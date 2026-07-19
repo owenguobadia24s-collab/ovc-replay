@@ -1,0 +1,75 @@
+{
+  "artifact_checks": [
+    {
+      "path": "opt_c_event_anchor_ledger_15m.jsonl.gz",
+      "sha256": "a072cc73bc952a9d872d34f4d8eaa121b42aa771e9a33b21ccad582c1f978282",
+      "status": "PASS"
+    },
+    {
+      "path": "opt_c_event_anchor_ledger_2h.jsonl.gz",
+      "sha256": "17c856ec75005bef2a0763ff374d0105eff80a75eaa51bc662303cea7ff12b0e",
+      "status": "PASS"
+    },
+    {
+      "path": "opt_c_event_anchor_ledger_summary.json",
+      "sha256": "e32c1835ac1f14648d9d8c83578187cc9fcba9117b786b12787d72e1d93a08c4",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_EVENT_ANCHOR_LEDGER_REPORT_v0_1.md",
+      "sha256": "0e27eaea389930f4d1f9c20096e38cdbfc6084588a6f3d04479ad3ec7c9c13f4",
+      "status": "PASS"
+    },
+    {
+      "path": "OPT_C_OUTCOME_0_1_APPROVAL_RECORD.md",
+      "sha256": "0912d090ec6629709134d1953fef222860973b218df666e2239353aabc8bac1d",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_NEUTRAL_FORWARD_OUTCOME_CONTRACT_v0_1.md",
+      "sha256": "0285bcd4e52e48d9ac54d8c8644cd09307424e63736cd366fbdd1262ee979a13",
+      "status": "PASS"
+    },
+    {
+      "path": "B_STATE_0_3B_RATIFICATION_RECORD.md",
+      "sha256": "d6a348a4294f1d75e9163e0d37f9f522e89e011f040d07a0e5dfdee1ffcd2c2f",
+      "status": "PASS"
+    }
+  ],
+  "authority_boundary": "Validated event eligibility and lineage only; no forward outcome, edge, recommendation, risk or execution authority.",
+  "cross_clock_groups": 128,
+  "determinism": {
+    "all_canonical_hashes_match": true,
+    "checked": true,
+    "comparisons": {
+      "15M": true,
+      "2H": true
+    }
+  },
+  "semantic_controls": {
+    "b_state_lineage_matches": true,
+    "compound_components_not_duplicated": true,
+    "event_bar_prices_match_opt_a": true,
+    "future_context_absent": true,
+    "measured_outcomes_absent": true,
+    "one_anchor_per_clock_bar": true
+  },
+  "status": "PASS",
+  "stream_checks": [
+    {
+      "event_components": 5193,
+      "gzip_integrity": "PASS",
+      "path": "opt_c_event_anchor_ledger_15m.jsonl.gz",
+      "rows": 3845,
+      "unique_anchor_ids": 3845
+    },
+    {
+      "event_components": 607,
+      "gzip_integrity": "PASS",
+      "path": "opt_c_event_anchor_ledger_2h.jsonl.gz",
+      "rows": 459,
+      "unique_anchor_ids": 459
+    }
+  ],
+  "validated_manifest_hash": "14b1e7522fd0c8cdcca6ec8b50f03867657f370a2bfc7edca0a1b7871e2c9ef8"
+}

@@ -1,0 +1,841 @@
+{
+  "artifacts": [
+    {
+      "path": "acceptance_frontier_review_state_stream_15m.jsonl.gz",
+      "sha256": "d0cb8bc9ffbc88f7b1d967a3a752bab3c9aeae332ebfb2a8e1f00d2155ca8132",
+      "size_bytes": 6105339
+    },
+    {
+      "path": "acceptance_frontier_event_records_15m.jsonl.gz",
+      "sha256": "2d1243d136e3d1e3389f057a242e2f7c836a10349e0a483dd09eb2138ab16508",
+      "size_bytes": 805046
+    },
+    {
+      "path": "acceptance_frontier_review_state_stream_2h.jsonl.gz",
+      "sha256": "32dc2ffd0fbf553006f2691d0da057aca304750116dab5a70b7abfb8b27ba393",
+      "size_bytes": 280798
+    },
+    {
+      "path": "acceptance_frontier_event_records_2h.jsonl.gz",
+      "sha256": "5056f057a3db1a5d162027040c57ea09d087dee3cda8ba2d42d0f556b7e7f007",
+      "size_bytes": 25
+    },
+    {
+      "path": "b_state_0_3b_semantic_review_summary.json",
+      "sha256": "31cf401a8576a99aa01dbc05955432bd433a0683be9f9ee87b4fce1c155506a7",
+      "size_bytes": 23872
+    },
+    {
+      "path": "OVC_OPT_B_STATE_v0_3B_ACCEPTANCE_FRONTIER_SEMANTIC_REVIEW.md",
+      "sha256": "6b3036b9bb486b1f57a3299633c402d43c849d55c3e471d44d226c2ac7af4a43",
+      "size_bytes": 3373
+    },
+    {
+      "path": "B_STATE_0_3A_REPRESENTATION_RATIFICATION_RECORD.md",
+      "sha256": "2aba7c8c67ee0eecdb577df6cfd9ff8a2e2e2c611e771cfa1f8d22fd490a13c9",
+      "size_bytes": 1605
+    },
+    {
+      "path": "OVC_OPT_B_ACCEPTANCE_FRONTIER_SEMANTIC_REVIEW_CONTRACT_v0_3b.md",
+      "sha256": "bf7aec7fa3e777173bcd3f7059d26a7108a264f5e5165c714668716ded42489f",
+      "size_bytes": 1619
+    },
+    {
+      "path": "B_STATE_0_3B_OPERATOR_REVIEW_CHECKLIST.md",
+      "sha256": "fefeefab5bbfaaba1bca6836f802fb3f2fac539896d9101122b7d85edcdda790",
+      "size_bytes": 959
+    }
+  ],
+  "authority_boundary": "Representation-only OPT-B research authority. No OPT-C outcome, edge, recommendation, production or execution authority.",
+  "generated_date": "2026-07-19",
+  "implementation_hashes": {
+    "run_acceptance_frontier_semantic_review.py": "894775ed1899207d9fff56082c8ede7def7b7aaff9a3b7cd7bbbcd156294a2a6",
+    "state_v03b.py": "479503d12cbfe2397b94265701f7d905a5cfb1620bfb6ba2b993652fbc597ef4",
+    "test_state_v03b.py": "6f2f75caaf0738d5e648ca66fca66a2e34b6db1a74c2826716533e02b779436d"
+  },
+  "manifest_hash": "5a7105bc6a24b118932274e687456cbd3f23c81e20cfe2b8c0b9876923cb76de",
+  "parent_v03a_manifest_hash": "33d1eb55ccaf2eddb6ad23819c83ddc3651aa3da23ca9b7a130b48a389634984",
+  "release_id": "B-STATE-GBPUSD-2026H1-v0.3b-semantic-review",
+  "representation_ratification_id": "B-STATE-0.3a-REPRESENTATION-ONLY",
+  "results": {
+    "15M": {
+      "active_metrics": {
+        "boundary_confirmation": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 2949,
+              "max_bars": 5,
+              "mean_bars": 1.2126,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "INACTIVE": {
+              "episodes": 3560,
+              "max_bars": 34,
+              "mean_bars": 5.6876,
+              "median_bars": 3.0,
+              "p90_bars": 15
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 3576,
+            "INACTIVE": 20248
+          },
+          "occupancy_pct": {
+            "ACTIVE": 15.0101,
+            "INACTIVE": 84.9899
+          },
+          "transition_count": 5832,
+          "transitions_per_1000_bars": 244.7952
+        },
+        "frontier_advance": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 2434,
+              "max_bars": 4,
+              "mean_bars": 1.1479,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "INACTIVE": {
+              "episodes": 3063,
+              "max_bars": 34,
+              "mean_bars": 6.8658,
+              "median_bars": 4.0,
+              "p90_bars": 20
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 2794,
+            "INACTIVE": 21030
+          },
+          "occupancy_pct": {
+            "ACTIVE": 11.7277,
+            "INACTIVE": 88.2723
+          },
+          "transition_count": 4820,
+          "transitions_per_1000_bars": 202.317
+        },
+        "raw_confirmation": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 4478,
+              "max_bars": 8,
+              "mean_bars": 1.4962,
+              "median_bars": 1.0,
+              "p90_bars": 3
+            },
+            "INACTIVE": {
+              "episodes": 5045,
+              "max_bars": 26,
+              "mean_bars": 3.3943,
+              "median_bars": 2.0,
+              "p90_bars": 6
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 6700,
+            "INACTIVE": 17124
+          },
+          "occupancy_pct": {
+            "ACTIVE": 28.1229,
+            "INACTIVE": 71.8771
+          },
+          "transition_count": 8846,
+          "transitions_per_1000_bars": 371.3062
+        }
+      },
+      "any_axis_active_metrics": {
+        "frontier_advance": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 3009,
+              "max_bars": 43,
+              "mean_bars": 3.3842,
+              "median_bars": 1.0,
+              "p90_bars": 8
+            },
+            "INACTIVE": {
+              "episodes": 3368,
+              "max_bars": 24,
+              "mean_bars": 4.0502,
+              "median_bars": 2.0,
+              "p90_bars": 9
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 10183,
+            "INACTIVE": 13641
+          },
+          "occupancy_pct": {
+            "ACTIVE": 42.7426,
+            "INACTIVE": 57.2574
+          },
+          "transition_count": 5700,
+          "transitions_per_1000_bars": 239.2545
+        },
+        "raw_confirmation": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 3406,
+              "max_bars": 43,
+              "mean_bars": 3.645,
+              "median_bars": 2.0,
+              "p90_bars": 9
+            },
+            "INACTIVE": {
+              "episodes": 3726,
+              "max_bars": 24,
+              "mean_bars": 3.062,
+              "median_bars": 1.0,
+              "p90_bars": 5
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 12415,
+            "INACTIVE": 11409
+          },
+          "occupancy_pct": {
+            "ACTIVE": 52.1113,
+            "INACTIVE": 47.8887
+          },
+          "transition_count": 6455,
+          "transitions_per_1000_bars": 270.9453
+        }
+      },
+      "frontier_event_records": 2794,
+      "frontier_event_stream_canonical_jsonl_hash": "3f4dd84df6b7ec48b3dbcb7890c7d76c4f74c10f8ff1fe828bb6324c7bdab735",
+      "inventory_projection": {
+        "boundary_id_references": 63603,
+        "canonical_byte_reduction_pct": 96.582,
+        "compact_summary_canonical_bytes": 15599614,
+        "full_inventory_canonical_bytes": 456393709,
+        "full_ledger_authority": "PARENT_B_STATE_0_3A_STATE_STREAM",
+        "full_relation_id_references": 6010911,
+        "id_reference_reduction_pct": 98.9419
+      },
+      "monthly_event_rates": {
+        "2025-01": {
+          "bars": 2068,
+          "boundary_confirmation_event_bars": 371,
+          "boundary_confirmation_event_rate_pct": 17.94,
+          "frontier_advance_event_bars": 275,
+          "frontier_advance_event_rate_pct": 13.2979,
+          "raw_confirmation_event_bars": 649,
+          "raw_confirmation_event_rate_pct": 31.383
+        },
+        "2025-02": {
+          "bars": 1868,
+          "boundary_confirmation_event_bars": 298,
+          "boundary_confirmation_event_rate_pct": 15.9529,
+          "frontier_advance_event_bars": 238,
+          "frontier_advance_event_rate_pct": 12.7409,
+          "raw_confirmation_event_bars": 560,
+          "raw_confirmation_event_rate_pct": 29.9786
+        },
+        "2025-03": {
+          "bars": 1956,
+          "boundary_confirmation_event_bars": 304,
+          "boundary_confirmation_event_rate_pct": 15.5419,
+          "frontier_advance_event_bars": 240,
+          "frontier_advance_event_rate_pct": 12.2699,
+          "raw_confirmation_event_bars": 581,
+          "raw_confirmation_event_rate_pct": 29.7035
+        },
+        "2025-04": {
+          "bars": 2046,
+          "boundary_confirmation_event_bars": 333,
+          "boundary_confirmation_event_rate_pct": 16.2757,
+          "frontier_advance_event_bars": 257,
+          "frontier_advance_event_rate_pct": 12.5611,
+          "raw_confirmation_event_bars": 619,
+          "raw_confirmation_event_rate_pct": 30.2542
+        },
+        "2025-05": {
+          "bars": 2023,
+          "boundary_confirmation_event_bars": 320,
+          "boundary_confirmation_event_rate_pct": 15.8181,
+          "frontier_advance_event_bars": 253,
+          "frontier_advance_event_rate_pct": 12.5062,
+          "raw_confirmation_event_bars": 605,
+          "raw_confirmation_event_rate_pct": 29.9061
+        },
+        "2025-06": {
+          "bars": 1959,
+          "boundary_confirmation_event_bars": 301,
+          "boundary_confirmation_event_rate_pct": 15.365,
+          "frontier_advance_event_bars": 228,
+          "frontier_advance_event_rate_pct": 11.6386,
+          "raw_confirmation_event_bars": 579,
+          "raw_confirmation_event_rate_pct": 29.5559
+        },
+        "2025-07": {
+          "bars": 2128,
+          "boundary_confirmation_event_bars": 323,
+          "boundary_confirmation_event_rate_pct": 15.1786,
+          "frontier_advance_event_bars": 250,
+          "frontier_advance_event_rate_pct": 11.7481,
+          "raw_confirmation_event_bars": 577,
+          "raw_confirmation_event_rate_pct": 27.1147
+        },
+        "2025-08": {
+          "bars": 1897,
+          "boundary_confirmation_event_bars": 279,
+          "boundary_confirmation_event_rate_pct": 14.7074,
+          "frontier_advance_event_bars": 220,
+          "frontier_advance_event_rate_pct": 11.5973,
+          "raw_confirmation_event_bars": 496,
+          "raw_confirmation_event_rate_pct": 26.1465
+        },
+        "2025-09": {
+          "bars": 1981,
+          "boundary_confirmation_event_bars": 272,
+          "boundary_confirmation_event_rate_pct": 13.7304,
+          "frontier_advance_event_bars": 211,
+          "frontier_advance_event_rate_pct": 10.6512,
+          "raw_confirmation_event_bars": 537,
+          "raw_confirmation_event_rate_pct": 27.1075
+        },
+        "2025-10": {
+          "bars": 2078,
+          "boundary_confirmation_event_bars": 264,
+          "boundary_confirmation_event_rate_pct": 12.7045,
+          "frontier_advance_event_bars": 212,
+          "frontier_advance_event_rate_pct": 10.2021,
+          "raw_confirmation_event_bars": 534,
+          "raw_confirmation_event_rate_pct": 25.6978
+        },
+        "2025-11": {
+          "bars": 1831,
+          "boundary_confirmation_event_bars": 249,
+          "boundary_confirmation_event_rate_pct": 13.5991,
+          "frontier_advance_event_bars": 204,
+          "frontier_advance_event_rate_pct": 11.1415,
+          "raw_confirmation_event_bars": 468,
+          "raw_confirmation_event_rate_pct": 25.5598
+        },
+        "2025-12": {
+          "bars": 1989,
+          "boundary_confirmation_event_bars": 262,
+          "boundary_confirmation_event_rate_pct": 13.1724,
+          "frontier_advance_event_bars": 206,
+          "frontier_advance_event_rate_pct": 10.357,
+          "raw_confirmation_event_bars": 495,
+          "raw_confirmation_event_rate_pct": 24.8869
+        }
+      },
+      "post_gap_boundary_events_not_promoted_to_advance": 0,
+      "retention": {
+        "boundary_from_raw_pct": 53.3731,
+        "frontier_from_boundary_pct": 78.132,
+        "frontier_from_raw_pct": 41.7015
+      },
+      "review_genuine_conflict_bars": 0,
+      "review_genuine_conflict_pct": 0.0,
+      "review_state_records": 23824,
+      "review_state_stream_canonical_jsonl_hash": "b369bc88e1f3fc225de9562cadffbf5c0d33bcf0b41d94c3273d04f7bc379d80",
+      "semantic_metrics": {
+        "boundary_confirmation": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "BOUNDARY_ACCEPTED_ABOVE_EVENT": {
+              "episodes": 1497,
+              "max_bars": 3,
+              "mean_bars": 1.1242,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "BOUNDARY_ACCEPTED_BELOW_EVENT": {
+              "episodes": 1522,
+              "max_bars": 5,
+              "mean_bars": 1.1222,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "COMPOUND_BOUNDARY_ACCEPTANCE_EVENT": {
+              "episodes": 184,
+              "max_bars": 2,
+              "mean_bars": 1.0054,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "NONE": {
+              "episodes": 3560,
+              "max_bars": 34,
+              "mean_bars": 5.6876,
+              "median_bars": 3.0,
+              "p90_bars": 15
+            }
+          },
+          "occupancy_counts": {
+            "BOUNDARY_ACCEPTED_ABOVE_EVENT": 1683,
+            "BOUNDARY_ACCEPTED_BELOW_EVENT": 1708,
+            "COMPOUND_BOUNDARY_ACCEPTANCE_EVENT": 185,
+            "NONE": 20248
+          },
+          "occupancy_pct": {
+            "BOUNDARY_ACCEPTED_ABOVE_EVENT": 7.0643,
+            "BOUNDARY_ACCEPTED_BELOW_EVENT": 7.1692,
+            "COMPOUND_BOUNDARY_ACCEPTANCE_EVENT": 0.7765,
+            "NONE": 84.9899
+          },
+          "transition_count": 6086,
+          "transitions_per_1000_bars": 255.4567
+        },
+        "frontier_advance": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "COMPOUND_FRONTIER_ADVANCE": {
+              "episodes": 144,
+              "max_bars": 2,
+              "mean_bars": 1.0069,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "FRONTIER_ADVANCE_DOWN": {
+              "episodes": 1212,
+              "max_bars": 3,
+              "mean_bars": 1.0858,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "FRONTIER_ADVANCE_UP": {
+              "episodes": 1219,
+              "max_bars": 3,
+              "mean_bars": 1.0935,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "NONE": {
+              "episodes": 3063,
+              "max_bars": 34,
+              "mean_bars": 6.8658,
+              "median_bars": 4.0,
+              "p90_bars": 20
+            }
+          },
+          "occupancy_counts": {
+            "COMPOUND_FRONTIER_ADVANCE": 145,
+            "FRONTIER_ADVANCE_DOWN": 1316,
+            "FRONTIER_ADVANCE_UP": 1333,
+            "NONE": 21030
+          },
+          "occupancy_pct": {
+            "COMPOUND_FRONTIER_ADVANCE": 0.6086,
+            "FRONTIER_ADVANCE_DOWN": 5.5238,
+            "FRONTIER_ADVANCE_UP": 5.5952,
+            "NONE": 88.2723
+          },
+          "transition_count": 4961,
+          "transitions_per_1000_bars": 208.2354
+        },
+        "raw_confirmation": {
+          "comparable_adjacent_pairs": 23147,
+          "duration_by_state_bars": {
+            "ACCEPTED_ABOVE_EVENT": {
+              "episodes": 2522,
+              "max_bars": 5,
+              "mean_bars": 1.1975,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "ACCEPTED_BELOW_EVENT": {
+              "episodes": 2515,
+              "max_bars": 5,
+              "mean_bars": 1.1984,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "COMPOUND_ACCEPTANCE_EVENT": {
+              "episodes": 656,
+              "max_bars": 2,
+              "mean_bars": 1.0152,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "NONE": {
+              "episodes": 5045,
+              "max_bars": 26,
+              "mean_bars": 3.3943,
+              "median_bars": 2.0,
+              "p90_bars": 6
+            }
+          },
+          "occupancy_counts": {
+            "ACCEPTED_ABOVE_EVENT": 3020,
+            "ACCEPTED_BELOW_EVENT": 3014,
+            "COMPOUND_ACCEPTANCE_EVENT": 666,
+            "NONE": 17124
+          },
+          "occupancy_pct": {
+            "ACCEPTED_ABOVE_EVENT": 12.6763,
+            "ACCEPTED_BELOW_EVENT": 12.6511,
+            "COMPOUND_ACCEPTANCE_EVENT": 2.7955,
+            "NONE": 71.8771
+          },
+          "transition_count": 10061,
+          "transitions_per_1000_bars": 422.3052
+        }
+      },
+      "source_bars": 23824,
+      "source_genuine_conflict_bars": 0,
+      "state_counts": {
+        "boundary_confirmation": {
+          "BOUNDARY_ACCEPTED_ABOVE_EVENT": 1683,
+          "BOUNDARY_ACCEPTED_BELOW_EVENT": 1708,
+          "COMPOUND_BOUNDARY_ACCEPTANCE_EVENT": 185,
+          "NONE": 20248
+        },
+        "frontier_advance": {
+          "COMPOUND_FRONTIER_ADVANCE": 145,
+          "FRONTIER_ADVANCE_DOWN": 1316,
+          "FRONTIER_ADVANCE_UP": 1333,
+          "NONE": 21030
+        },
+        "raw_confirmation": {
+          "ACCEPTED_ABOVE_EVENT": 3020,
+          "ACCEPTED_BELOW_EVENT": 3014,
+          "COMPOUND_ACCEPTANCE_EVENT": 666,
+          "NONE": 17124
+        }
+      }
+    },
+    "2H": {
+      "active_metrics": {
+        "boundary_confirmation": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "INACTIVE": {
+              "episodes": 318,
+              "max_bars": 22,
+              "mean_bars": 8.2799,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "INACTIVE": 2633
+          },
+          "occupancy_pct": {
+            "INACTIVE": 100.0
+          },
+          "transition_count": 0,
+          "transitions_per_1000_bars": 0.0
+        },
+        "frontier_advance": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "INACTIVE": {
+              "episodes": 318,
+              "max_bars": 22,
+              "mean_bars": 8.2799,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "INACTIVE": 2633
+          },
+          "occupancy_pct": {
+            "INACTIVE": 100.0
+          },
+          "transition_count": 0,
+          "transitions_per_1000_bars": 0.0
+        },
+        "raw_confirmation": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "INACTIVE": {
+              "episodes": 318,
+              "max_bars": 22,
+              "mean_bars": 8.2799,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "INACTIVE": 2633
+          },
+          "occupancy_pct": {
+            "INACTIVE": 100.0
+          },
+          "transition_count": 0,
+          "transitions_per_1000_bars": 0.0
+        }
+      },
+      "any_axis_active_metrics": {
+        "frontier_advance": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 1,
+              "max_bars": 1,
+              "mean_bars": 1.0,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "INACTIVE": {
+              "episodes": 318,
+              "max_bars": 21,
+              "mean_bars": 8.2767,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 1,
+            "INACTIVE": 2632
+          },
+          "occupancy_pct": {
+            "ACTIVE": 0.038,
+            "INACTIVE": 99.962
+          },
+          "transition_count": 1,
+          "transitions_per_1000_bars": 0.3798
+        },
+        "raw_confirmation": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 1,
+              "max_bars": 1,
+              "mean_bars": 1.0,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "INACTIVE": {
+              "episodes": 318,
+              "max_bars": 21,
+              "mean_bars": 8.2767,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 1,
+            "INACTIVE": 2632
+          },
+          "occupancy_pct": {
+            "ACTIVE": 0.038,
+            "INACTIVE": 99.962
+          },
+          "transition_count": 1,
+          "transitions_per_1000_bars": 0.3798
+        }
+      },
+      "frontier_event_records": 0,
+      "frontier_event_stream_canonical_jsonl_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "inventory_projection": {
+        "boundary_id_references": 0,
+        "canonical_byte_reduction_pct": 17.1657,
+        "compact_summary_canonical_bytes": 1092695,
+        "full_inventory_canonical_bytes": 1319133,
+        "full_ledger_authority": "PARENT_B_STATE_0_3A_STATE_STREAM",
+        "full_relation_id_references": 0,
+        "id_reference_reduction_pct": 0.0
+      },
+      "monthly_event_rates": {
+        "2025-01": {
+          "bars": 237,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-02": {
+          "bars": 215,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-03": {
+          "bars": 220,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-04": {
+          "bars": 239,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-05": {
+          "bars": 233,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-06": {
+          "bars": 223,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-07": {
+          "bars": 233,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-08": {
+          "bars": 199,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-09": {
+          "bars": 210,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-10": {
+          "bars": 221,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-11": {
+          "bars": 200,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        },
+        "2025-12": {
+          "bars": 203,
+          "boundary_confirmation_event_bars": 0,
+          "boundary_confirmation_event_rate_pct": 0.0,
+          "frontier_advance_event_bars": 0,
+          "frontier_advance_event_rate_pct": 0.0,
+          "raw_confirmation_event_bars": 0,
+          "raw_confirmation_event_rate_pct": 0.0
+        }
+      },
+      "post_gap_boundary_events_not_promoted_to_advance": 0,
+      "retention": {
+        "boundary_from_raw_pct": 0.0,
+        "frontier_from_boundary_pct": 0.0,
+        "frontier_from_raw_pct": 0.0
+      },
+      "review_genuine_conflict_bars": 0,
+      "review_genuine_conflict_pct": 0.0,
+      "review_state_records": 2633,
+      "review_state_stream_canonical_jsonl_hash": "dfe41fe743eb9fc7e776e41a4253191d69ff33496a2145ef6f6ef3702419b5b0",
+      "semantic_metrics": {
+        "boundary_confirmation": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "NONE": {
+              "episodes": 318,
+              "max_bars": 22,
+              "mean_bars": 8.2799,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "NONE": 2633
+          },
+          "occupancy_pct": {
+            "NONE": 100.0
+          },
+          "transition_count": 0,
+          "transitions_per_1000_bars": 0.0
+        },
+        "frontier_advance": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "NONE": {
+              "episodes": 318,
+              "max_bars": 22,
+              "mean_bars": 8.2799,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "NONE": 2633
+          },
+          "occupancy_pct": {
+            "NONE": 100.0
+          },
+          "transition_count": 0,
+          "transitions_per_1000_bars": 0.0
+        },
+        "raw_confirmation": {
+          "comparable_adjacent_pairs": 2315,
+          "duration_by_state_bars": {
+            "NONE": {
+              "episodes": 318,
+              "max_bars": 22,
+              "mean_bars": 8.2799,
+              "median_bars": 10.0,
+              "p90_bars": 11
+            }
+          },
+          "occupancy_counts": {
+            "NONE": 2633
+          },
+          "occupancy_pct": {
+            "NONE": 100.0
+          },
+          "transition_count": 0,
+          "transitions_per_1000_bars": 0.0
+        }
+      },
+      "source_bars": 2633,
+      "source_genuine_conflict_bars": 0,
+      "state_counts": {
+        "boundary_confirmation": {
+          "NONE": 2633
+        },
+        "frontier_advance": {
+          "NONE": 2633
+        },
+        "raw_confirmation": {
+          "NONE": 2633
+        }
+      }
+    }
+  },
+  "state_contract_version": "B-STATE-0.3b-REVIEW",
+  "status": "REPRESENTATION_BOUNDARY_RATIFIED_FRONTIER_CANDIDATE_NOT_RATIFIED"
+}

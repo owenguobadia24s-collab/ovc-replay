@@ -1,0 +1,1584 @@
+{
+  "artifacts": [
+    {
+      "path": "opt_c_semantic_cohort_support_matrix.jsonl.gz",
+      "sha256": "e1d7fb9caf23582820b1ee67a3064136e481f815da5de777167de5141e278133",
+      "size_bytes": 15638
+    },
+    {
+      "path": "opt_c_semantic_distribution_integrity.json",
+      "sha256": "5cac2b8ea1970386adb9b6f60aa5556c80d48c82489f686dbe25853cf0f01a51",
+      "size_bytes": 12825
+    },
+    {
+      "path": "opt_c_semantic_overlap_review.json",
+      "sha256": "d018d448cc1df158fea480f678fab279d2c8ee3ae0910427e7d00706872d3e99",
+      "size_bytes": 24477
+    },
+    {
+      "path": "opt_c_semantic_frontier_review.json",
+      "sha256": "aceeb3942be70270fa2ab28e686453875cfd85b7c252a0f719f2a95ac290403f",
+      "size_bytes": 6232
+    },
+    {
+      "path": "opt_c_semantic_review_summary.json",
+      "sha256": "da39b05e8d3596faafe5580e7226365af625beb0fd2c3e959695201bb0eeab44",
+      "size_bytes": 46945
+    },
+    {
+      "path": "OVC_OPT_C_SEMANTIC_SANITY_REVIEW_REPORT_v0_1.md",
+      "sha256": "35203a6b7b24dad366567b095b746039d46f1098f1d5d181041e0c36308d2e60",
+      "size_bytes": 2652
+    },
+    {
+      "path": "OVC_OPT_C_SEMANTIC_SANITY_REVIEW_CONTRACT_v0_1.md",
+      "sha256": "5e039a3523d7538685770324d1e3be23ddb473ce6e1de936fc37ebdb83e00fc9",
+      "size_bytes": 1955
+    },
+    {
+      "path": "OVC_OPT_C_NEUTRAL_MEASUREMENT_IMPLEMENTATION_CONTRACT_v0_1_1.md",
+      "sha256": "946aaf21d7816b1d2e9195d39c2d4d81d0890cf0d764ad2cfb2a72c2ce9776ba",
+      "size_bytes": 1279
+    }
+  ],
+  "authority_boundary": "Semantic coherence and descriptive cohort support only. No statistical independence, hypothesis, edge, recommendation, risk, trade or execution authority.",
+  "blocked_horizons_hours": [
+    48
+  ],
+  "coverage_only_horizons_hours": [
+    24
+  ],
+  "generated_date": "2026-07-19",
+  "implementation_hashes": {
+    "review_opt_c_semantic_sanity.py": "31df0dc4e394b06d2e14bb0f14e36d3c3c8ee11b16b7402e30223e4844843cd7",
+    "semantic_review.py": "3ee5fb6da5f679dd3e387f0fc0a991ad27ec0ede54cd94d0dd7ef1263daacb4e",
+    "test_opt_c_semantic_review.py": "4e4cd4e09b30eac6e39f5fcc7d68fe34462e246c0212d329893946a03db6ba45"
+  },
+  "manifest_hash": "7a47df19f7c06846c0edfc6b46b4d42711459d154790765168d96e969646bbf7",
+  "parent_measurement_contract_version": "OPT-C-MEASURE-0.1.1",
+  "parent_measurement_manifest_hash": "fe3df29b96dc6c3007f0578a376d641a322cdbacdbc8cbe1dce7c84fb693549b",
+  "release_id": "OPT-C-SEMANTIC-SANITY-GBPUSD-2026H1-v0.1",
+  "results": {
+    "cohort_support": {
+      "canonical_jsonl_hash": "b0d0df45f2f97cbb5499d11cb13e1a74735c2ecc82447feb12833fb9293d50ce",
+      "cells": 160,
+      "support_band_counts": {
+        "ADEQUATE_DESCRIPTIVE_SUPPORT": 45,
+        "EMPTY": 31,
+        "LIMITED_DESCRIPTIVE_SUPPORT": 29,
+        "SPARSE_NO_COMPARISON": 55
+      }
+    },
+    "distribution_integrity": {
+      "15M": {
+        "anchors_by_complete_horizon_count": {
+          "1": 219,
+          "2": 402,
+          "3": 859,
+          "4": 843,
+          "5": 1282
+        },
+        "horizons": {
+          "1": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 2992,
+              "maximum": "96.0",
+              "median": "-0.100",
+              "minimum": "-93.9",
+              "p10": "-15.990",
+              "p90": "15.590"
+            },
+            "endpoint_close_position": {
+              "count": 3605,
+              "maximum": "1",
+              "median": "0.4855491329479768786127167630",
+              "minimum": "0",
+              "p10": "0.07481386255289517381755851947",
+              "p90": "0.9107825295723384895359417652"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 3605,
+              "maximum": "103.8",
+              "median": "7.400",
+              "minimum": "0E+4",
+              "p10": "1.200",
+              "p90": "21.800"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 3605,
+              "maximum": "171.3",
+              "median": "6.900",
+              "minimum": "0E+4",
+              "p10": "1.100",
+              "p90": "21.600"
+            },
+            "raw_return_pips": {
+              "count": 3605,
+              "maximum": "93.9",
+              "median": "-0.300",
+              "minimum": "-96.0",
+              "p10": "-15.460",
+              "p90": "15.300"
+            },
+            "records": 3605
+          },
+          "12": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 1001,
+              "maximum": "144.4",
+              "median": "1.100",
+              "minimum": "-195.0",
+              "p10": "-58.300",
+              "p90": "60.500"
+            },
+            "endpoint_close_position": {
+              "count": 1282,
+              "maximum": "0.9981185324553151458137347131",
+              "median": "0.4917960287651741421081642332",
+              "minimum": "0",
+              "p10": "0.08310707535541129098529049224",
+              "p90": "0.9108840123889776963795382218"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 1282,
+              "maximum": "152.7",
+              "median": "32.750",
+              "minimum": "0E+4",
+              "p10": "4.300",
+              "p90": "76.340"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 1282,
+              "maximum": "213.9",
+              "median": "33.900",
+              "minimum": "0E+4",
+              "p10": "5.810",
+              "p90": "78.290"
+            },
+            "raw_return_pips": {
+              "count": 1282,
+              "maximum": "195.0",
+              "median": "-0.850",
+              "minimum": "-144.9",
+              "p10": "-57.000",
+              "p90": "59.990"
+            },
+            "records": 1282
+          },
+          "2": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 2809,
+              "maximum": "78.7",
+              "median": "-0.100",
+              "minimum": "-166.6",
+              "p10": "-22.420",
+              "p90": "21.700"
+            },
+            "endpoint_close_position": {
+              "count": 3386,
+              "maximum": "1",
+              "median": "0.500",
+              "minimum": "0",
+              "p10": "0.07908505790937204930742643300",
+              "p90": "0.9007775085107610639893831862"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 3386,
+              "maximum": "115.9",
+              "median": "10.900",
+              "minimum": "0E+4",
+              "p10": "2.000",
+              "p90": "31.350"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 3386,
+              "maximum": "171.3",
+              "median": "10.400",
+              "minimum": "0E+4",
+              "p10": "1.800",
+              "p90": "31.050"
+            },
+            "raw_return_pips": {
+              "count": 3386,
+              "maximum": "166.6",
+              "median": "-0.100",
+              "minimum": "-115.8",
+              "p10": "-22.200",
+              "p90": "21.900"
+            },
+            "records": 3386
+          },
+          "4": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 2470,
+              "maximum": "109.7",
+              "median": "0.150",
+              "minimum": "-180.3",
+              "p10": "-31.710",
+              "p90": "31.620"
+            },
+            "endpoint_close_position": {
+              "count": 2984,
+              "maximum": "1",
+              "median": "0.5109318996415770609318996416",
+              "minimum": "0",
+              "p10": "0.08524335053592695514092894005",
+              "p90": "0.9027409046214355948869223206"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 2984,
+              "maximum": "131.9",
+              "median": "17.100",
+              "minimum": "0E+4",
+              "p10": "2.800",
+              "p90": "43.300"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 2984,
+              "maximum": "216.6",
+              "median": "16.000",
+              "minimum": "0E+4",
+              "p10": "2.800",
+              "p90": "46.300"
+            },
+            "raw_return_pips": {
+              "count": 2984,
+              "maximum": "180.3",
+              "median": "-0.300",
+              "minimum": "-109.7",
+              "p10": "-30.170",
+              "p90": "32.700"
+            },
+            "records": 2984
+          },
+          "8": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 1732,
+              "maximum": "156.4",
+              "median": "-0.550",
+              "minimum": "-191.6",
+              "p10": "-50.290",
+              "p90": "46.300"
+            },
+            "endpoint_close_position": {
+              "count": 2125,
+              "maximum": "1",
+              "median": "0.4829001367989056087551299590",
+              "minimum": "0",
+              "p10": "0.08414443865244780576588356909",
+              "p90": "0.9066911973047349565473903205"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 2125,
+              "maximum": "145.0",
+              "median": "25.900",
+              "minimum": "0E+4",
+              "p10": "4.100",
+              "p90": "63.060"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 2125,
+              "maximum": "216.6",
+              "median": "25.500",
+              "minimum": "0E+4",
+              "p10": "4.800",
+              "p90": "66.560"
+            },
+            "raw_return_pips": {
+              "count": 2125,
+              "maximum": "191.6",
+              "median": "-1.500",
+              "minimum": "-140.7",
+              "p10": "-44.200",
+              "p90": "51.220"
+            },
+            "records": 2125
+          }
+        },
+        "measurement_semantic_violation_counts": {},
+        "nested_horizon_violation_counts": {},
+        "outcome_records": 13382,
+        "unique_event_anchors": 3605
+      },
+      "2H": {
+        "anchors_by_complete_horizon_count": {
+          "1": 26,
+          "2": 52,
+          "3": 77,
+          "4": 69,
+          "5": 192
+        },
+        "horizons": {
+          "1": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 338,
+              "maximum": "77.9",
+              "median": "0.450",
+              "minimum": "-53.9",
+              "p10": "-13.460",
+              "p90": "12.320"
+            },
+            "endpoint_close_position": {
+              "count": 416,
+              "maximum": "1",
+              "median": "0.5324300699300699300699300700",
+              "minimum": "0",
+              "p10": "0.09320987654320987654320987654",
+              "p90": "0.9172298799466429524232992441"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 416,
+              "maximum": "71.4",
+              "median": "6.200",
+              "minimum": "0E+4",
+              "p10": "1.000",
+              "p90": "19.200"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 416,
+              "maximum": "86",
+              "median": "6.800",
+              "minimum": "0E+4",
+              "p10": "1.050",
+              "p90": "18.800"
+            },
+            "raw_return_pips": {
+              "count": 416,
+              "maximum": "77.9",
+              "median": "0.400",
+              "minimum": "-45.2",
+              "p10": "-13.300",
+              "p90": "13.100"
+            },
+            "records": 416
+          },
+          "12": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 153,
+              "maximum": "129.9",
+              "median": "-2.800",
+              "minimum": "-107.4",
+              "p10": "-48.240",
+              "p90": "50.840"
+            },
+            "endpoint_close_position": {
+              "count": 192,
+              "maximum": "0.9865771812080536912751677852",
+              "median": "0.3794398631890909416494309991",
+              "minimum": "0",
+              "p10": "0.05190960166656145445363297771",
+              "p90": "0.8656158104134232831690019028"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 192,
+              "maximum": "115.3",
+              "median": "27.750",
+              "minimum": "0E+4",
+              "p10": "6.150",
+              "p90": "64.840"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 192,
+              "maximum": "204",
+              "median": "26.550",
+              "minimum": "1.7",
+              "p10": "6.860",
+              "p90": "73.850"
+            },
+            "raw_return_pips": {
+              "count": 192,
+              "maximum": "167.2",
+              "median": "-6.000",
+              "minimum": "-109.8",
+              "p10": "-51.340",
+              "p90": "53.500"
+            },
+            "records": 192
+          },
+          "2": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 315,
+              "maximum": "106.1",
+              "median": "0.900",
+              "minimum": "-57.4",
+              "p10": "-20.560",
+              "p90": "18.120"
+            },
+            "endpoint_close_position": {
+              "count": 390,
+              "maximum": "1",
+              "median": "0.4529943890988205656704454368",
+              "minimum": "0",
+              "p10": "0.07848045331669785818257433978",
+              "p90": "0.8881426202321724709784411277"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 390,
+              "maximum": "71.4",
+              "median": "9.000",
+              "minimum": "0E+4",
+              "p10": "1.200",
+              "p90": "26.900"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 390,
+              "maximum": "114.1",
+              "median": "9.800",
+              "minimum": "0E+4",
+              "p10": "1.790",
+              "p90": "29.210"
+            },
+            "raw_return_pips": {
+              "count": 390,
+              "maximum": "106.1",
+              "median": "-0.500",
+              "minimum": "-49.7",
+              "p10": "-18.920",
+              "p90": "21.410"
+            },
+            "records": 390
+          },
+          "4": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 274,
+              "maximum": "110.7",
+              "median": "-0.150",
+              "minimum": "-83.8",
+              "p10": "-27.440",
+              "p90": "25.400"
+            },
+            "endpoint_close_position": {
+              "count": 338,
+              "maximum": "0.9954337899543378995433789954",
+              "median": "0.4814982817869415807560137457",
+              "minimum": "0",
+              "p10": "0.07875373388286005974212576095",
+              "p90": "0.8741193199192709925998409883"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 338,
+              "maximum": "133.8",
+              "median": "14.450",
+              "minimum": "0E+4",
+              "p10": "1.700",
+              "p90": "37.730"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 338,
+              "maximum": "120.9",
+              "median": "14.450",
+              "minimum": "0E+4",
+              "p10": "2.970",
+              "p90": "44.690"
+            },
+            "raw_return_pips": {
+              "count": 338,
+              "maximum": "109.2",
+              "median": "-1.050",
+              "minimum": "-110.7",
+              "p10": "-27.950",
+              "p90": "29.600"
+            },
+            "records": 338
+          },
+          "8": {
+            "direction_normalized_endpoint_return_pips": {
+              "count": 210,
+              "maximum": "138.3",
+              "median": "-0.400",
+              "minimum": "-138.2",
+              "p10": "-38.100",
+              "p90": "34.710"
+            },
+            "endpoint_close_position": {
+              "count": 261,
+              "maximum": "0.9889196675900277008310249307",
+              "median": "0.4784313725490196078431372549",
+              "minimum": "0",
+              "p10": "0.07155635062611806797853309481",
+              "p90": "0.8917018284106891701828410689"
+            },
+            "maximum_downward_excursion_pips": {
+              "count": 261,
+              "maximum": "142.7",
+              "median": "22.400",
+              "minimum": "0E+4",
+              "p10": "3.400",
+              "p90": "55.900"
+            },
+            "maximum_upward_excursion_pips": {
+              "count": 261,
+              "maximum": "175",
+              "median": "20.400",
+              "minimum": "0E+4",
+              "p10": "6.200",
+              "p90": "63.500"
+            },
+            "raw_return_pips": {
+              "count": 261,
+              "maximum": "138.3",
+              "median": "-2.300",
+              "minimum": "-123.0",
+              "p10": "-37.400",
+              "p90": "45.000"
+            },
+            "records": 261
+          }
+        },
+        "measurement_semantic_violation_counts": {},
+        "nested_horizon_violation_counts": {},
+        "outcome_records": 1597,
+        "unique_event_anchors": 416
+      }
+    },
+    "frontier_review": {
+      "15M": {
+        "horizons": {
+          "1": {
+            "directional_records": 2992,
+            "frontier_test_counts": {
+              "CEILING": 3584,
+              "FLOOR": 3565
+            },
+            "primary_frontier_applicability_rate_pct": 99.8329,
+            "primary_frontier_applicable_records": 2987,
+            "primary_frontier_endpoint_hold_rate_pct": 88.6173,
+            "primary_frontier_held_at_endpoint_records": 2647,
+            "primary_frontier_loss_rate_pct": 15.4001,
+            "primary_frontier_lost_on_close_records": 460,
+            "primary_frontier_retest_rate_pct": 22.9327,
+            "primary_frontier_retested_records": 685,
+            "records": 3605
+          },
+          "12": {
+            "directional_records": 1001,
+            "frontier_test_counts": {
+              "CEILING": 1274,
+              "FLOOR": 1270
+            },
+            "primary_frontier_applicability_rate_pct": 99.6004,
+            "primary_frontier_applicable_records": 997,
+            "primary_frontier_endpoint_hold_rate_pct": 62.6881,
+            "primary_frontier_held_at_endpoint_records": 625,
+            "primary_frontier_loss_rate_pct": 63.6911,
+            "primary_frontier_lost_on_close_records": 635,
+            "primary_frontier_retest_rate_pct": 67.8034,
+            "primary_frontier_retested_records": 676,
+            "records": 1282
+          },
+          "2": {
+            "directional_records": 2809,
+            "frontier_test_counts": {
+              "CEILING": 3367,
+              "FLOOR": 3349
+            },
+            "primary_frontier_applicability_rate_pct": 99.822,
+            "primary_frontier_applicable_records": 2804,
+            "primary_frontier_endpoint_hold_rate_pct": 82.3466,
+            "primary_frontier_held_at_endpoint_records": 2309,
+            "primary_frontier_loss_rate_pct": 26.0342,
+            "primary_frontier_lost_on_close_records": 730,
+            "primary_frontier_retest_rate_pct": 33.7019,
+            "primary_frontier_retested_records": 945,
+            "records": 3386
+          },
+          "4": {
+            "directional_records": 2470,
+            "frontier_test_counts": {
+              "CEILING": 2967,
+              "FLOOR": 2947
+            },
+            "primary_frontier_applicability_rate_pct": 99.7976,
+            "primary_frontier_applicable_records": 2465,
+            "primary_frontier_endpoint_hold_rate_pct": 75.0913,
+            "primary_frontier_held_at_endpoint_records": 1851,
+            "primary_frontier_loss_rate_pct": 40.2028,
+            "primary_frontier_lost_on_close_records": 991,
+            "primary_frontier_retest_rate_pct": 47.2211,
+            "primary_frontier_retested_records": 1164,
+            "records": 2984
+          },
+          "8": {
+            "directional_records": 1732,
+            "frontier_test_counts": {
+              "CEILING": 2116,
+              "FLOOR": 2098
+            },
+            "primary_frontier_applicability_rate_pct": 99.7113,
+            "primary_frontier_applicable_records": 1727,
+            "primary_frontier_endpoint_hold_rate_pct": 66.242,
+            "primary_frontier_held_at_endpoint_records": 1144,
+            "primary_frontier_loss_rate_pct": 59.1778,
+            "primary_frontier_lost_on_close_records": 1022,
+            "primary_frontier_retest_rate_pct": 64.3312,
+            "primary_frontier_retested_records": 1111,
+            "records": 2125
+          }
+        }
+      },
+      "2H": {
+        "horizons": {
+          "1": {
+            "directional_records": 338,
+            "frontier_test_counts": {
+              "CEILING": 412,
+              "FLOOR": 404
+            },
+            "primary_frontier_applicability_rate_pct": 98.8166,
+            "primary_frontier_applicable_records": 334,
+            "primary_frontier_endpoint_hold_rate_pct": 96.7066,
+            "primary_frontier_held_at_endpoint_records": 323,
+            "primary_frontier_loss_rate_pct": 4.1916,
+            "primary_frontier_lost_on_close_records": 14,
+            "primary_frontier_retest_rate_pct": 6.5868,
+            "primary_frontier_retested_records": 22,
+            "records": 416
+          },
+          "12": {
+            "directional_records": 153,
+            "frontier_test_counts": {
+              "CEILING": 190,
+              "FLOOR": 192
+            },
+            "primary_frontier_applicability_rate_pct": 100.0,
+            "primary_frontier_applicable_records": 153,
+            "primary_frontier_endpoint_hold_rate_pct": 81.0458,
+            "primary_frontier_held_at_endpoint_records": 124,
+            "primary_frontier_loss_rate_pct": 33.9869,
+            "primary_frontier_lost_on_close_records": 52,
+            "primary_frontier_retest_rate_pct": 40.5229,
+            "primary_frontier_retested_records": 62,
+            "records": 192
+          },
+          "2": {
+            "directional_records": 315,
+            "frontier_test_counts": {
+              "CEILING": 386,
+              "FLOOR": 380
+            },
+            "primary_frontier_applicability_rate_pct": 99.0476,
+            "primary_frontier_applicable_records": 312,
+            "primary_frontier_endpoint_hold_rate_pct": 96.4744,
+            "primary_frontier_held_at_endpoint_records": 301,
+            "primary_frontier_loss_rate_pct": 7.3718,
+            "primary_frontier_lost_on_close_records": 23,
+            "primary_frontier_retest_rate_pct": 10.8974,
+            "primary_frontier_retested_records": 34,
+            "records": 390
+          },
+          "4": {
+            "directional_records": 274,
+            "frontier_test_counts": {
+              "CEILING": 336,
+              "FLOOR": 333
+            },
+            "primary_frontier_applicability_rate_pct": 100.0,
+            "primary_frontier_applicable_records": 274,
+            "primary_frontier_endpoint_hold_rate_pct": 91.9708,
+            "primary_frontier_held_at_endpoint_records": 252,
+            "primary_frontier_loss_rate_pct": 13.5036,
+            "primary_frontier_lost_on_close_records": 37,
+            "primary_frontier_retest_rate_pct": 18.9781,
+            "primary_frontier_retested_records": 52,
+            "records": 338
+          },
+          "8": {
+            "directional_records": 210,
+            "frontier_test_counts": {
+              "CEILING": 259,
+              "FLOOR": 261
+            },
+            "primary_frontier_applicability_rate_pct": 100.0,
+            "primary_frontier_applicable_records": 210,
+            "primary_frontier_endpoint_hold_rate_pct": 84.7619,
+            "primary_frontier_held_at_endpoint_records": 178,
+            "primary_frontier_loss_rate_pct": 27.1429,
+            "primary_frontier_lost_on_close_records": 57,
+            "primary_frontier_retest_rate_pct": 31.9048,
+            "primary_frontier_retested_records": 67,
+            "records": 261
+          }
+        }
+      }
+    },
+    "gate_decision": "PASS_WITH_OVERLAP_AND_SPARSE_COHORT_CONTROLS",
+    "overlap_review": {
+      "15M": {
+        "horizons": {
+          "1": {
+            "maximum_subsequent_overlap_anchors": 5,
+            "overlap_rate_pct": 92.3162,
+            "overlap_records": 3328,
+            "records": 3605,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 252,
+                  "maximum": "37.5",
+                  "median": "1.400",
+                  "minimum": "-31.3",
+                  "p10": "-10.850",
+                  "p90": "14.300"
+                },
+                "raw_return_pips": {
+                  "count": 277,
+                  "maximum": "51.7",
+                  "median": "0.700",
+                  "minimum": "-37.5",
+                  "p10": "-11.740",
+                  "p90": "13.640"
+                },
+                "records": 277
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 13,
+                  "maximum": "20.6",
+                  "median": "-1.300",
+                  "minimum": "-11.0",
+                  "p10": "-7.300",
+                  "p90": "9.760"
+                },
+                "raw_return_pips": {
+                  "count": 13,
+                  "maximum": "11.0",
+                  "median": "-4.100",
+                  "minimum": "-20.6",
+                  "p10": "-10.020",
+                  "p90": "5.940"
+                },
+                "records": 13
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 64,
+                  "maximum": "28.3",
+                  "median": "5.600",
+                  "minimum": "-18.6",
+                  "p10": "-8.910",
+                  "p90": "16.700"
+                },
+                "raw_return_pips": {
+                  "count": 67,
+                  "maximum": "25.6",
+                  "median": "-2.700",
+                  "minimum": "-28.3",
+                  "p10": "-13.900",
+                  "p90": "12.900"
+                },
+                "records": 67
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 2663,
+                  "maximum": "96.0",
+                  "median": "-0.400",
+                  "minimum": "-93.9",
+                  "p10": "-16.700",
+                  "p90": "15.700"
+                },
+                "raw_return_pips": {
+                  "count": 3248,
+                  "maximum": "93.9",
+                  "median": "-0.400",
+                  "minimum": "-96.0",
+                  "p10": "-15.800",
+                  "p90": "15.530"
+                },
+                "records": 3248
+              }
+            }
+          },
+          "12": {
+            "maximum_subsequent_overlap_anchors": 38,
+            "overlap_rate_pct": 100.0,
+            "overlap_records": 1282,
+            "records": 1282,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 1001,
+                  "maximum": "144.4",
+                  "median": "1.100",
+                  "minimum": "-195.0",
+                  "p10": "-58.300",
+                  "p90": "60.500"
+                },
+                "raw_return_pips": {
+                  "count": 1282,
+                  "maximum": "195.0",
+                  "median": "-0.850",
+                  "minimum": "-144.9",
+                  "p10": "-57.000",
+                  "p90": "59.990"
+                },
+                "records": 1282
+              }
+            }
+          },
+          "2": {
+            "maximum_subsequent_overlap_anchors": 9,
+            "overlap_rate_pct": 98.1985,
+            "overlap_records": 3325,
+            "records": 3386,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 56,
+                  "maximum": "55.9",
+                  "median": "-3.850",
+                  "minimum": "-46.6",
+                  "p10": "-17.900",
+                  "p90": "23.500"
+                },
+                "raw_return_pips": {
+                  "count": 61,
+                  "maximum": "55.9",
+                  "median": "1.700",
+                  "minimum": "-27.9",
+                  "p10": "-17.400",
+                  "p90": "24.400"
+                },
+                "records": 61
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 24,
+                  "maximum": "30.8",
+                  "median": "-2.700",
+                  "minimum": "-36.0",
+                  "p10": "-21.290",
+                  "p90": "20.620"
+                },
+                "raw_return_pips": {
+                  "count": 25,
+                  "maximum": "32.8",
+                  "median": "-3.600",
+                  "minimum": "-36.0",
+                  "p10": "-22.080",
+                  "p90": "20.360"
+                },
+                "records": 25
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 2729,
+                  "maximum": "78.7",
+                  "median": "-0.100",
+                  "minimum": "-166.6",
+                  "p10": "-22.500",
+                  "p90": "21.700"
+                },
+                "raw_return_pips": {
+                  "count": 3300,
+                  "maximum": "166.6",
+                  "median": "-0.100",
+                  "minimum": "-115.8",
+                  "p10": "-22.210",
+                  "p90": "21.900"
+                },
+                "records": 3300
+              }
+            }
+          },
+          "4": {
+            "maximum_subsequent_overlap_anchors": 16,
+            "overlap_rate_pct": 99.7319,
+            "overlap_records": 2976,
+            "records": 2984,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 8,
+                  "maximum": "16.6",
+                  "median": "-6.300",
+                  "minimum": "-37.8",
+                  "p10": "-32.690",
+                  "p90": "15.410"
+                },
+                "raw_return_pips": {
+                  "count": 8,
+                  "maximum": "37.8",
+                  "median": "-7.350",
+                  "minimum": "-30.5",
+                  "p10": "-20.770",
+                  "p90": "30.030"
+                },
+                "records": 8
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 3,
+                  "maximum": "48.5",
+                  "median": "8.100",
+                  "minimum": "-2.8",
+                  "p10": "-0.620",
+                  "p90": "40.420"
+                },
+                "raw_return_pips": {
+                  "count": 3,
+                  "maximum": "8.1",
+                  "median": "2.800",
+                  "minimum": "-48.5",
+                  "p10": "-38.240",
+                  "p90": "7.040"
+                },
+                "records": 3
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 2459,
+                  "maximum": "109.7",
+                  "median": "0.100",
+                  "minimum": "-180.3",
+                  "p10": "-31.720",
+                  "p90": "31.640"
+                },
+                "raw_return_pips": {
+                  "count": 2973,
+                  "maximum": "180.3",
+                  "median": "-0.300",
+                  "minimum": "-109.7",
+                  "p10": "-30.100",
+                  "p90": "32.700"
+                },
+                "records": 2973
+              }
+            }
+          },
+          "8": {
+            "maximum_subsequent_overlap_anchors": 28,
+            "overlap_rate_pct": 100.0,
+            "overlap_records": 2125,
+            "records": 2125,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 1732,
+                  "maximum": "156.4",
+                  "median": "-0.550",
+                  "minimum": "-191.6",
+                  "p10": "-50.290",
+                  "p90": "46.300"
+                },
+                "raw_return_pips": {
+                  "count": 2125,
+                  "maximum": "191.6",
+                  "median": "-1.500",
+                  "minimum": "-140.7",
+                  "p10": "-44.200",
+                  "p90": "51.220"
+                },
+                "records": 2125
+              }
+            }
+          }
+        }
+      },
+      "2H": {
+        "horizons": {
+          "1": {
+            "maximum_subsequent_overlap_anchors": 4,
+            "overlap_rate_pct": 66.5865,
+            "overlap_records": 277,
+            "records": 416,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 111,
+                  "maximum": "77.9",
+                  "median": "0.400",
+                  "minimum": "-15.6",
+                  "p10": "-9.700",
+                  "p90": "11.600"
+                },
+                "raw_return_pips": {
+                  "count": 139,
+                  "maximum": "77.9",
+                  "median": "1.200",
+                  "minimum": "-30.4",
+                  "p10": "-10.920",
+                  "p90": "10.880"
+                },
+                "records": 139
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 10,
+                  "maximum": "20.6",
+                  "median": "0.300",
+                  "minimum": "-7.5",
+                  "p10": "-6.600",
+                  "p90": "11.960"
+                },
+                "raw_return_pips": {
+                  "count": 13,
+                  "maximum": "11.0",
+                  "median": "-4.100",
+                  "minimum": "-20.6",
+                  "p10": "-10.020",
+                  "p90": "5.940"
+                },
+                "records": 13
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 217,
+                  "maximum": "53.4",
+                  "median": "0.700",
+                  "minimum": "-53.9",
+                  "p10": "-15.900",
+                  "p90": "13.760"
+                },
+                "raw_return_pips": {
+                  "count": 264,
+                  "maximum": "53.9",
+                  "median": "0.300",
+                  "minimum": "-45.2",
+                  "p10": "-14.070",
+                  "p90": "15.780"
+                },
+                "records": 264
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              }
+            }
+          },
+          "12": {
+            "maximum_subsequent_overlap_anchors": 36,
+            "overlap_rate_pct": 100.0,
+            "overlap_records": 192,
+            "records": 192,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 12,
+                  "maximum": "61.1",
+                  "median": "14.600",
+                  "minimum": "-104.8",
+                  "p10": "-40.890",
+                  "p90": "47.650"
+                },
+                "raw_return_pips": {
+                  "count": 13,
+                  "maximum": "104.8",
+                  "median": "24.300",
+                  "minimum": "-46.3",
+                  "p10": "-36.080",
+                  "p90": "58.440"
+                },
+                "records": 13
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 141,
+                  "maximum": "129.9",
+                  "median": "-3.500",
+                  "minimum": "-107.4",
+                  "p10": "-48.800",
+                  "p90": "51.600"
+                },
+                "raw_return_pips": {
+                  "count": 179,
+                  "maximum": "167.2",
+                  "median": "-8.400",
+                  "minimum": "-109.8",
+                  "p10": "-52.720",
+                  "p90": "52.100"
+                },
+                "records": 179
+              }
+            }
+          },
+          "2": {
+            "maximum_subsequent_overlap_anchors": 9,
+            "overlap_rate_pct": 88.2051,
+            "overlap_records": 344,
+            "records": 390,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 37,
+                  "maximum": "22.5",
+                  "median": "-2.500",
+                  "minimum": "-26.5",
+                  "p10": "-12.540",
+                  "p90": "13.740"
+                },
+                "raw_return_pips": {
+                  "count": 46,
+                  "maximum": "22.5",
+                  "median": "1.000",
+                  "minimum": "-26.5",
+                  "p10": "-12.700",
+                  "p90": "11.850"
+                },
+                "records": 46
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 142,
+                  "maximum": "60.4",
+                  "median": "1.800",
+                  "minimum": "-44.4",
+                  "p10": "-17.340",
+                  "p90": "18.740"
+                },
+                "raw_return_pips": {
+                  "count": 163,
+                  "maximum": "60.4",
+                  "median": "-0.600",
+                  "minimum": "-49.7",
+                  "p10": "-18.200",
+                  "p90": "20.560"
+                },
+                "records": 163
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 136,
+                  "maximum": "106.1",
+                  "median": "0.500",
+                  "minimum": "-57.4",
+                  "p10": "-20.950",
+                  "p90": "19.450"
+                },
+                "raw_return_pips": {
+                  "count": 181,
+                  "maximum": "106.1",
+                  "median": "-0.500",
+                  "minimum": "-47.0",
+                  "p10": "-20.500",
+                  "p90": "22.900"
+                },
+                "records": 181
+              }
+            }
+          },
+          "4": {
+            "maximum_subsequent_overlap_anchors": 16,
+            "overlap_rate_pct": 97.0414,
+            "overlap_records": 328,
+            "records": 338,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 8,
+                  "maximum": "8.7",
+                  "median": "-2.600",
+                  "minimum": "-26.9",
+                  "p10": "-20.320",
+                  "p90": "2.330"
+                },
+                "raw_return_pips": {
+                  "count": 10,
+                  "maximum": "2.6",
+                  "median": "-1.000",
+                  "minimum": "-26.9",
+                  "p10": "-18.440",
+                  "p90": "2.600"
+                },
+                "records": 10
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 75,
+                  "maximum": "57.6",
+                  "median": "4.500",
+                  "minimum": "-42.0",
+                  "p10": "-18.500",
+                  "p90": "19.720"
+                },
+                "raw_return_pips": {
+                  "count": 82,
+                  "maximum": "42.0",
+                  "median": "-2.200",
+                  "minimum": "-57.6",
+                  "p10": "-18.080",
+                  "p90": "19.980"
+                },
+                "records": 82
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 191,
+                  "maximum": "110.7",
+                  "median": "-0.200",
+                  "minimum": "-83.8",
+                  "p10": "-31.700",
+                  "p90": "31.200"
+                },
+                "raw_return_pips": {
+                  "count": 246,
+                  "maximum": "109.2",
+                  "median": "-1.000",
+                  "minimum": "-110.7",
+                  "p10": "-31.750",
+                  "p90": "32.650"
+                },
+                "records": 246
+              }
+            }
+          },
+          "8": {
+            "maximum_subsequent_overlap_anchors": 26,
+            "overlap_rate_pct": 100.0,
+            "overlap_records": 261,
+            "records": 261,
+            "strata": {
+              "NO_OVERLAP": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SAME_TIME_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "raw_return_pips": {
+                  "count": 0,
+                  "maximum": null,
+                  "median": null,
+                  "minimum": null,
+                  "p10": null,
+                  "p90": null
+                },
+                "records": 0
+              },
+              "SUBSEQUENT_CROSS_CLOCK_ONLY": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 26,
+                  "maximum": "58.1",
+                  "median": "1.850",
+                  "minimum": "-63.2",
+                  "p10": "-28.000",
+                  "p90": "44.600"
+                },
+                "raw_return_pips": {
+                  "count": 27,
+                  "maximum": "63.2",
+                  "median": "5.900",
+                  "minimum": "-49.3",
+                  "p10": "-32.760",
+                  "p90": "43.940"
+                },
+                "records": 27
+              },
+              "SUBSEQUENT_SAME_CLOCK": {
+                "direction_normalized_endpoint_return_pips": {
+                  "count": 184,
+                  "maximum": "138.3",
+                  "median": "-0.450",
+                  "minimum": "-138.2",
+                  "p10": "-38.100",
+                  "p90": "31.940"
+                },
+                "raw_return_pips": {
+                  "count": 234,
+                  "maximum": "138.3",
+                  "median": "-3.700",
+                  "minimum": "-123.0",
+                  "p10": "-37.890",
+                  "p90": "43.980"
+                },
+                "records": 234
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "review_contract_version": "OPT-C-SEMANTIC-REVIEW-0.1",
+  "reviewed_horizons_hours": [
+    1,
+    2,
+    4,
+    8,
+    12
+  ],
+  "reviewed_outcome_records": 14979,
+  "status": "PASS_WITH_OVERLAP_AND_SPARSE_COHORT_CONTROLS",
+  "support_bands": {
+    "ADEQUATE_DESCRIPTIVE_SUPPORT": [
+      100,
+      null
+    ],
+    "EMPTY": [
+      0,
+      0
+    ],
+    "LIMITED_DESCRIPTIVE_SUPPORT": [
+      30,
+      99
+    ],
+    "SPARSE_NO_COMPARISON": [
+      1,
+      29
+    ]
+  }
+}

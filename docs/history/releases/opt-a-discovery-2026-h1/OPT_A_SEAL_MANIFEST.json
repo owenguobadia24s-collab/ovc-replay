@@ -1,0 +1,126 @@
+{
+  "artifacts": [
+    {
+      "path": "sources/m1/GBPUSD_M1_BID_2026-01-01_to_2026-07-01_UTC_PROVIDER_DIRECT.csv",
+      "role": "RAW_M1_PROVIDER_RELEASE",
+      "sha256": "3d18d9a0a5d813522654543f49146f7841e2851c682aa946454cc685e26f67e0",
+      "size_bytes": 10108191
+    },
+    {
+      "path": "sources/h1/GBP-USD_1Hour_BID_2026-01-01_to_2026-01-31_Etc_UTC.csv",
+      "role": "RAW_H1_PROVIDER_RELEASE",
+      "sha256": "96564e2fbb7b69113ce3918ba51c3404979ac4d9c83b9bd4b1b2488c397e3929",
+      "size_bytes": 34573
+    },
+    {
+      "path": "sources/h1/GBP-USD_1Hour_BID_2026-02-01_to_2026-02-28_Etc_UTC.csv",
+      "role": "RAW_H1_PROVIDER_RELEASE",
+      "sha256": "ac6902fd3c17ed748fb02b0249e1f6e16f362dd92512ad541e7e5fdccd061415",
+      "size_bytes": 32971
+    },
+    {
+      "path": "sources/h1/GBP-USD_1Hour_BID_2026-03-01_to_2026-03-31_Etc_UTC.csv",
+      "role": "RAW_H1_PROVIDER_RELEASE",
+      "sha256": "0ae5b430f31f7014bad49d9cc52f618356ac5abc4cc6f742be715a131a754baf",
+      "size_bytes": 36529
+    },
+    {
+      "path": "sources/h1/GBP-USD_1Hour_BID_2026-04-01_to_2026-04-30_Etc_UTC.csv",
+      "role": "RAW_H1_PROVIDER_RELEASE",
+      "sha256": "af75f42788752c908dd39addf91f2feec0d2e18567f4bb82b8195c6a3706fcb9",
+      "size_bytes": 36259
+    },
+    {
+      "path": "sources/h1/GBP-USD_1Hour_BID_2026-05-01_to_2026-05-31_Etc_UTC.csv",
+      "role": "RAW_H1_PROVIDER_RELEASE",
+      "sha256": "01be50eda06f2012fae45cef9cef648476b50b667637b1dffae2ee3e09b83a09",
+      "size_bytes": 34546
+    },
+    {
+      "path": "sources/h1/GBP-USD_1Hour_BID_2026-06-01_to_2026-06-30_Etc_UTC.csv",
+      "role": "RAW_H1_PROVIDER_RELEASE",
+      "sha256": "24ad9c1ca34bf4a60f9dac665f6e0e4e0a577cf6120b29bffc939eee0ba7b6e2",
+      "size_bytes": 36269
+    },
+    {
+      "path": "canonical/accepted_15m.csv",
+      "role": "CANONICAL_15M_DETAIL",
+      "sha256": "6eca8ca9529968ae0a0594837886504bb4a2e5e17899857920089c1207b56c85",
+      "size_bytes": 2656846
+    },
+    {
+      "path": "canonical/accepted_2h.csv",
+      "role": "CANONICAL_2H_SPINE",
+      "sha256": "28acab32b3b5325709a3654dd909b3e7fe446fed0598a94b29a6cba10a29072c",
+      "size_bytes": 343212
+    },
+    {
+      "path": "reconciliation/m1_chain_accepted_2h.csv",
+      "role": "M1_CHAIN_2H_CORROBORATION",
+      "sha256": "f6682510236b4c0666b7a953c066ab0137373c5f6b9819a53d53d57fdab476da",
+      "size_bytes": 292135
+    },
+    {
+      "path": "reconciliation/opt_a_2h_reconciliation_ledger.csv",
+      "role": "RECONCILIATION_LEDGER",
+      "sha256": "02858d5623a5b1f81fa4499296886b4744ec5ed0b5ea3b4e9bd84a48ea65be38",
+      "size_bytes": 228289
+    },
+    {
+      "path": "reconciliation/opt_a_hourly_only_exceptions.csv",
+      "role": "RECONCILIATION_EXCEPTIONS",
+      "sha256": "392694c6c3cc6dc453849169522c48694cfcd0c365621c3c8522ec02fa8b58bf",
+      "size_bytes": 59602
+    },
+    {
+      "path": "reconciliation/opt_a_reconciliation_summary.json",
+      "role": "RECONCILIATION_SUMMARY",
+      "sha256": "c70ad2e0cafd5be687f42ca5ecd6ff6ad0e4f55fb8defc72df26950a97287a2a",
+      "size_bytes": 2361
+    },
+    {
+      "path": "reconciliation/OVC_OPT_A_RECONCILIATION_AUDIT_2026_H1.md",
+      "role": "RECONCILIATION_REPORT",
+      "sha256": "ce5789e45c9bed0760ec2f0327b32740dc24b7fcca0d376f59c043e8857e6ba3",
+      "size_bytes": 4574
+    }
+  ],
+  "authority": {
+    "15M": "Provider-returned M1 candles aggregated only from 15 exact M1 records",
+    "2H": "Provider H1 candles aggregated from two exact UTC H1 bars",
+    "execution_authority": "NONE",
+    "incomplete_15M": "QUARANTINED",
+    "lower_resolution_inference": "PROHIBITED",
+    "synthetic_flat_candles": "PROHIBITED"
+  },
+  "counts": {
+    "canonical_15m_bars": 11830,
+    "canonical_2h_bars": 1521,
+    "h1_rejected_2h_buckets": 33,
+    "m1_detail_complete_2h_bars": 1312,
+    "m1_detail_incomplete_2h_bars": 209,
+    "m1_rejected_15m_buckets": 470,
+    "raw_m1_rows": 183619
+  },
+  "immutability_rule": "Any byte change creates a new seal_id and seal version; this release is never overwritten.",
+  "lineage_flags": {
+    "M1_DETAIL_COMPLETE": 1312,
+    "M1_DETAIL_INCOMPLETE": 209
+  },
+  "operator_authorization": "Direct operator instruction: Seal OPT A",
+  "scope": {
+    "canonical_timeframes": [
+      "15M",
+      "2H"
+    ],
+    "instrument_id": "GBPUSD",
+    "interval": "[2026-01-01T00:00:00Z, 2026-07-01T00:00:00Z)",
+    "price_side": "BID",
+    "timezone": "UTC"
+  },
+  "seal_hash": "0927f7a2b078d670370eb9ec26718f3e2ff0d97708df1f785a9333264415ef99",
+  "seal_id": "OPT-A.GBPUSD.2026H1.v1",
+  "seal_version": "A-SEAL-1.0",
+  "sealed_date": "2026-07-19",
+  "status": "SEALED_RESEARCH_AUTHORITY"
+}

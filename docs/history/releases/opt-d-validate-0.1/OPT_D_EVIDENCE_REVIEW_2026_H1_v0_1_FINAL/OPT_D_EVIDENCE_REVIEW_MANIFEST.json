@@ -1,0 +1,139 @@
+{
+  "artifacts": [
+    {
+      "path": "opt_d_story_review_ledger.jsonl.gz",
+      "sha256": "d29f479ce034ecfcf25cd551894898da805a359c6c6badb2d8d54d594ca3e60e",
+      "size_bytes": 1395120
+    },
+    {
+      "path": "opt_d_pending_hypothesis_register.jsonl.gz",
+      "sha256": "0785abdf9e5eba942f809a90d06f2db301186787ba5798c0aba29553c60e404e",
+      "size_bytes": 188132
+    },
+    {
+      "path": "opt_d_directional_symmetry_review.jsonl.gz",
+      "sha256": "f516710acd3fbf7706adecc0fac0349b680fa5053b2338b5e509a7ca78a92695",
+      "size_bytes": 32394
+    },
+    {
+      "path": "opt_d_evidence_review_summary.json",
+      "sha256": "b70199f7564880721a3b983ea6b070936640ab78f6daa976d86816b93dd4af63",
+      "size_bytes": 2787
+    },
+    {
+      "path": "OVC_OPT_D_EVIDENCE_REVIEW_REPORT_v0_1.md",
+      "sha256": "708fdcd44413db7379f358ebf386df67bae4cfb93046f8025bc920ee549c6573",
+      "size_bytes": 2496
+    },
+    {
+      "path": "OVC_OPT_D_EVIDENCE_REVIEW_HYPOTHESIS_CONTRACT_v0_1.md",
+      "sha256": "dea0d4de96add9d7f3dd17bd63b51ca03adc0dec5af631261a95cd43ff6b01ae",
+      "size_bytes": 3381
+    },
+    {
+      "path": "OPT_D_REVIEW_OPERATOR_RATIFICATION_CHECKLIST_v0_1.md",
+      "sha256": "aa9d48840e9e828e8d24926c0d9fc732f91451b9d8474d09419a37b75e967de9",
+      "size_bytes": 1372
+    },
+    {
+      "path": "OVC_OPT_D_REPEATED_STORY_EVIDENCE_CONTRACT_v0_1.md",
+      "sha256": "70f57c9a7eed5d5b8309fdfd0adf52ce9740a78d3a55a581044750a042ad8bab",
+      "size_bytes": 3266
+    }
+  ],
+  "authority_boundary": "In-sample exploratory review and pending hypothesis definitions only. No validation, independence, probability, edge, recommendation, trade or execution authority.",
+  "blocked_horizons_hours": [
+    48
+  ],
+  "coverage_only_horizons_hours": [
+    24
+  ],
+  "generated_date": "2026-07-19",
+  "implementation_hashes": {
+    "__init__.py": "c212a4837abf93c95743eaf0e62f8d39b8ea48038fd5a2f8ec5b4bb7dadcba56",
+    "build_opt_d_review.py": "00803dffeca397b530a2408b7005ee31385da67d5dff827672baf08343b57afb",
+    "review.py": "fe9314afd3268d18c9f065c4e98678fac7367e02abc809673531424c80833a2f",
+    "test_opt_d_review.py": "91453d363a58cf3b9a62373f0bc86a964bcbe40a3bb4ee9e199625f24f86776f"
+  },
+  "manifest_hash": "106137fb0a7984080ea393e038e4cacdaf4fde8ffb2bec211d5455b447f79a00",
+  "parent_contrast_manifest_hash": "73a29381d12825b38bce4de40152fa8b2d74f1119a44453938719d61cb595b46",
+  "parent_story_manifest_hash": "ec7821a874137128919402a7d5821dbe9904500e052a3931a6dda58417973d6b",
+  "release_id": "OPT-D-EVIDENCE-REVIEW-GBPUSD-2026H1-v0.1",
+  "results": {
+    "candidate_alignment_counts": {
+      "ALIGNED": 81,
+      "OPPOSITE": 121
+    },
+    "candidate_clock_counts": {
+      "15M": 202
+    },
+    "candidate_counter_story_cluster_links": 25182,
+    "candidate_counterexample_memberships": 15455,
+    "candidate_direction_counts": {
+      "DOWN": 104,
+      "UP": 98
+    },
+    "candidate_family_counts": {
+      "ACCEPTANCE_FRONTIER": 62,
+      "ACCEPTANCE_FRONTIER+DISPLACEMENT": 1,
+      "ACCEPTANCE_FRONTIER+INTERACTION": 9,
+      "DISPLACEMENT": 36,
+      "DISPLACEMENT+INTERACTION": 5,
+      "INTERACTION": 89
+    },
+    "candidate_horizon_counts": {
+      "1": 62,
+      "2": 61,
+      "4": 50,
+      "8": 29
+    },
+    "candidate_month_counts": {
+      "4": 15,
+      "5": 38,
+      "6": 149
+    },
+    "candidate_representative_cases": 236,
+    "candidates_with_counter_story": 202,
+    "candidates_with_mirror": 156,
+    "candidates_without_counter_story": 0,
+    "candidates_without_mirror": 46,
+    "complete_directional_pairs": 78,
+    "holdout_rules": {
+      "cluster_counting": "DISTINCT_OVERLAP_CLUSTERS_ONLY",
+      "counter_story_alert": "CONTRADICTORY_RESPONSE_CLUSTERS_GREATER_THAN_OR_EQUAL_TO_MATCHING_CLUSTERS",
+      "counter_story_definition": "SAME_ANTECEDENT_AND_HORIZON_WITH_OPPOSITE_ENDPOINT_ALIGNMENT_OR_FRONTIER_POLARITY",
+      "definition_authority": "OPT_D_STORY_0_1_AND_OPT_D_REVIEW_0_1_FROZEN",
+      "definition_drift_status": "INVALID_DEFINITION_OR_LINEAGE_DRIFT",
+      "eligible_status": "EVALUABLE",
+      "input_authority": "NEW_SEALED_NON_OVERLAPPING_OPT_A_RELEASE",
+      "insufficient_status": "NOT_EVALUABLE_INSUFFICIENT_ANTECEDENT_COVERAGE",
+      "minimum_evaluable_antecedent_clusters": 10,
+      "minimum_evaluable_antecedent_months": 4,
+      "minimum_reappearance_matching_clusters": 10,
+      "minimum_reappearance_matching_months": 4,
+      "monthly_reporting": "ALL_SUPPLIED_MONTHS_WITH_ZERO_SUPPORT_MONTHS_EXPLICIT",
+      "not_reappeared_status": "STRUCTURAL_STORY_NOT_REAPPEARED",
+      "reappeared_status": "STRUCTURAL_STORY_REAPPEARED",
+      "threshold_optimization": "PROHIBITED_DURING_HOLDOUT"
+    },
+    "operator_decision": "PENDING_BATCH_RATIFICATION",
+    "pending_hypotheses": 202,
+    "review_disposition_counts": {
+      "CANDIDATE_FOR_BATCH_PREREGISTRATION": 202,
+      "RETAIN_LIMITED_SUPPORT_INVENTORY": 449,
+      "RETAIN_MINIMAL_SUPPORT_INVENTORY": 309,
+      "RETAIN_SINGLETON_INVENTORY": 870
+    },
+    "reviewed_archetypes": 1830,
+    "stream_metadata": {
+      "directional_records": 202,
+      "directional_stream_canonical_jsonl_hash": "545ec0836f134d51ae632881b1ae034a689e4ee0625d75e9cc663e5208f83f0c",
+      "hypothesis_records": 202,
+      "hypothesis_stream_canonical_jsonl_hash": "5ce96321714129beee463ca0bfa0408f81dcfbe92eaa09a177838bfd0bdc1124",
+      "review_records": 1830,
+      "review_stream_canonical_jsonl_hash": "cc7d8a49fa7b1e9d6f2b25785d7cd76d0d7cb0c602b942634c2e18197b3fb6b9"
+    }
+  },
+  "review_contract_version": "OPT-D-REVIEW-0.1",
+  "status": "BUILT_FOR_OPERATOR_RATIFICATION_NOT_PREREGISTERED"
+}

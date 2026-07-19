@@ -1,0 +1,123 @@
+{
+  "artifacts": [
+    {
+      "path": "sources/m1/GBPUSD_M1_BID_2025-01-01_to_2026-01-01_UTC_PROVIDER_DIRECT.csv",
+      "role": "RAW_M1_PROVIDER_RELEASE",
+      "sha256": "613abc547b5a53ac982c02ae68c4c3046c69a737cb70a080da3e058bc7cdf6ac",
+      "size_bytes": 20399678
+    },
+    {
+      "path": "retrieval/DUKASCOPY_RETRIEVAL_MANIFEST.json",
+      "role": "RETRIEVAL_MANIFEST",
+      "sha256": "3bbb0f2b654a3be3b44681d8a55caea5f0c9181143cc0602f873860d36430bd8",
+      "size_bytes": 1075
+    },
+    {
+      "path": "canonical/accepted_15m.csv",
+      "role": "CANONICAL_15M_HOLDOUT_AUTHORITY",
+      "sha256": "27fa8a44006e43995cce5babbc4532786a4fb9aecda600def51106677eb86278",
+      "size_bytes": 5325778
+    },
+    {
+      "path": "canonical/accepted_2h.csv",
+      "role": "M1_CHAIN_2H_CONTEXT_ONLY",
+      "sha256": "6c121e65dad293564009165589aabecfeb298dddc404b08efbff488b90dbf14d",
+      "size_bytes": 583471
+    },
+    {
+      "path": "quality/minute_gap_ledger.jsonl.gz",
+      "role": "MINUTE_GAP_LEDGER",
+      "sha256": "2e02248d9785a54e4c8e1748f7577491c7a56ad0fb41950167d30ca6efffd48b",
+      "size_bytes": 18949
+    },
+    {
+      "path": "quality/rejected_15m_buckets.jsonl.gz",
+      "role": "REJECTED_15M_BUCKET_LEDGER",
+      "sha256": "a5b613f48354a1e618e94e534105b07e5794b1981d1fa400ffc64171725e3170",
+      "size_bytes": 6228
+    },
+    {
+      "path": "quality/rejected_2h_context_buckets.jsonl.gz",
+      "role": "REJECTED_2H_CONTEXT_BUCKET_LEDGER",
+      "sha256": "9a66570180f1b1418a8f161fdc8bb005805696b584f7ba97d0f071314158e829",
+      "size_bytes": 2782
+    },
+    {
+      "path": "quality/OPT_A_VALIDATION_INGESTION_SUMMARY.json",
+      "role": "INGESTION_SUMMARY",
+      "sha256": "246255b5f76c9c7b2f94177eb1964bd28c1892c8e7f7a08339184e91ac4ee03d",
+      "size_bytes": 1353
+    },
+    {
+      "path": "OPT_A_GBPUSD_2025_VALIDATION_SEAL_REPORT.md",
+      "role": "HUMAN_READABLE_REPORT",
+      "sha256": "ded44a62f6b7beadf2bb74ff503865700145818c8ad10249a39682b8916e6c40",
+      "size_bytes": 1193
+    }
+  ],
+  "authority": {
+    "15M": "Provider-returned M1 candles aggregated only from 15 exact records",
+    "2H": "M1-chain context only; no OPT-D hypothesis authority",
+    "execution_authority": "NONE",
+    "incomplete_15M": "QUARANTINED",
+    "synthetic_flat_candles": "PROHIBITED"
+  },
+  "counts": {
+    "absent_minutes": 154526,
+    "accepted_15m_bars": 23824,
+    "accepted_2h_context_bars": 2633,
+    "boundary_absent_minutes": 1442,
+    "contiguous_15m_segments": 677,
+    "expected_interval_15m_buckets": 35040,
+    "expected_interval_2h_buckets": 4380,
+    "expected_interval_minutes": 525600,
+    "first_provider_open_utc": "2025-01-01T22:01:00+00:00",
+    "gap_classification_counts": {
+      "BOUNDARY_ABSENCE": 2,
+      "CLOSURE_LIKE": 53,
+      "SPARSE_PROVIDER_INTERVAL": 1500
+    },
+    "gap_records": 1555,
+    "internal_closure_like_missing_minutes": 150712,
+    "internal_sparse_missing_minutes": 2372,
+    "interval": "[2025-01-01T00:00:00Z, 2026-01-01T00:00:00Z)",
+    "last_provider_close_utc": "2025-12-31T21:59:00+00:00",
+    "maximum_15m_segment_bars": 184,
+    "minimum_15m_segment_bars": 1,
+    "raw_m1_rows": 371074,
+    "raw_zero_volume_rows": 0,
+    "rejected_touched_15m_buckets": 1076,
+    "rejected_touched_2h_context_buckets": 504,
+    "stream_metadata": {
+      "gaps_canonical_jsonl_hash": "59b367626ac30031e7eb7ee4511c1a7798d4651b9772ced668e74674e90db757",
+      "gaps_records": 1555,
+      "rejected_15m_canonical_jsonl_hash": "cab8363091ea198222aa24a222ed8db62820cbf32a914ecbfc449d35727bedf0",
+      "rejected_15m_records": 1076,
+      "rejected_2h_canonical_jsonl_hash": "17222f1f76acedcaa9b16921048bceb2f17d0fa64d3a8171f3e9090774ec5cd9",
+      "rejected_2h_records": 504
+    }
+  },
+  "immutability_rule": "Any byte change creates a new seal ID/version; this release is never overwritten.",
+  "implementation_hashes": {
+    "build_opt_a_validation_seal.py": "ab04c85a84ac944314a0fb7cdcb05ead3cd477f0d0598391de4940b1a615bc29",
+    "dukascopy.py": "95fafa5c773f2bb67d977273bf3752863f001fbcba905b2cb317030019492f0f"
+  },
+  "operator_authorization": "Operator approved 2025 Dukascopy ingestion for OPT-D-VALIDATE-0.1",
+  "scope": {
+    "canonical_timeframes": [
+      "15M"
+    ],
+    "context_only_timeframes": [
+      "2H"
+    ],
+    "instrument_id": "GBPUSD",
+    "interval": "[2025-01-01T00:00:00Z, 2026-01-01T00:00:00Z)",
+    "price_side": "BID",
+    "timezone": "UTC"
+  },
+  "seal_hash": "85c1ce9f7721b33c4aef97a86561bd3c6fd8bc7681214a689d56bf147d4575d4",
+  "seal_id": "OPT-A.GBPUSD.2025.v1",
+  "seal_version": "A-SEAL-VALIDATION-1.0",
+  "sealed_date": "2026-07-19",
+  "status": "SEALED_VALIDATION_RESEARCH_AUTHORITY"
+}
