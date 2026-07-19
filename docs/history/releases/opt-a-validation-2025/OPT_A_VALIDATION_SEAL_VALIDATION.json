@@ -1,0 +1,88 @@
+{
+  "artifact_checks": [
+    {
+      "path": "sources/m1/GBPUSD_M1_BID_2025-01-01_to_2026-01-01_UTC_PROVIDER_DIRECT.csv",
+      "sha256": "613abc547b5a53ac982c02ae68c4c3046c69a737cb70a080da3e058bc7cdf6ac",
+      "status": "PASS"
+    },
+    {
+      "path": "retrieval/DUKASCOPY_RETRIEVAL_MANIFEST.json",
+      "sha256": "3bbb0f2b654a3be3b44681d8a55caea5f0c9181143cc0602f873860d36430bd8",
+      "status": "PASS"
+    },
+    {
+      "path": "canonical/accepted_15m.csv",
+      "sha256": "27fa8a44006e43995cce5babbc4532786a4fb9aecda600def51106677eb86278",
+      "status": "PASS"
+    },
+    {
+      "path": "canonical/accepted_2h.csv",
+      "sha256": "6c121e65dad293564009165589aabecfeb298dddc404b08efbff488b90dbf14d",
+      "status": "PASS"
+    },
+    {
+      "path": "quality/minute_gap_ledger.jsonl.gz",
+      "sha256": "2e02248d9785a54e4c8e1748f7577491c7a56ad0fb41950167d30ca6efffd48b",
+      "status": "PASS"
+    },
+    {
+      "path": "quality/rejected_15m_buckets.jsonl.gz",
+      "sha256": "a5b613f48354a1e618e94e534105b07e5794b1981d1fa400ffc64171725e3170",
+      "status": "PASS"
+    },
+    {
+      "path": "quality/rejected_2h_context_buckets.jsonl.gz",
+      "sha256": "9a66570180f1b1418a8f161fdc8bb005805696b584f7ba97d0f071314158e829",
+      "status": "PASS"
+    },
+    {
+      "path": "quality/OPT_A_VALIDATION_INGESTION_SUMMARY.json",
+      "sha256": "246255b5f76c9c7b2f94177eb1964bd28c1892c8e7f7a08339184e91ac4ee03d",
+      "status": "PASS"
+    },
+    {
+      "path": "OPT_A_GBPUSD_2025_VALIDATION_SEAL_REPORT.md",
+      "sha256": "ded44a62f6b7beadf2bb74ff503865700145818c8ad10249a39682b8916e6c40",
+      "status": "PASS"
+    }
+  ],
+  "counts": {
+    "absent_minutes": 154526,
+    "accepted_15m_bars": 23824,
+    "accepted_2h_context_bars": 2633,
+    "raw_m1_rows": 371074,
+    "rejected_touched_15m_buckets": 1076
+  },
+  "determinism": {
+    "checked": true,
+    "seal_hash_match": true
+  },
+  "gate_controls": {
+    "2h_is_context_only": true,
+    "all_incomplete_15m_buckets_quarantined": true,
+    "canonical_15m_recomputed": true,
+    "minute_coverage_conserved": true,
+    "no_execution_authority": true,
+    "provider_rows_strictly_monotonic": true,
+    "zero_synthetic_flat_rows": true
+  },
+  "status": "PASS",
+  "stream_checks": [
+    {
+      "canonical_jsonl_hash": "59b367626ac30031e7eb7ee4511c1a7798d4651b9772ced668e74674e90db757",
+      "path": "quality/minute_gap_ledger.jsonl.gz",
+      "rows": 1555
+    },
+    {
+      "canonical_jsonl_hash": "cab8363091ea198222aa24a222ed8db62820cbf32a914ecbfc449d35727bedf0",
+      "path": "quality/rejected_15m_buckets.jsonl.gz",
+      "rows": 1076
+    },
+    {
+      "canonical_jsonl_hash": "17222f1f76acedcaa9b16921048bceb2f17d0fa64d3a8171f3e9090774ec5cd9",
+      "path": "quality/rejected_2h_context_buckets.jsonl.gz",
+      "rows": 504
+    }
+  ],
+  "validated_seal_hash": "85c1ce9f7721b33c4aef97a86561bd3c6fd8bc7681214a689d56bf147d4575d4"
+}

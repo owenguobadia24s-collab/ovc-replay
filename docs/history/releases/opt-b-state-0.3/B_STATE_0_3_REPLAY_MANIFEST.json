@@ -1,0 +1,1070 @@
+{
+  "artifacts": [
+    {
+      "path": "parallel_axis_state_stream_15m.jsonl.gz",
+      "sha256": "732bf2737b6b82e9b7f7fcc3c6177b8c6d4602ede9abb3e070a51224c358b7dc",
+      "size_bytes": 39990742
+    },
+    {
+      "path": "parallel_axis_transition_records_15m.jsonl.gz",
+      "sha256": "0ad8986af0d9f5a7c1acce65e971078d3e703d88ad9a2576e434008e116cdaa1",
+      "size_bytes": 243781
+    },
+    {
+      "path": "parallel_axis_state_stream_2h.jsonl.gz",
+      "sha256": "327b9ffa6ae8f99f2dc233feaaaa82f756802dbdef3efce6ef77ccda3f045c65",
+      "size_bytes": 1095786
+    },
+    {
+      "path": "parallel_axis_transition_records_2h.jsonl.gz",
+      "sha256": "1d24978860ea7be11f3f19050619c239765eb14d8728a8bf5c98a71bf58a691c",
+      "size_bytes": 30071
+    },
+    {
+      "path": "b_state_0_3_comparison_summary.json",
+      "sha256": "4d5d813ead71d6e5929c6bcf2853abfc4e2ea4bf96ae8578bfb7c82c4446485e",
+      "size_bytes": 29033
+    },
+    {
+      "path": "OVC_OPT_B_STATE_v0_3_H1_COMPARISON_REPORT.md",
+      "sha256": "e035e4b40e8a174740c2d5bf52566f95bb3d6db84f3fa51017d89f5194a01390",
+      "size_bytes": 2406
+    },
+    {
+      "path": "OVC_OPT_B_PARALLEL_AXIS_STATE_CONTRACT_v0_3.md",
+      "sha256": "720a0458e6f7bdde4a082430056c65d8027a46e47fe6eb6782cbfd130c0be40d",
+      "size_bytes": 3367
+    },
+    {
+      "path": "B_STATE_0_3_OPERATOR_REVIEW_CHECKLIST.md",
+      "sha256": "e6c732d8cf8dfead85d540eda8dfe4000da99fc104d537cab241de4d69e7c489",
+      "size_bytes": 1345
+    },
+    {
+      "path": "OVC_OPT_B_COMPLETE_REPLAY_INPUT_REPAIR_RECORD.md",
+      "sha256": "1f4f9faecb4a8453717306c4524f3559f1f6f38e9dc4ac6323833b5613ef2c02",
+      "size_bytes": 1582
+    }
+  ],
+  "authority_boundary": "B-STATE-0.3 is historically replayed for semantic comparison only and is not ratified. No OPT-C outcome, edge, recommendation or execution authority.",
+  "complete_replay_manifest_hash": "d072e2713b337a8d73b54135e8f832153006201232eca24a13906a46258f3389",
+  "generated_date": "2026-07-19",
+  "implementation_hashes": {
+    "run_parallel_axis_state_replay.py": "c17cb6698c8543f5d7404e64217bb5861144958da65236503b9672573f6770d6",
+    "state_v03.py": "e012cb9d8f0f0bc25ab800a346176d75c6b4ec18dfa60abe7c8e8a05d5f8d240",
+    "test_state_v03.py": "826f010b627d6f4fcd96a27d1b0c1b25ecacc59a150eb71d49c0f46aed21171c"
+  },
+  "manifest_hash": "7da71fc6a478f23b42159032badffa206cd80886631e10f00f5dd22e183c79b5",
+  "opt_a_seal_hash": "0927f7a2b078d670370eb9ec26718f3e2ff0d97708df1f785a9333264415ef99",
+  "reference_registry_hash": "7aa84f4bc774a86cae66992fc753b34e7f35b8576a19e7e84164c1fb9cb5949f",
+  "release_id": "B-STATE-GBPUSD-2026H1-v0.3",
+  "relevance_policy_id": "B-REF-0.2-STRUCTURAL-ONLY",
+  "relevance_review_manifest_hash": "165cd548d61cf5a4e89c53a5dff392cc3ad7a2e2a5109f4875a702b86e2bf873",
+  "results": {
+    "15M": {
+      "comparison": {
+        "v02_acceptance_duration_bars": {
+          "episodes": 698,
+          "max_bars": 93,
+          "mean_bars": 14.7221,
+          "median_bars": 11.0,
+          "p90_bars": 30
+        },
+        "v02_acceptance_occupancy_pct": 86.8639,
+        "v02_ambiguous_occupancy_pct": 5.1479,
+        "v02_conflicting_trigger_count": 391,
+        "v02_exclusive_transitions_per_1000_bars": 183.2629,
+        "v02_suppressed_lower_precedence_triggers": 1245,
+        "v03_axis_transitions_per_1000_bars": {
+          "compression": 10.1437,
+          "displacement": 63.9053,
+          "interaction": 268.5545,
+          "location": 3.8884,
+          "quality": 18.5968
+        },
+        "v03_genuine_conflict_bars": 0,
+        "v03_genuine_conflict_pct": 0.0,
+        "v03_location_duration_bars": {
+          "episodes": 303,
+          "max_bars": 185,
+          "mean_bars": 38.9142,
+          "median_bars": 6.0,
+          "p90_bars": 94
+        },
+        "v03_location_occupancy_pct": 99.6703,
+        "v03_suppressed_cross_axis_evidence": 0
+      },
+      "evidence_scan": {
+        "admitted_compression": 119,
+        "admitted_displacement": 505,
+        "admitted_interaction": 3113,
+        "admitted_location": 4769,
+        "admitted_status_confirmed": 8506,
+        "excluded_irrelevant": 1596647,
+        "scanned_rows": 2624005
+      },
+      "v02": {
+        "acceptance_occupancy": {
+          "comparable_adjacent_pairs": 11526,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 698,
+              "max_bars": 93,
+              "mean_bars": 14.7221,
+              "median_bars": 11.0,
+              "p90_bars": 30
+            },
+            "INACTIVE": {
+              "episodes": 479,
+              "max_bars": 27,
+              "mean_bars": 3.2443,
+              "median_bars": 2.0,
+              "p90_bars": 5
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 10276,
+            "INACTIVE": 1554
+          },
+          "occupancy_pct": {
+            "ACTIVE": 86.8639,
+            "INACTIVE": 13.1361
+          },
+          "transition_count": 873,
+          "transitions_per_1000_bars": 73.7954
+        },
+        "exclusive_state": {
+          "comparable_adjacent_pairs": 11526,
+          "duration_by_state_bars": {
+            "ACCEPTED_ABOVE": {
+              "episodes": 837,
+              "max_bars": 33,
+              "mean_bars": 5.7718,
+              "median_bars": 4.0,
+              "p90_bars": 13
+            },
+            "ACCEPTED_BELOW": {
+              "episodes": 899,
+              "max_bars": 37,
+              "mean_bars": 6.0567,
+              "median_bars": 4.0,
+              "p90_bars": 14
+            },
+            "AMBIGUOUS": {
+              "episodes": 377,
+              "max_bars": 4,
+              "mean_bars": 1.6154,
+              "median_bars": 2.0,
+              "p90_bars": 2
+            },
+            "COMPRESSED": {
+              "episodes": 20,
+              "max_bars": 22,
+              "mean_bars": 4.75,
+              "median_bars": 2.0,
+              "p90_bars": 12
+            },
+            "DISPLACING_DOWN": {
+              "episodes": 7,
+              "max_bars": 1,
+              "mean_bars": 1.0,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "DISPLACING_UP": {
+              "episodes": 6,
+              "max_bars": 3,
+              "mean_bars": 1.8333,
+              "median_bars": 1.5,
+              "p90_bars": 3
+            },
+            "NEUTRAL": {
+              "episodes": 183,
+              "max_bars": 23,
+              "mean_bars": 2.7814,
+              "median_bars": 1.0,
+              "p90_bars": 4
+            },
+            "RECLAIMED_ABOVE": {
+              "episodes": 48,
+              "max_bars": 24,
+              "mean_bars": 3.1458,
+              "median_bars": 2.0,
+              "p90_bars": 4
+            },
+            "RECLAIMED_BELOW": {
+              "episodes": 57,
+              "max_bars": 3,
+              "mean_bars": 1.4211,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "REJECTED_DOWN": {
+              "episodes": 20,
+              "max_bars": 22,
+              "mean_bars": 2.35,
+              "median_bars": 1.0,
+              "p90_bars": 3
+            },
+            "REJECTED_UP": {
+              "episodes": 18,
+              "max_bars": 22,
+              "mean_bars": 2.4444,
+              "median_bars": 1.0,
+              "p90_bars": 3
+            }
+          },
+          "occupancy_counts": {
+            "ACCEPTED_ABOVE": 4831,
+            "ACCEPTED_BELOW": 5445,
+            "AMBIGUOUS": 609,
+            "COMPRESSED": 95,
+            "DISPLACING_DOWN": 7,
+            "DISPLACING_UP": 11,
+            "NEUTRAL": 509,
+            "RECLAIMED_ABOVE": 151,
+            "RECLAIMED_BELOW": 81,
+            "REJECTED_DOWN": 47,
+            "REJECTED_UP": 44
+          },
+          "occupancy_pct": {
+            "ACCEPTED_ABOVE": 40.8369,
+            "ACCEPTED_BELOW": 46.027,
+            "AMBIGUOUS": 5.1479,
+            "COMPRESSED": 0.803,
+            "DISPLACING_DOWN": 0.0592,
+            "DISPLACING_UP": 0.093,
+            "NEUTRAL": 4.3026,
+            "RECLAIMED_ABOVE": 1.2764,
+            "RECLAIMED_BELOW": 0.6847,
+            "REJECTED_DOWN": 0.3973,
+            "REJECTED_UP": 0.3719
+          },
+          "transition_count": 2168,
+          "transitions_per_1000_bars": 183.2629
+        }
+      },
+      "v03": {
+        "any_axis_active_metrics": {
+          "comparable_adjacent_pairs": 11526,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 303,
+              "max_bars": 185,
+              "mean_bars": 38.9208,
+              "median_bars": 6.0,
+              "p90_bars": 94
+            },
+            "INACTIVE": {
+              "episodes": 2,
+              "max_bars": 22,
+              "mean_bars": 18.5,
+              "median_bars": 18.5,
+              "p90_bars": 22
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 11793,
+            "INACTIVE": 37
+          },
+          "occupancy_pct": {
+            "ACTIVE": 99.6872,
+            "INACTIVE": 0.3128
+          },
+          "transition_count": 1,
+          "transitions_per_1000_bars": 0.0845
+        },
+        "axis_metrics": {
+          "compression": {
+            "comparable_adjacent_pairs": 11526,
+            "duration_by_state_bars": {
+              "COMPRESSED": {
+                "episodes": 126,
+                "max_bars": 29,
+                "mean_bars": 8.1429,
+                "median_bars": 3.0,
+                "p90_bars": 29
+              },
+              "NORMAL": {
+                "episodes": 298,
+                "max_bars": 97,
+                "mean_bars": 36.255,
+                "median_bars": 11.5,
+                "p90_bars": 92
+              }
+            },
+            "occupancy_counts": {
+              "COMPRESSED": 1026,
+              "NORMAL": 10804
+            },
+            "occupancy_pct": {
+              "COMPRESSED": 8.6729,
+              "NORMAL": 91.3271
+            },
+            "transition_count": 120,
+            "transitions_per_1000_bars": 10.1437
+          },
+          "displacement": {
+            "comparable_adjacent_pairs": 11526,
+            "duration_by_state_bars": {
+              "DISPLACING_DOWN": {
+                "episodes": 239,
+                "max_bars": 28,
+                "mean_bars": 4.7113,
+                "median_bars": 4.0,
+                "p90_bars": 10
+              },
+              "DISPLACING_UP": {
+                "episodes": 208,
+                "max_bars": 31,
+                "mean_bars": 5.4135,
+                "median_bars": 4.0,
+                "p90_bars": 12
+              },
+              "NONE": {
+                "episodes": 613,
+                "max_bars": 75,
+                "mean_bars": 15.6248,
+                "median_bars": 12.0,
+                "p90_bars": 35
+              }
+            },
+            "occupancy_counts": {
+              "DISPLACING_DOWN": 1126,
+              "DISPLACING_UP": 1126,
+              "NONE": 9578
+            },
+            "occupancy_pct": {
+              "DISPLACING_DOWN": 9.5182,
+              "DISPLACING_UP": 9.5182,
+              "NONE": 80.9637
+            },
+            "transition_count": 756,
+            "transitions_per_1000_bars": 63.9053
+          },
+          "interaction": {
+            "comparable_adjacent_pairs": 11526,
+            "duration_by_state_bars": {
+              "BREACH_RESPONSE_DOWN": {
+                "episodes": 151,
+                "max_bars": 2,
+                "mean_bars": 1.0066,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              },
+              "BREACH_RESPONSE_UP": {
+                "episodes": 140,
+                "max_bars": 2,
+                "mean_bars": 1.0143,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              },
+              "COMPOUND": {
+                "episodes": 378,
+                "max_bars": 4,
+                "mean_bars": 1.1746,
+                "median_bars": 1.0,
+                "p90_bars": 2
+              },
+              "NONE": {
+                "episodes": 1567,
+                "max_bars": 41,
+                "mean_bars": 6.178,
+                "median_bars": 3.0,
+                "p90_bars": 21
+              },
+              "RECLAIMED_ABOVE": {
+                "episodes": 457,
+                "max_bars": 3,
+                "mean_bars": 1.1619,
+                "median_bars": 1.0,
+                "p90_bars": 2
+              },
+              "RECLAIMED_BELOW": {
+                "episodes": 494,
+                "max_bars": 4,
+                "mean_bars": 1.1781,
+                "median_bars": 1.0,
+                "p90_bars": 2
+              },
+              "REJECTED_DOWN": {
+                "episodes": 153,
+                "max_bars": 2,
+                "mean_bars": 1.0131,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              },
+              "REJECTED_UP": {
+                "episodes": 141,
+                "max_bars": 2,
+                "mean_bars": 1.0142,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              }
+            },
+            "occupancy_counts": {
+              "BREACH_RESPONSE_DOWN": 152,
+              "BREACH_RESPONSE_UP": 142,
+              "COMPOUND": 444,
+              "NONE": 9681,
+              "RECLAIMED_ABOVE": 531,
+              "RECLAIMED_BELOW": 582,
+              "REJECTED_DOWN": 155,
+              "REJECTED_UP": 143
+            },
+            "occupancy_pct": {
+              "BREACH_RESPONSE_DOWN": 1.2849,
+              "BREACH_RESPONSE_UP": 1.2003,
+              "COMPOUND": 3.7532,
+              "NONE": 81.8343,
+              "RECLAIMED_ABOVE": 4.4886,
+              "RECLAIMED_BELOW": 4.9197,
+              "REJECTED_DOWN": 1.3102,
+              "REJECTED_UP": 1.2088
+            },
+            "transition_count": 3177,
+            "transitions_per_1000_bars": 268.5545
+          },
+          "location": {
+            "comparable_adjacent_pairs": 11526,
+            "duration_by_state_bars": {
+              "ACCEPTED_ABOVE": {
+                "episodes": 13,
+                "max_bars": 24,
+                "mean_bars": 10.5385,
+                "median_bars": 9.0,
+                "p90_bars": 24
+              },
+              "ACCEPTED_BELOW": {
+                "episodes": 18,
+                "max_bars": 24,
+                "mean_bars": 9.8333,
+                "median_bars": 7.0,
+                "p90_bars": 24
+              },
+              "ACCEPTED_CORRIDOR": {
+                "episodes": 317,
+                "max_bars": 185,
+                "mean_bars": 36.205,
+                "median_bars": 7.0,
+                "p90_bars": 93
+              },
+              "NEUTRAL": {
+                "episodes": 2,
+                "max_bars": 24,
+                "mean_bars": 19.5,
+                "median_bars": 19.5,
+                "p90_bars": 24
+              }
+            },
+            "occupancy_counts": {
+              "ACCEPTED_ABOVE": 137,
+              "ACCEPTED_BELOW": 177,
+              "ACCEPTED_CORRIDOR": 11477,
+              "NEUTRAL": 39
+            },
+            "occupancy_pct": {
+              "ACCEPTED_ABOVE": 1.1581,
+              "ACCEPTED_BELOW": 1.4962,
+              "ACCEPTED_CORRIDOR": 97.0161,
+              "NEUTRAL": 0.3297
+            },
+            "transition_count": 46,
+            "transitions_per_1000_bars": 3.8884
+          },
+          "quality": {
+            "comparable_adjacent_pairs": 11526,
+            "duration_by_state_bars": {
+              "COHERENT": {
+                "episodes": 222,
+                "max_bars": 184,
+                "mean_bars": 48.3423,
+                "median_bars": 58.5,
+                "p90_bars": 93
+              },
+              "STALE_AFTER_GAP": {
+                "episodes": 302,
+                "max_bars": 29,
+                "mean_bars": 3.6358,
+                "median_bars": 1.0,
+                "p90_bars": 7
+              }
+            },
+            "occupancy_counts": {
+              "COHERENT": 10732,
+              "STALE_AFTER_GAP": 1098
+            },
+            "occupancy_pct": {
+              "COHERENT": 90.7185,
+              "STALE_AFTER_GAP": 9.2815
+            },
+            "transition_count": 220,
+            "transitions_per_1000_bars": 18.5968
+          }
+        },
+        "gap_carry_bars": 302,
+        "genuine_conflict_bars": 0,
+        "genuine_conflict_pct": 0.0,
+        "genuine_conflict_reason_counts": {},
+        "interaction_component_bar_counts": {
+          "BREACH_RESPONSE_DOWN": 335,
+          "BREACH_RESPONSE_UP": 320,
+          "RECLAIMED_ABOVE": 650,
+          "RECLAIMED_BELOW": 707,
+          "REJECTED_DOWN": 347,
+          "REJECTED_UP": 320
+        },
+        "location_active_metrics": {
+          "comparable_adjacent_pairs": 11526,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 303,
+              "max_bars": 185,
+              "mean_bars": 38.9142,
+              "median_bars": 6.0,
+              "p90_bars": 94
+            },
+            "INACTIVE": {
+              "episodes": 2,
+              "max_bars": 24,
+              "mean_bars": 19.5,
+              "median_bars": 19.5,
+              "p90_bars": 24
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 11791,
+            "INACTIVE": 39
+          },
+          "occupancy_pct": {
+            "ACTIVE": 99.6703,
+            "INACTIVE": 0.3297
+          },
+          "transition_count": 1,
+          "transitions_per_1000_bars": 0.0845
+        },
+        "ratified_lifecycles": 11488,
+        "reason_counts": {
+          "COMPRESSION_AXIS_EXITED": 60,
+          "COMPRESSION_AXIS_REFRESHED": 119,
+          "COMPRESSION_EXIT_PENDING": 135,
+          "DISPLACEMENT_AXIS_EXITED": 339,
+          "DISPLACEMENT_AXIS_REFRESHED": 505,
+          "DISPLACEMENT_EXIT_PENDING": 1047,
+          "GAP_CARRY_FORWARD_AXES_STALE": 302,
+          "LOCATION_CONDITION_ENTERED": 4747,
+          "LOCATION_CONDITION_EXITED": 3883,
+          "LOCATION_CONDITION_REFRESHED": 22,
+          "LOCATION_ENDED_RANGE_SUPERSEDED": 678,
+          "LOCATION_MAINTENANCE_FAILED": 9517
+        },
+        "registry_levels": 11488,
+        "source_bars": 11830,
+        "stale_after_gap_bars": 1098,
+        "state_records": 11830,
+        "state_stream_canonical_jsonl_hash": "7ba9a8430292a4ee2e2e01f05367c81477e11cdb75825df1218ce82213187193",
+        "suppressed_cross_axis_evidence": 0,
+        "transition_records": 4319,
+        "transition_stream_canonical_jsonl_hash": "5d7b55208fc6ef3a78a093a11d378060a572c5e6cdd20cc3901b5ca3d37f3fd8"
+      }
+    },
+    "2H": {
+      "comparison": {
+        "v02_acceptance_duration_bars": {
+          "episodes": 80,
+          "max_bars": 36,
+          "mean_bars": 15.5,
+          "median_bars": 16.5,
+          "p90_bars": 27
+        },
+        "v02_acceptance_occupancy_pct": 81.5253,
+        "v02_ambiguous_occupancy_pct": 6.1801,
+        "v02_conflicting_trigger_count": 61,
+        "v02_exclusive_transitions_per_1000_bars": 171.5976,
+        "v02_suppressed_lower_precedence_triggers": 136,
+        "v03_axis_transitions_per_1000_bars": {
+          "compression": 6.5746,
+          "displacement": 50.6246,
+          "interaction": 259.6976,
+          "location": 9.8619,
+          "quality": 16.4366
+        },
+        "v03_genuine_conflict_bars": 0,
+        "v03_genuine_conflict_pct": 0.0,
+        "v03_location_duration_bars": {
+          "episodes": 26,
+          "max_bars": 60,
+          "mean_bars": 57.1154,
+          "median_bars": 59.0,
+          "p90_bars": 60
+        },
+        "v03_location_occupancy_pct": 97.6331,
+        "v03_suppressed_cross_axis_evidence": 0
+      },
+      "evidence_scan": {
+        "admitted_compression": 8,
+        "admitted_displacement": 50,
+        "admitted_interaction": 370,
+        "admitted_location": 599,
+        "admitted_status_confirmed": 1027,
+        "excluded_irrelevant": 51318,
+        "scanned_rows": 81708
+      },
+      "v02": {
+        "acceptance_occupancy": {
+          "comparable_adjacent_pairs": 1494,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 80,
+              "max_bars": 36,
+              "mean_bars": 15.5,
+              "median_bars": 16.5,
+              "p90_bars": 27
+            },
+            "INACTIVE": {
+              "episodes": 65,
+              "max_bars": 28,
+              "mean_bars": 4.3231,
+              "median_bars": 2.0,
+              "p90_bars": 8
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 1240,
+            "INACTIVE": 281
+          },
+          "occupancy_pct": {
+            "ACTIVE": 81.5253,
+            "INACTIVE": 18.4747
+          },
+          "transition_count": 118,
+          "transitions_per_1000_bars": 77.5805
+        },
+        "exclusive_state": {
+          "comparable_adjacent_pairs": 1494,
+          "duration_by_state_bars": {
+            "ACCEPTED_ABOVE": {
+              "episodes": 84,
+              "max_bars": 27,
+              "mean_bars": 7.119,
+              "median_bars": 4.0,
+              "p90_bars": 23
+            },
+            "ACCEPTED_BELOW": {
+              "episodes": 93,
+              "max_bars": 24,
+              "mean_bars": 6.9032,
+              "median_bars": 4.0,
+              "p90_bars": 22
+            },
+            "AMBIGUOUS": {
+              "episodes": 58,
+              "max_bars": 5,
+              "mean_bars": 1.6207,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "DISPLACING_DOWN": {
+              "episodes": 1,
+              "max_bars": 1,
+              "mean_bars": 1.0,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "NEUTRAL": {
+              "episodes": 23,
+              "max_bars": 22,
+              "mean_bars": 5.4348,
+              "median_bars": 2.0,
+              "p90_bars": 21
+            },
+            "RECLAIMED_ABOVE": {
+              "episodes": 11,
+              "max_bars": 2,
+              "mean_bars": 1.1818,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            },
+            "RECLAIMED_BELOW": {
+              "episodes": 11,
+              "max_bars": 22,
+              "mean_bars": 3.6364,
+              "median_bars": 2.0,
+              "p90_bars": 2
+            },
+            "REJECTED_DOWN": {
+              "episodes": 3,
+              "max_bars": 1,
+              "mean_bars": 1.0,
+              "median_bars": 1.0,
+              "p90_bars": 1
+            },
+            "REJECTED_UP": {
+              "episodes": 4,
+              "max_bars": 2,
+              "mean_bars": 1.25,
+              "median_bars": 1.0,
+              "p90_bars": 2
+            }
+          },
+          "occupancy_counts": {
+            "ACCEPTED_ABOVE": 598,
+            "ACCEPTED_BELOW": 642,
+            "AMBIGUOUS": 94,
+            "DISPLACING_DOWN": 1,
+            "NEUTRAL": 125,
+            "RECLAIMED_ABOVE": 13,
+            "RECLAIMED_BELOW": 40,
+            "REJECTED_DOWN": 3,
+            "REJECTED_UP": 5
+          },
+          "occupancy_pct": {
+            "ACCEPTED_ABOVE": 39.3162,
+            "ACCEPTED_BELOW": 42.2091,
+            "AMBIGUOUS": 6.1801,
+            "DISPLACING_DOWN": 0.0657,
+            "NEUTRAL": 8.2183,
+            "RECLAIMED_ABOVE": 0.8547,
+            "RECLAIMED_BELOW": 2.6298,
+            "REJECTED_DOWN": 0.1972,
+            "REJECTED_UP": 0.3287
+          },
+          "transition_count": 261,
+          "transitions_per_1000_bars": 171.5976
+        }
+      },
+      "v03": {
+        "any_axis_active_metrics": {
+          "comparable_adjacent_pairs": 1494,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 27,
+              "max_bars": 60,
+              "mean_bars": 55.037,
+              "median_bars": 59.0,
+              "p90_bars": 60
+            },
+            "INACTIVE": {
+              "episodes": 3,
+              "max_bars": 22,
+              "mean_bars": 11.6667,
+              "median_bars": 12.0,
+              "p90_bars": 22
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 1486,
+            "INACTIVE": 35
+          },
+          "occupancy_pct": {
+            "ACTIVE": 97.6989,
+            "INACTIVE": 2.3011
+          },
+          "transition_count": 3,
+          "transitions_per_1000_bars": 1.9724
+        },
+        "axis_metrics": {
+          "compression": {
+            "comparable_adjacent_pairs": 1494,
+            "duration_by_state_bars": {
+              "COMPRESSED": {
+                "episodes": 5,
+                "max_bars": 5,
+                "mean_bars": 2.6,
+                "median_bars": 2.0,
+                "p90_bars": 5
+              },
+              "NORMAL": {
+                "episodes": 32,
+                "max_bars": 60,
+                "mean_bars": 47.125,
+                "median_bars": 59.0,
+                "p90_bars": 60
+              }
+            },
+            "occupancy_counts": {
+              "COMPRESSED": 13,
+              "NORMAL": 1508
+            },
+            "occupancy_pct": {
+              "COMPRESSED": 0.8547,
+              "NORMAL": 99.1453
+            },
+            "transition_count": 10,
+            "transitions_per_1000_bars": 6.5746
+          },
+          "displacement": {
+            "comparable_adjacent_pairs": 1494,
+            "duration_by_state_bars": {
+              "DISPLACING_DOWN": {
+                "episodes": 32,
+                "max_bars": 17,
+                "mean_bars": 5.5312,
+                "median_bars": 4.5,
+                "p90_bars": 11
+              },
+              "DISPLACING_UP": {
+                "episodes": 17,
+                "max_bars": 11,
+                "mean_bars": 5.2353,
+                "median_bars": 4.0,
+                "p90_bars": 11
+              },
+              "NONE": {
+                "episodes": 55,
+                "max_bars": 59,
+                "mean_bars": 22.8182,
+                "median_bars": 17.0,
+                "p90_bars": 47
+              }
+            },
+            "occupancy_counts": {
+              "DISPLACING_DOWN": 177,
+              "DISPLACING_UP": 89,
+              "NONE": 1255
+            },
+            "occupancy_pct": {
+              "DISPLACING_DOWN": 11.6371,
+              "DISPLACING_UP": 5.8514,
+              "NONE": 82.5115
+            },
+            "transition_count": 77,
+            "transitions_per_1000_bars": 50.6246
+          },
+          "interaction": {
+            "comparable_adjacent_pairs": 1494,
+            "duration_by_state_bars": {
+              "BREACH_RESPONSE_DOWN": {
+                "episodes": 14,
+                "max_bars": 2,
+                "mean_bars": 1.0714,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              },
+              "BREACH_RESPONSE_UP": {
+                "episodes": 29,
+                "max_bars": 1,
+                "mean_bars": 1.0,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              },
+              "COMPOUND": {
+                "episodes": 45,
+                "max_bars": 3,
+                "mean_bars": 1.1778,
+                "median_bars": 1.0,
+                "p90_bars": 2
+              },
+              "NONE": {
+                "episodes": 186,
+                "max_bars": 26,
+                "mean_bars": 6.7366,
+                "median_bars": 3.5,
+                "p90_bars": 22
+              },
+              "RECLAIMED_ABOVE": {
+                "episodes": 41,
+                "max_bars": 5,
+                "mean_bars": 1.2927,
+                "median_bars": 1.0,
+                "p90_bars": 2
+              },
+              "RECLAIMED_BELOW": {
+                "episodes": 63,
+                "max_bars": 3,
+                "mean_bars": 1.1587,
+                "median_bars": 1.0,
+                "p90_bars": 2
+              },
+              "REJECTED_DOWN": {
+                "episodes": 29,
+                "max_bars": 2,
+                "mean_bars": 1.0345,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              },
+              "REJECTED_UP": {
+                "episodes": 15,
+                "max_bars": 1,
+                "mean_bars": 1.0,
+                "median_bars": 1.0,
+                "p90_bars": 1
+              }
+            },
+            "occupancy_counts": {
+              "BREACH_RESPONSE_DOWN": 15,
+              "BREACH_RESPONSE_UP": 29,
+              "COMPOUND": 53,
+              "NONE": 1253,
+              "RECLAIMED_ABOVE": 53,
+              "RECLAIMED_BELOW": 73,
+              "REJECTED_DOWN": 30,
+              "REJECTED_UP": 15
+            },
+            "occupancy_pct": {
+              "BREACH_RESPONSE_DOWN": 0.9862,
+              "BREACH_RESPONSE_UP": 1.9066,
+              "COMPOUND": 3.4845,
+              "NONE": 82.38,
+              "RECLAIMED_ABOVE": 3.4845,
+              "RECLAIMED_BELOW": 4.7995,
+              "REJECTED_DOWN": 1.9724,
+              "REJECTED_UP": 0.9862
+            },
+            "transition_count": 395,
+            "transitions_per_1000_bars": 259.6976
+          },
+          "location": {
+            "comparable_adjacent_pairs": 1494,
+            "duration_by_state_bars": {
+              "ACCEPTED_ABOVE": {
+                "episodes": 2,
+                "max_bars": 27,
+                "mean_bars": 14.5,
+                "median_bars": 14.5,
+                "p90_bars": 27
+              },
+              "ACCEPTED_BELOW": {
+                "episodes": 8,
+                "max_bars": 24,
+                "mean_bars": 11.125,
+                "median_bars": 7.0,
+                "p90_bars": 24
+              },
+              "ACCEPTED_CORRIDOR": {
+                "episodes": 30,
+                "max_bars": 60,
+                "mean_bars": 45.5667,
+                "median_bars": 59.0,
+                "p90_bars": 60
+              },
+              "NEUTRAL": {
+                "episodes": 2,
+                "max_bars": 24,
+                "mean_bars": 18.0,
+                "median_bars": 18.0,
+                "p90_bars": 24
+              }
+            },
+            "occupancy_counts": {
+              "ACCEPTED_ABOVE": 29,
+              "ACCEPTED_BELOW": 89,
+              "ACCEPTED_CORRIDOR": 1367,
+              "NEUTRAL": 36
+            },
+            "occupancy_pct": {
+              "ACCEPTED_ABOVE": 1.9066,
+              "ACCEPTED_BELOW": 5.8514,
+              "ACCEPTED_CORRIDOR": 89.8751,
+              "NEUTRAL": 2.3669
+            },
+            "transition_count": 15,
+            "transitions_per_1000_bars": 9.8619
+          },
+          "quality": {
+            "comparable_adjacent_pairs": 1494,
+            "duration_by_state_bars": {
+              "COHERENT": {
+                "episodes": 27,
+                "max_bars": 60,
+                "mean_bars": 55.1852,
+                "median_bars": 58.0,
+                "p90_bars": 59
+              },
+              "STALE_AFTER_GAP": {
+                "episodes": 25,
+                "max_bars": 2,
+                "mean_bars": 1.24,
+                "median_bars": 1.0,
+                "p90_bars": 2
+              }
+            },
+            "occupancy_counts": {
+              "COHERENT": 1490,
+              "STALE_AFTER_GAP": 31
+            },
+            "occupancy_pct": {
+              "COHERENT": 97.9619,
+              "STALE_AFTER_GAP": 2.0381
+            },
+            "transition_count": 25,
+            "transitions_per_1000_bars": 16.4366
+          }
+        },
+        "gap_carry_bars": 25,
+        "genuine_conflict_bars": 0,
+        "genuine_conflict_pct": 0.0,
+        "genuine_conflict_reason_counts": {},
+        "interaction_component_bar_counts": {
+          "BREACH_RESPONSE_DOWN": 36,
+          "BREACH_RESPONSE_UP": 50,
+          "RECLAIMED_ABOVE": 65,
+          "RECLAIMED_BELOW": 87,
+          "REJECTED_DOWN": 51,
+          "REJECTED_UP": 37
+        },
+        "location_active_metrics": {
+          "comparable_adjacent_pairs": 1494,
+          "duration_by_state_bars": {
+            "ACTIVE": {
+              "episodes": 26,
+              "max_bars": 60,
+              "mean_bars": 57.1154,
+              "median_bars": 59.0,
+              "p90_bars": 60
+            },
+            "INACTIVE": {
+              "episodes": 2,
+              "max_bars": 24,
+              "mean_bars": 18.0,
+              "median_bars": 18.0,
+              "p90_bars": 24
+            }
+          },
+          "occupancy_counts": {
+            "ACTIVE": 1485,
+            "INACTIVE": 36
+          },
+          "occupancy_pct": {
+            "ACTIVE": 97.6331,
+            "INACTIVE": 2.3669
+          },
+          "transition_count": 1,
+          "transitions_per_1000_bars": 0.6575
+        },
+        "ratified_lifecycles": 1489,
+        "reason_counts": {
+          "COMPRESSION_AXIS_EXITED": 5,
+          "COMPRESSION_AXIS_REFRESHED": 8,
+          "COMPRESSION_EXIT_PENDING": 10,
+          "DISPLACEMENT_AXIS_EXITED": 35,
+          "DISPLACEMENT_AXIS_REFRESHED": 50,
+          "DISPLACEMENT_EXIT_PENDING": 120,
+          "GAP_CARRY_FORWARD_AXES_STALE": 25,
+          "LOCATION_CONDITION_ENTERED": 597,
+          "LOCATION_CONDITION_EXITED": 459,
+          "LOCATION_CONDITION_REFRESHED": 2,
+          "LOCATION_ENDED_RANGE_SUPERSEDED": 66,
+          "LOCATION_MAINTENANCE_FAILED": 1110
+        },
+        "registry_levels": 1489,
+        "source_bars": 1521,
+        "stale_after_gap_bars": 31,
+        "state_records": 1521,
+        "state_stream_canonical_jsonl_hash": "63438aa648007b3fd3e98cce7d8b7b5aa0587bf901a2d61d76b56c55544babab",
+        "suppressed_cross_axis_evidence": 0,
+        "transition_records": 522,
+        "transition_stream_canonical_jsonl_hash": "01e49345cbe6922e164492f4e9a876e455b2aece54ba040d294ef341f9ca7970"
+      }
+    }
+  },
+  "semantic_findings": [
+    "Parallel axes eliminate cross-axis evidence suppression.",
+    "Topology-aware level relations reduce v0.3 genuine-conflict bars to zero in H1.",
+    "Maintained accepted-level relations accumulate into ACCEPTED_CORRIDOR and saturate the location axis.",
+    "B-STATE-0.3 is not recommended for ratification without a revised acceptance-relation lifecycle or non-categorical location representation."
+  ],
+  "state_contract_version": "B-STATE-0.3",
+  "status": "CONTROLLED_H1_REPLAY_COMPLETE_NOT_RATIFIED",
+  "v02_state_manifest_hash": "684f4ed9b7afcbf3060745d602798d0f611304e50ab75e79c96c240a7184f4a1"
+}

@@ -1,0 +1,101 @@
+{
+  "artifacts": [
+    {
+      "path": "reference_levels_15m.jsonl",
+      "sha256": "b9fea483cee093246c6ea05fd16001badb0c94d5b59857cbbde7549158a6faf8",
+      "size_bytes": 11143562
+    },
+    {
+      "path": "reference_levels_15m.csv",
+      "sha256": "ea31fe5aaa51d60b5b0faa1cb049a0adb91b0433109e1ea6f00a2373de22065f",
+      "size_bytes": 7794275
+    },
+    {
+      "path": "reference_levels_2h.jsonl",
+      "sha256": "2c4740fe8e2296bb2a486bf3c3f8f04922c4642d1a320b7434de9f7afabf3470",
+      "size_bytes": 1434274
+    },
+    {
+      "path": "reference_levels_2h.csv",
+      "sha256": "a1690daa54256e9dc629130a6ba29e827e7bfa24e734e4b84e0ba3a4e958882a",
+      "size_bytes": 1000426
+    }
+  ],
+  "combined_registry_hash": "7aa84f4bc774a86cae66992fc753b34e7f35b8576a19e7e84164c1fb9cb5949f",
+  "construction_rules": {
+    "B.LEVEL.CONFIRMED_SWING_2X2.v0.1": {
+      "first_valid_time": "close of second right-confirmation bar",
+      "left_bars": 2,
+      "right_bars": 2,
+      "tie_policy": "STRICT_EXTREME_REQUIRED",
+      "types": [
+        "PRIOR_SWING_HIGH",
+        "PRIOR_SWING_LOW"
+      ]
+    },
+    "B.LEVEL.ROLLING_RANGE_8.v0.1": {
+      "emission": "new level only when boundary price changes within a contiguous segment",
+      "first_valid_time": "close of eighth source bar",
+      "types": [
+        "RANGE_HIGH",
+        "RANGE_LOW"
+      ],
+      "window_bars": 8
+    }
+  },
+  "deferred_level_types": {
+    "CUSTOM_RESEARCH": "Prohibited from active operator surfaces",
+    "EQUILIBRIUM_FVG_BOUNDARY": "Construction predicates not ratified",
+    "IBH_IBL_VAH_VAL_POC": "Initial-balance and profile contracts not ratified",
+    "PDH_PDL_PWH_PWL_PMH_PML": "Economic/session calendar contract not ratified"
+  },
+  "eligibility": {
+    "candidate_rule": "first_valid_time <= candidate.open_time",
+    "gap_rule": "construction windows never cross non-contiguous source bars",
+    "identity_rule": "instrument, timeframe, source release and price side must match",
+    "multiplicity_rule": "all eligible levels remain separate; no silent best-level selection"
+  },
+  "generated_date": "2026-07-19",
+  "instrument_id": "GBPUSD",
+  "manifest_hash": "e2815f41032d15010857ca406e368ed2074dcf91d55ce64a9106bb4516330407",
+  "opt_a_seal_hash": "0927f7a2b078d670370eb9ec26718f3e2ff0d97708df1f785a9333264415ef99",
+  "opt_a_seal_id": "OPT-A.GBPUSD.2026H1.v1",
+  "price_side": "BID",
+  "registry_id": "OPT-B-REFERENCE-LEVELS",
+  "registry_version": "B-REF-0.1",
+  "status": "BUILT_FOR_REPLAY_VALIDATION_NOT_ACTIVE",
+  "timeframes": {
+    "15M": {
+      "first_valid_time_max": "2026-06-30T21:45:00+00:00",
+      "first_valid_time_min": "2026-01-01T23:45:00+00:00",
+      "level_count": 11488,
+      "level_type_counts": {
+        "PRIOR_SWING_HIGH": 1366,
+        "PRIOR_SWING_LOW": 1381,
+        "RANGE_HIGH": 4341,
+        "RANGE_LOW": 4400
+      },
+      "registry_hash": "cbe7e7eb6fb5e1b3e4ef59f37498c9131d1541f10811f1547bf12491036c2aac",
+      "source_bar_count": 11830,
+      "source_path": "canonical/accepted_15m.csv",
+      "source_release_id": "dukascopy-gbpusd-bid-3d18d9a0a5d81352",
+      "source_sha256": "6eca8ca9529968ae0a0594837886504bb4a2e5e17899857920089c1207b56c85"
+    },
+    "2H": {
+      "first_valid_time_max": "2026-06-30T20:00:00+00:00",
+      "first_valid_time_min": "2026-01-02T08:00:00+00:00",
+      "level_count": 1489,
+      "level_type_counts": {
+        "PRIOR_SWING_HIGH": 189,
+        "PRIOR_SWING_LOW": 180,
+        "RANGE_HIGH": 545,
+        "RANGE_LOW": 575
+      },
+      "registry_hash": "928415a24fa958e337bedb7cd41f4fa851b9f2ff19dcc8a61200fccf26873f9e",
+      "source_bar_count": 1521,
+      "source_path": "canonical/accepted_2h.csv",
+      "source_release_id": "dukascopy-gbpusd-bid-1h-73edf9f4b7eb9bed",
+      "source_sha256": "28acab32b3b5325709a3654dd909b3e7fe446fed0598a94b29a6cba10a29072c"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "accepted_sets": {
+    "accepted_by_both": 1312,
+    "hourly_derived_2h": 1521,
+    "hourly_only": 209,
+    "minute_chain_2h": 1312,
+    "minute_only": 0
+  },
+  "audit_id": "OPT-A.RECON.GBPUSD.2026H1.v0.1",
+  "decision": {
+    "canonical_15m_detail": "provider-returned 1M -> complete 15M only",
+    "canonical_2h_price_bars": "provider 1H -> deterministic 2H",
+    "cross_resolution_rule": "Never infer missing 1M/15M records from accepted H1/2H bars.",
+    "opt_a_state": "RECONCILED; READY_TO_SEAL AFTER OPERATOR REVIEW",
+    "synthetic_minute_fill": "PROHIBITED"
+  },
+  "minute_sparsity": {
+    "hourly_only_by_month": {
+      "2026-01": 43,
+      "2026-02": 34,
+      "2026-03": 22,
+      "2026-04": 42,
+      "2026-05": 35,
+      "2026-06": 33
+    },
+    "hourly_only_by_tpo": {
+      "TPO-A": 5,
+      "TPO-B": 8,
+      "TPO-C": 15,
+      "TPO-D": 2,
+      "TPO-E": 1,
+      "TPO-F": 1,
+      "TPO-G": 1,
+      "TPO-I": 1,
+      "TPO-J": 5,
+      "TPO-K": 81,
+      "TPO-L": 89
+    },
+    "missing_count_distribution": {
+      "1": 45,
+      "2": 37,
+      "3": 45,
+      "4": 21,
+      "5": 19,
+      "6": 13,
+      "7": 8,
+      "8": 5,
+      "9": 5,
+      "10": 4,
+      "11": 2,
+      "12": 2,
+      "13": 1,
+      "14": 1,
+      "15": 1
+    },
+    "missing_minutes_inside_hourly_only_bars": 780
+  },
+  "price_reconciliation": {
+    "common_bars_with_exact_ohlc_match": 1312,
+    "common_component_mismatches": {},
+    "hourly_only_bars_whose_available_minutes_reproduce_hourly_ohlc": 209,
+    "hourly_only_price_differences": 0
+  },
+  "rejected_sets": {
+    "hourly_rejected": 33,
+    "hourly_rejected_not_enumerated_by_minute_aggregator": [
+      "2026-04-26T20:00:00+00:00",
+      "2026-06-07T20:00:00+00:00"
+    ],
+    "minute_chain_rejected": 240,
+    "minute_rejected_but_hourly_accepted": 209,
+    "rejected_by_both": 31
+  },
+  "scope": {
+    "instrument": "GBPUSD",
+    "interval": "[2026-01-01, 2026-07-01)",
+    "price_side": "BID",
+    "timezone": "UTC"
+  },
+  "source_hashes": {
+    "hourly_accepted_2h_sha256": "28acab32b3b5325709a3654dd909b3e7fe446fed0598a94b29a6cba10a29072c",
+    "minute_accepted_2h_sha256": "f6682510236b4c0666b7a953c066ab0137373c5f6b9819a53d53d57fdab476da",
+    "minute_raw_sha256": "3d18d9a0a5d813522654543f49146f7841e2851c682aa946454cc685e26f67e0"
+  },
+  "status": "PASS_WITH_RESOLUTION_SPECIFIC_AUTHORITY"
+}

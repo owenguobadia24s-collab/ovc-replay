@@ -1,0 +1,272 @@
+{
+  "artifacts": [
+    {
+      "path": "term_records_15m.jsonl.gz",
+      "sha256": "25505fbc050de39fec384ad8fdf1158842ce020f28dff838997ae6b18d778259",
+      "size_bytes": 339683591
+    },
+    {
+      "path": "transition_records_15m.jsonl.gz",
+      "sha256": "13878cc2044226ab621c2140d81ad9e19c1c51cf947946e9f5c9c5dc672b9d8c",
+      "size_bytes": 3574
+    },
+    {
+      "path": "resolved_state_stream_15m.jsonl.gz",
+      "sha256": "13f5285cd3b5e0452149c9a0970a3c40a0dcbd807d250ffe3f7026299bc1b5f7",
+      "size_bytes": 57059926
+    },
+    {
+      "path": "coverage_15m.json",
+      "sha256": "e0696084cc1f89fb54233148282619fd85d131c097c29dddd2b6ae52a9b212c8",
+      "size_bytes": 2892
+    },
+    {
+      "path": "review_samples_15m.jsonl",
+      "sha256": "0034543e4237fac930f2c087ec67d74cc351b79f8259c894e4b9c9b7aa3b8a0e",
+      "size_bytes": 869552
+    },
+    {
+      "path": "ambiguous_clusters_15m.jsonl",
+      "sha256": "d17fd2a619f15ee4b0ece80e7eef7747094cac4a051a271c31063e7a8cb4f5f7",
+      "size_bytes": 95047030
+    },
+    {
+      "path": "term_records_2h.jsonl.gz",
+      "sha256": "242e88289bd2ecc9b955063eb6ca6436f7bc841dbb12813fe040594ba2463f7a",
+      "size_bytes": 11178489
+    },
+    {
+      "path": "transition_records_2h.jsonl.gz",
+      "sha256": "6219fa1c5fb7140c538e7aeaf37323536bd4833e385260d41ad373c5e200532a",
+      "size_bytes": 2143
+    },
+    {
+      "path": "resolved_state_stream_2h.jsonl.gz",
+      "sha256": "8bbc1676a4c205cb3fcd2bed6033d2b97d1e4b850bb493aa114805c3133c2c29",
+      "size_bytes": 1852928
+    },
+    {
+      "path": "coverage_2h.json",
+      "sha256": "5c87606cf4925293e5195ef330a8b80e9a8fce99c7921a8861d8f27ad541dafa",
+      "size_bytes": 2773
+    },
+    {
+      "path": "review_samples_2h.jsonl",
+      "sha256": "36ed4db12fa11a803648568cb9c95f045f7bda655d13a0daeacc58857b9db5c8",
+      "size_bytes": 805950
+    },
+    {
+      "path": "ambiguous_clusters_2h.jsonl",
+      "sha256": "9d255d11a329d1912e669f0e91b86599b336f3f25fa31dc93972db2126ffa050",
+      "size_bytes": 3046630
+    }
+  ],
+  "generated_date": "2026-07-19",
+  "instrument_id": "GBPUSD",
+  "manifest_hash": "d072e2713b337a8d73b54135e8f832153006201232eca24a13906a46258f3389",
+  "materialization_policy": {
+    "coverage": "Every eligible directional level-bar combination is counted.",
+    "multiplicity": "Every qualifying level produces its own term record; no best-level selection.",
+    "records": "Materialize deterministic condition-entry and event-episode records; do not repeat persistent non-events on every bar."
+  },
+  "opt_a_seal_hash": "0927f7a2b078d670370eb9ec26718f3e2ff0d97708df1f785a9333264415ef99",
+  "opt_a_seal_id": "OPT-A.GBPUSD.2026H1.v1",
+  "parameter_set_id": "B-LANG-0.1-SEED",
+  "price_side": "BID",
+  "reference_registry_hash": "7aa84f4bc774a86cae66992fc753b34e7f35b8576a19e7e84164c1fb9cb5949f",
+  "reference_registry_version": "B-REF-0.1",
+  "replay_id": "B-REPLAY-GBPUSD-2026H1-v0.1",
+  "replay_version": "B-REPLAY-0.1",
+  "results": {
+    "15M": {
+      "ambiguous_state_bars": 6922,
+      "contiguous_segments": 304,
+      "coverage": {
+        "contiguous_segments": 304,
+        "eligible_directional_level_bar_evaluations": 288769346,
+        "episode_starts": {
+          "B.TERM.ACCEPTANCE.v0.1:DOWN": 601083,
+          "B.TERM.ACCEPTANCE.v0.1:UP": 389097,
+          "B.TERM.COMPRESSION.v0.1:NONE": 7459,
+          "B.TERM.DISPLACEMENT.v0.1:DOWN": 4228,
+          "B.TERM.DISPLACEMENT.v0.1:NONE": 77,
+          "B.TERM.DISPLACEMENT.v0.1:UP": 4082,
+          "B.TERM.RECLAIM.v0.1:DOWN": 234962,
+          "B.TERM.RECLAIM.v0.1:UP": 229715,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:DOWN": 341906,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:UP": 233588,
+          "B.TERM.REJECTION.v0.1:DOWN": 235392,
+          "B.TERM.REJECTION.v0.1:UP": 342416
+        },
+        "materialization_policy": "All eligible pairs counted; records emitted on deterministic episode/condition entry and resolution.",
+        "materialized_episode_records": 2624005,
+        "neutral_transition_policy": "Deferred because B-LANG-0.1 requires a confirmed destination trigger but defines no NEUTRAL-producing term.",
+        "pair_evaluations": {
+          "ACCEPTANCE_DOWN": 46584123,
+          "ACCEPTANCE_UP": 46584123,
+          "RECLAIM_DOWN": 48900275,
+          "RECLAIM_UP": 48900275,
+          "REJECTION_DOWN": 24311361,
+          "REJECTION_UP": 24588914,
+          "SWEEP_DOWN": 24588914,
+          "SWEEP_UP": 24311361
+        },
+        "reason_counts": {
+          "COMPRESSION_THRESHOLDS_NOT_MET": 7340,
+          "DISPLACEMENT_THRESHOLDS_NOT_MET": 7882,
+          "INSUFFICIENT_CONFIRMING_CLOSES": 94735,
+          "NO_DEPARTURE_IN_WINDOW": 459459,
+          "NO_RESPONSE_IN_WINDOW": 429713,
+          "RECLAIM_WINDOW_INCOMPLETE": 6544,
+          "REJECTION_WINDOW_INCOMPLETE": 7073,
+          "RESPONSE_WINDOW_INCOMPLETE": 6106
+        },
+        "registry_levels": 11488,
+        "source_bars": 11830,
+        "state_counts": {
+          "ACCEPTED_ABOVE": 623,
+          "ACCEPTED_BELOW": 657,
+          "AMBIGUOUS": 6922,
+          "COMPRESSED": 1,
+          "DISPLACING_DOWN": 3,
+          "DISPLACING_UP": 1,
+          "NEUTRAL": 3542,
+          "RECLAIMED_ABOVE": 31,
+          "RECLAIMED_BELOW": 35,
+          "REJECTED_DOWN": 3,
+          "REJECTED_UP": 12
+        },
+        "status_counts": {
+          "B.TERM.ACCEPTANCE.v0.1:CONFIRMED": 990180,
+          "B.TERM.COMPRESSION.v0.1:CONFIRMED": 119,
+          "B.TERM.COMPRESSION.v0.1:FAILED": 7340,
+          "B.TERM.DISPLACEMENT.v0.1:CONFIRMED": 505,
+          "B.TERM.DISPLACEMENT.v0.1:FAILED": 7882,
+          "B.TERM.RECLAIM.v0.1:CONFIRMED": 363398,
+          "B.TERM.RECLAIM.v0.1:FAILED": 94735,
+          "B.TERM.RECLAIM.v0.1:PENDING": 6544,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:CONFIRMED": 139675,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:FAILED": 429713,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:PENDING": 6106,
+          "B.TERM.REJECTION.v0.1:CONFIRMED": 111276,
+          "B.TERM.REJECTION.v0.1:FAILED": 459459,
+          "B.TERM.REJECTION.v0.1:PENDING": 7073
+        },
+        "transition_records": 5,
+        "unique_levels_with_records_by_term": {
+          "B.TERM.ACCEPTANCE.v0.1": 11486,
+          "B.TERM.RECLAIM.v0.1": 11114,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1": 11219,
+          "B.TERM.REJECTION.v0.1": 11252
+        }
+      },
+      "registry_levels": 11488,
+      "review_samples": 420,
+      "source_bars": 11830,
+      "state_stream_canonical_jsonl_hash": "24a8382f980b97baf47762db1f9aac6720688e19e7cf36d217e234da2e732fe7",
+      "term_records": 2624005,
+      "term_records_canonical_jsonl_hash": "f76a1beabbb37af519ea81fe5da3faaf08e757da16fe7fca9904ad461825545e",
+      "transition_records": 5,
+      "transition_records_canonical_jsonl_hash": "9b0376455efd78f0ab14d82e3da4966135ad19616ffd2eafe5c9e39054466d7e"
+    },
+    "2H": {
+      "ambiguous_state_bars": 722,
+      "contiguous_segments": 27,
+      "coverage": {
+        "contiguous_segments": 27,
+        "eligible_directional_level_bar_evaluations": 4250248,
+        "episode_starts": {
+          "B.TERM.ACCEPTANCE.v0.1:DOWN": 17047,
+          "B.TERM.ACCEPTANCE.v0.1:UP": 10645,
+          "B.TERM.COMPRESSION.v0.1:NONE": 784,
+          "B.TERM.DISPLACEMENT.v0.1:DOWN": 518,
+          "B.TERM.DISPLACEMENT.v0.1:NONE": 1,
+          "B.TERM.DISPLACEMENT.v0.1:UP": 444,
+          "B.TERM.RECLAIM.v0.1:DOWN": 9578,
+          "B.TERM.RECLAIM.v0.1:UP": 8417,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:DOWN": 10305,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:UP": 6720,
+          "B.TERM.REJECTION.v0.1:DOWN": 6890,
+          "B.TERM.REJECTION.v0.1:UP": 10359
+        },
+        "materialization_policy": "All eligible pairs counted; records emitted on deterministic episode/condition entry and resolution.",
+        "materialized_episode_records": 81708,
+        "neutral_transition_policy": "Deferred because B-LANG-0.1 requires a confirmed destination trigger but defines no NEUTRAL-producing term.",
+        "pair_evaluations": {
+          "ACCEPTANCE_DOWN": 666502,
+          "ACCEPTANCE_UP": 666502,
+          "RECLAIM_DOWN": 729311,
+          "RECLAIM_UP": 729311,
+          "REJECTION_DOWN": 359622,
+          "REJECTION_UP": 369689,
+          "SWEEP_DOWN": 369689,
+          "SWEEP_UP": 359622
+        },
+        "reason_counts": {
+          "COMPRESSION_THRESHOLDS_NOT_MET": 776,
+          "DISPLACEMENT_THRESHOLDS_NOT_MET": 913,
+          "INSUFFICIENT_CONFIRMING_CLOSES": 3265,
+          "NO_DEPARTURE_IN_WINDOW": 12214,
+          "NO_RESPONSE_IN_WINDOW": 10888,
+          "RECLAIM_WINDOW_INCOMPLETE": 526,
+          "REJECTION_WINDOW_INCOMPLETE": 425,
+          "RESPONSE_WINDOW_INCOMPLETE": 356
+        },
+        "registry_levels": 1489,
+        "source_bars": 1521,
+        "state_counts": {
+          "ACCEPTED_ABOVE": 85,
+          "ACCEPTED_BELOW": 112,
+          "AMBIGUOUS": 722,
+          "DISPLACING_DOWN": 1,
+          "NEUTRAL": 579,
+          "RECLAIMED_ABOVE": 6,
+          "RECLAIMED_BELOW": 8,
+          "REJECTED_DOWN": 4,
+          "REJECTED_UP": 4
+        },
+        "status_counts": {
+          "B.TERM.ACCEPTANCE.v0.1:CONFIRMED": 27692,
+          "B.TERM.COMPRESSION.v0.1:CONFIRMED": 8,
+          "B.TERM.COMPRESSION.v0.1:FAILED": 776,
+          "B.TERM.DISPLACEMENT.v0.1:CONFIRMED": 50,
+          "B.TERM.DISPLACEMENT.v0.1:FAILED": 913,
+          "B.TERM.RECLAIM.v0.1:CONFIRMED": 14204,
+          "B.TERM.RECLAIM.v0.1:FAILED": 3265,
+          "B.TERM.RECLAIM.v0.1:PENDING": 526,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:CONFIRMED": 5781,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:FAILED": 10888,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1:PENDING": 356,
+          "B.TERM.REJECTION.v0.1:CONFIRMED": 4610,
+          "B.TERM.REJECTION.v0.1:FAILED": 12214,
+          "B.TERM.REJECTION.v0.1:PENDING": 425
+        },
+        "transition_records": 3,
+        "unique_levels_with_records_by_term": {
+          "B.TERM.ACCEPTANCE.v0.1": 1485,
+          "B.TERM.RECLAIM.v0.1": 1340,
+          "B.TERM.REFERENCE_LEVEL_BREACH_RESPONSE.v0.1": 1370,
+          "B.TERM.REJECTION.v0.1": 1382
+        }
+      },
+      "registry_levels": 1489,
+      "review_samples": 398,
+      "source_bars": 1521,
+      "state_stream_canonical_jsonl_hash": "dd612effa81c34b6843c0968e61d27f421deb93af8ee0f00f0318f8c0ac2942f",
+      "term_records": 81708,
+      "term_records_canonical_jsonl_hash": "1d1bb62b5f7cee6b64f16de2fe5bef37b94f98b2b576c46a77cbf72cc16f6a9d",
+      "transition_records": 3,
+      "transition_records_canonical_jsonl_hash": "288b7d02031585e9df210008b20205ff9911f4629d078b68815167666a396a32"
+    }
+  },
+  "semantic_blockers": [
+    "No ratified level retirement/relevance horizon; old levels remain eligible.",
+    "Multiple same-precedence level states resolve to AMBIGUOUS rather than a hidden best level.",
+    "B-LANG-0.1 defines NEUTRAL transitions but no confirmed term that produces NEUTRAL; neutral exit transitions are deferred.",
+    "Acceptance failed windows are retained in aggregate coverage rather than emitted as hundreds of millions of duplicate rows.",
+    "Confirmed acceptance records represent condition entry; a separate persistent acceptance exit/retirement ledger is not yet ratified.",
+    "Semantic sample review and threshold sensitivity remain required before activation."
+  ],
+  "status": "HISTORICALLY_REPLAYED_WITH_SEMANTIC_BLOCKERS_NOT_ACTIVE",
+  "term_registry_version": "B-LANG-0.1"
+}

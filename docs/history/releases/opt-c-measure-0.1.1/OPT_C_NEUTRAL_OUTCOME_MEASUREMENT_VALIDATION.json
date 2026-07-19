@@ -1,0 +1,105 @@
+{
+  "artifact_checks": [
+    {
+      "path": "opt_c_neutral_outcomes_15m.jsonl.gz",
+      "sha256": "d188d8b3e6dddae0887197dfd65f03c69881b6cc27f963a12130855397a984e0",
+      "status": "PASS"
+    },
+    {
+      "path": "opt_c_neutral_outcomes_2h.jsonl.gz",
+      "sha256": "518062e165d50e7591afc45089dd061c7c0756462f00c89aeb7392bb87dc00c0",
+      "status": "PASS"
+    },
+    {
+      "path": "opt_c_neutral_outcome_measurement_summary.json",
+      "sha256": "23c8447a8e6b8901a498bb72130cb69e408de64bfafcccb9872f5406785bd5ee",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_NEUTRAL_FORWARD_OUTCOME_MEASUREMENT_REPORT_v0_1_1.md",
+      "sha256": "4f2bbac63871af8d72eb57599d631c81e9ce27031f5efb450d037e9d4bffad91",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_NEUTRAL_MEASUREMENT_IMPLEMENTATION_CONTRACT_v0_1_1.md",
+      "sha256": "946aaf21d7816b1d2e9195d39c2d4d81d0890cf0d764ad2cfb2a72c2ce9776ba",
+      "status": "PASS"
+    },
+    {
+      "path": "OPT_C_MEASURE_0_1_1_FRONTIER_NULLABILITY_REPAIR_RECORD.md",
+      "sha256": "a9dd18e88a545f44c4746b1696ec3aaa050fe0eadb92093f6060f8c7d2b36c0b",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_FORWARD_PATH_COVERAGE_CENSORING_CONTRACT_v0_1.md",
+      "sha256": "73f6f5ffb8efe1a963aa293ed608437d3ae5bb89dba04bd2f758c940d3fc4180",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_NEUTRAL_FORWARD_OUTCOME_CONTRACT_v0_1.md",
+      "sha256": "0285bcd4e52e48d9ac54d8c8644cd09307424e63736cd366fbdd1262ee979a13",
+      "status": "PASS"
+    },
+    {
+      "path": "OPT_C_OUTCOME_0_1_APPROVAL_RECORD.md",
+      "sha256": "0912d090ec6629709134d1953fef222860973b218df666e2239353aabc8bac1d",
+      "status": "PASS"
+    }
+  ],
+  "authority_boundary": "Neutral descriptive measurements only; no edge, recommendation, risk, trade or execution authority.",
+  "determinism": {
+    "checked": true,
+    "manifest_hash_match": true,
+    "stream_hashes_match": {
+      "15M": true,
+      "2H": true
+    }
+  },
+  "gate_controls": {
+    "24h_coverage_only": true,
+    "48h_blocked": true,
+    "censored_paths_have_no_outcome_rows": true,
+    "complete_paths_only": true,
+    "endpoint_states_replayed": true,
+    "neutral_measurements_recomputed": true,
+    "ordered_path_hashes_replayed": true,
+    "overlap_metadata_preserved": true,
+    "prohibited_outcome_semantics_absent": true,
+    "transition_lineage_replayed": true
+  },
+  "status": "PASS",
+  "stream_checks": [
+    {
+      "all_measurements_recomputed": true,
+      "canonical_jsonl_hash": "59010d5184bb94ea2c5023f0bc2d57b5415e2a61ed94e1284d0ba1cc21934ef3",
+      "event_timeframe": "15M",
+      "gzip_integrity": "PASS",
+      "horizon_counts": {
+        "1": 3605,
+        "12": 1282,
+        "2": 3386,
+        "4": 2984,
+        "8": 2125
+      },
+      "rows": 13382,
+      "unique_coverage_records": 13382
+    },
+    {
+      "all_measurements_recomputed": true,
+      "canonical_jsonl_hash": "2a7066fc0e19428b8ad74a01251b8c4cb5aa9ed2cc81b08d23000ad004804581",
+      "event_timeframe": "2H",
+      "gzip_integrity": "PASS",
+      "horizon_counts": {
+        "1": 416,
+        "12": 192,
+        "2": 390,
+        "4": 338,
+        "8": 261
+      },
+      "rows": 1597,
+      "unique_coverage_records": 1597
+    }
+  ],
+  "total_outcome_records": 14979,
+  "validated_manifest_hash": "fe3df29b96dc6c3007f0578a376d641a322cdbacdbc8cbe1dce7c84fb693549b"
+}

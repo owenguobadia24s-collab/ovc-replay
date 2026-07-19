@@ -1,0 +1,79 @@
+{
+  "artifact_checks": [
+    {
+      "path": "opt_c_forward_path_coverage_15m.jsonl.gz",
+      "sha256": "698366b030c55ff466eec5be752aee3dfbd2ef70c65cbd918ca60bfc8ad875bd",
+      "status": "PASS"
+    },
+    {
+      "path": "opt_c_forward_path_coverage_2h.jsonl.gz",
+      "sha256": "30fa7f5b4c89cacb0671cd8039d695cd5006d7bf2276eccb84ac8fa6cb9046d2",
+      "status": "PASS"
+    },
+    {
+      "path": "opt_c_forward_path_coverage_summary.json",
+      "sha256": "84c7ed4ad5ae989e3ec2b8c5e5428cf0eb0f289823b189cef53de8bc7daff0eb",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_FORWARD_PATH_COVERAGE_CENSORING_AUDIT_REPORT_v0_1.md",
+      "sha256": "0cc3539512c02392788b3bc204f7eac9a691b2537159ef78e62ed120dbfdfe9a",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_FORWARD_PATH_COVERAGE_CENSORING_CONTRACT_v0_1.md",
+      "sha256": "73f6f5ffb8efe1a963aa293ed608437d3ae5bb89dba04bd2f758c940d3fc4180",
+      "status": "PASS"
+    },
+    {
+      "path": "OVC_OPT_C_NEUTRAL_FORWARD_OUTCOME_CONTRACT_v0_1.md",
+      "sha256": "0285bcd4e52e48d9ac54d8c8644cd09307424e63736cd366fbdd1262ee979a13",
+      "status": "PASS"
+    },
+    {
+      "path": "OPT_C_OUTCOME_0_1_APPROVAL_RECORD.md",
+      "sha256": "0912d090ec6629709134d1953fef222860973b218df666e2239353aabc8bac1d",
+      "status": "PASS"
+    }
+  ],
+  "authority_boundary": "Coverage and censoring evidence only; no forward outcome, edge, recommendation, risk or execution authority.",
+  "determinism": {
+    "all_canonical_hashes_match": true,
+    "checked": true,
+    "comparisons": {
+      "15M": true,
+      "2H": true
+    }
+  },
+  "gate_controls": {
+    "48h_measurement_blocked": true,
+    "censored_paths_unrepaired": true,
+    "complete_paths_exact": true,
+    "forward_price_values_absent": true,
+    "overlap_recomputed": true
+  },
+  "status": "PASS",
+  "stream_checks": [
+    {
+      "gzip_integrity": "PASS",
+      "path": "opt_c_forward_path_coverage_15m.jsonl.gz",
+      "rows": 26915,
+      "status_counts": {
+        "CENSORED": 13501,
+        "COMPLETE": 13414
+      },
+      "unique_anchor_horizons": 26915
+    },
+    {
+      "gzip_integrity": "PASS",
+      "path": "opt_c_forward_path_coverage_2h.jsonl.gz",
+      "rows": 3213,
+      "status_counts": {
+        "CENSORED": 1612,
+        "COMPLETE": 1601
+      },
+      "unique_anchor_horizons": 3213
+    }
+  ],
+  "validated_manifest_hash": "1696c2ab95747908150703f39bb2a3cdd77b600a76891f2c6fbf783c0738ecf2"
+}

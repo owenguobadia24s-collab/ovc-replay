@@ -1,0 +1,32 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+build/
+dist/
+
+# Large/generated research artifacts belong in external storage.
+*.zip
+*.jsonl
+*.jsonl.gz
+*.parquet
+data/raw/
+data/generated/
+outputs/
+
+# Canonical semantic registries are allowed even when compressed.
+!**/*registry*.jsonl.gz
+!**/*register*.jsonl.gz
+
+# Market-data CSVs are always external dependencies.
+**/sources/**/*.csv
+**/canonical/*.csv
+**/reconciliation/*.csv
+**/*_BID_*.csv
+**/*_ASK_*.csv
+**/*OHLCV*.csv
+**/*ohlcv*.csv
