@@ -134,9 +134,27 @@ class EvidenceStoreTests(unittest.TestCase):
         (self.root / "nested" / "x.txt").write_bytes(b"x")
         document = self.build()
         manifest_key, keys = remote_keys(document)
-        base = "locked/ovc/releases/release-2026-07/manifest-001"
+        base = "ovc-evidence/locked/ovc/releases/release-2026-07/manifest-001"
         self.assertEqual(manifest_key, f"{base}/manifest.json")
         self.assertEqual(keys["nested/x.txt"], f"{base}/files/nested/x.txt")
+
+    def test_bucket_appears_exactly_once_in_remote_destination(self) -> None:
+        (self.root / "x.txt").write_bytes(b"x")
+        document = self.build(prefix="sentinel/activation")
+        manifest_key, keys = remote_keys(document)
+        expected = (
+            "ovc-evidence/sentinel/activation/releases/"
+            "release-2026-07/manifest-001"
+        )
+        self.assertEqual(manifest_key, f"{expected}/manifest.json")
+        self.assertEqual(keys["x.txt"], f"{expected}/files/x.txt")
+        self.assertEqual(manifest_key.count("ovc-evidence"), 1)
+
+    def test_trailing_prefix_slash_is_normalized(self) -> None:
+        document = self.build(prefix="sentinel/activation/")
+        self.assertEqual(document["prefix"], "sentinel/activation")
+        manifest_key, _ = remote_keys(document)
+        self.assertNotIn("//", manifest_key)
 
     def test_upload_verifies_local_then_uses_immutable_copyto(self) -> None:
         target = self.root / "x.txt"
@@ -151,8 +169,76 @@ class EvidenceStoreTests(unittest.TestCase):
         upload(document, self.manifest_path, self.root, "r2", runner=runner)
         self.assertEqual(len(calls), 2)
         self.assertEqual(calls[0][0:3], ["rclone", "copyto", "--immutable"])
-        self.assertTrue(calls[0][-1].startswith("r2:locked/ovc/releases/"))
+        self.assertIn("--s3-no-check-bucket", calls[0])
+        self.assertTrue(calls[0][-1].startswith("r2:ovc-evidence/locked/ovc/releases/"))
         self.assertTrue(calls[1][-1].endswith("/manifest.json"))
+
+    def test_upload_handles_unicode_spaces_and_never_uses_shell(self) -> None:
+        target = self.root / "nested folder"
+        target.mkdir()
+        (target / "café file.txt").write_bytes(b"x")
+        document = self.build()
+        calls: list[tuple[list[str], dict[str, object]]] = []
+
+        def runner(
+            args: list[str], **kwargs: object
+        ) -> subprocess.CompletedProcess[bytes]:
+            calls.append((args, kwargs))
+            return subprocess.CompletedProcess(args, 0, b"", b"")
+
+        upload(document, self.manifest_path, self.root, "ovc_r2", runner=runner)
+        file_call, kwargs = calls[0]
+        self.assertEqual(
+            file_call[-1].split(":")[1],
+            "ovc-evidence/locked/ovc/releases/release-2026-07/"
+            "manifest-001/files/nested folder/café file.txt",
+        )
+        self.assertNotIn("shell", kwargs)
+        self.assertIsInstance(file_call, list)
+
+    def test_remote_name_must_not_include_colon_or_path(self) -> None:
+        document = self.build()
+        for remote in ("ovc_r2:", "ovc_r2/base", "../remote", ""):
+            with self.subTest(remote=remote):
+                with self.assertRaisesRegex(EvidenceStoreError, "remote must be"):
+                    upload(
+                        document,
+                        self.manifest_path,
+                        self.root,
+                        remote,
+                        runner=lambda *args, **kwargs: subprocess.CompletedProcess(
+                            args, 0, b"", b""
+                        ),
+                    )
+
+    def test_partial_upload_stops_before_manifest(self) -> None:
+        (self.root / "a.txt").write_bytes(b"a")
+        (self.root / "b.txt").write_bytes(b"b")
+        document = self.build()
+        calls: list[list[str]] = []
+
+        def runner(args: list[str], **_: object) -> subprocess.CompletedProcess[bytes]:
+            calls.append(args)
+            if len(calls) == 2:
+                return subprocess.CompletedProcess(args, 1, b"", b"interrupted")
+            return subprocess.CompletedProcess(args, 0, b"", b"")
+
+        with self.assertRaisesRegex(EvidenceStoreError, "b.txt.*interrupted"):
+            upload(document, self.manifest_path, self.root, "ovc_r2", runner=runner)
+        self.assertEqual(len(calls), 2)
+        self.assertTrue(all(not call[-1].endswith("/manifest.json") for call in calls))
+
+    def test_upload_always_requests_immutable_objects(self) -> None:
+        (self.root / "x.txt").write_bytes(b"x")
+        document = self.build(prefix="canonical")
+        calls: list[list[str]] = []
+
+        def runner(args: list[str], **_: object) -> subprocess.CompletedProcess[bytes]:
+            calls.append(args)
+            return subprocess.CompletedProcess(args, 0, b"", b"")
+
+        upload(document, self.manifest_path, self.root, "ovc_r2", runner=runner)
+        self.assertTrue(all("--immutable" in call for call in calls))
 
     def test_upload_does_not_call_rclone_after_local_tampering(self) -> None:
         target = self.root / "x.txt"
@@ -176,8 +262,43 @@ class EvidenceStoreTests(unittest.TestCase):
         def runner(args: list[str], **_: object) -> subprocess.CompletedProcess[bytes]:
             return subprocess.CompletedProcess(args, 0, objects.pop(0), b"")
 
-        verify_remote(document, self.manifest_path, "r2:", runner=runner)
+        verify_remote(document, self.manifest_path, "r2", runner=runner)
         self.assertEqual(objects, [])
+
+    def test_production_remote_verification_streams_objects(self) -> None:
+        target = self.root / "large.bin"
+        target.write_bytes(b"x" * (1024 * 1024 + 17))
+        document = self.build()
+        objects = [self.manifest_path.read_bytes(), target.read_bytes()]
+        calls: list[list[str]] = []
+
+        class FakeProcess:
+            def __init__(self, content: bytes) -> None:
+                from io import BytesIO
+
+                self.stdout = BytesIO(content)
+                self.stderr = BytesIO()
+
+            def wait(self) -> int:
+                return 0
+
+            def kill(self) -> None:
+                pass
+
+        def popen_factory(args: list[str], **kwargs: object) -> FakeProcess:
+            calls.append(args)
+            self.assertNotIn("shell", kwargs)
+            return FakeProcess(objects.pop(0))
+
+        verify_remote(
+            document,
+            self.manifest_path,
+            "ovc_r2",
+            popen_factory=popen_factory,  # type: ignore[arg-type]
+        )
+        self.assertEqual(objects, [])
+        self.assertEqual(len(calls), 2)
+        self.assertTrue(all("--s3-no-check-bucket" in call for call in calls))
 
     def test_remote_hash_mismatch_is_detected(self) -> None:
         (self.root / "x.txt").write_bytes(b"good")
@@ -198,6 +319,19 @@ class EvidenceStoreTests(unittest.TestCase):
 
         with self.assertRaisesRegex(EvidenceStoreError, "exit code 9.*remote unavailable"):
             verify_remote(document, self.manifest_path, "r2", runner=runner)
+
+    def test_rclone_403_includes_logical_object_without_secrets(self) -> None:
+        (self.root / "x.txt").write_bytes(b"x")
+        document = self.build(prefix="sentinel/activation")
+
+        def runner(args: list[str], **_: object) -> subprocess.CompletedProcess[bytes]:
+            return subprocess.CompletedProcess(args, 1, b"", b"403 Forbidden")
+
+        with self.assertRaisesRegex(
+            EvidenceStoreError,
+            "ovc-evidence/sentinel/activation/.+x.txt.*403 Forbidden",
+        ):
+            upload(document, self.manifest_path, self.root, "ovc_r2", runner=runner)
 
     def test_cli_returns_nonzero_for_failure(self) -> None:
         exit_code = main([

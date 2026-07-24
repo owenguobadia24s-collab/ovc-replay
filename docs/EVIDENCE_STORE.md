@@ -17,7 +17,7 @@ timestamp or machine-specific path. The top-level fields are:
 | `schema` | Exact schema identifier |
 | `release_id` | Validated immutable release namespace |
 | `manifest_id` | Validated immutable manifest namespace |
-| `bucket` | Intended bucket name (provenance; rclone selects the endpoint) |
+| `bucket` | Bucket name and first component of every remote object path |
 | `prefix` | Canonical lock prefix, without leading or trailing slash |
 | `authority_state` | Authority description supplied by the operator |
 | `repository_commit` | Source repository commit supplied by the operator |
@@ -37,13 +37,15 @@ collisions are rejected.
 The layout is fixed before upload:
 
 ```text
-<prefix>/releases/<release_id>/<manifest_id>/manifest.json
-<prefix>/releases/<release_id>/<manifest_id>/files/<release-relative-path>
+<bucket>/<prefix>/releases/<release_id>/<manifest_id>/manifest.json
+<bucket>/<prefix>/releases/<release_id>/<manifest_id>/files/<release-relative-path>
 ```
 
-When `prefix` is empty, the key begins with `releases/`. Both identifiers are
-restricted to safe ASCII segments. The separate `files/` boundary prevents a
-release path from colliding with the manifest. The pair
+When `prefix` is empty, the bucket is followed directly by `releases/`. A
+trailing slash on an input prefix is normalized away. Both identifiers are
+restricted to safe ASCII segments. The bucket appears exactly once, and the
+separate `files/` boundary prevents a release path from colliding with the
+manifest. The pair
 `release_id/manifest_id` gives every manifest its own immutable namespace.
 
 Uploads use `rclone copyto --immutable`. Under an indefinite R2 bucket-lock
@@ -88,11 +90,11 @@ python -m ovc_evidence_store verify-remote `
   --remote $env:OVC_RCLONE_REMOTE
 ```
 
-`upload` first performs full local verification. `verify-remote` uses
-`rclone cat` to read the exact remote manifest and every complete release
+`upload` first performs full local verification. `verify-remote` streams
+`rclone cat` output for the exact remote manifest and every complete release
 object; it checks manifest byte identity and each file's byte count and
-SHA-256. All validation, filesystem, and rclone failures produce a clear
-stderr message and a non-zero process exit code.
+SHA-256 without relying on ETags. All validation, filesystem, and rclone
+failures produce a clear stderr message and a non-zero process exit code.
 
 Run all tests in PowerShell with:
 

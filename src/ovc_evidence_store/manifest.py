@@ -192,9 +192,11 @@ def validate_prefix(value: object) -> str:
         raise EvidenceStoreError("prefix must be a string")
     if value == "":
         return ""
-    canonical = value.strip("/")
-    if canonical != value:
-        raise EvidenceStoreError("prefix must not start or end with '/'")
+    if value.startswith("/"):
+        raise EvidenceStoreError("prefix must not start with '/'")
+    canonical = value.rstrip("/")
+    if not canonical:
+        raise EvidenceStoreError("prefix must contain a safe relative path")
     validate_relative_path(canonical)
     return canonical
 
@@ -279,6 +281,7 @@ def remote_keys(document: dict[str, Any]) -> tuple[str, dict[str, str]]:
     validate_manifest(document)
     base_parts = [
         part for part in (
+            document["bucket"],
             document["prefix"],
             "releases",
             document["release_id"],
