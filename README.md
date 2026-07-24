@@ -25,6 +25,7 @@ validation period is selected.
 
 ```text
 src/ovc_opt_b/        Deterministic A-D engine modules
+src/ovc_evidence_store/ Deterministic release manifests and remote verification
 scripts/              Build, replay, audit, validate, and gate entry points
 tests/                Dependency-free unit and contract tests
 contracts/            Ratified and historical semantic contracts
@@ -61,6 +62,8 @@ The imported canonical tree currently passes 107 tests.
 See [Current status](docs/CURRENT_STATUS.md), [Development history](docs/history/README.md),
 [import provenance](docs/IMPORT_PROVENANCE.md), and the
 [complete development summary](docs/architecture/OVC_ABCD_COMPLETE_DEVELOPMENT_SUMMARY_2026-07-19.md).
+For immutable evidence publication and Windows PowerShell commands, see the
+[evidence-store guide](docs/EVIDENCE_STORE.md).
 
 ## Data and large artifacts
 
