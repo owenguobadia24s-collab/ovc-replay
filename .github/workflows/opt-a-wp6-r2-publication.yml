@@ -12,6 +12,7 @@ on:
 permissions:
   contents: read
   actions: read
+  issues: write
 
 jobs:
   packet-tests:
@@ -101,7 +102,7 @@ jobs:
             --releases-root wp6-releases \
             --output-root wp6-manifests
 
-      - name: Verify local identities and publication readiness
+      - name: Publish absent manifests or verify existing immutable releases
         shell: bash
         run: |
           set -euo pipefail
@@ -111,14 +112,39 @@ jobs:
             approval="docs/releases/opt-a-v2/publication/approvals/${role}.json"
             root="wp6-releases/${role}"
             python -m ovc_evidence_store verify-local --manifest "$manifest" --root "$root"
-            python -m ovc_evidence_store readiness \
-              --manifest "$manifest" \
-              --root "$root" \
-              --approval "$approval" \
-              --repository-root a2-g3-source \
-              --remote ovc_r2 \
-              --bucket-lock-visible true > "wp6-readiness/${role}.json"
-            python - "$role" <<'PY'
+            manifest_key=$(python - "$manifest" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          from ovc_evidence_store.manifest import remote_keys
+          document = json.loads(Path(sys.argv[1]).read_text())
+          print(remote_keys(document)[0])
+          PY
+            )
+            if rclone lsjson --stat --s3-no-check-bucket "ovc_r2:${manifest_key}" >/dev/null 2>&1; then
+              python -m ovc_evidence_store verify-remote --manifest "$manifest" --remote ovc_r2
+              python - "$role" "$manifest_key" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          role, key = sys.argv[1:]
+          Path(f"wp6-readiness/{role}.json").write_text(json.dumps({
+              "schema": "ovc-evidence-publication-readiness/v1",
+              "overall_status": "READY",
+              "checks": {"existing_remote_manifest": "PASS", "full_byte_remote_verification": "PASS"},
+              "details": {"manifest_key": key, "mode": "EXISTING_IMMUTABLE_REMOTE_VERIFIED"},
+              "side_effects_performed": False,
+          }, indent=2, sort_keys=True) + "\n")
+          PY
+            else
+              python -m ovc_evidence_store readiness \
+                --manifest "$manifest" \
+                --root "$root" \
+                --approval "$approval" \
+                --repository-root a2-g3-source \
+                --remote ovc_r2 \
+                --bucket-lock-visible true > "wp6-readiness/${role}.json"
+              python - "$role" <<'PY'
           import json
           import sys
           from pathlib import Path
@@ -126,28 +152,13 @@ jobs:
           result = json.loads(Path(f"wp6-readiness/{role}.json").read_text())
           assert result["overall_status"] == "READY", result
           PY
-          done
-
-      - name: Publish immutable payloads and manifests
-        shell: bash
-        run: |
-          set -euo pipefail
-          for role in discovery development validation; do
-            python -m ovc_evidence_store upload \
-              --manifest "wp6-manifests/${role}.json" \
-              --root "wp6-releases/${role}" \
-              --remote ovc_r2 \
-              --approval "docs/releases/opt-a-v2/publication/approvals/${role}.json"
-          done
-
-      - name: Full-byte remote verification
-        shell: bash
-        run: |
-          set -euo pipefail
-          for role in discovery development validation; do
-            python -m ovc_evidence_store verify-remote \
-              --manifest "wp6-manifests/${role}.json" \
-              --remote ovc_r2
+              python -m ovc_evidence_store upload \
+                --manifest "$manifest" \
+                --root "$root" \
+                --remote ovc_r2 \
+                --approval "$approval"
+              python -m ovc_evidence_store verify-remote --manifest "$manifest" --remote ovc_r2
+            fi
           done
 
       - name: Build compact WP6 report
@@ -168,3 +179,10 @@ jobs:
             wp6-output/WP6_PUBLICATION_REPORT.json
             wp6-readiness/*.json
           retention-days: 90
+
+      - name: Record WP6 external execution on PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment 12 --repo "${{ github.repository }}" --body "WP6 external publication execution **${{ job.status }}**. Workflow run: \`${{ github.run_id }}\`; commit: \`${{ github.sha }}\`. Selector activation was not part of this run."
