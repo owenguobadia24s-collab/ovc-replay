@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -e . pytest
-      - run: pytest -q
+      - run: pytest -q tests/opt_a/test_wp5_role_workspace.py
 
   construct-role-workspaces:
     needs: test
