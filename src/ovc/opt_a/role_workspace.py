@@ -3,14 +3,21 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 from typing import Iterable, Iterator
 
-from .provider_population import ORDERED_COLUMNS, ROLE_RELEASES, SourceSpec, audit_provider_csv, role_for_month, source_specs_for_month
+from .provider_population import (
+    ORDERED_COLUMNS,
+    ROLE_RELEASES,
+    SourceSpec,
+    audit_provider_csv,
+    role_for_month,
+    source_specs_for_month,
+)
 
 PROGRAMME_ID = "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2"
 WORK_PACKET_ID = "WP5"
@@ -89,7 +96,9 @@ def _read_bars(path: Path) -> Iterator[Bar]:
             )
 
 
-def _aggregate_exact(bars: Iterable[Bar], *, minutes: int) -> tuple[list[Bar], list[dict[str, object]]]:
+def _aggregate_exact(
+    bars: Iterable[Bar], *, minutes: int
+) -> tuple[list[Bar], list[dict[str, object]]]:
     step_ms = minutes * 60_000
     expected = minutes
     groups: dict[int, list[Bar]] = defaultdict(list)
@@ -104,12 +113,20 @@ def _aggregate_exact(bars: Iterable[Bar], *, minutes: int) -> tuple[list[Bar], l
         exact_timestamps = [bucket + offset * 60_000 for offset in range(expected)]
         observed_timestamps = [item.timestamp_ms for item in members]
         if observed_timestamps != exact_timestamps:
+            exact_set = set(exact_timestamps)
+            observed_set = set(observed_timestamps)
+            missing_timestamps = sorted(exact_set - observed_set)
+            unexpected_timestamps = sorted(observed_set - exact_set)
             quarantined.append(
                 {
                     "bucket_start": bucket,
                     "clock_minutes": minutes,
                     "expected_count": expected,
                     "observed_count": len(members),
+                    "missing_timestamp_count": len(missing_timestamps),
+                    "missing_timestamps_ms": missing_timestamps,
+                    "unexpected_timestamp_count": len(unexpected_timestamps),
+                    "unexpected_timestamps_ms": unexpected_timestamps,
                     "reason": "INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET",
                 }
             )
@@ -127,7 +144,18 @@ def _aggregate_exact(bars: Iterable[Bar], *, minutes: int) -> tuple[list[Bar], l
     return output, quarantined
 
 
-def _write_bars(path: Path, bars: Iterable[Bar]) -> dict[str, object]:
+def _portable_relative_path(path: Path, *, relative_to: Path) -> str:
+    try:
+        return path.resolve().relative_to(relative_to.resolve()).as_posix()
+    except ValueError as exc:
+        raise RoleWorkspaceError(
+            f"workspace artifact path escapes its root: {path} not under {relative_to}"
+        ) from exc
+
+
+def _write_bars(
+    path: Path, bars: Iterable[Bar], *, relative_to: Path
+) -> dict[str, object]:
     path.parent.mkdir(parents=True, exist_ok=True)
     count = 0
     first_timestamp: int | None = None
@@ -141,7 +169,7 @@ def _write_bars(path: Path, bars: Iterable[Bar]) -> dict[str, object]:
             first_timestamp = bar.timestamp_ms if first_timestamp is None else first_timestamp
             last_timestamp = bar.timestamp_ms
     return {
-        "path": path.as_posix(),
+        "path": _portable_relative_path(path, relative_to=relative_to),
         "row_count": count,
         "size_bytes": path.stat().st_size,
         "sha256": _sha256(path),
@@ -169,6 +197,38 @@ def _find_source_csv(evidence_roots: Iterable[Path], spec: SourceSpec) -> Path:
 def _validate_role_lock(role: str, *, allow_validation: bool) -> None:
     if role == "VALIDATION" and not allow_validation:
         raise RoleWorkspaceError("validation workspace is LOCKED_UNCONSUMED")
+
+
+def _coverage_summary(
+    observation_records: list[dict[str, object]],
+    quarantine: list[dict[str, object]],
+) -> dict[str, dict[str, dict[str, int]]]:
+    accepted: Counter[tuple[str, str]] = Counter()
+    for record in observation_records:
+        accepted[(str(record["clock"]), str(record["price_side"]))] += int(
+            record["row_count"]
+        )
+    rejected: Counter[tuple[str, str]] = Counter(
+        (str(record["clock"]), str(record["price_side"])) for record in quarantine
+    )
+    summary: dict[str, dict[str, dict[str, int]]] = {}
+    for clock in ("M1", *DERIVED_CLOCKS.keys()):
+        summary[clock] = {}
+        for side in ("BID", "ASK"):
+            accepted_count = accepted[(clock, side)]
+            quarantined_count = rejected[(clock, side)]
+            candidate_count = accepted_count + quarantined_count
+            summary[clock][side] = {
+                "accepted_bucket_count": accepted_count,
+                "quarantined_bucket_count": quarantined_count,
+                "candidate_bucket_count": candidate_count,
+                "acceptance_rate_ppm": (
+                    accepted_count * 1_000_000 // candidate_count
+                    if candidate_count
+                    else 0
+                ),
+            }
+    return summary
 
 
 def build_role_workspace(
@@ -208,7 +268,8 @@ def build_role_workspace(
                         "target_release_id": ROLE_RELEASES[role],
                         "native_timeframe": spec.native_timeframe,
                         "price_side": spec.price_side,
-                        "source_path": source_path.as_posix(),
+                        "source_path": spec.relative_csv_path.as_posix(),
+                        "source_path_scope": "WP4_YEARLY_ARTIFACT_ROOT",
                         "source_sha256": _sha256(source_path),
                         "audit": audit,
                     }
@@ -217,13 +278,15 @@ def build_role_workspace(
                 if spec.native_timeframe != "M1":
                     continue
                 m1_bars = list(_read_bars(source_path))
-                native_copy = workspace / "observations" / "M1" / spec.price_side / source_path.name
+                native_copy = (
+                    workspace / "observations" / "M1" / spec.price_side / source_path.name
+                )
                 observation_records.append(
                     {
                         "clock": "M1",
                         "price_side": spec.price_side,
                         "year_month": year_month,
-                        **_write_bars(native_copy, m1_bars),
+                        **_write_bars(native_copy, m1_bars, relative_to=workspace),
                     }
                 )
                 for clock, minutes in DERIVED_CLOCKS.items():
@@ -231,6 +294,10 @@ def build_role_workspace(
                     quarantine.extend(
                         {
                             **item,
+                            "bucket_id": (
+                                f"QBUCKET.{spec.source_object_id}.{clock}."
+                                f"{item['bucket_start']}"
+                            ),
                             "year_month": year_month,
                             "price_side": spec.price_side,
                             "clock": clock,
@@ -238,15 +305,21 @@ def build_role_workspace(
                         }
                         for item in rejected
                     )
-                    derived_name = f"GBPUSD_{clock}_{spec.price_side}_{year_month}_UTC.csv"
-                    derived_path = workspace / "observations" / clock / spec.price_side / derived_name
+                    derived_name = (
+                        f"GBPUSD_{clock}_{spec.price_side}_{year_month}_UTC.csv"
+                    )
+                    derived_path = (
+                        workspace / "observations" / clock / spec.price_side / derived_name
+                    )
                     observation_records.append(
                         {
                             "clock": clock,
                             "price_side": spec.price_side,
                             "year_month": year_month,
                             "source_object_id": spec.source_object_id,
-                            **_write_bars(derived_path, derived),
+                            **_write_bars(
+                                derived_path, derived, relative_to=workspace
+                            ),
                         }
                     )
 
@@ -256,8 +329,9 @@ def build_role_workspace(
             f"source-object cardinality mismatch: {len(source_records)} != {expected_source_objects}"
         )
 
+    reason_counts = Counter(str(item["reason"]) for item in quarantine)
     manifest = {
-        "schema": "ovc-opt-a-role-workspace-manifest/v1",
+        "schema": "ovc-opt-a-role-workspace-manifest/v2",
         "programme_id": PROGRAMME_ID,
         "work_packet_id": WORK_PACKET_ID,
         "gate_id": GATE_ID,
@@ -265,10 +339,14 @@ def build_role_workspace(
         "target_release_id": ROLE_RELEASES[role],
         "authority_state": "MUTABLE_WORKSPACE",
         "qa_state": "PASS" if not quarantine else "WARN",
-        "validation_consumption": "LOCKED_UNCONSUMED" if role == "VALIDATION" else "NOT_APPLICABLE",
+        "validation_consumption": (
+            "LOCKED_UNCONSUMED" if role == "VALIDATION" else "NOT_APPLICABLE"
+        ),
         "source_object_count": len(source_records),
         "observation_object_count": len(observation_records),
         "quarantined_bucket_count": len(quarantine),
+        "quarantine_reason_counts": dict(sorted(reason_counts.items())),
+        "coverage": _coverage_summary(observation_records, quarantine),
         "source_objects": source_records,
         "observations": observation_records,
         "quarantine": quarantine,
@@ -282,11 +360,15 @@ def build_role_workspace(
     }
     manifest["manifest_sha256"] = _canonical_json_sha256(manifest)
     manifest_path = workspace / "workspace-manifest.json"
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     return manifest
 
 
-def build_all_role_workspaces(*, evidence_roots: Iterable[Path], output_root: Path) -> dict[str, object]:
+def build_all_role_workspaces(
+    *, evidence_roots: Iterable[Path], output_root: Path
+) -> dict[str, object]:
     results = {
         role: build_role_workspace(
             evidence_roots=evidence_roots,
@@ -297,17 +379,23 @@ def build_all_role_workspaces(*, evidence_roots: Iterable[Path], output_root: Pa
         for role in ("DISCOVERY", "DEVELOPMENT", "VALIDATION")
     }
     report = {
-        "schema": "ovc-opt-a-wp5-observation-construction-report/v1",
+        "schema": "ovc-opt-a-wp5-observation-construction-report/v2",
         "programme_id": PROGRAMME_ID,
         "work_packet_id": WORK_PACKET_ID,
         "gate_id": GATE_ID,
-        "result": "PASS" if all(item["qa_state"] in {"PASS", "WARN"} for item in results.values()) else "BLOCK",
+        "result": (
+            "PASS"
+            if all(item["qa_state"] in {"PASS", "WARN"} for item in results.values())
+            else "BLOCK"
+        ),
         "roles": {
             role: {
                 "target_release_id": item["target_release_id"],
                 "source_object_count": item["source_object_count"],
                 "observation_object_count": item["observation_object_count"],
                 "quarantined_bucket_count": item["quarantined_bucket_count"],
+                "quarantine_reason_counts": item["quarantine_reason_counts"],
+                "coverage": item["coverage"],
                 "qa_state": item["qa_state"],
             }
             for role, item in results.items()
