@@ -1,0 +1,29 @@
+schema: ovc-authority-guard-registry/v1
+state: ENFORCED_BY_TEST_SUITE
+baseline_commit: c0ad7ba22618babdde731e2a338f68f688d4210c
+market_authority: NONE
+guards:
+  - id: GUARD-NO-QUARANTINE-IMPORTS
+    test: tests/authority/test_no_quarantine_imports.py
+    state: ACTIVE
+    protects: runtime_import_boundary
+  - id: GUARD-ACTIVE-NAMESPACE-ALLOWLIST
+    test: tests/authority/test_active_namespace_allowlist.py
+    state: ACTIVE
+    protects: package_authority_boundary
+  - id: GUARD-NO-LEGACY-SELECTOR-AUTHORITY
+    test: tests/authority/test_no_legacy_selector_authority.py
+    state: ACTIVE
+    protects: selector_and_release_authority
+  - id: GUARD-NO-OLD-DISCOVERY-SEED
+    test: tests/authority/test_no_old_discovery_seed.py
+    state: ACTIVE
+    protects: discovery_independence
+  - id: GUARD-NO-REVERSE-DEPENDENCIES
+    test: tests/authority/test_no_reverse_dependencies.py
+    state: ACTIVE
+    protects: one_way_layer_dependencies
+  - id: GUARD-NO-RAW-MARKET-DATA-IN-GIT
+    test: tests/authority/test_no_raw_market_data_in_git.py
+    state: ACTIVE
+    protects: storage_plane_boundary

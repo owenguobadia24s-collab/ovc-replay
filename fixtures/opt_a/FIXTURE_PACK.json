@@ -1,0 +1,167 @@
+{
+  "boundary_rules": [
+    "BID_AND_ASK_SEPARATE",
+    "NATIVE_AND_DERIVED_IDENTITIES_SEPARATE",
+    "UTC_ONLY",
+    "NO_GAP_FILL",
+    "SEALED_HANDOFF_ONLY"
+  ],
+  "case_count": 14,
+  "cases": [
+    {
+      "authority": {
+        "discovery_seed": "DENIED",
+        "market": "NONE",
+        "release_parent": "DENIED"
+      },
+      "expected": {
+        "reason": "VALID_BAR",
+        "status": "ACCEPTED"
+      },
+      "id": "OPT-A-FX-001",
+      "input": {
+        "interval": "M1",
+        "ohlc": ["1.25000", "1.25040", "1.24980", "1.25020"],
+        "side": "BID"
+      },
+      "purpose": "valid M1 BID bar",
+      "role": "POSITIVE",
+      "synthetic": true,
+      "tags": ["m1", "bid"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "VALID_BAR", "status": "ACCEPTED"},
+      "id": "OPT-A-FX-002",
+      "input": {"interval": "M1", "ohlc": ["1.25012", "1.25052", "1.24992", "1.25032"], "side": "ASK"},
+      "purpose": "valid M1 ASK bar kept separate",
+      "role": "POSITIVE",
+      "synthetic": true,
+      "tags": ["m1", "ask"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "VALID_NATIVE_H1", "status": "ACCEPTED"},
+      "id": "OPT-A-FX-003",
+      "input": {"interval": "H1_NATIVE", "side": "BID"},
+      "purpose": "valid native H1 BID identity",
+      "role": "POSITIVE",
+      "synthetic": true,
+      "tags": ["h1", "bid"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "VALID_NATIVE_H1", "status": "ACCEPTED"},
+      "id": "OPT-A-FX-004",
+      "input": {"interval": "H1_NATIVE", "side": "ASK"},
+      "purpose": "valid native H1 ASK identity",
+      "role": "POSITIVE",
+      "synthetic": true,
+      "tags": ["h1", "ask"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "INVALID_OHLC_ORDER", "status": "REJECTED"},
+      "id": "OPT-A-FX-005",
+      "input": {"interval": "M1", "ohlc": ["1.25000", "1.24990", "1.24980", "1.25020"], "side": "BID"},
+      "purpose": "impossible OHLC ordering",
+      "role": "NEGATIVE",
+      "synthetic": true,
+      "tags": ["schema"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "DUPLICATE_TIMESTAMP", "status": "REJECTED"},
+      "id": "OPT-A-FX-006",
+      "input": {"rows": [["2024-01-02T00:00:00Z", "BID", "M1"], ["2024-01-02T00:00:00Z", "BID", "M1"]]},
+      "purpose": "duplicate timestamp in one release identity",
+      "role": "NEGATIVE",
+      "synthetic": true,
+      "tags": ["dedupe"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "MISSING_INTERVAL_PRESERVED", "status": "ACCEPTED_WITH_GAP"},
+      "id": "OPT-A-FX-007",
+      "input": {"timestamps": ["2024-01-02T00:00:00Z", "2024-01-02T00:02:00Z"]},
+      "purpose": "missing minute preserved as gap",
+      "role": "BOUNDARY",
+      "synthetic": true,
+      "tags": ["gap", "no-fill"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "UNSUPPORTED_SIDE", "status": "REJECTED"},
+      "id": "OPT-A-FX-008",
+      "input": {"interval": "M1", "side": "MID"},
+      "purpose": "unsupported MID side",
+      "role": "NEGATIVE",
+      "synthetic": true,
+      "tags": ["side"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "COMPLETE_BUCKET", "status": "ACCEPTED"},
+      "id": "OPT-A-FX-009",
+      "input": {"first_open": "1.25000", "last_close": "1.25090", "max_high": "1.25100", "min_low": "1.24990", "rows": 15, "target": "15M"},
+      "purpose": "complete exact 15M aggregation",
+      "role": "POSITIVE",
+      "synthetic": true,
+      "tags": ["15m"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "INCOMPLETE_BUCKET", "status": "REJECTED"},
+      "id": "OPT-A-FX-010",
+      "input": {"present_minutes": [0,1,2,3,4,5,6,7,8,9,10,11,12,13], "target": "15M"},
+      "purpose": "incomplete 15M bucket",
+      "role": "NEGATIVE",
+      "synthetic": true,
+      "tags": ["15m", "no-fill"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "COMPLETE_A_L_BUCKET", "status": "ACCEPTED"},
+      "id": "OPT-A-FX-011",
+      "input": {"bucket": "A", "rows": 120, "target": "2H_A_L"},
+      "purpose": "complete A-L aligned two-hour bucket",
+      "role": "POSITIVE",
+      "synthetic": true,
+      "tags": ["2h-a-l"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "UNSEALED_PARENT_RELEASE", "status": "REJECTED"},
+      "id": "OPT-A-FX-012",
+      "input": {"release_state": "BUILT_UNSEALED"},
+      "purpose": "unsealed OPT-A handoff",
+      "role": "NEGATIVE",
+      "synthetic": true,
+      "tags": ["handoff"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "WRONG_RELEASE_IDENTITY", "status": "REJECTED"},
+      "id": "OPT-A-FX-013",
+      "input": {"release_id": "LEGACY-OPT-A-V1"},
+      "purpose": "legacy release identity at v2 handoff",
+      "role": "NEGATIVE",
+      "synthetic": true,
+      "tags": ["authority"]
+    },
+    {
+      "authority": {"discovery_seed": "DENIED", "market": "NONE", "release_parent": "DENIED"},
+      "expected": {"reason": "DISTINCT_IDENTITIES_PRESERVED", "status": "RECONCILED_WITH_DIFFERENCE"},
+      "id": "OPT-A-FX-014",
+      "input": {"derived": "H1_DERIVED_FROM_M1", "difference": "0.00002", "native": "H1_NATIVE"},
+      "purpose": "native and derived H1 identities remain distinct",
+      "role": "BOUNDARY",
+      "synthetic": true,
+      "tags": ["reconciliation"]
+    }
+  ],
+  "layer": "OPT_A",
+  "market_authority": "NONE",
+  "schema": "ovc-synthetic-fixture-pack/v1",
+  "synthetic": true
+}

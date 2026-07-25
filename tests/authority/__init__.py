@@ -1,0 +1,1 @@
+"""Repository authority guard tests."""
