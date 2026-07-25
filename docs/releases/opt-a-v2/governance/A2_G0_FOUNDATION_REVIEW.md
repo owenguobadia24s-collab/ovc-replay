@@ -18,7 +18,7 @@
 | WP2 evidence lifecycle | `91d57980be84239de69de00c43649d20a2acd7fe` | PASS | External-root, workspace, freeze, approval and readiness controls implemented |
 | WP3 provider/clock/handoff | `087cfe47c2dceffc89d43f2795ebd28dd35d3d3d` | PASS | Provider, source-object, UTC clock, role split, reconciliation and handoff contracts frozen |
 
-The current `main` tip is exactly the WP3 merge commit and therefore includes WP1, WP2 and WP3.
+The reviewed `main` tip is exactly the WP3 merge commit and therefore includes WP1, WP2 and WP3.
 
 ## Gate criteria and findings
 
@@ -34,11 +34,20 @@ The current `main` tip is exactly the WP3 merge commit and therefore includes WP
 | G0-08 reconciliation and handoff | native/derived H1 remain distinct; one-way sealed handoff to OPT-B.C1 only | PASS |
 | G0-09 synthetic fixtures | contract fixtures are synthetic, non-authoritative and denied as seeds/releases/selectors | PASS |
 | G0-10 repository authority | no active market selector, no active handoff, no raw market population in Git | PASS |
-| G0-11 integrated CI | complete merged foundation plus review guards pass canonical test suite | PENDING FINAL CI |
+| G0-11 integrated CI | complete merged foundation plus A2-G0 review guards | PASS — 100 tests, 0 failures, 0 errors |
+
+Canonical pre-seal CI evidence:
+
+- tested head: `b735266c9ef8200a825d1a6e19e9c8de2d202417`
+- tested PR merge commit: `6b3eddbb1df567d00d007d64e6fe67012a9b795f`
+- workflow run: `30173948121`
+- command: `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+
+The PR must remain green after the final state-sealing edits before merge.
 
 ## Foundation decision
 
-The repository foundation is technically and governably coherent for the next OPT-A v2 execution packet. Subject to final branch-head CI, A2-G0 is approved as `PASS`.
+**PASS.** The repository foundation is technically and governably coherent for the next OPT-A v2 execution packet.
 
 A2-G0 clears the programme-level block that prevented the next provider-intake packet from beginning. It authorises **WP4 provider-intake implementation and bounded provider execution only after the operator-local preflight below passes**. It does not itself download any provider bytes.
 
@@ -79,4 +88,4 @@ Still prohibited:
 
 ## Review conclusion
 
-`A2-G0` will be sealed only after the canonical branch-head suite passes. The review introduces governance authority for the next bounded intake packet, not market authority.
+`A2-G0` is sealed as `PASS` and awaits operator review and merge. The decision introduces governance authority for the next bounded intake packet, not market authority.
