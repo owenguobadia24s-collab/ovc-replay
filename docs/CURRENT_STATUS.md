@@ -4,30 +4,50 @@ Snapshot date: 25 July 2026.
 
 ## Integrated baseline
 
-The reset and the first three OPT-A v2 work packets are merged into `main`:
+The reset, foundation work and A2-G0 review are merged into `main`:
 
 - R0 reset: `a9902c97e21131b1882b4c11ca3a2a79273e7c77`
 - WP1 release governance: `5c567c1ba7de57d83079200c006f991d41642310`
 - WP2 evidence-store lifecycle: `91d57980be84239de69de00c43649d20a2acd7fe`
 - WP3 provider, clock, release-split and handoff contracts: `087cfe47c2dceffc89d43f2795ebd28dd35d3d3d`
+- A2-G0 foundation review: `f4286bdb9d816ba12c77a4bb09604f462a6dc87e`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and non-reproducible from its exact sealed bytes. It cannot be reused, published, selected or used as rollback authority.
 
-## A2-G0 foundation review
+## WP4 actual GBP/USD provider population intake
 
-A2-G0 is sealed as `PASS`. The combined foundation now includes:
+WP4 is sealed as `PASS` and awaits operator review and merge.
 
-- exact discovery, development and validation release identities;
-- all role selectors at `NONE`;
-- 2025 validation at `LOCKED_UNCONSUMED` with default access denied;
-- process-only external-root, deterministic inventory, gated freeze, exact publication approval and read-only readiness controls;
-- frozen Dukascopy GBPUSD M1/H1 BID/ASK source-object contracts;
-- UTC half-open A–L clock and exact aggregation, gap, volume and reconciliation rules;
-- a sealed one-way OPT-A-to-OPT-B.C1 handoff contract with no active handoff;
-- synthetic, non-authoritative contract fixtures and repository guard tests;
-- integrated canonical CI with 100 tests passing and no failures or errors before gate sealing.
+The successful Dukascopy intake covers `[2021-01-01T00:00:00Z, 2026-01-01T00:00:00Z)` and contains:
 
-A2-G0 performs no provider request and introduces no market authority.
+- **60** accepted UTC calendar-month partitions;
+- independent M1 BID, M1 ASK, H1 BID and H1 ASK objects;
+- **240** accepted source objects;
+- **3,781,810** accepted rows across the four object families;
+- **216,656,289** accepted CSV bytes;
+- aggregate QA state `PASS`;
+- no release, selector, handoff or market authority.
+
+Role allocation remains:
+
+- 144 discovery objects for 2021–2023;
+- 48 development objects for 2024;
+- 48 validation objects for 2025.
+
+Validation remains `LOCKED_UNCONSUMED`, default deny and unavailable to design or threshold selection.
+
+## Execution evidence
+
+Workflow run `30175183492` completed successfully:
+
+- repository unit tests: PASS;
+- January 2021 provider pilot: PASS;
+- yearly population jobs for 2021, 2022, 2023, 2024 and 2025: PASS;
+- exact 60-month / 240-object aggregate: PASS.
+
+Final pre-seal canonical CI run `30176467243` passed **107 tests** with zero failures and zero errors.
+
+The executed adapter was `OVC_DIRECT_BI5_CANDLE_ADAPTER` version `1.0.1`. Exact provider BI5 transport objects, generated CSV objects, intake records and source identities are held in temporary GitHub Actions evidence artifacts. The five yearly compressed artifacts total **85,076,759 bytes**.
 
 ## Active authority matrix
 
@@ -35,24 +55,25 @@ A2-G0 performs no provider request and introduces no market authority.
 |---|---|---|
 | Evidence store | `ACTIVE_INFRASTRUCTURE / WP2_MERGED_PASS` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
-| OPT-A v2 | `FOUNDATION_PASS_INTAKE_NOT_RELEASE` | `NONE` |
+| OPT-A v2 | `WP4_PASS / INTAKE_COMPLETE_NOT_RELEASE` | `NONE` |
 | OPT-B.C1 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
-## External evaluation boundary
+## Storage boundary
 
-Credential-free GitHub CI cannot inspect the operator's Windows artifact root, provider connectivity, environment-only rclone configuration, the current R2 object inventory or the live bucket-lock state. These remain `NOT_EVALUATED_BY_GITHUB_RUNNER` and must be checked in the operator-local preflight before the relevant intake or publication action.
+- Raw provider and market payloads in Git: denied.
+- Yearly provider evidence bundles: temporary GitHub Actions artifacts with 30-day retention.
+- Compact summaries and aggregate execution records: 90-day Actions retention plus compact Git records.
+- Canonical Cloudflare R2 mutation: none.
 
-## Authority granted after merge
-
-A passing merged A2-G0 authorises the bounded `WP4 — provider intake implementation and execution` packet. The first provider network request remains denied until the operator-local preflight confirms the external root, path safety, workspace uniqueness, local capacity and repository secret boundary.
+These artifacts are intake evidence, not canonical role releases. Their exact IDs, digests, sizes and expiry times are recorded in `docs/releases/opt-a-v2/intake/WP4_ACTIONS_ARTIFACT_INVENTORY.json`.
 
 ## Authority still withheld
 
-Canonical R2 publication, treating mutable workspace bytes as a release, selector activation, validation design/threshold consumption, active OPT-A-to-OPT-B handoff, OPT-B/C/D market claims, probability, exposure, trading and execution remain unauthorised.
+Release freezing, canonical R2 publication, selector activation, validation design/threshold consumption, active OPT-A-to-OPT-B handoff, OPT-B/C/D market claims, probability, exposure, trading and execution remain unauthorised.
 
 ## Next packet
 
-`WP4 — provider intake implementation and bounded execution`, after A2-G0 PR review and merge.
+After merge, the next bounded packet is `WP5 — role workspace construction and QA`. It may transform the accepted intake evidence into governed discovery, development and locked-validation workspaces, but release freezing and publication remain separate gates.
