@@ -1,0 +1,68 @@
+schema: ovc-opt-a-implementation-record/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+gate_id: A2-G3
+title: Role release freeze
+branch: build/opt-a-v2-role-release-freeze
+baseline_commit: a7a99c7679a06fda3173592abeafe56a429c2e9f
+execution_commit: 8c4c6c70da6f3f8b400d06df990500702813ff39
+workflow_run_id: 30179286521
+status: EXECUTED_PASS_READY_TO_MERGE
+preconditions:
+  - A2_G2_PASS
+  - EXACT_REVIEWED_WORKSPACE_IDENTITIES
+  - QUARANTINE_DISPOSITION_BOUND
+inputs:
+  discovery_workspace_manifest_sha256: f1ef621bce4a098a80d2cb309ae6f9cba2fcd177e71ce1ac98614f826e0f9a71
+  development_workspace_manifest_sha256: fa527f01fc0db621cbcddf2fe4bbe8f697e54c9af238e56e85f2a4da0140b1c2
+  validation_workspace_manifest_sha256: 9e92e479b7d39e6669681659d0acf98b1d686d0dc66bfe2e8558d742aaa13514
+outputs:
+  release_state: RELEASE_FROZEN
+  availability_state: LOCAL_ARTIFACT_ONLY
+  authority_state: CANDIDATE
+  selector_state: NONE
+  publication_status: NOT_ATTEMPTED
+  quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
+  releases:
+    discovery:
+      release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+      artifact_id: 8625089938
+      artifact_digest: sha256:45738f741e8fc88becf5630ea004ec049ff90a04aed7c7694ca92d25887f227d
+      file_count: 292
+      total_size_bytes: 155631400
+      inventory_sha256: 202abccd550dee73e5a383f623c83355671622df89e528ffc3f119e3ae5a5ead
+    development:
+      release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+      artifact_id: 8625090401
+      artifact_digest: sha256:c54d04577144a5ee19586a18dfb74987c2e9fa35c84538b8ffb83bc729edd718
+      file_count: 100
+      total_size_bytes: 52761781
+      inventory_sha256: afd943105dc88c4320169b92077c6b3718a78ad450716ae7755ff780ffc160a6
+    validation_locked:
+      release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+      artifact_id: 8625090861
+      artifact_digest: sha256:9dfc6f04343cb55f2dc14849a00b16a905aade1428ec950c1ff4bacbf13312ac
+      file_count: 100
+      total_size_bytes: 52303593
+      inventory_sha256: 3a648c4350955a248933cc24231da69f12238d563298e0675ac2530a8237cf74
+      validation_consumption: LOCKED_UNCONSUMED
+qa:
+  exact_reviewed_workspace_identity: PASS
+  observation_byte_identity: PASS
+  quarantine_cardinality_and_timestamp_evidence: PASS
+  accepted_observation_quarantine_separation: PASS
+  deterministic_release_descriptor: PASS
+  deterministic_release_inventory: PASS
+  overwrite_denial: PASS
+  canonical_tests: PASS
+  freeze_workflow: PASS
+authority:
+  role_release_freeze: COMPLETE_LOCAL_ARTIFACT_ONLY
+  r2_publication: DENIED
+  selector_activation: DENIED
+  validation_consumption: LOCKED_UNCONSUMED
+  opt_b_handoff: DENIED
+  market: NONE
+rollback:
+  action: DISCARD_UNPUBLISHED_FROZEN_ARTIFACT_AND_REBUILD_FROM_EXACT_REVIEWED_WORKSPACE
+  historical_mutation: PROHIBITED
+next_gate: SEPARATE_PUBLICATION_APPROVAL_AND_REMOTE_VERIFICATION_PACKET
