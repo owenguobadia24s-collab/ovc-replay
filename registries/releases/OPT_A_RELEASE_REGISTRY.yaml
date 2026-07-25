@@ -1,0 +1,127 @@
+schema: ovc-opt-a-release-registry/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+repository: owenguobadia24s-collab/ovc-replay
+baseline_commit: a9902c97e21131b1882b4c11ca3a2a79273e7c77
+r0_reset_head: 71c7c5513efb9bb8d214d118be03090664050c21
+release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
+programme_scope:
+  instrument: GBPUSD
+  provider: DUKASCOPY
+  start_inclusive: 2021-01-01T00:00:00Z
+  end_exclusive: 2026-01-01T00:00:00Z
+  native_timeframes:
+    - M1
+    - H1
+  price_sides:
+    - BID
+    - ASK
+releases:
+  - release_id: OPT-A.GBPUSD.2026H1.v1
+    research_role: HISTORICAL
+    interval: "[2026-01-01T00:00:00Z, 2026-07-01T00:00:00Z)"
+    historical_seal_status: SEALED_RESEARCH_AUTHORITY
+    lifecycle_state: RELEASE_FROZEN
+    authority_state: SUPERSEDED
+    qa_state: PASS_HISTORICAL_RECORD_ONLY
+    availability_state: MISSING
+    publication_status: NEVER_PUBLISHED
+    consumption_state: RETIRED
+    selector_state: NONE
+    active_selector: false
+    reproducibility_status: NOT_REPRODUCIBLE_MISSING_PAYLOAD
+    r2_canonical_status: ABSENT
+    reason: EXACT_SEALED_PAYLOAD_UNAVAILABLE
+    replacement_policy: NEW_BYTES_REQUIRE_NEW_RELEASE_ID
+    permitted_use:
+      - HISTORICAL_LINEAGE
+      - LEGACY_RESULT_REFERENCE
+      - GOVERNANCE_AUDIT
+    prohibited_use:
+      - NEW_REPLAY_INPUT
+      - CANONICAL_PUBLICATION
+      - PARAMETER_SOURCE
+      - SELECTOR_FALLBACK
+      - ROLLBACK_TARGET
+      - UNTOUCHED_VALIDATION
+    historical_files:
+      seal_manifest:
+        path: legacy/quarantine/abcd-engine-v1-c0ad7ba/docs/history/releases/opt-a-discovery-2026-h1/OPT_A_SEAL_MANIFEST.json
+        git_blob_sha1: 56367dd59398ff8a64e12cdd48e60178fdb334ce
+        embedded_seal_hash: 0927f7a2b078d670370eb9ec26718f3e2ff0d97708df1f785a9333264415ef99
+      seal_record:
+        path: legacy/quarantine/abcd-engine-v1-c0ad7ba/docs/history/releases/opt-a-discovery-2026-h1/OPT_A_SEAL_RECORD.md
+        git_blob_sha1: b16aadb0154f86b418b2653e3b33f468952813ae
+    expected_payload:
+      artifact_count: 14
+      total_size_bytes: 13906357
+  - release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    research_role: DISCOVERY
+    interval: "[2021-01-01T00:00:00Z, 2024-01-01T00:00:00Z)"
+    historical_seal_status: null
+    lifecycle_state: DRAFT
+    authority_state: NONE
+    qa_state: NOT_EVALUATED
+    availability_state: MISSING
+    publication_status: NOT_ATTEMPTED
+    consumption_state: NOT_APPLICABLE
+    selector_state: NONE
+    active_selector: false
+    reproducibility_status: NOT_EVALUATED
+    r2_canonical_status: NOT_EVALUATED
+    reason: REGISTERED_PROGRAMME_IDENTITY_ONLY
+    replacement_policy: IMMUTABLE_IDENTITY
+    permitted_use:
+      - FUTURE_DISCOVERY_RELEASE_BUILD_AFTER_GATES
+    prohibited_use:
+      - ACTIVE_MARKET_INPUT
+      - PUBLICATION_BEFORE_APPROVAL
+      - SELECTOR_ACTIVATION_BEFORE_REMOTE_VERIFICATION
+  - release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    research_role: DEVELOPMENT
+    interval: "[2024-01-01T00:00:00Z, 2025-01-01T00:00:00Z)"
+    historical_seal_status: null
+    lifecycle_state: DRAFT
+    authority_state: NONE
+    qa_state: NOT_EVALUATED
+    availability_state: MISSING
+    publication_status: NOT_ATTEMPTED
+    consumption_state: NOT_APPLICABLE
+    selector_state: NONE
+    active_selector: false
+    reproducibility_status: NOT_EVALUATED
+    r2_canonical_status: NOT_EVALUATED
+    reason: REGISTERED_PROGRAMME_IDENTITY_ONLY
+    replacement_policy: IMMUTABLE_IDENTITY
+    permitted_use:
+      - FUTURE_DEVELOPMENT_RELEASE_BUILD_AFTER_GATES
+    prohibited_use:
+      - ACTIVE_MARKET_INPUT
+      - VALIDATION_DATA_ACCESS
+      - PUBLICATION_BEFORE_APPROVAL
+      - SELECTOR_ACTIVATION_BEFORE_REMOTE_VERIFICATION
+  - release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+    research_role: VALIDATION
+    interval: "[2025-01-01T00:00:00Z, 2026-01-01T00:00:00Z)"
+    historical_seal_status: null
+    lifecycle_state: DRAFT
+    authority_state: NONE
+    qa_state: NOT_EVALUATED
+    availability_state: MISSING
+    publication_status: NOT_ATTEMPTED
+    consumption_state: LOCKED_UNCONSUMED
+    selector_state: NONE
+    active_selector: false
+    reproducibility_status: NOT_EVALUATED
+    r2_canonical_status: NOT_EVALUATED
+    reason: REGISTERED_PROGRAMME_IDENTITY_AND_DEFAULT_DENY_HOLDOUT
+    replacement_policy: IMMUTABLE_IDENTITY
+    permitted_use:
+      - FUTURE_INTEGRITY_ONLY_BUILD_AFTER_GATES
+    prohibited_use:
+      - MODEL_DESIGN
+      - THRESHOLD_SELECTION
+      - SEMANTIC_REVIEW
+      - CASE_SELECTION
+      - CONSUMPTION_WITHOUT_VALIDATION_ACCESS_APPROVAL
+      - PUBLICATION_BEFORE_APPROVAL
+      - SELECTOR_ACTIVATION_BEFORE_REMOTE_VERIFICATION
