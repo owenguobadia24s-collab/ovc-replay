@@ -1,0 +1,108 @@
+{
+  "schema": "ovc-opt-a-a2-g0-foundation-gate/v1",
+  "gate_id": "A2-G0-FOUNDATION-REVIEW",
+  "programme_id": "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "reviewed_main_commit": "087cfe47c2dceffc89d43f2795ebd28dd35d3d3d",
+  "branch": "review/opt-a-v2-a2-g0-foundation",
+  "result": "PENDING_CI",
+  "authority_delta": "WP4_PROVIDER_INTAKE_MAY_BEGIN_AFTER_OPERATOR_LOCAL_PREFLIGHT",
+  "market_authority": "NONE",
+  "provider_download_performed": false,
+  "market_release_constructed": false,
+  "r2_mutation": "NONE",
+  "selector_activation": "NONE",
+  "active_handoff": "NONE",
+  "validation_consumption": "LOCKED_UNCONSUMED",
+  "predecessors": {
+    "R0": {
+      "merge_commit": "a9902c97e21131b1882b4c11ca3a2a79273e7c77",
+      "result": "PASS"
+    },
+    "WP1": {
+      "merge_commit": "5c567c1ba7de57d83079200c006f991d41642310",
+      "result": "PASS"
+    },
+    "WP2": {
+      "merge_commit": "91d57980be84239de69de00c43649d20a2acd7fe",
+      "result": "PASS"
+    },
+    "WP3": {
+      "merge_commit": "087cfe47c2dceffc89d43f2795ebd28dd35d3d3d",
+      "result": "PASS"
+    }
+  },
+  "checks": {
+    "G0_01_programme_identity": "PASS",
+    "G0_02_v1_disposition": "PASS",
+    "G0_03_role_release_boundaries": "PASS",
+    "G0_04_selector_and_validation_controls": "PASS",
+    "G0_05_evidence_lifecycle_controls": "PASS",
+    "G0_06_source_object_contracts": "PASS",
+    "G0_07_clock_aggregation_gap_volume": "PASS",
+    "G0_08_reconciliation_and_handoff": "PASS",
+    "G0_09_synthetic_fixture_authority": "PASS",
+    "G0_10_repository_authority_and_storage_boundary": "PASS",
+    "G0_11_integrated_canonical_ci": "PENDING"
+  },
+  "programme_scope": {
+    "provider": "DUKASCOPY",
+    "instrument": "GBPUSD",
+    "start_inclusive": "2021-01-01T00:00:00Z",
+    "end_exclusive": "2026-01-01T00:00:00Z",
+    "native_timeframes": [
+      "M1",
+      "H1"
+    ],
+    "price_sides": [
+      "BID",
+      "ASK"
+    ],
+    "primary_operational_spine": "H2_M1_CHAIN_DERIVED_A_L_UTC"
+  },
+  "role_releases": {
+    "discovery": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "development": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+    "validation": "OPT-A.GBPUSD.VALIDATION.2025.v2"
+  },
+  "all_role_selectors": "NONE",
+  "operator_local_preflight_required": [
+    "EXTERNAL_ROOT_RESOLVES_OUTSIDE_GIT",
+    "EXTERNAL_ROOT_PATH_AND_SYMLINK_SAFETY_PASS",
+    "NEW_WORKSPACE_IDENTITY_HAS_NO_COLLISION",
+    "LOCAL_CAPACITY_RECORDED",
+    "NO_PROVIDER_SECRET_OR_MACHINE_PATH_IN_GIT"
+  ],
+  "remote_checks_before_publication": [
+    "RCLONE_REMOTE_READ_ONLY_VISIBILITY",
+    "OVC_EVIDENCE_BUCKET_VISIBILITY",
+    "CANONICAL_LOCK_VISIBILITY",
+    "EXACT_REMOTE_KEY_COLLISION_PREFLIGHT"
+  ],
+  "external_evaluation_state": {
+    "operator_windows_artifact_root": "NOT_EVALUATED_BY_GITHUB_RUNNER",
+    "provider_connectivity": "NOT_EVALUATED_BY_GITHUB_RUNNER",
+    "live_rclone_remote": "NOT_EVALUATED_BY_GITHUB_RUNNER",
+    "current_r2_object_inventory": "NOT_EVALUATED_BY_GITHUB_RUNNER",
+    "current_r2_bucket_lock": "NOT_EVALUATED_BY_GITHUB_RUNNER"
+  },
+  "permitted_after_merge": [
+    "WP4_PROVIDER_INTAKE_IMPLEMENTATION",
+    "BOUNDED_PROVIDER_CONNECTIVITY_PILOT_AFTER_LOCAL_PREFLIGHT",
+    "MONTHLY_GBPUSD_M1_H1_BID_ASK_INTAKE_AFTER_LOCAL_PREFLIGHT",
+    "EXTERNAL_WORKSPACE_AND_INTAKE_RECORD_CREATION",
+    "COMPACT_GIT_GOVERNANCE_AND_CODE_UPDATES"
+  ],
+  "still_prohibited": [
+    "MUTABLE_WORKSPACE_AS_RELEASE_AUTHORITY",
+    "R2_PUBLICATION_WITHOUT_EXACT_APPROVAL_AND_READINESS",
+    "OPT_A_SELECTOR_ACTIVATION",
+    "VALIDATION_DESIGN_OR_THRESHOLD_CONSUMPTION",
+    "OPT_A_TO_OPT_B_HANDOFF_ACTIVATION",
+    "HISTORICAL_V1_FALLBACK_OR_ROLLBACK",
+    "OPT_B_C_D_MARKET_CLAIMS",
+    "PROBABILITY_EXPOSURE_TRADING_EXECUTION_AUTHORITY"
+  ],
+  "next_packet_after_merge": "WP4_PROVIDER_INTAKE_IMPLEMENTATION_AND_BOUNDED_EXECUTION",
+  "merge_authority": "AWAITING_CI_AND_OPERATOR_REVIEW"
+}
