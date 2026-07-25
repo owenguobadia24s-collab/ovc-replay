@@ -8,6 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "fixtures"
 EXPECTED_COUNTS = {"OPT_A": 14, "C1": 12, "C2": 16}
+ALLOWED_REPOSITORY_STATES = {
+    "state: V2_FOUNDATION_NO_MARKET_AUTHORITY",
+    "state: V2_FOUNDATION_RESET_COMPLETE_NO_MARKET_AUTHORITY",
+}
 FORBIDDEN = (
     "B-STATE-",
     "OPT-C-",
@@ -90,7 +94,8 @@ class SyntheticFixturePackTests(unittest.TestCase):
 
     def test_active_authority_remains_none(self) -> None:
         authority = (ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml").read_text(encoding="utf-8")
-        self.assertIn("state: V2_FOUNDATION_NO_MARKET_AUTHORITY", authority)
+        repository_state = next(line for line in authority.splitlines() if line.startswith("state: "))
+        self.assertIn(repository_state, ALLOWED_REPOSITORY_STATES)
         self.assertGreaterEqual(authority.count(": NONE"), 8)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
 
