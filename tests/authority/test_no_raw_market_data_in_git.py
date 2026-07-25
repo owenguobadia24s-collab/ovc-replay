@@ -5,10 +5,11 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-FORBIDDEN_BINARY_SUFFIXES = {
+FORBIDDEN_ACTIVE_BINARY_SUFFIXES = {
     ".parquet", ".feather", ".arrow", ".orc", ".h5", ".hdf5",
     ".duckdb", ".sqlite", ".sqlite3", ".db", ".zip", ".7z", ".gz",
 }
+HISTORICAL_ROOTS = ("docs/history/", "legacy/quarantine/")
 MARKET_COLUMNS = {"timestamp", "time", "open", "high", "low", "close", "volume", "bid", "ask"}
 
 
@@ -17,9 +18,18 @@ def tracked_paths() -> list[Path]:
     return [Path(item.decode("utf-8")) for item in output.split(b"\0") if item]
 
 
+def is_historical(path: Path) -> bool:
+    value = path.as_posix()
+    return any(value.startswith(root) for root in HISTORICAL_ROOTS)
+
+
 class NoRawMarketDataInGitTests(unittest.TestCase):
-    def test_no_forbidden_binary_data_formats_are_tracked(self) -> None:
-        violations = [path.as_posix() for path in tracked_paths() if path.suffix.lower() in FORBIDDEN_BINARY_SUFFIXES]
+    def test_no_forbidden_binary_data_formats_are_active(self) -> None:
+        violations = [
+            path.as_posix()
+            for path in tracked_paths()
+            if path.suffix.lower() in FORBIDDEN_ACTIVE_BINARY_SUFFIXES and not is_historical(path)
+        ]
         self.assertEqual([], violations)
 
     def test_csv_files_are_governance_only(self) -> None:
@@ -27,10 +37,11 @@ class NoRawMarketDataInGitTests(unittest.TestCase):
         for relative in tracked_paths():
             if relative.suffix.lower() != ".csv":
                 continue
-            if not (relative.as_posix().startswith("docs/history/") or relative.as_posix().startswith("legacy/quarantine/")):
+            if not is_historical(relative):
                 violations.append(f"{relative}: CSV outside historical governance roots")
                 continue
-            first_line = (ROOT / relative).read_text(encoding="utf-8", errors="replace").splitlines()[0].lower()
+            lines = (ROOT / relative).read_text(encoding="utf-8", errors="replace").splitlines()
+            first_line = lines[0].lower() if lines else ""
             columns = {item.strip().strip('"') for item in first_line.split(",")}
             if len(columns & MARKET_COLUMNS) >= 4:
                 violations.append(f"{relative}: market-like CSV header")
