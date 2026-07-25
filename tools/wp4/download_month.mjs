@@ -43,6 +43,7 @@ async function downloadObject(timeframe, priceType) {
     `GBPUSD_${upper(timeframe)}_${upper(priceType)}_${yearMonth}_UTC.csv`,
   );
 
+  console.log(`WP4 download start ${yearMonth} ${timeframe.toUpperCase()} ${priceType.toUpperCase()}`);
   const csv = await getHistoricalRates({
     instrument: 'gbpusd',
     dates: { from: start, to: end },
@@ -58,16 +59,20 @@ async function downloadObject(timeframe, priceType) {
     useCache: true,
     cacheFolderPath: cacheDir,
     retryCount: 4,
-    retryOnEmpty: true,
+    retryOnEmpty: false,
     failAfterRetryCount: true,
     pauseBetweenRetriesMs: 1500,
   });
 
   if (typeof csv !== 'string' || !csv.startsWith('timestamp,open,high,low,close,volume')) {
-    throw new Error(`unexpected ${timeframe}/${priceType} response for ${yearMonth}`);
+    const observedType = csv === null ? 'null' : typeof csv;
+    throw new Error(
+      `unexpected ${timeframe}/${priceType} response for ${yearMonth}; type=${observedType}`,
+    );
   }
   const payload = csv.endsWith('\n') ? csv : `${csv}\n`;
   await fs.writeFile(target, payload, { encoding: 'utf8', flag: 'wx' });
+  console.log(`WP4 download complete ${yearMonth} ${timeframe.toUpperCase()} ${priceType.toUpperCase()} bytes=${Buffer.byteLength(payload, 'utf8')}`);
   return target;
 }
 
