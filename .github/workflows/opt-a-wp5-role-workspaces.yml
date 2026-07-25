@@ -45,6 +45,17 @@ jobs:
           path: wp4-evidence
           merge-multiple: false
 
+      - name: Expand yearly evidence archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' archive; do
+            destination="${archive%.tar.gz}"
+            mkdir -p "$destination"
+            tar -xzf "$archive" -C "$destination"
+          done < <(find wp4-evidence -type f -name 'wp4-*.tar.gz' -print0)
+          test "$(find wp4-evidence -type f -name 'GBPUSD_*_UTC.csv' | wc -l)" -eq 240
+
       - name: Construct discovery, development and locked-validation workspaces
         run: |
           python scripts/opt_a/build_role_workspaces.py \
