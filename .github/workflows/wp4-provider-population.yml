@@ -67,25 +67,42 @@ jobs:
             --workspace-id wp4-pilot-2021-01 \
             --repository-root "$GITHUB_WORKSPACE"
       - name: Download and audit actual January 2021 pilot
+        id: pilot
         shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
           export OVC_EXTERNAL_ARTIFACT_ROOT="$RUNNER_TEMP/ovc-external"
           workspace="$OVC_EXTERNAL_ARTIFACT_ROOT/workspace/wp4-pilot-2021-01"
-          node tools/wp4/download_month.mjs 2021-01 "$workspace"
-          PYTHONPATH=src python3 tools/wp4/audit_month.py \
-            --workspace "$workspace" \
-            --year-month 2021-01
-          tar -C "$workspace" -czf "$RUNNER_TEMP/wp4-pilot-2021-01.tar.gz" .
-      - name: Upload pilot evidence
+          log="$RUNNER_TEMP/WP4_PILOT_EXECUTION.log"
+          status=0
+          node tools/wp4/download_month.mjs 2021-01 "$workspace" 2>&1 | tee "$log" || status=${PIPESTATUS[0]}
+          if [ "$status" -eq 0 ]; then
+            PYTHONPATH=src python3 tools/wp4/audit_month.py \
+              --workspace "$workspace" \
+              --year-month 2021-01 2>&1 | tee -a "$log" || status=${PIPESTATUS[0]}
+          fi
+          if [ -d "$workspace" ]; then
+            tar -C "$workspace" -czf "$RUNNER_TEMP/wp4-pilot-2021-01.tar.gz" . || true
+          fi
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload pilot evidence and diagnostics
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: wp4-provider-pilot-2021-01
           path: |
             ${{ runner.temp }}/wp4-pilot-2021-01.tar.gz
             ${{ runner.temp }}/WP4_PILOT_CAPACITY.txt
+            ${{ runner.temp }}/WP4_PILOT_EXECUTION.log
+          if-no-files-found: warn
           retention-days: 30
           compression-level: 0
+      - name: Enforce pilot success
+        if: steps.pilot.outputs.status != '0'
+        run: |
+          echo "WP4 provider pilot failed; inspect wp4-provider-pilot-2021-01 artifact"
+          exit 1
 
   provider-population:
     needs: provider-pilot
