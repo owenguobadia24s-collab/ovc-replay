@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-opt-a-wp2-gate-packet/v1",
+  "gate_id": "WP2-EVIDENCE-STORE-LIFECYCLE-EXTENSION",
+  "programme_id": "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "baseline_commit": "5c567c1ba7de57d83079200c006f991d41642310",
+  "branch": "build/opt-a-v2-evidence-lifecycle",
+  "result": "PENDING_CI",
+  "authority_delta": "EVIDENCE_LIFECYCLE_INFRASTRUCTURE_ONLY",
+  "market_authority": "NONE",
+  "provider_download": "NONE",
+  "market_release_construction": "NONE",
+  "r2_mutation": "NONE",
+  "selector_activation": "NONE",
+  "checks": {
+    "A2-08_external_root_resolver": "IMPLEMENTED",
+    "A2-09_init_workspace": "IMPLEMENTED",
+    "A2-10_freeze_release": "IMPLEMENTED",
+    "A2-11_readiness": "IMPLEMENTED",
+    "A2-12_supersession_validator": "IMPLEMENTED",
+    "A2-13_publication_approval_contract": "IMPLEMENTED",
+    "A2-14_windows_operator_guide": "IMPLEMENTED",
+    "canonical_ci": "PENDING"
+  },
+  "preserved_existing_core": [
+    "DETERMINISTIC_MANIFEST_V1",
+    "IMMUTABLE_RCLONE_UPLOAD",
+    "PAYLOAD_FIRST_MANIFEST_LAST",
+    "FULL_REMOTE_BYTE_VERIFICATION"
+  ],
+  "new_controls": [
+    "PROCESS_ONLY_EXTERNAL_ROOT",
+    "REPOSITORY_DISJOINT_ROOT",
+    "NO_OVERWRITE_WORKSPACE",
+    "DETERMINISTIC_WORKSPACE_INVENTORY",
+    "QA_PASS_AND_INVENTORY_GATED_FREEZE",
+    "RELEASE_ID_REUSE_DENIAL",
+    "EXACT_MANIFEST_APPROVAL_BINDING",
+    "NON_DESTRUCTIVE_READINESS",
+    "REMOTE_COLLISION_READ_ONLY",
+    "UPLOAD_APPROVAL_REQUIRED"
+  ],
+  "readiness_side_effects": false,
+  "external_limitations": [
+    "OPERATOR_WINDOWS_ROOT_NOT_EVALUATED_BY_CREDENTIAL_FREE_CI",
+    "LIVE_RCLONE_REMOTE_NOT_EVALUATED_BY_CREDENTIAL_FREE_CI",
+    "CURRENT_R2_BUCKET_LOCK_NOT_EVALUATED_BY_CREDENTIAL_FREE_CI"
+  ],
+  "next_authority_after_merge": [
+    "WP3_CONTRACTS_MAY_CONTINUE",
+    "A2_G0_REVIEW_MAY_USE_WP2_CONTROLS_AFTER_WP3"
+  ],
+  "population_execution_gate": "A2-G0_REQUIRED",
+  "merge_authority": "AWAITING_CI_AND_OPERATOR_REVIEW"
+}
