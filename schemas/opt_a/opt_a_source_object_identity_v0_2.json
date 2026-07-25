@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_source_object_identity_v0_2.json",
+  "title": "OVC OPT-A source object identity v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source_object_id",
+    "synthetic",
+    "provider",
+    "instrument_id",
+    "native_timeframe",
+    "price_side",
+    "research_role",
+    "target_release_id",
+    "partition_start",
+    "partition_end",
+    "timezone",
+    "intake_record_id",
+    "response_sha256",
+    "size_bytes",
+    "schema_fingerprint",
+    "identity_version",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-a-source-object-identity/v2"},
+    "source_object_id": {"type": "string", "pattern": "^SRC\\.DUKASCOPY\\.GBPUSD\\.(M1|H1)\\.(BID|ASK)\\.[0-9]{4}-[0-9]{2}\\.v[0-9]+$"},
+    "synthetic": {"type": "boolean"},
+    "provider": {"const": "DUKASCOPY"},
+    "instrument_id": {"const": "GBPUSD"},
+    "native_timeframe": {"enum": ["M1", "H1"]},
+    "price_side": {"enum": ["BID", "ASK"]},
+    "research_role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "target_release_id": {
+      "enum": [
+        "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "OPT-A.GBPUSD.VALIDATION.2025.v2"
+      ]
+    },
+    "partition_start": {"type": "string", "format": "date-time"},
+    "partition_end": {"type": "string", "format": "date-time"},
+    "timezone": {"const": "UTC"},
+    "intake_record_id": {"type": "string", "minLength": 1},
+    "response_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "size_bytes": {"type": "integer", "minimum": 0},
+    "row_count": {"type": "integer", "minimum": 0},
+    "first_timestamp": {"type": ["string", "null"], "format": "date-time"},
+    "last_timestamp": {"type": ["string", "null"], "format": "date-time"},
+    "schema_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identity_version": {"type": "integer", "minimum": 1},
+    "supersedes_source_object_id": {"type": ["string", "null"]},
+    "quality_state": {"enum": ["NOT_EVALUATED", "PASS", "WARN", "BLOCK", "QUARANTINE"]},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["market", "workspace_input", "release_parent", "selector_input"],
+      "properties": {
+        "market": {"const": "NONE"},
+        "workspace_input": {"enum": ["ELIGIBLE", "DENIED"]},
+        "release_parent": {"const": "DENIED_UNTIL_FREEZE"},
+        "selector_input": {"const": "DENIED"}
+      }
+    }
+  }
+}

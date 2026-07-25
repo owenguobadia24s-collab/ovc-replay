@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_reconciliation_record_v0_2.json",
+  "title": "OVC OPT-A H1 reconciliation record v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "reconciliation_id",
+    "synthetic",
+    "instrument_id",
+    "price_side",
+    "interval_start",
+    "interval_end",
+    "m1_derived_bar_id",
+    "provider_native_bar_id",
+    "price_result",
+    "volume_result",
+    "field_comparisons",
+    "qa_state",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-a-h1-reconciliation/v2"},
+    "reconciliation_id": {"type": "string", "minLength": 1},
+    "synthetic": {"type": "boolean"},
+    "instrument_id": {"const": "GBPUSD"},
+    "price_side": {"enum": ["BID", "ASK"]},
+    "research_role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "interval_start": {"type": "string", "format": "date-time"},
+    "interval_end": {"type": "string", "format": "date-time"},
+    "m1_derived_bar_id": {"type": ["string", "null"]},
+    "provider_native_bar_id": {"type": ["string", "null"]},
+    "price_result": {
+      "enum": [
+        "MATCH_EXACT",
+        "OHLC_MISMATCH",
+        "M1_DERIVED_MISSING",
+        "PROVIDER_NATIVE_MISSING",
+        "BOTH_QUARANTINED"
+      ]
+    },
+    "volume_result": {
+      "enum": ["VOLUME_MATCH", "VOLUME_MISMATCH", "VOLUME_NOT_COMPARABLE"]
+    },
+    "field_comparisons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "m1_derived_value", "provider_native_value", "result"],
+        "properties": {
+          "field": {"enum": ["open", "high", "low", "close", "volume"]},
+          "m1_derived_value": {"type": ["string", "null"]},
+          "provider_native_value": {"type": ["string", "null"]},
+          "result": {"enum": ["MATCH", "MISMATCH", "NOT_COMPARABLE", "MISSING"]}
+        }
+      }
+    },
+    "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "qa_state": {"enum": ["PASS", "WARN", "BLOCK", "QUARANTINE"]},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["substitution", "market", "release_parent", "discovery_seed"],
+      "properties": {
+        "substitution": {"const": "PROHIBITED"},
+        "market": {"const": "NONE"},
+        "release_parent": {"const": "DENIED_UNTIL_FREEZE"},
+        "discovery_seed": {"const": "DENIED"}
+      }
+    }
+  }
+}

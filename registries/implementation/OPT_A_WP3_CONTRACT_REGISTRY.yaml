@@ -1,0 +1,94 @@
+schema: ovc-opt-a-wp3-contract-registry/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+repository: owenguobadia24s-collab/ovc-replay
+baseline_commit: 5c567c1ba7de57d83079200c006f991d41642310
+branch: build/opt-a-v2-intake-clock-contracts
+state: CONTRACTS_AND_SYNTHETIC_FIXTURES_ONLY
+market_authority: NONE
+provider_execution: DENIED_UNTIL_A2_G0
+r2_mutation: NONE
+selector_activation: NONE
+contracts:
+  - id: OPT-A-PROVIDER-INTAKE-SOURCE-OBJECT-0.2
+    path: contracts/opt_a/OPT_A_PROVIDER_INTAKE_AND_SOURCE_OBJECT_CONTRACT_v0_2.md
+    state: FROZEN_FOR_IMPLEMENTATION
+  - id: OPT-A-CLOCK-AGGREGATION-RECONCILIATION-0.2
+    path: contracts/opt_a/OPT_A_CLOCK_AGGREGATION_GAP_VOLUME_RECONCILIATION_CONTRACT_v0_2.md
+    state: FROZEN_FOR_IMPLEMENTATION
+  - id: OPT-A-TO-OPT-B-HANDOFF-0.2
+    path: contracts/opt_a/OPT_A_TO_OPT_B_HANDOFF_CONTRACT_v0_2.md
+    state: FROZEN_FOR_IMPLEMENTATION
+schemas:
+  - path: schemas/opt_a/opt_a_provider_intake_record_v0_2.json
+    schema_id: ovc-opt-a-provider-intake-record/v2
+  - path: schemas/opt_a/opt_a_source_object_identity_v0_2.json
+    schema_id: ovc-opt-a-source-object-identity/v2
+  - path: schemas/opt_a/opt_a_observation_bar_v0_2.json
+    schema_id: ovc-opt-a-observation-bar/v2
+  - path: schemas/opt_a/opt_a_reconciliation_record_v0_2.json
+    schema_id: ovc-opt-a-h1-reconciliation/v2
+  - path: schemas/opt_a/opt_a_to_opt_b_handoff_v0_2.json
+    schema_id: ovc-opt-a-to-opt-b-handoff/v2
+source_object_families:
+  - M1_BID
+  - M1_ASK
+  - H1_BID
+  - H1_ASK
+observation_identities:
+  - M1_PROVIDER_NATIVE
+  - M15_M1_DERIVED
+  - H1_M1_DERIVED
+  - H1_PROVIDER_NATIVE
+  - H2_M1_CHAIN_DERIVED
+  - H4_M1_CHAIN_DERIVED
+  - D1_M1_CHAIN_DERIVED
+role_releases:
+  discovery:
+    release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    interval: '[2021-01-01T00:00:00Z, 2024-01-01T00:00:00Z)'
+    selector: NONE
+  development:
+    release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    interval: '[2024-01-01T00:00:00Z, 2025-01-01T00:00:00Z)'
+    selector: NONE
+  validation:
+    release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+    interval: '[2025-01-01T00:00:00Z, 2026-01-01T00:00:00Z)'
+    selector: NONE
+    consumption_state: LOCKED_UNCONSUMED
+clock:
+  timezone: UTC
+  interval_semantics: HALF_OPEN
+  primary_operational_spine: H2_M1_CHAIN_DERIVED_A_L
+  daylight_saving_shift: PROHIBITED
+  a_l_labels:
+    A: '[00:00,02:00)'
+    B: '[02:00,04:00)'
+    C: '[04:00,06:00)'
+    D: '[06:00,08:00)'
+    E: '[08:00,10:00)'
+    F: '[10:00,12:00)'
+    G: '[12:00,14:00)'
+    H: '[14:00,16:00)'
+    I: '[16:00,18:00)'
+    J: '[18:00,20:00)'
+    K: '[20:00,22:00)'
+    L: '[22:00,00:00_next_day)'
+required_parent_counts:
+  M15_M1_DERIVED: 15
+  H1_M1_DERIVED: 60
+  H2_M1_CHAIN_DERIVED: 120
+  H4_M1_CHAIN_DERIVED: 240
+  D1_M1_CHAIN_DERIVED: 1440
+handoff:
+  consumer: OPT_B_C1
+  mutable_workspace_access: DENIED
+  path_scanning: DENIED
+  provider_native_h1_substitution: DENIED
+  validation_default_access: DENIED
+  synthetic_fixture_state: DRAFT
+  active_handoff: NONE
+fixtures:
+  manifest: fixtures/opt_a/wp3/FIXTURE_MANIFEST.json
+  state: SYNTHETIC_NON_AUTHORITATIVE
+next_gate: A2_G0_FOUNDATION_REVIEW

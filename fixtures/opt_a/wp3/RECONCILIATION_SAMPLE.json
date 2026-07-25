@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-opt-a-wp3-reconciliation-fixture/v1",
+  "fixture_id": "FIXTURE.OPT-A.WP3.RECONCILIATION.001",
+  "synthetic": true,
+  "market_authority": "NONE",
+  "substitution": "PROHIBITED",
+  "records": [
+    {
+      "schema": "ovc-opt-a-h1-reconciliation/v2",
+      "reconciliation_id": "RECON.SYNTHETIC.BID.2021-01-04T00.v1",
+      "synthetic": true,
+      "instrument_id": "GBPUSD",
+      "price_side": "BID",
+      "research_role": "DISCOVERY",
+      "interval_start": "2021-01-04T00:00:00Z",
+      "interval_end": "2021-01-04T01:00:00Z",
+      "m1_derived_bar_id": "BAR.H1.M1.BID.SYNTHETIC.001",
+      "provider_native_bar_id": "BAR.H1.NATIVE.BID.SYNTHETIC.001",
+      "price_result": "MATCH_EXACT",
+      "volume_result": "VOLUME_NOT_COMPARABLE",
+      "field_comparisons": [
+        {"field": "open", "m1_derived_value": "1.35000", "provider_native_value": "1.3500", "result": "MATCH"},
+        {"field": "high", "m1_derived_value": "1.35100", "provider_native_value": "1.35100", "result": "MATCH"},
+        {"field": "low", "m1_derived_value": "1.34900", "provider_native_value": "1.3490", "result": "MATCH"},
+        {"field": "close", "m1_derived_value": "1.35050", "provider_native_value": "1.35050", "result": "MATCH"},
+        {"field": "volume", "m1_derived_value": null, "provider_native_value": null, "result": "NOT_COMPARABLE"}
+      ],
+      "reason_codes": ["VOLUME_UNIT_UNKNOWN"],
+      "qa_state": "PASS",
+      "authority": {"substitution": "PROHIBITED", "market": "NONE", "release_parent": "DENIED_UNTIL_FREEZE", "discovery_seed": "DENIED"}
+    },
+    {
+      "schema": "ovc-opt-a-h1-reconciliation/v2",
+      "reconciliation_id": "RECON.SYNTHETIC.ASK.2021-01-04T00.v1",
+      "synthetic": true,
+      "instrument_id": "GBPUSD",
+      "price_side": "ASK",
+      "research_role": "DISCOVERY",
+      "interval_start": "2021-01-04T00:00:00Z",
+      "interval_end": "2021-01-04T01:00:00Z",
+      "m1_derived_bar_id": "BAR.H1.M1.ASK.SYNTHETIC.001",
+      "provider_native_bar_id": "BAR.H1.NATIVE.ASK.SYNTHETIC.001",
+      "price_result": "OHLC_MISMATCH",
+      "volume_result": "VOLUME_NOT_COMPARABLE",
+      "field_comparisons": [
+        {"field": "open", "m1_derived_value": "1.35020", "provider_native_value": "1.35020", "result": "MATCH"},
+        {"field": "high", "m1_derived_value": "1.35120", "provider_native_value": "1.35130", "result": "MISMATCH"},
+        {"field": "low", "m1_derived_value": "1.34920", "provider_native_value": "1.34920", "result": "MATCH"},
+        {"field": "close", "m1_derived_value": "1.35070", "provider_native_value": "1.35070", "result": "MATCH"},
+        {"field": "volume", "m1_derived_value": null, "provider_native_value": null, "result": "NOT_COMPARABLE"}
+      ],
+      "reason_codes": ["HIGH_MISMATCH"],
+      "qa_state": "WARN",
+      "authority": {"substitution": "PROHIBITED", "market": "NONE", "release_parent": "DENIED_UNTIL_FREEZE", "discovery_seed": "DENIED"}
+    }
+  ]
+}

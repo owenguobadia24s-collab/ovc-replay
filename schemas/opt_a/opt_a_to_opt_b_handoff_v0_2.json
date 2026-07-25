@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_to_opt_b_handoff_v0_2.json",
+  "title": "OVC OPT-A to OPT-B handoff v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "handoff_id",
+    "synthetic",
+    "release_id",
+    "manifest_id",
+    "research_role",
+    "instrument_id",
+    "interval_start",
+    "interval_end",
+    "source_commit",
+    "release_manifest_sha256",
+    "workspace_inventory_sha256",
+    "contract_ids",
+    "surface_records",
+    "source_object_counts",
+    "qa_summary",
+    "gap_summary",
+    "reconciliation_summary",
+    "lifecycle_state",
+    "authority_state",
+    "selector_state",
+    "validation_consumption_state",
+    "downstream_permissions",
+    "downstream_prohibitions"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-a-to-opt-b-handoff/v2"},
+    "handoff_id": {"type": "string", "minLength": 1},
+    "synthetic": {"type": "boolean"},
+    "release_id": {
+      "enum": [
+        "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "OPT-A.GBPUSD.VALIDATION.2025.v2"
+      ]
+    },
+    "manifest_id": {"type": "string", "minLength": 1},
+    "research_role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "instrument_id": {"const": "GBPUSD"},
+    "interval_start": {"type": "string", "format": "date-time"},
+    "interval_end": {"type": "string", "format": "date-time"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "release_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "workspace_inventory_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "remote_verification_receipt_id": {"type": ["string", "null"]},
+    "validation_access_approval_id": {"type": ["string", "null"]},
+    "contract_ids": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 3,
+      "uniqueItems": true
+    },
+    "surface_records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["surface_id", "schema_id", "eligibility", "accepted_count", "quarantined_count"],
+        "properties": {
+          "surface_id": {"type": "string", "minLength": 1},
+          "schema_id": {"type": "string", "minLength": 1},
+          "eligibility": {"enum": ["NOT_READY", "HANDOFF_ELIGIBLE", "BLOCKED", "OPTIONAL_NOT_BUILT"]},
+          "accepted_count": {"type": "integer", "minimum": 0},
+          "quarantined_count": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "source_object_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["M1_BID", "M1_ASK", "H1_BID", "H1_ASK"],
+      "properties": {
+        "M1_BID": {"type": "integer", "minimum": 0},
+        "M1_ASK": {"type": "integer", "minimum": 0},
+        "H1_BID": {"type": "integer", "minimum": 0},
+        "H1_ASK": {"type": "integer", "minimum": 0}
+      }
+    },
+    "qa_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "blocker_count", "warning_count"],
+      "properties": {
+        "state": {"enum": ["NOT_EVALUATED", "PASS", "WARN", "BLOCK", "QUARANTINE"]},
+        "blocker_count": {"type": "integer", "minimum": 0},
+        "warning_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "gap_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["missing_timestamp_count", "quarantined_bucket_count"],
+      "properties": {
+        "missing_timestamp_count": {"type": "integer", "minimum": 0},
+        "quarantined_bucket_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "reconciliation_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["match_exact", "ohlc_mismatch", "native_missing", "derived_missing", "not_comparable"],
+      "properties": {
+        "match_exact": {"type": "integer", "minimum": 0},
+        "ohlc_mismatch": {"type": "integer", "minimum": 0},
+        "native_missing": {"type": "integer", "minimum": 0},
+        "derived_missing": {"type": "integer", "minimum": 0},
+        "not_comparable": {"type": "integer", "minimum": 0}
+      }
+    },
+    "lifecycle_state": {"enum": ["DRAFT", "LOCAL_VERIFIED", "REMOTE_VERIFIED", "HANDOFF_ELIGIBLE", "SHADOW", "ACTIVE", "BLOCKED", "SUPERSEDED"]},
+    "authority_state": {"enum": ["NONE", "CANDIDATE", "SHADOW", "ACTIVE_DISCOVERY", "ACTIVE_DEVELOPMENT", "ACTIVE_VALIDATION", "SUPERSEDED"]},
+    "selector_state": {"enum": ["NONE", "PENDING", "ACTIVE", "ROLLED_BACK", "BLOCKED"]},
+    "validation_consumption_state": {"enum": ["NOT_APPLICABLE", "LOCKED_UNCONSUMED", "APPROVED_ONCE", "CONSUMED"]},
+    "downstream_permissions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "downstream_prohibitions": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"synthetic": {"const": true}}, "required": ["synthetic"]},
+      "then": {
+        "properties": {
+          "lifecycle_state": {"const": "DRAFT"},
+          "authority_state": {"const": "NONE"},
+          "selector_state": {"const": "NONE"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"research_role": {"const": "VALIDATION"}}, "required": ["research_role"]},
+      "then": {
+        "properties": {
+          "validation_consumption_state": {"enum": ["LOCKED_UNCONSUMED", "APPROVED_ONCE", "CONSUMED"]}
+        }
+      }
+    }
+  ]
+}
