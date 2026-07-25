@@ -3,6 +3,8 @@ repository: owenguobadia24s-collab/ovc-replay
 reset_baseline: c0ad7ba22618babdde731e2a338f68f688d4210c
 r0_merge_commit: a9902c97e21131b1882b4c11ca3a2a79273e7c77
 wp1_merge_commit: 5c567c1ba7de57d83079200c006f991d41642310
+wp2_merge_commit: 91d57980be84239de69de00c43649d20a2acd7fe
+wp3_merge_commit: 087cfe47c2dceffc89d43f2795ebd28dd35d3d3d
 state: V2_FOUNDATION_RESET_COMPLETE_NO_MARKET_AUTHORITY
 selectors:
   opt_a: NONE
@@ -16,7 +18,7 @@ selectors:
 authorities:
   evidence_store:
     state: ACTIVE_INFRASTRUCTURE
-    lifecycle_extension: WP2_IMPLEMENTED_PENDING_REVIEW
+    lifecycle_extension: WP2_MERGED_PASS
     workspace_authority: LOCAL_MUTABLE_ONLY
     freeze_authority: QA_AND_INVENTORY_GATED_LOCAL_ONLY
     readiness_authority: READ_ONLY
@@ -30,8 +32,16 @@ authorities:
     active: false
   opt_a_v2:
     state: DESIGN_AND_FIXTURES_ONLY
-    programme_governance: WP1_RATIFIED
+    programme_governance: WP1_MERGED_PASS
+    evidence_lifecycle: WP2_MERGED_PASS
+    provider_clock_handoff_contracts: WP3_MERGED_PASS
+    foundation_review: A2_G0_PENDING_CI
     release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
+    provider_intake_authority: DENIED_PENDING_A2_G0
+    first_network_request_authority: DENIED_PENDING_OPERATOR_LOCAL_PREFLIGHT
+    r2_publication_authority: DENIED
+    active_handoff: NONE
+    validation_consumption: LOCKED_UNCONSUMED
     market_authority: NONE
     active: false
   opt_b_c1_v2:
