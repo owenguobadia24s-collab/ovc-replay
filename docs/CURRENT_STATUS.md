@@ -2,33 +2,33 @@
 
 Snapshot date: 25 July 2026.
 
-## Repository reset baseline
+## Repository baseline
 
-R0 PR #2 is merged into `main` at `a9902c97e21131b1882b4c11ca3a2a79273e7c77`. The merge contains reviewed reset head `71c7c5513efb9bb8d214d118be03090664050c21`. Historical executable machinery, release records and superseded decisions remain quarantined; the evidence-store infrastructure and clean OPT-A/C1/C2 namespaces remain active.
+R0 PR #2 and WP1 PR #3 are merged. WP2 starts from `main` commit `5c567c1ba7de57d83079200c006f991d41642310`.
 
-## OPT-A v2 WP1 — release governance
+Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and non-reproducible from the exact sealed bytes. The three v2 role identities remain registered with every selector at `NONE`; 2025 validation remains `LOCKED_UNCONSUMED`.
 
-WP1 records the exact OPT-A v2 programme identity and the disposition of historical `OPT-A.GBPUSD.2026H1.v1`.
+## OPT-A v2 WP2 — evidence-store lifecycle extension
 
-- v1 disposition: `SUPERSEDED_UNPUBLISHED`
-- exact v1 payload: unavailable; 14 expected artifacts totalling 13,906,357 bytes
-- v1 reproducibility: `NOT_REPRODUCIBLE_MISSING_PAYLOAD`
-- v1 R2 canonical state: `ABSENT`
-- new bytes under the v1 identity: prohibited
-- v2 release set: `OPT-A.GBPUSD.ROLESET.2021_2025.v1`
-- discovery identity: `OPT-A.GBPUSD.DISCOVERY.2021_2023.v2`
-- development identity: `OPT-A.GBPUSD.DEVELOPMENT.2024.v2`
-- validation identity: `OPT-A.GBPUSD.VALIDATION.2025.v2`
-- validation consumption: `LOCKED_UNCONSUMED`
-- role selectors: all `NONE`
+WP2 extends the retained `ovc_evidence_store` core with:
 
-WP1 creates governance contracts, schemas, registries, recovery/supersession records and tests only. It does not download provider data, build a market release, publish to R2 or activate selectors.
+- process-only `OVC_EXTERNAL_ARTIFACT_ROOT` resolution and repository separation;
+- safe `init-workspace` creation with no provider or R2 side effects;
+- deterministic exact-byte workspace inventories;
+- `freeze-release` with QA PASS, inventory matching and no-overwrite controls;
+- predecessor/supersession validation and release-ID reuse denial;
+- manifest-bound publication approval validation;
+- non-destructive publication readiness with explicit `READY`, `BLOCKED` and `NOT_EVALUABLE` results;
+- an upload CLI gate requiring an exact publication approval before rclone can run;
+- Windows operator guidance and lifecycle/readiness tests.
+
+The original deterministic manifest, immutable payload-first/manifest-last upload and full remote byte-verification code remains in place.
 
 ## Active authority matrix
 
 | Boundary | State | Selector |
 |---|---|---|
-| Evidence store | `ACTIVE_INFRASTRUCTURE` | Not applicable |
+| Evidence store | `ACTIVE_INFRASTRUCTURE / WP2_LIFECYCLE_IMPLEMENTED` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
 | OPT-A v2 programme | `WP1_GOVERNANCE_ONLY` | `NONE` |
 | OPT-B.C1 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
@@ -36,10 +36,14 @@ WP1 creates governance contracts, schemas, registries, recovery/supersession rec
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
-## Not yet authorised
+## External evaluation boundary
 
-Provider download, role-release construction, v2 canonical publication, selector activation, validation consumption, OPT-B/C/D semantic claims, probability, exposure, trading and execution remain unauthorised.
+Credential-free CI tests lifecycle and remote-readiness behaviour with synthetic files and mocked read-only rclone responses. It does not inspect the operator's Windows artifact root, expose environment-only R2 credentials, read the current bucket lock or mutate R2.
+
+## Not authorised
+
+Provider download, GBP/USD population creation, role-release construction, canonical R2 publication, selector activation, validation consumption, OPT-B/C/D semantic claims, probability, exposure, trading and execution remain unauthorised.
 
 ## Next gate
 
-Review and merge WP1. After WP1 PASS is merged, WP2 evidence-store lifecycle extension and WP3 provider/clock/release-split contracts may begin on separate branches. Population execution remains blocked until A2-G0 passes.
+Review and merge WP2. WP3 may proceed independently after WP1. Actual population execution remains blocked until A2-G0 passes.
