@@ -1,0 +1,170 @@
+name: OPT-A WP6 R2 publication
+
+on:
+  push:
+    branches:
+      - publish/opt-a-v2-role-releases-r2
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  packet-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pytest
+      - run: pytest -q tests/opt_a/test_wp6_publication_packet.py
+
+  publish-and-verify:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-publish]'))
+    needs: packet-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+    steps:
+      - name: Checkout publication packet
+        uses: actions/checkout@v4
+
+      - name: Checkout exact A2-G3 source authority
+        uses: actions/checkout@v4
+        with:
+          ref: 8c4c6c70da6f3f8b400d06df990500702813ff39
+          path: a2-g3-source
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install package and rclone
+        run: |
+          set -euo pipefail
+          python -m pip install -e .
+          sudo apt-get update
+          sudo apt-get install -y rclone
+
+      - name: Require configured R2 credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo "::error::Missing R2 access-key GitHub secret"; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo "::error::Missing R2 secret-key GitHub secret"; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
+
+      - name: Download exact A2-G3 discovery release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30179286521
+          name: a2-g3-opt-a-gbpusd-discovery-2021-2023-v2
+          path: wp6-releases/discovery
+
+      - name: Download exact A2-G3 development release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30179286521
+          name: a2-g3-opt-a-gbpusd-development-2024-v2
+          path: wp6-releases/development
+
+      - name: Download exact A2-G3 locked validation release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30179286521
+          name: a2-g3-opt-a-gbpusd-validation-2025-v2-locked
+          path: wp6-releases/validation
+
+      - name: Rebuild exact deterministic manifests
+        run: |
+          python scripts/opt_a/prepare_wp6_manifests.py \
+            --spec docs/releases/opt-a-v2/publication/WP6_MANIFEST_SPEC.json \
+            --releases-root wp6-releases \
+            --output-root wp6-manifests
+
+      - name: Verify local identities and publication readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wp6-readiness
+          for role in discovery development validation; do
+            manifest="wp6-manifests/${role}.json"
+            approval="docs/releases/opt-a-v2/publication/approvals/${role}.json"
+            root="wp6-releases/${role}"
+            python -m ovc_evidence_store verify-local --manifest "$manifest" --root "$root"
+            python -m ovc_evidence_store readiness \
+              --manifest "$manifest" \
+              --root "$root" \
+              --approval "$approval" \
+              --repository-root a2-g3-source \
+              --remote ovc_r2 \
+              --bucket-lock-visible true > "wp6-readiness/${role}.json"
+            python - "$role" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          role = sys.argv[1]
+          result = json.loads(Path(f"wp6-readiness/{role}.json").read_text())
+          assert result["overall_status"] == "READY", result
+          PY
+          done
+
+      - name: Publish immutable payloads and manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          for role in discovery development validation; do
+            python -m ovc_evidence_store upload \
+              --manifest "wp6-manifests/${role}.json" \
+              --root "wp6-releases/${role}" \
+              --remote ovc_r2 \
+              --approval "docs/releases/opt-a-v2/publication/approvals/${role}.json"
+          done
+
+      - name: Full-byte remote verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          for role in discovery development validation; do
+            python -m ovc_evidence_store verify-remote \
+              --manifest "wp6-manifests/${role}.json" \
+              --remote ovc_r2
+          done
+
+      - name: Build compact WP6 report
+        run: |
+          python scripts/opt_a/build_wp6_publication_report.py \
+            --manifest-root wp6-manifests \
+            --approval-root docs/releases/opt-a-v2/publication/approvals \
+            --readiness-root wp6-readiness \
+            --output wp6-output/WP6_PUBLICATION_REPORT.json \
+            --workflow-run-id "${{ github.run_id }}" \
+            --execution-commit "${{ github.sha }}"
+
+      - name: Upload publication report and readiness receipts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp6-opt-a-r2-publication-report
+          path: |
+            wp6-output/WP6_PUBLICATION_REPORT.json
+            wp6-readiness/*.json
+          retention-days: 90
