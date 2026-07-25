@@ -1,0 +1,95 @@
+name: OPT-A WP5 role workspaces
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pytest
+      - run: pytest -q
+
+  construct-role-workspaces:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e .
+
+      - name: Download exact WP4 yearly evidence
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30175183492
+          pattern: wp4-provider-population-20*
+          path: wp4-evidence
+          merge-multiple: false
+
+      - name: Construct discovery, development and locked-validation workspaces
+        run: |
+          python scripts/opt_a/build_role_workspaces.py \
+            --evidence-root wp4-evidence \
+            --output-root wp5-workspaces \
+            --role ALL
+
+      - name: Assert role boundaries and authority
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path('wp5-workspaces/WP5_OBSERVATION_CONSTRUCTION_REPORT.json').read_text())
+          assert report['result'] == 'PASS'
+          assert report['roles']['DISCOVERY']['source_object_count'] == 144
+          assert report['roles']['DEVELOPMENT']['source_object_count'] == 48
+          assert report['roles']['VALIDATION']['source_object_count'] == 48
+          assert report['authority']['release_freeze'] == 'DENIED_PENDING_A2_G3'
+          assert report['authority']['r2_publication'] == 'DENIED'
+          assert report['authority']['selector_activation'] == 'DENIED'
+          assert report['authority']['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          PY
+
+      - name: Upload discovery workspace evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp5-discovery-workspace
+          path: wp5-workspaces/discovery
+          retention-days: 30
+          compression-level: 6
+
+      - name: Upload development workspace evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp5-development-workspace
+          path: wp5-workspaces/development
+          retention-days: 30
+          compression-level: 6
+
+      - name: Upload locked validation workspace evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp5-validation-workspace-locked
+          path: wp5-workspaces/validation
+          retention-days: 30
+          compression-level: 6
+
+      - name: Upload compact A2-G2 report
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp5-observation-construction-report
+          path: wp5-workspaces/WP5_OBSERVATION_CONSTRUCTION_REPORT.json
+          retention-days: 90
