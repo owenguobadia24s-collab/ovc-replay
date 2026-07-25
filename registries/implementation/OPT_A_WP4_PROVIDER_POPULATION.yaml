@@ -3,17 +3,23 @@ programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
 repository: owenguobadia24s-collab/ovc-replay
 baseline_commit: f4286bdb9d816ba12c77a4bb09604f462a6dc87e
 branch: build/opt-a-v2-provider-population-intake
-state: PENDING_EXECUTION
+state: PASS_PENDING_FINAL_CI
 market_authority: NONE
 provider:
   id: DUKASCOPY
-  adapter: dukascopy-node
-  adapter_version: 1.46.4
+  adapter: OVC_DIRECT_BI5_CANDLE_ADAPTER
+  adapter_version: 1.0.1
+  transport_format: DUKASCOPY_BI5_LZMA_CANDLES
   instrument: GBPUSD
   interval: '[2021-01-01T00:00:00Z, 2026-01-01T00:00:00Z)'
   month_count: 60
+  flat_candle_policy: DROP_ONLY_ZERO_VOLUME_EQUAL_OHLC
 source_objects:
   planned_count: 240
+  accepted_count: 240
+  accepted_row_count: 3781810
+  accepted_csv_size_bytes: 216656289
+  aggregate_qa_state: PASS
   families:
     - M1_BID
     - M1_ASK
@@ -37,26 +43,35 @@ roles:
     selector: NONE
     consumption_state: LOCKED_UNCONSUMED
 execution:
-  workflow: .github/workflows/wp4-provider-population.yml
+  workflow_state: RETIRED_AFTER_SUCCESS
+  workflow_run_id: 30175183492
+  tested_provider_code_head: 242dd45fd482699f940fa1c237fc1b6e10650e77
   pilot_month: 2021-01
+  pilot_result: PASS
   yearly_jobs:
-    - 2021
-    - 2022
-    - 2023
-    - 2024
-    - 2025
-  max_parallel_years: 3
+    2021: PASS
+    2022: PASS
+    2023: PASS
+    2024: PASS
+    2025: PASS
+  aggregate_result: PASS
   raw_artifact_retention_days: 30
   summary_artifact_retention_days: 90
+  yearly_compressed_size_bytes: 85076759
   aggregate_summary: docs/releases/opt-a-v2/intake/WP4_POPULATION_INTAKE_SUMMARY.json
+  execution_receipt: docs/releases/opt-a-v2/intake/WP4_EXECUTION_RECEIPT.json
+  artifact_inventory: docs/releases/opt-a-v2/intake/WP4_ACTIONS_ARTIFACT_INVENTORY.json
 storage:
   git_market_payloads: DENIED
+  github_actions_artifacts: TEMPORARY_NON_CANONICAL_EVIDENCE
   r2_mutation: NONE
   release_freeze: NONE
 authority:
-  mutable_workspace_input: AUTHORISED_AFTER_JOB_PREFLIGHT
+  mutable_workspace_input: INTAKE_COMPLETE
   release_parent: DENIED_UNTIL_FREEZE
   selector_input: DENIED
   active_handoff: NONE
+  validation_consumption: LOCKED_UNCONSUMED
   market: NONE
-next_gate: WP4_COMPLETION_REVIEW
+next_packet: WP5_ROLE_WORKSPACE_CONSTRUCTION_AND_QA
+merge_authority: AWAITING_FINAL_CI_AND_OPERATOR_REVIEW
