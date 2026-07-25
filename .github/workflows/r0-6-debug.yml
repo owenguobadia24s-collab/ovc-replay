@@ -1,0 +1,34 @@
+name: R0 Authority Guard Debug
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/r0-6-debug.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Capture complete test output
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > docs/history/repository-freezes/ovc-replay-v1-c0ad7ba/R0_6_DEBUG_TEST_OUTPUT.log 2>&1
+          status=$?
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/history/repository-freezes/ovc-replay-v1-c0ad7ba/R0_6_DEBUG_TEST_OUTPUT.log
+          git commit -m 'R0-6 capture authority guard test output'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          exit $status
