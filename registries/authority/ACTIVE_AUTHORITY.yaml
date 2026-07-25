@@ -6,6 +6,7 @@ wp1_merge_commit: 5c567c1ba7de57d83079200c006f991d41642310
 wp2_merge_commit: 91d57980be84239de69de00c43649d20a2acd7fe
 wp3_merge_commit: 087cfe47c2dceffc89d43f2795ebd28dd35d3d3d
 a2_g0_merge_commit: f4286bdb9d816ba12c77a4bb09604f462a6dc87e
+wp4_merge_commit: b4358c0f14186b55af43eda0c77299791fe4e774
 state: V2_FOUNDATION_RESET_COMPLETE_NO_MARKET_AUTHORITY
 selectors:
   opt_a: NONE
@@ -32,17 +33,23 @@ authorities:
     reproducibility: NOT_REPRODUCIBLE_MISSING_PAYLOAD
     active: false
   opt_a_v2:
-    state: PROVIDER_POPULATION_INTAKE_COMPLETE_NOT_RELEASE
+    state: A2_G1_POPULATION_INTEGRITY_PASS_INTAKE_NOT_RELEASE
     programme_governance: WP1_MERGED_PASS
     evidence_lifecycle: WP2_MERGED_PASS
     provider_clock_handoff_contracts: WP3_MERGED_PASS
     foundation_review: A2_G0_MERGED_PASS
-    provider_population_intake: WP4_PASS
+    provider_population_intake: WP4_MERGED_PASS
+    population_integrity: A2_G1_PASS
     population_month_count: 60
     population_source_object_count: 240
     population_row_count: 3781810
+    population_csv_size_bytes: 216656289
+    population_transport_chunk_count: 3772
+    population_integrity_violations: 0
     release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
     provider_intake_authority: COMPLETE_EXTERNAL_MUTABLE_EVIDENCE_ONLY
+    mutable_workspace_entry_authority: AUTHORISED_FOR_VERIFIED_SOURCE_OBJECTS
+    observation_construction_authority: DENIED_UNTIL_A2_G2
     further_provider_network_authority: DENIED_PENDING_NEW_PACKET
     mutable_workspace_release_authority: DENIED
     r2_publication_authority: DENIED
