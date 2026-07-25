@@ -16,7 +16,7 @@ Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailabl
 
 ## WP4 actual GBP/USD provider population intake
 
-WP4 actual provider execution is complete and awaits final branch-head CI and operator review.
+WP4 is sealed as `PASS` and awaits operator review and merge.
 
 The successful Dukascopy intake covers `[2021-01-01T00:00:00Z, 2026-01-01T00:00:00Z)` and contains:
 
@@ -45,6 +45,8 @@ Workflow run `30175183492` completed successfully:
 - yearly population jobs for 2021, 2022, 2023, 2024 and 2025: PASS;
 - exact 60-month / 240-object aggregate: PASS.
 
+Final pre-seal canonical CI run `30176467243` passed **107 tests** with zero failures and zero errors.
+
 The executed adapter was `OVC_DIRECT_BI5_CANDLE_ADAPTER` version `1.0.1`. Exact provider BI5 transport objects, generated CSV objects, intake records and source identities are held in temporary GitHub Actions evidence artifacts. The five yearly compressed artifacts total **85,076,759 bytes**.
 
 ## Active authority matrix
@@ -53,7 +55,7 @@ The executed adapter was `OVC_DIRECT_BI5_CANDLE_ADAPTER` version `1.0.1`. Exact 
 |---|---|---|
 | Evidence store | `ACTIVE_INFRASTRUCTURE / WP2_MERGED_PASS` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
-| OPT-A v2 | `WP4_INTAKE_COMPLETE_NOT_RELEASE` | `NONE` |
+| OPT-A v2 | `WP4_PASS / INTAKE_COMPLETE_NOT_RELEASE` | `NONE` |
 | OPT-B.C1 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
@@ -74,4 +76,4 @@ Release freezing, canonical R2 publication, selector activation, validation desi
 
 ## Next packet
 
-After final CI and merge, the next bounded packet is `WP5 — role workspace construction and QA`. It may transform the accepted intake evidence into governed discovery, development and locked-validation workspaces, but release freezing and publication remain separate gates.
+After merge, the next bounded packet is `WP5 — role workspace construction and QA`. It may transform the accepted intake evidence into governed discovery, development and locked-validation workspaces, but release freezing and publication remain separate gates.
