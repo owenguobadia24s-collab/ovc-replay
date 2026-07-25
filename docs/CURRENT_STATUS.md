@@ -4,7 +4,7 @@ Snapshot date: 25 July 2026.
 
 ## Integrated baseline
 
-The reset, OPT-A v2 foundation, provider population, population-integrity review and WP5 workspace construction are merged into `main`:
+The reset, OPT-A v2 foundation, provider population, population-integrity review, WP5 workspace construction and A2-G2 observation review are merged into `main`:
 
 - R0 reset: `a9902c97e21131b1882b4c11ca3a2a79273e7c77`
 - WP1 release governance: `5c567c1ba7de57d83079200c006f991d41642310`
@@ -14,37 +14,33 @@ The reset, OPT-A v2 foundation, provider population, population-integrity review
 - WP4 provider population intake: `b4358c0f14186b55af43eda0c77299791fe4e774`
 - A2-G1 population intake integrity: `6599919f7cd2d4e4d93e2d76c2bcf4eb4f70314d`
 - WP5 role workspace construction: `bce2499dff255076b2fe297035d8923f4a21776c`
+- A2-G2 observation review: `a7a99c7679a06fda3173592abeafe56a429c2e9f`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and non-reproducible from its exact sealed bytes. It cannot be reused, published, selected or used as rollback authority.
 
-## A2-G2 observation-construction review
+## A2-G3 role release freeze
 
-A2-G2 is `PASS` after the role workspaces were rebuilt with portable manifest paths and exact missing-timestamp evidence. Both the canonical test workflow (`30178480639`) and role-workspace workflow (`30178480623`) passed from review execution commit `8d62471c3a9d81e46d5193e82d3b64497e5b3853`.
+A2-G3 executed successfully on commit `8c4c6c70da6f3f8b400d06df990500702813ff39`. Canonical tests (`30179286518`) and the governed freeze workflow (`30179286521`) passed.
 
-The reviewed mutable workspaces contain:
+Three candidate role releases were frozen from the exact A2-G2 reviewed workspace identities:
 
-- discovery: **144** source objects and **288** observation objects for 2021–2023;
-- development: **48** source objects and **96** observation objects for 2024;
-- locked validation: **48** source objects and **96** observation objects for 2025;
-- observation clocks: M1, 15M, H1_M1_DERIVED and 2H_A_L;
-- separate BID and ASK observation chains;
-- exact byte identities for all **480** observation objects.
+| Role | Release | Files | Bytes | Artifact |
+|---|---|---:|---:|---:|
+| Discovery | `OPT-A.GBPUSD.DISCOVERY.2021_2023.v2` | 292 | 155,631,400 | `8625089938` |
+| Development | `OPT-A.GBPUSD.DEVELOPMENT.2024.v2` | 100 | 52,761,781 | `8625090401` |
+| Validation — locked | `OPT-A.GBPUSD.VALIDATION.2025.v2` | 100 | 52,303,593 | `8625090861` |
 
-Independent review verified the Actions artifact digests, canonical manifest self-hashes, observation hashes and sizes, portable paths, exact quarantine timestamp sets, unique bucket identities, coverage arithmetic and validation default deny. Review violations after remediation: **0**.
+Each release contains accepted canonical observations, the exact reviewed workspace manifest, a separately packaged quarantine ledger, a deterministic release descriptor, a release inventory and a freeze receipt. Existing release roots cannot be overwritten.
+
+The frozen releases are `CANDIDATE / RELEASE_FROZEN / LOCAL_ARTIFACT_ONLY`. They are not published, selected or active.
 
 ## Quarantine disposition
 
-The workspaces retain **21,410 side-specific derived-bucket quarantine records**, representing **10,705 clock-time bucket locations** recorded consistently on both BID and ASK:
+The **21,410** side-specific derived-bucket quarantine records remain bound to:
 
-- discovery: **12,104**;
-- development: **4,862**;
-- validation: **4,444**.
+`RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS`
 
-All have reason `INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET`.
-
-Their disposition is `RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS`. They remain traceable evidence of source-chain incompleteness and are prohibited from accepted observations, interpolation, fill, provider-native H1 substitution, cross-side substitution, manual repair, selector input and OPT-B parentage.
-
-A2-G3 may freeze accepted exact observations and package the quarantine ledger alongside them. It may not promote quarantined buckets into market truth.
+They are preserved in each release's QA ledger and remain excluded from accepted observations, interpolation, fill, substitution, manual repair, selector input and OPT-B parentage.
 
 ## Active authority matrix
 
@@ -52,9 +48,9 @@ A2-G3 may freeze accepted exact observations and package the quarantine ledger a
 |---|---|---|
 | Evidence store | `ACTIVE_INFRASTRUCTURE / WP2_MERGED_PASS` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
-| OPT-A v2 intake | `A2_G1_PASS / WORKSPACE_ENTRY_AUTHORISED` | `NONE` |
-| OPT-A v2 observations | `A2_G2_PASS / REVIEWED_MUTABLE_ROLE_WORKSPACES` | `NONE` |
-| OPT-A v2 role freeze | `A2_G3_BOUNDED_PACKET_AUTHORISED` | `NONE` |
+| OPT-A v2 intake | `A2_G1_PASS` | `NONE` |
+| OPT-A v2 observations | `A2_G2_PASS / REVIEWED` | `NONE` |
+| OPT-A v2 role releases | `A2_G3_PASS / RELEASE_FROZEN / LOCAL_ARTIFACT_ONLY` | `NONE` |
 | OPT-B.C1 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
@@ -65,15 +61,15 @@ Validation remains `LOCKED_UNCONSUMED`, default deny and unavailable to design, 
 ## Storage boundary
 
 - Raw provider and market payloads in Git: denied.
-- Reviewed role workspaces: temporary GitHub Actions artifacts expiring 24 August 2026.
-- Compact review and execution records: retained in Git; compact Actions report retained for 90 days.
+- Frozen role releases: temporary GitHub Actions artifacts expiring 24 August 2026.
+- Compact A2-G3 report: artifact `8625090992`, retained until 23 October 2026, plus a Git execution receipt.
 - Canonical Cloudflare R2 mutation: none.
-- Frozen role releases: none.
+- Active selector mutation: none.
 
 ## Authority still withheld
 
 Canonical R2 publication, selector activation, validation consumption, active OPT-A-to-OPT-B handoff, OPT-B/C/D market claims, probability, exposure, trading and execution remain unauthorised.
 
-## Next gate
+## Next boundary
 
-`A2-G3 — role release freeze`, bounded to the reviewed artifact identities and quarantine disposition recorded in `docs/releases/opt-a-v2/observations/A2_G2_OPERATOR_REVIEW.md`.
+A separate publication-approval and remote-verification packet is required before any R2 mutation. Publication and selector activation remain independent operator decisions.
