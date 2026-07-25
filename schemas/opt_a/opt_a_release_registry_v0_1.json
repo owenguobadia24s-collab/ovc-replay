@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_release_registry_v0_1.json",
+  "title": "OVC OPT-A release registry v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "repository",
+    "baseline_commit",
+    "release_set_id",
+    "releases"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-a-release-registry/v1"},
+    "programme_id": {"const": "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2"},
+    "repository": {"const": "owenguobadia24s-collab/ovc-replay"},
+    "baseline_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "release_set_id": {
+      "const": "OPT-A.GBPUSD.ROLESET.2021_2025.v1"
+    },
+    "releases": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "$ref": "opt_a_release_state_v0_2.json"
+      }
+    }
+  }
+}
