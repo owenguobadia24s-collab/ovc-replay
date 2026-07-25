@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-opt-a-wp3-gate-packet/v1",
+  "gate_id": "WP3-PROVIDER-CLOCK-RELEASE-SPLIT-HANDOFF-CONTRACTS",
+  "programme_id": "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "baseline_commit": "5c567c1ba7de57d83079200c006f991d41642310",
+  "branch": "build/opt-a-v2-intake-clock-contracts",
+  "result": "PENDING_CI",
+  "authority_delta": "CONTRACTS_AND_SYNTHETIC_FIXTURES_ONLY",
+  "market_authority": "NONE",
+  "provider_download": "NONE",
+  "market_release_construction": "NONE",
+  "r2_mutation": "NONE",
+  "selector_activation": "NONE",
+  "validation_consumption": "LOCKED_UNCONSUMED",
+  "checks": {
+    "A2-15_provider_intake_schema": "PASS",
+    "A2-16_source_object_identity": "PASS",
+    "A2-17_utc_clock_and_a_l_boundaries": "PASS",
+    "A2-18_aggregation_gap_and_volume_rules": "PASS",
+    "A2-19_h1_reconciliation_rules": "PASS",
+    "A2-20_role_release_split": "PASS",
+    "A2-21_opt_a_to_opt_b_handoff": "PASS",
+    "A2-22_synthetic_contract_fixtures": "PASS",
+    "canonical_ci": "PENDING"
+  },
+  "contracts": [
+    "OPT-A-PROVIDER-INTAKE-SOURCE-OBJECT-0.2",
+    "OPT-A-CLOCK-AGGREGATION-RECONCILIATION-0.2",
+    "OPT-A-TO-OPT-B-HANDOFF-0.2"
+  ],
+  "schemas": [
+    "ovc-opt-a-provider-intake-record/v2",
+    "ovc-opt-a-source-object-identity/v2",
+    "ovc-opt-a-observation-bar/v2",
+    "ovc-opt-a-h1-reconciliation/v2",
+    "ovc-opt-a-to-opt-b-handoff/v2"
+  ],
+  "required_source_object_families": [
+    "M1_BID",
+    "M1_ASK",
+    "H1_BID",
+    "H1_ASK"
+  ],
+  "primary_operational_spine": "H2_M1_CHAIN_DERIVED_A_L_UTC",
+  "h1_identity_rule": "H1_M1_DERIVED_AND_H1_PROVIDER_NATIVE_ARE_DISTINCT",
+  "no_fill_policy": "ENFORCED_BY_CONTRACT",
+  "all_role_selectors": "NONE",
+  "active_handoff": "NONE",
+  "fixture_counts": {
+    "provider_intake_records": 4,
+    "source_object_records": 4,
+    "clock_cases": 3,
+    "reconciliation_records": 2,
+    "handoff_records": 1
+  },
+  "predecessor_status": {
+    "WP1": "MERGED_PASS",
+    "WP2": "OPEN_SEPARATE_BRANCH_PASS_NOT_REQUIRED_FOR_WP3_CONTRACT_AUTHORING"
+  },
+  "next_gate_after_wp2_and_wp3_merge": "A2-G0_FOUNDATION_REVIEW",
+  "population_execution": "BLOCKED_UNTIL_A2_G0",
+  "merge_authority": "AWAITING_CI_AND_OPERATOR_REVIEW"
+}
