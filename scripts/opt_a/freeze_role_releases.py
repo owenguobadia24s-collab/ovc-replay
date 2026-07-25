@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from ovc.opt_a.release_freeze import freeze_all_roles
+from ovc.opt_a.release_freeze_gate import freeze_all_roles
 
 
 def main() -> int:
