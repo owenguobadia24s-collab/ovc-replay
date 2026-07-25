@@ -15,7 +15,7 @@
 - SHA-256 identity: **PASS**
 - Synthetic fixture cases: **42**
 - Authority guard families: **6**
-- Discovered active test cases: **28**
+- Complete GitHub Actions test suite: **53 passed**
 - Active market selectors: **0**
 - Market authority: **NONE**
 
