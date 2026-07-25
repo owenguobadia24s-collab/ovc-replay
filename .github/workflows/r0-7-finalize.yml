@@ -1,0 +1,45 @@
+name: R0 Final Validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/r0-7-finalize.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out reset branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - name: Fetch frozen refs
+        run: |
+          git fetch origin main
+          git fetch origin archive/ovc-replay-v1-c0ad7ba-20260725
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Quarantine past releases and superseded decisions
+        run: python tools/r0/finalize_reset.py execute
+      - name: Compile active source tree
+        run: python -m compileall -q src
+      - name: Run complete active test suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Seal final operator packet
+        run: python tools/r0/finalize_reset.py seal
+      - name: Commit R0-7 final packet
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'R0-7 finalize reset and quarantine historical records'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
