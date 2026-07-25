@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-opt-a-wp4-provider-population-gate/v1",
+  "gate_id": "WP4-ACTUAL-GBPUSD-PROVIDER-POPULATION-INTAKE",
+  "programme_id": "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "baseline_commit": "f4286bdb9d816ba12c77a4bb09604f462a6dc87e",
+  "branch": "build/opt-a-v2-provider-population-intake",
+  "result": "PENDING_EXECUTION",
+  "authority_delta": "ACTUAL_PROVIDER_INTAKE_TO_MUTABLE_EXTERNAL_WORKSPACES_ONLY",
+  "provider": "DUKASCOPY",
+  "instrument_id": "GBPUSD",
+  "interval_start": "2021-01-01T00:00:00Z",
+  "interval_end": "2026-01-01T00:00:00Z",
+  "month_count_planned": 60,
+  "source_object_count_planned": 240,
+  "source_object_families": [
+    "M1_BID",
+    "M1_ASK",
+    "H1_BID",
+    "H1_ASK"
+  ],
+  "role_source_object_counts": {
+    "DISCOVERY": 144,
+    "DEVELOPMENT": 48,
+    "VALIDATION": 48
+  },
+  "provider_adapter": {
+    "name": "dukascopy-node",
+    "version": "1.46.4",
+    "price_types": [
+      "bid",
+      "ask"
+    ],
+    "timeframes": [
+      "m1",
+      "h1"
+    ],
+    "transport_cache_retained": true
+  },
+  "checks": {
+    "WP4_01_integrated_predecessor_A2_G0": "PASS",
+    "WP4_02_population_plan_exact": "PASS",
+    "WP4_03_repository_boundary": "PASS",
+    "WP4_04_provider_pilot": "PENDING",
+    "WP4_05_discovery_population": "PENDING",
+    "WP4_06_development_population": "PENDING",
+    "WP4_07_validation_population_integrity_only": "PENDING",
+    "WP4_08_exact_60_month_aggregate": "PENDING",
+    "WP4_09_exact_240_source_objects": "PENDING",
+    "WP4_10_final_canonical_ci": "PENDING"
+  },
+  "storage": {
+    "git_market_payloads": "DENIED",
+    "github_actions_yearly_artifacts": "30_DAY_TEMPORARY_EXTERNAL_EVIDENCE",
+    "github_actions_summary_artifacts": "90_DAY_COMPACT_EVIDENCE",
+    "r2_mutation": "NONE"
+  },
+  "release_construction": "NONE",
+  "selector_activation": "NONE",
+  "active_handoff": "NONE",
+  "validation_consumption": "LOCKED_UNCONSUMED",
+  "market_authority": "NONE",
+  "still_prohibited": [
+    "MUTABLE_WORKSPACE_AS_RELEASE_AUTHORITY",
+    "R2_PUBLICATION",
+    "OPT_A_SELECTOR_ACTIVATION",
+    "VALIDATION_DESIGN_OR_THRESHOLD_CONSUMPTION",
+    "OPT_A_TO_OPT_B_HANDOFF_ACTIVATION",
+    "HISTORICAL_V1_FALLBACK_OR_ROLLBACK",
+    "OPT_B_C_D_MARKET_CLAIMS",
+    "PROBABILITY_EXPOSURE_TRADING_EXECUTION_AUTHORITY"
+  ],
+  "completion_evidence": null,
+  "merge_authority": "AWAITING_PROVIDER_EXECUTION_CI_AND_OPERATOR_REVIEW"
+}
