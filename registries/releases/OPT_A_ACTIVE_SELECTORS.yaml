@@ -1,0 +1,36 @@
+schema: ovc-opt-a-selector-set/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
+release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
+state: NONE
+atomic_update_required: true
+market_authority: NONE
+roles:
+  discovery:
+    release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    manifest_id: null
+    remote_verification_receipt: null
+    selector_state: NONE
+    consumption_state: NOT_APPLICABLE
+  development:
+    release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    manifest_id: null
+    remote_verification_receipt: null
+    selector_state: NONE
+    consumption_state: NOT_APPLICABLE
+  validation:
+    release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+    manifest_id: null
+    remote_verification_receipt: null
+    selector_state: NONE
+    consumption_state: LOCKED_UNCONSUMED
+rollback:
+  all_role_selectors: NONE
+  historical_v1_reactivation: PROHIBITED
+activation_requirements:
+  - ALL_THREE_RELEASES_REMOTE_VERIFIED
+  - EXACT_MANIFEST_BINDING
+  - OPERATOR_ACTIVATION_DECISION
+  - ATOMIC_UPDATE
+  - VALIDATION_REMAINS_LOCKED_UNCONSUMED
+  - ROLLBACK_TO_NONE_VERIFIED
