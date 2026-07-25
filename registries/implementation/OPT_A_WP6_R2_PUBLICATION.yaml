@@ -1,0 +1,43 @@
+schema: ovc-implementation-record/v1
+implementation_id: OPT-A-WP6-R2-PUBLICATION
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+work_packet: WP6
+title: Canonical R2 publication and remote verification
+status: APPROVED_FOR_EXECUTION
+branch: publish/opt-a-v2-role-releases-r2
+upstream_gate: A2-G3
+upstream_source_commit: 8c4c6c70da6f3f8b400d06df990500702813ff39
+upstream_workflow_run_id: 30179286521
+inputs:
+  discovery_artifact_id: 8625089938
+  development_artifact_id: 8625090401
+  validation_artifact_id: 8625090861
+releases:
+  - release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    role: DISCOVERY
+  - release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r1
+    role: DEVELOPMENT
+  - release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+    manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r1
+    role: VALIDATION
+    consumption_state: LOCKED_UNCONSUMED
+authority_delta:
+  r2_publication: AUTHORISED_FOR_EXACT_APPROVED_MANIFESTS
+  remote_verification: REQUIRED
+  selector_activation: DENIED
+  validation_consumption: LOCKED_UNCONSUMED
+  opt_b_handoff: DENIED
+  market: NONE
+write_policy:
+  mode: IMMUTABLE
+  payload_first: true
+  manifest_last: true
+  overwrite: DENIED
+  deletion: DENIED
+quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
+exit:
+  pass: ALL_THREE_MANIFESTS_AND_PAYLOADS_REMOTE_VERIFIED
+  blocked: ANY_LOCAL_IDENTITY_APPROVAL_COLLISION_UPLOAD_OR_REMOTE_BYTE_FAILURE
+next_gate: A2-G4_REMOTE_PUBLICATION_REVIEW
