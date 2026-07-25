@@ -26,7 +26,7 @@ jobs:
       - run: pytest -q tests/opt_a/test_wp6_publication_packet.py
 
   publish-and-verify:
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-publish]'))
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-publish]'))
     needs: packet-tests
     runs-on: ubuntu-latest
     timeout-minutes: 180
