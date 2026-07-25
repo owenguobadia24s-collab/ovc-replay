@@ -78,9 +78,31 @@ def _validate_plan(classification: dict[str, Any], move_plan: dict[str, Any]) ->
     return records
 
 
+def _verify_completed(move_plan: dict[str, Any]) -> None:
+    validation = _read_json(PACKET_ROOT / "R0_3_VALIDATION.json")
+    if validation.get("result") != "PASS" or validation.get("executed_move_count") != 106:
+        raise SystemExit("completed migration lacks a passing validation packet")
+    records = move_plan.get("records", [])
+    if len(records) != 106:
+        raise SystemExit("completed migration does not contain 106 move records")
+    for record in records:
+        source = Path(record["source_path"])
+        target = Path(record["target_path"])
+        if source.exists():
+            raise SystemExit(f"quarantined source unexpectedly restored: {source}")
+        if not target.is_file():
+            raise SystemExit(f"quarantine target missing: {target}")
+        if _run("git", "hash-object", "--", target.as_posix()) != record["git_blob_sha1"]:
+            raise SystemExit(f"quarantine blob drift detected: {target}")
+    print("R0-3 already complete; verified 106 quarantined paths and unchanged blobs")
+
+
 def migrate() -> None:
     classification = _read_json(CLASSIFICATION_PATH)
     move_plan = _read_json(MOVE_PLAN_PATH)
+    if move_plan.get("moves_executed") is True:
+        _verify_completed(move_plan)
+        return
     records = _validate_plan(classification, move_plan)
 
     manifest_records: list[dict[str, Any]] = []
