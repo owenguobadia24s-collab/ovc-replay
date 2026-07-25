@@ -6,7 +6,7 @@ Snapshot date: 25 July 2026.
 
 R0-1, R0-2 and R0-3 have passed. The historical v1 repository is frozen at `c0ad7ba22618babdde731e2a338f68f688d4210c`, 339 tracked files were classified, and 106 legacy executable files were moved with exact byte identity into `legacy/quarantine/abcd-engine-v1-c0ad7ba/`.
 
-R0-4 establishes the clean active-tree foundation. It does not activate any research release.
+R0-4 established the clean active-tree foundation. R0-5 installed 42 compact synthetic OPT-A, C1 and C2 fixture cases. The fixtures are non-authoritative and do not activate any research release.
 
 ## Active authority matrix
 
@@ -27,6 +27,7 @@ R0-4 establishes the clean active-tree foundation. It does not activate any rese
 - Preserve immutable history, decisions and release records.
 - Maintain deterministic evidence-store infrastructure.
 - Provide clean OPT-A, C1 and C2 package and governance namespaces.
+- Maintain compact synthetic fixtures for contract and implementation testing.
 - Deny legacy imports, reverse dependencies, old discovery seeds and raw market data in Git.
 
 ## Not yet authorised
@@ -35,4 +36,4 @@ Provider download, OPT-A v2 release creation, C1 or C2 market replay, R2 canonic
 
 ## Next gate
 
-`R0-5 — synthetic OPT-A, C1 and C2 fixture packs`.
+`R0-6 — repository authority guard suite`.
