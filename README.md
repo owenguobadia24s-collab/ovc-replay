@@ -1,85 +1,57 @@
 # OVC Replay
 
-Deterministic GBP/USD market-structure research from sealed source data through
-descriptive cohort validation.
+OVC Replay is being reset into an evidence-first v2 research foundation.
 
-This repository contains the canonical implementation, contracts, tests, and
-compact release evidence for the completed OPT-A → OPT-D research pipeline.
-It does **not** establish trading edge or authorize paper/live execution.
+The active repository now contains only:
+
+- immutable repository history and historical release records;
+- the tested `ovc_evidence_store` infrastructure;
+- clean namespaces for OPT-A v2, OPT-B.C1 v2 and OPT-B.C2 v2;
+- repository authority and implementation registries;
+- synthetic-fixture and contract locations that will be populated in later bounded work packets.
 
 ## Current authority
 
-| Layer | Current version | Status |
-| --- | --- | --- |
-| OPT-A | `OPT-A.GBPUSD.2026H1.v1` and `OPT-A.GBPUSD.2025.v1` | Sealed research-data authority |
-| OPT-B | `B-STATE-0.3b-FRONTIER-ACTIVE-RESEARCH` | Ratified descriptive state |
-| OPT-C | `OPT-C-MEASURE-0.1.1` | Neutral forward-path measurement |
-| OPT-D | `OPT-D-VALIDATE-0.1` + robustness review | Holdout validation complete |
-| Paper gate | `PAPER-PLAYBOOK-GATE-0.1` | Closed: 0 pass, 0 defer, 202 block |
+| Component | State | Active market authority |
+|---|---|---:|
+| Evidence store | `ACTIVE_INFRASTRUCTURE` | No |
+| OPT-A v1 | `HISTORICAL_SUPERSEDED` | No |
+| OPT-A v2 | `DESIGN_AND_FIXTURES_ONLY` | No |
+| OPT-B.C1 v2 | `DESIGN_AND_FIXTURES_ONLY` | No |
+| OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | No |
+| C2E, C2.5 and C3 | `DEFERRED` | No |
+| OPT-C and OPT-D | `HISTORICAL_QUARANTINED` | No |
 
-The 2025 holdout is now consumed evidence. The next valid research build is
-`OPT-D-REFINE-0.2`; it must define new hypotheses before another untouched
-validation period is selected.
+No selector is active. No provider intake, market replay, probability, exposure or execution authority is granted by this foundation.
 
-## Repository map
+## Repository boundaries
+
+- Git stores code, contracts, schemas, registries, compact manifests, fixtures, tests and decisions.
+- Full market data, generated streams and large evidence remain outside Git.
+- Immutable canonical evidence is published only through the separately governed R2 evidence-store workflow.
+- The historical ABCD implementation is retained under `legacy/quarantine/abcd-engine-v1-c0ad7ba/` and is prohibited as a runtime import, release parent, selector fallback, rollback target, parameter source or discovery seed.
+
+## Active package layout
 
 ```text
-src/ovc_opt_b/        Deterministic A-D engine modules
-src/ovc_evidence_store/ Deterministic release manifests and remote verification
-scripts/              Build, replay, audit, validate, and gate entry points
-tests/                Dependency-free unit and contract tests
-contracts/            Ratified and historical semantic contracts
-docs/architecture/    Full development summary and operating language
-docs/history/         Compact release reports, manifests, registries, and history
-docs/decisions/       Operator decisions and handover records
-artifacts/             External artifact storage policy
-data/                  External dependency declarations; no market records
+src/
+├── ovc/
+│   ├── opt_a/
+│   └── opt_b/
+│       ├── c1/
+│       └── c2/
+└── ovc_evidence_store/
 ```
 
-## Run the tests
+The `ovc` namespaces are foundation-only. Their contracts, fixtures and engines are built through the ratified OPT-A, C1 and C2 implementation plans after completion of R0.
 
-Python 3.11 or newer is required. The reference implementation has no runtime
-dependencies outside the standard library.
+## Development
 
-```bash
-PYTHONPATH=src python3 -m unittest discover -s tests -v
+Python 3.11 or newer is required.
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path .\src)
+python -m unittest discover -s tests -v
 ```
 
-The imported canonical tree currently passes 107 tests.
-
-## Research pipeline
-
-- OPT-A seals provider data, enforces UTC and complete-bucket rules, and forbids
-  synthetic filling or cross-resolution fabrication.
-- OPT-B creates deterministic levels and structural language, then resolves
-  acceptance as frontier advances rather than a dominant persistent state.
-- OPT-C measures neutral 1h, 2h, 4h, 8h, and 12h forward paths with explicit
-  coverage and censoring; 24h is coverage-only and 48h remains blocked.
-- OPT-D forms overlap-aware cohorts, balanced contrasts, story evidence,
-  frozen hypotheses, untouched 2025 validation, and robustness reviews.
-- The paper-playbook gate blocks all 202 candidates under the frozen rules.
-
-See [Current status](docs/CURRENT_STATUS.md), [Development history](docs/history/README.md),
-[import provenance](docs/IMPORT_PROVENANCE.md), and the
-[complete development summary](docs/architecture/OVC_ABCD_COMPLETE_DEVELOPMENT_SUMMARY_2026-07-19.md).
-For immutable evidence publication and Windows PowerShell commands, see the
-[evidence-store guide](docs/EVIDENCE_STORE.md).
-
-## Data and large artifacts
-
-No raw or derived OHLCV dataset is stored in this repository. Provider files,
-canonical bar tables, reconciliation tables, state/outcome streams, and replay
-evidence remain external dependencies. Their names, hashes, roles, and saved
-locations remain discoverable through [the dependency declarations](data/EXTERNAL_DEPENDENCIES.md),
-[historical manifests](docs/history/README.md), and the
-[external artifact policy](artifacts/README.md).
-
-Committed historical artifacts are limited to documentation, contracts,
-manifests, validation summaries, compact semantic registries, and decision
-records.
-
-## Safety boundary
-
-All outputs are structural or descriptive research evidence. No file in this
-repository grants outcome, risk, production, paper-execution, or live-execution
-authority unless a later explicit ratification record says so.
+Historical v1 repository state is pinned at `archive/ovc-replay-v1-c0ad7ba-20260725` and commit `c0ad7ba22618babdde731e2a338f68f688d4210c`.
