@@ -1,0 +1,36 @@
+schema: ovc-opt-a-a2-g1-population-integrity-registry/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+gate_id: A2-G1
+state: PASS
+baseline_commit: b4358c0f14186b55af43eda0c77299791fe4e774
+branch: build/opt-a-v2-a2-g1-population-integrity
+provider: DUKASCOPY
+instrument_id: GBPUSD
+population:
+  interval: '[2021-01-01T00:00:00Z, 2026-01-01T00:00:00Z)'
+  month_count: 60
+  source_object_count: 240
+  row_count: 3781810
+  csv_size_bytes: 216656289
+  transport_chunk_count: 3772
+integrity:
+  csv_byte_identity: PASS
+  transport_byte_identity: PASS
+  request_lineage: PASS
+  schema_timestamp_duplicate_gap_metadata: PASS
+  quarantine_accounting: PASS
+  violations: 0
+authority:
+  provider_objects_may_enter_mutable_workspaces: true
+  observation_construction: DENIED_UNTIL_A2_G2
+  release_freeze: DENIED
+  r2_publication: DENIED
+  selector_activation: DENIED
+  validation_consumption: LOCKED_UNCONSUMED
+  active_handoff: NONE
+  market: NONE
+evidence:
+  report: docs/releases/opt-a-v2/intake/A2_G1_POPULATION_INTEGRITY_REPORT.json
+  gate_packet: docs/releases/opt-a-v2/intake/A2_G1_GATE_PACKET.md
+  source_artifact_inventory: docs/releases/opt-a-v2/intake/WP4_ACTIONS_ARTIFACT_INVENTORY.json
+next_gate: A2-G2_OBSERVATION_CONSTRUCTION
