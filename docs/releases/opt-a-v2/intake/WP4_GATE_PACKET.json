@@ -5,14 +5,18 @@
   "repository": "owenguobadia24s-collab/ovc-replay",
   "baseline_commit": "f4286bdb9d816ba12c77a4bb09604f462a6dc87e",
   "branch": "build/opt-a-v2-provider-population-intake",
-  "result": "PENDING_EXECUTION",
+  "result": "PASS_PENDING_FINAL_CI",
   "authority_delta": "ACTUAL_PROVIDER_INTAKE_TO_MUTABLE_EXTERNAL_WORKSPACES_ONLY",
   "provider": "DUKASCOPY",
   "instrument_id": "GBPUSD",
   "interval_start": "2021-01-01T00:00:00Z",
   "interval_end": "2026-01-01T00:00:00Z",
   "month_count_planned": 60,
+  "month_count_accepted": 60,
   "source_object_count_planned": 240,
+  "source_object_count_accepted": 240,
+  "accepted_row_count": 3781810,
+  "accepted_csv_size_bytes": 216656289,
   "source_object_families": [
     "M1_BID",
     "M1_ASK",
@@ -25,33 +29,51 @@
     "VALIDATION": 48
   },
   "provider_adapter": {
-    "name": "dukascopy-node",
-    "version": "1.46.4",
-    "price_types": [
-      "bid",
-      "ask"
+    "name": "OVC_DIRECT_BI5_CANDLE_ADAPTER",
+    "version": "1.0.1",
+    "transport_format": "DUKASCOPY_BI5_LZMA_CANDLES",
+    "price_sides": [
+      "BID",
+      "ASK"
     ],
     "timeframes": [
-      "m1",
-      "h1"
+      "M1",
+      "H1"
     ],
-    "transport_cache_retained": true
+    "transport_cache_retained": true,
+    "flat_candle_policy": "DROP_ONLY_ZERO_VOLUME_EQUAL_OHLC"
   },
   "checks": {
     "WP4_01_integrated_predecessor_A2_G0": "PASS",
     "WP4_02_population_plan_exact": "PASS",
     "WP4_03_repository_boundary": "PASS",
-    "WP4_04_provider_pilot": "PENDING",
-    "WP4_05_discovery_population": "PENDING",
-    "WP4_06_development_population": "PENDING",
-    "WP4_07_validation_population_integrity_only": "PENDING",
-    "WP4_08_exact_60_month_aggregate": "PENDING",
-    "WP4_09_exact_240_source_objects": "PENDING",
+    "WP4_04_provider_pilot": "PASS",
+    "WP4_05_discovery_population": "PASS",
+    "WP4_06_development_population": "PASS",
+    "WP4_07_validation_population_integrity_only": "PASS",
+    "WP4_08_exact_60_month_aggregate": "PASS",
+    "WP4_09_exact_240_source_objects": "PASS",
     "WP4_10_final_canonical_ci": "PENDING"
+  },
+  "execution_evidence": {
+    "workflow_run_id": 30175183492,
+    "tested_provider_code_head": "242dd45fd482699f940fa1c237fc1b6e10650e77",
+    "unit_tests": "PASS",
+    "provider_pilot": "PASS",
+    "year_2021": "PASS",
+    "year_2022": "PASS",
+    "year_2023": "PASS",
+    "year_2024": "PASS",
+    "year_2025": "PASS",
+    "aggregate_and_record": "PASS",
+    "population_summary": "docs/releases/opt-a-v2/intake/WP4_POPULATION_INTAKE_SUMMARY.json",
+    "execution_receipt": "docs/releases/opt-a-v2/intake/WP4_EXECUTION_RECEIPT.json",
+    "actions_artifact_inventory": "docs/releases/opt-a-v2/intake/WP4_ACTIONS_ARTIFACT_INVENTORY.json"
   },
   "storage": {
     "git_market_payloads": "DENIED",
     "github_actions_yearly_artifacts": "30_DAY_TEMPORARY_EXTERNAL_EVIDENCE",
+    "yearly_compressed_size_bytes": 85076759,
     "github_actions_summary_artifacts": "90_DAY_COMPACT_EVIDENCE",
     "r2_mutation": "NONE"
   },
@@ -70,6 +92,6 @@
     "OPT_B_C_D_MARKET_CLAIMS",
     "PROBABILITY_EXPOSURE_TRADING_EXECUTION_AUTHORITY"
   ],
-  "completion_evidence": null,
-  "merge_authority": "AWAITING_PROVIDER_EXECUTION_CI_AND_OPERATOR_REVIEW"
+  "next_packet_after_merge": "WP5_ROLE_WORKSPACE_CONSTRUCTION_AND_QA",
+  "merge_authority": "AWAITING_FINAL_CI_AND_OPERATOR_REVIEW"
 }
