@@ -7,7 +7,6 @@ import hashlib
 import json
 import lzma
 import math
-import os
 import struct
 import time
 import urllib.error
@@ -112,14 +111,17 @@ def _format_volume(value: float) -> str:
 
 def _records(data: bytes, *, base: datetime, interval_end: datetime, identity: str) -> list[list[str]]:
     rows: list[list[str]] = []
-    previous: datetime | None = None
+    previous_raw: datetime | None = None
     for offset in range(0, len(data), CANDLE.size):
-        seconds, open_raw, high_raw, low_raw, close_raw, volume = CANDLE.unpack_from(data, offset)
+        seconds, open_raw, close_raw, low_raw, high_raw, volume = CANDLE.unpack_from(data, offset)
         timestamp = base + timedelta(seconds=seconds)
         if not (base <= timestamp < interval_end):
             raise DownloadError(f"provider candle outside partition for {identity}: {timestamp.isoformat()}")
-        if previous is not None and timestamp <= previous:
+        if previous_raw is not None and timestamp <= previous_raw:
             raise DownloadError(f"provider candle timestamps not strictly increasing for {identity}")
+        previous_raw = timestamp
+        if volume == 0 and open_raw == close_raw == low_raw == high_raw:
+            continue
         if high_raw < max(open_raw, low_raw, close_raw) or low_raw > min(open_raw, high_raw, close_raw):
             raise DownloadError(f"invalid provider OHLC ordering for {identity} at {timestamp.isoformat()}")
         rows.append(
@@ -132,7 +134,6 @@ def _records(data: bytes, *, base: datetime, interval_end: datetime, identity: s
                 _format_volume(volume),
             ]
         )
-        previous = timestamp
     return rows
 
 
@@ -264,7 +265,7 @@ def download_month(workspace: Path, year_month: str) -> dict[str, object]:
         "schema": "ovc-opt-a-wp4-downloader-receipt/v2",
         "provider": "DUKASCOPY",
         "adapter": "OVC_DIRECT_BI5_CANDLE_ADAPTER",
-        "adapter_version": "1.0.0",
+        "adapter_version": "1.0.1",
         "instrument_id": "GBPUSD",
         "year_month": year_month,
         "interval_start": specs[0].interval_start.isoformat().replace("+00:00", "Z"),
@@ -273,6 +274,7 @@ def download_month(workspace: Path, year_month: str) -> dict[str, object]:
         "source_object_count": len(object_receipts),
         "objects": object_receipts,
         "raw_transport_cache_retained": True,
+        "flat_candle_policy": "DROP_ONLY_ZERO_VOLUME_EQUAL_OHLC",
         "market_authority": "NONE",
         "release_parent": "DENIED_UNTIL_FREEZE",
         "selector_input": "DENIED",
