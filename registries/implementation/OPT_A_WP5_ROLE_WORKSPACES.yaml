@@ -3,11 +3,14 @@ programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
 work_packet_id: WP5
 gate_id: A2-G2
 title: Role workspace construction and QA
-branch: build/opt-a-v2-role-workspaces
+build_branch: build/opt-a-v2-role-workspaces
+review_branch: review/opt-a-v2-a2-g2-observation-construction
 baseline_commit: 6599919f7cd2d4e4d93e2d76c2bcf4eb4f70314d
-execution_commit: 6dd4e092caa6d8dbaaff0b9b41f8821e454120cd
-workflow_run_id: 30177706792
-status: EXECUTED_PASS_AWAITING_MERGE
+wp5_merge_commit: bce2499dff255076b2fe297035d8923f4a21776c
+initial_execution_commit: 6dd4e092caa6d8dbaaff0b9b41f8821e454120cd
+review_execution_commit: 8d62471c3a9d81e46d5193e82d3b64497e5b3853
+workflow_run_id: 30178480623
+status: A2_G2_OPERATOR_REVIEW_PASS
 preconditions:
   - A2-G1_PASS
   - EXACT_WP4_PROVIDER_EVIDENCE_AVAILABLE
@@ -29,7 +32,7 @@ inputs:
 outputs:
   clocks: [M1, 15M, H1_M1_DERIVED, 2H_A_L]
   price_sides: [BID, ASK]
-  workspace_state: MUTABLE_WORKSPACE
+  workspace_state: MUTABLE_WORKSPACE_REVIEWED
   role_workspace_objects:
     discovery: 288
     development: 96
@@ -38,7 +41,10 @@ outputs:
     discovery: 12104
     development: 4862
     validation: 4444
-  manifests: ROLE_LOCAL_WORKSPACE_MANIFESTS
+    total_side_specific: 21410
+    total_clock_time_locations: 10705
+  quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
+  manifests: ROLE_LOCAL_WORKSPACE_MANIFESTS_V2
 qa:
   targeted_tests: PASS
   canonical_tests: PASS
@@ -47,13 +53,19 @@ qa:
   exact_source_object_cardinality: PASS
   source_csv_contract_reaudit: PASS
   deterministic_ohlcv_aggregation: PASS
-  incomplete_bucket_quarantine: PASS_WITH_RECORDED_WARNINGS
+  incomplete_bucket_quarantine: PASS_WITH_RETAINED_EXCLUSIONS
+  exact_missing_timestamp_evidence: PASS
+  portable_manifest_paths: PASS
+  observation_byte_identity: PASS
+  bid_ask_quarantine_symmetry: PASS
+  coverage_arithmetic: PASS
   no_gap_fill_or_interpolation: PASS
   validation_default_deny: PASS
   manifest_hash_and_inventory: PASS
+  operator_review: PASS
 authority:
-  observation_construction: COMPLETE_MUTABLE_ONLY
-  release_freeze: DENIED_PENDING_A2_G3
+  observation_construction: REVIEWED_COMPLETE_MUTABLE_ONLY
+  a2_g3_role_release_freeze: AUTHORISED_BOUNDED_PACKET
   r2_publication: DENIED
   selector_activation: DENIED
   validation_consumption: LOCKED_UNCONSUMED
@@ -61,18 +73,28 @@ authority:
   market: NONE
 artifacts:
   discovery:
-    artifact_id: 8624691154
-    digest: sha256:371eac7f02d9e013c8686b5acae630acdc044cec56b36bc61225c01af17cbedb
+    artifact_id: 8624894577
+    digest: sha256:402babcbbe26e9f4297e0526183ce44d67f879bd7d2554c6132163599e0cae5c
+    manifest_sha256: f1ef621bce4a098a80d2cb309ae6f9cba2fcd177e71ce1ac98614f826e0f9a71
+    expires_at: 2026-08-24T22:57:24Z
   development:
-    artifact_id: 8624691530
-    digest: sha256:d502e4f493869761af7e72ca9a91c8fd93ef1b909367ac9482e3c4ea8a0bfc48
+    artifact_id: 8624894979
+    digest: sha256:6897377b47b645c53678eedea1d8e5e1802ebc18b7cfe84a21e604374e4ac2a6
+    manifest_sha256: fa527f01fc0db621cbcddf2fe4bbe8f697e54c9af238e56e85f2a4da0140b1c2
+    expires_at: 2026-08-24T22:57:32Z
   validation_locked:
-    artifact_id: 8624691924
-    digest: sha256:7c795b0b49c92e79d9ce9f70dc9ad5da41bc780dd7f665283e4707b08a1eecbb
+    artifact_id: 8624895364
+    digest: sha256:d48a19ba123f007029f9fe226fd31bf8e88ce17eafdf03a4daa2bfba7d5163fb
+    manifest_sha256: 9e92e479b7d39e6669681659d0acf98b1d686d0dc66bfe2e8558d742aaa13514
+    expires_at: 2026-08-24T22:57:35Z
   compact_report:
-    artifact_id: 8624691986
-    digest: sha256:869328d72ffbd15333e216b814537bc2a3c4c32871241b31162772f57300ea03
+    artifact_id: 8624895466
+    digest: sha256:7140eb871f0d5007ae45a302b5b443644323be95cd44352d083b7683bd01d752
+    expires_at: 2026-10-23T22:55:27Z
+records:
+  operator_review: docs/releases/opt-a-v2/observations/A2_G2_OPERATOR_REVIEW.md
+  machine_review: docs/releases/opt-a-v2/observations/A2_G2_OPERATOR_REVIEW.json
 rollback:
   action: DELETE_MUTABLE_WORKSPACE_AND_REBUILD_FROM_VERIFIED_SOURCE_OBJECTS
   historical_mutation: PROHIBITED
-next_gate: A2-G2_OPERATOR_REVIEW_THEN_A2-G3_RELEASE_FREEZE
+next_gate: A2-G3_ROLE_RELEASE_FREEZE
