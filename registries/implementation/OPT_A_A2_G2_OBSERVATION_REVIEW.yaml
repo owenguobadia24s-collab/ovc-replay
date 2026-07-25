@@ -1,0 +1,73 @@
+schema: ovc-opt-a-gate-review/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+gate_id: A2-G2
+title: Operator review of observation construction and quarantine disposition
+branch: review/opt-a-v2-a2-g2-observation-construction
+baseline_commit: bce2499dff255076b2fe297035d8923f4a21776c
+review_execution_commit: 8d62471c3a9d81e46d5193e82d3b64497e5b3853
+status: PASS
+workflows:
+  canonical_tests:
+    run_id: 30178480639
+    state: PASS
+  role_workspace_rebuild:
+    run_id: 30178480623
+    state: PASS
+review:
+  artifact_zip_digest: PASS
+  manifest_self_hash: PASS
+  observation_byte_identity: PASS
+  portable_manifest_paths: PASS
+  exact_missing_timestamp_evidence: PASS
+  quarantine_bucket_identity: PASS
+  bid_ask_quarantine_symmetry: PASS
+  coverage_arithmetic: PASS
+  role_cardinality: PASS
+  validation_default_deny: PASS
+  violations: 0
+roles:
+  discovery:
+    source_objects: 144
+    observation_objects: 288
+    quarantined_buckets: 12104
+    artifact_id: 8624894577
+    artifact_digest: sha256:402babcbbe26e9f4297e0526183ce44d67f879bd7d2554c6132163599e0cae5c
+    manifest_sha256: f1ef621bce4a098a80d2cb309ae6f9cba2fcd177e71ce1ac98614f826e0f9a71
+  development:
+    source_objects: 48
+    observation_objects: 96
+    quarantined_buckets: 4862
+    artifact_id: 8624894979
+    artifact_digest: sha256:6897377b47b645c53678eedea1d8e5e1802ebc18b7cfe84a21e604374e4ac2a6
+    manifest_sha256: fa527f01fc0db621cbcddf2fe4bbe8f697e54c9af238e56e85f2a4da0140b1c2
+  validation:
+    source_objects: 48
+    observation_objects: 96
+    quarantined_buckets: 4444
+    artifact_id: 8624895364
+    artifact_digest: sha256:d48a19ba123f007029f9fe226fd31bf8e88ce17eafdf03a4daa2bfba7d5163fb
+    manifest_sha256: 9e92e479b7d39e6669681659d0acf98b1d686d0dc66bfe2e8558d742aaa13514
+    consumption: LOCKED_UNCONSUMED
+quarantine:
+  side_specific_bucket_records: 21410
+  clock_time_bucket_locations: 10705
+  reason: INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET
+  disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
+  interpolation: PROHIBITED
+  fill: PROHIBITED
+  provider_native_h1_substitution: PROHIBITED
+  cross_side_substitution: PROHIBITED
+  manual_repair: PROHIBITED
+  opt_b_parent_eligibility: DENIED
+  selector_eligibility: DENIED
+authority:
+  a2_g3_role_release_freeze: AUTHORISED_BOUNDED_PACKET
+  r2_publication: DENIED
+  selector_activation: DENIED
+  validation_consumption: LOCKED_UNCONSUMED
+  opt_b_handoff: DENIED
+  market: NONE
+records:
+  operator_review: docs/releases/opt-a-v2/observations/A2_G2_OPERATOR_REVIEW.md
+  machine_review: docs/releases/opt-a-v2/observations/A2_G2_OPERATOR_REVIEW.json
+next_gate: A2-G3_ROLE_RELEASE_FREEZE
