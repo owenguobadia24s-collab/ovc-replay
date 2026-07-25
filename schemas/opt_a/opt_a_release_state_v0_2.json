@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_release_state_v0_2.json",
+  "title": "OVC OPT-A release state v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "release_id",
+    "lifecycle_state",
+    "authority_state",
+    "qa_state",
+    "availability_state",
+    "publication_status",
+    "consumption_state",
+    "selector_state",
+    "active_selector",
+    "reproducibility_status",
+    "r2_canonical_status",
+    "replacement_policy",
+    "permitted_use",
+    "prohibited_use"
+  ],
+  "properties": {
+    "release_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_role": {
+      "enum": ["HISTORICAL", "DISCOVERY", "DEVELOPMENT", "VALIDATION"]
+    },
+    "interval": {
+      "type": ["string", "null"]
+    },
+    "historical_seal_status": {
+      "type": ["string", "null"]
+    },
+    "lifecycle_state": {
+      "enum": [
+        "DRAFT",
+        "INTAKE_IN_PROGRESS",
+        "WORKSPACE_VALIDATED",
+        "RELEASE_FROZEN",
+        "LOCAL_VERIFIED",
+        "PUBLICATION_APPROVED",
+        "PUBLISHED",
+        "REMOTE_VERIFIED"
+      ]
+    },
+    "authority_state": {
+      "enum": [
+        "NONE",
+        "CANDIDATE",
+        "SHADOW",
+        "ACTIVE_DISCOVERY",
+        "ACTIVE_DEVELOPMENT",
+        "ACTIVE_VALIDATION",
+        "HISTORICAL",
+        "SUPERSEDED"
+      ]
+    },
+    "qa_state": {
+      "enum": [
+        "NOT_EVALUATED",
+        "PASS",
+        "PASS_HISTORICAL_RECORD_ONLY",
+        "WARN",
+        "BLOCK",
+        "QUARANTINE"
+      ]
+    },
+    "availability_state": {
+      "enum": [
+        "LOCAL_ONLY",
+        "REMOTE_PRESENT",
+        "REMOTE_VERIFIED",
+        "PARTIALLY_AVAILABLE",
+        "MISSING"
+      ]
+    },
+    "publication_status": {
+      "enum": [
+        "NOT_ATTEMPTED",
+        "APPROVED",
+        "PUBLISHED",
+        "NEVER_PUBLISHED",
+        "ABANDONED_BY_POLICY"
+      ]
+    },
+    "consumption_state": {
+      "enum": [
+        "NOT_APPLICABLE",
+        "OPEN",
+        "LOCKED_UNCONSUMED",
+        "APPROVED_ONCE",
+        "CONSUMED",
+        "RETIRED"
+      ]
+    },
+    "selector_state": {
+      "enum": [
+        "NONE",
+        "PENDING",
+        "ACTIVE",
+        "ROLLED_BACK",
+        "BLOCKED"
+      ]
+    },
+    "active_selector": {
+      "type": "boolean"
+    },
+    "reproducibility_status": {
+      "enum": [
+        "NOT_EVALUATED",
+        "REPRODUCIBLE",
+        "NOT_REPRODUCIBLE_MISSING_PAYLOAD"
+      ]
+    },
+    "r2_canonical_status": {
+      "enum": [
+        "NOT_EVALUATED",
+        "ABSENT",
+        "PARTIAL",
+        "PRESENT",
+        "VERIFIED"
+      ]
+    },
+    "reason": {
+      "type": ["string", "null"]
+    },
+    "replacement_policy": {
+      "enum": [
+        "NEW_BYTES_REQUIRE_NEW_RELEASE_ID",
+        "IMMUTABLE_IDENTITY"
+      ]
+    },
+    "permitted_use": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    },
+    "prohibited_use": {
+      "type": "array",
+      "items": {"type": "string"},
+      "uniqueItems": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "authority_state": {
+            "enum": ["SUPERSEDED", "HISTORICAL"]
+          }
+        },
+        "required": ["authority_state"]
+      },
+      "then": {
+        "properties": {
+          "active_selector": {"const": false},
+          "selector_state": {
+            "enum": ["NONE", "ROLLED_BACK", "BLOCKED"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "publication_status": {
+            "enum": ["NEVER_PUBLISHED", "ABANDONED_BY_POLICY"]
+          }
+        },
+        "required": ["publication_status"]
+      },
+      "then": {
+        "properties": {
+          "lifecycle_state": {
+            "not": {
+              "enum": ["PUBLISHED", "REMOTE_VERIFIED"]
+            }
+          },
+          "availability_state": {
+            "not": {
+              "enum": ["REMOTE_PRESENT", "REMOTE_VERIFIED"]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "active_selector": {"const": true}
+        },
+        "required": ["active_selector"]
+      },
+      "then": {
+        "properties": {
+          "selector_state": {"const": "ACTIVE"}
+        }
+      }
+    }
+  ]
+}
