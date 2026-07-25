@@ -1,0 +1,76 @@
+{
+  "schema": "ovc-opt-a-wp3-clock-fixture/v1",
+  "fixture_id": "FIXTURE.OPT-A.WP3.CLOCK.001",
+  "synthetic": true,
+  "market_authority": "NONE",
+  "discovery_seed": "DENIED",
+  "timezone": "UTC",
+  "interval_semantics": "HALF_OPEN",
+  "a_l_boundaries": [
+    {"label": "A", "interval_start": "2021-01-04T00:00:00Z", "interval_end": "2021-01-04T02:00:00Z"},
+    {"label": "B", "interval_start": "2021-01-04T02:00:00Z", "interval_end": "2021-01-04T04:00:00Z"},
+    {"label": "C", "interval_start": "2021-01-04T04:00:00Z", "interval_end": "2021-01-04T06:00:00Z"},
+    {"label": "D", "interval_start": "2021-01-04T06:00:00Z", "interval_end": "2021-01-04T08:00:00Z"},
+    {"label": "E", "interval_start": "2021-01-04T08:00:00Z", "interval_end": "2021-01-04T10:00:00Z"},
+    {"label": "F", "interval_start": "2021-01-04T10:00:00Z", "interval_end": "2021-01-04T12:00:00Z"},
+    {"label": "G", "interval_start": "2021-01-04T12:00:00Z", "interval_end": "2021-01-04T14:00:00Z"},
+    {"label": "H", "interval_start": "2021-01-04T14:00:00Z", "interval_end": "2021-01-04T16:00:00Z"},
+    {"label": "I", "interval_start": "2021-01-04T16:00:00Z", "interval_end": "2021-01-04T18:00:00Z"},
+    {"label": "J", "interval_start": "2021-01-04T18:00:00Z", "interval_end": "2021-01-04T20:00:00Z"},
+    {"label": "K", "interval_start": "2021-01-04T20:00:00Z", "interval_end": "2021-01-04T22:00:00Z"},
+    {"label": "L", "interval_start": "2021-01-04T22:00:00Z", "interval_end": "2021-01-05T00:00:00Z"}
+  ],
+  "bucket_rules": {
+    "M15_M1_DERIVED": {"expected_parent_count": 15},
+    "H1_M1_DERIVED": {"expected_parent_count": 60},
+    "H2_M1_CHAIN_DERIVED": {"expected_parent_count": 120},
+    "H4_M1_CHAIN_DERIVED": {"expected_parent_count": 240, "optional": true},
+    "D1_M1_CHAIN_DERIVED": {"expected_parent_count": 1440, "optional": true}
+  },
+  "cases": [
+    {
+      "case_id": "CLOCK-COMPLETE-M15",
+      "price_side": "BID",
+      "observation_identity": "M15_M1_DERIVED",
+      "interval_start": "2021-01-04T00:00:00Z",
+      "interval_end": "2021-01-04T00:15:00Z",
+      "expected_parent_count": 15,
+      "actual_parent_count": 15,
+      "expected_timestamps": [
+        "2021-01-04T00:00:00Z", "2021-01-04T00:01:00Z", "2021-01-04T00:02:00Z",
+        "2021-01-04T00:03:00Z", "2021-01-04T00:04:00Z", "2021-01-04T00:05:00Z",
+        "2021-01-04T00:06:00Z", "2021-01-04T00:07:00Z", "2021-01-04T00:08:00Z",
+        "2021-01-04T00:09:00Z", "2021-01-04T00:10:00Z", "2021-01-04T00:11:00Z",
+        "2021-01-04T00:12:00Z", "2021-01-04T00:13:00Z", "2021-01-04T00:14:00Z"
+      ],
+      "actual_timestamps": [
+        "2021-01-04T00:00:00Z", "2021-01-04T00:01:00Z", "2021-01-04T00:02:00Z",
+        "2021-01-04T00:03:00Z", "2021-01-04T00:04:00Z", "2021-01-04T00:05:00Z",
+        "2021-01-04T00:06:00Z", "2021-01-04T00:07:00Z", "2021-01-04T00:08:00Z",
+        "2021-01-04T00:09:00Z", "2021-01-04T00:10:00Z", "2021-01-04T00:11:00Z",
+        "2021-01-04T00:12:00Z", "2021-01-04T00:13:00Z", "2021-01-04T00:14:00Z"
+      ],
+      "qa_state": "PASS",
+      "reason_codes": []
+    },
+    {
+      "case_id": "CLOCK-INCOMPLETE-M15",
+      "price_side": "BID",
+      "observation_identity": "M15_M1_DERIVED",
+      "interval_start": "2021-01-04T00:00:00Z",
+      "interval_end": "2021-01-04T00:15:00Z",
+      "expected_parent_count": 15,
+      "actual_parent_count": 14,
+      "missing_timestamp": "2021-01-04T00:07:00Z",
+      "qa_state": "QUARANTINE",
+      "reason_codes": ["EXPECTED_TIMESTAMP_MISSING", "INCOMPLETE_BUCKET"]
+    },
+    {
+      "case_id": "CLOCK-H1-IDENTITIES-DISTINCT",
+      "interval_start": "2021-01-04T00:00:00Z",
+      "interval_end": "2021-01-04T01:00:00Z",
+      "identities": ["H1_M1_DERIVED", "H1_PROVIDER_NATIVE"],
+      "substitution": "PROHIBITED"
+    }
+  ]
+}
