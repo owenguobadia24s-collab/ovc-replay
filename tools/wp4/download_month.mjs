@@ -60,7 +60,7 @@ async function downloadObject(timeframe, priceType) {
     cacheFolderPath: cacheDir,
     retryCount: 4,
     retryOnEmpty: false,
-    failAfterRetryCount: true,
+    failAfterRetryCount: false,
     pauseBetweenRetriesMs: 1500,
   });
 
