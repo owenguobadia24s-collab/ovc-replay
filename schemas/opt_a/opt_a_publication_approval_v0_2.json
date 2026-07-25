@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_publication_approval_v0_2.json",
+  "title": "OVC OPT-A publication approval v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "approval_id",
+    "decision",
+    "release_id",
+    "manifest_id",
+    "manifest_sha256",
+    "source_commit",
+    "operator",
+    "decision_recorded_at",
+    "rollback_note"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ovc-opt-a-publication-approval/v0.2"
+    },
+    "approval_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "decision": {
+      "const": "APPROVE"
+    },
+    "release_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "operator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rollback_note": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
