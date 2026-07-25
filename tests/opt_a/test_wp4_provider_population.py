@@ -16,6 +16,10 @@ from ovc.opt_a.provider_population import (
 )
 
 
+ROOT = Path(__file__).resolve().parents[2]
+INTAKE_ROOT = ROOT / "docs" / "releases" / "opt-a-v2" / "intake"
+
+
 class WP4ProviderPopulationTests(unittest.TestCase):
     def test_exact_population_plan(self) -> None:
         plan = build_population_plan()
@@ -120,6 +124,70 @@ class WP4ProviderPopulationTests(unittest.TestCase):
             self.assertEqual("NONE", summary["r2_mutation"])
             with self.assertRaises(PopulationIntakeError):
                 aggregate_month_summaries(paths[:-1])
+
+    def test_committed_population_summary_is_exact_and_non_authoritative(self) -> None:
+        summary = json.loads(
+            (INTAKE_ROOT / "WP4_POPULATION_INTAKE_SUMMARY.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual("DUKASCOPY", summary["provider"])
+        self.assertEqual("GBPUSD", summary["instrument_id"])
+        self.assertEqual("2021-01-01T00:00:00Z", summary["interval_start"])
+        self.assertEqual("2026-01-01T00:00:00Z", summary["interval_end"])
+        self.assertEqual(60, summary["month_count"])
+        self.assertEqual(240, summary["source_object_count"])
+        self.assertEqual(3_781_810, summary["row_count"])
+        self.assertEqual(216_656_289, summary["size_bytes"])
+        self.assertEqual("PASS", summary["qa_state"])
+        self.assertEqual("NONE", summary["market_authority"])
+        self.assertEqual("NONE", summary["r2_mutation"])
+        self.assertEqual("NONE", summary["selector_activation"])
+        self.assertEqual("DENIED_UNTIL_FREEZE", summary["release_parent"])
+        self.assertEqual("LOCKED_UNCONSUMED", summary["validation_consumption"])
+        months = [item["year_month"] for item in summary["monthly_summaries"]]
+        self.assertEqual(list(iter_population_months()), months)
+        self.assertTrue(all(item["qa_state"] == "PASS" for item in summary["monthly_summaries"]))
+        self.assertTrue(
+            all(item["source_object_count"] == 4 for item in summary["monthly_summaries"])
+        )
+        self.assertTrue(
+            all(
+                item["validation_consumption"] == "LOCKED_UNCONSUMED"
+                for item in summary["monthly_summaries"]
+                if item["research_role"] == "VALIDATION"
+            )
+        )
+
+    def test_execution_receipt_and_artifact_inventory_are_bounded(self) -> None:
+        receipt = json.loads(
+            (INTAKE_ROOT / "WP4_EXECUTION_RECEIPT.json").read_text(encoding="utf-8")
+        )
+        inventory = json.loads(
+            (INTAKE_ROOT / "WP4_ACTIONS_ARTIFACT_INVENTORY.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(30175183492, receipt["workflow_run_id"])
+        self.assertEqual("OVC_DIRECT_BI5_CANDLE_ADAPTER", receipt["adapter"])
+        self.assertEqual("1.0.1", receipt["adapter_version"])
+        self.assertEqual(60, receipt["month_count"])
+        self.assertEqual(240, receipt["source_object_count"])
+        self.assertEqual("NONE", receipt["r2_mutation"])
+        self.assertEqual("NONE", receipt["selector_activation"])
+        self.assertEqual("NONE", receipt["market_authority"])
+        self.assertEqual("LOCKED_UNCONSUMED", receipt["validation_consumption"])
+        self.assertIs(inventory["market_payloads_in_git"], False)
+        self.assertEqual("NONE", inventory["canonical_authority"])
+        self.assertEqual("NONE", inventory["r2_mutation"])
+        self.assertEqual(85_076_759, inventory["yearly_compressed_size_bytes"])
+        self.assertEqual(12, len(inventory["artifacts"]))
+        yearly = [
+            item
+            for item in inventory["artifacts"]
+            if item["role"].startswith("TEMPORARY_YEARLY_PROVIDER_EVIDENCE")
+        ]
+        self.assertEqual(5, len(yearly))
+        self.assertEqual(
+            inventory["yearly_compressed_size_bytes"],
+            sum(item["size_in_bytes"] for item in yearly),
+        )
 
 
 if __name__ == "__main__":
