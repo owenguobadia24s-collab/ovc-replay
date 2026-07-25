@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_observation_bar_v0_2.json",
+  "title": "OVC OPT-A observation bar v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "bar_id",
+    "synthetic",
+    "instrument_id",
+    "price_side",
+    "observation_identity",
+    "interval_start",
+    "interval_end",
+    "timezone",
+    "clock_label",
+    "expected_parent_count",
+    "actual_parent_count",
+    "expected_timestamp_set_sha256",
+    "parent_lineage_sha256",
+    "ohlc",
+    "volume",
+    "qa_state",
+    "quarantine_reason_codes",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-a-observation-bar/v2"},
+    "bar_id": {"type": "string", "minLength": 1},
+    "synthetic": {"type": "boolean"},
+    "instrument_id": {"const": "GBPUSD"},
+    "price_side": {"enum": ["BID", "ASK"]},
+    "observation_identity": {
+      "enum": [
+        "M1_PROVIDER_NATIVE",
+        "M15_M1_DERIVED",
+        "H1_M1_DERIVED",
+        "H1_PROVIDER_NATIVE",
+        "H2_M1_CHAIN_DERIVED",
+        "H4_M1_CHAIN_DERIVED",
+        "D1_M1_CHAIN_DERIVED"
+      ]
+    },
+    "research_role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "interval_start": {"type": "string", "format": "date-time"},
+    "interval_end": {"type": "string", "format": "date-time"},
+    "timezone": {"const": "UTC"},
+    "clock_label": {"type": ["string", "null"], "enum": [null, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]},
+    "expected_parent_count": {"type": "integer", "minimum": 1},
+    "actual_parent_count": {"type": "integer", "minimum": 0},
+    "expected_timestamp_set_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "parent_lineage_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ohlc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["open", "high", "low", "close", "decimal_quantum"],
+      "properties": {
+        "open": {"type": "string", "pattern": "^-?[0-9]+(?:\\.[0-9]+)?$"},
+        "high": {"type": "string", "pattern": "^-?[0-9]+(?:\\.[0-9]+)?$"},
+        "low": {"type": "string", "pattern": "^-?[0-9]+(?:\\.[0-9]+)?$"},
+        "close": {"type": "string", "pattern": "^-?[0-9]+(?:\\.[0-9]+)?$"},
+        "decimal_quantum": {"type": "string", "pattern": "^0\\.[0-9]*1$"}
+      }
+    },
+    "volume": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "unit", "quality_state"],
+      "properties": {
+        "value": {"type": ["string", "null"], "pattern": "^[0-9]+(?:\\.[0-9]+)?$"},
+        "unit": {"type": "string", "minLength": 1},
+        "quality_state": {
+          "enum": [
+            "KNOWN_ADDITIVE",
+            "KNOWN_NON_ADDITIVE",
+            "UNKNOWN_UNIT",
+            "MISSING",
+            "INCONSISTENT_UNIT",
+            "NOT_COMPARABLE"
+          ]
+        }
+      }
+    },
+    "qa_state": {"enum": ["PASS", "WARN", "BLOCK", "QUARANTINE"]},
+    "quarantine_reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["market", "release_parent", "handoff_eligible", "selector_input"],
+      "properties": {
+        "market": {"const": "NONE"},
+        "release_parent": {"const": "DENIED_UNTIL_FREEZE"},
+        "handoff_eligible": {"const": false},
+        "selector_input": {"const": "DENIED"}
+      }
+    }
+  }
+}
