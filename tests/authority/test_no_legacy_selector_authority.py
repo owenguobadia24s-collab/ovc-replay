@@ -7,12 +7,17 @@ ROOT = Path(__file__).resolve().parents[2]
 AUTHORITY = ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml"
 RELEASES = ROOT / "registries" / "releases"
 SELECTORS = ("opt_a", "opt_b_c1", "opt_b_c2", "c2e", "c2_5", "c3", "opt_c", "opt_d")
+ALLOWED_REPOSITORY_STATES = {
+    "state: V2_FOUNDATION_NO_MARKET_AUTHORITY",
+    "state: V2_FOUNDATION_RESET_COMPLETE_NO_MARKET_AUTHORITY",
+}
 
 
 class NoLegacySelectorAuthorityTests(unittest.TestCase):
     def test_all_market_selectors_are_none(self) -> None:
         text = AUTHORITY.read_text(encoding="utf-8")
-        self.assertIn("state: V2_FOUNDATION_NO_MARKET_AUTHORITY", text)
+        repository_state = next(line for line in text.splitlines() if line.startswith("state: "))
+        self.assertIn(repository_state, ALLOWED_REPOSITORY_STATES)
         for selector in SELECTORS:
             self.assertIn(f"  {selector}: NONE", text)
         for denial in (
