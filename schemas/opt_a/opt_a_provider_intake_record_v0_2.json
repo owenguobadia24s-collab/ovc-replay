@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_a_provider_intake_record_v0_2.json",
+  "title": "OVC OPT-A provider intake record v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "intake_id",
+    "source_object_id",
+    "synthetic",
+    "provider",
+    "instrument_id",
+    "native_timeframe",
+    "price_side",
+    "research_role",
+    "target_release_id",
+    "partition",
+    "request",
+    "response",
+    "parsed_object",
+    "schema_fingerprint",
+    "qa_state",
+    "availability_state",
+    "disposition",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-a-provider-intake-record/v2"},
+    "intake_id": {"type": "string", "pattern": "^INTAKE\\.DUKASCOPY\\.GBPUSD\\.(M1|H1)\\.(BID|ASK)\\.[0-9]{4}-[0-9]{2}\\.v[0-9]+$"},
+    "source_object_id": {"type": "string", "pattern": "^SRC\\.DUKASCOPY\\.GBPUSD\\.(M1|H1)\\.(BID|ASK)\\.[0-9]{4}-[0-9]{2}\\.v[0-9]+$"},
+    "synthetic": {"type": "boolean"},
+    "provider": {"const": "DUKASCOPY"},
+    "instrument_id": {"const": "GBPUSD"},
+    "native_timeframe": {"enum": ["M1", "H1"]},
+    "price_side": {"enum": ["BID", "ASK"]},
+    "research_role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "target_release_id": {
+      "enum": [
+        "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "OPT-A.GBPUSD.VALIDATION.2025.v2"
+      ]
+    },
+    "partition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["year_month", "interval_start", "interval_end", "timezone"],
+      "properties": {
+        "year_month": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}$"},
+        "interval_start": {"type": "string", "format": "date-time"},
+        "interval_end": {"type": "string", "format": "date-time"},
+        "timezone": {"const": "UTC"}
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_instrument", "timeframe", "price_side", "interval_start", "interval_end", "parameters_sha256"],
+      "properties": {
+        "provider_instrument": {"const": "GBPUSD"},
+        "timeframe": {"enum": ["M1", "H1"]},
+        "price_side": {"enum": ["BID", "ASK"]},
+        "interval_start": {"type": "string", "format": "date-time"},
+        "interval_end": {"type": "string", "format": "date-time"},
+        "parameters_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "content_type", "sha256", "size_bytes"],
+      "properties": {
+        "status": {"type": "integer", "minimum": 0},
+        "content_type": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "parsed_object": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["row_count", "first_timestamp", "last_timestamp", "ordered_columns", "logical_types", "volume_unit"],
+      "properties": {
+        "row_count": {"type": "integer", "minimum": 0},
+        "first_timestamp": {"type": ["string", "null"], "format": "date-time"},
+        "last_timestamp": {"type": ["string", "null"], "format": "date-time"},
+        "ordered_columns": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "logical_types": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "volume_unit": {"type": "string", "minLength": 1}
+      }
+    },
+    "schema_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "downloader_version": {"type": ["string", "null"]},
+    "qa_state": {"enum": ["NOT_EVALUATED", "PASS", "WARN", "BLOCK", "QUARANTINE"]},
+    "availability_state": {"enum": ["LOCAL_ONLY", "MISSING", "QUARANTINED"]},
+    "disposition": {
+      "enum": [
+        "ACCEPTED_WORKSPACE_INPUT",
+        "RETRYABLE_PROVIDER_FAILURE",
+        "QUARANTINED_HTTP_RESPONSE",
+        "QUARANTINED_SCHEMA_MISMATCH",
+        "QUARANTINED_CONTENT_MISMATCH",
+        "QUARANTINED_TIME_RANGE_MISMATCH",
+        "BLOCKED_CONFIGURATION"
+      ]
+    },
+    "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["market", "release_parent", "discovery_seed", "selector_input"],
+      "properties": {
+        "market": {"const": "NONE"},
+        "release_parent": {"const": "DENIED_UNTIL_FREEZE"},
+        "discovery_seed": {"const": "DENIED"},
+        "selector_input": {"const": "DENIED"}
+      }
+    }
+  }
+}
