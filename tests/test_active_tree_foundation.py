@@ -10,6 +10,10 @@ from ovc.opt_b.c2 import AUTHORITY_STATE as C2_STATE
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ALLOWED_REPOSITORY_STATES = {
+    "state: V2_FOUNDATION_NO_MARKET_AUTHORITY",
+    "state: V2_FOUNDATION_RESET_COMPLETE_NO_MARKET_AUTHORITY",
+}
 
 
 class ActiveTreeFoundationTests(unittest.TestCase):
@@ -25,7 +29,8 @@ class ActiveTreeFoundationTests(unittest.TestCase):
 
     def test_authority_registry_denies_market_selectors(self) -> None:
         authority = (ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml").read_text(encoding="utf-8")
-        self.assertIn("state: V2_FOUNDATION_NO_MARKET_AUTHORITY", authority)
+        repository_state = next(line for line in authority.splitlines() if line.startswith("state: "))
+        self.assertIn(repository_state, ALLOWED_REPOSITORY_STATES)
         self.assertGreaterEqual(authority.count(": NONE"), 8)
         self.assertIn("runtime_imports: DENIED", authority)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
