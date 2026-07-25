@@ -1,0 +1,62 @@
+schema: ovc-opt-a-wp4-provider-population-registry/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+repository: owenguobadia24s-collab/ovc-replay
+baseline_commit: f4286bdb9d816ba12c77a4bb09604f462a6dc87e
+branch: build/opt-a-v2-provider-population-intake
+state: PENDING_EXECUTION
+market_authority: NONE
+provider:
+  id: DUKASCOPY
+  adapter: dukascopy-node
+  adapter_version: 1.46.4
+  instrument: GBPUSD
+  interval: '[2021-01-01T00:00:00Z, 2026-01-01T00:00:00Z)'
+  month_count: 60
+source_objects:
+  planned_count: 240
+  families:
+    - M1_BID
+    - M1_ASK
+    - H1_BID
+    - H1_ASK
+roles:
+  discovery:
+    interval: '[2021-01-01T00:00:00Z, 2024-01-01T00:00:00Z)'
+    release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    source_object_count: 144
+    selector: NONE
+  development:
+    interval: '[2024-01-01T00:00:00Z, 2025-01-01T00:00:00Z)'
+    release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    source_object_count: 48
+    selector: NONE
+  validation:
+    interval: '[2025-01-01T00:00:00Z, 2026-01-01T00:00:00Z)'
+    release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+    source_object_count: 48
+    selector: NONE
+    consumption_state: LOCKED_UNCONSUMED
+execution:
+  workflow: .github/workflows/wp4-provider-population.yml
+  pilot_month: 2021-01
+  yearly_jobs:
+    - 2021
+    - 2022
+    - 2023
+    - 2024
+    - 2025
+  max_parallel_years: 3
+  raw_artifact_retention_days: 30
+  summary_artifact_retention_days: 90
+  aggregate_summary: docs/releases/opt-a-v2/intake/WP4_POPULATION_INTAKE_SUMMARY.json
+storage:
+  git_market_payloads: DENIED
+  r2_mutation: NONE
+  release_freeze: NONE
+authority:
+  mutable_workspace_input: AUTHORISED_AFTER_JOB_PREFLIGHT
+  release_parent: DENIED_UNTIL_FREEZE
+  selector_input: DENIED
+  active_handoff: NONE
+  market: NONE
+next_gate: WP4_COMPLETION_REVIEW
