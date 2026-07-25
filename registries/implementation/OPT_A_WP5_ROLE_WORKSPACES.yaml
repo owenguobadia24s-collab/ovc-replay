@@ -1,0 +1,57 @@
+schema: ovc-opt-a-implementation-record/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+work_packet_id: WP5
+gate_id: A2-G2
+title: Role workspace construction and QA
+branch: build/opt-a-v2-role-workspaces
+baseline_commit: 6599919f7cd2d4e4d93e2d76c2bcf4eb4f70314d
+status: IMPLEMENTED_AWAITING_EXECUTION
+preconditions:
+  - A2-G1_PASS
+  - EXACT_WP4_PROVIDER_EVIDENCE_AVAILABLE
+  - SOURCE_OBJECT_BYTE_IDENTITY_VERIFIED
+inputs:
+  discovery:
+    years: [2021, 2022, 2023]
+    source_objects: 144
+    target_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+  development:
+    years: [2024]
+    source_objects: 48
+    target_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+  validation:
+    years: [2025]
+    source_objects: 48
+    target_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+    consumption: LOCKED_UNCONSUMED
+outputs:
+  clocks:
+    - M1
+    - 15M
+    - H1_M1_DERIVED
+    - 2H_A_L
+  price_sides: [BID, ASK]
+  workspace_state: MUTABLE_WORKSPACE
+  manifests: ROLE_LOCAL_WORKSPACE_MANIFESTS
+qa:
+  - EXACT_ROLE_ALLOCATION
+  - EXACT_SOURCE_OBJECT_CARDINALITY
+  - SOURCE_CSV_CONTRACT_REAUDIT
+  - DETERMINISTIC_OHLCV_AGGREGATION
+  - EXACT_BUCKET_MEMBERSHIP
+  - INCOMPLETE_BUCKET_QUARANTINE
+  - NO_GAP_FILL_OR_INTERPOLATION
+  - VALIDATION_DEFAULT_DENY
+  - MANIFEST_HASH_AND_INVENTORY
+authority:
+  observation_construction: AUTHORISED_MUTABLE_ONLY
+  release_freeze: DENIED_PENDING_A2_G3
+  r2_publication: DENIED
+  selector_activation: DENIED
+  validation_consumption: LOCKED_UNCONSUMED
+  opt_b_handoff: DENIED
+  market: NONE
+rollback:
+  action: DELETE_MUTABLE_WORKSPACE_AND_REBUILD_FROM_VERIFIED_SOURCE_OBJECTS
+  historical_mutation: PROHIBITED
+next_gate: A2-G2_OPERATOR_REVIEW_THEN_A2-G3_RELEASE_FREEZE
