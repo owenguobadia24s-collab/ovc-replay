@@ -11,6 +11,12 @@ ALLOWED_REPOSITORY_STATES = {
     "state: V2_FOUNDATION_NO_MARKET_AUTHORITY",
     "state: V2_FOUNDATION_RESET_COMPLETE_NO_MARKET_AUTHORITY",
 }
+ALLOWED_GOVERNANCE_RECORDS = {
+    "README.md",
+    "OPT_A_RELEASE_REGISTRY.yaml",
+    "OPT_A_ACTIVE_SELECTORS.yaml",
+    "OPT_A_VALIDATION_ACCESS_REGISTRY.yaml",
+}
 
 
 class NoLegacySelectorAuthorityTests(unittest.TestCase):
@@ -30,13 +36,20 @@ class NoLegacySelectorAuthorityTests(unittest.TestCase):
         ):
             self.assertIn(denial, text)
 
-    def test_no_v2_release_selector_record_exists(self) -> None:
-        active_records = [
-            path.relative_to(ROOT).as_posix()
+    def test_release_registry_root_contains_governance_only(self) -> None:
+        records = {
+            path.name
             for path in RELEASES.rglob("*")
-            if path.is_file() and path.name != "README.md"
-        ]
-        self.assertEqual([], active_records)
+            if path.is_file()
+        }
+        self.assertEqual(ALLOWED_GOVERNANCE_RECORDS, records)
+
+    def test_no_active_v2_selector_record_exists(self) -> None:
+        selectors = (RELEASES / "OPT_A_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
+        self.assertIn("state: NONE", selectors)
+        self.assertNotIn("selector_state: ACTIVE", selectors)
+        self.assertIn("all_role_selectors: NONE", selectors)
+        self.assertIn("historical_v1_reactivation: PROHIBITED", selectors)
 
 
 if __name__ == "__main__":
