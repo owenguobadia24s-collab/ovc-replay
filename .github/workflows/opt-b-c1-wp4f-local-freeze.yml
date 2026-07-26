@@ -41,9 +41,10 @@ jobs:
       - name: Assert authority boundary
         run: |
           grep -F '"status":"PASS"' frozen/WP4F_FREEZE_REPORT.json
-          grep -E 'state: C1_(B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY|B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR|WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR)' registries/authority/ACTIVE_AUTHORITY.yaml
-          grep -F 'selector: NONE' registries/authority/ACTIVE_AUTHORITY.yaml
+          grep -E 'state: C1_(B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY|B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR|WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR|B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED)' registries/authority/ACTIVE_AUTHORITY.yaml
+          grep -E 'selector: (NONE|SHADOW)' registries/authority/ACTIVE_AUTHORITY.yaml
           grep -F 'validation_consumption: LOCKED_UNCONSUMED' registries/authority/ACTIVE_AUTHORITY.yaml
+          grep -F 'c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW' registries/authority/ACTIVE_AUTHORITY.yaml
       - name: Upload frozen Discovery release
         uses: actions/upload-artifact@v4
         with:

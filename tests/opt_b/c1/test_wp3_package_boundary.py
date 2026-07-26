@@ -25,12 +25,14 @@ class C1WP3PackageBoundaryTests(unittest.TestCase):
         for forbidden in ("requests.", "urllib", "boto3", "rclone", "cloudflare", "subprocess"):
             self.assertNotIn(forbidden, text)
 
-    def test_wp3_does_not_create_market_payloads_or_release_files(self) -> None:
+    def test_wp3_package_remains_payload_free_after_later_shadow_activation(self) -> None:
         self.assertFalse(any((ROOT / "src" / "ovc" / "opt_b" / "c1").rglob("*.csv")))
         self.assertFalse(any((ROOT / "src" / "ovc" / "opt_b" / "c1").rglob("*.parquet")))
         selectors = (ROOT / "registries" / "opt_b" / "c1" / "C1_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
-        self.assertIn("state: NONE", selectors)
-        self.assertEqual(selectors.count("selector_state: NONE"), 3)
+        self.assertIn("state: SHADOW", selectors)
+        self.assertEqual(selectors.count("selector_state: SHADOW"), 2)
+        self.assertEqual(selectors.count("selector_state: NONE"), 1)
+        self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", selectors)
 
 
 if __name__ == "__main__":

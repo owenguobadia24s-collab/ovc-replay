@@ -23,6 +23,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY",
     "state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR",
     "state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR",
+    "state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED",
 }
 FORBIDDEN = ("B-STATE-", "OPT-C-", "OPT-D-", "PAPER-PLAYBOOK", "story_id", "candidate_id", "outcome_label")
 
@@ -93,8 +94,10 @@ class SyntheticFixturePackTests(unittest.TestCase):
         repository_state = next(line for line in authority.splitlines() if line.startswith("state: "))
         self.assertIn(repository_state, ALLOWED_REPOSITORY_STATES)
         self.assertIn("  opt_a: ACTIVE", authority)
-        self.assertGreaterEqual(authority.count(": NONE"), 7)
+        self.assertIn("  opt_b_c1: SHADOW", authority)
+        self.assertIn("  opt_b_c2: NONE", authority)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
+        self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", authority)
 
 
 if __name__ == "__main__":

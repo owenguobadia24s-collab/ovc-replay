@@ -1,8 +1,8 @@
 schema: ovc-opt-b-c1-implementation-registry/v1
 programme_id: OVC-OPT-B-C1-V2-IMPLEMENTATION-PLAN-0.1
 layer_id: OPT-B.C1.v2
-work_packet: B1-G2
-status: B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED
+work_packet: B1-G5
+status: B1_G5_PASS_SHADOW_SELECTED_C2_DENIED
 repository: owenguobadia24s-collab/ovc-replay
 wp1_merge_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
 wp2_merge_commit: fefac25f19a836898c3a22228036cd66617dca07
@@ -15,6 +15,9 @@ b1_g1_merge_commit: 29718a526235ef7268a3226173352951072c35e8
 wp4f_merge_commit: 74af01f611d56b5b4a580543236859ce7767e1fc
 wp4f_execution_commit: c641f732d50527a93edd1901b0ddcbf1bcf929ee
 wp4f_workflow_run_id: 30187276514
+wp5_reconciliation_merge_commit: c1bf15b3fcdc0d6ad37e9525c0cee562574c8cfd
+wp5_verification_run_id: 30190733324
+b1_g3_merge_commit: a94d201cf06da304620e3c67adbd39d639bcbbf0
 owner: OPERATOR
 upstream:
   selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
@@ -33,11 +36,13 @@ frozen_design:
   null_policy: contracts/opt_b/c1/C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md
   release_lifecycle_contract: contracts/opt_b/c1/C1_RELEASE_LIFECYCLE_CONTRACT_v0_1.md
   input_profile: contracts/opt_b/c1/OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1.md
+  c1_to_c2_handoff_contract: contracts/opt_b/c1/C1_TO_C2_HANDOFF_CONTRACT_v0_1.md
   formula_registry: registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml
   qa_registry: registries/opt_b/c1/C1_QA_CHECK_REGISTRY_v0_1.yaml
   formula_registry_id: C1.FORMULAS.v0.1
   formula_count: 18
   record_schema: schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json
+  selector_schema: schemas/opt_b/c1/c1_shadow_selector_v0_1.schema.json
 implementation:
   root: src/ovc/opt_b/c1/
   replay_runner: scripts/opt_b/run_c1_wp4_replay.py
@@ -48,6 +53,8 @@ implementation:
   freeze_review_workflow: .github/workflows/opt-b-c1-b1-g1-freeze-review.yml
   local_freeze_workflow: .github/workflows/opt-b-c1-wp4f-local-freeze.yml
   publication_readiness_workflow: .github/workflows/opt-b-c1-b1-g2-publication-readiness.yml
+  publication_workflow: .github/workflows/opt-b-c1-wp5-r2-publication.yml
+  shadow_activation_workflow: .github/workflows/opt-b-c1-b1-g5-shadow-activation.yml
   arithmetic: DECIMAL_EXACT
   identity_excludes: [runtime, machine, absolute_local_path]
   prior_close_policy: IMMEDIATE_CONTIGUOUS_ONLY
@@ -111,17 +118,42 @@ b1_g2_result:
   gate_packet: docs/releases/opt-b-c1-v2/b1-g2/B1_G2_GATE_PACKET.json
   operator_decision: docs/releases/opt-b-c1-v2/b1-g2/B1_G2_OPERATOR_DECISION.md
   runtime_receipt_artifact_name: c1-b1-g2-publication-readiness-receipt
-  exact_pr_head_verification: REQUIRED_BEFORE_MERGE
+  exact_pr_head_verification: PASS
+b1_g3_result:
+  gate_packet: docs/releases/opt-b-c1-v2/b1-g3/B1_G3_GATE_PACKET.json
+  operator_decision: docs/releases/opt-b-c1-v2/b1-g3/B1_G3_OPERATOR_DECISION.md
+  status: PASS_EXISTING_EXACT_CANDIDATE_RELEASE_RECONCILED
+wp5_result:
+  publication_packet: docs/releases/opt-b-c1-v2/wp5/WP5_PUBLICATION_PACKET.md
+  remote_verification_receipt: docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json
+  verification_run_id: 30190733324
+  remote_object_count: 194
+  remote_verified_bytes_including_manifests: 36203151
+  status: PASS_FULL_REMOTE_BYTE_VERIFICATION
+b1_g5_result:
+  gate_packet: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_GATE_PACKET.json
+  operator_decision: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_OPERATOR_DECISION.md
+  comparison_packet: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_COMPARISON_PACKET.json
+  c1_to_c2_handoff_validation: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_C1_TO_C2_HANDOFF_VALIDATION.json
+  activation_decision_id: B1-G5-OPT-B.C1-SHADOW-ACTIVATION-2026-07-26
+  selected_roles: [DISCOVERY, DEVELOPMENT]
+  selector_state: SHADOW
+  rollback_target: ALL_C1_ROLE_SELECTORS_NONE
+  c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
+  status: PASS
+
 authority:
-  current: B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED
+  current: B1_G5_PASS_SHADOW_SELECTED_C2_DENIED
   market_replay: COMPLETE_WP4_PASS
   local_candidate: EXACT_INVENTORY_ACCEPTED
   local_release_freeze: COMPLETE_WP4F_PASS
-  release_lifecycle: RELEASE_FROZEN
+  release_lifecycle: REMOTE_VERIFIED
   release_qa: PASS
-  release_availability: LOCAL_VERIFIED_TRANSIENT_ARTIFACT
-  r2_publication: AUTHORISED_EXACT_RELEASES_ONLY_PENDING_WP5_EXECUTION
-  selector_activation: DENIED_PENDING_POST_PUBLICATION_REVIEW
+  release_availability: REMOTE_VERIFIED
+  r2_publication: COMPLETE_WP5_REMOTE_VERIFIED
+  selector_activation: SHADOW_DISCOVERY_AND_DEVELOPMENT
+  selector_rollback: ALL_C1_ROLE_SELECTORS_NONE
+  c2_handoff: INTERFACE_VALIDATED_CONSUMPTION_NOT_AUTHORISED
   c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
   validation_consumption: LOCKED_UNCONSUMED
   probability: NONE
@@ -135,6 +167,7 @@ reads_allowlist:
   - exact WP4F Discovery frozen artifact 8627405334
   - exact WP4F Development frozen artifact 8627405553
   - exact WP4F freeze report artifact 8627405685
+  - exact WP5 remote verification receipt
   - registries/releases/OPT_A_ACTIVE_SELECTORS.yaml
   - registries/releases/OPT_A_RELEASE_REGISTRY.yaml
   - contracts/opt_a/OPT_A_TO_OPT_B_HANDOFF_CONTRACT_v0_2.md
@@ -156,27 +189,31 @@ reads_denylist:
   - TRADE_LABELS
 writes:
   permitted:
-    - exact WP4F Discovery and Development frozen release artifacts to immutable R2 namespaces through WP5
-    - compact QA packets, publication records and decisions in Git
+    - compact QA, comparison, handoff, publication, selector and decision records in Git
+    - governed SHADOW selector transaction for exact remote-verified Discovery and Development releases
   prohibited:
     - raw_market_payloads_in_git
     - full_c1_streams_in_git
     - overwrite_existing_release_root
     - publication_from_rebuilt_or_substituted_bytes
     - active_opt_a_selector_mutation
-    - active_c1_selector_mutation_before_post_publication_review
+    - C1_ACTIVE_DISCOVERY_OR_DEVELOPMENT_AUTHORITY
     - validation_access
-required_b1_g2_artifacts:
-  - .github/workflows/opt-b-c1-b1-g2-publication-readiness.yml
-  - scripts/opt_b/review_c1_b1_g2_release.py
-  - tests/opt_b/c1/test_b1_g2_publication_readiness.py
-  - docs/releases/opt-b-c1-v2/b1-g2/B1_G2_GATE_PACKET.json
-  - docs/releases/opt-b-c1-v2/b1-g2/B1_G2_OPERATOR_DECISION.md
-next_gate: WP5_R2_PUBLICATION_AND_FULL_REMOTE_VERIFICATION
+    - c2_consumption_without_separate_gate
+required_b1_g5_artifacts:
+  - .github/workflows/opt-b-c1-b1-g5-shadow-activation.yml
+  - tests/opt_b/c1/test_b1_g5_shadow_activation.py
+  - contracts/opt_b/c1/C1_TO_C2_HANDOFF_CONTRACT_v0_1.md
+  - docs/releases/opt-b-c1-v2/b1-g5/B1_G5_GATE_PACKET.json
+  - docs/releases/opt-b-c1-v2/b1-g5/B1_G5_COMPARISON_PACKET.json
+  - docs/releases/opt-b-c1-v2/b1-g5/B1_G5_C1_TO_C2_HANDOFF_VALIDATION.json
+  - docs/releases/opt-b-c1-v2/b1-g5/B1_G5_OPERATOR_DECISION.md
+next_gate: SEPARATE_C2_SCOPE_AND_HANDOFF_REVIEW
 rollback:
-  target_state: WP4F_RELEASE_FROZEN_LOCAL_VERIFIED_NO_PUBLICATION
-  abort_on_hash_manifest_or_collision_failure: true
-  partial_payload_without_manifest_is_non_authoritative: true
+  target_state: ALL_C1_ROLE_SELECTORS_NONE
+  preserve_remote_published_releases: true
+  preserve_historical_gate_packets: true
   active_opt_a_selector_unchanged: true
-  c1_selectors_return_to_none: true
+  validation_remains_locked: true
+  c2_consumption_remains_denied: true
   legacy_reactivation: PROHIBITED

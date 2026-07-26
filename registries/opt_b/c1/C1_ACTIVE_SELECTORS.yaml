@@ -1,37 +1,61 @@
 schema: ovc-opt-b-c1-active-selectors/v1
 selector_set_id: SELECTOR.OPT-B.C1.ROLESET.v0.1
-state: NONE
-reason: WP2_CONTRACTS_FROZEN_NO_C1_RELEASE
+state: SHADOW
+reason: B1_G5_PASS_EXACT_REMOTE_VERIFIED_RELEASES_SHADOW_SELECTED
+activation_decision_id: B1-G5-OPT-B.C1-SHADOW-ACTIVATION-2026-07-26
 selectors:
   discovery:
     selector_id: SELECTOR.OPT-B.C1.DISCOVERY
-    selector_state: NONE
-    authority_state: NONE
-    release_id: null
-    manifest_id: null
+    research_role: DISCOVERY
+    selector_state: SHADOW
+    authority_state: SHADOW
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
+    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    parent_opt_a_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    parent_opt_a_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
+    activation_decision_id: B1-G5-OPT-B.C1-SHADOW-ACTIVATION-2026-07-26
     rollback_target: NONE
     c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
   development:
     selector_id: SELECTOR.OPT-B.C1.DEVELOPMENT
-    selector_state: NONE
-    authority_state: NONE
-    release_id: null
-    manifest_id: null
+    research_role: DEVELOPMENT
+    selector_state: SHADOW
+    authority_state: SHADOW
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
+    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    parent_opt_a_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    parent_opt_a_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
+    activation_decision_id: B1-G5-OPT-B.C1-SHADOW-ACTIVATION-2026-07-26
     rollback_target: NONE
     c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
   validation:
     selector_id: SELECTOR.OPT-B.C1.VALIDATION
+    research_role: VALIDATION
     selector_state: NONE
     authority_state: NONE
     release_id: null
     manifest_id: null
+    manifest_sha256: null
+    parent_opt_a_release_id: null
+    parent_opt_a_manifest_sha256: null
+    activation_decision_id: null
     rollback_target: NONE
     validation_consumption_state: LOCKED_UNCONSUMED
     c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
+selector_transaction:
+  atomic: true
+  selected_roles: [DISCOVERY, DEVELOPMENT]
+  validation_role: NONE
+  rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE
+  preserves_published_releases: true
 activation_requirements:
   - WP3_FIXTURE_TRUST_PASS
   - WP4_CANDIDATE_REPLAY_AND_LOCAL_RELEASE_PASS
   - WP5_REMOTE_PUBLICATION_VERIFIED
+  - B1_G5_COMPARISON_COMPLETE
+  - B1_G5_C1_TO_C2_INTERFACE_VALIDATED
   - EXACT_OPERATOR_SELECTOR_DECISION
 initial_activation_role: SHADOW_ONLY
 historical_v1_reactivation: PROHIBITED

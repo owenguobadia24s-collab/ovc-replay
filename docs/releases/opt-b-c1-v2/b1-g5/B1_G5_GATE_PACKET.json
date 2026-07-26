@@ -1,0 +1,78 @@
+{
+  "schema": "ovc-opt-b-c1-b1-g5-gate-packet/v1",
+  "gate_id": "B1-G5",
+  "gate_name": "Shadow activation",
+  "decision": "PASS_SHADOW_ACTIVATION_EXACT_REMOTE_VERIFIED_RELEASES",
+  "review_base_commit": "a94d201cf06da304620e3c67adbd39d639bcbbf0",
+  "activation_decision_id": "B1-G5-OPT-B.C1-SHADOW-ACTIVATION-2026-07-26",
+  "publication_evidence": {
+    "wp5_verification_run_id": 30190733324,
+    "remote_verification_receipt": "docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json",
+    "publication_packet": "docs/releases/opt-b-c1-v2/wp5/WP5_PUBLICATION_PACKET.md",
+    "remote_object_count": 194,
+    "remote_verified_bytes_including_manifests": 36203151
+  },
+  "comparison_packet": "docs/releases/opt-b-c1-v2/b1-g5/B1_G5_COMPARISON_PACKET.json",
+  "c1_to_c2_handoff_validation": "docs/releases/opt-b-c1-v2/b1-g5/B1_G5_C1_TO_C2_HANDOFF_VALIDATION.json",
+  "releases": {
+    "DISCOVERY": {
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+      "manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
+      "parent_opt_a_release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+      "parent_opt_a_manifest_id": "MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2",
+      "parent_opt_a_manifest_sha256": "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c",
+      "selector_state": "SHADOW"
+    },
+    "DEVELOPMENT": {
+      "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1",
+      "manifest_sha256": "ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017",
+      "parent_opt_a_release_id": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+      "parent_opt_a_manifest_id": "MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2",
+      "parent_opt_a_manifest_sha256": "25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc",
+      "selector_state": "SHADOW"
+    }
+  },
+  "qa_results": [
+    {"check_id": "B1-G5-QA-01", "name": "Exact publication identity", "status": "PASS", "severity": "BLOCKING"},
+    {"check_id": "B1-G5-QA-02", "name": "Comparison completeness", "status": "PASS", "severity": "BLOCKING"},
+    {"check_id": "B1-G5-QA-03", "name": "No historical relabelling", "status": "PASS", "severity": "BLOCKING"},
+    {"check_id": "B1-G5-QA-04", "name": "C1-to-C2 handoff interface", "status": "PASS", "severity": "BLOCKING"},
+    {"check_id": "B1-G5-QA-05", "name": "No downstream reverse dependency", "status": "PASS", "severity": "BLOCKING"},
+    {"check_id": "B1-G5-QA-06", "name": "Selector rollback to NONE", "status": "PASS", "severity": "BLOCKING"}
+  ],
+  "selector_transaction": {
+    "selector_set_id": "SELECTOR.OPT-B.C1.ROLESET.v0.1",
+    "discovery": "SHADOW",
+    "development": "SHADOW",
+    "validation": "NONE",
+    "atomic": true,
+    "rollback_target": "ALL_C1_ROLE_SELECTORS_NONE",
+    "legacy_reactivation": "PROHIBITED"
+  },
+  "authority_delta": {
+    "derived_fact_authority": "SHADOW_DISCOVERY_AND_DEVELOPMENT",
+    "c2_consumption": "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "coverage": {
+    "record_count": 212764,
+    "record_file_count": 192,
+    "verified_payload_bytes": 36170710,
+    "duplicate_record_ids": 0,
+    "quarantine_records_excluded": 16966
+  },
+  "known_limitations": [
+    "Shadow selection permits inspection and comparison only.",
+    "Validation C1 has not been built or consumed.",
+    "C2 consumption requires a separate gate and remains denied.",
+    "Historical OPT-A v1 is not comparable because source lineage changed."
+  ],
+  "unexplained_differences": 0,
+  "blocking_issues": 0
+}

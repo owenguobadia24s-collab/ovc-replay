@@ -45,23 +45,24 @@ class B1G3CandidateReleaseTests(unittest.TestCase):
             "25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc",
         )
 
-    def test_gate_does_not_regress_later_publication_or_activate_selector(self) -> None:
+    def test_historical_gate_is_preserved_after_later_shadow_activation(self) -> None:
         gate = json.loads(GATE.read_text(encoding="utf-8"))
         releases = RELEASES.read_text(encoding="utf-8")
         selectors = SELECTORS.read_text(encoding="utf-8")
         wp5 = json.loads(WP5.read_text(encoding="utf-8"))
         self.assertEqual(gate["execution_mode"], "RETROSPECTIVE_GATE_RECONCILIATION_AFTER_PUBLICATION")
         self.assertEqual(wp5["status"], "PASS_FULL_REMOTE_BYTE_VERIFICATION")
-        self.assertEqual(releases.count("authority_state: CANDIDATE"), 2)
-        self.assertEqual(releases.count("publication_status: PUBLISHED_REMOTE_VERIFIED"), 2)
-        self.assertIn("state: NONE", selectors)
-        self.assertEqual(selectors.count("selector_state: NONE"), 3)
         self.assertEqual(gate["authority_delta"]["selector_activation"], "NONE")
         self.assertEqual(gate["authority_delta"]["validation_consumption"], "LOCKED_UNCONSUMED")
         self.assertEqual(
             gate["authority_delta"]["c2_consumption"],
             "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW",
         )
+        self.assertEqual(releases.count("authority_state: SHADOW"), 2)
+        self.assertEqual(releases.count("publication_status: PUBLISHED_REMOTE_VERIFIED"), 2)
+        self.assertIn("state: SHADOW", selectors)
+        self.assertEqual(selectors.count("selector_state: SHADOW"), 2)
+        self.assertEqual(selectors.count("selector_state: NONE"), 1)
 
     def test_operator_decision_names_sequence_and_next_gate(self) -> None:
         decision = DECISION.read_text(encoding="utf-8")

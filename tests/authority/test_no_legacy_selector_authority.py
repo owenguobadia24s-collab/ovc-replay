@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 AUTHORITY = ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml"
 RELEASES = ROOT / "registries" / "releases"
-DOWNSTREAM_SELECTORS = ("opt_b_c1", "opt_b_c2", "c2e", "c2_5", "c3", "opt_c", "opt_d")
+INACTIVE_DOWNSTREAM_SELECTORS = ("opt_b_c2", "c2e", "c2_5", "c3", "opt_c", "opt_d")
 ALLOWED_REPOSITORY_STATES = {
     "state: V2_FOUNDATION_NO_MARKET_AUTHORITY",
     "state: V2_FOUNDATION_RESET_COMPLETE_NO_MARKET_AUTHORITY",
@@ -22,6 +22,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY",
     "state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR",
     "state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR",
+    "state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED",
 }
 ALLOWED_GOVERNANCE_RECORDS = {
     "README.md",
@@ -32,13 +33,16 @@ ALLOWED_GOVERNANCE_RECORDS = {
 
 
 class NoLegacySelectorAuthorityTests(unittest.TestCase):
-    def test_only_opt_a_selector_is_active(self) -> None:
+    def test_only_opt_a_and_bounded_c1_shadow_are_selected(self) -> None:
         text = AUTHORITY.read_text(encoding="utf-8")
         repository_state = next(line for line in text.splitlines() if line.startswith("state: "))
         self.assertIn(repository_state, ALLOWED_REPOSITORY_STATES)
         self.assertIn("  opt_a: ACTIVE", text)
-        for selector in DOWNSTREAM_SELECTORS:
+        self.assertIn("  opt_b_c1: SHADOW", text)
+        for selector in INACTIVE_DOWNSTREAM_SELECTORS:
             self.assertIn(f"  {selector}: NONE", text)
+        self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", text)
+        self.assertIn("selector_rollback: ALL_C1_ROLE_SELECTORS_NONE", text)
         for denial in (
             "runtime_imports: DENIED",
             "release_parent_eligibility: DENIED",

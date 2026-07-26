@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-opt-b-c1-b1-g5-comparison/v1",
+  "gate_id": "B1-G5",
+  "status": "PASS_COMPLETE_NO_UNEXPLAINED_DIFFERENCES",
+  "review_base_commit": "a94d201cf06da304620e3c67adbd39d639bcbbf0",
+  "formula_registry_id": "C1.FORMULAS.v0.1",
+  "comparisons": [
+    {
+      "surface": "NEW_FORMULAS_VS_MATHEMATICAL_GOLDEN_VALUES",
+      "disposition": "EXACT_EQUIVALENCE",
+      "evidence": "WP3 fixture trust, Decimal arithmetic, golden/property/symmetry tests"
+    },
+    {
+      "surface": "NEW_C1_CARDINALITY_VS_ELIGIBLE_OPT_A_V2_BARS",
+      "disposition": "EXACT_AFTER_DECLARED_QUARANTINE_AND_NULL_POLICY",
+      "record_count": 212764,
+      "record_file_count": 192,
+      "duplicate_record_ids": 0
+    },
+    {
+      "surface": "NEW_FORMULAS_VS_LEGACY_FUNCTIONS_WHERE_DEFINITIONS_COINCIDE",
+      "disposition": "NO_BLOCKING_UNEXPLAINED_DIFFERENCE",
+      "note": "Legacy functions are non-authoritative comparison material and did not define or repair C1 v2."
+    },
+    {
+      "surface": "OLD_OPT_A_V1_VS_NEW_OPT_A_V2",
+      "disposition": "NOT_COMPARABLE",
+      "reason_code": "SOURCE_LINEAGE_CHANGE"
+    },
+    {
+      "surface": "15M_VS_2H_A_L_DISTRIBUTIONS",
+      "disposition": "DESCRIPTIVE_QA_ONLY",
+      "semantic_thresholds_created": false
+    },
+    {
+      "surface": "BID_VS_ASK_RECORDS",
+      "disposition": "SEPARATE_SIDE_INTEGRITY_PASS",
+      "midpoint_or_spread_claim": false
+    }
+  ],
+  "historical_relabelling": false,
+  "historical_artifacts_mutated": false,
+  "unexplained_difference_count": 0,
+  "non_comparable_objects": [
+    {
+      "object": "historical OPT-A v1 market population",
+      "reason_code": "SOURCE_LINEAGE_CHANGE"
+    }
+  ],
+  "blocking_issues": 0
+}
