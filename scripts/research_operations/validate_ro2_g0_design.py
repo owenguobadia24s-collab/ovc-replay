@@ -55,7 +55,18 @@ def main() -> int:
     require_tokens(REQUIRED[0], ["FROZEN_DESIGN_ONLY", "No runtime indexer", "LOCKED_UNCONSUMED"])
     require_tokens(REQUIRED[1], ["validation_guard: DENY_BEFORE_PATH_RESOLUTION", "content_resolution: DENY"])
     require_tokens(REQUIRED[2], ["OPT_A_V2_VALIDATION_CONTENT", "GIT_PRIMARY_BRANCH", "R2_CANONICAL"])
-    require_tokens(REQUIRED[3], ["RO2_WP2_CANDIDATE_PENDING_RO2_G2", "IMPLEMENTED_CANDIDATE_PENDING_RO2_G2"])
+    require_tokens(
+        REQUIRED[3],
+        [
+            "RO2_G2_PASS_LOCAL_REPLACEABLE_READ_ONLY_INSPECTION",
+            "ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_DERIVED",
+            "ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_READ_ONLY",
+            "ACCEPTED_RO2_G2_ACTIVE_DISCOVERY_DEVELOPMENT_LOCAL_READ_ONLY",
+            "validation_consumption: LOCKED_UNCONSUMED",
+            "c2_selector: NONE",
+            "c2_activation: NONE",
+        ],
+    )
     require_tokens(REQUIRED[4], ["RO2.ReplayFrame", "RO2.ConsoleResearchProjection", "Validation content identifiers may not be emitted"])
     require_tokens(REQUIRED[5], ["RO2-QA-002", "RO2-QA-004", "RO2-QA-011"])
     require_tokens(REQUIRED[6], ["validation_row_resolution_attempt", "prospective_frame_contains_post_cutoff_record", "attempted_git_r2_selector_or_threshold_write"])
@@ -66,7 +77,7 @@ def main() -> int:
         "registries/authority/ACTIVE_AUTHORITY.yaml",
         ["publication: COMPLETE_REMOTE_VERIFIED", "selector: NONE", "activation: NONE", "validation_consumption: LOCKED_UNCONSUMED"],
     )
-    print("PASS: RO2-G0 design remains valid with RO2-WP2 candidate and retained authority")
+    print("PASS: RO2-G0 design remains valid with RO2-G2 accepted inspection authority and retained boundaries")
     return 0
 
 
