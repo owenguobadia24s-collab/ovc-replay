@@ -1,25 +1,24 @@
 # Current status
 
 Snapshot date: 26 July 2026.
-Latest integrated `main` tip reconciled for RO2-G1: `e2935f0c607aa25c565da59c08e15263176213d6`.
-RO2-G1 implementation and acceptance branch: `build/research-operations-v0-2-workspace-index` / PR `#71`.
+Integrated `main` tip before this review: `dc05204becb2806fc10cab024d85ddab235326a7`.
+C2 publication-readiness branch: `review/c2-publication-readiness` / PR `#72`.
 
 ## Integrated baseline
 
-The repository reset, OPT-A v2 role-set activation, OPT-B.C1 v2 remote publication and shadow activation, Research Operations Foundation v0.1 activation, Research Console v0.3 Overview acceptance, OPT-B.C2 actual-parent reconciliation, C2-G4 exact-parent replay, C2-G5 local candidate freeze, Research Operations Foundation v0.2 design freeze and C2 publication-readiness approval are merged into `main`.
+The repository reset, OPT-A v2 role-set activation, OPT-B.C1 v2 remote publication and shadow activation, Research Operations Foundation v0.1 activation, Research Console v0.3 Overview acceptance, OPT-B.C2 actual-parent reconciliation, C2-G4 exact-parent replay, C2-G5 local candidate freeze and Research Operations Foundation v0.2 design freeze are merged into `main`.
 
 Latest authority-changing or boundary-confirming records:
 
 - OPT-A v2 A2-G5 selector activation: `docs/releases/opt-a-v2/activation/`
 - OPT-B.C1 v2 B1-G5 shadow activation: `docs/releases/opt-b-c1-v2/b1-g5/`
-- Research Operations v0.1 RO-G3 local activation: `docs/releases/research-operations-foundation/ro-g3/`
+- Research Operations RO-G3 local activation: `docs/releases/research-operations-foundation/ro-g3/`
 - Research Operations v0.2 RO2-G0 design freeze: `docs/releases/research-operations-foundation-v0-2/ro2-g0/`
-- Research Operations v0.2 RO2-G1 deterministic index acceptance: `docs/releases/research-operations-foundation-v0-2/ro2-g1/` on PR `#71`
 - Research Console RC-G2-v0.3 Overview acceptance: `docs/releases/research-console-v0-3/rc-g2/`
 - OPT-B.C2 C2-G3R actual-parent reconciliation: `docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/`
 - OPT-B.C2 C2-G4 exact-parent replay: `docs/releases/opt-b-c2-v2/c2-g4/`
 - OPT-B.C2 C2-G5 local candidate freeze: `docs/releases/opt-b-c2-v2/c2-g5/`
-- OPT-B.C2 C2-PUB-G0 publication-readiness approval: `docs/releases/opt-b-c2-v2/publication-readiness/`
+- OPT-B.C2 publication-readiness approval: `docs/releases/opt-b-c2-v2/publication-readiness/` on PR `#72`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent, parameter source or rollback target.
 
@@ -81,7 +80,7 @@ The candidates remain `RELEASE_FROZEN / CANDIDATE / LOCAL_ONLY` until the approv
 
 Result: `PASS_PUBLICATION_READY_OPERATOR_APPROVED_EXACT_RELEASES_ONLY`.
 
-Workflow run `30213663356` passed the canonical repository suite, verified exact candidate artifact identities and every manifest-bound byte, confirmed exact OPT-A/C1 lineage and zero open QA issues, and established that both exact R2 prefixes were absent without writing.
+Workflow run `30213663356` passed the canonical repository suite, verified the exact final GitHub artifact identities, downloaded both candidates, verified every manifest-bound byte and current contract/schema/registry/parameter-pack binding, confirmed exact OPT-A/C1 lineage, confirmed zero open QA issues and established that both exact R2 prefixes were absent without writing.
 
 Review totals:
 
@@ -104,29 +103,11 @@ Authority after PASS:
 
 ## Research Operations Foundation
 
-### v0.1
-
 RO-G3 result: `PASS`.
 
 `OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1` remains `ACTIVE_RESEARCH_OPERATIONS_LOCAL` with append-only records, audit, research CLI, artifact catalogue, no-mutation QA, deterministic read model and local read-only console authority.
 
-### v0.2
-
-RO2-G1 result: `PASS_LOCAL_REPLACEABLE_DERIVED_INDEX`.
-
-Accepted bounded local capabilities:
-
-- deterministic Discovery and Development role-workspace indexes;
-- deterministic observation and observation-family indexes;
-- stable logical fixture index SHA-256 `dcb88c5f9c9fc0d4dbd12ac6a293607a1067fc11cfd9f19f72c4f497bd0da697`;
-- Validation aggregate metadata projection only;
-- Validation denial before path, object or row resolution;
-- fail-closed unknown-role and conflicting-duplicate handling;
-- no runtime writes.
-
-Verification passed through 5 focused tests, two independent deterministic fixture builds and the 70-test full repository suite. The accepted index is replaceable and does not outrank its source releases or manifests. Quality, lineage, replay and release-difference implementation have not begun.
-
-RO2-G1 does not change the separately approved C2 publication-readiness state. It neither executes the R2 write nor grants a C2 selector or activation.
+Research Operations Foundation v0.2 has `RO2-G0 PASS_DESIGN_FREEZE`. It remains design canon only; RO2-WP1 runtime implementation has not begun. The RO2-G0 packet records the C2-G4 baseline at its freeze point and does not prevent later bounded C2 candidate or publication gates.
 
 ## Research Console v0.3
 
@@ -144,7 +125,7 @@ The unified shell, context-preserving navigation, Overview workspace and seven-d
 | OPT-B.C1 v2 | `B1_G5_PASS / REMOTE_VERIFIED / SHADOW` | `SHADOW` |
 | OPT-B.C2 v2 | `C2_PUB_G0_PASS / PUBLICATION_AUTHORISED_NOT_EXECUTED / NO_C2_AUTHORITY` | `NONE` |
 | Research Operations v0.1 | `RO_G3_PASS / ACTIVE_RESEARCH_OPERATIONS_LOCAL` | Not applicable |
-| Research Operations v0.2 | `RO2_G1_PASS / LOCAL_REPLACEABLE_DERIVED_INDEX` | Not applicable |
+| Research Operations v0.2 | `RO2_G0_PASS / DESIGN_CANON_ONLY` | Not applicable |
 | Research Console v0.3 | `RC_G2_PASS / OVERVIEW_LOCAL_READ_ONLY / WP3_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
@@ -152,17 +133,16 @@ The unified shell, context-preserving navigation, Overview workspace and seven-d
 ## Retained authority boundaries
 
 - Validation consumption remains `LOCKED_UNCONSUMED`.
-- C2 publication is approved only for the two exact frozen releases and has not been executed.
 - C2 selector and activation authority remain absent.
+- No C2 remote bytes have been written by the readiness review.
 - C2E, C2.5, C3 and new OPT-C/OPT-D authority remain absent.
 - Probability, exposure, trading, execution and autonomous-agent authority remain `NONE`.
-- Direct UI or RO2 writes to Git, R2, releases, selectors, thresholds or the primary branch remain denied.
-- RO2-G1 grants only bounded local replaceable derived-index authority.
+- Direct UI writes to Git, R2 or the primary branch remain denied.
+- RO2-G0 grants design records and validators only; no RO2 runtime package has begun.
 
 ## Next boundaries
 
-1. Merge PR `#71` after final CI confirms RO2-G1 against the latest integrated main tip.
-2. Begin `RO2-WP2` only under a separate operator instruction.
-3. Execute exact C2 Discovery and Development R2 publication using artifacts `8634803012` and `8634803579`, payload-first and manifest-last.
-4. Perform full remote byte readback and commit the remote-verification receipt; stop with C2 selector and activation at `NONE`.
-5. Only after remote verification, conduct a separate selector, B-STATE retirement and rollback-to-C1-only activation review.
+1. Review and merge PR `#72` so the publication-readiness workflow, exact approval and gate records become part of `main`.
+2. Execute exact C2 Discovery and Development R2 publication using artifacts `8634803012` and `8634803579`, payload-first and manifest-last.
+3. Perform full remote byte readback and commit the remote-verification receipt; stop with C2 selector and activation at `NONE`.
+4. Only after remote verification, conduct a separate selector, B-STATE retirement and rollback-to-C1-only activation review.
