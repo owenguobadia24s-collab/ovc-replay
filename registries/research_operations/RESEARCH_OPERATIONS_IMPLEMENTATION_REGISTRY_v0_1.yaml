@@ -1,9 +1,12 @@
 schema: ovc-research-operations-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
 workstream: RO-WP1
-status: IMPLEMENTED_AWAITING_RO_G1_OPERATOR_REVIEW
+status: RO_G1_PASS_WP2_BUILD_AUTHORISED
 baseline_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
 ro_g0_merge_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
+ro_wp1_merge_commit: 8944da84dec4915c7d7748ae5dbb2a9e1d187d28
+ro_g1_decision: docs/releases/research-operations-foundation/ro-g1/RO_G1_OPERATOR_DECISION.md
+ro_g1_gate_packet: docs/releases/research-operations-foundation/ro-g1/RO_G1_GATE_PACKET.json
 package_namespace: ovc.research_operations
 source_path: src/ovc/research_operations
 schema_bundle: schemas/research_operations/research_records_v0_1.schema.json
@@ -12,10 +15,10 @@ lifecycle_registry: registries/research_operations/RESEARCH_RECORD_LIFECYCLE_REG
 fixture_pack: fixtures/research_operations/ro_wp1/FIXTURE_PACK.json
 authority:
   contracts_and_schemas: FROZEN
-  pure_validation_and_lifecycle_code: IMPLEMENTED
-  durable_record_write_service: DENIED_PENDING_RO_G1_AND_RO_WP2
-  cli: DENIED_PENDING_RO_G1
-  artifact_catalogue: DENIED_PENDING_RO_G1
+  pure_validation_and_lifecycle_code: REVIEWED_PASS
+  durable_record_write_service: DENIED_PENDING_RO_WP2_IMPLEMENTATION
+  cli: AUTHORISED_FOR_RO_WP2_BUILD_NOT_ACTIVE
+  artifact_catalogue: AUTHORISED_FOR_RO_WP2_BUILD_NOT_ACTIVE
   qa_runner: DENIED_PENDING_RO_G2
   read_model: DENIED_PENDING_RO_G2
   console: DENIED_PENDING_RO_G2
@@ -25,4 +28,5 @@ authority:
   exposure: NONE
   execution: NONE
   agent: NONE
-next_gate: RO-G1
+next_workstream: RO-WP2
+next_gate: RO-G2
