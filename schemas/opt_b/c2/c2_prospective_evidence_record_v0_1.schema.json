@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/c2/c2_prospective_evidence_record_v0_1",
+  "title": "C2 Prospective Evidence Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "record_id",
+    "research_line_id",
+    "record_class",
+    "evidence_status",
+    "instrument",
+    "canonical_clock",
+    "price_side",
+    "observation_start_utc",
+    "observation_end_utc",
+    "created_at_utc",
+    "author",
+    "active_release_id",
+    "active_manifest_id",
+    "active_manifest_sha256",
+    "source_object_ids",
+    "summary",
+    "prospective"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2-prospective-evidence-record/v0.1"},
+    "record_id": {"type": "string", "pattern": "^C2EV-[A-F0-9]{16}$"},
+    "research_line_id": {"const": "RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1"},
+    "record_class": {
+      "enum": [
+        "STATE_FIDELITY_REVIEW",
+        "BOUNDARY_CONFLICT_CASE",
+        "ANOMALY",
+        "INCIDENT",
+        "BOUNDED_RESEARCH_QUESTION"
+      ]
+    },
+    "evidence_status": {
+      "enum": [
+        "OBSERVED_UNREVIEWED",
+        "REVIEWED_ACCEPTED",
+        "REVIEWED_REJECTED",
+        "DUPLICATE_SUPERSEDED",
+        "INCIDENT_BLOCKED"
+      ]
+    },
+    "instrument": {"const": "GBPUSD"},
+    "canonical_clock": {"enum": ["15M", "2H_A_L"]},
+    "price_side": {"enum": ["BID", "ASK"]},
+    "observation_start_utc": {"type": "string", "format": "date-time"},
+    "observation_end_utc": {"type": "string", "format": "date-time"},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "author": {"type": "string", "minLength": 1},
+    "active_release_id": {"const": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1"},
+    "active_manifest_id": {"const": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1"},
+    "active_manifest_sha256": {"const": "c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33"},
+    "source_object_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "summary": {"type": "string", "minLength": 1},
+    "prospective": {"const": true},
+    "context_references": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string"},
+      "default": []
+    },
+    "sequence_boundary_friction": {"type": "boolean", "default": false},
+    "c2e_authority": {"const": "NONE"},
+    "probability_authority": {"const": "NONE"},
+    "exposure_authority": {"const": "NONE"},
+    "trading_authority": {"const": "NONE"},
+    "execution_authority": {"const": "NONE"}
+  }
+}
