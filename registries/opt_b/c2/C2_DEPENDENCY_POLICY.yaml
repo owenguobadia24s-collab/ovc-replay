@@ -1,0 +1,24 @@
+schema: ovc-opt-b-c2-dependency-policy/v1
+policy_id: C2.DEPENDENCIES.v0.1
+status: FROZEN_WP1
+allow:
+  - exact active OPT-A v2 contracts, schemas and role registries
+  - exact active C1 v2 Discovery and Development releases
+  - C1 formula, null, quality and handoff registries
+  - synthetic handoff fixtures
+  - repository QA and authority records
+deny:
+  - C1 Validation records
+  - OPT-A v1 and missing historical payloads
+  - B-STATE-0.3b runtime imports or parentage
+  - legacy/quarantine/**
+  - C2E
+  - C2.5
+  - C3
+  - OPT-C
+  - OPT-D
+  - outcome, probability, exposure, trading or execution packages
+one_way_dependency: true
+reverse_write_to_c1: PROHIBITED
+hidden_best_level_selection: PROHIBITED
+future_data_access: PROHIBITED
