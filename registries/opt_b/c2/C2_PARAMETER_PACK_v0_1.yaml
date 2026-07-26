@@ -1,0 +1,31 @@
+schema: ovc-opt-b-c2-parameter-pack/v1
+parameter_pack_id: C2.PARAMS.GBPUSD.DISCOVERY.v0.1
+status: FROZEN_IMMUTABLE_WP2
+instrument: GBPUSD
+clocks:
+  15M:
+    swing_left_bars: 4
+    swing_right_bars: 4
+    range_window_bars: 32
+    motion_window_bars: 8
+    organisation_window_bars: 16
+    proximity_fraction_of_local_range: '0.10'
+    crossing_epsilon_fraction: '0.02'
+    stale_after_bars: 8
+  2H_A_L:
+    swing_left_bars: 3
+    swing_right_bars: 3
+    range_window_bars: 24
+    motion_window_bars: 6
+    organisation_window_bars: 12
+    proximity_fraction_of_local_range: '0.08'
+    crossing_epsilon_fraction: '0.015'
+    stale_after_bars: 4
+projection_boundaries:
+  location: ['-1.0','0.0','0.5','1.0','2.0']
+  motion: ['-0.75','-0.15','0.15','0.75']
+  organisation: ['0.25','0.50','0.75']
+runtime_editing: PROHIBITED
+serializer_defaults: PROHIBITED
+code_constants_for_thresholds: PROHIBITED
+semantic_change_requires_new_version_and_full_replay: true
