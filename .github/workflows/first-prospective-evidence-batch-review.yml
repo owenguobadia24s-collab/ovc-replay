@@ -1,0 +1,64 @@
+name: FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW
+
+on:
+  pull_request:
+    paths:
+      - "contracts/opt_b/c2/C2_FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_CONTRACT_v0_1.md"
+      - "docs/releases/opt-b-c2-v2/first-prospective-batch/**"
+      - "registries/research/C2_FIRST_PROSPECTIVE_BATCH_REVIEW.yaml"
+      - "scripts/opt_b/review_first_prospective_evidence_batch.py"
+      - "tests/opt_b/c2/test_first_prospective_evidence_batch_review.py"
+      - ".github/workflows/first-prospective-evidence-batch-review.yml"
+  workflow_dispatch:
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run canonical repository tests
+        run: python -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Run focused first-batch review tests
+        run: python -m unittest tests.opt_b.c2.test_first_prospective_evidence_batch_review
+
+      - name: Execute current first-batch review
+        run: |
+          python scripts/opt_b/review_first_prospective_evidence_batch.py --output /tmp/first-batch-review.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path('/tmp/first-batch-review.json').read_text(encoding='utf-8'))
+          assert result['decision'] == 'DEFER_NO_REAL_PROSPECTIVE_BATCH', result
+          assert result['record_count'] == 0, result
+          assert result['append_target_state'] in {'ABSENT', 'EMPTY'}, result
+
+          packet = json.loads(Path('docs/releases/opt-b-c2-v2/first-prospective-batch/FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_PACKET.json').read_text(encoding='utf-8'))
+          assert packet['decision'] == result['decision']
+          assert packet['batch']['record_count'] == 0
+          assert packet['next_boundary'] == 'CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH'
+          PY
+
+      - name: Enforce retained authority
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          packet = json.loads(Path('docs/releases/opt-b-c2-v2/first-prospective-batch/FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_PACKET.json').read_text(encoding='utf-8'))
+          retained = packet['retained_authority']
+          assert retained['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          for field in ('c2e_authority', 'c2_5_authority', 'c3_authority', 'opt_c_authority', 'opt_d_authority', 'probability_authority', 'exposure_authority', 'trading_authority', 'execution_authority'):
+              assert retained[field] == 'NONE', (field, retained[field])
+          assert retained['direct_r2_write'] == 'DENIED'
+          assert retained['selector_mutation'] == 'DENIED'
+          assert retained['release_mutation'] == 'DENIED'
+          PY
