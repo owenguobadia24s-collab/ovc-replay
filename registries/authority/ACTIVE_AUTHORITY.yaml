@@ -1,7 +1,7 @@
 schema: ovc-active-authority/v1
 repository: owenguobadia24s-collab/ovc-replay
 snapshot_date: 2026-07-26
-court_record_tip: e2935f0c607aa25c565da59c08e15263176213d6
+court_record_tip: dc05204becb2806fc10cab024d85ddab235326a7
 court_record_tip_before_recovery: 015e57d862f740c4a0e722e611e0dbeadfaad209
 reset_baseline: c0ad7ba22618babdde731e2a338f68f688d4210c
 state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED
@@ -14,10 +14,6 @@ records:
   c1_b1_g5_gate_packet: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_GATE_PACKET.json
   ro_g3_decision: docs/releases/research-operations-foundation/ro-g3/RO_G3_OPERATOR_DECISION.md
   ro_g3_gate_packet: docs/releases/research-operations-foundation/ro-g3/RO_G3_GATE_PACKET.json
-  ro2_g0_decision: docs/releases/research-operations-foundation-v0-2/ro2-g0/RO2_G0_OPERATOR_REVIEW.md
-  ro2_g0_gate_packet: docs/releases/research-operations-foundation-v0-2/ro2-g0/RO2_G0_GATE_PACKET.json
-  ro2_g1_decision: docs/releases/research-operations-foundation-v0-2/ro2-g1/RO2_G1_OPERATOR_DECISION.md
-  ro2_g1_gate_packet: docs/releases/research-operations-foundation-v0-2/ro2-g1/RO2_G1_GATE_PACKET.json
   rc_g2_v0_3_decision: docs/releases/research-console-v0-3/rc-g2/RC_G2_OPERATOR_DECISION.md
   rc_g2_v0_3_gate_packet: docs/releases/research-console-v0-3/rc-g2/RC_G2_GATE_PACKET.json
   c2_g3r_decision: docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_OPERATOR_DECISION.md
@@ -28,6 +24,8 @@ records:
   c2_g5_gate_packet: docs/releases/opt-b-c2-v2/c2-g5/C2_G5_GATE_PACKET.json
   c2_publication_readiness_decision: docs/releases/opt-b-c2-v2/publication-readiness/C2_PUBLICATION_READINESS_OPERATOR_DECISION.md
   c2_publication_readiness_gate_packet: docs/releases/opt-b-c2-v2/publication-readiness/C2_PUBLICATION_READINESS_GATE_PACKET.json
+  ro2_g0_decision: docs/releases/research-operations-foundation-v0-2/ro2-g0/RO2_G0_OPERATOR_REVIEW.md
+  ro2_g0_gate_packet: docs/releases/research-operations-foundation-v0-2/ro2-g0/RO2_G0_GATE_PACKET.json
 
 selectors:
   opt_a: ACTIVE
@@ -199,32 +197,21 @@ authorities:
     active: true
 
   research_operations_v0_2_design:
-    state: RO2_G1_PASS_LOCAL_REPLACEABLE_DERIVED_INDEX
+    state: RO2_G0_PASS_DESIGN_FREEZE
     programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2
-    ro2_g0: PASS_DESIGN_FREEZE
-    ro2_wp1: ACCEPTED_BOUNDED_LOCAL_OPERATION
-    ro2_g1: PASS
-    workspace_index: ACTIVE_BOUNDED_LOCAL_DERIVED
-    observation_index: ACTIVE_BOUNDED_LOCAL_DERIVED
-    observation_family_index: ACTIVE_BOUNDED_LOCAL_DERIVED
-    logical_fixture_index_sha256: dcb88c5f9c9fc0d4dbd12ac6a293607a1067fc11cfd9f19f72c4f497bd0da697
-    validation_projection: METADATA_ONLY
-    validation_guard: DENY_BEFORE_PATH_RESOLUTION
-    runtime_writes: NONE
-    authority_delta: LOCAL_REPLACEABLE_DERIVED_READ_INDEX_ONLY
-    next_workstream: RO2_WP2_REQUIRES_SEPARATE_OPERATOR_INSTRUCTION
+    runtime_implementation: NOT_STARTED
+    authority_delta: DESIGN_CANON_ONLY
     validation_consumption: LOCKED_UNCONSUMED
     c2_candidate_release_at_design_freeze: NONE
     c2_publication_at_design_freeze: NONE
-    current_c2_candidate_context: FROZEN_LOCAL_ONLY_PUBLICATION_APPROVED
-    current_c2_publication_authority: AUTHORISED_EXACT_RELEASES_ONLY_NOT_EXECUTED
     c2_selector: NONE
     c2_activation: NONE
+    current_c2_candidate_context: FROZEN_LOCAL_ONLY_PUBLICATION_APPROVED
     market_authority: NONE
     probability_authority: NONE
     exposure_authority: NONE
     execution_authority: NONE
-    active: true
+    active: false
 
   research_console_v0_3:
     state: RC_G2_PASS_OVERVIEW_LOCAL_READ_ONLY_RC_WP3_AUTHORISED
