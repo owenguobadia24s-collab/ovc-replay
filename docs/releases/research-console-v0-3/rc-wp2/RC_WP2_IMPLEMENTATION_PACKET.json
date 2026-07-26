@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-research-console-rc-wp2-v0-3-implementation-packet/v1",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "work_package": "RC-WP2-v0.3",
+  "name": "Overview workspace and ambient health",
+  "baseline_commit": "3bd4ed79f43c6f288248f10b99e9dfa04a9f68a2",
+  "branch": "build/research-console-v0-3-overview-health",
+  "authority": "CANDIDATE_PROJECTION_IMPLEMENTATION_ONLY",
+  "implemented": {
+    "projection_core": "src/ovc/research_operations/console_overview.py",
+    "candidate_builder": "src/ovc/research_operations/console_overview_candidate.py",
+    "builder_command": "scripts/build_research_console_overview.py",
+    "projection_schema": "schemas/research_operations/research_console_overview_projection_v0_3.schema.json",
+    "projection_registry": "registries/research_operations/RESEARCH_CONSOLE_OVERVIEW_PROJECTION_REGISTRY_v0_3.yaml",
+    "source_fixture": "fixtures/research_operations/research_console_v0_3/RC_WP2_OVERVIEW_SOURCE_READ_MODEL.json"
+  },
+  "projection_contract": {
+    "schema": "ovc-research-console-overview-projection/v0.3",
+    "health_domains": ["DATA", "READ_MODEL", "ARTIFACTS", "QA", "RESEARCH_RECORDS", "REPOSITORY", "SEMANTIC"],
+    "overview_summaries": ["METRICS", "RELEASES", "GATES", "SESSIONS", "ATTENTION"],
+    "deterministic": true,
+    "replaceable": true,
+    "source_bound": true,
+    "active_console_consumption": false
+  },
+  "checks": [
+    {"check_id": "RC-WP2-01", "name": "deterministic Overview projection builder implemented", "status": "PASS"},
+    {"check_id": "RC-WP2-02", "name": "seven required ambient-health domains implemented in stable order", "status": "PASS"},
+    {"check_id": "RC-WP2-03", "name": "no-signal health cannot become PASS", "status": "PASS"},
+    {"check_id": "RC-WP2-04", "name": "research-record health remains NOT_EVALUATED with zero progress without assertions", "status": "PASS"},
+    {"check_id": "RC-WP2-05", "name": "unknown explicit health status fails closed to BLOCK", "status": "PASS"},
+    {"check_id": "RC-WP2-06", "name": "lifecycle vocabulary cannot become a false node-level health blocker", "status": "PASS"},
+    {"check_id": "RC-WP2-07", "name": "release gate session and attention summaries retain source references", "status": "PASS"},
+    {"check_id": "RC-WP2-08", "name": "candidate builder writes canonical JSON outside authoritative sources", "status": "PASS"},
+    {"check_id": "RC-WP2-09", "name": "existing shell remains fixture-only and does not consume the candidate projection", "status": "PASS"},
+    {"check_id": "RC-WP2-10", "name": "no live Research write or mutating authority introduced", "status": "PASS"}
+  ],
+  "denied_authority": {
+    "active_live_projection": "DENIED_PENDING_RC_G2",
+    "live_research_surface": "DENIED_PENDING_RC_G3",
+    "research_write": "DENIED_PENDING_SEPARATE_GATE",
+    "repository_mutation": "NONE",
+    "selector_mutation": "NONE",
+    "threshold_mutation": "NONE",
+    "release_activation": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE",
+    "agent": "NONE",
+    "remote_deployment": "DENIED"
+  },
+  "blocking_issues": 0,
+  "disposition": "COMPLETE_RC_G2_V0_3_REVIEW_READY",
+  "next_gate": "RC-G2-v0.3_OVERVIEW_AND_AMBIENT_HEALTH_ACCEPTANCE"
+}
