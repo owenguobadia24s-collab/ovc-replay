@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-opt-b-c1-to-c2-handoff-gate/v1",
+  "gate_id": "C1-C2-HANDOFF-ACTIVE",
+  "decision": "PASS_C1_ACTIVE_C2_BUILD_AND_REPLAY_SCOPE_AUTHORISED",
+  "operator_decision_id": "C1-C2-HANDOFF-ACTIVE-2026-07-26",
+  "source_gates": ["B1-G3", "WP5", "B1-G5"],
+  "checks": [
+    {"check_id":"C1-C2-01","name":"Exact C1 release and manifest identities","status":"PASS"},
+    {"check_id":"C1-C2-02","name":"Exact parent OPT-A identities","status":"PASS"},
+    {"check_id":"C1-C2-03","name":"C1 schema and 18-formula binding","status":"PASS"},
+    {"check_id":"C1-C2-04","name":"First-valid chronology","status":"PASS"},
+    {"check_id":"C1-C2-05","name":"Explicit null and quality states","status":"PASS"},
+    {"check_id":"C1-C2-06","name":"Role clock and price-side alignment","status":"PASS"},
+    {"check_id":"C1-C2-07","name":"No reverse write or repair","status":"PASS"},
+    {"check_id":"C1-C2-08","name":"Validation exclusion","status":"PASS"},
+    {"check_id":"C1-C2-09","name":"Atomic selector rollback","status":"PASS"}
+  ],
+  "selectors": {
+    "DISCOVERY": "ACTIVE_DISCOVERY",
+    "DEVELOPMENT": "ACTIVE_DEVELOPMENT",
+    "VALIDATION": "NONE"
+  },
+  "c2_scope": {
+    "consumption": "AUTHORISED_FOR_C2_BUILD_AND_REPLAY_SCOPE_PENDING_C2_GATE",
+    "roles": ["DISCOVERY", "DEVELOPMENT"],
+    "clocks": ["15M", "2H_A_L"],
+    "price_sides": ["BID", "ASK"],
+    "selector": "NONE",
+    "activation": "DENIED_PENDING_C2_GATES"
+  },
+  "validation_consumption": "LOCKED_UNCONSUMED",
+  "probability": "NONE",
+  "exposure": "NONE",
+  "trading": "NONE",
+  "execution": "NONE",
+  "rollback": "RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE",
+  "blocking_issues": 0
+}
