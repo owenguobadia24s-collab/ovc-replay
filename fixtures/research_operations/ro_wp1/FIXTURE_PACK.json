@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-research-operations-ro-wp1-fixture-pack/v1",
+  "status": "SYNTHETIC_NON_AUTHORITATIVE",
+  "market_authority": "NONE",
+  "discovery_seed_eligibility": "DENIED",
+  "fixtures": {
+    "VALID_COMPLETE": {
+      "record_type": "OBSERVATION_SNAPSHOT",
+      "schema_version": "0.1",
+      "lifecycle_state": "DRAFT",
+      "created_at": "2023-06-15T10:00:00Z",
+      "frozen_at": null,
+      "operator_id": "fixture-operator",
+      "admissible_cutoff": "2023-06-15T10:00:00Z",
+      "source_release_refs": [{"release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2", "first_valid_time": "2023-06-15T10:00:00Z"}],
+      "artifact_refs": [],
+      "missingness": [],
+      "lineage": {"parent": [], "derived_from": [], "supersedes": null, "adjudicates": []},
+      "authority_state": "DRAFT",
+      "reproducibility_state": "REPRODUCIBLE",
+      "payload": {"session_id": "fixture-session", "visible_facts": {"clock": "2H_A_L", "side": "BID"}, "unknowns": ["later_path"], "source_record_refs": ["opt-a:fixture-bar"]},
+      "content_sha256": null
+    },
+    "VALID_NO_MODEL": {"inherits": "VALID_COMPLETE", "model_refs": "ABSENT_AND_VALID"},
+    "FUTURE_LEAKAGE": {"inherits": "VALID_COMPLETE", "source_first_valid_time": "2023-06-15T10:00:01Z", "expected_error": "POST_CUTOFF_REFERENCE"},
+    "FROZEN_MUTATION": {"inherits": "VALID_COMPLETE", "mutation": "payload.visible_facts.side", "expected_error": "FROZEN_MUTATION"},
+    "MISSING_ARTIFACT": {"artifact_refs": [{"artifact_id": "ART.MISSING", "required": true, "availability": "MISSING"}], "expected_state": "NOT_REPRODUCIBLE"},
+    "PARTIAL_ARTIFACTS": {"artifact_refs": [{"artifact_id": "ART.OK", "required": true, "availability": "VERIFIED"}, {"artifact_id": "ART.MISSING", "required": true, "availability": "MISSING"}], "expected_state": "PARTIALLY_AVAILABLE"},
+    "LOCKED_VALIDATION": {"source_release_ref": {"release_id": "OPT-A.GBPUSD.VALIDATION.2025.v2", "validation_access_state": "LOCKED_UNCONSUMED", "payload_access": "DENIED"}, "payload_locator": "PROHIBITED"},
+    "CENSORED_PATH": {"record_type": "REALIZATION_SNAPSHOT", "coverage": "PARTIAL", "censoring_state": "HORIZON_UNAVAILABLE"},
+    "DUPLICATE_ID": {"operation": "ADD_SAME_DETERMINISTIC_ID_TWICE", "expected_error": "DUPLICATE_RECORD_ID"}
+  }
+}

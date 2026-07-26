@@ -1,0 +1,14 @@
+schema: ovc-research-record-lifecycle-registry/v1
+status: FROZEN_AFTER_RO_WP1
+states: [DRAFT, FROZEN, ADJUDICATED, SUPERSEDED, WITHDRAWN]
+transitions:
+  DRAFT: [FROZEN, WITHDRAWN]
+  FROZEN: [ADJUDICATED, SUPERSEDED]
+  ADJUDICATED: [SUPERSEDED]
+  SUPERSEDED: []
+  WITHDRAWN: []
+immutable_states: [FROZEN, ADJUDICATED, SUPERSEDED, WITHDRAWN]
+mutation_policy: APPEND_ONLY_SUPERSESSION
+identity_reuse: DENIED
+record_deletion: DENIED
+validation_payload_access: DENIED_WHILE_LOCKED_UNCONSUMED
