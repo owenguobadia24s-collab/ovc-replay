@@ -1,0 +1,308 @@
+name: OPT-B.C1 WP5 R2 publication and full verification
+
+on:
+  push:
+    branches:
+      - build/opt-b-c1-v2-wp5-r2-publication
+    paths:
+      - .github/workflows/opt-b-c1-wp5-r2-publication.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: opt-b-c1-wp5-r2-publication
+  cancel-in-progress: false
+
+jobs:
+  publish-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+      WP4F_RUN_ID: '30187276514'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run repository tests before publication
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > unit-tests-pre-publication.log 2>&1
+          status=$?
+          tail -n 180 unit-tests-pre-publication.log
+          exit $status
+
+      - name: Install and validate rclone
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo "::error::Missing R2 access-key secret"; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo "::error::Missing R2 secret-key secret"; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
+          rclone lsf --s3-no-check-bucket ovc_r2:ovc-evidence >/dev/null
+
+      - name: Download exact WP4F Discovery release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30187276514
+          name: c1-opt-b-c1-gbpusd-discovery-2021-2023-v1-frozen
+          path: wp5/discovery
+
+      - name: Download exact WP4F Development release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30187276514
+          name: c1-opt-b-c1-gbpusd-development-2024-v1-frozen
+          path: wp5/development
+
+      - name: Download exact WP4F freeze report
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30187276514
+          name: c1-wp4f-freeze-verification-report
+          path: wp5/report
+
+      - name: Verify exact frozen source bytes and collision-free targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+
+          expected = {
+              'discovery': ('OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1', 'MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1', '6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2'),
+              'development': ('OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1', 'MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1', 'ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017'),
+          }
+          report = json.loads(Path('wp5/report/WP4F_FREEZE_REPORT.json').read_text())
+          assert report['status'] == 'PASS'
+          for role, (release_id, manifest_id, manifest_sha) in expected.items():
+              root = Path('wp5') / role
+              manifest_path = root / 'manifest.json'
+              actual_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+              assert actual_sha == manifest_sha, (role, actual_sha)
+              manifest = json.loads(manifest_path.read_text())
+              assert manifest['release_id'] == release_id
+              assert manifest['manifest_id'] == manifest_id
+              for item in manifest['files']:
+                  path = root / item['path']
+                  assert path.is_file(), path
+                  assert path.stat().st_size == item['size_bytes'], path
+                  assert hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256'], path
+          PY
+          : > wp5/remote-collision-preflight.txt
+          while IFS='|' read -r release manifest; do
+            prefix="ovc-evidence/canonical/releases/${release}/${manifest}/"
+            listing=$(rclone lsf --recursive --s3-no-check-bucket "ovc_r2:${prefix}" 2>/dev/null || true)
+            if [ -n "$listing" ]; then
+              echo "::error::Remote collision under ${prefix}"
+              printf '%s\n' "$listing"
+              exit 1
+            fi
+            printf '%s ABSENT\n' "$prefix" | tee -a wp5/remote-collision-preflight.txt
+          done <<'EOF'
+          OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1|MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
+          OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1|MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
+          EOF
+
+      - name: Publish payloads first and manifests last
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+
+          bucket = 'ovc_r2:ovc-evidence/canonical/releases'
+          for role in ('discovery', 'development'):
+              root = Path('wp5') / role
+              manifest = json.loads((root / 'manifest.json').read_text())
+              prefix = f"{bucket}/{manifest['release_id']}/{manifest['manifest_id']}"
+              for item in manifest['files']:
+                  source = root / item['path']
+                  target = f"{prefix}/files/{item['path']}"
+                  subprocess.run(['rclone', 'copyto', '--immutable', '--s3-no-check-bucket', str(source), target], check=True)
+              subprocess.run(['rclone', 'copyto', '--immutable', '--s3-no-check-bucket', str(root / 'manifest.json'), f'{prefix}/manifest.json'], check=True)
+          PY
+
+      - name: Stream and hash every remote byte
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wp5/output
+          python - <<'PY'
+          import hashlib, json, os, subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          bucket = 'ovc_r2:ovc-evidence/canonical/releases'
+          releases = []
+          total_objects = 0
+          total_bytes = 0
+          for role in ('discovery', 'development'):
+              root = Path('wp5') / role
+              manifest_path = root / 'manifest.json'
+              manifest = json.loads(manifest_path.read_text())
+              prefix = f"{bucket}/{manifest['release_id']}/{manifest['manifest_id']}"
+              verified = []
+              for item in manifest['files']:
+                  remote = f"{prefix}/files/{item['path']}"
+                  data = subprocess.check_output(['rclone', 'cat', '--s3-no-check-bucket', remote])
+                  actual = hashlib.sha256(data).hexdigest()
+                  if len(data) != item['size_bytes'] or actual != item['sha256']:
+                      raise SystemExit(f'remote mismatch: {remote}')
+                  verified.append({'key': remote.split(':', 1)[1], 'size_bytes': len(data), 'sha256': actual})
+                  total_objects += 1
+                  total_bytes += len(data)
+              manifest_remote = f'{prefix}/manifest.json'
+              manifest_data = subprocess.check_output(['rclone', 'cat', '--s3-no-check-bucket', manifest_remote])
+              manifest_sha = hashlib.sha256(manifest_data).hexdigest()
+              local_manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+              if manifest_data != manifest_path.read_bytes() or manifest_sha != local_manifest_sha:
+                  raise SystemExit(f'remote manifest mismatch: {manifest_remote}')
+              verified.append({'key': manifest_remote.split(':', 1)[1], 'size_bytes': len(manifest_data), 'sha256': manifest_sha, 'completion_marker': True})
+              total_objects += 1
+              total_bytes += len(manifest_data)
+              releases.append({
+                  'role': role.upper(),
+                  'release_id': manifest['release_id'],
+                  'manifest_id': manifest['manifest_id'],
+                  'manifest_sha256': manifest_sha,
+                  'payload_file_count': len(manifest['files']),
+                  'remote_object_count': len(verified),
+                  'payload_bytes': manifest['payload_bytes'],
+                  'remote_verified': True,
+                  'objects': verified,
+              })
+          receipt = {
+              'schema': 'ovc-opt-b-c1-wp5-remote-verification/v1',
+              'status': 'PASS_FULL_REMOTE_BYTE_VERIFICATION',
+              'workflow_run_id': os.environ['GITHUB_RUN_ID'],
+              'workflow_commit': os.environ['GITHUB_SHA'],
+              'source_wp4f_run_id': int(os.environ['WP4F_RUN_ID']),
+              'verified_at': datetime.now(timezone.utc).isoformat(),
+              'bucket': 'ovc-evidence',
+              'prefix': 'canonical/releases/',
+              'publication_order': 'PAYLOAD_FIRST_MANIFEST_LAST',
+              'release_count': len(releases),
+              'remote_object_count': total_objects,
+              'remote_verified_bytes_including_manifests': total_bytes,
+              'releases': releases,
+              'selector_activation': 'NONE',
+              'c2_consumption': 'DENIED_PENDING_SEPARATE_REVIEW',
+              'validation_consumption': 'LOCKED_UNCONSUMED',
+          }
+          out = Path('wp5/output/WP5_REMOTE_VERIFICATION_RECEIPT.json')
+          out.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          PY
+          grep -F 'PASS_FULL_REMOTE_BYTE_VERIFICATION' wp5/output/WP5_REMOTE_VERIFICATION_RECEIPT.json
+
+      - name: Write repository publication packet and update registries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          receipt = json.loads(Path('wp5/output/WP5_REMOTE_VERIFICATION_RECEIPT.json').read_text())
+          packet_dir = Path('docs/releases/opt-b-c1-v2/wp5')
+          packet_dir.mkdir(parents=True, exist_ok=True)
+          (packet_dir / 'WP5_REMOTE_VERIFICATION_RECEIPT.json').write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          lines = [
+              '# OPT-B.C1 v2 WP5 — R2 publication and full remote verification',
+              '',
+              '**Decision:** PASS — the exact WP4F Discovery and Development C1 releases were published immutably to R2 and every remote byte was read back and SHA-256 verified.',
+              '',
+              f"- Workflow run: `{receipt['workflow_run_id']}`",
+              f"- Source WP4F run: `{receipt['source_wp4f_run_id']}`",
+              f"- Remote objects verified: `{receipt['remote_object_count']}`",
+              f"- Remote bytes verified, including manifests: `{receipt['remote_verified_bytes_including_manifests']}`",
+              '- Publication order: payloads first, manifest completion marker last',
+              '- C1 selector: `NONE`',
+              '- C2 consumption: `DENIED_PENDING_SEPARATE_REVIEW`',
+              '- Validation consumption: `LOCKED_UNCONSUMED`',
+              '',
+              '## Published releases',
+              '',
+              '| Role | Release | Manifest | Manifest SHA-256 | Remote objects |',
+              '|---|---|---|---|---:|',
+          ]
+          for r in receipt['releases']:
+              lines.append(f"| {r['role']} | `{r['release_id']}` | `{r['manifest_id']}` | `{r['manifest_sha256']}` | {r['remote_object_count']} |")
+          lines += ['', 'Publication does not activate a selector. B1-G4 publication review and any later shadow-selector decision remain separate authority changes.', '']
+          (packet_dir / 'WP5_PUBLICATION_PACKET.md').write_text('\n'.join(lines))
+
+          reg = Path('registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml')
+          text = reg.read_text()
+          text = text.replace('status: B1_G2_PASS_PUBLICATION_READY', 'status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW', 1)
+          text = text.replace('availability_state: LOCAL_VERIFIED_TRANSIENT_ARTIFACT', 'availability_state: REMOTE_VERIFIED', 2)
+          text = text.replace('publication_status: NOT_ATTEMPTED', 'publication_status: PUBLISHED_REMOTE_VERIFIED', 2)
+          text = text.replace('r2_publication_authority: AUTHORISED_EXACT_RELEASE_ONLY_PENDING_WP5', 'r2_publication_authority: COMPLETE_WP5_REMOTE_VERIFIED', 2)
+          text = text.replace('r2_publication: AUTHORISED_EXACT_DISCOVERY_AND_DEVELOPMENT_RELEASES_PENDING_WP5', 'r2_publication: COMPLETE_WP5_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW', 1)
+          reg.write_text(text)
+
+          authority = Path('registries/authority/ACTIVE_AUTHORITY.yaml')
+          text = authority.read_text()
+          text = text.replace('state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR', 'state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR', 1)
+          text = text.replace('state: B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED', 'state: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW', 1)
+          text = text.replace('availability_state: LOCAL_VERIFIED_TRANSIENT_ARTIFACT', 'availability_state: REMOTE_VERIFIED', 1)
+          text = text.replace('r2_publication: AUTHORISED_EXACT_RELEASES_ONLY_PENDING_WP5_EXECUTION', 'r2_publication: COMPLETE_WP5_FULL_REMOTE_VERIFICATION', 1)
+          text = text.replace('    selector: NONE', '    wp5_workflow_run_id: ' + receipt['workflow_run_id'] + '\n    wp5_remote_verification_receipt: docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json\n    selector: NONE', 1)
+          authority.write_text(text)
+          PY
+
+      - name: Run repository tests after packet generation
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > unit-tests-post-publication.log 2>&1
+          status=$?
+          tail -n 180 unit-tests-post-publication.log
+          exit $status
+
+      - name: Commit publication record to WP5 branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/releases/opt-b-c1-v2/wp5 registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml registries/authority/ACTIVE_AUTHORITY.yaml
+          git diff --cached --check
+          git commit -m 'OPT-B.C1 v2 WP5: publish C1 releases and record full remote verification'
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+      - name: Upload operator receipt artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: c1-wp5-r2-publication-and-verification
+          path: |
+            wp5/output/WP5_REMOTE_VERIFICATION_RECEIPT.json
+            wp5/remote-collision-preflight.txt
+            unit-tests-pre-publication.log
+            unit-tests-post-publication.log
+          retention-days: 90
