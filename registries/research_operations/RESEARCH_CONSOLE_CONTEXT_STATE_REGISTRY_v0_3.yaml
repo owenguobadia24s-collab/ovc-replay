@@ -1,0 +1,53 @@
+schema: ovc-research-console-context-state-registry/v0.3
+status: FROZEN_BY_RC_A0_PENDING_RC_A1_REVIEW
+global_context:
+  required_fields:
+    - repository
+    - branch
+    - source_commit
+    - read_model_sha256
+    - instrument
+    - release_role
+    - release_id
+    - clock
+    - price_side
+    - selected_time
+    - cutoff_mode
+    - freshness
+  optional_fields:
+    - selected_object_id
+    - selected_case_id
+    - selected_session_id
+    - selected_gate_id
+    - selected_release_id
+cutoff_modes:
+  PROSPECTIVE:
+    post_cutoff_access: DENIED
+    review_surface: HIDDEN
+  REVIEW:
+    post_cutoff_access: READ_ONLY_SEPARATE_SURFACE
+    review_surface: EXPLICITLY_LABELLED_POST_CUTOFF
+persistence:
+  workspace_navigation: PRESERVE_GLOBAL_CONTEXT
+  system_detail_navigation: PRESERVE_GLOBAL_CONTEXT
+  contextual_drawer_open_close: PRESERVE_GLOBAL_CONTEXT
+  command_palette_navigation: PRESERVE_GLOBAL_CONTEXT
+  read_model_change: REQUIRE_EXPLICIT_REBIND
+  release_change: REQUIRE_EXPLICIT_SELECTION
+  incompatible_field: SET_NOT_APPLICABLE_WITH_REASON
+workspace_local_state:
+  OVERVIEW: [summary_scope, activity_filter]
+  RESEARCH: [evidence_filter, replay_zoom, queue_filter]
+  SYSTEM: [system_section, object_filter, audit_filter]
+selection_law:
+  inferred_release_switch: PROHIBITED
+  inferred_clock_switch: PROHIBITED
+  inferred_side_switch: PROHIBITED
+  selected_object_must_resolve: true
+  stale_context_status: STALE
+  unresolved_context_status: BLOCK
+security_and_authority:
+  context_write_to_source_records: PROHIBITED
+  context_write_to_repository: PROHIBITED
+  context_write_to_selectors: PROHIBITED
+  context_write_to_thresholds: PROHIBITED
