@@ -3,14 +3,12 @@ repository: owenguobadia24s-collab/ovc-replay
 snapshot_date: 2026-07-26
 court_record_tip_before_reconciliation: fa11546a93f865c26d7cf99f5b5c60156bf50f9b
 reset_baseline: c0ad7ba22618babdde731e2a338f68f688d4210c
-r0_merge_commit: a9902c97e21131b1882b4c11ca3a2a79273e7c77
+state: OPT_A_ACTIVE_C1_SHADOW_RO_LOCAL_ACTIVE_C2_G4_BLOCKED
 
 records:
   opt_a_a2_g5: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
   c1_b1_g5_decision: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_OPERATOR_DECISION.md
   c1_b1_g5_gate_packet: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_GATE_PACKET.json
-  c1_b1_g5_comparison: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_COMPARISON_PACKET.json
-  c1_to_c2_handoff_validation: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_C1_TO_C2_HANDOFF_VALIDATION.json
   ro_g3_decision: docs/releases/research-operations-foundation/ro-g3/RO_G3_OPERATOR_DECISION.md
   ro_g3_gate_packet: docs/releases/research-operations-foundation/ro-g3/RO_G3_GATE_PACKET.json
   rc_g2_v0_3_decision: docs/releases/research-console-v0-3/rc-g2/RC_G2_OPERATOR_DECISION.md
@@ -19,8 +17,6 @@ records:
   c2_g3r_gate_packet: docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_GATE_PACKET.json
   c2_g4_decision: docs/releases/opt-b-c2-v2/wp5/WP5_OPERATOR_DECISION.md
   c2_g4_gate_packet: docs/releases/opt-b-c2-v2/wp5/WP5_GATE_PACKET.json
-
-state: OPT_A_ACTIVE_C1_SHADOW_RO_LOCAL_ACTIVE_C2_G4_BLOCKED
 
 selectors:
   opt_a: ACTIVE
@@ -32,33 +28,16 @@ selectors:
   opt_c: NONE
   opt_d: NONE
 
-prohibitions:
-  validation_consumption: LOCKED_UNCONSUMED
-  probability_authority: NONE
-  exposure_authority: NONE
-  trading_authority: NONE
-  execution_authority: NONE
-  autonomous_agent_authority: NONE
-  direct_ui_git_write: DENIED
-  direct_ui_r2_write: DENIED
-  direct_ui_primary_branch_write: DENIED
-
- authorities_placeholder: null
-
 authorities:
   evidence_store:
     state: ACTIVE_INFRASTRUCTURE
     lifecycle_state: REMOTE_VERIFIED
-    readiness_authority: READ_ONLY
-    upload_authority: EXACT_PUBLICATION_APPROVAL_REQUIRED
     market_authority: NONE
     active: true
 
   opt_a_v1:
     state: SUPERSEDED_UNPUBLISHED
     availability: MISSING
-    publication: NEVER_PUBLISHED
-    reproducibility: NOT_REPRODUCIBLE_MISSING_PAYLOAD
     parent_eligibility: DENIED
     selector_eligibility: DENIED
     rollback_target: DENIED
@@ -68,47 +47,31 @@ authorities:
     state: A2_G5_SELECTOR_SET_ACTIVE
     selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
     release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
-    selector_set_state: ACTIVE
-    release_lifecycle_state: REMOTE_VERIFIED
-    release_availability: REMOTE_VERIFIED
-    release_count: 3
-    published_release_count: 3
+    lifecycle_state: REMOTE_VERIFIED
     discovery_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
-    discovery_manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     discovery_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
     discovery_authority: ACTIVE_DISCOVERY
     development_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
-    development_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     development_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
     development_authority: ACTIVE_DEVELOPMENT
     validation_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
-    validation_manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
     validation_manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
     validation_authority: ACTIVE_VALIDATION
     validation_consumption: LOCKED_UNCONSUMED
     quarantined_derived_bucket_records: 21410
     quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
-    active_handoff: NONE
     market_authority: SEALED_OBSERVATION_INPUT_ONLY
-    probability_authority: NONE
-    exposure_authority: NONE
-    execution_authority: NONE
     active: true
 
   opt_b_c1_v2:
     state: B1_G5_PASS_SHADOW_SELECTED_C2_NOT_ACTIVE
     lifecycle_state: REMOTE_VERIFIED
     authority_state: SHADOW
-    availability_state: REMOTE_VERIFIED
     qa_state: PASS
-    selector: SHADOW
-    selector_activation: COMPLETE_B1_G5_SHADOW_DISCOVERY_DEVELOPMENT
     discovery_release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
-    discovery_manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
     discovery_manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
     discovery_selector: SHADOW
     development_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
-    development_manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
     development_manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
     development_selector: SHADOW
     validation_selector: NONE
@@ -116,23 +79,14 @@ authorities:
     frozen_record_file_count: 192
     frozen_verified_payload_bytes: 36170710
     duplicate_record_ids: 0
-    deterministic_rerun: PASS
     comparison: PASS_B1_G5_NO_UNEXPLAINED_DIFFERENCES
-    no_historical_relabelling: PASS
     c1_to_c2_interface: VALIDATED
-    c2_consumption: AVAILABLE_ONLY_TO_SEPARATELY_GATED_C2_REPLAY
     validation_consumption: LOCKED_UNCONSUMED
-    probability_authority: NONE
-    exposure_authority: NONE
-    trading_authority: NONE
-    execution_authority: NONE
     active: true
 
   opt_b_c2_v2:
     state: C2_G3R_PASS_C2_G4_BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT
     contracts_and_registries: IMPLEMENTED
-    level_container_relation_engine: TRUSTED_FIXTURE
-    parallel_state_persistence_transition_engine: TRUSTED_FIXTURE
     actual_parent_engine: TRUSTED_FIXTURE_EXACT_SHAPE
     canonical_c1_intake: READY_MANIFEST_BOUND
     exact_opt_a_intake: READY_CODE_NOT_EXECUTED
@@ -143,12 +97,7 @@ authorities:
     selector: NONE
     activation: NONE
     validation_consumption: LOCKED_UNCONSUMED
-    probability_authority: NONE
-    exposure_authority: NONE
-    trading_authority: NONE
-    execution_authority: NONE
     next_gate: C2_G4_EXACT_PARENT_MARKET_REPLAY
-    operator_action: DOWNLOAD_OR_MOUNT_EXACT_REMOTE_VERIFIED_OPT_A_DISCOVERY_AND_DEVELOPMENT_ROOTS
     active: false
 
   research_operations:
@@ -156,14 +105,11 @@ authorities:
     programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
     ro_g1: PASS
     ro_g2: PASS
-    ro_wp3: MERGED_AND_REVIEWED
     ro_g3: PASS
-    service_activation: BOUNDED_LOCAL_OPERATIONS_APPROVED
     append_only_record_service: APPROVED_BOUNDED_LOCAL_OPERATION
     audit_service: APPROVED_BOUNDED_LOCAL_OPERATION
     cli: APPROVED_BOUNDED_LOCAL_OPERATION
     artifact_catalogue: APPROVED_READ_VERIFY_REPORT_LOCAL
-    queues: APPROVED_READ_ONLY_LOCAL
     qa_runner: ACTIVE_BOUNDED_LOCAL_NO_MUTATION
     read_model: ACTIVE_REPLACEABLE_LOCAL_DERIVED
     console: ACTIVE_LOCAL_READ_ONLY_127_0_0_1
@@ -179,43 +125,38 @@ authorities:
     state: RC_G2_PASS_OVERVIEW_LOCAL_READ_ONLY_RC_WP3_AUTHORISED
     shell: ACCEPTED_RC_G1
     overview_projection: ACCEPTED_RC_G2
-    ambient_health_domains:
-      - DATA
-      - READ_MODEL
-      - ARTIFACTS
-      - QA
-      - RESEARCH_RECORDS
-      - REPOSITORY
-      - SEMANTIC
-    overview_authority: BOUNDED_LOCAL_READ_ONLY
+    ambient_health_domains: [DATA, READ_MODEL, ARTIFACTS, QA, RESEARCH_RECORDS, REPOSITORY, SEMANTIC]
     research_workspace: FIXTURE_ONLY_PENDING_RC_G3
     next_workstream: RC_WP3_V0_3_RESEARCH_REPLAY_EVIDENCE_QUEUE
-    repository_mutation: NONE
-    selector_mutation: NONE
-    threshold_mutation: NONE
-    release_mutation: NONE
     remote_deployment: DENIED
     active: true
 
   c2e:
     state: DEFERRED
     active: false
-
   c2_5:
     state: DEFERRED
     active: false
-
   c3:
     state: DEFERRED
     active: false
-
   opt_c:
     state: HISTORICAL_QUARANTINED
     active: false
-
   opt_d:
     state: HISTORICAL_QUARANTINED
     active: false
+
+retained_prohibitions:
+  validation_consumption: LOCKED_UNCONSUMED
+  probability_authority: NONE
+  exposure_authority: NONE
+  trading_authority: NONE
+  execution_authority: NONE
+  autonomous_agent_authority: NONE
+  direct_ui_git_write: DENIED
+  direct_ui_r2_write: DENIED
+  direct_ui_primary_branch_write: DENIED
 
 legacy_quarantine:
   root: legacy/quarantine/abcd-engine-v1-c0ad7ba
