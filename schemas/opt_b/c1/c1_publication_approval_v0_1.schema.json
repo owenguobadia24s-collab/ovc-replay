@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c1/c1_publication_approval_v0_1.schema.json",
+  "title": "OVC OPT-B.C1 publication approval v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "approval_id",
+    "decision",
+    "release_id",
+    "manifest_id",
+    "manifest_sha256",
+    "source_commit",
+    "parent_opt_a_release_id",
+    "parent_opt_a_manifest_sha256",
+    "target_bucket",
+    "target_prefix",
+    "operator_id",
+    "decision_record",
+    "rollback_target",
+    "selector_activation_included"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-b-c1-publication-approval/v1"},
+    "approval_id": {"type": "string", "pattern": "^APPROVAL\\.R2\\.C1\\.[A-Z0-9._-]+$"},
+    "decision": {"const": "APPROVE_EXACT_MANIFEST_PUBLICATION"},
+    "release_id": {"type": "string", "pattern": "^OPT-B\\.C1\\.GBPUSD\\.(DISCOVERY|DEVELOPMENT|VALIDATION)\\.[A-Z0-9_]+\\.v[0-9]+$"},
+    "manifest_id": {"type": "string", "pattern": "^MANIFEST\\.C1\\.[A-Z0-9._-]+\\.r[0-9]+$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "parent_opt_a_release_id": {"type": "string", "pattern": "^OPT-A\\.GBPUSD\\.(DISCOVERY|DEVELOPMENT|VALIDATION)\\..+\\.v2$"},
+    "parent_opt_a_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "target_bucket": {"const": "ovc-evidence"},
+    "target_prefix": {"type": "string", "pattern": "^canonical/releases/OPT-B\\.C1\\."},
+    "operator_id": {"type": "string", "minLength": 1},
+    "approved_at": {"type": ["string", "null"], "format": "date-time"},
+    "decision_record": {"type": "string", "minLength": 1},
+    "rollback_target": {"type": "string", "minLength": 1},
+    "selector_activation_included": {"const": false},
+    "single_use": {"const": true}
+  }
+}
