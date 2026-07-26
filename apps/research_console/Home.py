@@ -3,53 +3,37 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+from typing import Any
 
-import streamlit as st
-
-from ovc.research_operations.read_model import ResearchReadModel, ReadModelNode
+from apps.research_console.shell import run_console
 
 
-st.set_page_config(page_title="OVC Research Console", layout="wide")
-st.title("OVC Research Console")
-st.caption("RO-WP3 · read-only typed read model · no market, selector, threshold or execution authority")
+def load_represented_identity() -> dict[str, Any]:
+    """Read only the already-authorised read-model identity for persistent shell context.
 
-model_path = Path(os.environ.get("OVC_RESEARCH_READ_MODEL", "var/research_operations/read_model/current.json"))
-if not model_path.is_file():
-    st.warning(f"Read model unavailable: {model_path}")
-    st.stop()
+    RC-WP1-v0.3 does not consume nodes, health rows or other live projections.
+    Missing or malformed identity fails to NOT_EVALUATED rather than stopping the fixture shell.
+    """
 
-raw = json.loads(model_path.read_text(encoding="utf-8"))
-model = ResearchReadModel(
-    schema=raw["schema"],
-    source_commit=raw["source_commit"],
-    catalogue_sha256=raw.get("catalogue_sha256"),
-    nodes=tuple(ReadModelNode(**{**node, "source_refs": tuple(node.get("source_refs", []))}) for node in raw.get("nodes", [])),
-    health=tuple(raw.get("health", [])),
-    logical_sha256=raw["logical_sha256"],
-)
+    model_path = Path(os.environ.get("OVC_RESEARCH_READ_MODEL", "var/research_operations/read_model/current.json"))
+    identity: dict[str, Any] = {
+        "repository": "owenguobadia24s-collab/ovc-replay",
+        "branch": os.environ.get("OVC_REPOSITORY_BRANCH", "main"),
+        "source_commit": os.environ.get("OVC_SOURCE_COMMIT", "NOT_EVALUATED"),
+        "read_model_sha256": "NOT_EVALUATED",
+        "freshness": "READ_MODEL_IDENTITY_UNAVAILABLE",
+    }
+    if not model_path.is_file():
+        return identity
+    try:
+        raw = json.loads(model_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        identity["freshness"] = "READ_MODEL_IDENTITY_INVALID"
+        return identity
+    identity["source_commit"] = str(raw.get("source_commit") or identity["source_commit"])
+    identity["read_model_sha256"] = str(raw.get("logical_sha256") or "NOT_EVALUATED")
+    identity["freshness"] = "IDENTITY_ONLY_FIXTURE_PRESENTATION"
+    return identity
 
-st.code(f"source_commit={model.source_commit}\nread_model_sha256={model.logical_sha256}")
-left, right = st.columns(2)
-left.metric("Indexed objects", len(model.nodes))
-right.metric("Health signals", len(model.health))
 
-st.subheader("Authority boundary")
-st.json({
-    "mode": "READ_ONLY",
-    "repository_mutation": "NONE",
-    "selector_mutation": "NONE",
-    "threshold_mutation": "NONE",
-    "market_classification": "NONE",
-    "probability": "NONE",
-    "exposure": "NONE",
-    "execution": "NONE",
-    "agent": "NONE",
-})
-
-st.subheader("Health")
-st.dataframe(list(model.health), use_container_width=True)
-
-st.subheader("Research objects and lineage")
-object_type = st.selectbox("Object type", ["ALL"] + sorted({node.object_type for node in model.nodes}))
-rows = [node.to_dict() for node in model.nodes if object_type == "ALL" or node.object_type == object_type]
-st.dataframe(rows, use_container_width=True)
+run_console(load_represented_identity())

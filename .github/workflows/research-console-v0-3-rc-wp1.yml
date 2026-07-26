@@ -1,0 +1,50 @@
+name: Research Console v0.3 RC-WP1 shell and navigation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shell-navigation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
+      - name: Verify exact RC-WP1 v0.3 packet
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          packet = json.loads(Path('docs/releases/research-console-v0-3/rc-wp1/RC_WP1_IMPLEMENTATION_PACKET.json').read_text())
+          registry = Path('registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml').read_text()
+          component_registry = Path('registries/research_operations/RESEARCH_CONSOLE_COMPONENT_REGISTRY_v0_3.yaml').read_text()
+          fixture = json.loads(Path('fixtures/research_operations/research_console_v0_3/RC_WP1_SHELL_FIXTURES.json').read_text())
+          shell = Path('apps/research_console/shell.py').read_text()
+          home = Path('apps/research_console/Home.py').read_text()
+
+          assert packet['baseline_commit'] == 'ea4d4dac2ec07845b82250980207c99e98eb581b'
+          assert packet['authority'] == 'FIXTURE_ONLY_LOCAL_PRESENTATION'
+          assert packet['blocking_issues'] == 0
+          assert packet['disposition'] == 'COMPLETE_RC_G1_V0_3_REVIEW_READY'
+          assert all(check['status'] == 'PASS' for check in packet['checks'])
+          assert fixture['workspaces'] == ['OVERVIEW', 'RESEARCH', 'SYSTEM']
+          assert fixture['conditions'][1]['health_truth'] == 'NO_SIGNAL_NOT_PASS'
+          assert all(item['research_records_status'] == 'NOT_EVALUATED' for item in fixture['conditions'])
+          assert all(item['research_records_progress'] == 0 for item in fixture['conditions'])
+          assert 'stage: RC_WP1_COMPLETE_RC_G1_V0_3_REVIEW_READY' in registry
+          assert 'shell_implementation_authority: IMPLEMENTED_FIXTURE_ONLY_PENDING_RC_G1' in registry
+          assert 'id: COMMAND_PALETTE' in component_registry
+          assert 'command_mutation: NONE' in component_registry
+          assert 'LOCAL · NO DEPLOY' in shell
+          assert 'ReadModelNode' not in home
+          assert 'model.nodes' not in home
+          PY
