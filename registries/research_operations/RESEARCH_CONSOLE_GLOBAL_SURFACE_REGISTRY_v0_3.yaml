@@ -1,0 +1,46 @@
+schema: ovc-research-console-global-surface-registry/v0.3
+status: ACCEPTED_BY_RC_A1
+surfaces:
+  - surface_id: ICON_RAIL
+    authority: ACTIVE_LOCAL_UI_ONLY
+    allowed_actions: [NAVIGATE_WORKSPACE, OPEN_HELP]
+    prohibited_actions: [MUTATE_REPOSITORY, ACTIVATE_RELEASE, CHANGE_SELECTOR, CHANGE_THRESHOLD]
+  - surface_id: WORKSPACE_TABS
+    authority: ACTIVE_LOCAL_UI_ONLY
+    allowed_actions: [NAVIGATE_OVERVIEW, NAVIGATE_RESEARCH, NAVIGATE_SYSTEM]
+    prohibited_actions: [UNREGISTERED_WORKSPACE]
+  - surface_id: CONTEXT_BAR
+    authority: READ_ONLY_CONTEXT_SELECTION
+    allowed_actions: [SELECT_REGISTERED_RELEASE, SELECT_INSTRUMENT, SELECT_CLOCK, SELECT_SIDE, SELECT_TIME, SELECT_CUTOFF_MODE]
+    constraints: [EXPLICIT_SELECTION_ONLY, PRESERVE_SOURCE_IDENTITY, NO_HIDDEN_DEFAULT_SWITCH]
+  - surface_id: CONTEXTUAL_DETAIL_DRAWER
+    authority: ACTIVE_BOUNDED_READ
+    allowed_actions: [OPEN_SOURCE_DETAIL, COPY_IDENTIFIER, INSPECT_LINEAGE, INSPECT_STATUS_MEANING, INSPECT_NEXT_VALID_ACTION]
+    prohibited_actions: [EDIT_SOURCE, EDIT_STATUS, EDIT_LINEAGE, CREATE_RECORD]
+  - surface_id: COMMAND_PALETTE
+    authority: READ_ONLY_NAVIGATION_AND_SEARCH
+    allowed_actions: [NAVIGATE_REGISTERED_DESTINATION, FILTER_VIEW, SEARCH_REGISTERED_INDEX, OPEN_SOURCE_DETAIL, COPY_IDENTIFIER]
+    prohibited_actions: [RUN_UNREGISTERED_COMMAND, WRITE_RECORD, EDIT_REPOSITORY, ACTIVATE_RELEASE, CHANGE_SELECTOR, CHANGE_THRESHOLD, DEPLOY_CONSOLE]
+  - surface_id: AMBIENT_HEALTH
+    authority: DERIVED_ASSURANCE_ONLY
+    allowed_actions: [FILTER_AFFECTED_SURFACES, OPEN_HEALTH_DETAIL, OPEN_BLOCKING_ASSERTION]
+    constraints: [MULTIDIMENSIONAL, SOURCE_REQUIRED, CONSEQUENCE_REQUIRED, NO_SIGNAL_NOT_PASS]
+  - surface_id: ACTIVITY_STREAM
+    authority: DERIVED_READ_ONLY
+    allowed_actions: [FILTER_ACTIVITY, OPEN_EVENT_SOURCE, COPY_IDENTIFIER]
+    constraints: [IMMUTABLE_SOURCE_EVENTS_ONLY, SOURCE_REQUIRED, CHRONOLOGICAL]
+    prohibited_actions: [CREATE_EVENT, EDIT_EVENT, DELETE_EVENT]
+  - surface_id: LOCAL_BADGE
+    authority: STATIC_AUTHORITY_DISPLAY
+    allowed_actions: []
+    constraints: [NON_CLICKABLE, REMOTE_DEPLOYMENT_DENIED]
+rules:
+  unregistered_global_surface: PROHIBITED
+  unregistered_action: PROHIBITED
+  hidden_mutation: PROHIBITED
+  self_approval: PROHIBITED
+  drawer_cannot_create_authority: true
+  activity_projection_cannot_replace_audit_source: true
+  command_palette_cannot_bypass_action_registry: true
+  fixture_only_shell_rendering: AUTHORISED_BY_RC_A1
+  live_source_actions: DENIED_PENDING_LATER_GATE
