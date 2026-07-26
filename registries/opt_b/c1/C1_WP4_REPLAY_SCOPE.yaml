@@ -1,0 +1,52 @@
+schema: ovc-opt-b-c1-wp4-replay-scope/v1
+scope_id: C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1
+status: APPROVED_BY_B1_G0
+instrument: GBPUSD
+formula_registry_id: C1.FORMULAS.v0.1
+reference_engine_commit: d5c0f1a9053f837ee85e2b478fba0662a133cc29
+roles:
+  - role: DISCOVERY
+    release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
+    manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
+    interval_start: 2021-01-01T00:00:00Z
+    interval_end: 2024-01-01T00:00:00Z
+    replay_authority: AUTHORISED
+  - role: DEVELOPMENT
+    release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
+    manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
+    interval_start: 2024-01-01T00:00:00Z
+    interval_end: 2025-01-01T00:00:00Z
+    replay_authority: AUTHORISED
+validation:
+  release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+  manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
+  manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
+  consumption_state: LOCKED_UNCONSUMED
+  replay_authority: DENIED
+canonical_clocks: [15M, 2H_A_L]
+price_sides: [BID, ASK]
+control_only_clocks: [H1_M1_DERIVED, H1_PROVIDER_NATIVE]
+input_source: exact_remote_verified_opt_a_v2_release_artifacts
+output_root_policy: external_workspace_only
+output_release_state: REPLAY_BUILT_NOT_RELEASE_FROZEN
+required_controls:
+  - exact_parent_manifest_verification
+  - accepted_observations_only
+  - quarantine_exclusion
+  - deterministic_rerun_identity
+  - no_gap_bridge
+  - no_cross_side_substitution
+  - no_validation_consumption
+  - full_cardinality_and_null_reason_report
+prohibited:
+  - release_freeze_without_wp4_qa
+  - r2_publication
+  - selector_activation
+  - c2_consumption
+  - probability_or_exposure_authority
+rollback:
+  target: WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS
+  delete_unfrozen_wp4_workspace: true
+  selectors_unchanged: true
