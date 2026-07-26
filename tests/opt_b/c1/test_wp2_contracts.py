@@ -15,17 +15,8 @@ C1_FIXTURES = ROOT / "fixtures" / "c1" / "wp2" / "WP2_HANDOFF_FIXTURES.json"
 AUTHORITY = ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml"
 
 FORMULA_FIELDS = (
-    "field_name:",
-    "definition:",
-    "formula:",
-    "required_inputs:",
-    "unit:",
-    "domain:",
-    "null_rule:",
-    "lookback_bars:",
-    "first_valid_rule:",
-    "symmetry_rule:",
-    "authority:",
+    "field_name:", "definition:", "formula:", "required_inputs:", "unit:", "domain:",
+    "null_rule:", "lookback_bars:", "first_valid_rule:", "symmetry_rule:", "authority:",
 )
 
 EXPECTED_SCHEMAS = {
@@ -39,15 +30,17 @@ EXPECTED_SCHEMAS = {
 
 
 class C1WP2ContractTests(unittest.TestCase):
-    def test_wp2_authority_state_is_bounded(self) -> None:
-        self.assertEqual(AUTHORITY_STATE, "WP2_CONTRACTS_FROZEN_WP3_SYNTHETIC_ENGINE_AUTHORISED")
+    def test_wp2_design_remains_frozen_after_wp3_progression(self) -> None:
+        self.assertIn(AUTHORITY_STATE, {
+            "WP2_CONTRACTS_FROZEN_WP3_SYNTHETIC_ENGINE_AUTHORISED",
+            "WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS",
+        })
         self.assertEqual(FORMULA_REGISTRY_ID, "C1.FORMULAS.v0.1")
         self.assertEqual(FORMULA_COUNT, 18)
-
         authority = AUTHORITY.read_text(encoding="utf-8")
-        self.assertIn("state: C1_WP2_CONTRACT_FREEZE_PASS_NO_C1_MARKET_AUTHORITY", authority)
+        self.assertIn("state: C1_WP3_REFERENCE_ENGINE_PASS_NO_C1_MARKET_AUTHORITY", authority)
         self.assertIn("selector: NONE", authority)
-        self.assertIn("synthetic_engine_work: AUTHORISED_FOR_WP3_FIXTURES_ONLY", authority)
+        self.assertIn("synthetic_engine_work: COMPLETE_WP3_PASS", authority)
         self.assertIn("market_replay: DENIED_PENDING_WP4", authority)
         self.assertIn("r2_publication: DENIED_PENDING_WP5", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
@@ -89,17 +82,8 @@ class C1WP2ContractTests(unittest.TestCase):
         text = (C1_REGISTRIES / "C1_FORMULA_REGISTRY_v0_1.yaml").read_text(encoding="utf-8")
         formula_section = text.split("formulas:\n", 1)[1].split("\nversioning:", 1)[0].lower()
         for forbidden in (
-            "hammer",
-            "doji",
-            "compression",
-            "displacement",
-            "reclaim",
-            "rejection",
-            "future_return",
-            "outcome",
-            "probability",
-            "trade",
-            "overall_state",
+            "hammer", "doji", "compression", "displacement", "reclaim", "rejection",
+            "future_return", "outcome", "probability", "trade", "overall_state",
         ):
             self.assertNotIn(forbidden, formula_section)
 
@@ -124,16 +108,9 @@ class C1WP2ContractTests(unittest.TestCase):
     def test_null_policy_names_all_required_failure_modes(self) -> None:
         text = (C1_CONTRACTS / "C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md").read_text(encoding="utf-8")
         for reason in (
-            "ZERO_RANGE",
-            "NO_PRIOR_BAR",
-            "NO_CONTIGUOUS_PRIOR_BAR",
-            "PRIOR_IDENTITY_MISMATCH",
-            "PRIOR_NOT_FIRST_VALID",
-            "PRICE_INCREMENT_UNAVAILABLE",
-            "SOURCE_BAR_INADMISSIBLE",
-            "CONTROL_CLOCK_NOT_AUTHORISED",
-            "VALIDATION_LOCKED",
-            "UPSTREAM_IDENTITY_UNRESOLVED",
+            "ZERO_RANGE", "NO_PRIOR_BAR", "NO_CONTIGUOUS_PRIOR_BAR", "PRIOR_IDENTITY_MISMATCH",
+            "PRIOR_NOT_FIRST_VALID", "PRICE_INCREMENT_UNAVAILABLE", "SOURCE_BAR_INADMISSIBLE",
+            "CONTROL_CLOCK_NOT_AUTHORISED", "VALIDATION_LOCKED", "UPSTREAM_IDENTITY_UNRESOLVED",
         ):
             self.assertIn(reason, text)
         self.assertIn("must not search farther backward", text.lower())
@@ -174,14 +151,9 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))
         reasons = {case["expected"]["reason"] for case in fixtures["cases"]}
         self.assertTrue({
-            None,
-            "NO_PRIOR_BAR",
-            "ZERO_RANGE",
-            "NO_CONTIGUOUS_PRIOR_BAR",
-            "UPSTREAM_IDENTITY_UNRESOLVED",
-            "CONTROL_CLOCK_NOT_AUTHORISED",
-            "PRIOR_IDENTITY_MISMATCH",
-            "SOURCE_BAR_INADMISSIBLE",
+            None, "NO_PRIOR_BAR", "ZERO_RANGE", "NO_CONTIGUOUS_PRIOR_BAR",
+            "UPSTREAM_IDENTITY_UNRESOLVED", "CONTROL_CLOCK_NOT_AUTHORISED",
+            "PRIOR_IDENTITY_MISMATCH", "SOURCE_BAR_INADMISSIBLE",
         } <= reasons)
         self.assertEqual(fixtures["base_handoff"]["authority_state"], "NONE")
         self.assertEqual(fixtures["base_handoff"]["selector_state"], "NONE")
@@ -189,7 +161,7 @@ class C1WP2ContractTests(unittest.TestCase):
     def test_qa_registry_is_blocking_and_non_mutating(self) -> None:
         text = (C1_REGISTRIES / "C1_QA_CHECK_REGISTRY_v0_1.yaml").read_text(encoding="utf-8")
         ids = re.findall(r"check_id: (C1-QA-[A-Z0-9-]+)", text)
-        self.assertEqual(len(ids), 20)  # ten definitions plus ten required-for-WP3 references
+        self.assertEqual(len(ids), 20)
         self.assertEqual(len(set(ids)), 10)
         self.assertIn("may_rewrite_market_facts: false", text)
         self.assertIn("may_repair_outputs: false", text)
