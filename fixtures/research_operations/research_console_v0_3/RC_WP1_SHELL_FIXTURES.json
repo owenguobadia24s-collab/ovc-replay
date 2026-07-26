@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-research-console-v0-3-shell-fixtures/v1",
+  "fixture_only": true,
+  "market_authority": "NONE",
+  "live_projection_authority": "DENIED",
+  "conditions": [
+    {
+      "id": "VALID",
+      "expected": "RENDER_ALL_THREE_WORKSPACES",
+      "health_truth": "EXPLICIT_DOMAIN_STATUSES",
+      "research_records_status": "NOT_EVALUATED",
+      "research_records_progress": 0
+    },
+    {
+      "id": "EMPTY",
+      "expected": "EXPLICIT_EMPTY_STATES",
+      "health_truth": "NO_SIGNAL_NOT_PASS",
+      "research_records_status": "NOT_EVALUATED",
+      "research_records_progress": 0
+    },
+    {
+      "id": "WARN",
+      "expected": "RENDER_WITH_NAMED_CONSEQUENCES",
+      "health_truth": "WARN_VISIBLE",
+      "research_records_status": "NOT_EVALUATED",
+      "research_records_progress": 0
+    },
+    {
+      "id": "BLOCK",
+      "expected": "FAIL_CLOSED_MAIN_PANELS",
+      "health_truth": "BLOCK_VISIBLE",
+      "research_records_status": "NOT_EVALUATED",
+      "research_records_progress": 0
+    }
+  ],
+  "workspaces": ["OVERVIEW", "RESEARCH", "SYSTEM"],
+  "global_surfaces": [
+    "ICON_RAIL",
+    "WORKSPACE_TABS",
+    "CONTEXT_BAR",
+    "CONTEXTUAL_DETAIL_DRAWER",
+    "COMMAND_PALETTE",
+    "AMBIENT_HEALTH",
+    "ACTIVITY_STREAM",
+    "LOCAL_BADGE"
+  ],
+  "prohibited": [
+    "REPOSITORY_MUTATION",
+    "RESEARCH_WRITE",
+    "SELECTOR_MUTATION",
+    "THRESHOLD_MUTATION",
+    "RELEASE_ACTIVATION",
+    "MARKET_CLASSIFICATION",
+    "PROBABILITY",
+    "EXPOSURE",
+    "EXECUTION",
+    "AGENT",
+    "REMOTE_DEPLOYMENT"
+  ]
+}
