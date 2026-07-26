@@ -1,11 +1,11 @@
 # RO2 to Research Console v0.3 projection map
 
-Status: `IMPLEMENTED_CANDIDATE_PENDING_RO2_G3`
+Status: `ACCEPTED_RO2_G3_ACTIVE_BOUNDED_LOCAL_READ_ONLY_PRESENTATION`
 Gate: `RO2-G3`
 
 ## Boundary
 
-This map defines the implemented read-only adapter boundary from accepted RO2-G1 and RO2-G2 typed objects into the Console v0.3 Research workspace. It creates no write path, selector authority, release authority or Validation-content access.
+This map defines the accepted read-only adapter boundary from accepted RO2-G1 and RO2-G2 typed objects into the Console v0.3 Research workspace. It creates no write path, selector authority, release authority or Validation-content access.
 
 ## Context-preserving projection
 
