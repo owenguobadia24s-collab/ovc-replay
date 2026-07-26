@@ -126,6 +126,9 @@ jobs:
           PY
             )
             if rclone lsjson --stat --s3-no-check-bucket "ovc_r2:${manifest_key}" >/dev/null 2>&1; then
+              rclone cat --s3-no-check-bucket "ovc_r2:${manifest_key}" > "wp6-output/remote-${role}-manifest.json"
+              sha256sum "$manifest" "wp6-output/remote-${role}-manifest.json" | tee "wp6-output/${role}-manifest-sha256.txt"
+              diff -u "$manifest" "wp6-output/remote-${role}-manifest.json" > "wp6-output/${role}-manifest.diff" || true
               python -m ovc_evidence_store verify-remote --manifest "$manifest" --remote ovc_r2
               python - "$role" "$manifest_key" <<'PY'
           import json
