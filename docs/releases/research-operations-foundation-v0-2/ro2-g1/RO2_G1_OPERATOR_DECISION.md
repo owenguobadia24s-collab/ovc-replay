@@ -6,7 +6,7 @@
 
 RO2-WP1 is accepted for bounded local operation. The accepted implementation deterministically builds role-workspace, observation and observation-family indexes for the approved OPT-A Discovery and Development releases. It exposes Validation aggregate metadata only and denies Validation content before path, object or row resolution.
 
-The gate is reconciled to integrated `main` commit `e2935f0c607aa25c565da59c08e15263176213d6`, which separately approved exact C2 R2 publication readiness without executing a remote write or granting selector or activation authority.
+The gate is reconciled to integrated `main` commit `28f0161580327a2222ae089a7ad01aa1dfc5f994` through merge commit `79b515540eb8de982ee8434479b709f98d2ffd2c`.
 
 ## Verification basis
 
@@ -37,12 +37,12 @@ RO2-G1 does not grant or modify:
 
 - Validation row, timestamp, path, key, object or content access;
 - market classification or model authority;
-- C2 R2 publication execution, selector or activation authority;
+- C2 publication, selector, activation or legacy-retirement authority;
 - quality, bar-lineage, replay or release-difference implementation;
 - Git, R2, release, selector or threshold writes by RO2;
 - probability, exposure, trading or execution authority.
 
-The separately approved C2 authority remains `AUTHORISED_EXACT_RELEASES_ONLY / NOT_YET_EXECUTED`. C2 selector and activation remain `NONE`. Validation remains `LOCKED_UNCONSUMED`.
+The separately governed C2 releases are now `REMOTE_VERIFIED`, but the C2 selector and activation remain `NONE`, legacy B-STATE retirement has not executed, and Validation remains `LOCKED_UNCONSUMED`. RO2-G1 did not perform or authorise those C2 operations.
 
 ## Next boundary
 
