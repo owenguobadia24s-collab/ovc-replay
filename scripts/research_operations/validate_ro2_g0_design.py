@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the RO2-G0 design packet without importing runtime packages or mutating files."""
+"""Validate the RO2-G0 design packet and retained boundaries against the current court record."""
 
 from __future__ import annotations
 
@@ -41,6 +41,7 @@ def main() -> int:
     baseline = json.loads((ROOT / REQUIRED[8]).read_text(encoding="utf-8"))
     gate = json.loads((ROOT / REQUIRED[9]).read_text(encoding="utf-8"))
 
+    # RO2-G0 remains pinned to the C2-G4 court record that existed when design froze.
     assert baseline["court_record_tip"] == "85d2638d36c5039c35d2d49fcdb499dd48e7b354"
     assert baseline["c2_g4_replay"]["state_records"] == 404434
     assert baseline["c2_g4_replay"]["transition_records"] == 323910
@@ -65,10 +66,35 @@ def main() -> int:
     require_tokens(REQUIRED[5], ["RO2-QA-002", "RO2-QA-004", "RO2-QA-011"])
     require_tokens(REQUIRED[6], ["validation_row_resolution_attempt", "prospective_frame_contains_post_cutoff_record", "attempted_git_r2_selector_or_threshold_write"])
     require_tokens(REQUIRED[7], ["Research workspace remains fixture-only", "Validation content must never be resolved"])
-    require_tokens("docs/CURRENT_STATUS.md", ["C2-G4 result: `PASS_LOCAL_REPLAY`", "404,434", "323,910", "Validation remains `LOCKED_UNCONSUMED`"])
-    require_tokens("registries/authority/ACTIVE_AUTHORITY.yaml", ["C2_G4_PASS_LOCAL_REPLAY_NO_C2_AUTHORITY", "market_replay: COMPLETE_C2_G4_PASS", "local_candidate_release: NONE", "validation_consumption: LOCKED_UNCONSUMED"])
 
-    print("PASS: RO2-G0 design packet and retained-authority invariants are complete")
+    # Later C2 gates may publish and verify exact releases while preserving the RO2 boundary.
+    # Selector, activation and Validation access remain separately controlled.
+    require_tokens(
+        "docs/CURRENT_STATUS.md",
+        [
+            "### C2-G4 exact-parent replay",
+            "PASS_LOCAL_REPLAY",
+            "PASS_LOCAL_CANDIDATE_RELEASE_FROZEN",
+            "PASS_FULL_REMOTE_BYTE_VERIFICATION",
+            "PASS_READY_FOR_EXPLICIT_ACTIVATION_DECISION_NOT_ACTIVATED",
+            "Validation remains `LOCKED_UNCONSUMED`",
+        ],
+    )
+    require_tokens(
+        "registries/authority/ACTIVE_AUTHORITY.yaml",
+        [
+            "C2_R2_REMOTE_VERIFIED_READY_FOR_EXPLICIT_ACTIVATION_NOT_ACTIVATED",
+            "publication: COMPLETE_REMOTE_VERIFIED",
+            "publication_executed: true",
+            "remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION",
+            "selector: NONE",
+            "activation: NONE",
+            "legacy_b_state_retirement_executed: false",
+            "validation_consumption: LOCKED_UNCONSUMED",
+        ],
+    )
+
+    print("PASS: RO2-G0 design packet remains valid against the remote-verified C2 court record")
     return 0
 
 

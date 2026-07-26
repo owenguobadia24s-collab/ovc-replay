@@ -24,6 +24,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR",
     "state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR",
     "state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED",
+    "state: C1_B1_G5_SHADOW_C2_G5_LOCAL_CANDIDATES_NO_SELECTOR",
 }
 FORBIDDEN = ("B-STATE-", "OPT-C-", "OPT-D-", "PAPER-PLAYBOOK", "story_id", "candidate_id", "outcome_label")
 
@@ -97,7 +98,13 @@ class SyntheticFixturePackTests(unittest.TestCase):
         self.assertIn("  opt_b_c1: SHADOW", authority)
         self.assertIn("  opt_b_c2: NONE", authority)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
-        self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", authority)
+        self.assertIn("local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY", authority)
+        self.assertIn("publication: COMPLETE_REMOTE_VERIFIED", authority)
+        self.assertIn("publication_executed: true", authority)
+        self.assertIn("remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION", authority)
+        self.assertIn("selector: NONE", authority)
+        self.assertIn("activation: NONE", authority)
+        self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
 
 
 if __name__ == "__main__":

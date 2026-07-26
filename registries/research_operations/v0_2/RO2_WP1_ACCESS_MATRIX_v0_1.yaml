@@ -1,0 +1,39 @@
+schema: ovc-ro2-wp1-access-matrix/v1
+roles:
+  DISCOVERY:
+    metadata: ALLOW
+    path_resolution: ALLOW_APPROVED_RELEASE_ONLY
+    content_resolution: ALLOW_APPROVED_RELEASE_ONLY
+    observation_index: ALLOW
+  DEVELOPMENT:
+    metadata: ALLOW
+    path_resolution: ALLOW_APPROVED_RELEASE_ONLY
+    content_resolution: ALLOW_APPROVED_RELEASE_ONLY
+    observation_index: ALLOW
+  VALIDATION:
+    metadata: ALLOW_AGGREGATE_ONLY
+    path_resolution: DENY_BEFORE_PATH_RESOLUTION
+    content_resolution: DENY
+    observation_index: DENY
+    emitted_fields:
+      - release_id
+      - manifest_sha256
+      - coverage_start
+      - coverage_end
+      - aggregate_record_count
+      - validation_consumption
+    prohibited_fields:
+      - local_path
+      - remote_key
+      - source_object_id
+      - observation_id
+      - first_valid_at
+      - row_hash
+      - content_hash
+unknown_role: DENY
+writes:
+  git: DENY
+  r2: DENY
+  selectors: DENY
+  releases: DENY
+  thresholds: DENY

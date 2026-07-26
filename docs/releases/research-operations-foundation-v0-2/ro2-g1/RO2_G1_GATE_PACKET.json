@@ -1,0 +1,62 @@
+{
+  "schema": "ovc-ro2-g1-gate-packet/v1",
+  "gate_id": "RO2-G1",
+  "decision": "PASS_LOCAL_REPLACEABLE_DERIVED_INDEX",
+  "recorded_on": "2026-07-26",
+  "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2",
+  "work_packet": "RO2-WP1",
+  "branch": "build/research-operations-v0-2-workspace-index",
+  "ro2_g0_merged_main_commit": "dc05204becb2806fc10cab024d85ddab235326a7",
+  "latest_reconciled_main_commit": "28f0161580327a2222ae089a7ad01aa1dfc5f994",
+  "main_reconciliation_commit": "79b515540eb8de982ee8434479b709f98d2ffd2c",
+  "tested_implementation_commit": "474534310b9dec679aa9e7c94fb3556856a24901",
+  "logical_fixture_index_sha256": "dcb88c5f9c9fc0d4dbd12ac6a293607a1067fc11cfd9f19f72c4f497bd0da697",
+  "deliverables": [
+    "contracts/research_operations/v0_2/OVC_RO2_WORKSPACE_INDEX_CONTRACT_v0_1.md",
+    "schemas/research_operations/v0_2/role_workspace_index_v0_1.schema.json",
+    "schemas/research_operations/v0_2/observation_index_v0_1.schema.json",
+    "registries/research_operations/v0_2/RO2_WP1_ACCESS_MATRIX_v0_1.yaml",
+    "fixtures/research_operations/v0_2/wp1_workspace_index_cases.json",
+    "src/ovc/research_operations/v0_2/workspace_index.py",
+    "tests/research_operations/v0_2/test_workspace_index.py",
+    ".github/workflows/ro2-wp1.yml"
+  ],
+  "verification": {
+    "ro2_g0_parent_design_validator": "PASS",
+    "focused_ro2_wp1_tests": {
+      "status": "PASS",
+      "tests": 5
+    },
+    "deterministic_independent_fixture_builds": "PASS_IDENTICAL_LOGICAL_HASH",
+    "full_repository_suite": {
+      "status": "PASS",
+      "tests": 70
+    },
+    "dedicated_ci_run_id": 30214437661,
+    "canonical_tests_ci_run_id": 30214437602
+  },
+  "accepted_capabilities": {
+    "discovery_role_workspace_index": "ACTIVE_BOUNDED_LOCAL_DERIVED",
+    "development_role_workspace_index": "ACTIVE_BOUNDED_LOCAL_DERIVED",
+    "observation_index": "ACTIVE_BOUNDED_LOCAL_DERIVED",
+    "observation_family_index": "ACTIVE_BOUNDED_LOCAL_DERIVED",
+    "validation_projection": "METADATA_ONLY",
+    "validation_guard": "DENY_BEFORE_PATH_RESOLUTION",
+    "runtime_writes": "NONE"
+  },
+  "retained_authority": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2_publication": "COMPLETE_REMOTE_VERIFIED_SEPARATE_C2_AUTHORITY_UNCHANGED_BY_RO2_G1",
+    "c2_selector": "NONE",
+    "c2_activation": "NONE",
+    "c2_legacy_retirement_executed": false,
+    "market_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "trading_authority": "NONE",
+    "execution_authority": "NONE",
+    "ro2_direct_git_or_r2_write": "DENIED"
+  },
+  "authority_delta": "LOCAL_REPLACEABLE_DERIVED_READ_INDEX_ONLY",
+  "next_boundary": "RO2-WP2_AUTHORISED_FOR_BUILD_REQUIRES_SEPARATE_OPERATOR_INSTRUCTION"
+}

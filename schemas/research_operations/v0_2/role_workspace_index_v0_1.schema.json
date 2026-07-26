@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/v0_2/role_workspace_index_v0_1.schema.json",
+  "title": "RO2 RoleWorkspaceIndex v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workspace_id", "role", "release_id", "manifest_sha256", "availability", "observation_count"],
+  "properties": {
+    "workspace_id": {"type": "string", "pattern": "^RO2-WS-[a-f0-9]{16}$"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "release_id": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "instrument": {"type": ["string", "null"]},
+    "coverage_start": {"type": ["string", "null"]},
+    "coverage_end": {"type": ["string", "null"]},
+    "availability": {"enum": ["AVAILABLE", "METADATA_ONLY", "NOT_AVAILABLE", "DENIED"]},
+    "observation_count": {"type": "integer", "minimum": 0},
+    "logical_hash": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"role": {"const": "VALIDATION"}}},
+      "then": {"properties": {"availability": {"const": "METADATA_ONLY"}}}
+    }
+  ]
+}
