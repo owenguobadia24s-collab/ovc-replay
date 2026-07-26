@@ -1,0 +1,29 @@
+schema: ovc-research-console-component-registry/v0.3
+status: IMPLEMENTED_RC_WP1_PENDING_RC_G1
+components:
+  - {id: APP_SHELL, source: apps/research_console/shell.py, authority: FIXTURE_ONLY_LOCAL_PRESENTATION}
+  - {id: ICON_RAIL, source: apps/research_console/shell.py, authority: ACTIVE_LOCAL_UI_ONLY}
+  - {id: WORKSPACE_TABS, source: apps/research_console/shell.py, authority: ACTIVE_LOCAL_UI_ONLY}
+  - {id: CONTEXT_BAR, source: apps/research_console/shell.py, authority: READ_ONLY_CONTEXT_SELECTION}
+  - {id: AUTHORITY_STRIP, source: apps/research_console/shell.py, authority: CONTRACT_DERIVED_READ_ONLY}
+  - {id: COMMAND_PALETTE, source: apps/research_console/shell.py, authority: READ_ONLY_FIXTURE_SEARCH}
+  - {id: AMBIENT_HEALTH, source: apps/research_console/shell.py, authority: DERIVED_FIXTURE_ASSURANCE_ONLY}
+  - {id: RESEARCH_BRIEF, source: apps/research_console/shell.py, authority: FIXTURE_ONLY_NOT_MARKET_AUTHORITY}
+  - {id: REPLAY_STRIP, source: apps/research_console/shell.py, authority: FIXTURE_ONLY_CUTOFF_SAFE}
+  - {id: EVIDENCE_RAIL, source: apps/research_console/shell.py, authority: FIXTURE_ONLY}
+  - {id: RESEARCH_QUEUE, source: apps/research_console/shell.py, authority: DERIVED_FIXTURE_ONLY}
+  - {id: SYSTEM_NAVIGATOR, source: apps/research_console/shell.py, authority: ACTIVE_LOCAL_UI_ONLY}
+  - {id: CONTEXTUAL_DETAIL_DRAWER, source: apps/research_console/components.py, authority: ACTIVE_BOUNDED_FIXTURE_READ}
+  - {id: ACTIVITY_STREAM, source: apps/research_console/components.py, authority: DERIVED_FIXTURE_READ_ONLY}
+  - {id: EMPTY_STATE, source: apps/research_console/components.py, authority: TRUTH_PRESERVING_PRESENTATION}
+  - {id: STATUS_BADGE, source: apps/research_console/components.py, authority: TRUTH_PRESERVING_PRESENTATION}
+rules:
+  unregistered_component: PROHIBITED
+  unregistered_action: PROHIBITED
+  source_resolution_required: true
+  color_only_status: PROHIBITED
+  context_preservation_required: true
+  drawer_mutation: NONE
+  command_mutation: NONE
+  activity_mutation: NONE
+  remote_deployment: DENIED
