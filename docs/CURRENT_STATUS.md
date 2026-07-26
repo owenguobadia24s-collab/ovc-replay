@@ -1,19 +1,20 @@
 # Current status
 
 Snapshot date: 26 July 2026.
-Repository court-record tip reviewed: `fa11546a93f865c26d7cf99f5b5c60156bf50f9b`.
+Repository court-record tip reviewed: `85d2638d36c5039c35d2d49fcdb499dd48e7b354`.
 
 ## Integrated baseline
 
-The reset, OPT-A v2 role-set activation, OPT-B.C1 v2 publication and shadow activation, Research Operations Foundation activation, Research Console v0.3 Overview acceptance, and OPT-B.C2 actual-parent reconciliation are merged into `main`.
+The reset, OPT-A v2 role-set activation, OPT-B.C1 v2 publication and shadow activation, Research Operations Foundation activation, Research Console v0.3 Overview acceptance, OPT-B.C2 actual-parent reconciliation, and C2-G4 exact-parent Discovery and Development replay are merged into `main`.
 
-Latest authority-changing records:
+Latest authority-changing or boundary-confirming records:
 
 - OPT-A v2 A2-G5 selector activation: `fb5b2fea2200b05a050aa1f8af51121a1883a4a5`
 - OPT-B.C1 v2 B1-G5 shadow activation: recorded in `docs/releases/opt-b-c1-v2/b1-g5/`
 - Research Operations RO-G3 local activation: `516e068ff94b3a43964f221ceface2f01f13d010`
 - Research Console RC-G2-v0.3 Overview acceptance: `cd0327e11084d19ce8b51fea67c6cfa3eb00c502`
 - OPT-B.C2 v2 C2-G3R actual-parent reconciliation: `fa11546a93f865c26d7cf99f5b5c60156bf50f9b`
+- OPT-B.C2 v2 C2-G4 exact-parent replay: `85d2638d36c5039c35d2d49fcdb499dd48e7b354`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent, parameter source or rollback target.
 
@@ -37,7 +38,7 @@ B1-G5 result: `PASS — SHADOW ACTIVATION`.
 | Development | `OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1` | `SHADOW` | 52,872 | 48 | `ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017` |
 | **Total** | **2 releases** | — | **212,764** | **192** | — |
 
-The exact releases are frozen, QA-passed, remotely verified and selected for read, inspection and comparison as atomic derived facts. Validation C1 is not built. C1-to-C2 interface validation has passed, but active C2 consumption is not implied by C1 shadow selection.
+The exact releases are frozen, QA-passed, remotely verified and selected for read, inspection and comparison as atomic derived facts. Validation C1 is not built. C1-to-C2 interface validation has passed; C2-G4 used the exact canonical C1 parents without changing C1 selector authority.
 
 ## OPT-B.C2 v2
 
@@ -45,19 +46,25 @@ WP1-WP4 contracts, schemas, registries, fixtures, level/container/relation engin
 
 C2-G3R result: `PASS_ACTUAL_C1_AND_EXACT_OPT_A_PRICE_PARENT_ENGINE_TRUST`.
 
-C2 now consumes the immutable published C1 primitive record together with the exact manifest-bound OPT-A price row identified by its lineage. The former synthetic embedded-price assumption is superseded. Current-bar primitive reconciliation, rolling range and midpoint derivation, confirmed first-valid swings, containers, relation inventories, five-axis state, gap reset, persistence, transitions and 15M-with-latest-first-valid-2H scope have fixture trust.
+C2-G4 result: `PASS_LOCAL_REPLAY`.
 
-C2-G4 remains:
+The exact manifest-bound OPT-B.C1 and OPT-A Discovery and Development parent chains passed full-byte verification and completed the bounded C2 replay:
 
-`BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT`
+| Role | Input records | Scopes | State records | Transition records | Rejected |
+|---|---:|---:|---:|---:|---:|
+| Discovery | 159,892 | 6 | 303,856 | 245,752 | 0 |
+| Development | 52,872 | 6 | 100,578 | 78,158 | 0 |
+| **Total** | **212,764** | **12** | **404,434** | **323,910** | **0** |
 
-The exact OPT-A Discovery and Development release roots must be mounted and fully verified before the actual Discovery/Development replay can run. Therefore:
+The 24 replay outputs total 872,839,722 bytes and remain external in workflow artifact `8634383302` with digest `sha256:b8f993f733aed75e488aa60883f00a53596c15e5cd6c14edb787fc3bc12df62f`.
 
-- actual market replay: `NOT_EXECUTED`
+C2-G4 changed no C2 release authority:
+
 - local C2 candidate release: `NONE`
 - publication: `NONE`
 - selector: `NONE`
 - activation: `NONE`
+- probability, exposure, trading and execution: `NONE`
 
 Validation remains `LOCKED_UNCONSUMED`.
 
@@ -78,6 +85,8 @@ Approved bounded local capabilities:
 
 The read model and console do not outrank their source records and expose no direct Git, R2, selector, threshold or classification mutation.
 
+Research Operations Foundation v0.2 has a branch-local `RO2-G0 PASS_DESIGN_FREEZE` packet. It is design canon only; RO2-WP1 runtime implementation has not begun and requires separate operator instruction.
+
 ## Research Console v0.3
 
 RC-G2-v0.3 result: `PASS`.
@@ -94,8 +103,9 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `B1_G5_PASS / REMOTE_VERIFIED / SHADOW` | `SHADOW` |
-| OPT-B.C2 v2 | `C2_G3R_PASS / C2_G4_BLOCKED_MISSING_EXACT_OPT_A_ROOTS` | `NONE` |
-| Research Operations | `RO_G3_PASS / ACTIVE_RESEARCH_OPERATIONS_LOCAL` | Not applicable |
+| OPT-B.C2 v2 | `C2_G4_PASS_LOCAL_REPLAY / NO_CANDIDATE_OR_SELECTOR` | `NONE` |
+| Research Operations v0.1 | `RO_G3_PASS / ACTIVE_RESEARCH_OPERATIONS_LOCAL` | Not applicable |
+| Research Operations v0.2 | `RO2_G0_PASS_DESIGN_FREEZE / RUNTIME_NOT_STARTED` | Not applicable |
 | Research Console v0.3 | `RC_G2_PASS / OVERVIEW_LOCAL_READ_ONLY / WP3_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
@@ -107,9 +117,10 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 - C2E, C2.5, C3 and new OPT-C/OPT-D authority remain absent.
 - Probability, exposure, trading, execution and autonomous-agent authority remain `NONE`.
 - Direct UI writes to Git, R2 or the primary branch remain denied.
+- RO2-G0 grants design records and validators only; no RO2 runtime package has begun.
 
 ## Next boundaries
 
-1. Download or mount the exact remote-verified OPT-A Discovery and Development release roots.
-2. Execute `C2_G4_EXACT_PARENT_MARKET_REPLAY` with both C1 and OPT-A roots.
-3. Continue `RC-WP3-v0.3 — Research workspace, replay, evidence and queue` under the accepted read-only and fail-closed boundaries.
+1. Execute a separate C2 candidate-freeze and QA review only when explicitly authorised.
+2. Begin RO2-WP1 runtime implementation only under a separate operator instruction.
+3. Continue `RC-WP3-v0.3 — Research workspace, replay, evidence and queue` under accepted read-only and fail-closed boundaries.
