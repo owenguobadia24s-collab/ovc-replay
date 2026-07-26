@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-research-console-rc00-preflight-packet/v0.1",
+  "packet_id": "RC-00.OVC-RESEARCH-CONSOLE.v0.2",
+  "prepared_at": "2026-07-26",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "branch": "build/research-console-v0-2-preflight",
+  "baseline": {
+    "branch": "main",
+    "commit": "e365eddb2ee465312ed6563cbe6df0760661f0d7",
+    "comparison": "IDENTICAL_AT_BRANCH_CREATION",
+    "python_requirement": ">=3.11",
+    "canonical_test_command": "python -m unittest discover tests",
+    "github_combined_status_count": 0,
+    "test_execution_state": "NOT_EXECUTED_BY_REMOTE_CONNECTOR"
+  },
+  "current_console_snapshot": {
+    "home_path": "apps/research_console/Home.py",
+    "home_blob_sha": "99df592da5d14ff5e672fdba8b8608e7e1a1a19b",
+    "read_model_path": "src/ovc/research_operations/read_model.py",
+    "read_model_blob_sha": "d2330716d9559b64f2a185aef695057729bb3d25",
+    "launcher_path": "scripts/start_research_console.ps1",
+    "launcher_blob_sha": "2a9c2333ac55043f07dd7538ef2ecb628704f98e",
+    "requirements_path": "requirements-console.txt",
+    "requirements_blob_sha": "f2d00de91e0e1f5386105f85a35123670c212f20",
+    "current_mode": "LOCAL_READ_ONLY",
+    "current_read_model_schema": "ovc-research-operations-read-model/v0.1"
+  },
+  "frozen_outputs": {
+    "authority_contract": "contracts/research_operations/console/OVC_RESEARCH_CONSOLE_UI_AUTHORITY_CONTRACT_v0_2.md",
+    "route_registry": "registries/research_operations/RESEARCH_CONSOLE_ROUTE_REGISTRY_v0_2.yaml",
+    "card_registry": "registries/research_operations/RESEARCH_CONSOLE_CARD_REGISTRY_v0_2.yaml",
+    "status_registry": "registries/research_operations/RESEARCH_CONSOLE_STATUS_REGISTRY_v0_2.yaml",
+    "empty_state_registry": "registries/research_operations/RESEARCH_CONSOLE_EMPTY_STATE_REGISTRY_v0_2.yaml",
+    "action_registry": "registries/research_operations/RESEARCH_CONSOLE_ACTION_REGISTRY_v0_2.yaml"
+  },
+  "checks": [
+    {"check_id": "RC00-01", "result": "PASS", "statement": "Exact main baseline is pinned and branch creation was non-forced."},
+    {"check_id": "RC00-02", "result": "PASS", "statement": "Current console, read-model, launcher and dependency files are hash-pinned."},
+    {"check_id": "RC00-03", "result": "PASS", "statement": "Every planned route has a stable ID, source family, authority and fallback."},
+    {"check_id": "RC00-04", "result": "PASS", "statement": "Cards, statuses, empty states and actions are frozen in named registries."},
+    {"check_id": "RC00-05", "result": "PASS", "statement": "Repository, selector, threshold, release, market, probability, exposure, execution and deployment mutations are prohibited."},
+    {"check_id": "RC00-06", "result": "PASS", "statement": "No-signal health is explicitly not PASS."},
+    {"check_id": "RC00-07", "result": "PASS", "statement": "The visual Deploy control is replaced by a non-clickable LOCAL badge."},
+    {"check_id": "RC00-08", "result": "NOT_EVALUATED", "statement": "Canonical tests must run on the branch or pull request before RC-G0 operator acceptance."}
+  ],
+  "authority_delta": "DESIGN_RECORDS_ONLY",
+  "rc00_disposition": "IMPLEMENTATION_COMPLETE_TEST_CONFIRMATION_PENDING",
+  "next_gate": "RC-G0_OPERATOR_REVIEW",
+  "rc_g0_recommendation": "DEFER_UNTIL_CANONICAL_TESTS_PASS",
+  "market_authority": "NONE",
+  "probability_authority": "NONE",
+  "exposure_authority": "NONE",
+  "execution_authority": "NONE",
+  "agent_authority": "NONE"
+}
