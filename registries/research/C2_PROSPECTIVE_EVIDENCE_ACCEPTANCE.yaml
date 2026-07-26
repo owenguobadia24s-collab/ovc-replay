@@ -14,7 +14,13 @@ record_classes:
   - BOUNDED_RESEARCH_QUESTION
 append_policy: APPEND_ONLY_AFTER_C2_G7
 validator_mode: FAIL_CLOSED
-next_boundary: FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW
+first_batch_review:
+  gate_id: FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW
+  decision: DEFER_NO_REAL_PROSPECTIVE_BATCH
+  record_count: 0
+  append_target_state: ABSENT
+  packet: docs/releases/opt-b-c2-v2/first-prospective-batch/FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_PACKET.json
+next_boundary: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH
 retained_authority:
   validation_consumption: LOCKED_UNCONSUMED
   c2e_authority: NONE
