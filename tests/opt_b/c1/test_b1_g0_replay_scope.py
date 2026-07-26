@@ -55,10 +55,12 @@ class C1B1G0ReplayScopeTests(unittest.TestCase):
         self.assertEqual(packet["authority_delta"]["r2_publication"], "DENIED")
         self.assertIs(packet["side_effects_performed"], False)
 
-    def test_implementation_registry_authorises_only_wp4_scope(self) -> None:
+    def test_implementation_registry_preserves_scope_and_records_later_gates(self) -> None:
         text = IMPLEMENTATION.read_text(encoding="utf-8")
-        self.assertIn("market_replay: AUTHORISED_EXACT_WP4_SCOPE_ONLY", text)
-        self.assertIn("local_release_freeze: DENIED_PENDING_WP4_QA_AND_OPERATOR_DECISION", text)
+        self.assertIn("scope_id: C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1", text)
+        self.assertIn("market_replay: COMPLETE_WP4_PASS", text)
+        self.assertIn("local_release_freeze: COMPLETE_WP4F_PASS", text)
+        self.assertIn("r2_publication: AUTHORISED_EXACT_RELEASES_ONLY_PENDING_WP5_EXECUTION", text)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", text)
         self.assertIn("c1_selectors_return_to_none: true", text)
 

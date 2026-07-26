@@ -1,8 +1,8 @@
 schema: ovc-opt-b-c1-implementation-registry/v1
 programme_id: OVC-OPT-B-C1-V2-IMPLEMENTATION-PLAN-0.1
 layer_id: OPT-B.C1.v2
-work_packet: B1-G1
-status: B1_G1_PASS_EXACT_INVENTORY_FREEZE_AUTHORISED
+work_packet: B1-G2
+status: B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED
 repository: owenguobadia24s-collab/ovc-replay
 wp1_merge_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
 wp2_merge_commit: fefac25f19a836898c3a22228036cd66617dca07
@@ -11,6 +11,10 @@ b1_g0_merge_commit: d584813a7a26e7e272259abc87c88b9bb212fc50
 wp4_merge_commit: 74151d3c9f4659fc6414456c2ad13a138912089c
 wp4_execution_commit: 2e2d84ad34fae02992a7861d194c12e0bdbd0c1f
 wp4_workflow_run_id: 30185680001
+b1_g1_merge_commit: 29718a526235ef7268a3226173352951072c35e8
+wp4f_merge_commit: 74af01f611d56b5b4a580543236859ce7767e1fc
+wp4f_execution_commit: c641f732d50527a93edd1901b0ddcbf1bcf929ee
+wp4f_workflow_run_id: 30187276514
 owner: OPERATOR
 upstream:
   selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
@@ -38,8 +42,12 @@ implementation:
   root: src/ovc/opt_b/c1/
   replay_runner: scripts/opt_b/run_c1_wp4_replay.py
   b1_g1_verifier: scripts/opt_b/verify_c1_b1_g1_candidate.py
+  wp4f_freezer: scripts/opt_b/freeze_c1_wp4f_release.py
+  b1_g2_verifier: scripts/opt_b/review_c1_b1_g2_release.py
   replay_workflow: .github/workflows/opt-b-c1-wp4-market-replay.yml
   freeze_review_workflow: .github/workflows/opt-b-c1-b1-g1-freeze-review.yml
+  local_freeze_workflow: .github/workflows/opt-b-c1-wp4f-local-freeze.yml
+  publication_readiness_workflow: .github/workflows/opt-b-c1-b1-g2-publication-readiness.yml
   arithmetic: DECIMAL_EXACT
   identity_excludes: [runtime, machine, absolute_local_path]
   prior_close_policy: IMMEDIATE_CONTIGUOUS_ONLY
@@ -74,13 +82,46 @@ b1_g1_result:
   verified_record_count: 212764
   duplicate_record_ids: 0
   open_blockers: 0
+wp4f_result:
+  freeze_report_artifact_id: 8627405685
+  freeze_report_artifact_digest: sha256:3e61750f9fc260a661f28593b426610d13350e558d4f3ceae99ab088a004b75a
+  artifact_retention_expires_at: 2026-10-24T04:07:25Z
+  discovery:
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
+    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    descriptor_sha256: c965d76d9888b045f0e57ef058726ca320628725d517b73923ab4a9cbef80e81
+    frozen_artifact_id: 8627405334
+    frozen_artifact_digest: sha256:1b572844be05c64bbe201d1b1a31bf430ccbed7225bc5fd3affe769967a54cea
+    record_file_count: 144
+    verified_payload_bytes: 27451233
+    record_count: 159892
+  development:
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
+    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    descriptor_sha256: d85b59f021b15c353c28ae3dc7feb4f88930af2eb4faa07a9e884a4654eb3f10
+    frozen_artifact_id: 8627405553
+    frozen_artifact_digest: sha256:6ee79feafeb8e31ddae7e53525a458304392714482e691790a8bbe557d76c3be
+    record_file_count: 48
+    verified_payload_bytes: 8719477
+    record_count: 52872
+  status: RELEASE_FROZEN_LOCAL_VERIFIED
+b1_g2_result:
+  gate_packet: docs/releases/opt-b-c1-v2/b1-g2/B1_G2_GATE_PACKET.json
+  operator_decision: docs/releases/opt-b-c1-v2/b1-g2/B1_G2_OPERATOR_DECISION.md
+  runtime_receipt_artifact_name: c1-b1-g2-publication-readiness-receipt
+  exact_pr_head_verification: REQUIRED_BEFORE_MERGE
 authority:
-  current: B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NOT_YET_FROZEN
+  current: B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED
   market_replay: COMPLETE_WP4_PASS
   local_candidate: EXACT_INVENTORY_ACCEPTED
-  local_release_freeze: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION
-  r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
-  selector_activation: DENIED_PENDING_SEPARATE_WP5_APPROVAL
+  local_release_freeze: COMPLETE_WP4F_PASS
+  release_lifecycle: RELEASE_FROZEN
+  release_qa: PASS
+  release_availability: LOCAL_VERIFIED_TRANSIENT_ARTIFACT
+  r2_publication: AUTHORISED_EXACT_RELEASES_ONLY_PENDING_WP5_EXECUTION
+  selector_activation: DENIED_PENDING_POST_PUBLICATION_REVIEW
   c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
   validation_consumption: LOCKED_UNCONSUMED
   probability: NONE
@@ -91,6 +132,9 @@ reads_allowlist:
   - exact active OPT-A v2 Discovery release artifact
   - exact active OPT-A v2 Development release artifact
   - exact WP4 candidate artifact 8626942276
+  - exact WP4F Discovery frozen artifact 8627405334
+  - exact WP4F Development frozen artifact 8627405553
+  - exact WP4F freeze report artifact 8627405685
   - registries/releases/OPT_A_ACTIVE_SELECTORS.yaml
   - registries/releases/OPT_A_RELEASE_REGISTRY.yaml
   - contracts/opt_a/OPT_A_TO_OPT_B_HANDOFF_CONTRACT_v0_2.md
@@ -112,28 +156,27 @@ reads_denylist:
   - TRADE_LABELS
 writes:
   permitted:
-    - exact accepted candidate to durable external C1 release roots through c1 freeze-release
-    - compact QA packets and decisions in Git
+    - exact WP4F Discovery and Development frozen release artifacts to immutable R2 namespaces through WP5
+    - compact QA packets, publication records and decisions in Git
   prohibited:
     - raw_market_payloads_in_git
     - full_c1_streams_in_git
     - overwrite_existing_release_root
-    - r2_publication_without_wp5_approval
+    - publication_from_rebuilt_or_substituted_bytes
     - active_opt_a_selector_mutation
-    - active_c1_selector_mutation
+    - active_c1_selector_mutation_before_post_publication_review
     - validation_access
-required_b1_g1_artifacts:
-  - .github/workflows/opt-b-c1-b1-g1-freeze-review.yml
-  - scripts/opt_b/verify_c1_b1_g1_candidate.py
-  - tests/opt_b/c1/test_b1_g1_candidate_freeze_review.py
-  - docs/releases/opt-b-c1-v2/b1-g1/B1_G1_GATE_PACKET.json
-  - docs/releases/opt-b-c1-v2/b1-g1/B1_G1_VERIFICATION_RECEIPT.json
-  - docs/releases/opt-b-c1-v2/b1-g1/B1_G1_OPERATOR_DECISION.md
-next_gate: WP4F_DURABLE_LOCAL_RELEASE_FREEZE_AND_FULL_BYTE_VERIFICATION
+required_b1_g2_artifacts:
+  - .github/workflows/opt-b-c1-b1-g2-publication-readiness.yml
+  - scripts/opt_b/review_c1_b1_g2_release.py
+  - tests/opt_b/c1/test_b1_g2_publication_readiness.py
+  - docs/releases/opt-b-c1-v2/b1-g2/B1_G2_GATE_PACKET.json
+  - docs/releases/opt-b-c1-v2/b1-g2/B1_G2_OPERATOR_DECISION.md
+next_gate: WP5_R2_PUBLICATION_AND_FULL_REMOTE_VERIFICATION
 rollback:
-  target_state: WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE
-  delete_unfrozen_candidate_workspace: true
-  discard_failed_freeze_attempt: true
+  target_state: WP4F_RELEASE_FROZEN_LOCAL_VERIFIED_NO_PUBLICATION
+  abort_on_hash_manifest_or_collision_failure: true
+  partial_payload_without_manifest_is_non_authoritative: true
   active_opt_a_selector_unchanged: true
   c1_selectors_return_to_none: true
   legacy_reactivation: PROHIBITED
