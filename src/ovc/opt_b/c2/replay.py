@@ -7,11 +7,10 @@ import re
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any, Iterable, Iterator, Mapping
+from typing import Any, Callable, Iterable, Iterator, Mapping
 
-from .persistence import apply_persistence
-from .state import build_parallel_state
-from .transitions import build_transition
+from .engine import C2ScopeEngine
+from .price_parent import OptAPriceParentIndex, VerifiedOptARelease
 
 
 DISCOVERY_RELEASE = "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1"
@@ -57,35 +56,6 @@ RELEASE_BINDINGS = {
 }
 _ALLOWED = {role: binding.release_id for role, binding in RELEASE_BINDINGS.items()}
 _RECORD_PATH = re.compile(r"^records/(15M|2H_A_L)/(BID|ASK)/[^/]+\.c1\.jsonl\.gz$")
-_SYNTHETIC_HANDOFF_FIELDS = {
-    "c1_record_id",
-    "c1_release_id",
-    "c1_manifest_id",
-    "opt_a_release_id",
-    "opt_a_manifest_id",
-    "role",
-    "authority_state",
-    "instrument",
-    "clock",
-    "side",
-    "close_time",
-    "first_valid_time",
-    "measurements",
-    "quality_state",
-}
-_ENGINE_PRICE_FIELDS = {
-    "open",
-    "high",
-    "low",
-    "close",
-    "range_low",
-    "range_high",
-    "swing_low",
-    "swing_high",
-    "prior_range",
-}
-
-
 @dataclass(frozen=True)
 class VerifiedRelease:
     root: Path
@@ -113,6 +83,25 @@ class ReplaySummary:
     transition_records: int
     rejected_records: int
     scope_count: int = 1
+
+
+class FirstValidParentResolver:
+    """Select only the latest parent structure first-valid by the local close."""
+
+    def __init__(self, snapshots: Iterable[tuple[str, tuple[dict[str, Any], ...]]]):
+        self.snapshots = list(snapshots)
+        times = [item[0] for item in self.snapshots]
+        if times != sorted(times) or len(times) != len(set(times)):
+            raise ReplayError("NON_MONOTONIC_PARENT_FIRST_VALID_TIMES")
+        self.index = 0
+        self.active: tuple[dict[str, Any], ...] = ()
+
+    def __call__(self, record: Mapping[str, Any]) -> tuple[dict[str, Any], ...]:
+        local_close = str(record["close_time"])
+        while self.index < len(self.snapshots) and self.snapshots[self.index][0] <= local_close:
+            self.active = self.snapshots[self.index][1]
+            self.index += 1
+        return self.active
 
 
 def sha256(path: Path) -> str:
@@ -249,60 +238,41 @@ def _scope(record: Mapping[str, Any], role: str) -> tuple[str, str, str, str]:
     return role, clock, side, evaluation_scope
 
 
-def _assert_engine_compatible(record: Mapping[str, Any], binding: ReleaseBinding) -> None:
-    if not _SYNTHETIC_HANDOFF_FIELDS.issubset(record):
-        missing = ",".join(sorted(_SYNTHETIC_HANDOFF_FIELDS - set(record)))
-        raise ReplayError(
-            "PUBLISHED_C1_RECORD_SHAPE_NOT_C2_HANDOFF_ENVELOPE:"
-            f"{binding.role}:missing={missing}"
-        )
-    measurements = record.get("measurements")
-    if not isinstance(measurements, Mapping):
-        raise ReplayError(f"INVALID_MEASUREMENTS:{binding.role}")
-    missing_price = sorted(_ENGINE_PRICE_FIELDS - set(measurements))
-    if missing_price:
-        raise ReplayError(
-            "C2_REQUIRED_PRICE_AND_STRUCTURE_INPUTS_UNAVAILABLE:"
-            f"{binding.role}:missing={','.join(missing_price)}"
-        )
-    if record.get("c1_release_id") != binding.release_id or record.get("c1_manifest_id") != binding.manifest_id:
-        raise ReplayError(f"RECORD_MANIFEST_BINDING_MISMATCH:{binding.role}")
-    if record.get("role") != binding.role:
-        raise ReplayError(f"RECORD_ROLE_MISMATCH:{binding.role}")
-
-
 def _write_scope_replay(
     *,
     records: Iterable[dict[str, Any]],
-    scope: tuple[str, str, str, str],
+    role: str,
+    clock: str,
+    side: str,
+    evaluation_scope: str,
     output_dir: Path,
-) -> tuple[int, int, int]:
-    role, clock, side, evaluation_scope = scope
+    parent_levels: Callable[[Mapping[str, Any]], Iterable[Mapping[str, Any]]] | None = None,
+    collect_levels: bool = False,
+) -> tuple[int, int, list[tuple[str, tuple[dict[str, Any], ...]]]]:
     scope_slug = evaluation_scope.replace(".", "_")
     state_path = output_dir / "states" / role.lower() / clock / side / f"{scope_slug}.jsonl"
     transition_path = output_dir / "transitions" / role.lower() / clock / side / f"{scope_slug}.jsonl"
     state_path.parent.mkdir(parents=True, exist_ok=True)
     transition_path.parent.mkdir(parents=True, exist_ok=True)
-    previous: dict[str, Any] | None = None
-    previous_time = ""
-    input_count = state_count = transition_count = 0
+    engine = C2ScopeEngine(evaluation_scope)
+    state_count = transition_count = 0
+    snapshots: list[tuple[str, tuple[dict[str, Any], ...]]] = []
     with state_path.open("w", encoding="utf-8", newline="\n") as states, transition_path.open(
         "w", encoding="utf-8", newline="\n"
     ) as transitions:
         for record in records:
-            input_count += 1
             current_scope = _scope(record, role)
-            if current_scope != scope:
-                raise ReplayError(f"SCOPE_DRIFT:{scope}:{current_scope}")
-            close_time = str(record["close_time"])
-            if previous_time and close_time <= previous_time:
-                raise ReplayError(f"NON_MONOTONIC_SCOPE_CHRONOLOGY:{scope}:{close_time}")
-            current = apply_persistence(build_parallel_state(record), previous)
+            if current_scope[:3] != (role, clock, side):
+                raise ReplayError(f"SCOPE_DRIFT:{(role, clock, side)}:{current_scope[:3]}")
+            result = engine.process(
+                record,
+                parent_levels=parent_levels(record) if parent_levels is not None else (),
+            )
+            current = result.state
             current["role"] = role
-            current["evaluation_scope_id"] = evaluation_scope
             states.write(json.dumps(current, sort_keys=True, separators=(",", ":")) + "\n")
             state_count += 1
-            transition = build_transition(current, previous)
+            transition = result.transition
             if transition is not None:
                 transition["role"] = role
                 transition["clock"] = clock
@@ -310,38 +280,104 @@ def _write_scope_replay(
                 transition["evaluation_scope_id"] = evaluation_scope
                 transitions.write(json.dumps(transition, sort_keys=True, separators=(",", ":")) + "\n")
                 transition_count += 1
-            previous = current
-            previous_time = close_time
-    return input_count, state_count, transition_count
+            if collect_levels:
+                snapshots.append((str(current["first_valid_time"]), result.levels))
+    return state_count, transition_count, snapshots
 
 
-def run_verified_role_replay(verified: VerifiedRelease, output_dir: Path) -> ReplaySummary:
+def _scope_paths(verified: VerifiedRelease, clock: str, side: str) -> list[Path]:
+    prefix = f"records/{clock}/{side}/"
+    return [
+        path
+        for path in verified.record_paths
+        if path.relative_to(verified.root / "files").as_posix().startswith(prefix)
+    ]
+
+
+def _joined_records(
+    verified: VerifiedRelease,
+    price_release: VerifiedOptARelease,
+    *,
+    clock: str,
+    side: str,
+) -> Iterator[dict[str, Any]]:
+    index = OptAPriceParentIndex(price_release)
+    previous_time = ""
+    for shard in _scope_paths(verified, clock, side):
+        seen = False
+        for record in read_jsonl(shard):
+            seen = True
+            try:
+                joined = index.join(
+                    record,
+                    c1_release_id=verified.binding.release_id,
+                    c1_manifest_id=verified.binding.manifest_id,
+                )
+            except ValueError as exc:
+                raise ReplayError(f"EXACT_PARENT_JOIN_FAILED:{verified.binding.role}:{exc}") from exc
+            if previous_time and joined["open_time"] <= previous_time:
+                raise ReplayError(
+                    f"NON_MONOTONIC_JOINED_SCOPE:{verified.binding.role}:{clock}:{side}:{joined['open_time']}"
+                )
+            previous_time = joined["open_time"]
+            yield joined
+        if not seen:
+            raise ReplayError(f"EMPTY_RECORD_SHARD:{shard}")
+
+
+def run_verified_role_replay(
+    verified: VerifiedRelease,
+    price_release: VerifiedOptARelease,
+    output_dir: Path,
+) -> ReplaySummary:
     binding = verified.binding
-    by_scope: dict[tuple[str, str, str, str], list[Path]] = {}
-    first: dict[tuple[str, str, str, str], dict[str, Any]] = {}
-    for path in verified.record_paths:
-        iterator = read_jsonl(path)
-        try:
-            record = next(iterator)
-        except StopIteration as exc:
-            raise ReplayError(f"EMPTY_RECORD_SHARD:{path}") from exc
-        scope = _scope(record, binding.role)
-        _assert_engine_compatible(record, binding)
-        first.setdefault(scope, record)
-        by_scope.setdefault(scope, []).append(path)
-
+    if price_release.binding.role != binding.role:
+        raise ReplayError("C1_OPT_A_VERIFIED_ROLE_MISMATCH")
     input_count = state_count = transition_count = 0
-    for scope, paths in sorted(by_scope.items()):
-        def records() -> Iterator[dict[str, Any]]:
-            for shard in paths:
-                for record in read_jsonl(shard):
-                    _assert_engine_compatible(record, binding)
-                    yield record
+    scope_count = 0
+    for side in ("BID", "ASK"):
+        two_h_records = _joined_records(verified, price_release, clock="2H_A_L", side=side)
+        two_h_states, two_h_transitions, parent_snapshots = _write_scope_replay(
+            records=two_h_records,
+            role=binding.role,
+            clock="2H_A_L",
+            side=side,
+            evaluation_scope="GBPUSD-2H-A-L-LOCAL-v0.1",
+            output_dir=output_dir,
+            collect_levels=True,
+        )
+        input_count += two_h_states
+        state_count += two_h_states
+        transition_count += two_h_transitions
+        scope_count += 1
 
-        inputs, states, transitions = _write_scope_replay(records=records(), scope=scope, output_dir=output_dir)
-        input_count += inputs
-        state_count += states
-        transition_count += transitions
+        local_states, local_transitions, _ = _write_scope_replay(
+            records=_joined_records(verified, price_release, clock="15M", side=side),
+            role=binding.role,
+            clock="15M",
+            side=side,
+            evaluation_scope="GBPUSD-15M-LOCAL-v0.1",
+            output_dir=output_dir,
+        )
+        input_count += local_states
+        state_count += local_states
+        transition_count += local_transitions
+        scope_count += 1
+
+        latest_parent = FirstValidParentResolver(parent_snapshots)
+
+        combined_states, combined_transitions, _ = _write_scope_replay(
+            records=_joined_records(verified, price_release, clock="15M", side=side),
+            role=binding.role,
+            clock="15M",
+            side=side,
+            evaluation_scope="GBPUSD-15M-WITH-2H-PARENT-v0.1",
+            output_dir=output_dir,
+            parent_levels=latest_parent,
+        )
+        state_count += combined_states
+        transition_count += combined_transitions
+        scope_count += 1
     return ReplaySummary(
         binding.role,
         binding.release_id,
@@ -349,7 +385,7 @@ def run_verified_role_replay(verified: VerifiedRelease, output_dir: Path) -> Rep
         state_count,
         transition_count,
         0,
-        len(by_scope),
+        scope_count,
     )
 
 
@@ -374,22 +410,16 @@ def run_role_replay(*, role: str, release_id: str, input_path: Path, output_dir:
         "w", encoding="utf-8", newline="\n"
     ) as transitions:
         for scope, scoped_records in sorted(scopes.items()):
-            previous: dict[str, Any] | None = None
-            previous_time = ""
+            engine = C2ScopeEngine(scope[3])
             for record in sorted(scoped_records, key=lambda item: str(item["close_time"])):
-                close_time = str(record["close_time"])
-                if previous_time and close_time <= previous_time:
-                    raise ReplayError(f"NON_MONOTONIC_SCOPE_CHRONOLOGY:{scope}:{close_time}")
-                current = apply_persistence(build_parallel_state(record), previous)
+                result = engine.process(record)
+                current = result.state
                 current["role"] = role
-                current["evaluation_scope_id"] = scope[3]
                 states.write(json.dumps(current, sort_keys=True, separators=(",", ":")) + "\n")
                 total_states += 1
-                transition = build_transition(current, previous)
+                transition = result.transition
                 if transition is not None:
                     transition.update({"role": role, "clock": scope[1], "side": scope[2], "evaluation_scope_id": scope[3]})
                     transitions.write(json.dumps(transition, sort_keys=True, separators=(",", ":")) + "\n")
                     total_transitions += 1
-                previous = current
-                previous_time = close_time
     return ReplaySummary(role, release_id, len(records), total_states, total_transitions, 0, len(scopes))

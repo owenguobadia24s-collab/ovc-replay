@@ -2,54 +2,62 @@ from __future__ import annotations
 
 import unittest
 
-from ovc.opt_b.c2.persistence import apply_persistence
-from ovc.opt_b.c2.state import AXES, build_parallel_state
-from ovc.opt_b.c2.transitions import build_transition
-
-
-def fixture(close: str = "1.2500", open_: str = "1.2490") -> dict:
-    measurements = {
-        "open": open_, "high": "1.2510", "low": "1.2480", "close": close,
-        "range_low": "1.2400", "range_high": "1.2600",
-        "swing_low": "1.2300", "swing_high": "1.2700", "prior_range": "0.0020",
-    }
-    for index in range(9, 18):
-        measurements[f"m{index}"] = str(index)
-    return {
-        "c1_record_id": "C1.TEST.1", "c1_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.TEST",
-        "c1_manifest_id": "MANIFEST.C1.TEST", "opt_a_release_id": "OPT-A.TEST",
-        "opt_a_manifest_id": "MANIFEST.A.TEST", "role": "DISCOVERY",
-        "authority_state": "ACTIVE_DISCOVERY", "instrument": "GBPUSD", "clock": "15M",
-        "side": "BID", "close_time": "2026-01-01T00:15:00Z",
-        "first_valid_time": "2026-01-01T00:15:00Z", "measurements": measurements,
-        "quality_state": "VALID",
-    }
+from ovc.opt_b.c2.engine import C2ScopeEngine
+from ovc.opt_b.c2.state import AXES
+from tests.opt_b.c2.test_wp3_structure_engine import parent
 
 
 class WP4EngineTrustTests(unittest.TestCase):
     def test_parallel_axes_are_complete_and_independent(self) -> None:
-        state = build_parallel_state(fixture())
-        self.assertEqual(tuple(state["axes"]), AXES)
-        self.assertNotIn("overall_state", state)
-        self.assertNotIn("winning_state", state)
+        engine = C2ScopeEngine("GBPUSD-15M-LOCAL-v0.1")
+        result = None
+        for index in range(32):
+            result = engine.process(parent(index))
+        assert result is not None
+        self.assertEqual(tuple(result.state["axes"]), AXES)
+        self.assertNotIn("overall_state", result.state)
+        self.assertNotIn("winning_state", result.state)
 
     def test_deterministic_identity(self) -> None:
-        self.assertEqual(build_parallel_state(fixture()), build_parallel_state(fixture()))
+        def run() -> dict:
+            engine = C2ScopeEngine("GBPUSD-15M-LOCAL-v0.1")
+            result = None
+            for index in range(32):
+                result = engine.process(parent(index))
+            assert result is not None
+            return result.state
+
+        self.assertEqual(run(), run())
 
     def test_persistence_increments_only_for_unchanged_axes(self) -> None:
-        first = apply_persistence(build_parallel_state(fixture()), None)
-        second = apply_persistence(build_parallel_state(fixture()), first)
-        self.assertTrue(all(value == 2 for value in second["persistence"].values()))
+        engine = C2ScopeEngine("GBPUSD-15M-LOCAL-v0.1")
+        for index in range(32):
+            first = engine.process(parent(index))
+        second = engine.process(parent(32))
+        self.assertGreaterEqual(second.state["persistence"]["LOCATION"], first.state["persistence"]["LOCATION"])
+        self.assertEqual(second.state["continuity"], "CONTIGUOUS")
 
     def test_transition_lists_only_changed_axes(self) -> None:
-        previous = apply_persistence(build_parallel_state(fixture()), None)
-        changed_record = fixture(close="1.2485", open_="1.2495")
-        changed_record["c1_record_id"] = "C1.TEST.2"
-        current = apply_persistence(build_parallel_state(changed_record), previous)
-        transition = build_transition(current, previous)
-        self.assertIsNotNone(transition)
-        self.assertIn("MOTION", transition["changed_axes"])
-        self.assertNotIn("future_outcome", transition)
+        engine = C2ScopeEngine("GBPUSD-15M-LOCAL-v0.1")
+        for index in range(32):
+            engine.process(parent(index))
+        changed = parent(32, close="1.1005")
+        changed["measurements"]["body_signed"] = "-0.0045"
+        changed["measurements"]["body_abs"] = "0.0045"
+        changed["categorical"]["direction"] = "DOWN"
+        result = engine.process(changed)
+        self.assertIsNotNone(result.transition)
+        self.assertIn("MOTION", result.transition["changed_axes"])
+        self.assertNotIn("future_outcome", result.transition)
+
+    def test_gap_resets_persistence_and_first_valid_history(self) -> None:
+        engine = C2ScopeEngine("GBPUSD-15M-LOCAL-v0.1")
+        for index in range(32):
+            engine.process(parent(index))
+        gapped = parent(40)
+        result = engine.process(gapped)
+        self.assertEqual(result.state["continuity"], "RESET")
+        self.assertEqual(result.state["axes"]["QUALITY"]["value"], "CENSORED")
 
 
 if __name__ == "__main__":
