@@ -37,6 +37,7 @@ class C1WP3ReferenceEngineTests(unittest.TestCase):
             "WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE",
             "B1_G1_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED",
             "B1_G2_PUBLICATION_READY_WP5_AUTHORISED",
+            "B1_G5_SHADOW_SELECTED_C2_DENIED",
         })
 
     def test_exact_decimal_geometry_and_determinism(self) -> None:
