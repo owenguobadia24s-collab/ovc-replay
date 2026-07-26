@@ -1,6 +1,6 @@
 schema: ovc-opt-b-c1-release-registry/v1
 registry_id: C1.RELEASES.v0.1
-status: B1_G1_PASS_EXACT_CANDIDATES_FREEZE_AUTHORISED
+status: B1_G2_PASS_PUBLICATION_READY
 formula_registry_id: C1.FORMULAS.v0.1
 record_schema_id: c1_bar_primitives_v0_1
 wp4_workflow_run_id: 30185680001
@@ -9,41 +9,61 @@ wp4_candidate_artifact_digest: sha256:fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5e
 wp4_inventory_sha256: 39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383
 b1_g1_verification_receipt_sha256: 3eb831185c73ae279b837dfacfc669d600c1630c1e9f17638645f1456a71cc14
 wp4_qa_artifact_id: 8626942405
+wp4f_workflow_run_id: 30187276514
+wp4f_freeze_report_artifact_id: 8627405685
+wp4f_freeze_report_artifact_digest: sha256:3e61750f9fc260a661f28593b426610d13350e558d4f3ceae99ab088a004b75a
+artifact_retention_expires_at: 2026-10-24T04:07:25Z
 releases:
   - role: DISCOVERY
-    planned_release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
+    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    descriptor_sha256: c965d76d9888b045f0e57ef058726ca320628725d517b73923ab4a9cbef80e81
+    frozen_artifact_id: 8627405334
+    frozen_artifact_digest: sha256:1b572844be05c64bbe201d1b1a31bf430ccbed7225bc5fd3affe769967a54cea
     parent_opt_a_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
     parent_opt_a_manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     parent_opt_a_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
-    lifecycle_state: REPLAY_BUILT
+    lifecycle_state: RELEASE_FROZEN
     authority_state: CANDIDATE
     qa_state: PASS
-    availability_state: LOCAL_ONLY
+    availability_state: LOCAL_VERIFIED_TRANSIENT_ARTIFACT
     publication_status: NOT_ATTEMPTED
     active_selector: false
     market_replay: COMPLETE_WP4_PASS
     record_count: 159892
-    candidate_file_count: 144
-    candidate_bytes: 27450668
+    record_file_count: 144
+    manifest_file_count: 145
+    verified_payload_bytes: 27451233
     quarantine_records_excluded: 12104
-    freeze_state: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION
+    freeze_state: COMPLETE_WP4F_PASS
+    publication_readiness: PASS_B1_G2
+    r2_publication_authority: AUTHORISED_EXACT_RELEASE_ONLY_PENDING_WP5
   - role: DEVELOPMENT
-    planned_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
+    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    descriptor_sha256: d85b59f021b15c353c28ae3dc7feb4f88930af2eb4faa07a9e884a4654eb3f10
+    frozen_artifact_id: 8627405553
+    frozen_artifact_digest: sha256:6ee79feafeb8e31ddae7e53525a458304392714482e691790a8bbe557d76c3be
     parent_opt_a_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
     parent_opt_a_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     parent_opt_a_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
-    lifecycle_state: REPLAY_BUILT
+    lifecycle_state: RELEASE_FROZEN
     authority_state: CANDIDATE
     qa_state: PASS
-    availability_state: LOCAL_ONLY
+    availability_state: LOCAL_VERIFIED_TRANSIENT_ARTIFACT
     publication_status: NOT_ATTEMPTED
     active_selector: false
     market_replay: COMPLETE_WP4_PASS
     record_count: 52872
-    candidate_file_count: 48
-    candidate_bytes: 8718913
+    record_file_count: 48
+    manifest_file_count: 49
+    verified_payload_bytes: 8719477
     quarantine_records_excluded: 4862
-    freeze_state: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION
+    freeze_state: COMPLETE_WP4F_PASS
+    publication_readiness: PASS_B1_G2
+    r2_publication_authority: AUTHORISED_EXACT_RELEASE_ONLY_PENDING_WP5
   - role: VALIDATION
     planned_release_id: OPT-B.C1.GBPUSD.VALIDATION.2025.v1
     parent_opt_a_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
@@ -60,7 +80,7 @@ releases:
 prohibited_release_ids:
   - OPT-A.GBPUSD.2026H1.v1
 legacy_source_authority: NONE
-local_release_freeze_authority: GRANTED_B1_G1_EXACT_CANDIDATE_ONLY
-selector_activation: DENIED_PENDING_WP5
-r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
+local_release_freeze: COMPLETE_WP4F_PASS
+selector_activation: DENIED_PENDING_POST_PUBLICATION_REVIEW
+r2_publication: AUTHORISED_EXACT_DISCOVERY_AND_DEVELOPMENT_RELEASES_PENDING_WP5
 c2_handoff: DENIED_PENDING_SEPARATE_REVIEW
