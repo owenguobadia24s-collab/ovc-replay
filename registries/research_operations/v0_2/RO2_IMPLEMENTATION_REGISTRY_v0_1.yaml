@@ -1,9 +1,8 @@
 schema: ovc-ro2-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2
 design_gate: RO2_G0_PASS_DESIGN_FREEZE
-status: RO2_G1_PASS_LOCAL_REPLACEABLE_DERIVED_INDEX
-latest_reconciled_main_commit: 28f0161580327a2222ae089a7ad01aa1dfc5f994
-main_reconciliation_commit: 79b515540eb8de982ee8434479b709f98d2ffd2c
+status: RO2_WP2_CANDIDATE_PENDING_RO2_G2
+latest_reconciled_main_commit: a79616eeaa90ba097cc797a230aa73f9f41ecee8
 items:
   - id: RO2-00
     name: Boundary, reconciliation and contract freeze
@@ -13,44 +12,46 @@ items:
     name: Role workspace and release index
     status: ACCEPTED_RO2_G1_ACTIVE_BOUNDED_LOCAL_DERIVED
     namespace: src/ovc/research_operations/v0_2/workspace_index.py
-    authority_after_gate: REPLACEABLE_LOCAL_DERIVED_READ_MODEL
     writes: NONE
   - id: RO2-WP1-OBSERVATION
     name: Observation and observation-family indexes
     status: ACCEPTED_RO2_G1_ACTIVE_BOUNDED_LOCAL_DERIVED
     namespace: src/ovc/research_operations/v0_2/workspace_index.py
-    authority_after_gate: READ_ONLY_DISCOVERY_DEVELOPMENT
     validation_projection: METADATA_ONLY
     validation_guard: DENY_BEFORE_PATH_RESOLUTION
     writes: NONE
   - id: RO2-WP2-QUALITY
     name: Data-quality projection
-    status: NOT_STARTED_REQUIRES_SEPARATE_INSTRUCTION
-    planned_namespace: src/ovc/research_operations/v0_2/quality
+    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    namespace: src/ovc/research_operations/v0_2/quality.py
     authority_after_gate: DERIVED_HEALTH_ONLY
+    writes: NONE
   - id: RO2-WP2-LINEAGE
     name: Bar-lineage inspection
-    status: NOT_STARTED_REQUIRES_SEPARATE_INSTRUCTION
-    planned_namespace: src/ovc/research_operations/v0_2/lineage
+    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    namespace: src/ovc/research_operations/v0_2/lineage.py
     authority_after_gate: READ_ONLY_TRACE
+    writes: NONE
   - id: RO2-WP2-REPLAY
     name: Admissible-cutoff replay
-    status: AUTHORISED_FOR_BUILD_REQUIRES_SEPARATE_INSTRUCTION
-    planned_namespace: src/ovc/research_operations/v0_2/replay
+    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    namespace: src/ovc/research_operations/v0_2/replay.py
     authority_after_gate: LOCAL_READ_ONLY_REPLAY
+    validation_guard: DENY_BEFORE_PATH_RESOLUTION
+    writes: NONE
   - id: RO2-WP2-DIFF
     name: Release and workspace comparison
-    status: AUTHORISED_FOR_BUILD_REQUIRES_SEPARATE_INSTRUCTION
-    planned_namespace: src/ovc/research_operations/v0_2/release_diff
+    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    namespace: src/ovc/research_operations/v0_2/release_diff.py
     authority_after_gate: DERIVED_COMPARISON_ONLY
+    writes: NONE
   - id: RO2-WP3-CONSOLE
     name: Research Console v0.3 adapters
-    status: DEFERRED_AFTER_RO2_WP2_GATE
+    status: DEFERRED_AFTER_RO2_G2
     planned_namespace: src/ovc/research_operations/v0_2/console_adapters
-    authority_after_gate: READ_ONLY_PRESENTATION
 retained_boundaries:
   validation_consumption: LOCKED_UNCONSUMED
-  c2_publication: COMPLETE_REMOTE_VERIFIED_SEPARATE_C2_AUTHORITY_UNCHANGED_BY_RO2_G1
+  c2_publication: COMPLETE_REMOTE_VERIFIED_SEPARATE_C2_AUTHORITY_UNCHANGED
   c2_selector: NONE
   c2_activation: NONE
   c2_legacy_retirement_executed: false
