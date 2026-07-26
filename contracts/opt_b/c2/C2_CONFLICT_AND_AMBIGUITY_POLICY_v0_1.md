@@ -1,0 +1,3 @@
+# C2 Conflict and Ambiguity Policy v0.1
+
+Valid coexistence is retained, not coerced to NEUTRAL. Conflicts and ambiguities are explicit quality states with deterministic reason codes, affected axes and parent identities. No precedence, suppression or hidden winner is permitted. Unresolved parent, boundary or relation ambiguity is NOT_EVALUABLE or CONFLICT according to the registry; records remain auditable and outcome-blind.
