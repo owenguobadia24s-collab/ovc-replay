@@ -1,0 +1,39 @@
+name: C2-G6 discovery operation review
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discovery-operation-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce C2-G6 prospective-only boundary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('docs/releases/opt-b-c2-v2/c2-g6/C2_G6_GATE_PACKET.json').read_text())
+          assert gate['decision'] == 'PASS_DISCOVERY_OPERATION_OPEN_PROSPECTIVE_ONLY'
+          assert gate['operation']['status'] == 'OPEN_PROSPECTIVE_RESEARCH'
+          assert gate['operation']['pre_cutoff_rows_admissible'] is False
+          assert gate['operation']['effective_commit'] == '2a3f262fc0539786b67ae6c3e20604eb4d4adc2b'
+          assert gate['prerequisites']['c2_discovery_authority'] == 'ACTIVE_DISCOVERY'
+          assert gate['prerequisites']['legacy_b_state'] == 'HISTORICAL_SUPERSEDED'
+          assert gate['retained']['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          assert gate['retained']['trading'] == 'NONE'
+          assert gate['retained']['execution'] == 'NONE'
+          assert gate['blocking_issues'] == 0
+          PY
