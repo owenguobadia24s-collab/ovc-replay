@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c1/c1_release_descriptor_v0_1.schema.json",
+  "title": "OVC OPT-B.C1 release descriptor v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "release_id",
+    "research_role",
+    "instrument",
+    "interval_start",
+    "interval_end",
+    "parent_opt_a_release_id",
+    "parent_opt_a_manifest_id",
+    "parent_opt_a_manifest_sha256",
+    "formula_registry_id",
+    "formula_registry_sha256",
+    "record_schema_id",
+    "record_schema_sha256",
+    "clocks",
+    "price_sides",
+    "record_counts",
+    "inventory_sha256",
+    "qa_packet_id",
+    "qa_state",
+    "lifecycle_state",
+    "authority_state",
+    "availability_state",
+    "publication_status",
+    "active_selector",
+    "source_commit"
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]}
+  },
+  "properties": {
+    "schema": {"const": "ovc-opt-b-c1-release-descriptor/v1"},
+    "release_id": {"type": "string", "pattern": "^OPT-B\\.C1\\.GBPUSD\\.(DISCOVERY|DEVELOPMENT|VALIDATION)\\.[A-Z0-9_]+\\.v[0-9]+$"},
+    "research_role": {"$ref": "#/$defs/role"},
+    "instrument": {"const": "GBPUSD"},
+    "interval_start": {"type": "string", "format": "date-time"},
+    "interval_end": {"type": "string", "format": "date-time"},
+    "parent_opt_a_release_id": {
+      "enum": [
+        "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "OPT-A.GBPUSD.VALIDATION.2025.v2"
+      ]
+    },
+    "parent_opt_a_manifest_id": {"type": "string", "minLength": 1},
+    "parent_opt_a_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+    "formula_registry_sha256": {"$ref": "#/$defs/sha256"},
+    "record_schema_id": {"const": "c1_bar_primitives_v0_1"},
+    "record_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "clocks": {"type": "array", "prefixItems": [{"const": "15M"}, {"const": "2H_A_L"}], "items": false},
+    "price_sides": {"type": "array", "prefixItems": [{"const": "BID"}, {"const": "ASK"}], "items": false},
+    "record_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["15M_BID", "15M_ASK", "2H_A_L_BID", "2H_A_L_ASK", "total"],
+      "properties": {
+        "15M_BID": {"type": "integer", "minimum": 0},
+        "15M_ASK": {"type": "integer", "minimum": 0},
+        "2H_A_L_BID": {"type": "integer", "minimum": 0},
+        "2H_A_L_ASK": {"type": "integer", "minimum": 0},
+        "total": {"type": "integer", "minimum": 0}
+      }
+    },
+    "inventory_sha256": {"$ref": "#/$defs/sha256"},
+    "qa_packet_id": {"type": "string", "minLength": 1},
+    "qa_state": {"enum": ["NOT_EVALUATED", "PASS", "WARN", "BLOCK", "QUARANTINE"]},
+    "lifecycle_state": {"enum": ["DRAFT", "CONTRACT_FROZEN", "IMPLEMENTED", "FIXTURE_VERIFIED", "REPLAY_BUILT", "RELEASE_FROZEN", "LOCAL_VERIFIED", "PUBLICATION_APPROVED", "PUBLISHED", "REMOTE_VERIFIED"]},
+    "authority_state": {"enum": ["NONE", "CANDIDATE", "SHADOW", "ACTIVE_DISCOVERY", "ACTIVE_DEVELOPMENT", "ACTIVE_VALIDATION", "HISTORICAL", "SUPERSEDED"]},
+    "availability_state": {"enum": ["LOCAL_ONLY", "REMOTE_PRESENT", "REMOTE_VERIFIED", "PARTIALLY_AVAILABLE", "MISSING"]},
+    "compatibility_state": {"enum": ["NOT_EVALUATED", "EXACT", "EXPECTED_DIFFERENCE", "UNEXPLAINED_DIFFERENCE", "NOT_COMPARABLE"]},
+    "publication_status": {"enum": ["NOT_ATTEMPTED", "APPROVED", "PUBLISHED", "NEVER_PUBLISHED", "ABANDONED_BY_POLICY"]},
+    "active_selector": {"type": "boolean"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "supersedes_release_id": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"research_role": {"const": "VALIDATION"}}},
+      "then": {"properties": {"active_selector": {"const": false}}}
+    },
+    {
+      "if": {"properties": {"lifecycle_state": {"enum": ["DRAFT", "CONTRACT_FROZEN", "IMPLEMENTED", "FIXTURE_VERIFIED", "REPLAY_BUILT"]}}},
+      "then": {"properties": {"authority_state": {"enum": ["NONE", "CANDIDATE"]}, "active_selector": {"const": false}}}
+    }
+  ]
+}
