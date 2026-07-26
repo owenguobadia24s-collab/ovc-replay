@@ -1,0 +1,61 @@
+schema: ovc-opt-b-c2-implementation-registry/v1
+programme_id: OVC-OPT-B-C2-V2-IMPLEMENTATION-PLAN-0.1
+layer_id: OPT-B.C2.v2
+work_packet: WP1
+status: WP1_PASS_BOUNDARY_FROZEN_WP2_AUTHORISED
+owner: OPERATOR
+repository: owenguobadia24s-collab/ovc-replay
+source_branch: build/opt-b-c2-boundary
+upstream:
+  c1_handoff_gate: C1-C2-HANDOFF-ACTIVE
+  required_c1_roles: [DISCOVERY, DEVELOPMENT]
+  required_c1_authorities: [ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT]
+  validation_consumption: LOCKED_UNCONSUMED
+scope:
+  instrument: [GBPUSD]
+  canonical_clocks: [15M, 2H_A_L]
+  control_only_clocks: [H1_M1_DERIVED, H1_PROVIDER_NATIVE]
+  price_sides: [BID, ASK]
+  canonical_namespaces: [C2.L, C2.K, C2.R, C2.S, C2.T, C2.Q]
+authority:
+  design: APPROVED
+  contracts_and_schemas: AUTHORISED_FOR_WP2
+  engine_implementation: DENIED_PENDING_WP2
+  market_replay: DENIED_PENDING_C2_G2_AND_OPERATOR_APPROVAL
+  release: NONE
+  selector: NONE
+  activation: NONE
+  validation_consumption: LOCKED_UNCONSUMED
+  probability: NONE
+  exposure: NONE
+  trading: NONE
+  execution: NONE
+reads_allowlist:
+  - exact active OPT-A v2 registries and contracts
+  - exact active C1 v2 Discovery and Development releases and registries
+  - synthetic OPT-A/C1 handoff fixtures
+  - QA and authority registries
+reads_denylist:
+  - C1 Validation payloads
+  - legacy/quarantine/**
+  - B-STATE-0.3b as parent authority
+  - C2E
+  - C2.5
+  - C3
+  - OPT-C
+  - OPT-D
+  - FUTURE_OUTCOMES
+  - TRADE_LABELS
+writes:
+  permitted:
+    - C2 contracts, schemas, registries, parameter packs and synthetic fixtures under WP2
+    - compact gate and QA packets in Git
+  prohibited:
+    - market-derived C2 records before C2-G3
+    - active selectors
+    - provider payloads
+    - legacy state mutation
+rollback:
+  target_state: C1_ACTIVE_C2_NONE
+  legacy_reactivation: PROHIBITED
+next_gate: C2-G1_CONTRACT_FREEZE
