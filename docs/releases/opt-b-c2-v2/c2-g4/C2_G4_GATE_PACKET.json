@@ -1,0 +1,72 @@
+{
+  "schema": "ovc-opt-b-c2-c2-g4-gate-packet/v1",
+  "gate_id": "C2-G4",
+  "decision": "PASS_LOCAL_REPLAY",
+  "executed_at": "2026-07-26T16:36:15Z",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "workflow": {
+    "name": "C2-G4 exact-parent market replay",
+    "run_id": 30210057332,
+    "source_commit": "4fb06b4d2b13bdf737446cb619e548eb987aeab1",
+    "conclusion": "SUCCESS"
+  },
+  "artifact": {
+    "artifact_id": 8634383302,
+    "name": "c2-g4-exact-parent-replay-output",
+    "archive_size_bytes": 146833320,
+    "digest": "sha256:b8f993f733aed75e488aa60883f00a53596c15e5cd6c14edb787fc3bc12df62f",
+    "expires_at": "2026-10-24T16:16:45Z"
+  },
+  "verification": {
+    "status": "PASS_C1_AND_OPT_A_CANONICAL_FULL_BYTE_VERIFICATION",
+    "c1_record_shards": 192,
+    "c1_manifest_bound_payload_objects": 194,
+    "c1_canonical_objects_including_manifests": 196,
+    "opt_a_manifest_bound_payload_objects": 394,
+    "opt_a_price_files": 192
+  },
+  "replay": {
+    "status": "PASS_LOCAL_REPLAY",
+    "roles": [
+      {
+        "role": "DISCOVERY",
+        "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+        "input_records": 159892,
+        "scope_count": 6,
+        "state_records": 303856,
+        "transition_records": 245752,
+        "rejected_records": 0
+      },
+      {
+        "role": "DEVELOPMENT",
+        "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+        "input_records": 52872,
+        "scope_count": 6,
+        "state_records": 100578,
+        "transition_records": 78158,
+        "rejected_records": 0
+      }
+    ],
+    "totals": {
+      "input_records": 212764,
+      "scope_count": 12,
+      "state_records": 404434,
+      "transition_records": 323910,
+      "rejected_records": 0,
+      "output_files": 24,
+      "output_bytes": 872839722
+    }
+  },
+  "authority": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "local_candidate_release": "NONE",
+    "publication": "NONE",
+    "selector": "NONE",
+    "activation": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "next_gate": "C2_CANDIDATE_FREEZE_AND_QA_REVIEW"
+}
