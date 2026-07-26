@@ -1,0 +1,75 @@
+schema: ovc-opt-a-implementation-record/v1
+programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
+gate_id: A2-G4
+title: Remote publication verification and authority review
+branch: review/opt-a-v2-a2-g4-remote-publication
+baseline_commit: 8f0dd49e489b531df8998b4fc1575d6fb11317d1
+status: EXECUTED_PASS_READY_TO_MERGE
+preconditions:
+  - A2_G3_PASS
+  - WP6_PUBLICATION_APPROVALS_BOUND
+  - ALL_THREE_REMOTE_MANIFESTS_PRESENT
+inputs:
+  wp6_pull_request: 12
+  wp6_branch_head: 582eaaa4f844422270095bea90dd3488852762cf
+  wp6_merge_commit: 8f0dd49e489b531df8998b4fc1575d6fb11317d1
+  wp6_workflow_run_id: 30181995980
+  wp6_report_artifact_id: 8625889699
+  wp6_report_artifact_digest: sha256:67f9ea95026c60a6c42446974a887f9a900a2fd0809ee09a685d7ed65b827d3f
+  wp6_publication_report_sha256: b6f482d5f94a266593ad9a0012925a9a9389764206605f731e65cbb66e3f6d4a
+outputs:
+  lifecycle_state: REMOTE_VERIFIED
+  availability_state: REMOTE_VERIFIED
+  authority_state: SHADOW
+  selector_state: NONE
+  publication_status: PUBLISHED
+  quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
+  releases:
+    discovery:
+      release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+      manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
+      manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
+      file_count: 293
+      total_size_bytes: 155632392
+    development:
+      release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+      manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
+      manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
+      file_count: 101
+      total_size_bytes: 52762768
+    validation_locked:
+      release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+      manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
+      manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
+      file_count: 101
+      total_size_bytes: 52304577
+      validation_consumption: LOCKED_UNCONSUMED
+qa:
+  publication_packet_tests: PASS
+  credential_preflight: PASS
+  exact_a2_g3_artifact_binding: PASS
+  manifest_approval_binding: PASS
+  immutable_payload_first_upload: PASS
+  manifest_last_completion: PASS
+  remote_manifest_identity: PASS
+  remote_manifest_diff: PASS_EMPTY
+  full_byte_remote_readback: PASS
+  report_self_hash: PASS
+  selector_non_mutation: PASS
+  validation_lock: PASS
+  quarantine_preservation: PASS
+authority:
+  r2_publication: COMPLETE_REMOTE_VERIFIED
+  release_availability: REMOTE_VERIFIED
+  release_authority: SHADOW_NOT_SELECTED
+  selector_activation: DENIED_PENDING_A2_G5
+  validation_consumption: LOCKED_UNCONSUMED
+  opt_b_handoff: NONE_ACTIVE
+  market: NONE
+  probability_exposure_trading_execution: DENIED
+rollback:
+  remote_objects: IMMUTABLE_RETAINED
+  selectors: REMAIN_NONE
+  historical_mutation: PROHIBITED
+  v1_reactivation: PROHIBITED
+next_gate: A2-G5_SELECTOR_SET_ACTIVATION
