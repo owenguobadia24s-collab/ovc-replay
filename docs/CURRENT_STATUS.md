@@ -8,7 +8,7 @@ C2-G5 execution branch: `exec/c2-g5-candidate-freeze` / PR `#69`.
 
 The reset, OPT-A v2 role-set activation, OPT-B.C1 v2 publication and shadow activation, Research Operations Foundation activation, Research Console v0.3 Overview acceptance, OPT-B.C2 actual-parent reconciliation and C2-G4 exact-parent replay are merged into `main`.
 
-Latest authority-changing records:
+Latest authority-changing or boundary-confirming records:
 
 - OPT-A v2 A2-G5 selector activation: `docs/releases/opt-a-v2/activation/`
 - OPT-B.C1 v2 B1-G5 shadow activation: `docs/releases/opt-b-c1-v2/b1-g5/`
@@ -91,6 +91,8 @@ Approved bounded local capabilities:
 
 The read model and console do not outrank their source records and expose no direct Git, R2, selector, threshold or classification mutation.
 
+Research Operations Foundation v0.2 has a branch-local `RO2-G0 PASS_DESIGN_FREEZE` packet. It is design canon only; RO2-WP1 runtime implementation has not begun and requires separate operator instruction.
+
 ## Research Console v0.3
 
 RC-G2-v0.3 result: `PASS`.
@@ -120,6 +122,7 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 - C2E, C2.5, C3 and new OPT-C/OPT-D authority remain absent.
 - Probability, exposure, trading, execution and autonomous-agent authority remain `NONE`.
 - Direct UI writes to Git, R2 or the primary branch remain denied.
+- RO2-G0 grants design records and validators only; no RO2 runtime package has begun.
 
 ## Next boundaries
 
