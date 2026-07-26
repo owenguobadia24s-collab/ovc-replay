@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the RO2-G0 design packet without importing runtime packages or mutating files."""
+"""Validate the RO2-G0 design packet and retained boundaries against the current court record."""
 
 from __future__ import annotations
 
@@ -41,6 +41,7 @@ def main() -> int:
     baseline = json.loads((ROOT / REQUIRED[8]).read_text(encoding="utf-8"))
     gate = json.loads((ROOT / REQUIRED[9]).read_text(encoding="utf-8"))
 
+    # RO2-G0 remains pinned to the C2-G4 court record that existed when design froze.
     assert baseline["court_record_tip"] == "85d2638d36c5039c35d2d49fcdb499dd48e7b354"
     assert baseline["c2_g4_replay"]["state_records"] == 404434
     assert baseline["c2_g4_replay"]["transition_records"] == 323910
@@ -65,10 +66,31 @@ def main() -> int:
     require_tokens(REQUIRED[5], ["RO2-QA-002", "RO2-QA-004", "RO2-QA-011"])
     require_tokens(REQUIRED[6], ["validation_row_resolution_attempt", "prospective_frame_contains_post_cutoff_record", "attempted_git_r2_selector_or_threshold_write"])
     require_tokens(REQUIRED[7], ["Research workspace remains fixture-only", "Validation content must never be resolved"])
-    require_tokens("docs/CURRENT_STATUS.md", ["C2-G4 result: `PASS_LOCAL_REPLAY`", "404,434", "323,910", "Validation remains `LOCKED_UNCONSUMED`"])
-    require_tokens("registries/authority/ACTIVE_AUTHORITY.yaml", ["C2_G4_PASS_LOCAL_REPLAY_NO_C2_AUTHORITY", "market_replay: COMPLETE_C2_G4_PASS", "local_candidate_release: NONE", "validation_consumption: LOCKED_UNCONSUMED"])
 
-    print("PASS: RO2-G0 design packet and retained-authority invariants are complete")
+    # Later C2-G5 candidate freeze may be recorded, but it must not create publication,
+    # selector, activation, Validation consumption, or exposure authority.
+    require_tokens(
+        "docs/CURRENT_STATUS.md",
+        [
+            "### C2-G4 exact-parent replay",
+            "Result: `PASS_LOCAL_REPLAY`",
+            "PASS_LOCAL_CANDIDATE_RELEASE_FROZEN",
+            "Validation remains `LOCKED_UNCONSUMED`",
+        ],
+    )
+    require_tokens(
+        "registries/authority/ACTIVE_AUTHORITY.yaml",
+        [
+            "C2_G5_PASS_LOCAL_CANDIDATES_FROZEN_NO_C2_AUTHORITY",
+            "local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY",
+            "publication: NONE",
+            "selector: NONE",
+            "activation: NONE",
+            "validation_consumption: LOCKED_UNCONSUMED",
+        ],
+    )
+
+    print("PASS: RO2-G0 design packet remains valid against the reconciled C2-G5 court record")
     return 0
 
 
