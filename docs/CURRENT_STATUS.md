@@ -11,6 +11,8 @@ The reset and OPT-A v2 build line through selector activation are merged into `m
 - A2-G5 selector activation: `fb5b2fea2200b05a050aa1f8af51121a1883a4a5`
 - OPT-B.C1 v2 WP1 boundary: `3940f64a635f547a6bef6045bd3a8a27e386dcdd`
 - OPT-B.C1 v2 WP2 design freeze: `fefac25f19a836898c3a22228036cd66617dca07`
+- OPT-B.C1 v2 WP3 reference engine: `d5c0f1a9053f837ee85e2b478fba0662a133cc29`
+- OPT-B.C1 v2 B1-G0 replay approval: `d584813a7a26e7e272259abc87c88b9bb212fc50`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent or rollback target.
 
@@ -24,37 +26,28 @@ Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailabl
 
 The **21,410** quarantined derived-bucket records remain bound to `RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS` and cannot become downstream parents.
 
-## OPT-B.C1 v2 WP3
+## OPT-B.C1 v2 WP4
 
-WP3 result: `PASS — REFERENCE ENGINE AND FIXTURE TRUST`.
+WP4 result: `PASS — DISCOVERY AND DEVELOPMENT REPLAY QA COMPLETE; LOCAL CANDIDATE RECORDED`.
 
-The repository now contains:
+Workflow run `30185680001` used only the exact B1-G0-approved Discovery and Development parents. It produced:
 
-- strict typed adaptation of approved OPT-A-v2-shaped source bars;
-- exact Decimal implementation of `C1.FORMULAS.v0.1`;
-- explicit zero-range and non-computable outputs;
-- one-step contiguous-prior-close resolution with no gap search;
-- deterministic `c1:<sha256>` identity independent of path, runtime and machine;
-- canonical UTF-8 JSON serialization;
-- local validation of null/reason parity, clock, side and formula identity;
-- tests covering deterministic rerun, geometry, zero range, gaps, side mismatch, H1 controls, legacy parent denial and Validation lock.
+| Role | 15M BID | 15M ASK | 2H_A_L BID | 2H_A_L ASK | Total |
+|---|---:|---:|---:|---:|---:|
+| Discovery | 71,982 | 71,982 | 7,964 | 7,964 | 159,892 |
+| Development | 23,853 | 23,853 | 2,583 | 2,583 | 52,872 |
 
-All WP3 computation remains synthetic/golden-fixture-only. No market payload was replayed and no release was created.
+The local candidate contains **212,764** records in **192** compressed files with **36,169,581** candidate bytes. A complete second replay produced an identical inventory, sizes and SHA-256 values.
+
+The candidate artifact is GitHub Actions artifact `8626942276`, digest `sha256:fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc`. It is `LOCAL_ONLY / CANDIDATE`, not frozen, published or selected.
+
+WP4 excluded 12,104 Discovery and 4,862 Development quarantined upstream records. It performed no interpolation, gap repair or cross-side substitution. Validation was not downloaded and remains `LOCKED_UNCONSUMED`.
 
 ## Research Operations Foundation RO-G0
 
 RO-G0 result: `PASS — RO-WP1 AUTHORISED AFTER MERGE`.
 
-The preflight pins `main` at `fefac25f19a836898c3a22228036cd66617dca07`, binds the Research Operations implementation plan by SHA-256 `4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0`, and freezes:
-
-- `ovc.research_operations` as the canonical future namespace;
-- contract, schema, registry, fixture, record, console and derived-runtime path boundaries;
-- one-way dependencies from approved OPT-A and optional approved C1/C2 objects;
-- metadata-only visibility for Validation while payload access remains denied;
-- Git, external-root and rebuildable-index storage separation;
-- RO-WP1, RO-WP2 and RO-WP3 predecessor gates.
-
-RO-G0 creates no runtime package, CLI, database, console or research record. After merge, only `RO-WP1 — Evidence envelope and record schemas` may begin.
+Research Operations remains a parallel foundation line with no runtime database, console or downstream market authority created by WP4.
 
 ## Active authority matrix
 
@@ -63,17 +56,15 @@ RO-G0 creates no runtime package, CLI, database, console or research record. Aft
 | Evidence store | `ACTIVE_INFRASTRUCTURE / REMOTE_VERIFIED` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
-| OPT-B.C1 v2 | `WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS` | `NONE` |
+| OPT-B.C1 v2 | `WP4_REPLAY_QA_PASS / LOCAL_CANDIDATE` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
-| Research Operations | `RO_G0_PASS / WP1_BUILD_AUTHORISED_AFTER_MERGE` | Not applicable |
+| Research Operations | `RO_G0_PASS / WP1_BUILD_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
-Validation remains `LOCKED_UNCONSUMED`. Research Operations and C1 cannot read the Validation payload, future paths or downstream outcomes without separate exact approvals.
-Validation remains `LOCKED_UNCONSUMED`. C1 market replay, local release freeze, R2 publication, selector activation and C2 consumption remain denied.
+Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation and C2 consumption remain denied. Probability, exposure, trading and execution authority remain absent.
 
 ## Parallel next boundaries
 
-- `OPT-B.C1 v2 WP3 — reference engine and fixture trust`
+- `OPT-B.C1 v2 B1-G1 — WP4 candidate inventory and freeze review`
 - `RO-WP1 — Evidence envelope and record schemas`
-`C1-G0 — WP3 reference-engine review and WP4 replay-scope approval`
