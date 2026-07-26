@@ -1,10 +1,10 @@
 schema: ovc-active-authority/v1
 repository: owenguobadia24s-collab/ovc-replay
 snapshot_date: 2026-07-26
-court_record_tip: 85d2638d36c5039c35d2d49fcdb499dd48e7b354
+court_record_tip: dc05204becb2806fc10cab024d85ddab235326a7
 court_record_tip_before_recovery: 015e57d862f740c4a0e722e611e0dbeadfaad209
 reset_baseline: c0ad7ba22618babdde731e2a338f68f688d4210c
-state: C1_B1_G5_SHADOW_C2_G4_PASS_NO_C2_AUTHORITY
+state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED
 
 records:
   opt_a_a2_g5: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
@@ -20,6 +20,12 @@ records:
   c2_g3r_gate_packet: docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_GATE_PACKET.json
   c2_g4_decision: docs/releases/opt-b-c2-v2/c2-g4/C2_G4_OPERATOR_DECISION.md
   c2_g4_gate_packet: docs/releases/opt-b-c2-v2/c2-g4/C2_G4_GATE_PACKET.json
+  c2_g5_decision: docs/releases/opt-b-c2-v2/c2-g5/C2_G5_OPERATOR_DECISION.md
+  c2_g5_gate_packet: docs/releases/opt-b-c2-v2/c2-g5/C2_G5_GATE_PACKET.json
+  c2_publication_readiness_decision: docs/releases/opt-b-c2-v2/publication-readiness/C2_PUBLICATION_READINESS_OPERATOR_DECISION.md
+  c2_publication_readiness_gate_packet: docs/releases/opt-b-c2-v2/publication-readiness/C2_PUBLICATION_READINESS_GATE_PACKET.json
+  ro2_g0_decision: docs/releases/research-operations-foundation-v0-2/ro2-g0/RO2_G0_OPERATOR_REVIEW.md
+  ro2_g0_gate_packet: docs/releases/research-operations-foundation-v0-2/ro2-g0/RO2_G0_GATE_PACKET.json
 
 selectors:
   opt_a: ACTIVE
@@ -79,7 +85,7 @@ authorities:
     active: true
 
   opt_b_c1_v2:
-    state: B1_G5_PASS_SHADOW_SELECTED_C2_G4_REPLAYED_NOT_ACTIVE
+    state: B1_G5_PASS_SHADOW_SELECTED_C2_DENIED
     lifecycle_state: REMOTE_VERIFIED
     authority_state: SHADOW
     qa_state: PASS
@@ -101,12 +107,17 @@ authorities:
     c1_to_c2_interface: VALIDATED
     selector: SHADOW
     selector_rollback: ALL_C1_ROLE_SELECTORS_NONE
-    c2_g4_consumption: COMPLETE_EXACT_PARENT_REPLAY_ONLY
+    active_handoff: INTERFACE_VALIDATED_NOT_CONSUMABLE
+    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
+    bounded_c2_g4_replay: COMPLETE_EXACT_PARENT_REPLAY_ONLY
+    bounded_c2_g5_candidate_freeze: COMPLETE_LOCAL_CANDIDATE_ONLY
+    bounded_c2_publication_review: PASS_EXACT_R2_PUBLICATION_ONLY
     validation_consumption: LOCKED_UNCONSUMED
     active: true
 
   opt_b_c2_v2:
-    state: C2_G4_PASS_LOCAL_REPLAY_NO_C2_AUTHORITY
+    state: C2_PUB_G0_PASS_PUBLICATION_AUTHORISED_NO_REMOTE_WRITE_NO_C2_AUTHORITY
+    prior_authority_state: C2_G4_PASS_LOCAL_REPLAY_NO_C2_AUTHORITY
     contracts_and_registries: IMPLEMENTED
     actual_parent_engine: TRUSTED_EXACT_PARENT
     canonical_c1_intake: VERIFIED_MANIFEST_BOUND
@@ -124,16 +135,44 @@ authorities:
     replay_rejected_records: 0
     replay_output_files: 24
     replay_output_bytes: 872839722
-    local_candidate_release: NONE
-    publication: NONE
+    ro2_g0_baseline_local_candidate_release: NONE
+    local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY
+    candidate_freeze_state: PASS_C2_G5
+    candidate_tree_sha256: f15ad152405708bca09e0255af6de69a4a54051e6f0f9e2128cd0c2944bf60fd
+    deterministic_output_equivalence: PASS_TWO_INDEPENDENT_BYTE_IDENTICAL_MATERIALIZATIONS
+    full_byte_local_verification: PASS
+    duplicate_record_ids: 0
+    blocking_qa_issues: 0
+    unresolved_qa_issues: 0
+    discovery_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+    discovery_manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
+    discovery_manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
+    discovery_manifest_file_sha256: d3a8184a8f890ea0c57882fa37d5ea726af2a799b2db0063489cb58a157dba2f
+    discovery_candidate_artifact_id: 8634803012
+    discovery_candidate_artifact_digest: sha256:e92853173779ed8a34df6e96d0472e0f88528aee4c84c094255e4a012b4aad6d
+    development_release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1
+    development_manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1
+    development_manifest_sha256: 8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e
+    development_manifest_file_sha256: 79733b9aff7d290a853ae38d174974876b4cb70d4ead6e62548839bf6a923750
+    development_candidate_artifact_id: 8634803579
+    development_candidate_artifact_digest: sha256:708f53afdb75c9561a30ac4290fcf9a184adb1a0925962d2fe10e577ff3cdf63
+    gate_packet_artifact_id: 8634803684
+    gate_packet_artifact_digest: sha256:667aa5a51ea38bb29d9c76780c69b4dbbcee7c4fc137f87dece9f35c04b06b3f
+    candidate_artifacts_expires_at: 2026-10-24T17:18:01Z
+    publication_readiness: PASS_EXACT_RELEASES_REMOTE_COLLISION_ABSENT
+    publication: AUTHORISED_EXACT_RELEASES_ONLY
+    publication_executed: false
+    publication_method: PAYLOAD_FIRST_MANIFEST_LAST_IMMUTABLE_R2
+    required_post_write_verification: FULL_REMOTE_BYTE_READBACK
     selector: NONE
     activation: NONE
+    direct_active_discovery: DENIED_PENDING_REMOTE_VERIFICATION_AND_SEPARATE_SELECTOR_RETIREMENT_TRANSACTION
     validation_consumption: LOCKED_UNCONSUMED
     probability_authority: NONE
     exposure_authority: NONE
     trading_authority: NONE
     execution_authority: NONE
-    next_gate: C2_CANDIDATE_FREEZE_AND_QA_REVIEW
+    next_gate: C2_R2_PUBLICATION_AND_FULL_REMOTE_VERIFICATION_EXACT_RELEASES_ONLY
     active: false
 
   research_operations:
@@ -163,10 +202,11 @@ authorities:
     runtime_implementation: NOT_STARTED
     authority_delta: DESIGN_CANON_ONLY
     validation_consumption: LOCKED_UNCONSUMED
-    c2_candidate_release: NONE
-    c2_publication: NONE
+    c2_candidate_release_at_design_freeze: NONE
+    c2_publication_at_design_freeze: NONE
     c2_selector: NONE
     c2_activation: NONE
+    current_c2_candidate_context: FROZEN_LOCAL_ONLY_PUBLICATION_APPROVED
     market_authority: NONE
     probability_authority: NONE
     exposure_authority: NONE
