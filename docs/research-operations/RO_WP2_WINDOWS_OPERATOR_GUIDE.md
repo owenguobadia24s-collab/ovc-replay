@@ -2,9 +2,11 @@
 
 ## Status
 
-`IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2`
+`APPROVED_BOUNDED_LOCAL_OPERATION_RO_G2_PASS`
 
-RO-WP2 provides a local CLI and artifact catalogue. It performs no Git commit or push, provider download, R2 upload or deletion, selector mutation, threshold change, model classification, or Validation payload access.
+RO-G2 approved the RO-WP2 CLI, append-only service, audit service, artifact catalogue, and operating queues for bounded local use. This does not create active-research, market, probability, exposure, execution, or agent authority.
+
+RO-WP2 performs no Git commit or push, provider download, R2 upload or deletion, selector mutation, threshold change, model classification, or Validation payload access.
 
 ## Environment
 
