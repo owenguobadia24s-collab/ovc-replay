@@ -1,0 +1,38 @@
+schema: ovc-opt-b-c1-active-selectors/v1
+selector_set_id: SELECTOR.OPT-B.C1.ROLESET.v0.1
+state: NONE
+reason: WP2_CONTRACTS_FROZEN_NO_C1_RELEASE
+selectors:
+  discovery:
+    selector_id: SELECTOR.OPT-B.C1.DISCOVERY
+    selector_state: NONE
+    authority_state: NONE
+    release_id: null
+    manifest_id: null
+    rollback_target: NONE
+    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
+  development:
+    selector_id: SELECTOR.OPT-B.C1.DEVELOPMENT
+    selector_state: NONE
+    authority_state: NONE
+    release_id: null
+    manifest_id: null
+    rollback_target: NONE
+    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
+  validation:
+    selector_id: SELECTOR.OPT-B.C1.VALIDATION
+    selector_state: NONE
+    authority_state: NONE
+    release_id: null
+    manifest_id: null
+    rollback_target: NONE
+    validation_consumption_state: LOCKED_UNCONSUMED
+    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
+activation_requirements:
+  - WP3_FIXTURE_TRUST_PASS
+  - WP4_CANDIDATE_REPLAY_AND_LOCAL_RELEASE_PASS
+  - WP5_REMOTE_PUBLICATION_VERIFIED
+  - EXACT_OPERATOR_SELECTOR_DECISION
+initial_activation_role: SHADOW_ONLY
+historical_v1_reactivation: PROHIBITED
+legacy_opt_b_reactivation: PROHIBITED
