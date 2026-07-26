@@ -34,23 +34,13 @@ def observation() -> dict:
         "frozen_at": None,
         "operator_id": "ro-g1-review",
         "admissible_cutoff": "2023-06-15T10:00:00Z",
-        "source_release_refs": [
-            {
-                "release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
-                "first_valid_time": "2023-06-15T10:00:00Z",
-            }
-        ],
+        "source_release_refs": [{"release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2", "first_valid_time": "2023-06-15T10:00:00Z"}],
         "artifact_refs": [],
         "missingness": [],
         "lineage": {"parent": [], "derived_from": [], "supersedes": None, "adjudicates": []},
         "authority_state": "DRAFT",
         "reproducibility_state": "REPRODUCIBLE",
-        "payload": {
-            "session_id": "ro-g1-fixture",
-            "visible_facts": {"clock": "2H_A_L", "side": "BID"},
-            "unknowns": ["later_path"],
-            "source_record_refs": ["opt-a:fixture-bar"],
-        },
+        "payload": {"session_id": "ro-g1-fixture", "visible_facts": {"clock": "2H_A_L", "side": "BID"}, "unknowns": ["later_path"], "source_record_refs": ["opt-a:fixture-bar"]},
         "content_sha256": None,
     }
 
@@ -70,11 +60,7 @@ class ROG1EvidenceIntegrityTests(unittest.TestCase):
         predecessor_bytes = canonical_json_bytes(first)
         replacement = observation()
         replacement["payload"]["unknowns"].append("context")
-        predecessor, successor = supersede_record(
-            first,
-            replacement,
-            frozen_at="2023-06-15T10:05:00Z",
-        )
+        predecessor, successor = supersede_record(first, replacement, frozen_at="2023-06-15T10:05:00Z")
         self.assertEqual(canonical_json_bytes(predecessor), predecessor_bytes)
         self.assertEqual(successor["lineage"]["supersedes"], first["record_id"])
         self.assertNotEqual(successor["record_id"], first["record_id"])
@@ -87,15 +73,7 @@ class ROG1EvidenceIntegrityTests(unittest.TestCase):
         self.assertEqual(cutoff_ctx.exception.code, "POST_CUTOFF_REFERENCE")
 
         locked = observation()
-        locked["source_release_refs"] = [
-            {
-                "release_id": "OPT-A.GBPUSD.VALIDATION.2025.v2",
-                "validation_access_state": "LOCKED_UNCONSUMED",
-                "payload_access": "DENIED",
-                "payload_ref": "r2://forbidden",
-                "first_valid_time": "2023-06-15T10:00:00Z",
-            }
-        ]
+        locked["source_release_refs"] = [{"release_id": "OPT-A.GBPUSD.VALIDATION.2025.v2", "validation_access_state": "LOCKED_UNCONSUMED", "payload_access": "DENIED", "payload_ref": "r2://forbidden", "first_valid_time": "2023-06-15T10:00:00Z"}]
         with self.assertRaises(RecordValidationError) as validation_ctx:
             validate_record(locked)
         self.assertEqual(validation_ctx.exception.code, "VALIDATION_PAYLOAD_ACCESS_DENIED")
@@ -107,44 +85,24 @@ class ROG1EvidenceIntegrityTests(unittest.TestCase):
         with self.assertRaises(FrozenRecordMutationError) as mutation_ctx:
             verify_frozen_record(mutated)
         self.assertEqual(mutation_ctx.exception.incident["incident_code"], "FROZEN_MUTATION")
-
         registry = RecordIdRegistry()
         registry.add(frozen["record_id"])
         with self.assertRaises(DuplicateRecordIdError):
             registry.add(frozen["record_id"])
 
     def test_missing_artifact_states_remain_visible(self) -> None:
-        self.assertEqual(
-            derive_reproducibility_state([{"required": True, "availability": "MISSING"}]),
-            "NOT_REPRODUCIBLE",
-        )
-        self.assertEqual(
-            derive_reproducibility_state(
-                [
-                    {"required": True, "availability": "VERIFIED"},
-                    {"required": True, "availability": "MISSING"},
-                ]
-            ),
-            "PARTIALLY_AVAILABLE",
-        )
+        self.assertEqual(derive_reproducibility_state([{"required": True, "availability": "MISSING"}]), "NOT_REPRODUCIBLE")
+        self.assertEqual(derive_reproducibility_state([{"required": True, "availability": "VERIFIED"}, {"required": True, "availability": "MISSING"}]), "PARTIALLY_AVAILABLE")
 
-    def test_authority_delta_is_build_only(self) -> None:
+    def test_ro_g1_remains_pass_after_wp2_implementation(self) -> None:
         authority = AUTHORITY.read_text(encoding="utf-8")
         implementation = IMPLEMENTATION.read_text(encoding="utf-8")
         decision = DECISION.read_text(encoding="utf-8")
-        self.assertIn("state: RO_G1_PASS_WP2_BUILD_AUTHORISED", authority)
-        self.assertIn("ro_wp2: AUTHORISED_FOR_BUILD", authority)
-        self.assertIn("durable_write_service: DENIED_PENDING_RO_WP2_IMPLEMENTATION", authority)
-        self.assertIn("status: RO_G1_PASS_WP2_BUILD_AUTHORISED", implementation)
+        self.assertIn("ro_g1: PASS", authority)
+        self.assertIn("ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW", authority)
+        self.assertIn("status: IMPLEMENTED_AWAITING_RO_G2_OPERATOR_REVIEW", implementation)
         self.assertIn("PASS — RO-WP2 AUTHORISED FOR BUILD", decision)
-        for denied in (
-            "active_research: NONE",
-            "market_authority: NONE",
-            "probability_authority: NONE",
-            "exposure_authority: NONE",
-            "execution_authority: NONE",
-            "agent_authority: NONE",
-        ):
+        for denied in ("active_research: NONE", "market_authority: NONE", "probability_authority: NONE", "exposure_authority: NONE", "execution_authority: NONE", "agent_authority: NONE"):
             self.assertIn(denied, authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
 

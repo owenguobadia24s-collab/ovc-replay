@@ -1,0 +1,17 @@
+schema: ovc-research-operations-artifact-state-registry/v0.1
+states:
+  NOT_EVALUATED: No verification executed.
+  LOCAL_PRESENT: Local bytes exist but exact verification failed or is pending.
+  LOCAL_VERIFIED: Local size and SHA-256 match the declaration or deterministic scan.
+  REMOTE_PRESENT: Remote object identity is declared but exact bytes are not verified by this catalogue build.
+  REMOTE_VERIFIED: Compact receipt declares exact remote verification.
+  PARTIALLY_AVAILABLE: Some required objects are unavailable.
+  MISSING: Declared object cannot be resolved.
+  EXPIRED: Temporary CI artifact is past its expiry.
+  QUARANTINED: Preserved but excluded from active use.
+issue_codes:
+  HASH_MISMATCH: BLOCK
+  MISSING_ARTIFACT: BLOCK
+  EXPIRED_CI_ARTIFACT: BLOCK
+  MISSING_DEPENDENCY: BLOCK
+  ORPHAN_MANIFEST: WARN
