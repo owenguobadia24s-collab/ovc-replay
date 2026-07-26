@@ -64,6 +64,8 @@ jobs:
           PY
 
       - name: Run canonical repository tests
+        env:
+          PYTHONPATH: src
         run: |
           set +e
           python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
