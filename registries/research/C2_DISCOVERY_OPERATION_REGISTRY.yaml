@@ -1,0 +1,34 @@
+schema: ovc-c2-discovery-operation-registry/v1
+operation_id: OPERATION.C2.GBPUSD.DISCOVERY.v1
+research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
+state: OPEN
+opened_by_gate: C2-G6
+prospective_cutoff_commit: 2a3f262fc0539786b67ae6c3e20604eb4d4adc2b
+active_selector:
+  selector_set_id: SELECTOR.OPT-B.C2.GBPUSD.v1
+  release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+  manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
+  manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
+record_classes:
+  STATE_FIDELITY_REVIEW:
+    required_fields: [record_id, observed_at, scope_id, state_axes, evidence_refs, disposition]
+  BOUNDARY_CASE:
+    required_fields: [record_id, observed_at, scope_id, boundary_type, evidence_refs, disposition]
+  CONFLICT_CASE:
+    required_fields: [record_id, observed_at, scope_id, conflicting_axes, evidence_refs, disposition]
+  ANOMALY:
+    required_fields: [record_id, observed_at, scope_id, anomaly_code, evidence_refs, disposition]
+  INCIDENT:
+    required_fields: [record_id, observed_at, scope_id, incident_code, evidence_refs, containment]
+  BOUNDED_RESEARCH_QUESTION:
+    required_fields: [record_id, opened_at, question, admissible_evidence, close_condition]
+initial_state:
+  accepted_record_count: 0
+  rejected_record_count: 0
+  open_incident_count: 0
+  open_question_count: 0
+  c2e_escalation_evidence_count: 0
+append_authority: RESEARCH_OPERATIONS_APPEND_ONLY
+amend_existing_records: DENIED
+delete_records: DENIED
+validation_consumption: LOCKED_UNCONSUMED
