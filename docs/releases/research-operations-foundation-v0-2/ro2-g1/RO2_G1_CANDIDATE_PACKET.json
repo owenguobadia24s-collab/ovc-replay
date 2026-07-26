@@ -1,11 +1,13 @@
 {
   "schema": "ovc-ro2-g1-candidate-packet/v1",
   "gate_id": "RO2-G1",
-  "status": "CANDIDATE_READY_FOR_OPERATOR_REVIEW",
+  "status": "SUPERSEDED_BY_RO2_G1_PASS",
   "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2",
   "work_packet": "RO2-WP1",
-  "parent_branch": "design/research-operations-v0-2-bootstrap",
-  "parent_commit": "980b08689ed57298ca101a4bc04146b0bb098085",
+  "original_parent_branch": "design/research-operations-v0-2-bootstrap",
+  "original_parent_commit": "980b08689ed57298ca101a4bc04146b0bb098085",
+  "reconciled_main_commit": "dc05204becb2806fc10cab024d85ddab235326a7",
+  "tested_implementation_commit": "474534310b9dec679aa9e7c94fb3556856a24901",
   "branch": "build/research-operations-v0-2-workspace-index",
   "deliverables": [
     "contracts/research_operations/v0_2/OVC_RO2_WORKSPACE_INDEX_CONTRACT_v0_1.md",
@@ -17,18 +19,25 @@
     "tests/research_operations/v0_2/test_workspace_index.py"
   ],
   "candidate_checks": {
-    "discovery_index_supported": "IMPLEMENTED",
-    "development_index_supported": "IMPLEMENTED",
-    "validation_metadata_only": "IMPLEMENTED",
-    "validation_deny_before_path_resolution": "IMPLEMENTED",
-    "deterministic_logical_hash": "IMPLEMENTED",
-    "conflicting_duplicate_detection": "IMPLEMENTED",
-    "unknown_role_fail_closed": "IMPLEMENTED",
+    "discovery_index_supported": "PASS",
+    "development_index_supported": "PASS",
+    "validation_metadata_only": "PASS",
+    "validation_deny_before_path_resolution": "PASS",
+    "deterministic_logical_hash": "PASS",
+    "conflicting_duplicate_detection": "PASS",
+    "unknown_role_fail_closed": "PASS",
     "runtime_writes": "NONE"
+  },
+  "verification": {
+    "focused_tests": "5_PASS",
+    "full_repository_suite": "70_PASS",
+    "dedicated_ci_run_id": 30214437661,
+    "canonical_tests_ci_run_id": 30214437602,
+    "logical_fixture_index_sha256": "dcb88c5f9c9fc0d4dbd12ac6a293607a1067fc11cfd9f19f72c4f497bd0da697"
   },
   "retained_authority": {
     "validation_consumption": "LOCKED_UNCONSUMED",
-    "c2_candidate_release": "NONE",
+    "c2_local_candidate_releases": "FROZEN_LOCAL_ONLY_UNCHANGED",
     "c2_publication": "NONE",
     "c2_selector": "NONE",
     "c2_activation": "NONE",
@@ -37,12 +46,8 @@
     "exposure_authority": "NONE",
     "execution_authority": "NONE"
   },
-  "required_operator_verification": [
-    "run py -m pytest tests/research_operations/v0_2/test_workspace_index.py",
-    "run full repository test suite",
-    "confirm deterministic fixture hash across two runs",
-    "confirm Validation denial occurs before external path resolution"
-  ],
+  "final_gate_packet": "docs/releases/research-operations-foundation-v0-2/ro2-g1/RO2_G1_GATE_PACKET.json",
+  "final_operator_decision": "docs/releases/research-operations-foundation-v0-2/ro2-g1/RO2_G1_OPERATOR_DECISION.md",
   "authority_delta_on_pass": "LOCAL_REPLACEABLE_DERIVED_INDEX_ONLY",
-  "next_boundary": "RO2-G1_OPERATOR_ACCEPTANCE_BEFORE_RO2-WP2"
+  "next_boundary": "RO2-WP2_REQUIRES_SEPARATE_OPERATOR_INSTRUCTION"
 }
