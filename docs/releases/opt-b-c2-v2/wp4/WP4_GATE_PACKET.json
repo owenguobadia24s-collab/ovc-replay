@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-opt-b-c2-wp4-gate-packet/v1",
+  "gate_id": "C2-G3",
+  "work_packet": "WP4",
+  "decision": "PASS_C2_PARALLEL_STATE_PERSISTENCE_AND_TRANSITION_ENGINE_TRUST",
+  "fixture_trust": "PASS_SYNTHETIC_ONLY",
+  "checks": [
+    {"id":"B2-24","name":"Five independent axes","status":"PASS"},
+    {"id":"B2-25","name":"No overall or winning state","status":"PASS"},
+    {"id":"B2-26","name":"Deterministic state identity","status":"PASS"},
+    {"id":"B2-27","name":"Scope-bound persistence reset and increment","status":"PASS"},
+    {"id":"B2-28","name":"Explicit changed-axis transition records","status":"PASS"},
+    {"id":"C2-QA-03","name":"Future, probability and trade leakage absent","status":"PASS"}
+  ],
+  "authority_delta": {
+    "discovery_development_market_replay": "AUTHORISED_PENDING_OPERATOR_EXECUTION_PACKET",
+    "candidate_release": "DENIED_PENDING_REPLAY_QA",
+    "selector": "NONE",
+    "activation": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "blocking_issues": 0,
+  "next_gate": "C2_MARKET_REPLAY_OPERATOR_APPROVAL"
+}
