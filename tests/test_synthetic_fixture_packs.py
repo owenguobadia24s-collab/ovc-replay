@@ -21,10 +21,9 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_B1_G0_PASS_WP4_REPLAY_AUTHORISED_NO_C1_RELEASE_AUTHORITY",
     "state: C1_WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_NO_PUBLICATION_AUTHORITY",
     "state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY",
+    "state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR",
 }
-FORBIDDEN = (
-    "B-STATE-", "OPT-C-", "OPT-D-", "PAPER-PLAYBOOK", "story_id", "candidate_id", "outcome_label",
-)
+FORBIDDEN = ("B-STATE-", "OPT-C-", "OPT-D-", "PAPER-PLAYBOOK", "story_id", "candidate_id", "outcome_label")
 
 
 def git_blob_sha1(path: Path) -> str:
@@ -45,7 +44,7 @@ class SyntheticFixturePackTests(unittest.TestCase):
     def test_case_counts_and_unique_ids(self) -> None:
         counts = {pack["layer"]: pack["case_count"] for pack in self.packs.values()}
         self.assertEqual(counts, EXPECTED_COUNTS)
-        ids: list[str] = [case["id"] for pack in self.packs.values() for case in pack["cases"]]
+        ids = [case["id"] for pack in self.packs.values() for case in pack["cases"]]
         self.assertEqual(len(ids), 42)
         self.assertEqual(len(ids), len(set(ids)))
 

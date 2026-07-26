@@ -37,7 +37,7 @@ class C1B1G1CandidateFreezeReviewTests(unittest.TestCase):
         self.assertEqual(receipt["duplicate_record_ids"], 0)
         self.assertEqual(sum(receipt["role_clock_side_counts"].values()), 212764)
 
-    def test_freeze_authority_is_exact_and_does_not_claim_completion(self) -> None:
+    def test_historical_freeze_authority_remains_bounded(self) -> None:
         packet = json.loads(GATE.read_text(encoding="utf-8"))
         delta = packet["authority_delta"]
         self.assertEqual(delta["local_freeze"], "AUTHORISED_EXACT_CANDIDATE_ONLY")
@@ -48,17 +48,17 @@ class C1B1G1CandidateFreezeReviewTests(unittest.TestCase):
         self.assertEqual(delta["selector_activation"], "NONE")
         self.assertEqual(delta["c2_consumption"], "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW")
 
-    def test_registries_preserve_candidate_and_downstream_denials(self) -> None:
+    def test_current_registries_show_lawful_progression_beyond_b1_g1(self) -> None:
         authority = AUTHORITY.read_text(encoding="utf-8")
         releases = RELEASES.read_text(encoding="utf-8")
         implementation = IMPLEMENTATION.read_text(encoding="utf-8")
-        self.assertEqual(AUTHORITY_STATE, "B1_G1_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED")
-        self.assertIn("state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY", authority)
-        self.assertIn("release_freeze: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION", authority)
-        self.assertIn("status: B1_G1_PASS_EXACT_CANDIDATES_FREEZE_AUTHORISED", releases)
+        self.assertEqual(AUTHORITY_STATE, "B1_G2_PUBLICATION_READY_WP5_AUTHORISED")
+        self.assertIn("state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR", authority)
+        self.assertIn("release_freeze: COMPLETE_WP4F_PASS", authority)
+        self.assertIn("status: B1_G2_PASS_PUBLICATION_READY", releases)
         self.assertEqual(releases.count("authority_state: CANDIDATE"), 2)
         self.assertEqual(releases.count("active_selector: false"), 3)
-        self.assertIn("status: B1_G1_PASS_EXACT_INVENTORY_FREEZE_AUTHORISED", implementation)
+        self.assertIn("status: B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED", implementation)
         for text in (authority, releases, implementation):
             self.assertIn("LOCKED_UNCONSUMED", text)
         self.assertIn("selector: NONE", authority)
