@@ -1,0 +1,101 @@
+{
+  "schema": "ovc-c2-g5-gate-packet/v1",
+  "gate_id": "C2-G5",
+  "decision": "PASS_LOCAL_CANDIDATE_RELEASE_FROZEN",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "execution": {
+    "workflow_name": "C2-G5 local candidate freeze and QA",
+    "workflow_run_id": 30211911410,
+    "workflow_run_number": 1,
+    "branch": "exec/c2-g5-candidate-freeze",
+    "source_commit": "2bf24c56fde3ff773e8e265d17982754cbe38ef7",
+    "conclusion": "SUCCESS"
+  },
+  "source": {
+    "artifact_id": 8634383302,
+    "artifact_name": "c2-g4-exact-parent-replay-output",
+    "artifact_archive_sha256": "b8f993f733aed75e488aa60883f00a53596c15e5cd6c14edb787fc3bc12df62f",
+    "workflow_run_id": 30210057332,
+    "workflow_commit": "4fb06b4d2b13bdf737446cb619e548eb987aeab1",
+    "replay_receipt_sha256": "27aac06a35a56518eab67027272238c7bd265161b552823b5ab59d0547d13018",
+    "intake_receipt_sha256": "4d519786ce8cc138a88924d1d2ec7de37caabad2ea83e021b403f91c4266d21b"
+  },
+  "verification": {
+    "source_output_files": 24,
+    "source_output_bytes": 872839722,
+    "state_records": 404434,
+    "transition_records": 323910,
+    "rejected_records": 0,
+    "duplicate_record_ids": 0,
+    "deterministic_output_equivalence": "PASS_TWO_INDEPENDENT_BYTE_IDENTICAL_MATERIALIZATIONS",
+    "candidate_tree_sha256": "f15ad152405708bca09e0255af6de69a4a54051e6f0f9e2128cd0c2944bf60fd",
+    "full_byte_local_verification": "PASS",
+    "blocking_qa_issues": 0,
+    "unresolved_qa_issues": 0
+  },
+  "releases": [
+    {
+      "role": "DISCOVERY",
+      "release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+      "manifest_sha256": "c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33",
+      "manifest_file_sha256": "d3a8184a8f890ea0c57882fa37d5ea726af2a799b2db0063489cb58a157dba2f",
+      "manifest_bound_file_count": 18,
+      "manifest_bound_bytes": 659484886,
+      "state_file_count": 6,
+      "transition_file_count": 6,
+      "state_record_count": 303856,
+      "transition_record_count": 245752,
+      "duplicate_record_ids": 0,
+      "unresolved_qa_issues": 0,
+      "artifact": {
+        "artifact_id": 8634699529,
+        "name": "c2-opt-b-c2-gbpusd-discovery-2021-2023-v1-frozen-candidate",
+        "archive_size_bytes": 111321461,
+        "digest": "sha256:3f07105e27420157656e64445515bdeb6ad62ea3beddc9761b32656ea5d81d47",
+        "expires_at": "2026-10-24T17:07:21Z"
+      }
+    },
+    {
+      "role": "DEVELOPMENT",
+      "release_id": "OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1",
+      "manifest_sha256": "8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e",
+      "manifest_file_sha256": "79733b9aff7d290a853ae38d174974876b4cb70d4ead6e62548839bf6a923750",
+      "manifest_bound_file_count": 18,
+      "manifest_bound_bytes": 213382716,
+      "state_file_count": 6,
+      "transition_file_count": 6,
+      "state_record_count": 100578,
+      "transition_record_count": 78158,
+      "duplicate_record_ids": 0,
+      "unresolved_qa_issues": 0,
+      "artifact": {
+        "artifact_id": 8634700114,
+        "name": "c2-opt-b-c2-gbpusd-development-2024-v1-frozen-candidate",
+        "archive_size_bytes": 35521811,
+        "digest": "sha256:f9b80f652a38c1e5b6137e97226488809481407ea93139fe03d7aea268448083",
+        "expires_at": "2026-10-24T17:07:21Z"
+      }
+    }
+  ],
+  "gate_packet_artifact": {
+    "artifact_id": 8634700203,
+    "name": "c2-g5-candidate-freeze-gate-packet",
+    "archive_size_bytes": 2174,
+    "digest": "sha256:2b4c2c902ca52c7d4359ea7df3c9d0c52df866957f76fe7d1e70779306fa4e59",
+    "expires_at": "2026-10-24T17:07:21Z"
+  },
+  "authority_delta": {
+    "local_candidate_release": "FROZEN_CANDIDATE_LOCAL_ONLY",
+    "publication": "NONE",
+    "selector": "NONE",
+    "activation": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "next_boundary": "SEPARATE_C2_PUBLICATION_READINESS_AND_OPERATOR_APPROVAL_GATE"
+}
