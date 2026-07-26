@@ -41,12 +41,12 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertEqual(FORMULA_REGISTRY_ID, "C1.FORMULAS.v0.1")
         self.assertEqual(FORMULA_COUNT, 18)
         authority = AUTHORITY.read_text(encoding="utf-8")
-        self.assertIn("state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR", authority)
+        self.assertIn("state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR", authority)
         self.assertIn("selector: NONE", authority)
         self.assertIn("fixture_trust: PASS", authority)
         self.assertIn("market_replay: COMPLETE_WP4_PASS", authority)
         self.assertIn("release_freeze: COMPLETE_WP4F_PASS", authority)
-        self.assertIn("r2_publication: AUTHORISED_EXACT_RELEASES_ONLY_PENDING_WP5_EXECUTION", authority)
+        self.assertIn("r2_publication: COMPLETE_WP5_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
         self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", authority)
 
@@ -132,15 +132,16 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertIn("H1_PROVIDER_NATIVE", text)
         self.assertIn("No-repair law", text)
 
-    def test_release_candidates_remain_unselected_after_freeze_readiness(self) -> None:
+    def test_release_candidates_remain_unselected_after_remote_verification(self) -> None:
         releases = (C1_REGISTRIES / "C1_RELEASE_REGISTRY.yaml").read_text(encoding="utf-8")
         selectors = (C1_REGISTRIES / "C1_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
-        self.assertIn("status: B1_G2_PASS_PUBLICATION_READY", releases)
+        self.assertIn("status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW", releases)
         self.assertEqual(releases.count("authority_state: CANDIDATE"), 2)
         self.assertIn("authority_state: NONE", releases)
         self.assertEqual(releases.count("active_selector: false"), 3)
         self.assertEqual(releases.count("freeze_state: COMPLETE_WP4F_PASS"), 2)
         self.assertEqual(releases.count("publication_readiness: PASS_B1_G2"), 2)
+        self.assertEqual(releases.count("publication_status: PUBLISHED_REMOTE_VERIFIED"), 2)
         self.assertIn("validation_consumption_state: LOCKED_UNCONSUMED", releases)
         self.assertIn("state: NONE", selectors)
         self.assertEqual(selectors.count("selector_state: NONE"), 3)

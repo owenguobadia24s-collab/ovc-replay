@@ -59,16 +59,16 @@ class B1G2PublicationReadinessTests(unittest.TestCase):
         self.assertIn("unmanifested or missing release files", verifier)
         self.assertIn("PASS_ABSENT", verifier)
 
-    def test_repository_court_record_is_updated(self) -> None:
+    def test_repository_court_record_preserves_gate_and_records_wp5_successor(self) -> None:
         authority = AUTHORITY.read_text(encoding="utf-8")
         implementation = IMPLEMENTATION.read_text(encoding="utf-8")
         releases = RELEASES.read_text(encoding="utf-8")
         status = STATUS.read_text(encoding="utf-8")
         decision = DECISION.read_text(encoding="utf-8")
-        self.assertIn("C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR", authority)
+        self.assertIn("C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR", authority)
         self.assertIn("work_packet: B1-G2", implementation)
         self.assertIn("next_gate: WP5_R2_PUBLICATION_AND_FULL_REMOTE_VERIFICATION", implementation)
-        self.assertIn("status: B1_G2_PASS_PUBLICATION_READY", releases)
+        self.assertIn("status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW", releases)
         self.assertIn("B1-G2 result", status)
         self.assertIn("C1 selectors remain `NONE`", decision)
 
