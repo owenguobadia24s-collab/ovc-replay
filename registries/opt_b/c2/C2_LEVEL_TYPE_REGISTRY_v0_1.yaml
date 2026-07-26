@@ -1,0 +1,11 @@
+schema: ovc-opt-b-c2-level-type-registry/v1
+registry_id: C2.LEVEL_TYPES.v0.1
+status: FROZEN_WP2
+level_types:
+  - {id: SWING_HIGH, first_valid_rule: CONFIRMED_AFTER_RIGHT_WINDOW, lifecycle: ACTIVE_UNTIL_SUPERSEDED, gap_rule: NO_CROSS_GAP}
+  - {id: SWING_LOW, first_valid_rule: CONFIRMED_AFTER_RIGHT_WINDOW, lifecycle: ACTIVE_UNTIL_SUPERSEDED, gap_rule: NO_CROSS_GAP}
+  - {id: RANGE_HIGH, first_valid_rule: WINDOW_COMPLETE, lifecycle: ACTIVE_FOR_SCOPE, gap_rule: CENSOR_ON_GAP}
+  - {id: RANGE_LOW, first_valid_rule: WINDOW_COMPLETE, lifecycle: ACTIVE_FOR_SCOPE, gap_rule: CENSOR_ON_GAP}
+  - {id: MIDPOINT, first_valid_rule: PARENTS_FIRST_VALID, lifecycle: ACTIVE_WITH_PARENTS, gap_rule: INHERIT_PARENT}
+identity_fields: [type_id, clock, price_side, source_record_ids, first_valid_time, parameter_pack_id]
+outcome_selection: PROHIBITED
