@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-opt-b-c1-wp3-gate-packet/v1",
+  "packet_id": "C1-WP3-REFERENCE-ENGINE-FIXTURE-TRUST",
+  "decision": "PASS",
+  "layer_id": "OPT-B.C1.v2",
+  "formula_registry_id": "C1.FORMULAS.v0.1",
+  "formula_count": 18,
+  "authority": {
+    "synthetic_fixture_compute": "PASS",
+    "market_replay": "DENIED_PENDING_WP4_APPROVAL",
+    "release_freeze": "DENIED_PENDING_WP4_QA",
+    "r2_publication": "DENIED_PENDING_WP5_APPROVAL",
+    "selector_activation": "DENIED_PENDING_WP5_APPROVAL",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2_consumption": "DENIED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE"
+  },
+  "components": [
+    "src/ovc/opt_b/c1/models.py",
+    "src/ovc/opt_b/c1/adapter.py",
+    "src/ovc/opt_b/c1/formulas.py",
+    "src/ovc/opt_b/c1/identity.py",
+    "src/ovc/opt_b/c1/builder.py",
+    "src/ovc/opt_b/c1/serialization.py",
+    "src/ovc/opt_b/c1/validation.py"
+  ],
+  "checks": {
+    "decimal_arithmetic": "PASS",
+    "deterministic_rerun": "PASS",
+    "canonical_serialization": "PASS",
+    "record_identity_path_independence": "PASS",
+    "zero_range_null_policy": "PASS",
+    "prior_close_contiguity": "PASS",
+    "gap_bridge_denial": "PASS",
+    "cross_side_denial": "PASS",
+    "control_clock_denial": "PASS",
+    "legacy_parent_denial": "PASS",
+    "validation_lock": "PASS",
+    "future_first_valid_denial": "PASS",
+    "synthetic_authority_none": "PASS"
+  },
+  "next_gate": "C1-G0_WP3_REVIEW_AND_WP4_SCOPE_APPROVAL"
+}
