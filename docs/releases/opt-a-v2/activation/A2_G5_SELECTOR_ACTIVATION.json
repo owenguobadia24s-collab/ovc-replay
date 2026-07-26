@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-opt-a-selector-activation/v1",
+  "gate_id": "A2-G5",
+  "decision": "PASS_ACTIVATE",
+  "selector_set_id": "SELECTOR.OPT-A.GBPUSD.ROLESET.v1",
+  "release_set_id": "OPT-A.GBPUSD.ROLESET.2021_2025.v1",
+  "baseline_commit": "a58960fcf47ed9dfc63feffa860b44e2101ffbcd",
+  "publication_review": {
+    "gate_id": "A2-G4",
+    "decision": "PASS",
+    "record": "docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json"
+  },
+  "atomic_update": true,
+  "roles": {
+    "discovery": {
+      "release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+      "manifest_id": "MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2",
+      "manifest_sha256": "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c",
+      "authority_state": "ACTIVE_DISCOVERY",
+      "selector_state": "ACTIVE",
+      "consumption_state": "NOT_APPLICABLE"
+    },
+    "development": {
+      "release_id": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+      "manifest_id": "MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2",
+      "manifest_sha256": "25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc",
+      "authority_state": "ACTIVE_DEVELOPMENT",
+      "selector_state": "ACTIVE",
+      "consumption_state": "NOT_APPLICABLE"
+    },
+    "validation": {
+      "release_id": "OPT-A.GBPUSD.VALIDATION.2025.v2",
+      "manifest_id": "MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2",
+      "manifest_sha256": "9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877",
+      "authority_state": "ACTIVE_VALIDATION",
+      "selector_state": "ACTIVE",
+      "consumption_state": "LOCKED_UNCONSUMED"
+    }
+  },
+  "rollback": {
+    "mode": "ATOMIC_SELECTOR_SET",
+    "target_state": "NONE",
+    "historical_v1_reactivation": "PROHIBITED",
+    "remote_object_mutation": false
+  },
+  "authority": {
+    "opt_a_selector_set": "ACTIVE",
+    "active_opt_a_to_opt_b_handoff": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "opt_b_c1": "NONE",
+    "opt_b_c2": "NONE",
+    "opt_c": "NONE",
+    "opt_d": "NONE",
+    "probability": "DENIED",
+    "exposure": "DENIED",
+    "trading": "DENIED",
+    "execution": "DENIED"
+  },
+  "quarantine_disposition": "RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS",
+  "next_boundary": "OPT-B.C1_V2_BOUNDED_IMPLEMENTATION"
+}
