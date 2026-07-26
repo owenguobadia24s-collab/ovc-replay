@@ -1,8 +1,9 @@
 """OPT-B.C1 v2 atomic-fact namespace.
 
-WP4 has completed the B1-G0-bounded Discovery and Development replay with deterministic QA.
-The resulting artifact is a local candidate only: selectors, R2 publication, Validation,
-downstream, probability, exposure, trading and execution authority remain absent.
+B1-G1 has accepted the exact WP4 Discovery and Development candidate inventory and
+has authorised a controlled durable local freeze of that candidate only. The release
+is not yet frozen, published or selected; Validation, downstream, probability,
+exposure, trading and execution authority remain absent.
 """
 
 from .adapter import InputRejected, adapt
@@ -10,7 +11,7 @@ from .builder import build
 from .serialization import dumps, to_dict
 from .validation import validate
 
-AUTHORITY_STATE = "WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE"
+AUTHORITY_STATE = "B1_G1_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED"
 FORMULA_REGISTRY_ID = "C1.FORMULAS.v0.1"
 FORMULA_COUNT = 18
 
