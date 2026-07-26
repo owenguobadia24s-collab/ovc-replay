@@ -1,0 +1,239 @@
+name: OPT-A WP6 R2 publication
+
+on:
+  push:
+    branches:
+      - publish/opt-a-v2-role-releases-r2
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+jobs:
+  packet-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pytest
+      - run: pytest -q tests/opt_a/test_wp6_publication_packet.py
+
+  publish-and-verify:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-publish]'))
+    needs: packet-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+    steps:
+      - name: Checkout publication packet
+        uses: actions/checkout@v4
+
+      - name: Checkout exact A2-G3 source authority
+        uses: actions/checkout@v4
+        with:
+          ref: 8c4c6c70da6f3f8b400d06df990500702813ff39
+          path: a2-g3-source
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install package and rclone
+        run: |
+          set -euo pipefail
+          python -m pip install -e .
+          sudo apt-get update
+          sudo apt-get install -y rclone
+
+      - name: Require configured R2 credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo "::error::Missing R2 access-key GitHub secret"; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo "::error::Missing R2 secret-key GitHub secret"; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
+
+      - name: Download exact A2-G3 discovery release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30179286521
+          name: a2-g3-opt-a-gbpusd-discovery-2021-2023-v2
+          path: wp6-releases/discovery
+
+      - name: Download exact A2-G3 development release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30179286521
+          name: a2-g3-opt-a-gbpusd-development-2024-v2
+          path: wp6-releases/development
+
+      - name: Download exact A2-G3 locked validation release
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30179286521
+          name: a2-g3-opt-a-gbpusd-validation-2025-v2-locked
+          path: wp6-releases/validation
+
+      - name: Rebuild exact deterministic manifests
+        run: |
+          python scripts/opt_a/prepare_wp6_manifests.py \
+            --spec docs/releases/opt-a-v2/publication/WP6_MANIFEST_SPEC.json \
+            --releases-root wp6-releases \
+            --output-root wp6-manifests
+
+      - name: Publish absent manifests or verify existing immutable releases
+        id: publication
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p wp6-readiness wp6-output
+          exec > >(tee wp6-output/publication.log) 2>&1
+          for role in discovery development validation; do
+            manifest="wp6-manifests/${role}.json"
+            approval="docs/releases/opt-a-v2/publication/approvals/${role}.json"
+            root="wp6-releases/${role}"
+            python -m ovc_evidence_store verify-local --manifest "$manifest" --root "$root"
+            manifest_key=$(python - "$manifest" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          from ovc_evidence_store.manifest import remote_keys
+          print(remote_keys(json.loads(Path(sys.argv[1]).read_text()))[0])
+          PY
+            )
+            stat_json=$(rclone lsjson --stat --s3-no-check-bucket "ovc_r2:${manifest_key}" 2>/dev/null || true)
+            if STAT_JSON="$stat_json" python - <<'PY'
+          import json
+          import os
+          raw = os.environ.get("STAT_JSON", "").strip()
+          try:
+              value = json.loads(raw)
+          except Exception:
+              raise SystemExit(1)
+          exists = isinstance(value, dict) and value.get("IsDir") is False and isinstance(value.get("Size"), int)
+          raise SystemExit(0 if exists else 1)
+          PY
+            then
+              rclone cat --s3-no-check-bucket "ovc_r2:${manifest_key}" > "wp6-output/remote-${role}-manifest.json"
+              sha256sum "$manifest" "wp6-output/remote-${role}-manifest.json" | tee "wp6-output/${role}-manifest-sha256.txt"
+              diff -u "$manifest" "wp6-output/remote-${role}-manifest.json" > "wp6-output/${role}-manifest.diff" || true
+              python -m ovc_evidence_store verify-remote --manifest "$manifest" --remote ovc_r2
+              python - "$role" "$manifest_key" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          role, key = sys.argv[1:]
+          Path(f"wp6-readiness/{role}.json").write_text(json.dumps({
+              "schema": "ovc-evidence-publication-readiness/v1",
+              "overall_status": "READY",
+              "checks": {"existing_remote_manifest": "PASS", "full_byte_remote_verification": "PASS"},
+              "details": {"manifest_key": key, "mode": "EXISTING_IMMUTABLE_REMOTE_VERIFIED"},
+              "side_effects_performed": False
+          }, indent=2, sort_keys=True) + "\n")
+          PY
+            else
+              python -m ovc_evidence_store readiness \
+                --manifest "$manifest" \
+                --root "$root" \
+                --approval "$approval" \
+                --repository-root a2-g3-source \
+                --bucket-lock-visible true > "wp6-readiness/${role}.json"
+              python - "$role" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          role = sys.argv[1]
+          path = Path(f"wp6-readiness/{role}.json")
+          result = json.loads(path.read_text())
+          required = (
+              "release_root", "inventory", "local_hashes", "manifest_schema",
+              "prohibited_files", "symlinks", "duplicate_remote_keys",
+              "source_commit", "git_worktree", "publication_approval",
+              "bucket_lock_visibility"
+          )
+          for name in required:
+              assert result["checks"][name] == "PASS", (name, result)
+          result["details"]["remote_manifest_stat"] = "ABSENT_OR_EMPTY_RESPONSE"
+          result["details"]["remote_collision_control"] = "RCLONE_IMMUTABLE_UPLOAD_AND_MANIFEST_LAST"
+          result["details"]["mode"] = "ABSENT_MANIFEST_LOCAL_READY"
+          path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          PY
+              python -m ovc_evidence_store upload \
+                --manifest "$manifest" \
+                --root "$root" \
+                --remote ovc_r2 \
+                --approval "$approval"
+              python -m ovc_evidence_store verify-remote --manifest "$manifest" --remote ovc_r2
+              python - "$role" "$manifest_key" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          role, key = sys.argv[1:]
+          path = Path(f"wp6-readiness/{role}.json")
+          result = json.loads(path.read_text())
+          result["overall_status"] = "READY"
+          result["checks"]["remote_upload"] = "PASS"
+          result["checks"]["full_byte_remote_verification"] = "PASS"
+          result["details"]["manifest_key"] = key
+          result["details"]["mode"] = "NEW_IMMUTABLE_REMOTE_PUBLISHED_AND_VERIFIED"
+          result["side_effects_performed"] = True
+          path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          PY
+            fi
+          done
+
+      - name: Build compact WP6 report
+        if: steps.publication.outcome == 'success'
+        run: |
+          python scripts/opt_a/build_wp6_publication_report.py \
+            --manifest-root wp6-manifests \
+            --approval-root docs/releases/opt-a-v2/publication/approvals \
+            --readiness-root wp6-readiness \
+            --output wp6-output/WP6_PUBLICATION_REPORT.json \
+            --workflow-run-id "${{ github.run_id }}" \
+            --execution-commit "${{ github.sha }}"
+
+      - name: Upload publication report and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wp6-opt-a-r2-publication-report
+          path: |
+            wp6-output/*
+            wp6-readiness/*.json
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Record WP6 external execution on PR
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment 12 --repo "${{ github.repository }}" --body "WP6 external publication execution **${{ steps.publication.outcome }}**. Workflow run: \`${{ github.run_id }}\`; commit: \`${{ github.sha }}\`. Selector activation was not part of this run."
+
+      - name: Enforce publication result
+        if: steps.publication.outcome != 'success'
+        run: exit 1
