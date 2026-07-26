@@ -67,34 +67,34 @@ def main() -> int:
     require_tokens(REQUIRED[6], ["validation_row_resolution_attempt", "prospective_frame_contains_post_cutoff_record", "attempted_git_r2_selector_or_threshold_write"])
     require_tokens(REQUIRED[7], ["Research workspace remains fixture-only", "Validation content must never be resolved"])
 
-    # Later C2 gates may freeze candidates and approve exact publication while preserving
-    # the RO2 boundary. Publication execution, selector, activation and Validation access
-    # remain separately controlled.
+    # Later C2 gates may publish and verify exact releases while preserving the RO2 boundary.
+    # Selector, activation and Validation access remain separately controlled.
     require_tokens(
         "docs/CURRENT_STATUS.md",
         [
             "### C2-G4 exact-parent replay",
-            "C2-G4 result: `PASS_LOCAL_REPLAY`",
+            "PASS_LOCAL_REPLAY",
             "PASS_LOCAL_CANDIDATE_RELEASE_FROZEN",
-            "PASS_PUBLICATION_READY_OPERATOR_APPROVED_EXACT_RELEASES_ONLY",
-            "publication execution: `NOT_YET_EXECUTED`",
+            "PASS_FULL_REMOTE_BYTE_VERIFICATION",
+            "PASS_READY_FOR_EXPLICIT_ACTIVATION_DECISION_NOT_ACTIVATED",
             "Validation remains `LOCKED_UNCONSUMED`",
         ],
     )
     require_tokens(
         "registries/authority/ACTIVE_AUTHORITY.yaml",
         [
-            "C2_PUB_G0_PASS_PUBLICATION_AUTHORISED_NO_REMOTE_WRITE_NO_C2_AUTHORITY",
-            "local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY",
-            "publication: AUTHORISED_EXACT_RELEASES_ONLY",
-            "publication_executed: false",
+            "C2_R2_REMOTE_VERIFIED_READY_FOR_EXPLICIT_ACTIVATION_NOT_ACTIVATED",
+            "publication: COMPLETE_REMOTE_VERIFIED",
+            "publication_executed: true",
+            "remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION",
             "selector: NONE",
             "activation: NONE",
+            "legacy_b_state_retirement_executed: false",
             "validation_consumption: LOCKED_UNCONSUMED",
         ],
     )
 
-    print("PASS: RO2-G0 design packet remains valid against the reconciled C2 publication-readiness court record")
+    print("PASS: RO2-G0 design packet remains valid against the remote-verified C2 court record")
     return 0
 
 
