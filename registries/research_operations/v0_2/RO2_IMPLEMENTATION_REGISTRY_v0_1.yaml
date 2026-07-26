@@ -2,6 +2,7 @@ schema: ovc-ro2-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2
 design_gate: RO2_G0_PASS_DESIGN_FREEZE
 status: RO2_G1_PASS_LOCAL_REPLACEABLE_DERIVED_INDEX
+latest_reconciled_main_commit: e2935f0c607aa25c565da59c08e15263176213d6
 items:
   - id: RO2-00
     name: Boundary, reconciliation and contract freeze
@@ -46,14 +47,15 @@ items:
     status: DEFERRED_AFTER_RO2_WP2_GATE
     planned_namespace: src/ovc/research_operations/v0_2/console_adapters
     authority_after_gate: READ_ONLY_PRESENTATION
-retained_prohibitions:
+retained_boundaries:
   validation_consumption: LOCKED_UNCONSUMED
   c2_local_candidate_releases: FROZEN_LOCAL_ONLY_UNCHANGED_BY_RO2_G1
-  c2_publication: NONE
+  c2_publication_authority: AUTHORISED_EXACT_RELEASES_ONLY_UNCHANGED_BY_RO2_G1
+  c2_publication_executed: false
   c2_selector: NONE
   c2_activation: NONE
-  direct_git_write: DENIED
-  direct_r2_write: DENIED
+  ro2_direct_git_write: DENIED
+  ro2_direct_r2_write: DENIED
   market_authority: NONE
   probability_authority: NONE
   exposure_authority: NONE
