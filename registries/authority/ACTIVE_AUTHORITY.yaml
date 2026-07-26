@@ -20,7 +20,9 @@ c1_wp2_decision_record: docs/releases/opt-b-c1-v2/wp2/WP2_OPERATOR_DECISION.md
 c1_wp2_gate_packet: docs/releases/opt-b-c1-v2/wp2/WP2_GATE_PACKET.json
 c1_wp3_decision_record: docs/releases/opt-b-c1-v2/wp3/WP3_OPERATOR_DECISION.md
 c1_wp3_gate_packet: docs/releases/opt-b-c1-v2/wp3/WP3_GATE_PACKET.json
-state: C1_WP3_REFERENCE_ENGINE_PASS_NO_C1_MARKET_AUTHORITY
+c1_b1_g0_decision_record: docs/releases/opt-b-c1-v2/b1-g0/B1_G0_OPERATOR_DECISION.md
+c1_b1_g0_gate_packet: docs/releases/opt-b-c1-v2/b1-g0/B1_G0_GATE_PACKET.json
+state: C1_B1_G0_PASS_WP4_REPLAY_AUTHORISED_NO_C1_RELEASE_AUTHORITY
 selectors:
   opt_a: ACTIVE
   opt_b_c1: NONE
@@ -106,7 +108,7 @@ authorities:
     execution_authority: NONE
     active: true
   opt_b_c1_v2:
-    state: WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS
+    state: B1_G0_PASS_WP4_REPLAY_SCOPE_APPROVED
     boundary_contract: contracts/opt_b/c1/OVC_OPT_B_C1_AUTHORITY_BOUNDARY_v0_1.md
     primitive_contract: contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md
     null_policy: contracts/opt_b/c1/C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md
@@ -117,14 +119,15 @@ authorities:
     implementation_registry: registries/opt_b/c1/C1_IMPLEMENTATION_REGISTRY.yaml
     reference_engine: src/ovc/opt_b/c1/
     fixture_trust: PASS
-    exact_opt_a_remote_parent_available: true
-    exact_opt_a_active_parent_available: true
-    contract_and_schema_design: COMPLETE_WP2_PASS
-    synthetic_engine_work: COMPLETE_WP3_PASS
-    wp4_scope_preparation: AUTHORISED_PENDING_SEPARATE_OPERATOR_APPROVAL
-    market_replay: DENIED_PENDING_WP4
-    release_freeze: DENIED_PENDING_WP4_QA
-    r2_publication: DENIED_PENDING_WP5
+    replay_scope_registry: registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml
+    replay_scope_id: C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1
+    market_replay: AUTHORISED_EXACT_WP4_SCOPE_ONLY
+    replay_roles: [DISCOVERY, DEVELOPMENT]
+    replay_clocks: [15M, 2H_A_L]
+    replay_sides: [BID, ASK]
+    replay_workspace_authority: EXTERNAL_MUTABLE_ONLY
+    release_freeze: DENIED_PENDING_WP4_QA_AND_OPERATOR_DECISION
+    r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
     selector: NONE
     validation_consumption: LOCKED_UNCONSUMED
     active_handoff: NONE
