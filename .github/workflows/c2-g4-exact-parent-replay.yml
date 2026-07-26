@@ -1,0 +1,95 @@
+name: C2-G4 exact-parent market replay
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  exact-parent-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+
+    steps:
+      - name: Checkout exact court record
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install repository package and rclone
+        run: |
+          set -euo pipefail
+          python -m pip install -e .
+          sudo apt-get update
+          sudo apt-get install -y rclone
+      - name: Require read-capable R2 credentials
+        run: |
+          set -euo pipefail
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}"
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}"
+          rclone listremotes | grep -Fx 'ovc_r2:'
+      - name: Download exact recovered OPT-A roots artifact 8633917454
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30209041054
+          name: opt-a-v2-r2-exact-parent-roots
+          path: parents/opt-a
+      - name: Recover exact canonical C1 Discovery and Development roots from R2
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p parents/c1/discovery parents/c1/development
+          rclone copy --s3-no-check-bucket "ovc_r2:ovc-evidence/canonical/releases/OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1/MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1" parents/c1/discovery
+          rclone copy --s3-no-check-bucket "ovc_r2:ovc-evidence/canonical/releases/OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1/MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1" parents/c1/development
+          test -f parents/c1/discovery/manifest.json
+          test -f parents/c1/development/manifest.json
+          test -f parents/opt-a/discovery/manifest.json
+          test -f parents/opt-a/development/manifest.json
+      - name: Full-byte verify both C1 and OPT-A parent chains
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python scripts/opt_b/run_c2_wp5_replay.py --release-root parents/c1 --opt-a-release-root parents/opt-a --output-root c2-g4-output --verify-only | tee c2-g4-verify.log
+      - name: Execute exact-parent Discovery and Development replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python scripts/opt_b/run_c2_wp5_replay.py --release-root parents/c1 --opt-a-release-root parents/opt-a --output-root c2-g4-output | tee c2-g4-replay.log
+      - name: Enforce retained authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path('c2-g4-output/WP5_LOCAL_REPLAY_RECEIPT.json').read_text())
+          assert receipt['status'] == 'PASS_LOCAL_REPLAY'
+          assert receipt['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          assert receipt['probability'] == 'NONE'
+          assert receipt['exposure'] == 'NONE'
+          assert receipt['trading'] == 'NONE'
+          assert receipt['execution'] == 'NONE'
+          PY
+      - name: Upload C2-G4 replay outputs and logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: c2-g4-exact-parent-replay-output
+          path: |
+            c2-g4-output/
+            c2-g4-verify.log
+            c2-g4-replay.log
+          if-no-files-found: error
+          retention-days: 90
