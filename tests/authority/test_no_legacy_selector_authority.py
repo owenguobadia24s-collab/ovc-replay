@@ -23,6 +23,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR",
     "state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR",
     "state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED",
+    "state: C1_B1_G5_SHADOW_C2_G5_LOCAL_CANDIDATES_NO_SELECTOR",
 }
 ALLOWED_GOVERNANCE_RECORDS = {
     "README.md",
@@ -41,7 +42,11 @@ class NoLegacySelectorAuthorityTests(unittest.TestCase):
         self.assertIn("  opt_b_c1: SHADOW", text)
         for selector in INACTIVE_DOWNSTREAM_SELECTORS:
             self.assertIn(f"  {selector}: NONE", text)
-        self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", text)
+        self.assertIn("local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY", text)
+        self.assertIn("publication: NONE", text)
+        self.assertIn("selector: NONE", text)
+        self.assertIn("activation: NONE", text)
+        self.assertIn("validation_consumption: LOCKED_UNCONSUMED", text)
         self.assertIn("selector_rollback: ALL_C1_ROLE_SELECTORS_NONE", text)
         for denial in (
             "runtime_imports: DENIED",
