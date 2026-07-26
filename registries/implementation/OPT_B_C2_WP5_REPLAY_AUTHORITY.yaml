@@ -1,15 +1,19 @@
-schema: ovc-implementation-gate/v1
+schema: ovc-implementation-gate/v2
 gate_id: C2-G4
-work_packet: WP5
-status: BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT
-source_branch: build/opt-b-c2-wp5-replay
-source_main_tip: 6f823d018330af6b06860d0cf131675947d817fd
+work_packet: WP5_CANONICAL_RECONCILIATION
+status: BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH
+source_branch: build/opt-b-c2-wp5-canonical-shard-reconcile
+source_main_tip: 3bd4ed79f43c6f288248f10b99e9dfa04a9f68a2
 result:
-  replay_runner: READY
-  release_identity_guards: PASS
-  synthetic_fixture_trust: PASS
-  discovery_market_replay: BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT
-  development_market_replay: BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT
+  canonical_shard_intake: READY_MANIFEST_BOUND
+  exact_manifest_identity_guards: PASS
+  full_payload_byte_verification: READY
+  release_descriptor_binding: PASS
+  record_shards: 192
+  manifest_bound_payload_objects: 194
+  canonical_objects_including_manifests: 196
+  scope_isolation: PASS_SYNTHETIC
+  actual_market_replay: BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH
   replay_qa: NOT_EXECUTED
   local_candidate_release: NONE
   publication: NONE
@@ -21,6 +25,24 @@ result:
   trading: NONE
   execution: NONE
 required_exact_releases:
-  discovery: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
-  development: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
-next_gate: C2-G4_REPLAY_QA_AND_LOCAL_CANDIDATE_RELEASE
+  discovery:
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
+    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    record_shards: 144
+    payload_objects: 145
+    canonical_objects_including_manifest: 146
+  development:
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
+    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    record_shards: 48
+    payload_objects: 49
+    canonical_objects_including_manifest: 50
+prohibited:
+  manual_shard_concatenation: true
+  missing_price_field_fabrication: true
+  cross_clock_persistence: true
+  cross_side_transition: true
+  validation_consumption: true
+next_gate: C2_WP3_WP4_MARKET_INPUT_CONTRACT_REALIGNMENT_BEFORE_C2_G4
