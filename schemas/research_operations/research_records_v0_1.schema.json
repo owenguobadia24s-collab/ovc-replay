@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/research_records_v0_1.schema.json",
+  "title": "OVC Research Operations records v0.1",
+  "oneOf": [
+    {"$ref": "#/$defs/DataReleaseRef"},
+    {"$ref": "#/$defs/ResearchSession"},
+    {"$ref": "#/$defs/ObservationSnapshot"},
+    {"$ref": "#/$defs/ClaimRecord"},
+    {"$ref": "#/$defs/RealizationSnapshot"},
+    {"$ref": "#/$defs/EvidenceItem"},
+    {"$ref": "#/$defs/CaseBundle"},
+    {"$ref": "#/$defs/IncidentRecord"},
+    {"$ref": "#/$defs/DecisionRecord"},
+    {"$ref": "#/$defs/AuditEvent"}
+  ],
+  "$defs": {
+    "Lineage": {
+      "type": "object",
+      "required": ["parent", "derived_from", "supersedes", "adjudicates"],
+      "properties": {
+        "parent": {"type": "array", "items": {"type": "string"}},
+        "derived_from": {"type": "array", "items": {"type": "string"}},
+        "supersedes": {"type": ["string", "null"]},
+        "adjudicates": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "Envelope": {
+      "type": "object",
+      "required": ["record_type", "schema_version", "lifecycle_state", "created_at", "frozen_at", "operator_id", "admissible_cutoff", "source_release_refs", "artifact_refs", "missingness", "lineage", "authority_state", "reproducibility_state", "payload", "content_sha256"],
+      "properties": {
+        "record_id": {"type": "string", "pattern": "^ro:[a-z0-9_]+:[0-9a-f]{64}$"},
+        "record_type": {"enum": ["DATA_RELEASE_REF", "RESEARCH_SESSION", "OBSERVATION_SNAPSHOT", "CLAIM_RECORD", "REALIZATION_SNAPSHOT", "EVIDENCE_ITEM", "CASE_BUNDLE", "INCIDENT_RECORD", "DECISION_RECORD", "AUDIT_EVENT"]},
+        "schema_version": {"const": "0.1"},
+        "lifecycle_state": {"enum": ["DRAFT", "FROZEN", "ADJUDICATED", "SUPERSEDED", "WITHDRAWN"]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "frozen_at": {"type": ["string", "null"], "format": "date-time"},
+        "operator_id": {"type": "string", "minLength": 1},
+        "admissible_cutoff": {"type": "string", "format": "date-time"},
+        "source_release_refs": {"type": "array", "items": {"type": "object"}},
+        "artifact_refs": {"type": "array", "items": {"type": "object"}},
+        "model_refs": {"type": "array", "items": {"type": "object"}},
+        "missingness": {"type": "array", "items": {"type": "object"}},
+        "lineage": {"$ref": "#/$defs/Lineage"},
+        "authority_state": {"enum": ["DRAFT", "FROZEN", "ADJUDICATED", "SUPERSEDED", "WITHDRAWN"]},
+        "reproducibility_state": {"enum": ["REPRODUCIBLE", "PARTIALLY_AVAILABLE", "NOT_REPRODUCIBLE", "NOT_EVALUATED"]},
+        "payload": {"type": "object"},
+        "content_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "DataReleaseRef": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "DATA_RELEASE_REF"}, "payload": {"required": ["release_id", "manifest_id", "manifest_sha256", "role", "instrument", "coverage_start", "coverage_end", "clocks", "sides", "qa_state", "validation_access_state"]}}}]},
+    "ResearchSession": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "RESEARCH_SESSION"}, "payload": {"required": ["objective", "instrument", "research_role", "session_state", "objects_reviewed"]}}}]},
+    "ObservationSnapshot": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "OBSERVATION_SNAPSHOT"}, "payload": {"required": ["session_id", "visible_facts", "unknowns", "source_record_refs"]}}}]},
+    "ClaimRecord": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "CLAIM_RECORD"}, "payload": {"required": ["observation_id", "eligibility", "discriminator", "falsifier", "horizons"]}}}]},
+    "RealizationSnapshot": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "REALIZATION_SNAPSHOT"}, "payload": {"required": ["observation_id", "reference_time", "horizon", "coverage", "path", "censoring_state"]}}}]},
+    "EvidenceItem": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "EVIDENCE_ITEM"}, "payload": {"required": ["observation_id", "claim_id", "realization_id", "evidence_role", "admissibility"]}}}]},
+    "CaseBundle": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "CASE_BUNDLE"}, "payload": {"required": ["title", "record_refs", "artifact_refs", "review_state"]}}}]},
+    "IncidentRecord": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "INCIDENT_RECORD"}, "payload": {"required": ["incident_code", "severity", "target_id", "description", "blocking_effect"]}}}]},
+    "DecisionRecord": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "DECISION_RECORD"}, "payload": {"required": ["decision_scope", "disposition", "reason", "authority_delta", "rollback"]}}}]},
+    "AuditEvent": {"allOf": [{"$ref": "#/$defs/Envelope"}, {"properties": {"record_type": {"const": "AUDIT_EVENT"}, "payload": {"required": ["actor", "action", "object_id", "result", "trace_ref"]}}}]}
+  }
+}
