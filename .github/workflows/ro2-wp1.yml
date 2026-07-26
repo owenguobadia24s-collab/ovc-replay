@@ -47,4 +47,10 @@ jobs:
           print(first['logical_index_hash'])
           PY
       - name: Run full repository suite
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > full-suite.log 2>&1
+          status=$?
+          tail -n 240 full-suite.log
+          exit $status
