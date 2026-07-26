@@ -5,7 +5,7 @@ import csv
 import gzip
 import hashlib
 import json
-from collections import Counter, defaultdict
+from collections import Counter
 from decimal import Decimal, getcontext
 from pathlib import Path
 from typing import Any
@@ -80,7 +80,6 @@ def build_record(*, meta: dict[str, str], clock: str, side: str, source_path: st
         "true_range_ticks": None,
         "close_change": None,
         "open_gap": None,
-        "range_price": r,
     }
     nulls: dict[str, str] = {}
     if r == 0:
@@ -108,7 +107,6 @@ def build_record(*, meta: dict[str, str], clock: str, side: str, source_path: st
     if prior_reason:
         for field in PRIOR_FIELDS:
             nulls[field] = prior_reason
-    measurements.pop("range_price")
     payload = {
         "schema": "ovc-c1-bar-primitives/v0.1",
         "formula_registry_id": "C1.FORMULAS.v0.1",
@@ -159,23 +157,24 @@ def replay(role_key: str, source_root: Path, output_root: Path) -> dict[str, Any
                 rel = source.relative_to(source_root).as_posix()
                 target = output_root / meta["role"].lower() / clock / side / (source.stem + ".c1.jsonl.gz")
                 target.parent.mkdir(parents=True, exist_ok=True)
-                with source.open(newline="", encoding="utf-8") as inp, gzip.open(target, "wb", mtime=0) as out:
-                    reader = csv.DictReader(inp)
-                    for row in reader:
-                        key = (clock, side)
-                        record, rejection = build_record(meta=meta, clock=clock, side=side, source_path=rel, row=row, prior=prior_by_key.get(key))
-                        counts[f"input:{clock}:{side}"] += 1
-                        if rejection:
-                            rejects[rejection] += 1
-                            continue
-                        out.write(canonical_bytes(record))
-                        counts[f"output:{clock}:{side}"] += 1
-                        for reason in record["null_reasons"].values():
-                            nulls[reason] += 1
-                        prior_by_key[key] = {
-                            "release_id": meta["release_id"], "manifest_id": meta["manifest_id"],
-                            "clock": clock, "side": side, "timestamp": int(row["timestamp"]), "close": dec(row["close"]),
-                        }
+                with source.open(newline="", encoding="utf-8") as inp, target.open("wb") as raw:
+                    with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as out:
+                        reader = csv.DictReader(inp)
+                        for row in reader:
+                            key = (clock, side)
+                            record, rejection = build_record(meta=meta, clock=clock, side=side, source_path=rel, row=row, prior=prior_by_key.get(key))
+                            counts[f"input:{clock}:{side}"] += 1
+                            if rejection:
+                                rejects[rejection] += 1
+                                continue
+                            out.write(canonical_bytes(record))
+                            counts[f"output:{clock}:{side}"] += 1
+                            for reason in record["null_reasons"].values():
+                                nulls[reason] += 1
+                            prior_by_key[key] = {
+                                "release_id": meta["release_id"], "manifest_id": meta["manifest_id"],
+                                "clock": clock, "side": side, "timestamp": int(row["timestamp"]), "close": dec(row["close"]),
+                            }
                 files.append(hash_file(target))
     quarantine = source_root / "QA" / "quarantine-ledger.jsonl"
     quarantine_count = sum(1 for _ in quarantine.open(encoding="utf-8")) if quarantine.exists() else 0
