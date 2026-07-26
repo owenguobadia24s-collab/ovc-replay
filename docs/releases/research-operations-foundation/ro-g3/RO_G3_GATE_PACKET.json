@@ -1,0 +1,49 @@
+{
+  "schema": "ovc-research-operations-gate-packet/v1",
+  "gate_id": "RO-G3",
+  "gate_name": "Research Operations Foundation acceptance and local-console activation review",
+  "status": "PASS",
+  "reviewed_commit": "2e7b7fd31ad87eeb14d545e9b667a53a6f98337d",
+  "predecessor_gate": "RO-G2_PASS",
+  "candidate_packet": "docs/releases/research-operations-foundation/ro-wp3/RO_G3_CANDIDATE_GATE_PACKET.json",
+  "checks": {
+    "QA_TARGET_NON_MUTATION": "PASS",
+    "QA_DETERMINISM": "PASS",
+    "BLOCKING_ASSERTION_PROPAGATION": "PASS",
+    "READ_MODEL_DETERMINISTIC_REBUILD": "PASS",
+    "SOURCE_LINEAGE_VISIBLE": "PASS",
+    "MISSING_AND_BLOCKING_HEALTH_VISIBLE": "PASS",
+    "CONSOLE_WRITE_DENIED": "PASS",
+    "VALIDATION_LOCKED_UNCONSUMED": "PASS",
+    "NO_GIT_R2_SELECTOR_THRESHOLD_MARKET_OR_EXECUTION_AUTHORITY": "PASS",
+    "CANONICAL_TEST_SUITE_PASS": "PASS"
+  },
+  "workflow_evidence": {
+    "canonical_tests_run_id": 30189873318,
+    "canonical_tests_conclusion": "success",
+    "canonical_command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
+    "reviewed_pr": 35,
+    "reviewed_pr_head": "613b61bcaf9b8ad073a11d5424c1395798f8e563",
+    "ro_wp3_merge_commit": "2e7b7fd31ad87eeb14d545e9b667a53a6f98337d"
+  },
+  "accepted_authority": {
+    "qa_runner": "APPROVED_LOCAL_ASSURANCE_OPERATION",
+    "read_model": "APPROVED_REPLACEABLE_LOCAL_DERIVED_INDEX",
+    "console": "APPROVED_LOCAL_READ_ONLY_OPERATION",
+    "research_writes": "RO_WP2_GOVERNED_CLI_ONLY",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "active_research": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE",
+    "agent": "NONE"
+  },
+  "known_limitations": [
+    "The Streamlit shell is a local read-only projection and is not a market-model surface.",
+    "Live OPT-A, C1 and C2 cards remain gated by approved upstream adapters and releases.",
+    "The local derived read-model directory is disposable and never outranks durable sources."
+  ],
+  "rollback": "Disable the local console and delete var/research_operations/read_model while preserving contracts, records, QA evidence, catalogue state and RO-WP2 governed services.",
+  "operator_disposition": "PASS"
+}
