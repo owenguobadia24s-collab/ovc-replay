@@ -1,0 +1,63 @@
+:root {
+  --ovc-bg: #0B1220;
+  --ovc-panel: #111B2E;
+  --ovc-panel-alt: #0F192A;
+  --ovc-border: #25324A;
+  --ovc-text: #F4F7FB;
+  --ovc-muted: #94A3B8;
+  --ovc-blue: #4F7CFF;
+  --ovc-green: #25C281;
+  --ovc-amber: #F3B94E;
+  --ovc-red: #EF5A67;
+  --ovc-purple: #8B5CF6;
+  --ovc-cyan: #35C7D8;
+}
+
+.stApp { background: var(--ovc-bg); color: var(--ovc-text); }
+[data-testid="stAppViewContainer"] { background: var(--ovc-bg); }
+[data-testid="stHeader"] { background: rgba(11, 18, 32, 0.96); }
+[data-testid="stSidebar"] { background: #0C1626; border-right: 1px solid var(--ovc-border); }
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: var(--ovc-muted); }
+.block-container { padding-top: 1.35rem; padding-bottom: 2.5rem; max-width: 1760px; }
+
+.ovc-brand { font-size: 1.55rem; font-weight: 750; letter-spacing: -0.02em; color: var(--ovc-text); }
+.ovc-subtitle { color: var(--ovc-muted); margin-top: -0.2rem; }
+.ovc-context-bar, .ovc-authority-strip, .ovc-card, .ovc-empty-state, .ovc-source-card {
+  background: var(--ovc-panel);
+  border: 1px solid var(--ovc-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+.ovc-context-bar { padding: 0.85rem 1rem; margin: 0.45rem 0 0.75rem; display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; }
+.ovc-authority-strip { padding: 0.7rem 0.85rem; margin-bottom: 0.9rem; }
+.ovc-card { padding: 1rem; min-height: 118px; margin-bottom: 0.8rem; }
+.ovc-card-title { color: var(--ovc-muted); font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.ovc-card-value { color: var(--ovc-text); font-size: 1.65rem; font-weight: 720; margin-top: 0.2rem; }
+.ovc-card-note { color: var(--ovc-muted); font-size: 0.84rem; margin-top: 0.3rem; }
+.ovc-local-badge, .ovc-chip, .ovc-status { display: inline-flex; align-items: center; border-radius: 999px; font-size: 0.73rem; font-weight: 720; padding: 0.24rem 0.55rem; margin: 0.1rem 0.2rem 0.1rem 0; border: 1px solid transparent; }
+.ovc-local-badge { color: #B7F7DA; background: rgba(37, 194, 129, 0.13); border-color: rgba(37, 194, 129, 0.45); }
+.ovc-chip { color: #CBD5E1; background: #162238; border-color: #2A3A56; }
+.ovc-status-pass { color: #B7F7DA; background: rgba(37, 194, 129, 0.13); border-color: rgba(37, 194, 129, 0.45); }
+.ovc-status-warn, .ovc-status-incomplete, .ovc-status-stale, .ovc-status-not_evaluated, .ovc-status-unresolved, .ovc-status-censored { color: #FFE4A3; background: rgba(243, 185, 78, 0.13); border-color: rgba(243, 185, 78, 0.48); }
+.ovc-status-block, .ovc-status-missing { color: #FFC0C6; background: rgba(239, 90, 103, 0.13); border-color: rgba(239, 90, 103, 0.48); }
+.ovc-status-quarantine { color: #D8C7FF; background: rgba(139, 92, 246, 0.13); border-color: rgba(139, 92, 246, 0.48); }
+.ovc-status-not_applicable { color: #C8D5E8; background: rgba(148, 163, 184, 0.13); border-color: rgba(148, 163, 184, 0.4); }
+.ovc-empty-state { padding: 1rem 1.05rem; border-left: 4px solid var(--ovc-amber); }
+.ovc-empty-state strong { color: var(--ovc-text); }
+.ovc-empty-state p { color: var(--ovc-muted); margin: 0.25rem 0; }
+.ovc-source-card { padding: 0.72rem 0.9rem; color: var(--ovc-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; overflow-wrap: anywhere; }
+.ovc-route-kicker { color: var(--ovc-blue); font-size: 0.76rem; font-weight: 760; letter-spacing: 0.08em; text-transform: uppercase; }
+.ovc-section-title { color: var(--ovc-text); font-size: 1.15rem; font-weight: 720; margin: 0.3rem 0 0.7rem; }
+.ovc-fixture-notice { color: #BFD0E7; background: rgba(79, 124, 255, 0.08); border: 1px solid rgba(79, 124, 255, 0.32); border-radius: 10px; padding: 0.65rem 0.8rem; margin-bottom: 0.75rem; }
+.ovc-footer { color: var(--ovc-muted); font-size: 0.74rem; border-top: 1px solid var(--ovc-border); margin-top: 1.2rem; padding-top: 0.8rem; }
+
+.stButton > button { width: 100%; border-radius: 9px; border: 1px solid #243650; background: #111D31; color: #D9E3F0; text-align: left; }
+.stButton > button:hover { border-color: var(--ovc-blue); color: #FFFFFF; background: #182945; }
+.stButton > button:focus { box-shadow: 0 0 0 2px rgba(79, 124, 255, 0.4); }
+[data-testid="stMetricValue"] { color: var(--ovc-text); }
+[data-testid="stDataFrame"] { border: 1px solid var(--ovc-border); border-radius: 10px; overflow: hidden; }
+
+@media (max-width: 1100px) {
+  .block-container { padding-left: 1rem; padding-right: 1rem; }
+  .ovc-card-value { font-size: 1.35rem; }
+}
