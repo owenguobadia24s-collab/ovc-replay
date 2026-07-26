@@ -1,15 +1,16 @@
 schema: ovc-opt-b-c1-implementation-registry/v1
 programme_id: OVC-OPT-B-C1-V2-IMPLEMENTATION-PLAN-0.1
 layer_id: OPT-B.C1.v2
-work_packet: WP1
-status: APPROVED_FOR_WP2_DESIGN
+work_packet: WP2
+status: APPROVED_FOR_WP3_SYNTHETIC_ENGINE
 repository: owenguobadia24s-collab/ovc-replay
-baseline_commit: fb5b2fea2200b05a050aa1f8af51121a1883a4a5
+wp1_merge_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
 owner: OPERATOR
 upstream:
   selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
   required_state: ACTIVE
   handoff_contract: OPT_A_TO_OPT_B_HANDOFF_CONTRACT_v0_2
+  handoff_schema: ovc-opt-a-to-opt-b-handoff/v2
   validation_consumption: LOCKED_UNCONSUMED
 scope:
   instrument:
@@ -23,16 +24,35 @@ scope:
   price_sides:
     - BID
     - ASK
+frozen_design:
+  primitive_contract: contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md
+  null_policy: contracts/opt_b/c1/C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md
+  release_lifecycle_contract: contracts/opt_b/c1/C1_RELEASE_LIFECYCLE_CONTRACT_v0_1.md
+  input_profile: contracts/opt_b/c1/OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1.md
+  formula_registry: registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml
+  qa_registry: registries/opt_b/c1/C1_QA_CHECK_REGISTRY_v0_1.yaml
+  formula_registry_id: C1.FORMULAS.v0.1
+  formula_count: 18
+  record_schema: schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json
+  release_descriptor_schema: schemas/opt_b/c1/c1_release_descriptor_v0_1.schema.json
+  release_manifest_schema: schemas/opt_b/c1/c1_release_manifest_v0_1.schema.json
+  publication_approval_schema: schemas/opt_b/c1/c1_publication_approval_v0_1.schema.json
+  selector_schema: schemas/opt_b/c1/c1_shadow_selector_v0_1.schema.json
+  supersession_schema: schemas/opt_b/c1/c1_supersession_record_v0_1.schema.json
+  release_registry: registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml
+  active_selectors: registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml
+  synthetic_handoff_fixtures: fixtures/c1/wp2/WP2_HANDOFF_FIXTURES.json
 authority:
-  current: DESIGN_AND_REGISTRY_ONLY
-  formula_contract_work: AUTHORISED_AFTER_WP1_PASS
-  schema_work: AUTHORISED_AFTER_WP1_PASS
-  synthetic_fixture_work: AUTHORISED_AFTER_WP2_PASS
+  current: CONTRACTS_FORMULAS_SCHEMAS_FROZEN_NO_ENGINE
+  formula_contract_work: COMPLETE_WP2_PASS
+  schema_work: COMPLETE_WP2_PASS
+  synthetic_fixture_engine_work: AUTHORISED_FOR_WP3_ONLY
   market_replay: DENIED_PENDING_SEPARATE_WP4_APPROVAL
   local_release_freeze: DENIED_PENDING_WP4_QA
   r2_publication: DENIED_PENDING_WP5_APPROVAL
   selector_activation: DENIED_PENDING_WP5_APPROVAL
-  c2_consumption: DENIED
+  c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
+  validation_consumption: LOCKED_UNCONSUMED
   probability: NONE
   exposure: NONE
   trading: NONE
@@ -74,13 +94,32 @@ writes:
     - validation_access
 required_wp1_artifacts:
   - contracts/opt_b/c1/OVC_OPT_B_C1_AUTHORITY_BOUNDARY_v0_1.md
-  - registries/opt_b/c1/C1_IMPLEMENTATION_REGISTRY.yaml
   - registries/opt_b/c1/C1_NAMESPACE_MAP.yaml
   - registries/opt_b/c1/C1_DEFERRED_CAPABILITIES.yaml
   - docs/releases/opt-b-c1-v2/wp1/WP1_OPERATOR_DECISION.md
   - tests/opt_b/c1/test_wp1_boundary.py
-next_gate: C1-WP2_CONTRACT_FORMULA_AND_SCHEMA_FREEZE
+required_wp2_artifacts:
+  - contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md
+  - contracts/opt_b/c1/C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md
+  - contracts/opt_b/c1/C1_RELEASE_LIFECYCLE_CONTRACT_v0_1.md
+  - contracts/opt_b/c1/OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1.md
+  - registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml
+  - registries/opt_b/c1/C1_QA_CHECK_REGISTRY_v0_1.yaml
+  - registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml
+  - registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml
+  - schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json
+  - schemas/opt_b/c1/c1_release_descriptor_v0_1.schema.json
+  - schemas/opt_b/c1/c1_release_manifest_v0_1.schema.json
+  - schemas/opt_b/c1/c1_publication_approval_v0_1.schema.json
+  - schemas/opt_b/c1/c1_shadow_selector_v0_1.schema.json
+  - schemas/opt_b/c1/c1_supersession_record_v0_1.schema.json
+  - fixtures/c1/wp2/WP2_HANDOFF_FIXTURES.json
+  - docs/releases/opt-b-c1-v2/wp2/WP2_GATE_PACKET.json
+  - docs/releases/opt-b-c1-v2/wp2/WP2_OPERATOR_DECISION.md
+  - tests/opt_b/c1/test_wp2_contracts.py
+next_gate: C1-WP3_REFERENCE_ENGINE_AND_FIXTURE_TRUST
 rollback:
-  target_state: DESIGN_AND_FIXTURES_ONLY
+  target_state: WP1_BOUNDARY_PASS_WP2_NOT_FROZEN
   active_opt_a_selector_unchanged: true
+  c1_selectors_return_to_none: true
   legacy_reactivation: PROHIBITED

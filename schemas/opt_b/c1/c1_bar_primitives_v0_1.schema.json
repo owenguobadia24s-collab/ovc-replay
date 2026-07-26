@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json",
+  "title": "OVC OPT-B.C1 bar primitives v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_id",
+    "record_type",
+    "schema_version",
+    "contract_id",
+    "contract_version",
+    "formula_registry_id",
+    "formula_registry_sha256",
+    "opt_a_release_id",
+    "opt_a_manifest_id",
+    "source_bar_id",
+    "prior_bar_id",
+    "instrument",
+    "clock",
+    "price_side",
+    "open_time",
+    "close_time",
+    "first_valid_time",
+    "source_quality",
+    "source_admissibility",
+    "source_lineage",
+    "measurements",
+    "null_reasons",
+    "formula_versions",
+    "authority_state"
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decimal": {"type": "string", "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"},
+    "nullableDecimal": {
+      "oneOf": [
+        {"$ref": "#/$defs/decimal"},
+        {"type": "null"}
+      ]
+    },
+    "nullReason": {
+      "enum": [
+        "ZERO_RANGE",
+        "NO_PRIOR_BAR",
+        "NO_CONTIGUOUS_PRIOR_BAR",
+        "PRIOR_IDENTITY_MISMATCH",
+        "PRIOR_NOT_FIRST_VALID",
+        "PRICE_INCREMENT_UNAVAILABLE"
+      ]
+    }
+  },
+  "properties": {
+    "record_id": {"type": "string", "pattern": "^c1:[0-9a-f]{64}$"},
+    "record_type": {"const": "OPT_B_C1_BAR_PRIMITIVES"},
+    "schema_version": {"const": "0.1"},
+    "contract_id": {"const": "OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1"},
+    "contract_version": {"const": "0.1"},
+    "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+    "formula_registry_sha256": {"$ref": "#/$defs/sha256"},
+    "opt_a_release_id": {
+      "enum": [
+        "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "OPT-A.GBPUSD.VALIDATION.2025.v2"
+      ]
+    },
+    "opt_a_manifest_id": {"type": "string", "minLength": 1},
+    "source_bar_id": {"type": "string", "minLength": 1},
+    "prior_bar_id": {"type": ["string", "null"]},
+    "instrument": {"const": "GBPUSD"},
+    "clock": {"enum": ["15M", "2H_A_L"]},
+    "price_side": {"enum": ["BID", "ASK"]},
+    "open_time": {"type": "string", "format": "date-time"},
+    "close_time": {"type": "string", "format": "date-time"},
+    "first_valid_time": {"type": "string", "format": "date-time"},
+    "source_quality": {
+      "enum": ["COMPLETE", "GAP_ADJACENT", "FIRST_IN_PARTITION", "PRICE_INCREMENT_UNAVAILABLE"]
+    },
+    "source_admissibility": {"const": "HANDOFF_ELIGIBLE"},
+    "source_lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_object_ids", "parent_m1_bar_ids", "contract_versions"],
+      "properties": {
+        "source_object_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+        "parent_m1_bar_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+        "contract_versions": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "minLength": 1},
+          "minProperties": 3
+        }
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "range_abs",
+        "range_ticks",
+        "body_signed",
+        "body_abs",
+        "body_utilisation",
+        "upper_wick_abs",
+        "lower_wick_abs",
+        "upper_wick_share",
+        "lower_wick_share",
+        "wick_balance",
+        "open_location",
+        "close_location",
+        "signed_efficiency",
+        "direction",
+        "true_range_abs",
+        "true_range_ticks",
+        "close_change",
+        "open_gap"
+      ],
+      "properties": {
+        "range_abs": {"$ref": "#/$defs/decimal"},
+        "range_ticks": {"$ref": "#/$defs/nullableDecimal"},
+        "body_signed": {"$ref": "#/$defs/decimal"},
+        "body_abs": {"$ref": "#/$defs/decimal"},
+        "body_utilisation": {"$ref": "#/$defs/nullableDecimal"},
+        "upper_wick_abs": {"$ref": "#/$defs/decimal"},
+        "lower_wick_abs": {"$ref": "#/$defs/decimal"},
+        "upper_wick_share": {"$ref": "#/$defs/nullableDecimal"},
+        "lower_wick_share": {"$ref": "#/$defs/nullableDecimal"},
+        "wick_balance": {"$ref": "#/$defs/nullableDecimal"},
+        "open_location": {"$ref": "#/$defs/nullableDecimal"},
+        "close_location": {"$ref": "#/$defs/nullableDecimal"},
+        "signed_efficiency": {"$ref": "#/$defs/nullableDecimal"},
+        "direction": {"enum": ["UP", "DOWN", "FLAT"]},
+        "true_range_abs": {"$ref": "#/$defs/nullableDecimal"},
+        "true_range_ticks": {"$ref": "#/$defs/nullableDecimal"},
+        "close_change": {"$ref": "#/$defs/nullableDecimal"},
+        "open_gap": {"$ref": "#/$defs/nullableDecimal"}
+      }
+    },
+    "null_reasons": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/nullReason"}
+    },
+    "formula_versions": {
+      "type": "object",
+      "additionalProperties": {"type": "string", "pattern": "^C1-[A-Z0-9-]+\\.v0\\.1$"},
+      "minProperties": 18,
+      "maxProperties": 18
+    },
+    "authority_state": {"enum": ["CANDIDATE", "SHADOW", "ACTIVE_DISCOVERY", "ACTIVE_DEVELOPMENT", "ACTIVE_VALIDATION", "HISTORICAL", "SUPERSEDED"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"opt_a_release_id": {"const": "OPT-A.GBPUSD.VALIDATION.2025.v2"}}},
+      "then": {"properties": {"authority_state": {"enum": ["CANDIDATE", "SHADOW", "ACTIVE_VALIDATION", "HISTORICAL", "SUPERSEDED"]}}}
+    }
+  ]
+}

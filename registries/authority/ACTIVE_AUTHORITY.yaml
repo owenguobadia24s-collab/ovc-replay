@@ -16,7 +16,9 @@ wp6_workflow_run_id: 30181995980
 a2_g4_review_record: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
 a2_g5_activation_record: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
 c1_wp1_decision_record: docs/releases/opt-b-c1-v2/wp1/WP1_OPERATOR_DECISION.md
-state: C1_WP1_BOUNDARY_PASS_NO_C1_MARKET_AUTHORITY
+c1_wp2_decision_record: docs/releases/opt-b-c1-v2/wp2/WP2_OPERATOR_DECISION.md
+c1_wp2_gate_packet: docs/releases/opt-b-c1-v2/wp2/WP2_GATE_PACKET.json
+state: C1_WP2_CONTRACT_FREEZE_PASS_NO_C1_MARKET_AUTHORITY
 selectors:
   opt_a: ACTIVE
   opt_b_c1: NONE
@@ -102,19 +104,27 @@ authorities:
     execution_authority: NONE
     active: true
   opt_b_c1_v2:
-    state: WP1_BOUNDARY_PASS_WP2_DESIGN_AUTHORISED
+    state: WP2_CONTRACTS_FROZEN_WP3_SYNTHETIC_ENGINE_AUTHORISED
     boundary_contract: contracts/opt_b/c1/OVC_OPT_B_C1_AUTHORITY_BOUNDARY_v0_1.md
+    primitive_contract: contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md
+    null_policy: contracts/opt_b/c1/C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md
+    input_profile: contracts/opt_b/c1/OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1.md
+    formula_registry: registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml
+    formula_registry_id: C1.FORMULAS.v0.1
+    formula_count: 18
     implementation_registry: registries/opt_b/c1/C1_IMPLEMENTATION_REGISTRY.yaml
+    release_registry_state: CONTRACTS_FROZEN_NO_RELEASE
     exact_opt_a_remote_parent_available: true
     exact_opt_a_active_parent_available: true
-    contract_and_schema_design: AUTHORISED
-    synthetic_engine_work: DENIED_PENDING_WP2
+    contract_and_schema_design: COMPLETE_WP2_PASS
+    synthetic_engine_work: AUTHORISED_FOR_WP3_FIXTURES_ONLY
     market_replay: DENIED_PENDING_WP4
     release_freeze: DENIED_PENDING_WP4_QA
     r2_publication: DENIED_PENDING_WP5
     selector: NONE
+    validation_consumption: LOCKED_UNCONSUMED
     active_handoff: NONE
-    c2_consumption: DENIED
+    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
     probability_authority: NONE
     exposure_authority: NONE
     execution_authority: NONE

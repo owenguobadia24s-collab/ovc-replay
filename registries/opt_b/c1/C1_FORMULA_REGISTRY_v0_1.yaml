@@ -1,0 +1,252 @@
+schema: ovc-opt-b-c1-formula-registry/v1
+registry_id: C1.FORMULAS.v0.1
+status: FROZEN_AFTER_WP2
+layer_id: OPT-B.C1.v2
+contract_id: OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1
+record_schema_id: c1_bar_primitives_v0_1
+arithmetic: DECIMAL_EXACT
+canonical_serialization: UTF8_SORTED_KEYS_FINAL_NEWLINE
+clock_neutral: true
+side_separate: true
+formula_count: 18
+forbidden_dependencies:
+  - ROLLING_WINDOWS
+  - ATR
+  - LEVELS
+  - CONTAINERS
+  - SESSIONS
+  - STATE
+  - EVENTS
+  - SEMANTIC_NAMES
+  - FUTURE_BARS
+  - OUTCOMES
+  - TRADE_LABELS
+formulas:
+  - primitive_id: C1-RANGE-ABS.v0.1
+    field_name: range_abs
+    definition: Current high minus current low.
+    formula: high - low
+    required_inputs: [high, low]
+    unit: PRICE
+    domain: {minimum: "0", maximum: null}
+    null_rule: NEVER_FOR_ADMISSIBLE_BAR
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: PRICE_REFLECTION_INVARIANT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-RANGE-TICKS.v0.1
+    field_name: range_ticks
+    definition: Current absolute range expressed in price increments.
+    formula: range_abs / price_increment
+    required_inputs: [range_abs, price_increment]
+    unit: TICKS
+    domain: {minimum: "0", maximum: null}
+    null_rule: PRICE_INCREMENT_UNAVAILABLE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: PRICE_REFLECTION_INVARIANT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-BODY-SIGNED.v0.1
+    field_name: body_signed
+    definition: Current close minus current open.
+    formula: close - open
+    required_inputs: [open, close]
+    unit: PRICE
+    domain: {minimum: null, maximum: null}
+    null_rule: NEVER_FOR_ADMISSIBLE_BAR
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_SIGN_REVERSAL
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-BODY-ABS.v0.1
+    field_name: body_abs
+    definition: Absolute current close-open difference.
+    formula: abs(close - open)
+    required_inputs: [open, close]
+    unit: PRICE
+    domain: {minimum: "0", maximum: null}
+    null_rule: NEVER_FOR_ADMISSIBLE_BAR
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: ABSOLUTE_UP_DOWN_INVARIANT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-BODY-UTIL.v0.1
+    field_name: body_utilisation
+    definition: Absolute body divided by current high-low range.
+    formula: body_abs / range_abs
+    required_inputs: [body_abs, range_abs]
+    unit: RATIO
+    domain: {minimum: "0", maximum: "1"}
+    null_rule: ZERO_RANGE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: ABSOLUTE_UP_DOWN_INVARIANT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-UPPER-WICK-ABS.v0.1
+    field_name: upper_wick_abs
+    definition: Current high minus the greater of open and close.
+    formula: high - max(open, close)
+    required_inputs: [open, high, close]
+    unit: PRICE
+    domain: {minimum: "0", maximum: null}
+    null_rule: NEVER_FOR_ADMISSIBLE_BAR
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_WICK_SWAP
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-LOWER-WICK-ABS.v0.1
+    field_name: lower_wick_abs
+    definition: The lesser of open and close minus current low.
+    formula: min(open, close) - low
+    required_inputs: [open, low, close]
+    unit: PRICE
+    domain: {minimum: "0", maximum: null}
+    null_rule: NEVER_FOR_ADMISSIBLE_BAR
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_WICK_SWAP
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-UPPER-WICK-SHARE.v0.1
+    field_name: upper_wick_share
+    definition: Upper-wick magnitude divided by current range.
+    formula: upper_wick_abs / range_abs
+    required_inputs: [upper_wick_abs, range_abs]
+    unit: RATIO
+    domain: {minimum: "0", maximum: "1"}
+    null_rule: ZERO_RANGE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_WICK_SHARE_SWAP
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-LOWER-WICK-SHARE.v0.1
+    field_name: lower_wick_share
+    definition: Lower-wick magnitude divided by current range.
+    formula: lower_wick_abs / range_abs
+    required_inputs: [lower_wick_abs, range_abs]
+    unit: RATIO
+    domain: {minimum: "0", maximum: "1"}
+    null_rule: ZERO_RANGE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_WICK_SHARE_SWAP
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-WICK-BALANCE.v0.1
+    field_name: wick_balance
+    definition: Upper-wick share minus lower-wick share.
+    formula: upper_wick_share - lower_wick_share
+    required_inputs: [upper_wick_share, lower_wick_share]
+    unit: RATIO
+    domain: {minimum: "-1", maximum: "1"}
+    null_rule: ZERO_RANGE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_SIGN_REVERSAL
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-OPEN-LOC.v0.1
+    field_name: open_location
+    definition: Open location within current low-high range.
+    formula: (open - low) / range_abs
+    required_inputs: [open, low, range_abs]
+    unit: RATIO
+    domain: {minimum: "0", maximum: "1"}
+    null_rule: ZERO_RANGE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: PRICE_REFLECTION_COMPLEMENT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-CLOSE-LOC.v0.1
+    field_name: close_location
+    definition: Close location within current low-high range.
+    formula: (close - low) / range_abs
+    required_inputs: [close, low, range_abs]
+    unit: RATIO
+    domain: {minimum: "0", maximum: "1"}
+    null_rule: ZERO_RANGE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: PRICE_REFLECTION_COMPLEMENT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-SIGNED-EFF.v0.1
+    field_name: signed_efficiency
+    definition: Signed current body divided by current range.
+    formula: body_signed / range_abs
+    required_inputs: [body_signed, range_abs]
+    unit: RATIO
+    domain: {minimum: "-1", maximum: "1"}
+    null_rule: ZERO_RANGE
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_SIGN_REVERSAL
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-DIRECTION.v0.1
+    field_name: direction
+    definition: Arithmetic sign of current close-open difference.
+    formula: sign(close - open)
+    required_inputs: [open, close]
+    unit: ENUM
+    domain: {values: [UP, DOWN, FLAT]}
+    null_rule: NEVER_FOR_ADMISSIBLE_BAR
+    lookback_bars: 0
+    first_valid_rule: SOURCE_BAR_CLOSE
+    symmetry_rule: UP_DOWN_ENUM_SWAP_FLAT_INVARIANT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-TRUE-RANGE-ABS.v0.1
+    field_name: true_range_abs
+    definition: Maximum of current range and absolute high/low distance from lawful prior close.
+    formula: max(high - low, abs(high - prior_close), abs(low - prior_close))
+    required_inputs: [high, low, prior_close]
+    unit: PRICE
+    domain: {minimum: "0", maximum: null}
+    null_rule: PRIOR_CLOSE_REQUIRED
+    lookback_bars: 1
+    first_valid_rule: SOURCE_BAR_CLOSE_WITH_CONTIGUOUS_PRIOR
+    symmetry_rule: PRICE_REFLECTION_INVARIANT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-TRUE-RANGE-TICKS.v0.1
+    field_name: true_range_ticks
+    definition: True range expressed in price increments.
+    formula: true_range_abs / price_increment
+    required_inputs: [true_range_abs, price_increment]
+    unit: TICKS
+    domain: {minimum: "0", maximum: null}
+    null_rule: PRIOR_CLOSE_AND_PRICE_INCREMENT_REQUIRED
+    lookback_bars: 1
+    first_valid_rule: SOURCE_BAR_CLOSE_WITH_CONTIGUOUS_PRIOR
+    symmetry_rule: PRICE_REFLECTION_INVARIANT
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-CLOSE-CHANGE.v0.1
+    field_name: close_change
+    definition: Current close minus lawful prior close.
+    formula: close - prior_close
+    required_inputs: [close, prior_close]
+    unit: PRICE
+    domain: {minimum: null, maximum: null}
+    null_rule: PRIOR_CLOSE_REQUIRED
+    lookback_bars: 1
+    first_valid_rule: SOURCE_BAR_CLOSE_WITH_CONTIGUOUS_PRIOR
+    symmetry_rule: UP_DOWN_SIGN_REVERSAL
+    authority: DERIVED_ATOMIC_FACT
+  - primitive_id: C1-OPEN-GAP.v0.1
+    field_name: open_gap
+    definition: Current open minus lawful prior close.
+    formula: open - prior_close
+    required_inputs: [open, prior_close]
+    unit: PRICE
+    domain: {minimum: null, maximum: null}
+    null_rule: PRIOR_CLOSE_REQUIRED
+    lookback_bars: 1
+    first_valid_rule: SOURCE_BAR_CLOSE_WITH_CONTIGUOUS_PRIOR
+    symmetry_rule: UP_DOWN_SIGN_REVERSAL
+    authority: DERIVED_ATOMIC_FACT
+versioning:
+  change_requires_new_version:
+    - EQUATION
+    - UNIT
+    - DOMAIN
+    - REQUIRED_INPUT
+    - NULL_RULE
+    - LOOKBACK
+    - FIRST_VALID_RULE
+    - SYMMETRY_RULE
+  historical_mutation: PROHIBITED
+  complete_replay_required: true

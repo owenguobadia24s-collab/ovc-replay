@@ -1,0 +1,82 @@
+{
+  "schema": "ovc-opt-b-c1-wp2-gate-packet/v1",
+  "gate_id": "C1-WP2_CONTRACT_FORMULA_AND_SCHEMA_FREEZE",
+  "decision": "PASS",
+  "decision_state": "CONTRACTS_FORMULAS_SCHEMAS_FROZEN",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "baseline_commit": "3940f64a635f547a6bef6045bd3a8a27e386dcdd",
+  "execution_commit": null,
+  "workflow_run_id": null,
+  "contract_ids": [
+    "OVC_OPT_B_C1_AUTHORITY_BOUNDARY_v0_1",
+    "OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1",
+    "C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1",
+    "C1_RELEASE_LIFECYCLE_CONTRACT_v0_1",
+    "OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1"
+  ],
+  "formula_registry": {
+    "registry_id": "C1.FORMULAS.v0.1",
+    "formula_count": 18,
+    "arithmetic": "DECIMAL_EXACT",
+    "lookback_zero_count": 14,
+    "lookback_one_count": 4,
+    "thresholds": "NONE",
+    "semantic_labels": "NONE"
+  },
+  "schemas": [
+    "c1_bar_primitives_v0_1.schema.json",
+    "c1_release_descriptor_v0_1.schema.json",
+    "c1_release_manifest_v0_1.schema.json",
+    "c1_publication_approval_v0_1.schema.json",
+    "c1_shadow_selector_v0_1.schema.json",
+    "c1_supersession_record_v0_1.schema.json"
+  ],
+  "qa": {
+    "registry_id": "C1.QA.v0.1",
+    "blocking_check_count": 10,
+    "required_families": [
+      "ARITHMETIC",
+      "DOMAIN_AND_NULLS",
+      "CHRONOLOGY",
+      "LEAKAGE",
+      "SOURCE_LINEAGE",
+      "DETERMINISM",
+      "METAMORPHIC_SYMMETRY",
+      "SERIALIZATION_AND_IDENTITY",
+      "CARDINALITY",
+      "AUTHORITY_BOUNDARY"
+    ]
+  },
+  "fixtures": {
+    "path": "fixtures/c1/wp2/WP2_HANDOFF_FIXTURES.json",
+    "fixture_count": 8,
+    "synthetic": true,
+    "market_authority": "NONE",
+    "release_parent_eligibility": "DENIED"
+  },
+  "scope": {
+    "instrument": "GBPUSD",
+    "canonical_clocks": ["15M", "2H_A_L"],
+    "control_only_clocks": ["H1_M1_DERIVED", "H1_PROVIDER_NATIVE"],
+    "price_sides": ["BID", "ASK"],
+    "validation_consumption": "LOCKED_UNCONSUMED"
+  },
+  "authority_delta": {
+    "wp3_reference_engine_on_synthetic_fixtures": "AUTHORISED",
+    "market_replay": "DENIED_PENDING_WP4",
+    "local_release_freeze": "DENIED_PENDING_WP4_QA",
+    "r2_publication": "DENIED_PENDING_WP5",
+    "selector_activation": "DENIED_PENDING_WP5",
+    "c2_consumption": "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "selectors": {
+    "opt_a": "ACTIVE_UNCHANGED",
+    "opt_b_c1": "NONE",
+    "opt_b_c2": "NONE"
+  },
+  "next_gate": "C1-WP3_REFERENCE_ENGINE_AND_FIXTURE_TRUST"
+}

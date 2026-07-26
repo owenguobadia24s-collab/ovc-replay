@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c1/c1_shadow_selector_v0_1.schema.json",
+  "title": "OVC OPT-B.C1 selector v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "selector_id",
+    "research_role",
+    "selector_state",
+    "authority_state",
+    "release_id",
+    "manifest_id",
+    "manifest_sha256",
+    "parent_opt_a_release_id",
+    "parent_opt_a_manifest_sha256",
+    "activation_decision_id",
+    "rollback_target",
+    "c2_consumption"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-b-c1-selector/v1"},
+    "selector_id": {"type": "string", "pattern": "^SELECTOR\\.OPT-B\\.C1\\.(DISCOVERY|DEVELOPMENT|VALIDATION)$"},
+    "research_role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "selector_state": {"enum": ["NONE", "SHADOW", "ACTIVE", "ROLLED_BACK", "BLOCKED"]},
+    "authority_state": {"enum": ["NONE", "SHADOW", "ACTIVE_DISCOVERY", "ACTIVE_DEVELOPMENT", "ACTIVE_VALIDATION", "SUPERSEDED"]},
+    "release_id": {"type": ["string", "null"]},
+    "manifest_id": {"type": ["string", "null"]},
+    "manifest_sha256": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "parent_opt_a_release_id": {"type": ["string", "null"]},
+    "parent_opt_a_manifest_sha256": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "activation_decision_id": {"type": ["string", "null"]},
+    "activated_at": {"type": ["string", "null"], "format": "date-time"},
+    "rollback_target": {"enum": ["NONE", "PRIOR_ELIGIBLE_C1_RELEASE"]},
+    "c2_consumption": {"const": "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW"},
+    "validation_consumption_state": {"enum": ["NOT_APPLICABLE", "LOCKED_UNCONSUMED", "APPROVED_ONCE", "CONSUMED"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"selector_state": {"const": "NONE"}}},
+      "then": {
+        "properties": {
+          "authority_state": {"const": "NONE"},
+          "release_id": {"type": "null"},
+          "manifest_id": {"type": "null"},
+          "manifest_sha256": {"type": "null"},
+          "activation_decision_id": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"research_role": {"const": "VALIDATION"}}},
+      "then": {
+        "required": ["validation_consumption_state"],
+        "properties": {
+          "validation_consumption_state": {"const": "LOCKED_UNCONSUMED"},
+          "selector_state": {"enum": ["NONE", "SHADOW", "BLOCKED"]}
+        }
+      }
+    }
+  ]
+}

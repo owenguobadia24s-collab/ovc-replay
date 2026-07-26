@@ -18,6 +18,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: V2_REMOTE_PUBLICATION_REVIEW_PASS_NO_MARKET_AUTHORITY",
     "state: V2_SELECTOR_SET_ACTIVE_NO_DOWNSTREAM_MARKET_AUTHORITY",
     "state: C1_WP1_BOUNDARY_PASS_NO_C1_MARKET_AUTHORITY",
+    "state: C1_WP2_CONTRACT_FREEZE_PASS_NO_C1_MARKET_AUTHORITY",
 }
 
 
@@ -25,7 +26,7 @@ class ActiveTreeFoundationTests(unittest.TestCase):
     def test_clean_namespaces_import(self) -> None:
         self.assertEqual(ovc.__version__, "0.2.0")
         self.assertEqual(OPT_A_STATE, "DESIGN_AND_FIXTURES_ONLY")
-        self.assertEqual(C1_STATE, "WP1_BOUNDARY_PASS_WP2_DESIGN_AUTHORISED")
+        self.assertEqual(C1_STATE, "WP2_CONTRACTS_FROZEN_WP3_SYNTHETIC_ENGINE_AUTHORISED")
         self.assertEqual(C2_STATE, "DESIGN_AND_FIXTURES_ONLY")
 
     def test_legacy_engine_is_not_in_active_source_tree(self) -> None:
@@ -42,6 +43,7 @@ class ActiveTreeFoundationTests(unittest.TestCase):
         self.assertIn("runtime_imports: DENIED", authority)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
         self.assertIn("market_replay: DENIED_PENDING_WP4", authority)
+        self.assertIn("selector: NONE", authority)
 
 
 if __name__ == "__main__":

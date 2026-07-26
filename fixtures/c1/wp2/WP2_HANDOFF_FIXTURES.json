@@ -1,0 +1,154 @@
+{
+  "schema": "ovc-opt-b-c1-wp2-handoff-fixtures/v1",
+  "synthetic": true,
+  "market_authority": "NONE",
+  "release_parent_eligibility": "DENIED",
+  "discovery_seed_eligibility": "DENIED",
+  "fixture_count": 8,
+  "base_handoff": {
+    "schema": "ovc-opt-a-to-opt-b-handoff/v2",
+    "synthetic": true,
+    "release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "manifest_id": "MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2",
+    "research_role": "DISCOVERY",
+    "instrument_id": "GBPUSD",
+    "lifecycle_state": "DRAFT",
+    "authority_state": "NONE",
+    "selector_state": "NONE",
+    "validation_consumption_state": "NOT_APPLICABLE"
+  },
+  "cases": [
+    {
+      "case_id": "C1-WP2-FX-001",
+      "purpose": "valid contiguous 15M BID current and prior bars",
+      "input": {
+        "current": {
+          "bar_id": "bar:disc:15m:bid:2021-01-04T00:15:00Z",
+          "clock": "15M",
+          "price_side": "BID",
+          "open_time": "2021-01-04T00:15:00Z",
+          "close_time": "2021-01-04T00:30:00Z",
+          "open": "1.3500",
+          "high": "1.3520",
+          "low": "1.3490",
+          "close": "1.3515",
+          "price_increment": "0.00001",
+          "admissibility": "HANDOFF_ELIGIBLE",
+          "quality": "COMPLETE"
+        },
+        "prior": {
+          "bar_id": "bar:disc:15m:bid:2021-01-04T00:00:00Z",
+          "clock": "15M",
+          "price_side": "BID",
+          "open_time": "2021-01-04T00:00:00Z",
+          "close_time": "2021-01-04T00:15:00Z",
+          "close": "1.3502",
+          "admissibility": "HANDOFF_ELIGIBLE"
+        }
+      },
+      "expected": {"record": "EMIT", "prior_close_fields": "COMPUTABLE", "reason": null}
+    },
+    {
+      "case_id": "C1-WP2-FX-002",
+      "purpose": "valid 2H ASK bar with no prior at partition start",
+      "input": {
+        "current": {
+          "bar_id": "bar:dev:2h:ask:2024-01-02T00:00:00Z",
+          "clock": "2H_A_L",
+          "price_side": "ASK",
+          "open_time": "2024-01-02T00:00:00Z",
+          "close_time": "2024-01-02T02:00:00Z",
+          "open": "1.2702",
+          "high": "1.2730",
+          "low": "1.2680",
+          "close": "1.2710",
+          "price_increment": "0.00001",
+          "admissibility": "HANDOFF_ELIGIBLE",
+          "quality": "FIRST_IN_PARTITION"
+        },
+        "prior": null
+      },
+      "expected": {"record": "EMIT", "prior_close_fields": "NULL", "reason": "NO_PRIOR_BAR"}
+    },
+    {
+      "case_id": "C1-WP2-FX-003",
+      "purpose": "admissible zero-range bar",
+      "input": {
+        "current": {
+          "bar_id": "bar:disc:15m:ask:2021-01-04T00:30:00Z",
+          "clock": "15M",
+          "price_side": "ASK",
+          "open_time": "2021-01-04T00:30:00Z",
+          "close_time": "2021-01-04T00:45:00Z",
+          "open": "1.2500",
+          "high": "1.2500",
+          "low": "1.2500",
+          "close": "1.2500",
+          "price_increment": "0.00001",
+          "admissibility": "HANDOFF_ELIGIBLE",
+          "quality": "COMPLETE"
+        },
+        "prior": null
+      },
+      "expected": {"record": "EMIT", "range_divided_fields": "NULL", "reason": "ZERO_RANGE"}
+    },
+    {
+      "case_id": "C1-WP2-FX-004",
+      "purpose": "gap-adjacent current bar cannot bridge to an older prior close",
+      "input": {
+        "current": {
+          "bar_id": "bar:disc:15m:bid:2021-01-04T01:00:00Z",
+          "clock": "15M",
+          "price_side": "BID",
+          "open_time": "2021-01-04T01:00:00Z",
+          "close_time": "2021-01-04T01:15:00Z",
+          "open": "1.3510",
+          "high": "1.3525",
+          "low": "1.3500",
+          "close": "1.3520",
+          "price_increment": "0.00001",
+          "admissibility": "HANDOFF_ELIGIBLE",
+          "quality": "GAP_ADJACENT"
+        },
+        "prior": {
+          "bar_id": "bar:disc:15m:bid:2021-01-04T00:30:00Z",
+          "clock": "15M",
+          "price_side": "BID",
+          "open_time": "2021-01-04T00:30:00Z",
+          "close_time": "2021-01-04T00:45:00Z",
+          "close": "1.3508",
+          "admissibility": "HANDOFF_ELIGIBLE"
+        }
+      },
+      "expected": {"record": "EMIT", "prior_close_fields": "NULL", "reason": "NO_CONTIGUOUS_PRIOR_BAR"}
+    },
+    {
+      "case_id": "C1-WP2-FX-005",
+      "purpose": "historical OPT-A v1 is rejected as parent",
+      "handoff_overrides": {"release_id": "OPT-A.GBPUSD.2026H1.v1"},
+      "input": {"current": {"clock": "15M", "price_side": "BID", "admissibility": "HANDOFF_ELIGIBLE"}},
+      "expected": {"record": "REJECT", "reason": "UPSTREAM_IDENTITY_UNRESOLVED"}
+    },
+    {
+      "case_id": "C1-WP2-FX-006",
+      "purpose": "provider-native H1 control clock is rejected by canonical profile",
+      "input": {"current": {"clock": "H1_PROVIDER_NATIVE", "price_side": "BID", "admissibility": "HANDOFF_ELIGIBLE"}},
+      "expected": {"record": "REJECT", "reason": "CONTROL_CLOCK_NOT_AUTHORISED"}
+    },
+    {
+      "case_id": "C1-WP2-FX-007",
+      "purpose": "cross-side prior identity is not used",
+      "input": {
+        "current": {"clock": "15M", "price_side": "ASK", "open_time": "2021-01-04T00:15:00Z", "close_time": "2021-01-04T00:30:00Z", "admissibility": "HANDOFF_ELIGIBLE"},
+        "prior": {"clock": "15M", "price_side": "BID", "close_time": "2021-01-04T00:15:00Z", "admissibility": "HANDOFF_ELIGIBLE"}
+      },
+      "expected": {"record": "EMIT_CURRENT_ONLY", "prior_close_fields": "NULL", "reason": "PRIOR_IDENTITY_MISMATCH"}
+    },
+    {
+      "case_id": "C1-WP2-FX-008",
+      "purpose": "quarantined current source bar produces no C1 record",
+      "input": {"current": {"clock": "2H_A_L", "price_side": "BID", "admissibility": "QUARANTINED", "quality": "INCOMPLETE"}},
+      "expected": {"record": "REJECT", "reason": "SOURCE_BAR_INADMISSIBLE"}
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c1/c1_supersession_record_v0_1.schema.json",
+  "title": "OVC OPT-B.C1 supersession record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "supersession_id",
+    "predecessor_release_id",
+    "predecessor_manifest_id",
+    "successor_release_id",
+    "successor_manifest_id",
+    "reason_code",
+    "changed_semantic_components",
+    "historical_mutation",
+    "selector_transition",
+    "rollback_target",
+    "decision_record"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-opt-b-c1-supersession-record/v1"},
+    "supersession_id": {"type": "string", "pattern": "^SUPERSEDE\\.OPT-B\\.C1\\.[A-Z0-9._-]+$"},
+    "predecessor_release_id": {"type": "string", "pattern": "^OPT-B\\.C1\\."},
+    "predecessor_manifest_id": {"type": "string", "pattern": "^MANIFEST\\.C1\\."},
+    "successor_release_id": {"type": "string", "pattern": "^OPT-B\\.C1\\."},
+    "successor_manifest_id": {"type": "string", "pattern": "^MANIFEST\\.C1\\."},
+    "reason_code": {"enum": ["FORMULA_CHANGE", "NULL_POLICY_CHANGE", "SCHEMA_CHANGE", "INPUT_PROFILE_CHANGE", "PARENT_RELEASE_CHANGE", "DEFECT_CORRECTION", "GOVERNANCE_REPLACEMENT"]},
+    "changed_semantic_components": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+    "historical_mutation": {"const": "PROHIBITED"},
+    "selector_transition": {"enum": ["NONE", "ATOMIC_TO_SUCCESSOR", "ROLLBACK_TO_NONE"]},
+    "rollback_target": {"enum": ["NONE", "PREDECESSOR_IF_STILL_ELIGIBLE"]},
+    "decision_record": {"type": "string", "minLength": 1},
+    "recorded_at": {"type": ["string", "null"], "format": "date-time"}
+  },
+  "not": {
+    "properties": {
+      "predecessor_release_id": {"const": "OPT-A.GBPUSD.2026H1.v1"},
+      "successor_release_id": {"const": "OPT-A.GBPUSD.2026H1.v1"}
+    }
+  }
+}
