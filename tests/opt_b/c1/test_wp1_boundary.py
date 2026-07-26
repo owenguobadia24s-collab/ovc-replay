@@ -36,14 +36,16 @@ class C1WP1BoundaryTests(unittest.TestCase):
         ):
             self.assertIn(phrase, boundary)
 
-    def test_wp1_does_not_activate_c1_or_validation(self) -> None:
+    def test_wp1_boundary_survives_later_shadow_activation(self) -> None:
         authority = (ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml").read_text(encoding="utf-8")
         self.assertIn("  opt_a: ACTIVE", authority)
-        self.assertIn("  opt_b_c1: NONE", authority)
+        self.assertIn("  opt_b_c1: SHADOW", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
-        self.assertIn("market_replay: DENIED_PENDING_WP4", authority)
-        self.assertIn("r2_publication: DENIED_PENDING_WP5", authority)
-        self.assertIn("c2_consumption: DENIED", authority)
+        self.assertIn("market_replay: COMPLETE_WP4_PASS", authority)
+        self.assertIn("r2_publication: COMPLETE_WP5_REMOTE_VERIFIED", authority)
+        self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", authority)
+        self.assertIn("probability_authority: NONE", authority)
+        self.assertIn("execution_authority: NONE", authority)
 
     def test_namespace_and_deferred_registers_block_scope_creep(self) -> None:
         namespace = (ROOT / "registries/opt_b/c1/C1_NAMESPACE_MAP.yaml").read_text(encoding="utf-8")
