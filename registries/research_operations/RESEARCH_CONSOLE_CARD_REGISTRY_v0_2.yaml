@@ -1,0 +1,68 @@
+schema: ovc-research-console-card-registry/v0.2
+status: FROZEN_BY_RC_00_PENDING_RC_G0_REVIEW
+cards:
+  - card_id: SESSION_CONTEXT
+    routes: [OVERVIEW]
+    required_fields: [repository, branch, working_copy, source_commit, read_model_sha256, built_at_utc, indexed_object_count, health_signal_count]
+    authority: DERIVED_READ_ONLY
+    fallback: BLOCK
+  - card_id: AUTHORITY_BOUNDARY
+    routes: [OVERVIEW, ABOUT]
+    required_fields: [mode, repository_mutation, selector_mutation, threshold_mutation, market_classification, probability, exposure, execution, agent, deployment]
+    authority: CONTRACT_DERIVED_READ_ONLY
+    fallback: BLOCK
+  - card_id: HEALTH_SUMMARY
+    routes: [OVERVIEW, HEALTH]
+    required_fields: [required_domains, domain_status, freshness, source_refs, consequence, affected_surfaces]
+    authority: DERIVED_ASSURANCE_ONLY
+    fallback: NOT_EVALUATED
+  - card_id: OBJECT_BREAKDOWN
+    routes: [OVERVIEW, LINEAGE]
+    required_fields: [object_type, count, source_refs]
+    authority: DERIVED_READ_ONLY
+    fallback: EXPECTED_EMPTY
+  - card_id: RECENT_ACTIVITY
+    routes: [OVERVIEW, AUDIT]
+    required_fields: [event_time, event_type, object_id, disposition, source_refs]
+    authority: DERIVED_READ_ONLY
+    fallback: EXPECTED_EMPTY
+  - card_id: RELEASE_INDEX
+    routes: [OVERVIEW, RELEASES]
+    required_fields: [release_id, role, interval, clocks, lifecycle_state, authority_state, qa_state, availability_state, source_refs]
+    authority: DERIVED_READ_ONLY
+    fallback: NOT_MATERIALIZED
+  - card_id: RESEARCH_SESSIONS
+    routes: [OVERVIEW, SESSIONS]
+    required_fields: [session_id, lifecycle_state, session_type, created_at, frozen_at, source_refs]
+    authority: READ_ONLY
+    fallback: EXPECTED_EMPTY
+  - card_id: QA_GATE_STATUS
+    routes: [OVERVIEW, QA_GATES]
+    required_fields: [gate_id, disposition, assertions, blocking_effect, source_refs]
+    authority: DERIVED_ASSURANCE_ONLY
+    fallback: NOT_EVALUATED
+  - card_id: DESK_CONTEXT
+    routes: [RESEARCH_DESK]
+    required_fields: [instrument, release_id, side, clock, selected_time, freshness, source_refs]
+    authority: READ_ONLY_WHEN_MATERIALIZED
+    fallback: NOT_MATERIALIZED
+  - card_id: DESK_STATE
+    routes: [RESEARCH_DESK]
+    required_fields: [parallel_axes, computability, ambiguity, source_refs]
+    authority: READ_ONLY_WHEN_MATERIALIZED
+    fallback: NOT_EVALUATED
+  - card_id: DESK_EVIDENCE
+    routes: [RESEARCH_DESK, EVIDENCE]
+    required_fields: [support, contradiction, boundary, null, anomaly, censored, source_refs]
+    authority: READ_ONLY
+    fallback: NOT_MATERIALIZED
+  - card_id: LINEAGE_DETAIL
+    routes: [RESEARCH_DESK, REPLAY, EVIDENCE, LINEAGE, CATALOGUE, RELEASES, QA_GATES, AUDIT]
+    required_fields: [object_id, parents, children, dependencies, source_refs, hashes]
+    authority: READ_ONLY
+    fallback: NOT_MATERIALIZED
+rules:
+  source_resolution_required: true
+  color_only_status_forbidden: true
+  raw_payload_default_collapsed: true
+  empty_state_must_use_registry: true
