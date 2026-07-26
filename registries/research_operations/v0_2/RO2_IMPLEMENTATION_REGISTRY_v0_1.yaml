@@ -1,8 +1,8 @@
 schema: ovc-ro2-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2
 design_gate: RO2_G0_PASS_DESIGN_FREEZE
-status: RO2_G2_PASS_LOCAL_REPLACEABLE_READ_ONLY_INSPECTION
-latest_reconciled_main_commit: a79616eeaa90ba097cc797a230aa73f9f41ecee8
+status: RO2_WP3_CANDIDATE_PENDING_RO2_G3
+latest_reconciled_main_commit: 97b0f6b9f8d1bdac04e2f06ddf064ac0e4924638
 items:
   - id: RO2-00
     name: Boundary, reconciliation and contract freeze
@@ -47,9 +47,12 @@ items:
     writes: NONE
   - id: RO2-WP3-CONSOLE
     name: Research Console v0.3 adapters
-    status: AUTHORISED_FOR_BUILD_REQUIRES_SEPARATE_INSTRUCTION
-    planned_namespace: src/ovc/research_operations/v0_2/console_adapters
+    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G3
+    namespace: src/ovc/research_operations/v0_2/console_adapters.py
     authority_after_gate: READ_ONLY_PRESENTATION
+    validation_projection: METADATA_ONLY
+    validation_guard: DENY_BEFORE_PATH_RESOLUTION
+    writes: NONE
 retained_boundaries:
   validation_consumption: LOCKED_UNCONSUMED
   c2_publication: COMPLETE_REMOTE_VERIFIED_SEPARATE_C2_AUTHORITY_UNCHANGED
