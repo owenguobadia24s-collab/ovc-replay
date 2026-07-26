@@ -37,16 +37,17 @@ class C1WP2ContractTests(unittest.TestCase):
             "WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE",
             "B1_G1_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED",
             "B1_G2_PUBLICATION_READY_WP5_AUTHORISED",
+            "B1_G5_SHADOW_SELECTED_C2_DENIED",
         })
         self.assertEqual(FORMULA_REGISTRY_ID, "C1.FORMULAS.v0.1")
         self.assertEqual(FORMULA_COUNT, 18)
         authority = AUTHORITY.read_text(encoding="utf-8")
-        self.assertIn("state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR", authority)
-        self.assertIn("selector: NONE", authority)
+        self.assertIn("state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED", authority)
+        self.assertIn("selector: SHADOW", authority)
         self.assertIn("fixture_trust: PASS", authority)
         self.assertIn("market_replay: COMPLETE_WP4_PASS", authority)
         self.assertIn("release_freeze: COMPLETE_WP4F_PASS", authority)
-        self.assertIn("r2_publication: COMPLETE_WP5_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW", authority)
+        self.assertIn("r2_publication: COMPLETE_WP5_REMOTE_VERIFIED", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
         self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", authority)
 
@@ -56,6 +57,7 @@ class C1WP2ContractTests(unittest.TestCase):
             C1_CONTRACTS / "C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md",
             C1_CONTRACTS / "C1_RELEASE_LIFECYCLE_CONTRACT_v0_1.md",
             C1_CONTRACTS / "OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1.md",
+            C1_CONTRACTS / "C1_TO_C2_HANDOFF_CONTRACT_v0_1.md",
             C1_REGISTRIES / "C1_FORMULA_REGISTRY_v0_1.yaml",
             C1_REGISTRIES / "C1_QA_CHECK_REGISTRY_v0_1.yaml",
             C1_REGISTRIES / "C1_RELEASE_REGISTRY.yaml",
@@ -132,22 +134,24 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertIn("H1_PROVIDER_NATIVE", text)
         self.assertIn("No-repair law", text)
 
-    def test_release_candidates_remain_unselected_after_remote_verification(self) -> None:
+    def test_remote_verified_releases_are_shadow_selected_only(self) -> None:
         releases = (C1_REGISTRIES / "C1_RELEASE_REGISTRY.yaml").read_text(encoding="utf-8")
         selectors = (C1_REGISTRIES / "C1_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
-        self.assertIn("status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW", releases)
-        self.assertEqual(releases.count("authority_state: CANDIDATE"), 2)
+        self.assertIn("status: B1_G5_PASS_SHADOW_SELECTED_C2_DENIED", releases)
+        self.assertEqual(releases.count("authority_state: SHADOW"), 2)
         self.assertIn("authority_state: NONE", releases)
-        self.assertEqual(releases.count("active_selector: false"), 3)
+        self.assertEqual(releases.count("active_selector: true"), 2)
+        self.assertEqual(releases.count("active_selector: false"), 1)
         self.assertEqual(releases.count("freeze_state: COMPLETE_WP4F_PASS"), 2)
         self.assertEqual(releases.count("publication_readiness: PASS_B1_G2"), 2)
         self.assertEqual(releases.count("publication_status: PUBLISHED_REMOTE_VERIFIED"), 2)
         self.assertIn("validation_consumption_state: LOCKED_UNCONSUMED", releases)
-        self.assertIn("state: NONE", selectors)
-        self.assertEqual(selectors.count("selector_state: NONE"), 3)
-        self.assertEqual(selectors.count("release_id: null"), 3)
+        self.assertIn("state: SHADOW", selectors)
+        self.assertEqual(selectors.count("selector_state: SHADOW"), 2)
+        self.assertEqual(selectors.count("selector_state: NONE"), 1)
         self.assertIn("initial_activation_role: SHADOW_ONLY", selectors)
         self.assertIn("legacy_opt_b_reactivation: PROHIBITED", selectors)
+        self.assertIn("rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE", selectors)
 
     def test_wp2_fixtures_cover_valid_null_gap_and_rejection_cases(self) -> None:
         fixtures = json.loads(C1_FIXTURES.read_text(encoding="utf-8"))
