@@ -54,7 +54,13 @@ The preflight pins `main` at `fefac25f19a836898c3a22228036cd66617dca07`, binds t
 - Git, external-root and rebuildable-index storage separation;
 - RO-WP1, RO-WP2 and RO-WP3 predecessor gates.
 
-RO-G0 creates no runtime package, CLI, database, console or research record. After merge, only `RO-WP1 — Evidence envelope and record schemas` may begin.
+## Research Operations Foundation RO-WP1
+
+RO-WP1 result: `IMPLEMENTED — READY FOR RO-G1 OPERATOR REVIEW`.
+
+The evidence kernel now provides a permanent model-optional envelope, canonical UTF-8 JSON, deterministic record IDs, ten record types, prospective-cutoff and Validation-lock enforcement, append-only freeze and supersession rules, explicit missing-artifact reproducibility states, nine synthetic fixture families and pure validators.
+
+RO-WP1 creates no operator records, write service, CLI, catalogue, QA runner, read model or console. RO-WP2 remains blocked until a separate RO-G1 operator `PASS`. Research Operations active-research, market, probability, exposure, execution and agent authority remain `NONE`.
 
 ## Active authority matrix
 
@@ -65,7 +71,7 @@ RO-G0 creates no runtime package, CLI, database, console or research record. Aft
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
-| Research Operations | `RO_G0_PASS / WP1_BUILD_AUTHORISED_AFTER_MERGE` | Not applicable |
+| Research Operations | `RO_WP1_IMPLEMENTED / RO_G1_REVIEW_REQUIRED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
@@ -74,6 +80,5 @@ Validation remains `LOCKED_UNCONSUMED`. C1 market replay, local release freeze, 
 
 ## Parallel next boundaries
 
-- `OPT-B.C1 v2 WP3 — reference engine and fixture trust`
-- `RO-WP1 — Evidence envelope and record schemas`
-`C1-G0 — WP3 reference-engine review and WP4 replay-scope approval`
+- `C1-G0 — WP3 reference-engine review and WP4 replay-scope approval`
+- `RO-G1 — Evidence integrity`
