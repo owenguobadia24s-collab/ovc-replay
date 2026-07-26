@@ -67,30 +67,34 @@ def main() -> int:
     require_tokens(REQUIRED[6], ["validation_row_resolution_attempt", "prospective_frame_contains_post_cutoff_record", "attempted_git_r2_selector_or_threshold_write"])
     require_tokens(REQUIRED[7], ["Research workspace remains fixture-only", "Validation content must never be resolved"])
 
-    # Later C2-G5 candidate freeze may be recorded, but it must not create publication,
-    # selector, activation, Validation consumption, or exposure authority.
+    # Later C2 gates may freeze candidates and approve exact publication while preserving
+    # the RO2 boundary. Publication execution, selector, activation and Validation access
+    # remain separately controlled.
     require_tokens(
         "docs/CURRENT_STATUS.md",
         [
             "### C2-G4 exact-parent replay",
-            "Result: `PASS_LOCAL_REPLAY`",
+            "C2-G4 result: `PASS_LOCAL_REPLAY`",
             "PASS_LOCAL_CANDIDATE_RELEASE_FROZEN",
+            "PASS_PUBLICATION_READY_OPERATOR_APPROVED_EXACT_RELEASES_ONLY",
+            "publication execution: `NOT_YET_EXECUTED`",
             "Validation remains `LOCKED_UNCONSUMED`",
         ],
     )
     require_tokens(
         "registries/authority/ACTIVE_AUTHORITY.yaml",
         [
-            "C2_G5_PASS_LOCAL_CANDIDATES_FROZEN_NO_C2_AUTHORITY",
+            "C2_PUB_G0_PASS_PUBLICATION_AUTHORISED_NO_REMOTE_WRITE_NO_C2_AUTHORITY",
             "local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY",
-            "publication: NONE",
+            "publication: AUTHORISED_EXACT_RELEASES_ONLY",
+            "publication_executed: false",
             "selector: NONE",
             "activation: NONE",
             "validation_consumption: LOCKED_UNCONSUMED",
         ],
     )
 
-    print("PASS: RO2-G0 design packet remains valid against the reconciled C2-G5 court record")
+    print("PASS: RO2-G0 design packet remains valid against the reconciled C2 publication-readiness court record")
     return 0
 
 
