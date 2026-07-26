@@ -1,0 +1,13 @@
+schema: ovc-opt-b-c2-measurement-registry/v1
+registry_id: C2.MEASUREMENTS.v0.1
+status: FROZEN_WP2
+measurements:
+  - {id: C2.M.LOCATION.NORMALIZED_POSITION, axis: LOCATION, unit: RATIO, domain: [-4, 4], inputs: [close, container_lower, container_upper]}
+  - {id: C2.M.MOTION.SIGNED_PROGRESS, axis: MOTION, unit: RATIO, domain: [-4, 4], inputs: [close, prior_close, local_scale]}
+  - {id: C2.M.ORGANISATION.DISPERSION, axis: ORGANISATION, unit: RATIO, domain: [0, 8], inputs: [c1_range, c1_body, local_scale]}
+  - {id: C2.M.INTERACTION.SIGNED_DISTANCE, axis: INTERACTION, unit: PRICE, domain: UNBOUNDED, inputs: [close, reference_level]}
+  - {id: C2.M.QUALITY.COMPLETENESS, axis: QUALITY, unit: RATIO, domain: [0, 1], inputs: [required_field_count, present_field_count]}
+  - {id: C2.M.PERSISTENCE.COUNT, axis: QUALITY, unit: BARS, domain: [1, 1000000], inputs: [previous_contiguous_state]}
+null_policy: EXPLICIT_REASON_REQUIRED
+threshold_source: C2.PARAMS.GBPUSD.DISCOVERY.v0.1
+serializer: DECIMAL_STRING
