@@ -4,7 +4,8 @@ work_package: RC-WP2-v0.3
 status: IMPLEMENTED_CANDIDATE_PENDING_RC_G2
 source_read_model: ovc-research-operations-read-model/v0.1
 projection_schema: schemas/research_operations/research_console_overview_projection_v0_3.schema.json
-builder_module: src/ovc/research_operations/console_overview.py
+projection_core: src/ovc/research_operations/console_overview.py
+builder_module: src/ovc/research_operations/console_overview_candidate.py
 builder_command: scripts/build_research_console_overview.py
 candidate_output: var/research_operations/console/overview_candidate.json
 active_console_consumption: DENIED_PENDING_RC_G2
@@ -19,6 +20,7 @@ health_domains:
 summary_rules:
   no_signal_is_pass: false
   unknown_status: BLOCK
+  lifecycle_status_is_not_health_status: true
   status_not_colour_only: true
   domain_status_and_consequence_remain_visible: true
   aggregate_cannot_conceal_domain_state: true
