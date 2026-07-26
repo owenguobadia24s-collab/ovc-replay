@@ -1,0 +1,58 @@
+schema: ovc-ro2-qa-check-registry/v1
+registry_id: RO2-QA-REGISTRY-0.1
+status: FROZEN_DESIGN_ONLY
+checks:
+  - id: RO2-QA-001
+    name: No authority expansion
+    severity: BLOCK
+    rule: RO2_G0_MUST_NOT_CREATE_RUNTIME_MARKET_RELEASE_SELECTOR_OR_EXECUTION_AUTHORITY
+  - id: RO2-QA-002
+    name: Validation pre-resolution denial
+    severity: BLOCK
+    rule: VALIDATION_CONTENT_DENIED_BEFORE_PATH_DOWNLOAD_DESERIALISATION_OR_CACHE
+  - id: RO2-QA-003
+    name: Exact source identity
+    severity: BLOCK
+    rule: EVERY_OBJECT_RESOLVES_SOURCE_COMMIT_RELEASE_MANIFEST_AND_HASH
+  - id: RO2-QA-004
+    name: Prospective cutoff integrity
+    severity: BLOCK
+    rule: NO_VISIBLE_RECORD_FIRST_VALID_AFTER_CUTOFF
+  - id: RO2-QA-005
+    name: Lineage integrity
+    severity: BLOCK
+    rule: NO_ORPHAN_DUPLICATE_OR_CYCLIC_ACCEPTED_LINEAGE
+  - id: RO2-QA-006
+    name: Quality evidence and consequence
+    severity: BLOCK
+    rule: EVERY_HEALTH_SIGNAL_NAMES_EVIDENCE_FRESHNESS_CONSEQUENCE_AND_AFFECTED_SURFACES
+  - id: RO2-QA-007
+    name: Optional model fail-closed
+    severity: BLOCK
+    rule: MISSING_C1_OR_C2_RETURNS_NOT_AVAILABLE_OR_NOT_EVALUABLE
+  - id: RO2-QA-008
+    name: Deterministic design serialization
+    severity: BLOCK
+    rule: SAME_DESIGN_INPUTS_PRODUCE_SAME_LOGICAL_PACKET
+  - id: RO2-QA-009
+    name: Object catalogue completeness
+    severity: BLOCK
+    rule: EVERY_PLANNED_PROJECTION_HAS_GRAIN_AUTHORITY_REQUIRED_FIELDS_AND_SCHEMA_PATH
+  - id: RO2-QA-010
+    name: Fixture coverage
+    severity: BLOCK
+    rule: PASS_AND_BLOCK_FIXTURES_EXIST_FOR_EVERY_BLOCKING_BOUNDARY
+  - id: RO2-QA-011
+    name: C2-G4 status reconciliation
+    severity: BLOCK
+    rule: STATUS_AND_AUTHORITY_RECORD_PASS_LOCAL_REPLAY_WITH_NO_C2_AUTHORITY
+  - id: RO2-QA-012
+    name: Legacy quarantine isolation
+    severity: BLOCK
+    rule: LEGACY_QUARANTINED_ABCD_IS_NOT_A_RUNTIME_OR_PARAMETER_DEPENDENCY
+  - id: RO2-QA-013
+    name: Console projection traceability
+    severity: WARN
+    rule: EVERY_PANEL_DECLARES_SOURCE_OBJECTS_UNAVAILABLE_STATES_AND_AUTHORITY
+results: [PASS, WARN, BLOCK, QUARANTINE, NOT_EVALUABLE]
+mutation_authority: NONE
