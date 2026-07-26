@@ -1,0 +1,90 @@
+{
+  "schema": "ovc-opt-b-c1-b1-g1-gate-packet/v1",
+  "gate": "OPT-B.C1.v2.B1-G1",
+  "title": "WP4 candidate inventory and freeze review",
+  "decision": "PASS_EXACT_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED",
+  "review_baseline_commit": "74151d3c9f4659fc6414456c2ad13a138912089c",
+  "source_execution": {
+    "workflow_run_id": 30185680001,
+    "execution_commit": "2e2d84ad34fae02992a7861d194c12e0bdbd0c1f",
+    "candidate_artifact_id": 8626942276,
+    "candidate_artifact_name": "c1-wp4-gbpusd-discovery-development-local-candidate",
+    "candidate_archive_size_bytes": 36317973,
+    "candidate_archive_sha256": "fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc",
+    "qa_artifact_id": 8626942405,
+    "qa_artifact_sha256": "2dc137ede8ee8ca2625bb11aaf591dc9935e3261481d0a0f35a272f02b1cb49d"
+  },
+  "embedded_evidence": {
+    "inventory_sha256": "39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383",
+    "replay_report_sha256": "553d814a77f1efe831644ccdb4b8fa625d7f584527ec09f580048f6851862589",
+    "determinism_receipt_sha256": "e71f52fcc5dde73c54b456d09ecc59a804de77ea4ecad44de9a196f0a818fbc9",
+    "verification_receipt": "docs/releases/opt-b-c1-v2/b1-g1/B1_G1_VERIFICATION_RECEIPT.json",
+    "verification_receipt_sha256": "3eb831185c73ae279b837dfacfc669d600c1630c1e9f17638645f1456a71cc14"
+  },
+  "candidate_inventory": {
+    "file_count": 192,
+    "payload_bytes": 36169581,
+    "record_count": 212764,
+    "unique_record_ids": 212764,
+    "duplicate_record_ids": 0,
+    "roles": {
+      "DISCOVERY": {
+        "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+        "parent_opt_a_release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "parent_opt_a_manifest_sha256": "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c",
+        "file_count": 144,
+        "payload_bytes": 27450668,
+        "record_count": 159892
+      },
+      "DEVELOPMENT": {
+        "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+        "parent_opt_a_release_id": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "parent_opt_a_manifest_sha256": "25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc",
+        "file_count": 48,
+        "payload_bytes": 8718913,
+        "record_count": 52872
+      }
+    }
+  },
+  "blocking_checks": {
+    "archive_identity": "PASS",
+    "complete_inventory": "PASS",
+    "full_byte_hash_verification": "PASS",
+    "role_clock_side_cardinality": "PASS",
+    "unique_record_identity": "PASS",
+    "deterministic_rerun": "PASS",
+    "quarantine_exclusion": "PASS",
+    "validation_exclusion": "PASS",
+    "legacy_source_exclusion": "PASS",
+    "open_blockers": 0
+  },
+  "authority_delta": {
+    "local_freeze": "AUTHORISED_EXACT_CANDIDATE_ONLY",
+    "authorised_command": "c1 freeze-release",
+    "release_ids": [
+      "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+      "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1"
+    ],
+    "source_artifact_id": 8626942276,
+    "inventory_sha256": "39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383",
+    "overwrite": "PROHIBITED",
+    "release_state_after_this_gate": "REPLAY_BUILT_CANDIDATE_FREEZE_AUTHORISED_NOT_YET_FROZEN",
+    "r2_publication": "DENIED_PENDING_SEPARATE_WP5_APPROVAL",
+    "selector_activation": "NONE",
+    "c2_consumption": "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "rollback": {
+    "target_state": "WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE",
+    "delete_unfrozen_workspace": true,
+    "discard_freeze_attempt_on_any_hash_or_manifest_failure": true,
+    "opt_a_selectors_unchanged": true,
+    "c1_selectors": "NONE",
+    "legacy_reactivation": "PROHIBITED"
+  },
+  "next_work_packet": "OPT-B.C1.v2.WP4F_DURABLE_LOCAL_RELEASE_FREEZE_AND_FULL_BYTE_VERIFICATION"
+}

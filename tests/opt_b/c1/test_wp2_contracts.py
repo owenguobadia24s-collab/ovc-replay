@@ -30,19 +30,21 @@ EXPECTED_SCHEMAS = {
 
 
 class C1WP2ContractTests(unittest.TestCase):
-    def test_wp2_design_remains_frozen_after_wp3_and_wp4_progression(self) -> None:
+    def test_wp2_design_remains_frozen_after_wp3_wp4_and_b1_g1_progression(self) -> None:
         self.assertIn(AUTHORITY_STATE, {
             "WP2_CONTRACTS_FROZEN_WP3_SYNTHETIC_ENGINE_AUTHORISED",
             "WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS",
             "WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE",
+            "B1_G1_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED",
         })
         self.assertEqual(FORMULA_REGISTRY_ID, "C1.FORMULAS.v0.1")
         self.assertEqual(FORMULA_COUNT, 18)
         authority = AUTHORITY.read_text(encoding="utf-8")
-        self.assertIn("state: C1_WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_NO_PUBLICATION_AUTHORITY", authority)
+        self.assertIn("state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY", authority)
         self.assertIn("selector: NONE", authority)
         self.assertIn("fixture_trust: PASS", authority)
         self.assertIn("market_replay: COMPLETE_WP4_PASS", authority)
+        self.assertIn("release_freeze: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION", authority)
         self.assertIn("r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
         self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", authority)
@@ -132,10 +134,11 @@ class C1WP2ContractTests(unittest.TestCase):
     def test_release_candidates_do_not_activate_selectors(self) -> None:
         releases = (C1_REGISTRIES / "C1_RELEASE_REGISTRY.yaml").read_text(encoding="utf-8")
         selectors = (C1_REGISTRIES / "C1_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
-        self.assertIn("status: WP4_LOCAL_CANDIDATES_QA_PASS_PENDING_FREEZE_REVIEW", releases)
+        self.assertIn("status: B1_G1_PASS_EXACT_CANDIDATES_FREEZE_AUTHORISED", releases)
         self.assertEqual(releases.count("authority_state: CANDIDATE"), 2)
         self.assertIn("authority_state: NONE", releases)
         self.assertEqual(releases.count("active_selector: false"), 3)
+        self.assertEqual(releases.count("freeze_state: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION"), 2)
         self.assertIn("validation_consumption_state: LOCKED_UNCONSUMED", releases)
         self.assertIn("state: NONE", selectors)
         self.assertEqual(selectors.count("selector_state: NONE"), 3)
