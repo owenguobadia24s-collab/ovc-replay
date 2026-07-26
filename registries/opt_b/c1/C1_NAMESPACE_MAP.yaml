@@ -1,0 +1,38 @@
+schema: ovc-opt-b-c1-namespace-map/v1
+layer_id: OPT-B.C1.v2
+status: FROZEN_FOR_WP2_DESIGN
+reserved:
+  package: src/ovc/opt_b/c1
+  contract_root: contracts/opt_b/c1
+  schema_root: schemas/opt_b/c1
+  registry_root: registries/opt_b/c1
+  fixture_root: fixtures/c1
+  test_root: tests/opt_b/c1
+  release_record_root: docs/releases/opt-b-c1-v2
+  identifiers:
+    formula_registry: C1.FORMULAS.v<MAJOR>.<MINOR>
+    primitive: C1-<CATEGORY>-<NNN>.v<MAJOR>
+    record: C1REC.<OPT_A_BAR_ID>.<FORMULA_SET_HASH_PREFIX>
+    release: OPT-B.C1.<INSTRUMENT>.<ROLE>.<INTERVAL>.v<MAJOR>
+    manifest: MANIFEST.<C1_RELEASE_SLUG>.<REVISION>
+    selector: SELECTOR.OPT-B.C1.<INSTRUMENT>.<ROLESET>.v<MAJOR>
+prohibited_aliases:
+  - B-STATE
+  - candle_type
+  - market_state
+  - overall_state
+  - story
+  - setup
+  - signal
+  - probability
+  - edge
+  - trade
+  - execution
+legacy_namespace_policy:
+  import_from_legacy_runtime: DENIED
+  rename_legacy_implementation_as_c1: DENIED
+  arithmetic_comparison_fixture: PERMITTED_ONLY_WHEN_EXPLICITLY_HISTORICAL
+collision_policy:
+  one_identifier_one_meaning: true
+  definition_change_requires_new_version: true
+  historical_identity_reuse: PROHIBITED
