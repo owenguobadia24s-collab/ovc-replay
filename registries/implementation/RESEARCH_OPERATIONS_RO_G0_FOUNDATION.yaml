@@ -1,0 +1,47 @@
+schema: ovc-research-operations-implementation-registry/v1
+programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+programme_version: 0.1
+gate_id: RO-G0
+status: RO_G0_PASS_WP1_AUTHORISED
+repository: owenguobadia24s-collab/ovc-replay
+baseline_branch: main
+baseline_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
+producing_branch: review/research-operations-ro-g0-foundation
+source_plan:
+  filename: OVC_Research_Operations_Foundation_v0_1_Implementation_Plan.docx
+  sha256: 4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0
+  size_bytes: 193991
+  repository_control_copy: docs/plans/research_operations/OVC_RESEARCH_OPERATIONS_FOUNDATION_IMPLEMENTATION_PLAN_v0_1.md
+predecessor_state:
+  opt_a: A2_G5_SELECTOR_SET_ACTIVE
+  discovery: ACTIVE_DISCOVERY
+  development: ACTIVE_DEVELOPMENT
+  validation: ACTIVE_VALIDATION_LOCKED_UNCONSUMED
+  opt_b_c1: WP1_BOUNDARY_PASS_WP2_DESIGN_AUTHORISED
+  legacy_engine: HISTORICAL_QUARANTINED
+workstreams:
+  ro_wp1:
+    name: Evidence envelope and record schemas
+    branch: build/research-operations-evidence-kernel
+    state: AUTHORISED_AFTER_RO_G0_MERGE
+    exit_gate: RO-G1
+  ro_wp2:
+    name: Research CLI and artifact catalogue
+    branch: build/research-operations-cli-catalogue
+    state: BLOCKED_PENDING_RO_G1
+    exit_gate: RO-G2
+  ro_wp3:
+    name: QA runner, read model and console integration
+    branch: build/research-operations-read-model-console
+    state: BLOCKED_PENDING_RO_G2
+    exit_gate: RO-G3
+authority:
+  active_research: NONE
+  market: NONE
+  probability: NONE
+  exposure: NONE
+  execution: NONE
+  agent: NONE
+rollback:
+  action: REMOVE_RO_WP1_BUILD_APPROVAL_AND_RETAIN_RO_G0_RECORDS
+  upstream_effect: NONE
