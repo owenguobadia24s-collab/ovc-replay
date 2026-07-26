@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-research-operations-gate-packet/v1",
+  "gate_id": "RO-G2",
+  "gate_name": "Operating reliability",
+  "gate_version": "0.1",
+  "baseline_commit": "51f94c55eaed8c997bc141d33f0f3f4fa452bb0f",
+  "producing_branch": "build/research-operations-cli-catalogue",
+  "operator_disposition": "PENDING_REVIEW",
+  "checks": [
+    {"check_id": "RO-G2-01", "name": "complete session without manual file editing", "status": "PASS"},
+    {"check_id": "RO-G2-02", "name": "every public write emits immutable AuditEvent", "status": "PASS"},
+    {"check_id": "RO-G2-03", "name": "frozen overwrite, identity reuse and CLI deletion denied", "status": "PASS"},
+    {"check_id": "RO-G2-04", "name": "changed byte, missing file, expired CI artifact and orphan manifest detected", "status": "PASS"},
+    {"check_id": "RO-G2-05", "name": "catalogue rebuild is logically deterministic", "status": "PASS"},
+    {"check_id": "RO-G2-06", "name": "Validation metadata visible and payload denied", "status": "PASS"},
+    {"check_id": "RO-G2-07", "name": "no Git, R2, selector, threshold or classification side effects", "status": "PASS"}
+  ],
+  "authority_delta_if_passed": {
+    "ro_wp3": "AUTHORISED_FOR_BUILD",
+    "active_research": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE",
+    "agent": "NONE"
+  },
+  "rollback": "Remove RO-WP3 build authority while preserving all RO-WP1 and RO-WP2 contracts, schemas, code, tests and decision evidence."
+}
