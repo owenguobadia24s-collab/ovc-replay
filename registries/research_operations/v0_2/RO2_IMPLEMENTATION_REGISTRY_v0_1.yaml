@@ -1,7 +1,7 @@
 schema: ovc-ro2-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2
 design_gate: RO2_G0_PASS_DESIGN_FREEZE
-status: RO2_WP2_CANDIDATE_PENDING_RO2_G2
+status: RO2_G2_PASS_LOCAL_REPLACEABLE_READ_ONLY_INSPECTION
 latest_reconciled_main_commit: a79616eeaa90ba097cc797a230aa73f9f41ecee8
 items:
   - id: RO2-00
@@ -22,33 +22,34 @@ items:
     writes: NONE
   - id: RO2-WP2-QUALITY
     name: Data-quality projection
-    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    status: ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_DERIVED
     namespace: src/ovc/research_operations/v0_2/quality.py
     authority_after_gate: DERIVED_HEALTH_ONLY
     writes: NONE
   - id: RO2-WP2-LINEAGE
     name: Bar-lineage inspection
-    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    status: ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_READ_ONLY
     namespace: src/ovc/research_operations/v0_2/lineage.py
     authority_after_gate: READ_ONLY_TRACE
     writes: NONE
   - id: RO2-WP2-REPLAY
     name: Admissible-cutoff replay
-    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    status: ACCEPTED_RO2_G2_ACTIVE_DISCOVERY_DEVELOPMENT_LOCAL_READ_ONLY
     namespace: src/ovc/research_operations/v0_2/replay.py
     authority_after_gate: LOCAL_READ_ONLY_REPLAY
     validation_guard: DENY_BEFORE_PATH_RESOLUTION
     writes: NONE
   - id: RO2-WP2-DIFF
     name: Release and workspace comparison
-    status: IMPLEMENTED_CANDIDATE_PENDING_RO2_G2
+    status: ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_DERIVED
     namespace: src/ovc/research_operations/v0_2/release_diff.py
     authority_after_gate: DERIVED_COMPARISON_ONLY
     writes: NONE
   - id: RO2-WP3-CONSOLE
     name: Research Console v0.3 adapters
-    status: DEFERRED_AFTER_RO2_G2
+    status: AUTHORISED_FOR_BUILD_REQUIRES_SEPARATE_INSTRUCTION
     planned_namespace: src/ovc/research_operations/v0_2/console_adapters
+    authority_after_gate: READ_ONLY_PRESENTATION
 retained_boundaries:
   validation_consumption: LOCKED_UNCONSUMED
   c2_publication: COMPLETE_REMOTE_VERIFIED_SEPARATE_C2_AUTHORITY_UNCHANGED
