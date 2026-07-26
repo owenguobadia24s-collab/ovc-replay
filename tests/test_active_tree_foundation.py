@@ -24,6 +24,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_NO_PUBLICATION_AUTHORITY",
     "state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY",
     "state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR",
+    "state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR",
 }
 
 
@@ -49,7 +50,7 @@ class ActiveTreeFoundationTests(unittest.TestCase):
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
         self.assertIn("market_replay: COMPLETE_WP4_PASS", authority)
         self.assertIn("release_freeze: COMPLETE_WP4F_PASS", authority)
-        self.assertIn("r2_publication: AUTHORISED_EXACT_RELEASES_ONLY_PENDING_WP5_EXECUTION", authority)
+        self.assertIn("r2_publication: COMPLETE_WP5_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW", authority)
         self.assertIn("selector: NONE", authority)
 
 

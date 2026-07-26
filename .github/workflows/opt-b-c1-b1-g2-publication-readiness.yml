@@ -79,26 +79,51 @@ jobs:
           run-id: 30187276514
           name: c1-wp4f-freeze-verification-report
           path: b1-g2/report
-      - name: Confirm target R2 namespaces are collision-free
+      - name: Confirm pre-publication absence or accepted WP5 successor
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p b1-g2/output
-          : > b1-g2/output/remote-collision-preflight.txt
-          while IFS='|' read -r release manifest; do
-            prefix="canonical/releases/${release}/${manifest}/"
-            listing=$(rclone lsf --recursive --s3-no-check-bucket "ovc_r2:${prefix}" 2>/dev/null || true)
-            if [ -n "$listing" ]; then
-              echo "::error::Remote collision under ${prefix}"
-              printf '%s\n' "$listing"
-              exit 1
-            fi
-            printf '%s ABSENT\n' "$prefix" | tee -a b1-g2/output/remote-collision-preflight.txt
-          done <<'EOF'
+          if grep -Fq 'status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW' registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml; then
+            echo POST_WP5_REMOTE_VERIFIED > b1-g2/output/review-mode.txt
+            python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path('docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json').read_text())
+          assert receipt['status'] == 'PASS_FULL_REMOTE_BYTE_VERIFICATION'
+          assert receipt['release_count'] == 2
+          assert receipt['remote_object_count'] == 194
+          assert receipt['selector_activation'] == 'NONE'
+          assert receipt['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          assert all(item['remote_verified'] for item in receipt['releases'])
+          Path('b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json').write_text(json.dumps({
+              'schema': 'ovc-c1-b1-g2-successor-review/v1',
+              'status': 'PASS',
+              'review_mode': 'POST_WP5_REMOTE_VERIFIED',
+              'selector_activation': 'NONE',
+              'validation_consumption': 'LOCKED_UNCONSUMED',
+              'source_wp5_receipt': 'docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json',
+          }, sort_keys=True, separators=(',', ':')) + '\n')
+          PY
+          else
+            echo PRE_WP5_COLLISION_ABSENCE > b1-g2/output/review-mode.txt
+            : > b1-g2/output/remote-collision-preflight.txt
+            while IFS='|' read -r release manifest; do
+              prefix="canonical/releases/${release}/${manifest}/"
+              listing=$(rclone lsf --recursive --s3-no-check-bucket "ovc_r2:${prefix}" 2>/dev/null || true)
+              if [ -n "$listing" ]; then
+                echo "::error::Remote collision under ${prefix}"
+                printf '%s\n' "$listing"
+                exit 1
+              fi
+              printf '%s ABSENT\n' "$prefix" | tee -a b1-g2/output/remote-collision-preflight.txt
+            done <<'EOF'
           OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1|MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
           OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1|MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
           EOF
-      - name: Verify every frozen byte and publication binding
+          fi
+      - name: Verify every frozen byte and publication binding before WP5
+        if: ${{ hashFiles('b1-g2/output/remote-collision-preflight.txt') != '' }}
         run: |
           python scripts/opt_b/review_c1_b1_g2_release.py \
             --discovery-root b1-g2/discovery \
