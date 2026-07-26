@@ -1,0 +1,63 @@
+schema: ovc-discovery-operating-hub-route-alignment/v0.1
+status: FROZEN_BY_DO_00_PENDING_DO_G0
+console_version: v0.2
+source_route_registry: registries/research_operations/RESEARCH_CONSOLE_ROUTE_REGISTRY_v0_2.yaml
+rules:
+  primary_navigation: RESEARCH_CONSOLE_V0_2_FOURTEEN_ROUTES
+  direct_repository_traversal: PROHIBITED
+  source_resolution: TYPED_READ_MODEL_AND_REGISTERED_CATALOGUE_ONLY
+  missing_source_fallback: EXPLICIT_NOT_MATERIALIZED_OR_NOT_EVALUATED
+  v0_3_workspace_migration: DEFERRED
+alignments:
+  - route_id: OVERVIEW
+    discovery_hub_use: programme authority, release roles, gate state, active incidents and evidence workload summary
+    authority: READ_ONLY
+  - route_id: RESEARCH_DESK
+    discovery_hub_use: selected context, source state, research brief, uncertainty, friction and change conditions
+    authority: READ_ONLY_WHEN_MATERIALIZED
+  - route_id: REPLAY
+    discovery_hub_use: prospective cutoff-safe replay and explicitly separated review path
+    authority: READ_ONLY_CUTOFF_SAFE
+  - route_id: EVIDENCE
+    discovery_hub_use: observations, claims, realizations, cases, contradictions, nulls, anomalies, censoring and neutral recurrence candidates
+    authority: READ_ONLY
+  - route_id: SESSIONS
+    discovery_hub_use: governed ResearchSession lifecycle and linked immutable records
+    authority: READ_ONLY_UI_EXISTING_APPEND_ONLY_SERVICE_OUTSIDE_UI
+  - route_id: QUEUE
+    discovery_hub_use: due realizations, unresolved incidents, censored paths, stale catalogues, missing artifacts and unreviewed contradictions
+    authority: READ_ONLY_DERIVED
+  - route_id: HEALTH
+    discovery_hub_use: data, read-model, artifact, QA, research-record, repository and semantic health domains
+    authority: READ_ONLY
+  - route_id: LINEAGE
+    discovery_hub_use: record, release, model, gate and artifact parent-child lineage
+    authority: READ_ONLY
+  - route_id: CATALOGUE
+    discovery_hub_use: local, GitHub Actions and R2 artifact identity, availability, checksum and expiry
+    authority: READ_ONLY
+  - route_id: RELEASES
+    discovery_hub_use: Discovery, Development and Validation lifecycle, authority, QA, availability and compatibility
+    authority: READ_ONLY
+  - route_id: QA_GATES
+    discovery_hub_use: DO checks, gate packets, blockers, operator decisions and architecture-promotion evidence
+    authority: READ_ONLY
+  - route_id: AUDIT
+    discovery_hub_use: immutable research, build, gate, incident and catalogue activity
+    authority: READ_ONLY
+  - route_id: CONFIG
+    discovery_hub_use: local resolved paths and represented environment without mutation
+    authority: READ_ONLY_LOCAL
+  - route_id: ABOUT
+    discovery_hub_use: programme contract, implementation registry, authority boundary and operator guidance
+    authority: READ_ONLY_STATIC
+v0_3_deferred_mapping:
+  status: DEFERRED_DESIGN_REFERENCE_ONLY
+  overview_workspace: NOT_IMPLEMENTED
+  research_workspace: NOT_IMPLEMENTED
+  system_workspace: NOT_IMPLEMENTED
+  contextual_drawer: NOT_IMPLEMENTED
+  command_palette: NOT_IMPLEMENTED
+  persistent_activity_stream: NOT_IMPLEMENTED
+  session_state_amendment: NOT_IMPLEMENTED
+  rule: NO_V0_3_FILE_OR_RUNTIME_DEPENDENCY_MAY_BE_REQUIRED_BY_DO_V0_1
