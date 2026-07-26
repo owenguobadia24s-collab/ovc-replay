@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-opt-b-c1-to-c2-handoff-validation/v1",
+  "gate_id": "B1-G5",
+  "status": "PASS_INTERFACE_VALIDATED_CONSUMPTION_NOT_AUTHORISED",
+  "contract": "contracts/opt_b/c1/C1_TO_C2_HANDOFF_CONTRACT_v0_1.md",
+  "validated_roles": ["DISCOVERY", "DEVELOPMENT"],
+  "validated_clocks": ["15M", "2H_A_L"],
+  "validated_price_sides": ["BID", "ASK"],
+  "checks": [
+    {"check_id": "C1-C2-HO-01", "name": "Exact immutable C1 parent identity", "status": "PASS"},
+    {"check_id": "C1-C2-HO-02", "name": "Exact OPT-A source lineage traversal", "status": "PASS"},
+    {"check_id": "C1-C2-HO-03", "name": "Clock and price-side identity", "status": "PASS"},
+    {"check_id": "C1-C2-HO-04", "name": "All measurements bind formula versions", "status": "PASS"},
+    {"check_id": "C1-C2-HO-05", "name": "Null and quality states remain explicit", "status": "PASS"},
+    {"check_id": "C1-C2-HO-06", "name": "First-valid chronology preserved", "status": "PASS"},
+    {"check_id": "C1-C2-HO-07", "name": "No reverse or downstream dependency", "status": "PASS"},
+    {"check_id": "C1-C2-HO-08", "name": "Rollback returns C1 selectors to NONE", "status": "PASS"}
+  ],
+  "releases": {
+    "DISCOVERY": {
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+      "manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
+      "parent_opt_a_release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+      "parent_opt_a_manifest_sha256": "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c"
+    },
+    "DEVELOPMENT": {
+      "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1",
+      "manifest_sha256": "ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017",
+      "parent_opt_a_release_id": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+      "parent_opt_a_manifest_sha256": "25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc"
+    }
+  },
+  "c2_consumption": "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW",
+  "c2_authority": "NONE",
+  "next_required_action": "C2 must independently ratify its scope, contract and exact parent-selector reads before consuming shadow C1 records.",
+  "blocking_issues": 0
+}
