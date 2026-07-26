@@ -40,8 +40,7 @@
   "known_limitations": [
     "Operator-local external artifact root is not re-evaluated by RO-G0.",
     "Live R2 object inventory and lock state are not re-evaluated because RO-G0 performs no remote operation.",
-    "No Research Operations implementation package, record, CLI, index, database or console is created by this gate.",
-    "Final branch-head CI run will be appended after pull-request validation."
+    "No Research Operations implementation package, record, CLI, index, database or console is created by this gate."
   ],
   "next_packet": "RO-WP1 — Evidence envelope and record schemas",
   "operator_disposition": "PASS",
@@ -65,5 +64,12 @@
     "sha256": "4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0",
     "size_bytes": 193991,
     "status": "RATIFIED_FOR_RO_G0_AND_RO_WP1"
+  },
+  "validation": {
+    "canonical_command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
+    "preflight_baseline_run_id": 30184455698,
+    "preflight_baseline_result": "PASS",
+    "ro_g0_pre_seal_run_id": 30184747504,
+    "ro_g0_pre_seal_result": "PASS"
   }
 }
