@@ -1,0 +1,32 @@
+name: RO2-WP2 inspection acceptance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'contracts/research_operations/v0_2/**'
+      - 'src/ovc/research_operations/v0_2/**'
+      - 'tests/research_operations/v0_2/**'
+      - 'registries/research_operations/v0_2/**'
+      - 'docs/releases/research-operations-foundation-v0-2/**'
+      - '.github/workflows/ro2-wp2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ro2-wp2-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate RO2-G0 parent design
+        run: PYTHONPATH=src python scripts/research_operations/validate_ro2_g0_design.py
+      - name: Run RO2-WP1 and RO2-WP2 focused tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_2 -p 'test_*.py' -v
+      - name: Run full repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
