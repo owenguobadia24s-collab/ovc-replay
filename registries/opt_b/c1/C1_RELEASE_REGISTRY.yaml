@@ -1,6 +1,6 @@
 schema: ovc-opt-b-c1-release-registry/v1
 registry_id: C1.RELEASES.v0.1
-status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW
+status: B1_G5_PASS_SHADOW_SELECTED_C2_DENIED
 formula_registry_id: C1.FORMULAS.v0.1
 record_schema_id: c1_bar_primitives_v0_1
 wp4_workflow_run_id: 30185680001
@@ -12,6 +12,8 @@ wp4_qa_artifact_id: 8626942405
 wp4f_workflow_run_id: 30187276514
 wp4f_freeze_report_artifact_id: 8627405685
 wp4f_freeze_report_artifact_digest: sha256:3e61750f9fc260a661f28593b426610d13350e558d4f3ceae99ab088a004b75a
+wp5_verification_run_id: 30190733324
+b1_g5_activation_decision_id: B1-G5-OPT-B.C1-SHADOW-ACTIVATION-2026-07-26
 artifact_retention_expires_at: 2026-10-24T04:07:25Z
 releases:
   - role: DISCOVERY
@@ -25,11 +27,12 @@ releases:
     parent_opt_a_manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     parent_opt_a_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
     lifecycle_state: RELEASE_FROZEN
-    authority_state: CANDIDATE
+    authority_state: SHADOW
     qa_state: PASS
     availability_state: REMOTE_VERIFIED
     publication_status: PUBLISHED_REMOTE_VERIFIED
-    active_selector: false
+    selector_state: SHADOW
+    active_selector: true
     market_replay: COMPLETE_WP4_PASS
     record_count: 159892
     record_file_count: 144
@@ -39,6 +42,7 @@ releases:
     freeze_state: COMPLETE_WP4F_PASS
     publication_readiness: PASS_B1_G2
     r2_publication_authority: COMPLETE_WP5_REMOTE_VERIFIED
+    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
   - role: DEVELOPMENT
     release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
     manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
@@ -50,11 +54,12 @@ releases:
     parent_opt_a_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     parent_opt_a_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
     lifecycle_state: RELEASE_FROZEN
-    authority_state: CANDIDATE
+    authority_state: SHADOW
     qa_state: PASS
     availability_state: REMOTE_VERIFIED
     publication_status: PUBLISHED_REMOTE_VERIFIED
-    active_selector: false
+    selector_state: SHADOW
+    active_selector: true
     market_replay: COMPLETE_WP4_PASS
     record_count: 52872
     record_file_count: 48
@@ -64,6 +69,7 @@ releases:
     freeze_state: COMPLETE_WP4F_PASS
     publication_readiness: PASS_B1_G2
     r2_publication_authority: COMPLETE_WP5_REMOTE_VERIFIED
+    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
   - role: VALIDATION
     planned_release_id: OPT-B.C1.GBPUSD.VALIDATION.2025.v1
     parent_opt_a_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
@@ -74,6 +80,7 @@ releases:
     qa_state: NOT_EVALUATED
     availability_state: MISSING
     publication_status: NOT_ATTEMPTED
+    selector_state: NONE
     active_selector: false
     validation_consumption_state: LOCKED_UNCONSUMED
     market_replay: DENIED_PENDING_EXACT_VALIDATION_APPROVAL
@@ -81,6 +88,9 @@ prohibited_release_ids:
   - OPT-A.GBPUSD.2026H1.v1
 legacy_source_authority: NONE
 local_release_freeze: COMPLETE_WP4F_PASS
-selector_activation: DENIED_PENDING_POST_PUBLICATION_REVIEW
-r2_publication: COMPLETE_WP5_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW
+selector_activation: COMPLETE_B1_G5_SHADOW_DISCOVERY_DEVELOPMENT
+selector_rollback: ALL_C1_ROLE_SELECTORS_NONE
+r2_publication: COMPLETE_WP5_REMOTE_VERIFIED
+comparison: PASS_B1_G5_NO_UNEXPLAINED_DIFFERENCES
+c1_to_c2_handoff: INTERFACE_VALIDATED_CONSUMPTION_NOT_AUTHORISED
 c2_handoff: DENIED_PENDING_SEPARATE_REVIEW
