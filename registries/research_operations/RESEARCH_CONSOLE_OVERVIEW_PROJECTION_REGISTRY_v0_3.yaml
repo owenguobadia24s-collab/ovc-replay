@@ -1,0 +1,56 @@
+schema: ovc-research-console-overview-projection-registry/v0.3
+programme_id: OVC-RESEARCH-CONSOLE.v0.3
+work_package: RC-WP2-v0.3
+status: IMPLEMENTED_CANDIDATE_PENDING_RC_G2
+source_read_model: ovc-research-operations-read-model/v0.1
+projection_schema: schemas/research_operations/research_console_overview_projection_v0_3.schema.json
+projection_core: src/ovc/research_operations/console_overview.py
+builder_module: src/ovc/research_operations/console_overview_candidate.py
+builder_command: scripts/build_research_console_overview.py
+candidate_output: var/research_operations/console/overview_candidate.json
+active_console_consumption: DENIED_PENDING_RC_G2
+health_domains:
+  - {id: DATA, required: true, no_signal_status: NOT_EVALUATED}
+  - {id: READ_MODEL, required: true, no_identity_status: BLOCK}
+  - {id: ARTIFACTS, required: true, no_signal_status: NOT_EVALUATED}
+  - {id: QA, required: true, no_signal_status: NOT_EVALUATED}
+  - {id: RESEARCH_RECORDS, required: true, no_signal_status: NOT_EVALUATED, empty_progress: 0}
+  - {id: REPOSITORY, required: true, source_identity_only: true}
+  - {id: SEMANTIC, required: true, no_signal_status: NOT_EVALUATED}
+summary_rules:
+  no_signal_is_pass: false
+  unknown_status: BLOCK
+  lifecycle_status_is_not_health_status: true
+  status_not_colour_only: true
+  domain_status_and_consequence_remain_visible: true
+  aggregate_cannot_conceal_domain_state: true
+projection_surfaces:
+  - OVERVIEW_METRICS
+  - AMBIENT_HEALTH_GRID
+  - RELEASE_SUMMARY
+  - GATE_SUMMARY
+  - SESSION_SUMMARY
+  - ATTENTION_QUEUE
+source_rules:
+  read_model_sha256_required: true
+  source_commit_required: true
+  source_refs_required: true
+  deterministic_sorting: true
+  absolute_local_paths_excluded_from_logical_hash: true
+  ui_session_state_excluded_from_projection: true
+authority:
+  implementation: AUTHORISED_BY_RC_G1
+  candidate_build: AUTHORISED_LOCAL_DERIVED
+  active_live_projection: DENIED_PENDING_RC_G2
+  live_research_surface: DENIED_PENDING_RC_G3
+  research_write: DENIED_PENDING_SEPARATE_GATE
+  repository_mutation: NONE
+  selector_mutation: NONE
+  threshold_mutation: NONE
+  release_activation: NONE
+  market: NONE
+  probability: NONE
+  exposure: NONE
+  execution: NONE
+  agent: NONE
+  remote_deployment: DENIED

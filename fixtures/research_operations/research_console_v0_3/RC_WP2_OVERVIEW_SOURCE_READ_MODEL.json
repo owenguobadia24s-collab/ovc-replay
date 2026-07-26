@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-research-operations-read-model/v0.1",
+  "source_commit": "RC_WP2_FIXTURE_SOURCE_COMMIT",
+  "catalogue_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "nodes": [
+    {
+      "object_id": "ARTIFACT.FIXTURE.001",
+      "object_type": "ARTIFACT",
+      "authority": "READ_ONLY",
+      "status": "LOCAL_AVAILABLE",
+      "source_refs": ["FIXTURE_ROOT:artifact.json"],
+      "payload": {"release_id": "RELEASE.FIXTURE.DEV", "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "dependencies": []}
+    },
+    {
+      "object_id": "GATE.RC_G1",
+      "object_type": "GATE_PACKET",
+      "authority": "GOVERNANCE_SOURCE",
+      "status": "PASS",
+      "source_refs": ["docs/releases/research-console-v0-3/rc-g1/RC_G1_GATE_PACKET.json"],
+      "payload": {"created_at": "2026-07-26T12:42:00Z"}
+    },
+    {
+      "object_id": "QA.FIXTURE.001",
+      "object_type": "QA_RUN",
+      "authority": "DERIVED_ASSURANCE_ONLY",
+      "status": "PASS",
+      "source_refs": ["RC_WP2_FIXTURE_TARGET"],
+      "payload": {"assertions": [], "source_commit": "RC_WP2_FIXTURE_SOURCE_COMMIT"}
+    },
+    {
+      "object_id": "RECORD.FIXTURE.001",
+      "object_type": "EVIDENCE_CASE",
+      "authority": "FROZEN",
+      "status": "OBSERVATION_FROZEN",
+      "source_refs": ["RELEASE.FIXTURE.DEV"],
+      "payload": {"created_at": "2026-07-26T12:00:00Z", "missingness": [], "lineage": {}}
+    },
+    {
+      "object_id": "RELEASE.FIXTURE.DEV",
+      "object_type": "RELEASE_DESCRIPTOR",
+      "authority": "CANDIDATE",
+      "status": "FROZEN",
+      "source_refs": ["FIXTURE.RELEASE.MANIFEST"],
+      "payload": {"release_id": "RELEASE.FIXTURE.DEV", "frozen_at": "2026-07-26T11:00:00Z"}
+    },
+    {
+      "object_id": "SESSION.FIXTURE.001",
+      "object_type": "RESEARCH_SESSION",
+      "authority": "READ_ONLY",
+      "status": "CLOSED",
+      "source_refs": ["RECORD.FIXTURE.001"],
+      "payload": {"created_at": "2026-07-26T10:00:00Z"}
+    }
+  ],
+  "health": [
+    {"domain": "DATA", "code": "DATA_COVERAGE", "status": "PASS", "object_id": "RELEASE.FIXTURE.DEV", "detail": "Fixture data coverage assertion passed."},
+    {"domain": "ARTIFACT", "code": "ARTIFACT_REFERENCE", "status": "WARN", "object_id": "ARTIFACT.FIXTURE.001", "detail": "One fixture artifact remains local-only."},
+    {"domain": "REPOSITORY", "code": "SOURCE_COMMIT", "status": "PASS", "object_id": "RC_WP2_FIXTURE_SOURCE_COMMIT", "detail": "Represented commit is explicit."}
+  ],
+  "logical_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
