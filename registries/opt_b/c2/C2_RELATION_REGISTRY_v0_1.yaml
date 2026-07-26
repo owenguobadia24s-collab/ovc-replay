@@ -1,0 +1,15 @@
+schema: ovc-opt-b-c2-relation-registry/v1
+registry_id: C2.RELATIONS.v0.1
+status: FROZEN_WP2
+relation_types:
+  - {id: BELOW_LEVEL, side_rule: SIGNED_DISTANCE_NEGATIVE}
+  - {id: AT_LEVEL, side_rule: ABS_DISTANCE_WITHIN_PROXIMITY}
+  - {id: ABOVE_LEVEL, side_rule: SIGNED_DISTANCE_POSITIVE}
+  - {id: CROSSED_UP, side_rule: PRIOR_BELOW_CURRENT_ABOVE}
+  - {id: CROSSED_DOWN, side_rule: PRIOR_ABOVE_CURRENT_BELOW}
+  - {id: INSIDE_CONTAINER, side_rule: WITHIN_DECLARED_BOUNDARIES}
+  - {id: OUTSIDE_CONTAINER, side_rule: BEYOND_DECLARED_BOUNDARIES}
+complete_inventory_required: true
+explicit_exclusion_reason_required: true
+multi_level_coexistence: ALLOWED
+hidden_best_level_selection: PROHIBITED
