@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from ovc.research_operations.console_overview import OverviewProjectionBuilder
+from ovc.research_operations.console_overview_candidate import CandidateOverviewProjectionBuilder
 from ovc.research_operations.read_model import ReadModelNode, ResearchReadModel
 
 
@@ -50,7 +50,7 @@ def main() -> int:
     if not args.read_model.is_file():
         raise FileNotFoundError(f"Research read model unavailable: {args.read_model}")
 
-    projection = OverviewProjectionBuilder().build(load_read_model(args.read_model))
+    projection = CandidateOverviewProjectionBuilder().build(load_read_model(args.read_model))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(projection.to_dict(), sort_keys=True, separators=(",", ":")) + "\n",
