@@ -17,15 +17,10 @@ ALLOWED_REPOSITORY_STATES = {
     "state: V2_SELECTOR_SET_ACTIVE_NO_DOWNSTREAM_MARKET_AUTHORITY",
     "state: C1_WP1_BOUNDARY_PASS_NO_C1_MARKET_AUTHORITY",
     "state: C1_WP2_CONTRACT_FREEZE_PASS_NO_C1_MARKET_AUTHORITY",
+    "state: C1_WP3_REFERENCE_ENGINE_PASS_NO_C1_MARKET_AUTHORITY",
 }
 FORBIDDEN = (
-    "B-STATE-",
-    "OPT-C-",
-    "OPT-D-",
-    "PAPER-PLAYBOOK",
-    "story_id",
-    "candidate_id",
-    "outcome_label",
+    "B-STATE-", "OPT-C-", "OPT-D-", "PAPER-PLAYBOOK", "story_id", "candidate_id", "outcome_label",
 )
 
 
@@ -76,15 +71,7 @@ class SyntheticFixturePackTests(unittest.TestCase):
 
     def test_c1_pack_enforces_atomic_fact_boundary(self) -> None:
         rules = set(self.packs["c1"]["boundary_rules"])
-        required = {
-            "ATOMIC_FACTS_ONLY",
-            "NO_THRESHOLDS",
-            "NO_LEVELS",
-            "NO_STATES",
-            "NO_EVENTS",
-            "NO_SEMANTIC_NAMES",
-            "NO_FUTURE_OUTCOMES",
-        }
+        required = {"ATOMIC_FACTS_ONLY", "NO_THRESHOLDS", "NO_LEVELS", "NO_STATES", "NO_EVENTS", "NO_SEMANTIC_NAMES", "NO_FUTURE_OUTCOMES"}
         self.assertTrue(required <= rules)
 
     def test_c2_pack_has_five_independent_axes_and_no_winner(self) -> None:
