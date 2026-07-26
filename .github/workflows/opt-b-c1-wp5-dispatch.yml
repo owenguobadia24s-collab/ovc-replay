@@ -6,6 +6,12 @@ on:
       - build/opt-b-c1-v2-wp5-dispatch
     paths:
       - docs/releases/opt-b-c1-v2/wp5/WP5_EXECUTION_REQUEST.md
+  pull_request:
+    branches:
+      - main
+    paths:
+      - docs/releases/opt-b-c1-v2/wp5/WP5_EXECUTION_REQUEST.md
+  workflow_dispatch:
 
 permissions:
   actions: write
@@ -13,6 +19,7 @@ permissions:
 
 jobs:
   dispatch-publication:
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'build/opt-b-c1-v2-wp5-dispatch' || github.ref_name == 'build/opt-b-c1-v2-wp5-dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch canonical WP5 publication workflow
