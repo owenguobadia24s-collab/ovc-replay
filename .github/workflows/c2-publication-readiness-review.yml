@@ -29,7 +29,13 @@ jobs:
         with:
           python-version: '3.12'
       - name: Run canonical repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > canonical-tests.log 2>&1
+          status=$?
+          tail -n 220 canonical-tests.log
+          exit $status
       - name: Install rclone
         run: |
           set -euo pipefail
