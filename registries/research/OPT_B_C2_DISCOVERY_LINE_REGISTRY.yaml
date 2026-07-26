@@ -1,14 +1,40 @@
 schema: ovc-research-line-registry/v1
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
-status: REGISTERED_NOT_OPEN
+status: OPEN_PROSPECTIVE_RESEARCH
 layer: OPT-B.C2.v2
 instrument: GBPUSD
+opened_at: 2026-07-26
+open_gate: C2-G6
+activation_transaction: TXN.C2.ACTIVE_DISCOVERY.BSTATE_RETIREMENT.v1
+prospective_cutoff:
+  rule: STRICTLY_AFTER_ACTIVE_SELECTOR_EFFECTIVE_COMMIT
+  effective_commit: 2a3f262fc0539786b67ae6c3e20604eb4d4adc2b
+  pre_cutoff_rows_admissible: false
+  historical_material_use: CONTEXT_ONLY_NOT_EVIDENCE
 parent_roles: [DISCOVERY, DEVELOPMENT]
 canonical_clocks: [15M, 2H_A_L]
 price_sides: [BID, ASK]
-required_parent_authority:
-  c1_discovery: ACTIVE_DISCOVERY
-  c1_development: ACTIVE_DEVELOPMENT
+required_authority:
+  c2_discovery:
+    selector_state: ACTIVE
+    authority_state: ACTIVE_DISCOVERY
+    release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
+  c2_development:
+    selector_state: NONE
+    authority_state: REMOTE_VERIFIED_REFERENCE_ONLY
+    release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_sha256: 8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e
+  c1:
+    selector_state: SHADOW
+    use: LINEAGE_AND_ROLLBACK_REFERENCE_ONLY
+admissible_record_classes:
+  - STATE_FIDELITY_REVIEW
+  - BOUNDARY_CASE
+  - CONFLICT_CASE
+  - ANOMALY
+  - INCIDENT
+  - BOUNDED_RESEARCH_QUESTION
 prohibited_imports:
   - old 202-story programme
   - old 58-candidate programme
@@ -18,8 +44,13 @@ prohibited_imports:
   - C3 meanings
   - OPT-C outcomes
   - OPT-D validations
-append_policy: PROSPECTIVE_AFTER_C2_G5_ACTIVATION
-open_gate: C2-G5
+append_policy: PROSPECTIVE_ONLY_AFTER_C2_ACTIVE_DISCOVERY_MERGE
+write_authority: APPEND_ONLY_RESEARCH_RECORDS_THROUGH_RESEARCH_OPERATIONS
+mutation_authority: NONE
+validation_consumption: LOCKED_UNCONSUMED
+c2e_escalation:
+  state: NOT_AUTHORISED
+  minimum_basis: REPEATED_REPRODUCIBLE_SEQUENCE_BOUNDARY_FRICTION
 close_rules:
   - blocking authority or leakage incident
   - selector rollback to C1-only
