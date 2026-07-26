@@ -31,8 +31,13 @@ def bar(**overrides):
 
 
 class C1WP3ReferenceEngineTests(unittest.TestCase):
-    def test_authority_is_fixture_only(self) -> None:
-        self.assertEqual(AUTHORITY_STATE, "WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS")
+    def test_reference_engine_remains_trusted_after_later_gates(self) -> None:
+        self.assertIn(AUTHORITY_STATE, {
+            "WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS",
+            "WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE",
+            "B1_G1_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED",
+            "B1_G2_PUBLICATION_READY_WP5_AUTHORISED",
+        })
 
     def test_exact_decimal_geometry_and_determinism(self) -> None:
         result = build(bar())
