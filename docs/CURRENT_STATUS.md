@@ -13,6 +13,8 @@ The reset and OPT-A v2 build line through selector activation are merged into `m
 - OPT-B.C1 v2 WP2 design freeze: `fefac25f19a836898c3a22228036cd66617dca07`
 - OPT-B.C1 v2 WP3 reference engine: `d5c0f1a9053f837ee85e2b478fba0662a133cc29`
 - OPT-B.C1 v2 B1-G0 replay approval: `d584813a7a26e7e272259abc87c88b9bb212fc50`
+- OPT-B.C1 v2 WP4 candidate replay: `74151d3c9f4659fc6414456c2ad13a138912089c`
+- Research Operations RO-G0: `8a4852358324a4e6dfc9f7c239be9e9eb8d69c23`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent or rollback target.
 
@@ -43,11 +45,23 @@ The candidate artifact is GitHub Actions artifact `8626942276`, digest `sha256:f
 
 WP4 excluded 12,104 Discovery and 4,862 Development quarantined upstream records. It performed no interpolation, gap repair or cross-side substitution. Validation was not downloaded and remains `LOCKED_UNCONSUMED`.
 
-## Research Operations Foundation RO-G0
+## Research Operations Foundation RO-WP1
 
-RO-G0 result: `PASS — RO-WP1 AUTHORISED AFTER MERGE`.
+RO-WP1 result: `IMPLEMENTED — READY FOR RO-G1 OPERATOR REVIEW`.
 
-Research Operations remains a parallel foundation line with no runtime database, console or downstream market authority created by WP4.
+The evidence kernel provides:
+
+- a permanent model-optional evidence envelope;
+- canonical UTF-8 JSON and deterministic content-derived record IDs;
+- ten versioned research record types;
+- prospective-cutoff and Validation metadata-only enforcement;
+- DRAFT, FROZEN, ADJUDICATED, SUPERSEDED and WITHDRAWN lifecycle rules;
+- frozen-record mutation, duplicate-ID and post-cutoff rejection;
+- append-only supersession preserving predecessor bytes;
+- explicit `REPRODUCIBLE`, `PARTIALLY_AVAILABLE` and `NOT_REPRODUCIBLE` states;
+- nine non-authoritative synthetic fixture families and executable integrity tests.
+
+RO-WP1 creates no operator research record, durable write service, CLI, artifact catalogue, QA runner, read model or console. RO-WP2 remains blocked until a separate RO-G1 operator `PASS`.
 
 ## Active authority matrix
 
@@ -58,13 +72,13 @@ Research Operations remains a parallel foundation line with no runtime database,
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `WP4_REPLAY_QA_PASS / LOCAL_CANDIDATE` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
-| Research Operations | `RO_G0_PASS / WP1_BUILD_AUTHORISED` | Not applicable |
+| Research Operations | `RO_WP1_IMPLEMENTED / RO_G1_REVIEW_REQUIRED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
-Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation and C2 consumption remain denied. Probability, exposure, trading and execution authority remain absent.
+Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation and C2 consumption remain denied. Research Operations active-research, market, probability, exposure, trading, execution and agent authority remain absent.
 
 ## Parallel next boundaries
 
 - `OPT-B.C1 v2 B1-G1 — WP4 candidate inventory and freeze review`
-- `RO-WP1 — Evidence envelope and record schemas`
+- `RO-G1 — Evidence integrity`

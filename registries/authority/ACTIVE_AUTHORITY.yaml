@@ -24,6 +24,10 @@ c1_b1_g0_decision_record: docs/releases/opt-b-c1-v2/b1-g0/B1_G0_OPERATOR_DECISIO
 c1_b1_g0_gate_packet: docs/releases/opt-b-c1-v2/b1-g0/B1_G0_GATE_PACKET.json
 c1_wp4_decision_record: docs/releases/opt-b-c1-v2/wp4/WP4_OPERATOR_DECISION.md
 c1_wp4_execution_receipt: docs/releases/opt-b-c1-v2/wp4/WP4_EXECUTION_RECEIPT.json
+ro_g0_merge_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
+ro_wp1_summary: docs/releases/research-operations-foundation/ro-wp1/RO_WP1_IMPLEMENTATION_SUMMARY.md
+ro_wp1_gate_packet: docs/releases/research-operations-foundation/ro-wp1/RO_WP1_GATE_PACKET.json
+ro_g1_candidate_packet: docs/releases/research-operations-foundation/ro-wp1/RO_G1_CANDIDATE_GATE_PACKET.json
 state: C1_WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_NO_PUBLICATION_AUTHORITY
 selectors:
   opt_a: ACTIVE
@@ -145,6 +149,33 @@ authorities:
     probability_authority: NONE
     exposure_authority: NONE
     execution_authority: NONE
+    active: false
+  research_operations:
+    state: RO_WP1_IMPLEMENTED_AWAITING_RO_G1_REVIEW
+    programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+    implementation_registry: registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml
+    evidence_envelope: contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md
+    record_type_count: 10
+    schema_bundle_count: 1
+    fixture_family_count: 9
+    contract_and_schema_state: FROZEN_AFTER_RO_WP1
+    pure_validation_and_lifecycle_code: IMPLEMENTED
+    ro_g1: READY_FOR_OPERATOR_REVIEW
+    ro_wp2: DENIED_PENDING_RO_G1
+    ro_wp3: DENIED_PENDING_RO_G2
+    durable_write_service: NONE
+    cli: NONE
+    artifact_catalogue: NONE
+    qa_runner: NONE
+    read_model: NONE
+    console: NONE
+    validation_consumption: LOCKED_UNCONSUMED
+    active_research: NONE
+    market_authority: NONE
+    probability_authority: NONE
+    exposure_authority: NONE
+    execution_authority: NONE
+    agent_authority: NONE
     active: false
   opt_b_c2_v2:
     state: DESIGN_AND_FIXTURES_ONLY
