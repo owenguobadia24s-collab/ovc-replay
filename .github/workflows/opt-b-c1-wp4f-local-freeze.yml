@@ -1,0 +1,66 @@
+name: OPT-B.C1 WP4F local release freeze
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  packet-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: PYTHONPATH=src python -m unittest discover -s tests -v
+
+  freeze-and-verify:
+    needs: packet-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download exact B1-G1 accepted candidate
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30185680001
+          name: c1-wp4-gbpusd-discovery-development-local-candidate
+          path: candidate
+      - name: Build frozen release roots and verify every byte
+        run: python scripts/opt_b/freeze_c1_wp4f_release.py --candidate-root candidate --output-root frozen
+      - name: Assert authority boundary
+        run: |
+          grep -F '"status":"PASS"' frozen/WP4F_FREEZE_REPORT.json
+          grep -F 'state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY' registries/authority/ACTIVE_AUTHORITY.yaml
+          grep -F 'selector: NONE' registries/authority/ACTIVE_AUTHORITY.yaml
+          grep -F 'validation_consumption: LOCKED_UNCONSUMED' registries/authority/ACTIVE_AUTHORITY.yaml
+      - name: Upload frozen Discovery release
+        uses: actions/upload-artifact@v4
+        with:
+          name: c1-opt-b-c1-gbpusd-discovery-2021-2023-v1-frozen
+          path: frozen/OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1/**
+          compression-level: 0
+          retention-days: 90
+      - name: Upload frozen Development release
+        uses: actions/upload-artifact@v4
+        with:
+          name: c1-opt-b-c1-gbpusd-development-2024-v1-frozen
+          path: frozen/OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1/**
+          compression-level: 0
+          retention-days: 90
+      - name: Upload freeze report
+        uses: actions/upload-artifact@v4
+        with:
+          name: c1-wp4f-freeze-verification-report
+          path: frozen/WP4F_FREEZE_REPORT.json
+          retention-days: 90
