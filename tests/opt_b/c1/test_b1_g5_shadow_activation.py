@@ -68,7 +68,7 @@ class B1G5ShadowActivationTests(unittest.TestCase):
         self.assertIn("NOT_COMPARABLE", dispositions)
         self.assertIn("DESCRIPTIVE_QA_ONLY", dispositions)
 
-    def test_c1_to_c2_interface_passes_but_consumption_stays_denied(self) -> None:
+    def test_c1_to_c2_interface_passes_but_consumption_stays_denied_at_b1_g5(self) -> None:
         packet = json.loads(HANDOFF.read_text(encoding="utf-8"))
         self.assertEqual(packet["status"], "PASS_INTERFACE_VALIDATED_CONSUMPTION_NOT_AUTHORISED")
         self.assertEqual(packet["blocking_issues"], 0)
@@ -98,16 +98,18 @@ class B1G5ShadowActivationTests(unittest.TestCase):
         self.assertEqual(releases.count("active_selector: false"), 1)
         self.assertIn("validation_consumption_state: LOCKED_UNCONSUMED", releases)
 
-    def test_repository_authority_is_shadow_not_downstream_active(self) -> None:
+    def test_repository_authority_preserves_shadow_selector_after_bounded_c2_consumption(self) -> None:
         authority = AUTHORITY.read_text(encoding="utf-8")
         self.assertEqual(AUTHORITY_STATE, "B1_G5_SHADOW_SELECTED_C2_DENIED")
-        self.assertIn("state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED", authority)
+        self.assertIn("state: C2_G5_PASS_LOCAL_CANDIDATES_FROZEN_NO_PUBLICATION_AUTHORITY", authority)
         self.assertIn("  opt_a: ACTIVE", authority)
         self.assertIn("  opt_b_c1: SHADOW", authority)
         for selector in ("opt_b_c2", "c2e", "c2_5", "c3", "opt_c", "opt_d"):
             self.assertIn(f"  {selector}: NONE", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
-        self.assertIn("c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW", authority)
+        self.assertIn("c2_consumption: AUTHORISED_FOR_C2_G4_REPLAY_AND_C2_G5_LOCAL_CANDIDATE_ONLY", authority)
+        self.assertIn("publication: NONE", authority)
+        self.assertIn("activation: NONE", authority)
         self.assertIn("probability_authority: NONE", authority)
         self.assertIn("exposure_authority: NONE", authority)
         self.assertIn("trading_authority: NONE", authority)
