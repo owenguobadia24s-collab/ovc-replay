@@ -1,0 +1,44 @@
+schema: ovc-ro2-role-access/v1
+policy_id: RO2-ROLE-ACCESS-0.1
+status: FROZEN_DESIGN_ONLY
+default: DENY
+validation_guard: DENY_BEFORE_PATH_RESOLUTION
+roles:
+  DISCOVERY:
+    release_metadata: ALLOW
+    manifest_identity: ALLOW
+    aggregate_inventory: ALLOW
+    content_resolution: ALLOW_LATER_IMPLEMENTATION_ONLY
+    observation_index: ALLOW_LATER_IMPLEMENTATION_ONLY
+    lineage_inspection: ALLOW_LATER_IMPLEMENTATION_ONLY
+    prospective_replay: ALLOW_LATER_IMPLEMENTATION_ONLY
+    review_replay: ALLOW_LATER_IMPLEMENTATION_ONLY
+    research_session_parent: ALLOW_EXISTING_V0_1_SERVICE_ONLY
+  DEVELOPMENT:
+    release_metadata: ALLOW
+    manifest_identity: ALLOW
+    aggregate_inventory: ALLOW
+    content_resolution: ALLOW_LATER_IMPLEMENTATION_ONLY
+    observation_index: ALLOW_LATER_IMPLEMENTATION_ONLY
+    lineage_inspection: ALLOW_LATER_IMPLEMENTATION_ONLY
+    prospective_replay: ALLOW_LATER_IMPLEMENTATION_ONLY
+    review_replay: ALLOW_LATER_IMPLEMENTATION_ONLY
+    research_session_parent: ALLOW_EXISTING_V0_1_SERVICE_ONLY
+  VALIDATION:
+    release_metadata: ALLOW
+    manifest_identity: ALLOW
+    aggregate_inventory: ALLOW
+    content_resolution: DENY
+    object_download: DENY
+    row_access: DENY
+    observation_index: DENY
+    lineage_inspection: DENY
+    prospective_replay: DENY
+    review_replay: DENY
+    research_session_parent: DENY
+retained_state:
+  validation_consumption: LOCKED_UNCONSUMED
+  c2_candidate_release: NONE
+  c2_publication: NONE
+  c2_selector: NONE
+  c2_activation: NONE
