@@ -1,0 +1,126 @@
+schema: ovc-discovery-operating-hub-programme-registry/v0.1
+programme_id: OVC-DISCOVERY-OPERATING-HUB.v0.1
+stage: DO_00_V0_3_REALIGNED_PENDING_RC_G0A_AND_DO_G0
+status: DESIGN_RECORDS_ONLY
+baseline_commit: f704f33e4d5fc19f5807d0a92156b99afa8bce84
+source_branch: design/discovery-operating-hub-do-00-v0-3-realigned
+parent_programmes:
+  research_operations_foundation:
+    id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+    state: ACTIVE_RESEARCH_OPERATIONS_LOCAL
+  research_console:
+    id: OVC-RESEARCH-CONSOLE.v0.3
+    plan_state: PROPOSED_READY_FOR_RC_A0
+    required_preflight: RC-A0
+    required_contract_gate: RC-G0A
+console_alignment:
+  operative_target: v0.3
+  primary_workspaces: [OVERVIEW, RESEARCH, SYSTEM]
+  superseded_primary_navigation: RESEARCH_CONSOLE_V0_2_FOURTEEN_ROUTES
+  inherited_v0_2_safety:
+    - READ_ONLY_AUTHORITY
+    - HEALTH_TRUTH
+    - EXPLICIT_EMPTY_STATES
+    - CUTOFF_SAFETY
+    - DETERMINISTIC_READ_MODEL
+    - LOCAL_ONLY
+    - NO_MUTATION
+  required_v0_3_registries:
+    - registries/research_operations/RESEARCH_CONSOLE_WORKSPACE_REGISTRY_v0_3.yaml
+    - registries/research_operations/RESEARCH_CONSOLE_PANEL_REGISTRY_v0_3.yaml
+    - registries/research_operations/RESEARCH_CONSOLE_SESSION_STATE_REGISTRY_v0_3.yaml
+    - registries/research_operations/RESEARCH_CONSOLE_ACTION_REGISTRY_v0_3.yaml
+  implementation_ownership:
+    console_shell_and_interactions: OVC_RESEARCH_CONSOLE_V0_3
+    discovery_programme_content_and_projections: OVC_DISCOVERY_OPERATING_HUB_V0_1
+    append_only_record_service: OVC_RESEARCH_OPERATIONS_FOUNDATION_V0_1
+research_roles:
+  discovery:
+    interval: 2021-01-01/2024-01-01
+    authority: APPROVED_SOURCE_ROLE_PENDING_DO_G0_OPERATIONAL_GATE
+  development:
+    interval: 2024-01-01/2025-01-01
+    authority: CANDIDATE_GATED_REVIEW_ONLY
+  validation:
+    interval: 2025-01-01/2026-01-01
+    authority: LOCKED_UNCONSUMED
+workspace_projection_scope:
+  overview:
+    content:
+      - programme authority and represented build context
+      - ambient multidomain health
+      - release gate object session incident and attention summaries
+      - source-derived recent activity
+    mutation: NONE
+  research:
+    content:
+      - instrument release side clock time and cutoff context
+      - brief state structure uncertainty and change conditions
+      - prospective and review replay
+      - evidence sessions neutral recurrence and queue projections
+    mutation: NONE
+  system:
+    content:
+      - objects catalogue releases QA gates configuration and governance
+      - lineage hashes source references and persistent activity
+      - architecture-promotion packet inspection
+    mutation: NONE
+work_packages:
+  - id: DO-WP1
+    name: Three-workspace discovery projections and governed read surfaces
+    authority_delta: READ_ONLY_DISCOVERY_OPERATIONS
+    preconditions: [RC-G0A_PASS, DO-G0_PASS]
+    console_dependencies: [RC-WP2, RC-WP3, RC-WP4, RC-WP5]
+  - id: DO-WP2
+    name: Prospective observation and realization programme
+    authority_delta: EXISTING_APPEND_ONLY_SERVICE_OUTSIDE_CONSOLE_UI
+    precondition: DO-G1_READ_SURFACES_AND_CUTOFF_PASS
+    console_surface: RESEARCH_READ_ONLY
+  - id: DO-WP3
+    name: Discovery friction and neutral recurrence inventory
+    authority_delta: NEUTRAL_RESEARCH_OBJECTS_ONLY
+    precondition: DO-G2_PROSPECTIVE_EVIDENCE_INTEGRITY_PASS
+    console_surfaces: [RESEARCH, SYSTEM]
+  - id: DO-WP4
+    name: Research review and architecture-promotion packets
+    authority_delta: PROPOSAL_PACKETS_ONLY
+    precondition: DO-G3_RECURRENCE_ADMISSIBILITY_PASS
+    console_surfaces: [OVERVIEW, SYSTEM]
+gates:
+  prerequisite_gate: RC-G0A
+  next_gate: DO-G0
+  rc_g0a: PENDING
+  do_g0: OPERATIONAL_READINESS_PENDING_RC_G0A
+  do_g1: READ_SURFACES_AND_CUTOFF_PENDING
+  do_g2: PROSPECTIVE_EVIDENCE_INTEGRITY_PENDING
+  do_g3: RECURRENCE_ADMISSIBILITY_PENDING
+  do_g4: ARCHITECTURE_EXPANSION_DECISION_PENDING
+authority:
+  design_records: FROZEN_BY_DO_00_V0_3_REALIGNMENT
+  v0_3_workspace_target: APPROVED_AS_ALIGNMENT_TARGET
+  v0_3_runtime: DENIED_PENDING_RC_GATES
+  read_model_extensions: DENIED_PENDING_RC_G0A_AND_DO_G0
+  discovery_operations: DENIED_PENDING_DO_G0
+  append_only_research_service: INHERITED_EXISTING_RO_G2_AUTHORITY_NO_EXPANSION
+  console_research_writes: DENIED_PENDING_RC_WP7_OR_SEPARATE_ACTION_GATE
+  development_review: DENIED_PENDING_SEPARATE_PACKET
+  validation_consumption: LOCKED_UNCONSUMED
+  c2e: DEFERRED
+  c2_5: DEFERRED
+  c3: DEFERRED
+  opt_c: DEFERRED
+  opt_d: DEFERRED
+  market: NONE
+  probability: NONE
+  exposure: NONE
+  trading: NONE
+  execution: NONE
+  agents: NONE
+  remote_deployment: NONE
+rollback:
+  action: REMOVE_DO_PROGRAMME_PROJECTIONS_AND_RETAIN_RECORDS
+  prior_console_fallback: LAST_ACCEPTED_LOCAL_CONSOLE_RELEASE
+  preserves_research_operations_foundation: true
+  preserves_authoritative_records: true
+  never_reactivates_v0_2_information_architecture_as_authorITY: true
+next_packet: RC_A0_AND_DO_G0_COORDINATED_REVIEW
