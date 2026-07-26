@@ -1,0 +1,38 @@
+name: OPT-B.C2 WP2 contract freeze
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  c2-g1-contract-freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Verify exact C2-G1 packet
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate=json.loads(Path('docs/releases/opt-b-c2-v2/wp2/WP2_GATE_PACKET.json').read_text())
+          reg=Path('registries/opt_b/c2/C2_IMPLEMENTATION_REGISTRY.yaml').read_text()
+          params=Path('registries/opt_b/c2/C2_PARAMETER_PACK_v0_1.yaml').read_text()
+          self_schema=json.loads(Path('schemas/opt_b/c2/c2_parallel_state_v0_1.schema.json').read_text())
+          assert gate['decision']=='PASS_C2_CONTRACT_SCHEMA_REGISTRY_AND_PARAMETER_FREEZE'
+          assert gate['blocking_issues']==0
+          assert 'WP2_PASS_CONTRACTS_SCHEMAS_REGISTRIES_PARAMETERS_FROZEN' in reg
+          assert 'runtime_editing: PROHIBITED' in params
+          assert 'not' in self_schema
+          assert gate['authority_delta']['market_replay']=='DENIED_PENDING_C2_G2_AND_OPERATOR_APPROVAL'
+          assert gate['authority_delta']['selector']=='NONE'
+          assert gate['authority_delta']['validation_consumption']=='LOCKED_UNCONSUMED'
+          PY
