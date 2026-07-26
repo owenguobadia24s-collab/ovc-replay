@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-opt-b-c2-wp5-gate-packet/v1",
+  "gate_id": "C2-G4",
+  "work_packet": "WP5",
+  "decision": "BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT",
+  "checks": [
+    {"id": "B2-29", "name": "WP5 replay runner and exact release guards", "status": "PASS"},
+    {"id": "B2-30", "name": "Deterministic synthetic replay and transition QA", "status": "PASS"},
+    {"id": "B2-31", "name": "Exact Discovery C1 release bytes available to execution environment", "status": "BLOCKED"},
+    {"id": "B2-32", "name": "Exact Development C1 release bytes available to execution environment", "status": "BLOCKED"},
+    {"id": "B2-33", "name": "Full market replay and local candidate release", "status": "NOT_EXECUTED"}
+  ],
+  "required_inputs": {
+    "discovery_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+    "discovery_manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
+    "development_release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+    "development_manifest_sha256": "ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017",
+    "remote_verified_object_count": 194,
+    "remote_verified_bytes_including_manifests": 36203151
+  },
+  "authority": {
+    "replay_tooling": "READY",
+    "synthetic_fixture_trust": "PASS",
+    "market_replay": "BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT",
+    "local_candidate_release": "NONE",
+    "publication": "NONE",
+    "selector": "NONE",
+    "activation": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "blocking_issues": 1,
+  "operator_action": "Provide or mount the exact verified C1 Discovery and Development release exports, then run scripts/opt_b/run_c2_wp5_replay.py.",
+  "next_gate": "C2-G4_REPLAY_QA_AND_LOCAL_CANDIDATE_RELEASE"
+}

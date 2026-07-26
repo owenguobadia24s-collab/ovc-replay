@@ -1,0 +1,26 @@
+schema: ovc-implementation-gate/v1
+gate_id: C2-G4
+work_packet: WP5
+status: BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT
+source_branch: build/opt-b-c2-wp5-replay
+source_main_tip: 6f823d018330af6b06860d0cf131675947d817fd
+result:
+  replay_runner: READY
+  release_identity_guards: PASS
+  synthetic_fixture_trust: PASS
+  discovery_market_replay: BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT
+  development_market_replay: BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT
+  replay_qa: NOT_EXECUTED
+  local_candidate_release: NONE
+  publication: NONE
+  selector: NONE
+  activation: NONE
+  validation_consumption: LOCKED_UNCONSUMED
+  probability: NONE
+  exposure: NONE
+  trading: NONE
+  execution: NONE
+required_exact_releases:
+  discovery: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+  development: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+next_gate: C2-G4_REPLAY_QA_AND_LOCAL_CANDIDATE_RELEASE
