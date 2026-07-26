@@ -11,7 +11,10 @@ a2_g1_merge_commit: 6599919f7cd2d4e4d93e2d76c2bcf4eb4f70314d
 wp5_merge_commit: bce2499dff255076b2fe297035d8923f4a21776c
 a2_g2_merge_commit: a7a99c7679a06fda3173592abeafe56a429c2e9f
 a2_g3_execution_commit: 8c4c6c70da6f3f8b400d06df990500702813ff39
-state: V2_ROLE_RELEASE_FREEZE_PASS_NO_MARKET_AUTHORITY
+wp6_merge_commit: 8f0dd49e489b531df8998b4fc1575d6fb11317d1
+wp6_workflow_run_id: 30181995980
+a2_g4_review_record: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
+state: V2_REMOTE_PUBLICATION_REVIEW_PASS_NO_MARKET_AUTHORITY
 selectors:
   opt_a: NONE
   opt_b_c1: NONE
@@ -29,6 +32,7 @@ authorities:
     freeze_authority: QA_AND_INVENTORY_GATED_LOCAL_ONLY
     readiness_authority: READ_ONLY
     upload_authority: EXACT_PUBLICATION_APPROVAL_REQUIRED
+    last_publication_result: COMPLETE_REMOTE_VERIFIED
     market_authority: false
   opt_a_v1:
     state: SUPERSEDED_UNPUBLISHED
@@ -37,7 +41,7 @@ authorities:
     reproducibility: NOT_REPRODUCIBLE_MISSING_PAYLOAD
     active: false
   opt_a_v2:
-    state: A2_G3_ROLE_RELEASE_FREEZE_PASS_LOCAL_ARTIFACT_ONLY
+    state: A2_G4_REMOTE_PUBLICATION_REVIEW_PASS_SHADOW_NOT_SELECTED
     programme_governance: WP1_MERGED_PASS
     evidence_lifecycle: WP2_MERGED_PASS
     provider_clock_handoff_contracts: WP3_MERGED_PASS
@@ -47,6 +51,8 @@ authorities:
     role_workspace_construction: WP5_MERGED_PASS
     observation_operator_review: A2_G2_PASS
     role_release_freeze: A2_G3_PASS
+    r2_publication_work_packet: WP6_EXECUTED_PASS
+    remote_publication_review: A2_G4_PASS
     population_month_count: 60
     population_source_object_count: 240
     population_row_count: 3781810
@@ -60,23 +66,33 @@ authorities:
     quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
     release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
     discovery_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    discovery_manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
+    discovery_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
     development_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    development_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
+    development_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
     validation_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+    validation_manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
+    validation_manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
     frozen_release_count: 3
-    frozen_release_availability: LOCAL_ACTIONS_ARTIFACT_ONLY
+    published_release_count: 3
+    release_lifecycle_state: REMOTE_VERIFIED
+    release_availability: REMOTE_VERIFIED
+    release_authority_state: SHADOW
     provider_intake_authority: COMPLETE_EXTERNAL_MUTABLE_EVIDENCE_ONLY
     mutable_workspace_entry_authority: AUTHORISED_FOR_VERIFIED_SOURCE_OBJECTS
     observation_construction_authority: A2_G2_REVIEWED_COMPLETE_MUTABLE_ONLY
-    mutable_workspace_release_authority: A2_G3_COMPLETE_LOCAL_ARTIFACT_ONLY
+    mutable_workspace_release_authority: A2_G3_COMPLETE
+    r2_publication_authority: A2_G4_COMPLETE_REMOTE_VERIFIED
     further_provider_network_authority: DENIED_PENDING_NEW_PACKET
-    r2_publication_authority: DENIED_PENDING_SEPARATE_APPROVAL
-    selector_activation_authority: DENIED
+    selector_activation_authority: DENIED_PENDING_A2_G5
     active_handoff: NONE
     validation_consumption: LOCKED_UNCONSUMED
     market_authority: NONE
     active: false
   opt_b_c1_v2:
     state: DESIGN_AND_FIXTURES_ONLY
+    exact_opt_a_remote_parent_available: true
     active: false
   opt_b_c2_v2:
     state: DESIGN_AND_FIXTURES_ONLY
