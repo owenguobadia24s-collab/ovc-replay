@@ -1,0 +1,45 @@
+name: Discovery Operating Hub DO-00 v0.3 alignment
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  do-00-v0-3-alignment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Verify exact DO-00 v0.3 boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          packet = json.loads(Path('docs/releases/discovery-operating-hub-v0-1/do-00/DO_00_PREFLIGHT_PACKET.json').read_text())
+          programme = Path('registries/research_operations/DISCOVERY_OPERATING_HUB_PROGRAMME_REGISTRY_v0_1.yaml').read_text()
+          workspace = Path('registries/research_operations/DISCOVERY_OPERATING_HUB_WORKSPACE_ALIGNMENT_v0_1.yaml').read_text()
+          context = Path('registries/research_operations/DISCOVERY_OPERATING_HUB_CONTEXT_ALIGNMENT_v0_1.yaml').read_text()
+          deferred = Path('registries/research_operations/DISCOVERY_OPERATING_HUB_DEFERRED_CAPABILITIES_v0_1.yaml').read_text()
+
+          assert packet['do_00_disposition'] == 'COMPLETE_V0_3_REALIGNMENT'
+          assert packet['console_alignment']['primary_workspaces'] == ['OVERVIEW', 'RESEARCH', 'SYSTEM']
+          assert packet['pending_prerequisites'] == ['RC-A0', 'RC-G0A']
+          assert packet['authority_delta'] == 'DESIGN_RECORDS_ONLY'
+          assert 'operative_target: v0.3' in programme
+          assert 'console_research_writes: DENIED_PENDING_RC_WP7_OR_SEPARATE_ACTION_GATE' in programme
+          assert workspace.count('workspace_id: ') == 3
+          assert 'former_v0_2_routes_are_primary_navigation: false' in workspace
+          assert 'authority: PRESENTATION_ONLY_EXCLUDED_FROM_LOGICAL_AUTHORITY' in context
+          assert 'post_cutoff_rendering: PROHIBITED' in context
+          assert 'Research Console v0.3 unified workspaces are the operative target' in deferred
+          assert 'SUPERSEDED_AS_PRIMARY_INFORMATION_ARCHITECTURE' in deferred
+          PY
