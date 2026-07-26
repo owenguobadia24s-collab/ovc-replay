@@ -43,10 +43,12 @@ class NoLegacySelectorAuthorityTests(unittest.TestCase):
         for selector in INACTIVE_DOWNSTREAM_SELECTORS:
             self.assertIn(f"  {selector}: NONE", text)
         self.assertIn("local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY", text)
-        self.assertIn("publication: AUTHORISED_EXACT_RELEASES_ONLY", text)
-        self.assertIn("publication_executed: false", text)
+        self.assertIn("publication: COMPLETE_REMOTE_VERIFIED", text)
+        self.assertIn("publication_executed: true", text)
+        self.assertIn("remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION", text)
         self.assertIn("selector: NONE", text)
         self.assertIn("activation: NONE", text)
+        self.assertIn("legacy_b_state_retirement_executed: false", text)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", text)
         self.assertIn("selector_rollback: ALL_C1_ROLE_SELECTORS_NONE", text)
         for denial in (
