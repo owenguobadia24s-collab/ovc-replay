@@ -1,20 +1,22 @@
 # Current status
 
 Snapshot date: 26 July 2026.
-Repository court-record tip reviewed: `85d2638d36c5039c35d2d49fcdb499dd48e7b354`.
+Main baseline before the C2-G5 execution PR: `85d2638d36c5039c35d2d49fcdb499dd48e7b354`.
+C2-G5 execution branch: `exec/c2-g5-candidate-freeze` / PR `#69`.
 
 ## Integrated baseline
 
-The reset, OPT-A v2 role-set activation, OPT-B.C1 v2 publication and shadow activation, Research Operations Foundation activation, Research Console v0.3 Overview acceptance, OPT-B.C2 actual-parent reconciliation, and C2-G4 exact-parent Discovery and Development replay are merged into `main`.
+The reset, OPT-A v2 role-set activation, OPT-B.C1 v2 publication and shadow activation, Research Operations Foundation activation, Research Console v0.3 Overview acceptance, OPT-B.C2 actual-parent reconciliation and C2-G4 exact-parent replay are merged into `main`.
 
 Latest authority-changing or boundary-confirming records:
 
-- OPT-A v2 A2-G5 selector activation: `fb5b2fea2200b05a050aa1f8af51121a1883a4a5`
-- OPT-B.C1 v2 B1-G5 shadow activation: recorded in `docs/releases/opt-b-c1-v2/b1-g5/`
-- Research Operations RO-G3 local activation: `516e068ff94b3a43964f221ceface2f01f13d010`
-- Research Console RC-G2-v0.3 Overview acceptance: `cd0327e11084d19ce8b51fea67c6cfa3eb00c502`
-- OPT-B.C2 v2 C2-G3R actual-parent reconciliation: `fa11546a93f865c26d7cf99f5b5c60156bf50f9b`
-- OPT-B.C2 v2 C2-G4 exact-parent replay: `85d2638d36c5039c35d2d49fcdb499dd48e7b354`
+- OPT-A v2 A2-G5 selector activation: `docs/releases/opt-a-v2/activation/`
+- OPT-B.C1 v2 B1-G5 shadow activation: `docs/releases/opt-b-c1-v2/b1-g5/`
+- Research Operations RO-G3 local activation: `docs/releases/research-operations-foundation/ro-g3/`
+- Research Console RC-G2-v0.3 Overview acceptance: `docs/releases/research-console-v0-3/rc-g2/`
+- OPT-B.C2 C2-G3R actual-parent reconciliation: `docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/`
+- OPT-B.C2 C2-G4 exact-parent replay: `docs/releases/opt-b-c2-v2/c2-g4/`
+- OPT-B.C2 C2-G5 local candidate freeze: `docs/releases/opt-b-c2-v2/c2-g5/` on PR `#69`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent, parameter source or rollback target.
 
@@ -38,35 +40,39 @@ B1-G5 result: `PASS — SHADOW ACTIVATION`.
 | Development | `OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1` | `SHADOW` | 52,872 | 48 | `ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017` |
 | **Total** | **2 releases** | — | **212,764** | **192** | — |
 
-The exact releases are frozen, QA-passed, remotely verified and selected for read, inspection and comparison as atomic derived facts. Validation C1 is not built. C1-to-C2 interface validation has passed; C2-G4 used the exact canonical C1 parents without changing C1 selector authority.
+The exact releases are frozen, QA-passed, remotely verified and selected for read, inspection and comparison as atomic derived facts. Validation C1 is not built. The exact C1 Discovery and Development releases were consumed only through the separately approved C2-G4 replay and C2-G5 local-candidate boundary.
 
 ## OPT-B.C2 v2
 
-WP1-WP4 contracts, schemas, registries, fixtures, level/container/relation engines, parallel-state, persistence and transition logic are implemented.
+WP1-WP4 contracts, schemas, registries, fixtures, level/container/relation engines, parallel-state, persistence and transition logic are implemented. C2-G3R passed actual C1 plus exact OPT-A price-parent engine trust.
 
-C2-G3R result: `PASS_ACTUAL_C1_AND_EXACT_OPT_A_PRICE_PARENT_ENGINE_TRUST`.
+### C2-G4 exact-parent replay
 
-C2-G4 result: `PASS_LOCAL_REPLAY`.
+Result: `PASS_LOCAL_REPLAY`.
 
-The exact manifest-bound OPT-B.C1 and OPT-A Discovery and Development parent chains passed full-byte verification and completed the bounded C2 replay:
+- exact C1 and OPT-A parent chains: full-byte verified;
+- input C1 records: 212,764;
+- state records: 404,434;
+- transition records: 323,910;
+- rejected records: 0;
+- output files: 24;
+- output bytes: 872,839,722;
+- source artifact: `8634383302`.
 
-| Role | Input records | Scopes | State records | Transition records | Rejected |
-|---|---:|---:|---:|---:|---:|
-| Discovery | 159,892 | 6 | 303,856 | 245,752 | 0 |
-| Development | 52,872 | 6 | 100,578 | 78,158 | 0 |
-| **Total** | **212,764** | **12** | **404,434** | **323,910** | **0** |
+### C2-G5 local candidate freeze
 
-The 24 replay outputs total 872,839,722 bytes and remain external in workflow artifact `8634383302` with digest `sha256:b8f993f733aed75e488aa60883f00a53596c15e5cd6c14edb787fc3bc12df62f`.
+Result: `PASS_LOCAL_CANDIDATE_RELEASE_FROZEN`.
 
-C2-G4 changed no C2 release authority:
+Two independent materialisations of the C2-G4 outputs were byte-identical. Complete inventory and manifest binding, exact parent lineage, five independent axes, record uniqueness, transition endpoint closure and full-byte local verification passed. Blocking and unresolved QA issues are both zero.
 
-- local C2 candidate release: `NONE`
-- publication: `NONE`
-- selector: `NONE`
-- activation: `NONE`
-- probability, exposure, trading and execution: `NONE`
+| Role | Candidate release | Manifest | Manifest SHA-256 | State records | Transitions | Candidate artifact |
+|---|---|---|---|---:|---:|---:|
+| Discovery | `OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1` | `MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1` | `c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33` | 303,856 | 245,752 | `8634699529` |
+| Development | `OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1` | `MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1` | `8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e` | 100,578 | 78,158 | `8634700114` |
 
-Validation remains `LOCKED_UNCONSUMED`.
+Candidate tree SHA-256: `f15ad152405708bca09e0255af6de69a4a54051e6f0f9e2128cd0c2944bf60fd`.
+
+The candidates are `RELEASE_FROZEN / CANDIDATE / LOCAL_ONLY`. Publication, selector and activation remain `NONE`. Validation remains `LOCKED_UNCONSUMED`.
 
 ## Research Operations Foundation
 
@@ -103,9 +109,8 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `B1_G5_PASS / REMOTE_VERIFIED / SHADOW` | `SHADOW` |
-| OPT-B.C2 v2 | `C2_G4_PASS_LOCAL_REPLAY / NO_CANDIDATE_OR_SELECTOR` | `NONE` |
-| Research Operations v0.1 | `RO_G3_PASS / ACTIVE_RESEARCH_OPERATIONS_LOCAL` | Not applicable |
-| Research Operations v0.2 | `RO2_G0_PASS_DESIGN_FREEZE / RUNTIME_NOT_STARTED` | Not applicable |
+| OPT-B.C2 v2 | `C2_G5_PASS / LOCAL_DISCOVERY_AND_DEVELOPMENT_CANDIDATES_FROZEN` | `NONE` |
+| Research Operations | `RO_G3_PASS / ACTIVE_RESEARCH_OPERATIONS_LOCAL` | Not applicable |
 | Research Console v0.3 | `RC_G2_PASS / OVERVIEW_LOCAL_READ_ONLY / WP3_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
@@ -113,7 +118,7 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 ## Retained authority boundaries
 
 - Validation consumption remains `LOCKED_UNCONSUMED`.
-- C2 candidate, publication, selector and activation authority remain absent.
+- C2 publication, selector and activation authority remain absent.
 - C2E, C2.5, C3 and new OPT-C/OPT-D authority remain absent.
 - Probability, exposure, trading, execution and autonomous-agent authority remain `NONE`.
 - Direct UI writes to Git, R2 or the primary branch remain denied.
@@ -121,6 +126,7 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 
 ## Next boundaries
 
-1. Execute a separate C2 candidate-freeze and QA review only when explicitly authorised.
-2. Begin RO2-WP1 runtime implementation only under a separate operator instruction.
-3. Continue `RC-WP3-v0.3 — Research workspace, replay, evidence and queue` under accepted read-only and fail-closed boundaries.
+1. Review and merge PR `#69` so the C2-G5 workflow and gate packet become part of `main`.
+2. Execute a separate C2 publication-readiness and operator-approval gate against the exact frozen manifests and candidate artifact identities.
+3. Do not write to R2, select or activate C2 until those separate decisions pass.
+4. Continue `RC-WP3-v0.3 — Research workspace, replay, evidence and queue` under the accepted read-only and fail-closed boundaries.
