@@ -1,0 +1,23 @@
+name: OPT-B.C1 WP5 controlled dispatcher
+
+on:
+  push:
+    branches:
+      - build/opt-b-c1-v2-wp5-dispatch
+    paths:
+      - docs/releases/opt-b-c1-v2/wp5/WP5_EXECUTION_REQUEST.md
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch-publication:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch canonical WP5 publication workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run opt-b-c1-wp5-r2-publication.yml --repo "${GITHUB_REPOSITORY}" --ref main
