@@ -1,0 +1,53 @@
+schema: ovc-research-console-workspace-registry/v0.3
+status: ACCEPTED_BY_RC_A1
+primary_workspace_count: 3
+workspaces:
+  - workspace_id: OVERVIEW
+    label: Overview
+    icon_rail_id: HOME
+    authority: DERIVED_READ_ONLY
+    primary_question: What context is represented, what is due, and what is blocked?
+    global_context_required: true
+    default_panels:
+      - OPERATING_CONTEXT
+      - AUTHORITY_BOUNDARY
+      - RELEASE_AND_GATE_SUMMARY
+      - RESEARCH_QUEUE_SUMMARY
+      - AMBIENT_HEALTH
+      - ACTIVITY_STREAM
+    fallback: NOT_EVALUATED
+  - workspace_id: RESEARCH
+    label: Research
+    icon_rail_id: RESEARCH
+    authority: READ_ONLY_CUTOFF_SAFE_WHEN_MATERIALIZED
+    primary_question: What is the selected market or research object doing, what supports it, what contradicts it, and what changes it?
+    global_context_required: true
+    default_panels:
+      - RESEARCH_BRIEF
+      - REPLAY_STRIP
+      - EVIDENCE_RAIL
+      - RESEARCH_QUEUE
+      - AMBIENT_HEALTH
+      - ACTIVITY_STREAM
+    fallback: NOT_MATERIALIZED
+  - workspace_id: SYSTEM
+    label: System
+    icon_rail_id: SYSTEM
+    authority: READ_ONLY_OPERATIONAL_INSPECTION
+    primary_question: Which releases, sources, QA assertions, lineage and configuration references produce the represented state?
+    global_context_required: true
+    default_panels:
+      - SYSTEM_NAVIGATOR
+      - SYSTEM_DETAIL
+      - AMBIENT_HEALTH
+      - ACTIVITY_STREAM
+    fallback: NOT_EVALUATED
+rules:
+  fourth_primary_workspace: PROHIBITED_WITHOUT_NEW_CONTRACT
+  workspace_change_preserves_global_context: true
+  context_loss_must_be_explicit: true
+  fixture_only_shell_implementation: AUTHORISED_BY_RC_A1
+  live_projection_authority: DENIED_PENDING_LATER_GATE
+  repository_mutation: NONE
+  research_write_authority: NONE
+  remote_deployment: DENIED
