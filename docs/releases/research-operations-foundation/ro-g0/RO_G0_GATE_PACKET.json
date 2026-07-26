@@ -1,0 +1,69 @@
+{
+  "authority_delta": {
+    "active_research": "NONE",
+    "agent": "NONE",
+    "execution": "NONE",
+    "exposure": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "ro_wp1": "AUTHORISED_AFTER_RO_G0_MERGE",
+    "ro_wp2": "BLOCKED_PENDING_RO_G1",
+    "ro_wp3": "BLOCKED_PENDING_RO_G2"
+  },
+  "baseline": {
+    "branch": "main",
+    "commit": "fefac25f19a836898c3a22228036cd66617dca07",
+    "open_pull_requests_at_preflight": 0
+  },
+  "checks": [
+    {"check_id": "RO-G0-01", "name": "Exact repository baseline", "status": "PASS", "evidence": ["fefac25f19a836898c3a22228036cd66617dca07"]},
+    {"check_id": "RO-G0-02", "name": "Implementation-plan identity and ratification", "status": "PASS", "evidence": ["4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0", "193991"]},
+    {"check_id": "RO-G0-03", "name": "Namespace collision and package-boundary review", "status": "PASS", "evidence": ["ovc.research_operations reserved", "no existing research_operations package"]},
+    {"check_id": "RO-G0-04", "name": "Dependency allowlist and denylist frozen", "status": "PASS", "evidence": ["registries/research_operations/RESEARCH_OPERATIONS_DEPENDENCY_POLICY_v0_1.yaml"]},
+    {"check_id": "RO-G0-05", "name": "Git, external-root and derived-path boundaries frozen", "status": "PASS", "evidence": ["registries/research_operations/RESEARCH_OPERATIONS_PATH_POLICY_v0_1.yaml"]},
+    {"check_id": "RO-G0-06", "name": "Validation isolation preserved", "status": "PASS", "evidence": ["OPT-A.GBPUSD.VALIDATION.2025.v2", "LOCKED_UNCONSUMED"]},
+    {"check_id": "RO-G0-07", "name": "Preflight integrated test baseline", "status": "PASS", "evidence": ["workflow_run:30184455698", "conclusion:success"]},
+    {"check_id": "RO-G0-08", "name": "No authority escalation", "status": "PASS", "evidence": ["market:NONE", "probability:NONE", "exposure:NONE", "execution:NONE", "agent:NONE"]}
+  ],
+  "frozen_boundaries": {
+    "console_path": "apps/research_console",
+    "dependency_direction": "OPT_A_OPTIONAL_C1_C2_TO_RESEARCH_RECORDS_TO_QA_TO_READ_MODEL_TO_CONSOLE",
+    "derived_path": "var/research_operations",
+    "durable_record_path": "records/research_operations",
+    "external_root_variable": "OVC_EXTERNAL_ARTIFACT_ROOT",
+    "python_namespace": "ovc.research_operations",
+    "source_path": "src/ovc/research_operations"
+  },
+  "gate_id": "RO-G0",
+  "gate_name": "Foundation preflight",
+  "gate_version": "0.1",
+  "known_limitations": [
+    "Operator-local external artifact root is not re-evaluated by RO-G0.",
+    "Live R2 object inventory and lock state are not re-evaluated because RO-G0 performs no remote operation.",
+    "No Research Operations implementation package, record, CLI, index, database or console is created by this gate.",
+    "Final branch-head CI run will be appended after pull-request validation."
+  ],
+  "next_packet": "RO-WP1 — Evidence envelope and record schemas",
+  "operator_disposition": "PASS",
+  "predecessor_state": {
+    "development_release": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+    "discovery_release": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "legacy_engine": "HISTORICAL_QUARANTINED",
+    "opt_a": "A2_G5_SELECTOR_SET_ACTIVE",
+    "opt_b_c1": "WP2_CONTRACTS_FROZEN_WP3_SYNTHETIC_ENGINE_AUTHORISED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "validation_release": "OPT-A.GBPUSD.VALIDATION.2025.v2"
+  },
+  "producing_branch": "review/research-operations-ro-g0-foundation-v2",
+  "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "result": "PASS",
+  "rollback": "Remove RO-WP1 build approval while preserving RO-G0 records; no upstream selector or release changes.",
+  "schema": "ovc-research-operations-gate-packet/v1",
+  "source_plan": {
+    "filename": "OVC_Research_Operations_Foundation_v0_1_Implementation_Plan.docx",
+    "sha256": "4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0",
+    "size_bytes": 193991,
+    "status": "RATIFIED_FOR_RO_G0_AND_RO_WP1"
+  }
+}
