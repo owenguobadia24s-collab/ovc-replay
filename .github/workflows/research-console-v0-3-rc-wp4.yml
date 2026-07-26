@@ -1,0 +1,31 @@
+name: Research Console v0.3 RC-WP4 System workspace
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/research_console/**'
+      - 'tests/research_operations/test_rc_wp4_v0_3_system_activity.py'
+      - 'docs/releases/research-console-v0-3/rc-wp4/**'
+      - 'registries/research_operations/RESEARCH_CONSOLE_SYSTEM_PROJECTION_REGISTRY_v0_3.yaml'
+      - '.github/workflows/research-console-v0-3-rc-wp4.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rc-wp4-system:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run focused RC-WP4 tests
+        run: PYTHONPATH=src:. python -m unittest tests.research_operations.test_rc_wp4_v0_3_system_activity -v
+      - name: Run RC-G3 adapter tests
+        run: PYTHONPATH=src:. python -m unittest tests.research_operations.test_rc_g3_v0_3_ro2_adapter_acceptance -v
+      - name: Run full repository suite
+        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
