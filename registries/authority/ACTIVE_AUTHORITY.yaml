@@ -14,9 +14,10 @@ a2_g3_execution_commit: 8c4c6c70da6f3f8b400d06df990500702813ff39
 wp6_merge_commit: 8f0dd49e489b531df8998b4fc1575d6fb11317d1
 wp6_workflow_run_id: 30181995980
 a2_g4_review_record: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
-state: V2_REMOTE_PUBLICATION_REVIEW_PASS_NO_MARKET_AUTHORITY
+a2_g5_activation_record: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
+state: V2_SELECTOR_SET_ACTIVE_NO_DOWNSTREAM_MARKET_AUTHORITY
 selectors:
-  opt_a: NONE
+  opt_a: ACTIVE
   opt_b_c1: NONE
   opt_b_c2: NONE
   c2e: NONE
@@ -41,7 +42,7 @@ authorities:
     reproducibility: NOT_REPRODUCIBLE_MISSING_PAYLOAD
     active: false
   opt_a_v2:
-    state: A2_G4_REMOTE_PUBLICATION_REVIEW_PASS_SHADOW_NOT_SELECTED
+    state: A2_G5_SELECTOR_SET_ACTIVE
     programme_governance: WP1_MERGED_PASS
     evidence_lifecycle: WP2_MERGED_PASS
     provider_clock_handoff_contracts: WP3_MERGED_PASS
@@ -53,6 +54,7 @@ authorities:
     role_release_freeze: A2_G3_PASS
     r2_publication_work_packet: WP6_EXECUTED_PASS
     remote_publication_review: A2_G4_PASS
+    selector_set_activation: A2_G5_PASS
     population_month_count: 60
     population_source_object_count: 240
     population_row_count: 3781810
@@ -65,34 +67,44 @@ authorities:
     quarantined_clock_time_bucket_locations: 10705
     quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
     release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
+    selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
     discovery_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
     discovery_manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     discovery_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
+    discovery_authority: ACTIVE_DISCOVERY
     development_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
     development_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     development_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
+    development_authority: ACTIVE_DEVELOPMENT
     validation_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
     validation_manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
     validation_manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
-    frozen_release_count: 3
+    validation_authority: ACTIVE_VALIDATION
+    release_count: 3
     published_release_count: 3
     release_lifecycle_state: REMOTE_VERIFIED
     release_availability: REMOTE_VERIFIED
-    release_authority_state: SHADOW
+    selector_set_state: ACTIVE
     provider_intake_authority: COMPLETE_EXTERNAL_MUTABLE_EVIDENCE_ONLY
     mutable_workspace_entry_authority: AUTHORISED_FOR_VERIFIED_SOURCE_OBJECTS
     observation_construction_authority: A2_G2_REVIEWED_COMPLETE_MUTABLE_ONLY
     mutable_workspace_release_authority: A2_G3_COMPLETE
     r2_publication_authority: A2_G4_COMPLETE_REMOTE_VERIFIED
+    selector_activation_authority: A2_G5_COMPLETE
+    rollback_target: ALL_OPT_A_ROLE_SELECTORS_NONE
     further_provider_network_authority: DENIED_PENDING_NEW_PACKET
-    selector_activation_authority: DENIED_PENDING_A2_G5
     active_handoff: NONE
     validation_consumption: LOCKED_UNCONSUMED
-    market_authority: NONE
-    active: false
+    market_authority: SEALED_OBSERVATION_INPUT_ONLY
+    probability_authority: NONE
+    exposure_authority: NONE
+    execution_authority: NONE
+    active: true
   opt_b_c1_v2:
     state: DESIGN_AND_FIXTURES_ONLY
     exact_opt_a_remote_parent_available: true
+    exact_opt_a_active_parent_available: true
+    selector: NONE
     active: false
   opt_b_c2_v2:
     state: DESIGN_AND_FIXTURES_ONLY

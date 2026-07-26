@@ -14,6 +14,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: V2_OBSERVATION_CONSTRUCTION_REVIEW_PASS_NO_MARKET_AUTHORITY",
     "state: V2_ROLE_RELEASE_FREEZE_PASS_NO_MARKET_AUTHORITY",
     "state: V2_REMOTE_PUBLICATION_REVIEW_PASS_NO_MARKET_AUTHORITY",
+    "state: V2_SELECTOR_SET_ACTIVE_NO_DOWNSTREAM_MARKET_AUTHORITY",
 }
 FORBIDDEN = (
     "B-STATE-",
@@ -95,11 +96,12 @@ class SyntheticFixturePackTests(unittest.TestCase):
         self.assertFalse(any(FIXTURES.rglob("*.parquet")))
         self.assertFalse(any(FIXTURES.rglob("*.feather")))
 
-    def test_active_authority_remains_none(self) -> None:
+    def test_synthetic_fixtures_remain_non_authoritative(self) -> None:
         authority = (ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml").read_text(encoding="utf-8")
         repository_state = next(line for line in authority.splitlines() if line.startswith("state: "))
         self.assertIn(repository_state, ALLOWED_REPOSITORY_STATES)
-        self.assertGreaterEqual(authority.count(": NONE"), 8)
+        self.assertIn("  opt_a: ACTIVE", authority)
+        self.assertGreaterEqual(authority.count(": NONE"), 7)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
 
 

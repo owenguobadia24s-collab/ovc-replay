@@ -2,9 +2,13 @@ schema: ovc-opt-a-selector-set/v1
 programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
 selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
 release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
-state: NONE
+state: ACTIVE
 atomic_update_required: true
-market_authority: NONE
+market_authority: SEALED_OBSERVATION_INPUT_ONLY
+activation:
+  gate_id: A2-G5
+  decision: PASS_ACTIVATE
+  record: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
 publication_review:
   gate_id: A2-G4
   decision: PASS
@@ -15,25 +19,30 @@ roles:
     manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
     remote_verification_receipt: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
-    selector_state: NONE
+    selector_state: ACTIVE
+    authority_state: ACTIVE_DISCOVERY
     consumption_state: NOT_APPLICABLE
   development:
     release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
     manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
     remote_verification_receipt: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
-    selector_state: NONE
+    selector_state: ACTIVE
+    authority_state: ACTIVE_DEVELOPMENT
     consumption_state: NOT_APPLICABLE
   validation:
     release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
     manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
     manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
     remote_verification_receipt: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
-    selector_state: NONE
+    selector_state: ACTIVE
+    authority_state: ACTIVE_VALIDATION
     consumption_state: LOCKED_UNCONSUMED
 rollback:
+  mode: ATOMIC_SELECTOR_SET
   all_role_selectors: NONE
   historical_v1_reactivation: PROHIBITED
+  remote_object_mutation: false
 activation_requirements:
   - ALL_THREE_RELEASES_REMOTE_VERIFIED
   - EXACT_MANIFEST_BINDING
@@ -41,4 +50,5 @@ activation_requirements:
   - ATOMIC_UPDATE
   - VALIDATION_REMAINS_LOCKED_UNCONSUMED
   - ROLLBACK_TO_NONE_VERIFIED
-next_gate: A2-G5_SELECTOR_SET_ACTIVATION
+requirements_result: PASS
+next_boundary: OPT-B.C1_V2_BOUNDED_IMPLEMENTATION

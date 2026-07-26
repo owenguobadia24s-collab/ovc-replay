@@ -4,6 +4,8 @@ repository: owenguobadia24s-collab/ovc-replay
 baseline_commit: a9902c97e21131b1882b4c11ca3a2a79273e7c77
 r0_reset_head: 71c7c5513efb9bb8d214d118be03090664050c21
 release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
+active_selector_set: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
+activation_record: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
 programme_scope:
   instrument: GBPUSD
   provider: DUKASCOPY
@@ -59,84 +61,87 @@ releases:
     interval: "[2021-01-01T00:00:00Z, 2024-01-01T00:00:00Z)"
     historical_seal_status: null
     lifecycle_state: REMOTE_VERIFIED
-    authority_state: SHADOW
+    authority_state: ACTIVE_DISCOVERY
     qa_state: PASS
     availability_state: REMOTE_VERIFIED
     publication_status: PUBLISHED
     consumption_state: NOT_APPLICABLE
-    selector_state: NONE
-    active_selector: false
+    selector_state: ACTIVE
+    active_selector: true
     reproducibility_status: REPRODUCIBLE_EXACT_MANIFEST
     r2_canonical_status: REMOTE_VERIFIED
     manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
     remote_verification_review: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
-    reason: A2_G4_REMOTE_PUBLICATION_VERIFIED_NOT_SELECTED
+    activation_record: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
+    reason: A2_G5_ACTIVE_DISCOVERY_SELECTOR
     replacement_policy: IMMUTABLE_IDENTITY
     permitted_use:
+      - ACTIVE_DISCOVERY_MARKET_OBSERVATION_INPUT
       - EXACT_MANIFEST_GOVERNANCE_REFERENCE
-      - BOUNDED_CANDIDATE_REPLAY_AFTER_LAYER_SPECIFIC_APPROVAL
-      - FUTURE_SELECTOR_TARGET_AFTER_A2_G5
+      - BOUNDED_DOWNSTREAM_REPLAY_AFTER_LAYER_SPECIFIC_APPROVAL
     prohibited_use:
-      - ACTIVE_MARKET_INPUT_BEFORE_SELECTOR_ACTIVATION
       - SILENT_MANIFEST_SUBSTITUTION
       - OVERWRITE_OR_DELETE
+      - PROBABILITY_OR_EXECUTION_CLAIMS
   - release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
     research_role: DEVELOPMENT
     interval: "[2024-01-01T00:00:00Z, 2025-01-01T00:00:00Z)"
     historical_seal_status: null
     lifecycle_state: REMOTE_VERIFIED
-    authority_state: SHADOW
+    authority_state: ACTIVE_DEVELOPMENT
     qa_state: PASS
     availability_state: REMOTE_VERIFIED
     publication_status: PUBLISHED
     consumption_state: NOT_APPLICABLE
-    selector_state: NONE
-    active_selector: false
+    selector_state: ACTIVE
+    active_selector: true
     reproducibility_status: REPRODUCIBLE_EXACT_MANIFEST
     r2_canonical_status: REMOTE_VERIFIED
     manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
     remote_verification_review: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
-    reason: A2_G4_REMOTE_PUBLICATION_VERIFIED_NOT_SELECTED
+    activation_record: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
+    reason: A2_G5_ACTIVE_DEVELOPMENT_SELECTOR
     replacement_policy: IMMUTABLE_IDENTITY
     permitted_use:
+      - ACTIVE_DEVELOPMENT_MARKET_OBSERVATION_INPUT
       - EXACT_MANIFEST_GOVERNANCE_REFERENCE
-      - BOUNDED_CANDIDATE_REPLAY_AFTER_LAYER_SPECIFIC_APPROVAL
-      - FUTURE_SELECTOR_TARGET_AFTER_A2_G5
+      - BOUNDED_DOWNSTREAM_REPLAY_AFTER_LAYER_SPECIFIC_APPROVAL
     prohibited_use:
-      - ACTIVE_MARKET_INPUT_BEFORE_SELECTOR_ACTIVATION
       - VALIDATION_DATA_ACCESS
       - SILENT_MANIFEST_SUBSTITUTION
       - OVERWRITE_OR_DELETE
+      - PROBABILITY_OR_EXECUTION_CLAIMS
   - release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
     research_role: VALIDATION
     interval: "[2025-01-01T00:00:00Z, 2026-01-01T00:00:00Z)"
     historical_seal_status: null
     lifecycle_state: REMOTE_VERIFIED
-    authority_state: SHADOW
+    authority_state: ACTIVE_VALIDATION
     qa_state: PASS
     availability_state: REMOTE_VERIFIED
     publication_status: PUBLISHED
     consumption_state: LOCKED_UNCONSUMED
-    selector_state: NONE
-    active_selector: false
+    selector_state: ACTIVE
+    active_selector: true
     reproducibility_status: REPRODUCIBLE_EXACT_MANIFEST
     r2_canonical_status: REMOTE_VERIFIED
     manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
     manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
     remote_verification_review: docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json
-    reason: A2_G4_REMOTE_PUBLICATION_VERIFIED_DEFAULT_DENY_HOLDOUT
+    activation_record: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
+    reason: A2_G5_ACTIVE_VALIDATION_IDENTITY_DEFAULT_DENY_HOLDOUT
     replacement_policy: IMMUTABLE_IDENTITY
     permitted_use:
+      - ACTIVE_VALIDATION_IDENTITY_REGISTRATION
       - EXACT_MANIFEST_GOVERNANCE_REFERENCE
-      - FUTURE_SELECTOR_TARGET_AFTER_A2_G5_WITH_LOCK_PRESERVED
     prohibited_use:
       - MODEL_DESIGN
       - THRESHOLD_SELECTION
       - SEMANTIC_REVIEW
       - CASE_SELECTION
       - CONSUMPTION_WITHOUT_VALIDATION_ACCESS_APPROVAL
-      - ACTIVE_MARKET_INPUT_BEFORE_SELECTOR_ACTIVATION
       - SILENT_MANIFEST_SUBSTITUTION
       - OVERWRITE_OR_DELETE
+      - PROBABILITY_OR_EXECUTION_CLAIMS
