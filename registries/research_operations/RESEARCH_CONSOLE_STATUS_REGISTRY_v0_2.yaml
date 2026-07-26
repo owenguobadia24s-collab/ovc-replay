@@ -1,0 +1,52 @@
+schema: ovc-research-console-status-registry/v0.2
+status: FROZEN_BY_RC_00_PENDING_RC_G0_REVIEW
+statuses:
+  - status_id: PASS
+    severity: 0
+    meaning: Required checks are explicitly satisfied by current source evidence.
+    terminal: false
+  - status_id: WARN
+    severity: 1
+    meaning: Usable with a named limitation and consequence.
+    terminal: false
+  - status_id: BLOCK
+    severity: 2
+    meaning: The affected surface or action must not proceed.
+    terminal: false
+  - status_id: QUARANTINE
+    severity: 3
+    meaning: Object is isolated from normal use pending resolution.
+    terminal: false
+  - status_id: NOT_EVALUATED
+    severity: 1
+    meaning: Required evidence or assertion has not been produced.
+    terminal: false
+  - status_id: INCOMPLETE
+    severity: 1
+    meaning: Some required source objects are absent or unresolved.
+    terminal: false
+  - status_id: STALE
+    severity: 1
+    meaning: Source or derived view does not represent the selected current context.
+    terminal: false
+  - status_id: NOT_APPLICABLE
+    severity: 0
+    meaning: Domain is explicitly outside the object or route scope.
+    terminal: true
+  - status_id: UNRESOLVED
+    severity: 1
+    meaning: A lawful result cannot yet be determined.
+    terminal: false
+  - status_id: CENSORED
+    severity: 1
+    meaning: Required path or observation was unavailable before completion.
+    terminal: true
+  - status_id: MISSING
+    severity: 2
+    meaning: A required source or artifact cannot be resolved.
+    terminal: false
+rules:
+  all_clear_requires_all_required_domains_explicit: true
+  no_signal_is_pass: false
+  color_only_status_forbidden: true
+  unknown_status_fallback: BLOCK

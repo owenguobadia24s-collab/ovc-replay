@@ -1,0 +1,63 @@
+schema: ovc-research-console-action-registry/v0.2
+status: FROZEN_BY_RC_00_PENDING_RC_G0_REVIEW
+actions:
+  - action_id: FILTER_VIEW
+    authority: ACTIVE_READ_ONLY
+    routes: [OVERVIEW, RESEARCH_DESK, REPLAY, EVIDENCE, SESSIONS, QUEUE, HEALTH, LINEAGE, CATALOGUE, RELEASES, QA_GATES, AUDIT]
+    mutation: NONE
+  - action_id: OPEN_SOURCE_DETAIL
+    authority: ACTIVE_BOUNDED_READ
+    routes: [OVERVIEW, RESEARCH_DESK, REPLAY, EVIDENCE, SESSIONS, QUEUE, HEALTH, LINEAGE, CATALOGUE, RELEASES, QA_GATES, AUDIT]
+    mutation: NONE
+    constraint: source_must_resolve_through_catalogue_or_registry
+  - action_id: COPY_IDENTIFIER
+    authority: ACTIVE_LOCAL_UI_ONLY
+    routes: [OVERVIEW, RESEARCH_DESK, REPLAY, EVIDENCE, SESSIONS, QUEUE, HEALTH, LINEAGE, CATALOGUE, RELEASES, QA_GATES, AUDIT, CONFIG, ABOUT]
+    mutation: NONE
+  - action_id: DOWNLOAD_DERIVED_VIEW
+    authority: DEFERRED_PENDING_EXPORT_CONTRACT
+    routes: []
+    mutation: NONE
+  - action_id: CREATE_RESEARCH_SESSION
+    authority: DEFERRED_PENDING_SEPARATE_WRITE_GATE
+    routes: [SESSIONS]
+    mutation: PROHIBITED_IN_V0_2
+    ui_treatment: DISABLED_WITH_AUTHORITY_EXPLANATION
+  - action_id: CREATE_RESEARCH_RECORD
+    authority: DEFERRED_PENDING_SEPARATE_WRITE_GATE
+    routes: [RESEARCH_DESK, REPLAY, EVIDENCE, SESSIONS]
+    mutation: PROHIBITED_IN_V0_2
+    ui_treatment: OMIT_OR_DISABLE_WITH_AUTHORITY_EXPLANATION
+  - action_id: CHANGE_SELECTOR
+    authority: PROHIBITED
+    routes: []
+    mutation: PROHIBITED
+  - action_id: CHANGE_THRESHOLD
+    authority: PROHIBITED
+    routes: []
+    mutation: PROHIBITED
+  - action_id: ACTIVATE_RELEASE
+    authority: PROHIBITED
+    routes: []
+    mutation: PROHIBITED
+  - action_id: EDIT_REPOSITORY
+    authority: PROHIBITED
+    routes: []
+    mutation: PROHIBITED
+  - action_id: DEPLOY_CONSOLE
+    authority: PROHIBITED
+    routes: []
+    mutation: PROHIBITED
+    ui_treatment: REPLACE_WITH_NON_CLICKABLE_LOCAL_BADGE
+  - action_id: CREATE_MARKET_CLASSIFICATION
+    authority: PROHIBITED
+    routes: []
+    mutation: PROHIBITED
+  - action_id: CREATE_PROBABILITY_OR_EXPOSURE_OBJECT
+    authority: PROHIBITED
+    routes: []
+    mutation: PROHIBITED
+rules:
+  unregistered_action: PROHIBITED
+  hidden_mutation: PROHIBITED
+  self_approval: PROHIBITED
