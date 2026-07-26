@@ -1,0 +1,94 @@
+{
+  "schema": "ovc-research-operations-gate-packet/v1",
+  "gate_id": "RO-G1",
+  "gate_name": "Evidence integrity",
+  "gate_version": "0.1",
+  "review_baseline_commit": "8944da84dec4915c7d7748ae5dbb2a9e1d187d28",
+  "ro_g0_merge_commit": "8a4852358324a4e6dfc9f7c239be9e9eb8d69c23",
+  "ro_wp1_merge_commit": "8944da84dec4915c7d7748ae5dbb2a9e1d187d28",
+  "candidate_packet": "docs/releases/research-operations-foundation/ro-wp1/RO_G1_CANDIDATE_GATE_PACKET.json",
+  "operator_decision": "docs/releases/research-operations-foundation/ro-g1/RO_G1_OPERATOR_DECISION.md",
+  "operator_disposition": "PASS",
+  "checks": [
+    {
+      "check_id": "RO-G1-01",
+      "name": "RO-WP1 predecessor merged and exact review baseline",
+      "status": "PASS",
+      "evidence": ["8944da84dec4915c7d7748ae5dbb2a9e1d187d28"]
+    },
+    {
+      "check_id": "RO-G1-02",
+      "name": "Valid record chain reconstructs",
+      "status": "PASS",
+      "evidence": ["freeze_record", "verify_frozen_record", "supersede_record"]
+    },
+    {
+      "check_id": "RO-G1-03",
+      "name": "Canonical serialization and deterministic identity",
+      "status": "PASS",
+      "evidence": ["canonical_json_bytes", "ro:<record-type>:<sha256>"]
+    },
+    {
+      "check_id": "RO-G1-04",
+      "name": "Post-cutoff reference rejects",
+      "status": "PASS",
+      "evidence": ["POST_CUTOFF_REFERENCE"]
+    },
+    {
+      "check_id": "RO-G1-05",
+      "name": "Validation metadata-only isolation",
+      "status": "PASS",
+      "evidence": ["LOCKED_UNCONSUMED", "VALIDATION_PAYLOAD_ACCESS_DENIED"]
+    },
+    {
+      "check_id": "RO-G1-06",
+      "name": "Frozen mutation and duplicate identity reject",
+      "status": "PASS",
+      "evidence": ["FROZEN_MUTATION", "DuplicateRecordIdError"]
+    },
+    {
+      "check_id": "RO-G1-07",
+      "name": "Missing artifacts remain explicit",
+      "status": "PASS",
+      "evidence": ["REPRODUCIBLE", "PARTIALLY_AVAILABLE", "NOT_REPRODUCIBLE"]
+    },
+    {
+      "check_id": "RO-G1-08",
+      "name": "Append-only supersession preserves predecessor bytes",
+      "status": "PASS",
+      "evidence": ["lineage.supersedes", "immutable predecessor"]
+    },
+    {
+      "check_id": "RO-G1-09",
+      "name": "Model references remain optional",
+      "status": "PASS",
+      "evidence": ["OPT-A-only observation accepted"]
+    },
+    {
+      "check_id": "RO-G1-10",
+      "name": "No authority escalation",
+      "status": "PASS",
+      "evidence": ["active_research:NONE", "market:NONE", "probability:NONE", "exposure:NONE", "execution:NONE", "agent:NONE"]
+    }
+  ],
+  "validation": {
+    "source_workflow_run": 30186086401,
+    "source_job": 89750957685,
+    "source_result": "PASS",
+    "canonical_command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
+    "gate_specific_test": "tests/research_operations/test_ro_g1_evidence_integrity.py",
+    "pr_head_ci_required": true
+  },
+  "authority_delta": {
+    "ro_wp2": "AUTHORISED_FOR_BUILD",
+    "durable_write_service": "DENIED_PENDING_RO_WP2_IMPLEMENTATION",
+    "active_research": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE",
+    "agent": "NONE"
+  },
+  "next_packet": "RO-WP2 — Research CLI and artifact catalogue",
+  "rollback": "Remove RO-WP2 build authority while preserving RO-WP1 contracts, schemas, fixtures, tests and decision evidence."
+}

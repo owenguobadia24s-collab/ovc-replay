@@ -15,6 +15,7 @@ The reset and OPT-A v2 build line through selector activation are merged into `m
 - OPT-B.C1 v2 B1-G0 replay approval: `d584813a7a26e7e272259abc87c88b9bb212fc50`
 - OPT-B.C1 v2 WP4 candidate replay: `74151d3c9f4659fc6414456c2ad13a138912089c`
 - Research Operations RO-G0: `8a4852358324a4e6dfc9f7c239be9e9eb8d69c23`
+- Research Operations RO-WP1: `8944da84dec4915c7d7748ae5dbb2a9e1d187d28`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent or rollback target.
 
@@ -45,23 +46,21 @@ The candidate artifact is GitHub Actions artifact `8626942276`, digest `sha256:f
 
 WP4 excluded 12,104 Discovery and 4,862 Development quarantined upstream records. It performed no interpolation, gap repair or cross-side substitution. Validation was not downloaded and remains `LOCKED_UNCONSUMED`.
 
-## Research Operations Foundation RO-WP1
+## Research Operations Foundation RO-G1
 
-RO-WP1 result: `IMPLEMENTED — READY FOR RO-G1 OPERATOR REVIEW`.
+RO-G1 result: `PASS — RO-WP2 AUTHORISED FOR BUILD`.
 
-The evidence kernel provides:
+The operator review confirms that the RO-WP1 evidence kernel:
 
-- a permanent model-optional evidence envelope;
-- canonical UTF-8 JSON and deterministic content-derived record IDs;
-- ten versioned research record types;
-- prospective-cutoff and Validation metadata-only enforcement;
-- DRAFT, FROZEN, ADJUDICATED, SUPERSEDED and WITHDRAWN lifecycle rules;
-- frozen-record mutation, duplicate-ID and post-cutoff rejection;
-- append-only supersession preserving predecessor bytes;
-- explicit `REPRODUCIBLE`, `PARTIALLY_AVAILABLE` and `NOT_REPRODUCIBLE` states;
-- nine non-authoritative synthetic fixture families and executable integrity tests.
+- reconstructs valid frozen and superseding record chains;
+- produces deterministic canonical bytes and content-derived IDs;
+- rejects post-cutoff references and Validation payload access;
+- rejects frozen mutation and duplicate record identities;
+- preserves missing required evidence as explicit reproducibility states;
+- permits model-optional OPT-A-only observations;
+- preserves predecessor bytes during append-only supersession.
 
-RO-WP1 creates no operator research record, durable write service, CLI, artifact catalogue, QA runner, read model or console. RO-WP2 remains blocked until a separate RO-G1 operator `PASS`.
+RO-G1 grants build authority only for `RO-WP2 — Research CLI and artifact catalogue`. No durable write service, CLI or catalogue is active yet. RO-WP3 remains blocked pending RO-G2.
 
 ## Active authority matrix
 
@@ -72,7 +71,7 @@ RO-WP1 creates no operator research record, durable write service, CLI, artifact
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `WP4_REPLAY_QA_PASS / LOCAL_CANDIDATE` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
-| Research Operations | `RO_WP1_IMPLEMENTED / RO_G1_REVIEW_REQUIRED` | Not applicable |
+| Research Operations | `RO_G1_PASS / WP2_BUILD_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
@@ -81,4 +80,4 @@ Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation a
 ## Parallel next boundaries
 
 - `OPT-B.C1 v2 B1-G1 — WP4 candidate inventory and freeze review`
-- `RO-G1 — Evidence integrity`
+- `RO-WP2 — Research CLI and artifact catalogue`
