@@ -1,0 +1,149 @@
+name: OPT-B.C1 WP5 idempotent R2 reconciliation
+
+on:
+  push:
+    branches:
+      - build/opt-b-c1-v2-wp5-idempotent-reconcile
+    paths:
+      - .github/workflows/opt-b-c1-wp5-idempotent-reconcile.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+      WP4F_RUN_ID: '30187276514'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Install and validate rclone
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}"
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}"
+          rclone lsf --s3-no-check-bucket ovc_r2:ovc-evidence >/dev/null
+      - name: Download exact frozen releases
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30187276514
+          pattern: c1-opt-b-c1-gbpusd-*-v1-frozen
+          path: wp5
+      - name: Download freeze report
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30187276514
+          name: c1-wp4f-freeze-verification-report
+          path: wp5/report
+      - name: Reconcile exact bytes and verify remote
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os, subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          roots = {
+            'DISCOVERY': Path('wp5/c1-opt-b-c1-gbpusd-discovery-2021-2023-v1-frozen'),
+            'DEVELOPMENT': Path('wp5/c1-opt-b-c1-gbpusd-development-2024-v1-frozen'),
+          }
+          expected = {
+            'DISCOVERY': ('OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1','MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1','6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2'),
+            'DEVELOPMENT': ('OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1','MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1','ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017'),
+          }
+          report = json.loads(Path('wp5/report/WP4F_FREEZE_REPORT.json').read_text())
+          assert report['status'] == 'PASS'
+          bucket = 'ovc_r2:ovc-evidence/canonical/releases'
+          releases=[]; total_objects=0; total_bytes=0
+          for role, root in roots.items():
+            rid, mid, msha = expected[role]
+            mp = root/'manifest.json'
+            assert hashlib.sha256(mp.read_bytes()).hexdigest() == msha
+            manifest = json.loads(mp.read_text())
+            assert manifest['release_id']==rid and manifest['manifest_id']==mid
+            prefix=f"{bucket}/{rid}/{mid}"
+            verified=[]
+            for item in manifest['files']:
+              src=root/item['path']; remote=f"{prefix}/files/{item['path']}"
+              data=src.read_bytes()
+              assert len(data)==item['size_bytes'] and hashlib.sha256(data).hexdigest()==item['sha256']
+              probe=subprocess.run(['rclone','cat','--s3-no-check-bucket',remote],capture_output=True)
+              if probe.returncode!=0:
+                subprocess.run(['rclone','copyto','--immutable','--s3-no-check-bucket',str(src),remote],check=True)
+                state='UPLOADED'
+              else:
+                if len(probe.stdout)!=item['size_bytes'] or hashlib.sha256(probe.stdout).hexdigest()!=item['sha256']:
+                  raise SystemExit(f'COLLISION_MISMATCH {remote}')
+                state='PRESENT_EXACT'
+              remote_data=subprocess.check_output(['rclone','cat','--s3-no-check-bucket',remote])
+              if len(remote_data)!=item['size_bytes'] or hashlib.sha256(remote_data).hexdigest()!=item['sha256']:
+                raise SystemExit(f'REMOTE_VERIFY_FAIL {remote}')
+              verified.append({'key':remote.split(':',1)[1],'size_bytes':len(remote_data),'sha256':item['sha256'],'reconcile_state':state})
+              total_objects+=1; total_bytes+=len(remote_data)
+            mremote=f'{prefix}/manifest.json'
+            probe=subprocess.run(['rclone','cat','--s3-no-check-bucket',mremote],capture_output=True)
+            if probe.returncode!=0:
+              subprocess.run(['rclone','copyto','--immutable','--s3-no-check-bucket',str(mp),mremote],check=True)
+              mstate='UPLOADED_LAST'
+            else:
+              if probe.stdout!=mp.read_bytes(): raise SystemExit(f'MANIFEST_COLLISION_MISMATCH {mremote}')
+              mstate='PRESENT_EXACT'
+            mdata=subprocess.check_output(['rclone','cat','--s3-no-check-bucket',mremote])
+            if mdata!=mp.read_bytes(): raise SystemExit(f'MANIFEST_REMOTE_VERIFY_FAIL {mremote}')
+            verified.append({'key':mremote.split(':',1)[1],'size_bytes':len(mdata),'sha256':msha,'reconcile_state':mstate,'completion_marker':True})
+            total_objects+=1; total_bytes+=len(mdata)
+            releases.append({'role':role,'release_id':rid,'manifest_id':mid,'manifest_sha256':msha,'remote_object_count':len(verified),'remote_verified':True})
+          receipt={'schema':'ovc-opt-b-c1-wp5-reconciliation/v1','status':'PASS_FULL_REMOTE_BYTE_VERIFICATION','workflow_run_id':os.environ['GITHUB_RUN_ID'],'source_wp4f_run_id':int(os.environ['WP4F_RUN_ID']),'verified_at':datetime.now(timezone.utc).isoformat(),'release_count':2,'remote_object_count':total_objects,'remote_verified_bytes_including_manifests':total_bytes,'releases':releases,'selector_activation':'NONE','c2_consumption':'DENIED_PENDING_SEPARATE_REVIEW','validation_consumption':'LOCKED_UNCONSUMED'}
+          out=Path('docs/releases/opt-b-c1-v2/wp5'); out.mkdir(parents=True,exist_ok=True)
+          (out/'WP5_REMOTE_VERIFICATION_RECEIPT.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          (out/'WP5_PUBLICATION_PACKET.md').write_text('# OPT-B.C1 v2 WP5 — R2 publication and full remote verification\n\n**Decision:** PASS — exact frozen Discovery and Development releases are present in R2 and every remote byte was SHA-256 verified.\n\n- Workflow run: `'+os.environ['GITHUB_RUN_ID']+'`\n- Source WP4F run: `30187276514`\n- Remote objects verified: `'+str(total_objects)+'`\n- Remote bytes verified, including manifests: `'+str(total_bytes)+'`\n- C1 selector: `NONE`\n- C2 consumption: `DENIED_PENDING_SEPARATE_REVIEW`\n- Validation: `LOCKED_UNCONSUMED`\n')
+          PY
+      - name: Reconcile authority registries
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml'); t=p.read_text()
+          t=t.replace('status: B1_G2_PASS_PUBLICATION_READY','status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW',1)
+          t=t.replace('availability_state: LOCAL_VERIFIED_TRANSIENT_ARTIFACT','availability_state: REMOTE_VERIFIED',2)
+          t=t.replace('publication_status: NOT_ATTEMPTED','publication_status: PUBLISHED_REMOTE_VERIFIED',2)
+          t=t.replace('r2_publication_authority: AUTHORISED_EXACT_RELEASE_ONLY_PENDING_WP5','r2_publication_authority: COMPLETE_WP5_REMOTE_VERIFIED',2)
+          t=t.replace('r2_publication: AUTHORISED_EXACT_DISCOVERY_AND_DEVELOPMENT_RELEASES_PENDING_WP5','r2_publication: COMPLETE_WP5_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW',1); p.write_text(t)
+          p=Path('registries/authority/ACTIVE_AUTHORITY.yaml'); t=p.read_text()
+          t=t.replace('state: C1_B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR','state: C1_WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR',1)
+          t=t.replace('state: B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED','state: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW',1)
+          t=t.replace('availability_state: LOCAL_VERIFIED_TRANSIENT_ARTIFACT','availability_state: REMOTE_VERIFIED',1)
+          t=t.replace('r2_publication: AUTHORISED_EXACT_RELEASES_ONLY_PENDING_WP5_EXECUTION','r2_publication: COMPLETE_WP5_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW',1); p.write_text(t)
+          PY
+      - name: Commit reconciliation packet
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add docs/releases/opt-b-c1-v2/wp5 registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml registries/authority/ACTIVE_AUTHORITY.yaml
+          git commit -m 'OPT-B.C1 v2 WP5: reconcile R2 publication and full remote verification'
+          git push origin HEAD:build/opt-b-c1-v2-wp5-idempotent-reconcile
