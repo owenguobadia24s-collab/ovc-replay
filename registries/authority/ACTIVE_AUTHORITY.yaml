@@ -14,6 +14,8 @@ records:
   c1_b1_g5_gate_packet: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_GATE_PACKET.json
   ro_g3_decision: docs/releases/research-operations-foundation/ro-g3/RO_G3_OPERATOR_DECISION.md
   ro_g3_gate_packet: docs/releases/research-operations-foundation/ro-g3/RO_G3_GATE_PACKET.json
+  ro2_g1_decision: docs/releases/research-operations-foundation-v0-2/ro2-g1/RO2_G1_OPERATOR_DECISION.md
+  ro2_g1_gate_packet: docs/releases/research-operations-foundation-v0-2/ro2-g1/RO2_G1_GATE_PACKET.json
   rc_g2_v0_3_decision: docs/releases/research-console-v0-3/rc-g2/RC_G2_OPERATOR_DECISION.md
   rc_g2_v0_3_gate_packet: docs/releases/research-console-v0-3/rc-g2/RC_G2_GATE_PACKET.json
   c2_g3r_decision: docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_OPERATOR_DECISION.md
@@ -172,10 +174,20 @@ authorities:
     active: true
 
   research_operations_v0_2_design:
-    state: RO2_G0_PASS_DESIGN_FREEZE
+    state: RO2_G1_PASS_LOCAL_REPLACEABLE_DERIVED_INDEX
     programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2
-    runtime_implementation: RO2_WP1_CANDIDATE_UNDER_REVIEW
-    authority_delta: DESIGN_CANON_ONLY_PENDING_RO2_G1
+    ro2_g0: PASS_DESIGN_FREEZE
+    ro2_wp1: ACCEPTED_BOUNDED_LOCAL_OPERATION
+    ro2_g1: PASS
+    workspace_index: ACTIVE_BOUNDED_LOCAL_DERIVED
+    observation_index: ACTIVE_BOUNDED_LOCAL_DERIVED
+    observation_family_index: ACTIVE_BOUNDED_LOCAL_DERIVED
+    logical_fixture_index_sha256: dcb88c5f9c9fc0d4dbd12ac6a293607a1067fc11cfd9f19f72c4f497bd0da697
+    validation_projection: METADATA_ONLY
+    validation_guard: DENY_BEFORE_PATH_RESOLUTION
+    runtime_writes: NONE
+    authority_delta: LOCAL_REPLACEABLE_DERIVED_READ_INDEX_ONLY
+    next_workstream: RO2_WP2_REQUIRES_SEPARATE_OPERATOR_INSTRUCTION
     validation_consumption: LOCKED_UNCONSUMED
     c2_candidate_release: FROZEN_LOCAL_ONLY_EXISTING_C2_G5_AUTHORITY
     c2_publication: NONE
@@ -185,7 +197,7 @@ authorities:
     probability_authority: NONE
     exposure_authority: NONE
     execution_authority: NONE
-    active: false
+    active: true
 
   research_console_v0_3:
     state: RC_G2_PASS_OVERVIEW_LOCAL_READ_ONLY_RC_WP3_AUTHORISED
