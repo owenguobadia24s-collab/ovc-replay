@@ -1,0 +1,96 @@
+name: RO-G2 authority indentation repair
+
+on:
+  push:
+    branches:
+      - review/research-operations-ro-g2-operating-reliability
+    paths:
+      - tools/ro_g2_authority_indent_repair.ready
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: review/research-operations-ro-g2-operating-reliability
+          fetch-depth: 0
+      - name: Restore exact baseline and write structurally nested RO-G2 block
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin 62c9a7bf13fce5dd7f3850179c28f89aec16b9ee
+          git show 62c9a7bf13fce5dd7f3850179c28f89aec16b9ee:registries/authority/ACTIVE_AUTHORITY.yaml > registries/authority/ACTIVE_AUTHORITY.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('registries/authority/ACTIVE_AUTHORITY.yaml')
+          text = path.read_text(encoding='utf-8')
+
+          anchor = 'ro_g1_merge_commit: 51f94c55eaed8c997bc141d33f0f3f4fa452bb0f\n'
+          if 'ro_wp2_merge_commit:' not in text:
+              text = text.replace(anchor, anchor + 'ro_wp2_merge_commit: 62c9a7bf13fce5dd7f3850179c28f89aec16b9ee\n', 1)
+
+          candidate = 'ro_g2_candidate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_G2_CANDIDATE_GATE_PACKET.json\n'
+          refs = candidate + 'ro_g2_decision_record: docs/releases/research-operations-foundation/ro-g2/RO_G2_OPERATOR_DECISION.md\nro_g2_gate_packet: docs/releases/research-operations-foundation/ro-g2/RO_G2_GATE_PACKET.json\n'
+          text = text.replace(candidate, refs, 1)
+
+          body = [
+              'state: RO_G2_PASS_WP3_BUILD_AUTHORISED',
+              'programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1',
+              'implementation_registry: registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml',
+              'evidence_envelope: contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md',
+              'cli_contract: contracts/research_operations/RESEARCH_CLI_AND_APPEND_ONLY_SERVICE_CONTRACT_v0_1.md',
+              'catalogue_contract: contracts/research_operations/ARTIFACT_CATALOGUE_AND_PATH_SAFETY_CONTRACT_v0_1.md',
+              'record_type_count: 10',
+              'schema_bundle_count: 2',
+              'fixture_family_count: 10',
+              'contract_and_schema_state: FROZEN_AFTER_RO_WP2',
+              'evidence_kernel: REVIEWED_RO_G1_PASS',
+              'ro_g1: PASS',
+              'ro_wp2: REVIEWED_RO_G2_PASS',
+              'ro_g2: PASS',
+              'ro_wp3: AUTHORISED_FOR_BUILD',
+              'service_activation: BOUNDED_LOCAL_OPERATIONS_APPROVED',
+              'append_only_record_service: APPROVED_BOUNDED_LOCAL_OPERATION',
+              'audit_service: APPROVED_BOUNDED_LOCAL_OPERATION',
+              'cli: APPROVED_BOUNDED_LOCAL_OPERATION',
+              'artifact_catalogue: APPROVED_READ_VERIFY_REPORT_LOCAL',
+              'queues: APPROVED_READ_ONLY_LOCAL',
+              'qa_runner: AUTHORISED_FOR_BUILD_NOT_ACTIVE',
+              'read_model: AUTHORISED_FOR_BUILD_NOT_ACTIVE',
+              'console: AUTHORISED_FOR_BUILD_NOT_ACTIVE',
+              'validation_consumption: LOCKED_UNCONSUMED',
+              'active_research: NONE',
+              'market_authority: NONE',
+              'probability_authority: NONE',
+              'exposure_authority: NONE',
+              'execution_authority: NONE',
+              'agent_authority: NONE',
+              'active: false',
+          ]
+          block = '  research_operations:\n' + ''.join(f'    {line}\n' for line in body)
+          start = text.index('  research_operations:\n')
+          end = text.index('  opt_b_c2_v2:\n', start)
+          text = text[:start] + block + text[end:]
+          path.write_text(text, encoding='utf-8')
+          PY
+          rm -f .github/workflows/ro-g2-authority-indent-repair.yml tools/ro_g2_authority_indent_repair.ready
+      - name: Validate exact structural and canonical tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python3 -m unittest tests.research_operations.test_ro_g2_operating_reliability -v
+          PYTHONPATH=src python3 -m unittest discover -s tests -v
+      - name: Commit corrected final tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "RO-G2: correct authority registry nesting and pass canonical suite"
+          git push origin HEAD:review/research-operations-ro-g2-operating-reliability
