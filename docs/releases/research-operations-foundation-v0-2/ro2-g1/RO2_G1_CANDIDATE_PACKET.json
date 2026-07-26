@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-ro2-g1-candidate-packet/v1",
+  "gate_id": "RO2-G1",
+  "status": "CANDIDATE_READY_FOR_OPERATOR_REVIEW",
+  "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2",
+  "work_packet": "RO2-WP1",
+  "parent_branch": "design/research-operations-v0-2-bootstrap",
+  "parent_commit": "980b08689ed57298ca101a4bc04146b0bb098085",
+  "branch": "build/research-operations-v0-2-workspace-index",
+  "deliverables": [
+    "contracts/research_operations/v0_2/OVC_RO2_WORKSPACE_INDEX_CONTRACT_v0_1.md",
+    "schemas/research_operations/v0_2/role_workspace_index_v0_1.schema.json",
+    "schemas/research_operations/v0_2/observation_index_v0_1.schema.json",
+    "registries/research_operations/v0_2/RO2_WP1_ACCESS_MATRIX_v0_1.yaml",
+    "fixtures/research_operations/v0_2/wp1_workspace_index_cases.json",
+    "src/ovc/research_operations/v0_2/workspace_index.py",
+    "tests/research_operations/v0_2/test_workspace_index.py"
+  ],
+  "candidate_checks": {
+    "discovery_index_supported": "IMPLEMENTED",
+    "development_index_supported": "IMPLEMENTED",
+    "validation_metadata_only": "IMPLEMENTED",
+    "validation_deny_before_path_resolution": "IMPLEMENTED",
+    "deterministic_logical_hash": "IMPLEMENTED",
+    "conflicting_duplicate_detection": "IMPLEMENTED",
+    "unknown_role_fail_closed": "IMPLEMENTED",
+    "runtime_writes": "NONE"
+  },
+  "retained_authority": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2_candidate_release": "NONE",
+    "c2_publication": "NONE",
+    "c2_selector": "NONE",
+    "c2_activation": "NONE",
+    "market_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "execution_authority": "NONE"
+  },
+  "required_operator_verification": [
+    "run py -m pytest tests/research_operations/v0_2/test_workspace_index.py",
+    "run full repository test suite",
+    "confirm deterministic fixture hash across two runs",
+    "confirm Validation denial occurs before external path resolution"
+  ],
+  "authority_delta_on_pass": "LOCAL_REPLACEABLE_DERIVED_INDEX_ONLY",
+  "next_boundary": "RO2-G1_OPERATOR_ACCEPTANCE_BEFORE_RO2-WP2"
+}
