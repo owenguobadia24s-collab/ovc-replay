@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-research-operations-gate-packet/v1",
+  "gate_id": "RO-G1",
+  "gate_name": "Evidence integrity",
+  "gate_version": "0.1",
+  "baseline_commit": "8a4852358324a4e6dfc9f7c239be9e9eb8d69c23",
+  "producing_branch": "build/research-operations-evidence-kernel",
+  "operator_disposition": "PENDING_REVIEW",
+  "checks": [
+    {"check_id": "RO-G1-01", "name": "valid record chain reconstructs", "status": "PASS"},
+    {"check_id": "RO-G1-02", "name": "post-cutoff reference rejects", "status": "PASS"},
+    {"check_id": "RO-G1-03", "name": "frozen mutation rejects with incident", "status": "PASS"},
+    {"check_id": "RO-G1-04", "name": "duplicate deterministic ID rejects", "status": "PASS"},
+    {"check_id": "RO-G1-05", "name": "missing artifact remains visible", "status": "PASS"},
+    {"check_id": "RO-G1-06", "name": "canonical serialization is deterministic", "status": "PASS"},
+    {"check_id": "RO-G1-07", "name": "model references are optional", "status": "PASS"}
+  ],
+  "authority_delta_if_passed": {
+    "ro_wp2": "AUTHORISED",
+    "active_research": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE",
+    "agent": "NONE"
+  },
+  "rollback": "Remove RO-WP2 build approval while preserving all RO-WP1 contracts, schemas and evidence."
+}
