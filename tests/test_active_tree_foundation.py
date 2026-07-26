@@ -56,8 +56,9 @@ class ActiveTreeFoundationTests(unittest.TestCase):
         self.assertIn("r2_publication: COMPLETE_WP5_REMOTE_VERIFIED", authority)
         self.assertIn("selector: SHADOW", authority)
         self.assertIn("local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY", authority)
-        self.assertIn("candidate_determinism: PASS_TWO_INDEPENDENT_BYTE_IDENTICAL_MATERIALIZATIONS", authority)
-        self.assertIn("publication: NONE", authority)
+        self.assertIn("publication: AUTHORISED_EXACT_RELEASES_ONLY", authority)
+        self.assertIn("publication_executed: false", authority)
+        self.assertIn("selector: NONE", authority)
         self.assertIn("activation: NONE", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
 
