@@ -1,0 +1,64 @@
+name: Research Console v0.3 RC-WP3 Research workspace
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  research-workspace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Build prospective and review candidates
+        run: |
+          PYTHONPATH=src python scripts/build_research_console_research.py \
+            --source fixtures/research_operations/research_console_v0_3/RC_WP3_RESEARCH_SOURCE_RECORDS.json \
+            --output /tmp/research_prospective.json \
+            --mode PROSPECTIVE
+          PYTHONPATH=src python scripts/build_research_console_research.py \
+            --source fixtures/research_operations/research_console_v0_3/RC_WP3_RESEARCH_SOURCE_RECORDS.json \
+            --output /tmp/research_review.json \
+            --mode REVIEW
+      - name: Verify exact RC-WP3 v0.3 packet and cutoff boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          packet = json.loads(Path('docs/releases/research-console-v0-3/rc-wp3/RC_WP3_IMPLEMENTATION_PACKET.json').read_text())
+          registry = Path('registries/research_operations/RESEARCH_CONSOLE_RESEARCH_PROJECTION_REGISTRY_v0_3.yaml').read_text()
+          implementation = Path('registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml').read_text()
+          prospective = json.loads(Path('/tmp/research_prospective.json').read_text())
+          review = json.loads(Path('/tmp/research_review.json').read_text())
+          home = Path('apps/research_console/Home.py').read_text()
+          shell = Path('apps/research_console/shell.py').read_text()
+
+          assert packet['work_package'] == 'RC-WP3-v0.3'
+          assert packet['baseline_commit'] == 'cd0327e11084d19ce8b51fea67c6cfa3eb00c502'
+          assert packet['authority'] == 'CANDIDATE_RESEARCH_PROJECTION_IMPLEMENTATION_ONLY'
+          assert packet['blocking_issues'] == 0
+          assert packet['disposition'] == 'COMPLETE_RC_G3_V0_3_REVIEW_READY'
+          assert all(check['status'] == 'PASS' for check in packet['checks'])
+          assert prospective['schema'] == 'ovc-research-console-research-projection/v0.3'
+          assert prospective['context']['cutoff_mode'] == 'PROSPECTIVE'
+          assert all(item['visibility_phase'] == 'PRE_CUTOFF' for item in prospective['replay'])
+          assert all(item['visibility_phase'] == 'PRE_CUTOFF' for item in prospective['evidence'])
+          assert not any(item['evidence_role'] == 'CONTRADICTION' for item in prospective['evidence'])
+          assert any(item['visibility_phase'] == 'POST_CUTOFF_REVIEW' for item in review['replay'])
+          assert any(item['evidence_role'] == 'CONTRADICTION' and item['visibility_phase'] == 'POST_CUTOFF_REVIEW' for item in review['evidence'])
+          assert {'DUE_REALIZATION', 'CENSORED_REALIZATION', 'INCIDENT'} <= {item['queue_type'] for item in prospective['queue']}
+          assert 'status: IMPLEMENTED_CANDIDATE_PENDING_RC_G3' in registry
+          assert 'active_live_research_surface: DENIED_PENDING_RC_G3' in registry
+          assert 'stage: RC_WP3_COMPLETE_RC_G3_V0_3_REVIEW_READY' in implementation
+          assert 'research_candidate.json' not in home
+          assert 'console_research_candidate' not in shell
+          PY
