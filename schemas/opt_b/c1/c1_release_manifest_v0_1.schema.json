@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c1/c1_release_manifest_v0_1.schema.json",
+  "title": "OVC OPT-B.C1 release manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "manifest_id",
+    "release_id",
+    "release_descriptor_sha256",
+    "parent_opt_a_release_id",
+    "parent_opt_a_manifest_id",
+    "parent_opt_a_manifest_sha256",
+    "formula_registry_id",
+    "formula_registry_sha256",
+    "record_schema_sha256",
+    "source_commit",
+    "canonical_prefix",
+    "files",
+    "file_count",
+    "total_size_bytes",
+    "record_count",
+    "qa_packet_id",
+    "qa_state"
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "properties": {
+    "schema": {"const": "ovc-opt-b-c1-release-manifest/v1"},
+    "manifest_id": {"type": "string", "pattern": "^MANIFEST\\.C1\\.[A-Z0-9._-]+\\.r[0-9]+$"},
+    "release_id": {"type": "string", "pattern": "^OPT-B\\.C1\\.GBPUSD\\.(DISCOVERY|DEVELOPMENT|VALIDATION)\\.[A-Z0-9_]+\\.v[0-9]+$"},
+    "release_descriptor_sha256": {"$ref": "#/$defs/sha256"},
+    "parent_opt_a_release_id": {"type": "string", "pattern": "^OPT-A\\.GBPUSD\\.(DISCOVERY|DEVELOPMENT|VALIDATION)\\..+\\.v2$"},
+    "parent_opt_a_manifest_id": {"type": "string", "minLength": 1},
+    "parent_opt_a_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+    "formula_registry_sha256": {"$ref": "#/$defs/sha256"},
+    "record_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "canonical_prefix": {"type": "string", "pattern": "^canonical/releases/OPT-B\\.C1\\."},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "clock", "price_side", "record_count", "size_bytes", "sha256"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^(c1|QA)/[A-Za-z0-9._/-]+$"},
+          "role": {"enum": ["C1_RECORD_STREAM", "QA_PACKET", "RELEASE_DESCRIPTOR", "INVENTORY"]},
+          "clock": {"enum": ["15M", "2H_A_L", "NOT_APPLICABLE"]},
+          "price_side": {"enum": ["BID", "ASK", "NOT_APPLICABLE"]},
+          "record_count": {"type": "integer", "minimum": 0},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "file_count": {"type": "integer", "minimum": 1},
+    "total_size_bytes": {"type": "integer", "minimum": 1},
+    "record_count": {"type": "integer", "minimum": 0},
+    "qa_packet_id": {"type": "string", "minLength": 1},
+    "qa_state": {"enum": ["PASS", "WARN", "BLOCK", "QUARANTINE"]},
+    "publication_mode": {"const": "IMMUTABLE_PAYLOAD_FIRST_MANIFEST_LAST"}
+  }
+}
