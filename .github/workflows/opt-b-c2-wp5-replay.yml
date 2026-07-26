@@ -1,4 +1,4 @@
-name: OPT-B.C2 WP5 bounded replay readiness
+name: OPT-B.C2 WP5 canonical shard reconciliation
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  wp5-readiness:
+  wp5-reconciliation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,17 +18,28 @@ jobs:
           python-version: '3.12'
       - name: Run repository tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Verify honest WP5 blocker and authority bounds
+      - name: Verify fail-closed canonical reconciliation
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
+
           gate=json.loads(Path('docs/releases/opt-b-c2-v2/wp5/WP5_GATE_PACKET.json').read_text())
           authority=Path('registries/implementation/OPT_B_C2_WP5_REPLAY_AUTHORITY.yaml').read_text()
-          assert gate['decision']=='BLOCKED_MISSING_EXACT_C1_RELEASE_ROOT'
+          replay=Path('src/ovc/opt_b/c2/replay.py').read_text()
+          runner=Path('scripts/opt_b/run_c2_wp5_replay.py').read_text()
+
+          assert gate['decision']=='BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH'
           assert gate['blocking_issues']==1
+          assert gate['required_inputs']['record_shards']==192
+          assert gate['required_inputs']['manifest_bound_payload_objects']==194
+          assert gate['required_inputs']['canonical_objects_including_manifests']==196
           assert gate['authority']['local_candidate_release']=='NONE'
           assert gate['authority']['validation_consumption']=='LOCKED_UNCONSUMED'
-          assert 'replay_runner: READY' in authority
-          assert 'probability: NONE' in authority
+          assert 'canonical_shard_intake: READY_MANIFEST_BOUND' in authority
+          assert 'actual_market_replay: BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH' in authority
+          assert 'verify_canonical_release' in replay
+          assert 'PUBLISHED_C1_RECORD_SHAPE_NOT_C2_HANDOFF_ENVELOPE' in replay
+          assert 'C2_REQUIRED_PRICE_AND_STRUCTURE_INPUTS_UNAVAILABLE' in replay
+          assert '--verify-only' in runner
           PY
