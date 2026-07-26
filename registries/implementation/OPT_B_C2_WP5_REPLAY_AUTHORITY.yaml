@@ -1,19 +1,17 @@
-schema: ovc-implementation-gate/v2
+schema: ovc-implementation-gate/v3
 gate_id: C2-G4
-work_packet: WP5_CANONICAL_RECONCILIATION
-status: BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH
-source_branch: build/opt-b-c2-wp5-canonical-shard-reconcile
-source_main_tip: 3bd4ed79f43c6f288248f10b99e9dfa04a9f68a2
+work_packet: WP5_EXACT_PARENT_REPLAY
+status: BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT
+source_branch: agent/opt-b-c2-actual-parent-reconcile
+source_main_tip: 6701ec00469898b12f17b294610d839d4082d94b
 result:
-  canonical_shard_intake: READY_MANIFEST_BOUND
-  exact_manifest_identity_guards: PASS
-  full_payload_byte_verification: READY
-  release_descriptor_binding: PASS
-  record_shards: 192
-  manifest_bound_payload_objects: 194
-  canonical_objects_including_manifests: 196
-  scope_isolation: PASS_SYNTHETIC
-  actual_market_replay: BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH
+  canonical_c1_shard_intake: READY_MANIFEST_BOUND
+  exact_c1_manifest_guards: PASS
+  exact_opt_a_manifest_guards: READY_CODE_NOT_EXECUTED
+  actual_c1_opt_a_parent_join: TRUSTED_FIXTURE_C2_G3R_PASS
+  rolling_structure_engine: TRUSTED_FIXTURE_C2_G3R_PASS
+  combined_15m_2h_scope: TRUSTED_FIXTURE_NO_FUTURE_PARENT
+  actual_market_replay: BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT
   replay_qa: NOT_EXECUTED
   local_candidate_release: NONE
   publication: NONE
@@ -24,25 +22,24 @@ result:
   exposure: NONE
   trading: NONE
   execution: NONE
-required_exact_releases:
+required_exact_opt_a_releases:
   discovery:
-    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
-    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
-    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
-    record_shards: 144
-    payload_objects: 145
-    canonical_objects_including_manifest: 146
+    release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
+    manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
+    payload_objects: 293
+    payload_bytes: 155632392
   development:
-    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
-    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
-    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
-    record_shards: 48
-    payload_objects: 49
-    canonical_objects_including_manifest: 50
+    release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
+    manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
+    payload_objects: 101
+    payload_bytes: 52762768
 prohibited:
-  manual_shard_concatenation: true
-  missing_price_field_fabrication: true
-  cross_clock_persistence: true
-  cross_side_transition: true
+  c1_release_rewrite: true
+  price_reconstruction_from_primitives: true
+  filename_only_parent_identity: true
+  gap_bridge: true
+  future_2h_parent: true
   validation_consumption: true
-next_gate: C2_WP3_WP4_MARKET_INPUT_CONTRACT_REALIGNMENT_BEFORE_C2_G4
+next_gate: C2_G4_EXACT_PARENT_MARKET_REPLAY

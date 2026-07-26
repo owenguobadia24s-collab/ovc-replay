@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c2/c2_actual_parent_handoff_v0_2.schema.json",
+  "title": "OVC C2 actual C1 and OPT-A price-parent handoff v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "c1_record_id",
+    "c1_release_id",
+    "c1_manifest_id",
+    "opt_a_release_id",
+    "opt_a_manifest_id",
+    "opt_a_manifest_sha256",
+    "role",
+    "authority_state",
+    "instrument",
+    "clock",
+    "side",
+    "open_time",
+    "close_time",
+    "first_valid_time",
+    "source_path",
+    "source_bar_id",
+    "measurements",
+    "categorical",
+    "null_reasons",
+    "quality_state",
+    "prices"
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decimal": {"type": "string", "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"},
+    "nullableDecimal": {
+      "oneOf": [
+        {"$ref": "#/$defs/decimal"},
+        {"type": "null"}
+      ]
+    }
+  },
+  "properties": {
+    "c1_record_id": {"type": "string", "pattern": "^c1:[0-9a-f]{64}$"},
+    "c1_release_id": {
+      "enum": [
+        "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+        "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1"
+      ]
+    },
+    "c1_manifest_id": {"type": "string", "pattern": "^MANIFEST\\.C1\\."},
+    "opt_a_release_id": {
+      "enum": [
+        "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "OPT-A.GBPUSD.DEVELOPMENT.2024.v2"
+      ]
+    },
+    "opt_a_manifest_id": {"type": "string", "pattern": "^MANIFEST\\.OPT-A\\."},
+    "opt_a_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "authority_state": {"enum": ["ACTIVE_DISCOVERY", "ACTIVE_DEVELOPMENT"]},
+    "instrument": {"const": "GBPUSD"},
+    "clock": {"enum": ["15M", "2H_A_L"]},
+    "side": {"enum": ["BID", "ASK"]},
+    "open_time": {"type": "string", "format": "date-time"},
+    "close_time": {"type": "string", "format": "date-time"},
+    "first_valid_time": {"type": "string", "format": "date-time"},
+    "source_path": {"type": "string", "pattern": "^canonical/(15M|2H_A_L)/(BID|ASK)/[^/]+\\.csv$"},
+    "source_bar_id": {"type": "string", "pattern": "^opt-a:[0-9a-f]{64}$"},
+    "measurements": {
+      "type": "object",
+      "minProperties": 17,
+      "maxProperties": 17,
+      "additionalProperties": {"$ref": "#/$defs/nullableDecimal"}
+    },
+    "categorical": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction"],
+      "properties": {"direction": {"enum": ["UP", "DOWN", "FLAT"]}}
+    },
+    "null_reasons": {"type": "object", "additionalProperties": {"type": "string"}},
+    "quality_state": {"const": "EXACT_C1_AND_OPT_A_PARENT_VERIFIED"},
+    "prices": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["open", "high", "low", "close"],
+      "properties": {
+        "open": {"$ref": "#/$defs/decimal"},
+        "high": {"$ref": "#/$defs/decimal"},
+        "low": {"$ref": "#/$defs/decimal"},
+        "close": {"$ref": "#/$defs/decimal"}
+      }
+    }
+  }
+}

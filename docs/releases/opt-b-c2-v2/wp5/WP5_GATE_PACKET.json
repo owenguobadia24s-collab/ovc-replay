@@ -1,75 +1,56 @@
 {
-  "schema": "ovc-opt-b-c2-wp5-gate-packet/v2",
+  "schema": "ovc-opt-b-c2-wp5-gate-packet/v3",
   "gate_id": "C2-G4",
   "work_packet": "WP5",
-  "decision": "BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH",
+  "decision": "BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT",
   "checks": [
-    {
-      "id": "B2-29",
-      "name": "Canonical C1 gzip-shard intake and exact release guards",
-      "status": "PASS"
-    },
-    {
-      "id": "B2-30",
-      "name": "Manifest identity, full payload byte and descriptor binding",
-      "status": "PASS"
-    },
-    {
-      "id": "B2-31",
-      "name": "Role, clock, side and evaluation-scope chronology isolation",
-      "status": "PASS_SYNTHETIC"
-    },
-    {
-      "id": "B2-32",
-      "name": "Published C1 primitive record shape satisfies frozen C2 engine input contract",
-      "status": "BLOCKED"
-    },
-    {
-      "id": "B2-33",
-      "name": "Full Discovery and Development market replay and local candidate release",
-      "status": "NOT_EXECUTED"
-    }
+    {"id": "B2-29", "name": "Canonical C1 gzip-shard intake and exact release guards", "status": "PASS"},
+    {"id": "B2-30", "name": "C1 manifest identity, full payload byte and descriptor binding", "status": "PASS"},
+    {"id": "B2-31", "name": "Role, clock, side and evaluation-scope chronology isolation", "status": "PASS_FIXTURE"},
+    {"id": "B2-32", "name": "Actual C1 primitive plus exact OPT-A price-parent engine contract", "status": "PASS_C2_G3R_FIXTURE_TRUST"},
+    {"id": "B2-33", "name": "Exact OPT-A Discovery and Development release roots mounted and verified", "status": "BLOCKED"},
+    {"id": "B2-34", "name": "Full Discovery and Development market replay and local candidate release", "status": "NOT_EXECUTED"}
   ],
   "required_inputs": {
-    "discovery_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
-    "discovery_manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1",
-    "discovery_manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
-    "development_release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
-    "development_manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1",
-    "development_manifest_sha256": "ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017",
-    "record_shards": 192,
-    "release_descriptors": 2,
-    "manifest_bound_payload_objects": 194,
-    "completion_manifests": 2,
-    "canonical_objects_including_manifests": 196,
-    "remote_verified_bytes_including_manifests": 36203151
+    "c1": {
+      "discovery_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+      "discovery_manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+      "discovery_manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
+      "development_release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+      "development_manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1",
+      "development_manifest_sha256": "ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017",
+      "record_shards": 192,
+      "manifest_bound_payload_objects": 194,
+      "canonical_objects_including_manifests": 196,
+      "remote_verified_bytes_including_manifests": 36203151
+    },
+    "opt_a": {
+      "discovery_release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+      "discovery_manifest_id": "MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2",
+      "discovery_manifest_sha256": "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c",
+      "discovery_payload_objects": 293,
+      "discovery_payload_bytes": 155632392,
+      "development_release_id": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+      "development_manifest_id": "MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2",
+      "development_manifest_sha256": "25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc",
+      "development_payload_objects": 101,
+      "development_payload_bytes": 52762768,
+      "required_price_files": 192
+    }
   },
   "reconciliation_findings": {
-    "prior_194_count_meaning": "MANIFEST_BOUND_PAYLOAD_OBJECTS_ONLY",
-    "correct_canonical_object_count": 196,
-    "published_record_schema": "ovc-c1-bar-primitives/v0.1",
-    "published_records_expose": [
-      "18 C1 primitive measurements",
-      "clock",
-      "price_side",
-      "timestamp_ms",
-      "OPT-A parent identity"
-    ],
-    "current_c2_engine_requires_unavailable_fields": [
-      "absolute open/high/low/close",
-      "range_low/range_high",
-      "swing_low/swing_high",
-      "prior_range",
-      "canonical close_time and first_valid_time handoff fields",
-      "15M-with-2H-parent combined-scope input"
-    ],
+    "published_c1_record_schema": "ovc-c1-bar-primitives/v0.1",
+    "actual_formula_shape": "17 numeric-or-null measurements plus categorical direction equals 18 frozen formulas",
+    "absolute_price_authority": "EXACT_OPT_A_MANIFEST_BOUND_SOURCE_ROW",
+    "join_identity": ["role", "release", "manifest", "manifest_sha256", "source_path", "timestamp_ms", "source_bar_id"],
+    "synthetic_embedded_price_assumption": "SUPERSEDED",
     "fabrication_policy": "PROHIBITED_FAIL_CLOSED"
   },
   "authority": {
-    "canonical_shard_intake": "READY_MANIFEST_BOUND",
-    "full_local_byte_verification": "READY",
-    "scope_isolation": "PASS_SYNTHETIC",
-    "market_replay": "BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH",
+    "canonical_c1_intake": "READY_MANIFEST_BOUND",
+    "exact_opt_a_intake": "READY_CODE_NOT_EXECUTED",
+    "actual_parent_engine": "PASS_C2_G3R_FIXTURE_TRUST",
+    "market_replay": "BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT",
     "local_candidate_release": "NONE",
     "publication": "NONE",
     "selector": "NONE",
@@ -81,6 +62,6 @@
     "execution": "NONE"
   },
   "blocking_issues": 1,
-  "operator_action": "Run --verify-only against the downloaded canonical roots if desired; do not execute or freeze a market replay until the C2 handoff and structure engine are realigned to the published C1 primitive schema and exact OPT-A price parents.",
-  "next_gate": "C2_WP3_WP4_MARKET_INPUT_CONTRACT_REALIGNMENT_BEFORE_C2_G4"
+  "operator_action": "Download the exact remote-verified OPT-A Discovery and Development release roots, then run the exact-parent WP5 command with both --release-root and --opt-a-release-root.",
+  "next_gate": "C2_G4_EXACT_PARENT_MARKET_REPLAY"
 }

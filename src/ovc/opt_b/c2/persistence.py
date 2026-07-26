@@ -7,7 +7,8 @@ def apply_persistence(current: Mapping[str, Any], previous: Mapping[str, Any] | 
     out = dict(current)
     persisted: dict[str, int] = {}
     contiguous = bool(previous) and all(
-        previous.get(k) == current.get(k) for k in ("clock", "side")
+        previous.get(k) == current.get(k)
+        for k in ("c1_release_id", "clock", "side", "evaluation_scope_id", "parameter_pack_id")
     )
     for axis, payload in current["axes"].items():
         count = 1

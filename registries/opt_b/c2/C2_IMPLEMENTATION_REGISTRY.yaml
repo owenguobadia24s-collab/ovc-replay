@@ -1,11 +1,11 @@
 schema: ovc-opt-b-c2-implementation-registry/v1
 programme_id: OVC-OPT-B-C2-V2-IMPLEMENTATION-PLAN-0.1
 layer_id: OPT-B.C2.v2
-work_packet: WP2
-status: WP2_PASS_CONTRACTS_SCHEMAS_REGISTRIES_PARAMETERS_FROZEN
+work_packet: WP3_WP4_ACTUAL_PARENT_RECONCILIATION
+status: C2_G3R_PASS_ACTUAL_C1_AND_EXACT_OPT_A_PRICE_PARENT_ENGINE_TRUST
 owner: OPERATOR
 repository: owenguobadia24s-collab/ovc-replay
-source_branch: build/opt-b-c2-contracts
+source_branch: agent/opt-b-c2-actual-parent-reconcile
 upstream:
   wp1_gate: C2-G0
   c1_handoff_gate: C1-C2-HANDOFF-ACTIVE
@@ -18,20 +18,21 @@ frozen_design:
   container_contract: contracts/opt_b/c2/C2_CONTAINER_CONTRACT_v0_1.md
   persistence_gap_policy: contracts/opt_b/c2/C2_PERSISTENCE_AND_GAP_POLICY_v0_1.md
   conflict_policy: contracts/opt_b/c2/C2_CONFLICT_AND_AMBIGUITY_POLICY_v0_1.md
-  input_profile: contracts/opt_b/c2/C1_V2_TO_C2_INPUT_PROFILE_v0_1.md
+  input_profile: contracts/opt_b/c2/C1_V2_AND_OPT_A_PRICE_PARENT_TO_C2_INPUT_PROFILE_v0_2.md
+  superseded_synthetic_input_profile: contracts/opt_b/c2/C1_V2_TO_C2_INPUT_PROFILE_v0_1.md
   release_contract: contracts/opt_b/c2/C2_RELEASE_ACTIVATION_AND_RETIREMENT_CONTRACT_v0_1.md
   discovery_line_contract: contracts/opt_b/c2/C2_DISCOVERY_RESEARCH_LINE_CONTRACT_v0_1.md
   axis_registry: C2.AXES.v0.1
   state_value_registry: C2.STATE_VALUES.v0.1
   measurement_registry: C2.MEASUREMENTS.v0.1
   parameter_pack: C2.PARAMS.GBPUSD.DISCOVERY.v0.1
-  schema_count: 11
+  schema_count: 12
   synthetic_fixture_pack: fixtures/opt_b/c2/wp2/C2_HANDOFF_FIXTURE_PACK.json
 authority:
   design: FROZEN
   contracts_and_schemas: COMPLETE_C2_G1_PASS
-  fixture_and_engine_implementation: AUTHORISED_FOR_WP3_AND_WP4
-  market_replay: DENIED_PENDING_C2_G2_AND_OPERATOR_APPROVAL
+  fixture_and_engine_implementation: TRUSTED_ACTUAL_PARENT_SHAPE_C2_G3R_PASS
+  market_replay: READY_PENDING_EXACT_OPT_A_RELEASE_ROOT_AND_OPERATOR_EXECUTION
   release: NONE
   selector: NONE
   activation: NONE
@@ -52,4 +53,4 @@ invariants:
 rollback:
   target_state: C1_ACTIVE_C2_NONE
   legacy_reactivation: PROHIBITED
-next_gate: C2-G2_FIXTURE_TRUST
+next_gate: C2_G4_EXACT_PARENT_MARKET_REPLAY

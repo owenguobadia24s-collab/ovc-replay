@@ -1,0 +1,52 @@
+name: OPT-B.C2 WP3-WP4 actual-parent reconciliation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  actual-parent-reconciliation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run focused reconciliation tests
+        run: |
+          PYTHONPATH=src python -m unittest \
+            tests.opt_b.c2.test_wp3_structure_engine \
+            tests.opt_b.c2.test_wp4_state_persistence_transition \
+            tests.opt_b.c2.test_c2_wp5_replay -v
+      - name: Verify reconciliation authority
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          gate = json.loads(Path(
+              'docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_GATE_PACKET.json'
+          ).read_text())
+          authority = Path(
+              'registries/implementation/OPT_B_C2_WP3_WP4_ACTUAL_PARENT_RECONCILIATION.yaml'
+          ).read_text()
+          contract = Path(
+              'contracts/opt_b/c2/C1_V2_AND_OPT_A_PRICE_PARENT_TO_C2_INPUT_PROFILE_v0_2.md'
+          ).read_text()
+          schema = json.loads(Path(
+              'schemas/opt_b/c2/c2_actual_parent_handoff_v0_2.schema.json'
+          ).read_text())
+
+          assert gate['decision'] == 'PASS_ACTUAL_C1_AND_EXACT_OPT_A_PRICE_PARENT_ENGINE_TRUST'
+          assert gate['blocking_issues'] == 0
+          assert gate['authority']['local_candidate_release'] == 'NONE'
+          assert gate['authority']['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          assert 'actual_c1_primitive_adapter: TRUSTED_FIXTURE_EXACT_SHAPE' in authority
+          assert 'synthetic_embedded_price_assumption: SUPERSEDED' in authority
+          assert 'C1 record remains the atomic-fact authority' in contract
+          assert schema['properties']['role']['enum'] == ['DISCOVERY', 'DEVELOPMENT']
+          PY

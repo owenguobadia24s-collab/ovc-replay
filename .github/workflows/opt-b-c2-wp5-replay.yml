@@ -1,4 +1,4 @@
-name: OPT-B.C2 WP5 canonical shard reconciliation
+name: OPT-B.C2 WP5 exact-parent replay readiness
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  wp5-reconciliation:
+  wp5-exact-parent-readiness:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,7 +18,7 @@ jobs:
           python-version: '3.12'
       - name: Run repository tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Verify fail-closed canonical reconciliation
+      - name: Verify exact-parent successor boundary
         run: |
           python - <<'PY'
           import json
@@ -29,17 +29,19 @@ jobs:
           replay=Path('src/ovc/opt_b/c2/replay.py').read_text()
           runner=Path('scripts/opt_b/run_c2_wp5_replay.py').read_text()
 
-          assert gate['decision']=='BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH'
+          assert gate['decision']=='BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT'
           assert gate['blocking_issues']==1
-          assert gate['required_inputs']['record_shards']==192
-          assert gate['required_inputs']['manifest_bound_payload_objects']==194
-          assert gate['required_inputs']['canonical_objects_including_manifests']==196
+          assert gate['required_inputs']['c1']['record_shards']==192
+          assert gate['required_inputs']['c1']['manifest_bound_payload_objects']==194
+          assert gate['required_inputs']['c1']['canonical_objects_including_manifests']==196
+          assert gate['required_inputs']['opt_a']['required_price_files']==192
           assert gate['authority']['local_candidate_release']=='NONE'
           assert gate['authority']['validation_consumption']=='LOCKED_UNCONSUMED'
-          assert 'canonical_shard_intake: READY_MANIFEST_BOUND' in authority
-          assert 'actual_market_replay: BLOCKED_C1_C2_RECORD_CONTRACT_MISMATCH' in authority
+          assert 'canonical_c1_shard_intake: READY_MANIFEST_BOUND' in authority
+          assert 'actual_market_replay: BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT' in authority
           assert 'verify_canonical_release' in replay
-          assert 'PUBLISHED_C1_RECORD_SHAPE_NOT_C2_HANDOFF_ENVELOPE' in replay
-          assert 'C2_REQUIRED_PRICE_AND_STRUCTURE_INPUTS_UNAVAILABLE' in replay
+          assert 'VerifiedOptARelease' in replay
+          assert 'OptAPriceParentIndex' in replay
+          assert '--opt-a-release-root' in runner
           assert '--verify-only' in runner
           PY
