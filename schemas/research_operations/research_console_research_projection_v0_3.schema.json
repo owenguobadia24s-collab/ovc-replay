@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/research_console_research_projection_v0_3.schema.json",
+  "title": "OVC Research Console Research workspace projection v0.3",
+  "type": "object",
+  "required": [
+    "schema",
+    "source_commit",
+    "context",
+    "summary_status",
+    "brief",
+    "replay",
+    "evidence",
+    "queue",
+    "sessions",
+    "source_refs",
+    "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-research-console-research-projection/v0.3"},
+    "source_commit": {"type": "string", "minLength": 1},
+    "context": {
+      "type": "object",
+      "required": ["instrument", "release_id", "clock", "price_side", "selected_time", "cutoff_mode"],
+      "properties": {
+        "instrument": {"type": "string", "minLength": 1},
+        "release_id": {"type": "string", "minLength": 1},
+        "clock": {"type": "string", "minLength": 1},
+        "price_side": {"type": "string", "minLength": 1},
+        "selected_time": {"type": "string", "format": "date-time"},
+        "cutoff_mode": {"enum": ["PROSPECTIVE", "REVIEW"]}
+      },
+      "additionalProperties": false
+    },
+    "summary_status": {"enum": ["PASS", "WARN", "BLOCK", "NOT_EVALUATED"]},
+    "brief": {"type": "object"},
+    "replay": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["realization_id", "time", "visibility_phase", "cutoff_locked", "source_refs"],
+        "properties": {
+          "realization_id": {"type": "string"},
+          "time": {"type": "string", "format": "date-time"},
+          "visibility_phase": {"enum": ["PRE_CUTOFF", "POST_CUTOFF_REVIEW"]},
+          "cutoff_locked": {"type": "boolean"},
+          "source_refs": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "evidence_role", "presentation_status", "visibility_phase", "source_refs"],
+        "properties": {
+          "evidence_id": {"type": "string"},
+          "evidence_role": {"enum": ["SUPPORT", "CONTRADICTION", "BOUNDARY", "NULL", "ANOMALY", "CENSORED", "UNRESOLVED"]},
+          "presentation_status": {"enum": ["PASS", "CENSORED", "BLOCK"]},
+          "visibility_phase": {"enum": ["PRE_CUTOFF", "POST_CUTOFF_REVIEW"]},
+          "source_refs": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+        },
+        "additionalProperties": true
+      }
+    },
+    "queue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["queue_id", "queue_type", "status", "object_id", "consequence", "source_refs"],
+        "properties": {
+          "queue_id": {"type": "string"},
+          "queue_type": {"enum": ["DUE_REALIZATION", "CENSORED_REALIZATION", "INCIDENT", "MISSING_SOURCE"]},
+          "status": {"enum": ["WARN", "CENSORED", "BLOCK", "MISSING", "NOT_EVALUATED", "PASS"]},
+          "object_id": {"type": "string"},
+          "consequence": {"type": "string"},
+          "source_refs": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+        },
+        "additionalProperties": true
+      }
+    },
+    "sessions": {"type": "array", "items": {"type": "object"}},
+    "source_refs": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
