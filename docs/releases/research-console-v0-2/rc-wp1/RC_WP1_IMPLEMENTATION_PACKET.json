@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-research-console-rc-wp1-implementation-packet/v1",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.2",
+  "work_package": "RC-WP1",
+  "work_package_name": "Design system, shell and navigation",
+  "disposition": "COMPLETE_RC_G1_REVIEW_READY",
+  "authority_delta": "FIXTURE_ONLY_LOCAL_PRESENTATION",
+  "base_commit": "e4fdc03014b1f133b32cd7a921142b4354079fe4",
+  "branch": "build/research-console-v0-2-shell-navigation",
+  "upstream_gate": {
+    "gate_id": "RC-G0",
+    "decision": "PASS",
+    "decision_record": "docs/releases/research-console-v0-2/rc-g0/RC_G0_OPERATOR_DECISION.md"
+  },
+  "route_count": 14,
+  "fixture_modes": ["VALID", "EMPTY", "WARN", "BLOCK"],
+  "implemented": [
+    "dark design tokens and shared stylesheet",
+    "stable grouped navigation for all frozen v0.2 routes",
+    "persistent local context and authority surfaces",
+    "reusable status, metric, empty-state and source-reference components",
+    "fixture-only rendering for every route and degraded state",
+    "fail-open presentation of missing read-model identity without inventing health",
+    "non-clickable LOCAL / NO DEPLOY treatment"
+  ],
+  "source_contracts": [
+    "contracts/research_operations/console/OVC_RESEARCH_CONSOLE_UI_AUTHORITY_CONTRACT_v0_2.md",
+    "registries/research_operations/RESEARCH_CONSOLE_ROUTE_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_CARD_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_STATUS_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_EMPTY_STATE_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_ACTION_REGISTRY_v0_2.yaml"
+  ],
+  "restrictions": {
+    "live_v0_2_projection_authority": "DENIED_PENDING_RC_G2",
+    "live_research_surface_authority": "DENIED_PENDING_RC_G3",
+    "research_write_authority": "DENIED_PENDING_SEPARATE_GATE",
+    "repository_mutation": "NONE",
+    "selector_mutation": "NONE",
+    "threshold_mutation": "NONE",
+    "market_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "execution_authority": "NONE",
+    "agent_authority": "NONE",
+    "deployment": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
+  },
+  "v0_3_plan": "DEFERRED_NOT_ADOPTED",
+  "verification": {
+    "canonical_tests": "REQUIRED_ON_PULL_REQUEST_HEAD",
+    "console_shell_tests": "tests/research_operations/test_rc_wp1_console_shell_navigation.py",
+    "required_viewports": ["1280x720", "1440x900", "1920x1080"],
+    "operator_visual_review": "PENDING_RC_G1"
+  },
+  "next_gate": "RC-G1_SHELL_AND_NAVIGATION_ACCEPTANCE"
+}
