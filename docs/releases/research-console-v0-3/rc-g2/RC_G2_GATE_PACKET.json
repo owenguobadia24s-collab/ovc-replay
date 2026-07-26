@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-research-console-rc-g2-v0-3-gate-packet/v1",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "gate_id": "RC-G2-v0.3",
+  "gate_name": "Overview and ambient-health acceptance",
+  "review": {
+    "repository": "owenguobadia24s-collab/ovc-replay",
+    "implementation_pull_request": 63,
+    "implementation_branch": "build/research-console-v0-3-overview-health",
+    "reviewed_head": "5301922805114a5ea6628a300095ab4b74f3cfed",
+    "implementation_merge_commit": "6701ec00469898b12f17b294610d839d4082d94b",
+    "gate_branch": "gate/research-console-v0-3-rc-g2",
+    "canonical_tests_run_id": 30203088849,
+    "canonical_tests_conclusion": "PASS",
+    "rc_wp2_workflow_run_id": 30203088877,
+    "rc_wp2_workflow_conclusion": "PASS"
+  },
+  "accepted_artifacts": {
+    "projection_core": "src/ovc/research_operations/console_overview.py",
+    "candidate_loader": "src/ovc/research_operations/console_overview_candidate.py",
+    "builder_command": "scripts/build_research_console_overview.py",
+    "projection_schema": "schemas/research_operations/research_console_overview_projection_v0_3.schema.json",
+    "projection_registry": "registries/research_operations/RESEARCH_CONSOLE_OVERVIEW_PROJECTION_REGISTRY_v0_3.yaml",
+    "source_fixture": "fixtures/research_operations/research_console_v0_3/RC_WP2_OVERVIEW_SOURCE_READ_MODEL.json",
+    "implementation_packet": "docs/releases/research-console-v0-3/rc-wp2/RC_WP2_IMPLEMENTATION_PACKET.json"
+  },
+  "checks": [
+    {"check_id": "RC-G2-01", "name": "RC-WP2 implementation packet complete with zero blockers", "status": "PASS"},
+    {"check_id": "RC-G2-02", "name": "deterministic Overview projection and canonical logical hash accepted", "status": "PASS"},
+    {"check_id": "RC-G2-03", "name": "seven required ambient-health domains remain stable and source-bound", "status": "PASS"},
+    {"check_id": "RC-G2-04", "name": "no-signal health cannot become PASS", "status": "PASS"},
+    {"check_id": "RC-G2-05", "name": "Research-record health remains NOT_EVALUATED with zero progress without required assertions", "status": "PASS"},
+    {"check_id": "RC-G2-06", "name": "unknown explicit health status fails closed to BLOCK", "status": "PASS"},
+    {"check_id": "RC-G2-07", "name": "lifecycle vocabulary remains separate from health vocabulary", "status": "PASS"},
+    {"check_id": "RC-G2-08", "name": "release gate session and attention summaries retain source references", "status": "PASS"},
+    {"check_id": "RC-G2-09", "name": "source commit and read-model hash are required and represented", "status": "PASS"},
+    {"check_id": "RC-G2-10", "name": "candidate output remains replaceable derived state outside authoritative sources", "status": "PASS"},
+    {"check_id": "RC-G2-11", "name": "bounded local Overview consumption is accepted only through fail-closed schema source and hash verification", "status": "PASS"},
+    {"check_id": "RC-G2-12", "name": "live Research research-write and mutating authority remain denied", "status": "PASS"},
+    {"check_id": "RC-G2-13", "name": "canonical and dedicated RC-WP2 workflows passed", "status": "PASS"}
+  ],
+  "decision": "PASS_OVERVIEW_AND_AMBIENT_HEALTH_CONTRACT_ACCEPTED",
+  "authority_delta": {
+    "overview_projection": "ACCEPTED_LOCAL_DERIVED_READ_ONLY",
+    "ambient_health": "ACCEPTED_MULTIDOMAIN_CONSEQUENCE_AWARE",
+    "active_overview_projection_consumption": "APPROVED_OVERVIEW_ONLY_BOUNDED_LOCAL_READ_ONLY",
+    "overview_console_adapter": "AUTHORISED_FAIL_CLOSED_SCHEMA_SOURCE_HASH_VERIFICATION_REQUIRED",
+    "live_research_surface": "DENIED_PENDING_RC_G3",
+    "research_write": "DENIED_PENDING_SEPARATE_GATE",
+    "repository_mutation": "NONE",
+    "selector_mutation": "NONE",
+    "threshold_mutation": "NONE",
+    "release_activation": "NONE",
+    "market_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "execution_authority": "NONE",
+    "agent_authority": "NONE",
+    "deployment_authority": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
+  },
+  "activation_boundary": {
+    "accepted_consumer": "OVERVIEW_WORKSPACE_ONLY",
+    "required_validation": ["projection schema", "source commit", "read-model logical hash", "source references"],
+    "automatic_activation_by_gate_files": false,
+    "research_workspace_remains_fixture_only": true,
+    "system_workspace_live_detail": "DENIED_PENDING_LATER_WORK"
+  },
+  "blocking_issues": 0,
+  "disposition": "RC_G2_PASS_RC_WP3_V0_3_AUTHORISED",
+  "next_workstream": "RC-WP3-v0.3_RESEARCH_WORKSPACE_REPLAY_EVIDENCE_AND_QUEUE"
+}
