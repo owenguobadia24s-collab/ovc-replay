@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - build/opt-b-c1-v2-wp5-dispatch
+      - build/opt-b-c1-v2-wp5-reconcile-request
     paths:
       - docs/releases/opt-b-c1-v2/wp5/WP5_EXECUTION_REQUEST.md
   pull_request:
@@ -19,12 +20,12 @@ permissions:
 
 jobs:
   dispatch-publication:
-    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'build/opt-b-c1-v2-wp5-dispatch' || github.ref_name == 'build/opt-b-c1-v2-wp5-dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'build/opt-b-c1-v2-wp5-dispatch' || github.head_ref == 'build/opt-b-c1-v2-wp5-reconcile-request' || github.ref_name == 'build/opt-b-c1-v2-wp5-dispatch' || github.ref_name == 'build/opt-b-c1-v2-wp5-reconcile-request'
     runs-on: ubuntu-latest
     steps:
-      - name: Dispatch canonical WP5 publication workflow
+      - name: Dispatch idempotent WP5 reconciliation workflow
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh workflow run opt-b-c1-wp5-r2-publication.yml --repo "${GITHUB_REPOSITORY}" --ref main
+          gh workflow run opt-b-c1-wp5-idempotent-reconcile.yml --repo "${GITHUB_REPOSITORY}" --ref main
