@@ -1,0 +1,49 @@
+schema: ovc-research-operations-namespace-registry/v1
+programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+gate_id: RO-G0
+status: FROZEN_FOR_RO_WP1
+baseline_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
+source_plan_sha256: 4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0
+canonical_python_namespace:
+  path: src/ovc/research_operations
+  import_name: ovc.research_operations
+  state: RESERVED_NOT_IMPLEMENTED
+  top_level_package_creation: DENIED
+  permitted_subpackages:
+    - records
+    - cli
+    - catalogue
+    - qa
+    - read_model
+    - adapters
+reserved_repository_roots:
+  contracts: contracts/research_operations
+  schemas: schemas/research_operations
+  registries: registries/research_operations
+  fixtures: fixtures/research_operations
+  tests: tests/research_operations
+  documentation: docs/research-operations
+  release_records: docs/releases/research-operations-foundation
+  durable_records: records/research_operations
+  console: apps/research_console
+  derived_runtime: var/research_operations
+namespace_rules:
+  one_identifier_one_meaning: true
+  unknown_contract_versions_fail_closed: true
+  historical_readers_are_explicit: true
+  console_depends_on_services_not_reverse: true
+  no_legacy_runtime_parentage: true
+prohibited_namespaces:
+  - src/ovc_opt_b
+  - legacy/quarantine/**
+  - data/**
+  - outputs/**
+  - caches/**
+authority:
+  implementation: APPROVED_FOR_RO_WP1_AFTER_MERGE
+  active_research: NONE
+  market: NONE
+  probability: NONE
+  exposure: NONE
+  execution: NONE
+  agent: NONE
