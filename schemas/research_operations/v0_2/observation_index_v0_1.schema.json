@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/v0_2/observation_index_v0_1.schema.json",
+  "title": "RO2 ObservationIndex v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["observation_id", "workspace_id", "role", "release_id", "source_object_id", "instrument", "clock", "side", "first_valid_at"],
+  "properties": {
+    "observation_id": {"type": "string", "minLength": 1},
+    "workspace_id": {"type": "string", "pattern": "^RO2-WS-[a-f0-9]{16}$"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "release_id": {"type": "string", "minLength": 1},
+    "source_object_id": {"type": "string", "minLength": 1},
+    "instrument": {"type": "string", "minLength": 1},
+    "clock": {"type": "string", "minLength": 1},
+    "side": {"type": "string", "minLength": 1},
+    "first_valid_at": {"type": "string", "format": "date-time"},
+    "schema_version": {"type": "string", "minLength": 1},
+    "source_hash": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+  }
+}
