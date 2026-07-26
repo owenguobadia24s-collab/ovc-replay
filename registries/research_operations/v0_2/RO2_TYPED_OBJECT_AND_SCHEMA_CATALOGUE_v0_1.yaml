@@ -1,0 +1,51 @@
+schema: ovc-ro2-object-schema-catalogue/v1
+catalogue_id: RO2-TYPED-OBJECTS-0.1
+status: FROZEN_DESIGN_ONLY
+identity_rule: EXACT_SOURCE_COMMIT_RELEASE_MANIFEST_AND_RECORD_LINEAGE
+objects:
+  - id: RO2.RoleWorkspaceRef
+    grain: ONE_ROLE_RELEASE_WORKSPACE
+    authority: DERIVED_REFERENCE_ONLY
+    required_fields: [workspace_id, role, release_id, manifest_id, manifest_sha256, source_commit, availability, validation_consumption]
+    planned_schema: schemas/research_operations/v0_2/role_workspace_ref_v0_1.schema.json
+  - id: RO2.ObservationRef
+    grain: ONE_ADMISSIBLE_SOURCE_OBSERVATION
+    authority: DERIVED_REFERENCE_ONLY
+    required_fields: [observation_ref_id, role, release_id, clock, side, bar_id, first_valid_time, source_object_hash]
+    planned_schema: schemas/research_operations/v0_2/observation_ref_v0_1.schema.json
+  - id: RO2.QualitySignal
+    grain: ONE_SIGNAL_ONE_SCOPE
+    authority: DERIVED_HEALTH_ONLY
+    required_fields: [signal_id, domain, status, evidence_refs, consequence, freshness, affected_surfaces]
+    planned_schema: schemas/research_operations/v0_2/quality_signal_v0_1.schema.json
+  - id: RO2.BarLineageRecord
+    grain: ONE_OBSERVATION_LINEAGE_GRAPH
+    authority: DERIVED_TRACE_ONLY
+    required_fields: [lineage_id, child_id, parent_ids, release_id, manifest_sha256, source_hashes, first_valid_time, lineage_status]
+    planned_schema: schemas/research_operations/v0_2/bar_lineage_record_v0_1.schema.json
+  - id: RO2.ReplayFrame
+    grain: ONE_TIMESTAMP_ONE_SCOPE
+    authority: DERIVED_REPLAY_VIEW_ONLY
+    required_fields: [frame_id, workspace_id, cutoff, visible_record_ids, hidden_post_cutoff_count, mode, source_hash]
+    planned_schema: schemas/research_operations/v0_2/replay_frame_v0_1.schema.json
+  - id: RO2.ReleaseComparison
+    grain: ONE_BASE_TARGET_RELEASE_PAIR
+    authority: DERIVED_COMPARISON_ONLY
+    required_fields: [comparison_id, base_release, target_release, base_manifest_sha256, target_manifest_sha256, dimensions, differences, not_evaluable]
+    planned_schema: schemas/research_operations/v0_2/release_comparison_v0_1.schema.json
+  - id: RO2.OptionalModelAttachment
+    grain: ONE_SOURCE_RECORD_ONE_MODEL_LAYER
+    authority: OPTIONAL_READ_ONLY
+    required_fields: [attachment_id, source_record_id, model_layer, model_release_id, model_manifest_sha256, status, record_refs]
+    planned_schema: schemas/research_operations/v0_2/optional_model_attachment_v0_1.schema.json
+  - id: RO2.ConsoleResearchProjection
+    grain: ONE_CONTEXT_PRESERVING_VIEW
+    authority: READ_ONLY_PRESENTATION
+    required_fields: [projection_id, workspace_id, selected_time, source_commit, authority_snapshot, panels, unavailable_fields]
+    planned_schema: schemas/research_operations/v0_2/console_research_projection_v0_1.schema.json
+schema_rules:
+  - schemas are additive within a minor version
+  - missing fields use explicit reason codes and never fabricated neutrality
+  - local paths and machine names are excluded from deterministic identity
+  - Validation content identifiers may not be emitted
+  - source hashes and authority state are required in every projection
