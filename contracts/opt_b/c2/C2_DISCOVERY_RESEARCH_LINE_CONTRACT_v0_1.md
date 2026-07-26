@@ -1,0 +1,3 @@
+# C2 Discovery Research-Line Contract v0.1
+
+The new line `RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1` opens only after C2-G5 direct activation. It admits prospective sessions linked to the exact active C2 release and cutoff. Old 202-story, 58-candidate, B-STATE, C2E, C2.5, C3, OPT-C and OPT-D evidence cannot be imported. Every session records incidents, state-fidelity observations and boundary evidence without probability or trading claims.
