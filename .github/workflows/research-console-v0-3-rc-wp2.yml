@@ -1,0 +1,56 @@
+name: Research Console v0.3 RC-WP2 overview and ambient health
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  overview-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Build deterministic candidate from fixture
+        run: |
+          PYTHONPATH=src python scripts/build_research_console_overview.py \
+            --read-model fixtures/research_operations/research_console_v0_3/RC_WP2_OVERVIEW_SOURCE_READ_MODEL.json \
+            --output /tmp/overview_candidate.json
+      - name: Verify exact RC-WP2 v0.3 packet
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          packet = json.loads(Path('docs/releases/research-console-v0-3/rc-wp2/RC_WP2_IMPLEMENTATION_PACKET.json').read_text())
+          registry = Path('registries/research_operations/RESEARCH_CONSOLE_OVERVIEW_PROJECTION_REGISTRY_v0_3.yaml').read_text()
+          implementation = Path('registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml').read_text()
+          candidate = json.loads(Path('/tmp/overview_candidate.json').read_text())
+          home = Path('apps/research_console/Home.py').read_text()
+          shell = Path('apps/research_console/shell.py').read_text()
+
+          assert packet['work_package'] == 'RC-WP2-v0.3'
+          assert packet['baseline_commit'] == '3bd4ed79f43c6f288248f10b99e9dfa04a9f68a2'
+          assert packet['authority'] == 'CANDIDATE_PROJECTION_IMPLEMENTATION_ONLY'
+          assert packet['blocking_issues'] == 0
+          assert packet['disposition'] == 'COMPLETE_RC_G2_V0_3_REVIEW_READY'
+          assert all(check['status'] == 'PASS' for check in packet['checks'])
+          assert candidate['schema'] == 'ovc-research-console-overview-projection/v0.3'
+          assert len(candidate['health_domains']) == 7
+          research = next(item for item in candidate['health_domains'] if item['domain'] == 'RESEARCH_RECORDS')
+          assert research['status'] == 'NOT_EVALUATED'
+          assert research['progress'] == 0.0
+          assert 'active_console_consumption: DENIED_PENDING_RC_G2' in registry
+          assert 'stage: RC_WP2_COMPLETE_RC_G2_V0_3_REVIEW_READY' in implementation
+          assert 'active_live_projection_authority: DENIED_PENDING_RC_G2' in implementation
+          assert 'live_research_surface_authority: DENIED_PENDING_RC_G3' in implementation
+          assert 'console_overview_candidate' not in home
+          assert 'console_overview_candidate' not in shell
+          PY
