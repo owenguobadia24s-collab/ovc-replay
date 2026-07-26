@@ -1,0 +1,17 @@
+{
+  "schema": "ovc-research-operations-path-registry/v0.1",
+  "default_policy": "DENY",
+  "persist_absolute_paths": false,
+  "allow_symlinks": false,
+  "roots": [
+    {"alias": "repo_contracts", "path_template": "${REPO_ROOT}/contracts/research_operations", "read_only": true, "required": true},
+    {"alias": "repo_schemas", "path_template": "${REPO_ROOT}/schemas/research_operations", "read_only": true, "required": true},
+    {"alias": "repo_registries", "path_template": "${REPO_ROOT}/registries/research_operations", "read_only": true, "required": true},
+    {"alias": "repo_release_packets", "path_template": "${REPO_ROOT}/docs/releases/research-operations-foundation", "read_only": true, "required": true},
+    {"alias": "records", "path_template": "${RECORD_ROOT}", "read_only": false, "required": true},
+    {"alias": "runtime", "path_template": "${RUNTIME_ROOT}", "read_only": false, "required": false},
+    {"alias": "external", "path_template": "${EXTERNAL_ROOT}", "read_only": true, "required": false}
+  ],
+  "symbolic_remote_roots": ["github_actions", "r2"],
+  "prohibited_operations": ["GIT_COMMIT", "GIT_PUSH", "R2_UPLOAD", "R2_DELETE", "SELECTOR_MUTATION", "THRESHOLD_MUTATION", "VALIDATION_PAYLOAD_ACCESS"]
+}

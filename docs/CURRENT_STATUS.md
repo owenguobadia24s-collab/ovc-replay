@@ -48,21 +48,23 @@ All 212,764 record IDs are unique. There are zero duplicate record IDs, missing 
 
 B1-G1 authorises only the controlled promotion of this exact candidate into durable immutable local release roots. It does not claim that the releases are already `RELEASE_FROZEN` or `LOCAL_VERIFIED`; those states require the subsequent freeze execution and post-freeze full-byte verification.
 
-## Research Operations Foundation RO-G1
+## Research Operations Foundation RO-WP2
 
-RO-G1 result: `PASS — RO-WP2 AUTHORISED FOR BUILD`.
+RO-WP2 result: `IMPLEMENTED — READY FOR RO-G2 OPERATOR REVIEW`.
 
-The operator review confirms that the RO-WP1 evidence kernel:
+The repository now contains:
 
-- reconstructs valid frozen and superseding record chains;
-- produces deterministic canonical bytes and content-derived IDs;
-- rejects post-cutoff references and Validation payload access;
-- rejects frozen mutation and duplicate record identities;
-- preserves missing required evidence as explicit reproducibility states;
-- permits model-optional OPT-A-only observations;
-- preserves predecessor bytes during append-only supersession.
+- `ovc research`, `ovc artifact`, and `ovc queue` command families;
+- environment-only configuration and approved portable path aliases;
+- derived draft storage and append-only frozen record storage;
+- immutable AuditEvent emission for every public write action;
+- complete session, observation, claim, realization, adjudication, close and supersession handlers;
+- deterministic artifact catalogue scanning and verification;
+- changed-byte, missing-file, expired-CI-artifact, orphan-manifest and dependency detection;
+- realization, incident, incomplete-session, stale-catalogue and missing-artifact queues;
+- Windows launcher and operator guide.
 
-RO-G1 grants build authority only for `RO-WP2 — Research CLI and artifact catalogue`. No durable write service, CLI or catalogue is active yet. RO-WP3 remains blocked pending RO-G2.
+No operator record was created by the build packet. The CLI and catalogue are implemented but not active pending RO-G2. RO-WP3 remains blocked pending RO-G2.
 
 ## Active authority matrix
 
@@ -73,7 +75,7 @@ RO-G1 grants build authority only for `RO-WP2 — Research CLI and artifact cata
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `B1_G1_PASS / EXACT_CANDIDATE_FREEZE_AUTHORISED / NOT_YET_FROZEN` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
-| Research Operations | `RO_G1_PASS / WP2_BUILD_AUTHORISED` | Not applicable |
+| Research Operations | `RO_WP2_IMPLEMENTED / RO_G2_REVIEW_REQUIRED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
@@ -82,4 +84,4 @@ Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation a
 ## Parallel next boundaries
 
 - `OPT-B.C1 v2 WP4F — durable local release freeze and full-byte verification`
-- `RO-WP2 — Research CLI and artifact catalogue`
+- `RO-G2 — Operating reliability`
