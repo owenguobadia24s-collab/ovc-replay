@@ -43,7 +43,8 @@ class NoLegacySelectorAuthorityTests(unittest.TestCase):
         for selector in INACTIVE_DOWNSTREAM_SELECTORS:
             self.assertIn(f"  {selector}: NONE", text)
         self.assertIn("local_candidate_release: FROZEN_DISCOVERY_AND_DEVELOPMENT_LOCAL_ONLY", text)
-        self.assertIn("publication: NONE", text)
+        self.assertIn("publication: AUTHORISED_EXACT_RELEASES_ONLY", text)
+        self.assertIn("publication_executed: false", text)
         self.assertIn("selector: NONE", text)
         self.assertIn("activation: NONE", text)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", text)
