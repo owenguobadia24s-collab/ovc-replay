@@ -58,10 +58,11 @@ def main() -> int:
     require_tokens(
         REQUIRED[3],
         [
-            "RO2_G2_PASS_LOCAL_REPLACEABLE_READ_ONLY_INSPECTION",
+            "RO2_G3_PASS_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS",
             "ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_DERIVED",
             "ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_READ_ONLY",
             "ACCEPTED_RO2_G2_ACTIVE_DISCOVERY_DEVELOPMENT_LOCAL_READ_ONLY",
+            "ACCEPTED_RO2_G3_ACTIVE_BOUNDED_LOCAL_READ_ONLY_PRESENTATION",
             "validation_consumption: LOCKED_UNCONSUMED",
             "c2_selector: NONE",
             "c2_activation: NONE",
@@ -70,14 +71,14 @@ def main() -> int:
     require_tokens(REQUIRED[4], ["RO2.ReplayFrame", "RO2.ConsoleResearchProjection", "Validation content identifiers may not be emitted"])
     require_tokens(REQUIRED[5], ["RO2-QA-002", "RO2-QA-004", "RO2-QA-011"])
     require_tokens(REQUIRED[6], ["validation_row_resolution_attempt", "prospective_frame_contains_post_cutoff_record", "attempted_git_r2_selector_or_threshold_write"])
-    require_tokens(REQUIRED[7], ["Research workspace remains fixture-only", "Validation content must never be resolved"])
+    require_tokens(REQUIRED[7], ["ACCEPTED_RO2_G3_ACTIVE_BOUNDED_LOCAL_READ_ONLY_PRESENTATION", "Validation content, paths, timestamps, object identities and rows are denied before resolution"])
 
     require_tokens("docs/CURRENT_STATUS.md", ["PASS_FULL_REMOTE_BYTE_VERIFICATION", "Validation remains `LOCKED_UNCONSUMED`"])
     require_tokens(
         "registries/authority/ACTIVE_AUTHORITY.yaml",
         ["publication: COMPLETE_REMOTE_VERIFIED", "selector: NONE", "activation: NONE", "validation_consumption: LOCKED_UNCONSUMED"],
     )
-    print("PASS: RO2-G0 design remains valid with RO2-G2 accepted inspection authority and retained boundaries")
+    print("PASS: RO2-G0 design remains valid with RO2-G3 accepted read-only console adapters and retained boundaries")
     return 0
 
 
