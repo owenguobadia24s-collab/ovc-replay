@@ -1,0 +1,153 @@
+name: C2 publication readiness and operator approval
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  publication-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+    steps:
+      - name: Checkout exact review branch
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Install rclone
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rclone
+      - name: Require configured R2 read credentials
+        run: |
+          set -euo pipefail
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo "::error::Missing R2 access-key secret"; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo "::error::Missing R2 secret-key secret"; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
+      - name: Verify final C2-G5 artifact identities through GitHub API
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p c2-publication-review/input c2-publication-review/output
+          curl --fail --silent --show-error \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/actions/runs/30212281089/artifacts?per_page=100" \
+            > c2-publication-review/input/artifacts-api.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          expected = {
+              'DISCOVERY': (8634803012, 'c2-opt-b-c2-gbpusd-discovery-2021-2023-v1-frozen-candidate', 'sha256:e92853173779ed8a34df6e96d0472e0f88528aee4c84c094255e4a012b4aad6d'),
+              'DEVELOPMENT': (8634803579, 'c2-opt-b-c2-gbpusd-development-2024-v1-frozen-candidate', 'sha256:708f53afdb75c9561a30ac4290fcf9a184adb1a0925962d2fe10e577ff3cdf63'),
+              'GATE_PACKET': (8634803684, 'c2-g5-candidate-freeze-gate-packet', 'sha256:667aa5a51ea38bb29d9c76780c69b4dbbcee7c4fc137f87dece9f35c04b06b3f'),
+          }
+          payload = json.loads(Path('c2-publication-review/input/artifacts-api.json').read_text())
+          by_id = {item['id']: item for item in payload['artifacts']}
+          output = {}
+          for role, (artifact_id, name, digest) in expected.items():
+              item = by_id.get(artifact_id)
+              assert item is not None, (role, artifact_id)
+              assert item['name'] == name, (role, item['name'])
+              assert item['digest'] == digest, (role, item['digest'])
+              assert item['expired'] is False, (role, 'expired')
+              assert item['workflow_run']['id'] == 30212281089
+              assert item['workflow_run']['head_sha'] == '1d72d2332e71639e7eee42bef96357e4640d4fb8'
+              output[role] = {'id': artifact_id, 'name': name, 'digest': digest, 'expires_at': item['expires_at']}
+          Path('c2-publication-review/input/ARTIFACT_METADATA.json').write_text(json.dumps(output, sort_keys=True, separators=(',', ':')) + '\n')
+          PY
+      - name: Download exact final Discovery candidate
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30212281089
+          name: c2-opt-b-c2-gbpusd-discovery-2021-2023-v1-frozen-candidate
+          path: c2-publication-review/discovery
+      - name: Download exact final Development candidate
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30212281089
+          name: c2-opt-b-c2-gbpusd-development-2024-v1-frozen-candidate
+          path: c2-publication-review/development
+      - name: Download exact final C2-G5 gate packet
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30212281089
+          name: c2-g5-candidate-freeze-gate-packet
+          path: c2-publication-review/source-gate
+      - name: Confirm exact R2 namespaces are absent without writing
+        run: |
+          set -euo pipefail
+          : > c2-publication-review/output/REMOTE_COLLISION_PREFLIGHT.txt
+          while IFS='|' read -r release manifest; do
+            prefix="canonical/releases/${release}/${manifest}/"
+            listing=$(rclone lsf --recursive --s3-no-check-bucket "ovc_r2:${prefix}" 2>/dev/null || true)
+            if [ -n "$listing" ]; then
+              echo "::error::Remote collision under ${prefix}"
+              printf '%s\n' "$listing"
+              exit 1
+            fi
+            printf '%s ABSENT\n' "$prefix" | tee -a c2-publication-review/output/REMOTE_COLLISION_PREFLIGHT.txt
+          done <<'EOF'
+          OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1|MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
+          OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1|MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1
+          EOF
+      - name: Verify every candidate byte and issue exact publication approval
+        run: |
+          set -euo pipefail
+          python scripts/opt_b/review_c2_publication_readiness.py \
+            --discovery-root c2-publication-review/discovery \
+            --development-root c2-publication-review/development \
+            --source-gate-packet c2-publication-review/source-gate/C2_G5_GATE_PACKET.json \
+            --repo-root . \
+            --artifact-metadata c2-publication-review/input/ARTIFACT_METADATA.json \
+            --remote-collision-state PASS_ABSENT \
+            --operator-approval APPROVE_EXACT_R2_PUBLICATION_ONLY \
+            --output c2-publication-review/output/C2_PUBLICATION_READINESS_RECEIPT.json
+      - name: Enforce no-write and no-activation boundary
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt = json.loads(Path('c2-publication-review/output/C2_PUBLICATION_READINESS_RECEIPT.json').read_text())
+          assert receipt['decision'] == 'PASS_PUBLICATION_READY_OPERATOR_APPROVED_EXACT_RELEASES_ONLY'
+          assert receipt['authority']['r2_publication'] == 'AUTHORISED_EXACT_RELEASES_ONLY'
+          assert receipt['authority']['remote_write_executed'] is False
+          assert receipt['authority']['selector'] == 'NONE'
+          assert receipt['authority']['activation'] == 'NONE'
+          assert receipt['authority']['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          assert receipt['totals']['state_record_count'] == 404434
+          assert receipt['totals']['transition_record_count'] == 323910
+          assert receipt['totals']['verified_payload_bytes'] == 872867602
+          PY
+      - name: Upload publication-readiness receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: c2-publication-readiness-operator-approval
+          path: c2-publication-review/output/*
+          if-no-files-found: error
+          retention-days: 90
