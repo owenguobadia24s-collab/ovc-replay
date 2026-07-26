@@ -79,12 +79,12 @@ jobs:
           run-id: 30187276514
           name: c1-wp4f-freeze-verification-report
           path: b1-g2/report
-      - name: Confirm pre-publication absence or accepted WP5 successor
+      - name: Confirm pre-publication absence or accepted post-WP5 successor
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p b1-g2/output
-          if grep -Fq 'status: WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW' registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml; then
+          if grep -Eq 'status: (WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW|B1_G5_PASS_SHADOW_SELECTED_C2_DENIED)' registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml; then
             echo POST_WP5_REMOTE_VERIFIED > b1-g2/output/review-mode.txt
             python - <<'PY'
           import json
@@ -131,7 +131,7 @@ jobs:
             --freeze-report b1-g2/report/WP4F_FREEZE_REPORT.json \
             --remote-collision-state PASS_ABSENT \
             --output b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json
-      - name: Assert retained authority boundary
+      - name: Assert retained historical B1-G2 authority boundary
         run: |
           grep -F '"status":"PASS"' b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json
           grep -F '"selector_activation":"NONE"' b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json
