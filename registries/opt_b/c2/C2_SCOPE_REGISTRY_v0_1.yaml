@@ -1,0 +1,9 @@
+schema: ovc-opt-b-c2-scope-registry/v1
+registry_id: C2.SCOPES.v0.1
+status: FROZEN_WP2
+scopes:
+  - {id: GBPUSD-15M-LOCAL-v0.1, local_clock: 15M, parent_clock: null, allowed_sides: [BID, ASK]}
+  - {id: GBPUSD-2H-A-L-LOCAL-v0.1, local_clock: 2H_A_L, parent_clock: null, allowed_sides: [BID, ASK]}
+  - {id: GBPUSD-15M-WITH-2H-PARENT-v0.1, local_clock: 15M, parent_clock: 2H_A_L, parent_rule: LATEST_FIRST_VALID_NOT_AFTER_LOCAL_CLOSE, allowed_sides: [BID, ASK]}
+wrong_role_clock_side_or_release: REJECT
+scope_change_resets_persistence: true

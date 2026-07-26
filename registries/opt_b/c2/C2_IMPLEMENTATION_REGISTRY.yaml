@@ -1,26 +1,36 @@
 schema: ovc-opt-b-c2-implementation-registry/v1
 programme_id: OVC-OPT-B-C2-V2-IMPLEMENTATION-PLAN-0.1
 layer_id: OPT-B.C2.v2
-work_packet: WP1
-status: WP1_PASS_BOUNDARY_FROZEN_WP2_AUTHORISED
+work_packet: WP2
+status: WP2_PASS_CONTRACTS_SCHEMAS_REGISTRIES_PARAMETERS_FROZEN
 owner: OPERATOR
 repository: owenguobadia24s-collab/ovc-replay
-source_branch: build/opt-b-c2-boundary
+source_branch: build/opt-b-c2-contracts
 upstream:
+  wp1_gate: C2-G0
   c1_handoff_gate: C1-C2-HANDOFF-ACTIVE
   required_c1_roles: [DISCOVERY, DEVELOPMENT]
   required_c1_authorities: [ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT]
   validation_consumption: LOCKED_UNCONSUMED
-scope:
-  instrument: [GBPUSD]
-  canonical_clocks: [15M, 2H_A_L]
-  control_only_clocks: [H1_M1_DERIVED, H1_PROVIDER_NATIVE]
-  price_sides: [BID, ASK]
-  canonical_namespaces: [C2.L, C2.K, C2.R, C2.S, C2.T, C2.Q]
+frozen_design:
+  parallel_state_contract: contracts/opt_b/c2/OVC_OPT_B_C2_PARALLEL_STATE_CONTRACT_v0_1.md
+  level_relation_contract: contracts/opt_b/c2/C2_LEVEL_AND_RELATION_CONTRACT_v0_1.md
+  container_contract: contracts/opt_b/c2/C2_CONTAINER_CONTRACT_v0_1.md
+  persistence_gap_policy: contracts/opt_b/c2/C2_PERSISTENCE_AND_GAP_POLICY_v0_1.md
+  conflict_policy: contracts/opt_b/c2/C2_CONFLICT_AND_AMBIGUITY_POLICY_v0_1.md
+  input_profile: contracts/opt_b/c2/C1_V2_TO_C2_INPUT_PROFILE_v0_1.md
+  release_contract: contracts/opt_b/c2/C2_RELEASE_ACTIVATION_AND_RETIREMENT_CONTRACT_v0_1.md
+  discovery_line_contract: contracts/opt_b/c2/C2_DISCOVERY_RESEARCH_LINE_CONTRACT_v0_1.md
+  axis_registry: C2.AXES.v0.1
+  state_value_registry: C2.STATE_VALUES.v0.1
+  measurement_registry: C2.MEASUREMENTS.v0.1
+  parameter_pack: C2.PARAMS.GBPUSD.DISCOVERY.v0.1
+  schema_count: 11
+  synthetic_fixture_pack: fixtures/opt_b/c2/wp2/C2_HANDOFF_FIXTURE_PACK.json
 authority:
-  design: APPROVED
-  contracts_and_schemas: AUTHORISED_FOR_WP2
-  engine_implementation: DENIED_PENDING_WP2
+  design: FROZEN
+  contracts_and_schemas: COMPLETE_C2_G1_PASS
+  fixture_and_engine_implementation: AUTHORISED_FOR_WP3_AND_WP4
   market_replay: DENIED_PENDING_C2_G2_AND_OPERATOR_APPROVAL
   release: NONE
   selector: NONE
@@ -30,32 +40,16 @@ authority:
   exposure: NONE
   trading: NONE
   execution: NONE
-reads_allowlist:
-  - exact active OPT-A v2 registries and contracts
-  - exact active C1 v2 Discovery and Development releases and registries
-  - synthetic OPT-A/C1 handoff fixtures
-  - QA and authority registries
-reads_denylist:
-  - C1 Validation payloads
-  - legacy/quarantine/**
-  - B-STATE-0.3b as parent authority
-  - C2E
-  - C2.5
-  - C3
-  - OPT-C
-  - OPT-D
-  - FUTURE_OUTCOMES
-  - TRADE_LABELS
-writes:
-  permitted:
-    - C2 contracts, schemas, registries, parameter packs and synthetic fixtures under WP2
-    - compact gate and QA packets in Git
-  prohibited:
-    - market-derived C2 records before C2-G3
-    - active selectors
-    - provider payloads
-    - legacy state mutation
+invariants:
+  five_axes_independent: true
+  overall_winner: PROHIBITED
+  hidden_level_selection: PROHIBITED
+  runtime_parameter_edits: PROHIBITED
+  future_data_access: PROHIBITED
+  reverse_write_to_c1: PROHIBITED
+  legacy_parentage: PROHIBITED
+  semantic_change_requires_new_version_and_full_replay: true
 rollback:
   target_state: C1_ACTIVE_C2_NONE
   legacy_reactivation: PROHIBITED
-next_gate: C2-G1_CONTRACT_FREEZE
+next_gate: C2-G2_FIXTURE_TRUST

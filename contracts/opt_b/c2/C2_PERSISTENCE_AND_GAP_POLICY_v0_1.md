@@ -1,0 +1,3 @@
+# C2 Persistence and Gap Policy v0.1
+
+Persistence increments only across contiguous records sharing release, clock, side, evaluation scope and parameter-pack ID. Axis changes start a new count at one; scope or semantic-version changes reset all scope-bound counters. Container changes reset container-relative location persistence. Missing intervals break continuity and produce STALE, CENSORED or NOT_EVALUABLE with SOURCE_GAP. Parent records not yet first-valid make dependent fields NOT_EVALUABLE. Quarantined inputs never enter the canonical stream.

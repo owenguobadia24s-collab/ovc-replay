@@ -1,0 +1,3 @@
+# C2 Release, Activation and Retirement Contract v0.1
+
+C2 releases bind exact OPT-A/C1 parents, code commit, environment lock, contracts, schemas, registries and parameter-pack hashes. Candidate authority precedes publication. Publication is payload-first and manifest-last with full remote byte verification. Activation is atomic and targets one exact ACTIVE_DISCOVERY release. B-STATE-0.3b becomes HISTORICAL_SUPERSEDED and cannot be a rollback target. Rollback sets C2 selectors to NONE and returns to C1-active operation. Validation, probability, exposure, trading and execution remain separately gated.

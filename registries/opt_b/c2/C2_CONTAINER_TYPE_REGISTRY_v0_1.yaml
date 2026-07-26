@@ -1,0 +1,10 @@
+schema: ovc-opt-b-c2-container-type-registry/v1
+registry_id: C2.CONTAINERS.v0.1
+status: FROZEN_WP2
+container_types:
+  - {id: LOCAL_RANGE, scale: LOCAL_CLOCK, boundary_sources: [RANGE_LOW, RANGE_HIGH], confirmation: WINDOW_COMPLETE}
+  - {id: PARENT_RANGE, scale: PARENT_CLOCK, boundary_sources: [RANGE_LOW, RANGE_HIGH], confirmation: PARENTS_FIRST_VALID}
+  - {id: SWING_ENVELOPE, scale: DECLARED_SCOPE, boundary_sources: [SWING_LOW, SWING_HIGH], confirmation: BOTH_PARENTS_FIRST_VALID}
+replacement_policy: NEW_ID_ON_BOUNDARY_OR_PARAMETER_CHANGE
+staleness_policy: EXPLICIT_STALE_REASON
+cross_gap_continuity: PROHIBITED
