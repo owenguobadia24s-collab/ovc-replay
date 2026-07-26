@@ -24,12 +24,17 @@ allowed_record_classes:
   - ANOMALY
   - INCIDENT
   - BOUNDED_RESEARCH_QUESTION
-initial_counts:
+current_counts:
   total: 0
   accepted: 0
   rejected: 0
   blocked: 0
   sequence_boundary_friction: 0
+first_batch_review:
+  decision: DEFER_NO_REAL_PROSPECTIVE_BATCH
+  append_target_state: ABSENT
+  record_count: 0
+  packet: docs/releases/opt-b-c2-v2/first-prospective-batch/FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_PACKET.json
 prohibited_seed_material:
   - OLD_202_STORY_PROGRAMME
   - OLD_58_CANDIDATE_PROGRAMME
@@ -51,4 +56,4 @@ writes:
   r2: DENIED
   selector: DENIED
   release: DENIED
-next_gate: C2_G7_PROSPECTIVE_EVIDENCE_OPERATION_ACCEPTANCE
+next_gate: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH
