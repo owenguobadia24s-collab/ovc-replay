@@ -1,0 +1,43 @@
+schema: ovc-research-console-empty-state-registry/v0.2
+status: FROZEN_BY_RC_00_PENDING_RC_G0_REVIEW
+empty_states:
+  - empty_state_id: EXPECTED_EMPTY
+    status: NOT_APPLICABLE
+    meaning: No objects are currently expected for this surface.
+    consequence: NONE
+    next_action: Inspect source scope or return later after lawful records exist.
+  - empty_state_id: NOT_MATERIALIZED
+    status: NOT_EVALUATED
+    meaning: The source object family has not been materialized into the approved read model.
+    consequence: SURFACE_UNAVAILABLE
+    next_action: Build or register the missing lawful source through its own work packet.
+  - empty_state_id: MISSING_SOURCE
+    status: MISSING
+    meaning: A required source reference cannot be resolved.
+    consequence: DEPENDENT_SURFACE_BLOCKED
+    next_action: Restore or re-register the exact source and verify its hash.
+  - empty_state_id: STALE
+    status: STALE
+    meaning: The read model does not represent the selected source commit or time context.
+    consequence: DEPENDENT_SURFACE_BLOCKED
+    next_action: Rebuild the read model from the exact approved source commit.
+  - empty_state_id: BLOCKED
+    status: BLOCK
+    meaning: A named QA, authority or integrity condition blocks this surface.
+    consequence: NO_PROGRESSION
+    next_action: Open the blocking assertion and its issue or decision record.
+  - empty_state_id: NOT_EVALUATED
+    status: NOT_EVALUATED
+    meaning: Required checks or evidence have not been run.
+    consequence: NO_HEALTH_CLAIM
+    next_action: Run the approved bounded check or inspect the missing gate packet.
+  - empty_state_id: NOT_APPLICABLE
+    status: NOT_APPLICABLE
+    meaning: The surface is outside the selected object or route scope.
+    consequence: NONE
+    next_action: Select an applicable object or route.
+rules:
+  empty_cannot_imply_pass: true
+  message_must_include_reason: true
+  message_must_include_consequence: true
+  message_must_include_next_action: true

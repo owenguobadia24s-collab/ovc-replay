@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-research-console-rc00-preflight-packet/v0.1",
+  "packet_id": "RC-00.OVC-RESEARCH-CONSOLE.v0.2",
+  "prepared_at": "2026-07-26",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "branch": "build/research-console-v0-2-preflight-rc00-current",
+  "baseline": {
+    "branch": "main",
+    "commit": "4cc23b0f746feaa3fc91d1b6a956a0d4961a88dc",
+    "canonical_test_command": "python -m unittest discover tests",
+    "test_execution_state": "NOT_EXECUTED_BY_REMOTE_CONNECTOR"
+  },
+  "current_console_snapshot": {
+    "home_path": "apps/research_console/Home.py",
+    "home_blob_sha": "99df592da5d14ff5e672fdba8b8608e7e1a1a19b",
+    "read_model_path": "src/ovc/research_operations/read_model.py",
+    "read_model_blob_sha": "d2330716d9559b64f2a185aef695057729bb3d25",
+    "launcher_path": "scripts/start_research_console.ps1",
+    "launcher_blob_sha": "2a9c2333ac55043f07dd7538ef2ecb628704f98e",
+    "requirements_path": "requirements-console.txt",
+    "requirements_blob_sha": "f2d00de91e0e1f5386105f85a35123670c212f20",
+    "current_mode": "LOCAL_READ_ONLY",
+    "current_read_model_schema": "ovc-research-operations-read-model/v0.1"
+  },
+  "frozen_outputs": [
+    "contracts/research_operations/console/OVC_RESEARCH_CONSOLE_UI_AUTHORITY_CONTRACT_v0_2.md",
+    "registries/research_operations/RESEARCH_CONSOLE_ROUTE_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_CARD_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_STATUS_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_EMPTY_STATE_REGISTRY_v0_2.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_ACTION_REGISTRY_v0_2.yaml"
+  ],
+  "checks": {
+    "baseline_pinned": "PASS",
+    "current_files_hash_pinned": "PASS",
+    "routes_registered": "PASS",
+    "cards_statuses_empty_states_actions_registered": "PASS",
+    "mutations_prohibited": "PASS",
+    "no_signal_not_pass": "PASS",
+    "deploy_replaced_by_local_badge": "PASS",
+    "canonical_tests": "NOT_EVALUATED"
+  },
+  "authority_delta": "DESIGN_RECORDS_ONLY",
+  "rc00_disposition": "IMPLEMENTATION_COMPLETE_TEST_CONFIRMATION_PENDING",
+  "next_gate": "RC-G0_OPERATOR_REVIEW",
+  "rc_g0_recommendation": "DEFER_UNTIL_CANONICAL_TESTS_PASS",
+  "market_authority": "NONE",
+  "probability_authority": "NONE",
+  "exposure_authority": "NONE",
+  "execution_authority": "NONE",
+  "agent_authority": "NONE"
+}

@@ -1,0 +1,89 @@
+schema: ovc-research-console-route-registry/v0.2
+status: FROZEN_BY_RC_00_PENDING_RC_G0_REVIEW
+baseline_commit: e365eddb2ee465312ed6563cbe6df0760661f0d7
+default_mode: READ_ONLY
+routes:
+  - route_id: OVERVIEW
+    label: Overview
+    group: HOME
+    authority: READ_ONLY
+    sources: [BuildContext, AuthorityBoundary, ObjectTypeSummary, HealthDomainSummary, ReleaseSummary, GateSummary, SessionSummary, ActivityEvent]
+    fallback: NOT_EVALUATED
+  - route_id: RESEARCH_DESK
+    label: Research Desk
+    group: RESEARCH
+    authority: READ_ONLY_WHEN_MATERIALIZED
+    sources: [DeskSnapshot, HealthDomainSummary, LineageProjection]
+    fallback: NOT_MATERIALIZED
+  - route_id: REPLAY
+    label: Replay
+    group: RESEARCH
+    authority: READ_ONLY_CUTOFF_SAFE
+    sources: [approved_market_records, approved_model_records, LineageProjection]
+    fallback: NOT_MATERIALIZED
+  - route_id: EVIDENCE
+    label: Evidence Library
+    group: RESEARCH
+    authority: READ_ONLY
+    sources: [EvidenceItem, CaseBundle, cohorts, contrasts, validation_records]
+    fallback: NOT_MATERIALIZED
+  - route_id: SESSIONS
+    label: Research Sessions
+    group: RESEARCH
+    authority: READ_ONLY
+    sources: [ResearchSession, SessionSummary]
+    fallback: EXPECTED_EMPTY
+  - route_id: QUEUE
+    label: Research Queue
+    group: RESEARCH
+    authority: READ_ONLY_DERIVED
+    sources: [ResearchSession, ObservationSnapshot, ClaimRecord, RealizationSnapshot, IncidentRecord, artifact_catalogue]
+    fallback: EXPECTED_EMPTY
+  - route_id: HEALTH
+    label: Health
+    group: SYSTEM
+    authority: READ_ONLY
+    sources: [health, HealthDomainSummary, QA_RUN]
+    fallback: NOT_EVALUATED
+  - route_id: LINEAGE
+    label: Lineage & Objects
+    group: SYSTEM
+    authority: READ_ONLY
+    sources: [ReadModelNode, LineageProjection]
+    fallback: EXPECTED_EMPTY
+  - route_id: CATALOGUE
+    label: Data Catalogue
+    group: SYSTEM
+    authority: READ_ONLY
+    sources: [ArtifactCatalogue, artifact_issues]
+    fallback: NOT_MATERIALIZED
+  - route_id: RELEASES
+    label: Releases
+    group: SYSTEM
+    authority: READ_ONLY
+    sources: [release_registries, release_descriptors, selectors, ReleaseSummary]
+    fallback: NOT_MATERIALIZED
+  - route_id: QA_GATES
+    label: QA & Gates
+    group: SYSTEM
+    authority: READ_ONLY
+    sources: [QA_RUN, qa_assertions, gate_packets, operator_decisions, GateSummary]
+    fallback: NOT_EVALUATED
+  - route_id: AUDIT
+    label: Audit Log
+    group: SYSTEM
+    authority: READ_ONLY
+    sources: [AuditEvent, ActivityEvent]
+    fallback: EXPECTED_EMPTY
+  - route_id: CONFIG
+    label: Configuration
+    group: SETTINGS
+    authority: READ_ONLY_LOCAL
+    sources: [launcher_context, path_registry, environment_resolution]
+    fallback: NOT_EVALUATED
+  - route_id: ABOUT
+    label: About
+    group: SETTINGS
+    authority: READ_ONLY_STATIC
+    sources: [ui_contract, implementation_registry, build_metadata]
+    fallback: NOT_APPLICABLE
