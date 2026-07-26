@@ -1,0 +1,38 @@
+name: C2 ACTIVE_DISCOVERY selector and legacy retirement
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  activation-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce exact selector and retirement transaction
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('docs/releases/opt-b-c2-v2/activation/C2_ACTIVE_DISCOVERY_GATE_PACKET.json').read_text())
+          assert gate['decision'] == 'PASS_ACTIVE_DISCOVERY_SELECTOR_AND_LEGACY_RETIREMENT'
+          assert gate['activation']['manifest_sha256'] == 'c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33'
+          assert gate['prerequisites']['c2_r2_remote_verification'] == 'PASS_FULL_REMOTE_BYTE_VERIFICATION'
+          assert gate['legacy_retirement']['state'] == 'HISTORICAL_SUPERSEDED'
+          assert gate['rollback']['action'] == 'SET_ALL_C2_SELECTORS_NONE'
+          assert gate['rollback']['legacy_reactivation'] == 'PROHIBITED'
+          assert gate['retained']['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          assert gate['retained']['trading'] == 'NONE'
+          assert gate['retained']['execution'] == 'NONE'
+          PY

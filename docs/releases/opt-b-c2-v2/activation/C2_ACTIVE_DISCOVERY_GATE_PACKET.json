@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-c2-active-discovery-gate-packet/v1",
+  "gate_id": "C2-ACT-G0",
+  "decision": "PASS_ACTIVE_DISCOVERY_SELECTOR_AND_LEGACY_RETIREMENT",
+  "transaction_id": "TXN.C2.ACTIVE_DISCOVERY.BSTATE_RETIREMENT.v1",
+  "baseline_main_tip": "a79616eeaa90ba097cc797a230aa73f9f41ecee8",
+  "prerequisites": {
+    "c2_r2_remote_verification": "PASS_FULL_REMOTE_BYTE_VERIFICATION",
+    "workflow_run_id": 30214691361,
+    "remote_object_count": 38,
+    "remote_verified_bytes_including_manifests": 872884406,
+    "blocking_qa_issues": 0,
+    "unresolved_qa_issues": 0
+  },
+  "activation": {
+    "selector_set_id": "SELECTOR.OPT-B.C2.GBPUSD.v1",
+    "role": "DISCOVERY",
+    "release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+    "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+    "manifest_sha256": "c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33",
+    "selector_state": "ACTIVE",
+    "authority_state": "ACTIVE_DISCOVERY"
+  },
+  "development": {
+    "release_id": "OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1",
+    "manifest_sha256": "8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e",
+    "selector_state": "NONE",
+    "authority_state": "REMOTE_VERIFIED_REFERENCE_ONLY"
+  },
+  "legacy_retirement": {
+    "object_id": "B-STATE-0.3b",
+    "state": "HISTORICAL_SUPERSEDED",
+    "runtime_imports": "DENIED",
+    "selector_eligibility": "DENIED",
+    "rollback_target": "DENIED"
+  },
+  "rollback": {
+    "action": "SET_ALL_C2_SELECTORS_NONE",
+    "target": "C1_ONLY_OPERATION",
+    "legacy_reactivation": "PROHIBITED"
+  },
+  "retained": {
+    "c1_selector": "SHADOW",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2e": "DEFERRED",
+    "c2_5": "DEFERRED",
+    "c3": "DEFERRED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "blocking_issues": 0
+}

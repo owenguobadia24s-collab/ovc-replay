@@ -1,0 +1,23 @@
+schema: ovc-opt-b-c2-legacy-retirement/v1
+retirement_id: RETIREMENT.B-STATE-0.3b.v1
+transaction_id: TXN.C2.ACTIVE_DISCOVERY.BSTATE_RETIREMENT.v1
+object_id: B-STATE-0.3b
+prior_state: LEGACY_QUARANTINED
+state: HISTORICAL_SUPERSEDED
+retired_at: 2026-07-26
+reason: SUPERSEDED_BY_REMOTE_VERIFIED_OPT-B.C2_DISCOVERY_RELEASE
+replacement:
+  release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+  manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
+  manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
+prohibitions:
+  runtime_imports: DENIED
+  release_parent_eligibility: DENIED
+  selector_eligibility: DENIED
+  rollback_target: DENIED
+  parameter_source: DENIED
+  discovery_seed_eligibility: DENIED
+rollback:
+  target: C1_ONLY_OPERATION
+  c2_selectors: NONE
+  legacy_reactivation: PROHIBITED
