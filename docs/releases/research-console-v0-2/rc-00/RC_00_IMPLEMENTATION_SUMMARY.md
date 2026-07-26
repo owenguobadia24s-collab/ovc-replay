@@ -4,12 +4,12 @@ Programme: OVC Research Console v0.2
 Work packet: RC-00 — Preflight and UI contract freeze
 Baseline: `main` at `4cc23b0f746feaa3fc91d1b6a956a0d4961a88dc`
 Branch: `build/research-console-v0-2-preflight-rc00-current`
-Status: IMPLEMENTATION_COMPLETE_TEST_CONFIRMATION_PENDING
+Status: COMPLETE_RC_G0_REVIEW_READY
 Authority delta: DESIGN_RECORDS_ONLY
 
 ## Completed
 
-- pinned the exact current main baseline and current console implementation files;
+- pinned the exact preflight main baseline and current console implementation files;
 - froze the UI authority contract;
 - froze route, card, status, empty-state and action registries;
 - classified all planned routes as read-only, bounded-read or read-only-when-materialized;
@@ -18,14 +18,12 @@ Authority delta: DESIGN_RECORDS_ONLY
 - froze the rule that no health signals cannot be interpreted as PASS;
 - added fail-closed RC-00 verification coverage.
 
-## Test status
+## Verification
 
 Canonical command: `python -m unittest discover tests`.
 
-The GitHub connector cannot execute the repository test suite directly. The packet therefore records canonical tests as `NOT_EVALUATED`; RC-G0 must not PASS until branch or pull-request test evidence is clean.
+GitHub Actions tests workflow run `30192017977` (run number `260`) completed successfully on the RC-00 branch head.
 
-## RC-G0 recommendation
+## Gate state
 
-`DEFER_UNTIL_CANONICAL_TESTS_PASS`.
-
-RC-WP1 remains unauthorized until RC-G0 is explicitly accepted.
+RC-00 is complete. RC-G0 is `READY_FOR_OPERATOR_REVIEW`. RC-WP1 remains unauthorized until RC-G0 is explicitly accepted.
