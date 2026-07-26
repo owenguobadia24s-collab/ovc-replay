@@ -1,0 +1,128 @@
+schema: ovc-discovery-operating-hub-workspace-alignment/v0.1
+status: FROZEN_BY_DO_00_V0_3_REALIGNMENT_PENDING_RC_G0A_AND_DO_G0
+console_target: OVC_RESEARCH_CONSOLE_V0_3
+source_plan: OVC_Research_Console_v0_3_Unified_Operations_Workspaces_Implementation_Plan_v0_1.docx
+rules:
+  primary_navigation: THREE_CONTEXTUAL_WORKSPACES
+  workspaces: [OVERVIEW, RESEARCH, SYSTEM]
+  former_v0_2_routes_are_primary_navigation: false
+  direct_repository_traversal: PROHIBITED
+  repository_scans_during_streamlit_rerun: PROHIBITED
+  source_resolution: DETERMINISTIC_TYPED_READ_MODEL_AND_REGISTERED_CATALOGUE_ONLY
+  missing_source_fallback: EXPLICIT_NOT_MATERIALIZED_NOT_EVALUATED_OR_EXPECTED_EMPTY
+  session_state_authority: PRESENTATION_ONLY
+  drawer_navigation: OPEN_IN_PLACE_PRESERVE_CONTEXT
+  search_scope: APPROVED_INDEXED_FIELDS_ONLY
+  activity_source: SOURCE_DERIVED_EVENTS_ONLY
+  console_mutation: NONE
+workspaces:
+  - workspace_id: OVERVIEW
+    primary_question: What is represented healthy missing blocked or changing?
+    always_visible:
+      - context and authority band
+      - ambient health grid
+      - activity handle
+    discovery_hub_panels:
+      - programme status and role boundaries
+      - release and gate index
+      - object and record inventory
+      - session incident and attention summaries
+      - recent source-derived change
+    authority: READ_ONLY_DERIVED_OPERATIONAL_VISIBILITY
+    fallback: NOT_EVALUATED
+  - workspace_id: RESEARCH
+    primary_question: What is the selected context doing what supports or contradicts it and what is due?
+    always_visible:
+      - instrument release side clock and time context
+      - prospective or review mode badge
+      - admissible cutoff
+      - queue sidebar
+      - activity handle
+    discovery_hub_panels:
+      - research brief
+      - cutoff-safe replay strip
+      - evidence cards and claim lineage
+      - session timeline
+      - neutral recurrence inventory
+      - discovery friction ledger
+      - change conditions
+    authority: READ_ONLY_CUTOFF_SAFE_RESEARCH_VISIBILITY
+    fallback: NOT_MATERIALIZED
+  - workspace_id: SYSTEM
+    primary_question: What are the governed objects dependencies releases QA assertions and configuration references?
+    always_visible:
+      - context and authority band
+      - scoped health
+      - activity handle
+    discovery_hub_panels:
+      - objects and lineage
+      - artifact catalogue
+      - releases and selectors
+      - QA gates issues and decisions
+      - research review and architecture-promotion packets
+      - local configuration and about
+    authority: READ_ONLY_GOVERNANCE_VISIBILITY
+    fallback: NOT_EVALUATED
+v0_2_route_migration:
+  OVERVIEW:
+    workspace: OVERVIEW
+    treatment: CONTEXT_HEALTH_AND_OPERATIONAL_SUMMARY
+  RESEARCH_DESK:
+    workspace: RESEARCH
+    treatment: RESEARCH_BRIEF_PANEL
+  REPLAY:
+    workspace: RESEARCH
+    treatment: CUTOFF_SAFE_REPLAY_PANEL
+  EVIDENCE:
+    workspace: RESEARCH
+    treatment: EVIDENCE_AND_CASE_PANEL
+  SESSIONS:
+    workspace: RESEARCH
+    treatment: READ_ONLY_SESSION_TIMELINE_PANEL
+  QUEUE:
+    workspace: RESEARCH
+    treatment: AMBIENT_QUEUE_SIDEBAR
+  HEALTH:
+    workspace: OVERVIEW
+    treatment: AMBIENT_HEALTH_GRID_WITH_SCOPED_CELLS_IN_RESEARCH_AND_SYSTEM
+  LINEAGE:
+    workspace: SYSTEM
+    treatment: OBJECT_AND_LINEAGE_PANEL_PLUS_DRAWER
+  CATALOGUE:
+    workspace: SYSTEM
+    treatment: ARTIFACT_CATALOGUE_PANEL
+  RELEASES:
+    workspace: SYSTEM
+    treatment: RELEASE_PANEL_WITH_OVERVIEW_SUMMARY
+  QA_GATES:
+    workspace: SYSTEM
+    treatment: QA_GATE_PANEL_WITH_OVERVIEW_SUMMARY
+  AUDIT:
+    workspace: SYSTEM
+    treatment: PERSISTENT_ACTIVITY_STREAM_AND_DETAIL_DRAWER
+  CONFIG:
+    workspace: SYSTEM
+    treatment: READ_ONLY_LOCAL_CONFIGURATION_PANEL
+  ABOUT:
+    workspace: SYSTEM
+    treatment: STATIC_PROGRAMME_AND_AUTHORITY_PANEL
+context_preservation:
+  preserve_across_workspace_switch:
+    - instrument
+    - release_id
+    - clock
+    - side
+    - selected_time
+    - replay_mode
+    - admissible_cutoff
+    - compatible_filters
+  drawer_must_not_change_main_selection: true
+  search_result_opens_owning_workspace_and_drawer: true
+  activity_focus_preserves_compatible_context: true
+  invalid_combination_requires_named_empty_state: true
+required_console_registries:
+  - RESEARCH_CONSOLE_WORKSPACE_REGISTRY_v0_3.yaml
+  - RESEARCH_CONSOLE_PANEL_REGISTRY_v0_3.yaml
+  - RESEARCH_CONSOLE_SESSION_STATE_REGISTRY_v0_3.yaml
+  - RESEARCH_CONSOLE_ACTION_REGISTRY_v0_3.yaml
+activation_rule: NO_LIVE_DO_PROJECTION_BEFORE_RC_SURFACE_GATE_AND_DO_GATE_PASS
