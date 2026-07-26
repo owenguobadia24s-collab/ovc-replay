@@ -41,6 +41,21 @@ The repository now contains:
 
 All WP3 computation remains synthetic/golden-fixture-only. No market payload was replayed and no release was created.
 
+## Research Operations Foundation RO-G0
+
+RO-G0 result: `PASS — RO-WP1 AUTHORISED AFTER MERGE`.
+
+The preflight pins `main` at `fefac25f19a836898c3a22228036cd66617dca07`, binds the Research Operations implementation plan by SHA-256 `4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0`, and freezes:
+
+- `ovc.research_operations` as the canonical future namespace;
+- contract, schema, registry, fixture, record, console and derived-runtime path boundaries;
+- one-way dependencies from approved OPT-A and optional approved C1/C2 objects;
+- metadata-only visibility for Validation while payload access remains denied;
+- Git, external-root and rebuildable-index storage separation;
+- RO-WP1, RO-WP2 and RO-WP3 predecessor gates.
+
+RO-G0 creates no runtime package, CLI, database, console or research record. After merge, only `RO-WP1 — Evidence envelope and record schemas` may begin.
+
 ## Active authority matrix
 
 | Boundary | State | Selector |
@@ -50,11 +65,15 @@ All WP3 computation remains synthetic/golden-fixture-only. No market payload was
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
+| Research Operations | `RO_G0_PASS / WP1_BUILD_AUTHORISED_AFTER_MERGE` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
+Validation remains `LOCKED_UNCONSUMED`. Research Operations and C1 cannot read the Validation payload, future paths or downstream outcomes without separate exact approvals.
 Validation remains `LOCKED_UNCONSUMED`. C1 market replay, local release freeze, R2 publication, selector activation and C2 consumption remain denied.
 
-## Next boundary
+## Parallel next boundaries
 
+- `OPT-B.C1 v2 WP3 — reference engine and fixture trust`
+- `RO-WP1 — Evidence envelope and record schemas`
 `C1-G0 — WP3 reference-engine review and WP4 replay-scope approval`

@@ -1,0 +1,62 @@
+schema: ovc-research-operations-dependency-policy/v1
+programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+gate_id: RO-G0
+status: FROZEN_FOR_RO_WP1
+baseline_commit: fefac25f19a836898c3a22228036cd66617dca07
+read_allowlist:
+  - registries/authority/ACTIVE_AUTHORITY.yaml
+  - registries/releases/**
+  - contracts/opt_a/**
+  - schemas/opt_a/**
+  - docs/releases/opt-a-v2/**
+  - registries/opt_b/c1/**
+  - contracts/opt_b/c1/**
+  - schemas/opt_b/c1/**
+  - src/ovc_evidence_store/**
+  - contracts/research_operations/**
+  - schemas/research_operations/**
+  - registries/research_operations/**
+conditional_future_reads:
+  opt_b_c1_outputs:
+    condition: EXACT_APPROVED_C1_RELEASE_AND_HANDOFF
+    default: DENIED
+  opt_b_c2_outputs:
+    condition: EXACT_APPROVED_C2_RELEASE_AND_HANDOFF
+    default: DENIED
+  validation_metadata:
+    condition: METADATA_ONLY
+    payload_access: DENIED_LOCKED_UNCONSUMED
+write_allowlist_after_respective_gates:
+  ro_wp1:
+    - contracts/research_operations/**
+    - schemas/research_operations/**
+    - registries/research_operations/**
+    - fixtures/research_operations/**
+    - tests/research_operations/**
+    - docs/research-operations/**
+    - docs/releases/research-operations-foundation/**
+  ro_wp2:
+    - src/ovc/research_operations/**
+    - records/research_operations/**
+    - scripts/**
+  ro_wp3:
+    - apps/research_console/**
+    - var/research_operations/**
+dependency_denylist:
+  - legacy/quarantine/** runtime imports
+  - historical OPT-A v1 as parent authority
+  - raw provider network access
+  - provider download or market aggregation
+  - direct R2 write, delete or publication
+  - release or selector mutation
+  - active threshold or parameter-pack mutation
+  - validation payload resolution
+  - post-cutoff bars or later model outputs in prospective records
+  - OPT-C or OPT-D outcomes before approved handoff
+  - probability, setup, forecast, risk, trade or execution objects
+  - autonomous agent tools or self-approval
+  - direct main-branch writes, commits, pushes, merges or history rewrite
+one_way_rule:
+  direction: OPT_A_OPTIONAL_C1_C2_TO_RESEARCH_RECORDS_TO_QA_TO_READ_MODEL_TO_CONSOLE
+  reverse_rewrite: DENIED
+  later_evaluation: ALLOWED_WITH_LINEAGE
