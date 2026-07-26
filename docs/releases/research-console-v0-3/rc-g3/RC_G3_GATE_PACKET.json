@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-research-console-rc-g3-gate-packet/v1",
+  "gate_id": "RC-G3",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "decision": "PASS_RO2_READ_ONLY_ADAPTER_CONSUMPTION",
+  "status": "ACCEPTED_LOCAL_READ_ONLY_RESEARCH_SURFACE",
+  "parent_ro2_gate": "RO2-G3",
+  "parent_ro2_merge_commit": "18cee80272284986a75c7bc88dd6e7f63f1aa7c8",
+  "baseline_main_commit": "35c259255f4b09aca85de8bf114a6e1031b99e52",
+  "accepted_capabilities": [
+    "workspace projection identity consumption",
+    "quality projection consumption",
+    "lineage projection consumption",
+    "admissible-cutoff replay presentation",
+    "release and workspace comparison presentation",
+    "Validation metadata-only presentation",
+    "fail-closed schema and role validation",
+    "write-capability rejection"
+  ],
+  "authority_delta": "LOCAL_READ_ONLY_RESEARCH_SURFACE_ONLY",
+  "retained_boundaries": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "research_writes": "DENIED_PENDING_SEPARATE_GATE",
+    "repository_mutation": "NONE",
+    "selector_mutation": "NONE_BY_CONSOLE",
+    "threshold_mutation": "NONE",
+    "release_activation": "NONE_BY_CONSOLE",
+    "market_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "execution_authority": "NONE",
+    "agent_authority": "NONE",
+    "deployment": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
+  },
+  "verification_required": [
+    "focused RC-G3 tests",
+    "RO2 adapter tests",
+    "full repository suite"
+  ]
+}
