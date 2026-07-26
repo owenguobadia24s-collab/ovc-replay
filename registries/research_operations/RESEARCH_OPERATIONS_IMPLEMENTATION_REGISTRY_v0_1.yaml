@@ -1,11 +1,14 @@
 schema: ovc-research-operations-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
-workstream: RO-WP2
-status: IMPLEMENTED_AWAITING_RO_G2_OPERATOR_REVIEW
-baseline_commit: 51f94c55eaed8c997bc141d33f0f3f4fa452bb0f
+workstream: RO-G2
+status: PASS_RO_WP3_BUILD_AUTHORISED
+baseline_commit: 62c9a7bf13fce5dd7f3850179c28f89aec16b9ee
 ro_g0_merge_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
 ro_wp1_merge_commit: 8944da84dec4915c7d7748ae5dbb2a9e1d187d28
 ro_g1_merge_commit: 51f94c55eaed8c997bc141d33f0f3f4fa452bb0f
+ro_wp2_merge_commit: 62c9a7bf13fce5dd7f3850179c28f89aec16b9ee
+ro_g2_decision_record: docs/releases/research-operations-foundation/ro-g2/RO_G2_OPERATOR_DECISION.md
+ro_g2_gate_packet: docs/releases/research-operations-foundation/ro-g2/RO_G2_GATE_PACKET.json
 package_namespace: ovc.research_operations
 source_path: src/ovc/research_operations
 schema_bundle: schemas/research_operations/research_records_v0_1.schema.json
@@ -19,14 +22,14 @@ fixture_pack: fixtures/research_operations/ro_wp2/FIXTURE_PACK.json
 authority:
   contracts_and_schemas: FROZEN
   evidence_kernel: REVIEWED_RO_G1_PASS
-  append_only_record_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-  audit_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-  cli: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-  artifact_catalogue: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-  queues: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-  qa_runner: DENIED_PENDING_RO_G2
-  read_model: DENIED_PENDING_RO_G2
-  console: DENIED_PENDING_RO_G2
+  append_only_record_service: APPROVED_BOUNDED_LOCAL_OPERATION
+  audit_service: APPROVED_BOUNDED_LOCAL_OPERATION
+  cli: APPROVED_BOUNDED_LOCAL_OPERATION
+  artifact_catalogue: APPROVED_READ_VERIFY_REPORT_LOCAL
+  queues: APPROVED_READ_ONLY_LOCAL
+  qa_runner: AUTHORISED_FOR_BUILD_NOT_ACTIVE
+  read_model: AUTHORISED_FOR_BUILD_NOT_ACTIVE
+  console: AUTHORISED_FOR_BUILD_NOT_ACTIVE
   validation_consumption: LOCKED_UNCONSUMED
   active_research: NONE
   market: NONE
@@ -34,4 +37,4 @@ authority:
   exposure: NONE
   execution: NONE
   agent: NONE
-next_gate: RO-G2
+next_workstream: RO-WP3

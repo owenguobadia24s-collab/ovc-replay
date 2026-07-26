@@ -36,6 +36,8 @@ ro_g1_gate_packet: docs/releases/research-operations-foundation/ro-g1/RO_G1_GATE
 ro_wp2_summary: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_IMPLEMENTATION_SUMMARY.md
 ro_wp2_gate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_GATE_PACKET.json
 ro_g2_candidate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_G2_CANDIDATE_GATE_PACKET.json
+ro_g2_decision_record: docs/releases/research-operations-foundation/ro-g2/RO_G2_OPERATOR_DECISION.md
+ro_g2_gate_packet: docs/releases/research-operations-foundation/ro-g2/RO_G2_GATE_PACKET.json
 state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY
 selectors:
   opt_a: ACTIVE
@@ -163,7 +165,7 @@ authorities:
     execution_authority: NONE
     active: false
   research_operations:
-    state: RO_WP2_IMPLEMENTED_AWAITING_RO_G2_REVIEW
+    state: RO_G2_PASS_WP3_BUILD_AUTHORISED
     programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
     implementation_registry: registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml
     evidence_envelope: contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md
@@ -175,17 +177,18 @@ authorities:
     contract_and_schema_state: FROZEN_AFTER_RO_WP2
     evidence_kernel: REVIEWED_RO_G1_PASS
     ro_g1: PASS
-    ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW
-    ro_g2: READY_FOR_OPERATOR_REVIEW
-    ro_wp3: DENIED_PENDING_RO_G2
-    append_only_record_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    audit_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    cli: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    artifact_catalogue: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    queues: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    qa_runner: NONE
-    read_model: NONE
-    console: NONE
+    ro_wp2: REVIEWED_RO_G2_PASS
+    ro_g2: PASS
+    ro_wp3: AUTHORISED_FOR_BUILD
+    service_activation: BOUNDED_LOCAL_OPERATIONS_APPROVED
+    append_only_record_service: APPROVED_BOUNDED_LOCAL_OPERATION
+    audit_service: APPROVED_BOUNDED_LOCAL_OPERATION
+    cli: APPROVED_BOUNDED_LOCAL_OPERATION
+    artifact_catalogue: APPROVED_READ_VERIFY_REPORT_LOCAL
+    queues: APPROVED_READ_ONLY_LOCAL
+    qa_runner: AUTHORISED_FOR_BUILD_NOT_ACTIVE
+    read_model: AUTHORISED_FOR_BUILD_NOT_ACTIVE
+    console: AUTHORISED_FOR_BUILD_NOT_ACTIVE
     validation_consumption: LOCKED_UNCONSUMED
     active_research: NONE
     market_authority: NONE

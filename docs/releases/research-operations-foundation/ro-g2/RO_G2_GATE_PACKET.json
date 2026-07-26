@@ -1,0 +1,132 @@
+{
+  "authority_delta": {
+    "active_research": "NONE",
+    "agent": "NONE",
+    "console": "AUTHORISED_FOR_BUILD_NOT_ACTIVE",
+    "execution": "NONE",
+    "exposure": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "qa_runner": "AUTHORISED_FOR_BUILD_NOT_ACTIVE",
+    "read_model": "AUTHORISED_FOR_BUILD_NOT_ACTIVE",
+    "ro_wp2_services": "APPROVED_BOUNDED_LOCAL_OPERATION",
+    "ro_wp3": "AUTHORISED_FOR_BUILD"
+  },
+  "candidate_packet": "docs/releases/research-operations-foundation/ro-wp2/RO_G2_CANDIDATE_GATE_PACKET.json",
+  "checks": [
+    {
+      "check_id": "RO-G2-01",
+      "evidence": [
+        "62c9a7bf13fce5dd7f3850179c28f89aec16b9ee"
+      ],
+      "name": "RO-WP2 merged at exact review baseline",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-02",
+      "evidence": [
+        "tests/research_operations/test_ro_wp2_service.py::test_complete_session_without_manual_file_editing"
+      ],
+      "name": "Complete session without manual file editing",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-03",
+      "evidence": [
+        "AUDIT_EVENT",
+        "FROZEN"
+      ],
+      "name": "Every public write emits immutable AuditEvent",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-04",
+      "evidence": [
+        "AppendOnlyViolationError",
+        "no delete command registered"
+      ],
+      "name": "Frozen overwrite, identity reuse and CLI deletion denied",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-05",
+      "evidence": [
+        "UnsafePathError"
+      ],
+      "name": "Path traversal and symlink escape denied",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-06",
+      "evidence": [
+        "HASH_MISMATCH",
+        "MISSING_ARTIFACT",
+        "EXPIRED_CI_ARTIFACT",
+        "ORPHAN_MANIFEST",
+        "MISSING_DEPENDENCY"
+      ],
+      "name": "Changed, missing, expired, orphaned and dependency defects remain visible",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-07",
+      "evidence": [
+        "logical_inventory_sha256"
+      ],
+      "name": "Catalogue rebuild is logically deterministic",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-08",
+      "evidence": [
+        "LOCKED_UNCONSUMED",
+        "payload_access:DENIED"
+      ],
+      "name": "Validation metadata-only isolation",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-09",
+      "evidence": [
+        "network_operations:NONE",
+        "git_operations:NONE",
+        "r2_operations:NONE",
+        "market_classification:NONE"
+      ],
+      "name": "No Git, R2, selector, threshold or classification side effects",
+      "status": "PASS"
+    },
+    {
+      "check_id": "RO-G2-10",
+      "evidence": [
+        "active_research:NONE",
+        "market:NONE",
+        "probability:NONE",
+        "exposure:NONE",
+        "execution:NONE",
+        "agent:NONE"
+      ],
+      "name": "No authority escalation",
+      "status": "PASS"
+    }
+  ],
+  "gate_id": "RO-G2",
+  "gate_name": "Operating reliability",
+  "gate_version": "0.1",
+  "next_packet": "RO-WP3 — QA runner, read model and console integration",
+  "operator_decision": "docs/releases/research-operations-foundation/ro-g2/RO_G2_OPERATOR_DECISION.md",
+  "operator_disposition": "PASS",
+  "review_baseline_commit": "62c9a7bf13fce5dd7f3850179c28f89aec16b9ee",
+  "ro_wp2_merge_commit": "62c9a7bf13fce5dd7f3850179c28f89aec16b9ee",
+  "rollback": "Disable bounded RO-WP2 service operation and remove RO-WP3 build authority while preserving all RO-WP1 and RO-WP2 evidence.",
+  "schema": "ovc-research-operations-gate-packet/v1",
+  "validation": {
+    "canonical_command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
+    "gate_specific_test": "tests/research_operations/test_ro_g2_operating_reliability.py",
+    "pr_head_ci_required": true,
+    "source_job": 89754746039,
+    "source_result": "PASS",
+    "source_workflow_run": 30187517516,
+    "trigger_provenance": "CONNECTED_GITHUB_IDENTITY_AFTER_SELF_REMOVING_REPAIR"
+  }
+}
