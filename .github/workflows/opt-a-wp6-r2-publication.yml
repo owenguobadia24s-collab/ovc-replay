@@ -103,10 +103,14 @@ jobs:
             --output-root wp6-manifests
 
       - name: Publish absent manifests or verify existing immutable releases
+        id: publication
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p wp6-readiness
+          mkdir -p wp6-readiness wp6-output
+          exec > >(tee wp6-output/publication.log) 2>&1
+          set -x
           for role in discovery development validation; do
             manifest="wp6-manifests/${role}.json"
             approval="docs/releases/opt-a-v2/publication/approvals/${role}.json"
@@ -143,6 +147,7 @@ jobs:
                 --approval "$approval" \
                 --repository-root a2-g3-source \
                 --bucket-lock-visible true > "wp6-readiness/${role}.json"
+              cat "wp6-readiness/${role}.json"
               python - "$role" <<'PY'
           import json
           import sys
@@ -172,6 +177,7 @@ jobs:
           done
 
       - name: Build compact WP6 report
+        if: steps.publication.outcome == 'success'
         run: |
           python scripts/opt_a/build_wp6_publication_report.py \
             --manifest-root wp6-manifests \
@@ -181,13 +187,15 @@ jobs:
             --workflow-run-id "${{ github.run_id }}" \
             --execution-commit "${{ github.sha }}"
 
-      - name: Upload publication report and readiness receipts
+      - name: Upload publication report and diagnostics
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: wp6-opt-a-r2-publication-report
           path: |
-            wp6-output/WP6_PUBLICATION_REPORT.json
+            wp6-output/*
             wp6-readiness/*.json
+          if-no-files-found: warn
           retention-days: 90
 
       - name: Record WP6 external execution on PR
@@ -196,4 +204,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh pr comment 12 --repo "${{ github.repository }}" --body "WP6 external publication execution **${{ job.status }}**. Workflow run: \`${{ github.run_id }}\`; commit: \`${{ github.sha }}\`. Selector activation was not part of this run."
+          gh pr comment 12 --repo "${{ github.repository }}" --body "WP6 external publication execution **${{ steps.publication.outcome }}**. Workflow run: \`${{ github.run_id }}\`; commit: \`${{ github.sha }}\`. Selector activation was not part of this run."
+
+      - name: Enforce publication result
+        if: steps.publication.outcome != 'success'
+        run: exit 1
