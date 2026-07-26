@@ -1,0 +1,41 @@
+schema: ovc-c1-to-c2-active-handoff-authority/v1
+authority_id: C1-C2-HANDOFF-ACTIVE-2026-07-26
+status: PASS_C1_ACTIVE_C2_SCOPE_AUTHORISED
+parent_repository_state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED
+selectors:
+  discovery: ACTIVE_DISCOVERY
+  development: ACTIVE_DEVELOPMENT
+  validation: NONE
+exact_releases:
+  discovery:
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
+    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+  development:
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
+    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+handoff:
+  contract: contracts/opt_b/c1/C1_TO_C2_HANDOFF_CONTRACT_v0_1.md
+  review_status: PASS_EXACT_IDENTITY_SCHEMA_CHRONOLOGY_NULL_AND_LINEAGE
+  authorised_scope: C2_BUILD_AND_REPLAY_DISCOVERY_DEVELOPMENT_ONLY
+  c2_selector: NONE
+  c2_activation: DENIED_PENDING_C2_GATES
+  c2_writeback_to_c1: PROHIBITED
+  validation_consumption: LOCKED_UNCONSUMED
+rollback:
+  action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE
+  atomic: true
+  preserves_published_releases: true
+prohibited:
+  - C1_VALIDATION_CONSUMPTION
+  - C2_ACTIVE_SELECTOR
+  - C2E
+  - C2_5
+  - C3
+  - OPT_C
+  - OPT_D
+  - PROBABILITY
+  - EXPOSURE
+  - TRADING
+  - EXECUTION
