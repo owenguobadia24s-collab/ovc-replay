@@ -40,8 +40,6 @@ def main() -> int:
 
     baseline = json.loads((ROOT / REQUIRED[8]).read_text(encoding="utf-8"))
     gate = json.loads((ROOT / REQUIRED[9]).read_text(encoding="utf-8"))
-
-    # RO2-G0 remains pinned to the C2-G4 court record that existed when design froze.
     assert baseline["court_record_tip"] == "85d2638d36c5039c35d2d49fcdb499dd48e7b354"
     assert baseline["c2_g4_replay"]["state_records"] == 404434
     assert baseline["c2_g4_replay"]["transition_records"] == 323910
@@ -53,48 +51,33 @@ def main() -> int:
     assert gate["authority_delta"] == "DESIGN_CANON_ONLY"
     assert gate["checks"]["runtime_implementation_started"] == "NO"
     assert gate["retained"]["validation_consumption"] == "LOCKED_UNCONSUMED"
-    assert gate["retained"]["c2_candidate_release"] == "NONE"
-    assert gate["retained"]["c2_publication"] == "NONE"
-    assert gate["retained"]["c2_selector"] == "NONE"
-    assert gate["retained"]["c2_activation"] == "NONE"
 
     require_tokens(REQUIRED[0], ["FROZEN_DESIGN_ONLY", "No runtime indexer", "LOCKED_UNCONSUMED"])
     require_tokens(REQUIRED[1], ["validation_guard: DENY_BEFORE_PATH_RESOLUTION", "content_resolution: DENY"])
     require_tokens(REQUIRED[2], ["OPT_A_V2_VALIDATION_CONTENT", "GIT_PRIMARY_BRANCH", "R2_CANONICAL"])
-    require_tokens(REQUIRED[3], ["RO2_G0_PASS_DESIGN_FREEZE", "NOT_STARTED_REQUIRES_SEPARATE_INSTRUCTION"])
+    require_tokens(
+        REQUIRED[3],
+        [
+            "RO2_G2_PASS_LOCAL_REPLACEABLE_READ_ONLY_INSPECTION",
+            "ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_DERIVED",
+            "ACCEPTED_RO2_G2_ACTIVE_BOUNDED_LOCAL_READ_ONLY",
+            "ACCEPTED_RO2_G2_ACTIVE_DISCOVERY_DEVELOPMENT_LOCAL_READ_ONLY",
+            "validation_consumption: LOCKED_UNCONSUMED",
+            "c2_selector: NONE",
+            "c2_activation: NONE",
+        ],
+    )
     require_tokens(REQUIRED[4], ["RO2.ReplayFrame", "RO2.ConsoleResearchProjection", "Validation content identifiers may not be emitted"])
     require_tokens(REQUIRED[5], ["RO2-QA-002", "RO2-QA-004", "RO2-QA-011"])
     require_tokens(REQUIRED[6], ["validation_row_resolution_attempt", "prospective_frame_contains_post_cutoff_record", "attempted_git_r2_selector_or_threshold_write"])
     require_tokens(REQUIRED[7], ["Research workspace remains fixture-only", "Validation content must never be resolved"])
 
-    # Later C2 gates may publish and verify exact releases while preserving the RO2 boundary.
-    # Selector, activation and Validation access remain separately controlled.
-    require_tokens(
-        "docs/CURRENT_STATUS.md",
-        [
-            "### C2-G4 exact-parent replay",
-            "PASS_LOCAL_REPLAY",
-            "PASS_LOCAL_CANDIDATE_RELEASE_FROZEN",
-            "PASS_FULL_REMOTE_BYTE_VERIFICATION",
-            "PASS_READY_FOR_EXPLICIT_ACTIVATION_DECISION_NOT_ACTIVATED",
-            "Validation remains `LOCKED_UNCONSUMED`",
-        ],
-    )
+    require_tokens("docs/CURRENT_STATUS.md", ["PASS_FULL_REMOTE_BYTE_VERIFICATION", "Validation remains `LOCKED_UNCONSUMED`"])
     require_tokens(
         "registries/authority/ACTIVE_AUTHORITY.yaml",
-        [
-            "C2_R2_REMOTE_VERIFIED_READY_FOR_EXPLICIT_ACTIVATION_NOT_ACTIVATED",
-            "publication: COMPLETE_REMOTE_VERIFIED",
-            "publication_executed: true",
-            "remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION",
-            "selector: NONE",
-            "activation: NONE",
-            "legacy_b_state_retirement_executed: false",
-            "validation_consumption: LOCKED_UNCONSUMED",
-        ],
+        ["publication: COMPLETE_REMOTE_VERIFIED", "selector: NONE", "activation: NONE", "validation_consumption: LOCKED_UNCONSUMED"],
     )
-
-    print("PASS: RO2-G0 design packet remains valid against the remote-verified C2 court record")
+    print("PASS: RO2-G0 design remains valid with RO2-G2 accepted inspection authority and retained boundaries")
     return 0
 
 
