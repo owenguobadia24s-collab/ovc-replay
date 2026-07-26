@@ -1,0 +1,82 @@
+schema: ovc-opt-b-c1-qa-check-registry/v1
+registry_id: C1.QA.v0.1
+status: FROZEN_AFTER_WP2
+layer_id: OPT-B.C1.v2
+blocking_default: true
+checks:
+  - check_id: C1-QA-ARITH-001
+    family: ARITHMETIC
+    severity: BLOCK
+    target: C1_RECORD
+    rule: OHLC invariants and every formula must reproduce exact Decimal output.
+    quarantine_effect: RECORD_OR_RELEASE
+  - check_id: C1-QA-DOMAIN-002
+    family: DOMAIN_AND_NULLS
+    severity: BLOCK
+    target: C1_RECORD
+    rule: Bounded ratios, zero-range outputs and null reasons must match the frozen registry and policy.
+    quarantine_effect: RECORD_OR_RELEASE
+  - check_id: C1-QA-CHRON-003
+    family: CHRONOLOGY
+    severity: BLOCK
+    target: C1_RECORD
+    rule: Only one closed current bar and an exact immediate contiguous prior close may be read.
+    quarantine_effect: RECORD_OR_RELEASE
+  - check_id: C1-QA-LEAK-004
+    family: LEAKAGE
+    severity: BLOCK
+    target: IMPLEMENTATION_AND_RECORD
+    rule: Future bars, outcomes and downstream C2/C/D or exposure objects are absent from inputs and outputs.
+    quarantine_effect: RELEASE
+  - check_id: C1-QA-LINEAGE-005
+    family: SOURCE_LINEAGE
+    severity: BLOCK
+    target: C1_RECORD_AND_RELEASE
+    rule: Exact OPT-A v2 release, manifest, bar, clock, side, first-valid time and source lineage resolve.
+    quarantine_effect: RECORD_OR_RELEASE
+  - check_id: C1-QA-DETERMINISM-006
+    family: DETERMINISM
+    severity: BLOCK
+    target: C1_STREAM_AND_RELEASE
+    rule: Identical code, registry, schema and input bytes produce bit-identical canonical output.
+    quarantine_effect: RELEASE
+  - check_id: C1-QA-SYMMETRY-007
+    family: METAMORPHIC_SYMMETRY
+    severity: BLOCK
+    target: FORMULA_IMPLEMENTATION
+    rule: Each primitive satisfies its declared reflection, sign or wick-swap symmetry.
+    quarantine_effect: FORMULA_VERSION
+  - check_id: C1-QA-SERIAL-008
+    family: SERIALIZATION_AND_IDENTITY
+    severity: BLOCK
+    target: C1_RECORD
+    rule: Decimal strings, stable ordering, UTF-8 newline policy and path-independent record identity hold.
+    quarantine_effect: RECORD_OR_RELEASE
+  - check_id: C1-QA-CARDINALITY-009
+    family: CARDINALITY
+    severity: BLOCK
+    target: C1_STREAM
+    rule: Each handoff-eligible source bar produces exactly one C1 record and each ineligible bar produces none with a reason count.
+    quarantine_effect: RELEASE
+  - check_id: C1-QA-BOUNDARY-010
+    family: AUTHORITY_BOUNDARY
+    severity: BLOCK
+    target: PACKAGE_AND_RELEASE
+    rule: No thresholds, semantic labels, rolling state, cross-side interpretation, market claim or exposure authority enters C1.
+    quarantine_effect: RELEASE_AND_GATE
+required_for_wp3_pass:
+  - C1-QA-ARITH-001
+  - C1-QA-DOMAIN-002
+  - C1-QA-CHRON-003
+  - C1-QA-LEAK-004
+  - C1-QA-LINEAGE-005
+  - C1-QA-DETERMINISM-006
+  - C1-QA-SYMMETRY-007
+  - C1-QA-SERIAL-008
+  - C1-QA-CARDINALITY-009
+  - C1-QA-BOUNDARY-010
+qa_authority:
+  may_pass_warn_block_quarantine: true
+  may_rewrite_market_facts: false
+  may_repair_outputs: false
+  may_suppress_failure: false
