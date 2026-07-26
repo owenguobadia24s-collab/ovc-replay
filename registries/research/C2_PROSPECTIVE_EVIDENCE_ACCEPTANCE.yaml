@@ -1,0 +1,27 @@
+schema: ovc-c2-prospective-evidence-acceptance/v1
+gate_id: C2-G7
+research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
+state: ACTIVE_PROSPECTIVE_EVIDENCE_ACCUMULATION
+accepted_work_packet: C2_WP7_PROSPECTIVE_EVIDENCE_ACCUMULATION
+baseline_main_tip: bc1ea7d1e82bd48817b83b89c1e1d983f3b44ab7
+zero_baseline: true
+historical_backfill: false
+record_classes:
+  - STATE_FIDELITY_REVIEW
+  - BOUNDARY_CONFLICT_CASE
+  - ANOMALY
+  - INCIDENT
+  - BOUNDED_RESEARCH_QUESTION
+append_policy: APPEND_ONLY_AFTER_C2_G7
+validator_mode: FAIL_CLOSED
+next_boundary: FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW
+retained_authority:
+  validation_consumption: LOCKED_UNCONSUMED
+  c2e_authority: NONE
+  probability_authority: NONE
+  exposure_authority: NONE
+  trading_authority: NONE
+  execution_authority: NONE
+  direct_r2_write: DENIED
+  selector_mutation: DENIED
+  release_mutation: DENIED
