@@ -63,15 +63,17 @@ console_v0_2_upgrade:
   research_write_authority: DENIED_PENDING_SEPARATE_GATE
 console_v0_3_amendment:
   programme_id: OVC-RESEARCH-CONSOLE.v0.3
-  stage: RC_WP1_COMPLETE_RC_G1_V0_3_REVIEW_READY
+  stage: RC_G1_PASS_RC_WP2_V0_3_AUTHORISED
   preflight_baseline_commit: f704f33e4d5fc19f5807d0a92156b99afa8bce84
   acceptance_merge_commit: f93a84e9bfdf36b28ba79f84da8163c3ae4e3b10
   rc_wp1_baseline_commit: ea4d4dac2ec07845b82250980207c99e98eb581b
+  rc_wp1_reviewed_head: 4f2450ded381945a088d1f0b21c0a2745c172577
+  rc_wp1_merge_commit: fa210386378db684419fe6a38b89870dbf72de2d
   integration_baseline_commit: 2a1b22dc248ebe0f0c1b360062e9e6c1402a5b1a
   rc_a0_reviewed_head: 8373a0129e482e7b1a27dc574f236e804a703ef0
   rc_a0_pr: 54
   rc_a0_pr_integration_state: REBASED_BY_RC_A1_FRESH_MAIN_INTEGRATION
-  authority_delta: FIXTURE_ONLY_LOCAL_PRESENTATION
+  authority_delta: FIXTURE_ONLY_LOCAL_PRESENTATION_ACCEPTED_RC_G1
   amendment_plan: docs/plans/research_operations/OVC_RESEARCH_CONSOLE_V0_3_INFORMATION_ARCHITECTURE_AMENDMENT_v0_1.md
   information_architecture_contract: contracts/research_operations/console/OVC_RESEARCH_CONSOLE_INFORMATION_ARCHITECTURE_CONTRACT_v0_3.md
   workspace_registry: registries/research_operations/RESEARCH_CONSOLE_WORKSPACE_REGISTRY_v0_3.yaml
@@ -85,17 +87,22 @@ console_v0_3_amendment:
   rc_a1_gate_packet: docs/releases/research-console-v0-3/rc-a1/RC_A1_GATE_PACKET.json
   rc_a1_decision_record: docs/releases/research-console-v0-3/rc-a1/RC_A1_OPERATOR_DECISION.md
   rc_wp1_branch: build/research-console-v0-3-shell-navigation-current
+  rc_wp1_pr: 61
   rc_wp1_entry_point: apps/research_console/Home.py
   rc_wp1_fixture_pack: fixtures/research_operations/research_console_v0_3/RC_WP1_SHELL_FIXTURES.json
   rc_wp1_packet: docs/releases/research-console-v0-3/rc-wp1/RC_WP1_IMPLEMENTATION_PACKET.json
   rc_wp1_summary: docs/releases/research-console-v0-3/rc-wp1/RC_WP1_IMPLEMENTATION_SUMMARY.md
+  rc_g1_gate_packet: docs/releases/research-console-v0-3/rc-g1/RC_G1_GATE_PACKET.json
+  rc_g1_decision_record: docs/releases/research-console-v0-3/rc-g1/RC_G1_OPERATOR_DECISION.md
   primary_workspaces: [OVERVIEW, RESEARCH, SYSTEM]
   rc_a0: COMPLETE_RC_A1_REVIEW_READY
   rc_a1: PASS
-  rc_wp1: COMPLETE_RC_G1_V0_3_REVIEW_READY
-  shell_implementation_authority: IMPLEMENTED_FIXTURE_ONLY_PENDING_RC_G1
-  live_projection_authority: DENIED_PENDING_LATER_GATE
-  live_research_surface_authority: DENIED_PENDING_LATER_GATE
+  rc_wp1: MERGED_AND_ACCEPTED_BY_RC_G1
+  rc_g1: PASS
+  shell_implementation_authority: ACCEPTED_LOCAL_FIXTURE_ONLY_PRESENTATION
+  rc_wp2_authority: AUTHORISED_IMPLEMENTATION_PENDING_RC_G2
+  active_live_projection_authority: DENIED_PENDING_RC_G2
+  live_research_surface_authority: DENIED_PENDING_RC_G3
   research_write_authority: DENIED_PENDING_SEPARATE_GATE
   repository_mutation: NONE
   selector_mutation: NONE
@@ -107,4 +114,4 @@ console_v0_3_amendment:
   execution_authority: NONE
   agent_authority: NONE
   deployment_authority: LOCAL_ONLY_NO_REMOTE_DEPLOY
-next_workstream: RC_G1_V0_3_SHELL_CONTEXT_AND_RESPONSIVE_ACCEPTANCE
+next_workstream: RC_WP2_V0_3_OVERVIEW_WORKSPACE_AND_AMBIENT_HEALTH

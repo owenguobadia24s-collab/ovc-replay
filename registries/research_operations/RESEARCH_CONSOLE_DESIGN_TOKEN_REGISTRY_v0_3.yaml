@@ -1,5 +1,5 @@
 schema: ovc-research-console-design-token-registry/v0.3
-status: IMPLEMENTED_RC_WP1_PENDING_RC_G1
+status: ACCEPTED_BY_RC_G1_V0_3
 source: apps/research_console/theme.py
 palette:
   background: '#0B1220'
@@ -20,6 +20,7 @@ layout:
   main_canvas_weight: 4.7
   detail_drawer_weight: 1.55
   target_widths: [1280, 1440, 1920]
+  narrow_screen_fallback: 1100
 status_rules:
   color_only_status: PROHIBITED
   unknown_status: BLOCK
@@ -29,5 +30,9 @@ status_rules:
 css: apps/research_console/assets/console.css
 authority:
   presentation: FIXTURE_ONLY_LOCAL
-  live_projection: DENIED
+  active_live_projection: DENIED_PENDING_RC_G2
   mutation: NONE
+acceptance:
+  gate: RC-G1-v0.3
+  decision: PASS_SHELL_CONTEXT_AND_RESPONSIVE_CONTRACT_ACCEPTED
+  implementation_merge_commit: fa210386378db684419fe6a38b89870dbf72de2d
