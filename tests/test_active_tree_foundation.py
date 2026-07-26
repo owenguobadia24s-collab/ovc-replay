@@ -22,6 +22,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_WP3_REFERENCE_ENGINE_PASS_NO_C1_MARKET_AUTHORITY",
     "state: C1_B1_G0_PASS_WP4_REPLAY_AUTHORISED_NO_C1_RELEASE_AUTHORITY",
     "state: C1_WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_NO_PUBLICATION_AUTHORITY",
+    "state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY",
 }
 
 
@@ -29,7 +30,7 @@ class ActiveTreeFoundationTests(unittest.TestCase):
     def test_clean_namespaces_import(self) -> None:
         self.assertEqual(ovc.__version__, "0.2.0")
         self.assertEqual(OPT_A_STATE, "DESIGN_AND_FIXTURES_ONLY")
-        self.assertEqual(C1_STATE, "WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE")
+        self.assertEqual(C1_STATE, "B1_G1_CANDIDATE_INVENTORY_ACCEPTED_FREEZE_AUTHORISED")
         self.assertEqual(C2_STATE, "DESIGN_AND_FIXTURES_ONLY")
 
     def test_legacy_engine_is_not_in_active_source_tree(self) -> None:
@@ -46,7 +47,7 @@ class ActiveTreeFoundationTests(unittest.TestCase):
         self.assertIn("runtime_imports: DENIED", authority)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
         self.assertIn("market_replay: COMPLETE_WP4_PASS", authority)
-        self.assertIn("release_freeze: PENDING_B1_G1_EXACT_INVENTORY_REVIEW", authority)
+        self.assertIn("release_freeze: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION", authority)
         self.assertIn("selector: NONE", authority)
 
 
