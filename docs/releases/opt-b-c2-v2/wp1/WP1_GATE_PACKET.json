@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-opt-b-c2-wp1-gate-packet/v1",
+  "gate_id": "C2-G0",
+  "work_packet": "WP1",
+  "decision": "PASS_C2_BOUNDARY_RETIREMENT_AND_RESEARCH_LINE_FROZEN",
+  "source_state": "C1_ACTIVE_C2_NONE",
+  "checks": [
+    {"check_id":"B2-01","name":"Repository and plan preflight","status":"PASS"},
+    {"check_id":"B2-02","name":"C2 implementation record","status":"PASS"},
+    {"check_id":"B2-03","name":"C2 namespace map","status":"PASS"},
+    {"check_id":"B2-04","name":"Dependency allowlist and denylist","status":"PASS"},
+    {"check_id":"B2-05","name":"B-STATE retirement and no-reactivation plan","status":"PASS"},
+    {"check_id":"B2-06","name":"New discovery-line registry","status":"PASS"},
+    {"check_id":"B2-07","name":"Deferred-capability register","status":"PASS"}
+  ],
+  "authority_delta": {
+    "c2_design": "APPROVED",
+    "wp2_contract_freeze": "AUTHORISED",
+    "engine_implementation": "DENIED_PENDING_WP2",
+    "market_replay": "DENIED_PENDING_C2_G2_AND_OPERATOR_APPROVAL",
+    "selector": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "blocking_issues": 0,
+  "next_gate": "C2-G1_CONTRACT_FREEZE"
+}

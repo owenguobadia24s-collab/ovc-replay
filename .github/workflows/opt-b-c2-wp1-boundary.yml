@@ -1,0 +1,37 @@
+name: OPT-B.C2 WP1 boundary and implementation registry
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wp1-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Verify C2 WP1 gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('docs/releases/opt-b-c2-v2/wp1/WP1_GATE_PACKET.json').read_text())
+          registry = Path('registries/opt_b/c2/C2_IMPLEMENTATION_REGISTRY.yaml').read_text()
+          dependency = Path('registries/opt_b/c2/C2_DEPENDENCY_POLICY.yaml').read_text()
+          retirement = Path('registries/opt_b/c2/C2_LEGACY_RETIREMENT_PLAN.yaml').read_text()
+          assert gate['decision'] == 'PASS_C2_BOUNDARY_RETIREMENT_AND_RESEARCH_LINE_FROZEN'
+          assert gate['blocking_issues'] == 0
+          assert 'WP1_PASS_BOUNDARY_FROZEN_WP2_AUTHORISED' in registry
+          assert 'selector: NONE' in registry
+          assert 'validation_consumption: LOCKED_UNCONSUMED' in registry
+          assert 'B-STATE-0.3b runtime imports or parentage' in dependency
+          assert 'reactivate_b_state: PROHIBITED' in retirement
+          PY
