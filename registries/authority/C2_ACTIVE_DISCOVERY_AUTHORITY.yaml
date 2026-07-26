@@ -1,0 +1,31 @@
+schema: ovc-c2-active-discovery-authority/v1
+transaction_id: TXN.C2.ACTIVE_DISCOVERY.BSTATE_RETIREMENT.v1
+effective_when_merged_to: main
+state: C2_ACTIVE_DISCOVERY_BSTATE_HISTORICAL_SUPERSEDED
+selector:
+  layer: OPT-B.C2.v2
+  state: ACTIVE
+  authority: ACTIVE_DISCOVERY
+  release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+  manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
+  manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
+  remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION
+  remote_verification_workflow_run_id: 30214691361
+legacy:
+  object_id: B-STATE-0.3b
+  state: HISTORICAL_SUPERSEDED
+  runtime_imports: DENIED
+  selector_eligibility: DENIED
+  rollback_target: DENIED
+rollback:
+  c2_selector: NONE
+  operation: C1_ONLY
+  legacy_reactivation: PROHIBITED
+retained:
+  c1_selector: SHADOW
+  c2_development_selector: NONE
+  validation_consumption: LOCKED_UNCONSUMED
+  probability_authority: NONE
+  exposure_authority: NONE
+  trading_authority: NONE
+  execution_authority: NONE
