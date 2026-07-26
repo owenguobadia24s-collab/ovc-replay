@@ -1,7 +1,7 @@
 """Deterministic Research Operations evidence and operator services.
 
-RO-WP2 adds governed append-only record writes, audit emission, queues and a
-read/verify/report-only artifact catalogue. It performs no Git, R2, selector,
+RO-WP3 adds a no-mutation QA runner, replaceable typed read model and local
+read-only console projection. These surfaces perform no Git, R2, selector,
 threshold, market-classification, probability, exposure or execution action.
 """
 from .availability import derive_reproducibility_state
@@ -16,11 +16,14 @@ from .catalogue import (
     write_catalogue,
 )
 from .config import ConfigurationError, ResearchOperationsConfig
+from .console import ConsoleWriteDenied, ResearchConsole
 from .identity import DuplicateRecordIdError, RecordIdRegistry, deterministic_record_id
 from .lifecycle import FrozenRecordMutationError, freeze_record, supersede_record, verify_frozen_record
 from .operations import ResearchOperationsService
 from .paths import ApprovedPathRegistry, PathPolicyError, UnsafePathError
+from .qa import QAAssertion, QARun, QARunner, required_fields_check
 from .queues import ResearchQueueService
+from .read_model import ReadModelBuilder, ReadModelNode, ResearchReadModel, query_nodes
 from .storage import AppendOnlyViolationError, DraftStore, FrozenRecordStore, ResearchWriteService
 from .validation import RecordValidationError, validate_record
 
@@ -34,4 +37,7 @@ __all__ = [
     "FrozenRecordStore", "ResearchWriteService", "ResearchOperationsService",
     "ArtifactNode", "CatalogueIssue", "ArtifactCatalogue", "ArtifactCatalogueBuilder",
     "write_catalogue", "read_catalogue", "catalogue_report", "ResearchQueueService",
+    "QAAssertion", "QARun", "QARunner", "required_fields_check",
+    "ReadModelNode", "ResearchReadModel", "ReadModelBuilder", "query_nodes",
+    "ConsoleWriteDenied", "ResearchConsole",
 ]

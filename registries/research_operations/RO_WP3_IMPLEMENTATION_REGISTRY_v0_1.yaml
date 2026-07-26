@@ -1,0 +1,32 @@
+schema: ovc-research-operations-wp3-implementation/v1
+programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+workstream: RO-WP3
+status: IMPLEMENTED_AWAITING_OPERATOR_REVIEW
+baseline_commit: e19456821e243c6f9fb7f77e49cb5cad295c3d18
+predecessor_gate: RO-G2_PASS
+contract: contracts/research_operations/QA_READ_MODEL_AND_CONSOLE_CONTRACT_v0_1.md
+source:
+  qa_runner: src/ovc/research_operations/qa.py
+  read_model: src/ovc/research_operations/read_model.py
+  console_projection: src/ovc/research_operations/console.py
+  streamlit_shell: apps/research_console/Home.py
+  read_model_builder: scripts/build_research_read_model.py
+  windows_launcher: scripts/start_research_console.ps1
+tests:
+  - tests/research_operations/test_ro_wp3_qa_read_model_console.py
+authority:
+  qa_runner: IMPLEMENTED_NOT_ACTIVE
+  read_model: IMPLEMENTED_NOT_ACTIVE
+  console: IMPLEMENTED_NOT_ACTIVE
+  research_writes: EXISTING_RO_WP2_GOVERNED_CLI_ONLY
+  validation_consumption: LOCKED_UNCONSUMED
+  repository_mutation: NONE
+  r2_mutation: NONE
+  selector_mutation: NONE
+  threshold_mutation: NONE
+  market_classification: NONE
+  probability: NONE
+  exposure: NONE
+  execution: NONE
+  agent: NONE
+next_gate: RO-G3_FOUNDATION_ACCEPTANCE

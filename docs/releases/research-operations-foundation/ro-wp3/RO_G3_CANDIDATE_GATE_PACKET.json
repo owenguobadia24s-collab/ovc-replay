@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-research-operations-gate-candidate/v1",
+  "gate_id": "RO-G3",
+  "gate_name": "Research Operations Foundation acceptance",
+  "status": "CANDIDATE_AWAITING_OPERATOR_REVIEW",
+  "baseline_commit": "e19456821e243c6f9fb7f77e49cb5cad295c3d18",
+  "predecessor_gate": "RO-G2_PASS",
+  "scope": [
+    "QA_RUNNER",
+    "TYPED_READ_MODEL",
+    "READ_ONLY_LOCAL_CONSOLE",
+    "WINDOWS_LAUNCHER"
+  ],
+  "required_checks": [
+    "QA_TARGET_NON_MUTATION",
+    "QA_DETERMINISM",
+    "BLOCKING_ASSERTION_PROPAGATION",
+    "READ_MODEL_DETERMINISTIC_REBUILD",
+    "SOURCE_LINEAGE_VISIBLE",
+    "MISSING_AND_BLOCKING_HEALTH_VISIBLE",
+    "CONSOLE_WRITE_DENIED",
+    "VALIDATION_LOCKED_UNCONSUMED",
+    "NO_GIT_R2_SELECTOR_THRESHOLD_MARKET_OR_EXECUTION_AUTHORITY",
+    "CANONICAL_TEST_SUITE_PASS"
+  ],
+  "authority_request": {
+    "qa_runner": "APPROVE_LOCAL_ASSURANCE_OPERATION",
+    "read_model": "APPROVE_REPLACEABLE_LOCAL_DERIVED_INDEX",
+    "console": "APPROVE_LOCAL_READ_ONLY_OPERATION",
+    "active_research": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "market": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE",
+    "agent": "NONE"
+  },
+  "rollback": "Disable the local console and discard the derived read-model directory while preserving all source records, contracts, QA evidence and RO-WP2 services."
+}
