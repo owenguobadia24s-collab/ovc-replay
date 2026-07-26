@@ -1,12 +1,14 @@
 schema: ovc-active-authority/v1
 repository: owenguobadia24s-collab/ovc-replay
 snapshot_date: 2026-07-26
-court_record_tip_before_reconciliation: fa11546a93f865c26d7cf99f5b5c60156bf50f9b
+court_record_tip_before_recovery: 015e57d862f740c4a0e722e611e0dbeadfaad209
 reset_baseline: c0ad7ba22618babdde731e2a338f68f688d4210c
-state: OPT_A_ACTIVE_C1_SHADOW_RO_LOCAL_ACTIVE_C2_G4_BLOCKED
+state: OPT_A_ACTIVE_C1_SHADOW_RO_LOCAL_ACTIVE_C2_EXACT_PARENT_INPUTS_AVAILABLE
 
 records:
   opt_a_a2_g5: docs/releases/opt-a-v2/activation/A2_G5_SELECTOR_ACTIVATION.json
+  opt_a_r2_root_recovery_decision: docs/releases/opt-a-v2/recovery/OPT_A_V2_R2_ROOT_RECOVERY.md
+  opt_a_r2_root_recovery_receipt: docs/releases/opt-a-v2/recovery/OPT_A_V2_R2_ROOT_RECOVERY_RECEIPT.json
   c1_b1_g5_decision: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_OPERATOR_DECISION.md
   c1_b1_g5_gate_packet: docs/releases/opt-b-c1-v2/b1-g5/B1_G5_GATE_PACKET.json
   ro_g3_decision: docs/releases/research-operations-foundation/ro-g3/RO_G3_OPERATOR_DECISION.md
@@ -15,8 +17,8 @@ records:
   rc_g2_v0_3_gate_packet: docs/releases/research-console-v0-3/rc-g2/RC_G2_GATE_PACKET.json
   c2_g3r_decision: docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_OPERATOR_DECISION.md
   c2_g3r_gate_packet: docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_GATE_PACKET.json
-  c2_g4_decision: docs/releases/opt-b-c2-v2/wp5/WP5_OPERATOR_DECISION.md
-  c2_g4_gate_packet: docs/releases/opt-b-c2-v2/wp5/WP5_GATE_PACKET.json
+  c2_g4_prior_decision: docs/releases/opt-b-c2-v2/wp5/WP5_OPERATOR_DECISION.md
+  c2_g4_prior_gate_packet: docs/releases/opt-b-c2-v2/wp5/WP5_GATE_PACKET.json
 
 selectors:
   opt_a: ACTIVE
@@ -49,9 +51,11 @@ authorities:
     release_set_id: OPT-A.GBPUSD.ROLESET.2021_2025.v1
     lifecycle_state: REMOTE_VERIFIED
     discovery_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    discovery_manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     discovery_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
     discovery_authority: ACTIVE_DISCOVERY
     development_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    development_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     development_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
     development_authority: ACTIVE_DEVELOPMENT
     validation_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
@@ -60,6 +64,16 @@ authorities:
     validation_consumption: LOCKED_UNCONSUMED
     quarantined_derived_bucket_records: 21410
     quarantine_disposition: RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS
+    exact_parent_recovery_state: PASS_EXACT_R2_ROOTS_RECOVERED_AND_FULL_BYTE_VERIFIED
+    exact_parent_recovery_source: CLOUDFLARE_R2_CANONICAL
+    exact_parent_recovery_workflow_run_id: 30209041054
+    exact_parent_roots_artifact_id: 8633917454
+    exact_parent_roots_artifact_name: opt-a-v2-r2-exact-parent-roots
+    exact_parent_roots_artifact_digest: sha256:6ba85619d21e4ac84bab2838adb237c4cb8fdd5b69bacd185c862712ddd8e47e
+    exact_parent_roots_artifact_expires_at: 2026-10-24T15:49:48Z
+    recovered_manifest_bound_payload_objects: 394
+    recovered_manifest_bound_payload_bytes: 208395160
+    recovered_price_files: 192
     market_authority: SEALED_OBSERVATION_INPUT_ONLY
     active: true
 
@@ -85,13 +99,19 @@ authorities:
     active: true
 
   opt_b_c2_v2:
-    state: C2_G3R_PASS_C2_G4_BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT
+    state: C2_G3R_PASS_EXACT_PARENT_INPUTS_AVAILABLE_REPLAY_NOT_EXECUTED
     contracts_and_registries: IMPLEMENTED
     actual_parent_engine: TRUSTED_FIXTURE_EXACT_SHAPE
     canonical_c1_intake: READY_MANIFEST_BOUND
-    exact_opt_a_intake: READY_CODE_NOT_EXECUTED
+    exact_opt_a_intake: RECOVERED_VERIFIED_ARTIFACT_AVAILABLE
+    exact_opt_a_recovery_workflow_run_id: 30209041054
+    exact_opt_a_roots_artifact_id: 8633917454
+    exact_opt_a_roots_artifact_digest: sha256:6ba85619d21e4ac84bab2838adb237c4cb8fdd5b69bacd185c862712ddd8e47e
+    exact_opt_a_manifest_bound_payload_objects: 394
+    exact_opt_a_manifest_bound_payload_bytes: 208395160
+    exact_opt_a_price_files: 192
     synthetic_embedded_price_assumption: SUPERSEDED
-    market_replay: BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT
+    market_replay: READY_NOT_EXECUTED
     local_candidate_release: NONE
     publication: NONE
     selector: NONE
