@@ -1,0 +1,62 @@
+schema: ovc-ro2-fixture-matrix/v1
+matrix_id: RO2-FIXTURE-MATRIX-0.1
+status: FROZEN_DESIGN_ONLY
+fixtures:
+  - id: RO2-FX-001
+    case: valid_discovery_workspace
+    expected: PASS
+    covers: [RO2-QA-003, RO2-QA-005, RO2-QA-008]
+  - id: RO2-FX-002
+    case: valid_development_workspace
+    expected: PASS
+    covers: [RO2-QA-003, RO2-QA-005, RO2-QA-008]
+  - id: RO2-FX-003
+    case: validation_metadata_only
+    expected: PASS
+    covers: [RO2-QA-002, RO2-QA-011]
+  - id: RO2-FX-004
+    case: validation_row_resolution_attempt
+    expected: BLOCK_ACCESS_DENIED_LOCKED_UNCONSUMED
+    covers: [RO2-QA-002]
+  - id: RO2-FX-005
+    case: prospective_frame_contains_post_cutoff_record
+    expected: BLOCK
+    covers: [RO2-QA-004]
+  - id: RO2-FX-006
+    case: orphan_lineage_parent
+    expected: BLOCK
+    covers: [RO2-QA-005]
+  - id: RO2-FX-007
+    case: cyclic_lineage_graph
+    expected: BLOCK
+    covers: [RO2-QA-005]
+  - id: RO2-FX-008
+    case: missing_external_artifact
+    expected: NOT_REPRODUCIBLE
+    covers: [RO2-QA-003, RO2-QA-006]
+  - id: RO2-FX-009
+    case: manifest_hash_mismatch
+    expected: BLOCK
+    covers: [RO2-QA-003]
+  - id: RO2-FX-010
+    case: optional_c2_attachment_absent
+    expected: PASS_WITH_NOT_AVAILABLE
+    covers: [RO2-QA-007]
+  - id: RO2-FX-011
+    case: attempted_git_r2_selector_or_threshold_write
+    expected: BLOCK
+    covers: [RO2-QA-001]
+  - id: RO2-FX-012
+    case: legacy_quarantine_import
+    expected: BLOCK
+    covers: [RO2-QA-012]
+  - id: RO2-FX-013
+    case: status_registry_reports_c2_candidate_after_g4
+    expected: BLOCK
+    covers: [RO2-QA-011]
+  - id: RO2-FX-014
+    case: console_panel_missing_source_or_authority
+    expected: WARN
+    covers: [RO2-QA-013]
+fixture_payloads: NOT_CREATED_AT_RO2_G0
+runtime_tests: NOT_STARTED
