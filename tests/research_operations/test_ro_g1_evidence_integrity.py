@@ -94,13 +94,14 @@ class ROG1EvidenceIntegrityTests(unittest.TestCase):
         self.assertEqual(derive_reproducibility_state([{"required": True, "availability": "MISSING"}]), "NOT_REPRODUCIBLE")
         self.assertEqual(derive_reproducibility_state([{"required": True, "availability": "VERIFIED"}, {"required": True, "availability": "MISSING"}]), "PARTIALLY_AVAILABLE")
 
-    def test_ro_g1_remains_pass_after_wp2_implementation(self) -> None:
+    def test_ro_g1_invariants_remain_after_wp2_and_ro_g2_progression(self) -> None:
         authority = AUTHORITY.read_text(encoding="utf-8")
         implementation = IMPLEMENTATION.read_text(encoding="utf-8")
         decision = DECISION.read_text(encoding="utf-8")
         self.assertIn("ro_g1: PASS", authority)
-        self.assertIn("ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW", authority)
-        self.assertIn("status: IMPLEMENTED_AWAITING_RO_G2_OPERATOR_REVIEW", implementation)
+        self.assertIn("ro_wp2: REVIEWED_RO_G2_PASS", authority)
+        self.assertIn("ro_g2: PASS", authority)
+        self.assertIn("status: PASS_RO_WP3_BUILD_AUTHORISED", implementation)
         self.assertIn("PASS — RO-WP2 AUTHORISED FOR BUILD", decision)
         for denied in ("active_research: NONE", "market_authority: NONE", "probability_authority: NONE", "exposure_authority: NONE", "execution_authority: NONE", "agent_authority: NONE"):
             self.assertIn(denied, authority)

@@ -37,11 +37,12 @@ class ROWP1ContractsAndSchemasTests(unittest.TestCase):
         self.assertEqual(pack["market_authority"], "NONE")
         self.assertGreaterEqual(len(pack["fixtures"]), 7)
 
-    def test_wp1_invariants_remain_after_ro_g1_and_wp2_progression(self) -> None:
+    def test_wp1_invariants_remain_after_ro_g1_wp2_and_ro_g2_progression(self) -> None:
         authority = (ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml").read_text()
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
         self.assertIn("ro_g1: PASS", authority)
-        self.assertIn("ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW", authority)
+        self.assertIn("ro_wp2: REVIEWED_RO_G2_PASS", authority)
+        self.assertIn("ro_g2: PASS", authority)
         self.assertIn("active_research: NONE", authority)
         for token in ("market_authority: NONE", "probability_authority: NONE", "exposure_authority: NONE", "execution_authority: NONE", "agent_authority: NONE"):
             self.assertIn(token, authority)
