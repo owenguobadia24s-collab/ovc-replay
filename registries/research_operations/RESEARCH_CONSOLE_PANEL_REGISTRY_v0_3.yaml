@@ -1,0 +1,75 @@
+schema: ovc-research-console-panel-registry/v0.3
+status: FROZEN_BY_RC_A0_PENDING_RC_A1_REVIEW
+panels:
+  - panel_id: OPERATING_CONTEXT
+    workspaces: [OVERVIEW]
+    sources: [BuildContext, AuthorityBoundary, ObjectTypeSummary]
+    authority: DERIVED_READ_ONLY
+    fallback: BLOCK
+  - panel_id: AUTHORITY_BOUNDARY
+    workspaces: [OVERVIEW, SYSTEM]
+    sources: [AuthorityBoundary, ui_contract]
+    authority: CONTRACT_DERIVED_READ_ONLY
+    fallback: BLOCK
+  - panel_id: RELEASE_AND_GATE_SUMMARY
+    workspaces: [OVERVIEW]
+    sources: [ReleaseSummary, GateSummary]
+    authority: DERIVED_ASSURANCE_ONLY
+    fallback: NOT_EVALUATED
+  - panel_id: RESEARCH_QUEUE_SUMMARY
+    workspaces: [OVERVIEW]
+    sources: [SessionSummary, QueueProjection, artifact_issues]
+    authority: READ_ONLY_DERIVED
+    fallback: EXPECTED_EMPTY
+  - panel_id: RESEARCH_BRIEF
+    workspaces: [RESEARCH]
+    sources: [DeskSnapshot, HealthDomainSummary, LineageProjection]
+    authority: READ_ONLY_WHEN_MATERIALIZED
+    fallback: NOT_MATERIALIZED
+  - panel_id: REPLAY_STRIP
+    workspaces: [RESEARCH]
+    sources: [approved_market_records, approved_model_records, LineageProjection]
+    authority: READ_ONLY_CUTOFF_SAFE
+    fallback: NOT_MATERIALIZED
+  - panel_id: EVIDENCE_RAIL
+    workspaces: [RESEARCH]
+    sources: [EvidenceItem, CaseBundle, cohorts, contrasts, validation_records]
+    authority: READ_ONLY
+    fallback: NOT_MATERIALIZED
+  - panel_id: RESEARCH_QUEUE
+    workspaces: [RESEARCH]
+    sources: [ResearchSession, ObservationSnapshot, ClaimRecord, RealizationSnapshot, IncidentRecord, artifact_catalogue]
+    authority: READ_ONLY_DERIVED
+    fallback: EXPECTED_EMPTY
+  - panel_id: SYSTEM_NAVIGATOR
+    workspaces: [SYSTEM]
+    sources: [system_section_registry]
+    authority: READ_ONLY_LOCAL_UI_ONLY
+    fallback: NOT_APPLICABLE
+  - panel_id: SYSTEM_DETAIL
+    workspaces: [SYSTEM]
+    sources: [HealthDomainSummary, LineageProjection, ArtifactCatalogue, ReleaseSummary, GateSummary, ActivityEvent, launcher_context, build_metadata]
+    authority: READ_ONLY
+    fallback: NOT_EVALUATED
+  - panel_id: CONTEXTUAL_DETAIL_DRAWER
+    workspaces: [OVERVIEW, RESEARCH, SYSTEM]
+    sources: [source_refs, lineage, hashes, status_definition, consequence, next_valid_action]
+    authority: ACTIVE_BOUNDED_READ
+    fallback: NOT_MATERIALIZED
+  - panel_id: AMBIENT_HEALTH
+    workspaces: [OVERVIEW, RESEARCH, SYSTEM]
+    sources: [health, HealthDomainSummary, QA_RUN]
+    authority: DERIVED_ASSURANCE_ONLY
+    fallback: NOT_EVALUATED
+  - panel_id: ACTIVITY_STREAM
+    workspaces: [OVERVIEW, RESEARCH, SYSTEM]
+    sources: [AuditEvent, ActivityEvent, QA_RUN, gate_packets, release_events]
+    authority: DERIVED_READ_ONLY
+    fallback: EXPECTED_EMPTY
+rules:
+  unregistered_panel: PROHIBITED
+  source_resolution_required: true
+  raw_payload_default_collapsed: true
+  color_only_status_forbidden: true
+  empty_state_must_use_v0_2_truth_rules: true
+  panel_mutation: NONE
