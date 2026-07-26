@@ -1,19 +1,20 @@
 # Current status
 
 Snapshot date: 26 July 2026.
-Repository court-record tip reviewed: `fa11546a93f865c26d7cf99f5b5c60156bf50f9b`.
+Repository court-record tip before recovery: `015e57d862f740c4a0e722e611e0dbeadfaad209`.
 
 ## Integrated baseline
 
-The reset, OPT-A v2 role-set activation, OPT-B.C1 v2 publication and shadow activation, Research Operations Foundation activation, Research Console v0.3 Overview acceptance, and OPT-B.C2 actual-parent reconciliation are merged into `main`.
+The reset, OPT-A v2 role-set activation, OPT-B.C1 v2 publication and shadow activation, Research Operations Foundation activation, Research Console v0.3 Overview acceptance, OPT-B.C2 actual-parent reconciliation, and exact OPT-A R2 parent-root recovery are represented by the current court record.
 
-Latest authority-changing records:
+Latest authority and operating records:
 
 - OPT-A v2 A2-G5 selector activation: `fb5b2fea2200b05a050aa1f8af51121a1883a4a5`
 - OPT-B.C1 v2 B1-G5 shadow activation: recorded in `docs/releases/opt-b-c1-v2/b1-g5/`
 - Research Operations RO-G3 local activation: `516e068ff94b3a43964f221ceface2f01f13d010`
 - Research Console RC-G2-v0.3 Overview acceptance: `cd0327e11084d19ce8b51fea67c6cfa3eb00c502`
 - OPT-B.C2 v2 C2-G3R actual-parent reconciliation: `fa11546a93f865c26d7cf99f5b5c60156bf50f9b`
+- Exact OPT-A Discovery/Development R2 root recovery: workflow run `30209041054`; receipt in `docs/releases/opt-a-v2/recovery/`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent, parameter source or rollback target.
 
@@ -26,6 +27,16 @@ Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailabl
 | Validation | `OPT-A.GBPUSD.VALIDATION.2025.v2` | `ACTIVE_VALIDATION` | `ACTIVE` | `LOCKED_UNCONSUMED` |
 
 All three releases are remotely verified. The 21,410 quarantined derived-bucket records remain bound to `RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS` and cannot become downstream parents.
+
+The exact active Discovery and Development roots have now also been recovered read-only from canonical R2 and verified against the C2 price-parent contract:
+
+| Role | Manifest-bound objects | Payload bytes | Price files | Recovery verification |
+|---|---:|---:|---:|---|
+| Discovery | 293 | 155,632,392 | 144 | `PASS_C2_EXACT_PRICE_PARENT_CONTRACT` |
+| Development | 101 | 52,762,768 | 48 | `PASS_C2_EXACT_PRICE_PARENT_CONTRACT` |
+| **Total** | **394** | **208,395,160** | **192** | **PASS** |
+
+The combined recovered root is retained as GitHub Actions artifact `8633917454` (`opt-a-v2-r2-exact-parent-roots`) until 24 October 2026. It contains `discovery/` and `development/` children in the exact shape required by `--opt-a-release-root`.
 
 ## OPT-B.C1 v2
 
@@ -45,21 +56,22 @@ WP1-WP4 contracts, schemas, registries, fixtures, level/container/relation engin
 
 C2-G3R result: `PASS_ACTUAL_C1_AND_EXACT_OPT_A_PRICE_PARENT_ENGINE_TRUST`.
 
-C2 now consumes the immutable published C1 primitive record together with the exact manifest-bound OPT-A price row identified by its lineage. The former synthetic embedded-price assumption is superseded. Current-bar primitive reconciliation, rolling range and midpoint derivation, confirmed first-valid swings, containers, relation inventories, five-axis state, gap reset, persistence, transitions and 15M-with-latest-first-valid-2H scope have fixture trust.
+C2 consumes the immutable published C1 primitive record together with the exact manifest-bound OPT-A price row identified by its lineage. The former synthetic embedded-price assumption is superseded. Current-bar primitive reconciliation, rolling range and midpoint derivation, confirmed first-valid swings, containers, relation inventories, five-axis state, gap reset, persistence, transitions and 15M-with-latest-first-valid-2H scope have fixture trust.
 
-C2-G4 remains:
+The former C2-G4 external-input blocker is resolved at the artifact boundary:
 
-`BLOCKED_MISSING_EXACT_OPT_A_PRICE_PARENT_ROOT`
+`PASS_EXACT_R2_ROOTS_RECOVERED_AND_FULL_BYTE_VERIFIED`
 
-The exact OPT-A Discovery and Development release roots must be mounted and fully verified before the actual Discovery/Development replay can run. Therefore:
+Workflow run `30209041054` recovered and verified both exact OPT-A roots. Therefore the current C2 position is:
 
+- exact OPT-A parent roots: `RECOVERED_VERIFIED_ARTIFACT_AVAILABLE`
 - actual market replay: `NOT_EXECUTED`
 - local C2 candidate release: `NONE`
 - publication: `NONE`
 - selector: `NONE`
 - activation: `NONE`
 
-Validation remains `LOCKED_UNCONSUMED`.
+Validation remains `LOCKED_UNCONSUMED`. C2-G4 is now ready for the separately authorised exact-parent replay using the recovered OPT-A artifact and exact C1 roots.
 
 ## Research Operations Foundation
 
@@ -92,9 +104,9 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 |---|---|---|
 | Evidence store | `ACTIVE_INFRASTRUCTURE / REMOTE_VERIFIED` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
-| OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
+| OPT-A v2 role set | `A2_G5_PASS / ACTIVE / R2_ROOTS_RECOVERED` | `ACTIVE` |
 | OPT-B.C1 v2 | `B1_G5_PASS / REMOTE_VERIFIED / SHADOW` | `SHADOW` |
-| OPT-B.C2 v2 | `C2_G3R_PASS / C2_G4_BLOCKED_MISSING_EXACT_OPT_A_ROOTS` | `NONE` |
+| OPT-B.C2 v2 | `C2_G3R_PASS / EXACT_PARENT_INPUTS_AVAILABLE / REPLAY_NOT_EXECUTED` | `NONE` |
 | Research Operations | `RO_G3_PASS / ACTIVE_RESEARCH_OPERATIONS_LOCAL` | Not applicable |
 | Research Console v0.3 | `RC_G2_PASS / OVERVIEW_LOCAL_READ_ONLY / WP3_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
@@ -103,6 +115,7 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 ## Retained authority boundaries
 
 - Validation consumption remains `LOCKED_UNCONSUMED`.
+- C2 market replay has not yet run.
 - C2 candidate, publication, selector and activation authority remain absent.
 - C2E, C2.5, C3 and new OPT-C/OPT-D authority remain absent.
 - Probability, exposure, trading, execution and autonomous-agent authority remain `NONE`.
@@ -110,6 +123,6 @@ The Research workspace remains fixture-only pending `RC-WP3-v0.3 — Research wo
 
 ## Next boundaries
 
-1. Download or mount the exact remote-verified OPT-A Discovery and Development release roots.
-2. Execute `C2_G4_EXACT_PARENT_MARKET_REPLAY` with both C1 and OPT-A roots.
+1. Execute `C2_G4_EXACT_PARENT_MARKET_REPLAY` using recovered OPT-A artifact `8633917454` and the exact C1 Discovery/Development roots.
+2. Freeze and review a local C2 candidate only if the exact-parent replay and QA pass.
 3. Continue `RC-WP3-v0.3 — Research workspace, replay, evidence and queue` under the accepted read-only and fail-closed boundaries.
