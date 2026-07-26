@@ -1,0 +1,35 @@
+name: OPT-B.C2 WP4 state engine trust
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  c2-g3-engine-trust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Verify C2-G3 packet and authority boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate=json.loads(Path('docs/releases/opt-b-c2-v2/wp4/WP4_GATE_PACKET.json').read_text())
+          authority=Path('registries/implementation/OPT_B_C2_WP4_ENGINE_TRUST.yaml').read_text()
+          assert gate['decision']=='PASS_C2_PARALLEL_STATE_PERSISTENCE_AND_TRANSITION_ENGINE_TRUST'
+          assert gate['blocking_issues']==0
+          assert gate['fixture_trust']=='PASS_SYNTHETIC_ONLY'
+          assert gate['authority_delta']['candidate_release']=='DENIED_PENDING_REPLAY_QA'
+          assert gate['authority_delta']['selector']=='NONE'
+          assert 'validation_consumption: LOCKED_UNCONSUMED' in authority
+          assert 'probability: NONE' in authority
+          PY
