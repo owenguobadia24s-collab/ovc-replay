@@ -1,13 +1,15 @@
 schema: ovc-opt-b-c1-implementation-registry/v1
 programme_id: OVC-OPT-B-C1-V2-IMPLEMENTATION-PLAN-0.1
 layer_id: OPT-B.C1.v2
-work_packet: B1-G0
-status: WP3_REVIEW_PASS_WP4_SCOPE_APPROVED
+work_packet: WP4
+status: REPLAY_QA_PASS_LOCAL_CANDIDATE_PENDING_B1_G1
 repository: owenguobadia24s-collab/ovc-replay
 wp1_merge_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
 wp2_merge_commit: fefac25f19a836898c3a22228036cd66617dca07
 wp3_merge_commit: d5c0f1a9053f837ee85e2b478fba0662a133cc29
-b1_g0_baseline_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
+b1_g0_merge_commit: d584813a7a26e7e272259abc87c88b9bb212fc50
+wp4_execution_commit: 2e2d84ad34fae02992a7861d194c12e0bdbd0c1f
+wp4_workflow_run_id: 30185680001
 owner: OPERATOR
 upstream:
   selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
@@ -17,6 +19,7 @@ upstream:
   validation_consumption: LOCKED_UNCONSUMED
 scope:
   instrument: [GBPUSD]
+  roles: [DISCOVERY, DEVELOPMENT]
   canonical_clocks: [15M, 2H_A_L]
   control_only_clocks: [H1_M1_DERIVED, H1_PROVIDER_NATIVE]
   price_sides: [BID, ASK]
@@ -32,25 +35,35 @@ frozen_design:
   record_schema: schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json
 implementation:
   root: src/ovc/opt_b/c1/
+  replay_runner: scripts/opt_b/run_c1_wp4_replay.py
+  workflow: .github/workflows/opt-b-c1-wp4-market-replay.yml
   arithmetic: DECIMAL_EXACT
-  identity_excludes: [runtime, local_path, machine]
+  identity_excludes: [runtime, machine, absolute_local_path]
   prior_close_policy: IMMEDIATE_CONTIGUOUS_ONLY
   gap_search: PROHIBITED
   fixture_trust: PASS
-wp4_replay_scope:
+wp4_result:
   scope_registry: registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml
   scope_id: C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1
-  roles: [DISCOVERY, DEVELOPMENT]
+  execution_receipt: docs/releases/opt-b-c1-v2/wp4/WP4_EXECUTION_RECEIPT.json
+  operator_decision: docs/releases/opt-b-c1-v2/wp4/WP4_OPERATOR_DECISION.md
+  candidate_artifact_id: 8626942276
+  candidate_artifact_digest: sha256:fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc
+  qa_artifact_id: 8626942405
+  qa_artifact_digest: sha256:2dc137ede8ee8ca2625bb11aaf591dc9935e3261481d0a0f35a272f02b1cb49d
+  candidate_file_count: 192
+  candidate_bytes: 36169581
+  candidate_record_count: 212764
+  deterministic_rerun: PASS
+  quarantine_exclusions:
+    discovery: 12104
+    development: 4862
   validation: LOCKED_UNCONSUMED_EXCLUDED
-  clocks: [15M, 2H_A_L]
-  sides: [BID, ASK]
-  workspace: EXTERNAL_MUTABLE_ONLY
-  release_freeze: NOT_AUTHORISED_BY_SCOPE_APPROVAL
 authority:
-  current: B1_G0_PASS_WP4_REPLAY_AUTHORISED_EXACT_SCOPE_ONLY
-  synthetic_fixture_compute: COMPLETE_WP3_PASS
-  market_replay: AUTHORISED_EXACT_WP4_SCOPE_ONLY
-  local_release_freeze: DENIED_PENDING_WP4_QA_AND_OPERATOR_DECISION
+  current: WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_ONLY
+  market_replay: COMPLETE_WP4_PASS
+  local_candidate: RECORDED
+  local_release_freeze: PENDING_B1_G1_EXACT_INVENTORY_REVIEW
   r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
   selector_activation: DENIED_PENDING_SEPARATE_WP5_APPROVAL
   c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
@@ -83,7 +96,7 @@ reads_denylist:
   - TRADE_LABELS
 writes:
   permitted:
-    - external C1 WP4 replay workspace
+    - workflow-local C1 WP4 candidate artifact
     - compact QA packets and decisions in Git
   prohibited:
     - raw_market_payloads_in_git
@@ -91,15 +104,16 @@ writes:
     - active_opt_a_selector_mutation
     - active_c1_selector_mutation
     - validation_access
-required_b1_g0_artifacts:
-  - registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml
-  - docs/releases/opt-b-c1-v2/b1-g0/B1_G0_GATE_PACKET.json
-  - docs/releases/opt-b-c1-v2/b1-g0/B1_G0_OPERATOR_DECISION.md
-  - tests/opt_b/c1/test_b1_g0_replay_scope.py
-next_gate: C1-WP4_DISCOVERY_DEVELOPMENT_REPLAY_QA_AND_LOCAL_CANDIDATE
+required_wp4_artifacts:
+  - .github/workflows/opt-b-c1-wp4-market-replay.yml
+  - scripts/opt_b/run_c1_wp4_replay.py
+  - tests/opt_b/c1/test_wp4_replay_packet.py
+  - docs/releases/opt-b-c1-v2/wp4/WP4_EXECUTION_RECEIPT.json
+  - docs/releases/opt-b-c1-v2/wp4/WP4_OPERATOR_DECISION.md
+next_gate: B1-G1_WP4_CANDIDATE_INVENTORY_AND_FREEZE_REVIEW
 rollback:
-  target_state: WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS
-  delete_unfrozen_wp4_workspace: true
+  target_state: B1_G0_PASS_WP4_REPLAY_SCOPE_APPROVED
+  delete_unfrozen_candidate_artifact: true
   active_opt_a_selector_unchanged: true
   c1_selectors_return_to_none: true
   legacy_reactivation: PROHIBITED
