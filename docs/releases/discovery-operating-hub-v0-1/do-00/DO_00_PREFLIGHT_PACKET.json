@@ -1,0 +1,100 @@
+{
+  "schema": "ovc-discovery-operating-hub-do-00-preflight/v0.2",
+  "packet_id": "DO-00-OVC-DISCOVERY-OPERATING-HUB-V0.1-RC-V0.3-REALIGNMENT-2026-07-26",
+  "programme_id": "OVC-DISCOVERY-OPERATING-HUB.v0.1",
+  "baseline": {
+    "repository": "owenguobadia24s-collab/ovc-replay",
+    "branch": "main",
+    "commit": "f704f33e4d5fc19f5807d0a92156b99afa8bce84",
+    "research_operations_state": "ACTIVE_RESEARCH_OPERATIONS_LOCAL",
+    "c1_discovery_state": "ACTIVE_DISCOVERY",
+    "c1_development_state": "ACTIVE_DEVELOPMENT",
+    "c1_validation_state": "NONE_LOCKED_UNCONSUMED",
+    "c2_state": "WP1_PASS_BOUNDARY_FROZEN_WP2_AUTHORISED_SELECTOR_NONE",
+    "market_probability_exposure_execution": "NONE"
+  },
+  "plan_source": {
+    "document": "OVC_Research_Console_v0_3_Unified_Operations_Workspaces_Implementation_Plan_v0_1(2).docx",
+    "document_id": "OVC-RESEARCH-CONSOLE-V0.3-UNIFIED-WORKSPACES-IMPLEMENTATION-PLAN-0.1",
+    "sha256": "c805445a60be8dae1d7c2a2b6767ebbf5c7572102f8b0769e4d30fb7feed8332",
+    "repository_copy": false,
+    "treatment": "OPERATOR_SUPPLIED_NORMATIVE_ALIGNMENT_SOURCE_BOUND_BY_THIS_PACKET"
+  },
+  "console_alignment": {
+    "operative_target": "OVC Research Console v0.3",
+    "primary_workspace_count": 3,
+    "primary_workspaces": ["OVERVIEW", "RESEARCH", "SYSTEM"],
+    "v0_2_information_architecture": "SUPERSEDED_AS_PRIMARY_NAVIGATION",
+    "v0_2_safety_contracts": "INHERITED_UNLESS_STRICTER_V0_3_RULE_APPLIES",
+    "workspace_alignment_registry": "registries/research_operations/DISCOVERY_OPERATING_HUB_WORKSPACE_ALIGNMENT_v0_1.yaml",
+    "context_alignment_registry": "registries/research_operations/DISCOVERY_OPERATING_HUB_CONTEXT_ALIGNMENT_v0_1.yaml",
+    "decision": "ALIGN_DO_V0_1_TO_RC_V0_3_UNIFIED_WORKSPACES"
+  },
+  "programme_coordination": {
+    "rc_owns": [
+      "shell",
+      "icon rail",
+      "workspace switching",
+      "context bar",
+      "detail drawer",
+      "command palette",
+      "persistent activity stream",
+      "session-state mechanics"
+    ],
+    "do_owns": [
+      "discovery programme projections",
+      "prospective research content",
+      "neutral recurrence inventory",
+      "research friction ledger",
+      "review and architecture-promotion packets"
+    ],
+    "research_operations_foundation_owns": [
+      "append-only record service",
+      "audit service",
+      "artifact catalogue",
+      "QA runner",
+      "typed source records"
+    ]
+  },
+  "frozen_outputs": [
+    "contracts/research_operations/discovery_hub/OVC_DISCOVERY_OPERATING_HUB_AUTHORITY_CONTRACT_v0_1.md",
+    "registries/research_operations/DISCOVERY_OPERATING_HUB_PROGRAMME_REGISTRY_v0_1.yaml",
+    "registries/research_operations/DISCOVERY_OPERATING_HUB_WORKSPACE_ALIGNMENT_v0_1.yaml",
+    "registries/research_operations/DISCOVERY_OPERATING_HUB_CONTEXT_ALIGNMENT_v0_1.yaml",
+    "registries/research_operations/DISCOVERY_OPERATING_HUB_DEFERRED_CAPABILITIES_v0_1.yaml",
+    "docs/releases/discovery-operating-hub-v0-1/do-00/DO_00_IMPLEMENTATION_SUMMARY.md",
+    "tests/research_operations/test_do_00_discovery_hub_v0_3_alignment.py"
+  ],
+  "checks": [
+    {"check_id": "DO00-01", "name": "Exact repository baseline pinned", "status": "PASS"},
+    {"check_id": "DO00-02", "name": "Research Operations Foundation active and bounded", "status": "PASS"},
+    {"check_id": "DO00-03", "name": "Research Console v0.3 selected as operative target", "status": "PASS"},
+    {"check_id": "DO00-04", "name": "Overview Research and System workspace mapping complete", "status": "PASS"},
+    {"check_id": "DO00-05", "name": "All fourteen v0.2 routes accounted for as panels drawers or activity", "status": "PASS"},
+    {"check_id": "DO00-06", "name": "v0.2 safety contracts inherited without weakening", "status": "PASS"},
+    {"check_id": "DO00-07", "name": "Session state drawer search and activity remain presentation-only", "status": "PASS"},
+    {"check_id": "DO00-08", "name": "Prospective cutoff safety and review separation frozen", "status": "PASS"},
+    {"check_id": "DO00-09", "name": "Discovery Development Validation role separation frozen", "status": "PASS"},
+    {"check_id": "DO00-10", "name": "Validation remains locked unconsumed", "status": "PASS"},
+    {"check_id": "DO00-11", "name": "Console research writes deferred to separate action gate", "status": "PASS"},
+    {"check_id": "DO00-12", "name": "C2E C2.5 C3 OPT-C OPT-D remain deferred", "status": "PASS"},
+    {"check_id": "DO00-13", "name": "No market probability exposure trading execution agent or remote deployment authority", "status": "PASS"}
+  ],
+  "authority_delta": "DESIGN_RECORDS_ONLY",
+  "do_00_disposition": "COMPLETE_V0_3_REALIGNMENT",
+  "do_g0_recommendation": "WAIT_FOR_RC_G0A_THEN_REVIEW_OPERATIONAL_READINESS",
+  "pending_prerequisites": ["RC-A0", "RC-G0A"],
+  "next_gate": "RC-A0_THEN_RC-G0A_THEN_DO-G0_OPERATIONAL_READINESS",
+  "blocking_issues": 0,
+  "side_effects": {
+    "provider_request": false,
+    "market_payload_created": false,
+    "r2_mutation": false,
+    "selector_mutation": false,
+    "threshold_mutation": false,
+    "research_record_created": false,
+    "console_runtime_changed": false,
+    "v0_3_runtime_implementation_started": false,
+    "repository_design_records_created": true
+  }
+}
