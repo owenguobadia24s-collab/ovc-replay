@@ -6,6 +6,8 @@
 
 RO2-WP1 is accepted for bounded local operation. The accepted implementation deterministically builds role-workspace, observation and observation-family indexes for the approved OPT-A Discovery and Development releases. It exposes Validation aggregate metadata only and denies Validation content before path, object or row resolution.
 
+The gate is reconciled to integrated `main` commit `e2935f0c607aa25c565da59c08e15263176213d6`, which separately approved exact C2 R2 publication readiness without executing a remote write or granting selector or activation authority.
+
 ## Verification basis
 
 - RO2-G0 parent design validator: `PASS`
@@ -29,18 +31,18 @@ The following capability is accepted:
 
 The index is replaceable and never outranks its source release, manifest or record.
 
-## Authority not granted
+## Authority not granted or modified
 
-RO2-G1 does not grant:
+RO2-G1 does not grant or modify:
 
 - Validation row, timestamp, path, key, object or content access;
 - market classification or model authority;
-- C2 publication, selector or activation authority;
+- C2 R2 publication execution, selector or activation authority;
 - quality, bar-lineage, replay or release-difference implementation;
-- Git, R2, release, selector or threshold writes;
+- Git, R2, release, selector or threshold writes by RO2;
 - probability, exposure, trading or execution authority.
 
-The separately frozen C2-G5 Discovery and Development candidates remain local-only and are unchanged by this gate. Validation remains `LOCKED_UNCONSUMED`.
+The separately approved C2 authority remains `AUTHORISED_EXACT_RELEASES_ONLY / NOT_YET_EXECUTED`. C2 selector and activation remain `NONE`. Validation remains `LOCKED_UNCONSUMED`.
 
 ## Next boundary
 
