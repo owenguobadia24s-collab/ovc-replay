@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-research-console-rc-g0-gate-packet/v0.1",
+  "gate_id": "RC-G0",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.2",
+  "reviewed_at": "2026-07-26",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "gate_branch": "gate/research-console-v0-2-rc-g0",
+  "rc00_pull_request": 47,
+  "rc00_merge_commit": "2e7f88e2a42e3feba4b4c1c7a2ea448e0a6b5b01",
+  "reviewed_head": "f8c3b1786488b0847192cce3f69a7782d82fc72d",
+  "verification": {
+    "canonical_command": "python -m unittest discover tests",
+    "tests_workflow_run_id": 30192103953,
+    "tests_workflow_run_number": 262,
+    "tests_conclusion": "success"
+  },
+  "review_checks": [
+    {"check_id": "RCG0-01", "result": "PASS", "statement": "The exact preflight baseline and current console implementation are hash-pinned."},
+    {"check_id": "RCG0-02", "result": "PASS", "statement": "All fourteen planned routes have stable identifiers, named source families, read-only authority and fallback states."},
+    {"check_id": "RCG0-03", "result": "PASS", "statement": "Card, status, empty-state and action registries are complete enough to begin fixture-only shell implementation."},
+    {"check_id": "RCG0-04", "result": "PASS", "statement": "No-signal health is not PASS and unknown status fails closed to BLOCK."},
+    {"check_id": "RCG0-05", "result": "PASS", "statement": "Repository, selector, threshold, release, classification, probability, exposure, execution and agent mutations remain prohibited."},
+    {"check_id": "RCG0-06", "result": "PASS", "statement": "Remote deployment is prohibited and the visual Deploy control is replaced by a non-clickable LOCAL badge."},
+    {"check_id": "RCG0-07", "result": "PASS", "statement": "Deferred research writes require a separate authority gate and cannot be activated by RC-WP1."},
+    {"check_id": "RCG0-08", "result": "PASS", "statement": "Canonical tests passed on the reviewed RC-00 head and RC-00 was squash-merged without force push."}
+  ],
+  "disposition": "PASS",
+  "authority_delta": "AUTHORISE_RC_WP1_LOCAL_PRESENTATION_BUILD_ONLY",
+  "authorised_next_workstream": "RC-WP1_DESIGN_SYSTEM_SHELL_AND_NAVIGATION",
+  "restrictions": {
+    "live_projections": "DENIED_PENDING_RC_G2",
+    "research_desk_live_data": "DENIED_PENDING_RC_G3",
+    "research_record_creation": "DENIED_PENDING_SEPARATE_WRITE_GATE",
+    "repository_mutation_from_ui": "NONE",
+    "selector_mutation": "NONE",
+    "threshold_mutation": "NONE",
+    "market_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "execution_authority": "NONE",
+    "agent_authority": "NONE",
+    "remote_deployment": "DENIED"
+  }
+}

@@ -44,10 +44,11 @@ authority:
   agent: NONE
 console_v0_2_upgrade:
   programme_id: OVC-RESEARCH-CONSOLE.v0.2
-  stage: RC_00_COMPLETE_RC_G0_REVIEW_READY
+  stage: RC_G0_PASS_RC_WP1_AUTHORISED
+  rc00_merge_commit: 2e7f88e2a42e3feba4b4c1c7a2ea448e0a6b5b01
+  rc00_reviewed_head: f8c3b1786488b0847192cce3f69a7782d82fc72d
   baseline_commit: 4cc23b0f746feaa3fc91d1b6a956a0d4961a88dc
-  branch: build/research-console-v0-2-preflight-rc00-current
-  authority_delta: DESIGN_RECORDS_ONLY
+  authority_delta: LOCAL_PRESENTATION_BUILD_ONLY
   authority_contract: contracts/research_operations/console/OVC_RESEARCH_CONSOLE_UI_AUTHORITY_CONTRACT_v0_2.md
   route_registry: registries/research_operations/RESEARCH_CONSOLE_ROUTE_REGISTRY_v0_2.yaml
   card_registry: registries/research_operations/RESEARCH_CONSOLE_CARD_REGISTRY_v0_2.yaml
@@ -55,11 +56,16 @@ console_v0_2_upgrade:
   empty_state_registry: registries/research_operations/RESEARCH_CONSOLE_EMPTY_STATE_REGISTRY_v0_2.yaml
   action_registry: registries/research_operations/RESEARCH_CONSOLE_ACTION_REGISTRY_v0_2.yaml
   preflight_packet: docs/releases/research-console-v0-2/rc-00/RC_00_PREFLIGHT_PACKET.json
-  tests_workflow_run_id: 30192017977
+  rc_g0_gate_packet: docs/releases/research-console-v0-2/rc-g0/RC_G0_GATE_PACKET.json
+  rc_g0_decision_record: docs/releases/research-console-v0-2/rc-g0/RC_G0_OPERATOR_DECISION.md
+  tests_workflow_run_id: 30192103953
   tests_workflow_conclusion: PASS
-  next_gate: RC_G0_OPERATOR_REVIEW
-  rc_g0_recommendation: READY_FOR_OPERATOR_REVIEW
-  rc_wp1_authority: DENIED_PENDING_RC_G0_PASS
+  rc_g0: PASS
+  next_workstream: RC_WP1_DESIGN_SYSTEM_SHELL_AND_NAVIGATION
+  rc_wp1_authority: AUTHORISED_FIXTURE_ONLY_LOCAL_PRESENTATION
+  live_projection_authority: DENIED_PENDING_RC_G2
+  live_research_surface_authority: DENIED_PENDING_RC_G3
+  research_write_authority: DENIED_PENDING_SEPARATE_GATE
   repository_mutation: NONE
   selector_mutation: NONE
   threshold_mutation: NONE
@@ -69,4 +75,4 @@ console_v0_2_upgrade:
   execution_authority: NONE
   agent_authority: NONE
   deployment_authority: LOCAL_ONLY_NO_REMOTE_DEPLOY
-next_workstream: NONE_FOUNDATION_V0_1_ACCEPTED
+next_workstream: RC_WP1_DESIGN_SYSTEM_SHELL_AND_NAVIGATION
