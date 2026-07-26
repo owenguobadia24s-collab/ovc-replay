@@ -1,35 +1,41 @@
 {
   "schema": "ovc-ro2-g2-candidate-packet/v1",
   "gate_id": "RO2-G2",
-  "status": "CANDIDATE_READY_FOR_CI_AND_OPERATOR_REVIEW",
+  "status": "SUPERSEDED_BY_RO2_G2_PASS",
   "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2",
   "work_packet": "RO2-WP2",
   "parent_main_commit": "a79616eeaa90ba097cc797a230aa73f9f41ecee8",
+  "tested_candidate_commit": "7bfd2bfd31b3bc46fa86bfbab918e8d674d3869c",
   "branch": "build/research-operations-v0-2-wp2",
   "capabilities": {
-    "data_quality_projection": "IMPLEMENTED",
-    "bar_lineage_inspection": "IMPLEMENTED",
-    "admissible_cutoff_replay": "IMPLEMENTED",
-    "release_workspace_comparison": "IMPLEMENTED",
-    "validation_deny_before_path_resolution": "IMPLEMENTED",
+    "data_quality_projection": "PASS_ACCEPTED",
+    "bar_lineage_inspection": "PASS_ACCEPTED",
+    "admissible_cutoff_replay": "PASS_ACCEPTED",
+    "release_workspace_comparison": "PASS_ACCEPTED",
+    "validation_deny_before_path_resolution": "PASS_ACCEPTED",
     "runtime_writes": "NONE"
+  },
+  "verification": {
+    "focused_ro2_wp1_wp2_tests": "PASS",
+    "full_repository_suite": "PASS",
+    "deterministic_comparison_identity": "PASS",
+    "post_cutoff_exclusion": "PASS",
+    "validation_deny_before_resolution": "PASS",
+    "dedicated_ci_run_id": 30216117806,
+    "canonical_tests_ci_run_id": 30216117794
   },
   "retained_authority": {
     "validation_consumption": "LOCKED_UNCONSUMED",
     "c2_selector": "NONE",
     "c2_activation": "NONE",
+    "c2_legacy_retirement_executed": false,
     "market_authority": "NONE",
     "probability_authority": "NONE",
     "exposure_authority": "NONE",
     "execution_authority": "NONE"
   },
-  "required_verification": [
-    "focused RO2-WP1 and RO2-WP2 tests",
-    "full repository suite",
-    "deterministic comparison identity",
-    "post-cutoff exclusion",
-    "Validation denial before resolution"
-  ],
+  "final_gate_packet": "docs/releases/research-operations-foundation-v0-2/ro2-g2/RO2_G2_GATE_PACKET.json",
+  "final_operator_decision": "docs/releases/research-operations-foundation-v0-2/ro2-g2/RO2_G2_OPERATOR_DECISION.md",
   "authority_delta_on_pass": "LOCAL_REPLACEABLE_READ_ONLY_INSPECTION_ONLY",
-  "next_boundary": "RO2_G2_OPERATOR_ACCEPTANCE_BEFORE_RO2_WP3"
+  "next_boundary": "RO2-WP3_REQUIRES_SEPARATE_OPERATOR_INSTRUCTION"
 }
