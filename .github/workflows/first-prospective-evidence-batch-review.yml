@@ -6,8 +6,11 @@ on:
       - "contracts/opt_b/c2/C2_FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_CONTRACT_v0_1.md"
       - "docs/releases/opt-b-c2-v2/first-prospective-batch/**"
       - "registries/research/C2_FIRST_PROSPECTIVE_BATCH_REVIEW.yaml"
+      - "registries/research/C2_PROSPECTIVE_EVIDENCE_ACCEPTANCE.yaml"
+      - "registries/research/C2_PROSPECTIVE_EVIDENCE_REGISTRY.yaml"
       - "scripts/opt_b/review_first_prospective_evidence_batch.py"
       - "tests/opt_b/c2/test_first_prospective_evidence_batch_review.py"
+      - "tests/opt_b/c2/test_c2_wp7_prospective_evidence.py"
       - ".github/workflows/first-prospective-evidence-batch-review.yml"
   workflow_dispatch:
 
@@ -22,9 +25,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Run canonical repository tests
-        run: python -m unittest discover -s tests -p 'test_*.py'
 
       - name: Run focused first-batch review tests
         run: python -m unittest tests.opt_b.c2.test_first_prospective_evidence_batch_review
@@ -62,3 +62,19 @@ jobs:
           assert retained['selector_mutation'] == 'DENIED'
           assert retained['release_mutation'] == 'DENIED'
           PY
+
+      - name: Run canonical repository tests
+        run: |
+          set +e
+          python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
+          status=$?
+          cat canonical-tests.log
+          exit $status
+
+      - name: Upload canonical test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: first-prospective-batch-canonical-tests
+          path: canonical-tests.log
+          if-no-files-found: error
