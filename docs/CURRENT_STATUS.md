@@ -16,6 +16,7 @@ The reset and OPT-A v2 build line through selector activation are merged into `m
 - OPT-B.C1 v2 WP4 candidate replay: `74151d3c9f4659fc6414456c2ad13a138912089c`
 - Research Operations RO-G0: `8a4852358324a4e6dfc9f7c239be9e9eb8d69c23`
 - Research Operations RO-WP1: `8944da84dec4915c7d7748ae5dbb2a9e1d187d28`
+- Research Operations RO-G1: `51f94c55eaed8c997bc141d33f0f3f4fa452bb0f`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent or rollback target.
 
@@ -29,22 +30,23 @@ Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailabl
 
 The **21,410** quarantined derived-bucket records remain bound to `RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS` and cannot become downstream parents.
 
-## OPT-B.C1 v2 WP4
+## OPT-B.C1 v2 B1-G1
 
-WP4 result: `PASS — DISCOVERY AND DEVELOPMENT REPLAY QA COMPLETE; LOCAL CANDIDATE RECORDED`.
+B1-G1 result: `PASS — EXACT WP4 CANDIDATE INVENTORY ACCEPTED; DURABLE LOCAL FREEZE AUTHORISED`.
 
-Workflow run `30185680001` used only the exact B1-G0-approved Discovery and Development parents. It produced:
+The review is bound to workflow run `30185680001`, candidate artifact `8626942276`, archive SHA-256 `fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc` and inventory SHA-256 `39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383`.
 
-| Role | 15M BID | 15M ASK | 2H_A_L BID | 2H_A_L ASK | Total |
-|---|---:|---:|---:|---:|---:|
-| Discovery | 71,982 | 71,982 | 7,964 | 7,964 | 159,892 |
-| Development | 23,853 | 23,853 | 2,583 | 2,583 | 52,872 |
+Independent full-byte verification confirmed:
 
-The local candidate contains **212,764** records in **192** compressed files with **36,169,581** candidate bytes. A complete second replay produced an identical inventory, sizes and SHA-256 values.
+| Role | Files | Bytes | Records |
+|---|---:|---:|---:|
+| Discovery 2021–2023 | 144 | 27,450,668 | 159,892 |
+| Development 2024 | 48 | 8,718,913 | 52,872 |
+| **Total** | **192** | **36,169,581** | **212,764** |
 
-The candidate artifact is GitHub Actions artifact `8626942276`, digest `sha256:fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc`. It is `LOCAL_ONLY / CANDIDATE`, not frozen, published or selected.
+All 212,764 record IDs are unique. There are zero duplicate record IDs, missing candidate files or payload hash mismatches. The deterministic second replay matched the complete inventory. The 12,104 Discovery and 4,862 Development upstream quarantine records remain excluded, and Validation remains `LOCKED_UNCONSUMED`.
 
-WP4 excluded 12,104 Discovery and 4,862 Development quarantined upstream records. It performed no interpolation, gap repair or cross-side substitution. Validation was not downloaded and remains `LOCKED_UNCONSUMED`.
+B1-G1 authorises only the controlled promotion of this exact candidate into durable immutable local release roots. It does not claim that the releases are already `RELEASE_FROZEN` or `LOCAL_VERIFIED`; those states require the subsequent freeze execution and post-freeze full-byte verification.
 
 ## Research Operations Foundation RO-G1
 
@@ -69,7 +71,7 @@ RO-G1 grants build authority only for `RO-WP2 — Research CLI and artifact cata
 | Evidence store | `ACTIVE_INFRASTRUCTURE / REMOTE_VERIFIED` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
-| OPT-B.C1 v2 | `WP4_REPLAY_QA_PASS / LOCAL_CANDIDATE` | `NONE` |
+| OPT-B.C1 v2 | `B1_G1_PASS / EXACT_CANDIDATE_FREEZE_AUTHORISED / NOT_YET_FROZEN` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
 | Research Operations | `RO_G1_PASS / WP2_BUILD_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
@@ -79,5 +81,5 @@ Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation a
 
 ## Parallel next boundaries
 
-- `OPT-B.C1 v2 B1-G1 — WP4 candidate inventory and freeze review`
+- `OPT-B.C1 v2 WP4F — durable local release freeze and full-byte verification`
 - `RO-WP2 — Research CLI and artifact catalogue`
