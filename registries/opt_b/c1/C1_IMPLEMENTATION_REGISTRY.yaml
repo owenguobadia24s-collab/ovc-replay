@@ -1,11 +1,13 @@
 schema: ovc-opt-b-c1-implementation-registry/v1
 programme_id: OVC-OPT-B-C1-V2-IMPLEMENTATION-PLAN-0.1
 layer_id: OPT-B.C1.v2
-work_packet: WP3
-status: REFERENCE_ENGINE_FIXTURE_TRUST_PASS
+work_packet: B1-G0
+status: WP3_REVIEW_PASS_WP4_SCOPE_APPROVED
 repository: owenguobadia24s-collab/ovc-replay
 wp1_merge_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
 wp2_merge_commit: fefac25f19a836898c3a22228036cd66617dca07
+wp3_merge_commit: d5c0f1a9053f837ee85e2b478fba0662a133cc29
+b1_g0_baseline_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
 owner: OPERATOR
 upstream:
   selector_set_id: SELECTOR.OPT-A.GBPUSD.ROLESET.v1
@@ -29,25 +31,28 @@ frozen_design:
   formula_count: 18
   record_schema: schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json
 implementation:
-  models: src/ovc/opt_b/c1/models.py
-  adapter: src/ovc/opt_b/c1/adapter.py
-  formulas: src/ovc/opt_b/c1/formulas.py
-  identity: src/ovc/opt_b/c1/identity.py
-  builder: src/ovc/opt_b/c1/builder.py
-  serialization: src/ovc/opt_b/c1/serialization.py
-  validation: src/ovc/opt_b/c1/validation.py
+  root: src/ovc/opt_b/c1/
   arithmetic: DECIMAL_EXACT
   identity_excludes: [runtime, local_path, machine]
   prior_close_policy: IMMEDIATE_CONTIGUOUS_ONLY
   gap_search: PROHIBITED
+  fixture_trust: PASS
+wp4_replay_scope:
+  scope_registry: registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml
+  scope_id: C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1
+  roles: [DISCOVERY, DEVELOPMENT]
+  validation: LOCKED_UNCONSUMED_EXCLUDED
+  clocks: [15M, 2H_A_L]
+  sides: [BID, ASK]
+  workspace: EXTERNAL_MUTABLE_ONLY
+  release_freeze: NOT_AUTHORISED_BY_SCOPE_APPROVAL
 authority:
-  current: WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS
+  current: B1_G0_PASS_WP4_REPLAY_AUTHORISED_EXACT_SCOPE_ONLY
   synthetic_fixture_compute: COMPLETE_WP3_PASS
-  wp4_scope_preparation: AUTHORISED_PENDING_SEPARATE_OPERATOR_APPROVAL
-  market_replay: DENIED_PENDING_SEPARATE_WP4_APPROVAL
-  local_release_freeze: DENIED_PENDING_WP4_QA
-  r2_publication: DENIED_PENDING_WP5_APPROVAL
-  selector_activation: DENIED_PENDING_WP5_APPROVAL
+  market_replay: AUTHORISED_EXACT_WP4_SCOPE_ONLY
+  local_release_freeze: DENIED_PENDING_WP4_QA_AND_OPERATOR_DECISION
+  r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
+  selector_activation: DENIED_PENDING_SEPARATE_WP5_APPROVAL
   c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
   validation_consumption: LOCKED_UNCONSUMED
   probability: NONE
@@ -55,6 +60,8 @@ authority:
   trading: NONE
   execution: NONE
 reads_allowlist:
+  - exact active OPT-A v2 Discovery release artifact
+  - exact active OPT-A v2 Development release artifact
   - registries/releases/OPT_A_ACTIVE_SELECTORS.yaml
   - registries/releases/OPT_A_RELEASE_REGISTRY.yaml
   - contracts/opt_a/OPT_A_TO_OPT_B_HANDOFF_CONTRACT_v0_2.md
@@ -62,8 +69,8 @@ reads_allowlist:
   - contracts/opt_b/c1/**
   - schemas/opt_b/c1/**
   - registries/opt_b/c1/**
-  - fixtures/c1/**
 reads_denylist:
+  - OPT-A.GBPUSD.VALIDATION.2025.v2 payloads
   - legacy/quarantine/**
   - OPT-A.GBPUSD.2026H1.v1
   - src/ovc/opt_b/c2/**
@@ -76,33 +83,23 @@ reads_denylist:
   - TRADE_LABELS
 writes:
   permitted:
-    - contracts/opt_b/c1/**
-    - schemas/opt_b/c1/**
-    - registries/opt_b/c1/**
-    - fixtures/c1/**
-    - tests/opt_b/c1/**
-    - docs/releases/opt-b-c1-v2/**
-    - src/ovc/opt_b/c1/**
+    - external C1 WP4 replay workspace
+    - compact QA packets and decisions in Git
   prohibited:
-    - raw_market_payloads
+    - raw_market_payloads_in_git
     - full_c1_streams_in_git
     - active_opt_a_selector_mutation
     - active_c1_selector_mutation
     - validation_access
-required_wp3_artifacts:
-  - src/ovc/opt_b/c1/models.py
-  - src/ovc/opt_b/c1/adapter.py
-  - src/ovc/opt_b/c1/formulas.py
-  - src/ovc/opt_b/c1/identity.py
-  - src/ovc/opt_b/c1/builder.py
-  - src/ovc/opt_b/c1/serialization.py
-  - src/ovc/opt_b/c1/validation.py
-  - tests/opt_b/c1/test_wp3_reference_engine.py
-  - docs/releases/opt-b-c1-v2/wp3/WP3_GATE_PACKET.json
-  - docs/releases/opt-b-c1-v2/wp3/WP3_OPERATOR_DECISION.md
-next_gate: C1-G0_WP3_REVIEW_AND_WP4_SCOPE_APPROVAL
+required_b1_g0_artifacts:
+  - registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml
+  - docs/releases/opt-b-c1-v2/b1-g0/B1_G0_GATE_PACKET.json
+  - docs/releases/opt-b-c1-v2/b1-g0/B1_G0_OPERATOR_DECISION.md
+  - tests/opt_b/c1/test_b1_g0_replay_scope.py
+next_gate: C1-WP4_DISCOVERY_DEVELOPMENT_REPLAY_QA_AND_LOCAL_CANDIDATE
 rollback:
-  target_state: WP2_CONTRACTS_FROZEN_WP3_NOT_APPROVED
+  target_state: WP3_REFERENCE_ENGINE_FIXTURE_TRUST_PASS
+  delete_unfrozen_wp4_workspace: true
   active_opt_a_selector_unchanged: true
   c1_selectors_return_to_none: true
   legacy_reactivation: PROHIBITED

@@ -20,6 +20,7 @@ ALLOWED_REPOSITORY_STATES = {
     "state: C1_WP1_BOUNDARY_PASS_NO_C1_MARKET_AUTHORITY",
     "state: C1_WP2_CONTRACT_FREEZE_PASS_NO_C1_MARKET_AUTHORITY",
     "state: C1_WP3_REFERENCE_ENGINE_PASS_NO_C1_MARKET_AUTHORITY",
+    "state: C1_B1_G0_PASS_WP4_REPLAY_AUTHORISED_NO_C1_RELEASE_AUTHORITY",
 }
 
 
@@ -43,7 +44,8 @@ class ActiveTreeFoundationTests(unittest.TestCase):
         self.assertIn("active_handoff: NONE", authority)
         self.assertIn("runtime_imports: DENIED", authority)
         self.assertIn("discovery_seed_eligibility: DENIED", authority)
-        self.assertIn("market_replay: DENIED_PENDING_WP4", authority)
+        self.assertIn("market_replay: AUTHORISED_EXACT_WP4_SCOPE_ONLY", authority)
+        self.assertIn("release_freeze: DENIED_PENDING_WP4_QA_AND_OPERATOR_DECISION", authority)
         self.assertIn("selector: NONE", authority)
 
 
