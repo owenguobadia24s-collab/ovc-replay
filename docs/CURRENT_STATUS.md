@@ -20,6 +20,7 @@ The reset and OPT-A v2 build line through selector activation are merged into `m
 - Research Operations RO-WP1: `8944da84dec4915c7d7748ae5dbb2a9e1d187d28`
 - Research Operations RO-G1: `51f94c55eaed8c997bc141d33f0f3f4fa452bb0f`
 - Research Operations RO-WP2: `62c9a7bf13fce5dd7f3850179c28f89aec16b9ee`
+- Research Operations RO-G2: `e19456821e243c6f9fb7f77e49cb5cad295c3d18`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent or rollback target.
 
@@ -51,23 +52,23 @@ B1-G2 authorises only immutable R2 publication of the exact Discovery and Develo
 
 C1 selectors remain `NONE`. Selector activation requires a separate post-publication review. C2 consumption remains denied, and Validation remains `LOCKED_UNCONSUMED`.
 
-## Research Operations Foundation RO-WP2
+## Research Operations Foundation RO-G2
 
-RO-WP2 result: `IMPLEMENTED — READY FOR RO-G2 OPERATOR REVIEW`.
+RO-G2 result: `PASS — BOUNDED LOCAL OPERATIONS APPROVED; RO-WP3 AUTHORISED FOR BUILD`.
 
-The repository now contains:
+The review confirms:
 
-- `ovc research`, `ovc artifact`, and `ovc queue` command families;
-- environment-only configuration and approved portable path aliases;
-- derived draft storage and append-only frozen record storage;
-- immutable AuditEvent emission for every public write action;
-- complete session, observation, claim, realization, adjudication, close and supersession handlers;
-- deterministic artifact catalogue scanning and verification;
-- changed-byte, missing-file, expired-CI-artifact, orphan-manifest and dependency detection;
-- realization, incident, incomplete-session, stale-catalogue and missing-artifact queues;
-- Windows launcher and operator guide.
+- complete governed sessions can be produced without manual record editing;
+- every public write emits a frozen AuditEvent;
+- append-only overwrite, identity reuse, traversal, symlink escape, and deletion attempts fail closed;
+- catalogue rebuilds are logically deterministic;
+- changed, missing, expired, orphaned, and dependency-defect evidence remains visible;
+- Validation remains metadata-only and `LOCKED_UNCONSUMED`;
+- no Git, R2, selector, threshold, classification, probability, exposure, execution, or agent side effect is introduced.
 
-No operator record was created by the build packet. The CLI and catalogue are implemented but not active pending RO-G2. RO-WP3 remains blocked pending RO-G2.
+The RO-WP2 CLI, append-only service, audit service, catalogue, and queues are approved for bounded local operation. This is not active-research or market authority.
+
+RO-WP3 is authorised for build. Its QA runner, read model, and console are not active.
 
 ## Active authority matrix
 
@@ -78,7 +79,7 @@ No operator record was created by the build packet. The CLI and catalogue are im
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
 | OPT-B.C1 v2 | `B1_G2_PASS / RELEASE_FROZEN / LOCAL_VERIFIED / WP5_PUBLICATION_AUTHORISED` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
-| Research Operations | `RO_WP2_IMPLEMENTED / RO_G2_REVIEW_REQUIRED` | Not applicable |
+| Research Operations | `RO_G2_PASS / WP2_BOUNDED_LOCAL / WP3_BUILD_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
@@ -87,4 +88,4 @@ Validation remains `LOCKED_UNCONSUMED`. C1 selector activation and C2 consumptio
 ## Parallel next boundaries
 
 - `OPT-B.C1 v2 WP5 — R2 publication and full remote verification`
-- `RO-G2 — Operating reliability`
+- `RO-WP3 — QA runner, read model and console integration`
