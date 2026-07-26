@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-research-console-rc-wp3-v0-3-implementation-packet/v1",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "work_package": "RC-WP3-v0.3",
+  "name": "Research workspace, replay, evidence and queue",
+  "baseline_commit": "cd0327e11084d19ce8b51fea67c6cfa3eb00c502",
+  "branch": "build/research-console-v0-3-research-workspace",
+  "authority": "CANDIDATE_RESEARCH_PROJECTION_IMPLEMENTATION_ONLY",
+  "implemented": {
+    "projection_core": "src/ovc/research_operations/console_research.py",
+    "candidate_loader": "src/ovc/research_operations/console_research_candidate.py",
+    "builder_command": "scripts/build_research_console_research.py",
+    "projection_schema": "schemas/research_operations/research_console_research_projection_v0_3.schema.json",
+    "projection_registry": "registries/research_operations/RESEARCH_CONSOLE_RESEARCH_PROJECTION_REGISTRY_v0_3.yaml",
+    "source_fixture": "fixtures/research_operations/research_console_v0_3/RC_WP3_RESEARCH_SOURCE_RECORDS.json"
+  },
+  "projection_contract": {
+    "schema": "ovc-research-console-research-projection/v0.3",
+    "surfaces": ["RESEARCH_BRIEF", "REPLAY_STRIP", "EVIDENCE_CARDS", "RESEARCH_QUEUE", "SESSION_TIMELINE"],
+    "cutoff_modes": ["PROSPECTIVE", "REVIEW"],
+    "prospective_post_cutoff_visibility": "PHYSICALLY_EXCLUDED",
+    "review_post_cutoff_visibility": "EXPLICIT_POST_CUTOFF_REVIEW",
+    "evidence_roles": ["SUPPORT", "CONTRADICTION", "BOUNDARY", "NULL", "ANOMALY", "CENSORED", "UNRESOLVED"],
+    "queue_classes": ["DUE_REALIZATION", "CENSORED_REALIZATION", "INCIDENT", "MISSING_SOURCE"],
+    "deterministic": true,
+    "replaceable": true,
+    "source_bound": true,
+    "active_console_consumption": false
+  },
+  "checks": [
+    {"check_id": "RC-WP3-01", "name": "deterministic Research projection builder implemented", "status": "PASS"},
+    {"check_id": "RC-WP3-02", "name": "selected instrument release clock side time and cutoff context are explicit", "status": "PASS"},
+    {"check_id": "RC-WP3-03", "name": "prospective mode physically excludes post-cutoff records and replay points", "status": "PASS"},
+    {"check_id": "RC-WP3-04", "name": "review mode labels every later record and replay point as post-cutoff review", "status": "PASS"},
+    {"check_id": "RC-WP3-05", "name": "research brief remains descriptive and source-bound", "status": "PASS"},
+    {"check_id": "RC-WP3-06", "name": "support contradiction boundary null anomaly censored and unresolved evidence roles are registered", "status": "PASS"},
+    {"check_id": "RC-WP3-07", "name": "unknown evidence role fails closed to unresolved block", "status": "PASS"},
+    {"check_id": "RC-WP3-08", "name": "due censored incident and missing-source queue classes retain consequences and source refs", "status": "PASS"},
+    {"check_id": "RC-WP3-09", "name": "projection is deterministic under source-record reordering", "status": "PASS"},
+    {"check_id": "RC-WP3-10", "name": "candidate output remains replaceable derived state outside authoritative sources", "status": "PASS"},
+    {"check_id": "RC-WP3-11", "name": "existing shell remains fixture-only and does not consume the Research candidate", "status": "PASS"},
+    {"check_id": "RC-WP3-12", "name": "no research write market probability exposure execution or mutating authority introduced", "status": "PASS"}
+  ],
+  "denied_authority": {
+    "active_live_research_surface": "DENIED_PENDING_RC_G3",
+    "research_write": "DENIED_PENDING_SEPARATE_GATE",
+    "repository_mutation": "NONE",
+    "selector_mutation": "NONE",
+    "threshold_mutation": "NONE",
+    "release_activation": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "execution": "NONE",
+    "agent": "NONE",
+    "remote_deployment": "DENIED"
+  },
+  "blocking_issues": 0,
+  "disposition": "COMPLETE_RC_G3_V0_3_REVIEW_READY",
+  "next_gate": "RC-G3-v0.3_RESEARCH_WORKSPACE_REPLAY_EVIDENCE_AND_QUEUE_ACCEPTANCE"
+}
