@@ -1,0 +1,93 @@
+{
+  "schema": "ovc-c2-publication-readiness-gate-packet/v1",
+  "gate_id": "C2-PUB-G0",
+  "decision": "PASS_PUBLICATION_READY_OPERATOR_APPROVED_EXACT_RELEASES_ONLY",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "execution": {
+    "workflow_name": "C2 publication readiness and operator approval",
+    "workflow_run_id": 30213663356,
+    "workflow_run_number": 3,
+    "source_branch": "review/c2-publication-readiness",
+    "source_commit": "0a896b8ce5f4fbf3caddb16e20702f9d7f93ae0f",
+    "conclusion": "SUCCESS",
+    "receipt_artifact_id": 8635181040,
+    "receipt_artifact_name": "c2-publication-readiness-operator-approval",
+    "receipt_artifact_digest": "sha256:cc4f1a0997b56867a7a5cf8a03be3c326d275870d195039555c2c5eb0b45d27d",
+    "receipt_artifact_expires_at": "2026-10-24T17:57:14Z"
+  },
+  "source_candidate_freeze": {
+    "workflow_run_id": 30212281089,
+    "source_commit": "1d72d2332e71639e7eee42bef96357e4640d4fb8",
+    "candidate_tree_sha256": "f15ad152405708bca09e0255af6de69a4a54051e6f0f9e2128cd0c2944bf60fd",
+    "gate_packet_artifact_id": 8634803684,
+    "gate_packet_artifact_digest": "sha256:667aa5a51ea38bb29d9c76780c69b4dbbcee7c4fc137f87dece9f35c04b06b3f"
+  },
+  "verification": {
+    "canonical_repository_tests": "PASS",
+    "artifact_identity": "PASS",
+    "manifest_self_hashes": "PASS",
+    "complete_inventory_binding": "PASS",
+    "full_byte_local_verification": "PASS",
+    "repository_contract_schema_registry_binding": "PASS",
+    "exact_opt_a_and_c1_parent_binding": "PASS",
+    "qa_issue_closure": "PASS_ZERO_OPEN_OR_UNRESOLVED",
+    "remote_collision_preflight": "PASS_ABSENT",
+    "remote_write_executed": false
+  },
+  "releases": [
+    {
+      "role": "DISCOVERY",
+      "release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+      "manifest_sha256": "c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33",
+      "manifest_file_sha256": "d3a8184a8f890ea0c57882fa37d5ea726af2a799b2db0063489cb58a157dba2f",
+      "candidate_artifact_id": 8634803012,
+      "candidate_artifact_digest": "sha256:e92853173779ed8a34df6e96d0472e0f88528aee4c84c094255e4a012b4aad6d",
+      "manifest_bound_file_count": 18,
+      "verified_payload_bytes": 659484886,
+      "state_records": 303856,
+      "transition_records": 245752,
+      "remote_prefix": "canonical/releases/OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1/MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1/",
+      "remote_collision_preflight": "PASS_ABSENT"
+    },
+    {
+      "role": "DEVELOPMENT",
+      "release_id": "OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1",
+      "manifest_sha256": "8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e",
+      "manifest_file_sha256": "79733b9aff7d290a853ae38d174974876b4cb70d4ead6e62548839bf6a923750",
+      "candidate_artifact_id": 8634803579,
+      "candidate_artifact_digest": "sha256:708f53afdb75c9561a30ac4290fcf9a184adb1a0925962d2fe10e577ff3cdf63",
+      "manifest_bound_file_count": 18,
+      "verified_payload_bytes": 213382716,
+      "state_records": 100578,
+      "transition_records": 78158,
+      "remote_prefix": "canonical/releases/OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1/MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1/",
+      "remote_collision_preflight": "PASS_ABSENT"
+    }
+  ],
+  "totals": {
+    "release_count": 2,
+    "manifest_bound_file_count": 36,
+    "verified_payload_bytes": 872867602,
+    "state_records": 404434,
+    "transition_records": 323910
+  },
+  "operator_approval": {
+    "decision": "APPROVE_EXACT_R2_PUBLICATION_ONLY",
+    "publication_scope": "EXACT_DISCOVERY_AND_DEVELOPMENT_RELEASES_ONLY",
+    "publication_method": "PAYLOAD_FIRST_MANIFEST_LAST_IMMUTABLE_R2",
+    "required_post_write_verification": "FULL_REMOTE_BYTE_READBACK"
+  },
+  "authority": {
+    "r2_publication": "AUTHORISED_EXACT_RELEASES_ONLY",
+    "selector": "NONE",
+    "activation": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "next_boundary": "C2_R2_PUBLICATION_AND_FULL_REMOTE_VERIFICATION_EXACT_RELEASES_ONLY"
+}
