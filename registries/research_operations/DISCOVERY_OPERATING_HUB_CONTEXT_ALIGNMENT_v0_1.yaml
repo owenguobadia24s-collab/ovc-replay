@@ -1,0 +1,143 @@
+schema: ovc-discovery-operating-hub-context-alignment/v0.1
+status: FROZEN_BY_DO_00_V0_3_REALIGNMENT_PENDING_RC_G0A
+session_state:
+  authority: PRESENTATION_ONLY_EXCLUDED_FROM_LOGICAL_AUTHORITY
+  fields:
+    active_workspace:
+      allowed: [OVERVIEW, RESEARCH, SYSTEM]
+      reset: EXPLICIT_WORKSPACE_SELECTION_ONLY
+    active_system_panel:
+      allowed: [OBJECTS, CATALOGUE, RELEASES, QA, CONFIG, ABOUT]
+      reset: EXPLICIT_SYSTEM_PANEL_SELECTION_ONLY
+    selected_object_id:
+      type: STRING_OR_NULL
+      reset: DRAWER_CLOSE_NEW_SELECTION_OR_STALE_OBJECT_WARNING
+    selected_object_type:
+      type: STRING_OR_NULL
+      reset: WITH_SELECTED_OBJECT_ID
+    drawer_open:
+      type: BOOLEAN
+      default: false
+    activity_open:
+      type: BOOLEAN
+      default: false
+    command_palette_open:
+      type: BOOLEAN
+      default: false
+      transient: true
+    instrument:
+      type: STRING_OR_NULL
+      persistence: ACROSS_WORKSPACES
+    release_id:
+      type: STRING_OR_NULL
+      persistence: ACROSS_WORKSPACES
+    clock:
+      type: STRING_OR_NULL
+      persistence: ACROSS_WORKSPACES
+    side:
+      type: STRING_OR_NULL
+      persistence: ACROSS_WORKSPACES
+    selected_time:
+      type: ISO8601_OR_NULL
+      persistence: ACROSS_RESEARCH_INTERACTIONS
+    replay_mode:
+      allowed: [PROSPECTIVE, REVIEW]
+      default_when_record_context_opens: PROSPECTIVE
+    admissible_cutoff:
+      type: ISO8601_OR_NULL
+      rule: HARD_QUERY_BOUNDARY_IN_PROSPECTIVE_MODE
+    filters:
+      type: NAMESPACED_MAPPING
+      persistence: BY_WORKSPACE_AND_PANEL
+    scroll_anchor:
+      type: STABLE_UI_ANCHOR_OR_NULL
+      authority: BEST_EFFORT_PRESENTATION_ONLY
+  prohibited:
+    - SOURCE_OF_TRUTH
+    - PERSISTED_MARKET_CLASSIFICATION
+    - SELECTOR_OR_THRESHOLD_STATE
+    - LOGICAL_READ_MODEL_HASH_INPUT
+contextual_drawer:
+  authority: ACTIVE_BOUNDED_READ_AFTER_RC_GATE
+  open_mode: IN_PLACE_RIGHT_DRAWER_OR_CONDITIONAL_RIGHT_COLUMN
+  required_sections:
+    - object identity and status
+    - authority and consequence
+    - source IDs and hashes
+    - release and parent lineage
+    - QA and health context
+    - next valid action
+  guarantees:
+    preserve_main_canvas_selection: true
+    preserve_filters_time_and_scroll_context: true
+    selected_context_in_projection: true
+    stale_reference_fails_visible: true
+  prohibited:
+    - MUTATION_CONTROLS
+    - REPOSITORY_EDITOR
+    - SELECTOR_THRESHOLD_OR_RELEASE_ACTION
+universal_search:
+  authority: READ_ONLY_INDEXED_LOOKUP
+  targets:
+    objects: [id, type, status, authority, source_refs]
+    releases: [release_id, role, interval, clocks, state]
+    gates_and_qa: [gate_id, check_id, status, issue]
+    research_records: [session_id, observation_id, claim_id, case_id, incident_id]
+    artifacts: [path_alias, media_type, hash, release_id]
+    local_commands: [SWITCH_WORKSPACE, CLOSE_DRAWER, TOGGLE_ACTIVITY]
+  result_action: FOCUS_OWNING_WORKSPACE_AND_OPEN_DRAWER
+  prohibited:
+    - ARBITRARY_FILESYSTEM_SEARCH
+    - SHELL_COMMAND_EXECUTION
+    - REPOSITORY_MUTATION
+    - UNREGISTERED_ACTION
+action_registry_alignment:
+  permitted:
+    - FILTER_VIEW
+    - OPEN_SOURCE_DETAIL
+    - COPY_IDENTIFIER
+    - SWITCH_WORKSPACE
+    - OPEN_CLOSE_DRAWER
+    - TOGGLE_ACTIVITY
+    - SEARCH_APPROVED_INDEX
+  deferred:
+    - CREATE_RESEARCH_SESSION
+    - CREATE_RESEARCH_RECORD
+    - DOWNLOAD_DERIVED_VIEW
+  prohibited:
+    - CHANGE_SELECTOR
+    - CHANGE_THRESHOLD
+    - ACTIVATE_RELEASE
+    - EDIT_REPOSITORY
+    - DEPLOY_CONSOLE
+    - CREATE_MARKET_CLASSIFICATION
+    - CREATE_PROBABILITY_OR_EXPOSURE_OBJECT
+activity_stream:
+  authority: READ_ONLY_SOURCE_DERIVED_CHRONOLOGY
+  included_sources:
+    - read_model_builds
+    - gate_decisions
+    - release_freezes_publications_and_supersessions
+    - research_record_lifecycle_events
+    - incidents
+    - artifact_verification_and_availability_changes
+  excluded_sources:
+    - ordinary_page_views
+    - filter_changes
+    - drawer_open_close_events
+    - hover_or_scroll_events
+  ordering: EVENT_TIME_THEN_STABLE_EVENT_ID
+  filters: [time, status, event_type, affected_workspace]
+cutoff_safety:
+  prospective_mode:
+    exclude_if_first_valid_after_cutoff: true
+    replay_marker_cannot_move_beyond_cutoff: true
+    post_cutoff_rendering: PROHIBITED
+  review_mode:
+    explicit_switch_required: true
+    post_cutoff_evidence_visually_and_semantically_separated: true
+  horizons:
+    best_horizon_selection: PROHIBITED
+    missing_or_censored_horizons: EXPLICIT
+  source_trace_required_for_every_overlay: true
+activation_rule: CONTEXT_FEATURES_REQUIRE_RC_GATES_AND_MAY_NOT_EXPAND_DO_AUTHORITY
