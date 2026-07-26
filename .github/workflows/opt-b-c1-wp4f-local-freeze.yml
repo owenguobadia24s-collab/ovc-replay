@@ -41,7 +41,7 @@ jobs:
       - name: Assert authority boundary
         run: |
           grep -F '"status":"PASS"' frozen/WP4F_FREEZE_REPORT.json
-          grep -F 'state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY' registries/authority/ACTIVE_AUTHORITY.yaml
+          grep -E 'state: C1_(B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY|B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR)' registries/authority/ACTIVE_AUTHORITY.yaml
           grep -F 'selector: NONE' registries/authority/ACTIVE_AUTHORITY.yaml
           grep -F 'validation_consumption: LOCKED_UNCONSUMED' registries/authority/ACTIVE_AUTHORITY.yaml
       - name: Upload frozen Discovery release
