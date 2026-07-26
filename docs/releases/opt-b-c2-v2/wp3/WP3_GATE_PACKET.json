@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-opt-b-c2-wp3-gate-packet/v1",
+  "gate_id": "C2-G2",
+  "work_packet": "WP3",
+  "decision": "PASS_C2_LEVEL_CONTAINER_RELATION_ENGINE_TRUST",
+  "checks": [
+    {"id":"B2-20","name":"C1 handoff adapter","status":"PASS"},
+    {"id":"B2-21","name":"Level engine deterministic identity and first-valid chronology","status":"PASS"},
+    {"id":"B2-22","name":"Container engine boundary and conflict visibility","status":"PASS"},
+    {"id":"B2-23","name":"Complete relation-set engine without hidden selection","status":"PASS"},
+    {"id":"C2-QA-01","name":"Wrong role, clock, side, authority and legacy parent rejection","status":"PASS"},
+    {"id":"C2-QA-02","name":"Future and downstream semantic leakage rejection","status":"PASS"}
+  ],
+  "fixture_trust": "PASS_SYNTHETIC_ONLY",
+  "authority_delta": {
+    "wp4_axis_persistence_transition_implementation": "AUTHORISED",
+    "market_replay": "DENIED_PENDING_SEPARATE_OPERATOR_APPROVAL",
+    "release": "NONE",
+    "selector": "NONE",
+    "activation": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "blocking_issues": 0,
+  "next_gate": "C2-WP4_PARALLEL_STATE_PERSISTENCE_AND_TRANSITION_ENGINE"
+}
