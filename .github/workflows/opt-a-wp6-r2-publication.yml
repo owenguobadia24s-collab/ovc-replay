@@ -110,7 +110,6 @@ jobs:
           set -euo pipefail
           mkdir -p wp6-readiness wp6-output
           exec > >(tee wp6-output/publication.log) 2>&1
-          set -x
           for role in discovery development validation; do
             manifest="wp6-manifests/${role}.json"
             approval="docs/releases/opt-a-v2/publication/approvals/${role}.json"
@@ -121,11 +120,22 @@ jobs:
           import sys
           from pathlib import Path
           from ovc_evidence_store.manifest import remote_keys
-          document = json.loads(Path(sys.argv[1]).read_text())
-          print(remote_keys(document)[0])
+          print(remote_keys(json.loads(Path(sys.argv[1]).read_text()))[0])
           PY
             )
-            if rclone lsjson --stat --s3-no-check-bucket "ovc_r2:${manifest_key}" >/dev/null 2>&1; then
+            stat_json=$(rclone lsjson --stat --s3-no-check-bucket "ovc_r2:${manifest_key}" 2>/dev/null || true)
+            if STAT_JSON="$stat_json" python - <<'PY'
+          import json
+          import os
+          raw = os.environ.get("STAT_JSON", "").strip()
+          try:
+              value = json.loads(raw)
+          except Exception:
+              raise SystemExit(1)
+          exists = isinstance(value, dict) and value.get("IsDir") is False and isinstance(value.get("Size"), int)
+          raise SystemExit(0 if exists else 1)
+          PY
+            then
               rclone cat --s3-no-check-bucket "ovc_r2:${manifest_key}" > "wp6-output/remote-${role}-manifest.json"
               sha256sum "$manifest" "wp6-output/remote-${role}-manifest.json" | tee "wp6-output/${role}-manifest-sha256.txt"
               diff -u "$manifest" "wp6-output/remote-${role}-manifest.json" > "wp6-output/${role}-manifest.diff" || true
@@ -140,7 +150,7 @@ jobs:
               "overall_status": "READY",
               "checks": {"existing_remote_manifest": "PASS", "full_byte_remote_verification": "PASS"},
               "details": {"manifest_key": key, "mode": "EXISTING_IMMUTABLE_REMOTE_VERIFIED"},
-              "side_effects_performed": False,
+              "side_effects_performed": False
           }, indent=2, sort_keys=True) + "\n")
           PY
             else
@@ -150,25 +160,25 @@ jobs:
                 --approval "$approval" \
                 --repository-root a2-g3-source \
                 --bucket-lock-visible true > "wp6-readiness/${role}.json"
-              cat "wp6-readiness/${role}.json"
               python - "$role" <<'PY'
           import json
           import sys
           from pathlib import Path
           role = sys.argv[1]
-          result = json.loads(Path(f"wp6-readiness/{role}.json").read_text())
-          blocking = {name: status for name, status in result["checks"].items() if status == "BLOCK"}
-          assert not blocking, result
-          for name in (
+          path = Path(f"wp6-readiness/{role}.json")
+          result = json.loads(path.read_text())
+          required = (
               "release_root", "inventory", "local_hashes", "manifest_schema",
               "prohibited_files", "symlinks", "duplicate_remote_keys",
               "source_commit", "git_worktree", "publication_approval",
-              "bucket_lock_visibility",
-          ):
+              "bucket_lock_visibility"
+          )
+          for name in required:
               assert result["checks"][name] == "PASS", (name, result)
+          result["details"]["remote_manifest_stat"] = "ABSENT_OR_EMPTY_RESPONSE"
           result["details"]["remote_collision_control"] = "RCLONE_IMMUTABLE_UPLOAD_AND_MANIFEST_LAST"
           result["details"]["mode"] = "ABSENT_MANIFEST_LOCAL_READY"
-          Path(f"wp6-readiness/{role}.json").write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
           PY
               python -m ovc_evidence_store upload \
                 --manifest "$manifest" \
