@@ -5,13 +5,13 @@ from typing import Any, Iterable, Mapping
 
 KNOWN_STATUSES = {
     "PASS", "WARN", "BLOCK", "QUARANTINE", "NOT_EVALUATED", "NOT_MATERIALIZED",
-    "INCOMPLETE", "STALE", "NOT_APPLICABLE", "UNRESOLVED", "CENSORED", "MISSING",
+    "INCOMPLETE", "STALE", "NOT_APPLICABLE", "UNRESOLVED", "CENSORED", "MISSING", "EXPECTED_EMPTY",
 }
 STATUS_COLOURS = {
     "PASS": "#25C281", "WARN": "#F3B94E", "BLOCK": "#EF5A67", "MISSING": "#EF5A67",
     "QUARANTINE": "#8B5CF6", "NOT_EVALUATED": "#8B5CF6", "NOT_MATERIALIZED": "#8B5CF6",
     "INCOMPLETE": "#8B5CF6", "STALE": "#8B5CF6", "CENSORED": "#8B5CF6",
-    "NOT_APPLICABLE": "#64748B", "UNRESOLVED": "#8B5CF6",
+    "NOT_APPLICABLE": "#64748B", "UNRESOLVED": "#8B5CF6", "EXPECTED_EMPTY": "#64748B",
 }
 
 
@@ -98,10 +98,9 @@ def render_source_refs(source_refs: Iterable[str]) -> None:
 
 def render_drawer(item: Mapping[str, Any] | None) -> None:
     st = _streamlit()
-    st.markdown('<div class="ovc-drawer"><div class="ovc-kicker">Contextual detail</div>', unsafe_allow_html=True)
+    st.markdown('<div class="ovc-kicker">Contextual detail</div>', unsafe_allow_html=True)
     if item is None:
         render_empty_state("NOT_MATERIALIZED", "No object is selected.", "Drawer remains inactive.", "Select a health cell, evidence card, release, gate or activity event.")
-        st.markdown('</div>', unsafe_allow_html=True)
         return
     st.markdown(f'<div class="ovc-panel-title">{escape(str(item.get("label", item.get("object_id", "Selected object"))))}</div>', unsafe_allow_html=True)
     st.markdown(status_html(str(item.get("status", "BLOCK"))), unsafe_allow_html=True)
@@ -117,7 +116,6 @@ def render_drawer(item: Mapping[str, Any] | None) -> None:
         render_source_refs(item.get("source_refs", []))
     with st.expander("Raw fixture payload", expanded=False):
         st.json(dict(item))
-    st.markdown('</div>', unsafe_allow_html=True)
 
 
 def render_activity_rows(activity: Iterable[Mapping[str, Any]], *, on_select) -> None:
