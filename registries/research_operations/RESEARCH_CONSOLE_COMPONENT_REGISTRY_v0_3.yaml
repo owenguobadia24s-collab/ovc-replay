@@ -1,5 +1,5 @@
 schema: ovc-research-console-component-registry/v0.3
-status: IMPLEMENTED_RC_WP1_PENDING_RC_G1
+status: ACCEPTED_BY_RC_G1_V0_3
 components:
   - {id: APP_SHELL, source: apps/research_console/shell.py, authority: FIXTURE_ONLY_LOCAL_PRESENTATION}
   - {id: ICON_RAIL, source: apps/research_console/shell.py, authority: ACTIVE_LOCAL_UI_ONLY}
@@ -27,3 +27,8 @@ rules:
   command_mutation: NONE
   activity_mutation: NONE
   remote_deployment: DENIED
+acceptance:
+  gate: RC-G1-v0.3
+  decision: PASS_SHELL_CONTEXT_AND_RESPONSIVE_CONTRACT_ACCEPTED
+  implementation_merge_commit: fa210386378db684419fe6a38b89870dbf72de2d
+  active_live_projection: DENIED_PENDING_RC_G2
