@@ -1,0 +1,73 @@
+schema: ovc-research-console-route-migration-registry/v0.3
+status: FROZEN_BY_RC_A0_PENDING_RC_A1_REVIEW
+source_registry: registries/research_operations/RESEARCH_CONSOLE_ROUTE_REGISTRY_v0_2.yaml
+migrations:
+  - v0_2_route_id: OVERVIEW
+    v0_3_workspace: OVERVIEW
+    destination: OPERATING_CONTEXT
+    disposition: REPLACED_BY_WORKSPACE_ROOT
+  - v0_2_route_id: RESEARCH_DESK
+    v0_3_workspace: RESEARCH
+    destination: RESEARCH_BRIEF
+    disposition: INTEGRATED_PANEL
+  - v0_2_route_id: REPLAY
+    v0_3_workspace: RESEARCH
+    destination: REPLAY_STRIP
+    disposition: INTEGRATED_PANEL
+  - v0_2_route_id: EVIDENCE
+    v0_3_workspace: RESEARCH
+    destination: EVIDENCE_RAIL
+    disposition: INTEGRATED_PANEL
+  - v0_2_route_id: SESSIONS
+    v0_3_workspace: RESEARCH
+    destination: RESEARCH_QUEUE
+    disposition: READ_ONLY_SECTION
+  - v0_2_route_id: QUEUE
+    v0_3_workspace: RESEARCH
+    destination: RESEARCH_QUEUE
+    disposition: INTEGRATED_PANEL
+  - v0_2_route_id: HEALTH
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.HEALTH
+    global_projection: AMBIENT_HEALTH
+    disposition: DETAIL_SECTION_PLUS_GLOBAL_PROJECTION
+  - v0_2_route_id: LINEAGE
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.LINEAGE
+    global_projection: CONTEXTUAL_DETAIL_DRAWER
+    disposition: DETAIL_SECTION_PLUS_CONTEXTUAL_PROJECTION
+  - v0_2_route_id: CATALOGUE
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.CATALOGUE
+    disposition: DETAIL_SECTION
+  - v0_2_route_id: RELEASES
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.RELEASES
+    disposition: DETAIL_SECTION
+  - v0_2_route_id: QA_GATES
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.QA_GATES
+    disposition: DETAIL_SECTION
+  - v0_2_route_id: AUDIT
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.AUDIT
+    global_projection: ACTIVITY_STREAM
+    disposition: DETAIL_SECTION_PLUS_GLOBAL_PROJECTION
+  - v0_2_route_id: CONFIG
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.CONFIGURATION
+    disposition: DETAIL_SECTION
+  - v0_2_route_id: ABOUT
+    v0_3_workspace: SYSTEM
+    destination: SYSTEM_DETAIL.ABOUT
+    disposition: DETAIL_SECTION
+compatibility:
+  legacy_route_ids_may_alias: true
+  aliases_create_authority: false
+  duplicate_active_information_architecture: PROHIBITED
+  missing_migration_destination: BLOCK
+rules:
+  all_v0_2_routes_must_map_once: true
+  no_route_silently_deleted: true
+  research_cutoff_rules_preserved: true
+  v0_2_write_authority_not_inherited: true
