@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-research-console-rc-a0-amendment-preflight/v1",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "gate_id": "RC-A0",
+  "gate_name": "v0.3 information-architecture amendment preflight",
+  "baseline": {
+    "repository": "owenguobadia24s-collab/ovc-replay",
+    "branch": "main",
+    "commit": "f704f33e4d5fc19f5807d0a92156b99afa8bce84"
+  },
+  "supersession": {
+    "superseded_plan": "OVC-RESEARCH-CONSOLE-V0.2-IMPLEMENTATION-PLAN-0.1",
+    "successor_plan": "OVC-RESEARCH-CONSOLE-V0.3-IA-AMENDMENT-0.1",
+    "v0_2_rc_wp1_pr": 53,
+    "v0_2_rc_wp1_pr_state": "CLOSED_UNMERGED_SUPERSEDED",
+    "v0_2_historical_records_preserved": true
+  },
+  "frozen_artifacts": {
+    "amendment_plan": "docs/plans/research_operations/OVC_RESEARCH_CONSOLE_V0_3_INFORMATION_ARCHITECTURE_AMENDMENT_v0_1.md",
+    "ia_contract": "contracts/research_operations/console/OVC_RESEARCH_CONSOLE_INFORMATION_ARCHITECTURE_CONTRACT_v0_3.md",
+    "workspace_registry": "registries/research_operations/RESEARCH_CONSOLE_WORKSPACE_REGISTRY_v0_3.yaml",
+    "panel_registry": "registries/research_operations/RESEARCH_CONSOLE_PANEL_REGISTRY_v0_3.yaml",
+    "route_migration_registry": "registries/research_operations/RESEARCH_CONSOLE_ROUTE_MIGRATION_REGISTRY_v0_3.yaml",
+    "context_state_registry": "registries/research_operations/RESEARCH_CONSOLE_CONTEXT_STATE_REGISTRY_v0_3.yaml",
+    "global_surface_registry": "registries/research_operations/RESEARCH_CONSOLE_GLOBAL_SURFACE_REGISTRY_v0_3.yaml",
+    "supersession_record": "docs/releases/research-console-v0-3/rc-a0/RC_A0_V0_2_SUPERSESSION_RECORD.md"
+  },
+  "checks": [
+    {"check_id": "RC-A0-01", "name": "v0.2 implementation direction explicitly superseded", "status": "PASS"},
+    {"check_id": "RC-A0-02", "name": "stale v0.2 RC-WP1 pull request closed without merge", "status": "PASS"},
+    {"check_id": "RC-A0-03", "name": "exact three-workspace hierarchy frozen", "status": "PASS"},
+    {"check_id": "RC-A0-04", "name": "every v0.2 route has a v0.3 destination", "status": "PASS"},
+    {"check_id": "RC-A0-05", "name": "global context and cutoff preservation frozen", "status": "PASS"},
+    {"check_id": "RC-A0-06", "name": "drawer, command palette, ambient health and activity boundaries frozen", "status": "PASS"},
+    {"check_id": "RC-A0-07", "name": "v0.2 safety and health-truth rules inherited", "status": "PASS"},
+    {"check_id": "RC-A0-08", "name": "no write, market, exposure or deployment authority introduced", "status": "PASS"}
+  ],
+  "authority_delta": {
+    "v0_2_rc_wp1": "REVOKED_SUPERSEDED_BEFORE_MERGE",
+    "v0_3_information_architecture": "FROZEN_PENDING_RC_A1",
+    "v0_3_shell_implementation": "DENIED_PENDING_RC_A1",
+    "live_projection_authority": "DENIED",
+    "live_research_surface_authority": "DENIED",
+    "research_write_authority": "DENIED_PENDING_SEPARATE_GATE",
+    "repository_mutation": "NONE",
+    "selector_mutation": "NONE",
+    "threshold_mutation": "NONE",
+    "release_activation": "NONE",
+    "market_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "execution_authority": "NONE",
+    "agent_authority": "NONE",
+    "deployment_authority": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
+  },
+  "blocking_issues": 0,
+  "rc_a0_disposition": "COMPLETE_RC_A1_REVIEW_READY",
+  "next_gate": "RC-A1_V0_3_INFORMATION_ARCHITECTURE_AMENDMENT_ACCEPTANCE"
+}
