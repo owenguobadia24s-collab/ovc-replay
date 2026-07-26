@@ -1,0 +1,63 @@
+schema: ovc-research-operations-path-policy/v1
+programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+gate_id: RO-G0
+status: FROZEN_FOR_RO_WP1
+baseline_commit: 3940f64a635f547a6bef6045bd3a8a27e386dcdd
+stores:
+  git:
+    purpose:
+      - contracts
+      - schemas
+      - registries
+      - compact_records
+      - fixtures
+      - tests
+      - manifests
+      - decisions
+      - gate_packets
+    prohibited:
+      - raw_ohlcv
+      - full_model_streams
+      - sqlite_databases
+      - caches
+      - recordings
+      - screenshots
+      - secrets
+      - absolute_operator_paths
+  external_root:
+    environment_variable: OVC_EXTERNAL_ARTIFACT_ROOT
+    purpose:
+      - raw_market_payloads
+      - full_state_and_outcome_streams
+      - large_case_extracts
+      - recordings_and_media
+      - checksum_addressed_evidence
+    persistence_in_repository_configuration: DENIED
+  local_derived:
+    path: var/research_operations
+    git_state: IGNORED
+    authority: DERIVED_REBUILDABLE_ONLY
+approved_repository_write_roots:
+  - contracts/research_operations/**
+  - schemas/research_operations/**
+  - registries/research_operations/**
+  - fixtures/research_operations/**
+  - tests/research_operations/**
+  - docs/research-operations/**
+  - docs/releases/research-operations-foundation/**
+  - records/research_operations/**
+  - src/ovc/research_operations/**
+  - apps/research_console/**
+  - scripts/**
+path_controls:
+  traversal: DENIED
+  symlink_escape: DENIED
+  absolute_path_commit: DENIED
+  unsafe_existing_target_overwrite: DENIED
+  frozen_record_delete_or_replace: DENIED
+  direct_primary_branch_mutation: DENIED
+validation_boundary:
+  release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
+  metadata_visibility: ALLOWED
+  payload_resolution: DENIED_LOCKED_UNCONSUMED
+  search_case_or_realization_access: DENIED
