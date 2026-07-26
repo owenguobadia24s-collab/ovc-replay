@@ -186,6 +186,21 @@ jobs:
                 --remote ovc_r2 \
                 --approval "$approval"
               python -m ovc_evidence_store verify-remote --manifest "$manifest" --remote ovc_r2
+              python - "$role" "$manifest_key" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          role, key = sys.argv[1:]
+          path = Path(f"wp6-readiness/{role}.json")
+          result = json.loads(path.read_text())
+          result["overall_status"] = "READY"
+          result["checks"]["remote_upload"] = "PASS"
+          result["checks"]["full_byte_remote_verification"] = "PASS"
+          result["details"]["manifest_key"] = key
+          result["details"]["mode"] = "NEW_IMMUTABLE_REMOTE_PUBLISHED_AND_VERIFIED"
+          result["side_effects_performed"] = True
+          path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+          PY
             fi
           done
 
