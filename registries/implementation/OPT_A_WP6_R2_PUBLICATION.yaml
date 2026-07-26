@@ -3,32 +3,43 @@ implementation_id: OPT-A-WP6-R2-PUBLICATION
 programme_id: OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2
 work_packet: WP6
 title: Canonical R2 publication and remote verification
-status: APPROVED_FOR_EXECUTION
+status: EXECUTED_PASS
 branch: publish/opt-a-v2-role-releases-r2
 upstream_gate: A2-G3
 upstream_source_commit: 8c4c6c70da6f3f8b400d06df990500702813ff39
 upstream_workflow_run_id: 30179286521
+publication_branch_head: 582eaaa4f844422270095bea90dd3488852762cf
+publication_merge_commit: 8f0dd49e489b531df8998b4fc1575d6fb11317d1
+publication_workflow_run_id: 30181995980
+publication_report_artifact_id: 8625889699
+publication_report_artifact_digest: sha256:67f9ea95026c60a6c42446974a887f9a900a2fd0809ee09a685d7ed65b827d3f
 inputs:
   discovery_artifact_id: 8625089938
   development_artifact_id: 8625090401
   validation_artifact_id: 8625090861
 releases:
   - release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
-    manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
+    manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
     role: DISCOVERY
+    remote_verification: PASS_FULL_BYTE_READBACK
   - release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
-    manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r1
+    manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
+    manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
     role: DEVELOPMENT
+    remote_verification: PASS_FULL_BYTE_READBACK
   - release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
-    manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r1
+    manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
+    manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
     role: VALIDATION
+    remote_verification: PASS_FULL_BYTE_READBACK
     consumption_state: LOCKED_UNCONSUMED
 authority_delta:
-  r2_publication: AUTHORISED_FOR_EXACT_APPROVED_MANIFESTS
-  remote_verification: REQUIRED
-  selector_activation: DENIED
+  r2_publication: COMPLETE_REMOTE_VERIFIED
+  remote_verification: PASS
+  selector_activation: DENIED_PENDING_A2_G5
   validation_consumption: LOCKED_UNCONSUMED
-  opt_b_handoff: DENIED
+  opt_b_handoff: NONE_ACTIVE
   market: NONE
 write_policy:
   mode: IMMUTABLE
