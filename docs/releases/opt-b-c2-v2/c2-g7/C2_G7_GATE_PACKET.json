@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-c2-g7-prospective-evidence-acceptance/v1",
+  "gate_id": "C2-G7",
+  "decision": "PASS_PROSPECTIVE_EVIDENCE_OPERATION_ACCEPTED",
+  "baseline_main_tip": "bc1ea7d1e82bd48817b83b89c1e1d983f3b44ab7",
+  "accepted_work_packet": "C2_WP7_PROSPECTIVE_EVIDENCE_ACCUMULATION",
+  "research_line_id": "RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1",
+  "operation_state": "ACTIVE_PROSPECTIVE_EVIDENCE_ACCUMULATION",
+  "prerequisites": {
+    "c2_g6": "PASS_DISCOVERY_OPERATION_OPEN_PROSPECTIVE_ONLY",
+    "c2_discovery_selector": "ACTIVE_DISCOVERY",
+    "wp7_ci": "PASS",
+    "zero_baseline": true,
+    "historical_backfill": false
+  },
+  "accepted_capabilities": [
+    "APPEND_ONLY_PROSPECTIVE_EVIDENCE_RECORDS",
+    "DETERMINISTIC_RECORD_IDS",
+    "SCHEMA_VALIDATION",
+    "FAIL_CLOSED_ADMISSIBILITY_CHECKS",
+    "READ_ONLY_SUMMARY_PROJECTIONS"
+  ],
+  "accepted_record_classes": [
+    "STATE_FIDELITY_REVIEW",
+    "BOUNDARY_CONFLICT_CASE",
+    "ANOMALY",
+    "INCIDENT",
+    "BOUNDED_RESEARCH_QUESTION"
+  ],
+  "prohibited_seed_material": [
+    "OLD_202_STORY_PROGRAMME",
+    "OLD_58_CANDIDATE_PROGRAMME",
+    "B_STATE_0_3B",
+    "C2E",
+    "C2_5",
+    "C3",
+    "HISTORICAL_OPT_C",
+    "HISTORICAL_OPT_D"
+  ],
+  "retained": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2e_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "trading_authority": "NONE",
+    "execution_authority": "NONE",
+    "direct_r2_write": "DENIED",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED"
+  },
+  "blocking_issues": 0,
+  "next_boundary": "FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW"
+}
