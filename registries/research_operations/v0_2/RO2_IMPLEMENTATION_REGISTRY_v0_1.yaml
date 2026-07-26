@@ -1,6 +1,7 @@
 schema: ovc-ro2-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2
-status: RO2_G0_PASS_DESIGN_FREEZE
+design_gate: RO2_G0_PASS_DESIGN_FREEZE
+status: RO2_G1_PASS_LOCAL_REPLACEABLE_DERIVED_INDEX
 items:
   - id: RO2-00
     name: Boundary, reconciliation and contract freeze
@@ -8,43 +9,52 @@ items:
     gate: RO2-G0
   - id: RO2-WP1-WORKSPACE
     name: Role workspace and release index
-    status: NOT_STARTED_REQUIRES_SEPARATE_INSTRUCTION
-    planned_namespace: src/ovc/research_operations/v0_2/workspace_index
+    status: ACCEPTED_RO2_G1_ACTIVE_BOUNDED_LOCAL_DERIVED
+    namespace: src/ovc/research_operations/v0_2/workspace_index.py
     authority_after_gate: REPLACEABLE_LOCAL_DERIVED_READ_MODEL
+    writes: NONE
   - id: RO2-WP1-OBSERVATION
-    name: Observation index
-    status: NOT_STARTED_REQUIRES_SEPARATE_INSTRUCTION
-    planned_namespace: src/ovc/research_operations/v0_2/workspace_index
+    name: Observation and observation-family indexes
+    status: ACCEPTED_RO2_G1_ACTIVE_BOUNDED_LOCAL_DERIVED
+    namespace: src/ovc/research_operations/v0_2/workspace_index.py
     authority_after_gate: READ_ONLY_DISCOVERY_DEVELOPMENT
-  - id: RO2-WP1-QUALITY
+    validation_projection: METADATA_ONLY
+    validation_guard: DENY_BEFORE_PATH_RESOLUTION
+    writes: NONE
+  - id: RO2-WP2-QUALITY
     name: Data-quality projection
     status: NOT_STARTED_REQUIRES_SEPARATE_INSTRUCTION
     planned_namespace: src/ovc/research_operations/v0_2/quality
     authority_after_gate: DERIVED_HEALTH_ONLY
-  - id: RO2-WP1-LINEAGE
+  - id: RO2-WP2-LINEAGE
     name: Bar-lineage inspection
     status: NOT_STARTED_REQUIRES_SEPARATE_INSTRUCTION
     planned_namespace: src/ovc/research_operations/v0_2/lineage
     authority_after_gate: READ_ONLY_TRACE
   - id: RO2-WP2-REPLAY
     name: Admissible-cutoff replay
-    status: DEFERRED_AFTER_WP1_GATE
+    status: AUTHORISED_FOR_BUILD_REQUIRES_SEPARATE_INSTRUCTION
     planned_namespace: src/ovc/research_operations/v0_2/replay
     authority_after_gate: LOCAL_READ_ONLY_REPLAY
   - id: RO2-WP2-DIFF
     name: Release and workspace comparison
-    status: DEFERRED_AFTER_WP1_GATE
+    status: AUTHORISED_FOR_BUILD_REQUIRES_SEPARATE_INSTRUCTION
     planned_namespace: src/ovc/research_operations/v0_2/release_diff
     authority_after_gate: DERIVED_COMPARISON_ONLY
   - id: RO2-WP3-CONSOLE
     name: Research Console v0.3 adapters
-    status: DEFERRED_AFTER_WP2_GATE
+    status: DEFERRED_AFTER_RO2_WP2_GATE
     planned_namespace: src/ovc/research_operations/v0_2/console_adapters
     authority_after_gate: READ_ONLY_PRESENTATION
 retained_prohibitions:
-  runtime_started_at_ro2_g0: false
   validation_consumption: LOCKED_UNCONSUMED
-  c2_candidate_release: NONE
+  c2_local_candidate_releases: FROZEN_LOCAL_ONLY_UNCHANGED_BY_RO2_G1
   c2_publication: NONE
   c2_selector: NONE
   c2_activation: NONE
+  direct_git_write: DENIED
+  direct_r2_write: DENIED
+  market_authority: NONE
+  probability_authority: NONE
+  exposure_authority: NONE
+  execution_authority: NONE
