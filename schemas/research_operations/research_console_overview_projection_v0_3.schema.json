@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_console_overview_projection_v0_3.schema.json",
+  "title": "OVC Research Console Overview Projection v0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source_commit",
+    "read_model_sha256",
+    "summary_status",
+    "metrics",
+    "health_domains",
+    "releases",
+    "gates",
+    "sessions",
+    "attention",
+    "source_refs",
+    "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-research-console-overview-projection/v0.3"},
+    "source_commit": {"type": "string", "minLength": 1},
+    "read_model_sha256": {"type": "string", "minLength": 1},
+    "summary_status": {
+      "enum": ["PASS", "WARN", "BLOCK", "QUARANTINE", "NOT_EVALUATED", "INCOMPLETE", "STALE", "NOT_APPLICABLE", "UNRESOLVED", "CENSORED", "MISSING", "NOT_MATERIALIZED"]
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["indexed_objects", "health_signals", "release_objects", "gate_objects", "session_objects", "attention_items"],
+      "properties": {
+        "indexed_objects": {"type": "integer", "minimum": 0},
+        "health_signals": {"type": "integer", "minimum": 0},
+        "release_objects": {"type": "integer", "minimum": 0},
+        "gate_objects": {"type": "integer", "minimum": 0},
+        "session_objects": {"type": "integer", "minimum": 0},
+        "attention_items": {"type": "integer", "minimum": 0}
+      }
+    },
+    "health_domains": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/healthDomain"}
+    },
+    "releases": {"type": "array", "items": {"type": "object"}},
+    "gates": {"type": "array", "items": {"type": "object"}},
+    "sessions": {"type": "array", "items": {"type": "object"}},
+    "attention": {"type": "array", "items": {"type": "object"}},
+    "source_refs": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "healthDomain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["object_id", "domain", "label", "status", "progress", "detail", "consequence", "affected_surfaces", "source_refs"],
+      "properties": {
+        "object_id": {"type": "string", "pattern": "^HEALTH\\."},
+        "domain": {"enum": ["DATA", "READ_MODEL", "ARTIFACTS", "QA", "RESEARCH_RECORDS", "REPOSITORY", "SEMANTIC"]},
+        "label": {"type": "string", "minLength": 1},
+        "status": {
+          "enum": ["PASS", "WARN", "BLOCK", "QUARANTINE", "NOT_EVALUATED", "INCOMPLETE", "STALE", "NOT_APPLICABLE", "UNRESOLVED", "CENSORED", "MISSING", "NOT_MATERIALIZED"]
+        },
+        "progress": {"type": "number", "minimum": 0, "maximum": 1},
+        "detail": {"type": "string", "minLength": 1},
+        "consequence": {"type": "string", "minLength": 1},
+        "affected_surfaces": {"type": "array", "items": {"type": "string"}},
+        "source_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}
