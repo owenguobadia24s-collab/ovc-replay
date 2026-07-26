@@ -17,6 +17,7 @@ The reset and OPT-A v2 build line through selector activation are merged into `m
 - Research Operations RO-G0: `8a4852358324a4e6dfc9f7c239be9e9eb8d69c23`
 - Research Operations RO-WP1: `8944da84dec4915c7d7748ae5dbb2a9e1d187d28`
 - Research Operations RO-G1: `51f94c55eaed8c997bc141d33f0f3f4fa452bb0f`
+- Research Operations RO-WP2: `62c9a7bf13fce5dd7f3850179c28f89aec16b9ee`
 
 Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailable and prohibited as a selector, parent or rollback target.
 
@@ -30,41 +31,31 @@ Historical `OPT-A.GBPUSD.2026H1.v1` remains `SUPERSEDED_UNPUBLISHED`, unavailabl
 
 The **21,410** quarantined derived-bucket records remain bound to `RETAIN_TRACE_AND_EXCLUDE_FROM_ACCEPTED_OBSERVATIONS` and cannot become downstream parents.
 
-## OPT-B.C1 v2 B1-G1
+## OPT-B.C1 v2 B1-G1 and WP4F
 
-B1-G1 result: `PASS — EXACT WP4 CANDIDATE INVENTORY ACCEPTED; DURABLE LOCAL FREEZE AUTHORISED`.
+B1-G1 accepted the exact WP4 candidate inventory and authorised its controlled durable local freeze.
 
-The review is bound to workflow run `30185680001`, candidate artifact `8626942276`, archive SHA-256 `fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc` and inventory SHA-256 `39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383`.
+WP4F is bound to the exact candidate artifact `8626942276`, archive SHA-256 `fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc`, and inventory SHA-256 `39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383`.
 
-Independent full-byte verification confirmed:
+The C1 selector remains `NONE`; R2 publication, Validation consumption, and C2 handoff remain denied pending their separate gates.
 
-| Role | Files | Bytes | Records |
-|---|---:|---:|---:|
-| Discovery 2021–2023 | 144 | 27,450,668 | 159,892 |
-| Development 2024 | 48 | 8,718,913 | 52,872 |
-| **Total** | **192** | **36,169,581** | **212,764** |
+## Research Operations Foundation RO-G2
 
-All 212,764 record IDs are unique. There are zero duplicate record IDs, missing candidate files or payload hash mismatches. The deterministic second replay matched the complete inventory. The 12,104 Discovery and 4,862 Development upstream quarantine records remain excluded, and Validation remains `LOCKED_UNCONSUMED`.
+RO-G2 result: `PASS — BOUNDED LOCAL OPERATIONS APPROVED; RO-WP3 AUTHORISED FOR BUILD`.
 
-B1-G1 authorises only the controlled promotion of this exact candidate into durable immutable local release roots. It does not claim that the releases are already `RELEASE_FROZEN` or `LOCAL_VERIFIED`; those states require the subsequent freeze execution and post-freeze full-byte verification.
+The review confirms:
 
-## Research Operations Foundation RO-WP2
+- complete governed sessions can be produced without manual record editing;
+- every public write emits a frozen AuditEvent;
+- append-only overwrite, identity reuse, traversal, symlink escape, and deletion attempts fail closed;
+- catalogue rebuilds are logically deterministic;
+- changed, missing, expired, orphaned, and dependency-defect evidence remains visible;
+- Validation remains metadata-only and `LOCKED_UNCONSUMED`;
+- no Git, R2, selector, threshold, classification, probability, exposure, execution, or agent side effect is introduced.
 
-RO-WP2 result: `IMPLEMENTED — READY FOR RO-G2 OPERATOR REVIEW`.
+The RO-WP2 CLI, append-only service, audit service, catalogue, and queues are approved for bounded local operation. This is not active-research or market authority.
 
-The repository now contains:
-
-- `ovc research`, `ovc artifact`, and `ovc queue` command families;
-- environment-only configuration and approved portable path aliases;
-- derived draft storage and append-only frozen record storage;
-- immutable AuditEvent emission for every public write action;
-- complete session, observation, claim, realization, adjudication, close and supersession handlers;
-- deterministic artifact catalogue scanning and verification;
-- changed-byte, missing-file, expired-CI-artifact, orphan-manifest and dependency detection;
-- realization, incident, incomplete-session, stale-catalogue and missing-artifact queues;
-- Windows launcher and operator guide.
-
-No operator record was created by the build packet. The CLI and catalogue are implemented but not active pending RO-G2. RO-WP3 remains blocked pending RO-G2.
+RO-WP3 is authorised for build. Its QA runner, read model, and console are not active.
 
 ## Active authority matrix
 
@@ -73,15 +64,15 @@ No operator record was created by the build packet. The CLI and catalogue are im
 | Evidence store | `ACTIVE_INFRASTRUCTURE / REMOTE_VERIFIED` | Not applicable |
 | OPT-A v1 | `SUPERSEDED_UNPUBLISHED / MISSING` | `NONE` |
 | OPT-A v2 role set | `A2_G5_PASS / ACTIVE` | `ACTIVE` |
-| OPT-B.C1 v2 | `B1_G1_PASS / EXACT_CANDIDATE_FREEZE_AUTHORISED / NOT_YET_FROZEN` | `NONE` |
+| OPT-B.C1 v2 | `B1_G1_PASS / EXACT_CANDIDATE_FREEZE_AUTHORISED` | `NONE` |
 | OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | `NONE` |
-| Research Operations | `RO_WP2_IMPLEMENTED / RO_G2_REVIEW_REQUIRED` | Not applicable |
+| Research Operations | `RO_G2_PASS / WP2_BOUNDED_LOCAL / WP3_BUILD_AUTHORISED` | Not applicable |
 | C2E / C2.5 / C3 | `DEFERRED` | `NONE` |
 | OPT-C / OPT-D | `HISTORICAL_QUARANTINED` | `NONE` |
 
-Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation and C2 consumption remain denied. Research Operations active-research, market, probability, exposure, trading, execution and agent authority remain absent.
+Validation remains `LOCKED_UNCONSUMED`. C1 R2 publication, selector activation, and C2 consumption remain denied. Research Operations active-research, market, probability, exposure, trading, execution, and agent authority remain absent.
 
 ## Parallel next boundaries
 
-- `OPT-B.C1 v2 WP4F — durable local release freeze and full-byte verification`
-- `RO-G2 — Operating reliability`
+- `OPT-B.C1 v2 B1-G2 — frozen release inventory and publication-readiness review`
+- `RO-WP3 — QA runner, read model and console integration`

@@ -29,13 +29,17 @@ c1_b1_g1_gate_packet: docs/releases/opt-b-c1-v2/b1-g1/B1_G1_GATE_PACKET.json
 c1_b1_g1_verification_receipt: docs/releases/opt-b-c1-v2/b1-g1/B1_G1_VERIFICATION_RECEIPT.json
 ro_g0_merge_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
 ro_wp1_merge_commit: 8944da84dec4915c7d7748ae5dbb2a9e1d187d28
+ro_g1_merge_commit: 51f94c55eaed8c997bc141d33f0f3f4fa452bb0f
+ro_wp2_merge_commit: 62c9a7bf13fce5dd7f3850179c28f89aec16b9ee
 ro_wp1_summary: docs/releases/research-operations-foundation/ro-wp1/RO_WP1_IMPLEMENTATION_SUMMARY.md
 ro_wp1_gate_packet: docs/releases/research-operations-foundation/ro-wp1/RO_WP1_GATE_PACKET.json
 ro_g1_decision_record: docs/releases/research-operations-foundation/ro-g1/RO_G1_OPERATOR_DECISION.md
 ro_g1_gate_packet: docs/releases/research-operations-foundation/ro-g1/RO_G1_GATE_PACKET.json
-ro_wp2_summary: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_IMPLEMENTATION_SUMMARY.md
+ro_wp2_summary: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_IMPLMENTATION_SUMMARY.md
 ro_wp2_gate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_GATE_PACKET.json
 ro_g2_candidate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_G2_CANDIDATE_GATE_PACKET.json
+ro_g2_decision_record: docs/releases/research-operations-foundation/ro-g2/RO_G2_OPERATOR_DECISION.md
+ro_g2_gate_packet: docs/releases/research-operations-foundation/ro-g2/RO_G2_GATE_PACKET.json
 state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY
 selectors:
   opt_a: ACTIVE
@@ -96,127 +100,4 @@ authorities:
     development_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
     development_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     development_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
-    development_authority: ACTIVE_DEVELOPMENT
-    validation_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
-    validation_manifest_id: MANIFEST.OPT-A.GBPUSD.VALIDATION.2025.v2.r2
-    validation_manifest_sha256: 9d855d4c7dda01182a574cba96761c2f545266580307b2e2bc764af6d933b877
-    validation_authority: ACTIVE_VALIDATION
-    release_count: 3
-    published_release_count: 3
-    release_lifecycle_state: REMOTE_VERIFIED
-    release_availability: REMOTE_VERIFIED
-    selector_set_state: ACTIVE
-    provider_intake_authority: COMPLETE_EXTERNAL_MUTABLE_EVIDENCE_ONLY
-    mutable_workspace_entry_authority: AUTHORISED_FOR_VERIFIED_SOURCE_OBJECTS
-    observation_construction_authority: A2_G2_REVIEWED_COMPLETE_MUTABLE_ONLY
-    mutable_workspace_release_authority: A2_G3_COMPLETE
-    r2_publication_authority: A2_G4_COMPLETE_REMOTE_VERIFIED
-    selector_activation_authority: A2_G5_COMPLETE
-    rollback_target: ALL_OPT_A_ROLE_SELECTORS_NONE
-    further_provider_network_authority: DENIED_PENDING_NEW_PACKET
-    active_handoff: NONE
-    validation_consumption: LOCKED_UNCONSUMED
-    market_authority: SEALED_OBSERVATION_INPUT_ONLY
-    probability_authority: NONE
-    exposure_authority: NONE
-    execution_authority: NONE
-    active: true
-  opt_b_c1_v2:
-    state: B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED
-    boundary_contract: contracts/opt_b/c1/OVC_OPT_B_C1_AUTHORITY_BOUNDARY_v0_1.md
-    primitive_contract: contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md
-    null_policy: contracts/opt_b/c1/C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md
-    input_profile: contracts/opt_b/c1/OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1.md
-    formula_registry: registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml
-    formula_registry_id: C1.FORMULAS.v0.1
-    formula_count: 18
-    implementation_registry: registries/opt_b/c1/C1_IMPLEMENTATION_REGISTRY.yaml
-    reference_engine: src/ovc/opt_b/c1/
-    fixture_trust: PASS
-    replay_scope_registry: registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml
-    replay_scope_id: C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1
-    market_replay: COMPLETE_WP4_PASS
-    replay_roles: [DISCOVERY, DEVELOPMENT]
-    replay_clocks: [15M, 2H_A_L]
-    replay_sides: [BID, ASK]
-    candidate_artifact_id: 8626942276
-    candidate_artifact_digest: sha256:fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc
-    candidate_inventory_sha256: 39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383
-    candidate_record_count: 212764
-    candidate_file_count: 192
-    candidate_bytes: 36169581
-    unique_record_ids: 212764
-    duplicate_record_ids: 0
-    deterministic_rerun: PASS
-    qa_state: PASS
-    lifecycle_state: REPLAY_BUILT_LOCAL_CANDIDATE
-    authority_state: CANDIDATE
-    availability_state: LOCAL_ONLY
-    release_freeze: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION
-    r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
-    selector: NONE
-    validation_consumption: LOCKED_UNCONSUMED
-    active_handoff: NONE
-    c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW
-    probability_authority: NONE
-    exposure_authority: NONE
-    execution_authority: NONE
-    active: false
-  research_operations:
-    state: RO_WP2_IMPLEMENTED_AWAITING_RO_G2_REVIEW
-    programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
-    implementation_registry: registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml
-    evidence_envelope: contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md
-    cli_contract: contracts/research_operations/RESEARCH_CLI_AND_APPEND_ONLY_SERVICE_CONTRACT_v0_1.md
-    catalogue_contract: contracts/research_operations/ARTIFACT_CATALOGUE_AND_PATH_SAFETY_CONTRACT_v0_1.md
-    record_type_count: 10
-    schema_bundle_count: 2
-    fixture_family_count: 10
-    contract_and_schema_state: FROZEN_AFTER_RO_WP2
-    evidence_kernel: REVIEWED_RO_G1_PASS
-    ro_g1: PASS
-    ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW
-    ro_g2: READY_FOR_OPERATOR_REVIEW
-    ro_wp3: DENIED_PENDING_RO_G2
-    append_only_record_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    audit_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    cli: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    artifact_catalogue: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    queues: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    qa_runner: NONE
-    read_model: NONE
-    console: NONE
-    validation_consumption: LOCKED_UNCONSUMED
-    active_research: NONE
-    market_authority: NONE
-    probability_authority: NONE
-    exposure_authority: NONE
-    execution_authority: NONE
-    agent_authority: NONE
-    active: false
-  opt_b_c2_v2:
-    state: DESIGN_AND_FIXTURES_ONLY
-    active: false
-  c2e:
-    state: DEFERRED
-    active: false
-  c2_5:
-    state: DEFERRED
-    active: false
-  c3:
-    state: DEFERRED
-    active: false
-  opt_c:
-    state: HISTORICAL_QUARANTINED
-    active: false
-  opt_d:
-    state: HISTORICAL_QUARANTINED
-    active: false
-legacy_quarantine:
-  root: legacy/quarantine/abcd-engine-v1-c0ad7ba
-  runtime_imports: DENIED
-  release_parent_eligibility: DENIED
-  selector_eligibility: DENIED
-  rollback_target: DENIED
-  parameter_source: DENIED
-  discovery_seed_eligibility: DENIED
+    development_authority: ACTIVE_DEVELOPMENT(€€€Ù…±¥‘…Ñ¥½¹}É•±•…Í•}¥è=APµ¹	AUM¹Y1%Q%=8¸ÈÀÈÔ¹ØÈ(€€€Ù…±¥‘…Ñ¥½¹}µ…¹¥™•ÍÑ}¥è59%MP¹=APµ¹	AUM¹Y1%Q%=8¸ÈÀÈÔ¹ØÈ¹ÈÈ(€€€Ù…±¥‘…Ñ¥½¹}µ…¹¥™•ÍÑ}Í¡„ÈÔØè€åàÔÕÑŒİ‘‘„ÀÄÄàÉ„ÔÜÑ‰„äØÜØÅŒÉ˜ÔĞÔÈØØÔàÀÌÀİˆÉ”É‰ŒÜØÑ…˜ÙäÌÍˆàÜÜ(€€€Ù…±¥‘…Ñ¥½¹}…ÕÑ¡½É¥ÑäèQ%Y}Y1%Q%=8(€€€É•±•…Í•}½Õ¹Ğè€Ì(€€€ÁÕ‰±¥Í¡•‘}É•±•…Í•}½Õ¹Ğè€Ì(€€€É•±•…Í•}±¥™•å±•}ÍÑ…Ñ”èI5=Q}YI%%(€€€É•±•…Í•}…Ù…¥±…‰¥±¥ÑäèI5=Q}YI%%(€€€Í•±•Ñ½É}Í•Ñ}ÍÑ…Ñ”èQ%Y(€€€ÁÉ½Ù¥‘•É}¥¹Ñ…­•}…ÕÑ¡½É¥Ñäè=5A1Q}aQI91}5UQ	1}Y%9}=91d(€€€µÕÑ…‰±•}İ½É­ÍÁ…•}•¹ÑÉå}…ÕÑ¡½É¥ÑäèUQ!=I%M}=I}YI%%}M=UI}=	)QL(€€€½‰Í•ÉÙ…Ñ¥½¹}½¹ÍÑÉÕÑ¥½¹}…ÕÑ¡½É¥ÑäèÉ}É}IY%]}=5A1Q}5UQ	1}=91d(€€€µÕÑ…‰±•}İ½É­ÍÁ…•}É•±•…Í•}…ÕÑ¡½É¥ÑäèÉ}Í}=5A1Q(€€€ÈÉ}ÁÕ‰±¥…Ñ¥½¹}…ÕÑ¡½É¥ÑäèÉ}Ñ}=5A1Q}I5=Q}YI%%(€€€Í•±•Ñ½É}…Ñ¥Ù…Ñ¥½¹}…ÕÑ¡½É¥ÑäèÉ}Õ}=5A1Q(€€€É½±±‰…­}Ñ…É•Ğè11}=AQ}}I=1}M1Q=IM}9=9(€€€™ÕÉÑ¡•É}ÁÉ½Ù¥‘•É}¹•Ñİ½É­}…ÕÑ¡½É¥Ñäè9%}A9%9}9]}A-P(€€€…Ñ¥Ù•}¡…¹‘½™˜è9=9(€€€Ù…±¥‘…Ñ¥½¹}½¹ÍÕµÁÑ¥½¸è1=-}U9=9MU5€€(€€€µ…É­•Ñ}…ÕÑ¡½É¥ÑäèM1}=	MIYQ%=9}%9AUQ}=91d(€€€ÁÉ½‰…‰¥±¥Ñå}…ÕÑ¡½É¥Ñäè9=9(€€€•áÁ½ÍÕÉ•}…ÕÑ¡½É¥Ñäè9=9(€€€•á•ÕÑ¥½¹}…ÕÑ¡½É¥Ñäè9=9(€€€…Ñ¥Ù”èÑÉÕ”(€½ÁÑ}‰}ŒÅ}ØÈè(€€€ÍÑ…Ñ”èÅ}Å}AMM}aQ}9%Q}Ii}UQ!=I%M(€€€‰½Õ¹‘…Éå}½¹ÑÉ…Ğè½¹ÑÉ…ÑÌ½½ÁÑ}ˆ½ŒÄ½=Y}=AQ}	}Å}UQ!=I%Qe}	=U9Ie}ØÁ|Ä¹µ(€€€ÁÉ¥µ¥Ñ¥Ù•}½¹ÑÉ…Ğè½¹ÑÉ…ÑÌ½½ÁÑ}ˆ½ŒÄ½=Y}=AQ}	}Å}AI%5%Q%Y}=9QIQ}ØÁ|Ä¹µ(€€€¹Õ±±}Á½±¥äè½¹ÑÉ…ÑÌ½½ÁÑ}ˆ½ŒÄ½Å}9U11}9}9=9=5AUQ	1}A=1%e}ØÁ|Ä¹µ(€€€¥¹ÁÕÑ}ÁÉ½™¥±”è½¹ÑÉ…ÑÌ½½ÁÑ}ˆ½ŒÄ½=AQ}}XÉ}Q=}Å}%9AUQ}AI=%1}ØÁ|Ä¹µ(€€€™½ÉµÕ±…}É•¥ÍÑÉäèÉ•¥ÍÑÉ¥•Ì½½ÁÑ}ˆ½ŒÄ½Å}=I5U1}I%MQIe}ØÁ|Ä¹å…µ°(€€€™½ÉµÕ±…}É•¥ÍÑÉå}¥èÄ¹=I5U1L¹ØÀ¸Ä(€€€™½ÉµÕ±…}½Õ¹Ğè€Äà(€€€¥µÁ±•µ•¹Ñ…Ñ¥½¹}É•¥ÍÑÉäèÉ•¥ÍÑÉ¥•Ì½½ÁÑ}ˆ½ŒÄ½Å}%5A159QQ%=9}I%MQId¹å…µ°(€€€É•™•É•¹•}•¹¥¹”èÍÉŒ½½ÙŒ½½ÁÑ}ˆ½ŒÄ¼(€€€™¥áÑÕÉ•}ÑÉÕÍĞèAML(€€€É•Á±…å}Í½Á•}É•¥ÍÑÉäèÉ•¥ÍÑÉ¥•Ì½½ÁÑ}ˆ½ŒÄ½Å}]@Ñ}IA1e}M=A¹å…µ°(€€€É•Á±…å}Í½Á•}¥èÄ¹]@Ğ¹	AUM¹%M=YIe}Y1=A59P¹ØÄ(€€€µ…É­•Ñ}É•Á±…äè=5A1Q}]@Ñ}AML(€€€É•Á±…å}É½±•Ìèm%M=YId°Y1=A59Qt(€€€É•Á±…å}±½­ÌèlÄÕ4°€É!}}1t(€€€É•Á±…å}Í¥‘•Ìèm	%°M-t(€€€…¹‘¥‘…Ñ•}…ÉÑ¥™…Ñ}¥è€àØÈØäĞÈÈÜØ(€€€…¹‘¥‘…Ñ•}…ÉÑ¥™…Ñ}‘¥•ÍĞèÍ¡„ÈÔØé™ˆÔÉ•„Ñ˜àÑ™„İŒÅÜåŒåŒÔÈĞĞÜÁØÜÈÉ…ˆàÉˆÀå„Õ•ÑÑ˜ÀÈÜá™‘„ÑÌÌÁ•…‰™Œ(€€€…¹‘¥‘…Ñ•}¥¹Ù•¹Ñ½Éå}Í¡„ÈÔØè€Ìå˜ÔÕ”äÈÍ™„Á„àÌÀÈÀÈÑ˜ÀÉàØÉÈäÑ…åàĞĞá™”Ääİ„äàĞå•”å•ŒÁ˜ÄÕÑ„ÌàÌ(€€€…¹‘¥‘…Ñ•}É•½É‘}½Õ¹Ğè€ÈÄÈÜØĞ(€€€…¹‘¥‘…Ñ•}™¥±•}½Õ¹Ğè€ÄäÈ(€€€…¹‘¥‘…Ñ•}‰åÑ•Ìè€ÌØÄØäÔàÄ(€€€Õ¹¥ÅÕ•}É•½É‘}¥‘Ìè€ÈÄÈÜØĞ(€€€‘ÕÁ±¥…Ñ•}É•½É‘}¥‘Ìè€À(€€€‘•Ñ•Éµ¥¹¥ÍÑ¥}É•ÉÕ¸èAML(€€€Å…}ÍÑ…Ñ”èAML(€€€±¥™•å±•}ÍÑ…Ñ”èIA1e}	U%1Q}1=1}9%Q(€€€…ÕÑ¡½É¥Ñå}ÍÑ…Ñ”è9%Q(€€€…Ù…¥±…‰¥±¥Ñå}ÍÑ…Ñ”è1=1}=91d(€€€É•±•…Í•}™É••é”èUQ!=I%M}aQ}9%Q}=91e}A9%9}aUQ%=8(€€€ÈÉ}ÁÕ‰±¥…Ñ¥½¸è9%}A9%9}MAIQ}]@Õ}AAI=Y0(€€€Í•±•Ñ½Èè9=9(€€€Ù…±¥‘…Ñ¥½¹}½¹ÍÕµÁÑ¥½¸è1=-}U9=9MU5(€€€…Ñ¥Ù•}¡…¹‘½™˜è9=9(€€€ŒÉ}½¹ÍÕµÁÑ¥½¸è9%}A9%9}MAIQ}!9=}IY%\(€€€ÁÉ½‰…‰¥±¥Ñå}…ÕÑ¡½É¥Ñäè9=9(€€€•áÁ½ÍÕÉ•}…ÕÑ¡½É¥Ñäè9=9(€€€•á•ÕÑ¥½¹}…ÕÑ¡½É¥Ñäè9=9(€€€…Ñ¥Ù”è™…±Í”(€É•Í•…É¡}½Á•É…Ñ¥½¹Ìè(€€€ÍÑ…Ñ”èI=}É}AMM}]@Í}	U%1}UQ!=I%M(€€€ÁÉ½É…µµ•}¥è=YµIMI µ=AIQ%=9Lµ=U9Q%=8¹ØÀ¸Ä(€€€¥µÁ±•µ•¹Ñ…Ñ¥½¹}É•¥ÍÑÉäèÉ•¥ÍÑÉ¥•Ì½É•Í•…É¡}½Á•É…Ñ¥½¹Ì½IMI!}=AIQ%=9M}%5A159QQ%=9}I%MQIe}ØÁ|Ä¹å…µ°(€€€•Ù¥‘•¹•}•¹Ù•±½Á”è½¹ÑÉ…ÑÌ½É•Í•…É¡}½Á•É…Ñ¥½¹Ì½Y%9}9Y1=A}9}%9Q%Qe}=9QIQ}ØÁ|Ä¹µ(€€€±¥}½¹ÑÉ…Ğè½¹ÑÉ…ÑÌ½É•Í•…É¡}½Á•É…Ñ¥½¹Ì½IMI!}1%}9}AA9}=91e}MIY%}=9QIQ}ØÁ|Ä¹µ(€€€…Ñ…±½Õ•}½¹ÑÉ…Ğè½¹ÑÉ…ÑÌ½É•Í•…É¡}½Á•É…Ñ¥½¹Ì½IQ%Q}Q1=U}9}AQ!}MQe}=9QIQ}ØÁ|Ä¹µ(€€€É•½É‘}ÑåÁ•}½Õ¹Ğè€ÄÀ(€€€Í¡•µ…}‰Õ¹‘±•}½Õ¹Ğè€È(€€€™¥áÑÕÉ•}™…µ¥±å}½Õ¹Ğè€ÄÀ(€€€½¹ÑÉ…Ñ}…¹‘}Í¡•µ…}ÍÑ…Ñ”èI=i9}QI}I=}]@È(€€€•Ù¥‘•¹•}­•É¹•°èIY%]}I=}Å}AML(€€€É½}œÄèAML(€€€É½}İÀÈèIY%]}I=}É}AML(€€€É½}œÈèAML(€€€É½}İÀÌèUQ!=I%M}=I}	U%1(€€€Í•ÉÙ¥•}…Ñ¥Ù…Ñ¥½¸è	=U9}1=1}=AIQ%=9M}AAI=Y(€€€…ÁÁ•¹‘}½¹±å}É•½É‘}Í•ÉÙ¥”èAAI=Y}	=U9}1=1}=AIQ%=8(€€€…Õ‘¥Ñ}Í•ÉÙ¥”èAAI=Y}	=U9}1=1}=AIQ%=8(€€€±¤èAAI=Y}	=U9}1=1}=AIQ%=8(€€€…ÉÑ¥™…Ñ}…Ñ…±½Õ”èAAI=Y}I}YI%e}IA=IQ}1=0(€€€ÅÕ•Õ•ÌèAAI=Y}I}=91e}1=0(€€€Å…}ÉÕ¹¹•ÈèUQ!=I%M}=I}	U%1}9=Q}Q%Y(€€€É•…‘}µ½‘•°èUQ!=I%M}=I}	U%1}9=Q}Q%Y(€€€½¹Í½±”èUQ!=I%M}=I}	U%1}9=Q}Q%Y(€€€Ù…±¥‘…Ñ¥½¹}½¹ÍÕµÁÑ¥½¸è1=-}U9=9MU5(€€€…Ñ¥Ù•}É•Í•…É è9=9(€€€µ…É­•Ñ}…ÕÑ¡½É¥Ñäè9=9(€€€ÁÉ½‰…‰¥±¥Ñå}…ÕÑ¡½É¥Ñäè9=9(€€€•áÁ½ÍÕÉ•}…ÕÑ¡½É¥Ñäè9=9(€€€•á•ÕÑ¥½¹}…ÕÑ¡½É¥Ñäè9=9(€€€…•¹Ñ}…ÕÑ¡½É¥Ñäè9=9(€€€…Ñ¥Ù”è™…±Í”(€½ÁÑ}‰}ŒÉ}ØÈè(€€€ÍÑ…Ñ”èM%9}9}%aQUIM}=91d(€€€…Ñ¥Ù”è™…±Í”(€ŒÉ”è(€€€ÍÑ…Ñ”èII(€€€…Ñ¥Ù”è™…±Í”(€ŒÉ|Ôè(€€€ÍÑ…Ñ”èII(€€€…Ñ¥Ù”è™…±Í”(€ŒÌè(€€€ÍÑ…Ñ”èII(€€€…Ñ¥Ù”è™…±Í”(€½ÁÑ}Œè(€€€ÍÑ…Ñ”è!%MQ=I%1}EUI9Q%9(€€€…Ñ¥Ù”è™…±Í”(€½ÁÑ}è(€€€ÍÑ…Ñ”è!%MQ=I%1}EUI9Q%9(€€€…Ñ¥Ù”è™…±Í”)±•…å}ÅÕ…É…¹Ñ¥¹”è(€É½½Ğè±•…ä½ÅÕ…É…¹Ñ¥¹”½…‰µ•¹¥¹”µØÄµŒÁ…İ‰„(€ÉÕ¹Ñ¥µ•}¥µÁ½ÉÑÌè9%(€É•±•…Í•}Á…É•¹Ñ}•±¥¥‰¥±¥Ñäè9%(€Í•±•Ñ½É}•±¥¥‰¥±¥Ñäè9%(€É½±±‰…­}Ñ…É•Ğè9%(€Á…É…µ•Ñ•É}Í½ÕÉ”è9%(€‘¥Í½Ù•Éå}Í••‘}•±¥¥‰¥±¥Ñäè9%(
