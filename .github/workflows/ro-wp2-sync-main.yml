@@ -1,0 +1,124 @@
+name: RO-WP2 sync current main
+
+on:
+  push:
+    branches:
+      - build/research-operations-cli-catalogue
+    paths:
+      - tools/ro_wp2_sync.ready
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build/research-operations-cli-catalogue
+          fetch-depth: 0
+      - name: Merge current main and resolve bounded authority overlaps
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git merge --no-commit origin/main || true
+          git checkout --theirs docs/CURRENT_STATUS.md registries/authority/ACTIVE_AUTHORITY.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+
+          status_path = Path('docs/CURRENT_STATUS.md')
+          status = status_path.read_text(encoding='utf-8')
+          start = status.index('## Research Operations Foundation RO-G1')
+          end = status.index('## Active authority matrix')
+          ro = '''## Research Operations Foundation RO-WP2
+
+          RO-WP2 result: `IMPLEMENTED — READY FOR RO-G2 OPERATOR REVIEW`.
+
+          The repository now contains:
+
+          - `ovc research`, `ovc artifact`, and `ovc queue` command families;
+          - environment-only configuration and approved portable path aliases;
+          - derived draft storage and append-only frozen record storage;
+          - immutable AuditEvent emission for every public write action;
+          - complete session, observation, claim, realization, adjudication, close and supersession handlers;
+          - deterministic artifact catalogue scanning and verification;
+          - changed-byte, missing-file, expired-CI-artifact, orphan-manifest and dependency detection;
+          - realization, incident, incomplete-session, stale-catalogue and missing-artifact queues;
+          - Windows launcher and operator guide.
+
+          No operator record was created by the build packet. The CLI and catalogue are implemented but not active pending RO-G2. RO-WP3 remains blocked pending RO-G2.
+
+          '''
+          status = status[:start] + ro + status[end:]
+          status = status.replace('| Research Operations | `RO_G1_PASS / WP2_BUILD_AUTHORISED` | Not applicable |', '| Research Operations | `RO_WP2_IMPLEMENTED / RO_G2_REVIEW_REQUIRED` | Not applicable |')
+          status = status.replace('- `RO-WP2 — Research CLI and artifact catalogue`', '- `RO-G2 — Operating reliability`')
+          status_path.write_text(status, encoding='utf-8')
+
+          authority_path = Path('registries/authority/ACTIVE_AUTHORITY.yaml')
+          authority = authority_path.read_text(encoding='utf-8')
+          anchor = 'ro_g1_gate_packet: docs/releases/research-operations-foundation/ro-g1/RO_G1_GATE_PACKET.json\n'
+          additions = (
+              'ro_wp2_summary: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_IMPLEMENTATION_SUMMARY.md\n'
+              'ro_wp2_gate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_GATE_PACKET.json\n'
+              'ro_g2_candidate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_G2_CANDIDATE_GATE_PACKET.json\n'
+          )
+          if 'ro_wp2_summary:' not in authority:
+              authority = authority.replace(anchor, anchor + additions)
+          section_start = authority.index('  research_operations:\n')
+          section_end = authority.index('  opt_b_c2_v2:\n')
+          section = '''  research_operations:
+            state: RO_WP2_IMPLEMENTED_AWAITING_RO_G2_REVIEW
+            programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+            implementation_registry: registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml
+            evidence_envelope: contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md
+            cli_contract: contracts/research_operations/RESEARCH_CLI_AND_APPEND_ONLY_SERVICE_CONTRACT_v0_1.md
+            catalogue_contract: contracts/research_operations/ARTIFACT_CATALOGUE_AND_PATH_SAFETY_CONTRACT_v0_1.md
+            record_type_count: 10
+            schema_bundle_count: 2
+            fixture_family_count: 10
+            contract_and_schema_state: FROZEN_AFTER_RO_WP2
+            evidence_kernel: REVIEWED_RO_G1_PASS
+            ro_g1: PASS
+            ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW
+            ro_g2: READY_FOR_OPERATOR_REVIEW
+            ro_wp3: DENIED_PENDING_RO_G2
+            append_only_record_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+            audit_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+            cli: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+            artifact_catalogue: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+            queues: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+            qa_runner: NONE
+            read_model: NONE
+            console: NONE
+            validation_consumption: LOCKED_UNCONSUMED
+            active_research: NONE
+            market_authority: NONE
+            probability_authority: NONE
+            exposure_authority: NONE
+            execution_authority: NONE
+            agent_authority: NONE
+            active: false
+          '''
+          authority = authority[:section_start] + section + authority[section_end:]
+          authority_path.write_text(authority, encoding='utf-8')
+          PY
+          rm -f .github/workflows/ro-wp2-sync-main.yml tools/ro_wp2_sync.ready
+          git add -A
+      - name: Validate integrated tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python3 -m unittest discover -s tests -v
+          python3 -m json.tool registries/research_operations/RESEARCH_OPERATIONS_PATH_REGISTRY_v0_1.json >/dev/null
+          python3 -m json.tool registries/research_operations/RESEARCH_OPERATIONS_COMMAND_REGISTRY_v0_1.json >/dev/null
+          python3 -m json.tool docs/releases/research-operations-foundation/ro-wp2/RO_WP2_GATE_PACKET.json >/dev/null
+      - name: Commit integrated WP2 tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          git commit -m "chore(ro-wp2): integrate current main authority state"
+          git push origin HEAD:build/research-operations-cli-catalogue
