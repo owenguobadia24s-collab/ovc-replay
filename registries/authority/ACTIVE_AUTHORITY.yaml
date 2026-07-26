@@ -24,9 +24,11 @@ c1_b1_g0_decision_record: docs/releases/opt-b-c1-v2/b1-g0/B1_G0_OPERATOR_DECISIO
 c1_b1_g0_gate_packet: docs/releases/opt-b-c1-v2/b1-g0/B1_G0_GATE_PACKET.json
 c1_wp4_decision_record: docs/releases/opt-b-c1-v2/wp4/WP4_OPERATOR_DECISION.md
 c1_wp4_execution_receipt: docs/releases/opt-b-c1-v2/wp4/WP4_EXECUTION_RECEIPT.json
+c1_b1_g1_decision_record: docs/releases/opt-b-c1-v2/b1-g1/B1_G1_OPERATOR_DECISION.md
+c1_b1_g1_gate_packet: docs/releases/opt-b-c1-v2/b1-g1/B1_G1_GATE_PACKET.json
+c1_b1_g1_verification_receipt: docs/releases/opt-b-c1-v2/b1-g1/B1_G1_VERIFICATION_RECEIPT.json
 ro_g0_merge_commit: 8a4852358324a4e6dfc9f7c239be9e9eb8d69c23
 ro_wp1_merge_commit: 8944da84dec4915c7d7748ae5dbb2a9e1d187d28
-ro_g1_merge_commit: 51f94c55eaed8c997bc141d33f0f3f4fa452bb0f
 ro_wp1_summary: docs/releases/research-operations-foundation/ro-wp1/RO_WP1_IMPLEMENTATION_SUMMARY.md
 ro_wp1_gate_packet: docs/releases/research-operations-foundation/ro-wp1/RO_WP1_GATE_PACKET.json
 ro_g1_decision_record: docs/releases/research-operations-foundation/ro-g1/RO_G1_OPERATOR_DECISION.md
@@ -34,7 +36,7 @@ ro_g1_gate_packet: docs/releases/research-operations-foundation/ro-g1/RO_G1_GATE
 ro_wp2_summary: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_IMPLEMENTATION_SUMMARY.md
 ro_wp2_gate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_WP2_GATE_PACKET.json
 ro_g2_candidate_packet: docs/releases/research-operations-foundation/ro-wp2/RO_G2_CANDIDATE_GATE_PACKET.json
-state: C1_WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_NO_PUBLICATION_AUTHORITY
+state: C1_B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY
 selectors:
   opt_a: ACTIVE
   opt_b_c1: NONE
@@ -120,7 +122,7 @@ authorities:
     execution_authority: NONE
     active: true
   opt_b_c1_v2:
-    state: WP4_REPLAY_QA_PASS_LOCAL_CANDIDATE_PENDING_B1_G1
+    state: B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED
     boundary_contract: contracts/opt_b/c1/OVC_OPT_B_C1_AUTHORITY_BOUNDARY_v0_1.md
     primitive_contract: contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md
     null_policy: contracts/opt_b/c1/C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md
@@ -139,14 +141,18 @@ authorities:
     replay_sides: [BID, ASK]
     candidate_artifact_id: 8626942276
     candidate_artifact_digest: sha256:fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc
+    candidate_inventory_sha256: 39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383
     candidate_record_count: 212764
     candidate_file_count: 192
+    candidate_bytes: 36169581
+    unique_record_ids: 212764
+    duplicate_record_ids: 0
     deterministic_rerun: PASS
     qa_state: PASS
     lifecycle_state: REPLAY_BUILT_LOCAL_CANDIDATE
     authority_state: CANDIDATE
     availability_state: LOCAL_ONLY
-    release_freeze: PENDING_B1_G1_EXACT_INVENTORY_REVIEW
+    release_freeze: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION
     r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
     selector: NONE
     validation_consumption: LOCKED_UNCONSUMED
@@ -157,37 +163,37 @@ authorities:
     execution_authority: NONE
     active: false
   research_operations:
-    state: RO_WP2_IMPLEMENTED_AWAITING_RO_G2_REVIEW
-    programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
-    implementation_registry: registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml
-    evidence_envelope: contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md
-    cli_contract: contracts/research_operations/RESEARCH_CLI_AND_APPEND_ONLY_SERVICE_CONTRACT_v0_1.md
-    catalogue_contract: contracts/research_operations/ARTIFACT_CATALOGUE_AND_PATH_SAFETY_CONTRACT_v0_1.md
-    record_type_count: 10
-    schema_bundle_count: 2
-    fixture_family_count: 10
-    contract_and_schema_state: FROZEN_AFTER_RO_WP2
-    evidence_kernel: REVIEWED_RO_G1_PASS
-    ro_g1: PASS
-    ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW
-    ro_g2: READY_FOR_OPERATOR_REVIEW
-    ro_wp3: DENIED_PENDING_RO_G2
-    append_only_record_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    audit_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    cli: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    artifact_catalogue: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    queues: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
-    qa_runner: NONE
-    read_model: NONE
-    console: NONE
-    validation_consumption: LOCKED_UNCONSUMED
-    active_research: NONE
-    market_authority: NONE
-    probability_authority: NONE
-    exposure_authority: NONE
-    execution_authority: NONE
-    agent_authority: NONE
-    active: false
+  state: RO_WP2_IMPLEMENTED_AWAITING_RO_G2_REVIEW
+  programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
+  implementation_registry: registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml
+  evidence_envelope: contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md
+  cli_contract: contracts/research_operations/RESEARCH_CLI_AND_APPEND_ONLY_SERVICE_CONTRACT_v0_1.md
+  catalogue_contract: contracts/research_operations/ARTIFACT_CATALOGUE_AND_PATH_SAFETY_CONTRACT_v0_1.md
+  record_type_count: 10
+  schema_bundle_count: 2
+  fixture_family_count: 10
+  contract_and_schema_state: FROZEN_AFTER_RO_WP2
+  evidence_kernel: REVIEWED_RO_G1_PASS
+  ro_g1: PASS
+  ro_wp2: IMPLEMENTED_READY_FOR_RO_G2_REVIEW
+  ro_g2: READY_FOR_OPERATOR_REVIEW
+  ro_wp3: DENIED_PENDING_RO_G2
+  append_only_record_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+  audit_service: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+  cli: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+  artifact_catalogue: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+  queues: IMPLEMENTED_NOT_ACTIVE_PENDING_RO_G2
+  qa_runner: NONE
+  read_model: NONE
+  console: NONE
+  validation_consumption: LOCKED_UNCONSUMED
+  active_research: NONE
+  market_authority: NONE
+  probability_authority: NONE
+  exposure_authority: NONE
+  execution_authority: NONE
+  agent_authority: NONE
+  active: false
   opt_b_c2_v2:
     state: DESIGN_AND_FIXTURES_ONLY
     active: false

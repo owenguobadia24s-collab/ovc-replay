@@ -1,11 +1,13 @@
 schema: ovc-opt-b-c1-release-registry/v1
 registry_id: C1.RELEASES.v0.1
-status: WP4_LOCAL_CANDIDATES_QA_PASS_PENDING_FREEZE_REVIEW
+status: B1_G1_PASS_EXACT_CANDIDATES_FREEZE_AUTHORISED
 formula_registry_id: C1.FORMULAS.v0.1
 record_schema_id: c1_bar_primitives_v0_1
 wp4_workflow_run_id: 30185680001
 wp4_candidate_artifact_id: 8626942276
 wp4_candidate_artifact_digest: sha256:fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc
+wp4_inventory_sha256: 39f55e923fa0a8302024f02d862d294ad9d8448fe197a9849ee9ec0f15d4a383
+b1_g1_verification_receipt_sha256: 3eb831185c73ae279b837dfacfc669d600c1630c1e9f17638645f1456a71cc14
 wp4_qa_artifact_id: 8626942405
 releases:
   - role: DISCOVERY
@@ -22,8 +24,9 @@ releases:
     market_replay: COMPLETE_WP4_PASS
     record_count: 159892
     candidate_file_count: 144
+    candidate_bytes: 27450668
     quarantine_records_excluded: 12104
-    freeze_state: PENDING_B1_G1_REVIEW
+    freeze_state: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION
   - role: DEVELOPMENT
     planned_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
     parent_opt_a_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
@@ -38,8 +41,9 @@ releases:
     market_replay: COMPLETE_WP4_PASS
     record_count: 52872
     candidate_file_count: 48
+    candidate_bytes: 8718913
     quarantine_records_excluded: 4862
-    freeze_state: PENDING_B1_G1_REVIEW
+    freeze_state: AUTHORISED_EXACT_CANDIDATE_ONLY_PENDING_EXECUTION
   - role: VALIDATION
     planned_release_id: OPT-B.C1.GBPUSD.VALIDATION.2025.v1
     parent_opt_a_release_id: OPT-A.GBPUSD.VALIDATION.2025.v2
@@ -56,6 +60,7 @@ releases:
 prohibited_release_ids:
   - OPT-A.GBPUSD.2026H1.v1
 legacy_source_authority: NONE
+local_release_freeze_authority: GRANTED_B1_G1_EXACT_CANDIDATE_ONLY
 selector_activation: DENIED_PENDING_WP5
 r2_publication: DENIED_PENDING_SEPARATE_WP5_APPROVAL
 c2_handoff: DENIED_PENDING_SEPARATE_REVIEW
