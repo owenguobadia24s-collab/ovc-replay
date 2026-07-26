@@ -63,17 +63,19 @@ console_v0_2_upgrade:
   research_write_authority: DENIED_PENDING_SEPARATE_GATE
 console_v0_3_amendment:
   programme_id: OVC-RESEARCH-CONSOLE.v0.3
-  stage: RC_G1_PASS_RC_WP2_V0_3_AUTHORISED
+  stage: RC_WP2_COMPLETE_RC_G2_V0_3_REVIEW_READY
   preflight_baseline_commit: f704f33e4d5fc19f5807d0a92156b99afa8bce84
   acceptance_merge_commit: f93a84e9bfdf36b28ba79f84da8163c3ae4e3b10
   rc_wp1_baseline_commit: ea4d4dac2ec07845b82250980207c99e98eb581b
   rc_wp1_reviewed_head: 4f2450ded381945a088d1f0b21c0a2745c172577
   rc_wp1_merge_commit: fa210386378db684419fe6a38b89870dbf72de2d
+  rc_g1_merge_commit: 3bd4ed79f43c6f288248f10b99e9dfa04a9f68a2
+  rc_wp2_baseline_commit: 3bd4ed79f43c6f288248f10b99e9dfa04a9f68a2
   integration_baseline_commit: 2a1b22dc248ebe0f0c1b360062e9e6c1402a5b1a
   rc_a0_reviewed_head: 8373a0129e482e7b1a27dc574f236e804a703ef0
   rc_a0_pr: 54
   rc_a0_pr_integration_state: REBASED_BY_RC_A1_FRESH_MAIN_INTEGRATION
-  authority_delta: FIXTURE_ONLY_LOCAL_PRESENTATION_ACCEPTED_RC_G1
+  authority_delta: CANDIDATE_OVERVIEW_AND_AMBIENT_HEALTH_PROJECTION_IMPLEMENTED_PENDING_RC_G2
   amendment_plan: docs/plans/research_operations/OVC_RESEARCH_CONSOLE_V0_3_INFORMATION_ARCHITECTURE_AMENDMENT_v0_1.md
   information_architecture_contract: contracts/research_operations/console/OVC_RESEARCH_CONSOLE_INFORMATION_ARCHITECTURE_CONTRACT_v0_3.md
   workspace_registry: registries/research_operations/RESEARCH_CONSOLE_WORKSPACE_REGISTRY_v0_3.yaml
@@ -83,6 +85,11 @@ console_v0_3_amendment:
   global_surface_registry: registries/research_operations/RESEARCH_CONSOLE_GLOBAL_SURFACE_REGISTRY_v0_3.yaml
   design_token_registry: registries/research_operations/RESEARCH_CONSOLE_DESIGN_TOKEN_REGISTRY_v0_3.yaml
   component_registry: registries/research_operations/RESEARCH_CONSOLE_COMPONENT_REGISTRY_v0_3.yaml
+  overview_projection_registry: registries/research_operations/RESEARCH_CONSOLE_OVERVIEW_PROJECTION_REGISTRY_v0_3.yaml
+  overview_projection_schema: schemas/research_operations/research_console_overview_projection_v0_3.schema.json
+  overview_projection_core: src/ovc/research_operations/console_overview.py
+  overview_candidate_builder: src/ovc/research_operations/console_overview_candidate.py
+  overview_builder_command: scripts/build_research_console_overview.py
   rc_a0_preflight_packet: docs/releases/research-console-v0-3/rc-a0/RC_A0_AMENDMENT_PREFLIGHT_PACKET.json
   rc_a1_gate_packet: docs/releases/research-console-v0-3/rc-a1/RC_A1_GATE_PACKET.json
   rc_a1_decision_record: docs/releases/research-console-v0-3/rc-a1/RC_A1_OPERATOR_DECISION.md
@@ -94,13 +101,18 @@ console_v0_3_amendment:
   rc_wp1_summary: docs/releases/research-console-v0-3/rc-wp1/RC_WP1_IMPLEMENTATION_SUMMARY.md
   rc_g1_gate_packet: docs/releases/research-console-v0-3/rc-g1/RC_G1_GATE_PACKET.json
   rc_g1_decision_record: docs/releases/research-console-v0-3/rc-g1/RC_G1_OPERATOR_DECISION.md
+  rc_wp2_branch: build/research-console-v0-3-overview-health
+  rc_wp2_fixture: fixtures/research_operations/research_console_v0_3/RC_WP2_OVERVIEW_SOURCE_READ_MODEL.json
+  rc_wp2_packet: docs/releases/research-console-v0-3/rc-wp2/RC_WP2_IMPLEMENTATION_PACKET.json
+  rc_wp2_summary: docs/releases/research-console-v0-3/rc-wp2/RC_WP2_IMPLEMENTATION_SUMMARY.md
   primary_workspaces: [OVERVIEW, RESEARCH, SYSTEM]
   rc_a0: COMPLETE_RC_A1_REVIEW_READY
   rc_a1: PASS
   rc_wp1: MERGED_AND_ACCEPTED_BY_RC_G1
   rc_g1: PASS
+  rc_wp2: COMPLETE_RC_G2_V0_3_REVIEW_READY
   shell_implementation_authority: ACCEPTED_LOCAL_FIXTURE_ONLY_PRESENTATION
-  rc_wp2_authority: AUTHORISED_IMPLEMENTATION_PENDING_RC_G2
+  overview_projection_implementation: IMPLEMENTED_CANDIDATE_ONLY_PENDING_RC_G2
   active_live_projection_authority: DENIED_PENDING_RC_G2
   live_research_surface_authority: DENIED_PENDING_RC_G3
   research_write_authority: DENIED_PENDING_SEPARATE_GATE
@@ -114,4 +126,4 @@ console_v0_3_amendment:
   execution_authority: NONE
   agent_authority: NONE
   deployment_authority: LOCAL_ONLY_NO_REMOTE_DEPLOY
-next_workstream: RC_WP2_V0_3_OVERVIEW_WORKSPACE_AND_AMBIENT_HEALTH
+next_workstream: RC_G2_V0_3_OVERVIEW_AND_AMBIENT_HEALTH_ACCEPTANCE
