@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/prospective_source/prospective_compute_run_v0_1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "source_slice_id", "source_manifest_sha256", "code_commit", "operation_mode", "admissible_cutoff_utc", "output_manifest_sha256", "status"],
+  "properties": {
+    "run_id": {"type": "string", "pattern": "^RPS\\.RUN\\."},
+    "source_slice_id": {"type": "string"},
+    "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "code_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "operation_mode": {"enum": ["TIME_GATED_REPLAY", "NON_EVIDENTIARY_REPLAY"]},
+    "admissible_cutoff_utc": {"type": "string", "format": "date-time"},
+    "output_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["COMPLETE", "QUARANTINED", "BLOCKED"]}
+  }
+}
