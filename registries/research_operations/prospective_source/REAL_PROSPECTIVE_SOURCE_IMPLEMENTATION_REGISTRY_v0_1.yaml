@@ -15,15 +15,15 @@ write_authority: false
 operation_mode: TIME_GATED_REPLAY
 objects:
   ProspectiveSourceSlice:
-    status: APPROVED_FOR_FIXTURE_BUILD
+    status: IMPLEMENTED_FIXTURE_ONLY
     canonical_release: false
     selector_eligible: false
     r2_eligible: false
   ProspectiveComputeRun:
-    status: APPROVED_FOR_FIXTURE_BUILD
+    status: IMPLEMENTED_FIXTURE_ONLY
     derived: true
   ProspectiveSourceBinding:
-    status: APPROVED_FOR_FIXTURE_BUILD
+    status: IMPLEMENTED_REPLAY_ONLY
     required_for_live_triage: true
   OperatorSigningBinding:
     status: DEFERRED_TO_RPS_WP4
@@ -32,15 +32,22 @@ objects:
     status: IMPLEMENTED_FAIL_CLOSED
 packets:
   - packet_id: RPS-00
-    status: RUNNING
+    status: COMPLETED
     prerequisites: [PD-G4_APPROVED]
     authority_delta: REPOSITORY_RECONCILIATION_ONLY
     branch: build/rps-00-prospective-source-freeze
+    decision_record: docs/releases/prospective-source-v0-1/rps-00/RPS_G0_DELEGATED_DECISION.md
+    merge_commit: c54c4246c1976a9a9aa75fe2d1307f0955b4865d
+    blockers: []
     next_packet: RPS-WP1
   - packet_id: RPS-WP1
-    status: READY
+    status: QA_REVIEW
     prerequisites: [RPS-G0_APPROVED]
     authority_delta: FIXTURE_SOURCE_FOUNDATION
+    baseline_commit: c54c4246c1976a9a9aa75fe2d1307f0955b4865d
+    branch: build/rps-wp1-source-fixture-foundation
+    qa_packet: docs/releases/prospective-source-v0-1/rps-wp1/RPS_WP1_QA_PACKET.md
+    blockers: []
     next_gate: RPS-G1
   - packet_id: RPS-WP2
     status: PLANNED
@@ -53,6 +60,13 @@ packets:
     authority_delta: TIME_GATED_REPLAY_ACCEPTANCE
   - packet_id: PD-WP5
     status: BLOCKED_PENDING_RPS_G4
+completed_gates:
+  - gate_id: RPS-G0
+    status: APPROVED
+    decision: PASS
+    authority: DELEGATED_AUTO_EXECUTABLE
+    decision_record: docs/releases/prospective-source-v0-1/rps-00/RPS_G0_DELEGATED_DECISION.md
+    merge_commit: c54c4246c1976a9a9aa75fe2d1307f0955b4865d
 prohibited_authority:
   - PROVIDER_REQUEST_BEFORE_RPS_G1
   - LIVE_PATTERN_DISCOVERY_PROCESSING
@@ -74,5 +88,5 @@ prohibited_authority:
   - TRADING
   - EXECUTION
   - AGENT_WRITE
-next_gate: RPS-G0
+next_gate: RPS-G1
 rollback: DISABLE_RUNTIME_AND_PRESERVE_APPROVED_PD_G4_ARTIFACTS
