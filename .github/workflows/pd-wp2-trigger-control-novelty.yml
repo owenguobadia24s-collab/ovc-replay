@@ -1,0 +1,57 @@
+name: PD-WP2 Trigger Control and Novelty Shadow
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/pattern_discovery/**"
+      - "contracts/research_operations/pattern_discovery/PATTERN_DISCOVERY_TRIGGER_CONTROL_AND_NOVELTY_SHADOW_CONTRACT_v0_1.md"
+      - "tests/research_operations/pattern_discovery/**"
+      - "registries/research_operations/pattern_discovery/**"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp2/**"
+      - ".github/workflows/pd-wp2-trigger-control-novelty.yml"
+  workflow_dispatch:
+
+jobs:
+  pd-wp2:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run PD-WP2 focused tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty
+
+      - name: Run PD-WP1 retained-foundation tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine
+
+      - name: Run PD-G0 retained-boundary tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze
+
+      - name: Run canonical repository tests
+        env:
+          PYTHONPATH: src
+        run: |
+          set +e
+          python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
+          status=$?
+          cat canonical-tests.log
+          exit $status
+
+      - name: Upload canonical diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-wp2-canonical-tests
+          path: canonical-tests.log
+          if-no-files-found: error
