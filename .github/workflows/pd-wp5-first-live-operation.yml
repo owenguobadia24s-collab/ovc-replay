@@ -8,6 +8,7 @@ on:
       - "contracts/research_operations/pattern_discovery/PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION_CONTRACT_v0_1.md"
       - "docs/releases/pattern-discovery-v0-3/pd-wp5/**"
       - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
+      - "registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json"
       - "tests/research_operations/pattern_discovery/test_pd_wp5_first_live_operation.py"
       - ".github/workflows/pd-wp5-first-live-operation.yml"
   workflow_dispatch:
@@ -47,13 +48,45 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
-          assert state['packet_status'] == 'BLOCKED'
-          assert state['blocker_code'] == 'ACTIVE_BINDING_HAS_NO_POST_ACTIVATION_MARKET_COVERAGE'
-          assert state['operator_approval_required'] is True
-          assert state['next_gate'] == 'RPS-G4A'
-          assert state['provider_request_authority'] == 'DENIED_PENDING_RPS_G4A'
-          assert state['replay_substitution'] == 'DENIED'
+          packet = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
+          gate = json.loads(Path('registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json').read_text())
+          assert packet['packet_status'] == 'BLOCKED'
+          assert packet['blocker_code'] == 'ACTIVE_BINDING_HAS_NO_POST_ACTIVATION_MARKET_COVERAGE'
+          assert packet['operator_approval_required'] is True
+          assert packet['next_gate'] == 'RPS-G4A'
+          assert packet['provider_request_authority'] == 'DENIED_PENDING_RPS_G4A'
+          assert packet['replay_substitution'] == 'DENIED'
+          assert packet['supersedes_prior_ready_state'] is True
+          assert gate['gate_id'] == 'RPS-G4A'
+          assert gate['gate_status'] == 'GATE_READY'
+          assert gate['operator_approval_required'] is True
+          assert gate['provider_request_authority'] == 'DENIED_PENDING_OPERATOR_DECISION'
+          assert gate['provider_request_in_ci'] == 'DENIED'
+          assert gate['candidate_source_resolved'] is False
+          assert gate['live_append_enabled'] is False
+          assert gate['decision_record'] is None
+          PY
+      - name: Assert exact amendment scope
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json').read_text())
+          assert gate['proposed_provider'] == 'DUKASCOPY'
+          assert gate['proposed_instrument'] == 'GBPUSD'
+          assert gate['proposed_slice_id'] == 'RPS.DUKASCOPY.GBPUSD.20260728_20260801.v1'
+          assert gate['proposed_interval'] == {
+              'start_utc': '2026-07-28T00:00:00Z',
+              'end_utc': '2026-08-01T00:00:00Z',
+          }
+          assert gate['proposed_streams'] == ['M1_BID', 'M1_ASK', 'H1_BID', 'H1_ASK']
+          assert gate['compressed_byte_limit'] == 26214400
+          assert gate['expanded_byte_limit'] == 104857600
+          assert gate['destination_scope'] == 'OVC_EXTERNAL_ARTIFACT_ROOT_ONLY'
+          assert gate['native_h1_requirement'] == 'REQUIRED_NO_M1_DERIVED_SUBSTITUTION'
+          assert gate['reuse_prior_identity_or_bytes'] is False
           PY
       - name: Assert retained prohibitions
         shell: bash
