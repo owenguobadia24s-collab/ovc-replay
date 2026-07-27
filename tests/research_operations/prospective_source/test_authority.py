@@ -1,8 +1,16 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+import tempfile
 import unittest
 
-from ovc.research_operations.prospective_source.authority import AuthoritySnapshot, authority_from_mapping
+from ovc.research_operations.prospective_source.authority import (
+    ACTIVE_AUTHORITY_RECORD,
+    AuthoritySnapshot,
+    authority_from_mapping,
+    load_repository_authority_snapshot,
+)
 
 
 class AuthoritySnapshotTests(unittest.TestCase):
@@ -112,6 +120,45 @@ class AuthoritySnapshotTests(unittest.TestCase):
         self.assertFalse(snapshot.triage_enabled)
         self.assertFalse(snapshot.live_append_enabled)
         self.assertEqual(snapshot.authority_label, "TIME_GATED_REPLAY_NON_EVIDENTIARY")
+
+    def test_repository_loader_reads_active_record_and_keeps_append_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            path = root / ACTIVE_AUTHORITY_RECORD
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                json.dumps(
+                    {
+                        "pd_g4_approved": True,
+                        "rps_g4_approved": True,
+                        "operator_key_bound": True,
+                        "bridge_healthy": True,
+                        "write_authority": True,
+                        "operation_mode": "LIVE_PROSPECTIVE",
+                        "source_binding_id": "RPS.BINDING.TEST",
+                        "signing_binding_id": "RPS.SIGNING.TEST",
+                        "operator_id": "OVC.OPERATOR.TEST.V1",
+                        "candidate_source_resolved": False,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            snapshot = load_repository_authority_snapshot(root)
+            self.assertTrue(snapshot.triage_enabled)
+            self.assertFalse(snapshot.live_append_enabled)
+            self.assertEqual(snapshot.authority_label, "ACTIVE_RESEARCH_TRIAGE")
+
+    def test_repository_loader_fails_closed_for_missing_or_invalid_record(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            missing = load_repository_authority_snapshot(root)
+            self.assertFalse(missing.triage_enabled)
+            path = root / ACTIVE_AUTHORITY_RECORD
+            path.parent.mkdir(parents=True)
+            path.write_text("not-json", encoding="utf-8")
+            invalid = load_repository_authority_snapshot(root)
+            self.assertFalse(invalid.triage_enabled)
+            self.assertFalse(invalid.live_append_enabled)
 
 
 if __name__ == "__main__":
