@@ -4,11 +4,14 @@ on:
   pull_request:
     paths:
       - "contracts/opt_b/c2/C2_FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_CONTRACT_v0_1.md"
+      - "contracts/opt_b/c2/C2_PROSPECTIVE_EVIDENCE_ACCUMULATION_CONTRACT_v0_2.md"
+      - "schemas/opt_b/c2/c2_prospective_evidence_record_v0_2.schema.json"
       - "docs/releases/opt-b-c2-v2/first-prospective-batch/**"
       - "registries/research/C2_FIRST_PROSPECTIVE_BATCH_REVIEW.yaml"
       - "registries/research/C2_PROSPECTIVE_EVIDENCE_ACCEPTANCE.yaml"
       - "registries/research/C2_PROSPECTIVE_EVIDENCE_REGISTRY.yaml"
       - "scripts/opt_b/review_first_prospective_evidence_batch.py"
+      - "scripts/opt_b/validate_c2_wp7_prospective_evidence.py"
       - "tests/opt_b/c2/test_first_prospective_evidence_batch_review.py"
       - "tests/opt_b/c2/test_c2_wp7_prospective_evidence.py"
       - ".github/workflows/first-prospective-evidence-batch-review.yml"
@@ -39,11 +42,19 @@ jobs:
           result = json.loads(Path('/tmp/first-batch-review.json').read_text(encoding='utf-8'))
           assert result['decision'] == 'DEFER_NO_REAL_PROSPECTIVE_BATCH', result
           assert result['record_count'] == 0, result
+          assert result['live_prospective_count'] == 0, result
           assert result['append_target_state'] in {'ABSENT', 'EMPTY'}, result
 
           packet = json.loads(Path('docs/releases/opt-b-c2-v2/first-prospective-batch/FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_PACKET.json').read_text(encoding='utf-8'))
           assert packet['decision'] == result['decision']
+          assert packet['record_schema'].endswith('c2_prospective_evidence_record_v0_2.schema.json')
           assert packet['batch']['record_count'] == 0
+          assert packet['batch']['live_prospective_count'] == 0
+          assert packet['batch']['operation_mode_counts'] == {
+              'LIVE_PROSPECTIVE': 0,
+              'TIME_GATED_REPLAY': 0,
+              'NON_EVIDENTIARY_REPLAY': 0,
+          }
           assert packet['next_boundary'] == 'CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH'
           PY
 
