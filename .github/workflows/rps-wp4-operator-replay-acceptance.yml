@@ -1,0 +1,68 @@
+name: RPS-WP4 operator signing and replay acceptance
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/prospective_source/operator_replay_acceptance.py"
+      - "scripts/run_rps_wp4_operator_replay_acceptance.ps1"
+      - "contracts/research_operations/prospective_source/RPS_OPERATOR_SIGNING_AND_TIME_GATED_REPLAY_ACCEPTANCE_CONTRACT_v0_1.md"
+      - "schemas/research_operations/prospective_source/operator_signing_binding_v0_1.schema.json"
+      - "schemas/research_operations/prospective_source/time_gated_replay_acceptance_v0_1.schema.json"
+      - "schemas/research_operations/prospective_source/signature_verification_receipt_v0_1.schema.json"
+      - "schemas/research_operations/prospective_source/rps_g4_operator_gate_input_v0_1.schema.json"
+      - "docs/releases/prospective-source-v0-1/rps-wp4/**"
+      - "registries/research_operations/prospective_source/RPS_WP4_COMMAND_STATE_v0_1.json"
+      - "tests/research_operations/prospective_source/test_rps_wp4_operator_replay_acceptance.py"
+      - ".github/workflows/rps-wp4-operator-replay-acceptance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  command-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused RPS-WP4 tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_wp4_operator_replay_acceptance.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert key setup is denied in CI
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m ovc.research_operations.prospective_source.operator_replay_acceptance \
+            setup-key \
+            --repository-root "$GITHUB_WORKSPACE" \
+            --operator-id OVC.OPERATOR.TEST.LOCAL.V1 \
+            --gate RPS-G3
+          status=$?
+          set -e
+          if [ "$status" -ne 2 ]; then
+            echo "Expected operator key setup to fail closed in CI with exit 2; got $status"
+            exit 1
+          fi
+      - name: Assert replay acceptance is denied in CI
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m ovc.research_operations.prospective_source.operator_replay_acceptance \
+            accept-replay \
+            --repository-root "$GITHUB_WORKSPACE" \
+            --operator-id OVC.OPERATOR.TEST.LOCAL.V1 \
+            --gate RPS-G3 \
+            --confirm-private-key-protected
+          status=$?
+          set -e
+          if [ "$status" -ne 2 ]; then
+            echo "Expected replay acceptance to fail closed in CI with exit 2; got $status"
+            exit 1
+          fi
