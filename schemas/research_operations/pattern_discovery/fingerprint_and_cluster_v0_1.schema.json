@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/fingerprint_and_cluster_v0_1.schema.json",
+  "title": "PatternFingerprint and ClusterVersion",
+  "type": "object",
+  "oneOf": [
+    {"$ref": "#/$defs/PatternFingerprint"},
+    {"$ref": "#/$defs/ClusterVersion"}
+  ],
+  "$defs": {
+    "PatternFingerprint": {
+      "type": "object",
+      "required": ["record_type", "fingerprint_id", "fingerprint_kind", "candidate_window_id", "fingerprint_version", "feature_pack_id", "source_release_id", "features", "missingness"],
+      "properties": {
+        "record_type": {"const": "PatternFingerprint"},
+        "fingerprint_id": {"type": "string", "minLength": 1},
+        "fingerprint_kind": {"enum": ["TRIGGER", "COMPLETED_TRAJECTORY"]},
+        "candidate_window_id": {"type": "string", "minLength": 1},
+        "fingerprint_version": {"type": "string", "minLength": 1},
+        "feature_pack_id": {"type": "string", "minLength": 1},
+        "source_release_id": {"type": "string", "minLength": 1},
+        "features": {"type": "object"},
+        "missingness": {"type": "object"},
+        "contains_prohibited_outcome_fields": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "ClusterVersion": {
+      "type": "object",
+      "required": ["record_type", "cluster_id", "cluster_version", "status", "partition_key", "member_candidate_ids", "medoid_candidate_id", "fingerprint_version", "distance_pack_id", "algorithm_id", "input_candidate_set_hash", "dispersion"],
+      "properties": {
+        "record_type": {"const": "ClusterVersion"},
+        "cluster_id": {"type": "string", "minLength": 1},
+        "cluster_version": {"type": "string", "minLength": 1},
+        "status": {"enum": ["PROVISIONAL", "RECURRING", "REVIEW_REQUIRED", "RESTRICTED", "REJECTED", "SUPERSEDED", "ARCHETYPE_PROPOSAL"]},
+        "partition_key": {"type": "string", "minLength": 1},
+        "member_candidate_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "medoid_candidate_id": {"type": "string", "minLength": 1},
+        "fingerprint_version": {"type": "string", "minLength": 1},
+        "distance_pack_id": {"type": "string", "minLength": 1},
+        "algorithm_id": {"const": "DETERMINISTIC_PAM"},
+        "input_candidate_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "dispersion": {"type": "number", "minimum": 0},
+        "previous_cluster_links": {"type": "array", "items": {"type": "object"}},
+        "semantic_authority": {"const": "NONE"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
