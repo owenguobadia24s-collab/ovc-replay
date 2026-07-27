@@ -27,8 +27,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Focused C1 index tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_c1_index.py' -v
+      - name: Capture focused C1 index test result
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_c1_index.py' -v > ro3-g1-focused.log 2>&1
+          status=$?
+          printf '%s\n' "$status" > ro3-g1-focused.status
+          cat ro3-g1-focused.log
+          exit 0
+      - name: Upload focused diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g1-focused-diagnostics
+          path: |
+            ro3-g1-focused.log
+            ro3-g1-focused.status
+          if-no-files-found: error
+      - name: Require focused test PASS
+        run: test "$(cat ro3-g1-focused.status)" = "0"
       - name: Full-corpus shape benchmark and deterministic rerun
         env:
           RO3_BENCHMARK_OUTPUT: ro3-c1-index-benchmark-runtime.json
