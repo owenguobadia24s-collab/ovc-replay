@@ -6,6 +6,9 @@
 - Prerequisite: `RPS-G2` PASS and merged
 - Candidate branch: `build/rps-wp3-derived-compute-command`
 - Pull request: `#107`
+- Tested head: `510e6c6a0dc887d1587c0e563fe3b0b710d699bf`
+- Dedicated workflow: `30290939053`, job `90060276971` — PASS
+- Canonical workflow: `30290938717`, job `90060276151` — PASS
 - QA recommendation: `PASS_COMMAND_READY`
 - Packet state after merge: `RUNNING_AWAITING_OPERATOR_LOCAL_COMPUTE`
 
@@ -32,17 +35,27 @@ Per side:
 
 Transition counts are deterministic but evidence-dependent and are recorded by the local compute receipt.
 
-## Test matrix
+## Tests
+
+The dedicated workflow passed:
+
+- focused prospective compute tests;
+- the complete canonical repository suite;
+- an explicit assertion that external execution returns blocked in CI.
+
+The independent canonical workflow also passed the repository-wide test suite.
+
+Tested behaviours include:
 
 - M1 gap creates unavailable parents without fill;
 - incomplete parents cannot enter C1;
 - prospective C1 profile reuses `C1.FORMULAS.v0.1`;
-- historical C1 profile remains covered by the canonical regression suite;
+- historical C1 profile remains covered by canonical regressions;
 - prospective C2 handoff requires exact non-release RPS identities and denied authorities;
 - actual C2 engine emits deterministic state and transition outputs;
 - wrong gate fails closed;
 - external execution in CI fails closed;
-- canonical repository suite executes all prior provider, source, C1 and C2 regressions.
+- all prior provider, source, C1 and C2 regressions pass.
 
 ## Authority assessment
 
