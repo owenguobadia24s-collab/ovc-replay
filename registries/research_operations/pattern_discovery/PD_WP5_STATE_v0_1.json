@@ -6,6 +6,7 @@
   "packet_status": "BLOCKED",
   "baseline_commit": "5842c8e9079efb82e5dc78dbeba31005c27eaa24",
   "branch": "build/pd-wp5-first-live-prospective-operation",
+  "candidate_commit": "32999117d440f393eeb5cbeb6927656bb1db7dd4",
   "authority_required": "ACTIVE_RESEARCH_TRIAGE_APPROVED",
   "authority_delta": "FIRST_PROSPECTIVE_DISCOVERY_BATCH",
   "activation_merge_commit": "aa29b23a7a83e33880ac2d80deb013f0c0390f30",
@@ -16,6 +17,12 @@
   "active_binding_eligible_data_through_utc": "2026-06-25T00:00:00Z",
   "blocker_code": "ACTIVE_BINDING_HAS_NO_POST_ACTIVATION_MARKET_COVERAGE",
   "blocker_detail": "The exact active binding ends before the RPS-G4 activation cutoff and cannot produce a genuine LIVE_PROSPECTIVE candidate.",
+  "supersedes_prior_ready_state": true,
+  "superseded_ready_sources": [
+    "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml#PD-WP5",
+    "registries/research_operations/prospective_source/REAL_PROSPECTIVE_SOURCE_IMPLEMENTATION_REGISTRY_v0_1.yaml#PD-WP5"
+  ],
+  "readiness_interpretation": "PREREQUISITES_SATISFIED_BUT_OPERATION_BLOCKED_BY_POST_ACTIVATION_SOURCE_COVERAGE",
   "replay_substitution": "DENIED",
   "canonical_append": "DENIED",
   "provider_request_authority": "DENIED_PENDING_RPS_G4A",
@@ -44,7 +51,13 @@
   "trading_authority": "NONE",
   "execution_authority": "NONE",
   "agent_write_authority": "NONE",
-  "tests": ["PENDING_CI"],
+  "tests": [
+    "GitHub_Actions_30302376087",
+    "GitHub_Actions_30302374856"
+  ],
+  "focused_job": 90098171075,
+  "canonical_job": 90098167609,
+  "qa_result": "BLOCK_PENDING_RPS_G4A",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_WP5_BLOCKER_QA_PACKET.md",
   "gate_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5/RPS_G4A_OPERATOR_AMENDMENT_GATE_PACKET.md",
   "rollback": "REVERT_DIAGNOSTIC_PACKET_PRESERVE_RPS_G4_ACTIVATION_SOURCE_COMPUTE_KEYS_SIGNATURES_AND_QUARANTINES"
