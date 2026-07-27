@@ -8,7 +8,7 @@ DEFAULT_AUTHORITY = AuthoritySnapshot()
 AUTHORITY = {
     "surface": "LOCAL_PATTERN_DISCOVERY_CANDIDATE",
     "views": ["Queue", "Candidate Detail", "Clusters"],
-    "research_write": DEFAULT_AUTHORITY.authority_label,
+    "research_write": "OPERATOR_GATE_REQUIRED",
     "active_novelty_ranking": "DENIED",
     "semantic_promotion": "DENIED",
     "selector_release_r2": "DENIED",
@@ -22,7 +22,6 @@ def _streamlit():
 
 
 def render_queue(items: list[Mapping[str, Any]], authority: AuthoritySnapshot | None = None) -> str | None:
-    authority = authority or DEFAULT_AUTHORITY
     st = _streamlit()
     st.subheader("Review Queue")
     st.caption("Reason-coded C2 candidate windows · derived and non-authoritative")
@@ -66,10 +65,9 @@ def render_queue(items: list[Mapping[str, Any]], authority: AuthoritySnapshot | 
 
 
 def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnapshot | None = None) -> None:
-    authority = authority or DEFAULT_AUTHORITY
     st = _streamlit()
     st.subheader("Candidate Detail")
-    st.warning(authority.authority_label)
+    st.warning(authority.authority_label if authority is not None else str(detail.get("authority_banner")))
     summary = detail.get("summary", {})
     metrics = st.columns(4)
     metrics[0].metric("Clock", str(summary.get("clock")))
@@ -78,7 +76,7 @@ def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnaps
     metrics[3].metric("Distance", str(summary.get("nearest_cluster_distance") or "N/A"))
     strip = detail.get("price_strip", {})
     if strip.get("status") == "AVAILABLE":
-        st.caption("Lightweight exact-source context strip")
+        st.caption("Lightweight exact-OPT-A context strip")
         chart_rows = [{"time": row.get("bar_end_utc"), "close": row.get("close")} for row in strip.get("bars", ())]
         st.line_chart(chart_rows, x="time", y="close")
         st.json(strip.get("markers", {}), expanded=False)
@@ -97,9 +95,10 @@ def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnaps
     st.selectbox("Evidence class", list(detail.get("permitted_review_classes", ())))
     st.text_area("Factual observation", placeholder="Describe what C2 represents faithfully or misses.")
     st.text_area("Limitation / next bounded question")
+    enabled = authority.live_append_enabled if authority is not None else False
     st.button(
         "Freeze evidence record",
-        disabled=not authority.live_append_enabled,
+        disabled=not enabled,
         help="Disabled unless PD-G4 and RPS-G4 are approved, the operator key is bound, the bridge is healthy, write authority is true, and the candidate source resolves.",
     )
 
@@ -133,7 +132,7 @@ def render_pattern_discovery_app(bundle: Mapping[str, Any]) -> None:
     st.set_page_config(page_title="OVC C2 Pattern Discovery", page_icon="◈", layout="wide")
     st.title("OVC C2 Pattern Discovery")
     st.caption("Simple local research triage · Queue → Candidate Detail → Clusters")
-    st.json({**AUTHORITY, **authority.as_dict()}, expanded=False)
+    st.json({**AUTHORITY, **authority.as_dict(), "research_write": authority.authority_label}, expanded=False)
     queue_tab, detail_tab, cluster_tab = st.tabs(["Queue", "Candidate Detail", "Clusters"])
     with queue_tab:
         selected = render_queue(list(bundle.get("queue_items", ())), authority)
