@@ -6,7 +6,7 @@ owner: RESEARCH_OPERATIONS
 baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 active_c2_model_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
-current_authority: ONE_BOUNDED_JUNE_PROVIDER_INTAKE_APPROVED
+current_authority: RPS_G1B_APPROVED_AWAITING_CHECKSUM_PINNED_LOCAL_FREEZE
 real_prospective_source_available: false
 active_research_triage: false
 active_binding_id: null
@@ -43,13 +43,32 @@ approved_intake:
   destination_scope: OVC_EXTERNAL_ARTIFACT_ROOT_ONLY
   adapter_module: ovc.research_operations.prospective_source.dukascopy_intake_rps_g1a
   wrapper: scripts/run_rps_wp2_intake.ps1
-  provider_execution_operator_local: APPROVED
+  provider_execution_operator_local: COMPLETED_TO_QUARANTINE
   provider_execution_in_ci: DENIED
   raw_provider_bytes_in_git: false
-  execution_state: AWAITING_OPERATOR_LOCAL_EXECUTION
+  execution_state: QUARANTINED_SOURCE_QA_GAPS
+  accepted_source_slice_created: false
+  gapped_acceptance_authority: APPROVED_RPS_G1B
   decision_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_DECISION.md
   authority_merge_commit: 4634f909de391321f918027719202dc0bdd1ee70
   merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
+gapped_recovery_authority:
+  gate_id: RPS-G1B
+  decision: PASS
+  authority: OPERATOR
+  approval_command: OVC APPROVE RPS-G1B
+  approved_on: '2026-07-27'
+  authority_delta: ACCEPT_EXACT_JUNE_QUARANTINE_AS_CHECKSUM_PINNED_GAPPED_SOURCE
+  slice_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1
+  quarantine_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd
+  coverage_state: GAPPED
+  provider_network_access: DENIED
+  source_quarantine_mutation: DENIED
+  copy_on_verify: REQUIRED
+  checksum_inventory: REQUIRED_OPERATOR_LOCAL
+  incomplete_parent_policy: EXCLUDE_NO_SYNTHESIS
+  execution_state: AWAITING_OPERATOR_LOCAL_PREFLIGHT_INVENTORY_AND_FREEZE
+  decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
 intake_incidents:
   - incident_id: RPS.INCIDENT.DUKASCOPY.GBPUSD.20260724_20260727.H1_UNAVAILABLE.v1
     source_gate: RPS-G1
@@ -61,10 +80,32 @@ intake_incidents:
     machine_path_in_git: false
     bytes_reusable: false
     record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_PROVIDER_AVAILABILITY_INCIDENT.md
+  - incident_id: RPS.INCIDENT.DUKASCOPY.GBPUSD.20260622_20260625.M1_GAPPED.v1
+    source_gate: RPS-G1A
+    source_slice_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1
+    quarantine_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd
+    status: QUARANTINED_NO_ACCEPTED_SOURCE_SLICE
+    m1_bid_rows: 4285
+    m1_ask_rows: 4285
+    missing_m1_timestamps: 35
+    gap_runs: 24
+    shared_m1_timestamp_set: true
+    boundary_complete: true
+    duplicate_timestamps: 0
+    non_monotonic_timestamps: 0
+    native_h1_rows_per_side: 72
+    complete_m1_derived_h1_per_side: 64
+    native_h1_ohlc_mismatches: 0
+    local_payload_location: OUTSIDE_GIT_OPERATOR_QUARANTINE
+    machine_path_in_git: false
+    raw_bytes_in_git: false
+    source_mutation_authority: NONE
+    record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1A_JUNE_SOURCE_QA_INCIDENT.md
 objects:
   ProspectiveSourceSlice:
-    status: IMPLEMENTED_FIXTURE_AND_APPROVED_BOUNDED_LOCAL_INTAKE_PROFILE
+    status: IMPLEMENTED_GAPPED_RECOVERY_APPROVED_AWAITING_LOCAL_FREEZE
     approved_real_instance_available: false
+    coverage_candidate: GAPPED
     canonical_release: false
     selector_eligible: false
     r2_eligible: false
@@ -106,29 +147,33 @@ packets:
     next_packet: RPS-WP2
   - packet_id: RPS-WP2
     status: RUNNING
-    prerequisites: [RPS-G1A_APPROVED]
-    authority_required: OPERATOR_LOCAL_EXECUTION_WITHIN_RPS_G1A
-    authority_delta: IMMUTABLE_LOCAL_PROSPECTIVE_SOURCE_SLICE_REPLACEMENT_SCOPE
-    baseline_commit: c61825aa6edc3389566e94316138391db49ac9d5
-    branch: build/rps-g1a-june-source-amendment
-    candidate_commit: 2aaed61438da65000a45542e7bbd097d9433cc00
-    approved_branch_head: bf65fedcd1cf354641fa25f87f4ab5acb642cae7
-    final_pr_head: 065dd44a6af7aa05160118f40ab0194372d2ee70
-    pull_request: 101
-    merge_commit: 4634f909de391321f918027719202dc0bdd1ee70
-    implementation_state: JUNE_REPLACEMENT_COMMAND_APPROVED_AWAITING_LOCAL_EXECUTION
-    replacement_profile: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_REPLACEMENT_INTAKE_PROFILE.json
-    incident_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_PROVIDER_AVAILABILITY_INCIDENT.md
-    operator_guide: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_WINDOWS_OPERATOR_GUIDE.md
+    prerequisites: [RPS-G1A_APPROVED, JUNE_SOURCE_QA_INCIDENT_RECORDED, RPS-G1B_APPROVED]
+    authority_required: OPERATOR_LOCAL_EXECUTION_WITHIN_RPS_G1B
+    authority_delta: EXACT_CHECKSUM_PINNED_GAPPED_SOURCE_ACCEPTANCE
+    baseline_commit: 6aaa898727be83ebf3e5c32ebca129d38e629adb
+    branch: build/rps-g1b-gapped-source-amendment
+    candidate_commit: 4e4c58799258f4bc87bac299affcec1c6ea57f7e
+    gate_ready_commit: 3955593633b0680cc0cd79d9135154b9e5b97e52
+    decision_commit: 38a47b3f33d4f581be3fb1385fe7ef99ab7ea879
+    pull_request: 103
+    implementation_state: GAPPED_RECOVERY_APPROVED_AWAITING_LOCAL_INVENTORY_AND_FREEZE
+    source_quarantine_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd
+    contract: contracts/research_operations/prospective_source/RPS_GAPPED_SOURCE_ACCEPTANCE_CONTRACT_v0_1.md
+    recovery_module: ovc.research_operations.prospective_source.dukascopy_gapped_recovery
     local_command: scripts/run_rps_wp2_intake.ps1
-    tests: [GitHub_Actions_30282135778]
+    operator_guide: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_WINDOWS_OPERATOR_GUIDE.md
+    incident_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1A_JUNE_SOURCE_QA_INCIDENT.md
+    qa_packet: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_QA_PACKET.md
+    gate_packet: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_AMENDMENT_GATE_PACKET.md
+    decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
+    tests: [GitHub_Actions_30286888160]
+    unit_test_job: 90046787818
     qa_result: PASS
-    gate_packet: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_AMENDMENT_GATE_PACKET.md
-    decision_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_DECISION.md
-    merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
+    provider_network_access: DENIED
+    source_quarantine_mutation: DENIED
     blockers:
-      - code: OPERATOR_LOCAL_EXECUTION_AND_COMPACT_EVIDENCE_REQUIRED
-        detail: GitHub cannot perform the approved provider request or access OVC_EXTERNAL_ARTIFACT_ROOT.
+      - code: OPERATOR_LOCAL_CHECKSUM_INVENTORY_AND_FREEZE_REQUIRED
+        detail: GitHub cannot access or re-evaluate the exact Windows quarantine under OVC_EXTERNAL_ARTIFACT_ROOT.
     next_gate: RPS-G2
   - packet_id: RPS-WP3
     status: PLANNED
@@ -163,9 +208,21 @@ completed_gates:
     decision_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_DECISION.md
     merge_commit: 4634f909de391321f918027719202dc0bdd1ee70
     merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
+  - gate_id: RPS-G1B
+    status: APPROVED
+    decision: PASS
+    authority: OPERATOR
+    approval_command: OVC APPROVE RPS-G1B
+    approved_on: '2026-07-27'
+    tests: [GitHub_Actions_30286888160]
+    qa_result: PASS
+    decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
 prohibited_authority:
-  - PROVIDER_REQUEST_OUTSIDE_APPROVED_RPS_G1A_SCOPE
-  - RETRY_OR_ACCEPTANCE_OF_SUPERSEDED_RPS_G1_JULY_IDENTITY
+  - PROVIDER_REQUEST_OUTSIDE_APPROVED_RPS_SCOPE
+  - ANOTHER_PROVIDER_REQUEST_FOR_RPS_G1B
+  - QUARANTINE_MUTATION_OR_RELABEL
+  - INCOMPLETE_PARENT_CONSUMPTION
+  - GAP_REPAIR_FORWARD_FILL_INTERPOLATION_OR_SYNTHESIS
   - LIVE_PATTERN_DISCOVERY_PROCESSING
   - LIVE_PROSPECTIVE_APPEND
   - ACTIVE_NOVELTY_RANKING
@@ -186,5 +243,5 @@ prohibited_authority:
   - EXECUTION
   - AGENT_WRITE
 next_gate: RPS-G2
-continuation_state: AWAITING_OPERATOR_LOCAL_JUNE_INTAKE_EXECUTION_AND_COMPACT_EVIDENCE
-rollback: WITHDRAW_RPS_G1A_AUTHORITY_PRESERVE_ALL_QUARANTINE_AND_FROZEN_EVIDENCE
+continuation_state: AWAITING_OPERATOR_LOCAL_RPS_G1B_PREFLIGHT_INVENTORY_FREEZE_AND_COMPACT_EVIDENCE
+rollback: WITHDRAW_RPS_G1B_AUTHORITY_AND_PRESERVE_JULY_JUNE_QUARANTINES_AND_ANY_COMPACT_EVIDENCE
