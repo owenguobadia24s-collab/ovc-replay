@@ -66,10 +66,16 @@ packets:
     blockers: []
     next_packet: RPS-WP2
   - packet_id: RPS-WP2
-    status: READY
+    status: BLOCKED
     prerequisites: [RPS-G1_APPROVED]
     authority_required: REAL_PROVIDER_INTAKE
     authority_delta: IMMUTABLE_LOCAL_PROSPECTIVE_SOURCE_SLICE
+    baseline_commit: d74d5a917fd7b49fec050c81232d899f00b78253
+    branch: build/rps-wp2-real-provider-intake
+    blockers:
+      - code: REQUIRED_LOCAL_RUNTIME_UNAVAILABLE
+        detail: GitHub execution cannot resolve OVC_EXTERNAL_ARTIFACT_ROOT or invoke the operator-local Dukascopy adapter; CI network access is prohibited.
+        packet: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_BLOCKER_PACKET.md
     next_gate: RPS-G2
   - packet_id: RPS-WP3
     status: PLANNED
@@ -114,5 +120,6 @@ prohibited_authority:
   - TRADING
   - EXECUTION
   - AGENT_WRITE
-next_gate: RPS-G2
+next_packet: RPS-WP2
+continuation_state: BLOCKED_PENDING_OPERATOR_LOCAL_INTAKE_EVIDENCE
 rollback: DISABLE_RUNTIME_AND_PRESERVE_APPROVED_PD_G4_ARTIFACTS
