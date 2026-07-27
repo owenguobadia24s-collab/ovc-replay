@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      PYTHONPATH: src
     steps:
       - uses: actions/checkout@v4
 
@@ -23,24 +25,34 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run PD-WP2 focused tests
-        env:
-          PYTHONPATH: src
+      - name: PD-WP2 structural trigger cases
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty.PatternDiscoveryWP2Tests.test_structural_triggers_have_fired_negative_and_not_evaluable_results
+
+      - name: PD-WP2 persistence and switching cases
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty.PatternDiscoveryWP2Tests.test_return_inside_persistence_and_switching_are_first_crossing_only
+
+      - name: PD-WP2 deterministic controls
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty.PatternDiscoveryWP2Tests.test_control_selection_and_representation_are_deterministic
+
+      - name: PD-WP2 novelty authority boundary
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty.PatternDiscoveryWP2Tests.test_novelty_baseline_and_shadow_never_change_queue_authority
+
+      - name: PD-WP2 queue backpressure
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty.PatternDiscoveryWP2Tests.test_queue_projection_enforces_caps_and_control_reservation
+
+      - name: PD-WP2 latency degradation
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty.PatternDiscoveryWP2Tests.test_latency_degradation_is_explicit
+
+      - name: Run full PD-WP2 focused suite
         run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty
 
       - name: Run PD-WP1 retained-foundation tests
-        env:
-          PYTHONPATH: src
         run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine
 
       - name: Run PD-G0 retained-boundary tests
-        env:
-          PYTHONPATH: src
         run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze
 
       - name: Run canonical repository tests
-        env:
-          PYTHONPATH: src
         run: |
           set +e
           python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
@@ -54,4 +66,4 @@ jobs:
         with:
           name: pd-wp2-canonical-tests
           path: canonical-tests.log
-          if-no-files-found: error
+          if-no-files-found: ignore
