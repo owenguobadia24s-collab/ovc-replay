@@ -1,0 +1,19 @@
+schema: ovc-ro3-role-access-policy/v1
+status: FROZEN_AT_RO3_G0
+content_roles:
+  DISCOVERY:
+    content_resolution: ALLOW_EXACT_C1_RELEASE_ONLY
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+  DEVELOPMENT:
+    content_resolution: ALLOW_EXACT_C1_RELEASE_ONLY
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+  VALIDATION:
+    content_resolution: DENY
+    metadata_projection: NOT_BUILT_LOCKED_UNCONSUMED
+    validation_guard: DENY_BEFORE_PATH_OBJECT_RECORD_TIMESTAMP_RESOLUTION
+explicit_role_required: true
+role_collapse: PROHIBITED
+unknown_role: BLOCK
+writes: NONE
