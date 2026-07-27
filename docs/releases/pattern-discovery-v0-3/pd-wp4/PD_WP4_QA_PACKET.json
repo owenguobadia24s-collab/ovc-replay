@@ -1,0 +1,43 @@
+{
+  "packet_id": "PD-WP4",
+  "gate_id": "PD-G4",
+  "plan_id": "OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER",
+  "plan_version": "0.3",
+  "source_sha256": "03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa",
+  "baseline_commit": "b0798b5535f5fb0276a2b524956c801e278b96d4",
+  "branch": "build/pd-wp4-simple-ui-evidence-bridge",
+  "status": "GATE_READY_PENDING_FINAL_CI",
+  "authority_delta": "HUMAN_REVIEW_OPERATION_AND_CANONICAL_EVIDENCE_BRIDGE_ACTIVATION",
+  "checks": [
+    {"check_id": "PD4-THREE-VIEW-UI", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-SOURCE-LINEAGE-VISIBLE", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-PRICE-STRIP-OPT-A-BINDING", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-NO-MANUAL-CANONICAL-ID", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-WRITE-DISABLED-BY-DEFAULT", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-REQUEST-IDEMPOTENCY", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-NONCE-SEQUENCE-CUTOFF", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-ATOMIC-EVIDENCE-AUDIT", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-ED25519-SIGNER-BOUNDARY", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-REPLAY-EXPOSURE-DENIAL", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-RETAINED-UPSTREAM", "status": "PENDING", "blocking": true},
+    {"check_id": "PD4-CANONICAL-SUITE", "status": "PENDING", "blocking": true}
+  ],
+  "operator_efficiency_targets": {
+    "dismiss_or_defer_median_seconds": 45,
+    "control_classification_median_seconds": 45,
+    "full_evidence_review_median_seconds": 180,
+    "manual_source_id_entry": 0,
+    "irrecoverable_misclicks": 0,
+    "real_operator_measurement_status": "REQUIRED_AT_PD_G4"
+  },
+  "warnings": [
+    "Canonical evidence-write authority remains disabled until operator approval.",
+    "The fixture signer verifies the service boundary but is not an operator production key.",
+    "Real operator timing and browser ergonomics require a PD-G4 acceptance session.",
+    "No real candidate or evidence record has been created."
+  ],
+  "blockers": [],
+  "recommended_decision": "PASS_AFTER_FINAL_CI_AND_OPERATOR_ACCEPTANCE",
+  "decision_classification": "OPERATOR_REQUIRED",
+  "next_packet_after_pass": "PD-WP5"
+}
