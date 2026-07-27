@@ -8,7 +8,8 @@
 - Packet: `RPS-WP4`
 - Baseline main: `32d878f651d7edc832d75bccf839df41f14201e4`
 - Candidate branch: `gate/rps-g4-active-research-triage`
-- Candidate commit: pinned after final CI
+- Tested evidence commit: `c157397dedd2d2d1cc8f57d91b06bdbac0cf70e8`
+- Pull request: `#112`
 - Decision authority: `OPERATOR`
 - Allowed decisions: `PASS`, `DEFER`, `BLOCK`, `QUARANTINE`, `SUPERSEDE`
 
@@ -23,7 +24,8 @@ The following programme work is complete:
 5. RPS-G3 accepted deterministic local 15M/2H C1/C2 computation and the non-activating source-binding candidate.
 6. RPS-WP4 command readiness passed and merged.
 7. The operator created and protected one external Ed25519 key, signed the exact TIME_GATED_REPLAY acceptance and supplied the four permitted compact evidence files.
-8. The signature, deterministic identities, file hashes, lineage and retained denials have been independently validated; final CI remains to be pinned.
+8. The signature, deterministic identities, original CRLF file hashes, lineage and retained denials were independently validated.
+9. Focused and repository-wide CI passed on the tested evidence head.
 
 ## Baseline and candidate identities
 
@@ -101,18 +103,21 @@ RPS-G4 may pass only if all of the following remain true:
 7. private-key material is absent from Git and compact evidence;
 8. the signing-binding remains a single local human operator identity;
 9. current state remains non-activating until the operator decision is recorded and merged;
-10. focused and repository-wide CI pass on the final candidate head;
+10. focused and repository-wide CI pass on the final gate-ready branch;
 11. QA recommends `PASS` and there are no unresolved reviews or blocking warnings;
 12. rollback preserves all source, compute, key, signature, evidence and quarantine artifacts.
 
 ## Tests and QA
 
 - Focused test: `tests/research_operations/prospective_source/test_rps_g4_signed_replay_evidence.py`
-- Focused workflow: `.github/workflows/rps-g4-operator-gate.yml`
-- Repository-wide canonical test suite: required
+- Focused workflow: `30298056893`
+- Focused job: `90083869457` — PASS
+- Canonical workflow: `30298056638`
+- Canonical job: `90083867686` — PASS
 - QA packet: `docs/releases/prospective-source-v0-1/rps-wp4/RPS_WP4_SIGNED_ACCEPTANCE_QA_PACKET.md`
-- Current QA recommendation: `PASS_OPERATOR_GATE_READY_CANDIDATE`
-- Final workflow IDs, job IDs and candidate head: pinned after CI
+- QA recommendation: `PASS_OPERATOR_GATE_READY`
+
+The focused run verifies byte inventory, deterministic IDs, public-key fingerprint, Ed25519 SSHSIG, cross-record lineage, retained denials and the operator gate stop. It also confirms no private key is committed. The canonical repository suite passed separately.
 
 ## Changed files
 
@@ -146,7 +151,7 @@ No market data, derived payload set, private key, cache, ledger or machine-speci
 
 ## Unresolved issues
 
-None blocking. Final CI and operator decision remain outstanding by design.
+None blocking. The explicit operator decision is the only remaining gate condition.
 
 ## Rollback
 
