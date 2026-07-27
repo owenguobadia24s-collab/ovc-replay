@@ -1,7 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
+from pathlib import Path
 from typing import Any, Mapping
+
+
+ACTIVE_AUTHORITY_RECORD = (
+    "registries/research_operations/prospective_source/"
+    "RPS_G4_ACTIVE_AUTHORITY_v0_1.json"
+)
 
 
 @dataclass(frozen=True)
@@ -91,3 +99,13 @@ def authority_from_mapping(value: Mapping[str, Any] | None) -> AuthoritySnapshot
         eligible_data_through_utc=value.get("eligible_data_through_utc"),
         evidence_sequence=int(value.get("evidence_sequence", 0)),
     )
+
+
+def load_repository_authority_snapshot(repository_root: str | Path | None = None) -> AuthoritySnapshot:
+    root = Path(repository_root) if repository_root is not None else Path(__file__).resolve().parents[4]
+    path = root / ACTIVE_AUTHORITY_RECORD
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+        return AuthoritySnapshot()
+    return authority_from_mapping(payload)
