@@ -4,8 +4,8 @@ plan_version: '0.3'
 source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
-status: GATE_READY
-current_authority: TRIGGER_CONTROL_NOVELTY_SHADOW_CANDIDATE
+status: APPROVED
+current_authority: TRIGGER_CONTROL_NOVELTY_SHADOW_ACCEPTED
 prohibited_authority:
   - LIVE_PATTERN_DISCOVERY_PROCESSING
   - ACTIVE_TRIGGER_REGISTRY
@@ -37,7 +37,7 @@ objects:
     owner: RO.C2.PATTERN_DISCOVERY.TRIGGERS
     canonical: false
     replaceable: true
-    implementation_status: ACCEPTED_WITH_PD_WP2_EVALUATOR_CANDIDATE
+    implementation_status: ACCEPTED_WITH_EVALUATOR
   - id: CandidateWindow
     owner: RO.C2.PATTERN_DISCOVERY.WINDOWS
     canonical: false
@@ -47,29 +47,29 @@ objects:
     owner: RO.C2.PATTERN_DISCOVERY.CONTROLS
     canonical: false
     replaceable: true
-    implementation_status: IMPLEMENTED_CANDIDATE
+    implementation_status: ACCEPTED
   - id: QueueProjection
     owner: RO.C2.PATTERN_DISCOVERY.QUEUE
     canonical: false
     replaceable: true
-    implementation_status: IMPLEMENTED_CANDIDATE
+    implementation_status: ACCEPTED
   - id: PatternFingerprint
     owner: RO.C2.PATTERN_DISCOVERY.FINGERPRINTS
     canonical: false
     replaceable: true
-    implementation_status: PLANNED
+    implementation_status: PLANNED_PD_WP3
   - id: NoveltyAssessment
     owner: RO.C2.PATTERN_DISCOVERY.NOVELTY
     canonical: false
     replaceable: true
-    implementation_status: IMPLEMENTED_BASELINE_AND_SHADOW_CANDIDATE
+    implementation_status: ACCEPTED_BASELINE_AND_SHADOW
     ranking_authority: NONE
   - id: ClusterVersion
     owner: RO.C2.PATTERN_DISCOVERY.CLUSTERS
     canonical: false
     replaceable: false
     immutable_versions: true
-    implementation_status: PLANNED
+    implementation_status: PLANNED_PD_WP3
   - id: ReviewQueueItem
     owner: RESEARCH_CONSOLE
     canonical: false
@@ -139,29 +139,39 @@ work_packets:
     blockers: []
     next_packet: PD-WP2
   - packet_id: PD-WP2
-    status: GATE_READY
+    status: COMPLETED
     prerequisites: [PD-G1_APPROVED]
     authority_required: DERIVED_DISCOVERY_TRIAGE
     authority_delta: TRIGGER_CONTROL_AND_NOVELTY_SHADOW
     baseline_commit: abc0f4dc63932907c331f645b17ec4cdd3bb58cf
     branch: build/pd-wp2-trigger-control-novelty
-    candidate_commit: 66c8333d57852add725f0132efe8ee51be09f715
+    candidate_commit: 7200b386d6d564ef60d0b533c8c33257e2f53104
     tests:
       - tests/research_operations/pattern_discovery/test_pd_wp2_trigger_control_novelty.py
       - tests/research_operations/pattern_discovery/test_pd_wp1_transition_candidate_engine.py
       - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
       - canonical repository suite
-    qa_result: PENDING_FINAL_CI
+      - GitHub Actions 30263210563
+      - GitHub Actions 30263210628
+    qa_result: PASS_PD_G2_AUTO_RATIFIABLE
     qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_WP2_QA_PACKET.json
     gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_G2_GATE_PACKET.md
-    decision_record: null
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_G2_DELEGATED_DECISION.md
+    merge_commit: null
     blockers: []
     next_packet: PD-WP3
   - packet_id: PD-WP3
-    status: PLANNED
+    status: READY
     prerequisites: [PD-G2_APPROVED]
     authority_required: DERIVED_CLUSTER_COMPUTE
     authority_delta: PROVISIONAL_CLUSTER_CANDIDATE
+    baseline_commit: TO_BE_RESOLVED_FROM_PD_G2_MERGE
+    branch: build/pd-wp3-fingerprint-clustering
+    candidate_commit: null
+    tests: []
+    qa_packet: null
+    decision_record: null
+    blockers: []
     next_packet: PD-WP4
   - packet_id: PD-WP4
     status: PLANNED
@@ -188,4 +198,10 @@ completed_gates:
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_DECISION.md
     approval_command: OVC APPROVE PD-G1
     approved_on: '2026-07-27'
-next_gate: PD-G2
+  - gate_id: PD-G2
+    status: APPROVED
+    decision: PASS
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_G2_DELEGATED_DECISION.md
+    authority: DELEGATED_AUTO_EXECUTABLE
+    approved_on: '2026-07-27'
+next_gate: PD-G3
