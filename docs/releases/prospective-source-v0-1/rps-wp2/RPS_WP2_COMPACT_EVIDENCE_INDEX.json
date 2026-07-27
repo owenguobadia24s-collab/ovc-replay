@@ -1,0 +1,168 @@
+{
+  "acceptance": {
+    "authority": "DELEGATED_AUTO_EXECUTABLE_WITHIN_RPS_G1B",
+    "machine_paths_in_git": false,
+    "next_packet": "RPS-WP3",
+    "raw_provider_bytes_in_git": false,
+    "status": "PASS"
+  },
+  "compact_files": [
+    {
+      "name": "source-slice-manifest.json",
+      "sha256": "8509b6cc66814663786e429e6ba1dc0c3497482fc6ac8ceb016cfc1867ec78eb",
+      "size_bytes": 1358
+    },
+    {
+      "name": "bid-ask-reconciliation.json",
+      "sha256": "66169e242af4a63d031130fb664315a99d067e324511554af32c94448717249d",
+      "size_bytes": 737
+    },
+    {
+      "name": "downstream-coverage-propagation.json",
+      "sha256": "8f386b44752ba72f535fade957dd5f3151472ff2c2adb88002645769eceb167f",
+      "size_bytes": 24864
+    },
+    {
+      "name": "freeze-receipt.json",
+      "sha256": "6902b53bf0ff3b9fc0e7d70571dd3f5e7bb65d27338622aefc008bd80fb7d5eb",
+      "size_bytes": 711
+    },
+    {
+      "name": "gap-and-duplicate-qa.json",
+      "sha256": "0df4c4dbe1f763bea3ca77c555b4f8fec66477ebcd07f122248b19d1568c84d7",
+      "size_bytes": 12967
+    },
+    {
+      "name": "native-h1-reconciliation.json",
+      "sha256": "5af5f016b1fb6d6c1615bf40b491aeb9a9c4f5beb4acbb84ba5030f320ef6c5f",
+      "size_bytes": 786
+    },
+    {
+      "name": "provider-request-receipt.json",
+      "sha256": "34b5ab9a7f852499af51872e63bcc0ccc3c51d3009ecbeba0e6ec2f9e3da32e0",
+      "size_bytes": 2546
+    },
+    {
+      "name": "quarantine-checksum-inventory.json",
+      "sha256": "54fabf97adf71afc3c8a529b21eb11f5c13a3e997d93ff88324396accb316fa8",
+      "size_bytes": 2590
+    },
+    {
+      "name": "source-object-inventory.json",
+      "sha256": "466390abd1a1630cfb9e7b474ecd8e294028b31855096c270d184631e2060140",
+      "size_bytes": 2424
+    }
+  ],
+  "coverage_state": "GAPPED",
+  "freeze": {
+    "copy_on_verify": true,
+    "frozen": true,
+    "live_prospective_append": "DENIED",
+    "provider_network_access_performed": false,
+    "r2_publication": "DENIED",
+    "release_status": "NOT_A_RELEASE",
+    "selector_eligibility": "NONE",
+    "source_quarantine_unchanged_after_copy": true,
+    "validation_consumption": "DENIED"
+  },
+  "gate_id": "RPS-G2",
+  "manifest_file_sha256": "8509b6cc66814663786e429e6ba1dc0c3497482fc6ac8ceb016cfc1867ec78eb",
+  "manifest_logical_sha256": "429b7b568b7a43d04893c1873773f0b1b567730f2d5d4122d6a1c06dd40e3e41",
+  "packet_id": "RPS-WP2",
+  "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
+  "qa": {
+    "bid_ask": {
+      "h1_paired_rows": 72,
+      "inverted_rows": 0,
+      "m1_paired_rows": 4285,
+      "missing_timestamps": 0,
+      "state": "PASS"
+    },
+    "downstream_coverage": {
+      "15M": {"available": 271, "unavailable": 17},
+      "2H": {"available": 30, "unavailable": 6},
+      "H1_M1_DERIVED": {"available": 64, "unavailable": 8},
+      "forward_fill_performed": false,
+      "incomplete_parent_consumption": "DENIED",
+      "interpolation_performed": false,
+      "repair_performed": false,
+      "state": "PASS_GAPPED_EXCLUSION",
+      "synthesis_performed": false
+    },
+    "gap_and_duplicate": {
+      "boundary_complete": true,
+      "duplicates": 0,
+      "gap_runs_per_side": 24,
+      "m1_rows_per_side": 4285,
+      "missing_timestamps_per_side": 35,
+      "non_monotonic": 0,
+      "repair_performed": false,
+      "shared_m1_timestamp_set": true,
+      "state": "PASS_GAPPED"
+    },
+    "native_h1": {
+      "compared_per_side": 64,
+      "complete_m1_derived_h1_per_side": 64,
+      "missing_native_timestamps": 0,
+      "native_rows_per_side": 72,
+      "ohlc_mismatches": 0,
+      "repair_authority": "NONE",
+      "state": "PASS"
+    }
+  },
+  "quarantine_inventory_logical_sha256": "ce58bc91ea36e920fa2f855a96ee7084e5d867b976a0d06a9e94bf65b20084c2",
+  "schema": "ovc-rps-wp2-compact-evidence-index/v1",
+  "slice_id": "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1",
+  "source_objects": [
+    {
+      "clock": "H1",
+      "first_timestamp_utc": "2026-06-22T00:00:00Z",
+      "last_timestamp_utc": "2026-06-24T23:00:00Z",
+      "object_id": "SRC.DUKASCOPY.GBPUSD.H1.ASK.20260622_20260625.v1",
+      "relative_path": "source-objects/GBPUSD_H1_ASK_20260622_20260625_UTC.csv",
+      "row_count": 72,
+      "schema_fingerprint": "16bd872773f1cef4d05dfd581270ee0cdcfff93ceabf6a9c6759db26d01c247c",
+      "sha256": "3c273e6237a99b0444c7c921eb56783a63717dcf8b1e36b6ad189a4cac7ae103",
+      "side": "ASK",
+      "size_bytes": 4476
+    },
+    {
+      "clock": "H1",
+      "first_timestamp_utc": "2026-06-22T00:00:00Z",
+      "last_timestamp_utc": "2026-06-24T23:00:00Z",
+      "object_id": "SRC.DUKASCOPY.GBPUSD.H1.BID.20260622_20260625.v1",
+      "relative_path": "source-objects/GBPUSD_H1_BID_20260622_20260625_UTC.csv",
+      "row_count": 72,
+      "schema_fingerprint": "16bd872773f1cef4d05dfd581270ee0cdcfff93ceabf6a9c6759db26d01c247c",
+      "sha256": "c6112688ae67d745bd8e6138cde0ccdf998bb91191100c776bcece463c2a522a",
+      "side": "BID",
+      "size_bytes": 4548
+    },
+    {
+      "clock": "M1",
+      "first_timestamp_utc": "2026-06-22T00:00:00Z",
+      "last_timestamp_utc": "2026-06-24T23:59:00Z",
+      "object_id": "SRC.DUKASCOPY.GBPUSD.M1.ASK.20260622_20260625.v1",
+      "relative_path": "source-objects/GBPUSD_M1_ASK_20260622_20260625_UTC.csv",
+      "row_count": 4285,
+      "schema_fingerprint": "16bd872773f1cef4d05dfd581270ee0cdcfff93ceabf6a9c6759db26d01c247c",
+      "sha256": "22a4f13702c8128af3903698ade2cf2c7a019df5872bf8a7e9afa381e4136fa3",
+      "side": "ASK",
+      "size_bytes": 268399
+    },
+    {
+      "clock": "M1",
+      "first_timestamp_utc": "2026-06-22T00:00:00Z",
+      "last_timestamp_utc": "2026-06-24T23:59:00Z",
+      "object_id": "SRC.DUKASCOPY.GBPUSD.M1.BID.20260622_20260625.v1",
+      "relative_path": "source-objects/GBPUSD_M1_BID_20260622_20260625_UTC.csv",
+      "row_count": 4285,
+      "schema_fingerprint": "16bd872773f1cef4d05dfd581270ee0cdcfff93ceabf6a9c6759db26d01c247c",
+      "sha256": "7ecff7add57a54a3153f322e777bfda8c66e395b50e990bb3be100a2bb441b50",
+      "side": "BID",
+      "size_bytes": 268258
+    }
+  ],
+  "source_window_end_utc": "2026-06-25T00:00:00Z",
+  "source_window_start_utc": "2026-06-22T00:00:00Z"
+}
