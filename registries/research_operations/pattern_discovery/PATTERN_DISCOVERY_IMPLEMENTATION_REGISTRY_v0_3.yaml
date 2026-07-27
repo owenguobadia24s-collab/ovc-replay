@@ -5,12 +5,13 @@ source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
-current_authority: TRIGGER_CONTROL_NOVELTY_SHADOW_ACCEPTED
+current_authority: PROVISIONAL_CLUSTER_COMPUTE_ACCEPTED
 prohibited_authority:
   - LIVE_PATTERN_DISCOVERY_PROCESSING
   - ACTIVE_TRIGGER_REGISTRY
   - ACTIVE_NOVELTY_RANKING
-  - CLUSTER_AUTHORITY
+  - SEMANTIC_CLUSTER_PROMOTION
+  - ARCHETYPE_PROMOTION
   - EVIDENCE_BRIDGE_WRITE
   - C2_MUTATION
   - C2E
@@ -57,7 +58,7 @@ objects:
     owner: RO.C2.PATTERN_DISCOVERY.FINGERPRINTS
     canonical: false
     replaceable: true
-    implementation_status: PLANNED_PD_WP3
+    implementation_status: ACCEPTED
   - id: NoveltyAssessment
     owner: RO.C2.PATTERN_DISCOVERY.NOVELTY
     canonical: false
@@ -69,48 +70,28 @@ objects:
     canonical: false
     replaceable: false
     immutable_versions: true
-    implementation_status: PLANNED_PD_WP3
+    implementation_status: ACCEPTED_PROVISIONAL_ONLY
+    semantic_authority: NONE
   - id: ReviewQueueItem
     owner: RESEARCH_CONSOLE
     canonical: false
     replaceable: true
-    implementation_status: PLANNED
+    implementation_status: PLANNED_PD_WP4
   - id: ReviewDecision
     owner: RESEARCH_OPERATIONS
     canonical: true
     append_only: true
-    implementation_status: PLANNED
-processing_modes:
-  - LIVE_PROSPECTIVE
-  - TIME_GATED_REPLAY
-  - NON_EVIDENTIARY_REPLAY
-novelty_states:
-  - BASELINE_FORMING
-  - CALIBRATED_SHADOW
-  - ACTIVE_NOVELTY_RANKING
-candidate_populations:
-  - DISCOVERY_CANDIDATE_POPULATION
-  - HUMAN_REVIEWED_POPULATION
-  - CANONICAL_EVIDENCE_POPULATION
-ui_views:
-  - Queue
-  - Candidate Detail
-  - Clusters
+    implementation_status: PLANNED_PD_WP4
+processing_modes: [LIVE_PROSPECTIVE, TIME_GATED_REPLAY, NON_EVIDENTIARY_REPLAY]
+novelty_states: [BASELINE_FORMING, CALIBRATED_SHADOW, ACTIVE_NOVELTY_RANKING]
+candidate_populations: [DISCOVERY_CANDIDATE_POPULATION, HUMAN_REVIEWED_POPULATION, CANONICAL_EVIDENCE_POPULATION]
+ui_views: [Queue, Candidate Detail, Clusters]
 work_packets:
   - packet_id: PD-00
     status: COMPLETED
-    prerequisites:
-      - C2_G7_ACCEPTED
-      - ACTIVE_C2_DISCOVERY_RELEASE
-      - RESEARCH_OPERATIONS_FOUNDATION
-    authority_required: DESIGN_ONLY
-    authority_delta: FREEZE_PATTERN_DISCOVERY_DESIGN
     baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
     branch: build/pd-00-pattern-discovery-v0-3-freeze
     candidate_commit: 65ea7998059fbce7f2aa858166e12fdbf7ff0a14
-    tests:
-      - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
-      - GitHub Actions 30254489870
     qa_packet: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_GATE_PACKET.md
     decision_record: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_DECISION.md
     merge_commit: fb63c15b5f7e265cc78e35421de39c4656d8140e
@@ -119,21 +100,13 @@ work_packets:
   - packet_id: PD-WP1
     status: COMPLETED
     prerequisites: [PD-G0_APPROVED]
-    authority_required: DERIVED_FIXTURE_COMPUTE
     authority_delta: ACCEPT_TRANSITION_AND_CANDIDATE_ENGINE
     baseline_commit: fb63c15b5f7e265cc78e35421de39c4656d8140e
     branch: build/pd-g1-clean-integration
     candidate_commit: 0e1674afb9df5ed87fc5a3b19f73cb3f95a2d265
-    tests:
-      - tests/research_operations/pattern_discovery/test_pd_wp1_transition_candidate_engine.py
-      - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
-      - tests/authority/test_active_namespace_allowlist.py
-      - canonical repository suite
-      - GitHub Actions 30262050883
-      - GitHub Actions 30262050941
+    tests: [GitHub_Actions_30262050883, GitHub_Actions_30262050941]
     qa_result: PASS_PD_G1_APPROVED
     qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_WP1_QA_PACKET.json
-    gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_GATE_PACKET.md
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_DECISION.md
     merge_commit: abc0f4dc63932907c331f645b17ec4cdd3bb58cf
     blockers: []
@@ -141,43 +114,45 @@ work_packets:
   - packet_id: PD-WP2
     status: COMPLETED
     prerequisites: [PD-G1_APPROVED]
-    authority_required: DERIVED_DISCOVERY_TRIAGE
     authority_delta: TRIGGER_CONTROL_AND_NOVELTY_SHADOW
     baseline_commit: abc0f4dc63932907c331f645b17ec4cdd3bb58cf
     branch: build/pd-wp2-trigger-control-novelty
-    candidate_commit: 7200b386d6d564ef60d0b533c8c33257e2f53104
-    tests:
-      - tests/research_operations/pattern_discovery/test_pd_wp2_trigger_control_novelty.py
-      - tests/research_operations/pattern_discovery/test_pd_wp1_transition_candidate_engine.py
-      - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
-      - canonical repository suite
-      - GitHub Actions 30263210563
-      - GitHub Actions 30263210628
+    candidate_commit: cd28cfadf2f9aba23e6d289baa464df65d53676f
+    tests: [GitHub_Actions_30263506047, GitHub_Actions_30263506074]
     qa_result: PASS_PD_G2_AUTO_RATIFIABLE
     qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_WP2_QA_PACKET.json
-    gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_G2_GATE_PACKET.md
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_G2_DELEGATED_DECISION.md
-    merge_commit: null
+    merge_commit: ff9f8a9604d352bb37777e04282cd0641e5f38b8
     blockers: []
     next_packet: PD-WP3
   - packet_id: PD-WP3
-    status: READY
+    status: COMPLETED
     prerequisites: [PD-G2_APPROVED]
     authority_required: DERIVED_CLUSTER_COMPUTE
     authority_delta: PROVISIONAL_CLUSTER_CANDIDATE
-    baseline_commit: TO_BE_RESOLVED_FROM_PD_G2_MERGE
+    baseline_commit: ff9f8a9604d352bb37777e04282cd0641e5f38b8
     branch: build/pd-wp3-fingerprint-clustering
+    candidate_commit: ae86f566e36acc06a5babf53833283ea7769e4b8
+    tests: [GitHub_Actions_30264050530, GitHub_Actions_30264050496]
+    qa_result: PASS_PD_G3_AUTO_RATIFIABLE
+    qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_WP3_QA_PACKET.json
+    gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_G3_GATE_PACKET.md
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_G3_DELEGATED_DECISION.md
+    merge_commit: null
+    blockers: []
+    next_packet: PD-WP4
+  - packet_id: PD-WP4
+    status: READY
+    prerequisites: [PD-G3_APPROVED]
+    authority_required: LOCAL_UI_AND_GOVERNED_APPEND_BRIDGE
+    authority_delta: HUMAN_REVIEW_OPERATION_CANDIDATE
+    baseline_commit: TO_BE_RESOLVED_FROM_PD_G3_MERGE
+    branch: build/pd-wp4-simple-ui-evidence-bridge
     candidate_commit: null
     tests: []
     qa_packet: null
     decision_record: null
     blockers: []
-    next_packet: PD-WP4
-  - packet_id: PD-WP4
-    status: PLANNED
-    prerequisites: [PD-G3_APPROVED]
-    authority_required: LOCAL_UI_AND_GOVERNED_APPEND_BRIDGE
-    authority_delta: HUMAN_REVIEW_OPERATION_CANDIDATE
     next_packet: PD-WP5
   - packet_id: PD-WP5
     status: PLANNED
@@ -204,4 +179,10 @@ completed_gates:
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_G2_DELEGATED_DECISION.md
     authority: DELEGATED_AUTO_EXECUTABLE
     approved_on: '2026-07-27'
-next_gate: PD-G3
+  - gate_id: PD-G3
+    status: APPROVED
+    decision: PASS
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_G3_DELEGATED_DECISION.md
+    authority: DELEGATED_AUTO_EXECUTABLE
+    approved_on: '2026-07-27'
+next_gate: PD-G4
