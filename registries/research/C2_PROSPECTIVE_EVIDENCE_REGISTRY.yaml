@@ -1,10 +1,10 @@
-schema: ovc-c2-prospective-evidence-registry/v1
+schema: ovc-c2-prospective-evidence-registry/v2
 programme_id: C2_WP7_PROSPECTIVE_EVIDENCE_ACCUMULATION
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 state: ACTIVE_PROSPECTIVE_ACCUMULATION
 baseline_main_tip: 35c259255f4b09aca85de8bf114a6e1031b99e52
 activation_commit: 2a3f262fc0539786b67ae6c3e20604eb4d4adc2b
-prospective_cutoff_rule: STRICTLY_AFTER_C2_G6_MERGE_AND_OBSERVATION_TIME
+prospective_cutoff_rule: STRICTLY_AFTER_C2_G6_MERGE_AND_MARKET_TIME
 active_selector:
   release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
   manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
@@ -14,10 +14,30 @@ development_reference:
   release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1
   selector: NONE
   authority: REMOTE_VERIFIED_REFERENCE_ONLY
-record_schema: schemas/opt_b/c2/c2_prospective_evidence_record_v0_1.schema.json
-contract: contracts/opt_b/c2/C2_PROSPECTIVE_EVIDENCE_ACCUMULATION_CONTRACT_v0_1.md
+record_schema: schemas/opt_b/c2/c2_prospective_evidence_record_v0_2.schema.json
+contract: contracts/opt_b/c2/C2_PROSPECTIVE_EVIDENCE_ACCUMULATION_CONTRACT_v0_2.md
+superseded_contract: contracts/opt_b/c2/C2_PROSPECTIVE_EVIDENCE_ACCUMULATION_CONTRACT_v0_1.md
+superseded_schema: schemas/opt_b/c2/c2_prospective_evidence_record_v0_1.schema.json
 append_target: evidence/research/opt-b-c2-v2/prospective/c2_evidence_records.jsonl
 append_mode: APPEND_ONLY
+timestamp_fields:
+  market_window_start_utc: REQUIRED
+  market_window_end_utc: REQUIRED
+  trigger_first_valid_at: REQUIRED
+  review_created_at_utc: REQUIRED
+operation_modes:
+  LIVE_PROSPECTIVE:
+    prospective_count_eligible: true
+    first_real_batch_eligible: true
+    c2e_escalation_weight: ELIGIBLE_AFTER_REVIEW
+  TIME_GATED_REPLAY:
+    prospective_count_eligible: false
+    first_real_batch_eligible: false
+    c2e_escalation_weight: NONE
+  NON_EVIDENTIARY_REPLAY:
+    prospective_count_eligible: false
+    first_real_batch_eligible: false
+    c2e_escalation_weight: NONE
 allowed_record_classes:
   - STATE_FIDELITY_REVIEW
   - BOUNDARY_CONFLICT_CASE
@@ -26,6 +46,10 @@ allowed_record_classes:
   - BOUNDED_RESEARCH_QUESTION
 current_counts:
   total: 0
+  live_prospective: 0
+  time_gated_replay: 0
+  non_evidentiary_replay: 0
+  prospective_evidence: 0
   accepted: 0
   rejected: 0
   blocked: 0
@@ -34,6 +58,7 @@ first_batch_review:
   decision: DEFER_NO_REAL_PROSPECTIVE_BATCH
   append_target_state: ABSENT
   record_count: 0
+  live_prospective_count: 0
   packet: docs/releases/opt-b-c2-v2/first-prospective-batch/FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_PACKET.json
 prohibited_seed_material:
   - OLD_202_STORY_PROGRAMME
