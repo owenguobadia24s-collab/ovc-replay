@@ -4,6 +4,9 @@
 - Packet: `PD-WP5`
 - Baseline main: `5842c8e9079efb82e5dc78dbeba31005c27eaa24`
 - Branch: `build/pd-wp5-first-live-prospective-operation`
+- Tested gate-ready head: `9694f279ba2ca64d85c77e8679a863c6a79f2be3`
+- Focused workflow: `30302750156`, job `90099418472` — PASS
+- Canonical workflow: `30302750032`, job `90099417677` — PASS
 - QA recommendation: `BLOCK_PENDING_RPS_G4A`
 
 ## Finding
@@ -40,6 +43,21 @@ The packet adds a no-network operator-local preflight that:
 Expected current result:
 
 `BLOCKED_POST_ACTIVATION_SOURCE_REQUIRED`
+
+## Tests
+
+The focused workflow passed:
+
+- source-coverage contradiction reproduction;
+- exact RPS-G4A scope;
+- strict post-activation chronology;
+- replay and pre-activation rejection;
+- exact source/signing/operator binding checks;
+- no-network preflight;
+- unapproved gate and provider-request denial;
+- retained authority prohibitions.
+
+The canonical repository suite also passed. No unresolved implementation defect remains.
 
 ## Prohibited workarounds
 
