@@ -57,6 +57,8 @@ Unknown role, release, manifest, formula, unit, null reason, clock, side, schema
 
 ## Console boundary
 
+Route state: `DISABLED_PENDING_RC_G4`.
+
 RO3-G4 may accept adapters and fixture/source-bound projections only. Live Research Console C1 consumption remains disabled until a separate operator-owned `RC-G4` PASS. `RC-G4` is `OPERATOR_REQUIRED` and `NOT_AUTO_RATIFIABLE`.
 
 ## Rollback
