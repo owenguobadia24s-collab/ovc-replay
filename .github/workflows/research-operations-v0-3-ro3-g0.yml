@@ -22,11 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          show-progress: false
+      - name: Runtime identity
+        run: python --version
       - name: Validate RO3-G0 design
-        run: python scripts/research_operations/validate_ro3_g0_design.py
+        run: python -u scripts/research_operations/validate_ro3_g0_design.py
       - name: Focused RO3-G0 tests
         run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_ro3_g0_design.py' -v
       - name: Canonical repository tests
