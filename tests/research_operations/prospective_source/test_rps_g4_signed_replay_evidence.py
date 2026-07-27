@@ -181,14 +181,8 @@ class RpsG4SignedReplayEvidenceTests(unittest.TestCase):
             "signing_binding_id": "RPS.SIGNING.50092c28981fef08f53a6cb5",
             "acceptance_id": "RPS.REPLAY-ACCEPT.0844eddf74e144ced487cc48",
         }
-        for key in ("source_slice_id", "run_id", "binding_id", "acceptance_id"):
-            self.assertEqual(self.index[key], expected[key])
-        self.assertEqual(self.index["operator"]["operator_id"], expected["operator_id"])
-        self.assertEqual(
-            self.index["operator"]["signing_binding_id"],
-            expected["signing_binding_id"],
-        )
         for key, value in expected.items():
+            self.assertEqual(self.index[key], value)
             self.assertEqual(self.gate[key], value)
         for key in ("source_slice_id", "run_id", "binding_id", "operator_id", "signing_binding_id"):
             self.assertEqual(self.binding[key], expected[key])
@@ -235,15 +229,23 @@ class RpsG4SignedReplayEvidenceTests(unittest.TestCase):
 
     def test_programme_state_stops_at_operator_gate(self) -> None:
         self.assertEqual(self.state["packet_id"], "RPS-WP4")
-        self.assertEqual(self.state["packet_status"], "GATE_READY")
+        self.assertEqual(self.state["packet_status"], "APPROVED_PENDING_MERGE")
         self.assertEqual(self.state["gate_id"], "RPS-G4")
-        self.assertEqual(self.state["gate_status"], "GATE_READY")
-        self.assertTrue(self.state["operator_approval_required"])
+        self.assertEqual(self.state["gate_status"], "APPROVED_PENDING_MERGE")
+        self.assertEqual(self.state["decision"], "PASS")
+        self.assertEqual(self.state["decision_authority"], "OPERATOR")
+        self.assertFalse(self.state["operator_approval_required"])
         self.assertIsNone(self.state["active_binding_id"])
         self.assertFalse(self.state["active_research_triage"])
         self.assertFalse(self.state["write_authority"])
-        self.assertEqual(self.state["live_prospective_append"], "DENIED")
-        self.assertEqual(self.state["next_action"], "OVC APPROVE RPS-G4")
+        self.assertEqual(
+            self.state["live_prospective_append"],
+            "DENIED_PENDING_ACTIVATION_PACKET",
+        )
+        self.assertEqual(
+            self.state["next_action"],
+            "MERGE_RPS_G4_THEN_BUILD_EXACT_ACTIVATION_PACKET",
+        )
 
 
 if __name__ == "__main__":
