@@ -1,0 +1,40 @@
+schema: ovc-ro3-dependency-policy/v1
+status: FROZEN_AT_RO3_G0
+allow_reads:
+  - contracts/opt_b/c1/**
+  - schemas/opt_b/c1/**
+  - registries/opt_b/c1/**
+  - approved OPT-A Discovery and Development compact manifests
+  - approved C1 Discovery and Development remote-verified manifests and record inventories
+  - src/ovc/research_operations/v0_1/**
+  - src/ovc/research_operations/v0_2/**
+  - approved compact C2 and Pattern Discovery child-reference summaries
+allow_writes:
+  - contracts/research_operations/v0_3/**
+  - schemas/research_operations/v0_3/**
+  - registries/research_operations/v0_3/**
+  - fixtures/research_operations/v0_3/**
+  - src/ovc/research_operations/v0_3/**
+  - tests/research_operations/v0_3/**
+  - docs/releases/research-operations-foundation-v0-3/**
+  - benchmarks/research_operations/v0_3/**
+deny_reads:
+  - OPT-A Validation payloads
+  - OPT-B.C1 Validation payloads
+  - legacy/quarantine/**
+  - C2E
+  - C2.5
+  - C3
+  - OPT-C outcomes
+  - OPT-D outcomes
+  - FUTURE_OUTCOMES
+deny_writes:
+  - C1 formulas, contracts, schemas, records, releases or selectors
+  - OPT-A records, releases or selectors
+  - C2 or Pattern Discovery records, thresholds, selectors or ledgers
+  - R2 canonical
+  - Git primary branch from runtime code
+  - raw market or full C1 payloads in Git
+  - probability, risk, exposure, trading or execution objects
+cycle_guard: REQUIRED
+unknown_dependency: BLOCK

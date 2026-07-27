@@ -1,0 +1,50 @@
+schema: ovc-ro3-implementation-registry/v1
+programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
+plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
+plan_version: v0.2
+status: RO3_G0_PASS_DESIGN_CANON
+baseline_commit: 0c177560b02e14a36a949626b155f616c12549e5
+items:
+  - id: RO3-00
+    name: Boundary and design freeze
+    status: COMPLETE_DESIGN_ONLY
+    gate: RO3-G0
+    branch: design/research-operations-v0-3-ro3-00
+  - id: RO3-WP1
+    name: Primitive release and coverage indexes
+    status: READY
+    gate: RO3-G1
+    authority_delta: LOCAL_REPLACEABLE_DERIVED
+  - id: RO3-WP2
+    name: Null computability and formula comparison
+    status: PLANNED
+    gate: RO3-G2
+    authority_delta: READ_ONLY_DERIVED_INSPECTION
+  - id: RO3-WP3
+    name: Symmetry metamorphic and deterministic assurance
+    status: PLANNED
+    gate: RO3-G3
+    authority_delta: QA_EVIDENCE_ONLY
+  - id: RO3-WP4
+    name: C1 lineage and Console adapters
+    status: PLANNED
+    gate: RO3-G4
+    authority_delta: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
+  - id: RC-G4
+    name: Live C1 Console projection consumption
+    status: OPERATOR_REQUIRED_AFTER_RO3_G4
+    authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
+    auto_ratifiable: false
+retained_boundaries:
+  c1_formulas_releases_selectors: IMMUTABLE
+  validation_consumption: LOCKED_UNCONSUMED
+  c2_pattern_discovery_authority: UNCHANGED
+  live_console_c1_route: DISABLED_PENDING_RC_G4
+  market_authority: NONE
+  probability_authority: NONE
+  risk_authority: NONE
+  exposure_authority: NONE
+  trading_authority: NONE
+  execution_authority: NONE
+  agent_write_authority: NONE
+next_packet: RO3-WP1

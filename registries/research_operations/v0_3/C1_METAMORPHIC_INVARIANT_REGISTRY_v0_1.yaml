@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-ro3-c1-metamorphic-invariant-registry/v1",
+  "registry_id": "C1.METAMORPHIC.INVARIANTS.v0.1",
+  "status": "FROZEN_AT_RO3_G0",
+  "source_of_expectations": "INDEPENDENT_CONTRACT_CANON_NOT_IMPLEMENTATION",
+  "formula_registry_id": "C1.FORMULAS.v0.1",
+  "formula_count": 18,
+  "transforms": {
+    "PRICE_TRANSLATION": {"parameter": "decimal_offset", "precondition": "all OHLC and lawful prior_close translated equally"},
+    "PRICE_REFLECTION": {"parameter": "decimal_centre", "precondition": "reflect OHLC and lawful prior_close around one centre while restoring high/low order"},
+    "UP_DOWN_REVERSAL": {"parameter": null, "precondition": "swap open and close with high/low unchanged"},
+    "WICK_SWAP_REFLECTION": {"parameter": "decimal_centre", "precondition": "reflect full bar around one centre"},
+    "POSITIVE_SCALE": {"parameter": "positive_decimal_factor", "precondition": "scale OHLC, lawful prior_close and price_increment by the same positive factor"},
+    "ZERO_RANGE": {"parameter": null, "precondition": "open equals high equals low equals close"},
+    "REMOVE_CONTIGUOUS_PRIOR": {"parameter": null, "precondition": "current bar remains admissible and prior close becomes unavailable"},
+    "CANONICAL_REORDER": {"parameter": null, "precondition": "logical input content unchanged and mapping/list order permitted to vary"}
+  },
+  "invariants": [
+    {"primitive_id":"C1-RANGE-ABS.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:EQUAL","POSITIVE_SCALE:SCALE","ZERO_RANGE:ZERO"]},
+    {"primitive_id":"C1-RANGE-TICKS.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:EQUAL","POSITIVE_SCALE:EQUAL","ZERO_RANGE:ZERO_IF_INCREMENT_AVAILABLE"]},
+    {"primitive_id":"C1-BODY-SIGNED.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SIGN_REVERSE","UP_DOWN_REVERSAL:SIGN_REVERSE","POSITIVE_SCALE:SCALE","ZERO_RANGE:ZERO"]},
+    {"primitive_id":"C1-BODY-ABS.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:EQUAL","UP_DOWN_REVERSAL:EQUAL","POSITIVE_SCALE:SCALE","ZERO_RANGE:ZERO"]},
+    {"primitive_id":"C1-BODY-UTIL.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:EQUAL","UP_DOWN_REVERSAL:EQUAL","POSITIVE_SCALE:EQUAL","ZERO_RANGE:NULL_ZERO_RANGE"]},
+    {"primitive_id":"C1-UPPER-WICK-ABS.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SWAP_WITH_LOWER","UP_DOWN_REVERSAL:EQUAL","POSITIVE_SCALE:SCALE","ZERO_RANGE:ZERO"]},
+    {"primitive_id":"C1-LOWER-WICK-ABS.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SWAP_WITH_UPPER","UP_DOWN_REVERSAL:EQUAL","POSITIVE_SCALE:SCALE","ZERO_RANGE:ZERO"]},
+    {"primitive_id":"C1-UPPER-WICK-SHARE.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SWAP_WITH_LOWER","POSITIVE_SCALE:EQUAL","ZERO_RANGE:NULL_ZERO_RANGE"]},
+    {"primitive_id":"C1-LOWER-WICK-SHARE.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SWAP_WITH_UPPER","POSITIVE_SCALE:EQUAL","ZERO_RANGE:NULL_ZERO_RANGE"]},
+    {"primitive_id":"C1-WICK-BALANCE.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SIGN_REVERSE","POSITIVE_SCALE:EQUAL","ZERO_RANGE:NULL_ZERO_RANGE"]},
+    {"primitive_id":"C1-OPEN-LOC.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:COMPLEMENT","POSITIVE_SCALE:EQUAL","ZERO_RANGE:NULL_ZERO_RANGE"]},
+    {"primitive_id":"C1-CLOSE-LOC.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:COMPLEMENT","POSITIVE_SCALE:EQUAL","ZERO_RANGE:NULL_ZERO_RANGE"]},
+    {"primitive_id":"C1-SIGNED-EFF.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SIGN_REVERSE","UP_DOWN_REVERSAL:SIGN_REVERSE","POSITIVE_SCALE:EQUAL","ZERO_RANGE:NULL_ZERO_RANGE"]},
+    {"primitive_id":"C1-DIRECTION.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:UP_DOWN_SWAP_FLAT_INVARIANT","UP_DOWN_REVERSAL:UP_DOWN_SWAP_FLAT_INVARIANT","POSITIVE_SCALE:EQUAL","ZERO_RANGE:FLAT"]},
+    {"primitive_id":"C1-TRUE-RANGE-ABS.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:EQUAL","POSITIVE_SCALE:SCALE","REMOVE_CONTIGUOUS_PRIOR:NULL_PRIOR_CLOSE_REQUIRED"]},
+    {"primitive_id":"C1-TRUE-RANGE-TICKS.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:EQUAL","POSITIVE_SCALE:EQUAL","REMOVE_CONTIGUOUS_PRIOR:NULL_PRIOR_CLOSE_AND_PRICE_INCREMENT_REQUIRED"]},
+    {"primitive_id":"C1-CLOSE-CHANGE.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SIGN_REVERSE","POSITIVE_SCALE:SCALE","REMOVE_CONTIGUOUS_PRIOR:NULL_PRIOR_CLOSE_REQUIRED"]},
+    {"primitive_id":"C1-OPEN-GAP.v0.1","relations":["PRICE_TRANSLATION:EQUAL","PRICE_REFLECTION:SIGN_REVERSE","POSITIVE_SCALE:SCALE","REMOVE_CONTIGUOUS_PRIOR:NULL_PRIOR_CLOSE_REQUIRED"]}
+  ],
+  "global_relations": ["CANONICAL_REORDER:IDENTICAL_LOGICAL_HASH", "SAME_INPUTS:SAME_OUTPUT_BYTES"],
+  "implementation_imports_prohibited": ["ovc.opt_b.c1.formulas", "ovc.research_operations.v0_3.metamorphic"],
+  "mutation": "PROHIBITED_WITHOUT_NEW_PLAN_AND_OPERATOR_GATE"
+}

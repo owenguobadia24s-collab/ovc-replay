@@ -1,0 +1,69 @@
+schema: ovc-ro3-fixture-matrix/v1
+status: FROZEN_AT_RO3_G0
+cases:
+  - id: valid_discovery_record
+    packet: RO3-WP1
+    expected: PASS
+  - id: valid_development_record
+    packet: RO3-WP1
+    expected: PASS
+  - id: validation_content_request
+    packet: ALL
+    expected: DENY_BEFORE_PATH_OBJECT_RECORD_TIMESTAMP_RESOLUTION
+  - id: unknown_role_clock_side_formula_schema
+    packet: ALL
+    expected: BLOCK
+  - id: reordered_logical_inputs
+    packet: RO3-WP1
+    expected: IDENTICAL_LOGICAL_HASH
+  - id: zero_range
+    packet: RO3-WP2
+    expected: ABSOLUTE_GEOMETRY_VALID_REGISTERED_RATIOS_NULL
+  - id: first_record_in_partition
+    packet: RO3-WP2
+    expected: NO_PRIOR_BAR
+  - id: gap_adjacent_bar
+    packet: RO3-WP2
+    expected: NO_CONTIGUOUS_PRIOR_BAR_NO_BACKWARD_SEARCH
+  - id: prior_identity_mismatch
+    packet: RO3-WP2
+    expected: PRIOR_IDENTITY_MISMATCH
+  - id: missing_price_increment
+    packet: RO3-WP2
+    expected: TICK_FIELDS_NULL_PRICE_FIELDS_VALID
+  - id: source_inadmissible_bar
+    packet: RO3-WP2
+    expected: NO_C1_RECORD_REJECTION_COUNTED
+  - id: comparison_without_acknowledgement
+    packet: RO3-WP2
+    expected: HEADER_ONLY_ACKNOWLEDGEMENT_REQUIRED
+  - id: comparison_mismatched_acknowledgement
+    packet: RO3-WP2
+    expected: FAIL_CLOSED
+  - id: registry_one_byte_mutation
+    packet: RO3-WP2
+    expected: IDENTITY_AND_DIFF_CHANGE
+  - id: translation_reflection_reversal_scale
+    packet: RO3-WP3
+    expected: REGISTERED_RELATIONS_REPRODUCE
+  - id: implementation_derived_expectations
+    packet: RO3-WP3
+    expected: BLOCK
+  - id: float_nan_infinity_contamination
+    packet: RO3-WP3
+    expected: BLOCK
+  - id: corrupted_formula_implementation
+    packet: RO3-WP3
+    expected: DETECTED
+  - id: missing_lineage_link
+    packet: RO3-WP4
+    expected: LINEAGE_INCOMPLETE
+  - id: write_capable_console_payload
+    packet: RO3-WP4
+    expected: REJECT
+  - id: c1_null_and_c2_transition_same_compact_card
+    packet: RO3-WP4
+    expected: PRESENTATION_BLOCK
+  - id: console_route_enabled_before_rc_g4
+    packet: RO3-WP4
+    expected: AUTHORITY_BLOCK

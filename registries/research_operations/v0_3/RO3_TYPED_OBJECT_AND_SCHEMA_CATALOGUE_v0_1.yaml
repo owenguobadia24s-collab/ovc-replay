@@ -1,0 +1,66 @@
+schema: ovc-ro3-typed-object-catalogue/v1
+status: FROZEN_AT_RO3_G0
+objects:
+  - id: RO3.C1ReleaseIndex.v1
+    owner: RO3-WP1
+    authority: LOCAL_REPLACEABLE_DERIVED
+    storage: LOCAL_DERIVED
+  - id: RO3.C1PrimitiveIndex.v1
+    owner: RO3-WP1
+    authority: LOCAL_REPLACEABLE_DERIVED
+    storage: LOCAL_DERIVED
+  - id: RO3.C1RecordFamilyIndex.v1
+    owner: RO3-WP1
+    authority: LOCAL_REPLACEABLE_DERIVED
+    storage: LOCAL_DERIVED
+  - id: RO3.C1CoverageProfile.v1
+    owner: RO3-WP1
+    authority: LOCAL_REPLACEABLE_DERIVED
+    storage: LOCAL_DERIVED
+  - id: RO3.C1ComputabilityProfile.v1
+    owner: RO3-WP2
+    authority: DERIVED_EXPLANATION_ONLY
+    storage: LOCAL_DERIVED
+  - id: RO3.C1NullReasonProfile.v1
+    owner: RO3-WP2
+    authority: DERIVED_EXPLANATION_ONLY
+    storage: LOCAL_DERIVED
+  - id: RO3.C1FormulaVersionDiff.v1
+    owner: RO3-WP2
+    authority: DERIVED_COMPARISON_ONLY
+    storage: COMPACT_EVIDENCE
+    acknowledgement_required: true
+  - id: RO3.C1AffectedSurface.v1
+    owner: RO3-WP2
+    authority: IMPACT_EVIDENCE_ONLY
+    storage: COMPACT_EVIDENCE
+  - id: RO3.C1SymmetryAssertion.v1
+    owner: RO3-WP3
+    authority: QA_EVIDENCE_ONLY
+    storage: COMPACT_EVIDENCE
+  - id: RO3.C1MetamorphicRun.v1
+    owner: RO3-WP3
+    authority: QA_EVIDENCE_ONLY
+    storage: COMPACT_EVIDENCE
+  - id: RO3.C1DeterminismReceipt.v1
+    owner: RO3-WP3
+    authority: QA_EVIDENCE_ONLY
+    storage: COMPACT_EVIDENCE
+  - id: RO3.C1LineageTrace.v1
+    owner: RO3-WP4
+    authority: READ_ONLY_TRACE
+    storage: LOCAL_DERIVED
+  - id: RO3.C1ConsoleProjection.v1
+    owner: RO3-WP4
+    authority: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
+    storage: LOCAL_DERIVED
+    live_route: DISABLED_PENDING_RC_G4
+  - id: RO3.DownstreamTraceProjection.v1
+    owner: RO3-WP4
+    authority: READ_ONLY_TRACE
+    storage: LOCAL_DERIVED
+    separate_panel_required: true
+identity_rules:
+  hash: SHA256_CANONICAL_LOGICAL_CONTENT
+  excludes: [absolute_path, machine_name, process_id, run_timestamp, display_order, pagination]
+unknown_object_or_schema: BLOCK
