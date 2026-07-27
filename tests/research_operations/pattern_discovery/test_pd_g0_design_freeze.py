@@ -100,7 +100,7 @@ class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
             "commit atomically",
             "every 30 seconds for up to 5 minutes",
             "Streamlit does not receive",
-            "AUDIT_CHAIN",
+            "Audit chain",
         ]:
             self.assertIn(required.lower(), text.lower())
 
