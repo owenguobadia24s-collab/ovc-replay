@@ -16,7 +16,6 @@ from typing import Any, Mapping, Sequence
 
 from . import dukascopy_intake as intake
 
-
 PLAN_ID = "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1"
 AUTHORITY_GATE = "RPS-G3"
 SLICE_ID = "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1"
@@ -29,20 +28,15 @@ OPERATION_MODE = "TIME_GATED_REPLAY"
 SIGNATURE_NAMESPACE = "ovc-rps"
 ALGORITHM = "ED25519"
 SIGNATURE_FORMAT = "SSHSIG_OPENSSH_V1"
-_OPERATOR_ID = re.compile(r"^OVC\.OPERATOR\.[A-Z0-9][A-Z0-9_.-]*\.v[0-9]+$")
+_OPERATOR_ID = re.compile(r"^OVC\.OPERATOR\.[A-Z0-9][A-Z0-9_.-]*\.V[0-9]+$")
 
 
 class ReplayAcceptanceError(RuntimeError):
-    """Raised when RPS-WP4 cannot complete lawfully."""
+    pass
 
 
 def canonical_bytes(value: object) -> bytes:
-    return json.dumps(
-        value,
-        sort_keys=True,
-        separators=(",", ":"),
-        ensure_ascii=True,
-    ).encode("utf-8")
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
 
 
 def canonical_sha256(value: object) -> str:
@@ -81,9 +75,7 @@ def truthy(value: str | None) -> bool:
 def validate_operator_id(operator_id: str) -> str:
     value = operator_id.strip().upper()
     if not _OPERATOR_ID.fullmatch(value):
-        raise ReplayAcceptanceError(
-            "operator ID must match OVC.OPERATOR.<UPPERCASE_ID>.v<NUMBER>"
-        )
+        raise ReplayAcceptanceError("operator ID must match OVC.OPERATOR.<UPPERCASE_ID>.V<NUMBER>")
     return value
 
 
@@ -93,34 +85,16 @@ def operator_slug(operator_id: str) -> str:
 
 def repository_state(repository_root: Path) -> tuple[str, str]:
     try:
-        branch = subprocess.run(
-            ["git", "branch", "--show-current"],
-            cwd=repository_root,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        commit = subprocess.run(
-            ["git", "rev-parse", "HEAD"],
-            cwd=repository_root,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        changes = subprocess.run(
-            ["git", "status", "--porcelain", "--untracked-files=no"],
-            cwd=repository_root,
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
+        branch = subprocess.run(["git", "branch", "--show-current"], cwd=repository_root, check=True, capture_output=True, text=True).stdout.strip()
+        commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repository_root, check=True, capture_output=True, text=True).stdout.strip()
+        changes = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=repository_root, check=True, capture_output=True, text=True).stdout.strip()
     except (OSError, subprocess.CalledProcessError) as exc:
         raise ReplayAcceptanceError("unable to resolve repository state") from exc
     if branch != "main":
         raise ReplayAcceptanceError("RPS-WP4 local execution requires the main branch")
     if changes:
         raise ReplayAcceptanceError("RPS-WP4 requires a clean tracked worktree")
-    if len(commit) != 40 or any(char not in "0123456789abcdef" for char in commit):
+    if len(commit) != 40 or any(c not in "0123456789abcdef" for c in commit):
         raise ReplayAcceptanceError("invalid repository commit identity")
     return branch, commit
 
@@ -136,39 +110,28 @@ def safe_file(root: Path, relative: str) -> Path:
     path = root / Path(relative)
     if path.is_symlink() or not path.is_file():
         raise ReplayAcceptanceError(f"required regular file unavailable: {relative}")
-    resolved_root = root.resolve(strict=True)
-    resolved = path.resolve(strict=True)
     try:
-        resolved.relative_to(resolved_root)
+        path.resolve(strict=True).relative_to(root.resolve(strict=True))
     except ValueError as exc:
         raise ReplayAcceptanceError(f"file escapes governed root: {relative}") from exc
-    return resolved
+    return path.resolve(strict=True)
 
 
-def evidence_index_path(repository_root: Path) -> Path:
-    return (
-        repository_root
-        / "docs"
-        / "releases"
-        / "prospective-source-v0-1"
-        / "rps-wp3"
-        / "RPS_WP3_COMPACT_COMPUTE_EVIDENCE_INDEX.json"
-    )
-
-
-def acceptance_state_path(repository_root: Path) -> Path:
-    return (
-        repository_root
-        / "registries"
-        / "research_operations"
-        / "prospective_source"
-        / "RPS_G3_ACCEPTANCE_STATE_v0_1.json"
-    )
+def _repo_json(repository_root: Path, relative: str, code: str) -> dict[str, Any]:
+    return load_json(repository_root / relative, code)
 
 
 def load_governed_acceptance(repository_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
-    index = load_json(evidence_index_path(repository_root), "INVALID_RPS_G3_EVIDENCE_INDEX")
-    state = load_json(acceptance_state_path(repository_root), "INVALID_RPS_G3_STATE")
+    index = _repo_json(
+        repository_root,
+        "docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_COMPACT_COMPUTE_EVIDENCE_INDEX.json",
+        "INVALID_RPS_G3_EVIDENCE_INDEX",
+    )
+    state = _repo_json(
+        repository_root,
+        "registries/research_operations/prospective_source/RPS_G3_ACCEPTANCE_STATE_v0_1.json",
+        "INVALID_RPS_G3_STATE",
+    )
     expected = {
         "gate_id": "RPS-G3",
         "run_id": RUN_ID,
@@ -181,33 +144,20 @@ def load_governed_acceptance(repository_root: Path) -> tuple[dict[str, Any], dic
     for key, value in expected.items():
         if index.get(key) != value:
             raise ReplayAcceptanceError(f"RPS-G3 evidence mismatch:{key}")
-    if state.get("gate_status") != "APPROVED":
-        raise ReplayAcceptanceError("RPS-G3 is not approved")
-    if state.get("packet_status") != "COMPLETED":
-        raise ReplayAcceptanceError("RPS-WP3 is not complete")
-    if state.get("active_binding_id") is not None:
-        raise ReplayAcceptanceError("RPS-G3 state unexpectedly contains an active binding")
-    if state.get("active_research_triage") is not False:
-        raise ReplayAcceptanceError("active research triage must remain false")
+    if state.get("gate_status") != "APPROVED" or state.get("packet_status") != "COMPLETED":
+        raise ReplayAcceptanceError("RPS-G3/RPS-WP3 is not complete")
+    if state.get("active_binding_id") is not None or state.get("active_research_triage") is not False:
+        raise ReplayAcceptanceError("RPS-G3 must remain non-activating")
     if state.get("write_authority") is not False:
         raise ReplayAcceptanceError("write authority must remain false")
     return index, state
 
 
-def verify_compute_run(
-    repository_root: Path,
-    environ: Mapping[str, str],
-) -> tuple[Path, dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+def verify_compute_run(repository_root: Path, environ: Mapping[str, str]):
     index, _ = load_governed_acceptance(repository_root)
-    root = (
-        external_root(repository_root, environ)
-        / "prospective-source"
-        / "compute"
-        / RUN_ID
-    )
+    root = external_root(repository_root, environ) / "prospective-source" / "compute" / RUN_ID
     if not root.is_dir():
         raise ReplayAcceptanceError(f"accepted compute run unavailable: {root}")
-
     compact_paths = {
         "coverage.json": "qa/coverage.json",
         "compute-receipt.json": "compute-receipt.json",
@@ -220,11 +170,8 @@ def verify_compute_run(
         raise ReplayAcceptanceError("compact compute inventory mismatch")
     for name, relative in compact_paths.items():
         path = safe_file(root, relative)
-        expected = compact[name]
-        if path.stat().st_size != int(expected["size_bytes"]):
-            raise ReplayAcceptanceError(f"compact size mismatch:{name}")
-        if sha_file(path) != expected["sha256"]:
-            raise ReplayAcceptanceError(f"compact SHA-256 mismatch:{name}")
+        if path.stat().st_size != int(compact[name]["size_bytes"]) or sha_file(path) != compact[name]["sha256"]:
+            raise ReplayAcceptanceError(f"compact byte mismatch:{name}")
 
     manifest_path = safe_file(root, "output-manifest.json")
     manifest = load_json(manifest_path, "INVALID_OUTPUT_MANIFEST")
@@ -234,7 +181,6 @@ def verify_compute_run(
         raise ReplayAcceptanceError("output manifest logical SHA-256 mismatch")
     if sha_file(manifest_path) != index["output_manifest_file_sha256"]:
         raise ReplayAcceptanceError("output manifest file SHA-256 mismatch")
-
     files = manifest.get("files")
     if not isinstance(files, list) or len(files) != 21 or manifest.get("file_count") != 21:
         raise ReplayAcceptanceError("output payload inventory count mismatch")
@@ -244,53 +190,30 @@ def verify_compute_run(
         if not isinstance(item, dict):
             raise ReplayAcceptanceError("invalid output manifest file entry")
         relative = str(item.get("path", ""))
-        if not relative or relative in declared or "\\" in relative or relative.startswith("/"):
+        if not relative or relative in declared or "\\" in relative or relative.startswith("/") or ".." in Path(relative).parts:
             raise ReplayAcceptanceError(f"unsafe or duplicate output path:{relative}")
-        if ".." in Path(relative).parts:
-            raise ReplayAcceptanceError(f"unsafe output path:{relative}")
         declared.add(relative)
         path = safe_file(root, relative)
-        if path.stat().st_size != int(item.get("size_bytes", -1)):
-            raise ReplayAcceptanceError(f"derived payload size mismatch:{relative}")
-        if sha_file(path) != item.get("sha256"):
-            raise ReplayAcceptanceError(f"derived payload SHA-256 mismatch:{relative}")
+        if path.stat().st_size != int(item.get("size_bytes", -1)) or sha_file(path) != item.get("sha256"):
+            raise ReplayAcceptanceError(f"derived payload byte mismatch:{relative}")
         payload_bytes += path.stat().st_size
     if payload_bytes != 5_557_327:
         raise ReplayAcceptanceError("derived payload byte count mismatch")
 
-    run = load_json(
-        safe_file(root, "prospective-compute-run.json"),
-        "INVALID_COMPUTE_RUN",
-    )
-    binding = load_json(
-        safe_file(root, "prospective-source-binding.json"),
-        "INVALID_SOURCE_BINDING",
-    )
-    receipt = load_json(
-        safe_file(root, "compute-receipt.json"),
-        "INVALID_COMPUTE_RECEIPT",
-    )
-    coverage = load_json(
-        safe_file(root, "qa/coverage.json"),
-        "INVALID_COVERAGE",
-    )
+    run = load_json(safe_file(root, "prospective-compute-run.json"), "INVALID_COMPUTE_RUN")
+    binding = load_json(safe_file(root, "prospective-source-binding.json"), "INVALID_SOURCE_BINDING")
+    receipt = load_json(safe_file(root, "compute-receipt.json"), "INVALID_COMPUTE_RECEIPT")
+    coverage = load_json(safe_file(root, "qa/coverage.json"), "INVALID_COVERAGE")
     if run.get("run_id") != RUN_ID or run.get("status") != "COMPLETE":
         raise ReplayAcceptanceError("compute run identity or status mismatch")
-    if binding.get("binding_id") != BINDING_ID:
-        raise ReplayAcceptanceError("source binding identity mismatch")
-    if binding.get("status") != "ACCEPTED_FOR_REPLAY_CANDIDATE":
-        raise ReplayAcceptanceError("source binding status mismatch")
-    if binding.get("active_research_triage") is not False:
-        raise ReplayAcceptanceError("binding must remain non-activating")
-    if binding.get("write_authority") is not False:
-        raise ReplayAcceptanceError("binding must not grant write authority")
-    if receipt.get("status") != "COMPLETE_LOCAL_CANDIDATE":
-        raise ReplayAcceptanceError("compute receipt status mismatch")
-    if coverage.get("qa_state") != "PASS_GAPPED_EXCLUSION":
-        raise ReplayAcceptanceError("coverage QA is not accepted")
-    for value in (manifest, run, binding, receipt):
-        if value.get("operation_mode") != OPERATION_MODE:
-            raise ReplayAcceptanceError("operation mode mismatch")
+    if binding.get("binding_id") != BINDING_ID or binding.get("status") != "ACCEPTED_FOR_REPLAY_CANDIDATE":
+        raise ReplayAcceptanceError("source binding identity or status mismatch")
+    if binding.get("active_research_triage") is not False or binding.get("write_authority") is not False:
+        raise ReplayAcceptanceError("source binding must remain non-activating")
+    if receipt.get("status") != "COMPLETE_LOCAL_CANDIDATE" or coverage.get("qa_state") != "PASS_GAPPED_EXCLUSION":
+        raise ReplayAcceptanceError("compute receipt or coverage QA mismatch")
+    if any(value.get("operation_mode") != OPERATION_MODE for value in (manifest, run, binding, receipt)):
+        raise ReplayAcceptanceError("operation mode mismatch")
     return root, manifest, run, binding, receipt
 
 
@@ -301,18 +224,14 @@ def ssh_keygen() -> str:
     return path
 
 
-def key_root(repository_root: Path, environ: Mapping[str, str], operator_id: str) -> Path:
-    return (
+def key_paths(repository_root: Path, environ: Mapping[str, str], operator_id: str) -> tuple[Path, Path]:
+    private = (
         external_root(repository_root, environ)
         / "prospective-source"
         / "operator-signing"
         / operator_slug(operator_id)
+        / "id_ed25519"
     )
-
-
-def key_paths(repository_root: Path, environ: Mapping[str, str], operator_id: str) -> tuple[Path, Path]:
-    root = key_root(repository_root, environ, operator_id)
-    private = root / "id_ed25519"
     return private, private.with_suffix(".pub")
 
 
@@ -321,14 +240,8 @@ def public_key_details(public_key_path: Path, operator_id: str) -> dict[str, Any
     parts = line.split()
     if len(parts) < 2 or parts[0] != "ssh-ed25519":
         raise ReplayAcceptanceError("operator public key is not Ed25519")
-    result = subprocess.run(
-        [ssh_keygen(), "-lf", str(public_key_path), "-E", "sha256"],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    fingerprint_line = result.stdout.strip()
-    fields = fingerprint_line.split()
+    result = subprocess.run([ssh_keygen(), "-lf", str(public_key_path), "-E", "sha256"], check=True, capture_output=True, text=True)
+    fields = result.stdout.strip().split()
     if len(fields) < 2 or not fields[1].startswith("SHA256:"):
         raise ReplayAcceptanceError("unable to resolve Ed25519 public-key fingerprint")
     return {
@@ -340,20 +253,11 @@ def public_key_details(public_key_path: Path, operator_id: str) -> dict[str, Any
         "public_key_sha256": hashlib.sha256((line + "\n").encode("utf-8")).hexdigest(),
         "public_key_fingerprint": fields[1],
         "private_key_in_git": False,
-        "private_key_alias": (
-            f"OVC_EXTERNAL_ARTIFACT_ROOT/prospective-source/operator-signing/"
-            f"{operator_slug(operator_id)}/id_ed25519"
-        ),
+        "private_key_alias": f"OVC_EXTERNAL_ARTIFACT_ROOT/prospective-source/operator-signing/{operator_slug(operator_id)}/id_ed25519",
     }
 
 
-def setup_key(
-    repository_root: Path,
-    *,
-    operator_id: str,
-    authority_gate: str,
-    environ: Mapping[str, str] | None = None,
-) -> dict[str, Any]:
+def setup_key(repository_root: Path, *, operator_id: str, authority_gate: str, environ: Mapping[str, str] | None = None):
     values = os.environ if environ is None else environ
     if authority_gate != AUTHORITY_GATE:
         raise ReplayAcceptanceError(f"exact delegated authority required: --gate {AUTHORITY_GATE}")
@@ -367,27 +271,9 @@ def setup_key(
     if private.exists() or public.exists():
         raise ReplayAcceptanceError("refusing to overwrite existing operator key")
     try:
-        subprocess.run(
-            [
-                ssh_keygen(),
-                "-q",
-                "-t",
-                "ed25519",
-                "-N",
-                "",
-                "-C",
-                operator,
-                "-f",
-                str(private),
-            ],
-            check=True,
-            capture_output=True,
-            text=True,
-        )
+        subprocess.run([ssh_keygen(), "-q", "-t", "ed25519", "-N", "", "-C", operator, "-f", str(private)], check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as exc:
-        raise ReplayAcceptanceError(
-            f"ssh-keygen failed:{exc.stderr.strip() or exc.stdout.strip()}"
-        ) from exc
+        raise ReplayAcceptanceError(f"ssh-keygen failed:{exc.stderr.strip() or exc.stdout.strip()}") from exc
     details = public_key_details(public, operator)
     return {
         "status": "KEY_CREATED_AWAITING_PRIVATE_KEY_PROTECTION_CONFIRMATION",
@@ -401,68 +287,28 @@ def setup_key(
     }
 
 
-def sign_and_verify(
-    *,
-    private_key: Path,
-    public_key: str,
-    operator_id: str,
-    payload: bytes,
-) -> tuple[str, str]:
+def sign_and_verify(*, private_key: Path, public_key: str, operator_id: str, payload: bytes) -> tuple[str, str]:
     with tempfile.TemporaryDirectory(prefix="rps-wp4-sign-") as temporary:
         root = Path(temporary)
         payload_path = root / "payload.json"
         signature_path = root / "payload.json.sig"
-        allowed_path = root / "allowed_signers"
+        allowed = root / "allowed_signers"
         payload_path.write_bytes(payload)
-        allowed_path.write_text(
-            f'{operator_id} namespaces="{SIGNATURE_NAMESPACE}" {public_key}\n',
-            encoding="utf-8",
-        )
+        allowed.write_text(f'{operator_id} namespaces="{SIGNATURE_NAMESPACE}" {public_key}\n', encoding="utf-8")
         try:
-            subprocess.run(
-                [
-                    ssh_keygen(),
-                    "-Y",
-                    "sign",
-                    "-f",
-                    str(private_key),
-                    "-n",
-                    SIGNATURE_NAMESPACE,
-                    str(payload_path),
-                ],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
+            subprocess.run([ssh_keygen(), "-Y", "sign", "-f", str(private_key), "-n", SIGNATURE_NAMESPACE, str(payload_path)], check=True, capture_output=True, text=True)
         except subprocess.CalledProcessError as exc:
-            raise ReplayAcceptanceError(
-                f"Ed25519 signing failed:{exc.stderr.strip() or exc.stdout.strip()}"
-            ) from exc
+            raise ReplayAcceptanceError(f"Ed25519 signing failed:{exc.stderr.strip() or exc.stdout.strip()}") from exc
         if not signature_path.is_file():
             raise ReplayAcceptanceError("ssh-keygen did not create a signature")
         signature = signature_path.read_text(encoding="utf-8")
         verify = subprocess.run(
-            [
-                ssh_keygen(),
-                "-Y",
-                "verify",
-                "-f",
-                str(allowed_path),
-                "-I",
-                operator_id,
-                "-n",
-                SIGNATURE_NAMESPACE,
-                "-s",
-                str(signature_path),
-            ],
+            [ssh_keygen(), "-Y", "verify", "-f", str(allowed), "-I", operator_id, "-n", SIGNATURE_NAMESPACE, "-s", str(signature_path)],
             input=payload,
             capture_output=True,
         )
         if verify.returncode != 0:
-            raise ReplayAcceptanceError(
-                "Ed25519 signature verification failed:"
-                + verify.stderr.decode("utf-8", errors="replace").strip()
-            )
+            raise ReplayAcceptanceError("Ed25519 signature verification failed:" + verify.stderr.decode("utf-8", errors="replace").strip())
         return signature, hashlib.sha256(signature.encode("utf-8")).hexdigest()
 
 
@@ -471,34 +317,23 @@ def quarantine_staging(staging: Path, reason: str) -> Path | None:
         return None
     quarantine = staging.parent / "quarantine"
     quarantine.mkdir(parents=True, exist_ok=True)
-    target = quarantine / (
-        f"RPS-WP4.{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}."
-        f"{uuid.uuid4().hex[:8]}"
-    )
+    target = quarantine / f"RPS-WP4.{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.{uuid.uuid4().hex[:8]}"
     try:
-        write_json(
-            staging / "failure-receipt.json",
-            {
-                "schema": "ovc-rps-wp4-failure/v1",
-                "reason": reason,
-                "private_key_in_git": False,
-                "provider_network_access_performed": False,
-                "active_research_triage": False,
-                "write_authority": False,
-            },
-        )
+        write_json(staging / "failure-receipt.json", {
+            "schema": "ovc-rps-wp4-failure/v1",
+            "reason": reason,
+            "private_key_in_git": False,
+            "provider_network_access_performed": False,
+            "active_research_triage": False,
+            "write_authority": False,
+        })
     except Exception:
         pass
     staging.rename(target)
     return target
 
 
-def preflight(
-    repository_root: Path,
-    *,
-    operator_id: str,
-    environ: Mapping[str, str] | None = None,
-) -> dict[str, Any]:
+def preflight(repository_root: Path, *, operator_id: str, environ: Mapping[str, str] | None = None):
     values = os.environ if environ is None else environ
     operator = validate_operator_id(operator_id)
     branch, commit = repository_state(repository_root)
@@ -529,7 +364,7 @@ def accept_replay(
     authority_gate: str,
     confirm_private_key_protected: bool,
     environ: Mapping[str, str] | None = None,
-) -> dict[str, Any]:
+):
     values = os.environ if environ is None else environ
     if authority_gate != AUTHORITY_GATE:
         raise ReplayAcceptanceError(f"exact delegated authority required: --gate {AUTHORITY_GATE}")
@@ -541,10 +376,8 @@ def accept_replay(
     _, repository_commit = repository_state(repository_root)
     _, manifest, run, source_binding, _ = verify_compute_run(repository_root, values)
     private, public = key_paths(repository_root, values, operator)
-    if private.is_symlink() or not private.is_file():
-        raise ReplayAcceptanceError("operator private key is unavailable or unsafe")
-    if public.is_symlink() or not public.is_file():
-        raise ReplayAcceptanceError("operator public key is unavailable or unsafe")
+    if private.is_symlink() or not private.is_file() or public.is_symlink() or not public.is_file():
+        raise ReplayAcceptanceError("operator key pair is unavailable or unsafe")
     key = public_key_details(public, operator)
 
     signing_identity = {
@@ -570,8 +403,7 @@ def accept_replay(
         "write_authority": False,
         "status": "REGISTERED_REPLAY_ONLY_CANDIDATE",
     }
-
-    acceptance_body = {
+    body = {
         "schema": "ovc-rps-time-gated-replay-acceptance/v1",
         "plan_id": PLAN_ID,
         "authority_gate": AUTHORITY_GATE,
@@ -607,8 +439,8 @@ def accept_replay(
         "execution_authority": "NONE",
         "agent_write_authority": "NONE",
     }
-    acceptance_id = f"RPS.REPLAY-ACCEPT.{canonical_sha256(acceptance_body)[:24]}"
-    signed_payload = {**acceptance_body, "acceptance_id": acceptance_id}
+    acceptance_id = f"RPS.REPLAY-ACCEPT.{canonical_sha256(body)[:24]}"
+    signed_payload = {**body, "acceptance_id": acceptance_id}
     signature, signature_sha = sign_and_verify(
         private_key=private,
         public_key=key["public_key"],
@@ -626,11 +458,7 @@ def accept_replay(
         "status": "SIGNED_REPLAY_ACCEPTANCE_CANDIDATE",
     }
 
-    root = (
-        external_root(repository_root, values)
-        / "prospective-source"
-        / "replay-acceptance"
-    )
+    root = external_root(repository_root, values) / "prospective-source" / "replay-acceptance"
     root.mkdir(parents=True, exist_ok=True)
     final = root / acceptance_id
     if final.exists():
@@ -674,18 +502,11 @@ def accept_replay(
             "acceptance_id": acceptance_id,
             "signing_binding_id": signing_binding_id,
             "operator_id": operator,
-            "operator_signing_binding_file_sha256": verification[
-                "operator_signing_binding_file_sha256"
-            ],
-            "time_gated_replay_acceptance_file_sha256": verification[
-                "time_gated_replay_acceptance_file_sha256"
-            ],
+            "operator_signing_binding_file_sha256": verification["operator_signing_binding_file_sha256"],
+            "time_gated_replay_acceptance_file_sha256": verification["time_gated_replay_acceptance_file_sha256"],
             "signature_verification_receipt_file_sha256": sha_file(verification_path),
             "current_authority": "TIME_GATED_REPLAY_ACCEPTED_NON_ACTIVATING",
-            "proposed_delta": (
-                "ACTIVATE_EXACT_BINDING_FOR_ACTIVE_RESEARCH_TRIAGE_AND_ENABLE_"
-                "PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION"
-            ),
+            "proposed_delta": "ACTIVATE_EXACT_BINDING_FOR_ACTIVE_RESEARCH_TRIAGE_AND_ENABLE_PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION",
             "operator_approval_required": True,
             "active_binding_id": None,
             "active_research_triage": False,
@@ -697,8 +518,7 @@ def accept_replay(
             "validation_consumption": "DENIED",
             "status": "RPS_G4_EVIDENCE_CANDIDATE",
         }
-        gate_path = staging / "rps-g4-operator-gate-input.json"
-        write_json(gate_path, gate_input)
+        write_json(staging / "rps-g4-operator-gate-input.json", gate_input)
         staging.rename(final)
     except Exception as exc:
         quarantine_staging(staging, str(exc))
@@ -727,12 +547,7 @@ def accept_replay(
 
 
 def parser() -> argparse.ArgumentParser:
-    value = argparse.ArgumentParser(
-        description=(
-            "Operator-local RPS-WP4 Ed25519 signing binding and "
-            "TIME_GATED_REPLAY acceptance preparation."
-        )
-    )
+    value = argparse.ArgumentParser(description="Operator-local RPS-WP4 Ed25519 signing binding and TIME_GATED_REPLAY acceptance preparation.")
     value.add_argument("command", choices=("preflight", "setup-key", "accept-replay"))
     value.add_argument("--repository-root", type=Path, default=Path.cwd())
     value.add_argument("--operator-id", required=True)
@@ -746,10 +561,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         repository_root = arguments.repository_root.resolve(strict=True)
         if arguments.command == "preflight":
-            result = preflight(
-                repository_root,
-                operator_id=arguments.operator_id,
-            )
+            result = preflight(repository_root, operator_id=arguments.operator_id)
         elif arguments.command == "setup-key":
             result = setup_key(
                 repository_root,
