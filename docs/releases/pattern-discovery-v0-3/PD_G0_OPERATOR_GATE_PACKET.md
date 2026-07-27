@@ -8,7 +8,8 @@
 - Governing source SHA-256: `03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa`
 - Baseline commit: `3c0785ddb571a4af6de4bf5756a1dfae7e2d3557`
 - Candidate branch: `build/pd-00-pattern-discovery-v0-3-freeze`
-- Candidate commit: GitHub PR head at operator review time
+- Approved candidate commit: `65ea7998059fbce7f2aa858166e12fdbf7ff0a14`
+- Decision record: `docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_DECISION.md`
 
 ## Completed packets
 
@@ -21,19 +22,19 @@
 - Typed schema candidates and trigger/implementation registries.
 - Focused QA tests and dedicated CI workflow.
 
-## Current authority
+## Current authority before decision
 
-- Canonical C2 Discovery remains unchanged.
-- C2 prospective evidence operation remains governed by the accepted C2-G7/C2 v0.2 contracts.
-- Validation remains `LOCKED_UNCONSUMED`.
-- Pattern Discovery has design-candidate authority only.
-- C2E, C2.5, C3, OPT-C, OPT-D, probability, exposure, trading, execution and agent-write authority remain `NONE`.
+- Canonical C2 Discovery remained unchanged.
+- C2 prospective evidence operation remained governed by the accepted C2-G7/C2 v0.2 contracts.
+- Validation remained `LOCKED_UNCONSUMED`.
+- Pattern Discovery had design-candidate authority only.
+- C2E, C2.5, C3, OPT-C, OPT-D, probability, exposure, trading, execution and agent-write authority remained `NONE`.
 
-## Proposed authority delta
+## Approved authority delta
 
-Approve the frozen Pattern Discovery design and permit `PD-WP1` to implement the transition extractor and deterministic candidate-window engine on fixtures and approved read-only C2 inputs.
+`PD-WP1` may implement the frozen Pattern Discovery transition extractor and deterministic candidate-window engine on fixtures and approved read-only C2 inputs.
 
-The proposed delta does **not** activate prospective processing, novelty ranking, clustering authority, the UI evidence bridge, evidence writes, selector changes or downstream model authority.
+The approved delta does **not** activate prospective processing, novelty ranking, clustering authority, the UI evidence bridge, evidence writes, selector changes, release changes, R2 mutation or downstream model authority.
 
 ## Acceptance conditions
 
@@ -53,7 +54,7 @@ The proposed delta does **not** activate prospective processing, novelty ranking
 - Focused suite: `tests.research_operations.pattern_discovery.test_pd_g0_design_freeze`
 - Canonical suite: `python -m unittest discover -s tests -p 'test_*.py'`
 - Workflow: `.github/workflows/pd-g0-pattern-discovery-design-freeze.yml`
-- Successful run: GitHub Actions `30254408829`
+- Successful final run: GitHub Actions `30254489870`
 - Focused test step: `PASS`
 - Canonical repository test step: `PASS`
 - Diagnostic artifact upload: `PASS`
@@ -91,6 +92,7 @@ None inside PD-00 design scope. Runtime performance, trigger precision, operator
 - `registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_TRIGGER_REGISTRY_v0_1.yaml`
 - `tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py`
 - `docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_GATE_PACKET.md`
+- `docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_DECISION.md`
 
 ## External artifacts and hashes
 
@@ -99,14 +101,16 @@ None inside PD-00 design scope. Runtime performance, trigger precision, operator
 
 ## Rollback
 
-Close the candidate PR or reset the unmerged branch reference. Main, active C2 selectors, releases, evidence records and R2 remain unchanged. No destructive action is required.
+Close or abandon the unmerged PD-00 and downstream candidate branches. Main, active C2 selectors, releases, evidence records and R2 remain unchanged. No destructive action is required.
 
-## Recommended decision
+## Operator decision
 
 `PASS`
 
-The design packet is complete, the focused PD-G0 assertions pass and the canonical repository suite passes. Approval remains an operator authority decision.
+- Approval command: `OVC APPROVE PD-G0`
+- Approval date: `2026-07-27`
+- Decision authority: operator-reserved project authority
 
-## Exact work that begins automatically after approval
+## Exact work beginning automatically
 
-`PD-WP1` starts on a new bounded branch from the approved baseline. It will implement TransitionRecord extraction, TriggerEvent persistence, candidate deduplication, deterministic open/accumulate/close behaviour, gap/quarantine/selector failure transitions, fixtures, tests and the `PD-G1` operator packet. It will stop at `PD-G1` and will not activate live prospective processing.
+`PD-WP1` starts on a new bounded branch from the approved decision state. It will implement TransitionRecord extraction, TriggerEvent persistence, candidate deduplication, deterministic open/accumulate/close behaviour, gap/quarantine/selector failure transitions, fixtures, tests and the `PD-G1` operator packet. It will stop at `PD-G1` and will not activate live prospective processing.
