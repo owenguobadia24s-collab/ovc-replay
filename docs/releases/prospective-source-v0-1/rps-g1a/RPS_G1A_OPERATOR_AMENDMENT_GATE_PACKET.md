@@ -9,32 +9,36 @@
 - Packet: `RPS-WP2`
 - Baseline main: `c61825aa6edc3389566e94316138391db49ac9d5`
 - Candidate implementation commit: `2aaed61438da65000a45542e7bbd097d9433cc00`
-- Candidate gate branch head tested through PR merge ref: `4a4ae30692af6b226ef79add115646eb3ad5b8ce`
+- Approved tested branch head: `bf65fedcd1cf354641fa25f87f4ab5acb642cae7`
 - Candidate branch: `build/rps-g1a-june-source-amendment`
 - Pull request: `#101`
-- Gate status: `GATE_READY`
-- Authority: `OPERATOR_REQUIRED`
+- Gate status: `APPROVED`
+- Decision: `PASS`
+- Authority: `OPERATOR`
+- Approval command: `OVC APPROVE RPS-G1A`
+- Decision record: `RPS_G1A_OPERATOR_DECISION.md`
 
 ## Completed work
 
 1. Preserved the original July attempt as a provider-availability incident without committing machine paths, raw provider bytes or quarantine payloads.
 2. Added an isolated RPS-G1A intake profile that reuses the accepted bounded BI5 implementation without mutating the historical RPS-G1 profile.
-3. Bound the operator wrapper to the proposed June slice and `RPS-G1A` gate.
+3. Bound the operator wrapper to the approved June slice and `RPS-G1A` gate.
 4. Added exact fake-provider tests for the replacement interval and regression protection for the historical July profile.
 5. Added a no-provider-access CI workflow definition.
 6. Updated the machine-readable programme registry, replacement profile manifest and Windows operator guide.
+7. Recorded the operator PASS decision and supersession of the unavailable July scope.
 
-## Current authority
+## Previous authority
 
 The operator approved one exact July 2026 intake under `RPS-G1`. That request could not complete because the required current-month native-H1 provider object returned HTTP 404. No accepted source slice was created.
 
-The July authority remains historical but unusable. It does not automatically transfer to another interval. Provider execution for the June candidate remains denied until this amendment gate passes.
+RPS-G1 is now superseded for intake execution. Its quarantined identity and bytes remain preserved and cannot be retried, relabelled or accepted under RPS-G1A.
 
-## Proposed authority delta
+## Approved authority delta
 
-Supersede only the unavailable RPS-G1 intake scope with one exact operator-local Dukascopy request:
+One exact operator-local Dukascopy request is authorised:
 
-| Field | Proposed RPS-G1A value |
+| Field | Approved RPS-G1A value |
 |---|---|
 | Provider | Dukascopy |
 | Instrument | GBP/USD |
@@ -49,7 +53,7 @@ Supersede only the unavailable RPS-G1 intake scope with one exact operator-local
 | Network location | Operator-local only; prohibited in CI |
 | Result authority | Local immutable source slice only; `NOT_A_RELEASE` |
 
-Approval of RPS-G1A withdraws authority to retry or accept the July identity under RPS-G1. The July quarantine remains evidence and cannot be relabelled, copied or reused as June data.
+Approval withdraws authority to retry or accept the July identity under RPS-G1. The July quarantine remains evidence and cannot be relabelled, copied or reused as June data.
 
 ## Acceptance conditions
 
@@ -62,7 +66,7 @@ Approval of RPS-G1A withdraws authority to retry or accept the July identity und
 7. The command aborts and quarantines on integrity failure or byte-limit breach.
 8. The final slice remains local-only, `NOT_A_RELEASE`, selector-ineligible, R2-denied, Validation-denied and LIVE_PROSPECTIVE-denied.
 9. Raw provider bytes, local quarantine payloads and machine paths remain outside Git.
-10. Provider execution remains impossible in CI and before operator approval.
+10. Provider execution remains impossible in CI.
 
 ## Tests and QA
 
@@ -80,25 +84,25 @@ Approval of RPS-G1A withdraws authority to retry or accept the July identity und
 
 ### CI evidence
 
-- Canonical workflow: `30281272345`
-- Canonical job: `90027978323`
+- Canonical workflow: `30281531558`
+- Canonical job: `90028842735`
 - Command: `PYTHONPATH=src python3 -m unittest discover -s tests -v`
 - Result: `PASS`
+- Provider request performed: `false`
 
-The canonical discovery suite included the new `test_dukascopy_intake_rps_g1a.py` file. Its tests exercise the exact June profile with generated fake BI5 objects, no-network preflight, wrong-gate rejection, CI execution denial and historical July-profile restoration. No provider request occurred.
-
-The dedicated amendment workflow definition is included for future branch/default-branch execution; the canonical repository workflow supplied the gate's executed test evidence.
+The canonical discovery suite included the June amendment tests. No provider request occurred.
 
 ### QA recommendation
 
-`PASS`. The candidate is deterministic, bounded, non-activating, tested without provider access and preserves every prohibited authority. No blocking warning or unresolved code defect remains inside the amendment packet.
+`PASS`, accepted by the operator. The candidate is deterministic, bounded, non-activating and preserves every prohibited authority.
 
 ## Warnings and unresolved issues
 
-- The June provider objects have not been requested from this GitHub execution environment.
-- Actual byte sizes and provider content are unknown until the operator executes locally after approval.
+- The June provider objects have not yet been requested locally.
+- Actual byte sizes and provider content remain unknown until operator execution.
 - A provider correction, gap, mismatch or unavailable object must quarantine the run; it cannot be silently repaired.
-- The July local quarantine is outside Git and must remain preserved by the operator.
+- The July local quarantine remains outside Git and must remain preserved by the operator.
+- RPS-WP2 is not complete until the compact accepted June manifest and receipts are supplied.
 
 ## Changed files
 
@@ -108,6 +112,7 @@ The dedicated amendment workflow definition is included for future branch/defaul
 - `.github/workflows/rps-g1a-june-source-amendment.yml`
 - `docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_PROVIDER_AVAILABILITY_INCIDENT.md`
 - `docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_REPLACEMENT_INTAKE_PROFILE.json`
+- `docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_DECISION.md`
 - `docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_WINDOWS_OPERATOR_GUIDE.md`
 - `registries/research_operations/prospective_source/REAL_PROSPECTIVE_SOURCE_IMPLEMENTATION_REGISTRY_v0_1.yaml`
 - this gate packet
@@ -122,25 +127,16 @@ ACTIVE_RESEARCH_TRIAGE, LIVE_PROSPECTIVE append, live Pattern Discovery processi
 
 ## Rollback
 
-Close PR #101 without merge and retain `main` at `c61825aa6edc3389566e94316138391db49ac9d5`. Preserve the July quarantine incident. No provider source, release, selector, R2 key, evidence row or active authority is changed by rollback.
+Before a frozen June slice exists, withdraw RPS-G1A authority and revert the amendment merge. Preserve the July quarantine and any June failure incident. After a checksum-addressed June slice freezes, preserve it and its receipts while withdrawing downstream consumption authority.
 
-## Recommended decision
+## Decision
 
-**PASS** — approve the exact June replacement scope and supersede the unavailable July intake authority.
-
-Allowed decisions: `PASS`, `DEFER`, `BLOCK`, `QUARANTINE`, `SUPERSEDE`.
+**PASS** — the exact June replacement scope is approved and the unavailable July intake authority is superseded.
 
 ## Exact work after approval
 
-1. Record the RPS-G1A operator decision and supersession of the July intake scope.
-2. Pin the final PR head, confirm canonical checks remain PASS and squash-merge PR #101 into `main`.
-3. Pull the approved main tip locally.
-4. Run the documented preflight and execute commands.
-5. Supply only the compact June manifest and six compact receipt files.
-6. Resume RPS-WP2 and evaluate RPS-G2.
-
-## Approval command
-
-```text
-OVC APPROVE RPS-G1A
-```
+1. Squash-merge the bounded amendment PR into `main` after pinning the final head and verifying checks.
+2. Pull the approved main tip locally.
+3. Run the documented preflight and execute commands.
+4. Supply only the compact June manifest and six compact receipt files.
+5. Resume RPS-WP2 and evaluate RPS-G2.
