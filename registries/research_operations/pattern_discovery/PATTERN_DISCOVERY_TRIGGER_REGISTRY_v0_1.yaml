@@ -1,0 +1,97 @@
+registry_id: RO.C2.PATTERN_DISCOVERY.TRIGGERS.v0.1
+status: DESIGN_FROZEN_CANDIDATE
+precedence:
+  - QUALITY_OR_INCIDENT
+  - CROSS_SCALE_CONFLICT
+  - STRUCTURAL_TRANSITION
+  - PERSISTENCE_OR_INSTABILITY
+  - NOVELTY
+  - RECURRENCE
+  - CONTROL
+triggers:
+  - trigger_id: TR-LOC-001
+    name: BOUNDARY_ZONE_ENTRY
+    family: STRUCTURAL_TRANSITION
+    inputs: [C2_LOCATION, C2_RELATION_SET]
+    first_valid_rule: FIRST_CLOSED_BAR_WITH_NEW_BOUNDARY_ZONE_MEMBERSHIP
+    closure_profile: CP-BOUNDARY-RESOLUTION
+    rate_limit_group: BOUNDARY_INTERACTION
+  - trigger_id: TR-INT-001
+    name: BREACH_ACTIVE
+    family: STRUCTURAL_TRANSITION
+    inputs: [C2_INTERACTION, C2_RELATION_SET]
+    first_valid_rule: FIRST_CLOSED_BAR_WITH_BREACH_ACTIVE
+    closure_profile: CP-BOUNDARY-RESOLUTION
+    rate_limit_group: BOUNDARY_INTERACTION
+  - trigger_id: TR-INT-002
+    name: RETURN_INSIDE
+    family: STRUCTURAL_TRANSITION
+    inputs: [C2_INTERACTION, C2_RELATION_SET]
+    first_valid_rule: FIRST_CLOSED_BAR_RETURNING_INSIDE_AFTER_BREACH
+    closure_profile: CP-STABLE-RESOLUTION
+    rate_limit_group: BOUNDARY_INTERACTION
+  - trigger_id: TR-ORG-001
+    name: COMPRESSION_TO_DISPLACEMENT
+    family: STRUCTURAL_TRANSITION
+    inputs: [C2_ORGANISATION, C2_MOTION]
+    first_valid_rule: FIRST_CLOSED_BAR_WITH_DECLARED_TRANSITION_PAIR
+    closure_profile: CP-STABLE-RESOLUTION
+    rate_limit_group: ORGANISATION_MOTION
+  - trigger_id: TR-XSC-001
+    name: LOCAL_PARENT_CONFLICT
+    family: CROSS_SCALE_CONFLICT
+    inputs: [C2_LOCAL_RELATIONS, C2_PARENT_RELATIONS]
+    first_valid_rule: FIRST_CLOSED_BAR_WITH_DECLARED_CONFLICT
+    closure_profile: CP-CROSS-SCALE-RESOLUTION
+    rate_limit_group: CROSS_SCALE
+  - trigger_id: TR-XSC-002
+    name: ALIGNMENT_GAINED
+    family: CROSS_SCALE_CONFLICT
+    inputs: [C2_LOCAL_RELATIONS, C2_PARENT_RELATIONS]
+    first_valid_rule: FIRST_CLOSED_BAR_AFTER_CONFLICT_WITH_ALIGNMENT
+    closure_profile: CP-STABLE-RESOLUTION
+    rate_limit_group: CROSS_SCALE
+  - trigger_id: TR-PER-001
+    name: LONG_PERSISTENCE
+    family: PERSISTENCE_OR_INSTABILITY
+    inputs: [C2_PERSISTENCE]
+    first_valid_rule: FIRST_CLOSED_BAR_MEETING_VERSIONED_DURATION
+    closure_profile: CP-RETURN_OR-MAX-DURATION
+    rate_limit_group: PERSISTENCE
+  - trigger_id: TR-INS-001
+    name: REPEATED_SWITCHING
+    family: PERSISTENCE_OR_INSTABILITY
+    inputs: [C2_TRANSITIONS]
+    first_valid_rule: FIRST_CLOSED_BAR_MEETING_VERSIONED_SWITCH_COUNT
+    closure_profile: CP-STABLE-RESOLUTION
+    rate_limit_group: INSTABILITY
+  - trigger_id: TR-NOV-001
+    name: UNSEEN_SIGNATURE
+    family: NOVELTY
+    inputs: [PATTERN_FINGERPRINT_LIBRARY]
+    first_valid_rule: FIRST_VALID_SIGNATURE_NOT_PRESENT_IN_ELIGIBLE_BASELINE
+    closure_profile: CP-MAX-DURATION
+    rate_limit_group: NOVELTY
+    active_before_novelty_gate: false
+  - trigger_id: TR-NOV-002
+    name: MEDOID_DISTANCE_HIGH
+    family: NOVELTY
+    inputs: [PATTERN_FINGERPRINT, CURRENT_CLUSTER_VERSION]
+    first_valid_rule: FIRST_VALID_DISTANCE_ABOVE_VERSIONED_BAND
+    closure_profile: CP-MAX-DURATION
+    rate_limit_group: NOVELTY
+    active_before_novelty_gate: false
+  - trigger_id: TR-REC-001
+    name: KNOWN_CLUSTER_RECURRENCE
+    family: RECURRENCE
+    inputs: [PATTERN_FINGERPRINT, CURRENT_CLUSTER_VERSION]
+    first_valid_rule: FIRST_VALID_DISTANCE_WITHIN_VERSIONED_RECURRENCE_BAND
+    closure_profile: CP-CLUSTER-SPECIFIC
+    rate_limit_group: RECURRENCE
+  - trigger_id: TR-CTL-001
+    name: DETERMINISTIC_STABLE_SAMPLE
+    family: CONTROL
+    inputs: [C2_STATE, CONTROL_SAMPLING_PACK]
+    first_valid_rule: DETERMINISTIC_SAMPLE_SELECTION
+    closure_profile: CP-FIXED-CONTROL-WINDOW
+    rate_limit_group: CONTROL
