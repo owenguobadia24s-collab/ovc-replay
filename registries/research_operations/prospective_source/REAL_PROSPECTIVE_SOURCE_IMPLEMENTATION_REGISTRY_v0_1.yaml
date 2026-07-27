@@ -1,0 +1,78 @@
+registry_id: RO.C2.REAL_PROSPECTIVE_SOURCE.IMPLEMENTATION.v0.1
+plan_id: OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1
+plan_version: '0.1'
+plan_status: RATIFIED
+owner: RESEARCH_OPERATIONS
+baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
+research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
+active_c2_model_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+current_authority: FIXTURE_AND_NON_PROVIDER_IMPLEMENTATION_ONLY
+real_prospective_source_available: false
+active_research_triage: false
+active_binding_id: null
+active_triage_started_at_utc: null
+write_authority: false
+operation_mode: TIME_GATED_REPLAY
+objects:
+  ProspectiveSourceSlice:
+    status: APPROVED_FOR_FIXTURE_BUILD
+    canonical_release: false
+    selector_eligible: false
+    r2_eligible: false
+  ProspectiveComputeRun:
+    status: APPROVED_FOR_FIXTURE_BUILD
+    derived: true
+  ProspectiveSourceBinding:
+    status: APPROVED_FOR_FIXTURE_BUILD
+    required_for_live_triage: true
+  OperatorSigningBinding:
+    status: DEFERRED_TO_RPS_WP4
+    private_key_in_git: false
+  RuntimeAuthoritySnapshot:
+    status: IMPLEMENTED_FAIL_CLOSED
+packets:
+  - packet_id: RPS-00
+    status: RUNNING
+    prerequisites: [PD-G4_APPROVED]
+    authority_delta: REPOSITORY_RECONCILIATION_ONLY
+    branch: build/rps-00-prospective-source-freeze
+    next_packet: RPS-WP1
+  - packet_id: RPS-WP1
+    status: READY
+    prerequisites: [RPS-G0_APPROVED]
+    authority_delta: FIXTURE_SOURCE_FOUNDATION
+    next_gate: RPS-G1
+  - packet_id: RPS-WP2
+    status: PLANNED
+    authority_required: REAL_PROVIDER_INTAKE
+  - packet_id: RPS-WP3
+    status: PLANNED
+    authority_delta: DERIVED_LOCAL_PROSPECTIVE_COMPUTE
+  - packet_id: RPS-WP4
+    status: PLANNED
+    authority_delta: TIME_GATED_REPLAY_ACCEPTANCE
+  - packet_id: PD-WP5
+    status: BLOCKED_PENDING_RPS_G4
+prohibited_authority:
+  - PROVIDER_REQUEST_BEFORE_RPS_G1
+  - LIVE_PATTERN_DISCOVERY_PROCESSING
+  - LIVE_PROSPECTIVE_APPEND
+  - ACTIVE_NOVELTY_RANKING
+  - SELECTOR_MUTATION
+  - RELEASE_MUTATION
+  - DIRECT_R2_WRITE
+  - VALIDATION_CONSUMPTION
+  - SEMANTIC_PROMOTION
+  - C2E
+  - C2_5
+  - C3
+  - OPT_C
+  - OPT_D
+  - PROBABILITY
+  - RISK
+  - EXPOSURE
+  - TRADING
+  - EXECUTION
+  - AGENT_WRITE
+next_gate: RPS-G0
+rollback: DISABLE_RUNTIME_AND_PRESERVE_APPROVED_PD_G4_ARTIFACTS
