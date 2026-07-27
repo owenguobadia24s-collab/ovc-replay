@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/prospective_source/quarantine_checksum_inventory_v0_1",
+  "title": "RPS Quarantine Checksum Inventory v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "gate_candidate",
+    "slice_id",
+    "quarantine_id",
+    "source_window_start_utc",
+    "source_window_end_utc",
+    "files",
+    "file_count",
+    "compressed_transport_bytes",
+    "compressed_byte_limit",
+    "expanded_byte_limit",
+    "source_mutation_performed",
+    "provider_network_access_performed",
+    "inventory_sha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ovc-rps-g1b-quarantine-checksum-inventory/v1"
+    },
+    "gate_candidate": {"const": "RPS-G1B"},
+    "slice_id": {
+      "const": "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1"
+    },
+    "quarantine_id": {
+      "const": "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd"
+    },
+    "source_window_start_utc": {
+      "const": "2026-06-22T00:00:00Z"
+    },
+    "source_window_end_utc": {
+      "const": "2026-06-25T00:00:00Z"
+    },
+    "files": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["relative_path", "size_bytes", "sha256"],
+        "properties": {
+          "relative_path": {"type": "string", "minLength": 1},
+          "size_bytes": {"type": "integer", "minimum": 1},
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "file_count": {"const": 9},
+    "compressed_transport_bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 26214400
+    },
+    "compressed_byte_limit": {"const": 26214400},
+    "expanded_byte_limit": {"const": 104857600},
+    "source_mutation_performed": {"const": false},
+    "provider_network_access_performed": {"const": false},
+    "inventory_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

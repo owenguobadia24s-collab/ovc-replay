@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("preflight", "execute")]
+    [ValidateSet("preflight", "inventory", "freeze")]
     [string]$Command = "preflight"
 )
 
@@ -27,19 +27,21 @@ if ([string]::IsNullOrWhiteSpace($env:OVC_EXTERNAL_ARTIFACT_ROOT)) {
 
 $arguments = @(
     "-m",
-    "ovc.research_operations.prospective_source.dukascopy_intake_rps_g1a",
+    "ovc.research_operations.prospective_source.dukascopy_gapped_recovery",
     $Command,
     "--repository-root",
     $repositoryRoot
 )
 
-if ($Command -eq "execute") {
-    $arguments += @("--gate", "RPS-G1A")
+if ($Command -eq "freeze") {
+    $arguments += @("--gate", "RPS-G1B")
 }
 
-Write-Host "RPS-WP2 amendment command: $Command"
-Write-Host "Gate candidate: RPS-G1A"
-Write-Host "Slice candidate: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1"
+Write-Host "RPS-WP2 gapped-source recovery command: $Command"
+Write-Host "Gate candidate: RPS-G1B"
+Write-Host "Slice: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1"
+Write-Host "Source quarantine: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd"
+Write-Host "Provider network access: denied"
 Write-Host "Repository: $repositoryRoot"
 Write-Host "External artifact root: $env:OVC_EXTERNAL_ARTIFACT_ROOT"
 
