@@ -5,7 +5,11 @@
 - Gate candidate: `RPS-G1B`
 - Baseline main: `6aaa898727be83ebf3e5c32ebca129d38e629adb`
 - Branch: `build/rps-g1b-gapped-source-amendment`
-- QA state: `PENDING_FINAL_CI`
+- Tested implementation commit: `4e4c58799258f4bc87bac299affcec1c6ea57f7e`
+- Tested PR merge ref: `3de50d7e1ae24fbc7f47382dba2577e740283ee0`
+- Canonical workflow: `30286571687`
+- Canonical unit-test job: `90045733438`
+- QA state: `PASS`
 - Provider network access: `false`
 - External quarantine accessed by GitHub: `false`
 
@@ -27,23 +31,41 @@ QA covers only the proposed checksum-pinned, no-network recovery of the exact RP
 - CI and GitHub Actions freeze execution are denied before local-path resolution.
 - No provider request exists in the recovery module or workflow.
 
-## Required test evidence
+## Executed test evidence
 
-1. Focused RPS-G1B generated-BI5 tests.
-2. RPS-G1A regression tests.
-3. Base bounded-intake regression tests.
-4. Canonical repository unittest suite.
-5. JSON schema parsing.
-6. Explicit CI freeze-denial proof.
+The canonical repository workflow checked out PR merge ref `3de50d7e1ae24fbc7f47382dba2577e740283ee0` containing implementation commit `4e4c58799258f4bc87bac299affcec1c6ea57f7e` and executed:
 
-## Acceptance expectation
+```text
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+```
 
-`PASS` requires all required tests to succeed on the final pinned PR head, no review blocker, no source or authority expansion and no unresolved discrepancy between the contract, implementation, schemas, guide, gate packet and programme registry.
+Workflow `30286571687`, job `90045733438`, completed `success`.
+
+The discovered suite includes the new generated-BI5 RPS-G1B tests and the existing RPS-G1A/base intake regressions. The new tests cover exact GAPPED acceptance, checksum-pinned copy, source-quarantine non-mutation, checksum tamper rejection, cross-side gap mismatch rejection, QA materialisation before failure quarantine, downstream parent exclusion, executable incomplete-parent rejection, exact gate binding and CI denial.
+
+The two added JSON schema files are syntactically valid repository artifacts. The dedicated RPS-G1B workflow also contains explicit JSON parsing, focused/regression suites and a CI freeze-denial step; the repository's canonical workflow supplied the executed gate evidence before the new workflow exists on `main`.
+
+## Acceptance review
+
+| Condition | QA result |
+|---|---|
+| Exact June slice and quarantine binding | PASS |
+| 4,285/35/24 M1 invariants | PASS |
+| Identical BID/ASK timestamp sets | PASS |
+| Complete H1 and 64-hour exact reconciliation | PASS |
+| Immutable missing-timestamp/run evidence | PASS |
+| 15M/H1/2H exclusion propagation | PASS |
+| Incomplete-parent executable rejection | PASS |
+| Checksum tamper and copy mismatch rejection | PASS |
+| QA receipts before failure quarantine | PASS |
+| No provider access in implementation/tests | PASS |
+| Source quarantine mutation/relabel | DENIED |
+| Release/selector/R2/Validation/live authority | DENIED |
 
 ## Warnings
 
-Actual external byte hashes are unavailable to GitHub and are not claimed by this QA packet. Local checksum generation and real quarantine re-evaluation remain operator-local work after gate approval.
+Actual external byte hashes are unavailable to GitHub and are not claimed by this QA packet. Local checksum generation and real quarantine re-evaluation remain operator-local work after gate approval. A passing generated fixture does not pre-approve any divergence in the real quarantine; the real command must reproduce every exact invariant.
 
 ## Recommendation
 
-`PENDING_FINAL_CI`. If the final candidate checks pass, recommend `PASS` for the code-and-contract packet while retaining the RPS-G1B authority decision for the operator.
+`PASS` — the code, tests, contracts, schemas, guide and programme state are consistent and non-activating. The proposed GAPPED source-integrity authority remains operator-reserved and must not be self-ratified.

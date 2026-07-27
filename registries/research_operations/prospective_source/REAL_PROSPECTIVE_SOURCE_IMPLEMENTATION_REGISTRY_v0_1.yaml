@@ -135,6 +135,9 @@ packets:
     authority_delta: EXACT_CHECKSUM_PINNED_GAPPED_SOURCE_ACCEPTANCE
     baseline_commit: 6aaa898727be83ebf3e5c32ebca129d38e629adb
     branch: build/rps-g1b-gapped-source-amendment
+    candidate_commit: 4e4c58799258f4bc87bac299affcec1c6ea57f7e
+    tested_pr_merge_ref: 3de50d7e1ae24fbc7f47382dba2577e740283ee0
+    pull_request: 103
     implementation_state: GAPPED_RECOVERY_CANDIDATE_NO_LOCAL_REEVALUATION
     source_quarantine_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd
     contract: contracts/research_operations/prospective_source/RPS_GAPPED_SOURCE_ACCEPTANCE_CONTRACT_v0_1.md
@@ -142,10 +145,13 @@ packets:
     local_command: scripts/run_rps_wp2_intake.ps1
     operator_guide: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_WINDOWS_OPERATOR_GUIDE.md
     incident_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1A_JUNE_SOURCE_QA_INCIDENT.md
+    qa_packet: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_QA_PACKET.md
     gate_packet: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_AMENDMENT_GATE_PACKET.md
+    tests: [GitHub_Actions_30286571687]
+    unit_test_job: 90045733438
+    qa_result: PASS
     provider_network_access: DENIED
     source_quarantine_mutation: DENIED
-    qa_result: PENDING_FINAL_CI
     blockers:
       - code: OPERATOR_RPS_G1B_APPROVAL_REQUIRED
         detail: GAPPED source acceptance changes the integrity authority of the RPS-G1A June slice.
@@ -185,8 +191,10 @@ completed_gates:
     merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
 pending_gates:
   - gate_id: RPS-G1B
-    status: GATE_READY_PENDING_FINAL_CI
+    status: GATE_READY
     authority: OPERATOR
+    qa_result: PASS
+    tests: [GitHub_Actions_30286571687]
     decision_requested: PASS_OR_DEFER_OR_BLOCK_OR_QUARANTINE_OR_SUPERSEDE
     proposed_delta: ACCEPT_EXACT_JUNE_QUARANTINE_AS_CHECKSUM_PINNED_GAPPED_SOURCE
     gate_packet: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_AMENDMENT_GATE_PACKET.md

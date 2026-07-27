@@ -8,8 +8,11 @@
 - Plan version: `0.1`
 - Packet: `RPS-WP2`
 - Baseline main: `6aaa898727be83ebf3e5c32ebca129d38e629adb`
+- Candidate implementation commit: `4e4c58799258f4bc87bac299affcec1c6ea57f7e`
+- Tested PR merge ref: `3de50d7e1ae24fbc7f47382dba2577e740283ee0`
 - Candidate branch: `build/rps-g1b-gapped-source-amendment`
-- Gate status: `GATE_READY_PENDING_FINAL_CI`
+- Pull request: `#103`
+- Gate status: `GATE_READY`
 - Authority: `OPERATOR_REQUIRED`
 
 ## Completed work
@@ -76,7 +79,7 @@ The command may calculate and freeze the local quarantine checksum inventory, co
 
 ## Tests and QA
 
-### Implemented tests
+### Implemented checks
 
 - exact 4,285-row/35-minute/24-run GAPPED fixture acceptance;
 - exact M1 timestamp-set equality;
@@ -91,13 +94,21 @@ The command may calculate and freeze the local quarantine checksum inventory, co
 - exact gate binding and CI execution denial;
 - canonical repository test discovery.
 
-### CI state
+### Executed CI evidence
 
-`PENDING_FINAL_CI` — the candidate PR must pass the focused RPS-G1B suite and canonical repository suite before the operator decision is recorded.
+- Canonical workflow: `30286571687`
+- Canonical unit-test job: `90045733438`
+- Checked-out PR merge ref: `3de50d7e1ae24fbc7f47382dba2577e740283ee0`
+- Command: `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+- Result: `PASS`
+- Provider request performed: `false`
+- External quarantine accessed: `false`
+
+The canonical discovered suite included the new RPS-G1B generated-BI5 tests and existing RPS-G1A/base intake regression tests. The dedicated amendment workflow definition additionally specifies JSON parsing, focused suites and explicit CI freeze denial for future execution once present on `main`.
 
 ### QA recommendation
 
-`PASS` after final candidate-head CI succeeds. The proposed delta is explicit source-integrity authority and therefore remains operator-reserved even when code and tests pass.
+`PASS`. The candidate is deterministic, bounded, fail-closed and non-activating. No blocking implementation defect, review warning or inconsistent authority record remains in the packet. The proposed source-integrity delta remains operator-reserved despite passing QA.
 
 ## Warnings and unresolved issues
 
@@ -120,6 +131,7 @@ The command may calculate and freeze the local quarantine checksum inventory, co
 - `.github/workflows/rps-g1b-gapped-source-amendment.yml`
 - `docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1A_JUNE_SOURCE_QA_INCIDENT.md`
 - `docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_WINDOWS_OPERATOR_GUIDE.md`
+- `docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_QA_PACKET.md`
 - this gate packet
 - `registries/research_operations/prospective_source/REAL_PROSPECTIVE_SOURCE_IMPLEMENTATION_REGISTRY_v0_1.yaml`
 
@@ -133,11 +145,11 @@ Another provider request, another quarantine, gap repair, interpolation, forward
 
 ## Rollback
 
-Close the candidate PR without merge and retain `main` at `6aaa898727be83ebf3e5c32ebca129d38e629adb`. Preserve the July and June source quarantines. No provider source, accepted slice, selector, release, R2 key, evidence row or active authority is changed by rollback.
+Close PR #103 without merge and retain `main` at `6aaa898727be83ebf3e5c32ebca129d38e629adb`. Preserve the July and June source quarantines. No provider source, accepted slice, selector, release, R2 key, evidence row or active authority is changed by rollback.
 
 ## Recommended decision
 
-**PASS** after final CI — approve exact checksum-pinned GAPPED re-evaluation and local freeze for the named June quarantine only.
+**PASS** — approve exact checksum-pinned GAPPED re-evaluation and local freeze for the named June quarantine only.
 
 Allowed decisions: `PASS`, `DEFER`, `BLOCK`, `QUARANTINE`, `SUPERSEDE`.
 
