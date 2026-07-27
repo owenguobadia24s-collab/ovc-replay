@@ -12,6 +12,7 @@ SCHEMA_ROOT = ROOT / "schemas" / "research_operations" / "pattern_discovery"
 REGISTRY_ROOT = ROOT / "registries" / "research_operations" / "pattern_discovery"
 PLAN_BINDING = ROOT / "docs" / "implementation-plans" / "OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER_v0_3_SOURCE_BINDING.md"
 GATE_PACKET = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "PD_G0_OPERATOR_GATE_PACKET.md"
+DECISION_RECORD = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "PD_G0_OPERATOR_DECISION.md"
 
 
 class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
@@ -27,6 +28,7 @@ class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
             REGISTRY_ROOT / "PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml",
             REGISTRY_ROOT / "PATTERN_DISCOVERY_TRIGGER_REGISTRY_v0_1.yaml",
             GATE_PACKET,
+            DECISION_RECORD,
         ]
         missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
         self.assertEqual([], missing)
@@ -111,13 +113,17 @@ class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
         self.assertIn("Persist every TriggerEvent", scale_text)
         self.assertIn("queue presentation and closure-profile choice only", failure_text)
 
-    def test_programme_state_stops_at_operator_gate(self) -> None:
+    def test_operator_approval_releases_pd_wp1_only(self) -> None:
         registry = (REGISTRY_ROOT / "PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml").read_text(encoding="utf-8")
+        decision = DECISION_RECORD.read_text(encoding="utf-8")
+        self.assertIn("status: APPROVED", registry)
         self.assertIn("packet_id: PD-00", registry)
-        self.assertIn("status: GATE_READY", registry)
-        self.assertIn("next_gate: PD-G0", registry)
-        self.assertIn("prerequisites: [PD-G0_APPROVED]", registry)
-        self.assertNotIn("status: APPROVED", registry)
+        self.assertIn("status: COMPLETED", registry)
+        self.assertIn("packet_id: PD-WP1", registry)
+        self.assertIn("status: READY", registry)
+        self.assertIn("next_gate: PD-G1", registry)
+        self.assertIn("OVC APPROVE PD-G0", decision)
+        self.assertIn("Merge into `main` is not granted", decision)
 
 
 if __name__ == "__main__":
