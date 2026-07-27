@@ -7,7 +7,8 @@
 - Governing source SHA-256: `03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa`
 - Baseline commit: `d567297b1743d665e603e62e258767b18f2694ee`
 - Candidate branch: `build/pd-wp1-transition-candidate-engine`
-- Candidate commit: `TO_BE_RESOLVED_AT_PR_TIP`
+- Candidate implementation commit: `7b16174656f9370d13ff4e3575b6834513705892`
+- Candidate pull request: `#90`
 - Prerequisite decision: `PD-G0 PASS`
 
 ## Completed packet
@@ -27,7 +28,8 @@ Implemented:
 - explicit per-family and per-instrument cap suppression;
 - open, accumulate, pending-input, resume, close and invalid lifecycle;
 - gap, quarantine, context-change and selector-change failure handling;
-- synthetic fixtures, focused tests and dedicated CI.
+- synthetic fixtures, focused tests and dedicated CI;
+- approved additive Research Operations namespace registration.
 
 ## Current authority
 
@@ -63,12 +65,16 @@ This gate does not activate live prospective processing, novelty ranking, cluste
 
 ## Tests and QA
 
-- Focused suite: `tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine`
-- Retained boundary: `tests.research_operations.pattern_discovery.test_pd_g0_design_freeze`
-- Canonical suite: `python -m unittest discover -s tests -p 'test_*.py'`
-- Workflow: `.github/workflows/pd-wp1-transition-candidate-engine.yml`
-- Result: `PENDING_GITHUB_CI`
+- Focused suite: `PASS`
+- Retained PD-G0 boundary suite: `PASS`
+- Canonical repository suite: `PASS`
+- Dedicated workflow: GitHub Actions `30258601276` — `SUCCESS`
+- Canonical workflow: GitHub Actions `30258601125` — `SUCCESS`
+- Retained PD-G0 workflow: GitHub Actions `30258601144` — `SUCCESS`
+- QA result: `PASS_PD_G1_CANDIDATE`
 - QA packet: `docs/releases/pattern-discovery-v0-3/pd-wp1/PD_WP1_QA_PACKET.json`
+
+A first canonical run exposed one correctable namespace-allowlist failure: the newly approved `ovc.research_operations.pattern_discovery` package had not yet been added to the frozen Research Operations namespace registry and canonical test allowlist. Both were updated additively within PD-WP1 scope, and all focused and repository-wide tests were rerun successfully.
 
 ## Warnings and limitations
 
@@ -91,6 +97,8 @@ This gate does not activate live prospective processing, novelty ranking, cluste
 - `contracts/research_operations/pattern_discovery/PATTERN_DISCOVERY_TRANSITION_AND_WINDOW_ENGINE_CONTRACT_v0_1.md`
 - `fixtures/research_operations/pattern_discovery/pd_wp1/c2_state_stream.json`
 - `tests/research_operations/pattern_discovery/test_pd_wp1_transition_candidate_engine.py`
+- `tests/authority/test_active_namespace_allowlist.py`
+- `registries/research_operations/RESEARCH_OPERATIONS_NAMESPACE_REGISTRY_v0_1.yaml`
 - `.github/workflows/pd-wp1-transition-candidate-engine.yml`
 - `docs/releases/pattern-discovery-v0-3/pd-wp1/PD_WP1_IMPLEMENTATION_SUMMARY.md`
 - `docs/releases/pattern-discovery-v0-3/pd-wp1/PD_WP1_QA_PACKET.json`
@@ -107,7 +115,9 @@ Abandon the unmerged PD-WP1 candidate branch and rebuild replaceable derived art
 
 ## Recommended decision
 
-`PASS` only after all named CI checks are green. Otherwise `BLOCK` on the exact failing assertion.
+`PASS`
+
+The implementation and retained authority boundaries are reproducible, the focused assertions pass and the canonical repository suite passes. Approval remains an operator-reserved authority decision.
 
 ## Exact work beginning after approval
 
