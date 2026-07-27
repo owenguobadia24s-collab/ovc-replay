@@ -1,19 +1,37 @@
-"""Derived C2 Pattern Discovery transition, trigger and triage services.
+"""Derived C2 Pattern Discovery services.
 
-PD-WP1 provides the accepted transition and CandidateWindow foundation. PD-WP2
-adds deterministic trigger evaluation, controls, backpressure and non-authoritative
-novelty shadow. No live processing, active novelty ranking, evidence-write,
-selector, release, clustering, probability, exposure, trading, execution or agent
-authority is granted.
+PD-WP1 provides transitions and CandidateWindows. PD-WP2 adds deterministic
+trigger evaluation, controls, backpressure and non-authoritative novelty shadow.
+PD-WP3 adds deterministic fingerprints, composite distance and provisional PAM
+clusters. No live processing, active novelty ranking, evidence-write, selector,
+release, semantic, probability, exposure, trading, execution or agent authority
+is granted.
 """
 
 from .backpressure import LatencyObservation, QueuePolicy, degradation_states, project_review_queue
+from .clustering import (
+    ALGORITHM_VERSION,
+    MAX_ACTIVE_PARTITION,
+    build_cluster_versions,
+    build_partition_cluster_version,
+    deterministic_pam,
+    eligible_clustering_population,
+    map_cluster_lineage,
+)
 from .controls import (
     ControlSamplingPack,
     assess_control_representation,
     required_control_counts,
     select_matched_control,
     select_population_control,
+)
+from .distance import (
+    DISTANCE_VERSION,
+    DistancePack,
+    ScalePack,
+    build_scale_pack,
+    composite_distance,
+    normalized_levenshtein,
 )
 from .engine import PatternDiscoveryEngine
 from .evaluation import (
@@ -25,6 +43,7 @@ from .evaluation import (
     evaluate_transition_triggers,
     materialize_fired_events,
 )
+from .fingerprints import FINGERPRINT_VERSION, build_pattern_fingerprint, partition_key
 from .models import (
     AXES,
     C2Snapshot,
@@ -74,4 +93,20 @@ __all__ = [
     "LatencyObservation",
     "project_review_queue",
     "degradation_states",
+    "FINGERPRINT_VERSION",
+    "build_pattern_fingerprint",
+    "partition_key",
+    "DISTANCE_VERSION",
+    "DistancePack",
+    "ScalePack",
+    "build_scale_pack",
+    "composite_distance",
+    "normalized_levenshtein",
+    "ALGORITHM_VERSION",
+    "MAX_ACTIVE_PARTITION",
+    "eligible_clustering_population",
+    "deterministic_pam",
+    "build_partition_cluster_version",
+    "build_cluster_versions",
+    "map_cluster_lineage",
 ]
