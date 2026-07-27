@@ -152,11 +152,11 @@ objects:
     selector_eligible: false
     r2_eligible: false
   ProspectiveComputeRun:
-    status: IMPLEMENTED_COMMAND_READY_AWAITING_OPERATOR_LOCAL_EXECUTION
+    status: IMPLEMENTED_COMMAND_MERGED_AWAITING_OPERATOR_LOCAL_EXECUTION
     derived: true
     operation_mode: TIME_GATED_REPLAY
   ProspectiveSourceBinding:
-    status: IMPLEMENTED_CANDIDATE_COMMAND_READY_NOT_ACTIVE
+    status: IMPLEMENTED_CANDIDATE_COMMAND_MERGED_NOT_ACTIVE
     required_for_live_triage: true
   OperatorSigningBinding:
     status: DEFERRED_TO_RPS_WP4
@@ -220,15 +220,20 @@ packets:
     authority_delta: DERIVED_LOCAL_PROSPECTIVE_COMPUTE_AND_EXACT_SOURCE_BINDING
     baseline_commit: fe6483264f7652ede5e679140878788c15276da4
     branch: build/rps-wp3-derived-compute-command
+    final_pr_head: 48dee2cbeb7b365853b5ae4616ad0d8c52214b4e
     pull_request: 107
-    implementation_state: COMMAND_READY_PENDING_FINAL_CI_AND_MERGE
+    merge_commit: 4ccda083ddbe099056da4d1ce068ab63ba816c9a
+    implementation_state: COMMAND_READY_MERGED_AWAITING_OPERATOR_LOCAL_EXECUTION
     contract: contracts/research_operations/prospective_source/RPS_DERIVED_COMPUTE_AND_BINDING_CONTRACT_v0_1.md
     compute_module: ovc.research_operations.prospective_source.prospective_compute
     local_command: scripts/run_rps_wp3_compute.ps1
     operator_guide: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_WINDOWS_OPERATOR_GUIDE.md
     receipt_schema: schemas/research_operations/prospective_source/prospective_compute_receipt_v0_1.schema.json
     qa_packet: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_COMMAND_READINESS_QA_PACKET.md
-    tests: [PENDING_FINAL_CI]
+    merge_receipt: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_COMMAND_MERGE_RECEIPT.md
+    tests: [GitHub_Actions_30291002463, GitHub_Actions_30291002498]
+    dedicated_test_job: 90060487550
+    canonical_unit_test_job: 90060487801
     qa_result: PASS_COMMAND_READY
     provider_network_access: DENIED
     release_mutation: DENIED
