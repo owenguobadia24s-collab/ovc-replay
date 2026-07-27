@@ -52,7 +52,7 @@ def build_c2_records(c1_records: Iterable[dict[str, Any]], *, active_model_relea
                 "INTERACTION": "UNRESOLVED_FIXTURE",
                 "QUALITY": quality,
             },
-            "historical_release_membership": false,
+            "historical_release_membership": False,
             "operation_mode": "TIME_GATED_REPLAY",
         }
         payload["c2_record_id"] = f"RPS.C2.{canonical_hash(payload)[:24]}"
