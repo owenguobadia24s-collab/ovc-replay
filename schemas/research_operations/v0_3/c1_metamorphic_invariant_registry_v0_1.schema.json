@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-ro3-c1-metamorphic-invariant-registry/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "registry_id", "status", "source_of_expectations", "formula_registry_id", "formula_count", "transforms", "invariants", "global_relations", "implementation_imports_prohibited", "mutation"],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-metamorphic-invariant-registry/v1"},
+    "registry_id": {"const": "C1.METAMORPHIC.INVARIANTS.v0.1"},
+    "status": {"const": "FROZEN_AT_RO3_G0"},
+    "source_of_expectations": {"const": "INDEPENDENT_CONTRACT_CANON_NOT_IMPLEMENTATION"},
+    "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+    "formula_count": {"const": 18},
+    "transforms": {"type": "object", "minProperties": 8},
+    "invariants": {
+      "type": "array",
+      "minItems": 18,
+      "maxItems": 18,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["primitive_id", "relations"],
+        "properties": {
+          "primitive_id": {"type": "string", "pattern": "^C1-"},
+          "relations": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true}
+        }
+      }
+    },
+    "global_relations": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "implementation_imports_prohibited": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+    "mutation": {"const": "PROHIBITED_WITHOUT_NEW_PLAN_AND_OPERATOR_GATE"}
+  }
+}
