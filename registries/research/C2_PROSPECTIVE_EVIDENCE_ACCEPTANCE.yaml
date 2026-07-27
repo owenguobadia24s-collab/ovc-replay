@@ -1,4 +1,4 @@
-schema: ovc-c2-prospective-evidence-acceptance/v1
+schema: ovc-c2-prospective-evidence-acceptance/v2
 gate_id: C2-G7
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 state: ACTIVE_PROSPECTIVE_EVIDENCE_ACCUMULATION
@@ -6,15 +6,28 @@ accepted_work_packet: C2_WP7_PROSPECTIVE_EVIDENCE_ACCUMULATION
 baseline_main_tip: bc1ea7d1e82bd48817b83b89c1e1d983f3b44ab7
 zero_baseline: true
 historical_backfill: false
+active_contract: contracts/opt_b/c2/C2_PROSPECTIVE_EVIDENCE_ACCUMULATION_CONTRACT_v0_2.md
+record_schema: schemas/opt_b/c2/c2_prospective_evidence_record_v0_2.schema.json
 record_classes:
   - STATE_FIDELITY_REVIEW
   - BOUNDARY_CONFLICT_CASE
   - ANOMALY
   - INCIDENT
   - BOUNDED_RESEARCH_QUESTION
+operation_modes:
+  LIVE_PROSPECTIVE: PROSPECTIVE_COUNT_ELIGIBLE
+  TIME_GATED_REPLAY: REVIEW_ONLY_NOT_PROSPECTIVE
+  NON_EVIDENTIARY_REPLAY: CONTEXT_ONLY
 append_policy: APPEND_ONLY_AFTER_C2_G7
 validator_mode: FAIL_CLOSED
-next_boundary: FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW
+first_batch_review:
+  gate_id: FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW
+  decision: DEFER_NO_REAL_PROSPECTIVE_BATCH
+  record_count: 0
+  live_prospective_count: 0
+  append_target_state: ABSENT
+  packet: docs/releases/opt-b-c2-v2/first-prospective-batch/FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_PACKET.json
+next_boundary: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH
 retained_authority:
   validation_consumption: LOCKED_UNCONSUMED
   c2e_authority: NONE

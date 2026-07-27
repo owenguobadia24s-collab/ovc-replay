@@ -1,0 +1,37 @@
+schema: ovc-c2-first-prospective-batch-review/v2
+gate_id: FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW
+research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
+state: DEFERRED_AWAITING_FIRST_REAL_BATCH
+baseline_main_tip: 9fb4c07984df2d5151c48b5b5d063789d9a594f1
+accepted_operation: ACTIVE_PROSPECTIVE_EVIDENCE_ACCUMULATION
+record_schema: schemas/opt_b/c2/c2_prospective_evidence_record_v0_2.schema.json
+append_target: evidence/research/opt-b-c2-v2/prospective/c2_evidence_records.jsonl
+append_target_state: ABSENT
+record_count: 0
+live_prospective_count: 0
+operation_mode_counts:
+  LIVE_PROSPECTIVE: 0
+  TIME_GATED_REPLAY: 0
+  NON_EVIDENTIARY_REPLAY: 0
+record_ids: []
+review_decision: DEFER_NO_REAL_PROSPECTIVE_BATCH
+reviewable_when:
+  - APPEND_TARGET_EXISTS
+  - LIVE_PROSPECTIVE_RECORD_COUNT_GREATER_THAN_ZERO
+  - IMMUTABLE_BATCH_INVENTORY_PRESENT
+  - EXACT_JSONL_SHA256_PRESENT
+  - ALL_RECORDS_SCHEMA_V0_2_VALID
+  - ALL_LIVE_RECORDS_POST_C2_G6
+  - ALL_RECORDS_BOUND_TO_ACTIVE_DISCOVERY_RELEASE
+  - NO_PROHIBITED_SEED_MATERIAL
+retained_authority:
+  validation_consumption: LOCKED_UNCONSUMED
+  c2e_authority: NONE
+  probability_authority: NONE
+  exposure_authority: NONE
+  trading_authority: NONE
+  execution_authority: NONE
+  direct_r2_write: DENIED
+  selector_mutation: DENIED
+  release_mutation: DENIED
+next_boundary: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH

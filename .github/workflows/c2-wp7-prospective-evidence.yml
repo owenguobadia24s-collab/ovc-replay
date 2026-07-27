@@ -35,5 +35,9 @@ jobs:
               assert baseline[field] == 'NONE'
           registry = Path('registries/research/C2_PROSPECTIVE_EVIDENCE_REGISTRY.yaml').read_text()
           assert 'append_mode: APPEND_ONLY' in registry
-          assert 'next_gate: C2_G7_PROSPECTIVE_EVIDENCE_OPERATION_ACCEPTANCE' in registry
+          assert 'c2_prospective_evidence_record_v0_2.schema.json' in registry
+          assert 'LIVE_PROSPECTIVE' in registry
+          assert 'TIME_GATED_REPLAY' in registry
+          assert 'NON_EVIDENTIARY_REPLAY' in registry
+          assert 'next_gate: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH' in registry
           PY

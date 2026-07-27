@@ -1,0 +1,69 @@
+{
+  "schema": "ovc-c2-first-prospective-evidence-batch-review/v2",
+  "gate_id": "FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW",
+  "research_line_id": "RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1",
+  "reviewed_on": "2026-07-26",
+  "baseline_main_tip": "9fb4c07984df2d5151c48b5b5d063789d9a594f1",
+  "c2_g7_acceptance_commit": "9fb4c07984df2d5151c48b5b5d063789d9a594f1",
+  "contract": "contracts/opt_b/c2/C2_FIRST_PROSPECTIVE_EVIDENCE_BATCH_REVIEW_CONTRACT_v0_1.md",
+  "record_contract": "contracts/opt_b/c2/C2_PROSPECTIVE_EVIDENCE_ACCUMULATION_CONTRACT_v0_2.md",
+  "record_schema": "schemas/opt_b/c2/c2_prospective_evidence_record_v0_2.schema.json",
+  "append_target": "evidence/research/opt-b-c2-v2/prospective/c2_evidence_records.jsonl",
+  "append_target_state": "ABSENT",
+  "batch": {
+    "batch_id": null,
+    "sha256": null,
+    "record_count": 0,
+    "live_prospective_count": 0,
+    "accepted_count": 0,
+    "rejected_count": 0,
+    "blocked_count": 0,
+    "sequence_boundary_friction_count": 0,
+    "record_ids": [],
+    "operation_mode_counts": {
+      "LIVE_PROSPECTIVE": 0,
+      "TIME_GATED_REPLAY": 0,
+      "NON_EVIDENTIARY_REPLAY": 0
+    },
+    "class_counts": {
+      "STATE_FIDELITY_REVIEW": 0,
+      "BOUNDARY_CONFLICT_CASE": 0,
+      "ANOMALY": 0,
+      "INCIDENT": 0,
+      "BOUNDED_RESEARCH_QUESTION": 0
+    }
+  },
+  "checks": {
+    "c2_g7_effective_on_main": "PASS",
+    "active_discovery_selector_unchanged": "PASS",
+    "prospective_append_target_present": "DEFER",
+    "minimum_live_prospective_record_count": "DEFER",
+    "schema_v0_2_validation": "NOT_EVALUABLE",
+    "operation_mode_validation": "NOT_EVALUABLE",
+    "market_window_chronology_validation": "NOT_EVALUABLE",
+    "trigger_first_valid_validation": "NOT_EVALUABLE",
+    "cutoff_validation": "NOT_EVALUABLE",
+    "lineage_validation": "NOT_EVALUABLE",
+    "duplicate_record_id_check": "NOT_EVALUABLE",
+    "prohibited_seed_check": "NOT_EVALUABLE",
+    "retained_authority_check": "PASS"
+  },
+  "decision": "DEFER_NO_REAL_PROSPECTIVE_BATCH",
+  "decision_reason": "The canonical append target does not exist and no LIVE_PROSPECTIVE v0.2 record is available for review. No evidence was generated or inferred by this gate.",
+  "retained_authority": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2e_authority": "NONE",
+    "c2_5_authority": "NONE",
+    "c3_authority": "NONE",
+    "opt_c_authority": "NONE",
+    "opt_d_authority": "NONE",
+    "probability_authority": "NONE",
+    "exposure_authority": "NONE",
+    "trading_authority": "NONE",
+    "execution_authority": "NONE",
+    "direct_r2_write": "DENIED",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED"
+  },
+  "next_boundary": "CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH"
+}
