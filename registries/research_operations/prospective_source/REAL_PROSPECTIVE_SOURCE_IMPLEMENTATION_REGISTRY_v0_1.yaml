@@ -69,6 +69,8 @@ gapped_recovery_authority:
   incomplete_parent_policy: EXCLUDE_NO_SYNTHESIS
   execution_state: AWAITING_OPERATOR_LOCAL_PREFLIGHT_INVENTORY_AND_FREEZE
   decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
+  authority_merge_commit: 8fb9e2289da2b38387fdf368ab3467875ecc5bc6
+  merge_receipt: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_MERGE_RECEIPT.md
 intake_incidents:
   - incident_id: RPS.INCIDENT.DUKASCOPY.GBPUSD.20260724_20260727.H1_UNAVAILABLE.v1
     source_gate: RPS-G1
@@ -155,7 +157,9 @@ packets:
     candidate_commit: 4e4c58799258f4bc87bac299affcec1c6ea57f7e
     gate_ready_commit: 3955593633b0680cc0cd79d9135154b9e5b97e52
     decision_commit: 38a47b3f33d4f581be3fb1385fe7ef99ab7ea879
+    final_pr_head: 2a7900f3ad5315bd5ccb67b415c270048daf49b2
     pull_request: 103
+    merge_commit: 8fb9e2289da2b38387fdf368ab3467875ecc5bc6
     implementation_state: GAPPED_RECOVERY_APPROVED_AWAITING_LOCAL_INVENTORY_AND_FREEZE
     source_quarantine_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd
     contract: contracts/research_operations/prospective_source/RPS_GAPPED_SOURCE_ACCEPTANCE_CONTRACT_v0_1.md
@@ -166,8 +170,9 @@ packets:
     qa_packet: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_QA_PACKET.md
     gate_packet: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_AMENDMENT_GATE_PACKET.md
     decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
-    tests: [GitHub_Actions_30286888160]
-    unit_test_job: 90046787818
+    merge_receipt: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_MERGE_RECEIPT.md
+    tests: [GitHub_Actions_30287697027]
+    unit_test_job: 90049467082
     qa_result: PASS
     provider_network_access: DENIED
     source_quarantine_mutation: DENIED
@@ -209,14 +214,16 @@ completed_gates:
     merge_commit: 4634f909de391321f918027719202dc0bdd1ee70
     merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
   - gate_id: RPS-G1B
-    status: APPROVED
+    status: COMPLETED
     decision: PASS
     authority: OPERATOR
     approval_command: OVC APPROVE RPS-G1B
     approved_on: '2026-07-27'
-    tests: [GitHub_Actions_30286888160]
+    tests: [GitHub_Actions_30287697027]
     qa_result: PASS
     decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
+    merge_commit: 8fb9e2289da2b38387fdf368ab3467875ecc5bc6
+    merge_receipt: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_MERGE_RECEIPT.md
 prohibited_authority:
   - PROVIDER_REQUEST_OUTSIDE_APPROVED_RPS_SCOPE
   - ANOTHER_PROVIDER_REQUEST_FOR_RPS_G1B
