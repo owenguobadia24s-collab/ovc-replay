@@ -7,6 +7,9 @@
 - RPS-G1: `APPROVED`
 - State: `READY_FOR_OPERATOR_LOCAL_EXECUTION`
 - Real source slice available: `false`
+- Tested implementation commit: `8885f474eba986ac5b95790ff95eebc6840cd65e`
+- Canonical workflow: `30278066944` — `PASS`
+- Delegated decision: `PASS`
 
 ## Delivered
 
@@ -55,15 +58,19 @@ The command does not expose CLI options for changing:
 
 A different source request requires a different approved gate and implementation identity.
 
+## Tests and QA
+
+Canonical workflow `30278066944` passed on tested implementation commit `8885f474eba986ac5b95790ff95eebc6840cd65e`. The workflow ran the full repository unittest discovery suite, including the bounded-intake fake-provider tests. No provider request occurred.
+
+The command-readiness boundary is `PASS` under delegated AUTO-EXECUTABLE authority. Decision record: `RPS_WP2_COMMAND_READY_DELEGATED_DECISION.md`.
+
+RPS-WP2 itself remains `RUNNING`; it is not complete until the operator creates and supplies the compact accepted source-slice evidence.
+
 ## Authority retained as denied
 
 No provider request has been made by this implementation packet. No accepted real source slice exists yet.
 
 The packet grants no ACTIVE_RESEARCH_TRIAGE, LIVE_PROSPECTIVE append, selector/release/R2 mutation, Validation consumption, active novelty ranking, semantic promotion, C2E/C2.5/C3, OPT-C/OPT-D, probability, risk, exposure, trading, execution or agent-write authority.
-
-## QA recommendation
-
-PASS the command-readiness implementation when focused fake-provider tests and the canonical repository suite pass. This implementation is non-activating and may be squash-merged automatically. RPS-WP2 remains in progress until the operator runs the exact local command and supplies the compact accepted-slice evidence.
 
 ## Rollback
 
