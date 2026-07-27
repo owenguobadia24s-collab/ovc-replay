@@ -5,10 +5,14 @@ source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
-current_authority: HUMAN_REVIEW_OPERATION_AND_GOVERNED_PROSPECTIVE_EVIDENCE_APPEND_APPROVED
-live_triage_authority: NONE_PENDING_RPS_G4
+current_authority: HUMAN_REVIEW_GOVERNED_APPEND_AND_ACTIVE_RESEARCH_TRIAGE_APPROVED
+live_triage_authority: RPS_G4_APPROVED_ONE_BOUNDED_PD_WP5_OPERATION
+active_source_binding_id: RPS.BINDING.32fb3003efa072916c11e907
+active_signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
+active_operator_id: OVC.OPERATOR.PRIMARY.LOCAL.V1
+live_append_enabled: false
 prohibited_authority:
-  - LIVE_PATTERN_DISCOVERY_PROCESSING
+  - AUTONOMOUS_LIVE_PATTERN_DISCOVERY_PROCESSING
   - ACTIVE_TRIGGER_REGISTRY
   - ACTIVE_NOVELTY_RANKING
   - SEMANTIC_CLUSTER_PROMOTION
@@ -16,6 +20,8 @@ prohibited_authority:
   - MANUAL_EVIDENCE_LEDGER_EDIT
   - MANUAL_CANONICAL_SOURCE_ID_ENTRY
   - AUTOMATIC_EVIDENCE_CREATION
+  - LIVE_PROSPECTIVE_APPEND_WITHOUT_RESOLVED_SOURCE
+  - MORE_THAN_ONE_PD_WP5_OPERATION
   - C2_MUTATION
   - C2E
   - C2_5
@@ -171,20 +177,29 @@ work_packets:
     blockers: []
     next_packet: RPS-00
   - packet_id: PD-WP5
-    status: READY_PENDING_REAL_PROSPECTIVE_SOURCE
-    prerequisites: [PD-G4_APPROVED, RPS-G4_APPROVED, REAL_PROSPECTIVE_SOURCE_AVAILABLE]
-    authority_required: ACTIVE_RESEARCH_TRIAGE
+    status: READY
+    prerequisites: [PD-G4_APPROVED, RPS-G4_APPROVED, REAL_PROSPECTIVE_SOURCE_AVAILABLE, ACTIVE_RESEARCH_TRIAGE_APPROVED]
+    authority_required: ACTIVE_RESEARCH_TRIAGE_APPROVED
     authority_delta: FIRST_PROSPECTIVE_DISCOVERY_BATCH
+    operation_limit: 1
+    source_binding_id: RPS.BINDING.32fb3003efa072916c11e907
+    signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
+    activation_record: registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json
     next_packet: PD-G5
 rps_enablement:
   plan_id: OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1
   plan_status: RATIFIED
   baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
-  current_packet: RPS-00
-  next_operator_gate: RPS-G1
+  current_packet: PD-WP5
+  next_operator_gate: PD-G5
   prospective_source_binding_required: true
-  real_prospective_source_available: false
-  active_research_triage: false
+  real_prospective_source_available: true
+  active_research_triage: true
+  active_binding_id: RPS.BINDING.32fb3003efa072916c11e907
+  active_signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
+  operation_mode: LIVE_PROSPECTIVE
+  first_operation_limit: 1
+  live_append_enabled: false
 completed_gates:
   - gate_id: PD-G0
     status: APPROVED
@@ -217,4 +232,12 @@ completed_gates:
     approval_command: OVC APPROVE PD-G4
     authority: OPERATOR
     approved_on: '2026-07-27'
-next_gate: RPS-G0
+  - gate_id: RPS-G4
+    status: APPROVED
+    decision: PASS
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp4/RPS_G4_OPERATOR_DECISION.md
+    approval_command: OVC APPROVE RPS-G4
+    authority: OPERATOR
+    approved_on: '2026-07-27'
+    merge_commit: b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac
+next_gate: PD-G5
