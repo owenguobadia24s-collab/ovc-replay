@@ -6,7 +6,7 @@ owner: RESEARCH_OPERATIONS
 baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 active_c2_model_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
-current_authority: RPS_G2_SOURCE_ACCEPTED_DERIVED_LOCAL_COMPUTE_ONLY
+current_authority: RPS_WP3_COMMAND_READY_OPERATOR_LOCAL_DERIVED_COMPUTE_ONLY
 real_prospective_source_available: true
 active_research_triage: false
 active_binding_id: null
@@ -73,7 +73,7 @@ gapped_recovery_authority:
   merge_receipt: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_MERGE_RECEIPT.md
 accepted_source:
   gate_id: RPS-G2
-  status: APPROVED
+  status: COMPLETED
   decision: PASS
   authority: DELEGATED_AUTO_EXECUTABLE_WITHIN_RPS_G1B
   approved_on: '2026-07-27'
@@ -102,8 +102,12 @@ accepted_source:
   validation_consumption: DENIED
   live_prospective_append: DENIED
   tested_evidence_head: be01c0d2d272bb89aad5aa4279189dc802b991e4
-  tests: [GitHub_Actions_30289144879]
-  unit_test_job: 90054311140
+  final_pr_head: 5e8d918dc619c3758ce2a305f9505680fcd6478a
+  tests: [GitHub_Actions_30289416380]
+  unit_test_job: 90055215958
+  pull_request: 105
+  merge_commit: dde4ce967b65f373db9c3150a92d93b02326047a
+  merge_receipt: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_MERGE_RECEIPT.md
   evidence_index: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_COMPACT_EVIDENCE_INDEX.json
   qa_packet: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_SOURCE_EVIDENCE_QA_PACKET.md
   decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_DELEGATED_DECISION.md
@@ -148,10 +152,11 @@ objects:
     selector_eligible: false
     r2_eligible: false
   ProspectiveComputeRun:
-    status: IMPLEMENTED_FIXTURE_ONLY_RPS_WP3_READY
+    status: IMPLEMENTED_COMMAND_READY_AWAITING_OPERATOR_LOCAL_EXECUTION
     derived: true
+    operation_mode: TIME_GATED_REPLAY
   ProspectiveSourceBinding:
-    status: IMPLEMENTED_REPLAY_ONLY_RPS_WP3_READY
+    status: IMPLEMENTED_CANDIDATE_COMMAND_READY_NOT_ACTIVE
     required_for_live_triage: true
   OperatorSigningBinding:
     status: DEFERRED_TO_RPS_WP4
@@ -191,28 +196,50 @@ packets:
     baseline_commit: 18ba74378ece734647801576f373d68b4ba8687f
     branch: build/rps-wp2-g2-source-evidence-acceptance
     tested_evidence_head: be01c0d2d272bb89aad5aa4279189dc802b991e4
+    final_pr_head: 5e8d918dc619c3758ce2a305f9505680fcd6478a
+    pull_request: 105
+    merge_commit: dde4ce967b65f373db9c3150a92d93b02326047a
     implementation_state: SOURCE_EVIDENCE_ACCEPTED_RPS_G2
     source_quarantine_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd
     contract: contracts/research_operations/prospective_source/RPS_GAPPED_SOURCE_ACCEPTANCE_CONTRACT_v0_1.md
     evidence_index: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_COMPACT_EVIDENCE_INDEX.json
     qa_packet: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_SOURCE_EVIDENCE_QA_PACKET.md
     decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_DELEGATED_DECISION.md
-    tests: [GitHub_Actions_30289144879]
-    unit_test_job: 90054311140
+    merge_receipt: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_MERGE_RECEIPT.md
+    tests: [GitHub_Actions_30289416380]
+    unit_test_job: 90055215958
     qa_result: PASS
     provider_network_access: DENIED
     source_quarantine_mutation: DENIED
     blockers: []
     next_packet: RPS-WP3
   - packet_id: RPS-WP3
-    status: READY
+    status: RUNNING
     prerequisites: [RPS-G2_APPROVED]
     authority_required: AUTO_EXECUTABLE_DERIVED_LOCAL_COMPUTE
     authority_delta: DERIVED_LOCAL_PROSPECTIVE_COMPUTE_AND_EXACT_SOURCE_BINDING
-    blockers: []
+    baseline_commit: fe6483264f7652ede5e679140878788c15276da4
+    branch: build/rps-wp3-derived-compute-command
+    pull_request: 107
+    implementation_state: COMMAND_READY_PENDING_FINAL_CI_AND_MERGE
+    contract: contracts/research_operations/prospective_source/RPS_DERIVED_COMPUTE_AND_BINDING_CONTRACT_v0_1.md
+    compute_module: ovc.research_operations.prospective_source.prospective_compute
+    local_command: scripts/run_rps_wp3_compute.ps1
+    operator_guide: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_WINDOWS_OPERATOR_GUIDE.md
+    receipt_schema: schemas/research_operations/prospective_source/prospective_compute_receipt_v0_1.schema.json
+    qa_packet: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_COMMAND_READINESS_QA_PACKET.md
+    tests: [PENDING_FINAL_CI]
+    qa_result: PASS_COMMAND_READY
+    provider_network_access: DENIED
+    release_mutation: DENIED
+    active_binding_creation: DENIED
+    blockers:
+      - code: OPERATOR_LOCAL_DERIVED_COMPUTE_AND_COMPACT_EVIDENCE_REQUIRED
+        detail: GitHub cannot access the accepted source CSVs under OVC_EXTERNAL_ARTIFACT_ROOT.
     next_gate: RPS-G3
   - packet_id: RPS-WP4
     status: PLANNED
+    prerequisites: [RPS-G3_APPROVED]
     authority_delta: TIME_GATED_REPLAY_ACCEPTANCE
   - packet_id: PD-WP5
     status: BLOCKED_PENDING_RPS_G4
@@ -253,15 +280,17 @@ completed_gates:
     merge_commit: 8fb9e2289da2b38387fdf368ab3467875ecc5bc6
     merge_receipt: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_MERGE_RECEIPT.md
   - gate_id: RPS-G2
-    status: APPROVED
+    status: COMPLETED
     decision: PASS
     authority: DELEGATED_AUTO_EXECUTABLE_WITHIN_RPS_G1B
     approved_on: '2026-07-27'
-    tested_evidence_head: be01c0d2d272bb89aad5aa4279189dc802b991e4
-    tests: [GitHub_Actions_30289144879]
-    unit_test_job: 90054311140
+    final_pr_head: 5e8d918dc619c3758ce2a305f9505680fcd6478a
+    tests: [GitHub_Actions_30289416380]
+    unit_test_job: 90055215958
     qa_result: PASS
     decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_DELEGATED_DECISION.md
+    merge_commit: dde4ce967b65f373db9c3150a92d93b02326047a
+    merge_receipt: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_MERGE_RECEIPT.md
 prohibited_authority:
   - PROVIDER_REQUEST_OUTSIDE_APPROVED_RPS_SCOPE
   - ANOTHER_PROVIDER_REQUEST_FOR_RPS_G1B
@@ -289,5 +318,5 @@ prohibited_authority:
   - EXECUTION
   - AGENT_WRITE
 next_gate: RPS-G3
-continuation_state: RPS_WP3_READY_AFTER_RPS_G2_MERGE
-rollback: REVERT_RPS_WP2_G2_ACCEPTANCE_AND_PRESERVE_ALL_LOCAL_FROZEN_AND_QUARANTINED_EVIDENCE
+continuation_state: AWAITING_OPERATOR_LOCAL_RPS_WP3_DERIVED_COMPUTE_AND_COMPACT_EVIDENCE
+rollback: REVERT_RPS_WP3_COMMAND_AND_PRESERVE_RPS_G2_SOURCE_AND_ALL_LOCAL_FROZEN_AND_QUARANTINED_EVIDENCE
