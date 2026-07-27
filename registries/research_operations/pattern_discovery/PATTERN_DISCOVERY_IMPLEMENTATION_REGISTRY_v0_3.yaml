@@ -1,0 +1,123 @@
+registry_id: RO.C2.PATTERN_DISCOVERY.IMPLEMENTATION.v0.3
+plan_id: OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER
+plan_version: '0.3'
+source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
+baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
+owner: RESEARCH_OPERATIONS
+status: GATE_READY
+current_authority: DESIGN_FREEZE_CANDIDATE
+prohibited_authority:
+  - C2_MUTATION
+  - C2E
+  - C2_5
+  - C3
+  - OPT_C
+  - OPT_D
+  - VALIDATION_CONSUMPTION
+  - PROBABILITY
+  - EXPOSURE
+  - TRADING
+  - EXECUTION
+  - AGENT_WRITE
+  - SELECTOR_MUTATION
+  - RELEASE_MUTATION
+  - DIRECT_R2_WRITE
+objects:
+  - id: TransitionRecord
+    owner: RO.C2.PATTERN_DISCOVERY.TRANSITIONS
+    canonical: false
+    replaceable: true
+  - id: TriggerEvent
+    owner: RO.C2.PATTERN_DISCOVERY.TRIGGERS
+    canonical: false
+    replaceable: true
+  - id: CandidateWindow
+    owner: RO.C2.PATTERN_DISCOVERY.WINDOWS
+    canonical: false
+    replaceable: true
+  - id: PatternFingerprint
+    owner: RO.C2.PATTERN_DISCOVERY.FINGERPRINTS
+    canonical: false
+    replaceable: true
+  - id: NoveltyAssessment
+    owner: RO.C2.PATTERN_DISCOVERY.NOVELTY
+    canonical: false
+    replaceable: true
+  - id: ClusterVersion
+    owner: RO.C2.PATTERN_DISCOVERY.CLUSTERS
+    canonical: false
+    replaceable: false
+    immutable_versions: true
+  - id: ReviewQueueItem
+    owner: RESEARCH_CONSOLE
+    canonical: false
+    replaceable: true
+  - id: ReviewDecision
+    owner: RESEARCH_OPERATIONS
+    canonical: true
+    append_only: true
+processing_modes:
+  - LIVE_PROSPECTIVE
+  - TIME_GATED_REPLAY
+  - NON_EVIDENTIARY_REPLAY
+novelty_states:
+  - BASELINE_FORMING
+  - CALIBRATED_SHADOW
+  - ACTIVE_NOVELTY_RANKING
+candidate_populations:
+  - DISCOVERY_CANDIDATE_POPULATION
+  - HUMAN_REVIEWED_POPULATION
+  - CANONICAL_EVIDENCE_POPULATION
+ui_views:
+  - Queue
+  - Candidate Detail
+  - Clusters
+work_packets:
+  - packet_id: PD-00
+    status: GATE_READY
+    prerequisites:
+      - C2_G7_ACCEPTED
+      - ACTIVE_C2_DISCOVERY_RELEASE
+      - RESEARCH_OPERATIONS_FOUNDATION
+    authority_required: DESIGN_ONLY
+    authority_delta: FREEZE_PATTERN_DISCOVERY_DESIGN
+    baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
+    branch: build/pd-00-pattern-discovery-v0-3-freeze
+    candidate_commit: TO_BE_RESOLVED_AT_PR_TIP
+    tests:
+      - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
+    qa_packet: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_GATE_PACKET.md
+    decision_record: null
+    blockers: []
+    next_packet: PD-WP1
+  - packet_id: PD-WP1
+    status: PLANNED
+    prerequisites: [PD-G0_APPROVED]
+    authority_required: DERIVED_FIXTURE_COMPUTE
+    authority_delta: TRANSITION_AND_CANDIDATE_ENGINE_CANDIDATE
+    next_packet: PD-WP2
+  - packet_id: PD-WP2
+    status: PLANNED
+    prerequisites: [PD-G1_APPROVED]
+    authority_required: DERIVED_DISCOVERY_TRIAGE
+    authority_delta: TRIGGER_CONTROL_AND_NOVELTY_SHADOW
+    next_packet: PD-WP3
+  - packet_id: PD-WP3
+    status: PLANNED
+    prerequisites: [PD-G2_APPROVED]
+    authority_required: DERIVED_CLUSTER_COMPUTE
+    authority_delta: PROVISIONAL_CLUSTER_CANDIDATE
+    next_packet: PD-WP4
+  - packet_id: PD-WP4
+    status: PLANNED
+    prerequisites: [PD-G3_APPROVED]
+    authority_required: LOCAL_UI_AND_GOVERNED_APPEND_BRIDGE
+    authority_delta: HUMAN_REVIEW_OPERATION_CANDIDATE
+    next_packet: PD-WP5
+  - packet_id: PD-WP5
+    status: PLANNED
+    prerequisites: [PD-G4_APPROVED, REAL_PROSPECTIVE_SOURCE_AVAILABLE]
+    authority_required: ACTIVE_RESEARCH_TRIAGE
+    authority_delta: FIRST_PROSPECTIVE_DISCOVERY_BATCH
+    next_packet: PD-G5
+next_gate: PD-G0
