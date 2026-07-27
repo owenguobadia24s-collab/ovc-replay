@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "programme_status": "RUNNING",
+  "packets": [
+    {
+      "packet_id": "RO3-00",
+      "status": "APPROVED",
+      "prerequisites": ["OPERATOR_PLAN_RATIFICATION"],
+      "authority_required": "OPERATOR_REQUIRED_PLAN_RATIFICATION",
+      "authority_delta": "DESIGN_CANON_ONLY",
+      "baseline_commit": "0c177560b02e14a36a949626b155f616c12549e5",
+      "branch": "design/research-operations-v0-3-ro3-00",
+      "candidate_commit": null,
+      "tests": [],
+      "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g0/RO3_G0_GATE_PACKET.json",
+      "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g0/RO3_G0_OPERATOR_RATIFICATION.md",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "RO3-WP1"
+    },
+    {"packet_id": "RO3-WP1", "status": "READY", "prerequisites": ["RO3-G0"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "LOCAL_REPLACEABLE_DERIVED", "next_packet": "RO3-WP2"},
+    {"packet_id": "RO3-WP2", "status": "PLANNED", "prerequisites": ["RO3-G1"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "READ_ONLY_DERIVED_INSPECTION", "next_packet": "RO3-WP3"},
+    {"packet_id": "RO3-WP3", "status": "PLANNED", "prerequisites": ["RO3-G2"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "QA_EVIDENCE_ONLY", "next_packet": "RO3-WP4"},
+    {"packet_id": "RO3-WP4", "status": "PLANNED", "prerequisites": ["RO3-G3"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS", "next_packet": "RC-G4"},
+    {"packet_id": "RC-G4", "status": "PLANNED", "prerequisites": ["RO3-G4"], "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE", "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION", "next_packet": null}
+  ]
+}
