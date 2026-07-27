@@ -107,11 +107,17 @@ packets:
     authority_delta: IMMUTABLE_LOCAL_PROSPECTIVE_SOURCE_SLICE_REPLACEMENT_SCOPE
     baseline_commit: c61825aa6edc3389566e94316138391db49ac9d5
     branch: build/rps-g1a-june-source-amendment
+    candidate_commit: 2aaed61438da65000a45542e7bbd097d9433cc00
+    tested_branch_head: 4a4ae30692af6b226ef79add115646eb3ad5b8ce
+    pull_request: 101
     implementation_state: JUNE_REPLACEMENT_COMMAND_CANDIDATE_NO_PROVIDER_REQUEST
     replacement_profile: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_REPLACEMENT_INTAKE_PROFILE.json
     incident_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_PROVIDER_AVAILABILITY_INCIDENT.md
     operator_guide: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_WINDOWS_OPERATOR_GUIDE.md
     local_command: scripts/run_rps_wp2_intake.ps1
+    tests: [GitHub_Actions_30281272345]
+    qa_result: PASS
+    gate_packet: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_AMENDMENT_GATE_PACKET.md
     blockers:
       - code: OPERATOR_RPS_G1A_APPROVAL_REQUIRED
         detail: The proposed June interval changes the exact provider intake authority granted by RPS-G1.
@@ -142,6 +148,7 @@ pending_gates:
   - gate_id: RPS-G1A
     status: GATE_READY
     authority: OPERATOR
+    qa_result: PASS
     decision_requested: PASS_OR_DEFER_OR_BLOCK_OR_QUARANTINE_OR_SUPERSEDE
     proposed_delta: REPLACE_EXACT_JULY_INTAKE_WITH_EXACT_JUNE_INTAKE
     gate_packet: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_AMENDMENT_GATE_PACKET.md
