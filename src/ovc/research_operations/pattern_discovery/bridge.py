@@ -188,7 +188,14 @@ class LocalEvidenceBridge:
             return "PROHIBITED_EXPOSURE_FIELD"
         return None
 
-    def _persist_request_result(self, request: AppendRequest, status: str, *, rejection_reason: str | None = None) -> dict[str, Any]:
+    def _persist_request_result(
+        self,
+        request: AppendRequest,
+        status: str,
+        *,
+        rejection_reason: str | None = None,
+        extra: Mapping[str, Any] | None = None,
+    ) -> dict[str, Any]:
         self.requests.mkdir(parents=True, exist_ok=True)
         result = {
             "append_request_id": request.append_request_id,
@@ -197,6 +204,7 @@ class LocalEvidenceBridge:
             "record_body_hash": request.record_body_hash,
             "nonce": request.nonce,
             "rejection_reason": rejection_reason,
+            **dict(extra or {}),
         }
         self._atomic_write(self._request_path(request.append_request_id), result)
         return result
@@ -243,12 +251,16 @@ class LocalEvidenceBridge:
         }
         self.transactions.mkdir(parents=True, exist_ok=True)
         self._atomic_write(self._transaction_path(sequence, request.append_request_id), transaction)
-        return self._persist_request_result(request, "COMMITTED") | {
-            "sequence_number": sequence,
-            "evidence_record_id": evidence["record_id"],
-            "audit_event_hash": event_hash,
-            "canonical": bool(self.write_authority),
-        }
+        return self._persist_request_result(
+            request,
+            "COMMITTED",
+            extra={
+                "sequence_number": sequence,
+                "evidence_record_id": evidence["record_id"],
+                "audit_event_hash": event_hash,
+                "canonical": bool(self.write_authority),
+            },
+        )
 
     @staticmethod
     def _atomic_write(path: Path, payload: Mapping[str, Any]) -> None:
