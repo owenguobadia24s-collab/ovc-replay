@@ -28,11 +28,11 @@ jobs:
         with:
           python-version: "3.11"
       - name: Focused C1 index tests
-        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_c1_index -v
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_c1_index.py' -v
       - name: Full-corpus shape benchmark and deterministic rerun
         env:
           RO3_BENCHMARK_OUTPUT: ro3-c1-index-benchmark-runtime.json
-        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_c1_index_performance -v
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_c1_index_performance.py' -v
       - name: Upload benchmark evidence
         uses: actions/upload-artifact@v4
         with:
