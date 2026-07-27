@@ -27,17 +27,19 @@ if ([string]::IsNullOrWhiteSpace($env:OVC_EXTERNAL_ARTIFACT_ROOT)) {
 
 $arguments = @(
     "-m",
-    "ovc.research_operations.prospective_source.dukascopy_intake",
+    "ovc.research_operations.prospective_source.dukascopy_intake_rps_g1a",
     $Command,
     "--repository-root",
     $repositoryRoot
 )
 
 if ($Command -eq "execute") {
-    $arguments += @("--gate", "RPS-G1")
+    $arguments += @("--gate", "RPS-G1A")
 }
 
-Write-Host "RPS-WP2 command: $Command"
+Write-Host "RPS-WP2 amendment command: $Command"
+Write-Host "Gate candidate: RPS-G1A"
+Write-Host "Slice candidate: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1"
 Write-Host "Repository: $repositoryRoot"
 Write-Host "External artifact root: $env:OVC_EXTERNAL_ARTIFACT_ROOT"
 
