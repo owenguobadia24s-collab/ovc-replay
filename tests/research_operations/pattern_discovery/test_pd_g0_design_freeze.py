@@ -120,7 +120,7 @@ class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
         self.assertIn("packet_id: PD-00", registry)
         self.assertIn("status: COMPLETED", registry)
         self.assertIn("packet_id: PD-WP1", registry)
-        self.assertIn("status: READY", registry)
+        self.assertIn("status: GATE_READY", registry)
         self.assertIn("next_gate: PD-G1", registry)
         self.assertIn("OVC APPROVE PD-G0", decision)
         self.assertIn("Merge into `main` is not granted", decision)
