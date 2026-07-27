@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "contracts/research_operations/pattern_discovery/PD_WP5_PILOT_DISCOVERY_OPERATION_CONTRACT_v0_1.md"
-      - "schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_amendment_gate_state_v0_1.schema.json"
+      - "schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_gate_state_v0_1.schema.json"
       - "registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json"
       - "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
       - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
@@ -38,7 +38,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m json.tool schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_amendment_gate_state_v0_1.schema.json >/dev/null
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_gate_state_v0_1.schema.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
