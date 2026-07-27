@@ -113,15 +113,14 @@ class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
         self.assertIn("Persist every TriggerEvent", scale_text)
         self.assertIn("queue presentation and closure-profile choice only", failure_text)
 
-    def test_operator_approval_releases_pd_wp1_only(self) -> None:
+    def test_operator_approval_retains_design_boundary_after_pd_g1(self) -> None:
         registry = (REGISTRY_ROOT / "PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml").read_text(encoding="utf-8")
         decision = DECISION_RECORD.read_text(encoding="utf-8")
         self.assertIn("status: APPROVED", registry)
         self.assertIn("packet_id: PD-00", registry)
         self.assertIn("status: COMPLETED", registry)
-        self.assertIn("packet_id: PD-WP1", registry)
-        self.assertIn("status: READY", registry)
-        self.assertIn("next_gate: PD-G1", registry)
+        self.assertRegex(registry, re.compile(r"packet_id: PD-WP1\s+status: COMPLETED", re.S))
+        self.assertIn("next_gate: PD-G2", registry)
         self.assertIn("OVC APPROVE PD-G0", decision)
         self.assertIn("Merge into `main` is not granted", decision)
 

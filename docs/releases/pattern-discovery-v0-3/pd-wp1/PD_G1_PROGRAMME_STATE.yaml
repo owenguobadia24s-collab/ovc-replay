@@ -1,0 +1,42 @@
+plan_id: OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER
+plan_version: '0.3'
+gate_id: PD-G1
+status: APPROVED
+decision: PASS
+approval_command: OVC APPROVE PD-G1
+approved_on: '2026-07-27'
+baseline_commit: d567297b1743d665e603e62e258767b18f2694ee
+branch: build/pd-wp1-transition-candidate-engine
+candidate_commit: 5e16e932e85e2e4d11b2f66c95a64cb02a1281dd
+tests:
+  - workflow: 30258799465
+    status: PASS
+  - workflow: 30258799373
+    status: PASS
+  - workflow: 30258799340
+    status: PASS
+qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_WP1_QA_PACKET.json
+decision_record: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_DECISION.md
+authority_delta: ACCEPT_TRANSITION_AND_CANDIDATE_ENGINE
+retained_prohibitions:
+  - LIVE_PATTERN_DISCOVERY_PROCESSING
+  - ACTIVE_NOVELTY_RANKING
+  - CLUSTER_AUTHORITY
+  - EVIDENCE_BRIDGE_WRITE
+  - SELECTOR_MUTATION
+  - RELEASE_MUTATION
+  - DIRECT_R2_WRITE
+  - C2E
+  - C2_5
+  - C3
+  - VALIDATION_CONSUMPTION
+  - PROBABILITY
+  - EXPOSURE
+  - TRADING
+  - EXECUTION
+  - AGENT_WRITE
+next_packet:
+  packet_id: PD-WP2
+  status: READY
+  authority_delta: TRIGGER_CONTROL_AND_NOVELTY_SHADOW
+next_gate: PD-G2

@@ -5,8 +5,13 @@ source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
-current_authority: DESIGN_FREEZE_APPROVED
+current_authority: TRANSITION_AND_CANDIDATE_ENGINE_ACCEPTED
 prohibited_authority:
+  - LIVE_PATTERN_DISCOVERY_PROCESSING
+  - ACTIVE_TRIGGER_REGISTRY
+  - ACTIVE_NOVELTY_RANKING
+  - CLUSTER_AUTHORITY
+  - EVIDENCE_BRIDGE_WRITE
   - C2_MUTATION
   - C2E
   - C2_5
@@ -27,35 +32,43 @@ objects:
     owner: RO.C2.PATTERN_DISCOVERY.TRANSITIONS
     canonical: false
     replaceable: true
+    implementation_status: ACCEPTED
   - id: TriggerEvent
     owner: RO.C2.PATTERN_DISCOVERY.TRIGGERS
     canonical: false
     replaceable: true
+    implementation_status: ACCEPTED_PERSISTENCE_FOUNDATION
   - id: CandidateWindow
     owner: RO.C2.PATTERN_DISCOVERY.WINDOWS
     canonical: false
     replaceable: true
+    implementation_status: ACCEPTED
   - id: PatternFingerprint
     owner: RO.C2.PATTERN_DISCOVERY.FINGERPRINTS
     canonical: false
     replaceable: true
+    implementation_status: PLANNED
   - id: NoveltyAssessment
     owner: RO.C2.PATTERN_DISCOVERY.NOVELTY
     canonical: false
     replaceable: true
+    implementation_status: PLANNED_PD_WP2_BASELINE_ONLY
   - id: ClusterVersion
     owner: RO.C2.PATTERN_DISCOVERY.CLUSTERS
     canonical: false
     replaceable: false
     immutable_versions: true
+    implementation_status: PLANNED
   - id: ReviewQueueItem
     owner: RESEARCH_CONSOLE
     canonical: false
     replaceable: true
+    implementation_status: PLANNED
   - id: ReviewDecision
     owner: RESEARCH_OPERATIONS
     canonical: true
     append_only: true
+    implementation_status: PLANNED
 processing_modes:
   - LIVE_PROSPECTIVE
   - TIME_GATED_REPLAY
@@ -89,26 +102,43 @@ work_packets:
       - GitHub Actions 30254489870
     qa_packet: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_GATE_PACKET.md
     decision_record: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_DECISION.md
+    merge_commit: fb63c15b5f7e265cc78e35421de39c4656d8140e
     blockers: []
     next_packet: PD-WP1
   - packet_id: PD-WP1
-    status: READY
+    status: COMPLETED
     prerequisites: [PD-G0_APPROVED]
     authority_required: DERIVED_FIXTURE_COMPUTE
-    authority_delta: TRANSITION_AND_CANDIDATE_ENGINE_CANDIDATE
-    baseline_commit: TO_BE_RESOLVED_FROM_PD_G0_DECISION_TIP
-    branch: build/pd-wp1-transition-candidate-engine
+    authority_delta: ACCEPT_TRANSITION_AND_CANDIDATE_ENGINE
+    baseline_commit: fb63c15b5f7e265cc78e35421de39c4656d8140e
+    branch: build/pd-g1-clean-integration
+    candidate_commit: efa062115cb654b951eb0d44c8b66107bdd882d7
+    tests:
+      - tests/research_operations/pattern_discovery/test_pd_wp1_transition_candidate_engine.py
+      - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
+      - tests/authority/test_active_namespace_allowlist.py
+      - canonical repository suite
+      - GitHub Actions 30261913139
+      - GitHub Actions 30261913174
+    qa_result: PASS_PD_G1_APPROVED
+    qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_WP1_QA_PACKET.json
+    gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_GATE_PACKET.md
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_DECISION.md
+    merge_commit: null
+    blockers: []
+    next_packet: PD-WP2
+  - packet_id: PD-WP2
+    status: READY
+    prerequisites: [PD-G1_APPROVED]
+    authority_required: DERIVED_DISCOVERY_TRIAGE
+    authority_delta: TRIGGER_CONTROL_AND_NOVELTY_SHADOW
+    baseline_commit: TO_BE_RESOLVED_FROM_PD_G1_MERGE
+    branch: build/pd-wp2-trigger-control-novelty
     candidate_commit: null
     tests: []
     qa_packet: null
     decision_record: null
     blockers: []
-    next_packet: PD-WP2
-  - packet_id: PD-WP2
-    status: PLANNED
-    prerequisites: [PD-G1_APPROVED]
-    authority_required: DERIVED_DISCOVERY_TRIAGE
-    authority_delta: TRIGGER_CONTROL_AND_NOVELTY_SHADOW
     next_packet: PD-WP3
   - packet_id: PD-WP3
     status: PLANNED
@@ -135,4 +165,10 @@ completed_gates:
     decision_record: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_DECISION.md
     approval_command: OVC APPROVE PD-G0
     approved_on: '2026-07-27'
-next_gate: PD-G1
+  - gate_id: PD-G1
+    status: APPROVED
+    decision: PASS
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_DECISION.md
+    approval_command: OVC APPROVE PD-G1
+    approved_on: '2026-07-27'
+next_gate: PD-G2

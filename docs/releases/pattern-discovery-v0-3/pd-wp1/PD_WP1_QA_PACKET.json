@@ -1,0 +1,41 @@
+{
+  "packet_id": "PD-WP1",
+  "gate_id": "PD-G1",
+  "plan_id": "OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER",
+  "plan_version": "0.3",
+  "source_sha256": "03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa",
+  "baseline_commit": "d567297b1743d665e603e62e258767b18f2694ee",
+  "branch": "build/pd-wp1-transition-candidate-engine",
+  "candidate_implementation_commit": "7b16174656f9370d13ff4e3575b6834513705892",
+  "status": "PASS_PD_G1_CANDIDATE",
+  "authority_delta": "TRANSITION_AND_CANDIDATE_ENGINE_CANDIDATE",
+  "workflow_run": 30258601276,
+  "canonical_workflow_run": 30258601125,
+  "retained_pd_g0_workflow_run": 30258601144,
+  "checks": [
+    {"check_id": "PD1-DETERMINISM", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-CHRONOLOGY", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-SOURCE-BINDING", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-APPEND-ONLY", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-DEDUP-CAPS", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-FAILURE-MATRIX", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-PROHIBITED-DEPENDENCY", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-NAMESPACE-ALLOWLIST", "status": "PASS", "blocking": true},
+    {"check_id": "PD1-CANONICAL-SUITE", "status": "PASS", "blocking": true}
+  ],
+  "corrected_defects": [
+    {
+      "issue": "The canonical namespace allowlist did not yet include the PD-G0-approved pattern_discovery subpackage.",
+      "resolution": "The Research Operations namespace registry and canonical allowlist test were updated additively; all focused and repository-wide tests were rerun successfully."
+    }
+  ],
+  "warnings": [
+    "No live prospective Pattern Discovery job is activated.",
+    "Trigger predicate evaluation remains PD-WP2.",
+    "Fingerprint, novelty and clustering remain later packets.",
+    "CandidateWindow objects remain derived and non-canonical."
+  ],
+  "blockers": [],
+  "recommended_decision": "PASS",
+  "next_packet_after_operator_pass": "PD-WP2"
+}
