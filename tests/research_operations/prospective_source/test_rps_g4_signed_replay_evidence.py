@@ -182,7 +182,10 @@ class RpsG4SignedReplayEvidenceTests(unittest.TestCase):
             "acceptance_id": "RPS.REPLAY-ACCEPT.0844eddf74e144ced487cc48",
         }
         for key, value in expected.items():
-            self.assertEqual(self.index[key], value)
+            if key in {"operator_id", "signing_binding_id"}:
+                self.assertEqual(self.index["operator"][key], value)
+            else:
+                self.assertEqual(self.index[key], value)
             self.assertEqual(self.gate[key], value)
         for key in ("source_slice_id", "run_id", "binding_id", "operator_id", "signing_binding_id"):
             self.assertEqual(self.binding[key], expected[key])
