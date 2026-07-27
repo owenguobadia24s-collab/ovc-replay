@@ -53,7 +53,11 @@ The proposed delta does **not** activate prospective processing, novelty ranking
 - Focused suite: `tests.research_operations.pattern_discovery.test_pd_g0_design_freeze`
 - Canonical suite: `python -m unittest discover -s tests -p 'test_*.py'`
 - Workflow: `.github/workflows/pd-g0-pattern-discovery-design-freeze.yml`
-- Result: `PENDING_GITHUB_CI` at packet creation. The PR check result is part of this gate evidence and must be PASS before approval is recommended.
+- Successful run: GitHub Actions `30254408829`
+- Focused test step: `PASS`
+- Canonical repository test step: `PASS`
+- Diagnostic artifact upload: `PASS`
+- QA result: `PASS_PD_G0_CANDIDATE`
 
 ## Warnings and limitations
 
@@ -99,7 +103,9 @@ Close the candidate PR or reset the unmerged branch reference. Main, active C2 s
 
 ## Recommended decision
 
-`PASS` only after focused and canonical CI are green. Otherwise `BLOCK` on the exact failing assertion.
+`PASS`
+
+The design packet is complete, the focused PD-G0 assertions pass and the canonical repository suite passes. Approval remains an operator authority decision.
 
 ## Exact work that begins automatically after approval
 
