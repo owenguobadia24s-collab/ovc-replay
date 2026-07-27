@@ -2,7 +2,7 @@
 
 ## Status
 
-`IMPLEMENTED_AWAITING_PD_G1`
+`GATE_READY_PD_G1`
 
 ## Governing plan
 
@@ -10,7 +10,9 @@
 - Source SHA-256: `03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa`
 - Approved prerequisite: `PD-G0`
 - Packet baseline: `d567297b1743d665e603e62e258767b18f2694ee`
+- Candidate implementation commit: `7b16174656f9370d13ff4e3575b6834513705892`
 - Branch: `build/pd-wp1-transition-candidate-engine`
+- Pull request: `#90`
 
 ## Implemented capability
 
@@ -26,6 +28,7 @@
 - open, accumulate, pending-input, resume, close and invalid lifecycle operations;
 - exact gap, quarantine, context-change and selector-change failure transitions;
 - fixture-only composition service and synthetic C2 state stream;
+- additive registration of the approved Pattern Discovery Python namespace;
 - focused tests and dedicated GitHub Actions workflow.
 
 ## Authority boundary
@@ -44,13 +47,17 @@ TransitionRecord and TriggerEvent JSONL ledgers are append-only, duplicate-safe 
 
 `fixtures/research_operations/pattern_discovery/pd_wp1/c2_state_stream.json` includes stable and changing C2 axes, relation-set movement, an explicit source gap, an explicit quarantined source and exact release lineage.
 
-## Tests
+## Tests and QA
 
-- Focused: `python -m unittest tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine`
-- Retained boundary: `python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze`
-- Canonical: `python -m unittest discover -s tests -p 'test_*.py'`
+- Focused suite: `PASS`
+- Retained PD-G0 boundary suite: `PASS`
+- Canonical repository suite: `PASS`
+- Dedicated workflow: `30258601276` — `SUCCESS`
+- Canonical workflow: `30258601125` — `SUCCESS`
+- Retained PD-G0 workflow: `30258601144` — `SUCCESS`
+- QA result: `PASS_PD_G1_CANDIDATE`
 
-Final GitHub CI evidence is recorded in the PD-G1 packet before an operator decision is requested.
+One correctable canonical namespace-allowlist failure was found and resolved inside packet scope. The approved `ovc.research_operations.pattern_discovery` namespace was added to the Research Operations namespace registry and canonical test allowlist, then all affected and repository-wide tests were rerun successfully.
 
 ## Rollback
 
