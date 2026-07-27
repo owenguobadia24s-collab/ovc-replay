@@ -6,12 +6,13 @@
   "source_sha256": "03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa",
   "baseline_commit": "b0798b5535f5fb0276a2b524956c801e278b96d4",
   "branch": "build/pd-wp4-simple-ui-evidence-bridge",
-  "candidate_commit": "b3ed131ae6327c1d2c2e6fc9be4df0cbd4d96213",
+  "candidate_implementation_commit": "0062b5e212225211c03fd372fc17e3225a2818c2",
   "status": "PASS_PD_G4_CANDIDATE_OPERATOR_REQUIRED",
   "authority_delta": "HUMAN_REVIEW_OPERATION_AND_CANONICAL_EVIDENCE_BRIDGE_ACTIVATION",
-  "canonical_workflow_run": 30265182927,
+  "dedicated_workflow_run": 30265782754,
+  "dedicated_workflow_result": "PASS",
+  "canonical_workflow_run": 30265782856,
   "canonical_workflow_result": "PASS",
-  "focused_tests_included_in_canonical_discovery": true,
   "checks": [
     {"check_id": "PD4-THREE-VIEW-UI", "status": "PASS", "blocking": true},
     {"check_id": "PD4-SOURCE-LINEAGE-VISIBLE", "status": "PASS", "blocking": true},
@@ -35,6 +36,12 @@
     "fixture_manual_source_id_entry": 0,
     "real_operator_measurement_status": "REQUIRED_AT_PD_G4_ACCEPTANCE_SESSION"
   },
+  "corrected_defects": [
+    {
+      "issue": "The committed idempotent response initially omitted transaction metadata from the persisted request status, so a repeated identical request did not return the full original result.",
+      "resolution": "The bridge now persists sequence, evidence-record, audit-event and canonical fields in the committed request status; dedicated and canonical suites pass."
+    }
+  ],
   "warnings": [
     "Canonical evidence-write authority remains disabled until operator approval.",
     "The fixture signer verifies the service boundary but is not an operator production key.",
