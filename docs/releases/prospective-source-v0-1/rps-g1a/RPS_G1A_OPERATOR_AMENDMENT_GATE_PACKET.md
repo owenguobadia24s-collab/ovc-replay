@@ -9,8 +9,10 @@
 - Packet: `RPS-WP2`
 - Baseline main: `c61825aa6edc3389566e94316138391db49ac9d5`
 - Candidate implementation commit: `2aaed61438da65000a45542e7bbd097d9433cc00`
+- Candidate gate branch head tested through PR merge ref: `4a4ae30692af6b226ef79add115646eb3ad5b8ce`
 - Candidate branch: `build/rps-g1a-june-source-amendment`
-- Gate status: `GATE_READY_PENDING_FINAL_CI`
+- Pull request: `#101`
+- Gate status: `GATE_READY`
 - Authority: `OPERATOR_REQUIRED`
 
 ## Completed work
@@ -19,7 +21,7 @@
 2. Added an isolated RPS-G1A intake profile that reuses the accepted bounded BI5 implementation without mutating the historical RPS-G1 profile.
 3. Bound the operator wrapper to the proposed June slice and `RPS-G1A` gate.
 4. Added exact fake-provider tests for the replacement interval and regression protection for the historical July profile.
-5. Added a no-provider-access CI workflow.
+5. Added a no-provider-access CI workflow definition.
 6. Updated the machine-readable programme registry, replacement profile manifest and Windows operator guide.
 
 ## Current authority
@@ -76,13 +78,20 @@ Approval of RPS-G1A withdraws authority to retry or accept the July identity und
 - canonical repository unittest discovery;
 - no-network preflight.
 
-### CI state
+### CI evidence
 
-`PENDING_FINAL_CI` — the branch workflow must pass before the operator decision is recorded.
+- Canonical workflow: `30281272345`
+- Canonical job: `90027978323`
+- Command: `PYTHONPATH=src python3 -m unittest discover -s tests -v`
+- Result: `PASS`
+
+The canonical discovery suite included the new `test_dukascopy_intake_rps_g1a.py` file. Its tests exercise the exact June profile with generated fake BI5 objects, no-network preflight, wrong-gate rejection, CI execution denial and historical July-profile restoration. No provider request occurred.
+
+The dedicated amendment workflow definition is included for future branch/default-branch execution; the canonical repository workflow supplied the gate's executed test evidence.
 
 ### QA recommendation
 
-`PASS` after the exact amendment workflow and canonical repository suite complete successfully. No provider request is performed by CI or by preparation of this gate.
+`PASS`. The candidate is deterministic, bounded, non-activating, tested without provider access and preserves every prohibited authority. No blocking warning or unresolved code defect remains inside the amendment packet.
 
 ## Warnings and unresolved issues
 
@@ -113,7 +122,7 @@ ACTIVE_RESEARCH_TRIAGE, LIVE_PROSPECTIVE append, live Pattern Discovery processi
 
 ## Rollback
 
-Close the candidate PR without merge and retain `main` at `c61825aa6edc3389566e94316138391db49ac9d5`. Preserve the July quarantine incident. No provider source, release, selector, R2 key, evidence row or active authority is changed by rollback.
+Close PR #101 without merge and retain `main` at `c61825aa6edc3389566e94316138391db49ac9d5`. Preserve the July quarantine incident. No provider source, release, selector, R2 key, evidence row or active authority is changed by rollback.
 
 ## Recommended decision
 
@@ -124,7 +133,7 @@ Allowed decisions: `PASS`, `DEFER`, `BLOCK`, `QUARANTINE`, `SUPERSEDE`.
 ## Exact work after approval
 
 1. Record the RPS-G1A operator decision and supersession of the July intake scope.
-2. Ensure final CI is PASS and squash-merge the bounded amendment PR into `main`.
+2. Pin the final PR head, confirm canonical checks remain PASS and squash-merge PR #101 into `main`.
 3. Pull the approved main tip locally.
 4. Run the documented preflight and execute commands.
 5. Supply only the compact June manifest and six compact receipt files.
