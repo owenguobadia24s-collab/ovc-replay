@@ -1,0 +1,57 @@
+name: PD-WP4 Simple UI and Evidence Bridge Candidate
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/pattern_discovery/**"
+      - "apps/research_console/pattern_discovery*.py"
+      - "tests/research_operations/pattern_discovery/**"
+      - "registries/research_operations/pattern_discovery/**"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp4/**"
+      - ".github/workflows/pd-wp4-simple-ui-evidence-bridge.yml"
+  workflow_dispatch:
+
+jobs:
+  pd-wp4:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      PYTHONPATH: src:.
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run PD-WP4 focused tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp4_simple_ui_evidence_bridge
+
+      - name: Run PD-WP3 retained tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp3_fingerprint_clustering
+
+      - name: Run PD-WP2 retained tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty
+
+      - name: Run PD-WP1 retained tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine
+
+      - name: Run retained design-boundary tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze
+
+      - name: Run canonical repository tests
+        run: |
+          set +e
+          python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
+          status=$?
+          cat canonical-tests.log
+          exit $status
+
+      - name: Upload canonical diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-wp4-canonical-tests
+          path: canonical-tests.log
+          if-no-files-found: ignore
