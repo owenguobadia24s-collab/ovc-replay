@@ -1,0 +1,105 @@
+name: PD-WP5 Pilot Discovery amendment
+
+on:
+  pull_request:
+    paths:
+      - "contracts/research_operations/pattern_discovery/PD_WP5_PILOT_DISCOVERY_OPERATION_CONTRACT_v0_1.md"
+      - "schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_amendment_gate_state_v0_1.schema.json"
+      - "registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
+      - "registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp5/**"
+      - "tests/research_operations/pattern_discovery/test_pd_wp5_pilot_discovery_amendment.py"
+      - ".github/workflows/pd-wp5-pilot-discovery-amendment.yml"
+      - ".github/workflows/pd-wp5-first-live-operation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  amendment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused Pilot Discovery amendment tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/pattern_discovery
+          -p 'test_pd_wp5_pilot_discovery_amendment.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Validate machine-readable gate and schema JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_amendment_gate_state_v0_1.schema.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
+          python -m json.tool registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json >/dev/null
+      - name: Assert exact Pilot Discovery authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json').read_text())
+          pd = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
+          rps = json.loads(Path('registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json').read_text())
+          assert gate['gate_status'] == 'GATE_READY'
+          assert gate['operator_approval_required'] is True
+          assert gate['research_role'] == 'PILOT_DISCOVERY'
+          assert gate['operation_mode'] == 'TIME_GATED_REPLAY'
+          assert gate['source_slice_id'] == 'RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1'
+          assert gate['compute_run_id'] == 'RPS.RUN.7aeb551335d766ee3bf503e6'
+          assert gate['source_binding_id'] == 'RPS.BINDING.32fb3003efa072916c11e907'
+          assert gate['signed_replay_acceptance_id'] == 'RPS.REPLAY-ACCEPT.0844eddf74e144ced487cc48'
+          assert gate['pilot_only'] is True
+          assert gate['promotion_eligibility'] == 'NON_PROMOTABLE'
+          assert gate['canonical_discovery_population'] is False
+          assert gate['canonical_append'] == 'DENIED'
+          assert gate['next_gate'] == 'PD-G5P'
+          assert pd['packet_status'] == 'GATE_READY'
+          assert pd['next_gate'] == 'PD-G4B'
+          assert rps['gate_status'] == 'SUPERSEDED_FOR_PILOT_DISCOVERY'
+          assert rps['future_live_gate'] == 'RPS-LIVE-G1'
+          assert rps['provider_request_authority'] == 'DENIED'
+          PY
+      - name: Assert no executable, provider or market payload added by amendment
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only origin/${{ github.base_ref }}...HEAD)"
+          echo "$changed"
+          if echo "$changed" | grep -E '(^|/)(id_ed25519|.*\.bi5|.*\.csv|.*\.jsonl|raw|cache)(/|$)'; then
+            echo "Prohibited raw/provider/key/payload path added by amendment."
+            exit 1
+          fi
+          if echo "$changed" | grep -E '^src/'; then
+            echo "Executable source change found in design-only amendment."
+            exit 1
+          fi
+      - name: Assert retained prohibitions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json').read_text())
+          prohibited = set(gate['retained_prohibitions'])
+          required = {
+              'SEMANTIC_PROMOTION', 'FAMILY_PROMOTION', 'ACTIVE_NOVELTY_RANKING',
+              'SELECTOR_MUTATION', 'RELEASE_MUTATION', 'DIRECT_R2_WRITE',
+              'VALIDATION_CONSUMPTION', 'PROBABILITY', 'RISK', 'EXPOSURE',
+              'TRADING', 'EXECUTION', 'AGENT_WRITE', 'LIVE_PROSPECTIVE_RELABEL'
+          }
+          assert required <= prohibited
+          PY
