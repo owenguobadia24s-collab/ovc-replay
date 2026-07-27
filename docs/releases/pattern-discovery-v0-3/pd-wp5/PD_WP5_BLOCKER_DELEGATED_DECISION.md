@@ -4,6 +4,7 @@
 - Packet: `PD-WP5`
 - Baseline main: `5842c8e9079efb82e5dc78dbeba31005c27eaa24`
 - Candidate branch: `build/pd-wp5-first-live-prospective-operation`
+- Tested gate-ready head: `9694f279ba2ca64d85c77e8679a863c6a79f2be3`
 - Pull request: `#115`
 - Decision: `BLOCK`
 - Decision authority: `DELEGATED_DIAGNOSTIC_AND_STATE_RECORD_ONLY`
@@ -55,12 +56,12 @@ RPS-G4 ACTIVE_RESEARCH_TRIAGE remains approved and fail-closed. Candidate source
 
 ## Tests
 
-Initial tested head workflows:
+- focused PD-WP5 workflow `30302750156`, job `90099418472`: PASS;
+- canonical workflow `30302750032`, job `90099417677`: PASS;
+- exact RPS-G4A scope and retained-denial checks: PASS;
+- provider-network code exclusion: PASS.
 
-- focused PD-WP5 workflow `30302376087`, job `90098171075`: PASS;
-- canonical workflow `30302374856`, job `90098167609`: PASS.
-
-Final-head workflows are pinned before squash merge.
+Final decision-bearing head checks are rerun before squash merge.
 
 ## Rollback
 
