@@ -1,0 +1,31 @@
+{
+  "packet_id": "PD-WP1",
+  "gate_id": "PD-G1",
+  "plan_id": "OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER",
+  "plan_version": "0.3",
+  "source_sha256": "03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa",
+  "baseline_commit": "d567297b1743d665e603e62e258767b18f2694ee",
+  "branch": "build/pd-wp1-transition-candidate-engine",
+  "candidate_commit": "TO_BE_RESOLVED_AT_PR_TIP",
+  "status": "QA_REVIEW_PENDING_CI",
+  "authority_delta": "TRANSITION_AND_CANDIDATE_ENGINE_CANDIDATE",
+  "checks": [
+    {"check_id": "PD1-DETERMINISM", "status": "PENDING_CI", "blocking": true},
+    {"check_id": "PD1-CHRONOLOGY", "status": "PENDING_CI", "blocking": true},
+    {"check_id": "PD1-SOURCE-BINDING", "status": "PENDING_CI", "blocking": true},
+    {"check_id": "PD1-APPEND-ONLY", "status": "PENDING_CI", "blocking": true},
+    {"check_id": "PD1-DEDUP-CAPS", "status": "PENDING_CI", "blocking": true},
+    {"check_id": "PD1-FAILURE-MATRIX", "status": "PENDING_CI", "blocking": true},
+    {"check_id": "PD1-PROHIBITED-DEPENDENCY", "status": "PENDING_CI", "blocking": true},
+    {"check_id": "PD1-CANONICAL-SUITE", "status": "PENDING_CI", "blocking": true}
+  ],
+  "warnings": [
+    "No live prospective Pattern Discovery job is activated.",
+    "Trigger predicate evaluation remains PD-WP2.",
+    "Fingerprint, novelty and clustering remain later packets.",
+    "CandidateWindow objects remain derived and non-canonical."
+  ],
+  "blockers": [],
+  "recommended_decision": "PASS_IF_CI_GREEN",
+  "next_packet_after_operator_pass": "PD-WP2"
+}
