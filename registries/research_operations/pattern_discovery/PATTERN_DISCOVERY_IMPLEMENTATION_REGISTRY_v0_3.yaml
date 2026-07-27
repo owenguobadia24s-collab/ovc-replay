@@ -4,8 +4,8 @@ plan_version: '0.3'
 source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
-status: GATE_READY
-current_authority: DESIGN_FREEZE_CANDIDATE
+status: APPROVED
+current_authority: DESIGN_FREEZE_APPROVED
 prohibited_authority:
   - C2_MUTATION
   - C2E
@@ -74,7 +74,7 @@ ui_views:
   - Clusters
 work_packets:
   - packet_id: PD-00
-    status: GATE_READY
+    status: COMPLETED
     prerequisites:
       - C2_G7_ACCEPTED
       - ACTIVE_C2_DISCOVERY_RELEASE
@@ -83,18 +83,26 @@ work_packets:
     authority_delta: FREEZE_PATTERN_DISCOVERY_DESIGN
     baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
     branch: build/pd-00-pattern-discovery-v0-3-freeze
-    candidate_commit: TO_BE_RESOLVED_AT_PR_TIP
+    candidate_commit: 65ea7998059fbce7f2aa858166e12fdbf7ff0a14
     tests:
       - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
+      - GitHub Actions 30254489870
     qa_packet: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_GATE_PACKET.md
-    decision_record: null
+    decision_record: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_DECISION.md
     blockers: []
     next_packet: PD-WP1
   - packet_id: PD-WP1
-    status: PLANNED
+    status: READY
     prerequisites: [PD-G0_APPROVED]
     authority_required: DERIVED_FIXTURE_COMPUTE
     authority_delta: TRANSITION_AND_CANDIDATE_ENGINE_CANDIDATE
+    baseline_commit: TO_BE_RESOLVED_FROM_PD_G0_DECISION_TIP
+    branch: build/pd-wp1-transition-candidate-engine
+    candidate_commit: null
+    tests: []
+    qa_packet: null
+    decision_record: null
+    blockers: []
     next_packet: PD-WP2
   - packet_id: PD-WP2
     status: PLANNED
@@ -120,4 +128,11 @@ work_packets:
     authority_required: ACTIVE_RESEARCH_TRIAGE
     authority_delta: FIRST_PROSPECTIVE_DISCOVERY_BATCH
     next_packet: PD-G5
-next_gate: PD-G0
+completed_gates:
+  - gate_id: PD-G0
+    status: APPROVED
+    decision: PASS
+    decision_record: docs/releases/pattern-discovery-v0-3/PD_G0_OPERATOR_DECISION.md
+    approval_command: OVC APPROVE PD-G0
+    approved_on: '2026-07-27'
+next_gate: PD-G1
