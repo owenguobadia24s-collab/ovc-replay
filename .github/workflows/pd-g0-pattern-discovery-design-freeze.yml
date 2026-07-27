@@ -1,0 +1,46 @@
+name: PD-G0 Pattern Discovery Design Freeze
+
+on:
+  pull_request:
+    paths:
+      - "contracts/research_operations/pattern_discovery/**"
+      - "schemas/research_operations/pattern_discovery/**"
+      - "registries/research_operations/pattern_discovery/**"
+      - "tests/research_operations/pattern_discovery/**"
+      - "docs/implementation-plans/OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER_v0_3_SOURCE_BINDING.md"
+      - "docs/releases/pattern-discovery-v0-3/**"
+      - ".github/workflows/pd-g0-pattern-discovery-design-freeze.yml"
+  workflow_dispatch:
+
+jobs:
+  pd-g0:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run PD-G0 focused tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze
+
+      - name: Run canonical repository tests
+        env:
+          PYTHONPATH: src
+        run: |
+          set +e
+          python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
+          status=$?
+          cat canonical-tests.log
+          exit $status
+
+      - name: Upload canonical diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-g0-canonical-tests
+          path: canonical-tests.log
+          if-no-files-found: error
