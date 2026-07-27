@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-ro3-c1-coverage-profile/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile_id", "roles", "total_eligible_source_bar_count", "total_c1_record_count", "total_record_file_count", "null_bearing_field_counts", "record_population_sha256", "writes"],
+  "properties": {
+    "profile_id": {"type": "string", "pattern": "^RO3-C1-COV-[0-9a-f]{20}$"},
+    "roles": {
+      "type": "object",
+      "required": ["DISCOVERY", "DEVELOPMENT"],
+      "additionalProperties": false,
+      "properties": {
+        "DISCOVERY": {"$ref": "#/$defs/roleCoverage"},
+        "DEVELOPMENT": {"$ref": "#/$defs/roleCoverage"}
+      }
+    },
+    "total_eligible_source_bar_count": {"type": "integer", "minimum": 0},
+    "total_c1_record_count": {"const": 212764},
+    "total_record_file_count": {"const": 192},
+    "null_bearing_field_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "record_population_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "writes": {"const": "NONE"}
+  },
+  "$defs": {
+    "roleCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["release_id", "manifest_sha256", "eligible_source_bar_count", "c1_record_count", "record_file_count", "source_rejections", "coverage_status"],
+      "properties": {
+        "release_id": {"type": "string"},
+        "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "eligible_source_bar_count": {"type": "integer", "minimum": 0},
+        "c1_record_count": {"type": "integer", "minimum": 0},
+        "record_file_count": {"type": "integer", "minimum": 1},
+        "source_rejections": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "coverage_status": {"enum": ["RECONCILED", "RECONCILIATION_REQUIRED"]}
+      }
+    }
+  }
+}
