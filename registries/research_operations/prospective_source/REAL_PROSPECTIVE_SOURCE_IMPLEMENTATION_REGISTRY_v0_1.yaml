@@ -6,13 +6,23 @@ owner: RESEARCH_OPERATIONS
 baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 active_c2_model_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
-current_authority: FIXTURE_AND_NON_PROVIDER_IMPLEMENTATION_ONLY
+current_authority: ONE_BOUNDED_REAL_PROVIDER_INTAKE_APPROVED
 real_prospective_source_available: false
 active_research_triage: false
 active_binding_id: null
 active_triage_started_at_utc: null
 write_authority: false
 operation_mode: TIME_GATED_REPLAY
+approved_intake:
+  provider: DUKASCOPY
+  instrument: GBPUSD
+  source_window_start_utc: '2026-07-24T00:00:00Z'
+  source_window_end_utc: '2026-07-27T00:00:00Z'
+  streams: [M1_BID, M1_ASK, H1_BID, H1_ASK]
+  slice_id: RPS.DUKASCOPY.GBPUSD.20260724_20260727.v1
+  compressed_byte_limit: 26214400
+  expanded_byte_limit: 104857600
+  destination_scope: OVC_EXTERNAL_ARTIFACT_ROOT_ONLY
 objects:
   ProspectiveSourceSlice:
     status: IMPLEMENTED_FIXTURE_ONLY
@@ -41,7 +51,7 @@ packets:
     blockers: []
     next_packet: RPS-WP1
   - packet_id: RPS-WP1
-    status: GATE_READY
+    status: COMPLETED
     prerequisites: [RPS-G0_APPROVED]
     authority_delta: FIXTURE_SOURCE_FOUNDATION
     baseline_commit: c54c4246c1976a9a9aa75fe2d1307f0955b4865d
@@ -51,11 +61,16 @@ packets:
     qa_result: PASS
     qa_packet: docs/releases/prospective-source-v0-1/rps-wp1/RPS_WP1_QA_PACKET.md
     gate_packet: docs/releases/prospective-source-v0-1/rps-wp1/RPS_G1_OPERATOR_GATE_PACKET.md
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp1/RPS_G1_OPERATOR_DECISION.md
+    merge_commit: e893a026606a56fca1e746433d693ab86f7c3cb5
     blockers: []
-    next_gate: RPS-G1
+    next_packet: RPS-WP2
   - packet_id: RPS-WP2
-    status: PLANNED
+    status: READY
+    prerequisites: [RPS-G1_APPROVED]
     authority_required: REAL_PROVIDER_INTAKE
+    authority_delta: IMMUTABLE_LOCAL_PROSPECTIVE_SOURCE_SLICE
+    next_gate: RPS-G2
   - packet_id: RPS-WP3
     status: PLANNED
     authority_delta: DERIVED_LOCAL_PROSPECTIVE_COMPUTE
@@ -71,14 +86,15 @@ completed_gates:
     authority: DELEGATED_AUTO_EXECUTABLE
     decision_record: docs/releases/prospective-source-v0-1/rps-00/RPS_G0_DELEGATED_DECISION.md
     merge_commit: c54c4246c1976a9a9aa75fe2d1307f0955b4865d
-pending_gates:
   - gate_id: RPS-G1
-    status: GATE_READY
-    authority: OPERATOR_REQUIRED
-    proposed_delta: ONE_BOUNDED_REAL_PROVIDER_INTAKE
-    gate_packet: docs/releases/prospective-source-v0-1/rps-wp1/RPS_G1_OPERATOR_GATE_PACKET.md
+    status: APPROVED
+    decision: PASS
+    authority: OPERATOR
+    approval_command: OVC APPROVE RPS-G1
+    approved_on: '2026-07-27'
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp1/RPS_G1_OPERATOR_DECISION.md
 prohibited_authority:
-  - PROVIDER_REQUEST_BEFORE_RPS_G1
+  - PROVIDER_REQUEST_OUTSIDE_RPS_G1_SCOPE
   - LIVE_PATTERN_DISCOVERY_PROCESSING
   - LIVE_PROSPECTIVE_APPEND
   - ACTIVE_NOVELTY_RANKING
@@ -98,5 +114,5 @@ prohibited_authority:
   - TRADING
   - EXECUTION
   - AGENT_WRITE
-next_gate: RPS-G1
+next_gate: RPS-G2
 rollback: DISABLE_RUNTIME_AND_PRESERVE_APPROVED_PD_G4_ARTIFACTS
