@@ -6,6 +6,9 @@
 - Decision: `PASS`
 - Authority: `DELEGATED_AUTO_EXECUTABLE_WITHIN_RPS_G1B`
 - Baseline main: `18ba74378ece734647801576f373d68b4ba8687f`
+- Tested evidence head: `be01c0d2d272bb89aad5aa4279189dc802b991e4`
+- Canonical workflow: `30289144879`
+- Canonical unit-test job: `90054311140`
 - Slice: `RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1`
 - Coverage: `GAPPED`
 - QA: `PASS`
@@ -25,6 +28,7 @@ The decision relies on the previously granted operator authority in RPS-G1B. It 
 - gap, BID/ASK, native-H1 and downstream-coverage QA: PASS
 - original source quarantine unchanged after copy: true
 - provider network access during recovery: false
+- canonical repository tests: PASS
 
 ## Accepted scope
 
