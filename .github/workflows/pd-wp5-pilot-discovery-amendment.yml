@@ -76,7 +76,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          changed="$(git diff --name-only origin/${{ github.base_ref }}...HEAD)"
+          changed="$(git diff --name-only HEAD^1 HEAD)"
           echo "$changed"
           if echo "$changed" | grep -E '(^|/)(id_ed25519|.*\.bi5|.*\.csv|.*\.jsonl|raw|cache)(/|$)'; then
             echo "Prohibited raw/provider/key/payload path added by amendment."
