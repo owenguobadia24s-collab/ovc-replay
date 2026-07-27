@@ -114,7 +114,7 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
             "PILOT_ONLY",
             "NON_PROMOTABLE",
             "PD-G5P",
-            "identity reset",
+            "reset candidate",
             "LIVE_PROSPECTIVE",
         ):
             self.assertIn(phrase, contract)
