@@ -48,6 +48,8 @@ approved_intake:
   raw_provider_bytes_in_git: false
   execution_state: AWAITING_OPERATOR_LOCAL_EXECUTION
   decision_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_DECISION.md
+  authority_merge_commit: 4634f909de391321f918027719202dc0bdd1ee70
+  merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
 intake_incidents:
   - incident_id: RPS.INCIDENT.DUKASCOPY.GBPUSD.20260724_20260727.H1_UNAVAILABLE.v1
     source_gate: RPS-G1
@@ -111,16 +113,19 @@ packets:
     branch: build/rps-g1a-june-source-amendment
     candidate_commit: 2aaed61438da65000a45542e7bbd097d9433cc00
     approved_branch_head: bf65fedcd1cf354641fa25f87f4ab5acb642cae7
+    final_pr_head: 065dd44a6af7aa05160118f40ab0194372d2ee70
     pull_request: 101
+    merge_commit: 4634f909de391321f918027719202dc0bdd1ee70
     implementation_state: JUNE_REPLACEMENT_COMMAND_APPROVED_AWAITING_LOCAL_EXECUTION
     replacement_profile: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_REPLACEMENT_INTAKE_PROFILE.json
     incident_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_PROVIDER_AVAILABILITY_INCIDENT.md
     operator_guide: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_WINDOWS_OPERATOR_GUIDE.md
     local_command: scripts/run_rps_wp2_intake.ps1
-    tests: [GitHub_Actions_30281531558]
+    tests: [GitHub_Actions_30282135778]
     qa_result: PASS
     gate_packet: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_AMENDMENT_GATE_PACKET.md
     decision_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_DECISION.md
+    merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
     blockers:
       - code: OPERATOR_LOCAL_EXECUTION_AND_COMPACT_EVIDENCE_REQUIRED
         detail: GitHub cannot perform the approved provider request or access OVC_EXTERNAL_ARTIFACT_ROOT.
@@ -148,14 +153,16 @@ completed_gates:
     approved_on: '2026-07-27'
     decision_record: docs/releases/prospective-source-v0-1/rps-wp1/RPS_G1_OPERATOR_DECISION.md
   - gate_id: RPS-G1A
-    status: APPROVED
+    status: COMPLETED
     decision: PASS
     authority: OPERATOR
     approval_command: OVC APPROVE RPS-G1A
     approved_on: '2026-07-27'
-    tests: [GitHub_Actions_30281531558]
+    tests: [GitHub_Actions_30282135778]
     qa_result: PASS
     decision_record: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_OPERATOR_DECISION.md
+    merge_commit: 4634f909de391321f918027719202dc0bdd1ee70
+    merge_receipt: docs/releases/prospective-source-v0-1/rps-g1a/RPS_G1A_MERGE_RECEIPT.md
 prohibited_authority:
   - PROVIDER_REQUEST_OUTSIDE_APPROVED_RPS_G1A_SCOPE
   - RETRY_OR_ACCEPTANCE_OF_SUPERSEDED_RPS_G1_JULY_IDENTITY
