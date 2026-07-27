@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/transition_and_trigger_v0_1.schema.json",
+  "title": "Pattern Discovery TransitionRecord and TriggerEvent",
+  "type": "object",
+  "oneOf": [
+    {"$ref": "#/$defs/TransitionRecord"},
+    {"$ref": "#/$defs/TriggerEvent"}
+  ],
+  "$defs": {
+    "utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "sourceRef": {
+      "type": "object",
+      "required": ["release_id", "manifest_id", "record_id"],
+      "properties": {
+        "release_id": {"type": "string", "minLength": 1},
+        "manifest_id": {"type": "string", "minLength": 1},
+        "record_id": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "TransitionRecord": {
+      "type": "object",
+      "required": ["record_type", "transition_id", "first_valid_at", "clock", "price_side", "scope_id", "axis_or_relation", "previous_value", "new_value", "source_before", "source_after", "extractor_version"],
+      "properties": {
+        "record_type": {"const": "TransitionRecord"},
+        "transition_id": {"type": "string", "minLength": 1},
+        "first_valid_at": {"$ref": "#/$defs/utc"},
+        "clock": {"enum": ["15M", "2H_A_L"]},
+        "price_side": {"enum": ["BID", "ASK"]},
+        "scope_id": {"type": "string", "minLength": 1},
+        "axis_or_relation": {"type": "string", "minLength": 1},
+        "previous_value": {"type": ["string", "number", "null"]},
+        "new_value": {"type": ["string", "number", "null"]},
+        "source_before": {"$ref": "#/$defs/sourceRef"},
+        "source_after": {"$ref": "#/$defs/sourceRef"},
+        "extractor_version": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "TriggerEvent": {
+      "type": "object",
+      "required": ["record_type", "trigger_event_id", "trigger_id", "trigger_version", "first_valid_at", "reason_code", "source_transition_ids", "operation_mode", "closure_profile_id", "rate_limit_group"],
+      "properties": {
+        "record_type": {"const": "TriggerEvent"},
+        "trigger_event_id": {"type": "string", "minLength": 1},
+        "trigger_id": {"type": "string", "minLength": 1},
+        "trigger_version": {"type": "string", "minLength": 1},
+        "first_valid_at": {"$ref": "#/$defs/utc"},
+        "reason_code": {"type": "string", "minLength": 1},
+        "source_transition_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "operation_mode": {"enum": ["LIVE_PROSPECTIVE", "TIME_GATED_REPLAY", "NON_EVIDENTIARY_REPLAY"]},
+        "closure_profile_id": {"type": "string", "minLength": 1},
+        "rate_limit_group": {"type": "string", "minLength": 1},
+        "primary": {"type": "boolean", "default": false}
+      },
+      "additionalProperties": false
+    }
+  }
+}
