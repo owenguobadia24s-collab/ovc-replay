@@ -4,7 +4,7 @@ research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 state: ACTIVE_PROSPECTIVE_ACCUMULATION
 baseline_main_tip: 35c259255f4b09aca85de8bf114a6e1031b99e52
 activation_commit: 2a3f262fc0539786b67ae6c3e20604eb4d4adc2b
-prospective_cutoff_rule: STRICTLY_AFTER_C2_G6_MERGE_AND_MARKET_TIME
+prospective_cutoff_rule: STRICTLY_AFTER_RPS_G4_ACTIVATION_MERGE_AND_MARKET_TIME
 active_selector:
   release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
   manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
@@ -22,16 +22,27 @@ append_target: evidence/research/opt-b-c2-v2/prospective/c2_evidence_records.jso
 append_mode: APPEND_ONLY
 prospective_source:
   plan_id: OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1
-  active_binding_id: null
-  real_prospective_source_available: false
-  active_research_triage: false
+  gate_id: RPS-G4
+  decision: PASS
+  decision_merge_commit: b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac
+  active_binding_id: RPS.BINDING.32fb3003efa072916c11e907
+  source_slice_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1
+  real_prospective_source_available: true
+  active_research_triage: true
   active_triage_started_at_utc: null
-  service_build_hash: null
-  operator_key_id: null
-  eligible_data_through_utc: null
+  active_triage_started_at_commit: PENDING_ACTIVATION_MERGE
+  service_build_hash: PENDING_ACTIVATION_MERGE
+  operator_key_id: RPS.SIGNING.50092c28981fef08f53a6cb5
+  operator_id: OVC.OPERATOR.PRIMARY.LOCAL.V1
+  eligible_data_through_utc: '2026-06-25T00:00:00Z'
   live_cursor: null
-  write_authority: false
-  operation_mode: TIME_GATED_REPLAY
+  candidate_source_resolved: false
+  live_append_enabled: false
+  write_authority: true
+  operation_mode: LIVE_PROSPECTIVE
+  first_operation_limit: 1
+  first_operation_status: READY_AWAITING_NEW_LIVE_PROSPECTIVE_CANDIDATE
+  replay_backfill: DENIED
 timestamp_fields:
   market_window_start_utc: REQUIRED
   market_window_end_utc: REQUIRED
@@ -67,7 +78,7 @@ current_counts:
   blocked: 0
   sequence_boundary_friction: 0
 first_batch_review:
-  decision: DEFER_NO_REAL_PROSPECTIVE_BATCH
+  decision: PENDING_PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION
   append_target_state: ABSENT
   record_count: 0
   live_prospective_count: 0
@@ -88,9 +99,13 @@ retained:
   exposure_authority: NONE
   trading_authority: NONE
   execution_authority: NONE
+  agent_write_authority: NONE
+  automatic_evidence_creation: DENIED
+  active_novelty_ranking: NONE
+  semantic_promotion: NONE
 writes:
   git: OPERATOR_REVIEWED_APPEND_ONLY
   r2: DENIED
   selector: DENIED
   release: DENIED
-next_gate: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH
+next_gate: PD-G5
