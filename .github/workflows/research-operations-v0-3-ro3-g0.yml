@@ -26,8 +26,26 @@ jobs:
           show-progress: false
       - name: Runtime identity
         run: python --version
-      - name: Validate RO3-G0 design
-        run: python -u scripts/research_operations/validate_ro3_g0_design.py
+      - name: Capture RO3-G0 validator result
+        shell: bash
+        run: |
+          set +e
+          python -u scripts/research_operations/validate_ro3_g0_design.py > ro3-g0-validator.log 2>&1
+          status=$?
+          printf '%s\n' "$status" > ro3-g0-validator.status
+          cat ro3-g0-validator.log
+          exit 0
+      - name: Upload validator diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g0-validator-diagnostics
+          path: |
+            ro3-g0-validator.log
+            ro3-g0-validator.status
+          if-no-files-found: error
+      - name: Require validator PASS
+        shell: bash
+        run: test "$(cat ro3-g0-validator.status)" = "0"
       - name: Focused RO3-G0 tests
         run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_ro3_g0_design.py' -v
       - name: Canonical repository tests
