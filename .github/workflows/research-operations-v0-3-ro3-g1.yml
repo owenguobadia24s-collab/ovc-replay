@@ -56,8 +56,25 @@ jobs:
           name: ro3-c1-index-benchmark-runtime
           path: ro3-c1-index-benchmark-runtime.json
           if-no-files-found: error
-      - name: Canonical repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Capture canonical repository test result
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > ro3-g1-canonical.log 2>&1
+          status=$?
+          printf '%s\n' "$status" > ro3-g1-canonical.status
+          tail -n 200 ro3-g1-canonical.log
+          exit 0
+      - name: Upload canonical diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g1-canonical-diagnostics
+          path: |
+            ro3-g1-canonical.log
+            ro3-g1-canonical.status
+          if-no-files-found: error
+      - name: Require canonical suite PASS
+        run: test "$(cat ro3-g1-canonical.status)" = "0"
       - name: Boundary assertions
         shell: bash
         run: |
