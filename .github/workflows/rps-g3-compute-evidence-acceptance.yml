@@ -1,0 +1,30 @@
+name: RPS-G3 derived compute evidence acceptance
+
+on:
+  pull_request:
+    paths:
+      - "docs/releases/prospective-source-v0-1/rps-wp3/**"
+      - "registries/research_operations/prospective_source/RPS_G3_ACCEPTANCE_STATE_v0_1.json"
+      - "tests/research_operations/prospective_source/test_rps_wp3_compact_compute_evidence.py"
+      - ".github/workflows/rps-g3-compute-evidence-acceptance.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused RPS-G3 evidence tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_wp3_compact_compute_evidence.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
