@@ -7,6 +7,7 @@ on:
       - "docs/releases/prospective-source-v0-1/rps-wp4/RPS_WP4_COMPACT_SIGNING_EVIDENCE_INDEX.json"
       - "docs/releases/prospective-source-v0-1/rps-wp4/RPS_WP4_SIGNED_ACCEPTANCE_QA_PACKET.md"
       - "docs/releases/prospective-source-v0-1/rps-wp4/RPS_G4_OPERATOR_GATE_PACKET.md"
+      - "docs/releases/prospective-source-v0-1/rps-wp4/RPS_G4_OPERATOR_DECISION.md"
       - "registries/research_operations/prospective_source/RPS_G4_GATE_STATE_v0_1.json"
       - "registries/research_operations/prospective_source/RPS_WP4_COMMAND_STATE_v0_1.json"
       - "tests/research_operations/prospective_source/test_rps_g4_signed_replay_evidence.py"
@@ -59,14 +60,14 @@ jobs:
           -p 'test_rps_g4_signed_replay_evidence.py'
           -k exact_source_compute
           -v
-      - name: Verify operator gate remains non-activating
+      - name: Verify signed gate input remains non-activating
         run: >-
           PYTHONPATH=src python -m unittest discover
           -s tests/research_operations/prospective_source
           -p 'test_rps_g4_signed_replay_evidence.py'
           -k gate_is_operator_required
           -v
-      - name: Verify programme state stops at RPS-G4
+      - name: Verify approved gate state remains non-activating before merge
         run: >-
           PYTHONPATH=src python -m unittest discover
           -s tests/research_operations/prospective_source
@@ -90,7 +91,7 @@ jobs:
             echo "Private key material found."
             exit 1
           fi
-      - name: Assert gate remains non-activating
+      - name: Assert approved gate remains non-activating pending activation packet
         shell: bash
         run: |
           set -euo pipefail
@@ -98,10 +99,12 @@ jobs:
           import json
           from pathlib import Path
           state = json.loads(Path('registries/research_operations/prospective_source/RPS_G4_GATE_STATE_v0_1.json').read_text())
-          assert state['gate_status'] == 'GATE_READY'
-          assert state['operator_approval_required'] is True
+          assert state['gate_status'] == 'APPROVED_PENDING_MERGE'
+          assert state['decision'] == 'PASS'
+          assert state['decision_authority'] == 'OPERATOR'
+          assert state['operator_approval_required'] is False
           assert state['active_binding_id'] is None
           assert state['active_research_triage'] is False
-          assert state['live_prospective_append'] == 'DENIED'
+          assert state['live_prospective_append'] == 'DENIED_PENDING_ACTIVATION_PACKET'
           assert state['write_authority'] is False
           PY
