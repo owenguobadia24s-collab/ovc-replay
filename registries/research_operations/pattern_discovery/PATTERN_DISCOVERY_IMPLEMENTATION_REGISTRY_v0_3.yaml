@@ -5,14 +5,16 @@ source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
-current_authority: PROVISIONAL_CLUSTER_COMPUTE_ACCEPTED
+current_authority: HUMAN_REVIEW_OPERATION_AND_GOVERNED_PROSPECTIVE_EVIDENCE_APPEND_APPROVED
 prohibited_authority:
   - LIVE_PATTERN_DISCOVERY_PROCESSING
   - ACTIVE_TRIGGER_REGISTRY
   - ACTIVE_NOVELTY_RANKING
   - SEMANTIC_CLUSTER_PROMOTION
   - ARCHETYPE_PROMOTION
-  - EVIDENCE_BRIDGE_WRITE
+  - MANUAL_EVIDENCE_LEDGER_EDIT
+  - MANUAL_CANONICAL_SOURCE_ID_ENTRY
+  - AUTOMATIC_EVIDENCE_CREATION
   - C2_MUTATION
   - C2E
   - C2_5
@@ -76,12 +78,24 @@ objects:
     owner: RESEARCH_CONSOLE
     canonical: false
     replaceable: true
-    implementation_status: PLANNED_PD_WP4
+    implementation_status: ACCEPTED_FOR_LOCAL_HUMAN_REVIEW
   - id: ReviewDecision
     owner: RESEARCH_OPERATIONS
     canonical: true
     append_only: true
-    implementation_status: PLANNED_PD_WP4
+    implementation_status: ACCEPTED_GOVERNED_BRIDGE
+    write_authority: OPERATOR_APPROVED_BOUNDED
+  - id: AppendRequest
+    owner: RESEARCH_OPERATIONS
+    canonical: false
+    replaceable: false
+    implementation_status: ACCEPTED
+  - id: AuditEvent
+    owner: RESEARCH_OPERATIONS
+    canonical: true
+    append_only: true
+    implementation_status: ACCEPTED_HASH_CHAINED_TRANSACTION
+    write_authority: OPERATOR_APPROVED_BOUNDED
 processing_modes: [LIVE_PROSPECTIVE, TIME_GATED_REPLAY, NON_EVIDENTIARY_REPLAY]
 novelty_states: [BASELINE_FORMING, CALIBRATED_SHADOW, ACTIVE_NOVELTY_RANKING]
 candidate_populations: [DISCOVERY_CANDIDATE_POPULATION, HUMAN_REVIEWED_POPULATION, CANONICAL_EVIDENCE_POPULATION]
@@ -128,34 +142,35 @@ work_packets:
   - packet_id: PD-WP3
     status: COMPLETED
     prerequisites: [PD-G2_APPROVED]
-    authority_required: DERIVED_CLUSTER_COMPUTE
     authority_delta: PROVISIONAL_CLUSTER_CANDIDATE
     baseline_commit: ff9f8a9604d352bb37777e04282cd0641e5f38b8
     branch: build/pd-wp3-fingerprint-clustering
-    candidate_commit: ae86f566e36acc06a5babf53833283ea7769e4b8
-    tests: [GitHub_Actions_30264050530, GitHub_Actions_30264050496]
+    candidate_commit: b3eb6382f14a5c7bc3253c1632501244f8a57e8c
+    tests: [GitHub_Actions_30264370173, GitHub_Actions_30264370322]
     qa_result: PASS_PD_G3_AUTO_RATIFIABLE
     qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_WP3_QA_PACKET.json
-    gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_G3_GATE_PACKET.md
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_G3_DELEGATED_DECISION.md
-    merge_commit: null
+    merge_commit: b0798b5535f5fb0276a2b524956c801e278b96d4
     blockers: []
     next_packet: PD-WP4
   - packet_id: PD-WP4
-    status: READY
+    status: APPROVED
     prerequisites: [PD-G3_APPROVED]
     authority_required: LOCAL_UI_AND_GOVERNED_APPEND_BRIDGE
-    authority_delta: HUMAN_REVIEW_OPERATION_CANDIDATE
-    baseline_commit: TO_BE_RESOLVED_FROM_PD_G3_MERGE
+    authority_delta: HUMAN_REVIEW_OPERATION_AND_CANONICAL_EVIDENCE_BRIDGE_ACTIVATION
+    baseline_commit: b0798b5535f5fb0276a2b524956c801e278b96d4
     branch: build/pd-wp4-simple-ui-evidence-bridge
-    candidate_commit: null
-    tests: []
-    qa_packet: null
-    decision_record: null
+    candidate_implementation_commit: 0062b5e212225211c03fd372fc17e3225a2818c2
+    tests: [GitHub_Actions_30266028660, GitHub_Actions_30266028698]
+    qa_result: PASS_PD_G4_OPERATOR_APPROVED
+    qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp4/PD_WP4_QA_PACKET.json
+    gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp4/PD_G4_OPERATOR_GATE_PACKET.md
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp4/PD_G4_OPERATOR_DECISION.md
+    merge_commit: null
     blockers: []
     next_packet: PD-WP5
   - packet_id: PD-WP5
-    status: PLANNED
+    status: READY_PENDING_REAL_PROSPECTIVE_SOURCE
     prerequisites: [PD-G4_APPROVED, REAL_PROSPECTIVE_SOURCE_AVAILABLE]
     authority_required: ACTIVE_RESEARCH_TRIAGE
     authority_delta: FIRST_PROSPECTIVE_DISCOVERY_BATCH
@@ -185,4 +200,11 @@ completed_gates:
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp3/PD_G3_DELEGATED_DECISION.md
     authority: DELEGATED_AUTO_EXECUTABLE
     approved_on: '2026-07-27'
-next_gate: PD-G4
+  - gate_id: PD-G4
+    status: APPROVED
+    decision: PASS
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp4/PD_G4_OPERATOR_DECISION.md
+    approval_command: OVC APPROVE PD-G4
+    authority: OPERATOR
+    approved_on: '2026-07-27'
+next_gate: PD-G5
