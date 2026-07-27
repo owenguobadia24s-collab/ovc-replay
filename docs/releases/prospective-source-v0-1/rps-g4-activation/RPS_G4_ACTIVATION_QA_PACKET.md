@@ -7,7 +7,10 @@
 - Decision merge: `b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac`
 - Baseline main: `b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac`
 - Candidate branch: `activate/rps-g4-exact-binding-active-triage`
-- QA recommendation: `PASS_ACTIVATION_CANDIDATE`
+- Tested head: `e774932432f042f0eb43470f50a2147e0a5976af`
+- Activation workflow: `30301205779`, job `90094300332`
+- Canonical workflow: `30301205665`, job `90094299926`
+- QA recommendation: `PASS_ACTIVATION`
 
 ## Exact activation
 
@@ -23,7 +26,7 @@ The packet materialises only the authority explicitly granted at RPS-G4:
 
 ## Fail-closed runtime model
 
-The authority model now separates programme-level triage activation from candidate-level append eligibility.
+The authority model separates programme-level triage activation from candidate-level append eligibility.
 
 `ACTIVE_RESEARCH_TRIAGE` requires all of:
 
@@ -49,7 +52,18 @@ A canonical append additionally requires immutable source lineage to resolve for
 - focused authority and cross-registry tests;
 - dedicated activation workflow.
 
-## Test matrix
+## Test results
+
+The activation workflow passed:
+
+- focused authority tests;
+- focused exact-activation and cross-registry tests;
+- canonical repository tests;
+- candidate-gated append assertion;
+- retained-authority-denial assertion;
+- private-key, raw-data and machine-path exclusion assertion.
+
+The repository-wide canonical workflow also passed independently.
 
 The activation suite verifies:
 
@@ -66,6 +80,10 @@ The activation suite verifies:
 - registries advance consistently to PD-WP5 and PD-G5;
 - private-key material, raw market bytes and machine paths are absent.
 
+## Corrected defect
+
+The first activation run found a test-only registry-shape assumption: the test required the same readiness token in all three registries even though each registry lawfully expresses readiness at a different structural level. The assertion was replaced with exact per-registry closure checks. No authority field, acceptance condition or test threshold was weakened.
+
 ## Authority assessment
 
 This packet does not grant authority beyond the explicit RPS-G4 PASS. It merely materialises the exact approved delta. The activation remains narrower than unrestricted live operation:
@@ -78,7 +96,7 @@ This packet does not grant authority beyond the explicit RPS-G4 PASS. It merely 
 - the first-operation limit is one;
 - the next gate is PD-G5.
 
-The activation packet is therefore eligible for delegated implementation and squash merge under the recorded operator decision, subject to passing focused and repository-wide tests with no unresolved review or blocking warning.
+The activation packet is eligible for delegated squash merge under the recorded operator decision. QA finds no blocking warning or unresolved issue.
 
 ## Warnings
 
@@ -93,4 +111,4 @@ Set active triage false, clear source and signing bindings, deny LIVE_PROSPECTIV
 
 ## Recommendation
 
-`PASS_ACTIVATION_CANDIDATE` — merge after final tests, record the activation merge, then continue to the first incomplete PD-WP5 packet.
+`PASS_ACTIVATION` — squash-merge after the final decision-bearing head passes, record the activation merge and continue to the first incomplete PD-WP5 packet.
