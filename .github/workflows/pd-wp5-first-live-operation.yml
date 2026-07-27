@@ -1,0 +1,74 @@
+name: PD-WP5 first LIVE_PROSPECTIVE operation readiness
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/pattern_discovery/first_live_operation.py"
+      - "scripts/run_pd_wp5_first_live_operation.ps1"
+      - "contracts/research_operations/pattern_discovery/PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION_CONTRACT_v0_1.md"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp5/**"
+      - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
+      - "tests/research_operations/pattern_discovery/test_pd_wp5_first_live_operation.py"
+      - ".github/workflows/pd-wp5-first-live-operation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused PD-WP5 tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/pattern_discovery
+          -p 'test_pd_wp5_first_live_operation.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert diagnostic does not access provider
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -nE 'urllib|requests\.|urlopen|datafeed\.dukascopy|historicalPrices' \
+            src/ovc/research_operations/pattern_discovery/first_live_operation.py; then
+            echo "Provider-network code found in PD-WP5 diagnostic."
+            exit 1
+          fi
+      - name: Assert exact operator amendment remains unapproved
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
+          assert state['packet_status'] == 'BLOCKED'
+          assert state['blocker_code'] == 'ACTIVE_BINDING_HAS_NO_POST_ACTIVATION_MARKET_COVERAGE'
+          assert state['operator_approval_required'] is True
+          assert state['next_gate'] == 'RPS-G4A'
+          assert state['provider_request_authority'] == 'DENIED_PENDING_RPS_G4A'
+          assert state['replay_substitution'] == 'DENIED'
+          PY
+      - name: Assert retained prohibitions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
+          assert state['canonical_append'] == 'DENIED'
+          assert state['automatic_evidence_creation'] is False
+          for field in ('active_novelty_ranking', 'semantic_promotion', 'probability_authority', 'risk_authority', 'exposure_authority', 'trading_authority', 'execution_authority', 'agent_write_authority'):
+              assert state[field] == 'NONE', (field, state[field])
+          assert state['selector_mutation'] == 'DENIED'
+          assert state['release_mutation'] == 'DENIED'
+          assert state['r2_publication'] == 'DENIED'
+          assert state['validation_consumption'] == 'DENIED'
+          PY
