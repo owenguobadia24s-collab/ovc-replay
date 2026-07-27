@@ -1,0 +1,42 @@
+{
+  "packet_id": "PD-WP2",
+  "gate_id": "PD-G2",
+  "plan_id": "OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER",
+  "plan_version": "0.3",
+  "source_sha256": "03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa",
+  "baseline_commit": "abc0f4dc63932907c331f645b17ec4cdd3bb58cf",
+  "branch": "build/pd-wp2-trigger-control-novelty",
+  "status": "QA_REVIEW",
+  "authority_delta": "TRIGGER_CONTROL_AND_NOVELTY_SHADOW",
+  "workflow_run": null,
+  "canonical_workflow_run": null,
+  "checks": [
+    {"check_id": "PD2-TRIGGER-POSITIVE-NEGATIVE-UNKNOWN", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-CROSS-SCALE-LINEAGE", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-PERSISTENCE-INSTABILITY", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-CONTROL-DETERMINISM", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-CONTROL-REPRESENTATION", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-BACKPRESSURE-CAPS", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-NOVELTY-ZERO-RANK-AUTHORITY", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-ACTIVE-NOVELTY-DENIAL", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-DEGRADATION-STATES", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-PROHIBITED-DEPENDENCY", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-RETAINED-PD-WP1", "status": "PENDING", "blocking": true},
+    {"check_id": "PD2-CANONICAL-SUITE", "status": "PENDING", "blocking": true}
+  ],
+  "corrected_defects": [
+    {
+      "issue": "The initial queue fixture expected twelve promotions even when the frozen three-per-family cap made only ten lawful for the supplied family mix.",
+      "resolution": "The fixture expectation was corrected; the cap and production implementation were retained unchanged."
+    }
+  ],
+  "warnings": [
+    "No live Pattern Discovery processing is activated.",
+    "Novelty remains BASELINE_FORMING or CALIBRATED_SHADOW with zero actual ranking weight.",
+    "Fingerprint and cluster parents remain PD-WP3.",
+    "No canonical evidence write path is implemented or invoked."
+  ],
+  "blockers": [],
+  "recommended_decision": "PENDING_FINAL_CI",
+  "next_packet_after_pass": "PD-WP3"
+}
