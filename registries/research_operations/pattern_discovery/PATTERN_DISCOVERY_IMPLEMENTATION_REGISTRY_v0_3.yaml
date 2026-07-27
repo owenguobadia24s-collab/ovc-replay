@@ -6,6 +6,7 @@ baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
 current_authority: HUMAN_REVIEW_OPERATION_AND_GOVERNED_PROSPECTIVE_EVIDENCE_APPEND_APPROVED
+live_triage_authority: NONE_PENDING_RPS_G4
 prohibited_authority:
   - LIVE_PATTERN_DISCOVERY_PROCESSING
   - ACTIVE_TRIGGER_REGISTRY
@@ -154,7 +155,7 @@ work_packets:
     blockers: []
     next_packet: PD-WP4
   - packet_id: PD-WP4
-    status: APPROVED
+    status: COMPLETED
     prerequisites: [PD-G3_APPROVED]
     authority_required: LOCAL_UI_AND_GOVERNED_APPEND_BRIDGE
     authority_delta: HUMAN_REVIEW_OPERATION_AND_CANONICAL_EVIDENCE_BRIDGE_ACTIVATION
@@ -166,15 +167,24 @@ work_packets:
     qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp4/PD_WP4_QA_PACKET.json
     gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp4/PD_G4_OPERATOR_GATE_PACKET.md
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp4/PD_G4_OPERATOR_DECISION.md
-    merge_commit: null
+    merge_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
     blockers: []
-    next_packet: PD-WP5
+    next_packet: RPS-00
   - packet_id: PD-WP5
     status: READY_PENDING_REAL_PROSPECTIVE_SOURCE
-    prerequisites: [PD-G4_APPROVED, REAL_PROSPECTIVE_SOURCE_AVAILABLE]
+    prerequisites: [PD-G4_APPROVED, RPS-G4_APPROVED, REAL_PROSPECTIVE_SOURCE_AVAILABLE]
     authority_required: ACTIVE_RESEARCH_TRIAGE
     authority_delta: FIRST_PROSPECTIVE_DISCOVERY_BATCH
     next_packet: PD-G5
+rps_enablement:
+  plan_id: OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1
+  plan_status: RATIFIED
+  baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
+  current_packet: RPS-00
+  next_operator_gate: RPS-G1
+  prospective_source_binding_required: true
+  real_prospective_source_available: false
+  active_research_triage: false
 completed_gates:
   - gate_id: PD-G0
     status: APPROVED
@@ -207,4 +217,4 @@ completed_gates:
     approval_command: OVC APPROVE PD-G4
     authority: OPERATOR
     approved_on: '2026-07-27'
-next_gate: PD-G5
+next_gate: RPS-G0
