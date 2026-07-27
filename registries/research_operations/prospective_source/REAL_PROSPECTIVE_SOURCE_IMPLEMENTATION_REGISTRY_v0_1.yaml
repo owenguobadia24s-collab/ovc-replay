@@ -23,9 +23,16 @@ approved_intake:
   compressed_byte_limit: 26214400
   expanded_byte_limit: 104857600
   destination_scope: OVC_EXTERNAL_ARTIFACT_ROOT_ONLY
+  local_execution:
+    state: READY_FOR_OPERATOR_LOCAL_EXECUTION
+    module: ovc.research_operations.prospective_source.dukascopy_intake
+    wrapper: scripts/run_rps_wp2_intake.ps1
+    provider_execution_in_ci: DENIED
+    raw_provider_bytes_in_git: false
 objects:
   ProspectiveSourceSlice:
-    status: IMPLEMENTED_FIXTURE_ONLY
+    status: IMPLEMENTED_FIXTURE_AND_LOCAL_INTAKE_COMMAND
+    real_instance_available: false
     canonical_release: false
     selector_eligible: false
     r2_eligible: false
@@ -66,16 +73,22 @@ packets:
     blockers: []
     next_packet: RPS-WP2
   - packet_id: RPS-WP2
-    status: BLOCKED
+    status: RUNNING
     prerequisites: [RPS-G1_APPROVED]
     authority_required: REAL_PROVIDER_INTAKE
     authority_delta: IMMUTABLE_LOCAL_PROSPECTIVE_SOURCE_SLICE
-    baseline_commit: d74d5a917fd7b49fec050c81232d899f00b78253
-    branch: build/rps-wp2-real-provider-intake
-    blockers:
-      - code: REQUIRED_LOCAL_RUNTIME_UNAVAILABLE
-        detail: GitHub execution cannot resolve OVC_EXTERNAL_ARTIFACT_ROOT or invoke the operator-local Dukascopy adapter; CI network access is prohibited.
-        packet: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_BLOCKER_PACKET.md
+    baseline_commit: b21228a8e43a3f5b4a49441991d0097b2e1908b6
+    branch: build/rps-wp2-local-intake-command
+    candidate_commit: 8885f474eba986ac5b95790ff95eebc6840cd65e
+    implementation_state: LOCAL_COMMAND_READY_NO_SOURCE_SLICE
+    implementation_packet: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_LOCAL_COMMAND_READY_PACKET.md
+    operator_guide: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_WINDOWS_OPERATOR_GUIDE.md
+    local_command: scripts/run_rps_wp2_intake.ps1
+    tests: [GitHub_Actions_30278066944]
+    qa_result: PASS_COMMAND_READY
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_COMMAND_READY_DELEGATED_DECISION.md
+    blockers: []
+    continuation_requirement: OPERATOR_LOCAL_EXECUTION_AND_COMPACT_ACCEPTED_SLICE_EVIDENCE
     next_gate: RPS-G2
   - packet_id: RPS-WP3
     status: PLANNED
@@ -121,5 +134,5 @@ prohibited_authority:
   - EXECUTION
   - AGENT_WRITE
 next_packet: RPS-WP2
-continuation_state: BLOCKED_PENDING_OPERATOR_LOCAL_INTAKE_EVIDENCE
+continuation_state: READY_FOR_OPERATOR_LOCAL_INTAKE_EXECUTION
 rollback: DISABLE_RUNTIME_AND_PRESERVE_APPROVED_PD_G4_ARTIFACTS
