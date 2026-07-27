@@ -77,6 +77,76 @@ def _unquote(value: str) -> str:
     return value
 
 
+def _split_top_level(value: str, delimiter: str = ",") -> list[str]:
+    """Split a YAML inline collection without splitting nested lists or quoted text."""
+
+    parts: list[str] = []
+    start = 0
+    depth = 0
+    quote: str | None = None
+    escaped = False
+    for index, char in enumerate(value):
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\" and quote is not None:
+            escaped = True
+            continue
+        if quote is not None:
+            if char == quote:
+                quote = None
+            continue
+        if char in {"'", '"'}:
+            quote = char
+            continue
+        if char in "[{(":
+            depth += 1
+            continue
+        if char in "]})":
+            depth -= 1
+            if depth < 0:
+                raise IndexContractError(f"unbalanced inline collection: {value}")
+            continue
+        if char == delimiter and depth == 0:
+            parts.append(value[start:index].strip())
+            start = index + 1
+    if quote is not None or depth != 0:
+        raise IndexContractError(f"unbalanced inline collection: {value}")
+    tail = value[start:].strip()
+    if tail:
+        parts.append(tail)
+    return parts
+
+
+def _split_mapping_item(item: str) -> tuple[str, str]:
+    depth = 0
+    quote: str | None = None
+    escaped = False
+    for index, char in enumerate(item):
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\" and quote is not None:
+            escaped = True
+            continue
+        if quote is not None:
+            if char == quote:
+                quote = None
+            continue
+        if char in {"'", '"'}:
+            quote = char
+            continue
+        if char in "[{(":
+            depth += 1
+            continue
+        if char in "]})":
+            depth -= 1
+            continue
+        if char == ":" and depth == 0:
+            return item[:index].strip(), item[index + 1 :].strip()
+    raise IndexContractError(f"invalid inline mapping item: {item}")
+
+
 def _parse_scalar(value: str) -> Any:
     value = value.strip()
     if value == "null":
@@ -87,16 +157,17 @@ def _parse_scalar(value: str) -> Any:
         return False
     if value.startswith("[") and value.endswith("]"):
         body = value[1:-1].strip()
-        return [] if not body else [_parse_scalar(item) for item in body.split(",")]
+        return [] if not body else [_parse_scalar(item) for item in _split_top_level(body)]
     if value.startswith("{") and value.endswith("}"):
         body = value[1:-1].strip()
         result: dict[str, Any] = {}
         if body:
-            for item in body.split(","):
-                if ":" not in item:
-                    raise IndexContractError(f"invalid inline mapping item: {item}")
-                key, raw = item.split(":", 1)
-                result[_unquote(key)] = _parse_scalar(raw)
+            for item in _split_top_level(body):
+                key, raw = _split_mapping_item(item)
+                key = _unquote(key)
+                if not key or key in result:
+                    raise IndexContractError(f"invalid or duplicate inline mapping key: {key}")
+                result[key] = _parse_scalar(raw)
         return result
     if re.fullmatch(r"-?[0-9]+", value):
         return int(value)
@@ -175,6 +246,12 @@ def parse_formula_registry(registry_text: str) -> dict[str, Any]:
             raise IndexContractError(f"invalid primitive_id: {primitive_id}")
         if formula["authority"] != "DERIVED_ATOMIC_FACT":
             raise IndexContractError(f"unknown primitive authority: {primitive_id}")
+        if formula["unit"] not in {"PRICE", "TICKS", "RATIO", "ENUM"}:
+            raise IndexContractError(f"unknown primitive unit: {primitive_id}")
+        if not isinstance(formula["required_inputs"], list) or not formula["required_inputs"]:
+            raise IndexContractError(f"invalid required_inputs: {primitive_id}")
+        if not isinstance(formula["domain"], dict) or not formula["domain"]:
+            raise IndexContractError(f"invalid domain: {primitive_id}")
         seen.add(primitive_id)
 
     formulas.sort(key=lambda item: item["primitive_id"])
@@ -208,7 +285,7 @@ def validation_metadata_only(metadata: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _validate_release(release: Mapping[str, Any]) -> dict[str, Any]:
+def _validate_release(release: Mapping[str, Any], formula_registry_sha256: str) -> dict[str, Any]:
     role = str(release.get("role", ""))
     if role == "VALIDATION":
         raise AccessDenied("VALIDATION_DENY_BEFORE_RELEASE_CONTENT_RESOLUTION")
@@ -248,8 +325,8 @@ def _validate_release(release: Mapping[str, Any]) -> dict[str, Any]:
         raise IndexContractError("instrument must remain GBPUSD")
     if release["formula_registry_id"] != "C1.FORMULAS.v0.1":
         raise IndexContractError("unknown formula registry")
-    if not _SHA256_RE.fullmatch(str(release["formula_registry_sha256"])):
-        raise IndexContractError("invalid formula registry SHA-256")
+    if release["formula_registry_sha256"] != formula_registry_sha256:
+        raise IndexContractError("formula registry SHA-256 does not match frozen source bytes")
     clocks = sorted(set(release["clocks"]))
     sides = sorted(set(release["sides"]))
     if set(clocks) != _ALLOWED_CLOCKS:
@@ -284,11 +361,21 @@ def _validate_release(release: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _release_index_id(release: Mapping[str, Any]) -> str:
-    return f"RO3-C1-REL-{_digest({'role': release['role'], 'release_id': release['release_id'], 'manifest_sha256': release['manifest_sha256']})[:20]}"
+    identity = {
+        "role": release["role"],
+        "release_id": release["release_id"],
+        "manifest_sha256": release["manifest_sha256"],
+    }
+    return f"RO3-C1-REL-{_digest(identity)[:20]}"
 
 
 def _primitive_index_id(primitive: Mapping[str, Any], registry_hash: str) -> str:
-    return f"RO3-C1-PRIM-{_digest({'primitive_id': primitive['primitive_id'], 'registry_hash': registry_hash, 'definition': primitive})[:20]}"
+    identity = {
+        "primitive_id": primitive["primitive_id"],
+        "registry_hash": registry_hash,
+        "definition": primitive,
+    }
+    return f"RO3-C1-PRIM-{_digest(identity)[:20]}"
 
 
 def _family_id(key: tuple[str, str, str, str, str, str]) -> str:
@@ -305,7 +392,10 @@ def build_c1_indexes(
     """Build source-bound, order-independent C1 index projections."""
 
     parsed_registry = parse_formula_registry(formula_registry_text)
-    normalized_releases = [_validate_release(release) for release in releases]
+    formula_registry_sha256 = hashlib.sha256(formula_registry_text.encode("utf-8")).hexdigest()
+    normalized_releases = [
+        _validate_release(release, formula_registry_sha256) for release in releases
+    ]
     normalized_releases.sort(key=lambda item: item["role"])
     roles = [release["role"] for release in normalized_releases]
     if roles != ["DEVELOPMENT", "DISCOVERY"]:
@@ -339,10 +429,6 @@ def build_c1_indexes(
     seen_record_ids: set[str] = set()
 
     if record_headers is None:
-        for release in normalized_releases:
-            declared = release.get("family_counts")
-            if declared is not None:
-                raise IndexContractError("family_counts must be supplied on original release input, not normalized release")
         raise IndexContractError("record_headers are required for source-bound family and coverage indexes")
 
     for raw in record_headers:
@@ -442,16 +528,20 @@ def build_c1_indexes(
             "c1_record_count": release["record_count"],
             "record_file_count": release["record_file_count"],
             "source_rejections": release["source_rejections"],
-            "coverage_status": "RECONCILED"
-            if release["eligible_source_bar_count"] == release["record_count"]
-            else "RECONCILIATION_REQUIRED",
+            "coverage_status": (
+                "RECONCILED"
+                if release["eligible_source_bar_count"] == release["record_count"]
+                else "RECONCILIATION_REQUIRED"
+            ),
         }
         for release in normalized_releases
     }
     coverage_profile = {
         "profile_id": "",
         "roles": role_coverage,
-        "total_eligible_source_bar_count": sum(item["eligible_source_bar_count"] for item in normalized_releases),
+        "total_eligible_source_bar_count": sum(
+            item["eligible_source_bar_count"] for item in normalized_releases
+        ),
         "total_c1_record_count": expected_total,
         "total_record_file_count": sum(item["record_file_count"] for item in normalized_releases),
         "null_bearing_field_counts": dict(sorted(null_field_counts.items())),
