@@ -4,6 +4,9 @@
 - Packet: `RPS-WP2`
 - Gate: `RPS-G2`
 - Baseline main: `18ba74378ece734647801576f373d68b4ba8687f`
+- Tested evidence head: `be01c0d2d272bb89aad5aa4279189dc802b991e4`
+- Canonical workflow: `30289144879`
+- Canonical unit-test job: `90054311140`
 - Slice: `RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1`
 - Interval: `[2026-06-22T00:00:00Z, 2026-06-25T00:00:00Z)`
 - Coverage: `GAPPED`
@@ -40,6 +43,10 @@ The operator supplied one source-slice manifest and eight compact receipts. The 
 - The 17 incomplete 15M parents, 8 incomplete M1-derived H1 parents and 6 incomplete 2H parents are unavailable and excluded.
 - No repair, forward fill, interpolation or synthesis occurred.
 - The source quarantine remained unchanged after copy-on-verify.
+
+## Tests
+
+The canonical repository command `PYTHONPATH=src python3 -m unittest discover -s tests -v` passed on the tested evidence head. The new tests verify exact logical hashes, all nine compact file pins, all four source-object identities and row counts, GAPPED QA, downstream exclusion arithmetic and every retained authority denial.
 
 ## Authority assessment
 
