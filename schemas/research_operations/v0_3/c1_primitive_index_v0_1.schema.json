@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-ro3-c1-primitive-index/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["primitive_index_id", "formula_registry_id", "formula_registry_logical_sha256", "primitive_id", "field_name", "definition", "formula", "required_inputs", "unit", "domain", "null_rule", "lookback_bars", "first_valid_rule", "symmetry_rule", "authority", "writes"],
+  "properties": {
+    "primitive_index_id": {"type": "string", "pattern": "^RO3-C1-PRIM-[0-9a-f]{20}$"},
+    "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+    "formula_registry_logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "primitive_id": {"type": "string", "pattern": "^C1-[A-Z0-9-]+\\.v0\\.1$"},
+    "field_name": {"type": "string", "minLength": 1},
+    "definition": {"type": "string", "minLength": 1},
+    "formula": {"type": "string", "minLength": 1},
+    "required_inputs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "unit": {"enum": ["PRICE", "TICKS", "RATIO", "ENUM"]},
+    "domain": {"type": "object"},
+    "null_rule": {"type": "string", "minLength": 1},
+    "lookback_bars": {"type": "integer", "minimum": 0, "maximum": 1},
+    "first_valid_rule": {"type": "string", "minLength": 1},
+    "symmetry_rule": {"type": "string", "minLength": 1},
+    "authority": {"const": "DERIVED_ATOMIC_FACT"},
+    "writes": {"const": "NONE"}
+  }
+}
