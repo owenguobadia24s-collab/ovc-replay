@@ -4,8 +4,8 @@ plan_version: '0.3'
 source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
-status: APPROVED
-current_authority: TRANSITION_AND_CANDIDATE_ENGINE_ACCEPTED
+status: GATE_READY
+current_authority: TRIGGER_CONTROL_NOVELTY_SHADOW_CANDIDATE
 prohibited_authority:
   - LIVE_PATTERN_DISCOVERY_PROCESSING
   - ACTIVE_TRIGGER_REGISTRY
@@ -37,12 +37,22 @@ objects:
     owner: RO.C2.PATTERN_DISCOVERY.TRIGGERS
     canonical: false
     replaceable: true
-    implementation_status: ACCEPTED_PERSISTENCE_FOUNDATION
+    implementation_status: ACCEPTED_WITH_PD_WP2_EVALUATOR_CANDIDATE
   - id: CandidateWindow
     owner: RO.C2.PATTERN_DISCOVERY.WINDOWS
     canonical: false
     replaceable: true
     implementation_status: ACCEPTED
+  - id: ControlSelection
+    owner: RO.C2.PATTERN_DISCOVERY.CONTROLS
+    canonical: false
+    replaceable: true
+    implementation_status: IMPLEMENTED_CANDIDATE
+  - id: QueueProjection
+    owner: RO.C2.PATTERN_DISCOVERY.QUEUE
+    canonical: false
+    replaceable: true
+    implementation_status: IMPLEMENTED_CANDIDATE
   - id: PatternFingerprint
     owner: RO.C2.PATTERN_DISCOVERY.FINGERPRINTS
     canonical: false
@@ -52,7 +62,8 @@ objects:
     owner: RO.C2.PATTERN_DISCOVERY.NOVELTY
     canonical: false
     replaceable: true
-    implementation_status: PLANNED_PD_WP2_BASELINE_ONLY
+    implementation_status: IMPLEMENTED_BASELINE_AND_SHADOW_CANDIDATE
+    ranking_authority: NONE
   - id: ClusterVersion
     owner: RO.C2.PATTERN_DISCOVERY.CLUSTERS
     canonical: false
@@ -112,31 +123,37 @@ work_packets:
     authority_delta: ACCEPT_TRANSITION_AND_CANDIDATE_ENGINE
     baseline_commit: fb63c15b5f7e265cc78e35421de39c4656d8140e
     branch: build/pd-g1-clean-integration
-    candidate_commit: efa062115cb654b951eb0d44c8b66107bdd882d7
+    candidate_commit: 0e1674afb9df5ed87fc5a3b19f73cb3f95a2d265
     tests:
       - tests/research_operations/pattern_discovery/test_pd_wp1_transition_candidate_engine.py
       - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
       - tests/authority/test_active_namespace_allowlist.py
       - canonical repository suite
-      - GitHub Actions 30261913139
-      - GitHub Actions 30261913174
+      - GitHub Actions 30262050883
+      - GitHub Actions 30262050941
     qa_result: PASS_PD_G1_APPROVED
     qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_WP1_QA_PACKET.json
     gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_GATE_PACKET.md
     decision_record: docs/releases/pattern-discovery-v0-3/pd-wp1/PD_G1_OPERATOR_DECISION.md
-    merge_commit: null
+    merge_commit: abc0f4dc63932907c331f645b17ec4cdd3bb58cf
     blockers: []
     next_packet: PD-WP2
   - packet_id: PD-WP2
-    status: READY
+    status: GATE_READY
     prerequisites: [PD-G1_APPROVED]
     authority_required: DERIVED_DISCOVERY_TRIAGE
     authority_delta: TRIGGER_CONTROL_AND_NOVELTY_SHADOW
-    baseline_commit: TO_BE_RESOLVED_FROM_PD_G1_MERGE
+    baseline_commit: abc0f4dc63932907c331f645b17ec4cdd3bb58cf
     branch: build/pd-wp2-trigger-control-novelty
-    candidate_commit: null
-    tests: []
-    qa_packet: null
+    candidate_commit: 66c8333d57852add725f0132efe8ee51be09f715
+    tests:
+      - tests/research_operations/pattern_discovery/test_pd_wp2_trigger_control_novelty.py
+      - tests/research_operations/pattern_discovery/test_pd_wp1_transition_candidate_engine.py
+      - tests/research_operations/pattern_discovery/test_pd_g0_design_freeze.py
+      - canonical repository suite
+    qa_result: PENDING_FINAL_CI
+    qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_WP2_QA_PACKET.json
+    gate_packet: docs/releases/pattern-discovery-v0-3/pd-wp2/PD_G2_GATE_PACKET.md
     decision_record: null
     blockers: []
     next_packet: PD-WP3
