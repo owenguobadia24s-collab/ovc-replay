@@ -1,0 +1,47 @@
+{
+  "fixture_id": "PD-WP2-FIXTURES-v0.1",
+  "trigger_value_sets": {
+    "boundary_locations": ["UPPER_REGION", "LOWER_REGION", "NEAR_UPPER_BOUNDARY", "NEAR_LOWER_BOUNDARY", "AT_UPPER_BOUNDARY", "AT_LOWER_BOUNDARY"],
+    "breach_interactions": ["BREACH", "BREACH_ACTIVE", "CROSSING"],
+    "return_inside_interactions": ["INSIDE", "RETURNED_INSIDE", "RECLAIMED_INSIDE"],
+    "compression_organisation": ["COMPRESSION", "COMPRESSED", "COMPRESSING"],
+    "displacement_motion": ["DISPLACEMENT", "UP_DISPLACEMENT", "DOWN_DISPLACEMENT", "UP_PROGRESS", "DOWN_PROGRESS"]
+  },
+  "threshold_pack": {
+    "persistence_records": 4,
+    "switching_lookback_records": 6,
+    "switching_count": 3
+  },
+  "control_pack": {
+    "pack_id": "PD.CONTROLS.v0.1",
+    "population_denominator": 5,
+    "matched_denominator": 4,
+    "minimum_control_share": 0.20,
+    "minimum_matched_share_of_controls": 0.50,
+    "minimum_population_share_of_controls": 0.25
+  },
+  "queue_policy": {
+    "daily_promotions": 12,
+    "family_promotions": 3,
+    "unresolved_depth": 50
+  },
+  "novelty_burn_in": {
+    "completed_valid_candidates": 60,
+    "valid_controls": 12,
+    "eligible_operating_days": 10,
+    "market_conditions": 2,
+    "active_ranking": "PROHIBITED"
+  },
+  "expected_failure_modes": [
+    "LOCATION_NOT_EVALUABLE",
+    "INTERACTION_NOT_EVALUABLE",
+    "PARENT_CONTEXT_UNAVAILABLE",
+    "CROSS_SCALE_DIRECTION_NOT_EVALUABLE",
+    "MOTION_HISTORY_NOT_EVALUABLE",
+    "NOVELTY_BASELINE_INSUFFICIENT",
+    "OPERATOR_GATE_REQUIRED",
+    "SUPPRESSED_DAILY_PROMOTION_CAP",
+    "SUPPRESSED_FAMILY_PROMOTION_CAP",
+    "SUPPRESSED_QUEUE_DEPTH"
+  ]
+}
