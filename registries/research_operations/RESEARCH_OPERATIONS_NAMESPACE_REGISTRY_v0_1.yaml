@@ -1,13 +1,13 @@
 schema: ovc-research-operations-namespace-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1
 gate_id: RO-G0
-status: FROZEN_FOR_RO_WP1
+status: FROZEN_WITH_APPROVED_ADDITIVE_NAMESPACES
 baseline_commit: fefac25f19a836898c3a22228036cd66617dca07
 source_plan_sha256: 4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0
 canonical_python_namespace:
   path: src/ovc/research_operations
   import_name: ovc.research_operations
-  state: RESERVED_NOT_IMPLEMENTED
+  state: IMPLEMENTED
   top_level_package_creation: DENIED
   permitted_subpackages:
     - records
@@ -16,6 +16,8 @@ canonical_python_namespace:
     - qa
     - read_model
     - adapters
+    - v0_2
+    - pattern_discovery
 reserved_repository_roots:
   contracts: contracts/research_operations
   schemas: schemas/research_operations
@@ -33,6 +35,12 @@ namespace_rules:
   historical_readers_are_explicit: true
   console_depends_on_services_not_reverse: true
   no_legacy_runtime_parentage: true
+additive_namespace_decisions:
+  - namespace: ovc.research_operations.pattern_discovery
+    authority_source: PD-G0_APPROVED
+    implementation_packet: PD-WP1
+    authority: DERIVED_FIXTURE_AND_READ_ONLY_C2_COMPUTE
+    canonical_market_authority: NONE
 prohibited_namespaces:
   - src/ovc_opt_b
   - legacy/quarantine/**
@@ -40,7 +48,7 @@ prohibited_namespaces:
   - outputs/**
   - caches/**
 authority:
-  implementation: APPROVED_FOR_RO_WP1_AFTER_MERGE
+  implementation: APPROVED_FOR_BOUNDED_WORK_PACKETS
   active_research: NONE
   market: NONE
   probability: NONE
