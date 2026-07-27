@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/candidate_window_v0_1.schema.json",
+  "title": "Pattern Discovery CandidateWindow",
+  "type": "object",
+  "required": ["window_id", "status", "operation_mode", "instrument", "price_side", "clock", "scope_id", "window_start_utc", "trigger_first_valid_at", "trigger_event_ids", "trigger_snapshot_hash", "source_release_id", "source_manifest_id", "closure_profile_id", "candidate_dedup_key"],
+  "properties": {
+    "window_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["DETECTED", "OPEN", "OPEN_PENDING_INPUT", "ACCUMULATING", "READY_FOR_REVIEW", "REVIEWED", "DISMISSED", "INVALID", "SUPPRESSED_DUPLICATE", "SUPPRESSED_QUEUE_CAP"]},
+    "operation_mode": {"enum": ["LIVE_PROSPECTIVE", "TIME_GATED_REPLAY", "NON_EVIDENTIARY_REPLAY"]},
+    "instrument": {"const": "GBPUSD"},
+    "price_side": {"enum": ["BID", "ASK"]},
+    "clock": {"enum": ["15M", "2H_A_L"]},
+    "scope_id": {"type": "string", "minLength": 1},
+    "window_start_utc": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "trigger_first_valid_at": {"type": "string", "format": "date-time", "pattern": "Z$"},
+    "window_end_utc": {"type": ["string", "null"], "format": "date-time"},
+    "closure_reason": {"type": ["string", "null"]},
+    "trigger_event_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "trigger_snapshot_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "completed_fingerprint_hash": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "source_release_id": {"type": "string", "minLength": 1},
+    "source_manifest_id": {"type": "string", "minLength": 1},
+    "source_c2_record_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+    "closure_profile_id": {"type": "string", "minLength": 1},
+    "candidate_dedup_key": {"type": "string", "minLength": 1},
+    "control_class": {"enum": ["NONE", "MATCHED_CONTROL", "POPULATION_CONTROL"]},
+    "quality_state": {"type": "string", "minLength": 1},
+    "suppression_reason": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}
