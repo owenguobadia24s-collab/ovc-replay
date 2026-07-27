@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-ro3-wp1-c1-index-fixtures/v1",
+  "formula_registry_path": "registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml",
+  "formula_registry_sha256": "0d736a9e2c9b8b6f197f0d92c87bf76f9eaad55bc8ef87ff5ecc420891474bbe",
+  "releases": [
+    {
+      "role": "DISCOVERY",
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+      "manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
+      "instrument": "GBPUSD",
+      "coverage_start": "2021-01-01T00:00:00Z",
+      "coverage_end": "2024-01-01T00:00:00Z",
+      "record_count": 159892,
+      "record_file_count": 144,
+      "schema_version": "0.1",
+      "formula_registry_id": "C1.FORMULAS.v0.1",
+      "formula_registry_sha256": "0d736a9e2c9b8b6f197f0d92c87bf76f9eaad55bc8ef87ff5ecc420891474bbe",
+      "clocks": ["15M", "2H_A_L"],
+      "sides": ["BID", "ASK"],
+      "selector_state": "SHADOW",
+      "lifecycle_state": "REMOTE_VERIFIED",
+      "availability": "REMOTE_VERIFIED",
+      "eligible_source_bar_count": 159892,
+      "source_rejections": {"QUARANTINED_UPSTREAM": 12104}
+    },
+    {
+      "role": "DEVELOPMENT",
+      "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+      "manifest_sha256": "ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017",
+      "instrument": "GBPUSD",
+      "coverage_start": "2024-01-01T00:00:00Z",
+      "coverage_end": "2025-01-01T00:00:00Z",
+      "record_count": 52872,
+      "record_file_count": 48,
+      "schema_version": "0.1",
+      "formula_registry_id": "C1.FORMULAS.v0.1",
+      "formula_registry_sha256": "0d736a9e2c9b8b6f197f0d92c87bf76f9eaad55bc8ef87ff5ecc420891474bbe",
+      "clocks": ["15M", "2H_A_L"],
+      "sides": ["BID", "ASK"],
+      "selector_state": "SHADOW",
+      "lifecycle_state": "REMOTE_VERIFIED",
+      "availability": "REMOTE_VERIFIED",
+      "eligible_source_bar_count": 52872,
+      "source_rejections": {"QUARANTINED_UPSTREAM": 4862}
+    }
+  ],
+  "record_header_generation": {
+    "total": 212764,
+    "family_rotation": [
+      ["15M", "BID"],
+      ["15M", "ASK"],
+      ["2H_A_L", "BID"],
+      ["2H_A_L", "ASK"]
+    ],
+    "schema_version": "0.1",
+    "formula_registry_id": "C1.FORMULAS.v0.1"
+  },
+  "validation_metadata": {
+    "role": "VALIDATION",
+    "release_id": "OPT-B.C1.GBPUSD.VALIDATION.NOT_BUILT",
+    "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "coverage_start": "2025-01-01T00:00:00Z",
+    "coverage_end": "2026-01-01T00:00:00Z",
+    "aggregate_record_count": 0
+  },
+  "negative_cases": [
+    "validation_content_request",
+    "unknown_role",
+    "wrong_release_or_manifest",
+    "wrong_clock_or_side",
+    "duplicate_record_id",
+    "missing_formula",
+    "input_order_changes_identity"
+  ]
+}
