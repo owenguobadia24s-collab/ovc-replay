@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/prospective_source/prospective_source_binding_v0_1",
+  "title": "ProspectiveSourceBinding v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["binding_id", "research_line_id", "status", "active_c2_model_release_id", "source_slice_id", "source_manifest_sha256", "compute_run_id", "eligible_data_through_utc", "qa", "release_eligibility", "selector_eligibility", "r2_publication", "validation_consumption", "exposure_authority"],
+  "properties": {
+    "binding_id": {"type": "string", "pattern": "^RPS\\.BINDING\\."},
+    "research_line_id": {"const": "RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1"},
+    "status": {"enum": ["CANDIDATE", "ACCEPTED_FOR_REPLAY", "ACTIVE_RESEARCH_TRIAGE", "QUARANTINED"]},
+    "active_c2_model_release_id": {"const": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1"},
+    "source_slice_id": {"type": "string"},
+    "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "compute_run_id": {"type": "string"},
+    "eligible_data_through_utc": {"type": "string", "format": "date-time"},
+    "active_triage_started_at_utc": {"type": ["string", "null"], "format": "date-time"},
+    "qa": {"type": "object", "required": ["gap_state", "deterministic_replay", "lineage_complete"], "properties": {"gap_state": {"enum": ["COMPLETE", "GAPPED", "QUARANTINED"]}, "deterministic_replay": {"type": "boolean"}, "lineage_complete": {"type": "boolean"}}, "additionalProperties": false},
+    "release_eligibility": {"const": "NONE"},
+    "selector_eligibility": {"const": "NONE"},
+    "r2_publication": {"const": "DENIED"},
+    "validation_consumption": {"const": "DENIED"},
+    "exposure_authority": {"const": "NONE"}
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/prospective_source/prospective_cursor_v0_1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cursor_id", "source_slice_id", "last_source_interval_end_utc", "last_transition_id", "sequence", "state_hash"],
+  "properties": {
+    "cursor_id": {"type": "string"},
+    "source_slice_id": {"type": "string"},
+    "last_source_interval_end_utc": {"type": "string", "format": "date-time"},
+    "last_transition_id": {"type": ["string", "null"]},
+    "sequence": {"type": "integer", "minimum": 0},
+    "state_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/prospective_source/prospective_source_slice_v0_1",
+  "title": "ProspectiveSourceSlice v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["slice_id", "instrument", "provider", "source_window_start_utc", "source_window_end_utc", "source_objects", "coverage_state", "frozen", "manifest_sha256", "release_status", "selector_eligibility", "r2_publication"],
+  "properties": {
+    "slice_id": {"type": "string", "pattern": "^RPS\\.DUKASCOPY\\.GBPUSD\\."},
+    "instrument": {"const": "GBPUSD"},
+    "provider": {"const": "DUKASCOPY"},
+    "source_window_start_utc": {"type": "string", "format": "date-time"},
+    "source_window_end_utc": {"type": "string", "format": "date-time"},
+    "source_objects": {"type": "array", "minItems": 4, "items": {"type": "object", "required": ["object_id", "clock", "side", "sha256"], "properties": {"object_id": {"type": "string"}, "clock": {"enum": ["M1", "H1"]}, "side": {"enum": ["BID", "ASK"]}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}, "additionalProperties": false}},
+    "coverage_state": {"enum": ["COMPLETE", "GAPPED", "QUARANTINED", "NOT_EVALUABLE"]},
+    "frozen": {"const": true},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "release_status": {"const": "NOT_A_RELEASE"},
+    "selector_eligibility": {"const": "NONE"},
+    "r2_publication": {"const": "DENIED"}
+  }
+}
