@@ -6,50 +6,25 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from collections import Counter
-from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.opt_b.validate_c2_wp7_prospective_evidence import (  # noqa: E402
+    deterministic_record_id,
+    validate_record as validate_contract_record,
+)
 
 APPEND_TARGET = Path("evidence/research/opt-b-c2-v2/prospective/c2_evidence_records.jsonl")
 RESEARCH_LINE = "RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1"
 ACTIVE_RELEASE = "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1"
 ACTIVE_MANIFEST = "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1"
 ACTIVE_MANIFEST_SHA256 = "c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33"
-ALLOWED_CLASSES = {
-    "STATE_FIDELITY_REVIEW",
-    "BOUNDARY_CONFLICT_CASE",
-    "ANOMALY",
-    "INCIDENT",
-    "BOUNDED_RESEARCH_QUESTION",
-}
-ALLOWED_STATUSES = {
-    "OBSERVED_UNREVIEWED",
-    "REVIEWED_ACCEPTED",
-    "REVIEWED_REJECTED",
-    "DUPLICATE_SUPERSEDED",
-    "INCIDENT_BLOCKED",
-}
-REQUIRED = {
-    "schema",
-    "record_id",
-    "research_line_id",
-    "record_class",
-    "evidence_status",
-    "instrument",
-    "canonical_clock",
-    "price_side",
-    "observation_start_utc",
-    "observation_end_utc",
-    "created_at_utc",
-    "author",
-    "active_release_id",
-    "active_manifest_id",
-    "active_manifest_sha256",
-    "source_object_ids",
-    "summary",
-    "prospective",
-}
 PROHIBITED_CONTEXT_MARKERS = {
     "OLD_202_STORY_PROGRAMME",
     "OLD_58_CANDIDATE_PROGRAMME",
@@ -62,84 +37,11 @@ PROHIBITED_CONTEXT_MARKERS = {
 }
 
 
-def parse_utc(value: Any) -> datetime:
-    if not isinstance(value, str):
-        raise ValueError("timestamp must be a string")
-    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    if parsed.tzinfo is None:
-        raise ValueError("timestamp must include a timezone")
-    return parsed
-
-
 def validate_record(record: dict[str, Any], line_number: int) -> list[str]:
-    errors: list[str] = []
-    missing = sorted(REQUIRED.difference(record))
-    if missing:
-        errors.append(f"line {line_number}: missing required fields {missing}")
-        return errors
-
-    exact = {
-        "schema": "ovc-c2-prospective-evidence-record/v0.1",
-        "research_line_id": RESEARCH_LINE,
-        "instrument": "GBPUSD",
-        "active_release_id": ACTIVE_RELEASE,
-        "active_manifest_id": ACTIVE_MANIFEST,
-        "active_manifest_sha256": ACTIVE_MANIFEST_SHA256,
-        "prospective": True,
-    }
-    for key, expected in exact.items():
-        if record.get(key) != expected:
-            errors.append(f"line {line_number}: {key} does not match the frozen contract")
-
-    record_id = record.get("record_id")
-    if not isinstance(record_id, str) or len(record_id) != 21 or not record_id.startswith("C2EV-"):
-        errors.append(f"line {line_number}: invalid record_id")
-    elif any(ch not in "0123456789ABCDEF" for ch in record_id[5:]):
-        errors.append(f"line {line_number}: record_id suffix must be uppercase hexadecimal")
-
-    if record.get("record_class") not in ALLOWED_CLASSES:
-        errors.append(f"line {line_number}: unknown record_class")
-    if record.get("evidence_status") not in ALLOWED_STATUSES:
-        errors.append(f"line {line_number}: unknown evidence_status")
-    if record.get("canonical_clock") not in {"15M", "2H_A_L"}:
-        errors.append(f"line {line_number}: invalid canonical_clock")
-    if record.get("price_side") not in {"BID", "ASK"}:
-        errors.append(f"line {line_number}: invalid price_side")
-
-    source_ids = record.get("source_object_ids")
-    if not isinstance(source_ids, list) or not source_ids or len(source_ids) != len(set(source_ids)):
-        errors.append(f"line {line_number}: source_object_ids must be a non-empty unique list")
-
-    if not isinstance(record.get("author"), str) or not record["author"].strip():
-        errors.append(f"line {line_number}: author must be non-empty")
-    if not isinstance(record.get("summary"), str) or not record["summary"].strip():
-        errors.append(f"line {line_number}: summary must be non-empty")
-
-    try:
-        start = parse_utc(record.get("observation_start_utc"))
-        end = parse_utc(record.get("observation_end_utc"))
-        created = parse_utc(record.get("created_at_utc"))
-        if end <= start:
-            errors.append(f"line {line_number}: observation interval is not increasing")
-        if created < end:
-            errors.append(f"line {line_number}: record was created before observation end")
-    except ValueError as exc:
-        errors.append(f"line {line_number}: invalid timestamp: {exc}")
-
-    for field in (
-        "c2e_authority",
-        "probability_authority",
-        "exposure_authority",
-        "trading_authority",
-        "execution_authority",
-    ):
-        if field in record and record[field] != "NONE":
-            errors.append(f"line {line_number}: {field} must remain NONE")
+    errors = [f"line {line_number}: {error}" for error in validate_contract_record(record)]
 
     context = record.get("context_references", [])
-    if not isinstance(context, list):
-        errors.append(f"line {line_number}: context_references must be a list")
-    else:
+    if isinstance(context, list):
         joined = "\n".join(str(value) for value in context)
         for marker in PROHIBITED_CONTEXT_MARKERS:
             if marker in joined:
@@ -148,27 +50,30 @@ def validate_record(record: dict[str, Any], line_number: int) -> list[str]:
     return errors
 
 
+def _empty_result(state: str, sha256: str | None = None) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "decision": "DEFER_NO_REAL_PROSPECTIVE_BATCH",
+        "append_target": str(APPEND_TARGET),
+        "append_target_state": state,
+        "record_count": 0,
+        "live_prospective_count": 0,
+        "operation_mode_counts": {},
+        "errors": [],
+    }
+    if sha256 is not None:
+        result["sha256"] = sha256
+    return result
+
+
 def review(root: Path) -> tuple[dict[str, Any], int]:
     target = root / APPEND_TARGET
     if not target.exists():
-        return {
-            "decision": "DEFER_NO_REAL_PROSPECTIVE_BATCH",
-            "append_target": str(APPEND_TARGET),
-            "append_target_state": "ABSENT",
-            "record_count": 0,
-            "errors": [],
-        }, 0
+        return _empty_result("ABSENT"), 0
 
     payload = target.read_bytes()
+    payload_sha = hashlib.sha256(payload).hexdigest()
     if not payload.strip():
-        return {
-            "decision": "DEFER_NO_REAL_PROSPECTIVE_BATCH",
-            "append_target": str(APPEND_TARGET),
-            "append_target_state": "EMPTY",
-            "record_count": 0,
-            "sha256": hashlib.sha256(payload).hexdigest(),
-            "errors": [],
-        }, 0
+        return _empty_result("EMPTY", payload_sha), 0
 
     records: list[dict[str, Any]] = []
     errors: list[str] = []
@@ -191,20 +96,57 @@ def review(root: Path) -> tuple[dict[str, Any], int]:
     if duplicate_ids:
         errors.append(f"duplicate active record IDs: {duplicate_ids}")
 
-    decision = "BLOCK_BATCH_INTEGRITY_FAILURE" if errors else "PASS_FIRST_BATCH_ACCEPTED"
-    result = {
+    mode_counts = Counter(record.get("operation_mode") for record in records)
+    live_records = [record for record in records if record.get("operation_mode") == "LIVE_PROSPECTIVE"]
+
+    if errors:
+        decision = "BLOCK_BATCH_INTEGRITY_FAILURE"
+    elif not live_records:
+        decision = "DEFER_NO_REAL_PROSPECTIVE_BATCH"
+    else:
+        decision = "PASS_FIRST_BATCH_ACCEPTED"
+
+    result: dict[str, Any] = {
         "decision": decision,
         "append_target": str(APPEND_TARGET),
         "append_target_state": "PRESENT",
         "record_count": len(records),
-        "sha256": hashlib.sha256(payload).hexdigest(),
+        "live_prospective_count": len(live_records),
+        "sha256": payload_sha,
         "record_ids": ids,
+        "live_prospective_record_ids": [record["record_id"] for record in live_records],
         "class_counts": dict(Counter(record.get("record_class") for record in records)),
+        "operation_mode_counts": {str(key): value for key, value in mode_counts.items()},
         "sequence_boundary_friction_count": sum(
-            1 for record in records if record.get("sequence_boundary_friction") is True
+            1
+            for record in live_records
+            if record.get("sequence_boundary_friction") is True
         ),
         "errors": errors,
     }
+
+    if live_records:
+        result["market_time_range"] = {
+            "first_market_window_start_utc": min(
+                str(record["market_window_start_utc"]) for record in live_records
+            ),
+            "last_market_window_end_utc": max(
+                str(record["market_window_end_utc"]) for record in live_records
+            ),
+            "first_trigger_first_valid_at": min(
+                str(record["trigger_first_valid_at"]) for record in live_records
+            ),
+            "last_trigger_first_valid_at": max(
+                str(record["trigger_first_valid_at"]) for record in live_records
+            ),
+            "first_review_created_at_utc": min(
+                str(record["review_created_at_utc"]) for record in live_records
+            ),
+            "last_review_created_at_utc": max(
+                str(record["review_created_at_utc"]) for record in live_records
+            ),
+        }
+
     return result, 1 if errors else 0
 
 
