@@ -2,16 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-
-AUTHORITY = {
-    "surface": "LOCAL_PATTERN_DISCOVERY_CANDIDATE",
-    "views": ["Queue", "Candidate Detail", "Clusters"],
-    "research_write": "OPERATOR_GATE_REQUIRED",
-    "active_novelty_ranking": "DENIED",
-    "semantic_promotion": "DENIED",
-    "selector_release_r2": "DENIED",
-    "probability_exposure_execution": "NONE",
-}
+from ovc.research_operations.prospective_source.authority import (
+    AuthoritySnapshot,
+    authority_from_mapping,
+)
 
 
 def _streamlit():
@@ -19,10 +13,11 @@ def _streamlit():
     return st
 
 
-def render_queue(items: list[Mapping[str, Any]]) -> str | None:
+def render_queue(items: list[Mapping[str, Any]], authority: AuthoritySnapshot) -> str | None:
     st = _streamlit()
     st.subheader("Review Queue")
     st.caption("Reason-coded C2 candidate windows · derived and non-authoritative")
+    st.json(authority.as_dict(), expanded=False)
     if not items:
         st.info("No candidates currently meet the frozen trigger and queue rules.")
         return None
@@ -62,10 +57,14 @@ def render_queue(items: list[Mapping[str, Any]]) -> str | None:
     return st.selectbox("Open candidate", [str(item["candidate_window_id"]) for item in selected])
 
 
-def render_candidate_detail(detail: Mapping[str, Any]) -> None:
+def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnapshot) -> None:
     st = _streamlit()
     st.subheader("Candidate Detail")
-    st.warning(str(detail.get("authority_banner")))
+    st.warning(authority.authority_label)
+    st.caption(
+        f"Model {authority.active_model_release_id} · source {authority.source_binding_id or 'NOT_BOUND'} · "
+        f"eligible through {authority.eligible_data_through_utc or 'NOT_AVAILABLE'} · sequence {authority.evidence_sequence}"
+    )
     summary = detail.get("summary", {})
     metrics = st.columns(4)
     metrics[0].metric("Clock", str(summary.get("clock")))
@@ -74,7 +73,7 @@ def render_candidate_detail(detail: Mapping[str, Any]) -> None:
     metrics[3].metric("Distance", str(summary.get("nearest_cluster_distance") or "N/A"))
     strip = detail.get("price_strip", {})
     if strip.get("status") == "AVAILABLE":
-        st.caption("Lightweight exact-OPT-A context strip")
+        st.caption("Lightweight exact-source context strip")
         chart_rows = [{"time": row.get("bar_end_utc"), "close": row.get("close")} for row in strip.get("bars", ())]
         st.line_chart(chart_rows, x="time", y="close")
         st.json(strip.get("markers", {}), expanded=False)
@@ -93,7 +92,12 @@ def render_candidate_detail(detail: Mapping[str, Any]) -> None:
     st.selectbox("Evidence class", list(detail.get("permitted_review_classes", ())))
     st.text_area("Factual observation", placeholder="Describe what C2 represents faithfully or misses.")
     st.text_area("Limitation / next bounded question")
-    st.button("Freeze evidence record", disabled=True, help="PD-G4 operator approval is required before canonical evidence writes are enabled.")
+    help_text = (
+        "LIVE_PROSPECTIVE append is enabled for the exact approved source binding."
+        if authority.live_append_enabled
+        else "Disabled unless PD-G4 and RPS-G4 are approved, the operator key is bound, the bridge is healthy, write authority is true, and the candidate source resolves."
+    )
+    st.button("Freeze evidence record", disabled=not authority.live_append_enabled, help=help_text)
 
 
 def render_clusters(view: Mapping[str, Any]) -> None:
@@ -121,18 +125,20 @@ def render_clusters(view: Mapping[str, Any]) -> None:
 
 def render_pattern_discovery_app(bundle: Mapping[str, Any]) -> None:
     st = _streamlit()
+    authority = authority_from_mapping(bundle.get("authority"))
     st.set_page_config(page_title="OVC C2 Pattern Discovery", page_icon="◈", layout="wide")
     st.title("OVC C2 Pattern Discovery")
     st.caption("Simple local research triage · Queue → Candidate Detail → Clusters")
-    st.json(AUTHORITY, expanded=False)
+    st.json(authority.as_dict(), expanded=False)
     queue_tab, detail_tab, cluster_tab = st.tabs(["Queue", "Candidate Detail", "Clusters"])
     with queue_tab:
-        selected = render_queue(list(bundle.get("queue_items", ())))
+        selected = render_queue(list(bundle.get("queue_items", ())), authority)
     details = bundle.get("candidate_details", {})
     with detail_tab:
         selected_id = selected or next(iter(details), None)
         if selected_id and selected_id in details:
-            render_candidate_detail(details[selected_id])
+            candidate_authority = AuthoritySnapshot(**{**authority.__dict__, "candidate_source_resolved": bool(details[selected_id].get("source_lineage"))})
+            render_candidate_detail(details[selected_id], candidate_authority)
         else:
             st.info("Select a candidate from the Queue.")
     with cluster_tab:
