@@ -165,11 +165,10 @@ class RpsG4ActivationTests(unittest.TestCase):
         self.assertEqual(self.wp4_state["next_packet"], "PD-WP5")
 
     def test_all_programme_registries_reference_exact_active_state(self) -> None:
-        required = (
+        exact_identities = (
             "RPS.BINDING.32fb3003efa072916c11e907",
             "RPS.SIGNING.50092c28981fef08f53a6cb5",
             "OVC.OPERATOR.PRIMARY.LOCAL.V1",
-            "READY_AWAITING_NEW_LIVE_PROSPECTIVE_CANDIDATE",
             "PD-G5",
         )
         for registry in (
@@ -177,10 +176,20 @@ class RpsG4ActivationTests(unittest.TestCase):
             self.pd_registry,
             self.evidence_registry,
         ):
-            for value in required:
+            for value in exact_identities:
                 self.assertIn(value, registry)
+
+        self.assertIn(
+            "first_operation_status: READY_AWAITING_NEW_LIVE_PROSPECTIVE_CANDIDATE",
+            self.rps_registry,
+        )
         self.assertIn("status: READY", self.rps_registry)
         self.assertIn("status: READY", self.pd_registry)
+        self.assertIn("current_packet: PD-WP5", self.pd_registry)
+        self.assertIn(
+            "first_operation_status: READY_AWAITING_NEW_LIVE_PROSPECTIVE_CANDIDATE",
+            self.evidence_registry,
+        )
         self.assertIn("replay_backfill: DENIED", self.evidence_registry)
 
     def test_no_private_key_or_live_payload_is_embedded(self) -> None:
