@@ -24,11 +24,54 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Focused RPS-G4 evidence tests
+      - name: Verify compact byte inventory
         run: >-
           PYTHONPATH=src python -m unittest discover
           -s tests/research_operations/prospective_source
           -p 'test_rps_g4_signed_replay_evidence.py'
+          -k compact_file_byte_inventory
+          -v
+      - name: Verify signing binding and public key
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_signed_replay_evidence.py'
+          -k signing_binding_identity
+          -v
+      - name: Verify acceptance identities
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_signed_replay_evidence.py'
+          -k acceptance_and_signed_payload
+          -v
+      - name: Verify Ed25519 SSHSIG
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_signed_replay_evidence.py'
+          -k ed25519_sshsig
+          -v
+      - name: Verify exact cross-record bindings
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_signed_replay_evidence.py'
+          -k exact_source_compute
+          -v
+      - name: Verify operator gate remains non-activating
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_signed_replay_evidence.py'
+          -k gate_is_operator_required
+          -v
+      - name: Verify programme state stops at RPS-G4
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_signed_replay_evidence.py'
+          -k programme_state_stops
           -v
       - name: Canonical repository tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
