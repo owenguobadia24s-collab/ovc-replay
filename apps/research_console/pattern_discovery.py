@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
-from ovc.research_operations.prospective_source.authority import AuthoritySnapshot, authority_from_mapping
+from ovc.research_operations.prospective_source.authority import (
+    AuthoritySnapshot,
+    authority_from_mapping,
+    load_repository_authority_snapshot,
+)
 
 DEFAULT_AUTHORITY = AuthoritySnapshot()
 AUTHORITY = {
@@ -128,7 +132,11 @@ def render_clusters(view: Mapping[str, Any]) -> None:
 
 def render_pattern_discovery_app(bundle: Mapping[str, Any]) -> None:
     st = _streamlit()
-    authority = authority_from_mapping(bundle.get("authority"))
+    authority = (
+        authority_from_mapping(bundle.get("authority"))
+        if "authority" in bundle
+        else load_repository_authority_snapshot()
+    )
     st.set_page_config(page_title="OVC C2 Pattern Discovery", page_icon="◈", layout="wide")
     st.title("OVC C2 Pattern Discovery")
     st.caption("Simple local research triage · Queue → Candidate Detail → Clusters")
