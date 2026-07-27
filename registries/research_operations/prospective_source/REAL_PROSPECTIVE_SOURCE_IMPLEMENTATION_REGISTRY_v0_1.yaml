@@ -6,7 +6,7 @@ owner: RESEARCH_OPERATIONS
 baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 active_c2_model_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
-current_authority: RPS_G2_SOURCE_ACCEPTANCE_CANDIDATE_DERIVED_COMPUTE_ONLY
+current_authority: RPS_G2_SOURCE_ACCEPTED_DERIVED_LOCAL_COMPUTE_ONLY
 real_prospective_source_available: true
 active_research_triage: false
 active_binding_id: null
@@ -67,15 +67,16 @@ gapped_recovery_authority:
   copy_on_verify: REQUIRED
   checksum_inventory: COMPLETED_OPERATOR_LOCAL
   incomplete_parent_policy: EXCLUDE_NO_SYNTHESIS
-  execution_state: FROZEN_LOCAL_GAPPED_SOURCE_SLICE_EVIDENCE_RECEIVED
+  execution_state: FROZEN_LOCAL_GAPPED_SOURCE_SLICE_EVIDENCE_ACCEPTED_RPS_G2
   decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
   authority_merge_commit: 8fb9e2289da2b38387fdf368ab3467875ecc5bc6
   merge_receipt: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_MERGE_RECEIPT.md
 accepted_source:
   gate_id: RPS-G2
-  status: QA_REVIEW
-  decision_candidate: PASS
+  status: APPROVED
+  decision: PASS
   authority: DELEGATED_AUTO_EXECUTABLE_WITHIN_RPS_G1B
+  approved_on: '2026-07-27'
   slice_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1
   source_window_start_utc: '2026-06-22T00:00:00Z'
   source_window_end_utc: '2026-06-25T00:00:00Z'
@@ -100,6 +101,9 @@ accepted_source:
   r2_publication: DENIED
   validation_consumption: DENIED
   live_prospective_append: DENIED
+  tested_evidence_head: be01c0d2d272bb89aad5aa4279189dc802b991e4
+  tests: [GitHub_Actions_30289144879]
+  unit_test_job: 90054311140
   evidence_index: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_COMPACT_EVIDENCE_INDEX.json
   qa_packet: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_SOURCE_EVIDENCE_QA_PACKET.md
   decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_DELEGATED_DECISION.md
@@ -137,17 +141,17 @@ intake_incidents:
     record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1A_JUNE_SOURCE_QA_INCIDENT.md
 objects:
   ProspectiveSourceSlice:
-    status: FROZEN_GAPPED_SOURCE_ACCEPTANCE_CANDIDATE
+    status: FROZEN_GAPPED_SOURCE_ACCEPTED
     approved_real_instance_available: true
     coverage_state: GAPPED
     canonical_release: false
     selector_eligible: false
     r2_eligible: false
   ProspectiveComputeRun:
-    status: IMPLEMENTED_FIXTURE_ONLY_PENDING_RPS_WP3
+    status: IMPLEMENTED_FIXTURE_ONLY_RPS_WP3_READY
     derived: true
   ProspectiveSourceBinding:
-    status: IMPLEMENTED_REPLAY_ONLY_PENDING_RPS_WP3
+    status: IMPLEMENTED_REPLAY_ONLY_RPS_WP3_READY
     required_for_live_triage: true
   OperatorSigningBinding:
     status: DEFERRED_TO_RPS_WP4
@@ -180,28 +184,33 @@ packets:
     blockers: []
     next_packet: RPS-WP2
   - packet_id: RPS-WP2
-    status: QA_REVIEW
+    status: COMPLETED
     prerequisites: [RPS-G1A_APPROVED, JUNE_SOURCE_QA_INCIDENT_RECORDED, RPS-G1B_APPROVED, FROZEN_GAPPED_SOURCE_EVIDENCE_RECEIVED]
     authority_required: DELEGATED_AUTO_EXECUTABLE_WITHIN_RPS_G1B
     authority_delta: ACCEPT_EXACT_FROZEN_GAPPED_SOURCE_EVIDENCE
     baseline_commit: 18ba74378ece734647801576f373d68b4ba8687f
     branch: build/rps-wp2-g2-source-evidence-acceptance
-    implementation_state: COMPACT_EVIDENCE_VALIDATED_PENDING_FINAL_CI
+    tested_evidence_head: be01c0d2d272bb89aad5aa4279189dc802b991e4
+    implementation_state: SOURCE_EVIDENCE_ACCEPTED_RPS_G2
     source_quarantine_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1.20260727T160337Z.38a69acd
     contract: contracts/research_operations/prospective_source/RPS_GAPPED_SOURCE_ACCEPTANCE_CONTRACT_v0_1.md
     evidence_index: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_COMPACT_EVIDENCE_INDEX.json
     qa_packet: docs/releases/prospective-source-v0-1/rps-wp2/RPS_WP2_SOURCE_EVIDENCE_QA_PACKET.md
     decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_DELEGATED_DECISION.md
-    tests: [PENDING_FINAL_CI]
+    tests: [GitHub_Actions_30289144879]
+    unit_test_job: 90054311140
     qa_result: PASS
     provider_network_access: DENIED
     source_quarantine_mutation: DENIED
     blockers: []
-    next_gate: RPS-G2
+    next_packet: RPS-WP3
   - packet_id: RPS-WP3
-    status: PLANNED
+    status: READY
     prerequisites: [RPS-G2_APPROVED]
-    authority_delta: DERIVED_LOCAL_PROSPECTIVE_COMPUTE
+    authority_required: AUTO_EXECUTABLE_DERIVED_LOCAL_COMPUTE
+    authority_delta: DERIVED_LOCAL_PROSPECTIVE_COMPUTE_AND_EXACT_SOURCE_BINDING
+    blockers: []
+    next_gate: RPS-G3
   - packet_id: RPS-WP4
     status: PLANNED
     authority_delta: TIME_GATED_REPLAY_ACCEPTANCE
@@ -243,13 +252,15 @@ completed_gates:
     decision_record: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_OPERATOR_DECISION.md
     merge_commit: 8fb9e2289da2b38387fdf368ab3467875ecc5bc6
     merge_receipt: docs/releases/prospective-source-v0-1/rps-g1b/RPS_G1B_MERGE_RECEIPT.md
-pending_gates:
   - gate_id: RPS-G2
-    status: QA_REVIEW
+    status: APPROVED
+    decision: PASS
     authority: DELEGATED_AUTO_EXECUTABLE_WITHIN_RPS_G1B
+    approved_on: '2026-07-27'
+    tested_evidence_head: be01c0d2d272bb89aad5aa4279189dc802b991e4
+    tests: [GitHub_Actions_30289144879]
+    unit_test_job: 90054311140
     qa_result: PASS
-    tests: [PENDING_FINAL_CI]
-    proposed_delta: ACCEPT_EXACT_FROZEN_GAPPED_SOURCE_EVIDENCE
     decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_DELEGATED_DECISION.md
 prohibited_authority:
   - PROVIDER_REQUEST_OUTSIDE_APPROVED_RPS_SCOPE
@@ -277,6 +288,6 @@ prohibited_authority:
   - TRADING
   - EXECUTION
   - AGENT_WRITE
-next_gate: RPS-G2
-continuation_state: RPS_G2_EVIDENCE_ACCEPTANCE_PENDING_FINAL_CI
+next_gate: RPS-G3
+continuation_state: RPS_WP3_READY_AFTER_RPS_G2_MERGE
 rollback: REVERT_RPS_WP2_G2_ACCEPTANCE_AND_PRESERVE_ALL_LOCAL_FROZEN_AND_QUARANTINED_EVIDENCE
