@@ -8,6 +8,8 @@
 - Blocked packet: `PD-WP5`
 - Baseline main: `5842c8e9079efb82e5dc78dbeba31005c27eaa24`
 - Candidate branch: `build/pd-wp5-first-live-prospective-operation`
+- Tested gate-ready head: `9694f279ba2ca64d85c77e8679a863c6a79f2be3`
+- Pull request: `#115`
 - Decision authority: `OPERATOR`
 - Allowed decisions: `PASS`, `DEFER`, `BLOCK`, `QUARANTINE`, `SUPERSEDE`
 
@@ -98,16 +100,16 @@ The amendment may pass only if the operator accepts:
 
 ## Tests and QA
 
-The candidate branch includes:
+- focused PD-WP5 workflow `30302750156`, job `90099418472`: PASS;
+- canonical workflow `30302750032`, job `90099417677`: PASS;
+- no provider-network code in the diagnostic: PASS;
+- exact amendment scope and limits: PASS;
+- operator gate remains unapproved and provider access denied: PASS;
+- retained authority prohibitions: PASS;
+- QA packet: `docs/releases/pattern-discovery-v0-3/pd-wp5/PD_WP5_BLOCKER_QA_PACKET.md`;
+- QA recommendation: `BLOCK_PENDING_RPS_G4A`.
 
-- no-network PD-WP5 preflight;
-- post-activation chronology tests;
-- replay-contamination tests;
-- exact amendment-scope tests;
-- canonical repository tests;
-- QA packet `PD_WP5_BLOCKER_QA_PACKET.md`.
-
-Final workflow IDs and candidate head are pinned after CI.
+Final decision-bearing head checks are rerun before squash merge of the diagnostic packet.
 
 ## Changed files
 
@@ -116,8 +118,8 @@ The gate-preparation branch contains only:
 - diagnostic implementation and Windows wrapper;
 - tests and CI;
 - first-operation contract;
-- blocker QA;
-- machine-readable PD-WP5 state;
+- blocker QA and delegated blocker decision;
+- machine-readable PD-WP5 and RPS-G4A states;
 - this consolidated amendment packet.
 
 No provider request, market data, private key, evidence ledger, cache or machine path is committed.
