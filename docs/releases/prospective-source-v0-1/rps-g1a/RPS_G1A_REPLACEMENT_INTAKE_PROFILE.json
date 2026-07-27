@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-rps-g1a-replacement-intake-profile/v1",
+  "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "RPS-G1A",
+  "status": "OPERATOR_APPROVAL_REQUIRED",
+  "provider": "DUKASCOPY",
+  "instrument": "GBPUSD",
+  "replacement_slice": {
+    "slice_id": "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1",
+    "source_window_start_utc": "2026-06-22T00:00:00Z",
+    "source_window_end_utc": "2026-06-25T00:00:00Z",
+    "logical_streams": [
+      "M1_BID",
+      "M1_ASK",
+      "H1_BID",
+      "H1_ASK"
+    ],
+    "compressed_byte_limit": 26214400,
+    "expanded_byte_limit": 104857600,
+    "destination_scope": "OVC_EXTERNAL_ARTIFACT_ROOT_ONLY",
+    "adapter_module": "ovc.research_operations.prospective_source.dukascopy_intake_rps_g1a",
+    "operator_wrapper": "scripts/run_rps_wp2_intake.ps1"
+  },
+  "superseded_unavailable_scope": {
+    "gate_id": "RPS-G1",
+    "slice_id": "RPS.DUKASCOPY.GBPUSD.20260724_20260727.v1",
+    "source_window_start_utc": "2026-07-24T00:00:00Z",
+    "source_window_end_utc": "2026-07-27T00:00:00Z",
+    "disposition": "QUARANTINED_PROVIDER_OBJECT_UNAVAILABLE",
+    "accepted_source_slice_created": false,
+    "identity_or_bytes_reusable": false
+  },
+  "authority": {
+    "provider_execution_before_gate_approval": "DENIED",
+    "provider_execution_in_ci": "DENIED",
+    "raw_provider_bytes_in_git": false,
+    "release_status": "NOT_A_RELEASE",
+    "selector_eligibility": "NONE",
+    "r2_publication": "DENIED",
+    "validation_consumption": "DENIED",
+    "live_prospective_append": "DENIED",
+    "active_research_triage": "DENIED"
+  }
+}
