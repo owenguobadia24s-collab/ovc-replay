@@ -1,0 +1,55 @@
+name: PD-WP3 Fingerprint and Provisional Clustering
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/pattern_discovery/**"
+      - "contracts/research_operations/pattern_discovery/PATTERN_DISCOVERY_FINGERPRINT_AND_CLUSTER_ENGINE_CONTRACT_v0_1.md"
+      - "tests/research_operations/pattern_discovery/**"
+      - "fixtures/research_operations/pattern_discovery/pd_wp3/**"
+      - "registries/research_operations/pattern_discovery/**"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp3/**"
+      - ".github/workflows/pd-wp3-fingerprint-clustering.yml"
+  workflow_dispatch:
+
+jobs:
+  pd-wp3:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run PD-WP3 focused tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp3_fingerprint_clustering
+
+      - name: Run PD-WP2 retained tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp2_trigger_control_novelty
+
+      - name: Run PD-WP1 retained tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine
+
+      - name: Run retained design-boundary tests
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze
+
+      - name: Run canonical repository tests
+        run: |
+          set +e
+          python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
+          status=$?
+          cat canonical-tests.log
+          exit $status
+
+      - name: Upload canonical diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-wp3-canonical-tests
+          path: canonical-tests.log
+          if-no-files-found: ignore

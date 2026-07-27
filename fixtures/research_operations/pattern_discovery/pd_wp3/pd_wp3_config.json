@@ -1,0 +1,55 @@
+{
+  "fixture_id": "PD-WP3-FINGERPRINT-CLUSTER-CONFIG-v0.1",
+  "fingerprint_version": "PD.FINGERPRINT.v0.1",
+  "distance_pack": {
+    "pack_id": "PD.DISTANCE.v0.1",
+    "weights": {
+      "state_path": 0.25,
+      "transition_sequence": 0.25,
+      "interaction": 0.15,
+      "cross_scale": 0.15,
+      "duration_persistence": 0.10,
+      "quality": 0.10
+    },
+    "numeric_scaling": "MEDIAN_IQR_CLIPPED",
+    "numeric_clip": 3.0,
+    "missing_one_penalty": 0.75,
+    "missing_different_penalty": 1.0
+  },
+  "algorithm": {
+    "id": "PD.PAM.v0.1",
+    "method": "EXACT_DETERMINISTIC_PAM",
+    "small_sample_state": "UNASSIGNED_SMALL_SAMPLE",
+    "capacity": 500,
+    "capacity_state": "CLUSTER_BUILD_CAPACITY_BLOCK",
+    "k_max": 8,
+    "k_rule": "1..min(8,floor(sqrt(n)))",
+    "tie_breakers": [
+      "LOWER_K",
+      "LOWER_TOTAL_WITHIN_CLUSTER_DISTANCE",
+      "LEXICOGRAPHIC_MEDOID_IDS"
+    ]
+  },
+  "prohibited_features": [
+    "return",
+    "returns",
+    "mfe",
+    "mae",
+    "outcome",
+    "probability",
+    "profitable_direction",
+    "trade_direction",
+    "setup",
+    "execution",
+    "archetype"
+  ],
+  "machine_cluster_statuses": [
+    "PROVISIONAL",
+    "RECURRING",
+    "REVIEW_REQUIRED",
+    "RESTRICTED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "forbidden_machine_status": "ARCHETYPE_PROPOSAL"
+}
