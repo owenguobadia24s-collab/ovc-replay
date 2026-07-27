@@ -41,12 +41,16 @@ packets:
     blockers: []
     next_packet: RPS-WP1
   - packet_id: RPS-WP1
-    status: QA_REVIEW
+    status: GATE_READY
     prerequisites: [RPS-G0_APPROVED]
     authority_delta: FIXTURE_SOURCE_FOUNDATION
     baseline_commit: c54c4246c1976a9a9aa75fe2d1307f0955b4865d
     branch: build/rps-wp1-source-fixture-foundation
+    candidate_commit: 260b00883828a1bc78395218584a0dc46c568549
+    tests: [GitHub_Actions_30273017674]
+    qa_result: PASS
     qa_packet: docs/releases/prospective-source-v0-1/rps-wp1/RPS_WP1_QA_PACKET.md
+    gate_packet: docs/releases/prospective-source-v0-1/rps-wp1/RPS_G1_OPERATOR_GATE_PACKET.md
     blockers: []
     next_gate: RPS-G1
   - packet_id: RPS-WP2
@@ -67,6 +71,12 @@ completed_gates:
     authority: DELEGATED_AUTO_EXECUTABLE
     decision_record: docs/releases/prospective-source-v0-1/rps-00/RPS_G0_DELEGATED_DECISION.md
     merge_commit: c54c4246c1976a9a9aa75fe2d1307f0955b4865d
+pending_gates:
+  - gate_id: RPS-G1
+    status: GATE_READY
+    authority: OPERATOR_REQUIRED
+    proposed_delta: ONE_BOUNDED_REAL_PROVIDER_INTAKE
+    gate_packet: docs/releases/prospective-source-v0-1/rps-wp1/RPS_G1_OPERATOR_GATE_PACKET.md
 prohibited_authority:
   - PROVIDER_REQUEST_BEFORE_RPS_G1
   - LIVE_PATTERN_DISCOVERY_PROCESSING
