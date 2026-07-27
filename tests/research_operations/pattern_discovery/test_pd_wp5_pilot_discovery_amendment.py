@@ -8,6 +8,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[3]
 PD_STATE = ROOT / "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
 PD_G4B_STATE = ROOT / "registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json"
+PD_G4B_SCHEMA = ROOT / "schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_gate_state_v0_1.schema.json"
 PD_G5P_STATE = ROOT / "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
 RPS_G4A_STATE = ROOT / "registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json"
 RPS_G4_ACTIVE = ROOT / "registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json"
@@ -103,6 +104,26 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
         self.assertEqual(acceptance["next_packet_on_pass"], "PD-WP5-CANONICAL")
         self.assertEqual(acceptance["next_source_on_pass"], "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1")
         self.assertIn("RESET_ALL", acceptance["required_identity_action_on_pass"])
+
+    def test_gate_schema_covers_full_machine_record(self) -> None:
+        gate = load(PD_G4B_STATE)
+        schema = load(PD_G4B_SCHEMA)
+        allowed = set(schema["properties"])
+        required = set(schema["required"])
+        self.assertFalse(set(gate) - allowed)
+        self.assertFalse(required - set(gate))
+        self.assertFalse(schema["additionalProperties"])
+
+    def test_test_evidence_is_pinned(self) -> None:
+        gate = load(PD_G4B_STATE)
+        state = load(PD_STATE)
+        for record in (gate, state):
+            self.assertEqual(record["tested_candidate_head"], "1c55524754d6cd457ea8e60a6478206bb89aa886")
+            self.assertEqual(record["pull_request"], 117)
+            self.assertEqual(len(record["tests"]), 3)
+            self.assertEqual(record["pilot_amendment_job"], 90114384840)
+            self.assertEqual(record["historical_supersession_job"], 90114385057)
+            self.assertEqual(record["canonical_test_job"], 90114384730)
 
     def test_contract_and_gate_records_are_complete(self) -> None:
         for path in (CONTRACT, HISTORICAL_LIVE_CONTRACT, GATE_PACKET, QA_PACKET, SUPERSESSION):
