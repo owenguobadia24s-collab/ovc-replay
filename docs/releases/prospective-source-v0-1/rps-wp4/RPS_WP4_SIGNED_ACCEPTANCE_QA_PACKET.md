@@ -5,11 +5,16 @@
 - Gate: `RPS-G4`
 - Baseline main: `32d878f651d7edc832d75bccf839df41f14201e4`
 - Candidate branch: `gate/rps-g4-active-research-triage`
-- QA recommendation: `PASS_OPERATOR_GATE_READY_CANDIDATE`
+- Tested evidence head: `c157397dedd2d2d1cc8f57d91b06bdbac0cf70e8`
+- Focused workflow: `30298056893`
+- Focused job: `90083869457`
+- Canonical workflow: `30298056638`
+- Canonical job: `90083867686`
+- QA recommendation: `PASS_OPERATOR_GATE_READY`
 
 ## Evidence received
 
-The permitted four compact files were received and copied without raw source, derived payload or private-key material:
+The permitted four compact files were received and copied byte-for-byte without raw source, derived payload or private-key material:
 
 | File | Bytes | SHA-256 |
 |---|---:|---|
@@ -44,7 +49,7 @@ The following controls close:
 4. the signed canonical payload SHA-256 reproduces to `acd3c5653678780523b969d201bb08382f02a081c3fb814386f4fab7a9e6ca82`;
 5. the SSHSIG envelope SHA-256 reproduces to `9383c582814809fc0a0408aec1674307e2771b51cad472c06fb86efc3e0c93b8`;
 6. the signature declares namespace `ovc-rps`, format `SSHSIG_OPENSSH_V1` and algorithm `ED25519`;
-7. independent OpenSSH verification is included in the focused repository test and must pass on final CI.
+7. independent OpenSSH SSHSIG verification passed in focused CI.
 
 The private key is not present in Git or the compact evidence. Protection of the external private key is an explicit operator attestation; repository QA cannot independently prove the Windows ACL state.
 
@@ -70,6 +75,15 @@ PD-G4 already approved bounded human-operated canonical prospective-evidence app
 
 Approval must not grant automatic evidence creation, live autonomous processing, active novelty ranking, semantic promotion, selector/release/R2 mutation, Validation use, probability, risk, exposure, trading, execution or agent write.
 
+## Test history
+
+Two correctable gate-preparation defects were resolved without weakening evidence or acceptance conditions:
+
+1. the initial focused test traversed the compact index as though the operator fields were top-level rather than under the governed `operator` object;
+2. the first repository copies normalised the operator-produced CRLF files to LF, causing the required byte hashes to fail.
+
+The assertion was corrected and the original CRLF evidence bytes were restored. The final focused workflow then passed every byte, identity, fingerprint, SSHSIG, authority and programme-state check. The separate canonical repository workflow also passed.
+
 ## Warnings
 
 1. The accepted source and compute evidence are GAPPED and end at `2026-06-25T00:00:00Z`; gaps remain excluded with no synthesis.
@@ -80,7 +94,7 @@ Approval must not grant automatic evidence creation, live autonomous processing,
 
 ## Blocking issues
 
-None in the compact evidence. Final CI remains required before the gate-ready packet is frozen.
+None.
 
 ## Rollback
 
@@ -88,4 +102,4 @@ Revert the RPS-G4 gate-preparation branch and preserve the accepted source, comp
 
 ## Recommendation
 
-`PASS`, subject to final focused and repository-wide CI and explicit operator acceptance of the exact active-triage delta stated in the consolidated RPS-G4 gate packet.
+`PASS` at the explicit operator gate. The evidence satisfies the exact signing, source, compute, replay and retained-authority conditions. No activation is permitted until the operator decision is recorded.
