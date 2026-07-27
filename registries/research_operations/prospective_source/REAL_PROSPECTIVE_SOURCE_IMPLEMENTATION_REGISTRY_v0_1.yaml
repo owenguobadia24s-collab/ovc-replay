@@ -6,13 +6,19 @@ owner: RESEARCH_OPERATIONS
 baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
 research_line_id: RESEARCH.OPT-B.C2.GBPUSD.DISCOVERY.v1
 active_c2_model_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
-current_authority: RPS_WP3_COMMAND_READY_OPERATOR_LOCAL_DERIVED_COMPUTE_ONLY
+current_authority: ACTIVE_RESEARCH_TRIAGE_APPROVED_BOUNDED_FIRST_OPERATION
 real_prospective_source_available: true
-active_research_triage: false
-active_binding_id: null
+active_research_triage: true
+active_binding_id: RPS.BINDING.32fb3003efa072916c11e907
+active_signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
+active_operator_id: OVC.OPERATOR.PRIMARY.LOCAL.V1
 active_triage_started_at_utc: null
-write_authority: false
-operation_mode: TIME_GATED_REPLAY
+active_triage_started_at_commit: PENDING_ACTIVATION_MERGE
+write_authority: true
+live_append_enabled: false
+operation_mode: LIVE_PROSPECTIVE
+first_operation_limit: 1
+first_operation_status: READY_AWAITING_NEW_LIVE_PROSPECTIVE_CANDIDATE
 superseded_intake:
   gate_id: RPS-G1
   provider: DUKASCOPY
@@ -100,7 +106,7 @@ accepted_source:
   selector_eligibility: NONE
   r2_publication: DENIED
   validation_consumption: DENIED
-  live_prospective_append: DENIED
+  live_prospective_append: DENIED_FOR_REPLAY_OUTPUT
   tested_evidence_head: be01c0d2d272bb89aad5aa4279189dc802b991e4
   final_pr_head: 5e8d918dc619c3758ce2a305f9505680fcd6478a
   tests: [GitHub_Actions_30289416380]
@@ -152,17 +158,22 @@ objects:
     selector_eligible: false
     r2_eligible: false
   ProspectiveComputeRun:
-    status: IMPLEMENTED_COMMAND_MERGED_AWAITING_OPERATOR_LOCAL_EXECUTION
+    status: COMPLETED_ACCEPTED_RPS_G3
     derived: true
     operation_mode: TIME_GATED_REPLAY
   ProspectiveSourceBinding:
-    status: IMPLEMENTED_CANDIDATE_COMMAND_MERGED_NOT_ACTIVE
+    status: ACTIVE_RESEARCH_TRIAGE_BOUND
+    binding_id: RPS.BINDING.32fb3003efa072916c11e907
     required_for_live_triage: true
+    replay_backfill: DENIED
   OperatorSigningBinding:
-    status: DEFERRED_TO_RPS_WP4
+    status: ACTIVE_LOCAL_HUMAN_OPERATOR
+    signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
+    operator_id: OVC.OPERATOR.PRIMARY.LOCAL.V1
     private_key_in_git: false
   RuntimeAuthoritySnapshot:
-    status: IMPLEMENTED_FAIL_CLOSED
+    status: ACTIVE_TRIAGE_FAIL_CLOSED_APPEND_PENDING_SOURCE
+    record: registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json
 packets:
   - packet_id: RPS-00
     status: COMPLETED
@@ -214,7 +225,7 @@ packets:
     blockers: []
     next_packet: RPS-WP3
   - packet_id: RPS-WP3
-    status: RUNNING
+    status: COMPLETED
     prerequisites: [RPS-G2_APPROVED]
     authority_required: AUTO_EXECUTABLE_DERIVED_LOCAL_COMPUTE
     authority_delta: DERIVED_LOCAL_PROSPECTIVE_COMPUTE_AND_EXACT_SOURCE_BINDING
@@ -222,32 +233,44 @@ packets:
     branch: build/rps-wp3-derived-compute-command
     final_pr_head: 48dee2cbeb7b365853b5ae4616ad0d8c52214b4e
     pull_request: 107
-    merge_commit: 4ccda083ddbe099056da4d1ce068ab63ba816c9a
-    implementation_state: COMMAND_READY_MERGED_AWAITING_OPERATOR_LOCAL_EXECUTION
+    command_merge_commit: 4ccda083ddbe099056da4d1ce068ab63ba816c9a
+    evidence_merge_commit: c8429ebdf8774a876d5a33e495cb313e31c8d034
+    implementation_state: DERIVED_COMPUTE_AND_BINDING_ACCEPTED_RPS_G3
     contract: contracts/research_operations/prospective_source/RPS_DERIVED_COMPUTE_AND_BINDING_CONTRACT_v0_1.md
     compute_module: ovc.research_operations.prospective_source.prospective_compute
     local_command: scripts/run_rps_wp3_compute.ps1
     operator_guide: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_WINDOWS_OPERATOR_GUIDE.md
-    receipt_schema: schemas/research_operations/prospective_source/prospective_compute_receipt_v0_1.schema.json
-    qa_packet: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_COMMAND_READINESS_QA_PACKET.md
-    merge_receipt: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_COMMAND_MERGE_RECEIPT.md
-    tests: [GitHub_Actions_30291002463, GitHub_Actions_30291002498]
-    dedicated_test_job: 90060487550
-    canonical_unit_test_job: 90060487801
-    qa_result: PASS_COMMAND_READY
+    evidence_index: docs/releases/prospective-source-v0-1/rps-wp3/RPS_WP3_COMPACT_COMPUTE_EVIDENCE_INDEX.json
+    qa_packet: docs/releases/prospective-source-v0-1/rps-wp3/RPS_G3_COMPUTE_EVIDENCE_QA_PACKET.md
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp3/RPS_G3_DELEGATED_DECISION.md
+    tests: [GitHub_Actions_30295366127, GitHub_Actions_30295362965]
+    qa_result: PASS
     provider_network_access: DENIED
     release_mutation: DENIED
-    active_binding_creation: DENIED
-    blockers:
-      - code: OPERATOR_LOCAL_DERIVED_COMPUTE_AND_COMPACT_EVIDENCE_REQUIRED
-        detail: GitHub cannot access the accepted source CSVs under OVC_EXTERNAL_ARTIFACT_ROOT.
-    next_gate: RPS-G3
+    active_binding_creation: ACCEPTED_AT_RPS_G4
+    blockers: []
+    next_packet: RPS-WP4
   - packet_id: RPS-WP4
-    status: PLANNED
-    prerequisites: [RPS-G3_APPROVED]
-    authority_delta: TIME_GATED_REPLAY_ACCEPTANCE
+    status: COMPLETED
+    prerequisites: [RPS-G3_APPROVED, OPERATOR_SIGNING_BINDING_RECEIVED, SIGNED_TIME_GATED_REPLAY_ACCEPTANCE_RECEIVED, RPS-G4_OPERATOR_APPROVED]
+    authority_required: OPERATOR
+    authority_delta: TIME_GATED_REPLAY_ACCEPTANCE_AND_ACTIVE_RESEARCH_TRIAGE_BINDING
+    baseline_commit: c8429ebdf8774a876d5a33e495cb313e31c8d034
+    command_merge_commit: f453d7260d15720a4741a14684ec0e1a61e67a3e
+    gate_decision_merge_commit: b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac
+    activation_branch: activate/rps-g4-exact-binding-active-triage
+    activation_record: registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp4/RPS_G4_OPERATOR_DECISION.md
+    qa_result: PASS_OPERATOR_APPROVED
+    blockers: []
+    next_packet: PD-WP5
   - packet_id: PD-WP5
-    status: BLOCKED_PENDING_RPS_G4
+    status: READY
+    prerequisites: [PD-G4_APPROVED, RPS-G4_APPROVED, REAL_PROSPECTIVE_SOURCE_AVAILABLE, ACTIVE_RESEARCH_TRIAGE_APPROVED]
+    authority_required: ACTIVE_RESEARCH_TRIAGE_APPROVED
+    authority_delta: FIRST_PROSPECTIVE_DISCOVERY_BATCH
+    operation_limit: 1
+    next_packet: PD-G5
 completed_gates:
   - gate_id: RPS-G0
     status: APPROVED
@@ -296,15 +319,31 @@ completed_gates:
     decision_record: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_DELEGATED_DECISION.md
     merge_commit: dde4ce967b65f373db9c3150a92d93b02326047a
     merge_receipt: docs/releases/prospective-source-v0-1/rps-wp2/RPS_G2_MERGE_RECEIPT.md
+  - gate_id: RPS-G3
+    status: COMPLETED
+    decision: PASS
+    authority: DELEGATED_AUTO_EXECUTABLE_DERIVED_LOCAL_COMPUTE
+    approved_on: '2026-07-27'
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp3/RPS_G3_DELEGATED_DECISION.md
+    merge_commit: c8429ebdf8774a876d5a33e495cb313e31c8d034
+  - gate_id: RPS-G4
+    status: APPROVED
+    decision: PASS
+    authority: OPERATOR
+    approval_command: OVC APPROVE RPS-G4
+    approved_on: '2026-07-27'
+    decision_record: docs/releases/prospective-source-v0-1/rps-wp4/RPS_G4_OPERATOR_DECISION.md
+    merge_commit: b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac
 prohibited_authority:
   - PROVIDER_REQUEST_OUTSIDE_APPROVED_RPS_SCOPE
   - ANOTHER_PROVIDER_REQUEST_FOR_RPS_G1B
   - QUARANTINE_MUTATION_OR_RELABEL
   - INCOMPLETE_PARENT_CONSUMPTION
   - GAP_REPAIR_FORWARD_FILL_INTERPOLATION_OR_SYNTHESIS
-  - LIVE_PATTERN_DISCOVERY_PROCESSING
-  - LIVE_PROSPECTIVE_APPEND
-  - ACTIVE_RESEARCH_TRIAGE
+  - AUTONOMOUS_LIVE_PATTERN_DISCOVERY_PROCESSING
+  - LIVE_PROSPECTIVE_APPEND_WITHOUT_RESOLVED_SOURCE
+  - MORE_THAN_ONE_PD_WP5_OPERATION
+  - AUTOMATIC_EVIDENCE_CREATION
   - ACTIVE_NOVELTY_RANKING
   - SELECTOR_MUTATION
   - RELEASE_MUTATION
@@ -322,6 +361,6 @@ prohibited_authority:
   - TRADING
   - EXECUTION
   - AGENT_WRITE
-next_gate: RPS-G3
-continuation_state: AWAITING_OPERATOR_LOCAL_RPS_WP3_DERIVED_COMPUTE_AND_COMPACT_EVIDENCE
-rollback: REVERT_RPS_WP3_COMMAND_AND_PRESERVE_RPS_G2_SOURCE_AND_ALL_LOCAL_FROZEN_AND_QUARANTINED_EVIDENCE
+next_gate: PD-G5
+continuation_state: READY_PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION
+rollback: SET_ACTIVE_RESEARCH_TRIAGE_FALSE_CLEAR_SOURCE_AND_SIGNING_BINDINGS_DENY_LIVE_APPEND_STOP_PD_WP5_AND_PRESERVE_ALL_SOURCE_COMPUTE_KEYS_SIGNATURES_APPEND_ONLY_EVIDENCE_AND_QUARANTINES

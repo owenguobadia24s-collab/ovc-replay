@@ -1,0 +1,110 @@
+name: RPS-G4 exact binding activation
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/prospective_source/authority.py"
+      - "apps/research_console/pattern_discovery.py"
+      - "registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json"
+      - "schemas/research_operations/prospective_source/rps_g4_active_authority_v0_1.schema.json"
+      - "registries/research_operations/prospective_source/RPS_G4_GATE_STATE_v0_1.json"
+      - "registries/research_operations/prospective_source/RPS_WP4_COMMAND_STATE_v0_1.json"
+      - "registries/research_operations/prospective_source/REAL_PROSPECTIVE_SOURCE_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+      - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
+      - "registries/research/C2_PROSPECTIVE_EVIDENCE_REGISTRY.yaml"
+      - "docs/releases/prospective-source-v0-1/rps-g4-activation/**"
+      - "tests/research_operations/prospective_source/test_authority.py"
+      - "tests/research_operations/prospective_source/test_rps_g4_activation.py"
+      - ".github/workflows/rps-g4-activation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  activation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused authority tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_authority.py'
+          -v
+      - name: Focused RPS-G4 activation tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_activation.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert exact activation remains candidate-gated
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json')
+          state = json.loads(path.read_text())
+          assert state['decision_merge_commit'] == 'b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac'
+          assert state['source_binding_id'] == 'RPS.BINDING.32fb3003efa072916c11e907'
+          assert state['signing_binding_id'] == 'RPS.SIGNING.50092c28981fef08f53a6cb5'
+          assert state['operator_id'] == 'OVC.OPERATOR.PRIMARY.LOCAL.V1'
+          assert state['active_research_triage'] is True
+          assert state['candidate_source_resolved'] is False
+          assert state['live_append_enabled'] is False
+          assert state['first_operation_limit'] == 1
+          assert state['time_gated_replay_backfill'] == 'DENIED'
+          assert state['next_gate'] == 'PD-G5'
+          PY
+      - name: Assert retained authority denials
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json').read_text())
+          expected = {
+              'automatic_evidence_creation': False,
+              'agent_write_authority': 'NONE',
+              'active_novelty_ranking': 'NONE',
+              'semantic_promotion': 'NONE',
+              'selector_mutation': 'DENIED',
+              'release_mutation': 'DENIED',
+              'r2_publication': 'DENIED',
+              'validation_consumption': 'DENIED',
+              'probability_authority': 'NONE',
+              'risk_authority': 'NONE',
+              'exposure_authority': 'NONE',
+              'trading_authority': 'NONE',
+              'execution_authority': 'NONE',
+          }
+          for key, value in expected.items():
+              assert state[key] == value, (key, state[key], value)
+          PY
+      - name: Assert no private key raw data or machine paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          paths=(
+            src/ovc/research_operations/prospective_source/authority.py
+            apps/research_console/pattern_discovery.py
+            registries/research_operations/prospective_source/RPS_G4_ACTIVE_AUTHORITY_v0_1.json
+            registries/research_operations/prospective_source/RPS_G4_GATE_STATE_v0_1.json
+            registries/research_operations/prospective_source/RPS_WP4_COMMAND_STATE_v0_1.json
+            registries/research_operations/prospective_source/REAL_PROSPECTIVE_SOURCE_IMPLEMENTATION_REGISTRY_v0_1.yaml
+            registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml
+            registries/research/C2_PROSPECTIVE_EVIDENCE_REGISTRY.yaml
+            docs/releases/prospective-source-v0-1/rps-g4-activation/RPS_G4_ACTIVATION_QA_PACKET.md
+          )
+          if grep -nH -E 'BEGIN OPENSSH PRIVATE KEY|C:\\Users\\|M1_BID\.csv|c2_states/' "${paths[@]}"; then
+            echo "Prohibited private key, raw payload, or machine path found."
+            exit 1
+          fi
