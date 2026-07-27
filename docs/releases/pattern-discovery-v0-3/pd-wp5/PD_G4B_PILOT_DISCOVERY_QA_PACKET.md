@@ -6,8 +6,20 @@
 - Packet: `PD-WP5-PILOT`
 - Baseline main: `0c177560b02e14a36a949626b155f616c12549e5`
 - Branch: `gate/pd-g4b-pilot-discovery-amendment`
+- Tested candidate head: `1c55524754d6cd457ea8e60a6478206bb89aa886`
+- Pull request: `#117`
 - QA status: `PASS_RECOMMEND_OPERATOR_AMENDMENT`
 - Authority changed by this packet: none until operator approval
+
+## Test evidence
+
+| Suite | Workflow | Job | Result |
+|---|---:|---:|---|
+| Pilot Discovery amendment, schema, payload guard and retained prohibitions | `30307255995` | `90114384840` | PASS |
+| Historical first-live blocker preservation and Pilot supersession | `30307256074` | `90114385057` | PASS |
+| Canonical repository unit-test suite | `30307255967` | `90114384730` | PASS |
+
+The focused and canonical suites passed on the same candidate head. The workflow verified that the amendment adds no executable `src/` change, provider payload, private key, BI5, CSV or JSONL evidence stream.
 
 ## Scope reviewed
 
