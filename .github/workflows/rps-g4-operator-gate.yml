@@ -1,0 +1,64 @@
+name: RPS-G4 operator gate evidence
+
+on:
+  pull_request:
+    paths:
+      - "docs/releases/prospective-source-v0-1/rps-wp4/evidence/**"
+      - "docs/releases/prospective-source-v0-1/rps-wp4/RPS_WP4_COMPACT_SIGNING_EVIDENCE_INDEX.json"
+      - "docs/releases/prospective-source-v0-1/rps-wp4/RPS_WP4_SIGNED_ACCEPTANCE_QA_PACKET.md"
+      - "docs/releases/prospective-source-v0-1/rps-wp4/RPS_G4_OPERATOR_GATE_PACKET.md"
+      - "registries/research_operations/prospective_source/RPS_G4_GATE_STATE_v0_1.json"
+      - "registries/research_operations/prospective_source/RPS_WP4_COMMAND_STATE_v0_1.json"
+      - "tests/research_operations/prospective_source/test_rps_g4_signed_replay_evidence.py"
+      - ".github/workflows/rps-g4-operator-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused RPS-G4 evidence tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/prospective_source
+          -p 'test_rps_g4_signed_replay_evidence.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no private key material is committed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find docs/releases/prospective-source-v0-1/rps-wp4 -type f \
+            \( -name 'id_ed25519' -o -name '*.key' -o -name '*.pem' \) | grep -q .; then
+            echo "Private-key-shaped file found in RPS-WP4 evidence."
+            exit 1
+          fi
+          if grep -R --line-number --fixed-strings 'BEGIN OPENSSH PRIVATE KEY' \
+            docs/releases/prospective-source-v0-1/rps-wp4 \
+            registries/research_operations/prospective_source; then
+            echo "Private key material found."
+            exit 1
+          fi
+      - name: Assert gate remains non-activating
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/prospective_source/RPS_G4_GATE_STATE_v0_1.json').read_text())
+          assert state['gate_status'] == 'GATE_READY'
+          assert state['operator_approval_required'] is True
+          assert state['active_binding_id'] is None
+          assert state['active_research_triage'] is False
+          assert state['live_prospective_append'] == 'DENIED'
+          assert state['write_authority'] is False
+          PY
