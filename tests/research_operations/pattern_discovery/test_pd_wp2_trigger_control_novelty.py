@@ -12,6 +12,7 @@ from ovc.research_operations.pattern_discovery import (
     assess_control_representation,
     canonical_signature,
     degradation_states,
+    evaluate_cross_scale_triggers,
     evaluate_persistence_trigger,
     evaluate_switching_trigger,
     evaluate_transition_triggers,
@@ -32,21 +33,23 @@ def snapshot(
     interaction: str = "APPROACHING",
     quality: str = "COMPLETE",
     parent: str = "CTR-PARENT-1",
+    clock: str = "15M",
+    scope: str = "GBPUSD-15M-LOCAL-v0.1",
 ) -> dict:
     minute = number * 15
     hour, minute = divmod(minute, 60)
     return {
-        "c2_state_id": f"C2S-WP2-{number:04d}",
+        "c2_state_id": f"C2S-WP2-{clock}-{number:04d}",
         "c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
         "c2_manifest_id": "MANIFEST-OPT-B-C2-DISCOVERY-v1",
         "first_valid_time": f"2026-07-27T{hour:02d}:{minute:02d}:00Z",
-        "clock": "15M",
+        "clock": clock,
         "side": "BID",
-        "evaluation_scope_id": "GBPUSD-15M-LOCAL-v0.1",
+        "evaluation_scope_id": scope,
         "parameter_pack_id": "C2.PARAMS.GBPUSD.DISCOVERY.v0.1",
         "selector_id": "OPT-B.C2.GBPUSD.DISCOVERY.ACTIVE",
         "authority_state": "FIXTURE",
-        "relation_set_id": f"REL-{number:04d}",
+        "relation_set_id": f"REL-{clock}-{number:04d}",
         "level_ids": ["LVL-1", "LVL-2"],
         "container_ids": ["CTR-LOCAL-1", parent],
         "parent_container_id": parent,
@@ -74,13 +77,34 @@ class PatternDiscoveryWP2Tests(unittest.TestCase):
         self.assertTrue(results["TR-LOC-001"].source_transition_ids)
 
         unavailable = copy.deepcopy(after)
-        unavailable["c2_state_id"] = "C2S-WP2-0003"
+        unavailable["c2_state_id"] = "C2S-WP2-15M-0003"
         unavailable["first_valid_time"] = "2026-07-27T00:45:00Z"
         unavailable["axes"]["LOCATION"] = {"status": "NOT_EVALUABLE", "value": None, "reason_code": "SOURCE_GAP"}
         unavailable_transitions = extract_transitions(after, unavailable)
         unavailable_results = {item.trigger_id: item for item in evaluate_transition_triggers(after, unavailable, unavailable_transitions)}
         self.assertEqual(unavailable_results["TR-LOC-001"].status, "NOT_EVALUABLE")
         self.assertEqual(unavailable_results["TR-LOC-001"].not_evaluable_reason, "LOCATION_NOT_EVALUABLE")
+
+    def test_cross_scale_conflict_alignment_and_missing_parent_are_explicit(self) -> None:
+        previous_local = snapshot(1, location="UPPER_REGION", motion="UP_PROGRESS")
+        current_local = snapshot(2, location="UPPER_REGION", motion="UP_PROGRESS")
+        previous_parent = snapshot(1, location="UPPER_REGION", motion="UP_PROGRESS", clock="2H_A_L", scope="GBPUSD-2H-PARENT-v0.1")
+        current_parent = snapshot(2, location="LOWER_REGION", motion="DOWN_PROGRESS", clock="2H_A_L", scope="GBPUSD-2H-PARENT-v0.1")
+        transitions = extract_transitions(previous_local, current_local)
+        results = {item.trigger_id: item for item in evaluate_cross_scale_triggers(previous_local, current_local, previous_parent, current_parent, transitions)}
+        self.assertEqual(results["TR-XSC-001"].status, "FIRED")
+        self.assertEqual(results["TR-XSC-002"].status, "NOT_FIRED")
+
+        aligned_parent = snapshot(3, location="UPPER_REGION", motion="UP_PROGRESS", clock="2H_A_L", scope="GBPUSD-2H-PARENT-v0.1")
+        aligned_local = snapshot(3, location="UPPER_REGION", motion="UP_PROGRESS")
+        aligned_results = {item.trigger_id: item for item in evaluate_cross_scale_triggers(current_local, aligned_local, current_parent, aligned_parent, extract_transitions(current_local, aligned_local))}
+        self.assertEqual(aligned_results["TR-XSC-002"].status, "FIRED")
+
+        missing_parent = copy.deepcopy(aligned_parent)
+        missing_parent["parent_container_id"] = "UNRESOLVED"
+        missing_results = {item.trigger_id: item for item in evaluate_cross_scale_triggers(current_local, aligned_local, current_parent, missing_parent, [])}
+        self.assertEqual(missing_results["TR-XSC-001"].status, "NOT_EVALUABLE")
+        self.assertEqual(missing_results["TR-XSC-001"].not_evaluable_reason, "PARENT_CONTEXT_UNAVAILABLE")
 
     def test_return_inside_persistence_and_switching_are_first_crossing_only(self) -> None:
         breached = snapshot(1, interaction="BREACH_ACTIVE")
@@ -102,6 +126,10 @@ class PatternDiscoveryWP2Tests(unittest.TestCase):
         ]
         result = evaluate_switching_trigger(switching, [], lookback=4, switch_threshold=3)
         self.assertEqual(result.status, "FIRED")
+
+        unavailable = copy.deepcopy(switching[-1])
+        unavailable["axes"]["MOTION"] = {"status": "NOT_EVALUABLE", "value": None, "reason_code": "SOURCE_GAP"}
+        self.assertEqual(evaluate_switching_trigger(switching[:-1] + [unavailable], [], lookback=4, switch_threshold=3).status, "NOT_EVALUABLE")
 
     def test_control_selection_and_representation_are_deterministic(self) -> None:
         source = snapshot(8)
@@ -184,7 +212,8 @@ class PatternDiscoveryWP2Tests(unittest.TestCase):
             "control_class": "NONE",
         })
         result = project_review_queue(candidates, unresolved_queue_depth=38, policy=QueuePolicy())
-        self.assertEqual(len(result["promoted"]), 12)
+        self.assertLessEqual(len(result["promoted"]), 12)
+        self.assertEqual(len(result["promoted"]), 10)
         self.assertLessEqual(result["metrics"]["family_counts"].get("STRUCTURAL_TRANSITION", 0), 3)
         self.assertIn("PDW-INCIDENT", {item["window_id"] for item in result["promoted"]})
         self.assertGreaterEqual(result["metrics"]["control_promotions"], 3)
