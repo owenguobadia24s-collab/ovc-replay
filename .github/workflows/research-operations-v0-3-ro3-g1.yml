@@ -1,0 +1,59 @@
+name: RO3-G1 deterministic C1 indexes
+
+on:
+  pull_request:
+    paths:
+      - "contracts/research_operations/v0_3/RO3_C1_INDEX_CONTRACT_v0_1.md"
+      - "schemas/research_operations/v0_3/**"
+      - "registries/research_operations/v0_3/**"
+      - "fixtures/research_operations/v0_3/wp1_c1_index_cases.json"
+      - "src/ovc/research_operations/v0_3/**"
+      - "tests/research_operations/v0_3/test_c1_index*.py"
+      - "benchmarks/research_operations/v0_3/**"
+      - "docs/releases/research-operations-foundation-v0-3/ro3-g1/**"
+      - ".github/workflows/research-operations-v0-3-ro3-g1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ro3-g1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused C1 index tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_c1_index -v
+      - name: Full-corpus shape benchmark and deterministic rerun
+        env:
+          RO3_BENCHMARK_OUTPUT: ro3-c1-index-benchmark-runtime.json
+        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_c1_index_performance -v
+      - name: Upload benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-c1-index-benchmark-runtime
+          path: ro3-c1-index-benchmark-runtime.json
+          if-no-files-found: error
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'LOCKED_UNCONSUMED' contracts/research_operations/v0_3/RO3_C1_INDEX_CONTRACT_v0_1.md
+          grep -q 'writes.*NONE' src/ovc/research_operations/v0_3/c1_index.py
+          test ! -e var/research_operations/v0_3/research.sqlite
+          ! grep -R --line-number -E 'selector_write|threshold_write|r2_write|ACTIVE_VALIDATION' src/ovc/research_operations/v0_3/c1_index.py
+      - name: Verify ratified gate packet when materialised
+        shell: bash
+        run: |
+          if test -f docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json; then
+            grep -q '"decision": "PASS"' docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json
+            grep -q '"qa_recommendation": "PASS"' docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json
+            test -f benchmarks/research_operations/v0_3/C1_INDEX_PERFORMANCE_BENCHMARK_v0_1.json
+          fi
