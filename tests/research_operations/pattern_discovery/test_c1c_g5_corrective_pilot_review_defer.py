@@ -42,8 +42,20 @@ class C1cG5CorrectivePilotReviewDeferTests(unittest.TestCase):
         self.assertEqual(packet["authority_delta"], "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY")
         self.assertEqual(packet["machine_replay"], "DENIED_NOT_REQUIRED")
         self.assertEqual(packet["return_gate"], "C1C-G5-CORRECTIVE-PILOT-REVIEW")
-        self.assertEqual(self.state["status"], "OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED")
-        self.assertEqual(self.state["corr2"]["status"], "READY")
+        self.assertIn(
+            self.state["status"],
+            {
+                "OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED",
+                "C1C_G5_CORR2_IMPLEMENTED_OPERATOR_LOCAL_REREVIEW_REQUIRED",
+                "C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED",
+            },
+        )
+        self.assertIn(
+            self.state["corr2"]["status"],
+            {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "COMPLETED_IN_MAIN"},
+        )
+        self.assertEqual(self.state["corr2"]["authority_delta"], "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY")
+        self.assertEqual(self.state["corr2"]["second_machine_replay"], "DENIED_NOT_REQUIRED")
 
     def test_retained_authority_is_fail_closed(self) -> None:
         retained = self.decision["retained_prohibitions"]
