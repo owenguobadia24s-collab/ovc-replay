@@ -1,0 +1,76 @@
+{
+  "schema": "ovc-c1c-g5-corr2-merge-receipt/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "packet_id": "C1C-G5-CORR2",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+  "authority_delta": "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY",
+  "baseline_commit": "8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b",
+  "branch": "build/c1c-g5-corr2-review-closure",
+  "tested_candidate_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
+  "pull_request": 137,
+  "merge_commit": "66593aa2bca3b781058e1bc81f96bf2e57b18005",
+  "merge_method": "SQUASH",
+  "merged_on": "2026-07-28",
+  "changed_file_count": 22,
+  "tests": [
+    {"workflow_run": 30405881435, "job": 90431071055, "result": "PASS"},
+    {"workflow_run": 30405881448, "job": 90431071054, "result": "PASS"},
+    {"workflow_run": 30405881334, "job": 90431070754, "result": "PASS"},
+    {"workflow_run": 30405881354, "job": 90431070785, "result": "PASS"},
+    {"workflow_run": 30405881330, "job": 90431070671, "result": "PASS"}
+  ],
+  "qa_result": "PASS",
+  "review_state": {
+    "reviews": 0,
+    "unresolved_review_threads": 0,
+    "blocking_implementation_issues": 0
+  },
+  "completed_capabilities": [
+    "DISPOSITION_SPECIFIC_READ_ONLY_CONSOLE_FIELDS",
+    "EXACT_EVIDENCE_REFERENCE_RESOLUTION",
+    "TWO_DEFERRED_OBJECT_REREVIEW_PREPARATION_WITHOUT_MACHINE_REPLAY",
+    "IMMUTABLE_NON_DEFERRED_DECISION_HASH_PRESERVATION",
+    "SIGNED_FINAL_CLOSURE_PACKET_GENERATION"
+  ],
+  "operator_local_blocker": {
+    "blocker_id": "C1C-G5-BLOCK-003",
+    "status": "OPEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_REQUIRED",
+    "reason": "CI cannot perform the required human disposition of the two exact deferred pilot objects or use the operator-private Ed25519 key.",
+    "deferred_candidate_ids": [
+      "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+      "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
+    ],
+    "second_machine_replay": "DENIED_NOT_REQUIRED",
+    "commands": [
+      ".\\scripts\\run_c1c_g5_corr2_deferred_review.ps1 preflight",
+      ".\\scripts\\run_c1c_g5_corr2_deferred_review.ps1 prepare",
+      ".\\scripts\\run_c1c_g5_corr2_deferred_review.ps1 finalize -ReviewFile '<COMPLETED_CORR2_REVIEW_JSON>'"
+    ],
+    "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
+  },
+  "retained_authority": {
+    "second_machine_replay": "DENIED_NOT_REQUIRED",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "Revert only CORR2 code, schemas, tests and court records through a new non-destructive commit while preserving every signed external artifact and the immutable corrective machine run.",
+  "next_packet": "C1C-G5-CORR2-LOCAL-REVIEW",
+  "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
+}
