@@ -2,8 +2,8 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RO3_G1_APPROVED
-baseline_commit: 4d701ad78af8597e182565eb301739501b51dff6
+status: RO3_WP2_QA_REVIEW
+baseline_commit: 928f5c00bd76ddd9348c8721f4430a1b105d45f1
 items:
   - id: RO3-00
     name: Boundary and design freeze
@@ -13,10 +13,11 @@ items:
     merge_commit: 4d701ad78af8597e182565eb301739501b51dff6
   - id: RO3-WP1
     name: Primitive release and coverage indexes
-    status: APPROVED
+    status: COMPLETED
     gate: RO3-G1
     branch: build/research-operations-v0-3-wp1-c1-index
     tested_candidate_commit: d8f2d20dbd8dda2a553d247111e28464ce7f1fb8
+    merge_commit: 928f5c00bd76ddd9348c8721f4430a1b105d45f1
     authority_delta: LOCAL_REPLACEABLE_DERIVED
     decision: PASS
     decision_authority: DELEGATED_AUTO_RATIFICATION
@@ -37,9 +38,21 @@ items:
       reproducibility: PASS_IDENTICAL_RERUN
   - id: RO3-WP2
     name: Null computability and formula comparison
-    status: READY_AFTER_RO3_G1_MERGE
+    status: QA_REVIEW
     gate: RO3-G2
+    branch: build/research-operations-v0-3-wp2-computability-diff
+    baseline_commit: 928f5c00bd76ddd9348c8721f4430a1b105d45f1
     authority_delta: READ_ONLY_DERIVED_INSPECTION
+    runtime:
+      computability_profile: IMPLEMENTED
+      null_reason_profile: IMPLEMENTED
+      formula_definition_comparison: IMPLEMENTED
+      release_output_comparison: IMPLEMENTED
+      non_activating_evidence_header: IMPLEMENTED
+      acknowledgement_gate: IMPLEMENTED
+      affected_surface_trace: IMPLEMENTED_SEPARATE_BANNERED
+      validation_denial: IMPLEMENTED
+      writes: NONE
   - id: RO3-WP3
     name: Symmetry metamorphic and deterministic assurance
     status: PLANNED
@@ -60,6 +73,7 @@ retained_boundaries:
   validation_consumption: LOCKED_UNCONSUMED
   c2_pattern_discovery_authority: UNCHANGED
   live_console_c1_route: DISABLED_PENDING_RC_G4
+  formula_comparison_authority: NON_ACTIVATING_EVIDENCE_ONLY
   market_authority: NONE
   probability_authority: NONE
   risk_authority: NONE
@@ -67,4 +81,4 @@ retained_boundaries:
   trading_authority: NONE
   execution_authority: NONE
   agent_write_authority: NONE
-next_packet: RO3-WP2
+next_packet: RO3-WP2_QA
