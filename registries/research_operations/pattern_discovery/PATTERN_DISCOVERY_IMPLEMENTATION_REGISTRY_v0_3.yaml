@@ -5,7 +5,7 @@ source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
-current_authority: PILOT_DISCOVERY_OPERATION_COMPLETE_PD_G5P_DECISION_REQUIRED
+current_authority: PD_G5P_DEFERRED_PD_WP5_CORR1_AUTHORISED
 live_triage_authority: GENUINE_LIVE_PROSPECTIVE_DEFERRED_TO_RPS_LIVE_G1
 active_source_binding_id: RPS.BINDING.32fb3003efa072916c11e907
 active_signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
@@ -25,6 +25,8 @@ prohibited_authority:
   - AUTOMATIC_EVIDENCE_CREATION
   - LIVE_PROSPECTIVE_APPEND_WITHOUT_RESOLVED_SOURCE
   - MORE_THAN_ONE_PD_WP5_OPERATION
+  - SECOND_PILOT_REPLAY_WITHOUT_OPERATOR_APPROVAL
+  - CANONICAL_DISCOVERY_PROCESSING
   - PILOT_OUTPUT_CANONICAL_IMPORT
   - PILOT_IDENTITY_REUSE
   - PILOT_LIVE_PROSPECTIVE_RELABEL
@@ -97,7 +99,7 @@ objects:
     owner: RESEARCH_OPERATIONS
     canonical: false
     append_only: true
-    implementation_status: PILOT_NAMESPACE_SIGNED_REVIEW_COMPLETE
+    implementation_status: PILOT_NAMESPACE_SIGNED_REVIEW_COMPLETE_CORRECTION_SPEC_PENDING
     write_authority: OPERATOR_APPROVED_PILOT_ONLY
   - id: AppendRequest
     owner: RESEARCH_OPERATIONS
@@ -184,12 +186,12 @@ work_packets:
     blockers: []
     next_packet: RPS-00
   - packet_id: PD-WP5
-    status: GATE_READY
+    status: COMPLETED
     implementation_status: COMPLETED_IN_MAIN
     execution_status: PILOT_OPERATION_AND_REVIEW_COMPLETE
     prerequisites: [PD-G4B_APPROVED, RPS-G4_APPROVED, RPS-WP3_COMPLETED, RPS-WP4_COMPLETED]
-    authority_required: PD_G5P_OPERATOR_DECISION
-    authority_delta: PILOT_DISCOVERY_OPERATIONS_ACCEPTANCE_AND_POSSIBLE_CANONICAL_CORRECTION_WORK
+    authority_required: PD_G5P_OPERATOR_DECISION_RECORDED
+    authority_delta: PD_WP5_CORR1_NON_ACTIVATING_CORRECTION_SPECIFICATION_ONLY
     operation_limit: 1
     operation_count: 1
     research_role: PILOT_DISCOVERY
@@ -215,16 +217,32 @@ work_packets:
     qa_packet: docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json
     gate_packet: docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json
     gate_state: registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json
-    recommended_decision: DEFER
-    blockers: [PDG5P-DEFECT-SPEC-001, PDG5P-UI-SPEC-001, PDG5P-DEFER-RESOLUTION-001, PDG5P-REJECTION-BASIS-001, PDG5P-CONTRACT-FREEZE-001, PDG5P-REPLAY-AUTHORITY-001]
-    next_packet_on_defer: PD-WP5-CORR1
-    next_packet_on_pass: PD-WP5-CANONICAL
+    decision: DEFER
+    decision_authority: OPERATOR
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md
+    operator_command: OVC APPROVE PD-G5P DEFER
+    decided_on: '2026-07-28'
+    correction_objectives: [PDG5P-DEFECT-SPEC-001, PDG5P-UI-SPEC-001, PDG5P-DEFER-RESOLUTION-001, PDG5P-REJECTION-BASIS-001, PDG5P-CONTRACT-FREEZE-001, PDG5P-REPLAY-AUTHORITY-001]
+    next_packet: PD-WP5-CORR1
+    next_gate: PD-G5P
+  - packet_id: PD-WP5-CORR1
+    status: READY
+    prerequisites: [PD-G5P_DEFER_RECORDED]
+    authority_required: NONE
+    authority_delta: VERSIONED_REVIEW_WORKFLOW_CONSOLE_AND_EVIDENCE_PRESENTATION_CORRECTION_SPECIFICATION_ONLY
+    branch: null
+    candidate_commit: null
+    tests: []
+    qa_packet: null
+    decision_record: null
+    merge_commit: null
+    blockers: []
     next_gate: PD-G5P
 rps_enablement:
   plan_id: OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1
   plan_status: RATIFIED
   baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
-  current_packet: PD-G5P
+  current_packet: PD-WP5-CORR1
   next_operator_gate: PD-G5P
   prospective_source_binding_required: true
   real_prospective_source_available: true
@@ -238,6 +256,7 @@ rps_enablement:
   first_operation_exhausted: true
   live_append_enabled: false
   canonical_append_enabled: false
+  second_pilot_replay_authorised: false
   future_live_gate: RPS-LIVE-G1
   future_live_gate_status: DEFERRED_NOT_AUTHORISED
 completed_gates:
@@ -288,4 +307,11 @@ completed_gates:
     authority: OPERATOR
     approved_on: '2026-07-28'
     merge_commit: c46d9620e242c047dd8e203f91a1b00b542a2a81
+  - gate_id: PD-G5P
+    status: COMPLETED
+    decision: DEFER
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md
+    approval_command: OVC APPROVE PD-G5P DEFER
+    authority: OPERATOR
+    approved_on: '2026-07-28'
 next_gate: PD-G5P
