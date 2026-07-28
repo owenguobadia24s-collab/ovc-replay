@@ -4,16 +4,16 @@
   "plan_version": "0.1",
   "amendment_id": "PD-WP5-PILOT-DISCOVERY-AMENDMENT-0.1",
   "packet_id": "PD-WP5",
-  "packet_phase": "PILOT_DISCOVERY_OPERATION_AND_REVIEW_COMPLETE_PD_G5P_GATE_READY",
-  "packet_status": "GATE_READY",
+  "packet_phase": "PD_G5P_DEFERRED_PD_WP5_CORR1_AUTHORISED",
+  "packet_status": "COMPLETED",
   "baseline_commit": "c46d9620e242c047dd8e203f91a1b00b542a2a81",
   "tested_base_commit": "8c243c009f30e453312861708afb784fe762c442",
   "tested_candidate_head": "06b0a4604b1afc72b130f3dc2eab1dd8be4f9fc5",
   "implementation_merge_commit": "ac5d9c9cbc4b2336c3af389f01a60827a509b1ba",
   "gate_packet_branch": "gate/pd-g5p-pilot-operations-review",
   "gate_candidate_commit": "b1bb92faaf300c8422581f33f75db96e0ab10a3d",
-  "authority_required": "PD_G5P_OPERATOR_DECISION",
-  "authority_delta": "PILOT_DISCOVERY_OPERATIONS_ACCEPTANCE_AND_POSSIBLE_RELEASE_OF_CANONICAL_DISCOVERY_CORRECTION_WORK",
+  "authority_required": "NONE_FOR_PD_WP5_CORR1_NON_ACTIVATING_SPECIFICATION",
+  "authority_delta": "PD_WP5_CORR1_VERSIONED_REVIEW_WORKFLOW_AND_CONSOLE_CORRECTION_SPECIFICATION_ONLY",
   "research_role": "PILOT_DISCOVERY",
   "operation_mode": "TIME_GATED_REPLAY",
   "operation_limit": 1,
@@ -57,6 +57,7 @@
   "execution_authority": "NONE",
   "agent_write_authority": "NONE",
   "live_prospective_relabelling": "DENIED",
+  "second_pilot_replay": "DENIED",
   "superseded_first_operation": {
     "operation": "FIRST_LIVE_PROSPECTIVE_PATTERN_DISCOVERY_BATCH",
     "status": "SUPERSEDED_FOR_PILOT_DISCOVERY",
@@ -66,8 +67,8 @@
     "historical_contract": "contracts/research_operations/pattern_discovery/PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION_CONTRACT_v0_1.md",
     "historical_gate": "RPS-G4A"
   },
-  "readiness_interpretation": "PILOT_OPERATION_EVIDENCE_AND_OPERATOR_REVIEW_COMPLETE_PD_G5P_REQUIRES_OPERATOR_DECISION_VERSIONED_CORRECTION_REQUIRED",
-  "operator_approval_required": true,
+  "readiness_interpretation": "PD_G5P_DEFER_RECORDED_CORRECTION_SPECIFICATION_AUTHORISED_CANONICAL_DISCOVERY_AND_SECOND_REPLAY_DENIED",
+  "operator_approval_required": false,
   "approved_gate": "PD-G4B",
   "approved_on": "2026-07-27",
   "implementation_packet": "PD-WP5-PILOT",
@@ -89,6 +90,13 @@
       "job": 90306722224,
       "result": "PASS",
       "tested_head": "b1bb92faaf300c8422581f33f75db96e0ab10a3d"
+    },
+    {
+      "suite": "PD-G5P latest-main merge verification",
+      "workflow_run": 30369976011,
+      "job": 90310962090,
+      "result": "PASS",
+      "tested_merge_candidate": "c96802c7da4722d97ea3d96f65fdb02c39561dac"
     }
   ],
   "pilot_operation_evidence": {
@@ -96,11 +104,16 @@
     "evidence_index": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json",
     "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json",
     "gate_packet": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json",
-    "gate_state": "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
+    "gate_state": "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json",
+    "decision_record": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md"
   },
   "qa_result": "DEFER_VERSIONED_CORRECTION_REQUIRED",
   "recommended_gate_decision": "DEFER",
-  "blockers": [
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE PD-G5P DEFER",
+  "decided_on": "2026-07-28",
+  "correction_objectives": [
     "PDG5P-DEFECT-SPEC-001",
     "PDG5P-UI-SPEC-001",
     "PDG5P-DEFER-RESOLUTION-001",
@@ -108,16 +121,12 @@
     "PDG5P-CONTRACT-FREEZE-001",
     "PDG5P-REPLAY-AUTHORITY-001"
   ],
-  "next_packet": "PD-G5P",
+  "next_packet": "PD-WP5-CORR1",
   "next_gate": "PD-G5P",
-  "next_operational_step": "PD_G5P_OPERATOR_DECISION",
-  "next_packet_on_defer": "PD-WP5-CORR1",
-  "next_packet_on_pass": "PD-WP5-CANONICAL",
+  "next_operational_step": "EXECUTE_PD_WP5_CORR1_NON_ACTIVATING_CORRECTION_SPECIFICATION",
   "pilot_acceptance_gate": "PD-G5P",
   "future_live_gate": "RPS-LIVE-G1",
   "future_live_gate_status": "DEFERRED_NOT_AUTHORISED",
-  "decision": null,
-  "decision_authority": "OPERATOR",
-  "decision_record": null,
-  "rollback": "PRESERVE_AND_SEAL_PILOT_OUTPUTS_REVERT_GATE_PACKET_STATE_KEEP_PD_G4B_APPROVED_KEEP_CANONICAL_DISCOVERY_DENIED"
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md",
+  "rollback": "PRESERVE_AND_SEAL_PILOT_OUTPUTS_REVERT_DECISION_AND_CORRECTION_STATE_KEEP_PD_G4B_APPROVED_KEEP_CANONICAL_DISCOVERY_AND_SECOND_REPLAY_DENIED"
 }
