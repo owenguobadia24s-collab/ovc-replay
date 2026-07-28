@@ -79,10 +79,19 @@ def load_corrective_authority(repository_root: Path) -> dict[str, Any]:
         repository_root / "registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml"
     ).read_text(encoding="utf-8")
 
-    gates = {str(item.get("gate_id")): item for item in decision.get("gates", ()) if isinstance(item, dict)}
+    gates = {
+        str(item.get("gate_id")): item
+        for item in decision.get("approved_gates", ())
+        if isinstance(item, dict)
+    }
     gate = gates.get("C1C-G5")
-    if not gate or gate.get("decision") != "PASS":
+    if decision.get("decision") != "PASS" or not gate:
         raise pilot.PilotDiscoveryError("C1C_G5_OPERATOR_PASS_UNAVAILABLE")
+    if gate.get("authority_delta") != (
+        "DETERMINISTIC_C2_V2_IDENTITY_REPLAY_PUBLICATION_COORDINATED_SELECTOR_REPLACEMENT_"
+        "AND_NONCANONICAL_PILOT_SUPERSESSION_RERUN"
+    ):
+        raise pilot.PilotDiscoveryError("C1C_G5_OPERATOR_SCOPE_MISMATCH")
     if transaction.get("status") != "APPROVED_MATERIALISED_EFFECTIVE_ON_MAIN_MERGE":
         raise pilot.PilotDiscoveryError("C1C_G5_SELECTOR_TRANSACTION_NOT_MATERIALISED")
     if receipt.get("status") != "PASS_C2_V2_IDENTITY_REPLAY_PUBLICATION_FULL_REMOTE_BYTE_VERIFICATION":
