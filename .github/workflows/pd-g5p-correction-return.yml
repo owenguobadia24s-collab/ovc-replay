@@ -1,0 +1,87 @@
+name: PD-G5P correction return gate verification
+
+on:
+  pull_request:
+    paths:
+      - "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_*.json"
+      - "registries/research_operations/pattern_discovery/PD_G5P_CORRECTION_RETURN_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
+      - "tests/research_operations/pattern_discovery/test_pd_g5p_correction_return.py"
+      - ".github/workflows/pd-g5p-correction-return.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate-verification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: PD-G5P correction return tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/pattern_discovery
+          -p 'test_pd_g5p_correction_return.py'
+          -v
+      - name: Pattern Discovery dependent tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/pattern_discovery
+          -p 'test_pd_wp*.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Validate gate JSON
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_QA_PACKET.json >/dev/null
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_GATE_PACKET.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_CORRECTION_RETURN_STATE_v0_1.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
+      - name: Assert operator boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          state = json.loads((root / 'registries/research_operations/pattern_discovery/PD_G5P_CORRECTION_RETURN_STATE_v0_1.json').read_text())
+          gate = json.loads((root / 'docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_GATE_PACKET.json').read_text())
+          qa = json.loads((root / 'docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_QA_PACKET.json').read_text())
+
+          assert state['status'] == 'GATE_READY'
+          assert state['decision_authority'] == 'OPERATOR'
+          assert state['operator_approval_required'] is True
+          assert state['decision_record'] is None
+          assert gate['gate_status'] == 'GATE_READY'
+          assert gate['operator_approval_required'] is True
+          assert gate['proposed_delta_status'] == 'NOT_GRANTED_PENDING_OPERATOR'
+          assert gate['decision_record'] is None
+          assert qa['qa_recommendation'] == 'PASS'
+          assert qa['unresolved_issues'] == []
+
+          current = state['current_authority']
+          for key in (
+              'canonical_discovery_processing', 'canonical_append', 'contract_activation',
+              'identity_reset_activation', 'semantic_promotion', 'family_promotion',
+              'candidate_promotion', 'threshold_or_model_change', 'active_novelty_ranking',
+              'selector_mutation', 'release_mutation', 'r2_publication',
+              'validation_consumption',
+          ):
+              assert current[key] == 'DENIED', (key, current[key])
+          for key in (
+              'probability_authority', 'risk_authority', 'exposure_authority',
+              'trading_authority', 'execution_authority', 'agent_write_authority',
+          ):
+              assert current[key] == 'NONE', (key, current[key])
+          PY
