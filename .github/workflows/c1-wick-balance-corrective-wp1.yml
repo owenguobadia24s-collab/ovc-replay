@@ -20,7 +20,7 @@ jobs:
           python-version: '3.12'
 
       - name: Focused corrective tests
-        run: PYTHONPATH=src python -m unittest tests.opt_b.c1.test_c1_wick_balance_corrective -v
+        run: PYTHONPATH=src python -m unittest discover -s tests/opt_b/c1 -p 'test_c1_wick_balance_corrective.py' -v
 
       - name: Canonical repository tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
