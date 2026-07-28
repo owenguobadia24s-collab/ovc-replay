@@ -6,8 +6,12 @@
   "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
   "baseline_commit": "8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b",
   "branch": "build/c1c-g5-corr2-review-closure",
-  "tested_candidate_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
-  "status": "PASS_IMPLEMENTED_QA_REVIEW_COMPLETE_PENDING_SQUASH_MERGE",
+  "tested_candidate_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
+  "pull_request": 137,
+  "merge_commit": "66593aa2bca3b781058e1bc81f96bf2e57b18005",
+  "merge_method": "SQUASH",
+  "merged_on": "2026-07-28",
+  "status": "COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED",
   "decision": "PASS",
   "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
   "authority_delta": "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY",
@@ -50,23 +54,37 @@
   "tests": [
     {
       "suite": "CORR2 focused, retained, complete repository, schema and authority checks",
-      "workflow_run": 30405314053,
-      "job": 90429331646,
-      "tested_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+      "workflow_run": 30405881435,
+      "job": 90431071055,
+      "tested_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
       "result": "PASS"
     },
     {
       "suite": "Structured-v2 retained evidence and lawful successor workflow",
-      "workflow_run": 30405313946,
-      "job": 90429331287,
-      "tested_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+      "workflow_run": 30405881448,
+      "job": 90431071054,
+      "tested_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
       "result": "PASS"
     },
     {
       "suite": "Generic complete repository unit tests",
-      "workflow_run": 30405314175,
-      "job": 90429332422,
-      "tested_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+      "workflow_run": 30405881334,
+      "job": 90431070754,
+      "tested_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
+      "result": "PASS"
+    },
+    {
+      "suite": "Operator DEFER boundary and lawful successor",
+      "workflow_run": 30405881354,
+      "job": 90431070785,
+      "tested_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
+      "result": "PASS"
+    },
+    {
+      "suite": "PD-WP4 Console, lineage, source resolution and repository checks",
+      "workflow_run": 30405881330,
+      "job": 90431070671,
+      "tested_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
       "result": "PASS"
     }
   ],
@@ -74,6 +92,7 @@
   "blocking_implementation_issues": [],
   "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_QA_PACKET.json",
   "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_DELEGATED_DECISION.md",
+  "merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_MERGE_RECEIPT.json",
   "rollback": "Revert only CORR2 code, schemas, tests and court records through a new non-destructive commit. Preserve every signed external artifact and the immutable machine run.",
-  "next_action": "SQUASH_MERGE_THEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW"
+  "next_action": "OPERATOR_LOCAL_TWO_OBJECT_REREVIEW"
 }
