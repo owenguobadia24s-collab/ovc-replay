@@ -1,8 +1,8 @@
 {
   "schema": "ovc-pd-c1c-g5-pilot-corrective-state/v1",
   "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
-  "gate_id": "C1C-G5",
-  "status": "BLOCKED_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW_REQUIRED",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "status": "OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED",
   "source_pilot": {
     "namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
     "run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
@@ -34,7 +34,7 @@
     "deterministic_rerun_match": true,
     "machine_execution_status": "COMPLETE_SIGNED_HASH_VERIFIED",
     "review_v1_status": "PRESERVED_SIGNED_INCOMPLETE_UNDER_V2_CONTRACT",
-    "execution_status": "BLOCKED_PENDING_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW",
+    "structured_review_v2_status": "COMPLETE_SIGNED_HASH_VERIFIED",
     "second_machine_replay_required": false,
     "pilot_only": true,
     "promotion_eligibility": "NON_PROMOTABLE",
@@ -55,39 +55,68 @@
       {"workflow_run": 30398433313, "job": 90407078517, "result": "PASS"},
       {"workflow_run": 30398433339, "job": 90407078832, "result": "PASS"}
     ],
-    "qa_result": "PASS_IMPLEMENTATION_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW",
-    "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_QA_PACKET.json",
-    "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_DELEGATED_DECISION.md",
-    "merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_MERGE_RECEIPT.json",
-    "contract": "contracts/research_operations/pattern_discovery/C1C_G5_STRUCTURED_CORRECTIVE_REVIEW_CONTRACT_v0_1.md",
-    "runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_review_v2.py",
-    "windows_wrapper": "scripts/run_c1c_g5_structured_review_v2.ps1",
+    "qa_result": "PASS_IMPLEMENTATION",
     "review_contract": "ovc-pd-wp5-pilot-review-input/v2",
-    "output_directory": "operator-review-v2",
-    "preserve_review_v1": true,
-    "operator_local_review_required": true,
-    "private_key_required": true,
-    "provider_network_access": "DENIED",
+    "operator_local_review_complete": true,
     "second_machine_replay": "DENIED_NOT_REQUIRED"
+  },
+  "operator_decision": {
+    "decision_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW-DEFER-2026-07-28",
+    "decision": "DEFER",
+    "decision_authority": "OPERATOR",
+    "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW DEFER",
+    "decision_date": "2026-07-28",
+    "decision_record_json": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_OPERATOR_DECISION.json",
+    "decision_record_markdown": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_OPERATOR_DECISION.md",
+    "accepted_machine_rerun": true,
+    "accepted_signature_and_hash_integrity": true,
+    "contract_changes_required": true,
+    "unresolved_finding_codes": [
+      "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001",
+      "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001",
+      "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
+      "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002"
+    ]
+  },
+  "corr2": {
+    "packet_id": "C1C-G5-CORR2",
+    "status": "READY",
+    "authority_required": "OPERATOR_DEFER_RECORDED",
+    "authority_delta": "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY",
+    "allowed_scope": [
+      "DISPOSITION_SPECIFIC_READ_ONLY_CONSOLE_FIELDS",
+      "EXACT_EVIDENCE_REFERENCE_RESOLUTION",
+      "TWO_DEFERRED_OBJECT_REREVIEW_WITHOUT_MACHINE_REPLAY",
+      "IMMUTABLE_EVIDENCE_AND_ACCEPTED_REJECTED_DECISION_PRESERVATION",
+      "FINAL_CLOSURE_PACKET_RETURN"
+    ],
+    "second_machine_replay": "DENIED_NOT_REQUIRED",
+    "operator_local_human_rereview": "REQUIRED_FOR_TWO_DEFERRED_OBJECTS",
+    "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
   },
   "implementation": {
     "machine_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
-    "machine_windows_wrapper": "scripts/run_c1c_g5_pilot_corrective_rerun.ps1",
     "structured_review_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_review_v2.py",
-    "structured_review_windows_wrapper": "scripts/run_c1c_g5_structured_review_v2.ps1",
     "evidence_index": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json",
-    "blocker_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_PILOT_SUPERSESSION_RERUN_BLOCKER.json"
+    "gate_ready_bundle": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_READY_BUNDLE.json"
   },
-  "blocker_id": "C1C-G5-BLOCK-002",
-  "continuation_command": ".\\scripts\\run_c1c_g5_structured_review_v2.ps1 preflight",
+  "prior_blocker": {
+    "blocker_id": "C1C-G5-BLOCK-002",
+    "status": "DISPOSED_BY_COMPLETED_SIGNED_STRUCTURED_V2_REVIEW_AND_OPERATOR_DEFER",
+    "evidence_preserved": true
+  },
+  "continuation": "BEGIN_C1C_G5_CORR2_FROM_DECISION_MERGE",
+  "next_packet": "C1C-G5-CORR2",
   "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
   "retained_authority": {
-    "selector_mutation": "DENIED_BY_REVIEW_RUNNER",
-    "release_mutation": "DENIED_BY_REVIEW_RUNNER",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "canonical_discovery_processing": "DENIED",
     "canonical_append": "DENIED",
     "validation_consumption": "LOCKED_UNCONSUMED",
     "semantic_promotion": "NONE",
     "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
     "novelty_promotion": "NONE",
     "threshold_change": "NONE",
     "probability": "NONE",
