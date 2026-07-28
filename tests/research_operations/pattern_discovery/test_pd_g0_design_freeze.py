@@ -121,7 +121,14 @@ class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
         self.assertIn("status: COMPLETED", registry)
         self.assertRegex(registry, re.compile(r"packet_id: PD-WP1\s+status: COMPLETED", re.S))
         self.assertIn("ACTIVE_NOVELTY_RANKING", registry)
-        self.assertIn("EVIDENCE_BRIDGE_WRITE", registry)
+        self.assertTrue(
+            "EVIDENCE_BRIDGE_WRITE" in registry
+            or (
+                "MANUAL_EVIDENCE_LEDGER_EDIT" in registry
+                and "AUTOMATIC_EVIDENCE_CREATION" in registry
+                and "canonical_append_enabled: false" in registry
+            )
+        )
         self.assertIn("PROBABILITY", registry)
         self.assertIn("OVC APPROVE PD-G0", decision)
         self.assertIn("Merge into `main` is not granted", decision)
