@@ -13,6 +13,7 @@ on:
       - apps/research_console/pattern_discovery_corr2.py
       - scripts/run_c1c_g5_corr2_deferred_review.ps1
       - tests/research_operations/pattern_discovery/test_c1c_g5_corr2_*.py
+      - tests/research_operations/pattern_discovery/test_c1c_g5_structured_review_merge_state.py
       - docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/**
       - registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json
       - .github/workflows/c1c-g5-corr2-review-closure.yml
@@ -53,6 +54,7 @@ jobs:
         run: |
           python -m unittest \
             tests.research_operations.pattern_discovery.test_c1c_g5_structured_review_v2 \
+            tests.research_operations.pattern_discovery.test_c1c_g5_structured_review_merge_state \
             tests.research_operations.pattern_discovery.test_c1c_g5_corrective_pilot_review_defer \
             tests.research_operations.pattern_discovery.test_pd_wp4_simple_ui_evidence_bridge -v
 
