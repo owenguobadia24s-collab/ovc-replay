@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c1c-g5-corrective-pilot-review-return-gate-input/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "gate_id", "packet_id", "pilot_run_id", "pilot_namespace", "active_c2_release_id", "active_c2_manifest_id", "selector_id", "machine_rerun_valid", "structured_review_v2_complete", "corr2_rereview_complete", "corr2_rereview_receipt_file_sha256", "corr2_closure_ledger_file_sha256", "signed_corr2_inventory_file_sha256", "unresolved_finding_count", "contract_changes_required", "second_machine_replay_required", "operator_approval_required", "allowed_decisions", "recommended_decision", "pilot_only", "promotion_eligibility", "canonical_discovery_processing", "canonical_append", "status"],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corrective-pilot-review-return-gate-input/v1"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "packet_id": {"const": "C1C-G5-CORR2"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "pilot_namespace": {"const": "PD.PILOT.GBPUSD.20260622_20260625.v2"},
+    "active_c2_release_id": {"const": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2"},
+    "active_c2_manifest_id": {"const": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1"},
+    "selector_id": {"const": "SELECTOR.OPT-B.C2.GBPUSD.v2"},
+    "unresolved_finding_count": {"const": 0},
+    "contract_changes_required": {"const": false},
+    "second_machine_replay_required": {"const": false},
+    "operator_approval_required": {"const": true},
+    "recommended_decision": {"const": "PASS"},
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_discovery_processing": {"const": "DENIED"},
+    "canonical_append": {"const": "DENIED"},
+    "status": {"const": "C1C_G5_CORRECTIVE_PILOT_REVIEW_RETURN_GATE_INPUT_READY"}
+  }
+}
