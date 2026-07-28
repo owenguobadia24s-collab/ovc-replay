@@ -1,0 +1,137 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "PD-G5P",
+  "gate_title": "Pilot Discovery Operations Acceptance",
+  "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
+  "plan_version": "0.1",
+  "baseline_commit": "6c0aa91a6c51a86d39994ef363f8e29bb924764b",
+  "candidate_commit": null,
+  "completed_packets": [
+    "PD-G4B",
+    "PD-WP5-PILOT-IMPLEMENTATION",
+    "PD-WP5-PILOT-LOCAL-OPERATION",
+    "PD-WP5-PILOT-OPERATOR-REVIEW"
+  ],
+  "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+  "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+  "current_authority": {
+    "research_role": "PILOT_DISCOVERY",
+    "operation_mode": "TIME_GATED_REPLAY",
+    "pilot_only": true,
+    "promotion_eligibility": "NON_PROMOTABLE",
+    "canonical_discovery_population": false,
+    "canonical_append": "DENIED",
+    "live_prospective_relabelling": "DENIED",
+    "semantic_promotion": "DENIED",
+    "family_promotion": "DENIED",
+    "active_novelty_ranking": "DENIED",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "DENIED",
+    "probability_authority": "NONE",
+    "risk_authority": "NONE",
+    "exposure_authority": "NONE",
+    "trading_authority": "NONE",
+    "execution_authority": "NONE",
+    "agent_write_authority": "NONE"
+  },
+  "proposed_delta_on_pass": "AUTHORISE_VERSIONED_FINAL_PD_WP5_CANONICAL_DISCOVERY_CONTRACT_AND_RELEASE_PD_WP5_CANONICAL_FOR_OPT_B_C2_GBPUSD_DISCOVERY_2021_2023_AFTER_COMPLETE_IDENTITY_RESET",
+  "proposed_delta_status": "NOT_GRANTED",
+  "acceptance_conditions": [
+    {
+      "condition": "ONE_PILOT_DISCOVERY_OPERATION_COMPLETED",
+      "result": "PASS"
+    },
+    {
+      "condition": "SIGNED_PILOT_EVIDENCE_CAPTURED",
+      "result": "PASS"
+    },
+    {
+      "condition": "DETERMINISTIC_RERUN_COMPLETED",
+      "result": "PASS"
+    },
+    {
+      "condition": "OPERATOR_REVIEW_COMPLETE",
+      "result": "PASS"
+    },
+    {
+      "condition": "PILOT_DEFECT_AND_CORRECTION_LEDGER_COMPLETE",
+      "result": "FAIL_CORRECTION_SPECIFICATION_INCOMPLETE"
+    },
+    {
+      "condition": "FINAL_CONTRACT_CANDIDATE_FROZEN",
+      "result": "FAIL_NOT_AVAILABLE"
+    }
+  ],
+  "tests": [],
+  "qa_result": "DEFER_VERSIONED_CORRECTION_REQUIRED",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json",
+  "evidence_index": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json",
+  "warnings": [
+    "Five of six promoted pilot objects were not accepted without qualification.",
+    "The workflow-defect finding has no reproducible defect code, affected component or correction acceptance test.",
+    "The UI-friction finding has no friction code or affected Console surface.",
+    "Two deferred objects have no resolution criteria and one rejected object has no structural rejection reason.",
+    "No versioned final contract candidate exists.",
+    "The approved pilot operation limit is exhausted; no correction replay is authorised."
+  ],
+  "unresolved_issues": [
+    {
+      "code": "PDG5P-DEFECT-SPEC-001",
+      "severity": "BLOCKING_FOR_PASS",
+      "description": "Materialise reproducible workflow-defect evidence for PDPILOT-CANDIDATE-bf1e96ba941e97a4d12e8fba."
+    },
+    {
+      "code": "PDG5P-UI-SPEC-001",
+      "severity": "BLOCKING_FOR_PASS",
+      "description": "Record the affected Console surface, friction code, reproduction steps and acceptance criterion for PDPILOT-CANDIDATE-f10546a0a1ec4dfbe03545c4."
+    },
+    {
+      "code": "PDG5P-DEFER-RESOLUTION-001",
+      "severity": "BLOCKING_FOR_PASS",
+      "description": "Define resolution criteria for the two deferred pilot objects."
+    },
+    {
+      "code": "PDG5P-REJECTION-BASIS-001",
+      "severity": "BLOCKING_FOR_PASS",
+      "description": "Record the structural and workflow basis for the rejected pilot object without semantic or outcome interpretation."
+    },
+    {
+      "code": "PDG5P-CONTRACT-FREEZE-001",
+      "severity": "BLOCKING_FOR_PASS",
+      "description": "Produce a versioned final PD-WP5 canonical Discovery contract candidate and exact diff from the pilot contract."
+    },
+    {
+      "code": "PDG5P-REPLAY-AUTHORITY-001",
+      "severity": "OPERATOR_RESERVED",
+      "description": "Decide whether one bounded correction replay is necessary; the current operation limit authorises no second pilot."
+    }
+  ],
+  "changed_files": [],
+  "external_artifact_hashes": {
+    "pilot_run_file_sha256": "ceacb9668fd1ca4d07b65df49b89af4c488af56dec8aecec6f922ceaa4f06039",
+    "pilot_output_manifest_file_sha256": "9e8e42c04aeca078c5e8cae6715a9a017b2f01e7a6b112ab7b4dd6a8c2af2f6c",
+    "pilot_qa_file_sha256": "9f18db6e4cd1c26fe61ee2ccf03ab3bcce5e71f557f8a1b9eddf97812058e75f",
+    "pd_g5p_gate_input_file_sha256": "4ff62d6804bdadcc8f127ba9093a25a8caff8a55307219fd7c4f13cc5a1c6e05",
+    "pilot_defect_ledger_file_sha256": "a9e0102e042e3919871c7c0b135a60e4d3d27d8483f2e8eaa55fd366ee6d174d",
+    "pilot_review_receipt_file_sha256": "2486d9f7097c434fd52d4d5fd0cd086df8117887b6bf4b70a9ef6cf50869ab81",
+    "signed_pilot_evidence_inventory_file_sha256": "8953dfb1bbd4b04ab36018cc5af7de223ca60516f8cab444ec3cf453e0181f9a"
+  },
+  "rollback": "REVERT_GATE_PACKET_BRANCH_PRESERVE_AND_SEAL_ALL_PILOT_EVIDENCE_KEEP_PD_G4B_APPROVED_KEEP_CANONICAL_DISCOVERY_DENIED",
+  "recommended_decision": "DEFER",
+  "recommendation_reason": "Machine and evidence integrity pass, but operator review records material unresolved workflow and interface findings, contract changes are explicitly required, the final contract candidate is absent and no correction replay is authorised.",
+  "exact_work_after_defer": [
+    "Create PD-WP5-CORR1 as a non-activating correction-specification packet.",
+    "Inspect the five non-accepted pilot objects using preserved read-only pilot evidence.",
+    "Record concrete defect and friction codes, affected components, reproduction steps and acceptance tests.",
+    "Version the workflow, Console and evidence-presentation contract changes without changing C2 semantics, thresholds, selectors, releases or authority.",
+    "Test corrections on governed fixtures and the preserved pilot projection only.",
+    "Prepare a single operator amendment if one correction replay is required; do not execute a second pilot without explicit approval.",
+    "Return to PD-G5P with a frozen final contract candidate and closed correction ledger."
+  ],
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "operator_approval_required": true,
+  "gate_status": "GATE_READY",
+  "decision_record": null
+}
