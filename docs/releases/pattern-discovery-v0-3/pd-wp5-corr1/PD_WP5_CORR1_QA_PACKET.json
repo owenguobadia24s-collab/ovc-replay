@@ -4,26 +4,41 @@
   "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
   "plan_version": "0.1",
   "baseline_commit": "02b123fb923feabf1c7d71a1ce901e850e57362f",
-  "candidate_commit": null,
-  "qa_status": "PENDING_CI",
-  "qa_recommendation": "PENDING",
+  "candidate_commit": "2b8f8cee6825781a5f2b67af8f4a00173491c26c",
+  "qa_status": "PASS",
+  "qa_recommendation": "PASS",
   "scope_result": "VERSIONED_NON_ACTIVATING_CORRECTION_ONLY",
   "acceptance_conditions": [
     {"condition": "FIVE_NON_ACCEPTED_OBJECTS_HAVE_DETERMINISTIC_STRUCTURED_CORRECTIONS", "result": "PASS"},
     {"condition": "V2_REVIEW_VALIDATION_FAILS_CLOSED", "result": "PASS"},
     {"condition": "READ_ONLY_CONSOLE_PRESENTS_DISPOSITION_SPECIFIC_FIELDS", "result": "PASS"},
     {"condition": "SIGNED_V1_ARTIFACTS_REMAIN_BYTE_IDENTICAL", "result": "PASS"},
-    {"condition": "FINAL_CONTRACT_CANDIDATE_AND_IDENTITY_RESET_PROCEDURE_FROZEN", "result": "PASS"},
+    {"condition": "FINAL_CONTRACT_CANDIDATE_AND_IDENTITY_RESET_PROCEDURE_FROZEN", "result": "PASS_CANDIDATE_ONLY"},
     {"condition": "SECOND_REPLAY_NECESSITY_DETERMINED_WITHOUT_EXECUTION", "result": "PASS_NOT_REQUIRED"},
     {"condition": "CANONICAL_AND_PROMOTIONAL_AUTHORITY_REMAINS_DENIED", "result": "PASS"},
-    {"condition": "FOCUSED_AND_REPOSITORY_TESTS_PASS", "result": "PENDING_CI"}
+    {"condition": "FOCUSED_AND_REPOSITORY_TESTS_PASS", "result": "PASS"}
   ],
   "source_artifact_hashes": {
     "pilot_review_receipt_file_sha256": "2486d9f7097c434fd52d4d5fd0cd086df8117887b6bf4b70a9ef6cf50869ab81",
     "pilot_defect_ledger_file_sha256": "a9e0102e042e3919871c7c0b135a60e4d3d27d8483f2e8eaa55fd366ee6d174d"
   },
   "correction_ledger_sha256": "cd93fb5cc6490402449d94a433e7f74a4f12722ef2a922dd12f3236dcd0f17bd",
-  "tests": [],
+  "tests": [
+    {
+      "suite": "CORR1 focused, Pattern Discovery dependent, full repository, schemas and authority guards",
+      "workflow_run": 30374928283,
+      "job": 90328016724,
+      "result": "PASS",
+      "tested_head": "2b8f8cee6825781a5f2b67af8f4a00173491c26c"
+    },
+    {
+      "suite": "General repository unit tests",
+      "workflow_run": 30374929201,
+      "job": 90328019927,
+      "result": "PASS",
+      "tested_head": "2b8f8cee6825781a5f2b67af8f4a00173491c26c"
+    }
+  ],
   "warnings": [
     "The final contract and identity reset are candidates only.",
     "No second replay or canonical Discovery operation is authorised.",
@@ -33,5 +48,6 @@
   "second_pilot_replay_recommendation": "NOT_REQUIRED",
   "second_pilot_replay_authorised": false,
   "canonical_discovery_authorised": false,
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_DELEGATED_DECISION.md",
   "rollback": "REVERT_CORR1_CODE_SCHEMAS_AND_UI_PRESERVE_ORIGINAL_SIGNED_PILOT_EVIDENCE_AND_ALL_AUTHORITY_DENIALS"
 }
