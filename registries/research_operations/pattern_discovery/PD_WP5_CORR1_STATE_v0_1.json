@@ -3,13 +3,14 @@
   "packet_id": "PD-WP5-CORR1",
   "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "prerequisites": ["PD-G5P_DEFER_RECORDED"],
   "authority_required": "NONE",
   "authority_delta": "VERSIONED_REVIEW_WORKFLOW_CONSOLE_AND_EVIDENCE_PRESENTATION_CORRECTION_ONLY",
   "baseline_commit": "02b123fb923feabf1c7d71a1ce901e850e57362f",
   "branch": "build/pd-wp5-corr1",
   "candidate_commit": "2b8f8cee6825781a5f2b67af8f4a00173491c26c",
+  "final_head": "76436c8f5c43d3eb333d804ef4652cc864aba865",
   "pull_request": 130,
   "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
   "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
@@ -59,6 +60,20 @@
       "job": 90328019927,
       "result": "PASS",
       "tested_head": "2b8f8cee6825781a5f2b67af8f4a00173491c26c"
+    },
+    {
+      "suite": "CORR1 final state-bearing verification",
+      "workflow_run": 30375427315,
+      "job": 90329757637,
+      "result": "PASS",
+      "tested_head": "76436c8f5c43d3eb333d804ef4652cc864aba865"
+    },
+    {
+      "suite": "General final-head repository tests",
+      "workflow_run": 30375427307,
+      "job": 90329757773,
+      "result": "PASS",
+      "tested_head": "76436c8f5c43d3eb333d804ef4652cc864aba865"
     }
   ],
   "qa_result": "PASS",
@@ -66,9 +81,9 @@
   "decision": "PASS",
   "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_DELEGATED_DECISION.md",
-  "merge_commit": null,
+  "merge_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
   "blockers": [],
-  "next_packet": "PD-G5P",
+  "next_packet": "PD-G5P-CORRECTION-RETURN",
   "next_gate": "PD-G5P",
   "rollback": "REVERT_CORR1_CODE_SCHEMAS_AND_PRESENTATION_PRESERVE_SIGNED_PILOT_EVIDENCE_KEEP_SECOND_REPLAY_AND_CANONICAL_DISCOVERY_DENIED"
 }
