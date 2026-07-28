@@ -5,12 +5,13 @@ source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
-current_authority: PILOT_DISCOVERY_APPROVED_IMPLEMENTED_LOCAL_OPERATION_REQUIRED
+current_authority: PILOT_DISCOVERY_OPERATION_COMPLETE_PD_G5P_DECISION_REQUIRED
 live_triage_authority: GENUINE_LIVE_PROSPECTIVE_DEFERRED_TO_RPS_LIVE_G1
 active_source_binding_id: RPS.BINDING.32fb3003efa072916c11e907
 active_signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
 active_operator_id: OVC.OPERATOR.PRIMARY.LOCAL.V1
 pilot_namespace: PD.PILOT.GBPUSD.20260622_20260625.v1
+pilot_run_id: PD.PILOT.RUN.0cc5a59ca751583f3e50091c
 live_append_enabled: false
 canonical_append_enabled: false
 prohibited_authority:
@@ -96,7 +97,7 @@ objects:
     owner: RESEARCH_OPERATIONS
     canonical: false
     append_only: true
-    implementation_status: PILOT_NAMESPACE_ONLY_PENDING_LOCAL_OPERATION
+    implementation_status: PILOT_NAMESPACE_SIGNED_REVIEW_COMPLETE
     write_authority: OPERATOR_APPROVED_PILOT_ONLY
   - id: AppendRequest
     owner: RESEARCH_OPERATIONS
@@ -107,7 +108,7 @@ objects:
     owner: RESEARCH_OPERATIONS
     canonical: false
     append_only: true
-    implementation_status: PILOT_HASH_CHAINED_TRANSACTION
+    implementation_status: PILOT_SIGNED_EVIDENCE_COMPLETE
     write_authority: OPERATOR_APPROVED_PILOT_ONLY
 processing_modes: [LIVE_PROSPECTIVE, TIME_GATED_REPLAY, NON_EVIDENTIARY_REPLAY]
 novelty_states: [BASELINE_FORMING, CALIBRATED_SHADOW, ACTIVE_NOVELTY_RANKING]
@@ -183,34 +184,47 @@ work_packets:
     blockers: []
     next_packet: RPS-00
   - packet_id: PD-WP5
-    status: BLOCKED
+    status: GATE_READY
     implementation_status: COMPLETED_IN_MAIN
-    execution_status: OPERATOR_LOCAL_EXTERNAL_ARTIFACT_EXECUTION_REQUIRED
+    execution_status: PILOT_OPERATION_AND_REVIEW_COMPLETE
     prerequisites: [PD-G4B_APPROVED, RPS-G4_APPROVED, RPS-WP3_COMPLETED, RPS-WP4_COMPLETED]
-    authority_required: PD_G4B_APPROVED
-    authority_delta: ONE_PILOT_DISCOVERY_TIME_GATED_REPLAY_OPERATION
+    authority_required: PD_G5P_OPERATOR_DECISION
+    authority_delta: PILOT_DISCOVERY_OPERATIONS_ACCEPTANCE_AND_POSSIBLE_CANONICAL_CORRECTION_WORK
     operation_limit: 1
+    operation_count: 1
     research_role: PILOT_DISCOVERY
     operation_mode: TIME_GATED_REPLAY
     source_slice_id: RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1
     source_binding_id: RPS.BINDING.32fb3003efa072916c11e907
     signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
     pilot_namespace: PD.PILOT.GBPUSD.20260622_20260625.v1
+    pilot_run_id: PD.PILOT.RUN.0cc5a59ca751583f3e50091c
+    pilot_output_manifest_sha256: 0133103e937da4a80fec63198a6a7a72bd9bbad53b57140dafeac90d78608778
+    signed_evidence_inventory_file_sha256: 8953dfb1bbd4b04ab36018cc5af7de223ca60516f8cab444ec3cf453e0181f9a
+    deterministic_rerun_match: true
+    operator_review_complete: true
+    review_decision_count: 6
+    defect_count: 5
+    contract_changes_required: true
     implementation_branch: build/pd-wp5-pilot-discovery
     implementation_pull_request: 121
     tested_candidate_head: 06b0a4604b1afc72b130f3dc2eab1dd8be4f9fc5
-    tests: [GitHub_Actions_30353957840]
-    qa_result: PASS_IMPLEMENTATION_BLOCKED_LOCAL_EXECUTION
-    qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp5-pilot/PD_WP5_PILOT_QA_PACKET.md
-    merge_commit: ac5d9c9cbc4b2336c3af389f01a60827a509b1ba
-    blockers: [OPERATOR_LOCAL_EXTERNAL_ARTIFACT_EXECUTION_REQUIRED]
-    next_packet: PD-WP5-PILOT-LOCAL-OPERATION
+    implementation_tests: [GitHub_Actions_30353957840]
+    implementation_merge_commit: ac5d9c9cbc4b2336c3af389f01a60827a509b1ba
+    qa_result: DEFER_VERSIONED_CORRECTION_REQUIRED
+    qa_packet: docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json
+    gate_packet: docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json
+    gate_state: registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json
+    recommended_decision: DEFER
+    blockers: [PDG5P-DEFECT-SPEC-001, PDG5P-UI-SPEC-001, PDG5P-DEFER-RESOLUTION-001, PDG5P-REJECTION-BASIS-001, PDG5P-CONTRACT-FREEZE-001, PDG5P-REPLAY-AUTHORITY-001]
+    next_packet_on_defer: PD-WP5-CORR1
+    next_packet_on_pass: PD-WP5-CANONICAL
     next_gate: PD-G5P
 rps_enablement:
   plan_id: OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1
   plan_status: RATIFIED
   baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
-  current_packet: PD-WP5-PILOT-LOCAL-OPERATION
+  current_packet: PD-G5P
   next_operator_gate: PD-G5P
   prospective_source_binding_required: true
   real_prospective_source_available: true
@@ -220,6 +234,8 @@ rps_enablement:
   operation_mode: TIME_GATED_REPLAY
   research_role: PILOT_DISCOVERY
   first_operation_limit: 1
+  first_operation_count: 1
+  first_operation_exhausted: true
   live_append_enabled: false
   canonical_append_enabled: false
   future_live_gate: RPS-LIVE-G1
