@@ -1,0 +1,79 @@
+{
+  "schema": "ovc-c1c-g5-corr2-implementation-receipt/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "packet_id": "C1C-G5-CORR2",
+  "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "baseline_commit": "8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b",
+  "branch": "build/c1c-g5-corr2-review-closure",
+  "tested_candidate_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+  "status": "PASS_IMPLEMENTED_QA_REVIEW_COMPLETE_PENDING_SQUASH_MERGE",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+  "authority_delta": "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY",
+  "workflow_evidence_finding": "CLOSED_BY_IMPLEMENTATION_AND_TESTS",
+  "console_context_finding": "CLOSED_BY_IMPLEMENTATION_AND_TESTS",
+  "deferred_candidate_ids": [
+    "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+    "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
+  ],
+  "completed_scope": [
+    "Disposition-specific structured fields are rendered on the read-only Console candidate-detail review surface.",
+    "Exact queue, candidate-detail, fingerprint and immutable source-lineage references are resolved per candidate.",
+    "A fail-closed operator-local runner prepares and finalises review of exactly two deferred objects.",
+    "Four non-deferred structured-v2 decisions are hash-bound and immutable under CORR2.",
+    "Signed CORR2 receipt, closure ledger, evidence inventory and final gate input are generated append-only.",
+    "PASS recommendation is impossible while any deferred object remains deferred.",
+    "Historical structured-v2 blocker and evidence remain auditable under the lawful operator-DEFER successor."
+  ],
+  "second_machine_replay": "DENIED_NOT_REQUIRED",
+  "provider_network_access": "DENIED",
+  "operator_local_human_rereview": "REQUIRED_FOR_TWO_DEFERRED_OBJECTS",
+  "operator_private_key": "REQUIRED_ONLY_FOR_LOCAL_FINALIZATION",
+  "canonical_discovery_processing": "DENIED",
+  "canonical_append": "DENIED",
+  "selector_mutation": "DENIED",
+  "release_mutation": "DENIED",
+  "r2_publication": "DENIED",
+  "validation_consumption": "LOCKED_UNCONSUMED",
+  "semantic_promotion": "NONE",
+  "family_promotion": "NONE",
+  "candidate_promotion": "NONE",
+  "novelty_promotion": "NONE",
+  "threshold_or_model_change": "NONE",
+  "probability": "NONE",
+  "risk": "NONE",
+  "exposure": "NONE",
+  "trading": "NONE",
+  "execution": "NONE",
+  "agent_write": "NONE",
+  "tests": [
+    {
+      "suite": "CORR2 focused, retained, complete repository, schema and authority checks",
+      "workflow_run": 30405314053,
+      "job": 90429331646,
+      "tested_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+      "result": "PASS"
+    },
+    {
+      "suite": "Structured-v2 retained evidence and lawful successor workflow",
+      "workflow_run": 30405313946,
+      "job": 90429331287,
+      "tested_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+      "result": "PASS"
+    },
+    {
+      "suite": "Generic complete repository unit tests",
+      "workflow_run": 30405314175,
+      "job": 90429332422,
+      "tested_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+      "result": "PASS"
+    }
+  ],
+  "qa_result": "PASS",
+  "blocking_implementation_issues": [],
+  "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_QA_PACKET.json",
+  "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_DELEGATED_DECISION.md",
+  "rollback": "Revert only CORR2 code, schemas, tests and court records through a new non-destructive commit. Preserve every signed external artifact and the immutable machine run.",
+  "next_action": "SQUASH_MERGE_THEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW"
+}

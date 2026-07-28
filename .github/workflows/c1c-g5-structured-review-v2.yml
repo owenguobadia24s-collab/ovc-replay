@@ -60,7 +60,7 @@ jobs:
             python -m json.tool "$schema" >/dev/null
           done
 
-      - name: Assert retained authority and local-only execution
+      - name: Assert retained authority and lawful successor
         shell: bash
         run: |
           set -euo pipefail
@@ -70,7 +70,18 @@ jobs:
 
           state=json.loads(Path('registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
           index=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json').read_text())
-          assert state['status']=='BLOCKED_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW_REQUIRED'
+          if state['status']=='BLOCKED_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW_REQUIRED':
+              assert state['blocker_id']=='C1C-G5-BLOCK-002'
+          else:
+              assert state['status'] in {
+                  'OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED',
+                  'C1C_G5_CORR2_IMPLEMENTED_OPERATOR_LOCAL_REREVIEW_REQUIRED',
+                  'C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED',
+              }
+              assert state['operator_decision']['decision']=='DEFER'
+              assert state['prior_blocker']['blocker_id']=='C1C-G5-BLOCK-002'
+              assert state['prior_blocker']['evidence_preserved'] is True
+              assert state['corr2']['packet_id']=='C1C-G5-CORR2'
           assert state['corrective_rerun']['machine_execution_status']=='COMPLETE_SIGNED_HASH_VERIFIED'
           assert state['corrective_rerun']['review_v1_status']=='PRESERVED_SIGNED_INCOMPLETE_UNDER_V2_CONTRACT'
           assert state['corrective_rerun']['second_machine_replay_required'] is False

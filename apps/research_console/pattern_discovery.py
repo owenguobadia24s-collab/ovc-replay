@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
+from apps.research_console.pattern_discovery_corr2 import render_exact_review_context
 from ovc.research_operations.prospective_source.authority import (
     AuthoritySnapshot,
     authority_from_mapping,
@@ -19,7 +20,7 @@ AUTHORITY = {
     "probability_exposure_execution": "NONE",
 }
 PILOT_BANNER = "PILOT_ONLY · NON_PROMOTABLE · TIME_GATED_REPLAY · GAPPED_SOURCE"
-CORRECTION_BANNER = "PD-WP5-CORR1 · STRUCTURED REVIEW ONLY · C2 AND CANONICAL AUTHORITY UNCHANGED"
+CORRECTION_BANNER = "C1C-G5-CORR2 · STRUCTURED DEFERRED-OBJECT REVIEW ONLY · C2 AND CANONICAL AUTHORITY UNCHANGED"
 REVIEW_DISPOSITIONS = [
     "WORKFLOW_ACCEPTED",
     "FLAG_WORKFLOW_DEFECT",
@@ -99,7 +100,13 @@ def render_queue(items: list[Mapping[str, Any]], authority: AuthoritySnapshot | 
     return st.selectbox("Open candidate", [str(item["candidate_window_id"]) for item in selected])
 
 
-def _render_structured_review_fields(st: Any, disposition: str) -> None:
+def _render_structured_review_fields(
+    st: Any,
+    disposition: str,
+    *,
+    candidate_window_id: str,
+    exact_evidence_references: Sequence[str] = (),
+) -> None:
     st.info(CORRECTION_BANNER)
     st.caption("Structured fields are a local review candidate only. No evidence write, replay or canonical append is enabled.")
     fields = review_fields_for_disposition(disposition)
@@ -115,7 +122,7 @@ def _render_structured_review_fields(st: Any, disposition: str) -> None:
         "resolution_criteria": "Resolution criteria (one per line)",
         "next_review_condition": "Next lawful review condition",
         "structural_basis": "Structural / workflow rejection basis",
-        "evidence_references": "Evidence references (one per line)",
+        "evidence_references": "Exact evidence references (one per line)",
         "ui_friction_codes": "UI friction codes (PD-UI-…; one per line)",
     }
     multiline = {
@@ -123,12 +130,14 @@ def _render_structured_review_fields(st: Any, disposition: str) -> None:
         "acceptance_basis", "resolution_criteria", "next_review_condition", "structural_basis",
         "evidence_references", "ui_friction_codes",
     }
+    key_prefix = f"c1c_g5_corr2_{candidate_window_id}_{disposition}"
     for field in fields:
         label = labels[field]
+        value = "\n".join(exact_evidence_references) if field == "evidence_references" else ""
         if field in multiline:
-            st.text_area(label, key=f"pd_corr1_{disposition}_{field}")
+            st.text_area(label, value=value, key=f"{key_prefix}_{field}")
         else:
-            st.text_input(label, key=f"pd_corr1_{disposition}_{field}")
+            st.text_input(label, value=value, key=f"{key_prefix}_{field}")
 
 
 def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnapshot | None = None) -> None:
@@ -161,17 +170,28 @@ def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnaps
         st.dataframe(list(detail.get("neighbours", ())), use_container_width=True, hide_index=True)
     with st.expander("Immutable source lineage", expanded=False):
         st.json(detail.get("source_lineage", {}))
+
+    exact_context = render_exact_review_context(st, detail, queue_item=summary)
+    candidate_window_id = str(summary.get("candidate_window_id") or "UNKNOWN_CANDIDATE")
+    exact_references = tuple(exact_context.get("exact_evidence_references", ())) if exact_context else ()
+
     st.markdown("**Review action candidate**")
-    disposition = st.selectbox("Review disposition", REVIEW_DISPOSITIONS)
-    st.selectbox("Evidence class", list(detail.get("permitted_review_classes", ())))
-    st.text_area("Factual observation", placeholder="Describe what C2 represents faithfully or misses.")
-    st.text_area("Limitation / next bounded question")
-    _render_structured_review_fields(st, disposition)
+    disposition = st.selectbox("Review disposition", REVIEW_DISPOSITIONS, key=f"review_disposition_{candidate_window_id}")
+    st.selectbox("Evidence class", list(detail.get("permitted_review_classes", ())), key=f"evidence_class_{candidate_window_id}")
+    st.text_area("Factual observation", placeholder="Describe what C2 represents faithfully or misses.", key=f"observation_{candidate_window_id}")
+    st.text_area("Limitation / next bounded question", key=f"limitation_{candidate_window_id}")
+    _render_structured_review_fields(
+        st,
+        disposition,
+        candidate_window_id=candidate_window_id,
+        exact_evidence_references=exact_references,
+    )
     enabled = authority.live_append_enabled if authority is not None else False
     st.button(
         "Freeze evidence record",
         disabled=not enabled,
         help="Canonical append remains disabled for every Pilot Discovery object.",
+        key=f"freeze_evidence_{candidate_window_id}",
     )
 
 

@@ -28,7 +28,7 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s tests -v
-      - name: Enforce retained authority
+      - name: Enforce retained authority and lawful successor
         run: |
           python - <<'PY'
           import json
@@ -39,7 +39,16 @@ jobs:
           assert decision['decision']=='DEFER'
           assert decision['authorised_next_packet']['packet_id']=='C1C-G5-CORR2'
           assert decision['authorised_next_packet']['machine_replay']=='DENIED_NOT_REQUIRED'
-          assert state['corr2']['status']=='READY'
+          assert state['status'] in {
+              'OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED',
+              'C1C_G5_CORR2_IMPLEMENTED_OPERATOR_LOCAL_REREVIEW_REQUIRED',
+              'C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED',
+          }
+          assert state['corr2']['status'] in {
+              'READY', 'RUNNING', 'IMPLEMENTED', 'QA_REVIEW', 'GATE_READY', 'COMPLETED_IN_MAIN'
+          }
+          assert state['corr2']['authority_delta']=='NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY'
+          assert state['corr2']['second_machine_replay']=='DENIED_NOT_REQUIRED'
           assert state['next_gate']=='C1C-G5-CORRECTIVE-PILOT-REVIEW'
           retained=decision['retained_prohibitions']
           assert retained['canonical_append']=='DENIED'

@@ -1,0 +1,78 @@
+{
+  "schema": "ovc-c1c-g5-corr2-qa-packet/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "packet_id": "C1C-G5-CORR2",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "baseline_commit": "8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b",
+  "branch": "build/c1c-g5-corr2-review-closure",
+  "tested_candidate_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+  "qa_status": "PASS_IMPLEMENTATION_OPERATOR_LOCAL_REREVIEW_REQUIRED",
+  "recommended_packet_decision": "PASS",
+  "acceptance_conditions": [
+    "Exact two-object identity is frozen and a third or changed candidate is rejected.",
+    "Queue, candidate-detail, fingerprint and source-lineage evidence references resolve to the same candidate.",
+    "Disposition-specific fields fail closed for accepted, deferred and rejected outcomes.",
+    "The four non-deferred structured-v2 decisions are preserved by canonical hash.",
+    "No machine replay, provider access, selector, release, R2, Validation or canonical append path exists.",
+    "Focused and complete repository tests pass.",
+    "All new JSON schemas parse and remain closed.",
+    "Historical structured-v2 evidence remains exact under the lawful DEFER successor.",
+    "No unresolved review or blocking warning remains within implementation scope."
+  ],
+  "acceptance_results": [
+    {"condition": "EXACT_TWO_OBJECT_IDENTITY", "result": "PASS"},
+    {"condition": "EXACT_EVIDENCE_REFERENCE_RESOLUTION", "result": "PASS"},
+    {"condition": "DISPOSITION_SPECIFIC_FAIL_CLOSED_VALIDATION", "result": "PASS"},
+    {"condition": "NON_DEFERRED_DECISION_HASH_PRESERVATION", "result": "PASS"},
+    {"condition": "NO_MACHINE_REPLAY_OR_PROVIDER_OPERATION", "result": "PASS"},
+    {"condition": "RETAINED_AUTHORITY", "result": "PASS"},
+    {"condition": "SCHEMA_AND_REPOSITORY_TESTS", "result": "PASS"}
+  ],
+  "tests": [
+    {
+      "suite": "CORR2 focused, retained, complete repository, schema and authority checks",
+      "workflow_run": 30405314053,
+      "job": 90429331646,
+      "result": "PASS"
+    },
+    {
+      "suite": "Structured-v2 retained evidence and lawful successor workflow",
+      "workflow_run": 30405313946,
+      "job": 90429331287,
+      "result": "PASS"
+    },
+    {
+      "suite": "Generic complete repository unit tests",
+      "workflow_run": 30405314175,
+      "job": 90429332422,
+      "result": "PASS"
+    }
+  ],
+  "warnings": [
+    "Operator-local Ed25519 signing and human re-review remain intentionally unavailable to CI and are not waived by packet PASS."
+  ],
+  "unresolved_issues": [],
+  "blocking_issues": [],
+  "authority": {
+    "second_machine_replay": "DENIED_NOT_REQUIRED",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "Revert only the bounded CORR2 implementation packet through a new non-destructive commit while preserving all signed external evidence and the immutable machine run.",
+  "next_boundary": "OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_AFTER_IMPLEMENTATION_MERGE"
+}
