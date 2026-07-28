@@ -7,6 +7,7 @@
 - Governing authority: `PD-G4B PASS`
 - Baseline: `c46d9620e242c047dd8e203f91a1b00b542a2a81`
 - Tested base: `8c243c009f30e453312861708afb784fe762c442`
+- Tested candidate head: `3613709a4b073b0521a460b1d0c57d9ae2842cd5`
 - PR: `#121`
 - QA result: `PASS_IMPLEMENTATION_BLOCKED_LOCAL_EXECUTION`
 
@@ -18,10 +19,10 @@ QA reviewed the operator-local implementation for one June 2026 `PILOT_DISCOVERY
 
 | Suite | Workflow | Job | Result |
 |---|---:|---:|---|
-| Focused Pilot Discovery implementation, authority, schema and fail-closed tests | `30353005206` | `90254663557` | PASS |
-| Canonical repository tests | `30353005039` | `90254662097` | PASS |
+| Focused Pilot Discovery implementation and full repository suite | `30353533468` | `90256328468` | PASS |
+| Machine-readable schemas, authority boundary and fail-closed local-execution guards | `30353533468` | `90256328468` | PASS |
 
-The PR test merge included the independent RO3-G2 main change; no overlapping file or authority conflict was found.
+The decision-bearing job ran focused Pilot Discovery tests and the complete repository test suite against the PR merge containing current main `8c243c009f30e453312861708afb784fe762c442`. It also validated the packet schemas, prohibited provider access and canonical/promotion paths, and asserted clean-main, no-overwrite, deterministic-rerun and CI-denial controls.
 
 ## Functional acceptance
 
@@ -88,6 +89,7 @@ Complete the generated `pilot-review-input.template.json`, then run `finalize` a
 3. Fixture success cannot substitute for the exact accepted June compute bytes.
 4. A machine-successful pilot remains incomplete until operator review and signed finalisation complete.
 5. PD-G5P remains operator-required and canonical 2021–2023 Discovery remains unavailable.
+6. Historical workflows that assert pre-Pilot registry state are not decision-bearing for this packet; the packet-specific workflow and full repository suite are the acceptance evidence.
 
 ## Rollback
 
