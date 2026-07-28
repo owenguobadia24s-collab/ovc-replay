@@ -4,7 +4,7 @@
   "plan_version": "0.1",
   "packet_id": "PD-WP5-PILOT",
   "status": "BLOCKED",
-  "implementation_status": "IMPLEMENTED_AND_TESTED",
+  "implementation_status": "COMPLETED_IN_MAIN",
   "execution_status": "BLOCKED_OPERATOR_LOCAL_EXTERNAL_ARTIFACT_EXECUTION_REQUIRED",
   "prerequisites": ["PD-G4B:APPROVED", "RPS-G4:APPROVED", "RPS-WP3:COMPLETED", "RPS-WP4:COMPLETED"],
   "authority_required": "PD-G4B_APPROVED",
@@ -13,8 +13,8 @@
   "tested_base_commit": "8c243c009f30e453312861708afb784fe762c442",
   "branch": "build/pd-wp5-pilot-discovery",
   "pull_request": 121,
-  "candidate_commit": "3613709a4b073b0521a460b1d0c57d9ae2842cd5",
-  "tested_candidate_head": "3613709a4b073b0521a460b1d0c57d9ae2842cd5",
+  "candidate_commit": "06b0a4604b1afc72b130f3dc2eab1dd8be4f9fc5",
+  "tested_candidate_head": "06b0a4604b1afc72b130f3dc2eab1dd8be4f9fc5",
   "research_role": "PILOT_DISCOVERY",
   "operation_mode": "TIME_GATED_REPLAY",
   "operation_limit": 1,
@@ -57,16 +57,16 @@
   "tests": [
     {
       "suite": "PD-WP5 Pilot Discovery implementation, full repository suite, schemas and authority guards",
-      "workflow_run": 30353533468,
-      "job": 90256328468,
+      "workflow_run": 30353957840,
+      "job": 90257693751,
       "result": "PASS",
-      "tested_head": "3613709a4b073b0521a460b1d0c57d9ae2842cd5"
+      "tested_head": "06b0a4604b1afc72b130f3dc2eab1dd8be4f9fc5"
     }
   ],
   "qa_result": "PASS_IMPLEMENTATION_BLOCKED_LOCAL_EXECUTION",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-pilot/PD_WP5_PILOT_QA_PACKET.md",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_OPERATOR_DECISION.md",
-  "merge_commit": null,
+  "merge_commit": "ac5d9c9cbc4b2336c3af389f01a60827a509b1ba",
   "blockers": [
     {
       "code": "OPERATOR_LOCAL_EXTERNAL_ARTIFACT_EXECUTION_REQUIRED",
@@ -74,7 +74,7 @@
       "required_environment": "clean local main with C:\\Users\\Owner\\OVIS\\ovc-replay-external-artifacts",
       "preflight_command": ".\\scripts\\run_pd_wp5_pilot_discovery.ps1 preflight",
       "execution_command": ".\\scripts\\run_pd_wp5_pilot_discovery.ps1 execute -Gate PD-G4B",
-      "smallest_lawful_resolution": "Integrate the tested runner, pull main locally, execute preflight and the one approved pilot, complete the generated operator review, finalize signed evidence, and return the compact PD-G5P files."
+      "smallest_lawful_resolution": "Pull main locally, execute preflight and the one approved pilot, complete the generated operator review, finalize signed evidence, and return the compact PD-G5P files."
     }
   ],
   "next_gate": "PD-G5P",
