@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c1c-g5-corr2-deferred-rereview-receipt/v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "packet_id", "gate_id", "pilot_run_id", "pilot_namespace", "operator_id", "reviewed_at_utc", "decisions", "decision_count", "signature_algorithm", "signature_format", "signature_namespace", "signed_payload_sha256", "signature_sha256", "signature", "status"],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corr2-deferred-rereview-receipt/v1"},
+    "packet_id": {"const": "C1C-G5-CORR2"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "pilot_namespace": {"const": "PD.PILOT.GBPUSD.20260622_20260625.v2"},
+    "decision_count": {"const": 2},
+    "signature_algorithm": {"const": "ED25519"},
+    "signature_format": {"const": "SSHSIG_OPENSSH_V1"},
+    "signature_namespace": {"const": "ovc-rps"},
+    "status": {"const": "C1C_G5_CORR2_OPERATOR_REREVIEW_COMPLETE"}
+  }
+}
