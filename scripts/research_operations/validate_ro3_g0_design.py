@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the RO3-G0 authority and design freeze."""
+"""Validate the frozen RO3-G0 authority canon throughout later packets."""
 
 from __future__ import annotations
 
@@ -70,9 +70,9 @@ def main() -> int:
     assert len(set(primitive_ids)) == 18
     assert all(row["relations"] for row in invariants["invariants"])
 
-    assert state["programme_status"] == "RUNNING"
+    assert state["programme_status"] in {"RUNNING", "GATE_READY", "COMPLETED"}
     assert state["packets"][0]["packet_id"] == "RO3-00"
-    assert state["packets"][0]["status"] == "APPROVED"
+    assert state["packets"][0]["status"] in {"APPROVED", "COMPLETED"}
     assert state["packets"][-1]["authority_required"] == "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE"
 
     require_tokens(REQUIRED[0], ["LOCKED_UNCONSUMED", "No reverse write", "DISABLED_PENDING_RC_G4"])
@@ -83,7 +83,7 @@ def main() -> int:
     require_tokens(REQUIRED[5], ["R2 canonical", "C1 formulas, contracts, schemas, records, releases or selectors", "cycle_guard: REQUIRED"])
     require_tokens(REQUIRED[12], ["Live route state: `DISABLED_PENDING_RC_G4`", "No C1 null explanation and C2 transition"])
 
-    print("PASS: RO3-G0 design canon, independent invariants and operator boundary are frozen")
+    print("PASS: RO3-G0 design canon, independent invariants and operator boundary remain frozen")
     return 0
 
 

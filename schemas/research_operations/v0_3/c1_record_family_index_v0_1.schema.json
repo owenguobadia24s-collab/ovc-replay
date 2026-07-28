@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-ro3-c1-record-family-index/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["family_id", "role", "release_id", "clock", "side", "schema_version", "formula_registry_id", "record_count", "writes"],
+  "properties": {
+    "family_id": {"type": "string", "pattern": "^RO3-C1-FAM-[0-9a-f]{20}$"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "release_id": {"type": "string", "minLength": 1},
+    "clock": {"enum": ["15M", "2H_A_L"]},
+    "side": {"enum": ["BID", "ASK"]},
+    "schema_version": {"type": "string"},
+    "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+    "record_count": {"type": "integer", "minimum": 1},
+    "writes": {"const": "NONE"}
+  }
+}

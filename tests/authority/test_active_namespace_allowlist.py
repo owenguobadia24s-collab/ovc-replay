@@ -14,6 +14,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.opt_b.c2",
     "ovc.research_operations",
     "ovc.research_operations.v0_2",
+    "ovc.research_operations.v0_3",
     "ovc.research_operations.pattern_discovery",
 }
 
