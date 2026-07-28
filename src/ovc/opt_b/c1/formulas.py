@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from decimal import Decimal
+from decimal import Decimal, localcontext
 
 from .models import SourceBar
 
@@ -24,16 +24,18 @@ def calculate_wick_balance(
     lower_wick_abs: Decimal,
     range_abs: Decimal,
 ) -> Decimal | None:
-    """Return the frozen C1 wick-balance formula.
+    """Return the frozen C1 wick-balance formula at release precision.
 
     The formula registry defines wick balance as upper-wick share minus
-    lower-wick share.  Keeping this as one callable prevents the fixture,
-    replay and prospective-compute paths from acquiring independent signs.
+    lower-wick share. Keeping this as one callable prevents fixture, replay
+    and prospective-compute paths from acquiring independent signs.
     """
 
     if range_abs == 0:
         return None
-    return (upper_wick_abs - lower_wick_abs) / range_abs
+    with localcontext() as context:
+        context.prec = 34
+        return (upper_wick_abs - lower_wick_abs) / range_abs
 
 
 def calculate(current: SourceBar, prior: SourceBar | None, prior_reason: str | None) -> tuple[dict[str, str | None], dict[str, str], dict[str, str]]:
