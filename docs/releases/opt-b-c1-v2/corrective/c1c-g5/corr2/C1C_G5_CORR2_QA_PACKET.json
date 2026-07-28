@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-c1c-g5-corr2-qa-packet/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "packet_id": "C1C-G5-CORR2",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "baseline_commit": "8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b",
+  "branch": "build/c1c-g5-corr2-review-closure",
+  "qa_status": "QA_REVIEW_PENDING_CI",
+  "recommended_packet_decision": "PASS_SUBJECT_TO_REQUIRED_CHECKS",
+  "acceptance_conditions": [
+    "Exact two-object identity is frozen and a third or changed candidate is rejected.",
+    "Queue, candidate-detail, fingerprint and source-lineage evidence references resolve to the same candidate.",
+    "Disposition-specific fields fail closed for accepted, deferred and rejected outcomes.",
+    "The four non-deferred structured-v2 decisions are preserved by canonical hash.",
+    "No machine replay, provider access, selector, release, R2, Validation or canonical append path exists.",
+    "Focused and complete repository tests pass.",
+    "All new JSON schemas parse and remain closed.",
+    "No unresolved review or blocking warning remains within implementation scope."
+  ],
+  "planned_tests": [
+    "tests.research_operations.pattern_discovery.test_c1c_g5_corr2_review_closure",
+    "tests.research_operations.pattern_discovery.test_c1c_g5_corr2_console",
+    "complete repository unittest discovery",
+    "schema parse and authority guards"
+  ],
+  "tests": [],
+  "warnings": [
+    "Operator-local Ed25519 signing and human re-review remain intentionally unavailable to CI."
+  ],
+  "blocking_issues": [],
+  "authority": {
+    "second_machine_replay": "DENIED_NOT_REQUIRED",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "Revert only the bounded CORR2 implementation packet through a new non-destructive commit while preserving all signed external evidence and the immutable machine run.",
+  "next_boundary": "OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_AFTER_IMPLEMENTATION_MERGE"
+}
