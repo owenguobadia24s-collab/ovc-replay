@@ -79,16 +79,21 @@ def build_exact_evidence_context(
         "price_side",
         "trigger_first_valid_at",
         "primary_trigger_reason",
-        "quality_state",
         "fingerprint_id",
     )
     missing_queue = [field for field in required_queue_fields if queue.get(field) in (None, "")]
     if missing_queue:
         raise Corr2EvidenceError(f"CORR2_QUEUE_CONTEXT_INCOMPLETE:{','.join(missing_queue)}")
+
+    queue_fingerprint_id = str(queue.get("fingerprint_id") or "")
+    fingerprint_id = str(fingerprint.get("fingerprint_id") or "")
+    lineage_fingerprint_id = str(lineage.get("fingerprint_id") or "")
+    if not fingerprint_id or queue_fingerprint_id != fingerprint_id or lineage_fingerprint_id != fingerprint_id:
+        raise Corr2EvidenceError("CORR2_FINGERPRINT_LINEAGE_IDENTITY_MISMATCH")
+    if not lineage.get("release_id") or not lineage.get("manifest_id"):
+        raise Corr2EvidenceError("CORR2_SOURCE_RELEASE_MANIFEST_IDENTITY_MISSING")
     if not lineage.get("c2_record_ids"):
         raise Corr2EvidenceError("CORR2_SOURCE_LINEAGE_RECORD_IDS_MISSING")
-    if not lineage.get("fingerprint_id"):
-        raise Corr2EvidenceError("CORR2_SOURCE_LINEAGE_FINGERPRINT_ID_MISSING")
 
     return {
         "schema": "ovc-c1c-g5-corr2-exact-evidence-context/v1",
@@ -107,12 +112,12 @@ def build_exact_evidence_context(
             "trigger_first_valid_at": queue.get("trigger_first_valid_at"),
             "primary_trigger_reason": queue.get("primary_trigger_reason"),
             "quality_state": queue.get("quality_state"),
-            "fingerprint_id": queue.get("fingerprint_id"),
+            "fingerprint_id": queue_fingerprint_id,
             "nearest_cluster_id": queue.get("nearest_cluster_id"),
             "nearest_cluster_distance": queue.get("nearest_cluster_distance"),
         },
         "fingerprint_context": {
-            "fingerprint_id": fingerprint.get("fingerprint_id"),
+            "fingerprint_id": fingerprint_id,
             "fingerprint_version": fingerprint.get("fingerprint_version"),
             "state_path": fingerprint.get("state_path"),
             "transition_path": fingerprint.get("transition_path"),
@@ -123,7 +128,7 @@ def build_exact_evidence_context(
             "release_id": lineage.get("release_id"),
             "manifest_id": lineage.get("manifest_id"),
             "c2_record_ids": list(lineage.get("c2_record_ids", ())),
-            "fingerprint_id": lineage.get("fingerprint_id"),
+            "fingerprint_id": lineage_fingerprint_id,
             "fingerprint_version": lineage.get("fingerprint_version"),
         },
         "authority": {
