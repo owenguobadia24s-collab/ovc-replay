@@ -27,14 +27,14 @@ candidate_releases:
   discovery:
     release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
     manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
-    status: PLANNED_LOCAL_ONLY
+    status: BUILDING_LOCAL_ONLY
   development:
     release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
     manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1
-    status: PLANNED_LOCAL_ONLY
+    status: BUILDING_LOCAL_ONLY
 work_packets:
   - packet_id: C1C-WP1
-    status: APPROVED
+    status: COMPLETED
     prerequisites: [C1C-G0_PASS]
     authority_required: RATIFIED_CORRECTIVE_PROGRAMME
     authority_delta: IMPLEMENTATION_RECONCILIATION_AND_AUDIT_TOOLING
@@ -47,31 +47,32 @@ work_packets:
     qa_result: PASS
     qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_WP1_QA_EVIDENCE.json
     decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
-    merge_commit: null
+    merge_commit: 1142abd2010b92b33e56bccc23e05ccd8bed1320
     blockers: []
     next_packet: C1C-WP2
   - packet_id: C1C-WP2
-    status: READY
+    status: RUNNING
     prerequisites: [C1C-G1_APPROVED, C1C_WP1_MERGED]
     authority_required: RATIFIED_CORRECTIVE_PROGRAMME
     authority_delta: LOCAL_IMMUTABLE_CANDIDATES_AND_ASSURANCE
-    baseline_commit: null
+    baseline_commit: 1142abd2010b92b33e56bccc23e05ccd8bed1320
     branch: build/c1-wick-balance-corrective-wp2
     candidate_commit: null
     tests: []
     qa_packet: null
     decision_record: null
     merge_commit: null
-    blockers: [C1C_WP1_MERGE_PENDING]
+    blockers: []
     next_gate: C1C-G3_G4_G5_OPERATOR_PACKET
 gates:
   - gate_id: C1C-G1
     owner: DELEGATED
     auto_ratifiable: true
-    status: APPROVED
+    status: COMPLETED
     decision: PASS
     tested_head: c1500d383aa5069a216d311b3017f859cfc73a85
     workflow_run: 30368890403
+    merge_commit: 1142abd2010b92b33e56bccc23e05ccd8bed1320
     decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
   - gate_id: C1C-G2
     owner: DELEGATED
