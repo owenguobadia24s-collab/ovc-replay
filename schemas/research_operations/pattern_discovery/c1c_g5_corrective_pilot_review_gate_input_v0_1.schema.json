@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_gate_input_v0_1.schema.json",
+  "title": "C1C-G5 Corrective Pilot Review Gate Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "gate_id", "pilot_run_id", "pilot_namespace", "active_c2_release_id",
+    "active_c2_manifest_id", "selector_id", "machine_rerun_valid",
+    "structured_review_v2_complete", "structured_review_receipt_file_sha256",
+    "structured_defect_ledger_file_sha256", "signed_structured_inventory_file_sha256",
+    "defect_count", "contract_changes_required", "second_machine_replay_required",
+    "operator_approval_required", "allowed_decisions", "pilot_only",
+    "promotion_eligibility", "canonical_append", "status"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corrective-pilot-review-gate-input/v2"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "pilot_namespace": {"const": "PD.PILOT.GBPUSD.20260622_20260625.v2"},
+    "active_c2_release_id": {"const": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2"},
+    "active_c2_manifest_id": {"const": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1"},
+    "selector_id": {"const": "SELECTOR.OPT-B.C2.GBPUSD.v2"},
+    "machine_rerun_valid": {"const": true},
+    "structured_review_v2_complete": {"const": true},
+    "structured_review_receipt_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "structured_defect_ledger_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signed_structured_inventory_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "defect_count": {"type": "integer", "minimum": 0},
+    "contract_changes_required": {"type": "boolean"},
+    "second_machine_replay_required": {"const": false},
+    "operator_approval_required": {"const": true},
+    "allowed_decisions": {"const": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"]},
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_append": {"const": "DENIED"},
+    "status": {"const": "C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_INPUT_READY"}
+  }
+}
