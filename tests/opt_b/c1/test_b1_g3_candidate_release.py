@@ -11,6 +11,7 @@ DECISION = ROOT / "docs/releases/opt-b-c1-v2/b1-g3/B1_G3_OPERATOR_DECISION.md"
 RELEASES = ROOT / "registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml"
 SELECTORS = ROOT / "registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml"
 WP5 = ROOT / "docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json"
+CORRECTIVE = ROOT / "docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json"
 
 
 class B1G3CandidateReleaseTests(unittest.TestCase):
@@ -45,7 +46,7 @@ class B1G3CandidateReleaseTests(unittest.TestCase):
             "25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc",
         )
 
-    def test_historical_gate_is_preserved_after_later_shadow_activation(self) -> None:
+    def test_historical_gate_is_preserved_after_later_selector_progression(self) -> None:
         gate = json.loads(GATE.read_text(encoding="utf-8"))
         releases = RELEASES.read_text(encoding="utf-8")
         selectors = SELECTORS.read_text(encoding="utf-8")
@@ -60,9 +61,18 @@ class B1G3CandidateReleaseTests(unittest.TestCase):
         )
         self.assertEqual(releases.count("authority_state: SHADOW"), 2)
         self.assertEqual(releases.count("publication_status: PUBLISHED_REMOTE_VERIFIED"), 2)
-        self.assertIn("state: SHADOW", selectors)
-        self.assertEqual(selectors.count("selector_state: SHADOW"), 2)
-        self.assertEqual(selectors.count("selector_state: NONE"), 1)
+        if CORRECTIVE.exists():
+            transaction = json.loads(CORRECTIVE.read_text(encoding="utf-8"))
+            self.assertTrue(transaction["atomic_on_main_merge"])
+            self.assertIn("state: ACTIVE", selectors)
+            self.assertEqual(selectors.count("selector_state: ACTIVE"), 2)
+            self.assertEqual(selectors.count("selector_state: NONE"), 1)
+            self.assertIn("OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2", selectors)
+            self.assertIn("OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2", selectors)
+        else:
+            self.assertIn("state: SHADOW", selectors)
+            self.assertEqual(selectors.count("selector_state: SHADOW"), 2)
+            self.assertEqual(selectors.count("selector_state: NONE"), 1)
 
     def test_operator_decision_names_sequence_and_next_gate(self) -> None:
         decision = DECISION.read_text(encoding="utf-8")
