@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-pd-g5p-pass-upstream-reconciliation-blocker/v1",
+  "gate_id": "PD-G5P",
+  "gate_iteration": 2,
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE PD-G5P PASS",
+  "decided_on": "2026-07-28",
+  "status": "BLOCKED_DECISION_RECORDED_AUTHORITY_NOT_EFFECTIVE",
+  "reviewed_gate_head": "2510dbf66794db7fc98476eb253863d8721088d8",
+  "reviewed_exact_source": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+  "blocking_main_commit": "0c687101e031b404b3994c8bb96d65b177f97743",
+  "blocking_programme": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "blocking_gate": "C1C-G5",
+  "blocker_id": "C1C-G5-BLOCK-001",
+  "conflict": {
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "active_c2_selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "superseded_pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "required_corrective_pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "required_corrective_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+    "reason": "The reviewed PD-G5P delta is exactly bound to C2 v1. Applying it after the C2 v2 selector transaction would either use a superseded source or silently expand authority to a new release and selector."
+  },
+  "decision_effect": {
+    "operator_pass_recorded": true,
+    "reviewed_delta_effective": false,
+    "contract_activation": "DENIED",
+    "identity_reset_activation": "DENIED",
+    "pd_wp5_canonical_packet": "NOT_AUTHORISED",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED"
+  },
+  "smallest_lawful_resolution": [
+    "Complete C1C-G5-BLOCK-001 using the operator-local accepted source root, private Ed25519 key and human review.",
+    "Return pilot-run.json, output-manifest.json, pilot-review-receipt.json, pilot-defect-ledger.json, signed-pilot-evidence-inventory.json and pd-g5p-gate-input.json.",
+    "Prepare a superseding PD-G5P gate exactly bound to C2 v2.",
+    "Obtain a new explicit operator decision for the changed exact source and selector binding."
+  ],
+  "retained_authority": {
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "active_novelty_ranking": "NONE",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "PRESERVE_PASS_INSTRUCTION_AND_GATE_EVIDENCE_KEEP_C2_V2_SELECTOR_EFFECTIVE_KEEP_V1_PILOT_SUPERSEDED_AND_ALL_CANONICAL_AUTHORITY_DENIED"
+}
