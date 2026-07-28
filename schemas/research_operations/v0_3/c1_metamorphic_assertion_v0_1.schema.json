@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_metamorphic_assertion_v0_1",
+  "title": "C1MetamorphicAssertion v0.1",
+  "type": "object",
+  "required": [
+    "primitive_id", "field_name", "transform_id", "expectation",
+    "status", "detail", "assertion_id"
+  ],
+  "properties": {
+    "primitive_id": {"type": "string", "pattern": "^C1-[A-Z0-9-]+\\.v0\\.1$"},
+    "field_name": {"type": "string", "minLength": 1},
+    "transform_id": {"enum": [
+      "PRICE_TRANSLATION", "PRICE_REFLECTION", "UP_DOWN_REVERSAL",
+      "WICK_SWAP_REFLECTION", "POSITIVE_SCALE", "ZERO_RANGE",
+      "REMOVE_CONTIGUOUS_PRIOR", "CANONICAL_REORDER"
+    ]},
+    "expectation": {"type": "string", "minLength": 1},
+    "status": {"enum": ["PASS", "FAIL"]},
+    "detail": {"type": "string"},
+    "assertion_id": {"type": "string", "pattern": "^ro3-c1-metamorphic-assertion:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
