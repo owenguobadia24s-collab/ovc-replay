@@ -5,7 +5,7 @@ source_sha256: 03a4c602026950f3a496f6bf2085c378a62292090d334f3b0ea2f17f6463a0aa
 baseline_commit: 3c0785ddb571a4af6de4bf5756a1dfae7e2d3557
 owner: RESEARCH_OPERATIONS
 status: APPROVED
-current_authority: PD_G5P_DEFERRED_PD_WP5_CORR1_AUTHORISED
+current_authority: PD_WP5_CORR1_APPROVED_PD_G5P_RETURN_PENDING
 live_triage_authority: GENUINE_LIVE_PROSPECTIVE_DEFERRED_TO_RPS_LIVE_G1
 active_source_binding_id: RPS.BINDING.32fb3003efa072916c11e907
 active_signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
@@ -99,7 +99,7 @@ objects:
     owner: RESEARCH_OPERATIONS
     canonical: false
     append_only: true
-    implementation_status: PILOT_NAMESPACE_SIGNED_REVIEW_COMPLETE_CORRECTION_SPEC_PENDING
+    implementation_status: PILOT_NAMESPACE_SIGNED_REVIEW_COMPLETE_CORRECTION_V2_APPROVED
     write_authority: OPERATOR_APPROVED_PILOT_ONLY
   - id: AppendRequest
     owner: RESEARCH_OPERATIONS
@@ -226,15 +226,23 @@ work_packets:
     next_packet: PD-WP5-CORR1
     next_gate: PD-G5P
   - packet_id: PD-WP5-CORR1
-    status: READY
+    status: APPROVED
     prerequisites: [PD-G5P_DEFER_RECORDED]
     authority_required: NONE
     authority_delta: VERSIONED_REVIEW_WORKFLOW_CONSOLE_AND_EVIDENCE_PRESENTATION_CORRECTION_SPECIFICATION_ONLY
-    branch: null
-    candidate_commit: null
-    tests: []
-    qa_packet: null
-    decision_record: null
+    baseline_commit: 02b123fb923feabf1c7d71a1ce901e850e57362f
+    branch: build/pd-wp5-corr1
+    pull_request: 130
+    candidate_commit: 2b8f8cee6825781a5f2b67af8f4a00173491c26c
+    tests: [GitHub_Actions_30374928283, GitHub_Actions_30374929201]
+    qa_result: PASS
+    qa_packet: docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_QA_PACKET.json
+    decision: PASS
+    decision_authority: DELEGATED_AUTO_EXECUTABLE
+    decision_record: docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_DELEGATED_DECISION.md
+    second_pilot_replay_recommendation: NOT_REQUIRED
+    second_pilot_replay_authorised: false
+    canonical_discovery_authorised: false
     merge_commit: null
     blockers: []
     next_gate: PD-G5P
@@ -242,7 +250,7 @@ rps_enablement:
   plan_id: OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1
   plan_status: RATIFIED
   baseline_commit: 979aa574a2b29e2f298ee3718c8cbc3588c6a813
-  current_packet: PD-WP5-CORR1
+  current_packet: PD-G5P
   next_operator_gate: PD-G5P
   prospective_source_binding_required: true
   real_prospective_source_available: true
