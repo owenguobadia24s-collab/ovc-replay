@@ -135,9 +135,10 @@ class PdG5pCorrectionReturnTests(unittest.TestCase):
         self.assertEqual(identity["pilot_identity_reuse"], "DENIED")
         self.assertFalse(identity["canonical_run_authorised"])
         contract = CONTRACT.read_text(encoding="utf-8")
-        self.assertIn("CANDIDATE", contract)
-        self.assertIn("CANONICAL_DISCOVERY", contract)
-        self.assertIn("OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1", contract)
+        self.assertIn("CANDIDATE_ONLY_NOT_AUTHORISED", contract)
+        self.assertIn("No pilot candidate, fingerprint, cluster, medoid, assignment, family or evidence identity may be reused", contract)
+        self.assertIn("canonical Discovery processing", contract)
+        self.assertIn("Activation requires a new explicit operator decision", contract)
 
     def test_parent_and_programme_state_return_to_gate(self) -> None:
         parent = load(PARENT_STATE)
