@@ -16,7 +16,10 @@ ZERO_RANGE_NULL_FIELDS = (
 def _s(value: Decimal) -> str:
     if value == 0:
         return "0"
-    return format(value.normalize(), "f")
+    rendered = format(value, "f")
+    if "." in rendered:
+        rendered = rendered.rstrip("0").rstrip(".")
+    return rendered
 
 
 def calculate_wick_balance(
