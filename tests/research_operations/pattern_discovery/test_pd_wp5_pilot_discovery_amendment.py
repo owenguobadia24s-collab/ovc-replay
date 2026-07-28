@@ -44,22 +44,34 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
         self.assertEqual(gate["signing_binding_id"], "RPS.SIGNING.50092c28981fef08f53a6cb5")
         self.assertEqual(gate["operator_id"], "OVC.OPERATOR.PRIMARY.LOCAL.V1")
 
-    def test_pilot_packet_returns_to_operator_gate_after_corr1(self) -> None:
+    def test_operator_pass_is_recorded_but_c2_v2_reconciliation_blocks_continuation(self) -> None:
         state = load(PD_STATE)
-        self.assertEqual(state["packet_status"], "GATE_READY")
-        self.assertEqual(state["packet_phase"], "PD_WP5_CORR1_COMPLETED_PD_G5P_CORRECTION_RETURN_GATE_READY")
-        self.assertEqual(state["authority_required"], "PD_G5P_OPERATOR_DECISION_CANONICAL_DISCOVERY")
-        self.assertTrue(state["operator_approval_required"])
-        self.assertEqual(state["decision"], "DEFER")
+        self.assertEqual(state["packet_status"], "BLOCKED")
+        self.assertEqual(state["packet_phase"], "PD_G5P_PASS_RECORDED_BLOCKED_BY_C1C_G5_C2_V2_CORRECTIVE_RERUN")
+        self.assertEqual(
+            state["authority_required"],
+            "C1C_G5_CORRECTIVE_PILOT_COMPLETION_AND_SUPERSEDING_PD_G5P_C2_V2_OPERATOR_DECISION",
+        )
+        self.assertFalse(state["operator_approval_required"])
+        self.assertEqual(state["decision"], "PASS")
         self.assertEqual(state["prior_gate_decision"]["decision"], "DEFER")
         self.assertEqual(state["correction_completion"]["status"], "COMPLETED")
         self.assertEqual(state["correction_completion"]["qa_result"], "PASS")
-        self.assertEqual(state["next_packet"], "PD-G5P-CORRECTION-RETURN")
-        self.assertEqual(state["next_gate"], "PD-G5P")
-        self.assertEqual(state["decision_record"], "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md")
-        self.assertEqual(state["second_pilot_replay"], "DENIED_NOT_REQUIRED")
-        self.assertEqual(state["current_gate"]["status"], "GATE_READY")
-        self.assertEqual(state["current_gate"]["recommended_decision"], "PASS")
+        self.assertEqual(state["next_packet"], "C1C-G5-CORRECTIVE-PILOT-RERUN")
+        self.assertEqual(state["next_gate"], "C1C-G5-CORRECTIVE-PILOT-REVIEW")
+        self.assertEqual(
+            state["decision_record"],
+            "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_DECISION.md",
+        )
+        self.assertEqual(
+            state["second_pilot_replay"],
+            "DENIED_UNDER_PD_G5P_V1_REVIEW_C1C_G5_CORRECTIVE_RERUN_SEPARATELY_APPROVED_AND_BLOCKED",
+        )
+        self.assertEqual(state["current_gate"]["status"], "BLOCKED")
+        self.assertEqual(state["current_gate"]["decision"], "PASS")
+        self.assertEqual(state["current_gate"]["decision_effect"], "NOT_EFFECTIVE_UPSTREAM_C2_V2_SUPERSESSION")
+        self.assertEqual(state["active_c2_model_release_id"], "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2")
+        self.assertEqual(state["pilot_lineage_disposition"], "SUPERSEDED_NONCANONICAL_LINEAGE_IDENTITY")
 
     def test_pilot_outputs_are_non_promotable_and_noncanonical(self) -> None:
         gate = load(PD_G4B_STATE)
