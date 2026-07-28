@@ -81,6 +81,7 @@ class WickBalanceCorrectiveTests(unittest.TestCase):
                 "wick_balance": "-0.1428571428571428571428571428571429",
             },
         }
+        encoded = (json.dumps(record, sort_keys=True) + "\n").encode("utf-8")
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             discovery = root / "discovery/records/15M/BID"
@@ -88,8 +89,9 @@ class WickBalanceCorrectiveTests(unittest.TestCase):
             discovery.mkdir(parents=True)
             development.mkdir(parents=True)
             for target in (discovery / "a.jsonl.gz", development / "b.jsonl.gz"):
-                with gzip.open(target, "wt", encoding="utf-8", mtime=0) as handle:
-                    handle.write(json.dumps(record, sort_keys=True) + "\n")
+                with target.open("wb") as raw:
+                    with gzip.GzipFile(filename="", fileobj=raw, mode="wb", mtime=0) as handle:
+                        handle.write(encoded)
             output = root / "audit.json"
             subprocess.run(
                 [
