@@ -6,7 +6,8 @@
   "additionalProperties": false,
   "required": [
     "schema", "plan_id", "plan_version", "amendment_id", "gate_id", "gate_title",
-    "gate_status", "decision_authority", "operator_approval_required", "allowed_decisions",
+    "gate_status", "decision", "decision_authority", "operator_approval_required",
+    "operator_approval_command", "approved_on", "approved_gate_ready_head", "allowed_decisions",
     "baseline_main", "branch", "authority_delta", "research_role", "operation_mode",
     "operation_limit", "source_slice_id", "source_coverage_state", "source_manifest_sha256",
     "compute_run_id", "output_manifest_sha256", "source_binding_id",
@@ -16,7 +17,7 @@
     "canonical_identity_namespace_reuse", "identity_reset_before_canonical",
     "pilot_signed_evidence_capture", "canonical_append", "live_prospective_relabelling",
     "permitted_corrections", "outcome_selected_tuning", "rps_g4a_status", "future_live_gate",
-    "next_gate", "retained_prohibitions", "qa_result", "qa_packet", "gate_packet",
+    "next_packet", "next_gate", "retained_prohibitions", "qa_result", "qa_packet", "gate_packet",
     "tested_candidate_head", "pull_request", "tests", "decision_record", "rollback"
   ],
   "properties": {
@@ -26,9 +27,13 @@
     "amendment_id": {"const": "PD-WP5-PILOT-DISCOVERY-AMENDMENT-0.1"},
     "gate_id": {"const": "PD-G4B"},
     "gate_title": {"const": "Pilot Discovery Contract Amendment"},
-    "gate_status": {"enum": ["GATE_READY", "APPROVED", "DEFERRED", "BLOCKED", "QUARANTINED", "SUPERSEDED", "COMPLETED"]},
+    "gate_status": {"const": "APPROVED"},
+    "decision": {"const": "PASS"},
     "decision_authority": {"const": "OPERATOR"},
-    "operator_approval_required": {"type": "boolean"},
+    "operator_approval_required": {"const": false},
+    "operator_approval_command": {"const": "OVC APPROVE PD-G4B"},
+    "approved_on": {"type": "string", "pattern": "^20[0-9]{2}-[0-9]{2}-[0-9]{2}$"},
+    "approved_gate_ready_head": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "allowed_decisions": {"type": "array", "const": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"]},
     "baseline_main": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "branch": {"const": "gate/pd-g4b-pilot-discovery-amendment"},
@@ -65,11 +70,12 @@
     "rps_g4a_status": {"const": "SUPERSEDED_FOR_PILOT_DISCOVERY"},
     "future_live_gate": {"const": "RPS-LIVE-G1"},
     "future_live_gate_status": {"const": "DEFERRED_NOT_AUTHORISED"},
+    "next_packet": {"const": "PD-WP5-PILOT"},
     "next_gate": {"const": "PD-G5P"},
     "next_gate_title": {"const": "Pilot Discovery Operations Acceptance"},
     "canonical_discovery_after_pass": {"const": "PD-WP5-CANONICAL"},
     "retained_prohibitions": {"type": "array", "minItems": 20, "uniqueItems": true, "items": {"type": "string"}},
-    "qa_result": {"const": "PASS_RECOMMEND_OPERATOR_AMENDMENT"},
+    "qa_result": {"const": "PASS_OPERATOR_APPROVED"},
     "qa_packet": {"type": "string"},
     "gate_packet": {"type": "string"},
     "tested_candidate_head": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
@@ -78,7 +84,7 @@
     "pilot_amendment_job": {"type": "integer"},
     "historical_supersession_job": {"type": "integer"},
     "canonical_test_job": {"type": "integer"},
-    "decision_record": {"type": ["string", "null"]},
+    "decision_record": {"const": "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_OPERATOR_DECISION.md"},
     "rollback": {"type": "string"}
   }
 }
