@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/c1c_g5_corrective_review_defect_ledger_v0_1.schema.json",
+  "title": "C1C-G5 Structured Corrective Review Defect Ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "gate_id", "pilot_run_id", "pilot_namespace",
+    "source_review_receipt_v2_file_sha256", "defects", "defect_count",
+    "contract_changes_required", "pilot_only", "promotion_eligibility",
+    "canonical_append", "status", "ledger_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corrective-review-defect-ledger/v2"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "pilot_namespace": {"const": "PD.PILOT.GBPUSD.20260622_20260625.v2"},
+    "source_review_receipt_v2_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "defects": {"type": "array", "uniqueItems": true, "items": {"type": "object"}},
+    "defect_count": {"type": "integer", "minimum": 0},
+    "contract_changes_required": {"type": "boolean"},
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_append": {"const": "DENIED"},
+    "status": {"enum": ["STRUCTURED_V2_REVIEW_COMPLETE_WITH_FINDINGS", "STRUCTURED_V2_REVIEW_COMPLETE_NO_FINDINGS"]},
+    "ledger_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
