@@ -9,7 +9,7 @@ on:
       - docs/releases/opt-b-c1-v2/corrective/c1c-g3/**
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 jobs:
@@ -71,6 +71,25 @@ jobs:
             c1c-g3-failed.log
           if-no-files-found: error
           retention-days: 90
+
+      - name: Persist monitored-run state on bounded branch
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p docs/qa/c1c-g3-monitor
+          cp c1c-g3-monitored-run.json docs/qa/c1c-g3-monitor/C1C_G3_MONITORED_RUN.json
+          cp c1c-g3-failed.log docs/qa/c1c-g3-monitor/C1C_G3_FAILED_LOG.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/qa/c1c-g3-monitor
+          if git diff --cached --quiet; then
+            echo 'Monitored-run state unchanged'
+          else
+            git diff --cached --check
+            git commit -m 'C1C-G3: persist monitored publication execution state'
+            git push origin HEAD:${TARGET_BRANCH}
+          fi
 
       - name: Verify committed remote-verification receipt
         if: steps.wait.outcome == 'success'
