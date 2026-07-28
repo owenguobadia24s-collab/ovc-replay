@@ -3,13 +3,17 @@
   "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
   "plan_version": "0.1",
   "packet_id": "PD-WP5-PILOT",
-  "status": "RUNNING",
+  "status": "BLOCKED",
+  "implementation_status": "IMPLEMENTED_AND_TESTED",
+  "execution_status": "BLOCKED_OPERATOR_LOCAL_EXTERNAL_ARTIFACT_EXECUTION_REQUIRED",
   "prerequisites": ["PD-G4B:APPROVED", "RPS-G4:APPROVED", "RPS-WP3:COMPLETED", "RPS-WP4:COMPLETED"],
   "authority_required": "PD-G4B_APPROVED",
   "authority_delta": "ONE_OPERATOR_SUPERVISED_PILOT_DISCOVERY_TIME_GATED_REPLAY_OPERATION",
   "baseline_commit": "c46d9620e242c047dd8e203f91a1b00b542a2a81",
+  "tested_base_commit": "8c243c009f30e453312861708afb784fe762c442",
   "branch": "build/pd-wp5-pilot-discovery",
-  "candidate_commit": null,
+  "pull_request": 121,
+  "candidate_commit": "0c52902ee35a009d301422e18cc268f280fa0290",
   "research_role": "PILOT_DISCOVERY",
   "operation_mode": "TIME_GATED_REPLAY",
   "operation_limit": 1,
@@ -46,13 +50,37 @@
     "console_projection": "apps/research_console/pattern_discovery.py",
     "pilot_run_schema": "schemas/research_operations/pattern_discovery/pd_wp5_pilot_run_v0_1.schema.json",
     "review_input_schema": "schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_input_v0_1.schema.json",
-    "pd_g5p_input_schema": "schemas/research_operations/pattern_discovery/pd_g5p_pilot_operations_gate_input_v0_1.schema.json"
+    "pd_g5p_input_schema": "schemas/research_operations/pattern_discovery/pd_g5p_pilot_operations_gate_input_v0_1.schema.json",
+    "operator_guide": "docs/releases/pattern-discovery-v0-3/pd-wp5-pilot/PD_WP5_PILOT_WINDOWS_OPERATOR_GUIDE.md"
   },
-  "tests": [],
-  "qa_packet": null,
+  "tests": [
+    {
+      "suite": "PD-WP5 Pilot Discovery implementation",
+      "workflow_run": 30353005206,
+      "job": 90254663557,
+      "result": "PASS"
+    },
+    {
+      "suite": "canonical repository tests",
+      "workflow_run": 30353005039,
+      "job": 90254662097,
+      "result": "PASS"
+    }
+  ],
+  "qa_result": "PASS_IMPLEMENTATION_BLOCKED_LOCAL_EXECUTION",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-pilot/PD_WP5_PILOT_QA_PACKET.md",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_OPERATOR_DECISION.md",
   "merge_commit": null,
-  "blockers": [],
+  "blockers": [
+    {
+      "code": "OPERATOR_LOCAL_EXTERNAL_ARTIFACT_EXECUTION_REQUIRED",
+      "reason": "GitHub cannot access OVC_EXTERNAL_ARTIFACT_ROOT or the operator private Ed25519 key; the exact June machine rehearsal and human Console review cannot be fabricated in CI.",
+      "required_environment": "clean local main with C:\\Users\\Owner\\OVIS\\ovc-replay-external-artifacts",
+      "preflight_command": ".\\scripts\\run_pd_wp5_pilot_discovery.ps1 preflight",
+      "execution_command": ".\\scripts\\run_pd_wp5_pilot_discovery.ps1 execute -Gate PD-G4B",
+      "smallest_lawful_resolution": "Integrate the tested runner, pull main locally, execute preflight and the one approved pilot, complete the generated operator review, finalize signed evidence, and return the compact PD-G5P files."
+    }
+  ],
   "next_gate": "PD-G5P",
   "next_packet_on_gate_pass": "PD-WP5-CANONICAL",
   "identity_reset_before_canonical": "REQUIRED",
