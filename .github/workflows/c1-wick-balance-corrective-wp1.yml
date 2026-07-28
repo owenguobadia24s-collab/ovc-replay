@@ -1,0 +1,80 @@
+name: C1 wick-balance corrective WP1
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  corrective-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Focused corrective tests
+        run: PYTHONPATH=src python -m unittest tests.opt_b.c1.test_c1_wick_balance_corrective -v
+
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+
+      - name: Frozen authority guard
+        run: |
+          set -euo pipefail
+          git diff --exit-code origin/main -- \
+            registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml \
+            contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md \
+            schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json \
+            registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml \
+            registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml \
+            registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml
+          grep -F 'formula: upper_wick_share - lower_wick_share' registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml
+          grep -F 'C1_IMPLEMENTATION_ID = "C1.IMPLEMENTATION.v0.2"' src/ovc/opt_b/c1/formulas.py
+          ! grep -F '(lower - upper) / r' src/ovc/opt_b/c1/formulas.py scripts/opt_b/run_c1_wp4_replay.py
+
+      - name: Emit compact QA evidence
+        run: |
+          mkdir -p c1c-wp1-evidence
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          files = [
+              'src/ovc/opt_b/c1/formulas.py',
+              'scripts/opt_b/run_c1_wp4_replay.py',
+              'scripts/opt_b/audit_c1_wick_balance.py',
+              'tests/opt_b/c1/test_c1_wick_balance_corrective.py',
+          ]
+          inventory = []
+          for name in files:
+              payload = Path(name).read_bytes()
+              inventory.append({'path': name, 'size_bytes': len(payload), 'sha256': hashlib.sha256(payload).hexdigest()})
+          evidence = {
+              'schema': 'ovc-c1c-wp1-qa-evidence/v1',
+              'programme_id': 'OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1',
+              'packet_id': 'C1C-WP1',
+              'gate_id': 'C1C-G1',
+              'status': 'PASS',
+              'qa_recommendation': 'PASS',
+              'formula_registry_id': 'C1.FORMULAS.v0.1',
+              'implementation_id': 'C1.IMPLEMENTATION.v0.2',
+              'formula_registry_mutation': False,
+              'selector_mutation': False,
+              'release_mutation': False,
+              'validation_consumption': 'LOCKED_UNCONSUMED',
+              'files': inventory,
+          }
+          Path('c1c-wp1-evidence/C1C_WP1_QA_EVIDENCE.json').write_text(json.dumps(evidence, indent=2, sort_keys=True) + '\n')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c1c-wp1-qa-evidence
+          path: c1c-wp1-evidence/**
+          retention-days: 90
