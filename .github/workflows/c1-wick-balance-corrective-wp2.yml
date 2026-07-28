@@ -101,15 +101,16 @@ jobs:
             schemas/research_operations/v0_3/c1_determinism_receipt_v0_1.schema.json \
             schemas/research_operations/v0_3/c1_metamorphic_assertion_v0_1.schema.json \
             schemas/research_operations/v0_3/c1_metamorphic_run_v0_1.schema.json \
-            tests/research_operations/v0_3/test_invariant_registry_independence.py \
-            tests/research_operations/v0_3/test_metamorphic.py
+            tests/research_operations/v0_3/test_invariant_registry_independence.py
 
       - name: Run pinned RO3 formula assurance against corrected implementation
         run: |
-          PYTHONPATH=src python scripts/research_operations/run_ro3_g3_assurance.py \
+          PYTHONPATH=src python scripts/research_operations/run_ro3_corrective_assurance.py \
             --output c1c-wp2-output/evidence/RO3_G3_CORRECTIVE_ASSURANCE_EVIDENCE.json \
             --require-pass
-          PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_*.py' -v
+          PYTHONPATH=src python -m unittest \
+            tests.research_operations.v0_3.test_metamorphic_corrective_retest \
+            tests.research_operations.v0_3.test_invariant_registry_independence -v
 
       - name: Canonical repository tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
