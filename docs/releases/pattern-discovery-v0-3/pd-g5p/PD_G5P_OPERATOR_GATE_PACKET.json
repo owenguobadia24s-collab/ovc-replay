@@ -5,6 +5,7 @@
   "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
   "plan_version": "0.1",
   "baseline_commit": "6c0aa91a6c51a86d39994ef363f8e29bb924764b",
+  "latest_lawful_main_commit": "1142abd2010b92b33e56bccc23e05ccd8bed1320",
   "candidate_commit": "b1bb92faaf300c8422581f33f75db96e0ab10a3d",
   "completed_packets": [
     "PD-G4B",
@@ -37,7 +38,8 @@
     "agent_write_authority": "NONE"
   },
   "proposed_delta_on_pass": "AUTHORISE_VERSIONED_FINAL_PD_WP5_CANONICAL_DISCOVERY_CONTRACT_AND_RELEASE_PD_WP5_CANONICAL_FOR_OPT_B_C2_GBPUSD_DISCOVERY_2021_2023_AFTER_COMPLETE_IDENTITY_RESET",
-  "proposed_delta_status": "NOT_GRANTED",
+  "proposed_delta_status": "DEFERRED_NOT_GRANTED",
+  "authority_granted_by_defer": "PD_WP5_CORR1_NON_ACTIVATING_CORRECTION_SPECIFICATION_ONLY",
   "acceptance_conditions": [
     {"condition": "ONE_PILOT_DISCOVERY_OPERATION_COMPLETED", "result": "PASS"},
     {"condition": "SIGNED_PILOT_EVIDENCE_CAPTURED", "result": "PASS"},
@@ -53,6 +55,13 @@
       "job": 90306722224,
       "result": "PASS",
       "tested_head": "b1bb92faaf300c8422581f33f75db96e0ab10a3d"
+    },
+    {
+      "suite": "PD-G5P latest-main merge verification",
+      "workflow_run": 30369976011,
+      "job": 90310962090,
+      "result": "PASS",
+      "tested_merge_candidate": "c96802c7da4722d97ea3d96f65fdb02c39561dac"
     }
   ],
   "qa_result": "DEFER_VERSIONED_CORRECTION_REQUIRED",
@@ -77,6 +86,7 @@
   "changed_files": [
     ".github/workflows/pd-g5p-pilot-operations-gate-ready.yml",
     "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md",
     "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json",
     "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json",
     "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/pilot-qa.json",
@@ -101,8 +111,12 @@
     "pilot_review_receipt_file_sha256": "2486d9f7097c434fd52d4d5fd0cd086df8117887b6bf4b70a9ef6cf50869ab81",
     "signed_pilot_evidence_inventory_file_sha256": "8953dfb1bbd4b04ab36018cc5af7de223ca60516f8cab444ec3cf453e0181f9a"
   },
-  "rollback": "REVERT_GATE_PACKET_BRANCH_PRESERVE_AND_SEAL_ALL_PILOT_EVIDENCE_KEEP_PD_G4B_APPROVED_KEEP_CANONICAL_DISCOVERY_DENIED",
+  "rollback": "REVERT_OPERATOR_DECISION_AND_CORRECTION_PACKET_PRESERVE_AND_SEAL_ALL_PILOT_EVIDENCE_KEEP_PD_G4B_APPROVED_KEEP_CANONICAL_DISCOVERY_AND_SECOND_REPLAY_DENIED",
   "recommended_decision": "DEFER",
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE PD-G5P DEFER",
+  "decided_on": "2026-07-28",
   "recommendation_reason": "Machine and evidence integrity pass, but operator review records material unresolved workflow and interface findings, contract changes are explicitly required, the final contract candidate is absent and no correction replay is authorised.",
   "exact_work_after_defer": [
     "Create PD-WP5-CORR1 as a non-activating correction-specification packet.",
@@ -114,7 +128,9 @@
     "Return to PD-G5P with a frozen final contract candidate and closed correction ledger."
   ],
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
-  "operator_approval_required": true,
-  "gate_status": "GATE_READY",
-  "decision_record": null
+  "operator_approval_required": false,
+  "gate_status": "COMPLETED",
+  "next_packet": "PD-WP5-CORR1",
+  "next_gate": "PD-G5P",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md"
 }
