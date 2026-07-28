@@ -82,276 +82,29 @@ jobs:
           name: c1c-development-2024-v2-local-candidate
           path: c1c-g3/development
 
-      - name: Verify local candidate bytes and identities
+      - name: Publish or reverify and materialise evidence
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p c1c-g3/output
-          python - <<'PY'
-          import hashlib
-          import json
-          from pathlib import Path
-
-          expected = {
-              'discovery': {
-                  'release_id': 'OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2',
-                  'manifest_id': 'MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1',
-                  'manifest_sha256': 'c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf',
-                  'record_count': 159892,
-                  'file_count': 144,
-              },
-              'development': {
-                  'release_id': 'OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2',
-                  'manifest_id': 'MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1',
-                  'manifest_sha256': 'e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f',
-                  'record_count': 52872,
-                  'file_count': 48,
-              },
-          }
-
-          def logical_sha(manifest):
-              body = {key: value for key, value in manifest.items() if key != 'manifest_sha256'}
-              raw = (json.dumps(body, sort_keys=True, separators=(',', ':'), ensure_ascii=True) + '\n').encode('utf-8')
-              return hashlib.sha256(raw).hexdigest()
-
-          verified = []
-          for role, exp in expected.items():
-              root = Path('c1c-g3') / role
-              manifest_path = root / 'manifest.json'
-              manifest_bytes = manifest_path.read_bytes()
-              manifest_file_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
-              manifest = json.loads(manifest_bytes)
-
-              for key in ('release_id', 'manifest_id', 'manifest_sha256', 'record_count', 'file_count'):
-                  if manifest[key] != exp[key]:
-                      raise SystemExit(f'{role} {key} mismatch: {manifest[key]!r}')
-              calculated_logical_sha = logical_sha(manifest)
-              if calculated_logical_sha != exp['manifest_sha256']:
-                  raise SystemExit(
-                      f"{role} logical manifest hash mismatch: expected={exp['manifest_sha256']} actual={calculated_logical_sha}"
-                  )
-              if manifest['formula_registry_id'] != 'C1.FORMULAS.v0.1':
-                  raise SystemExit(f'{role} formula registry mismatch')
-              if manifest['implementation_id'] != 'C1.IMPLEMENTATION.v0.2':
-                  raise SystemExit(f'{role} implementation identity mismatch')
-              if len(manifest['files']) != exp['file_count']:
-                  raise SystemExit(f'{role} file inventory length mismatch')
-
-              records = 0
-              payload_bytes = 0
-              seen = set()
-              for item in manifest['files']:
-                  rel = item['path']
-                  if rel in seen or not rel.startswith('records/'):
-                      raise SystemExit(f'{role} invalid or duplicate path: {rel}')
-                  seen.add(rel)
-                  path = root / rel
-                  data = path.read_bytes()
-                  if len(data) != item['size_bytes']:
-                      raise SystemExit(f'{role} size mismatch: {rel}')
-                  if hashlib.sha256(data).hexdigest() != item['sha256']:
-                      raise SystemExit(f'{role} hash mismatch: {rel}')
-                  records += int(item['record_count'])
-                  payload_bytes += len(data)
-              if records != exp['record_count']:
-                  raise SystemExit(f'{role} record cardinality mismatch: {records}')
-
-              verified.append({
-                  'role': role.upper(),
-                  'release_id': exp['release_id'],
-                  'manifest_id': exp['manifest_id'],
-                  'manifest_sha256': exp['manifest_sha256'],
-                  'manifest_file_sha256': manifest_file_sha256,
-                  'record_count': records,
-                  'record_file_count': exp['file_count'],
-                  'payload_bytes': payload_bytes,
-              })
-
-          Path('c1c-g3/output/C1C_G3_LOCAL_VERIFICATION.json').write_text(
-              json.dumps({'status': 'PASS', 'source_run_id': 30370847916, 'releases': verified}, indent=2, sort_keys=True) + '\n'
-          )
-          PY
-
-      - name: Collision-preflight, publish and full remote byte verification
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import hashlib
-          import json
-          import os
-          import subprocess
-          from datetime import datetime, timezone
-          from pathlib import Path
-
-          approved_manifest_sha = {
-              'DISCOVERY': 'c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf',
-              'DEVELOPMENT': 'e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f',
-          }
-          bucket = 'ovc_r2:ovc-evidence/canonical/releases'
-          releases = []
-          total_objects = 0
-          total_bytes = 0
-
-          def run(*args, capture=False):
-              if capture:
-                  return subprocess.check_output(args)
-              subprocess.run(args, check=True)
-
-          for role in ('discovery', 'development'):
-              root = Path('c1c-g3') / role
-              manifest_path = root / 'manifest.json'
-              manifest_bytes = manifest_path.read_bytes()
-              manifest_file_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
-              manifest = json.loads(manifest_bytes)
-              role_name = role.upper()
-              if manifest['manifest_sha256'] != approved_manifest_sha[role_name]:
-                  raise SystemExit(f'APPROVED_LOGICAL_MANIFEST_MISMATCH:{role_name}')
-
-              prefix = f"{bucket}/{manifest['release_id']}/{manifest['manifest_id']}"
-              listing_result = subprocess.run(
-                  ['rclone', 'lsf', '--recursive', '--s3-no-check-bucket', prefix],
-                  stdout=subprocess.PIPE,
-                  stderr=subprocess.PIPE,
-                  text=True,
-              )
-              if listing_result.returncode not in (0,):
-                  raise SystemExit(f'REMOTE_PREFLIGHT_ERROR:{role}:{listing_result.stderr.strip()}')
-              listing = {
-                  line.rstrip('/')
-                  for line in listing_result.stdout.splitlines()
-                  if line and not line.endswith('/')
-              }
-              expected_listing = {f"files/{item['path']}" for item in manifest['files']} | {'manifest.json'}
-              if listing:
-                  if listing != expected_listing:
-                      missing = sorted(expected_listing - listing)
-                      extra = sorted(listing - expected_listing)
-                      raise SystemExit(f"REMOTE_COLLISION:{role}:missing={missing[:5]}:extra={extra[:5]}")
-                  collision_state = 'EXACT_EXISTING_REVERIFY'
-              else:
-                  collision_state = 'ABSENT_PUBLISH'
-                  for item in manifest['files']:
-                      source = root / item['path']
-                      target = f"{prefix}/files/{item['path']}"
-                      run('rclone', 'copyto', '--immutable', '--s3-no-check-bucket', str(source), target)
-                  run('rclone', 'copyto', '--immutable', '--s3-no-check-bucket', str(manifest_path), f'{prefix}/manifest.json')
-
-              verified = []
-              for item in manifest['files']:
-                  remote = f"{prefix}/files/{item['path']}"
-                  data = run('rclone', 'cat', '--s3-no-check-bucket', remote, capture=True)
-                  digest = hashlib.sha256(data).hexdigest()
-                  if len(data) != item['size_bytes'] or digest != item['sha256']:
-                      raise SystemExit(f'REMOTE_BYTE_MISMATCH:{remote}')
-                  verified.append({'key': remote.split(':', 1)[1], 'size_bytes': len(data), 'sha256': digest})
-                  total_objects += 1
-                  total_bytes += len(data)
-
-              remote_manifest = f'{prefix}/manifest.json'
-              remote_manifest_bytes = run('rclone', 'cat', '--s3-no-check-bucket', remote_manifest, capture=True)
-              remote_manifest_file_sha256 = hashlib.sha256(remote_manifest_bytes).hexdigest()
-              if remote_manifest_bytes != manifest_bytes or remote_manifest_file_sha256 != manifest_file_sha256:
-                  raise SystemExit(f'REMOTE_MANIFEST_BYTE_MISMATCH:{remote_manifest}')
-              remote_manifest_logical = json.loads(remote_manifest_bytes)['manifest_sha256']
-              if remote_manifest_logical != approved_manifest_sha[role_name]:
-                  raise SystemExit(f'REMOTE_MANIFEST_LOGICAL_IDENTITY_MISMATCH:{remote_manifest}')
-
-              verified.append({
-                  'key': remote_manifest.split(':', 1)[1],
-                  'size_bytes': len(remote_manifest_bytes),
-                  'sha256': remote_manifest_file_sha256,
-                  'completion_marker': True,
-              })
-              total_objects += 1
-              total_bytes += len(remote_manifest_bytes)
-              releases.append({
-                  'role': role_name,
-                  'release_id': manifest['release_id'],
-                  'manifest_id': manifest['manifest_id'],
-                  'manifest_sha256': manifest['manifest_sha256'],
-                  'manifest_file_sha256': remote_manifest_file_sha256,
-                  'implementation_id': manifest['implementation_id'],
-                  'formula_registry_id': manifest['formula_registry_id'],
-                  'record_count': manifest['record_count'],
-                  'record_file_count': manifest['file_count'],
-                  'remote_object_count': len(verified),
-                  'collision_state': collision_state,
-                  'remote_verified': True,
-                  'objects': verified,
-              })
-
-          receipt = {
-              'schema': 'ovc-c1c-g3-remote-verification/v1',
-              'gate_id': 'C1C-G3',
-              'decision': 'PASS',
-              'status': 'PASS_FULL_REMOTE_BYTE_VERIFICATION',
-              'workflow_run_id': int(os.environ['GITHUB_RUN_ID']),
-              'workflow_commit': os.environ['GITHUB_SHA'],
-              'approval_merge_commit': os.environ['APPROVAL_MERGE'],
-              'source_candidate_workflow_run_id': int(os.environ['SOURCE_RUN_ID']),
-              'verified_at_utc': datetime.now(timezone.utc).isoformat(),
-              'bucket': 'ovc-evidence',
-              'prefix': 'canonical/releases/',
-              'publication_order': 'PAYLOAD_FIRST_MANIFEST_LAST',
-              'release_count': len(releases),
-              'remote_object_count': total_objects,
-              'remote_verified_bytes_including_manifests': total_bytes,
-              'releases': releases,
-              'c1_selector_change': 'NONE_PENDING_COORDINATED_C1C_G4_G5_TRANSACTION',
-              'c2_change': 'NONE_PENDING_C1C_G5',
-              'validation_consumption': 'LOCKED_UNCONSUMED',
-          }
-          Path('c1c-g3/output/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json').write_text(
-              json.dumps(receipt, indent=2, sort_keys=True) + '\n'
-          )
-          PY
-          grep -q 'PASS_FULL_REMOTE_BYTE_VERIFICATION' c1c-g3/output/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
-
-      - name: Materialise publication packet
-        shell: bash
-        run: |
-          set -euo pipefail
+          python scripts/opt_b/run_c1c_g3_publication.py \
+            --discovery-root c1c-g3/discovery \
+            --development-root c1c-g3/development \
+            --output-root c1c-g3/output \
+            --packet-dir docs/releases/opt-b-c1-v2/corrective/c1c-g3 \
+            --source-run-id "${SOURCE_RUN_ID}" \
+            --approval-merge-commit "${APPROVAL_MERGE}"
           python - <<'PY'
           import json
           from pathlib import Path
-
-          receipt = json.loads(Path('c1c-g3/output/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json').read_text())
-          target = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g3')
-          target.mkdir(parents=True, exist_ok=True)
-          (target / 'C1C_G3_REMOTE_VERIFICATION_RECEIPT.json').write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
-          lines = [
-              '# C1C-G3 — C1 v2 R2 publication and full remote verification',
-              '',
-              '**Decision:** `PASS`',
-              '',
-              f"- Workflow run: `{receipt['workflow_run_id']}`",
-              f"- Workflow commit: `{receipt['workflow_commit']}`",
-              f"- Source candidate run: `{receipt['source_candidate_workflow_run_id']}`",
-              f"- Remote objects verified: `{receipt['remote_object_count']}`",
-              f"- Remote bytes verified including manifests: `{receipt['remote_verified_bytes_including_manifests']}`",
-              '- Publication order: payload first, manifest completion marker last',
-              '- C1 selectors: unchanged pending coordinated C1C-G4/G5 transaction',
-              '- C2: unchanged pending C1C-G5',
-              '- Validation: `LOCKED_UNCONSUMED`',
-              '',
-              '## Releases',
-              '',
-              '| Role | Release | Manifest | Logical SHA-256 | File SHA-256 | Collision state | Objects |',
-              '|---|---|---|---|---|---|---:|',
-          ]
-          for item in receipt['releases']:
-              lines.append(
-                  f"| {item['role']} | `{item['release_id']}` | `{item['manifest_id']}` | `{item['manifest_sha256']}` | `{item['manifest_file_sha256']}` | {item['collision_state']} | {item['remote_object_count']} |"
-              )
-          lines += [
-              '',
-              'Rollback leaves the exact v2 releases immutable and inactive and retains the existing v1 selectors.',
-              '',
-              'Next: execute deterministic C2 v2 identity replay and remote verification under C1C-G5.',
-              '',
-          ]
-          (target / 'C1C_G3_PUBLICATION_PACKET.md').write_text('\n'.join(lines))
+          receipt=json.loads(Path('c1c-g3/output/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json').read_text())
+          assert receipt['gate_id']=='C1C-G3'
+          assert receipt['decision']=='PASS'
+          assert receipt['status']=='PASS_FULL_REMOTE_BYTE_VERIFICATION'
+          assert receipt['release_count']==2
+          assert receipt['remote_object_count']==194
+          assert all(item['remote_verified'] for item in receipt['releases'])
+          assert receipt['c1_selector_change']=='NONE_PENDING_COORDINATED_C1C_G4_G5_TRANSACTION'
+          assert receipt['validation_consumption']=='LOCKED_UNCONSUMED'
           PY
 
       - name: Run repository tests after packet generation
@@ -366,7 +119,9 @@ jobs:
           git add docs/releases/opt-b-c1-v2/corrective/c1c-g3
           git diff --cached --check
           git commit -m 'C1C-G3: publish exact C1 v2 releases and record remote verification'
-          git push origin HEAD:${GITHUB_REF_NAME}
+          git fetch origin "${GITHUB_REF_NAME}"
+          git merge --no-edit "origin/${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
 
       - name: Upload C1C-G3 execution evidence
         uses: actions/upload-artifact@v4
