@@ -18,6 +18,7 @@ STATE_PATH = ROOT / "registries/research_operations/pattern_discovery/PD_G5P_PIL
 PD_WP5_STATE_PATH = ROOT / "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
 REGISTRY_PATH = ROOT / "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
 SIGNING_PATH = ROOT / "docs/releases/prospective-source-v0-1/rps-wp4/evidence/operator-signing-binding.json"
+DECISION_PATH = GATE_ROOT / "PD_G5P_OPERATOR_DECISION.md"
 
 PILOT_RUN_ID = "PD.PILOT.RUN.0cc5a59ca751583f3e50091c"
 PILOT_NAMESPACE = "PD.PILOT.GBPUSD.20260622_20260625.v1"
@@ -27,6 +28,7 @@ BINDING_ID = "RPS.BINDING.32fb3003efa072916c11e907"
 ACCEPTANCE_ID = "RPS.REPLAY-ACCEPT.0844eddf74e144ced487cc48"
 SIGNING_BINDING_ID = "RPS.SIGNING.50092c28981fef08f53a6cb5"
 OPERATOR_ID = "OVC.OPERATOR.PRIMARY.LOCAL.V1"
+DECISION_RECORD = "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md"
 
 
 def canonical_bytes(value: object) -> bytes:
@@ -56,7 +58,7 @@ def exact_json(name: str) -> dict:
     return value
 
 
-class PDG5PGateReadyTest(unittest.TestCase):
+class PDG5PDecisionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.index = load_json(GATE_ROOT / "PD_G5P_COMPACT_EVIDENCE_INDEX.json")
@@ -65,10 +67,8 @@ class PDG5PGateReadyTest(unittest.TestCase):
         cls.state = load_json(STATE_PATH)
         cls.pd_wp5_state = load_json(PD_WP5_STATE_PATH)
         cls.signing = load_json(SIGNING_PATH)
-        cls.files = {
-            item["name"]: exact_json(item["name"])
-            for item in cls.index["files"]
-        }
+        cls.decision = DECISION_PATH.read_text(encoding="utf-8")
+        cls.files = {item["name"]: exact_json(item["name"]) for item in cls.index["files"]}
 
     def test_exact_original_bytes_match_index(self) -> None:
         self.assertEqual(self.index["repository_storage_encoding"], "BASE64_OF_EXACT_ORIGINAL_BYTES")
@@ -96,12 +96,6 @@ class PDG5PGateReadyTest(unittest.TestCase):
             "signed-pilot-evidence-inventory.json",
         ):
             self.assertEqual(self.files[name].get("compute_run_id"), RUN_ID, name)
-        for name in (
-            "pilot-run.json",
-            "output-manifest.json",
-            "pd-g5p-gate-input.json",
-            "signed-pilot-evidence-inventory.json",
-        ):
             self.assertEqual(self.files[name].get("source_binding_id"), BINDING_ID, name)
         self.assertEqual(self.files["pd-g5p-gate-input.json"]["signed_replay_acceptance_id"], ACCEPTANCE_ID)
         self.assertEqual(self.files["pd-g5p-gate-input.json"]["signing_binding_id"], SIGNING_BINDING_ID)
@@ -202,25 +196,39 @@ class PDG5PGateReadyTest(unittest.TestCase):
         self.assertTrue(defects["contract_changes_required"])
         self.assertEqual(defects["status"], "REVIEWED_VERSIONED_CORRECTION_REQUIRED")
 
-    def test_gate_is_operator_required_and_defer_recommended(self) -> None:
+    def test_operator_defer_is_recorded_and_corr1_is_next(self) -> None:
         gate_input = self.files["pd-g5p-gate-input.json"]
         self.assertTrue(gate_input["operator_approval_required"])
         self.assertTrue(gate_input["contract_changes_required"])
         self.assertEqual(gate_input["identity_reset_before_canonical"], "REQUIRED")
         self.assertEqual(gate_input["status"], "PD_G5P_EVIDENCE_CANDIDATE")
 
-        self.assertEqual(self.gate_packet["gate_status"], "GATE_READY")
+        self.assertEqual(self.gate_packet["gate_status"], "COMPLETED")
+        self.assertEqual(self.gate_packet["decision"], "DEFER")
         self.assertEqual(self.gate_packet["recommended_decision"], "DEFER")
-        self.assertEqual(self.gate_packet["proposed_delta_status"], "NOT_GRANTED")
-        self.assertIsNone(self.gate_packet["decision_record"])
+        self.assertEqual(self.gate_packet["proposed_delta_status"], "DEFERRED_NOT_GRANTED")
+        self.assertEqual(self.gate_packet["decision_record"], DECISION_RECORD)
+        self.assertFalse(self.gate_packet["operator_approval_required"])
+        self.assertEqual(self.gate_packet["next_packet"], "PD-WP5-CORR1")
         self.assertEqual(self.qa_packet["qa_recommendation"], "DEFER")
         self.assertEqual(self.qa_packet["operational_acceptance_result"], "DEFER_VERSIONED_CORRECTION_REQUIRED")
 
-        self.assertEqual(self.state["gate_status"], "GATE_READY")
-        self.assertEqual(self.state["recommended_decision"], "DEFER")
-        self.assertTrue(self.state["operator_approval_required"])
+        self.assertEqual(self.state["gate_status"], "COMPLETED")
+        self.assertEqual(self.state["decision"], "DEFER")
+        self.assertEqual(self.state["decision_record"], DECISION_RECORD)
+        self.assertFalse(self.state["operator_approval_required"])
         self.assertFalse(self.state["canonical_discovery_available"])
-        self.assertIsNone(self.state["decision_record"])
+        self.assertEqual(self.state["next_packet"], "PD-WP5-CORR1")
+
+        self.assertEqual(self.pd_wp5_state["packet_status"], "COMPLETED")
+        self.assertEqual(self.pd_wp5_state["decision"], "DEFER")
+        self.assertEqual(self.pd_wp5_state["next_packet"], "PD-WP5-CORR1")
+        self.assertEqual(self.pd_wp5_state["second_pilot_replay"], "DENIED")
+        self.assertEqual(self.pd_wp5_state["decision_record"], DECISION_RECORD)
+
+        self.assertIn("OVC APPROVE PD-G5P DEFER", self.decision)
+        self.assertIn("PD-WP5-CORR1", self.decision)
+        self.assertIn("a second Pilot Discovery operation or correction replay", self.decision)
 
     def test_authority_remains_fail_closed(self) -> None:
         for source in (self.files["pilot-run.json"], self.files["output-manifest.json"], self.files["pd-g5p-gate-input.json"]):
@@ -233,8 +241,10 @@ class PDG5PGateReadyTest(unittest.TestCase):
         self.assertEqual(self.pd_wp5_state["canonical_append"], "DENIED")
         self.assertEqual(self.pd_wp5_state["next_gate"], "PD-G5P")
         registry = REGISTRY_PATH.read_text(encoding="utf-8")
-        self.assertIn("current_authority: PILOT_DISCOVERY_OPERATION_COMPLETE_PD_G5P_DECISION_REQUIRED", registry)
-        self.assertIn("status: GATE_READY", registry)
+        self.assertIn("current_authority: PD_G5P_DEFERRED_PD_WP5_CORR1_AUTHORISED", registry)
+        self.assertIn("packet_id: PD-WP5-CORR1", registry)
+        self.assertIn("status: READY", registry)
+        self.assertIn("SECOND_PILOT_REPLAY_WITHOUT_OPERATOR_APPROVAL", registry)
         self.assertIn("canonical_append_enabled: false", registry)
         self.assertIn("future_live_gate_status: DEFERRED_NOT_AUTHORISED", registry)
 
