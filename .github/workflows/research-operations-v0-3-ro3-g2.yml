@@ -1,0 +1,78 @@
+name: RO3-G2 computability and non-activating comparison
+
+on:
+  pull_request:
+    paths:
+      - "contracts/research_operations/v0_3/RO3_COMPARISON_NON_ACTIVATION_CONTRACT_v0_1.md"
+      - "schemas/research_operations/v0_3/**"
+      - "registries/research_operations/v0_3/**"
+      - "fixtures/research_operations/v0_3/wp2_computability_and_diff_cases.json"
+      - "src/ovc/research_operations/v0_3/computability.py"
+      - "src/ovc/research_operations/v0_3/formula_diff.py"
+      - "src/ovc/research_operations/v0_3/__init__.py"
+      - "tests/research_operations/v0_3/test_computability.py"
+      - "tests/research_operations/v0_3/test_formula_diff.py"
+      - "tests/research_operations/v0_3/test_comparison_authority.py"
+      - "docs/releases/research-operations-foundation-v0-3/ro3-g2/**"
+      - ".github/workflows/research-operations-v0-3-ro3-g2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ro3-g2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run focused computability tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_computability -v
+      - name: Run focused formula comparison tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_formula_diff -v
+      - name: Run focused comparison authority tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_comparison_authority -v
+      - name: Capture canonical repository test result
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > ro3-g2-canonical.log 2>&1
+          status=$?
+          printf '%s\n' "$status" > ro3-g2-canonical.status
+          tail -n 240 ro3-g2-canonical.log
+          exit 0
+      - name: Upload canonical diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g2-canonical-diagnostics
+          path: |
+            ro3-g2-canonical.log
+            ro3-g2-canonical.status
+          if-no-files-found: error
+      - name: Require canonical suite PASS
+        run: test "$(cat ro3-g2-canonical.status)" = "0"
+      - name: Authority and presentation boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'NON_ACTIVATING_EVIDENCE_HEADER' contracts/research_operations/v0_3/RO3_COMPARISON_NON_ACTIVATION_CONTRACT_v0_1.md
+          grep -q 'ACKNOWLEDGEMENT_REQUIRED' schemas/research_operations/v0_3/non_activating_evidence_header_v0_1.schema.json
+          grep -q 'FROZEN_APPEND_ONLY' schemas/research_operations/v0_3/comparison_acknowledgement_v0_1.schema.json
+          grep -q 'SEPARATE_BANNERED_TRACE_ONLY' schemas/research_operations/v0_3/c1_affected_surface_v0_1.schema.json
+          grep -q 'LOCKED_UNCONSUMED' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          grep -q 'DISABLED_PENDING_RC_G4' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          ! grep -R --line-number -E 'selector_write|threshold_write|r2_write|formula_write|ACTIVE_VALIDATION' \
+            src/ovc/research_operations/v0_3/computability.py \
+            src/ovc/research_operations/v0_3/formula_diff.py
+      - name: Verify ratified gate packet when materialised
+        shell: bash
+        run: |
+          if test -f docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_GATE_PACKET.json; then
+            grep -q '"decision": "PASS"' docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_GATE_PACKET.json
+            grep -q '"qa_recommendation": "PASS"' docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_GATE_PACKET.json
+            test -f docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_DELEGATED_DECISION.md
+          fi
