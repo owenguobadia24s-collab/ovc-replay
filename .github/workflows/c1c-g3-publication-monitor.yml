@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Resolve exact push publication run
         id: resolve
         shell: bash
@@ -39,10 +40,40 @@ jobs:
           test -n "${run_id}" || { echo '::error::No C1C-G3 push publication run found'; exit 1; }
           echo "run_id=${run_id}" >> "${GITHUB_OUTPUT}"
           echo "Resolved C1C-G3 publication run ${run_id}"
-      - name: Wait for publication run and require PASS
+
+      - name: Wait for publication run
+        id: wait
+        continue-on-error: true
         shell: bash
         run: gh run watch "${{ steps.resolve.outputs.run_id }}" --repo "${GITHUB_REPOSITORY}" --exit-status
+
+      - name: Capture monitored-run diagnostics
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run view "${{ steps.resolve.outputs.run_id }}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --json databaseId,name,event,headBranch,headSha,status,conclusion,url,createdAt,updatedAt \
+            > c1c-g3-monitored-run.json
+          gh run view "${{ steps.resolve.outputs.run_id }}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --log-failed > c1c-g3-failed.log 2>&1 || true
+          cat c1c-g3-monitored-run.json
+
+      - name: Upload monitored-run diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c1c-g3-publication-monitor-diagnostics
+          path: |
+            c1c-g3-monitored-run.json
+            c1c-g3-failed.log
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Verify committed remote-verification receipt
+        if: steps.wait.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
@@ -67,4 +98,16 @@ jobs:
               'remote_objects': receipt['remote_object_count'],
               'remote_bytes': receipt['remote_verified_bytes_including_manifests'],
           }, indent=2, sort_keys=True))
+          PY
+
+      - name: Require monitored publication PASS
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result=json.loads(Path('c1c-g3-monitored-run.json').read_text())
+          if result.get('conclusion') != 'success':
+              raise SystemExit(f"C1C-G3 publication run {result.get('databaseId')} concluded {result.get('conclusion')}")
           PY
