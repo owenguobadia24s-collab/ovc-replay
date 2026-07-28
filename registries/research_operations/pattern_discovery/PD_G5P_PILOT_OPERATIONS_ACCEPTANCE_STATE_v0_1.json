@@ -4,9 +4,12 @@
   "plan_version": "0.1",
   "gate_id": "PD-G5P",
   "gate_title": "Pilot Discovery Operations Acceptance",
-  "gate_status": "GATE_READY",
+  "gate_status": "COMPLETED",
+  "decision": "DEFER",
   "decision_authority": "OPERATOR",
-  "operator_approval_required": true,
+  "operator_command": "OVC APPROVE PD-G5P DEFER",
+  "decided_on": "2026-07-28",
+  "operator_approval_required": false,
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "baseline_commit": "6c0aa91a6c51a86d39994ef363f8e29bb924764b",
   "latest_lawful_main_commit": "1142abd2010b92b33e56bccc23e05ccd8bed1320",
@@ -62,16 +65,17 @@
     "PDG5P-REPLAY-AUTHORITY-001"
   ],
   "recommended_decision": "DEFER",
-  "recommendation_reason": "Machine and signature integrity pass, but five of six promoted objects remain non-accepted, versioned correction is explicitly required, the correction ledger is not operationally closed, the final contract candidate is absent and no second pilot operation is authorised.",
+  "decision_effect": "AUTHORISE_PD_WP5_CORR1_NON_ACTIVATING_CORRECTION_SPECIFICATION_ONLY",
   "required_identity_action_on_pass": "RESET_ALL_CANDIDATE_CLUSTER_MEDOID_ASSIGNMENT_FAMILY_AND_EVIDENCE_IDENTITIES",
   "required_final_freeze_on_pass": "VERSIONED_FINAL_PD_WP5_CANONICAL_DISCOVERY_CONTRACT",
-  "next_packet_on_defer": "PD-WP5-CORR1",
-  "next_packet_on_pass": "PD-WP5-CANONICAL",
+  "next_packet": "PD-WP5-CORR1",
+  "next_gate": "PD-G5P",
   "next_source_on_pass": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
   "canonical_discovery_available": false,
   "pilot_outputs_in_canonical_counts": false,
   "pilot_outputs_promotable": false,
   "canonical_append": "DENIED",
+  "second_pilot_replay": "DENIED",
   "live_prospective_relabelling": "DENIED",
   "semantic_promotion": "DENIED",
   "family_promotion": "DENIED",
@@ -96,8 +100,15 @@
       "job": 90306722224,
       "result": "PASS",
       "tested_head": "b1bb92faaf300c8422581f33f75db96e0ab10a3d"
+    },
+    {
+      "suite": "PD-G5P latest-main merge verification",
+      "workflow_run": 30369976011,
+      "job": 90310962090,
+      "result": "PASS",
+      "tested_merge_candidate": "c96802c7da4722d97ea3d96f65fdb02c39561dac"
     }
   ],
-  "decision_record": null,
-  "rollback": "SEAL_OR_QUARANTINE_PILOT_NAMESPACE_PRESERVE_ALL_PILOT_RECORDS_DENY_CANONICAL_DISCOVERY_UNTIL_A_NEW_OPERATOR_DECISION"
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md",
+  "rollback": "PRESERVE_AND_SEAL_PILOT_NAMESPACE_REVERT_DECISION_AND_CORRECTION_STATE_KEEP_PD_G4B_APPROVED_KEEP_CANONICAL_DISCOVERY_AND_SECOND_REPLAY_DENIED"
 }
