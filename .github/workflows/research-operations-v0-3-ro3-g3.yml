@@ -1,0 +1,96 @@
+name: RO3-G3 independent formula assurance
+
+on:
+  pull_request:
+    paths:
+      - "registries/research_operations/v0_3/C1_METAMORPHIC_INVARIANT_REGISTRY_v0_1.yaml"
+      - "registries/research_operations/v0_3/RO3_ASSURANCE_CHECK_REGISTRY_v0_1.yaml"
+      - "registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+      - "registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json"
+      - "schemas/research_operations/v0_3/c1_metamorphic_*.schema.json"
+      - "schemas/research_operations/v0_3/c1_determinism_receipt_v0_1.schema.json"
+      - "fixtures/research_operations/v0_3/wp3_metamorphic_cases.json"
+      - "src/ovc/research_operations/v0_3/metamorphic.py"
+      - "src/ovc/research_operations/v0_3/__init__.py"
+      - "scripts/research_operations/run_ro3_g3_assurance.py"
+      - "tests/research_operations/v0_3/test_metamorphic.py"
+      - "tests/research_operations/v0_3/test_invariant_registry_independence.py"
+      - "docs/releases/research-operations-foundation-v0-3/ro3-g3/**"
+      - ".github/workflows/research-operations-v0-3-ro3-g3.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ro3-g3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run metamorphic assurance tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_metamorphic -v
+      - name: Run invariant independence tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.v0_3.test_invariant_registry_independence -v
+      - name: Generate exact assurance evidence
+        run: |
+          PYTHONPATH=src python scripts/research_operations/run_ro3_g3_assurance.py \
+            --output ro3-g3-assurance-evidence.json | tee ro3-g3-assurance-summary.log
+      - name: Upload assurance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g3-assurance-evidence
+          path: |
+            ro3-g3-assurance-evidence.json
+            ro3-g3-assurance-summary.log
+          if-no-files-found: error
+      - name: Capture canonical repository test result
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests -v > ro3-g3-canonical.log 2>&1
+          status=$?
+          printf '%s\n' "$status" > ro3-g3-canonical.status
+          tail -n 240 ro3-g3-canonical.log
+          exit 0
+      - name: Upload canonical diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g3-canonical-diagnostics
+          path: |
+            ro3-g3-canonical.log
+            ro3-g3-canonical.status
+          if-no-files-found: error
+      - name: Require canonical suite PASS
+        run: test "$(cat ro3-g3-canonical.status)" = "0"
+      - name: Authority and frozen-canon boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse 4d701ad78af8597e182565eb301739501b51dff6:registries/research_operations/v0_3/C1_METAMORPHIC_INVARIANT_REGISTRY_v0_1.yaml)" = \
+               "$(git hash-object registries/research_operations/v0_3/C1_METAMORPHIC_INVARIANT_REGISTRY_v0_1.yaml)"
+          grep -q 'QA_EVIDENCE_ONLY' registries/research_operations/v0_3/RO3_ASSURANCE_CHECK_REGISTRY_v0_1.yaml
+          grep -q 'LOCKED_UNCONSUMED' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          grep -q 'DISABLED_PENDING_RC_G4' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          ! grep -n -E '^from ovc\.opt_b\.c1|^import ovc\.opt_b\.c1' src/ovc/research_operations/v0_3/metamorphic.py
+          ! grep -R --line-number 'ovc.research_operations.v0_3.metamorphic' src/ovc/opt_b/c1
+      - name: Require RO3-G3 assurance PASS
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          evidence = json.loads(Path('ro3-g3-assurance-evidence.json').read_text())
+          if evidence['status'] != 'PASS':
+              print(json.dumps({
+                  'status': evidence['status'],
+                  'qa_recommendation': evidence['qa_recommendation'],
+                  'failed_assertions': evidence['actual_implementation_run']['failed_assertions'],
+              }, indent=2, sort_keys=True))
+              raise SystemExit(1)
+          PY
