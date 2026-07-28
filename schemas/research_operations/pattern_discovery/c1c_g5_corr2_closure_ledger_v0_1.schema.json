@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c1c-g5-corr2-closure-ledger/v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "packet_id", "gate_id", "pilot_run_id", "pilot_namespace", "source_rereview_receipt_file_sha256", "findings", "finding_count", "unresolved_finding_count", "contract_changes_required", "second_machine_replay_required", "pilot_only", "promotion_eligibility", "canonical_append", "status", "ledger_sha256"],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corr2-closure-ledger/v1"},
+    "packet_id": {"const": "C1C-G5-CORR2"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "unresolved_finding_count": {"const": 0},
+    "contract_changes_required": {"const": false},
+    "second_machine_replay_required": {"const": false},
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_append": {"const": "DENIED"},
+    "status": {"const": "C1C_G5_CORR2_FINDINGS_CLOSED_RETURN_GATE_READY"}
+  }
+}
