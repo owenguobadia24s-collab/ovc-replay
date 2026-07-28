@@ -108,24 +108,35 @@ jobs:
                   'file_count': 48,
               },
           }
+
+          def logical_sha(manifest):
+              body = {key: value for key, value in manifest.items() if key != 'manifest_sha256'}
+              raw = (json.dumps(body, sort_keys=True, separators=(',', ':'), ensure_ascii=True) + '\n').encode('utf-8')
+              return hashlib.sha256(raw).hexdigest()
+
           verified = []
           for role, exp in expected.items():
               root = Path('c1c-g3') / role
               manifest_path = root / 'manifest.json'
-              raw = manifest_path.read_bytes()
-              digest = hashlib.sha256(raw).hexdigest()
-              if digest != exp['manifest_sha256']:
-                  raise SystemExit(f'{role} manifest byte hash mismatch: {digest}')
-              manifest = json.loads(raw)
+              manifest_bytes = manifest_path.read_bytes()
+              manifest_file_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
+              manifest = json.loads(manifest_bytes)
+
               for key in ('release_id', 'manifest_id', 'manifest_sha256', 'record_count', 'file_count'):
                   if manifest[key] != exp[key]:
                       raise SystemExit(f'{role} {key} mismatch: {manifest[key]!r}')
+              calculated_logical_sha = logical_sha(manifest)
+              if calculated_logical_sha != exp['manifest_sha256']:
+                  raise SystemExit(
+                      f"{role} logical manifest hash mismatch: expected={exp['manifest_sha256']} actual={calculated_logical_sha}"
+                  )
               if manifest['formula_registry_id'] != 'C1.FORMULAS.v0.1':
                   raise SystemExit(f'{role} formula registry mismatch')
               if manifest['implementation_id'] != 'C1.IMPLEMENTATION.v0.2':
                   raise SystemExit(f'{role} implementation identity mismatch')
               if len(manifest['files']) != exp['file_count']:
                   raise SystemExit(f'{role} file inventory length mismatch')
+
               records = 0
               payload_bytes = 0
               seen = set()
@@ -144,15 +155,18 @@ jobs:
                   payload_bytes += len(data)
               if records != exp['record_count']:
                   raise SystemExit(f'{role} record cardinality mismatch: {records}')
+
               verified.append({
                   'role': role.upper(),
                   'release_id': exp['release_id'],
                   'manifest_id': exp['manifest_id'],
-                  'manifest_sha256': digest,
+                  'manifest_sha256': exp['manifest_sha256'],
+                  'manifest_file_sha256': manifest_file_sha256,
                   'record_count': records,
                   'record_file_count': exp['file_count'],
                   'payload_bytes': payload_bytes,
               })
+
           Path('c1c-g3/output/C1C_G3_LOCAL_VERIFICATION.json').write_text(
               json.dumps({'status': 'PASS', 'source_run_id': 30370847916, 'releases': verified}, indent=2, sort_keys=True) + '\n'
           )
@@ -170,6 +184,10 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
 
+          approved_manifest_sha = {
+              'DISCOVERY': 'c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf',
+              'DEVELOPMENT': 'e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f',
+          }
           bucket = 'ovc_r2:ovc-evidence/canonical/releases'
           releases = []
           total_objects = 0
@@ -184,13 +202,26 @@ jobs:
               root = Path('c1c-g3') / role
               manifest_path = root / 'manifest.json'
               manifest_bytes = manifest_path.read_bytes()
+              manifest_file_sha256 = hashlib.sha256(manifest_bytes).hexdigest()
               manifest = json.loads(manifest_bytes)
+              role_name = role.upper()
+              if manifest['manifest_sha256'] != approved_manifest_sha[role_name]:
+                  raise SystemExit(f'APPROVED_LOGICAL_MANIFEST_MISMATCH:{role_name}')
+
               prefix = f"{bucket}/{manifest['release_id']}/{manifest['manifest_id']}"
-              listing_raw = subprocess.check_output(
+              listing_result = subprocess.run(
                   ['rclone', 'lsf', '--recursive', '--s3-no-check-bucket', prefix],
-                  stderr=subprocess.DEVNULL,
-              ).decode().splitlines()
-              listing = {line.rstrip('/') for line in listing_raw if line and not line.endswith('/')}
+                  stdout=subprocess.PIPE,
+                  stderr=subprocess.PIPE,
+                  text=True,
+              )
+              if listing_result.returncode not in (0,):
+                  raise SystemExit(f'REMOTE_PREFLIGHT_ERROR:{role}:{listing_result.stderr.strip()}')
+              listing = {
+                  line.rstrip('/')
+                  for line in listing_result.stdout.splitlines()
+                  if line and not line.endswith('/')
+              }
               expected_listing = {f"files/{item['path']}" for item in manifest['files']} | {'manifest.json'}
               if listing:
                   if listing != expected_listing:
@@ -219,22 +250,27 @@ jobs:
 
               remote_manifest = f'{prefix}/manifest.json'
               remote_manifest_bytes = run('rclone', 'cat', '--s3-no-check-bucket', remote_manifest, capture=True)
-              remote_manifest_sha = hashlib.sha256(remote_manifest_bytes).hexdigest()
-              if remote_manifest_bytes != manifest_bytes or remote_manifest_sha != manifest['manifest_sha256']:
-                  raise SystemExit(f'REMOTE_MANIFEST_MISMATCH:{remote_manifest}')
+              remote_manifest_file_sha256 = hashlib.sha256(remote_manifest_bytes).hexdigest()
+              if remote_manifest_bytes != manifest_bytes or remote_manifest_file_sha256 != manifest_file_sha256:
+                  raise SystemExit(f'REMOTE_MANIFEST_BYTE_MISMATCH:{remote_manifest}')
+              remote_manifest_logical = json.loads(remote_manifest_bytes)['manifest_sha256']
+              if remote_manifest_logical != approved_manifest_sha[role_name]:
+                  raise SystemExit(f'REMOTE_MANIFEST_LOGICAL_IDENTITY_MISMATCH:{remote_manifest}')
+
               verified.append({
                   'key': remote_manifest.split(':', 1)[1],
                   'size_bytes': len(remote_manifest_bytes),
-                  'sha256': remote_manifest_sha,
+                  'sha256': remote_manifest_file_sha256,
                   'completion_marker': True,
               })
               total_objects += 1
               total_bytes += len(remote_manifest_bytes)
               releases.append({
-                  'role': role.upper(),
+                  'role': role_name,
                   'release_id': manifest['release_id'],
                   'manifest_id': manifest['manifest_id'],
-                  'manifest_sha256': remote_manifest_sha,
+                  'manifest_sha256': manifest['manifest_sha256'],
+                  'manifest_file_sha256': remote_manifest_file_sha256,
                   'implementation_id': manifest['implementation_id'],
                   'formula_registry_id': manifest['formula_registry_id'],
                   'record_count': manifest['record_count'],
@@ -279,6 +315,7 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
+
           receipt = json.loads(Path('c1c-g3/output/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json').read_text())
           target = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g3')
           target.mkdir(parents=True, exist_ok=True)
@@ -300,12 +337,12 @@ jobs:
               '',
               '## Releases',
               '',
-              '| Role | Release | Manifest | Manifest SHA-256 | Collision state | Objects |',
-              '|---|---|---|---|---|---:|',
+              '| Role | Release | Manifest | Logical SHA-256 | File SHA-256 | Collision state | Objects |',
+              '|---|---|---|---|---|---|---:|',
           ]
           for item in receipt['releases']:
               lines.append(
-                  f"| {item['role']} | `{item['release_id']}` | `{item['manifest_id']}` | `{item['manifest_sha256']}` | {item['collision_state']} | {item['remote_object_count']} |"
+                  f"| {item['role']} | `{item['release_id']}` | `{item['manifest_id']}` | `{item['manifest_sha256']}` | `{item['manifest_file_sha256']}` | {item['collision_state']} | {item['remote_object_count']} |"
               )
           lines += [
               '',
