@@ -1,0 +1,88 @@
+name: PD-G5P Pilot Discovery operations gate readiness
+
+on:
+  pull_request:
+    paths:
+      - "docs/releases/pattern-discovery-v0-3/pd-g5p/**"
+      - "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
+      - "tests/research_operations/pattern_discovery/test_pd_g5p_gate_ready.py"
+      - ".github/workflows/pd-g5p-pilot-operations-gate-ready.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused PD-G5P exact evidence tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/pattern_discovery
+          -p 'test_pd_g5p_gate_ready.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Validate machine-readable gate packet and state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json >/dev/null
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json >/dev/null
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
+      - name: Assert operator decision and DEFER recommendation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('docs/releases/pattern-discovery-v0-3/pd-g5p')
+          gate = json.loads((root / 'PD_G5P_OPERATOR_GATE_PACKET.json').read_text())
+          qa = json.loads((root / 'PD_G5P_QA_PACKET.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json').read_text())
+          assert gate['gate_status'] == 'GATE_READY'
+          assert gate['operator_approval_required'] is True
+          assert gate['recommended_decision'] == 'DEFER'
+          assert gate['proposed_delta_status'] == 'NOT_GRANTED'
+          assert gate['decision_record'] is None
+          assert qa['qa_recommendation'] == 'DEFER'
+          assert state['gate_status'] == 'GATE_READY'
+          assert state['recommended_decision'] == 'DEFER'
+          assert state['operator_approval_required'] is True
+          assert state['canonical_discovery_available'] is False
+          assert state['decision_record'] is None
+          PY
+      - name: Assert retained prohibitions and bounded evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find docs/releases/pattern-discovery-v0-3/pd-g5p -type f -size +100k | grep .; then
+            echo 'Unexpected large artifact in PD-G5P gate packet.'
+            exit 1
+          fi
+          test "$(find docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw -name '*.b64' | wc -l)" -eq 7
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json').read_text())
+          authority = gate['current_authority']
+          assert authority['pilot_only'] is True
+          assert authority['promotion_eligibility'] == 'NON_PROMOTABLE'
+          assert authority['canonical_discovery_population'] is False
+          assert authority['canonical_append'] == 'DENIED'
+          assert authority['live_prospective_relabelling'] == 'DENIED'
+          for key in ('semantic_promotion', 'family_promotion', 'active_novelty_ranking', 'selector_mutation', 'release_mutation', 'r2_publication', 'validation_consumption'):
+              assert authority[key] == 'DENIED', (key, authority[key])
+          for key in ('probability_authority', 'risk_authority', 'exposure_authority', 'trading_authority', 'execution_authority', 'agent_write_authority'):
+              assert authority[key] == 'NONE', (key, authority[key])
+          PY
