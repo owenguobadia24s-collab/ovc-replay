@@ -1,0 +1,70 @@
+name: C1C-G3 publication execution monitor
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/c1c-g3-r2-publication.yml
+      - .github/workflows/c1c-g3-publication-monitor.yml
+      - docs/releases/opt-b-c1-v2/corrective/c1c-g3/**
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  monitor-publication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 125
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TARGET_BRANCH: publish/c1c-g3-c1-v2-r2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Resolve exact push publication run
+        id: resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+          run_id=$(gh run list \
+            --repo "${GITHUB_REPOSITORY}" \
+            --workflow c1c-g3-r2-publication.yml \
+            --branch "${TARGET_BRANCH}" \
+            --event push \
+            --limit 10 \
+            --json databaseId,createdAt,status,conclusion \
+            --jq 'sort_by(.createdAt) | reverse | .[0].databaseId')
+          test -n "${run_id}" || { echo '::error::No C1C-G3 push publication run found'; exit 1; }
+          echo "run_id=${run_id}" >> "${GITHUB_OUTPUT}"
+          echo "Resolved C1C-G3 publication run ${run_id}"
+      - name: Wait for publication run and require PASS
+        shell: bash
+        run: gh run watch "${{ steps.resolve.outputs.run_id }}" --repo "${GITHUB_REPOSITORY}" --exit-status
+      - name: Verify committed remote-verification receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "${TARGET_BRANCH}"
+          receipt=docs/releases/opt-b-c1-v2/corrective/c1c-g3/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
+          git show "origin/${TARGET_BRANCH}:${receipt}" > /tmp/c1c-g3-receipt.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path('/tmp/c1c-g3-receipt.json').read_text())
+          assert receipt['gate_id']=='C1C-G3'
+          assert receipt['decision']=='PASS'
+          assert receipt['status']=='PASS_FULL_REMOTE_BYTE_VERIFICATION'
+          assert receipt['release_count']==2
+          assert receipt['remote_object_count']==194
+          assert all(item['remote_verified'] for item in receipt['releases'])
+          assert receipt['c1_selector_change']=='NONE_PENDING_COORDINATED_C1C_G4_G5_TRANSACTION'
+          assert receipt['validation_consumption']=='LOCKED_UNCONSUMED'
+          print(json.dumps({
+              'workflow_run_id': receipt['workflow_run_id'],
+              'status': receipt['status'],
+              'remote_objects': receipt['remote_object_count'],
+              'remote_bytes': receipt['remote_verified_bytes_including_manifests'],
+          }, indent=2, sort_keys=True))
+          PY
