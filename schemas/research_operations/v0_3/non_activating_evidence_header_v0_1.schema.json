@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/non_activating_evidence_header_v0_1",
+  "title": "NonActivatingEvidenceHeader v0.1",
+  "type": "object",
+  "required": [
+    "schema", "comparison_id", "evidence_class", "authority_effect",
+    "statement", "detailed_diff_access", "prohibited_effects", "header_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-non-activating-evidence-header/v1"},
+    "comparison_id": {"type": "string", "pattern": "^ro3-c1-comparison:[0-9a-f]{64}$"},
+    "evidence_class": {"const": "NON_ACTIVATING_EVIDENCE"},
+    "authority_effect": {"const": "NONE"},
+    "statement": {"type": "string", "minLength": 1},
+    "detailed_diff_access": {"const": "ACKNOWLEDGEMENT_REQUIRED"},
+    "prohibited_effects": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "header_id": {"type": "string", "pattern": "^ro3-non-activating-header:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
