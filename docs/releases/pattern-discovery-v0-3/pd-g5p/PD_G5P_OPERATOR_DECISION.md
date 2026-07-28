@@ -5,7 +5,8 @@
 - **Plan:** `OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1`
 - **Plan version:** `0.1`
 - **Original gate baseline:** `6c0aa91a6c51a86d39994ef363f8e29bb924764b`
-- **Latest lawful main reviewed:** `1142abd2010b92b33e56bccc23e05ccd8bed1320`
+- **Latest lawful main reviewed:** `5401387ee9acd9e1dfdf6eb0d5643100b7e0319f`
+- **Base-change assessment:** `DISJOINT_C1C_WP2_AND_GATE_READY_PACKET_NO_PD_G5P_FILE_OR_AUTHORITY_OVERLAP`
 - **Gate branch:** `gate/pd-g5p-pilot-operations-review`
 - **Decision-bearing candidate:** `b1bb92faaf300c8422581f33f75db96e0ab10a3d`
 - **Final pre-decision gate head:** `ba6fc9a5351b5049bcfc608a1e7e7f09db654429`
