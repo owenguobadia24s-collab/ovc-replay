@@ -4,7 +4,9 @@
   "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
   "baseline_commit": "0c687101e031b404b3994c8bb96d65b177f97743",
   "branch": "build/c1c-g5-structured-v2-review",
-  "candidate_commit": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+  "candidate_commit": "fed68083ea642ed9c4821b9e73ac2013bc922d44",
+  "pull_request": 133,
+  "merge_commit": "d2dedd3f65a3b7fa32ba334693aa18b74ba295c9",
   "authority_required": "NONE_FOR_NONACTIVATING_REVIEW_FINALIZER_IMPLEMENTATION",
   "authority_delta": "STRUCTURED_V2_OPERATOR_REREVIEW_TOOLING_ONLY",
   "accepted_evidence": {
@@ -34,21 +36,21 @@
   ],
   "tests": [
     {
-      "workflow_run": 30398079249,
-      "job": 90405918618,
-      "tested_head": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+      "workflow_run": 30398433313,
+      "job": 90407078517,
+      "tested_head": "fed68083ea642ed9c4821b9e73ac2013bc922d44",
       "suite": "focused exact evidence, signatures, Pattern Discovery dependencies, complete repository, schemas, authority and CI-denial checks",
       "result": "PASS"
     },
     {
-      "workflow_run": 30398079004,
-      "job": 90405917808,
-      "tested_head": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+      "workflow_run": 30398433339,
+      "job": 90407078832,
+      "tested_head": "fed68083ea642ed9c4821b9e73ac2013bc922d44",
       "suite": "independent complete repository unit tests",
       "result": "PASS"
     }
   ],
-  "qa_status": "PASS_IMPLEMENTATION_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW",
+  "qa_status": "PASS_IMPLEMENTATION_MERGED_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW",
   "qa_recommendation": "PASS",
   "unresolved_issues": [],
   "operational_blocker": {
@@ -56,6 +58,7 @@
     "reason": "The immutable v2 machine run is accepted, but the human review must be completed under the structured v2 contract and signed with the operator-local Ed25519 key.",
     "correctable_without_machine_replay": true
   },
-  "rollback": "Preserve the immutable corrective machine run and signed v1 evidence; revert only the structured review implementation packet; keep canonical Discovery and append denied.",
-  "next_action": "AUTO_RATIFY_AND_MERGE_IMPLEMENTATION_THEN_STOP_AT_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW"
+  "merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_MERGE_RECEIPT.json",
+  "rollback": "Preserve the immutable corrective machine run and signed v1 evidence; revert only through a new non-destructive authority-approved commit; keep canonical Discovery and append denied.",
+  "next_action": "OPERATOR_LOCAL_STRUCTURED_V2_REVIEW"
 }

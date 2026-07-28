@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-c1c-g5-structured-review-v2-merge-receipt/v1",
+  "packet_id": "C1C-G5-REVIEW-V2-CORRECTION",
+  "gate_retained": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+  "baseline_commit": "0c687101e031b404b3994c8bb96d65b177f97743",
+  "tested_head": "fed68083ea642ed9c4821b9e73ac2013bc922d44",
+  "pull_request": 133,
+  "merge_method": "SQUASH",
+  "merge_commit": "d2dedd3f65a3b7fa32ba334693aa18b74ba295c9",
+  "merged_on": "2026-07-28",
+  "tests": [
+    {
+      "workflow_run": 30398433313,
+      "job": 90407078517,
+      "result": "PASS",
+      "suite": "focused exact evidence, signatures, Pattern Discovery dependencies, complete repository, schemas, authority and CI-denial checks"
+    },
+    {
+      "workflow_run": 30398433339,
+      "job": 90407078832,
+      "result": "PASS",
+      "suite": "independent complete repository unit tests"
+    }
+  ],
+  "qa_result": "PASS_IMPLEMENTATION_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW",
+  "authority_delta": "STRUCTURED_V2_OPERATOR_REREVIEW_TOOLING_ONLY",
+  "operator_local_blocker": {
+    "blocker_id": "C1C-G5-BLOCK-002",
+    "status": "OPEN",
+    "required_action": "COMPLETE_AND_SIGN_STRUCTURED_V2_OPERATOR_REVIEW",
+    "second_machine_replay_required": false
+  },
+  "retained_authority": {
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "active_novelty_ranking": "NONE",
+    "selector_mutation": "DENIED_BY_REVIEW_RUNNER",
+    "release_mutation": "DENIED_BY_REVIEW_RUNNER",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "Preserve the immutable corrective machine run and signed v1 evidence; revert the squash merge only through a new non-destructive authority-approved commit; retain the operator gate and all authority denials.",
+  "next_action": "OPERATOR_LOCAL_STRUCTURED_V2_REVIEW"
+}
