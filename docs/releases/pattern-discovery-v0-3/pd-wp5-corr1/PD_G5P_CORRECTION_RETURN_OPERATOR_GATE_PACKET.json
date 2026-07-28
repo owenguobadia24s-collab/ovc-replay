@@ -1,0 +1,159 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "PD-G5P",
+  "gate_iteration": 2,
+  "gate_title": "Pilot Discovery Correction Return and Canonical Discovery Authority",
+  "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
+  "plan_version": "0.1",
+  "baseline_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
+  "candidate_commit": null,
+  "completed_packets": [
+    "PD-G4B",
+    "PD-WP5-PILOT-IMPLEMENTATION",
+    "PD-WP5-PILOT-LOCAL-OPERATION",
+    "PD-WP5-PILOT-OPERATOR-REVIEW",
+    "PD-G5P-DEFER",
+    "PD-WP5-CORR1"
+  ],
+  "prior_decision": {
+    "decision": "DEFER",
+    "operator_command": "OVC APPROVE PD-G5P DEFER",
+    "decision_record": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md",
+    "merge_commit": "02b123fb923feabf1c7d71a1ce901e850e57362f"
+  },
+  "correction_completion": {
+    "packet": "PD-WP5-CORR1",
+    "decision": "PASS",
+    "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+    "decision_record": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_DELEGATED_DECISION.md",
+    "merge_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
+    "closed_objectives": [
+      "PDG5P-DEFECT-SPEC-001",
+      "PDG5P-UI-SPEC-001",
+      "PDG5P-DEFER-RESOLUTION-001",
+      "PDG5P-REJECTION-BASIS-001",
+      "PDG5P-CONTRACT-FREEZE-001",
+      "PDG5P-REPLAY-AUTHORITY-001"
+    ]
+  },
+  "current_authority": {
+    "research_role": "PILOT_DISCOVERY",
+    "pilot_only": true,
+    "promotion_eligibility": "NON_PROMOTABLE",
+    "second_pilot_replay": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "contract_activation": "DENIED",
+    "identity_reset_activation": "DENIED",
+    "candidate_promotion": "DENIED",
+    "semantic_promotion": "DENIED",
+    "family_promotion": "DENIED",
+    "threshold_or_model_change": "DENIED",
+    "active_novelty_ranking": "DENIED",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "DENIED",
+    "probability_authority": "NONE",
+    "risk_authority": "NONE",
+    "exposure_authority": "NONE",
+    "trading_authority": "NONE",
+    "execution_authority": "NONE",
+    "agent_write_authority": "NONE"
+  },
+  "proposed_delta_on_pass": {
+    "activate_contract": "PD_WP5_FINAL_CANONICAL_DISCOVERY_CONTRACT_v0_2",
+    "activate_identity_reset_procedure": "PD_WP5_CANONICAL_IDENTITY_RESET_PROCEDURE_v0_1",
+    "authorise_packet": "PD-WP5-CANONICAL",
+    "authorise_research_role": "CANONICAL_DISCOVERY",
+    "authorise_exact_source": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+    "authorise_operation": "ONE_LOCAL_DETERMINISTIC_CANONICAL_DISCOVERY_CANDIDATE_BUILD",
+    "required_new_identity": [
+      "CANONICAL_RUN_ID",
+      "CANONICAL_NAMESPACE",
+      "CANDIDATE_WINDOW_ID",
+      "PATTERN_FINGERPRINT_ID",
+      "CLUSTER_VERSION_ID",
+      "CLUSTER_ID",
+      "MEDOID_ID",
+      "ASSIGNMENT_ID",
+      "FAMILY_ID",
+      "EVIDENCE_RECORD_ID"
+    ],
+    "pilot_identity_reuse": "DENIED",
+    "second_pilot_replay": "NOT_AUTHORISED_OR_REQUIRED",
+    "canonical_evidence_append": "NOT_YET_AUTHORISED",
+    "semantic_or_family_promotion": "NOT_AUTHORISED",
+    "candidate_threshold_or_model_promotion": "NOT_AUTHORISED",
+    "active_novelty_ranking": "NOT_AUTHORISED",
+    "selector_release_or_r2_mutation": "NOT_AUTHORISED",
+    "validation_consumption": "NOT_AUTHORISED",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "proposed_delta_status": "NOT_GRANTED_PENDING_OPERATOR",
+  "acceptance_conditions": [
+    {"condition": "ORIGINAL_PILOT_EVIDENCE_INTEGRITY", "result": "PASS"},
+    {"condition": "ALL_PD_G5P_CORRECTION_OBJECTIVES_CLOSED", "result": "PASS"},
+    {"condition": "STRUCTURED_V2_REVIEW_CONTRACT_FAILS_CLOSED", "result": "PASS"},
+    {"condition": "READ_ONLY_CONSOLE_CORRECTION_ACCEPTED", "result": "PASS"},
+    {"condition": "FINAL_CONTRACT_CANDIDATE_FROZEN", "result": "PASS_CANDIDATE_ONLY"},
+    {"condition": "COMPLETE_IDENTITY_RESET_PROCEDURE_FROZEN", "result": "PASS_CANDIDATE_ONLY"},
+    {"condition": "SECOND_PILOT_REPLAY_NECESSITY", "result": "PASS_NOT_REQUIRED"},
+    {"condition": "FOCUSED_DEPENDENT_AND_REPOSITORY_TESTS", "result": "PASS"},
+    {"condition": "QA_RECOMMENDATION", "result": "PASS"},
+    {"condition": "NO_BLOCKING_REVIEW_OR_UNRESOLVED_ISSUE", "result": "PASS"}
+  ],
+  "tests": [
+    {"workflow_run": 30374928283, "job": 90328016724, "result": "PASS", "tested_head": "2b8f8cee6825781a5f2b67af8f4a00173491c26c"},
+    {"workflow_run": 30374929201, "job": 90328019927, "result": "PASS", "tested_head": "2b8f8cee6825781a5f2b67af8f4a00173491c26c"},
+    {"workflow_run": 30375427315, "job": 90329757637, "result": "PASS", "tested_head": "76436c8f5c43d3eb333d804ef4652cc864aba865"},
+    {"workflow_run": 30375427307, "job": 90329757773, "result": "PASS", "tested_head": "76436c8f5c43d3eb333d804ef4652cc864aba865"}
+  ],
+  "qa_result": "PASS",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_QA_PACKET.json",
+  "warnings": [
+    "PASS activates a material v0.2 review contract for a new canonical Discovery line and is operator-reserved.",
+    "PASS authorises one local canonical Discovery candidate build but not final evidence append, promotion, publication or selector change.",
+    "All pilot outputs remain permanently excluded from canonical identities and counts.",
+    "No second pilot replay is requested."
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "apps/research_console/pattern_discovery.py",
+    "contracts/research_operations/pattern_discovery/PD_WP5_FINAL_CANONICAL_DISCOVERY_CONTRACT_CANDIDATE_v0_2.md",
+    "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_CONTRACT_DIFF.md",
+    "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_CORRECTION_LEDGER.json",
+    "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CANONICAL_IDENTITY_RESET_PROCEDURE_CANDIDATE.json",
+    "schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_input_v0_2.schema.json",
+    "schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_receipt_v0_2.schema.json",
+    "schemas/research_operations/pattern_discovery/pd_wp5_correction_ledger_v0_1.schema.json",
+    "src/ovc/research_operations/pattern_discovery/review_corrections.py"
+  ],
+  "external_artifact_hashes": {
+    "pilot_review_receipt_file_sha256": "2486d9f7097c434fd52d4d5fd0cd086df8117887b6bf4b70a9ef6cf50869ab81",
+    "pilot_defect_ledger_file_sha256": "a9e0102e042e3919871c7c0b135a60e4d3d27d8483f2e8eaa55fd366ee6d174d",
+    "correction_ledger_sha256": "cd93fb5cc6490402449d94a433e7f74a4f12722ef2a922dd12f3236dcd0f17bd"
+  },
+  "rollback": "KEEP_PD_G5P_DEFER_EFFECTIVE_KEEP_CORR1_COMPLETED_PRESERVE_ALL_PILOT_EVIDENCE_DENY_CONTRACT_ACTIVATION_IDENTITY_RESET_AND_CANONICAL_DISCOVERY",
+  "recommended_decision": "PASS",
+  "recommendation_reason": "The correction ledger is complete, validation and Console defects are closed, exact evidence is preserved, no replay is required, tests and QA pass, and the requested canonical Discovery authority is bounded and separated from all promotional, publication and execution authority.",
+  "exact_work_after_pass": [
+    "Create PD-WP5-CANONICAL from the post-decision lawful main tip.",
+    "Materialise the approved v0.2 final contract and approved identity-reset procedure without changing their reviewed semantics.",
+    "Create a new canonical run ID and canonical namespace; reject every pilot identity or namespace reference.",
+    "Bind the operation only to OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1 and the exact approved contract/code commits.",
+    "Run one deterministic local canonical Discovery candidate build.",
+    "Generate candidate, fingerprint, provisional clustering, queue, coverage, identity-contamination and reproducibility QA.",
+    "Keep canonical evidence append, family/semantic/candidate promotion, active novelty ranking, selector/release/R2 mutation and Validation denied.",
+    "Return at the next operator-required gate with the canonical candidate evidence and exact proposed authority delta."
+  ],
+  "exact_work_after_defer": [
+    "Preserve CORR1 as completed and keep all current authority denials.",
+    "Record the specific remaining concern or narrower requested delta.",
+    "Do not run a second pilot or canonical Discovery operation."
+  ],
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "operator_approval_required": true,
+  "gate_status": "GATE_READY",
+  "decision_record": null
+}
