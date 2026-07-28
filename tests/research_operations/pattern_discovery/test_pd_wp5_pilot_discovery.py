@@ -2,21 +2,15 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import tempfile
 import unittest
 
 from ovc.research_operations.pattern_discovery.pilot_discovery import (
-    ACCEPTANCE_ID,
     ALLOWED_REVIEW_DISPOSITIONS,
-    AUTHORITY_GATE,
-    BINDING_ID,
-    NEXT_GATE,
     OPERATION_MODE,
     PILOT_BANNER,
     PILOT_NAMESPACE,
     RESEARCH_ROLE,
-    RUN_ID,
-    SLICE_ID,
+    PilotDiscoveryError,
     _validate_review,
     load_governed_authority,
     normalise_c2_states,
@@ -27,6 +21,8 @@ from ovc.research_operations.canonical import canonical_sha256
 
 ROOT = Path(__file__).resolve().parents[3]
 FIXTURE = ROOT / "fixtures/research_operations/pattern_discovery/pd_wp1/c2_state_stream.json"
+GATE_STATE = ROOT / "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
+PARENT_STATE = ROOT / "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
 
 
 class PdWp5PilotDiscoveryTests(unittest.TestCase):
@@ -35,17 +31,16 @@ class PdWp5PilotDiscoveryTests(unittest.TestCase):
         cls.rows = json.loads(FIXTURE.read_text(encoding="utf-8"))
         cls.bundle = run_pilot_from_states(cls.rows)
 
-    def test_governed_approval_chain_is_exact(self) -> None:
-        authority = load_governed_authority(ROOT)
-        gate = authority["gate"]
-        self.assertEqual(gate["gate_id"], AUTHORITY_GATE)
-        self.assertEqual(gate["gate_status"], "APPROVED")
-        self.assertEqual(gate["decision"], "PASS")
-        self.assertEqual(gate["source_slice_id"], SLICE_ID)
-        self.assertEqual(gate["compute_run_id"], RUN_ID)
-        self.assertEqual(gate["source_binding_id"], BINDING_ID)
-        self.assertEqual(gate["signed_replay_acceptance_id"], ACCEPTANCE_ID)
-        self.assertEqual(gate["next_gate"], NEXT_GATE)
+    def test_governed_operation_authority_is_exhausted_after_pd_g5p(self) -> None:
+        with self.assertRaisesRegex(PilotDiscoveryError, "PD-WP5-PILOT is not authorised"):
+            load_governed_authority(ROOT)
+        gate = json.loads(GATE_STATE.read_text(encoding="utf-8"))
+        parent = json.loads(PARENT_STATE.read_text(encoding="utf-8"))
+        self.assertEqual(gate["gate_status"], "COMPLETED")
+        self.assertEqual(gate["decision"], "DEFER")
+        self.assertEqual(gate["next_packet"], "PD-WP5-CORR1")
+        self.assertEqual(parent["operation_count"], parent["operation_limit"])
+        self.assertEqual(parent["second_pilot_replay"], "DENIED")
 
     def test_fixture_rehearsal_is_deterministic(self) -> None:
         first = run_pilot_from_states(self.rows)
