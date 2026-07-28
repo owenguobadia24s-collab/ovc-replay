@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-pd-c1c-g5-pilot-corrective-state/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "gate_id": "C1C-G5",
+  "status": "BLOCKED_OPERATOR_LOCAL_CORRECTIVE_RERUN_REQUIRED",
+  "source_pilot": {
+    "namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+    "disposition": "SUPERSEDED_NONCANONICAL_LINEAGE_IDENTITY",
+    "evidence_preservation": "REQUIRED",
+    "identity_reuse": "DENIED",
+    "promotion_eligibility": "NON_PROMOTABLE",
+    "canonical_append": "DENIED"
+  },
+  "corrective_rerun": {
+    "namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "run_id": null,
+    "authority_gate": "C1C-G5",
+    "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+    "research_role": "PILOT_DISCOVERY",
+    "operation_mode": "TIME_GATED_REPLAY",
+    "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1",
+    "compute_run_id": "RPS.RUN.7aeb551335d766ee3bf503e6",
+    "source_binding_id": "RPS.BINDING.32fb3003efa072916c11e907",
+    "signed_replay_acceptance_id": "RPS.REPLAY-ACCEPT.0844eddf74e144ced487cc48",
+    "signing_binding_id": "RPS.SIGNING.50092c28981fef08f53a6cb5",
+    "operator_id": "OVC.OPERATOR.PRIMARY.LOCAL.V1",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "active_c2_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "execution_status": "BLOCKED_PENDING_OPERATOR_LOCAL_EXTERNAL_ROOT_KEY_AND_REVIEW",
+    "pilot_only": true,
+    "promotion_eligibility": "NON_PROMOTABLE",
+    "canonical_discovery_population": false,
+    "canonical_append": "DENIED",
+    "r2_publication": "DENIED"
+  },
+  "implementation": {
+    "runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
+    "windows_wrapper": "scripts/run_c1c_g5_pilot_corrective_rerun.ps1",
+    "blocker_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_PILOT_SUPERSESSION_RERUN_BLOCKER.json"
+  },
+  "blocker_id": "C1C-G5-BLOCK-001",
+  "continuation_command": ".\\scripts\\run_c1c_g5_pilot_corrective_rerun.ps1 preflight",
+  "retained_authority": {
+    "selector_mutation": "DENIED_BY_PILOT_RUNNER",
+    "release_mutation": "DENIED_BY_PILOT_RUNNER",
+    "canonical_append": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_change": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  }
+}

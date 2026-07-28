@@ -1,0 +1,114 @@
+{
+  "schema": "ovc-c1c-g4-g5-execution-gate-packet/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "gate_ids": ["C1C-G4", "C1C-G5"],
+  "operator_decision_id": "C1C-G3-G4-G5-OPERATOR-PASS-2026-07-28",
+  "baseline_main_commit": "08a34576e1d8efaf314ab020b9116f5885c3a1e0",
+  "branch": "remediate/c1c-g4-g5-c2-v2",
+  "pull_request": 132,
+  "status": "PASS_SELECTOR_TRANSACTION_BLOCKED_PILOT_CORRECTIVE_RERUN",
+  "recommended_decision": "MERGE_COMPLETED_SELECTOR_TRANSACTION_THEN_BLOCK_AT_OPERATOR_LOCAL_PILOT_RERUN",
+  "completed": {
+    "c1_v2_publication": {
+      "status": "PASS_FULL_REMOTE_BYTE_VERIFICATION",
+      "workflow_run_id": 30384400312,
+      "remote_object_count": 194,
+      "remote_verified_bytes": 36206001
+    },
+    "c2_v2_identity_replay": {
+      "status": "PASS_ZERO_SEMANTIC_DRIFT",
+      "workflow_run_id": 30386243014,
+      "source_c2_v1_artifact_id": 8634383302,
+      "state_record_count": 404434,
+      "transition_record_count": 323910,
+      "semantic_state_drift_count": 0,
+      "semantic_transition_drift_count": 0,
+      "deterministic_output_equivalence": "PASS_TWO_INDEPENDENT_BYTE_IDENTICAL_MATERIALIZATIONS",
+      "replay_tree_sha256": "17df53fbac3861fb021bc41d60de79532f8d8945316875ed0741ae93aff2b7aa",
+      "candidate_tree_sha256": "c969dc0e41f1163b5864155f561ed3ad9c80535a7f565ed4e6307cdf8ed37371"
+    },
+    "c2_v2_publication": {
+      "status": "PASS_FULL_REMOTE_BYTE_VERIFICATION",
+      "remote_object_count": 38,
+      "remote_verified_bytes": 872879711,
+      "discovery_manifest_sha256": "c60b48ac18653eaf253c48f63645dbaa11bd94cee9a28a83ed7ae7bad5cac180",
+      "development_manifest_sha256": "42cb65574473826c82ca94d8c2e8c46d9d4acfc79a0090daef68c3efbc8cee62"
+    },
+    "selector_transaction": {
+      "transaction_id": "C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28",
+      "status": "MATERIALISED_EFFECTIVE_ON_MAIN_MERGE",
+      "atomic_on_main_merge": true,
+      "c1_discovery": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2",
+      "c1_development": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2",
+      "c2_discovery": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+      "c2_development_reference": "OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2"
+    },
+    "pilot_supersession": {
+      "source_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+      "source_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+      "disposition": "SUPERSEDED_NONCANONICAL_LINEAGE_IDENTITY",
+      "evidence_preserved": true,
+      "identity_reuse": "DENIED"
+    }
+  },
+  "blocker": {
+    "blocker_id": "C1C-G5-BLOCK-001",
+    "scope": "CORRECTIVE_NONCANONICAL_PILOT_RERUN",
+    "reason": "The exact accepted RPS compute root, bound private Ed25519 key and human review are intentionally operator-local and unavailable to GitHub Actions.",
+    "corrective_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "corrective_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
+    "windows_wrapper": "scripts/run_c1c_g5_pilot_corrective_rerun.ps1",
+    "blocker_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_PILOT_SUPERSESSION_RERUN_BLOCKER.json"
+  },
+  "changed_files": [
+    ".github/workflows/c1c-g5-c2-v2-remediation.yml",
+    ".github/workflows/opt-b-c1-b1-g5-shadow-activation.yml",
+    ".github/workflows/opt-b-c1-c1-c2-handoff-active.yml",
+    ".github/workflows/opt-b-c2-wp1-boundary.yml",
+    ".github/workflows/opt-b-c2-wp2-contract-freeze.yml",
+    "scripts/opt_b/run_c1c_g5_c2_remediation.py",
+    "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
+    "scripts/run_c1c_g5_pilot_corrective_rerun.ps1",
+    "tests/opt_b/c2/test_c1c_g5_identity_remediation.py",
+    "tests/opt_b/c1/test_c1_c2_handoff_active.py",
+    "tests/research_operations/pattern_discovery/test_c1c_g5_pilot_corrective_rerun.py",
+    "registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml",
+    "registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml",
+    "registries/authority/C1_TO_C2_ACTIVE_HANDOFF_AUTHORITY.yaml",
+    "registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml",
+    "registries/opt_b/c1/C1_CORRECTIVE_PROGRAMME_v0_1.yaml",
+    "registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json"
+  ],
+  "tests": [
+    {"workflow_run_id": 30386242901, "result": "PASS"},
+    {"workflow_run_id": 30386243014, "result": "PASS"}
+  ],
+  "qa": {
+    "recommendation": "PASS_COMPLETED_RELEASE_AND_SELECTOR_TRANSACTION_BLOCK_PILOT_RERUN",
+    "blocking_release_or_selector_issues": 0,
+    "blocking_pilot_execution_issues": 1,
+    "external_evidence_artifact_id": 8699206429,
+    "external_evidence_artifact_digest": "sha256:fd4ac24036a97ffb048a9bf205114e305554f4166a21cda2c4d378fe99a175da"
+  },
+  "rollback": {
+    "action": "ATOMICALLY_RESTORE_EXACT_C1_V1_AND_C2_V1_SELECTOR_IDENTITIES",
+    "preserve_v2_releases_immutable_inactive": true,
+    "legacy_b_state_reactivation": "PROHIBITED"
+  },
+  "retained_authority": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "canonical_pattern_discovery_append": "NONE",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_change": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "next_action": "MERGE_SELECTOR_TRANSACTION_PULL_MAIN_LOCALLY_EXECUTE_C1C_G5_CORRECTIVE_PILOT_RERUN_RETURN_SIGNED_COMPACT_EVIDENCE"
+}

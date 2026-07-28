@@ -1,27 +1,47 @@
 schema: ovc-opt-b-c2-active-selectors/v1
-selector_set_id: SELECTOR.OPT-B.C2.GBPUSD.v1
-transaction_id: TXN.C2.ACTIVE_DISCOVERY.BSTATE_RETIREMENT.v1
+selector_set_id: SELECTOR.OPT-B.C2.GBPUSD.v2
+transaction_id: C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28
 state: ACTIVE_DISCOVERY
 atomic: true
-activated_at: 2026-07-26
+atomic_on_main_merge: true
+activated_at: 2026-07-28
 operator: OWEN_VITAE
 
 selectors:
   discovery:
     selector_state: ACTIVE
     authority_state: ACTIVE_DISCOVERY
-    release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
-    manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
-    manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
+    release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2
+    manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    manifest_sha256: c60b48ac18653eaf253c48f63645dbaa11bd94cee9a28a83ed7ae7bad5cac180
+    manifest_file_sha256: 9f78cec29a1f19fc77f9feec0171eb2b822c9959f3dc77b373420907a3b028af
+    parent_c1_release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
+    parent_c1_manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    parent_c1_manifest_sha256: c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf
     remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION
-    remote_verification_workflow_run_id: 30214691361
+    remote_verification_workflow_run_id: 30386243014
+    semantic_equivalence: PASS_ZERO_STATE_OR_TRANSITION_VALUE_DRIFT
+    rollback_target:
+      release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+      manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
+      manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
   development:
     selector_state: NONE
     authority_state: REMOTE_VERIFIED_REFERENCE_ONLY
-    release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1
-    manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1
-    manifest_sha256: 8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e
+    release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2
+    manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2.r1
+    manifest_sha256: 42cb65574473826c82ca94d8c2e8c46d9d4acfc79a0090daef68c3efbc8cee62
+    manifest_file_sha256: 53986fe8426960d4cb9da5145d91b0889b20566207d80da95c6f15d9460a3f75
+    parent_c1_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
+    parent_c1_manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1
+    parent_c1_manifest_sha256: e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f
     remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION
+    remote_verification_workflow_run_id: 30386243014
+    semantic_equivalence: PASS_ZERO_STATE_OR_TRANSITION_VALUE_DRIFT
+    rollback_target:
+      release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1
+      manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1
+      manifest_sha256: 8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e
   validation:
     selector_state: NONE
     authority_state: NONE
@@ -29,22 +49,41 @@ selectors:
 
 legacy_retirement:
   object_id: B-STATE-0.3b
-  prior_state: LEGACY_QUARANTINED
+  prior_state: HISTORICAL_SUPERSEDED
   new_state: HISTORICAL_SUPERSEDED
   runtime_imports: DENIED
   selector_eligibility: DENIED
   release_parent_eligibility: DENIED
   rollback_target: DENIED
 
+coordinated_transaction:
+  paired_c1_selector_set_id: SELECTOR.OPT-B.C1.ROLESET.v0.2
+  operator_decision_id: C1C-G3-G4-G5-OPERATOR-PASS-2026-07-28
+  c1_v2_publication_workflow_run_id: 30384400312
+  c2_v2_publication_workflow_run_id: 30386243014
+  semantic_state_drift_count: 0
+  semantic_transition_drift_count: 0
+  state_record_count: 404434
+  transition_record_count: 323910
+  canonical_pattern_discovery_append: DENIED
+  pilot_supersession_rerun: PENDING_EXTERNAL_LOCAL_ARTIFACT_EXECUTION
+
 rollback:
-  action: SET_ALL_C2_SELECTORS_NONE
-  target_state: C1_ONLY_OPERATION
-  c1_selector_state: SHADOW
+  action: ATOMICALLY_RESTORE_EXACT_C1_V1_AND_C2_V1_SELECTOR_IDENTITIES
+  target_state: C1_V1_C2_V1_OPERATION
   legacy_b_state_reactivation: PROHIBITED
+  preserves_v2_releases_immutable_inactive: true
 
 retained_authority:
   validation_consumption: LOCKED_UNCONSUMED
+  semantic_promotion: NONE
+  family_promotion: NONE
+  novelty_promotion: NONE
+  threshold_change: NONE
+  canonical_pattern_discovery_append: NONE
   probability: NONE
+  risk: NONE
   exposure: NONE
   trading: NONE
   execution: NONE
+  agent_write: NONE

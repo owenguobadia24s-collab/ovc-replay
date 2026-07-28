@@ -39,16 +39,30 @@ jobs:
           assert handoff['status'] == 'PASS_INTERFACE_VALIDATED_CONSUMPTION_NOT_AUTHORISED'
           assert handoff['c2_consumption'] == 'DENIED_PENDING_SEPARATE_HANDOFF_REVIEW'
           assert selectors.count('selector_state: NONE') == 1
-          assert 'rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE' in selectors
+
+          corrective = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json')
           successor = Path('registries/authority/C1_TO_C2_ACTIVE_HANDOFF_AUTHORITY.yaml')
-          if successor.exists():
+          if corrective.exists():
+              transaction = json.loads(corrective.read_text())
+              text = successor.read_text()
+              assert transaction['status'] == 'APPROVED_MATERIALISED_EFFECTIVE_ON_MAIN_MERGE'
+              assert transaction['atomic_on_main_merge'] is True
+              assert selectors.count('selector_state: ACTIVE') == 2
+              assert 'OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2' in selectors
+              assert 'OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2' in selectors
+              assert 'status: PASS_C1_V2_ACTIVE_C2_V2_ACTIVE_DISCOVERY' in text
+              assert 'c2_activation: ACTIVE_DISCOVERY' in text
+              assert 'ATOMICALLY_RESTORE_EXACT_C1_V1_AND_C2_V1_SELECTOR_IDENTITIES' in selectors
+          elif successor.exists():
               text = successor.read_text()
               assert selectors.count('selector_state: ACTIVE') == 2
               assert 'status: PASS_C1_ACTIVE_C2_SCOPE_AUTHORISED' in text
               assert 'c2_activation: DENIED_PENDING_C2_GATES' in text
+              assert 'rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE' in selectors
           else:
               authority = Path('registries/authority/ACTIVE_AUTHORITY.yaml').read_text()
               assert selectors.count('selector_state: SHADOW') == 2
               assert 'state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED' in authority
               assert '  opt_b_c1: SHADOW' in authority
+              assert 'rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE' in selectors
           PY

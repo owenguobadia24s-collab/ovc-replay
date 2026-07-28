@@ -29,9 +29,22 @@ jobs:
           retirement = Path('registries/opt_b/c2/C2_LEGACY_RETIREMENT_PLAN.yaml').read_text()
           assert gate['decision'] == 'PASS_C2_BOUNDARY_RETIREMENT_AND_RESEARCH_LINE_FROZEN'
           assert gate['blocking_issues'] == 0
-          assert any(state in registry for state in ('WP1_PASS_BOUNDARY_FROZEN_WP2_AUTHORISED','WP2_PASS_CONTRACTS_SCHEMAS_REGISTRIES_PARAMETERS_FROZEN'))
-          assert 'selector: NONE' in registry
+          lawful_successors = (
+              'WP1_PASS_BOUNDARY_FROZEN_WP2_AUTHORISED',
+              'WP2_PASS_CONTRACTS_SCHEMAS_REGISTRIES_PARAMETERS_FROZEN',
+              'C2_G3R_PASS_ACTUAL_C1_AND_EXACT_OPT_A_PRICE_PARENT_ENGINE_TRUST',
+          )
+          assert any(state in registry for state in lawful_successors)
           assert 'validation_consumption: LOCKED_UNCONSUMED' in registry
           assert 'B-STATE-0.3b runtime imports or parentage' in dependency
           assert 'reactivate_b_state: PROHIBITED' in retirement
+          corrective = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json')
+          if corrective.exists():
+              transaction = json.loads(corrective.read_text())
+              selectors = Path('registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml').read_text()
+              assert transaction['atomic_on_main_merge'] is True
+              assert 'OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2' in selectors
+              assert 'legacy_b_state_reactivation: PROHIBITED' in selectors
+          else:
+              assert 'selector: NONE' in registry
           PY

@@ -1,0 +1,103 @@
+{
+  "schema": "ovc-c1c-g4-g5-coordinated-selector-transaction/v1",
+  "transaction_id": "C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "operator_decision_id": "C1C-G3-G4-G5-OPERATOR-PASS-2026-07-28",
+  "status": "APPROVED_MATERIALISED_EFFECTIVE_ON_MAIN_MERGE",
+  "atomic_on_main_merge": true,
+  "preconditions": {
+    "c1_v2_remote_verification_workflow_run_id": 30384400312,
+    "c1_v2_remote_object_count": 194,
+    "c1_v2_remote_verified_bytes": 36206001,
+    "c2_v2_remote_verification_workflow_run_id": 30386243014,
+    "c2_v2_remote_object_count": 38,
+    "c2_v2_remote_verified_bytes": 872879711,
+    "c2_state_record_count": 404434,
+    "c2_transition_record_count": 323910,
+    "c2_semantic_state_drift_count": 0,
+    "c2_semantic_transition_drift_count": 0,
+    "deterministic_output_equivalence": "PASS_TWO_INDEPENDENT_BYTE_IDENTICAL_MATERIALIZATIONS"
+  },
+  "before": {
+    "c1_discovery": {
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+      "manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2"
+    },
+    "c1_development": {
+      "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1",
+      "manifest_sha256": "ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017"
+    },
+    "c2_discovery": {
+      "release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1",
+      "manifest_sha256": "c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33"
+    },
+    "c2_development": {
+      "release_id": "OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1.r1",
+      "manifest_sha256": "8a37e931ac003e88c8e1b3c4f8a1849e947f86f47e982e00ca4723e53fd9586e",
+      "selector_state": "NONE_REMOTE_VERIFIED_REFERENCE_ONLY"
+    }
+  },
+  "after": {
+    "c1_discovery": {
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+      "manifest_sha256": "c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf",
+      "manifest_file_sha256": "708025a0f96db4649996bc1201da258f76c048723cf29b0c82725a19ba6418a9",
+      "selector_state": "ACTIVE_DISCOVERY"
+    },
+    "c1_development": {
+      "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1",
+      "manifest_sha256": "e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f",
+      "manifest_file_sha256": "56c42c1d34d77670ffec25dcf86da6bd7726017c133f1bd9e4f4be2aba23633e",
+      "selector_state": "ACTIVE_DEVELOPMENT"
+    },
+    "c2_discovery": {
+      "release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+      "manifest_sha256": "c60b48ac18653eaf253c48f63645dbaa11bd94cee9a28a83ed7ae7bad5cac180",
+      "manifest_file_sha256": "9f78cec29a1f19fc77f9feec0171eb2b822c9959f3dc77b373420907a3b028af",
+      "selector_state": "ACTIVE_DISCOVERY",
+      "parent_c1_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2"
+    },
+    "c2_development": {
+      "release_id": "OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2.r1",
+      "manifest_sha256": "42cb65574473826c82ca94d8c2e8c46d9d4acfc79a0090daef68c3efbc8cee62",
+      "manifest_file_sha256": "53986fe8426960d4cb9da5145d91b0889b20566207d80da95c6f15d9460a3f75",
+      "selector_state": "NONE_REMOTE_VERIFIED_REFERENCE_ONLY",
+      "parent_c1_release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2"
+    }
+  },
+  "rollback": {
+    "action": "ATOMICALLY_RESTORE_EXACT_C1_V1_AND_C2_V1_SELECTOR_IDENTITIES",
+    "preserve_v2_releases_immutable_inactive": true,
+    "legacy_b_state_reactivation": "PROHIBITED"
+  },
+  "pilot": {
+    "source_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "source_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+    "action": "APPEND_ONLY_SUPERSEDE_AND_RERUN_UNDER_NEW_PILOT_IDENTITY",
+    "status": "BLOCKED_PENDING_EXACT_OPERATOR_LOCAL_SOURCE_AND_SIGNING_MATERIAL",
+    "canonical_append": "DENIED",
+    "promotion_eligibility": "NON_PROMOTABLE"
+  },
+  "retained_prohibitions": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "canonical_pattern_discovery_append": "NONE",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_change": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  }
+}
