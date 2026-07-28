@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-pd-g5p-correction-return-qa/v1",
+  "gate_id": "PD-G5P",
+  "gate_iteration": 2,
+  "gate_title": "Pilot Discovery Correction Return and Canonical Discovery Authority",
+  "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
+  "plan_version": "0.1",
+  "baseline_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
+  "candidate_commit": null,
+  "qa_status": "PASS",
+  "qa_recommendation": "PASS",
+  "acceptance_conditions": [
+    {"condition": "ORIGINAL_PILOT_EVIDENCE_EXACT_BYTES_AND_SIGNATURE_CHAIN_PASS", "result": "PASS"},
+    {"condition": "ALL_SIX_PD_G5P_CORRECTION_OBJECTIVES_CLOSED", "result": "PASS"},
+    {"condition": "FIVE_NON_ACCEPTED_OBJECTS_HAVE_STRUCTURED_DETERMINISTIC_CORRECTIONS", "result": "PASS"},
+    {"condition": "V2_REVIEW_CONTRACT_FAILS_CLOSED", "result": "PASS"},
+    {"condition": "CONSOLE_CORRECTION_IS_READ_ONLY_AND_AUTHORITY_DISTINCT", "result": "PASS"},
+    {"condition": "FINAL_CANONICAL_DISCOVERY_CONTRACT_CANDIDATE_FROZEN", "result": "PASS_CANDIDATE_ONLY"},
+    {"condition": "CANONICAL_IDENTITY_RESET_PROCEDURE_FROZEN", "result": "PASS_CANDIDATE_ONLY"},
+    {"condition": "SECOND_PILOT_REPLAY_NECESSITY_RESOLVED", "result": "PASS_NOT_REQUIRED"},
+    {"condition": "FOCUSED_DEPENDENT_AND_REPOSITORY_TESTS_PASS", "result": "PASS"},
+    {"condition": "CURRENT_AUTHORITY_REMAINS_FAIL_CLOSED_PENDING_OPERATOR", "result": "PASS"}
+  ],
+  "evidence": {
+    "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "pilot_review_receipt_file_sha256": "2486d9f7097c434fd52d4d5fd0cd086df8117887b6bf4b70a9ef6cf50869ab81",
+    "pilot_defect_ledger_file_sha256": "a9e0102e042e3919871c7c0b135a60e4d3d27d8483f2e8eaa55fd366ee6d174d",
+    "correction_ledger_sha256": "cd93fb5cc6490402449d94a433e7f74a4f12722ef2a922dd12f3236dcd0f17bd",
+    "correction_merge_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96"
+  },
+  "tests": [
+    {"workflow_run": 30374928283, "job": 90328016724, "result": "PASS", "tested_head": "2b8f8cee6825781a5f2b67af8f4a00173491c26c"},
+    {"workflow_run": 30374929201, "job": 90328019927, "result": "PASS", "tested_head": "2b8f8cee6825781a5f2b67af8f4a00173491c26c"},
+    {"workflow_run": 30375427315, "job": 90329757637, "result": "PASS", "tested_head": "76436c8f5c43d3eb333d804ef4652cc864aba865"},
+    {"workflow_run": 30375427307, "job": 90329757773, "result": "PASS", "tested_head": "76436c8f5c43d3eb333d804ef4652cc864aba865"}
+  ],
+  "warnings": [
+    "The v0.2 final contract and identity reset remain candidates until an operator PASS.",
+    "A PASS would grant canonical Discovery processing authority and is operator-reserved.",
+    "No second pilot replay is recommended or requested.",
+    "No semantic, family, candidate, threshold, model, selector, release, R2, Validation, probability, risk, exposure, trading, execution or agent-write authority is included."
+  ],
+  "unresolved_issues": [],
+  "recommended_decision": "PASS",
+  "recommendation_reason": "All deferred correction conditions are closed deterministically, no correction replay is required, the final contract and identity reset candidates are frozen, tests pass and the proposed canonical Discovery authority is explicitly bounded for operator decision.",
+  "rollback": "KEEP_PD_G5P_DEFER_EFFECTIVE_KEEP_CORR1_MERGED_PRESERVE_PILOT_EVIDENCE_DENY_CANONICAL_DISCOVERY_AND_CONTRACT_ACTIVATION"
+}
