@@ -2,8 +2,9 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RO3_WP3_QA_REVIEW
+status: RO3_BLOCKED_AT_G3
 baseline_commit: 8c243c009f30e453312861708afb784fe762c442
+current_main_at_blocker_record: ac5d9c9cbc4b2336c3af389f01a60827a509b1ba
 items:
   - id: RO3-00
     name: Boundary and design freeze
@@ -65,27 +66,46 @@ items:
       writes: NONE
   - id: RO3-WP3
     name: Symmetry metamorphic and deterministic assurance
-    status: QA_REVIEW
+    status: BLOCKED
     gate: RO3-G3
     branch: build/research-operations-v0-3-wp3-formula-assurance
     baseline_commit: 8c243c009f30e453312861708afb784fe762c442
+    tested_candidate_commit: cc1eac3830d3cbd5f568f89e4389c8f7390629b7
+    tested_pull_request_merge_ref: 71c21f5721f016f68a073124fb545c290a754f58
     authority_delta: QA_EVIDENCE_ONLY
+    decision: BLOCK
+    decision_authority: QA_BLOCKING_POLICY
+    qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_GATE_PACKET.json
+    decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_BLOCKER_DECISION.md
+    evidence_record: docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_ASSURANCE_EVIDENCE.json
+    blocker_id: RO3-G3-BLOCK-001
+    blocker: C1_WICK_BALANCE_FROZEN_FORMULA_IMPLEMENTATION_SIGN_INVERSION
+    correctable_inside_packet_scope: false
     runtime:
-      invariant_registry: FROZEN_AT_RO3_G0
-      invariant_registry_independence: IMPLEMENTED
-      metamorphic_runner: IMPLEMENTED
-      golden_contract_oracle: IMPLEMENTED_FIXTURE_ONLY
-      deterministic_receipt: IMPLEMENTED
-      negative_control: IMPLEMENTED
+      invariant_registry: FROZEN_AT_RO3_G0_UNCHANGED
+      invariant_registry_independence: PASS
+      metamorphic_runner: PASS_79_OF_79
+      golden_contract_oracle: BLOCK_17_OF_18_PASS
+      blocking_primitive: C1-WICK-BALANCE.v0.1
+      formula_registry_expected: upper_wick_share_minus_lower_wick_share
+      implementation_actual: lower_wick_share_minus_upper_wick_share
+      deterministic_receipt: PASS_IDENTICAL_BYTES
+      negative_control: PASS_DETECTED
+      focused_tests: PASS_9
+      canonical_tests: PASS_70
+      qa_recommendation: BLOCK
+      workflow_run_id: 30353976138
       writes: NONE
+    continuation_point: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
   - id: RO3-WP4
     name: C1 lineage and Console adapters
-    status: PLANNED
+    status: BLOCKED
+    blocker: RO3-G3-BLOCK-001
     gate: RO3-G4
     authority_delta: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
   - id: RC-G4
     name: Live C1 Console projection consumption
-    status: OPERATOR_REQUIRED_AFTER_RO3_G4
+    status: BLOCKED_BY_RO3_G3
     authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
     auto_ratifiable: false
 retained_boundaries:
@@ -94,7 +114,7 @@ retained_boundaries:
   c2_pattern_discovery_authority: UNCHANGED
   live_console_c1_route: DISABLED_PENDING_RC_G4
   formula_comparison_authority: NON_ACTIVATING_EVIDENCE_ONLY
-  assurance_authority: QA_EVIDENCE_ONLY
+  assurance_authority: BLOCKED_NO_DELTA_GRANTED
   market_authority: NONE
   probability_authority: NONE
   risk_authority: NONE
@@ -102,4 +122,9 @@ retained_boundaries:
   trading_authority: NONE
   execution_authority: NONE
   agent_write_authority: NONE
-next_packet: RO3-WP3_QA
+blockers:
+  - id: RO3-G3-BLOCK-001
+    status: OPEN
+    smallest_lawful_resolution: SEPARATE_C1_WICK_BALANCE_IMPLEMENTATION_RECONCILIATION_AND_IMMUTABLE_RELEASE_CORRECTION_PLAN
+next_packet: null
+continuation_point: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
