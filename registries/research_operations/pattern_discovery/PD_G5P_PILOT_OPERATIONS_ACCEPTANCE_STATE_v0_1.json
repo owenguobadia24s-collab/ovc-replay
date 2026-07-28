@@ -10,32 +10,14 @@
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "baseline_commit": "6c0aa91a6c51a86d39994ef363f8e29bb924764b",
   "branch": "gate/pd-g5p-pilot-operations-review",
-  "candidate_commit": null,
+  "candidate_commit": "b1bb92faaf300c8422581f33f75db96e0ab10a3d",
   "prerequisite_results": [
-    {
-      "prerequisite": "PD-G4B_APPROVED",
-      "result": "PASS"
-    },
-    {
-      "prerequisite": "ONE_PILOT_DISCOVERY_OPERATION_COMPLETED",
-      "result": "PASS"
-    },
-    {
-      "prerequisite": "SIGNED_PILOT_EVIDENCE_CAPTURED",
-      "result": "PASS"
-    },
-    {
-      "prerequisite": "DETERMINISTIC_RERUN_COMPLETED",
-      "result": "PASS"
-    },
-    {
-      "prerequisite": "PILOT_DEFECT_AND_CORRECTION_LEDGER_COMPLETE",
-      "result": "INCOMPLETE_VERSIONED_CORRECTION_REQUIRED"
-    },
-    {
-      "prerequisite": "FINAL_CONTRACT_CANDIDATE_FROZEN",
-      "result": "NOT_FROZEN"
-    }
+    {"prerequisite": "PD-G4B_APPROVED", "result": "PASS"},
+    {"prerequisite": "ONE_PILOT_DISCOVERY_OPERATION_COMPLETED", "result": "PASS"},
+    {"prerequisite": "SIGNED_PILOT_EVIDENCE_CAPTURED", "result": "PASS"},
+    {"prerequisite": "DETERMINISTIC_RERUN_COMPLETED", "result": "PASS"},
+    {"prerequisite": "PILOT_DEFECT_AND_CORRECTION_LEDGER_COMPLETE", "result": "INCOMPLETE_VERSIONED_CORRECTION_REQUIRED"},
+    {"prerequisite": "FINAL_CONTRACT_CANDIDATE_FROZEN", "result": "NOT_FROZEN"}
   ],
   "research_role": "PILOT_DISCOVERY",
   "operation_mode": "TIME_GATED_REPLAY",
@@ -105,7 +87,15 @@
   "gate_packet": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json",
   "evidence_index": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json",
-  "tests": [],
+  "tests": [
+    {
+      "suite": "PD-G5P exact evidence, signature, disposition, authority and full repository tests",
+      "workflow_run": 30368743532,
+      "job": 90306722224,
+      "result": "PASS",
+      "tested_head": "b1bb92faaf300c8422581f33f75db96e0ab10a3d"
+    }
+  ],
   "decision_record": null,
   "rollback": "SEAL_OR_QUARANTINE_PILOT_NAMESPACE_PRESERVE_ALL_PILOT_RECORDS_DENY_CANONICAL_DISCOVERY_UNTIL_A_NEW_OPERATOR_DECISION"
 }
