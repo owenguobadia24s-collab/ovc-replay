@@ -22,7 +22,7 @@
     },
     {
       "packet_id": "RO3-WP1",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["RO3-G0"],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "LOCAL_REPLACEABLE_DERIVED",
@@ -38,27 +38,48 @@
       ],
       "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json",
       "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_DELEGATED_DECISION.md",
-      "merge_commit": null,
+      "merge_commit": "928f5c00bd76ddd9348c8721f4430a1b105d45f1",
       "blockers": [],
       "next_packet": "RO3-WP2"
     },
     {
       "packet_id": "RO3-WP2",
-      "status": "READY",
-      "prerequisites": ["RO3-G1_MERGED"],
+      "status": "APPROVED",
+      "prerequisites": ["RO3-G1"],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "READ_ONLY_DERIVED_INSPECTION",
-      "baseline_commit": null,
+      "baseline_commit": "928f5c00bd76ddd9348c8721f4430a1b105d45f1",
+      "reconciled_main_commit": "c46d9620e242c047dd8e203f91a1b00b542a2a81",
       "branch": "build/research-operations-v0-3-wp2-computability-diff",
+      "candidate_commit": "2ce09241806021f3dfe67289080438d0a24d71b5",
+      "tests": [
+        "19 focused computability, formula-diff and comparison-authority tests PASS",
+        "70 canonical repository tests PASS in 0.851 seconds",
+        "pull-request merge-ref base-change reconciliation PASS",
+        "comparison, Validation, write and presentation denials PASS"
+      ],
+      "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_GATE_PACKET.json",
+      "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_DELEGATED_DECISION.md",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "RO3-WP3"
+    },
+    {
+      "packet_id": "RO3-WP3",
+      "status": "READY",
+      "prerequisites": ["RO3-G2_MERGED"],
+      "authority_required": "AUTO_EXECUTABLE",
+      "authority_delta": "QA_EVIDENCE_ONLY",
+      "baseline_commit": null,
+      "branch": "build/research-operations-v0-3-wp3-formula-assurance",
       "candidate_commit": null,
       "tests": [],
       "qa_packet": null,
       "decision_record": null,
       "merge_commit": null,
       "blockers": [],
-      "next_packet": "RO3-WP3"
+      "next_packet": "RO3-WP4"
     },
-    {"packet_id": "RO3-WP3", "status": "PLANNED", "prerequisites": ["RO3-G2"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "QA_EVIDENCE_ONLY", "next_packet": "RO3-WP4"},
     {"packet_id": "RO3-WP4", "status": "PLANNED", "prerequisites": ["RO3-G3"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS", "next_packet": "RC-G4"},
     {"packet_id": "RC-G4", "status": "PLANNED", "prerequisites": ["RO3-G4"], "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE", "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION", "next_packet": null}
   ]

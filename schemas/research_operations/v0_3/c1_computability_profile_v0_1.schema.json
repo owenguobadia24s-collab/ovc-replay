@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_computability_profile_v0_1",
+  "title": "C1ComputabilityProfile v0.1",
+  "type": "object",
+  "required": [
+    "schema", "profile_id", "role", "record_emission",
+    "current_bar_admissibility", "range_computability",
+    "prior_close_computability", "price_increment_computability",
+    "chronology", "field_null_consistency", "null_reason_counts", "writes"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-computability-profile/v1"},
+    "profile_id": {"type": "string", "pattern": "^ro3-c1-computability:[0-9a-f]{64}$"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "release_id": {"type": ["string", "null"]},
+    "manifest_id": {"type": ["string", "null"]},
+    "instrument_id": {"type": ["string", "null"]},
+    "clock_id": {"type": ["string", "null"]},
+    "price_side": {"type": ["string", "null"]},
+    "source_bar_id": {"type": ["string", "null"]},
+    "record_id": {"type": ["string", "null"]},
+    "record_emission": {"enum": ["ONE_RECORD", "NO_RECORD"]},
+    "record_emission_reason": {"type": ["string", "null"]},
+    "current_bar_admissibility": {"enum": ["PASS", "REJECTED"]},
+    "range_computability": {"enum": ["COMPUTABLE", "ZERO_RANGE", "NOT_EVALUATED"]},
+    "prior_close_computability": {"enum": ["COMPUTABLE", "NOT_COMPUTABLE", "NOT_EVALUATED"]},
+    "prior_close_reason": {"type": ["string", "null"]},
+    "price_increment_computability": {"enum": ["COMPUTABLE", "NOT_COMPUTABLE", "NOT_EVALUATED"]},
+    "chronology": {"enum": ["PASS", "NOT_EVALUATED"]},
+    "field_null_consistency": {"enum": ["PASS", "NOT_APPLICABLE"]},
+    "null_reason_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "measurement_count": {"type": "integer", "minimum": 0},
+    "categorical_count": {"type": "integer", "minimum": 0},
+    "writes": {"const": "NONE"}
+  },
+  "additionalProperties": false
+}

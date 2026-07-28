@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/comparison_acknowledgement_v0_1",
+  "title": "ComparisonAcknowledgement v0.1",
+  "type": "object",
+  "required": [
+    "schema", "comparison_id", "operator_id", "acknowledged_at",
+    "expires_at", "acknowledged_statement", "record_state",
+    "authority_effect", "supersedes", "acknowledgement_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-comparison-acknowledgement/v1"},
+    "comparison_id": {"type": "string", "pattern": "^ro3-c1-comparison:[0-9a-f]{64}$"},
+    "operator_id": {"type": "string", "minLength": 1},
+    "acknowledged_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "acknowledged_statement": {"type": "string", "minLength": 1},
+    "record_state": {"const": "FROZEN_APPEND_ONLY"},
+    "authority_effect": {"const": "NONE"},
+    "supersedes": {"type": "null"},
+    "acknowledgement_id": {"type": "string", "pattern": "^ro3-comparison-ack:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
