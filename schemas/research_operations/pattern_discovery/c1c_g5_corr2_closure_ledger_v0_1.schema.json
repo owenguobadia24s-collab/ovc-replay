@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/c1c_g5_corr2_closure_ledger_v0_1.schema.json",
+  "title": "C1C-G5 CORR2 closure ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "packet_id", "gate_id", "pilot_run_id",
+    "source_corr2_review_receipt_file_sha256", "workflow_evidence_finding",
+    "console_context_finding", "deferred_object_resolutions",
+    "remaining_deferred_object_count", "contract_changes_required", "pilot_only",
+    "promotion_eligibility", "canonical_append", "status", "ledger_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corr2-closure-ledger/v1"},
+    "packet_id": {"const": "C1C-G5-CORR2"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "source_corr2_review_receipt_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "workflow_evidence_finding": {"const": "CLOSED_BY_IMPLEMENTATION_AND_TESTS"},
+    "console_context_finding": {"const": "CLOSED_BY_IMPLEMENTATION_AND_TESTS"},
+    "deferred_object_resolutions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate_window_id", "prior_finding_code", "final_disposition", "status"],
+        "properties": {
+          "candidate_window_id": {"type": "string", "pattern": "^PDPILOT-CANDIDATE-"},
+          "prior_finding_code": {"type": "string", "pattern": "^PD-DEFER-"},
+          "final_disposition": {"enum": ["WORKFLOW_ACCEPTED", "DEFER_PILOT_OBJECT", "REJECT_PILOT_OBJECT"]},
+          "status": {"enum": ["OPEN_DEFERRED", "CLOSED_BY_OPERATOR_REREVIEW"]}
+        }
+      }
+    },
+    "remaining_deferred_object_count": {"type": "integer", "minimum": 0, "maximum": 2},
+    "contract_changes_required": {"type": "boolean"},
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_append": {"const": "DENIED"},
+    "status": {"enum": ["CORR2_CLOSURE_READY", "CORR2_REVIEW_COMPLETE_REMAINS_DEFERRED"]},
+    "ledger_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
