@@ -18,6 +18,7 @@ GATE_PACKET = ROOT / "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_PILOT_D
 QA_PACKET = ROOT / "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_PILOT_DISCOVERY_QA_PACKET.md"
 DECISION = ROOT / "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_OPERATOR_DECISION.md"
 SUPERSESSION = ROOT / "docs/releases/pattern-discovery-v0-3/pd-wp5/RPS_G4A_PILOT_DISCOVERY_SUPERSESSION_RECORD.md"
+PD_G5P_DECISION = ROOT / "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md"
 
 
 def load(path: Path) -> dict[str, object]:
@@ -43,16 +44,17 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
         self.assertEqual(gate["signing_binding_id"], "RPS.SIGNING.50092c28981fef08f53a6cb5")
         self.assertEqual(gate["operator_id"], "OVC.OPERATOR.PRIMARY.LOCAL.V1")
 
-    def test_pilot_packet_advanced_after_operator_approval(self) -> None:
+    def test_pilot_packet_completed_and_corr1_authorised_after_defer(self) -> None:
         state = load(PD_STATE)
-        self.assertEqual(state["packet_status"], "APPROVED")
-        self.assertEqual(state["packet_phase"], "PILOT_DISCOVERY_APPROVED")
-        self.assertEqual(state["authority_required"], "APPROVED_PD_G4B")
+        self.assertEqual(state["packet_status"], "COMPLETED")
+        self.assertEqual(state["packet_phase"], "PD_G5P_DEFERRED_PD_WP5_CORR1_AUTHORISED")
+        self.assertEqual(state["authority_required"], "NONE_FOR_PD_WP5_CORR1_NON_ACTIVATING_SPECIFICATION")
         self.assertFalse(state["operator_approval_required"])
-        self.assertEqual(state["decision"], "PASS")
-        self.assertEqual(state["next_packet"], "PD-WP5-PILOT")
+        self.assertEqual(state["decision"], "DEFER")
+        self.assertEqual(state["next_packet"], "PD-WP5-CORR1")
         self.assertEqual(state["next_gate"], "PD-G5P")
-        self.assertEqual(state["decision_record"], "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_OPERATOR_DECISION.md")
+        self.assertEqual(state["decision_record"], "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md")
+        self.assertEqual(state["second_pilot_replay"], "DENIED")
 
     def test_pilot_outputs_are_non_promotable_and_noncanonical(self) -> None:
         gate = load(PD_G4B_STATE)
@@ -109,15 +111,17 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
         self.assertFalse(active["live_append_enabled"])
         self.assertEqual(active["time_gated_replay_backfill"], "DENIED")
 
-    def test_pilot_acceptance_precedes_canonical_discovery(self) -> None:
+    def test_pd_g5p_defer_still_precedes_canonical_discovery(self) -> None:
         gate = load(PD_G4B_STATE)
         acceptance = load(PD_G5P_STATE)
         self.assertEqual(gate["next_gate"], "PD-G5P")
-        self.assertEqual(acceptance["gate_status"], "PLANNED")
+        self.assertEqual(acceptance["gate_status"], "COMPLETED")
+        self.assertEqual(acceptance["decision"], "DEFER")
         self.assertFalse(acceptance["canonical_discovery_available"])
-        self.assertEqual(acceptance["next_packet_on_pass"], "PD-WP5-CANONICAL")
+        self.assertEqual(acceptance["next_packet"], "PD-WP5-CORR1")
         self.assertEqual(acceptance["next_source_on_pass"], "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1")
         self.assertIn("RESET_ALL", acceptance["required_identity_action_on_pass"])
+        self.assertEqual(acceptance["second_pilot_replay"], "DENIED")
 
     def test_gate_schema_covers_full_machine_record(self) -> None:
         gate = load(PD_G4B_STATE)
@@ -128,19 +132,22 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
         self.assertFalse(required - set(gate))
         self.assertFalse(schema["additionalProperties"])
 
-    def test_test_evidence_is_pinned(self) -> None:
+    def test_historical_and_current_test_evidence_are_pinned(self) -> None:
         gate = load(PD_G4B_STATE)
         state = load(PD_STATE)
-        for record in (gate, state):
-            self.assertEqual(record["tested_candidate_head"], "1c55524754d6cd457ea8e60a6478206bb89aa886")
-            self.assertEqual(record["pull_request"], 117)
-            self.assertEqual(len(record["tests"]), 3)
-            self.assertEqual(record["pilot_amendment_job"], 90114384840)
-            self.assertEqual(record["historical_supersession_job"], 90114385057)
-            self.assertEqual(record["canonical_test_job"], 90114384730)
+        self.assertEqual(gate["tested_candidate_head"], "1c55524754d6cd457ea8e60a6478206bb89aa886")
+        self.assertEqual(gate["pull_request"], 117)
+        self.assertEqual(len(gate["tests"]), 3)
+        self.assertEqual(gate["pilot_amendment_job"], 90114384840)
+        self.assertEqual(gate["historical_supersession_job"], 90114385057)
+        self.assertEqual(gate["canonical_test_job"], 90114384730)
+        self.assertEqual(state["tested_candidate_head"], "06b0a4604b1afc72b130f3dc2eab1dd8be4f9fc5")
+        self.assertEqual(state["implementation_pull_request"], 121)
+        self.assertEqual(state["implementation_tests"][0]["workflow_run"], 30353957840)
+        self.assertEqual(state["gate_tests"][0]["workflow_run"], 30368743532)
 
     def test_contract_and_gate_records_are_complete(self) -> None:
-        for path in (CONTRACT, HISTORICAL_LIVE_CONTRACT, GATE_PACKET, QA_PACKET, DECISION, SUPERSESSION):
+        for path in (CONTRACT, HISTORICAL_LIVE_CONTRACT, GATE_PACKET, QA_PACKET, DECISION, SUPERSESSION, PD_G5P_DECISION):
             self.assertTrue(path.is_file(), path)
         contract = CONTRACT.read_text(encoding="utf-8")
         for phrase in (
@@ -156,6 +163,7 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
         self.assertIn("PASS_RECOMMEND_OPERATOR_AMENDMENT", QA_PACKET.read_text(encoding="utf-8"))
         self.assertIn("Recommended decision", GATE_PACKET.read_text(encoding="utf-8"))
         self.assertIn("Decision: `PASS`", DECISION.read_text(encoding="utf-8"))
+        self.assertIn("OVC APPROVE PD-G5P DEFER", PD_G5P_DECISION.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
