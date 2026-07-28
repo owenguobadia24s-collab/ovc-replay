@@ -45,7 +45,8 @@ def load_json(path: Path) -> dict:
 
 
 def exact_bytes(name: str) -> bytes:
-    return base64.b64decode((RAW_ROOT / f"{name}.b64").read_text(encoding="ascii"), validate=True)
+    encoded = (RAW_ROOT / f"{name}.b64").read_text(encoding="ascii").strip()
+    return base64.b64decode(encoded, validate=True)
 
 
 def exact_json(name: str) -> dict:
