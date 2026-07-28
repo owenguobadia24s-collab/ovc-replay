@@ -1,7 +1,7 @@
 schema: ovc-c1-corrective-programme/v1
 programme_id: OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1
 plan_version: '0.1'
-status: OPERATOR_APPROVED_EXECUTION_AUTHORISED
+status: OPERATOR_APPROVED_EXECUTION_IN_PROGRESS
 operator_ratification: C1C-G0_PASS
 ratified_on: '2026-07-28'
 baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
@@ -42,22 +42,24 @@ candidate_releases:
     release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
     manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
     manifest_sha256: c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf
+    manifest_file_sha256: 708025a0f96db4649996bc1201da258f76c048723cf29b0c82725a19ba6418a9
     record_count: 159892
     record_file_count: 144
     active_v1_byte_equivalence: PASS
     workflow_artifact_id: 8692836156
     workflow_artifact_digest: sha256:9cec2ff4391576334149cb4a3542131b2692530829d9794c4038354a4a299bf7
-    status: RELEASE_FROZEN_LOCAL_CANDIDATE
+    status: REMOTE_VERIFIED_INACTIVE
   development:
     release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
     manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1
     manifest_sha256: e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f
+    manifest_file_sha256: 56c42c1d34d77670ffec25dcf86da6bd7726017c133f1bd9e4f4be2aba23633e
     record_count: 52872
     record_file_count: 48
     active_v1_byte_equivalence: PASS
     workflow_artifact_id: 8692837001
     workflow_artifact_digest: sha256:fa5e02c23a834b0d6c1c9496635b6a5fcda8fbf3b9354fe3cc8ab363ea6937d1
-    status: RELEASE_FROZEN_LOCAL_CANDIDATE
+    status: REMOTE_VERIFIED_INACTIVE
 work_packets:
   - packet_id: C1C-WP1
     status: COMPLETED
@@ -119,15 +121,20 @@ gates:
     title: R2 publication
     owner: OPERATOR
     auto_ratifiable: false
-    status: APPROVED
+    status: COMPLETED
     decision: PASS
     decision_authority: OPERATOR
     decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
+    execution_workflow_run: 30384400312
+    execution_commit: 1e2a1960ff0eb6747998453e5693cc82856524ba
+    remote_verification_receipt: docs/releases/opt-b-c1-v2/corrective/c1c-g3/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
+    remote_object_count: 194
+    remote_verified_bytes_including_manifests: 36206001
   - gate_id: C1C-G4
     title: C1 selector replacement
     owner: OPERATOR
     auto_ratifiable: false
-    status: APPROVED_PENDING_C1_V2_REMOTE_VERIFICATION
+    status: APPROVED_READY_FOR_COORDINATED_EXECUTION
     decision: PASS
     decision_authority: OPERATOR
     decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
@@ -135,7 +142,7 @@ gates:
     title: Downstream remediation
     owner: OPERATOR
     auto_ratifiable: false
-    status: APPROVED_PENDING_C1_V2_REMOTE_VERIFICATION
+    status: APPROVED_READY_FOR_EXECUTION
     decision: PASS
     decision_authority: OPERATOR
     decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
@@ -147,16 +154,18 @@ continuation:
   blocked_ro3_gate: RO3-G3
   continuation_id: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
   resume_condition: CORRECTED_RELEASE_CHAIN_REMOTE_VERIFIED_AND_REQUIRED_OPERATOR_DECISIONS_RECORDED
-  next_action: EXECUTE_C1C_G3_PUBLICATION
+  next_action: EXECUTE_C1C_G5_C2_IDENTITY_REPLAY_PUBLICATION_AND_COORDINATED_C1C_G4_G5_SELECTOR_TRANSACTION
 external_evidence:
   candidate_build_workflow_run: 30370847916
   final_packet_verification_workflow_run: 30371616629
+  c1c_g3_publication_workflow_run: 30384400312
   evidence_artifact_id: 8692834967
   evidence_artifact_digest: sha256:961e816e18b64cfe48a643dedf7a3f3ad64deecb53ffbe3e10a33dfe3ac0dc30
+  c1c_g3_remote_verification_receipt: docs/releases/opt-b-c1-v2/corrective/c1c-g3/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
 authority:
   formula_registry_mutation: NONE
-  active_release_mutation: NONE
-  r2_publication: AUTHORISED_EXACT_C1_V2_RELEASES_C1C_G3
+  active_release_mutation: NONE_PENDING_COORDINATED_C1C_G4_G5
+  r2_publication: COMPLETED_EXACT_C1_V2_RELEASES_C1C_G3
   selector_replacement: AUTHORISED_AFTER_C1_V2_REMOTE_VERIFIED_C1C_G4
   c2_mutation: AUTHORISED_DETERMINISTIC_IDENTITY_REPLAY_ONLY_C1C_G5
   pattern_discovery_canonical_append: NONE

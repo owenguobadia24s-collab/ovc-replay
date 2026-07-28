@@ -1,0 +1,133 @@
+name: C1C-G3 exact C1 v2 R2 publication
+
+on:
+  push:
+    branches:
+      - publish/c1c-g3-c1-v2-r2
+    paths:
+      - .github/workflows/c1c-g3-r2-publication.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: c1c-g3-r2-publication
+  cancel-in-progress: false
+
+jobs:
+  publish-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+      SOURCE_RUN_ID: '30370847916'
+      APPROVAL_MERGE: '5eb773e47e10209057e6731f01f8702b3e3a2596'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run repository tests before publication
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+
+      - name: Verify operator approval and exact gate packet
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'OPERATOR_APPROVED_EXECUTION_AUTHORISED' registries/opt_b/c1/C1_CORRECTIVE_PROGRAMME_v0_1.yaml
+          grep -q 'OVC APPROVE C1C-G3 C1C-G4 C1C-G5' docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.md
+          grep -q '"gate_id": "C1C-G3"' docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
+          grep -q '"decision": "PASS"' docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
+
+      - name: Install and validate rclone
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo '::error::Missing R2 access-key secret'; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo '::error::Missing R2 secret-key secret'; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
+          rclone lsf --s3-no-check-bucket ovc_r2:ovc-evidence >/dev/null
+
+      - name: Download exact C1C Discovery v2 candidate
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30370847916
+          name: c1c-discovery-2021-2023-v2-local-candidate
+          path: c1c-g3/discovery
+
+      - name: Download exact C1C Development v2 candidate
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30370847916
+          name: c1c-development-2024-v2-local-candidate
+          path: c1c-g3/development
+
+      - name: Publish or reverify and materialise evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/opt_b/run_c1c_g3_publication.py \
+            --discovery-root c1c-g3/discovery \
+            --development-root c1c-g3/development \
+            --output-root c1c-g3/output \
+            --packet-dir docs/releases/opt-b-c1-v2/corrective/c1c-g3 \
+            --source-run-id "${SOURCE_RUN_ID}" \
+            --approval-merge-commit "${APPROVAL_MERGE}"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path('c1c-g3/output/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json').read_text())
+          assert receipt['gate_id']=='C1C-G3'
+          assert receipt['decision']=='PASS'
+          assert receipt['status']=='PASS_FULL_REMOTE_BYTE_VERIFICATION'
+          assert receipt['release_count']==2
+          assert receipt['remote_object_count']==194
+          assert all(item['remote_verified'] for item in receipt['releases'])
+          assert receipt['c1_selector_change']=='NONE_PENDING_COORDINATED_C1C_G4_G5_TRANSACTION'
+          assert receipt['validation_consumption']=='LOCKED_UNCONSUMED'
+          PY
+
+      - name: Run repository tests after packet generation
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+
+      - name: Commit publication evidence to bounded branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/releases/opt-b-c1-v2/corrective/c1c-g3
+          git diff --cached --check
+          git commit -m 'C1C-G3: publish exact C1 v2 releases and record remote verification'
+          git fetch origin "${GITHUB_REF_NAME}"
+          git merge --no-edit "origin/${GITHUB_REF_NAME}"
+          git push origin HEAD:"${GITHUB_REF_NAME}"
+
+      - name: Upload C1C-G3 execution evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: c1c-g3-r2-publication-evidence
+          path: |
+            c1c-g3/output/C1C_G3_LOCAL_VERIFICATION.json
+            c1c-g3/output/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
+          retention-days: 90
