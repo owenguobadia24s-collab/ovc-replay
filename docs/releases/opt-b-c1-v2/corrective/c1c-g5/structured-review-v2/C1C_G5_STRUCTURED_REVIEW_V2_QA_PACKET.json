@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-c1c-g5-structured-review-v2-qa/v1",
+  "packet_id": "C1C-G5-REVIEW-V2-CORRECTION",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "baseline_commit": "0c687101e031b404b3994c8bb96d65b177f97743",
+  "branch": "build/c1c-g5-structured-v2-review",
+  "candidate_commit": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+  "authority_required": "NONE_FOR_NONACTIVATING_REVIEW_FINALIZER_IMPLEMENTATION",
+  "authority_delta": "STRUCTURED_V2_OPERATOR_REREVIEW_TOOLING_ONLY",
+  "accepted_evidence": {
+    "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "machine_rerun": "PASS_DETERMINISTIC_SIGNED",
+    "signatures": "PASS_THREE_ED25519_SSHSIG",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2"
+  },
+  "corrected_defect": {
+    "code": "C1C-G5-REVIEW-CONTRACT-001",
+    "actual_behavior": "The corrective machine runner reused the v1 review finalizer and accepted five non-accepted dispositions without the structured evidence required by the approved v2 contract.",
+    "expected_behavior": "A replacement review must fail closed under ovc-pd-wp5-pilot-review-input/v2 and be signed into a separate append-only operator-review-v2 directory.",
+    "second_machine_replay_required": false
+  },
+  "required_tests": [
+    "exact compact byte and hash-chain verification",
+    "Ed25519 SSHSIG verification for run, v1 review and inventory",
+    "C2 v2 namespace and selector lineage verification",
+    "v1 review rejection under v2 contract",
+    "deterministic v2 template and complete-review validation",
+    "placeholder and incomplete-field rejection",
+    "full Pattern Discovery dependent suite",
+    "complete repository suite",
+    "JSON schema validation",
+    "retained authority guard"
+  ],
+  "tests": [
+    {
+      "workflow_run": 30398079249,
+      "job": 90405918618,
+      "tested_head": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+      "suite": "focused exact evidence, signatures, Pattern Discovery dependencies, complete repository, schemas, authority and CI-denial checks",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30398079004,
+      "job": 90405917808,
+      "tested_head": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+      "suite": "independent complete repository unit tests",
+      "result": "PASS"
+    }
+  ],
+  "qa_status": "PASS_IMPLEMENTATION_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW",
+  "qa_recommendation": "PASS",
+  "unresolved_issues": [],
+  "operational_blocker": {
+    "blocker_id": "C1C-G5-BLOCK-002",
+    "reason": "The immutable v2 machine run is accepted, but the human review must be completed under the structured v2 contract and signed with the operator-local Ed25519 key.",
+    "correctable_without_machine_replay": true
+  },
+  "rollback": "Preserve the immutable corrective machine run and signed v1 evidence; revert only the structured review implementation packet; keep canonical Discovery and append denied.",
+  "next_action": "AUTO_RATIFY_AND_MERGE_IMPLEMENTATION_THEN_STOP_AT_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW"
+}
