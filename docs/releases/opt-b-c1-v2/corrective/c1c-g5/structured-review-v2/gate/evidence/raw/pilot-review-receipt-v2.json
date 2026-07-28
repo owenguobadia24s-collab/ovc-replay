@@ -1,0 +1,187 @@
+{
+  "canonical_append": "DENIED",
+  "decision_count": 6,
+  "decisions": [
+    {
+      "acceptance_criteria": [
+        "A complete structured workflow-defect decision is normalized and signed without changing the candidate or machine-run identity.",
+        "The v2 validator rejects a workflow defect missing component, actual behavior, expected behavior, reproduction steps, evidence references or acceptance criteria.",
+        "The v2 validator rejects a workflow defect without a PD-WF finding code."
+      ],
+      "actual_behavior": "The original review finalizer accepted FLAG_WORKFLOW_DEFECT while the decision contained no defect code, affected component, actual and expected behavior, reproduction steps or acceptance criteria.",
+      "affected_component": "pilot_discovery._validate_review",
+      "candidate_window_id": "PDPILOT-CANDIDATE-4a8ab246246a3b1eea9ca428",
+      "canonical_discovery_population": false,
+      "evidence_references": [
+        "operator-review/pilot-defect-ledger.json#candidate_window_id=PDPILOT-CANDIDATE-4a8ab246246a3b1eea9ca428",
+        "operator-review/pilot-review-receipt.json#candidate_window_id=PDPILOT-CANDIDATE-4a8ab246246a3b1eea9ca428",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-4a8ab246246a3b1eea9ca428"
+      ],
+      "expected_behavior": "A workflow-defect disposition must fail closed unless every required structured field and at least one exact evidence reference are present.",
+      "finding_code": "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001",
+      "identity_namespaace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+      "live_prospective": false,
+      "notes": "The candidate remains valid pilot evidence, but the original review path accepted a non-accepted disposition without the structured defect evidence needed for reproducible operator review. Preserve the object and require the v2 fail-closed review contract before any gate decision. No canonical, semantic, promotional or execution use is authorised.",
+      "operation_mode": "TIME_GATED_REPLAY",
+      "pilot_only": true,
+      "promotion_eligibility": "NON_PROMOTABLE",
+      "reproduction_steps": [
+        "Locate candidate PDPILOT-CANDIDATE-4a8ab246246a3b1eea9ca428.",
+        "Observe that the signed v1 decision records FLAG_WORKFLOW_DEFECT with empty notes and without structured defect fields.",
+        "Open operator-review/pilot-review-receipt.json for the corrective pilot run.",
+        "Validate the same incomplete decision under the v2 review contract and confirm that it is rejected."
+      ],
+      "research_role": "PILOT_DISCOVERY",
+      "review_disposition": "FLAG_WORKFLOW_DEFECT",
+      "ui_friction_codes": []
+    },
+    {
+      "candidate_window_id": "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+      "canonical_discovery_population": false,
+      "evidence_references": [
+        "operator-review/pilot-review-receipt.json#candidate_window_id=PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+        "review/console-bundle.json#candidate_window_id=PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4"
+      ],
+      "finding_code": "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
+      "identity_namespaace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+      "live_prospective": false,
+      "next_review_condition": "Re-review after the preserved queue and console evidence has been inspected and every listed resolution criterion can be answered from exact source references.",
+      "notes": "Deferred because the preserved pilot projection has not yet been inspected to a sufficient standard to record a final accept or reject basis. The object remains available for later operator review and remains PILOT_ONLY, NON_PROMOTABLE and excluded from canonical Discovery.",
+      "operation_mode": "TIME_GATED_REPLAY",
+      "pilot_only": true,
+      "promotion_eligibility": "NON_PROMOTABLE",
+      "research_role": "PILOT_DISCOVERY",
+      "resolution_criteria": [
+        "The candidate identity resolves consistently across the queue item and console bundle.",
+        "The operator can state a deterministic non-semantic basis for acceptance or rejection without relying on later outcomes.",
+        "The trigger, candidate-window, source-lineage and quality references are available for operator inspection."
+      ],
+      "review_disposition": "DEFER_PILOT_OBJECT",
+      "ui_friction_codes": []
+    },
+    {
+      "candidate_window_id": "PDPILOT-CANDIDATE-5bb7163e87d9b8521a1e235e",
+      "canonical_discovery_population": false,
+      "evidence_references": [
+        "operator-review/pilot-review-receipt.json#candidate_window_id=PDPILOT-CANDIDATE-5bb7163e87d9b8521a1e235e",
+        "review/console-bundle.json#candidate_window_id=PDPILOT-CANDIDATE-5bb7163e87d9b8521a1e235e",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-5bb7163e87d9b8521a1e235e"
+      ],
+      "finding_code": "PD-REJECT-PILOT-REVIEWABILITY-001",
+      "identity_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+      "live_prospective": false,
+      "notes": "Rejected from continued pilot workflow consideration and retained as negative operational evidence. This decision is procedural and structural only; it does not assign semantic meaning, market quality, forecast value, profitability or canonical invalidity.",
+      "operation_mode": "TIME_GATED_REPLAY",
+      "pilot_only": true,
+      "promotion_eligibility": "NON_PROMOTABLE",
+      "research_role": "PILOT_DISCOVERY",
+      "review_disposition": "REJECT_PILOT_OBJECT",
+      "structural_basis": "The object does not satisfy the operator's minimum reviewability requirement for a coherent, traceable pilot case across its candidate identity, queue projection and presented evidence. It is therefore excluded from the reviewed pilot set while remaining preserved as a non-promotable negative control.",
+      "ui_friction_codes": []
+    },
+    {
+      "acceptance_basis": "The candidate identity is stable and the review projection provides sufficient source and workflow context for a bounded operator decision without manual identity entry or authority mutation.",
+      "acceptance_criteria": [
+        "No blocking workflow defect, UI friction code or missing required review evidence is recorded for this candidate.",
+        "The accepted decision remains PILOT_ONLY, NON_PROMOTABLE and excluded from canonical append.",
+        "The candidate window ID resolves consistently across the queue item and console bundle.",
+        "The review exposes sufficient source-lineage and pilot-status context to inspect the object."
+      ],
+      "candidate_window_id": "PDPILOT-CANDIDATE-622511909d36a69adc34fa4f",
+      "canonical_discovery_population": false,
+      "evidence_references": [
+        "operator-review/pilot-review-receipt.json#candidate_window_id=PDPILOT-CANDIDATE-622511909d36a69adc34fa4f",
+        "review/console-bundle.json#candidate_window_id=PDPILOT-CANDIDATE-622511909d36a69adc34fa4f",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-622511909d36a69adc34fa4f"
+      ],
+      "identity_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+      "live_prospective": false,
+      "notes": "The candidate was reviewable through the preserved pilot workflow with exact identity and evidence references. No blocking workflow or interface defect was recorded for this object. Acceptance applies only to the pilot review workflow and grants no canonical or promotional authority.",
+      "operation_mode": "TIME_GATED_REPLAY",
+      "pilot_only": true,
+      "promotion_eligibility": "NON_PROMOTABLE",
+      "research_role": "PILOT_DISCOVERY",
+      "review_disposition": "WORKFLOW_ACCEPTED",
+      "ui_friction_codes": []
+    },
+    {
+      "acceptance_criteria": [
+        "Actual behavior, expected behavior, reproduction steps, evidence references and acceptance criteria are visible and preserved.",
+        "FLAG_UI_FRICTION requires a non-empty PD-UI finding code and matching friction-code entry.",
+        "No selector, release, threshold, canonical append or evidence-ledger write authority is introduced.",
+        "The affected component and console surface are explicit."
+      ],
+      "actual_behavior": "The review surface presented the candidate but did not expose disposition-specific fields for a friction code, affected surface, actual and expected behavior, reproduction steps and acceptance criteria.",
+      "affected_component": "apps.research_console.pattern_discovery.render_candidate_detail",
+      "affected_console_surface": "Candidate Detail / Review action candidate",
+      "candidate_window_id": "PDPILOT-CANDIDATE-731fe26d4e86c6cd249235ca",
+      "canonical_discovery_population": false,
+      "evidence_references": [
+        "operator-review/pilot-review-receipt.json#candidate_window_id=PDPILOT-CANDIDATE-731fe26d4e86c6cd249235ca",
+        "review/console-bundle.json#candidate_window_id=PDPILOT-CANDIDATE-731fe26d4e86c6cd249235ca",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-731fe26d4e86c6cd249235ca"
+      ],
+      "expected_behavior": "Selecting FLAG_UI_FRICTION should expose all required structured review fields while keeping canonical append and every authority-changing control disabled.",
+      "finding_code": "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001",
+      "identity_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+      "live_prospective": false,
+      "notes": "The candidate could be located, but the review surface did not provide disposition-specific fields needed to document UI friction reproducibly. Preserve the object and correct the review presentation without changing C1, C2, selector, release or canonical authority.",
+      "operation_mode": "TIME_GATED_REPLAY",
+      "pilot_only": true,
+      "promotion_eligibility": "NON_PROMOTABLE",
+      "reproduction_steps": [
+        "Inspect the Review action candidate section.",
+        "Observe that the original review path did not provide the complete disposition-specific evidence fields.",
+        "Open candidate PDPILOT-CANDIDATE-731fe26d4e86c6cd249235ca in Candidate Detail.",
+        "Select or inspect the FLAG_UI_FRICTION disposition."
+      ],
+      "research_role": "PILOT_DISCOVERY",
+      "review_disposition": "FLAG_UI_FRICTION",
+      "ui_friction_codes": [
+        "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001"
+      ]
+    },
+    {
+      "candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+      "canonical_discovery_population": false,
+      "evidence_references": [
+        "operator-review/pilot-review-receipt.json#candidate_window_id=PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+        "review/console-bundle.json#candidate_window_id=PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
+      ],
+      "finding_code": "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002",
+      "identity_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+      "live_prospective": false,
+      "next_review_condition": "Re-review when the preserved fingerprint and structural-comparison evidence has been inspected and all resolution criteria are documented from exact pilot artifacts.",
+      "notes": "Deferred pending a complete comparison of the candidate's queue presentation, fingerprint context and nearest available structural comparison. The object remains preserved for later inspection and cannot be promoted, semantically labelled or appended to canonical Discovery.",
+      "operation_mode": "TIME_GATED_REPLAY",
+      "pilot_only": true,
+      "promotion_eligibility": "NON_PROMOTABLE",
+      "research_role": "PILOT_DISCOVERY",
+      "resolution_criteria": [
+        "A final disposition can be stated without semantic naming, later outcomes or promotion assumptions.",
+        "Missingness, duplicate-window and overlap status are explicit.",
+        "The candidate fingerprint and queue projection resolve to the same candidate identity.",
+        "The nearest structural comparison or absence of a valid comparison is available to the operator."
+      ],
+      "review_disposition": "DEFER_PILOT_OBJECT",
+      "ui_friction_codes": []
+    }
+  ],
+  "operator_id": "OVC.OPERATOR.PRIMARY.LOCAL.V1",
+  "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+  "pilot_only": true,
+  "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+  "promotion_eligibility": "NON_PROMOTABLE",
+  "reviewed_at_utc": "2026-07-28T21:32:04Z",
+  "schema": "ovc-pd-wp5-pilot-review-receipt/v2",
+  "signature": "-----BEGIN SSH SIGNATURE-----\nU1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAg6MhPEyKgheAZsCkaiFqrYn91CW\n26W5W8/PLkHcjdAokAAAAHb3ZjLXJwcwAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQy\nNTUxOQAAAEAdidrU1g/Drfun2ANvigrkejM4BXzcQlSDRVF28HpXzdk2H2XE/WzUavVzK8\nkUjFrjBo9XHcvJuDy95+nYeZiwE\n-----END SSH SIGNATURE-----\n",
+  "signature_algorithm": "ED25519",
+  "signature_format": "SSHSIG_OPENSSH_V1",
+  "signature_namespace": "ovc-rps",
+  "signature_sha256": "a466873d797b1fa00e8d9e47d5f1d8282fbdd47dcc1195facd284acfa68d0d9b",
+  "signed_payload_sha256": "904e1175c7f8b6d6009edd00d5b8ea9d0ab118b18b9327d7a4462e18291d0c81",
+  "source_review_contract": "ovc-pd-wp5-pilot-review-input/v2",
+  "status": "OPERATOR_REVIEW_COMPLETE_STRUCTURED_V2"
+}
