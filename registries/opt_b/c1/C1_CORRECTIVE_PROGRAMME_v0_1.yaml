@@ -5,6 +5,7 @@ status: GATE_READY
 operator_ratification: C1C-G0_PASS
 ratified_on: '2026-07-28'
 baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
+programme_main_tip: 5004a12c2679033aab062d6ced69ab3c1650afe3
 frozen_formula_registry:
   id: C1.FORMULAS.v0.1
   mutation: PROHIBITED
@@ -70,7 +71,7 @@ work_packets:
     blockers: []
     next_packet: C1C-WP2
   - packet_id: C1C-WP2
-    status: APPROVED
+    status: COMPLETED
     prerequisites: [C1C-G1_APPROVED, C1C_WP1_MERGED]
     authority_required: RATIFIED_CORRECTIVE_PROGRAMME
     authority_delta: LOCAL_IMMUTABLE_CANDIDATES_AND_ASSURANCE
@@ -79,11 +80,12 @@ work_packets:
     pull_request: 126
     candidate_commit: f30efb0ef8b72cb2e43ccb242c479932a6ee8387
     tested_candidate_head: f30efb0ef8b72cb2e43ccb242c479932a6ee8387
-    tests: [GitHub_Actions_30370847916]
+    final_packet_head: 9585598878d36c914ff141f97adebfd8c129d78a
+    tests: [GitHub_Actions_30370847916, GitHub_Actions_30371616629]
     qa_result: PASS_C1C_G2_LOCAL_ONLY
     qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_WP2_QA_EVIDENCE.json
     decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_G2_DELEGATED_DECISION.md
-    merge_commit: null
+    merge_commit: 5004a12c2679033aab062d6ced69ab3c1650afe3
     blockers: []
     next_gate: C1C-G3_G4_G5_OPERATOR_PACKET
 gates:
@@ -99,10 +101,12 @@ gates:
   - gate_id: C1C-G2
     owner: DELEGATED
     auto_ratifiable: true
-    status: APPROVED
+    status: COMPLETED
     decision: PASS
     tested_head: f30efb0ef8b72cb2e43ccb242c479932a6ee8387
-    workflow_run: 30370847916
+    final_packet_head: 9585598878d36c914ff141f97adebfd8c129d78a
+    workflow_runs: [30370847916, 30371616629]
+    merge_commit: 5004a12c2679033aab062d6ced69ab3c1650afe3
     qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_WP2_QA_EVIDENCE.json
     decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_G2_DELEGATED_DECISION.md
   - gate_id: C1C-G3
@@ -133,7 +137,8 @@ continuation:
   resume_condition: CORRECTED_RELEASE_CHAIN_REMOTE_VERIFIED_AND_REQUIRED_OPERATOR_DECISIONS_RECORDED
   next_action: WAIT_OPERATOR_DECISION
 external_evidence:
-  workflow_run: 30370847916
+  candidate_build_workflow_run: 30370847916
+  final_packet_verification_workflow_run: 30371616629
   evidence_artifact_id: 8692834967
   evidence_artifact_digest: sha256:961e816e18b64cfe48a643dedf7a3f3ad64deecb53ffbe3e10a33dfe3ac0dc30
 authority:
