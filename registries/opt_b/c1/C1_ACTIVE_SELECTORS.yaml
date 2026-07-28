@@ -1,35 +1,53 @@
 schema: ovc-opt-b-c1-active-selectors/v1
-selector_set_id: SELECTOR.OPT-B.C1.ROLESET.v0.1
+selector_set_id: SELECTOR.OPT-B.C1.ROLESET.v0.2
 state: ACTIVE
-reason: C1_TO_C2_HANDOFF_REVIEW_PASS_C1_ACTIVE
-activation_decision_id: C1-C2-HANDOFF-ACTIVE-2026-07-26
+reason: C1C_G4_G5_COORDINATED_SELECTOR_REPLACEMENT_PASS
+activation_decision_id: C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28
 selectors:
   discovery:
     selector_id: SELECTOR.OPT-B.C1.DISCOVERY
     research_role: DISCOVERY
     selector_state: ACTIVE
     authority_state: ACTIVE_DISCOVERY
-    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
-    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
-    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    manifest_sha256: c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf
+    manifest_file_sha256: 708025a0f96db4649996bc1201da258f76c048723cf29b0c82725a19ba6418a9
+    implementation_id: C1.IMPLEMENTATION.v0.2
+    formula_registry_id: C1.FORMULAS.v0.1
     parent_opt_a_release_id: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+    parent_opt_a_manifest_id: MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2
     parent_opt_a_manifest_sha256: 0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c
-    activation_decision_id: C1-C2-HANDOFF-ACTIVE-2026-07-26
-    rollback_target: NONE
-    c2_consumption: AUTHORISED_FOR_C2_BUILD_AND_REPLAY_SCOPE_PENDING_C2_GATE
+    activation_decision_id: C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28
+    remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION
+    remote_verification_workflow_run_id: 30384400312
+    rollback_target:
+      release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+      manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
+      manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    c2_consumption: AUTHORISED_EXACT_C2_V2_ACTIVE_DISCOVERY_PARENT
   development:
     selector_id: SELECTOR.OPT-B.C1.DEVELOPMENT
     research_role: DEVELOPMENT
     selector_state: ACTIVE
     authority_state: ACTIVE_DEVELOPMENT
-    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
-    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
-    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1
+    manifest_sha256: e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f
+    manifest_file_sha256: 56c42c1d34d77670ffec25dcf86da6bd7726017c133f1bd9e4f4be2aba23633e
+    implementation_id: C1.IMPLEMENTATION.v0.2
+    formula_registry_id: C1.FORMULAS.v0.1
     parent_opt_a_release_id: OPT-A.GBPUSD.DEVELOPMENT.2024.v2
+    parent_opt_a_manifest_id: MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2
     parent_opt_a_manifest_sha256: 25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc
-    activation_decision_id: C1-C2-HANDOFF-ACTIVE-2026-07-26
-    rollback_target: NONE
-    c2_consumption: AUTHORISED_FOR_C2_BUILD_AND_REPLAY_SCOPE_PENDING_C2_GATE
+    activation_decision_id: C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28
+    remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION
+    remote_verification_workflow_run_id: 30384400312
+    rollback_target:
+      release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+      manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
+      manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    c2_consumption: AUTHORISED_EXACT_C2_V2_REFERENCE_PARENT
   validation:
     selector_id: SELECTOR.OPT-B.C1.VALIDATION
     research_role: VALIDATION
@@ -39,24 +57,32 @@ selectors:
     manifest_id: null
     manifest_sha256: null
     parent_opt_a_release_id: null
+    parent_opt_a_manifest_id: null
     parent_opt_a_manifest_sha256: null
     activation_decision_id: null
     rollback_target: NONE
     validation_consumption_state: LOCKED_UNCONSUMED
     c2_consumption: DENIED_VALIDATION_LOCKED
 selector_transaction:
-  atomic: true
+  transaction_id: C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28
+  atomic_on_main_merge: true
   selected_roles: [DISCOVERY, DEVELOPMENT]
   validation_role: NONE
-  rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE
+  paired_c2_selector_set_id: SELECTOR.OPT-B.C2.GBPUSD.v2
+  rollback_action: ATOMICALLY_RESTORE_EXACT_C1_V1_AND_C2_V1_SELECTOR_IDENTITIES
   preserves_published_releases: true
 activation_requirements:
-  - WP3_FIXTURE_TRUST_PASS
-  - WP4_CANDIDATE_REPLAY_AND_LOCAL_RELEASE_PASS
-  - WP5_REMOTE_PUBLICATION_VERIFIED
-  - B1_G5_SHADOW_ACTIVATION_PASS
-  - C1_TO_C2_HANDOFF_REVIEW_PASS
-  - EXACT_OPERATOR_ACTIVE_SELECTOR_DECISION
+  - C1C_G3_C1_V2_REMOTE_VERIFICATION_PASS
+  - C1C_G5_C2_V2_IDENTITY_REPLAY_ZERO_SEMANTIC_DRIFT
+  - C1C_G5_C2_V2_REMOTE_VERIFICATION_PASS
+  - EXACT_OPERATOR_C1C_G4_G5_PASS
 active_activation_role: ACTIVE_DISCOVERY_AND_DEVELOPMENT
-historical_v1_reactivation: PROHIBITED
+v1_reactivation: EXACT_CORRECTIVE_ROLLBACK_ONLY
 legacy_opt_b_reactivation: PROHIBITED
+validation_consumption: LOCKED_UNCONSUMED
+probability_authority: NONE
+risk_authority: NONE
+exposure_authority: NONE
+trading_authority: NONE
+execution_authority: NONE
+agent_write_authority: NONE
