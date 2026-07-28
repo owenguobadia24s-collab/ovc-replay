@@ -4,7 +4,7 @@
   "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
   "baseline_commit": "0c687101e031b404b3994c8bb96d65b177f97743",
   "branch": "build/c1c-g5-structured-v2-review",
-  "candidate_commit": null,
+  "candidate_commit": "22acce012527c23e1f251c379dffd0e7b282dd5c",
   "authority_required": "NONE_FOR_NONACTIVATING_REVIEW_FINALIZER_IMPLEMENTATION",
   "authority_delta": "STRUCTURED_V2_OPERATOR_REREVIEW_TOOLING_ONLY",
   "accepted_evidence": {
@@ -32,12 +32,30 @@
     "JSON schema validation",
     "retained authority guard"
   ],
-  "tests": [],
-  "qa_status": "IMPLEMENTED_AWAITING_FINAL_TESTS",
-  "qa_recommendation": "PENDING",
-  "unresolved_issues": [
-    "Operator-local structured v2 review and Ed25519 finalization remain required after implementation integration."
+  "tests": [
+    {
+      "workflow_run": 30398079249,
+      "job": 90405918618,
+      "tested_head": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+      "suite": "focused exact evidence, signatures, Pattern Discovery dependencies, complete repository, schemas, authority and CI-denial checks",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30398079004,
+      "job": 90405917808,
+      "tested_head": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+      "suite": "independent complete repository unit tests",
+      "result": "PASS"
+    }
   ],
+  "qa_status": "PASS_IMPLEMENTATION_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW",
+  "qa_recommendation": "PASS",
+  "unresolved_issues": [],
+  "operational_blocker": {
+    "blocker_id": "C1C-G5-BLOCK-002",
+    "reason": "The immutable v2 machine run is accepted, but the human review must be completed under the structured v2 contract and signed with the operator-local Ed25519 key.",
+    "correctable_without_machine_replay": true
+  },
   "rollback": "Preserve the immutable corrective machine run and signed v1 evidence; revert only the structured review implementation packet; keep canonical Discovery and append denied.",
-  "next_action": "RUN_FINAL_TESTS_AUTO_RATIFY_AND_MERGE_IF_PASS_THEN_STOP_AT_OPERATOR_LOCAL_STRUCTURED_REVIEW"
+  "next_action": "AUTO_RATIFY_AND_MERGE_IMPLEMENTATION_THEN_STOP_AT_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW"
 }
