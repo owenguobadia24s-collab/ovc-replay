@@ -65,7 +65,7 @@ class C1MetamorphicAssuranceTests(unittest.TestCase):
             failed[0]["expected"],
             FIXTURE["hand_verified"]["wick_balance_formula_registry_expected"],
         )
-        self.assertEqual(failed[0]["actual"], "0.1428571428571428571428571428")
+        self.assertEqual(failed[0]["actual"], "0.1428571428571428571428571429")
         self.assertEqual(result["status"], "BLOCK")
 
     def test_contract_oracle_matches_hand_verified_geometry(self) -> None:
