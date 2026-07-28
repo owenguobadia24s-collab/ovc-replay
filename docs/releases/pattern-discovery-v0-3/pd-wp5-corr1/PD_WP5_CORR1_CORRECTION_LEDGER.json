@@ -1,0 +1,118 @@
+{
+  "canonical_discovery_authorised": false,
+  "correction_scope": "VERSIONED_REVIEW_VALIDATION_AND_READ_ONLY_PRESENTATION_ONLY",
+  "entries": [
+    {
+      "acceptance_test_ids": ["PD-CORR1-DEFER-STRUCTURE-001"],
+      "actual_behavior": "The v1 review accepted a deferred disposition with free-text notes but no deterministic resolution criteria or next lawful review condition.",
+      "affected_component": "PILOT_REVIEW_DECISION_CONTRACT",
+      "candidate_window_id": "PDPILOT-CANDIDATE-1ae851d7446f3934e18248dc",
+      "evidence_references": [
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-review-receipt.json.b64",
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-defect-ledger.json.b64"
+      ],
+      "expected_behavior": "A deferred object must identify a reason code, objective resolution criteria and a next lawful review condition.",
+      "finding_code": "PD-DEFER-REVIEW-BASIS-INCOMPLETE-001",
+      "next_review_condition": "Re-review after the v2 correction projection contains complete structured defer evidence.",
+      "resolution_criteria": [
+        "A structured reason code is present.",
+        "At least one objective resolution criterion is present.",
+        "A next lawful review condition is present."
+      ],
+      "review_disposition": "DEFER_PILOT_OBJECT"
+    },
+    {
+      "acceptance_test_ids": ["PD-CORR1-REJECT-STRUCTURE-001"],
+      "actual_behavior": "The v1 review accepted rejection without a reason code, structural basis or exact evidence references.",
+      "affected_component": "PILOT_REVIEW_DECISION_CONTRACT",
+      "candidate_window_id": "PDPILOT-CANDIDATE-4c78ddd97117f06a0c6a1339",
+      "evidence_references": [
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-review-receipt.json.b64",
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-defect-ledger.json.b64"
+      ],
+      "expected_behavior": "A rejected pilot object must carry a deterministic reason code, a non-semantic structural or workflow basis and exact evidence references.",
+      "finding_code": "PD-REJECT-STRUCTURAL-BASIS-MISSING-001",
+      "review_disposition": "REJECT_PILOT_OBJECT",
+      "structural_basis": "The rejection record lacks the structured basis required to distinguish workflow exclusion from semantic or outcome interpretation."
+    },
+    {
+      "acceptance_criteria": [
+        "The v2 validator rejects a workflow defect without a PD-WF code.",
+        "The v2 validator rejects a workflow defect without affected component, actual behavior, expected behavior, reproduction steps, evidence references or acceptance criteria.",
+        "A complete structured workflow-defect decision is normalized deterministically."
+      ],
+      "acceptance_test_ids": ["PD-CORR1-WORKFLOW-FAIL-CLOSED-001"],
+      "actual_behavior": "The v1 validator accepted FLAG_WORKFLOW_DEFECT with notes only and did not require a defect code, affected component, reproduction steps, actual/expected behavior or acceptance criteria.",
+      "affected_component": "pilot_discovery._validate_review",
+      "candidate_window_id": "PDPILOT-CANDIDATE-bf1e96ba941e97a4d12e8fba",
+      "evidence_references": [
+        "schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_input_v0_1.schema.json",
+        "src/ovc/research_operations/pattern_discovery/pilot_discovery.py",
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-review-receipt.json.b64"
+      ],
+      "expected_behavior": "Workflow-defect records fail closed unless every structured defect field and evidence reference is present.",
+      "finding_code": "PD-WF-STRUCTURED-DEFECT-EVIDENCE-MISSING-001",
+      "reproduction_steps": [
+        "Submit a v1 review decision with FLAG_WORKFLOW_DEFECT.",
+        "Provide notes and an empty ui_friction_codes array only.",
+        "Observe that the v1 validator accepts and signs the decision."
+      ],
+      "review_disposition": "FLAG_WORKFLOW_DEFECT"
+    },
+    {
+      "acceptance_test_ids": ["PD-CORR1-DEFER-STRUCTURE-002"],
+      "actual_behavior": "The v1 review accepted a second deferred disposition without a reason code, resolution criteria or a bounded next review condition.",
+      "affected_component": "PILOT_REVIEW_DECISION_CONTRACT",
+      "candidate_window_id": "PDPILOT-CANDIDATE-d724904c774d448919877dec",
+      "evidence_references": [
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-review-receipt.json.b64",
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-defect-ledger.json.b64"
+      ],
+      "expected_behavior": "Every deferred object must state the exact evidence condition that permits its next review.",
+      "finding_code": "PD-DEFER-NEXT-CONDITION-MISSING-002",
+      "next_review_condition": "Re-review only after the corrected evidence-presentation contract is verified against the preserved pilot projection.",
+      "resolution_criteria": [
+        "A structured defer reason is present.",
+        "Resolution criteria are evidence-based and non-semantic.",
+        "The next review condition does not imply promotion or replay authority."
+      ],
+      "review_disposition": "DEFER_PILOT_OBJECT"
+    },
+    {
+      "acceptance_criteria": [
+        "Selecting FLAG_UI_FRICTION exposes a non-empty friction code field.",
+        "The affected Console surface, actual behavior, expected behavior, reproduction steps, evidence references and acceptance criteria are visible.",
+        "The Freeze evidence record control remains disabled without canonical append authority."
+      ],
+      "acceptance_test_ids": ["PD-CORR1-CONSOLE-STRUCTURED-REVIEW-001"],
+      "actual_behavior": "The v1 Console exposed generic observation and limitation text areas but no disposition-specific code, affected surface, reproduction, expected behavior or acceptance criterion fields.",
+      "affected_component": "apps.research_console.pattern_discovery.render_candidate_detail",
+      "affected_console_surface": "Candidate Detail / Review action candidate",
+      "candidate_window_id": "PDPILOT-CANDIDATE-f10546a0a1ec4dfbe03545c4",
+      "evidence_references": [
+        "apps/research_console/pattern_discovery.py",
+        "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-review-receipt.json.b64"
+      ],
+      "expected_behavior": "The Candidate Detail review panel presents disposition-specific structured fields while canonical append remains disabled.",
+      "finding_code": "PD-UI-REVIEW-CONTEXT-MISSING-001",
+      "reproduction_steps": [
+        "Open a Pilot Discovery candidate in Candidate Detail.",
+        "Inspect the Review action candidate panel.",
+        "Observe that only generic evidence class, observation and limitation fields are presented."
+      ],
+      "review_disposition": "FLAG_UI_FRICTION"
+    }
+  ],
+  "entry_count": 5,
+  "gate_id": "PD-G5P",
+  "ledger_sha256": "cd93fb5cc6490402449d94a433e7f74a4f12722ef2a922dd12f3236dcd0f17bd",
+  "packet_id": "PD-WP5-CORR1",
+  "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+  "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+  "schema": "ovc-pd-wp5-correction-ledger/v1",
+  "second_pilot_replay_authorised": false,
+  "second_pilot_replay_recommendation": "NOT_REQUIRED",
+  "source_defect_ledger_file_sha256": "a9e0102e042e3919871c7c0b135a60e4d3d27d8483f2e8eaa55fd366ee6d174d",
+  "source_review_receipt_file_sha256": "2486d9f7097c434fd52d4d5fd0cd086df8117887b6bf4b70a9ef6cf50869ab81",
+  "status": "CORRECTION_SPECIFICATION_COMPLETE"
+}
