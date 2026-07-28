@@ -1,0 +1,122 @@
+{
+  "acceptance_conditions": [
+    {
+      "condition": "Exact C2 v2 lineage and selector binding",
+      "result": "PASS"
+    },
+    {
+      "condition": "Deterministic signed corrective machine rerun",
+      "result": "PASS"
+    },
+    {
+      "condition": "Complete six-object structured v2 operator review",
+      "result": "PASS"
+    },
+    {
+      "condition": "Exact compact-file hash chain and Ed25519 signatures",
+      "result": "PASS"
+    },
+    {
+      "condition": "No unresolved blocking operational findings",
+      "result": "FAIL"
+    },
+    {
+      "condition": "QA recommends PASS",
+      "result": "FAIL"
+    }
+  ],
+  "allowed_decisions": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
+  "authority_delta_by_decision": {
+    "DEFER": {
+      "delta": [
+        "Authorise C1C-G5-REVIEW-FINDINGS-CORR1 as a non-activating correction packet.",
+        "Close or disposition the workflow and Console findings using preserved evidence.",
+        "Resolve the two deferred object reviews and preserve the rejected object as a negative control.",
+        "Return to this gate without another machine replay."
+      ],
+      "status": "OPERATOR_RESERVED"
+    },
+    "PASS": {
+      "delta": [
+        "Accept the C2 v2 corrective pilot as operational lineage and review evidence.",
+        "Close C1C-G5-BLOCK-002 and the corrective pilot review gate.",
+        "Unblock RO3-WP3 formula-assurance retest.",
+        "Permit preparation of a new PD-G5P operator packet explicitly bound to C2 v2."
+      ],
+      "not_authorised": [
+        "Canonical Discovery processing or append",
+        "Semantic, family, candidate, threshold or model promotion",
+        "Active novelty ranking",
+        "Selector or release mutation",
+        "R2 publication or Validation consumption",
+        "Probability, risk, exposure, trading, execution or agent write"
+      ],
+      "status": "OPERATOR_RESERVED"
+    }
+  },
+  "baseline_commit": "b56392666810d2bd6fed0e870240f64ca547b479",
+  "branch": "gate/c1c-g5-corrective-pilot-review",
+  "candidate_commit": null,
+  "completed_packets": [
+    "C1C-G5 C2 v2 identity replay and selector transaction",
+    "C1C-G5 corrective Pilot Discovery machine rerun",
+    "C1C-G5-REVIEW-V2-CORRECTION structured review tooling",
+    "operator-local signed structured v2 review"
+  ],
+  "current_authority": {
+    "active_c2_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "canonical_append": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "operation_mode": "TIME_GATED_REPLAY",
+    "pilot_only": true,
+    "promotion_eligibility": "NON_PROMOTABLE",
+    "research_role": "PILOT_DISCOVERY",
+    "selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2"
+  },
+  "evidence": {
+    "contract_changes_required": true,
+    "decision_count": 6,
+    "defect_count": 5,
+    "deterministic_rerun_match": true,
+    "dispositions": {
+      "DEFER_PILOT_OBJECT": 2,
+      "FLAG_UI_FRICTION": 1,
+      "FLAG_WORKFLOW_DEFECT": 1,
+      "REJECT_PILOT_OBJECT": 1,
+      "WORKFLOW_ACCEPTED": 1
+    },
+    "evidence_index": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_EVIDENCE_INDEX.json",
+    "machine_rerun_valid": true,
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "second_machine_replay_required": false,
+    "signatures_verified": true,
+    "structured_review_complete": true
+  },
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "gate_status": "GATE_READY",
+  "next_work_after_defer": "C1C-G5-REVIEW-FINDINGS-CORR1",
+  "next_work_after_pass": "RO3-WP3_RETEST_AND_PD-G5P-C2-V2_GATE_PREPARATION",
+  "operator_approval_required": true,
+  "plan_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "recommendation_rationale": "The evidence and signatures pass, but the signed review itself records five unresolved findings and contract_changes_required=true; PASS would conceal unresolved operational evidence.",
+  "recommended_decision": "DEFER",
+  "rollback": "Preserve the immutable v2 machine run and signed review layers. Revert only the unmerged gate packet. Do not delete, rewrite, relabel or promote any pilot object.",
+  "schema": "ovc-c1c-g5-corrective-pilot-review-gate-packet/v1",
+  "title": "C1C-G5 Corrective Pilot Review",
+  "unresolved_issues": [
+    "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001 remains an open workflow finding requiring closure evidence against the merged v2 validator.",
+    "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001 remains an open Console presentation finding.",
+    "Two pilot objects remain deferred under explicit next-review conditions.",
+    "One pilot object is rejected from the reviewed pilot set and must remain a negative control.",
+    "The signed gate input declares contract_changes_required=true."
+  ]
+}

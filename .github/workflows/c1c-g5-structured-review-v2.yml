@@ -12,6 +12,8 @@ on:
       - docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/**
       - registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json
       - tests/research_operations/pattern_discovery/test_c1c_g5_structured_review_v2.py
+      - tests/research_operations/pattern_discovery/test_c1c_g5_corrective_pilot_review_gate.py
+      - tests/research_operations/pattern_discovery/test_c1c_g5_structured_review_merge_state.py
   workflow_dispatch:
 
 permissions:
@@ -36,6 +38,13 @@ jobs:
           -p 'test_c1c_g5_structured_review_v2.py'
           -v
 
+      - name: Focused C1C-G5 operator gate tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/pattern_discovery
+          -p 'test_c1c_g5_corrective_pilot_review_gate.py'
+          -v
+
       - name: Pattern Discovery dependent tests
         run: >-
           PYTHONPATH=src python -m unittest discover
@@ -52,15 +61,17 @@ jobs:
           set -euo pipefail
           python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json >/dev/null
           python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_QA_PACKET.json >/dev/null
+          python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_EVIDENCE_INDEX.json >/dev/null
+          python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_QA_PACKET.json >/dev/null
+          python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_PACKET.json >/dev/null
+          python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/C1C_G5_BLOCK_002_RESOLUTION_RECEIPT.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json >/dev/null
-          for schema in \
-            schemas/research_operations/pattern_discovery/c1c_g5_corrective_review_defect_ledger_v0_1.schema.json \
-            schemas/research_operations/pattern_discovery/c1c_g5_corrective_review_evidence_inventory_v0_1.schema.json \
-            schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_gate_input_v0_1.schema.json; do
+          python -m json.tool schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_gate_packet_v0_1.schema.json >/dev/null
+          for schema in             schemas/research_operations/pattern_discovery/c1c_g5_corrective_review_defect_ledger_v0_1.schema.json             schemas/research_operations/pattern_discovery/c1c_g5_corrective_review_evidence_inventory_v0_1.schema.json             schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_gate_input_v0_1.schema.json; do
             python -m json.tool "$schema" >/dev/null
           done
 
-      - name: Assert retained authority and local-only execution
+      - name: Assert retained authority and operator boundary
         shell: bash
         run: |
           set -euo pipefail
@@ -69,27 +80,27 @@ jobs:
           from pathlib import Path
 
           state=json.loads(Path('registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
-          index=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json').read_text())
-          assert state['status']=='BLOCKED_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW_REQUIRED'
-          assert state['corrective_rerun']['machine_execution_status']=='COMPLETE_SIGNED_HASH_VERIFIED'
-          assert state['corrective_rerun']['review_v1_status']=='PRESERVED_SIGNED_INCOMPLETE_UNDER_V2_CONTRACT'
-          assert state['corrective_rerun']['second_machine_replay_required'] is False
+          gate=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_PACKET.json').read_text())
+          assert state['status']=='GATE_READY_OPERATOR_DECISION_REQUIRED'
+          assert state['blocker_resolution']['status']=='RESOLVED_TO_OPERATOR_GATE'
           assert state['next_gate']=='C1C-G5-CORRECTIVE-PILOT-REVIEW'
-          assert index['review_v1_assessment']['v2_contract_result']=='FAIL_CLOSED_REVIEW_REFINALIZATION_REQUIRED'
-          assert index['second_machine_replay_required'] is False
-          assert index['canonical_append']=='DENIED'
-          for key in ('semantic_promotion','family_promotion','novelty_promotion','threshold_change','probability','risk','exposure','trading','execution','agent_write'):
+          assert state['recommended_decision']=='DEFER'
+          assert gate['gate_status']=='GATE_READY'
+          assert gate['operator_approval_required'] is True
+          assert gate['recommended_decision']=='DEFER'
+          assert state['corrective_rerun']['second_machine_replay_required'] is False
+          assert state['retained_authority']['canonical_discovery_processing']=='DENIED'
+          assert state['retained_authority']['canonical_append']=='DENIED'
+          for key in ('semantic_promotion','family_promotion','candidate_promotion','novelty_promotion','threshold_change','probability','risk','exposure','trading','execution','agent_write'):
               assert state['retained_authority'][key]=='NONE'
           assert state['retained_authority']['validation_consumption']=='LOCKED_UNCONSUMED'
           PY
 
-      - name: Prove operator-local actions are denied in CI
+      - name: Prove operator-local actions remain denied in CI
         shell: bash
         run: |
           set +e
-          PYTHONPATH=src CI=true python -m ovc.research_operations.pattern_discovery.pilot_corrective_review_v2 prepare \
-            --repository-root . \
-            --pilot-run-id PD.PILOT.RUN.96c16f11717e787f971851ee > /tmp/prepare.log 2>&1
+          PYTHONPATH=src CI=true python -m ovc.research_operations.pattern_discovery.pilot_corrective_review_v2 prepare             --repository-root .             --pilot-run-id PD.PILOT.RUN.96c16f11717e787f971851ee > /tmp/prepare.log 2>&1
           status=$?
           cat /tmp/prepare.log
           test "$status" -ne 0

@@ -1,0 +1,44 @@
+{
+  "baseline_commit": "b56392666810d2bd6fed0e870240f64ca547b479",
+  "blocking_for_pass": [
+    "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001 remains an open workflow finding requiring closure evidence against the merged v2 validator.",
+    "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001 remains an open Console presentation finding.",
+    "Two pilot objects remain deferred under explicit next-review conditions.",
+    "One pilot object is rejected from the reviewed pilot set and must remain a negative control.",
+    "The signed gate input declares contract_changes_required=true."
+  ],
+  "branch": "gate/c1c-g5-corrective-pilot-review",
+  "candidate_commit": null,
+  "checks": {
+    "authority_fail_closed": "PASS",
+    "c2_v2_lineage": "PASS",
+    "exact_compact_file_hashes": "PASS",
+    "inventory_ed25519_sshsig": "PASS",
+    "no_second_machine_replay_required": "PASS",
+    "review_receipt_ed25519_sshsig": "PASS",
+    "signed_hash_chain": "PASS",
+    "six_decision_coverage": "PASS",
+    "structured_v2_contract": "PASS",
+    "unresolved_findings": "FAIL_FOR_GATE_PASS"
+  },
+  "evidence_index": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_EVIDENCE_INDEX.json",
+  "finding_summary": {
+    "accepted_objects": 1,
+    "contract_changes_required": true,
+    "deferred_objects": 2,
+    "rejected_objects": 1,
+    "total_nonaccepted": 5,
+    "ui_friction": 1,
+    "workflow_defects": 1
+  },
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "qa_recommendation": "DEFER",
+  "qa_status": "PASS_EVIDENCE_DEFER_OPERATIONAL_ACCEPTANCE",
+  "rollback": "Preserve the immutable C2 v2 machine run and all signed v1/v2 review evidence; revert only the unmerged gate packet; retain all authority denials.",
+  "schema": "ovc-c1c-g5-corrective-pilot-review-qa/v1",
+  "tests": [],
+  "warnings": [
+    "The machine run and signatures are valid; DEFER is based on unresolved operational findings, not evidence corruption.",
+    "No second market replay is required."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "$id": "ovc-c1c-g5-corrective-pilot-review-gate-packet/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "gate_id": {
+      "const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
+    },
+    "gate_status": {
+      "const": "GATE_READY"
+    },
+    "operator_approval_required": {
+      "const": true
+    },
+    "recommended_decision": {
+      "enum": [
+        "PASS",
+        "DEFER",
+        "BLOCK",
+        "QUARANTINE",
+        "SUPERSEDE"
+      ]
+    },
+    "schema": {
+      "const": "ovc-c1c-g5-corrective-pilot-review-gate-packet/v1"
+    }
+  },
+  "required": [
+    "schema",
+    "gate_id",
+    "baseline_commit",
+    "gate_status",
+    "operator_approval_required",
+    "allowed_decisions",
+    "current_authority",
+    "evidence",
+    "acceptance_conditions",
+    "unresolved_issues",
+    "authority_delta_by_decision",
+    "recommended_decision",
+    "rollback"
+  ],
+  "type": "object"
+}

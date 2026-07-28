@@ -1,0 +1,84 @@
+{
+  "active_c2_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+  "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+  "baseline_commit": "b56392666810d2bd6fed0e870240f64ca547b479",
+  "canonical_append": "DENIED",
+  "files": [
+    {
+      "name": "c1c-g5-corrective-pilot-review-gate-input.json",
+      "repository_path": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/evidence/raw/c1c-g5-corrective-pilot-review-gate-input.json.b64",
+      "sha256": "c2732c771ee6baca17fe94f9f36319dc54a24220f2976c17d47dc0875fc8c0cd",
+      "size_bytes": 1272,
+      "storage_encoding": "BASE64_OF_EXACT_ORIGINAL_BYTES"
+    },
+    {
+      "name": "pilot-defect-ledger-v2.json",
+      "repository_path": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/evidence/raw/pilot-defect-ledger-v2.json",
+      "sha256": "d6e05c0a2715df2b81a94ad8b0a1144ffb47d4995fd566b2924c33b0557e62bd",
+      "size_bytes": 11200,
+      "storage_encoding": "EXACT_ORIGINAL_BYTES"
+    },
+    {
+      "name": "pilot-review-receipt-v2.json",
+      "repository_path": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/evidence/raw/pilot-review-receipt-v2.json",
+      "sha256": "e5b65129559762def39da4f576b20b1f8e83ff331f01376cffde8f3100ded64a",
+      "size_bytes": 13546,
+      "storage_encoding": "EXACT_ORIGINAL_BYTES"
+    },
+    {
+      "name": "signed-structured-review-evidence-inventory.json",
+      "repository_path": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/gate/evidence/raw/signed-structured-review-evidence-inventory.json.b64",
+      "sha256": "12804b9a39d1457c15a150a5098c9e5d03d6e8441c306e592dec8f853facd9ba",
+      "size_bytes": 1717,
+      "storage_encoding": "BASE64_OF_EXACT_ORIGINAL_BYTES"
+    }
+  ],
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "hash_chain": {
+    "gate_to_inventory": true,
+    "gate_to_ledger": true,
+    "gate_to_receipt": true,
+    "inventory_to_ledger": true,
+    "inventory_to_receipt": true,
+    "ledger_to_receipt": true
+  },
+  "machine_rerun_valid": true,
+  "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+  "pilot_only": true,
+  "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+  "promotion_eligibility": "NON_PROMOTABLE",
+  "review_summary": {
+    "contract_changes_required": true,
+    "decision_count": 6,
+    "defect_count": 5,
+    "dispositions": {
+      "DEFER_PILOT_OBJECT": 2,
+      "FLAG_UI_FRICTION": 1,
+      "FLAG_WORKFLOW_DEFECT": 1,
+      "REJECT_PILOT_OBJECT": 1,
+      "WORKFLOW_ACCEPTED": 1
+    },
+    "finding_codes": [
+      "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001",
+      "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
+      "PD-REJECT-PILOT-REVIEWABILITY-001",
+      "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001",
+      "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002"
+    ]
+  },
+  "schema": "ovc-c1c-g5-corrective-pilot-review-evidence-index/v1",
+  "second_machine_replay_required": false,
+  "selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+  "signature_verification": {
+    "algorithm": "ED25519",
+    "format": "SSHSIG_OPENSSH_V1",
+    "namespace": "ovc-rps",
+    "operator_id": "OVC.OPERATOR.PRIMARY.LOCAL.V1",
+    "review_receipt": "PASS",
+    "signing_binding_id": "RPS.SIGNING.50092c28981fef08f53a6cb5",
+    "structured_inventory": "PASS",
+    "verification_method": "INDEPENDENT_CANONICAL_BODY_AND_OPENSSH_SSHSIG_VERIFICATION"
+  },
+  "status": "EVIDENCE_VERIFIED_OPERATOR_GATE_INPUT_ACCEPTED",
+  "structured_review_v2_complete": true
+}

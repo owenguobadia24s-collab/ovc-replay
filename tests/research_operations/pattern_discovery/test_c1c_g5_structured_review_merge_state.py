@@ -31,34 +31,28 @@ class C1cG5StructuredReviewMergeStateTests(unittest.TestCase):
         self.assertEqual(len(correction["tests"]), 2)
         self.assertTrue(all(item["result"] == "PASS" for item in correction["tests"]))
 
-    def test_operator_gate_and_blocker_remain_open(self) -> None:
+    def test_operator_local_blocker_progresses_to_gate(self) -> None:
         state = load(STATE)
-        self.assertEqual(state["status"], "BLOCKED_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW_REQUIRED")
-        self.assertEqual(state["blocker_id"], "C1C-G5-BLOCK-002")
+        self.assertEqual(state["status"], "GATE_READY_OPERATOR_DECISION_REQUIRED")
+        self.assertIsNone(state["blocker_id"])
+        self.assertEqual(state["blocker_resolution"]["blocker_id"], "C1C-G5-BLOCK-002")
+        self.assertEqual(state["blocker_resolution"]["status"], "RESOLVED_TO_OPERATOR_GATE")
         self.assertEqual(state["next_gate"], "C1C-G5-CORRECTIVE-PILOT-REVIEW")
         self.assertEqual(
             state["continuation_command"],
-            ".\\scripts\\run_c1c_g5_structured_review_v2.ps1 preflight",
+            "@GitHub OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW DEFER",
         )
         self.assertFalse(state["corrective_rerun"]["second_machine_replay_required"])
         self.assertEqual(state["corrective_rerun"]["canonical_append"], "DENIED")
         retained = state["retained_authority"]
         self.assertEqual(retained["validation_consumption"], "LOCKED_UNCONSUMED")
         for key in (
-            "semantic_promotion",
-            "family_promotion",
-            "novelty_promotion",
-            "threshold_change",
-            "probability",
-            "risk",
-            "exposure",
-            "trading",
-            "execution",
-            "agent_write",
+            "semantic_promotion","family_promotion","candidate_promotion","novelty_promotion",
+            "threshold_change","probability","risk","exposure","trading","execution","agent_write",
         ):
             self.assertEqual(retained[key], "NONE", key)
 
-    def test_qa_and_merge_receipt_reconcile(self) -> None:
+    def test_historical_qa_and_merge_receipt_remain_immutable(self) -> None:
         qa = load(QA)
         receipt = load(RECEIPT)
         self.assertEqual(qa["qa_status"], "PASS_IMPLEMENTATION_MERGED_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW")
