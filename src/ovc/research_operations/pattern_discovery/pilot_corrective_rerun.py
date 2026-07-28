@@ -4,8 +4,9 @@ import json
 from pathlib import Path
 from typing import Any, Sequence
 
+from ovc.research_operations.prospective_source import operator_replay_acceptance as replay
+
 from . import pilot_discovery as pilot
-from . import operator_replay_acceptance as replay
 
 CORRECTIVE_AUTHORITY_GATE = "C1C-G5"
 CORRECTIVE_NEXT_GATE = "C1C-G5-CORRECTIVE-PILOT-REVIEW"
