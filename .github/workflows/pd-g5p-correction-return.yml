@@ -9,6 +9,7 @@ on:
       - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
       - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
       - "tests/research_operations/pattern_discovery/test_pd_g5p_correction_return.py"
+      - "tests/research_operations/pattern_discovery/test_pd_wp5_pilot_discovery_amendment.py"
       - ".github/workflows/pd-g5p-correction-return.yml"
   workflow_dispatch:
 
@@ -30,11 +31,24 @@ jobs:
           -p 'test_pd_g5p_correction_return.py'
           -v
       - name: Pattern Discovery dependent tests
-        run: >-
-          PYTHONPATH=src python -m unittest discover
-          -s tests/research_operations/pattern_discovery
-          -p 'test_pd_wp*.py'
-          -v
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover \
+            -s tests/research_operations/pattern_discovery \
+            -p 'test_pd_wp*.py' \
+            -v > /tmp/pd-g5p-dependent.log 2>&1
+          status=$?
+          cat /tmp/pd-g5p-dependent.log
+          exit "$status"
+      - name: Preserve dependent test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-g5p-correction-return-dependent-log
+          path: /tmp/pd-g5p-dependent.log
+          if-no-files-found: error
+          retention-days: 7
       - name: Canonical repository tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
       - name: Validate gate JSON
