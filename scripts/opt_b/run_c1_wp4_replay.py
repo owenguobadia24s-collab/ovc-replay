@@ -5,10 +5,18 @@ import csv
 import gzip
 import hashlib
 import json
+import sys
 from collections import Counter
 from decimal import Decimal, getcontext
 from pathlib import Path
 from typing import Any
+
+REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+SOURCE_ROOT = REPOSITORY_ROOT / "src"
+if str(SOURCE_ROOT) not in sys.path:
+    sys.path.insert(0, str(SOURCE_ROOT))
+
+from ovc.opt_b.c1.formulas import C1_IMPLEMENTATION_ID, calculate_wick_balance
 
 getcontext().prec = 34
 
@@ -72,7 +80,7 @@ def build_record(*, meta: dict[str, str], clock: str, side: str, source_path: st
         "lower_wick_abs": lower,
         "upper_wick_share": None if r == 0 else upper / r,
         "lower_wick_share": None if r == 0 else lower / r,
-        "wick_balance": None if r == 0 else (upper - lower) / r,
+        "wick_balance": calculate_wick_balance(upper, lower, r),
         "open_location": None if r == 0 else (o - l) / r,
         "close_location": None if r == 0 else (c - l) / r,
         "signed_efficiency": None if r == 0 else body_signed / r,
@@ -206,6 +214,7 @@ def main() -> None:
         "scope_id": "C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1",
         "status": "LOCAL_CANDIDATE_QA_PASS",
         "formula_registry_id": "C1.FORMULAS.v0.1",
+        "implementation_id": C1_IMPLEMENTATION_ID,
         "validation_consumption": "LOCKED_UNCONSUMED_EXCLUDED",
         "roles": summaries,
         "inventory": inv,

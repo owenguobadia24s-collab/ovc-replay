@@ -1,0 +1,112 @@
+schema: ovc-c1-corrective-programme/v1
+programme_id: OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1
+plan_version: '0.1'
+status: RUNNING
+operator_ratification: C1C-G0_PASS
+ratified_on: '2026-07-28'
+baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
+frozen_formula_registry:
+  id: C1.FORMULAS.v0.1
+  mutation: PROHIBITED
+corrective_implementation:
+  id: C1.IMPLEMENTATION.v0.2
+  formula: upper_wick_share - lower_wick_share
+  duplicate_formula_implementations: PROHIBITED
+active_releases:
+  discovery:
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    record_count: 159892
+    record_file_count: 144
+  development:
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    record_count: 52872
+    record_file_count: 48
+candidate_releases:
+  discovery:
+    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    status: PLANNED_LOCAL_ONLY
+  development:
+    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
+    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1
+    status: PLANNED_LOCAL_ONLY
+work_packets:
+  - packet_id: C1C-WP1
+    status: APPROVED
+    prerequisites: [C1C-G0_PASS]
+    authority_required: RATIFIED_CORRECTIVE_PROGRAMME
+    authority_delta: IMPLEMENTATION_RECONCILIATION_AND_AUDIT_TOOLING
+    baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
+    branch: build/c1-wick-balance-corrective-wp1
+    pull_request: 125
+    candidate_commit: c1500d383aa5069a216d311b3017f859cfc73a85
+    tested_candidate_head: c1500d383aa5069a216d311b3017f859cfc73a85
+    tests: [GitHub_Actions_30368890403]
+    qa_result: PASS
+    qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_WP1_QA_EVIDENCE.json
+    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
+    merge_commit: null
+    blockers: []
+    next_packet: C1C-WP2
+  - packet_id: C1C-WP2
+    status: READY
+    prerequisites: [C1C-G1_APPROVED, C1C_WP1_MERGED]
+    authority_required: RATIFIED_CORRECTIVE_PROGRAMME
+    authority_delta: LOCAL_IMMUTABLE_CANDIDATES_AND_ASSURANCE
+    baseline_commit: null
+    branch: build/c1-wick-balance-corrective-wp2
+    candidate_commit: null
+    tests: []
+    qa_packet: null
+    decision_record: null
+    merge_commit: null
+    blockers: [C1C_WP1_MERGE_PENDING]
+    next_gate: C1C-G3_G4_G5_OPERATOR_PACKET
+gates:
+  - gate_id: C1C-G1
+    owner: DELEGATED
+    auto_ratifiable: true
+    status: APPROVED
+    decision: PASS
+    tested_head: c1500d383aa5069a216d311b3017f859cfc73a85
+    workflow_run: 30368890403
+    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
+  - gate_id: C1C-G2
+    owner: DELEGATED
+    auto_ratifiable: true
+    status: PENDING
+  - gate_id: C1C-G3
+    title: R2 publication
+    owner: OPERATOR
+    auto_ratifiable: false
+    status: NOT_READY
+  - gate_id: C1C-G4
+    title: C1 selector replacement
+    owner: OPERATOR
+    auto_ratifiable: false
+    status: NOT_READY
+  - gate_id: C1C-G5
+    title: Downstream remediation
+    owner: OPERATOR
+    auto_ratifiable: false
+    status: NOT_READY
+continuation:
+  blocked_ro3_gate: RO3-G3
+  continuation_id: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
+  resume_condition: CORRECTED_RELEASE_CHAIN_REMOTE_VERIFIED_AND_REQUIRED_OPERATOR_DECISIONS_RECORDED
+authority:
+  formula_registry_mutation: NONE
+  active_release_mutation: NONE
+  r2_publication: NONE
+  selector_replacement: NONE
+  c2_mutation: NONE
+  pattern_discovery_canonical_append: NONE
+  validation_consumption: LOCKED_UNCONSUMED
+  probability: NONE
+  risk: NONE
+  exposure: NONE
+  trading: NONE
+  execution: NONE
+  agent_write: NONE

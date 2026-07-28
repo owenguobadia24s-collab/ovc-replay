@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from decimal import Decimal
+from decimal import Decimal, localcontext
 
 from .models import SourceBar
 
 FORMULA_REGISTRY_ID = "C1.FORMULAS.v0.1"
+C1_IMPLEMENTATION_ID = "C1.IMPLEMENTATION.v0.2"
 PRIOR_FIELDS = ("true_range_abs", "true_range_ticks", "close_change", "open_gap")
 ZERO_RANGE_NULL_FIELDS = (
     "body_utilisation", "upper_wick_share", "lower_wick_share", "wick_balance",
@@ -15,7 +16,29 @@ ZERO_RANGE_NULL_FIELDS = (
 def _s(value: Decimal) -> str:
     if value == 0:
         return "0"
-    return format(value.normalize(), "f")
+    rendered = format(value, "f")
+    if "." in rendered:
+        rendered = rendered.rstrip("0").rstrip(".")
+    return rendered
+
+
+def calculate_wick_balance(
+    upper_wick_abs: Decimal,
+    lower_wick_abs: Decimal,
+    range_abs: Decimal,
+) -> Decimal | None:
+    """Return the frozen C1 wick-balance formula at release precision.
+
+    The formula registry defines wick balance as upper-wick share minus
+    lower-wick share. Keeping this as one callable prevents fixture, replay
+    and prospective-compute paths from acquiring independent signs.
+    """
+
+    if range_abs == 0:
+        return None
+    with localcontext() as context:
+        context.prec = 34
+        return (upper_wick_abs - lower_wick_abs) / range_abs
 
 
 def calculate(current: SourceBar, prior: SourceBar | None, prior_reason: str | None) -> tuple[dict[str, str | None], dict[str, str], dict[str, str]]:
@@ -34,7 +57,7 @@ def calculate(current: SourceBar, prior: SourceBar | None, prior_reason: str | N
         "lower_wick_abs": _s(lower),
         "upper_wick_share": _s(upper / r) if r else None,
         "lower_wick_share": _s(lower / r) if r else None,
-        "wick_balance": _s((lower - upper) / r) if r else None,
+        "wick_balance": None if (balance := calculate_wick_balance(upper, lower, r)) is None else _s(balance),
         "open_location": _s((o - l) / r) if r else None,
         "close_location": _s((c - l) / r) if r else None,
         "signed_efficiency": _s(body / r) if r else None,
