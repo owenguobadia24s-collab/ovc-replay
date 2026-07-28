@@ -1,16 +1,31 @@
 schema: ovc-c2-active-discovery-authority/v1
-transaction_id: TXN.C2.ACTIVE_DISCOVERY.BSTATE_RETIREMENT.v1
+transaction_id: C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28
 effective_when_merged_to: main
-state: C2_ACTIVE_DISCOVERY_BSTATE_HISTORICAL_SUPERSEDED
+state: C2_V2_ACTIVE_DISCOVERY_C1_V2_PARENT_BSTATE_HISTORICAL_SUPERSEDED
 selector:
   layer: OPT-B.C2.v2
   state: ACTIVE
   authority: ACTIVE_DISCOVERY
-  release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
-  manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1.r1
-  manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
+  release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2
+  manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1
+  manifest_sha256: c60b48ac18653eaf253c48f63645dbaa11bd94cee9a28a83ed7ae7bad5cac180
+  manifest_file_sha256: 9f78cec29a1f19fc77f9feec0171eb2b822c9959f3dc77b373420907a3b028af
+  parent_c1_release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
+  parent_c1_manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
+  parent_c1_manifest_sha256: c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf
   remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION
-  remote_verification_workflow_run_id: 30214691361
+  remote_verification_workflow_run_id: 30386243014
+  semantic_equivalence: PASS_ZERO_STATE_OR_TRANSITION_VALUE_DRIFT
+reference_release:
+  role: DEVELOPMENT
+  selector_state: NONE
+  authority: REMOTE_VERIFIED_REFERENCE_ONLY
+  release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2
+  manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2.r1
+  manifest_sha256: 42cb65574473826c82ca94d8c2e8c46d9d4acfc79a0090daef68c3efbc8cee62
+  manifest_file_sha256: 53986fe8426960d4cb9da5145d91b0889b20566207d80da95c6f15d9460a3f75
+  parent_c1_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
+  remote_verification: PASS_FULL_REMOTE_BYTE_VERIFICATION
 legacy:
   object_id: B-STATE-0.3b
   state: HISTORICAL_SUPERSEDED
@@ -18,14 +33,23 @@ legacy:
   selector_eligibility: DENIED
   rollback_target: DENIED
 rollback:
-  c2_selector: NONE
-  operation: C1_ONLY
+  c1_discovery_release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+  c1_development_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+  c2_discovery_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+  operation: ATOMICALLY_RESTORE_EXACT_C1_V1_AND_C2_V1_SELECTORS
   legacy_reactivation: PROHIBITED
 retained:
-  c1_selector: SHADOW
-  c2_development_selector: NONE
+  c1_selector: ACTIVE_V2_DISCOVERY_AND_DEVELOPMENT
+  c2_development_selector: NONE_REMOTE_VERIFIED_REFERENCE_ONLY
   validation_consumption: LOCKED_UNCONSUMED
+  canonical_pattern_discovery_append: NONE
+  semantic_promotion: NONE
+  family_promotion: NONE
+  novelty_promotion: NONE
+  threshold_change: NONE
   probability_authority: NONE
+  risk_authority: NONE
   exposure_authority: NONE
   trading_authority: NONE
   execution_authority: NONE
+  agent_write_authority: NONE
