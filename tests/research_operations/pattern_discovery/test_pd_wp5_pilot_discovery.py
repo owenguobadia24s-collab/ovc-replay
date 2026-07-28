@@ -40,7 +40,10 @@ class PdWp5PilotDiscoveryTests(unittest.TestCase):
         self.assertEqual(gate["decision"], "DEFER")
         self.assertEqual(gate["next_packet"], "PD-WP5-CORR1")
         self.assertEqual(parent["operation_count"], parent["operation_limit"])
-        self.assertEqual(parent["second_pilot_replay"], "DENIED_NOT_REQUIRED")
+        self.assertEqual(
+            parent["second_pilot_replay"],
+            "DENIED_UNDER_PD_G5P_V1_REVIEW_C1C_G5_CORRECTIVE_RERUN_SEPARATELY_APPROVED_AND_BLOCKED",
+        )
 
     def test_fixture_rehearsal_is_deterministic(self) -> None:
         first = run_pilot_from_states(self.rows)
