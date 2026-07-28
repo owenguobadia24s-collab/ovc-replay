@@ -1,0 +1,180 @@
+name: C1C-G5 C2 v2 identity replay and publication
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/c1c-g5-c2-v2-remediation.yml
+      - scripts/opt_b/run_c1c_g5_c2_remediation.py
+      - tests/opt_b/c2/test_c1c_g5_identity_remediation.py
+      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/**
+      - registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml
+      - registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml
+      - registries/opt_b/c1/C1_CORRECTIVE_PROGRAMME_v0_1.yaml
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: c1c-g5-c2-v2-remediation
+  cancel-in-progress: false
+
+jobs:
+  c2-v2-remediation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Detect already materialised C1C-G5 receipt
+        id: state
+        shell: bash
+        run: |
+          receipt=docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json
+          if test -f "${receipt}"; then
+            echo 'complete=true' >> "${GITHUB_OUTPUT}"
+          else
+            echo 'complete=false' >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Run repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+
+      - name: Verify committed completion state
+        if: steps.state.outputs.complete == 'true'
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json').read_text())
+          assert receipt['gate_id']=='C1C-G5'
+          assert receipt['decision']=='PASS'
+          assert receipt['status']=='PASS_C2_V2_IDENTITY_REPLAY_PUBLICATION_FULL_REMOTE_BYTE_VERIFICATION'
+          assert receipt['state_record_count']==404434
+          assert receipt['transition_record_count']==323910
+          assert receipt['semantic_state_drift_count']==0
+          assert receipt['semantic_transition_drift_count']==0
+          assert receipt['release_count']==2
+          assert all(item['remote_verified'] for item in receipt['releases'])
+          assert receipt['validation_consumption']=='LOCKED_UNCONSUMED'
+          assert receipt['canonical_pattern_discovery_append']=='DENIED'
+          PY
+
+      - name: Verify operator approval and C1C-G3 completion
+        if: steps.state.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'OVC APPROVE C1C-G3 C1C-G4 C1C-G5' docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.md
+          grep -q '"gate_id": "C1C-G5"' docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
+          grep -q 'DETERMINISTIC_C2_V2_IDENTITY_REPLAY_PUBLICATION_COORDINATED_SELECTOR_REPLACEMENT_AND_NONCANONICAL_PILOT_SUPERSESSION_RERUN' docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
+          grep -q 'PASS_FULL_REMOTE_BYTE_VERIFICATION' docs/releases/opt-b-c1-v2/corrective/c1c-g3/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
+
+      - name: Install and validate rclone
+        if: steps.state.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo '::error::Missing R2 access-key secret'; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo '::error::Missing R2 secret-key secret'; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
+          rclone lsf --s3-no-check-bucket ovc_r2:ovc-evidence >/dev/null
+
+      - name: Download exact C2 v1 semantic source artifact
+        if: steps.state.outputs.complete != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30210057332
+          name: c2-g4-exact-parent-replay-output
+          path: reference
+
+      - name: Recover exact remote-verified C1 v2 parents from R2
+        if: steps.state.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p parents/c1/discovery parents/c1/development
+          rclone copy --s3-no-check-bucket \
+            'ovc_r2:ovc-evidence/canonical/releases/OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2/MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1' \
+            parents/c1/discovery
+          rclone copy --s3-no-check-bucket \
+            'ovc_r2:ovc-evidence/canonical/releases/OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2/MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1' \
+            parents/c1/development
+          test -f parents/c1/discovery/manifest.json
+          test -f parents/c1/development/manifest.json
+
+      - name: Execute deterministic C2 v2 identity replay, publish and full readback verification
+        if: steps.state.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python scripts/opt_b/run_c1c_g5_c2_remediation.py \
+            --c1-root parents/c1 \
+            --c2-v1-artifact-root reference \
+            --output-root c1c-g5 \
+            --source-commit "${GITHUB_SHA}" \
+            --workflow-run-id "${GITHUB_RUN_ID}" \
+            --publish | tee c1c-g5-execution.log
+
+      - name: Enforce C1C-G5 acceptance and retained authority
+        if: steps.state.outputs.complete != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path('c1c-g5/evidence/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json').read_text())
+          local=json.loads(Path('c1c-g5/evidence/C1C_G5_LOCAL_REPLAY_RECEIPT.json').read_text())
+          assert receipt['gate_id']=='C1C-G5'
+          assert receipt['decision']=='PASS'
+          assert receipt['status']=='PASS_C2_V2_IDENTITY_REPLAY_PUBLICATION_FULL_REMOTE_BYTE_VERIFICATION'
+          assert receipt['state_record_count']==404434
+          assert receipt['transition_record_count']==323910
+          assert receipt['semantic_state_drift_count']==0
+          assert receipt['semantic_transition_drift_count']==0
+          assert receipt['deterministic_output_equivalence']=='PASS_TWO_INDEPENDENT_BYTE_IDENTICAL_MATERIALIZATIONS'
+          assert receipt['release_count']==2
+          assert all(item['remote_verified'] for item in receipt['releases'])
+          assert local['c1_v2_parent_counts']=={'development':52872,'discovery':159892}
+          assert receipt['canonical_pattern_discovery_append']=='DENIED'
+          assert receipt['validation_consumption']=='LOCKED_UNCONSUMED'
+          for key in ('semantic_promotion','family_promotion','novelty_promotion','threshold_change','probability','risk','exposure','trading','execution','agent_write'):
+              assert receipt[key]=='NONE'
+          PY
+
+      - name: Upload compact C1C-G5 execution evidence
+        if: steps.state.outputs.complete != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: c1c-g5-c2-v2-remediation-evidence
+          path: |
+            c1c-g5/evidence/*.json
+            c1c-g5/candidates/*/manifest.json
+            c1c-g5/candidates/*/release-descriptor.json
+            c1c-g5/candidates/*/qa/*.json
+            c1c-g5/candidates/*/source/C1C_G5_SOURCE_BINDING.json
+            c1c-g5-execution.log
+          if-no-files-found: error
+          retention-days: 90
