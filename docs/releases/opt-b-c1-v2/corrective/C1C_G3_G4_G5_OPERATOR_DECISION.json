@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-consolidated-operator-decision/v1",
+  "decision_id": "C1C-G3-G4-G5-OPERATOR-PASS-2026-07-28",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "decision_date": "2026-07-28",
+  "operator_command": "OVC APPROVE C1C-G3 C1C-G4 C1C-G5",
+  "gate_packet": "docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_CONSOLIDATED_OPERATOR_GATE_PACKET.json",
+  "approved_gates": [
+    {
+      "gate_id": "C1C-G3",
+      "authority_delta": "PUBLISH_EXACT_C1_V2_DISCOVERY_AND_DEVELOPMENT_CANDIDATES_AND_FULL_REMOTE_VERIFY",
+      "conditions": [
+        "collision preflight passes",
+        "local artifact and manifest identities match the approved packet",
+        "payloads are written before manifests",
+        "every remote byte is read back and SHA-256 verified",
+        "selectors remain unchanged until coordinated activation"
+      ]
+    },
+    {
+      "gate_id": "C1C-G4",
+      "authority_delta": "ATOMICALLY_REPLACE_C1_DISCOVERY_AND_DEVELOPMENT_SELECTORS_WITH_REMOTE_VERIFIED_V2",
+      "conditions": [
+        "both exact C1 v2 releases are remotely verified",
+        "exact v1 rollback identities are recorded",
+        "Validation remains LOCKED_UNCONSUMED"
+      ]
+    },
+    {
+      "gate_id": "C1C-G5",
+      "authority_delta": "DETERMINISTIC_C2_V2_IDENTITY_REPLAY_PUBLICATION_COORDINATED_SELECTOR_REPLACEMENT_AND_NONCANONICAL_PILOT_SUPERSESSION_RERUN",
+      "conditions": [
+        "C2 replay uses exact C1 v2 parents",
+        "C2 state and transition values remain semantically identical",
+        "C2 v2 is published immutably and fully remote verified",
+        "C1 and C2 selector replacement is coordinated and atomic",
+        "canonical Pattern Discovery append remains prohibited",
+        "Pilot Discovery remains PILOT_ONLY TIME_GATED_REPLAY NON_PROMOTABLE"
+      ]
+    }
+  ],
+  "retained_prohibitions": {
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_change": "NONE",
+    "canonical_pattern_discovery_append": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "continuation": "EXECUTE_C1C_G3_THEN_C1C_G5_REPLAY_PUBLICATION_THEN_COORDINATED_C1C_G4_G5_SELECTOR_TRANSACTION"
+}

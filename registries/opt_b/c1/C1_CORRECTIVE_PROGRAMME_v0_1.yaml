@@ -1,11 +1,17 @@
 schema: ovc-c1-corrective-programme/v1
 programme_id: OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1
 plan_version: '0.1'
-status: GATE_READY
+status: OPERATOR_APPROVED_EXECUTION_AUTHORISED
 operator_ratification: C1C-G0_PASS
 ratified_on: '2026-07-28'
 baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
-programme_main_tip: 5004a12c2679033aab062d6ced69ab3c1650afe3
+programme_main_tip: 5401387ee9acd9e1dfdf6eb0d5643100b7e0319f
+operator_decision:
+  command: OVC APPROVE C1C-G3 C1C-G4 C1C-G5
+  decision: PASS
+  decision_date: '2026-07-28'
+  markdown: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.md
+  json: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
 frozen_formula_registry:
   id: C1.FORMULAS.v0.1
   mutation: PROHIBITED
@@ -113,20 +119,26 @@ gates:
     title: R2 publication
     owner: OPERATOR
     auto_ratifiable: false
-    status: GATE_READY
-    recommended_decision: PASS
+    status: APPROVED
+    decision: PASS
+    decision_authority: OPERATOR
+    decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
   - gate_id: C1C-G4
     title: C1 selector replacement
     owner: OPERATOR
     auto_ratifiable: false
-    status: GATE_READY
-    recommended_decision: PASS
+    status: APPROVED_PENDING_C1_V2_REMOTE_VERIFICATION
+    decision: PASS
+    decision_authority: OPERATOR
+    decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
   - gate_id: C1C-G5
     title: Downstream remediation
     owner: OPERATOR
     auto_ratifiable: false
-    status: GATE_READY
-    recommended_decision: PASS
+    status: APPROVED_PENDING_C1_V2_REMOTE_VERIFICATION
+    decision: PASS
+    decision_authority: OPERATOR
+    decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
 operator_gate_packet:
   markdown: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_CONSOLIDATED_OPERATOR_GATE_PACKET.md
   json: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_CONSOLIDATED_OPERATOR_GATE_PACKET.json
@@ -135,7 +147,7 @@ continuation:
   blocked_ro3_gate: RO3-G3
   continuation_id: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
   resume_condition: CORRECTED_RELEASE_CHAIN_REMOTE_VERIFIED_AND_REQUIRED_OPERATOR_DECISIONS_RECORDED
-  next_action: WAIT_OPERATOR_DECISION
+  next_action: EXECUTE_C1C_G3_PUBLICATION
 external_evidence:
   candidate_build_workflow_run: 30370847916
   final_packet_verification_workflow_run: 30371616629
@@ -144,9 +156,9 @@ external_evidence:
 authority:
   formula_registry_mutation: NONE
   active_release_mutation: NONE
-  r2_publication: NONE_PENDING_C1C_G3
-  selector_replacement: NONE_PENDING_C1C_G4
-  c2_mutation: NONE_PENDING_C1C_G5
+  r2_publication: AUTHORISED_EXACT_C1_V2_RELEASES_C1C_G3
+  selector_replacement: AUTHORISED_AFTER_C1_V2_REMOTE_VERIFIED_C1C_G4
+  c2_mutation: AUTHORISED_DETERMINISTIC_IDENTITY_REPLAY_ONLY_C1C_G5
   pattern_discovery_canonical_append: NONE
   validation_consumption: LOCKED_UNCONSUMED
   probability: NONE
