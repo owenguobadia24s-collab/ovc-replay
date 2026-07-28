@@ -1,0 +1,168 @@
+{
+  "schema": "ovc-ro3-gate-packet/v1",
+  "gate_id": "RO3-G3",
+  "title": "Independent C1 symmetry, metamorphic and deterministic assurance",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "construction_baseline_commit": "8c243c009f30e453312861708afb784fe762c442",
+  "current_main_at_blocker_record": "ac5d9c9cbc4b2336c3af389f01a60827a509b1ba",
+  "tested_candidate_commit": "cc1eac3830d3cbd5f568f89e4389c8f7390629b7",
+  "tested_pull_request_merge_ref": "71c21f5721f016f68a073124fb545c290a754f58",
+  "branch": "build/research-operations-v0-3-wp3-formula-assurance",
+  "pull_request": 122,
+  "decision": "BLOCK",
+  "decision_authority": "QA_BLOCKING_POLICY_UNDER_RATIFIED_PLAN",
+  "packet_state": "BLOCKED",
+  "quarantine_scope": [
+    "RO3-G3 assurance result",
+    "RO3-WP4 eligibility",
+    "live Console C1 inspection progression"
+  ],
+  "current_authority": {
+    "ro3": "RO3_G2_READ_ONLY_DERIVED_INSPECTION",
+    "c1": "SHADOW_DISCOVERY_AND_DEVELOPMENT_REMOTE_VERIFIED",
+    "c2": "ACTIVE_DISCOVERY",
+    "validation": "LOCKED_UNCONSUMED",
+    "live_console_c1_route": "DISABLED_PENDING_RC_G4"
+  },
+  "proposed_authority_delta": "QA_EVIDENCE_ONLY",
+  "granted_authority_delta": "NONE",
+  "completed_packets": ["RO3-WP3_IMPLEMENTATION_AND_QA_EVIDENCE"],
+  "acceptance_conditions": {
+    "frozen_invariant_registry_unchanged_since_ro3_g0": "PASS",
+    "independent_invariant_canon_covers_all_18_formulas": "PASS",
+    "metamorphic_relations": "PASS_79_OF_79",
+    "golden_formula_registry_outputs": "BLOCK_17_OF_18_PASS",
+    "same_input_same_canonical_bytes": "PASS",
+    "canonical_input_reorder": "PASS",
+    "deliberate_corruption_detection": "PASS",
+    "implementation_independence": "PASS",
+    "write_and_authority_denials": "PASS",
+    "all_blocking_checks_pass": "FAIL"
+  },
+  "blocking_finding": {
+    "finding_id": "RO3-G3-BLOCK-001",
+    "class": "FROZEN_FORMULA_IMPLEMENTATION_MISMATCH",
+    "primitive_id": "C1-WICK-BALANCE.v0.1",
+    "field_name": "wick_balance",
+    "formula_registry_definition": "upper_wick_share - lower_wick_share",
+    "formula_registry_path": "registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml",
+    "formula_registry_blob_sha": "a4503c062d6414c7bf54340612352284d0b83f4e",
+    "implementation_expression": "(lower - upper) / range",
+    "implementation_path": "src/ovc/opt_b/c1/formulas.py",
+    "implementation_blob_sha": "400344be048c9462cd9679a6275e3a0bc35bfc02",
+    "fixture_expected": "-0.1428571428571428571428571429",
+    "implementation_actual": "0.1428571428571428571428571429",
+    "difference_class": "SIGN_INVERSION",
+    "assertion_id": "ro3-c1-golden-assertion:264901109b282f8444f8c41de05d2810d16c7114eba0dd041784d8e8abb4a8f8",
+    "reproducibility": "PASS_REPRODUCED",
+    "correctable_inside_ro3_wp3": false,
+    "reason_not_correctable_inside_scope": "Changing the C1 implementation would alter frozen remotely verified release outputs and require a separately authorised C1 correction, replay, release, publication and downstream impact programme. Changing the formula registry would be a material change to a frozen contract."
+  },
+  "tests": {
+    "focused_metamorphic": {
+      "result": "PASS",
+      "count": 5
+    },
+    "focused_invariant_independence": {
+      "result": "PASS",
+      "count": 4
+    },
+    "canonical_repository": {
+      "result": "PASS",
+      "count": 70,
+      "duration_seconds": 0.720,
+      "artifact_id": 8686049653,
+      "artifact_digest": "sha256:648996befe015b0b60431b7c0113afe713234e25cd07c745703d0478907b7e11"
+    },
+    "assurance": {
+      "result": "BLOCK",
+      "metamorphic_assertions": 79,
+      "metamorphic_failures": 0,
+      "golden_assertions": 18,
+      "golden_failures": 1,
+      "negative_control_detected": true,
+      "artifact_id": 8686048701,
+      "artifact_digest": "sha256:3024dfa568efa545bd5d058f6e3941bc8accc0233d6214bc185f3c38f92b1ada"
+    },
+    "focused_diagnostics": {
+      "artifact_id": 8686048378,
+      "artifact_digest": "sha256:2ba5d84131140fcab028b6bd78b2384d124597847c58cc9e30426c704232abb1"
+    },
+    "workflow_run_id": 30353976138,
+    "workflow_gate_conclusion": "FAIL_EXPECTED_FROM_BLOCKING_ASSURANCE"
+  },
+  "qa_recommendation": "BLOCK",
+  "warnings": [
+    "The exact affected C1 record count is not established by RO3-WP3. The frozen Discovery and Development releases contain 212764 total records; all non-zero-range wick_balance values require impact reconciliation.",
+    "The active C2 Discovery release and any Pattern Discovery artifacts may contain downstream references to the affected C1 releases. RO3 grants no authority to diagnose, rewrite, retire or reactivate downstream selectors; impact must be assessed in the corrective programme."
+  ],
+  "unresolved_issues": [
+    "Exact affected record and file inventory across the 192 C1 release files",
+    "Exact C2 and Pattern Discovery affected-surface inventory",
+    "Corrected C1 implementation identity and immutable release identity",
+    "Replay, remote publication, selector and downstream remediation decisions"
+  ],
+  "changed_files": [
+    ".github/workflows/research-operations-v0-3-ro3-g3.yml",
+    "docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_ASSURANCE_EVIDENCE.json",
+    "docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_GATE_PACKET.json",
+    "fixtures/research_operations/v0_3/wp3_metamorphic_cases.json",
+    "registries/research_operations/v0_3/RO3_ASSURANCE_CHECK_REGISTRY_v0_1.yaml",
+    "registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml",
+    "registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json",
+    "schemas/research_operations/v0_3/c1_determinism_receipt_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_metamorphic_assertion_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_metamorphic_run_v0_1.schema.json",
+    "scripts/research_operations/run_ro3_g3_assurance.py",
+    "src/ovc/research_operations/v0_3/__init__.py",
+    "src/ovc/research_operations/v0_3/metamorphic.py",
+    "tests/research_operations/v0_3/test_invariant_registry_independence.py",
+    "tests/research_operations/v0_3/test_metamorphic.py"
+  ],
+  "external_artifacts": [
+    {
+      "artifact_id": 8686048378,
+      "name": "ro3-g3-focused-diagnostics",
+      "digest": "sha256:2ba5d84131140fcab028b6bd78b2384d124597847c58cc9e30426c704232abb1"
+    },
+    {
+      "artifact_id": 8686048701,
+      "name": "ro3-g3-assurance-evidence",
+      "digest": "sha256:3024dfa568efa545bd5d058f6e3941bc8accc0233d6214bc185f3c38f92b1ada"
+    },
+    {
+      "artifact_id": 8686049653,
+      "name": "ro3-g3-canonical-diagnostics",
+      "digest": "sha256:648996befe015b0b60431b7c0113afe713234e25cd07c745703d0478907b7e11"
+    }
+  ],
+  "retained_prohibitions": [
+    "C1 formula registry mutation",
+    "in-place C1 implementation or release correction",
+    "C1 release identity reuse",
+    "selector activation, replacement or retirement",
+    "Validation consumption",
+    "C2 or Pattern Discovery rewrite, tuning, retirement or activation",
+    "R2 publication or destructive operation",
+    "RO3-WP4 progression",
+    "live Console C1 route activation",
+    "semantic, probability, risk, exposure, trading, execution or agent authority"
+  ],
+  "rollback": "Remove the replaceable RO3-WP3 assurance implementation while preserving the frozen RO3-G0 invariant registry, blocking evidence, RO3-G1/G2, all upstream releases and every selector/authority record. No historical artifact is rewritten.",
+  "recommended_decision": "BLOCK",
+  "smallest_lawful_resolution": {
+    "required_operator_action": "Ratify a separate bounded C1 wick-balance implementation reconciliation and immutable release correction plan.",
+    "exact_work_after_approval": [
+      "Freeze the current formula registry, implementation, Discovery and Development release hashes as the correction baseline.",
+      "Compute the exact affected C1 record/file inventory without mutating existing releases.",
+      "Assess exact parent/child impact on active C2 Discovery and Pattern Discovery trace surfaces.",
+      "Correct the implementation to the frozen formula registry under a new implementation identity; do not reuse existing release identities.",
+      "Replay Discovery and Development, compare old and corrected outputs, run full C1 QA and formula assurance, and freeze new candidate releases.",
+      "Present separate operator gates for remote publication, C1 selector replacement and any downstream C2/Pattern Discovery remediation.",
+      "Resume RO3-WP3 against the corrected remotely verified release chain; continue to RO3-WP4 only after RO3-G3 PASS."
+    ]
+  },
+  "next_packet": null,
+  "continuation_point": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME"
+}
