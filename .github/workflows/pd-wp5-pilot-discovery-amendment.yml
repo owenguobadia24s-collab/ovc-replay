@@ -45,7 +45,7 @@ jobs:
           python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
           python -m json.tool registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json >/dev/null
-      - name: Assert exact Pilot Discovery authority boundary
+      - name: Assert exact approved Pilot Discovery authority boundary
         shell: bash
         run: |
           set -euo pipefail
@@ -55,8 +55,10 @@ jobs:
           gate = json.loads(Path('registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json').read_text())
           pd = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
           rps = json.loads(Path('registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json').read_text())
-          assert gate['gate_status'] == 'GATE_READY'
-          assert gate['operator_approval_required'] is True
+          assert gate['gate_status'] == 'APPROVED'
+          assert gate['decision'] == 'PASS'
+          assert gate['operator_approval_required'] is False
+          assert gate['operator_approval_command'] == 'OVC APPROVE PD-G4B'
           assert gate['research_role'] == 'PILOT_DISCOVERY'
           assert gate['operation_mode'] == 'TIME_GATED_REPLAY'
           assert gate['source_slice_id'] == 'RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1'
@@ -68,8 +70,10 @@ jobs:
           assert gate['canonical_discovery_population'] is False
           assert gate['canonical_append'] == 'DENIED'
           assert gate['next_gate'] == 'PD-G5P'
-          assert pd['packet_status'] == 'GATE_READY'
-          assert pd['next_gate'] == 'PD-G4B'
+          assert pd['packet_status'] == 'APPROVED'
+          assert pd['next_packet'] == 'PD-WP5-PILOT'
+          assert pd['next_gate'] == 'PD-G5P'
+          assert pd['decision'] == 'PASS'
           assert rps['gate_status'] == 'SUPERSEDED_FOR_PILOT_DISCOVERY'
           assert rps['future_live_gate'] == 'RPS-LIVE-G1'
           assert rps['provider_request_authority'] == 'DENIED'
