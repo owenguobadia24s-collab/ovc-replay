@@ -1,0 +1,114 @@
+name: C1C-G5 CORR2 deferred review closure
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - contracts/research_operations/pattern_discovery/C1C_G5_CORR2_DEFERRED_OBJECT_REVIEW_CONTRACT_v0_1.md
+      - schemas/research_operations/pattern_discovery/c1c_g5_corr2_*.schema.json
+      - schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_final_gate_input_v0_1.schema.json
+      - src/ovc/research_operations/pattern_discovery/corr2_evidence.py
+      - src/ovc/research_operations/pattern_discovery/pilot_corr2_review_closure.py
+      - apps/research_console/pattern_discovery.py
+      - apps/research_console/pattern_discovery_corr2.py
+      - scripts/run_c1c_g5_corr2_deferred_review.ps1
+      - tests/research_operations/pattern_discovery/test_c1c_g5_corr2_*.py
+      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/**
+      - registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json
+      - .github/workflows/c1c-g5-corr2-review-closure.yml
+
+permissions:
+  contents: read
+
+jobs:
+  corr2-review-closure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile CORR2 implementation
+        run: |
+          PYTHONPATH=src python -m py_compile \
+            src/ovc/research_operations/pattern_discovery/corr2_evidence.py \
+            src/ovc/research_operations/pattern_discovery/pilot_corr2_review_closure.py \
+            apps/research_console/pattern_discovery.py \
+            apps/research_console/pattern_discovery_corr2.py
+
+      - name: Run focused CORR2 tests
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -m unittest \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_review_closure \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_console -v
+
+      - name: Run retained corrective review tests
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -m unittest \
+            tests.research_operations.pattern_discovery.test_c1c_g5_structured_review_v2 \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corrective_pilot_review_defer \
+            tests.research_operations.pattern_discovery.test_pd_wp4_simple_ui_evidence_bridge -v
+
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src:.
+        run: python -m unittest discover -s tests -v
+
+      - name: Parse closed schemas and verify packet records
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          schemas = [
+              'c1c_g5_corr2_deferred_review_input_v0_1.schema.json',
+              'c1c_g5_corr2_deferred_review_receipt_v0_1.schema.json',
+              'c1c_g5_corr2_closure_ledger_v0_1.schema.json',
+              'c1c_g5_corr2_evidence_inventory_v0_1.schema.json',
+              'c1c_g5_corrective_pilot_review_final_gate_input_v0_1.schema.json',
+          ]
+          root = Path('schemas/research_operations/pattern_discovery')
+          for name in schemas:
+              schema = json.loads((root / name).read_text())
+              assert schema['$schema'] == 'https://json-schema.org/draft/2020-12/schema'
+              assert schema['additionalProperties'] is False
+          release = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2')
+          receipt = json.loads((release / 'C1C_G5_CORR2_IMPLEMENTATION_RECEIPT.json').read_text())
+          qa = json.loads((release / 'C1C_G5_CORR2_QA_PACKET.json').read_text())
+          assert receipt['packet_id'] == 'C1C-G5-CORR2'
+          assert receipt['decision'] == 'PASS'
+          assert receipt['second_machine_replay'] == 'DENIED_NOT_REQUIRED'
+          assert qa['packet_id'] == 'C1C-G5-CORR2'
+          PY
+
+      - name: Enforce no replay and retained authority
+        run: |
+          set -euo pipefail
+          ! grep -F 'run_pilot_from_states(' src/ovc/research_operations/pattern_discovery/pilot_corr2_review_closure.py
+          ! grep -F 'load_exact_c2_states(' src/ovc/research_operations/pattern_discovery/pilot_corr2_review_closure.py
+          ! grep -F 'verify_compute_run(' src/ovc/research_operations/pattern_discovery/pilot_corr2_review_closure.py
+          git diff --exit-code origin/main -- \
+            registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml \
+            registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml \
+            registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml \
+            registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml \
+            contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_IMPLEMENTATION_RECEIPT.json').read_text())
+          assert receipt['canonical_discovery_processing']=='DENIED'
+          assert receipt['canonical_append']=='DENIED'
+          assert receipt['selector_mutation']=='DENIED'
+          assert receipt['release_mutation']=='DENIED'
+          assert receipt['r2_publication']=='DENIED'
+          assert receipt['validation_consumption']=='LOCKED_UNCONSUMED'
+          for key in ('semantic_promotion','family_promotion','candidate_promotion','novelty_promotion','threshold_or_model_change','probability','risk','exposure','trading','execution','agent_write'):
+              assert receipt[key]=='NONE'
+          PY
