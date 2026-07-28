@@ -4,11 +4,14 @@ on:
   pull_request:
     paths:
       - "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_*.json"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_DECISION.md"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_PASS_UPSTREAM_RECONCILIATION_BLOCKER.json"
       - "registries/research_operations/pattern_discovery/PD_G5P_CORRECTION_RETURN_STATE_v0_1.json"
       - "registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json"
       - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
-      - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
+      - "registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json"
       - "tests/research_operations/pattern_discovery/test_pd_g5p_correction_return.py"
+      - "tests/research_operations/pattern_discovery/test_pd_wp5_pilot_discovery.py"
       - "tests/research_operations/pattern_discovery/test_pd_wp5_pilot_discovery_amendment.py"
       - ".github/workflows/pd-g5p-correction-return.yml"
   workflow_dispatch:
@@ -57,10 +60,12 @@ jobs:
           set -euo pipefail
           python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_QA_PACKET.json >/dev/null
           python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_GATE_PACKET.json >/dev/null
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_PASS_UPSTREAM_RECONCILIATION_BLOCKER.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_CORRECTION_RETURN_STATE_v0_1.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json >/dev/null
           python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
-      - name: Assert operator boundary
+          python -m json.tool registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json >/dev/null
+      - name: Assert blocked operator decision and retained authority
         shell: bash
         run: |
           set -euo pipefail
@@ -70,13 +75,28 @@ jobs:
 
           root = Path('.')
           state = json.loads((root / 'registries/research_operations/pattern_discovery/PD_G5P_CORRECTION_RETURN_STATE_v0_1.json').read_text())
+          parent = json.loads((root / 'registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
+          c1c = json.loads((root / 'registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
+          blocker = json.loads((root / 'docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_PASS_UPSTREAM_RECONCILIATION_BLOCKER.json').read_text())
           gate = json.loads((root / 'docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_GATE_PACKET.json').read_text())
           qa = json.loads((root / 'docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_QA_PACKET.json').read_text())
 
-          assert state['status'] == 'GATE_READY'
+          assert state['status'] == 'BLOCKED'
           assert state['decision_authority'] == 'OPERATOR'
-          assert state['operator_approval_required'] is True
-          assert state['decision_record'] is None
+          assert state['operator_approval_required'] is False
+          assert state['decision'] == 'PASS'
+          assert state['operator_command'] == 'OVC APPROVE PD-G5P PASS'
+          assert 'NOT_EFFECTIVE' in state['decision_effect']
+          assert state['blockers'][0]['blocker_id'] == 'C1C-G5-BLOCK-001'
+          assert parent['packet_status'] == 'BLOCKED'
+          assert parent['active_c2_model_release_id'] == 'OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2'
+          assert parent['next_packet'] == 'C1C-G5-CORRECTIVE-PILOT-RERUN'
+          assert c1c['blocker_id'] == 'C1C-G5-BLOCK-001'
+          assert c1c['corrective_rerun']['active_c2_release_id'] == 'OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2'
+          assert blocker['decision_effect']['operator_pass_recorded'] is True
+          assert blocker['decision_effect']['reviewed_delta_effective'] is False
+
+          # Preserve the reviewed gate and QA as immutable pre-decision evidence.
           assert gate['gate_status'] == 'GATE_READY'
           assert gate['operator_approval_required'] is True
           assert gate['proposed_delta_status'] == 'NOT_GRANTED_PENDING_OPERATOR'
@@ -90,9 +110,9 @@ jobs:
               'identity_reset_activation', 'semantic_promotion', 'family_promotion',
               'candidate_promotion', 'threshold_or_model_change', 'active_novelty_ranking',
               'selector_mutation', 'release_mutation', 'r2_publication',
-              'validation_consumption',
           ):
               assert current[key] == 'DENIED', (key, current[key])
+          assert current['validation_consumption'] == 'LOCKED_UNCONSUMED'
           for key in (
               'probability_authority', 'risk_authority', 'exposure_authority',
               'trading_authority', 'execution_authority', 'agent_write_authority',
