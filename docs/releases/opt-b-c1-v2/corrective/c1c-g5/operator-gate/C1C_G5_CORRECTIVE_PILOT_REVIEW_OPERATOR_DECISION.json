@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-c1c-g5-corrective-pilot-review-operator-decision/v1",
+  "decision_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW-DEFER-2026-07-28",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "decision_date": "2026-07-28",
+  "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW DEFER",
+  "gate_ready_bundle": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_READY_BUNDLE.json",
+  "accepted_evidence": {
+    "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "active_c2_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "machine_rerun_valid": true,
+    "structured_review_v2_complete": true,
+    "signature_and_hash_integrity": "PASS",
+    "second_machine_replay_required": false
+  },
+  "finding_summary": {
+    "decision_count": 6,
+    "workflow_accepted": 1,
+    "workflow_defect": 1,
+    "ui_friction": 1,
+    "deferred_objects": 2,
+    "rejected_objects": 1,
+    "defect_count": 5,
+    "contract_changes_required": true,
+    "unresolved_finding_codes": [
+      "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001",
+      "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001",
+      "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
+      "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002"
+    ]
+  },
+  "authorised_next_packet": {
+    "packet_id": "C1C-G5-CORR2",
+    "authority_delta": "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY",
+    "scope": [
+      "Add disposition-specific structured evidence fields to the read-only Console review surface.",
+      "Expose exact evidence-reference resolution for queue, candidate-detail and fingerprint context.",
+      "Re-review only the two deferred pilot objects without another machine replay.",
+      "Preserve the accepted object, rejected object, immutable machine run and all signed evidence.",
+      "Return a final closure packet to C1C-G5-CORRECTIVE-PILOT-REVIEW."
+    ],
+    "machine_replay": "DENIED_NOT_REQUIRED",
+    "operator_local_human_rereview": "REQUIRED_FOR_TWO_DEFERRED_OBJECTS",
+    "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
+  },
+  "retained_prohibitions": {
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "Preserve every signed external evidence object and the immutable corrective machine run. Revert only the DEFER court record and bounded CORR2 implementation through new non-destructive commits; do not delete, rewrite, relabel, publish, append or promote any pilot object.",
+  "continuation": "BEGIN_C1C_G5_CORR2_FROM_DECISION_MERGE"
+}
