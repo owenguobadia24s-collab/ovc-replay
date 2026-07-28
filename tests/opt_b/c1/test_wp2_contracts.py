@@ -13,6 +13,7 @@ C1_SCHEMAS = ROOT / "schemas" / "opt_b" / "c1"
 C1_REGISTRIES = ROOT / "registries" / "opt_b" / "c1"
 C1_FIXTURES = ROOT / "fixtures" / "c1" / "wp2" / "WP2_HANDOFF_FIXTURES.json"
 AUTHORITY = ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml"
+CORRECTIVE = ROOT / "docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json"
 
 FORMULA_FIELDS = (
     "field_name:", "definition:", "formula:", "required_inputs:", "unit:", "domain:",
@@ -134,9 +135,10 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertIn("H1_PROVIDER_NATIVE", text)
         self.assertIn("No-repair law", text)
 
-    def test_remote_verified_releases_are_shadow_selected_only(self) -> None:
+    def test_remote_verified_release_history_and_current_selector_successor(self) -> None:
         releases = (C1_REGISTRIES / "C1_RELEASE_REGISTRY.yaml").read_text(encoding="utf-8")
         selectors = (C1_REGISTRIES / "C1_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
+        # Historical release registry remains unchanged and auditable.
         self.assertIn("status: B1_G5_PASS_SHADOW_SELECTED_C2_DENIED", releases)
         self.assertEqual(releases.count("authority_state: SHADOW"), 2)
         self.assertIn("authority_state: NONE", releases)
@@ -146,12 +148,23 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertEqual(releases.count("publication_readiness: PASS_B1_G2"), 2)
         self.assertEqual(releases.count("publication_status: PUBLISHED_REMOTE_VERIFIED"), 2)
         self.assertIn("validation_consumption_state: LOCKED_UNCONSUMED", releases)
-        self.assertIn("state: SHADOW", selectors)
-        self.assertEqual(selectors.count("selector_state: SHADOW"), 2)
-        self.assertEqual(selectors.count("selector_state: NONE"), 1)
-        self.assertIn("initial_activation_role: SHADOW_ONLY", selectors)
-        self.assertIn("legacy_opt_b_reactivation: PROHIBITED", selectors)
-        self.assertIn("rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE", selectors)
+        if CORRECTIVE.exists():
+            transaction = json.loads(CORRECTIVE.read_text(encoding="utf-8"))
+            self.assertTrue(transaction["atomic_on_main_merge"])
+            self.assertIn("state: ACTIVE", selectors)
+            self.assertEqual(selectors.count("selector_state: ACTIVE"), 2)
+            self.assertEqual(selectors.count("selector_state: NONE"), 1)
+            self.assertIn("SELECTOR.OPT-B.C1.ROLESET.v0.2", selectors)
+            self.assertIn("C1.IMPLEMENTATION.v0.2", selectors)
+            self.assertIn("legacy_opt_b_reactivation: PROHIBITED", selectors)
+            self.assertIn("ATOMICALLY_RESTORE_EXACT_C1_V1_AND_C2_V1_SELECTOR_IDENTITIES", selectors)
+        else:
+            self.assertIn("state: SHADOW", selectors)
+            self.assertEqual(selectors.count("selector_state: SHADOW"), 2)
+            self.assertEqual(selectors.count("selector_state: NONE"), 1)
+            self.assertIn("initial_activation_role: SHADOW_ONLY", selectors)
+            self.assertIn("legacy_opt_b_reactivation: PROHIBITED", selectors)
+            self.assertIn("rollback_action: RETURN_ALL_C1_ROLE_SELECTORS_TO_NONE", selectors)
 
     def test_wp2_fixtures_cover_valid_null_gap_and_rejection_cases(self) -> None:
         fixtures = json.loads(C1_FIXTURES.read_text(encoding="utf-8"))
