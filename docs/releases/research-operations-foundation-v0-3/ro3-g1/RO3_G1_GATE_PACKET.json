@@ -1,0 +1,103 @@
+{
+  "schema": "ovc-ro3-gate-packet/v1",
+  "gate_id": "RO3-G1",
+  "title": "Deterministic C1 release, primitive and coverage indexes",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "baseline_commit": "4d701ad78af8597e182565eb301739501b51dff6",
+  "tested_candidate_commit": "d8f2d20dbd8dda2a553d247111e28464ce7f1fb8",
+  "branch": "build/research-operations-v0-3-wp1-c1-index",
+  "pull_request": 119,
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION_UNDER_RATIFIED_PLAN",
+  "current_authority": "RO3_G0_DESIGN_CANON_C1_DISCOVERY_DEVELOPMENT_SHADOW_REMOTE_VERIFIED",
+  "authority_delta": "LOCAL_REPLACEABLE_DERIVED",
+  "completed_packets": ["RO3-WP1"],
+  "accepted_inputs": [
+    "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+    "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+    "C1.FORMULAS.v0.1",
+    "approved compact release and source-count metadata"
+  ],
+  "prohibited_inputs": [
+    "Validation content",
+    "raw market or C1 payload materialisation in Git",
+    "unknown release, formula, clock, side, schema or registry vocabulary"
+  ],
+  "deliverables": [
+    "contracts/research_operations/v0_3/RO3_C1_INDEX_CONTRACT_v0_1.md",
+    "schemas/research_operations/v0_3/c1_release_index_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_primitive_index_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_record_family_index_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_coverage_profile_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_index_benchmark_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_incremental_index_receipt_v0_1.schema.json",
+    "fixtures/research_operations/v0_3/wp1_c1_index_cases.json",
+    "src/ovc/research_operations/v0_3/c1_index.py",
+    "tests/research_operations/v0_3/test_c1_index.py",
+    "tests/research_operations/v0_3/test_c1_index_performance.py",
+    "benchmarks/research_operations/v0_3/C1_INDEX_PERFORMANCE_BENCHMARK_v0_1.json"
+  ],
+  "acceptance": {
+    "exact_discovery_records_159892": "PASS",
+    "exact_development_records_52872": "PASS",
+    "exact_total_records_212764": "PASS",
+    "exact_record_files_192": "PASS",
+    "formula_definitions_18_of_18_once": "PASS",
+    "role_scoped_queries_required": "PASS",
+    "validation_denied_before_resolution": "PASS",
+    "unknown_vocabulary_fails_closed": "PASS",
+    "input_order_path_runtime_independent_identity": "PASS",
+    "full_corpus_benchmark_reproducible": "PASS",
+    "soft_target_300_seconds": "PASS_22_855605_SECONDS",
+    "identical_rerun": "PASS",
+    "write_and_activation_denials": "PASS"
+  },
+  "tests": {
+    "focused": {
+      "result": "PASS",
+      "count": 5,
+      "duration_seconds": 8.917,
+      "artifact_id": 8669999623,
+      "artifact_digest": "sha256:35f70d2f18179798c0ce88586586c5787ebc82a43bf85625f4b8f37b8038acf0"
+    },
+    "performance": {
+      "result": "PASS",
+      "wall_time_seconds": 22.855605,
+      "rerun_wall_time_seconds": 3.02711,
+      "peak_memory_bytes": 89218774,
+      "logical_index_sha256": "56df633d244e67ce4c0445e96e94c503f9157238d63fd274c3f40ca2a434ce59",
+      "artifact_id": 8670009914,
+      "artifact_digest": "sha256:55f3045709ceb109790528b84a2d6e200e79ed0fcbe304ecc4dbe384957003e0"
+    },
+    "canonical_repository": {
+      "result": "PASS",
+      "count": 70,
+      "duration_seconds": 0.706,
+      "artifact_id": 8670010567,
+      "artifact_digest": "sha256:994f4e1a23237f290e89765aca91a2ff3cb296cafa2d4b2bdb58cf980e3426b7"
+    },
+    "workflow_run_id": 30310124349
+  },
+  "qa_recommendation": "PASS",
+  "warnings": [],
+  "unresolved_issues": [],
+  "external_artifacts": [
+    {
+      "identity": "ro3-c1-index-benchmark-runtime",
+      "availability": "GITHUB_ACTIONS_ARTIFACT",
+      "digest": "sha256:55f3045709ceb109790528b84a2d6e200e79ed0fcbe304ecc4dbe384957003e0",
+      "reproduction_status": "REPRODUCED_AND_MATERIALISED"
+    }
+  ],
+  "retained_prohibitions": [
+    "C1 formula, record, release or selector mutation",
+    "Validation consumption",
+    "C2 or Pattern Discovery change",
+    "R2 write",
+    "live Console C1 route activation",
+    "semantic, probability, risk, exposure, trading, execution or agent authority"
+  ],
+  "rollback": "Remove the RO3-WP1 derived index package, schemas, fixtures and benchmark record; preserve RO3-G0 and all upstream OPT-A, C1, C2 and Pattern Discovery authority and evidence.",
+  "next_packet": "RO3-WP2"
+}
