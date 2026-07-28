@@ -2,7 +2,8 @@
   "schema": "ovc-programme-state/v1",
   "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "v0.2",
-  "programme_status": "RUNNING",
+  "programme_status": "BLOCKED",
+  "current_main_at_blocker_record": "ac5d9c9cbc4b2336c3af389f01a60827a509b1ba",
   "packets": [
     {
       "packet_id": "RO3-00",
@@ -66,27 +67,60 @@
     },
     {
       "packet_id": "RO3-WP3",
-      "status": "QA_REVIEW",
+      "status": "BLOCKED",
       "prerequisites": ["RO3-G2"],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "QA_EVIDENCE_ONLY",
+      "granted_authority_delta": "NONE",
       "baseline_commit": "8c243c009f30e453312861708afb784fe762c442",
       "branch": "build/research-operations-v0-3-wp3-formula-assurance",
-      "candidate_commit": null,
+      "candidate_commit": "cc1eac3830d3cbd5f568f89e4389c8f7390629b7",
+      "tested_pull_request_merge_ref": "71c21f5721f016f68a073124fb545c290a754f58",
       "tests": [
-        "test_metamorphic.py",
-        "test_invariant_registry_independence.py",
-        "exact assurance evidence command",
-        "canonical repository suite",
-        "frozen-canon and authority denial assertions"
+        "5 focused metamorphic tests PASS",
+        "4 invariant-independence tests PASS",
+        "79 of 79 metamorphic assertions PASS",
+        "17 of 18 golden formula assertions PASS; C1-WICK-BALANCE.v0.1 BLOCK",
+        "deterministic canonical bytes PASS",
+        "negative corruption control PASS",
+        "70 canonical repository tests PASS in 0.720 seconds",
+        "frozen-canon and authority denial assertions PASS"
       ],
-      "qa_packet": null,
-      "decision_record": null,
+      "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_GATE_PACKET.json",
+      "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_BLOCKER_DECISION.md",
+      "evidence_record": "docs/releases/research-operations-foundation-v0-3/ro3-g3/RO3_G3_ASSURANCE_EVIDENCE.json",
       "merge_commit": null,
-      "blockers": [],
-      "next_packet": "RO3-WP4"
+      "blockers": [
+        {
+          "blocker_id": "RO3-G3-BLOCK-001",
+          "class": "FROZEN_FORMULA_IMPLEMENTATION_MISMATCH",
+          "primitive_id": "C1-WICK-BALANCE.v0.1",
+          "difference": "SIGN_INVERSION",
+          "correctable_inside_scope": false,
+          "smallest_lawful_resolution": "SEPARATE_C1_WICK_BALANCE_IMPLEMENTATION_RECONCILIATION_AND_IMMUTABLE_RELEASE_CORRECTION_PLAN"
+        }
+      ],
+      "next_packet": null,
+      "continuation_point": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME"
     },
-    {"packet_id": "RO3-WP4", "status": "PLANNED", "prerequisites": ["RO3-G3"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS", "next_packet": "RC-G4"},
-    {"packet_id": "RC-G4", "status": "PLANNED", "prerequisites": ["RO3-G4"], "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE", "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION", "next_packet": null}
-  ]
+    {
+      "packet_id": "RO3-WP4",
+      "status": "BLOCKED",
+      "prerequisites": ["RO3-G3"],
+      "authority_required": "AUTO_EXECUTABLE",
+      "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS",
+      "blockers": ["RO3-G3-BLOCK-001"],
+      "next_packet": null
+    },
+    {
+      "packet_id": "RC-G4",
+      "status": "BLOCKED",
+      "prerequisites": ["RO3-G4"],
+      "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
+      "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
+      "blockers": ["RO3-G3-BLOCK-001"],
+      "next_packet": null
+    }
+  ],
+  "continuation_point": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME"
 }
