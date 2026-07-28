@@ -60,6 +60,8 @@ def complete_decision(candidate_id: str, disposition: str) -> dict:
     spec = dict(PILOT_CORRECTION_SPECS[candidate_id])
     spec.pop("review_disposition", None)
     spec.pop("acceptance_test_ids", None)
+    if disposition == "FLAG_UI_FRICTION":
+        common["ui_friction_codes"] = [str(spec["finding_code"])]
     return {**common, **spec}
 
 
