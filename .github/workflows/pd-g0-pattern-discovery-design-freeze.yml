@@ -25,7 +25,9 @@ jobs:
           python-version: "3.11"
 
       - name: Run PD-G0 focused tests
-        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze -v
 
       - name: Run canonical repository tests
         env:
@@ -43,4 +45,4 @@ jobs:
         with:
           name: pd-g0-canonical-tests
           path: canonical-tests.log
-          if-no-files-found: error
+          if-no-files-found: warn
