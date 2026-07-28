@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from . import pilot_discovery as pilot
+from . import operator_replay_acceptance as replay
 
 CORRECTIVE_AUTHORITY_GATE = "C1C-G5"
 CORRECTIVE_NEXT_GATE = "C1C-G5-CORRECTIVE-PILOT-REVIEW"
@@ -36,11 +37,6 @@ def _load_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def _set_original_authority_constants() -> None:
-    pilot.AUTHORITY_GATE = str(_ORIGINAL_VALUES["AUTHORITY_GATE"])
-    pilot.NEXT_GATE = str(_ORIGINAL_VALUES["NEXT_GATE"])
-
-
 def apply_corrective_identity() -> None:
     pilot.AUTHORITY_GATE = CORRECTIVE_AUTHORITY_GATE
     pilot.NEXT_GATE = CORRECTIVE_NEXT_GATE
@@ -51,16 +47,27 @@ def apply_corrective_identity() -> None:
     pilot.PILOT_BANNER = CORRECTIVE_BANNER
 
 
-def load_corrective_authority(repository_root: Path) -> dict[str, Any]:
-    # The original source, replay-acceptance and Ed25519 bindings remain the exact
-    # operator-approved June inputs. Only the downstream C1/C2 release identity
-    # and isolated pilot namespace are superseded by C1C-G5.
-    _set_original_authority_constants()
-    try:
-        authority = _ORIGINAL_LOAD_AUTHORITY(repository_root)
-    finally:
-        apply_corrective_identity()
+def _require_fields(source: dict[str, Any], expected: dict[str, Any], code: str) -> None:
+    for key, value in expected.items():
+        if source.get(key) != value:
+            raise pilot.PilotDiscoveryError(f"{code}:{key}")
 
+
+def load_corrective_authority(repository_root: Path) -> dict[str, Any]:
+    # C1C-G5 is a later, narrower authority that preserves the already approved
+    # June source/replay/signing bindings while superseding only the downstream
+    # C1/C2 lineage and isolated noncanonical pilot identity. Historical PD-WP5
+    # packet status is deliberately not reopened or rewritten.
+    historical_gate = _load_json(
+        repository_root
+        / "registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json"
+    )
+    signing = _load_json(
+        repository_root / "docs/releases/prospective-source-v0-1/rps-wp4/evidence/operator-signing-binding.json"
+    )
+    acceptance = _load_json(
+        repository_root / "docs/releases/prospective-source-v0-1/rps-wp4/evidence/time-gated-replay-acceptance.json"
+    )
     decision = _load_json(
         repository_root / "docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json"
     )
@@ -78,6 +85,58 @@ def load_corrective_authority(repository_root: Path) -> dict[str, Any]:
     c2_selectors = (
         repository_root / "registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml"
     ).read_text(encoding="utf-8")
+
+    _require_fields(
+        historical_gate,
+        {
+            "gate_id": "PD-G4B",
+            "gate_status": "APPROVED",
+            "decision": "PASS",
+            "research_role": pilot.RESEARCH_ROLE,
+            "operation_mode": pilot.OPERATION_MODE,
+            "source_slice_id": pilot.SLICE_ID,
+            "source_manifest_sha256": pilot.SOURCE_MANIFEST_SHA256,
+            "compute_run_id": pilot.RUN_ID,
+            "output_manifest_sha256": pilot.OUTPUT_MANIFEST_SHA256,
+            "source_binding_id": pilot.BINDING_ID,
+            "signed_replay_acceptance_id": pilot.ACCEPTANCE_ID,
+            "signing_binding_id": pilot.SIGNING_BINDING_ID,
+            "operator_id": pilot.OPERATOR_ID,
+            "pilot_only": True,
+            "promotion_eligibility": "NON_PROMOTABLE",
+            "canonical_append": "DENIED",
+        },
+        "HISTORICAL_PD_G4B_BINDING_MISMATCH",
+    )
+    _require_fields(
+        signing,
+        {
+            "signing_binding_id": pilot.SIGNING_BINDING_ID,
+            "binding_id": pilot.BINDING_ID,
+            "run_id": pilot.RUN_ID,
+            "source_slice_id": pilot.SLICE_ID,
+            "operator_id": pilot.OPERATOR_ID,
+            "algorithm": "ED25519",
+            "signature_namespace": replay.SIGNATURE_NAMESPACE,
+        },
+        "SIGNING_BINDING_MISMATCH",
+    )
+    _require_fields(
+        acceptance,
+        {
+            "acceptance_id": pilot.ACCEPTANCE_ID,
+            "binding_id": pilot.BINDING_ID,
+            "run_id": pilot.RUN_ID,
+            "source_slice_id": pilot.SLICE_ID,
+            "source_manifest_sha256": pilot.SOURCE_MANIFEST_SHA256,
+            "output_manifest_sha256": pilot.OUTPUT_MANIFEST_SHA256,
+            "operation_mode": pilot.OPERATION_MODE,
+            "operator_id": pilot.OPERATOR_ID,
+            "signing_binding_id": pilot.SIGNING_BINDING_ID,
+            "acceptance": "ACCEPTED_FOR_TIME_GATED_REPLAY_ONLY",
+        },
+        "REPLAY_ACCEPTANCE_MISMATCH",
+    )
 
     gates = {
         str(item.get("gate_id")): item
@@ -108,19 +167,23 @@ def load_corrective_authority(repository_root: Path) -> dict[str, Any]:
         if required not in c1_selectors:
             raise pilot.PilotDiscoveryError(f"C1C_G5_C1_V2_SELECTOR_MISMATCH:{required}")
 
-    authority["corrective"] = {
-        "gate_id": CORRECTIVE_AUTHORITY_GATE,
-        "next_gate": CORRECTIVE_NEXT_GATE,
-        "pilot_namespace": CORRECTIVE_PILOT_NAMESPACE,
-        "active_c2_release": CORRECTIVE_ACTIVE_C2_RELEASE,
-        "c2_manifest_id": CORRECTIVE_C2_MANIFEST_ID,
-        "selector_id": CORRECTIVE_SELECTOR_ID,
-        "source_binding_preserved": pilot.BINDING_ID,
-        "source_compute_run_preserved": pilot.RUN_ID,
-        "canonical_append": "DENIED",
-        "promotion_eligibility": "NON_PROMOTABLE",
+    return {
+        "gate": historical_gate,
+        "signing": signing,
+        "acceptance": acceptance,
+        "corrective": {
+            "gate_id": CORRECTIVE_AUTHORITY_GATE,
+            "next_gate": CORRECTIVE_NEXT_GATE,
+            "pilot_namespace": CORRECTIVE_PILOT_NAMESPACE,
+            "active_c2_release": CORRECTIVE_ACTIVE_C2_RELEASE,
+            "c2_manifest_id": CORRECTIVE_C2_MANIFEST_ID,
+            "selector_id": CORRECTIVE_SELECTOR_ID,
+            "source_binding_preserved": pilot.BINDING_ID,
+            "source_compute_run_preserved": pilot.RUN_ID,
+            "canonical_append": "DENIED",
+            "promotion_eligibility": "NON_PROMOTABLE",
+        },
     }
-    return authority
 
 
 def configure() -> None:
