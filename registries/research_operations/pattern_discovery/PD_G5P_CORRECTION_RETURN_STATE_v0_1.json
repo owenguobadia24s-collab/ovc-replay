@@ -11,7 +11,7 @@
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "baseline_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
   "branch": "gate/pd-g5p-correction-return",
-  "candidate_commit": "9551f2ea59a10809122c1728670c651270bfb5a6",
+  "candidate_commit": "a48ec5898f5483d999f3f8cc481117b87ed6ad92",
   "completed_packets": ["PD-G5P_DEFER", "PD-WP5-CORR1"],
   "correction_packet_state": "registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json",
   "correction_merge_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
@@ -75,6 +75,10 @@
     "tests": "PASS",
     "qa": "PASS"
   },
+  "tests": [
+    {"workflow_run": 30385464799, "job": 90363534506, "result": "PASS", "tested_head": "a48ec5898f5483d999f3f8cc481117b87ed6ad92", "suite": "PD-G5P return focused, Pattern Discovery dependent, full repository, JSON and authority guards"},
+    {"workflow_run": 30385464721, "job": 90363533700, "result": "PASS", "tested_head": "a48ec5898f5483d999f3f8cc481117b87ed6ad92", "suite": "Independent complete repository unit tests"}
+  ],
   "recommended_decision": "PASS",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_QA_PACKET.json",
   "gate_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_GATE_PACKET.json",
