@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import os
-import tempfile
+import sys
 import uuid
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -22,7 +21,6 @@ from .corr2_evidence import (
     exact_evidence_references,
     validate_exact_evidence_references,
 )
-
 
 INPUT_SCHEMA = "ovc-c1c-g5-corr2-deferred-review-input/v1"
 RECEIPT_SCHEMA = "ovc-c1c-g5-corr2-deferred-review-receipt/v1"
@@ -73,10 +71,6 @@ def _load_jsonl(path: Path, code: str) -> list[dict[str, Any]]:
     return rows
 
 
-def _repo_json(repository_root: Path, relative: str, code: str) -> dict[str, Any]:
-    return _load_json(repository_root / relative, code)
-
-
 def _required_text(source: Mapping[str, Any], field: str, code: str) -> str:
     value = str(source.get(field) or "").strip()
     if not value or "REPLACE_WITH" in value:
@@ -92,6 +86,10 @@ def _required_strings(source: Mapping[str, Any], field: str, code: str) -> list[
     if not normalized or any("REPLACE_WITH" in item for item in normalized):
         raise Corr2ReviewError(f"{code}:{field}")
     return normalized
+
+
+def _repo_json(repository_root: Path, relative: str, code: str) -> dict[str, Any]:
+    return _load_json(repository_root / relative, code)
 
 
 def load_corr2_authority(repository_root: Path) -> dict[str, Any]:
@@ -110,7 +108,7 @@ def load_corr2_authority(repository_root: Path) -> dict[str, Any]:
         "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_READY_BUNDLE.json",
         "CORR2_GATE_READY_BUNDLE_UNAVAILABLE",
     )
-    if decision.get("decision") != "DEFER" or decision.get("gate_id") != RETURN_GATE:
+    if decision.get("gate_id") != RETURN_GATE or decision.get("decision") != "DEFER":
         raise Corr2ReviewError("CORR2_OPERATOR_DEFER_NOT_RECORDED")
     packet = decision.get("authorised_next_packet")
     if not isinstance(packet, Mapping) or packet.get("packet_id") != PACKET_ID:
@@ -127,10 +125,7 @@ def load_corr2_authority(repository_root: Path) -> dict[str, Any]:
     return {"decision": decision, "state": state, "bundle": bundle}
 
 
-def _verify_external_hashes(
-    bundle: Mapping[str, Any],
-    paths: Mapping[str, Path],
-) -> None:
+def _verify_returned_file_hashes(bundle: Mapping[str, Any], paths: Mapping[str, Path]) -> None:
     expected = {
         str(item.get("name")): str(item.get("sha256"))
         for item in bundle.get("evidence_files", ())
@@ -139,8 +134,10 @@ def _verify_external_hashes(
     for name, path in paths.items():
         if name not in expected:
             raise Corr2ReviewError(f"CORR2_GATE_BUNDLE_HASH_MISSING:{name}")
+        if not path.is_file() or path.is_symlink():
+            raise Corr2ReviewError(f"CORR2_RETURNED_FILE_UNAVAILABLE_OR_UNSAFE:{path}")
         if pilot.sha_file(path) != expected[name]:
-            raise Corr2ReviewError(f"CORR2_EXTERNAL_FILE_HASH_MISMATCH:{name}")
+            raise Corr2ReviewError(f"CORR2_RETURNED_FILE_HASH_MISMATCH:{name}")
 
 
 def load_verified_corr2_source(
@@ -152,18 +149,13 @@ def load_verified_corr2_source(
     base = review_v2.load_and_verify_evidence(repository_root, environ=environ)
     root = Path(base["root"])
     review_root = root / "operator-review-v2"
-    if not review_root.is_dir():
-        raise Corr2ReviewError(f"CORR2_STRUCTURED_REVIEW_V2_UNAVAILABLE:{review_root}")
-
     paths = {
         "pilot-review-receipt-v2.json": review_root / "pilot-review-receipt-v2.json",
         "pilot-defect-ledger-v2.json": review_root / "pilot-defect-ledger-v2.json",
         "signed-structured-review-evidence-inventory.json": review_root / "signed-structured-review-evidence-inventory.json",
         "c1c-g5-corrective-pilot-review-gate-input.json": review_root / "c1c-g5-corrective-pilot-review-gate-input.json",
     }
-    if any(not path.is_file() or path.is_symlink() for path in paths.values()):
-        raise Corr2ReviewError("CORR2_STRUCTURED_REVIEW_V2_FILES_UNAVAILABLE_OR_UNSAFE")
-    _verify_external_hashes(authority["bundle"], paths)
+    _verify_returned_file_hashes(authority["bundle"], paths)
 
     receipt = _load_json(paths["pilot-review-receipt-v2.json"], "CORR2_REVIEW_V2_RECEIPT_INVALID")
     ledger = _load_json(paths["pilot-defect-ledger-v2.json"], "CORR2_REVIEW_V2_LEDGER_INVALID")
@@ -190,18 +182,16 @@ def load_verified_corr2_source(
     claimed_ledger = logical_ledger.pop("ledger_sha256", None)
     if claimed_ledger != pilot.logical_sha(logical_ledger):
         raise Corr2ReviewError("CORR2_REVIEW_V2_LEDGER_LOGICAL_HASH_MISMATCH")
-    if ledger.get("source_review_receipt_v2_file_sha256") != pilot.sha_file(paths["pilot-review-receipt-v2.json"]):
-        raise Corr2ReviewError("CORR2_REVIEW_V2_LEDGER_RECEIPT_LINK_MISMATCH")
-    if inventory.get("structured_review_v2_file_sha256") != pilot.sha_file(paths["pilot-review-receipt-v2.json"]):
-        raise Corr2ReviewError("CORR2_REVIEW_V2_INVENTORY_RECEIPT_LINK_MISMATCH")
-    if inventory.get("structured_defect_ledger_v2_file_sha256") != pilot.sha_file(paths["pilot-defect-ledger-v2.json"]):
-        raise Corr2ReviewError("CORR2_REVIEW_V2_INVENTORY_LEDGER_LINK_MISMATCH")
-    if gate.get("structured_review_receipt_file_sha256") != pilot.sha_file(paths["pilot-review-receipt-v2.json"]):
-        raise Corr2ReviewError("CORR2_REVIEW_V2_GATE_RECEIPT_LINK_MISMATCH")
-    if gate.get("structured_defect_ledger_file_sha256") != pilot.sha_file(paths["pilot-defect-ledger-v2.json"]):
-        raise Corr2ReviewError("CORR2_REVIEW_V2_GATE_LEDGER_LINK_MISMATCH")
-    if gate.get("signed_structured_inventory_file_sha256") != pilot.sha_file(paths["signed-structured-review-evidence-inventory.json"]):
-        raise Corr2ReviewError("CORR2_REVIEW_V2_GATE_INVENTORY_LINK_MISMATCH")
+    links = {
+        "ledger_receipt": ledger.get("source_review_receipt_v2_file_sha256") == pilot.sha_file(paths["pilot-review-receipt-v2.json"]),
+        "inventory_receipt": inventory.get("structured_review_v2_file_sha256") == pilot.sha_file(paths["pilot-review-receipt-v2.json"]),
+        "inventory_ledger": inventory.get("structured_defect_ledger_v2_file_sha256") == pilot.sha_file(paths["pilot-defect-ledger-v2.json"]),
+        "gate_receipt": gate.get("structured_review_receipt_file_sha256") == pilot.sha_file(paths["pilot-review-receipt-v2.json"]),
+        "gate_ledger": gate.get("structured_defect_ledger_file_sha256") == pilot.sha_file(paths["pilot-defect-ledger-v2.json"]),
+        "gate_inventory": gate.get("signed_structured_inventory_file_sha256") == pilot.sha_file(paths["signed-structured-review-evidence-inventory.json"]),
+    }
+    if not all(links.values()):
+        raise Corr2ReviewError(f"CORR2_REVIEW_V2_HASH_LINK_MISMATCH:{sorted(key for key, value in links.items() if not value)}")
 
     public_key = str(base["authority"]["signing"]["public_key"])
     review_v2._verify_signature(receipt, review_v2._signature_body(receipt), public_key=public_key)
@@ -215,20 +205,16 @@ def load_verified_corr2_source(
         for item in decisions
         if isinstance(item, Mapping)
     }
-    if set(DEFERRED_OBJECTS) - set(by_id):
-        raise Corr2ReviewError("CORR2_DEFERRED_OBJECTS_MISSING_FROM_REVIEW_V2")
     for candidate_id, finding_code in DEFERRED_OBJECTS.items():
-        item = by_id[candidate_id]
+        item = by_id.get(candidate_id)
+        if not item:
+            raise Corr2ReviewError(f"CORR2_DEFERRED_SOURCE_OBJECT_MISSING:{candidate_id}")
         if item.get("review_disposition") != "DEFER_PILOT_OBJECT" or item.get("finding_code") != finding_code:
             raise Corr2ReviewError(f"CORR2_DEFERRED_SOURCE_DECISION_MISMATCH:{candidate_id}")
 
     console_path = root / "review/console-bundle.json"
     queue_path = root / "review/queue-items.jsonl"
     fingerprints_path = root / "derived/fingerprints.jsonl"
-    console = _load_json(console_path, "CORR2_CONSOLE_BUNDLE_INVALID")
-    queue_rows = _load_jsonl(queue_path, "CORR2_QUEUE_ROWS_INVALID")
-    fingerprints = _load_jsonl(fingerprints_path, "CORR2_FINGERPRINT_ROWS_INVALID")
-
     return {
         **base,
         "corr2_authority": authority,
@@ -237,12 +223,9 @@ def load_verified_corr2_source(
         "inventory_v2": inventory,
         "gate_v2": gate,
         "review_v2_paths": paths,
-        "console_bundle": console,
-        "queue_rows": queue_rows,
-        "fingerprints": fingerprints,
-        "console_path": console_path,
-        "queue_path": queue_path,
-        "fingerprints_path": fingerprints_path,
+        "console_bundle": _load_json(console_path, "CORR2_CONSOLE_BUNDLE_INVALID"),
+        "queue_rows": _load_jsonl(queue_path, "CORR2_QUEUE_ROWS_INVALID"),
+        "fingerprints": _load_jsonl(fingerprints_path, "CORR2_FINGERPRINT_ROWS_INVALID"),
     }
 
 
@@ -264,12 +247,12 @@ def _contexts(source: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
     result: dict[str, dict[str, Any]] = {}
     for candidate_id in DEFERRED_OBJECTS:
         detail = details.get(candidate_id)
+        queue = queue_by_id.get(candidate_id)
+        fingerprint = fingerprint_by_id.get(candidate_id)
         if not isinstance(detail, Mapping):
             raise Corr2ReviewError(f"CORR2_CANDIDATE_DETAIL_MISSING:{candidate_id}")
-        queue = queue_by_id.get(candidate_id)
         if not isinstance(queue, Mapping):
             raise Corr2ReviewError(f"CORR2_QUEUE_ITEM_MISSING:{candidate_id}")
-        fingerprint = fingerprint_by_id.get(candidate_id)
         if not isinstance(fingerprint, Mapping):
             raise Corr2ReviewError(f"CORR2_FINGERPRINT_MISSING:{candidate_id}")
         merged_detail = dict(detail)
@@ -311,10 +294,10 @@ def build_deferred_review_template(source: Mapping[str, Any]) -> dict[str, Any]:
             "DEFER_PILOT_OBJECT": ["finding_code", "resolution_criteria", "next_review_condition"],
             "REJECT_PILOT_OBJECT": ["finding_code", "structural_basis"],
         },
-        "second_machine_replay_required": false,
-        "pilot_only": true,
+        "second_machine_replay_required": False,
+        "pilot_only": True,
         "promotion_eligibility": "NON_PROMOTABLE",
-        "canonical_append": "DENIED"
+        "canonical_append": "DENIED",
     }
 
 
@@ -323,14 +306,17 @@ def validate_corr2_review_input(
     *,
     source: Mapping[str, Any],
 ) -> list[dict[str, Any]]:
-    if review.get("schema") != INPUT_SCHEMA:
-        raise Corr2ReviewError("CORR2_REVIEW_INPUT_SCHEMA_INVALID")
-    if review.get("packet_id") != PACKET_ID or review.get("gate_id") != RETURN_GATE:
-        raise Corr2ReviewError("CORR2_REVIEW_INPUT_PACKET_GATE_MISMATCH")
-    if review.get("pilot_run_id") != EXPECTED_RUN_ID or review.get("pilot_namespace") != EXPECTED_NAMESPACE:
-        raise Corr2ReviewError("CORR2_REVIEW_INPUT_PILOT_IDENTITY_MISMATCH")
-    if review.get("operator_id") != pilot.OPERATOR_ID:
-        raise Corr2ReviewError("CORR2_REVIEW_INPUT_OPERATOR_MISMATCH")
+    expected = {
+        "schema": INPUT_SCHEMA,
+        "packet_id": PACKET_ID,
+        "gate_id": RETURN_GATE,
+        "pilot_run_id": EXPECTED_RUN_ID,
+        "pilot_namespace": EXPECTED_NAMESPACE,
+        "operator_id": pilot.OPERATOR_ID,
+    }
+    for key, value in expected.items():
+        if review.get(key) != value:
+            raise Corr2ReviewError(f"CORR2_REVIEW_INPUT_MISMATCH:{key}")
     pilot.parse_utc(_required_text(review, "reviewed_at_utc", "CORR2_REVIEW_INPUT_MISSING"))
     expected_receipt_sha = pilot.sha_file(source["review_v2_paths"]["pilot-review-receipt-v2.json"])
     if review.get("source_structured_review_v2_file_sha256") != expected_receipt_sha:
@@ -363,6 +349,7 @@ def validate_corr2_review_input(
             )
         except Corr2EvidenceError as exc:
             raise Corr2ReviewError(str(exc)) from exc
+
         disposition = _required_text(item, "final_disposition", "CORR2_REVIEW_DECISION_MISSING")
         if disposition not in ALLOWED_FINAL_DISPOSITIONS:
             raise Corr2ReviewError(f"CORR2_FINAL_DISPOSITION_INVALID:{disposition}")
@@ -382,15 +369,19 @@ def validate_corr2_review_input(
             finding_code = _required_text(item, "finding_code", "CORR2_DEFER_INCOMPLETE")
             if not finding_code.startswith("PD-DEFER-"):
                 raise Corr2ReviewError(f"CORR2_DEFER_CODE_INVALID:{finding_code}")
-            row["finding_code"] = finding_code
-            row["resolution_criteria"] = _required_strings(item, "resolution_criteria", "CORR2_DEFER_INCOMPLETE")
-            row["next_review_condition"] = _required_text(item, "next_review_condition", "CORR2_DEFER_INCOMPLETE")
-        elif disposition == "REJECT_PILOT_OBJECT":
+            row.update({
+                "finding_code": finding_code,
+                "resolution_criteria": _required_strings(item, "resolution_criteria", "CORR2_DEFER_INCOMPLETE"),
+                "next_review_condition": _required_text(item, "next_review_condition", "CORR2_DEFER_INCOMPLETE"),
+            })
+        else:
             finding_code = _required_text(item, "finding_code", "CORR2_REJECTION_INCOMPLETE")
             if not finding_code.startswith("PD-REJECT-"):
                 raise Corr2ReviewError(f"CORR2_REJECTION_CODE_INVALID:{finding_code}")
-            row["finding_code"] = finding_code
-            row["structural_basis"] = _required_text(item, "structural_basis", "CORR2_REJECTION_INCOMPLETE")
+            row.update({
+                "finding_code": finding_code,
+                "structural_basis": _required_text(item, "structural_basis", "CORR2_REJECTION_INCOMPLETE"),
+            })
         normalized.append(row)
     if observed != set(DEFERRED_OBJECTS):
         raise Corr2ReviewError(f"CORR2_REVIEW_INPUT_MISSING_OBJECTS:{sorted(set(DEFERRED_OBJECTS) - observed)}")
@@ -400,12 +391,16 @@ def validate_corr2_review_input(
 def _implementation_receipt(repository_root: Path) -> tuple[Path, dict[str, Any]]:
     path = repository_root / "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_IMPLEMENTATION_RECEIPT.json"
     receipt = _load_json(path, "CORR2_IMPLEMENTATION_RECEIPT_UNAVAILABLE")
-    if receipt.get("packet_id") != PACKET_ID or receipt.get("decision") != "PASS":
-        raise Corr2ReviewError("CORR2_IMPLEMENTATION_RECEIPT_NOT_PASS")
-    if receipt.get("workflow_evidence_finding") != "CLOSED_BY_IMPLEMENTATION_AND_TESTS":
-        raise Corr2ReviewError("CORR2_WORKFLOW_FINDING_NOT_CLOSED")
-    if receipt.get("console_context_finding") != "CLOSED_BY_IMPLEMENTATION_AND_TESTS":
-        raise Corr2ReviewError("CORR2_CONSOLE_FINDING_NOT_CLOSED")
+    required = {
+        "packet_id": PACKET_ID,
+        "decision": "PASS",
+        "workflow_evidence_finding": "CLOSED_BY_IMPLEMENTATION_AND_TESTS",
+        "console_context_finding": "CLOSED_BY_IMPLEMENTATION_AND_TESTS",
+        "second_machine_replay": "DENIED_NOT_REQUIRED",
+    }
+    for key, value in required.items():
+        if receipt.get(key) != value:
+            raise Corr2ReviewError(f"CORR2_IMPLEMENTATION_RECEIPT_MISMATCH:{key}")
     return path, receipt
 
 
@@ -477,9 +472,12 @@ def finalize(
     staging = root / f".{FINAL_DIR}.staging.{uuid.uuid4().hex}"
     staging.mkdir(parents=False, exist_ok=False)
     try:
-        review_v2_decisions = source["review_v2"]["decisions"]
         preserved = sorted(
-            [dict(item) for item in review_v2_decisions if item.get("candidate_window_id") not in DEFERRED_OBJECTS],
+            [
+                dict(item)
+                for item in source["review_v2"]["decisions"]
+                if item.get("candidate_window_id") not in DEFERRED_OBJECTS
+            ],
             key=lambda item: str(item.get("candidate_window_id")),
         )
         preserved_hash = pilot.logical_sha(preserved)
@@ -658,7 +656,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 raise Corr2ReviewError("CORR2_FINALIZE_REQUIRES_REVIEW_FILE")
             result = finalize(repository_root, review_file=arguments.review_file)
     except (Corr2ReviewError, review_v2.CorrectiveReviewV2Error, pilot.PilotDiscoveryError, replay.ReplayAcceptanceError) as exc:
-        print(f"C1C-G5-CORR2 blocked: {exc}", file=os.sys.stderr)
+        print(f"C1C-G5-CORR2 blocked: {exc}", file=sys.stderr)
         return 2
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
