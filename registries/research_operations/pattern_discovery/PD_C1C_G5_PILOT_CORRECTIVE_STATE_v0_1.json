@@ -44,7 +44,17 @@
   },
   "structured_review_correction": {
     "packet_id": "C1C-G5-REVIEW-V2-CORRECTION",
-    "status": "IMPLEMENTED_AWAITING_TEST_AND_INTEGRATION",
+    "status": "APPROVED_PENDING_SQUASH_MERGE",
+    "decision": "PASS",
+    "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+    "tested_candidate_head": "22acce012527c23e1f251c379dffd0e7b282dd5c",
+    "tests": [
+      {"workflow_run": 30398079249, "job": 90405918618, "result": "PASS"},
+      {"workflow_run": 30398079004, "job": 90405917808, "result": "PASS"}
+    ],
+    "qa_result": "PASS_IMPLEMENTATION_BLOCKED_OPERATOR_LOCAL_STRUCTURED_REVIEW",
+    "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_QA_PACKET.json",
+    "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_DELEGATED_DECISION.md",
     "contract": "contracts/research_operations/pattern_discovery/C1C_G5_STRUCTURED_CORRECTIVE_REVIEW_CONTRACT_v0_1.md",
     "runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_review_v2.py",
     "windows_wrapper": "scripts/run_c1c_g5_structured_review_v2.ps1",
@@ -65,7 +75,7 @@
     "blocker_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_PILOT_SUPERSESSION_RERUN_BLOCKER.json"
   },
   "blocker_id": "C1C-G5-BLOCK-002",
-  "continuation_command": ".\\scripts\\run_c1c_g5_structured_review_v2.ps1 preflight",
+  "continuation_command": ".\scripts\run_c1c_g5_structured_review_v2.ps1 preflight",
   "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
   "retained_authority": {
     "selector_mutation": "DENIED_BY_REVIEW_RUNNER",
