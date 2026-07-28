@@ -1,0 +1,104 @@
+name: PD-WP5-CORR1 structured review correction
+
+on:
+  pull_request:
+    paths:
+      - "apps/research_console/pattern_discovery.py"
+      - "contracts/research_operations/pattern_discovery/PD_WP5_FINAL_CANONICAL_DISCOVERY_CONTRACT_CANDIDATE_v0_2.md"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/**"
+      - "registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json"
+      - "schemas/research_operations/pattern_discovery/pd_wp5_*v0_2.schema.json"
+      - "schemas/research_operations/pattern_discovery/pd_wp5_correction_ledger_v0_1.schema.json"
+      - "scripts/research_operations/validate_pd_wp5_review_v2.py"
+      - "src/ovc/research_operations/pattern_discovery/review_corrections.py"
+      - "tests/research_operations/pattern_discovery/test_pd_wp5_corr1.py"
+      - ".github/workflows/pd-wp5-corr1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  correction-acceptance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused CORR1 tests
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover \
+            -s tests/research_operations/pattern_discovery \
+            -p 'test_pd_wp5_corr1.py' \
+            -v > /tmp/pd-wp5-corr1-focused.log 2>&1
+          status=$?
+          cat /tmp/pd-wp5-corr1-focused.log
+          exit "$status"
+      - name: Preserve focused test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-wp5-corr1-focused-log
+          path: /tmp/pd-wp5-corr1-focused.log
+          if-no-files-found: error
+          retention-days: 7
+      - name: Pattern Discovery dependent tests
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover \
+            -s tests/research_operations/pattern_discovery \
+            -p 'test_pd_wp*.py' \
+            -v > /tmp/pd-wp5-corr1-dependent.log 2>&1
+          status=$?
+          cat /tmp/pd-wp5-corr1-dependent.log
+          exit "$status"
+      - name: Preserve dependent test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-wp5-corr1-dependent-log
+          path: /tmp/pd-wp5-corr1-dependent.log
+          if-no-files-found: error
+          retention-days: 7
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Validate JSON and schemas
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_CORRECTION_LEDGER.json >/dev/null
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CANONICAL_IDENTITY_RESET_PROCEDURE_CANDIDATE.json >/dev/null
+          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_QA_PACKET.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json >/dev/null
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_input_v0_2.schema.json >/dev/null
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_receipt_v0_2.schema.json >/dev/null
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_wp5_correction_ledger_v0_1.schema.json >/dev/null
+      - name: Assert authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json').read_text())
+          qa = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CORR1_QA_PACKET.json').read_text())
+          identity = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_WP5_CANONICAL_IDENTITY_RESET_PROCEDURE_CANDIDATE.json').read_text())
+          assert state['authority_required'] == 'NONE'
+          assert state['second_pilot_replay_authorised'] is False
+          assert state['canonical_discovery_authorised'] is False
+          assert state['canonical_append'] == 'DENIED'
+          assert qa['second_pilot_replay_recommendation'] == 'NOT_REQUIRED'
+          assert qa['second_pilot_replay_authorised'] is False
+          assert qa['canonical_discovery_authorised'] is False
+          assert identity['status'] == 'CANDIDATE_ONLY_NOT_AUTHORISED'
+          assert identity['pilot_identity_reuse'] == 'DENIED'
+          assert identity['canonical_run_authorised'] is False
+          for key in ('selector_mutation', 'release_mutation', 'r2_publication', 'validation_consumption'):
+              assert state[key] == 'DENIED', (key, state[key])
+          for key in ('probability_authority', 'risk_authority', 'exposure_authority', 'trading_authority', 'execution_authority', 'agent_write_authority'):
+              assert state[key] == 'NONE', (key, state[key])
+          PY

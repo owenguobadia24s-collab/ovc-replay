@@ -19,6 +19,35 @@ AUTHORITY = {
     "probability_exposure_execution": "NONE",
 }
 PILOT_BANNER = "PILOT_ONLY · NON_PROMOTABLE · TIME_GATED_REPLAY · GAPPED_SOURCE"
+CORRECTION_BANNER = "PD-WP5-CORR1 · STRUCTURED REVIEW ONLY · C2 AND CANONICAL AUTHORITY UNCHANGED"
+REVIEW_DISPOSITIONS = [
+    "WORKFLOW_ACCEPTED",
+    "FLAG_WORKFLOW_DEFECT",
+    "FLAG_UI_FRICTION",
+    "DEFER_PILOT_OBJECT",
+    "REJECT_PILOT_OBJECT",
+]
+
+
+def review_fields_for_disposition(disposition: str) -> tuple[str, ...]:
+    fields = {
+        "WORKFLOW_ACCEPTED": ("acceptance_basis", "acceptance_criteria", "evidence_references"),
+        "FLAG_WORKFLOW_DEFECT": (
+            "finding_code", "affected_component", "actual_behavior", "expected_behavior",
+            "reproduction_steps", "acceptance_criteria", "evidence_references",
+        ),
+        "FLAG_UI_FRICTION": (
+            "ui_friction_codes", "affected_console_surface", "affected_component", "actual_behavior",
+            "expected_behavior", "reproduction_steps", "acceptance_criteria", "evidence_references",
+        ),
+        "DEFER_PILOT_OBJECT": (
+            "finding_code", "resolution_criteria", "next_review_condition", "evidence_references",
+        ),
+        "REJECT_PILOT_OBJECT": ("finding_code", "structural_basis", "evidence_references"),
+    }
+    if disposition not in fields:
+        raise ValueError(f"unsupported review disposition: {disposition}")
+    return fields[disposition]
 
 
 def _streamlit():
@@ -70,6 +99,38 @@ def render_queue(items: list[Mapping[str, Any]], authority: AuthoritySnapshot | 
     return st.selectbox("Open candidate", [str(item["candidate_window_id"]) for item in selected])
 
 
+def _render_structured_review_fields(st: Any, disposition: str) -> None:
+    st.info(CORRECTION_BANNER)
+    st.caption("Structured fields are a local review candidate only. No evidence write, replay or canonical append is enabled.")
+    fields = review_fields_for_disposition(disposition)
+    labels = {
+        "finding_code": "Finding / reason code",
+        "affected_component": "Affected component",
+        "affected_console_surface": "Affected Console surface",
+        "actual_behavior": "Actual behavior",
+        "expected_behavior": "Expected behavior",
+        "reproduction_steps": "Reproduction steps (one per line)",
+        "acceptance_criteria": "Acceptance criteria (one per line)",
+        "acceptance_basis": "Acceptance basis",
+        "resolution_criteria": "Resolution criteria (one per line)",
+        "next_review_condition": "Next lawful review condition",
+        "structural_basis": "Structural / workflow rejection basis",
+        "evidence_references": "Evidence references (one per line)",
+        "ui_friction_codes": "UI friction codes (PD-UI-…; one per line)",
+    }
+    multiline = {
+        "actual_behavior", "expected_behavior", "reproduction_steps", "acceptance_criteria",
+        "acceptance_basis", "resolution_criteria", "next_review_condition", "structural_basis",
+        "evidence_references", "ui_friction_codes",
+    }
+    for field in fields:
+        label = labels[field]
+        if field in multiline:
+            st.text_area(label, key=f"pd_corr1_{disposition}_{field}")
+        else:
+            st.text_input(label, key=f"pd_corr1_{disposition}_{field}")
+
+
 def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnapshot | None = None) -> None:
     st = _streamlit()
     st.subheader("Candidate Detail")
@@ -101,9 +162,11 @@ def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnaps
     with st.expander("Immutable source lineage", expanded=False):
         st.json(detail.get("source_lineage", {}))
     st.markdown("**Review action candidate**")
+    disposition = st.selectbox("Review disposition", REVIEW_DISPOSITIONS)
     st.selectbox("Evidence class", list(detail.get("permitted_review_classes", ())))
     st.text_area("Factual observation", placeholder="Describe what C2 represents faithfully or misses.")
     st.text_area("Limitation / next bounded question")
+    _render_structured_review_fields(st, disposition)
     enabled = authority.live_append_enabled if authority is not None else False
     st.button(
         "Freeze evidence record",
@@ -141,11 +204,7 @@ def render_clusters(view: Mapping[str, Any]) -> None:
 
 def render_pattern_discovery_app(bundle: Mapping[str, Any]) -> None:
     st = _streamlit()
-    authority = (
-        authority_from_mapping(bundle.get("authority"))
-        if "authority" in bundle
-        else load_repository_authority_snapshot()
-    )
+    authority = authority_from_mapping(bundle.get("authority")) if "authority" in bundle else load_repository_authority_snapshot()
     pilot = bundle.get("pilot") if isinstance(bundle.get("pilot"), Mapping) else None
     st.set_page_config(page_title="OVC C2 Pattern Discovery", page_icon="◈", layout="wide")
     st.title("OVC C2 Pattern Discovery")
@@ -174,10 +233,7 @@ def render_pattern_discovery_app(bundle: Mapping[str, Any]) -> None:
         if cluster_view:
             render_clusters(cluster_view)
         elif cluster_views:
-            selected_cluster_view = st.selectbox(
-                "Partition",
-                [str(item.get("cluster_version_id")) for item in cluster_views],
-            )
+            selected_cluster_view = st.selectbox("Partition", [str(item.get("cluster_version_id")) for item in cluster_views])
             render_clusters(next(item for item in cluster_views if str(item.get("cluster_version_id")) == selected_cluster_view))
         else:
             st.info("No ClusterVersion projection is available.")
