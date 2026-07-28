@@ -1,0 +1,69 @@
+{
+  "schema": "ovc-pd-g5p-qa-packet/v1",
+  "gate_id": "PD-G5P",
+  "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
+  "plan_version": "0.1",
+  "baseline_commit": "6c0aa91a6c51a86d39994ef363f8e29bb924764b",
+  "candidate_commit": null,
+  "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+  "evidence_result": "PASS_INTEGRITY_AND_SIGNATURE_CHAIN",
+  "operational_acceptance_result": "DEFER_VERSIONED_CORRECTION_REQUIRED",
+  "checks": {
+    "seven_compact_files_present": true,
+    "exact_original_file_hashes_verified": true,
+    "signed_inventory_file_hash_chain_verified": true,
+    "pilot_run_ed25519_signature_verified": true,
+    "operator_review_ed25519_signature_verified": true,
+    "signed_inventory_ed25519_signature_verified": true,
+    "source_binding_consistent": true,
+    "signing_binding_consistent": true,
+    "pilot_identity_consistent": true,
+    "deterministic_rerun_match": true,
+    "operator_review_complete": true,
+    "six_promoted_candidates_reviewed": true,
+    "five_nonaccepted_objects_reconcile_to_defect_ledger": true,
+    "canonical_append_denied": true,
+    "live_prospective_relabelling_denied": true,
+    "pilot_only_and_non_promotable": true,
+    "provider_network_access_performed": false,
+    "outcome_features_consumed": false
+  },
+  "machine_metrics": {
+    "c2_states": 1144,
+    "transitions": 7032,
+    "trigger_events": 208,
+    "candidates": 208,
+    "fingerprints": 208,
+    "cluster_versions": 24,
+    "cluster_rows": 40,
+    "queue_promoted": 6,
+    "queue_suppressed": 202,
+    "elapsed_seconds_two_runs": 52.219883,
+    "peak_memory_bytes": 22744573
+  },
+  "operator_review_summary": {
+    "workflow_accepted": 1,
+    "workflow_defect": 1,
+    "ui_friction": 1,
+    "deferred": 2,
+    "rejected": 1,
+    "contract_changes_required": true
+  },
+  "blocking_acceptance_gaps": [
+    "FINAL_CONTRACT_CANDIDATE_NOT_FROZEN",
+    "WORKFLOW_DEFECT_NOT_REPRODUCIBLY_SPECIFIED",
+    "UI_FRICTION_NOT_CODED_OR_LOCATED",
+    "DEFERRED_OBJECTS_HAVE_NO_RESOLUTION_CRITERIA",
+    "REJECTED_OBJECT_HAS_NO STRUCTURAL_REJECTION_REASON",
+    "SECOND_CORRECTION_REPLAY_NOT_AUTHORISED"
+  ],
+  "qa_recommendation": "DEFER",
+  "tests": [],
+  "warnings": [
+    "The source coverage state is GAPPED and no fill, repair, interpolation or synthesis is authorised.",
+    "Pilot outputs remain PILOT_ONLY and NON_PROMOTABLE.",
+    "A three-day pilot cannot support semantic, family, probability, exposure or execution conclusions.",
+    "PD-G5P PASS would authorise an operator-reserved canonical Discovery transition and is not supported by the current defect record."
+  ],
+  "rollback": "REVERT_GATE_PACKET_BRANCH_PRESERVE_ALL_SIGNED_PILOT_EVIDENCE_KEEP_CANONICAL_DISCOVERY_DENIED"
+}
