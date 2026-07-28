@@ -2,7 +2,7 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RO3_WP1_QA_REVIEW
+status: RO3_G1_APPROVED
 baseline_commit: 4d701ad78af8597e182565eb301739501b51dff6
 items:
   - id: RO3-00
@@ -13,10 +13,15 @@ items:
     merge_commit: 4d701ad78af8597e182565eb301739501b51dff6
   - id: RO3-WP1
     name: Primitive release and coverage indexes
-    status: QA_REVIEW
+    status: APPROVED
     gate: RO3-G1
     branch: build/research-operations-v0-3-wp1-c1-index
+    tested_candidate_commit: d8f2d20dbd8dda2a553d247111e28464ce7f1fb8
     authority_delta: LOCAL_REPLACEABLE_DERIVED
+    decision: PASS
+    decision_authority: DELEGATED_AUTO_RATIFICATION
+    qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json
+    decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_DELEGATED_DECISION.md
     runtime:
       release_index: IMPLEMENTED
       primitive_index: IMPLEMENTED
@@ -24,10 +29,15 @@ items:
       coverage_profile: IMPLEMENTED
       logical_hash: IMPLEMENTED
       validation_denial: IMPLEMENTED
-      performance_benchmark: PENDING_CI_EVIDENCE
+      performance_benchmark: PASS
+      full_corpus_records: 212764
+      full_corpus_files: 192
+      wall_time_seconds: 22.855605
+      soft_target_seconds: 300
+      reproducibility: PASS_IDENTICAL_RERUN
   - id: RO3-WP2
     name: Null computability and formula comparison
-    status: PLANNED
+    status: READY_AFTER_RO3_G1_MERGE
     gate: RO3-G2
     authority_delta: READ_ONLY_DERIVED_INSPECTION
   - id: RO3-WP3
@@ -57,4 +67,4 @@ retained_boundaries:
   trading_authority: NONE
   execution_authority: NONE
   agent_write_authority: NONE
-next_packet: RO3-WP1_QA
+next_packet: RO3-WP2
