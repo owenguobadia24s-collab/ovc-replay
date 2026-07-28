@@ -1,0 +1,138 @@
+{
+  "schema": "ovc-consolidated-operator-gate-packet/v1",
+  "packet_id": "C1C-G3-G4-G5-OPERATOR-PACKET-0.1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "original_plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "status": "GATE_READY",
+  "baseline_commit": "6c0aa91a6c51a86d39994ef363f8e29bb924764b",
+  "completed_packet_merge": "1142abd2010b92b33e56bccc23e05ccd8bed1320",
+  "tested_candidate_commit": "f30efb0ef8b72cb2e43ccb242c479932a6ee8387",
+  "completed_packets": [
+    {"packet_id": "C1C-WP1", "gate_id": "C1C-G1", "decision": "PASS", "status": "COMPLETED"},
+    {"packet_id": "C1C-WP2", "gate_id": "C1C-G2", "decision": "PASS", "status": "APPROVED_LOCAL_ONLY"}
+  ],
+  "current_authority": {
+    "c1_discovery": "ACTIVE_DISCOVERY:OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+    "c1_development": "ACTIVE_DEVELOPMENT:OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1",
+    "c1_validation": "NONE_LOCKED_UNCONSUMED",
+    "c2_discovery": "ACTIVE_DISCOVERY:OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+    "c2_development": "REMOTE_VERIFIED_REFERENCE_ONLY",
+    "pattern_discovery_canonical_impact": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "findings": {
+    "active_c1_record_count": 212764,
+    "active_c1_record_file_count": 192,
+    "active_affected_record_count": 0,
+    "active_affected_file_count": 0,
+    "defective_helper_counterfactual_divergence_count": 208185,
+    "candidate_record_shards_byte_identical_to_active_v1": true,
+    "ro3_assurance": "PASS",
+    "ro3_failed_assertion_count": 0
+  },
+  "gates": [
+    {
+      "gate_id": "C1C-G3",
+      "title": "C1 v2 R2 publication",
+      "owner": "OPERATOR",
+      "operator_required": true,
+      "auto_ratifiable": false,
+      "recommended_decision": "PASS",
+      "authority_delta": "PUBLISH_EXACT_C1_V2_DISCOVERY_AND_DEVELOPMENT_CANDIDATES_AND_FULL_REMOTE_VERIFY",
+      "rollback": "Leave selectors on v1; preserve any published v2 bytes inactive and immutable."
+    },
+    {
+      "gate_id": "C1C-G4",
+      "title": "C1 selector replacement",
+      "owner": "OPERATOR",
+      "operator_required": true,
+      "auto_ratifiable": false,
+      "recommended_decision": "PASS",
+      "authority_delta": "ATOMically_REPLACE_C1_DISCOVERY_AND_DEVELOPMENT_SELECTORS_WITH_REMOTE_VERIFIED_V2",
+      "rollback": "Atomically restore exact v1 C1 selector release and manifest hashes."
+    },
+    {
+      "gate_id": "C1C-G5",
+      "title": "Downstream identity remediation",
+      "owner": "OPERATOR",
+      "operator_required": true,
+      "auto_ratifiable": false,
+      "recommended_decision": "PASS",
+      "authority_delta": "DETERMINISTIC_C2_V2_IDENTITY_REPLAY_PUBLICATION_COORDINATED_SELECTOR_REPLACEMENT_AND_NONCANONICAL_PILOT_SUPERSESSION_RERUN",
+      "rollback": "Atomically restore C1/C2 v1 selectors, retain v2 inactive, preserve pilot supersession and never reactivate legacy B-state."
+    }
+  ],
+  "candidate_releases": {
+    "discovery": {
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+      "manifest_sha256": "c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf",
+      "record_count": 159892,
+      "record_file_count": 144,
+      "artifact_id": 8692836156,
+      "artifact_digest": "sha256:9cec2ff4391576334149cb4a3542131b2692530829d9794c4038354a4a299bf7"
+    },
+    "development": {
+      "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1",
+      "manifest_sha256": "e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f",
+      "record_count": 52872,
+      "record_file_count": 48,
+      "artifact_id": 8692837001,
+      "artifact_digest": "sha256:fa5e02c23a834b0d6c1c9496635b6a5fcda8fbf3b9354fe3cc8ab363ea6937d1"
+    }
+  },
+  "tests": {
+    "workflow_run_id": 30370847916,
+    "workflow_job_id": 90313984452,
+    "exact_parent_resolution": "PASS",
+    "full_corpus_audit": "PASS",
+    "deterministic_double_replay": "PASS_BYTE_IDENTICAL",
+    "active_v1_equivalence": "PASS_BYTE_IDENTICAL",
+    "metamorphic_assertions": "79_OF_79_PASS",
+    "golden_assertions": "18_OF_18_PASS",
+    "negative_control": "DETECTED",
+    "canonical_repository_suite": "PASS",
+    "authority_guard": "PASS"
+  },
+  "qa": {
+    "recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_issues": [],
+    "evidence_artifact_id": 8692834967,
+    "evidence_artifact_digest": "sha256:961e816e18b64cfe48a643dedf7a3f3ad64deecb53ffbe3e10a33dfe3ac0dc30"
+  },
+  "downstream_surface": {
+    "c2_state_records": 404434,
+    "c2_transition_records": 323910,
+    "c2_identity_bearing_record_count": 728344,
+    "c2_state_transition_file_count": 24,
+    "c2_semantic_effect_from_active_c1_bytes": "NONE",
+    "canonical_pattern_discovery_affected": false,
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+    "source_compute_run_id": "RPS.RUN.7aeb551335d766ee3bf503e6",
+    "pilot_action": "SUPERSEDE_APPEND_ONLY_AND_RERUN"
+  },
+  "warnings": [
+    "R2 execution requires operator-authorised environment-only remote configuration.",
+    "C1 v2 record bytes are identical to v1; publication changes implementation and lineage identity only.",
+    "Any C2 state or transition value drift during v2 replay is blocking.",
+    "Pilot rerun remains PILOT_ONLY, TIME_GATED_REPLAY and NON_PROMOTABLE."
+  ],
+  "exact_work_after_approval": [
+    "Materialise C1C-G3 publication approval records pinned to candidate hashes.",
+    "Collision-preflight, publish and full-remote-verify both C1 v2 releases.",
+    "Replay C2 Discovery and Development under new v2 identities against exact C1 v2 parents and prove semantic equivalence.",
+    "Publish and full-remote-verify C2 v2.",
+    "Execute coordinated atomic C1/C2 selector replacement with exact v1 rollback targets.",
+    "Supersede and rerun the noncanonical Pilot Discovery namespace from the exact corrected source binding.",
+    "Rerun RO3-G3 from current main, complete RO3-WP3 on PASS and continue to RO3-WP4."
+  ],
+  "requested_operator_command": "OVC APPROVE C1C-G3 C1C-G4 C1C-G5"
+}
