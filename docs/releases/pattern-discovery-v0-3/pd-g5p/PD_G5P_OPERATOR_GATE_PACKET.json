@@ -5,7 +5,7 @@
   "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
   "plan_version": "0.1",
   "baseline_commit": "6c0aa91a6c51a86d39994ef363f8e29bb924764b",
-  "candidate_commit": null,
+  "candidate_commit": "b1bb92faaf300c8422581f33f75db96e0ab10a3d",
   "completed_packets": [
     "PD-G4B",
     "PD-WP5-PILOT-IMPLEMENTATION",
@@ -39,32 +39,22 @@
   "proposed_delta_on_pass": "AUTHORISE_VERSIONED_FINAL_PD_WP5_CANONICAL_DISCOVERY_CONTRACT_AND_RELEASE_PD_WP5_CANONICAL_FOR_OPT_B_C2_GBPUSD_DISCOVERY_2021_2023_AFTER_COMPLETE_IDENTITY_RESET",
   "proposed_delta_status": "NOT_GRANTED",
   "acceptance_conditions": [
+    {"condition": "ONE_PILOT_DISCOVERY_OPERATION_COMPLETED", "result": "PASS"},
+    {"condition": "SIGNED_PILOT_EVIDENCE_CAPTURED", "result": "PASS"},
+    {"condition": "DETERMINISTIC_RERUN_COMPLETED", "result": "PASS"},
+    {"condition": "OPERATOR_REVIEW_COMPLETE", "result": "PASS"},
+    {"condition": "PILOT_DEFECT_AND_CORRECTION_LEDGER_COMPLETE", "result": "FAIL_CORRECTION_SPECIFICATION_INCOMPLETE"},
+    {"condition": "FINAL_CONTRACT_CANDIDATE_FROZEN", "result": "FAIL_NOT_AVAILABLE"}
+  ],
+  "tests": [
     {
-      "condition": "ONE_PILOT_DISCOVERY_OPERATION_COMPLETED",
-      "result": "PASS"
-    },
-    {
-      "condition": "SIGNED_PILOT_EVIDENCE_CAPTURED",
-      "result": "PASS"
-    },
-    {
-      "condition": "DETERMINISTIC_RERUN_COMPLETED",
-      "result": "PASS"
-    },
-    {
-      "condition": "OPERATOR_REVIEW_COMPLETE",
-      "result": "PASS"
-    },
-    {
-      "condition": "PILOT_DEFECT_AND_CORRECTION_LEDGER_COMPLETE",
-      "result": "FAIL_CORRECTION_SPECIFICATION_INCOMPLETE"
-    },
-    {
-      "condition": "FINAL_CONTRACT_CANDIDATE_FROZEN",
-      "result": "FAIL_NOT_AVAILABLE"
+      "suite": "PD-G5P exact evidence, signature, disposition, authority and full repository tests",
+      "workflow_run": 30368743532,
+      "job": 90306722224,
+      "result": "PASS",
+      "tested_head": "b1bb92faaf300c8422581f33f75db96e0ab10a3d"
     }
   ],
-  "tests": [],
   "qa_result": "DEFER_VERSIONED_CORRECTION_REQUIRED",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json",
   "evidence_index": "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json",
@@ -77,38 +67,31 @@
     "The approved pilot operation limit is exhausted; no correction replay is authorised."
   ],
   "unresolved_issues": [
-    {
-      "code": "PDG5P-DEFECT-SPEC-001",
-      "severity": "BLOCKING_FOR_PASS",
-      "description": "Materialise reproducible workflow-defect evidence for PDPILOT-CANDIDATE-bf1e96ba941e97a4d12e8fba."
-    },
-    {
-      "code": "PDG5P-UI-SPEC-001",
-      "severity": "BLOCKING_FOR_PASS",
-      "description": "Record the affected Console surface, friction code, reproduction steps and acceptance criterion for PDPILOT-CANDIDATE-f10546a0a1ec4dfbe03545c4."
-    },
-    {
-      "code": "PDG5P-DEFER-RESOLUTION-001",
-      "severity": "BLOCKING_FOR_PASS",
-      "description": "Define resolution criteria for the two deferred pilot objects."
-    },
-    {
-      "code": "PDG5P-REJECTION-BASIS-001",
-      "severity": "BLOCKING_FOR_PASS",
-      "description": "Record the structural and workflow basis for the rejected pilot object without semantic or outcome interpretation."
-    },
-    {
-      "code": "PDG5P-CONTRACT-FREEZE-001",
-      "severity": "BLOCKING_FOR_PASS",
-      "description": "Produce a versioned final PD-WP5 canonical Discovery contract candidate and exact diff from the pilot contract."
-    },
-    {
-      "code": "PDG5P-REPLAY-AUTHORITY-001",
-      "severity": "OPERATOR_RESERVED",
-      "description": "Decide whether one bounded correction replay is necessary; the current operation limit authorises no second pilot."
-    }
+    {"code": "PDG5P-DEFECT-SPEC-001", "severity": "BLOCKING_FOR_PASS", "description": "Materialise reproducible workflow-defect evidence for PDPILOT-CANDIDATE-bf1e96ba941e97a4d12e8fba."},
+    {"code": "PDG5P-UI-SPEC-001", "severity": "BLOCKING_FOR_PASS", "description": "Record the affected Console surface, friction code, reproduction steps and acceptance criterion for PDPILOT-CANDIDATE-f10546a0a1ec4dfbe03545c4."},
+    {"code": "PDG5P-DEFER-RESOLUTION-001", "severity": "BLOCKING_FOR_PASS", "description": "Define resolution criteria for the two deferred pilot objects."},
+    {"code": "PDG5P-REJECTION-BASIS-001", "severity": "BLOCKING_FOR_PASS", "description": "Record the structural and workflow basis for the rejected pilot object without semantic or outcome interpretation."},
+    {"code": "PDG5P-CONTRACT-FREEZE-001", "severity": "BLOCKING_FOR_PASS", "description": "Produce a versioned final PD-WP5 canonical Discovery contract candidate and exact diff from the pilot contract."},
+    {"code": "PDG5P-REPLAY-AUTHORITY-001", "severity": "OPERATOR_RESERVED", "description": "Decide whether one bounded correction replay is necessary; the current operation limit authorises no second pilot."}
   ],
-  "changed_files": [],
+  "changed_files": [
+    ".github/workflows/pd-g5p-pilot-operations-gate-ready.yml",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/pilot-qa.json",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/output-manifest.json.b64",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pd-g5p-gate-input.json.b64",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-defect-ledger.json.b64",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-qa.json.b64",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-review-receipt.json.b64",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/pilot-run.json.b64",
+    "docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw/signed-pilot-evidence-inventory.json.b64",
+    "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml",
+    "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json",
+    "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json",
+    "tests/research_operations/pattern_discovery/test_pd_g5p_gate_ready.py"
+  ],
   "external_artifact_hashes": {
     "pilot_run_file_sha256": "ceacb9668fd1ca4d07b65df49b89af4c488af56dec8aecec6f922ceaa4f06039",
     "pilot_output_manifest_file_sha256": "9e8e42c04aeca078c5e8cae6715a9a017b2f01e7a6b112ab7b4dd6a8c2af2f6c",
