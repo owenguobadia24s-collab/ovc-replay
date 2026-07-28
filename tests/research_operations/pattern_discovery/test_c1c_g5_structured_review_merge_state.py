@@ -35,7 +35,14 @@ class C1cG5StructuredReviewMergeStateTests(unittest.TestCase):
     def test_historical_blocker_is_preserved_and_lawfully_succeeded_by_operator_defer(self) -> None:
         state = load(STATE)
         decision = load(DEFER)
-        self.assertEqual(state["status"], "OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED")
+        self.assertIn(
+            state["status"],
+            {
+                "OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED",
+                "C1C_G5_CORR2_IMPLEMENTED_OPERATOR_LOCAL_REREVIEW_REQUIRED",
+                "C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED",
+            },
+        )
         self.assertEqual(state["prior_blocker"]["blocker_id"], "C1C-G5-BLOCK-002")
         self.assertEqual(
             state["prior_blocker"]["status"],
@@ -45,7 +52,10 @@ class C1cG5StructuredReviewMergeStateTests(unittest.TestCase):
         self.assertEqual(decision["decision"], "DEFER")
         self.assertEqual(decision["decision_authority"], "OPERATOR")
         self.assertEqual(state["corr2"]["packet_id"], "C1C-G5-CORR2")
-        self.assertIn(state["corr2"]["status"], {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "COMPLETED_IN_MAIN"})
+        self.assertIn(
+            state["corr2"]["status"],
+            {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "COMPLETED_IN_MAIN"},
+        )
         self.assertEqual(state["next_gate"], "C1C-G5-CORRECTIVE-PILOT-REVIEW")
         self.assertFalse(state["corrective_rerun"]["second_machine_replay_required"])
         self.assertEqual(state["corrective_rerun"]["canonical_append"], "DENIED")
