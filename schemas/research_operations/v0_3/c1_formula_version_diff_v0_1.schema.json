@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_formula_version_diff_v0_1",
+  "title": "C1FormulaVersionDiff v0.1",
+  "type": "object",
+  "required": [
+    "non_activating_evidence_header", "schema", "comparison_id",
+    "comparison_mode", "preflight_status", "classification",
+    "base_sha256", "candidate_sha256", "acknowledgement_id",
+    "changes", "winner", "authority_effect", "writes", "comparison_output_id"
+  ],
+  "properties": {
+    "non_activating_evidence_header": {"$ref": "non_activating_evidence_header_v0_1.schema.json"},
+    "schema": {"const": "ovc-ro3-c1-formula-version-diff/v1"},
+    "comparison_id": {"type": "string", "pattern": "^ro3-c1-comparison:[0-9a-f]{64}$"},
+    "comparison_mode": {"enum": ["FORMULA_DEFINITION", "RELEASE_OUTPUT", "ROLE_CONTRAST"]},
+    "preflight_status": {"enum": ["COMPARABLE", "NOT_COMPARABLE"]},
+    "classification": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": [
+        "IDENTICAL_DEFINITION", "CONTRACT_CHANGED", "FORMULA_CHANGED",
+        "DOMAIN_CHANGED", "NULL_POLICY_CHANGED", "CHRONOLOGY_CHANGED",
+        "SYMMETRY_CHANGED", "SERIALIZATION_CHANGED", "POPULATION_CHANGED",
+        "OUTPUT_CHANGED", "NOT_COMPARABLE"
+      ]}
+    },
+    "base_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "candidate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "acknowledgement_id": {"type": "string", "pattern": "^ro3-comparison-ack:[0-9a-f]{64}$"},
+    "changes": {"type": "object"},
+    "winner": {"type": "null"},
+    "authority_effect": {"const": "NONE"},
+    "writes": {"const": "NONE"},
+    "comparison_output_id": {"type": "string", "pattern": "^ro3-c1-formula-diff:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
