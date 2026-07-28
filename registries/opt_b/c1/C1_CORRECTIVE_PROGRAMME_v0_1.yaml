@@ -1,11 +1,10 @@
 schema: ovc-c1-corrective-programme/v1
 programme_id: OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1
 plan_version: '0.1'
-status: OPERATOR_APPROVED_EXECUTION_IN_PROGRESS
+status: C1C_G4_G5_SELECTOR_TRANSACTION_MATERIALISED_PILOT_RERUN_BLOCKED
 operator_ratification: C1C-G0_PASS
 ratified_on: '2026-07-28'
 baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
-programme_main_tip: 5401387ee9acd9e1dfdf6eb0d5643100b7e0319f
 operator_decision:
   command: OVC APPROVE C1C-G3 C1C-G4 C1C-G5
   decision: PASS
@@ -26,150 +25,151 @@ active_release_impact:
   affected_record_count: 0
   affected_file_count: 0
   defective_helper_counterfactual_divergence_count: 208185
-active_releases:
+c1_release_chain:
   discovery:
-    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
-    manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
+    selected_release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
+    selected_manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    selected_manifest_sha256: c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf
+    selected_manifest_file_sha256: 708025a0f96db4649996bc1201da258f76c048723cf29b0c82725a19ba6418a9
     record_count: 159892
     record_file_count: 144
+    status: REMOTE_VERIFIED_SELECTED_EFFECTIVE_ON_MAIN_MERGE
+    rollback_release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1
+    rollback_manifest_sha256: 6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2
   development:
-    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
-    manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+    selected_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
+    selected_manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1
+    selected_manifest_sha256: e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f
+    selected_manifest_file_sha256: 56c42c1d34d77670ffec25dcf86da6bd7726017c133f1bd9e4f4be2aba23633e
     record_count: 52872
     record_file_count: 48
-candidate_releases:
+    status: REMOTE_VERIFIED_SELECTED_EFFECTIVE_ON_MAIN_MERGE
+    rollback_release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1
+    rollback_manifest_sha256: ca83f2d9d948be426f3d80ebc91cc981f92546dfdd07268d71938d618c51f017
+c2_release_chain:
   discovery:
-    release_id: OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2
-    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1
-    manifest_sha256: c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf
-    manifest_file_sha256: 708025a0f96db4649996bc1201da258f76c048723cf29b0c82725a19ba6418a9
-    record_count: 159892
-    record_file_count: 144
-    active_v1_byte_equivalence: PASS
-    workflow_artifact_id: 8692836156
-    workflow_artifact_digest: sha256:9cec2ff4391576334149cb4a3542131b2692530829d9794c4038354a4a299bf7
-    status: REMOTE_VERIFIED_INACTIVE
+    selected_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2
+    selected_manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1
+    selected_manifest_sha256: c60b48ac18653eaf253c48f63645dbaa11bd94cee9a28a83ed7ae7bad5cac180
+    selected_manifest_file_sha256: 9f78cec29a1f19fc77f9feec0171eb2b822c9959f3dc77b373420907a3b028af
+    state_record_count: 303856
+    transition_record_count: 245752
+    status: REMOTE_VERIFIED_SELECTED_EFFECTIVE_ON_MAIN_MERGE
+    rollback_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1
+    rollback_manifest_sha256: c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33
   development:
-    release_id: OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2
-    manifest_id: MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1
-    manifest_sha256: e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f
-    manifest_file_sha256: 56c42c1d34d77670ffec25dcf86da6bd7726017c133f1bd9e4f4be2aba23633e
-    record_count: 52872
-    record_file_count: 48
-    active_v1_byte_equivalence: PASS
-    workflow_artifact_id: 8692837001
-    workflow_artifact_digest: sha256:fa5e02c23a834b0d6c1c9496635b6a5fcda8fbf3b9354fe3cc8ab363ea6937d1
-    status: REMOTE_VERIFIED_INACTIVE
+    reference_release_id: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2
+    reference_manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2.r1
+    reference_manifest_sha256: 42cb65574473826c82ca94d8c2e8c46d9d4acfc79a0090daef68c3efbc8cee62
+    reference_manifest_file_sha256: 53986fe8426960d4cb9da5145d91b0889b20566207d80da95c6f15d9460a3f75
+    state_record_count: 100578
+    transition_record_count: 78158
+    selector_state: NONE_REMOTE_VERIFIED_REFERENCE_ONLY
 work_packets:
   - packet_id: C1C-WP1
     status: COMPLETED
-    prerequisites: [C1C-G0_PASS]
-    authority_required: RATIFIED_CORRECTIVE_PROGRAMME
-    authority_delta: IMPLEMENTATION_RECONCILIATION_AND_AUDIT_TOOLING
-    baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
     branch: build/c1-wick-balance-corrective-wp1
     pull_request: 125
-    candidate_commit: c1500d383aa5069a216d311b3017f859cfc73a85
-    tested_candidate_head: c1500d383aa5069a216d311b3017f859cfc73a85
     tests: [GitHub_Actions_30368890403]
     qa_result: PASS
-    qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_WP1_QA_EVIDENCE.json
-    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
     merge_commit: 1142abd2010b92b33e56bccc23e05ccd8bed1320
     blockers: []
-    next_packet: C1C-WP2
   - packet_id: C1C-WP2
     status: COMPLETED
-    prerequisites: [C1C-G1_APPROVED, C1C_WP1_MERGED]
-    authority_required: RATIFIED_CORRECTIVE_PROGRAMME
-    authority_delta: LOCAL_IMMUTABLE_CANDIDATES_AND_ASSURANCE
-    baseline_commit: 1142abd2010b92b33e56bccc23e05ccd8bed1320
     branch: build/c1-wick-balance-corrective-wp2
     pull_request: 126
-    candidate_commit: f30efb0ef8b72cb2e43ccb242c479932a6ee8387
-    tested_candidate_head: f30efb0ef8b72cb2e43ccb242c479932a6ee8387
-    final_packet_head: 9585598878d36c914ff141f97adebfd8c129d78a
     tests: [GitHub_Actions_30370847916, GitHub_Actions_30371616629]
     qa_result: PASS_C1C_G2_LOCAL_ONLY
-    qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_WP2_QA_EVIDENCE.json
-    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_G2_DELEGATED_DECISION.md
     merge_commit: 5004a12c2679033aab062d6ced69ab3c1650afe3
     blockers: []
-    next_gate: C1C-G3_G4_G5_OPERATOR_PACKET
+  - packet_id: C1C-WP3
+    status: BLOCKED
+    branch: remediate/c1c-g4-g5-c2-v2
+    pull_request: 132
+    authority_required: OPERATOR_APPROVED_C1C_G3_G4_G5
+    authority_delta: C1_C2_V2_PUBLICATION_SELECTOR_REPLACEMENT_AND_NONCANONICAL_PILOT_SUPERSESSION_RERUN
+    tests:
+      - GitHub_Actions_30386242901
+      - GitHub_Actions_30386243014
+    qa_result: PASS_C1_C2_RELEASE_CHAIN_BLOCKED_PILOT_CORRECTIVE_RERUN
+    evidence_artifact_id: 8699206429
+    evidence_artifact_digest: sha256:fd4ac24036a97ffb048a9bf205114e305554f4166a21cda2c4d378fe99a175da
+    selector_transaction: docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json
+    blockers: [C1C-G5-BLOCK-001]
 gates:
   - gate_id: C1C-G1
     owner: DELEGATED
-    auto_ratifiable: true
     status: COMPLETED
     decision: PASS
-    tested_head: c1500d383aa5069a216d311b3017f859cfc73a85
     workflow_run: 30368890403
     merge_commit: 1142abd2010b92b33e56bccc23e05ccd8bed1320
-    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
   - gate_id: C1C-G2
     owner: DELEGATED
-    auto_ratifiable: true
     status: COMPLETED
     decision: PASS
-    tested_head: f30efb0ef8b72cb2e43ccb242c479932a6ee8387
-    final_packet_head: 9585598878d36c914ff141f97adebfd8c129d78a
     workflow_runs: [30370847916, 30371616629]
     merge_commit: 5004a12c2679033aab062d6ced69ab3c1650afe3
-    qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_WP2_QA_EVIDENCE.json
-    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp2/C1C_G2_DELEGATED_DECISION.md
   - gate_id: C1C-G3
     title: R2 publication
     owner: OPERATOR
-    auto_ratifiable: false
     status: COMPLETED
     decision: PASS
-    decision_authority: OPERATOR
-    decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
     execution_workflow_run: 30384400312
-    execution_commit: 1e2a1960ff0eb6747998453e5693cc82856524ba
-    remote_verification_receipt: docs/releases/opt-b-c1-v2/corrective/c1c-g3/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
+    merge_commit: 08a34576e1d8efaf314ab020b9116f5885c3a1e0
     remote_object_count: 194
     remote_verified_bytes_including_manifests: 36206001
   - gate_id: C1C-G4
     title: C1 selector replacement
     owner: OPERATOR
-    auto_ratifiable: false
-    status: APPROVED_READY_FOR_COORDINATED_EXECUTION
+    status: MATERIALISED_EFFECTIVE_ON_MAIN_MERGE
     decision: PASS
-    decision_authority: OPERATOR
-    decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
+    selector_transaction: C1C-G4-G5-COORDINATED-SELECTOR-TRANSACTION-2026-07-28
   - gate_id: C1C-G5
     title: Downstream remediation
     owner: OPERATOR
-    auto_ratifiable: false
-    status: APPROVED_READY_FOR_EXECUTION
-    decision: PASS
-    decision_authority: OPERATOR
-    decision_record: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_OPERATOR_DECISION.json
-operator_gate_packet:
-  markdown: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_CONSOLIDATED_OPERATOR_GATE_PACKET.md
-  json: docs/releases/opt-b-c1-v2/corrective/C1C_G3_G4_G5_CONSOLIDATED_OPERATOR_GATE_PACKET.json
-  requested_command: OVC_APPROVE_C1C_G3_C1C_G4_C1C_G5
+    status: BLOCKED_PARTIAL_PASS
+    decision: PASS_AUTHORITY_RECORDED
+    c2_identity_replay: PASS
+    c2_remote_publication: PASS
+    selector_transaction: MATERIALISED_EFFECTIVE_ON_MAIN_MERGE
+    pilot_supersession: MATERIALISED
+    pilot_rerun: BLOCKED_OPERATOR_LOCAL_EXTERNAL_ARTIFACT_AND_PRIVATE_SIGNING_KEY_REQUIRED
+    blocker_id: C1C-G5-BLOCK-001
 continuation:
   blocked_ro3_gate: RO3-G3
   continuation_id: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
-  resume_condition: CORRECTED_RELEASE_CHAIN_REMOTE_VERIFIED_AND_REQUIRED_OPERATOR_DECISIONS_RECORDED
-  next_action: EXECUTE_C1C_G5_C2_IDENTITY_REPLAY_PUBLICATION_AND_COORDINATED_C1C_G4_G5_SELECTOR_TRANSACTION
+  resume_condition: C1_C2_V2_SELECTOR_TRANSACTION_MERGED_AND_C1C_G5_PILOT_RERUN_BLOCKER_DISPOSED
+  next_action: EXECUTE_OPERATOR_LOCAL_NONCANONICAL_PILOT_CORRECTIVE_RERUN_AND_RETURN_COMPACT_EVIDENCE
 external_evidence:
-  candidate_build_workflow_run: 30370847916
-  final_packet_verification_workflow_run: 30371616629
-  c1c_g3_publication_workflow_run: 30384400312
-  evidence_artifact_id: 8692834967
-  evidence_artifact_digest: sha256:961e816e18b64cfe48a643dedf7a3f3ad64deecb53ffbe3e10a33dfe3ac0dc30
-  c1c_g3_remote_verification_receipt: docs/releases/opt-b-c1-v2/corrective/c1c-g3/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
+  c1_candidate_build_workflow_run: 30370847916
+  c1_final_packet_verification_workflow_run: 30371616629
+  c1_publication_workflow_run: 30384400312
+  c2_identity_replay_publication_workflow_run: 30386243014
+  c2_evidence_artifact_id: 8699206429
+  c2_evidence_artifact_digest: sha256:fd4ac24036a97ffb048a9bf205114e305554f4166a21cda2c4d378fe99a175da
+  c1_remote_verification_receipt: docs/releases/opt-b-c1-v2/corrective/c1c-g3/C1C_G3_REMOTE_VERIFICATION_RECEIPT.json
+  c2_remote_verification_receipt: docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json
+blockers:
+  - blocker_id: C1C-G5-BLOCK-001
+    status: BLOCKED
+    scope: NONCANONICAL_PILOT_SUPERSESSION_RERUN
+    reason: GitHub Actions cannot access the exact operator-local RPS compute root or private Ed25519 signing key required by the frozen Pilot Discovery contract.
+    unavailable_artifacts:
+      - C:\Users\Owner\OVIS\ovc-replay-external-artifacts\prospective-source\compute\RPS.RUN.7aeb551335d766ee3bf503e6
+      - operator private Ed25519 key bound by RPS.SIGNING.50092c28981fef08f53a6cb5
+    smallest_lawful_resolution: Pull the selector-transaction branch locally, run the corrective pilot preflight and one approved noncanonical rerun against the exact external source and key, then return the compact signed evidence files.
 authority:
   formula_registry_mutation: NONE
-  active_release_mutation: NONE_PENDING_COORDINATED_C1C_G4_G5
-  r2_publication: COMPLETED_EXACT_C1_V2_RELEASES_C1C_G3
-  selector_replacement: AUTHORISED_AFTER_C1_V2_REMOTE_VERIFIED_C1C_G4
-  c2_mutation: AUTHORISED_DETERMINISTIC_IDENTITY_REPLAY_ONLY_C1C_G5
+  c1_v2_publication: COMPLETED
+  c2_v2_publication: COMPLETED
+  selector_replacement: MATERIALISED_EFFECTIVE_ON_MAIN_MERGE
+  c2_mutation: COMPLETED_DETERMINISTIC_IDENTITY_REPLAY_ONLY
   pattern_discovery_canonical_append: NONE
   validation_consumption: LOCKED_UNCONSUMED
+  semantic_promotion: NONE
+  family_promotion: NONE
+  novelty_promotion: NONE
+  threshold_change: NONE
   probability: NONE
   risk: NONE
   exposure: NONE
