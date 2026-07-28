@@ -46,11 +46,24 @@ jobs:
           if-no-files-found: error
           retention-days: 7
       - name: Pattern Discovery dependent tests
-        run: >-
-          PYTHONPATH=src python -m unittest discover
-          -s tests/research_operations/pattern_discovery
-          -p 'test_pd_wp*.py'
-          -v
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover \
+            -s tests/research_operations/pattern_discovery \
+            -p 'test_pd_wp*.py' \
+            -v > /tmp/pd-wp5-corr1-dependent.log 2>&1
+          status=$?
+          cat /tmp/pd-wp5-corr1-dependent.log
+          exit "$status"
+      - name: Preserve dependent test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pd-wp5-corr1-dependent-log
+          path: /tmp/pd-wp5-corr1-dependent.log
+          if-no-files-found: error
+          retention-days: 7
       - name: Canonical repository tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
       - name: Validate JSON and schemas
