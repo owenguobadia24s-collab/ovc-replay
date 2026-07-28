@@ -1,0 +1,100 @@
+{
+  "schema": "ovc-c1c-wp2-qa-evidence/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "packet_id": "C1C-WP2",
+  "gate_id": "C1C-G2",
+  "baseline_commit": "1142abd2010b92b33e56bccc23e05ccd8bed1320",
+  "tested_head": "f30efb0ef8b72cb2e43ccb242c479932a6ee8387",
+  "workflow_run_id": 30370847916,
+  "workflow_job_id": 90313984452,
+  "status": "PASS",
+  "qa_recommendation": "PASS_C1C_G2_LOCAL_ONLY",
+  "formula_registry_id": "C1.FORMULAS.v0.1",
+  "implementation_id": "C1.IMPLEMENTATION.v0.2",
+  "impact_audit": {
+    "active_release_record_count": 212764,
+    "active_release_file_count": 192,
+    "active_affected_record_count": 0,
+    "active_affected_file_count": 0,
+    "counterfactual_defective_library_divergence_record_count": 208185,
+    "zero_balance_record_count": 4576,
+    "null_balance_record_count": 3,
+    "artifact_sha256": "f250dd35499be61d65b4c0cac643ec41c2cd8311f8541315643858bcadbff48f"
+  },
+  "candidate_releases": {
+    "discovery": {
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+      "manifest_sha256": "c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf",
+      "record_count": 159892,
+      "record_file_count": 144,
+      "record_shards_byte_identical_to_active_v1": true,
+      "workflow_artifact_id": 8692836156,
+      "workflow_artifact_digest": "sha256:9cec2ff4391576334149cb4a3542131b2692530829d9794c4038354a4a299bf7"
+    },
+    "development": {
+      "release_id": "OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2.r1",
+      "manifest_sha256": "e4f1a2d0af7064837003f1c7b56156966aba3b035cc9a7b8ebbdc8b6b181d73f",
+      "record_count": 52872,
+      "record_file_count": 48,
+      "record_shards_byte_identical_to_active_v1": true,
+      "workflow_artifact_id": 8692837001,
+      "workflow_artifact_digest": "sha256:fa5e02c23a834b0d6c1c9496635b6a5fcda8fbf3b9354fe3cc8ab363ea6937d1"
+    }
+  },
+  "ro3_assurance": {
+    "status": "PASS",
+    "primitive_count": 18,
+    "metamorphic_assertion_count": 79,
+    "golden_assertion_count": 18,
+    "failed_assertion_count": 0,
+    "negative_control_detected": true,
+    "deterministic_rerun": true,
+    "canonical_reorder_identical": true,
+    "frozen_invariant_blob": "568309747bbf4e9d368c704893f4a9d0b8af406b",
+    "frozen_invariant_logical_sha256": "9c108a4d6f453237f1a684ce2dd375e99a4495235d3200078fcfab88210116a7",
+    "evidence_sha256": "71edf3d0226ba2ddc7c3f90e721d81aa249bbc810e69edc0fecda21ab673f64e"
+  },
+  "downstream_surface": {
+    "active_c1_semantic_affected_records": 0,
+    "active_c1_semantic_affected_files": 0,
+    "c2_semantic_effect": "NONE",
+    "c2_identity_replay_record_count_if_c1_v2_selected": 728344,
+    "c2_identity_replay_file_count_if_c1_v2_selected": 24,
+    "pattern_discovery_canonical_affected": false,
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+    "source_compute_run_id": "RPS.RUN.7aeb551335d766ee3bf503e6",
+    "pilot_required_action": "INVALIDATE_AND_RERUN_AFTER_CORRECTED_IMPLEMENTATION",
+    "surface_artifact_sha256": "c842d8c8d1aef39714ccccb73c4c49b0686cba98959e750fac979d25f7499ecb"
+  },
+  "tests": {
+    "exact_artifact_downloads": "PASS",
+    "full_corpus_impact_audit": "PASS",
+    "two_full_replays": "PASS_BYTE_IDENTICAL",
+    "active_v1_record_shard_comparison": "PASS_BYTE_IDENTICAL",
+    "focused_ro3_corrective_retest": "PASS",
+    "canonical_repository_suite": "PASS",
+    "frozen_authority_guard": "PASS"
+  },
+  "authority": {
+    "formula_registry_mutation": "NONE",
+    "r2_publication": "NOT_ATTEMPTED",
+    "selector_mutation": "NONE",
+    "c2_mutation": "NONE",
+    "pattern_discovery_canonical_append": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE"
+  },
+  "workflow_evidence_artifact": {
+    "artifact_id": 8692834967,
+    "digest": "sha256:961e816e18b64cfe48a643dedf7a3f3ad64deecb53ffbe3e10a33dfe3ac0dc30"
+  },
+  "blockers": [],
+  "rollback": "Discard unpublished workflow candidates and rebuild from the exact pinned inputs; active C1 and C2 releases and selectors remain unchanged."
+}
