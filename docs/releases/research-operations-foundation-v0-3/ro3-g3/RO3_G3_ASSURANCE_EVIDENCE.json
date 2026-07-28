@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-ro3-g3-assurance-evidence/v1",
+  "gate_id": "RO3-G3",
+  "tested_candidate_commit": "cc1eac3830d3cbd5f568f89e4389c8f7390629b7",
+  "tested_pull_request_merge_ref": "71c21f5721f016f68a073124fb545c290a754f58",
+  "workflow_run_id": 30353976138,
+  "status": "BLOCK",
+  "qa_recommendation": "BLOCK",
+  "invariant_registry": {
+    "path": "registries/research_operations/v0_3/C1_METAMORPHIC_INVARIANT_REGISTRY_v0_1.yaml",
+    "g0_merge_commit": "4d701ad78af8597e182565eb301739501b51dff6",
+    "g0_blob_sha": "568309747bbf4e9d368c704893f4a9d0b8af406b",
+    "current_blob_sha": "568309747bbf4e9d368c704893f4a9d0b8af406b",
+    "logical_sha256": "9c108a4d6f453237f1a684ce2dd375e99a4495235d3200078fcfab88210116a7",
+    "primitive_count": 18,
+    "unchanged_since_ro3_g0": true,
+    "source_of_expectations": "INDEPENDENT_CONTRACT_CANON_NOT_IMPLEMENTATION"
+  },
+  "formula_registry": {
+    "path": "registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml",
+    "registry_id": "C1.FORMULAS.v0.1",
+    "logical_sha256": "171813797f16b25688f9a1c583e1925993da210be9b127d621b74f3149140804",
+    "primitive_count": 18
+  },
+  "assurance": {
+    "metamorphic_assertion_count": 79,
+    "metamorphic_failures": 0,
+    "golden_assertion_count": 18,
+    "golden_failures": 1,
+    "negative_control_detected": true,
+    "determinism": {
+      "base_sha256": "829b8fa29d92d8b5f16e5ddd33936d8266c22de11286e9ddef63bc97240a4c84",
+      "rerun_sha256": "829b8fa29d92d8b5f16e5ddd33936d8266c22de11286e9ddef63bc97240a4c84",
+      "same_input_same_output_bytes": true,
+      "canonical_reorder_identical": true,
+      "receipt_id": "ro3-c1-determinism:7b1e120cd4db94907cd79a64bd482ccf58ad9992f14fa2d3d39dc92fecdfa84b"
+    }
+  },
+  "blocking_assertion": {
+    "assertion_id": "ro3-c1-golden-assertion:264901109b282f8444f8c41de05d2810d16c7114eba0dd041784d8e8abb4a8f8",
+    "primitive_id": "C1-WICK-BALANCE.v0.1",
+    "field_name": "wick_balance",
+    "formula_registry_definition": "upper_wick_share - lower_wick_share",
+    "implementation_expression": "(lower - upper) / range",
+    "expected": "-0.1428571428571428571428571429",
+    "actual": "0.1428571428571428571428571429",
+    "difference_class": "SIGN_INVERSION",
+    "status": "FAIL"
+  },
+  "tests": {
+    "focused_metamorphic": "PASS_5",
+    "focused_invariant_independence": "PASS_4",
+    "canonical_repository": "PASS_70",
+    "canonical_duration_seconds": 0.720,
+    "authority_and_frozen_canon_assertions": "PASS",
+    "gate_condition": "BLOCK"
+  },
+  "workflow_artifacts": [
+    {
+      "artifact_id": 8686048378,
+      "name": "ro3-g3-focused-diagnostics",
+      "digest": "sha256:2ba5d84131140fcab028b6bd78b2384d124597847c58cc9e30426c704232abb1"
+    },
+    {
+      "artifact_id": 8686048701,
+      "name": "ro3-g3-assurance-evidence",
+      "digest": "sha256:3024dfa568efa545bd5d058f6e3941bc8accc0233d6214bc185f3c38f92b1ada"
+    },
+    {
+      "artifact_id": 8686049653,
+      "name": "ro3-g3-canonical-diagnostics",
+      "digest": "sha256:648996befe015b0b60431b7c0113afe713234e25cd07c745703d0478907b7e11"
+    }
+  ],
+  "authority_effect": "NONE",
+  "writes": "NONE"
+}
