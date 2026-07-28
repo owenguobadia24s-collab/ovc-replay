@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_affected_surface_v0_1",
+  "title": "C1AffectedSurface v0.1",
+  "type": "object",
+  "required": [
+    "schema", "comparison_id", "presentation", "banner",
+    "co_render_with_c1_null_explanation", "references", "reference_count",
+    "authority_effect", "writes", "affected_surface_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-affected-surface/v1"},
+    "comparison_id": {"type": "string", "pattern": "^ro3-c1-comparison:[0-9a-f]{64}$"},
+    "presentation": {"const": "SEPARATE_BANNERED_TRACE_ONLY"},
+    "banner": {"type": "string", "minLength": 1},
+    "co_render_with_c1_null_explanation": {"const": false},
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["surface_type", "child_id", "source_binding", "consequence", "availability"],
+        "properties": {
+          "surface_type": {"enum": ["C2_CHILD", "PATTERN_DISCOVERY_TRACE"]},
+          "child_id": {"type": "string", "minLength": 1},
+          "source_binding": {"type": "string", "minLength": 1},
+          "consequence": {"type": "string", "minLength": 1},
+          "availability": {"type": "string", "minLength": 1},
+          "operation_mode": {"enum": ["LIVE_PROSPECTIVE", "TIME_GATED_REPLAY", "NON_EVIDENTIARY_REPLAY"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "reference_count": {"type": "integer", "minimum": 0},
+    "authority_effect": {"const": "NONE"},
+    "writes": {"const": "NONE"},
+    "affected_surface_id": {"type": "string", "pattern": "^ro3-c1-affected-surface:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
