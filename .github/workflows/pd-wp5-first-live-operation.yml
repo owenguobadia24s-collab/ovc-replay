@@ -67,9 +67,11 @@ jobs:
           assert rps['gate_status'] == 'SUPERSEDED_FOR_PILOT_DISCOVERY'
           assert rps['provider_request_authority'] == 'DENIED'
           assert rps['future_live_gate'] == 'RPS-LIVE-G1'
-          assert amendment['gate_status'] == 'GATE_READY'
-          assert amendment['operator_approval_required'] is True
-          assert packet['decision'] is None
+          assert amendment['gate_status'] == 'APPROVED'
+          assert amendment['decision'] == 'PASS'
+          assert amendment['operator_approval_required'] is False
+          assert packet['decision'] == 'PASS'
+          assert packet['next_packet'] == 'PD-WP5-PILOT'
           PY
       - name: Assert Pilot Discovery is not live relabelling
         shell: bash
