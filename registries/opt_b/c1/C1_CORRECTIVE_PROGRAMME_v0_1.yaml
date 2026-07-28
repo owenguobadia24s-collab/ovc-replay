@@ -34,22 +34,25 @@ candidate_releases:
     status: PLANNED_LOCAL_ONLY
 work_packets:
   - packet_id: C1C-WP1
-    status: RUNNING
+    status: APPROVED
     prerequisites: [C1C-G0_PASS]
     authority_required: RATIFIED_CORRECTIVE_PROGRAMME
     authority_delta: IMPLEMENTATION_RECONCILIATION_AND_AUDIT_TOOLING
     baseline_commit: 6c0aa91a6c51a86d39994ef363f8e29bb924764b
     branch: build/c1-wick-balance-corrective-wp1
-    candidate_commit: null
-    tests: []
-    qa_packet: null
-    decision_record: null
+    pull_request: 125
+    candidate_commit: c1500d383aa5069a216d311b3017f859cfc73a85
+    tested_candidate_head: c1500d383aa5069a216d311b3017f859cfc73a85
+    tests: [GitHub_Actions_30368890403]
+    qa_result: PASS
+    qa_packet: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_WP1_QA_EVIDENCE.json
+    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
     merge_commit: null
     blockers: []
     next_packet: C1C-WP2
   - packet_id: C1C-WP2
-    status: PLANNED
-    prerequisites: [C1C-G1_APPROVED]
+    status: READY
+    prerequisites: [C1C-G1_APPROVED, C1C_WP1_MERGED]
     authority_required: RATIFIED_CORRECTIVE_PROGRAMME
     authority_delta: LOCAL_IMMUTABLE_CANDIDATES_AND_ASSURANCE
     baseline_commit: null
@@ -59,13 +62,17 @@ work_packets:
     qa_packet: null
     decision_record: null
     merge_commit: null
-    blockers: []
+    blockers: [C1C_WP1_MERGE_PENDING]
     next_gate: C1C-G3_G4_G5_OPERATOR_PACKET
 gates:
   - gate_id: C1C-G1
     owner: DELEGATED
     auto_ratifiable: true
-    status: PENDING
+    status: APPROVED
+    decision: PASS
+    tested_head: c1500d383aa5069a216d311b3017f859cfc73a85
+    workflow_run: 30368890403
+    decision_record: docs/releases/opt-b-c1-v2/corrective/c1c-wp1/C1C_G1_DELEGATED_DECISION.md
   - gate_id: C1C-G2
     owner: DELEGATED
     auto_ratifiable: true
