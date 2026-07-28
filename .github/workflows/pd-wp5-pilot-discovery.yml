@@ -1,0 +1,80 @@
+name: PD-WP5 Pilot Discovery implementation
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/pattern_discovery/pilot_discovery.py"
+      - "apps/research_console/pattern_discovery.py"
+      - "scripts/run_pd_wp5_pilot_discovery.ps1"
+      - "schemas/research_operations/pattern_discovery/pd_wp5_pilot_*.schema.json"
+      - "registries/research_operations/pattern_discovery/PD_WP5_PILOT_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
+      - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
+      - "docs/releases/pattern-discovery-v0-3/pd-wp5-pilot/**"
+      - "tests/research_operations/pattern_discovery/test_pd_wp5_pilot_discovery.py"
+      - ".github/workflows/pd-wp5-pilot-discovery.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pilot-implementation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused Pilot Discovery tests
+        run: >-
+          PYTHONPATH=src python -m unittest discover
+          -s tests/research_operations/pattern_discovery
+          -p 'test_pd_wp5_pilot_discovery.py'
+          -v
+      - name: Canonical repository tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Validate machine-readable packet and schemas
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_PILOT_STATE_v0_1.json >/dev/null
+          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_wp5_pilot_run_v0_1.schema.json >/dev/null
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_input_v0_1.schema.json >/dev/null
+          python -m json.tool schemas/research_operations/pattern_discovery/pd_g5p_pilot_operations_gate_input_v0_1.schema.json >/dev/null
+      - name: Assert no provider, canonical append or promotion path
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -nE 'urllib|requests\.|urlopen|datafeed\.dukascopy|historicalPrices' \
+            src/ovc/research_operations/pattern_discovery/pilot_discovery.py; then
+            echo "Provider-network code found in Pilot Discovery runner."
+            exit 1
+          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_PILOT_STATE_v0_1.json').read_text())
+          assert state['research_role'] == 'PILOT_DISCOVERY'
+          assert state['operation_mode'] == 'TIME_GATED_REPLAY'
+          assert state['pilot_only'] is True
+          assert state['promotion_eligibility'] == 'NON_PROMOTABLE'
+          assert state['canonical_discovery_population'] is False
+          assert state['canonical_append'] == 'DENIED'
+          assert state['live_prospective_relabelling'] == 'DENIED'
+          assert state['provider_network_access'] == 'DENIED'
+          assert state['next_gate'] == 'PD-G5P'
+          for field in ('semantic_promotion', 'family_promotion', 'active_novelty_ranking', 'selector_mutation', 'release_mutation', 'r2_publication', 'validation_consumption'):
+              assert state[field] == 'DENIED', (field, state[field])
+          for field in ('probability_authority', 'risk_authority', 'exposure_authority', 'trading_authority', 'execution_authority', 'agent_write_authority'):
+              assert state[field] == 'NONE', (field, state[field])
+          PY
+      - name: Assert external execution remains local and fail-closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'external execution is prohibited in CI' src/ovc/research_operations/pattern_discovery/pilot_discovery.py
+          grep -q 'refusing to overwrite Pilot Discovery run' src/ovc/research_operations/pattern_discovery/pilot_discovery.py
+          grep -q 'deterministic pilot rerun mismatch' src/ovc/research_operations/pattern_discovery/pilot_discovery.py
+          grep -q 'PD-WP5-PILOT local execution requires main' src/ovc/research_operations/pattern_discovery/pilot_discovery.py

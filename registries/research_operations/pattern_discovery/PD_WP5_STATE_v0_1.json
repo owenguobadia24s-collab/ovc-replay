@@ -4,10 +4,12 @@
   "plan_version": "0.1",
   "amendment_id": "PD-WP5-PILOT-DISCOVERY-AMENDMENT-0.1",
   "packet_id": "PD-WP5",
-  "packet_phase": "PILOT_DISCOVERY_APPROVED",
+  "packet_phase": "PILOT_DISCOVERY_IMPLEMENTED_AWAITING_LOCAL_OPERATION",
   "packet_status": "APPROVED",
-  "baseline_commit": "0c177560b02e14a36a949626b155f616c12549e5",
-  "branch": "gate/pd-g4b-pilot-discovery-amendment",
+  "baseline_commit": "c46d9620e242c047dd8e203f91a1b00b542a2a81",
+  "tested_base_commit": "8c243c009f30e453312861708afb784fe762c442",
+  "tested_candidate_head": "3613709a4b073b0521a460b1d0c57d9ae2842cd5",
+  "branch": "build/pd-wp5-pilot-discovery",
   "authority_required": "APPROVED_PD_G4B",
   "authority_delta": "ONE_PILOT_DISCOVERY_TIME_GATED_REPLAY_OPERATION",
   "research_role": "PILOT_DISCOVERY",
@@ -27,7 +29,7 @@
   "pilot_identity_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
   "identity_reset_before_canonical": "REQUIRED",
   "canonical_append": "DENIED",
-  "pilot_signed_evidence_capture": "AUTHORISED_PILOT_NAMESPACE_ONLY",
+  "pilot_signed_evidence_capture": "IMPLEMENTED_PENDING_OPERATOR_LOCAL_EXECUTION",
   "automatic_evidence_creation": false,
   "active_novelty_ranking": "NONE",
   "semantic_promotion": "NONE",
@@ -52,38 +54,40 @@
     "historical_contract": "contracts/research_operations/pattern_discovery/PD_WP5_FIRST_LIVE_PROSPECTIVE_OPERATION_CONTRACT_v0_1.md",
     "historical_gate": "RPS-G4A"
   },
-  "supersedes_prior_ready_state": true,
-  "superseded_ready_sources": [
-    "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml#PD-WP5",
-    "registries/research_operations/prospective_source/REAL_PROSPECTIVE_SOURCE_IMPLEMENTATION_REGISTRY_v0_1.yaml#PD-WP5",
-    "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json@0c177560b02e14a36a949626b155f616c12549e5"
-  ],
-  "readiness_interpretation": "PD_G4B_OPERATOR_APPROVED_PD_WP5_PILOT_IMPLEMENTATION_AUTHORISED",
+  "readiness_interpretation": "PD_G4B_AUTHORITY_REMAINS_APPROVED_IMPLEMENTATION_READY_REAL_JUNE_OPERATION_REQUIRES_OPERATOR_LOCAL_EXTERNAL_ARTIFACT_ROOT_AND_HUMAN_REVIEW",
   "operator_approval_required": false,
   "approved_gate": "PD-G4B",
   "approved_on": "2026-07-27",
-  "approved_gate_ready_head": "33b227a632b9d19ce25b92abd5ef38485c73c7e5",
+  "implementation_packet": "PD-WP5-PILOT",
+  "implementation_state": "registries/research_operations/pattern_discovery/PD_WP5_PILOT_STATE_v0_1.json",
+  "implementation_pull_request": 121,
+  "tests": [
+    {
+      "suite": "PD-WP5 Pilot Discovery implementation, full repository suite, schemas and authority guards",
+      "workflow_run": 30353533468,
+      "job": 90256328468,
+      "result": "PASS",
+      "tested_head": "3613709a4b073b0521a460b1d0c57d9ae2842cd5"
+    }
+  ],
+  "qa_result": "PASS_IMPLEMENTATION_BLOCKED_LOCAL_EXECUTION",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-pilot/PD_WP5_PILOT_QA_PACKET.md",
+  "blockers": [
+    {
+      "code": "OPERATOR_LOCAL_EXTERNAL_ARTIFACT_EXECUTION_REQUIRED",
+      "required_action": ".\\scripts\\run_pd_wp5_pilot_discovery.ps1 preflight; then .\\scripts\\run_pd_wp5_pilot_discovery.ps1 execute -Gate PD-G4B",
+      "reason": "GitHub cannot access the approved external June C2 payload, operator private key or human Console review."
+    }
+  ],
   "next_packet": "PD-WP5-PILOT",
+  "next_operational_step": "PD-WP5-PILOT-LOCAL-OPERATION",
   "next_gate": "PD-G5P",
   "pilot_acceptance_gate": "PD-G5P",
   "canonical_packet_after_pd_g5p_pass": "PD-WP5-CANONICAL",
   "future_live_gate": "RPS-LIVE-G1",
   "future_live_gate_status": "DEFERRED_NOT_AUTHORISED",
-  "tested_candidate_head": "1c55524754d6cd457ea8e60a6478206bb89aa886",
-  "pull_request": 117,
-  "tests": [
-    "GitHub_Actions_30307255995",
-    "GitHub_Actions_30307256074",
-    "GitHub_Actions_30307255967"
-  ],
-  "pilot_amendment_job": 90114384840,
-  "historical_supersession_job": 90114385057,
-  "canonical_test_job": 90114384730,
-  "qa_result": "PASS_OPERATOR_APPROVED",
-  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_PILOT_DISCOVERY_QA_PACKET.md",
-  "gate_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_PILOT_DISCOVERY_AMENDMENT_GATE_PACKET.md",
   "decision": "PASS",
   "decision_authority": "OPERATOR",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-wp5/PD_G4B_OPERATOR_DECISION.md",
-  "rollback": "REVERT_PD_G4B_AMENDMENT_RESTORE_LIVE_BLOCKER_STATE_PRESERVE_RPS_G4_ACTIVATION_SOURCE_COMPUTE_KEYS_SIGNATURES_AND_QUARANTINES"
+  "rollback": "DISABLE_PILOT_COMMAND_PRESERVE_AND_QUARANTINE_OUTPUTS_REVERT_IMPLEMENTATION_PACKET_DENY_CANONICAL_IDENTITY_REUSE"
 }
