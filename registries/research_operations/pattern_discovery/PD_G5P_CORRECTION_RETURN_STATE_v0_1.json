@@ -5,13 +5,13 @@
   "gate_title": "Pilot Discovery Correction Return and Canonical Discovery Authority",
   "plan_id": "OVC-C2-REAL-PROSPECTIVE-SOURCE-PD-WP5-ENABLEMENT-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "GATE_READY",
+  "status": "BLOCKED",
   "decision_authority": "OPERATOR",
-  "operator_approval_required": true,
+  "operator_approval_required": false,
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "baseline_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
   "branch": "gate/pd-g5p-correction-return",
-  "candidate_commit": "a48ec5898f5483d999f3f8cc481117b87ed6ad92",
+  "candidate_commit": "2510dbf66794db7fc98476eb253863d8721088d8",
   "completed_packets": ["PD-G5P_DEFER", "PD-WP5-CORR1"],
   "correction_packet_state": "registries/research_operations/pattern_discovery/PD_WP5_CORR1_STATE_v0_1.json",
   "correction_merge_commit": "3e6f9f3f7f5dc2441d1c8c211bc5e5347e8e1d96",
@@ -23,6 +23,11 @@
     "PDG5P-CONTRACT-FREEZE-001",
     "PDG5P-REPLAY-AUTHORITY-001"
   ],
+  "decision": "PASS",
+  "operator_command": "OVC APPROVE PD-G5P PASS",
+  "decided_on": "2026-07-28",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_DECISION.md",
+  "decision_effect": "PASS_RECORDED_REVIEWED_DELTA_NOT_EFFECTIVE_UPSTREAM_C2_V2_SUPERSESSION",
   "current_authority": {
     "research_role": "PILOT_DISCOVERY",
     "pilot_only": true,
@@ -40,7 +45,7 @@
     "selector_mutation": "DENIED",
     "release_mutation": "DENIED",
     "r2_publication": "DENIED",
-    "validation_consumption": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
     "probability_authority": "NONE",
     "risk_authority": "NONE",
     "exposure_authority": "NONE",
@@ -64,6 +69,15 @@
     "selector_release_or_r2_mutation": false,
     "validation_consumption": false
   },
+  "upstream_reconciliation": {
+    "blocking_main_commit": "0c687101e031b404b3994c8bb96d65b177f97743",
+    "blocker_id": "C1C-G5-BLOCK-001",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "active_c2_selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "superseded_pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "required_corrective_pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "blocker_record": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_PASS_UPSTREAM_RECONCILIATION_BLOCKER.json"
+  },
   "acceptance_conditions": {
     "original_evidence_integrity": "PASS",
     "correction_objectives_closed": "PASS",
@@ -71,20 +85,29 @@
     "console_read_only": "PASS",
     "final_contract_candidate_frozen": "PASS",
     "identity_reset_candidate_frozen": "PASS",
-    "second_replay_assessment": "PASS_NOT_REQUIRED",
+    "second_replay_assessment": "PASS_NOT_REQUIRED_UNDER_REVIEWED_V1_STATE",
     "tests": "PASS",
-    "qa": "PASS"
+    "qa": "PASS",
+    "current_authority_reconciliation": "BLOCKED"
   },
   "tests": [
     {"workflow_run": 30385464799, "job": 90363534506, "result": "PASS", "tested_head": "a48ec5898f5483d999f3f8cc481117b87ed6ad92", "suite": "PD-G5P return focused, Pattern Discovery dependent, full repository, JSON and authority guards"},
-    {"workflow_run": 30385464721, "job": 90363533700, "result": "PASS", "tested_head": "a48ec5898f5483d999f3f8cc481117b87ed6ad92", "suite": "Independent complete repository unit tests"}
+    {"workflow_run": 30385464721, "job": 90363533700, "result": "PASS", "tested_head": "a48ec5898f5483d999f3f8cc481117b87ed6ad92", "suite": "Independent complete repository unit tests"},
+    {"workflow_run": 30385824462, "job": 90364744418, "result": "PASS", "tested_merge_candidate": "fa1d911de9f0aa7418d95f7fddcfc31e44930b99", "suite": "Latest-main state-bearing return gate verification"},
+    {"workflow_run": 30385824323, "job": 90364744096, "result": "PASS", "tested_merge_candidate": "fa1d911de9f0aa7418d95f7fddcfc31e44930b99", "suite": "Latest-main independent repository unit tests"}
   ],
   "recommended_decision": "PASS",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_QA_PACKET.json",
   "gate_packet": "docs/releases/pattern-discovery-v0-3/pd-wp5-corr1/PD_G5P_CORRECTION_RETURN_OPERATOR_GATE_PACKET.json",
-  "decision_record": null,
-  "next_packet_on_pass": "PD-WP5-CANONICAL",
-  "next_packet_on_defer": "PD-WP5-CORR2_OR_HOLD",
-  "blockers": [],
-  "rollback": "KEEP_PD_G5P_DEFER_EFFECTIVE_KEEP_CORR1_COMPLETED_DENY_CONTRACT_ACTIVATION_IDENTITY_RESET_AND_CANONICAL_DISCOVERY"
+  "next_packet": "C1C-G5-CORRECTIVE-PILOT-RERUN",
+  "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "blockers": [
+    {
+      "blocker_id": "C1C-G5-BLOCK-001",
+      "status": "BLOCKING",
+      "reason": "The reviewed exact C2 v1 source was superseded by the active C2 v2 selector transaction before decision materialisation.",
+      "resolution": "Complete the operator-local signed C2 v2 corrective pilot and return through a superseding C2 v2-bound PD-G5P gate."
+    }
+  ],
+  "rollback": "PRESERVE_PASS_INSTRUCTION_AND_CORR1_EVIDENCE_KEEP_C2_V2_SELECTOR_EFFECTIVE_KEEP_V1_PILOT_SUPERSEDED_AND_ALL_CANONICAL_AUTHORITY_DENIED"
 }
