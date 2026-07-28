@@ -4,9 +4,19 @@
 - Packet: `C1C-G5-CORR2`
 - Return gate: `C1C-G5-CORRECTIVE-PILOT-REVIEW`
 - Baseline: `8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b`
+- Tested candidate: `83ce4b100a3b3808060cc84dac9d73d3d5ae52c9`
 - Authority source: operator `DEFER`
-- Proposed packet decision: **PASS**, subject to required CI
+- Packet decision: **PASS**
 - Decision authority: `DELEGATED_AUTO_EXECUTABLE`
+- Authority delta: `NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY`
+
+## Tests and QA
+
+- CORR2 focused, retained, complete repository, schema and authority workflow: `30405314053 / 90429331646` — **PASS**.
+- Structured-v2 retained evidence and lawful-successor workflow: `30405313946 / 90429331287` — **PASS**.
+- Generic complete repository suite: `30405314175 / 90429332422` — **PASS**.
+- QA recommendation: **PASS**.
+- Blocking implementation issues: none.
 
 ## Bounded result
 
@@ -17,7 +27,12 @@ CORR2 adds only non-activating review-workflow correction:
 - a fail-closed local runner for exactly the two deferred pilot objects;
 - immutable hash preservation for the four non-deferred structured-v2 decisions;
 - signed closure receipt, ledger, inventory and final gate-input generation;
-- no PASS recommendation while any object remains deferred.
+- no PASS recommendation while any object remains deferred;
+- explicit preservation of the historical structured-v2 blocker and signed evidence under its lawful operator-DEFER successor.
+
+## Non-reserved rationale
+
+This packet implements deterministic contracts, read-only presentation, schemas, tests and operator-local signing preparation already authorised by the operator's DEFER decision. It does not perform the human re-review, sign evidence in CI, close the operator gate or alter any market authority. The packet therefore remains wholly auto-executable.
 
 ## Authority
 
@@ -25,7 +40,7 @@ No machine replay, provider access, canonical Discovery processing or append, se
 
 ## Remaining operator boundary
 
-After a tested squash merge, the operator must review the two exact deferred objects locally and sign the CORR2 evidence with the registered Ed25519 key. That work returns to `C1C-G5-CORRECTIVE-PILOT-REVIEW`; this implementation decision cannot close that gate.
+After squash merge, the operator must review the two exact deferred objects locally and sign the CORR2 evidence with the registered Ed25519 key. That work returns to `C1C-G5-CORRECTIVE-PILOT-REVIEW`; this implementation decision cannot close that gate.
 
 ## Rollback
 
