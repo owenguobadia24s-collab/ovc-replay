@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/pd_wp5_pilot_review_input_v0_1.schema.json",
+  "title": "PD-WP5 Pilot Review Input v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "pilot_run_id", "operator_id", "reviewed_at_utc", "decisions"],
+  "properties": {
+    "schema": {"const": "ovc-pd-wp5-pilot-review-input/v1"},
+    "pilot_run_id": {"type": "string", "pattern": "^PD\\.PILOT\\.RUN\\.[0-9A-Za-z.-]+$"},
+    "operator_id": {"const": "OVC.OPERATOR.PRIMARY.LOCAL.V1"},
+    "reviewed_at_utc": {"type": "string", "pattern": "Z$"},
+    "decisions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate_window_id", "review_disposition", "notes", "ui_friction_codes"],
+        "properties": {
+          "candidate_window_id": {"type": "string", "pattern": "^PDPILOT-CANDIDATE-[0-9a-f]{24}$"},
+          "review_disposition": {
+            "enum": [
+              "WORKFLOW_ACCEPTED",
+              "FLAG_WORKFLOW_DEFECT",
+              "FLAG_UI_FRICTION",
+              "DEFER_PILOT_OBJECT",
+              "REJECT_PILOT_OBJECT"
+            ]
+          },
+          "notes": {"type": "string"},
+          "ui_friction_codes": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}
