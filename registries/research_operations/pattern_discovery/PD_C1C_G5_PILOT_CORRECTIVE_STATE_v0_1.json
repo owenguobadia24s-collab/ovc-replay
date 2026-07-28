@@ -2,7 +2,7 @@
   "schema": "ovc-pd-c1c-g5-pilot-corrective-state/v1",
   "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
   "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
-  "status": "C1C_G5_CORR2_IMPLEMENTED_OPERATOR_LOCAL_REREVIEW_REQUIRED",
+  "status": "C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED",
   "source_pilot": {
     "namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
     "run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
@@ -80,12 +80,12 @@
   },
   "corr2": {
     "packet_id": "C1C-G5-CORR2",
-    "status": "GATE_READY",
+    "status": "COMPLETED_IN_MAIN",
     "authority_required": "OPERATOR_DEFER_RECORDED",
     "authority_delta": "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY",
     "baseline_commit": "8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b",
     "branch": "build/c1c-g5-corr2-review-closure",
-    "tested_candidate_head": "83ce4b100a3b3808060cc84dac9d73d3d5ae52c9",
+    "tested_candidate_head": "4268e4ecd34f1dde618b88ff0b7e8996331539b2",
     "pull_request": 137,
     "decision": "PASS",
     "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
@@ -105,13 +105,17 @@
     "operator_local_human_rereview": "REQUIRED_FOR_TWO_DEFERRED_OBJECTS",
     "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
     "tests": [
-      {"workflow_run": 30405314053, "job": 90429331646, "result": "PASS"},
-      {"workflow_run": 30405313946, "job": 90429331287, "result": "PASS"},
-      {"workflow_run": 30405314175, "job": 90429332422, "result": "PASS"}
+      {"workflow_run": 30405881435, "job": 90431071055, "result": "PASS"},
+      {"workflow_run": 30405881448, "job": 90431071054, "result": "PASS"},
+      {"workflow_run": 30405881334, "job": 90431070754, "result": "PASS"},
+      {"workflow_run": 30405881354, "job": 90431070785, "result": "PASS"},
+      {"workflow_run": 30405881330, "job": 90431070671, "result": "PASS"}
     ],
     "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_QA_PACKET.json",
     "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_DELEGATED_DECISION.md",
-    "merge_commit": null
+    "merge_commit": "66593aa2bca3b781058e1bc81f96bf2e57b18005",
+    "merge_method": "SQUASH",
+    "merged_on": "2026-07-28"
   },
   "implementation": {
     "machine_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
@@ -120,6 +124,7 @@
     "corr2_wrapper": "scripts/run_c1c_g5_corr2_deferred_review.ps1",
     "corr2_contract": "contracts/research_operations/pattern_discovery/C1C_G5_CORR2_DEFERRED_OBJECT_REVIEW_CONTRACT_v0_1.md",
     "corr2_implementation_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_IMPLEMENTATION_RECEIPT.json",
+    "corr2_merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_MERGE_RECEIPT.json",
     "evidence_index": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json",
     "gate_ready_bundle": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_READY_BUNDLE.json"
   },
@@ -140,7 +145,7 @@
     "second_machine_replay": "DENIED_NOT_REQUIRED",
     "smallest_lawful_resolution": "Run CORR2 preflight and prepare locally, complete the two-object review template, then finalize and return the signed compact closure evidence."
   },
-  "continuation": "RUN_OPERATOR_LOCAL_C1C_G5_CORR2_TWO_OBJECT_REREVIEW_AFTER_MERGE",
+  "continuation": "RUN_OPERATOR_LOCAL_C1C_G5_CORR2_TWO_OBJECT_REREVIEW",
   "continuation_command": ".\\scripts\\run_c1c_g5_corr2_deferred_review.ps1 preflight",
   "next_packet": "C1C-G5-CORR2-LOCAL-REVIEW",
   "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
