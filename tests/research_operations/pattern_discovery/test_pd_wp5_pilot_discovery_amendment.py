@@ -44,17 +44,22 @@ class PdWp5PilotDiscoveryAmendmentTests(unittest.TestCase):
         self.assertEqual(gate["signing_binding_id"], "RPS.SIGNING.50092c28981fef08f53a6cb5")
         self.assertEqual(gate["operator_id"], "OVC.OPERATOR.PRIMARY.LOCAL.V1")
 
-    def test_pilot_packet_completed_and_corr1_authorised_after_defer(self) -> None:
+    def test_pilot_packet_returns_to_operator_gate_after_corr1(self) -> None:
         state = load(PD_STATE)
-        self.assertEqual(state["packet_status"], "COMPLETED")
-        self.assertEqual(state["packet_phase"], "PD_G5P_DEFERRED_PD_WP5_CORR1_AUTHORISED")
-        self.assertEqual(state["authority_required"], "NONE_FOR_PD_WP5_CORR1_NON_ACTIVATING_SPECIFICATION")
-        self.assertFalse(state["operator_approval_required"])
+        self.assertEqual(state["packet_status"], "GATE_READY")
+        self.assertEqual(state["packet_phase"], "PD_WP5_CORR1_COMPLETED_PD_G5P_CORRECTION_RETURN_GATE_READY")
+        self.assertEqual(state["authority_required"], "PD_G5P_OPERATOR_DECISION_CANONICAL_DISCOVERY")
+        self.assertTrue(state["operator_approval_required"])
         self.assertEqual(state["decision"], "DEFER")
-        self.assertEqual(state["next_packet"], "PD-WP5-CORR1")
+        self.assertEqual(state["prior_gate_decision"]["decision"], "DEFER")
+        self.assertEqual(state["correction_completion"]["status"], "COMPLETED")
+        self.assertEqual(state["correction_completion"]["qa_result"], "PASS")
+        self.assertEqual(state["next_packet"], "PD-G5P-CORRECTION-RETURN")
         self.assertEqual(state["next_gate"], "PD-G5P")
         self.assertEqual(state["decision_record"], "docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md")
-        self.assertEqual(state["second_pilot_replay"], "DENIED")
+        self.assertEqual(state["second_pilot_replay"], "DENIED_NOT_REQUIRED")
+        self.assertEqual(state["current_gate"]["status"], "GATE_READY")
+        self.assertEqual(state["current_gate"]["recommended_decision"], "PASS")
 
     def test_pilot_outputs_are_non_promotable_and_noncanonical(self) -> None:
         gate = load(PD_G4B_STATE)
