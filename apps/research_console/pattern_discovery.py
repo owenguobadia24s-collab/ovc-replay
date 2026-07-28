@@ -18,6 +18,7 @@ AUTHORITY = {
     "selector_release_r2": "DENIED",
     "probability_exposure_execution": "NONE",
 }
+PILOT_BANNER = "PILOT_ONLY · NON_PROMOTABLE · TIME_GATED_REPLAY · GAPPED_SOURCE"
 
 
 def _streamlit():
@@ -63,6 +64,7 @@ def render_queue(items: list[Mapping[str, Any]], authority: AuthoritySnapshot | 
         "distance": item.get("nearest_cluster_distance"),
         "novelty": item.get("novelty_badge") or item.get("novelty_state"),
         "control": item.get("control_class"),
+        "pilot": "PILOT_ONLY" if item.get("pilot_only") else None,
     } for item in selected]
     st.dataframe(rows, use_container_width=True, hide_index=True)
     return st.selectbox("Open candidate", [str(item["candidate_window_id"]) for item in selected])
@@ -71,7 +73,10 @@ def render_queue(items: list[Mapping[str, Any]], authority: AuthoritySnapshot | 
 def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnapshot | None = None) -> None:
     st = _streamlit()
     st.subheader("Candidate Detail")
-    st.warning(authority.authority_label if authority is not None else str(detail.get("authority_banner")))
+    if detail.get("pilot", {}).get("pilot_only"):
+        st.error(str(detail.get("authority_banner") or PILOT_BANNER))
+    else:
+        st.warning(authority.authority_label if authority is not None else str(detail.get("authority_banner")))
     summary = detail.get("summary", {})
     metrics = st.columns(4)
     metrics[0].metric("Clock", str(summary.get("clock")))
@@ -103,14 +108,17 @@ def render_candidate_detail(detail: Mapping[str, Any], authority: AuthoritySnaps
     st.button(
         "Freeze evidence record",
         disabled=not enabled,
-        help="Disabled unless PD-G4 and RPS-G4 are approved, the operator key is bound, the bridge is healthy, write authority is true, and the candidate source resolves.",
+        help="Canonical append remains disabled for every Pilot Discovery object.",
     )
 
 
 def render_clusters(view: Mapping[str, Any]) -> None:
     st = _streamlit()
     st.subheader("Clusters")
-    st.warning(str(view.get("authority_banner")))
+    if view.get("pilot_only"):
+        st.error(str(view.get("authority_banner") or PILOT_BANNER))
+    else:
+        st.warning(str(view.get("authority_banner")))
     st.caption(f"Cluster version {view.get('cluster_version_id')} · {view.get('build_status')} · input {view.get('input_count')}")
     clusters = list(view.get("clusters", ()))
     if not clusters:
@@ -123,6 +131,7 @@ def render_clusters(view: Mapping[str, Any]) -> None:
         "medoid": item.get("medoid_id"),
         "dispersion": item.get("dispersion"),
         "outliers": len(item.get("outlier_ids", ())),
+        "pilot": "PILOT_ONLY" if item.get("pilot_only") else None,
     } for item in clusters], use_container_width=True, hide_index=True)
     selected_id = st.selectbox("Inspect cluster", [str(item.get("cluster_id")) for item in clusters])
     selected = next(item for item in clusters if item.get("cluster_id") == selected_id)
@@ -137,9 +146,16 @@ def render_pattern_discovery_app(bundle: Mapping[str, Any]) -> None:
         if "authority" in bundle
         else load_repository_authority_snapshot()
     )
+    pilot = bundle.get("pilot") if isinstance(bundle.get("pilot"), Mapping) else None
     st.set_page_config(page_title="OVC C2 Pattern Discovery", page_icon="◈", layout="wide")
     st.title("OVC C2 Pattern Discovery")
     st.caption("Simple local research triage · Queue → Candidate Detail → Clusters")
+    if pilot:
+        st.error(str(pilot.get("banner") or PILOT_BANNER))
+        st.caption(
+            f"Namespace {pilot.get('identity_namespace')} · research role {pilot.get('research_role')} · "
+            f"canonical population {pilot.get('canonical_discovery_population')}"
+        )
     st.json({**AUTHORITY, **authority.as_dict(), "research_write": authority.authority_label}, expanded=False)
     queue_tab, detail_tab, cluster_tab = st.tabs(["Queue", "Candidate Detail", "Clusters"])
     with queue_tab:
@@ -153,9 +169,16 @@ def render_pattern_discovery_app(bundle: Mapping[str, Any]) -> None:
         else:
             st.info("Select a candidate from the Queue.")
     with cluster_tab:
+        cluster_views = list(bundle.get("cluster_views", ()))
         cluster_view = bundle.get("cluster_view")
         if cluster_view:
             render_clusters(cluster_view)
+        elif cluster_views:
+            selected_cluster_view = st.selectbox(
+                "Partition",
+                [str(item.get("cluster_version_id")) for item in cluster_views],
+            )
+            render_clusters(next(item for item in cluster_views if str(item.get("cluster_version_id")) == selected_cluster_view))
         else:
             st.info("No ClusterVersion projection is available.")
 
