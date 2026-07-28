@@ -1,0 +1,82 @@
+{
+  "schema": "ovc-c1c-g5-pilot-corrective-blocker/v1",
+  "blocker_id": "C1C-G5-BLOCK-001",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "gate_id": "C1C-G5",
+  "status": "BLOCKED_OPERATOR_LOCAL_EXTERNAL_ARTIFACT_AND_PRIVATE_SIGNING_KEY_REQUIRED",
+  "completed_before_blocker": {
+    "c1_v2_publication": "PASS_FULL_REMOTE_BYTE_VERIFICATION",
+    "c2_v2_identity_replay": "PASS_ZERO_SEMANTIC_DRIFT",
+    "c2_v2_publication": "PASS_FULL_REMOTE_BYTE_VERIFICATION",
+    "selector_transaction": "MATERIALISED_EFFECTIVE_ON_MAIN_MERGE",
+    "source_pilot_supersession": "MATERIALISED_APPEND_ONLY"
+  },
+  "superseded_pilot": {
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
+    "pilot_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+    "compute_run_id": "RPS.RUN.7aeb551335d766ee3bf503e6",
+    "source_binding_id": "RPS.BINDING.32fb3003efa072916c11e907",
+    "disposition": "SUPERSEDED_NONCANONICAL_LINEAGE_IDENTITY",
+    "preserve_existing_evidence": true,
+    "canonical_append": "DENIED",
+    "promotion_eligibility": "NON_PROMOTABLE"
+  },
+  "approved_corrective_rerun": {
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "authority_gate": "C1C-G5",
+    "operation_mode": "TIME_GATED_REPLAY",
+    "research_role": "PILOT_DISCOVERY",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "active_c2_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "canonical_append": "DENIED",
+    "promotion_eligibility": "NON_PROMOTABLE",
+    "runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
+    "windows_wrapper": "scripts/run_c1c_g5_pilot_corrective_rerun.ps1"
+  },
+  "unavailable_to_github_execution": [
+    {
+      "object": "exact operator-local accepted RPS compute root",
+      "expected_path": "C:\\Users\\Owner\\OVIS\\ovc-replay-external-artifacts\\prospective-source\\compute\\RPS.RUN.7aeb551335d766ee3bf503e6",
+      "required_output_manifest_sha256": "3c6295badd04896a9e94b4b5a3ccb354bb51de52d5927839a86f61a40ed679ff"
+    },
+    {
+      "object": "operator private Ed25519 signing key",
+      "signing_binding_id": "RPS.SIGNING.50092c28981fef08f53a6cb5",
+      "operator_id": "OVC.OPERATOR.PRIMARY.LOCAL.V1"
+    },
+    {
+      "object": "human Console review of the generated corrective pilot queue",
+      "reason": "The frozen Pilot Discovery contract requires operator review and signed finalization; it cannot be fabricated in CI."
+    }
+  ],
+  "operator_commands_after_selector_transaction_is_on_main": [
+    ".\\scripts\\run_c1c_g5_pilot_corrective_rerun.ps1 preflight",
+    ".\\scripts\\run_c1c_g5_pilot_corrective_rerun.ps1 execute -Gate C1C-G5",
+    "Complete the generated review/pilot-review-input.template.json in the Research Console or as a schema-valid file.",
+    ".\\scripts\\run_c1c_g5_pilot_corrective_rerun.ps1 finalize -Gate C1C-G5 -PilotRunId <NEW_RUN_ID> -ReviewFile <COMPLETED_REVIEW_FILE>"
+  ],
+  "required_return_files": [
+    "pilot-run.json",
+    "output-manifest.json",
+    "pilot-review-receipt.json",
+    "pilot-defect-ledger.json",
+    "signed-pilot-evidence-inventory.json",
+    "pd-g5p-gate-input.json"
+  ],
+  "smallest_lawful_resolution": "Merge the completed C1/C2 selector transaction, pull clean main locally, execute the one approved corrective noncanonical pilot rerun against the exact external source and bound private key, perform the human review, finalize signed evidence, and return the compact files so C1C-G5 can close and RO3-WP3 can resume.",
+  "retained_prohibitions": {
+    "canonical_pattern_discovery_append": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_change": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  }
+}
