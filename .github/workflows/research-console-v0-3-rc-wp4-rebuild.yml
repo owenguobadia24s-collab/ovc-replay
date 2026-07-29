@@ -1,0 +1,79 @@
+name: Research Console v0.3 RC-WP4 rebuilt System workspace
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/research_console/fixtures.py'
+      - 'apps/research_console/system_workspace.py'
+      - 'tests/research_operations/test_rc_wp4_v0_3_system_activity.py'
+      - 'docs/releases/research-console-v0-3/rc-wp4/**'
+      - 'docs/releases/research-console-v0-3/rc-g3a/**'
+      - 'registries/research_operations/RESEARCH_CONSOLE_SYSTEM_PROJECTION_REGISTRY_v0_3.yaml'
+      - 'registries/research_operations/RESEARCH_CONSOLE_RC_WP4_STATE_v0_3.json'
+      - '.github/workflows/research-console-v0-3-rc-wp4-rebuild.yml'
+  push:
+    branches:
+      - 'rebuild/research-console-v0-3-rc-wp4-system-activity'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rc-wp4-system:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile packet modules
+        run: python -m py_compile apps/research_console/system_workspace.py apps/research_console/fixtures.py
+      - name: Run focused RC-WP4 tests
+        env:
+          PYTHONPATH: src:.
+        run: python -m unittest tests.research_operations.test_rc_wp4_v0_3_system_activity -v
+      - name: Run RC-G3 and RC-G4 regressions
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -m unittest tests.research_operations.test_rc_g3_v0_3_ro2_adapter_acceptance -v
+          python -m unittest tests.research_operations.v0_3.test_rc_g4_activation -v
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src:.
+        run: python -m unittest discover -s tests -v
+      - name: Enforce bounded authority delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          state = json.loads(Path('registries/research_operations/RESEARCH_CONSOLE_RC_WP4_STATE_v0_3.json').read_text())
+          packet = json.loads(Path('docs/releases/research-console-v0-3/rc-wp4/RC_WP4_IMPLEMENTATION_PACKET.json').read_text())
+          registry = Path('registries/research_operations/RESEARCH_CONSOLE_SYSTEM_PROJECTION_REGISTRY_v0_3.yaml').read_text()
+          source = Path('apps/research_console/system_workspace.py').read_text()
+
+          assert state['baseline_commit'] == '79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5'
+          assert state['authority_delta'] == 'LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY'
+          assert state['next_packet'] == 'RC-G3A'
+          assert packet['next_gate'] == 'RC-G3A'
+          assert 'validation_consumption: LOCKED_UNCONSUMED' in registry
+          assert 'research_writes: DENIED_PENDING_SEPARATE_GATE' in registry
+          assert 'c2_pattern_discovery_authority: UNCHANGED' in registry
+          assert 'r2_publication: DENIED' in registry
+          assert '"writes": "NONE"' in source
+          assert 'TRADE' not in source
+          PY
+
+          changed="$(git diff --name-only 79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5...HEAD)"
+          if printf '%s\n' "$changed" | grep -E '^(contracts/opt_b/|schemas/opt_b/|registries/opt_b/|src/ovc/opt_b/|registries/authority/|legacy/|quarantine/)'; then
+            echo 'RC-WP4 changed a forbidden authority surface' >&2
+            exit 1
+          fi
