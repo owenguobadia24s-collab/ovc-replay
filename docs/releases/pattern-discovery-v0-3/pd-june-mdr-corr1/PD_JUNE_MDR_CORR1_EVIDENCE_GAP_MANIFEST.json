@@ -3,7 +3,8 @@
   "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
   "packet_id": "PD-JUNE-MDR-CORR1",
   "return_gate": "PD-JUNE-MDR-G1",
-  "status": "BLOCKED_EXTERNAL_EVIDENCE_REQUIRED",
+  "status": "BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED",
+  "latest_upload_assessment": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_OPERATOR_UPLOAD_ASSESSMENT.json",
   "resolved_findings": [
     {
       "code": "PD-JUNE-MDR-001",
@@ -21,28 +22,49 @@
   "open_blockers": [
     {
       "code": "PD-JUNE-MDR-003",
-      "status": "OPEN_EXTERNAL_EXACT_C1_EVIDENCE_UNAVAILABLE",
+      "status": "OPEN_SUPPLIED_C1_IS_PRE_CORRECTIVE_AND_LEVEL_RELATION_EVIDENCE_ABSENT",
+      "new_evidence": {
+        "exact_c1_record_count": 602,
+        "same_bar_non_wick_invariants": "PASS_602_OF_602",
+        "wick_balance_registry_match_count": 13,
+        "wick_balance_opposite_sign_count": 589,
+        "supplied_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+        "required_reviewed_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2"
+      },
       "required_evidence": [
-        "Exact C1 fact records for every C2 state in the 26-unit review sample",
-        "Exact level-boundary records referenced by those C1/C2 states",
+        "Exact corrected C1 records produced under C1.IMPLEMENTATION.v0.2 and bound to the C1-v2 parent lineage for every reviewed C2-v2 state",
+        "Exact level-boundary records referenced by those corrected C1/C2-v2 states",
         "Exact relation values and container/parent relationships",
-        "Exact formula-registry and parameter-pack identities",
+        "Exact formula-registry, implementation and parameter-pack identities",
         "Exact formula inputs and derivation references for displayed LOCATION, MOTION, ORGANISATION and INTERACTION values"
       ],
-      "impact": "C2 labels cannot be independently verified against their exact upstream facts and formulas; external market-description validity remains NOT_ESTABLISHED.",
-      "smallest_lawful_resolution": "Bind read-only, hash-verifiable exact C1/level/relation/formula evidence for the existing June v2 states. Do not replay or alter formulas."
+      "impact": "The supplied original prospective C1 facts expose a 589-record wick-balance sign contradiction and are not the corrected C1-v2 parent evidence required by C1C-G5. C2-v2 labels still cannot be independently verified.",
+      "smallest_lawful_resolution": "Retrieve and bind the already-produced C1C-G5 corrective C1-v2 and C2-v2 pilot evidence. Do not perform another market replay or alter formulas."
     },
     {
       "code": "PD-JUNE-MDR-004",
-      "status": "OPEN_EXTERNAL_PRE_TRIGGER_HISTORY_UNAVAILABLE",
+      "status": "OPEN_CORRECTIVE_15M_STATE_AND_TRANSITION_HISTORY_UNAVAILABLE",
       "affected_review_units": 11,
-      "required_evidence": [
-        "Exact pre-trigger C2 history windows for every LONG_PERSISTENCE review unit",
-        "Exact pre-trigger C2 history windows for every REPEATED_SWITCHING review unit",
-        "Frozen evaluator inputs and thresholds already in force at the trigger cutoff"
+      "review_sample": {
+        "clock": "15M_ONLY",
+        "ask_units": 6,
+        "bid_units": 5
+      },
+      "missing_original_manifest_members": [
+        "c2/states/15M/BID/GBPUSD-15M-LOCAL-v0_1.jsonl",
+        "c2/states/15M/BID/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
+        "c2/transitions/15M/ASK/GBPUSD-15M-LOCAL-v0_1.jsonl",
+        "c2/transitions/15M/ASK/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
+        "c2/transitions/15M/BID/GBPUSD-15M-LOCAL-v0_1.jsonl",
+        "c2/transitions/15M/BID/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl"
       ],
-      "impact": "The event objects are traceable, but the historical basis of persistence and switching cannot be independently reconstructed.",
-      "smallest_lawful_resolution": "Bind the exact already-produced pre-trigger state histories and evaluator inputs. Do not run another market replay."
+      "required_evidence": [
+        "Exact corrective C2-v2 pre-trigger state-history windows for every LONG_PERSISTENCE review unit",
+        "Exact corrective C2-v2 pre-trigger state-history windows for every REPEATED_SWITCHING review unit",
+        "Exact corrective 15M transition inputs and frozen evaluator thresholds already in force at each trigger cutoff"
+      ],
+      "impact": "The supplied 2H transition streams do not apply to the entirely 15M review sample, and the corrective C2-v2 histories remain unavailable.",
+      "smallest_lawful_resolution": "Retrieve the exact already-produced corrective 15M C2-v2 state and transition histories. Do not run another market replay."
     },
     {
       "code": "PD-JUNE-MDR-006",
@@ -65,15 +87,22 @@
     "queue-items.jsonl",
     "prospective-source-binding.json",
     "15M BID/ASK price bars",
-    "2H BID/ASK price bars"
+    "2H BID/ASK price bars",
+    "Original RPS-WP3 C1 15M and 2H ASK/BID records",
+    "Original RPS-WP3 C2-v1 ASK 15M state streams",
+    "Original RPS-WP3 C2-v1 ASK/BID 2H state and transition streams",
+    "Original RPS-WP3 output manifest"
   ],
   "not_available": [
-    "Exact June v2 C1 fact ledger",
+    "Exact corrected June C1-v2 parent ledger for the corrective pilot run",
+    "Exact corrected June C2-v2 15M state streams for all sides and scopes",
+    "Exact corrected June C2-v2 15M transition streams for all sides and scopes",
     "Exact June v2 level and relation ledger",
-    "Exact per-state formula input/provenance bundle",
-    "Exact pre-trigger C2 history bundle",
+    "Exact per-state corrected formula input/provenance bundle",
+    "Exact corrective pre-trigger C2-v2 history bundle",
     "Immutable deterministic negative controls"
   ],
+  "expected_corrective_root": "C:\\Users\\Owner\\OVIS\\ovc-replay-external-artifacts\\pattern-discovery\\pilot\\PD.PILOT.GBPUSD.20260622_20260625.v2\\PD.PILOT.RUN.96c16f11717e787f971851ee",
   "authority": {
     "provider_intake": "DENIED",
     "machine_replay": "DENIED",
@@ -86,5 +115,5 @@
     "validation_consumption": "LOCKED_UNCONSUMED",
     "probability_risk_exposure_trading_execution_agent_write": "NONE"
   },
-  "next_action": "Preserve CORR1 branch and PR. Resume only when exact C1 and pre-trigger evidence is supplied and hash-verifiable, or when the operator separately decides how to handle the control-design limitation."
+  "next_action": "Preserve CORR1 branch and PR. Retrieve the already-produced C1C-G5 corrective C1-v2/C2-v2 evidence from the exact v2 pilot run root; do not perform another replay."
 }
