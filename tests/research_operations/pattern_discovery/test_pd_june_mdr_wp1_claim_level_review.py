@@ -17,6 +17,7 @@ SUMMARY = BASE / "PD_JUNE_MDR_WP1_REVIEW_SUMMARY.md"
 QA = BASE / "PD_JUNE_MDR_WP1_QA_PACKET.json"
 GATE = BASE / "PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json"
 DECISION = BASE / "PD_JUNE_MDR_G1_OPERATOR_DECISION.json"
+CORR1_DECISION = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-mdr-corr1" / "PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 SCHEMA = ROOT / "schemas" / "research_operations" / "pattern_discovery" / "pd_june_mdr_wp1_claim_level_review_v0_1.schema.json"
 
@@ -33,10 +34,11 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.qa = json.loads(QA.read_text(encoding="utf-8"))
         self.gate = json.loads(GATE.read_text(encoding="utf-8"))
         self.decision = json.loads(DECISION.read_text(encoding="utf-8"))
+        self.corr1_decision = json.loads(CORR1_DECISION.read_text(encoding="utf-8"))
         self.state = json.loads(STATE.read_text(encoding="utf-8"))
 
     def test_packet_files_exist(self) -> None:
-        for path in (REPORT, LEDGER, INVENTORY, SUMMARY, QA, GATE, DECISION, STATE, SCHEMA):
+        for path in (REPORT, LEDGER, INVENTORY, SUMMARY, QA, GATE, DECISION, CORR1_DECISION, STATE, SCHEMA):
             self.assertTrue(path.is_file(), path)
 
     def test_exact_governed_hashes_match(self) -> None:
@@ -69,7 +71,7 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(aggregate["all_reviewed_units"]["fully_supported"], 0)
         self.assertEqual(aggregate["all_reviewed_units"]["semantic_description_not_evaluated"], 26)
 
-    def test_price_joins_pass_but_model_binding_conflicts(self) -> None:
+    def test_price_joins_pass_but_original_model_binding_conflicts(self) -> None:
         verification = self.report["artifact_verification"]
         population = self.report["population_mechanical_findings"]
         self.assertTrue(verification["all_candidate_timeline_price_rows_available"])
@@ -92,7 +94,7 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(timeline_claim["chronology_status"], "FAIL_SERIALIZED_ORDER")
         self.assertEqual(timeline_claim["factual_status"], "CONTRADICTED")
 
-    def test_reliability_fails_closed(self) -> None:
+    def test_historical_reliability_assessment_fails_closed(self) -> None:
         dimensions = self.report["reliability_dimensions"]
         self.assertEqual(dimensions["artifact_hash_and_identity_integrity"], "PASS")
         self.assertEqual(dimensions["serialized_timeline_chronology"], "FAIL_44_OF_208_AND_4_OF_6_PROMOTED_NONCHRONOLOGICAL")
@@ -102,17 +104,20 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(self.report["overall_answer"]["verdict"], "NOT_ESTABLISHED")
         self.assertEqual(self.report["overall_answer"]["recommended_gate_decision"], "DEFER")
 
-    def test_operator_defer_is_recorded_and_bounded(self) -> None:
+    def test_both_operator_defer_decisions_are_recorded(self) -> None:
         self.assertEqual(self.gate["gate_id"], "PD-JUNE-MDR-G1")
         self.assertTrue(self.gate["operator_approval_required"])
         self.assertEqual(self.gate["recommended_decision"], "DEFER")
         self.assertEqual(self.decision["decision"], "DEFER")
-        self.assertEqual(self.decision["decision_authority"], "OPERATOR")
         self.assertEqual(self.decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.corr1_decision["decision"], "DEFER")
+        self.assertEqual(self.corr1_decision["decision_authority"], "OPERATOR")
+        self.assertEqual(self.corr1_decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
         self.assertEqual(self.state["status"], "APPROVED")
-        self.assertEqual(self.state["operator_decision"], "DEFER")
-        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR1")
-        self.assertEqual(self.state["next_packet_status"], "READY_AFTER_PD_JUNE_MDR_WP1_SQUASH_MERGE")
+        self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1")
+        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
+        self.assertEqual(self.state["source_to_c2_v2_binding"], "PASS_EXPLICIT_CARRY_FORWARD_AND_CORRECTIVE_RUN_BINDING")
         self.assertEqual(self.qa["recommendation"], "DEFER")
 
     def test_authority_boundary_is_unchanged(self) -> None:

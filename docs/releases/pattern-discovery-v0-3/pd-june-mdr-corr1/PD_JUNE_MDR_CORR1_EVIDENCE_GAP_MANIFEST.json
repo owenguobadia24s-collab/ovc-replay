@@ -1,0 +1,69 @@
+{
+  "schema": "ovc-pd-june-mdr-corr1-evidence-gap-manifest/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "packet_id": "PD-JUNE-MDR-CORR1",
+  "return_gate": "PD-JUNE-MDR-G1",
+  "status": "GATE_READY_CONTROL_AND_AGREEMENT_EVIDENCE_REQUIRED",
+  "drive_evidence_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json",
+  "claim_trigger_reproduction": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json",
+  "resolved_findings": [
+    {
+      "code": "PD-JUNE-MDR-001",
+      "resolution": "Exact source compute run and corrective-v2 pilot run are linked through the preserved source binding, corrective manifest and signed pilot-run descriptor."
+    },
+    {
+      "code": "PD-JUNE-MDR-002",
+      "resolution": "All 208 immutable candidate timelines have deterministic first-valid chronology projections; corrected projection failures are zero."
+    },
+    {
+      "code": "PD-JUNE-MDR-003",
+      "resolution": "All 21 source-compute manifest members were retrieved and hash verified. Exact C1, source-price, level, container, relation and state evidence reproduces 1,144 of 1,144 C2 states and all 48 unique displayed state claims."
+    },
+    {
+      "code": "PD-JUNE-MDR-004",
+      "resolution": "All four 15M state streams and all four 15M transition streams were retrieved. All 11 LONG_PERSISTENCE or REPEATED_SWITCHING histories reproduce against the frozen evaluator inputs."
+    },
+    {
+      "code": "PD-JUNE-MDR-005",
+      "resolution": "Exact frozen distance decomposition is available for 24 assigned reviewed fingerprints; two small-sample units are explicitly not applicable."
+    }
+  ],
+  "open_blockers": [
+    {
+      "code": "PD-JUNE-MDR-006",
+      "status": "OPEN_OPERATOR_AUTHORITY_REQUIRED_FOR_CONTROL_AND_AGREEMENT_ASSURANCE",
+      "required_evidence": [
+        "A separately approved deterministic read-only negative-control construction rule",
+        "Control identities that do not insert, relabel or mutate the immutable 208-candidate June population",
+        "A predeclared blinded repeat-review sample and agreement procedure",
+        "False-positive, contradiction-detection and inter-review agreement results"
+      ],
+      "impact": "The June packet establishes deterministic structural-description correctness for the exact slice, but not general reliability against false positives or reviewer disagreement.",
+      "smallest_lawful_resolution": "Operator-authorise PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE as a read-only packet using only existing June evidence."
+    }
+  ],
+  "evidence_results": {
+    "source_manifest_members_verified": "PASS_21_OF_21",
+    "c1_records": 602,
+    "c2_states_reproduced": "PASS_1144_OF_1144",
+    "axis_payloads_reproduced": "PASS_5720_OF_5720",
+    "reviewed_state_claims_reproduced": "PASS_48_OF_48",
+    "reviewed_triggers_reproduced": "PASS_26_OF_26",
+    "history_dependent_triggers_reproduced": "PASS_11_OF_11",
+    "wick_balance_opposite_sign_records": 589,
+    "wick_balance_dependency_on_c2_structural_axes": "NONE"
+  },
+  "authority": {
+    "provider_intake": "DENIED",
+    "machine_replay": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "formula_trigger_candidate_distance_cluster_threshold_or_model_change": "NONE",
+    "semantic_family_candidate_novelty_or_theory_promotion": "NONE",
+    "selector_or_release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability_risk_exposure_trading_execution_agent_write": "NONE"
+  },
+  "next_action": "Present PD-JUNE-MDR-G1 return gate. Recommended decision: DEFER to the bounded operator-required control-and-agreement assurance packet."
+}

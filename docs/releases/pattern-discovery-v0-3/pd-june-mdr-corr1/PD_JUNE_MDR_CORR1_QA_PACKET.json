@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-pd-june-mdr-corr1-qa-packet/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "packet_id": "PD-JUNE-MDR-CORR1",
+  "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
+  "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
+  "pull_request": 160,
+  "tested_candidate_commit": "3746bacbdf1856c4ee6e580f565a727d10fb0f96",
+  "status": "APPROVED_DEFER_CORR2_AUTHORISED_PENDING_FINAL_DECISION_CI",
+  "qa_result": "DEFER_APPROVED_EXACT_CORRECTIVE_EVIDENCE_PASS_CONTROL_AND_AGREEMENT_PACKET_AUTHORISED",
+  "market_description_verdict": "NOT_ESTABLISHED",
+  "bounded_supported_claim": "DETERMINISTIC_STRUCTURAL_DESCRIPTION_CORRECTNESS_ESTABLISHED_FOR_EXACT_JUNE_GAPPED_SLICE",
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json",
+  "checks": [
+    {"check":"Source-to-C2-v2 carry-forward and corrective pilot binding are explicit and non-replaying","result":"PASS"},
+    {"check":"All 208 historical candidate timelines have deterministic chronology-safe projections","result":"PASS_208_OF_208_ZERO_CORRECTED_FAILURES"},
+    {"check":"All source-compute manifest members match declared hashes and sizes","result":"PASS_21_OF_21"},
+    {"check":"Exact C1, source-price, level, container and relation evidence reproduces stored C2 states","result":"PASS_1144_OF_1144"},
+    {"check":"Every reviewed state claim reproduces exactly","result":"PASS_48_OF_48"},
+    {"check":"Every reviewed trigger claim reproduces under frozen evaluator inputs","result":"PASS_26_OF_26"},
+    {"check":"Every LONG_PERSISTENCE and REPEATED_SWITCHING pre-trigger history reproduces","result":"PASS_11_OF_11"},
+    {"check":"Prospective C1 wick-balance defect is preserved and its downstream dependency is evaluated","result":"PASS_589_OPPOSITE_SIGN_RECORDS_PRESERVED_C2_DEPENDENCY_NONE"},
+    {"check":"Exact frozen structural comparison is exposed for every assigned reviewed fingerprint","result":"PASS_24_ASSIGNED_2_SMALL_SAMPLE_NOT_APPLICABLE"},
+    {"check":"Immutable deterministic negative controls support false-positive assessment","result":"DEFER_APPROVED_CORR2_AUTHORISED"},
+    {"check":"Blinded repeat-review agreement is established","result":"DEFER_APPROVED_CORR2_AUTHORISED"},
+    {"check":"Focused, dependent and complete repository tests pass","result":"PASS"},
+    {"check":"Historical June assessment and claim-level decision continuity pass","result":"PASS"}
+  ],
+  "resolved_findings": [
+    "PD-JUNE-MDR-001",
+    "PD-JUNE-MDR-002",
+    "PD-JUNE-MDR-003",
+    "PD-JUNE-MDR-004",
+    "PD-JUNE-MDR-005"
+  ],
+  "approved_continuation_findings": [
+    {
+      "code": "PD-JUNE-MDR-006",
+      "status": "APPROVED_FOR_BOUNDED_CORR2_ASSURANCE",
+      "summary": "The operator approved a bounded read-only control-and-agreement assurance packet; the general reliability claim remains unestablished until CORR2 returns to the gate."
+    }
+  ],
+  "corrected_defects": [
+    {
+      "code": "PD-JUNE-MDR-CORR1-CI-004",
+      "failed_runs": [30497142515, 30497551601, 30497734957],
+      "finding": "The large base64-gzip claim-trigger digest was not preserved as a decodable payload by repository contents transport.",
+      "resolution": "Superseded the unusable encoding artifact for gate purposes with a compact canonical JSON digest receipt binding the 48 state-claim records, 26 trigger-reproduction records and full external evidence hashes. No evidence conclusion or raw external byte was altered."
+    }
+  ],
+  "warnings": [
+    "The original prospective C1 corpus contains 589 non-zero wick-balance values with the pre-corrective opposite sign.",
+    "The frozen C2 structural builders do not consume wick_balance; all 1,144 states reproduce exactly from the supplied C1 records.",
+    "This bounded June result does not establish general reliability without negative controls and repeat-review evidence.",
+    "PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json.gz.b64 is superseded and is not used by the gate or CI."
+  ],
+  "evidence": {
+    "drive_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json",
+    "reproduction_summary": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json",
+    "reproduction_digest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json",
+    "return_gate": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json",
+    "operator_decision": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json"
+  },
+  "test_evidence": [
+    {"workflow_run":30498219394,"job":90731843042,"scope":"CORR1 focused tests, dependent Pattern Discovery tests, complete repository suite and return-gate boundary","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219425,"job":90731843340,"scope":"General repository unit tests","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219325,"job":90731842858,"scope":"June assessment continuity and lawful return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219459,"job":90731843542,"scope":"Historical claim-level decision and lawful return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"}
+  ],
+  "recommendation": "EXECUTE_OPERATOR_APPROVED_PD-JUNE-MDR-CORR2_AFTER_CORR1_MERGE",
+  "rollback": "Preserve all external artifacts and signed pilot evidence. Revert only CORR1 compact evidence, tests, workflow, QA, gate packet, decision and state through a new non-destructive commit."
+}

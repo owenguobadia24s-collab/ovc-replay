@@ -3,76 +3,69 @@
   "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
   "plan_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
   "plan_version": "0.1",
-  "packet_id": "PD-JUNE-MDR-WP1",
+  "packet_id": "PD-JUNE-MDR-CORR1",
   "status": "APPROVED",
-  "packet_execution": "OPERATOR_DEFER_APPROVED_AWAITING_SQUASH_MERGE",
-  "baseline_commit": "ec0780a638a02d1f9f80daa1c48225684de8c8d0",
-  "branch": "review/pd-june-mdr-wp1-claim-level-market-description",
-  "candidate_commit": "75de3a8a7bd6c9754b7a053a7ae8de5813375017",
-  "pull_request": 159,
-  "gate_id": "PD-JUNE-MDR-G1",
-  "operator_decision": "DEFER",
-  "operator_decision_recorded_at_utc": "2026-07-29T15:23:00Z",
+  "packet_execution": "IMPLEMENTED_TESTED_EXACT_CORRECTIVE_EVIDENCE_BOUND_OPERATOR_DEFER_RECORDED",
+  "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
+  "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
+  "pull_request": 160,
+  "tested_candidate_commit": "3746bacbdf1856c4ee6e580f565a727d10fb0f96",
+  "authority_required": "NONE_FOR_APPROVED_CORR2_SCOPE_UNTIL_RETURN_TO_PD-JUNE-MDR-G1",
+  "authority_delta": "OPERATOR_APPROVED_BOUNDED_READ_ONLY_CONTROL_AND_AGREEMENT_ASSURANCE",
+  "decision": "DEFER",
   "decision_authority": "OPERATOR",
-  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_G1_OPERATOR_DECISION.json",
-  "authority_required": "NONE_WITHIN_APPROVED_PD_JUNE_MDR_CORR1_SCOPE_RETURN_TO_PD_JUNE_MDR_G1",
-  "authority_delta": "BOUNDED_READ_ONLY_PD_JUNE_MDR_CORR1_APPROVED",
-  "prerequisites": [
-    "PD-JUNE-RA1_COMPLETED_AND_MERGED",
-    "C1C-G5-CORRECTIVE-PILOT-REVIEW_PASS",
-    "EXACT_OPERATOR_UPLOADED_ARTIFACTS_RECEIVED",
-    "PD-JUNE-MDR-G1_OPERATOR_DEFER"
-  ],
-  "artifact_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_EXTERNAL_ARTIFACT_INVENTORY.json",
-  "claim_review": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json",
-  "claim_review_ledger": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json.gz.b64",
-  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_QA_PACKET.json",
-  "gate_packet": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json",
-  "artifact_hash_integrity": "PASS",
-  "machine_reproducibility": "PASS",
-  "price_timestamp_coverage": "PASS_328_OF_328_COMPLETE",
-  "source_to_c2_v2_binding": "FAIL_V1_V2_CONFLICT",
-  "timeline_chronology": "FAIL_44_OF_208_4_OF_6_PROMOTED",
-  "external_market_description_validity": "NOT_ESTABLISHED",
-  "population_level_consistency": "NOT_ESTABLISHED",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json",
+  "source_to_c2_v2_binding": "PASS_EXPLICIT_CARRY_FORWARD_AND_CORRECTIVE_RUN_BINDING",
+  "drive_evidence": "PASS_REQUIRED_ROOTS_LOCATED",
+  "source_manifest_verification": "PASS_21_OF_21_HASH_AND_SIZE",
+  "timeline_chronology": "PASS_208_OF_208_CORRECTED_READ_ONLY_PROJECTION",
+  "population_state_reproduction": "PASS_1144_OF_1144",
+  "axis_payload_reproduction": "PASS_5720_OF_5720",
+  "reviewed_state_claims": "PASS_48_OF_48",
+  "reviewed_trigger_claims": "PASS_26_OF_26",
+  "pre_trigger_history": "PASS_11_OF_11_HISTORY_DEPENDENT_UNITS",
+  "structural_comparison": "PASS_24_ASSIGNED_2_UNASSIGNED_SMALL_SAMPLE_NOT_APPLICABLE",
+  "operator_upload_c1_records": 602,
+  "operator_upload_wick_balance_assurance": "FAIL_589_OF_602_OPPOSITE_SIGN_13_ZERO_MATCHES_PRESERVED_AS_EVIDENCE",
+  "wick_balance_c2_structural_dependency": "NONE",
+  "negative_controls": "AUTHORISED_IN_CORR2_NOT_YET_EXECUTED",
+  "repeat_review_agreement": "AUTHORISED_IN_CORR2_NOT_YET_EXECUTED",
+  "deterministic_structural_description_correctness": "ESTABLISHED_FOR_EXACT_JUNE_GAPPED_SLICE",
+  "external_market_description_validity": "PARTIAL_DETERMINISTIC_RULE_CORRECTNESS_ESTABLISHED_GENERAL_RELIABILITY_NOT_ESTABLISHED",
+  "population_level_consistency": "PASS_EXACT_JUNE_SLICE",
   "overall_verdict": "NOT_ESTABLISHED",
-  "qa_result": "DEFER_RECOMMENDED_ALL_REQUIRED_CHECKS_PASS",
-  "recommended_gate_decision": "DEFER",
-  "blockers": [
-    {
-      "blocker_id": "PD-JUNE-MDR-001",
-      "status": "OPEN_ASSIGNED_TO_PD_JUNE_MDR_CORR1",
-      "description": "Source binding payload names C2 v1 while reviewed candidates name C2 v2."
-    },
-    {
-      "blocker_id": "PD-JUNE-MDR-002",
-      "status": "OPEN_ASSIGNED_TO_PD_JUNE_MDR_CORR1",
-      "description": "44 serialized candidate timelines are nonchronological."
-    },
-    {
-      "blocker_id": "PD-JUNE-MDR-003",
-      "status": "OPEN_ASSIGNED_TO_PD_JUNE_MDR_CORR1",
-      "description": "Exact C1 claim evidence and formula inputs are absent."
-    },
-    {
-      "blocker_id": "PD-JUNE-MDR-004",
-      "status": "OPEN_ASSIGNED_TO_PD_JUNE_MDR_CORR1",
-      "description": "Pre-trigger persistence and switching history is absent."
-    },
-    {
-      "blocker_id": "PD-JUNE-MDR-005",
-      "status": "OPEN_ASSIGNED_TO_PD_JUNE_MDR_CORR1",
-      "description": "General component distance decomposition is absent."
-    },
+  "recommended_decision": "DEFER_DECIDED",
+  "binding_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_SOURCE_TO_C2_V2_BINDING_RECEIPT.json",
+  "drive_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json",
+  "chronology_projection": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CHRONOLOGY_PROJECTION.json",
+  "structural_assurance": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json",
+  "claim_trigger_reproduction": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json",
+  "claim_trigger_digest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json",
+  "superseded_claim_trigger_encoding": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json.gz.b64",
+  "evidence_gap_manifest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_QA_PACKET.json",
+  "return_gate_packet": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json",
+  "qa_result": "DEFER_APPROVED_EXACT_CORRECTIVE_EVIDENCE_PASS_CONTROL_AND_AGREEMENT_PACKET_AUTHORISED",
+  "contract": "contracts/research_operations/pattern_discovery/PD_JUNE_MDR_CORR1_CORRECTIVE_EVIDENCE_ASSURANCE_CONTRACT_v0_1.md",
+  "open_findings": [
     {
       "blocker_id": "PD-JUNE-MDR-006",
-      "status": "OPEN_REQUIRES_DETERMINISTIC_NEGATIVE_CONTROL_DESIGN_WITHIN_EXISTING_EVIDENCE_ONLY",
-      "description": "No deterministic negative-control candidate exists."
+      "status": "AUTHORISED_FOR_BOUNDED_CORR2_ASSURANCE",
+      "description": "The immutable June population contains no deterministic negative controls and no blinded repeat-review agreement study.",
+      "smallest_lawful_resolution": "Execute the operator-approved bounded read-only CORR2 control-and-agreement assurance packet without mutating the June candidate population."
     }
   ],
-  "next_packet": "PD-JUNE-MDR-CORR1",
-  "next_packet_status": "READY_AFTER_PD_JUNE_MDR_WP1_SQUASH_MERGE",
-  "next_gate": "PD-JUNE-MDR-G1_RETURN",
+  "resolved_findings": [
+    "PD-JUNE-MDR-001",
+    "PD-JUNE-MDR-002",
+    "PD-JUNE-MDR-003",
+    "PD-JUNE-MDR-004",
+    "PD-JUNE-MDR-005"
+  ],
+  "next_packet_on_defer": "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE",
+  "next_packet": "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE",
+  "next_packet_status": "READY_AFTER_CORR1_SQUASH_MERGE",
+  "next_gate": "PD-JUNE-MDR-G1",
   "canonical_2021_2023_discovery": "DEFERRED_NOT_AUTHORISED",
   "second_june_replay": "DENIED_NOT_REQUIRED",
   "retained_prohibitions": [
@@ -87,25 +80,11 @@
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
   ],
   "tests": [
-    {
-      "workflow_run": 30459025751,
-      "job": 90599950470,
-      "result": "PASS",
-      "tested_head": "75de3a8a7bd6c9754b7a053a7ae8de5813375017"
-    },
-    {
-      "workflow_run": 30459026342,
-      "job": 90599952750,
-      "result": "PASS",
-      "tested_head": "75de3a8a7bd6c9754b7a053a7ae8de5813375017"
-    },
-    {
-      "workflow_run": 30459027007,
-      "job": 90599954486,
-      "result": "PASS",
-      "tested_head": "75de3a8a7bd6c9754b7a053a7ae8de5813375017"
-    }
+    {"workflow_run":30498219394,"job":90731843042,"scope":"CORR1 focused, dependent, complete suite and return-gate boundary","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219425,"job":90731843340,"scope":"General repository unit tests","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219325,"job":90731842858,"scope":"June assessment continuity and return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219459,"job":90731843542,"scope":"Claim-level decision continuity and return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"}
   ],
   "merge_commit": null,
-  "rollback": "REVERT_ONLY_PD_JUNE_MDR_WP1_COMPACT_REVIEW_GATE_DECISION_QA_TESTS_WORKFLOW_AND_STATE_PRESERVE_ALL_EXTERNAL_AND_SIGNED_EVIDENCE"
+  "rollback": "REVERT_ONLY_PD_JUNE_MDR_CORR1_COMPACT_EVIDENCE_QA_TESTS_WORKFLOW_GATE_DECISION_AND_STATE_PRESERVE_ALL_EXTERNAL_AND_SIGNED_EVIDENCE"
 }

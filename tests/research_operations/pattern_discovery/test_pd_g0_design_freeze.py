@@ -13,6 +13,12 @@ REGISTRY_ROOT = ROOT / "registries" / "research_operations" / "pattern_discovery
 PLAN_BINDING = ROOT / "docs" / "implementation-plans" / "OVC_C2_PATTERN_DISCOVERY_AND_REVIEW_LAYER_v0_3_SOURCE_BINDING.md"
 GATE_PACKET = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "PD_G0_OPERATOR_GATE_PACKET.md"
 DECISION_RECORD = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "PD_G0_OPERATOR_DECISION.md"
+PD_G0_FROZEN_SCHEMAS = (
+    SCHEMA_ROOT / "transition_and_trigger_v0_1.schema.json",
+    SCHEMA_ROOT / "candidate_window_v0_1.schema.json",
+    SCHEMA_ROOT / "fingerprint_and_cluster_v0_1.schema.json",
+    SCHEMA_ROOT / "append_request_v0_1.schema.json",
+)
 
 
 class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
@@ -39,9 +45,12 @@ class PatternDiscoveryDesignFreezeTests(unittest.TestCase):
         self.assertIn("3c0785ddb571a4af6de4bf5756a1dfae7e2d3557", text)
 
     def test_json_schemas_parse_and_close_objects(self) -> None:
-        schemas = sorted(SCHEMA_ROOT.glob("*.schema.json"))
-        self.assertGreaterEqual(len(schemas), 4)
-        for path in schemas:
+        # PD-G0 froze exactly these four operational schemas. Later assurance,
+        # decision and authority schemas may explicitly name denied downstream
+        # fields, so sweeping the whole directory would conflate a prohibition
+        # record with an operational outcome field.
+        for path in PD_G0_FROZEN_SCHEMAS:
+            self.assertTrue(path.is_file(), path)
             data = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual("https://json-schema.org/draft/2020-12/schema", data["$schema"])
             self.assertIn("$id", data)

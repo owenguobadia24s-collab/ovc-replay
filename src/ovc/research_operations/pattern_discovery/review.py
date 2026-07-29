@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Iterable, Mapping
 
-from .models import PatternDiscoveryError
+from .market_description_assurance import project_candidate_chronology
+from .models import PatternDiscoveryError, parse_utc
 
 
 EVIDENCE_CLASSES = {
@@ -12,6 +13,46 @@ EVIDENCE_CLASSES = {
     "INCIDENT",
     "BOUNDED_RESEARCH_QUESTION",
 }
+
+
+def _candidate_chronology(candidate: Mapping[str, Any]) -> dict[str, Any]:
+    timeline_source = candidate.get("timeline", ())
+    source_ids = [str(item) for item in candidate.get("source_c2_record_ids", ())]
+    if not timeline_source:
+        return {
+            "timeline": [],
+            "source_c2_record_ids": source_ids,
+            "original_is_chronological": None,
+            "ordering_rule": "FIRST_VALID_TIME_THEN_C2_STATE_ID_WHEN_EXACT_TIMELINE_AVAILABLE",
+            "mutation": "NONE_READ_ONLY_PROJECTION_ONLY",
+        }
+    if not isinstance(timeline_source, (list, tuple)) or not all(isinstance(item, Mapping) for item in timeline_source):
+        raise PatternDiscoveryError("candidate timeline must be a sequence of objects")
+    rows = [dict(item) for item in timeline_source]
+    exact_rows = all(item.get("c2_state_id") and item.get("first_valid_time") for item in rows)
+    if exact_rows:
+        return project_candidate_chronology(candidate)
+
+    # Older UI-only fixtures predate the exact C2 timeline contract. They are
+    # accepted only when their display-time sequence is already chronological;
+    # without immutable row identities they cannot be safely reordered or
+    # aligned to source IDs. Real governed candidate rows use the exact path.
+    if all(isinstance(item.get("time"), str) and item.get("time") for item in rows):
+        parsed = [parse_utc(str(item["time"])) for item in rows]
+        if parsed != sorted(parsed):
+            raise PatternDiscoveryError(
+                "legacy display timeline is nonchronological and lacks exact C2 identities for lawful correction"
+            )
+        return {
+            "timeline": rows,
+            "source_c2_record_ids": source_ids,
+            "original_is_chronological": True,
+            "ordering_rule": "LEGACY_DISPLAY_TIME_ALREADY_CHRONOLOGICAL_NO_IDENTITY_REALIGNMENT",
+            "mutation": "NONE_READ_ONLY_PROJECTION_ONLY",
+        }
+    raise PatternDiscoveryError(
+        "candidate timeline requires exact c2_state_id/first_valid_time or an already chronological legacy time projection"
+    )
 
 
 def build_review_queue_item(
@@ -37,6 +78,7 @@ def build_review_queue_item(
                 None,
             )
             distance = cluster_version.get("distances", {}).get(fingerprint_id)
+    chronology = _candidate_chronology(candidate)
     return {
         "queue_item_id": f"PDQI-{candidate_id}",
         "candidate_window_id": candidate_id,
@@ -59,7 +101,12 @@ def build_review_queue_item(
         "novelty_badge": novelty.get("badge") if novelty else None,
         "source_release_id": candidate.get("source_release_id"),
         "source_manifest_id": candidate.get("source_manifest_id"),
-        "source_c2_record_ids": list(candidate.get("source_c2_record_ids", ())),
+        "source_c2_record_ids": chronology["source_c2_record_ids"],
+        "chronology_projection": {
+            "original_is_chronological": chronology["original_is_chronological"],
+            "ordering_rule": chronology["ordering_rule"],
+            "mutation": chronology["mutation"],
+        },
         "authority": "READ_ONLY_CANDIDATE",
     }
 
@@ -72,8 +119,9 @@ def build_candidate_detail(
     cluster_version: Mapping[str, Any] | None = None,
     price_strip: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
+    chronology = _candidate_chronology(candidate)
     queue_item = build_review_queue_item(candidate, fingerprint=fingerprint, cluster_version=cluster_version)
-    source_ids = list(candidate.get("source_c2_record_ids", ()))
+    source_ids = chronology["source_c2_record_ids"]
     if not source_ids:
         raise PatternDiscoveryError("candidate detail requires immutable C2 source IDs")
     return {
@@ -85,7 +133,12 @@ def build_candidate_detail(
             "trigger_snapshot_hash": candidate.get("trigger_snapshot_hash"),
             "closure_reason": candidate.get("closure_reason"),
         },
-        "timeline": list(candidate.get("timeline", ())),
+        "timeline": chronology["timeline"],
+        "chronology_projection": {
+            "original_is_chronological": chronology["original_is_chronological"],
+            "ordering_rule": chronology["ordering_rule"],
+            "mutation": chronology["mutation"],
+        },
         "fingerprint": dict(fingerprint),
         "neighbours": [dict(item) for item in neighbours],
         "cluster": dict(cluster_version) if cluster_version else None,
