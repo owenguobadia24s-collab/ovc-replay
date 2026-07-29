@@ -24,6 +24,7 @@ jobs:
           paths = [
               'docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_2026_OPERATOR_REVIEW_AND_MARKET_DESCRIPTION_ASSESSMENT.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_RA1_QA_PACKET.json',
+              'docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_G1_OPERATOR_DECISION.json',
               'registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json',
               'schemas/research_operations/pattern_discovery/pd_june_2026_review_assessment_v0_1.schema.json',
           ]
@@ -34,18 +35,25 @@ jobs:
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_2026_review_assessment -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce non-activating assessment boundary
+      - name: Enforce non-activating assessment and approved corrective boundary
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           assessment = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_2026_OPERATOR_REVIEW_AND_MARKET_DESCRIPTION_ASSESSMENT.json').read_text())
+          decision = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_G1_OPERATOR_DECISION.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert assessment['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
           assert assessment['operator_boundary']['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_REQUESTED'
           assert assessment['operator_boundary']['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           assert assessment['next_packet']['status'] == 'BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED'
-          assert state['status'] == 'BLOCKED'
+          assert decision['decision'] == 'DEFER'
+          assert decision['decision_authority'] == 'OPERATOR'
+          assert state['status'] == 'APPROVED'
+          assert state['packet_id'] == 'PD-JUNE-MDR-WP1'
+          assert state['operator_decision'] == 'DEFER'
+          assert state['next_gate'] == 'PD-JUNE-MDR-G1_RETURN'
+          assert state['next_packet'] == 'PD-JUNE-MDR-CORR1'
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
           assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           authority = assessment['authority']

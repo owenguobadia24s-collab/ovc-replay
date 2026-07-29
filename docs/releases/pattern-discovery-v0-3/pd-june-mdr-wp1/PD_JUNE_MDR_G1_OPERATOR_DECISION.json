@@ -1,0 +1,66 @@
+{
+  "schema": "ovc-pd-june-mdr-g1-operator-decision/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "plan_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "plan_version": "0.1",
+  "packet_id": "PD-JUNE-MDR-WP1",
+  "gate_id": "PD-JUNE-MDR-G1",
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "operator_instruction": "OVC APPROVE PD-JUNE-MDR-G1 DEFER",
+  "recorded_at_utc": "2026-07-29T15:23:00Z",
+  "baseline_main_commit": "ec0780a638a02d1f9f80daa1c48225684de8c8d0",
+  "approved_gate_head": "9af59aeab58e11913634503ae65ffd210bb5bfe7",
+  "qa_recommendation": "DEFER",
+  "market_description_verdict": "NOT_ESTABLISHED",
+  "unresolved_findings": [
+    "PD-JUNE-MDR-001",
+    "PD-JUNE-MDR-002",
+    "PD-JUNE-MDR-003",
+    "PD-JUNE-MDR-004",
+    "PD-JUNE-MDR-005",
+    "PD-JUNE-MDR-006"
+  ],
+  "authority_delta": {
+    "next_packet": "PD-JUNE-MDR-CORR1",
+    "scope": [
+      "Materialize an immutable source-to-C2-v2 carry-forward binding receipt without changing source bytes.",
+      "Make first_valid_time chronological ordering mandatory in candidate materialization and every read-only projection.",
+      "Expose exact C1 fact, level, relation, formula-registry and source-price references for every displayed state claim.",
+      "Expose exact pre-trigger histories for persistence and switching triggers.",
+      "Expose component distance, weights, scales, thresholds, duplicate and overlap status for every reviewed fingerprint.",
+      "Return to PD-JUNE-MDR-G1 after tests and operator review."
+    ],
+    "not_authorised": [
+      "Provider intake or another replay",
+      "2021-2023 canonical Discovery processing or append",
+      "Formula, trigger, candidate, distance, clustering, threshold or model changes",
+      "Semantic, family, candidate, novelty or theory promotion",
+      "Selector or release mutation",
+      "R2 publication or Validation consumption",
+      "Probability, risk, exposure, trading, execution or agent write"
+    ]
+  },
+  "tests": [
+    {
+      "workflow_run": 30459025751,
+      "job": 90599950470,
+      "result": "PASS",
+      "scope": "PD-JUNE-MDR-WP1 focused tests, full repository suite and authority boundary"
+    },
+    {
+      "workflow_run": 30459026342,
+      "job": 90599952750,
+      "result": "PASS",
+      "scope": "General repository unit tests"
+    },
+    {
+      "workflow_run": 30459027007,
+      "job": 90599954486,
+      "result": "PASS",
+      "scope": "Historical June-assessment continuity and non-activating authority boundary"
+    }
+  ],
+  "rollback": "Preserve every uploaded external artifact and prior signed pilot/corrective record. Revert only the bounded review, gate, decision and state records through a new non-destructive commit.",
+  "next_action": "Commit the decision and state update, squash-merge PR 159, then execute PD-JUNE-MDR-CORR1 from the resulting lawful main."
+}

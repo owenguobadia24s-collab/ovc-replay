@@ -1,0 +1,75 @@
+name: PD-JUNE-MDR-WP1 claim-level market-description review
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  claim-level-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse gate and decision court records
+        run: |
+          python - <<'PY'
+          import base64
+          import gzip
+          import json
+          from pathlib import Path
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1')
+          paths = [
+              base / 'PD_JUNE_MDR_WP1_EXTERNAL_ARTIFACT_INVENTORY.json',
+              base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json',
+              base / 'PD_JUNE_MDR_WP1_QA_PACKET.json',
+              base / 'PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json',
+              base / 'PD_JUNE_MDR_G1_OPERATOR_DECISION.json',
+              Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
+              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_wp1_claim_level_review_v0_1.schema.json'),
+          ]
+          for path in paths:
+              json.loads(path.read_text(encoding='utf-8'))
+          compressed = base64.b64decode((base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json.gz.b64').read_text().strip(), validate=True)
+          json.loads(gzip.decompress(compressed).decode('utf-8'))
+          PY
+      - name: Run focused PD-JUNE-MDR-WP1 tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_mdr_wp1_claim_level_review -v
+      - name: Run complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce fail-closed authority and approved corrective boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1')
+          report = json.loads((base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json').read_text())
+          gate = json.loads((base / 'PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json').read_text())
+          decision = json.loads((base / 'PD_JUNE_MDR_G1_OPERATOR_DECISION.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
+          assert report['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
+          assert report['overall_answer']['recommended_gate_decision'] == 'DEFER'
+          assert report['artifact_verification']['source_to_model_binding_status'] == 'CONFLICT_V1_BINDING_PAYLOAD_VS_V2_CANDIDATES'
+          assert report['population_mechanical_findings']['serialized_nonchronological_candidate_count'] == 44
+          assert report['population_mechanical_findings']['serialized_nonchronological_queue_promoted_count'] == 4
+          assert gate['operator_approval_required'] is True
+          assert gate['recommended_decision'] == 'DEFER'
+          assert decision['decision'] == 'DEFER'
+          assert decision['decision_authority'] == 'OPERATOR'
+          assert decision['authority_delta']['next_packet'] == 'PD-JUNE-MDR-CORR1'
+          assert state['status'] == 'APPROVED'
+          assert state['operator_decision'] == 'DEFER'
+          assert state['next_packet'] == 'PD-JUNE-MDR-CORR1'
+          assert state['next_packet_status'] == 'READY_AFTER_PD_JUNE_MDR_WP1_SQUASH_MERGE'
+          authority = report['authority']
+          for key in ('provider_intake', 'machine_replay', 'canonical_discovery_processing', 'canonical_append', 'selector_or_release_mutation', 'r2_publication'):
+              assert authority[key] == 'DENIED'
+          for key in ('formula_or_trigger_change', 'distance_cluster_threshold_or_model_change', 'semantic_family_candidate_or_novelty_promotion', 'probability', 'risk', 'exposure', 'trading', 'execution', 'agent_write'):
+              assert authority[key] == 'NONE'
+          assert authority['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          PY
