@@ -1,0 +1,209 @@
+{
+  "schema": "ovc-pd-june-2026-review-assessment/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "packet_id": "PD-JUNE-RA1",
+  "baseline_commit": "61fdea3a1b05ec941d867b5c6d181f6a401c2fc6",
+  "operator_boundary": {
+    "canonical_2021_2023_discovery": "DEFERRED_NOT_REQUESTED",
+    "second_june_replay": "DENIED_NOT_REQUIRED",
+    "assessment_scope": "READ_ONLY_EXISTING_JUNE_PILOT_AND_CORRECTIVE_REVIEW_EVIDENCE_ONLY"
+  },
+  "source_evidence": {
+    "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1",
+    "coverage_state": "GAPPED",
+    "pilot_v1_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
+    "pilot_v2_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "pilot_v2_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "active_c2_release_id_at_v2_review": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "active_c2_manifest_id_at_v2_review": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "selector_id_at_v2_review": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "deterministic_rerun_match": true,
+    "signed_hash_chain_verified": true,
+    "pilot_only": true,
+    "promotion_eligibility": "NON_PROMOTABLE"
+  },
+  "machine_operation": {
+    "c2_states": 1144,
+    "transitions": 7032,
+    "trigger_events": 208,
+    "candidates": 208,
+    "fingerprints": 208,
+    "queue_promoted": 6,
+    "queue_suppressed": 202,
+    "cluster_rows": 40,
+    "cluster_versions": 24,
+    "two_run_elapsed_seconds": 52.219883,
+    "peak_memory_bytes": 22744573,
+    "verdict": "PASS_REPRODUCIBLE_FOR_EXACT_GOVERNED_INPUT"
+  },
+  "initial_v2_operator_review": {
+    "decision_count": 6,
+    "distribution": {
+      "WORKFLOW_ACCEPTED": 1,
+      "FLAG_WORKFLOW_DEFECT": 1,
+      "FLAG_UI_FRICTION": 1,
+      "DEFER_PILOT_OBJECT": 2,
+      "REJECT_PILOT_OBJECT": 1
+    },
+    "clean_acceptance_rate": "1/6",
+    "qualified_or_nonaccepted_rate": "5/6",
+    "finding_codes": [
+      "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001",
+      "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001",
+      "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
+      "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002"
+    ],
+    "verdict": "DEFER_CONTRACT_AND_REVIEW_CONTEXT_CORRECTION_REQUIRED"
+  },
+  "corrective_review_chain": {
+    "workflow_and_ui_findings": "CLOSED_BY_VERSIONED_IMPLEMENTATION_AND_TESTS",
+    "corr2_results": [
+      {
+        "candidate_window_id": "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+        "prior_finding_code": "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
+        "final_disposition": "REJECT_PILOT_OBJECT",
+        "finding_code": "PD-REJECT-CORR2-CHRONOLOGY-INCONSISTENT-001",
+        "meaning": "NEGATIVE_CONTROL_PRESERVED_DESCRIPTION_OR_REVIEW_CHRONOLOGY_NOT_COHERENT"
+      },
+      {
+        "candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+        "prior_finding_code": "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002",
+        "corr2_disposition": "DEFER_PILOT_OBJECT",
+        "corr2_finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001",
+        "corr3_final_disposition": "WORKFLOW_ACCEPTED",
+        "corr3_resolution": "EXACT_MEDOID_DISTANCE_OUTLIER_OVERLAP_AND_LONG_PERSISTENCE_CONTEXT_RECONCILED",
+        "meaning": "WORKFLOW_EVIDENCE_ACCEPTED_ONLY_NOT_CANDIDATE_OR_MARKET_SEMANTIC_APPROVAL"
+      }
+    ],
+    "remaining_deferred_object_count": 0,
+    "second_machine_replay_performed": false,
+    "verdict": "CONDITIONAL_PASS_REVIEW_WORKFLOW_AFTER_CORRECTIONS"
+  },
+  "what_went_wrong": [
+    {
+      "code": "JUNE-REVIEW-001",
+      "finding": "The original review path allowed generic free text and did not require disposition-specific codes, reproduction steps, expected behavior, acceptance criteria or exact evidence references.",
+      "impact": "Operator decisions were not sufficiently reproducible or diagnosable."
+    },
+    {
+      "code": "JUNE-REVIEW-002",
+      "finding": "The Candidate Detail panel did not initially expose exact queue, fingerprint, source-lineage and structural-comparison context needed to decide two deferred objects.",
+      "impact": "The operator could not distinguish a market-description problem from a presentation or missing-context problem."
+    },
+    {
+      "code": "JUNE-REVIEW-003",
+      "finding": "One deferred object was ultimately rejected for chronology inconsistency.",
+      "impact": "At least one selected object was not internally coherent enough to support a reliable market description."
+    },
+    {
+      "code": "JUNE-REVIEW-004",
+      "finding": "One object required a third review pass exposing medoid identity, component distance, outlier threshold, overlap status and LONG_PERSISTENCE derivation before workflow acceptance.",
+      "impact": "The underlying structural record was reproducible, but the initial description and panel were not self-explanatory."
+    },
+    {
+      "code": "JUNE-REVIEW-005",
+      "finding": "Only six queue-promoted objects were reviewed while 202 candidates were suppressed.",
+      "impact": "The reviewed set is too small and selection-biased for a population-level consistency claim."
+    },
+    {
+      "code": "JUNE-REVIEW-006",
+      "finding": "The June source is explicitly GAPPED and no claim-level benchmark against exact price paths was produced.",
+      "impact": "External market-description validity remains unmeasured."
+    }
+  ],
+  "reliability_dimensions": {
+    "computational_reproducibility": {
+      "verdict": "PASS",
+      "basis": "Byte-identical deterministic rerun for the exact governed input and frozen code/rule identities."
+    },
+    "lineage_and_evidence_integrity": {
+      "verdict": "PASS",
+      "basis": "Exact SHA-256 links and Ed25519 SSHSIG verification passed for the corrective evidence chain."
+    },
+    "review_workflow_reliability": {
+      "verdict": "CONDITIONAL_PASS_AFTER_CORRECTIONS",
+      "basis": "Structured v2, CORR2 and CORR3 corrections closed missing-field and missing-context defects without another machine replay."
+    },
+    "internal_structural_consistency": {
+      "verdict": "MIXED_THEN_RESOLVED_FOR_REVIEWED_CHAIN",
+      "basis": "One chronology-inconsistent object was rejected; one object became internally reconcilable only after exact structural comparison was exposed."
+    },
+    "external_market_description_validity": {
+      "verdict": "NOT_ESTABLISHED",
+      "basis": "No immutable claim-to-price truth matrix, contradiction audit or exact candidate-window benchmark is present in the repository packet."
+    },
+    "population_level_consistency": {
+      "verdict": "NOT_ESTABLISHED",
+      "basis": "Six promoted objects and zero stratified suppressed-object reviews cannot establish consistency across the 208-candidate population."
+    }
+  },
+  "overall_answer": {
+    "question": "Does the system consistently and reliably describe the market?",
+    "verdict": "NOT_ESTABLISHED",
+    "statement": "The system is deterministic, source-bound and capable of producing internally inspectable structural evidence. The June review does not prove that it consistently and reliably describes the market. It proves machine reproducibility and, after corrections, a workable review process. External descriptive accuracy and population consistency remain unevaluated."
+  },
+  "improvement_priorities": [
+    "Present a claim-level What-the-system-says versus What-price-did table for every candidate.",
+    "Bind every factual claim to exact C1, C2, trigger, price-window and cutoff evidence.",
+    "Fail closed on chronology conflicts and explicitly separate pre-trigger persistence from post-trigger candidate duration.",
+    "Show assigned medoid, component distance, total distance, outlier threshold, duplicate and overlap status by default.",
+    "Expose material contradictory or weakening facts rather than only supporting facts.",
+    "Review all promoted objects plus a stratified sample of suppressed candidates and negative controls.",
+    "Repeat blinded reviews to measure operator agreement and review stability.",
+    "Keep workflow acceptance separate from candidate, family, semantic or market-validity approval."
+  ],
+  "missing_evidence_for_claim_level_assurance": [
+    {
+      "path": "review/console-bundle.json",
+      "expected_sha256": "bfe5e3aa99b1c14166a57235e0da3a466f200f1ddd56a4654e7345c70c5cc98c"
+    },
+    {
+      "path": "review/queue-items.jsonl",
+      "expected_sha256": "f00e4bc5b725d51f7a24ce7126c33bd98362b274e7a430eb9f3c8e32669d88f7"
+    },
+    {
+      "path": "derived/candidates.jsonl",
+      "expected_sha256": "2a2c2fe2afa28c3f1c0311eef054359b3198c829ee2b0679aa1331ee50044664"
+    },
+    {
+      "path": "derived/fingerprints.jsonl",
+      "expected_sha256": "86c098d5d724cfe640baf9c5403dacc91ca702999ad0c1e40f8ef3125b3b0cf9"
+    },
+    {
+      "path": "derived/trigger-events.jsonl",
+      "expected_sha256": "727ee8e273725366f4345715d2993f9d23d19da2aa8c4925528b17d6f377d0c1"
+    },
+    {
+      "path": "derived/cluster-versions.jsonl",
+      "expected_sha256": "ea70287833897597f498414f1647b09866ce9fabe9155a8c665f01eb16072e1c"
+    },
+    {
+      "path": "exact_source_price_windows",
+      "expected_binding": "RPS.BINDING.32fb3003efa072916c11e907"
+    }
+  ],
+  "next_packet": {
+    "packet_id": "PD-JUNE-MDR-WP1",
+    "status": "BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED",
+    "scope": "READ_ONLY_CLAIM_LEVEL_MARKET_DESCRIPTION_VALIDATION_ONLY",
+    "canonical_2021_2023_discovery": "DENIED",
+    "second_replay": "DENIED"
+  },
+  "authority": {
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "provider_intake": "DENIED",
+    "machine_replay": "DENIED",
+    "trigger_or_model_change": "NONE",
+    "semantic_or_candidate_promotion": "NONE",
+    "selector_or_release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  }
+}
