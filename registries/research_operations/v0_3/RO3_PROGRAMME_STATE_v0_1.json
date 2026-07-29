@@ -68,26 +68,26 @@
       "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_DELEGATED_DECISION.md",
       "merge_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
       "blockers": [],
-      "resolved_blocker": {
-        "blocker_id": "RO3-G3-BLOCK-001",
-        "status": "CLOSED_BY_CORRECTIVE_PROGRAMME_AND_PASSING_RETEST"
-      },
+      "resolved_blocker": {"blocker_id": "RO3-G3-BLOCK-001", "status": "CLOSED_BY_CORRECTIVE_PROGRAMME_AND_PASSING_RETEST"},
       "next_packet": "RO3-WP4"
     },
     {
       "packet_id": "RO3-WP4",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["RO3-G3_COMPLETED"],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS",
       "baseline_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
       "branch": "build/research-operations-v0-3-wp4-c1-lineage-adapters",
       "candidate_commit": "05f7f99076cb848de2a8ea717937868d105ec13e",
+      "final_head": "6530d4bcb68b0f5546e510de4a20add73b697413",
+      "pull_request": 150,
       "tests": ["12 focused lineage and adapter tests PASS", "exact adapter evidence PASS", "70 repository tests PASS", "authority assertions PASS"],
       "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_GATE_PACKET.json",
       "evidence_record": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_ADAPTER_EVIDENCE.json",
       "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_DELEGATED_DECISION.md",
-      "merge_commit": null,
+      "merge_receipt": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_MERGE_RECEIPT.json",
+      "merge_commit": "80adf5cfb111a8b07788276c9867ff4fee32fb09",
       "blockers": [],
       "next_packet": "RC-G4"
     },
@@ -97,10 +97,14 @@
       "prerequisites": ["RO3-G4_MERGED_AND_MERGE_SHA_RECORDED"],
       "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
       "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
+      "baseline_commit": "80adf5cfb111a8b07788276c9867ff4fee32fb09",
+      "branch": "gate/rc-g4-c1-live-consumption",
       "live_route_current_state": "DISABLED_PENDING_RC_G4",
-      "operator_gate_packet": null,
+      "operator_gate_packet": "docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json",
+      "recommended_decision": "PASS",
+      "operator_approval_required": true,
       "blockers": [],
-      "next_packet": null
+      "next_packet": "RC-G4-ACTIVATION_AFTER_OPERATOR_PASS"
     }
   ]
 }
