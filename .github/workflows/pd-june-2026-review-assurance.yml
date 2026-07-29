@@ -45,7 +45,10 @@ jobs:
           assert assessment['operator_boundary']['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_REQUESTED'
           assert assessment['operator_boundary']['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           assert assessment['next_packet']['status'] == 'BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED'
-          assert state['status'] == 'BLOCKED'
+          assert state['status'] == 'GATE_READY'
+          assert state['packet_id'] == 'PD-JUNE-MDR-WP1'
+          assert state['next_gate'] == 'PD-JUNE-MDR-G1'
+          assert state['next_packet_on_defer'] == 'PD-JUNE-MDR-CORR1'
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
           assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           authority = assessment['authority']
