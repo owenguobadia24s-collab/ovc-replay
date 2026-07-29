@@ -7,6 +7,7 @@ from typing import Any, Sequence
 from ovc.research_operations.prospective_source import operator_replay_acceptance as replay
 
 from . import pilot_discovery as pilot
+from .market_description_assurance import ChronologySafeCandidateWindowManager
 
 CORRECTIVE_AUTHORITY_GATE = "C1C-G5"
 CORRECTIVE_NEXT_GATE = "C1C-G5-CORRECTIVE-PILOT-REVIEW"
@@ -190,6 +191,7 @@ def load_corrective_authority(repository_root: Path) -> dict[str, Any]:
 def configure() -> None:
     apply_corrective_identity()
     pilot.load_governed_authority = load_corrective_authority
+    pilot.CandidateWindowManager = ChronologySafeCandidateWindowManager
 
 
 def main(argv: Sequence[str] | None = None) -> int:
