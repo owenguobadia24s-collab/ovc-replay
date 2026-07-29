@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-ro3-g4-merge-receipt/v1",
+  "receipt_id": "RO3-G4-MERGE-2026-07-29",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "packet_id": "RO3-WP4",
+  "gate_id": "RO3-G4",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION",
+  "pull_request": 150,
+  "baseline_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
+  "tested_candidate_commit": "05f7f99076cb848de2a8ea717937868d105ec13e",
+  "final_head": "6530d4bcb68b0f5546e510de4a20add73b697413",
+  "merge_commit": "80adf5cfb111a8b07788276c9867ff4fee32fb09",
+  "merge_method": "SQUASH",
+  "merged_on": "2026-07-29",
+  "tests": [
+    {
+      "workflow_run": 30422180532,
+      "job": 90481077202,
+      "result": "PASS",
+      "scope": "12 focused tests, exact adapter evidence, 70-test repository suite and authority assertions"
+    },
+    {
+      "workflow_run": 30422180586,
+      "job": 90481077386,
+      "result": "PASS",
+      "scope": "generic complete repository suite"
+    }
+  ],
+  "qa_result": "PASS",
+  "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS",
+  "next_gate": "RC-G4",
+  "next_authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
+  "live_route_state": "DISABLED_PENDING_RC_G4",
+  "rollback": "Revert only the RO3-WP4 squash merge and this receipt through new non-destructive commits. Preserve all source releases, selectors, evidence, contracts and prior gate records."
+}
