@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 BASE = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-mdr-corr1"
 ASSESSMENT = BASE / "PD_JUNE_MDR_CORR1_OPERATOR_UPLOAD_ASSESSMENT.json"
 GAPS = BASE / "PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json"
+REPRO = BASE / "PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 
 
@@ -17,9 +18,10 @@ class PDJuneMDRCorr1OperatorUploadAssessmentTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.assessment = json.loads(ASSESSMENT.read_text(encoding="utf-8"))
         cls.gaps = json.loads(GAPS.read_text(encoding="utf-8"))
+        cls.repro = json.loads(REPRO.read_text(encoding="utf-8"))
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
 
-    def test_available_manifest_members_are_exactly_hash_verified(self) -> None:
+    def test_initial_available_manifest_members_remain_exactly_recorded(self) -> None:
         upload = self.assessment["operator_upload"]
         self.assertEqual(upload["manifest_file_count"], 21)
         self.assertEqual(upload["manifest_members_available_and_hash_verified"], 14)
@@ -40,7 +42,7 @@ class PDJuneMDRCorr1OperatorUploadAssessmentTests(unittest.TestCase):
             "FAIL_SUPPLIED_C1_CORPUS_IS_PRE_CORRECTIVE_DEFECTIVE_HELPER_OUTPUT",
         )
 
-    def test_release_identity_does_not_match_corrective_pilot(self) -> None:
+    def test_historical_release_identity_mismatch_remains_preserved(self) -> None:
         lineage = self.assessment["lineage_assessment"]
         self.assertEqual(lineage["supplied_c2_release_id"], "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1")
         self.assertEqual(lineage["reviewed_pilot_release_id"], "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2")
@@ -49,7 +51,7 @@ class PDJuneMDRCorr1OperatorUploadAssessmentTests(unittest.TestCase):
             "FAIL_SUPPLIED_RPS_WP3_V1_OUTPUT_IS_NOT_THE_CORRECTIVE_C1C_G5_V2_PILOT_EVIDENCE",
         )
 
-    def test_pretrigger_blocker_remains_for_entirely_15m_sample(self) -> None:
+    def test_initial_pretrigger_gap_is_preserved_as_historical_evidence(self) -> None:
         sample = self.assessment["review_sample_relevance"]
         self.assertEqual(sample["reviewed_unit_count"], 26)
         self.assertEqual(sample["reviewed_clock"], "15M_ONLY")
@@ -57,21 +59,20 @@ class PDJuneMDRCorr1OperatorUploadAssessmentTests(unittest.TestCase):
         self.assertEqual(sample["history_dependent_ask_count"], 6)
         self.assertEqual(sample["history_dependent_bid_count"], 5)
         self.assertEqual(sample["supplied_2h_transition_relevance"], "NONE_TO_THE_26_UNIT_CLAIM_REVIEW_SAMPLE")
-
-    def test_gap_and_programme_state_fail_closed(self) -> None:
         self.assertEqual(self.assessment["overall_verdict"], "NOT_ESTABLISHED_BLOCKER_REMAINS")
-        self.assertEqual(self.gaps["status"], "BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED")
-        self.assertEqual(
-            {item["code"] for item in self.gaps["open_blockers"]},
-            {"PD-JUNE-MDR-003", "PD-JUNE-MDR-004", "PD-JUNE-MDR-006"},
-        )
-        self.assertEqual(self.state["status"], "BLOCKED")
+
+    def test_later_exact_drive_evidence_lawfully_advances_the_programme(self) -> None:
+        self.assertEqual(self.gaps["status"], "GATE_READY_CONTROL_AND_AGREEMENT_EVIDENCE_REQUIRED")
+        self.assertEqual({item["code"] for item in self.gaps["open_blockers"]}, {"PD-JUNE-MDR-006"})
+        self.assertEqual(self.repro["population_state_reproduction"]["exact_core_match_count"], 1144)
+        self.assertEqual(self.repro["review_claim_evidence"]["history_dependent_exact_reproduction_count"], 11)
+        self.assertEqual(self.state["status"], "GATE_READY")
         self.assertEqual(self.state["operator_upload_c1_records"], 602)
         self.assertEqual(
             self.state["operator_upload_wick_balance_assurance"],
-            "FAIL_589_OF_602_OPPOSITE_SIGN_13_ZERO_MATCHES",
+            "FAIL_589_OF_602_OPPOSITE_SIGN_13_ZERO_MATCHES_PRESERVED_AS_EVIDENCE",
         )
-        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1_RETURN_NOT_READY")
+        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1")
         self.assertEqual(self.state["second_june_replay"], "DENIED_NOT_REQUIRED")
 
 
