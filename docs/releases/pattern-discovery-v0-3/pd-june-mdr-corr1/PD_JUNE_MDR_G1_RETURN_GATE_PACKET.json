@@ -35,6 +35,9 @@
     "semantic_promotion": "NONE",
     "validation_consumption": "LOCKED_UNCONSUMED"
   },
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json",
   "decision_effects": {
     "BLOCK": "Stop the programme with all evidence and PR state preserved.",
     "DEFER": "Authorise only a bounded read-only negative-control and repeat-review assurance packet, preserving the immutable June population and returning to PD-JUNE-MDR-G1.",
@@ -56,11 +59,11 @@
     {"code":"PD-JUNE-MDR-003","status":"RESOLVED"},
     {"code":"PD-JUNE-MDR-004","status":"RESOLVED"},
     {"code":"PD-JUNE-MDR-005","status":"RESOLVED"},
-    {"code":"PD-JUNE-MDR-006","status":"OPEN_OPERATOR_AUTHORITY_REQUIRED"}
+    {"code":"PD-JUNE-MDR-006","status":"APPROVED_FOR_BOUNDED_CORR2_ASSURANCE"}
   ],
   "gate_id": "PD-JUNE-MDR-G1",
-  "gate_status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
-  "operator_approval_required": true,
+  "gate_status": "APPROVED_DEFER_CORR2_AUTHORISED",
+  "operator_approval_required": false,
   "overall_answer": {
     "bounded_supported_claim": "DETERMINISTIC_STRUCTURAL_DESCRIPTION_CORRECTNESS_ESTABLISHED_FOR_EXACT_JUNE_GAPPED_SLICE",
     "statement": "The June evidence now proves that the frozen system deterministically and consistently derives its declared structural descriptions from exact market inputs: 1,144 of 1,144 C2 states and 26 of 26 reviewed trigger claims reproduce exactly. It does not yet establish reliability against false positives or repeat-review disagreement because the immutable June population contains no negative controls and no repeat-review study.",
@@ -72,11 +75,11 @@
   "plan_version": "0.1",
   "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
   "proposed_defer_delta": {
-    "authority": "OPERATOR_REQUIRED",
+    "authority": "OPERATOR_APPROVED_BOUNDED_READ_ONLY",
     "next_packet": "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE",
     "not_authorised": [
       "Provider intake or another market replay",
-      "Canonical 2021–2023 Discovery processing or append",
+      "Canonical 2021-2023 Discovery processing or append",
       "Formula, semantic, trigger, candidate, distance, cluster, threshold or model changes",
       "Candidate or family promotion",
       "Selector or release mutation",
