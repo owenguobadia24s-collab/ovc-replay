@@ -2,7 +2,7 @@
   "schema": "ovc-programme-state/v1",
   "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "v0.2",
-  "programme_status": "RUNNING",
+  "programme_status": "OPERATOR_GATE_PENDING",
   "packets": [
     {
       "packet_id": "RO3-00",
@@ -29,13 +29,7 @@
       "baseline_commit": "4d701ad78af8597e182565eb301739501b51dff6",
       "branch": "build/research-operations-v0-3-wp1-c1-index",
       "candidate_commit": "d8f2d20dbd8dda2a553d247111e28464ce7f1fb8",
-      "tests": [
-        "5 focused C1 index tests PASS",
-        "full-corpus benchmark PASS: 212764 records / 192 files / 22.855605 seconds",
-        "identical rerun PASS",
-        "70 canonical repository tests PASS",
-        "write and activation denials PASS"
-      ],
+      "tests": ["5 focused C1 index tests PASS", "full-corpus benchmark PASS", "identical rerun PASS", "70 canonical repository tests PASS", "write and activation denials PASS"],
       "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json",
       "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_DELEGATED_DECISION.md",
       "merge_commit": "928f5c00bd76ddd9348c8721f4430a1b105d45f1",
@@ -52,12 +46,7 @@
       "reconciled_main_commit": "c46d9620e242c047dd8e203f91a1b00b542a2a81",
       "branch": "build/research-operations-v0-3-wp2-computability-diff",
       "candidate_commit": "2ce09241806021f3dfe67289080438d0a24d71b5",
-      "tests": [
-        "19 focused computability, formula-diff and comparison-authority tests PASS",
-        "70 canonical repository tests PASS in 0.851 seconds",
-        "pull-request merge-ref base-change reconciliation PASS",
-        "comparison, Validation, write and presentation denials PASS"
-      ],
+      "tests": ["19 focused tests PASS", "70 canonical repository tests PASS", "base-change reconciliation PASS", "authority denials PASS"],
       "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_GATE_PACKET.json",
       "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_DELEGATED_DECISION.md",
       "merge_commit": "8c243c009f30e453312861708afb784fe762c442",
@@ -66,55 +55,51 @@
     },
     {
       "packet_id": "RO3-WP3",
-      "status": "APPROVED",
-      "prerequisites": [
-        "RO3-G2_MERGED",
-        "C1C-G5-CORRECTIVE-PILOT-REVIEW_OPERATOR_PASS",
-        "C1C-G5-BLOCK-004_CLOSED"
-      ],
+      "status": "COMPLETED",
+      "prerequisites": ["RO3-G2_MERGED", "C1C-G5-CORRECTIVE-PILOT-REVIEW_OPERATOR_PASS", "C1C-G5-BLOCK-004_CLOSED"],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "QA_EVIDENCE_ONLY",
       "baseline_commit": "38603eb9e52860074bb5ca95f8f016f4236965ed",
       "branch": "retest/research-operations-v0-3-wp3-formula-assurance",
       "candidate_commit": "cbbb45a70c058c46271195037b06cefa2b9b10fe",
-      "tests": [
-        "79 of 79 metamorphic assertions PASS",
-        "18 of 18 independent golden assertions PASS",
-        "exact corrected C1 wick-balance assertion PASS",
-        "same-input canonical byte determinism PASS",
-        "canonical input reorder PASS",
-        "deliberately corrupted negative control detected and BLOCKED",
-        "focused workflow 30420805433 job 90477014172 PASS",
-        "generic complete repository workflow 30420805438 job 90477014267 PASS: 70 tests"
-      ],
+      "tests": ["79 of 79 metamorphic assertions PASS", "18 of 18 golden assertions PASS", "determinism PASS", "negative control detected", "70 tests PASS"],
       "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_GATE_PACKET.json",
       "evidence_record": "docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_ASSURANCE_EVIDENCE.json",
       "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_DELEGATED_DECISION.md",
-      "merge_commit": null,
+      "merge_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
       "blockers": [],
       "resolved_blocker": {
         "blocker_id": "RO3-G3-BLOCK-001",
-        "status": "CLOSED_BY_CORRECTIVE_PROGRAMME_AND_PASSING_RETEST",
-        "corrective_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
-        "corrective_decision_merge_commit": "1d4065b7a4fa9a7c6d832528309a5b4f56fd2991",
-        "corrective_state_merge_commit": "38603eb9e52860074bb5ca95f8f016f4236965ed"
+        "status": "CLOSED_BY_CORRECTIVE_PROGRAMME_AND_PASSING_RETEST"
       },
       "next_packet": "RO3-WP4"
     },
     {
       "packet_id": "RO3-WP4",
-      "status": "READY",
-      "prerequisites": ["RO3-G3"],
+      "status": "APPROVED",
+      "prerequisites": ["RO3-G3_COMPLETED"],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS",
+      "baseline_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
+      "branch": "build/research-operations-v0-3-wp4-c1-lineage-adapters",
+      "candidate_commit": "05f7f99076cb848de2a8ea717937868d105ec13e",
+      "tests": ["12 focused lineage and adapter tests PASS", "exact adapter evidence PASS", "70 repository tests PASS", "authority assertions PASS"],
+      "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_GATE_PACKET.json",
+      "evidence_record": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_ADAPTER_EVIDENCE.json",
+      "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_DELEGATED_DECISION.md",
+      "merge_commit": null,
+      "blockers": [],
       "next_packet": "RC-G4"
     },
     {
       "packet_id": "RC-G4",
-      "status": "PLANNED",
-      "prerequisites": ["RO3-G4"],
+      "status": "GATE_READY",
+      "prerequisites": ["RO3-G4_MERGED_AND_MERGE_SHA_RECORDED"],
       "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
       "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
+      "live_route_current_state": "DISABLED_PENDING_RC_G4",
+      "operator_gate_packet": null,
+      "blockers": [],
       "next_packet": null
     }
   ]
