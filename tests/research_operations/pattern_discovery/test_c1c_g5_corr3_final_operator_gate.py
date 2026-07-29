@@ -117,7 +117,7 @@ class C1cG5Corr3FinalGateTests(unittest.TestCase):
         }
         verify_signature(inventory, inventory_body)
 
-    def test_pass_recommendation_and_operator_boundary(self) -> None:
+    def test_operator_pass_and_retained_authority_boundary(self) -> None:
         receipt = self.docs["c1c-g5-corr3-review-receipt.json"]
         ledger = self.docs["c1c-g5-corr3-closure-ledger.json"]
         gate = self.docs["c1c-g5-corrective-pilot-review-final-gate-input.json"]
@@ -130,12 +130,25 @@ class C1cG5Corr3FinalGateTests(unittest.TestCase):
         self.assertEqual(gate["canonical_append"], "DENIED")
         self.assertEqual(gate["validation_consumption"], "LOCKED_UNCONSUMED")
         self.assertEqual(self.packet["recommended_decision"], "PASS")
-        self.assertTrue(self.packet["operator_approval_required"])
-        self.assertEqual(self.packet["programme_state"]["authority_required"], "OPERATOR")
+        self.assertEqual(self.packet["status"], "APPROVED")
+        self.assertEqual(self.packet["gate_status"], "APPROVED")
+        self.assertFalse(self.packet["operator_approval_required"])
+        decision = self.packet["operator_decision"]
+        self.assertEqual(decision["decision"], "PASS")
+        self.assertEqual(decision["decision_authority"], "OPERATOR")
         self.assertEqual(
-            self.packet["programme_state"]["authority_delta"],
-            "NONE_UNTIL_OPERATOR_DECISION",
+            decision["operator_command"],
+            "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW PASS",
         )
+        self.assertEqual(decision["candidate_or_family_promotion"], "NOT_AUTHORISED")
+        state = self.packet["programme_state"]
+        self.assertEqual(state["authority_required"], "OPERATOR_PASS_RECORDED")
+        self.assertEqual(
+            state["authority_delta"],
+            "NONACTIVATING_CORRECTIVE_PILOT_REVIEW_ACCEPTANCE_ONLY",
+        )
+        self.assertEqual(state["resolved_blocker"]["status"], "CLOSED_BY_OPERATOR_PASS")
+        self.assertEqual(state["next_packet"], "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME")
         retained = self.packet["current_authority"]
         self.assertEqual(retained["canonical_discovery_processing"], "DENIED")
         self.assertEqual(retained["canonical_append"], "DENIED")
