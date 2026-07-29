@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_determinism_receipt_v0_1",
+  "title": "C1DeterminismReceipt v0.1",
+  "type": "object",
+  "required": [
+    "schema", "base_sha256", "rerun_sha256",
+    "same_input_same_output_bytes", "canonical_reorder_identical",
+    "writes", "receipt_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-determinism-receipt/v1"},
+    "base_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "rerun_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "same_input_same_output_bytes": {"type": "boolean"},
+    "canonical_reorder_identical": {"type": "boolean"},
+    "writes": {"const": "NONE"},
+    "receipt_id": {"type": "string", "pattern": "^ro3-c1-determinism:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
