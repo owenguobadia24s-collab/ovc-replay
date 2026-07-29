@@ -1,0 +1,209 @@
+{
+  "schema": "ovc-research-console-rc-g4-c1-consumption-operator-gate-packet/v1",
+  "gate_id": "RC-G4",
+  "title": "Research Console v0.3 — Live Local Read-Only C1 Presentation",
+  "owner": "OPERATOR",
+  "classification": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "baseline_main_commit": "80adf5cfb111a8b07788276c9867ff4fee32fb09",
+  "candidate_branch": "gate/rc-g4-c1-live-consumption",
+  "ro3_g4": {
+    "packet_id": "RO3-WP4",
+    "gate_id": "RO3-G4",
+    "pull_request": 150,
+    "baseline_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
+    "tested_candidate_commit": "05f7f99076cb848de2a8ea717937868d105ec13e",
+    "final_head": "6530d4bcb68b0f5546e510de4a20add73b697413",
+    "merge_commit": "80adf5cfb111a8b07788276c9867ff4fee32fb09",
+    "decision": "PASS",
+    "decision_authority": "DELEGATED_AUTO_RATIFICATION",
+    "qa_result": "PASS",
+    "merge_receipt": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_MERGE_RECEIPT.json"
+  },
+  "current_authority": {
+    "research_console_ro2_surface": "ACCEPTED_LOCAL_READ_ONLY",
+    "c1_projection_capability": "IMPLEMENTED_DISABLED",
+    "c1_live_route": "DISABLED_PENDING_RC_G4",
+    "c1_formulas_releases_selectors": "IMMUTABLE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2_pattern_discovery_authority": "UNCHANGED",
+    "r2_publication": "DENIED",
+    "research_write_authority": "DENIED_PENDING_SEPARATE_GATE",
+    "repository_mutation": "NONE",
+    "market": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "proposed_authority_delta": {
+    "delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
+    "permits": [
+      "Research Console v0.3 may consume exact accepted RO3-G4 projection objects locally.",
+      "The operator may inspect C1 facts, computability, assurance and upstream lineage in distinct read-only panels.",
+      "The operator may inspect identity-only downstream C2 and Pattern Discovery references in a separate bannered panel.",
+      "Discovery and Development C1 source roles may be presented only under the accepted exact release, manifest, schema and lineage bindings.",
+      "Validation metadata may remain visible only as LOCKED_UNCONSUMED; Validation C1 records, paths and content remain inaccessible."
+    ],
+    "does_not_permit": [
+      "Research note or append-only write authority beyond already accepted Research Operations v0.1 services",
+      "Formula, release, selector or threshold mutation",
+      "C1, C2 or Pattern Discovery recomputation, tuning, remediation, scoring or promotion",
+      "Validation consumption",
+      "R2 publication or canonical mutation",
+      "Semantic, model, family, candidate or theory promotion",
+      "Probability, risk, exposure, trading, execution or agent-write authority",
+      "Remote deployment"
+    ]
+  },
+  "approved_projection_schemas": [
+    {
+      "object_id": "RO3.C1LineageTrace.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/c1_lineage_trace_v0_1",
+      "path": "schemas/research_operations/v0_3/c1_lineage_trace_v0_1.schema.json",
+      "git_blob_sha": "f7ddd3535ca58bcef6ef620bfd6152340f7461e3"
+    },
+    {
+      "object_id": "RO3.C1FormulaEvidenceCard.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1",
+      "path": "schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1.schema.json",
+      "git_blob_sha": "a32ddfaa4d27f06ce33d47f4581569b6fdc1dae9"
+    },
+    {
+      "object_id": "RO3.DownstreamTraceProjection.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/downstream_trace_projection_v0_1",
+      "path": "schemas/research_operations/v0_3/downstream_trace_projection_v0_1.schema.json",
+      "git_blob_sha": "908c5323d3f7b5c55b6ad6becc1fd9a31f12331b"
+    },
+    {
+      "object_id": "RO3.C1ConsoleProjection.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/c1_console_projection_v0_1",
+      "path": "schemas/research_operations/v0_3/c1_console_projection_v0_1.schema.json",
+      "git_blob_sha": "cffb5618e942019f4dc7a0e580d4813c1537247e"
+    }
+  ],
+  "registry_and_fixture_bindings": {
+    "projection_registry": {
+      "registry_id": "RO3.WP4.PROJECTIONS.v0.1",
+      "path": "registries/research_operations/v0_3/RO3_WP4_PROJECTION_SCHEMA_REGISTRY_v0_1.yaml",
+      "git_blob_sha": "c977a43ec6f5ab2271c46bcdbf0ee43c13e9a3b5"
+    },
+    "fixture": {
+      "schema": "ovc-ro3-wp4-c1-lineage-projection-fixture/v1",
+      "path": "fixtures/research_operations/v0_3/wp4_c1_lineage_projection_fixture.json",
+      "git_blob_sha": "4b22ff00a0acd547a1eae146a4ec78dc4c7967cf",
+      "source_binding": {
+        "role": "DISCOVERY",
+        "c1_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+        "c1_manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
+        "opt_a_release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "formula_registry_id": "C1.FORMULAS.v0.1",
+        "formula_registry_logical_sha256": "171813797f16b25688f9a1c583e1925993da210be9b127d621b74f3149140804",
+        "clock": "15M",
+        "side": "BID"
+      },
+      "fixture_classification": "SYNTHETIC_NON_AUTHORITATIVE_SOURCE_BOUND_PRESENTATION_FIXTURE"
+    }
+  },
+  "route_and_capability_delta": {
+    "current": {
+      "route_id": "RESEARCH.C1_FACT_ASSURANCE",
+      "route_state": "DISABLED_PENDING_RC_G4",
+      "route_enabled": false,
+      "live_consumption_authority": "NONE_PENDING_RC_G4"
+    },
+    "proposed_after_pass": {
+      "route_id": "RESEARCH.C1_FACT_ASSURANCE",
+      "route_state": "ENABLED_LOCAL_READ_ONLY",
+      "route_enabled": true,
+      "live_consumption_authority": "LOCAL_READ_ONLY_C1_PRESENTATION",
+      "deployment": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
+    },
+    "permanent_panel_separation": {
+      "fact_panel": "RO3-C1-FACT-INSPECTOR",
+      "upstream_lineage_panel": "RO3-C1-UPSTREAM-LINEAGE",
+      "downstream_trace_panel": "RO3-C1-DOWNSTREAM-TRACE",
+      "mixed_compact_object": "DENIED",
+      "c1_null_reason_and_c2_transition_compact_corender": "DENIED"
+    }
+  },
+  "presentation_evidence": {
+    "repository_summary": "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_ADAPTER_EVIDENCE.json",
+    "workflow_artifact_id": 8712249496,
+    "workflow_artifact_digest": "sha256:44e4a533c153454c79009e2c8be196d6d9b543dcb869c5ac85cc5e8b63f86c05",
+    "full_evidence_payload_sha256": "a08b8ec0d3cb848076d8fdad884ac9f763a1b34beae123272290c396ccfb5c84",
+    "projection_id": "RO3-C1-CONSOLE-4fdbf83fc05afe620edb",
+    "lineage_trace_id": "RO3-C1-LINEAGE-9f0a58d22af57a8aeb40",
+    "permanent_downstream_banner": "DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED."
+  },
+  "acceptance_and_test_evidence": [
+    {"condition": "Source-bound lineage complete and deterministic", "result": "PASS"},
+    {"condition": "No-write projection enforcement", "result": "PASS"},
+    {"condition": "Validation denied before path, object or record resolution", "result": "PASS"},
+    {"condition": "Stale projection visible and route disabled", "result": "PASS"},
+    {"condition": "Missing downstream trace explicitly TRACE_NOT_AVAILABLE", "result": "PASS"},
+    {"condition": "C1 null reason and C2 transition compact co-render rejected", "result": "PASS"},
+    {"condition": "Downstream scoring, severity, confidence, tuning and remediation language rejected", "result": "PASS"},
+    {"condition": "Pre-RC-G4 route activation rejected", "result": "PASS"},
+    {"condition": "Permanent downstream authority banner exact", "result": "PASS"},
+    {"condition": "12 focused tests", "result": "PASS", "workflow_run": 30422180532, "job": 90481077202},
+    {"condition": "70-test complete repository suite", "result": "PASS", "workflow_run": 30422180586, "job": 90481077386}
+  ],
+  "changed_files_in_ro3_wp4": [
+    ".github/workflows/research-operations-v0-3-ro3-g4.yml",
+    "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_ADAPTER_EVIDENCE.json",
+    "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_DELEGATED_DECISION.md",
+    "docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_GATE_PACKET.json",
+    "fixtures/research_operations/v0_3/wp4_c1_lineage_projection_fixture.json",
+    "registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml",
+    "registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json",
+    "registries/research_operations/v0_3/RO3_WP4_PROJECTION_SCHEMA_REGISTRY_v0_1.yaml",
+    "schemas/research_operations/v0_3/c1_console_projection_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1.schema.json",
+    "schemas/research_operations/v0_3/c1_lineage_trace_v0_1.schema.json",
+    "schemas/research_operations/v0_3/downstream_trace_projection_v0_1.schema.json",
+    "scripts/research_operations/run_ro3_g4_adapters.py",
+    "src/ovc/research_operations/v0_3/__init__.py",
+    "src/ovc/research_operations/v0_3/lineage_adapters.py",
+    "tests/research_operations/v0_3/test_lineage_adapters.py"
+  ],
+  "warnings": [
+    "The accepted presentation fixture is synthetic and non-authoritative; it proves projection behaviour, not market correctness or research claims.",
+    "Downstream C2 and Pattern Discovery references are identity-only traces and must never be rendered as defect, priority, confidence, tuning, candidate-quality or remediation signals.",
+    "An operator PASS authorises only a subsequent bounded local activation implementation. It does not itself mutate the route in this gate branch.",
+    "Validation remains LOCKED_UNCONSUMED and inaccessible beyond existing metadata-only status."
+  ],
+  "unresolved_issues": [],
+  "rollback": {
+    "action": "Disable the C1 route and return Research Console v0.3 to the prior accepted RO2/RC-G3 local read-only state.",
+    "preserve": [
+      "RO3 projection objects and schemas",
+      "RO3 QA, evidence and decisions",
+      "C1 releases, formulas and selectors",
+      "C2 and Pattern Discovery authority and evidence",
+      "R2 objects"
+    ],
+    "prohibited": [
+      "Delete or rewrite historical projections or decisions",
+      "Alter C1, C2 or Pattern Discovery outputs",
+      "Consume Validation",
+      "Force-push or rewrite history"
+    ]
+  },
+  "exact_work_after_pass": [
+    "Create a bounded activation branch from the then-current lawful main tip.",
+    "Add a fail-closed local projection source for RESEARCH.C1_FACT_ASSURANCE that accepts only the four approved schema identities and hashes.",
+    "Add the C1 Fact Assurance surface to apps/research_console/Home.py while preserving separate fact, computability, assurance, upstream-lineage and downstream-trace panels.",
+    "Materialise RESEARCH_CONSOLE_RC_G4_ACCEPTANCE_v0_3.yaml with the operator decision and exact activated route state.",
+    "Add focused UI/source tests for no-write, Validation denial, stale projection, panel separation and permanent banner behaviour.",
+    "Run focused and complete repository tests, prepare an activation receipt, squash-merge only if the implementation remains inside the approved delta, and stop on any wider authority request."
+  ],
+  "allowed_operator_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "recommendation_rationale": "RO3-G4 is merged, all required adapter and authority tests pass, QA recommends PASS, the live route remains disabled, no unresolved issue exists, and the proposed delta is strictly local read-only C1 presentation with explicit rollback and retained prohibitions.",
+  "operator_approval_required": true,
+  "status": "GATE_READY"
+}
