@@ -4,21 +4,40 @@
   "plan_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
   "plan_version": "0.1",
   "packet_id": "C1C-G5-CORR3",
-  "status": "READY",
+  "status": "APPROVED",
   "prerequisites": [
     "C1C-G5-CORR2_COMPLETED_IN_MAIN",
     "C1C-G5-CORRECTIVE-PILOT-REVIEW_DEFER_APPROVED_2026-07-29"
   ],
   "authority_required": "OPERATOR_DEFER_RECORDED",
   "authority_delta": "NONACTIVATING_READ_ONLY_STRUCTURAL_COMPARISON_EXPOSURE_ONLY",
-  "baseline_commit": "PENDING_DECISION_PR_MERGE",
-  "branch": null,
-  "candidate_commit": null,
-  "tests": [],
-  "qa_packet": null,
-  "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR2_OPERATOR_DEFER_DECISION.json",
+  "baseline_commit": "41623d07e73b2e0b87824c365f11acca9e51d73d",
+  "branch": "build/c1c-g5-corr3-structural-comparison",
+  "candidate_commit": "9a4fa3f3472d8c09981264c29093d13115a34bcb",
+  "pull_request": 141,
+  "tests": [
+    {
+      "workflow_run": 30415338772,
+      "job": 90460513735,
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30415338842,
+      "job": 90460513953,
+      "result": "PASS"
+    }
+  ],
+  "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_QA_PACKET.json",
+  "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_DELEGATED_DECISION.md",
+  "implementation_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_IMPLEMENTATION_RECEIPT.json",
   "merge_commit": null,
-  "blockers": [],
+  "blockers": [
+    {
+      "blocker_id": "C1C-G5-BLOCK-004",
+      "status": "PENDING_AFTER_IMPLEMENTATION_MERGE",
+      "reason": "CI cannot perform the one-object human disposition or use the operator-private Ed25519 key and operator-local external pilot root."
+    }
+  ],
   "authorised_candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
   "scope": [
     "Read-only medoid or neighbour fingerprint context from preserved pilot artifacts",
@@ -43,6 +62,6 @@
     "Probability, risk, exposure, trading, execution or agent-write authority"
   ],
   "rollback": "Revert CORR3 code, schemas, tests and court records through a new non-destructive commit while preserving the immutable machine run and every signed external artifact.",
-  "next_packet": "C1C-G5-CORR3",
+  "next_packet": "C1C-G5-CORR3-LOCAL-REVIEW",
   "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
 }
