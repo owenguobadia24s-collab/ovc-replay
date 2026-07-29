@@ -3,9 +3,13 @@
   "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
   "packet_id": "RC-WP4-v0.3",
   "gate_id": "RC-G3A",
+  "status": "COMPLETED",
   "baseline_main_commit": "79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5",
   "tested_candidate_commit": "0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4",
+  "gate_ready_head": "631c1f5fbd646bc2a6581b7f87eedf5e9f610736",
+  "final_head_commit": "99782df561ac379cfac4b6e0a8a9fa401eda2dc0",
   "pull_request": 154,
+  "merge_commit": "d7d4d8e0ef4989ce1d9acc0352e20975512a05d5",
   "tests": [
     {"suite": "focused RC-WP4 System projection and activity", "count": 8, "result": "PASS"},
     {"suite": "RC-G3 adapter-consumption regression", "count": 5, "result": "PASS"},
@@ -15,8 +19,12 @@
     {"suite": "exact authority-delta assertions", "count": 1, "result": "PASS"}
   ],
   "workflow_evidence": [
-    {"workflow": "Research Console v0.3 RC-WP4 rebuilt System workspace", "run": 30441768190, "job": 90542516815, "result": "PASS"},
-    {"workflow": "tests", "run": 30441768186, "job": 90542516766, "result": "PASS"}
+    {"phase": "implementation_candidate", "workflow": "Research Console v0.3 RC-WP4 rebuilt System workspace", "run": 30441768190, "job": 90542516815, "result": "PASS"},
+    {"phase": "implementation_candidate", "workflow": "tests", "run": 30441768186, "job": 90542516766, "result": "PASS"},
+    {"phase": "gate_ready_head", "workflow": "Research Console v0.3 RC-WP4 rebuilt System workspace", "run": 30442027817, "job": 90543349957, "result": "PASS"},
+    {"phase": "gate_ready_head", "workflow": "tests", "run": 30442027526, "job": 90543348729, "result": "PASS"},
+    {"phase": "operator_decision_final_head", "workflow": "Research Console v0.3 RC-WP4 rebuilt System workspace", "run": 30442540717, "job": 90545003299, "result": "PASS"},
+    {"phase": "operator_decision_final_head", "workflow": "tests", "run": 30442540473, "job": 90545002680, "result": "PASS"}
   ],
   "acceptance_results": {
     "deterministic_projection": "PASS",
