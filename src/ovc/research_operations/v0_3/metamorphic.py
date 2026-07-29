@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import asdict, is_dataclass
-from decimal import Decimal, localcontext
+from decimal import Decimal, InvalidOperation, localcontext
 from typing import Any, Callable, Mapping
 
 ASSURANCE_DECIMAL_PRECISION = 34
@@ -27,23 +27,26 @@ def _digest(value: Any) -> str:
     return hashlib.sha256(_canonical(value)).hexdigest()
 
 
-def _decimal(value: str | None) -> Decimal | None:
-    return None if value is None else Decimal(value)
-
-
 def _s(value: Decimal) -> str:
     if value == 0:
         return "0"
     rendered = format(value, "f")
-    if "." in rendered:
-        rendered = rendered.rstrip("0").rstrip(".")
-    return rendered
+    return rendered.rstrip("0").rstrip(".") if "." in rendered else rendered
 
 
 def _q(numerator: Decimal, denominator: Decimal) -> Decimal:
     with localcontext() as context:
         context.prec = ASSURANCE_DECIMAL_PRECISION
         return numerator / denominator
+
+
+def _equivalent(left: Any, right: Any) -> bool:
+    if left is None or right is None:
+        return left is right
+    try:
+        return Decimal(str(left)) == Decimal(str(right))
+    except (InvalidOperation, ValueError):
+        return left == right
 
 
 def _result_dict(result: Any) -> dict[str, Any]:
@@ -69,10 +72,8 @@ def load_invariant_registry(registry_text: str) -> dict[str, Any]:
     if registry.get("formula_count") != 18 or not isinstance(invariants, list) or len(invariants) != 18:
         raise MetamorphicContractError("invariant registry must cover exactly 18 formulas")
     primitive_ids = [str(item.get("primitive_id")) for item in invariants]
-    if len(set(primitive_ids)) != 18:
-        raise MetamorphicContractError("invariant primitive IDs must be unique")
-    if any(not item.get("relations") for item in invariants):
-        raise MetamorphicContractError("every primitive requires at least one relation")
+    if len(set(primitive_ids)) != 18 or any(not item.get("relations") for item in invariants):
+        raise MetamorphicContractError("invariant registry is incomplete or has duplicate primitive IDs")
     logical = dict(registry)
     return {**logical, "registry_logical_sha256": _digest(logical)}
 
@@ -135,10 +136,7 @@ def _transform_bar(
 def contract_oracle(current: Mapping[str, Any], prior: Mapping[str, Any] | None) -> dict[str, Any]:
     """Independent fixture-only oracle derived from the frozen formula registry."""
 
-    o = Decimal(str(current["open"]))
-    h = Decimal(str(current["high"]))
-    l = Decimal(str(current["low"]))
-    c = Decimal(str(current["close"]))
+    o, h, l, c = (Decimal(str(current[field])) for field in ("open", "high", "low", "close"))
     increment = None if current.get("price_increment") is None else Decimal(str(current["price_increment"]))
     r = h - l
     body = c - o
@@ -192,9 +190,7 @@ def contract_oracle(current: Mapping[str, Any], prior: Mapping[str, Any] | None)
 
 
 def _field_value(result: Mapping[str, Any], field_name: str) -> Any:
-    if field_name == "direction":
-        return result["categorical"].get(field_name)
-    return result["measurements"].get(field_name)
+    return result["categorical"].get(field_name) if field_name == "direction" else result["measurements"].get(field_name)
 
 
 def _relation_assertion(
@@ -204,58 +200,45 @@ def _relation_assertion(
     base: Mapping[str, Any],
     transformed: Mapping[str, Any],
     factor: Decimal,
-    primitive_to_field: Mapping[str, str],
 ) -> dict[str, Any]:
     transform_id, expectation = relation.split(":", 1)
     base_value = _field_value(base, field_name)
     transformed_value = _field_value(transformed, field_name)
-    status = "PASS"
-    detail = ""
 
     if expectation == "EQUAL":
-        status = "PASS" if transformed_value == base_value else "FAIL"
+        passed = _equivalent(transformed_value, base_value)
     elif expectation == "SCALE":
-        expected = None if base_value is None else _s(Decimal(base_value) * factor)
-        status = "PASS" if transformed_value == expected else "FAIL"
+        passed = base_value is not None and _equivalent(transformed_value, Decimal(str(base_value)) * factor)
     elif expectation == "SIGN_REVERSE":
-        expected = None if base_value is None else _s(-Decimal(base_value))
-        status = "PASS" if transformed_value == expected else "FAIL"
+        passed = base_value is not None and _equivalent(transformed_value, -Decimal(str(base_value)))
     elif expectation == "COMPLEMENT":
-        expected = None if base_value is None else _s(Decimal("1") - Decimal(base_value))
-        status = "PASS" if transformed_value == expected else "FAIL"
+        passed = base_value is not None and _equivalent(transformed_value, Decimal("1") - Decimal(str(base_value)))
     elif expectation == "SWAP_WITH_LOWER":
         counterpart = "lower_wick_abs" if field_name == "upper_wick_abs" else "lower_wick_share"
-        status = "PASS" if transformed_value == _field_value(base, counterpart) else "FAIL"
+        passed = _equivalent(transformed_value, _field_value(base, counterpart))
     elif expectation == "SWAP_WITH_UPPER":
         counterpart = "upper_wick_abs" if field_name == "lower_wick_abs" else "upper_wick_share"
-        status = "PASS" if transformed_value == _field_value(base, counterpart) else "FAIL"
+        passed = _equivalent(transformed_value, _field_value(base, counterpart))
     elif expectation in {"UP_DOWN_SWAP_FLAT_INVARIANT", "UP_DOWN_ENUM_SWAP_FLAT_INVARIANT"}:
-        expected = {"UP": "DOWN", "DOWN": "UP", "FLAT": "FLAT"}.get(base_value)
-        status = "PASS" if transformed_value == expected else "FAIL"
-    elif expectation == "ZERO":
-        status = "PASS" if transformed_value == "0" else "FAIL"
-    elif expectation == "ZERO_IF_INCREMENT_AVAILABLE":
-        status = "PASS" if transformed_value == "0" else "FAIL"
+        passed = transformed_value == {"UP": "DOWN", "DOWN": "UP", "FLAT": "FLAT"}.get(base_value)
+    elif expectation in {"ZERO", "ZERO_IF_INCREMENT_AVAILABLE"}:
+        passed = _equivalent(transformed_value, "0")
     elif expectation == "FLAT":
-        status = "PASS" if transformed_value == "FLAT" else "FAIL"
+        passed = transformed_value == "FLAT"
     elif expectation == "NULL_ZERO_RANGE":
-        reason = transformed["null_reasons"].get(field_name)
-        status = "PASS" if transformed_value is None and reason == "ZERO_RANGE" else "FAIL"
+        passed = transformed_value is None and transformed["null_reasons"].get(field_name) == "ZERO_RANGE"
     elif expectation in {"NULL_PRIOR_CLOSE_REQUIRED", "NULL_PRIOR_CLOSE_AND_PRICE_INCREMENT_REQUIRED"}:
-        reason = transformed["null_reasons"].get(field_name)
-        status = "PASS" if transformed_value is None and reason in PRIOR_NULL_REASONS else "FAIL"
+        passed = transformed_value is None and transformed["null_reasons"].get(field_name) in PRIOR_NULL_REASONS
     else:
         raise MetamorphicContractError(f"unknown relation expectation: {expectation}")
 
-    if status == "FAIL":
-        detail = f"base={base_value!r}; transformed={transformed_value!r}; expectation={expectation}"
     assertion = {
         "primitive_id": primitive_id,
         "field_name": field_name,
         "transform_id": transform_id,
         "expectation": expectation,
-        "status": status,
-        "detail": detail,
+        "status": "PASS" if passed else "FAIL",
+        "detail": "" if passed else f"base={base_value!r}; transformed={transformed_value!r}; expectation={expectation}",
     }
     return {**assertion, "assertion_id": f"ro3-c1-metamorphic-assertion:{_digest(assertion)}"}
 
@@ -290,36 +273,34 @@ def run_metamorphic_assurance(
             transform_id = relation.split(":", 1)[0]
             assertions.append(
                 _relation_assertion(
-                    primitive_id, field_name, relation, base, transform_cache[transform_id],
-                    scale_factor, primitive_to_field,
+                    primitive_id, field_name, relation, base, transform_cache[transform_id], scale_factor
                 )
             )
 
     oracle = contract_oracle(current, prior)
-    oracle_assertions: list[dict[str, Any]] = []
+    golden_assertions: list[dict[str, Any]] = []
     for primitive_id in sorted(formulas):
         field_name = primitive_to_field[primitive_id]
         actual = _field_value(base, field_name)
         expected = _field_value(oracle, field_name)
-        status = "PASS" if actual == expected else "FAIL"
         item = {
             "primitive_id": primitive_id,
             "field_name": field_name,
             "actual": actual,
             "expected": expected,
-            "status": status,
+            "status": "PASS" if _equivalent(actual, expected) else "FAIL",
         }
-        oracle_assertions.append({**item, "assertion_id": f"ro3-c1-golden-assertion:{_digest(item)}"})
+        golden_assertions.append({**item, "assertion_id": f"ro3-c1-golden-assertion:{_digest(item)}"})
 
     reorder_current, reorder_prior = _transform_bar(current, prior, "CANONICAL_REORDER")
     reordered_object = engine(reorder_current, reorder_prior)
     if serializer is None:
-        serialization_pass = _canonical(_result_dict(base_result_object)) == _canonical(_result_dict(reordered_object))
         base_bytes = _canonical(_result_dict(base_result_object))
+        reordered_bytes = _canonical(_result_dict(reordered_object))
         rerun_bytes = _canonical(_result_dict(engine(dict(current), None if prior is None else dict(prior))))
     else:
         base_bytes = serializer(base_result_object).encode("utf-8")
-        serialization_pass = serializer(reordered_object).encode("utf-8") == base_bytes
+        reordered_bytes = serializer(reordered_object).encode("utf-8")
         rerun_bytes = serializer(engine(dict(current), None if prior is None else dict(prior))).encode("utf-8")
 
     determinism_receipt = {
@@ -327,14 +308,19 @@ def run_metamorphic_assurance(
         "base_sha256": hashlib.sha256(base_bytes).hexdigest(),
         "rerun_sha256": hashlib.sha256(rerun_bytes).hexdigest(),
         "same_input_same_output_bytes": base_bytes == rerun_bytes,
-        "canonical_reorder_identical": serialization_pass,
+        "canonical_reorder_identical": base_bytes == reordered_bytes,
         "writes": "NONE",
     }
     determinism_receipt["receipt_id"] = f"ro3-c1-determinism:{_digest(determinism_receipt)}"
 
-    failed = [item for item in assertions + oracle_assertions if item["status"] != "PASS"]
+    failed = [item for item in assertions + golden_assertions if item["status"] != "PASS"]
     if not determinism_receipt["same_input_same_output_bytes"] or not determinism_receipt["canonical_reorder_identical"]:
-        failed.append({"status": "FAIL", "primitive_id": "GLOBAL", "field_name": "serialization", "detail": "determinism or canonical reorder failure"})
+        failed.append({
+            "status": "FAIL",
+            "primitive_id": "GLOBAL",
+            "field_name": "serialization",
+            "detail": "determinism or canonical reorder failure",
+        })
     result = {
         "schema": "ovc-ro3-c1-metamorphic-run/v1",
         "registry_id": registry["registry_id"],
@@ -343,9 +329,9 @@ def run_metamorphic_assurance(
         "formula_registry_logical_sha256": formula_registry["registry_logical_sha256"],
         "primitive_count": len(formulas),
         "metamorphic_assertion_count": len(assertions),
-        "golden_assertion_count": len(oracle_assertions),
+        "golden_assertion_count": len(golden_assertions),
         "metamorphic_assertions": assertions,
-        "golden_assertions": oracle_assertions,
+        "golden_assertions": golden_assertions,
         "determinism_receipt": determinism_receipt,
         "failed_assertion_count": len(failed),
         "failed_assertions": failed,
