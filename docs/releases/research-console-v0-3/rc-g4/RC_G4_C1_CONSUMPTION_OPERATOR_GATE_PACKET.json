@@ -24,7 +24,7 @@
   "current_authority": {
     "research_console_ro2_surface": "ACCEPTED_LOCAL_READ_ONLY",
     "c1_projection_capability": "IMPLEMENTED_DISABLED",
-    "c1_live_route": "DISABLED_PENDING_RC_G4",
+    "c1_live_route": "DISABLED_PENDING_RC_G4_ACTIVATION",
     "c1_formulas_releases_selectors": "IMMUTABLE",
     "validation_consumption": "LOCKED_UNCONSUMED",
     "c2_pattern_discovery_authority": "UNCHANGED",
@@ -111,11 +111,11 @@
   "route_and_capability_delta": {
     "current": {
       "route_id": "RESEARCH.C1_FACT_ASSURANCE",
-      "route_state": "DISABLED_PENDING_RC_G4",
+      "route_state": "DISABLED_PENDING_RC_G4_ACTIVATION",
       "route_enabled": false,
-      "live_consumption_authority": "NONE_PENDING_RC_G4"
+      "live_consumption_authority": "APPROVED_PENDING_BOUNDED_ACTIVATION"
     },
-    "proposed_after_pass": {
+    "approved_after_activation": {
       "route_id": "RESEARCH.C1_FACT_ASSURANCE",
       "route_state": "ENABLED_LOCAL_READ_ONLY",
       "route_enabled": true,
@@ -150,7 +150,9 @@
     {"condition": "Pre-RC-G4 route activation rejected", "result": "PASS"},
     {"condition": "Permanent downstream authority banner exact", "result": "PASS"},
     {"condition": "12 focused tests", "result": "PASS", "workflow_run": 30422180532, "job": 90481077202},
-    {"condition": "70-test complete repository suite", "result": "PASS", "workflow_run": 30422180586, "job": 90481077386}
+    {"condition": "70-test complete repository suite", "result": "PASS", "workflow_run": 30422180586, "job": 90481077386},
+    {"condition": "RC-G4 gate packet validation", "result": "PASS", "workflow_run": 30422562947, "job": 90482181971},
+    {"condition": "RC-G4 gate complete repository suite", "result": "PASS", "workflow_run": 30422562930, "job": 90482181958}
   ],
   "changed_files_in_ro3_wp4": [
     ".github/workflows/research-operations-v0-3-ro3-g4.yml",
@@ -173,7 +175,7 @@
   "warnings": [
     "The accepted presentation fixture is synthetic and non-authoritative; it proves projection behaviour, not market correctness or research claims.",
     "Downstream C2 and Pattern Discovery references are identity-only traces and must never be rendered as defect, priority, confidence, tuning, candidate-quality or remediation signals.",
-    "An operator PASS authorises only a subsequent bounded local activation implementation. It does not itself mutate the route in this gate branch.",
+    "Operator PASS authorises only the bounded local activation implementation described in this packet; the route remains disabled until that implementation is tested and merged.",
     "Validation remains LOCKED_UNCONSUMED and inaccessible beyond existing metadata-only status."
   ],
   "unresolved_issues": [],
@@ -203,7 +205,14 @@
   ],
   "allowed_operator_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "recommended_decision": "PASS",
-  "recommendation_rationale": "RO3-G4 is merged, all required adapter and authority tests pass, QA recommends PASS, the live route remains disabled, no unresolved issue exists, and the proposed delta is strictly local read-only C1 presentation with explicit rollback and retained prohibitions.",
-  "operator_approval_required": true,
-  "status": "GATE_READY"
+  "recommendation_rationale": "RO3-G4 is merged, all required adapter and authority tests pass, QA recommends PASS, no unresolved issue exists, and the approved delta is strictly local read-only C1 presentation with explicit rollback and retained prohibitions.",
+  "operator_approval_required": false,
+  "operator_decision": {
+    "decision": "PASS",
+    "authority": "OPERATOR",
+    "instruction": "@GitHub OVC APPROVE RC-G4 PASS",
+    "recorded_date": "2026-07-29",
+    "decision_record": "docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md"
+  },
+  "status": "APPROVED_PENDING_ACTIVATION"
 }
