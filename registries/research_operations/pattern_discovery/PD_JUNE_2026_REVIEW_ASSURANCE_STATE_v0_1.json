@@ -5,11 +5,11 @@
   "plan_version": "0.1",
   "packet_id": "PD-JUNE-MDR-CORR1",
   "status": "GATE_READY",
-  "packet_execution": "IMPLEMENTED_EXACT_CORRECTIVE_EVIDENCE_BOUND_RETURN_GATE_PENDING_FINAL_CI",
+  "packet_execution": "IMPLEMENTED_TESTED_EXACT_CORRECTIVE_EVIDENCE_BOUND_OPERATOR_DECISION_REQUIRED",
   "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
   "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
   "pull_request": 160,
-  "candidate_commit": null,
+  "tested_candidate_commit": "3746bacbdf1856c4ee6e580f565a727d10fb0f96",
   "authority_required": "OPERATOR_DECISION_AT_PD-JUNE-MDR-G1",
   "authority_delta": "NONE_CORR1_REMAINS_READ_ONLY_AND_NON_ACTIVATING",
   "source_to_c2_v2_binding": "PASS_EXPLICIT_CARRY_FORWARD_AND_CORRECTIVE_RUN_BINDING",
@@ -75,7 +75,12 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
   ],
-  "tests": [],
+  "tests": [
+    {"workflow_run":30498219394,"job":90731843042,"scope":"CORR1 focused, dependent, complete suite and return-gate boundary","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219425,"job":90731843340,"scope":"General repository unit tests","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219325,"job":90731842858,"scope":"June assessment continuity and return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219459,"job":90731843542,"scope":"Claim-level decision continuity and return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"}
+  ],
   "merge_commit": null,
   "rollback": "REVERT_ONLY_PD_JUNE_MDR_CORR1_COMPACT_EVIDENCE_QA_TESTS_WORKFLOW_GATE_PACKET_AND_STATE_PRESERVE_ALL_EXTERNAL_AND_SIGNED_EVIDENCE"
 }
