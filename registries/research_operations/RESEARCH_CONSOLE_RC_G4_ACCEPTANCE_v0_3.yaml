@@ -2,14 +2,20 @@ schema: ovc-research-console-rc-g4-acceptance/v1
 programme_id: OVC-RESEARCH-CONSOLE.v0.3
 gate: RC-G4
 packet: RC-G4-ACTIVATION
-status: IMPLEMENTED_PENDING_QA
+status: APPROVED_PENDING_MERGE
 operator_decision: PASS
 operator_decision_authority: OPERATOR
 operator_decision_record: docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md
 operator_decision_merge_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
 baseline_main_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
 branch: activate/research-console-v0-3-rc-g4-c1
+tested_candidate_commit: 0fd59862770b50f9bc678de44c2ca99aa5a04953
+pull_request: 152
 approved_authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
+activation_decision: PASS
+activation_decision_authority: DELEGATED_AUTO_RATIFICATION_WITHIN_OPERATOR_APPROVED_DELTA
+activation_decision_record: docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_DELEGATED_DECISION.md
+qa_packet: docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_QA_PACKET.json
 entry_point: apps/research_console/Home.py
 console_wrapper: apps/research_console/rc_g4_console.py
 projection_source: apps/research_console/c1_projection_source.py
@@ -90,11 +96,23 @@ retained_boundaries:
   agent_write_authority: NONE
   remote_deployment: DENIED
 qa:
-  focused_tests: PENDING
-  complete_repository_suite: PENDING
-  authority_assertions: PENDING
-  recommendation: PENDING
+  focused_activation_tests: PASS_12
+  ro3_g4_regression_tests: PASS_12
+  operator_gate_regression_tests: PASS_6
+  complete_repository_suite_dedicated: PASS_70
+  complete_repository_suite_generic: PASS_70
+  authority_assertions: PASS
+  dedicated_workflow_run: 30425811445
+  dedicated_workflow_job: 90491943746
+  generic_workflow_run: 30425811401
+  generic_workflow_job: 90491943701
+  recommendation: PASS
+warnings:
+  - SOURCE_BOUND_SYNTHETIC_FIXTURE_IS_NON_AUTHORITATIVE
+  - MISSING_OR_INADMISSIBLE_LOCAL_PROJECTION_RETURNS_NOT_EVALUATED
+  - DOWNSTREAM_REFERENCES_ARE_IDENTITY_ONLY_NO_SCORE_OR_RECOMMENDATION
+unresolved_issues: []
 rollback:
   action: Disable RESEARCH.C1_FACT_ASSURANCE consumption and return the Console to accepted RO2/RC-G3 local read-only presentation.
-  preserve: [RO3_PROJECTIONS, RO3_QA_AND_DECISIONS, C1_C2_PD_AUTHORITY, SELECTORS, R2_OBJECTS]
+  preserve: [RC_G4_OPERATOR_DECISION, RO3_PROJECTIONS, RO3_QA_AND_DECISIONS, C1_C2_PD_AUTHORITY, SELECTORS, R2_OBJECTS]
   destructive_action: NONE
