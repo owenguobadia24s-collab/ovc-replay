@@ -25,7 +25,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate consolidated RC-G4 operator packet
+      - name: Validate RC-G4 operator PASS record
         env:
           PYTHONPATH: src
         run: python -m unittest tests.research_operations.v0_3.test_rc_g4_operator_gate -v
@@ -33,20 +33,28 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s tests -v
-      - name: Enforce operator-required stop and disabled route
+      - name: Enforce approved authority and disabled-until-activation boundary
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           packet = json.loads(Path('docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json').read_text())
           state = json.loads(Path('registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json').read_text())
+          decision = Path('docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md').read_text()
           rcg4 = next(item for item in state['packets'] if item['packet_id'] == 'RC-G4')
-          assert packet['status'] == 'GATE_READY'
-          assert packet['operator_approval_required'] is True
+          activation = next(item for item in state['packets'] if item['packet_id'] == 'RC-G4-ACTIVATION')
+          assert packet['status'] == 'APPROVED_PENDING_ACTIVATION'
+          assert packet['operator_approval_required'] is False
+          assert packet['operator_decision']['decision'] == 'PASS'
+          assert packet['operator_decision']['authority'] == 'OPERATOR'
           assert packet['classification'] == 'OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE'
-          assert rcg4['status'] == 'GATE_READY'
-          assert rcg4['authority_required'] == 'OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE'
+          assert rcg4['status'] == 'APPROVED'
+          assert rcg4['decision'] == 'PASS'
+          assert activation['status'] == 'READY'
+          assert activation['authority_delta'] == 'LOCAL_READ_ONLY_C1_PRESENTATION'
           assert packet['route_and_capability_delta']['current']['route_enabled'] is False
+          assert packet['route_and_capability_delta']['current']['route_state'] == 'DISABLED_PENDING_RC_G4_ACTIVATION'
           assert packet['current_authority']['validation_consumption'] == 'LOCKED_UNCONSUMED'
           assert packet['current_authority']['c2_pattern_discovery_authority'] == 'UNCHANGED'
+          assert 'Decision:** `PASS`' in decision
           PY
