@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-research-console-rc-g3a-qa-packet/v1",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "packet_id": "RC-WP4-v0.3",
+  "gate_id": "RC-G3A",
+  "baseline_main_commit": "79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5",
+  "tested_candidate_commit": "0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4",
+  "pull_request": 154,
+  "tests": [
+    {"suite": "focused RC-WP4 System projection and activity", "count": 8, "result": "PASS"},
+    {"suite": "RC-G3 adapter-consumption regression", "count": 5, "result": "PASS"},
+    {"suite": "RC-G4 activation regression", "count": 12, "result": "PASS"},
+    {"suite": "complete repository suite in dedicated workflow", "count": 70, "result": "PASS"},
+    {"suite": "complete repository suite in generic workflow", "count": 70, "result": "PASS"},
+    {"suite": "exact authority-delta assertions", "count": 1, "result": "PASS"}
+  ],
+  "workflow_evidence": [
+    {"workflow": "Research Console v0.3 RC-WP4 rebuilt System workspace", "run": 30441768190, "job": 90542516815, "result": "PASS"},
+    {"workflow": "tests", "run": 30441768186, "job": 90542516766, "result": "PASS"}
+  ],
+  "acceptance_results": {
+    "deterministic_projection": "PASS",
+    "immutable_source_refs": "PASS",
+    "activity_ordering_and_filtering": "PASS",
+    "unknown_type_and_status_fail_closed": "PASS",
+    "missing_projection_not_evaluated": "PASS",
+    "write_capability_absent": "PASS",
+    "rc_g3_and_rc_g4_compatibility": "PASS",
+    "reserved_authority_absent": "PASS"
+  },
+  "warnings": [
+    "SYSTEM_PROJECTION_SOURCE_IS_FIXTURE_BOUND_AND_NON_AUTHORITATIVE",
+    "ACTIVITY_IS_LOCAL_READ_ONLY_AND_SOURCE_DERIVED",
+    "VALIDATION_REMAINS_LOCKED_UNCONSUMED"
+  ],
+  "unresolved_issues": [],
+  "qa_recommendation": "PASS"
+}
