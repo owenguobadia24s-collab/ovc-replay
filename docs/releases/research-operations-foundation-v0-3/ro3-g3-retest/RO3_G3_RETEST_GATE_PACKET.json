@@ -1,0 +1,115 @@
+{
+  "schema": "ovc-ro3-g3-retest-gate-packet/v1",
+  "gate_id": "RO3-G3",
+  "title": "C1 Symmetry, Metamorphic and Deterministic Assurance Retest",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "packet_id": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME",
+  "baseline_commit": "38603eb9e52860074bb5ca95f8f016f4236965ed",
+  "tested_candidate_commit": "cbbb45a70c058c46271195037b06cefa2b9b10fe",
+  "branch": "retest/research-operations-v0-3-wp3-formula-assurance",
+  "prior_blocker": {
+    "blocker_id": "RO3-G3-BLOCK-001",
+    "finding": "C1_WICK_BALANCE_FROZEN_FORMULA_IMPLEMENTATION_SIGN_INVERSION",
+    "status": "RESOLVED_BY_SEPARATE_C1_CORRECTIVE_PROGRAMME",
+    "corrective_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+    "operator_pass_merge_commit": "1d4065b7a4fa9a7c6d832528309a5b4f56fd2991",
+    "programme_state_merge_commit": "38603eb9e52860074bb5ca95f8f016f4236965ed"
+  },
+  "completed_work": [
+    "Restored the independent RO3-G0-frozen invariant canon without modification.",
+    "Rebuilt the RO3-WP3 assurance implementation from the latest lawful main tip rather than reusing the stale blocked branch.",
+    "Implemented 79 deterministic metamorphic assertions across all 18 C1 primitives.",
+    "Implemented an independent formula-registry oracle with release precision 34.",
+    "Verified the corrected C1-WICK-BALANCE.v0.1 implementation against upper_wick_share minus lower_wick_share.",
+    "Verified canonical byte determinism and mapping-order independence.",
+    "Verified a deliberately corrupted C1-BODY-ABS.v0.1 negative control is blocked.",
+    "Preserved formula, release, selector, Validation, C2, Pattern Discovery, R2 and exposure prohibitions."
+  ],
+  "acceptance_conditions": [
+    {"condition": "Frozen invariant registry unchanged since RO3-G0", "result": "PASS"},
+    {"condition": "Invariant and formula registries cover the same 18 primitives", "result": "PASS"},
+    {"condition": "All 79 metamorphic assertions pass", "result": "PASS"},
+    {"condition": "All 18 independent golden assertions pass", "result": "PASS"},
+    {"condition": "C1-WICK-BALANCE.v0.1 matches the frozen formula", "result": "PASS"},
+    {"condition": "Same input produces identical canonical bytes", "result": "PASS"},
+    {"condition": "Canonical input reorder produces identical canonical bytes", "result": "PASS"},
+    {"condition": "Deliberately corrupted implementation is detected", "result": "PASS"},
+    {"condition": "Focused assurance and independence tests pass", "result": "PASS"},
+    {"condition": "Complete repository suite passes", "result": "PASS_70"},
+    {"condition": "No authority-bearing write or activation occurs", "result": "PASS"},
+    {"condition": "QA recommends PASS", "result": "PASS"}
+  ],
+  "tests": [
+    {
+      "workflow_run": 30420805433,
+      "job": 90477014172,
+      "result": "PASS",
+      "scope": "focused metamorphic assurance, invariant independence, exact evidence generation, complete repository suite and authority boundary"
+    },
+    {
+      "workflow_run": 30420805438,
+      "job": 90477014267,
+      "result": "PASS",
+      "scope": "generic complete repository suite: 70 tests"
+    }
+  ],
+  "evidence": {
+    "repository_summary": "docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_ASSURANCE_EVIDENCE.json",
+    "workflow_artifact_id": 8711826872,
+    "workflow_artifact_digest": "sha256:5f60f06a56531f274b6d5f6a63a9825529584d4f496685b35a67ffc365a4d701",
+    "full_evidence_payload_sha256": "71edf3d0226ba2ddc7c3f90e721d81aa249bbc810e69edc0fecda21ab673f64e",
+    "actual_run_id": "ro3-c1-metamorphic-run:ae87e9b8ec7d1214c7c524216fa42228c9d4559e8d107f00e5a5d243edc82137",
+    "negative_control_run_id": "ro3-c1-metamorphic-run:4bbd8de2496703bb9ab2bd081bebd9cf614b263bcd9ac4a1b47968919b32af8b"
+  },
+  "qa": {
+    "status": "PASS",
+    "recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_issues": [],
+    "warnings": [
+      "The gate proves formula and deterministic assurance only; it grants no market or presentation authority.",
+      "The full generated evidence is retained as a checksum-pinned GitHub Actions artifact while the compact court record remains in Git."
+    ]
+  },
+  "current_authority": {
+    "formula_registry": "IMMUTABLE",
+    "c1_releases": "IMMUTABLE",
+    "c1_selectors": "IMMUTABLE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2_pattern_discovery_authority": "UNCHANGED",
+    "live_console_c1_route": "DISABLED_PENDING_RC_G4",
+    "market": "NONE",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "authority_delta": {
+    "classification": "AUTO_EXECUTABLE",
+    "delta": "QA_EVIDENCE_ONLY",
+    "grants": [
+      "Record that independent C1 formula assurance now passes after the separately governed C1 corrective programme.",
+      "Close RO3-G3-BLOCK-001 as resolved.",
+      "Permit RO3-WP4 local read-only lineage and Console adapter implementation."
+    ],
+    "does_not_grant": [
+      "Formula, release or selector mutation",
+      "Validation consumption",
+      "C2 or Pattern Discovery authority change",
+      "Live Console C1 route activation",
+      "Semantic, threshold, model, family, candidate or theory promotion",
+      "R2 publication",
+      "Probability, risk, exposure, trading, execution or agent write"
+    ]
+  },
+  "rollback": "Revert only the bounded RO3-WP3 assurance implementation, evidence summary, gate packet and delegated decision through a new non-destructive commit. Preserve the frozen RO3-G0 invariant registry, the original RO3-G3 BLOCK evidence and all C1 corrective programme records.",
+  "recommended_decision": "PASS",
+  "auto_ratifiable": true,
+  "operator_approval_required": false,
+  "next_packet": "RO3-WP4",
+  "next_gate": "RO3-G4",
+  "status": "GATE_READY_PASS"
+}
