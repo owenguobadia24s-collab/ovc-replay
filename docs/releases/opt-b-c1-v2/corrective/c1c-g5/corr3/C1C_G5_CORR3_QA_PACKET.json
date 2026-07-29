@@ -1,0 +1,104 @@
+{
+  "schema": "ovc-c1c-g5-corr3-qa-packet/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "packet_id": "C1C-G5-CORR3",
+  "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "baseline_commit": "41623d07e73b2e0b87824c365f11acca9e51d73d",
+  "tested_candidate_head": "9a4fa3f3472d8c09981264c29093d13115a34bcb",
+  "target_candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+  "qa_status": "PASS",
+  "recommendation": "PASS_IMPLEMENTATION_MERGE_AND_REQUIRE_OPERATOR_LOCAL_REREVIEW",
+  "acceptance_conditions": [
+    {
+      "condition": "Operator DEFER authority and exact one-object scope are repository-bound",
+      "result": "PASS"
+    },
+    {
+      "condition": "Signed CORR2 return is verified before CORR3 source use",
+      "result": "PASS_BY_IMPLEMENTATION_AND_TESTS"
+    },
+    {
+      "condition": "Exact assigned medoid and same-partition fingerprint resolve fail-closed",
+      "result": "PASS"
+    },
+    {
+      "condition": "Frozen distance and scale identities match preserved ClusterVersion",
+      "result": "PASS"
+    },
+    {
+      "condition": "Recorded distance equals recomputed component total",
+      "result": "PASS"
+    },
+    {
+      "condition": "Outlier classification matches recorded p90 rule",
+      "result": "PASS"
+    },
+    {
+      "condition": "Duplicate-window, dedup-key, overlap and comparison status are explicit",
+      "result": "PASS"
+    },
+    {
+      "condition": "LONG_PERSISTENCE trigger-history scope is distinguished from candidate-window fingerprint duration",
+      "result": "PASS"
+    },
+    {
+      "condition": "Only the exact remaining candidate can be reviewed",
+      "result": "PASS"
+    },
+    {
+      "condition": "Operator signing and finalization remain prohibited in CI",
+      "result": "PASS"
+    },
+    {
+      "condition": "No machine replay, provider operation or rule mutation is present",
+      "result": "PASS"
+    },
+    {
+      "condition": "Focused, retained and repository-wide tests pass",
+      "result": "PASS"
+    }
+  ],
+  "test_evidence": [
+    {
+      "workflow_run": 30415338772,
+      "job": 90460513735,
+      "result": "PASS",
+      "coverage": [
+        "CORR3 focused tests",
+        "retained CORR2 tests",
+        "complete repository unit tests",
+        "nonactivating authority scan"
+      ]
+    },
+    {
+      "workflow_run": 30415338842,
+      "job": 90460513953,
+      "result": "PASS",
+      "coverage": [
+        "generic complete repository unit tests"
+      ]
+    }
+  ],
+  "warnings": [
+    "The implementation can expose and verify preserved evidence but cannot perform the operator's final factual disposition.",
+    "The operator-private Ed25519 key and external pilot root remain local and are not available to GitHub CI.",
+    "No PASS decision for the programme return gate is implied by this implementation QA PASS."
+  ],
+  "unresolved_implementation_issues": [],
+  "operator_local_requirements": [
+    "Run CORR3 preflight from a clean local main worktree.",
+    "Prepare the exact structural comparison and one-object review template.",
+    "Review only PDPILOT-CANDIDATE-bab63b935155e4d9033aed81.",
+    "Finalize with the existing operator Ed25519 key and return the four compact signed closure artifacts."
+  ],
+  "authority_assessment": {
+    "delta": "NONACTIVATING_READ_ONLY_STRUCTURAL_COMPARISON_EXPOSURE_ONLY",
+    "inside_approved_plan": true,
+    "auto_executable": true,
+    "operator_reserved_action_performed": false,
+    "canonical_or_promotional_authority_changed": false
+  },
+  "rollback": "Revert only CORR3 code, schemas, tests and court records through a new non-destructive commit. Preserve the immutable pilot run, signed evidence and prior decisions.",
+  "status": "QA_PASS"
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/c1c_g5_corr3_review_input_v0_1.schema.json",
+  "title": "C1C-G5-CORR3 one-object review input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "packet_id",
+    "gate_id",
+    "pilot_run_id",
+    "pilot_namespace",
+    "operator_id",
+    "reviewed_at_utc",
+    "source_corr2_review_receipt_file_sha256",
+    "decision",
+    "second_machine_replay_required",
+    "pilot_only",
+    "promotion_eligibility",
+    "canonical_append"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corr3-review-input/v1"},
+    "packet_id": {"const": "C1C-G5-CORR3"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "pilot_namespace": {"const": "PD.PILOT.GBPUSD.20260622_20260625.v2"},
+    "operator_id": {"const": "OVC.OPERATOR.PRIMARY.LOCAL.V1"},
+    "reviewed_at_utc": {"type": "string", "pattern": "Z$"},
+    "source_corr2_review_receipt_file_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "decision": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "candidate_window_id",
+        "prior_disposition",
+        "prior_finding_code",
+        "final_disposition",
+        "notes",
+        "evidence_references",
+        "evidence_context_sha256"
+      ],
+      "properties": {
+        "candidate_window_id": {"const": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"},
+        "prior_disposition": {"const": "DEFER_PILOT_OBJECT"},
+        "prior_finding_code": {"const": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001"},
+        "final_disposition": {"enum": ["WORKFLOW_ACCEPTED", "DEFER_PILOT_OBJECT", "REJECT_PILOT_OBJECT"]},
+        "notes": {"type": "string", "minLength": 1},
+        "evidence_references": {"type": "array", "minItems": 7, "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "evidence_context_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "required_fields_by_final_disposition": {"type": "object"},
+    "second_machine_replay_required": {"const": false},
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_append": {"const": "DENIED"}
+  }
+}

@@ -2,7 +2,7 @@
   "schema": "ovc-pd-c1c-g5-pilot-corrective-state/v1",
   "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
   "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
-  "status": "C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED",
+  "status": "C1C_G5_CORR3_IMPLEMENTED_QA_PASS_OPERATOR_LOCAL_REREVIEW_PENDING_MERGE",
   "source_pilot": {
     "namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
     "run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
@@ -67,20 +67,14 @@
     "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW DEFER",
     "decision_date": "2026-07-28",
     "decision_record_json": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_OPERATOR_DECISION.json",
-    "decision_record_markdown": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_OPERATOR_DECISION.md",
     "accepted_machine_rerun": true,
     "accepted_signature_and_hash_integrity": true,
     "contract_changes_required": true,
-    "unresolved_finding_codes": [
-      "PD-WF-STRUCTURED-REVIEW-EVIDENCE-MISSING-001",
-      "PD-UI-STRUCTURED-REVIEW-CONTEXT-MISSING-001",
-      "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
-      "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002"
-    ]
+    "authorised_next_packet": "C1C-G5-CORR2"
   },
   "corr2": {
     "packet_id": "C1C-G5-CORR2",
-    "status": "COMPLETED_IN_MAIN",
+    "status": "COMPLETED_IN_MAIN_AND_SIGNED_OPERATOR_REREVIEW_COMPLETE",
     "authority_required": "OPERATOR_DEFER_RECORDED",
     "authority_delta": "NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY",
     "baseline_commit": "8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b",
@@ -90,64 +84,102 @@
     "decision": "PASS",
     "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
     "qa_result": "PASS",
-    "allowed_scope": [
-      "DISPOSITION_SPECIFIC_READ_ONLY_CONSOLE_FIELDS",
-      "EXACT_EVIDENCE_REFERENCE_RESOLUTION",
-      "TWO_DEFERRED_OBJECT_REREVIEW_WITHOUT_MACHINE_REPLAY",
-      "IMMUTABLE_EVIDENCE_AND_ACCEPTED_REJECTED_DECISION_PRESERVATION",
-      "FINAL_CLOSURE_PACKET_RETURN"
-    ],
-    "deferred_candidate_ids": [
-      "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
-      "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
-    ],
-    "second_machine_replay": "DENIED_NOT_REQUIRED",
-    "operator_local_human_rereview": "REQUIRED_FOR_TWO_DEFERRED_OBJECTS",
-    "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
-    "tests": [
-      {"workflow_run": 30405881435, "job": 90431071055, "result": "PASS"},
-      {"workflow_run": 30405881448, "job": 90431071054, "result": "PASS"},
-      {"workflow_run": 30405881334, "job": 90431070754, "result": "PASS"},
-      {"workflow_run": 30405881354, "job": 90431070785, "result": "PASS"},
-      {"workflow_run": 30405881330, "job": 90431070671, "result": "PASS"}
-    ],
-    "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_QA_PACKET.json",
-    "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_DELEGATED_DECISION.md",
     "merge_commit": "66593aa2bca3b781058e1bc81f96bf2e57b18005",
     "merge_method": "SQUASH",
-    "merged_on": "2026-07-28"
+    "merged_on": "2026-07-28",
+    "operator_local_review_status": "C1C_G5_CORR2_OPERATOR_REREVIEW_COMPLETE",
+    "review_receipt_file_sha256": "86be15969ca26d9da83bffc018ec02f3f5f6b9f6eaf5cdca1b197d46b8dbc963",
+    "closure_ledger_file_sha256": "65507b2acb691433cccc48a1e63311f89b783dabd3802763c362004effcdd3af",
+    "signed_inventory_file_sha256": "7d57c8032465fca28508d9da8965a0abdec7c8a37a5b772ca8de87480d87e19f",
+    "remaining_deferred_object_count": 1,
+    "second_machine_replay": "DENIED_NOT_REQUIRED"
+  },
+  "corr2_final_operator_decision": {
+    "decision_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW-DEFER-CORR2-2026-07-29",
+    "decision": "DEFER",
+    "decision_authority": "OPERATOR",
+    "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW DEFER",
+    "decision_date": "2026-07-29",
+    "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR2_OPERATOR_DEFER_DECISION.json",
+    "decision_merge_commit": "41623d07e73b2e0b87824c365f11acca9e51d73d",
+    "accepted_dispositions": [
+      {
+        "candidate_window_id": "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+        "final_disposition": "REJECT_PILOT_OBJECT",
+        "finding_code": "PD-REJECT-CORR2-CHRONOLOGY-INCONSISTENT-001"
+      },
+      {
+        "candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+        "final_disposition": "DEFER_PILOT_OBJECT",
+        "finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001"
+      }
+    ],
+    "authorised_next_packet": "C1C-G5-CORR3"
+  },
+  "corr3": {
+    "packet_id": "C1C-G5-CORR3",
+    "status": "APPROVED_PENDING_SQUASH_MERGE",
+    "authority_required": "OPERATOR_DEFER_RECORDED",
+    "authority_delta": "NONACTIVATING_READ_ONLY_STRUCTURAL_COMPARISON_EXPOSURE_ONLY",
+    "baseline_commit": "41623d07e73b2e0b87824c365f11acca9e51d73d",
+    "branch": "build/c1c-g5-corr3-structural-comparison",
+    "tested_candidate_head": "9a4fa3f3472d8c09981264c29093d13115a34bcb",
+    "pull_request": 141,
+    "decision": "PASS",
+    "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+    "qa_result": "PASS",
+    "tests": [
+      {"workflow_run": 30415338772, "job": 90460513735, "result": "PASS"},
+      {"workflow_run": 30415338842, "job": 90460513953, "result": "PASS"}
+    ],
+    "target_candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+    "target_finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001",
+    "allowed_scope": [
+      "READ_ONLY_ASSIGNED_MEDOID_OR_NEIGHBOUR_FINGERPRINT_CONTEXT",
+      "EXISTING_DETERMINISTIC_DISTANCE_COMPONENTS",
+      "DUPLICATE_WINDOW_OVERLAP_AND_COMPARISON_STATUS",
+      "EXISTING_LONG_PERSISTENCE_DERIVATION",
+      "ONE_OBJECT_REREVIEW_WITHOUT_MACHINE_REPLAY",
+      "IMMUTABLE_PRIOR_DECISION_AND_SIGNED_EVIDENCE_PRESERVATION"
+    ],
+    "second_machine_replay": "DENIED_NOT_REQUIRED",
+    "operator_local_human_rereview": "REQUIRED_FOR_ONE_REMAINING_DEFERRED_OBJECT",
+    "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+    "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_QA_PACKET.json",
+    "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_DELEGATED_DECISION.md",
+    "merge_commit": null
   },
   "implementation": {
     "machine_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
     "structured_review_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_review_v2.py",
     "corr2_review_runner": "src/ovc/research_operations/pattern_discovery/pilot_corr2_review_closure.py",
-    "corr2_wrapper": "scripts/run_c1c_g5_corr2_deferred_review.ps1",
-    "corr2_contract": "contracts/research_operations/pattern_discovery/C1C_G5_CORR2_DEFERRED_OBJECT_REVIEW_CONTRACT_v0_1.md",
-    "corr2_implementation_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_IMPLEMENTATION_RECEIPT.json",
-    "corr2_merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_MERGE_RECEIPT.json",
-    "evidence_index": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json",
-    "gate_ready_bundle": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5_CORRECTIVE_PILOT_REVIEW_GATE_READY_BUNDLE.json"
+    "corr3_review_runner": "src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure.py",
+    "corr3_entry": "src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure_entry.py",
+    "corr3_wrapper": "scripts/run_c1c_g5_corr3_review.ps1",
+    "corr3_contract": "contracts/research_operations/pattern_discovery/C1C_G5_CORR3_STRUCTURAL_COMPARISON_REVIEW_CONTRACT_v0_1.md",
+    "corr3_implementation_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_IMPLEMENTATION_RECEIPT.json",
+    "corr3_authority_binding": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_AUTHORITY_BINDING.json"
   },
   "prior_blocker": {
-    "blocker_id": "C1C-G5-BLOCK-002",
-    "status": "DISPOSED_BY_COMPLETED_SIGNED_STRUCTURED_V2_REVIEW_AND_OPERATOR_DEFER",
+    "blocker_id": "C1C-G5-BLOCK-003",
+    "status": "RESOLVED_BY_SIGNED_CORR2_OPERATOR_RETURN_AND_FINAL_OPERATOR_DEFER",
     "evidence_preserved": true
   },
   "blocker": {
-    "blocker_id": "C1C-G5-BLOCK-003",
-    "status": "OPEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_REQUIRED",
-    "reason": "CI cannot perform the required human disposition of the two exact deferred pilot objects or use the operator-private Ed25519 key.",
+    "blocker_id": "C1C-G5-BLOCK-004",
+    "status": "PENDING_AFTER_CORR3_IMPLEMENTATION_MERGE",
+    "reason": "CI cannot perform the required human disposition of the exact remaining pilot object or use the operator-private Ed25519 key and operator-local external pilot root.",
     "required_resources": [
       "operator-local external corrective pilot root",
       "operator-private Ed25519 key bound to RPS.SIGNING.50092c28981fef08f53a6cb5",
-      "human review of exactly two deferred candidate objects"
+      "human review of PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
     ],
     "second_machine_replay": "DENIED_NOT_REQUIRED",
-    "smallest_lawful_resolution": "Run CORR2 preflight and prepare locally, complete the two-object review template, then finalize and return the signed compact closure evidence."
+    "smallest_lawful_resolution": "After CORR3 merges, run preflight and prepare locally, complete the one-object review template, finalize and return the signed compact CORR3 closure evidence."
   },
-  "continuation": "RUN_OPERATOR_LOCAL_C1C_G5_CORR2_TWO_OBJECT_REREVIEW",
-  "continuation_command": ".\\scripts\\run_c1c_g5_corr2_deferred_review.ps1 preflight",
-  "next_packet": "C1C-G5-CORR2-LOCAL-REVIEW",
+  "continuation": "SQUASH_MERGE_CORR3_THEN_RUN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW",
+  "continuation_command": ".\\scripts\\run_c1c_g5_corr3_review.ps1 preflight",
+  "next_packet": "C1C-G5-CORR3-LOCAL-REVIEW",
   "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
   "retained_authority": {
     "selector_mutation": "DENIED",
@@ -159,7 +191,7 @@
     "family_promotion": "NONE",
     "candidate_promotion": "NONE",
     "novelty_promotion": "NONE",
-    "threshold_change": "NONE",
+    "trigger_distance_clustering_threshold_or_model_change": "NONE",
     "probability": "NONE",
     "risk": "NONE",
     "exposure": "NONE",

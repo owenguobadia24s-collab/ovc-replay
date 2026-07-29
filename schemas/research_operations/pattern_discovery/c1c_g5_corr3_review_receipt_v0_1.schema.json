@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/c1c_g5_corr3_review_receipt_v0_1.schema.json",
+  "title": "C1C-G5-CORR3 signed review receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "packet_id", "gate_id", "pilot_run_id", "pilot_namespace", "operator_id",
+    "reviewed_at_utc", "source_corr2_review_receipt_file_sha256",
+    "source_corr3_comparison_context_sha256", "preserved_rejected_object_decision_sha256",
+    "preserved_non_deferred_decision_count", "preserved_non_deferred_decisions_sha256",
+    "decision", "second_machine_replay_performed", "pilot_only", "promotion_eligibility",
+    "canonical_append", "status", "signature_algorithm", "signature_format",
+    "signature_namespace", "signed_payload_sha256", "signature_sha256", "signature"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corr3-review-receipt/v1"},
+    "packet_id": {"const": "C1C-G5-CORR3"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "pilot_namespace": {"const": "PD.PILOT.GBPUSD.20260622_20260625.v2"},
+    "operator_id": {"const": "OVC.OPERATOR.PRIMARY.LOCAL.V1"},
+    "reviewed_at_utc": {"type": "string", "pattern": "Z$"},
+    "source_corr2_review_receipt_file_sha256": {"$ref": "#/$defs/sha256"},
+    "source_corr3_comparison_context_sha256": {"$ref": "#/$defs/sha256"},
+    "preserved_rejected_object_decision_sha256": {"$ref": "#/$defs/sha256"},
+    "preserved_non_deferred_decision_count": {"const": 4},
+    "preserved_non_deferred_decisions_sha256": {"$ref": "#/$defs/sha256"},
+    "decision": {"type": "object", "additionalProperties": true},
+    "second_machine_replay_performed": {"const": false},
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_append": {"const": "DENIED"},
+    "status": {"const": "C1C_G5_CORR3_OPERATOR_REREVIEW_COMPLETE"},
+    "signature_algorithm": {"const": "ED25519"},
+    "signature_format": {"const": "SSHSIG_OPENSSH_V1"},
+    "signature_namespace": {"const": "ovc-rps"},
+    "signed_payload_sha256": {"$ref": "#/$defs/sha256"},
+    "signature_sha256": {"$ref": "#/$defs/sha256"},
+    "signature": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
