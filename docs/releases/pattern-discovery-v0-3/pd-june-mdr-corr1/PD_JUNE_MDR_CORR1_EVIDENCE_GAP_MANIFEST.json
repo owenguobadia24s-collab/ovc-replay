@@ -1,0 +1,90 @@
+{
+  "schema": "ovc-pd-june-mdr-corr1-evidence-gap-manifest/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "packet_id": "PD-JUNE-MDR-CORR1",
+  "return_gate": "PD-JUNE-MDR-G1",
+  "status": "BLOCKED_EXTERNAL_EVIDENCE_REQUIRED",
+  "resolved_findings": [
+    {
+      "code": "PD-JUNE-MDR-001",
+      "resolution": "Immutable source-to-C2-v2 carry-forward receipt materialised from existing signed authority and zero-drift C2-v2 receipts."
+    },
+    {
+      "code": "PD-JUNE-MDR-002",
+      "resolution": "All 208 immutable candidate timelines projected in first-valid chronology; corrective materializer and read-only review projection enforce the same ordering."
+    },
+    {
+      "code": "PD-JUNE-MDR-005",
+      "resolution": "Exact frozen distance decomposition reproduced for 24 assigned reviewed fingerprints; two small-sample units explicitly marked not applicable."
+    }
+  ],
+  "open_blockers": [
+    {
+      "code": "PD-JUNE-MDR-003",
+      "status": "OPEN_EXTERNAL_EXACT_C1_EVIDENCE_UNAVAILABLE",
+      "required_evidence": [
+        "Exact C1 fact records for every C2 state in the 26-unit review sample",
+        "Exact level-boundary records referenced by those C1/C2 states",
+        "Exact relation values and container/parent relationships",
+        "Exact formula-registry and parameter-pack identities",
+        "Exact formula inputs and derivation references for displayed LOCATION, MOTION, ORGANISATION and INTERACTION values"
+      ],
+      "impact": "C2 labels cannot be independently verified against their exact upstream facts and formulas; external market-description validity remains NOT_ESTABLISHED.",
+      "smallest_lawful_resolution": "Bind read-only, hash-verifiable exact C1/level/relation/formula evidence for the existing June v2 states. Do not replay or alter formulas."
+    },
+    {
+      "code": "PD-JUNE-MDR-004",
+      "status": "OPEN_EXTERNAL_PRE_TRIGGER_HISTORY_UNAVAILABLE",
+      "affected_review_units": 11,
+      "required_evidence": [
+        "Exact pre-trigger C2 history windows for every LONG_PERSISTENCE review unit",
+        "Exact pre-trigger C2 history windows for every REPEATED_SWITCHING review unit",
+        "Frozen evaluator inputs and thresholds already in force at the trigger cutoff"
+      ],
+      "impact": "The event objects are traceable, but the historical basis of persistence and switching cannot be independently reconstructed.",
+      "smallest_lawful_resolution": "Bind the exact already-produced pre-trigger state histories and evaluator inputs. Do not run another market replay."
+    },
+    {
+      "code": "PD-JUNE-MDR-006",
+      "status": "OPEN_SEPARATE_CONTROL_DESIGN_AUTHORITY_REQUIRED",
+      "required_evidence": [
+        "A separately approved deterministic negative-control construction rule",
+        "Control identities that do not relabel or mutate the immutable June candidate population"
+      ],
+      "impact": "False-positive and contradiction-detection performance cannot be estimated from the June population.",
+      "smallest_lawful_resolution": "Create a future read-only control-design packet under separate authority. Preserve the immutable June population unchanged."
+    }
+  ],
+  "available_exact_external_artifacts": [
+    "candidates.jsonl",
+    "fingerprints.jsonl",
+    "transitions.jsonl",
+    "trigger-events.jsonl",
+    "cluster-versions.jsonl",
+    "console-bundle.json",
+    "queue-items.jsonl",
+    "prospective-source-binding.json",
+    "15M BID/ASK price bars",
+    "2H BID/ASK price bars"
+  ],
+  "not_available": [
+    "Exact June v2 C1 fact ledger",
+    "Exact June v2 level and relation ledger",
+    "Exact per-state formula input/provenance bundle",
+    "Exact pre-trigger C2 history bundle",
+    "Immutable deterministic negative controls"
+  ],
+  "authority": {
+    "provider_intake": "DENIED",
+    "machine_replay": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "formula_trigger_candidate_distance_cluster_threshold_or_model_change": "NONE",
+    "semantic_family_candidate_novelty_or_theory_promotion": "NONE",
+    "selector_or_release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability_risk_exposure_trading_execution_agent_write": "NONE"
+  },
+  "next_action": "Preserve CORR1 branch and PR. Resume only when exact C1 and pre-trigger evidence is supplied and hash-verifiable, or when the operator separately decides how to handle the control-design limitation."
+}
