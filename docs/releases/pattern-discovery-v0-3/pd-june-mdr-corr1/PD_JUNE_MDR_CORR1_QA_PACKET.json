@@ -5,104 +5,51 @@
   "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
   "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
   "pull_request": 160,
-  "tested_candidate_commit": "e305edc6579c808c1cc5fc4c2dbfc3ac74c5a5b7",
-  "status": "BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED_CI_PASS",
-  "qa_result": "PASS_IMPLEMENTED_SCOPE_BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED",
+  "candidate_commit": null,
+  "status": "GATE_READY_PENDING_FINAL_CI",
+  "qa_result": "DEFER_RECOMMENDED_EXACT_CORRECTIVE_EVIDENCE_PASS_CONTROL_AND_AGREEMENT_OPEN",
   "market_description_verdict": "NOT_ESTABLISHED",
+  "bounded_supported_claim": "DETERMINISTIC_STRUCTURAL_DESCRIPTION_CORRECTNESS_ESTABLISHED_FOR_EXACT_JUNE_GAPPED_SLICE",
   "checks": [
-    {
-      "check": "Source-to-C2-v2 carry-forward receipt is explicit and non-replaying",
-      "result": "PASS"
-    },
-    {
-      "check": "All 208 historical candidate timelines have deterministic chronology-safe projections",
-      "result": "PASS_208_OF_208_ZERO_CORRECTED_FAILURES"
-    },
-    {
-      "check": "Exact frozen structural comparison is exposed for every assigned reviewed fingerprint",
-      "result": "PASS_24_ASSIGNED_2_SMALL_SAMPLE_NOT_APPLICABLE"
-    },
-    {
-      "check": "Every reviewed timeline state joins to exact complete source-price evidence",
-      "result": "PASS_48_OF_48"
-    },
-    {
-      "check": "Operator-supplied RPS-WP3 manifest members match their declared hashes and sizes",
-      "result": "PASS_14_OF_14_AVAILABLE_MEMBERS"
-    },
-    {
-      "check": "Same-bar non-wick C1 invariants reproduce from supplied source-price inputs",
-      "result": "PASS_602_OF_602"
-    },
-    {
-      "check": "Supplied C1 wick-balance values match the frozen registry formula",
-      "result": "FAIL_589_OF_602_OPPOSITE_SIGN_13_ZERO_MATCHES"
-    },
-    {
-      "check": "Supplied C1/C2 evidence belongs to the corrective C1C-G5 v2 pilot lineage",
-      "result": "FAIL_SUPPLIED_RPS_WP3_C2_V1_PRE_CORRECTIVE_EVIDENCE"
-    },
-    {
-      "check": "Exact corrected C1-v2 facts, level boundaries, relation values and formula provenance are bound",
-      "result": "FAIL_CORRECTIVE_V2_EVIDENCE_UNAVAILABLE"
-    },
-    {
-      "check": "Exact corrected 15M pre-trigger histories are bound for every persistence and switching claim",
-      "result": "FAIL_11_REVIEW_UNITS_CORRECTIVE_HISTORY_UNAVAILABLE"
-    },
-    {
-      "check": "Immutable deterministic negative controls support false-positive assessment",
-      "result": "FAIL_ZERO_CONTROLS_SEPARATE_AUTHORITY_REQUIRED"
-    },
-    {
-      "check": "Focused, dependent and complete repository tests pass",
-      "result": "PASS"
-    }
+    {"check":"Source-to-C2-v2 carry-forward and corrective pilot binding are explicit and non-replaying","result":"PASS"},
+    {"check":"All 208 historical candidate timelines have deterministic chronology-safe projections","result":"PASS_208_OF_208_ZERO_CORRECTED_FAILURES"},
+    {"check":"All source-compute manifest members match declared hashes and sizes","result":"PASS_21_OF_21"},
+    {"check":"Exact C1, source-price, level, container and relation evidence reproduces stored C2 states","result":"PASS_1144_OF_1144"},
+    {"check":"Every reviewed state claim reproduces exactly","result":"PASS_48_OF_48"},
+    {"check":"Every reviewed trigger claim reproduces under frozen evaluator inputs","result":"PASS_26_OF_26"},
+    {"check":"Every LONG_PERSISTENCE and REPEATED_SWITCHING pre-trigger history reproduces","result":"PASS_11_OF_11"},
+    {"check":"Prospective C1 wick-balance defect is preserved and its downstream dependency is evaluated","result":"PASS_589_OPPOSITE_SIGN_RECORDS_PRESERVED_C2_DEPENDENCY_NONE"},
+    {"check":"Exact frozen structural comparison is exposed for every assigned reviewed fingerprint","result":"PASS_24_ASSIGNED_2_SMALL_SAMPLE_NOT_APPLICABLE"},
+    {"check":"Immutable deterministic negative controls support false-positive assessment","result":"FAIL_ZERO_CONTROLS_OPERATOR_AUTHORITY_REQUIRED"},
+    {"check":"Blinded repeat-review agreement is established","result":"FAIL_NOT_PERFORMED_OPERATOR_AUTHORITY_REQUIRED"},
+    {"check":"Focused, dependent and complete repository tests pass","result":"PENDING_FINAL_CI"}
   ],
   "resolved_findings": [
     "PD-JUNE-MDR-001",
     "PD-JUNE-MDR-002",
+    "PD-JUNE-MDR-003",
+    "PD-JUNE-MDR-004",
     "PD-JUNE-MDR-005"
   ],
   "blocking_findings": [
     {
-      "code": "PD-JUNE-MDR-003",
-      "status": "OPEN_STRONGER_CONTRADICTION",
-      "summary": "The supplied exact C1 corpus is pre-corrective: 589 non-zero wick-balance values use the opposite sign from the frozen formula, and corrected C1-v2 level/relation evidence remains unavailable."
-    },
-    {
-      "code": "PD-JUNE-MDR-004",
-      "status": "OPEN",
-      "summary": "The 26-unit sample is entirely 15M; exact corrective C2-v2 state and transition histories remain unavailable for 11 persistence/switching units."
-    },
-    {
       "code": "PD-JUNE-MDR-006",
-      "status": "OPEN",
-      "summary": "No immutable negative controls exist; separate control-design authority would be required."
+      "status": "OPEN_OPERATOR_AUTHORITY_REQUIRED",
+      "summary": "No immutable negative controls or blinded repeat-review agreement study exists; general false-positive and review-consistency reliability remains unestablished."
     }
   ],
-  "operator_upload_assessment": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_OPERATOR_UPLOAD_ASSESSMENT.json",
   "warnings": [
-    "The newly supplied files are exact evidence for the original RPS-WP3 v1 prospective compute, not the corrected C1C-G5 v2 pilot lineage.",
-    "The supplied evidence strengthens the conclusion that reliable market description is not established; it does not authorise another replay or formula change.",
-    "No return to PD-JUNE-MDR-G1 is lawful until the already-produced corrective C1-v2/C2-v2 evidence is retrieved and bound."
+    "The original prospective C1 corpus contains 589 non-zero wick-balance values with the pre-corrective opposite sign.",
+    "The frozen C2 structural builders do not consume wick_balance; all 1,144 states reproduce exactly from the supplied C1 records.",
+    "This bounded June result does not establish general reliability without negative controls and repeat-review evidence."
   ],
-  "test_evidence": [
-    {
-      "workflow_run": 30489365768,
-      "job": 90703082117,
-      "scope": "Focused CORR1 and upload-assessment tests, dependent Pattern Discovery tests, complete repository suite and fail-closed authority boundary",
-      "result": "PASS",
-      "tested_head": "e305edc6579c808c1cc5fc4c2dbfc3ac74c5a5b7"
-    },
-    {
-      "workflow_run": 30489365756,
-      "job": 90703082092,
-      "scope": "General repository unit tests",
-      "result": "PASS",
-      "tested_head": "e305edc6579c808c1cc5fc4c2dbfc3ac74c5a5b7"
-    }
-  ],
-  "recommendation": "PRESERVE_PR_OPEN_AND_RETRIEVE_ALREADY_PRODUCED_CORRECTIVE_C1_V2_C2_V2_EVIDENCE",
-  "rollback": "Preserve all external artifacts and signed pilot evidence. Revert only CORR1 code, compact evidence, tests, workflow, QA and state through a new non-destructive commit."
+  "evidence": {
+    "drive_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json",
+    "reproduction_summary": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json",
+    "reproduction_digest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json.gz.b64",
+    "return_gate": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json"
+  },
+  "test_evidence": [],
+  "recommendation": "DEFER_TO_OPERATOR_REQUIRED_READ_ONLY_CONTROL_AND_AGREEMENT_ASSURANCE",
+  "rollback": "Preserve all external artifacts and signed pilot evidence. Revert only CORR1 compact evidence, tests, workflow, QA, gate packet and state through a new non-destructive commit."
 }
