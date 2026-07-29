@@ -42,7 +42,7 @@ jobs:
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_mdr_wp1_claim_level_review -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce fail-closed authority and approved corrective boundary
+      - name: Enforce historical decision and current fail-closed boundary
         run: |
           python - <<'PY'
           import json
@@ -62,10 +62,10 @@ jobs:
           assert decision['decision'] == 'DEFER'
           assert decision['decision_authority'] == 'OPERATOR'
           assert decision['authority_delta']['next_packet'] == 'PD-JUNE-MDR-CORR1'
-          assert state['status'] == 'APPROVED'
-          assert state['operator_decision'] == 'DEFER'
-          assert state['next_packet'] == 'PD-JUNE-MDR-CORR1'
-          assert state['next_packet_status'] == 'READY_AFTER_PD_JUNE_MDR_WP1_SQUASH_MERGE'
+          assert state['status'] == 'BLOCKED'
+          assert state['packet_id'] == 'PD-JUNE-MDR-CORR1'
+          assert state['source_to_c2_v2_binding'] == 'PASS_CARRY_FORWARD_RECEIPT'
+          assert state['next_packet_status'] == 'BLOCKED_EXACT_EXTERNAL_EVIDENCE_REQUIRED'
           authority = report['authority']
           for key in ('provider_intake', 'machine_replay', 'canonical_discovery_processing', 'canonical_append', 'selector_or_release_mutation', 'r2_publication'):
               assert authority[key] == 'DENIED'
