@@ -1,0 +1,191 @@
+{
+  "acceptance_conditions": [
+    {
+      "condition": "Exact C2 v2 lineage and immutable corrective run",
+      "result": "PASS"
+    },
+    {
+      "condition": "Exact authorised CORR3 one-object review",
+      "result": "PASS"
+    },
+    {
+      "condition": "Receipt and inventory Ed25519 SSHSIG verification",
+      "result": "PASS"
+    },
+    {
+      "condition": "Exact SHA-256, logical hash and cross-file chain",
+      "result": "PASS"
+    },
+    {
+      "condition": "Structural comparison finding closed",
+      "result": "PASS"
+    },
+    {
+      "condition": "Rejected negative-control object preserved",
+      "result": "PASS"
+    },
+    {
+      "condition": "No deferred pilot object remains",
+      "result": "PASS"
+    },
+    {
+      "condition": "No second machine replay or authority-bearing mutation",
+      "result": "PASS"
+    },
+    {
+      "condition": "QA recommends PASS",
+      "result": "PASS"
+    }
+  ],
+  "accepted_evidence": {
+    "active_c2_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "inventory_signed_payload_sha256": "594450b5b98a9ec549a8406928f64d34767aa0b820abd71b28918e269f262b08",
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "preserved_non_deferred_decisions_sha256": "8af53e45df7cc3dd38b39861e818dfd132becd46ba7b78e3bf684ec97503cb0d",
+    "preserved_rejected_object_decision_sha256": "da5ac3cb7c0cc528c0fe0491de6205e7228b5ebe45866b644254e360ccc8fd4b",
+    "receipt_signed_payload_sha256": "663096e102215e63990112a609720622ea4e990149ecf84318d5144537328c85",
+    "second_machine_replay_performed": false,
+    "selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "structural_comparison_context_sha256": "01d4b1d1a4c060a5b2fb6a16b484fc94de8d43ad07ae65e0cb5a7b17412e65ef"
+  },
+  "allowed_decisions": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
+  "baseline_commit": "78f05ab29d5b4e7763c6c5262d97df2964074fd5",
+  "branch": "gate/c1c-g5-corr3-final-pass-ready",
+  "candidate_commit": null,
+  "current_authority": {
+    "agent_write": "NONE",
+    "candidate_promotion": "NONE",
+    "canonical_append": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "execution": "NONE",
+    "exposure": "NONE",
+    "family_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "probability": "NONE",
+    "r2_publication": "DENIED",
+    "release_mutation": "DENIED",
+    "risk": "NONE",
+    "selector_mutation": "DENIED",
+    "semantic_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "trading": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED"
+  },
+  "evidence": {
+    "files": [
+      {
+        "name": "c1c-g5-corr3-closure-ledger.json",
+        "sha256": "a2a78bd6fa0de286b92a6e55da4588b835b90263430e144762728b0120407657",
+        "size_bytes": 1126
+      },
+      {
+        "name": "c1c-g5-corr3-review-receipt.json",
+        "sha256": "8c1895b6f3cc047f1afe1a03ca9ca57c0b38227bd54476d9253c3b288097bd90",
+        "size_bytes": 5042
+      },
+      {
+        "name": "c1c-g5-corrective-pilot-review-final-gate-input.json",
+        "sha256": "d0d4c62c15b217d146fbd1a29e33f6c90cd7c54c6c6e2cbd005863b8bbb43089",
+        "size_bytes": 1538
+      },
+      {
+        "name": "signed-c1c-g5-corr3-evidence-inventory.json",
+        "sha256": "42b9004e5b38f7c3e52417857895fc3d27179f4e0a1c861d5fe3db8fd44c8c5c",
+        "size_bytes": 1850
+      }
+    ],
+    "storage": "Exact operator-returned bytes retained outside Git; gate packet records exact SHA-256 and size.",
+    "verification": {
+      "cross_file_hash_links": "PASS",
+      "exact_file_sha256": "PASS",
+      "inventory_ed25519_sshsig": "PASS",
+      "inventory_signature_sha256": "PASS",
+      "inventory_signed_payload_sha256": "PASS",
+      "json_parse": "PASS",
+      "ledger_logical_sha256": "PASS",
+      "operator_id": "OVC.OPERATOR.PRIMARY.LOCAL.V1",
+      "registered_public_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOjITxMioIXgGbApGohaq2J/dQltuluVvPzy5B3I3QKJ",
+      "registered_public_key_fingerprint": "SHA256:mCaINWRJxmHTChbwy366euz8AMLVFVKQNPiRqYP88kY",
+      "review_receipt_ed25519_sshsig": "PASS",
+      "review_receipt_signature_sha256": "PASS",
+      "review_receipt_signed_payload_sha256": "PASS",
+      "signature_namespace": "ovc-rps",
+      "signing_binding_id": "RPS.SIGNING.50092c28981fef08f53a6cb5"
+    }
+  },
+  "evidence_received_on": "2026-07-29",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "gate_status": "QA_REVIEW",
+  "operator_approval_required": true,
+  "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW PASS",
+  "packet_id": "C1C-G5-CORR3-FINAL-GATE-READY",
+  "plan_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "programme_state": {
+    "additional_allowed_preparation_on_pass": "PD-G5P_C2_V2_BOUND_OPERATOR_PACKET_PREPARATION_ONLY",
+    "authority_delta": "NONE_UNTIL_OPERATOR_DECISION",
+    "authority_required": "OPERATOR",
+    "baseline_commit": "78f05ab29d5b4e7763c6c5262d97df2964074fd5",
+    "branch": "gate/c1c-g5-corr3-final-pass-ready",
+    "candidate_commit": null,
+    "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+    "next_packet_on_pass": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME",
+    "resolved_blocker": {
+      "blocker_id": "C1C-G5-BLOCK-004",
+      "status": "RESOLVED_TO_OPERATOR_GATE"
+    },
+    "status": "QA_REVIEW",
+    "tests": []
+  },
+  "proposed_pass_delta": {
+    "delta": [
+      "Accept the signed C2 v2 corrective pilot review chain as operational lineage and review-workflow evidence only.",
+      "Close C1C-G5-BLOCK-004 and complete C1C-G5-CORRECTIVE-PILOT-REVIEW.",
+      "Unblock the existing RO3-WP3 retest after the C1 corrective programme.",
+      "Permit nonactivating preparation of a new PD-G5P operator packet explicitly bound to C2 v2."
+    ],
+    "not_authorised": [
+      "Canonical Discovery processing or append",
+      "Semantic, family, candidate, novelty, threshold or model promotion",
+      "Selector or release mutation",
+      "R2 publication or Validation consumption",
+      "Probability, risk, exposure, trading, execution or agent write",
+      "Treating WORKFLOW_ACCEPTED as candidate approval"
+    ],
+    "status": "OPERATOR_RESERVED"
+  },
+  "qa": {
+    "blocking_warnings": [],
+    "recommendation": "PASS",
+    "status": "PASS_EVIDENCE_GATE_READY_OPERATOR_PASS_RECOMMENDED",
+    "unresolved_issues": [],
+    "warnings": [
+      "WORKFLOW_ACCEPTED accepts review-workflow evidence only and does not promote any pilot object.",
+      "Canonical append, selector or release mutation, R2 publication and Validation consumption remain denied.",
+      "The chronology-inconsistent CORR2 object remains preserved as a rejected non-promotable negative control."
+    ]
+  },
+  "recommendation_rationale": "The exact CORR3 review closes the final structural-comparison finding. All compact evidence hashes, logical hashes and cross-file links reproduce, both Ed25519 SSHSIG records verify against the registered operator key, the rejected object remains preserved, no deferred object remains, no second machine replay occurred and every canonical or promotion authority remains denied.",
+  "recommended_decision": "PASS",
+  "review_result": {
+    "candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+    "final_disposition": "WORKFLOW_ACCEPTED",
+    "prior_finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001",
+    "remaining_deferred_object_count": 0,
+    "resolution_status": "CLOSED_BY_OPERATOR_REREVIEW",
+    "worklow_acceptance_scope": "Operational review evidence only; not candidate or family promotion."
+  },
+  "rollback": "Preserve the immutable machine run and all signed v1, v2, CORR2 and CORR3 evidence. Revert only this final gate packet through a new non-destructive commit. Do not delete, rewrite, relabel, append, publish or promote any pilot object.",
+  "schema": "ovc-c1c-g5-corr3-final-operator-gate-packet/v1",
+  "status": "QA_REVIEW",
+  "title": "C1C-G5 Corrective Pilot Review — Final CORR3 Return"
+}

@@ -1,0 +1,65 @@
+name: C1C-G5 CORR3 final operator gate
+
+on:
+  pull_request:
+    paths:
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_FINAL_OPERATOR_GATE_PACKET.json'
+      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_final_operator_gate.py'
+      - '.github/workflows/c1c-g5-corr3-final-gate.yml'
+  push:
+    branches:
+      - 'gate/c1c-g5-corr3-final-pass-ready'
+    paths:
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_FINAL_OPERATOR_GATE_PACKET.json'
+      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_final_operator_gate.py'
+      - '.github/workflows/c1c-g5-corr3-final-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  final-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact returned evidence and Ed25519 SSHSIG
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.pattern_discovery.test_c1c_g5_corr3_final_operator_gate -v
+      - name: Run retained CORR3 and CORR2 tests
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m unittest             tests.research_operations.pattern_discovery.test_c1c_g5_corr3_structural_comparison             tests.research_operations.pattern_discovery.test_c1c_g5_corr3_console_boundary             tests.research_operations.pattern_discovery.test_c1c_g5_corr2_review_closure             tests.research_operations.pattern_discovery.test_c1c_g5_corr2_signature_compat -v
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Enforce operator-reserved authority boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_FINAL_OPERATOR_GATE_PACKET.json')
+          packet = json.loads(path.read_text())
+          state = packet['programme_state']
+          if state['authority_required'] != 'OPERATOR':
+              raise SystemExit('operator authority missing')
+          if state['authority_delta'] != 'NONE_UNTIL_OPERATOR_DECISION':
+              raise SystemExit('authority granted before operator decision')
+          retained = packet['current_authority']
+          expected = {
+              'canonical_discovery_processing': 'DENIED',
+              'canonical_append': 'DENIED',
+              'selector_mutation': 'DENIED',
+              'release_mutation': 'DENIED',
+              'r2_publication': 'DENIED',
+              'validation_consumption': 'LOCKED_UNCONSUMED',
+          }
+          for key, value in expected.items():
+              if retained.get(key) != value:
+                  raise SystemExit(f'{key} boundary changed')
+          PY
