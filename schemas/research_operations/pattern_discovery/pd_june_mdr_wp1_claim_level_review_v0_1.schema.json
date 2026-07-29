@@ -1,0 +1,54 @@
+{
+  "$id": "ovc://schemas/research_operations/pattern_discovery/pd_june_mdr_wp1_claim_level_review_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "authority": {
+      "type": "object"
+    },
+    "gate_id": {
+      "const": "PD-JUNE-MDR-G1"
+    },
+    "ledger": {
+      "required": [
+        "path",
+        "encoding",
+        "compressed_sha256",
+        "uncompressed_sha256",
+        "review_unit_count"
+      ],
+      "type": "object"
+    },
+    "overall_answer": {
+      "required": [
+        "verdict",
+        "recommended_gate_decision",
+        "statement"
+      ],
+      "type": "object"
+    },
+    "packet_id": {
+      "const": "PD-JUNE-MDR-WP1"
+    },
+    "schema": {
+      "const": "ovc-pd-june-mdr-wp1-claim-level-review-summary/v1"
+    }
+  },
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "gate_id",
+    "ledger",
+    "artifact_verification",
+    "sample_construction",
+    "population_mechanical_findings",
+    "aggregate_claim_results",
+    "reliability_dimensions",
+    "blocking_findings",
+    "overall_answer",
+    "authority"
+  ],
+  "title": "PD-JUNE-MDR-WP1 Claim-level Review Summary",
+  "type": "object"
+}
