@@ -211,7 +211,7 @@ class PDJuneMDRCorr1EvidenceAssuranceTests(unittest.TestCase):
         self.assertTrue(trigger_history_requirement("REPEATED_SWITCHING")["required"])
         self.assertEqual(trigger_history_requirement("REPEATED_SWITCHING")["minimum_records"], 6)
         self.assertFalse(trigger_history_requirement("BOUNDARY_ZONE_ENTRY")["required"])
-        self.assertEqual(self.gaps["status"], "BLOCKED_EXTERNAL_EVIDENCE_REQUIRED")
+        self.assertEqual(self.gaps["status"], "BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED")
         open_codes = {item["code"] for item in self.gaps["open_blockers"]}
         self.assertEqual(open_codes, {"PD-JUNE-MDR-003", "PD-JUNE-MDR-004", "PD-JUNE-MDR-006"})
         self.assertEqual(self.structural["c1_claim_evidence_available_count"], 0)
