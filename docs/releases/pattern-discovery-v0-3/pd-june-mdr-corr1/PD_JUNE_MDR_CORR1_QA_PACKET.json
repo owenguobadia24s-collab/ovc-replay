@@ -1,0 +1,83 @@
+{
+  "schema": "ovc-pd-june-mdr-corr1-qa-packet/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "packet_id": "PD-JUNE-MDR-CORR1",
+  "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
+  "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
+  "candidate_commit": null,
+  "status": "BLOCKED_PENDING_CI_AND_EXTERNAL_EVIDENCE",
+  "qa_result": "BLOCKED_EXTERNAL_EVIDENCE_REQUIRED",
+  "market_description_verdict": "NOT_ESTABLISHED",
+  "checks": [
+    {
+      "check": "Exact accepted June source bytes and replay acceptance are explicitly carried forward to the authorised C2-v2 corrective pilot identity",
+      "result": "PASS"
+    },
+    {
+      "check": "CORR1 performs no provider intake, source mutation or replay",
+      "result": "PASS"
+    },
+    {
+      "check": "All 208 historical candidate timelines receive a deterministic chronology-safe read-only projection",
+      "result": "PASS_208_OF_208_ZERO_CORRECTED_FAILURES"
+    },
+    {
+      "check": "Corrective materialization and review projections enforce first-valid chronology and identity alignment",
+      "result": "PASS_IMPLEMENTED_AWAITING_CI"
+    },
+    {
+      "check": "Exact frozen structural comparison is exposed for every assigned reviewed fingerprint",
+      "result": "PASS_24_ASSIGNED_2_SMALL_SAMPLE_NOT_APPLICABLE"
+    },
+    {
+      "check": "Every reviewed timeline state joins to exact complete source-price evidence",
+      "result": "PASS_48_OF_48"
+    },
+    {
+      "check": "Exact C1 facts, levels, relations and formula inputs are bound for every displayed claim",
+      "result": "FAIL_EXTERNAL_EVIDENCE_UNAVAILABLE"
+    },
+    {
+      "check": "Exact pre-trigger histories are bound for every persistence and switching claim",
+      "result": "FAIL_11_REVIEW_UNITS_EXTERNAL_HISTORY_UNAVAILABLE"
+    },
+    {
+      "check": "Immutable deterministic negative controls support false-positive assessment",
+      "result": "FAIL_ZERO_CONTROLS_SEPARATE_AUTHORITY_REQUIRED"
+    },
+    {
+      "check": "Focused, dependent and complete repository tests pass",
+      "result": "PENDING_CI"
+    }
+  ],
+  "resolved_findings": [
+    "PD-JUNE-MDR-001",
+    "PD-JUNE-MDR-002",
+    "PD-JUNE-MDR-005"
+  ],
+  "blocking_findings": [
+    {
+      "code": "PD-JUNE-MDR-003",
+      "status": "OPEN",
+      "summary": "Exact June-v2 C1 claim and formula evidence is unavailable."
+    },
+    {
+      "code": "PD-JUNE-MDR-004",
+      "status": "OPEN",
+      "summary": "Exact pre-trigger persistence and switching histories are unavailable for 11 reviewed units."
+    },
+    {
+      "code": "PD-JUNE-MDR-006",
+      "status": "OPEN",
+      "summary": "No immutable negative controls exist; separate control-design authority would be required."
+    }
+  ],
+  "warnings": [
+    "Workflow and mechanical assurance are not evidence that the system semantically describes the market correctly.",
+    "The historical June artifacts remain immutable; corrected chronology is a read-only projection only.",
+    "No return to PD-JUNE-MDR-G1 is lawful while exact C1 and pre-trigger evidence is unavailable."
+  ],
+  "test_evidence": [],
+  "recommendation": "PRESERVE_USEFUL_CORR1_WORK_AND_BLOCK_ON_EXACT_EXTERNAL_EVIDENCE",
+  "rollback": "Preserve all external artifacts and signed pilot evidence. Revert only CORR1 code, compact evidence, tests, workflow, QA and state through a new non-destructive commit."
+}
