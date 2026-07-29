@@ -23,7 +23,7 @@ jobs:
           PYTHONPATH=src python scripts/build_research_console_overview.py \
             --read-model fixtures/research_operations/research_console_v0_3/RC_WP2_OVERVIEW_SOURCE_READ_MODEL.json \
             --output /tmp/overview_candidate.json
-      - name: Verify exact RC-WP2 v0.3 packet
+      - name: Verify exact RC-WP2 v0.3 packet and lawful programme continuity
         run: |
           python - <<'PY'
           import json
@@ -47,10 +47,17 @@ jobs:
           research = next(item for item in candidate['health_domains'] if item['domain'] == 'RESEARCH_RECORDS')
           assert research['status'] == 'NOT_EVALUATED'
           assert research['progress'] == 0.0
-          assert 'active_console_consumption: DENIED_PENDING_RC_G2' in registry
-          assert 'stage: RC_WP2_COMPLETE_RC_G2_V0_3_REVIEW_READY' in implementation
-          assert 'active_live_projection_authority: DENIED_PENDING_RC_G2' in implementation
-          assert 'live_research_surface_authority: DENIED_PENDING_RC_G3' in implementation
+          assert 'active_console_consumption: DENIED_PENDING_RC_G2' in registry or 'active_console_consumption: APPROVED_OVERVIEW_ONLY_BOUNDED_LOCAL_READ_ONLY' in registry
+
+          historical_stage = 'stage: RC_WP2_COMPLETE_RC_G2_V0_3_REVIEW_READY' in implementation
+          completed_stage = 'stage: RC_G3A_PASS_RC_WP4_COMPLETED' in implementation
+          assert historical_stage or completed_stage
+          assert 'active_live_projection_authority: DENIED_PENDING_RC_G2' in implementation or 'active_live_projection_authority: APPROVED_BOUNDED_LOCAL_READ_ONLY_PRESENTATION_ONLY' in implementation
+          assert 'live_research_surface_authority: DENIED_PENDING_RC_G3' in implementation or 'live_research_surface_authority: ACCEPTED_RO2_AND_RC_G4_C1_LOCAL_READ_ONLY' in implementation
+          if completed_stage:
+              assert 'rc_wp4_merge_commit: d7d4d8e0ef4989ce1d9acc0352e20975512a05d5' in implementation
+              assert 'system_workspace_and_activity_authority: ENABLED_LOCAL_READ_ONLY' in implementation
+              assert 'validation_consumption: LOCKED_UNCONSUMED' in implementation
           assert 'console_overview_candidate' not in home
           assert 'console_overview_candidate' not in shell
           PY

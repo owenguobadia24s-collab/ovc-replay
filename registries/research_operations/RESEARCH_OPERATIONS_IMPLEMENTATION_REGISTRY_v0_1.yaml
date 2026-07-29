@@ -63,7 +63,8 @@ console_v0_2_upgrade:
   research_write_authority: DENIED_PENDING_SEPARATE_GATE
 console_v0_3_amendment:
   programme_id: OVC-RESEARCH-CONSOLE.v0.3
-  stage: RC_G2_PASS_RC_WP3_V0_3_AUTHORISED
+  stage: RC_G3A_PASS_RC_WP4_COMPLETED
+  programme_status: COMPLETED
   preflight_baseline_commit: f704f33e4d5fc19f5807d0a92156b99afa8bce84
   acceptance_merge_commit: f93a84e9bfdf36b28ba79f84da8163c3ae4e3b10
   rc_wp1_baseline_commit: ea4d4dac2ec07845b82250980207c99e98eb581b
@@ -73,11 +74,18 @@ console_v0_3_amendment:
   rc_wp2_baseline_commit: 3bd4ed79f43c6f288248f10b99e9dfa04a9f68a2
   rc_wp2_reviewed_head: 5301922805114a5ea6628a300095ab4b74f3cfed
   rc_wp2_merge_commit: 6701ec00469898b12f17b294610d839d4082d94b
+  rc_g3_merge_commit: c0d089f3c5adcf4d2e4b96e060a0b67d5fe4655c
+  rc_g4_operator_decision_merge_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
+  rc_g4_activation_merge_commit: 4af07508c6503349d97cf7066e609837dc1b37f2
+  rc_g4_completion_merge_commit: 79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5
+  rc_wp4_final_head: 99782df561ac379cfac4b6e0a8a9fa401eda2dc0
+  rc_wp4_merge_commit: d7d4d8e0ef4989ce1d9acc0352e20975512a05d5
+  rc_g3a_merge_commit: d7d4d8e0ef4989ce1d9acc0352e20975512a05d5
   integration_baseline_commit: 2a1b22dc248ebe0f0c1b360062e9e6c1402a5b1a
   rc_a0_reviewed_head: 8373a0129e482e7b1a27dc574f236e804a703ef0
   rc_a0_pr: 54
   rc_a0_pr_integration_state: REBASED_BY_RC_A1_FRESH_MAIN_INTEGRATION
-  authority_delta: OVERVIEW_AND_AMBIENT_HEALTH_ACCEPTED_LOCAL_DERIVED_READ_ONLY
+  authority_delta: LOCAL_READ_ONLY_OVERVIEW_RESEARCH_C1_SYSTEM_AND_ACTIVITY_PRESENTATION
   amendment_plan: docs/plans/research_operations/OVC_RESEARCH_CONSOLE_V0_3_INFORMATION_ARCHITECTURE_AMENDMENT_v0_1.md
   information_architecture_contract: contracts/research_operations/console/OVC_RESEARCH_CONSOLE_INFORMATION_ARCHITECTURE_CONTRACT_v0_3.md
   workspace_registry: registries/research_operations/RESEARCH_CONSOLE_WORKSPACE_REGISTRY_v0_3.yaml
@@ -110,6 +118,16 @@ console_v0_3_amendment:
   rc_wp2_summary: docs/releases/research-console-v0-3/rc-wp2/RC_WP2_IMPLEMENTATION_SUMMARY.md
   rc_g2_gate_packet: docs/releases/research-console-v0-3/rc-g2/RC_G2_GATE_PACKET.json
   rc_g2_decision_record: docs/releases/research-console-v0-3/rc-g2/RC_G2_OPERATOR_DECISION.md
+  rc_g3_gate_packet: docs/releases/research-console-v0-3/rc-g3/RC_G3_GATE_PACKET.json
+  rc_g3_decision_record: docs/releases/research-console-v0-3/rc-g3/RC_G3_OPERATOR_DECISION.md
+  rc_g4_gate_packet: docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json
+  rc_g4_decision_record: docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md
+  rc_g4_merge_receipt: docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_MERGE_RECEIPT.json
+  rc_wp4_state: registries/research_operations/RESEARCH_CONSOLE_RC_WP4_STATE_v0_3.json
+  rc_wp4_projection_registry: registries/research_operations/RESEARCH_CONSOLE_SYSTEM_PROJECTION_REGISTRY_v0_3.yaml
+  rc_g3a_gate_packet: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_GATE_PACKET.json
+  rc_g3a_decision_record: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_DECISION.json
+  rc_g3a_merge_receipt: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_MERGE_RECEIPT.json
   primary_workspaces: [OVERVIEW, RESEARCH, SYSTEM]
   rc_a0: COMPLETE_RC_A1_REVIEW_READY
   rc_a1: PASS
@@ -117,12 +135,19 @@ console_v0_3_amendment:
   rc_g1: PASS
   rc_wp2: MERGED_AND_ACCEPTED_BY_RC_G2
   rc_g2: PASS
+  rc_wp3: MERGED_AND_ACCEPTED_BY_RC_G3
+  rc_g3: PASS
+  rc_g4: PASS
+  rc_wp4: COMPLETED
+  rc_g3a: PASS
   shell_implementation_authority: ACCEPTED_LOCAL_FIXTURE_ONLY_PRESENTATION
   overview_projection_implementation: ACCEPTED_LOCAL_DERIVED_READ_ONLY
-  active_live_projection_authority: APPROVED_OVERVIEW_ONLY_BOUNDED_LOCAL_READ_ONLY
+  active_live_projection_authority: APPROVED_BOUNDED_LOCAL_READ_ONLY_PRESENTATION_ONLY
   overview_console_adapter: AUTHORISED_FAIL_CLOSED_SCHEMA_SOURCE_HASH_VERIFICATION_REQUIRED
-  rc_wp3_authority: AUTHORISED_IMPLEMENTATION_PENDING_RC_G3
-  live_research_surface_authority: DENIED_PENDING_RC_G3
+  live_research_surface_authority: ACCEPTED_RO2_AND_RC_G4_C1_LOCAL_READ_ONLY
+  c1_fact_assurance_route: ENABLED_LOCAL_READ_ONLY
+  system_workspace_and_activity_authority: ENABLED_LOCAL_READ_ONLY
+  validation_consumption: LOCKED_UNCONSUMED
   research_write_authority: DENIED_PENDING_SEPARATE_GATE
   repository_mutation: NONE
   selector_mutation: NONE
@@ -130,8 +155,23 @@ console_v0_3_amendment:
   release_activation: NONE
   market_authority: NONE
   probability_authority: NONE
+  risk_authority: NONE
   exposure_authority: NONE
   execution_authority: NONE
   agent_authority: NONE
   deployment_authority: LOCAL_ONLY_NO_REMOTE_DEPLOY
-next_workstream: RC_WP3_V0_3_RESEARCH_WORKSPACE_REPLAY_EVIDENCE_AND_QUEUE
+  historical_milestones:
+    - stage: RC_A1_PASS_RC_WP1_V0_3_AUTHORISED
+      shell_implementation_authority: AUTHORISED_FIXTURE_ONLY_LOCAL_PRESENTATION
+      next_workstream: RC_WP1_V0_3_DESIGN_SYSTEM_UNIFIED_SHELL_AND_NAVIGATION
+    - stage: RC_WP1_COMPLETE_RC_G1_V0_3_REVIEW_READY
+      shell_implementation_authority: IMPLEMENTED_FIXTURE_ONLY_PENDING_RC_G1
+    - stage: RC_G1_PASS_RC_WP2_V0_3_AUTHORISED
+      rc_wp2_authority: AUTHORISED_IMPLEMENTATION_PENDING_RC_G2
+      active_live_projection_authority: DENIED_PENDING_RC_G2
+      live_research_surface_authority: DENIED_PENDING_RC_G3
+    - stage: RC_G2_PASS_RC_WP3_V0_3_AUTHORISED
+      rc_wp3_authority: AUTHORISED_IMPLEMENTATION_PENDING_RC_G3
+      active_live_projection_authority: APPROVED_OVERVIEW_ONLY_BOUNDED_LOCAL_READ_ONLY
+      live_research_surface_authority: DENIED_PENDING_RC_G3
+next_workstream: null

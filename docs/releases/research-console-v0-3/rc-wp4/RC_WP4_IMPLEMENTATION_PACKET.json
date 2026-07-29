@@ -2,17 +2,21 @@
   "schema": "ovc-research-console-rc-wp4-implementation-packet/v2",
   "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
   "work_packet": "RC-WP4-v0.3",
-  "status": "APPROVED_PENDING_MERGE",
+  "status": "COMPLETED",
   "baseline_main_commit": "79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5",
   "branch": "rebuild/research-console-v0-3-rc-wp4-system-activity",
   "candidate_commit": "0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4",
   "gate_ready_head": "631c1f5fbd646bc2a6581b7f87eedf5e9f610736",
+  "final_head": "99782df561ac379cfac4b6e0a8a9fa401eda2dc0",
   "pull_request": 154,
+  "merge_method": "SQUASH",
+  "merge_commit": "d7d4d8e0ef4989ce1d9acc0352e20975512a05d5",
+  "merge_receipt": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_MERGE_RECEIPT.json",
   "superseded_candidate": {
     "pull_request": 86,
     "branch": "build/research-console-v0-3-system-activity",
     "head": "eef56a3aa59641f87a1f71b0164714938acec0f2",
-    "reason": "61 commits behind current lawful main; rebuilt without force-push or history rewrite"
+    "disposition": "CLOSE_AS_SUPERSEDED_WITHOUT_BRANCH_DELETION_OR_HISTORY_REWRITE"
   },
   "prerequisites": [
     "RC-G3 PASS_RO2_READ_ONLY_ADAPTER_CONSUMPTION",
@@ -34,6 +38,8 @@
     "complete_repository_dedicated": "PASS_70",
     "complete_repository_generic": "PASS_70",
     "authority_assertions": "PASS",
+    "final_head_dedicated_workflow": "PASS_30442540717_90545003299",
+    "final_head_generic_workflow": "PASS_30442540473_90545002680",
     "qa_recommendation": "PASS"
   },
   "qa_packet": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json",
@@ -54,9 +60,9 @@
     "deployment": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
   },
   "rollback": {
-    "action": "Revert this bounded packet in a new commit and return the System workspace and activity stream to the prior accepted fixture presentation.",
+    "action": "Revert merge commit d7d4d8e0ef4989ce1d9acc0352e20975512a05d5 in a new non-destructive commit and return the System workspace and activity stream to the prior accepted fixture presentation.",
     "destructive_action": "NONE"
   },
   "next_gate": null,
-  "next_packet": "RC-WP4_SQUASH_MERGE"
+  "next_packet": null
 }

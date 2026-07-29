@@ -1,21 +1,25 @@
 schema: ovc-research-console-system-projection-registry/v1
 programme_id: OVC-RESEARCH-CONSOLE.v0.3
 work_packet: RC-WP4-v0.3
-status: APPROVED_PENDING_MERGE
+status: COMPLETED
 baseline_main_commit: 79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5
 branch: rebuild/research-console-v0-3-rc-wp4-system-activity
 candidate_commit: 0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4
 gate_ready_head: 631c1f5fbd646bc2a6581b7f87eedf5e9f610736
+final_head: 99782df561ac379cfac4b6e0a8a9fa401eda2dc0
 pull_request: 154
+merge_method: SQUASH
+merge_commit: d7d4d8e0ef4989ce1d9acc0352e20975512a05d5
+merge_receipt: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_MERGE_RECEIPT.json
 operator_gate: RC-G3A
 operator_decision: PASS
 operator_decision_record: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_DECISION.json
 approved_authority_delta: LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY
-activation_state: APPROVED_PENDING_MAIN_INTEGRATION
+activation_state: ENABLED_LOCAL_READ_ONLY
 supersedes_stale_candidate:
   pull_request: 86
   branch: build/research-console-v0-3-system-activity
-  reason: REBUILT_FROM_LATEST_LAWFUL_MAIN_WITH_RC_G4_COMPLETED
+  disposition: CLOSE_AS_SUPERSEDED_WITHOUT_BRANCH_DELETION_OR_HISTORY_REWRITE
 projection_schema: ovc-research-console-system-projection/v1
 implementation: apps/research_console/system_workspace.py
 fixture_integration: apps/research_console/fixtures.py
@@ -69,7 +73,11 @@ qa:
   gate_ready_head_dedicated_workflow_job: 90543349957
   gate_ready_head_generic_workflow_run: 30442027526
   gate_ready_head_generic_workflow_job: 90543348729
+  final_head_dedicated_workflow_run: 30442540717
+  final_head_dedicated_workflow_job: 90545003299
+  final_head_generic_workflow_run: 30442540473
+  final_head_generic_workflow_job: 90545002680
   recommendation: PASS
 qa_packet: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json
 gate_packet: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_GATE_PACKET.json
-next_packet: RC-WP4_SQUASH_MERGE
+next_packet: null
