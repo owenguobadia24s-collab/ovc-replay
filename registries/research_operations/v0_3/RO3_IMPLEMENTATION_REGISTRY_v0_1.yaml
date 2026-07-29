@@ -2,7 +2,7 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RC_G4_OPERATOR_GATE_PENDING
+status: RC_G4_OPERATOR_GATE_READY
 baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
 items:
   - id: RO3-00
@@ -51,12 +51,14 @@ items:
       complete_repository_suite: PASS_70
   - id: RO3-WP4
     name: C1 lineage and Console adapters
-    status: APPROVED
+    status: COMPLETED
     gate: RO3-G4
     branch: build/research-operations-v0-3-wp4-c1-lineage-adapters
     baseline_commit: 3aeb8a5a217befcf14561a5b952f075fe7a7a920
     tested_candidate_commit: 05f7f99076cb848de2a8ea717937868d105ec13e
-    merge_commit: null
+    final_head: 6530d4bcb68b0f5546e510de4a20add73b697413
+    pull_request: 150
+    merge_commit: 80adf5cfb111a8b07788276c9867ff4fee32fb09
     authority_delta: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
     decision: PASS
     decision_authority: DELEGATED_AUTO_RATIFICATION
@@ -78,13 +80,18 @@ items:
     qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_GATE_PACKET.json
     evidence_record: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_ADAPTER_EVIDENCE.json
     decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_DELEGATED_DECISION.md
+    merge_receipt: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_MERGE_RECEIPT.json
   - id: RC-G4
     name: Live C1 Console projection consumption
-    status: GATE_READY_AFTER_RO3_G4_MERGE_RECORD
+    status: GATE_READY
+    branch: gate/rc-g4-c1-live-consumption
+    baseline_commit: 80adf5cfb111a8b07788276c9867ff4fee32fb09
     authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
     auto_ratifiable: false
     operator_required: true
     current_route_state: DISABLED_PENDING_RC_G4
+    gate_packet: docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json
+    recommended_decision: PASS
 retained_boundaries:
   c1_formulas_releases_selectors: IMMUTABLE
   validation_consumption: LOCKED_UNCONSUMED
