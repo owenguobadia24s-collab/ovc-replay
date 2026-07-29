@@ -40,6 +40,12 @@ def _q(numerator: Decimal, denominator: Decimal) -> Decimal:
         return numerator / denominator
 
 
+def _at_assurance_precision(operation: Callable[[], Decimal]) -> Decimal:
+    with localcontext() as context:
+        context.prec = ASSURANCE_DECIMAL_PRECISION
+        return operation()
+
+
 def _equivalent(left: Any, right: Any) -> bool:
     if left is None or right is None:
         return left is right
@@ -208,11 +214,20 @@ def _relation_assertion(
     if expectation == "EQUAL":
         passed = _equivalent(transformed_value, base_value)
     elif expectation == "SCALE":
-        passed = base_value is not None and _equivalent(transformed_value, Decimal(str(base_value)) * factor)
+        expected = None if base_value is None else _at_assurance_precision(
+            lambda: Decimal(str(base_value)) * factor
+        )
+        passed = _equivalent(transformed_value, expected)
     elif expectation == "SIGN_REVERSE":
-        passed = base_value is not None and _equivalent(transformed_value, -Decimal(str(base_value)))
+        expected = None if base_value is None else _at_assurance_precision(
+            lambda: -Decimal(str(base_value))
+        )
+        passed = _equivalent(transformed_value, expected)
     elif expectation == "COMPLEMENT":
-        passed = base_value is not None and _equivalent(transformed_value, Decimal("1") - Decimal(str(base_value)))
+        expected = None if base_value is None else _at_assurance_precision(
+            lambda: Decimal("1") - Decimal(str(base_value))
+        )
+        passed = _equivalent(transformed_value, expected)
     elif expectation == "SWAP_WITH_LOWER":
         counterpart = "lower_wick_abs" if field_name == "upper_wick_abs" else "lower_wick_share"
         passed = _equivalent(transformed_value, _field_value(base, counterpart))
