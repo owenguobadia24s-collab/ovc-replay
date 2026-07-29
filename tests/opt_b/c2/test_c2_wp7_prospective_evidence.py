@@ -144,7 +144,7 @@ class C2WP7ProspectiveEvidenceTests(unittest.TestCase):
         self.assertIn("append_mode: APPEND_ONLY", text)
         self.assertIn("c2e_authority: NONE", text)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", text)
-        self.assertIn("next_gate: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH", text)
+        self.assertIn("next_gate: PD-G5", text)
 
     def test_contract_rejects_legacy_seed_material(self) -> None:
         text = CONTRACT.read_text(encoding="utf-8")
