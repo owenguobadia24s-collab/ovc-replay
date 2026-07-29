@@ -47,7 +47,7 @@ jobs:
           research = next(item for item in candidate['health_domains'] if item['domain'] == 'RESEARCH_RECORDS')
           assert research['status'] == 'NOT_EVALUATED'
           assert research['progress'] == 0.0
-          assert 'active_console_consumption: DENIED_PENDING_RC_G2' in registry
+          assert 'active_console_consumption: DENIED_PENDING_RC_G2' in registry or 'active_console_consumption: APPROVED_OVERVIEW_ONLY_BOUNDED_LOCAL_READ_ONLY' in registry
 
           historical_stage = 'stage: RC_WP2_COMPLETE_RC_G2_V0_3_REVIEW_READY' in implementation
           completed_stage = 'stage: RC_G3A_PASS_RC_WP4_COMPLETED' in implementation
