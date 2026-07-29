@@ -63,7 +63,7 @@ class PDJune2026ReviewAssessmentTests(unittest.TestCase):
         self.assertIn("NOT_CANDIDATE_OR_MARKET_SEMANTIC_APPROVAL", structural["meaning"])
         self.assertEqual(self.assessment["corrective_review_chain"]["remaining_deferred_object_count"], 0)
 
-    def test_market_description_reliability_fails_closed(self) -> None:
+    def test_historical_market_description_reliability_fails_closed(self) -> None:
         dimensions = self.assessment["reliability_dimensions"]
         self.assertEqual(dimensions["computational_reproducibility"]["verdict"], "PASS")
         self.assertEqual(dimensions["lineage_and_evidence_integrity"]["verdict"], "PASS")
@@ -88,18 +88,20 @@ class PDJune2026ReviewAssessmentTests(unittest.TestCase):
             self.assertEqual(authority[key], "NONE")
         self.assertEqual(authority["validation_consumption"], "LOCKED_UNCONSUMED")
 
-    def test_prior_blocker_progresses_to_bounded_corr1_external_evidence_block(self) -> None:
+    def test_prior_blocker_progresses_through_corr1_to_return_gate(self) -> None:
         next_packet = self.assessment["next_packet"]
         self.assertEqual(next_packet["packet_id"], "PD-JUNE-MDR-WP1")
         self.assertEqual(next_packet["status"], "BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED")
         self.assertGreaterEqual(len(self.assessment["missing_evidence_for_claim_level_assurance"]), 7)
-        self.assertEqual(self.state["status"], "BLOCKED")
+        self.assertEqual(self.state["status"], "GATE_READY")
         self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-CORR1")
         self.assertEqual(self.state["overall_verdict"], "NOT_ESTABLISHED")
-        self.assertEqual(self.state["source_to_c2_v2_binding"], "PASS_CARRY_FORWARD_RECEIPT")
-        self.assertEqual(self.state["timeline_chronology"], "PASS_208_OF_208_CORRECTED_READ_ONLY_PROJECTION_AND_FUTURE_CORRECTIVE_MATERIALIZATION")
-        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1_RETURN_NOT_READY")
-        self.assertEqual(self.state["next_packet_status"], "BLOCKED_EXACT_EXTERNAL_EVIDENCE_REQUIRED")
+        self.assertEqual(self.state["source_to_c2_v2_binding"], "PASS_EXPLICIT_CARRY_FORWARD_AND_CORRECTIVE_RUN_BINDING")
+        self.assertEqual(self.state["timeline_chronology"], "PASS_208_OF_208_CORRECTED_READ_ONLY_PROJECTION")
+        self.assertEqual(self.state["population_state_reproduction"], "PASS_1144_OF_1144")
+        self.assertEqual(self.state["pre_trigger_history"], "PASS_11_OF_11_HISTORY_DEPENDENT_UNITS")
+        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1")
+        self.assertEqual(self.state["next_packet_status"], "OPERATOR_AUTHORITY_REQUIRED")
 
     def test_qa_recommends_assessment_pass_not_market_validity_pass(self) -> None:
         self.assertEqual(self.qa["qa_status"], "PASS_ASSESSMENT_BLOCKED_NEXT_PACKET")
