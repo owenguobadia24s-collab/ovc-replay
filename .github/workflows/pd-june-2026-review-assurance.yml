@@ -35,7 +35,7 @@ jobs:
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_2026_review_assessment -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce non-activating assessment and approved corrective boundary
+      - name: Enforce historical assessment and current external-evidence block
         run: |
           python - <<'PY'
           import json
@@ -49,11 +49,11 @@ jobs:
           assert assessment['next_packet']['status'] == 'BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED'
           assert decision['decision'] == 'DEFER'
           assert decision['decision_authority'] == 'OPERATOR'
-          assert state['status'] == 'APPROVED'
-          assert state['packet_id'] == 'PD-JUNE-MDR-WP1'
-          assert state['operator_decision'] == 'DEFER'
-          assert state['next_gate'] == 'PD-JUNE-MDR-G1_RETURN'
-          assert state['next_packet'] == 'PD-JUNE-MDR-CORR1'
+          assert state['status'] == 'BLOCKED'
+          assert state['packet_id'] == 'PD-JUNE-MDR-CORR1'
+          assert state['source_to_c2_v2_binding'] == 'PASS_CARRY_FORWARD_RECEIPT'
+          assert state['next_gate'] == 'PD-JUNE-MDR-G1_RETURN_NOT_READY'
+          assert state['next_packet_status'] == 'BLOCKED_EXACT_EXTERNAL_EVIDENCE_REQUIRED'
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
           assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           authority = assessment['authority']
