@@ -25,7 +25,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify exact returned evidence and Ed25519 SSHSIG
+      - name: Verify exact returned evidence, Ed25519 SSHSIG and operator PASS
         env:
           PYTHONPATH: src
         run: python -m unittest tests.research_operations.pattern_discovery.test_c1c_g5_corr3_final_operator_gate -v
@@ -33,12 +33,16 @@ jobs:
         env:
           PYTHONPATH: src
         run: |
-          python -m unittest             tests.research_operations.pattern_discovery.test_c1c_g5_corr3_structural_comparison             tests.research_operations.pattern_discovery.test_c1c_g5_corr3_console_boundary             tests.research_operations.pattern_discovery.test_c1c_g5_corr2_review_closure             tests.research_operations.pattern_discovery.test_c1c_g5_corr2_signature_compat -v
+          python -m unittest \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr3_structural_comparison \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr3_console_boundary \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_review_closure \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_signature_compat -v
       - name: Run complete repository suite
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s tests -v
-      - name: Enforce operator-reserved authority boundary
+      - name: Enforce approved nonactivating authority boundary
         run: |
           python - <<'PY'
           import json
@@ -46,10 +50,21 @@ jobs:
           path = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_FINAL_OPERATOR_GATE_PACKET.json')
           packet = json.loads(path.read_text())
           state = packet['programme_state']
-          if state['authority_required'] != 'OPERATOR':
-              raise SystemExit('operator authority missing')
-          if state['authority_delta'] != 'NONE_UNTIL_OPERATOR_DECISION':
-              raise SystemExit('authority granted before operator decision')
+          decision = packet['operator_decision']
+          if packet['status'] != 'APPROVED' or packet['gate_status'] != 'APPROVED':
+              raise SystemExit('operator PASS not recorded')
+          if packet['operator_approval_required'] is not False:
+              raise SystemExit('operator gate still marked pending')
+          if decision['decision'] != 'PASS' or decision['decision_authority'] != 'OPERATOR':
+              raise SystemExit('operator PASS decision missing')
+          if state['authority_required'] != 'OPERATOR_PASS_RECORDED':
+              raise SystemExit('operator PASS authority record missing')
+          if state['authority_delta'] != 'NONACTIVATING_CORRECTIVE_PILOT_REVIEW_ACCEPTANCE_ONLY':
+              raise SystemExit('unexpected authority delta')
+          if state['resolved_blocker']['status'] != 'CLOSED_BY_OPERATOR_PASS':
+              raise SystemExit('C1C-G5-BLOCK-004 not closed')
+          if state['next_packet'] != 'RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME':
+              raise SystemExit('continuation point changed')
           retained = packet['current_authority']
           expected = {
               'canonical_discovery_processing': 'DENIED',
