@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1",
+  "title": "RO3 C1 Formula Evidence Card v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "object_type", "panel_id", "role", "release_id", "manifest_sha256",
+    "c1_record_id", "primitive_id", "field_name", "inputs", "formula", "output",
+    "unit", "domain", "null_reason", "first_valid_time", "lineage_trace_id",
+    "authority", "read_only", "writes", "projection_id", "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-formula-evidence-card/v1"},
+    "object_type": {"const": "RO3.C1FormulaEvidenceCard.v1"},
+    "panel_id": {"const": "RO3-C1-FACT-INSPECTOR"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "release_id": {"type": "string"},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "c1_record_id": {"type": "string", "pattern": "^c1:[0-9a-f]{64}$"},
+    "primitive_id": {"type": "string", "pattern": "^C1-[A-Z0-9-]+\\.v0\\.1$"},
+    "field_name": {"type": "string", "minLength": 1},
+    "inputs": {"type": "object", "minProperties": 1},
+    "formula": {"type": "string", "minLength": 1},
+    "output": {"type": ["string", "null"]},
+    "unit": {"enum": ["PRICE", "TICKS", "RATIO", "ENUM"]},
+    "domain": {"type": "object", "minProperties": 1},
+    "null_reason": {"type": ["string", "null"]},
+    "first_valid_time": {"type": "string", "format": "date-time"},
+    "lineage_trace_id": {"type": "string"},
+    "authority": {"const": "DERIVED_EXPLANATION_ONLY"},
+    "read_only": {"const": true},
+    "writes": {"const": "NONE"},
+    "projection_id": {"type": "string", "pattern": "^RO3-C1-FACT-[0-9a-f]{20}$"},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
