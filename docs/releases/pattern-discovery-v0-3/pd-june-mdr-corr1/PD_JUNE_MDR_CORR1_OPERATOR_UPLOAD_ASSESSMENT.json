@@ -1,0 +1,152 @@
+{
+  "schema": "ovc-pd-june-mdr-corr1-operator-upload-assessment/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "packet_id": "PD-JUNE-MDR-CORR1",
+  "assessment_date": "2026-07-29",
+  "status": "PARTIAL_EVIDENCE_RECEIVED_STRONGER_LINEAGE_CONTRADICTION",
+  "operator_upload": {
+    "output_manifest_file_sha256": "af0410d58f8b6522129a0162f9741c6b7bc5485526848d64199cdbc60256f7be",
+    "declared_output_manifest_sha256": "3c6295badd04896a9e94b4b5a3ccb354bb51de52d5927839a86f61a40ed679ff",
+    "manifest_schema": "ovc-rps-wp3-output-manifest/v1",
+    "manifest_code_commit": "2fbcc114d55858c95fbfefe743fb98ba5800560b",
+    "manifest_active_c2_model_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+    "manifest_file_count": 21,
+    "manifest_members_available_and_hash_verified": 14,
+    "manifest_members_missing": 7,
+    "available_c1_records": 602,
+    "available_c1_breakdown": {
+      "15M_ASK": 271,
+      "15M_BID": 271,
+      "2H_A_L_ASK": 30,
+      "2H_A_L_BID": 30
+    }
+  },
+  "exact_hash_verification": {
+    "status": "PASS_14_OF_14_AVAILABLE_MEMBERS_MATCH_DECLARED_MANIFEST_HASH_AND_SIZE",
+    "newly_received_c1_files": [
+      {
+        "manifest_path": "c1/15M/ASK.jsonl",
+        "sha256": "c19e87423b9d3fef1cf8f07531c3ff17b5e488711a5a56dad1972be2dbdb0e1a",
+        "size_bytes": 681659
+      },
+      {
+        "manifest_path": "c1/15M/BID.jsonl",
+        "sha256": "9ed170ce3b6b6c6553a02a2b3286a3140edd958c8a05ba309679a41c12d58dd5",
+        "size_bytes": 681623
+      },
+      {
+        "manifest_path": "c1/2H_A_L/ASK.jsonl",
+        "sha256": "96dbda0579f9f2ef7ec1ab7b91baae7b55c866a84c8700e8954ab384f4fbeccb",
+        "size_bytes": 193201
+      },
+      {
+        "manifest_path": "c1/2H_A_L/BID.jsonl",
+        "sha256": "743e6e7baf7318cae3e4649bd46b93d8a7e66c63b2d505d68c6a2d2c137aaffe",
+        "size_bytes": 193467
+      }
+    ],
+    "newly_received_c2_files": [
+      {
+        "manifest_path": "c2/states/15M/ASK/GBPUSD-15M-LOCAL-v0_1.jsonl",
+        "sha256": "f2b482033b6e6eb721e20723dc1e7b8c8e99e0fcb2eafe939b48d1ed135de3d6"
+      },
+      {
+        "manifest_path": "c2/states/15M/ASK/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
+        "sha256": "afdae9390606e73aa1d88ce8a3be7d09867ca1c4a4941768dc488115a57d91d4"
+      },
+      {
+        "manifest_path": "c2/states/2H_A_L/ASK/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl",
+        "sha256": "7996d13789beefbbc1aea583169a5a53d3d25ce3dbc8f0c33896084af60f5306"
+      },
+      {
+        "manifest_path": "c2/states/2H_A_L/BID/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl",
+        "sha256": "88bbecb4a6d7650c6c470754721fa37cdcb5a170270fa39c29ab86607121efc7"
+      },
+      {
+        "manifest_path": "c2/transitions/2H_A_L/ASK/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl",
+        "sha256": "28194d5ea88762c079b201380f47e10c76c5e837e511fc086ced063647a6f36f"
+      },
+      {
+        "manifest_path": "c2/transitions/2H_A_L/BID/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl",
+        "sha256": "83e8da273a54985d4027b184d5afce4758918a7f845406a57bde50af09653dc1"
+      }
+    ]
+  },
+  "c1_formula_assurance": {
+    "formula_registry_id_declared_by_every_record": "C1.FORMULAS.v0.1",
+    "corrective_implementation_identity": "C1.IMPLEMENTATION.v0.2",
+    "same_bar_non_wick_invariants": "PASS_602_OF_602_RECORDS",
+    "wick_balance_frozen_registry_formula": "upper_wick_share - lower_wick_share",
+    "wick_balance_exact_match_count": 13,
+    "wick_balance_opposite_sign_count": 589,
+    "wick_balance_total_record_count": 602,
+    "interpretation": "Every non-zero wick_balance value in the supplied prospective C1 corpus uses the opposite sign from the currently frozen registry formula. The 13 apparent matches are zero-balance records where sign reversal is observationally identical.",
+    "verdict": "FAIL_SUPPLIED_C1_CORPUS_IS_PRE_CORRECTIVE_DEFECTIVE_HELPER_OUTPUT"
+  },
+  "lineage_assessment": {
+    "reviewed_pilot_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "supplied_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+    "c1c_g5_required_parent_lineage": "EXACT_C1_V2_PARENTS",
+    "status": "FAIL_SUPPLIED_RPS_WP3_V1_OUTPUT_IS_NOT_THE_CORRECTIVE_C1C_G5_V2_PILOT_EVIDENCE",
+    "impact": "The supplied files are useful negative evidence and exact provenance for the original prospective compute, but they cannot establish the corrected C1-to-C2-v2 claim chain used by PD.PILOT.RUN.96c16f11717e787f971851ee."
+  },
+  "review_sample_relevance": {
+    "reviewed_unit_count": 26,
+    "reviewed_clock": "15M_ONLY",
+    "history_dependent_unit_count": 11,
+    "history_dependent_ask_count": 6,
+    "history_dependent_bid_count": 5,
+    "supplied_2h_transition_relevance": "NONE_TO_THE_26_UNIT_CLAIM_REVIEW_SAMPLE",
+    "status": "PRE_TRIGGER_HISTORY_BLOCKER_REMAINS"
+  },
+  "missing_manifest_members": [
+    "c2/states/15M/BID/GBPUSD-15M-LOCAL-v0_1.jsonl",
+    "c2/states/15M/BID/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
+    "c2/transitions/15M/ASK/GBPUSD-15M-LOCAL-v0_1.jsonl",
+    "c2/transitions/15M/ASK/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
+    "c2/transitions/15M/BID/GBPUSD-15M-LOCAL-v0_1.jsonl",
+    "c2/transitions/15M/BID/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
+    "qa/coverage.json"
+  ],
+  "finding_updates": [
+    {
+      "code": "PD-JUNE-MDR-003",
+      "status": "OPEN_STRONGER_CONTRADICTION",
+      "update": "Exact C1 facts and source-price inputs are now available, but the supplied corpus is pre-corrective and contains 589 non-zero wick-balance sign violations. Exact level-boundary and relation-value ledgers remain absent."
+    },
+    {
+      "code": "PD-JUNE-MDR-004",
+      "status": "OPEN",
+      "update": "The review sample is entirely 15M. Four exact 15M transition streams and both BID 15M C2 state streams are missing; the supplied 2H transition files do not reconstruct the 11 reviewed persistence/switching histories."
+    },
+    {
+      "code": "PD-JUNE-MDR-006",
+      "status": "UNCHANGED_SEPARATE_AUTHORITY_REQUIRED",
+      "update": "No immutable negative controls were supplied."
+    }
+  ],
+  "smallest_lawful_resolution": {
+    "instruction": "Retrieve the already-produced C1C-G5 corrective pilot evidence. Do not perform another market replay.",
+    "expected_root": "C:\\Users\\Owner\\OVIS\\ovc-replay-external-artifacts\\pattern-discovery\\pilot\\PD.PILOT.GBPUSD.20260622_20260625.v2\\PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "required_existing_artifacts": [
+      "Exact corrected 15M ASK and BID C1 records produced under C1.IMPLEMENTATION.v0.2 and bound to the C1-v2 parent lineage",
+      "Exact C2-v2 15M state streams for ASK and BID, LOCAL and WITH-2H-PARENT scopes",
+      "Exact C2-v2 15M transition streams for ASK and BID, LOCAL and WITH-2H-PARENT scopes",
+      "Exact level-boundary and relation-value evidence or a hash-bound per-state claim-evidence bundle",
+      "Exact pre-trigger state histories and evaluator inputs for the 11 LONG_PERSISTENCE or REPEATED_SWITCHING review units",
+      "Corrective output manifest and coverage receipt"
+    ]
+  },
+  "authority": {
+    "provider_intake": "DENIED",
+    "machine_replay": "DENIED",
+    "canonical_2021_2023_discovery_processing_or_append": "DENIED",
+    "formula_or_model_change": "NONE",
+    "promotion": "NONE",
+    "selector_or_release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability_risk_exposure_trading_execution_agent_write": "NONE"
+  },
+  "overall_verdict": "NOT_ESTABLISHED_BLOCKER_REMAINS"
+}
