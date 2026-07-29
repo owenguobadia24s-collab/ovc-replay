@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-c1c-g5-corr3-merge-receipt/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "packet_id": "C1C-G5-CORR3",
+  "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "baseline_commit": "41623d07e73b2e0b87824c365f11acca9e51d73d",
+  "branch": "build/c1c-g5-corr3-structural-comparison",
+  "tested_candidate_head": "9a4fa3f3472d8c09981264c29093d13115a34bcb",
+  "final_pull_request_head": "def805f70ac86d53e9db14fa4b5ebaee5356f27f",
+  "pull_request": 141,
+  "merge_commit": "85c9805db69d487ffdb043eca18414101cf03387",
+  "merge_method": "SQUASH",
+  "merged_on": "2026-07-29",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+  "qa_result": "PASS",
+  "final_head_checks": [
+    {
+      "workflow_run": 30415545335,
+      "job": 90461150777,
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30415545268,
+      "job": 90461150538,
+      "result": "PASS"
+    }
+  ],
+  "authority_delta": "NONACTIVATING_READ_ONLY_STRUCTURAL_COMPARISON_EXPOSURE_ONLY",
+  "target_candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+  "operator_local_blocker": {
+    "blocker_id": "C1C-G5-BLOCK-004",
+    "status": "OPEN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW_REQUIRED",
+    "reason": "GitHub CI cannot perform the exact one-object human disposition, access the operator-local external pilot root or use the operator-private Ed25519 key.",
+    "second_machine_replay": "DENIED_NOT_REQUIRED"
+  },
+  "next_packet": "C1C-G5-CORR3-LOCAL-REVIEW",
+  "next_command": ".\\scripts\\run_c1c_g5_corr3_review.ps1 preflight",
+  "rollback": "Revert CORR3 through a new non-destructive commit while preserving the immutable pilot run, all signed evidence, the operator decision and this merge receipt.",
+  "status": "COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED"
+}
