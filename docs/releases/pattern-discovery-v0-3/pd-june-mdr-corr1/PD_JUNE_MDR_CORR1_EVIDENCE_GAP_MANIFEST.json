@@ -3,106 +3,56 @@
   "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
   "packet_id": "PD-JUNE-MDR-CORR1",
   "return_gate": "PD-JUNE-MDR-G1",
-  "status": "BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED",
-  "latest_upload_assessment": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_OPERATOR_UPLOAD_ASSESSMENT.json",
+  "status": "GATE_READY_CONTROL_AND_AGREEMENT_EVIDENCE_REQUIRED",
+  "drive_evidence_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json",
+  "claim_trigger_reproduction": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json",
   "resolved_findings": [
     {
       "code": "PD-JUNE-MDR-001",
-      "resolution": "Immutable source-to-C2-v2 carry-forward receipt materialised from existing signed authority and zero-drift C2-v2 receipts."
+      "resolution": "Exact source compute run and corrective-v2 pilot run are linked through the preserved source binding, corrective manifest and signed pilot-run descriptor."
     },
     {
       "code": "PD-JUNE-MDR-002",
-      "resolution": "All 208 immutable candidate timelines projected in first-valid chronology; corrective materializer and read-only review projection enforce the same ordering."
+      "resolution": "All 208 immutable candidate timelines have deterministic first-valid chronology projections; corrected projection failures are zero."
+    },
+    {
+      "code": "PD-JUNE-MDR-003",
+      "resolution": "All 21 source-compute manifest members were retrieved and hash verified. Exact C1, source-price, level, container, relation and state evidence reproduces 1,144 of 1,144 C2 states and all 48 unique displayed state claims."
+    },
+    {
+      "code": "PD-JUNE-MDR-004",
+      "resolution": "All four 15M state streams and all four 15M transition streams were retrieved. All 11 LONG_PERSISTENCE or REPEATED_SWITCHING histories reproduce against the frozen evaluator inputs."
     },
     {
       "code": "PD-JUNE-MDR-005",
-      "resolution": "Exact frozen distance decomposition reproduced for 24 assigned reviewed fingerprints; two small-sample units explicitly marked not applicable."
+      "resolution": "Exact frozen distance decomposition is available for 24 assigned reviewed fingerprints; two small-sample units are explicitly not applicable."
     }
   ],
   "open_blockers": [
     {
-      "code": "PD-JUNE-MDR-003",
-      "status": "OPEN_SUPPLIED_C1_IS_PRE_CORRECTIVE_AND_LEVEL_RELATION_EVIDENCE_ABSENT",
-      "new_evidence": {
-        "exact_c1_record_count": 602,
-        "same_bar_non_wick_invariants": "PASS_602_OF_602",
-        "wick_balance_registry_match_count": 13,
-        "wick_balance_opposite_sign_count": 589,
-        "supplied_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
-        "required_reviewed_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2"
-      },
-      "required_evidence": [
-        "Exact corrected C1 records produced under C1.IMPLEMENTATION.v0.2 and bound to the C1-v2 parent lineage for every reviewed C2-v2 state",
-        "Exact level-boundary records referenced by those corrected C1/C2-v2 states",
-        "Exact relation values and container/parent relationships",
-        "Exact formula-registry, implementation and parameter-pack identities",
-        "Exact formula inputs and derivation references for displayed LOCATION, MOTION, ORGANISATION and INTERACTION values"
-      ],
-      "impact": "The supplied original prospective C1 facts expose a 589-record wick-balance sign contradiction and are not the corrected C1-v2 parent evidence required by C1C-G5. C2-v2 labels still cannot be independently verified.",
-      "smallest_lawful_resolution": "Retrieve and bind the already-produced C1C-G5 corrective C1-v2 and C2-v2 pilot evidence. Do not perform another market replay or alter formulas."
-    },
-    {
-      "code": "PD-JUNE-MDR-004",
-      "status": "OPEN_CORRECTIVE_15M_STATE_AND_TRANSITION_HISTORY_UNAVAILABLE",
-      "affected_review_units": 11,
-      "review_sample": {
-        "clock": "15M_ONLY",
-        "ask_units": 6,
-        "bid_units": 5
-      },
-      "missing_original_manifest_members": [
-        "c2/states/15M/BID/GBPUSD-15M-LOCAL-v0_1.jsonl",
-        "c2/states/15M/BID/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
-        "c2/transitions/15M/ASK/GBPUSD-15M-LOCAL-v0_1.jsonl",
-        "c2/transitions/15M/ASK/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl",
-        "c2/transitions/15M/BID/GBPUSD-15M-LOCAL-v0_1.jsonl",
-        "c2/transitions/15M/BID/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl"
-      ],
-      "required_evidence": [
-        "Exact corrective C2-v2 pre-trigger state-history windows for every LONG_PERSISTENCE review unit",
-        "Exact corrective C2-v2 pre-trigger state-history windows for every REPEATED_SWITCHING review unit",
-        "Exact corrective 15M transition inputs and frozen evaluator thresholds already in force at each trigger cutoff"
-      ],
-      "impact": "The supplied 2H transition streams do not apply to the entirely 15M review sample, and the corrective C2-v2 histories remain unavailable.",
-      "smallest_lawful_resolution": "Retrieve the exact already-produced corrective 15M C2-v2 state and transition histories. Do not run another market replay."
-    },
-    {
       "code": "PD-JUNE-MDR-006",
-      "status": "OPEN_SEPARATE_CONTROL_DESIGN_AUTHORITY_REQUIRED",
+      "status": "OPEN_OPERATOR_AUTHORITY_REQUIRED_FOR_CONTROL_AND_AGREEMENT_ASSURANCE",
       "required_evidence": [
-        "A separately approved deterministic negative-control construction rule",
-        "Control identities that do not relabel or mutate the immutable June candidate population"
+        "A separately approved deterministic read-only negative-control construction rule",
+        "Control identities that do not insert, relabel or mutate the immutable 208-candidate June population",
+        "A predeclared blinded repeat-review sample and agreement procedure",
+        "False-positive, contradiction-detection and inter-review agreement results"
       ],
-      "impact": "False-positive and contradiction-detection performance cannot be estimated from the June population.",
-      "smallest_lawful_resolution": "Create a future read-only control-design packet under separate authority. Preserve the immutable June population unchanged."
+      "impact": "The June packet establishes deterministic structural-description correctness for the exact slice, but not general reliability against false positives or reviewer disagreement.",
+      "smallest_lawful_resolution": "Operator-authorise PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE as a read-only packet using only existing June evidence."
     }
   ],
-  "available_exact_external_artifacts": [
-    "candidates.jsonl",
-    "fingerprints.jsonl",
-    "transitions.jsonl",
-    "trigger-events.jsonl",
-    "cluster-versions.jsonl",
-    "console-bundle.json",
-    "queue-items.jsonl",
-    "prospective-source-binding.json",
-    "15M BID/ASK price bars",
-    "2H BID/ASK price bars",
-    "Original RPS-WP3 C1 15M and 2H ASK/BID records",
-    "Original RPS-WP3 C2-v1 ASK 15M state streams",
-    "Original RPS-WP3 C2-v1 ASK/BID 2H state and transition streams",
-    "Original RPS-WP3 output manifest"
-  ],
-  "not_available": [
-    "Exact corrected June C1-v2 parent ledger for the corrective pilot run",
-    "Exact corrected June C2-v2 15M state streams for all sides and scopes",
-    "Exact corrected June C2-v2 15M transition streams for all sides and scopes",
-    "Exact June v2 level and relation ledger",
-    "Exact per-state corrected formula input/provenance bundle",
-    "Exact corrective pre-trigger C2-v2 history bundle",
-    "Immutable deterministic negative controls"
-  ],
-  "expected_corrective_root": "C:\\Users\\Owner\\OVIS\\ovc-replay-external-artifacts\\pattern-discovery\\pilot\\PD.PILOT.GBPUSD.20260622_20260625.v2\\PD.PILOT.RUN.96c16f11717e787f971851ee",
+  "evidence_results": {
+    "source_manifest_members_verified": "PASS_21_OF_21",
+    "c1_records": 602,
+    "c2_states_reproduced": "PASS_1144_OF_1144",
+    "axis_payloads_reproduced": "PASS_5720_OF_5720",
+    "reviewed_state_claims_reproduced": "PASS_48_OF_48",
+    "reviewed_triggers_reproduced": "PASS_26_OF_26",
+    "history_dependent_triggers_reproduced": "PASS_11_OF_11",
+    "wick_balance_opposite_sign_records": 589,
+    "wick_balance_dependency_on_c2_structural_axes": "NONE"
+  },
   "authority": {
     "provider_intake": "DENIED",
     "machine_replay": "DENIED",
@@ -115,5 +65,5 @@
     "validation_consumption": "LOCKED_UNCONSUMED",
     "probability_risk_exposure_trading_execution_agent_write": "NONE"
   },
-  "next_action": "Preserve CORR1 branch and PR. Retrieve the already-produced C1C-G5 corrective C1-v2/C2-v2 evidence from the exact v2 pilot run root; do not perform another replay."
+  "next_action": "Present PD-JUNE-MDR-G1 return gate. Recommended decision: DEFER to the bounded operator-required control-and-agreement assurance packet."
 }
