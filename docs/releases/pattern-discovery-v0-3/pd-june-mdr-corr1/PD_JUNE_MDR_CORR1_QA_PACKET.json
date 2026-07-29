@@ -38,15 +38,24 @@
       "summary": "No immutable negative controls or blinded repeat-review agreement study exists; general false-positive and review-consistency reliability remains unestablished."
     }
   ],
+  "corrected_defects": [
+    {
+      "code": "PD-JUNE-MDR-CORR1-CI-004",
+      "failed_runs": [30497142515, 30497551601, 30497734957],
+      "finding": "The large base64-gzip claim-trigger digest was not preserved as a decodable payload by repository contents transport.",
+      "resolution": "Superseded the unusable encoding artifact for gate purposes with a compact canonical JSON digest receipt binding the 48 state-claim records, 26 trigger-reproduction records and full external evidence hashes. No evidence conclusion or raw external byte was altered."
+    }
+  ],
   "warnings": [
     "The original prospective C1 corpus contains 589 non-zero wick-balance values with the pre-corrective opposite sign.",
     "The frozen C2 structural builders do not consume wick_balance; all 1,144 states reproduce exactly from the supplied C1 records.",
-    "This bounded June result does not establish general reliability without negative controls and repeat-review evidence."
+    "This bounded June result does not establish general reliability without negative controls and repeat-review evidence.",
+    "PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json.gz.b64 is superseded and is not used by the gate or CI."
   ],
   "evidence": {
     "drive_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json",
     "reproduction_summary": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json",
-    "reproduction_digest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json.gz.b64",
+    "reproduction_digest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json",
     "return_gate": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json"
   },
   "test_evidence": [],
