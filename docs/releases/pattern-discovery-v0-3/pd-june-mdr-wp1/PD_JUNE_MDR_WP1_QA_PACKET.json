@@ -9,59 +9,30 @@
     "No reviewed candidate receives a full market-description SUPPORT verdict."
   ],
   "branch": "review/pd-june-mdr-wp1-claim-level-market-description",
-  "candidate_commit": null,
+  "candidate_commit": "75de3a8a7bd6c9754b7a053a7ae8de5813375017",
   "checks": [
+    {"check": "Seven predeclared governed artifact hashes match exact uploaded bytes", "result": "PASS"},
+    {"check": "All twelve uploaded JSON/JSONL artifacts parse", "result": "PASS"},
+    {"check": "208 candidate/fingerprint/trigger identities reconcile", "result": "PASS"},
+    {"check": "All 7032 transition records parse and every trigger source-transition link resolves", "result": "PASS"},
+    {"check": "All 328 candidate timeline timestamps join to complete side-specific 15M bars", "result": "PASS"},
+    {"check": "All six queue-promoted candidates receive claim-level records", "result": "PASS"},
+    {"check": "One candidate selected from each of 20 observed nonqueue strata", "result": "PASS"},
+    {"check": "Source binding payload model identity agrees with C2 v2 candidate identity", "result": "FAIL"},
+    {"check": "Serialized candidate timeline chronology is reliable", "result": "FAIL_44_OF_208_4_OF_6_PROMOTED"},
+    {"check": "Exact C1 fact/level/formula evidence is available for semantic verification", "result": "FAIL"},
+    {"check": "Pre-trigger persistence/switching history is available", "result": "FAIL"},
+    {"check": "Component distance decomposition is available for every reviewed fingerprint", "result": "FAIL"},
+    {"check": "Deterministic negative controls are present", "result": "FAIL_ZERO_CONTROLS"}
+  ],
+  "corrected_defects": [
     {
-      "check": "Seven predeclared governed artifact hashes match exact uploaded bytes",
-      "result": "PASS"
-    },
-    {
-      "check": "All twelve uploaded JSON/JSONL artifacts parse",
-      "result": "PASS"
-    },
-    {
-      "check": "208 candidate/fingerprint/trigger identities reconcile",
-      "result": "PASS"
-    },
-    {
-      "check": "All 7032 transition records parse and every trigger source-transition link resolves",
-      "result": "PASS"
-    },
-    {
-      "check": "All 328 candidate timeline timestamps join to complete side-specific 15M bars",
-      "result": "PASS"
-    },
-    {
-      "check": "All six queue-promoted candidates receive claim-level records",
-      "result": "PASS"
-    },
-    {
-      "check": "One candidate selected from each of 20 observed nonqueue strata",
-      "result": "PASS"
-    },
-    {
-      "check": "Source binding payload model identity agrees with C2 v2 candidate identity",
-      "result": "FAIL"
-    },
-    {
-      "check": "Serialized candidate timeline chronology is reliable",
-      "result": "FAIL_44_OF_208_4_OF_6_PROMOTED"
-    },
-    {
-      "check": "Exact C1 fact/level/formula evidence is available for semantic verification",
-      "result": "FAIL"
-    },
-    {
-      "check": "Pre-trigger persistence/switching history is available",
-      "result": "FAIL"
-    },
-    {
-      "check": "Component distance decomposition is available for every reviewed fingerprint",
-      "result": "FAIL"
-    },
-    {
-      "check": "Deterministic negative controls are present",
-      "result": "FAIL_ZERO_CONTROLS"
+      "code": "PD-JUNE-MDR-CI-001",
+      "final_result": "PASS",
+      "finding": "The historical PD-JUNE-RA1 regression test expected the programme registry to remain BLOCKED after PD-JUNE-MDR-WP1 evidence arrival.",
+      "initial_failed_job": 90597716512,
+      "initial_failed_workflow_run": 30458367068,
+      "resolution": "Updated only historical continuity assertions and workflow checks to preserve the immutable RA1 assessment while accepting lawful programme advancement to PD-JUNE-MDR-G1."
     }
   ],
   "gate_id": "PD-JUNE-MDR-G1",
@@ -75,38 +46,18 @@
   "report_sha256": "64ab9f6e1572c3b76bfd1c45eb376b244788435a702de95ccf0d29b8eef6dd52",
   "rollback": "Preserve all external artifacts and prior signed evidence. Revert only this packet's compact review, inventory, gate, QA, tests, workflow and state update through a new non-destructive commit.",
   "schema": "ovc-pd-june-mdr-wp1-qa-packet/v1",
-  "status": "GATE_READY_PENDING_CI",
-  "test_evidence": [],
+  "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
+  "test_evidence": [
+    {"job": 90598478370, "result": "PASS", "scope": "PD-JUNE-MDR-WP1 focused tests, complete repository suite and fail-closed authority gate", "tested_head": "75de3a8a7bd6c9754b7a053a7ae8de5813375017", "workflow_run": 30458590060},
+    {"job": 90598477863, "result": "PASS", "scope": "General repository unit tests", "tested_head": "75de3a8a7bd6c9754b7a053a7ae8de5813375017", "workflow_run": 30458589975},
+    {"job": 90598478359, "result": "PASS", "scope": "PD-JUNE-RA1 regression continuity, complete repository suite and non-activating authority boundary", "tested_head": "75de3a8a7bd6c9754b7a053a7ae8de5813375017", "workflow_run": 30458590083}
+  ],
   "unresolved_issues": [
-    {
-      "code": "PD-JUNE-MDR-001",
-      "status": "OPEN",
-      "summary": "Source binding C2 v1 versus candidate C2 v2 conflict."
-    },
-    {
-      "code": "PD-JUNE-MDR-002",
-      "status": "OPEN",
-      "summary": "Nonchronological serialized candidate timelines."
-    },
-    {
-      "code": "PD-JUNE-MDR-003",
-      "status": "OPEN",
-      "summary": "Missing exact C1 claim evidence and formula inputs."
-    },
-    {
-      "code": "PD-JUNE-MDR-004",
-      "status": "OPEN",
-      "summary": "Missing pre-trigger histories for persistence and switching."
-    },
-    {
-      "code": "PD-JUNE-MDR-005",
-      "status": "OPEN",
-      "summary": "General component-distance decomposition missing."
-    },
-    {
-      "code": "PD-JUNE-MDR-006",
-      "status": "OPEN",
-      "summary": "No immutable negative-control candidates."
-    }
+    {"code": "PD-JUNE-MDR-001", "status": "OPEN", "summary": "Source binding C2 v1 versus candidate C2 v2 conflict."},
+    {"code": "PD-JUNE-MDR-002", "status": "OPEN", "summary": "Nonchronological serialized candidate timelines."},
+    {"code": "PD-JUNE-MDR-003", "status": "OPEN", "summary": "Missing exact C1 claim evidence and formula inputs."},
+    {"code": "PD-JUNE-MDR-004", "status": "OPEN", "summary": "Missing pre-trigger histories for persistence and switching."},
+    {"code": "PD-JUNE-MDR-005", "status": "OPEN", "summary": "General component-distance decomposition missing."},
+    {"code": "PD-JUNE-MDR-006", "status": "OPEN", "summary": "No immutable negative-control candidates."}
   ]
 }
