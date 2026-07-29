@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/pattern_discovery/pd_june_mdr_corr1_return_gate_v0_1",
+  "title": "PD-JUNE-MDR-CORR1 return-gate evidence",
+  "type": "object",
+  "required": ["schema", "programme_id", "packet_id"],
+  "properties": {
+    "schema": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1"},
+    "packet_id": {"const": "PD-JUNE-MDR-CORR1"},
+    "status": {"type": "string"},
+    "gate_id": {"enum": ["PD-JUNE-MDR-G1"]},
+    "gate_status": {"enum": ["GATE_READY_OPERATOR_DECISION_REQUIRED"]},
+    "recommended_decision": {"enum": ["DEFER"]},
+    "overall_answer": {
+      "type": "object",
+      "properties": {
+        "verdict": {"enum": ["NOT_ESTABLISHED"]}
+      },
+      "additionalProperties": true
+    },
+    "population_state_reproduction": {
+      "type": "object",
+      "properties": {
+        "stored_state_count": {"const": 1144},
+        "recomputed_state_count": {"const": 1144},
+        "exact_core_match_count": {"const": 1144},
+        "mismatch_count": {"const": 0}
+      },
+      "additionalProperties": true
+    },
+    "review_claim_evidence": {
+      "type": "object",
+      "properties": {
+        "reviewed_unit_count": {"const": 26},
+        "trigger_reproduction_count": {"const": 26},
+        "history_dependent_count": {"const": 11},
+        "history_dependent_exact_reproduction_count": {"const": 11}
+      },
+      "additionalProperties": true
+    },
+    "authority": {"type": "object"},
+    "current_authority": {"type": "object"}
+  },
+  "additionalProperties": true
+}
