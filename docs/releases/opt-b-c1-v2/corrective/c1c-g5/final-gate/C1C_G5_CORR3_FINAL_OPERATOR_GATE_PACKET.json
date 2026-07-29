@@ -59,7 +59,7 @@
   ],
   "baseline_commit": "78f05ab29d5b4e7763c6c5262d97df2964074fd5",
   "branch": "gate/c1c-g5-corr3-final-pass-ready",
-  "candidate_commit": null,
+  "candidate_commit": "d00d9734860b60588adb0dd994401b2d664f196c",
   "current_authority": {
     "agent_write": "NONE",
     "candidate_promotion": "NONE",
@@ -123,7 +123,7 @@
   },
   "evidence_received_on": "2026-07-29",
   "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
-  "gate_status": "QA_REVIEW",
+  "gate_status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
   "operator_approval_required": true,
   "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW PASS",
   "packet_id": "C1C-G5-CORR3-FINAL-GATE-READY",
@@ -136,15 +136,22 @@
     "authority_required": "OPERATOR",
     "baseline_commit": "78f05ab29d5b4e7763c6c5262d97df2964074fd5",
     "branch": "gate/c1c-g5-corr3-final-pass-ready",
-    "candidate_commit": null,
+    "candidate_commit": "d00d9734860b60588adb0dd994401b2d664f196c",
     "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
     "next_packet_on_pass": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME",
     "resolved_blocker": {
       "blocker_id": "C1C-G5-BLOCK-004",
       "status": "RESOLVED_TO_OPERATOR_GATE"
     },
-    "status": "QA_REVIEW",
-    "tests": []
+    "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
+    "tests": [
+      {
+        "job": 90471682580,
+        "result": "PASS",
+        "scope": "exact evidence, Ed25519 SSHSIG, retained CORR3/CORR2 tests, complete repository suite, authority boundary",
+        "workflow_run": 30419020308
+      }
+    ]
   },
   "proposed_pass_delta": {
     "delta": [
@@ -186,6 +193,6 @@
   },
   "rollback": "Preserve the immutable machine run and all signed v1, v2, CORR2 and CORR3 evidence. Revert only this final gate packet through a new non-destructive commit. Do not delete, rewrite, relabel, append, publish or promote any pilot object.",
   "schema": "ovc-c1c-g5-corr3-final-operator-gate-packet/v1",
-  "status": "QA_REVIEW",
+  "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
   "title": "C1C-G5 Corrective Pilot Review — Final CORR3 Return"
 }
