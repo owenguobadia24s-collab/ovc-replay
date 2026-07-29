@@ -1,0 +1,86 @@
+name: RO3-G3 independent formula assurance retest
+
+on:
+  pull_request:
+    paths:
+      - "registries/research_operations/v0_3/C1_METAMORPHIC_INVARIANT_REGISTRY_v0_1.yaml"
+      - "registries/research_operations/v0_3/RO3_ASSURANCE_CHECK_REGISTRY_v0_1.yaml"
+      - "registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+      - "registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json"
+      - "schemas/research_operations/v0_3/c1_metamorphic_*.schema.json"
+      - "schemas/research_operations/v0_3/c1_determinism_receipt_v0_1.schema.json"
+      - "fixtures/research_operations/v0_3/wp3_metamorphic_cases.json"
+      - "src/ovc/research_operations/v0_3/metamorphic.py"
+      - "src/ovc/research_operations/v0_3/__init__.py"
+      - "scripts/research_operations/run_ro3_g3_assurance.py"
+      - "tests/research_operations/v0_3/test_metamorphic.py"
+      - "tests/research_operations/v0_3/test_invariant_registry_independence.py"
+      - "docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/**"
+      - ".github/workflows/research-operations-v0-3-ro3-g3-retest.yml"
+  push:
+    branches:
+      - "retest/research-operations-v0-3-wp3-formula-assurance"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ro3-g3-retest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run focused metamorphic assurance tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.v0_3.test_metamorphic -v
+      - name: Run invariant independence tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.v0_3.test_invariant_registry_independence -v
+      - name: Generate and require exact assurance PASS
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/research_operations/run_ro3_g3_assurance.py \
+            --output ro3-g3-retest-assurance-evidence.json \
+            --require-pass | tee ro3-g3-retest-assurance-summary.log
+      - name: Upload assurance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g3-retest-assurance-evidence
+          path: |
+            ro3-g3-retest-assurance-evidence.json
+            ro3-g3-retest-assurance-summary.log
+          if-no-files-found: error
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Authority and frozen-canon boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse 4d701ad78af8597e182565eb301739501b51dff6:registries/research_operations/v0_3/C1_METAMORPHIC_INVARIANT_REGISTRY_v0_1.yaml)" = \
+               "$(git hash-object registries/research_operations/v0_3/C1_METAMORPHIC_INVARIANT_REGISTRY_v0_1.yaml)"
+          grep -q 'QA_EVIDENCE_ONLY' registries/research_operations/v0_3/RO3_ASSURANCE_CHECK_REGISTRY_v0_1.yaml
+          grep -q 'LOCKED_UNCONSUMED' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          grep -q 'DISABLED_PENDING_RC_G4' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          ! grep -n -E '^from ovc\.opt_b\.c1|^import ovc\.opt_b\.c1' src/ovc/research_operations/v0_3/metamorphic.py
+          ! grep -R --line-number 'ovc.research_operations.v0_3.metamorphic' src/ovc/opt_b/c1
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json').read_text())
+          wp3 = next(item for item in state['packets'] if item['packet_id'] == 'RO3-WP3')
+          if wp3['authority_delta'] != 'QA_EVIDENCE_ONLY':
+              raise SystemExit('unexpected RO3-WP3 authority delta')
+          if wp3['blockers']:
+              raise SystemExit('RO3-WP3 retest has unresolved blockers before QA')
+          PY
