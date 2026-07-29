@@ -1,0 +1,81 @@
+{
+  "schema": "ovc-c1c-g5-corr2-final-operator-decision/v1",
+  "decision_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW-DEFER-CORR2-2026-07-29",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "packet_id": "C1C-G5-CORR2-FINAL-GATE-READY",
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "decision_date": "2026-07-29",
+  "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW DEFER",
+  "baseline_main_commit": "71eeba61691d3ab545c5cd0d7bc36c8b9942542e",
+  "gate_ready_commit": "74cafc66d503fdedc398f09b2328338bc25c4412",
+  "gate_ready_bundle": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR2_FINAL_GATE_READY_BUNDLE.yaml",
+  "accepted_evidence": {
+    "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "machine_rerun_valid": true,
+    "structured_review_v2_preserved": true,
+    "corr2_operator_rereview_complete": true,
+    "signature_and_hash_integrity": "PASS",
+    "second_machine_replay_performed": false,
+    "review_receipt_file_sha256": "86be15969ca26d9da83bffc018ec02f3f5f6b9f6eaf5cdca1b197d46b8dbc963",
+    "closure_ledger_file_sha256": "65507b2acb691433cccc48a1e63311f89b783dabd3802763c362004effcdd3af",
+    "signed_inventory_file_sha256": "7d57c8032465fca28508d9da8965a0abdec7c8a37a5b772ca8de87480d87e19f",
+    "preserved_non_deferred_decision_count": 4,
+    "preserved_non_deferred_decisions_sha256": "8af53e45df7cc3dd38b39861e818dfd132becd46ba7b78e3bf684ec97503cb0d"
+  },
+  "accepted_dispositions": [
+    {
+      "candidate_window_id": "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+      "final_disposition": "REJECT_PILOT_OBJECT",
+      "finding_code": "PD-REJECT-CORR2-CHRONOLOGY-INCONSISTENT-001"
+    },
+    {
+      "candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+      "final_disposition": "DEFER_PILOT_OBJECT",
+      "finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001"
+    }
+  ],
+  "remaining_deferred_object_count": 1,
+  "authorised_next_packet": {
+    "packet_id": "C1C-G5-CORR3",
+    "authority_delta": "NONACTIVATING_READ_ONLY_STRUCTURAL_COMPARISON_EXPOSURE_ONLY",
+    "scope": [
+      "Expose the existing assigned-medoid or nearest-neighbour fingerprint context from preserved pilot artifacts.",
+      "Expose deterministic distance components for the existing distance 0.1 and outlier classification without changing the distance pack.",
+      "Expose duplicate-window, overlap and comparison-availability status.",
+      "Document the existing LONG_PERSISTENCE derivation without changing trigger rules.",
+      "Re-review only PDPILOT-CANDIDATE-bab63b935155e4d9033aed81 without another machine replay.",
+      "Preserve the rejected object, the four non-deferred decisions, the immutable machine run and every signed evidence object.",
+      "Return to C1C-G5-CORRECTIVE-PILOT-REVIEW."
+    ],
+    "machine_replay": "DENIED_NOT_REQUIRED",
+    "provider_intake": "DENIED",
+    "operator_local_human_rereview": "REQUIRED_FOR_ONE_REMAINING_DEFERRED_OBJECT",
+    "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
+  },
+  "retained_prohibitions": {
+    "trigger_distance_clustering_threshold_or_model_change": "NONE",
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "Preserve the immutable machine run and all signed v1, v2 and CORR2 evidence. Revert only the final gate decision and bounded CORR3 implementation through new non-destructive commits; do not delete, rewrite, relabel, append, publish or promote any pilot object.",
+  "continuation": "BEGIN_C1C_G5_CORR3_FROM_DECISION_MERGE",
+  "status": "DEFER_APPROVED_CORR3_AUTHORISED"
+}
