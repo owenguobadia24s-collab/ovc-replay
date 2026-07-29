@@ -2,7 +2,7 @@
   "schema": "ovc-programme-state/v1",
   "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "v0.2",
-  "programme_status": "OPERATOR_GATE_PENDING",
+  "programme_status": "RUNNING",
   "packets": [
     {
       "packet_id": "RO3-00",
@@ -93,18 +93,36 @@
     },
     {
       "packet_id": "RC-G4",
-      "status": "GATE_READY",
+      "status": "APPROVED",
       "prerequisites": ["RO3-G4_MERGED_AND_MERGE_SHA_RECORDED"],
       "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
       "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
       "baseline_commit": "80adf5cfb111a8b07788276c9867ff4fee32fb09",
       "branch": "gate/rc-g4-c1-live-consumption",
-      "live_route_current_state": "DISABLED_PENDING_RC_G4",
+      "live_route_current_state": "DISABLED_PENDING_RC_G4_ACTIVATION",
       "operator_gate_packet": "docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json",
-      "recommended_decision": "PASS",
-      "operator_approval_required": true,
+      "decision": "PASS",
+      "decision_authority": "OPERATOR",
+      "decision_record": "docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md",
+      "operator_approval_required": false,
       "blockers": [],
-      "next_packet": "RC-G4-ACTIVATION_AFTER_OPERATOR_PASS"
+      "next_packet": "RC-G4-ACTIVATION"
+    },
+    {
+      "packet_id": "RC-G4-ACTIVATION",
+      "status": "READY",
+      "prerequisites": ["RC-G4_OPERATOR_PASS", "RC-G4_DECISION_MERGED"],
+      "authority_required": "AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA",
+      "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
+      "baseline_commit": null,
+      "branch": "activate/research-console-v0-3-rc-g4-c1",
+      "candidate_commit": null,
+      "tests": [],
+      "qa_packet": null,
+      "decision_record": null,
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": null
     }
   ]
 }
