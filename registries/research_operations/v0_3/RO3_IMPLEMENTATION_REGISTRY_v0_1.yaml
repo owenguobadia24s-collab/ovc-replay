@@ -2,7 +2,7 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RC_G4_APPROVED_PENDING_ACTIVATION
+status: RC_G4_ACTIVATION_RUNNING
 baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
 items:
   - id: RO3-00
@@ -83,9 +83,10 @@ items:
     merge_receipt: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_MERGE_RECEIPT.json
   - id: RC-G4
     name: Live C1 Console projection consumption
-    status: APPROVED_PENDING_ACTIVATION
+    status: COMPLETED
     branch: gate/rc-g4-c1-live-consumption
     baseline_commit: 80adf5cfb111a8b07788276c9867ff4fee32fb09
+    decision_merge_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
     authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
     auto_ratifiable: false
     operator_required: true
@@ -93,21 +94,36 @@ items:
     decision_authority: OPERATOR
     decision_record: docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md
     gate_packet: docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json
-    current_route_state: DISABLED_PENDING_RC_G4_ACTIVATION
+    current_route_state: ENABLED_LOCAL_READ_ONLY_IMPLEMENTATION_PENDING_QA
   - id: RC-G4-ACTIVATION
     name: Activate bounded local read-only C1 presentation
-    status: READY
+    status: RUNNING
     branch: activate/research-console-v0-3-rc-g4-c1
+    baseline_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
     authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
     authority_required: AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA
     prerequisite: RC-G4_OPERATOR_PASS_AND_DECISION_MERGED
+    runtime:
+      route: IMPLEMENTED_PENDING_QA
+      projection_source: IMPLEMENTED_FAIL_CLOSED
+      schema_blob_binding: IMPLEMENTED_EXACT_FOUR
+      validation_denial: IMPLEMENTED_BEFORE_PANEL_OR_RECORD_RESOLUTION
+      stale_projection_denial: IMPLEMENTED
+      write_denial: IMPLEMENTED_RECURSIVE
+      panel_separation: IMPLEMENTED
+      downstream_banner: IMPLEMENTED_PERMANENT
+      ui_surface: IMPLEMENTED_LOCAL_READ_ONLY
+      deployment: LOCAL_ONLY_NO_REMOTE_DEPLOY
+      tests: PENDING
+      qa_recommendation: PENDING
 retained_boundaries:
   c1_formulas_releases_selectors: IMMUTABLE
   validation_consumption: LOCKED_UNCONSUMED
   c2_pattern_discovery_authority: UNCHANGED
-  live_console_c1_route: DISABLED_PENDING_RC_G4_ACTIVATION
+  live_console_c1_route: ENABLED_LOCAL_READ_ONLY_IMPLEMENTATION_PENDING_QA
   formula_comparison_authority: NON_ACTIVATING_EVIDENCE_ONLY
   assurance_authority: QA_EVIDENCE_ONLY
+  research_write_authority: DENIED_PENDING_SEPARATE_GATE
   r2_publication: DENIED
   market_authority: NONE
   probability_authority: NONE
@@ -116,5 +132,6 @@ retained_boundaries:
   trading_authority: NONE
   execution_authority: NONE
   agent_write_authority: NONE
+  remote_deployment: DENIED
 blockers: []
-next_packet: RC-G4-ACTIVATION
+next_packet: RC-G4-ACTIVATION_QA
