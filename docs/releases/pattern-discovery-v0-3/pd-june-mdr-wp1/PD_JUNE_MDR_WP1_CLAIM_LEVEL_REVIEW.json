@@ -1,0 +1,163 @@
+{
+  "aggregate_claim_results": {
+    "all_reviewed_units": {
+      "fully_supported": 0,
+      "reviewed": 26,
+      "semantic_description_not_evaluated": 26
+    },
+    "nonqueue_stratified_sample": {
+      "fully_supported": 0,
+      "reviewed": 20,
+      "semantic_description_not_evaluated": 20
+    },
+    "queue_promoted": {
+      "contradicted": 1,
+      "fully_supported": 0,
+      "partial": 5,
+      "reviewed": 6,
+      "semantic_description_not_evaluated": 6
+    }
+  },
+  "artifact_verification": {
+    "all_candidate_timeline_price_rows_available": true,
+    "all_candidate_timeline_price_rows_complete": true,
+    "candidate_payload_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "cross_file_identity_integrity": "PASS",
+    "expected_hash_match_count": 7,
+    "expected_hash_mismatch_count": 0,
+    "source_binding_id": "RPS.BINDING.32fb3003efa072916c11e907",
+    "source_binding_payload_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+    "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1",
+    "source_to_model_binding_status": "CONFLICT_V1_BINDING_PAYLOAD_VS_V2_CANDIDATES"
+  },
+  "authority": {
+    "agent_write": "NONE",
+    "canonical_append": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "distance_cluster_threshold_or_model_change": "NONE",
+    "execution": "NONE",
+    "exposure": "NONE",
+    "formula_or_trigger_change": "NONE",
+    "machine_replay": "DENIED",
+    "probability": "NONE",
+    "provider_intake": "DENIED",
+    "r2_publication": "DENIED",
+    "risk": "NONE",
+    "selector_or_release_mutation": "DENIED",
+    "semantic_family_candidate_or_novelty_promotion": "NONE",
+    "trading": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED"
+  },
+  "baseline_commit": "ec0780a638a02d1f9f80daa1c48225684de8c8d0",
+  "blocking_findings": [
+    {
+      "code": "PD-JUNE-MDR-001",
+      "finding": "The uploaded source-binding payload names OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1 while the candidate, fingerprint, trigger and console artifacts name v2.",
+      "impact": "Exact source-to-corrective-model lineage is not self-consistent in this packet.",
+      "required_resolution": "Produce an immutable corrective source-to-C2-v2 binding receipt or an authority record that explicitly carries the existing source binding forward to v2 without changing source bytes."
+    },
+    {
+      "code": "PD-JUNE-MDR-002",
+      "finding": "44 of 208 candidate timelines are serialized out of chronological order, including 4 of the 6 queue-promoted candidates.",
+      "impact": "A panel consuming list order can describe the market sequence incorrectly even when timestamps are individually valid.",
+      "required_resolution": "Make chronological sort by first_valid_time mandatory at materialization and presentation boundaries and add fail-closed tests."
+    },
+    {
+      "code": "PD-JUNE-MDR-003",
+      "finding": "Exact C1 fact values, level boundaries, relation values and formula inputs required to verify INTERACTION, LOCATION, MOTION and ORGANISATION labels are absent.",
+      "impact": "Raw price can be observed, but the system's structural labels cannot be independently checked against the market.",
+      "required_resolution": "Expose read-only claim evidence linking each label to exact C1 facts, levels, formula registry identity and source price observations."
+    },
+    {
+      "code": "PD-JUNE-MDR-004",
+      "finding": "The pre-trigger C2 histories required to independently reconstruct LONG_PERSISTENCE and REPEATED_SWITCHING are absent.",
+      "impact": "The event record is reproducible as an object, but the trigger's historical basis cannot be independently verified for the review sample.",
+      "required_resolution": "Bind exact pre-trigger C2 history windows and trigger-evaluator inputs for every persistence or switching claim."
+    },
+    {
+      "code": "PD-JUNE-MDR-005",
+      "finding": "The general review artifacts expose assigned medoids and total distances but not component-level distance decomposition for every review unit.",
+      "impact": "Structural similarity and outlier claims are only partially explainable.",
+      "required_resolution": "Expose frozen component distances, weights, scales, threshold and outlier decision for every reviewed fingerprint."
+    },
+    {
+      "code": "PD-JUNE-MDR-006",
+      "finding": "No deterministic negative-control candidate exists in the 208-candidate population.",
+      "impact": "False-positive and contradiction-detection performance cannot be estimated.",
+      "required_resolution": "Create a future read-only control-design packet; do not insert or relabel controls into the immutable June population."
+    }
+  ],
+  "branch": "review/pd-june-mdr-wp1-claim-level-market-description",
+  "gate_id": "PD-JUNE-MDR-G1",
+  "ledger": {
+    "compressed_sha256": "66c29d131055b898e4c1fd52042845a2cf630e3b0c732d4436faf23813d0a5e4",
+    "compressed_size_bytes": 10318,
+    "encoding": "BASE64_GZIP_JSON_UTF8",
+    "path": "PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json.gz.b64",
+    "review_unit_count": 26,
+    "uncompressed_sha256": "9aa1c2f823dc88dc2c9dc859522266563eb41e8bcd95a5c635506cfef553b7d9",
+    "uncompressed_size_bytes": 107851
+  },
+  "overall_answer": {
+    "question": "Does the system consistently and reliably describe the market?",
+    "recommended_gate_decision": "DEFER",
+    "statement": "The exact June artifacts are internally traceable and every candidate timestamp can be joined to a complete source bar. However, the source binding conflicts on C2 release identity, 44 candidate timelines are serialized out of chronology, trigger history is incomplete for persistence and switching, exact C1 label evidence is absent, and no reviewed unit can receive a full semantic-description SUPPORT verdict. The system is reproducible, but reliable market description remains unproven.",
+    "verdict": "NOT_ESTABLISHED"
+  },
+  "packet_id": "PD-JUNE-MDR-WP1",
+  "population_mechanical_findings": {
+    "candidate_count": 208,
+    "candidate_timeline_record_count": 328,
+    "candidate_timeline_records_with_complete_price_bars": 328,
+    "cluster_version_count": 24,
+    "fingerprint_count": 208,
+    "nonqueue_count": 202,
+    "queue_item_count": 6,
+    "serialized_nonchronological_candidate_count": 44,
+    "serialized_nonchronological_candidate_rate": 0.211538,
+    "serialized_nonchronological_queue_promoted_count": 4,
+    "serialized_nonchronological_queue_promoted_rate": 0.666667,
+    "transition_count": 7032,
+    "trigger_event_count": 208
+  },
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "reliability_dimensions": {
+    "artifact_hash_and_identity_integrity": "PASS",
+    "external_market_description_validity": "NOT_ESTABLISHED",
+    "population_level_consistency": "NOT_ESTABLISHED",
+    "price_record_availability_for_candidate_timestamps": "PASS_OBSERVED_COMPLETE_WINDOWS_ONLY",
+    "repeat_review_agreement": "NOT_ESTABLISHED",
+    "serialized_timeline_chronology": "FAIL_44_OF_208_AND_4_OF_6_PROMOTED_NONCHRONOLOGICAL",
+    "source_to_c2_v2_binding": "FAIL_BINDING_PAYLOAD_NAMES_C2_V1",
+    "structural_comparison_completeness": "PARTIAL_COMPONENT_DISTANCES_NOT_GENERAL",
+    "trigger_rule_reconstruction": "PARTIAL_PERSISTENCE_AND_SWITCHING_HISTORY_MISSING"
+  },
+  "review_date": "2026-07-29",
+  "sample_construction": {
+    "available_nonqueue_strata": 20,
+    "negative_control_count_in_population": 0,
+    "nonqueue_population": 202,
+    "nonqueue_stratum_definition": [
+      "price_side",
+      "primary_trigger_reason",
+      "quality_state",
+      "parent_containment_class"
+    ],
+    "queue_promoted_reviewed": 6,
+    "sample_size": 20,
+    "sampled_nonqueue_strata": 20,
+    "selection_rule": "Lexicographically smallest candidate_window_id within every observed nonqueue stratum.",
+    "warning": "No deterministic negative-control candidate is present in the 208-candidate population."
+  },
+  "schema": "ovc-pd-june-mdr-wp1-claim-level-review-summary/v1",
+  "scope": {
+    "canonical_2021_2023_discovery": "DENIED",
+    "identity_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+    "instrument": "GBPUSD",
+    "market_window_end_utc": "2026-06-25T00:00:00Z",
+    "market_window_start_utc": "2026-06-22T00:00:00Z",
+    "operation_mode": "TIME_GATED_REPLAY",
+    "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+    "second_replay": "DENIED"
+  }
+}
