@@ -44,7 +44,7 @@
     },
     {
       "packet_id": "RO3-WP2",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["RO3-G1"],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "READ_ONLY_DERIVED_INSPECTION",
@@ -60,27 +60,52 @@
       ],
       "qa_packet": "docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_GATE_PACKET.json",
       "decision_record": "docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_DELEGATED_DECISION.md",
-      "merge_commit": null,
+      "merge_commit": "8c243c009f30e453312861708afb784fe762c442",
       "blockers": [],
       "next_packet": "RO3-WP3"
     },
     {
       "packet_id": "RO3-WP3",
-      "status": "READY",
-      "prerequisites": ["RO3-G2_MERGED"],
+      "status": "RUNNING",
+      "prerequisites": [
+        "RO3-G2_MERGED",
+        "C1C-G5-CORRECTIVE-PILOT-REVIEW_OPERATOR_PASS",
+        "C1C-G5-BLOCK-004_CLOSED"
+      ],
       "authority_required": "AUTO_EXECUTABLE",
       "authority_delta": "QA_EVIDENCE_ONLY",
-      "baseline_commit": null,
-      "branch": "build/research-operations-v0-3-wp3-formula-assurance",
+      "baseline_commit": "38603eb9e52860074bb5ca95f8f016f4236965ed",
+      "branch": "retest/research-operations-v0-3-wp3-formula-assurance",
       "candidate_commit": null,
       "tests": [],
       "qa_packet": null,
       "decision_record": null,
       "merge_commit": null,
       "blockers": [],
+      "resolved_blocker": {
+        "blocker_id": "RO3-G3-BLOCK-001",
+        "status": "RESOLVED_BY_C1_CORRECTIVE_PROGRAMME",
+        "corrective_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+        "corrective_decision_merge_commit": "1d4065b7a4fa9a7c6d832528309a5b4f56fd2991",
+        "corrective_state_merge_commit": "38603eb9e52860074bb5ca95f8f016f4236965ed"
+      },
       "next_packet": "RO3-WP4"
     },
-    {"packet_id": "RO3-WP4", "status": "PLANNED", "prerequisites": ["RO3-G3"], "authority_required": "AUTO_EXECUTABLE", "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS", "next_packet": "RC-G4"},
-    {"packet_id": "RC-G4", "status": "PLANNED", "prerequisites": ["RO3-G4"], "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE", "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION", "next_packet": null}
+    {
+      "packet_id": "RO3-WP4",
+      "status": "PLANNED",
+      "prerequisites": ["RO3-G3"],
+      "authority_required": "AUTO_EXECUTABLE",
+      "authority_delta": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS",
+      "next_packet": "RC-G4"
+    },
+    {
+      "packet_id": "RC-G4",
+      "status": "PLANNED",
+      "prerequisites": ["RO3-G4"],
+      "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
+      "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
+      "next_packet": null
+    }
   ]
 }
