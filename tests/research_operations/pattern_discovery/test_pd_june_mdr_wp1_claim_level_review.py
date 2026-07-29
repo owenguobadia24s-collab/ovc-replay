@@ -16,6 +16,7 @@ INVENTORY = BASE / "PD_JUNE_MDR_WP1_EXTERNAL_ARTIFACT_INVENTORY.json"
 SUMMARY = BASE / "PD_JUNE_MDR_WP1_REVIEW_SUMMARY.md"
 QA = BASE / "PD_JUNE_MDR_WP1_QA_PACKET.json"
 GATE = BASE / "PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json"
+DECISION = BASE / "PD_JUNE_MDR_G1_OPERATOR_DECISION.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 SCHEMA = ROOT / "schemas" / "research_operations" / "pattern_discovery" / "pd_june_mdr_wp1_claim_level_review_v0_1.schema.json"
 
@@ -31,10 +32,11 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.inventory = json.loads(INVENTORY.read_text(encoding="utf-8"))
         self.qa = json.loads(QA.read_text(encoding="utf-8"))
         self.gate = json.loads(GATE.read_text(encoding="utf-8"))
+        self.decision = json.loads(DECISION.read_text(encoding="utf-8"))
         self.state = json.loads(STATE.read_text(encoding="utf-8"))
 
     def test_packet_files_exist(self) -> None:
-        for path in (REPORT, LEDGER, INVENTORY, SUMMARY, QA, GATE, STATE, SCHEMA):
+        for path in (REPORT, LEDGER, INVENTORY, SUMMARY, QA, GATE, DECISION, STATE, SCHEMA):
             self.assertTrue(path.is_file(), path)
 
     def test_exact_governed_hashes_match(self) -> None:
@@ -100,14 +102,17 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(self.report["overall_answer"]["verdict"], "NOT_ESTABLISHED")
         self.assertEqual(self.report["overall_answer"]["recommended_gate_decision"], "DEFER")
 
-    def test_gate_is_operator_required_and_recommends_defer(self) -> None:
+    def test_operator_defer_is_recorded_and_bounded(self) -> None:
         self.assertEqual(self.gate["gate_id"], "PD-JUNE-MDR-G1")
         self.assertTrue(self.gate["operator_approval_required"])
         self.assertEqual(self.gate["recommended_decision"], "DEFER")
-        self.assertEqual(self.gate["proposed_defer_delta"]["next_packet"], "PD-JUNE-MDR-CORR1")
-        self.assertEqual(self.state["status"], "GATE_READY")
-        self.assertEqual(self.state["recommended_gate_decision"], "DEFER")
-        self.assertEqual(self.state["next_packet_on_defer"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.decision["decision"], "DEFER")
+        self.assertEqual(self.decision["decision_authority"], "OPERATOR")
+        self.assertEqual(self.decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.state["status"], "APPROVED")
+        self.assertEqual(self.state["operator_decision"], "DEFER")
+        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.state["next_packet_status"], "READY_AFTER_PD_JUNE_MDR_WP1_SQUASH_MERGE")
         self.assertEqual(self.qa["recommendation"], "DEFER")
 
     def test_authority_boundary_is_unchanged(self) -> None:
@@ -126,6 +131,8 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(authority["validation_consumption"], "LOCKED_UNCONSUMED")
         self.assertEqual(self.report["scope"]["canonical_2021_2023_discovery"], "DENIED")
         self.assertEqual(self.report["scope"]["second_replay"], "DENIED")
+        self.assertIn("MACHINE_REPLAY", self.state["retained_prohibitions"])
+        self.assertIn("CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND", self.state["retained_prohibitions"])
 
 
 if __name__ == "__main__":
