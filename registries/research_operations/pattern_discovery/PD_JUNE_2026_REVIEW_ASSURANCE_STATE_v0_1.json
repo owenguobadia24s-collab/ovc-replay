@@ -5,7 +5,7 @@
   "plan_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
   "plan_version": "0.1",
   "status": "BLOCKED",
-  "packet_execution": "COMPLETED_ASSESSMENT",
+  "packet_execution": "COMPLETED_AND_MERGED",
   "prerequisites": [
     "C1C-G5-CORRECTIVE-PILOT-REVIEW_PASS",
     "RC-G3A_COMPLETED",
@@ -16,21 +16,36 @@
   "baseline_commit": "61fdea3a1b05ec941d867b5c6d181f6a401c2fc6",
   "branch": "review/pd-june-2026-market-description-assurance",
   "tested_candidate_commit": "69e89c140d6fd4511de96460f086182d21404d00",
+  "final_head": "3dc314e720396f8bf23ec70dadd39689879b651b",
   "pull_request": 157,
   "tests": [
     {
-      "suite": "Focused June review assessment, complete repository suite and authority boundary",
+      "suite": "Initial focused June review assessment, complete repository suite and authority boundary",
       "workflow_run": 30447194711,
       "job": 90560355621,
       "result": "PASS",
       "tested_head": "69e89c140d6fd4511de96460f086182d21404d00"
     },
     {
-      "suite": "General repository unit tests",
+      "suite": "Initial general repository unit tests",
       "workflow_run": 30447194616,
       "job": 90560355771,
       "result": "PASS",
       "tested_head": "69e89c140d6fd4511de96460f086182d21404d00"
+    },
+    {
+      "suite": "Final-head focused June review assessment, complete repository suite and authority boundary",
+      "workflow_run": 30447336524,
+      "job": 90560830545,
+      "result": "PASS",
+      "tested_head": "3dc314e720396f8bf23ec70dadd39689879b651b"
+    },
+    {
+      "suite": "Final-head general repository unit tests",
+      "workflow_run": 30447336530,
+      "job": 90560830570,
+      "result": "PASS",
+      "tested_head": "3dc314e720396f8bf23ec70dadd39689879b651b"
     }
   ],
   "qa_result": "PASS_ASSESSMENT_BLOCKED_NEXT_PACKET",
@@ -40,6 +55,7 @@
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_RA1_DELEGATED_DECISION.md",
   "assessment": "docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_2026_OPERATOR_REVIEW_AND_MARKET_DESCRIPTION_ASSESSMENT.json",
   "contract": "contracts/research_operations/pattern_discovery/PD_MARKET_DESCRIPTION_RELIABILITY_REVIEW_CONTRACT_v0_1.md",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_RA1_MERGE_RECEIPT.json",
   "pilot_v1_run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
   "pilot_v2_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
   "canonical_2021_2023_discovery": "DEFERRED_NOT_AUTHORISED",
@@ -50,7 +66,7 @@
   "external_market_description_validity": "NOT_ESTABLISHED",
   "population_level_consistency": "NOT_ESTABLISHED",
   "overall_verdict": "NOT_ESTABLISHED",
-  "merge_commit": null,
+  "merge_commit": "227bc32dbfa620c945fe85eaade1e7315c6db470",
   "blockers": [
     {
       "blocker_id": "PD-JUNE-MDR-BLOCK-001",
