@@ -33,7 +33,7 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s tests -v
-      - name: Enforce approved authority and disabled-until-activation boundary
+      - name: Enforce operator decision and lawful bounded activation continuity
         run: |
           python - <<'PY'
           import json
@@ -43,17 +43,23 @@ jobs:
           decision = Path('docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md').read_text()
           rcg4 = next(item for item in state['packets'] if item['packet_id'] == 'RC-G4')
           activation = next(item for item in state['packets'] if item['packet_id'] == 'RC-G4-ACTIVATION')
+
+          # The signed gate packet remains the historical pre-activation court record.
           assert packet['status'] == 'APPROVED_PENDING_ACTIVATION'
           assert packet['operator_approval_required'] is False
           assert packet['operator_decision']['decision'] == 'PASS'
           assert packet['operator_decision']['authority'] == 'OPERATOR'
           assert packet['classification'] == 'OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE'
-          assert rcg4['status'] == 'APPROVED'
-          assert rcg4['decision'] == 'PASS'
-          assert activation['status'] == 'READY'
-          assert activation['authority_delta'] == 'LOCAL_READ_ONLY_C1_PRESENTATION'
           assert packet['route_and_capability_delta']['current']['route_enabled'] is False
           assert packet['route_and_capability_delta']['current']['route_state'] == 'DISABLED_PENDING_RC_G4_ACTIVATION'
+
+          # Programme state may lawfully advance after the immutable operator decision.
+          assert rcg4['status'] in {'APPROVED', 'COMPLETED'}
+          assert rcg4['decision'] == 'PASS'
+          assert rcg4['decision_authority'] == 'OPERATOR'
+          assert activation['status'] in {'READY', 'RUNNING', 'APPROVED', 'COMPLETED'}
+          assert activation['authority_delta'] == 'LOCAL_READ_ONLY_C1_PRESENTATION'
+          assert activation['authority_required'] == 'AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA'
           assert packet['current_authority']['validation_consumption'] == 'LOCKED_UNCONSUMED'
           assert packet['current_authority']['c2_pattern_discovery_authority'] == 'UNCHANGED'
           assert 'Decision:** `PASS`' in decision
