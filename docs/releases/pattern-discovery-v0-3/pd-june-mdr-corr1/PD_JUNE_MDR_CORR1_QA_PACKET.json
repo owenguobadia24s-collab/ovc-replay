@@ -4,9 +4,10 @@
   "packet_id": "PD-JUNE-MDR-CORR1",
   "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
   "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
-  "candidate_commit": null,
-  "status": "BLOCKED_PENDING_CI_AND_EXTERNAL_EVIDENCE",
-  "qa_result": "BLOCKED_EXTERNAL_EVIDENCE_REQUIRED",
+  "pull_request": 160,
+  "tested_candidate_commit": "fdc57b363d529736a406af854775f9f743b72516",
+  "status": "BLOCKED_EXTERNAL_EVIDENCE_REQUIRED_CI_PASS",
+  "qa_result": "PASS_IMPLEMENTED_SCOPE_BLOCKED_EXTERNAL_EVIDENCE_REQUIRED",
   "market_description_verdict": "NOT_ESTABLISHED",
   "checks": [
     {
@@ -23,7 +24,7 @@
     },
     {
       "check": "Corrective materialization and review projections enforce first-valid chronology and identity alignment",
-      "result": "PASS_IMPLEMENTED_AWAITING_CI"
+      "result": "PASS"
     },
     {
       "check": "Exact frozen structural comparison is exposed for every assigned reviewed fingerprint",
@@ -47,7 +48,11 @@
     },
     {
       "check": "Focused, dependent and complete repository tests pass",
-      "result": "PENDING_CI"
+      "result": "PASS"
+    },
+    {
+      "check": "Historical PD-G0, PD-WP4, PD-JUNE-RA1 and PD-JUNE-MDR-WP1 boundaries remain consistent",
+      "result": "PASS"
     }
   ],
   "resolved_findings": [
@@ -72,12 +77,78 @@
       "summary": "No immutable negative controls exist; separate control-design authority would be required."
     }
   ],
+  "corrected_defects": [
+    {
+      "code": "PD-JUNE-MDR-CORR1-CI-001",
+      "initial_workflow_run": 30468701118,
+      "initial_job": 90633057451,
+      "finding": "The structural-assurance summary recorded an incorrect uncompressed ledger SHA-256 and size.",
+      "resolution": "Recomputed the decoded ledger hash and size from the committed deterministic gzip/base64 bytes; focused and full tests passed afterward."
+    },
+    {
+      "code": "PD-JUNE-MDR-CORR1-CI-002",
+      "initial_workflow_run": 30468820074,
+      "initial_job": 90633460155,
+      "finding": "The exact chronology projection rejected historical UI-only fixtures that contained chronological display-time rows but no immutable C2 row identities.",
+      "resolution": "Preserved the strict exact-C2 path and added a fail-closed legacy path that accepts only already-chronological display rows and never reorders or identity-aligns them."
+    },
+    {
+      "code": "PD-JUNE-MDR-CORR1-CI-003",
+      "initial_workflow_run": 30469250163,
+      "initial_job": 90634899336,
+      "finding": "The PD-G0 outcome-field guard swept later assurance and authority schemas, conflating explicit denied-authority fields with operational outcome fields.",
+      "resolution": "Scoped the guard to the exact four operational schemas frozen by the PD-G0 gate packet; PD-G0 and PD-WP4 workflows then passed."
+    }
+  ],
   "warnings": [
     "Workflow and mechanical assurance are not evidence that the system semantically describes the market correctly.",
     "The historical June artifacts remain immutable; corrected chronology is a read-only projection only.",
     "No return to PD-JUNE-MDR-G1 is lawful while exact C1 and pre-trigger evidence is unavailable."
   ],
-  "test_evidence": [],
+  "test_evidence": [
+    {
+      "workflow_run": 30469499901,
+      "job": 90635747728,
+      "scope": "Focused CORR1 tests, dependent Pattern Discovery tests, complete repository suite and fail-closed authority boundary",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469504144,
+      "job": 90635762311,
+      "scope": "General repository unit tests",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469502304,
+      "job": 90635755795,
+      "scope": "PD-WP4 UI, retained Pattern Discovery and canonical repository regression",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469499825,
+      "job": 90635747408,
+      "scope": "PD-G0 design-freeze and canonical repository regression",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469499714,
+      "job": 90635746941,
+      "scope": "Historical June assessment continuity and external-evidence blocker boundary",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469500079,
+      "job": 90635748154,
+      "scope": "Historical claim-level review decision and current fail-closed boundary",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    }
+  ],
   "recommendation": "PRESERVE_USEFUL_CORR1_WORK_AND_BLOCK_ON_EXACT_EXTERNAL_EVIDENCE",
   "rollback": "Preserve all external artifacts and signed pilot evidence. Revert only CORR1 code, compact evidence, tests, workflow, QA and state through a new non-destructive commit."
 }
