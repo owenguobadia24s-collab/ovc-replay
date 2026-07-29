@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_lineage_trace_v0_1",
+  "title": "RO3 C1 Lineage Trace v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "object_type", "panel_id", "status", "role", "c1_record_id",
+    "first_valid_time", "chain", "contract_versions", "source_refs", "authority",
+    "read_only", "writes", "trace_id", "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-lineage-trace/v1"},
+    "object_type": {"const": "RO3.C1LineageTrace.v1"},
+    "panel_id": {"const": "RO3-C1-UPSTREAM-LINEAGE"},
+    "status": {"enum": ["COMPLETE", "LINEAGE_INCOMPLETE"]},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "c1_record_id": {"type": "string", "pattern": "^c1:[0-9a-f]{64}$"},
+    "first_valid_time": {"type": "string", "format": "date-time"},
+    "chain": {"type": "array", "minItems": 4, "items": {"type": "object"}},
+    "contract_versions": {"type": "object", "minProperties": 3, "additionalProperties": {"type": "string"}},
+    "source_refs": {"type": "array", "minItems": 5, "items": {"type": "string"}, "uniqueItems": true},
+    "authority": {"const": "READ_ONLY_TRACE"},
+    "read_only": {"const": true},
+    "writes": {"const": "NONE"},
+    "trace_id": {"type": "string", "pattern": "^RO3-C1-LINEAGE-[0-9a-f]{20}$"},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
