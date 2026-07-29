@@ -80,7 +80,7 @@ jobs:
           assert 'route_state: ENABLED_LOCAL_READ_ONLY' in acceptance
           assert 'validation_consumption: LOCKED_UNCONSUMED' in acceptance
           assert 'DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED.' in source
-          assert 'DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED.' in view
+          assert 'DOWNSTREAM_AUTHORITY_BANNER' in view
           assert 'LOCAL_READ_ONLY_C1_PRESENTATION' in wrapper
           assert 'st.button' not in view
           PY
