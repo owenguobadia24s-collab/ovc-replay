@@ -2,10 +2,11 @@
   "schema": "ovc-research-console-rc-wp4-implementation-packet/v2",
   "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
   "work_packet": "RC-WP4-v0.3",
-  "status": "GATE_READY",
+  "status": "APPROVED_PENDING_MERGE",
   "baseline_main_commit": "79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5",
   "branch": "rebuild/research-console-v0-3-rc-wp4-system-activity",
   "candidate_commit": "0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4",
+  "gate_ready_head": "631c1f5fbd646bc2a6581b7f87eedf5e9f610736",
   "pull_request": 154,
   "superseded_candidate": {
     "pull_request": 86,
@@ -15,7 +16,8 @@
   },
   "prerequisites": [
     "RC-G3 PASS_RO2_READ_ONLY_ADAPTER_CONSUMPTION",
-    "RC-G4 COMPLETED_LOCAL_READ_ONLY_C1_PRESENTATION"
+    "RC-G4 COMPLETED_LOCAL_READ_ONLY_C1_PRESENTATION",
+    "RC-G3A OPERATOR PASS"
   ],
   "scope": [
     "deterministic System workspace projection",
@@ -36,8 +38,10 @@
   },
   "qa_packet": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json",
   "gate_packet": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_GATE_PACKET.json",
-  "authority_required": "OPERATOR_REQUIRED_AT_RC-G3A",
-  "authority_delta_on_gate_pass": "LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY",
+  "decision_record": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_DECISION.json",
+  "operator_decision": "PASS",
+  "authority_required": "OPERATOR_APPROVED_AT_RC-G3A",
+  "approved_authority_delta": "LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY",
   "retained": {
     "validation_consumption": "LOCKED_UNCONSUMED",
     "research_writes": "DENIED_PENDING_SEPARATE_GATE",
@@ -53,5 +57,6 @@
     "action": "Revert this bounded packet in a new commit and return the System workspace and activity stream to the prior accepted fixture presentation.",
     "destructive_action": "NONE"
   },
-  "next_gate": "RC-G3A"
+  "next_gate": null,
+  "next_packet": "RC-WP4_SQUASH_MERGE"
 }
