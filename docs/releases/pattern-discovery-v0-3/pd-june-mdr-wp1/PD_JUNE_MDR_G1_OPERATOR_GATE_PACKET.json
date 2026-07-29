@@ -1,0 +1,127 @@
+{
+  "acceptance_conditions": [
+    {"condition": "Exact uploaded bytes match predeclared governed hashes", "result": "PASS"},
+    {"condition": "All promoted candidates reviewed claim by claim", "result": "PASS"},
+    {"condition": "Nonqueue stratified sample covers every observed stratum", "result": "PASS"},
+    {"condition": "No unresolved chronology failures", "result": "FAIL"},
+    {"condition": "Exact source-to-C2-v2 binding is self-consistent", "result": "FAIL"},
+    {"condition": "External semantic claims are independently supported", "result": "FAIL"},
+    {"condition": "Population consistency is established", "result": "FAIL"},
+    {"condition": "QA recommends market-description PASS", "result": "FAIL_QA_RECOMMENDS_DEFER"}
+  ],
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "artifact_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_EXTERNAL_ARTIFACT_INVENTORY.json",
+  "baseline_commit": "ec0780a638a02d1f9f80daa1c48225684de8c8d0",
+  "branch": "review/pd-june-mdr-wp1-claim-level-market-description",
+  "candidate_commit": null,
+  "changed_files_planned": [
+    ".github/workflows/pd-june-mdr-wp1-claim-level-review.yml",
+    "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_EXTERNAL_ARTIFACT_INVENTORY.json",
+    "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json.gz.b64",
+    "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json",
+    "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_REVIEW_SUMMARY.md",
+    "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_QA_PACKET.json",
+    "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json",
+    "registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json",
+    "schemas/research_operations/pattern_discovery/pd_june_mdr_wp1_claim_level_review_v0_1.schema.json",
+    "tests/research_operations/pattern_discovery/test_pd_june_mdr_wp1_claim_level_review.py"
+  ],
+  "claim_review": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json",
+  "claim_review_ledger": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json.gz.b64",
+  "completed_scope": [
+    "Verified seven predeclared artifact hashes and recorded all twelve uploaded artifact hashes and sizes.",
+    "Reconciled 208 candidates, fingerprints and triggers plus 7032 transitions.",
+    "Joined every one of 328 candidate timeline records to an exact complete side-specific 15M source bar.",
+    "Produced claim-level records for all six queue-promoted candidates.",
+    "Produced a deterministic one-per-stratum review of 20 nonqueue candidates covering every observed side/trigger/quality/parent stratum.",
+    "Separated mechanical reproducibility, chronology, trigger reconstruction, structural comparison and external semantic validity."
+  ],
+  "current_authority": {
+    "agent_write": "NONE",
+    "canonical_append": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "distance_cluster_threshold_or_model_change": "NONE",
+    "execution": "NONE",
+    "exposure": "NONE",
+    "formula_or_trigger_change": "NONE",
+    "machine_replay": "DENIED",
+    "probability": "NONE",
+    "provider_intake": "DENIED",
+    "r2_publication": "DENIED",
+    "risk": "NONE",
+    "selector_or_release_mutation": "DENIED",
+    "semantic_family_candidate_or_novelty_promotion": "NONE",
+    "trading": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED"
+  },
+  "decision_effects": {
+    "BLOCK": "Stop the assurance programme with evidence preserved.",
+    "DEFER": "Authorise only PD-JUNE-MDR-CORR1 within the bounded non-activating scope and return to the same gate.",
+    "PASS": "Not recommended. Would accept the June market-description reliability claim despite unresolved material evidence failures.",
+    "QUARANTINE": "Quarantine the June review evidence if the operator treats the binding conflict as unsafe rather than correctable.",
+    "SUPERSEDE": "Replace this assurance design with a new operator-approved plan."
+  },
+  "gate_id": "PD-JUNE-MDR-G1",
+  "gate_status": "GATE_READY_PENDING_CI",
+  "operator_approval_required": true,
+  "packet_id": "PD-JUNE-MDR-WP1",
+  "plan_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "plan_version": "0.1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "proposed_defer_delta": {
+    "authority": "OPERATOR_REQUIRED",
+    "next_packet": "PD-JUNE-MDR-CORR1",
+    "not_authorised": [
+      "Provider intake or another replay",
+      "2021–2023 canonical Discovery processing or append",
+      "Formula, trigger, candidate, distance, clustering, threshold or model changes",
+      "Semantic, family, candidate, novelty or theory promotion",
+      "Selector or release mutation",
+      "R2 publication or Validation consumption",
+      "Probability, risk, exposure, trading, execution or agent write"
+    ],
+    "scope": [
+      "Materialize an immutable source-to-C2-v2 carry-forward binding receipt without changing source bytes.",
+      "Make first_valid_time chronological ordering mandatory in candidate materialization and every read-only projection.",
+      "Expose exact C1 fact, level, relation, formula-registry and source-price references for every displayed state claim.",
+      "Expose exact pre-trigger histories for persistence and switching triggers.",
+      "Expose component distance, weights, scales, thresholds, duplicate and overlap status for every reviewed fingerprint.",
+      "Return to PD-JUNE-MDR-G1 after tests and operator review."
+    ]
+  },
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_WP1_QA_PACKET.json",
+  "recommendation_rationale": "The packet proves deterministic artifact integrity and complete price-bar availability for all candidate timestamps, but it also exposes a C2 v1/v2 binding conflict, nonchronological serialized timelines, missing exact C1 claim evidence, incomplete trigger history and no fully supported semantic description. PASS would overstate what the June evidence establishes.",
+  "recommended_decision": "DEFER",
+  "review_result": {
+    "complete_price_joins": 328,
+    "fully_supported_market_descriptions": 0,
+    "nonqueue_sample_reviewed": 20,
+    "overall_verdict": "NOT_ESTABLISHED",
+    "queue_promoted_contradicted": 1,
+    "queue_promoted_partial": 5,
+    "queue_promoted_reviewed": 6,
+    "semantic_description_not_evaluated": 26,
+    "serialized_nonchronological_candidates": 44,
+    "serialized_nonchronological_promoted": 4,
+    "source_binding_status": "CONFLICT_V1_BINDING_PAYLOAD_VS_V2_CANDIDATES"
+  },
+  "rollback": "Preserve all uploaded bytes, prior signed evidence and immutable pilot decisions. Revert only this gate-ready packet and bounded compact review records through a new non-destructive commit.",
+  "schema": "ovc-pd-june-mdr-wp1-operator-gate-packet/v1",
+  "tests": [],
+  "title": "PD-JUNE-MDR-G1 — June Claim-level Market-Description Review",
+  "unresolved_issues": [
+    {"code": "PD-JUNE-MDR-001", "status": "OPEN", "summary": "Source binding C2 v1 versus candidate C2 v2 conflict."},
+    {"code": "PD-JUNE-MDR-002", "status": "OPEN", "summary": "Nonchronological serialized candidate timelines."},
+    {"code": "PD-JUNE-MDR-003", "status": "OPEN", "summary": "Missing exact C1 claim evidence and formula inputs."},
+    {"code": "PD-JUNE-MDR-004", "status": "OPEN", "summary": "Missing pre-trigger histories for persistence and switching."},
+    {"code": "PD-JUNE-MDR-005", "status": "OPEN", "summary": "General component-distance decomposition missing."},
+    {"code": "PD-JUNE-MDR-006", "status": "OPEN", "summary": "No immutable negative-control candidates."}
+  ],
+  "warnings": [
+    "The source-binding payload names C2 v1 while the reviewed candidate artifacts name C2 v2.",
+    "44 candidate timelines are serialized out of order, including four promoted review units.",
+    "No claim can establish external semantic correctness without exact C1 facts, levels and formula inputs.",
+    "Persistence and switching triggers cannot be independently reconstructed from the supplied history.",
+    "No reviewed candidate receives a full market-description SUPPORT verdict."
+  ]
+}
