@@ -35,37 +35,39 @@
   "merge_commit": "85c9805db69d487ffdb043eca18414101cf03387",
   "compatibility_hotfix": {
     "packet_id": "C1C-G5-CORR3-HOTFIX-STATE-COMPAT",
-    "status": "APPROVED_PENDING_SQUASH_MERGE",
+    "status": "COMPLETED_IN_MAIN",
     "baseline_commit": "655cfa7bfec840eb8cfe62fb4c12efe903c55ab2",
     "branch": "hotfix/c1c-g5-corr3-corr2-terminal-state",
     "tested_code_head": "e1c494c388a629c8be8aa5eae4aedd131615dc2f",
+    "final_pull_request_head": "89d0f94ef9df530a884b7d70eb693b4c545992d2",
     "pull_request": 143,
     "authority_delta": "NONACTIVATING_COMPATIBILITY_FIX_ONLY",
     "accepted_prerequisite_status": "COMPLETED_IN_MAIN_AND_SIGNED_OPERATOR_REREVIEW_COMPLETE",
     "tests": [
       {
-        "workflow_run": 30416291215,
-        "job": 90463433372,
+        "workflow_run": 30416397963,
+        "job": 90463748899,
         "result": "PASS"
       },
       {
-        "workflow_run": 30416291237,
-        "job": 90463433342,
+        "workflow_run": 30416398035,
+        "job": 90463748990,
         "result": "PASS"
       }
     ],
     "qa_decision": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/hotfix/C1C_G5_CORR3_TERMINAL_STATE_HOTFIX_QA_DECISION.json",
+    "merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/hotfix/C1C_G5_CORR3_TERMINAL_STATE_HOTFIX_MERGE_RECEIPT.json",
     "decision": "PASS",
     "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
-    "merge_commit": null,
-    "next_action": "SQUASH_MERGE_PR_143_THEN_RETRY_OPERATOR_LOCAL_CORR3_PREFLIGHT"
+    "merge_commit": "06adaed470bc1f6507154a992cb42721885435a3",
+    "next_action": "RETRY_OPERATOR_LOCAL_CORR3_PREFLIGHT"
   },
   "blockers": [
     {
       "blocker_id": "C1C-G5-BLOCK-004",
       "status": "OPEN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW_REQUIRED",
       "reason": "CI cannot perform the exact one-object human disposition, access the operator-local external pilot root or use the operator-private Ed25519 key.",
-      "smallest_lawful_resolution": "After the terminal-state compatibility hotfix merges, run CORR3 preflight and prepare locally, review exactly the authorised candidate, finalize with the existing operator key and return the compact signed closure artifacts."
+      "smallest_lawful_resolution": "Run CORR3 preflight and prepare locally, review exactly the authorised candidate, finalize with the existing operator key and return the compact signed closure artifacts."
     }
   ],
   "authorised_candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
