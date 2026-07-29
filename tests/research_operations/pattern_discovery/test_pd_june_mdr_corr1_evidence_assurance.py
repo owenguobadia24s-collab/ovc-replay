@@ -20,6 +20,7 @@ DIGEST = BASE / "PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json"
 GAPS = BASE / "PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json"
 QA = BASE / "PD_JUNE_MDR_CORR1_QA_PACKET.json"
 GATE = BASE / "PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json"
+DECISION = BASE / "PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 SCHEMA = ROOT / "schemas" / "research_operations" / "pattern_discovery" / "pd_june_mdr_corr1_return_gate_v0_1.schema.json"
 
@@ -36,10 +37,11 @@ class PDJuneMDRCorr1EvidenceAssuranceTests(unittest.TestCase):
         cls.gaps = json.loads(GAPS.read_text(encoding="utf-8"))
         cls.qa = json.loads(QA.read_text(encoding="utf-8"))
         cls.gate = json.loads(GATE.read_text(encoding="utf-8"))
+        cls.decision = json.loads(DECISION.read_text(encoding="utf-8"))
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
 
     def test_return_packet_files_exist(self) -> None:
-        for path in (BINDING, CHRONOLOGY, STRUCTURAL, STRUCTURAL_LEDGER, DRIVE, REPRO, DIGEST, GAPS, QA, GATE, STATE, SCHEMA):
+        for path in (BINDING, CHRONOLOGY, STRUCTURAL, STRUCTURAL_LEDGER, DRIVE, REPRO, DIGEST, GAPS, QA, GATE, DECISION, STATE, SCHEMA):
             self.assertTrue(path.is_file(), path)
 
     def test_binding_and_drive_inventory_are_exact(self) -> None:
@@ -92,15 +94,20 @@ class PDJuneMDRCorr1EvidenceAssuranceTests(unittest.TestCase):
         self.assertEqual(self.structural["exact_distance_recomputation_count"], 24)
         self.assertEqual(self.structural["unassigned_small_sample_count"], 2)
 
-    def test_return_gate_fails_closed_on_controls_and_agreement(self) -> None:
+    def test_operator_defer_authorises_bounded_corr2(self) -> None:
         self.assertEqual(self.gaps["status"], "GATE_READY_CONTROL_AND_AGREEMENT_EVIDENCE_REQUIRED")
         self.assertEqual({item["code"] for item in self.gaps["open_blockers"]}, {"PD-JUNE-MDR-006"})
-        self.assertEqual(self.gate["gate_status"], "GATE_READY_OPERATOR_DECISION_REQUIRED")
-        self.assertEqual(self.gate["recommended_decision"], "DEFER")
+        self.assertEqual(self.decision["decision"], "DEFER")
+        self.assertEqual(self.decision["decision_authority"], "OPERATOR")
+        self.assertEqual(self.decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
+        self.assertEqual(self.gate["gate_status"], "APPROVED_DEFER_CORR2_AUTHORISED")
+        self.assertFalse(self.gate["operator_approval_required"])
+        self.assertEqual(self.gate["decision"], "DEFER")
         self.assertEqual(self.gate["overall_answer"]["verdict"], "NOT_ESTABLISHED")
-        self.assertEqual(self.state["status"], "GATE_READY")
-        self.assertEqual(self.state["next_packet_on_defer"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
-        self.assertEqual(self.qa["recommendation"], "DEFER_TO_OPERATOR_REQUIRED_READ_ONLY_CONTROL_AND_AGREEMENT_ASSURANCE")
+        self.assertEqual(self.state["status"], "APPROVED")
+        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
+        self.assertEqual(self.state["next_packet_status"], "READY_AFTER_CORR1_SQUASH_MERGE")
+        self.assertEqual(self.qa["recommendation"], "EXECUTE_OPERATOR_APPROVED_PD-JUNE-MDR-CORR2_AFTER_CORR1_MERGE")
 
     def test_authority_remains_frozen(self) -> None:
         authority = self.gate["current_authority"]
