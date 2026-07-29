@@ -106,7 +106,7 @@ jobs:
               manifest=json.loads(manifest_path.read_text())
               exp=expected[role]
               prefix=f"ovc_r2:ovc-evidence/{exp['remote_prefix'].rstrip('/')}"
-              listing=subprocess.run(['rclone','lsf','--recursive','--files-only','--s3-no-check-bucket',prefix],capture_output=True,text=True)
+              listing=subprocess.run(['rclone','lsf','--recursive','--s3-no-check-bucket',prefix],capture_output=True,text=True)
               existing=[x for x in listing.stdout.splitlines() if x]
               expected_keys=[item['path'] for item in manifest['files']]+['manifest.json']
               mode='VERIFY_EXISTING' if existing else 'PUBLISH_NEW'
