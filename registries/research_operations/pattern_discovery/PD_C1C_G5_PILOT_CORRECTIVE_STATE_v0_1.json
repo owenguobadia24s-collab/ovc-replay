@@ -2,7 +2,7 @@
   "schema": "ovc-pd-c1c-g5-pilot-corrective-state/v1",
   "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
   "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
-  "status": "C1C_G5_CORR3_COMPLETED_IN_MAIN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW_REQUIRED",
+  "status": "C1C_G5_CORRECTIVE_PILOT_REVIEW_COMPLETED_OPERATOR_PASS",
   "source_pilot": {
     "namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
     "run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
@@ -144,7 +144,7 @@
       "IMMUTABLE_PRIOR_DECISION_AND_SIGNED_EVIDENCE_PRESERVATION"
     ],
     "second_machine_replay": "DENIED_NOT_REQUIRED",
-    "operator_local_human_rereview": "REQUIRED_FOR_ONE_REMAINING_DEFERRED_OBJECT",
+    "operator_local_human_rereview": "COMPLETED_WORKFLOW_ACCEPTED_SIGNED",
     "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
     "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_QA_PACKET.json",
     "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_DELEGATED_DECISION.md",
@@ -152,6 +152,26 @@
     "merge_commit": "85c9805db69d487ffdb043eca18414101cf03387",
     "merge_method": "SQUASH",
     "merged_on": "2026-07-29"
+  },
+  "final_operator_pass": {
+    "decision_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW-PASS-CORR3-2026-07-29",
+    "decision": "PASS",
+    "decision_authority": "OPERATOR",
+    "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW PASS",
+    "decision_date": "2026-07-29",
+    "gate_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_FINAL_OPERATOR_GATE_PACKET.json",
+    "decision_pull_request": 147,
+    "decision_head": "a000a697eceda064d4b723fa2d188381923723b9",
+    "decision_merge_commit": "1d4065b7a4fa9a7c6d832528309a5b4f56fd2991",
+    "tests": [
+      {"workflow_run": 30419697439, "job": 90473772097, "result": "PASS"},
+      {"workflow_run": 30419697463, "job": 90473772164, "result": "PASS"}
+    ],
+    "accepted_scope": "SIGNED_C2_V2_CORRECTIVE_PILOT_OPERATIONAL_LINEAGE_AND_REVIEW_WORKFLOW_EVIDENCE_ONLY",
+    "final_disposition": "WORKFLOW_ACCEPTED",
+    "remaining_deferred_object_count": 0,
+    "candidate_or_family_promotion": "NOT_AUTHORISED",
+    "second_machine_replay": "DENIED_NOT_REQUIRED"
   },
   "implementation": {
     "machine_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
@@ -172,20 +192,17 @@
   },
   "blocker": {
     "blocker_id": "C1C-G5-BLOCK-004",
-    "status": "OPEN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW_REQUIRED",
-    "reason": "CI cannot perform the required human disposition of the exact remaining pilot object, access the operator-local external pilot root or use the operator-private Ed25519 key.",
-    "required_resources": [
-      "operator-local external corrective pilot root",
-      "operator-private Ed25519 key bound to RPS.SIGNING.50092c28981fef08f53a6cb5",
-      "human review of PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
-    ],
-    "second_machine_replay": "DENIED_NOT_REQUIRED",
-    "smallest_lawful_resolution": "Run CORR3 preflight and prepare locally, complete the exact one-object review template, finalize and return the signed compact CORR3 closure evidence."
+    "status": "CLOSED_BY_OPERATOR_PASS",
+    "resolution": "SIGNED_CORR3_ONE_OBJECT_REVIEW_ACCEPTED_AT_FINAL_OPERATOR_GATE",
+    "decision_merge_commit": "1d4065b7a4fa9a7c6d832528309a5b4f56fd2991",
+    "evidence_preserved": true,
+    "second_machine_replay": "DENIED_NOT_REQUIRED"
   },
-  "continuation": "RUN_OPERATOR_LOCAL_C1C_G5_CORR3_ONE_OBJECT_REREVIEW",
-  "continuation_command": ".\\scripts\\run_c1c_g5_corr3_review.ps1 preflight",
-  "next_packet": "C1C-G5-CORR3-LOCAL-REVIEW",
-  "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "continuation": "BEGIN_RO3_WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME",
+  "continuation_command": "OVC CONTINUE",
+  "next_packet": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME",
+  "next_gate": "RO3-G3",
+  "additional_allowed_preparation": "PD-G5P_C2_V2_BOUND_OPERATOR_PACKET_PREPARATION_ONLY",
   "retained_authority": {
     "selector_mutation": "DENIED",
     "release_mutation": "DENIED",
