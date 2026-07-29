@@ -4,7 +4,7 @@
   "plan_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
   "plan_version": "0.1",
   "packet_id": "C1C-G5-CORR3",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "prerequisites": [
     "C1C-G5-CORR2_COMPLETED_IN_MAIN",
     "C1C-G5-CORRECTIVE-PILOT-REVIEW_DEFER_APPROVED_2026-07-29"
@@ -14,28 +14,31 @@
   "baseline_commit": "41623d07e73b2e0b87824c365f11acca9e51d73d",
   "branch": "build/c1c-g5-corr3-structural-comparison",
   "candidate_commit": "9a4fa3f3472d8c09981264c29093d13115a34bcb",
+  "final_pull_request_head": "def805f70ac86d53e9db14fa4b5ebaee5356f27f",
   "pull_request": 141,
   "tests": [
     {
-      "workflow_run": 30415338772,
-      "job": 90460513735,
+      "workflow_run": 30415545335,
+      "job": 90461150777,
       "result": "PASS"
     },
     {
-      "workflow_run": 30415338842,
-      "job": 90460513953,
+      "workflow_run": 30415545268,
+      "job": 90461150538,
       "result": "PASS"
     }
   ],
   "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_QA_PACKET.json",
   "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_DELEGATED_DECISION.md",
   "implementation_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_IMPLEMENTATION_RECEIPT.json",
-  "merge_commit": null,
+  "merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_MERGE_RECEIPT.json",
+  "merge_commit": "85c9805db69d487ffdb043eca18414101cf03387",
   "blockers": [
     {
       "blocker_id": "C1C-G5-BLOCK-004",
-      "status": "PENDING_AFTER_IMPLEMENTATION_MERGE",
-      "reason": "CI cannot perform the one-object human disposition or use the operator-private Ed25519 key and operator-local external pilot root."
+      "status": "OPEN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW_REQUIRED",
+      "reason": "CI cannot perform the exact one-object human disposition, access the operator-local external pilot root or use the operator-private Ed25519 key.",
+      "smallest_lawful_resolution": "Run CORR3 preflight and prepare locally, review exactly the authorised candidate, finalize with the existing operator key and return the compact signed closure artifacts."
     }
   ],
   "authorised_candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
@@ -63,5 +66,6 @@
   ],
   "rollback": "Revert CORR3 code, schemas, tests and court records through a new non-destructive commit while preserving the immutable machine run and every signed external artifact.",
   "next_packet": "C1C-G5-CORR3-LOCAL-REVIEW",
-  "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
+  "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "continuation_command": ".\\scripts\\run_c1c_g5_corr3_review.ps1 preflight"
 }
