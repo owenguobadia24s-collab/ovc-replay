@@ -8,12 +8,13 @@
     {"condition":"Population-level deterministic structural consistency is established","result":"PASS_1144_OF_1144"},
     {"condition":"Negative-control false-positive performance is established","result":"FAIL_NO_IMMUTABLE_CONTROLS"},
     {"condition":"Repeat-review agreement is established","result":"FAIL_NO_REPEAT_REVIEW_EVIDENCE"},
-    {"condition":"QA recommends unconditional market-description PASS","result":"FAIL_QA_RECOMMENDS_DEFER"}
+    {"condition":"QA recommends unconditional market-description PASS","result":"FAIL_QA_RECOMMENDS_DEFER"},
+    {"condition":"Focused, dependent and repository-wide tests pass","result":"PASS"}
   ],
   "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
   "baseline_main": "59057288675277d43b23e4831675b0f5c557d88f",
   "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
-  "candidate_commit": null,
+  "tested_candidate_commit": "3746bacbdf1856c4ee6e580f565a727d10fb0f96",
   "completed_scope": [
     "Located the exact frozen RPS source-compute and corrective v2 pilot roots in Google Drive.",
     "Verified all 21 source-compute manifest members by SHA-256 and size.",
@@ -46,7 +47,8 @@
     "drive_inventory": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json",
     "prior_structural_assurance": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json",
     "reproduction_digest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json",
-    "reproduction_summary": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json"
+    "reproduction_summary": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json",
+    "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_QA_PACKET.json"
   },
   "finding_disposition": [
     {"code":"PD-JUNE-MDR-001","status":"RESOLVED"},
@@ -93,11 +95,18 @@
   "recommended_decision": "DEFER",
   "rollback": "Preserve all Google Drive and signed external evidence. Revert only CORR1 compact evidence, tests, QA, gate packet and programme-state updates through a new non-destructive commit.",
   "schema": "ovc-pd-june-mdr-g1-return-gate-packet/v1",
+  "test_evidence": [
+    {"workflow_run":30498219394,"job":90731843042,"scope":"CORR1 focused, dependent, complete suite and return-gate boundary","result":"PASS"},
+    {"workflow_run":30498219425,"job":90731843340,"scope":"General repository unit tests","result":"PASS"},
+    {"workflow_run":30498219325,"job":90731842858,"scope":"June assessment continuity and return-gate progression","result":"PASS"},
+    {"workflow_run":30498219459,"job":90731843542,"scope":"Claim-level decision continuity and return-gate progression","result":"PASS"}
+  ],
   "title": "June Claim-level Market-Description Review — Corrective Return",
   "warnings": [
     "The original prospective C1 corpus contains 589 non-zero wick-balance values with the pre-corrective opposite sign.",
     "Exact reconstruction proves the frozen C2 structural implementation does not consume wick_balance and reproduces all 1,144 stored states.",
     "The evidence is one bounded gapped June slice and cannot establish general false-positive performance without controls.",
-    "No repeat-review agreement study has been performed."
+    "No repeat-review agreement study has been performed.",
+    "The superseded base64-gzip digest is not used by the gate; the compact canonical JSON receipt binds the exact evidence hashes."
   ]
 }
