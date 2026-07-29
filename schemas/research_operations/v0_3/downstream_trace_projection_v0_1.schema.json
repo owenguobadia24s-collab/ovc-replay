@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/downstream_trace_projection_v0_1",
+  "title": "RO3 Downstream Trace Projection v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "object_type", "panel_id", "banner", "status", "c1_record_id",
+    "child_references", "sorting", "authority", "c2_authority",
+    "pattern_discovery_authority", "read_only", "writes", "projection_id", "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-downstream-trace-projection/v1"},
+    "object_type": {"const": "RO3.DownstreamTraceProjection.v1"},
+    "panel_id": {"const": "RO3-C1-DOWNSTREAM-TRACE"},
+    "banner": {"const": "DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED."},
+    "status": {"enum": ["AVAILABLE", "TRACE_NOT_AVAILABLE"]},
+    "c1_record_id": {"type": "string", "pattern": "^c1:[0-9a-f]{64}$"},
+    "child_references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "child_id", "child_type", "source_c1_record_id", "source_binding",
+          "operation_mode", "cutoff", "availability", "trace_status"
+        ],
+        "properties": {
+          "child_id": {"type": "string", "minLength": 1},
+          "child_type": {"enum": ["C2_STATE", "C2_TRANSITION", "PATTERN_DISCOVERY_TRIGGER", "PATTERN_DISCOVERY_CANDIDATE_REFERENCE"]},
+          "source_c1_record_id": {"type": "string", "pattern": "^c1:[0-9a-f]{64}$"},
+          "source_binding": {"type": "string", "minLength": 1},
+          "operation_mode": {"enum": ["LIVE_PROSPECTIVE", "TIME_GATED_REPLAY", "NON_EVIDENTIARY_REPLAY", "HISTORICAL_TRACE"]},
+          "cutoff": {"type": "string", "format": "date-time"},
+          "availability": {"type": "string", "minLength": 1},
+          "trace_status": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "sorting": {"const": "IDENTITY_ONLY_NO_SCORE_OR_PRIORITY"},
+    "authority": {"const": "READ_ONLY_TRACE"},
+    "c2_authority": {"const": "UNCHANGED"},
+    "pattern_discovery_authority": {"const": "UNCHANGED"},
+    "read_only": {"const": true},
+    "writes": {"const": "NONE"},
+    "projection_id": {"type": "string", "pattern": "^RO3-C1-DOWNSTREAM-[0-9a-f]{20}$"},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
