@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_console_projection_v0_1",
+  "title": "RO3 C1 Console Projection v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "object_type", "route_id", "route_state", "route_enabled", "status",
+    "source_context", "panels", "panel_separation", "authority",
+    "live_consumption_authority", "validation_consumption", "read_only", "writes",
+    "projection_id", "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-console-projection/v1"},
+    "object_type": {"const": "RO3.C1ConsoleProjection.v1"},
+    "route_id": {"const": "RESEARCH.C1_FACT_ASSURANCE"},
+    "route_state": {"const": "DISABLED_PENDING_RC_G4"},
+    "route_enabled": {"const": false},
+    "status": {"enum": ["READY_CANDIDATE", "STALE_PROJECTION"]},
+    "source_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role", "c1_release_id", "c1_manifest_sha256", "formula_registry_id",
+        "formula_registry_logical_sha256", "represented_commit", "source_commit", "clock", "side"
+      ],
+      "properties": {
+        "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+        "c1_release_id": {"type": "string"},
+        "c1_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+        "formula_registry_logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "represented_commit": {"type": "string", "minLength": 7},
+        "source_commit": {"type": "string", "minLength": 7},
+        "clock": {"enum": ["15M", "2H_A_L"]},
+        "side": {"enum": ["BID", "ASK"]}
+      }
+    },
+    "panels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fact", "computability", "assurance", "upstream_lineage", "downstream_trace"],
+      "properties": {
+        "fact": {"$ref": "c1_formula_evidence_card_v0_1.schema.json"},
+        "computability": {"type": "object"},
+        "assurance": {"type": "object"},
+        "upstream_lineage": {"$ref": "c1_lineage_trace_v0_1.schema.json"},
+        "downstream_trace": {"$ref": "downstream_trace_projection_v0_1.schema.json"}
+      }
+    },
+    "panel_separation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fact_panel_id", "downstream_panel_id", "mixed_compact_object", "null_reason_and_c2_transition_compact_corender"],
+      "properties": {
+        "fact_panel_id": {"const": "RO3-C1-FACT-INSPECTOR"},
+        "downstream_panel_id": {"const": "RO3-C1-DOWNSTREAM-TRACE"},
+        "mixed_compact_object": {"const": "DENIED"},
+        "null_reason_and_c2_transition_compact_corender": {"const": "DENIED"}
+      }
+    },
+    "authority": {"const": "LOCAL_READ_ONLY_PRESENTATION_ADAPTERS"},
+    "live_consumption_authority": {"const": "NONE_PENDING_RC_G4"},
+    "validation_consumption": {"const": "LOCKED_UNCONSUMED"},
+    "read_only": {"const": true},
+    "writes": {"const": "NONE"},
+    "projection_id": {"type": "string", "pattern": "^RO3-C1-CONSOLE-[0-9a-f]{20}$"},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
