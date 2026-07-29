@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-c1c-g5-corr3-terminal-state-hotfix-qa-decision/v1",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "packet_id": "C1C-G5-CORR3-HOTFIX-STATE-COMPAT",
+  "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "baseline_commit": "655cfa7bfec840eb8cfe62fb4c12efe903c55ab2",
+  "branch": "hotfix/c1c-g5-corr3-corr2-terminal-state",
+  "tested_code_head": "e1c494c388a629c8be8aa5eae4aedd131615dc2f",
+  "pull_request": 143,
+  "defect": {
+    "code": "CORR2_STATE_NOT_EXECUTABLE:COMPLETED_IN_MAIN_AND_SIGNED_OPERATOR_REREVIEW_COMPLETE",
+    "classification": "CORRECTABLE_IN_SCOPE_STATE_COMPATIBILITY_DEFECT",
+    "root_cause": "The governed CORR2 authority loader predates the exact terminal court-record status written after the signed operator re-review. CORR3 reuses that loader and therefore rejected a lawful completed prerequisite state."
+  },
+  "correction": {
+    "accepted_status": "COMPLETED_IN_MAIN_AND_SIGNED_OPERATOR_REREVIEW_COMPLETE",
+    "surface": "CORR3_ENTRYPOINT_ONLY",
+    "direct_corr2_command_changed": false,
+    "all_other_unknown_statuses_fail_closed": true,
+    "operator_defer_check_retained": true,
+    "packet_identity_check_retained": true,
+    "machine_replay_boundary_retained": "DENIED_NOT_REQUIRED",
+    "gate_recommendation_check_retained": "DEFER"
+  },
+  "tests": [
+    {
+      "workflow_run": 30416291215,
+      "job": 90463433372,
+      "scope": "focused hotfix, retained CORR3, complete repository and authority boundary",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30416291237,
+      "job": 90463433342,
+      "scope": "repository-wide unit tests",
+      "result": "PASS"
+    }
+  ],
+  "qa": {
+    "status": "PASS",
+    "recommendation": "PASS",
+    "warnings": [],
+    "unresolved_issues": [],
+    "reproducibility": "PASS",
+    "authority_boundary": "PASS_NONACTIVATING"
+  },
+  "authority_delta": "NONACTIVATING_COMPATIBILITY_FIX_ONLY",
+  "retained_prohibitions": [
+    "Machine replay or provider intake",
+    "Trigger, distance, clustering, threshold or model changes",
+    "Canonical Discovery processing or append",
+    "Semantic, family, candidate or novelty promotion",
+    "Selector or release mutation",
+    "R2 publication or Validation consumption",
+    "Probability, risk, exposure, trading, execution or agent write"
+  ],
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
+  "decision_rationale": "The fix accepts one exact lawful completed prerequisite status only, preserves all authority checks, introduces no market or semantic operation, and all focused and repository-wide tests pass.",
+  "rollback": "Revert only the CORR3 compatibility adapter, entrypoint import, tests, workflow and this court record through a new non-destructive commit. Preserve all completed CORR2/CORR3 records and signed evidence.",
+  "next_action": "SQUASH_MERGE_PR_143_THEN_RETRY_OPERATOR_LOCAL_CORR3_PREFLIGHT",
+  "status": "APPROVED_PENDING_SQUASH_MERGE"
+}
