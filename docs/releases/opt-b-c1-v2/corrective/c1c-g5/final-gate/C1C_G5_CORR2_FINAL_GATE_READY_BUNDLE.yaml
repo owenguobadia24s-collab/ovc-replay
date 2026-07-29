@@ -1,0 +1,196 @@
+schema: ovc-c1c-g5-corr2-final-gate-ready-bundle/v1
+title: C1C-G5 Corrective Pilot Review - Final CORR2 Return
+gate_id: C1C-G5-CORRECTIVE-PILOT-REVIEW
+packet_id: C1C-G5-CORR2-FINAL-GATE-READY
+plan_id: OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1
+plan_version: '0.1'
+baseline_commit: 71eeba61691d3ab545c5cd0d7bc36c8b9942542e
+branch: gate/c1c-g5-corr2-final-defer-ready
+candidate_commit: null
+evidence_received_at_utc: 2026-07-29T01:14:08Z
+gate_status: GATE_READY
+operator_approval_required: true
+allowed_decisions:
+  - PASS
+  - DEFER
+  - BLOCK
+  - QUARANTINE
+  - SUPERSEDE
+
+evidence_files:
+  - name: c1c-g5-corr2-closure-ledger.json
+    sha256: 65507b2acb691433cccc48a1e63311f89b783dabd3802763c362004effcdd3af
+    size_bytes: 1323
+    storage: operator-returned compact evidence; exact bytes retained outside Git
+  - name: c1c-g5-corr2-review-receipt.json
+    sha256: 86be15969ca26d9da83bffc018ec02f3f5f6b9f6eaf5cdca1b197d46b8dbc963
+    size_bytes: 5223
+    storage: operator-returned compact signed evidence; exact bytes retained outside Git
+  - name: c1c-g5-corrective-pilot-review-final-gate-input.json
+    sha256: 5aadafcda41631f9a64575ede02136faa50ed2a2f546d8698a6ef294e781adb6
+    size_bytes: 1554
+    storage: operator-returned compact evidence; exact bytes retained outside Git
+  - name: signed-c1c-g5-corr2-evidence-inventory.json
+    sha256: 7d57c8032465fca28508d9da8965a0abdec7c8a37a5b772ca8de87480d87e19f
+    size_bytes: 1737
+    storage: operator-returned compact signed evidence; exact bytes retained outside Git
+
+independent_verification:
+  json_parse: PASS
+  exact_file_sha256: PASS
+  cross_file_hash_links: PASS
+  ledger_logical_sha256: PASS
+  review_receipt_signed_payload_sha256: PASS
+  review_receipt_signature_sha256: PASS
+  review_receipt_ed25519_sshsig: PASS
+  inventory_signed_payload_sha256: PASS
+  inventory_signature_sha256: PASS
+  inventory_ed25519_sshsig: PASS
+  registered_public_key_fingerprint: SHA256:mCaINWRJxmHTChbwy366euz8AMLVFVKQNPiRqYP88kY
+  signature_namespace: ovc-rps
+  operator_id: OVC.OPERATOR.PRIMARY.LOCAL.V1
+  signing_binding_id: RPS.SIGNING.50092c28981fef08f53a6cb5
+  implementation_receipt_binding: PASS_BY_SIGNED_LOCAL_FINALIZER
+
+accepted_evidence:
+  pilot_run_id: PD.PILOT.RUN.96c16f11717e787f971851ee
+  pilot_namespace: PD.PILOT.GBPUSD.20260622_20260625.v2
+  active_c2_release_id: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2
+  active_c2_manifest_id: MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1
+  selector_id: SELECTOR.OPT-B.C2.GBPUSD.v2
+  machine_rerun_valid: true
+  structured_review_v2_preserved: true
+  corr2_operator_rereview_complete: true
+  second_machine_replay_performed: false
+  receipt_signed_payload_sha256: eda18c11f05e1fe3c9b7e93ea2eaab32a17fbdad22260305d6fd303882f5eb65
+  inventory_signed_payload_sha256: 5cd44af77abb353b0f0f0915084aa7f86c4436f636c79ee4b19421d0b0186e38
+  preserved_non_deferred_decision_count: 4
+  preserved_non_deferred_decisions_sha256: 8af53e45df7cc3dd38b39861e818dfd132becd46ba7b78e3bf684ec97503cb0d
+
+review_result:
+  decision_count: 2
+  workflow_evidence_finding: CLOSED_BY_IMPLEMENTATION_AND_TESTS
+  console_context_finding: CLOSED_BY_IMPLEMENTATION_AND_TESTS
+  remaining_deferred_object_count: 1
+  contract_changes_required: true
+  decisions:
+    - candidate_window_id: PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4
+      prior_finding_code: PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001
+      final_disposition: REJECT_PILOT_OBJECT
+      finding_code: PD-REJECT-CORR2-CHRONOLOGY-INCONSISTENT-001
+    - candidate_window_id: PDPILOT-CANDIDATE-bab63b935155e4d9033aed81
+      prior_finding_code: PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002
+      final_disposition: DEFER_PILOT_OBJECT
+      finding_code: PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001
+
+acceptance_conditions:
+  - condition: exact C2 v2 lineage and immutable corrective run
+    result: PASS
+  - condition: exact two-object operator re-review
+    result: PASS
+  - condition: receipt and inventory Ed25519 SSHSIG verification
+    result: PASS
+  - condition: exact SHA-256 and logical hash chain
+    result: PASS
+  - condition: workflow and Console correction findings closed
+    result: PASS
+  - condition: no deferred object remains
+    result: FAIL
+  - condition: QA recommends PASS
+    result: FAIL
+
+qa:
+  status: PASS_EVIDENCE_DEFER_FINAL_ACCEPTANCE
+  recommendation: DEFER
+  warnings:
+    - The machine run, source lineage, hash chain and signatures are valid; DEFER is based on an unresolved review condition, not corrupted evidence.
+    - No second market replay is required or authorised.
+  blocking_for_pass:
+    - PDPILOT-CANDIDATE-bab63b935155e4d9033aed81 remains DEFER_PILOT_OBJECT.
+    - The exact medoid or neighbour fingerprint comparison is not exposed.
+    - The deterministic distance components for distance 0.1 and outlier status are not exposed.
+    - The LONG_PERSISTENCE trigger basis is not reconciled with duration_records=1 and max_persistence=1.
+    - Duplicate-window, overlap and comparison-availability status are not explicit.
+
+unresolved_issue:
+  candidate_window_id: PDPILOT-CANDIDATE-bab63b935155e4d9033aed81
+  finding_code: PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001
+  required_resolution:
+    - Expose the assigned medoid fingerprint or an exact equivalent structural comparison.
+    - Expose deterministic distance components for distance 0.1 and outlier classification.
+    - Document the LONG_PERSISTENCE derivation for the one-record candidate window.
+    - Make duplicate-window, overlap and comparison-availability status explicit.
+
+current_authority:
+  canonical_discovery_processing: DENIED
+  canonical_append: DENIED
+  selector_mutation: DENIED
+  release_mutation: DENIED
+  r2_publication: DENIED
+  validation_consumption: LOCKED_UNCONSUMED
+  semantic_promotion: NONE
+  family_promotion: NONE
+  candidate_promotion: NONE
+  novelty_promotion: NONE
+  threshold_or_model_change: NONE
+  probability: NONE
+  risk: NONE
+  exposure: NONE
+  trading: NONE
+  execution: NONE
+  agent_write: NONE
+
+authority_delta_by_decision:
+  DEFER:
+    status: OPERATOR_RESERVED
+    proposed_next_packet: C1C-G5-CORR3
+    delta:
+      - Expose read-only medoid or neighbour fingerprint context from preserved pilot artifacts.
+      - Expose deterministic distance components and explicit duplicate, overlap and comparison status.
+      - Document the existing LONG_PERSISTENCE trigger derivation without changing trigger rules.
+      - Re-review only PDPILOT-CANDIDATE-bab63b935155e4d9033aed81 without another machine replay.
+      - Preserve the rejected object, all prior decisions and every signed evidence object.
+      - Return to this same gate.
+    not_authorised:
+      - Machine replay or provider intake
+      - Trigger, distance, clustering, threshold or model changes
+      - Canonical Discovery processing or append
+      - Semantic, family, candidate or novelty promotion
+      - Selector or release mutation
+      - R2 publication or Validation consumption
+      - Probability, risk, exposure, trading, execution or agent write
+  PASS:
+    status: OPERATOR_RESERVED_NOT_RECOMMENDED
+    warning: PASS would conceal the unresolved structural-comparison condition.
+  BLOCK:
+    status: OPERATOR_RESERVED
+  QUARANTINE:
+    status: OPERATOR_RESERVED
+  SUPERSEDE:
+    status: OPERATOR_RESERVED
+
+recommended_decision: DEFER
+recommendation_rationale: >-
+  CORR2 closes the workflow-evidence and Console-context defects and produces valid signed evidence.
+  One exact pilot object remains deferred because its medoid comparison, distance decomposition,
+  persistence-trigger derivation and overlap status are not exposed. PASS would conceal that condition.
+operator_command: OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW DEFER
+
+programme_state:
+  status: GATE_READY_OPERATOR_DECISION_REQUIRED
+  authority_required: OPERATOR
+  authority_delta: NONE_UNTIL_OPERATOR_DECISION
+  baseline_commit: 71eeba61691d3ab545c5cd0d7bc36c8b9942542e
+  branch: gate/c1c-g5-corr2-final-defer-ready
+  candidate_commit: null
+  prior_blocker:
+    blocker_id: C1C-G5-BLOCK-003
+    status: RESOLVED_TO_FINAL_OPERATOR_GATE
+  next_packet_on_defer: C1C-G5-CORR3
+  next_gate: C1C-G5-CORRECTIVE-PILOT-REVIEW
+
+rollback: >-
+  Preserve the immutable machine run and all signed v1, v2 and CORR2 evidence. Revert only this
+  final gate-ready packet through a new non-destructive commit. Do not delete, rewrite, relabel,
+  append, publish or promote any pilot object.
+status: GATE_READY_OPERATOR_DECISION_REQUIRED
