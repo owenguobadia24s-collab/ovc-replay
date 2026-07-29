@@ -21,7 +21,7 @@ try {
     $env:PYTHONPATH = Join-Path $RepositoryRoot 'src'
     $arguments = @(
         '-m',
-        'ovc.research_operations.pattern_discovery.pilot_corr2_review_closure',
+        'ovc.research_operations.pattern_discovery.pilot_corr2_review_closure_entry',
         $Command,
         '--repository-root',
         $RepositoryRoot
