@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/v0_3/c1_metamorphic_run_v0_1",
+  "title": "C1MetamorphicRun v0.1",
+  "type": "object",
+  "required": [
+    "schema", "registry_id", "registry_logical_sha256",
+    "formula_registry_id", "formula_registry_logical_sha256",
+    "primitive_count", "metamorphic_assertion_count", "golden_assertion_count",
+    "metamorphic_assertions", "golden_assertions", "determinism_receipt",
+    "failed_assertion_count", "failed_assertions", "status",
+    "authority_effect", "writes", "run_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ro3-c1-metamorphic-run/v1"},
+    "registry_id": {"const": "C1.METAMORPHIC.INVARIANTS.v0.1"},
+    "registry_logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "formula_registry_id": {"const": "C1.FORMULAS.v0.1"},
+    "formula_registry_logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "primitive_count": {"const": 18},
+    "metamorphic_assertion_count": {"type": "integer", "minimum": 18},
+    "golden_assertion_count": {"const": 18},
+    "metamorphic_assertions": {
+      "type": "array",
+      "items": {"$ref": "c1_metamorphic_assertion_v0_1.schema.json"}
+    },
+    "golden_assertions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["primitive_id", "field_name", "actual", "expected", "status", "assertion_id"],
+        "properties": {
+          "primitive_id": {"type": "string"},
+          "field_name": {"type": "string"},
+          "actual": {"type": ["string", "null"]},
+          "expected": {"type": ["string", "null"]},
+          "status": {"enum": ["PASS", "FAIL"]},
+          "assertion_id": {"type": "string", "pattern": "^ro3-c1-golden-assertion:[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "determinism_receipt": {"$ref": "c1_determinism_receipt_v0_1.schema.json"},
+    "failed_assertion_count": {"type": "integer", "minimum": 0},
+    "failed_assertions": {"type": "array"},
+    "status": {"enum": ["PASS", "BLOCK"]},
+    "authority_effect": {"const": "QA_EVIDENCE_ONLY"},
+    "writes": {"const": "NONE"},
+    "run_id": {"type": "string", "pattern": "^ro3-c1-metamorphic-run:[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

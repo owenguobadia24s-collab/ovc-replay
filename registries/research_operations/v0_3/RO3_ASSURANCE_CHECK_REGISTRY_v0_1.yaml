@@ -1,0 +1,72 @@
+schema: ovc-ro3-assurance-check-registry/v1
+registry_id: RO3.ASSURANCE.CHECKS.v0.1
+status: FROZEN_FOR_RO3_G3
+owner: RESEARCH_OPERATIONS_QA
+authority_effect: QA_EVIDENCE_ONLY
+checks:
+  - check_id: RO3-A-001
+    name: Invariant registry unchanged since RO3-G0
+    severity: BLOCK
+    evidence: git_blob_identity
+  - check_id: RO3-A-002
+    name: Independent invariant canon covers all 18 formulas
+    severity: BLOCK
+    evidence: primitive_set_reconciliation
+  - check_id: RO3-A-003
+    name: Price translation relations
+    severity: BLOCK
+    evidence: metamorphic_assertions
+  - check_id: RO3-A-004
+    name: Price reflection and wick-swap relations
+    severity: BLOCK
+    evidence: metamorphic_assertions
+  - check_id: RO3-A-005
+    name: Up-down reversal relations
+    severity: BLOCK
+    evidence: metamorphic_assertions
+  - check_id: RO3-A-006
+    name: Positive scale relations
+    severity: BLOCK
+    evidence: metamorphic_assertions
+  - check_id: RO3-A-007
+    name: Zero-range null transitions
+    severity: BLOCK
+    evidence: metamorphic_assertions
+  - check_id: RO3-A-008
+    name: Contiguous-prior removal null transitions
+    severity: BLOCK
+    evidence: metamorphic_assertions
+  - check_id: RO3-A-009
+    name: Exact formula-registry golden outputs
+    severity: BLOCK
+    evidence: golden_assertions
+  - check_id: RO3-A-010
+    name: Same input produces same canonical bytes
+    severity: BLOCK
+    evidence: determinism_receipt
+  - check_id: RO3-A-011
+    name: Canonical input reorder preserves logical output
+    severity: BLOCK
+    evidence: determinism_receipt
+  - check_id: RO3-A-012
+    name: Deliberately corrupted implementation is detected
+    severity: BLOCK
+    evidence: negative_control
+  - check_id: RO3-A-013
+    name: No implementation import in invariant canon or assurance oracle
+    severity: BLOCK
+    evidence: dependency_audit
+  - check_id: RO3-A-014
+    name: No formula release selector Validation C2 Pattern Discovery or R2 write
+    severity: BLOCK
+    evidence: authority_denial
+pass_rule: ALL_BLOCKING_CHECKS_PASS
+failure_rule: QUARANTINE_ASSURANCE_RESULT_AND_BLOCK_RO3_G3
+retained_boundaries:
+  formula_registry: IMMUTABLE
+  c1_releases: IMMUTABLE
+  c1_selectors: IMMUTABLE
+  validation: LOCKED_UNCONSUMED
+  downstream_authority: UNCHANGED
+  live_console_route: DISABLED_PENDING_RC_G4
+  writes: NONE

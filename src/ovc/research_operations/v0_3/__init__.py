@@ -25,6 +25,12 @@ from .formula_diff import (
     create_comparison_acknowledgement,
     validate_comparison_acknowledgement,
 )
+from .metamorphic import (
+    MetamorphicContractError,
+    contract_oracle,
+    load_invariant_registry,
+    run_metamorphic_assurance,
+)
 
 __all__ = [
     "AccessDenied",
@@ -33,6 +39,7 @@ __all__ = [
     "ComputabilityAccessDenied",
     "ComputabilityContractError",
     "IndexContractError",
+    "MetamorphicContractError",
     "build_affected_surface_report",
     "build_c1_indexes",
     "build_computability_profile",
@@ -42,8 +49,11 @@ __all__ = [
     "compare_formula_versions",
     "compare_release_outputs",
     "comparison_preflight",
+    "contract_oracle",
     "create_comparison_acknowledgement",
+    "load_invariant_registry",
     "parse_formula_registry",
+    "run_metamorphic_assurance",
     "validate_comparison_acknowledgement",
     "validation_metadata_only",
 ]

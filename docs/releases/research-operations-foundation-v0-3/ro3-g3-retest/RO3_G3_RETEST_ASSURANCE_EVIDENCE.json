@@ -1,0 +1,111 @@
+{
+  "schema": "ovc-ro3-g3-retest-assurance-evidence-summary/v1",
+  "evidence_id": "RO3-G3-RETEST-ASSURANCE-EVIDENCE-2026-07-29",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "packet_id": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME",
+  "gate_id": "RO3-G3",
+  "baseline_commit": "38603eb9e52860074bb5ca95f8f016f4236965ed",
+  "tested_candidate_commit": "cbbb45a70c058c46271195037b06cefa2b9b10fe",
+  "workflow": {
+    "run_id": 30420805433,
+    "job_id": 90477014172,
+    "name": "RO3-G3 independent formula assurance retest",
+    "result": "PASS",
+    "steps": {
+      "focused_metamorphic_tests": "PASS",
+      "invariant_independence_tests": "PASS",
+      "exact_assurance_generation": "PASS",
+      "artifact_upload": "PASS",
+      "complete_repository_suite": "PASS_70",
+      "authority_boundary_assertions": "PASS"
+    }
+  },
+  "external_artifact": {
+    "artifact_id": 8711826872,
+    "artifact_name": "ro3-g3-retest-assurance-evidence",
+    "archive_size_bytes": 11802,
+    "archive_digest": "sha256:5f60f06a56531f274b6d5f6a63a9825529584d4f496685b35a67ffc365a4d701",
+    "payloads": [
+      {
+        "name": "ro3-g3-retest-assurance-evidence.json",
+        "size_bytes": 71761,
+        "sha256": "71edf3d0226ba2ddc7c3f90e721d81aa249bbc810e69edc0fecda21ab673f64e"
+      },
+      {
+        "name": "ro3-g3-retest-assurance-summary.log",
+        "size_bytes": 256,
+        "sha256": "cb859f12e5defb756de79efbc86c76013d6385abd5ca13d83cef1b244dd3d679"
+      }
+    ],
+    "retention_note": "The full generated evidence remains a GitHub Actions artifact; this compact repository record pins its exact archive and payload hashes."
+  },
+  "frozen_canon": {
+    "invariant_registry_id": "C1.METAMORPHIC.INVARIANTS.v0.1",
+    "invariant_registry_g0_merge_commit": "4d701ad78af8597e182565eb301739501b51dff6",
+    "invariant_registry_g0_blob_sha": "568309747bbf4e9d368c704893f4a9d0b8af406b",
+    "invariant_registry_current_blob_sha": "568309747bbf4e9d368c704893f4a9d0b8af406b",
+    "invariant_registry_logical_sha256": "9c108a4d6f453237f1a684ce2dd375e99a4495235d3200078fcfab88210116a7",
+    "unchanged_since_ro3_g0": true,
+    "formula_registry_id": "C1.FORMULAS.v0.1",
+    "formula_registry_logical_sha256": "171813797f16b25688f9a1c583e1925993da210be9b127d621b74f3149140804",
+    "primitive_count": 18,
+    "source_of_expectations": "INDEPENDENT_CONTRACT_CANON_NOT_IMPLEMENTATION"
+  },
+  "actual_implementation_run": {
+    "run_id": "ro3-c1-metamorphic-run:ae87e9b8ec7d1214c7c524216fa42228c9d4559e8d107f00e5a5d243edc82137",
+    "status": "PASS",
+    "metamorphic_assertion_count": 79,
+    "metamorphic_failed_assertion_count": 0,
+    "golden_assertion_count": 18,
+    "golden_failed_assertion_count": 0,
+    "wick_balance": {
+      "primitive_id": "C1-WICK-BALANCE.v0.1",
+      "field_name": "wick_balance",
+      "actual": "-0.1428571428571428571428571428571429",
+      "expected": "-0.1428571428571428571428571428571429",
+      "assertion_id": "ro3-c1-golden-assertion:9a1796bc6dc7d5a709356532d3c72b35b2041bed88e180ea63aa34bc5c6d35da",
+      "status": "PASS"
+    },
+    "determinism_receipt": {
+      "receipt_id": "ro3-c1-determinism:ad881b37e1591d1befe8895b5b5ea32f736e0f1d9149d587774d30b9570de8b9",
+      "base_sha256": "a02d7d3a4afeda2eb5e8d8aa24165ef939ccd120dbfa81814c09e7c3087864fe",
+      "rerun_sha256": "a02d7d3a4afeda2eb5e8d8aa24165ef939ccd120dbfa81814c09e7c3087864fe",
+      "same_input_same_output_bytes": true,
+      "canonical_reorder_identical": true,
+      "writes": "NONE"
+    }
+  },
+  "negative_control": {
+    "run_id": "ro3-c1-metamorphic-run:4bbd8de2496703bb9ab2bd081bebd9cf614b263bcd9ac4a1b47968919b32af8b",
+    "status": "BLOCK",
+    "detected": true,
+    "failed_assertion_count": 3,
+    "mutated_primitive_id": "C1-BODY-ABS.v0.1",
+    "golden_actual": "999",
+    "golden_expected": "0.004"
+  },
+  "qa": {
+    "status": "PASS",
+    "recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_issues": []
+  },
+  "authority": {
+    "authority_effect": "QA_EVIDENCE_ONLY",
+    "writes": "NONE",
+    "formula_registry_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "selector_mutation": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2_pattern_discovery_authority": "UNCHANGED",
+    "live_console_c1_route": "DISABLED_PENDING_RC_G4",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "status": "PASS"
+}
