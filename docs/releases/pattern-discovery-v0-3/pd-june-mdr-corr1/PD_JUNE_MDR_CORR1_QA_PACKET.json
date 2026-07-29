@@ -5,26 +5,18 @@
   "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
   "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
   "pull_request": 160,
-  "tested_candidate_commit": "fdc57b363d529736a406af854775f9f743b72516",
-  "status": "BLOCKED_EXTERNAL_EVIDENCE_REQUIRED_CI_PASS",
-  "qa_result": "PASS_IMPLEMENTED_SCOPE_BLOCKED_EXTERNAL_EVIDENCE_REQUIRED",
+  "tested_candidate_commit": "e305edc6579c808c1cc5fc4c2dbfc3ac74c5a5b7",
+  "status": "BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED_CI_PASS",
+  "qa_result": "PASS_IMPLEMENTED_SCOPE_BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED",
   "market_description_verdict": "NOT_ESTABLISHED",
   "checks": [
     {
-      "check": "Exact accepted June source bytes and replay acceptance are explicitly carried forward to the authorised C2-v2 corrective pilot identity",
+      "check": "Source-to-C2-v2 carry-forward receipt is explicit and non-replaying",
       "result": "PASS"
     },
     {
-      "check": "CORR1 performs no provider intake, source mutation or replay",
-      "result": "PASS"
-    },
-    {
-      "check": "All 208 historical candidate timelines receive a deterministic chronology-safe read-only projection",
+      "check": "All 208 historical candidate timelines have deterministic chronology-safe projections",
       "result": "PASS_208_OF_208_ZERO_CORRECTED_FAILURES"
-    },
-    {
-      "check": "Corrective materialization and review projections enforce first-valid chronology and identity alignment",
-      "result": "PASS"
     },
     {
       "check": "Exact frozen structural comparison is exposed for every assigned reviewed fingerprint",
@@ -35,12 +27,28 @@
       "result": "PASS_48_OF_48"
     },
     {
-      "check": "Exact C1 facts, levels, relations and formula inputs are bound for every displayed claim",
-      "result": "FAIL_EXTERNAL_EVIDENCE_UNAVAILABLE"
+      "check": "Operator-supplied RPS-WP3 manifest members match their declared hashes and sizes",
+      "result": "PASS_14_OF_14_AVAILABLE_MEMBERS"
     },
     {
-      "check": "Exact pre-trigger histories are bound for every persistence and switching claim",
-      "result": "FAIL_11_REVIEW_UNITS_EXTERNAL_HISTORY_UNAVAILABLE"
+      "check": "Same-bar non-wick C1 invariants reproduce from supplied source-price inputs",
+      "result": "PASS_602_OF_602"
+    },
+    {
+      "check": "Supplied C1 wick-balance values match the frozen registry formula",
+      "result": "FAIL_589_OF_602_OPPOSITE_SIGN_13_ZERO_MATCHES"
+    },
+    {
+      "check": "Supplied C1/C2 evidence belongs to the corrective C1C-G5 v2 pilot lineage",
+      "result": "FAIL_SUPPLIED_RPS_WP3_C2_V1_PRE_CORRECTIVE_EVIDENCE"
+    },
+    {
+      "check": "Exact corrected C1-v2 facts, level boundaries, relation values and formula provenance are bound",
+      "result": "FAIL_CORRECTIVE_V2_EVIDENCE_UNAVAILABLE"
+    },
+    {
+      "check": "Exact corrected 15M pre-trigger histories are bound for every persistence and switching claim",
+      "result": "FAIL_11_REVIEW_UNITS_CORRECTIVE_HISTORY_UNAVAILABLE"
     },
     {
       "check": "Immutable deterministic negative controls support false-positive assessment",
@@ -48,10 +56,6 @@
     },
     {
       "check": "Focused, dependent and complete repository tests pass",
-      "result": "PASS"
-    },
-    {
-      "check": "Historical PD-G0, PD-WP4, PD-JUNE-RA1 and PD-JUNE-MDR-WP1 boundaries remain consistent",
       "result": "PASS"
     }
   ],
@@ -63,13 +67,13 @@
   "blocking_findings": [
     {
       "code": "PD-JUNE-MDR-003",
-      "status": "OPEN",
-      "summary": "Exact June-v2 C1 claim and formula evidence is unavailable."
+      "status": "OPEN_STRONGER_CONTRADICTION",
+      "summary": "The supplied exact C1 corpus is pre-corrective: 589 non-zero wick-balance values use the opposite sign from the frozen formula, and corrected C1-v2 level/relation evidence remains unavailable."
     },
     {
       "code": "PD-JUNE-MDR-004",
       "status": "OPEN",
-      "summary": "Exact pre-trigger persistence and switching histories are unavailable for 11 reviewed units."
+      "summary": "The 26-unit sample is entirely 15M; exact corrective C2-v2 state and transition histories remain unavailable for 11 persistence/switching units."
     },
     {
       "code": "PD-JUNE-MDR-006",
@@ -77,78 +81,28 @@
       "summary": "No immutable negative controls exist; separate control-design authority would be required."
     }
   ],
-  "corrected_defects": [
-    {
-      "code": "PD-JUNE-MDR-CORR1-CI-001",
-      "initial_workflow_run": 30468701118,
-      "initial_job": 90633057451,
-      "finding": "The structural-assurance summary recorded an incorrect uncompressed ledger SHA-256 and size.",
-      "resolution": "Recomputed the decoded ledger hash and size from the committed deterministic gzip/base64 bytes; focused and full tests passed afterward."
-    },
-    {
-      "code": "PD-JUNE-MDR-CORR1-CI-002",
-      "initial_workflow_run": 30468820074,
-      "initial_job": 90633460155,
-      "finding": "The exact chronology projection rejected historical UI-only fixtures that contained chronological display-time rows but no immutable C2 row identities.",
-      "resolution": "Preserved the strict exact-C2 path and added a fail-closed legacy path that accepts only already-chronological display rows and never reorders or identity-aligns them."
-    },
-    {
-      "code": "PD-JUNE-MDR-CORR1-CI-003",
-      "initial_workflow_run": 30469250163,
-      "initial_job": 90634899336,
-      "finding": "The PD-G0 outcome-field guard swept later assurance and authority schemas, conflating explicit denied-authority fields with operational outcome fields.",
-      "resolution": "Scoped the guard to the exact four operational schemas frozen by the PD-G0 gate packet; PD-G0 and PD-WP4 workflows then passed."
-    }
-  ],
+  "operator_upload_assessment": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_OPERATOR_UPLOAD_ASSESSMENT.json",
   "warnings": [
-    "Workflow and mechanical assurance are not evidence that the system semantically describes the market correctly.",
-    "The historical June artifacts remain immutable; corrected chronology is a read-only projection only.",
-    "No return to PD-JUNE-MDR-G1 is lawful while exact C1 and pre-trigger evidence is unavailable."
+    "The newly supplied files are exact evidence for the original RPS-WP3 v1 prospective compute, not the corrected C1C-G5 v2 pilot lineage.",
+    "The supplied evidence strengthens the conclusion that reliable market description is not established; it does not authorise another replay or formula change.",
+    "No return to PD-JUNE-MDR-G1 is lawful until the already-produced corrective C1-v2/C2-v2 evidence is retrieved and bound."
   ],
   "test_evidence": [
     {
-      "workflow_run": 30469499901,
-      "job": 90635747728,
-      "scope": "Focused CORR1 tests, dependent Pattern Discovery tests, complete repository suite and fail-closed authority boundary",
+      "workflow_run": 30489365768,
+      "job": 90703082117,
+      "scope": "Focused CORR1 and upload-assessment tests, dependent Pattern Discovery tests, complete repository suite and fail-closed authority boundary",
       "result": "PASS",
-      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+      "tested_head": "e305edc6579c808c1cc5fc4c2dbfc3ac74c5a5b7"
     },
     {
-      "workflow_run": 30469504144,
-      "job": 90635762311,
+      "workflow_run": 30489365756,
+      "job": 90703082092,
       "scope": "General repository unit tests",
       "result": "PASS",
-      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
-    },
-    {
-      "workflow_run": 30469502304,
-      "job": 90635755795,
-      "scope": "PD-WP4 UI, retained Pattern Discovery and canonical repository regression",
-      "result": "PASS",
-      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
-    },
-    {
-      "workflow_run": 30469499825,
-      "job": 90635747408,
-      "scope": "PD-G0 design-freeze and canonical repository regression",
-      "result": "PASS",
-      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
-    },
-    {
-      "workflow_run": 30469499714,
-      "job": 90635746941,
-      "scope": "Historical June assessment continuity and external-evidence blocker boundary",
-      "result": "PASS",
-      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
-    },
-    {
-      "workflow_run": 30469500079,
-      "job": 90635748154,
-      "scope": "Historical claim-level review decision and current fail-closed boundary",
-      "result": "PASS",
-      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+      "tested_head": "e305edc6579c808c1cc5fc4c2dbfc3ac74c5a5b7"
     }
   ],
-  "recommendation": "PRESERVE_USEFUL_CORR1_WORK_AND_BLOCK_ON_EXACT_EXTERNAL_EVIDENCE",
+  "recommendation": "PRESERVE_PR_OPEN_AND_RETRIEVE_ALREADY_PRODUCED_CORRECTIVE_C1_V2_C2_V2_EVIDENCE",
   "rollback": "Preserve all external artifacts and signed pilot evidence. Revert only CORR1 code, compact evidence, tests, workflow, QA and state through a new non-destructive commit."
 }
