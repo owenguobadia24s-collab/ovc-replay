@@ -10,8 +10,10 @@
     "packet_id": {"const": "PD-JUNE-MDR-CORR1"},
     "status": {"type": "string"},
     "gate_id": {"enum": ["PD-JUNE-MDR-G1"]},
-    "gate_status": {"enum": ["GATE_READY_OPERATOR_DECISION_REQUIRED"]},
+    "gate_status": {"enum": ["GATE_READY_OPERATOR_DECISION_REQUIRED", "APPROVED_DEFER_CORR2_AUTHORISED"]},
     "recommended_decision": {"enum": ["DEFER"]},
+    "decision": {"enum": ["DEFER"]},
+    "decision_authority": {"enum": ["OPERATOR"]},
     "overall_answer": {
       "type": "object",
       "properties": {
