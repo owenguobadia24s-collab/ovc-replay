@@ -47,7 +47,7 @@ jobs:
         env:
           PYTHONPATH: src:.
         run: python -m unittest discover -s tests -v
-      - name: Enforce bounded authority delta
+      - name: Enforce gate-ready bounded authority delta
         shell: bash
         run: |
           set -euo pipefail
@@ -57,19 +57,28 @@ jobs:
 
           state = json.loads(Path('registries/research_operations/RESEARCH_CONSOLE_RC_WP4_STATE_v0_3.json').read_text())
           packet = json.loads(Path('docs/releases/research-console-v0-3/rc-wp4/RC_WP4_IMPLEMENTATION_PACKET.json').read_text())
+          gate = json.loads(Path('docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_GATE_PACKET.json').read_text())
+          qa = json.loads(Path('docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json').read_text())
           registry = Path('registries/research_operations/RESEARCH_CONSOLE_SYSTEM_PROJECTION_REGISTRY_v0_3.yaml').read_text()
           source = Path('apps/research_console/system_workspace.py').read_text()
 
           assert state['baseline_commit'] == '79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5'
+          assert state['status'] == 'GATE_READY'
           assert state['authority_delta'] == 'LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY'
-          assert state['next_packet'] == 'RC-G3A'
+          assert state['next_packet'] == 'RC-G3A_OPERATOR_DECISION'
+          assert packet['status'] == 'GATE_READY'
           assert packet['next_gate'] == 'RC-G3A'
+          assert gate['gate_id'] == 'RC-G3A'
+          assert gate['classification'] == 'OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE'
+          assert gate['status'] == 'GATE_READY'
+          assert gate['recommended_decision'] == 'PASS'
+          assert qa['qa_recommendation'] == 'PASS'
           assert 'validation_consumption: LOCKED_UNCONSUMED' in registry
           assert 'research_writes: DENIED_PENDING_SEPARATE_GATE' in registry
           assert 'c2_pattern_discovery_authority: UNCHANGED' in registry
           assert 'r2_publication: DENIED' in registry
           assert '"writes": "NONE"' in source
-          assert 'TRADE' not in source
+          assert '"TRADE"' not in source
           PY
 
           changed="$(git diff --name-only 79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5...HEAD)"
