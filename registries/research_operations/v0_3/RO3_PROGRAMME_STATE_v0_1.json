@@ -2,7 +2,7 @@
   "schema": "ovc-programme-state/v1",
   "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "v0.2",
-  "programme_status": "APPROVED_PENDING_MERGE",
+  "programme_status": "COMPLETED",
   "packets": [
     {
       "packet_id": "RO3-00",
@@ -111,26 +111,33 @@
     },
     {
       "packet_id": "RC-G4-ACTIVATION",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["RC-G4_OPERATOR_PASS", "RC-G4_DECISION_MERGED"],
       "authority_required": "AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA",
       "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
       "baseline_commit": "19066a5201e33a51b0e785dbdc932999f39fd9da",
       "branch": "activate/research-console-v0-3-rc-g4-c1",
       "candidate_commit": "0fd59862770b50f9bc678de44c2ca99aa5a04953",
+      "final_head": "1a14d43ed5b4e588f403925b8c17bee726d4fc02",
+      "pull_request": 152,
       "tests": [
         "12 focused RC-G4 activation tests PASS",
         "12 RO3-G4 adapter regression tests PASS",
         "6 RC-G4 operator-gate regression tests PASS",
         "70-test complete repository suite PASS in dedicated workflow",
         "70-test complete repository suite PASS in generic workflow",
-        "exact authority-delta assertions PASS"
+        "exact authority-delta assertions PASS",
+        "final-head activation workflow 30426254275 job 90493256678 PASS",
+        "final-head generic workflow 30426254330 job 90493257246 PASS",
+        "final-head operator continuity workflow 30426254374 job 90493257004 PASS",
+        "final-head RO3-G4 regression workflow 30426254348 job 90493257119 PASS"
       ],
       "qa_packet": "docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_QA_PACKET.json",
       "decision_record": "docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_DELEGATED_DECISION.md",
-      "merge_commit": null,
+      "merge_receipt": "docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_MERGE_RECEIPT.json",
+      "merge_commit": "4af07508c6503349d97cf7066e609837dc1b37f2",
       "blockers": [],
-      "next_packet": "RC-G4-ACTIVATION-MERGE-RECEIPT"
+      "next_packet": null
     }
   ]
 }
