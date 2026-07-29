@@ -102,17 +102,18 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(self.report["overall_answer"]["verdict"], "NOT_ESTABLISHED")
         self.assertEqual(self.report["overall_answer"]["recommended_gate_decision"], "DEFER")
 
-    def test_operator_defer_is_recorded_and_bounded(self) -> None:
+    def test_operator_defer_is_recorded_and_bounded_through_corr1(self) -> None:
         self.assertEqual(self.gate["gate_id"], "PD-JUNE-MDR-G1")
         self.assertTrue(self.gate["operator_approval_required"])
         self.assertEqual(self.gate["recommended_decision"], "DEFER")
         self.assertEqual(self.decision["decision"], "DEFER")
         self.assertEqual(self.decision["decision_authority"], "OPERATOR")
         self.assertEqual(self.decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR1")
-        self.assertEqual(self.state["status"], "APPROVED")
-        self.assertEqual(self.state["operator_decision"], "DEFER")
-        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR1")
-        self.assertEqual(self.state["next_packet_status"], "READY_AFTER_PD_JUNE_MDR_WP1_SQUASH_MERGE")
+        self.assertEqual(self.state["status"], "BLOCKED")
+        self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR1-EVIDENCE-BINDING-CONTINUATION")
+        self.assertEqual(self.state["next_packet_status"], "BLOCKED_EXACT_EXTERNAL_EVIDENCE_REQUIRED")
+        self.assertEqual(self.state["source_to_c2_v2_binding"], "PASS_CARRY_FORWARD_RECEIPT")
         self.assertEqual(self.qa["recommendation"], "DEFER")
 
     def test_authority_boundary_is_unchanged(self) -> None:
