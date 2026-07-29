@@ -5,13 +5,12 @@ import json
 import re
 from typing import Any, Iterable, Mapping
 
-
 DOWNSTREAM_AUTHORITY_BANNER = (
     "DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED."
 )
 LIVE_ROUTE_STATE = "DISABLED_PENDING_RC_G4"
 
-_ALLOWED_SOURCES: dict[str, dict[str, str]] = {
+_ALLOWED_SOURCES = {
     "DISCOVERY": {
         "c1_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
         "c1_manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
@@ -38,48 +37,19 @@ _ALLOWED_OPERATION_MODES = {
     "HISTORICAL_TRACE",
 }
 _WRITE_KEYS = {
-    "write",
-    "writes_allowed",
-    "git_write",
-    "r2_write",
-    "selector_write",
-    "release_write",
-    "threshold_write",
-    "mutation",
-    "mutate",
-    "activate",
-    "promote",
-    "recompute",
-    "tune",
-    "delete",
-    "patch",
-    "actions",
-    "controls",
+    "write", "writes_allowed", "git_write", "r2_write", "selector_write",
+    "release_write", "threshold_write", "mutation", "mutate", "activate",
+    "promote", "recompute", "tune", "delete", "patch", "actions", "controls",
+    "route_enabled", "enable_route", "live_route",
 }
 _DOWNSTREAM_PROHIBITED_KEYS = {
-    "defect",
-    "severity",
-    "confidence",
-    "score",
-    "priority",
-    "fix_priority",
-    "candidate_quality",
-    "recommended_action",
-    "remediation",
-    "tuning",
-    "null_reason",
-    "formula",
-    "formula_output",
+    "defect", "severity", "confidence", "score", "priority", "fix_priority",
+    "candidate_quality", "recommended_action", "remediation", "tuning",
+    "null_reason", "formula", "formula_output",
 }
 _FACT_PROHIBITED_KEYS = {
-    "c2_transition",
-    "c2_state",
-    "pattern_discovery",
-    "candidate_quality",
-    "downstream_trace",
-    "downstream_child_ids",
-    "defect_score",
-    "tuning",
+    "c2_transition", "c2_state", "pattern_discovery", "candidate_quality",
+    "downstream_trace", "downstream_child_ids", "defect_score", "tuning",
     "recommended_action",
 }
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -107,182 +77,129 @@ def _projection_id(kind: str, payload: Mapping[str, Any]) -> str:
 
 def _walk_keys(value: Any) -> Iterable[str]:
     if isinstance(value, Mapping):
-        for key, item in value.items():
+        for key, child in value.items():
             yield str(key).strip().lower()
-            yield from _walk_keys(item)
+            yield from _walk_keys(child)
     elif isinstance(value, (list, tuple)):
-        for item in value:
-            yield from _walk_keys(item)
+        for child in value:
+            yield from _walk_keys(child)
 
 
-def _guard_no_write_capability(value: Any) -> None:
+def _guard_read_only(value: Any) -> None:
     keys = set(_walk_keys(value))
-    forbidden = sorted(keys.intersection(_WRITE_KEYS))
-    suffix_forbidden = sorted(key for key in keys if key.endswith("_write") or key.endswith("_mutation"))
-    if forbidden or suffix_forbidden:
-        raise ProjectionDenied(
-            f"READ_ONLY_PROJECTION_REQUIRED:{sorted(set(forbidden + suffix_forbidden))}"
-        )
+    forbidden = keys.intersection(_WRITE_KEYS)
+    forbidden.update(key for key in keys if key.endswith("_write") or key.endswith("_mutation"))
+    if forbidden:
+        raise ProjectionDenied(f"READ_ONLY_PROJECTION_REQUIRED:{sorted(forbidden)}")
 
 
-def _guard_role(role: str) -> dict[str, str]:
+def _role(role: Any) -> tuple[str, dict[str, str]]:
     normalized = str(role or "").strip().upper()
     if normalized == "VALIDATION":
         raise ProjectionDenied("VALIDATION_DENY_BEFORE_PATH_OBJECT_OR_RECORD_RESOLUTION")
     if normalized not in _ALLOWED_SOURCES:
         raise ProjectionDenied(f"UNKNOWN_OR_UNAUTHORISED_ROLE:{normalized or 'MISSING'}")
-    return _ALLOWED_SOURCES[normalized]
+    return normalized, _ALLOWED_SOURCES[normalized]
 
 
-def _validate_release_context(context: Mapping[str, Any]) -> dict[str, Any]:
-    _guard_no_write_capability(context)
-    role = str(context.get("role", "")).upper()
-    expected = _guard_role(role)
+def _context(raw: Mapping[str, Any]) -> dict[str, str]:
+    _guard_read_only(raw)
+    role, expected = _role(raw.get("role"))
     required = {
-        "role",
-        "c1_release_id",
-        "c1_manifest_sha256",
-        "formula_registry_id",
-        "formula_registry_logical_sha256",
-        "represented_commit",
-        "source_commit",
-        "clock",
-        "side",
+        "role", "c1_release_id", "c1_manifest_sha256", "formula_registry_id",
+        "formula_registry_logical_sha256", "represented_commit", "source_commit",
+        "clock", "side",
     }
-    missing = sorted(required - context.keys())
+    missing = sorted(required - raw.keys())
     if missing:
         raise ProjectionContractError(f"release context missing fields: {missing}")
-    if context["c1_release_id"] != expected["c1_release_id"]:
+    if raw["c1_release_id"] != expected["c1_release_id"]:
         raise ProjectionContractError("unexpected C1 release identity")
-    if context["c1_manifest_sha256"] != expected["c1_manifest_sha256"]:
+    if raw["c1_manifest_sha256"] != expected["c1_manifest_sha256"]:
         raise ProjectionContractError("unexpected C1 manifest identity")
-    if context["formula_registry_id"] != "C1.FORMULAS.v0.1":
+    if raw["formula_registry_id"] != "C1.FORMULAS.v0.1":
         raise ProjectionContractError("unknown formula registry")
-    if not _SHA256_RE.fullmatch(str(context["formula_registry_logical_sha256"])):
+    if not _SHA256_RE.fullmatch(str(raw["formula_registry_logical_sha256"])):
         raise ProjectionContractError("invalid formula registry logical hash")
-    if str(context["clock"]) not in _ALLOWED_CLOCKS:
+    if str(raw["clock"]) not in _ALLOWED_CLOCKS:
         raise ProjectionContractError("unknown clock")
-    if str(context["side"]) not in _ALLOWED_SIDES:
+    if str(raw["side"]) not in _ALLOWED_SIDES:
         raise ProjectionContractError("unknown price side")
     return {
         "role": role,
-        "c1_release_id": str(context["c1_release_id"]),
-        "c1_manifest_sha256": str(context["c1_manifest_sha256"]),
+        "c1_release_id": str(raw["c1_release_id"]),
+        "c1_manifest_sha256": str(raw["c1_manifest_sha256"]),
         "formula_registry_id": "C1.FORMULAS.v0.1",
-        "formula_registry_logical_sha256": str(context["formula_registry_logical_sha256"]),
-        "represented_commit": str(context["represented_commit"]),
-        "source_commit": str(context["source_commit"]),
-        "clock": str(context["clock"]),
-        "side": str(context["side"]),
+        "formula_registry_logical_sha256": str(raw["formula_registry_logical_sha256"]),
+        "represented_commit": str(raw["represented_commit"]),
+        "source_commit": str(raw["source_commit"]),
+        "clock": str(raw["clock"]),
+        "side": str(raw["side"]),
     }
 
 
-def _validate_c1_record(record: Mapping[str, Any], context: Mapping[str, Any]) -> dict[str, Any]:
-    _guard_no_write_capability(record)
-    expected = _guard_role(str(context["role"]))
+def _record(raw: Mapping[str, Any], context: Mapping[str, Any]) -> dict[str, Any]:
+    _guard_read_only(raw)
+    _, expected = _role(context["role"])
     required = {
-        "record_id",
-        "record_type",
-        "schema_version",
-        "formula_registry_id",
-        "formula_registry_sha256",
-        "opt_a_release_id",
-        "opt_a_manifest_id",
-        "source_bar_id",
-        "prior_bar_id",
-        "instrument",
-        "clock",
-        "price_side",
-        "open_time",
-        "close_time",
-        "first_valid_time",
-        "source_lineage",
-        "measurements",
-        "null_reasons",
-        "formula_versions",
-        "authority_state",
+        "record_id", "record_type", "schema_version", "formula_registry_id",
+        "formula_registry_sha256", "opt_a_release_id", "opt_a_manifest_id",
+        "source_bar_id", "prior_bar_id", "instrument", "clock", "price_side",
+        "open_time", "close_time", "first_valid_time", "source_lineage",
+        "measurements", "null_reasons", "formula_versions", "authority_state",
     }
-    missing = sorted(required - record.keys())
+    missing = sorted(required - raw.keys())
     if missing:
         raise ProjectionContractError(f"C1 record missing fields: {missing}")
-    if record["record_type"] != "OPT_B_C1_BAR_PRIMITIVES" or record["schema_version"] != "0.1":
+    if raw["record_type"] != "OPT_B_C1_BAR_PRIMITIVES" or raw["schema_version"] != "0.1":
         raise ProjectionContractError("unknown C1 record schema")
-    if record["formula_registry_id"] != "C1.FORMULAS.v0.1":
+    if raw["formula_registry_id"] != "C1.FORMULAS.v0.1":
         raise ProjectionContractError("C1 record uses unknown formula registry")
-    if record["opt_a_release_id"] != expected["opt_a_release_id"]:
+    if raw["opt_a_release_id"] != expected["opt_a_release_id"]:
         raise ProjectionContractError("C1 record uses unexpected OPT-A parent")
-    if record["instrument"] != "GBPUSD":
+    if raw["instrument"] != "GBPUSD":
         raise ProjectionContractError("instrument expansion is not authorised")
-    if record["clock"] != context["clock"] or record["price_side"] != context["side"]:
+    if raw["clock"] != context["clock"] or raw["price_side"] != context["side"]:
         raise ProjectionContractError("record clock or side does not match release context")
-    lineage = record["source_lineage"]
+    lineage = raw["source_lineage"]
     if not isinstance(lineage, Mapping):
         raise ProjectionContractError("source_lineage must be an object")
-    source_objects = sorted(set(str(item) for item in lineage.get("source_object_ids", [])))
-    parent_bars = sorted(set(str(item) for item in lineage.get("parent_m1_bar_ids", [])))
-    contract_versions = dict(sorted((str(k), str(v)) for k, v in (lineage.get("contract_versions") or {}).items()))
-    if not source_objects or not parent_bars or len(contract_versions) < 3:
+    source_objects = sorted(set(map(str, lineage.get("source_object_ids", []))))
+    parent_bars = sorted(set(map(str, lineage.get("parent_m1_bar_ids", []))))
+    contracts = dict(sorted((str(k), str(v)) for k, v in (lineage.get("contract_versions") or {}).items()))
+    if not source_objects or not parent_bars or len(contracts) < 3:
         raise ProjectionContractError("C1 source lineage is incomplete")
     return {
-        "record_id": str(record["record_id"]),
-        "record_type": str(record["record_type"]),
-        "schema_version": str(record["schema_version"]),
-        "formula_registry_id": str(record["formula_registry_id"]),
-        "formula_registry_sha256": str(record["formula_registry_sha256"]),
-        "opt_a_release_id": str(record["opt_a_release_id"]),
-        "opt_a_manifest_id": str(record["opt_a_manifest_id"]),
-        "source_bar_id": str(record["source_bar_id"]),
-        "prior_bar_id": record["prior_bar_id"],
+        "record_id": str(raw["record_id"]),
+        "record_type": str(raw["record_type"]),
+        "schema_version": str(raw["schema_version"]),
+        "formula_registry_id": str(raw["formula_registry_id"]),
+        "formula_registry_sha256": str(raw["formula_registry_sha256"]),
+        "opt_a_release_id": str(raw["opt_a_release_id"]),
+        "opt_a_manifest_id": str(raw["opt_a_manifest_id"]),
+        "source_bar_id": str(raw["source_bar_id"]),
+        "prior_bar_id": raw["prior_bar_id"],
         "instrument": "GBPUSD",
-        "clock": str(record["clock"]),
-        "price_side": str(record["price_side"]),
-        "open_time": str(record["open_time"]),
-        "close_time": str(record["close_time"]),
-        "first_valid_time": str(record["first_valid_time"]),
-        "measurements": dict(record["measurements"]),
-        "null_reasons": dict(sorted((str(k), str(v)) for k, v in record["null_reasons"].items())),
-        "formula_versions": dict(sorted((str(k), str(v)) for k, v in record["formula_versions"].items())),
-        "authority_state": str(record["authority_state"]),
+        "clock": str(raw["clock"]),
+        "price_side": str(raw["price_side"]),
+        "open_time": str(raw["open_time"]),
+        "close_time": str(raw["close_time"]),
+        "first_valid_time": str(raw["first_valid_time"]),
+        "measurements": dict(raw["measurements"]),
+        "null_reasons": dict(sorted((str(k), str(v)) for k, v in raw["null_reasons"].items())),
+        "formula_versions": dict(sorted((str(k), str(v)) for k, v in raw["formula_versions"].items())),
+        "authority_state": str(raw["authority_state"]),
         "source_lineage": {
             "source_object_ids": source_objects,
             "parent_m1_bar_ids": parent_bars,
-            "contract_versions": contract_versions,
+            "contract_versions": contracts,
         },
     }
 
 
-def build_c1_lineage_trace(
-    *,
-    release_context: Mapping[str, Any],
-    c1_record: Mapping[str, Any],
-) -> dict[str, Any]:
-    context = _validate_release_context(release_context)
-    record = _validate_c1_record(c1_record, context)
-    chain = (
-        {
-            "layer": "OPT-B.C1",
-            "object_id": record["record_id"],
-            "release_id": context["c1_release_id"],
-            "manifest_sha256": context["c1_manifest_sha256"],
-            "formula_registry_id": record["formula_registry_id"],
-            "formula_registry_sha256": record["formula_registry_sha256"],
-        },
-        {
-            "layer": "OPT-A",
-            "object_id": record["source_bar_id"],
-            "release_id": record["opt_a_release_id"],
-            "manifest_id": record["opt_a_manifest_id"],
-            "first_valid_time": record["first_valid_time"],
-        },
-        {
-            "layer": "PROVIDER_SOURCE",
-            "object_ids": record["source_lineage"]["source_object_ids"],
-        },
-        {
-            "layer": "M1_PARENT_BARS",
-            "object_ids": record["source_lineage"]["parent_m1_bar_ids"],
-        },
-    )
+def build_c1_lineage_trace(*, release_context: Mapping[str, Any], c1_record: Mapping[str, Any]) -> dict[str, Any]:
+    context = _context(release_context)
+    record = _record(c1_record, context)
     payload = {
         "schema": "ovc-ro3-c1-lineage-trace/v1",
         "object_type": "RO3.C1LineageTrace.v1",
@@ -291,7 +208,23 @@ def build_c1_lineage_trace(
         "role": context["role"],
         "c1_record_id": record["record_id"],
         "first_valid_time": record["first_valid_time"],
-        "chain": list(chain),
+        "chain": [
+            {
+                "layer": "OPT-B.C1", "object_id": record["record_id"],
+                "release_id": context["c1_release_id"],
+                "manifest_sha256": context["c1_manifest_sha256"],
+                "formula_registry_id": record["formula_registry_id"],
+                "formula_registry_sha256": record["formula_registry_sha256"],
+            },
+            {
+                "layer": "OPT-A", "object_id": record["source_bar_id"],
+                "release_id": record["opt_a_release_id"],
+                "manifest_id": record["opt_a_manifest_id"],
+                "first_valid_time": record["first_valid_time"],
+            },
+            {"layer": "PROVIDER_SOURCE", "object_ids": record["source_lineage"]["source_object_ids"]},
+            {"layer": "M1_PARENT_BARS", "object_ids": record["source_lineage"]["parent_m1_bar_ids"]},
+        ],
         "contract_versions": record["source_lineage"]["contract_versions"],
         "source_refs": [
             f"c1-release:{context['c1_release_id']}",
@@ -308,15 +241,12 @@ def build_c1_lineage_trace(
 
 
 def build_c1_fact_projection(
-    *,
-    release_context: Mapping[str, Any],
-    c1_record: Mapping[str, Any],
-    formula_evidence: Mapping[str, Any],
-    lineage_trace: Mapping[str, Any],
+    *, release_context: Mapping[str, Any], c1_record: Mapping[str, Any],
+    formula_evidence: Mapping[str, Any], lineage_trace: Mapping[str, Any],
 ) -> dict[str, Any]:
-    context = _validate_release_context(release_context)
-    record = _validate_c1_record(c1_record, context)
-    _guard_no_write_capability(formula_evidence)
+    context = _context(release_context)
+    record = _record(c1_record, context)
+    _guard_read_only(formula_evidence)
     prohibited = sorted(set(_walk_keys(formula_evidence)).intersection(_FACT_PROHIBITED_KEYS))
     if prohibited:
         raise ProjectionDenied(f"FACT_PANEL_MIXED_WITH_DOWNSTREAM_AUTHORITY:{prohibited}")
@@ -324,14 +254,14 @@ def build_c1_fact_projection(
     missing = sorted(required - formula_evidence.keys())
     if missing:
         raise ProjectionContractError(f"formula evidence missing fields: {missing}")
-    field_name = str(formula_evidence["field_name"])
-    primitive_id = str(formula_evidence["primitive_id"])
-    if field_name not in record["measurements"]:
+    field = str(formula_evidence["field_name"])
+    primitive = str(formula_evidence["primitive_id"])
+    if field not in record["measurements"]:
         raise ProjectionContractError("formula evidence field is not present in the C1 record")
-    if record["formula_versions"].get(field_name) != primitive_id:
+    if record["formula_versions"].get(field) != primitive:
         raise ProjectionContractError("formula evidence primitive does not match record formula version")
-    output = record["measurements"][field_name]
-    null_reason = record["null_reasons"].get(field_name)
+    output = record["measurements"][field]
+    null_reason = record["null_reasons"].get(field)
     if formula_evidence.get("output", output) != output:
         raise ProjectionContractError("formula evidence output does not match the C1 record")
     if formula_evidence.get("null_reason", null_reason) != null_reason:
@@ -346,8 +276,8 @@ def build_c1_fact_projection(
         "release_id": context["c1_release_id"],
         "manifest_sha256": context["c1_manifest_sha256"],
         "c1_record_id": record["record_id"],
-        "primitive_id": primitive_id,
-        "field_name": field_name,
+        "primitive_id": primitive,
+        "field_name": field,
         "inputs": dict(sorted((str(k), v) for k, v in formula_evidence["inputs"].items())),
         "formula": str(formula_evidence["formula"]),
         "output": output,
@@ -364,25 +294,17 @@ def build_c1_fact_projection(
 
 
 def build_downstream_trace_projection(
-    *,
-    c1_record_id: str,
-    child_references: Iterable[Mapping[str, Any]],
+    *, c1_record_id: str, child_references: Iterable[Mapping[str, Any]],
 ) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     for reference in child_references:
-        _guard_no_write_capability(reference)
+        _guard_read_only(reference)
         prohibited = sorted(set(_walk_keys(reference)).intersection(_DOWNSTREAM_PROHIBITED_KEYS))
         if prohibited:
             raise ProjectionDenied(f"DOWNSTREAM_TRACE_PROHIBITED_PRESENTATION:{prohibited}")
         required = {
-            "child_id",
-            "child_type",
-            "source_c1_record_id",
-            "source_binding",
-            "operation_mode",
-            "cutoff",
-            "availability",
-            "trace_status",
+            "child_id", "child_type", "source_c1_record_id", "source_binding",
+            "operation_mode", "cutoff", "availability", "trace_status",
         }
         missing = sorted(required - reference.keys())
         if missing:
@@ -393,26 +315,14 @@ def build_downstream_trace_projection(
             raise ProjectionContractError("unknown downstream child type")
         if reference["operation_mode"] not in _ALLOWED_OPERATION_MODES:
             raise ProjectionContractError("unknown downstream operation mode")
-        rows.append(
-            {
-                "child_id": str(reference["child_id"]),
-                "child_type": str(reference["child_type"]),
-                "source_c1_record_id": str(reference["source_c1_record_id"]),
-                "source_binding": str(reference["source_binding"]),
-                "operation_mode": str(reference["operation_mode"]),
-                "cutoff": str(reference["cutoff"]),
-                "availability": str(reference["availability"]),
-                "trace_status": str(reference["trace_status"]),
-            }
-        )
+        rows.append({key: str(reference[key]) for key in sorted(required)})
     rows.sort(key=lambda item: (item["child_type"], item["child_id"]))
-    status = "AVAILABLE" if rows else "TRACE_NOT_AVAILABLE"
     payload = {
         "schema": "ovc-ro3-downstream-trace-projection/v1",
         "object_type": "RO3.DownstreamTraceProjection.v1",
         "panel_id": "RO3-C1-DOWNSTREAM-TRACE",
         "banner": DOWNSTREAM_AUTHORITY_BANNER,
-        "status": status,
+        "status": "AVAILABLE" if rows else "TRACE_NOT_AVAILABLE",
         "c1_record_id": str(c1_record_id),
         "child_references": rows,
         "sorting": "IDENTITY_ONLY_NO_SCORE_OR_PRIORITY",
@@ -426,23 +336,13 @@ def build_downstream_trace_projection(
 
 
 def build_c1_console_projection(
-    *,
-    release_context: Mapping[str, Any],
-    fact_projection: Mapping[str, Any],
-    computability_projection: Mapping[str, Any],
-    assurance_projection: Mapping[str, Any],
-    lineage_trace: Mapping[str, Any],
-    downstream_trace: Mapping[str, Any],
+    *, release_context: Mapping[str, Any], fact_projection: Mapping[str, Any],
+    computability_projection: Mapping[str, Any], assurance_projection: Mapping[str, Any],
+    lineage_trace: Mapping[str, Any], downstream_trace: Mapping[str, Any],
 ) -> dict[str, Any]:
-    context = _validate_release_context(release_context)
-    for projection in (
-        fact_projection,
-        computability_projection,
-        assurance_projection,
-        lineage_trace,
-        downstream_trace,
-    ):
-        _guard_no_write_capability(projection)
+    context = _context(release_context)
+    for item in (fact_projection, computability_projection, assurance_projection, lineage_trace, downstream_trace):
+        _guard_read_only(item)
     if fact_projection.get("panel_id") != "RO3-C1-FACT-INSPECTOR":
         raise ProjectionContractError("fact panel identity is invalid")
     if lineage_trace.get("panel_id") != "RO3-C1-UPSTREAM-LINEAGE":
@@ -453,19 +353,16 @@ def build_c1_console_projection(
         raise ProjectionContractError("permanent downstream authority banner is missing")
     if set(_walk_keys(fact_projection)).intersection(_FACT_PROHIBITED_KEYS):
         raise ProjectionDenied("C1_FACT_AND_DOWNSTREAM_TRACE_MUST_REMAIN_SEPARATE")
-    if fact_projection.get("c1_record_id") != lineage_trace.get("c1_record_id"):
-        raise ProjectionContractError("fact and lineage projections reference different C1 records")
-    if fact_projection.get("c1_record_id") != downstream_trace.get("c1_record_id"):
-        raise ProjectionContractError("fact and downstream projections reference different C1 records")
-    stale = context["represented_commit"] != context["source_commit"]
-    status = "STALE_PROJECTION" if stale else "READY_CANDIDATE"
+    record_id = fact_projection.get("c1_record_id")
+    if record_id != lineage_trace.get("c1_record_id") or record_id != downstream_trace.get("c1_record_id"):
+        raise ProjectionContractError("projection panels reference different C1 records")
     payload = {
         "schema": "ovc-ro3-c1-console-projection/v1",
         "object_type": "RO3.C1ConsoleProjection.v1",
         "route_id": "RESEARCH.C1_FACT_ASSURANCE",
         "route_state": LIVE_ROUTE_STATE,
         "route_enabled": False,
-        "status": status,
+        "status": "STALE_PROJECTION" if context["represented_commit"] != context["source_commit"] else "READY_CANDIDATE",
         "source_context": context,
         "panels": {
             "fact": dict(fact_projection),
