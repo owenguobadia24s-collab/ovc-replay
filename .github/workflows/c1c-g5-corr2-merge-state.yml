@@ -1,20 +1,21 @@
-name: C1C-G5 CORR2 merge state
+name: C1C-G5 CORR2 state and return gate
 
 on:
   pull_request:
     branches: [main]
     paths:
-      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_IMPLEMENTATION_RECEIPT.json
-      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_MERGE_RECEIPT.json
+      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2-return-gate/**
       - registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json
+      - schemas/research_operations/pattern_discovery/c1c_g5_corr2_return_gate_packet_v0_1.schema.json
       - tests/research_operations/pattern_discovery/test_c1c_g5_corr2_merge_state.py
+      - tests/research_operations/pattern_discovery/test_c1c_g5_corr2_return_gate.py
       - .github/workflows/c1c-g5-corr2-merge-state.yml
 
 permissions:
   contents: read
 
 jobs:
-  verify-merge-state:
+  verify-return-gate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,29 +24,45 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify exact merge receipt and blocker boundary
+
+      - name: Verify CORR2 historical merge and exact return gate
         env:
           PYTHONPATH: src:.
-        run: python -m unittest tests.research_operations.pattern_discovery.test_c1c_g5_corr2_merge_state -v
-      - name: Run retained DEFER and structured-review state tests
+        run: |
+          python -m unittest \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_merge_state \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_return_gate -v
+
+      - name: Run retained operator DEFER and structured-review tests
         env:
           PYTHONPATH: src:.
         run: |
           python -m unittest \
             tests.research_operations.pattern_discovery.test_c1c_g5_corrective_pilot_review_defer \
-            tests.research_operations.pattern_discovery.test_c1c_g5_structured_review_merge_state -v
+            tests.research_operations.pattern_discovery.test_c1c_g5_structured_review_merge_state \
+            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_signature_compat -v
+
       - name: Run complete repository suite
         env:
           PYTHONPATH: src:.
         run: python -m unittest discover -s tests -v
-      - name: Enforce registry-only post-merge scope
+
+      - name: Validate return-gate JSON and retained authority
+        shell: bash
         run: |
           set -euo pipefail
+          for path in \
+            docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2-return-gate/*.json \
+            docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2-return-gate/evidence/raw/*.json \
+            registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json \
+            schemas/research_operations/pattern_discovery/c1c_g5_corr2_return_gate_packet_v0_1.schema.json
+          do
+            python -m json.tool "$path" >/dev/null
+          done
           git diff --exit-code origin/main -- \
             src \
             apps \
             contracts \
-            schemas \
             scripts \
             registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml \
             registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml \
@@ -54,11 +71,14 @@ jobs:
           import json
           from pathlib import Path
           state=json.loads(Path('registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
-          merge=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_MERGE_RECEIPT.json').read_text())
-          assert state['corr2']['merge_commit']=='66593aa2bca3b781058e1bc81f96bf2e57b18005'
-          assert merge['merge_commit']=='66593aa2bca3b781058e1bc81f96bf2e57b18005'
-          assert state['blocker']['blocker_id']=='C1C-G5-BLOCK-003'
-          assert state['blocker']['status']=='OPEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_REQUIRED'
-          assert merge['retained_authority']['canonical_append']=='DENIED'
-          assert merge['retained_authority']['validation_consumption']=='LOCKED_UNCONSUMED'
+          gate=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2-return-gate/C1C_G5_CORR2_RETURN_GATE_PACKET.json').read_text())
+          qa=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2-return-gate/C1C_G5_CORR2_RETURN_QA_PACKET.json').read_text())
+          assert state['programme_state']=='GATE_READY'
+          assert state['blocker']['status']=='RESOLVED_TO_OPERATOR_RETURN_GATE'
+          assert state['corr2_local_review']['remaining_deferred_object_count']==1
+          assert gate['gate_status']=='GATE_READY'
+          assert gate['recommended_decision']=='DEFER'
+          assert qa['qa_recommendation']=='DEFER'
+          assert state['retained_authority']['canonical_append']=='DENIED'
+          assert state['retained_authority']['validation_consumption']=='LOCKED_UNCONSUMED'
           PY

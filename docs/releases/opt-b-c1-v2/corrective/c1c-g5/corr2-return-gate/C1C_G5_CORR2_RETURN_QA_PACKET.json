@@ -1,0 +1,38 @@
+{
+  "baseline_commit": "71eeba61691d3ab545c5cd0d7bc36c8b9942542e",
+  "branch": "gate/c1c-g5-corr2-return-defer",
+  "candidate_commit": null,
+  "checks": {
+    "canonical_append_denied": "PASS",
+    "chronology_inconsistent_object_rejected": "PASS",
+    "cross_file_hash_chain": "PASS",
+    "exact_file_hashes": "PASS",
+    "exact_run_namespace_release_manifest_selector_binding": "PASS",
+    "inventory_ed25519_sshsig": "PASS",
+    "ledger_logical_hash": "PASS",
+    "no_unresolved_operational_findings": "FAIL",
+    "preserved_non_deferred_decisions_hash": "PASS",
+    "qa_recommends_pass": "FAIL",
+    "receipt_ed25519_sshsig": "PASS",
+    "second_machine_replay_absent": "PASS",
+    "workflow_and_console_findings_closed": "PASS"
+  },
+  "finding_summary": {
+    "closed_workflow_findings": 2,
+    "rejected_objects": 1,
+    "remaining_candidate_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+    "remaining_deferred_objects": 1,
+    "remaining_finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001"
+  },
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "packet_id": "C1C-G5-CORR2-RETURN",
+  "qa_recommendation": "DEFER",
+  "qa_status": "PASS_EVIDENCE_DEFER_OPERATIONAL_ACCEPTANCE",
+  "rollback": "Preserve all immutable and signed pilot evidence. Revert only the unmerged return-gate packet and state update. Do not rewrite, delete, relabel or promote any pilot object.",
+  "schema": "ovc-c1c-g5-corr2-return-qa/v1",
+  "tests": [],
+  "warnings": [
+    "The CORR2 signatures and hash chain are valid; DEFER is based on one unresolved structural-comparison finding, not evidence corruption.",
+    "No second machine replay is authorised or required."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$id": "ovc-c1c-g5-corr2-return-gate-packet/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "gate_id": {
+      "const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"
+    },
+    "gate_status": {
+      "const": "GATE_READY"
+    },
+    "operator_approval_required": {
+      "const": true
+    },
+    "recommended_decision": {
+      "const": "DEFER"
+    },
+    "schema": {
+      "const": "ovc-c1c-g5-corr2-return-gate-packet/v1"
+    }
+  },
+  "required": [
+    "schema",
+    "title",
+    "gate_id",
+    "plan_id",
+    "plan_version",
+    "baseline_commit",
+    "branch",
+    "gate_status",
+    "operator_approval_required",
+    "allowed_decisions",
+    "current_authority",
+    "acceptance_conditions",
+    "evidence",
+    "unresolved_issues",
+    "authority_delta_by_decision",
+    "recommended_decision",
+    "rollback"
+  ],
+  "type": "object"
+}

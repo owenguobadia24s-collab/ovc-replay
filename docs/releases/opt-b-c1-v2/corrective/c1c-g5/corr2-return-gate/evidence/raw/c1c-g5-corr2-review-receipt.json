@@ -1,0 +1,65 @@
+{
+  "canonical_append": "DENIED",
+  "decision_count": 2,
+  "decisions": [
+    {
+      "candidate_window_id": "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+      "evidence_context_sha256": "45f10f7a9540e61ef0e615f73b79119dfbab1f2e2a83c2db5854f6a4a3d7b013",
+      "evidence_references": [
+        "derived/fingerprints.jsonl#candidate_window_id=PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+        "review/console-bundle.json#candidate_details.PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+        "review/console-bundle.json#candidate_details.PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4.source_lineage",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4"
+      ],
+      "final_disposition": "REJECT_PILOT_OBJECT",
+      "finding_code": "PD-REJECT-CORR2-CHRONOLOGY-INCONSISTENT-001",
+      "notes": "Exact queue, candidate-detail, fingerprint and source-lineage references resolve, but the candidate timeline is not ordered by first-valid chronology and the fingerprint initial and terminal states do not match the chronological first and last states.",
+      "prior_disposition": "DEFER_PILOT_OBJECT",
+      "prior_finding_code": "PD-DEFER-REVIEW-EVIDENCE-INCOMPLETE-001",
+      "structural_basis": "The timeline records first-valid times in the order 04:45, 04:30, 04:00 and 04:15. Chronological ordering gives CROSSING as the initial interaction state and APPROACHING as the terminal state, while the fingerprint records APPROACHING as initial and REJECTING as terminal. The pilot object is therefore rejected on a reproducible non-semantic structural chronology basis."
+    },
+    {
+      "candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+      "evidence_context_sha256": "28a8d0fd4d027b77d43554914b01f3186d4ad406777081dc6295d4f7fcdce5d9",
+      "evidence_references": [
+        "derived/fingerprints.jsonl#candidate_window_id=PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+        "review/console-bundle.json#candidate_details.PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+        "review/console-bundle.json#candidate_details.PDPILOT-CANDIDATE-bab63b935155e4d9033aed81.source_lineage",
+        "review/queue-items.jsonl#candidate_window_id=PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
+      ],
+      "final_disposition": "DEFER_PILOT_OBJECT",
+      "finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001",
+      "next_review_condition": "Re-review only after the exact medoid or neighbour comparison and the persistence-trigger basis are exposed from preserved pilot artifacts without another machine replay.",
+      "notes": "Queue, fingerprint and source-lineage identities resolve. The candidate is assigned to a recurring cluster but is marked as an outlier at distance 0.1 against a cluster p90 threshold of 0.05. No neighbour or medoid fingerprint context is exposed, and the LONG_PERSISTENCE basis is not reconciled with a one-record window and max_persistence of 1.",
+      "prior_disposition": "DEFER_PILOT_OBJECT",
+      "prior_finding_code": "PD-DEFER-STRUCTURAL-COMPARISON-PENDING-002",
+      "resolution_criteria": [
+        "Document how LONG_PERSISTENCE is derived when the candidate fingerprint contains one duration record and max_persistence equals 1.",
+        "Expose the assigned medoid fingerprint or an equivalent exact structural comparison bound to the same partition and distance pack.",
+        "Expose the deterministic distance components explaining the candidate-to-medoid distance of 0.1 and its outlier classification.",
+        "Make duplicate-window, overlap and comparison-availability status explicit."
+      ]
+    }
+  ],
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "implementation_receipt_file_sha256": "fbf5368856bb3498416211ef3ac30ca3b819e45875175668e5dce39876e99a71",
+  "operator_id": "OVC.OPERATOR.PRIMARY.LOCAL.V1",
+  "packet_id": "C1C-G5-CORR2",
+  "pilot_namespace": "PD.PILOT.GBPUSD.20260622_20260625.v2",
+  "pilot_only": true,
+  "pilot_run_id": "PD.PILOT.RUN.96c16f11717e787f971851ee",
+  "preserved_non_deferred_decision_count": 4,
+  "preserved_non_deferred_decisions_sha256": "8af53e45df7cc3dd38b39861e818dfd132becd46ba7b78e3bf684ec97503cb0d",
+  "promotion_eligibility": "NON_PROMOTABLE",
+  "reviewed_at_utc": "2026-07-29T01:14:08Z",
+  "schema": "ovc-c1c-g5-corr2-deferred-review-receipt/v1",
+  "second_machine_replay_performed": false,
+  "signature": "-----BEGIN SSH SIGNATURE-----\nU1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAg6MhPEyKgheAZsCkaiFqrYn91CW\n26W5W8/PLkHcjdAokAAAAHb3ZjLXJwcwAAAAAAAAAGc2hhNTEyAAAAUwAAAAtzc2gtZWQy\nNTUxOQAAAEDziKCW28qXFERpcMYXCnaA2NtL0Pgf4yEKJvIu+wKpGC13LS2kwZN7gqC5xx\nCEI4+C3+4fxTFyg9Xvcf3d4YwD\n-----END SSH SIGNATURE-----\n",
+  "signature_algorithm": "ED25519",
+  "signature_format": "SSHSIG_OPENSSH_V1",
+  "signature_namespace": "ovc-rps",
+  "signature_sha256": "42e3de5b8a667d140c3462f12c1583d2fc37f92456e6a7565c5d376171dfde21",
+  "signed_payload_sha256": "eda18c11f05e1fe3c9b7e93ea2eaab32a17fbdad22260305d6fd303882f5eb65",
+  "source_structured_review_v2_file_sha256": "e5b65129559762def39da4f576b20b1f8e83ff331f01376cffde8f3100ded64a",
+  "status": "C1C_G5_CORR2_OPERATOR_REREVIEW_COMPLETE"
+}

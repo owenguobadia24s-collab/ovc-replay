@@ -1,0 +1,124 @@
+{
+  "acceptance_conditions": [
+    {
+      "condition": "Exact C2 v2 lineage and selector binding",
+      "result": "PASS"
+    },
+    {
+      "condition": "Deterministic signed corrective machine rerun",
+      "result": "PASS"
+    },
+    {
+      "condition": "Structured v2 review and CORR2 operator rereview signatures",
+      "result": "PASS"
+    },
+    {
+      "condition": "Exact compact-file hash chain",
+      "result": "PASS"
+    },
+    {
+      "condition": "Workflow and Console context findings closed",
+      "result": "PASS"
+    },
+    {
+      "condition": "No unresolved pilot-object review findings",
+      "result": "FAIL"
+    },
+    {
+      "condition": "QA recommends PASS",
+      "result": "FAIL"
+    }
+  ],
+  "allowed_decisions": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
+  "authority_delta_by_decision": {
+    "DEFER": {
+      "delta": [
+        "Authorise C1C-G5-CORR3 for one exact candidate only.",
+        "Permit read-only extraction of the assigned medoid or equivalent neighbour fingerprint from preserved pilot artifacts.",
+        "Permit deterministic decomposition of the existing candidate-to-medoid distance using the already frozen distance pack and existing fingerprints, without market, C1, C2 or candidate-window replay.",
+        "Permit explicit trace of LONG_PERSISTENCE, duplicate-window, overlap and comparison-availability calculations from preserved artifacts.",
+        "Permit one operator-local rereview of PDPILOT-CANDIDATE-bab63b935155e4d9033aed81 and return to this gate."
+      ],
+      "not_authorised": [
+        "Second machine or market replay",
+        "New provider intake",
+        "Canonical Discovery processing or append",
+        "Semantic, family, candidate, novelty, threshold or model promotion",
+        "Selector or release mutation",
+        "R2 publication or Validation consumption",
+        "Probability, risk, exposure, trading, execution or agent write"
+      ],
+      "status": "OPERATOR_RESERVED"
+    },
+    "PASS": {
+      "delta": [
+        "Accept the corrective pilot workflow evidence with the remaining candidate permanently excluded as a non-promotable unresolved negative control.",
+        "Close C1C-G5 and permit RO3-WP3 retest plus preparation of a separate PD-G5P operator packet explicitly bound to C2 v2."
+      ],
+      "not_authorised": [
+        "Canonical Discovery processing or append",
+        "Any promotion or active novelty authority",
+        "Selector or release mutation",
+        "R2 publication or Validation consumption",
+        "Probability, risk, exposure, trading, execution or agent write"
+      ],
+      "status": "OPERATOR_RESERVED_NOT_QA_RECOMMENDED"
+    }
+  },
+  "baseline_commit": "71eeba61691d3ab545c5cd0d7bc36c8b9942542e",
+  "branch": "gate/c1c-g5-corr2-return-defer",
+  "candidate_commit": null,
+  "completed_packets": [
+    "C1C-G5 C2 v2 corrective machine rerun",
+    "C1C-G5 structured review v2",
+    "C1C-G5-CORR2 exact evidence resolution and two-object operator rereview"
+  ],
+  "current_authority": {
+    "active_c2_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "active_c2_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "canonical_append": "DENIED",
+    "canonical_discovery_processing": "DENIED",
+    "operation_mode": "TIME_GATED_REPLAY",
+    "pilot_only": true,
+    "promotion_eligibility": "NON_PROMOTABLE",
+    "research_role": "PILOT_DISCOVERY",
+    "selector_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "validation_consumption": "LOCKED_UNCONSUMED"
+  },
+  "evidence": {
+    "closure_ledger_sha256": "65507b2acb691433cccc48a1e63311f89b783dabd3802763c362004effcdd3af",
+    "evidence_index": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2-return-gate/C1C_G5_CORR2_RETURN_EVIDENCE_INDEX.json",
+    "final_gate_input_sha256": "5aadafcda41631f9a64575ede02136faa50ed2a2f546d8698a6ef294e781adb6",
+    "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2-return-gate/C1C_G5_CORR2_RETURN_QA_PACKET.json",
+    "rejected_candidate_id": "PDPILOT-CANDIDATE-4f41e21b6cd075e0fdbc40e4",
+    "remaining_deferred_candidate_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
+    "remaining_deferred_object_count": 1,
+    "review_receipt_sha256": "86be15969ca26d9da83bffc018ec02f3f5f6b9f6eaf5cdca1b197d46b8dbc963",
+    "second_machine_replay_required": false,
+    "signed_inventory_sha256": "7d57c8032465fca28508d9da8965a0abdec7c8a37a5b772ca8de87480d87e19f"
+  },
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "gate_status": "GATE_READY",
+  "next_work_after_defer": "C1C-G5-CORR3",
+  "next_work_after_pass": "RO3-WP3_RETEST_AND_PD-G5P-C2-V2_GATE_PREPARATION",
+  "operator_approval_required": true,
+  "plan_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "recommendation_rationale": "The signed CORR2 evidence is valid and one object was lawfully rejected, but one candidate remains unresolved because its structural comparison, distance decomposition and persistence basis are not exposed. PASS would conceal an explicit unresolved review finding.",
+  "recommended_decision": "DEFER",
+  "rollback": "Preserve all immutable machine and signed review evidence. Revert only the unmerged return-gate packet. Do not delete, rewrite, relabel or promote any pilot object.",
+  "schema": "ovc-c1c-g5-corr2-return-gate-packet/v1",
+  "title": "C1C-G5 Corrective Pilot Review \u2014 CORR2 Return",
+  "unresolved_issues": [
+    "LONG_PERSISTENCE is not reconciled with a one-record candidate window and max_persistence equal to 1.",
+    "The assigned medoid fingerprint or equivalent exact same-partition structural comparison is not exposed.",
+    "The deterministic distance components producing candidate-to-medoid distance 0.1 and p90 outlier classification 0.05 are not exposed.",
+    "Duplicate-window, overlap and comparison-availability status are not explicit for the remaining candidate."
+  ]
+}

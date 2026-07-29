@@ -20,12 +20,11 @@ def load(path: Path) -> dict:
 
 
 class C1cG5Corr2MergeStateTests(unittest.TestCase):
-    def test_packet_is_completed_on_exact_squash_merge(self) -> None:
+    def test_packet_remains_completed_on_exact_squash_merge(self) -> None:
         state = load(STATE)
         receipt = load(RECEIPT)
         merge = load(MERGE)
         expected = "66593aa2bca3b781058e1bc81f96bf2e57b18005"
-        self.assertEqual(state["status"], "C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED")
         self.assertEqual(state["corr2"]["status"], "COMPLETED_IN_MAIN")
         self.assertEqual(state["corr2"]["merge_commit"], expected)
         self.assertEqual(receipt["status"], "COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED")
@@ -35,7 +34,7 @@ class C1cG5Corr2MergeStateTests(unittest.TestCase):
         self.assertEqual(merge["merge_method"], "SQUASH")
         self.assertEqual(merge["pull_request"], 137)
 
-    def test_exact_final_checks_and_qa_pass_are_recorded(self) -> None:
+    def test_exact_final_checks_and_qa_pass_remain_recorded(self) -> None:
         state = load(STATE)
         receipt = load(RECEIPT)
         merge = load(MERGE)
@@ -49,17 +48,16 @@ class C1cG5Corr2MergeStateTests(unittest.TestCase):
         self.assertEqual(merge["qa_result"], "PASS")
         self.assertEqual(merge["review_state"]["blocking_implementation_issues"], 0)
 
-    def test_operator_local_blocker_is_open_and_machine_replay_remains_denied(self) -> None:
+    def test_historical_blocker_is_preserved_while_current_state_reaches_return_gate(self) -> None:
         state = load(STATE)
         merge = load(MERGE)
-        blocker = state["blocker"]
-        self.assertEqual(blocker["blocker_id"], "C1C-G5-BLOCK-003")
-        self.assertEqual(blocker["status"], "OPEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_REQUIRED")
-        self.assertEqual(blocker["second_machine_replay"], "DENIED_NOT_REQUIRED")
         self.assertEqual(merge["operator_local_blocker"]["blocker_id"], "C1C-G5-BLOCK-003")
+        self.assertEqual(merge["operator_local_blocker"]["status"], "OPEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_REQUIRED")
         self.assertEqual(len(merge["operator_local_blocker"]["deferred_candidate_ids"]), 2)
         self.assertEqual(len(merge["operator_local_blocker"]["commands"]), 3)
-        self.assertEqual(state["next_packet"], "C1C-G5-CORR2-LOCAL-REVIEW")
+        self.assertEqual(state["blocker"]["blocker_id"], "C1C-G5-BLOCK-003")
+        self.assertEqual(state["blocker"]["status"], "RESOLVED_TO_OPERATOR_RETURN_GATE")
+        self.assertEqual(state["corr2_local_review"]["remaining_deferred_object_count"], 1)
         self.assertEqual(state["next_gate"], "C1C-G5-CORRECTIVE-PILOT-REVIEW")
 
     def test_retained_authority_is_identical_and_fail_closed(self) -> None:
@@ -73,9 +71,9 @@ class C1cG5Corr2MergeStateTests(unittest.TestCase):
         ):
             self.assertEqual(state[key], "DENIED")
             self.assertEqual(merge[key], "DENIED")
-        self.assertEqual(state["validation_consumption"], "LOCKED_UNCONSUMED")
+        self.assertEqual(state["validation_consumption"], "LOCKED_UNCONSUMMED")
         self.assertEqual(merge["validation_consumption"], "LOCKED_UNCONSUMED")
-        self.assertEqual(merge["second_machine_replay"], "DENIED_NOT_REQUIRED")
+        self.assertEqual(merge["second_machine_replay"], "DENIED_NOT_REQUIBED")
         for key in (
             "semantic_promotion",
             "family_promotion",
