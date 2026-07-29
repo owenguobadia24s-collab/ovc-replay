@@ -3,9 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import asdict, is_dataclass
-from decimal import Decimal
+from decimal import Decimal, localcontext
 from typing import Any, Callable, Mapping
 
+ASSURANCE_DECIMAL_PRECISION = 34
 PRIOR_NULL_REASONS = {
     "NO_PRIOR_BAR",
     "NO_CONTIGUOUS_PRIOR_BAR",
@@ -33,7 +34,16 @@ def _decimal(value: str | None) -> Decimal | None:
 def _s(value: Decimal) -> str:
     if value == 0:
         return "0"
-    return format(value.normalize(), "f")
+    rendered = format(value, "f")
+    if "." in rendered:
+        rendered = rendered.rstrip("0").rstrip(".")
+    return rendered
+
+
+def _q(numerator: Decimal, denominator: Decimal) -> Decimal:
+    with localcontext() as context:
+        context.prec = ASSURANCE_DECIMAL_PRECISION
+        return numerator / denominator
 
 
 def _result_dict(result: Any) -> dict[str, Any]:
@@ -136,18 +146,18 @@ def contract_oracle(current: Mapping[str, Any], prior: Mapping[str, Any] | None)
     lower = min(o, c) - l
     measurements: dict[str, str | None] = {
         "range_abs": _s(r),
-        "range_ticks": _s(r / increment) if increment else None,
+        "range_ticks": _s(_q(r, increment)) if increment else None,
         "body_signed": _s(body),
         "body_abs": _s(abs(body)),
-        "body_utilisation": _s(abs(body) / r) if r else None,
+        "body_utilisation": _s(_q(abs(body), r)) if r else None,
         "upper_wick_abs": _s(upper),
         "lower_wick_abs": _s(lower),
-        "upper_wick_share": _s(upper / r) if r else None,
-        "lower_wick_share": _s(lower / r) if r else None,
-        "wick_balance": _s((upper - lower) / r) if r else None,
-        "open_location": _s((o - l) / r) if r else None,
-        "close_location": _s((c - l) / r) if r else None,
-        "signed_efficiency": _s(body / r) if r else None,
+        "upper_wick_share": _s(_q(upper, r)) if r else None,
+        "lower_wick_share": _s(_q(lower, r)) if r else None,
+        "wick_balance": _s(_q(upper - lower, r)) if r else None,
+        "open_location": _s(_q(o - l, r)) if r else None,
+        "close_location": _s(_q(c - l, r)) if r else None,
+        "signed_efficiency": _s(_q(body, r)) if r else None,
         "true_range_abs": None,
         "true_range_ticks": None,
         "close_change": None,
@@ -169,7 +179,7 @@ def contract_oracle(current: Mapping[str, Any], prior: Mapping[str, Any] | None)
         prior_close = Decimal(str(prior["close"]))
         true_range = max(r, abs(h - prior_close), abs(l - prior_close))
         measurements["true_range_abs"] = _s(true_range)
-        measurements["true_range_ticks"] = _s(true_range / increment) if increment else None
+        measurements["true_range_ticks"] = _s(_q(true_range, increment)) if increment else None
         measurements["close_change"] = _s(c - prior_close)
         measurements["open_gap"] = _s(o - prior_close)
         if increment is None:
