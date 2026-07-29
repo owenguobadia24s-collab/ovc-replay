@@ -2,7 +2,7 @@
   "schema": "ovc-pd-c1c-g5-pilot-corrective-state/v1",
   "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
   "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
-  "status": "C1C_G5_CORR3_IMPLEMENTED_QA_PASS_OPERATOR_LOCAL_REREVIEW_PENDING_MERGE",
+  "status": "C1C_G5_CORR3_COMPLETED_IN_MAIN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW_REQUIRED",
   "source_pilot": {
     "namespace": "PD.PILOT.GBPUSD.20260622_20260625.v1",
     "run_id": "PD.PILOT.RUN.0cc5a59ca751583f3e50091c",
@@ -118,19 +118,20 @@
   },
   "corr3": {
     "packet_id": "C1C-G5-CORR3",
-    "status": "APPROVED_PENDING_SQUASH_MERGE",
+    "status": "COMPLETED_IN_MAIN",
     "authority_required": "OPERATOR_DEFER_RECORDED",
     "authority_delta": "NONACTIVATING_READ_ONLY_STRUCTURAL_COMPARISON_EXPOSURE_ONLY",
     "baseline_commit": "41623d07e73b2e0b87824c365f11acca9e51d73d",
     "branch": "build/c1c-g5-corr3-structural-comparison",
     "tested_candidate_head": "9a4fa3f3472d8c09981264c29093d13115a34bcb",
+    "final_pull_request_head": "def805f70ac86d53e9db14fa4b5ebaee5356f27f",
     "pull_request": 141,
     "decision": "PASS",
     "decision_authority": "DELEGATED_AUTO_EXECUTABLE",
     "qa_result": "PASS",
     "tests": [
-      {"workflow_run": 30415338772, "job": 90460513735, "result": "PASS"},
-      {"workflow_run": 30415338842, "job": 90460513953, "result": "PASS"}
+      {"workflow_run": 30415545335, "job": 90461150777, "result": "PASS"},
+      {"workflow_run": 30415545268, "job": 90461150538, "result": "PASS"}
     ],
     "target_candidate_window_id": "PDPILOT-CANDIDATE-bab63b935155e4d9033aed81",
     "target_finding_code": "PD-DEFER-CORR2-STRUCTURAL-COMPARISON-INCOMPLETE-001",
@@ -147,7 +148,10 @@
     "return_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
     "qa_packet": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_QA_PACKET.json",
     "decision_record": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_DELEGATED_DECISION.md",
-    "merge_commit": null
+    "merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_MERGE_RECEIPT.json",
+    "merge_commit": "85c9805db69d487ffdb043eca18414101cf03387",
+    "merge_method": "SQUASH",
+    "merged_on": "2026-07-29"
   },
   "implementation": {
     "machine_runner": "src/ovc/research_operations/pattern_discovery/pilot_corrective_rerun.py",
@@ -158,6 +162,7 @@
     "corr3_wrapper": "scripts/run_c1c_g5_corr3_review.ps1",
     "corr3_contract": "contracts/research_operations/pattern_discovery/C1C_G5_CORR3_STRUCTURAL_COMPARISON_REVIEW_CONTRACT_v0_1.md",
     "corr3_implementation_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_IMPLEMENTATION_RECEIPT.json",
+    "corr3_merge_receipt": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_MERGE_RECEIPT.json",
     "corr3_authority_binding": "docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_AUTHORITY_BINDING.json"
   },
   "prior_blocker": {
@@ -167,17 +172,17 @@
   },
   "blocker": {
     "blocker_id": "C1C-G5-BLOCK-004",
-    "status": "PENDING_AFTER_CORR3_IMPLEMENTATION_MERGE",
-    "reason": "CI cannot perform the required human disposition of the exact remaining pilot object or use the operator-private Ed25519 key and operator-local external pilot root.",
+    "status": "OPEN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW_REQUIRED",
+    "reason": "CI cannot perform the required human disposition of the exact remaining pilot object, access the operator-local external pilot root or use the operator-private Ed25519 key.",
     "required_resources": [
       "operator-local external corrective pilot root",
       "operator-private Ed25519 key bound to RPS.SIGNING.50092c28981fef08f53a6cb5",
       "human review of PDPILOT-CANDIDATE-bab63b935155e4d9033aed81"
     ],
     "second_machine_replay": "DENIED_NOT_REQUIRED",
-    "smallest_lawful_resolution": "After CORR3 merges, run preflight and prepare locally, complete the one-object review template, finalize and return the signed compact CORR3 closure evidence."
+    "smallest_lawful_resolution": "Run CORR3 preflight and prepare locally, complete the exact one-object review template, finalize and return the signed compact CORR3 closure evidence."
   },
-  "continuation": "SQUASH_MERGE_CORR3_THEN_RUN_OPERATOR_LOCAL_ONE_OBJECT_REREVIEW",
+  "continuation": "RUN_OPERATOR_LOCAL_C1C_G5_CORR3_ONE_OBJECT_REREVIEW",
   "continuation_command": ".\\scripts\\run_c1c_g5_corr3_review.ps1 preflight",
   "next_packet": "C1C-G5-CORR3-LOCAL-REVIEW",
   "next_gate": "C1C-G5-CORRECTIVE-PILOT-REVIEW",

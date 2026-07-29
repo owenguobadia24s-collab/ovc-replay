@@ -1,0 +1,39 @@
+name: C1C-G5 CORR3 merge state
+
+on:
+  pull_request:
+    paths:
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_MERGE_RECEIPT.json'
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_PROGRAMME_STATE.json'
+      - 'registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json'
+      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_merge_state.py'
+      - '.github/workflows/c1c-g5-corr3-merge-state.yml'
+  push:
+    branches:
+      - 'record/c1c-g5-corr3-merge-state'
+    paths:
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/C1C_G5_CORR3_MERGE_RECEIPT.json'
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_PROGRAMME_STATE.json'
+      - 'registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json'
+      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_merge_state.py'
+      - '.github/workflows/c1c-g5-corr3-merge-state.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  merge-state:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run CORR3 merge-state tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.pattern_discovery.test_c1c_g5_corr3_merge_state -v
+      - name: Run complete repository tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
