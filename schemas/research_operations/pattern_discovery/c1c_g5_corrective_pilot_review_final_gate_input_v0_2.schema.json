@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_final_gate_input_v0_2.schema.json",
+  "title": "C1C-G5 corrective pilot review final gate input after CORR3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "packet_id", "gate_id", "pilot_run_id", "pilot_namespace",
+    "active_c2_release_id", "active_c2_manifest_id", "selector_id",
+    "corr3_operator_rereview_complete", "corr3_review_receipt_file_sha256",
+    "corr3_closure_ledger_file_sha256", "signed_corr3_inventory_file_sha256",
+    "structural_comparison_context_sha256", "structured_review_v2_preserved",
+    "corr2_rejected_object_preserved", "second_machine_replay_performed",
+    "remaining_deferred_object_count", "recommended_decision", "operator_approval_required",
+    "allowed_decisions", "pilot_only", "promotion_eligibility", "canonical_append",
+    "validation_consumption", "status"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c1c-g5-corrective-pilot-review-final-gate-input/v2"},
+    "packet_id": {"const": "C1C-G5-CORR3"},
+    "gate_id": {"const": "C1C-G5-CORRECTIVE-PILOT-REVIEW"},
+    "pilot_run_id": {"const": "PD.PILOT.RUN.96c16f11717e787f971851ee"},
+    "pilot_namespace": {"const": "PD.PILOT.GBPUSD.20260622_20260625.v2"},
+    "active_c2_release_id": {"type": "string", "minLength": 1},
+    "active_c2_manifest_id": {"type": "string", "minLength": 1},
+    "selector_id": {"type": "string", "minLength": 1},
+    "corr3_operator_rereview_complete": {"const": true},
+    "corr3_review_receipt_file_sha256": {"$ref": "#/$defs/sha256"},
+    "corr3_closure_ledger_file_sha256": {"$ref": "#/$defs/sha256"},
+    "signed_corr3_inventory_file_sha256": {"$ref": "#/$defs/sha256"},
+    "structural_comparison_context_sha256": {"$ref": "#/$defs/sha256"},
+    "structured_review_v2_preserved": {"const": true},
+    "corr2_rejected_object_preserved": {"const": true},
+    "second_machine_replay_performed": {"const": false},
+    "remaining_deferred_object_count": {"type": "integer", "minimum": 0, "maximum": 1},
+    "recommended_decision": {"enum": ["PASS", "DEFER"]},
+    "operator_approval_required": {"const": true},
+    "allowed_decisions": {
+      "type": "array",
+      "items": {"enum": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"]},
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "pilot_only": {"const": true},
+    "promotion_eligibility": {"const": "NON_PROMOTABLE"},
+    "canonical_append": {"const": "DENIED"},
+    "validation_consumption": {"const": "LOCKED_UNCONSUMED"},
+    "status": {"const": "C1C_G5_CORRECTIVE_PILOT_REVIEW_FINAL_GATE_INPUT_READY"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
