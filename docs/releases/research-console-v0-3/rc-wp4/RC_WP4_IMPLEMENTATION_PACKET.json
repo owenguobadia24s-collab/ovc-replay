@@ -2,9 +2,11 @@
   "schema": "ovc-research-console-rc-wp4-implementation-packet/v2",
   "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
   "work_packet": "RC-WP4-v0.3",
-  "status": "IMPLEMENTED_PENDING_QA",
+  "status": "GATE_READY",
   "baseline_main_commit": "79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5",
   "branch": "rebuild/research-console-v0-3-rc-wp4-system-activity",
+  "candidate_commit": "0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4",
+  "pull_request": 154,
   "superseded_candidate": {
     "pull_request": 86,
     "branch": "build/research-console-v0-3-system-activity",
@@ -23,14 +25,18 @@
     "fixture-bundle integration without page-level repository scanning",
     "fail-closed unknown vocabulary and unavailable projection behaviour"
   ],
-  "verification_required": [
-    "focused RC-WP4 tests",
-    "RC-G3 adapter-consumption regressions",
-    "RC-G4 activation regressions",
-    "complete repository suite",
-    "exact authority-delta assertions"
-  ],
-  "authority_required": "AUTO_EXECUTABLE_IMPLEMENTATION_THEN_OPERATOR_GATE",
+  "verification": {
+    "focused_rc_wp4": "PASS_8",
+    "rc_g3_regression": "PASS_5",
+    "rc_g4_regression": "PASS_12",
+    "complete_repository_dedicated": "PASS_70",
+    "complete_repository_generic": "PASS_70",
+    "authority_assertions": "PASS",
+    "qa_recommendation": "PASS"
+  },
+  "qa_packet": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json",
+  "gate_packet": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_GATE_PACKET.json",
+  "authority_required": "OPERATOR_REQUIRED_AT_RC-G3A",
   "authority_delta_on_gate_pass": "LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY",
   "retained": {
     "validation_consumption": "LOCKED_UNCONSUMED",
