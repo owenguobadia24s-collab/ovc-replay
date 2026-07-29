@@ -1,0 +1,61 @@
+name: C1C-G5 CORR3 operator PASS merge state
+
+on:
+  pull_request:
+    paths:
+      - 'registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json'
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_OPERATOR_PASS_MERGE_RECEIPT.json'
+      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_merge_state.py'
+      - '.github/workflows/c1c-g5-corr3-operator-pass-merge.yml'
+  push:
+    branches:
+      - 'state/c1c-g5-corr3-operator-pass-merge'
+    paths:
+      - 'registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json'
+      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/final-gate/C1C_G5_CORR3_OPERATOR_PASS_MERGE_RECEIPT.json'
+      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_merge_state.py'
+      - '.github/workflows/c1c-g5-corr3-operator-pass-merge.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  merge-state:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify operator PASS merge state
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.pattern_discovery.test_c1c_g5_corr3_merge_state -v
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Enforce retained authority and continuation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
+          if state['status'] != 'C1C_G5_CORRECTIVE_PILOT_REVIEW_COMPLETED_OPERATOR_PASS':
+              raise SystemExit('final operator PASS state missing')
+          if state['blocker']['status'] != 'CLOSED_BY_OPERATOR_PASS':
+              raise SystemExit('C1C-G5-BLOCK-004 not closed')
+          if state['next_packet'] != 'RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME':
+              raise SystemExit('wrong continuation packet')
+          retained = state['retained_authority']
+          expected = {
+              'canonical_discovery_processing': 'DENIED',
+              'canonical_append': 'DENIED',
+              'selector_mutation': 'DENIED',
+              'release_mutation': 'DENIED',
+              'validation_consumption': 'LOCKED_UNCONSUMED',
+          }
+          for key, value in expected.items():
+              if retained.get(key) != value:
+                  raise SystemExit(f'{key} authority changed')
+          PY
