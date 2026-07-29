@@ -1,0 +1,65 @@
+name: RO3-G4 C1 lineage and disabled Console adapters
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/research_operations/v0_3/**"
+      - "schemas/research_operations/v0_3/**"
+      - "fixtures/research_operations/v0_3/**"
+      - "registries/research_operations/v0_3/**"
+      - "scripts/research_operations/run_ro3_g4_adapters.py"
+      - "tests/research_operations/v0_3/**"
+      - "docs/releases/research-operations-foundation-v0-3/ro3-g4/**"
+      - ".github/workflows/research-operations-v0-3-ro3-g4.yml"
+  push:
+    branches:
+      - "build/research-operations-v0-3-wp4-c1-lineage-adapters"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ro3-g4:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Focused lineage and adapter tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.research_operations.v0_3.test_lineage_adapters -v
+      - name: Generate exact adapter evidence
+        env:
+          PYTHONPATH: src
+        run: python scripts/research_operations/run_ro3_g4_adapters.py --output ro3-g4-adapter-evidence.json --require-pass
+      - name: Upload adapter evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ro3-g4-adapter-evidence
+          path: ro3-g4-adapter-evidence.json
+          if-no-files-found: error
+      - name: Complete repository suite
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Authority assertions
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          evidence = json.loads(Path('ro3-g4-adapter-evidence.json').read_text())
+          assert evidence['status'] == 'PASS'
+          projection = evidence['projection']
+          assert projection['route_enabled'] is False
+          assert projection['route_state'] == 'DISABLED_PENDING_RC_G4'
+          assert projection['writes'] == 'NONE'
+          assert projection['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          assert projection['panel_separation']['null_reason_and_c2_transition_compact_corender'] == 'DENIED'
+          assert all(item['status'] == 'PASS' for item in evidence['negative_controls'])
+          PY
