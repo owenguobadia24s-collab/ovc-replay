@@ -117,9 +117,10 @@ def recompute_structural_comparison(
     if assignments.get(fingerprint_id) != medoid_id:
         raise PatternDiscoveryError("fingerprint is not assigned to the supplied medoid")
     population = [dict(item) for item in partition_fingerprints]
-    if {str(item.get("fingerprint_id")) for item in population} != {
-        str(item.get("fingerprint_id")) for item in partition_fingerprints
-    }:
+    population_ids = [str(item.get("fingerprint_id") or "") for item in population]
+    if any(not item for item in population_ids):
+        raise PatternDiscoveryError("partition fingerprint identity is missing")
+    if len(population_ids) != len(set(population_ids)):
         raise PatternDiscoveryError("duplicate partition fingerprint identities")
     scale_pack = build_scale_pack(population)
     recorded_scale_id = str(cluster_version.get("scale_pack_id") or "")
