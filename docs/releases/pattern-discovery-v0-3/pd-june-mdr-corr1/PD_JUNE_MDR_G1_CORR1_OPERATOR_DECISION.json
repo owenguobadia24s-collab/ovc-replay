@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-pd-june-mdr-g1-corr1-operator-decision/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "plan_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "plan_version": "0.1",
+  "packet_id": "PD-JUNE-MDR-CORR1",
+  "gate_id": "PD-JUNE-MDR-G1",
+  "decision": "DEFER",
+  "decision_authority": "OPERATOR",
+  "operator_instruction": "OVC APPROVE PD-JUNE-MDR-G1 DEFER",
+  "recorded_at_utc": "2026-07-29T23:15:00Z",
+  "baseline_main_commit": "59057288675277d43b23e4831675b0f5c557d88f",
+  "approved_gate_evidence_head": "3746bacbdf1856c4ee6e580f565a727d10fb0f96",
+  "branch_head_before_decision_record": "aadaaded6c139521fc1f768a146e8f5a21a98020",
+  "pull_request": 160,
+  "qa_recommendation": "DEFER_TO_OPERATOR_REQUIRED_READ_ONLY_CONTROL_AND_AGREEMENT_ASSURANCE",
+  "bounded_supported_claim": "DETERMINISTIC_STRUCTURAL_DESCRIPTION_CORRECTNESS_ESTABLISHED_FOR_EXACT_JUNE_GAPPED_SLICE",
+  "market_description_verdict": "NOT_ESTABLISHED",
+  "resolved_findings": [
+    "PD-JUNE-MDR-001",
+    "PD-JUNE-MDR-002",
+    "PD-JUNE-MDR-003",
+    "PD-JUNE-MDR-004",
+    "PD-JUNE-MDR-005"
+  ],
+  "open_findings": [
+    "PD-JUNE-MDR-006"
+  ],
+  "authority_delta": {
+    "next_packet": "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE",
+    "authority": "OPERATOR_APPROVED_BOUNDED_READ_ONLY",
+    "scope": [
+      "Freeze a deterministic read-only negative-control construction rule that does not insert, relabel or mutate the 208 immutable June candidates.",
+      "Materialise matched and population controls from already-existing June source and state evidence only.",
+      "Run blinded repeat review over the six promoted candidates and a predeclared stratified control sample.",
+      "Report false-positive detection, contradiction detection and inter-review agreement without changing formulas, triggers, candidates, clusters, thresholds or selectors.",
+      "Return to PD-JUNE-MDR-G1 with one consolidated decision packet."
+    ],
+    "not_authorised": [
+      "Provider intake or another market replay",
+      "Canonical 2021-2023 Discovery processing or append",
+      "Formula, semantic, trigger, candidate, distance, cluster, threshold or model changes",
+      "Candidate, family, novelty or theory promotion",
+      "Selector or release mutation",
+      "R2 publication or Validation consumption",
+      "Probability, risk, exposure, trading, execution or agent write"
+    ]
+  },
+  "tests": [
+    {
+      "workflow_run": 30498219394,
+      "job": 90731843042,
+      "result": "PASS",
+      "scope": "CORR1 focused, dependent, complete repository suite and return-gate boundary"
+    },
+    {
+      "workflow_run": 30498219425,
+      "job": 90731843340,
+      "result": "PASS",
+      "scope": "General repository unit tests"
+    },
+    {
+      "workflow_run": 30498219325,
+      "job": 90731842858,
+      "result": "PASS",
+      "scope": "June assessment continuity and return-gate progression"
+    },
+    {
+      "workflow_run": 30498219459,
+      "job": 90731843542,
+      "result": "PASS",
+      "scope": "Claim-level decision continuity and return-gate progression"
+    }
+  ],
+  "rollback": "Preserve all Google Drive and signed external evidence. Revert only CORR1 code, compact evidence, tests, workflow, gate packet, decision and programme-state updates through a new non-destructive commit.",
+  "next_action": "Complete decision-record continuity tests, squash-merge PR 160, create the CORR2 branch from the resulting lawful main, execute the bounded read-only control-and-agreement packet, and return to PD-JUNE-MDR-G1."
+}
