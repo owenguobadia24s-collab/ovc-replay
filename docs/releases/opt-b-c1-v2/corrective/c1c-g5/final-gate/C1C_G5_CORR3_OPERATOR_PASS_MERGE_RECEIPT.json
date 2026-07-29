@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-c1c-g5-corr3-operator-pass-merge-receipt/v1",
+  "receipt_id": "C1C-G5-CORR3-OPERATOR-PASS-MERGE-2026-07-29",
+  "programme_id": "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+  "plan_version": "0.1",
+  "gate_id": "C1C-G5-CORRECTIVE-PILOT-REVIEW",
+  "packet_id": "C1C-G5-CORR3-FINAL-GATE-READY",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE C1C-G5-CORRECTIVE-PILOT-REVIEW PASS",
+  "decision_date": "2026-07-29",
+  "pull_request": 147,
+  "final_head": "a000a697eceda064d4b723fa2d188381923723b9",
+  "merge_commit": "1d4065b7a4fa9a7c6d832528309a5b4f56fd2991",
+  "merge_method": "SQUASH",
+  "tests": [
+    {
+      "workflow_run": 30419697439,
+      "job": 90473772097,
+      "result": "PASS",
+      "scope": "exact CORR3 evidence, Ed25519 SSHSIG, operator PASS, retained CORR3/CORR2, complete repository and authority boundary"
+    },
+    {
+      "workflow_run": 30419697463,
+      "job": 90473772164,
+      "result": "PASS",
+      "scope": "generic complete repository unit-test suite"
+    }
+  ],
+  "accepted_scope": "SIGNED_C2_V2_CORRECTIVE_PILOT_OPERATIONAL_LINEAGE_AND_REVIEW_WORKFLOW_EVIDENCE_ONLY",
+  "resolved_blocker": {
+    "blocker_id": "C1C-G5-BLOCK-004",
+    "status": "CLOSED_BY_OPERATOR_PASS"
+  },
+  "next_packet": "RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME",
+  "next_gate": "RO3-G3",
+  "additional_allowed_preparation": "PD-G5P_C2_V2_BOUND_OPERATOR_PACKET_PREPARATION_ONLY",
+  "retained_prohibitions": {
+    "canonical_discovery_processing": "DENIED",
+    "canonical_append": "DENIED",
+    "semantic_promotion": "NONE",
+    "family_promotion": "NONE",
+    "candidate_promotion": "NONE",
+    "novelty_promotion": "NONE",
+    "threshold_or_model_change": "NONE",
+    "selector_mutation": "DENIED",
+    "release_mutation": "DENIED",
+    "r2_publication": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "probability": "NONE",
+    "risk": "NONE",
+    "exposure": "NONE",
+    "trading": "NONE",
+    "execution": "NONE",
+    "agent_write": "NONE"
+  },
+  "rollback": "Revert only the operator PASS court-record and this merge-state receipt through new non-destructive commits while preserving the immutable machine run and every signed v1, v2, CORR2 and CORR3 evidence object."
+}
