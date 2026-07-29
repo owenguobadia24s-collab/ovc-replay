@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse gate-ready court records
+      - name: Parse gate and decision court records
         run: |
           python - <<'PY'
           import base64
@@ -29,6 +29,7 @@ jobs:
               base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json',
               base / 'PD_JUNE_MDR_WP1_QA_PACKET.json',
               base / 'PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json',
+              base / 'PD_JUNE_MDR_G1_OPERATOR_DECISION.json',
               Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
               Path('schemas/research_operations/pattern_discovery/pd_june_mdr_wp1_claim_level_review_v0_1.schema.json'),
           ]
@@ -41,7 +42,7 @@ jobs:
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_mdr_wp1_claim_level_review -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce fail-closed authority and gate boundary
+      - name: Enforce fail-closed authority and approved corrective boundary
         run: |
           python - <<'PY'
           import json
@@ -49,6 +50,7 @@ jobs:
           base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1')
           report = json.loads((base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json').read_text())
           gate = json.loads((base / 'PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json').read_text())
+          decision = json.loads((base / 'PD_JUNE_MDR_G1_OPERATOR_DECISION.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert report['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
           assert report['overall_answer']['recommended_gate_decision'] == 'DEFER'
@@ -57,8 +59,13 @@ jobs:
           assert report['population_mechanical_findings']['serialized_nonchronological_queue_promoted_count'] == 4
           assert gate['operator_approval_required'] is True
           assert gate['recommended_decision'] == 'DEFER'
-          assert state['status'] == 'GATE_READY'
-          assert state['next_packet_on_defer'] == 'PD-JUNE-MDR-CORR1'
+          assert decision['decision'] == 'DEFER'
+          assert decision['decision_authority'] == 'OPERATOR'
+          assert decision['authority_delta']['next_packet'] == 'PD-JUNE-MDR-CORR1'
+          assert state['status'] == 'APPROVED'
+          assert state['operator_decision'] == 'DEFER'
+          assert state['next_packet'] == 'PD-JUNE-MDR-CORR1'
+          assert state['next_packet_status'] == 'READY_AFTER_PD_JUNE_MDR_WP1_SQUASH_MERGE'
           authority = report['authority']
           for key in ('provider_intake', 'machine_replay', 'canonical_discovery_processing', 'canonical_append', 'selector_or_release_mutation', 'r2_publication'):
               assert authority[key] == 'DENIED'
