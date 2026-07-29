@@ -2,7 +2,7 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RO3_WP3_RETEST_RUNNING
+status: RO3_WP3_APPROVED
 baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
 items:
   - id: RO3-00
@@ -65,32 +65,44 @@ items:
       writes: NONE
   - id: RO3-WP3
     name: Symmetry metamorphic and deterministic assurance
-    status: RUNNING_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
+    status: APPROVED
     gate: RO3-G3
     branch: retest/research-operations-v0-3-wp3-formula-assurance
     baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
+    tested_candidate_commit: cbbb45a70c058c46271195037b06cefa2b9b10fe
     authority_delta: QA_EVIDENCE_ONLY
+    decision: PASS
+    decision_authority: DELEGATED_AUTO_RATIFICATION
     prior_blocker:
       blocker_id: RO3-G3-BLOCK-001
       finding: C1_WICK_BALANCE_FROZEN_FORMULA_IMPLEMENTATION_SIGN_INVERSION
-      status: RESOLVED_BY_C1_CORRECTIVE_PROGRAMME_AND_OPERATOR_PASS
+      status: CLOSED_BY_CORRECTIVE_PROGRAMME_AND_PASSING_RETEST
       corrective_gate: C1C-G5-CORRECTIVE-PILOT-REVIEW
       corrective_merge_commit: 1d4065b7a4fa9a7c6d832528309a5b4f56fd2991
       programme_state_merge_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
-    acceptance:
+    runtime:
       invariant_registry: FROZEN_AT_RO3_G0_UNCHANGED
       formula_registry: IMMUTABLE
-      exact_golden_assertions_required: 18_OF_18_PASS
-      metamorphic_assertions_required: ALL_PASS
-      deterministic_bytes_required: PASS
-      negative_control_required: PASS_DETECTED
-      complete_repository_suite_required: PASS
+      primitive_count: 18
+      metamorphic_assertions: PASS_79_OF_79
+      golden_assertions: PASS_18_OF_18
+      wick_balance_exact_formula: PASS
+      deterministic_bytes: PASS
+      canonical_reorder: PASS
+      negative_control: PASS_DETECTED_BLOCK
+      focused_workflow_run: 30420805433
+      focused_workflow_job: 90477014172
+      generic_test_workflow_run: 30420805438
+      generic_test_workflow_job: 90477014267
+      complete_repository_suite: PASS_70
+      qa_recommendation: PASS
       writes: NONE
-    qa_packet: null
-    decision_record: null
+    qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_GATE_PACKET.json
+    evidence_record: docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_ASSURANCE_EVIDENCE.json
+    decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_DELEGATED_DECISION.md
   - id: RO3-WP4
     name: C1 lineage and Console adapters
-    status: PLANNED_PENDING_RO3_G3
+    status: READY
     gate: RO3-G4
     authority_delta: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
   - id: RC-G4
@@ -113,4 +125,4 @@ retained_boundaries:
   execution_authority: NONE
   agent_write_authority: NONE
 blockers: []
-next_packet: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
+next_packet: RO3-WP4
