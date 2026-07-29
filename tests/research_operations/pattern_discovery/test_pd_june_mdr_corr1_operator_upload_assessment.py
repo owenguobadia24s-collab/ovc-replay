@@ -61,18 +61,20 @@ class PDJuneMDRCorr1OperatorUploadAssessmentTests(unittest.TestCase):
         self.assertEqual(sample["supplied_2h_transition_relevance"], "NONE_TO_THE_26_UNIT_CLAIM_REVIEW_SAMPLE")
         self.assertEqual(self.assessment["overall_verdict"], "NOT_ESTABLISHED_BLOCKER_REMAINS")
 
-    def test_later_exact_drive_evidence_lawfully_advances_the_programme(self) -> None:
+    def test_later_exact_drive_evidence_and_operator_defer_advance_programme(self) -> None:
         self.assertEqual(self.gaps["status"], "GATE_READY_CONTROL_AND_AGREEMENT_EVIDENCE_REQUIRED")
         self.assertEqual({item["code"] for item in self.gaps["open_blockers"]}, {"PD-JUNE-MDR-006"})
         self.assertEqual(self.repro["population_state_reproduction"]["exact_core_match_count"], 1144)
         self.assertEqual(self.repro["review_claim_evidence"]["history_dependent_exact_reproduction_count"], 11)
-        self.assertEqual(self.state["status"], "GATE_READY")
+        self.assertEqual(self.state["status"], "APPROVED")
+        self.assertEqual(self.state["decision"], "DEFER")
         self.assertEqual(self.state["operator_upload_c1_records"], 602)
         self.assertEqual(
             self.state["operator_upload_wick_balance_assurance"],
             "FAIL_589_OF_602_OPPOSITE_SIGN_13_ZERO_MATCHES_PRESERVED_AS_EVIDENCE",
         )
         self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1")
+        self.assertEqual(self.state["next_packet_status"], "READY_AFTER_CORR1_SQUASH_MERGE")
         self.assertEqual(self.state["second_june_replay"], "DENIED_NOT_REQUIRED")
 
 
