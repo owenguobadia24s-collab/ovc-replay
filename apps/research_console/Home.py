@@ -9,8 +9,8 @@ from apps.research_console.c1_projection_source import (
     load_c1_projection,
     projection_identity as c1_projection_identity,
 )
+from apps.research_console.rc_g4_console import run_console
 from apps.research_console.ro2_projection_source import load_ro2_projection, projection_identity
-from apps.research_console.shell import run_console
 
 
 def load_represented_identity(c1_projection: Mapping[str, Any] | None = None) -> dict[str, Any]:
