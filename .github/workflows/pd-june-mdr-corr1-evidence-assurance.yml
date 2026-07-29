@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse CORR1 court records
+      - name: Parse CORR1 return-gate court records
         run: |
           python - <<'PY'
           import base64
@@ -29,15 +29,22 @@ jobs:
               base / 'PD_JUNE_MDR_CORR1_CHRONOLOGY_PROJECTION.json',
               base / 'PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json',
               base / 'PD_JUNE_MDR_CORR1_OPERATOR_UPLOAD_ASSESSMENT.json',
+              base / 'PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json',
+              base / 'PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json',
               base / 'PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json',
               base / 'PD_JUNE_MDR_CORR1_QA_PACKET.json',
+              base / 'PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json',
               Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
-              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_corr1_evidence_assurance_v0_1.schema.json'),
+              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_corr1_return_gate_v0_1.schema.json'),
           ]
           for path in paths:
               json.loads(path.read_text(encoding='utf-8'))
-          compressed = base64.b64decode((base / 'PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json.gz.b64').read_text().strip(), validate=True)
-          json.loads(gzip.decompress(compressed).decode('utf-8'))
+          for name in (
+              'PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json.gz.b64',
+              'PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json.gz.b64',
+          ):
+              compressed = base64.b64decode((base / name).read_text().strip(), validate=True)
+              json.loads(gzip.decompress(compressed).decode('utf-8'))
           PY
       - name: Run focused CORR1 tests
         run: |
@@ -54,7 +61,7 @@ jobs:
             -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce useful-correction and corrective-v2 evidence blocker boundary
+      - name: Enforce return-gate and retained-authority boundary
         run: |
           python - <<'PY'
           import json
@@ -63,33 +70,35 @@ jobs:
           binding = json.loads((base / 'PD_JUNE_MDR_CORR1_SOURCE_TO_C2_V2_BINDING_RECEIPT.json').read_text())
           chronology = json.loads((base / 'PD_JUNE_MDR_CORR1_CHRONOLOGY_PROJECTION.json').read_text())
           structural = json.loads((base / 'PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json').read_text())
-          upload = json.loads((base / 'PD_JUNE_MDR_CORR1_OPERATOR_UPLOAD_ASSESSMENT.json').read_text())
+          drive = json.loads((base / 'PD_JUNE_MDR_CORR1_DRIVE_EVIDENCE_INVENTORY.json').read_text())
+          repro = json.loads((base / 'PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json').read_text())
           gaps = json.loads((base / 'PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json').read_text())
+          qa = json.loads((base / 'PD_JUNE_MDR_CORR1_QA_PACKET.json').read_text())
+          gate = json.loads((base / 'PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert binding['status'] == 'PASS_SOURCE_BYTES_AND_REPLAY_ACCEPTANCE_CARRIED_FORWARD_TO_EXPLICIT_C2_V2_PILOT_IDENTITY'
           assert binding['interpretation']['replay_performed_by_corr1'] is False
-          assert binding['interpretation']['source_bytes_changed'] is False
           assert chronology['candidate_count'] == 208
-          assert chronology['nonchronological_input_count'] == 44
           assert chronology['corrected_projection_nonchronological_count'] == 0
-          assert structural['reviewed_count'] == 26
           assert structural['exact_distance_recomputation_count'] == 24
           assert structural['unassigned_small_sample_count'] == 2
-          assert structural['market_description_verdict'] == 'NOT_ESTABLISHED'
-          assert upload['operator_upload']['manifest_members_available_and_hash_verified'] == 14
-          assert upload['operator_upload']['manifest_members_missing'] == 7
-          assert upload['c1_formula_assurance']['same_bar_non_wick_invariants'] == 'PASS_602_OF_602_RECORDS'
-          assert upload['c1_formula_assurance']['wick_balance_opposite_sign_count'] == 589
-          assert upload['lineage_assessment']['supplied_c2_release_id'] == 'OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1'
-          assert upload['lineage_assessment']['reviewed_pilot_release_id'] == 'OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2'
-          assert upload['review_sample_relevance']['reviewed_clock'] == '15M_ONLY'
-          assert upload['review_sample_relevance']['history_dependent_unit_count'] == 11
-          assert upload['overall_verdict'] == 'NOT_ESTABLISHED_BLOCKER_REMAINS'
-          assert gaps['status'] == 'BLOCKED_CORRECTIVE_V2_EVIDENCE_REQUIRED'
-          assert {item['code'] for item in gaps['open_blockers']} == {'PD-JUNE-MDR-003', 'PD-JUNE-MDR-004', 'PD-JUNE-MDR-006'}
-          assert state['status'] == 'BLOCKED'
-          assert state['operator_upload_wick_balance_assurance'] == 'FAIL_589_OF_602_OPPOSITE_SIGN_13_ZERO_MATCHES'
-          assert state['next_gate'] == 'PD-JUNE-MDR-G1_RETURN_NOT_READY'
+          assert drive['source_compute_manifest']['verification'] == 'PASS_21_OF_21_HASH_AND_SIZE'
+          assert len(drive['source_manifest_members']) == 21
+          assert repro['population_state_reproduction']['exact_core_match_count'] == 1144
+          assert repro['population_state_reproduction']['mismatch_count'] == 0
+          assert repro['review_claim_evidence']['state_claim_exact_match_count'] == 48
+          assert repro['review_claim_evidence']['trigger_reproduction_count'] == 26
+          assert repro['review_claim_evidence']['history_dependent_exact_reproduction_count'] == 11
+          assert repro['c1_formula_assurance']['opposite_sign_count'] == 589
+          assert repro['c1_formula_assurance']['c2_semantic_dependency'] == 'NONE'
+          assert gaps['status'] == 'GATE_READY_CONTROL_AND_AGREEMENT_EVIDENCE_REQUIRED'
+          assert {item['code'] for item in gaps['open_blockers']} == {'PD-JUNE-MDR-006'}
+          assert qa['recommendation'] == 'DEFER_TO_OPERATOR_REQUIRED_READ_ONLY_CONTROL_AND_AGREEMENT_ASSURANCE'
+          assert gate['gate_status'] == 'GATE_READY_OPERATOR_DECISION_REQUIRED'
+          assert gate['recommended_decision'] == 'DEFER'
+          assert gate['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
+          assert state['status'] == 'GATE_READY'
+          assert state['next_packet_on_defer'] == 'PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE'
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
           assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           for prohibited in ('PROVIDER_INTAKE', 'MACHINE_REPLAY', 'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND', 'R2_PUBLICATION', 'VALIDATION_CONSUMPTION'):
