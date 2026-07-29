@@ -98,16 +98,17 @@ class PDJune2026ReviewAssessmentTests(unittest.TestCase):
             self.assertEqual(authority[key], "NONE")
         self.assertEqual(authority["validation_consumption"], "LOCKED_UNCONSUMED")
 
-    def test_prior_blocker_resolves_into_claim_level_operator_gate(self) -> None:
+    def test_prior_blocker_resolves_through_claim_review_to_approved_corrective_packet(self) -> None:
         next_packet = self.assessment["next_packet"]
         self.assertEqual(next_packet["packet_id"], "PD-JUNE-MDR-WP1")
         self.assertEqual(next_packet["status"], "BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED")
         self.assertGreaterEqual(len(self.assessment["missing_evidence_for_claim_level_assurance"]), 7)
-        self.assertEqual(self.state["status"], "GATE_READY")
+        self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-WP1")
         self.assertEqual(self.state["overall_verdict"], "NOT_ESTABLISHED")
-        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1")
-        self.assertEqual(self.state["next_packet_on_defer"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.state["operator_decision"], "DEFER")
+        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1_RETURN")
+        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR1")
         self.assertEqual(self.state["artifact_hash_integrity"], "PASS")
 
     def test_qa_recommends_assessment_pass_not_market_validity_pass(self) -> None:
