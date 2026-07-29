@@ -1,0 +1,49 @@
+name: C1C-G5 CORR3 terminal-state hotfix
+
+on:
+  pull_request:
+    paths:
+      - 'src/ovc/research_operations/pattern_discovery/corr3_corr2_state_compat.py'
+      - 'src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure_entry.py'
+      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_corr2_terminal_state_hotfix.py'
+      - '.github/workflows/c1c-g5-corr3-terminal-state-hotfix.yml'
+  push:
+    branches:
+      - 'hotfix/c1c-g5-corr3-corr2-terminal-state'
+
+permissions:
+  contents: read
+
+jobs:
+  terminal-state-compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run focused hotfix tests
+        env:
+          PYTHONPATH: src
+        run: >-
+          python -m unittest
+          tests.research_operations.pattern_discovery.test_c1c_g5_corr3_corr2_terminal_state_hotfix
+          -v
+      - name: Run retained CORR3 tests
+        env:
+          PYTHONPATH: src
+        run: >-
+          python -m unittest
+          tests.research_operations.pattern_discovery.test_c1c_g5_corr3_review_closure
+          tests.research_operations.pattern_discovery.test_c1c_g5_corr3_console
+          -v
+      - name: Run complete repository tests
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -v
+      - name: Enforce bounded compatibility surface
+        run: |
+          ! grep -R "machine_replay.*ALLOWED\|canonical_append.*ALLOWED\|selector_mutation.*ALLOWED" \
+            src/ovc/research_operations/pattern_discovery/corr3_corr2_state_compat.py
+          grep -q 'COMPLETED_IN_MAIN_AND_SIGNED_OPERATOR_REREVIEW_COMPLETE' \
+            src/ovc/research_operations/pattern_discovery/corr3_corr2_state_compat.py
