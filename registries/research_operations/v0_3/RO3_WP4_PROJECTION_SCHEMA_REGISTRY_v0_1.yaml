@@ -1,0 +1,45 @@
+schema: ovc-ro3-wp4-projection-schema-registry/v1
+registry_id: RO3.WP4.PROJECTIONS.v0.1
+status: IMPLEMENTED_PENDING_RO3_G4
+owner: RO3-WP4
+authority_delta: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
+objects:
+  - object_id: RO3.C1LineageTrace.v1
+    schema_id: ovc://schemas/research_operations/v0_3/c1_lineage_trace_v0_1
+    schema_path: schemas/research_operations/v0_3/c1_lineage_trace_v0_1.schema.json
+    authority: READ_ONLY_TRACE
+    panel_id: RO3-C1-UPSTREAM-LINEAGE
+  - object_id: RO3.C1FormulaEvidenceCard.v1
+    schema_id: ovc://schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1
+    schema_path: schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1.schema.json
+    authority: DERIVED_EXPLANATION_ONLY
+    panel_id: RO3-C1-FACT-INSPECTOR
+  - object_id: RO3.DownstreamTraceProjection.v1
+    schema_id: ovc://schemas/research_operations/v0_3/downstream_trace_projection_v0_1
+    schema_path: schemas/research_operations/v0_3/downstream_trace_projection_v0_1.schema.json
+    authority: READ_ONLY_TRACE
+    panel_id: RO3-C1-DOWNSTREAM-TRACE
+    permanent_banner: DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED.
+  - object_id: RO3.C1ConsoleProjection.v1
+    schema_id: ovc://schemas/research_operations/v0_3/c1_console_projection_v0_1
+    schema_path: schemas/research_operations/v0_3/c1_console_projection_v0_1.schema.json
+    authority: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
+    route_id: RESEARCH.C1_FACT_ASSURANCE
+    route_state: DISABLED_PENDING_RC_G4
+    route_enabled: false
+separation:
+  fact_panel: RO3-C1-FACT-INSPECTOR
+  downstream_panel: RO3-C1-DOWNSTREAM-TRACE
+  mixed_compact_object: DENIED
+  c1_null_and_c2_transition_compact_corender: DENIED
+role_access:
+  discovery: ALLOWED_EXACT_SOURCE_ONLY
+  development: ALLOWED_EXACT_SOURCE_ONLY
+  validation: LOCKED_UNCONSUMED_DENY_BEFORE_RESOLUTION
+retained_boundaries:
+  c1_formulas_releases_selectors: IMMUTABLE
+  c2_pattern_discovery_authority: UNCHANGED
+  live_console_consumption: NONE_PENDING_RC_G4
+  r2_publication: DENIED
+  writes: NONE
+unknown_schema_object_role_or_capability: BLOCK
