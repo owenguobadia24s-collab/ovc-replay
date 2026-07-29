@@ -1,0 +1,57 @@
+name: PD June 2026 operator review and market-description assurance
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review-assurance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse assessment court records
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          paths = [
+              'docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_2026_OPERATOR_REVIEW_AND_MARKET_DESCRIPTION_ASSESSMENT.json',
+              'docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_RA1_QA_PACKET.json',
+              'registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json',
+              'schemas/research_operations/pattern_discovery/pd_june_2026_review_assessment_v0_1.schema.json',
+          ]
+          for path in paths:
+              json.loads(Path(path).read_text(encoding='utf-8'))
+          PY
+      - name: Run focused June review assessment tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_2026_review_assessment -v
+      - name: Run complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce non-activating assessment boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          assessment = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_2026_OPERATOR_REVIEW_AND_MARKET_DESCRIPTION_ASSESSMENT.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
+          assert assessment['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
+          assert assessment['operator_boundary']['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_REQUESTED'
+          assert assessment['operator_boundary']['second_june_replay'] == 'DENIED_NOT_REQUIRED'
+          assert assessment['next_packet']['status'] == 'BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED'
+          assert state['status'] == 'BLOCKED'
+          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
+          assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
+          authority = assessment['authority']
+          for key in ('canonical_discovery_processing', 'canonical_append', 'provider_intake', 'machine_replay', 'selector_or_release_mutation', 'r2_publication'):
+              assert authority[key] == 'DENIED'
+          for key in ('trigger_or_model_change', 'semantic_or_candidate_promotion', 'probability', 'risk', 'exposure', 'trading', 'execution', 'agent_write'):
+              assert authority[key] == 'NONE'
+          assert authority['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          PY
