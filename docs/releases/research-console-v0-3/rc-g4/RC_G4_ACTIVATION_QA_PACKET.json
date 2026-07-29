@@ -1,0 +1,139 @@
+{
+  "schema": "ovc-research-console-rc-g4-activation-qa-packet/v1",
+  "packet_id": "RC-G4-ACTIVATION",
+  "gate_id": "RC-G4-ACTIVATION-QA",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "operator_gate": "RC-G4",
+  "operator_decision": "PASS",
+  "operator_decision_record": "docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md",
+  "operator_decision_merge_commit": "19066a5201e33a51b0e785dbdc932999f39fd9da",
+  "baseline_commit": "19066a5201e33a51b0e785dbdc932999f39fd9da",
+  "branch": "activate/research-console-v0-3-rc-g4-c1",
+  "tested_candidate_commit": "0fd59862770b50f9bc678de44c2ca99aa5a04953",
+  "pull_request": 152,
+  "authority_required": "AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA",
+  "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
+  "implemented": {
+    "route_id": "RESEARCH.C1_FACT_ASSURANCE",
+    "route_state": "ENABLED_LOCAL_READ_ONLY",
+    "projection_source": "FAIL_CLOSED_LOCAL_SOURCE",
+    "approved_schema_bindings": "EXACT_FOUR_GIT_BLOBS",
+    "accepted_roles": ["DISCOVERY", "DEVELOPMENT"],
+    "validation": "LOCKED_UNCONSUMED_DENY_BEFORE_PANEL_OR_RECORD_RESOLUTION",
+    "stale_projection": "DENIED",
+    "write_capability": "DENIED_RECURSIVELY",
+    "panel_separation": "ENFORCED",
+    "downstream_trace": "IDENTITY_ONLY_SEPARATE_PERMANENTLY_BANNERED",
+    "missing_or_invalid_projection": "NOT_EVALUATED_NO_FACT_CLAIM",
+    "deployment": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
+  },
+  "approved_schema_bindings": [
+    {
+      "object_type": "RO3.C1ConsoleProjection.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/c1_console_projection_v0_1",
+      "git_blob_sha": "cffb5618e942019f4dc7a0e580d4813c1537247e"
+    },
+    {
+      "object_type": "RO3.C1FormulaEvidenceCard.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1",
+      "git_blob_sha": "a32ddfaa4d27f06ce33d47f4581569b6fdc1dae9"
+    },
+    {
+      "object_type": "RO3.C1LineageTrace.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/c1_lineage_trace_v0_1",
+      "git_blob_sha": "f7ddd3535ca58bcef6ef620bfd6152340f7461e3"
+    },
+    {
+      "object_type": "RO3.DownstreamTraceProjection.v1",
+      "schema_id": "ovc://schemas/research_operations/v0_3/downstream_trace_projection_v0_1",
+      "git_blob_sha": "908c5323d3f7b5c55b6ad6becc1fd9a31f12331b"
+    }
+  ],
+  "tests": [
+    {
+      "suite": "focused_rc_g4_activation",
+      "result": "PASS",
+      "count": 12,
+      "workflow_run": 30425811445,
+      "job": 90491943746
+    },
+    {
+      "suite": "accepted_ro3_g4_regression",
+      "result": "PASS",
+      "count": 12,
+      "workflow_run": 30425811445,
+      "job": 90491943746
+    },
+    {
+      "suite": "rc_g4_operator_gate_regression",
+      "result": "PASS",
+      "count": 6,
+      "workflow_run": 30425811445,
+      "job": 90491943746
+    },
+    {
+      "suite": "complete_repository_suite_dedicated_workflow",
+      "result": "PASS",
+      "count": 70,
+      "workflow_run": 30425811445,
+      "job": 90491943746
+    },
+    {
+      "suite": "complete_repository_suite_generic_workflow",
+      "result": "PASS",
+      "count": 70,
+      "workflow_run": 30425811401,
+      "job": 90491943701
+    },
+    {
+      "suite": "exact_authority_delta_assertions",
+      "result": "PASS",
+      "workflow_run": 30425811445,
+      "job": 90491943746
+    }
+  ],
+  "negative_controls": [
+    {"control": "missing_projection", "result": "PASS_NOT_EVALUATED"},
+    {"control": "validation_nested_content", "result": "PASS_DENIED_BEFORE_PANEL_OR_RECORD_RESOLUTION"},
+    {"control": "stale_projection", "result": "PASS_DENIED"},
+    {"control": "recursive_write_capability", "result": "PASS_DENIED"},
+    {"control": "fact_panel_embeds_c2_transition", "result": "PASS_DENIED"},
+    {"control": "downstream_confidence_or_scoring", "result": "PASS_DENIED"},
+    {"control": "missing_or_modified_permanent_banner", "result": "PASS_DENIED"},
+    {"control": "approved_schema_blob_mutation", "result": "PASS_DENIED"}
+  ],
+  "changed_files": [
+    ".github/workflows/research-console-v0-3-rc-g4-activation.yml",
+    "apps/research_console/Home.py",
+    "apps/research_console/c1_fact_assurance.py",
+    "apps/research_console/c1_projection_source.py",
+    "apps/research_console/rc_g4_console.py",
+    "apps/research_console/state.py",
+    "registries/research_operations/RESEARCH_CONSOLE_RC_G4_ACCEPTANCE_v0_3.yaml",
+    "registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml",
+    "registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json",
+    "tests/research_operations/v0_3/test_rc_g4_activation.py",
+    "tests/research_operations/v0_3/test_rc_g4_operator_gate.py"
+  ],
+  "warnings": [
+    "The repository includes a source-bound synthetic fixture only; real local projections must be materialised outside Git at the configured local path.",
+    "A missing or inadmissible projection produces NOT_EVALUATED and no C1 fact claim.",
+    "Downstream references remain identity-only and cannot be interpreted as confidence, defect, priority, tuning or remediation evidence."
+  ],
+  "unresolved_issues": [],
+  "qa_recommendation": "PASS",
+  "auto_ratifiable": true,
+  "auto_ratification_rationale": "The implementation is wholly within the operator-approved LOCAL_READ_ONLY_C1_PRESENTATION delta, all focused and complete tests pass, authority assertions pass, no unresolved issue exists, rollback is non-destructive and all reserved authorities remain denied.",
+  "rollback": {
+    "action": "Revert the bounded RC-G4 activation package and return the Console to accepted RO2/RC-G3 local read-only presentation.",
+    "preserve": [
+      "RC-G4 operator decision",
+      "RO3 projection schemas and evidence",
+      "C1, C2 and Pattern Discovery authority and selectors",
+      "R2 objects"
+    ],
+    "destructive_action": "NONE"
+  },
+  "decision": "PASS"
+}
