@@ -1,0 +1,83 @@
+name: PD-JUNE-MDR-CORR1 corrective evidence assurance
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  corrective-assurance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse CORR1 court records
+        run: |
+          python - <<'PY'
+          import base64
+          import gzip
+          import json
+          from pathlib import Path
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1')
+          paths = [
+              base / 'PD_JUNE_MDR_CORR1_SOURCE_TO_C2_V2_BINDING_RECEIPT.json',
+              base / 'PD_JUNE_MDR_CORR1_CHRONOLOGY_PROJECTION.json',
+              base / 'PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json',
+              base / 'PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json',
+              base / 'PD_JUNE_MDR_CORR1_QA_PACKET.json',
+              Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
+              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_corr1_evidence_assurance_v0_1.schema.json'),
+          ]
+          for path in paths:
+              json.loads(path.read_text(encoding='utf-8'))
+          compressed = base64.b64decode((base / 'PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json.gz.b64').read_text().strip(), validate=True)
+          json.loads(gzip.decompress(compressed).decode('utf-8'))
+          PY
+      - name: Run focused CORR1 tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_mdr_corr1_evidence_assurance -v
+      - name: Run dependent Pattern Discovery tests
+        run: |
+          PYTHONPATH=src python -m unittest \
+            tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine \
+            tests.research_operations.pattern_discovery.test_pd_wp3_fingerprint_clustering \
+            tests.research_operations.pattern_discovery.test_pd_wp4_simple_ui_evidence_bridge \
+            -v
+      - name: Run complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce useful-correction and external-blocker boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1')
+          binding = json.loads((base / 'PD_JUNE_MDR_CORR1_SOURCE_TO_C2_V2_BINDING_RECEIPT.json').read_text())
+          chronology = json.loads((base / 'PD_JUNE_MDR_CORR1_CHRONOLOGY_PROJECTION.json').read_text())
+          structural = json.loads((base / 'PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json').read_text())
+          gaps = json.loads((base / 'PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
+          assert binding['status'] == 'PASS_SOURCE_BYTES_AND_REPLAY_ACCEPTANCE_CARRIED_FORWARD_TO_EXPLICIT_C2_V2_PILOT_IDENTITY'
+          assert binding['interpretation']['replay_performed_by_corr1'] is False
+          assert binding['interpretation']['source_bytes_changed'] is False
+          assert chronology['candidate_count'] == 208
+          assert chronology['nonchronological_input_count'] == 44
+          assert chronology['corrected_projection_nonchronological_count'] == 0
+          assert structural['reviewed_count'] == 26
+          assert structural['exact_distance_recomputation_count'] == 24
+          assert structural['unassigned_small_sample_count'] == 2
+          assert structural['c1_claim_evidence_available_count'] == 0
+          assert structural['trigger_history_required_missing_count'] == 11
+          assert structural['market_description_verdict'] == 'NOT_ESTABLISHED'
+          assert gaps['status'] == 'BLOCKED_EXTERNAL_EVIDENCE_REQUIRED'
+          assert {item['code'] for item in gaps['open_blockers']} == {'PD-JUNE-MDR-003', 'PD-JUNE-MDR-004', 'PD-JUNE-MDR-006'}
+          assert state['status'] == 'BLOCKED'
+          assert state['next_gate'] == 'PD-JUNE-MDR-G1_RETURN_NOT_READY'
+          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
+          assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
+          for prohibited in ('PROVIDER_INTAKE', 'MACHINE_REPLAY', 'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND', 'R2_PUBLICATION', 'VALIDATION_CONSUMPTION'):
+              assert prohibited in state['retained_prohibitions']
+          PY
