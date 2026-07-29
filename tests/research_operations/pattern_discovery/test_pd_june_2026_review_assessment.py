@@ -77,39 +77,29 @@ class PDJune2026ReviewAssessmentTests(unittest.TestCase):
         self.assertEqual(self.assessment["operator_boundary"]["canonical_2021_2023_discovery"], "DEFERRED_NOT_REQUESTED")
         self.assertEqual(self.assessment["operator_boundary"]["second_june_replay"], "DENIED_NOT_REQUIRED")
         for key in (
-            "canonical_discovery_processing",
-            "canonical_append",
-            "provider_intake",
-            "machine_replay",
-            "selector_or_release_mutation",
-            "r2_publication",
+            "canonical_discovery_processing", "canonical_append", "provider_intake",
+            "machine_replay", "selector_or_release_mutation", "r2_publication",
         ):
             self.assertIn(authority[key], {"DENIED", "DEFERRED_NOT_AUTHORISED"})
         for key in (
-            "trigger_or_model_change",
-            "semantic_or_candidate_promotion",
-            "probability",
-            "risk",
-            "exposure",
-            "trading",
-            "execution",
-            "agent_write",
+            "trigger_or_model_change", "semantic_or_candidate_promotion", "probability",
+            "risk", "exposure", "trading", "execution", "agent_write",
         ):
             self.assertEqual(authority[key], "NONE")
         self.assertEqual(authority["validation_consumption"], "LOCKED_UNCONSUMED")
 
-    def test_prior_blocker_resolves_through_claim_review_to_approved_corrective_packet(self) -> None:
+    def test_prior_blocker_progresses_to_bounded_corr1_external_evidence_block(self) -> None:
         next_packet = self.assessment["next_packet"]
         self.assertEqual(next_packet["packet_id"], "PD-JUNE-MDR-WP1")
         self.assertEqual(next_packet["status"], "BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED")
         self.assertGreaterEqual(len(self.assessment["missing_evidence_for_claim_level_assurance"]), 7)
-        self.assertEqual(self.state["status"], "APPROVED")
-        self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-WP1")
+        self.assertEqual(self.state["status"], "BLOCKED")
+        self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-CORR1")
         self.assertEqual(self.state["overall_verdict"], "NOT_ESTABLISHED")
-        self.assertEqual(self.state["operator_decision"], "DEFER")
-        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1_RETURN")
-        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR1")
-        self.assertEqual(self.state["artifact_hash_integrity"], "PASS")
+        self.assertEqual(self.state["source_to_c2_v2_binding"], "PASS_CARRY_FORWARD_RECEIPT")
+        self.assertEqual(self.state["timeline_chronology"], "PASS_208_OF_208_CORRECTED_READ_ONLY_PROJECTION_AND_FUTURE_CORRECTIVE_MATERIALIZATION")
+        self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1_RETURN_NOT_READY")
+        self.assertEqual(self.state["next_packet_status"], "BLOCKED_EXACT_EXTERNAL_EVIDENCE_REQUIRED")
 
     def test_qa_recommends_assessment_pass_not_market_validity_pass(self) -> None:
         self.assertEqual(self.qa["qa_status"], "PASS_ASSESSMENT_BLOCKED_NEXT_PACKET")
