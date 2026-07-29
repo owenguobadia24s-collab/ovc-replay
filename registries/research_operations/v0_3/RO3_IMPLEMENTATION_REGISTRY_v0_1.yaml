@@ -2,8 +2,8 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RO3_G2_APPROVED
-baseline_commit: 928f5c00bd76ddd9348c8721f4430a1b105d45f1
+status: RO3_WP3_RETEST_RUNNING
+baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
 items:
   - id: RO3-00
     name: Boundary and design freeze
@@ -38,12 +38,13 @@ items:
       reproducibility: PASS_IDENTICAL_RERUN
   - id: RO3-WP2
     name: Null computability and formula comparison
-    status: APPROVED
+    status: COMPLETED
     gate: RO3-G2
     branch: build/research-operations-v0-3-wp2-computability-diff
     baseline_commit: 928f5c00bd76ddd9348c8721f4430a1b105d45f1
     reconciled_main_commit: c46d9620e242c047dd8e203f91a1b00b542a2a81
     tested_candidate_commit: 2ce09241806021f3dfe67289080438d0a24d71b5
+    merge_commit: 8c243c009f30e453312861708afb784fe762c442
     authority_delta: READ_ONLY_DERIVED_INSPECTION
     decision: PASS
     decision_authority: DELEGATED_AUTO_RATIFICATION
@@ -64,12 +65,32 @@ items:
       writes: NONE
   - id: RO3-WP3
     name: Symmetry metamorphic and deterministic assurance
-    status: READY_AFTER_RO3_G2_MERGE
+    status: RUNNING_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
     gate: RO3-G3
+    branch: retest/research-operations-v0-3-wp3-formula-assurance
+    baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
     authority_delta: QA_EVIDENCE_ONLY
+    prior_blocker:
+      blocker_id: RO3-G3-BLOCK-001
+      finding: C1_WICK_BALANCE_FROZEN_FORMULA_IMPLEMENTATION_SIGN_INVERSION
+      status: RESOLVED_BY_C1_CORRECTIVE_PROGRAMME_AND_OPERATOR_PASS
+      corrective_gate: C1C-G5-CORRECTIVE-PILOT-REVIEW
+      corrective_merge_commit: 1d4065b7a4fa9a7c6d832528309a5b4f56fd2991
+      programme_state_merge_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
+    acceptance:
+      invariant_registry: FROZEN_AT_RO3_G0_UNCHANGED
+      formula_registry: IMMUTABLE
+      exact_golden_assertions_required: 18_OF_18_PASS
+      metamorphic_assertions_required: ALL_PASS
+      deterministic_bytes_required: PASS
+      negative_control_required: PASS_DETECTED
+      complete_repository_suite_required: PASS
+      writes: NONE
+    qa_packet: null
+    decision_record: null
   - id: RO3-WP4
     name: C1 lineage and Console adapters
-    status: PLANNED
+    status: PLANNED_PENDING_RO3_G3
     gate: RO3-G4
     authority_delta: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
   - id: RC-G4
@@ -83,6 +104,7 @@ retained_boundaries:
   c2_pattern_discovery_authority: UNCHANGED
   live_console_c1_route: DISABLED_PENDING_RC_G4
   formula_comparison_authority: NON_ACTIVATING_EVIDENCE_ONLY
+  assurance_authority: QA_EVIDENCE_ONLY
   market_authority: NONE
   probability_authority: NONE
   risk_authority: NONE
@@ -90,4 +112,5 @@ retained_boundaries:
   trading_authority: NONE
   execution_authority: NONE
   agent_write_authority: NONE
-next_packet: RO3-WP3
+blockers: []
+next_packet: RO3-WP3_RETEST_AFTER_C1_CORRECTIVE_PROGRAMME
