@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-pd-june-ra1-qa-packet/v1",
+  "programme_id": "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+  "packet_id": "PD-JUNE-RA1",
+  "baseline_commit": "61fdea3a1b05ec941d867b5c6d181f6a401c2fc6",
+  "qa_status": "PASS_ASSESSMENT_BLOCKED_NEXT_PACKET",
+  "recommendation": "PASS_READ_ONLY_ASSESSMENT_AND_PRESERVE_NOT_ESTABLISHED_VERDICT",
+  "checks": [
+    {"check": "Operator boundary excludes canonical 2021-2023 Discovery", "result": "PASS"},
+    {"check": "June v1 and corrective v2 identities are exact", "result": "PASS"},
+    {"check": "Machine counts and deterministic-rerun evidence are exact", "result": "PASS"},
+    {"check": "Initial six-object disposition distribution is exact", "result": "PASS"},
+    {"check": "CORR2 chronology rejection and CORR3 workflow acceptance are represented without promotion", "result": "PASS"},
+    {"check": "Computational and external-validity dimensions remain separate", "result": "PASS"},
+    {"check": "Overall market-description reliability fails closed to NOT_ESTABLISHED", "result": "PASS"},
+    {"check": "No replay, provider, trigger, model, selector, release, publication or Validation authority is introduced", "result": "PASS"},
+    {"check": "Next packet is blocked on exact operator-local artifact binding", "result": "PASS"}
+  ],
+  "warnings": [
+    "The June source slice is GAPPED.",
+    "Only six queue-promoted objects were reviewed; 202 suppressed candidates were not included in a claim-level review.",
+    "WORKFLOW_ACCEPTED is operational review evidence only and is not candidate, family, semantic or market-validity approval.",
+    "The repository does not contain the exact v2 console bundle, candidate JSONL or exact source price windows required for external market-description validation."
+  ],
+  "unresolved_issues": [
+    {
+      "code": "PD-JUNE-MDR-BLOCK-001",
+      "severity": "BLOCKING_FOR_MARKET_DESCRIPTION_RELIABILITY_CLAIM",
+      "description": "Exact claim-to-market evidence is unavailable in the repository packet."
+    }
+  ],
+  "qa_conclusion": "The assessment is reproducible and authority-safe. It is correct to conclude that machine reproducibility and lineage pass, the review workflow conditionally passes after corrections, and consistent reliable market description is not established. The next claim-level review cannot begin until exact operator-local artifacts are bound and verified."
+}
