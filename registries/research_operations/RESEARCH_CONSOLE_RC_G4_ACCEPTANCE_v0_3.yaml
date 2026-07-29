@@ -1,0 +1,118 @@
+schema: ovc-research-console-rc-g4-acceptance/v1
+programme_id: OVC-RESEARCH-CONSOLE.v0.3
+gate: RC-G4
+packet: RC-G4-ACTIVATION
+status: APPROVED_PENDING_MERGE
+operator_decision: PASS
+operator_decision_authority: OPERATOR
+operator_decision_record: docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md
+operator_decision_merge_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
+baseline_main_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
+branch: activate/research-console-v0-3-rc-g4-c1
+tested_candidate_commit: 0fd59862770b50f9bc678de44c2ca99aa5a04953
+pull_request: 152
+approved_authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
+activation_decision: PASS
+activation_decision_authority: DELEGATED_AUTO_RATIFICATION_WITHIN_OPERATOR_APPROVED_DELTA
+activation_decision_record: docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_DELEGATED_DECISION.md
+qa_packet: docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_QA_PACKET.json
+entry_point: apps/research_console/Home.py
+console_wrapper: apps/research_console/rc_g4_console.py
+projection_source: apps/research_console/c1_projection_source.py
+presentation_module: apps/research_console/c1_fact_assurance.py
+local_projection_path:
+  environment_variable: OVC_RO3_C1_CONSOLE_PROJECTION
+  default: var/research_operations/console/ro3_c1_console_projection.json
+route:
+  route_id: RESEARCH.C1_FACT_ASSURANCE
+  route_state: ENABLED_LOCAL_READ_ONLY
+  route_enabled: true
+  availability_without_admissible_projection: NOT_EVALUATED
+  authority: LOCAL_READ_ONLY_C1_PRESENTATION
+  deployment: LOCAL_ONLY_NO_REMOTE_DEPLOY
+accepted_roles:
+  DISCOVERY: EXACT_RELEASE_MANIFEST_SCHEMA_AND_LINEAGE_BOUND_READ_ONLY
+  DEVELOPMENT: EXACT_RELEASE_MANIFEST_SCHEMA_AND_LINEAGE_BOUND_READ_ONLY
+  VALIDATION: METADATA_ONLY_LOCKED_UNCONSUMED_NO_RECORD_PRESENTATION
+approved_schema_bindings:
+  - object_type: RO3.C1ConsoleProjection.v1
+    schema_id: ovc://schemas/research_operations/v0_3/c1_console_projection_v0_1
+    git_blob_sha: cffb5618e942019f4dc7a0e580d4813c1537247e
+  - object_type: RO3.C1FormulaEvidenceCard.v1
+    schema_id: ovc://schemas/research_operations/v0_3/c1_formula_evidence_card_v0_1
+    git_blob_sha: a32ddfaa4d27f06ce33d47f4581569b6fdc1dae9
+  - object_type: RO3.C1LineageTrace.v1
+    schema_id: ovc://schemas/research_operations/v0_3/c1_lineage_trace_v0_1
+    git_blob_sha: f7ddd3535ca58bcef6ef620bfd6152340f7461e3
+  - object_type: RO3.DownstreamTraceProjection.v1
+    schema_id: ovc://schemas/research_operations/v0_3/downstream_trace_projection_v0_1
+    git_blob_sha: 908c5323d3f7b5c55b6ad6becc1fd9a31f12331b
+panels:
+  fact:
+    panel_id: RO3-C1-FACT-INSPECTOR
+    authority: DERIVED_EXPLANATION_ONLY
+  computability:
+    panel_id: RO3-C1-COMPUTABILITY
+    authority: DERIVED_EXPLANATION_ONLY
+  assurance:
+    panel_id: RO3-C1-ASSURANCE
+    authority: QA_EVIDENCE_ONLY
+  upstream_lineage:
+    panel_id: RO3-C1-UPSTREAM-LINEAGE
+    authority: READ_ONLY_TRACE
+  downstream_trace:
+    panel_id: RO3-C1-DOWNSTREAM-TRACE
+    authority: READ_ONLY_TRACE
+    permanent_banner: DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED.
+    sorting: IDENTITY_ONLY_NO_SCORE_OR_PRIORITY
+panel_separation:
+  mixed_compact_object: DENIED
+  c1_null_reason_and_c2_transition_compact_corender: DENIED
+fail_closed:
+  missing_projection: NOT_EVALUATED
+  invalid_json: NOT_EVALUATED
+  schema_id_or_blob_mismatch: DENY
+  stale_projection: DENY
+  unknown_role_release_manifest_clock_or_side: DENY
+  validation_record_or_panel_request: DENY_BEFORE_PANEL_OR_RECORD_RESOLUTION
+  incomplete_lineage: DENY
+  write_or_mutation_capability: DENY_RECURSIVELY
+  mixed_fact_and_downstream_payload: DENY
+  downstream_scoring_tuning_or_remediation_vocabulary: DENY
+  missing_permanent_banner: DENY
+retained_boundaries:
+  research_write_authority: DENIED_PENDING_SEPARATE_GATE
+  c1_formula_release_selector_mutation: NONE
+  c2_pattern_discovery_authority: UNCHANGED
+  validation_consumption: LOCKED_UNCONSUMED
+  r2_publication: DENIED
+  semantic_threshold_model_family_candidate_theory_promotion: NONE
+  market_authority: NONE
+  probability_authority: NONE
+  risk_authority: NONE
+  exposure_authority: NONE
+  trading_authority: NONE
+  execution_authority: NONE
+  agent_write_authority: NONE
+  remote_deployment: DENIED
+qa:
+  focused_activation_tests: PASS_12
+  ro3_g4_regression_tests: PASS_12
+  operator_gate_regression_tests: PASS_6
+  complete_repository_suite_dedicated: PASS_70
+  complete_repository_suite_generic: PASS_70
+  authority_assertions: PASS
+  dedicated_workflow_run: 30425811445
+  dedicated_workflow_job: 90491943746
+  generic_workflow_run: 30425811401
+  generic_workflow_job: 90491943701
+  recommendation: PASS
+warnings:
+  - SOURCE_BOUND_SYNTHETIC_FIXTURE_IS_NON_AUTHORITATIVE
+  - MISSING_OR_INADMISSIBLE_LOCAL_PROJECTION_RETURNS_NOT_EVALUATED
+  - DOWNSTREAM_REFERENCES_ARE_IDENTITY_ONLY_NO_SCORE_OR_RECOMMENDATION
+unresolved_issues: []
+rollback:
+  action: Disable RESEARCH.C1_FACT_ASSURANCE consumption and return the Console to accepted RO2/RC-G3 local read-only presentation.
+  preserve: [RC_G4_OPERATOR_DECISION, RO3_PROJECTIONS, RO3_QA_AND_DECISIONS, C1_C2_PD_AUTHORITY, SELECTORS, R2_OBJECTS]
+  destructive_action: NONE

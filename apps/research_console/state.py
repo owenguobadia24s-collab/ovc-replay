@@ -20,6 +20,8 @@ GLOBAL_CONTEXT_DEFAULTS: dict[str, Any] = {
     "selected_time": "2025-07-18T14:00:00Z",
     "cutoff_mode": "PROSPECTIVE",
     "freshness": "FIXTURE_ONLY",
+    "c1_route_state": "ENABLED_LOCAL_READ_ONLY",
+    "c1_availability": "NOT_EVALUATED",
 }
 
 SESSION_DEFAULTS: dict[str, Any] = {
@@ -36,7 +38,15 @@ SESSION_DEFAULTS: dict[str, Any] = {
 def build_global_context(identity: Mapping[str, Any] | None = None) -> dict[str, Any]:
     context = deepcopy(GLOBAL_CONTEXT_DEFAULTS)
     if identity:
-        for key in ("repository", "branch", "source_commit", "read_model_sha256", "freshness"):
+        for key in (
+            "repository",
+            "branch",
+            "source_commit",
+            "read_model_sha256",
+            "freshness",
+            "c1_route_state",
+            "c1_availability",
+        ):
             value = identity.get(key)
             if value not in (None, ""):
                 context[key] = value

@@ -2,7 +2,7 @@
   "schema": "ovc-programme-state/v1",
   "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "v0.2",
-  "programme_status": "RUNNING",
+  "programme_status": "APPROVED_PENDING_MERGE",
   "packets": [
     {
       "packet_id": "RO3-00",
@@ -93,36 +93,44 @@
     },
     {
       "packet_id": "RC-G4",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["RO3-G4_MERGED_AND_MERGE_SHA_RECORDED"],
       "authority_required": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
       "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
       "baseline_commit": "80adf5cfb111a8b07788276c9867ff4fee32fb09",
       "branch": "gate/rc-g4-c1-live-consumption",
-      "live_route_current_state": "DISABLED_PENDING_RC_G4_ACTIVATION",
-      "operator_gate_packet": "docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json",
       "decision": "PASS",
       "decision_authority": "OPERATOR",
       "decision_record": "docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md",
+      "operator_gate_packet": "docs/releases/research-console-v0-3/rc-g4/RC_G4_C1_CONSUMPTION_OPERATOR_GATE_PACKET.json",
+      "decision_merge_commit": "19066a5201e33a51b0e785dbdc932999f39fd9da",
+      "live_route_current_state": "ENABLED_LOCAL_READ_ONLY",
       "operator_approval_required": false,
       "blockers": [],
       "next_packet": "RC-G4-ACTIVATION"
     },
     {
       "packet_id": "RC-G4-ACTIVATION",
-      "status": "READY",
+      "status": "APPROVED",
       "prerequisites": ["RC-G4_OPERATOR_PASS", "RC-G4_DECISION_MERGED"],
       "authority_required": "AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA",
       "authority_delta": "LOCAL_READ_ONLY_C1_PRESENTATION",
-      "baseline_commit": null,
+      "baseline_commit": "19066a5201e33a51b0e785dbdc932999f39fd9da",
       "branch": "activate/research-console-v0-3-rc-g4-c1",
-      "candidate_commit": null,
-      "tests": [],
-      "qa_packet": null,
-      "decision_record": null,
+      "candidate_commit": "0fd59862770b50f9bc678de44c2ca99aa5a04953",
+      "tests": [
+        "12 focused RC-G4 activation tests PASS",
+        "12 RO3-G4 adapter regression tests PASS",
+        "6 RC-G4 operator-gate regression tests PASS",
+        "70-test complete repository suite PASS in dedicated workflow",
+        "70-test complete repository suite PASS in generic workflow",
+        "exact authority-delta assertions PASS"
+      ],
+      "qa_packet": "docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_QA_PACKET.json",
+      "decision_record": "docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_DELEGATED_DECISION.md",
       "merge_commit": null,
       "blockers": [],
-      "next_packet": null
+      "next_packet": "RC-G4-ACTIVATION-MERGE-RECEIPT"
     }
   ]
 }

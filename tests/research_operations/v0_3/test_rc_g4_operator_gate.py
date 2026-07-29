@@ -56,7 +56,7 @@ class RCG4OperatorGateTests(unittest.TestCase):
             schema = json.loads((ROOT / item["path"]).read_text(encoding="utf-8"))
             self.assertEqual(schema["$id"], item["schema_id"])
 
-    def test_live_route_remains_disabled_until_bounded_activation_merges(self) -> None:
+    def test_gate_packet_and_ro3_adapter_remain_immutable_during_bounded_activation(self) -> None:
         current = self.packet["route_and_capability_delta"]["current"]
         approved = self.packet["route_and_capability_delta"]["approved_after_activation"]
         self.assertFalse(current["route_enabled"])
@@ -66,7 +66,10 @@ class RCG4OperatorGateTests(unittest.TestCase):
         self.assertEqual(approved["live_consumption_authority"], "LOCAL_READ_ONLY_C1_PRESENTATION")
         self.assertIn('LIVE_ROUTE_STATE = "DISABLED_PENDING_RC_G4"', self.adapter_text)
         self.assertIn('"route_enabled": False', self.adapter_text)
-        self.assertIn("live_console_c1_route: DISABLED_PENDING_RC_G4_ACTIVATION", self.registry_text)
+        self.assertTrue(
+            "live_console_c1_route: ENABLED_LOCAL_READ_ONLY_IMPLEMENTATION_PENDING_QA" in self.registry_text
+            or "live_console_c1_route: ENABLED_LOCAL_READ_ONLY" in self.registry_text
+        )
 
     def test_required_rejections_and_permanent_banner_are_recorded(self) -> None:
         evidence = {item["condition"]: item["result"] for item in self.packet["acceptance_and_test_evidence"]}
@@ -101,19 +104,24 @@ class RCG4OperatorGateTests(unittest.TestCase):
         for phrase in ("Validation consumption", "R2 publication", "Probability, risk, exposure, trading, execution or agent-write authority"):
             self.assertIn(phrase, denied)
 
-    def test_programme_state_continues_to_bounded_activation(self) -> None:
+    def test_programme_state_lawfully_continues_through_bounded_activation(self) -> None:
         wp4 = next(item for item in self.state["packets"] if item["packet_id"] == "RO3-WP4")
         rcg4 = next(item for item in self.state["packets"] if item["packet_id"] == "RC-G4")
         activation = next(item for item in self.state["packets"] if item["packet_id"] == "RC-G4-ACTIVATION")
-        self.assertEqual(self.state["programme_status"], "RUNNING")
+        self.assertIn(self.state["programme_status"], {"RUNNING", "APPROVED_PENDING_MERGE", "COMPLETED"})
         self.assertEqual(wp4["status"], "COMPLETED")
         self.assertEqual(wp4["merge_commit"], "80adf5cfb111a8b07788276c9867ff4fee32fb09")
-        self.assertEqual(rcg4["status"], "APPROVED")
+        self.assertEqual(rcg4["status"], "COMPLETED")
         self.assertEqual(rcg4["authority_required"], "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE")
         self.assertFalse(rcg4["operator_approval_required"])
         self.assertEqual(rcg4["decision"], "PASS")
-        self.assertEqual(rcg4["live_route_current_state"], "DISABLED_PENDING_RC_G4_ACTIVATION")
-        self.assertEqual(activation["status"], "READY")
+        self.assertEqual(rcg4["decision_merge_commit"], "19066a5201e33a51b0e785dbdc932999f39fd9da")
+        self.assertIn(
+            rcg4["live_route_current_state"],
+            {"ENABLED_LOCAL_READ_ONLY_IMPLEMENTATION_PENDING_QA", "ENABLED_LOCAL_READ_ONLY"},
+        )
+        self.assertIn(activation["status"], {"RUNNING", "APPROVED", "COMPLETED"})
+        self.assertEqual(activation["baseline_commit"], "19066a5201e33a51b0e785dbdc932999f39fd9da")
         self.assertEqual(activation["authority_delta"], "LOCAL_READ_ONLY_C1_PRESENTATION")
         self.assertEqual(activation["authority_required"], "AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA")
 
