@@ -15,6 +15,7 @@ on:
   push:
     branches:
       - 'rebuild/research-console-v0-3-rc-wp4-system-activity'
+      - 'close/research-console-v0-3-rc-g3a'
   workflow_dispatch:
 
 permissions:
@@ -47,7 +48,7 @@ jobs:
         env:
           PYTHONPATH: src:.
         run: python -m unittest discover -s tests -v
-      - name: Enforce operator-approved bounded authority delta
+      - name: Enforce approved or completed bounded authority delta
         shell: bash
         run: |
           set -euo pipefail
@@ -64,29 +65,43 @@ jobs:
           source = Path('apps/research_console/system_workspace.py').read_text()
 
           assert state['baseline_commit'] == '79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5'
-          assert state['status'] == 'APPROVED_PENDING_MERGE'
+          assert state['status'] in {'APPROVED_PENDING_MERGE', 'COMPLETED'}
           assert state['operator_decision'] == 'PASS'
           assert state['authority_delta'] == 'LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY'
-          assert state['next_packet'] == 'RC-WP4_SQUASH_MERGE'
-          assert packet['status'] == 'APPROVED_PENDING_MERGE'
+          assert packet['status'] in {'APPROVED_PENDING_MERGE', 'COMPLETED'}
           assert packet['operator_decision'] == 'PASS'
           assert packet['next_gate'] is None
           assert gate['gate_id'] == 'RC-G3A'
           assert gate['classification'] == 'OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE'
-          assert gate['status'] == 'APPROVED'
+          assert gate['status'] in {'APPROVED', 'COMPLETED'}
           assert gate['operator_decision'] == 'PASS'
           assert decision['decision'] == 'PASS'
           assert decision['decision_authority'] == 'OPERATOR'
           assert decision['approved_authority_delta'] == 'LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY'
           assert qa['qa_recommendation'] == 'PASS'
-          assert 'status: APPROVED_PENDING_MERGE' in registry
-          assert 'operator_decision: PASS' in registry
           assert 'validation_consumption: LOCKED_UNCONSUMED' in registry
           assert 'research_writes: DENIED_PENDING_SEPARATE_GATE' in registry
           assert 'c2_pattern_discovery_authority: UNCHANGED' in registry
           assert 'r2_publication: DENIED' in registry
           assert '"writes": "NONE"' in source
           assert '"TRADE"' not in source
+
+          if state['status'] == 'COMPLETED':
+              receipt = json.loads(Path('docs/releases/research-console-v0-3/rc-g3a/RC_G3A_MERGE_RECEIPT.json').read_text())
+              assert state['next_packet'] is None
+              assert packet['next_packet'] is None
+              assert gate['next_packet'] is None
+              assert state['merge_commit'] == 'd7d4d8e0ef4989ce1d9acc0352e20975512a05d5'
+              assert packet['merge_commit'] == 'd7d4d8e0ef4989ce1d9acc0352e20975512a05d5'
+              assert receipt['merge_commit'] == 'd7d4d8e0ef4989ce1d9acc0352e20975512a05d5'
+              assert receipt['programme_status'] == 'COMPLETED'
+              assert receipt['next_packet'] is None
+              assert 'status: COMPLETED' in registry
+              assert 'activation_state: ENABLED_LOCAL_READ_ONLY' in registry
+          else:
+              assert state['next_packet'] == 'RC-WP4_SQUASH_MERGE'
+              assert packet['next_packet'] == 'RC-WP4_SQUASH_MERGE'
+              assert 'status: APPROVED_PENDING_MERGE' in registry
           PY
 
           changed="$(git diff --name-only 79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5...HEAD)"
