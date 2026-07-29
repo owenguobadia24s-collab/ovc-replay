@@ -1,0 +1,55 @@
+name: Discovery Operating Hub programme disposition
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/releases/discovery-operating-hub-v0-1/programme-disposition/**'
+      - 'registries/research_operations/DISCOVERY_OPERATING_HUB_PROGRAMME_DISPOSITION_v0_1.yaml'
+      - 'tests/research_operations/test_discovery_operating_hub_programme_disposition.py'
+      - '.github/workflows/discovery-operating-hub-programme-disposition.yml'
+  push:
+    branches:
+      - 'defer/discovery-operating-hub-v0-1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  disposition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run focused disposition tests
+        env:
+          PYTHONPATH: src:.
+        run: python -m unittest tests.research_operations.test_discovery_operating_hub_programme_disposition -v
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src:.
+        run: python -m unittest discover -s tests -v
+      - name: Enforce non-activating operator DEFER
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          decision = json.loads(Path('docs/releases/discovery-operating-hub-v0-1/programme-disposition/DO_PROGRAMME_OPERATOR_DEFER_DECISION.json').read_text())
+          registry = Path('registries/research_operations/DISCOVERY_OPERATING_HUB_PROGRAMME_DISPOSITION_v0_1.yaml').read_text()
+
+          assert decision['decision'] == 'DEFER'
+          assert decision['decision_authority'] == 'OPERATOR'
+          assert decision['execution_enabled'] is False
+          assert decision['authority_delta'] == 'NONE'
+          assert decision['continuation_point'] is None
+          assert decision['source_pull_request_state'] == 'CLOSED_UNMERGED'
+          assert decision['future_disposition']['replacement_defined'] is False
+          assert 'validation_consumption: LOCKED_UNCONSUMED' in registry
+          assert 'r2_publication: DENIED' in registry
+          assert 'remote_deployment: DENIED' in registry
+          PY
