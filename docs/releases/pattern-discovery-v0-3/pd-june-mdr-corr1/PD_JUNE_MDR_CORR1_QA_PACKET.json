@@ -5,8 +5,8 @@
   "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
   "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
   "pull_request": 160,
-  "candidate_commit": null,
-  "status": "GATE_READY_PENDING_FINAL_CI",
+  "tested_candidate_commit": "3746bacbdf1856c4ee6e580f565a727d10fb0f96",
+  "status": "GATE_READY_OPERATOR_DECISION_REQUIRED_CI_PASS",
   "qa_result": "DEFER_RECOMMENDED_EXACT_CORRECTIVE_EVIDENCE_PASS_CONTROL_AND_AGREEMENT_OPEN",
   "market_description_verdict": "NOT_ESTABLISHED",
   "bounded_supported_claim": "DETERMINISTIC_STRUCTURAL_DESCRIPTION_CORRECTNESS_ESTABLISHED_FOR_EXACT_JUNE_GAPPED_SLICE",
@@ -22,7 +22,8 @@
     {"check":"Exact frozen structural comparison is exposed for every assigned reviewed fingerprint","result":"PASS_24_ASSIGNED_2_SMALL_SAMPLE_NOT_APPLICABLE"},
     {"check":"Immutable deterministic negative controls support false-positive assessment","result":"FAIL_ZERO_CONTROLS_OPERATOR_AUTHORITY_REQUIRED"},
     {"check":"Blinded repeat-review agreement is established","result":"FAIL_NOT_PERFORMED_OPERATOR_AUTHORITY_REQUIRED"},
-    {"check":"Focused, dependent and complete repository tests pass","result":"PENDING_FINAL_CI"}
+    {"check":"Focused, dependent and complete repository tests pass","result":"PASS"},
+    {"check":"Historical June assessment and claim-level decision continuity pass","result":"PASS"}
   ],
   "resolved_findings": [
     "PD-JUNE-MDR-001",
@@ -58,7 +59,12 @@
     "reproduction_digest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json",
     "return_gate": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json"
   },
-  "test_evidence": [],
+  "test_evidence": [
+    {"workflow_run":30498219394,"job":90731843042,"scope":"CORR1 focused tests, dependent Pattern Discovery tests, complete repository suite and return-gate boundary","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219425,"job":90731843340,"scope":"General repository unit tests","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219325,"job":90731842858,"scope":"June assessment continuity and lawful return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"},
+    {"workflow_run":30498219459,"job":90731843542,"scope":"Historical claim-level decision and lawful return-gate progression","result":"PASS","tested_head":"3746bacbdf1856c4ee6e580f565a727d10fb0f96"}
+  ],
   "recommendation": "DEFER_TO_OPERATOR_REQUIRED_READ_ONLY_CONTROL_AND_AGREEMENT_ASSURANCE",
   "rollback": "Preserve all external artifacts and signed pilot evidence. Revert only CORR1 compact evidence, tests, workflow, QA, gate packet and state through a new non-destructive commit."
 }
