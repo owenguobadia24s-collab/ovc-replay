@@ -3,6 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Mapping
 
+from apps.research_console.system_workspace import build_system_projection
+
 FIXTURE_MODES = ("VALID", "EMPTY", "WARN", "BLOCK")
 
 HEALTH_DOMAINS = (
@@ -27,10 +29,10 @@ OBJECTS: tuple[dict[str, Any], ...] = (
 )
 
 ACTIVITY = (
-    {"time": "12:05", "type": "GATE", "status": "PASS", "object_id": "GATE.RC_A1", "description": "v0.3 information architecture accepted."},
-    {"time": "12:12", "type": "SHELL", "status": "PASS", "object_id": "SYSTEM.CONFIG.001", "description": "Fixture-only unified shell loaded."},
-    {"time": "12:18", "type": "ARTIFACT", "status": "WARN", "object_id": "HEALTH.ARTIFACTS", "description": "Fixture artifact warning remains visible."},
-    {"time": "12:24", "type": "RESEARCH", "status": "CENSORED", "object_id": "QUEUE.CENSORED.001", "description": "Fixture realization path unavailable."},
+    {"time": "12:05", "type": "GATE", "status": "PASS", "object_id": "GATE.RC_A1", "description": "v0.3 information architecture accepted.", "source_refs": ["docs/releases/research-console-v0-3/rc-a1/RC_A1_GATE_PACKET.json"]},
+    {"time": "12:12", "type": "SHELL", "status": "PASS", "object_id": "SYSTEM.CONFIG.001", "description": "Fixture-only unified shell loaded.", "source_refs": ["contracts/research_operations/console/OVC_RESEARCH_CONSOLE_INFORMATION_ARCHITECTURE_CONTRACT_v0_3.md"]},
+    {"time": "12:18", "type": "ARTIFACT", "status": "WARN", "object_id": "HEALTH.ARTIFACTS", "description": "Fixture artifact warning remains visible.", "source_refs": ["fixtures/research_operations/research_console_v0_3/RC_WP1_SHELL_FIXTURES.json"]},
+    {"time": "12:24", "type": "RESEARCH", "status": "CENSORED", "object_id": "QUEUE.CENSORED.001", "description": "Fixture realization path unavailable.", "source_refs": ["FIXTURE.INCIDENT.001"]},
 )
 
 RELEASES = (
@@ -43,6 +45,11 @@ GATES = (
     {"gate": "RC-A0", "status": "PASS", "effect": "v0.3 architecture frozen"},
     {"gate": "RC-A1", "status": "PASS", "effect": "fixture-only shell authorised"},
     {"gate": "RC-G1", "status": "NOT_EVALUATED", "effect": "shell acceptance pending"},
+)
+
+CATALOGUE = (
+    {"artifact_id": "FIXTURE.CONSOLE.CSS", "availability": "LOCAL_FIXTURE", "authority": "PRESENTATION_ONLY"},
+    {"artifact_id": "FIXTURE.RC_WP1.PACK", "availability": "LOCAL_FIXTURE", "authority": "GOVERNANCE_SOURCE"},
 )
 
 REPLAY_VALUES = (1.2712, 1.2718, 1.2709, 1.2724, 1.2731, 1.2727, 1.2740, 1.2735, 1.2746, 1.2751)
@@ -65,13 +72,31 @@ def fixture_bundle(mode: str = "VALID") -> dict[str, Any]:
         raise ValueError(f"Unknown fixture mode: {mode}")
     empty = normalized == "EMPTY"
     blocked = normalized == "BLOCK"
+    if empty:
+        objects, activity, releases, gates, system_projection = [], [], [], [], None
+    else:
+        system_projection = build_system_projection(
+            source_commit="RC_WP4_FIXTURE_SOURCE",
+            read_model_sha256="RC_WP4_FIXTURE_READ_MODEL",
+            objects=OBJECTS,
+            releases=RELEASES,
+            gates=GATES,
+            activity=ACTIVITY,
+            catalogue=CATALOGUE,
+            configuration={"local_only": True, "writes": "NONE"},
+        )
+        objects = deepcopy(system_projection["panels"]["OBJECTS_LINEAGE"])
+        activity = deepcopy(system_projection["activity"])
+        releases = deepcopy(system_projection["panels"]["RELEASES"])
+        gates = deepcopy(system_projection["panels"]["QA_GATES"])
     return {
         "fixture_mode": normalized,
         "health": _mode_health(normalized),
-        "objects": [] if empty else deepcopy(list(OBJECTS)),
-        "activity": [] if empty else deepcopy(list(ACTIVITY)),
-        "releases": [] if empty else deepcopy(list(RELEASES)),
-        "gates": [] if empty else deepcopy(list(GATES)),
+        "objects": objects,
+        "activity": activity,
+        "releases": releases,
+        "gates": gates,
+        "system_projection": system_projection,
         "replay": [] if empty or blocked else list(REPLAY_VALUES),
         "summary_status": "BLOCK" if blocked else ("NOT_EVALUATED" if empty else ("WARN" if normalized == "WARN" else "PASS")),
     }

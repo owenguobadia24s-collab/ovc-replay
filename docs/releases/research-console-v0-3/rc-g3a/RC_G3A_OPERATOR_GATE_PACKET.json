@@ -1,0 +1,107 @@
+{
+  "schema": "ovc-research-console-rc-g3a-operator-gate-packet/v1",
+  "gate_id": "RC-G3A",
+  "gate_title": "System workspace and persistent-activity acceptance",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "plan_id": "OVC-RESEARCH-CONSOLE-V0.3-IA-AMENDMENT-0.1",
+  "plan_version": "v0.1",
+  "owner": "OPERATOR",
+  "classification": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
+  "status": "APPROVED",
+  "operator_decision": "PASS",
+  "operator_decision_record": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_DECISION.json",
+  "decided_at_utc": "2026-07-29T10:05:00Z",
+  "baseline_commit": "79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5",
+  "candidate_commit": "0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4",
+  "gate_ready_head": "631c1f5fbd646bc2a6581b7f87eedf5e9f610736",
+  "pull_request": 154,
+  "completed_packets": ["RC-WP4-v0.3"],
+  "superseded_candidate": {
+    "pull_request": 86,
+    "branch": "build/research-console-v0-3-system-activity",
+    "head": "eef56a3aa59641f87a1f71b0164714938acec0f2",
+    "disposition": "SUPERSEDE_AFTER_REPLACEMENT_MERGE"
+  },
+  "current_authority": {
+    "overview": "ACCEPTED_LOCAL_READ_ONLY",
+    "research": "ACCEPTED_RO2_AND_RC_G4_C1_LOCAL_READ_ONLY",
+    "system_workspace_and_persistent_activity": "APPROVED_PENDING_MAIN_INTEGRATION",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "research_write_authority": "DENIED_PENDING_SEPARATE_GATE",
+    "c1_formula_release_selector_mutation": "NONE",
+    "c2_pattern_discovery_authority": "UNCHANGED",
+    "r2_publication": "DENIED",
+    "market_probability_risk_exposure_execution_agent_write": "NONE",
+    "deployment": "LOCAL_ONLY_NO_REMOTE_DEPLOY"
+  },
+  "approved_authority_delta": {
+    "grant": "LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY",
+    "permits": [
+      "local read-only System workspace projection consumption",
+      "deterministic object and lineage inspection with immutable source references",
+      "local read-only catalogue, release, QA/gate, configuration and authority panels",
+      "persistent source-derived activity presentation and type/status filtering"
+    ],
+    "does_not_permit": [
+      "research-record creation or mutation",
+      "repository, selector, threshold, release or formula mutation",
+      "Validation content consumption",
+      "C2 or Pattern Discovery authority change",
+      "R2 publication",
+      "semantic, model, family, candidate or theory promotion",
+      "market classification, probability, risk, exposure, trading or execution authority",
+      "agent-write or remote-deployment authority"
+    ]
+  },
+  "acceptance_conditions": [
+    "System projection is deterministic and source-bound",
+    "every object and activity row has immutable source references",
+    "activity ordering and filtering are deterministic and read-only",
+    "unknown activity type or status fails closed",
+    "missing projection returns NOT_EVALUATED and never PASS",
+    "no write or reserved authority surface is introduced",
+    "RC-G3 and RC-G4 regression suites pass",
+    "complete repository suite passes"
+  ],
+  "tests": {
+    "focused_rc_wp4": "PASS_8",
+    "rc_g3_regression": "PASS_5",
+    "rc_g4_regression": "PASS_12",
+    "complete_repository_dedicated": "PASS_70",
+    "complete_repository_generic": "PASS_70",
+    "authority_assertions": "PASS",
+    "qa_packet": "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json"
+  },
+  "qa": {
+    "recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_reviews": [],
+    "unresolved_issues": []
+  },
+  "changed_files": [
+    ".github/workflows/research-console-v0-3-rc-wp4-rebuild.yml",
+    "apps/research_console/fixtures.py",
+    "apps/research_console/system_workspace.py",
+    "docs/releases/research-console-v0-3/rc-wp4/RC_WP4_IMPLEMENTATION_PACKET.json",
+    "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json",
+    "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_GATE_PACKET.json",
+    "docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_DECISION.json",
+    "registries/research_operations/RESEARCH_CONSOLE_SYSTEM_PROJECTION_REGISTRY_v0_3.yaml",
+    "registries/research_operations/RESEARCH_CONSOLE_RC_WP4_STATE_v0_3.json",
+    "tests/research_operations/test_rc_wp4_v0_3_system_activity.py"
+  ],
+  "external_artifacts": [],
+  "rollback": {
+    "action": "Revert the bounded RC-WP4 change in a new commit and return System and activity presentation to the prior accepted fixture surface.",
+    "preserve": ["RC-G3 decision", "RC-G4 decision and activation", "RO2 and C1 projections", "all QA and gate evidence"],
+    "destructive_action": "NONE"
+  },
+  "recommended_decision": "PASS",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "authorised_work_after_pass": [
+    "rerun focused, regression, complete-suite and authority checks on the decision head",
+    "squash-merge PR 154 into main when eligible",
+    "record the squash-merge receipt and close superseded PR 86",
+    "retain all stated prohibitions"
+  ]
+}

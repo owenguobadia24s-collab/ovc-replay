@@ -1,0 +1,75 @@
+schema: ovc-research-console-system-projection-registry/v1
+programme_id: OVC-RESEARCH-CONSOLE.v0.3
+work_packet: RC-WP4-v0.3
+status: APPROVED_PENDING_MERGE
+baseline_main_commit: 79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5
+branch: rebuild/research-console-v0-3-rc-wp4-system-activity
+candidate_commit: 0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4
+gate_ready_head: 631c1f5fbd646bc2a6581b7f87eedf5e9f610736
+pull_request: 154
+operator_gate: RC-G3A
+operator_decision: PASS
+operator_decision_record: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_DECISION.json
+approved_authority_delta: LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY
+activation_state: APPROVED_PENDING_MAIN_INTEGRATION
+supersedes_stale_candidate:
+  pull_request: 86
+  branch: build/research-console-v0-3-system-activity
+  reason: REBUILT_FROM_LATEST_LAWFUL_MAIN_WITH_RC_G4_COMPLETED
+projection_schema: ovc-research-console-system-projection/v1
+implementation: apps/research_console/system_workspace.py
+fixture_integration: apps/research_console/fixtures.py
+panels:
+  OBJECTS_LINEAGE: DETERMINISTIC_READ_ONLY
+  DATA_CATALOGUE: DETERMINISTIC_READ_ONLY
+  RELEASES: DETERMINISTIC_READ_ONLY
+  QA_GATES: DETERMINISTIC_READ_ONLY
+  CONFIGURATION: INSPECTION_ONLY
+  ABOUT_AUTHORITY: INSPECTION_ONLY
+activity:
+  ordering: DETERMINISTIC_DESCENDING_TIME_SEQUENCE_OBJECT
+  filters: [TYPE, STATUS]
+  source_refs: REQUIRED
+  mutable: false
+fail_closed:
+  missing_source_refs: BLOCK
+  unknown_activity_type: BLOCK
+  unknown_status: BLOCK
+  missing_projection: NOT_EVALUATED
+retained_boundaries:
+  validation_consumption: LOCKED_UNCONSUMED
+  research_writes: DENIED_PENDING_SEPARATE_GATE
+  repository_mutation: NONE
+  c1_formula_release_selector_mutation: NONE
+  c2_pattern_discovery_authority: UNCHANGED
+  selector_mutation: NONE_BY_CONSOLE
+  threshold_mutation: NONE
+  release_activation: NONE_BY_CONSOLE
+  r2_publication: DENIED
+  semantic_model_family_candidate_theory_promotion: NONE
+  market_authority: NONE
+  probability_authority: NONE
+  risk_authority: NONE
+  exposure_authority: NONE
+  execution_authority: NONE
+  agent_write_authority: NONE
+  deployment_authority: LOCAL_ONLY_NO_REMOTE_DEPLOY
+qa:
+  focused_tests: PASS_8
+  rc_g3_regression: PASS_5
+  rc_g4_regression: PASS_12
+  complete_repository_suite_dedicated: PASS_70
+  complete_repository_suite_generic: PASS_70
+  authority_assertions: PASS
+  dedicated_workflow_run: 30441768190
+  dedicated_workflow_job: 90542516815
+  generic_workflow_run: 30441768186
+  generic_workflow_job: 90542516766
+  gate_ready_head_dedicated_workflow_run: 30442027817
+  gate_ready_head_dedicated_workflow_job: 90543349957
+  gate_ready_head_generic_workflow_run: 30442027526
+  gate_ready_head_generic_workflow_job: 90543348729
+  recommendation: PASS
+qa_packet: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_QA_PACKET.json
+gate_packet: docs/releases/research-console-v0-3/rc-g3a/RC_G3A_OPERATOR_GATE_PACKET.json
+next_packet: RC-WP4_SQUASH_MERGE

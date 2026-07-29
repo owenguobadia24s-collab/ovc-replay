@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-research-console-rc-g3a-operator-decision/v1",
+  "gate_id": "RC-G3A",
+  "gate_title": "System workspace and persistent-activity acceptance",
+  "programme_id": "OVC-RESEARCH-CONSOLE.v0.3",
+  "plan_id": "OVC-RESEARCH-CONSOLE-V0.3-IA-AMENDMENT-0.1",
+  "plan_version": "v0.1",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "operator_instruction": "@GitHub OVC APPROVE RC-G3A PASS",
+  "decided_at_utc": "2026-07-29T10:05:00Z",
+  "baseline_main_commit": "79384a0d2f27e161e261b0ac3fc03ad1e36d7fb5",
+  "tested_candidate_commit": "0a30d82e1edf7e6e0b943d8cad142a85ed7d02c4",
+  "gate_ready_head": "631c1f5fbd646bc2a6581b7f87eedf5e9f610736",
+  "pull_request": 154,
+  "approved_authority_delta": "LOCAL_READ_ONLY_SYSTEM_WORKSPACE_AND_ACTIVITY_ONLY",
+  "approved_capabilities": [
+    "local read-only System workspace projection consumption",
+    "deterministic object and lineage inspection with immutable source references",
+    "local read-only catalogue, release, QA/gate, configuration and authority panels",
+    "persistent source-derived activity presentation and type/status filtering"
+  ],
+  "acceptance_basis": {
+    "focused_rc_wp4": "PASS_8",
+    "rc_g3_regression": "PASS_5",
+    "rc_g4_regression": "PASS_12",
+    "complete_repository_dedicated": "PASS_70",
+    "complete_repository_generic": "PASS_70",
+    "authority_assertions": "PASS",
+    "qa_recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_reviews": [],
+    "unresolved_issues": []
+  },
+  "retained_prohibitions": [
+    "Validation content consumption",
+    "research-record creation or mutation",
+    "repository, selector, threshold, release or formula mutation",
+    "C2 or Pattern Discovery authority change",
+    "R2 publication",
+    "semantic, threshold, model, family, candidate or theory promotion",
+    "market classification, probability, risk, exposure, trading or execution authority",
+    "agent-write authority",
+    "remote deployment"
+  ],
+  "rollback": {
+    "action": "Revert the bounded RC-WP4 change through a new non-destructive commit and return System and activity presentation to the prior accepted fixture surface.",
+    "preserve": [
+      "RC-G3 decision",
+      "RC-G4 decision and activation",
+      "RO2 and C1 projections",
+      "all QA and gate evidence"
+    ],
+    "destructive_action": "NONE"
+  },
+  "authorised_next_actions": [
+    "record RC-WP4 and RC-G3A as approved pending merge",
+    "rerun focused, regression, complete-suite and authority checks on the decision head",
+    "squash-merge PR 154 into main when final checks pass and the head remains pinned",
+    "record the exact merge receipt",
+    "close superseded PR 86 without deleting or rewriting its branch"
+  ]
+}
