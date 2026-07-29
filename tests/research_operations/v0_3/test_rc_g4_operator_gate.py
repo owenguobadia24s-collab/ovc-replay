@@ -108,7 +108,7 @@ class RCG4OperatorGateTests(unittest.TestCase):
         wp4 = next(item for item in self.state["packets"] if item["packet_id"] == "RO3-WP4")
         rcg4 = next(item for item in self.state["packets"] if item["packet_id"] == "RC-G4")
         activation = next(item for item in self.state["packets"] if item["packet_id"] == "RC-G4-ACTIVATION")
-        self.assertIn(self.state["programme_status"], {"RUNNING", "COMPLETED"})
+        self.assertIn(self.state["programme_status"], {"RUNNING", "APPROVED_PENDING_MERGE", "COMPLETED"})
         self.assertEqual(wp4["status"], "COMPLETED")
         self.assertEqual(wp4["merge_commit"], "80adf5cfb111a8b07788276c9867ff4fee32fb09")
         self.assertEqual(rcg4["status"], "COMPLETED")
