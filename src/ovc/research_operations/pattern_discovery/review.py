@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Iterable, Mapping
 
 from .market_description_assurance import project_candidate_chronology
-from .models import PatternDiscoveryError
+from .models import PatternDiscoveryError, parse_utc
 
 
 EVIDENCE_CLASSES = {
@@ -16,16 +16,43 @@ EVIDENCE_CLASSES = {
 
 
 def _candidate_chronology(candidate: Mapping[str, Any]) -> dict[str, Any]:
-    timeline = candidate.get("timeline", ())
-    if timeline:
+    timeline_source = candidate.get("timeline", ())
+    source_ids = [str(item) for item in candidate.get("source_c2_record_ids", ())]
+    if not timeline_source:
+        return {
+            "timeline": [],
+            "source_c2_record_ids": source_ids,
+            "original_is_chronological": None,
+            "ordering_rule": "FIRST_VALID_TIME_THEN_C2_STATE_ID_WHEN_EXACT_TIMELINE_AVAILABLE",
+            "mutation": "NONE_READ_ONLY_PROJECTION_ONLY",
+        }
+    if not isinstance(timeline_source, (list, tuple)) or not all(isinstance(item, Mapping) for item in timeline_source):
+        raise PatternDiscoveryError("candidate timeline must be a sequence of objects")
+    rows = [dict(item) for item in timeline_source]
+    exact_rows = all(item.get("c2_state_id") and item.get("first_valid_time") for item in rows)
+    if exact_rows:
         return project_candidate_chronology(candidate)
-    return {
-        "timeline": [],
-        "source_c2_record_ids": [str(item) for item in candidate.get("source_c2_record_ids", ())],
-        "original_is_chronological": None,
-        "ordering_rule": "FIRST_VALID_TIME_THEN_C2_STATE_ID_WHEN_TIMELINE_AVAILABLE",
-        "mutation": "NONE_READ_ONLY_PROJECTION_ONLY",
-    }
+
+    # Older UI-only fixtures predate the exact C2 timeline contract. They are
+    # accepted only when their display-time sequence is already chronological;
+    # without immutable row identities they cannot be safely reordered or
+    # aligned to source IDs. Real governed candidate rows use the exact path.
+    if all(isinstance(item.get("time"), str) and item.get("time") for item in rows):
+        parsed = [parse_utc(str(item["time"])) for item in rows]
+        if parsed != sorted(parsed):
+            raise PatternDiscoveryError(
+                "legacy display timeline is nonchronological and lacks exact C2 identities for lawful correction"
+            )
+        return {
+            "timeline": rows,
+            "source_c2_record_ids": source_ids,
+            "original_is_chronological": True,
+            "ordering_rule": "LEGACY_DISPLAY_TIME_ALREADY_CHRONOLOGICAL_NO_IDENTITY_REALIGNMENT",
+            "mutation": "NONE_READ_ONLY_PROJECTION_ONLY",
+        }
+    raise PatternDiscoveryError(
+        "candidate timeline requires exact c2_state_id/first_valid_time or an already chronological legacy time projection"
+    )
 
 
 def build_review_queue_item(
