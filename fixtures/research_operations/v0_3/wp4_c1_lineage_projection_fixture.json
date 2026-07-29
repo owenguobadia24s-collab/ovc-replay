@@ -1,0 +1,137 @@
+{
+  "schema": "ovc-ro3-wp4-c1-lineage-projection-fixture/v1",
+  "release_context": {
+    "role": "DISCOVERY",
+    "c1_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1",
+    "c1_manifest_sha256": "6abd6d1fb74e7f3797e9add2435eaa5e487b612efd2f4b5f4f4c59679820d5d2",
+    "formula_registry_id": "C1.FORMULAS.v0.1",
+    "formula_registry_logical_sha256": "171813797f16b25688f9a1c583e1925993da210be9b127d621b74f3149140804",
+    "represented_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
+    "source_commit": "3aeb8a5a217befcf14561a5b952f075fe7a7a920",
+    "clock": "15M",
+    "side": "BID"
+  },
+  "c1_record": {
+    "record_id": "c1:1111111111111111111111111111111111111111111111111111111111111111",
+    "record_type": "OPT_B_C1_BAR_PRIMITIVES",
+    "schema_version": "0.1",
+    "contract_id": "OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1",
+    "contract_version": "0.1",
+    "formula_registry_id": "C1.FORMULAS.v0.1",
+    "formula_registry_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "opt_a_release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "opt_a_manifest_id": "MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2",
+    "source_bar_id": "opt-a-bar:fixture-20230103T003000Z",
+    "prior_bar_id": "opt-a-bar:fixture-20230103T001500Z",
+    "instrument": "GBPUSD",
+    "clock": "15M",
+    "price_side": "BID",
+    "open_time": "2023-01-03T00:15:00Z",
+    "close_time": "2023-01-03T00:30:00Z",
+    "first_valid_time": "2023-01-03T00:30:00Z",
+    "source_quality": "COMPLETE",
+    "source_admissibility": "HANDOFF_ELIGIBLE",
+    "source_lineage": {
+      "source_object_ids": ["SRC.DUKASCOPY.GBPUSD.M1.BID.202301.v1"],
+      "parent_m1_bar_ids": [
+        "m1:00", "m1:01", "m1:02", "m1:03", "m1:04",
+        "m1:05", "m1:06", "m1:07", "m1:08", "m1:09",
+        "m1:10", "m1:11", "m1:12", "m1:13", "m1:14"
+      ],
+      "contract_versions": {
+        "opt_a_to_opt_b_handoff": "0.2",
+        "c1_primitive_contract": "0.1",
+        "c1_record_schema": "0.1"
+      }
+    },
+    "measurements": {
+      "range_abs": "0.007",
+      "range_ticks": "70",
+      "body_signed": "0.004",
+      "body_abs": "0.004",
+      "body_utilisation": "0.5714285714285714285714285714285714",
+      "upper_wick_abs": "0.001",
+      "lower_wick_abs": "0.002",
+      "upper_wick_share": "0.1428571428571428571428571428571429",
+      "lower_wick_share": "0.2857142857142857142857142857142857",
+      "wick_balance": "-0.1428571428571428571428571428571429",
+      "open_location": "0.2857142857142857142857142857142857",
+      "close_location": "0.8571428571428571428571428571428571",
+      "signed_efficiency": "0.5714285714285714285714285714285714",
+      "direction": "UP",
+      "true_range_abs": "0.007",
+      "true_range_ticks": "70",
+      "close_change": "0.004",
+      "open_gap": "0"
+    },
+    "null_reasons": {},
+    "formula_versions": {
+      "body_abs": "C1-BODY-ABS.v0.1",
+      "body_signed": "C1-BODY-SIGNED.v0.1",
+      "body_utilisation": "C1-BODY-UTIL.v0.1",
+      "close_change": "C1-CLOSE-CHANGE.v0.1",
+      "close_location": "C1-CLOSE-LOCATION.v0.1",
+      "direction": "C1-DIRECTION.v0.1",
+      "lower_wick_abs": "C1-LOWER-WICK-ABS.v0.1",
+      "lower_wick_share": "C1-LOWER-WICK-SHARE.v0.1",
+      "open_gap": "C1-OPEN-GAP.v0.1",
+      "open_location": "C1-OPEN-LOCATION.v0.1",
+      "range_abs": "C1-RANGE-ABS.v0.1",
+      "range_ticks": "C1-RANGE-TICKS.v0.1",
+      "signed_efficiency": "C1-SIGNED-EFFICIENCY.v0.1",
+      "true_range_abs": "C1-TRUE-RANGE-ABS.v0.1",
+      "true_range_ticks": "C1-TRUE-RANGE-TICKS.v0.1",
+      "upper_wick_abs": "C1-UPPER-WICK-ABS.v0.1",
+      "upper_wick_share": "C1-UPPER-WICK-SHARE.v0.1",
+      "wick_balance": "C1-WICK-BALANCE.v0.1"
+    },
+    "authority_state": "SHADOW"
+  },
+  "formula_evidence": {
+    "primitive_id": "C1-WICK-BALANCE.v0.1",
+    "field_name": "wick_balance",
+    "inputs": {
+      "upper_wick_abs": "0.001",
+      "lower_wick_abs": "0.002",
+      "range_abs": "0.007"
+    },
+    "formula": "(upper_wick_abs - lower_wick_abs) / range_abs",
+    "output": "-0.1428571428571428571428571428571429",
+    "unit": "RATIO",
+    "domain": {"minimum": "-1", "maximum": "1"},
+    "null_reason": null,
+    "first_valid_time": "2023-01-03T00:30:00Z"
+  },
+  "computability_projection": {
+    "schema": "ovc-ro3-c1-computability-profile/v1",
+    "panel_id": "RO3-C1-COMPUTABILITY",
+    "status": "COMPUTABLE",
+    "field_name": "wick_balance",
+    "null_reason": null,
+    "record_emission_consequence": "EMITTED",
+    "read_only": true,
+    "writes": "NONE"
+  },
+  "assurance_projection": {
+    "schema": "ovc-ro3-c1-assurance-summary/v1",
+    "panel_id": "RO3-C1-ASSURANCE",
+    "status": "PASS",
+    "gate_id": "RO3-G3",
+    "metamorphic_run_id": "ro3-c1-metamorphic-run:ae87e9b8ec7d1214c7c524216fa42228c9d4559e8d107f00e5a5d243edc82137",
+    "determinism_receipt_id": "ro3-c1-determinism:ad881b37e1591d1befe8895b5b5ea32f736e0f1d9149d587774d30b9570de8b9",
+    "read_only": true,
+    "writes": "NONE"
+  },
+  "child_references": [
+    {
+      "child_id": "c2-transition:fixture-read-only",
+      "child_type": "C2_TRANSITION",
+      "source_c1_record_id": "c1:1111111111111111111111111111111111111111111111111111111111111111",
+      "source_binding": "C1_TO_C2_EXACT_RECORD_ID",
+      "operation_mode": "HISTORICAL_TRACE",
+      "cutoff": "2023-01-03T00:30:00Z",
+      "availability": "COMPACT_REFERENCE_ONLY",
+      "trace_status": "AVAILABLE"
+    }
+  ]
+}
