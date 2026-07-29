@@ -2,7 +2,7 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RO3_WP3_APPROVED
+status: RC_G4_OPERATOR_GATE_PENDING
 baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
 items:
   - id: RO3-00
@@ -21,95 +21,70 @@ items:
     authority_delta: LOCAL_REPLACEABLE_DERIVED
     decision: PASS
     decision_authority: DELEGATED_AUTO_RATIFICATION
-    qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json
-    decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_DELEGATED_DECISION.md
-    runtime:
-      release_index: IMPLEMENTED
-      primitive_index: IMPLEMENTED
-      family_index: IMPLEMENTED
-      coverage_profile: IMPLEMENTED
-      logical_hash: IMPLEMENTED
-      validation_denial: IMPLEMENTED
-      performance_benchmark: PASS
-      full_corpus_records: 212764
-      full_corpus_files: 192
-      wall_time_seconds: 22.855605
-      soft_target_seconds: 300
-      reproducibility: PASS_IDENTICAL_RERUN
   - id: RO3-WP2
     name: Null computability and formula comparison
     status: COMPLETED
     gate: RO3-G2
     branch: build/research-operations-v0-3-wp2-computability-diff
-    baseline_commit: 928f5c00bd76ddd9348c8721f4430a1b105d45f1
-    reconciled_main_commit: c46d9620e242c047dd8e203f91a1b00b542a2a81
     tested_candidate_commit: 2ce09241806021f3dfe67289080438d0a24d71b5
     merge_commit: 8c243c009f30e453312861708afb784fe762c442
     authority_delta: READ_ONLY_DERIVED_INSPECTION
     decision: PASS
     decision_authority: DELEGATED_AUTO_RATIFICATION
-    qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_GATE_PACKET.json
-    decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g2/RO3_G2_DELEGATED_DECISION.md
-    runtime:
-      computability_profile: IMPLEMENTED
-      null_reason_profile: IMPLEMENTED
-      formula_definition_comparison: IMPLEMENTED
-      release_output_comparison: IMPLEMENTED
-      non_activating_evidence_header: IMPLEMENTED
-      acknowledgement_gate: IMPLEMENTED
-      affected_surface_trace: IMPLEMENTED_SEPARATE_BANNERED
-      validation_denial: IMPLEMENTED
-      focused_tests: PASS_19
-      canonical_tests: PASS_70
-      qa_recommendation: PASS
-      writes: NONE
   - id: RO3-WP3
     name: Symmetry metamorphic and deterministic assurance
-    status: APPROVED
+    status: COMPLETED
     gate: RO3-G3
     branch: retest/research-operations-v0-3-wp3-formula-assurance
-    baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
     tested_candidate_commit: cbbb45a70c058c46271195037b06cefa2b9b10fe
+    merge_commit: 3aeb8a5a217befcf14561a5b952f075fe7a7a920
     authority_delta: QA_EVIDENCE_ONLY
     decision: PASS
     decision_authority: DELEGATED_AUTO_RATIFICATION
-    prior_blocker:
-      blocker_id: RO3-G3-BLOCK-001
-      finding: C1_WICK_BALANCE_FROZEN_FORMULA_IMPLEMENTATION_SIGN_INVERSION
-      status: CLOSED_BY_CORRECTIVE_PROGRAMME_AND_PASSING_RETEST
-      corrective_gate: C1C-G5-CORRECTIVE-PILOT-REVIEW
-      corrective_merge_commit: 1d4065b7a4fa9a7c6d832528309a5b4f56fd2991
-      programme_state_merge_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
+    resolved_blocker: RO3-G3-BLOCK-001
     runtime:
-      invariant_registry: FROZEN_AT_RO3_G0_UNCHANGED
-      formula_registry: IMMUTABLE
       primitive_count: 18
       metamorphic_assertions: PASS_79_OF_79
       golden_assertions: PASS_18_OF_18
-      wick_balance_exact_formula: PASS
       deterministic_bytes: PASS
-      canonical_reorder: PASS
       negative_control: PASS_DETECTED_BLOCK
-      focused_workflow_run: 30420805433
-      focused_workflow_job: 90477014172
-      generic_test_workflow_run: 30420805438
-      generic_test_workflow_job: 90477014267
       complete_repository_suite: PASS_70
-      qa_recommendation: PASS
-      writes: NONE
-    qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_GATE_PACKET.json
-    evidence_record: docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_ASSURANCE_EVIDENCE.json
-    decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_DELEGATED_DECISION.md
   - id: RO3-WP4
     name: C1 lineage and Console adapters
-    status: READY
+    status: APPROVED
     gate: RO3-G4
+    branch: build/research-operations-v0-3-wp4-c1-lineage-adapters
+    baseline_commit: 3aeb8a5a217befcf14561a5b952f075fe7a7a920
+    tested_candidate_commit: 05f7f99076cb848de2a8ea717937868d105ec13e
+    merge_commit: null
     authority_delta: LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
+    decision: PASS
+    decision_authority: DELEGATED_AUTO_RATIFICATION
+    runtime:
+      lineage_trace: IMPLEMENTED
+      formula_evidence_card: IMPLEMENTED
+      downstream_trace: IMPLEMENTED_SEPARATE_BANNERED
+      console_projection: IMPLEMENTED_DISABLED
+      stale_projection: IMPLEMENTED
+      missing_trace: IMPLEMENTED
+      validation_denial: IMPLEMENTED
+      write_denial: IMPLEMENTED
+      mixed_panel_denial: IMPLEMENTED
+      pre_rc_g4_route_activation_denial: IMPLEMENTED
+      focused_tests: PASS_12
+      canonical_tests: PASS_70
+      qa_recommendation: PASS
+      writes: NONE
+    qa_packet: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_GATE_PACKET.json
+    evidence_record: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_ADAPTER_EVIDENCE.json
+    decision_record: docs/releases/research-operations-foundation-v0-3/ro3-g4/RO3_G4_DELEGATED_DECISION.md
   - id: RC-G4
     name: Live C1 Console projection consumption
-    status: OPERATOR_REQUIRED_AFTER_RO3_G4
+    status: GATE_READY_AFTER_RO3_G4_MERGE_RECORD
     authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
     auto_ratifiable: false
+    operator_required: true
+    current_route_state: DISABLED_PENDING_RC_G4
 retained_boundaries:
   c1_formulas_releases_selectors: IMMUTABLE
   validation_consumption: LOCKED_UNCONSUMED
@@ -117,6 +92,7 @@ retained_boundaries:
   live_console_c1_route: DISABLED_PENDING_RC_G4
   formula_comparison_authority: NON_ACTIVATING_EVIDENCE_ONLY
   assurance_authority: QA_EVIDENCE_ONLY
+  r2_publication: DENIED
   market_authority: NONE
   probability_authority: NONE
   risk_authority: NONE
@@ -125,4 +101,4 @@ retained_boundaries:
   execution_authority: NONE
   agent_write_authority: NONE
 blockers: []
-next_packet: RO3-WP4
+next_packet: RC-G4
