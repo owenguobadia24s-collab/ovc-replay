@@ -5,11 +5,11 @@
   "plan_version": "0.1",
   "packet_id": "PD-JUNE-MDR-CORR1",
   "status": "BLOCKED",
-  "packet_execution": "IMPLEMENTED_USEFUL_CORRECTIONS_EXTERNAL_EVIDENCE_BLOCKED",
+  "packet_execution": "IMPLEMENTED_TESTED_USEFUL_CORRECTIONS_EXTERNAL_EVIDENCE_BLOCKED",
   "baseline_commit": "59057288675277d43b23e4831675b0f5c557d88f",
   "branch": "corrective/pd-june-mdr-corr1-evidence-assurance",
-  "candidate_commit": null,
-  "pull_request": null,
+  "tested_candidate_commit": "fdc57b363d529736a406af854775f9f743b72516",
+  "pull_request": 160,
   "authority_required": "EXACT_EXTERNAL_EVIDENCE_BINDING_AND_SEPARATE_OPERATOR_AUTHORITY_FOR_CONTROL_DESIGN_IF_PURSUED",
   "authority_delta": "NONE_CORR1_IMPLEMENTATION_REMAINS_READ_ONLY_AND_NON_ACTIVATING",
   "prerequisites": [
@@ -32,6 +32,7 @@
   "structural_assurance": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_REVIEWED_STRUCTURAL_ASSURANCE.json",
   "evidence_gap_manifest": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_QA_PACKET.json",
+  "qa_result": "PASS_IMPLEMENTED_SCOPE_BLOCKED_EXTERNAL_EVIDENCE_REQUIRED",
   "contract": "contracts/research_operations/pattern_discovery/PD_JUNE_MDR_CORR1_CORRECTIVE_EVIDENCE_ASSURANCE_CONTRACT_v0_1.md",
   "blockers": [
     {
@@ -74,7 +75,50 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
   ],
-  "tests": [],
+  "tests": [
+    {
+      "workflow_run": 30469499901,
+      "job": 90635747728,
+      "scope": "Focused CORR1, dependent Pattern Discovery, complete repository suite and authority boundary",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469504144,
+      "job": 90635762311,
+      "scope": "General repository unit tests",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469502304,
+      "job": 90635755795,
+      "scope": "PD-WP4 UI, retained Pattern Discovery and canonical repository regression",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469499825,
+      "job": 90635747408,
+      "scope": "PD-G0 design-freeze and canonical repository regression",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469499714,
+      "job": 90635746941,
+      "scope": "Historical June assessment continuity and blocker boundary",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    },
+    {
+      "workflow_run": 30469500079,
+      "job": 90635748154,
+      "scope": "Historical claim-level decision and blocker boundary",
+      "result": "PASS",
+      "tested_head": "fdc57b363d529736a406af854775f9f743b72516"
+    }
+  ],
   "merge_commit": null,
   "rollback": "REVERT_ONLY_PD_JUNE_MDR_CORR1_CODE_COMPACT_EVIDENCE_QA_TESTS_WORKFLOW_AND_STATE_PRESERVE_ALL_EXTERNAL_AND_SIGNED_EVIDENCE"
 }
