@@ -2,7 +2,7 @@ schema: ovc-ro3-implementation-registry/v1
 programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.3
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.3-C1-FACT-ASSURANCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
-status: RC_G4_ACTIVATION_APPROVED_PENDING_MERGE
+status: COMPLETED
 baseline_commit: 38603eb9e52860074bb5ca95f8f016f4236965ed
 items:
   - id: RO3-00
@@ -97,11 +97,14 @@ items:
     current_route_state: ENABLED_LOCAL_READ_ONLY
   - id: RC-G4-ACTIVATION
     name: Activate bounded local read-only C1 presentation
-    status: APPROVED
+    status: COMPLETED
     branch: activate/research-console-v0-3-rc-g4-c1
     baseline_commit: 19066a5201e33a51b0e785dbdc932999f39fd9da
     tested_candidate_commit: 0fd59862770b50f9bc678de44c2ca99aa5a04953
+    final_head: 1a14d43ed5b4e588f403925b8c17bee726d4fc02
     pull_request: 152
+    merge_commit: 4af07508c6503349d97cf7066e609837dc1b37f2
+    merge_receipt: docs/releases/research-console-v0-3/rc-g4/RC_G4_ACTIVATION_MERGE_RECEIPT.json
     authority_delta: LOCAL_READ_ONLY_C1_PRESENTATION
     authority_required: AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA
     prerequisite: RC-G4_OPERATOR_PASS_AND_DECISION_MERGED
@@ -125,10 +128,18 @@ items:
       operator_gate_regression_tests: PASS_6
       complete_repository_suite_dedicated: PASS_70
       complete_repository_suite_generic: PASS_70
-      dedicated_workflow_run: 30425811445
-      dedicated_workflow_job: 90491943746
-      generic_workflow_run: 30425811401
-      generic_workflow_job: 90491943701
+      initial_dedicated_workflow_run: 30425811445
+      initial_dedicated_workflow_job: 90491943746
+      initial_generic_workflow_run: 30425811401
+      initial_generic_workflow_job: 90491943701
+      final_head_dedicated_workflow_run: 30426254275
+      final_head_dedicated_workflow_job: 90493256678
+      final_head_generic_workflow_run: 30426254330
+      final_head_generic_workflow_job: 90493257246
+      final_head_operator_continuity_run: 30426254374
+      final_head_operator_continuity_job: 90493257004
+      final_head_ro3_g4_regression_run: 30426254348
+      final_head_ro3_g4_regression_job: 90493257119
       authority_assertions: PASS
       qa_recommendation: PASS
 retained_boundaries:
@@ -149,4 +160,4 @@ retained_boundaries:
   agent_write_authority: NONE
   remote_deployment: DENIED
 blockers: []
-next_packet: RC-G4-ACTIVATION-MERGE-RECEIPT
+next_packet: null
