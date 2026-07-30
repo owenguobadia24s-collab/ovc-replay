@@ -90,21 +90,22 @@ class PDJune2026ReviewAssessmentTests(unittest.TestCase):
             self.assertEqual(authority[key], "NONE")
         self.assertEqual(authority["validation_consumption"], "LOCKED_UNCONSUMED")
 
-    def test_prior_blocker_progresses_through_corr1_to_approved_corr2(self) -> None:
+    def test_prior_blocker_progresses_through_corr1_into_corr2_review(self) -> None:
         next_packet = self.assessment["next_packet"]
         self.assertEqual(next_packet["packet_id"], "PD-JUNE-MDR-WP1")
         self.assertEqual(next_packet["status"], "BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED")
         self.assertGreaterEqual(len(self.assessment["missing_evidence_for_claim_level_assurance"]), 7)
         self.assertEqual(self.corr1_decision["decision"], "DEFER")
-        self.assertEqual(self.state["status"], "APPROVED")
-        self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-CORR1")
+        self.assertEqual(self.state["status"], "GATE_READY")
+        self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
         self.assertEqual(self.state["overall_verdict"], "NOT_ESTABLISHED")
         self.assertEqual(self.state["source_to_c2_v2_binding"], "PASS_EXPLICIT_CARRY_FORWARD_AND_CORRECTIVE_RUN_BINDING")
         self.assertEqual(self.state["timeline_chronology"], "PASS_208_OF_208_CORRECTED_READ_ONLY_PROJECTION")
         self.assertEqual(self.state["population_state_reproduction"], "PASS_1144_OF_1144")
         self.assertEqual(self.state["pre_trigger_history"], "PASS_11_OF_11_HISTORY_DEPENDENT_UNITS")
+        self.assertEqual(self.state["review_status"], "OPERATOR_INPUT_REQUIRED")
         self.assertEqual(self.state["next_gate"], "PD-JUNE-MDR-G1")
-        self.assertEqual(self.state["next_packet_status"], "READY_AFTER_CORR1_SQUASH_MERGE")
+        self.assertEqual(self.state["next_packet_status"], "WAITING_OPERATOR_REVIEW_ARTIFACT")
 
     def test_qa_recommends_assessment_pass_not_market_validity_pass(self) -> None:
         self.assertEqual(self.qa["qa_status"], "PASS_ASSESSMENT_BLOCKED_NEXT_PACKET")
