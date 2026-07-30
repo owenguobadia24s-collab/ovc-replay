@@ -94,7 +94,7 @@ class PDJuneMDRCorr1EvidenceAssuranceTests(unittest.TestCase):
         self.assertEqual(self.structural["exact_distance_recomputation_count"], 24)
         self.assertEqual(self.structural["unassigned_small_sample_count"], 2)
 
-    def test_operator_defer_authorises_bounded_corr2(self) -> None:
+    def test_operator_defer_authorises_and_advances_bounded_corr2(self) -> None:
         self.assertEqual(self.gaps["status"], "GATE_READY_CONTROL_AND_AGREEMENT_EVIDENCE_REQUIRED")
         self.assertEqual({item["code"] for item in self.gaps["open_blockers"]}, {"PD-JUNE-MDR-006"})
         self.assertEqual(self.decision["decision"], "DEFER")
@@ -104,9 +104,10 @@ class PDJuneMDRCorr1EvidenceAssuranceTests(unittest.TestCase):
         self.assertFalse(self.gate["operator_approval_required"])
         self.assertEqual(self.gate["decision"], "DEFER")
         self.assertEqual(self.gate["overall_answer"]["verdict"], "NOT_ESTABLISHED")
-        self.assertEqual(self.state["status"], "APPROVED")
-        self.assertEqual(self.state["next_packet"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
-        self.assertEqual(self.state["next_packet_status"], "READY_AFTER_CORR1_SQUASH_MERGE")
+        self.assertEqual(self.state["status"], "GATE_READY")
+        self.assertEqual(self.state["packet_id"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
+        self.assertEqual(self.state["review_status"], "OPERATOR_INPUT_REQUIRED")
+        self.assertEqual(self.state["next_packet_status"], "WAITING_OPERATOR_REVIEW_ARTIFACT")
         self.assertEqual(self.qa["recommendation"], "EXECUTE_OPERATOR_APPROVED_PD-JUNE-MDR-CORR2_AFTER_CORR1_MERGE")
 
     def test_authority_remains_frozen(self) -> None:
