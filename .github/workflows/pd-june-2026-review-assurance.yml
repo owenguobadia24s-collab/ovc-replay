@@ -28,6 +28,7 @@ jobs:
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json',
+              'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INDEX.json',
               'registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json',
               'schemas/research_operations/pattern_discovery/pd_june_2026_review_assessment_v0_1.schema.json',
           ]
@@ -38,7 +39,7 @@ jobs:
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_2026_review_assessment -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce historical assessment and approved CORR2 progression
+      - name: Enforce historical assessment and CORR2 operator-review progression
         run: |
           python - <<'PY'
           import json
@@ -48,6 +49,7 @@ jobs:
           reproduction = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json').read_text())
           return_gate = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json').read_text())
           corr1_decision = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json').read_text())
+          review_index = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INDEX.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert assessment['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
           assert assessment['operator_boundary']['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_REQUESTED'
@@ -64,12 +66,15 @@ jobs:
           assert reproduction['review_claim_evidence']['history_dependent_exact_reproduction_count'] == 11
           assert return_gate['gate_status'] == 'APPROVED_DEFER_CORR2_AUTHORISED'
           assert return_gate['decision'] == 'DEFER'
-          assert state['status'] == 'APPROVED'
-          assert state['packet_id'] == 'PD-JUNE-MDR-CORR1'
+          assert review_index['card_count'] == 16
+          assert review_index['batch_count'] == 4
+          assert state['status'] == 'GATE_READY'
+          assert state['packet_id'] == 'PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE'
           assert state['source_to_c2_v2_binding'] == 'PASS_EXPLICIT_CARRY_FORWARD_AND_CORRECTIVE_RUN_BINDING'
           assert state['population_state_reproduction'] == 'PASS_1144_OF_1144'
+          assert state['review_status'] == 'OPERATOR_INPUT_REQUIRED'
           assert state['next_gate'] == 'PD-JUNE-MDR-G1'
-          assert state['next_packet_status'] == 'READY_AFTER_CORR1_SQUASH_MERGE'
+          assert state['next_packet_status'] == 'WAITING_OPERATOR_REVIEW_ARTIFACT'
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
           assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           authority = assessment['authority']
