@@ -8,10 +8,13 @@ The review packet is complete and machine-validated. No model, candidate, trigge
 
 ## Files
 
-1. `PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INPUT.json` — review this file.
-2. `PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.template.json` — complete and return this file.
-3. `PD_JUNE_MDR_CORR2_SEALED_ANSWER_KEY.json` — **do not open until the completed response is returned**.
-4. `PD_JUNE_MDR_CORR2_CONTROL_LEDGER.json` — deterministic construction evidence; avoid opening before review if you want the strongest blinding.
+1. `PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INDEX.json` — review index and exact batch hashes.
+2. `PD_JUNE_MDR_CORR2_BLINDED_REVIEW_BATCH_01.json` through `BATCH_04.json` — review all 16 cards in batch and card order.
+3. `PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.template.json` — complete and return this file.
+4. `PD_JUNE_MDR_CORR2_SEALED_ANSWER_KEY.json` — **do not open until the completed response is returned**.
+5. `PD_JUNE_MDR_CORR2_CONTROL_LEDGER.json` — deterministic construction evidence; avoid opening before review to preserve the strongest blinding.
+
+A single combined review-input file is also supplied to the operator outside the repository for easier completion. Its cards are exactly bound by the index and four repository batches.
 
 ## Review procedure
 
