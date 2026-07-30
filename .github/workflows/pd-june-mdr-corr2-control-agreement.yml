@@ -1,0 +1,80 @@
+name: PD-JUNE-MDR-CORR2 control and agreement assurance
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  corr2-control-agreement:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse and verify CORR2 court records
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
+          paths = [
+              base / 'PD_JUNE_MDR_CORR2_CONTROL_LEDGER.json',
+              base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INDEX.json',
+              base / 'PD_JUNE_MDR_CORR2_SEALED_ANSWER_KEY.json',
+              base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.template.json',
+              base / 'PD_JUNE_MDR_CORR2_QA_PACKET.json',
+              Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
+              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_corr2_control_agreement_v0_1.schema.json'),
+          ]
+          for path in paths:
+              json.loads(path.read_text(encoding='utf-8'))
+          index = json.loads((base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INDEX.json').read_text())
+          cards = []
+          for item in index['batches']:
+              path = base / item['path']
+              raw = path.read_bytes()
+              assert len(raw) == item['size_bytes']
+              assert hashlib.sha256(raw).hexdigest() == item['file_sha256']
+              batch = json.loads(raw)
+              assert batch['card_count'] == item['card_count']
+              cards.extend(batch['cards'])
+          assert len(cards) == index['card_count'] == 16
+          PY
+      - name: Run focused CORR2 tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_mdr_corr2_control_agreement -v
+      - name: Run complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce operator-review boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
+          control = json.loads((base / 'PD_JUNE_MDR_CORR2_CONTROL_LEDGER.json').read_text())
+          index = json.loads((base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INDEX.json').read_text())
+          answer = json.loads((base / 'PD_JUNE_MDR_CORR2_SEALED_ANSWER_KEY.json').read_text())
+          qa = json.loads((base / 'PD_JUNE_MDR_CORR2_QA_PACKET.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
+          assert control['population']['immutable_candidate_count'] == 208
+          assert control['selection_rule']['total_control_count'] == 10
+          assert control['verification']['all_controls_candidate_disjoint'] is True
+          assert control['verification']['all_control_state_ids_unique'] is True
+          assert control['verification']['matched_quality_exact_count'] == 6
+          assert index['batch_count'] == 4
+          assert index['card_count'] == 16
+          assert answer['composition'] == {'promoted_candidates': 6, 'matched_controls': 6, 'population_controls': 4}
+          assert qa['status'] == 'GATE_READY_OPERATOR_REVIEW_INPUT_REQUIRED'
+          assert state['status'] == 'GATE_READY'
+          assert state['review_status'] == 'OPERATOR_INPUT_REQUIRED'
+          assert state['next_gate'] == 'PD-JUNE-MDR-G1'
+          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
+          assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
+          for prohibited in ('PROVIDER_INTAKE', 'MACHINE_REPLAY', 'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND', 'R2_PUBLICATION', 'VALIDATION_CONSUMPTION'):
+              assert prohibited in state['retained_prohibitions']
+          PY
