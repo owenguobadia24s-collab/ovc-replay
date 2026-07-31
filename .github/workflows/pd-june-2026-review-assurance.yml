@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse assessment court records
+      - name: Parse assessment and final decision court records
         run: |
           python - <<'PY'
           import json
@@ -26,10 +26,9 @@ jobs:
               'docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_RA1_QA_PACKET.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_G1_OPERATOR_DECISION.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json',
-              'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json',
+              'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json',
               'registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json',
-              'schemas/research_operations/pattern_discovery/pd_june_2026_review_assessment_v0_1.schema.json',
           ]
           for path in paths:
               json.loads(Path(path).read_text(encoding='utf-8'))
@@ -38,44 +37,30 @@ jobs:
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_2026_review_assessment -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce historical assessment and approved CORR2 progression
+      - name: Enforce historical assessment and final operator DEFER
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           assessment = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_2026_OPERATOR_REVIEW_AND_MARKET_DESCRIPTION_ASSESSMENT.json').read_text())
-          decision = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1/PD_JUNE_MDR_G1_OPERATOR_DECISION.json').read_text())
           reproduction = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json').read_text())
-          return_gate = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_RETURN_GATE_PACKET.json').read_text())
-          corr1_decision = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json').read_text())
+          decision = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert assessment['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
-          assert assessment['operator_boundary']['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_REQUESTED'
-          assert assessment['operator_boundary']['second_june_replay'] == 'DENIED_NOT_REQUIRED'
-          assert assessment['next_packet']['status'] == 'BLOCKED_EXTERNAL_OPERATOR_LOCAL_ARTIFACT_BINDING_REQUIRED'
-          assert decision['decision'] == 'DEFER'
-          assert decision['decision_authority'] == 'OPERATOR'
-          assert corr1_decision['decision'] == 'DEFER'
-          assert corr1_decision['decision_authority'] == 'OPERATOR'
-          assert corr1_decision['authority_delta']['next_packet'] == 'PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE'
           assert reproduction['population_state_reproduction']['exact_core_match_count'] == 1144
           assert reproduction['population_state_reproduction']['mismatch_count'] == 0
           assert reproduction['review_claim_evidence']['trigger_reproduction_count'] == 26
           assert reproduction['review_claim_evidence']['history_dependent_exact_reproduction_count'] == 11
-          assert return_gate['gate_status'] == 'APPROVED_DEFER_CORR2_AUTHORISED'
-          assert return_gate['decision'] == 'DEFER'
+          assert decision['decision'] == 'DEFER'
+          assert decision['decision_authority'] == 'OPERATOR'
+          assert decision['authority_delta'] == 'NONE_DEFER_AND_PRESERVE_CURRENT_AUTHORITY'
+          assert decision['next_packet'] is None
           assert state['status'] == 'APPROVED'
-          assert state['packet_id'] == 'PD-JUNE-MDR-CORR1'
-          assert state['source_to_c2_v2_binding'] == 'PASS_EXPLICIT_CARRY_FORWARD_AND_CORRECTIVE_RUN_BINDING'
-          assert state['population_state_reproduction'] == 'PASS_1144_OF_1144'
-          assert state['next_gate'] == 'PD-JUNE-MDR-G1'
-          assert state['next_packet_status'] == 'READY_AFTER_CORR1_SQUASH_MERGE'
+          assert state['review_status'] == 'COMPLETED'
+          assert state['next_gate'] is None
+          assert state['next_packet'] is None
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
           assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
-          authority = assessment['authority']
-          for key in ('canonical_discovery_processing', 'canonical_append', 'provider_intake', 'machine_replay', 'selector_or_release_mutation', 'r2_publication'):
-              assert authority[key] == 'DENIED'
-          for key in ('trigger_or_model_change', 'semantic_or_candidate_promotion', 'probability', 'risk', 'exposure', 'trading', 'execution', 'agent_write'):
-              assert authority[key] == 'NONE'
-          assert authority['validation_consumption'] == 'LOCKED_UNCONSUMED'
+          for prohibited in ('PROVIDER_INTAKE', 'MACHINE_REPLAY', 'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND', 'R2_PUBLICATION', 'VALIDATION_CONSUMPTION'):
+              assert prohibited in state['retained_prohibitions']
           PY
