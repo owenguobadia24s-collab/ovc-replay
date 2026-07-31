@@ -5,26 +5,33 @@
   "plan_version": "0.1+A1+A2",
   "packet_id": "PD-JUNE-FM-WP2",
   "correction_id": "PD-JUNE-FM-WP2-CORR1",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "prerequisites": [
     "PD-JUNE-FM-WP1-COMPLETED",
     "PD-JUNE-FM-WP2-TOOLING-SQUASH-MERGED",
     "OPERATOR_LOCAL_HASH_MISMATCH_REPRODUCED",
-    "CORRECTION_TESTS_PASS"
+    "CORRECTION_TESTS_PASS",
+    "CORRECTION_SQUASH_MERGED"
   ],
   "authority_required": "NONE",
   "authority_delta": "NONE_VALIDATION_CORRECTION_ONLY",
   "baseline_commit": "d674425aeb91dc470ce2cef9feb400ee6236784c",
   "branch": "fix/pd-june-fm-wp2-manifest-logical-hash",
+  "pull_request": 185,
   "implementation_tested_head": "545fe9be5048fb5cb130345b901b33f52d0809e5",
+  "final_head": "78429d7677a784a9f538babe111805ce23b0a5cb",
   "tests": [
-    {"workflow_run":30659504514,"result":"PASS","scope":"WP2 focused, retained source/A2 continuity, complete suite and authority boundary"},
-    {"workflow_run":30659504805,"result":"PASS","scope":"complete repository tests"}
+    {"workflow_run":30659504514,"result":"PASS","scope":"implementation-head WP2 focused, retained source/A2 continuity, complete suite and authority boundary"},
+    {"workflow_run":30659504805,"result":"PASS","scope":"implementation-head complete repository tests"},
+    {"workflow_run":30659656934,"result":"PASS","scope":"final-head WP2 focused, retained source/A2 continuity, complete suite and authority boundary"},
+    {"workflow_run":30659656902,"result":"PASS","scope":"final-head complete repository tests"}
   ],
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR1_QA_PACKET.json",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR1_DELEGATED_DECISION.json",
   "decision": "PASS",
-  "merge_commit": null,
+  "merge_commit": "81357a8e53e05289c1ae27a666f5ae8348f4eb44",
+  "merge_status": "PASS_SQUASH_MERGED_TO_MAIN",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR1_MERGE_RECEIPT.json",
   "blockers": [],
   "resolved_blockers": [
     {
@@ -36,7 +43,7 @@
   "source_manifest_embedded_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
   "source_manifest_accepted_content_logical_sha256": "aee0006826b4a9703416a4f171306df02f85b081f7f515e701ac8b0b2b409669",
   "source_mutated": false,
-  "rollback": "Revert the correction merge. Preserve the accepted source slice and prior acceptance records unchanged.",
+  "rollback": "Revert merge 81357a8e53e05289c1ae27a666f5ae8348f4eb44. Preserve the accepted source slice and prior acceptance records unchanged.",
   "next_packet": "PD-JUNE-FM-WP2-OPERATOR-LOCAL-REPLAY",
-  "next_packet_status": "READY_AFTER_CORRECTION_MERGE"
+  "next_packet_status": "READY"
 }
