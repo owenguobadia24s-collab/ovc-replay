@@ -2,7 +2,7 @@
   "baseline_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
   "blocking_issues": [],
   "branch": "build/ro4-wp2-matrix-persistence-conflict",
-  "candidate_commit": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
+  "candidate_commit": "96a83def9962d264a1ac0b035d51188998079653",
   "checks": {
     "all_conflict_runs_have_real_matched_controls": "PASS_370_OF_370",
     "all_four_external_artifacts_byte_deterministic": "PASS",
@@ -19,32 +19,23 @@
     "validation_consumption": "LOCKED_UNCONSUMED"
   },
   "final_head_evidence": [
-    {
-      "job": 91212236295,
-      "result": "PASS",
-      "scope": "RO4-G2 validator, focused tests, complete repository suite and authority assertions",
-      "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
-      "workflow_run": 30647451200
-    },
-    {
-      "job": 91212237818,
-      "result": "PASS",
-      "scope": "General repository unit tests",
-      "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
-      "workflow_run": 30647451379
-    }
+    {"job": 91212236295, "result": "PASS", "scope": "implementation-head RO4-G2 workflow", "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3", "workflow_run": 30647451200},
+    {"job": 91212237818, "result": "PASS", "scope": "implementation-head generic tests", "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3", "workflow_run": 30647451379},
+    {"job": 91213268803, "result": "PASS", "scope": "decision-head RO4-G2 workflow", "tested_head": "96a83def9962d264a1ac0b035d51188998079653", "workflow_run": 30647755625},
+    {"job": 91213270053, "result": "PASS", "scope": "decision-head generic tests", "tested_head": "96a83def9962d264a1ac0b035d51188998079653", "workflow_run": 30647755644}
   ],
   "gate_id": "RO4-G2",
   "packet_id": "RO4-WP2",
   "recommendation": "PASS",
   "rollback": "Remove replaceable local G2 evidence streams and revert only the bounded RO4-WP2 implementation packet.",
   "schema": "ovc-ro4-g2-qa-packet/v1",
-  "status": "PASS_FINAL_IMPLEMENTATION_HEAD_CI",
+  "status": "PASS_FINAL_DECISION_HEAD_CI",
   "tests": {
-    "authority_assertions": "PASS_FINAL_HEAD",
-    "complete_repository": "PASS_FINAL_HEAD",
-    "focused": "PASS_9_FINAL_HEAD",
-    "validator": "PASS_FINAL_HEAD",
+    "authority_assertions": "PASS_DECISION_HEAD",
+    "complete_repository": "PASS_DECISION_HEAD",
+    "focused": "PASS_9_DECISION_HEAD",
+    "generic": "PASS_DECISION_HEAD",
+    "validator": "PASS_DECISION_HEAD",
     "workflow": "PASS"
   },
   "warnings": []

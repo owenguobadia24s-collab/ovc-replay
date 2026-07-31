@@ -18,15 +18,11 @@ REQUIRED = [
     BASE / "ro4-wp2/RO4_WP2_IMPLEMENTATION_PACKET.json",
     BASE / "ro4-g2/RO4_G2_QA_PACKET.json",
     BASE / "ro4-g2/RO4_G2_GATE_PACKET.json",
+    BASE / "ro4-g2/RO4_G2_DELEGATED_DECISION.json",
 ]
 EXPECTED_G1 = "a6add1c87233d88b400b53ceec4efcd8c06c80d7cb4e4cfa83c73e05743bf200"
 EXPECTED_G2 = "eb5435443be26e956334c4aedd12c2a5280fc815f014f24bd74b064bf4e6eaeb"
-EXPECTED_COUNTS = {
-    "conflict_runs": 370,
-    "cross_scale_projections": 191670,
-    "matrices": 60,
-    "persistence_runs": 678322,
-}
+EXPECTED_COUNTS = {"conflict_runs": 370, "cross_scale_projections": 191670, "matrices": 60, "persistence_runs": 678322}
 
 
 def load(path: Path) -> dict:
@@ -63,38 +59,27 @@ def main() -> int:
     if benchmark.get("runtime_seconds", 10000) > 600 or benchmark.get("peak_rss_bytes", 10**12) > 8 * 1024**3:
         raise SystemExit("G2_PERFORMANCE_BOUND_FAILURE")
     receipt = load(BASE / "ro4-wp2/RO4_G2_DETERMINISM_RECEIPT.json")
-    if receipt.get("status") != "PASS_BYTE_IDENTICAL_ALL_FOUR_DERIVED_ARTIFACTS":
+    if receipt.get("status") != "PASS_BYTE_IDENTICAL_ALL_FOUR_DERIVED_ARTIFACTS" or not all(receipt.get("artifact_hashes_equal", {}).values()):
         raise SystemExit("G2_DETERMINISM_FAILURE")
-    if not all(receipt.get("artifact_hashes_equal", {}).values()):
-        raise SystemExit("G2_ARTIFACT_RERUN_HASH_FAILURE")
     fixture = load(ROOT / "fixtures/research_operations/v0_4/RO4_G2_SYNTHETIC_ASSURANCE_FIXTURE_v0_1.json")
     if not fixture.get("synthetic") or fixture.get("operator_evidence") is not False:
         raise SystemExit("G2_FIXTURE_AUTHORITY_FAILURE")
     gate = load(BASE / "ro4-g2/RO4_G2_GATE_PACKET.json")
     if gate.get("authority_delta") != "LOCAL_READ_ONLY_DERIVED" or gate.get("operator_decision_required") is not False:
         raise SystemExit("G2_AUTHORITY_DELTA_FAILURE")
-    if gate.get("status") not in {"QA_REVIEW", "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_MERGE"}:
+    if gate.get("status") not in {"QA_REVIEW", "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_MERGE", "APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI"}:
         raise SystemExit("G2_GATE_STATUS_FAILURE")
     qa = load(BASE / "ro4-g2/RO4_G2_QA_PACKET.json")
-    if qa.get("blocking_issues"):
-        raise SystemExit("G2_BLOCKING_ISSUE_PRESENT")
-    active_search_roots = [
-        ROOT / "src",
-        ROOT / "fixtures/research_operations/v0_4",
-        BASE,
-    ]
-    forbidden_external = [
-        path
-        for search_root in active_search_roots
-        for pattern in ("*.jsonl.gz", "*.sqlite", "*.db", "*.parquet")
-        for path in search_root.rglob(pattern)
-    ]
+    if qa.get("blocking_issues") or qa.get("recommendation") != "PASS":
+        raise SystemExit("G2_QA_FAILURE")
+    decision = load(BASE / "ro4-g2/RO4_G2_DELEGATED_DECISION.json")
+    if decision.get("decision") != "PASS" or decision.get("reserved_authority_delta") != "NONE":
+        raise SystemExit("G2_DELEGATED_DECISION_FAILURE")
+    active_search_roots = [ROOT / "src", ROOT / "fixtures/research_operations/v0_4", BASE]
+    forbidden_external = [path for search_root in active_search_roots for pattern in ("*.jsonl.gz", "*.sqlite", "*.db", "*.parquet") for path in search_root.rglob(pattern)]
     if forbidden_external:
-        raise SystemExit(
-            "G2_EXTERNAL_ARTIFACT_BYTES_COMMITTED:"
-            + ",".join(str(path.relative_to(ROOT)) for path in forbidden_external)
-        )
-    print("PASS: RO4-G2 matrix, persistence, conflict and cross-scale evidence is deterministic, count-only, source-bound and non-activating")
+        raise SystemExit("G2_EXTERNAL_ARTIFACT_BYTES_COMMITTED:" + ",".join(str(path.relative_to(ROOT)) for path in forbidden_external))
+    print("PASS: RO4-G2 matrix, persistence, conflict and cross-scale evidence is deterministic, count-only, source-bound, delegated-PASS and non-activating")
     return 0
 
 

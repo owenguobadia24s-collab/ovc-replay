@@ -5,6 +5,7 @@
   "decided_at_utc": "2026-07-31T16:31:00Z",
   "decision": "PASS",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "decision_commit": "96a83def9962d264a1ac0b035d51188998079653",
   "evidence": {
     "byte_identical_full_rerun": true,
     "conflict_runs": 370,
@@ -15,10 +16,11 @@
     "matrices": 60,
     "persistence_runs": 678322
   },
+  "final_decision_head_tested": "96a83def9962d264a1ac0b035d51188998079653",
   "gate_id": "RO4-G2",
   "implementation_baseline_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
   "merge_commit": null,
-  "merge_state": "PENDING_FINAL_DECISION_HEAD_CI_AND_ELIGIBLE_SQUASH_MERGE",
+  "merge_state": "APPROVED_MERGE_READY",
   "next_packet": "RO4-WP3",
   "non_reserved_rationale": "The packet creates only deterministic local read-only descriptive evidence over already approved indexes. It does not activate a selector, release, semantic, family, outcome, probability, exposure, execution, agent-write, R2-write or Console route.",
   "packet_id": "RO4-WP2",
@@ -26,7 +28,7 @@
   "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
   "plan_version": "v0.2",
   "pull_request": 174,
-  "qa_result": "PASS",
+  "qa_result": "PASS_FINAL_DECISION_HEAD_CI",
   "reserved_authority_delta": "NONE",
   "retained_prohibitions": [
     "C2_MUTATION",
@@ -50,16 +52,30 @@
     {
       "job": 91212236295,
       "result": "PASS",
-      "scope": "packet validator, 9 focused tests, complete repository suite, authority and storage assertions",
+      "scope": "implementation-head packet validator, 9 focused tests, complete repository suite, authority and storage assertions",
       "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
       "workflow_run": 30647451200
     },
     {
       "job": 91212237818,
       "result": "PASS",
-      "scope": "generic repository unit tests",
+      "scope": "implementation-head generic repository unit tests",
       "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
       "workflow_run": 30647451379
+    },
+    {
+      "job": 91213268803,
+      "result": "PASS",
+      "scope": "decision-head packet validator, 9 focused tests, complete repository suite, authority and storage assertions",
+      "tested_head": "96a83def9962d264a1ac0b035d51188998079653",
+      "workflow_run": 30647755625
+    },
+    {
+      "job": 91213270053,
+      "result": "PASS",
+      "scope": "decision-head generic repository unit tests",
+      "tested_head": "96a83def9962d264a1ac0b035d51188998079653",
+      "workflow_run": 30647755644
     }
   ],
   "title": "Transition matrix, persistence and conflict assurance acceptance"
