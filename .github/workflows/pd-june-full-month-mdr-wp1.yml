@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse A1 court records and amended provider plan
+      - name: Parse A1 court records, merge receipt and amended provider plan
         run: |
           PYTHONPATH=src python - <<'PY'
           import json
@@ -29,6 +29,7 @@ jobs:
           authority = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json').read_text())
           amendment = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json').read_text())
           incident = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_JULY_H1_PROVIDER_INCIDENT.json').read_text())
+          receipt = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_MERGE_RECEIPT.json').read_text())
           qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_QA_PACKET.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
           schema = json.loads(Path('schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_a1_v0_1.schema.json').read_text())
@@ -41,6 +42,9 @@ jobs:
           assert amendment['authority_delta'] == 'WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1'
           assert incident['observed_http_status'] == 404
           assert incident['accepted_source_slice_created'] is False
+          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
+          assert receipt['merge_commit'] == '8652834c7d99050d20dad6447a751c43e82a36e1'
+          assert receipt['next_action'] == 'OPERATOR_LOCAL_WP1_EXECUTION'
           assert plan['provider_object_count'] == 72
           assert len([item for item in plan['objects'] if item['logical_stream'].startswith('M1_')]) == 68
           assert len([item for item in plan['objects'] if item['logical_stream'].startswith('H1_')]) == 4
@@ -53,12 +57,14 @@ jobs:
           assert state['packet_id'] == 'PD-JUNE-FM-WP1'
           assert state['status'] == 'GATE_READY'
           assert state['plan_amendment'] == 'PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER'
+          assert state['amendment_status'] == 'COMPLETED_SQUASH_MERGED_TO_MAIN'
+          assert state['amendment_merge_commit'] == '8652834c7d99050d20dad6447a751c43e82a36e1'
           assert state['source_request_plan'] == 'GENERATED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY'
           assert state['native_july_h1_transport'] == 'WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE'
           assert state['post_target_h1_context'] == 'M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS'
           assert state['next_packet'] == 'PD-JUNE-FM-WP2'
           assert state['next_packet_status'] == 'BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS'
-          assert qa['status'] in {'QA_REVIEW_PENDING_FINAL_HEAD_CI', 'APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI'}
+          assert qa['status'] == 'COMPLETED_MERGE_RECORDED'
           PY
       - name: Run focused full-month and intake tests
         run: |

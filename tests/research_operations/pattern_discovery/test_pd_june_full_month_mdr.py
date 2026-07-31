@@ -27,6 +27,7 @@ BASE = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-full-mon
 AUTHORITY = BASE / "PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json"
 AMENDMENT = BASE / "PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json"
 INCIDENT = BASE / "PD_JUNE_FULL_MONTH_MDR_A1_JULY_H1_PROVIDER_INCIDENT.json"
+MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_A1_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json"
 PLAN = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_v0_1.md"
 PLAN_A1 = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A1_JULY_NATIVE_H1_WAIVER.md"
@@ -79,11 +80,24 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertEqual(profile["r2_publication"], "DENIED")
         self.assertEqual(profile["validation_consumption"], "DENIED")
 
-    def test_operator_authority_amendment_and_programme_state_are_bound(self) -> None:
-        for path in (AUTHORITY, AMENDMENT, INCIDENT, STATE, PLAN, PLAN_A1, CONTRACT, CONTRACT_A1, SCHEMA, SCHEMA_A1):
+    def test_operator_authority_amendment_merge_and_programme_state_are_bound(self) -> None:
+        for path in (
+            AUTHORITY,
+            AMENDMENT,
+            INCIDENT,
+            MERGE_RECEIPT,
+            STATE,
+            PLAN,
+            PLAN_A1,
+            CONTRACT,
+            CONTRACT_A1,
+            SCHEMA,
+            SCHEMA_A1,
+        ):
             self.assertTrue(path.is_file(), path)
         authority = json.loads(AUTHORITY.read_text(encoding="utf-8"))
         amendment = json.loads(AMENDMENT.read_text(encoding="utf-8"))
+        receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
         state = json.loads(STATE.read_text(encoding="utf-8"))
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
         self.assertEqual(authority["decision"], "PASS")
@@ -91,10 +105,14 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertEqual(amendment["decision"], "PASS")
         self.assertEqual(amendment["decision_authority"], "OPERATOR")
         self.assertEqual(amendment["authority_delta"], "WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1")
-        self.assertEqual(amendment["next_packet"], "PD-JUNE-FM-WP1")
+        self.assertEqual(receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(receipt["merge_commit"], "8652834c7d99050d20dad6447a751c43e82a36e1")
+        self.assertEqual(receipt["next_action"], "OPERATOR_LOCAL_WP1_EXECUTION")
         self.assertEqual(state["status"], "GATE_READY")
         self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP1")
         self.assertEqual(state["plan_amendment"], PLAN_AMENDMENT_ID)
+        self.assertEqual(state["amendment_status"], "COMPLETED_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(state["amendment_merge_commit"], "8652834c7d99050d20dad6447a751c43e82a36e1")
         self.assertEqual(state["source_request_plan"], "GENERATED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY")
         self.assertEqual(state["native_july_h1_transport"], "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE")
         self.assertEqual(state["post_target_h1_context"], "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS")
