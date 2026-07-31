@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp2_replay_v0_1",
+  "title": "PD-JUNE-FM-WP2 deterministic full-month replay evidence",
+  "type": "object",
+  "required": ["schema"],
+  "properties": {
+    "schema": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "PD-JUNE-FULL-MONTH-MDR"},
+    "packet_id": {"const": "PD-JUNE-FM-WP2"},
+    "slice_id": {"const": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"},
+    "source_manifest_sha256": {"const": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3"},
+    "target_start_utc": {"const": "2026-06-01T00:00:00Z"},
+    "target_end_exclusive_utc": {"const": "2026-07-01T00:00:00Z"},
+    "source_start_utc": {"const": "2026-05-30T00:00:00Z"},
+    "source_end_exclusive_utc": {"const": "2026-07-03T00:00:00Z"},
+    "operation_mode": {"const": "TIME_GATED_REPLAY"},
+    "release_status": {"const": "NOT_A_RELEASE"},
+    "selector_eligibility": {"const": "NONE"},
+    "r2_publication": {"const": "DENIED"},
+    "validation_consumption": {"const": "DENIED"},
+    "repair_performed": {"const": false},
+    "source_boundary_insufficiency": {"const": 0},
+    "deterministic_independent_rerun": {"const": "PASS_BYTE_IDENTICAL"}
+  },
+  "additionalProperties": true
+}
