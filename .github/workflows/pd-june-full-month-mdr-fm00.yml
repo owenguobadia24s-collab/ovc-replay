@@ -34,8 +34,12 @@ jobs:
           assert authority['decision'] == 'PASS'
           assert authority['decision_authority'] == 'OPERATOR'
           assert state['packet_id'] == 'PD-JUNE-FM-00'
-          assert state['status'] in {'RUNNING', 'IMPLEMENTED', 'QA_REVIEW', 'APPROVED', 'COMPLETED'}
-          assert qa['recommendation'] == 'PASS_FM00_AND_CONTINUE_TO_OPERATOR_LOCAL_SOURCE_INTAKE_AFTER_CI'
+          assert state['status'] == 'APPROVED'
+          assert state['next_packet'] == 'PD-JUNE-FM-WP1'
+          assert state['next_packet_status'] == 'READY_AFTER_FM00_SQUASH_MERGE'
+          assert qa['status'] == 'APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI'
+          assert qa['qa_result'] == 'PASS_SOURCE_BOUNDARY_AND_AUTHORITY_FREEZE'
+          assert qa['recommendation'] == 'PASS_FM00_AND_SQUASH_MERGE_THEN_CONTINUE_TO_WP1_TOOLING'
           assert schema['properties']['source_slice_id']['const'] == stored['source_slice_id']
           PY
       - name: Run focused FM00 tests
