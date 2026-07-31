@@ -19,6 +19,7 @@ DIGEST = BASE / "PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_DIGEST.json"
 GAPS = BASE / "PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json"
 CORR1_DECISION = BASE / "PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json"
 CORR2_DECISION = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-mdr-corr2" / "PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json"
+MERGE_RECEIPT = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-mdr-corr2" / "PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 
 
@@ -34,6 +35,7 @@ class PDJuneMDRCorr1EvidenceAssuranceTests(unittest.TestCase):
         cls.gaps = json.loads(GAPS.read_text(encoding="utf-8"))
         cls.corr1_decision = json.loads(CORR1_DECISION.read_text(encoding="utf-8"))
         cls.corr2_decision = json.loads(CORR2_DECISION.read_text(encoding="utf-8"))
+        cls.merge_receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
 
     def test_binding_and_drive_inventory_are_exact(self) -> None:
@@ -57,13 +59,13 @@ class PDJuneMDRCorr1EvidenceAssuranceTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(compressed).hexdigest(), self.structural["ledger"]["compressed_sha256"])
         self.assertEqual(len(json.loads(gzip.decompress(compressed).decode("utf-8"))["records"]), 26)
 
-    def test_operator_decision_chain_closes_with_defer(self) -> None:
+    def test_operator_decision_chain_and_merge_are_complete(self) -> None:
         self.assertEqual(self.corr1_decision["decision"], "DEFER")
         self.assertEqual(self.corr1_decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
         self.assertEqual(self.corr2_decision["decision"], "DEFER")
-        self.assertEqual(self.corr2_decision["decision_authority"], "OPERATOR")
         self.assertIsNone(self.corr2_decision["next_packet"])
-        self.assertEqual(self.state["status"], "APPROVED")
+        self.assertEqual(self.merge_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(self.state["status"], "COMPLETED")
         self.assertEqual(self.state["review_status"], "COMPLETED")
         self.assertIsNone(self.state["next_packet"])
 
