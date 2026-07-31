@@ -1,0 +1,39 @@
+{
+  "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
+  "blocking_issues": [],
+  "branch": "build/ro4-wp3-sequence-windows-neutral-candidates",
+  "candidate_commit": null,
+  "checks": {
+    "canonical_evidence_byte_determinism": "PASS_11_OF_11",
+    "declared_distance_components_visible": "PASS",
+    "full_population_no_sampling": "PASS_4093390_WINDOWS",
+    "incremental_unchanged_hashes_preserved": "PASS_11_OF_11",
+    "machine_ablation_operator_surface": "DENIED",
+    "no_promotion_path": "PASS",
+    "operation_mode_translation": "DENIED",
+    "operator_batch_blinded": "PASS_60_CARDS",
+    "pd_population_merge_or_bridge": "DENIED",
+    "real_control_ledgers": "PASS_9147_OF_9147",
+    "semantic_vocabulary": "ABSENT",
+    "signature_diversity": "PASS",
+    "synthetic_controls_operator_facing": "ZERO",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "window_cap": "PASS_MAX_27896_OF_100000",
+    "workspace_determinism": "PASS_LOGICAL_IDENTITY; RAW_SQLITE_PAGE_LAYOUT_NON_CANONICAL"
+  },
+  "gate_id": "RO4-G3",
+  "packet_id": "RO4-WP3",
+  "recommendation": "PENDING_CI",
+  "rollback": "Remove replaceable local G3 evidence and revert only the bounded RO4-WP3 implementation packet.",
+  "schema": "ovc-ro4-g3-qa-packet/v1",
+  "status": "PASS_LOCAL_PENDING_CI",
+  "tests": {
+    "complete_repository": "PENDING_CI",
+    "focused": "PASS_10_LOCAL",
+    "validator": "PASS_LOCAL",
+    "workflow": "PENDING_CI"
+  },
+  "warnings": [
+    "Raw SQLite workspace bytes are not portable byte-identical evidence; the workspace is explicitly replaceable and logical-only. All 11 canonical evidence artifacts are byte-identical across independent full builds."
+  ]
+}

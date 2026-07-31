@@ -2,130 +2,36 @@
   "$id": "ovc-ro4-neutral-recurrence-candidate/v1",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "not": {
-    "anyOf": [
-      {
-        "required": [
-          "pd_candidate_id"
-        ]
-      },
-      {
-        "required": [
-          "family_id"
-        ]
-      },
-      {
-        "required": [
-          "promotion_status"
-        ]
-      },
-      {
-        "required": [
-          "probability"
-        ]
-      }
-    ]
-  },
+  "not": {"anyOf": [
+    {"required": ["pd_candidate_id"]}, {"required": ["pd_cluster_id"]},
+    {"required": ["family_id"]}, {"required": ["family_name"]},
+    {"required": ["promotion_status"]}, {"required": ["promotion"]},
+    {"required": ["probability"]}, {"required": ["prediction"]},
+    {"required": ["outcome"]}
+  ]},
   "properties": {
-    "authority": {
-      "const": "NON_CANONICAL_RESEARCH_CANDIDATE"
-    },
-    "boundary_stability": {
-      "type": "object"
-    },
-    "candidate_id": {
-      "pattern": "^RO4\\.RECURRENCE\\.",
-      "type": "string"
-    },
-    "counterexample_ids": {
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "exact_or_declared_distance": {
-      "type": [
-        "object",
-        "null"
-      ]
-    },
-    "matched_control_ids": {
-      "items": {
-        "type": "string"
-      },
-      "minItems": 1,
-      "type": "array"
-    },
-    "member_sequence_ids": {
-      "items": {
-        "pattern": "^RO4\\.SEQUENCE\\.",
-        "type": "string"
-      },
-      "minItems": 2,
-      "type": "array"
-    },
-    "no_counterexample_reason": {
-      "enum": [
-        "NO_COUNTEREXAMPLE_AVAILABLE"
-      ]
-    },
-    "operation_modes": {
-      "items": {
-        "enum": [
-          "LIVE_PROSPECTIVE",
-          "TIME_GATED_REPLAY",
-          "NON_EVIDENTIARY_REPLAY"
-        ]
-      },
-      "type": "array"
-    },
-    "population_control_ids": {
-      "items": {
-        "type": "string"
-      },
-      "minItems": 1,
-      "type": "array"
-    },
-    "semantic_label": {
-      "const": "PROHIBITED"
-    },
-    "sequence_policy_id": {
-      "type": "string"
-    },
-    "signature_type": {
-      "enum": [
-        "EXACT",
-        "DECLARED_DISTANCE"
-      ]
-    },
-    "source_release_ids": {
-      "items": {
-        "type": "string"
-      },
-      "minItems": 1,
-      "type": "array"
-    },
-    "support_counts": {
-      "items": {
-        "$ref": "count_denominator_cell_v0_1.schema.json"
-      },
-      "type": "array"
-    }
+    "authority": {"const": "NON_CANONICAL_RESEARCH_CANDIDATE"},
+    "boundary_stability": {"type": "object"},
+    "candidate_id": {"pattern": "^RO4\\.RECURRENCE\\.[0-9a-f]{64}$", "type": "string"},
+    "counterexample_ids": {"items": {"type": "string"}, "type": "array"},
+    "exact_or_declared_distance": {"type": ["object", "null"]},
+    "exact_signature_id": {"pattern": "^RO4\\.SIGNATURE\\.[0-9a-f]{64}$", "type": "string"},
+    "full_member_count": {"minimum": 2, "type": "integer"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "matched_control_ids": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+    "member_inventory_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "member_sequence_ids": {"items": {"pattern": "^RO4\\.SEQUENCE\\.[0-9a-f]{64}$", "type": "string"}, "minItems": 2, "maxItems": 8, "type": "array"},
+    "no_counterexample_reason": {"enum": ["NO_COUNTEREXAMPLE_AVAILABLE"]},
+    "operation_modes": {"items": {"enum": ["LIVE_PROSPECTIVE", "TIME_GATED_REPLAY", "NON_EVIDENTIARY_REPLAY"]}, "type": "array"},
+    "population_control_ids": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+    "representative_member_policy": {"const": "LOWEST_SAMPLE_HASH_FIRST_8"},
+    "semantic_label": {"const": "PROHIBITED"},
+    "sequence_policy_id": {"const": "RO4.SEQUENCE.WINDOW.v0.1"},
+    "signature_type": {"enum": ["EXACT", "DECLARED_DISTANCE"]},
+    "source_release_ids": {"items": {"type": "string"}, "minItems": 1, "type": "array"},
+    "support_counts": {"items": {"$ref": "count_denominator_cell_v0_1.schema.json"}, "minItems": 1, "type": "array"}
   },
-  "required": [
-    "candidate_id",
-    "source_release_ids",
-    "sequence_policy_id",
-    "signature_type",
-    "member_sequence_ids",
-    "support_counts",
-    "matched_control_ids",
-    "population_control_ids",
-    "counterexample_ids",
-    "operation_modes",
-    "authority",
-    "semantic_label"
-  ],
+  "required": ["candidate_id", "source_release_ids", "sequence_policy_id", "signature_type", "exact_signature_id", "member_sequence_ids", "full_member_count", "member_inventory_sha256", "representative_member_policy", "support_counts", "matched_control_ids", "population_control_ids", "counterexample_ids", "boundary_stability", "operation_modes", "authority", "semantic_label", "logical_hash"],
   "title": "ovc-ro4-neutral-recurrence-candidate/v1",
   "type": "object"
 }

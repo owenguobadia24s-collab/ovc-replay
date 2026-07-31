@@ -1,6 +1,16 @@
 """Research Operations v0.4 local derived evidence services."""
 
 from .matrix_persistence_conflict import G2BuildResult, build_g2_evidence, validate_g2_evidence
+from .sequence_recurrence import (
+    SequenceBuildResult,
+    build_full_sequence_evidence,
+    build_sequence_partition,
+    declared_distance,
+    diversity_audit,
+    finalize_sequence_evidence,
+    validate_sequence_evidence,
+    workspace_inventory,
+)
 from .state_transition_index import (
     BuildResult,
     DeclaredSampleRequired,
@@ -16,10 +26,18 @@ __all__ = [
     "DeclaredSampleRequired",
     "G2BuildResult",
     "RO4IndexError",
+    "SequenceBuildResult",
     "assess_window_cardinality",
     "build_full_index",
+    "build_full_sequence_evidence",
     "build_g2_evidence",
+    "build_sequence_partition",
+    "declared_distance",
     "deterministic_sample_ids",
+    "diversity_audit",
+    "finalize_sequence_evidence",
     "validate_g2_evidence",
     "validate_index",
+    "validate_sequence_evidence",
+    "workspace_inventory",
 ]
