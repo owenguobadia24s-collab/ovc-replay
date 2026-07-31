@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_a1_v0_1",
+  "title": "PD-JUNE-FULL-MONTH-MDR A1 July native-H1 waiver records",
+  "type": "object",
+  "required": ["schema"],
+  "properties": {
+    "schema": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "PD-JUNE-FULL-MONTH-MDR"},
+    "plan_amendment": {"const": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER"},
+    "decision": {"enum": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"]},
+    "authority_delta": {"const": "WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1"},
+    "provider_request_count": {"const": 72},
+    "native_july_h1_transport": {"const": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE"},
+    "post_target_h1_context": {"const": "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS"},
+    "source_slice_id": {"const": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"}
+  },
+  "additionalProperties": true
+}

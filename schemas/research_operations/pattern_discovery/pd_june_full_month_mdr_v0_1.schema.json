@@ -8,11 +8,15 @@
     "schema": {"type": "string", "minLength": 1},
     "programme_id": {"const": "PD-JUNE-FULL-MONTH-MDR"},
     "plan_id": {"const": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1"},
+    "plan_version": {"enum": ["0.1", "0.1+A1"]},
+    "plan_amendment": {"const": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER"},
     "target_start_utc": {"const": "2026-06-01T00:00:00Z"},
     "target_end_exclusive_utc": {"const": "2026-07-01T00:00:00Z"},
     "source_start_utc": {"const": "2026-05-30T00:00:00Z"},
     "source_end_exclusive_utc": {"const": "2026-07-03T00:00:00Z"},
     "source_slice_id": {"const": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"},
+    "native_july_h1_transport": {"const": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE"},
+    "post_target_h1_context": {"const": "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS"},
     "status": {
       "enum": [
         "PLANNED",

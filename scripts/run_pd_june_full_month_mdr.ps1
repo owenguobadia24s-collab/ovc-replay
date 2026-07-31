@@ -22,9 +22,12 @@ else {
 }
 
 Write-Host "Programme: PD-JUNE-FULL-MONTH-MDR"
+Write-Host "Plan amendment: PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER"
 Write-Host "Target: 2026-06-01T00:00:00Z through 2026-07-01T00:00:00Z (end exclusive)"
 Write-Host "Context source: 2026-05-30T00:00:00Z through 2026-07-03T00:00:00Z (end exclusive)"
 Write-Host "May and July eligibility: CONTEXT_ONLY"
+Write-Host "Native July H1: WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE"
+Write-Host "July M1 context: RETAINED; H1 derived from complete M1 hours"
 Write-Host "Provider execution in CI: DENIED"
 
 $env:PYTHONPATH = (Join-Path $repositoryRoot "src")

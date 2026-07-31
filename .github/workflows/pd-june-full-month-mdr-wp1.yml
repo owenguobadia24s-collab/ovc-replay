@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse WP1 court records and provider plan
+      - name: Parse A1 court records and amended provider plan
         run: |
           PYTHONPATH=src python - <<'PY'
           import json
@@ -27,19 +27,38 @@ jobs:
 
           base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
           authority = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json').read_text())
-          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP1_QA_PACKET.json').read_text())
+          amendment = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json').read_text())
+          incident = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_JULY_H1_PROVIDER_INCIDENT.json').read_text())
+          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_QA_PACKET.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
+          schema = json.loads(Path('schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_a1_v0_1.schema.json').read_text())
           plan = provider_request_plan()
 
           assert authority['decision'] == 'PASS'
           assert authority['authority_delta'] == 'READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY'
-          assert plan['provider_object_count'] == 74
+          assert amendment['decision'] == 'PASS'
+          assert amendment['decision_authority'] == 'OPERATOR'
+          assert amendment['authority_delta'] == 'WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1'
+          assert incident['observed_http_status'] == 404
+          assert incident['accepted_source_slice_created'] is False
+          assert plan['provider_object_count'] == 72
+          assert len([item for item in plan['objects'] if item['logical_stream'].startswith('M1_')]) == 68
+          assert len([item for item in plan['objects'] if item['logical_stream'].startswith('H1_')]) == 4
+          assert not any(item['relative_provider_path'].endswith('2026/06/BID_candles_hour_1.bi5') for item in plan['objects'])
+          assert not any(item['relative_provider_path'].endswith('2026/06/ASK_candles_hour_1.bi5') for item in plan['objects'])
+          assert plan['native_july_h1_transport'] == 'WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE'
+          assert plan['post_target_h1_context'] == 'M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS'
           assert plan['provider_execution_in_ci'] == 'DENIED'
+          assert schema['properties']['provider_request_count']['const'] == 72
           assert state['packet_id'] == 'PD-JUNE-FM-WP1'
           assert state['status'] == 'GATE_READY'
+          assert state['plan_amendment'] == 'PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER'
+          assert state['source_request_plan'] == 'GENERATED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY'
+          assert state['native_july_h1_transport'] == 'WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE'
+          assert state['post_target_h1_context'] == 'M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS'
           assert state['next_packet'] == 'PD-JUNE-FM-WP2'
           assert state['next_packet_status'] == 'BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS'
-          assert qa['status'] == 'GATE_READY_EXTERNAL_EXECUTION_REQUIRED'
+          assert qa['status'] in {'QA_REVIEW_PENDING_FINAL_HEAD_CI', 'APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI'}
           PY
       - name: Run focused full-month and intake tests
         run: |
@@ -49,10 +68,11 @@ jobs:
             -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce local-only provider boundary
+      - name: Enforce local-only provider and derived-context boundary
         run: |
           PYTHONPATH=src python - <<'PY'
           import tempfile
+          from datetime import timedelta
           from pathlib import Path
           from ovc.research_operations.prospective_source import dukascopy_full_month_mdr as subject
 
@@ -62,6 +82,9 @@ jobs:
                   environ={'OVC_EXTERNAL_ARTIFACT_ROOT': external},
               )
               assert result['provider_network_access_performed'] is False
+              assert result['provider_object_count'] == 72
+              assert result['native_july_h1_transport'] == 'WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE'
+              assert result['post_target_h1_context'] == 'M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS'
               try:
                   subject.execute_intake(
                       repository_root=Path(repository),
@@ -75,4 +98,6 @@ jobs:
                   assert 'prohibited in CI' in str(exc)
               else:
                   raise AssertionError('provider execution unexpectedly allowed in CI')
+
+          assert subject.APPROVED_END - subject.TARGET_END == timedelta(hours=48)
           PY

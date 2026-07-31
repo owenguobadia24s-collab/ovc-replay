@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-a1-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "packet_id": "PD-JUNE-FM-A1",
+  "plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
+  "baseline_commit": "fbd8177cbff58827baeb55c9ceeb86d75d7b96f6",
+  "branch": "amend/pd-june-fm-a1-july-native-h1-waiver",
+  "tested_candidate_commit": "d1eeb61850cf99b08a5f030b566c0388ab95ae40",
+  "status": "APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI",
+  "qa_result": "PASS_NATIVE_JULY_H1_WAIVED_JULY_M1_CONTEXT_AND_DETERMINISTIC_H1_DERIVATION_RETAINED",
+  "recommendation": "PASS_A1_SQUASH_MERGE_AND_RETURN_TO_OPERATOR_LOCAL_WP1",
+  "checks": [
+    {"check": "operator amendment decision recorded", "result": "PASS"},
+    {"check": "target and source intervals unchanged", "result": "PASS"},
+    {"check": "July M1 post-target context retained", "result": "PASS"},
+    {"check": "native July H1 provider request removed", "result": "PASS"},
+    {"check": "provider plan reduced from 74 to 72 objects", "result": "PASS"},
+    {"check": "post-target H1 requires exactly 48 complete M1-derived hours per side", "result": "PASS"},
+    {"check": "native May/June H1 reconciliation retained", "result": "PASS"},
+    {"check": "quarantined failed attempt preserved", "result": "PASS"},
+    {"check": "formula, semantic, selector, publication and execution authority unchanged", "result": "PASS"},
+    {"check": "focused and complete repository tests", "result": "PASS"}
+  ],
+  "warnings": [
+    "The July monthly native-H1 object is not requested or consumed.",
+    "July 1-2 M1 context remains required; incomplete M1 membership must quarantine the run.",
+    "The combined H1 object has mixed provenance that must remain explicit in all compact receipts."
+  ],
+  "blockers": [],
+  "tests": [
+    {
+      "workflow_run": 30645339913,
+      "job": 91205209620,
+      "scope": "A1 records, amended 72-object provider plan, focused intake tests, complete repository suite and retained local-only boundary",
+      "result": "PASS",
+      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
+    },
+    {
+      "workflow_run": 30645339898,
+      "job": 91205209959,
+      "scope": "Amended source-profile reproduction, FM00 boundary continuity, complete repository suite and retained authority",
+      "result": "PASS",
+      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
+    },
+    {
+      "workflow_run": 30645339891,
+      "job": 91205209750,
+      "scope": "General repository unit tests",
+      "result": "PASS",
+      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
+    }
+  ],
+  "authority_delta": "WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1",
+  "reserved_authority_delta": "NONE",
+  "next_packet": "PD-JUNE-FM-WP1",
+  "rollback": "Preserve the provider incident and quarantine; revert only A1 through a new non-destructive commit."
+}

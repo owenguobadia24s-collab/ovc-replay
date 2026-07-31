@@ -2,23 +2,35 @@
   "schema": "ovc-pd-june-full-month-mdr-programme-state/v1",
   "programme_id": "PD-JUNE-FULL-MONTH-MDR",
   "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
-  "plan_version": "0.1",
+  "plan_version": "0.1+A1",
+  "plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
   "packet_id": "PD-JUNE-FM-WP1",
   "status": "GATE_READY",
   "prerequisites": [
     "PD-JUNE-MDR-G1-DEFER-COMPLETED",
-    "PD-JUNE-FM-00"
+    "PD-JUNE-FM-00",
+    "PD-JUNE-FM-A1-OPERATOR-PASS"
   ],
-  "authority_required": "NONE_OPERATOR_PLAN_AUTHORITY_RECORDED",
-  "authority_delta": "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY",
+  "authority_required": "NONE_OPERATOR_PLAN_AND_A1_AUTHORITY_RECORDED",
+  "authority_delta": "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY_WITH_NATIVE_JULY_H1_WAIVER",
+  "amendment_authority_delta": "WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1",
   "baseline_commit": "dcc1e634600e26480e16d8c64648649b64f4d034",
-  "execution_branch": "build/pd-june-full-month-mdr-wp1-intake-main",
+  "amendment_baseline_commit": "fbd8177cbff58827baeb55c9ceeb86d75d7b96f6",
+  "execution_branch": "amend/pd-june-fm-a1-july-native-h1-waiver",
   "receipt_branch": "administrative/pd-june-full-month-mdr-wp1-tooling-receipt",
-  "candidate_commit": "5f7d35703c8597ff23849fe282d8ae7860f96bba",
+  "implementation_candidate_commit": "d1eeb61850cf99b08a5f030b566c0388ab95ae40",
+  "candidate_commit": "af72460634a4b02ef359673bffd13c2fb6ed0ae8",
   "tooling_pull_request": 167,
+  "amendment_pull_request": 171,
   "tooling_merge_commit": "eae923ffe41e3b4a51fe48a61f4b014d6edd5e73",
   "tooling_merge_status": "PASS_TOOLING_MERGED_TO_MAIN",
   "tooling_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_TOOLING_MERGE_RECEIPT.json",
+  "amendment_plan": "plans/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A1_JULY_NATIVE_H1_WAIVER.md",
+  "amendment_contract": "contracts/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_SOURCE_AND_REVIEW_CONTRACT_A1.md",
+  "amendment_decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json",
+  "amendment_incident_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_JULY_H1_PROVIDER_INCIDENT.json",
+  "amendment_qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_QA_PACKET.json",
+  "amendment_status": "APPROVED_PENDING_FINAL_HEAD_CI_AND_SQUASH_MERGE",
   "target_start_utc": "2026-06-01T00:00:00Z",
   "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
   "source_start_utc": "2026-05-30T00:00:00Z",
@@ -26,44 +38,63 @@
   "target_eligibility": "TARGET_JUNE_ONLY",
   "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
-  "source_slice_status": "NOT_YET_EXECUTED",
-  "source_request_plan": "GENERATED_74_PROVIDER_OBJECTS_68_M1_DAILY_6_H1_MONTHLY",
-  "intake_implementation": "IMPLEMENTED_OPERATOR_LOCAL_MULTI_MONTH_FAIL_CLOSED",
+  "source_slice_status": "NOT_YET_EXECUTED_AFTER_A1",
+  "source_request_plan": "GENERATED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY",
+  "native_h1_months": ["2026-05", "2026-06"],
+  "native_july_h1_transport": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
+  "post_target_h1_context": "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS",
+  "combined_h1_provenance": "NATIVE_MAY_JUNE_PLUS_M1_DERIVED_JULY_CONTEXT",
+  "intake_implementation": "IMPLEMENTED_OPERATOR_LOCAL_MULTI_MONTH_FAIL_CLOSED_A1",
   "provider_execution_location": "OPERATOR_LOCAL_ONLY",
   "provider_execution_in_ci": "DENIED",
   "external_artifact_root_required": true,
   "tests": [
     {
-      "workflow_run": 30640236115,
-      "job": 91188021745,
-      "scope": "WP1 court records, provider plan, focused intake tests, complete repository suite and local-only boundary",
+      "workflow_run": 30645339913,
+      "job": 91205209620,
+      "scope": "A1 records, amended 72-object provider plan, focused intake tests, complete repository suite and retained local-only boundary",
       "result": "PASS",
-      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
+      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
     },
     {
-      "workflow_run": 30640236184,
-      "job": 91188022910,
-      "scope": "FM00 source-boundary continuity and complete repository suite",
+      "workflow_run": 30645339898,
+      "job": 91205209959,
+      "scope": "Amended source-profile reproduction, FM00 boundary continuity, complete repository suite and retained authority",
       "result": "PASS",
-      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
+      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
     },
     {
-      "workflow_run": 30640237159,
-      "job": 91188026217,
+      "workflow_run": 30645339891,
+      "job": 91205209750,
       "scope": "General repository unit tests",
       "result": "PASS",
+      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
+    },
+    {
+      "workflow_run": 30640236115,
+      "job": 91188021745,
+      "scope": "Original WP1 tooling acceptance",
+      "result": "PASS_HISTORICAL",
       "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
     }
   ],
-  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_QA_PACKET.json",
-  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_QA_PACKET.json",
+  "qa_result": "PASS_NATIVE_JULY_H1_WAIVED_JULY_M1_CONTEXT_AND_DETERMINISTIC_H1_DERIVATION_RETAINED",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json",
   "merge_commit": "eae923ffe41e3b4a51fe48a61f4b014d6edd5e73",
+  "resolved_blockers": [
+    {
+      "blocker_id": "PD-JUNE-FM-WP1-JULY-NATIVE-H1-404-001",
+      "status": "RESOLVED_BY_OPERATOR_A1",
+      "resolution": "Native July H1 monthly transport waived; July 1-2 H1 context derived only from complete M1 hours."
+    }
+  ],
   "blockers": [
     {
       "blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-001",
-      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
-      "description": "The approved tooling is merged, but GitHub Actions is prohibited from provider network access and cannot access OVC_EXTERNAL_ARTIFACT_ROOT. The source slice must be executed from the operator's local repository.",
-      "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr.ps1 preflight followed by execute, and return the compact receipts and source manifest."
+      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED_AFTER_A1_MERGE",
+      "description": "The A1 tooling must be squash-merged before the amended source slice is executed. GitHub Actions remains prohibited from provider network access and cannot access OVC_EXTERNAL_ARTIFACT_ROOT.",
+      "smallest_lawful_resolution": "Pull the A1 merge on main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr.ps1 preflight followed by execute, and return the compact receipts and source manifest."
     }
   ],
   "next_packet": "PD-JUNE-FM-WP2",
@@ -81,5 +112,5 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Revert only PD-JUNE-FULL-MONTH-MDR bounded records and tooling through new non-destructive commits; preserve prior CORR2, the tooling merge and all source and decision evidence."
+  "rollback": "Preserve the quarantined July-native-H1 incident, prior CORR2, tooling merge and all source/decision evidence. Revert only A1 records, code, tests, workflows and state through new non-destructive commits."
 }
