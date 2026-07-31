@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-a1-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "packet_id": "PD-JUNE-FM-A1",
+  "plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
+  "baseline_commit": "fbd8177cbff58827baeb55c9ceeb86d75d7b96f6",
+  "branch": "amend/pd-june-fm-a1-july-native-h1-waiver",
+  "status": "QA_REVIEW_PENDING_FINAL_HEAD_CI",
+  "qa_result": "PENDING",
+  "recommendation": "PASS_AFTER_FINAL_HEAD_CI_THEN_SQUASH_MERGE_AND_RETURN_TO_OPERATOR_LOCAL_WP1",
+  "checks": [
+    {"check": "operator amendment decision recorded", "result": "PASS"},
+    {"check": "target and source intervals unchanged", "result": "PASS"},
+    {"check": "July M1 post-target context retained", "result": "PASS"},
+    {"check": "native July H1 provider request removed", "result": "PASS"},
+    {"check": "provider plan reduced from 74 to 72 objects", "result": "PASS"},
+    {"check": "post-target H1 requires exactly 48 complete M1-derived hours per side", "result": "PASS"},
+    {"check": "native May/June H1 reconciliation retained", "result": "PASS"},
+    {"check": "quarantined failed attempt preserved", "result": "PASS"},
+    {"check": "formula, semantic, selector, publication and execution authority unchanged", "result": "PASS"},
+    {"check": "focused and complete repository tests", "result": "PENDING_CI"}
+  ],
+  "warnings": [
+    "The July monthly native-H1 object is not requested or consumed.",
+    "July 1-2 M1 context remains required; incomplete M1 membership must quarantine the run.",
+    "The combined H1 object has mixed provenance that must remain explicit in all compact receipts."
+  ],
+  "blockers": [],
+  "tests": [],
+  "authority_delta": "WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1",
+  "reserved_authority_delta": "NONE",
+  "next_packet": "PD-JUNE-FM-WP1",
+  "rollback": "Preserve the provider incident and quarantine; revert only A1 through a new non-destructive commit."
+}
