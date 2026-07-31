@@ -39,7 +39,7 @@ jobs:
           test ! -e apps/research_console/pages/C2_Sequence_Evidence.py
           ! find src fixtures/research_operations/v0_4 docs/releases/research-operations-foundation-v0-4 -type f \( -name '*.sqlite' -o -name '*.db' -o -name '*.parquet' -o -name '*.jsonl.gz' \) | grep -q .
           grep -q 'route_state: DISABLED_PENDING_RC_G5' registries/research_operations/v0_4/RO4_IMPLEMENTATION_REGISTRY_v0_1.yaml
-          grep -q '"validation_consumption": "LOCKED_UNCONSUMED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
-          grep -q '"pd_population_merge": "DENIED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
-          grep -q '"promotion_path": "DENIED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
+          grep -q '"validation_consumption":"LOCKED_UNCONSUMED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
+          grep -q '"pd_population_merge":"DENIED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
+          grep -q '"promotion_path":"DENIED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
           grep -q '"operator_decision_required": false' docs/releases/research-operations-foundation-v0-4/ro4-g3/RO4_G3_GATE_PACKET.json
