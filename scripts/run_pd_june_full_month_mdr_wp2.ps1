@@ -37,7 +37,7 @@ Write-Host "External artifact root: $env:OVC_EXTERNAL_ARTIFACT_ROOT"
 $env:PYTHONPATH = (Join-Path $repositoryRoot "src")
 $arguments = @(
     "-m",
-    "ovc.research_operations.prospective_source.full_month_mdr_compute",
+    "ovc.research_operations.prospective_source.full_month_mdr_replay",
     $Command,
     "--repository-root",
     $repositoryRoot
