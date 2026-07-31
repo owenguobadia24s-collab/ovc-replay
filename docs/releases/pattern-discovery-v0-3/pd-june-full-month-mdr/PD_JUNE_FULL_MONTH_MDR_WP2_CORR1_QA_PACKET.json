@@ -1,0 +1,24 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr1-qa-packet/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR1",
+  "baseline_commit": "d674425aeb91dc470ce2cef9feb400ee6236784c",
+  "candidate_branch": "fix/pd-june-fm-wp2-manifest-logical-hash",
+  "candidate_commit": "b68edf4086e7db28569af105bf32d23d2ed305f9",
+  "acceptance_conditions": [
+    "The exact accepted source manifest file SHA-256 remains pinned.",
+    "The preserved embedded pre-A2 logical SHA-256 remains pinned and auditable.",
+    "The canonical logical SHA-256 of accepted A2 content is independently pinned.",
+    "No frozen source bytes are rewritten.",
+    "Focused and complete repository tests pass.",
+    "No authority, formula, threshold, selector, release, R2 or Validation delta occurs."
+  ],
+  "tests": [],
+  "qa_recommendation": "PENDING_FINAL_HEAD_CI",
+  "authority_delta": "NONE_VALIDATION_CORRECTION_ONLY",
+  "warnings": [],
+  "unresolved_issues": ["FINAL_HEAD_CI_PENDING"],
+  "rollback": "Revert the bounded correction commit; preserve external source bytes and all prior court records.",
+  "status": "QA_REVIEW"
+}
