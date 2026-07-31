@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-tooling-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "effective_plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "baseline_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
+  "branch": "build/pd-june-fm-wp2-replay-tooling",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "status": "QA_REVIEW_PENDING_FINAL_HEAD_CI",
+  "qa_result": "PENDING_FINAL_HEAD_CI",
+  "recommendation": "PASS_TOOLING_AFTER_FINAL_HEAD_CI_SQUASH_MERGE_THEN_OPERATOR_LOCAL_EXECUTION",
+  "checks": [
+    {"check": "exact WP1 source acceptance and manifest binding", "result": "IMPLEMENTED"},
+    {"check": "full source interval replay before June target filtering", "result": "IMPLEMENTED"},
+    {"check": "15M expected population and sparse-parent censoring", "result": "IMPLEMENTED_2316_TOTAL_2231_COMPLETE_85_INCOMPLETE_PER_SIDE"},
+    {"check": "2H expected population and sparse-parent censoring", "result": "IMPLEMENTED_294_TOTAL_248_COMPLETE_46_INCOMPLETE_PER_SIDE"},
+    {"check": "C1 gap segmentation and previous-state reset", "result": "IMPLEMENTED"},
+    {"check": "C2 local state reset across discontinuities", "result": "IMPLEMENTED"},
+    {"check": "2H parent invalidation after incomplete parent", "result": "IMPLEMENTED"},
+    {"check": "May and July context-only classification", "result": "IMPLEMENTED"},
+    {"check": "zero source-boundary insufficiency assertion", "result": "IMPLEMENTED"},
+    {"check": "provider-gap and algorithmic not-evaluable separation", "result": "IMPLEMENTED"},
+    {"check": "independent byte-identical deterministic rerun", "result": "IMPLEMENTED"},
+    {"check": "provider execution and replay execution denied in CI", "result": "IMPLEMENTED"},
+    {"check": "release, selector, R2, Validation, live append and write authority denied", "result": "IMPLEMENTED"},
+    {"check": "focused tests and complete repository suite", "result": "PENDING_FINAL_HEAD_CI"}
+  ],
+  "warnings": [
+    "The expected full-month counts are frozen from the exact accepted source membership and must block on drift.",
+    "Incomplete parent buckets are output as censored evidence but cannot enter C1 or C2.",
+    "Actual WP2 completion requires operator-local execution and compact output receipts after the tooling merge."
+  ],
+  "blockers": ["FINAL_HEAD_CI_REQUIRED", "OPERATOR_LOCAL_REPLAY_EXECUTION_REQUIRED_AFTER_TOOLING_MERGE"],
+  "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_TOOLING_ONLY",
+  "reserved_authority_delta": "NONE",
+  "next_packet": "PD-JUNE-FM-WP3",
+  "rollback": "Preserve the accepted source slice and WP1 merge. Revert only WP2 tooling, tests, schemas, QA and state through a new non-destructive commit."
+}
