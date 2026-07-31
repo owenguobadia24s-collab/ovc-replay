@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-operator-authority/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "decided_at_utc": "2026-07-31T14:14:00Z",
+  "instruction": "Run a Full-June Market-Description Reliability and Evidence-Completeness Assessment for 2026-06-01 through 2026-06-30 UTC, with deterministically derived late-May warm-up and early-July completion context.",
+  "target_start_utc": "2026-06-01T00:00:00Z",
+  "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+  "source_start_utc": "2026-05-30T00:00:00Z",
+  "source_end_exclusive_utc": "2026-07-03T00:00:00Z",
+  "authority_delta": "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY",
+  "authorised_actions": [
+    "READ_ONLY_DUKASCOPY_GBPUSD_BID_ASK_INTAKE",
+    "DETERMINISTIC_EXISTING_PIPELINE_REPLAY",
+    "WHOLE_JUNE_TARGET_FILTERING",
+    "READ_ONLY_TRIGGER_CANDIDATE_CONTROL_AND_REVIEW_CONSTRUCTION",
+    "EVIDENCE_COMPLETENESS_AUDIT",
+    "LOCAL_EXTERNAL_ARTIFACT_WRITES",
+    "COMPACT_REPOSITORY_RECEIPTS",
+    "TESTS_QA_PR_PREPARATION_AND_ELIGIBLE_SQUASH_MERGE"
+  ],
+  "retained_prohibitions": [
+    "FORMULA_CHANGE",
+    "THRESHOLD_CHANGE",
+    "SEMANTIC_CHANGE_OR_PROMOTION",
+    "TRIGGER_OR_CANDIDATE_DEFINITION_CHANGE",
+    "DISTANCE_CLUSTER_OR_MODEL_CHANGE",
+    "CANDIDATE_NOVELTY_FAMILY_OR_THEORY_PROMOTION",
+    "SELECTOR_OR_RELEASE_MUTATION",
+    "CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND",
+    "R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
+  ],
+  "prior_corr2_treatment": "PRESERVE_IMMUTABLE_BOUNDED_THREE_DAY_DIAGNOSTIC_EVIDENCE",
+  "rollback": "Revert only this programme's bounded repository records and tooling through new non-destructive commits; preserve all source, prior CORR2, review and merge-history evidence."
+}
