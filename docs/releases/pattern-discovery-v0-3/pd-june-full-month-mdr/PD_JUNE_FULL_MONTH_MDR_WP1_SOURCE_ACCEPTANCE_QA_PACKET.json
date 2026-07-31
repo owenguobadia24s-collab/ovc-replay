@@ -7,10 +7,10 @@
   "gate_id": "PD-JUNE-FM-G1",
   "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
   "branch": "accept/pd-june-fm-wp1-source-freeze",
-  "candidate_commit": "PENDING_FINAL_HEAD",
-  "status": "QA_REVIEW_PENDING_FINAL_HEAD_CI",
-  "qa_result": "PENDING_FINAL_HEAD_CI",
-  "recommendation": "PASS_AFTER_FINAL_HEAD_CI_THEN_SQUASH_MERGE_AND_CONTINUE_TO_PD_JUNE_FM_WP2",
+  "tested_candidate_commit": "9ccc638a43b2d4fabb2a1d89060f8cd464eaec16",
+  "status": "PASS_APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
+  "qa_result": "PASS_FROZEN_SOURCE_EXACTLY_BOUND_PAIRED_SPARSE_ABSENCE_EXPLICITLY_CENSORED",
+  "recommendation": "PASS_PD_JUNE_FM_G1_SQUASH_MERGE_AND_CONTINUE_TO_PD_JUNE_FM_WP2",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
   "manifest_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
   "manifest_file_sha256": "8080b8def035cb37940b89054287d0c61756149aa7cb4711fc462a0ebbdc1f87",
@@ -27,14 +27,22 @@
     {"check": "July post-target H1 context", "result": "PASS_42_COMPLETE_6_EXPLICITLY_CENSORED_PER_SIDE"},
     {"check": "repair, interpolation, forward fill and synthesis", "result": "PASS_NONE"},
     {"check": "release, selector, R2, Validation and canonical Discovery authority", "result": "PASS_ALL_DENIED"},
-    {"check": "focused and complete repository tests", "result": "PENDING_FINAL_HEAD_CI"}
+    {"check": "source acceptance validator, focused tests and complete repository suite", "result": "PASS"},
+    {"check": "FM00, A2 and WP1 intake continuity", "result": "PASS"}
+  ],
+  "tests": [
+    {"workflow_run":30654178964,"job":91234403457,"scope":"source acceptance validator, focused tests, retained A1/A2 continuity, complete repository suite and authority boundary","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654177820,"job":91234399320,"scope":"A2 court record, focused tests, complete repository suite and no-repair boundary","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654178096,"job":91234400086,"scope":"WP1 intake and programme-state continuity with complete repository suite","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654178266,"job":91234401215,"scope":"FM00 source boundary, source-profile reproduction and complete repository suite","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654177973,"job":91234399597,"scope":"general repository unit tests","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"}
   ],
   "warnings": [
     "The accepted source is sparse by provider observation and must never be represented as continuous.",
     "Every dependent 15M, H1 or 2H bucket with incomplete required M1 membership must remain not evaluable or censored.",
     "May and July are context-only; only June timestamps are target eligible."
   ],
-  "blockers": ["FINAL_HEAD_CI_REQUIRED"],
+  "blockers": [],
   "authority_delta": "LOCAL_FROZEN_SOURCE_ACCEPTANCE_ONLY",
   "reserved_authority_delta": "NONE",
   "next_packet": "PD-JUNE-FM-WP2",
