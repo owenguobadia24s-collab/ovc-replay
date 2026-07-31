@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_v0_1",
+  "title": "PD-JUNE-FULL-MONTH-MDR source profile and programme records",
+  "type": "object",
+  "required": ["schema"],
+  "properties": {
+    "schema": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "PD-JUNE-FULL-MONTH-MDR"},
+    "plan_id": {"const": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1"},
+    "target_start_utc": {"const": "2026-06-01T00:00:00Z"},
+    "target_end_exclusive_utc": {"const": "2026-07-01T00:00:00Z"},
+    "source_start_utc": {"const": "2026-05-30T00:00:00Z"},
+    "source_end_exclusive_utc": {"const": "2026-07-03T00:00:00Z"},
+    "source_slice_id": {"const": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"},
+    "status": {
+      "enum": [
+        "PLANNED",
+        "READY",
+        "RUNNING",
+        "IMPLEMENTED",
+        "QA_REVIEW",
+        "GATE_READY",
+        "APPROVED",
+        "BLOCKED",
+        "QUARANTINED",
+        "SUPERSEDED",
+        "COMPLETED"
+      ]
+    }
+  },
+  "additionalProperties": true
+}
