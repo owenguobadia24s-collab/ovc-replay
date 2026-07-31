@@ -1,0 +1,89 @@
+{
+  "$id": "ovc-ro4-count-denominator-cell/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "percentage"
+        ]
+      },
+      {
+        "required": [
+          "ratio"
+        ]
+      },
+      {
+        "required": [
+          "normalized_frequency"
+        ]
+      },
+      {
+        "required": [
+          "probability"
+        ]
+      },
+      {
+        "required": [
+          "rank"
+        ]
+      },
+      {
+        "required": [
+          "colour_intensity"
+        ]
+      },
+      {
+        "required": [
+          "bar_length"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "display_style": {
+      "const": "UNIFORM_NON_DATA_DRIVEN_IDENTITY_ORDERED"
+    },
+    "display_text": {
+      "pattern": "^[0-9]+ of [0-9]+ eligible records$",
+      "type": "string"
+    },
+    "eligible_denominator": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "excluded_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "exclusion_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "missing_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "slice_identity": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "count",
+    "eligible_denominator",
+    "excluded_count",
+    "missing_count",
+    "slice_identity",
+    "display_style",
+    "display_text"
+  ],
+  "title": "ovc-ro4-count-denominator-cell/v1",
+  "type": "object"
+}

@@ -1,0 +1,132 @@
+{
+  "$id": "ovc-ro4-console-projection/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "actions"
+        ]
+      },
+      {
+        "required": [
+          "forms"
+        ]
+      },
+      {
+        "required": [
+          "buttons"
+        ]
+      },
+      {
+        "required": [
+          "pd_candidate"
+        ]
+      },
+      {
+        "required": [
+          "synthetic_control"
+        ]
+      },
+      {
+        "required": [
+          "percentage"
+        ]
+      },
+      {
+        "required": [
+          "ratio"
+        ]
+      },
+      {
+        "required": [
+          "heatmap"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "authority_banners": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 3,
+      "type": "array"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "panels": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "panel_class": {
+            "enum": [
+              "C2_STATE",
+              "C2_TRANSITION",
+              "PERSISTENCE_CONFLICT",
+              "RO4_SEQUENCE",
+              "BOUNDARY_FRICTION_READ_ONLY",
+              "PD_TRIGGER_TRACE_ONLY",
+              "SIGNATURE_DIVERSITY",
+              "SAMPLE_DISCLOSURE"
+            ]
+          },
+          "panel_id": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "panel_id",
+          "panel_class",
+          "payload"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "projection_id": {
+      "type": "string"
+    },
+    "remote_deployment": {
+      "const": "DENIED"
+    },
+    "route_id": {
+      "const": "RESEARCH.C2_SEQUENCE_EVIDENCE"
+    },
+    "route_state": {
+      "const": "DISABLED_PENDING_RC_G5"
+    },
+    "source_commit": {
+      "type": "string"
+    },
+    "source_release_refs": {
+      "items": {
+        "$ref": "c2_release_ref_v0_1.schema.json"
+      },
+      "type": "array"
+    },
+    "writes": {
+      "const": "NONE"
+    }
+  },
+  "required": [
+    "projection_id",
+    "route_id",
+    "route_state",
+    "source_commit",
+    "source_release_refs",
+    "panels",
+    "authority_banners",
+    "writes",
+    "remote_deployment",
+    "logical_hash"
+  ],
+  "title": "ovc-ro4-console-projection/v1",
+  "type": "object"
+}

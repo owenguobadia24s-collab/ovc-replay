@@ -1,0 +1,84 @@
+{
+  "$id": "ovc-ro4-declared-sample-manifest/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "silent_substitution"
+        ]
+      },
+      {
+        "required": [
+          "full_population_claim"
+        ]
+      },
+      {
+        "required": [
+          "probability"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "adequacy_decision_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "banner": {
+      "const": "SAMPLED_NON_CANONICAL_EXPLORATORY"
+    },
+    "excluded_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "full_population_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "hash_expression": {
+      "const": "SHA256(sequence_id + sampling_policy_id + sampling_version)"
+    },
+    "included_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "manifest_id": {
+      "type": "string"
+    },
+    "sampling_policy_id": {
+      "const": "RO4.PERFORMANCE.SAMPLE.v0.1"
+    },
+    "sampling_version": {
+      "const": "v0.1"
+    },
+    "strata": {
+      "items": {
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "manifest_id",
+    "sampling_policy_id",
+    "sampling_version",
+    "hash_expression",
+    "strata",
+    "included_count",
+    "excluded_count",
+    "full_population_count",
+    "banner",
+    "logical_hash"
+  ],
+  "title": "ovc-ro4-declared-sample-manifest/v1",
+  "type": "object"
+}

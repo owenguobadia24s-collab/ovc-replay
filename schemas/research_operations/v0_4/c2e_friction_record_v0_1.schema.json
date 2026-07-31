@@ -1,0 +1,115 @@
+{
+  "$id": "ovc-ro4-c2e-friction-record/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "episode_authority"
+        ]
+      },
+      {
+        "required": [
+          "semantic_label"
+        ]
+      },
+      {
+        "required": [
+          "c2_change"
+        ]
+      },
+      {
+        "required": [
+          "open_c2e_automatically"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "admissible_cutoff": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "authority_state": {
+      "const": "APPEND_ONLY_RESEARCH_RECORD_AFTER_RO4_G4"
+    },
+    "counterexample_refs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "evidence_refs": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "frozen_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "operation_mode": {
+      "enum": [
+        "LIVE_PROSPECTIVE",
+        "TIME_GATED_REPLAY",
+        "NON_EVIDENTIARY_REPLAY"
+      ]
+    },
+    "operator_id": {
+      "type": "string"
+    },
+    "rationale": {
+      "maxLength": 2000,
+      "type": "string"
+    },
+    "reason_code": {
+      "enum": [
+        "BOUNDARY_AMBIGUITY",
+        "SPLIT_MERGE_FRICTION",
+        "CROSS_SCALE_CONTEXT_FRICTION",
+        "LONG_PERSISTENCE_FRICTION",
+        "RAPID_ALTERNATION_FRICTION",
+        "TRANSITION_CHAIN_FRICTION",
+        "MISSINGNESS_FRICTION",
+        "PRESENTATION_ONLY_FRICTION"
+      ]
+    },
+    "record_id": {
+      "type": "string"
+    },
+    "record_type": {
+      "const": "RO4_C2E_FRICTION_RECORD.v0.1"
+    },
+    "remediation_ref": {
+      "type": "string"
+    },
+    "source_release_id": {
+      "type": "string"
+    },
+    "source_sequence_id": {
+      "pattern": "^RO4\\.SEQUENCE\\.",
+      "type": "string"
+    },
+    "supersedes_record_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "record_id",
+    "record_type",
+    "operator_id",
+    "source_sequence_id",
+    "source_release_id",
+    "operation_mode",
+    "admissible_cutoff",
+    "reason_code",
+    "evidence_refs",
+    "frozen_at",
+    "authority_state"
+  ],
+  "title": "ovc-ro4-c2e-friction-record/v1",
+  "type": "object"
+}

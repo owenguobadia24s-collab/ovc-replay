@@ -1,0 +1,82 @@
+{
+  "$id": "ovc-ro4-performance-benchmark/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_id": {
+      "type": "string"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "machine": {
+      "type": "string"
+    },
+    "memory_bytes": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "operation": {
+      "enum": [
+        "FULL_INDEX",
+        "FULL_SEQUENCE",
+        "INCREMENTAL_PARTITION",
+        "SEQUENCE_LOOKUP",
+        "DECLARED_SAMPLE"
+      ]
+    },
+    "os": {
+      "type": "string"
+    },
+    "partition_id": {
+      "type": "string"
+    },
+    "peak_rss_bytes": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "python": {
+      "type": "string"
+    },
+    "runtime_seconds": {
+      "minimum": 0,
+      "type": "number"
+    },
+    "source_counts": {
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "WARN_PERFORMANCE_TARGET",
+        "BLOCK"
+      ]
+    },
+    "storage": {
+      "type": "string"
+    },
+    "unchanged_hashes_preserved": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "benchmark_id",
+    "machine",
+    "os",
+    "python",
+    "memory_bytes",
+    "storage",
+    "source_counts",
+    "operation",
+    "runtime_seconds",
+    "peak_rss_bytes",
+    "logical_hash",
+    "status"
+  ],
+  "title": "ovc-ro4-performance-benchmark/v1",
+  "type": "object"
+}

@@ -1,0 +1,130 @@
+{
+  "$id": "ovc-ro4-sequence-boundary-annotation/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "semantic_label"
+        ]
+      },
+      {
+        "required": [
+          "episode_id"
+        ]
+      },
+      {
+        "required": [
+          "prediction"
+        ]
+      },
+      {
+        "required": [
+          "probability"
+        ]
+      },
+      {
+        "required": [
+          "pd_candidate_id"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "admissible_cutoff": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "annotation": {
+      "enum": [
+        "PROPOSED_START",
+        "PROPOSED_END",
+        "CONTINUATION",
+        "SPLIT",
+        "MERGE",
+        "UNCERTAIN",
+        "NOT_A_SEQUENCE"
+      ]
+    },
+    "authority_state": {
+      "const": "APPEND_ONLY_RESEARCH_RECORD_AFTER_RO4_G4"
+    },
+    "clock": {
+      "enum": [
+        "15M",
+        "2H_A_L"
+      ]
+    },
+    "frozen_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "member_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 2,
+      "type": "array"
+    },
+    "operation_mode": {
+      "enum": [
+        "LIVE_PROSPECTIVE",
+        "TIME_GATED_REPLAY",
+        "NON_EVIDENTIARY_REPLAY"
+      ]
+    },
+    "operator_id": {
+      "type": "string"
+    },
+    "rationale": {
+      "maxLength": 2000,
+      "type": "string"
+    },
+    "record_id": {
+      "type": "string"
+    },
+    "record_type": {
+      "const": "RO4_SEQUENCE_BOUNDARY_ANNOTATION.v0.1"
+    },
+    "side": {
+      "enum": [
+        "BID",
+        "ASK"
+      ]
+    },
+    "source_release_id": {
+      "type": "string"
+    },
+    "source_sequence_id": {
+      "pattern": "^RO4\\.SEQUENCE\\.",
+      "type": "string"
+    },
+    "supersedes_record_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "record_id",
+    "record_type",
+    "operator_id",
+    "source_sequence_id",
+    "source_release_id",
+    "manifest_sha256",
+    "clock",
+    "side",
+    "member_ids",
+    "operation_mode",
+    "admissible_cutoff",
+    "annotation",
+    "rationale",
+    "frozen_at",
+    "authority_state"
+  ],
+  "title": "ovc-ro4-sequence-boundary-annotation/v1",
+  "type": "object"
+}

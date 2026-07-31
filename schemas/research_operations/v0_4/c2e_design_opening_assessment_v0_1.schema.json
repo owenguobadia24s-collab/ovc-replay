@@ -1,0 +1,95 @@
+{
+  "$id": "ovc-ro4-c2e-design-opening-assessment/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "episode_records"
+        ]
+      },
+      {
+        "required": [
+          "selector_change"
+        ]
+      },
+      {
+        "required": [
+          "semantic_name"
+        ]
+      },
+      {
+        "required": [
+          "activation"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "agreement": {
+      "type": "object"
+    },
+    "all_conditions_pass": {
+      "type": "boolean"
+    },
+    "assessment_id": {
+      "type": "string"
+    },
+    "boundary_annotations": {
+      "type": "object"
+    },
+    "counterevidence": {
+      "type": "object"
+    },
+    "decision_effect": {
+      "const": "DRAFT_SEPARATE_PLAN_ONLY_NO_C2E_AUTHORITY"
+    },
+    "evidence_integrity": {
+      "type": "object"
+    },
+    "independent_strata": {
+      "type": "object"
+    },
+    "lawful_decisions": {
+      "items": {
+        "enum": [
+          "CONTINUE_EVIDENCE_COLLECTION",
+          "RESTRICT_SCOPE",
+          "REVISE_RESEARCH_PROCESS",
+          "OPEN_C2E_DESIGN_PLAN",
+          "OPEN_C2_5_FORMALISATION_PLAN",
+          "PROPOSE_C2_MEASUREMENT_REVIEW",
+          "DEFER",
+          "QUARANTINE"
+        ]
+      },
+      "type": "array"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "process_remediation": {
+      "type": "object"
+    },
+    "threshold_registry_id": {
+      "const": "RO4.C2E.DESIGN.OPENING.v0.1"
+    }
+  },
+  "required": [
+    "assessment_id",
+    "threshold_registry_id",
+    "independent_strata",
+    "boundary_annotations",
+    "agreement",
+    "counterevidence",
+    "process_remediation",
+    "evidence_integrity",
+    "all_conditions_pass",
+    "lawful_decisions",
+    "logical_hash"
+  ],
+  "title": "ovc-ro4-c2e-design-opening-assessment/v1",
+  "type": "object"
+}

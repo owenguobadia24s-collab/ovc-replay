@@ -1,0 +1,114 @@
+{
+  "$id": "ovc-ro4-prospective-sequence-review/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "post_cutoff_ids"
+        ]
+      },
+      {
+        "required": [
+          "relabelled_live"
+        ]
+      },
+      {
+        "required": [
+          "future_payload"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "admissible": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations_first_valid_by_cutoff": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sequence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "state_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "transition_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "state_ids",
+        "transition_ids",
+        "sequence_ids"
+      ],
+      "type": "object"
+    },
+    "admissible_cutoff": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "authority_state": {
+      "const": "APPEND_ONLY_RESEARCH_RECORD_AFTER_RO4_G4"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "operation_mode": {
+      "enum": [
+        "LIVE_PROSPECTIVE",
+        "TIME_GATED_REPLAY",
+        "NON_EVIDENTIARY_REPLAY"
+      ]
+    },
+    "post_cutoff_review": {
+      "additionalProperties": false,
+      "properties": {
+        "hidden_count_only_in_prospective_mode": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "hidden_count_only_in_prospective_mode"
+      ],
+      "type": "object"
+    },
+    "review_id": {
+      "type": "string"
+    },
+    "source_release_and_manifest": {
+      "type": "object"
+    },
+    "source_sequence_id": {
+      "pattern": "^RO4\\.SEQUENCE\\.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "review_id",
+    "source_sequence_id",
+    "operation_mode",
+    "admissible_cutoff",
+    "admissible",
+    "post_cutoff_review",
+    "logical_hash",
+    "authority_state"
+  ],
+  "title": "ovc-ro4-prospective-sequence-review/v1",
+  "type": "object"
+}

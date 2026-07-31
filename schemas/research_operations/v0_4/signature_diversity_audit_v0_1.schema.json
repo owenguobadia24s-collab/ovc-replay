@@ -1,0 +1,96 @@
+{
+  "$id": "ovc-ro4-signature-diversity-audit/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "operator_percentage_display"
+        ]
+      },
+      {
+        "required": [
+          "archetype_name"
+        ]
+      },
+      {
+        "required": [
+          "promotion"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "acknowledgement_record_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "audit_id": {
+      "type": "string"
+    },
+    "candidate_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "distinct_exact_signature_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "exception_disclosure": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "normalized_shannon_entropy": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "population_id": {
+      "type": "string"
+    },
+    "review_batch_signature_cap": {
+      "const": 0.2,
+      "type": "number"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "SIGNATURE_CONCENTRATION_WARNING",
+        "INSUFFICIENT_SAMPLE_FOR_DIVERSITY_AUDIT"
+      ]
+    },
+    "top_1": {
+      "$ref": "count_denominator_cell_v0_1.schema.json"
+    },
+    "top_10": {
+      "$ref": "count_denominator_cell_v0_1.schema.json"
+    },
+    "top_5": {
+      "$ref": "count_denominator_cell_v0_1.schema.json"
+    }
+  },
+  "required": [
+    "audit_id",
+    "population_id",
+    "candidate_count",
+    "distinct_exact_signature_count",
+    "normalized_shannon_entropy",
+    "top_1",
+    "top_5",
+    "top_10",
+    "review_batch_signature_cap",
+    "status",
+    "logical_hash"
+  ],
+  "title": "ovc-ro4-signature-diversity-audit/v1",
+  "type": "object"
+}
