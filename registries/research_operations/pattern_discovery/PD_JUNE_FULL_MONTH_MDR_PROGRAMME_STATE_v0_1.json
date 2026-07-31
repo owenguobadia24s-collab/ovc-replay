@@ -12,8 +12,13 @@
   "authority_required": "NONE_OPERATOR_PLAN_AUTHORITY_RECORDED",
   "authority_delta": "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY",
   "baseline_commit": "dcc1e634600e26480e16d8c64648649b64f4d034",
-  "branch": "build/pd-june-full-month-mdr-wp1-intake-main",
-  "candidate_commit": "6bda0a78aaca33f53d81c32fd112e50eac27d81c",
+  "execution_branch": "build/pd-june-full-month-mdr-wp1-intake-main",
+  "receipt_branch": "administrative/pd-june-full-month-mdr-wp1-tooling-receipt",
+  "candidate_commit": "5f7d35703c8597ff23849fe282d8ae7860f96bba",
+  "tooling_pull_request": 167,
+  "tooling_merge_commit": "eae923ffe41e3b4a51fe48a61f4b014d6edd5e73",
+  "tooling_merge_status": "PASS_TOOLING_MERGED_TO_MAIN",
+  "tooling_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_TOOLING_MERGE_RECEIPT.json",
   "target_start_utc": "2026-06-01T00:00:00Z",
   "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
   "source_start_utc": "2026-05-30T00:00:00Z",
@@ -21,6 +26,7 @@
   "target_eligibility": "TARGET_JUNE_ONLY",
   "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "source_slice_status": "NOT_YET_EXECUTED",
   "source_request_plan": "GENERATED_74_PROVIDER_OBJECTS_68_M1_DAILY_6_H1_MONTHLY",
   "intake_implementation": "IMPLEMENTED_OPERATOR_LOCAL_MULTI_MONTH_FAIL_CLOSED",
   "provider_execution_location": "OPERATOR_LOCAL_ONLY",
@@ -28,36 +34,36 @@
   "external_artifact_root_required": true,
   "tests": [
     {
-      "workflow_run": 30640056010,
-      "job": 91187393520,
+      "workflow_run": 30640236115,
+      "job": 91188021745,
       "scope": "WP1 court records, provider plan, focused intake tests, complete repository suite and local-only boundary",
       "result": "PASS",
-      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
     },
     {
-      "workflow_run": 30640056127,
-      "job": 91187393536,
+      "workflow_run": 30640236184,
+      "job": 91188022910,
       "scope": "FM00 source-boundary continuity and complete repository suite",
       "result": "PASS",
-      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
     },
     {
-      "workflow_run": 30640055980,
-      "job": 91187392919,
+      "workflow_run": 30640237159,
+      "job": 91188026217,
       "scope": "General repository unit tests",
       "result": "PASS",
-      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
     }
   ],
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_QA_PACKET.json",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json",
-  "merge_commit": null,
+  "merge_commit": "eae923ffe41e3b4a51fe48a61f4b014d6edd5e73",
   "blockers": [
     {
       "blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-001",
       "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
-      "description": "GitHub Actions is prohibited from provider network access and cannot access OVC_EXTERNAL_ARTIFACT_ROOT. The approved intake must be executed from the operator's local repository after the tooling PR is merged.",
-      "smallest_lawful_resolution": "Set OVC_EXTERNAL_ARTIFACT_ROOT and run scripts/run_pd_june_full_month_mdr.ps1 preflight followed by execute. Return the compact receipts and source manifest for validation."
+      "description": "The approved tooling is merged, but GitHub Actions is prohibited from provider network access and cannot access OVC_EXTERNAL_ARTIFACT_ROOT. The source slice must be executed from the operator's local repository.",
+      "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr.ps1 preflight followed by execute, and return the compact receipts and source manifest."
     }
   ],
   "next_packet": "PD-JUNE-FM-WP2",
@@ -75,5 +81,5 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Revert only PD-JUNE-FULL-MONTH-MDR bounded records and tooling through new non-destructive commits; preserve prior CORR2 and all source and decision evidence."
+  "rollback": "Revert only PD-JUNE-FULL-MONTH-MDR bounded records and tooling through new non-destructive commits; preserve prior CORR2, the tooling merge and all source and decision evidence."
 }
