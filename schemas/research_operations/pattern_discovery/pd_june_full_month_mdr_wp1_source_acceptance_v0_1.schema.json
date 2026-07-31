@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp1_source_acceptance_v0_1",
+  "title": "PD-JUNE-FM-WP1 frozen source acceptance index",
+  "type": "object",
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "gate_id",
+    "source_slice_id",
+    "manifest",
+    "compact_files",
+    "source_objects",
+    "qa",
+    "acceptance"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-pd-june-full-month-mdr-wp1-source-acceptance-index/v1"},
+    "programme_id": {"const": "PD-JUNE-FULL-MONTH-MDR"},
+    "packet_id": {"const": "PD-JUNE-FM-WP1"},
+    "gate_id": {"const": "PD-JUNE-FM-G1"},
+    "source_slice_id": {"const": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"},
+    "target_start_utc": {"const": "2026-06-01T00:00:00Z"},
+    "target_end_exclusive_utc": {"const": "2026-07-01T00:00:00Z"},
+    "source_window_start_utc": {"const": "2026-05-30T00:00:00Z"},
+    "source_window_end_exclusive_utc": {"const": "2026-07-03T00:00:00Z"},
+    "compact_files": {"type": "array", "minItems": 8, "maxItems": 8},
+    "source_objects": {"type": "array", "minItems": 4, "maxItems": 4},
+    "manifest": {
+      "type": "object",
+      "required": ["logical_sha256", "file_sha256", "frozen", "coverage_state"],
+      "properties": {
+        "logical_sha256": {"const": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3"},
+        "file_sha256": {"const": "8080b8def035cb37940b89054287d0c61756149aa7cb4711fc462a0ebbdc1f87"},
+        "frozen": {"const": true},
+        "coverage_state": {"const": "ACCEPTED_WITH_EXPLICIT_PAIRED_PROVIDER_ABSENCE_AND_CENSORING"}
+      },
+      "additionalProperties": true
+    },
+    "acceptance": {
+      "type": "object",
+      "required": ["decision", "authority_delta", "next_packet"],
+      "properties": {
+        "decision": {"const": "PASS"},
+        "authority_delta": {"const": "LOCAL_FROZEN_SOURCE_ACCEPTANCE_ONLY"},
+        "next_packet": {"const": "PD-JUNE-FM-WP2"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
