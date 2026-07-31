@@ -1,0 +1,75 @@
+name: PD-JUNE-FULL-MONTH-MDR FM00 source boundary
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fm00-source-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Parse and reproduce source profile
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          import json
+          from pathlib import Path
+          from ovc.research_operations.pattern_discovery.full_month_mdr import build_source_profile
+
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
+          authority = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json').read_text())
+          stored = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_SOURCE_PROFILE.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
+          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_FM00_QA_PACKET.json').read_text())
+          schema = json.loads(Path('schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_v0_1.schema.json').read_text())
+
+          assert stored == build_source_profile()
+          assert authority['decision'] == 'PASS'
+          assert authority['decision_authority'] == 'OPERATOR'
+          assert state['packet_id'] == 'PD-JUNE-FM-00'
+          assert state['status'] in {'RUNNING', 'IMPLEMENTED', 'QA_REVIEW', 'APPROVED', 'COMPLETED'}
+          assert qa['recommendation'] == 'PASS_FM00_AND_CONTINUE_TO_OPERATOR_LOCAL_SOURCE_INTAKE_AFTER_CI'
+          assert schema['properties']['source_slice_id']['const'] == stored['source_slice_id']
+          PY
+      - name: Run focused FM00 tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr -v
+      - name: Run complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce authority and target boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
+          authority = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json').read_text())
+          profile = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_SOURCE_PROFILE.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
+
+          assert profile['target_start_utc'] == '2026-06-01T00:00:00Z'
+          assert profile['target_end_exclusive_utc'] == '2026-07-01T00:00:00Z'
+          assert profile['source_start_utc'] == '2026-05-30T00:00:00Z'
+          assert profile['source_end_exclusive_utc'] == '2026-07-03T00:00:00Z'
+          assert profile['target_eligibility'] == 'TARGET_JUNE_ONLY'
+          assert profile['provider_execution_in_ci'] == 'DENIED'
+          assert profile['release_status'] == 'NOT_A_RELEASE'
+          assert profile['selector_eligibility'] == 'NONE'
+          assert profile['r2_publication'] == 'DENIED'
+          assert profile['validation_consumption'] == 'DENIED'
+          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
+          for prohibited in (
+              'FORMULA_CHANGE',
+              'THRESHOLD_CHANGE',
+              'SELECTOR_OR_RELEASE_MUTATION',
+              'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND',
+              'R2_PUBLICATION',
+              'VALIDATION_CONSUMPTION',
+          ):
+              assert prohibited in authority['retained_prohibitions']
+          PY
