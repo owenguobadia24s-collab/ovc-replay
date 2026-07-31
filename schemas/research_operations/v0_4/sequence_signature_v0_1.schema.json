@@ -2,116 +2,33 @@
   "$id": "ovc-ro4-sequence-signature/v1",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "not": {
-    "anyOf": [
-      {
-        "required": [
-          "learned_weight"
-        ]
-      },
-      {
-        "required": [
-          "family_name"
-        ]
-      },
-      {
-        "required": [
-          "archetype"
-        ]
-      },
-      {
-        "required": [
-          "prediction"
-        ]
-      },
-      {
-        "required": [
-          "promotion"
-        ]
-      }
-    ]
-  },
+  "not": {"anyOf": [
+    {"required": ["learned_weight"]}, {"required": ["family_name"]},
+    {"required": ["family_id"]}, {"required": ["archetype"]},
+    {"required": ["prediction"]}, {"required": ["probability"]},
+    {"required": ["promotion"]}, {"required": ["semantic_label"]}
+  ]},
   "properties": {
-    "authority": {
-      "const": "NON_CANONICAL_SEQUENCE_EVIDENCE"
-    },
-    "canonical_json_sha256": {
-      "pattern": "^[0-9a-f]{64}$",
-      "type": "string"
-    },
-    "context_markers": {
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "distance_components": {
-      "type": "object"
-    },
-    "distance_registry_id": {
-      "const": "RO4.SEQUENCE.DISTANCE.v0.1"
-    },
-    "duration_bins": {
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "ordered_axis_vectors": {
-      "items": {
-        "type": "object"
-      },
-      "type": "array"
-    },
-    "ordered_changed_axis_sets": {
-      "items": {
-        "items": {
-          "enum": [
-            "LOCATION",
-            "MOTION",
-            "ORGANISATION",
-            "INTERACTION",
-            "QUALITY"
-          ]
-        },
-        "type": "array"
-      },
-      "type": "array"
-    },
-    "raw_durations": {
-      "items": {
-        "minimum": 1,
-        "type": "integer"
-      },
-      "type": "array"
-    },
-    "registry_versions": {
-      "type": "object"
-    },
-    "sequence_id": {
-      "pattern": "^RO4\\.SEQUENCE\\.",
-      "type": "string"
-    },
-    "signature_id": {
-      "type": "string"
-    },
-    "signature_type": {
-      "enum": [
-        "EXACT",
-        "DECLARED_DISTANCE"
-      ]
-    }
+    "authority": {"const": "NON_CANONICAL_SEQUENCE_EVIDENCE"},
+    "canonical_json_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "clock": {"enum": ["15M", "2H_A_L"]},
+    "context_markers": {"items": {"type": "string"}, "type": "array"},
+    "distance_components": {"type": "object"},
+    "distance_registry_id": {"const": "RO4.SEQUENCE.DISTANCE.v0.1"},
+    "duration_bins": {"items": {"type": "string"}, "type": "array"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "ordered_axis_vectors": {"items": {"type": "object"}, "minItems": 2, "maxItems": 16, "type": "array"},
+    "ordered_changed_axis_sets": {"items": {"items": {"enum": ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"]}, "type": "array"}, "minItems": 1, "maxItems": 15, "type": "array"},
+    "parent_change_markers": {"items": {"type": "string"}, "type": "array"},
+    "raw_durations": {"items": {"minimum": 1, "type": "integer"}, "type": "array"},
+    "registry_versions": {"type": "object"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "sequence_id": {"pattern": "^RO4\\.SEQUENCE\\.[0-9a-f]{64}$", "type": "string"},
+    "side": {"enum": ["BID", "ASK"]},
+    "signature_id": {"pattern": "^RO4\\.SIGNATURE\\.[0-9a-f]{64}$", "type": "string"},
+    "signature_type": {"enum": ["EXACT", "DECLARED_DISTANCE"]}
   },
-  "required": [
-    "signature_id",
-    "sequence_id",
-    "signature_type",
-    "ordered_axis_vectors",
-    "ordered_changed_axis_sets",
-    "registry_versions",
-    "canonical_json_sha256",
-    "authority"
-  ],
+  "required": ["signature_id", "sequence_id", "signature_type", "role", "clock", "side", "ordered_axis_vectors", "ordered_changed_axis_sets", "registry_versions", "context_markers", "parent_change_markers", "canonical_json_sha256", "authority", "logical_hash"],
   "title": "ovc-ro4-sequence-signature/v1",
   "type": "object"
 }

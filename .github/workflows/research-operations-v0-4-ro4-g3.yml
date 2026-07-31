@@ -1,0 +1,45 @@
+name: RO4-G3 sequence recurrence evidence acceptance
+
+on:
+  pull_request:
+    paths:
+      - 'src/ovc/research_operations/v0_4/**'
+      - 'scripts/research_operations/build_ro4_sequence_recurrence.py'
+      - 'scripts/research_operations/validate_ro4_g3.py'
+      - 'tests/research_operations/v0_4/test_ro4_g3_sequence_recurrence.py'
+      - 'fixtures/research_operations/v0_4/RO4_G3_SYNTHETIC_ASSURANCE_FIXTURE_v0_1.json'
+      - 'schemas/research_operations/v0_4/**'
+      - 'registries/research_operations/v0_4/**'
+      - 'docs/releases/research-operations-foundation-v0-4/ro4-wp3/**'
+      - 'docs/releases/research-operations-foundation-v0-4/ro4-g3/**'
+      - '.github/workflows/research-operations-v0-4-ro4-g3.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ro4-g3:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate RO4-G3 packet
+        run: python -u scripts/research_operations/validate_ro4_g3.py
+      - name: Focused RO4-G3 tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_4 -p 'test_ro4_g3_sequence_recurrence.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Authority and repository-boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -e src/ovc/research_operations/v0_4/sequence_recurrence.py
+          test ! -e apps/research_console/pages/C2_Sequence_Evidence.py
+          ! find src fixtures/research_operations/v0_4 docs/releases/research-operations-foundation-v0-4 -type f \( -name '*.sqlite' -o -name '*.db' -o -name '*.parquet' -o -name '*.jsonl.gz' \) | grep -q .
+          grep -q 'route_state: DISABLED_PENDING_RC_G5' registries/research_operations/v0_4/RO4_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          grep -q '"validation_consumption":"LOCKED_UNCONSUMED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
+          grep -q '"pd_population_merge":"DENIED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
+          grep -q '"promotion_path":"DENIED"' docs/releases/research-operations-foundation-v0-4/ro4-wp3/RO4_G3_EVIDENCE_MANIFEST.json
+          grep -q '"operator_decision_required": false' docs/releases/research-operations-foundation-v0-4/ro4-g3/RO4_G3_GATE_PACKET.json

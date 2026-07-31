@@ -1,0 +1,19 @@
+{
+  "$id": "ovc-ro4-g3-blinded-review-batch/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {"anyOf": [{"required": ["answer_key"]}, {"required": ["true_class"]}, {"required": ["synthetic_controls"]}]},
+  "properties": {
+    "answer_key_access_state": {"const": "SEALED_SEPARATE"},
+    "answer_key_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "authority": {"const": "NON_CANONICAL_RESEARCH_CANDIDATE"},
+    "batch_id": {"pattern": "^RO4\\.G3\\.BATCH\\.[0-9a-f]{64}$", "type": "string"},
+    "blinded": {"const": true},
+    "cards": {"items": {"type": "object"}, "minItems": 1, "type": "array"},
+    "composition": {"type": "object"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"}
+  },
+  "required": ["batch_id", "authority", "blinded", "answer_key_access_state", "answer_key_sha256", "composition", "cards", "logical_hash"],
+  "title": "RO4 G3 blinded review batch",
+  "type": "object"
+}
