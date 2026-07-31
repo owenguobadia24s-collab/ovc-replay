@@ -109,7 +109,7 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertIn("Source-boundary insufficiency must be zero", plan)
         self.assertIn("SOURCE_BOUNDARY_INCOMPLETE", contract)
         self.assertIn("Provider execution is operator-local only", contract)
-        self.assertIn("No formula, threshold, semantic", contract)
+        self.assertIn("grants no formula, threshold, semantic", contract)
 
 
 if __name__ == "__main__":
