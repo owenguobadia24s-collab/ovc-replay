@@ -3,31 +3,31 @@ programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
 plan_sha256: 89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf
-status: APPROVED_RO4_G1_PENDING_MERGE
+status: APPROVED_RO4_G2_MERGE_READY
 owner: OPERATOR
 repository: owenguobadia24s-collab/ovc-replay
-court_record_main_tip: e82c3ce57f6c0bc1f69620c40c81bd81f7c045d8
-current_branch: build/ro4-wp1-state-transition-indexes
-runtime_implementation_started: YES_BOUNDED_RO4_WP1_LOCAL_DERIVED_ONLY
+court_record_main_tip: db883068e4a19e39aa17a278e9cee5b36459b8ad
+current_branch: build/ro4-wp2-matrix-persistence-conflict
+runtime_implementation_started: YES_BOUNDED_RO4_WP1_WP2_LOCAL_DERIVED_ONLY
 route_state: DISABLED_PENDING_RC_G5
 packages:
   contracts: APPROVED_RO4_G0
-  schemas: APPROVED_RO4_G0_WITH_WP1_IMPLEMENTATION_MANIFEST_SCHEMAS
-  registries: APPROVED_RO4_G0_WITH_WP1_SOURCE_INVENTORY
+  schemas: APPROVED_RO4_G0_WITH_WP1_WP2_IMPLEMENTATION_SCHEMAS
+  registries: APPROVED_RO4_G0_WITH_WP1_SOURCE_AND_WP2_STATE
   fixtures: ACTIVE_SYNTHETIC_NON_AUTHORITATIVE
-  source_runtime: IMPLEMENTED_RO4_WP1_LOCAL_REPLACEABLE_DERIVED
+  source_runtime: IMPLEMENTED_RO4_WP1_LOCAL_REPLACEABLE_AND_WP2_LOCAL_READ_ONLY_DERIVED
   console_runtime: NOT_STARTED
 packets:
   - {packet_id: RO4-00, gate_id: RO4-G0, status: COMPLETED, branch: build/ro4-00-design-boundary-freeze, merge_commit: e82c3ce57f6c0bc1f69620c40c81bd81f7c045d8, authority_delta: DESIGN_CANON_ONLY}
-  - {packet_id: RO4-WP1, gate_id: RO4-G1, status: APPROVED, branch: build/ro4-wp1-state-transition-indexes, prerequisites: [RO4-G0], authority_delta: LOCAL_REPLACEABLE_DERIVED}
-  - {packet_id: RO4-WP2, gate_id: RO4-G2, status: PLANNED, prerequisites: [RO4-G1], authority_delta: LOCAL_READ_ONLY_DERIVED}
+  - {packet_id: RO4-WP1, gate_id: RO4-G1, status: COMPLETED, branch: build/ro4-wp1-state-transition-indexes, merge_commit: fbd8177cbff58827baeb55c9ceeb86d75d7b96f6, prerequisites: [RO4-G0], authority_delta: LOCAL_REPLACEABLE_DERIVED}
+  - {packet_id: RO4-WP2, gate_id: RO4-G2, status: APPROVED_MERGE_READY, branch: build/ro4-wp2-matrix-persistence-conflict, prerequisites: [RO4-G1], authority_delta: LOCAL_READ_ONLY_DERIVED}
   - {packet_id: RO4-WP3, gate_id: RO4-G3, status: PLANNED, prerequisites: [RO4-G2], authority_delta: NON_CANONICAL_RESEARCH_CANDIDATE}
   - {packet_id: RO4-WP4, gate_id: RO4-G4, status: PLANNED, prerequisites: [RO4-G3], authority_delta: BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE}
   - {packet_id: RO4-WP5, gate_id: RO4-G5, status: PLANNED, prerequisites: [RO4-G4], authority_delta: DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS}
   - {packet_id: RC-G5, gate_id: RC-G5, status: PLANNED, prerequisites: [RO4-G5], authority_delta: LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION}
   - {packet_id: RO4-G6, gate_id: RO4-G6, status: PLANNED, prerequisites: [RO4-G4], authority_delta: EVIDENCE_DISPOSITION_ONLY}
 continuation:
-  on_pass: RO4-WP2
+  on_pass: RO4-WP3
   on_defer: null
   on_block: null
   on_quarantine: null

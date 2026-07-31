@@ -1,0 +1,44 @@
+{
+  "acceptance_conditions": [
+    {"condition": "exact count and visible denominator conservation", "status": "PASS"},
+    {"condition": "maximal persistence with gap and reset termination", "status": "PASS"},
+    {"condition": "no winner, composite score, percentage, ratio, probability, rank or heatmap field", "status": "PASS"},
+    {"condition": "existing C2 conflict predicates only", "status": "PASS"},
+    {"condition": "every conflict review object has a deterministic real matched control", "status": "PASS"},
+    {"condition": "15M and 2H identities remain separate and parent changes are explicit", "status": "PASS"},
+    {"condition": "unknown parent context is not bridged", "status": "PASS"},
+    {"condition": "byte-identical full rerun", "status": "PASS"},
+    {"condition": "complete repository suite", "status": "PASS"}
+  ],
+  "authority_delta": "LOCAL_READ_ONLY_DERIVED",
+  "auto_ratifiable": true,
+  "baseline_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
+  "branch": "build/ro4-wp2-matrix-persistence-conflict",
+  "candidate_commit": "96a83def9962d264a1ac0b035d51188998079653",
+  "completed_packets": ["RO4-00", "RO4-WP1", "RO4-WP2"],
+  "current_authority": "RO4_G1_LOCAL_REPLACEABLE_INDEXES_APPROVED",
+  "decision_record": "docs/releases/research-operations-foundation-v0-4/ro4-g2/RO4_G2_DELEGATED_DECISION.json",
+  "gate_id": "RO4-G2",
+  "next_packet": "RO4-WP3",
+  "operator_decision_required": false,
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
+  "plan_version": "v0.2",
+  "qa": {
+    "packet": "docs/releases/research-operations-foundation-v0-4/ro4-g2/RO4_G2_QA_PACKET.json",
+    "recommendation": "PASS"
+  },
+  "recommended_decision": "PASS",
+  "rollback": "Delete replaceable local G2 evidence and revert this packet through a new non-destructive commit.",
+  "schema": "ovc-ro4-gate-packet/v1",
+  "status": "APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI",
+  "tests": [
+    {"job": 91212236295, "name": "implementation-head RO4-G2", "status": "PASS", "workflow_run": 30647451200},
+    {"job": 91212237818, "name": "implementation-head generic tests", "status": "PASS", "workflow_run": 30647451379},
+    {"job": 91213268803, "name": "decision-head RO4-G2", "status": "PASS", "workflow_run": 30647755625},
+    {"job": 91213270053, "name": "decision-head generic tests", "status": "PASS", "workflow_run": 30647755644}
+  ],
+  "title": "Transition matrix, persistence and conflict assurance acceptance",
+  "unresolved_issues": [],
+  "warnings": []
+}
