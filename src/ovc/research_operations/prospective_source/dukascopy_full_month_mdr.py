@@ -13,12 +13,13 @@ from typing import Mapping, Sequence
 from ovc.research_operations.pattern_discovery.full_month_mdr import (
     EXPECTED_SOURCE_END,
     EXPECTED_SOURCE_START,
+    PLAN_AMENDMENT_ID,
     SOURCE_SLICE_ID,
     TARGET_END,
     TARGET_START,
     build_source_profile,
-    iter_h1_transport_months,
     iter_m1_partition_days,
+    iter_native_h1_transport_months,
 )
 
 from . import dukascopy_intake as base
@@ -30,8 +31,10 @@ APPROVED_START = EXPECTED_SOURCE_START
 APPROVED_END = EXPECTED_SOURCE_END
 COMPRESSED_BYTE_LIMIT = 512 * 1024 * 1024
 EXPANDED_BYTE_LIMIT = 2 * 1024 * 1024 * 1024
-ADAPTER_VERSION = "1.3.0-pd-june-full-month-mdr"
+ADAPTER_VERSION = "1.4.0-pd-june-full-month-mdr-a1"
 DATE_TOKEN = "20260530_20260703"
+NATIVE_JULY_H1_STATUS = "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE"
+POST_TARGET_H1_AUTHORITY = "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS"
 
 IntakeError = base.IntakeError
 FetchResult = base.FetchResult
@@ -63,7 +66,7 @@ def _enforce_limits(*, compressed_bytes: int, expanded_bytes: int) -> None:
 def provider_request_plan() -> dict[str, object]:
     profile = build_source_profile()
     m1_days = iter_m1_partition_days(APPROVED_START, APPROVED_END)
-    h1_months = iter_h1_transport_months(APPROVED_START, APPROVED_END)
+    native_h1_months = iter_native_h1_transport_months(APPROVED_START, APPROVED_END)
     objects: list[dict[str, object]] = []
     for side in ("BID", "ASK"):
         for day in m1_days:
@@ -75,25 +78,30 @@ def provider_request_plan() -> dict[str, object]:
                     "allow_missing_transport": True,
                 }
             )
-        for month in h1_months:
+        for month in native_h1_months:
             objects.append(
                 {
                     "logical_stream": f"H1_{side}",
                     "partition_start_utc": _utc(month),
                     "relative_provider_path": base._h1_relative(month, side),
                     "allow_missing_transport": False,
+                    "native_coverage_end_exclusive_utc": _utc(TARGET_END),
                 }
             )
     return {
         "schema": "ovc-pd-june-full-month-mdr-provider-plan/v1",
         "gate": APPROVED_GATE,
         "slice_id": APPROVED_SLICE_ID,
+        "plan_amendment": PLAN_AMENDMENT_ID,
         "target_start_utc": profile["target_start_utc"],
         "target_end_exclusive_utc": profile["target_end_exclusive_utc"],
         "source_start_utc": profile["source_start_utc"],
         "source_end_exclusive_utc": profile["source_end_exclusive_utc"],
         "provider_object_count": len(objects),
         "objects": objects,
+        "native_h1_transport_months_utc": ["2026-05", "2026-06"],
+        "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+        "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
         "compressed_byte_limit": COMPRESSED_BYTE_LIMIT,
         "expanded_byte_limit": EXPANDED_BYTE_LIMIT,
         "provider_execution_location": "OPERATOR_LOCAL_ONLY",
@@ -182,6 +190,40 @@ def _coverage_audit(
     }
 
 
+def _post_target_h1_audit(
+    m1_rows: Sequence[CandleRow],
+    *,
+    side: str,
+) -> tuple[list[CandleRow], dict[str, object]]:
+    derived = base._aggregate_complete_h1(
+        [
+            row
+            for row in m1_rows
+            if TARGET_END <= row.timestamp_utc < APPROVED_END
+        ]
+    )
+    expected: set[datetime] = set()
+    cursor = TARGET_END
+    while cursor < APPROVED_END:
+        expected.add(cursor)
+        cursor += timedelta(hours=1)
+    observed = set(derived)
+    missing = sorted(expected - observed)
+    unexpected = sorted(observed - expected)
+    state = "PASS" if not missing and not unexpected else "BLOCK"
+    audit = {
+        "side": side,
+        "authority": POST_TARGET_H1_AUTHORITY,
+        "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+        "expected_complete_hour_count": len(expected),
+        "derived_complete_hour_count": len(observed),
+        "missing_hours_utc": [_utc(value) for value in missing],
+        "unexpected_hours_utc": [_utc(value) for value in unexpected],
+        "qa_state": state,
+    }
+    return [derived[key] for key in sorted(derived)], audit
+
+
 def _write_csv(
     root: Path,
     *,
@@ -208,6 +250,7 @@ def _logical_manifest(source_objects: Sequence[dict[str, object]]) -> dict[str, 
     manifest: dict[str, object] = {
         "schema": "ovc-pd-june-full-month-mdr-source-manifest/v1",
         "slice_id": APPROVED_SLICE_ID,
+        "plan_amendment": PLAN_AMENDMENT_ID,
         "instrument": "GBPUSD",
         "provider": "DUKASCOPY",
         "target_start_utc": _utc(TARGET_START),
@@ -216,6 +259,8 @@ def _logical_manifest(source_objects: Sequence[dict[str, object]]) -> dict[str, 
         "source_window_end_exclusive_utc": _utc(APPROVED_END),
         "target_eligibility": "TARGET_JUNE_ONLY",
         "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
+        "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+        "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
         "source_objects": [
             {
                 "object_id": item["object_id"],
@@ -223,6 +268,7 @@ def _logical_manifest(source_objects: Sequence[dict[str, object]]) -> dict[str, 
                 "side": item["side"],
                 "sha256": item["sha256"],
                 "row_count": item["row_count"],
+                "construction": item["construction"],
             }
             for item in sorted(
                 source_objects,
@@ -256,6 +302,7 @@ def _quarantine(staging: Path, *, reason: str) -> Path | None:
             {
                 "schema": "ovc-pd-june-full-month-mdr-intake-incident/v1",
                 "slice_id": APPROVED_SLICE_ID,
+                "plan_amendment": PLAN_AMENDMENT_ID,
                 "reason": reason,
                 "accepted_source_slice_created": False,
                 "authority": "NONE",
@@ -284,12 +331,15 @@ def preflight(
         "status": "READY_FOR_OPERATOR_LOCAL_EXECUTION",
         "gate": APPROVED_GATE,
         "slice_id": APPROVED_SLICE_ID,
+        "plan_amendment": PLAN_AMENDMENT_ID,
         "source_window_start_utc": _utc(APPROVED_START),
         "source_window_end_exclusive_utc": _utc(APPROVED_END),
         "target_start_utc": _utc(TARGET_START),
         "target_end_exclusive_utc": _utc(TARGET_END),
         "provider_object_count": plan["provider_object_count"],
         "streams": ["M1_BID", "M1_ASK", "H1_BID", "H1_ASK"],
+        "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+        "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
         "compressed_byte_limit": COMPRESSED_BYTE_LIMIT,
         "expanded_byte_limit": EXPANDED_BYTE_LIMIT,
         "provider_network_access_performed": False,
@@ -328,6 +378,8 @@ def execute_intake(
     expanded_bytes = 0
     transport_receipts: list[dict[str, object]] = []
     rows_by_stream: dict[tuple[str, str], list[CandleRow]] = {}
+    native_h1_by_side: dict[str, list[CandleRow]] = {}
+    post_target_h1_audits: list[dict[str, object]] = []
     try:
         for side in ("BID", "ASK"):
             combined_m1: list[CandleRow] = []
@@ -371,13 +423,11 @@ def execute_intake(
                         "cached_relative_path": cached,
                     }
                 )
-            rows_by_stream[("M1", side)] = sorted(
-                combined_m1,
-                key=lambda row: row.timestamp_utc,
-            )
+            combined_m1 = sorted(combined_m1, key=lambda row: row.timestamp_utc)
+            rows_by_stream[("M1", side)] = combined_m1
 
-            combined_h1: list[CandleRow] = []
-            for month in iter_h1_transport_months(APPROVED_START, APPROVED_END):
+            native_h1: list[CandleRow] = []
+            for month in iter_native_h1_transport_months(APPROVED_START, APPROVED_END):
                 relative = base._h1_relative(month, side)
                 result = fetcher(relative, False)
                 if result.status != "DOWNLOADED":
@@ -396,14 +446,14 @@ def execute_intake(
                     compressed_bytes=compressed_bytes,
                     expanded_bytes=expanded_bytes,
                 )
-                combined_h1.extend(
+                native_h1.extend(
                     base._decode_candles(
                         data,
                         base=month,
                         partition_end=_month_end(month),
                         identity=relative,
                         accepted_start=APPROVED_START,
-                        accepted_end=APPROVED_END,
+                        accepted_end=TARGET_END,
                     )
                 )
                 transport_receipts.append(
@@ -418,10 +468,18 @@ def execute_intake(
                         "last_modified": result.last_modified,
                         "cached_relative_path": cached,
                         "accepted_interval_is_bounded_subset_of_monthly_transport": True,
+                        "native_coverage_end_exclusive_utc": _utc(TARGET_END),
                     }
                 )
+            native_h1 = sorted(native_h1, key=lambda row: row.timestamp_utc)
+            native_h1_by_side[side] = native_h1
+            post_target_h1, post_target_audit = _post_target_h1_audit(
+                combined_m1,
+                side=side,
+            )
+            post_target_h1_audits.append(post_target_audit)
             rows_by_stream[("H1", side)] = sorted(
-                combined_h1,
+                [*native_h1, *post_target_h1],
                 key=lambda row: row.timestamp_utc,
             )
 
@@ -448,17 +506,37 @@ def execute_intake(
             )
             for clock in ("M1", "H1")
         ]
-        h1_results = [
-            base._h1_reconciliation(
-                rows_by_stream[("M1", side)],
-                rows_by_stream[("H1", side)],
+        h1_results: list[dict[str, object]] = []
+        for side in ("BID", "ASK"):
+            reconciliation = base._h1_reconciliation(
+                [
+                    row
+                    for row in rows_by_stream[("M1", side)]
+                    if row.timestamp_utc < TARGET_END
+                ],
+                native_h1_by_side[side],
                 side=side,
             )
-            for side in ("BID", "ASK")
-        ]
+            post_target = next(
+                item for item in post_target_h1_audits if item["side"] == side
+            )
+            reconciliation.update(
+                {
+                    "native_coverage_end_exclusive_utc": _utc(TARGET_END),
+                    "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+                    "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
+                    "post_target_derived_h1_count": post_target[
+                        "derived_complete_hour_count"
+                    ],
+                    "post_target_missing_hours_utc": post_target["missing_hours_utc"],
+                }
+            )
+            if post_target["qa_state"] != "PASS":
+                reconciliation["qa_state"] = "BLOCK"
+            h1_results.append(reconciliation)
         if any(
             item["qa_state"] != "PASS"
-            for item in coverage_results + pair_results + h1_results
+            for item in coverage_results + pair_results + h1_results + post_target_h1_audits
         ):
             raise IntakeError("source QA did not pass; workspace must be quarantined")
 
@@ -475,11 +553,17 @@ def execute_intake(
                 compressed_bytes=compressed_bytes,
                 expanded_bytes=expanded_bytes,
             )
+            construction = (
+                "NATIVE_M1_PROVIDER_TRANSPORTS"
+                if clock == "M1"
+                else "NATIVE_MAY_JUNE_PLUS_M1_DERIVED_JULY_CONTEXT"
+            )
             source_objects.append(
                 {
                     "object_id": _source_object_id(clock, side),
                     "clock": clock,
                     "side": side,
+                    "construction": construction,
                     "sha256": hashlib.sha256(payload).hexdigest(),
                     "size_bytes": len(payload),
                     "row_count": len(rows),
@@ -500,9 +584,12 @@ def execute_intake(
                 "schema": "ovc-pd-june-full-month-mdr-provider-request-receipt/v1",
                 "gate": APPROVED_GATE,
                 "slice_id": APPROVED_SLICE_ID,
+                "plan_amendment": PLAN_AMENDMENT_ID,
                 "adapter": base.ADAPTER,
                 "adapter_version": ADAPTER_VERSION,
                 "transport_objects": transport_receipts,
+                "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+                "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
                 "compressed_bytes": compressed_bytes,
                 "compressed_byte_limit": COMPRESSED_BYTE_LIMIT,
                 "expanded_bytes_before_receipts": expanded_bytes,
@@ -516,6 +603,7 @@ def execute_intake(
             {
                 "schema": "ovc-pd-june-full-month-mdr-source-object-inventory/v1",
                 "slice_id": APPROVED_SLICE_ID,
+                "plan_amendment": PLAN_AMENDMENT_ID,
                 "source_object_count": len(source_objects),
                 "source_objects": source_objects,
             },
@@ -525,7 +613,9 @@ def execute_intake(
             {
                 "schema": "ovc-pd-june-full-month-mdr-coverage-qa/v1",
                 "slice_id": APPROVED_SLICE_ID,
+                "plan_amendment": PLAN_AMENDMENT_ID,
                 "results": coverage_results,
+                "post_target_h1_derivation": post_target_h1_audits,
                 "qa_state": "PASS",
                 "repair_performed": False,
             },
@@ -544,9 +634,12 @@ def execute_intake(
             {
                 "schema": "ovc-pd-june-full-month-mdr-native-h1-reconciliation/v1",
                 "slice_id": APPROVED_SLICE_ID,
+                "plan_amendment": PLAN_AMENDMENT_ID,
                 "results": h1_results,
                 "qa_state": "PASS",
                 "repair_authority": "NONE",
+                "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+                "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
             },
         )
         manifest = _logical_manifest(source_objects)
@@ -563,6 +656,7 @@ def execute_intake(
             {
                 "schema": "ovc-pd-june-full-month-mdr-freeze-receipt/v1",
                 "slice_id": APPROVED_SLICE_ID,
+                "plan_amendment": PLAN_AMENDMENT_ID,
                 "manifest_sha256": manifest["manifest_sha256"],
                 "manifest_file_sha256": manifest_file_sha,
                 "source_object_count": 4,
@@ -574,6 +668,8 @@ def execute_intake(
                 "r2_publication": "DENIED",
                 "validation_consumption": "DENIED",
                 "canonical_discovery_append": "DENIED",
+                "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+                "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
             },
         )
         expanded_final = base._workspace_size(staging)
@@ -586,6 +682,7 @@ def execute_intake(
             "status": "FROZEN_LOCAL_SOURCE_SLICE",
             "gate": APPROVED_GATE,
             "slice_id": APPROVED_SLICE_ID,
+            "plan_amendment": PLAN_AMENDMENT_ID,
             "manifest_sha256": manifest["manifest_sha256"],
             "manifest_file_sha256": manifest_file_sha,
             "source_object_count": 4,
@@ -596,6 +693,8 @@ def execute_intake(
             "selector_eligibility": "NONE",
             "r2_publication": "DENIED",
             "validation_consumption": "DENIED",
+            "native_july_h1_transport": NATIVE_JULY_H1_STATUS,
+            "post_target_h1_context": POST_TARGET_H1_AUTHORITY,
         }
     except Exception as exc:
         quarantined = _quarantine(staging, reason=str(exc))
