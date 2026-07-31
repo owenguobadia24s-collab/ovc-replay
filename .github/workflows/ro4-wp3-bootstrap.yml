@@ -1,9 +1,9 @@
 name: RO4-WP3 bounded packet materialization
 
 on:
-  push:
+  pull_request:
     branches:
-      - build/ro4-wp3-sequence-windows-neutral-candidates
+      - main
     paths:
       - '.github/workflows/ro4-wp3-bootstrap.yml'
       - 'tmp/ro4-wp3-packet.part*.b64'
@@ -17,7 +17,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: build/ro4-wp3-sequence-windows-neutral-candidates
           fetch-depth: 0
+      - name: Synchronize latest lawful main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin main
+          git merge --no-edit origin/main
       - name: Decode and verify bounded packet
         shell: bash
         run: |
@@ -51,9 +60,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git diff --cached --check
           git commit -m 'RO4-WP3 — materialize sequence-window and neutral recurrence packet'
-          git push origin HEAD:${GITHUB_REF_NAME}
+          git push origin HEAD:build/ro4-wp3-sequence-windows-neutral-candidates
