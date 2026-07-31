@@ -3,9 +3,11 @@
   "programme_id": "PD-JUNE-FULL-MONTH-MDR",
   "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
   "packet_id": "PD-JUNE-FM-A2",
-  "status": "PASS_FINAL_HEAD_CI",
+  "status": "COMPLETED_SQUASH_MERGED_TO_MAIN",
   "baseline_commit": "4c3ea8dbf4ff7d504c9dc083993fde9d16e684d8",
-  "candidate_commit": "7c1027d5f1f4320df564b55159ab1e10930f3617",
+  "candidate_commit": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+  "merge_commit": "5a19cc4f6d7b00c5e0f892f5727b97a498319c2e",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A2_MERGE_RECEIPT.json",
   "checks": {
     "operator_pass_recorded": "PASS",
     "diagnostic_hash_bound": "PASS",
@@ -17,32 +19,35 @@
     "focused_tests": "PASS",
     "complete_repository_suite": "PASS",
     "retained_a1_tests": "PASS",
-    "authority_assertions": "PASS"
+    "authority_assertions": "PASS",
+    "squash_merge": "PASS"
   },
   "test_evidence": [
     {
-      "workflow_run": 30649492043,
-      "job": 91218976467,
-      "tested_head": "7c1027d5f1f4320df564b55159ab1e10930f3617",
-      "scope": "A2 court record, focused A2/A1 tests, complete repository suite and local-only authority assertions",
+      "workflow_run": 30649698943,
+      "job": 91219648270,
+      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+      "scope": "A2 court record, focused A2 and retained A1 tests, complete repository suite and no-provider/no-repair/no-bridging assertions",
       "result": "PASS"
     },
     {
-      "workflow_run": 30649492096,
-      "job": 91218976795,
-      "tested_head": "7c1027d5f1f4320df564b55159ab1e10930f3617",
-      "scope": "WP1 court record, focused full-month intake tests and complete repository suite",
+      "workflow_run": 30649698796,
+      "job": 91219647892,
+      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+      "scope": "WP1 current court record, focused whole-month intake tests and complete repository suite",
       "result": "PASS"
     },
     {
-      "workflow_run": 30649491755,
-      "tested_head": "7c1027d5f1f4320df564b55159ab1e10930f3617",
-      "scope": "generic repository tests",
+      "workflow_run": 30649698673,
+      "job": 91219647720,
+      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+      "scope": "generic repository unit tests",
       "result": "PASS"
     }
   ],
   "qa_recommendation": "PASS",
   "authority_delta": "SOURCE_ADMISSIBILITY_AND_DOWNSTREAM_CENSORING_ONLY",
   "reserved_authority_delta": "NONE_AFTER_OPERATOR_A2_PASS",
-  "rollback": "Revert A2 through a new non-destructive commit and preserve all quarantines and diagnostics."
+  "next_action": "OPERATOR_LOCAL_WP1_EXECUTION",
+  "rollback": "Revert A2 through a new non-destructive commit and preserve all quarantines, diagnostics and merge evidence."
 }
