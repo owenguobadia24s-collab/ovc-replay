@@ -6,10 +6,12 @@
   "packet_id": "PD-JUNE-FM-WP2",
   "baseline_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
   "branch": "build/pd-june-fm-wp2-replay-tooling",
-  "tested_candidate_commit": "033637ddec053d656ed198f7c0b04b508dc8fac3",
-  "status": "PASS_APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
+  "final_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
+  "merge_commit": "b3ac2561aff225442465e6914a1e1e29adbfab62",
+  "administrative_tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
+  "status": "TOOLING_COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_EXECUTION_REQUIRED",
   "qa_result": "PASS_DETERMINISTIC_FULL_MONTH_REPLAY_TOOLING_LOCAL_EXECUTION_REQUIRED",
-  "recommendation": "PASS_TOOLING_SQUASH_MERGE_THEN_OPERATOR_LOCAL_EXECUTION",
+  "recommendation": "PASS_TOOLING_COMPLETED_PROCEED_TO_OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE",
   "checks": [
     {"check": "exact WP1 source acceptance and manifest binding", "result": "PASS"},
     {"check": "full source interval replay before June target filtering", "result": "PASS"},
@@ -21,24 +23,28 @@
     {"check": "May and July context-only classification", "result": "PASS"},
     {"check": "zero source-boundary insufficiency assertion", "result": "PASS_TOOLING_ASSERTION"},
     {"check": "provider-gap and algorithmic not-evaluable separation", "result": "PASS"},
-    {"check": "independent byte-identical deterministic rerun", "result": "PASS_TOOLING_REQUIRED"},
+    {"check": "independent byte-identical deterministic rerun", "result": "REQUIRED_AT_OPERATOR_LOCAL_EXECUTION"},
     {"check": "provider execution and replay execution denied in CI", "result": "PASS"},
     {"check": "release, selector, R2, Validation, live append and write authority denied", "result": "PASS"},
-    {"check": "focused tests and complete repository suite", "result": "PASS"},
-    {"check": "retained WP1 source acceptance continuity", "result": "PASS"}
+    {"check": "tooling final-head focused tests and complete repository suite", "result": "PASS"},
+    {"check": "eligible squash merge", "result": "PASS_b3ac2561aff225442465e6914a1e1e29adbfab62"},
+    {"check": "administrative merge receipt, state continuity, focused tests and complete repository suite", "result": "PASS"}
   ],
   "tests": [
-    {"workflow_run":30656604930,"job":91242380033,"scope":"module compile, packet parse, focused WP2 tests, retained full-month/A2 tests, complete repository suite and authority boundary","result":"PASS","tested_head":"033637ddec053d656ed198f7c0b04b508dc8fac3"},
-    {"workflow_run":30656605024,"job":91242380449,"scope":"WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary","result":"PASS","tested_head":"033637ddec053d656ed198f7c0b04b508dc8fac3"}
+    {"workflow_run":30657064858,"job":91243999664,"scope":"tooling final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
+    {"workflow_run":30657065738,"job":91244002340,"scope":"tooling final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
+    {"workflow_run":30657624697,"job":91245853454,"scope":"administrative merge receipt, WP2 focused tests, retained full-month/A2/WP1 continuity, complete repository suite and local-only authority boundary","result":"PASS","tested_head":"73d1c19171c84c942b77d8293aef1d66da4cdd38"},
+    {"workflow_run":30657624721,"job":91245853372,"scope":"administrative WP1 source acceptance continuity, focused tests, complete repository suite and source authority boundary","result":"PASS","tested_head":"73d1c19171c84c942b77d8293aef1d66da4cdd38"}
   ],
   "warnings": [
     "The expected full-month counts are frozen from the exact accepted source membership and must block on drift.",
     "Incomplete parent buckets are output as censored evidence but cannot enter C1 or C2.",
-    "Actual WP2 completion requires operator-local execution and compact output receipts after the tooling merge."
+    "Actual WP2 replay has not run; completion requires operator-local execution and compact output receipts."
   ],
-  "blockers": ["OPERATOR_LOCAL_REPLAY_EXECUTION_REQUIRED_AFTER_TOOLING_MERGE"],
+  "blockers": ["OPERATOR_LOCAL_REPLAY_EXECUTION_REQUIRED"],
   "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_TOOLING_ONLY",
   "reserved_authority_delta": "NONE",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_MERGE_RECEIPT.json",
   "next_packet": "PD-JUNE-FM-WP3",
-  "rollback": "Preserve the accepted source slice and WP1 merge. Revert only WP2 tooling, tests, schemas, QA and state through a new non-destructive commit."
+  "rollback": "Preserve the tooling squash merge, accepted source slice and all WP1 evidence. Correct only through a new non-destructive commit."
 }
