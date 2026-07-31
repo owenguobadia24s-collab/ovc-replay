@@ -46,6 +46,19 @@ jobs:
           test -f scripts/research_operations/validate_ro4_g3.py
           test -f tests/research_operations/v0_4/test_ro4_g3_sequence_recurrence.py
           ! find . -type f \( -name '*.pyc' -o -path '*/__pycache__/*' \) -not -path './.git/*' | grep -q .
+      - name: Normalize bounded text endings
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          for name in (
+              'src/ovc/research_operations/v0_4/sequence_finalize_support.py',
+              'src/ovc/research_operations/v0_4/sequence_materialize_support.py',
+          ):
+              path = Path(name)
+              path.write_text(path.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')
+          PY
       - name: Remove bootstrap transport
         shell: bash
         run: |
