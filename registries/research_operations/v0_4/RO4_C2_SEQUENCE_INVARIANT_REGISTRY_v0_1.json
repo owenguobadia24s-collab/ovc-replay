@@ -1,0 +1,153 @@
+{
+  "invariant_count": 24,
+  "invariants": [
+    {
+      "expectation": "Exact release/manifest/role/clock/side and C1/OPT-A parentage are required.",
+      "family": "source_identity",
+      "invariant_id": "RO4-INV-SOURCE-001",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Validation is denied before path/object/record/timestamp resolution.",
+      "family": "role_access",
+      "invariant_id": "RO4-INV-ROLE-002",
+      "mutation_required": true
+    },
+    {
+      "expectation": "All five axes exist independently; no overall winner.",
+      "family": "five_axis_independence",
+      "invariant_id": "RO4-INV-AXIS-003",
+      "mutation_required": true
+    },
+    {
+      "expectation": "State count reconciles exactly by role/clock/side.",
+      "family": "state_cardinality",
+      "invariant_id": "RO4-INV-CARD-004",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Every transition endpoint resolves to one exact state.",
+      "family": "transition_endpoint_closure",
+      "invariant_id": "RO4-INV-ENDPOINT-005",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Source precedes target; gaps and boundaries terminate continuity.",
+      "family": "chronology",
+      "invariant_id": "RO4-INV-CHRON-006",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Cell counts, exclusions and missingness reconcile to exact denominator.",
+      "family": "matrix_conservation",
+      "invariant_id": "RO4-INV-MATRIX-007",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Every eligible state belongs to exactly one run per declared run policy.",
+      "family": "persistence_partition",
+      "invariant_id": "RO4-INV-PERSIST-008",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Conflict remains vector evidence and has no composite score.",
+      "family": "conflict_vector",
+      "invariant_id": "RO4-INV-CONFLICT-009",
+      "mutation_required": true
+    },
+    {
+      "expectation": "2-16 exact contiguous states and 1-15 exact connecting transitions.",
+      "family": "sequence_membership",
+      "invariant_id": "RO4-INV-SEQUENCE-010",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Canonical ordered representation yields stable SHA-256.",
+      "family": "signature_determinism",
+      "invariant_id": "RO4-INV-SIGNATURE-011",
+      "mutation_required": true
+    },
+    {
+      "expectation": "All components, weights, scales and tie-break are explicit.",
+      "family": "distance_transparency",
+      "invariant_id": "RO4-INV-DISTANCE-012",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Operator controls are real C2 sequences; synthetic mutations are machine-only.",
+      "family": "real_control_only",
+      "invariant_id": "RO4-INV-CONTROL-013",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Prohibited semantic, prediction and promotion vocabulary is rejected.",
+      "family": "semantic_denial",
+      "invariant_id": "RO4-INV-VOCAB-014",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Replay cannot be relabelled or backfilled as live prospective.",
+      "family": "mode_separation",
+      "invariant_id": "RO4-INV-MODE-015",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Only trigger provenance fields cross from Pattern Discovery.",
+      "family": "pd_isolation",
+      "invariant_id": "RO4-INV-PD-016",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Frozen entropy/top-N/batch thresholds produce deterministic status.",
+      "family": "signature_concentration",
+      "invariant_id": "RO4-INV-DIVERSITY-017",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Cap exceedance blocks ordinary build; sample is explicit and stratified.",
+      "family": "declared_sample",
+      "invariant_id": "RO4-INV-SAMPLING-018",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Operator count and visible denominator are present; distribution-shaped fields are denied.",
+      "family": "count_only",
+      "invariant_id": "RO4-INV-COUNT-019",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Every threshold dimension must pass before planning is lawful.",
+      "family": "c2e_opening",
+      "invariant_id": "RO4-INV-C2E-020",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Annotation/friction identities bind source, operator, mode and cutoff; corrections supersede.",
+      "family": "append_only",
+      "invariant_id": "RO4-INV-ANNOTATION-021",
+      "mutation_required": true
+    },
+    {
+      "expectation": "C2, RO4 and PD trace panels are separate and write-free.",
+      "family": "console_separation",
+      "invariant_id": "RO4-INV-CONSOLE-022",
+      "mutation_required": true
+    },
+    {
+      "expectation": "Equivalent logical inputs produce byte-identical canonical JSON.",
+      "family": "byte_identity",
+      "invariant_id": "RO4-INV-DETERMINISM-023",
+      "mutation_required": true
+    },
+    {
+      "expectation": "No C2/PD/Validation/C2E/C2.5/C3/exposure authority is introduced.",
+      "family": "authority",
+      "invariant_id": "RO4-INV-AUTHORITY-024",
+      "mutation_required": true
+    }
+  ],
+  "registry_id": "RO4.C2.SEQUENCE.INVARIANTS.v0.1",
+  "schema": "ovc-ro4-c2-sequence-invariant-registry/v1",
+  "source_of_expectations": "INDEPENDENT_FROZEN_C2_AND_RO4_CONTRACT_CANON_NOT_IMPLEMENTATION",
+  "status": "PROPOSED_AT_RO4_G0"
+}

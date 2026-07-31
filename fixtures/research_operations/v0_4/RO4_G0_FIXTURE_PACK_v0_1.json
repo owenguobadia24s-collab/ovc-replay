@@ -1,0 +1,91 @@
+{
+  "cases": [
+    {
+      "case_id": "RO4-G0-COUNT-PASS",
+      "expected": "ACCEPT",
+      "family": "COUNT_PRESENTATION",
+      "payload": {
+        "count": 3,
+        "display_style": "UNIFORM_NON_DATA_DRIVEN_IDENTITY_ORDERED",
+        "display_text": "3 of 10 eligible records",
+        "eligible_denominator": 10,
+        "excluded_count": 1,
+        "missing_count": 0,
+        "slice_identity": "FIXTURE"
+      }
+    },
+    {
+      "case_id": "RO4-G0-COUNT-PERCENT-BLOCK",
+      "expected": "REJECT",
+      "family": "COUNT_PRESENTATION",
+      "payload": {
+        "count": 3,
+        "eligible_denominator": 10,
+        "percentage": 30
+      }
+    },
+    {
+      "case_id": "RO4-G0-PD-TRACE-PASS",
+      "expected": "ACCEPT",
+      "family": "PD_ISOLATION",
+      "payload": {
+        "pd_run_id": "PD.RUN.FIXTURE",
+        "pd_trigger_id": "PDTE-FIXTURE",
+        "trace_authority": "TRACE_ONLY_PATTERN_DISCOVERY_POPULATION_UNCHANGED",
+        "trigger_first_valid_at": "2026-01-01T00:00:00Z"
+      }
+    },
+    {
+      "case_id": "RO4-G0-PD-FINGERPRINT-BLOCK",
+      "expected": "REJECT",
+      "family": "PD_ISOLATION",
+      "payload": {
+        "fingerprint": {
+          "x": 1
+        },
+        "pd_trigger_id": "PDTE-FIXTURE"
+      }
+    },
+    {
+      "case_id": "RO4-G0-ABLATION-MACHINE-ONLY",
+      "expected": "ACCEPT_MACHINE_ONLY",
+      "family": "ABLATION",
+      "payload": {
+        "artifact_class": "MACHINE_QA_ONLY",
+        "operation": "AXIS_ABLATION"
+      }
+    },
+    {
+      "case_id": "RO4-G0-ABLATION-OPERATOR-BLOCK",
+      "expected": "REJECT",
+      "family": "ABLATION",
+      "payload": {
+        "operation": "AXIS_ABLATION",
+        "operator_surface": true
+      }
+    },
+    {
+      "case_id": "RO4-G0-REPLAY-RELABEL-BLOCK",
+      "expected": "QUARANTINE",
+      "family": "OPERATION_MODE",
+      "payload": {
+        "source_mode": "TIME_GATED_REPLAY",
+        "target_mode": "LIVE_PROSPECTIVE"
+      }
+    },
+    {
+      "case_id": "RO4-G0-C2E-PARTIAL-BLOCK",
+      "expected": "REJECT_DECISION_OPTION",
+      "family": "C2E_OPENING",
+      "payload": {
+        "all_conditions_pass": false,
+        "requested": "OPEN_C2E_DESIGN_PLAN"
+      }
+    }
+  ],
+  "market_authority": "NONE",
+  "operator_evidence_authority": "NONE",
+  "schema": "ovc-ro4-g0-fixture-pack/v1",
+  "status": "PROPOSED_AT_RO4_G0",
+  "synthetic": true
+}

@@ -1,0 +1,94 @@
+{
+  "$id": "ovc-ro4-transition-matrix/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "normalized_frequency"
+        ]
+      },
+      {
+        "required": [
+          "percentage"
+        ]
+      },
+      {
+        "required": [
+          "probability"
+        ]
+      },
+      {
+        "required": [
+          "rank"
+        ]
+      },
+      {
+        "required": [
+          "heatmap"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "authority": {
+      "const": "LOCAL_READ_ONLY_DERIVED"
+    },
+    "axis": {
+      "enum": [
+        "LOCATION",
+        "MOTION",
+        "ORGANISATION",
+        "INTERACTION",
+        "QUALITY"
+      ]
+    },
+    "cells": {
+      "items": {
+        "$ref": "count_denominator_cell_v0_1.schema.json"
+      },
+      "type": "array"
+    },
+    "eligible_denominator": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "excluded_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "matrix_id": {
+      "type": "string"
+    },
+    "missing_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "slice_identity": {
+      "type": "string"
+    },
+    "sort_order": {
+      "const": "FROZEN_IDENTITY_ORDER"
+    },
+    "total_transition_count": {
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "matrix_id",
+    "slice_identity",
+    "axis",
+    "cells",
+    "total_transition_count",
+    "eligible_denominator",
+    "logical_hash"
+  ],
+  "title": "ovc-ro4-transition-matrix/v1",
+  "type": "object"
+}

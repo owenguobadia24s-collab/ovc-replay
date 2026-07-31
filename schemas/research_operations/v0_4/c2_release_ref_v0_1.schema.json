@@ -1,0 +1,84 @@
+{
+  "$id": "ovc-ro4-c2-release-ref/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "validation_path"
+        ]
+      },
+      {
+        "required": [
+          "runtime_path"
+        ]
+      },
+      {
+        "required": [
+          "payload"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "authority_state": {
+      "enum": [
+        "ACTIVE_DISCOVERY",
+        "REMOTE_VERIFIED_REFERENCE_ONLY"
+      ]
+    },
+    "availability": {
+      "enum": [
+        "AVAILABLE",
+        "NOT_EVALUATED",
+        "QUARANTINED"
+      ]
+    },
+    "manifest_id": {
+      "type": "string"
+    },
+    "manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "parameter_pack_id": {
+      "const": "C2.PARAMS.GBPUSD.DISCOVERY.v0.1"
+    },
+    "parent_c1_manifest_id": {
+      "type": "string"
+    },
+    "parent_c1_release_id": {
+      "type": "string"
+    },
+    "release_id": {
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "DISCOVERY",
+        "DEVELOPMENT"
+      ]
+    },
+    "selector_state": {
+      "enum": [
+        "ACTIVE",
+        "NONE"
+      ]
+    },
+    "validation_consumption": {
+      "const": "LOCKED_UNCONSUMED"
+    }
+  },
+  "required": [
+    "release_id",
+    "manifest_id",
+    "manifest_sha256",
+    "role",
+    "authority_state",
+    "parent_c1_release_id",
+    "availability"
+  ],
+  "title": "ovc-ro4-c2-release-ref/v1",
+  "type": "object"
+}

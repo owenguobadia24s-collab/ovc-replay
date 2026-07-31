@@ -1,0 +1,82 @@
+{
+  "$id": "ovc-ro4-pd-trigger-trace-ref/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "pd_candidate_id"
+        ]
+      },
+      {
+        "required": [
+          "fingerprint"
+        ]
+      },
+      {
+        "required": [
+          "novelty"
+        ]
+      },
+      {
+        "required": [
+          "medoid"
+        ]
+      },
+      {
+        "required": [
+          "cluster"
+        ]
+      },
+      {
+        "required": [
+          "queue"
+        ]
+      },
+      {
+        "required": [
+          "review"
+        ]
+      },
+      {
+        "required": [
+          "answer_key"
+        ]
+      },
+      {
+        "required": [
+          "candidate_score"
+        ]
+      },
+      {
+        "required": [
+          "promotion"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "pd_run_id": {
+      "type": "string"
+    },
+    "pd_trigger_id": {
+      "type": "string"
+    },
+    "trace_authority": {
+      "const": "TRACE_ONLY_PATTERN_DISCOVERY_POPULATION_UNCHANGED"
+    },
+    "trigger_first_valid_at": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "pd_trigger_id",
+    "pd_run_id",
+    "trigger_first_valid_at",
+    "trace_authority"
+  ],
+  "title": "ovc-ro4-pd-trigger-trace-ref/v1",
+  "type": "object"
+}

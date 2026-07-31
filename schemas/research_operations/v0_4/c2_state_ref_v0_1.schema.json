@@ -1,0 +1,162 @@
+{
+  "$id": "ovc-ro4-c2-state-ref/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "overall_state"
+        ]
+      },
+      {
+        "required": [
+          "winning_state"
+        ]
+      },
+      {
+        "required": [
+          "future_outcome"
+        ]
+      },
+      {
+        "required": [
+          "semantic_label"
+        ]
+      },
+      {
+        "required": [
+          "probability"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "authority": {
+      "enum": [
+        "SOURCE_READ_ONLY",
+        "NOT_EVALUATED",
+        "QUARANTINED"
+      ]
+    },
+    "axes": {
+      "additionalProperties": false,
+      "properties": {
+        "INTERACTION": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "LOCATION": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "MOTION": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ORGANISATION": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "QUALITY": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "LOCATION",
+        "MOTION",
+        "ORGANISATION",
+        "INTERACTION",
+        "QUALITY"
+      ],
+      "type": "object"
+    },
+    "clock": {
+      "enum": [
+        "15M",
+        "2H_A_L"
+      ]
+    },
+    "context_refs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "first_valid_time": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "instrument": {
+      "const": "GBPUSD"
+    },
+    "interval_close": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "interval_open": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "lineage_status": {
+      "type": "string"
+    },
+    "manifest_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "parent_c1_record_id": {
+      "type": "string"
+    },
+    "parent_opt_a_bar_id": {
+      "type": "string"
+    },
+    "release_id": {
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "DISCOVERY",
+        "DEVELOPMENT"
+      ]
+    },
+    "side": {
+      "enum": [
+        "BID",
+        "ASK"
+      ]
+    },
+    "state_record_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "state_record_id",
+    "release_id",
+    "manifest_sha256",
+    "role",
+    "instrument",
+    "clock",
+    "side",
+    "interval_open",
+    "interval_close",
+    "first_valid_time",
+    "axes",
+    "parent_c1_record_id",
+    "parent_opt_a_bar_id",
+    "authority"
+  ],
+  "title": "ovc-ro4-c2-state-ref/v1",
+  "type": "object"
+}

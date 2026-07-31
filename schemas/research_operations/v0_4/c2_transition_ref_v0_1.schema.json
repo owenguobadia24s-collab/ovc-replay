@@ -1,0 +1,98 @@
+{
+  "$id": "ovc-ro4-c2-transition-ref/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "overall_transition"
+        ]
+      },
+      {
+        "required": [
+          "winning_axis"
+        ]
+      },
+      {
+        "required": [
+          "outcome"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "changed_axes": {
+      "items": {
+        "enum": [
+          "LOCATION",
+          "MOTION",
+          "ORGANISATION",
+          "INTERACTION",
+          "QUALITY"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "clock": {
+      "enum": [
+        "15M",
+        "2H_A_L"
+      ]
+    },
+    "continuity_status": {
+      "enum": [
+        "CONTIGUOUS",
+        "GAP_TERMINATED",
+        "PARENT_UNAVAILABLE",
+        "QUARANTINED"
+      ]
+    },
+    "first_valid_time": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "partition_id": {
+      "type": "string"
+    },
+    "release_id": {
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "DISCOVERY",
+        "DEVELOPMENT"
+      ]
+    },
+    "side": {
+      "enum": [
+        "BID",
+        "ASK"
+      ]
+    },
+    "source_state_id": {
+      "type": "string"
+    },
+    "target_state_id": {
+      "type": "string"
+    },
+    "transition_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "transition_id",
+    "release_id",
+    "role",
+    "clock",
+    "side",
+    "source_state_id",
+    "target_state_id",
+    "changed_axes",
+    "first_valid_time",
+    "continuity_status"
+  ],
+  "title": "ovc-ro4-c2-transition-ref/v1",
+  "type": "object"
+}

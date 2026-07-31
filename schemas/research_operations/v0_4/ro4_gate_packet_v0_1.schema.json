@@ -1,0 +1,140 @@
+{
+  "$id": "ovc-ro4-gate-packet/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acceptance_conditions": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "allowed_decisions": {
+      "items": {
+        "enum": [
+          "PASS",
+          "DEFER",
+          "BLOCK",
+          "QUARANTINE",
+          "SUPERSEDE"
+        ]
+      },
+      "type": "array"
+    },
+    "baseline_commit": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string"
+    },
+    "candidate_commit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "changed_files": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "current_authority": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "external_artifact_hashes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "gate_id": {
+      "type": "string"
+    },
+    "next_packet": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "plan_id": {
+      "const": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2"
+    },
+    "plan_version": {
+      "const": "v0.2"
+    },
+    "proposed_authority_delta": {
+      "type": "string"
+    },
+    "qa": {
+      "type": "object"
+    },
+    "recommended_decision": {
+      "enum": [
+        "PASS",
+        "DEFER",
+        "BLOCK",
+        "QUARANTINE",
+        "SUPERSEDE"
+      ]
+    },
+    "rollback": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "status": {
+      "enum": [
+        "GATE_READY_OPERATOR_DECISION_REQUIRED",
+        "APPROVED",
+        "BLOCKED",
+        "QUARANTINED",
+        "DEFERRED"
+      ]
+    },
+    "tests": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "unresolved_issues": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "gate_id",
+    "plan_id",
+    "plan_version",
+    "baseline_commit",
+    "branch",
+    "status",
+    "current_authority",
+    "proposed_authority_delta",
+    "acceptance_conditions",
+    "tests",
+    "qa",
+    "warnings",
+    "unresolved_issues",
+    "changed_files",
+    "rollback",
+    "recommended_decision",
+    "allowed_decisions",
+    "next_packet"
+  ],
+  "title": "ovc-ro4-gate-packet/v1",
+  "type": "object"
+}

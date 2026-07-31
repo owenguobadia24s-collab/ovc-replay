@@ -1,0 +1,17 @@
+
+schema: ovc-ro4-operation-mode-registry/v1
+registry_id: RO4.OPERATION.MODES.v0.1
+status: PROPOSED_AT_RO4_G0
+modes:
+  LIVE_PROSPECTIVE:
+    definition: Source, trigger and review occur after accepted activation cutoff with immutable lineage.
+    evidence_treatment: PROSPECTIVE_ONLY_AFTER_SEPARATE_SOURCE_AND_EVIDENCE_GATE
+  TIME_GATED_REPLAY:
+    definition: Historical source replayed under admissible cutoff and signed acceptance.
+    evidence_treatment: REPLAY_VISIBLE_NEVER_LIVE_PROSPECTIVE
+  NON_EVIDENTIARY_REPLAY:
+    definition: Historical diagnostic or UI review without prospective evidence authority.
+    evidence_treatment: DIAGNOSTIC_ONLY
+relabel_replay_to_live: QUARANTINE
+post_cutoff_identifiers_in_prospective_object: PROHIBITED
+validation_resolution: DENY_BEFORE_PATH_OBJECT_TIMESTAMP

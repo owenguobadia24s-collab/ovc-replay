@@ -1,0 +1,35 @@
+
+schema: ovc-ro4-role-access-matrix/v1
+default: DENY_BEFORE_PATH_OBJECT_RECORD_TIMESTAMP_RESOLUTION
+roles:
+  DISCOVERY:
+    source: OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2
+    authority: ACTIVE_DISCOVERY
+    state_transition_content: ALLOW_EXACT
+    derivation: ALLOW_AFTER_RO4_G0
+    annotation: DISABLED_PENDING_RO4_G4
+    console: DISABLED_PENDING_RC_G5
+  DEVELOPMENT:
+    source: OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v2
+    authority: REMOTE_VERIFIED_REFERENCE_ONLY
+    state_transition_content: ALLOW_EXACT_REFERENCE
+    derivation: ALLOW_BOUNDED_AFTER_RO4_G0
+    annotation: DISABLED_PENDING_RO4_G4
+    console: DISABLED_PENDING_RC_G5
+  VALIDATION:
+    authority: LOCKED_UNCONSUMED
+    content_resolution: DENY
+    path_resolution: DENY
+    object_resolution: DENY
+    timestamp_resolution: DENY
+    derivation: DENY
+    annotation: DENY
+    console: IDENTITY_AND_LOCK_STATE_ONLY
+  HISTORICAL_B_STATE:
+    authority: HISTORICAL_SUPERSEDED
+    runtime: DENY
+    trace_identity_only: true
+  PILOT_TIME_GATED_REPLAY:
+    authority: NON_PROMOTABLE_REGRESSION_EVIDENCE
+    operation_mode_required: TIME_GATED_REPLAY
+    pattern_discovery_population: SEPARATE

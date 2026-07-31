@@ -1,0 +1,24 @@
+
+schema: ovc-ro4-route-registry/v1
+registry_id: RO4.ROUTES.v0.1
+status: PROPOSED_AT_RO4_G0
+routes:
+  - route_id: RESEARCH.C2_SEQUENCE_EVIDENCE
+    state: DISABLED_PENDING_RC_G5
+    roles:
+      DISCOVERY: LOCAL_READ_ONLY_AFTER_RC_G5
+      DEVELOPMENT: LOCAL_READ_ONLY_REFERENCE_AFTER_RC_G5
+      VALIDATION: METADATA_ONLY_LOCKED_UNCONSUMED
+    panels:
+      - C2.STATE
+      - C2.TRANSITION
+      - RO4.PERSISTENCE_CONFLICT
+      - RO4.SEQUENCE
+      - RO4.BOUNDARY_FRICTION_READ_ONLY
+      - PD.TRIGGER_TRACE_ONLY
+      - RO4.SIGNATURE_DIVERSITY
+      - RO4.SAMPLE_DISCLOSURE
+    writes: NONE
+    forms: NONE
+    buttons: NONE
+    remote_deployment: DENIED

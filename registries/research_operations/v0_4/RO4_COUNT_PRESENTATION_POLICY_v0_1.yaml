@@ -1,0 +1,20 @@
+
+schema: ovc-ro4-count-presentation-policy/v1
+policy_id: RO4.COUNT.PRESENTATION.v0.1
+status: PROPOSED_AT_RO4_G0
+required_fields: [count, eligible_denominator, excluded_count, missing_count, slice_identity, display_style, display_text]
+display_text: N of D eligible records
+banner: DESCRIPTIVE COUNTS ONLY - counts are not probabilities, likelihoods, forecasts or transition expectations.
+default_sort: FROZEN_IDENTITY_ORDER
+style: UNIFORM_NON_DATA_DRIVEN
+prohibited:
+  - percentage
+  - decimal_ratio
+  - normalized_frequency
+  - ranked_likelihood
+  - pie_chart
+  - heatmap
+  - colour_gradient
+  - frequency_scaled_bar
+  - distribution_shaped_styling
+  - descending_frequency_default_sort

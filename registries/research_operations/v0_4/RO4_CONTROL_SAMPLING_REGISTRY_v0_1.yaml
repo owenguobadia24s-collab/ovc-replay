@@ -1,0 +1,22 @@
+
+schema: ovc-ro4-control-sampling-registry/v1
+registry_id: RO4.CONTROLS.v0.1
+status: PROPOSED_AT_RO4_G0
+operator_facing_real_controls:
+  - MATCHED_NON_CANDIDATE
+  - BROADER_POPULATION
+  - BOUNDARY_SHIFT_REAL_SEQUENCE
+  - TEMPORAL_OFFSET_REAL_SEQUENCE
+  - REPLAY_PROSPECTIVE_SEPARATION
+  - CROSS_PARTITION_REAL_SEQUENCE
+matching_fields: [role, clock, side, duration_band, context, partition_policy]
+determinism: SHA256_LOWEST_HASH_WITHIN_FROZEN_STRATA
+blinding: REQUIRED
+sealed_answer_key_separation: REQUIRED
+machine_only_controls:
+  - AXIS_ABLATION
+  - STATE_TOKEN_MUTATION
+  - TRANSITION_ORDER_MUTATION
+  - DURATION_PERTURBATION
+  - MISSINGNESS_INJECTION
+operator_surface_for_machine_only: DENIED

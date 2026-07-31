@@ -1,0 +1,98 @@
+{
+  "$id": "ovc-ro4-conflict-run/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "composite_score"
+        ]
+      },
+      {
+        "required": [
+          "winner"
+        ]
+      },
+      {
+        "required": [
+          "severity_rank"
+        ]
+      },
+      {
+        "required": [
+          "threshold_recommendation"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "authority": {
+      "const": "LOCAL_READ_ONLY_DERIVED"
+    },
+    "conflict_run_id": {
+      "type": "string"
+    },
+    "end_state_id": {
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "matched_control_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "missingness": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "participating_axes": {
+      "items": {
+        "enum": [
+          "LOCATION",
+          "MOTION",
+          "ORGANISATION",
+          "INTERACTION",
+          "QUALITY"
+        ]
+      },
+      "minItems": 2,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "predicate_id": {
+      "type": "string"
+    },
+    "source_release_id": {
+      "type": "string"
+    },
+    "start_state_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "conflict_run_id",
+    "predicate_id",
+    "source_release_id",
+    "participating_axes",
+    "start_state_id",
+    "end_state_id",
+    "evidence",
+    "missingness",
+    "logical_hash"
+  ],
+  "title": "ovc-ro4-conflict-run/v1",
+  "type": "object"
+}

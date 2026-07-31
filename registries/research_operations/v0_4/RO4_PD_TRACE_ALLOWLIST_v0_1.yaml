@@ -1,0 +1,27 @@
+
+schema: ovc-ro4-pd-trace-allowlist/v1
+registry_id: RO4.PD.TRACE.v0.1
+status: PROPOSED_AT_RO4_G0
+namespace:
+  ro4_sequence: RO4.SEQUENCE.*
+  pd_candidate: PD.CANDIDATE.*
+allowed_fields:
+  - pd_trigger_id
+  - pd_run_id
+  - trigger_first_valid_at
+  - trace_authority
+denied_fields:
+  - pd_candidate_id
+  - fingerprint
+  - novelty
+  - medoid
+  - cluster
+  - queue
+  - review
+  - answer_key
+  - candidate_score
+  - promotion
+joint_review_batch: DENIED
+shared_ranking: DENIED
+ro4_to_pd_evidence_bridge: DENIED
+pd_to_ro4_annotation_or_friction: DENIED

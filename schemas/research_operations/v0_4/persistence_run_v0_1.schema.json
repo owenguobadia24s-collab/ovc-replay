@@ -1,0 +1,117 @@
+{
+  "$id": "ovc-ro4-persistence-run/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "episode_id"
+        ]
+      },
+      {
+        "required": [
+          "semantic_label"
+        ]
+      },
+      {
+        "required": [
+          "quality_score"
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "authority": {
+      "const": "LOCAL_READ_ONLY_DERIVED"
+    },
+    "axis": {
+      "enum": [
+        "LOCATION",
+        "MOTION",
+        "ORGANISATION",
+        "INTERACTION",
+        "QUALITY"
+      ]
+    },
+    "clock": {
+      "enum": [
+        "15M",
+        "2H_A_L"
+      ]
+    },
+    "duration_records": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "end_state_id": {
+      "type": "string"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "member_state_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "role": {
+      "enum": [
+        "DISCOVERY",
+        "DEVELOPMENT"
+      ]
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "run_type": {
+      "enum": [
+        "FULL_VECTOR",
+        "SINGLE_AXIS",
+        "INSTABILITY",
+        "CROSS_SCALE_ALIGNMENT"
+      ]
+    },
+    "side": {
+      "enum": [
+        "BID",
+        "ASK"
+      ]
+    },
+    "source_release_id": {
+      "type": "string"
+    },
+    "start_state_id": {
+      "type": "string"
+    },
+    "termination_reason": {
+      "enum": [
+        "AXIS_CHANGE",
+        "VECTOR_CHANGE",
+        "GAP",
+        "CONTEXT_BREAK",
+        "RELEASE_BOUNDARY",
+        "PARENT_CHANGE",
+        "CENSORED_END"
+      ]
+    }
+  },
+  "required": [
+    "run_id",
+    "run_type",
+    "source_release_id",
+    "role",
+    "clock",
+    "side",
+    "start_state_id",
+    "end_state_id",
+    "member_state_ids",
+    "termination_reason",
+    "logical_hash"
+  ],
+  "title": "ovc-ro4-persistence-run/v1",
+  "type": "object"
+}
