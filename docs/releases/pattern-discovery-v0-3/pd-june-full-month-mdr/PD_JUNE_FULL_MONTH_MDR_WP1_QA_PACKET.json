@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp1-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "packet_id": "PD-JUNE-FM-WP1",
+  "tested_candidate_commit": "5f7d35703c8597ff23849fe282d8ae7860f96bba",
+  "tooling_pull_request": 167,
+  "tooling_merge_commit": "eae923ffe41e3b4a51fe48a61f4b014d6edd5e73",
+  "tooling_merge_status": "PASS_TOOLING_MERGED_TO_MAIN",
+  "status": "GATE_READY_EXTERNAL_EXECUTION_REQUIRED",
+  "qa_result": "PASS_INTAKE_TOOLING_OPERATOR_LOCAL_SOURCE_EXECUTION_REQUIRED",
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "source_slice_status": "NOT_YET_EXECUTED",
+  "checks": [
+    {"check": "Exact operator gate binding", "result": "PASS_PD-JUNE-FM-G1"},
+    {"check": "Provider execution prohibited in CI", "result": "PASS"},
+    {"check": "Provider object plan", "result": "PASS_74_OBJECTS"},
+    {"check": "M1 daily transports", "result": "PASS_34_PER_SIDE"},
+    {"check": "Native H1 monthly transports", "result": "PASS_3_PER_SIDE"},
+    {"check": "Multi-month exact clipping", "result": "PASS_IMPLEMENTED"},
+    {"check": "Existing destination overwrite prevention", "result": "PASS_IMPLEMENTED"},
+    {"check": "Failure quarantine", "result": "PASS_IMPLEMENTED"},
+    {"check": "Weekend and market-closure discontinuity recording", "result": "PASS_IMPLEMENTED"},
+    {"check": "Unexpected intra-session gaps block", "result": "PASS_IMPLEMENTED"},
+    {"check": "BID ASK exact pairing", "result": "PASS_IMPLEMENTED"},
+    {"check": "Native H1 reconciliation", "result": "PASS_IMPLEMENTED"},
+    {"check": "Release selector R2 and Validation prohibitions", "result": "PASS"},
+    {"check": "Focused intake tests", "result": "PASS"},
+    {"check": "Complete repository suite", "result": "PASS"},
+    {"check": "FM00 continuity", "result": "PASS"},
+    {"check": "Tooling squash merge", "result": "PASS_EAE923FFE41E3B4A51FE48A61F4B014D6EDD5E73"},
+    {"check": "Real provider source QA", "result": "PENDING_OPERATOR_LOCAL_EXECUTION"}
+  ],
+  "tests": [
+    {
+      "workflow_run": 30640236115,
+      "job": 91188021745,
+      "scope": "WP1 court records, provider plan, focused intake tests, complete repository suite and local-only boundary",
+      "result": "PASS",
+      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
+    },
+    {
+      "workflow_run": 30640236184,
+      "job": 91188022910,
+      "scope": "FM00 source-boundary continuity and complete repository suite",
+      "result": "PASS",
+      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
+    },
+    {
+      "workflow_run": 30640237159,
+      "job": 91188026217,
+      "scope": "General repository unit tests",
+      "result": "PASS",
+      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
+    }
+  ],
+  "operator_local_commands": [
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 profile",
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 plan",
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 preflight",
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 execute"
+  ],
+  "required_environment": {
+    "OVC_EXTERNAL_ARTIFACT_ROOT": "operator local external artifact root"
+  },
+  "expected_output_root": "prospective-source/intake/RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "required_return_artifacts": [
+    "source-slice-manifest.json",
+    "receipts/provider-request-plan.json",
+    "receipts/provider-request-receipt.json",
+    "receipts/source-object-inventory.json",
+    "receipts/coverage-gap-duplicate-qa.json",
+    "receipts/bid-ask-reconciliation.json",
+    "receipts/native-h1-reconciliation.json",
+    "receipts/freeze-receipt.json"
+  ],
+  "blocker": {
+    "blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-001",
+    "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
+    "reason": "Provider network execution is prohibited in CI and OVC_EXTERNAL_ARTIFACT_ROOT is not available to GitHub Actions.",
+    "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run the approved preflight and execute commands, then return the compact receipts and manifest."
+  },
+  "next_packet": "PD-JUNE-FM-WP2",
+  "next_packet_condition": "FROZEN_LOCAL_SOURCE_SLICE_AND_SOURCE_QA_PASS",
+  "recommendation": "EXECUTE_OPERATOR_LOCAL_INTAKE_AND_RETURN_COMPACT_RECEIPTS",
+  "rollback": "Preserve the tooling merge. Revert only WP1 receipt, QA or state corrections through a new non-destructive commit. Preserve all provider transports, quarantine evidence and prior CORR2 records."
+}
