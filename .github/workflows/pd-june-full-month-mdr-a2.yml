@@ -1,0 +1,102 @@
+name: PD-JUNE-FULL-MONTH-MDR A2 paired sparse M1 acceptance
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/ovc/research_operations/prospective_source/dukascopy_full_month_mdr_a2.py'
+      - 'scripts/run_pd_june_full_month_mdr.ps1'
+      - 'tests/research_operations/prospective_source/test_pd_june_full_month_mdr_a2.py'
+      - 'plans/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A2_PAIRED_SPARSE_M1_ACCEPTANCE.md'
+      - 'contracts/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_SOURCE_AND_REVIEW_CONTRACT_A2.md'
+      - 'schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_a2_v0_1.schema.json'
+      - 'registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json'
+      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A2_*.json'
+      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WINDOWS_OPERATOR_GUIDE.md'
+      - '.github/workflows/pd-june-full-month-mdr-a2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  a2-paired-sparse-m1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate A2 court record and bounded authority
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          import json
+          from pathlib import Path
+          from ovc.research_operations.prospective_source import dukascopy_full_month_mdr_a2 as subject
+
+          release = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
+          decision = json.loads((release / 'PD_JUNE_FULL_MONTH_MDR_A2_OPERATOR_DECISION.json').read_text())
+          diagnostic = json.loads((release / 'PD_JUNE_FULL_MONTH_MDR_A2_SOURCE_DIAGNOSTIC_SUMMARY.json').read_text())
+          qa = json.loads((release / 'PD_JUNE_FULL_MONTH_MDR_A2_QA_PACKET.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
+          schema = json.loads(Path('schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_a2_v0_1.schema.json').read_text())
+          plan = subject.provider_request_plan()
+
+          assert decision['decision'] == 'PASS'
+          assert decision['decision_authority'] == 'OPERATOR'
+          assert decision['authority_delta'] == 'ACCEPT_EXACTLY_PAIRED_PROVIDER_M1_ABSENCE_WITH_EXPLICIT_DOWNSTREAM_CENSORING'
+          assert diagnostic['diagnostic_sha256'] == 'ddfc9672be23ac8a87101c2d34daa706b7f4793a6bc5c925e9c07713563fef99'
+          assert diagnostic['observations']['m1_rows_per_side'] == 34565
+          assert diagnostic['observations']['absent_m1_timestamps_per_side'] == 138
+          assert diagnostic['observations']['july_complete_h1_hours_per_side'] == 42
+          assert diagnostic['observations']['native_may_june_ohlc_mismatches'] == 0
+          assert plan['provider_object_count'] == 72
+          assert plan['plan_amendment'] == 'PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE'
+          assert plan['provider_execution_in_ci'] == 'DENIED'
+          assert schema['properties']['repair_performed']['const'] is False
+          assert state['plan_amendment'] == 'PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE'
+          assert state['packet_id'] == 'PD-JUNE-FM-WP1'
+          assert state['next_packet'] == 'PD-JUNE-FM-WP2'
+          assert state['next_packet_status'] == 'BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS'
+          assert qa['status'] in {'IMPLEMENTED_PENDING_CI', 'PASS_FINAL_HEAD_CI', 'COMPLETED_SQUASH_MERGED_TO_MAIN'}
+          PY
+      - name: Run focused A2 and retained A1 tests
+        run: |
+          PYTHONPATH=src python -m unittest \
+            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_a2 \
+            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_intake \
+            tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr \
+            -v
+      - name: Run complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Enforce no provider execution, repair or bridging in CI
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          import tempfile
+          from pathlib import Path
+          from ovc.research_operations.prospective_source import dukascopy_full_month_mdr_a2 as subject
+
+          with tempfile.TemporaryDirectory() as repository, tempfile.TemporaryDirectory() as external:
+              result = subject.preflight(
+                  repository_root=Path(repository),
+                  environ={'OVC_EXTERNAL_ARTIFACT_ROOT': external},
+              )
+              assert result['provider_network_access_performed'] is False
+              assert result['paired_sparse_m1_policy'] == 'ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING'
+              assert result['downstream_incomplete_membership_policy'] == 'INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING'
+              try:
+                  subject.execute_intake(
+                      repository_root=Path(repository),
+                      gate='PD-JUNE-FM-G1',
+                      amendment_gate='PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE',
+                      environ={
+                          'OVC_EXTERNAL_ARTIFACT_ROOT': external,
+                          'GITHUB_ACTIONS': 'true',
+                      },
+                  )
+              except subject.IntakeError as exc:
+                  assert 'prohibited in CI' in str(exc)
+              else:
+                  raise AssertionError('provider execution unexpectedly allowed in CI')
+          PY
