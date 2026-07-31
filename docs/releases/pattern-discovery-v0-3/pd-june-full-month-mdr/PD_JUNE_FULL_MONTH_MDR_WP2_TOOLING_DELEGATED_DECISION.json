@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-tooling-delegated-decision/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "effective_plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "title": "Deterministic full-month C1/C2 replay tooling",
+  "baseline_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "decision": "PASS_TOOLING_PENDING_FINAL_HEAD_CI",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "status": "PENDING_FINAL_HEAD_CI_AND_SQUASH_MERGE",
+  "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_TOOLING_ONLY",
+  "reserved_authority_delta": "NONE",
+  "acceptance": {
+    "source_binding": "IMPLEMENTED_EXACT_WP1_ACCEPTED_SOURCE",
+    "formula_change": "NONE",
+    "parameter_change": "NONE",
+    "selector_or_release_change": "NONE",
+    "full_interval_before_target_filter": true,
+    "incomplete_parent_policy": "CENSOR_EXCLUDE_NO_REPAIR_NO_BRIDGING",
+    "deterministic_independent_rerun": "REQUIRED_BYTE_IDENTICAL",
+    "provider_network_access": "NONE",
+    "execution_location": "OPERATOR_LOCAL_ONLY"
+  },
+  "tests": {
+    "focused": "PENDING_FINAL_HEAD_CI",
+    "complete_repository_suite": "PENDING_FINAL_HEAD_CI",
+    "authority_assertions": "PENDING_FINAL_HEAD_CI"
+  },
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_QA_PACKET.json",
+  "retained_prohibitions": [
+    "FORMULA_CHANGE",
+    "THRESHOLD_CHANGE",
+    "SEMANTIC_TRIGGER_CANDIDATE_DISTANCE_CLUSTER_OR_MODEL_CHANGE",
+    "CANDIDATE_FAMILY_NOVELTY_OR_THEORY_PROMOTION",
+    "SELECTOR_OR_RELEASE_MUTATION",
+    "CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND",
+    "R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
+  ],
+  "next_action": "SQUASH_MERGE_TOOLING_THEN_OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE",
+  "rollback": "Preserve the accepted source slice and all WP1 evidence. Revert only WP2 tooling records through a new non-destructive commit."
+}
