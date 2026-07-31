@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import base64
 import gzip
-import hashlib
 import json
 import unittest
 from pathlib import Path
@@ -16,6 +15,7 @@ GATE = BASE / "PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json"
 WP1_DECISION = BASE / "PD_JUNE_MDR_G1_OPERATOR_DECISION.json"
 CORR1_DECISION = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-mdr-corr1" / "PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json"
 CORR2_DECISION = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-mdr-corr2" / "PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json"
+MERGE_RECEIPT = ROOT / "docs" / "releases" / "pattern-discovery-v0-3" / "pd-june-mdr-corr2" / "PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 
 
@@ -30,6 +30,7 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         cls.wp1_decision = json.loads(WP1_DECISION.read_text(encoding="utf-8"))
         cls.corr1_decision = json.loads(CORR1_DECISION.read_text(encoding="utf-8"))
         cls.corr2_decision = json.loads(CORR2_DECISION.read_text(encoding="utf-8"))
+        cls.merge_receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
 
     def test_exact_governed_hashes_and_sample_remain_preserved(self) -> None:
@@ -46,7 +47,7 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(population["serialized_nonchronological_queue_promoted_count"], 4)
         self.assertEqual(self.report["overall_answer"]["verdict"], "NOT_ESTABLISHED")
 
-    def test_operator_decision_chain_is_complete(self) -> None:
+    def test_operator_decision_chain_and_merge_are_complete(self) -> None:
         self.assertTrue(self.gate["operator_approval_required"])
         self.assertEqual(self.wp1_decision["decision"], "DEFER")
         self.assertEqual(self.wp1_decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR1")
@@ -54,7 +55,8 @@ class PDJuneMDRWP1ClaimLevelReviewTests(unittest.TestCase):
         self.assertEqual(self.corr1_decision["authority_delta"]["next_packet"], "PD-JUNE-MDR-CORR2-CONTROL-AND-AGREEMENT-ASSURANCE")
         self.assertEqual(self.corr2_decision["decision"], "DEFER")
         self.assertIsNone(self.corr2_decision["next_packet"])
-        self.assertEqual(self.state["status"], "APPROVED")
+        self.assertEqual(self.merge_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(self.state["status"], "COMPLETED")
         self.assertEqual(self.state["review_status"], "COMPLETED")
         self.assertIsNone(self.state["next_gate"])
         self.assertIsNone(self.state["next_packet"])
