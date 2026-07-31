@@ -6,20 +6,26 @@
   "prior_plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
   "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
   "packet_id": "PD-JUNE-FM-WP2",
-  "status": "APPROVED",
+  "status": "GATE_READY",
   "prerequisites": [
     "PD-JUNE-FM-00",
     "PD-JUNE-FM-A1-OPERATOR-PASS-AND-MERGED",
     "PD-JUNE-FM-A2-OPERATOR-PASS-AND-MERGED",
     "PD-JUNE-FM-WP1-COMPLETED",
     "PD-JUNE-FM-G1-DELEGATED-PASS",
-    "PD-JUNE-FM-WP2-TOOLING-DELEGATED-PASS"
+    "PD-JUNE-FM-WP2-TOOLING-DELEGATED-PASS",
+    "PD-JUNE-FM-WP2-TOOLING-SQUASH-MERGED"
   ],
-  "authority_required": "NONE_APPROVED_PLAN_AUTHORIZES_DETERMINISTIC_LOCAL_C1_C2_REPLAY_TOOLING",
+  "authority_required": "NONE_FOR_OPERATOR_LOCAL_EXECUTION_WITHIN_APPROVED_PLAN",
   "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_TOOLING_ONLY",
   "baseline_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
-  "branch": "build/pd-june-fm-wp2-replay-tooling",
-  "tested_candidate_commit": "033637ddec053d656ed198f7c0b04b508dc8fac3",
+  "tooling_branch": "build/pd-june-fm-wp2-replay-tooling",
+  "receipt_branch": "administrative/pd-june-fm-wp2-tooling-merge-receipt",
+  "final_tooling_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
+  "tooling_pull_request": 180,
+  "tooling_merge_commit": "b3ac2561aff225442465e6914a1e1e29adbfab62",
+  "tooling_merge_status": "PASS_SQUASH_MERGED_TO_MAIN",
+  "tooling_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_MERGE_RECEIPT.json",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
   "source_manifest_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
   "source_acceptance_merge_commit": "39da5213ff3931cf9a22760a3ee3529d4fc43c30",
@@ -48,7 +54,8 @@
     "release_status": "NOT_A_RELEASE",
     "selector_eligibility": "NONE",
     "r2_publication": "DENIED",
-    "validation_consumption": "DENIED"
+    "validation_consumption": "DENIED",
+    "live_prospective_append": "DENIED"
   },
   "expected_population": {
     "15m_per_side": {"total":2316,"complete":2231,"incomplete":85,"target_total":2112,"target_complete":2036,"target_incomplete":76},
@@ -59,25 +66,28 @@
     "c2_states_target": 8598
   },
   "tests": [
-    {"workflow_run":30656604930,"job":91242380033,"scope":"module compile, packet parse, focused WP2 tests, retained full-month/A2 tests, complete repository suite and authority boundary","result":"PASS","tested_head":"033637ddec053d656ed198f7c0b04b508dc8fac3"},
-    {"workflow_run":30656605024,"job":91242380449,"scope":"WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary","result":"PASS","tested_head":"033637ddec053d656ed198f7c0b04b508dc8fac3"}
+    {"workflow_run":30657064858,"job":91243999664,"scope":"final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
+    {"workflow_run":30657065738,"job":91244002340,"scope":"final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"}
   ],
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_QA_PACKET.json",
   "qa_result": "PASS_DETERMINISTIC_FULL_MONTH_REPLAY_TOOLING_LOCAL_EXECUTION_REQUIRED",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_DELEGATED_DECISION.json",
   "decision": "PASS_TOOLING",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
-  "merge_commit": null,
-  "merge_status": "PENDING_ELIGIBLE_SQUASH_MERGE",
+  "merge_commit": "b3ac2561aff225442465e6914a1e1e29adbfab62",
+  "merge_status": "PASS_TOOLING_SQUASH_MERGED_TO_MAIN",
+  "replay_status": "NOT_YET_EXECUTED_OPERATOR_LOCAL_BOUNDARY",
   "blockers": [
     {
       "blocker_id": "PD-JUNE-FM-WP2-LOCAL-EXECUTION-001",
-      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED_AFTER_TOOLING_MERGE",
-      "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run the WP2 preflight and execute commands, then return the six compact replay evidence files."
+      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
+      "description": "The deterministic replay tooling is merged, but GitHub Actions cannot access OVC_EXTERNAL_ARTIFACT_ROOT and replay execution is prohibited in CI.",
+      "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr_wp2.ps1 preflight followed by execute, and return the six compact replay evidence files."
     }
   ],
   "resolved_blockers": [
-    {"blocker_id":"PD-JUNE-FM-WP2-FINAL-HEAD-CI-001","status":"RESOLVED_REQUIRED_CHECKS_PASS_ON_TESTED_CANDIDATE"}
+    {"blocker_id":"PD-JUNE-FM-WP2-FINAL-HEAD-CI-001","status":"RESOLVED_REQUIRED_FINAL_HEAD_CHECKS_PASS"},
+    {"blocker_id":"PD-JUNE-FM-WP2-TOOLING-MERGE-001","status":"RESOLVED_SQUASH_MERGED_TO_MAIN"}
   ],
   "next_packet": "PD-JUNE-FM-WP3",
   "next_packet_status": "BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS",
@@ -93,5 +103,5 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Preserve the accepted source slice, WP1 merge and all prior evidence. Revert only WP2 tooling, tests, schemas, QA and state through new non-destructive commits."
+  "rollback": "Preserve the tooling squash merge, accepted source slice, WP1 merge and all prior evidence. Correct only through new non-destructive commits."
 }
