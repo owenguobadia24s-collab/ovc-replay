@@ -1,0 +1,45 @@
+schema: ovc-ro4-implementation-registry/v1
+programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4
+plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2
+plan_version: v0.2
+plan_sha256: 89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf
+status: GATE_READY_RO4_G0_OPERATOR_DECISION_REQUIRED
+owner: OPERATOR
+repository: owenguobadia24s-collab/ovc-replay
+court_record_main_tip: 1d436299c770a7043f95d7772b7550526de3ec73
+current_branch: build/ro4-00-design-boundary-freeze
+runtime_implementation_started: NO
+route_state: DISABLED_PENDING_RC_G5
+packages:
+  contracts: PROPOSED_AT_RO4_G0
+  schemas: PROPOSED_AT_RO4_G0
+  registries: PROPOSED_AT_RO4_G0
+  fixtures: PROPOSED_AT_RO4_G0
+  source_runtime: NOT_STARTED
+  console_runtime: NOT_STARTED
+packets:
+  - {packet_id: RO4-00, gate_id: RO4-G0, status: GATE_READY, branch: build/ro4-00-design-boundary-freeze, authority_delta: DESIGN_CANON_ONLY}
+  - {packet_id: RO4-WP1, gate_id: RO4-G1, status: PLANNED, prerequisites: [RO4-G0], authority_delta: LOCAL_REPLACEABLE_DERIVED}
+  - {packet_id: RO4-WP2, gate_id: RO4-G2, status: PLANNED, prerequisites: [RO4-G1], authority_delta: LOCAL_READ_ONLY_DERIVED}
+  - {packet_id: RO4-WP3, gate_id: RO4-G3, status: PLANNED, prerequisites: [RO4-G2], authority_delta: NON_CANONICAL_RESEARCH_CANDIDATE}
+  - {packet_id: RO4-WP4, gate_id: RO4-G4, status: PLANNED, prerequisites: [RO4-G3], authority_delta: BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE}
+  - {packet_id: RO4-WP5, gate_id: RO4-G5, status: PLANNED, prerequisites: [RO4-G4], authority_delta: DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS}
+  - {packet_id: RC-G5, gate_id: RC-G5, status: PLANNED, prerequisites: [RO4-G5], authority_delta: LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION}
+  - {packet_id: RO4-G6, gate_id: RO4-G6, status: PLANNED, prerequisites: [RO4-G4], authority_delta: EVIDENCE_DISPOSITION_ONLY}
+continuation:
+  on_pass: RO4-WP1
+  on_defer: null
+  on_block: null
+  on_quarantine: null
+retained_denials:
+  - C2_MUTATION
+  - C2_SELECTOR_OR_RELEASE_CHANGE
+  - DEVELOPMENT_ACTIVATION
+  - VALIDATION_CONSUMPTION
+  - PATTERN_DISCOVERY_POPULATION_MERGE_OR_WRITE
+  - C2E_C2_5_C3_AUTHORITY
+  - SEMANTIC_OR_FAMILY_PROMOTION
+  - PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION
+  - AGENT_WRITE
+  - R2_WRITE
+  - REMOTE_CONSOLE_DEPLOYMENT

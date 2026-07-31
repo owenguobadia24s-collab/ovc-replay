@@ -1,0 +1,18 @@
+
+schema: ovc-ro4-sequence-distance-registry/v1
+registry_id: RO4.SEQUENCE.DISTANCE.v0.1
+status: PROPOSED_AT_RO4_G0
+enabled: true
+learned_weights: PROHIBITED
+components:
+  axis_mismatch: {weight: '1.0', normalization: EXACT_MEMBER_AXIS_COUNT}
+  transition_mismatch: {weight: '1.0', normalization: EXACT_TRANSITION_COUNT}
+  duration_difference: {weight: '0.5', normalization: RAW_DURATION_L1}
+  context_difference: {weight: '0.5', normalization: DECLARED_CONTEXT_MARKER_COUNT}
+  missingness: {weight: '1.0', normalization: EXPLICIT_MISSINGNESS_COUNT}
+tie_break: [TOTAL_DISTANCE_ASC, EXACT_SIGNATURE_ID_ASC, SEQUENCE_ID_ASC]
+operator_output:
+  full_component_vector: REQUIRED
+  scale_pack: REQUIRED
+  recommendation: PROHIBITED
+  family_promotion: PROHIBITED

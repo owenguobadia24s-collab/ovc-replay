@@ -1,0 +1,21 @@
+
+schema: ovc-ro4-performance-and-sample-policy/v1
+policy_id: RO4.PERFORMANCE.SAMPLE.v0.1
+status: PROPOSED_AT_RO4_G0
+soft_targets:
+  full_discovery_index_seconds: 600
+  peak_rss_bytes: 8589934592
+  full_sequence_generation_seconds: 900
+  incremental_partition_seconds: 90
+  existing_sequence_lookup_p95_seconds: 2
+window_cardinality_cap_per_role_clock_side_calendar_partition: 100000
+cap_exceeded_action: STOP_ORDINARY_MATERIALISATION
+declared_sample:
+  hash_expression: SHA256(sequence_id + sampling_policy_id + sampling_version)
+  selection: LOWEST_HASH_WITHIN_FROZEN_STRATA
+  strata: [role, clock, side, partition, boundary_source]
+  exact_included_excluded_counts: REQUIRED
+  banner: SAMPLED_NON_CANONICAL_EXPLORATORY
+  silent_substitution: PROHIBITED
+  c2e_opening_without_adequacy_decision: DENIED
+missing_benchmark_at_ro4_g1: BLOCK

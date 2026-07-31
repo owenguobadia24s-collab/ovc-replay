@@ -1,0 +1,28 @@
+schema: ovc-ro4-qa-check-registry/v1
+registry_id: RO4.QA.v0.1
+status: PROPOSED_AT_RO4_G0
+checks:
+  - {id: RO4-QA-SOURCE-001, severity: BLOCK, requirement: "Exact C2 release, manifest, selector/reference and parent identities", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-ROLE-002, severity: BLOCK, requirement: "Discovery/Development separation and Validation deny-before-resolution", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-CARDINALITY-003, severity: BLOCK, requirement: "State/transition inventory and endpoint closure", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-CHRON-004, severity: BLOCK, requirement: "Ordering, first-valid time, gaps and partition boundaries", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-AXIS-005, severity: BLOCK, requirement: "Five-axis independence and no overall winner", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-MATRIX-006, severity: BLOCK, requirement: "Matrix totals, exact denominators and sparse-cell preservation", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-PERSIST-007, severity: BLOCK, requirement: "Run partition conservation and gap termination", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-CONFLICT-008, severity: BLOCK, requirement: "Frozen predicates, vector evidence and no composite score", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-SEQUENCE-009, severity: BLOCK, requirement: "Window contiguity, membership and policy binding", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-SIGNATURE-010, severity: BLOCK, requirement: "Canonical signature and declared-distance determinism", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-CONTROL-011, severity: BLOCK, requirement: "Real operator controls, blindness and sealed-answer-key separation", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-VOCAB-012, severity: BLOCK, requirement: "Semantic, promotion and probability vocabulary denial", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-ANNOTATION-013, severity: BLOCK, requirement: "Append-only freeze, supersession, cutoff and exact source binding", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-MODE-014, severity: BLOCK, requirement: "No replay-to-prospective relabelling or identifier leakage", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-CONSOLE-015, severity: BLOCK, requirement: "Panel separation, banners, no actions and missing-source fail closed", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-PERF-016, severity: BLOCK_OR_WARN_BY_POLICY, requirement: "Full-corpus runtime, memory, incremental and window-cardinality evidence", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-SIGNATURE-DIVERSITY-017, severity: BLOCK_OR_ACK_REQUIRED, requirement: "Entropy/concentration audit, batch cap and acknowledgement", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-PD-ISOLATION-018, severity: BLOCK, requirement: "Separate populations/namespaces and trace-only trigger allowlist", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-ABLATION-PRESENTATION-019, severity: BLOCK, requirement: "Synthetic controls denied from operator-facing evidence", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-SAMPLING-DISCLOSURE-020, severity: BLOCK, requirement: "No silent approximation; deterministic sample and sampled-only banner", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-COUNT-PRESENTATION-021, severity: BLOCK, requirement: "Exact count and visible denominator; no distribution display", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-C2E-OPENING-THRESHOLD-022, severity: BLOCK_DECISION_OPTION, requirement: "Frozen assessment before OPEN_C2E_DESIGN_PLAN", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-DETERMINISM-023, severity: BLOCK, requirement: "Byte-identical rerun and logical hash stability", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
+  - {id: RO4-QA-AUTHORITY-024, severity: BLOCK, requirement: "No reserved authority introduced", gate_mapping: [RO4-G0, RO4-G1, RO4-G2, RO4-G3, RO4-G4, RO4-G5, RC-G5, RO4-G6]}
