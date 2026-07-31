@@ -50,7 +50,7 @@ jobs:
           assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
           assert decision['reserved_authority_delta'] == 'NONE'
           assert state['packet_id'] == 'PD-JUNE-FM-WP2'
-          assert state['status'] == 'GATE_READY'
+          assert state['status'] == 'APPROVED'
           assert state['next_packet'] == 'PD-JUNE-FM-WP3'
           assert state['next_packet_status'] == 'BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS'
           assert schema['properties']['slice_id']['const'] == subject.SLICE_ID
