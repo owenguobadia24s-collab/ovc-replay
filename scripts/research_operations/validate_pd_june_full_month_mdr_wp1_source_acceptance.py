@@ -88,10 +88,17 @@ def validate() -> None:
     assert decision["reserved_authority_delta"] == "NONE"
     assert decision["next_packet"] == "PD-JUNE-FM-WP2"
     assert qa["authority_delta"] == "LOCAL_FROZEN_SOURCE_ACCEPTANCE_ONLY"
-    assert state["packet_id"] == "PD-JUNE-FM-WP1"
+
+    # Programme state may lawfully advance beyond WP1. Preserve exact WP1
+    # source identity and merge binding rather than requiring a stale packet ID.
+    assert state["packet_id"] in {"PD-JUNE-FM-WP1", "PD-JUNE-FM-WP2"}
     assert state["source_slice_id"] == index["source_slice_id"]
-    assert state["source_acceptance_index"] == INDEX.relative_to(ROOT).as_posix()
-    assert state["next_packet"] == "PD-JUNE-FM-WP2"
+    assert state["source_manifest_logical_sha256"] == manifest["logical_sha256"]
+    if state["packet_id"] == "PD-JUNE-FM-WP1":
+        assert state["next_packet"] == "PD-JUNE-FM-WP2"
+    else:
+        assert state["source_acceptance_merge_commit"] == "39da5213ff3931cf9a22760a3ee3529d4fc43c30"
+        assert state["next_packet"] == "PD-JUNE-FM-WP3"
     assert state["provider_execution_in_ci"] == "DENIED"
     assert state["canonical_2021_2023_discovery"] == "DEFERRED_NOT_AUTHORISED"
     assert schema["properties"]["source_slice_id"]["const"] == index["source_slice_id"]
