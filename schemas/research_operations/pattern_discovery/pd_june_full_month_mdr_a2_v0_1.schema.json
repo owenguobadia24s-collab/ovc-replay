@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/pd_june_full_month_mdr_a2_v0_1.schema.json",
+  "title": "PD-JUNE-FULL-MONTH-MDR A2 paired sparse M1 evidence",
+  "type": "object",
+  "required": [
+    "plan_amendment",
+    "paired_sparse_m1_policy",
+    "downstream_incomplete_membership_policy"
+  ],
+  "properties": {
+    "plan_amendment": {
+      "const": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE"
+    },
+    "paired_sparse_m1_policy": {
+      "const": "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING"
+    },
+    "downstream_incomplete_membership_policy": {
+      "const": "INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING"
+    },
+    "repair_performed": {
+      "const": false
+    },
+    "synthetic_price_insertion": {
+      "const": "DENIED"
+    },
+    "provider_request_count": {
+      "const": 72
+    },
+    "native_july_h1_transport": {
+      "const": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE"
+    }
+  },
+  "additionalProperties": true
+}
