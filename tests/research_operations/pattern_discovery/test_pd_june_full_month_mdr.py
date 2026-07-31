@@ -20,9 +20,7 @@ from ovc.research_operations.pattern_discovery.full_month_mdr import (
     iter_m1_partition_days,
     iter_native_h1_transport_months,
 )
-from ovc.research_operations.prospective_source import (
-    dukascopy_full_month_mdr_a2,
-)
+from ovc.research_operations.prospective_source import dukascopy_full_month_mdr_a2
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -33,6 +31,8 @@ AMENDMENT_A2 = BASE / "PD_JUNE_FULL_MONTH_MDR_A2_OPERATOR_DECISION.json"
 INCIDENT = BASE / "PD_JUNE_FULL_MONTH_MDR_A1_JULY_H1_PROVIDER_INCIDENT.json"
 DIAGNOSTIC_A2 = BASE / "PD_JUNE_FULL_MONTH_MDR_A2_SOURCE_DIAGNOSTIC_SUMMARY.json"
 MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_A1_MERGE_RECEIPT.json"
+SOURCE_ACCEPTANCE = BASE / "PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json"
+SOURCE_ACCEPTANCE_MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json"
 PLAN = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_v0_1.md"
 PLAN_A1 = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A1_JULY_NATIVE_H1_WAIVER.md"
@@ -90,28 +90,18 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
 
     def test_operator_authority_amendments_and_programme_state_are_bound(self) -> None:
         for path in (
-            AUTHORITY,
-            AMENDMENT,
-            AMENDMENT_A2,
-            INCIDENT,
-            DIAGNOSTIC_A2,
-            MERGE_RECEIPT,
-            STATE,
-            PLAN,
-            PLAN_A1,
-            PLAN_A2,
-            CONTRACT,
-            CONTRACT_A1,
-            CONTRACT_A2,
-            SCHEMA,
-            SCHEMA_A1,
-            SCHEMA_A2,
+            AUTHORITY, AMENDMENT, AMENDMENT_A2, INCIDENT, DIAGNOSTIC_A2,
+            MERGE_RECEIPT, SOURCE_ACCEPTANCE, SOURCE_ACCEPTANCE_MERGE_RECEIPT,
+            STATE, PLAN, PLAN_A1, PLAN_A2, CONTRACT, CONTRACT_A1, CONTRACT_A2,
+            SCHEMA, SCHEMA_A1, SCHEMA_A2,
         ):
             self.assertTrue(path.is_file(), path)
         authority = json.loads(AUTHORITY.read_text(encoding="utf-8"))
         amendment = json.loads(AMENDMENT.read_text(encoding="utf-8"))
         amendment_a2 = json.loads(AMENDMENT_A2.read_text(encoding="utf-8"))
         receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
+        source_acceptance = json.loads(SOURCE_ACCEPTANCE.read_text(encoding="utf-8"))
+        source_receipt = json.loads(SOURCE_ACCEPTANCE_MERGE_RECEIPT.read_text(encoding="utf-8"))
         state = json.loads(STATE.read_text(encoding="utf-8"))
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
         diagnostic = json.loads(DIAGNOSTIC_A2.read_text(encoding="utf-8"))
@@ -122,26 +112,26 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertEqual(amendment["authority_delta"], "WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1")
         self.assertEqual(amendment_a2["decision"], "PASS")
         self.assertEqual(amendment_a2["decision_authority"], "OPERATOR")
-        self.assertEqual(
-            amendment_a2["authority_delta"],
-            "ACCEPT_EXACTLY_PAIRED_PROVIDER_M1_ABSENCE_WITH_EXPLICIT_DOWNSTREAM_CENSORING",
-        )
+        self.assertEqual(amendment_a2["authority_delta"], "ACCEPT_EXACTLY_PAIRED_PROVIDER_M1_ABSENCE_WITH_EXPLICIT_DOWNSTREAM_CENSORING")
         self.assertEqual(receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
         self.assertEqual(receipt["merge_commit"], "8652834c7d99050d20dad6447a751c43e82a36e1")
         self.assertEqual(receipt["next_action"], "OPERATOR_LOCAL_WP1_EXECUTION")
-        self.assertEqual(state["status"], "GATE_READY")
+        self.assertEqual(source_acceptance["acceptance"]["decision"], "PASS")
+        self.assertEqual(source_acceptance["manifest"]["logical_sha256"], "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3")
+        self.assertEqual(source_receipt["pull_request"], 177)
+        self.assertEqual(source_receipt["merge_commit"], "39da5213ff3931cf9a22760a3ee3529d4fc43c30")
+        self.assertEqual(source_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(state["status"], "COMPLETED")
         self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP1")
         self.assertEqual(state["prior_plan_amendment"], PLAN_AMENDMENT_ID)
         self.assertEqual(state["plan_amendment"], "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE")
         self.assertEqual(state["a1_amendment_merge_commit"], "8652834c7d99050d20dad6447a751c43e82a36e1")
         self.assertEqual(state["source_request_plan"], "UNCHANGED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY")
         self.assertEqual(state["native_july_h1_transport"], "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE")
-        self.assertEqual(
-            state["paired_sparse_m1_policy"],
-            "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING",
-        )
+        self.assertEqual(state["paired_sparse_m1_policy"], "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING")
         self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP2")
-        self.assertEqual(state["next_packet_status"], "BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS")
+        self.assertEqual(state["next_packet_status"], "READY")
+        self.assertEqual(state["merge_commit"], "39da5213ff3931cf9a22760a3ee3529d4fc43c30")
         self.assertEqual(state["provider_execution_location"], "OPERATOR_LOCAL_ONLY")
         self.assertEqual(state["provider_execution_in_ci"], "DENIED")
         self.assertEqual(state["canonical_2021_2023_discovery"], "DEFERRED_NOT_AUTHORISED")
@@ -169,14 +159,8 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
     def test_a2_profile_records_source_admissibility_only(self) -> None:
         profile = dukascopy_full_month_mdr_a2.source_profile()
         self.assertEqual(profile["plan_version"], "0.1+A1+A2")
-        self.assertEqual(
-            profile["plan_amendment"],
-            "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
-        )
-        self.assertEqual(
-            profile["downstream_incomplete_membership_policy"],
-            "INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING",
-        )
+        self.assertEqual(profile["plan_amendment"], "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE")
+        self.assertEqual(profile["downstream_incomplete_membership_policy"], "INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING")
 
 
 if __name__ == "__main__":
