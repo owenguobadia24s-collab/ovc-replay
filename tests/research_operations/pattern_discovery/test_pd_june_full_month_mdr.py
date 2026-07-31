@@ -33,6 +33,7 @@ DIAGNOSTIC_A2 = BASE / "PD_JUNE_FULL_MONTH_MDR_A2_SOURCE_DIAGNOSTIC_SUMMARY.json
 MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_A1_MERGE_RECEIPT.json"
 SOURCE_ACCEPTANCE = BASE / "PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json"
 SOURCE_ACCEPTANCE_MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_MERGE_RECEIPT.json"
+WP2_TOOLING_MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json"
 PLAN = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_v0_1.md"
 PLAN_A1 = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A1_JULY_NATIVE_H1_WAIVER.md"
@@ -92,8 +93,8 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         for path in (
             AUTHORITY, AMENDMENT, AMENDMENT_A2, INCIDENT, DIAGNOSTIC_A2,
             MERGE_RECEIPT, SOURCE_ACCEPTANCE, SOURCE_ACCEPTANCE_MERGE_RECEIPT,
-            STATE, PLAN, PLAN_A1, PLAN_A2, CONTRACT, CONTRACT_A1, CONTRACT_A2,
-            SCHEMA, SCHEMA_A1, SCHEMA_A2,
+            WP2_TOOLING_MERGE_RECEIPT, STATE, PLAN, PLAN_A1, PLAN_A2,
+            CONTRACT, CONTRACT_A1, CONTRACT_A2, SCHEMA, SCHEMA_A1, SCHEMA_A2,
         ):
             self.assertTrue(path.is_file(), path)
         authority = json.loads(AUTHORITY.read_text(encoding="utf-8"))
@@ -102,6 +103,7 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
         source_acceptance = json.loads(SOURCE_ACCEPTANCE.read_text(encoding="utf-8"))
         source_receipt = json.loads(SOURCE_ACCEPTANCE_MERGE_RECEIPT.read_text(encoding="utf-8"))
+        tooling_receipt = json.loads(WP2_TOOLING_MERGE_RECEIPT.read_text(encoding="utf-8"))
         state = json.loads(STATE.read_text(encoding="utf-8"))
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
         diagnostic = json.loads(DIAGNOSTIC_A2.read_text(encoding="utf-8"))
@@ -121,12 +123,18 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertEqual(source_receipt["pull_request"], 177)
         self.assertEqual(source_receipt["merge_commit"], "39da5213ff3931cf9a22760a3ee3529d4fc43c30")
         self.assertEqual(source_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
-        self.assertEqual(state["status"], "APPROVED")
+        self.assertEqual(tooling_receipt["pull_request"], 180)
+        self.assertEqual(tooling_receipt["final_head"], "b2ea2ae786ed266363c3035a67e5ba029e61c45c")
+        self.assertEqual(tooling_receipt["merge_commit"], "b3ac2561aff225442465e6914a1e1e29adbfab62")
+        self.assertEqual(tooling_receipt["next_action"], "OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE")
+        self.assertEqual(state["status"], "GATE_READY")
         self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP2")
         self.assertEqual(state["prior_plan_amendment"], PLAN_AMENDMENT_ID)
         self.assertEqual(state["plan_amendment"], "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE")
         self.assertEqual(state["source_acceptance_merge_commit"], "39da5213ff3931cf9a22760a3ee3529d4fc43c30")
+        self.assertEqual(state["tooling_merge_commit"], tooling_receipt["merge_commit"])
         self.assertEqual(state["paired_sparse_m1_policy"], "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING")
+        self.assertEqual(state["replay_status"], "NOT_YET_EXECUTED_OPERATOR_LOCAL_BOUNDARY")
         self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP3")
         self.assertEqual(state["next_packet_status"], "BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS")
         self.assertEqual(state["tooling"]["execution_location"], "OPERATOR_LOCAL_ONLY")
