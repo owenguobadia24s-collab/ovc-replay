@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp1-source-acceptance-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "effective_plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP1",
+  "gate_id": "PD-JUNE-FM-G1",
+  "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
+  "branch": "accept/pd-june-fm-wp1-source-freeze",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "status": "QA_REVIEW_PENDING_FINAL_HEAD_CI",
+  "qa_result": "PENDING_FINAL_HEAD_CI",
+  "recommendation": "PASS_AFTER_FINAL_HEAD_CI_THEN_SQUASH_MERGE_AND_CONTINUE_TO_PD_JUNE_FM_WP2",
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "manifest_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+  "manifest_file_sha256": "8080b8def035cb37940b89054287d0c61756149aa7cb4711fc462a0ebbdc1f87",
+  "checks": [
+    {"check": "Google Drive accepted source folder and eight compact files retrieved", "result": "PASS"},
+    {"check": "four source CSV bytes match inventory SHA-256 and size", "result": "PASS_4_OF_4"},
+    {"check": "eight compact files match recorded SHA-256 and size", "result": "PASS_8_OF_8"},
+    {"check": "72 planned and observed provider transports reconcile", "result": "PASS"},
+    {"check": "M1 BID and ASK exact timestamp sets", "result": "PASS_34565_PER_SIDE"},
+    {"check": "paired sparse provider absence recorded", "result": "PASS_138_TIMESTAMPS_95_RUNS_PER_SIDE"},
+    {"check": "duplicates and non-monotonic rows", "result": "PASS_ZERO"},
+    {"check": "H1 BID and ASK exact timestamp pairing", "result": "PASS_573"},
+    {"check": "native May and June H1 reconciliation", "result": "PASS_483_PER_SIDE_ZERO_OHLC_MISMATCH"},
+    {"check": "July post-target H1 context", "result": "PASS_42_COMPLETE_6_EXPLICITLY_CENSORED_PER_SIDE"},
+    {"check": "repair, interpolation, forward fill and synthesis", "result": "PASS_NONE"},
+    {"check": "release, selector, R2, Validation and canonical Discovery authority", "result": "PASS_ALL_DENIED"},
+    {"check": "focused and complete repository tests", "result": "PENDING_FINAL_HEAD_CI"}
+  ],
+  "warnings": [
+    "The accepted source is sparse by provider observation and must never be represented as continuous.",
+    "Every dependent 15M, H1 or 2H bucket with incomplete required M1 membership must remain not evaluable or censored.",
+    "May and July are context-only; only June timestamps are target eligible."
+  ],
+  "blockers": ["FINAL_HEAD_CI_REQUIRED"],
+  "authority_delta": "LOCAL_FROZEN_SOURCE_ACCEPTANCE_ONLY",
+  "reserved_authority_delta": "NONE",
+  "next_packet": "PD-JUNE-FM-WP2",
+  "rollback": "Preserve all Google Drive source, compact receipts, quarantines and A1/A2 history. Revert only this compact acceptance packet through a new non-destructive commit."
+}
