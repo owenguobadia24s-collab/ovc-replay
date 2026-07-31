@@ -134,7 +134,7 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertEqual(receipt["next_action"], "OPERATOR_LOCAL_WP1_EXECUTION")
         self.assertEqual(source_acceptance["acceptance"]["decision"], "PASS")
         self.assertEqual(source_acceptance["manifest"]["logical_sha256"], "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3")
-        self.assertEqual(state["status"], "GATE_READY")
+        self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP1")
         self.assertEqual(state["prior_plan_amendment"], PLAN_AMENDMENT_ID)
         self.assertEqual(state["plan_amendment"], "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE")
@@ -146,7 +146,7 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
             "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING",
         )
         self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP2")
-        self.assertEqual(state["next_packet_status"], "BLOCKED_PENDING_WP1_FINAL_HEAD_CI_AND_SQUASH_MERGE")
+        self.assertEqual(state["next_packet_status"], "READY_AFTER_WP1_SOURCE_ACCEPTANCE_MERGE")
         self.assertEqual(state["provider_execution_location"], "OPERATOR_LOCAL_ONLY")
         self.assertEqual(state["provider_execution_in_ci"], "DENIED")
         self.assertEqual(state["canonical_2021_2023_discovery"], "DEFERRED_NOT_AUTHORISED")
