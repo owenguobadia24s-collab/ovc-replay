@@ -121,7 +121,7 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertEqual(source_receipt["pull_request"], 177)
         self.assertEqual(source_receipt["merge_commit"], "39da5213ff3931cf9a22760a3ee3529d4fc43c30")
         self.assertEqual(source_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
-        self.assertEqual(state["status"], "GATE_READY")
+        self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP2")
         self.assertEqual(state["prior_plan_amendment"], PLAN_AMENDMENT_ID)
         self.assertEqual(state["plan_amendment"], "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE")
