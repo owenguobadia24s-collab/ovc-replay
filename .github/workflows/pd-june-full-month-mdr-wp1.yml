@@ -19,7 +19,7 @@ jobs:
           python-version: '3.12'
       - name: Parse current A2 court records and provider plan
         run: |
-          PYTHONPATH=src python - <<'PY'
+          PYTHONPATH=src:. python - <<'PY'
           import json
           from pathlib import Path
           from ovc.research_operations.prospective_source import dukascopy_full_month_mdr_a2 as subject
@@ -49,6 +49,7 @@ jobs:
               'BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS',
               'BLOCKED_PENDING_WP1_FINAL_HEAD_CI_AND_SQUASH_MERGE',
               'READY_AFTER_WP1_SOURCE_ACCEPTANCE_MERGE',
+              'READY',
           }
           assert qa['status'] in {'IMPLEMENTED_PENDING_CI', 'PASS_FINAL_HEAD_CI', 'COMPLETED_SQUASH_MERGED_TO_MAIN'}
           PY
