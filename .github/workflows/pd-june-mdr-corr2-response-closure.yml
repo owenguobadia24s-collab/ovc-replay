@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse CORR2 response-closure court records
+      - name: Parse CORR2 closure and operator decision court records
         run: |
           python - <<'PY'
           import hashlib
@@ -30,8 +30,10 @@ jobs:
               base / 'PD_JUNE_MDR_CORR2_POST_UNBLINDING_COMPARISON.json',
               base / 'PD_JUNE_MDR_CORR2_CLOSURE_QA_PACKET.json',
               base / 'PD_JUNE_MDR_G1_CORR2_RETURN_GATE_PACKET.json',
+              base / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json',
               Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
               Path('schemas/research_operations/pattern_discovery/pd_june_mdr_corr2_response_closure_v0_1.schema.json'),
+              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_g1_corr2_operator_decision_v0_1.schema.json'),
           ]
           records = {str(path): json.loads(path.read_text(encoding='utf-8')) for path in paths}
           response_path = base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.completed.json'
@@ -47,33 +49,32 @@ jobs:
             -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce return-gate and retained-authority boundary
+      - name: Enforce operator DEFER and retained-authority boundary
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
           score = json.loads((base / 'PD_JUNE_MDR_CORR2_SCORED_REVIEW.json').read_text())
-          validation = json.loads((base / 'PD_JUNE_MDR_CORR2_RESPONSE_VALIDATION_RECEIPT.json').read_text())
           qa = json.loads((base / 'PD_JUNE_MDR_CORR2_CLOSURE_QA_PACKET.json').read_text())
           gate = json.loads((base / 'PD_JUNE_MDR_G1_CORR2_RETURN_GATE_PACKET.json').read_text())
+          decision = json.loads((base / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
-          assert validation['result'] == 'PASS_RESPONSE_VALIDATED_SCORE_MATERIALISED'
           assert score['bounded_result'] == 'DEFER_OR_BLOCK_EXACT_JUNE_CONTROLLED_REPEAT_REVIEW'
-          assert score['metrics']['control_false_positive_count'] == 0
-          assert score['metrics']['promoted_structural_contradiction_count'] == 0
-          assert qa['status'] == 'GATE_READY_OPERATOR_DECISION_REQUIRED'
-          assert qa['recommendation'] == 'RETURN_TO_PD-JUNE-MDR-G1_WITH_DEFER_RECOMMENDATION'
-          assert gate['gate_status'] == 'GATE_READY_OPERATOR_DECISION_REQUIRED'
-          assert gate['operator_approval_required'] is True
-          assert gate['recommended_decision'] == 'DEFER'
-          assert gate['proposed_authority_delta'] == 'NONE_DEFER_AND_PRESERVE_CURRENT_AUTHORITY'
-          assert state['status'] == 'GATE_READY'
-          assert state['operator_response_status'] == 'COMPLETED_VALIDATED_SCORED'
-          assert state['operator_input_stage'] == 'PD-JUNE-MDR-G1_DECISION'
-          assert state['decision'] == 'DEFER'
-          assert state['return_gate_decision'] == 'PENDING_OPERATOR_DECISION'
-          assert state['next_gate'] == 'PD-JUNE-MDR-G1'
+          assert qa['status'] == 'APPROVED_DEFER_MERGE_READY_AFTER_FINAL_CI'
+          assert qa['decision'] == 'DEFER'
+          assert gate['gate_status'] == 'APPROVED_DEFER_CORR2_CLOSED_MERGE_READY'
+          assert gate['operator_approval_required'] is False
+          assert gate['decision'] == 'DEFER'
+          assert decision['decision'] == 'DEFER'
+          assert decision['decision_authority'] == 'OPERATOR'
+          assert decision['authority_delta'] == 'NONE_DEFER_AND_PRESERVE_CURRENT_AUTHORITY'
+          assert decision['next_packet'] is None
+          assert state['status'] == 'APPROVED'
+          assert state['review_status'] == 'COMPLETED'
+          assert state['operator_input_required'] == 'NONE'
+          assert state['next_gate'] is None
+          assert state['next_packet'] is None
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
           assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
           for prohibited in ('PROVIDER_INTAKE', 'MACHINE_REPLAY', 'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND', 'R2_PUBLICATION', 'VALIDATION_CONSUMPTION'):
