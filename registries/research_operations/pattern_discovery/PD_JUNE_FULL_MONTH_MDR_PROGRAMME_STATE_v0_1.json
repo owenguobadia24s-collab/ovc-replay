@@ -6,7 +6,7 @@
   "prior_plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
   "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
   "packet_id": "PD-JUNE-FM-WP1",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "prerequisites": [
     "PD-JUNE-MDR-G1-DEFER-COMPLETED",
     "PD-JUNE-FM-00",
@@ -14,13 +14,14 @@
     "PD-JUNE-FM-A1-SQUASH-MERGED",
     "PD-JUNE-FM-A2-OPERATOR-PASS",
     "PD-JUNE-FM-A2-SQUASH-MERGED",
-    "PD-JUNE-FM-WP1-LOCAL-SOURCE-EXECUTION-COMPLETE"
+    "PD-JUNE-FM-WP1-LOCAL-SOURCE-EXECUTION-COMPLETE",
+    "PD-JUNE-FM-G1-DELEGATED-PASS"
   ],
   "authority_required": "NONE_DELEGATED_SOURCE_ACCEPTANCE_WITHIN_OPERATOR_APPROVED_PLAN_AND_A2",
   "authority_delta": "LOCAL_FROZEN_SOURCE_ACCEPTANCE_ONLY",
   "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
   "branch": "accept/pd-june-fm-wp1-source-freeze",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "tested_candidate_commit": "9ccc638a43b2d4fabb2a1d89060f8cd464eaec16",
   "target_start_utc": "2026-06-01T00:00:00Z",
   "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
   "source_start_utc": "2026-05-30T00:00:00Z",
@@ -28,12 +29,15 @@
   "target_eligibility": "TARGET_JUNE_ONLY",
   "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
-  "source_slice_status": "FROZEN_LOCAL_SOURCE_SLICE_ACCEPTED_PENDING_FINAL_HEAD_CI_AND_MERGE",
+  "source_slice_status": "FROZEN_LOCAL_SOURCE_SLICE_APPROVED_PENDING_SQUASH_MERGE",
   "source_manifest_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
   "source_manifest_file_sha256": "8080b8def035cb37940b89054287d0c61756149aa7cb4711fc462a0ebbdc1f87",
   "source_acceptance_index": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_QA_PACKET.json",
+  "qa_result": "PASS_FROZEN_SOURCE_EXACTLY_BOUND_PAIRED_SPARSE_ABSENCE_EXPLICITLY_CENSORED",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_G1_DELEGATED_DECISION.json",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN_AND_A2",
   "source_request_plan": "UNCHANGED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY",
   "native_july_h1_transport": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
   "source_object_verification": "PASS_4_OF_4_EXACT_SHA256_AND_SIZE",
@@ -60,23 +64,24 @@
   "provider_execution_location": "OPERATOR_LOCAL_ONLY",
   "provider_execution_in_ci": "DENIED",
   "external_artifact_root_required": true,
-  "tests": [],
-  "merge_commit": null,
-  "blockers": [
-    {
-      "blocker_id": "PD-JUNE-FM-WP1-SOURCE-ACCEPTANCE-FINAL-HEAD-CI-001",
-      "status": "FINAL_HEAD_CI_REQUIRED",
-      "description": "The Google Drive source and compact evidence have been verified and bound. Focused, full-suite and retained-authority checks must pass on the final packet head before delegated acceptance and squash merge.",
-      "smallest_lawful_resolution": "Run final-head GitHub Actions, record PASS evidence, squash-merge the bounded packet, then continue to PD-JUNE-FM-WP2."
-    }
+  "tests": [
+    {"workflow_run":30654178964,"job":91234403457,"scope":"source acceptance validator, focused tests, retained A1/A2 continuity, complete repository suite and authority boundary","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654177820,"job":91234399320,"scope":"A2 court record, focused tests, complete repository suite and no-repair boundary","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654178096,"job":91234400086,"scope":"WP1 intake and programme-state continuity with complete repository suite","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654178266,"job":91234401215,"scope":"FM00 source boundary, source-profile reproduction and complete repository suite","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"},
+    {"workflow_run":30654177973,"job":91234399597,"scope":"general repository unit tests","result":"PASS","tested_head":"9ccc638a43b2d4fabb2a1d89060f8cd464eaec16"}
   ],
+  "merge_commit": null,
+  "merge_status": "PENDING_ELIGIBLE_SQUASH_MERGE",
+  "blockers": [],
   "resolved_blockers": [
     {"blocker_id": "PD-JUNE-FM-WP1-JULY-NATIVE-H1-404-001", "status": "RESOLVED_BY_OPERATOR_A1"},
     {"blocker_id": "PD-JUNE-FM-WP1-PAIRED-SPARSE-M1-001", "status": "RESOLVED_BY_OPERATOR_A2"},
-    {"blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-A2-001", "status": "RESOLVED_SOURCE_SLICE_AND_COMPACT_RECEIPTS_RETURNED_AND_VERIFIED"}
+    {"blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-A2-001", "status": "RESOLVED_SOURCE_SLICE_AND_COMPACT_RECEIPTS_RETURNED_AND_VERIFIED"},
+    {"blocker_id": "PD-JUNE-FM-WP1-SOURCE-ACCEPTANCE-FINAL-HEAD-CI-001", "status": "RESOLVED_ALL_REQUIRED_CHECKS_PASS"}
   ],
   "next_packet": "PD-JUNE-FM-WP2",
-  "next_packet_status": "BLOCKED_PENDING_WP1_FINAL_HEAD_CI_AND_SQUASH_MERGE",
+  "next_packet_status": "READY_AFTER_WP1_SOURCE_ACCEPTANCE_MERGE",
   "canonical_2021_2023_discovery": "DEFERRED_NOT_AUTHORISED",
   "prior_corr2": "COMPLETED_AND_PRESERVED_IMMUTABLE",
   "retained_prohibitions": [
