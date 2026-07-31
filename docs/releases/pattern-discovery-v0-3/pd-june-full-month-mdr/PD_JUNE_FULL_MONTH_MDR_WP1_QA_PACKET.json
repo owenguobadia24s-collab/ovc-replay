@@ -3,8 +3,9 @@
   "programme_id": "PD-JUNE-FULL-MONTH-MDR",
   "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
   "packet_id": "PD-JUNE-FM-WP1",
+  "tested_candidate_commit": "6bda0a78aaca33f53d81c32fd112e50eac27d81c",
   "status": "GATE_READY_EXTERNAL_EXECUTION_REQUIRED",
-  "qa_result": "PASS_INTAKE_IMPLEMENTATION_PENDING_FINAL_HEAD_CI_AND_OPERATOR_LOCAL_EXECUTION",
+  "qa_result": "PASS_INTAKE_TOOLING_OPERATOR_LOCAL_SOURCE_EXECUTION_REQUIRED",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
   "checks": [
     {"check": "Exact operator gate binding", "result": "PASS_PD-JUNE-FM-G1"},
@@ -20,9 +21,33 @@
     {"check": "BID ASK exact pairing", "result": "PASS_IMPLEMENTED"},
     {"check": "Native H1 reconciliation", "result": "PASS_IMPLEMENTED"},
     {"check": "Release selector R2 and Validation prohibitions", "result": "PASS"},
-    {"check": "Focused intake tests", "result": "PENDING_FINAL_HEAD_CI"},
-    {"check": "Complete repository suite", "result": "PENDING_FINAL_HEAD_CI"},
+    {"check": "Focused intake tests", "result": "PASS"},
+    {"check": "Complete repository suite", "result": "PASS"},
+    {"check": "FM00 continuity", "result": "PASS"},
     {"check": "Real provider source QA", "result": "PENDING_OPERATOR_LOCAL_EXECUTION"}
+  ],
+  "tests": [
+    {
+      "workflow_run": 30640056010,
+      "job": 91187393520,
+      "scope": "WP1 court records, provider plan, focused intake tests, complete repository suite and local-only boundary",
+      "result": "PASS",
+      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+    },
+    {
+      "workflow_run": 30640056127,
+      "job": 91187393536,
+      "scope": "FM00 source-boundary continuity and complete repository suite",
+      "result": "PASS",
+      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+    },
+    {
+      "workflow_run": 30640055980,
+      "job": 91187392919,
+      "scope": "General repository unit tests",
+      "result": "PASS",
+      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+    }
   ],
   "operator_local_commands": [
     ".\\scripts\\run_pd_june_full_month_mdr.ps1 profile",
@@ -52,6 +77,6 @@
   },
   "next_packet": "PD-JUNE-FM-WP2",
   "next_packet_condition": "FROZEN_LOCAL_SOURCE_SLICE_AND_SOURCE_QA_PASS",
-  "recommendation": "MERGE_TOOLING_AFTER_CI_THEN_EXECUTE_OPERATOR_LOCAL_INTAKE",
+  "recommendation": "SQUASH_MERGE_TOOLING_THEN_EXECUTE_OPERATOR_LOCAL_INTAKE",
   "rollback": "Revert only WP1 tooling, tests, workflow, QA and state through a new non-destructive commit. Preserve all provider transports, quarantine evidence and prior CORR2 records."
 }
