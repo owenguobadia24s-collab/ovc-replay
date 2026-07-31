@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-source-profile/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "instrument": "GBPUSD",
+  "provider": "DUKASCOPY",
+  "sides": ["BID", "ASK"],
+  "target_start_utc": "2026-06-01T00:00:00Z",
+  "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+  "source_start_utc": "2026-05-30T00:00:00Z",
+  "source_end_exclusive_utc": "2026-07-03T00:00:00Z",
+  "context_buffer_seconds_each_side": 172800,
+  "context_requirements": [
+    {
+      "requirement_id": "C2_15M_LEVEL_HISTORY",
+      "duration_seconds": 28800,
+      "authority": "src/ovc/opt_b/c2/levels.py:_PARAMS[15M].range"
+    },
+    {
+      "requirement_id": "C2_2H_LEVEL_HISTORY",
+      "duration_seconds": 172800,
+      "authority": "src/ovc/opt_b/c2/levels.py:_PARAMS[2H_A_L].range"
+    },
+    {
+      "requirement_id": "PREVIOUS_STATE_CONTINUITY",
+      "duration_seconds": 7200,
+      "authority": "largest evaluated clock"
+    },
+    {
+      "requirement_id": "REPEATED_SWITCHING_TRIGGER_HISTORY",
+      "duration_seconds": 5400,
+      "authority": "src/ovc/research_operations/pattern_discovery/evaluation.py:lookback=6"
+    },
+    {
+      "requirement_id": "BOUNDED_CANDIDATE_COMPLETION",
+      "duration_seconds": 172800,
+      "authority": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1"
+    }
+  ],
+  "target_eligibility": "TARGET_JUNE_ONLY",
+  "pre_target_class": "CONTEXT_PRE_TARGET",
+  "post_target_class": "CONTEXT_POST_TARGET",
+  "m1_daily_partition_count_per_side": 34,
+  "m1_daily_partition_dates_utc": [
+    "2026-05-30", "2026-05-31",
+    "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-06", "2026-06-07", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-14", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20", "2026-06-21", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-27", "2026-06-28", "2026-06-29", "2026-06-30",
+    "2026-07-01", "2026-07-02"
+  ],
+  "h1_monthly_transport_count_per_side": 3,
+  "h1_monthly_transport_months_utc": ["2026-05", "2026-06", "2026-07"],
+  "logical_streams": ["M1_BID", "M1_ASK", "H1_BID", "H1_ASK"],
+  "provider_execution_location": "OPERATOR_LOCAL_ONLY",
+  "provider_execution_in_ci": "DENIED",
+  "release_status": "NOT_A_RELEASE",
+  "selector_eligibility": "NONE",
+  "r2_publication": "DENIED",
+  "validation_consumption": "DENIED"
+}
