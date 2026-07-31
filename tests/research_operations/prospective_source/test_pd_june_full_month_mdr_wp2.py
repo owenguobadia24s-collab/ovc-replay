@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -44,6 +45,26 @@ class PDJuneFullMonthMDRWP2Tests(unittest.TestCase):
             subject.SOURCE_MANIFEST_LOGICAL_SHA256,
         )
         self.assertEqual(value["acceptance"]["decision"], "PASS")
+
+    def test_accepted_a2_manifest_separates_embedded_and_content_hashes(self) -> None:
+        path = (
+            ROOT
+            / "fixtures"
+            / "research_operations"
+            / "prospective_source"
+            / "pd_june_full_month_mdr_source_manifest_a2.json"
+        )
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        embedded, content = subject.validate_source_manifest_hashes(manifest)
+        self.assertEqual(
+            embedded,
+            subject.ACCEPTED_SOURCE_MANIFEST_EMBEDDED_LOGICAL_SHA256,
+        )
+        self.assertEqual(
+            content,
+            subject.ACCEPTED_SOURCE_MANIFEST_CONTENT_LOGICAL_SHA256,
+        )
+        self.assertNotEqual(embedded, content)
 
     def test_target_classification_is_exact(self) -> None:
         self.assertEqual(
