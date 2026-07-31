@@ -95,9 +95,10 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
             authority["authority_delta"],
             "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY",
         )
-        self.assertEqual(state["status"], "RUNNING")
+        self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["packet_id"], "PD-JUNE-FM-00")
         self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP1")
+        self.assertEqual(state["next_packet_status"], "READY_AFTER_FM00_SQUASH_MERGE")
         self.assertEqual(state["canonical_2021_2023_discovery"], "DEFERRED_NOT_AUTHORISED")
         self.assertEqual(schema["properties"]["source_slice_id"]["const"], SOURCE_SLICE_ID)
 
