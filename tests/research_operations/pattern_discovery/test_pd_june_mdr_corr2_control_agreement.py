@@ -14,6 +14,7 @@ INDEX = BASE / "PD_JUNE_MDR_CORR2_BLINDED_REVIEW_INDEX.json"
 ANSWER = BASE / "PD_JUNE_MDR_CORR2_SEALED_ANSWER_KEY.json"
 TEMPLATE = BASE / "PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.template.json"
 DECISION = BASE / "PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json"
+MERGE_RECEIPT = BASE / "PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 
 
@@ -42,6 +43,7 @@ class PDJuneMDRCorr2ControlAgreementTests(unittest.TestCase):
         cls.answer = json.loads(ANSWER.read_text(encoding="utf-8"))
         cls.template = json.loads(TEMPLATE.read_text(encoding="utf-8"))
         cls.decision = json.loads(DECISION.read_text(encoding="utf-8"))
+        cls.merge_receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
 
     def test_control_population_is_exact_and_non_mutating(self) -> None:
@@ -72,10 +74,11 @@ class PDJuneMDRCorr2ControlAgreementTests(unittest.TestCase):
         next(item for item in perfect["responses"] if item["blind_id"] == control_id)["trigger_classification"] = "BREACH_ACTIVE"
         self.assertEqual(score_blinded_review(self.review, self.answer, perfect)["bounded_result"], "DEFER_OR_BLOCK_EXACT_JUNE_CONTROLLED_REPEAT_REVIEW")
 
-    def test_final_operator_defer_preserves_authority(self) -> None:
+    def test_final_defer_merge_and_authority_boundary(self) -> None:
         self.assertEqual(self.decision["decision"], "DEFER")
         self.assertEqual(self.decision["decision_authority"], "OPERATOR")
-        self.assertEqual(self.state["status"], "APPROVED")
+        self.assertEqual(self.merge_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(self.state["status"], "COMPLETED")
         self.assertEqual(self.state["review_status"], "COMPLETED")
         self.assertIsNone(self.state["next_packet"])
         self.assertIn("MACHINE_REPLAY", self.state["retained_prohibitions"])

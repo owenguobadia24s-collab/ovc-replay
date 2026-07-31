@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse assessment and final decision court records
+      - name: Parse assessment and completed decision court records
         run: |
           python - <<'PY'
           import json
@@ -28,6 +28,7 @@ jobs:
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json',
               'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json',
+              'docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json',
               'registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json',
           ]
           for path in paths:
@@ -37,7 +38,7 @@ jobs:
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_2026_review_assessment -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce historical assessment and final operator DEFER
+      - name: Enforce historical assessment and completed operator DEFER merge
         run: |
           python - <<'PY'
           import json
@@ -45,6 +46,7 @@ jobs:
           assessment = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-ra1/PD_JUNE_2026_OPERATOR_REVIEW_AND_MARKET_DESCRIPTION_ASSESSMENT.json').read_text())
           reproduction = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1/PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json').read_text())
           decision = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json').read_text())
+          receipt = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2/PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert assessment['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
           assert reproduction['population_state_reproduction']['exact_core_match_count'] == 1144
@@ -52,10 +54,10 @@ jobs:
           assert reproduction['review_claim_evidence']['trigger_reproduction_count'] == 26
           assert reproduction['review_claim_evidence']['history_dependent_exact_reproduction_count'] == 11
           assert decision['decision'] == 'DEFER'
-          assert decision['decision_authority'] == 'OPERATOR'
           assert decision['authority_delta'] == 'NONE_DEFER_AND_PRESERVE_CURRENT_AUTHORITY'
           assert decision['next_packet'] is None
-          assert state['status'] == 'APPROVED'
+          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
+          assert state['status'] == 'COMPLETED'
           assert state['review_status'] == 'COMPLETED'
           assert state['next_gate'] is None
           assert state['next_packet'] is None

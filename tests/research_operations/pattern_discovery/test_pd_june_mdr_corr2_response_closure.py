@@ -19,9 +19,11 @@ COMPARISON_MD = BASE / "PD_JUNE_MDR_CORR2_POST_UNBLINDING_COMPARISON.md"
 QA = BASE / "PD_JUNE_MDR_CORR2_CLOSURE_QA_PACKET.json"
 RETURN_GATE = BASE / "PD_JUNE_MDR_G1_CORR2_RETURN_GATE_PACKET.json"
 DECISION = BASE / "PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json"
+MERGE_RECEIPT = BASE / "PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json"
 SCHEMA = ROOT / "schemas" / "research_operations" / "pattern_discovery" / "pd_june_mdr_corr2_response_closure_v0_1.schema.json"
 DECISION_SCHEMA = ROOT / "schemas" / "research_operations" / "pattern_discovery" / "pd_june_mdr_g1_corr2_operator_decision_v0_1.schema.json"
+MERGE_SCHEMA = ROOT / "schemas" / "research_operations" / "pattern_discovery" / "pd_june_mdr_g1_corr2_merge_receipt_v0_1.schema.json"
 
 
 def load_review() -> dict:
@@ -55,10 +57,11 @@ class PDJuneMDRCorr2ResponseClosureTests(unittest.TestCase):
         cls.qa = json.loads(QA.read_text(encoding="utf-8"))
         cls.return_gate = json.loads(RETURN_GATE.read_text(encoding="utf-8"))
         cls.decision = json.loads(DECISION.read_text(encoding="utf-8"))
+        cls.merge_receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
 
-    def test_closure_and_decision_files_exist(self) -> None:
-        for path in (INDEX, ANSWER, RESPONSE, SCORE, VALIDATION, COMPARISON, COMPARISON_MD, QA, RETURN_GATE, DECISION, STATE, SCHEMA, DECISION_SCHEMA):
+    def test_closure_decision_and_merge_files_exist(self) -> None:
+        for path in (INDEX, ANSWER, RESPONSE, SCORE, VALIDATION, COMPARISON, COMPARISON_MD, QA, RETURN_GATE, DECISION, MERGE_RECEIPT, STATE, SCHEMA, DECISION_SCHEMA, MERGE_SCHEMA):
             self.assertTrue(path.is_file(), path)
 
     def test_completed_response_is_exactly_bound_and_frozen(self) -> None:
@@ -80,22 +83,21 @@ class PDJuneMDRCorr2ResponseClosureTests(unittest.TestCase):
         self.assertEqual(metrics["prior_repeat_disposition_agreement_count"], 0)
         self.assertEqual(metrics["prior_repeat_disposition_kappa"], -0.125)
 
-    def test_operator_defer_is_recorded_without_authority_expansion(self) -> None:
-        self.assertEqual(self.decision["gate_id"], "PD-JUNE-MDR-G1")
+    def test_operator_defer_and_squash_merge_are_recorded(self) -> None:
         self.assertEqual(self.decision["decision"], "DEFER")
         self.assertEqual(self.decision["decision_authority"], "OPERATOR")
-        self.assertEqual(self.decision["authority_delta"], "NONE_DEFER_AND_PRESERVE_CURRENT_AUTHORITY")
         self.assertIsNone(self.decision["next_packet"])
         self.assertEqual(self.return_gate["gate_status"], "APPROVED_DEFER_CORR2_CLOSED_MERGE_READY")
-        self.assertFalse(self.return_gate["operator_approval_required"])
-        self.assertEqual(self.return_gate["decision"], "DEFER")
+        self.assertEqual(self.merge_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(self.merge_receipt["packet_merge_commit"], "306e449acdaddbb0131fd01aca6098dd8ab0b7ef")
+        self.assertIsNone(self.merge_receipt["next_packet"])
 
-    def test_programme_state_is_approved_and_stopped(self) -> None:
-        self.assertEqual(self.state["status"], "APPROVED")
+    def test_programme_state_is_completed_and_stopped(self) -> None:
+        self.assertEqual(self.state["status"], "COMPLETED")
         self.assertEqual(self.state["decision"], "DEFER")
-        self.assertEqual(self.state["decision_authority"], "OPERATOR")
         self.assertEqual(self.state["review_status"], "COMPLETED")
-        self.assertEqual(self.state["operator_input_required"], "NONE")
+        self.assertEqual(self.state["merge_status"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(self.state["merge_commit"], "306e449acdaddbb0131fd01aca6098dd8ab0b7ef")
         self.assertIsNone(self.state["next_gate"])
         self.assertIsNone(self.state["next_packet"])
         self.assertEqual(self.state["canonical_2021_2023_discovery"], "DEFERRED_NOT_AUTHORISED")

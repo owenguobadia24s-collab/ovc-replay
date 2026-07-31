@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse CORR2 closure and operator decision court records
+      - name: Parse CORR2 closure, decision and merge court records
         run: |
           python - <<'PY'
           import hashlib
@@ -31,9 +31,11 @@ jobs:
               base / 'PD_JUNE_MDR_CORR2_CLOSURE_QA_PACKET.json',
               base / 'PD_JUNE_MDR_G1_CORR2_RETURN_GATE_PACKET.json',
               base / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json',
+              base / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json',
               Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
               Path('schemas/research_operations/pattern_discovery/pd_june_mdr_corr2_response_closure_v0_1.schema.json'),
               Path('schemas/research_operations/pattern_discovery/pd_june_mdr_g1_corr2_operator_decision_v0_1.schema.json'),
+              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_g1_corr2_merge_receipt_v0_1.schema.json'),
           ]
           records = {str(path): json.loads(path.read_text(encoding='utf-8')) for path in paths}
           response_path = base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.completed.json'
@@ -49,30 +51,27 @@ jobs:
             -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce operator DEFER and retained-authority boundary
+      - name: Enforce completed DEFER merge receipt and retained authority
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
           score = json.loads((base / 'PD_JUNE_MDR_CORR2_SCORED_REVIEW.json').read_text())
-          qa = json.loads((base / 'PD_JUNE_MDR_CORR2_CLOSURE_QA_PACKET.json').read_text())
-          gate = json.loads((base / 'PD_JUNE_MDR_G1_CORR2_RETURN_GATE_PACKET.json').read_text())
           decision = json.loads((base / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json').read_text())
+          receipt = json.loads((base / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert score['bounded_result'] == 'DEFER_OR_BLOCK_EXACT_JUNE_CONTROLLED_REPEAT_REVIEW'
-          assert qa['status'] == 'APPROVED_DEFER_MERGE_READY_AFTER_FINAL_CI'
-          assert qa['decision'] == 'DEFER'
-          assert gate['gate_status'] == 'APPROVED_DEFER_CORR2_CLOSED_MERGE_READY'
-          assert gate['operator_approval_required'] is False
-          assert gate['decision'] == 'DEFER'
           assert decision['decision'] == 'DEFER'
           assert decision['decision_authority'] == 'OPERATOR'
-          assert decision['authority_delta'] == 'NONE_DEFER_AND_PRESERVE_CURRENT_AUTHORITY'
           assert decision['next_packet'] is None
-          assert state['status'] == 'APPROVED'
+          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
+          assert receipt['packet_merge_commit'] == '306e449acdaddbb0131fd01aca6098dd8ab0b7ef'
+          assert receipt['next_packet'] is None
+          assert state['status'] == 'COMPLETED'
           assert state['review_status'] == 'COMPLETED'
-          assert state['operator_input_required'] == 'NONE'
+          assert state['merge_status'] == 'PASS_SQUASH_MERGED_TO_MAIN'
+          assert state['merge_commit'] == '306e449acdaddbb0131fd01aca6098dd8ab0b7ef'
           assert state['next_gate'] is None
           assert state['next_packet'] is None
           assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
