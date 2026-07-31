@@ -3,7 +3,7 @@
 Status: `GATE_READY_OPERATOR_DECISION_REQUIRED`
 
 Plan: `OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2`  
-Baseline: `1d436299c770a7043f95d7772b7550526de3ec73`  
+Baseline: `306e449acdaddbb0131fd01aca6098dd8ab0b7ef`  
 Branch: `build/ro4-00-design-boundary-freeze`
 
 ## Recommended decision
