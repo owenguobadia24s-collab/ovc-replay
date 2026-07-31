@@ -5,7 +5,7 @@ Baseline main: `306e449acdaddbb0131fd01aca6098dd8ab0b7ef`
 Branch: `build/ro4-00-design-boundary-freeze`  
 Status: `GATE_READY_OPERATOR_DECISION_REQUIRED`
 
-This packet materialises the proposed RO4 v0.4 design canon only: 13 contracts, 20 schemas, 18 policy/state registries, independent invariants, synthetic fixture declarations, disabled Console projection map, source/hash reconciliation, QA, validator, tests and CI.
+This packet materialises the proposed RO4 v0.4 design canon only: 13 contracts, 20 schemas, 19 policy/state registries, independent invariants, synthetic fixture declarations, disabled Console projection map, source/hash reconciliation, QA, validator, tests and CI.
 
 No runtime RO4 implementation, canonical annotation, C2E friction append, Console activation, selector/release change, Pattern Discovery write, Validation consumption, R2 write, outcome join or exposure authority is present.
 
