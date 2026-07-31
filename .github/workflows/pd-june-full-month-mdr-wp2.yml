@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'src/ovc/research_operations/prospective_source/full_month_mdr_compute.py'
+      - 'src/ovc/research_operations/prospective_source/full_month_mdr_replay.py'
       - 'scripts/run_pd_june_full_month_mdr_wp2.ps1'
       - 'tests/research_operations/prospective_source/test_pd_june_full_month_mdr_wp2.py'
       - 'schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp2_replay_v0_1.schema.json'
@@ -28,11 +29,12 @@ jobs:
       - name: Compile and parse WP2 tooling court records
         run: |
           PYTHONPATH=src:. python -m py_compile \
-            src/ovc/research_operations/prospective_source/full_month_mdr_compute.py
+            src/ovc/research_operations/prospective_source/full_month_mdr_compute.py \
+            src/ovc/research_operations/prospective_source/full_month_mdr_replay.py
           PYTHONPATH=src:. python - <<'PY'
           import json
           from pathlib import Path
-          from ovc.research_operations.prospective_source import full_month_mdr_compute as subject
+          from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
 
           base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
           qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_QA_PACKET.json').read_text())
@@ -77,7 +79,7 @@ jobs:
           PYTHONPATH=src:. python - <<'PY'
           import tempfile
           from pathlib import Path
-          from ovc.research_operations.prospective_source import full_month_mdr_compute as subject
+          from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
 
           with tempfile.TemporaryDirectory() as repository:
               try:
