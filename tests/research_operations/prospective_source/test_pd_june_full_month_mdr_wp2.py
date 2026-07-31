@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ovc.research_operations.prospective_source import full_month_mdr_compute as subject
+from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
 from ovc.research_operations.prospective_source.models import ProspectiveBar
 
 
