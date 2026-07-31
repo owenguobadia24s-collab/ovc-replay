@@ -1,6 +1,6 @@
 {
   "schema": "ovc-research-operations-command-registry/v0.1",
-  "status": "APPROVED_BOUNDED_LOCAL_OPERATION_RO_G2_PASS",
+  "status": "APPROVED_BOUNDED_LOCAL_OPERATION_WITH_RO4_G4_COMMANDS_DISABLED",
   "commands": [
     {"command": "ovc research open-session", "write_class": "DERIVED_DRAFT_AND_AUDIT"},
     {"command": "ovc research add-observation", "write_class": "DERIVED_DRAFT_AND_AUDIT"},
@@ -13,10 +13,15 @@
     {"command": "ovc artifact scan", "write_class": "DERIVED_CATALOGUE_AND_AUDIT"},
     {"command": "ovc artifact verify", "write_class": "DERIVED_CATALOGUE_AND_AUDIT"},
     {"command": "ovc artifact report", "write_class": "READ_ONLY"},
-    {"command": "ovc queue show", "write_class": "READ_ONLY"}
+    {"command": "ovc queue show", "write_class": "READ_ONLY"},
+    {"command": "ovc ro4 annotate-boundary", "write_class": "DISABLED_PENDING_RO4_G4_APPEND_ONLY_RECORD_AND_AUDIT"},
+    {"command": "ovc ro4 record-friction", "write_class": "DISABLED_PENDING_RO4_G4_APPEND_ONLY_RECORD_AND_AUDIT"},
+    {"command": "ovc ro4 review-sequence", "write_class": "DISABLED_PENDING_RO4_G4_APPEND_ONLY_RECORD_AND_AUDIT"},
+    {"command": "ovc ro4 supersede", "write_class": "DISABLED_PENDING_RO4_G4_APPEND_ONLY_RECORD_AND_AUDIT"}
   ],
   "network_operations": "NONE",
   "git_operations": "NONE",
   "r2_operations": "NONE",
-  "market_classification": "NONE"
+  "market_classification": "NONE",
+  "console_write": "PROHIBITED"
 }

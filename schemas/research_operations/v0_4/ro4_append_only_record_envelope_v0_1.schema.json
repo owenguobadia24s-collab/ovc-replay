@@ -1,0 +1,40 @@
+{
+  "$id": "ovc-ro4-append-only-record-envelope/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RO4 append-only Research Operations v0.1 envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "record_id": {"type": "string", "pattern": "^ro:ro4_"},
+    "record_type": {"enum": [
+      "RO4_SEQUENCE_BOUNDARY_ANNOTATION.v0.1",
+      "RO4_C2E_FRICTION_RECORD.v0.1",
+      "RO4_PROSPECTIVE_SEQUENCE_REVIEW.v0.1",
+      "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1"
+    ]},
+    "schema_version": {"const": "0.1"},
+    "lifecycle_state": {"enum": ["DRAFT", "FROZEN", "SUPERSEDED"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "frozen_at": {"type": ["string", "null"], "format": "date-time"},
+    "operator_id": {"type": "string"},
+    "admissible_cutoff": {"type": "string", "format": "date-time"},
+    "source_release_refs": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "artifact_refs": {"type": "array", "items": {"type": "object"}},
+    "model_refs": {"type": "array", "items": {"type": "object"}},
+    "missingness": {"type": "array", "items": {"type": "object"}},
+    "lineage": {"type": "object", "required": ["parent", "derived_from", "supersedes", "adjudicates"]},
+    "authority_state": {"enum": ["DRAFT", "FROZEN", "SUPERSEDED"]},
+    "reproducibility_state": {"enum": ["REPRODUCIBLE", "PARTIALLY_AVAILABLE", "NOT_REPRODUCIBLE"]},
+    "payload": {"type": "object"},
+    "content_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+  },
+  "required": [
+    "record_type", "schema_version", "lifecycle_state", "created_at", "frozen_at", "operator_id",
+    "admissible_cutoff", "source_release_refs", "artifact_refs", "model_refs", "missingness", "lineage",
+    "authority_state", "reproducibility_state", "payload", "content_sha256"
+  ],
+  "not": {"anyOf": [
+    {"required": ["semantic_label"]}, {"required": ["episode_id"]}, {"required": ["probability"]},
+    {"required": ["prediction"]}, {"required": ["pd_candidate_id"]}, {"required": ["c2_change"]}
+  ]}
+}

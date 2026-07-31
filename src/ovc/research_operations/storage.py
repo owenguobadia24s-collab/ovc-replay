@@ -25,6 +25,10 @@ RECORD_DIRECTORIES = {
     "INCIDENT_RECORD": "incidents",
     "DECISION_RECORD": "decisions",
     "AUDIT_EVENT": "audit",
+    "RO4_SEQUENCE_BOUNDARY_ANNOTATION.v0.1": "ro4/sequence_boundary_annotations",
+    "RO4_C2E_FRICTION_RECORD.v0.1": "ro4/c2e_friction_records",
+    "RO4_PROSPECTIVE_SEQUENCE_REVIEW.v0.1": "ro4/prospective_sequence_reviews",
+    "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1": "ro4/signature_concentration_acknowledgements",
 }
 
 

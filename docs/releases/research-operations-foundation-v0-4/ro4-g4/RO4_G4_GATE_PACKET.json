@@ -1,0 +1,144 @@
+{
+  "acceptance_conditions": [
+    {
+      "condition": "Exact allowlisted record types and frozen codes",
+      "status": "PASS"
+    },
+    {
+      "condition": "No canonical annotation/friction/review record appended before operator decision",
+      "status": "PASS_ZERO"
+    },
+    {
+      "condition": "Source release, sequence, manifest/member and first-valid binding",
+      "status": "PASS"
+    },
+    {
+      "condition": "Cutoff rejection for any post-cutoff source",
+      "status": "PASS"
+    },
+    {
+      "condition": "Append-only exclusive create, deterministic identity and idempotent retry",
+      "status": "PASS"
+    },
+    {
+      "condition": "Supersession preserves predecessor and links successor",
+      "status": "PASS"
+    },
+    {
+      "condition": "Every first append and supersession emits immutable audit",
+      "status": "PASS"
+    },
+    {
+      "condition": "Signature diversity warning acknowledgement",
+      "status": "NOT_REQUIRED_G3_AUDIT_PASS"
+    },
+    {
+      "condition": "RO4 and Pattern Discovery population isolation",
+      "status": "PASS"
+    },
+    {
+      "condition": "Synthetic/ablated controls remain machine-only",
+      "status": "PASS"
+    },
+    {
+      "condition": "Validation locked and replay not relabelled prospective",
+      "status": "PASS"
+    },
+    {
+      "condition": "C2/C2E/semantic/probability/exposure/execution authority remains denied",
+      "status": "PASS"
+    },
+    {
+      "condition": "Focused and complete repository tests",
+      "status": "FOCUSED_PASS_11_COMPLETE_PENDING_CI"
+    }
+  ],
+  "auto_ratifiable": false,
+  "baseline_commit": "04e7528fcc82c556f6e58347aea1468e4c7c2d57",
+  "branch": "build/ro4-wp4-annotations-c2e-friction",
+  "candidate_commit": "PENDING_FINAL_HEAD_PIN",
+  "changed_file_inventory": "docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_CHANGED_FILE_INVENTORY.json",
+  "completed_packets": [
+    "RO4-00",
+    "RO4-WP1",
+    "RO4-WP2",
+    "RO4-WP3",
+    "RO4-WP4_IMPLEMENTED"
+  ],
+  "current_authority": "RO4_G3_NON_CANONICAL_RESEARCH_CANDIDATE_APPROVED",
+  "decision_options": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
+  "exact_work_after_non_pass": "Leave production append disabled, preserve branch evidence, record the selected disposition and smallest lawful continuation.",
+  "exact_work_after_pass": [
+    "Record operator RO4-G4 PASS decision and exact authority delta.",
+    "Set RO4_APPEND_AUTHORITY_v0_1 enabled=true with the decision ID; keep Console write prohibited.",
+    "Rerun focused, complete and authority-boundary checks at the decision head.",
+    "Squash-merge the bounded RO4-WP4/G4 PR into main.",
+    "Create RO4-WP5 from the resulting main tip and implement disabled read-only presentation adapters."
+  ],
+  "external_artifacts": {
+    "canonical_records_appended": 0,
+    "external_bytes_created": 0,
+    "synthetic_fixture_sha256": "362e393562f0bd0dd786768cf6cbb5f66a0ced7ae2d06fb3e1f6d7aefbf7d2f6"
+  },
+  "gate_id": "RO4-G4",
+  "operator_decision_required": true,
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
+  "plan_version": "v0.2",
+  "proposed_authority_delta": "BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE",
+  "qa_packet": "docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_QA_PACKET.json",
+  "recommended_decision": "PASS",
+  "record_types": [
+    "RO4_SEQUENCE_BOUNDARY_ANNOTATION.v0.1",
+    "RO4_C2E_FRICTION_RECORD.v0.1",
+    "RO4_PROSPECTIVE_SEQUENCE_REVIEW.v0.1",
+    "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1_WHEN_REQUIRED"
+  ],
+  "retained_denials": [
+    "C2_MUTATION",
+    "SELECTOR_OR_RELEASE_CHANGE",
+    "DEVELOPMENT_ACTIVATION",
+    "VALIDATION_CONSUMPTION",
+    "PATTERN_DISCOVERY_POPULATION_MERGE_RANK_REVIEW_OR_WRITE",
+    "C2E_EPISODE_AUTHORITY",
+    "C2_5_C3_SEMANTICS",
+    "SEMANTIC_OR_FAMILY_PROMOTION",
+    "OUTCOME_JOIN",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "OPERATOR_FACING_SYNTHETIC_OR_ABLATED_CONTROLS",
+    "CONSOLE_WRITE",
+    "AGENT_WRITE",
+    "R2_WRITE",
+    "REMOTE_DEPLOYMENT"
+  ],
+  "rollback": "Disable append through a new commit; preserve all records, audit events and source evidence. Never delete or rewrite frozen records.",
+  "schema": "ovc-ro4-gate-packet/v1",
+  "service": {
+    "binding": "Research Operations v0.1 append-only transaction, deterministic identity, audit and supersession service",
+    "console_write": "PROHIBITED",
+    "production_registry": "DISABLED_PENDING_OPERATOR_PASS",
+    "version": "v0.1"
+  },
+  "signature_diversity": {
+    "acknowledgement_record_id": null,
+    "logical_hash": "9271f3b7e25e06c49e8f9864fda7edff8adb333289886d05c89ebaf730761097",
+    "status": "PASS"
+  },
+  "status": "GATE_READY_PENDING_FINAL_HEAD_CI",
+  "tests": {
+    "complete_repository": "PENDING_FINAL_HEAD_CI",
+    "focused": "PASS_11_LOCAL",
+    "workflow": "PENDING"
+  },
+  "title": "Append-only sequence annotation and C2E friction enablement",
+  "unresolved_issues": [],
+  "warnings": [
+    "PASS would enable only the four named local record types through the v0.1 service. It would not merge this PR until the decision and authority registry are committed."
+  ]
+}
