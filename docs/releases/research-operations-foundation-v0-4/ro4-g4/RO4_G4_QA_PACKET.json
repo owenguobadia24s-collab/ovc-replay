@@ -1,8 +1,8 @@
 {
-  "baseline_commit": "04e7528fcc82c556f6e58347aea1468e4c7c2d57",
+  "baseline_commit": "d674425aeb91dc470ce2cef9feb400ee6236784c",
   "blocking_issues": [],
   "branch": "build/ro4-wp4-annotations-c2e-friction",
-  "candidate_commit": "PENDING_FINAL_HEAD_PIN",
+  "candidate_commit": "3dbcdf9dea546886654c2b0ae6482a9a87bb71e5",
   "checks": {
     "append_only_exclusive_create": "PASS",
     "audit_event_emission": "PASS",
@@ -23,14 +23,20 @@
   "recommendation": "PASS",
   "rollback": "Set the registry to disabled in a new commit and preserve records/audit; no destructive rollback.",
   "schema": "ovc-ro4-g4-qa-packet/v1",
-  "status": "PASS_LOCAL_PENDING_FINAL_HEAD_CI",
+  "status": "PASS_CI",
   "tests": {
-    "authority_assertions": "PENDING_CI",
-    "complete_repository": "PENDING_CI",
-    "focused": "PASS_11_LOCAL",
-    "packet_validator": "PENDING_FINAL_TREE"
+    "authority_assertions": "PASS_CI",
+    "complete_repository": "PASS_70_CI",
+    "focused": "PASS_11_CI",
+    "packet_validator": "PASS_CI",
+    "workflow": "PASS_RUN_30659577293"
   },
   "warnings": [
     "Production append remains disabled. Synthetic test authority cannot be loaded by the production CLI."
-  ]
+  ],
+  "ci_evidence": {
+    "run_id": 30659577293,
+    "tested_head": "3dbcdf9dea546886654c2b0ae6482a9a87bb71e5",
+    "workflow_name": "RO4-G4 append-only record service readiness"
+  }
 }
