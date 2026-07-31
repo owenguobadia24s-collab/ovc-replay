@@ -17,28 +17,30 @@ class PDJuneFullMonthMDRIntakeTests(unittest.TestCase):
             plan["slice_id"],
             "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
         )
-        self.assertEqual(plan["provider_object_count"], 74)
-        m1_bid = [
-            item
-            for item in plan["objects"]
-            if item["logical_stream"] == "M1_BID"
-        ]
-        h1_ask = [
-            item
-            for item in plan["objects"]
-            if item["logical_stream"] == "H1_ASK"
-        ]
+        self.assertEqual(plan["provider_object_count"], 72)
+        m1_bid = [item for item in plan["objects"] if item["logical_stream"] == "M1_BID"]
+        h1_ask = [item for item in plan["objects"] if item["logical_stream"] == "H1_ASK"]
         self.assertEqual(len(m1_bid), 34)
-        self.assertEqual(len(h1_ask), 3)
+        self.assertEqual(len(h1_ask), 2)
         self.assertEqual(m1_bid[0]["partition_start_utc"], "2026-05-30T00:00:00Z")
         self.assertEqual(m1_bid[-1]["partition_start_utc"], "2026-07-02T00:00:00Z")
         self.assertEqual(
             [item["partition_start_utc"] for item in h1_ask],
-            [
-                "2026-05-01T00:00:00Z",
-                "2026-06-01T00:00:00Z",
-                "2026-07-01T00:00:00Z",
-            ],
+            ["2026-05-01T00:00:00Z", "2026-06-01T00:00:00Z"],
+        )
+        self.assertFalse(
+            any(
+                item["relative_provider_path"].endswith("2026/06/ASK_candles_hour_1.bi5")
+                for item in plan["objects"]
+            )
+        )
+        self.assertEqual(
+            plan["native_july_h1_transport"],
+            "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
+        )
+        self.assertEqual(
+            plan["post_target_h1_context"],
+            "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS",
         )
         self.assertEqual(plan["provider_execution_in_ci"], "DENIED")
 
@@ -49,18 +51,17 @@ class PDJuneFullMonthMDRIntakeTests(unittest.TestCase):
                 environ={"OVC_EXTERNAL_ARTIFACT_ROOT": external},
             )
             self.assertEqual(result["status"], "READY_FOR_OPERATOR_LOCAL_EXECUTION")
-            self.assertEqual(result["provider_object_count"], 74)
+            self.assertEqual(result["provider_object_count"], 72)
             self.assertFalse(result["provider_network_access_performed"])
             self.assertEqual(result["provider_execution_location"], "OPERATOR_LOCAL_ONLY")
+            self.assertEqual(
+                result["native_july_h1_transport"],
+                "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
+            )
 
     def test_preflight_refuses_existing_material(self) -> None:
         with tempfile.TemporaryDirectory() as repository, tempfile.TemporaryDirectory() as external:
-            destination = (
-                Path(external)
-                / "prospective-source"
-                / "intake"
-                / subject.APPROVED_SLICE_ID
-            )
+            destination = Path(external) / "prospective-source" / "intake" / subject.APPROVED_SLICE_ID
             destination.mkdir(parents=True)
             (destination / "existing.txt").write_text("do not overwrite", encoding="utf-8")
             with self.assertRaisesRegex(subject.IntakeError, "already contains material"):
@@ -81,10 +82,7 @@ class PDJuneFullMonthMDRIntakeTests(unittest.TestCase):
                 subject.execute_intake(
                     repository_root=Path(repository),
                     gate="PD-JUNE-FM-G1",
-                    environ={
-                        "OVC_EXTERNAL_ARTIFACT_ROOT": external,
-                        "CI": "true",
-                    },
+                    environ={"OVC_EXTERNAL_ARTIFACT_ROOT": external, "CI": "true"},
                 )
 
     @staticmethod
@@ -123,6 +121,20 @@ class PDJuneFullMonthMDRIntakeTests(unittest.TestCase):
         audit = subject._coverage_audit(rows, clock="H1", side="ASK")
         self.assertEqual(audit["qa_state"], "BLOCK")
         self.assertEqual(len(audit["unexpected_intra_session_gaps"]), 1)
+
+    def test_post_target_h1_is_derived_from_complete_july_m1_context(self) -> None:
+        rows: list[subject.CandleRow] = []
+        cursor = subject.TARGET_END
+        while cursor < subject.APPROVED_END:
+            rows.append(self._row(cursor))
+            cursor += timedelta(minutes=1)
+        derived, audit = subject._post_target_h1_audit(rows, side="BID")
+        self.assertEqual(audit["qa_state"], "PASS")
+        self.assertEqual(audit["expected_complete_hour_count"], 48)
+        self.assertEqual(audit["derived_complete_hour_count"], 48)
+        self.assertEqual(len(derived), 48)
+        self.assertEqual(derived[0].timestamp_utc, subject.TARGET_END)
+        self.assertEqual(derived[-1].timestamp_utc, subject.APPROVED_END - timedelta(hours=1))
 
 
 if __name__ == "__main__":
