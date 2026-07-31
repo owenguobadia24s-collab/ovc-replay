@@ -1,8 +1,8 @@
 {
-  "authority": "RO4_G2_LOCAL_READ_ONLY_DERIVED_APPROVED",
-  "court_record_main_tip": "db883068e4a19e39aa17a278e9cee5b36459b8ad",
-  "current_gate": "RO4-G2",
-  "current_packet": "RO4-WP2",
+  "authority": "RO4_G3_NON_CANONICAL_RESEARCH_CANDIDATE_APPROVED_PENDING_MERGE",
+  "court_record_main_tip": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
+  "current_gate": "RO4-G3",
+  "current_packet": "RO4-WP3",
   "operator_decision_required": false,
   "packets": [
     {
@@ -43,37 +43,37 @@
       "baseline_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
       "blockers": [],
       "branch": "build/ro4-wp2-matrix-persistence-conflict",
-      "candidate_commit": "96a83def9962d264a1ac0b035d51188998079653",
+      "candidate_commit": "13e16c36b7b413cfb99ca408e0381bc2231d12a6",
       "decision_record": "docs/releases/research-operations-foundation-v0-4/ro4-g2/RO4_G2_DELEGATED_DECISION.json",
-      "merge_commit": null,
+      "merge_commit": "4c3ea8dbf4ff7d504c9dc083993fde9d16e684d8",
       "next_packet": "RO4-WP3",
       "packet_id": "RO4-WP2",
       "prerequisites": ["RO4-G1"],
       "qa_packet": "docs/releases/research-operations-foundation-v0-4/ro4-g2/RO4_G2_QA_PACKET.json",
-      "status": "APPROVED_MERGE_READY",
-      "tests": ["PASS_9_DECISION_HEAD", "PASS_COMPLETE_SUITE_DECISION_HEAD", "PASS_AUTHORITY_ASSERTIONS_DECISION_HEAD", "PASS_GENERIC_TESTS_DECISION_HEAD"]
+      "status": "COMPLETED",
+      "tests": ["PASS_9", "PASS_COMPLETE_SUITE", "PASS_AUTHORITY_ASSERTIONS"]
     },
     {
       "authority_delta": "NON_CANONICAL_RESEARCH_CANDIDATE",
       "authority_required": "AUTO_RATIFIABLE_IF_ACCEPTANCE_PASSES",
-      "baseline_commit": null,
-      "blockers": ["RO4_G2_MERGE_PENDING"],
-      "branch": null,
-      "candidate_commit": null,
-      "decision_record": null,
+      "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
+      "blockers": [],
+      "branch": "build/ro4-wp3-sequence-windows-neutral-candidates",
+      "candidate_commit": "7d20e9bbec4f881dd782e8522668dde38c91e8bf",
+      "decision_record": "docs/releases/research-operations-foundation-v0-4/ro4-g3/RO4_G3_DELEGATED_DECISION.json",
       "merge_commit": null,
       "next_packet": "RO4-WP4",
       "packet_id": "RO4-WP3",
       "prerequisites": ["RO4-G2"],
-      "qa_packet": null,
-      "status": "PLANNED",
-      "tests": []
+      "qa_packet": "docs/releases/research-operations-foundation-v0-4/ro4-g3/RO4_G3_QA_PACKET.json",
+      "status": "APPROVED",
+      "tests": ["PASS_10_CI", "PASS_70_IN_RO4_G3_WORKFLOW", "PASS_AUTHORITY_ASSERTIONS", "PASS_WORKFLOW_30656591333"]
     },
     {
       "authority_delta": "BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE",
       "authority_required": "OPERATOR_REQUIRED",
       "baseline_commit": null,
-      "blockers": ["RO4-WP3_NOT_COMPLETED"],
+      "blockers": ["RO4_G3_MERGE_PENDING"],
       "branch": null,
       "candidate_commit": null,
       "decision_record": null,
@@ -138,7 +138,12 @@
   "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
   "plan_version": "v0.2",
   "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
-  "programme_status": "APPROVED_MERGE_READY",
-  "retained_prohibitions": ["C2_MUTATION", "SELECTOR_CHANGE", "RELEASE_PUBLICATION", "DEVELOPMENT_ACTIVATION", "VALIDATION_CONSUMPTION", "PD_POPULATION_MERGE_OR_WRITE", "C2E_EPISODE_AUTHORITY", "C2_5_C3_SEMANTICS", "OUTCOME_JOIN", "PROBABILITY", "RISK", "EXPOSURE", "TRADING", "EXECUTION", "AGENT_WRITE", "R2_WRITE", "REMOTE_DEPLOYMENT"],
+  "programme_status": "APPROVED_PENDING_MERGE",
+  "retained_prohibitions": [
+    "C2_MUTATION", "SELECTOR_CHANGE", "RELEASE_PUBLICATION", "DEVELOPMENT_ACTIVATION",
+    "VALIDATION_CONSUMPTION", "PD_POPULATION_MERGE_RANK_REVIEW_OR_WRITE", "C2E_EPISODE_AUTHORITY",
+    "C2_5_C3_SEMANTICS", "OUTCOME_JOIN", "PROBABILITY", "RISK", "EXPOSURE", "TRADING", "EXECUTION",
+    "OPERATOR_FACING_SYNTHETIC_OR_ABLATED_CONTROLS", "AGENT_WRITE", "R2_WRITE", "REMOTE_DEPLOYMENT"
+  ],
   "schema": "ovc-ro4-programme-state/v1"
 }

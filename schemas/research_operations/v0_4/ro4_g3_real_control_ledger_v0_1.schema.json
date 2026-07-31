@@ -1,0 +1,34 @@
+{
+  "$id": "ovc-ro4-g3-real-control-ledger/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": {"pattern": "^RO4\\.RECURRENCE\\.[0-9a-f]{64}$", "type": "string"},
+    "candidate_representative_sequence_id": {"pattern": "^RO4\\.SEQUENCE\\.[0-9a-f]{64}$", "type": "string"},
+    "candidate_signature_id": {"pattern": "^RO4\\.SIGNATURE\\.[0-9a-f]{64}$", "type": "string"},
+    "control_registry_id": {"const": "RO4.CONTROLS.v0.1"},
+    "real_controls": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "calendar_partition": {"type": "string"},
+          "control_id": {"pattern": "^RO4\\.SEQUENCE\\.[0-9a-f]{64}$", "type": "string"},
+          "control_type": {"enum": ["MATCHED_NON_CANDIDATE", "BROADER_POPULATION", "BOUNDARY_SHIFT_REAL_SEQUENCE", "TEMPORAL_OFFSET_REAL_SEQUENCE", "REPLAY_PROSPECTIVE_SEPARATION", "CROSS_PARTITION_REAL_SEQUENCE"]},
+          "signature_id": {"pattern": "^RO4\\.SIGNATURE\\.[0-9a-f]{64}$", "type": "string"},
+          "source_partition_id": {"type": "string"},
+          "synthetic": {"const": false}
+        },
+        "required": ["control_id", "control_type", "signature_id", "source_partition_id", "calendar_partition", "synthetic"],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "sealed_answer_key_state": {"const": "SEPARATE_NOT_OPERATOR_ACCESSIBLE"},
+    "synthetic_controls_operator_facing": {"const": "DENIED"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"}
+  },
+  "required": ["candidate_id", "candidate_representative_sequence_id", "candidate_signature_id", "control_registry_id", "real_controls", "sealed_answer_key_state", "synthetic_controls_operator_facing", "logical_hash"],
+  "title": "RO4 G3 real control ledger",
+  "type": "object"
+}

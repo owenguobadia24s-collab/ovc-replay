@@ -2,131 +2,35 @@
   "$id": "ovc-ro4-sequence-window/v1",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "not": {
-    "anyOf": [
-      {
-        "required": [
-          "pd_candidate_id"
-        ]
-      },
-      {
-        "required": [
-          "pd_fingerprint"
-        ]
-      },
-      {
-        "required": [
-          "pd_cluster_id"
-        ]
-      },
-      {
-        "required": [
-          "semantic_label"
-        ]
-      },
-      {
-        "required": [
-          "outcome"
-        ]
-      },
-      {
-        "required": [
-          "promotion"
-        ]
-      }
-    ]
-  },
+  "not": {"anyOf": [
+    {"required": ["pd_candidate_id"]}, {"required": ["pd_fingerprint"]},
+    {"required": ["pd_cluster_id"]}, {"required": ["semantic_label"]},
+    {"required": ["outcome"]}, {"required": ["promotion"]},
+    {"required": ["probability"]}, {"required": ["family_id"]}
+  ]},
   "properties": {
-    "authority": {
-      "const": "NON_CANONICAL_SEQUENCE_EVIDENCE"
-    },
-    "boundary_source": {
-      "enum": [
-        "FIXED_ROLLING",
-        "TRIGGER_BOUND",
-        "OPERATOR_ANNOTATED",
-        "REPLAY_REVIEW",
-        "LIVE_PROSPECTIVE"
-      ]
-    },
-    "clock": {
-      "enum": [
-        "15M",
-        "2H_A_L"
-      ]
-    },
-    "logical_hash": {
-      "pattern": "^[0-9a-f]{64}$",
-      "type": "string"
-    },
-    "manifest_sha256": {
-      "pattern": "^[0-9a-f]{64}$",
-      "type": "string"
-    },
-    "member_state_ids": {
-      "items": {
-        "type": "string"
-      },
-      "maxItems": 16,
-      "minItems": 2,
-      "type": "array"
-    },
-    "member_transition_ids": {
-      "items": {
-        "type": "string"
-      },
-      "maxItems": 15,
-      "minItems": 1,
-      "type": "array"
-    },
-    "operation_mode": {
-      "enum": [
-        "LIVE_PROSPECTIVE",
-        "TIME_GATED_REPLAY",
-        "NON_EVIDENTIARY_REPLAY"
-      ]
-    },
-    "pd_trigger_trace": {
-      "$ref": "pd_trigger_trace_ref_v0_1.schema.json"
-    },
-    "role": {
-      "enum": [
-        "DISCOVERY",
-        "DEVELOPMENT"
-      ]
-    },
-    "sequence_id": {
-      "pattern": "^RO4\\.SEQUENCE\\.",
-      "type": "string"
-    },
-    "sequence_policy_id": {
-      "const": "RO4.SEQUENCE.WINDOW.v0.1"
-    },
-    "side": {
-      "enum": [
-        "BID",
-        "ASK"
-      ]
-    },
-    "source_release_id": {
-      "type": "string"
-    }
+    "authority": {"const": "NON_CANONICAL_SEQUENCE_EVIDENCE"},
+    "boundary_source": {"enum": ["FIXED_ROLLING", "TRIGGER_BOUND", "OPERATOR_ANNOTATED", "REPLAY_REVIEW", "LIVE_PROSPECTIVE"]},
+    "calendar_partition": {"pattern": "^[0-9]{4}-[0-9]{2}$", "type": "string"},
+    "clock": {"enum": ["15M", "2H_A_L"]},
+    "evaluation_scope_id": {"type": "string"},
+    "first_valid_at": {"format": "date-time", "type": "string"},
+    "last_valid_at": {"format": "date-time", "type": "string"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "manifest_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "member_state_ids": {"items": {"type": "string"}, "maxItems": 16, "minItems": 2, "type": "array"},
+    "member_transition_ids": {"items": {"type": "string"}, "maxItems": 15, "minItems": 1, "type": "array"},
+    "non_canonical_banner": {"type": "string"},
+    "operation_mode": {"enum": ["LIVE_PROSPECTIVE", "TIME_GATED_REPLAY", "NON_EVIDENTIARY_REPLAY"]},
+    "pd_trigger_trace": {"$ref": "pd_trigger_trace_ref_v0_1.schema.json"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "sequence_id": {"pattern": "^RO4\\.SEQUENCE\\.[0-9a-f]{64}$", "type": "string"},
+    "sequence_policy_id": {"const": "RO4.SEQUENCE.WINDOW.v0.1"},
+    "side": {"enum": ["BID", "ASK"]},
+    "source_partition_id": {"type": "string"},
+    "source_release_id": {"type": "string"}
   },
-  "required": [
-    "sequence_id",
-    "source_release_id",
-    "manifest_sha256",
-    "role",
-    "clock",
-    "side",
-    "boundary_source",
-    "sequence_policy_id",
-    "member_state_ids",
-    "member_transition_ids",
-    "operation_mode",
-    "authority",
-    "logical_hash"
-  ],
+  "required": ["sequence_id", "source_release_id", "manifest_sha256", "role", "clock", "side", "source_partition_id", "evaluation_scope_id", "calendar_partition", "boundary_source", "sequence_policy_id", "member_state_ids", "member_transition_ids", "first_valid_at", "last_valid_at", "operation_mode", "authority", "logical_hash"],
   "title": "ovc-ro4-sequence-window/v1",
   "type": "object"
 }

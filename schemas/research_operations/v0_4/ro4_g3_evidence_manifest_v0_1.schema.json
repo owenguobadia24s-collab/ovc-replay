@@ -1,0 +1,127 @@
+{
+  "$id": "ovc-ro4-g3-evidence-manifest/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "ovc-ro4-g3-evidence-manifest/v1"
+    },
+    "authority": {
+      "const": "NON_CANONICAL_RESEARCH_CANDIDATE"
+    },
+    "source_g1_logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_g2_logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "validation_consumption": {
+      "const": "LOCKED_UNCONSUMED"
+    },
+    "sequence_policy_id": {
+      "const": "RO4.SEQUENCE.WINDOW.v0.1"
+    },
+    "distance_registry_id": {
+      "const": "RO4.SEQUENCE.DISTANCE.v0.1"
+    },
+    "sample_state": {
+      "enum": [
+        "FULL_POPULATION_NO_SAMPLING",
+        "DECLARED_SAMPLE_MODE"
+      ]
+    },
+    "window_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "recurrence_candidate_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "recurrence_member_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "excluded_candidate_groups": {
+      "type": "object"
+    },
+    "real_control_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "operator_batch_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "synthetic_controls_operator_facing": {
+      "const": 0
+    },
+    "pd_population_merge": {
+      "const": "DENIED"
+    },
+    "semantic_authority": {
+      "const": "NONE"
+    },
+    "promotion_path": {
+      "const": "DENIED"
+    },
+    "full_population_diversity_status": {
+      "enum": [
+        "PASS",
+        "SIGNATURE_CONCENTRATION_WARNING",
+        "INSUFFICIENT_SAMPLE_FOR_DIVERSITY_AUDIT"
+      ]
+    },
+    "ro4_g4_acknowledgement_required": {
+      "type": "boolean"
+    },
+    "non_canonical_banner": {
+      "type": "string"
+    },
+    "count_banner": {
+      "type": "string"
+    },
+    "artifacts": {
+      "items": {
+        "type": "object"
+      },
+      "minItems": 12,
+      "maxItems": 12,
+      "type": "array"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "authority",
+    "source_g1_logical_hash",
+    "source_g2_logical_hash",
+    "validation_consumption",
+    "sequence_policy_id",
+    "distance_registry_id",
+    "sample_state",
+    "window_count",
+    "recurrence_candidate_count",
+    "recurrence_member_count",
+    "excluded_candidate_groups",
+    "real_control_count",
+    "operator_batch_count",
+    "synthetic_controls_operator_facing",
+    "pd_population_merge",
+    "semantic_authority",
+    "promotion_path",
+    "full_population_diversity_status",
+    "ro4_g4_acknowledgement_required",
+    "non_canonical_banner",
+    "count_banner",
+    "artifacts",
+    "logical_hash"
+  ],
+  "title": "RO4 G3 sequence evidence manifest",
+  "type": "object"
+}
