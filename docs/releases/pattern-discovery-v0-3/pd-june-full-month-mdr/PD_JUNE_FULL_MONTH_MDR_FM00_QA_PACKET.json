@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-fm00-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1",
+  "packet_id": "PD-JUNE-FM-00",
+  "baseline_commit": "6b34ffcc8d1b7168584432a650cde81c09ca9068",
+  "branch": "build/pd-june-full-month-mdr-00-source-boundary",
+  "candidate_commit": null,
+  "status": "QA_REVIEW",
+  "qa_result": "PENDING_FINAL_HEAD_CI",
+  "checks": [
+    {"check": "Whole June target is exact and end-exclusive", "result": "PASS"},
+    {"check": "Context is deterministically derived from frozen horizons", "result": "PASS_48_HOURS_EACH_SIDE"},
+    {"check": "Source interval includes late May and early July context", "result": "PASS_2026_05_30_TO_2026_07_03"},
+    {"check": "May and July are context-only", "result": "PASS"},
+    {"check": "M1 partition plan covers 34 UTC days per side", "result": "PASS"},
+    {"check": "Native H1 transport plan covers May June and July", "result": "PASS"},
+    {"check": "Provider execution remains denied in CI", "result": "PASS"},
+    {"check": "Prior CORR2 evidence remains immutable", "result": "PASS"},
+    {"check": "Canonical 2021-2023 Discovery remains unauthorised", "result": "PASS"},
+    {"check": "No formula threshold semantic model selector release or promotion change", "result": "PASS"},
+    {"check": "Focused tests", "result": "PENDING_CI"},
+    {"check": "Complete repository suite", "result": "PENDING_CI"}
+  ],
+  "evidence": {
+    "plan": "plans/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_v0_1.md",
+    "authority": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json",
+    "contract": "contracts/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_SOURCE_AND_REVIEW_CONTRACT_v0_1.md",
+    "source_profile": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_SOURCE_PROFILE.json",
+    "programme_state": "registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json"
+  },
+  "authority_delta": "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY",
+  "next_packet": "PD-JUNE-FM-WP1",
+  "next_packet_boundary": "OPERATOR_LOCAL_PROVIDER_EXECUTION_AND_EXTERNAL_ARTIFACT_ROOT_REQUIRED",
+  "warnings": [
+    "This packet freezes the source boundary and does not perform provider intake.",
+    "Provider execution is intentionally unavailable in GitHub Actions.",
+    "Raw provider and replay artifacts must remain outside Git under OVC_EXTERNAL_ARTIFACT_ROOT.",
+    "A source dependency requiring more than 48 hours must fail closed and return to an operator gate."
+  ],
+  "recommendation": "PASS_FM00_AND_CONTINUE_TO_OPERATOR_LOCAL_SOURCE_INTAKE_AFTER_CI",
+  "rollback": "Revert only FM00 contracts, source-profile tooling, compact records, tests and workflow through a new non-destructive commit; preserve prior CORR2 and all authority evidence."
+}
