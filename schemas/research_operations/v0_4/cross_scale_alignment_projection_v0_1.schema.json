@@ -1,0 +1,58 @@
+{
+  "$id": "ovc-ro4-cross-scale-alignment-projection/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "not": {
+    "anyOf": [
+      {"required": ["overall_state"]},
+      {"required": ["winner"]},
+      {"required": ["composite_score"]},
+      {"required": ["probability"]},
+      {"required": ["override_state"]}
+    ]
+  },
+  "properties": {
+    "authority": {"const": "LOCAL_READ_ONLY_DERIVED"},
+    "axis_relations": {
+      "additionalProperties": false,
+      "properties": {
+        "INTERACTION": {"$ref": "#/$defs/relation"},
+        "LOCATION": {"$ref": "#/$defs/relation"},
+        "MOTION": {"$ref": "#/$defs/relation"},
+        "ORGANISATION": {"$ref": "#/$defs/relation"},
+        "QUALITY": {"$ref": "#/$defs/relation"}
+      },
+      "required": ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"],
+      "type": "object"
+    },
+    "first_valid_time": {"format": "date-time", "type": "string"},
+    "local_clock": {"const": "15M"},
+    "local_state_id": {"type": "string"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "parent_changed": {"type": "boolean"},
+    "parent_clock": {"const": "2H_A_L"},
+    "parent_first_valid_time": {"type": ["string", "null"]},
+    "parent_state_id": {"type": ["string", "null"]},
+    "projection_id": {"pattern": "^RO4\\.XSCALE\\.[0-9a-f]{64}$", "type": "string"},
+    "role": {"enum": ["DISCOVERY", "DEVELOPMENT"]},
+    "side": {"enum": ["BID", "ASK"]},
+    "source_release_id": {"type": "string"}
+  },
+  "required": ["authority", "source_release_id", "role", "side", "first_valid_time", "local_clock", "parent_clock", "local_state_id", "parent_state_id", "parent_first_valid_time", "parent_changed", "axis_relations", "projection_id", "logical_hash"],
+  "title": "RO4 cross-scale alignment projection",
+  "type": "object",
+  "$defs": {
+    "relation": {
+      "additionalProperties": false,
+      "properties": {
+        "local_status": {"type": "string"},
+        "local_value": {},
+        "parent_status": {"type": "string"},
+        "parent_value": {},
+        "relation": {"enum": ["ALIGNED", "DIVERGENT", "MISSING"]}
+      },
+      "required": ["relation", "local_status", "local_value", "parent_status", "parent_value"],
+      "type": "object"
+    }
+  }
+}

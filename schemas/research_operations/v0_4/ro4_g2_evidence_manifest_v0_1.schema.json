@@ -1,0 +1,41 @@
+{
+  "$id": "ovc-ro4-g2-evidence-manifest/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifacts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "artifact_type": {"enum": ["matrices", "persistence", "conflicts", "cross_scale"]},
+          "file": {"type": "string"},
+          "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+          "record_count": {"minimum": 0, "type": "integer"},
+          "record_stream_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+          "sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+          "size_bytes": {"minimum": 0, "type": "integer"}
+        },
+        "required": ["artifact_type", "file", "logical_hash", "record_count", "record_stream_sha256", "sha256", "size_bytes"],
+        "type": "object"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array"
+    },
+    "authority": {"const": "LOCAL_READ_ONLY_DERIVED"},
+    "banner": {"type": "string"},
+    "composite_or_winner": {"const": "PROHIBITED"},
+    "count_presentation": {"const": "EXACT_COUNT_WITH_VISIBLE_ELIGIBLE_DENOMINATOR"},
+    "counts": {"type": "object"},
+    "cross_scale_relation_counts": {"type": "object"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "matched_real_controls": {"const": "REQUIRED_AND_MATERIALISED_FOR_ALL_CONFLICT_RUNS"},
+    "schema": {"const": "ovc-ro4-g2-evidence-manifest/v1"},
+    "source_g1_logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "source_g1_manifest_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "validation_consumption": {"const": "LOCKED_UNCONSUMED"}
+  },
+  "required": ["schema", "authority", "source_g1_logical_hash", "source_g1_manifest_sha256", "validation_consumption", "artifacts", "counts", "cross_scale_relation_counts", "banner", "matched_real_controls", "composite_or_winner", "count_presentation", "logical_hash"],
+  "title": "RO4 G2 derived evidence manifest",
+  "type": "object"
+}
