@@ -6,21 +6,21 @@
   "prior_plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
   "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
   "packet_id": "PD-JUNE-FM-WP1",
-  "status": "GATE_READY",
+  "status": "QA_REVIEW",
   "prerequisites": [
     "PD-JUNE-MDR-G1-DEFER-COMPLETED",
     "PD-JUNE-FM-00",
     "PD-JUNE-FM-A1-OPERATOR-PASS",
     "PD-JUNE-FM-A1-SQUASH-MERGED",
     "PD-JUNE-FM-A2-OPERATOR-PASS",
-    "PD-JUNE-FM-A2-SQUASH-MERGED"
+    "PD-JUNE-FM-A2-SQUASH-MERGED",
+    "PD-JUNE-FM-WP1-LOCAL-SOURCE-EXECUTION-COMPLETE"
   ],
-  "authority_required": "NONE_OPERATOR_A2_PASS_RECORDED",
-  "authority_delta": "READ_ONLY_PROVIDER_INTAKE_WITH_PAIRED_SPARSE_M1_ADMISSIBILITY_AND_EXPLICIT_CENSORING",
-  "baseline_commit": "4c3ea8dbf4ff7d504c9dc083993fde9d16e684d8",
-  "execution_branch": "amend/pd-june-fm-a2-paired-sparse-m1-acceptance",
-  "receipt_branch": "administrative/pd-june-fm-a2-merge-receipt",
-  "candidate_commit": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+  "authority_required": "NONE_DELEGATED_SOURCE_ACCEPTANCE_WITHIN_OPERATOR_APPROVED_PLAN_AND_A2",
+  "authority_delta": "LOCAL_FROZEN_SOURCE_ACCEPTANCE_ONLY",
+  "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
+  "branch": "accept/pd-june-fm-wp1-source-freeze",
+  "candidate_commit": "PENDING_FINAL_HEAD",
   "target_start_utc": "2026-06-01T00:00:00Z",
   "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
   "source_start_utc": "2026-05-30T00:00:00Z",
@@ -28,87 +28,54 @@
   "target_eligibility": "TARGET_JUNE_ONLY",
   "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
-  "source_slice_status": "NOT_YET_EXECUTED_AFTER_A2",
-  "source_request_plan": "UNCHANGED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY",
-  "native_july_h1_transport": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
+  "source_slice_status": "FROZEN_LOCAL_SOURCE_SLICE_ACCEPTED_PENDING_FINAL_HEAD_CI_AND_MERGE",
+  "source_manifest_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+  "source_manifest_file_sha256": "8080b8def035cb37940b89054287d0c61756149aa7cb4711fc462a0ebbdc1f87",
+  "source_acceptance_index": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_QA_PACKET.json",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_G1_DELEGATED_DECISION.json",
+  "source_request_plan": "PASS_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY",
+  "source_object_verification": "PASS_4_OF_4_EXACT_SHA256_AND_SIZE",
+  "compact_evidence_verification": "PASS_8_OF_8_EXACT_SHA256_AND_SIZE",
   "paired_sparse_m1_policy": "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING",
   "downstream_incomplete_membership_policy": "INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING",
-  "observed_source_diagnostic": {
-    "quarantine_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1.20260731T162043Z.fe725d23",
-    "diagnostic_sha256": "ddfc9672be23ac8a87101c2d34daa706b7f4793a6bc5c925e9c07713563fef99",
+  "source_qa": {
     "m1_rows_per_side": 34565,
     "paired_gap_runs_per_side": 95,
     "absent_m1_timestamps_per_side": 138,
+    "duplicates": 0,
+    "non_monotonic": 0,
+    "exact_bid_ask_timestamp_set": true,
+    "h1_rows_per_side": 573,
+    "native_may_june_h1_compared_per_side": 483,
+    "native_h1_ohlc_mismatches": 0,
     "july_complete_h1_hours_per_side": 42,
-    "july_incomplete_h1_hours_per_side": 6,
-    "native_may_june_ohlc_mismatches": 0
+    "july_censored_h1_hours_per_side": 6,
+    "repair_performed": false
   },
   "a1_amendment_merge_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
-  "a2_pull_request": 175,
-  "a2_plan": "plans/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A2_PAIRED_SPARSE_M1_ACCEPTANCE.md",
-  "a2_contract": "contracts/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_SOURCE_AND_REVIEW_CONTRACT_A2.md",
-  "a2_decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A2_OPERATOR_DECISION.json",
-  "a2_diagnostic_summary": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A2_SOURCE_DIAGNOSTIC_SUMMARY.json",
-  "a2_qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A2_QA_PACKET.json",
-  "a2_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A2_MERGE_RECEIPT.json",
-  "a2_status": "COMPLETED_SQUASH_MERGED_TO_MAIN",
+  "a2_packet_merge_commit": "5a19cc4f6d7b00c5e0f892f5727b97a498319c2e",
+  "a2_merge_receipt_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
   "provider_execution_location": "OPERATOR_LOCAL_ONLY",
   "provider_execution_in_ci": "DENIED",
   "external_artifact_root_required": true,
-  "tests": [
-    {
-      "workflow_run": 30649698943,
-      "job": 91219648270,
-      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
-      "scope": "A2 court record, focused A2 and retained A1 tests, complete repository suite and no-provider/no-repair/no-bridging assertions",
-      "result": "PASS"
-    },
-    {
-      "workflow_run": 30649698796,
-      "job": 91219647892,
-      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
-      "scope": "WP1 current court record, focused whole-month intake tests and complete repository suite",
-      "result": "PASS"
-    },
-    {
-      "workflow_run": 30649698673,
-      "job": 91219647720,
-      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
-      "scope": "generic repository unit tests",
-      "result": "PASS"
-    }
-  ],
-  "qa_result": "PASS_FINAL_HEAD_CI",
-  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A2_OPERATOR_DECISION.json",
-  "merge_commit": "5a19cc4f6d7b00c5e0f892f5727b97a498319c2e",
-  "merge_status": "PASS_A2_SQUASH_MERGED_TO_MAIN",
-  "resolved_blockers": [
-    {
-      "blocker_id": "PD-JUNE-FM-WP1-JULY-NATIVE-H1-404-001",
-      "status": "RESOLVED_BY_OPERATOR_A1",
-      "resolution": "Native July H1 waived; July context H1 derives only from complete M1 hours."
-    },
-    {
-      "blocker_id": "PD-JUNE-FM-WP1-PAIRED-SPARSE-M1-001",
-      "status": "RESOLVED_BY_OPERATOR_A2",
-      "resolution": "Exactly paired provider absence may be accepted with explicit censoring and no repair."
-    },
-    {
-      "blocker_id": "PD-JUNE-FM-WP1-A2-FINAL-HEAD-CI-001",
-      "status": "RESOLVED_PASS",
-      "resolution": "A2, WP1 and generic final-head checks passed before squash merge."
-    }
-  ],
+  "tests": [],
+  "merge_commit": null,
   "blockers": [
     {
-      "blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-A2-001",
-      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
-      "description": "A2 is merged, but GitHub Actions cannot access OVC_EXTERNAL_ARTIFACT_ROOT and provider execution remains denied in CI. The amended source intake must be rerun locally.",
-      "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr.ps1 preflight and execute, then return the manifest and seven compact receipts."
+      "blocker_id": "PD-JUNE-FM-WP1-SOURCE-ACCEPTANCE-FINAL-HEAD-CI-001",
+      "status": "FINAL_HEAD_CI_REQUIRED",
+      "description": "The Google Drive source and compact evidence have been verified and bound. Focused, full-suite and retained-authority checks must pass on the final packet head before delegated acceptance and squash merge.",
+      "smallest_lawful_resolution": "Run final-head GitHub Actions, record PASS evidence, squash-merge the bounded packet, then continue to PD-JUNE-FM-WP2."
     }
   ],
+  "resolved_blockers": [
+    {"blocker_id": "PD-JUNE-FM-WP1-JULY-NATIVE-H1-404-001", "status": "RESOLVED_BY_OPERATOR_A1"},
+    {"blocker_id": "PD-JUNE-FM-WP1-PAIRED-SPARSE-M1-001", "status": "RESOLVED_BY_OPERATOR_A2"},
+    {"blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-A2-001", "status": "RESOLVED_SOURCE_SLICE_AND_COMPACT_RECEIPTS_RETURNED_AND_VERIFIED"}
+  ],
   "next_packet": "PD-JUNE-FM-WP2",
-  "next_packet_status": "BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS",
+  "next_packet_status": "BLOCKED_PENDING_WP1_FINAL_HEAD_CI_AND_SQUASH_MERGE",
   "canonical_2021_2023_discovery": "DEFERRED_NOT_AUTHORISED",
   "prior_corr2": "COMPLETED_AND_PRESERVED_IMMUTABLE",
   "retained_prohibitions": [
@@ -122,5 +89,5 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Preserve all quarantines, diagnostics, A1 history, A2 decision, QA and merge evidence. Correct A2 only through new non-destructive commits."
+  "rollback": "Preserve all Google Drive source and compact evidence, quarantines, A1/A2 history and prior decisions. Revert only the WP1 compact acceptance packet through a new non-destructive commit."
 }
