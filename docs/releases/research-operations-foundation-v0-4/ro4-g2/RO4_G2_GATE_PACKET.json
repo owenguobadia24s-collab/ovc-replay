@@ -34,21 +34,21 @@
     },
     {
       "condition": "complete repository suite",
-      "status": "PENDING_CI"
+      "status": "PASS"
     }
   ],
   "authority_delta": "LOCAL_READ_ONLY_DERIVED",
   "auto_ratifiable": true,
   "baseline_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
   "branch": "build/ro4-wp2-matrix-persistence-conflict",
-  "candidate_commit": null,
+  "candidate_commit": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
   "completed_packets": [
     "RO4-00",
     "RO4-WP1",
     "RO4-WP2"
   ],
   "current_authority": "RO4_G1_LOCAL_REPLACEABLE_INDEXES_APPROVED",
-  "decision_record": null,
+  "decision_record": "docs/releases/research-operations-foundation-v0-4/ro4-g2/RO4_G2_DELEGATED_DECISION.json",
   "gate_id": "RO4-G2",
   "next_packet": "RO4-WP3",
   "operator_decision_required": false,
@@ -57,29 +57,41 @@
   "plan_version": "v0.2",
   "qa": {
     "packet": "docs/releases/research-operations-foundation-v0-4/ro4-g2/RO4_G2_QA_PACKET.json",
-    "recommendation": "PENDING_CI"
+    "recommendation": "PASS"
   },
-  "recommended_decision": "PASS_AFTER_CI",
+  "recommended_decision": "PASS",
   "rollback": "Delete replaceable local G2 evidence and revert this packet through a new non-destructive commit.",
   "schema": "ovc-ro4-gate-packet/v1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_MERGE",
   "tests": [
     {
+      "job": 91212236295,
       "name": "focused RO4-G2",
-      "status": "PASS_9_LOCAL"
+      "status": "PASS_9_FINAL_HEAD",
+      "workflow_run": 30647451200
     },
     {
+      "job": 91212236295,
       "name": "complete repository",
-      "status": "PENDING_CI"
+      "status": "PASS_FINAL_HEAD",
+      "workflow_run": 30647451200
     },
     {
+      "job": 91212236295,
       "name": "authority assertions",
-      "status": "PENDING_CI"
+      "status": "PASS_FINAL_HEAD",
+      "workflow_run": 30647451200
+    },
+    {
+      "job": 91212237818,
+      "name": "generic unit tests",
+      "status": "PASS_FINAL_HEAD",
+      "workflow_run": 30647451379
     }
   ],
   "title": "Transition matrix, persistence and conflict assurance acceptance",
   "unresolved_issues": [
-    "FINAL_HEAD_CI_PENDING"
+    "FINAL_DECISION_HEAD_CI_PENDING"
   ],
   "warnings": []
 }

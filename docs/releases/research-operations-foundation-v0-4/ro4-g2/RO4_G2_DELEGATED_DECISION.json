@@ -1,0 +1,66 @@
+{
+  "acceptance": "PASS_ALL_NAMED_CONDITIONS",
+  "authority_delta": "LOCAL_READ_ONLY_DERIVED",
+  "branch": "build/ro4-wp2-matrix-persistence-conflict",
+  "decided_at_utc": "2026-07-31T16:31:00Z",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "evidence": {
+    "byte_identical_full_rerun": true,
+    "conflict_runs": 370,
+    "conflict_runs_with_real_matched_controls": 370,
+    "cross_scale_projections": 191670,
+    "external_bytes": 103556019,
+    "logical_hash": "eb5435443be26e956334c4aedd12c2a5280fc815f014f24bd74b064bf4e6eaeb",
+    "matrices": 60,
+    "persistence_runs": 678322
+  },
+  "gate_id": "RO4-G2",
+  "implementation_baseline_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
+  "merge_commit": null,
+  "merge_state": "PENDING_FINAL_DECISION_HEAD_CI_AND_ELIGIBLE_SQUASH_MERGE",
+  "next_packet": "RO4-WP3",
+  "non_reserved_rationale": "The packet creates only deterministic local read-only descriptive evidence over already approved indexes. It does not activate a selector, release, semantic, family, outcome, probability, exposure, execution, agent-write, R2-write or Console route.",
+  "packet_id": "RO4-WP2",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
+  "plan_version": "v0.2",
+  "pull_request": 174,
+  "qa_result": "PASS",
+  "reserved_authority_delta": "NONE",
+  "retained_prohibitions": [
+    "C2_MUTATION",
+    "SELECTOR_OR_RELEASE_CHANGE",
+    "DEVELOPMENT_ACTIVATION",
+    "VALIDATION_CONSUMPTION",
+    "PATTERN_DISCOVERY_POPULATION_MERGE_OR_WRITE",
+    "C2E_C2_5_C3_AUTHORITY",
+    "SEMANTIC_OR_FAMILY_PROMOTION",
+    "OUTCOME_JOIN",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "AGENT_WRITE",
+    "R2_WRITE",
+    "REMOTE_CONSOLE_DEPLOYMENT"
+  ],
+  "rollback": "Delete replaceable local G2 evidence and revert this bounded packet through a new non-destructive commit while preserving exact C2 and RO4-G1 sources.",
+  "schema": "ovc-ro4-g2-delegated-decision/v1",
+  "target_main_commit": "db883068e4a19e39aa17a278e9cee5b36459b8ad",
+  "tested_candidate_commit": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
+  "tests": [
+    {
+      "job": 91212236295,
+      "result": "PASS",
+      "scope": "packet validator, 9 focused tests, complete repository suite, authority and storage assertions",
+      "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
+      "workflow_run": 30647451200
+    },
+    {
+      "job": 91212237818,
+      "result": "PASS",
+      "scope": "generic repository unit tests",
+      "tested_head": "27034bdd8bf5dd806b736b1e066b632c08a8b9d3",
+      "workflow_run": 30647451379
+    }
+  ],
+  "title": "Transition matrix, persistence and conflict assurance acceptance"
+}
