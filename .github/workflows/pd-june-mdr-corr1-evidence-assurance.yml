@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse CORR1 and final CORR2 decision records
+      - name: Parse CORR1 and final CORR2 records
         run: |
           python - <<'PY'
           import base64
@@ -35,6 +35,7 @@ jobs:
               base / 'PD_JUNE_MDR_CORR1_EVIDENCE_GAP_MANIFEST.json',
               base / 'PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json',
               corr2 / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json',
+              corr2 / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json',
               Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
           ]
           for path in paths:
@@ -57,7 +58,7 @@ jobs:
             -v
       - name: Run complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce evidence continuity and final operator DEFER
+      - name: Enforce evidence continuity and completed operator DEFER merge
         run: |
           python - <<'PY'
           import json
@@ -68,6 +69,7 @@ jobs:
           chronology = json.loads((base / 'PD_JUNE_MDR_CORR1_CHRONOLOGY_PROJECTION.json').read_text())
           repro = json.loads((base / 'PD_JUNE_MDR_CORR1_CLAIM_TRIGGER_REPRODUCTION_SUMMARY.json').read_text())
           decision = json.loads((corr2 / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json').read_text())
+          receipt = json.loads((corr2 / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
           assert binding['status'] == 'PASS_SOURCE_BYTES_AND_REPLAY_ACCEPTANCE_CARRIED_FORWARD_TO_EXPLICIT_C2_V2_PILOT_IDENTITY'
           assert chronology['candidate_count'] == 208
@@ -77,9 +79,8 @@ jobs:
           assert repro['review_claim_evidence']['trigger_reproduction_count'] == 26
           assert repro['review_claim_evidence']['history_dependent_exact_reproduction_count'] == 11
           assert decision['decision'] == 'DEFER'
-          assert decision['decision_authority'] == 'OPERATOR'
-          assert decision['next_packet'] is None
-          assert state['status'] == 'APPROVED'
+          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
+          assert state['status'] == 'COMPLETED'
           assert state['review_status'] == 'COMPLETED'
           assert state['next_gate'] is None
           assert state['next_packet'] is None
