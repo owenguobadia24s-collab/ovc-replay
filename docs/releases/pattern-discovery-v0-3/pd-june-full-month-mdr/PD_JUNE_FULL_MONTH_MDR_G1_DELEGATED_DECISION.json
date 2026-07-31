@@ -7,10 +7,11 @@
   "gate_title": "Operator-local frozen source intake and QA acceptance",
   "packet_id": "PD-JUNE-FM-WP1",
   "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
-  "tested_candidate_commit": "9ccc638a43b2d4fabb2a1d89060f8cd464eaec16",
+  "final_head": "4f0cd68f6b34436a9bd94893374841f6b832e977",
+  "merge_commit": "39da5213ff3931cf9a22760a3ee3529d4fc43c30",
   "decision": "PASS",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN_AND_A2",
-  "status": "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
+  "status": "COMPLETED_SQUASH_MERGED_TO_MAIN",
   "authority_delta": "LOCAL_FROZEN_SOURCE_ACCEPTANCE_ONLY",
   "reserved_authority_delta": "NONE",
   "acceptance": {
@@ -22,19 +23,20 @@
     "paired_sparse_absence": "PASS_138_TIMESTAMPS_95_RUNS_PER_SIDE",
     "native_h1_reconciliation": "PASS_483_PER_SIDE_ZERO_OHLC_MISMATCH",
     "post_target_context": "PASS_42_COMPLETE_6_CENSORED_PER_SIDE",
-    "repair_or_synthesis": "NONE"
+    "repair_or_synthesis": "NONE",
+    "merge_result": "PASS_SQUASH_MERGED_TO_MAIN"
   },
   "tests": {
-    "source_acceptance_workflow_run": 30654178964,
-    "source_acceptance_job": 91234403457,
-    "a2_continuity_workflow_run": 30654177820,
-    "a2_continuity_job": 91234399320,
-    "wp1_continuity_workflow_run": 30654178096,
-    "wp1_continuity_job": 91234400086,
-    "fm00_workflow_run": 30654178266,
-    "fm00_job": 91234401215,
-    "generic_tests_workflow_run": 30654177973,
-    "generic_tests_job": 91234399597,
+    "source_acceptance_workflow_run": 30654447596,
+    "source_acceptance_job": 91235283800,
+    "a2_continuity_workflow_run": 30654447533,
+    "a2_continuity_job": 91235282856,
+    "wp1_continuity_workflow_run": 30654447388,
+    "wp1_continuity_job": 91235282363,
+    "fm00_workflow_run": 30654447503,
+    "fm00_job": 91235282750,
+    "generic_tests_workflow_run": 30654447497,
+    "generic_tests_job": 91235282893,
     "focused": "PASS",
     "complete_repository_suite": "PASS",
     "authority_assertions": "PASS"
@@ -42,6 +44,7 @@
   "qa_result": "PASS_FROZEN_SOURCE_EXACTLY_BOUND_PAIRED_SPARSE_ABSENCE_EXPLICITLY_CENSORED",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_QA_PACKET.json",
   "source_acceptance_index": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_MERGE_RECEIPT.json",
   "retained_prohibitions": [
     "FORMULA_CHANGE",
     "THRESHOLD_CHANGE",
@@ -53,6 +56,6 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Preserve the frozen external source slice, compact receipts, quarantines and all prior decisions. Revert only this compact acceptance record through a new non-destructive commit.",
+  "rollback": "Preserve the frozen external source slice, compact receipts, quarantines, squash merge and all prior decisions. Correct only through a new non-destructive commit.",
   "next_packet": "PD-JUNE-FM-WP2"
 }
