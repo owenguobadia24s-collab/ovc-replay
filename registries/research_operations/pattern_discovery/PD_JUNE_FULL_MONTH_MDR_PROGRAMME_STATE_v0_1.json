@@ -4,7 +4,7 @@
   "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
   "plan_version": "0.1",
   "packet_id": "PD-JUNE-FM-00",
-  "status": "RUNNING",
+  "status": "APPROVED",
   "prerequisites": [
     "PD-JUNE-MDR-G1-DEFER-COMPLETED"
   ],
@@ -12,7 +12,7 @@
   "authority_delta": "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY",
   "baseline_commit": "6b34ffcc8d1b7168584432a650cde81c09ca9068",
   "branch": "build/pd-june-full-month-mdr-00-source-boundary",
-  "candidate_commit": null,
+  "candidate_commit": "f9ec5570465e3be9973d9298bfd5efc9abc3e4de",
   "target_start_utc": "2026-06-01T00:00:00Z",
   "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
   "source_start_utc": "2026-05-30T00:00:00Z",
@@ -20,13 +20,28 @@
   "target_eligibility": "TARGET_JUNE_ONLY",
   "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
-  "tests": [],
+  "tests": [
+    {
+      "workflow_run": 30638683111,
+      "job": 91182769116,
+      "scope": "FM00 source-profile reproduction, focused tests, complete repository suite and authority boundary",
+      "result": "PASS",
+      "tested_head": "f9ec5570465e3be9973d9298bfd5efc9abc3e4de"
+    },
+    {
+      "workflow_run": 30638683640,
+      "job": 91182771171,
+      "scope": "General repository unit tests",
+      "result": "PASS",
+      "tested_head": "f9ec5570465e3be9973d9298bfd5efc9abc3e4de"
+    }
+  ],
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_FM00_QA_PACKET.json",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json",
   "merge_commit": null,
   "blockers": [],
   "next_packet": "PD-JUNE-FM-WP1",
-  "next_packet_status": "WAITING_FM00_TESTS_QA_AND_MERGE",
+  "next_packet_status": "READY_AFTER_FM00_SQUASH_MERGE",
   "canonical_2021_2023_discovery": "DEFERRED_NOT_AUTHORISED",
   "prior_corr2": "COMPLETED_AND_PRESERVED_IMMUTABLE",
   "provider_execution_location": "OPERATOR_LOCAL_ONLY",
