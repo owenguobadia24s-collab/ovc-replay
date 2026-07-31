@@ -1,0 +1,82 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp1-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "packet_id": "PD-JUNE-FM-WP1",
+  "tested_candidate_commit": "6bda0a78aaca33f53d81c32fd112e50eac27d81c",
+  "status": "GATE_READY_EXTERNAL_EXECUTION_REQUIRED",
+  "qa_result": "PASS_INTAKE_TOOLING_OPERATOR_LOCAL_SOURCE_EXECUTION_REQUIRED",
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "checks": [
+    {"check": "Exact operator gate binding", "result": "PASS_PD-JUNE-FM-G1"},
+    {"check": "Provider execution prohibited in CI", "result": "PASS"},
+    {"check": "Provider object plan", "result": "PASS_74_OBJECTS"},
+    {"check": "M1 daily transports", "result": "PASS_34_PER_SIDE"},
+    {"check": "Native H1 monthly transports", "result": "PASS_3_PER_SIDE"},
+    {"check": "Multi-month exact clipping", "result": "PASS_IMPLEMENTED"},
+    {"check": "Existing destination overwrite prevention", "result": "PASS_IMPLEMENTED"},
+    {"check": "Failure quarantine", "result": "PASS_IMPLEMENTED"},
+    {"check": "Weekend and market-closure discontinuity recording", "result": "PASS_IMPLEMENTED"},
+    {"check": "Unexpected intra-session gaps block", "result": "PASS_IMPLEMENTED"},
+    {"check": "BID ASK exact pairing", "result": "PASS_IMPLEMENTED"},
+    {"check": "Native H1 reconciliation", "result": "PASS_IMPLEMENTED"},
+    {"check": "Release selector R2 and Validation prohibitions", "result": "PASS"},
+    {"check": "Focused intake tests", "result": "PASS"},
+    {"check": "Complete repository suite", "result": "PASS"},
+    {"check": "FM00 continuity", "result": "PASS"},
+    {"check": "Real provider source QA", "result": "PENDING_OPERATOR_LOCAL_EXECUTION"}
+  ],
+  "tests": [
+    {
+      "workflow_run": 30640056010,
+      "job": 91187393520,
+      "scope": "WP1 court records, provider plan, focused intake tests, complete repository suite and local-only boundary",
+      "result": "PASS",
+      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+    },
+    {
+      "workflow_run": 30640056127,
+      "job": 91187393536,
+      "scope": "FM00 source-boundary continuity and complete repository suite",
+      "result": "PASS",
+      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+    },
+    {
+      "workflow_run": 30640055980,
+      "job": 91187392919,
+      "scope": "General repository unit tests",
+      "result": "PASS",
+      "tested_head": "6bda0a78aaca33f53d81c32fd112e50eac27d81c"
+    }
+  ],
+  "operator_local_commands": [
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 profile",
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 plan",
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 preflight",
+    ".\\scripts\\run_pd_june_full_month_mdr.ps1 execute"
+  ],
+  "required_environment": {
+    "OVC_EXTERNAL_ARTIFACT_ROOT": "operator local external artifact root"
+  },
+  "expected_output_root": "prospective-source/intake/RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "required_return_artifacts": [
+    "source-slice-manifest.json",
+    "receipts/provider-request-plan.json",
+    "receipts/provider-request-receipt.json",
+    "receipts/source-object-inventory.json",
+    "receipts/coverage-gap-duplicate-qa.json",
+    "receipts/bid-ask-reconciliation.json",
+    "receipts/native-h1-reconciliation.json",
+    "receipts/freeze-receipt.json"
+  ],
+  "blocker": {
+    "blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-001",
+    "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
+    "reason": "Provider network execution is prohibited in CI and OVC_EXTERNAL_ARTIFACT_ROOT is not available to GitHub Actions.",
+    "smallest_lawful_resolution": "Run the approved local intake command and return the compact receipts and manifest."
+  },
+  "next_packet": "PD-JUNE-FM-WP2",
+  "next_packet_condition": "FROZEN_LOCAL_SOURCE_SLICE_AND_SOURCE_QA_PASS",
+  "recommendation": "SQUASH_MERGE_TOOLING_THEN_EXECUTE_OPERATOR_LOCAL_INTAKE",
+  "rollback": "Revert only WP1 tooling, tests, workflow, QA and state through a new non-destructive commit. Preserve all provider transports, quarantine evidence and prior CORR2 records."
+}

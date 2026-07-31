@@ -31,36 +31,18 @@ SCHEMA = ROOT / "schemas" / "research_operations" / "pattern_discovery" / "pd_ju
 class PDJuneFullMonthMDRTests(unittest.TestCase):
     def test_context_buffer_and_source_window_are_exact(self) -> None:
         self.assertEqual(derive_context_buffer(), timedelta(hours=48))
-        self.assertEqual(
-            derive_source_window(),
-            (EXPECTED_SOURCE_START, EXPECTED_SOURCE_END),
-        )
+        self.assertEqual(derive_source_window(), (EXPECTED_SOURCE_START, EXPECTED_SOURCE_END))
         self.assertEqual(EXPECTED_SOURCE_START, datetime(2026, 5, 30, tzinfo=timezone.utc))
         self.assertEqual(EXPECTED_SOURCE_END, datetime(2026, 7, 3, tzinfo=timezone.utc))
 
     def test_whole_june_is_the_only_target_interval(self) -> None:
         self.assertEqual(TARGET_START, datetime(2026, 6, 1, tzinfo=timezone.utc))
         self.assertEqual(TARGET_END, datetime(2026, 7, 1, tzinfo=timezone.utc))
-        self.assertEqual(
-            classify_timestamp(datetime(2026, 5, 31, 23, 45, tzinfo=timezone.utc)),
-            "CONTEXT_PRE_TARGET",
-        )
-        self.assertEqual(
-            classify_timestamp(datetime(2026, 6, 1, tzinfo=timezone.utc)),
-            "TARGET_JUNE",
-        )
-        self.assertEqual(
-            classify_timestamp(datetime(2026, 6, 30, 23, 45, tzinfo=timezone.utc)),
-            "TARGET_JUNE",
-        )
-        self.assertEqual(
-            classify_timestamp(datetime(2026, 7, 1, tzinfo=timezone.utc)),
-            "CONTEXT_POST_TARGET",
-        )
-        self.assertEqual(
-            classify_timestamp(datetime(2026, 7, 3, tzinfo=timezone.utc)),
-            "OUTSIDE_SOURCE",
-        )
+        self.assertEqual(classify_timestamp(datetime(2026, 5, 31, 23, 45, tzinfo=timezone.utc)), "CONTEXT_PRE_TARGET")
+        self.assertEqual(classify_timestamp(datetime(2026, 6, 1, tzinfo=timezone.utc)), "TARGET_JUNE")
+        self.assertEqual(classify_timestamp(datetime(2026, 6, 30, 23, 45, tzinfo=timezone.utc)), "TARGET_JUNE")
+        self.assertEqual(classify_timestamp(datetime(2026, 7, 1, tzinfo=timezone.utc)), "CONTEXT_POST_TARGET")
+        self.assertEqual(classify_timestamp(datetime(2026, 7, 3, tzinfo=timezone.utc)), "OUTSIDE_SOURCE")
 
     def test_transport_partition_plan_spans_may_june_and_july(self) -> None:
         days = iter_m1_partition_days(EXPECTED_SOURCE_START, EXPECTED_SOURCE_END)
@@ -91,14 +73,13 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
         self.assertEqual(authority["decision"], "PASS")
         self.assertEqual(authority["decision_authority"], "OPERATOR")
-        self.assertEqual(
-            authority["authority_delta"],
-            "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY",
-        )
-        self.assertEqual(state["status"], "APPROVED")
-        self.assertEqual(state["packet_id"], "PD-JUNE-FM-00")
-        self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP1")
-        self.assertEqual(state["next_packet_status"], "READY_AFTER_FM00_SQUASH_MERGE")
+        self.assertEqual(authority["authority_delta"], "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY")
+        self.assertEqual(state["status"], "GATE_READY")
+        self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP1")
+        self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP2")
+        self.assertEqual(state["next_packet_status"], "BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS")
+        self.assertEqual(state["provider_execution_location"], "OPERATOR_LOCAL_ONLY")
+        self.assertEqual(state["provider_execution_in_ci"], "DENIED")
         self.assertEqual(state["canonical_2021_2023_discovery"], "DEFERRED_NOT_AUTHORISED")
         self.assertEqual(schema["properties"]["source_slice_id"]["const"], SOURCE_SLICE_ID)
 

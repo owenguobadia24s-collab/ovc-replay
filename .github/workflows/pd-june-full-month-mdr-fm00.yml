@@ -33,14 +33,18 @@ jobs:
           assert stored == build_source_profile()
           assert authority['decision'] == 'PASS'
           assert authority['decision_authority'] == 'OPERATOR'
-          assert state['packet_id'] == 'PD-JUNE-FM-00'
-          assert state['status'] == 'APPROVED'
-          assert state['next_packet'] == 'PD-JUNE-FM-WP1'
-          assert state['next_packet_status'] == 'READY_AFTER_FM00_SQUASH_MERGE'
           assert qa['status'] == 'APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI'
           assert qa['qa_result'] == 'PASS_SOURCE_BOUNDARY_AND_AUTHORITY_FREEZE'
           assert qa['recommendation'] == 'PASS_FM00_AND_SQUASH_MERGE_THEN_CONTINUE_TO_WP1_TOOLING'
           assert schema['properties']['source_slice_id']['const'] == stored['source_slice_id']
+          assert state['packet_id'] in {'PD-JUNE-FM-00', 'PD-JUNE-FM-WP1'}
+          if state['packet_id'] == 'PD-JUNE-FM-00':
+              assert state['status'] == 'APPROVED'
+              assert state['next_packet'] == 'PD-JUNE-FM-WP1'
+          else:
+              assert state['status'] == 'GATE_READY'
+              assert state['next_packet'] == 'PD-JUNE-FM-WP2'
+              assert state['provider_execution_in_ci'] == 'DENIED'
           PY
       - name: Run focused FM00 tests
         run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr -v
