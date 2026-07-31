@@ -9,6 +9,8 @@ from typing import Iterable, Sequence
 
 PROGRAMME_ID = "PD-JUNE-FULL-MONTH-MDR"
 PLAN_ID = "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1"
+PLAN_AMENDMENT_ID = "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER"
+PLAN_VERSION = "0.1+A1"
 SOURCE_SLICE_ID = "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"
 TARGET_START = datetime(2026, 6, 1, tzinfo=timezone.utc)
 TARGET_END = datetime(2026, 7, 1, tzinfo=timezone.utc)
@@ -145,17 +147,37 @@ def iter_h1_transport_months(
     return tuple(months)
 
 
+def iter_native_h1_transport_months(
+    start: datetime,
+    end: datetime,
+) -> tuple[datetime, ...]:
+    """Return native H1 months retained by operator amendment A1.
+
+    July 2026 native H1 is intentionally not requested because the provider
+    object is unavailable. July 1-2 remain M1 context and are aggregated into
+    H1 locally from complete M1 hours.
+    """
+
+    return tuple(
+        month
+        for month in iter_h1_transport_months(start, end)
+        if month < TARGET_END
+    )
+
+
 def build_source_profile(
     requirements: Sequence[HorizonRequirement] = DEFAULT_REQUIREMENTS,
 ) -> dict[str, object]:
     source_start, source_end = derive_source_window(requirements)
     buffer = derive_context_buffer(requirements)
     days = iter_m1_partition_days(source_start, source_end)
-    months = iter_h1_transport_months(source_start, source_end)
+    native_h1_months = iter_native_h1_transport_months(source_start, source_end)
     profile: dict[str, object] = {
         "schema": "ovc-pd-june-full-month-mdr-source-profile/v1",
         "programme_id": PROGRAMME_ID,
         "plan_id": PLAN_ID,
+        "plan_version": PLAN_VERSION,
+        "plan_amendment": PLAN_AMENDMENT_ID,
         "source_slice_id": SOURCE_SLICE_ID,
         "instrument": "GBPUSD",
         "provider": "DUKASCOPY",
@@ -171,8 +193,12 @@ def build_source_profile(
         "post_target_class": "CONTEXT_POST_TARGET",
         "m1_daily_partition_count_per_side": len(days),
         "m1_daily_partition_dates_utc": [item.strftime("%Y-%m-%d") for item in days],
-        "h1_monthly_transport_count_per_side": len(months),
-        "h1_monthly_transport_months_utc": [item.strftime("%Y-%m") for item in months],
+        "h1_monthly_transport_count_per_side": len(native_h1_months),
+        "h1_monthly_transport_months_utc": [
+            item.strftime("%Y-%m") for item in native_h1_months
+        ],
+        "native_july_h1_transport": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
+        "post_target_h1_context": "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS",
         "logical_streams": ["M1_BID", "M1_ASK", "H1_BID", "H1_ASK"],
         "provider_execution_location": "OPERATOR_LOCAL_ONLY",
         "provider_execution_in_ci": "DENIED",
@@ -199,8 +225,16 @@ def validate_source_profile(profile: dict[str, object]) -> None:
         raise AssertionError("source end drift")
     if profile["m1_daily_partition_count_per_side"] != 34:
         raise AssertionError("unexpected M1 partition count")
-    if profile["h1_monthly_transport_months_utc"] != ["2026-05", "2026-06", "2026-07"]:
-        raise AssertionError("unexpected H1 transport months")
+    if profile["h1_monthly_transport_months_utc"] != ["2026-05", "2026-06"]:
+        raise AssertionError("unexpected native H1 transport months")
+    if profile["native_july_h1_transport"] != (
+        "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE"
+    ):
+        raise AssertionError("July native H1 waiver drift")
+    if profile["post_target_h1_context"] != (
+        "M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS"
+    ):
+        raise AssertionError("post-target H1 derivation drift")
     if profile["provider_execution_in_ci"] != "DENIED":
         raise AssertionError("provider execution must remain denied in CI")
 
