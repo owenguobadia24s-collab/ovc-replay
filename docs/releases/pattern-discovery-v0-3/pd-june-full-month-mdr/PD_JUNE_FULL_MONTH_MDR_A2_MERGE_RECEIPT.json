@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-a2-merge-receipt/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
+  "effective_plan_version": "0.1+A1+A2",
+  "pull_request": 175,
+  "merged_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+  "merge_commit": "5a19cc4f6d7b00c5e0f892f5727b97a498319c2e",
+  "merge_method": "SQUASH",
+  "merge_result": "PASS_SQUASH_MERGED_TO_MAIN",
+  "operator_decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "authority_delta": "ACCEPT_EXACTLY_PAIRED_PROVIDER_M1_ABSENCE_WITH_EXPLICIT_DOWNSTREAM_CENSORING",
+  "diagnostic_sha256": "ddfc9672be23ac8a87101c2d34daa706b7f4793a6bc5c925e9c07713563fef99",
+  "tests": [
+    {
+      "workflow_run": 30649698943,
+      "job": 91219648270,
+      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+      "scope": "A2 court record, focused A2 and retained A1 tests, complete repository suite and no-provider/no-repair/no-bridging assertions",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30649698796,
+      "job": 91219647892,
+      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+      "scope": "WP1 current court record, focused whole-month intake tests and complete repository suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30649698673,
+      "job": 91219647720,
+      "tested_head": "d362ecdec5a3bd231544e4e99ad05691a50b1612",
+      "scope": "generic repository unit tests",
+      "result": "PASS"
+    }
+  ],
+  "source_slice_status": "NOT_YET_EXECUTED_AFTER_A2",
+  "next_action": "OPERATOR_LOCAL_WP1_EXECUTION",
+  "next_packet": "PD-JUNE-FM-WP2",
+  "next_packet_status": "BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS",
+  "retained_prohibitions": [
+    "FORMULA_OR_THRESHOLD_CHANGE",
+    "SEMANTIC_TRIGGER_CANDIDATE_DISTANCE_CLUSTER_OR_MODEL_CHANGE",
+    "CANDIDATE_FAMILY_NOVELTY_OR_THEORY_PROMOTION",
+    "SELECTOR_OR_RELEASE_MUTATION",
+    "CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND",
+    "R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
+  ],
+  "rollback": "Preserve all quarantines, the bound diagnostic, A1 history, the A2 operator decision and this merge receipt. Correct only through a new non-destructive commit."
+}
