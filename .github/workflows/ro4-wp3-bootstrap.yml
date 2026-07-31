@@ -59,7 +59,7 @@ jobs:
               path = Path(name)
               path.write_text(path.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')
           PY
-      - name: Remove bootstrap transport
+      - name: Remove transport and defer workflow swap
         shell: bash
         run: |
           set -euo pipefail
@@ -68,8 +68,8 @@ jobs:
                 tmp/ro4-wp3-packet.part3.b64 \
                 tmp/ro4-wp3-packet.part4.b64
           rmdir tmp 2>/dev/null || true
-          rm -f .github/workflows/ro4-wp3-bootstrap.yml
-      - name: Commit exact packet
+          rm -f .github/workflows/research-operations-v0-4-ro4-g3.yml
+      - name: Commit bounded packet without workflow mutation
         shell: bash
         run: |
           set -euo pipefail
