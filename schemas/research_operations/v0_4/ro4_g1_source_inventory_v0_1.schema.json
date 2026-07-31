@@ -1,0 +1,31 @@
+{
+  "$id": "ovc-ro4-g1-source-inventory/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "partitions": {"items": {"type": "object"}, "minItems": 1, "type": "array"},
+    "plan_id": {"const": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2"},
+    "plan_version": {"const": "v0.2"},
+    "programme_id": {"const": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4"},
+    "releases": {"items": {"type": "object"}, "maxItems": 2, "minItems": 2, "type": "array"},
+    "schema": {"const": "ovc-ro4-g1-source-inventory/v1"},
+    "source_artifact": {"type": "object"},
+    "source_authority_registry": {"type": "string"},
+    "source_remote_verification_receipt": {"type": "string"},
+    "totals": {
+      "additionalProperties": false,
+      "properties": {
+        "partitions": {"minimum": 1, "type": "integer"},
+        "source_bytes": {"minimum": 1, "type": "integer"},
+        "state_record_count": {"minimum": 1, "type": "integer"},
+        "transition_record_count": {"minimum": 0, "type": "integer"}
+      },
+      "required": ["partitions", "source_bytes", "state_record_count", "transition_record_count"],
+      "type": "object"
+    },
+    "validation_consumption": {"const": "LOCKED_UNCONSUMED"}
+  },
+  "required": ["schema", "programme_id", "plan_id", "plan_version", "source_authority_registry", "source_remote_verification_receipt", "source_artifact", "validation_consumption", "releases", "partitions", "totals"],
+  "title": "RO4 G1 exact C2 source inventory",
+  "type": "object"
+}

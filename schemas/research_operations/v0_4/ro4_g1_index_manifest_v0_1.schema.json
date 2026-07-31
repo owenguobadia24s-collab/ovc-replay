@@ -1,0 +1,22 @@
+{
+  "$id": "ovc-ro4-g1-index-manifest/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {"const": "LOCAL_REPLACEABLE_DERIVED"},
+    "logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "operation": {"enum": ["FULL_INDEX", "INCREMENTAL_PARTITION"]},
+    "partitions": {"items": {"type": "object"}, "minItems": 1, "type": "array"},
+    "sampling_mode": {"enum": ["FULL_CORPUS_NO_SAMPLING", "DECLARED_SAMPLE_MODE"]},
+    "schema": {"const": "ovc-ro4-g1-index-manifest/v1"},
+    "selected_partition": {"type": ["string", "null"]},
+    "source_inventory_logical_hash": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "source_inventory_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "state_record_count": {"minimum": 0, "type": "integer"},
+    "transition_record_count": {"minimum": 0, "type": "integer"},
+    "validation_consumption": {"const": "LOCKED_UNCONSUMED"}
+  },
+  "required": ["schema", "authority", "operation", "selected_partition", "source_inventory_sha256", "source_inventory_logical_hash", "validation_consumption", "sampling_mode", "partitions", "state_record_count", "transition_record_count", "logical_hash"],
+  "title": "RO4 G1 derived state transition index manifest",
+  "type": "object"
+}

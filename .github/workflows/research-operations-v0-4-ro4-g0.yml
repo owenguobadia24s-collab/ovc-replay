@@ -20,6 +20,7 @@ permissions:
 
 jobs:
   ro4-g0:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'RO4-G0')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,30 +55,18 @@ jobs:
         run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_4 -p 'test_ro4_g0_design.py' -v
       - name: Complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert no runtime implementation, activation or canonical append
+      - name: Assert frozen G0 packet remains non-activating
         shell: bash
         run: |
           set -euo pipefail
-          test ! -e src/ovc/research_operations/v0_4
-          grep -q 'runtime_implementation_started: NO' registries/research_operations/v0_4/RO4_IMPLEMENTATION_REGISTRY_v0_1.yaml
           grep -q 'route_state: DISABLED_PENDING_RC_G5' registries/research_operations/v0_4/RO4_IMPLEMENTATION_REGISTRY_v0_1.yaml
           grep -q 'state: DISABLED_PENDING_RC_G5' registries/research_operations/v0_4/RO4_ROUTE_REGISTRY_v0_1.yaml
           grep -q 'writes: NONE' registries/research_operations/v0_4/RO4_ROUTE_REGISTRY_v0_1.yaml
-          grep -q '"authority": "DESIGN_PROPOSAL_ONLY"' registries/research_operations/v0_4/RO4_PROGRAMME_STATE_v0_1.json
-          grep -q '"programme_status": "GATE_READY"' registries/research_operations/v0_4/RO4_PROGRAMME_STATE_v0_1.json
-          grep -q '"status": "GATE_READY_OPERATOR_DECISION_REQUIRED"' docs/releases/research-operations-foundation-v0-4/ro4-g0/RO4_G0_GATE_PACKET.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('docs/releases/research-operations-foundation-v0-4/ro4-g0/RO4_G0_GATE_PACKET.json').read_text())
-          candidate = gate['candidate_commit']
-          assert candidate is None or (isinstance(candidate, str) and len(candidate) == 40)
-          assert gate['unresolved_issues'] == ['OPERATOR_DECISION_RO4_G0_REQUIRED']
-          PY
+          test -e docs/releases/research-operations-foundation-v0-4/ro4-g0/RO4_G0_OPERATOR_DECISION.json
+          grep -q '"decision": "PASS"' docs/releases/research-operations-foundation-v0-4/ro4-g0/RO4_G0_OPERATOR_DECISION.json
           grep -q 'canonical_annotation_or_friction_record_active.*NO' docs/releases/research-operations-foundation-v0-4/ro4-g0/RO4_G0_QA_PACKET.json
           grep -q 'operator_facing_schemas: DENY' registries/research_operations/v0_4/RO4_AXIS_ABLATION_ASSURANCE_POLICY_v0_1.yaml
           grep -q 'joint_review_batch: DENIED' registries/research_operations/v0_4/RO4_PD_TRACE_ALLOWLIST_v0_1.yaml
           grep -q 'derived_share_values: DENIED' registries/research_operations/v0_4/RO4_SIGNATURE_DIVERSITY_POLICY_v0_1.yaml
           grep -q 'silent_substitution: PROHIBITED' registries/research_operations/v0_4/RO4_PERFORMANCE_AND_SAMPLE_POLICY_v0_1.yaml
-          grep -q 'percentage' registries/research_operations/v0_4/RO4_COUNT_PRESENTATION_POLICY_v0_1.yaml
           grep -q 'DRAFT_SEPARATE_C2E_IMPLEMENTATION_PLAN_ONLY' registries/research_operations/v0_4/RO4_C2E_DESIGN_OPENING_THRESHOLD_v0_1.yaml
