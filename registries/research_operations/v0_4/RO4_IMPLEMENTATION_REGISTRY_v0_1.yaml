@@ -3,10 +3,10 @@ programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
 plan_sha256: 89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf
-status: QA_REVIEW_RO4_G3
+status: APPROVED_RO4_G3_PENDING_MERGE
 owner: OPERATOR
 repository: owenguobadia24s-collab/ovc-replay
-court_record_main_tip: db74bed618b8ecf728f07b539c6f4aa2d9e95810
+court_record_main_tip: d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9
 current_branch: build/ro4-wp3-sequence-windows-neutral-candidates
 runtime_implementation_started: YES_BOUNDED_RO4_WP1_WP2_WP3_LOCAL_DERIVED_ONLY
 route_state: DISABLED_PENDING_RC_G5
@@ -21,7 +21,7 @@ packets:
   - {packet_id: RO4-00, gate_id: RO4-G0, status: COMPLETED, branch: build/ro4-00-design-boundary-freeze, merge_commit: e82c3ce57f6c0bc1f69620c40c81bd81f7c045d8, authority_delta: DESIGN_CANON_ONLY}
   - {packet_id: RO4-WP1, gate_id: RO4-G1, status: COMPLETED, branch: build/ro4-wp1-state-transition-indexes, merge_commit: fbd8177cbff58827baeb55c9ceeb86d75d7b96f6, prerequisites: [RO4-G0], authority_delta: LOCAL_REPLACEABLE_DERIVED}
   - {packet_id: RO4-WP2, gate_id: RO4-G2, status: COMPLETED, branch: build/ro4-wp2-matrix-persistence-conflict, merge_commit: 4c3ea8dbf4ff7d504c9dc083993fde9d16e684d8, prerequisites: [RO4-G1], authority_delta: LOCAL_READ_ONLY_DERIVED}
-  - {packet_id: RO4-WP3, gate_id: RO4-G3, status: QA_REVIEW, branch: build/ro4-wp3-sequence-windows-neutral-candidates, prerequisites: [RO4-G2], authority_delta: NON_CANONICAL_RESEARCH_CANDIDATE}
+  - {packet_id: RO4-WP3, gate_id: RO4-G3, status: APPROVED, branch: build/ro4-wp3-sequence-windows-neutral-candidates, candidate_commit: 7d20e9bbec4f881dd782e8522668dde38c91e8bf, decision_record: docs/releases/research-operations-foundation-v0-4/ro4-g3/RO4_G3_DELEGATED_DECISION.json, prerequisites: [RO4-G2], authority_delta: NON_CANONICAL_RESEARCH_CANDIDATE}
   - {packet_id: RO4-WP4, gate_id: RO4-G4, status: PLANNED, prerequisites: [RO4-G3], authority_delta: BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE}
   - {packet_id: RO4-WP5, gate_id: RO4-G5, status: PLANNED, prerequisites: [RO4-G4], authority_delta: DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS}
   - {packet_id: RC-G5, gate_id: RC-G5, status: PLANNED, prerequisites: [RO4-G5], authority_delta: LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION}
