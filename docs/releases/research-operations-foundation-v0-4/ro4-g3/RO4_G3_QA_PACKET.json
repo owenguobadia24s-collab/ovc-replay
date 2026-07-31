@@ -2,7 +2,7 @@
   "baseline_commit": "db74bed618b8ecf728f07b539c6f4aa2d9e95810",
   "blocking_issues": [],
   "branch": "build/ro4-wp3-sequence-windows-neutral-candidates",
-  "candidate_commit": null,
+  "candidate_commit": "7d20e9bbec4f881dd782e8522668dde38c91e8bf",
   "checks": {
     "canonical_evidence_byte_determinism": "PASS_11_OF_11",
     "declared_distance_components_visible": "PASS",
@@ -21,17 +21,23 @@
     "window_cap": "PASS_MAX_27896_OF_100000",
     "workspace_determinism": "PASS_LOGICAL_IDENTITY; RAW_SQLITE_PAGE_LAYOUT_NON_CANONICAL"
   },
+  "ci_evidence": {
+    "run_id": 30656591333,
+    "tested_head": "7d20e9bbec4f881dd782e8522668dde38c91e8bf",
+    "workflow_name": "RO4-G3 sequence recurrence evidence acceptance"
+  },
   "gate_id": "RO4-G3",
   "packet_id": "RO4-WP3",
-  "recommendation": "PENDING_CI",
+  "recommendation": "PASS",
   "rollback": "Remove replaceable local G3 evidence and revert only the bounded RO4-WP3 implementation packet.",
   "schema": "ovc-ro4-g3-qa-packet/v1",
-  "status": "PASS_LOCAL_PENDING_CI",
+  "status": "PASS_CI",
   "tests": {
-    "complete_repository": "PENDING_CI",
-    "focused": "PASS_10_LOCAL",
-    "validator": "PASS_LOCAL",
-    "workflow": "PENDING_CI"
+    "authority_assertions": "PASS_CI",
+    "complete_repository": "PASS_70_IN_RO4_G3_WORKFLOW",
+    "focused": "PASS_10_CI",
+    "validator": "PASS_CI",
+    "workflow": "PASS_RUN_30656591333"
   },
   "warnings": [
     "Raw SQLite workspace bytes are not portable byte-identical evidence; the workspace is explicitly replaceable and logical-only. All 11 canonical evidence artifacts are byte-identical across independent full builds."
