@@ -9,7 +9,8 @@
   "prerequisites": [
     "PD-JUNE-MDR-G1-DEFER-COMPLETED",
     "PD-JUNE-FM-00",
-    "PD-JUNE-FM-A1-OPERATOR-PASS"
+    "PD-JUNE-FM-A1-OPERATOR-PASS",
+    "PD-JUNE-FM-A1-SQUASH-MERGED"
   ],
   "authority_required": "NONE_OPERATOR_PLAN_AND_A1_AUTHORITY_RECORDED",
   "authority_delta": "READ_ONLY_PROVIDER_INTAKE_REPLAY_AND_REVIEW_CONSTRUCTION_ONLY_WITH_NATIVE_JULY_H1_WAIVER",
@@ -17,20 +18,23 @@
   "baseline_commit": "dcc1e634600e26480e16d8c64648649b64f4d034",
   "amendment_baseline_commit": "fbd8177cbff58827baeb55c9ceeb86d75d7b96f6",
   "execution_branch": "amend/pd-june-fm-a1-july-native-h1-waiver",
-  "receipt_branch": "administrative/pd-june-full-month-mdr-wp1-tooling-receipt",
+  "receipt_branch": "administrative/pd-june-fm-a1-merge-receipt",
   "implementation_candidate_commit": "d1eeb61850cf99b08a5f030b566c0388ab95ae40",
-  "candidate_commit": "af72460634a4b02ef359673bffd13c2fb6ed0ae8",
+  "final_amendment_head": "5f7b5ce21bd831ec59e8f62d7160757260e13d9a",
   "tooling_pull_request": 167,
   "amendment_pull_request": 171,
   "tooling_merge_commit": "eae923ffe41e3b4a51fe48a61f4b014d6edd5e73",
   "tooling_merge_status": "PASS_TOOLING_MERGED_TO_MAIN",
   "tooling_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_TOOLING_MERGE_RECEIPT.json",
+  "amendment_merge_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
+  "amendment_merge_status": "PASS_SQUASH_MERGED_TO_MAIN",
+  "amendment_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_MERGE_RECEIPT.json",
   "amendment_plan": "plans/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A1_JULY_NATIVE_H1_WAIVER.md",
   "amendment_contract": "contracts/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_SOURCE_AND_REVIEW_CONTRACT_A1.md",
   "amendment_decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json",
   "amendment_incident_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_JULY_H1_PROVIDER_INCIDENT.json",
   "amendment_qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_QA_PACKET.json",
-  "amendment_status": "APPROVED_PENDING_FINAL_HEAD_CI_AND_SQUASH_MERGE",
+  "amendment_status": "COMPLETED_SQUASH_MERGED_TO_MAIN",
   "target_start_utc": "2026-06-01T00:00:00Z",
   "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
   "source_start_utc": "2026-05-30T00:00:00Z",
@@ -50,38 +54,32 @@
   "external_artifact_root_required": true,
   "tests": [
     {
-      "workflow_run": 30645339913,
-      "job": 91205209620,
-      "scope": "A1 records, amended 72-object provider plan, focused intake tests, complete repository suite and retained local-only boundary",
+      "workflow_run": 30645500406,
+      "job": 91205746372,
+      "scope": "Final-head A1/WP1 amended provider plan, focused intake tests, complete repository suite and retained local-only boundary",
       "result": "PASS",
-      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
+      "tested_head": "5f7b5ce21bd831ec59e8f62d7160757260e13d9a"
     },
     {
-      "workflow_run": 30645339898,
-      "job": 91205209959,
-      "scope": "Amended source-profile reproduction, FM00 boundary continuity, complete repository suite and retained authority",
+      "workflow_run": 30645500429,
+      "job": 91205748276,
+      "scope": "Final-head amended source-profile reproduction, FM00 boundary continuity, complete repository suite and retained authority",
       "result": "PASS",
-      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
+      "tested_head": "5f7b5ce21bd831ec59e8f62d7160757260e13d9a"
     },
     {
-      "workflow_run": 30645339891,
-      "job": 91205209750,
-      "scope": "General repository unit tests",
+      "workflow_run": 30645500458,
+      "job": 91205746662,
+      "scope": "Final-head general repository unit tests",
       "result": "PASS",
-      "tested_head": "d1eeb61850cf99b08a5f030b566c0388ab95ae40"
-    },
-    {
-      "workflow_run": 30640236115,
-      "job": 91188021745,
-      "scope": "Original WP1 tooling acceptance",
-      "result": "PASS_HISTORICAL",
-      "tested_head": "5f7d35703c8597ff23849fe282d8ae7860f96bba"
+      "tested_head": "5f7b5ce21bd831ec59e8f62d7160757260e13d9a"
     }
   ],
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_QA_PACKET.json",
   "qa_result": "PASS_NATIVE_JULY_H1_WAIVED_JULY_M1_CONTEXT_AND_DETERMINISTIC_H1_DERIVATION_RETAINED",
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json",
-  "merge_commit": "eae923ffe41e3b4a51fe48a61f4b014d6edd5e73",
+  "merge_commit": "8652834c7d99050d20dad6447a751c43e82a36e1",
+  "merge_status": "PASS_A1_SQUASH_MERGED_TO_MAIN",
   "resolved_blockers": [
     {
       "blocker_id": "PD-JUNE-FM-WP1-JULY-NATIVE-H1-404-001",
@@ -92,9 +90,9 @@
   "blockers": [
     {
       "blocker_id": "PD-JUNE-FM-WP1-LOCAL-EXECUTION-001",
-      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED_AFTER_A1_MERGE",
-      "description": "The A1 tooling must be squash-merged before the amended source slice is executed. GitHub Actions remains prohibited from provider network access and cannot access OVC_EXTERNAL_ARTIFACT_ROOT.",
-      "smallest_lawful_resolution": "Pull the A1 merge on main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr.ps1 preflight followed by execute, and return the compact receipts and source manifest."
+      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
+      "description": "The amended A1 tooling is merged. GitHub Actions remains prohibited from provider network access and cannot access OVC_EXTERNAL_ARTIFACT_ROOT, so the frozen source slice must now be executed locally.",
+      "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr.ps1 preflight followed by execute, and return the compact receipts and source manifest."
     }
   ],
   "next_packet": "PD-JUNE-FM-WP2",
@@ -112,5 +110,5 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Preserve the quarantined July-native-H1 incident, prior CORR2, tooling merge and all source/decision evidence. Revert only A1 records, code, tests, workflows and state through new non-destructive commits."
+  "rollback": "Preserve the quarantined July-native-H1 incident, prior CORR2, tooling merge, A1 squash merge and all source/decision evidence. Correct only through new non-destructive commits."
 }
