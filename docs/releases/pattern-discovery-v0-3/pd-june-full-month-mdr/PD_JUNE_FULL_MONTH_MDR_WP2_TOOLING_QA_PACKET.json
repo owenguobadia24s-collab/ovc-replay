@@ -8,6 +8,7 @@
   "branch": "build/pd-june-fm-wp2-replay-tooling",
   "final_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
   "merge_commit": "b3ac2561aff225442465e6914a1e1e29adbfab62",
+  "administrative_tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
   "status": "TOOLING_COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_EXECUTION_REQUIRED",
   "qa_result": "PASS_DETERMINISTIC_FULL_MONTH_REPLAY_TOOLING_LOCAL_EXECUTION_REQUIRED",
   "recommendation": "PASS_TOOLING_COMPLETED_PROCEED_TO_OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE",
@@ -25,12 +26,15 @@
     {"check": "independent byte-identical deterministic rerun", "result": "REQUIRED_AT_OPERATOR_LOCAL_EXECUTION"},
     {"check": "provider execution and replay execution denied in CI", "result": "PASS"},
     {"check": "release, selector, R2, Validation, live append and write authority denied", "result": "PASS"},
-    {"check": "final-head focused tests and complete repository suite", "result": "PASS"},
-    {"check": "eligible squash merge", "result": "PASS_b3ac2561aff225442465e6914a1e1e29adbfab62"}
+    {"check": "tooling final-head focused tests and complete repository suite", "result": "PASS"},
+    {"check": "eligible squash merge", "result": "PASS_b3ac2561aff225442465e6914a1e1e29adbfab62"},
+    {"check": "administrative merge receipt, state continuity, focused tests and complete repository suite", "result": "PASS"}
   ],
   "tests": [
-    {"workflow_run":30657064858,"job":91243999664,"scope":"final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
-    {"workflow_run":30657065738,"job":91244002340,"scope":"final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"}
+    {"workflow_run":30657064858,"job":91243999664,"scope":"tooling final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
+    {"workflow_run":30657065738,"job":91244002340,"scope":"tooling final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
+    {"workflow_run":30657624697,"job":91245853454,"scope":"administrative merge receipt, WP2 focused tests, retained full-month/A2/WP1 continuity, complete repository suite and local-only authority boundary","result":"PASS","tested_head":"73d1c19171c84c942b77d8293aef1d66da4cdd38"},
+    {"workflow_run":30657624721,"job":91245853372,"scope":"administrative WP1 source acceptance continuity, focused tests, complete repository suite and source authority boundary","result":"PASS","tested_head":"73d1c19171c84c942b77d8293aef1d66da4cdd38"}
   ],
   "warnings": [
     "The expected full-month counts are frozen from the exact accepted source membership and must block on drift.",
