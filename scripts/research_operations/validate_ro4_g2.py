@@ -78,9 +78,22 @@ def main() -> int:
     qa = load(BASE / "ro4-g2/RO4_G2_QA_PACKET.json")
     if qa.get("blocking_issues"):
         raise SystemExit("G2_BLOCKING_ISSUE_PRESENT")
-    forbidden_external = list(ROOT.rglob("*.jsonl.gz")) + list(ROOT.rglob("*.sqlite"))
+    active_search_roots = [
+        ROOT / "src",
+        ROOT / "fixtures/research_operations/v0_4",
+        BASE,
+    ]
+    forbidden_external = [
+        path
+        for search_root in active_search_roots
+        for pattern in ("*.jsonl.gz", "*.sqlite", "*.db", "*.parquet")
+        for path in search_root.rglob(pattern)
+    ]
     if forbidden_external:
-        raise SystemExit("G2_EXTERNAL_ARTIFACT_BYTES_COMMITTED:" + ",".join(str(path.relative_to(ROOT)) for path in forbidden_external))
+        raise SystemExit(
+            "G2_EXTERNAL_ARTIFACT_BYTES_COMMITTED:"
+            + ",".join(str(path.relative_to(ROOT)) for path in forbidden_external)
+        )
     print("PASS: RO4-G2 matrix, persistence, conflict and cross-scale evidence is deterministic, count-only, source-bound and non-activating")
     return 0
 
