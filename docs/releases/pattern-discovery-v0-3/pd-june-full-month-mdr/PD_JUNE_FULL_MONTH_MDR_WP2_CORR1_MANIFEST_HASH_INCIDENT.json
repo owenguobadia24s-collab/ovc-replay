@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr1-manifest-hash-incident/v1",
+  "incident_id": "PD-JUNE-FM-WP2-CORR1-MANIFEST-HASH-001",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR1",
+  "detected_at": "OPERATOR_LOCAL_PREFLIGHT",
+  "reported_error": "source manifest logical SHA-256 mismatch",
+  "root_cause": "The A2 paired-sparse acceptance amendment changed authority and censoring fields after the source manifest self-hash had been generated. The frozen file bytes and exact file SHA-256 were accepted, but the WP2 verifier incorrectly required the preserved embedded pre-A2 logical value to equal the canonical hash of the accepted A2 content.",
+  "frozen_source_mutated": false,
+  "source_manifest_file_sha256": "8080b8def035cb37940b89054287d0c61756149aa7cb4711fc462a0ebbdc1f87",
+  "preserved_embedded_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+  "accepted_a2_content_logical_sha256": "aee0006826b4a9703416a4f171306df02f85b081f7f515e701ac8b0b2b409669",
+  "correction": "Validate exact file bytes, preserved embedded self-hash, and accepted A2 content hash independently. Do not rewrite or replace the frozen source manifest.",
+  "authority_delta": "NONE_VALIDATION_CORRECTION_ONLY",
+  "formula_change": false,
+  "threshold_change": false,
+  "selector_or_release_mutation": false,
+  "r2_publication": "DENIED",
+  "validation_consumption": "DENIED",
+  "rollback": "Revert the correction commit; preserve all source files and prior acceptance records unchanged.",
+  "status": "CORRECTION_IMPLEMENTED_QA_PENDING"
+}

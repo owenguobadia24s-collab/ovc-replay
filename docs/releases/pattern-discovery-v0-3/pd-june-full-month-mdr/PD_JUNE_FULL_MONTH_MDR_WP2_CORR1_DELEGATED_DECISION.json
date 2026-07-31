@@ -1,0 +1,21 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr1-delegated-decision/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR1",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN_AFTER_QA_PASS",
+  "authority_delta": "NONE_VALIDATION_CORRECTION_ONLY",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR1_QA_PACKET.json",
+  "tested_head": "545fe9be5048fb5cb130345b901b33f52d0809e5",
+  "rationale": "The failure was a verifier defect caused by conflating the preserved embedded pre-A2 self-hash with the canonical hash of the accepted A2 content. Exact accepted file bytes, the preserved embedded value and accepted content hash are now independently validated without source mutation.",
+  "source_mutation": "DENIED",
+  "formula_change": "DENIED",
+  "threshold_change": "DENIED",
+  "selector_or_release_mutation": "DENIED",
+  "r2_publication": "DENIED",
+  "validation_consumption": "DENIED",
+  "rollback": "Revert the correction commit; do not alter the accepted source slice.",
+  "next_action": "SQUASH_MERGE_AFTER_FINAL_HEAD_CHECKS_THEN_RERUN_OPERATOR_LOCAL_WP2",
+  "status": "APPROVED_PENDING_MERGE"
+}
