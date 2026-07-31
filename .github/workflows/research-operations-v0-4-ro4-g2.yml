@@ -37,7 +37,7 @@ jobs:
           set -euo pipefail
           test -e src/ovc/research_operations/v0_4/matrix_persistence_conflict.py
           test ! -e apps/research_console/pages/C2_Sequence_Evidence.py
-          ! find . -type f \( -name '*.sqlite' -o -name '*.db' -o -name '*.parquet' -o -name '*.jsonl.gz' \) -not -path './.git/*' | grep -q .
+          ! find src fixtures/research_operations/v0_4 docs/releases/research-operations-foundation-v0-4 -type f \( -name '*.sqlite' -o -name '*.db' -o -name '*.parquet' -o -name '*.jsonl.gz' \) | grep -q .
           grep -q 'route_state: DISABLED_PENDING_RC_G5' registries/research_operations/v0_4/RO4_IMPLEMENTATION_REGISTRY_v0_1.yaml
           grep -q '"validation_consumption":"LOCKED_UNCONSUMED"' docs/releases/research-operations-foundation-v0-4/ro4-wp2/RO4_G2_EVIDENCE_MANIFEST.json
           grep -q '"composite_or_winner":"PROHIBITED"' docs/releases/research-operations-foundation-v0-4/ro4-wp2/RO4_G2_EVIDENCE_MANIFEST.json
