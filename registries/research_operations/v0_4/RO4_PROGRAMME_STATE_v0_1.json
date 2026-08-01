@@ -4,8 +4,8 @@
   "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "v0.2",
   "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
-  "programme_status": "QA_REVIEW",
-  "authority": "RO4_G4_BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE_APPROVED",
+  "programme_status": "APPROVED_PENDING_MERGE",
+  "authority": "RO4_G5_DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS_APPROVED",
   "court_record_main_tip": "075752da9707f9c7bb8bd0298d32d1c50623026c",
   "current_packet": "RO4-WP5",
   "current_gate": "RO4-G5",
@@ -16,8 +16,8 @@
     {"packet_id":"RO4-WP2","status":"COMPLETED","prerequisites":["RO4-G1"],"authority_delta":"LOCAL_READ_ONLY_DERIVED","merge_commit":"4c3ea8dbf4ff7d504c9dc083993fde9d16e684d8","next_packet":"RO4-WP3"},
     {"packet_id":"RO4-WP3","status":"COMPLETED","prerequisites":["RO4-G2"],"authority_delta":"NON_CANONICAL_RESEARCH_CANDIDATE","merge_commit":"04e7528fcc82c556f6e58347aea1468e4c7c2d57","next_packet":"RO4-WP4"},
     {"packet_id":"RO4-WP4","status":"COMPLETED","prerequisites":["RO4-G3"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE","candidate_commit":"92e27e21d7c7b70fbb4c03378348d74ebf2088b9","decision_record":"docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_OPERATOR_DECISION.json","merge_commit":"075752da9707f9c7bb8bd0298d32d1c50623026c","tests":["PASS_12","PASS_70","PASS_WORKFLOW_30691395587"],"next_packet":"RO4-WP5"},
-    {"packet_id":"RO4-WP5","status":"QA_REVIEW","prerequisites":["RO4-G4"],"authority_required":"AUTO_RATIFIABLE_IF_ACCEPTANCE_PASSES","authority_delta":"DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS","baseline_commit":"075752da9707f9c7bb8bd0298d32d1c50623026c","branch":"build/ro4-wp5-disabled-console-projection","candidate_commit":"PENDING_FINAL_HEAD_PIN","qa_packet":"docs/releases/research-operations-foundation-v0-4/ro4-g5/RO4_G5_QA_PACKET.json","decision_record":null,"merge_commit":null,"blockers":[],"tests":["PENDING_CI"],"next_packet":"RC-G5"},
-    {"packet_id":"RC-G5","status":"PLANNED","prerequisites":["RO4-G5"],"authority_required":"OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE","authority_delta":"LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION","blockers":["RO4_G5_NOT_COMPLETED"],"next_packet":"RO4-G6"},
+    {"packet_id":"RO4-WP5","status":"APPROVED","prerequisites":["RO4-G4"],"authority_required":"AUTO_RATIFIABLE_IF_ACCEPTANCE_PASSES","authority_delta":"DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS","baseline_commit":"075752da9707f9c7bb8bd0298d32d1c50623026c","branch":"build/ro4-wp5-disabled-console-projection","candidate_commit":"20de0f29c1d2be6a70f0ffbbc3e6f775c3ad5965","qa_packet":"docs/releases/research-operations-foundation-v0-4/ro4-g5/RO4_G5_QA_PACKET.json","decision_record":"docs/releases/research-operations-foundation-v0-4/ro4-g5/RO4_G5_DELEGATED_DECISION.json","merge_commit":null,"blockers":[],"tests":["PASS_11_CI","PASS_70_CI","PASS_AUTHORITY_ASSERTIONS","PASS_WORKFLOW_30691738422","PENDING_FINAL_HEAD_CI"],"next_packet":"RC-G5"},
+    {"packet_id":"RC-G5","status":"READY","prerequisites":["RO4-G5"],"authority_required":"OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE","authority_delta":"LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION","blockers":["RO4_G5_MERGE_PENDING"],"next_packet":"RO4-G6"},
     {"packet_id":"RO4-G6","status":"PLANNED","prerequisites":["RO4-G4","EVIDENCE_SUFFICIENT"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"EVIDENCE_DISPOSITION_ONLY","blockers":["EVIDENCE_NOT_YET_COLLECTED"],"next_packet":null}
   ],
   "retained_prohibitions": [
