@@ -17,6 +17,10 @@ from .identity import canonical_sha256, normalize_relative_path, resolve_under
 from .profiles import ArtifactProfile
 
 
+_ALLOWED_DESTINATION_POLICIES = {"ABSENT", "ABSENT_OR_EMPTY"}
+_ALLOWED_IDENTITY_POLICIES = {"EXACT_FILE"}
+
+
 @dataclass(frozen=True)
 class DestinationCheck:
     logical_name: str
@@ -24,10 +28,10 @@ class DestinationCheck:
     policy: str = "ABSENT_OR_EMPTY"
 
     def __post_init__(self) -> None:
-        if not self.logical_name:
+        if not self.logical_name or not self.logical_name.strip():
             raise ValueError("destination logical_name is required")
         normalize_relative_path(self.relative_path)
-        if self.policy not in {"ABSENT", "ABSENT_OR_EMPTY"}:
+        if self.policy not in _ALLOWED_DESTINATION_POLICIES:
             raise ValueError("unsupported destination policy")
 
 
@@ -41,9 +45,15 @@ class PreflightRequest:
         logical_names = [ref.logical_name for ref in self.input_refs]
         if len(logical_names) != len(set(logical_names)):
             raise ValueError("duplicate input_ref logical names")
+        input_paths = [normalize_relative_path(ref.relative_path) for ref in self.input_refs]
+        if len(input_paths) != len(set(input_paths)):
+            raise ValueError("duplicate input_ref relative paths")
         destination_names = [row.logical_name for row in self.destinations]
         if len(destination_names) != len(set(destination_names)):
             raise ValueError("duplicate destination logical names")
+        destination_paths = [normalize_relative_path(row.relative_path) for row in self.destinations]
+        if len(destination_paths) != len(set(destination_paths)):
+            raise ValueError("duplicate destination relative paths")
 
     @property
     def request_id(self) -> str:
@@ -77,8 +87,32 @@ def _check_json_schema_marker(path: Path, ref: ArtifactRef) -> dict[str, Any] | 
     return {"check": "SCHEMA_MARKER", "status": "PASS", "reason": "SCHEMA_ID_MATCH", "schema_id": actual}
 
 
+def _root_result(root: Path, logical_name: str, *, required: bool) -> dict[str, Any]:
+    if not root.exists():
+        return {
+            "check": "ROOT",
+            "logical_name": logical_name,
+            "status": "BLOCK" if required else "PASS",
+            "reason": "ROOT_MISSING" if required else "ROOT_NOT_REQUIRED",
+        }
+    if root.is_symlink():
+        return {"check": "ROOT", "logical_name": logical_name, "status": "BLOCK", "reason": "ROOT_SYMLINK_PROHIBITED"}
+    if not root.is_dir():
+        return {"check": "ROOT", "logical_name": logical_name, "status": "BLOCK", "reason": "ROOT_NOT_DIRECTORY"}
+    return {"check": "ROOT", "logical_name": logical_name, "status": "PASS", "reason": "ROOT_DIRECTORY_VERIFIED"}
+
+
 def _destination_result(root: Path, check: DestinationCheck) -> dict[str, Any]:
-    path = resolve_under(root, check.relative_path)
+    try:
+        path = resolve_under(root, check.relative_path)
+    except (OSError, ValueError) as exc:
+        return {
+            "check": "DESTINATION",
+            "logical_name": check.logical_name,
+            "status": "BLOCK",
+            "reason": "UNSAFE_DESTINATION",
+            "detail": str(exc),
+        }
     if not path.exists():
         return {"check": "DESTINATION", "logical_name": check.logical_name, "status": "PASS", "reason": "ABSENT"}
     if path.is_symlink():
@@ -91,6 +125,14 @@ def _destination_result(root: Path, check: DestinationCheck) -> dict[str, Any]:
         next(path.iterdir())
     except StopIteration:
         return {"check": "DESTINATION", "logical_name": check.logical_name, "status": "PASS", "reason": "EMPTY_DIRECTORY"}
+    except OSError as exc:
+        return {
+            "check": "DESTINATION",
+            "logical_name": check.logical_name,
+            "status": "BLOCK",
+            "reason": "DESTINATION_UNREADABLE",
+            "detail": str(exc),
+        }
     return {"check": "DESTINATION", "logical_name": check.logical_name, "status": "BLOCK", "reason": "DESTINATION_COLLISION"}
 
 
@@ -113,6 +155,11 @@ def run_preflight(input_root: Path, destination_root: Path, request: PreflightRe
     refs = {row.logical_name: row for row in request.input_refs}
     checks: list[dict[str, Any]] = []
 
+    input_root_check = _root_result(input_root, "__input_root__", required=True)
+    checks.append(input_root_check)
+    destination_root_check = _root_result(destination_root, "__destination_root__", required=bool(request.destinations))
+    checks.append(destination_root_check)
+
     expected = set(profile_inputs)
     supplied = set(refs)
     for logical_name in sorted(expected - supplied):
@@ -126,40 +173,57 @@ def run_preflight(input_root: Path, destination_root: Path, request: PreflightRe
     for logical_name in sorted(supplied - expected):
         checks.append({"check": "INPUT_PROFILE", "logical_name": logical_name, "status": "BLOCK", "reason": "UNDECLARED_INPUT_REF"})
 
-    for logical_name in sorted(expected & supplied):
-        profile_input = profile_inputs[logical_name]
-        ref = refs[logical_name]
-        if profile_input.relative_path != ref.relative_path:
-            checks.append({
-                "check": "INPUT_PROFILE",
-                "logical_name": logical_name,
-                "status": "BLOCK",
-                "reason": "PATH_MISMATCH",
-                "expected": profile_input.relative_path,
-                "actual": ref.relative_path,
-            })
-            continue
-        if profile_input.identity_policy != ref.identity_policy:
-            checks.append({
-                "check": "INPUT_PROFILE",
-                "logical_name": logical_name,
-                "status": "BLOCK",
-                "reason": "IDENTITY_POLICY_MISMATCH",
-                "expected": profile_input.identity_policy,
-                "actual": ref.identity_policy,
-            })
-            continue
-        exact = verify_artifact(input_root, ref)
-        exact.update({"check": "EXACT_ARTIFACT", "logical_name": logical_name})
-        checks.append(exact)
-        if exact["status"] == "PASS":
-            marker = _check_json_schema_marker(resolve_under(input_root, ref.relative_path), ref)
-            if marker is not None:
-                marker["logical_name"] = logical_name
-                checks.append(marker)
+    if input_root_check["status"] == "PASS":
+        for logical_name in sorted(expected & supplied):
+            profile_input = profile_inputs[logical_name]
+            ref = refs[logical_name]
+            if profile_input.relative_path != ref.relative_path:
+                checks.append({
+                    "check": "INPUT_PROFILE",
+                    "logical_name": logical_name,
+                    "status": "BLOCK",
+                    "reason": "PATH_MISMATCH",
+                    "expected": profile_input.relative_path,
+                    "actual": ref.relative_path,
+                })
+                continue
+            if profile_input.identity_policy != ref.identity_policy:
+                checks.append({
+                    "check": "INPUT_PROFILE",
+                    "logical_name": logical_name,
+                    "status": "BLOCK",
+                    "reason": "IDENTITY_POLICY_MISMATCH",
+                    "expected": profile_input.identity_policy,
+                    "actual": ref.identity_policy,
+                })
+                continue
+            if ref.identity_policy not in _ALLOWED_IDENTITY_POLICIES:
+                checks.append({
+                    "check": "INPUT_PROFILE",
+                    "logical_name": logical_name,
+                    "status": "BLOCK",
+                    "reason": "UNSUPPORTED_IDENTITY_POLICY",
+                    "actual": ref.identity_policy,
+                })
+                continue
+            try:
+                exact = verify_artifact(input_root, ref)
+            except (OSError, ValueError) as exc:
+                exact = {"status": "BLOCK", "reason": "ARTIFACT_VERIFICATION_ERROR", "detail": str(exc)}
+            exact.update({"check": "EXACT_ARTIFACT", "logical_name": logical_name})
+            checks.append(exact)
+            if exact["status"] == "PASS":
+                try:
+                    marker = _check_json_schema_marker(resolve_under(input_root, ref.relative_path), ref)
+                except (OSError, ValueError) as exc:
+                    marker = {"check": "SCHEMA_MARKER", "status": "BLOCK", "reason": "SCHEMA_CHECK_ERROR", "detail": str(exc)}
+                if marker is not None:
+                    marker["logical_name"] = logical_name
+                    checks.append(marker)
 
-    for destination in sorted(request.destinations, key=lambda row: row.logical_name):
-        checks.append(_destination_result(destination_root, destination))
+    if destination_root_check["status"] == "PASS":
+        for destination in sorted(request.destinations, key=lambda row: row.logical_name):
+            checks.append(_destination_result(destination_root, destination))
 
     checks = sorted(checks, key=lambda row: (row.get("logical_name", ""), row["check"], row.get("reason", "")))
     status = _aggregate_status(checks)
@@ -172,7 +236,10 @@ def run_preflight(input_root: Path, destination_root: Path, request: PreflightRe
         "authority": {
             "read_only": True,
             "writes_performed": False,
+            "provider_access": "DENIED",
             "repository_bot_write": "DENIED",
+            "direct_main_write": "DENIED",
+            "force_push": "DENIED",
             "release": "DENIED",
             "selector": "DENIED",
             "r2": "DENIED",
