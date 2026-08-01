@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-research-console-rc-g5-activation-qa/v1",
+  "packet_id": "RC-G5-ACTIVATION",
+  "gate_id": "RC-G5-ACTIVATION",
+  "baseline_commit": "12cf93e9eec93c9b2245393bf8fb262109790e2d",
+  "branch": "activate/research-console-v0-3-rc-g5-c2-sequence",
+  "candidate_commit": "PENDING_FINAL_HEAD_PIN",
+  "status": "QA_REVIEW_PENDING_CI",
+  "recommendation": "PENDING",
+  "checks": {
+    "operator_decision_binding": "PASS_LOCAL_DESIGN",
+    "approved_projection_hash_bindings": "PASS_LOCAL_DESIGN",
+    "route_enabled_local_read_only": "PASS_LOCAL_DESIGN",
+    "eight_panel_classes_separated": "PASS_LOCAL_DESIGN",
+    "permanent_banners": "PASS_LOCAL_DESIGN",
+    "writes_none_and_actions_absent": "PASS_LOCAL_DESIGN",
+    "validation_deny_before_resolution": "PASS_LOCAL_DESIGN",
+    "pattern_discovery_trigger_trace_only": "PASS_LOCAL_DESIGN",
+    "missing_projection_not_evaluated": "PASS_LOCAL_DESIGN",
+    "remote_deployment_denied": "PASS_LOCAL_DESIGN",
+    "external_artifact_boundary": "PASS_ZERO"
+  },
+  "tests": {
+    "activation_validator": "PENDING_CI",
+    "focused_activation": "PENDING_CI",
+    "complete_repository": "PENDING_CI",
+    "authority_assertions": "PENDING_CI"
+  },
+  "blocking_issues": [],
+  "warnings": [
+    "The committed fixture is synthetic and proves presentation behavior only, not market correctness.",
+    "The active route can show NOT_EVALUATED until an admissible local projection path is supplied."
+  ],
+  "rollback": "Disable the route and restore the RC-G4 Home wrapper through a new non-destructive commit while preserving all evidence and decisions."
+}
