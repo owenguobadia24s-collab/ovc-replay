@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr2-prospective-id-incident/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR2",
+  "incident_id": "PD-JUNE-FM-WP2-PROSPECTIVE-ID-CONTRACT-001",
+  "observed_at_utc": "2026-08-01T08:26:00Z",
+  "execution_location": "OPERATOR_LOCAL_ONLY",
+  "failure": "PROSPECTIVE_PRICE_SET_ID_REQUIRED",
+  "quarantine": "C:/Users/Owner/OVIS/ovc-replay-external-artifacts/prospective-source/compute/quarantine/PD-JUNE-FM-WP2.20260801T082600Z.76382f72",
+  "reproduction_point": "FIRST_COMPLETE_DERIVED_BAR_ENTERING_FROZEN_C1_PROSPECTIVE_ADAPTER",
+  "root_cause": {
+    "replay_price_set_id": "PD-JUNE-FM.PRICESET.GBPUSD.20260530_20260703.v1",
+    "frozen_adapter_requirement": "RPS.PRICESET.*",
+    "additional_latent_incompatibilities": [
+      "PD-JUNE-FM.SOURCE-MANIFEST.* versus RPS.SOURCE-MANIFEST.*",
+      "PD-JUNE-FM.C1SET.* versus RPS.C1SET.*",
+      "PD-JUNE-FM.C1MANIFEST.* versus RPS.C1MANIFEST.*",
+      "pd-june-fm-price:* versus rps-price:*"
+    ]
+  },
+  "source_slice_mutated": false,
+  "quarantine_mutated": false,
+  "provider_network_access": "NONE",
+  "classification": "CORRECTABLE_DETERMINISTIC_TOOLING_COMPATIBILITY_DEFECT",
+  "authority_delta_required": "NONE_COMPATIBILITY_CORRECTION_ONLY",
+  "reserved_authority_delta": "NONE",
+  "smallest_lawful_resolution": "Bind the WP2 replay output identities to the already-frozen RPS prospective namespaces, add direct C1 and C2 adapter regression tests, run the complete repository suite, squash-merge the bounded correction, then rerun operator-local WP2 execution.",
+  "retained_prohibitions": [
+    "NO_C1_OR_C2_ADAPTER_CONTRACT_CHANGE",
+    "NO_FORMULA_OR_THRESHOLD_CHANGE",
+    "NO_SEMANTIC_CANDIDATE_MODEL_FAMILY_OR_THEORY_CHANGE",
+    "NO_SELECTOR_OR_RELEASE_MUTATION",
+    "NO_R2_PUBLICATION",
+    "NO_VALIDATION_CONSUMPTION",
+    "NO_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
+  ]
+}
