@@ -10,7 +10,7 @@
   "operator_decision_id": "DA-G0.OPERATOR.PASS.20260801T151200Z",
   "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41",
   "branch": "build/ovc-dev-accel-baseline",
-  "candidate_commit": null,
+  "candidate_commit": "7d983cb6924e6fd110d0456971279bcdaeaafc9e",
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -32,18 +32,21 @@
   "packets": [
     {
       "packet_id": "DA-00",
-      "status": "QA_REVIEW",
+      "status": "APPROVED",
       "prerequisites": ["DA-G0_OPERATOR_PASS"],
       "authority_required": "OPERATOR_REQUIRED_COMPLETED",
       "authority_delta": "REPOSITORY_RECORDS_ONLY",
       "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41",
       "branch": "build/ovc-dev-accel-baseline",
-      "candidate_commit": null,
-      "tests": ["DA-G0 validator", "focused DA-G0 tests", "complete repository suite"],
+      "candidate_commit": "7d983cb6924e6fd110d0456971279bcdaeaafc9e",
+      "tests": [
+        "DA-G0 workflow 30705789973 PASS",
+        "generic complete-suite workflow 30705790038 PASS"
+      ],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_OPERATOR_DECISION.json",
       "merge_commit": null,
-      "blockers": ["FINAL_HEAD_CI_NOT_YET_RECORDED"],
+      "blockers": [],
       "next_packet": "DA-WP1"
     },
     {
@@ -127,5 +130,5 @@
       "next_packet": "DA-G6"
     }
   ],
-  "next_action": "COMPLETE_DA_00_FINAL_HEAD_QA_AND_SQUASH_MERGE"
+  "next_action": "SQUASH_MERGE_PR_203_THEN_BEGIN_DA_WP1"
 }
