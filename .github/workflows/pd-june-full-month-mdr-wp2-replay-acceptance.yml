@@ -1,0 +1,58 @@
+name: PD-JUNE-FM-WP2 replay acceptance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/**'
+      - 'registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json'
+      - 'schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp2_replay_acceptance_v0_1.schema.json'
+      - 'tests/research_operations/pattern_discovery/test_pd_june_full_month_mdr_wp2_replay_acceptance.py'
+      - '.github/workflows/pd-june-full-month-mdr-wp2-replay-acceptance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay-acceptance:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and run focused acceptance tests
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -m py_compile tests/research_operations/pattern_discovery/test_pd_june_full_month_mdr_wp2_replay_acceptance.py
+          python -m unittest tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp2_replay_acceptance -v
+      - name: Run retained WP2 and source tests
+        env:
+          PYTHONPATH: src:.
+        run: >-
+          python -m unittest
+          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2
+          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr2
+          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr3
+          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr
+          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp1_source_acceptance
+          -v
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src:.
+        run: python -m unittest discover -s tests -v
+      - name: Enforce compact-artifact and authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only origin/main...HEAD)"
+          ! grep -Eq '^src/ovc/opt_b/|^src/ovc/research_operations/prospective_source/' <<<"$changed"
+          ! find . -type f \( -name '*.bi5' -o -name '*.jsonl' -o -name 'GBPUSD_M1_*' -o -name 'GBPUSD_H1_*' \) -not -path './.git/*' | grep -q .
+          grep -q '"source_boundary_insufficiency": 0' docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/coverage.json
+          grep -q '"window_not_complete_due_solely_to_june_calendar_boundary": 0' docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/target-eligibility.json
+          grep -q '"r2_publication": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
+          grep -q '"validation_consumption": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
