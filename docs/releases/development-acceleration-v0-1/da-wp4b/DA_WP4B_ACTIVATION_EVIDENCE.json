@@ -4,27 +4,33 @@
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "tested_candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
   "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "authority_active": false,
   "conditions": [
     {"condition": "OPERATOR_DA_G4_PASS", "result": "PASS", "evidence": "DA-G4.OPERATOR.PASS.20260801T172600Z"},
     {"condition": "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH", "result": "PENDING", "evidence": "Closed schema exists; no active profile is materialised while external controls are missing."},
-    {"condition": "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER", "result": "PASS_STATIC", "evidence": "receipt_bot.py enforces exact branch and path policy before producing an action plan; production transport is absent."},
-    {"condition": "NO_MERGE_API_AVAILABLE_TO_BOT", "result": "PASS_STATIC", "evidence": "RepositoryProposalAdapter exposes create_branch, put_file and open_pull_request only."},
-    {"condition": "DENIED_ACTION_TESTS_PASS", "result": "PENDING_FINAL_HEAD_CI", "evidence": "tests/development/test_receipt_bot.py"},
-    {"condition": "TOKEN_REDACTION_TESTS_PASS", "result": "PENDING_FINAL_HEAD_CI", "evidence": "recursive secret-redaction test"},
-    {"condition": "IDEMPOTENCY_AND_COLLISION_TESTS_PASS", "result": "PENDING_FINAL_HEAD_CI", "evidence": "exact retry and changed-plan collision tests"},
-    {"condition": "REVOCATION_TESTS_PASS", "result": "PENDING_FINAL_HEAD_CI", "evidence": "policy and court-record revocation assertions"},
+    {"condition": "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER", "result": "PASS_STATIC", "evidence": "receipt_bot.py enforces exact branch and path policy before producing an action plan; production transport remains absent."},
+    {"condition": "NO_MERGE_API_AVAILABLE_TO_BOT", "result": "PASS", "evidence": "RepositoryProposalAdapter exposes create_branch, put_file and open_pull_request only; static audit passed in run 30711248035."},
+    {"condition": "DENIED_ACTION_TESTS_PASS", "result": "PASS", "evidence": "DA-WP4B run 30711248035"},
+    {"condition": "TOKEN_REDACTION_TESTS_PASS", "result": "PASS", "evidence": "DA-WP4B run 30711248035"},
+    {"condition": "IDEMPOTENCY_AND_COLLISION_TESTS_PASS", "result": "PASS", "evidence": "DA-WP4B run 30711248035"},
+    {"condition": "REVOCATION_TESTS_PASS", "result": "PASS", "evidence": "DA-WP4B run 30711248035"},
     {"condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED", "result": "BLOCKED", "evidence": "No independently reproducible branch-protection rule-set evidence is available through the connected repository interface."},
     {"condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS", "result": "BLOCKED", "evidence": "A dedicated revocable bot identity is not provisioned; using the operator connector would not satisfy the approved identity boundary."},
-    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "result": "PENDING_FINAL_HEAD_CI", "evidence": "workflow pending"},
-    {"condition": "QA_PASS", "result": "BLOCKED", "evidence": "Activation QA cannot pass while branch protection and real dedicated-identity shadow evidence are absent."}
+    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "result": "PASS", "evidence": "DA-WP4B run 30711248035, tiered run 30711248023 and tests run 30711248056"},
+    {"condition": "QA_PASS", "result": "BLOCKED", "evidence": "Implementation QA passed, but activation QA cannot pass while branch protection and dedicated-identity shadow evidence are absent."}
   ],
   "activation_evaluation": "BLOCK",
   "blockers": [
     "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
     "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
     "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+  ],
+  "tests": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30711248035, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30711248023, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30711248056, "result": "PASS"}
   ],
   "non_substitution_rule": "Static code, tests and operator-identity writes do not substitute for independent branch-protection evidence or a dedicated-identity real shadow.",
   "rollback": "Leave active=false and provision no credential."
