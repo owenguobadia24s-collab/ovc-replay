@@ -42,10 +42,13 @@ jobs:
 
           assert incident['failure'] == 'PROSPECTIVE_PRICE_SET_ID_REQUIRED'
           assert incident['source_slice_mutated'] is False
+          assert qa['qa_result'] == 'PASS_PROSPECTIVE_ID_CONTRACT_COMPATIBILITY_CORRECTION'
           assert qa['authority_delta'] == 'NONE_COMPATIBILITY_CORRECTION_ONLY'
+          assert decision['decision'] == 'PASS'
           assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
           assert decision['reserved_authority_delta'] == 'NONE'
-          assert state['status'] == 'QA_REVIEW'
+          assert state['status'] == 'APPROVED'
+          assert state['qa_result'] == qa['qa_result']
           assert state['source_mutated'] is False
           assert subject.PRICE_SET_ID.startswith('RPS.PRICESET.')
           assert subject.SOURCE_MANIFEST_ID.startswith('RPS.SOURCE-MANIFEST.')
