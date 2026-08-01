@@ -1,12 +1,56 @@
 {
-  "schema": "ovc-pd-june-full-month-mdr-programme-state/v1",
-  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "acceptance_branch": "accept/pd-june-fm-wp2-replay",
+  "administrative_tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
+  "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_ACCEPTANCE_ONLY",
+  "authority_required": "NONE",
+  "baseline_commit": "837c9a3e1cbfc18bf01d577896a8f2e01d12f7d2",
+  "blockers": [
+    {
+      "blocker_id": "PD-JUNE-FM-WP2-ACCEPTANCE-CI-001",
+      "status": "FINAL_HEAD_CI_REQUIRED"
+    }
+  ],
+  "canonical_2021_2023_discovery": "DEFERRED_NOT_AUTHORISED",
+  "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
+  "decision": "PASS_PENDING_FINAL_HEAD_CI",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_DELEGATED_DECISION.json",
+  "downstream_incomplete_membership_policy": "INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING",
+  "expected_population": {
+    "15m_per_side": {
+      "complete": 2231,
+      "incomplete": 85,
+      "target_complete": 2036,
+      "target_incomplete": 76,
+      "target_total": 2112,
+      "total": 2316
+    },
+    "2h_per_side": {
+      "complete": 248,
+      "incomplete": 46,
+      "target_complete": 227,
+      "target_incomplete": 41,
+      "target_total": 268,
+      "total": 294
+    },
+    "c1_target": 4526,
+    "c1_total": 4958,
+    "c2_states_target": 8598,
+    "c2_states_total": 9420,
+    "c2_transitions_target": 6783,
+    "c2_transitions_total": 7345
+  },
+  "final_tooling_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
+  "merge_commit": null,
+  "merge_status": "PENDING",
+  "native_july_h1_transport": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
+  "next_packet": "PD-JUNE-FM-WP3",
+  "next_packet_status": "BLOCKED_PENDING_WP2_ACCEPTANCE_CI_AND_SQUASH_MERGE",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "paired_sparse_m1_policy": "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING",
+  "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
   "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
   "plan_version": "0.1+A1+A2",
-  "prior_plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
-  "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
-  "packet_id": "PD-JUNE-FM-WP2",
-  "status": "GATE_READY",
   "prerequisites": [
     "PD-JUNE-FM-00",
     "PD-JUNE-FM-A1-OPERATOR-PASS-AND-MERGED",
@@ -14,88 +58,52 @@
     "PD-JUNE-FM-WP1-COMPLETED",
     "PD-JUNE-FM-G1-DELEGATED-PASS",
     "PD-JUNE-FM-WP2-TOOLING-DELEGATED-PASS",
-    "PD-JUNE-FM-WP2-TOOLING-SQUASH-MERGED"
+    "PD-JUNE-FM-WP2-TOOLING-SQUASH-MERGED",
+    "PD-JUNE-FM-WP2-OPERATOR-LOCAL-REPLAY-COMPLETE"
   ],
-  "authority_required": "NONE_FOR_OPERATOR_LOCAL_EXECUTION_WITHIN_APPROVED_PLAN",
-  "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_TOOLING_ONLY",
-  "baseline_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
-  "tooling_branch": "build/pd-june-fm-wp2-replay-tooling",
-  "receipt_branch": "administrative/pd-june-fm-wp2-tooling-merge-receipt",
-  "final_tooling_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
-  "administrative_tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
-  "tooling_pull_request": 180,
-  "tooling_merge_commit": "b3ac2561aff225442465e6914a1e1e29adbfab62",
-  "tooling_merge_status": "PASS_SQUASH_MERGED_TO_MAIN",
-  "tooling_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_MERGE_RECEIPT.json",
-  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
-  "source_manifest_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
-  "source_acceptance_merge_commit": "39da5213ff3931cf9a22760a3ee3529d4fc43c30",
-  "source_acceptance_receipt_merge_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
-  "source_request_plan": "UNCHANGED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY",
-  "native_july_h1_transport": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
-  "target_start_utc": "2026-06-01T00:00:00Z",
-  "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
-  "source_start_utc": "2026-05-30T00:00:00Z",
-  "source_end_exclusive_utc": "2026-07-03T00:00:00Z",
-  "target_eligibility": "TARGET_JUNE_ONLY_AFTER_FULL_INTERVAL_REPLAY",
-  "context_eligibility": "MAY_AND_JULY_CONTEXT_ONLY",
-  "paired_sparse_m1_policy": "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING",
-  "downstream_incomplete_membership_policy": "INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING",
-  "provider_execution_location": "OPERATOR_LOCAL_ONLY",
+  "prior_plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
   "provider_execution_in_ci": "DENIED",
-  "tooling": {
-    "implementation_module": "src/ovc/research_operations/prospective_source/full_month_mdr_compute.py",
-    "entrypoint_module": "src/ovc/research_operations/prospective_source/full_month_mdr_replay.py",
-    "operator_command": "scripts/run_pd_june_full_month_mdr_wp2.ps1",
-    "execution_location": "OPERATOR_LOCAL_ONLY",
-    "execution_in_ci": "DENIED",
-    "provider_network_access": "NONE",
-    "independent_rerun": "REQUIRED_BYTE_IDENTICAL",
-    "output_root": "OVC_EXTERNAL_ARTIFACT_ROOT/prospective-source/compute/PD-JUNE-FM.RUN.<id>",
-    "release_status": "NOT_A_RELEASE",
-    "selector_eligibility": "NONE",
-    "r2_publication": "DENIED",
-    "validation_consumption": "DENIED",
-    "live_prospective_append": "DENIED"
+  "provider_execution_location": "OPERATOR_LOCAL_ONLY",
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_QA_PACKET.json",
+  "qa_result": "PENDING_FINAL_HEAD_CI",
+  "receipt_branch": "administrative/pd-june-fm-wp2-tooling-merge-receipt",
+  "replay": {
+    "algorithmic_not_evaluable_markers": 13993,
+    "binding_id": "RPS.BINDING.4894de559cdc4e7b426cf7cf",
+    "code_commit": "837c9a3e1cbfc18bf01d577896a8f2e01d12f7d2",
+    "deterministic_independent_rerun": "PASS_BYTE_IDENTICAL",
+    "deterministic_payload_hash": "d784f47395d904b2d78d77cde0a8a40287877692d8b92889ab2eeedef621a24b",
+    "output_manifest_file_sha256": "8d66eac6ace106370663ae090855fcde4634d232d73631d8a98c4f5ebb836220",
+    "output_manifest_sha256": "e805eaa0f8603da644d23d83297fdc5e62142f8051d8583c9c28c9469a3b704b",
+    "run_id": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9",
+    "source_boundary_insufficiency": 0,
+    "status": "COMPLETE_LOCAL_WP2_CANDIDATE_ACCEPTANCE_PENDING_CI",
+    "window_not_complete_due_solely_to_june_calendar_boundary": 0
   },
-  "expected_population": {
-    "15m_per_side": {"total":2316,"complete":2231,"incomplete":85,"target_total":2112,"target_complete":2036,"target_incomplete":76},
-    "2h_per_side": {"total":294,"complete":248,"incomplete":46,"target_total":268,"target_complete":227,"target_incomplete":41},
-    "c1_total": 4958,
-    "c1_target": 4526,
-    "c2_states_total": 9420,
-    "c2_states_target": 8598
-  },
-  "tests": [
-    {"workflow_run":30657064858,"job":91243999664,"scope":"tooling final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
-    {"workflow_run":30657065738,"job":91244002340,"scope":"tooling final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary","result":"PASS","tested_head":"b2ea2ae786ed266363c3035a67e5ba029e61c45c"},
-    {"workflow_run":30657624697,"job":91245853454,"scope":"administrative merge receipt, WP2 focused tests, retained full-month/A2/WP1 continuity, complete repository suite and local-only authority boundary","result":"PASS","tested_head":"73d1c19171c84c942b77d8293aef1d66da4cdd38"},
-    {"workflow_run":30657624721,"job":91245853372,"scope":"administrative WP1 source acceptance continuity, focused tests, complete repository suite and source authority boundary","result":"PASS","tested_head":"73d1c19171c84c942b77d8293aef1d66da4cdd38"}
-  ],
-  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_QA_PACKET.json",
-  "qa_result": "PASS_DETERMINISTIC_FULL_MONTH_REPLAY_TOOLING_LOCAL_EXECUTION_REQUIRED",
-  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_DELEGATED_DECISION.json",
-  "decision": "PASS_TOOLING",
-  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
-  "merge_commit": "b3ac2561aff225442465e6914a1e1e29adbfab62",
-  "merge_status": "PASS_TOOLING_SQUASH_MERGED_TO_MAIN",
-  "replay_status": "NOT_YET_EXECUTED_OPERATOR_LOCAL_BOUNDARY",
-  "blockers": [
+  "replay_status": "COMPLETE_LOCAL_WP2_CANDIDATE_ACCEPTANCE_PENDING_CI",
+  "resolved_blockers": [
+    {
+      "blocker_id": "PD-JUNE-FM-WP2-FINAL-HEAD-CI-001",
+      "status": "RESOLVED_REQUIRED_FINAL_HEAD_CHECKS_PASS"
+    },
+    {
+      "blocker_id": "PD-JUNE-FM-WP2-TOOLING-MERGE-001",
+      "status": "RESOLVED_SQUASH_MERGED_TO_MAIN"
+    },
+    {
+      "blocker_id": "PD-JUNE-FM-WP2-ADMINISTRATIVE-CI-001",
+      "status": "RESOLVED_ADMINISTRATIVE_CHECKS_PASS"
+    },
     {
       "blocker_id": "PD-JUNE-FM-WP2-LOCAL-EXECUTION-001",
-      "status": "OPERATOR_LOCAL_EXECUTION_REQUIRED",
-      "description": "The deterministic replay tooling is merged, but GitHub Actions cannot access OVC_EXTERNAL_ARTIFACT_ROOT and replay execution is prohibited in CI.",
-      "smallest_lawful_resolution": "Pull main, set OVC_EXTERNAL_ARTIFACT_ROOT, run scripts/run_pd_june_full_month_mdr_wp2.ps1 preflight followed by execute, and return the six compact replay evidence files."
+      "status": "RESOLVED_OPERATOR_LOCAL_REPLAY_COMPLETE_AND_SIX_COMPACT_FILES_RETURNED"
+    },
+    {
+      "blocker_id": "PD-JUNE-FM-WP2-WINDOWS-PASS-B-CLEANUP-001",
+      "status": "RESOLVED_BY_CORR3"
     }
   ],
-  "resolved_blockers": [
-    {"blocker_id":"PD-JUNE-FM-WP2-FINAL-HEAD-CI-001","status":"RESOLVED_REQUIRED_FINAL_HEAD_CHECKS_PASS"},
-    {"blocker_id":"PD-JUNE-FM-WP2-TOOLING-MERGE-001","status":"RESOLVED_SQUASH_MERGED_TO_MAIN"},
-    {"blocker_id":"PD-JUNE-FM-WP2-ADMINISTRATIVE-CI-001","status":"RESOLVED_ADMINISTRATIVE_CHECKS_PASS"}
-  ],
-  "next_packet": "PD-JUNE-FM-WP3",
-  "next_packet_status": "BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS",
-  "canonical_2021_2023_discovery": "DEFERRED_NOT_AUTHORISED",
   "retained_prohibitions": [
     "FORMULA_CHANGE",
     "THRESHOLD_CHANGE",
@@ -107,5 +115,67 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Preserve the tooling squash merge, accepted source slice, WP1 merge and all prior evidence. Correct only through new non-destructive commits."
+  "rollback": "Preserve the accepted external replay, tooling squash merge, accepted source slice, WP1 merge and all prior evidence. Correct only through new non-destructive commits.",
+  "schema": "ovc-pd-june-full-month-mdr-programme-state/v1",
+  "source_acceptance_merge_commit": "39da5213ff3931cf9a22760a3ee3529d4fc43c30",
+  "source_acceptance_receipt_merge_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
+  "source_end_exclusive_utc": "2026-07-03T00:00:00Z",
+  "source_manifest_logical_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+  "source_request_plan": "UNCHANGED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY",
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "source_start_utc": "2026-05-30T00:00:00Z",
+  "status": "QA_REVIEW",
+  "target_eligibility": "TARGET_JUNE_ONLY_AFTER_FULL_INTERVAL_REPLAY",
+  "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+  "target_start_utc": "2026-06-01T00:00:00Z",
+  "tests": [
+    {
+      "job": 91243999664,
+      "result": "PASS",
+      "scope": "tooling final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary",
+      "tested_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
+      "workflow_run": 30657064858
+    },
+    {
+      "job": 91244002340,
+      "result": "PASS",
+      "scope": "tooling final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary",
+      "tested_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
+      "workflow_run": 30657065738
+    },
+    {
+      "job": 91245853454,
+      "result": "PASS",
+      "scope": "administrative merge receipt, WP2 focused tests, retained full-month/A2/WP1 continuity, complete repository suite and local-only authority boundary",
+      "tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
+      "workflow_run": 30657624697
+    },
+    {
+      "job": 91245853372,
+      "result": "PASS",
+      "scope": "administrative WP1 source acceptance continuity, focused tests, complete repository suite and source authority boundary",
+      "tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
+      "workflow_run": 30657624721
+    }
+  ],
+  "tooling": {
+    "entrypoint_module": "src/ovc/research_operations/prospective_source/full_month_mdr_replay.py",
+    "execution_in_ci": "DENIED",
+    "execution_location": "OPERATOR_LOCAL_ONLY",
+    "implementation_module": "src/ovc/research_operations/prospective_source/full_month_mdr_compute.py",
+    "independent_rerun": "REQUIRED_BYTE_IDENTICAL",
+    "live_prospective_append": "DENIED",
+    "operator_command": "scripts/run_pd_june_full_month_mdr_wp2.ps1",
+    "output_root": "OVC_EXTERNAL_ARTIFACT_ROOT/prospective-source/compute/PD-JUNE-FM.RUN.<id>",
+    "provider_network_access": "NONE",
+    "r2_publication": "DENIED",
+    "release_status": "NOT_A_RELEASE",
+    "selector_eligibility": "NONE",
+    "validation_consumption": "DENIED"
+  },
+  "tooling_branch": "build/pd-june-fm-wp2-replay-tooling",
+  "tooling_merge_commit": "b3ac2561aff225442465e6914a1e1e29adbfab62",
+  "tooling_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_MERGE_RECEIPT.json",
+  "tooling_merge_status": "PASS_SQUASH_MERGED_TO_MAIN",
+  "tooling_pull_request": 180
 }
