@@ -1,0 +1,93 @@
+schema: ovc-development-acceleration-implementation-registry/v1
+registry_id: OVC.DEVELOPMENT.ACCELERATION.IMPLEMENTATION.v0.1
+programme_id: OVC-DEV-ACCEL-v0.1
+plan_id: OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1
+operator_decision_id: DA-G0.OPERATOR.PASS.20260801T151200Z
+entries:
+  - implementation_id: OVC-DEV-ACCEL-DA-00
+    packet_id: DA-00
+    title: Baseline metrics and profile freeze
+    branch: build/ovc-dev-accel-baseline
+    status: RUNNING
+    prerequisites: [DA-G0]
+    authority_required: OPERATOR_RATIFIED_REPOSITORY_RECORDS_ONLY
+    authority_delta: REPOSITORY_RECORDS_ONLY
+    reads: [Git metadata, pull-request metadata, workflow summaries, governing plan]
+    writes:
+      - contracts/development/**
+      - registries/development/**
+      - docs/development-acceleration/**
+      - docs/releases/development-acceleration-v0-1/da-00/**
+      - docs/releases/development-acceleration-v0-1/da-g0/**
+      - scripts/development/validate_da_g0.py
+      - tests/development/test_da_g0.py
+      - .github/workflows/development-acceleration-da-g0.yml
+    gate: DA-G0
+    rollback: Revert bounded DA-00 merge through a new commit.
+  - implementation_id: OVC-DEV-ACCEL-WP1
+    packet_id: DA-WP1
+    title: Shared development services
+    branch: build/ovc-dev-accel-shared-services
+    status: PLANNED
+    prerequisites: [DA-00_COMPLETED]
+    authority_required: AUTO_RATIFIABLE_LOCAL_COMPUTE
+    authority_delta: LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS
+    reads: [approved programme profiles, compact fixtures, repository metadata]
+    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g1/**]
+    gate: DA-G1
+    rollback: Revert shared-service merge; programme-specific implementations remain authoritative.
+  - implementation_id: OVC-DEV-ACCEL-WP2
+    packet_id: DA-WP2
+    title: Universal artifact preflight
+    branch: build/ovc-dev-accel-preflight
+    status: PLANNED
+    prerequisites: [DA-WP1_COMPLETED]
+    authority_required: AUTO_RATIFIABLE_FAIL_CLOSED_GUARD
+    authority_delta: FAIL_CLOSED_EXECUTION_GUARD
+    reads: [packet profiles, artifact identities, destination state, approved compact external metadata]
+    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g2/**]
+    gate: DA-G2
+    rollback: Disable preflight enforcement and preserve all receipts as non-authoritative evidence.
+  - implementation_id: OVC-DEV-ACCEL-WP3
+    packet_id: DA-WP3
+    title: Tiered testing and CI profiles
+    branch: build/ovc-dev-accel-test-profiles
+    status: PLANNED
+    prerequisites: [DA-WP1_COMPLETED]
+    authority_required: AUTO_RATIFIABLE_TEST_SELECTION
+    authority_delta: DETERMINISTIC_TEST_PROFILE_SELECTION
+    reads: [changed-file inventory, dependency registry, retained test requirements]
+    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, .github/workflows/ovc-*.yml, docs/releases/development-acceleration-v0-1/da-g3/**]
+    gate: DA-G3
+    rollback: Restore existing workflows; retain selection manifests for audit.
+  - implementation_id: OVC-DEV-ACCEL-WP4
+    packet_id: DA-WP4
+    title: Closure and merge-receipt automation
+    branch: build/ovc-dev-accel-closure
+    status: PLANNED
+    prerequisites: [DA-WP1_COMPLETED, DA-WP3_COMPLETED]
+    authority_required: AUTO_RATIFIABLE_SHADOW_ONLY_THEN_OPERATOR_REQUIRED_DA_G4
+    authority_delta: DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY
+    reads: [PR metadata, QA packets, decisions, merge results]
+    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g4a/**]
+    gate: DA-G4A_THEN_DA-G4
+    rollback: Disable closure generator; manual receipt preparation remains available.
+  - implementation_id: OVC-DEV-ACCEL-WP5
+    packet_id: DA-WP5
+    title: Compact evidence exporter
+    branch: build/ovc-dev-accel-evidence-export
+    status: PLANNED
+    prerequisites: [DA-WP1_COMPLETED, DA-WP2_COMPLETED]
+    authority_required: AUTO_RATIFIABLE_OPERATOR_LOCAL_EXPORT
+    authority_delta: COPY_ONLY_COMPACT_EVIDENCE_EXPORT
+    reads: [registered export profiles, exact compact artifacts, local destination configuration]
+    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g5/**]
+    gate: DA-G5
+    rollback: Disable remote destination and retain deterministic local bundles.
+reserved_gates:
+  - gate_id: DA-G4
+    purpose: Narrow receipt-bot writes to approved bot branches and paths.
+    current_authority: DENIED
+  - gate_id: DA-G6
+    purpose: Adopt workflow as default and retire duplicated mechanics.
+    current_authority: DENIED

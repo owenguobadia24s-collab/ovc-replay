@@ -1,0 +1,68 @@
+{
+  "schema": "ovc-development-acceleration-baseline-metrics/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-00",
+  "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41",
+  "observed_at": "2026-08-01T15:12:00Z",
+  "source": "GITHUB_PULL_REQUEST_TIMESTAMPS_AND_DECLARED_WORKFLOW_IDS",
+  "sample_definition": {
+    "programme": "PD-JUNE-FULL-MONTH-MDR",
+    "implementation_pull_requests": [177, 180, 185, 191, 197, 200],
+    "receipt_pull_requests": [178, 182, 186, 192, 199, 201],
+    "sample_size": 12,
+    "selection_reason": "Recent contiguous source, replay, corrective and acceptance packets that expose both implementation and one-purpose administrative receipt overhead."
+  },
+  "implementation_prs": [
+    {"pr": 177, "elapsed_seconds": 935, "declared_workflow_runs": 5},
+    {"pr": 180, "elapsed_seconds": 850, "declared_workflow_runs": 2},
+    {"pr": 185, "elapsed_seconds": 242, "declared_workflow_runs": 1},
+    {"pr": 191, "elapsed_seconds": 238, "declared_workflow_runs": 1},
+    {"pr": 197, "elapsed_seconds": 612, "declared_workflow_runs": 1},
+    {"pr": 200, "elapsed_seconds": 1556, "declared_workflow_runs": 6}
+  ],
+  "receipt_prs": [
+    {"pr": 178, "elapsed_seconds": 186, "declared_workflow_runs": 1},
+    {"pr": 182, "elapsed_seconds": 528, "declared_workflow_runs": 2},
+    {"pr": 186, "elapsed_seconds": 165, "declared_workflow_runs": 1},
+    {"pr": 192, "elapsed_seconds": 124, "declared_workflow_runs": 1},
+    {"pr": 199, "elapsed_seconds": 132, "declared_workflow_runs": 1},
+    {"pr": 201, "elapsed_seconds": 130, "declared_workflow_runs": 6}
+  ],
+  "aggregates": {
+    "implementation_count": 6,
+    "implementation_total_seconds": 4433,
+    "implementation_mean_seconds": 738.8333333333,
+    "implementation_median_seconds": 731.0,
+    "receipt_count": 6,
+    "receipt_total_seconds": 1265,
+    "receipt_mean_seconds": 210.8333333333,
+    "receipt_median_seconds": 148.5,
+    "one_purpose_receipt_pr_share": 0.5,
+    "one_purpose_receipt_overhead_seconds": 1265,
+    "declared_implementation_workflow_runs": 16,
+    "declared_receipt_workflow_runs": 12,
+    "declared_total_workflow_runs": 28
+  },
+  "current_expensive_replay_reference": {
+    "command": "scripts/run_pd_june_full_month_mdr_wp2.ps1 execute",
+    "operator_reported_elapsed_minutes": 102,
+    "treatment": "CONTEXT_ONLY_NOT_RECOMPUTED_BY_GITHUB_METADATA"
+  },
+  "acceptance_targets": {
+    "preflight_median_compact_seconds_max": 30,
+    "preflight_inventory_seconds_max": 90,
+    "escaped_input_defect_reduction_min": 0.8,
+    "pre_stable_full_suite_reduction_min": 0.5,
+    "one_purpose_receipt_pr_reduction_min": 0.6,
+    "registered_export_manual_selection_steps": 0,
+    "shared_programme_adoption_min": 3,
+    "final_assurance_reduction_allowed": 0
+  },
+  "limitations": [
+    "Elapsed time is wall-clock pull-request open-to-merge time and includes GitHub queueing and operator interaction.",
+    "Workflow counts include only explicit run IDs declared in pull-request bodies and may undercount auxiliary checks.",
+    "The sample is a bounded recent programme cohort, not a universal historical benchmark.",
+    "No raw market artifact or private local path was accessed to produce this packet."
+  ],
+  "authority": "REPOSITORY_METRICS_ONLY_NO_MARKET_OR_WORKFLOW_ACTIVATION"
+}

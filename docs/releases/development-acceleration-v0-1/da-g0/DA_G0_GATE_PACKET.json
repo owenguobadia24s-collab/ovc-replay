@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-development-acceleration-gate-packet/v1",
+  "gate_id": "DA-G0",
+  "gate_title": "Plan and baseline ratification",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
+  "decision": "PASS",
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_OPERATOR_DECISION.json",
+  "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41",
+  "candidate_branch": "build/ovc-dev-accel-baseline",
+  "tested_candidate_commit": "7d983cb6924e6fd110d0456971279bcdaeaafc9e",
+  "current_open_pull_requests": [202],
+  "concurrent_work_treatment": "PR_202_IS_NON_OVERLAPPING_AND_MUST_NOT_BE_MUTATED",
+  "completed_work": [
+    "authority boundary contract",
+    "baseline and authority profile",
+    "implementation registry",
+    "dependency map",
+    "machine-readable programme state",
+    "delivery baseline metrics",
+    "final-head validator, focused tests and complete repository suite"
+  ],
+  "acceptance_conditions": [
+    "Plan, baseline, paths, authority and rollback are frozen.",
+    "Repository-bot write remains denied until DA-G4.",
+    "Direct main write, force-push and history rewrite remain prohibited.",
+    "No market, provider, release, selector, R2, Validation or exposure authority is admitted.",
+    "Baseline metrics are reproducible from named pull requests.",
+    "DA-G0 validator, focused tests and complete repository suite pass at final head."
+  ],
+  "tests": {
+    "da_g0_workflow": {"run_id": 30705789973, "result": "PASS"},
+    "generic_complete_suite": {"run_id": 30705790038, "result": "PASS"}
+  },
+  "qa_packet": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_QA_PACKET.json",
+  "warnings": [
+    "Baseline metrics are a bounded recent cohort and not a universal historical benchmark.",
+    "PR 202 remains open on an unrelated bounded branch."
+  ],
+  "unresolved_issues": [],
+  "authority_delta": "RATIFY_BOUNDED_DEVELOPMENT_TOOLING_IMPLEMENTATION_AND_DA_00",
+  "reserved_authority_delta": "NONE",
+  "rollback": "Revert the bounded DA-00 merge through a new non-destructive commit while preserving the operator decision and metrics provenance.",
+  "recommended_decision": "PASS",
+  "next_packet": "DA-WP1"
+}
