@@ -17,6 +17,9 @@ from ovc.development.profiles import load_profile  # noqa: E402
 
 
 BASELINE = "90ea70f5ee9d706fc34c5186e182034a73e9a230"
+TESTED = "5c977bfaf1acb8f2aaeae94f8233fc2fe2783a24"
+DA_G2_RUN = 30707486877
+GENERIC_RUN = 30707486751
 REQUIRED = [
     "contracts/development/OVC_UNIVERSAL_ARTIFACT_PREFLIGHT_CONTRACT_v0_1.md",
     "schemas/development/preflight_request_v0_1.schema.json",
@@ -52,6 +55,12 @@ def load_ref() -> ArtifactRef:
     return ArtifactRef(**rows[0])
 
 
+def assert_runs(rows: list[dict[str, object]]) -> None:
+    actual = {(row["run_id"], row["result"]) for row in rows}
+    assert (DA_G2_RUN, "PASS") in actual
+    assert (GENERIC_RUN, "PASS") in actual
+
+
 def main() -> int:
     missing = [path for path in REQUIRED if not (ROOT / path).is_file()]
     if missing:
@@ -72,35 +81,46 @@ def main() -> int:
     assert state["current_gate"] == "DA-G2"
     assert state["baseline_commit"] == BASELINE
     assert state["branch"] == "build/ovc-dev-accel-preflight"
+    assert state["candidate_commit"] == TESTED
     assert state["authority"]["repository_bot_write"] == "DENIED_UNTIL_DA_G4"
     assert state["authority"]["direct_main_write"] == "PROHIBITED"
     packets = {row["packet_id"]: row for row in state["packets"]}
     assert packets["DA-WP1"]["status"] == "COMPLETED"
     assert packets["DA-WP1"]["merge_commit"] == BASELINE
-    assert packets["DA-WP2"]["status"] == "QA_REVIEW"
+    assert packets["DA-WP2"]["status"] == "APPROVED"
+    assert packets["DA-WP2"]["candidate_commit"] == TESTED
+    assert packets["DA-WP2"]["blockers"] == []
     assert packets["DA-WP2"]["authority_delta"] == "FAIL_CLOSED_EXECUTION_GUARD"
     assert packets["DA-WP3"]["status"] == "READY"
     assert state["open_concurrent_work"][0]["pull_request"] == 202
 
     assert gate["gate_id"] == "DA-G2"
     assert gate["packet_id"] == "DA-WP2"
-    assert gate["status"] == "QA_REVIEW"
+    assert gate["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert gate["baseline_commit"] == BASELINE
+    assert gate["tested_candidate_commit"] == TESTED
     assert gate["reserved_authority_delta"] == "NONE"
     assert gate["repository_bot_write"] == "DENIED"
+    assert gate["recommended_decision"] == "PASS"
     assert gate["next_packet"] == "DA-WP3"
+    assert_runs(gate["tests"])
 
-    assert qa["status"] == "PASS_STATIC_PENDING_FINAL_HEAD_CI"
+    assert qa["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert qa["baseline_commit"] == BASELINE
+    assert qa["tested_candidate_commit"] == TESTED
     assert qa["blocking_issues"] == []
+    assert qa["qa_recommendation"] == "PASS"
     assert qa["authority_delta"] == "FAIL_CLOSED_EXECUTION_GUARD"
     assert qa["reserved_authority_delta"] == "NONE"
+    assert_runs(qa["tests"])
 
-    assert decision["decision"] == "PENDING_CI"
+    assert decision["decision"] == "PASS"
     assert decision["decision_authority"] == "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN"
     assert decision["baseline_commit"] == BASELINE
+    assert decision["tested_candidate_commit"] == TESTED
     assert decision["reserved_authority_delta"] == "NONE"
     assert decision["repository_bot_write"] == "DENIED"
+    assert_runs(decision["tests"])
 
     for schema_path in REQUIRED[1:3]:
         schema = json.loads(read(schema_path))
