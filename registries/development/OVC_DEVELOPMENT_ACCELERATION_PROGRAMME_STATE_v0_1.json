@@ -4,13 +4,13 @@
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "programme_status": "RUNNING",
-  "current_packet": "DA-WP3",
-  "current_gate": "DA-G3",
+  "current_packet": "DA-WP4",
+  "current_gate": "DA-G4A",
   "operator_decision_required": false,
   "operator_decision_id": "DA-G0.OPERATOR.PASS.20260801T151200Z",
-  "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
-  "branch": "build/ovc-dev-accel-test-profiles",
-  "candidate_commit": "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db",
+  "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
+  "branch": "build/ovc-dev-accel-closure",
+  "candidate_commit": null,
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -21,7 +21,7 @@
     }
   ],
   "authority": {
-    "tooling": "DETERMINISTIC_TEST_PROFILE_SELECTION_APPROVED_PENDING_MERGE",
+    "tooling": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_PENDING_DA_G4A",
     "test_selection": "SHADOW_PATH_BOUNDED",
     "repository_bot_write": "DENIED_UNTIL_DA_G4",
     "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
@@ -82,34 +82,34 @@
     },
     {
       "packet_id": "DA-WP3",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["DA-WP1_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE_COMPLETED",
       "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
       "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
       "branch": "build/ovc-dev-accel-test-profiles",
-      "candidate_commit": "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db",
-      "tests": ["DA-G3 workflow 30708043830 PASS", "tiered shadow workflow 30708043814 PASS"],
+      "candidate_commit": "724a6a456922a82986276b7e741b6a6279fb33d3",
+      "tests": ["DA-G3 workflow 30708172648 PASS", "tiered shadow workflow 30708172596 PASS"],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_DELEGATED_DECISION.json",
-      "merge_commit": null,
+      "merge_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
       "blockers": [],
       "next_packet": "DA-WP4"
     },
     {
       "packet_id": "DA-WP4",
-      "status": "READY_AFTER_DA_WP3_MERGE",
+      "status": "QA_REVIEW",
       "prerequisites": ["DA-WP1_COMPLETED", "DA-WP3_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE_SHADOW_THEN_OPERATOR_REQUIRED_DA_G4",
       "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
-      "baseline_commit": null,
+      "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
       "branch": "build/ovc-dev-accel-closure",
       "candidate_commit": null,
-      "tests": [],
-      "qa_packet": null,
-      "decision_record": null,
+      "tests": ["DA-G4A validator", "focused closure tests", "retained development tests", "complete repository suite"],
+      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json",
+      "decision_record": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_DELEGATED_DECISION.json",
       "merge_commit": null,
-      "blockers": ["DA-WP3_NOT_MERGED"],
+      "blockers": ["FINAL_HEAD_CI_NOT_YET_RECORDED"],
       "next_packet": "DA-G4"
     },
     {
@@ -129,5 +129,5 @@
       "next_packet": "DA-G6"
     }
   ],
-  "next_action": "SQUASH_MERGE_PR_206_THEN_BEGIN_DA_WP4"
+  "next_action": "OPEN_DA_WP4_PR_AND_RUN_DA_G4A_FINAL_HEAD_QA"
 }
