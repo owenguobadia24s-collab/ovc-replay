@@ -8,6 +8,7 @@ SRC = ROOT / "src"
 EXPECTED_TOP_LEVEL = {"ovc", "ovc_evidence_store"}
 EXPECTED_OVC_PACKAGES = {
     "ovc",
+    "ovc.development",
     "ovc.opt_a",
     "ovc.opt_b",
     "ovc.opt_b.c1",
