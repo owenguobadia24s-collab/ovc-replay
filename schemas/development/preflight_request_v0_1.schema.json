@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/preflight_request_v0_1.schema.json",
+  "title": "OVC Artifact Preflight Request v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile_path", "refs_path", "input_root", "destination_root", "destinations"],
+  "properties": {
+    "profile_path": {"type": "string", "minLength": 1},
+    "refs_path": {"type": "string", "minLength": 1},
+    "input_root": {"type": "string", "minLength": 1},
+    "destination_root": {"type": "string", "minLength": 1},
+    "destinations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["logical_name", "relative_path", "policy"],
+        "properties": {
+          "logical_name": {"type": "string", "minLength": 1},
+          "relative_path": {"type": "string", "minLength": 1},
+          "policy": {"enum": ["ABSENT", "ABSENT_OR_EMPTY"]}
+        }
+      }
+    }
+  }
+}
