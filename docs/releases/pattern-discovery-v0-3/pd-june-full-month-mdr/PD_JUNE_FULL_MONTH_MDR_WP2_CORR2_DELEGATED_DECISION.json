@@ -7,9 +7,10 @@
   "correction_id": "PD-JUNE-FM-WP2-CORR2",
   "title": "Prospective identity contract compatibility correction",
   "baseline_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
-  "decision": "PASS_PENDING_FINAL_HEAD_CI",
+  "implementation_tested_head": "453ef7f480666c0a882ad518d007a79b5493834d",
+  "decision": "PASS",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
-  "status": "APPROVED_CONDITIONALLY_PENDING_REQUIRED_TESTS",
+  "status": "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
   "authority_delta": "NONE_COMPATIBILITY_CORRECTION_ONLY",
   "reserved_authority_delta": "NONE",
   "rationale": "The replay used programme-specific identity prefixes that were rejected by the already-frozen prospective C1 and C2 adapters. Rebinding only the replay output identities to the existing RPS namespaces corrects the implementation defect without changing any contract, formula, threshold, semantic or authority rule.",
@@ -21,6 +22,16 @@
     "NO_SOURCE_ADAPTER_FORMULA_SELECTOR_RELEASE_R2_OR_VALIDATION_MUTATION",
     "NO_UNRESOLVED_REVIEW_OR_BLOCKING_WARNING"
   ],
+  "acceptance_result": "PASS_ON_IMPLEMENTATION_HEAD_FINAL_HEAD_RECHECK_REQUIRED",
+  "tests": [
+    {
+      "workflow_run": 30692471398,
+      "job": 91349532500,
+      "tested_head": "453ef7f480666c0a882ad518d007a79b5493834d",
+      "result": "PASS"
+    }
+  ],
+  "qa_result": "PASS_PROSPECTIVE_ID_CONTRACT_COMPATIBILITY_CORRECTION",
   "retained_prohibitions": [
     "FORMULA_CHANGE",
     "THRESHOLD_CHANGE",
