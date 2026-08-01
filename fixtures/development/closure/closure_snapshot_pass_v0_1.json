@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-closure-snapshot/v1",
+  "policy_id": "OVC.DEVELOPMENT.ACCELERATION.CLOSURE.v0.1",
+  "policy_hash": "c03430ec885aca9262328ac894d3a0e3d45e01270186a8ce550ad2bc1e4ce27a",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4-FIXTURE",
+  "gate_id": "DA-G4A-FIXTURE",
+  "pull_request": 999,
+  "base_branch": "main",
+  "baseline_commit": "1111111111111111111111111111111111111111",
+  "head_branch": "build/ovc-dev-accel-fixture",
+  "head_sha": "2222222222222222222222222222222222222222",
+  "changed_files": [
+    "contracts/development/OVC_DRY_RUN_CLOSURE_AND_RECEIPT_CONTRACT_v0_1.md",
+    "src/ovc/development/closure.py",
+    "tests/development/test_closure.py"
+  ],
+  "required_checks": [
+    {"name": "Development Acceleration DA-G4A closure shadow", "run_id": 4001, "result": "PASS"},
+    {"name": "tests", "run_id": 4002, "result": "PASS"}
+  ],
+  "qa_status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
+  "decision": "PASS",
+  "decision_id": "DA-G4A.DELEGATED.PASS.FIXTURE",
+  "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
+  "reserved_authority_delta": "NONE",
+  "blockers": [],
+  "warnings": [],
+  "unresolved_review_count": 0,
+  "rollback": "Revert the bounded fixture merge through a new non-destructive commit.",
+  "next_packet": "DA-G4"
+}
