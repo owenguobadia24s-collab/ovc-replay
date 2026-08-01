@@ -1,0 +1,17 @@
+{
+  "$id": "ovc-ro4-signature-concentration-acknowledgement/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RO4 signature concentration acknowledgement v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "record_type": {"const": "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1"},
+    "population_id": {"type": "string"},
+    "diversity_audit_logical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "warning_status": {"const": "SIGNATURE_CONCENTRATION_WARNING"},
+    "acknowledgement": {"type": "string", "maxLength": 2000},
+    "record_authority": {"const": "APPEND_ONLY_RESEARCH_RECORD_AFTER_RO4_G4"},
+    "promotion_authority": {"const": "NONE"}
+  },
+  "required": ["record_type", "population_id", "diversity_audit_logical_hash", "warning_status", "acknowledgement", "record_authority", "promotion_authority"]
+}

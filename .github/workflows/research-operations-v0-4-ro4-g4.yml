@@ -1,0 +1,61 @@
+name: RO4-G4 append-only record service readiness
+
+on:
+  pull_request:
+    paths:
+      - 'src/ovc/research_operations/**'
+      - 'src/ovc/cli.py'
+      - 'src/ovc/__main__.py'
+      - 'pyproject.toml'
+      - 'scripts/research_operations/validate_ro4_g4.py'
+      - 'tests/research_operations/v0_4/test_ro4_g4_annotation_friction.py'
+      - 'fixtures/research_operations/v0_4/RO4_G4_SYNTHETIC_ASSURANCE_FIXTURE_v0_1.json'
+      - 'contracts/research_operations/v0_4/**'
+      - 'schemas/research_operations/v0_4/**'
+      - 'registries/research_operations/**'
+      - 'docs/releases/research-operations-foundation-v0-4/ro4-wp4/**'
+      - 'docs/releases/research-operations-foundation-v0-4/ro4-g4/**'
+      - '.github/workflows/research-operations-v0-4-ro4-g4.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ro4-g4:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate consolidated RO4-G4 decision packet
+        run: python -u scripts/research_operations/validate_ro4_g4.py
+      - name: Focused RO4-G4 tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_4 -p 'test_ro4_g4_annotation_friction.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Authority and repository-boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -e src/ovc/research_operations/v0_4/annotation_friction_service.py
+          test ! -e apps/research_console/pages/C2_Sequence_Evidence.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('registries/research_operations/v0_4/RO4_APPEND_AUTHORITY_v0_1.json').read_text())
+          g=json.loads(Path('docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_GATE_PACKET.json').read_text())
+          d=json.loads(Path('docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_OPERATOR_DECISION.json').read_text())
+          assert a['enabled'] is True
+          assert a['status']=='APPROVED_RO4_G4'
+          assert a['gate_decision_id']==d['decision_id']
+          assert a['console_write_state']=='PROHIBITED'
+          assert a['validation_consumption']=='LOCKED_UNCONSUMED'
+          assert g['operator_decision_required'] is False
+          assert g['auto_ratifiable'] is False
+          assert g['decision']=='PASS'
+          assert g['external_artifacts']['canonical_records_appended']==0
+          assert d['decision']=='PASS'
+          assert d['console_write']=='PROHIBITED'
+          PY
+          test ! -d records/research_operations/ro4

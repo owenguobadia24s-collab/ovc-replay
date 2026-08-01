@@ -1,5 +1,15 @@
-"""Research Operations v0.4 local derived evidence services."""
+"""Research Operations v0.4 local derived evidence and gate-disabled record services."""
 
+from .annotation_friction_service import (
+    ACK_RECORD,
+    BOUNDARY_RECORD,
+    FRICTION_RECORD,
+    REVIEW_RECORD,
+    RO4AnnotationFrictionService,
+    RO4AppendAuthority,
+    RO4AuthorityDisabled,
+    RO4RecordError,
+)
 from .matrix_persistence_conflict import G2BuildResult, build_g2_evidence, validate_g2_evidence
 from .sequence_recurrence import (
     SequenceBuildResult,
@@ -22,10 +32,18 @@ from .state_transition_index import (
 )
 
 __all__ = [
+    "ACK_RECORD",
+    "BOUNDARY_RECORD",
     "BuildResult",
     "DeclaredSampleRequired",
+    "FRICTION_RECORD",
     "G2BuildResult",
+    "REVIEW_RECORD",
+    "RO4AnnotationFrictionService",
+    "RO4AppendAuthority",
+    "RO4AuthorityDisabled",
     "RO4IndexError",
+    "RO4RecordError",
     "SequenceBuildResult",
     "assess_window_cardinality",
     "build_full_index",

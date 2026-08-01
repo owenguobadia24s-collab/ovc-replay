@@ -9,6 +9,8 @@ RECORD_TYPES = {
     "DATA_RELEASE_REF", "RESEARCH_SESSION", "OBSERVATION_SNAPSHOT", "CLAIM_RECORD",
     "REALIZATION_SNAPSHOT", "EVIDENCE_ITEM", "CASE_BUNDLE", "INCIDENT_RECORD",
     "DECISION_RECORD", "AUDIT_EVENT",
+    "RO4_SEQUENCE_BOUNDARY_ANNOTATION.v0.1", "RO4_C2E_FRICTION_RECORD.v0.1",
+    "RO4_PROSPECTIVE_SEQUENCE_REVIEW.v0.1", "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1",
 }
 PAYLOAD_REQUIRED = {
     "DATA_RELEASE_REF": {"release_id", "manifest_id", "manifest_sha256", "role", "instrument", "coverage_start", "coverage_end", "clocks", "sides", "qa_state", "validation_access_state"},
@@ -21,6 +23,25 @@ PAYLOAD_REQUIRED = {
     "INCIDENT_RECORD": {"incident_code", "severity", "target_id", "description", "blocking_effect"},
     "DECISION_RECORD": {"decision_scope", "disposition", "reason", "authority_delta", "rollback"},
     "AUDIT_EVENT": {"actor", "action", "object_id", "result", "trace_ref"},
+    "RO4_SEQUENCE_BOUNDARY_ANNOTATION.v0.1": {
+        "source_sequence_id", "source_release_id", "manifest_sha256", "clock", "side", "member_ids",
+        "member_first_valid_times", "operation_mode", "annotation", "rationale", "record_authority",
+        "c2_mutation", "pd_population_write", "semantic_authority",
+    },
+    "RO4_C2E_FRICTION_RECORD.v0.1": {
+        "source_sequence_id", "source_release_id", "source_first_valid_times", "operation_mode", "reason_code",
+        "evidence_refs", "counterexample_refs", "remediation_ref", "rationale", "record_authority",
+        "c2_mutation", "c2e_opening", "pd_population_write", "semantic_authority",
+    },
+    "RO4_PROSPECTIVE_SEQUENCE_REVIEW.v0.1": {
+        "source_sequence_id", "source_release_and_manifest", "operation_mode", "admissible", "post_cutoff_review",
+        "logical_hash", "source_first_valid_times", "record_authority", "replay_to_prospective_translation",
+        "validation_consumption",
+    },
+    "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1": {
+        "population_id", "diversity_audit_logical_hash", "warning_status", "acknowledgement",
+        "record_authority", "promotion_authority",
+    },
 }
 COMMON_REQUIRED = {
     "record_type", "schema_version", "lifecycle_state", "created_at", "frozen_at",
