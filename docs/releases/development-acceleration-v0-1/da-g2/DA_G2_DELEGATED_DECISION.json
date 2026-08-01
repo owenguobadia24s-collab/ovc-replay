@@ -1,25 +1,22 @@
 {
   "schema": "ovc-development-acceleration-delegated-decision/v1",
-  "decision_id": "DA-G2.DELEGATED.CONDITIONAL.PASS.20260801T160000Z",
+  "decision_id": "DA-G2.DELEGATED.PASS.20260801T161100Z",
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP2",
   "gate_id": "DA-G2",
-  "decision": "PENDING_CI",
+  "decision": "PASS",
   "decision_authority": "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN",
   "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
-  "candidate_commit": null,
-  "acceptance_conditions": [
-    "DA-G2 validator passes",
-    "focused preflight and retained shared-service tests pass",
-    "complete repository suite passes",
-    "no unresolved review or blocking warning remains",
-    "authority delta remains wholly non-reserved"
+  "tested_candidate_commit": "5c977bfaf1acb8f2aaeae94f8233fc2fe2783a24",
+  "tests": [
+    {"workflow": "Development Acceleration DA-G2 preflight trust", "run_id": 30707486877, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30707486751, "result": "PASS"}
   ],
-  "qa_status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "qa_status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD",
   "reserved_authority_delta": "NONE",
   "repository_bot_write": "DENIED",
-  "rationale": "The packet adds a read-only fail-closed guard. It does not run guarded computations or activate provider, release, selector, R2, Validation, repository-bot or exposure authority.",
+  "rationale": "All acceptance conditions passed. The packet adds a deterministic read-only guard and activates no provider, computation, publication, selector, R2, Validation, repository-bot, market or exposure authority.",
   "rollback": "Disable preflight invocation or revert the bounded DA-WP2 merge through a new non-destructive commit.",
   "next_packet": "DA-WP3"
 }
