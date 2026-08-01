@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-development-acceleration-delegated-decision/v1",
+  "decision_id": "DA-G2.DELEGATED.CONDITIONAL.PASS.20260801T160000Z",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP2",
+  "gate_id": "DA-G2",
+  "decision": "PENDING_CI",
+  "decision_authority": "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN",
+  "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
+  "candidate_commit": null,
+  "acceptance_conditions": [
+    "DA-G2 validator passes",
+    "focused preflight and retained shared-service tests pass",
+    "complete repository suite passes",
+    "no unresolved review or blocking warning remains",
+    "authority delta remains wholly non-reserved"
+  ],
+  "qa_status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "rationale": "The packet adds a read-only fail-closed guard. It does not run guarded computations or activate provider, release, selector, R2, Validation, repository-bot or exposure authority.",
+  "rollback": "Disable preflight invocation or revert the bounded DA-WP2 merge through a new non-destructive commit.",
+  "next_packet": "DA-WP3"
+}
