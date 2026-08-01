@@ -83,7 +83,7 @@ Previously merged receipts remain court records. Revocation grants no deletion a
 
 ## Post-approval implementation boundary
 
-An operator DA-G4 PASS authorises bounded implementation and eventual activation only inside this exact envelope. Activation remains conditional on:
+An operator DA-G4 PASS authorises bounded implementation and eventual activation only inside this exact envelope. The post-decision profile state is `APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE`; approval does not itself activate repository-bot write authority. Activation remains conditional on:
 
 - a closed authority-profile schema and active profile whose hash matches this proposal;
 - a branch/path-enforcing writer adapter with no merge API;
