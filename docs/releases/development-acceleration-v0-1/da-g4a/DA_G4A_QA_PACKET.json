@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4",
+  "gate_id": "DA-G4A",
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-G4A-SNAPSHOT-001", "result": "PASS", "evidence": "Closure snapshots bind exact policy, PR, base, head, paths, tests, QA, decision, authority and rollback."},
+    {"check_id": "DA-G4A-ELIGIBILITY-002", "result": "PASS", "evidence": "Wrong base/head, unallowlisted paths, failed tests, warnings, reviews, reserved authority and destructive rollback block."},
+    {"check_id": "DA-G4A-RECEIPT-003", "result": "PASS", "evidence": "Receipt proposal binds a supplied post-merge SHA without causing or implying a merge."},
+    {"check_id": "DA-G4A-COMPARE-004", "result": "PASS", "evidence": "Generated and manual fixture receipts have zero material differences; altered or extra fields block."},
+    {"check_id": "DA-G4A-NOWRITE-005", "result": "PASS", "evidence": "All results state writes_performed=false, merge_performed=false and permanent repository safety denials."},
+    {"check_id": "DA-G4A-AUTH-006", "result": "PASS", "evidence": "Repository-bot write remains denied until separate operator-required DA-G4."},
+    {"check_id": "DA-G4A-CI-007", "result": "PENDING", "evidence": "Final-head validator, closure tests, retained development tests and complete repository suite pending."}
+  ],
+  "blocking_issues": [],
+  "warnings": [],
+  "qa_recommendation": "PASS_AFTER_FINAL_HEAD_CI",
+  "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED_UNTIL_OPERATOR_DA_G4",
+  "rollback": "Stop closure proposal generation or revert the bounded DA-WP4 merge; preserve comparisons and manual receipts."
+}
