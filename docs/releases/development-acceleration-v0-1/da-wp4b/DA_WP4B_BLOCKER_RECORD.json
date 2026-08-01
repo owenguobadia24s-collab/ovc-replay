@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-development-acceleration-blocker-record/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4B",
+  "gate_id": "DA-G4B",
+  "status": "BLOCKED_ACTIVATION_EXTERNAL_EVIDENCE",
+  "blockers": [
+    {
+      "blocker_id": "DA-WP4B-BLOCK-BRANCH-PROTECTION",
+      "condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED",
+      "reason": "The connected GitHub interface does not expose independently reproducible branch-protection rule-set evidence sufficient to prove that the future dedicated bot identity cannot bypass main protection.",
+      "smallest_lawful_resolution": "Provide a reproducible branch-protection or ruleset export bound to the repository and dedicated bot identity, showing direct main writes and bypass are denied."
+    },
+    {
+      "blocker_id": "DA-WP4B-BLOCK-DEDICATED-IDENTITY",
+      "condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS",
+      "reason": "No dedicated revocable receipt-bot identity with the approved minimal permissions is provisioned. The operator GitHub connector is not that identity and cannot lawfully substitute.",
+      "smallest_lawful_resolution": "Provision the dedicated revocable identity, record only its non-secret identity hash and permission evidence, then run one allowlisted proposal-branch shadow without merge authority."
+    }
+  ],
+  "preserved_work": [
+    "bounded authority contract",
+    "closed schemas",
+    "inactive exact policy",
+    "fail-closed planner and adapter protocol",
+    "fixtures and tests",
+    "activation evidence ledger",
+    "rollback and revocation controls"
+  ],
+  "prohibited_resolution": [
+    "Do not use the operator connector as the bot shadow identity.",
+    "Do not mark branch protection PASS from assumptions or repository permissions alone.",
+    "Do not activate the profile, provision broad credentials or weaken tests.",
+    "Do not merge, force-push, rewrite history or delete accepted evidence."
+  ],
+  "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "authority_active": false,
+  "rollback": "Keep the profile inactive and provision no credential until both blockers are reproducibly resolved."
+}
