@@ -6,10 +6,10 @@
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
   "title": "Receipt-bot bounded implementation and activation evidence",
-  "status": "IMPLEMENTED_STATIC_PENDING_FINAL_HEAD_CI_ACTIVATION_BLOCKED",
+  "status": "IMPLEMENTED_QA_PASS_ACTIVATION_BLOCKED",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "candidate_commit": null,
+  "tested_candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
   "operator_decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
   "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
   "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
@@ -25,7 +25,8 @@
     "narrow adapter protocol with no merge or approval method",
     "deterministic action-plan and activation evaluation",
     "passing and blocking fixtures",
-    "denied-action and revocation tests"
+    "denied-action and revocation tests",
+    "complete repository assurance"
   ],
   "changed_files": [
     ".github/workflows/development-acceleration-da-wp4b.yml",
@@ -45,13 +46,13 @@
     "schemas/development/receipt_bot_work_packet_v0_1.schema.json",
     "scripts/development/validate_da_wp4b.py",
     "src/ovc/development/receipt_bot.py",
+    "tests/development/test_da_g4.py",
     "tests/development/test_receipt_bot.py"
   ],
   "tests": [
-    "DA-WP4B validator pending",
-    "focused receipt-bot tests pending",
-    "retained closure and DA-G4 tests pending",
-    "complete repository suite pending"
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30711248035, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30711248023, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30711248056, "result": "PASS"}
   ],
   "external_artifacts": [],
   "external_artifact_hashes": "NONE_AVAILABLE",
@@ -61,5 +62,6 @@
     "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
   ],
   "rollback": "Keep the profile inactive, provision no credential, close any unmerged shadow PR if later created, and revert the bounded implementation through a new non-destructive commit.",
-  "next_gate": "DA-G4B"
+  "next_gate": "DA-G4B",
+  "disposition": "PRESERVE_BRANCH_AND_OPEN_PR_UNMERGED_UNTIL_EXTERNAL_ACTIVATION_EVIDENCE_EXISTS"
 }
