@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 GATE = ROOT / "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_OPERATOR_GATE_PACKET.json"
 QA = ROOT / "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_QA_PACKET.json"
 AUTHORITY = ROOT / "registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json"
+DECISION = ROOT / "docs/releases/research-console-v0-3/rc-g5/RC_G5_OPERATOR_DECISION.json"
 
 
 def load(path: Path) -> dict:
@@ -37,21 +38,45 @@ def main() -> int:
 
     if gate.get("classification") != "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE":
         raise SystemExit("RC_G5_CLASSIFICATION_FAILURE")
-    if gate.get("operator_decision_required") is not True or gate.get("auto_ratifiable") is not False:
-        raise SystemExit("RC_G5_OPERATOR_GATE_FLAGS_FAILURE")
+    if gate.get("auto_ratifiable") is not False:
+        raise SystemExit("RC_G5_AUTO_RATIFICATION_FAILURE")
     if gate.get("proposed_authority_delta") != "LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION":
         raise SystemExit("RC_G5_AUTHORITY_DELTA_FAILURE")
-    if gate.get("status") not in {"GATE_READY_PENDING_FINAL_HEAD_CI", "GATE_READY"}:
-        raise SystemExit("RC_G5_GATE_STATUS_FAILURE")
-    if gate.get("operator_decision") is not None:
-        raise SystemExit("RC_G5_OPERATOR_DECISION_PREMATURE")
     if gate.get("unresolved_issues"):
         raise SystemExit("RC_G5_UNRESOLVED_ISSUES")
 
-    if authority.get("enabled") is not False or authority.get("status") != "DISABLED_PENDING_OPERATOR_RC_G5":
+    status = gate.get("status")
+    if status in {"GATE_READY_PENDING_FINAL_HEAD_CI", "GATE_READY"}:
+        if gate.get("operator_decision_required") is not True or gate.get("operator_decision") is not None:
+            raise SystemExit("RC_G5_GATE_READY_FLAGS_FAILURE")
+        if authority.get("status") != "DISABLED_PENDING_OPERATOR_RC_G5":
+            raise SystemExit("RC_G5_GATE_READY_AUTHORITY_STATE_FAILURE")
+        if authority.get("current_route_state") != "DISABLED_PENDING_RC_G5":
+            raise SystemExit("RC_G5_GATE_READY_ROUTE_STATE_FAILURE")
+    elif status == "APPROVED_PENDING_BOUNDED_ACTIVATION":
+        if gate.get("operator_decision_required") is not False:
+            raise SystemExit("RC_G5_APPROVED_OPERATOR_FLAG_FAILURE")
+        operator_decision = gate.get("operator_decision") or {}
+        if operator_decision.get("decision") != "PASS":
+            raise SystemExit("RC_G5_APPROVED_DECISION_FAILURE")
+        if not DECISION.is_file():
+            raise SystemExit("RC_G5_DECISION_RECORD_MISSING")
+        decision = load(DECISION)
+        if decision.get("decision") != "PASS" or decision.get("gate_id") != "RC-G5":
+            raise SystemExit("RC_G5_DECISION_RECORD_FAILURE")
+        if decision.get("decision_id") != operator_decision.get("decision_id"):
+            raise SystemExit("RC_G5_DECISION_ID_MISMATCH")
+        if authority.get("status") != "APPROVED_PENDING_BOUNDED_ACTIVATION":
+            raise SystemExit("RC_G5_APPROVED_AUTHORITY_STATE_FAILURE")
+        if authority.get("operator_decision_id") != decision.get("decision_id"):
+            raise SystemExit("RC_G5_AUTHORITY_DECISION_BINDING_FAILURE")
+        if authority.get("current_route_state") != "DISABLED_PENDING_BOUNDED_ACTIVATION":
+            raise SystemExit("RC_G5_APPROVED_ROUTE_STATE_FAILURE")
+    else:
+        raise SystemExit("RC_G5_GATE_STATUS_FAILURE")
+
+    if authority.get("enabled") is not False:
         raise SystemExit("RC_G5_ROUTE_PREMATURELY_ENABLED")
-    if authority.get("current_route_state") != "DISABLED_PENDING_RC_G5":
-        raise SystemExit("RC_G5_ROUTE_STATE_FAILURE")
     if authority.get("writes") != "NONE" or authority.get("annotation_actions") != "NONE":
         raise SystemExit("RC_G5_WRITE_BOUNDARY_FAILURE")
     if authority.get("remote_deployment") != "DENIED":
@@ -83,12 +108,12 @@ def main() -> int:
         ROOT / "apps/research_console/pages/RO4_Sequence_Evidence.py",
     ]
     if any(path.exists() for path in forbidden_pages):
-        raise SystemExit("RC_G5_ROUTE_ACTIVATED_BEFORE_OPERATOR_PASS")
+        raise SystemExit("RC_G5_ROUTE_ACTIVATED_INSIDE_DECISION_PACKET")
 
     if qa.get("recommendation") != "PASS" or qa.get("blocking_issues"):
         raise SystemExit("RC_G5_QA_FAILURE")
 
-    print("PASS: RC-G5 is consolidated, source-bound, no-write and operator-reserved with route disabled")
+    print("PASS: RC-G5 decision packet is source-bound, operator-approved, no-write and still route-disabled")
     return 0
 
 
