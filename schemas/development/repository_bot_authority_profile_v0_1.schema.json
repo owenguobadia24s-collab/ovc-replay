@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/repository_bot_authority_profile_v0_1.schema.json",
+  "title": "OVC Repository Bot Authority Profile v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "profile_id", "programme_id", "gate_id", "status", "active",
+    "proposed_authority_delta", "base_branch", "branch_patterns", "allowed_paths",
+    "allowed_actions", "denied_actions", "required_preconditions", "permissions",
+    "self_modification", "credential_storage", "activation_conditions", "revocation"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-repository-bot-authority-profile/v1"},
+    "profile_id": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "OVC-DEV-ACCEL-v0.1"},
+    "gate_id": {"const": "DA-G4"},
+    "status": {"const": "PENDING_OPERATOR_DA_G4"},
+    "active": {"const": false},
+    "proposed_authority_delta": {"const": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY"},
+    "base_branch": {"const": "main"},
+    "branch_patterns": {
+      "type": "array",
+      "const": ["bot/ovc-dev-accel-receipts/*"]
+    },
+    "allowed_paths": {
+      "type": "array",
+      "const": [
+        "docs/releases/development-acceleration-v0-1/**",
+        "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json",
+        "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+      ]
+    },
+    "allowed_actions": {
+      "type": "array",
+      "const": ["CREATE_BOT_BRANCH", "CREATE_OR_UPDATE_ALLOWLISTED_FILES", "OPEN_OR_UPDATE_PULL_REQUEST"]
+    },
+    "denied_actions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "required_preconditions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contents", "pull_requests", "workflows", "administration", "actions", "secrets", "environments"],
+      "properties": {
+        "contents": {"const": "WRITE_FOR_ALLOWLISTED_BOT_BRANCH_WORKFLOW_ONLY"},
+        "pull_requests": {"const": "WRITE_FOR_OPEN_OR_UPDATE_ONLY"},
+        "workflows": {"const": "NONE"},
+        "administration": {"const": "NONE"},
+        "actions": {"const": "NONE"},
+        "secrets": {"const": "NONE"},
+        "environments": {"const": "NONE"}
+      }
+    },
+    "self_modification": {"const": "DENIED"},
+    "credential_storage": {"const": "PROHIBITED_IN_REPOSITORY_RECORDS_FIXTURES_AND_LOGS"},
+    "activation_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "revocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_disable", "credential_revoke", "bot_pr_treatment", "history_rewrite", "accepted_record_deletion"],
+      "properties": {
+        "profile_disable": {"const": "REQUIRED"},
+        "credential_revoke": {"const": "REQUIRED"},
+        "bot_pr_treatment": {"const": "CLOSE_UNMERGED_IF_REQUIRED"},
+        "history_rewrite": {"const": "PROHIBITED"},
+        "accepted_record_deletion": {"const": "PROHIBITED"}
+      }
+    }
+  }
+}
