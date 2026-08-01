@@ -20,6 +20,9 @@ from ovc.development.closure import (  # noqa: E402
 
 
 BASELINE = "51c066cd851f3a222dde04bdd5f2e9769afe7a95"
+TESTED = "7bd25202458158fe1a77db1fbd2891a9063ae7db"
+DA_G4A_RUN = 30708716073
+SHADOW_RUN = 30708716057
 MERGE_SHA = "3333333333333333333333333333333333333333"
 REQUIRED = [
     "contracts/development/OVC_DRY_RUN_CLOSURE_AND_RECEIPT_CONTRACT_v0_1.md",
@@ -51,6 +54,12 @@ def require_tokens(path: str, tokens: list[str]) -> None:
     missing = [token for token in tokens if token not in body]
     if missing:
         raise AssertionError(f"{path}: missing {missing}")
+
+
+def assert_runs(rows: list[dict[str, object]]) -> None:
+    actual = {(row["run_id"], row["result"]) for row in rows}
+    assert (DA_G4A_RUN, "PASS") in actual
+    assert (SHADOW_RUN, "PASS") in actual
 
 
 def main() -> int:
@@ -106,33 +115,44 @@ def main() -> int:
     assert state["current_gate"] == "DA-G4A"
     assert state["baseline_commit"] == BASELINE
     assert state["branch"] == "build/ovc-dev-accel-closure"
+    assert state["candidate_commit"] == TESTED
     assert state["authority"]["repository_bot_write"] == "DENIED_UNTIL_DA_G4"
     packets = {row["packet_id"]: row for row in state["packets"]}
     assert packets["DA-WP3"]["status"] == "COMPLETED"
     assert packets["DA-WP3"]["merge_commit"] == BASELINE
-    assert packets["DA-WP4"]["status"] == "QA_REVIEW"
+    assert packets["DA-WP4"]["status"] == "APPROVED"
+    assert packets["DA-WP4"]["candidate_commit"] == TESTED
+    assert packets["DA-WP4"]["blockers"] == []
     assert packets["DA-WP4"]["authority_delta"] == "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY"
     assert state["open_concurrent_work"][0]["pull_request"] == 202
 
     assert gate["gate_id"] == "DA-G4A"
     assert gate["packet_id"] == "DA-WP4"
-    assert gate["status"] == "QA_REVIEW"
+    assert gate["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert gate["baseline_commit"] == BASELINE
+    assert gate["tested_candidate_commit"] == TESTED
     assert gate["reserved_authority_delta"] == "NONE"
     assert gate["repository_bot_write"] == "DENIED_UNTIL_OPERATOR_DA_G4"
+    assert gate["recommended_decision"] == "PASS"
     assert gate["next_gate"] == "DA-G4"
+    assert_runs(gate["tests"])
 
-    assert qa["status"] == "PASS_STATIC_PENDING_FINAL_HEAD_CI"
+    assert qa["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert qa["baseline_commit"] == BASELINE
+    assert qa["tested_candidate_commit"] == TESTED
     assert qa["blocking_issues"] == []
+    assert qa["qa_recommendation"] == "PASS"
     assert qa["reserved_authority_delta"] == "NONE"
     assert qa["repository_bot_write"] == "DENIED_UNTIL_OPERATOR_DA_G4"
+    assert_runs(qa["tests"])
 
-    assert decision["decision"] == "PENDING_CI"
+    assert decision["decision"] == "PASS"
     assert decision["decision_authority"] == "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN"
     assert decision["baseline_commit"] == BASELINE
+    assert decision["tested_candidate_commit"] == TESTED
     assert decision["reserved_authority_delta"] == "NONE"
     assert decision["repository_bot_write"] == "DENIED_UNTIL_OPERATOR_DA_G4"
+    assert_runs(decision["tests"])
 
     require_tokens(REQUIRED[0], [
         "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY", "performs no GitHub write",
