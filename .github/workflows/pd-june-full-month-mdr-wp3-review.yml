@@ -1,0 +1,65 @@
+name: PD-JUNE-FM-WP3 blinded review construction
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ovc/research_operations/pattern_discovery/full_month_wp3_review.py'
+      - 'tests/research_operations/pattern_discovery/test_pd_june_full_month_mdr_wp3_review.py'
+      - 'schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp3_review_v0_1.schema.json'
+      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp3-review/**'
+      - 'registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json'
+      - '.github/workflows/pd-june-full-month-mdr-wp3-review.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wp3-review-construction:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and run focused WP3 tests
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -m py_compile src/ovc/research_operations/pattern_discovery/full_month_wp3_review.py
+          python -m unittest tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp3_review -v
+      - name: Run retained full-month WP2 acceptance and source tests
+        env:
+          PYTHONPATH: src:.
+        run: >-
+          python -m unittest
+          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr
+          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp2_replay_acceptance
+          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2
+          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr2
+          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr3
+          -v
+      - name: Run complete repository suite
+        env:
+          PYTHONPATH: src:.
+        run: python -m unittest discover -s tests -v
+      - name: Enforce external-artifact, blinding and authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only origin/main...HEAD)"
+          ! grep -Eq '^src/ovc/opt_b/|^src/ovc/research_operations/prospective_source/' <<<"$changed"
+          ! find . -type f \( -name '*.bi5' -o -name '*.jsonl' -o -name 'PD_JUNE_FM_WP3_BLINDED_REVIEW_BATCH_*.json' -o -name 'PD_JUNE_FM_WP3_SEALED_ANSWER_KEY.json' \) -not -path './.git/*' | grep -q .
+          grep -q '"selected_card_count": 40' docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp3-review/PD_JUNE_FM_WP3_SELECTION_AND_COMPLETENESS_QA.json
+          grep -q '"source_boundary_insufficiency": 0' docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp3-review/PD_JUNE_FM_WP3_SELECTION_AND_COMPLETENESS_QA.json
+          grep -q '"review_card_presentation_omission_count": 0' docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp3-review/PD_JUNE_FM_WP3_SELECTION_AND_COMPLETENESS_QA.json
+          grep -q '"sealed_answer_key_sha256": "48ddb7ff6689c60ef4ce24703119f6557959828e886e02213ae1804c3001ed97"' docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp3-review/PD_JUNE_FM_WP3_SELECTION_AND_COMPLETENESS_QA.json
+          grep -q '"release_status": "NOT_A_RELEASE"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
+          grep -q '"selector_eligibility": "NONE"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
+          grep -q '"r2_publication": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
+          grep -q '"validation_consumption": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
+          grep -q '"write_authority": false' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
+          grep -q '"next_packet_authority": "OPERATOR_REQUIRED_BLINDED_REVIEW"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
