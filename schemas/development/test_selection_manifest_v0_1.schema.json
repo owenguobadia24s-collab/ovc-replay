@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/test_selection_manifest_v0_1.schema.json",
+  "title": "OVC Test Selection Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "registry_id", "registry_hash", "stage", "changed_paths", "selected_profile",
+    "status", "matched_rules", "unknown_paths", "ambiguous_paths", "commands",
+    "retained_checks", "blockers", "gate_id", "final_assurance_required",
+    "final_assurance_profile", "gate_replay_substitution",
+    "local_success_substitutes_remote_required_check", "authority", "selection_manifest_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-test-selection-manifest/v1"},
+    "registry_id": {"type": "string", "minLength": 1},
+    "registry_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stage": {"enum": ["CHANGE", "FINAL_HEAD", "GATE_REPLAY"]},
+    "changed_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "selected_profile": {"enum": ["FAST", "PACKET", "FINAL_HEAD", "GATE_REPLAY"]},
+    "status": {"enum": ["PASS", "BLOCK"]},
+    "matched_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "rule_id", "pattern", "priority", "owner", "minimum_profile"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "rule_id": {"type": "string", "minLength": 1},
+          "pattern": {"type": "string", "minLength": 1},
+          "priority": {"type": "integer", "minimum": 0},
+          "owner": {"type": "string", "minLength": 1},
+          "minimum_profile": {"enum": ["FAST", "PACKET", "FINAL_HEAD"]}
+        }
+      }
+    },
+    "unknown_paths": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "ambiguous_paths": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "commands": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "retained_checks": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "blockers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "gate_id": {"type": ["string", "null"]},
+    "final_assurance_required": {"const": true},
+    "final_assurance_profile": {"const": "FINAL_HEAD"},
+    "gate_replay_substitution": {"const": "PROHIBITED"},
+    "local_success_substitutes_remote_required_check": {"const": false},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "test_selection", "writes_performed", "repository_bot_write", "direct_main_write",
+        "force_push", "release", "selector", "r2", "validation"
+      ],
+      "properties": {
+        "test_selection": {"const": "DETERMINISTIC_ONLY"},
+        "writes_performed": {"const": false},
+        "repository_bot_write": {"const": "DENIED"},
+        "direct_main_write": {"const": "DENIED"},
+        "force_push": {"const": "DENIED"},
+        "release": {"const": "DENIED"},
+        "selector": {"const": "DENIED"},
+        "r2": {"const": "DENIED"},
+        "validation": {"const": "DENIED"}
+      }
+    },
+    "selection_manifest_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
