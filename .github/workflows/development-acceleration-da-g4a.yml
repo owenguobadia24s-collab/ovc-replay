@@ -48,5 +48,5 @@ jobs:
           grep -q 'writes_performed.*false' docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_SHADOW_COMPARISON.json
           grep -q 'merge_performed.*false' docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_SHADOW_COMPARISON.json
           grep -q 'reserved_authority_delta.*NONE' docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json
-          ! grep -R -E 'git push|git merge|git reset --hard|rclone|wrangler|aws s3' src/ovc/development/closure.py
+          ! grep -R -E 'subprocess|os\.system|requests|urllib|rclone|wrangler|aws s3' src/ovc/development/closure.py
           ! grep -R -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/closure.py
