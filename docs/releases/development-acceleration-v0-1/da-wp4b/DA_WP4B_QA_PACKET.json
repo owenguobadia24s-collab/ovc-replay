@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4B",
+  "gate_id": "DA-G4B",
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI_ACTIVATION_BLOCKED",
+  "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-WP4B-AUTH-001", "result": "PASS", "evidence": "DA-G4 operator PASS is recorded and the approved profile remains active=false."},
+    {"check_id": "DA-WP4B-POLICY-002", "result": "PASS", "evidence": "Exact bot branch, path and action allowlists are machine readable; all reserved actions remain denied."},
+    {"check_id": "DA-WP4B-PLANNER-003", "result": "PASS", "evidence": "Work-packet parsing, stale-head checks, profile binding, deterministic plan construction and no-write authority are implemented."},
+    {"check_id": "DA-WP4B-IDEMPOTENCY-004", "result": "PENDING_CI", "evidence": "Exact retries and changed-plan collisions are tested."},
+    {"check_id": "DA-WP4B-REDACTION-005", "result": "PENDING_CI", "evidence": "Nested credential values are redacted before audit output."},
+    {"check_id": "DA-WP4B-DENIAL-006", "result": "PENDING_CI", "evidence": "The adapter protocol has no merge, approval, deletion or force-push method."},
+    {"check_id": "DA-WP4B-BRANCH-PROTECTION-007", "result": "BLOCK", "evidence": "Independent no-bypass branch-protection evidence is unavailable."},
+    {"check_id": "DA-WP4B-REAL-SHADOW-008", "result": "BLOCK", "evidence": "Dedicated revocable bot identity is not provisioned, so a compliant real proposal-branch shadow cannot run."},
+    {"check_id": "DA-WP4B-CI-009", "result": "PENDING", "evidence": "Final-head validator, focused tests and complete repository suite pending."}
+  ],
+  "implementation_blocking_issues": [],
+  "activation_blocking_issues": [
+    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
+    "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
+    "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+  ],
+  "warnings": [
+    "Repository contents permission is not a native path sandbox; application checks alone do not satisfy the activation boundary."
+  ],
+  "qa_recommendation": "PASS_IMPLEMENTATION_AFTER_CI_BLOCK_ACTIVATION",
+  "authority_active": false,
+  "market_authority_delta": "NONE",
+  "validation_authority_delta": "NONE",
+  "probability_risk_exposure_execution_delta": "NONE",
+  "rollback": "Keep the profile inactive and provision no credential; preserve tests and evidence for continuation."
+}
