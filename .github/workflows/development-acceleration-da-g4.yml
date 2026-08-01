@@ -1,0 +1,54 @@
+name: Development Acceleration DA-G4 operator gate readiness
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/development/OVC_REPOSITORY_RECEIPT_BOT_AUTHORITY_PROPOSAL_v0_1.md"
+      - "schemas/development/repository_bot_authority_profile_v0_1.schema.json"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json"
+      - "docs/releases/development-acceleration-v0-1/da-wp4/**"
+      - "docs/releases/development-acceleration-v0-1/da-g4/**"
+      - "scripts/development/validate_da_g4.py"
+      - "tests/development/test_da_g4.py"
+      - ".github/workflows/development-acceleration-da-g4.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  da-g4-gate-ready:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'DA-G4')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate DA-G4 operator packet
+        run: PYTHONPATH=src python -u scripts/development/validate_da_g4.py
+      - name: Focused repository-bot proposal tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4.py' -v
+      - name: Retained closure tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_closure.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert authority remains inactive
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'status.*PENDING_OPERATOR_DA_G4' registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json
+          grep -q 'active.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json
+          grep -q 'repository_bot_write.*DENIED_PENDING_DA_G4' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
+          grep -q 'direct_main_write.*PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
+          grep -q 'authority_active.*false' docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION_REQUEST.json
+          ! grep -R -E 'ghp_|github_pat_|BEGIN PRIVATE KEY|sk-proj-|Bearer ' \
+            contracts/development/OVC_REPOSITORY_RECEIPT_BOT_AUTHORITY_PROPOSAL_v0_1.md \
+            schemas/development/repository_bot_authority_profile_v0_1.schema.json \
+            registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json \
+            docs/releases/development-acceleration-v0-1/da-g4
