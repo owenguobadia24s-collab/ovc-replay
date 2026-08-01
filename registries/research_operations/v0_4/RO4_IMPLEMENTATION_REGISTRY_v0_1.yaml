@@ -3,12 +3,12 @@ programme_id: OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4
 plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2
 plan_version: v0.2
 plan_sha256: 89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf
-status: APPROVED_RO4_G5_PENDING_MERGE
+status: COMPLETED_RO4_G5_READY_RC_G5
 owner: OPERATOR
 repository: owenguobadia24s-collab/ovc-replay
-court_record_main_tip: 075752da9707f9c7bb8bd0298d32d1c50623026c
-current_branch: build/ro4-wp5-disabled-console-projection
-runtime_implementation_started: YES_RO4_WP1_WP2_WP3_WP4_AND_APPROVED_WP5_DISABLED_ADAPTER
+court_record_main_tip: ecb6d6cd62e306c3ce161decd269aeb3aa26c407
+current_branch: record/ro4-g5-merge-receipt
+runtime_implementation_started: YES_RO4_WP1_WP2_WP3_WP4_AND_COMPLETED_WP5_DISABLED_ADAPTER
 route_state: DISABLED_PENDING_RC_G5
 append_authority: APPROVED_RO4_G4_BOUNDED_LOCAL
 packages:
@@ -17,7 +17,7 @@ packages:
   registries: APPROVED_RO4_G5_ROUTE_DISABLED
   fixtures: SYNTHETIC_NON_AUTHORITATIVE
   source_runtime: IMPLEMENTED_RO4_WP1_WP2_WP3_WP4
-  console_adapter: APPROVED_DISABLED_NO_ROUTE_REGISTRATION
+  console_adapter: COMPLETED_DISABLED_NO_ROUTE_REGISTRATION
   console_runtime: NOT_ACTIVATED
 packets:
   - {packet_id: RO4-00, gate_id: RO4-G0, status: COMPLETED, merge_commit: e82c3ce57f6c0bc1f69620c40c81bd81f7c045d8, authority_delta: DESIGN_CANON_ONLY}
@@ -25,12 +25,12 @@ packets:
   - {packet_id: RO4-WP2, gate_id: RO4-G2, status: COMPLETED, merge_commit: 4c3ea8dbf4ff7d504c9dc083993fde9d16e684d8, authority_delta: LOCAL_READ_ONLY_DERIVED}
   - {packet_id: RO4-WP3, gate_id: RO4-G3, status: COMPLETED, merge_commit: 04e7528fcc82c556f6e58347aea1468e4c7c2d57, authority_delta: NON_CANONICAL_RESEARCH_CANDIDATE}
   - {packet_id: RO4-WP4, gate_id: RO4-G4, status: COMPLETED, merge_commit: 075752da9707f9c7bb8bd0298d32d1c50623026c, authority_delta: BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE, decision_record: docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_OPERATOR_DECISION.json}
-  - {packet_id: RO4-WP5, gate_id: RO4-G5, status: APPROVED, baseline_commit: 075752da9707f9c7bb8bd0298d32d1c50623026c, branch: build/ro4-wp5-disabled-console-projection, candidate_commit: 20de0f29c1d2be6a70f0ffbbc3e6f775c3ad5965, prerequisites: [RO4-G4], authority_delta: DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS, decision_record: docs/releases/research-operations-foundation-v0-4/ro4-g5/RO4_G5_DELEGATED_DECISION.json}
-  - {packet_id: RC-G5, gate_id: RC-G5, status: READY, prerequisites: [RO4-G5], blockers: [RO4_G5_MERGE_PENDING], authority_delta: LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION}
+  - {packet_id: RO4-WP5, gate_id: RO4-G5, status: COMPLETED, baseline_commit: 075752da9707f9c7bb8bd0298d32d1c50623026c, branch: build/ro4-wp5-disabled-console-projection, candidate_commit: c95ee9e98bfb744b6f546caa7052307752ae718e, merge_commit: ecb6d6cd62e306c3ce161decd269aeb3aa26c407, prerequisites: [RO4-G4], authority_delta: DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS, decision_record: docs/releases/research-operations-foundation-v0-4/ro4-g5/RO4_G5_DELEGATED_DECISION.json, merge_receipt: docs/releases/research-operations-foundation-v0-4/ro4-g5/RO4_G5_MERGE_RECEIPT.json}
+  - {packet_id: RC-G5, gate_id: RC-G5, status: READY, prerequisites: [RO4-G5], authority_delta: LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION, operator_decision_required: true}
   - {packet_id: RO4-G6, gate_id: RO4-G6, status: PLANNED, prerequisites: [RO4-G4, EVIDENCE_SUFFICIENT], authority_delta: EVIDENCE_DISPOSITION_ONLY}
 continuation:
-  on_ro4_g5_pass: RC-G5_OPERATOR_GATE_PREPARATION
-  on_ro4_g5_block: RO4-WP5_BLOCKED
+  next_packet: RC-G5
+  next_authority: OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE
 retained_denials:
   - CONSOLE_ROUTE_ACTIVATION
   - CONSOLE_WRITE
