@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-development-acceleration-delegated-decision/v1",
+  "decision_id": "DA-G4A.DELEGATED.CONDITIONAL.PASS.20260801T164500Z",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4",
+  "gate_id": "DA-G4A",
+  "decision": "PENDING_CI",
+  "decision_authority": "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN",
+  "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
+  "candidate_commit": null,
+  "acceptance_conditions": [
+    "DA-G4A validator passes",
+    "focused closure and receipt comparison tests pass",
+    "complete repository suite passes",
+    "shadow receipt comparison has zero material differences",
+    "no unresolved review, warning or authority expansion remains"
+  ],
+  "qa_status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED_UNTIL_OPERATOR_DA_G4",
+  "rationale": "The packet evaluates and compares closure records only. It performs no merge or repository write and does not grant the reserved DA-G4 capability.",
+  "rollback": "Stop closure proposal generation or revert the bounded DA-WP4 merge through a new non-destructive commit.",
+  "next_gate": "DA-G4"
+}
