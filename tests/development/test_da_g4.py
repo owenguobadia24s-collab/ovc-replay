@@ -172,8 +172,10 @@ class RepositoryBotGateTests(unittest.TestCase):
         self.assertTrue(self.decision["implementation_authorized"])
         self.assertFalse(self.decision["authority_active"])
         self.assertFalse(self.state["operator_decision_required"])
-        self.assertEqual(self.state["current_gate"], "DA-G4")
-        self.assertEqual(self.state["next_action"], "SQUASH_MERGE_PR_208_THEN_BEGIN_DA_WP4B")
+        self.assertEqual(self.state["operator_gate"]["status"], "COMPLETED")
+        self.assertEqual(self.state["operator_gate"]["merge_commit"], "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3")
+        self.assertEqual(self.state["current_gate"], "DA-G4B")
+        self.assertEqual(self.state["current_packet"], "DA-WP4B")
 
 
 if __name__ == "__main__":
