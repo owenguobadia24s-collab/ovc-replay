@@ -59,7 +59,8 @@ def main() -> int:
     assert state["operator_decision_id"] == DECISION_ID
     assert state["authority"]["repository_bot_write"] == "DENIED_UNTIL_DA_G4"
     assert state["authority"]["direct_main_write"] == "PROHIBITED"
-    assert state["packets"][0]["status"] == "QA_REVIEW"
+    assert state["packets"][0]["status"] == "APPROVED"
+    assert state["packets"][0]["blockers"] == []
     assert state["packets"][1]["status"] == "PLANNED"
     assert state["open_concurrent_work"][0]["pull_request"] == 202
 
@@ -82,9 +83,10 @@ def main() -> int:
     assert gate["current_open_pull_requests"] == [202]
     assert gate["next_packet"] == "DA-WP1"
 
-    assert qa["status"] == "PASS_STATIC_PENDING_FINAL_HEAD_CI"
+    assert qa["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert qa["blocking_issues"] == []
     assert qa["authority_delta"] == "REPOSITORY_RECORDS_ONLY"
+    assert qa["reserved_authority_delta"] == "NONE"
 
     require_tokens(REQUIRED[0], [
         "REPOSITORY_BOT_WRITE", "DENIED", "force-push", "Validation",
