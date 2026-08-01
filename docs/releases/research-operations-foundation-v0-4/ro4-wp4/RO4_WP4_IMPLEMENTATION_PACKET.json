@@ -1,42 +1,48 @@
 {
-  "authority_state": {
-    "console_write": "PROHIBITED",
-    "current": "RO4_G3_NON_CANONICAL_RESEARCH_CANDIDATE_APPROVED",
-    "production_append_registry": "DISABLED_PENDING_RO4_G4",
-    "proposed_delta": "BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE"
-  },
-  "baseline_commit": "d674425aeb91dc470ce2cef9feb400ee6236784c",
+  "schema": "ovc-ro4-wp4-implementation-packet/v1",
+  "packet_id": "RO4-WP4",
+  "gate_id": "RO4-G4",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
   "branch": "build/ro4-wp4-annotations-c2e-friction",
+  "baseline_commit": "d674425aeb91dc470ce2cef9feb400ee6236784c",
   "candidate_commit": "3dbcdf9dea546886654c2b0ae6482a9a87bb71e5",
+  "status": "APPROVED_PENDING_MERGE",
+  "operator_decision": {
+    "decision_id": "RO4-G4.OPERATOR.PASS.20260801T080400Z",
+    "decision": "PASS",
+    "approved_at": "2026-08-01T08:04:00Z",
+    "decision_record": "docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_OPERATOR_DECISION.json"
+  },
+  "authority_state": {
+    "current": "RO4_G4_BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE_APPROVED",
+    "approved_delta": "BOUNDED_LOCAL_APPEND_ONLY_RESEARCH_EVIDENCE",
+    "production_append_registry": "APPROVED_RO4_G4",
+    "console_write": "PROHIBITED"
+  },
   "deliverables": [
     "Research Operations v0.1 envelope integration for four allowlisted RO4 record types",
-    "gate-disabled local annotation, friction, prospective-review and supersession service",
+    "approved bounded local annotation, friction, prospective-review and supersession service",
     "deterministic record identity, exact idempotent replay, immutable append and audit binding",
     "source release, sequence, member, first-valid and admissible-cutoff validation",
-    "disabled production authority registry and command registry",
+    "operator-bound production authority and command registries",
     "synthetic fixture and focused append/supersession/cutoff/authority tests",
     "ovc ro4 command dispatcher with Console write still prohibited",
-    "consolidated RO4-G4 operator gate packet before any canonical append"
+    "consolidated RO4-G4 operator decision before any canonical append"
   ],
-  "external_artifacts": {
-    "canonical_records_appended": 0,
-    "created": false,
-    "synthetic_fixture_sha256": "362e393562f0bd0dd786768cf6cbb5f66a0ced7ae2d06fb3e1f6d7aefbf7d2f6"
-  },
-  "gate_id": "RO4-G4",
-  "packet_id": "RO4-WP4",
-  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
-  "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
-  "plan_version": "v0.2",
-  "rollback": "Disable the RO4 append registry through a new commit and preserve all frozen records and audit events. Revert the bounded adapter/CLI changes non-destructively; do not mutate C2, Pattern Discovery, selectors, releases or R2.",
-  "schema": "ovc-ro4-wp4-implementation-packet/v1",
   "source_evidence": {
-    "acknowledgement_required": false,
-    "g3_logical_hash": "9271f3b7e25e06c49e8f9864fda7edff8adb333289886d05c89ebaf730761097",
     "g3_merge_commit": "04e7528fcc82c556f6e58347aea1468e4c7c2d57",
-    "pd_population_merge": "DENIED",
+    "g3_logical_hash": "9271f3b7e25e06c49e8f9864fda7edff8adb333289886d05c89ebaf730761097",
     "signature_diversity_status": "PASS",
+    "acknowledgement_required": false,
+    "pd_population_merge": "DENIED",
     "validation_consumption": "LOCKED_UNCONSUMED"
   },
-  "status": "GATE_READY_CI_PASS"
+  "external_artifacts": {
+    "created": false,
+    "canonical_records_appended": 0,
+    "synthetic_fixture_sha256": "362e393562f0bd0dd786768cf6cbb5f66a0ced7ae2d06fb3e1f6d7aefbf7d2f6"
+  },
+  "rollback": "Disable the RO4 append registry through a new commit and preserve all frozen records and audit events. Revert the bounded adapter/CLI changes non-destructively; do not mutate C2, Pattern Discovery, selectors, releases or R2."
 }
