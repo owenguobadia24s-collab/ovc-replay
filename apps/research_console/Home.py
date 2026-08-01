@@ -9,16 +9,19 @@ from apps.research_console.c1_projection_source import (
     load_c1_projection,
     projection_identity as c1_projection_identity,
 )
-from apps.research_console.rc_g4_console import run_console
+from apps.research_console.rc_g5_console import run_console
 from apps.research_console.ro2_projection_source import load_ro2_projection, projection_identity
+from apps.research_console.ro4_active_projection_source import (
+    load_active_projection,
+    projection_identity as c2_sequence_projection_identity,
+)
 
 
-def load_represented_identity(c1_projection: Mapping[str, Any] | None = None) -> dict[str, Any]:
-    """Load authorised local read-model, RO2 and RC-G4 C1 presentation identities.
-
-    Missing or malformed sources fail to NOT_EVALUATED. Only bounded, local,
-    read-only projection identity is admitted to the persistent shell context.
-    """
+def load_represented_identity(
+    c1_projection: Mapping[str, Any] | None = None,
+    c2_sequence_projection: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Load authorised local read-model, RO2, C1 and RC-G5 C2 sequence identities."""
 
     model_path = Path(os.environ.get("OVC_RESEARCH_READ_MODEL", "var/research_operations/read_model/current.json"))
     identity: dict[str, Any] = {
@@ -29,6 +32,8 @@ def load_represented_identity(c1_projection: Mapping[str, Any] | None = None) ->
         "freshness": "READ_MODEL_IDENTITY_UNAVAILABLE",
         "c1_route_state": "ENABLED_LOCAL_READ_ONLY",
         "c1_availability": "NOT_EVALUATED",
+        "c2_sequence_route_state": "ENABLED_LOCAL_READ_ONLY",
+        "c2_sequence_availability": "NOT_EVALUATED",
     }
     if model_path.is_file():
         try:
@@ -53,8 +58,21 @@ def load_represented_identity(c1_projection: Mapping[str, Any] | None = None) ->
     identity["c1_availability"] = str(c1_identity["availability"])
     if c1_identity["availability"] == "AVAILABLE":
         identity["freshness"] = "RC_G4_C1_ACCEPTED_LOCAL_READ_ONLY_PRESENTATION"
+
+    c2_source = dict(c2_sequence_projection or load_active_projection())
+    c2_identity = c2_sequence_projection_identity(c2_source)
+    identity.update({f"c2_sequence_{key}": value for key, value in c2_identity.items()})
+    identity["c2_sequence_route_state"] = str(c2_identity["route_state"])
+    identity["c2_sequence_availability"] = str(c2_identity["availability"])
+    if c2_identity["availability"] == "AVAILABLE":
+        identity["freshness"] = "RC_G5_C2_SEQUENCE_ACCEPTED_LOCAL_READ_ONLY_PRESENTATION"
     return identity
 
 
 _c1_projection = load_c1_projection()
-run_console(load_represented_identity(_c1_projection), c1_projection=_c1_projection)
+_c2_sequence_projection = load_active_projection()
+run_console(
+    load_represented_identity(_c1_projection, _c2_sequence_projection),
+    c1_projection=_c1_projection,
+    c2_sequence_projection=_c2_sequence_projection,
+)
