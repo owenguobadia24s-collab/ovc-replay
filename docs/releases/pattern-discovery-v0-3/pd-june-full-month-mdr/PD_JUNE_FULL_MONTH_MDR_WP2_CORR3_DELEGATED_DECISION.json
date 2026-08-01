@@ -1,0 +1,70 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr3-delegated-decision/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR3",
+  "title": "Windows deterministic pass-B cleanup compatibility correction",
+  "baseline_commit": "0ffc4894d804b2f311b79df6db96f75c25b382b6",
+  "latest_lawful_main_incorporated": "d94e6cca1db4c4d81f3e70f6868740f272d59302",
+  "base_synchronization_commit": "eb670efc9c7e3996bd980cfa4584bcbbb74deceb",
+  "implementation_tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "status": "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
+  "authority_delta": "NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY",
+  "reserved_authority_delta": "NONE",
+  "rationale": "The operator-local replay had completed the independent deterministic builds and byte-inventory comparison, then Windows denied deletion of the duplicate pass-B directory. Bounded retry and non-authoritative cleanup quarantine are operational filesystem handling only. They do not alter accepted source bytes, replay formulas, C1/C2 logic, expected counts, identities, candidate bytes or authority.",
+  "acceptance_conditions": [
+    "TRANSIENT_ACCESS_DENIAL_RETRIED_AND_REMOVED",
+    "PERSISTENT_RETRYABLE_DENIAL_QUARANTINES_ONLY_DUPLICATE_PASS_B",
+    "NON_RETRYABLE_FILESYSTEM_ERRORS_REMAIN_BLOCKING",
+    "CANDIDATE_STAGING_EXCLUDES_DUPLICATE_PASS_B",
+    "SCOPED_CLEANUP_OVERRIDE_RESTORED_AFTER_EXECUTION",
+    "LINUX_AND_WINDOWS_FOCUSED_TESTS_PASS",
+    "RETAINED_WP2_CORR1_CORR2_TESTS_PASS",
+    "COMPLETE_REPOSITORY_SUITE_PASS",
+    "NO_SOURCE_ADAPTER_FORMULA_THRESHOLD_IDENTITY_SELECTOR_RELEASE_R2_OR_VALIDATION_MUTATION",
+    "NO_UNRESOLVED_REVIEW_OR_BLOCKING_WARNING"
+  ],
+  "acceptance_result": "PASS_ON_IMPLEMENTATION_HEAD_FINAL_HEAD_RECHECK_REQUIRED",
+  "tests": [
+    {
+      "workflow_run": 30693845582,
+      "job": 91353174394,
+      "runner": "windows-latest",
+      "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30693845582,
+      "job": 91353174410,
+      "runner": "ubuntu-24.04",
+      "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30693845582,
+      "job": 91353210502,
+      "runner": "ubuntu-24.04",
+      "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+      "result": "PASS"
+    }
+  ],
+  "qa_result": "PASS_WINDOWS_CLEANUP_COMPATIBILITY_CORRECTION",
+  "retained_prohibitions": [
+    "FORMULA_CHANGE",
+    "THRESHOLD_CHANGE",
+    "SEMANTIC_TRIGGER_CANDIDATE_DISTANCE_CLUSTER_OR_MODEL_CHANGE",
+    "CANDIDATE_FAMILY_NOVELTY_OR_THEORY_PROMOTION",
+    "SELECTOR_OR_RELEASE_MUTATION",
+    "CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND",
+    "R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
+  ],
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_QA_PACKET.json",
+  "next_action": "FINAL_HEAD_LINUX_AND_WINDOWS_CI_THEN_ELIGIBLE_AUTOMATIC_SQUASH_MERGE",
+  "rollback": "Preserve all accepted source and prior correction history. Revert only CORR3 through a new non-destructive commit."
+}
