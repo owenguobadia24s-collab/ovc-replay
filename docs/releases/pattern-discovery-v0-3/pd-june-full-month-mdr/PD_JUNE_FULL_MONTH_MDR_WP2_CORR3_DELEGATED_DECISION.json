@@ -7,9 +7,11 @@
   "correction_id": "PD-JUNE-FM-WP2-CORR3",
   "title": "Windows deterministic pass-B cleanup compatibility correction",
   "baseline_commit": "0ffc4894d804b2f311b79df6db96f75c25b382b6",
-  "decision": "PASS_PENDING_FINAL_HEAD_CI",
+  "latest_lawful_main_incorporated": "dc8dfe285014c176bd6b48d85e58445f56801981",
+  "implementation_tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+  "decision": "PASS",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
-  "status": "APPROVED_CONDITIONALLY_PENDING_REQUIRED_TESTS",
+  "status": "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
   "authority_delta": "NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY",
   "reserved_authority_delta": "NONE",
   "rationale": "The operator-local replay had completed the independent deterministic builds and byte-inventory comparison, then Windows denied deletion of the duplicate pass-B directory. Bounded retry and non-authoritative cleanup quarantine are operational filesystem handling only. They do not alter accepted source bytes, replay formulas, C1/C2 logic, expected counts, identities, candidate bytes or authority.",
@@ -25,6 +27,31 @@
     "NO_SOURCE_ADAPTER_FORMULA_THRESHOLD_IDENTITY_SELECTOR_RELEASE_R2_OR_VALIDATION_MUTATION",
     "NO_UNRESOLVED_REVIEW_OR_BLOCKING_WARNING"
   ],
+  "acceptance_result": "PASS_ON_IMPLEMENTATION_HEAD_FINAL_HEAD_RECHECK_REQUIRED",
+  "tests": [
+    {
+      "workflow_run": 30693845582,
+      "job": 91353174394,
+      "runner": "windows-latest",
+      "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30693845582,
+      "job": 91353174410,
+      "runner": "ubuntu-24.04",
+      "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30693845582,
+      "job": 91353210502,
+      "runner": "ubuntu-24.04",
+      "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+      "result": "PASS"
+    }
+  ],
+  "qa_result": "PASS_WINDOWS_CLEANUP_COMPATIBILITY_CORRECTION",
   "retained_prohibitions": [
     "FORMULA_CHANGE",
     "THRESHOLD_CHANGE",
