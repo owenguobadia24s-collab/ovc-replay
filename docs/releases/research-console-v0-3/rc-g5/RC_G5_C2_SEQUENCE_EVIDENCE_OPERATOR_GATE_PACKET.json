@@ -1,0 +1,115 @@
+{
+  "schema": "ovc-research-console-rc-g5-c2-sequence-evidence-operator-gate-packet/v1",
+  "gate_id": "RC-G5",
+  "title": "Research Console v0.3 — Local Read-Only C2 Sequence-Evidence Presentation",
+  "owner": "OPERATOR",
+  "classification": "OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
+  "baseline_main_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
+  "candidate_branch": "gate/rc-g5-c2-sequence-evidence",
+  "tested_candidate_commit": "bea7cd245c1d79c336f3ac9e5502773995681d1c",
+  "prerequisite": {
+    "packet_id": "RO4-WP5",
+    "gate_id": "RO4-G5",
+    "decision_id": "RO4-G5.DELEGATED.PASS.20260801T082700Z",
+    "final_head": "c95ee9e98bfb744b6f546caa7052307752ae718e",
+    "merge_commit": "ecb6d6cd62e306c3ce161decd269aeb3aa26c407",
+    "merge_receipt_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
+    "qa_result": "PASS"
+  },
+  "current_authority": {
+    "ro4_g4_append_only_records": "APPROVED_BOUNDED_LOCAL",
+    "ro4_g5_projection_adapter": "APPROVED_DISABLED",
+    "c2_sequence_evidence_route": "DISABLED_PENDING_BOUNDED_ACTIVATION",
+    "console_write": "PROHIBITED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "c2_mutation": "DENIED",
+    "pattern_discovery_population_or_write": "DENIED",
+    "remote_deployment": "DENIED",
+    "probability_risk_exposure_execution": "DENIED"
+  },
+  "proposed_authority_delta": "LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION",
+  "permits_after_pass": [
+    "One local read-only route: RESEARCH.C2_SEQUENCE_EVIDENCE.",
+    "Exact approved RO4 projection objects only.",
+    "Separated panels for C2 state, transition, persistence/conflict, non-canonical sequences, read-only boundary/friction, PD trigger traces, signature diversity and sample disclosure.",
+    "Discovery and Development references under exact accepted release and manifest bindings."
+  ],
+  "does_not_permit": [
+    "Annotation or Console write actions",
+    "C2 mutation, selector/release change, recomputation, tuning or promotion",
+    "Pattern Discovery candidate population, ranking, review-batch or evidence-bridge access",
+    "Validation record, path or payload resolution",
+    "Synthetic or ablated operator-facing controls",
+    "Percentage, ratio, heatmap, likelihood or silent-sampling presentation",
+    "Semantic, family, model, candidate or theory promotion",
+    "Outcome joining, probability, risk, exposure, trading, execution or agent write",
+    "R2 write or remote deployment"
+  ],
+  "approved_bindings": {
+    "projection_schema": {"schema_id":"ovc-ro4-console-projection/v1","path":"schemas/research_operations/v0_4/ro4_console_projection_v0_1.schema.json","git_blob_sha":"83bcf57c0374411dfdf02a61483b529b46f333c7"},
+    "adapter": {"path":"src/ovc/research_operations/v0_4/console_projection.py","git_blob_sha":"9d59699f5e3e14f3f4d7174af44b8a485556dc0a"},
+    "local_source": {"path":"apps/research_console/ro4_projection_source.py","git_blob_sha":"0471bfdfd501098c78c72bc993365db19bf45007"},
+    "projection_registry": {"path":"registries/research_operations/v0_4/RO4_WP5_PROJECTION_REGISTRY_v0_1.yaml","git_blob_sha":"03fd7f67322cbd0ead793c5eab2214218d0b98fa"},
+    "assurance_fixture": {"path":"fixtures/research_operations/v0_4/RO4_WP5_CONSOLE_PROJECTION_FIXTURE_v0_1.json","git_blob_sha":"85699557b5719182d26bbd41d7298c44cd98f740","classification":"SYNTHETIC_NON_AUTHORITATIVE"}
+  },
+  "route_and_panel_map": {
+    "route_id": "RESEARCH.C2_SEQUENCE_EVIDENCE",
+    "current_state": "DISABLED_PENDING_BOUNDED_ACTIVATION",
+    "approved_state_after_activation": "ENABLED_LOCAL_READ_ONLY",
+    "panels": ["C2_STATE","C2_TRANSITION","PERSISTENCE_CONFLICT","RO4_SEQUENCE","BOUNDARY_FRICTION_READ_ONLY","PD_TRIGGER_TRACE_ONLY","SIGNATURE_DIVERSITY","SAMPLE_DISCLOSURE"],
+    "writes": "NONE",
+    "remote_deployment": "DENIED"
+  },
+  "permanent_banners_after_activation": [
+    "LOCAL READ ONLY — C2 SEQUENCE EVIDENCE.",
+    "NO ANNOTATION OR WRITE ACTIONS ARE AVAILABLE.",
+    "VALIDATION IS LOCKED_UNCONSUMED.",
+    "C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED."
+  ],
+  "acceptance_and_test_evidence": [
+    {"condition":"Exact projection schema and hash binding","result":"PASS"},
+    {"condition":"Route disabled with no page/navigation registration","result":"PASS"},
+    {"condition":"Writes NONE and remote deployment DENIED","result":"PASS"},
+    {"condition":"Count denominators, PD isolation, synthetic exclusion, sample disclosure and Validation denial","result":"PASS"},
+    {"condition":"RO4-G5 focused and complete suite","result":"PASS","workflow_run":30691923987,"job":91348049863,"focused":"11/11","complete":"70/70"},
+    {"condition":"RO4-G5 merge receipt","result":"PASS","workflow_run":30692014163,"job":91348285819},
+    {"condition":"RC-G5 final gate validator, focused, complete and authority checks","result":"PASS","workflow_run":30692304504,"job":91349065881,"focused":"11/11","complete":"70/70"}
+  ],
+  "qa_packet": "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_QA_PACKET.json",
+  "decision_record": "docs/releases/research-console-v0-3/rc-g5/RC_G5_OPERATOR_DECISION.json",
+  "external_artifacts": {"created":false,"bytes":0,"canonical_records_appended":0},
+  "warnings": [
+    "The synthetic fixture proves presentation behavior only, not market correctness.",
+    "Operator PASS authorises only a bounded local activation implementation; this PR does not activate the route.",
+    "Validation remains LOCKED_UNCONSUMED and denied before path, panel or record resolution."
+  ],
+  "unresolved_issues": [],
+  "rollback": {
+    "action":"Disable RESEARCH.C2_SEQUENCE_EVIDENCE and return to the accepted RC-G3A/RC-G4 surface.",
+    "preserve":["RO4 schemas, projections, records, QA and decisions","C2 releases and manifests","Pattern Discovery authority and evidence","R2 objects"],
+    "prohibited":["Delete or rewrite historical evidence","Alter C2 or Pattern Discovery outputs","Consume Validation","Force-push or rewrite history"]
+  },
+  "exact_work_after_pass": [
+    "Merge this decision packet after final-head checks.",
+    "Create a bounded activation branch from the resulting lawful main tip.",
+    "Add fail-closed local route registration accepting only the approved authority registry, schema identities and hashes.",
+    "Add the C2 Sequence Evidence surface with eight separated panel classes and permanent banners.",
+    "Keep all actions and annotation controls absent; preserve writes NONE and local-only deployment.",
+    "Add focused UI/source tests, run the complete repository suite and squash-merge only inside the approved delta."
+  ],
+  "allowed_operator_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "operator_decision_required": false,
+  "auto_ratifiable": false,
+  "operator_decision": {
+    "decision_id": "RC-G5.OPERATOR.PASS.20260801T084900Z",
+    "decision": "PASS",
+    "authority": "OPERATOR",
+    "approved_at": "2026-08-01T08:49:00Z",
+    "operator_command": "@GitHub OVC APPROVE RC-G5 PASS"
+  },
+  "status": "APPROVED_PENDING_BOUNDED_ACTIVATION"
+}
