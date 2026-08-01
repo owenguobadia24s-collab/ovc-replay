@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP2",
+  "gate_id": "DA-G2",
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-G2-AUTH-001", "result": "PASS", "evidence": "Preflight is read-only and denies provider, release, selector, R2, Validation, direct-main, force-push and repository-bot authority."},
+    {"check_id": "DA-G2-PROFILE-002", "result": "PASS", "evidence": "Required references, undeclared inputs, duplicate identities, path mismatches and unsupported identity policies fail closed."},
+    {"check_id": "DA-G2-BYTES-003", "result": "PASS", "evidence": "Exact regular-file size and SHA-256 plus optional JSON schema markers are verified."},
+    {"check_id": "DA-G2-DEST-004", "result": "PASS", "evidence": "ABSENT and ABSENT_OR_EMPTY destination policies block files, symlinks and non-empty collisions."},
+    {"check_id": "DA-G2-NOWRITE-005", "result": "PASS", "evidence": "Tests snapshot input and destination trees before and after execution and require byte-identical state."},
+    {"check_id": "DA-G2-DETERMINISM-006", "result": "PASS", "evidence": "Equivalent roots and content produce identical root-independent request and receipt identities."},
+    {"check_id": "DA-G2-PERFORMANCE-007", "result": "PASS", "evidence": "Compact fixture is asserted below the 30-second target; elapsed time is excluded from logical identity."},
+    {"check_id": "DA-G2-CI-008", "result": "PENDING", "evidence": "Final-head validator, focused preflight tests, retained shared-service tests and complete repository suite pending."}
+  ],
+  "blocking_issues": [],
+  "warnings": [],
+  "qa_recommendation": "PASS_AFTER_FINAL_HEAD_CI",
+  "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "rollback": "Disable preflight invocation or revert the bounded DA-WP2 merge; preserve receipts and programme-specific validators."
+}
