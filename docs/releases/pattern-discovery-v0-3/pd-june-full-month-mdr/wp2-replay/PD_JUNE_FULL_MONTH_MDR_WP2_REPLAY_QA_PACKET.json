@@ -3,95 +3,40 @@
   "baseline_commit": "837c9a3e1cbfc18bf01d577896a8f2e01d12f7d2",
   "blockers": [],
   "checks": [
-    {
-      "check": "six compact Google Drive files exact size and SHA-256",
-      "result": "PASS"
-    },
-    {
-      "check": "output manifest canonical logical SHA-256",
-      "result": "PASS"
-    },
-    {
-      "check": "compact cross-file run, binding, manifest and payload hashes",
-      "result": "PASS"
-    },
-    {
-      "check": "source slice and accepted source manifest binding",
-      "result": "PASS"
-    },
-    {
-      "check": "deterministic independent rerun",
-      "result": "PASS_BYTE_IDENTICAL"
-    },
-    {
-      "check": "frozen expected C1 and C2 populations",
-      "result": "PASS"
-    },
-    {
-      "check": "source-boundary insufficiency",
-      "result": "PASS_ZERO"
-    },
-    {
-      "check": "June calendar-boundary incompleteness",
-      "result": "PASS_ZERO"
-    },
-    {
-      "check": "provider gaps separately censored without repair or bridging",
-      "result": "PASS"
-    },
-    {
-      "check": "release selector R2 Validation and write boundaries",
-      "result": "PASS"
-    },
-    {
-      "check": "focused acceptance, retained A2/WP1/WP2 and complete repository CI",
-      "result": "PASS"
-    }
+    {"check": "six compact Google Drive files exact size and SHA-256", "result": "PASS"},
+    {"check": "output manifest canonical logical SHA-256", "result": "PASS"},
+    {"check": "compact cross-file run, binding, manifest and payload hashes", "result": "PASS"},
+    {"check": "source slice and accepted source manifest binding", "result": "PASS"},
+    {"check": "deterministic independent rerun", "result": "PASS_BYTE_IDENTICAL"},
+    {"check": "frozen expected C1 and C2 populations", "result": "PASS"},
+    {"check": "source-boundary insufficiency", "result": "PASS_ZERO"},
+    {"check": "June calendar-boundary incompleteness", "result": "PASS_ZERO"},
+    {"check": "provider gaps separately censored without repair or bridging", "result": "PASS"},
+    {"check": "release selector R2 Validation and write boundaries", "result": "PASS"},
+    {"check": "focused acceptance, retained A2/WP1/WP2 and complete repository CI", "result": "PASS"},
+    {"check": "eligible squash merge", "result": "PASS_fedc20ab92f0465e5c84d7626f859866c9ad1f00"}
   ],
+  "final_head": "89d06f5e4578c3e945c7b7dd443ef573ae743f85",
+  "merge_commit": "fedc20ab92f0465e5c84d7626f859866c9ad1f00",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_MERGE_RECEIPT.json",
   "next_packet": "PD-JUNE-FM-WP3",
-  "next_packet_status": "BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE",
+  "next_packet_status": "READY",
   "packet_id": "PD-JUNE-FM-WP2",
   "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
   "plan_version": "0.1+A1+A2",
   "programme_id": "PD-JUNE-FULL-MONTH-MDR",
   "qa_result": "PASS_DETERMINISTIC_FULL_MONTH_REPLAY_ACCEPTANCE",
-  "recommendation": "PASS_AUTO_RATIFY_AND_SQUASH_MERGE",
+  "recommendation": "PASS_COMPLETED_CONTINUE_TO_WP3",
   "reserved_authority_delta": "NONE",
-  "rollback": "Preserve the accepted external replay and all quarantines. Revert only this compact acceptance packet through a new non-destructive commit.",
+  "rollback": "Preserve the accepted external replay and all quarantines. Revert merge fedc20ab92f0465e5c84d7626f859866c9ad1f00 only through a new non-destructive commit.",
   "schema": "ovc-pd-june-full-month-mdr-wp2-replay-qa/v1",
-  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
-  "tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
+  "status": "COMPLETED_SQUASH_MERGED_WP3_READY",
   "tests": [
-    {
-      "workflow_run": 30695788261,
-      "job": 91358321910,
-      "scope": "exact compact evidence, cross-file bindings, retained WP2/source tests, complete suite and authority boundary",
-      "result": "PASS"
-    },
-    {
-      "workflow_run": 30695788262,
-      "job": 91358321845,
-      "scope": "A2 court record, retained tests, complete suite and no-repair boundary",
-      "result": "PASS"
-    },
-    {
-      "workflow_run": 30695788234,
-      "job": 91358321802,
-      "scope": "WP1 intake continuity and complete suite",
-      "result": "PASS"
-    },
-    {
-      "workflow_run": 30695788288,
-      "job": 91358321848,
-      "scope": "WP2 tooling continuity, retained tests, complete suite and local-only boundary",
-      "result": "PASS"
-    },
-    {
-      "workflow_run": 30695788320,
-      "job": 91358322001,
-      "scope": "generic complete repository unit tests",
-      "result": "PASS"
-    }
+    {"workflow_run": 30696059237, "job": 91359044666, "scope": "exact compact replay acceptance, retained tests, complete suite and authority boundary", "result": "PASS"},
+    {"workflow_run": 30696059351, "job": 91359044905, "scope": "A2 court record, retained tests, complete suite and no-repair boundary", "result": "PASS"},
+    {"workflow_run": 30696059354, "job": 91359044967, "scope": "WP1 intake continuity and complete suite", "result": "PASS"},
+    {"workflow_run": 30696059312, "job": 91359044837, "scope": "frozen source acceptance and authority boundary", "result": "PASS"},
+    {"workflow_run": 30696059390, "job": 91359045065, "scope": "generic complete repository unit tests", "result": "PASS"}
   ],
   "warnings": [
     "Algorithmic NOT_EVALUATED or NOT_EVALUABLE marker count is 13,993 and must remain separately reported in WP3.",

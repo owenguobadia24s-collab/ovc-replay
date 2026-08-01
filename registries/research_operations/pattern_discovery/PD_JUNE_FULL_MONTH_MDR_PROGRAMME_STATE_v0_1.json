@@ -1,6 +1,8 @@
 {
   "acceptance_branch": "accept/pd-june-fm-wp2-replay",
-  "acceptance_tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
+  "acceptance_final_head": "89d06f5e4578c3e945c7b7dd443ef573ae743f85",
+  "acceptance_merge_commit": "fedc20ab92f0465e5c84d7626f859866c9ad1f00",
+  "acceptance_merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_MERGE_RECEIPT.json",
   "administrative_tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
   "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_ACCEPTANCE_ONLY",
   "authority_required": "NONE",
@@ -13,22 +15,8 @@
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_DELEGATED_DECISION.json",
   "downstream_incomplete_membership_policy": "INCOMPLETE_REQUIRED_MEMBERSHIP_NOT_EVALUABLE_NO_BRIDGING",
   "expected_population": {
-    "15m_per_side": {
-      "complete": 2231,
-      "incomplete": 85,
-      "target_complete": 2036,
-      "target_incomplete": 76,
-      "target_total": 2112,
-      "total": 2316
-    },
-    "2h_per_side": {
-      "complete": 248,
-      "incomplete": 46,
-      "target_complete": 227,
-      "target_incomplete": 41,
-      "target_total": 268,
-      "total": 294
-    },
+    "15m_per_side": {"complete": 2231, "incomplete": 85, "target_complete": 2036, "target_incomplete": 76, "target_total": 2112, "total": 2316},
+    "2h_per_side": {"complete": 248, "incomplete": 46, "target_complete": 227, "target_incomplete": 41, "target_total": 268, "total": 294},
     "c1_target": 4526,
     "c1_total": 4958,
     "c2_states_target": 8598,
@@ -37,11 +25,11 @@
     "c2_transitions_total": 7345
   },
   "final_tooling_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
-  "merge_commit": null,
-  "merge_status": "APPROVED_PENDING_ELIGIBLE_SQUASH_MERGE",
+  "merge_commit": "fedc20ab92f0465e5c84d7626f859866c9ad1f00",
+  "merge_status": "PASS_SQUASH_MERGED_TO_MAIN",
   "native_july_h1_transport": "WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE",
   "next_packet": "PD-JUNE-FM-WP3",
-  "next_packet_status": "BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE",
+  "next_packet_status": "READY",
   "packet_id": "PD-JUNE-FM-WP2",
   "paired_sparse_m1_policy": "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING",
   "plan_amendment": "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE",
@@ -56,7 +44,8 @@
     "PD-JUNE-FM-WP2-TOOLING-DELEGATED-PASS",
     "PD-JUNE-FM-WP2-TOOLING-SQUASH-MERGED",
     "PD-JUNE-FM-WP2-OPERATOR-LOCAL-REPLAY-COMPLETE",
-    "PD-JUNE-FM-WP2-ACCEPTANCE-CI-PASS"
+    "PD-JUNE-FM-WP2-ACCEPTANCE-PASS",
+    "PD-JUNE-FM-WP2-ACCEPTANCE-SQUASH-MERGED"
   ],
   "prior_plan_amendment": "PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER",
   "programme_id": "PD-JUNE-FULL-MONTH-MDR",
@@ -64,7 +53,7 @@
   "provider_execution_location": "OPERATOR_LOCAL_ONLY",
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_QA_PACKET.json",
   "qa_result": "PASS_DETERMINISTIC_FULL_MONTH_REPLAY_ACCEPTANCE",
-  "receipt_branch": "administrative/pd-june-fm-wp2-tooling-merge-receipt",
+  "receipt_branch": "administrative/pd-june-fm-wp2-replay-merge-receipt",
   "replay": {
     "algorithmic_not_evaluable_markers": 13993,
     "binding_id": "RPS.BINDING.4894de559cdc4e7b426cf7cf",
@@ -80,30 +69,13 @@
   },
   "replay_status": "PASS_ACCEPTED_FOR_WP3",
   "resolved_blockers": [
-    {
-      "blocker_id": "PD-JUNE-FM-WP2-FINAL-HEAD-CI-001",
-      "status": "RESOLVED_REQUIRED_FINAL_HEAD_CHECKS_PASS"
-    },
-    {
-      "blocker_id": "PD-JUNE-FM-WP2-TOOLING-MERGE-001",
-      "status": "RESOLVED_SQUASH_MERGED_TO_MAIN"
-    },
-    {
-      "blocker_id": "PD-JUNE-FM-WP2-ADMINISTRATIVE-CI-001",
-      "status": "RESOLVED_ADMINISTRATIVE_CHECKS_PASS"
-    },
-    {
-      "blocker_id": "PD-JUNE-FM-WP2-LOCAL-EXECUTION-001",
-      "status": "RESOLVED_OPERATOR_LOCAL_REPLAY_COMPLETE_AND_SIX_COMPACT_FILES_RETURNED"
-    },
-    {
-      "blocker_id": "PD-JUNE-FM-WP2-WINDOWS-PASS-B-CLEANUP-001",
-      "status": "RESOLVED_BY_CORR3"
-    },
-    {
-      "blocker_id": "PD-JUNE-FM-WP2-ACCEPTANCE-CI-001",
-      "status": "RESOLVED_ACCEPTANCE_A2_WP1_WP2_AND_COMPLETE_SUITE_CHECKS_PASS"
-    }
+    {"blocker_id": "PD-JUNE-FM-WP2-FINAL-HEAD-CI-001", "status": "RESOLVED_REQUIRED_FINAL_HEAD_CHECKS_PASS"},
+    {"blocker_id": "PD-JUNE-FM-WP2-TOOLING-MERGE-001", "status": "RESOLVED_SQUASH_MERGED_TO_MAIN"},
+    {"blocker_id": "PD-JUNE-FM-WP2-ADMINISTRATIVE-CI-001", "status": "RESOLVED_ADMINISTRATIVE_CHECKS_PASS"},
+    {"blocker_id": "PD-JUNE-FM-WP2-LOCAL-EXECUTION-001", "status": "RESOLVED_OPERATOR_LOCAL_REPLAY_COMPLETE_AND_SIX_COMPACT_FILES_RETURNED"},
+    {"blocker_id": "PD-JUNE-FM-WP2-WINDOWS-PASS-B-CLEANUP-001", "status": "RESOLVED_BY_CORR3"},
+    {"blocker_id": "PD-JUNE-FM-WP2-ACCEPTANCE-CI-001", "status": "RESOLVED_ACCEPTANCE_A2_WP1_WP2_SOURCE_AND_COMPLETE_SUITE_CHECKS_PASS"},
+    {"blocker_id": "PD-JUNE-FM-WP2-ACCEPTANCE-MERGE-001", "status": "RESOLVED_SQUASH_MERGED_fedc20ab92f0465e5c84d7626f859866c9ad1f00"}
   ],
   "retained_prohibitions": [
     "FORMULA_CHANGE",
@@ -116,7 +88,7 @@
     "VALIDATION_CONSUMPTION",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
-  "rollback": "Preserve the accepted external replay, tooling squash merge, accepted source slice, WP1 merge and all prior evidence. Correct only through new non-destructive commits.",
+  "rollback": "Preserve the accepted external replay, tooling squash merge, accepted source slice, WP1 merge and all prior evidence. Revert merge fedc20ab92f0465e5c84d7626f859866c9ad1f00 only through a new non-destructive commit.",
   "schema": "ovc-pd-june-full-month-mdr-programme-state/v1",
   "source_acceptance_merge_commit": "39da5213ff3931cf9a22760a3ee3529d4fc43c30",
   "source_acceptance_receipt_merge_commit": "d9cb68b7cded7ec2b8a1e9bb862ae2501a3219f9",
@@ -125,74 +97,20 @@
   "source_request_plan": "UNCHANGED_72_PROVIDER_OBJECTS_68_M1_DAILY_4_H1_MONTHLY",
   "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
   "source_start_utc": "2026-05-30T00:00:00Z",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "target_eligibility": "TARGET_JUNE_ONLY_AFTER_FULL_INTERVAL_REPLAY",
   "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
   "target_start_utc": "2026-06-01T00:00:00Z",
   "tests": [
-    {
-      "job": 91243999664,
-      "result": "PASS",
-      "scope": "tooling final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary",
-      "tested_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
-      "workflow_run": 30657064858
-    },
-    {
-      "job": 91244002340,
-      "result": "PASS",
-      "scope": "tooling final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary",
-      "tested_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c",
-      "workflow_run": 30657065738
-    },
-    {
-      "job": 91245853454,
-      "result": "PASS",
-      "scope": "administrative merge receipt, WP2 focused tests, retained full-month/A2/WP1 continuity, complete repository suite and local-only authority boundary",
-      "tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
-      "workflow_run": 30657624697
-    },
-    {
-      "job": 91245853372,
-      "result": "PASS",
-      "scope": "administrative WP1 source acceptance continuity, focused tests, complete repository suite and source authority boundary",
-      "tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38",
-      "workflow_run": 30657624721
-    },
-    {
-      "job": 91358321910,
-      "result": "PASS",
-      "scope": "exact compact replay acceptance, retained tests, complete suite and authority boundary",
-      "tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
-      "workflow_run": 30695788261
-    },
-    {
-      "job": 91358321845,
-      "result": "PASS",
-      "scope": "A2 court record, retained tests, complete suite and no-repair boundary",
-      "tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
-      "workflow_run": 30695788262
-    },
-    {
-      "job": 91358321802,
-      "result": "PASS",
-      "scope": "WP1 intake continuity and complete suite",
-      "tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
-      "workflow_run": 30695788234
-    },
-    {
-      "job": 91358321848,
-      "result": "PASS",
-      "scope": "WP2 tooling continuity, retained tests, complete suite and local-only boundary",
-      "tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
-      "workflow_run": 30695788288
-    },
-    {
-      "job": 91358322001,
-      "result": "PASS",
-      "scope": "generic complete repository unit tests",
-      "tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
-      "workflow_run": 30695788320
-    }
+    {"job": 91243999664, "result": "PASS", "scope": "tooling final-head module compile, packet parse, focused WP2 tests, retained full-month/A2/WP1 tests, complete repository suite and authority boundary", "tested_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c", "workflow_run": 30657064858},
+    {"job": 91244002340, "result": "PASS", "scope": "tooling final-head WP1 source acceptance validator, focused tests, retained continuity, complete repository suite and source authority boundary", "tested_head": "b2ea2ae786ed266363c3035a67e5ba029e61c45c", "workflow_run": 30657065738},
+    {"job": 91245853454, "result": "PASS", "scope": "administrative merge receipt, WP2 focused tests, retained full-month/A2/WP1 continuity, complete repository suite and local-only authority boundary", "tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38", "workflow_run": 30657624697},
+    {"job": 91245853372, "result": "PASS", "scope": "administrative WP1 source acceptance continuity, focused tests, complete repository suite and source authority boundary", "tested_head": "73d1c19171c84c942b77d8293aef1d66da4cdd38", "workflow_run": 30657624721},
+    {"job": 91359044666, "result": "PASS", "scope": "exact compact replay acceptance, retained tests, complete suite and authority boundary", "tested_head": "89d06f5e4578c3e945c7b7dd443ef573ae743f85", "workflow_run": 30696059237},
+    {"job": 91359044905, "result": "PASS", "scope": "A2 court record, retained tests, complete suite and no-repair boundary", "tested_head": "89d06f5e4578c3e945c7b7dd443ef573ae743f85", "workflow_run": 30696059351},
+    {"job": 91359044967, "result": "PASS", "scope": "WP1 intake continuity and complete suite", "tested_head": "89d06f5e4578c3e945c7b7dd443ef573ae743f85", "workflow_run": 30696059354},
+    {"job": 91359044837, "result": "PASS", "scope": "frozen source acceptance and authority boundary", "tested_head": "89d06f5e4578c3e945c7b7dd443ef573ae743f85", "workflow_run": 30696059312},
+    {"job": 91359045065, "result": "PASS", "scope": "generic complete repository unit tests", "tested_head": "89d06f5e4578c3e945c7b7dd443ef573ae743f85", "workflow_run": 30696059390}
   ],
   "tooling": {
     "entrypoint_module": "src/ovc/research_operations/prospective_source/full_month_mdr_replay.py",

@@ -34,6 +34,7 @@ MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_A1_MERGE_RECEIPT.json"
 SOURCE_ACCEPTANCE = BASE / "PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json"
 SOURCE_ACCEPTANCE_MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_MERGE_RECEIPT.json"
 WP2_TOOLING_MERGE_RECEIPT = BASE / "PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_MERGE_RECEIPT.json"
+WP2_REPLAY_MERGE_RECEIPT = BASE / "wp2-replay" / "PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_MERGE_RECEIPT.json"
 STATE = ROOT / "registries" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json"
 PLAN = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_v0_1.md"
 PLAN_A1 = ROOT / "plans" / "research_operations" / "pattern_discovery" / "PD_JUNE_FULL_MONTH_MDR_IMPLEMENTATION_PLAN_A1_JULY_NATIVE_H1_WAIVER.md"
@@ -93,8 +94,9 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         for path in (
             AUTHORITY, AMENDMENT, AMENDMENT_A2, INCIDENT, DIAGNOSTIC_A2,
             MERGE_RECEIPT, SOURCE_ACCEPTANCE, SOURCE_ACCEPTANCE_MERGE_RECEIPT,
-            WP2_TOOLING_MERGE_RECEIPT, STATE, PLAN, PLAN_A1, PLAN_A2,
-            CONTRACT, CONTRACT_A1, CONTRACT_A2, SCHEMA, SCHEMA_A1, SCHEMA_A2,
+            WP2_TOOLING_MERGE_RECEIPT, WP2_REPLAY_MERGE_RECEIPT, STATE,
+            PLAN, PLAN_A1, PLAN_A2, CONTRACT, CONTRACT_A1, CONTRACT_A2,
+            SCHEMA, SCHEMA_A1, SCHEMA_A2,
         ):
             self.assertTrue(path.is_file(), path)
         authority = json.loads(AUTHORITY.read_text(encoding="utf-8"))
@@ -104,6 +106,7 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         source_acceptance = json.loads(SOURCE_ACCEPTANCE.read_text(encoding="utf-8"))
         source_receipt = json.loads(SOURCE_ACCEPTANCE_MERGE_RECEIPT.read_text(encoding="utf-8"))
         tooling_receipt = json.loads(WP2_TOOLING_MERGE_RECEIPT.read_text(encoding="utf-8"))
+        replay_receipt = json.loads(WP2_REPLAY_MERGE_RECEIPT.read_text(encoding="utf-8"))
         state = json.loads(STATE.read_text(encoding="utf-8"))
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
         diagnostic = json.loads(DIAGNOSTIC_A2.read_text(encoding="utf-8"))
@@ -127,17 +130,22 @@ class PDJuneFullMonthMDRTests(unittest.TestCase):
         self.assertEqual(tooling_receipt["final_head"], "b2ea2ae786ed266363c3035a67e5ba029e61c45c")
         self.assertEqual(tooling_receipt["merge_commit"], "b3ac2561aff225442465e6914a1e1e29adbfab62")
         self.assertEqual(tooling_receipt["next_action"], "OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE")
-        self.assertEqual(state["status"], "APPROVED")
+        self.assertEqual(replay_receipt["pull_request"], 200)
+        self.assertEqual(replay_receipt["final_head"], "89d06f5e4578c3e945c7b7dd443ef573ae743f85")
+        self.assertEqual(replay_receipt["merge_commit"], "fedc20ab92f0465e5c84d7626f859866c9ad1f00")
+        self.assertEqual(replay_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
+        self.assertEqual(state["status"], "COMPLETED")
         self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP2")
         self.assertEqual(state["prior_plan_amendment"], PLAN_AMENDMENT_ID)
         self.assertEqual(state["plan_amendment"], "PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE")
         self.assertEqual(state["source_acceptance_merge_commit"], "39da5213ff3931cf9a22760a3ee3529d4fc43c30")
         self.assertEqual(state["tooling_merge_commit"], tooling_receipt["merge_commit"])
+        self.assertEqual(state["acceptance_merge_commit"], replay_receipt["merge_commit"])
         self.assertEqual(state["paired_sparse_m1_policy"], "ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING")
         self.assertEqual(state["replay_status"], "PASS_ACCEPTED_FOR_WP3")
         self.assertEqual(state["replay"]["run_id"], "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9")
         self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP3")
-        self.assertEqual(state["next_packet_status"], "BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE")
+        self.assertEqual(state["next_packet_status"], "READY")
         self.assertEqual(state["tooling"]["execution_location"], "OPERATOR_LOCAL_ONLY")
         self.assertEqual(state["tooling"]["execution_in_ci"], "DENIED")
         self.assertEqual(state["canonical_2021_2023_discovery"], "DEFERRED_NOT_AUTHORISED")
