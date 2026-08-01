@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr2-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR2",
+  "baseline_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
+  "branch": "fix/pd-june-fm-wp2-prospective-id-contract",
+  "implementation_tested_head": "453ef7f480666c0a882ad518d007a79b5493834d",
+  "status": "PASS_APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
+  "qa_result": "PASS_PROSPECTIVE_ID_CONTRACT_COMPATIBILITY_CORRECTION",
+  "recommendation": "PASS_AUTO_RATIFY_AFTER_FINAL_HEAD_CHECKS",
+  "incident": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_PROSPECTIVE_ID_INCIDENT.json",
+  "checks": [
+    {"check": "price-set namespace matches frozen C1 prospective adapter", "result": "PASS_RPS_PRICESET"},
+    {"check": "source-manifest namespace matches frozen C1/C2 prospective adapters", "result": "PASS_RPS_SOURCE_MANIFEST"},
+    {"check": "C1 set and manifest namespaces match frozen C2 prospective adapter", "result": "PASS_RPS_C1_NAMESPACES"},
+    {"check": "source-bar identity matches frozen C2 prospective adapter", "result": "PASS_RPS_PRICE_PREFIX"},
+    {"check": "direct C1 adapter acceptance regression", "result": "PASS"},
+    {"check": "direct C2 adapter acceptance regression", "result": "PASS"},
+    {"check": "retained WP2 and CORR1 tests", "result": "PASS"},
+    {"check": "source bytes and source acceptance records unchanged", "result": "PASS_BY_CHANGED_FILE_BOUNDARY"},
+    {"check": "C1 and C2 frozen adapters unchanged", "result": "PASS_BY_CHANGED_FILE_BOUNDARY"},
+    {"check": "formula, threshold and semantic behaviour unchanged", "result": "PASS_BY_IMPLEMENTATION_SCOPE"},
+    {"check": "complete repository suite", "result": "PASS"},
+    {"check": "authority boundary", "result": "PASS"}
+  ],
+  "tests": [
+    {
+      "workflow_run": 30692471398,
+      "job": 91349532500,
+      "tested_head": "453ef7f480666c0a882ad518d007a79b5493834d",
+      "scope": "CORR2 record parsing, direct C1/C2 adapter regressions, retained WP2/CORR1/source tests, complete repository suite and bounded authority assertions",
+      "result": "PASS"
+    }
+  ],
+  "warnings": [
+    "The quarantined operator-local staging directory is preserved and is not reusable as accepted replay evidence.",
+    "Operator-local WP2 execution must be rerun from a fresh immutable output identity after the correction merge."
+  ],
+  "blockers": ["FINAL_HEAD_CI_REQUIRED_BEFORE_SQUASH_MERGE"],
+  "authority_delta": "NONE_COMPATIBILITY_CORRECTION_ONLY",
+  "reserved_authority_delta": "NONE",
+  "rollback": "Preserve the accepted source slice, CORR1 and all prior merges. Revert only the CORR2 compatibility correction through a new non-destructive commit.",
+  "next_action": "RUN_FINAL_HEAD_CI_THEN_AUTO_RATIFY_AND_SQUASH_MERGE_IF_PASS"
+}

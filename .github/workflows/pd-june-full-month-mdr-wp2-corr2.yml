@@ -1,0 +1,79 @@
+name: PD-JUNE-FM-WP2 CORR2 prospective identity contract
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ovc/research_operations/prospective_source/full_month_mdr_replay.py'
+      - 'tests/research_operations/prospective_source/test_pd_june_full_month_mdr_wp2_corr2.py'
+      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_*.json'
+      - 'registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_STATE_v0_1.json'
+      - '.github/workflows/pd-june-full-month-mdr-wp2-corr2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  corr2-prospective-identity-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and parse CORR2 court records
+        run: |
+          PYTHONPATH=src:. python -m py_compile \
+            src/ovc/research_operations/prospective_source/full_month_mdr_replay.py \
+            tests/research_operations/prospective_source/test_pd_june_full_month_mdr_wp2_corr2.py
+          PYTHONPATH=src:. python - <<'PY'
+          import json
+          from pathlib import Path
+          from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
+
+          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
+          incident = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_PROSPECTIVE_ID_INCIDENT.json').read_text())
+          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_QA_PACKET.json').read_text())
+          decision = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_DELEGATED_DECISION.json').read_text())
+          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_STATE_v0_1.json').read_text())
+
+          assert incident['failure'] == 'PROSPECTIVE_PRICE_SET_ID_REQUIRED'
+          assert incident['source_slice_mutated'] is False
+          assert qa['qa_result'] == 'PASS_PROSPECTIVE_ID_CONTRACT_COMPATIBILITY_CORRECTION'
+          assert qa['authority_delta'] == 'NONE_COMPATIBILITY_CORRECTION_ONLY'
+          assert decision['decision'] == 'PASS'
+          assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
+          assert decision['reserved_authority_delta'] == 'NONE'
+          assert state['status'] == 'APPROVED'
+          assert state['qa_result'] == qa['qa_result']
+          assert state['source_mutated'] is False
+          assert subject.PRICE_SET_ID.startswith('RPS.PRICESET.')
+          assert subject.SOURCE_MANIFEST_ID.startswith('RPS.SOURCE-MANIFEST.')
+          assert subject.C1_SET_ID.startswith('RPS.C1SET.')
+          assert subject.C1_MANIFEST_ID.startswith('RPS.C1MANIFEST.')
+          PY
+      - name: Run focused CORR2 adapter compatibility tests
+        run: PYTHONPATH=src:. python -m unittest tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr2 -v
+      - name: Run retained WP2 and CORR1 tests
+        run: |
+          PYTHONPATH=src:. python -m unittest \
+            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2 \
+            tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr \
+            tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp1_source_acceptance \
+            -v
+      - name: Run complete repository suite
+        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
+      - name: Enforce bounded correction and authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          changed="$(git diff --name-only origin/main...HEAD)"
+          ! grep -Eq '^src/ovc/opt_b/c1/adapter.py$|^src/ovc/opt_b/c2/adapter.py$|^src/ovc/opt_b/c1/formulas.py$' <<<"$changed"
+          ! find . -type f \( -name '*.bi5' -o -name 'GBPUSD_M1_*_20260530_20260703_UTC.csv' -o -name 'GBPUSD_H1_*_20260530_20260703_UTC.csv' -o -name 'replay-run.json' -o -name 'replay-receipt.json' \) -not -path './.git/*' | grep -q .
+          grep -q 'NONE_COMPATIBILITY_CORRECTION_ONLY' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_STATE_v0_1.json
+          grep -q '"source_mutated": false' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_STATE_v0_1.json
+          grep -q '"r2_publication": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_STATE_v0_1.json
+          grep -q '"validation_consumption": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_STATE_v0_1.json

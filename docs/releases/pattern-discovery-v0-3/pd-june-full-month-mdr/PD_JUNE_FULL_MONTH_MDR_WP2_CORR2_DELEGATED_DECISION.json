@@ -1,0 +1,49 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr2-delegated-decision/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR2",
+  "title": "Prospective identity contract compatibility correction",
+  "baseline_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
+  "implementation_tested_head": "453ef7f480666c0a882ad518d007a79b5493834d",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "status": "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
+  "authority_delta": "NONE_COMPATIBILITY_CORRECTION_ONLY",
+  "reserved_authority_delta": "NONE",
+  "rationale": "The replay used programme-specific identity prefixes that were rejected by the already-frozen prospective C1 and C2 adapters. Rebinding only the replay output identities to the existing RPS namespaces corrects the implementation defect without changing any contract, formula, threshold, semantic or authority rule.",
+  "acceptance_conditions": [
+    "DIRECT_PRICE_PAYLOAD_ACCEPTED_BY_FROZEN_C1_ADAPTER",
+    "GENERATED_C1_RECORD_ACCEPTED_BY_FROZEN_C2_ADAPTER",
+    "EXISTING_WP2_AND_CORR1_TESTS_PASS",
+    "COMPLETE_REPOSITORY_SUITE_PASS",
+    "NO_SOURCE_ADAPTER_FORMULA_SELECTOR_RELEASE_R2_OR_VALIDATION_MUTATION",
+    "NO_UNRESOLVED_REVIEW_OR_BLOCKING_WARNING"
+  ],
+  "acceptance_result": "PASS_ON_IMPLEMENTATION_HEAD_FINAL_HEAD_RECHECK_REQUIRED",
+  "tests": [
+    {
+      "workflow_run": 30692471398,
+      "job": 91349532500,
+      "tested_head": "453ef7f480666c0a882ad518d007a79b5493834d",
+      "result": "PASS"
+    }
+  ],
+  "qa_result": "PASS_PROSPECTIVE_ID_CONTRACT_COMPATIBILITY_CORRECTION",
+  "retained_prohibitions": [
+    "FORMULA_CHANGE",
+    "THRESHOLD_CHANGE",
+    "SEMANTIC_TRIGGER_CANDIDATE_DISTANCE_CLUSTER_OR_MODEL_CHANGE",
+    "CANDIDATE_FAMILY_NOVELTY_OR_THEORY_PROMOTION",
+    "SELECTOR_OR_RELEASE_MUTATION",
+    "CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND",
+    "R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
+  ],
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_QA_PACKET.json",
+  "next_action": "FINAL_HEAD_CI_THEN_ELIGIBLE_AUTOMATIC_SQUASH_MERGE",
+  "rollback": "Preserve all accepted source and prior correction history. Revert only CORR2 through a new non-destructive commit."
+}

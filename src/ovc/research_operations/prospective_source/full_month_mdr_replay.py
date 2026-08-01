@@ -14,6 +14,17 @@ ACCEPTED_SOURCE_MANIFEST_EMBEDDED_LOGICAL_SHA256 = (
 ACCEPTED_SOURCE_MANIFEST_CONTENT_LOGICAL_SHA256 = (
     "aee0006826b4a9703416a4f171306df02f85b081f7f515e701ac8b0b2b409669"
 )
+PRICE_SET_ID = "RPS.PRICESET.GBPUSD.PD-JUNE-FM.20260530_20260703.v1"
+SOURCE_MANIFEST_ID = (
+    "RPS.SOURCE-MANIFEST.PD-JUNE-FM."
+    f"{implementation.SOURCE_MANIFEST_LOGICAL_SHA256[:24]}"
+)
+C1_SET_ID = "RPS.C1SET.GBPUSD.PD-JUNE-FM.20260530_20260703.v1"
+C1_MANIFEST_ID = (
+    "RPS.C1MANIFEST.PD-JUNE-FM."
+    f"{implementation.canonical_hash({'source': implementation.SOURCE_MANIFEST_LOGICAL_SHA256, 'formula': implementation.FORMULA_REGISTRY_ID})[:24]}"
+)
+_ORIGINAL_PRICE_PAYLOAD = implementation.price_payload
 
 
 def validate_source_manifest_hashes(
@@ -218,10 +229,25 @@ def complete_segments(
     return segments
 
 
+def price_payload(bar: ProspectiveBar, source_object_id: str) -> dict[str, Any]:
+    """Emit the accepted prospective namespace required by frozen C1/C2 adapters."""
+
+    payload = _ORIGINAL_PRICE_PAYLOAD(bar, source_object_id)
+    payload["source_bar_id"] = (
+        f"rps-price:{implementation.canonical_hash(bar.logical_dict())}"
+    )
+    return payload
+
+
 # Functions defined in the implementation module resolve globals in that module.
 # Bind the corrected, tested policies before exposing execute/main entrypoints.
+implementation.PRICE_SET_ID = PRICE_SET_ID
+implementation.SOURCE_MANIFEST_ID = SOURCE_MANIFEST_ID
+implementation.C1_SET_ID = C1_SET_ID
+implementation.C1_MANIFEST_ID = C1_MANIFEST_ID
 implementation.verify_frozen_source = verify_frozen_source
 implementation.complete_segments = complete_segments
+implementation.price_payload = price_payload
 
 
 if __name__ == "__main__":
