@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP1",
+  "gate_id": "DA-G1",
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "baseline_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-G1-IDENTITY-001", "result": "PASS", "evidence": "Canonical JSON, explicit identity roles and safe path normalization implemented."},
+    {"check_id": "DA-G1-PROFILE-002", "result": "PASS", "evidence": "Strict JSON profiles deny reserved authorities and reject unknown fields, duplicates and unsafe paths."},
+    {"check_id": "DA-G1-ARTIFACT-003", "result": "PASS", "evidence": "Exact size and SHA-256 verification rejects symlinks and mismatches."},
+    {"check_id": "DA-G1-QA-004", "result": "PASS", "evidence": "Empty assertion sets fail closed and blocking precedence is deterministic."},
+    {"check_id": "DA-G1-GOV-005", "result": "PASS", "evidence": "PASS decisions require tests; gate and rollback records require evidence and non-destructive rollback."},
+    {"check_id": "DA-G1-DEPENDENCY-006", "result": "PASS", "evidence": "Shared package contains no market semantic imports."},
+    {"check_id": "DA-G1-CI-007", "result": "PENDING", "evidence": "Stable-head validator, focused tests and complete suite pending."}
+  ],
+  "blocking_issues": [],
+  "warnings": [],
+  "qa_recommendation": "PASS_AFTER_FINAL_HEAD_CI",
+  "authority_delta": "LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "rollback": "Revert the bounded DA-WP1 merge without removing generated evidence."
+}
