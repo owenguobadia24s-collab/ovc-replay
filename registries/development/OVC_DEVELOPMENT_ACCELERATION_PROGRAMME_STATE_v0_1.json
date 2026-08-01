@@ -4,17 +4,17 @@
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "programme_status": "RUNNING",
-  "current_packet": "DA-G4",
-  "current_gate": "DA-G4",
+  "current_packet": "DA-WP4B",
+  "current_gate": "DA-G4B",
   "operator_decision_required": false,
   "operator_decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
   "operator_decision_history": [
     "DA-G0.OPERATOR.PASS.20260801T151200Z",
     "DA-G4.OPERATOR.PASS.20260801T172600Z"
   ],
-  "baseline_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
-  "branch": "gate/ovc-dev-accel-da-g4",
-  "candidate_commit": "a6a642192663033b412ba48bd891e3d84e886a87",
+  "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "branch": "build/ovc-dev-accel-receipt-bot",
+  "candidate_commit": null,
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -25,10 +25,12 @@
     }
   ],
   "authority": {
-    "tooling": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ACTIVE",
+    "tooling": "RECEIPT_BOT_STATIC_IMPLEMENTATION_FAIL_CLOSED",
     "test_selection": "SHADOW_PATH_BOUNDED",
     "repository_bot_write": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
     "repository_bot_profile": "APPROVED_INACTIVE",
+    "repository_bot_credential": "NOT_PROVISIONED",
+    "repository_bot_production_transport": "ABSENT_FAIL_CLOSED",
     "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
     "direct_main_write": "PROHIBITED",
     "force_push": "PROHIBITED",
@@ -120,24 +122,44 @@
       "next_packet": "DA-G4"
     },
     {
+      "packet_id": "DA-G4",
+      "status": "COMPLETED",
+      "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED"],
+      "authority_required": "OPERATOR_REQUIRED_COMPLETED",
+      "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
+      "baseline_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
+      "branch": "gate/ovc-dev-accel-da-g4",
+      "candidate_commit": "50a07c1e2c1ff0515397c15ad3605a9ec5b6ee0a",
+      "tests": ["DA-G4 workflow 30710704212 PASS", "tiered workflow 30710704215 PASS", "tests workflow 30710704156 PASS"],
+      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json",
+      "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
+      "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+      "blockers": [],
+      "next_packet": "DA-WP4B"
+    },
+    {
       "packet_id": "DA-WP4B",
-      "status": "READY_AFTER_DA_G4_MERGE",
+      "status": "QA_REVIEW",
       "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED", "DA-G4_GATE_RECORD_MERGED"],
       "authority_required": "OPERATOR_APPROVED_BOUNDED_IMPLEMENTATION_WITH_CONDITIONAL_ACTIVATION",
       "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
-      "baseline_commit": null,
+      "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
       "branch": "build/ovc-dev-accel-receipt-bot",
       "candidate_commit": null,
-      "tests": [],
-      "qa_packet": null,
+      "tests": ["DA-WP4B validator pending", "focused receipt-bot tests pending", "complete repository suite pending"],
+      "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
       "merge_commit": null,
-      "blockers": ["DA-G4_GATE_RECORD_NOT_YET_MERGED"],
+      "blockers": [
+        "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
+        "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
+        "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+      ],
       "next_packet": "DA-WP5"
     },
     {
       "packet_id": "DA-WP5",
-      "status": "READY_AFTER_DA_WP4B_COMPLETED",
+      "status": "PLANNED",
       "prerequisites": ["DA-WP1_COMPLETED", "DA-WP2_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED", "DA-WP4B_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE",
       "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
@@ -154,21 +176,19 @@
   ],
   "operator_gate": {
     "gate_id": "DA-G4",
-    "status": "APPROVED_PENDING_SQUASH_MERGE",
-    "gate_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_GATE_PACKET.json",
-    "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json",
-    "decision_request": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION_REQUEST.json",
+    "status": "COMPLETED",
     "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
-    "proposed_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json",
-    "approved_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json",
-    "tested_candidate_commit": "a6a642192663033b412ba48bd891e3d84e886a87",
-    "tests": [
-      "Development Acceleration DA-G4 operator gate readiness 30710409242 PASS",
-      "OVC tiered test selection shadow 30710409313 PASS",
-      "tests 30710409322 PASS"
-    ],
+    "merge_receipt": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json",
     "recorded_decision": "PASS",
+    "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
     "authority_active": false
   },
-  "next_action": "SQUASH_MERGE_PR_208_THEN_BEGIN_DA_WP4B"
+  "activation_gate": {
+    "gate_id": "DA-G4B",
+    "status": "QA_REVIEW_ACTIVATION_BLOCKED",
+    "activation_evidence": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json",
+    "blocker_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json",
+    "authority_active": false
+  },
+  "next_action": "RUN_DA_WP4B_FINAL_HEAD_CI_THEN_MARK_BLOCKED_AND_PRESERVE_BRANCH"
 }
