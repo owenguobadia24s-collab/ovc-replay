@@ -92,6 +92,20 @@ class RO4G4Tests(unittest.TestCase):
             with self.assertRaises(RO4RecordError):
                 RO4AppendAuthority.from_registry(path)
 
+    def test_approved_registry_with_operator_decision_loads(self):
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / "authority.json"
+            path.write_text(json.dumps({
+                "enabled": True, "status": "APPROVED_RO4_G4", "service_version": "v0.1",
+                "accepted_record_types": [BOUNDARY_RECORD, FRICTION_RECORD, REVIEW_RECORD],
+                "gate_decision_id": "RO4-G4.OPERATOR.PASS.TEST",
+                "signature_diversity_status": "PASS", "acknowledgement_record_id": None,
+                "console_write_state": "PROHIBITED",
+            }), encoding="utf-8")
+            authority = RO4AppendAuthority.from_registry(path)
+            self.assertTrue(authority.enabled)
+            self.assertEqual("RO4-G4.OPERATOR.PASS.TEST", authority.gate_decision_id)
+
     def test_concentration_warning_requires_acknowledgement(self):
         authority = RO4AppendAuthority(
             enabled=False, status="DISABLED_PENDING_RO4_G4", service_version="v0.1",
