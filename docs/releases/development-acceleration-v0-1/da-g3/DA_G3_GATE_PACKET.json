@@ -6,10 +6,10 @@
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "packet_id": "DA-WP3",
-  "status": "QA_REVIEW",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
   "candidate_branch": "build/ovc-dev-accel-test-profiles",
-  "candidate_commit": null,
+  "tested_candidate_commit": "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db",
   "completed_work": [
     "tiered test selection contract",
     "strict test profile registry",
@@ -30,7 +30,10 @@
     "Default repository adoption remains denied until DA-G6.",
     "Focused and complete repository suites pass at stable final head."
   ],
-  "tests": ["DA-G3 validator", "tiered selector workflow", "focused selector tests", "retained development tests", "complete repository suite"],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G3 tiered test trust", "run_id": 30708043830, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30708043814, "result": "PASS"}
+  ],
   "qa_packet": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_QA_PACKET.json",
   "decision_record": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_DELEGATED_DECISION.json",
   "warnings": [],
@@ -40,6 +43,6 @@
   "repository_bot_write": "DENIED",
   "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
   "rollback": "Stop invoking the selector or revert the bounded DA-WP3 merge; existing final-head workflows remain authoritative.",
-  "recommended_decision": "PASS_AFTER_CI",
+  "recommended_decision": "PASS",
   "next_packet": "DA-WP4"
 }
