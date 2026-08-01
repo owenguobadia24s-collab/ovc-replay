@@ -1,0 +1,69 @@
+{
+  "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_ACCEPTANCE_ONLY",
+  "baseline_commit": "837c9a3e1cbfc18bf01d577896a8f2e01d12f7d2",
+  "blockers": [
+    "FINAL_HEAD_CI_REQUIRED_BEFORE_AUTO_RATIFICATION"
+  ],
+  "checks": [
+    {
+      "check": "six compact Google Drive files exact size and SHA-256",
+      "result": "PASS"
+    },
+    {
+      "check": "output manifest canonical logical SHA-256",
+      "result": "PASS"
+    },
+    {
+      "check": "compact cross-file run, binding, manifest and payload hashes",
+      "result": "PASS"
+    },
+    {
+      "check": "source slice and accepted source manifest binding",
+      "result": "PASS"
+    },
+    {
+      "check": "deterministic independent rerun",
+      "result": "PASS_BYTE_IDENTICAL"
+    },
+    {
+      "check": "frozen expected C1 and C2 populations",
+      "result": "PASS"
+    },
+    {
+      "check": "source-boundary insufficiency",
+      "result": "PASS_ZERO"
+    },
+    {
+      "check": "June calendar-boundary incompleteness",
+      "result": "PASS_ZERO"
+    },
+    {
+      "check": "provider gaps separately censored without repair or bridging",
+      "result": "PASS"
+    },
+    {
+      "check": "release selector R2 Validation and write boundaries",
+      "result": "PASS"
+    },
+    {
+      "check": "focused and complete repository CI",
+      "result": "PENDING"
+    }
+  ],
+  "next_packet": "PD-JUNE-FM-WP3",
+  "next_packet_status": "BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "qa_result": "PENDING_FINAL_HEAD_CI",
+  "recommendation": "PASS_AFTER_FOCUSED_FULL_AND_AUTHORITY_CHECKS",
+  "reserved_authority_delta": "NONE",
+  "rollback": "Preserve the accepted external replay and all quarantines. Revert only this compact acceptance packet through a new non-destructive commit.",
+  "schema": "ovc-pd-june-full-month-mdr-wp2-replay-qa/v1",
+  "status": "QA_REVIEW_PENDING_FINAL_HEAD_CI",
+  "warnings": [
+    "Algorithmic NOT_EVALUATED or NOT_EVALUABLE marker count is 13,993 and must remain separately reported in WP3.",
+    "The accepted replay is not a release and grants no selector, R2, Validation or write authority."
+  ]
+}
