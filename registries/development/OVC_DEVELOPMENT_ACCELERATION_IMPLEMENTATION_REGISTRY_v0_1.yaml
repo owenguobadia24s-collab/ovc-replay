@@ -64,7 +64,7 @@ entries:
     packet_id: DA-WP4
     title: Closure and merge-receipt automation
     branch: build/ovc-dev-accel-closure
-    status: APPROVED
+    status: COMPLETED
     prerequisites: [DA-WP1_COMPLETED, DA-WP3_COMPLETED]
     authority_required: AUTO_RATIFIABLE_SHADOW_ONLY_THEN_OPERATOR_REQUIRED_DA_G4
     authority_delta: DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY
@@ -87,8 +87,8 @@ entries:
     packet_id: DA-WP5
     title: Compact evidence exporter
     branch: build/ovc-dev-accel-evidence-export
-    status: READY
-    prerequisites: [DA-WP1_COMPLETED, DA-WP2_COMPLETED]
+    status: READY_BLOCKED_BY_DA_G4_OPERATOR_DECISION
+    prerequisites: [DA-WP1_COMPLETED, DA-WP2_COMPLETED, DA-G4_OPERATOR_DECISION_RECORDED]
     authority_required: AUTO_RATIFIABLE_OPERATOR_LOCAL_EXPORT
     authority_delta: COPY_ONLY_COMPACT_EVIDENCE_EXPORT
     reads: [registered export profiles, exact compact artifacts, local destination configuration]
@@ -98,7 +98,11 @@ entries:
 reserved_gates:
   - gate_id: DA-G4
     purpose: Narrow receipt-bot writes to approved bot branches and paths.
+    status: GATE_PREPARATION_PENDING_FINAL_HEAD_CI
     current_authority: DENIED
+    proposed_profile: registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json
+    decision_request: docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION_REQUEST.json
   - gate_id: DA-G6
     purpose: Adopt workflow as default and retire duplicated mechanics.
+    status: PLANNED
     current_authority: DENIED
