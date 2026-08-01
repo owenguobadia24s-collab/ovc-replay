@@ -3,9 +3,9 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4",
   "gate_id": "DA-G4A",
-  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
-  "candidate_commit": null,
+  "tested_candidate_commit": "7bd25202458158fe1a77db1fbd2891a9063ae7db",
   "checks": [
     {"check_id": "DA-G4A-SNAPSHOT-001", "result": "PASS", "evidence": "Closure snapshots bind exact policy, PR, base, head, paths, tests, QA, decision, authority and rollback."},
     {"check_id": "DA-G4A-ELIGIBILITY-002", "result": "PASS", "evidence": "Wrong base/head, unallowlisted paths, failed tests, warnings, reviews, reserved authority and destructive rollback block."},
@@ -13,11 +13,15 @@
     {"check_id": "DA-G4A-COMPARE-004", "result": "PASS", "evidence": "Generated and manual fixture receipts have zero material differences; altered or extra fields block."},
     {"check_id": "DA-G4A-NOWRITE-005", "result": "PASS", "evidence": "All results state writes_performed=false, merge_performed=false and permanent repository safety denials."},
     {"check_id": "DA-G4A-AUTH-006", "result": "PASS", "evidence": "Repository-bot write remains denied until separate operator-required DA-G4."},
-    {"check_id": "DA-G4A-CI-007", "result": "PENDING", "evidence": "Final-head validator, closure tests, retained development tests and complete repository suite pending."}
+    {"check_id": "DA-G4A-CI-007", "result": "PASS", "evidence": "DA-G4A workflow 30708716073 and tiered shadow workflow 30708716057 passed, including the complete repository suite."}
+  ],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30708716073, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30708716057, "result": "PASS"}
   ],
   "blocking_issues": [],
   "warnings": [],
-  "qa_recommendation": "PASS_AFTER_FINAL_HEAD_CI",
+  "qa_recommendation": "PASS",
   "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
   "reserved_authority_delta": "NONE",
   "repository_bot_write": "DENIED_UNTIL_OPERATOR_DA_G4",
