@@ -38,16 +38,25 @@ jobs:
           incident = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_PROSPECTIVE_ID_INCIDENT.json').read_text())
           qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_QA_PACKET.json').read_text())
           decision = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_DELEGATED_DECISION.json').read_text())
+          receipt = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_MERGE_RECEIPT.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR2_STATE_v0_1.json').read_text())
 
           assert incident['failure'] == 'PROSPECTIVE_PRICE_SET_ID_REQUIRED'
           assert incident['source_slice_mutated'] is False
+          assert qa['status'] == 'COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY'
           assert qa['qa_result'] == 'PASS_PROSPECTIVE_ID_CONTRACT_COMPATIBILITY_CORRECTION'
           assert qa['authority_delta'] == 'NONE_COMPATIBILITY_CORRECTION_ONLY'
           assert decision['decision'] == 'PASS'
+          assert decision['status'] == 'COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY'
           assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
           assert decision['reserved_authority_delta'] == 'NONE'
-          assert state['status'] == 'APPROVED'
+          assert receipt['pull_request'] == 191
+          assert receipt['final_head'] == '7d3b66558b76771d5d0f463a0f9f66b776fbb003'
+          assert receipt['merge_commit'] == '6b94b63f85ffa20a2ae007241028733635f060e2'
+          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
+          assert state['status'] == 'COMPLETED'
+          assert state['merge_commit'] == receipt['merge_commit']
+          assert state['next_packet_status'] == 'READY'
           assert state['qa_result'] == qa['qa_result']
           assert state['source_mutated'] is False
           assert subject.PRICE_SET_ID.startswith('RPS.PRICESET.')
