@@ -45,7 +45,7 @@ After a separately authorised squash merge has occurred, a supplied exact merge 
 
 ## Comparison
 
-The shadow programme compares the generated proposal with a manually prepared reference receipt. Material fields must be byte-logically equal after canonical ordering. Any missing, extra or unequal material field blocks. Comparison ignores no authority, identity, test or rollback field.
+The shadow programme compares the generated proposal with a manually prepared reference receipt. Material fields must be byte-logically equal after canonical ordering. PASS requires zero material differences. Any missing, extra or unequal material field blocks. Comparison ignores no authority, identity, test or rollback field.
 
 ## No-write assurance
 
