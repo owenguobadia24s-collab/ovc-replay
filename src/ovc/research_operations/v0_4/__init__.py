@@ -1,4 +1,4 @@
-"""Research Operations v0.4 local derived evidence and gate-disabled record services."""
+"""Research Operations v0.4 local derived evidence and governed record services."""
 
 from .annotation_friction_service import (
     ACK_RECORD,
@@ -9,6 +9,17 @@ from .annotation_friction_service import (
     RO4AppendAuthority,
     RO4AuthorityDisabled,
     RO4RecordError,
+)
+from .console_projection import (
+    REQUIRED_BANNERS,
+    ROUTE_ID,
+    ROUTE_STATE,
+    RO4ProjectionDenied,
+    RO4ProjectionError,
+    build_console_projection,
+    count_cell,
+    validate_console_projection,
+    verify_projection_schema_binding,
 )
 from .matrix_persistence_conflict import G2BuildResult, build_g2_evidence, validate_g2_evidence
 from .sequence_recurrence import (
@@ -38,24 +49,33 @@ __all__ = [
     "DeclaredSampleRequired",
     "FRICTION_RECORD",
     "G2BuildResult",
+    "REQUIRED_BANNERS",
     "REVIEW_RECORD",
     "RO4AnnotationFrictionService",
     "RO4AppendAuthority",
     "RO4AuthorityDisabled",
     "RO4IndexError",
+    "RO4ProjectionDenied",
+    "RO4ProjectionError",
     "RO4RecordError",
+    "ROUTE_ID",
+    "ROUTE_STATE",
     "SequenceBuildResult",
     "assess_window_cardinality",
+    "build_console_projection",
     "build_full_index",
     "build_full_sequence_evidence",
     "build_g2_evidence",
     "build_sequence_partition",
+    "count_cell",
     "declared_distance",
     "deterministic_sample_ids",
     "diversity_audit",
     "finalize_sequence_evidence",
+    "validate_console_projection",
     "validate_g2_evidence",
     "validate_index",
     "validate_sequence_evidence",
+    "verify_projection_schema_binding",
     "workspace_inventory",
 ]
