@@ -3,7 +3,7 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "programme_status": "RUNNING",
+  "programme_status": "BLOCKED",
   "current_packet": "DA-WP4B",
   "current_gate": "DA-G4B",
   "operator_decision_required": false,
@@ -14,7 +14,7 @@
   ],
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "candidate_commit": null,
+  "candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -22,10 +22,16 @@
       "programme_id": "PD-JUNE-FULL-MONTH-MDR",
       "branch": "build/pd-june-fm-wp3-review-population",
       "relationship": "NON_OVERLAPPING_DO_NOT_MUTATE"
+    },
+    {
+      "pull_request": 209,
+      "programme_id": "OVC-DEV-ACCEL-v0.1",
+      "branch": "build/ovc-dev-accel-receipt-bot",
+      "relationship": "DA-WP4B_PRESERVED_UNMERGED_ACTIVATION_BLOCKED"
     }
   ],
   "authority": {
-    "tooling": "RECEIPT_BOT_STATIC_IMPLEMENTATION_FAIL_CLOSED",
+    "tooling": "RECEIPT_BOT_IMPLEMENTATION_QA_PASS_ACTIVATION_BLOCKED",
     "test_selection": "SHADOW_PATH_BOUNDED",
     "repository_bot_write": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
     "repository_bot_profile": "APPROVED_INACTIVE",
@@ -139,14 +145,18 @@
     },
     {
       "packet_id": "DA-WP4B",
-      "status": "QA_REVIEW",
+      "status": "BLOCKED",
       "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED", "DA-G4_GATE_RECORD_MERGED"],
       "authority_required": "OPERATOR_APPROVED_BOUNDED_IMPLEMENTATION_WITH_CONDITIONAL_ACTIVATION",
       "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
       "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
       "branch": "build/ovc-dev-accel-receipt-bot",
-      "candidate_commit": null,
-      "tests": ["DA-WP4B validator pending", "focused receipt-bot tests pending", "complete repository suite pending"],
+      "candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
+      "tests": [
+        "DA-WP4B workflow 30711248035 PASS",
+        "tiered workflow 30711248023 PASS",
+        "tests workflow 30711248056 PASS"
+      ],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
       "merge_commit": null,
@@ -170,7 +180,7 @@
       "qa_packet": null,
       "decision_record": null,
       "merge_commit": null,
-      "blockers": ["DA-WP4B_NOT_COMPLETED"],
+      "blockers": ["DA-WP4B_BLOCKED"],
       "next_packet": "DA-G6"
     }
   ],
@@ -185,10 +195,16 @@
   },
   "activation_gate": {
     "gate_id": "DA-G4B",
-    "status": "QA_REVIEW_ACTIVATION_BLOCKED",
+    "status": "BLOCKED",
+    "tested_candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
     "activation_evidence": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json",
     "blocker_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json",
+    "tests": [
+      "DA-WP4B workflow 30711248035 PASS",
+      "tiered workflow 30711248023 PASS",
+      "tests workflow 30711248056 PASS"
+    ],
     "authority_active": false
   },
-  "next_action": "RUN_DA_WP4B_FINAL_HEAD_CI_THEN_MARK_BLOCKED_AND_PRESERVE_BRANCH"
+  "next_action": "STOP_BLOCKED_DA_WP4B_PRESERVE_PR_209_UNMERGED"
 }
