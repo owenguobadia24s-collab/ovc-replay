@@ -6,10 +6,10 @@
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "packet_id": "DA-WP4",
-  "status": "QA_REVIEW",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
   "candidate_branch": "build/ovc-dev-accel-closure",
-  "candidate_commit": null,
+  "tested_candidate_commit": "7bd25202458158fe1a77db1fbd2891a9063ae7db",
   "completed_work": [
     "dry-run closure authority contract",
     "strict closure policy registry",
@@ -29,7 +29,10 @@
     "Repository-bot write remains denied.",
     "Focused and complete repository suites pass at stable final head."
   ],
-  "tests": ["DA-G4A validator", "focused closure tests", "retained development tests", "complete repository suite"],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30708716073, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30708716057, "result": "PASS"}
+  ],
   "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json",
   "decision_record": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_DELEGATED_DECISION.json",
   "shadow_evidence": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_SHADOW_COMPARISON.json",
@@ -39,6 +42,6 @@
   "reserved_authority_delta": "NONE",
   "repository_bot_write": "DENIED_UNTIL_OPERATOR_DA_G4",
   "rollback": "Stop closure proposal generation or revert the bounded DA-WP4 merge; manual closure remains authoritative.",
-  "recommended_decision": "PASS_AFTER_CI",
+  "recommended_decision": "PASS",
   "next_gate": "DA-G4"
 }
