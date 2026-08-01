@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-research-console-rc-g5-activation-delegated-decision/v1",
+  "decision_id": "RC-G5-ACTIVATION.DELEGATED.PASS.20260801T091100Z",
+  "gate_id": "RC-G5-ACTIVATION",
+  "packet_id": "RC-G5-ACTIVATION",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION",
+  "decided_at": "2026-08-01T09:11:00Z",
+  "operator_authority_source": "RC-G5.OPERATOR.PASS.20260801T084900Z",
+  "tested_candidate": "6cc6c4d8b4107f23eba767c9204934dcc6746ed8",
+  "workflow": {
+    "run_id": 30693254429,
+    "job_id": 91351660802,
+    "activation_validator": "PASS",
+    "focused_activation_tests": "PASS_11",
+    "retained_projection_tests": "PASS_11",
+    "complete_repository": "PASS_70",
+    "authority_assertions": "PASS"
+  },
+  "retained_gate_workflow": {
+    "run_id": 30693254509,
+    "job_id": 91351661019,
+    "result": "PASS"
+  },
+  "authority_delta": "ACTIVATE_APPROVED_LOCAL_READ_ONLY_ROUTE",
+  "route": {
+    "route_id": "RESEARCH.C2_SEQUENCE_EVIDENCE",
+    "route_state": "ENABLED_LOCAL_READ_ONLY",
+    "local_only": true,
+    "writes": "NONE",
+    "annotation_actions": "NONE",
+    "remote_deployment": "DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED"
+  },
+  "external_artifacts": {"created": false, "bytes": 0, "canonical_records_appended": 0},
+  "rollback": "Disable the route through a new non-destructive commit and preserve all evidence and decisions.",
+  "next_gate": "RO4-G6",
+  "next_gate_status": "BLOCKED_PENDING_EVIDENCE_ACCUMULATION",
+  "final_head_ci": "PENDING"
+}
