@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/preflight_receipt_v0_1.schema.json",
+  "title": "OVC Artifact Preflight Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id", "profile_id", "profile_hash", "status", "checks", "authority", "preflight_receipt_id"],
+  "properties": {
+    "request_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "profile_id": {"type": "string", "minLength": 1},
+    "profile_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "WARN", "BLOCK", "QUARANTINE", "NOT_EVALUABLE"]},
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check", "status", "reason"],
+        "properties": {
+          "check": {"enum": ["ROOT", "INPUT_PROFILE", "EXACT_ARTIFACT", "SCHEMA_MARKER", "DESTINATION"]},
+          "logical_name": {"type": "string", "minLength": 1},
+          "status": {"enum": ["PASS", "WARN", "BLOCK", "QUARANTINE", "NOT_EVALUABLE"]},
+          "reason": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "artifact_ref_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "schema_id": {"type": ["string", "null"]},
+          "expected": {},
+          "actual": {},
+          "detail": {"type": "string"}
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "read_only", "writes_performed", "provider_access", "repository_bot_write",
+        "direct_main_write", "force_push", "release", "selector", "r2", "validation"
+      ],
+      "properties": {
+        "read_only": {"const": true},
+        "writes_performed": {"const": false},
+        "provider_access": {"const": "DENIED"},
+        "repository_bot_write": {"const": "DENIED"},
+        "direct_main_write": {"const": "DENIED"},
+        "force_push": {"const": "DENIED"},
+        "release": {"const": "DENIED"},
+        "selector": {"const": "DENIED"},
+        "r2": {"const": "DENIED"},
+        "validation": {"const": "DENIED"}
+      }
+    },
+    "preflight_receipt_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
