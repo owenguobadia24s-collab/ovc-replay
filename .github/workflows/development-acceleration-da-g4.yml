@@ -7,6 +7,7 @@ on:
       - "contracts/development/OVC_REPOSITORY_RECEIPT_BOT_AUTHORITY_PROPOSAL_v0_1.md"
       - "schemas/development/repository_bot_authority_profile_v0_1.schema.json"
       - "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json"
       - "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
       - "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json"
       - "docs/releases/development-acceleration-v0-1/da-wp4/**"
@@ -38,17 +39,21 @@ jobs:
         run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_closure.py' -v
       - name: Complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert authority remains inactive
+      - name: Assert approved authority remains inactive
         shell: bash
         run: |
           set -euo pipefail
           grep -q 'status.*PENDING_OPERATOR_DA_G4' registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json
           grep -q 'active.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json
-          grep -q 'repository_bot_write.*DENIED_PENDING_DA_G4' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
+          grep -q 'status.*APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE' registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json
+          grep -q 'active.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json
+          grep -q 'repository_bot_write.*APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
           grep -q 'direct_main_write.*PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
-          grep -q 'authority_active.*false' docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION_REQUEST.json
+          grep -q 'decision.*PASS' docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json
+          grep -q 'authority_active.*false' docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json
           ! grep -R -E 'ghp_|github_pat_|BEGIN PRIVATE KEY|sk-proj-|Bearer ' \
             contracts/development/OVC_REPOSITORY_RECEIPT_BOT_AUTHORITY_PROPOSAL_v0_1.md \
             schemas/development/repository_bot_authority_profile_v0_1.schema.json \
             registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json \
+            registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json \
             docs/releases/development-acceleration-v0-1/da-g4
