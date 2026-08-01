@@ -9,7 +9,7 @@
   "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
   "baseline_main_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
   "candidate_branch": "gate/rc-g5-c2-sequence-evidence",
-  "candidate_commit": "PENDING_FINAL_HEAD_PIN",
+  "tested_candidate_commit": "22df521bdef980c4bd52afbe322f030d48850177",
   "prerequisite": {
     "packet_id": "RO4-WP5",
     "gate_id": "RO4-G5",
@@ -17,8 +17,7 @@
     "final_head": "c95ee9e98bfb744b6f546caa7052307752ae718e",
     "merge_commit": "ecb6d6cd62e306c3ce161decd269aeb3aa26c407",
     "merge_receipt_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
-    "qa_result": "PASS",
-    "route_state": "DISABLED_PENDING_RC_G5"
+    "qa_result": "PASS"
   },
   "current_authority": {
     "ro4_g4_append_only_records": "APPROVED_BOUNDED_LOCAL",
@@ -33,14 +32,13 @@
   },
   "proposed_authority_delta": "LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION",
   "permits_after_pass": [
-    "Enable one local read-only Research Console route: RESEARCH.C2_SEQUENCE_EVIDENCE.",
-    "Consume only exact approved RO4 projection objects bound to the accepted schema and source identities.",
-    "Present C2 states, transitions, persistence/conflict evidence, non-canonical sequences, read-only boundary/friction records, signature-diversity evidence and disclosed samples in separated panels.",
-    "Present Pattern Discovery trigger-trace identities only, without candidate population, ranking, review or write access.",
-    "Present Discovery and Development references only under exact accepted release and manifest bindings."
+    "One local read-only route: RESEARCH.C2_SEQUENCE_EVIDENCE.",
+    "Exact approved RO4 projection objects only.",
+    "Separated panels for C2 state, transition, persistence/conflict, non-canonical sequences, read-only boundary/friction, PD trigger traces, signature diversity and sample disclosure.",
+    "Discovery and Development references under exact accepted release and manifest bindings."
   ],
   "does_not_permit": [
-    "Annotation or any other Console write action",
+    "Annotation or Console write actions",
     "C2 mutation, selector/release change, recomputation, tuning or promotion",
     "Pattern Discovery candidate population, ranking, review-batch or evidence-bridge access",
     "Validation record, path or payload resolution",
@@ -51,43 +49,17 @@
     "R2 write or remote deployment"
   ],
   "approved_bindings": {
-    "projection_schema": {
-      "schema_id": "ovc-ro4-console-projection/v1",
-      "path": "schemas/research_operations/v0_4/ro4_console_projection_v0_1.schema.json",
-      "git_blob_sha": "83bcf57c0374411dfdf02a61483b529b46f333c7"
-    },
-    "adapter": {
-      "path": "src/ovc/research_operations/v0_4/console_projection.py",
-      "git_blob_sha": "9d59699f5e3e14f3f4d7174af44b8a485556dc0a"
-    },
-    "local_source": {
-      "path": "apps/research_console/ro4_projection_source.py",
-      "git_blob_sha": "0471bfdfd501098c78c72bc993365db19bf45007"
-    },
-    "projection_registry": {
-      "path": "registries/research_operations/v0_4/RO4_WP5_PROJECTION_REGISTRY_v0_1.yaml",
-      "git_blob_sha": "03fd7f67322cbd0ead793c5eab2214218d0b98fa"
-    },
-    "assurance_fixture": {
-      "path": "fixtures/research_operations/v0_4/RO4_WP5_CONSOLE_PROJECTION_FIXTURE_v0_1.json",
-      "git_blob_sha": "85699557b5719182d26bbd41d7298c44cd98f740",
-      "classification": "SYNTHETIC_NON_AUTHORITATIVE"
-    }
+    "projection_schema": {"schema_id":"ovc-ro4-console-projection/v1","path":"schemas/research_operations/v0_4/ro4_console_projection_v0_1.schema.json","git_blob_sha":"83bcf57c0374411dfdf02a61483b529b46f333c7"},
+    "adapter": {"path":"src/ovc/research_operations/v0_4/console_projection.py","git_blob_sha":"9d59699f5e3e14f3f4d7174af44b8a485556dc0a"},
+    "local_source": {"path":"apps/research_console/ro4_projection_source.py","git_blob_sha":"0471bfdfd501098c78c72bc993365db19bf45007"},
+    "projection_registry": {"path":"registries/research_operations/v0_4/RO4_WP5_PROJECTION_REGISTRY_v0_1.yaml","git_blob_sha":"03fd7f67322cbd0ead793c5eab2214218d0b98fa"},
+    "assurance_fixture": {"path":"fixtures/research_operations/v0_4/RO4_WP5_CONSOLE_PROJECTION_FIXTURE_v0_1.json","git_blob_sha":"85699557b5719182d26bbd41d7298c44cd98f740","classification":"SYNTHETIC_NON_AUTHORITATIVE"}
   },
   "route_and_panel_map": {
     "route_id": "RESEARCH.C2_SEQUENCE_EVIDENCE",
     "current_state": "DISABLED_PENDING_RC_G5",
     "approved_state_after_pass": "ENABLED_LOCAL_READ_ONLY",
-    "panels": [
-      "C2_STATE",
-      "C2_TRANSITION",
-      "PERSISTENCE_CONFLICT",
-      "RO4_SEQUENCE",
-      "BOUNDARY_FRICTION_READ_ONLY",
-      "PD_TRIGGER_TRACE_ONLY",
-      "SIGNATURE_DIVERSITY",
-      "SAMPLE_DISCLOSURE"
-    ],
+    "panels": ["C2_STATE","C2_TRANSITION","PERSISTENCE_CONFLICT","RO4_SEQUENCE","BOUNDARY_FRICTION_READ_ONLY","PD_TRIGGER_TRACE_ONLY","SIGNATURE_DIVERSITY","SAMPLE_DISCLOSURE"],
     "writes": "NONE",
     "remote_deployment": "DENIED"
   },
@@ -98,47 +70,49 @@
     "C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED."
   ],
   "acceptance_and_test_evidence": [
-    {"condition": "Exact projection schema and git-blob binding", "result": "PASS"},
-    {"condition": "Route disabled with no page/navigation registration", "result": "PASS"},
-    {"condition": "Writes NONE and remote deployment DENIED", "result": "PASS"},
-    {"condition": "Exact counts with visible denominators", "result": "PASS"},
-    {"condition": "Percentage, ratio, heatmap and likelihood denial", "result": "PASS"},
-    {"condition": "Pattern Discovery trigger-trace-only isolation", "result": "PASS"},
-    {"condition": "Synthetic-control exclusion and sample disclosure", "result": "PASS"},
-    {"condition": "Validation deny-before-resolution", "result": "PASS"},
-    {"condition": "11 focused tests", "result": "PASS", "workflow_run": 30691923987, "job": 91348049863},
-    {"condition": "70-test complete repository suite", "result": "PASS", "workflow_run": 30691923987, "job": 91348049863},
-    {"condition": "RO4-G5 merge receipt validation", "result": "PASS", "workflow_run": 30692014163, "job": 91348285819}
+    {"condition":"Exact projection schema and hash binding","result":"PASS"},
+    {"condition":"Route disabled with no page/navigation registration","result":"PASS"},
+    {"condition":"Writes NONE and remote deployment DENIED","result":"PASS"},
+    {"condition":"Count denominators, PD isolation, synthetic exclusion, sample disclosure and Validation denial","result":"PASS"},
+    {"condition":"RO4-G5 focused and complete suite","result":"PASS","workflow_run":30691923987,"job":91348049863,"focused":"11/11","complete":"70/70"},
+    {"condition":"RO4-G5 merge receipt","result":"PASS","workflow_run":30692014163,"job":91348285819},
+    {"condition":"RC-G5 gate validator, focused, complete and authority checks","result":"PASS","workflow_run":30692190078,"job":91348752298,"focused":"11/11","complete":"70/70"}
   ],
-  "external_artifacts": {
-    "created": false,
-    "bytes": 0,
-    "canonical_records_appended": 0
-  },
+  "qa_packet": "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_QA_PACKET.json",
+  "changed_files": [
+    ".github/workflows/research-operations-v0-4-rc-g5.yml",
+    "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_OPERATOR_GATE_PACKET.json",
+    "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_QA_PACKET.json",
+    "registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json",
+    "registries/research_operations/v0_4/RO4_IMPLEMENTATION_REGISTRY_v0_1.yaml",
+    "registries/research_operations/v0_4/RO4_PROGRAMME_STATE_v0_1.json",
+    "scripts/research_operations/validate_rc_g5.py"
+  ],
+  "external_artifacts": {"created":false,"bytes":0,"canonical_records_appended":0},
   "warnings": [
-    "The assurance fixture is synthetic and proves presentation behavior only, not market correctness.",
-    "Operator PASS authorises a bounded local activation implementation; the route remains disabled until that implementation is tested and merged.",
-    "Validation remains LOCKED_UNCONSUMED and must be denied before path, panel or record resolution."
+    "The synthetic fixture proves presentation behavior only, not market correctness.",
+    "PASS authorises only a later bounded local activation implementation; this PR does not activate the route.",
+    "Validation remains LOCKED_UNCONSUMED and denied before path, panel or record resolution."
   ],
   "unresolved_issues": [],
   "rollback": {
-    "action": "Disable RESEARCH.C2_SEQUENCE_EVIDENCE and return to the accepted RC-G3A/RC-G4 surface.",
-    "preserve": ["RO4 schemas, projections, records, QA and decisions", "C2 releases and manifests", "Pattern Discovery authority and evidence", "R2 objects"],
-    "prohibited": ["Delete or rewrite historical evidence", "Alter C2 or Pattern Discovery outputs", "Consume Validation", "Force-push or rewrite history"]
+    "action":"Disable RESEARCH.C2_SEQUENCE_EVIDENCE and return to the accepted RC-G3A/RC-G4 surface.",
+    "preserve":["RO4 schemas, projections, records, QA and decisions","C2 releases and manifests","Pattern Discovery authority and evidence","R2 objects"],
+    "prohibited":["Delete or rewrite historical evidence","Alter C2 or Pattern Discovery outputs","Consume Validation","Force-push or rewrite history"]
   },
   "exact_work_after_pass": [
     "Create a bounded activation branch from the then-current lawful main tip.",
-    "Add a fail-closed local route registration that accepts only the approved RC-G5 authority registry, schema identities and hashes.",
-    "Add the C2 Sequence Evidence surface to the Research Console with the eight separated panel classes and permanent banners.",
-    "Keep every action and annotation control absent; preserve writes NONE and local-only deployment.",
-    "Add focused UI/source tests for no-write, Validation denial, PD isolation, denominator visibility, sample disclosure and permanent banners.",
-    "Run focused and complete repository tests, prepare an activation receipt and squash-merge only if the implementation remains inside this approved delta."
+    "Add fail-closed local route registration accepting only the approved authority registry, schema identities and hashes.",
+    "Add the C2 Sequence Evidence surface with eight separated panel classes and permanent banners.",
+    "Keep all actions and annotation controls absent; preserve writes NONE and local-only deployment.",
+    "Add focused UI/source tests and run the complete repository suite.",
+    "Prepare an activation receipt and squash-merge only if the implementation remains inside the approved delta."
   ],
-  "allowed_operator_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "allowed_operator_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
   "recommended_decision": "PASS",
-  "recommendation_rationale": "RO4-G5 is merged, all required adapter, no-write, source-isolation and complete-suite checks pass, no unresolved issue exists, and rollback is bounded and non-destructive.",
+  "recommendation_rationale": "RO4-G5 is merged; all required binding, no-write, isolation and complete-suite checks pass; no unresolved issue exists; rollback is bounded and non-destructive.",
   "operator_decision_required": true,
   "auto_ratifiable": false,
   "operator_decision": null,
-  "status": "GATE_READY_PENDING_FINAL_HEAD_CI"
+  "status": "GATE_READY"
 }
