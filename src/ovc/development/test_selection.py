@@ -174,7 +174,10 @@ def load_test_profile_registry(path: Path) -> TestProfileRegistry:
 
 
 def _normalized_changed_paths(changed_paths: Iterable[str]) -> tuple[str, ...]:
-    normalized = tuple(sorted({normalize_relative_path(path) for path in changed_paths}))
+    try:
+        normalized = tuple(sorted({normalize_relative_path(path) for path in changed_paths}))
+    except ValueError as exc:
+        raise TestSelectionError(f"unsafe changed path: {exc}") from exc
     if not normalized:
         raise TestSelectionError("changed-file inventory is empty")
     return normalized
