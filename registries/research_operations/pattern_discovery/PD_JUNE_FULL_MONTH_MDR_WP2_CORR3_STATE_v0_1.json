@@ -5,14 +5,16 @@
   "plan_version": "0.1+A1+A2",
   "packet_id": "PD-JUNE-FM-WP2",
   "correction_id": "PD-JUNE-FM-WP2-CORR3",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "prerequisites": [
     "PD-JUNE-FM-WP1-COMPLETED",
     "PD-JUNE-FM-WP2-TOOLING-SQUASH-MERGED",
     "PD-JUNE-FM-WP2-CORR1-COMPLETED",
     "PD-JUNE-FM-WP2-CORR2-COMPLETED",
     "OPERATOR_LOCAL_WINDOWS_CLEANUP_FAILURE_REPRODUCED",
-    "CORR3_IMPLEMENTATION_HEAD_LINUX_AND_WINDOWS_TESTS_PASS"
+    "CORR3_IMPLEMENTATION_HEAD_LINUX_AND_WINDOWS_TESTS_PASS",
+    "CORR3_FINAL_HEAD_LINUX_AND_WINDOWS_TESTS_PASS",
+    "CORR3_SQUASH_MERGED"
   ],
   "authority_required": "NONE",
   "authority_delta": "NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY",
@@ -20,15 +22,16 @@
   "latest_lawful_main_incorporated": "d94e6cca1db4c4d81f3e70f6868740f272d59302",
   "base_synchronization_commit": "eb670efc9c7e3996bd980cfa4584bcbbb74deceb",
   "branch": "fix/pd-june-fm-wp2-windows-cleanup",
+  "pull_request": 197,
   "implementation_tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-  "candidate_commit": null,
+  "final_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
   "tests": [
     {
       "workflow_run": 30693845582,
       "job": 91353174394,
       "runner": "windows-latest",
       "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-      "scope": "CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "scope": "implementation-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
       "result": "PASS"
     },
     {
@@ -36,7 +39,7 @@
       "job": 91353174410,
       "runner": "ubuntu-24.04",
       "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-      "scope": "CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "scope": "implementation-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
       "result": "PASS"
     },
     {
@@ -44,7 +47,31 @@
       "job": 91353210502,
       "runner": "ubuntu-24.04",
       "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-      "scope": "CORR3 court records, bounded changed files, raw-artifact exclusion and authority assertions",
+      "scope": "implementation-head CORR3 court records, bounded changed files, raw-artifact exclusion and authority assertions",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838304,
+      "runner": "windows-latest",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "scope": "final-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838305,
+      "runner": "ubuntu-24.04",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "scope": "final-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353882748,
+      "runner": "ubuntu-24.04",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "scope": "final-head CORR3 court records, bounded changed files, raw-artifact exclusion and authority assertions",
       "result": "PASS"
     }
   ],
@@ -53,19 +80,19 @@
   "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_DELEGATED_DECISION.json",
   "decision": "PASS",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
-  "merge_commit": null,
-  "merge_status": "PENDING_FINAL_HEAD_CI_AND_ELIGIBLE_SQUASH_MERGE",
-  "blockers": [
-    {
-      "blocker_id": "PD-JUNE-FM-WP2-CORR3-FINAL-HEAD-CI-001",
-      "status": "FINAL_HEAD_LINUX_AND_WINDOWS_CI_REQUIRED_BEFORE_SQUASH_MERGE"
-    }
-  ],
+  "merge_commit": "b6fd245104520344721f3b97f0236ef03b8f0a8a",
+  "merge_status": "PASS_SQUASH_MERGED_TO_MAIN",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_MERGE_RECEIPT.json",
+  "blockers": [],
   "resolved_blockers": [
     {
       "blocker_id": "PD-JUNE-FM-WP2-WINDOWS-PASS-B-CLEANUP-001",
-      "status": "RESOLVED_ON_IMPLEMENTATION_HEAD_PENDING_FINAL_HEAD_RECHECK",
+      "status": "RESOLVED_BY_BOUNDED_RETRY_AND_DUPLICATE_ONLY_CLEANUP_QUARANTINE",
       "quarantine": "C:/Users/Owner/OVIS/ovc-replay-external-artifacts/prospective-source/compute/quarantine/PD-JUNE-FM-WP2.20260801T090640Z.58efee95"
+    },
+    {
+      "blocker_id": "PD-JUNE-FM-WP2-CORR3-FINAL-HEAD-CI-001",
+      "status": "RESOLVED_FINAL_HEAD_WINDOWS_LINUX_AND_BOUNDARY_CHECKS_PASS"
     }
   ],
   "cleanup_policy": {
@@ -87,6 +114,6 @@
   "r2_publication": "DENIED",
   "validation_consumption": "DENIED",
   "next_packet": "PD-JUNE-FM-WP2-OPERATOR-LOCAL-REPLAY",
-  "next_packet_status": "BLOCKED_PENDING_CORR3_FINAL_HEAD_CI_AND_SQUASH_MERGE",
-  "rollback": "Preserve the accepted source slice, CORR1, CORR2 and all failed quarantines. Revert only CORR3 through a new non-destructive commit."
+  "next_packet_status": "READY",
+  "rollback": "Preserve the accepted source slice, CORR1, CORR2 and all failed quarantines. Revert merge b6fd245104520344721f3b97f0236ef03b8f0a8a only through a new non-destructive commit."
 }

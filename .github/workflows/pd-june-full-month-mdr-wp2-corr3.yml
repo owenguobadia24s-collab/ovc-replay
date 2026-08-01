@@ -87,7 +87,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Parse CORR3 court records
+      - name: Parse completed CORR3 court records
         env:
           PYTHONPATH: src:.
         run: |
@@ -96,26 +96,35 @@ jobs:
           from pathlib import Path
           from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
 
-          tested_head = 'b50a063922b4f1e8e7ae533a3d4a20e6429b9f91'
+          final_head = 'ddded6c74053acbf7013d3af826405a1dcc9b691'
+          merge_commit = 'b6fd245104520344721f3b97f0236ef03b8f0a8a'
           base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
           incident = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_WINDOWS_CLEANUP_INCIDENT.json').read_text())
           qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_QA_PACKET.json').read_text())
           decision = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_DELEGATED_DECISION.json').read_text())
+          receipt = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_MERGE_RECEIPT.json').read_text())
           state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json').read_text())
 
           assert incident['failure'] == 'WINERROR_5_ACCESS_DENIED_PASS_B_CLEANUP'
           assert incident['source_slice_mutated'] is False
-          assert qa['status'] == 'PASS_APPROVED_PENDING_FINAL_HEAD_RECHECK_AND_SQUASH_MERGE'
+          assert qa['status'] == 'COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY'
           assert qa['qa_result'] == 'PASS_WINDOWS_CLEANUP_COMPATIBILITY_CORRECTION'
-          assert qa['implementation_tested_head'] == tested_head
+          assert qa['final_head'] == final_head
+          assert qa['merge_commit'] == merge_commit
           assert qa['authority_delta'] == 'NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY'
           assert decision['decision'] == 'PASS'
-          assert decision['status'] == 'APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE'
-          assert decision['implementation_tested_head'] == tested_head
+          assert decision['status'] == 'COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY'
+          assert decision['final_head'] == final_head
+          assert decision['merge_commit'] == merge_commit
           assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
           assert decision['reserved_authority_delta'] == 'NONE'
-          assert state['status'] == 'APPROVED'
-          assert state['implementation_tested_head'] == tested_head
+          assert receipt['pull_request'] == 197
+          assert receipt['final_head'] == final_head
+          assert receipt['merge_commit'] == merge_commit
+          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
+          assert state['status'] == 'COMPLETED'
+          assert state['merge_commit'] == merge_commit
+          assert state['next_packet_status'] == 'READY'
           assert state['qa_result'] == qa['qa_result']
           assert state['decision'] == 'PASS'
           assert state['source_mutated'] is False

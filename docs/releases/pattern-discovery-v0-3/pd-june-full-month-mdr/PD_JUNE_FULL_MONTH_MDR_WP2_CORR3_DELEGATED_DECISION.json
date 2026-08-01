@@ -10,9 +10,11 @@
   "latest_lawful_main_incorporated": "d94e6cca1db4c4d81f3e70f6868740f272d59302",
   "base_synchronization_commit": "eb670efc9c7e3996bd980cfa4584bcbbb74deceb",
   "implementation_tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
+  "final_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+  "merge_commit": "b6fd245104520344721f3b97f0236ef03b8f0a8a",
   "decision": "PASS",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
-  "status": "APPROVED_PENDING_FINAL_HEAD_CHECKS_AND_SQUASH_MERGE",
+  "status": "COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY",
   "authority_delta": "NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY",
   "reserved_authority_delta": "NONE",
   "rationale": "The operator-local replay had completed the independent deterministic builds and byte-inventory comparison, then Windows denied deletion of the duplicate pass-B directory. Bounded retry and non-authoritative cleanup quarantine are operational filesystem handling only. They do not alter accepted source bytes, replay formulas, C1/C2 logic, expected counts, identities, candidate bytes or authority.",
@@ -28,7 +30,7 @@
     "NO_SOURCE_ADAPTER_FORMULA_THRESHOLD_IDENTITY_SELECTOR_RELEASE_R2_OR_VALIDATION_MUTATION",
     "NO_UNRESOLVED_REVIEW_OR_BLOCKING_WARNING"
   ],
-  "acceptance_result": "PASS_ON_IMPLEMENTATION_HEAD_FINAL_HEAD_RECHECK_REQUIRED",
+  "acceptance_result": "PASS_ALL_CONDITIONS_SATISFIED_AND_SQUASH_MERGED",
   "tests": [
     {
       "workflow_run": 30693845582,
@@ -50,9 +52,32 @@
       "runner": "ubuntu-24.04",
       "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
       "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838304,
+      "runner": "windows-latest",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838305,
+      "runner": "ubuntu-24.04",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353882748,
+      "runner": "ubuntu-24.04",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "result": "PASS"
     }
   ],
   "qa_result": "PASS_WINDOWS_CLEANUP_COMPATIBILITY_CORRECTION",
+  "merge_result": "PASS_SQUASH_MERGED_TO_MAIN",
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_MERGE_RECEIPT.json",
   "retained_prohibitions": [
     "FORMULA_CHANGE",
     "THRESHOLD_CHANGE",
@@ -65,6 +90,6 @@
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
   ],
   "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_QA_PACKET.json",
-  "next_action": "FINAL_HEAD_LINUX_AND_WINDOWS_CI_THEN_ELIGIBLE_AUTOMATIC_SQUASH_MERGE",
-  "rollback": "Preserve all accepted source and prior correction history. Revert only CORR3 through a new non-destructive commit."
+  "next_action": "OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE_WITH_FRESH_OUTPUT_IDENTITY",
+  "rollback": "Preserve all accepted source and prior correction history. Revert merge b6fd245104520344721f3b97f0236ef03b8f0a8a only through a new non-destructive commit."
 }

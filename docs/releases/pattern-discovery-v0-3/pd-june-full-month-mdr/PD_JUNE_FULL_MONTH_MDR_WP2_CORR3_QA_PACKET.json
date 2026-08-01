@@ -10,9 +10,11 @@
   "base_synchronization_commit": "eb670efc9c7e3996bd980cfa4584bcbbb74deceb",
   "branch": "fix/pd-june-fm-wp2-windows-cleanup",
   "implementation_tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-  "status": "PASS_APPROVED_PENDING_FINAL_HEAD_RECHECK_AND_SQUASH_MERGE",
+  "final_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+  "merge_commit": "b6fd245104520344721f3b97f0236ef03b8f0a8a",
+  "status": "COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY",
   "qa_result": "PASS_WINDOWS_CLEANUP_COMPATIBILITY_CORRECTION",
-  "recommendation": "PASS_AUTO_RATIFY_AFTER_FINAL_HEAD_CHECKS",
+  "recommendation": "PASS_COMPLETED_PROCEED_TO_FRESH_OPERATOR_LOCAL_WP2_REPLAY",
   "incident": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_WINDOWS_CLEANUP_INCIDENT.json",
   "checks": [
     {"check": "transient Windows access denial receives bounded retry", "result": "PASS"},
@@ -26,7 +28,8 @@
     {"check": "retained WP2, CORR1 and CORR2 tests", "result": "PASS_WINDOWS_AND_LINUX"},
     {"check": "complete repository suite", "result": "PASS_WINDOWS_AND_LINUX"},
     {"check": "Windows hosted runner regression", "result": "PASS"},
-    {"check": "authority boundary", "result": "PASS"}
+    {"check": "authority boundary", "result": "PASS"},
+    {"check": "eligible squash merge", "result": "PASS_b6fd245104520344721f3b97f0236ef03b8f0a8a"}
   ],
   "tests": [
     {
@@ -34,7 +37,7 @@
       "job": 91353174394,
       "runner": "windows-latest",
       "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-      "scope": "CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "scope": "implementation-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
       "result": "PASS"
     },
     {
@@ -42,7 +45,7 @@
       "job": 91353174410,
       "runner": "ubuntu-24.04",
       "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-      "scope": "CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "scope": "implementation-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
       "result": "PASS"
     },
     {
@@ -50,7 +53,31 @@
       "job": 91353210502,
       "runner": "ubuntu-24.04",
       "tested_head": "b50a063922b4f1e8e7ae533a3d4a20e6429b9f91",
-      "scope": "CORR3 court records, bounded changed files, raw-artifact exclusion and authority assertions",
+      "scope": "implementation-head CORR3 court records, bounded changed files, raw-artifact exclusion and authority assertions",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838304,
+      "runner": "windows-latest",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "scope": "final-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838305,
+      "runner": "ubuntu-24.04",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "scope": "final-head CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353882748,
+      "runner": "ubuntu-24.04",
+      "tested_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+      "scope": "final-head CORR3 court records, bounded changed files, raw-artifact exclusion and authority assertions",
       "result": "PASS"
     }
   ],
@@ -58,9 +85,10 @@
     "The failed staging quarantine PD-JUNE-FM-WP2.20260801T090640Z.58efee95 must remain preserved and is not accepted evidence.",
     "A pass-B cleanup quarantine is operational duplicate evidence only and must never enter the candidate output manifest or Git."
   ],
-  "blockers": ["FINAL_HEAD_CI_REQUIRED_BEFORE_SQUASH_MERGE"],
+  "blockers": [],
   "authority_delta": "NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY",
   "reserved_authority_delta": "NONE",
-  "rollback": "Preserve the accepted source slice, CORR1, CORR2 and all failed quarantines. Revert only CORR3 through a new non-destructive commit.",
-  "next_action": "RUN_FINAL_HEAD_CI_THEN_AUTO_RATIFY_AND_SQUASH_MERGE_IF_PASS"
+  "merge_receipt": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_MERGE_RECEIPT.json",
+  "rollback": "Preserve the accepted source slice, CORR1, CORR2 and all failed quarantines. Revert merge b6fd245104520344721f3b97f0236ef03b8f0a8a only through a new non-destructive commit.",
+  "next_action": "OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE_WITH_FRESH_OUTPUT_IDENTITY"
 }
