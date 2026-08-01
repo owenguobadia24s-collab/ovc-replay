@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-ro4-g6-evidence-accumulation-blocker/v1",
+  "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
+  "plan_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "v0.2",
+  "gate_id": "RO4-G6",
+  "title": "Evidence disposition",
+  "status": "BLOCKED",
+  "blocker_id": "RO4-G6-BLOCK-001-EVIDENCE-NOT-YET-COLLECTED",
+  "recorded_after_merge": "0ffc4894d804b2f311b79df6db96f75c25b382b6",
+  "current_authority": "RC_G5_LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION_ACTIVE",
+  "required_prerequisites": [
+    "Admissible local RC-G5 sequence-evidence projections",
+    "Operator review observations generated through the active local read-only route",
+    "Where applicable, bounded RO4-G4 append-only boundary, friction, review or concentration acknowledgement records",
+    "Sufficient reproducible evidence to support one consolidated operator-required disposition decision"
+  ],
+  "missing_artifacts": [
+    "RO4_G6_EVIDENCE_INVENTORY",
+    "RO4_G6_OPERATOR_REVIEW_EVIDENCE",
+    "RO4_G6_QA_PACKET",
+    "RO4_G6_CONSOLIDATED_OPERATOR_GATE_PACKET"
+  ],
+  "why_not_authorised": "RO4-G6 is an operator-required evidence-disposition gate. Route activation and synthetic assurance tests do not constitute collected market or operator-review evidence and cannot support a disposition decision.",
+  "smallest_lawful_resolution": "Use the active local read-only C2 sequence-evidence route on admissible projections, collect reproducible operator review and permitted append-only records, inventory and QA that evidence, then prepare one consolidated RO4-G6 operator gate packet.",
+  "preserved_state": {
+    "route_state": "ENABLED_LOCAL_READ_ONLY",
+    "writes": "NONE",
+    "annotation_actions": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "pattern_discovery_access": "TRIGGER_TRACE_IDENTITY_ONLY",
+    "remote_deployment": "DENIED"
+  },
+  "retained_denials": [
+    "C2_MUTATION",
+    "SELECTOR_OR_RELEASE_CHANGE",
+    "VALIDATION_CONSUMPTION",
+    "PATTERN_DISCOVERY_POPULATION_MERGE_RANK_REVIEW_OR_WRITE",
+    "SEMANTIC_MODEL_FAMILY_CANDIDATE_OR_THEORY_PROMOTION",
+    "OUTCOME_JOIN",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "AGENT_WRITE",
+    "R2_WRITE",
+    "REMOTE_DEPLOYMENT"
+  ],
+  "rollback": "No rollback is required for this blocker. Preserve the active read-only route and all historical evidence; disable the route only through a separate non-destructive rollback decision if a defect is found."
+}
