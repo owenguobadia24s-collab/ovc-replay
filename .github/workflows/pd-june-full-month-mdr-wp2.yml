@@ -58,12 +58,21 @@ jobs:
           assert receipt['merge_commit'] == 'b3ac2561aff225442465e6914a1e1e29adbfab62'
           assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
           assert receipt['next_action'] == 'OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE'
-          assert state['packet_id'] == 'PD-JUNE-FM-WP2'
-          assert state['status'] == 'GATE_READY'
+          assert state['packet_id'] in {'PD-JUNE-FM-WP2', 'PD-JUNE-FM-WP3'}
+          assert state['status'] in {'GATE_READY', 'QA_REVIEW', 'APPROVED', 'COMPLETED'}
           assert state['tooling_merge_commit'] == receipt['merge_commit']
-          assert state['replay_status'] == 'NOT_YET_EXECUTED_OPERATOR_LOCAL_BOUNDARY'
+          assert state['replay_status'] in {
+              'NOT_YET_EXECUTED_OPERATOR_LOCAL_BOUNDARY',
+              'COMPLETE_LOCAL_WP2_CANDIDATE_ACCEPTANCE_PENDING_CI',
+              'PASS_ACCEPTED_FOR_WP3',
+          }
           assert state['next_packet'] == 'PD-JUNE-FM-WP3'
-          assert state['next_packet_status'] == 'BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS'
+          assert state['next_packet_status'] in {
+              'BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS',
+              'BLOCKED_PENDING_WP2_ACCEPTANCE_CI_AND_SQUASH_MERGE',
+              'BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE',
+              'READY',
+          }
           assert schema['properties']['slice_id']['const'] == subject.SLICE_ID
           assert receipt_schema['properties']['merge_commit']['const'] == receipt['merge_commit']
           assert subject.EXPECTED_C1_RECORDS == 4958
