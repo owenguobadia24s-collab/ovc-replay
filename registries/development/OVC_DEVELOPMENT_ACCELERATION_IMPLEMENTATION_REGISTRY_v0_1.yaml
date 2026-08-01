@@ -52,7 +52,7 @@ entries:
     packet_id: DA-WP3
     title: Tiered testing and CI profiles
     branch: build/ovc-dev-accel-test-profiles
-    status: APPROVED
+    status: COMPLETED
     prerequisites: [DA-WP1_COMPLETED]
     authority_required: AUTO_RATIFIABLE_TEST_SELECTION
     authority_delta: DETERMINISTIC_TEST_PROFILE_SELECTION
@@ -64,12 +64,23 @@ entries:
     packet_id: DA-WP4
     title: Closure and merge-receipt automation
     branch: build/ovc-dev-accel-closure
-    status: READY_AFTER_DA_WP3_MERGE
+    status: APPROVED
     prerequisites: [DA-WP1_COMPLETED, DA-WP3_COMPLETED]
     authority_required: AUTO_RATIFIABLE_SHADOW_ONLY_THEN_OPERATOR_REQUIRED_DA_G4
     authority_delta: DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY
-    reads: [PR metadata, QA packets, decisions, merge results]
-    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g4a/**]
+    reads: [frozen PR snapshots, QA packets, decisions, manual merge receipts, supplied merge results]
+    writes:
+      - contracts/development/**
+      - schemas/development/**
+      - registries/development/**
+      - src/ovc/development/**
+      - tests/development/**
+      - fixtures/development/**
+      - scripts/development/validate_da_g4a.py
+      - .github/workflows/development-acceleration-da-g4a.yml
+      - docs/releases/development-acceleration-v0-1/da-wp3/**
+      - docs/releases/development-acceleration-v0-1/da-g4a/**
+    dependency_justification: DA-G4A needs a deterministic validator, final-head workflow and exact prior-packet merge receipt; all remain inside the ratified development-tooling path boundary.
     gate: DA-G4A_THEN_DA-G4
     rollback: Disable closure generator; manual receipt preparation remains available.
   - implementation_id: OVC-DEV-ACCEL-WP5

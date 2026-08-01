@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-closure-policy/v1",
+  "policy_id": "OVC.DEVELOPMENT.ACCELERATION.CLOSURE.v0.1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "base_branch": "main",
+  "merge_method": "squash",
+  "exact_head_required": true,
+  "allowed_head_patterns": ["build/ovc-dev-accel-*"],
+  "allowed_path_patterns": [
+    ".github/workflows/ovc-*.yml",
+    ".github/workflows/development-acceleration-*.yml",
+    "contracts/development/**",
+    "schemas/development/**",
+    "registries/development/**",
+    "src/ovc/development/**",
+    "scripts/development/**",
+    "tests/development/**",
+    "fixtures/development/**",
+    "docs/development-acceleration/**",
+    "docs/releases/development-acceleration-v0-1/**"
+  ],
+  "required_qa_status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
+  "required_decision": "PASS",
+  "required_reserved_authority_delta": "NONE",
+  "zero_warning_required": true,
+  "zero_unresolved_review_required": true,
+  "repository_bot_write": "DENIED_UNTIL_DA_G4",
+  "direct_main_write": "PROHIBITED",
+  "force_push": "PROHIBITED",
+  "history_rewrite": "PROHIBITED"
+}

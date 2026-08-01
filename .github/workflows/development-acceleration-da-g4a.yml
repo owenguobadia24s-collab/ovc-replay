@@ -1,0 +1,52 @@
+name: Development Acceleration DA-G4A closure shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/development/**"
+      - "schemas/development/**"
+      - "registries/development/**"
+      - "src/ovc/development/**"
+      - "scripts/development/validate_da_g4a.py"
+      - "tests/development/**"
+      - "fixtures/development/**"
+      - "docs/releases/development-acceleration-v0-1/da-wp3/**"
+      - "docs/releases/development-acceleration-v0-1/da-g4a/**"
+      - ".github/workflows/development-acceleration-da-g4a.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  da-g4a:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'DA-WP4')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate DA-G4A packet
+        run: PYTHONPATH=src python -u scripts/development/validate_da_g4a.py
+      - name: Focused closure tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_closure.py' -v
+      - name: Retained tiered-selection tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_test_selection.py' -v
+      - name: Retained preflight tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_preflight.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert shadow-only authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'repository_bot_write.*DENIED_UNTIL_DA_G4' registries/development/OVC_DEVELOPMENT_ACCELERATION_CLOSURE_POLICY_v0_1.json
+          grep -q 'writes_performed.*false' docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_SHADOW_COMPARISON.json
+          grep -q 'merge_performed.*false' docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_SHADOW_COMPARISON.json
+          grep -q 'reserved_authority_delta.*NONE' docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json
+          ! grep -R -E 'subprocess|os\.system|requests|urllib|rclone|wrangler|aws s3' src/ovc/development/closure.py
+          ! grep -R -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/closure.py

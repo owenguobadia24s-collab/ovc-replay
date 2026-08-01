@@ -5,6 +5,16 @@ release, provider, validation, probability, risk, exposure or execution authorit
 """
 
 from .artifacts import ArtifactRef, verify_artifact
+from .closure import (
+    ClosureError,
+    ClosurePolicy,
+    ClosureSnapshot,
+    compare_receipt_proposal,
+    evaluate_closure,
+    load_closure_policy,
+    load_closure_snapshot,
+    propose_merge_receipt,
+)
 from .decisions import DecisionRecord
 from .gates import GatePacket
 from .identity import canonical_json_bytes, canonical_sha256, normalize_relative_path
@@ -22,6 +32,9 @@ from .test_selection import (
 __all__ = [
     "ArtifactProfile",
     "ArtifactRef",
+    "ClosureError",
+    "ClosurePolicy",
+    "ClosureSnapshot",
     "DecisionRecord",
     "DestinationCheck",
     "GatePacket",
@@ -34,9 +47,14 @@ __all__ = [
     "aggregate_assertions",
     "canonical_json_bytes",
     "canonical_sha256",
+    "compare_receipt_proposal",
+    "evaluate_closure",
+    "load_closure_policy",
+    "load_closure_snapshot",
     "load_profile",
     "load_test_profile_registry",
     "normalize_relative_path",
+    "propose_merge_receipt",
     "run_preflight",
     "select_test_manifest",
     "verify_artifact",
