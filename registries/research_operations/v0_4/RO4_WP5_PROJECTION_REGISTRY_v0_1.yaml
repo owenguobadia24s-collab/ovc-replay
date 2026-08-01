@@ -1,0 +1,54 @@
+schema: ovc-ro4-wp5-projection-registry/v1
+registry_id: RO4.WP5.CONSOLE_PROJECTION.v0.1
+status: APPROVED_RO4_G5_ROUTE_DISABLED
+plan_id: OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2
+packet_id: RO4-WP5
+gate_id: RO4-G5
+decision_id: RO4-G5.DELEGATED.PASS.20260801T082700Z
+authority_delta: DISABLED_LOCAL_READ_ONLY_PRESENTATION_ADAPTERS
+route:
+  route_id: RESEARCH.C2_SEQUENCE_EVIDENCE
+  route_state: DISABLED_PENDING_RC_G5
+  page_registered: false
+  navigation_registered: false
+  local_only: true
+  writes: NONE
+  remote_deployment: DENIED
+schema_binding:
+  schema_id: ovc-ro4-console-projection/v1
+  path: schemas/research_operations/v0_4/ro4_console_projection_v0_1.schema.json
+  git_blob_sha: 83bcf57c0374411dfdf02a61483b529b46f333c7
+panels:
+  - {panel_class: C2_STATE, authority: READ_ONLY_EXACT_IDENTITY_AND_COUNT}
+  - {panel_class: C2_TRANSITION, authority: READ_ONLY_EXACT_IDENTITY_AND_COUNT}
+  - {panel_class: PERSISTENCE_CONFLICT, authority: READ_ONLY_DERIVED_EVIDENCE}
+  - {panel_class: RO4_SEQUENCE, authority: READ_ONLY_NON_CANONICAL_EVIDENCE}
+  - {panel_class: BOUNDARY_FRICTION_READ_ONLY, authority: READ_ONLY_APPEND_ONLY_RECORDS}
+  - {panel_class: PD_TRIGGER_TRACE_ONLY, authority: IDENTITY_TRACE_ONLY}
+  - {panel_class: SIGNATURE_DIVERSITY, authority: READ_ONLY_AUDIT}
+  - {panel_class: SAMPLE_DISCLOSURE, authority: REQUIRED_WHEN_SAMPLED}
+permanent_banners:
+  - LOCAL READ ONLY — ROUTE DISABLED PENDING RC-G5.
+  - NO ANNOTATION OR WRITE ACTIONS ARE AVAILABLE.
+  - VALIDATION IS LOCKED_UNCONSUMED.
+  - C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED.
+presentation_policy:
+  exact_count_with_visible_denominator: REQUIRED
+  excluded_and_missing_counts: REQUIRED
+  percentage: DENIED
+  ratio: DENIED
+  heatmap: DENIED
+  likelihood_language: DENIED
+  silent_sampling: DENIED
+  synthetic_or_ablated_operator_controls: DENIED
+source_policy:
+  discovery: ALLOWED_EXACT_ACCEPTED_IDENTITY
+  development: ALLOWED_EXACT_REFERENCE_IDENTITY
+  validation: LOCKED_UNCONSUMED_DENY_BEFORE_RESOLUTION
+pattern_discovery_policy:
+  trigger_trace_identity: ALLOWED
+  candidate_population: DENIED
+  ranking: DENIED
+  review_write: DENIED
+  evidence_bridge_write: DENIED
+rollback: Remove or disable the derived adapter through a new non-destructive commit; preserve RO4 evidence, records, decisions and C2 sources.

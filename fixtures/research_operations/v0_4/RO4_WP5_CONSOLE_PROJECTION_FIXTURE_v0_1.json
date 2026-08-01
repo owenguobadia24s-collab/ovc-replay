@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-ro4-wp5-console-projection-fixture/v1",
+  "status": "SYNTHETIC_NON_AUTHORITATIVE",
+  "operator_evidence": false,
+  "market_authority": "NONE",
+  "source_commit": "075752da9707f9c7bb8bd0298d32d1c50623026c",
+  "source_release_refs": [
+    {
+      "release_id": "SYNTHETIC.OPT-B.C2.GBPUSD.DISCOVERY.v0",
+      "manifest_id": "SYNTHETIC.C2.MANIFEST.v0",
+      "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "role": "DISCOVERY",
+      "authority_state": "ACTIVE_DISCOVERY",
+      "parent_c1_release_id": "SYNTHETIC.OPT-B.C1.GBPUSD.DISCOVERY.v0",
+      "availability": "AVAILABLE",
+      "validation_consumption": "LOCKED_UNCONSUMED"
+    }
+  ],
+  "panels": [
+    {
+      "panel_id": "RO4-C2-STATE-INVENTORY",
+      "panel_class": "C2_STATE",
+      "payload": {
+        "title": "Exact C2 state inventory",
+        "state_count": {
+          "count": 4,
+          "eligible_denominator": 4,
+          "excluded_count": 0,
+          "missing_count": 0,
+          "slice_identity": "SYNTHETIC|DISCOVERY|15M|BID",
+          "display_text": "4 of 4 eligible records",
+          "display_style": "COUNT_WITH_VISIBLE_DENOMINATOR"
+        },
+        "state_ids": ["c2:state:synthetic-1", "c2:state:synthetic-2"]
+      }
+    },
+    {
+      "panel_id": "RO4-SEQUENCE-INVENTORY",
+      "panel_class": "RO4_SEQUENCE",
+      "payload": {
+        "title": "Non-canonical sequence evidence",
+        "sequence_count": {
+          "count": 2,
+          "eligible_denominator": 4,
+          "excluded_count": 1,
+          "missing_count": 1,
+          "slice_identity": "SYNTHETIC|RO4-SEQUENCE",
+          "display_text": "2 of 4 eligible records",
+          "display_style": "COUNT_WITH_VISIBLE_DENOMINATOR"
+        },
+        "sequence_ids": ["RO4.SEQUENCE.SYNTHETIC.001", "RO4.SEQUENCE.SYNTHETIC.002"]
+      }
+    },
+    {
+      "panel_id": "RO4-PD-TRIGGER-TRACE",
+      "panel_class": "PD_TRIGGER_TRACE_ONLY",
+      "payload": {
+        "title": "Pattern Discovery trigger trace identities only",
+        "trigger_trace_ids": ["PD.TRIGGER.TRACE.SYNTHETIC.001"],
+        "authority": "TRACE_ONLY_NO_POPULATION_ACCESS"
+      }
+    },
+    {
+      "panel_id": "RO4-SIGNATURE-DIVERSITY",
+      "panel_class": "SIGNATURE_DIVERSITY",
+      "payload": {
+        "title": "Signature diversity audit",
+        "status": "PASS",
+        "audit_id": "RO4.DIVERSITY.SYNTHETIC.001",
+        "logical_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    }
+  ]
+}
