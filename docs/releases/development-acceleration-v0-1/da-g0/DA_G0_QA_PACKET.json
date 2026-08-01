@@ -1,0 +1,27 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-00",
+  "gate_id": "DA-G0",
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-QA-SCOPE-001", "result": "PASS", "evidence": "Authority contract and baseline profile limit the programme to development tooling."},
+    {"check_id": "DA-QA-AUTH-002", "result": "PASS", "evidence": "Bot write denied until DA-G4; direct main write and force-push prohibited."},
+    {"check_id": "DA-QA-MARKET-003", "result": "PASS", "evidence": "Provider, formulas, thresholds, semantics, selectors, releases, R2, Validation and exposure denied."},
+    {"check_id": "DA-QA-REGISTRY-004", "result": "PASS", "evidence": "DA-00 through DA-WP5 have stable IDs, branches, prerequisites, authority deltas, gates and rollback."},
+    {"check_id": "DA-QA-DEPENDENCY-005", "result": "PASS", "evidence": "Unknown paths escalate to FINAL_HEAD and market semantic reverse dependencies are denied."},
+    {"check_id": "DA-QA-METRICS-006", "result": "PASS", "evidence": "Twelve named PRs reconcile to six implementation and six receipt PRs with explicit totals."},
+    {"check_id": "DA-QA-CONCURRENT-007", "result": "PASS", "evidence": "Open PR 202 is recorded as non-overlapping and outside this branch's mutation authority."},
+    {"check_id": "DA-QA-CI-008", "result": "PENDING", "evidence": "Final-head validator, focused tests and complete repository suite will run in GitHub Actions."}
+  ],
+  "blocking_issues": [],
+  "warnings": [
+    "Recent PR metrics include queue and operator time.",
+    "Declared workflow IDs may undercount auxiliary checks."
+  ],
+  "qa_recommendation": "PASS_AFTER_FINAL_HEAD_CI",
+  "authority_delta": "REPOSITORY_RECORDS_ONLY",
+  "rollback": "Revert bounded packet merge without deleting prior records or rewriting history."
+}
