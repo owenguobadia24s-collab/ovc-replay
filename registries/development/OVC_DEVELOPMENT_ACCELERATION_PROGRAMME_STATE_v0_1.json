@@ -4,13 +4,13 @@
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "programme_status": "RUNNING",
-  "current_packet": "DA-WP1",
-  "current_gate": "DA-G1",
+  "current_packet": "DA-WP2",
+  "current_gate": "DA-G2",
   "operator_decision_required": false,
   "operator_decision_id": "DA-G0.OPERATOR.PASS.20260801T151200Z",
-  "baseline_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0",
-  "branch": "build/ovc-dev-accel-shared-services",
-  "candidate_commit": "44cf443d50dd0c63590d66b5c286c9cbeb80cb77",
+  "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
+  "branch": "build/ovc-dev-accel-preflight",
+  "candidate_commit": null,
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -48,39 +48,39 @@
     },
     {
       "packet_id": "DA-WP1",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["DA-00_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE_COMPLETED",
       "authority_delta": "LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS",
       "baseline_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0",
       "branch": "build/ovc-dev-accel-shared-services",
-      "candidate_commit": "44cf443d50dd0c63590d66b5c286c9cbeb80cb77",
-      "tests": ["DA-G1 workflow 30706304429 PASS", "generic tests workflow 30706304445 PASS"],
+      "candidate_commit": "603e95964155f43bc8e58d9cf70fa73c99d14e5e",
+      "tests": ["DA-G1 workflow 30706417632 PASS", "generic tests workflow 30706417598 PASS"],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_DELEGATED_DECISION.json",
-      "merge_commit": null,
+      "merge_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
       "blockers": [],
       "next_packet": "DA-WP2"
     },
     {
       "packet_id": "DA-WP2",
-      "status": "PLANNED",
+      "status": "QA_REVIEW",
       "prerequisites": ["DA-WP1_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE",
       "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD",
-      "baseline_commit": null,
+      "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
       "branch": "build/ovc-dev-accel-preflight",
       "candidate_commit": null,
-      "tests": [],
-      "qa_packet": null,
-      "decision_record": null,
+      "tests": ["DA-G2 validator", "focused preflight tests", "retained shared-service tests", "complete repository suite"],
+      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_QA_PACKET.json",
+      "decision_record": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_DELEGATED_DECISION.json",
       "merge_commit": null,
-      "blockers": ["DA-WP1_NOT_MERGED"],
+      "blockers": ["FINAL_HEAD_CI_NOT_YET_RECORDED"],
       "next_packet": "DA-WP3"
     },
     {
       "packet_id": "DA-WP3",
-      "status": "PLANNED",
+      "status": "READY",
       "prerequisites": ["DA-WP1_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE",
       "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
@@ -91,7 +91,7 @@
       "qa_packet": null,
       "decision_record": null,
       "merge_commit": null,
-      "blockers": ["DA-WP1_NOT_MERGED"],
+      "blockers": [],
       "next_packet": "DA-WP4"
     },
     {
@@ -107,7 +107,7 @@
       "qa_packet": null,
       "decision_record": null,
       "merge_commit": null,
-      "blockers": ["DA-WP1_NOT_MERGED", "DA-WP3_NOT_MERGED"],
+      "blockers": ["DA-WP3_NOT_MERGED"],
       "next_packet": "DA-G4"
     },
     {
@@ -123,9 +123,9 @@
       "qa_packet": null,
       "decision_record": null,
       "merge_commit": null,
-      "blockers": ["DA-WP1_NOT_MERGED", "DA-WP2_NOT_MERGED"],
+      "blockers": ["DA-WP2_NOT_MERGED"],
       "next_packet": "DA-G6"
     }
   ],
-  "next_action": "SQUASH_MERGE_PR_204_THEN_BEGIN_DA_WP2"
+  "next_action": "OPEN_DA_WP2_PR_AND_RUN_FINAL_HEAD_QA"
 }
