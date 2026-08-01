@@ -38,22 +38,37 @@ jobs:
           a=json.loads(Path('registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json').read_text())
           g=json.loads(Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_OPERATOR_GATE_PACKET.json').read_text())
           d=Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_OPERATOR_DECISION.json')
-          assert a['enabled'] is False
+          activation=Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_ACTIVATION_GATE_PACKET.json')
           assert a['writes']=='NONE'
+          assert a['annotation_actions']=='NONE'
           assert a['validation_consumption']=='LOCKED_UNCONSUMED'
+          assert a['remote_deployment']=='DENIED'
           assert g['auto_ratifiable'] is False
           assert g['proposed_authority_delta']=='LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION'
           if g['status'] in {'GATE_READY','GATE_READY_PENDING_FINAL_HEAD_CI'}:
+              assert a['enabled'] is False
               assert a['status']=='DISABLED_PENDING_OPERATOR_RC_G5'
               assert g['operator_decision_required'] is True
               assert g['operator_decision'] is None
           else:
               assert g['status']=='APPROVED_PENDING_BOUNDED_ACTIVATION'
-              assert a['status']=='APPROVED_PENDING_BOUNDED_ACTIVATION'
               assert g['operator_decision_required'] is False
               assert g['operator_decision']['decision']=='PASS'
               assert d.is_file()
               decision=json.loads(d.read_text())
               assert decision['decision']=='PASS'
               assert decision['decision_id']==a['operator_decision_id']==g['operator_decision']['decision_id']
+              if a['status']=='APPROVED_PENDING_BOUNDED_ACTIVATION':
+                  assert a['enabled'] is False
+                  assert a['current_route_state']=='DISABLED_PENDING_BOUNDED_ACTIVATION'
+              else:
+                  assert a['status']=='ENABLED_LOCAL_READ_ONLY'
+                  assert a['enabled'] is True
+                  assert a['current_route_state']=='ENABLED_LOCAL_READ_ONLY'
+                  assert activation.is_file()
+                  active=json.loads(activation.read_text())
+                  assert active['operator_decision_required'] is False
+                  assert active['auto_ratifiable'] is True
+                  assert active['proposed_authority_delta']=='ACTIVATE_APPROVED_LOCAL_READ_ONLY_ROUTE'
+                  assert active['unresolved_issues']==[]
           PY
