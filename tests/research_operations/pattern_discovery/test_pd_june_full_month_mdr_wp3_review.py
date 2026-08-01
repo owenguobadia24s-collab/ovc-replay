@@ -56,13 +56,14 @@ class PDJuneFullMonthMDRWP3ReviewTests(unittest.TestCase):
         ]
         result = subject.evaluate_trigger_rules(persistence)
         self.assertEqual(result["LONG_PERSISTENCE"]["status"], "FIRED")
-        switching_values = ["BALANCED", "UP_STALL", "BALANCED", "UP_STALL", "BALANCED", "UP_STALL"]
+        switching_values = ["BALANCED", "BALANCED", "UP_STALL", "UP_STALL", "BALANCED", "UP_STALL"]
         switching = [
             state(f"2026-06-02T0{index}:00:00Z", motion=value, suffix=f"s{index}")
             for index, value in enumerate(switching_values)
         ]
         result = subject.evaluate_trigger_rules(switching)
         self.assertEqual(result["REPEATED_SWITCHING"]["status"], "FIRED")
+        self.assertEqual(result["REPEATED_SWITCHING"]["switches"], 3)
 
     def test_external_index_and_selection_qa_are_exact_and_non_activating(self) -> None:
         index = json.loads(INDEX.read_text(encoding="utf-8"))
