@@ -1,0 +1,80 @@
+schema: ovc-development-acceleration-dependency-map/v1
+registry_id: OVC.DEVELOPMENT.ACCELERATION.DEPENDENCIES.v0.1
+programme_id: OVC-DEV-ACCEL-v0.1
+unknown_path_policy: FINAL_HEAD
+ambiguous_dependency_policy: BLOCK_AND_REQUIRE_PROFILE_CORRECTION
+rules:
+  - path: contracts/development/**
+    owner: DA-WP1_PLUS_RELEVANT_PACKET
+    minimum_test_profile: PACKET
+    retained_checks: [schema-registry-validation, authority-boundary]
+  - path: schemas/development/**
+    owner: DA-WP1_PLUS_RELEVANT_PACKET
+    minimum_test_profile: PACKET
+    retained_checks: [schema-validation, golden-fixtures, authority-boundary]
+  - path: registries/development/**
+    owner: DA-WP1_PLUS_RELEVANT_PACKET
+    minimum_test_profile: PACKET
+    retained_checks: [profile-validation, dependency-selection-audit, authority-boundary]
+  - path: src/ovc/development/**
+    owner: DA-WP1_PLUS_RELEVANT_PACKET
+    minimum_test_profile: PACKET
+    retained_checks: [development-unit, property, metamorphic, security-boundary]
+  - path: scripts/development/**
+    owner: RELEVANT_PACKET
+    minimum_test_profile: PACKET
+    retained_checks: [cli-contract, windows-linux-logical-equivalence]
+  - path: scripts/ovc.py
+    owner: SHARED_CLI
+    minimum_test_profile: FINAL_HEAD
+    retained_checks: [all-development-cli, complete-repository-suite]
+  - path: scripts/ovc.ps1
+    owner: SHARED_CLI
+    minimum_test_profile: FINAL_HEAD
+    retained_checks: [powershell-wrapper, complete-repository-suite]
+  - path: tests/development/**
+    owner: RELEVANT_PACKET
+    minimum_test_profile: PACKET
+    retained_checks: [no-test-weakening-audit]
+  - path: fixtures/development/**
+    owner: RELEVANT_PACKET
+    minimum_test_profile: PACKET
+    retained_checks: [fixture-selection-matrix]
+  - path: .github/workflows/ovc-*.yml
+    owner: DA-WP3
+    minimum_test_profile: FINAL_HEAD
+    retained_checks: [workflow-event-validation, selection-audit, complete-repository-suite]
+  - path: .github/workflows/development-acceleration-*.yml
+    owner: RELEVANT_GATE
+    minimum_test_profile: FINAL_HEAD
+    retained_checks: [workflow-event-validation, complete-repository-suite]
+  - path: docs/development-acceleration/**
+    owner: RELEVANT_PACKET
+    minimum_test_profile: FAST
+    escalation_if_court_record: PACKET
+  - path: docs/releases/development-acceleration-v0-1/**
+    owner: RELEVANT_GATE
+    minimum_test_profile: PACKET
+    retained_checks: [gate-packet, qa-decision-rollback, authority-boundary]
+adapters:
+  - adapter_id: DEV-ADAPTER-OPT-A-v1
+    source_domain: OPT-A
+    allowed_reads: [compact release descriptors, compact QA packets, manifests, hashes]
+    forbidden_reads: [raw provider bytes, full bar streams, market formulas]
+    reverse_dependency: DENIED
+  - adapter_id: DEV-ADAPTER-PD-JUNE-FM-v1
+    source_domain: PD-JUNE-FULL-MONTH-MDR
+    allowed_reads: [compact source and replay receipts, programme state, QA, decisions]
+    forbidden_reads: [full C1/C2 JSONL, blinded answer keys unless packet profile permits metadata only]
+    reverse_dependency: DENIED
+  - adapter_id: DEV-ADAPTER-RO-v1
+    source_domain: RESEARCH-OPERATIONS
+    allowed_reads: [artifact catalogue shapes, compact QA assertions, gate packets]
+    forbidden_reads: [market interpretations, operator evidence content]
+    reverse_dependency: DENIED
+final_assurance:
+  required_on_stable_pr_head: true
+  required_after_base_change: true
+  complete_repository_suite: true
+  gate_replay_substitution: PROHIBITED
+  local_success_substitutes_remote_required_check: false
