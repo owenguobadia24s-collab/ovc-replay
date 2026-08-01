@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-research-console-rc-g5-qa-packet/v1",
+  "gate_id": "RC-G5",
+  "baseline_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
+  "branch": "gate/rc-g5-c2-sequence-evidence",
+  "candidate_commit": "PENDING_FINAL_HEAD_PIN",
+  "status": "GATE_READY_PENDING_FINAL_HEAD_CI",
+  "recommendation": "PASS",
+  "checks": {
+    "ro4_g5_prerequisite_merged": "PASS",
+    "projection_schema_and_hash_binding": "PASS",
+    "adapter_and_local_source_hash_binding": "PASS",
+    "route_authority_registry_disabled": "PASS",
+    "route_and_panel_map_complete": "PASS_8_PANEL_CLASSES",
+    "permanent_banners_complete": "PASS_4",
+    "count_denominator_policy": "PASS",
+    "pattern_discovery_isolation": "PASS",
+    "synthetic_control_exclusion": "PASS",
+    "sample_disclosure": "PASS",
+    "validation_denial": "PASS",
+    "writes_none": "PASS",
+    "remote_deployment_denied": "PASS",
+    "rollback_defined": "PASS"
+  },
+  "tests": {
+    "prerequisite_focused": "PASS_11",
+    "prerequisite_complete_repository": "PASS_70",
+    "prerequisite_workflow": "PASS_RUN_30691923987",
+    "merge_receipt_workflow": "PASS_RUN_30692014163",
+    "operator_gate_validator": "PENDING_CI",
+    "operator_gate_complete_repository": "PENDING_CI",
+    "authority_assertions": "PENDING_CI"
+  },
+  "blocking_issues": [],
+  "warnings": [
+    "The route remains disabled. PASS would authorise only a later bounded local activation implementation.",
+    "The synthetic fixture is not market evidence."
+  ],
+  "rollback": "Disable the route and return to the accepted RC-G3A/RC-G4 surface while preserving RO4 and source evidence."
+}
