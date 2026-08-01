@@ -1,7 +1,15 @@
 from __future__ import annotations
 
+import errno
+import os
+import shutil
+import stat
+import sys
+import time
+import uuid
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any, Callable, Mapping, Sequence
 
 from . import full_month_mdr_compute as implementation
 from .full_month_mdr_compute import *  # noqa: F401,F403
@@ -25,6 +33,12 @@ C1_MANIFEST_ID = (
     f"{implementation.canonical_hash({'source': implementation.SOURCE_MANIFEST_LOGICAL_SHA256, 'formula': implementation.FORMULA_REGISTRY_ID})[:24]}"
 )
 _ORIGINAL_PRICE_PAYLOAD = implementation.price_payload
+_ORIGINAL_EXECUTE = implementation.execute
+_ORIGINAL_SHUTIL = implementation.shutil
+_ORIGINAL_RMTREE = shutil.rmtree
+_CLEANUP_RETRY_DELAYS_SECONDS = (0.05, 0.10, 0.20, 0.40, 0.80, 1.00)
+_RETRYABLE_CLEANUP_ERRNOS = {errno.EACCES, errno.EPERM, errno.EBUSY}
+_RETRYABLE_WINDOWS_ERRORS = {5, 32, 145}
 
 
 def validate_source_manifest_hashes(
@@ -239,6 +253,178 @@ def price_payload(bar: ProspectiveBar, source_object_id: str) -> dict[str, Any]:
     return payload
 
 
+def _retryable_cleanup_error(exc: OSError) -> bool:
+    return (
+        isinstance(exc, PermissionError)
+        or getattr(exc, "errno", None) in _RETRYABLE_CLEANUP_ERRNOS
+        or getattr(exc, "winerror", None) in _RETRYABLE_WINDOWS_ERRORS
+    )
+
+
+def _make_tree_writable(root: Path) -> None:
+    """Best-effort removal of read-only attributes before a cleanup retry."""
+
+    if not root.exists():
+        return
+    for current, directories, files in os.walk(root, topdown=False):
+        current_path = Path(current)
+        for name in files:
+            try:
+                os.chmod(current_path / name, stat.S_IREAD | stat.S_IWRITE)
+            except OSError:
+                pass
+        for name in directories:
+            try:
+                os.chmod(
+                    current_path / name,
+                    stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC,
+                )
+            except OSError:
+                pass
+    try:
+        os.chmod(root, stat.S_IREAD | stat.S_IWRITE | stat.S_IEXEC)
+    except OSError:
+        pass
+
+
+def _remove_tree_with_bounded_retry(
+    path: Path,
+    *,
+    rmtree: Callable[[Path], None] = _ORIGINAL_RMTREE,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> None:
+    last_error: OSError | None = None
+    for delay in (0.0, *_CLEANUP_RETRY_DELAYS_SECONDS):
+        if delay:
+            sleeper(delay)
+        _make_tree_writable(path)
+        try:
+            rmtree(path)
+            return
+        except OSError as exc:
+            if not path.exists():
+                return
+            if not _retryable_cleanup_error(exc):
+                raise
+            last_error = exc
+    if last_error is not None:
+        raise last_error
+
+
+def _rename_with_bounded_retry(
+    source: Path,
+    target: Path,
+    *,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> None:
+    last_error: OSError | None = None
+    for delay in (0.0, *_CLEANUP_RETRY_DELAYS_SECONDS):
+        if delay:
+            sleeper(delay)
+        try:
+            source.rename(target)
+            return
+        except OSError as exc:
+            if target.exists() and not source.exists():
+                return
+            if not _retryable_cleanup_error(exc):
+                raise
+            last_error = exc
+    if last_error is not None:
+        raise last_error
+
+
+def dispose_determinism_workspace(
+    path: Path,
+    *,
+    rmtree: Callable[[Path], None] = _ORIGINAL_RMTREE,
+    sleeper: Callable[[float], None] = time.sleep,
+) -> Path | None:
+    """Remove pass B, or preserve it outside the candidate after bounded denial.
+
+    A transient Windows scanner or filesystem handle must not invalidate an
+    already byte-identical deterministic replay. If bounded retries cannot remove
+    pass B, the duplicate workspace is moved to the compute quarantine with an
+    explicit receipt. The candidate staging tree remains complete and contains
+    only the manifest-bound payload and compact receipts.
+    """
+
+    try:
+        _remove_tree_with_bounded_retry(path, rmtree=rmtree, sleeper=sleeper)
+        return None
+    except OSError as exc:
+        if not _retryable_cleanup_error(exc):
+            raise
+        compute_root = path.parent.parent
+        quarantine_root = compute_root / "quarantine"
+        quarantine_root.mkdir(parents=True, exist_ok=True)
+        target = quarantine_root / (
+            "PD-JUNE-FM-WP2.DETERMINISM-CLEANUP."
+            f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}."
+            f"{uuid.uuid4().hex[:8]}"
+        )
+        implementation.common.write_json(
+            path / "cleanup-receipt.json",
+            {
+                "schema": "ovc-pd-june-full-month-mdr-wp2-cleanup-quarantine/v1",
+                "programme_id": implementation.PROGRAMME_ID,
+                "packet_id": implementation.PACKET_ID,
+                "slice_id": implementation.SLICE_ID,
+                "workspace_role": "DETERMINISTIC_INDEPENDENT_RERUN_PASS_B",
+                "reason": str(exc),
+                "disposition": "QUARANTINED_AFTER_BOUNDED_WINDOWS_CLEANUP_DENIAL",
+                "deterministic_inventory_comparison": "PASS_BYTE_IDENTICAL_BEFORE_CLEANUP",
+                "candidate_payload_mutated": False,
+                "provider_network_access_performed": False,
+                "release_mutation_performed": False,
+                "repair_performed": False,
+                "r2_publication": "DENIED",
+                "validation_consumption": "DENIED",
+            },
+        )
+        _rename_with_bounded_retry(path, target, sleeper=sleeper)
+        print(
+            "PD-JUNE-FM-WP2 warning: pass-B cleanup remained access-denied "
+            f"after bounded retries; duplicate workspace preserved at {target}",
+            file=sys.stderr,
+        )
+        return target
+
+
+class _ScopedShutilProxy:
+    """Delegate shutil except for the pass-B cleanup operation."""
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(_ORIGINAL_SHUTIL, name)
+
+    @staticmethod
+    def rmtree(path: str | os.PathLike[str]) -> None:
+        dispose_determinism_workspace(Path(path))
+
+
+_SHUTIL_PROXY = _ScopedShutilProxy()
+
+
+def execute(
+    repository_root: Path,
+    *,
+    authority_gate: str,
+    environ: Mapping[str, str] | None = None,
+) -> dict[str, Any]:
+    """Run the original replay with a scoped Windows-safe pass-B cleanup."""
+
+    previous_shutil = implementation.shutil
+    implementation.shutil = _SHUTIL_PROXY
+    try:
+        return _ORIGINAL_EXECUTE(
+            repository_root,
+            authority_gate=authority_gate,
+            environ=environ,
+        )
+    finally:
+        implementation.shutil = previous_shutil
+
+
 # Functions defined in the implementation module resolve globals in that module.
 # Bind the corrected, tested policies before exposing execute/main entrypoints.
 implementation.PRICE_SET_ID = PRICE_SET_ID
@@ -248,6 +434,7 @@ implementation.C1_MANIFEST_ID = C1_MANIFEST_ID
 implementation.verify_frozen_source = verify_frozen_source
 implementation.complete_segments = complete_segments
 implementation.price_payload = price_payload
+implementation.execute = execute
 
 
 if __name__ == "__main__":
