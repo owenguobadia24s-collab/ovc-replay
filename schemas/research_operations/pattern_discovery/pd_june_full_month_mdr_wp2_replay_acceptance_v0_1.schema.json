@@ -1,0 +1,48 @@
+{
+  "$id": "ovc://schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp2_replay_acceptance_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "acceptance_status": {
+      "enum": [
+        "PASS_PENDING_FINAL_HEAD_CI",
+        "PASS_SQUASH_MERGED_TO_MAIN"
+      ]
+    },
+    "compact_files": {
+      "maxItems": 6,
+      "minItems": 6,
+      "type": "array"
+    },
+    "deterministic_payload_hash": {
+      "const": "d784f47395d904b2d78d77cde0a8a40287877692d8b92889ab2eeedef621a24b"
+    },
+    "output_manifest_sha256": {
+      "const": "e805eaa0f8603da644d23d83297fdc5e62142f8051d8583c9c28c9469a3b704b"
+    },
+    "packet_id": {
+      "const": "PD-JUNE-FM-WP2"
+    },
+    "programme_id": {
+      "const": "PD-JUNE-FULL-MONTH-MDR"
+    },
+    "run_id": {
+      "const": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9"
+    },
+    "schema": {
+      "const": "ovc-pd-june-full-month-mdr-wp2-replay-acceptance-index/v1"
+    }
+  },
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "run_id",
+    "output_manifest_sha256",
+    "deterministic_payload_hash",
+    "compact_files",
+    "acceptance_status"
+  ],
+  "title": "PD-JUNE-FM-WP2 replay acceptance index",
+  "type": "object"
+}
