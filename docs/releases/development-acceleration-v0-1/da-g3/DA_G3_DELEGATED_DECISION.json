@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-development-acceleration-delegated-decision/v1",
+  "decision_id": "DA-G3.DELEGATED.CONDITIONAL.PASS.20260801T162500Z",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP3",
+  "gate_id": "DA-G3",
+  "decision": "PENDING_CI",
+  "decision_authority": "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN",
+  "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
+  "candidate_commit": null,
+  "acceptance_conditions": [
+    "DA-G3 validator passes",
+    "tiered shadow workflow and focused selector tests pass",
+    "complete repository suite passes",
+    "no unresolved review or blocking warning remains",
+    "authority delta remains wholly non-reserved"
+  ],
+  "qa_status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
+  "rationale": "The packet selects test profiles and emits compact manifests only. It does not weaken final assurance or activate merge, bot-write, default-workflow, market or exposure authority.",
+  "rollback": "Stop invoking the selector or revert the bounded DA-WP3 merge through a new non-destructive commit.",
+  "next_packet": "DA-WP4"
+}
