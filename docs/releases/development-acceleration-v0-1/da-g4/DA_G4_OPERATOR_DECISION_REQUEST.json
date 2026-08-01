@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-development-acceleration-operator-decision-request/v1",
+  "decision_request_id": "DA-G4.OPERATOR.REQUEST.20260801T170000Z",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "DA-G4",
+  "gate_title": "Narrow repository receipt-bot proposal-branch authority",
+  "status": "DECIDED_PASS",
+  "current_authority": "REPOSITORY_BOT_WRITE_APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "requested_decision": "PASS",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "proposed_authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
+  "effect_of_pass": "Approve the exact profile for bounded implementation but keep active=false until every implementation and activation condition passes.",
+  "effect_of_defer": "Keep repository-bot write denied and preserve the gate-ready evidence for later review.",
+  "effect_of_block": "Keep repository-bot write denied and require a new or corrected proposal before reconsideration.",
+  "effect_of_quarantine": "Keep repository-bot write denied and isolate the proposal/evidence pending an identified safety or reproducibility resolution.",
+  "effect_of_supersede": "Keep this proposal inactive and require a new immutable authority profile and gate packet.",
+  "operator_command": "OVC APPROVE DA-G4 PASS",
+  "alternative_command_examples": [
+    "OVC APPROVE DA-G4 DEFER",
+    "OVC APPROVE DA-G4 BLOCK",
+    "OVC APPROVE DA-G4 QUARANTINE",
+    "OVC APPROVE DA-G4 SUPERSEDE"
+  ],
+  "tested_candidate_commit": "a6a642192663033b412ba48bd891e3d84e886a87",
+  "readiness_tests": [
+    {"workflow": "Development Acceleration DA-G4 operator gate readiness", "run_id": 30710409242, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30710409313, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30710409322, "result": "PASS"}
+  ],
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
+  "decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
+  "approved_profile_record": "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json",
+  "authority_active": false
+}

@@ -1,0 +1,129 @@
+{
+  "schema": "ovc-development-acceleration-operator-gate-packet/v1",
+  "gate_id": "DA-G4",
+  "gate_title": "Narrow repository receipt-bot proposal-branch authority",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "APPROVED_PENDING_SQUASH_MERGE",
+  "baseline_main_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
+  "candidate_branch": "gate/ovc-dev-accel-da-g4",
+  "tested_candidate_commit": "a6a642192663033b412ba48bd891e3d84e886a87",
+  "completed_packets": [
+    {"packet_id": "DA-00", "gate_id": "DA-G0", "decision": "PASS", "merge_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0"},
+    {"packet_id": "DA-WP1", "gate_id": "DA-G1", "decision": "PASS", "merge_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230"},
+    {"packet_id": "DA-WP2", "gate_id": "DA-G2", "decision": "PASS", "merge_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491"},
+    {"packet_id": "DA-WP3", "gate_id": "DA-G3", "decision": "PASS", "merge_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95"},
+    {"packet_id": "DA-WP4", "gate_id": "DA-G4A", "decision": "PASS", "merge_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1"}
+  ],
+  "current_authority": {
+    "shared_development_services": "ACTIVE_LOCAL_COMPUTE",
+    "universal_artifact_preflight": "ACTIVE_FAIL_CLOSED_READ_ONLY_GUARD",
+    "tiered_test_selection": "ACTIVE_PATH_BOUNDED_SHADOW",
+    "closure_and_receipt_service": "ACTIVE_DRY_RUN_ONLY",
+    "repository_bot_write": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+    "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
+    "direct_main_write": "PROHIBITED",
+    "force_push": "PROHIBITED",
+    "history_rewrite": "PROHIBITED",
+    "market_authority": "NONE",
+    "validation_authority": "DENIED",
+    "probability_risk_exposure_execution_authority": "NONE"
+  },
+  "approved_authority_delta": {
+    "delta_id": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
+    "proposal_contract": "contracts/development/OVC_REPOSITORY_RECEIPT_BOT_AUTHORITY_PROPOSAL_v0_1.md",
+    "proposal_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json",
+    "proposal_profile_sha256": "e3e13f38dbddbf96da075c4489e2c5e7c7a03b6f42aaa9aa564e0db2813fa0f5",
+    "approved_profile_record": "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json",
+    "current_status": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+    "base_branch": "main",
+    "allowed_branch_patterns": ["bot/ovc-dev-accel-receipts/*"],
+    "allowed_paths": [
+      "docs/releases/development-acceleration-v0-1/**",
+      "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json",
+      "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+    ],
+    "allowed_actions_after_activation_only": [
+      "CREATE_BOT_BRANCH_FROM_EXACT_MAIN_SHA",
+      "CREATE_OR_UPDATE_ALLOWLISTED_FILES_ON_BOT_BRANCH",
+      "OPEN_OR_UPDATE_ONE_PULL_REQUEST_TO_MAIN"
+    ],
+    "permanent_denials": [
+      "DIRECT_MAIN_WRITE",
+      "WRITE_NON_BOT_BRANCH",
+      "MERGE_OR_APPROVE_PULL_REQUEST",
+      "DISMISS_REVIEW",
+      "FORCE_PUSH_OR_HISTORY_REWRITE",
+      "DELETE_BRANCH_OR_ACCEPTED_RECORD",
+      "MODIFY_CODE_WORKFLOW_CONTRACT_SCHEMA_FIXTURE_OR_TEST",
+      "SELF_MODIFY_SELF_APPROVE_OR_WAIVE_CHECK",
+      "PROVIDER_R2_RELEASE_SELECTOR_OR_VALIDATION_ACTION",
+      "MARKET_SEMANTIC_PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_ACTION"
+    ]
+  },
+  "acceptance_conditions": [
+    "DA-00 through DA-WP4 and DA-G0 through DA-G4A are merged PASS prerequisites.",
+    "DA-G4A shadow closure and receipt comparison has zero material differences.",
+    "The proposed authority profile is closed, inactive and exact-path/branch bounded.",
+    "No bot merge, approval, direct-main, force-push, workflow, code, market or exposure authority is included.",
+    "Independent credential revocation and profile disable are mandatory before activation.",
+    "Post-approval implementation must verify main branch protection denies bot bypass.",
+    "Post-approval implementation, denied-action tests, real proposal-branch shadow and final-head complete suite must PASS before activation.",
+    "The DA-G4 gate packet validator and complete repository suite passed on the tested stable gate-ready head."
+  ],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G4 operator gate readiness", "run_id": 30710409242, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30710409313, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30710409322, "result": "PASS"}
+  ],
+  "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json",
+  "decision_request": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION_REQUEST.json",
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
+  "operator_decision": "PASS",
+  "decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
+  "warnings": [
+    "GitHub repository contents permission is not a native path sandbox; the implementation must enforce branch/path policy and independently verify main branch protection before activation."
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    ".github/workflows/development-acceleration-da-g4.yml",
+    "contracts/development/OVC_REPOSITORY_RECEIPT_BOT_AUTHORITY_PROPOSAL_v0_1.md",
+    "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_GATE_PACKET.json",
+    "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION_REQUEST.json",
+    "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
+    "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json",
+    "docs/releases/development-acceleration-v0-1/da-wp4/DA_WP4_MERGE_RECEIPT.json",
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml",
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json",
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json",
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json",
+    "schemas/development/repository_bot_authority_profile_v0_1.schema.json",
+    "scripts/development/validate_da_g4.py",
+    "tests/development/test_da_g4.py"
+  ],
+  "external_artifacts": [],
+  "external_artifact_hashes": "NONE",
+  "rollback": {
+    "before_activation": "Keep the approved profile inactive; repository-bot write remains unavailable until every activation condition passes.",
+    "after_approved_implementation": "Disable the authority profile, revoke the dedicated identity, close unmerged bot PRs if required, and revert the bounded enablement merge through a new non-destructive commit.",
+    "preservation": "Preserve accepted records, gate packets, shadow evidence and audit events; no deletion or history rewrite."
+  },
+  "recommended_decision": "PASS",
+  "recorded_decision": "PASS",
+  "recommendation_rationale": "The deterministic shadow service reproduced the manual receipt with zero material differences and all prerequisite gates passed. The approved delta is restricted to proposal-branch court-record administration, retains human/eligible merge authority and requires additional fail-closed implementation evidence before activation.",
+  "next_packet": "DA-WP4B",
+  "exact_work_after_pass": [
+    "Record the operator decision and preserve the approved profile state as APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE.",
+    "Squash-merge the bounded DA-G4 court-record PR into main after final-head checks pass.",
+    "Create DA-WP4B from the then-current lawful main SHA.",
+    "Implement a dedicated branch/path-enforcing repository writer adapter with no merge API and no self-modification path.",
+    "Implement immutable bot work packets, idempotency keys, collision denial, token redaction, audit events and independent revocation.",
+    "Verify main branch protection denies direct write and bot bypass.",
+    "Run denied-action, wrong-branch, wrong-path, stale-head, retry, credential-leak and revocation fixtures.",
+    "Perform one real proposal-branch shadow restricted to Development Acceleration receipt records.",
+    "Run packet tests and the complete stable-head repository suite.",
+    "Activate only if every condition passes; otherwise preserve repository-bot write as inactive and mark BLOCKED or QUARANTINED.",
+    "Continue to DA-WP5 only after the DA-WP4B implementation state is lawfully recorded."
+  ]
+}

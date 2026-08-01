@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-G4",
+  "gate_id": "DA-G4",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
+  "baseline_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
+  "tested_candidate_commit": "a6a642192663033b412ba48bd891e3d84e886a87",
+  "checks": [
+    {"check_id": "DA-G4-PREREQ-001", "result": "PASS", "evidence": "DA-00 and DA-WP1 through DA-WP4 are merged with PASS decisions; DA-G4A final-head closure shadow passed."},
+    {"check_id": "DA-G4-SCOPE-002", "result": "PASS", "evidence": "Proposal is limited to Development Acceleration receipt court records on bot/ovc-dev-accel-receipts/* branches."},
+    {"check_id": "DA-G4-DENIAL-003", "result": "PASS", "evidence": "Merge, approval, direct-main, non-bot branch, force-push, history rewrite, deletion, workflow, code, market and exposure actions remain denied."},
+    {"check_id": "DA-G4-INACTIVE-004", "result": "PASS", "evidence": "Approved authority record is APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE and active=false."},
+    {"check_id": "DA-G4-REVOCATION-005", "result": "PASS", "evidence": "Profile disable, credential revoke, bot-PR treatment and non-destructive rollback are mandatory."},
+    {"check_id": "DA-G4-ACTIVATION-006", "result": "PASS", "evidence": "Operator PASS authorises bounded implementation only; branch protection, denied-action tests, real proposal shadow and final-head assurance remain activation conditions."},
+    {"check_id": "DA-G4-PLATFORM-007", "result": "WARN", "evidence": "Repository contents permission is not a native path sandbox; implementation policy and independently verified main branch protection must provide defense in depth."},
+    {"check_id": "DA-G4-CI-008", "result": "PASS", "evidence": "DA-G4 readiness workflow 30710409242, tiered final-head workflow 30710409313 and generic tests workflow 30710409322 passed on tested candidate a6a642192663033b412ba48bd891e3d84e886a87."},
+    {"check_id": "DA-G4-DECISION-009", "result": "PASS", "evidence": "Operator command OVC APPROVE DA-G4 PASS is recorded in decision DA-G4.OPERATOR.PASS.20260801T172600Z; authority remains inactive."}
+  ],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G4 operator gate readiness", "run_id": 30710409242, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30710409313, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30710409322, "result": "PASS"}
+  ],
+  "blocking_issues": [],
+  "warnings": [
+    "Path confinement must be application-enforced and independently backed by main branch protection; this must be verified before activation."
+  ],
+  "qa_recommendation": "PASS_OPERATOR_APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "current_repository_bot_write": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "approved_authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
+  "approved_profile_record": "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json",
+  "operator_decision": "PASS",
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
+  "authority_active": false,
+  "market_authority_delta": "NONE",
+  "validation_authority_delta": "NONE",
+  "probability_risk_exposure_execution_delta": "NONE",
+  "rollback": "Keep or restore the profile inactive, revoke the dedicated identity, close unmerged bot PRs if required and preserve all accepted court records."
+}
