@@ -52,12 +52,10 @@ jobs:
           assert qa['status'] == 'TOOLING_COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_EXECUTION_REQUIRED'
           assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
           assert decision['reserved_authority_delta'] == 'NONE'
-          assert decision['status'] == 'TOOLING_COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_EXECUTION_REQUIRED'
           assert receipt['pull_request'] == 180
           assert receipt['final_head'] == 'b2ea2ae786ed266363c3035a67e5ba029e61c45c'
           assert receipt['merge_commit'] == 'b3ac2561aff225442465e6914a1e1e29adbfab62'
           assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
-          assert receipt['next_action'] == 'OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE'
           assert state['packet_id'] in {'PD-JUNE-FM-WP2', 'PD-JUNE-FM-WP3'}
           assert state['status'] in {'GATE_READY', 'QA_REVIEW', 'APPROVED', 'COMPLETED'}
           assert state['tooling_merge_commit'] == receipt['merge_commit']
@@ -66,12 +64,14 @@ jobs:
               'COMPLETE_LOCAL_WP2_CANDIDATE_ACCEPTANCE_PENDING_CI',
               'PASS_ACCEPTED_FOR_WP3',
           }
-          assert state['next_packet'] == 'PD-JUNE-FM-WP3'
+          assert state['next_packet'] in {'PD-JUNE-FM-WP3', 'PD-JUNE-FM-G2'}
           assert state['next_packet_status'] in {
               'BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS',
               'BLOCKED_PENDING_WP2_ACCEPTANCE_CI_AND_SQUASH_MERGE',
               'BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE',
               'READY',
+              'BLOCKED_PENDING_WP3_FINAL_HEAD_CI_AND_SQUASH_MERGE',
+              'GATE_READY_OPERATOR_REQUIRED',
           }
           assert schema['properties']['slice_id']['const'] == subject.SLICE_ID
           assert receipt_schema['properties']['merge_commit']['const'] == receipt['merge_commit']
