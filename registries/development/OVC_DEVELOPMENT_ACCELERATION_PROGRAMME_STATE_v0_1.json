@@ -4,13 +4,14 @@
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "programme_status": "RUNNING",
-  "current_packet": "DA-WP4",
-  "current_gate": "DA-G4A",
-  "operator_decision_required": false,
+  "current_packet": "DA-G4",
+  "current_gate": "DA-G4",
+  "operator_decision_required": true,
   "operator_decision_id": "DA-G0.OPERATOR.PASS.20260801T151200Z",
-  "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
-  "branch": "build/ovc-dev-accel-closure",
-  "candidate_commit": "7bd25202458158fe1a77db1fbd2891a9063ae7db",
+  "pending_operator_decision_request_id": "DA-G4.OPERATOR.REQUEST.20260801T170000Z",
+  "baseline_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
+  "branch": "gate/ovc-dev-accel-da-g4",
+  "candidate_commit": null,
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -21,11 +22,14 @@
     }
   ],
   "authority": {
-    "tooling": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_APPROVED_PENDING_MERGE",
+    "tooling": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ACTIVE",
     "test_selection": "SHADOW_PATH_BOUNDED",
-    "repository_bot_write": "DENIED_UNTIL_DA_G4",
+    "repository_bot_write": "DENIED_PENDING_DA_G4",
+    "repository_bot_profile": "PENDING_OPERATOR_INACTIVE",
     "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
     "direct_main_write": "PROHIBITED",
+    "force_push": "PROHIBITED",
+    "history_rewrite": "PROHIBITED",
     "market": "NONE",
     "validation": "DENIED",
     "exposure": "NONE",
@@ -98,24 +102,24 @@
     },
     {
       "packet_id": "DA-WP4",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["DA-WP1_COMPLETED", "DA-WP3_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE_SHADOW_COMPLETED_THEN_OPERATOR_REQUIRED_DA_G4",
       "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
       "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
       "branch": "build/ovc-dev-accel-closure",
-      "candidate_commit": "7bd25202458158fe1a77db1fbd2891a9063ae7db",
-      "tests": ["DA-G4A workflow 30708716073 PASS", "tiered shadow workflow 30708716057 PASS"],
+      "candidate_commit": "ab1bb583046ead8f27e7adbd154c60b91b98dd32",
+      "tests": ["DA-G4A workflow 30708852313 PASS", "tiered shadow workflow 30708852304 PASS"],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_DELEGATED_DECISION.json",
-      "merge_commit": null,
+      "merge_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
       "blockers": [],
       "next_packet": "DA-G4"
     },
     {
       "packet_id": "DA-WP5",
       "status": "READY",
-      "prerequisites": ["DA-WP1_COMPLETED", "DA-WP2_COMPLETED"],
+      "prerequisites": ["DA-WP1_COMPLETED", "DA-WP2_COMPLETED", "DA-G4_OPERATOR_DECISION_RECORDED"],
       "authority_required": "AUTO_RATIFIABLE",
       "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
       "baseline_commit": null,
@@ -125,9 +129,19 @@
       "qa_packet": null,
       "decision_record": null,
       "merge_commit": null,
-      "blockers": [],
+      "blockers": ["DA-G4_OPERATOR_DECISION_PENDING"],
       "next_packet": "DA-G6"
     }
   ],
-  "next_action": "SQUASH_MERGE_PR_207_THEN_MATERIALISE_OPERATOR_REQUIRED_DA_G4_GATE"
+  "operator_gate": {
+    "gate_id": "DA-G4",
+    "status": "GATE_PREPARATION_PENDING_FINAL_HEAD_CI",
+    "gate_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_GATE_PACKET.json",
+    "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json",
+    "decision_request": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION_REQUEST.json",
+    "proposed_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json",
+    "recommended_decision": "PASS",
+    "authority_active": false
+  },
+  "next_action": "RUN_DA_G4_GATE_READY_QA_THEN_STOP_FOR_OPERATOR_DECISION"
 }
