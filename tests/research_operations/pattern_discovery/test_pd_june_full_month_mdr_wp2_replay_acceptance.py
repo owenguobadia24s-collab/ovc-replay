@@ -21,6 +21,7 @@ def logical_sha(value: object) -> str:
 class PDJuneFullMonthMDRWP2ReplayAcceptanceTests(unittest.TestCase):
     def test_six_compact_files_match_acceptance_index(self) -> None:
         index = load("PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_ACCEPTANCE_INDEX.json")
+        self.assertEqual(index["acceptance_status"], "PASS_APPROVED_PENDING_SQUASH_MERGE")
         self.assertEqual(len(index["compact_files"]), 6)
         for item in index["compact_files"]:
             path = BASE / item["name"]
@@ -62,6 +63,7 @@ class PDJuneFullMonthMDRWP2ReplayAcceptanceTests(unittest.TestCase):
     def test_authority_remains_non_activating(self) -> None:
         receipt = load("replay-receipt.json")
         binding = load("prospective-source-binding.json")
+        decision = load("PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_DELEGATED_DECISION.json")
         state = json.loads(STATE.read_text(encoding="utf-8"))
         self.assertEqual(receipt["release_status"], "NOT_A_RELEASE")
         self.assertEqual(receipt["selector_eligibility"], "NONE")
@@ -69,9 +71,12 @@ class PDJuneFullMonthMDRWP2ReplayAcceptanceTests(unittest.TestCase):
         self.assertEqual(receipt["validation_consumption"], "DENIED")
         self.assertFalse(receipt["write_authority"])
         self.assertFalse(binding["active_research_triage"])
-        self.assertEqual(state["status"], "QA_REVIEW")
+        self.assertEqual(decision["decision"], "PASS")
+        self.assertEqual(decision["reserved_authority_delta"], "NONE")
+        self.assertEqual(state["status"], "APPROVED")
+        self.assertEqual(state["replay_status"], "PASS_ACCEPTED_FOR_WP3")
         self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP3")
-        self.assertEqual(state["next_packet_status"], "BLOCKED_PENDING_WP2_ACCEPTANCE_CI_AND_SQUASH_MERGE")
+        self.assertEqual(state["next_packet_status"], "BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE")
 
 if __name__ == "__main__":
     unittest.main()
