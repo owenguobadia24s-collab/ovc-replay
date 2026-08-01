@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate DA-G0 ratification and DA-00 baseline records."""
+"""Validate immutable DA-G0/DA-00 records after later programme advances."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = "b9e763150858d02cc92d08efbcf2f6668b187a41"
 DECISION_ID = "DA-G0.OPERATOR.PASS.20260801T151200Z"
-
+PACKET_IDS = {"DA-00", "DA-WP1", "DA-WP2", "DA-WP3", "DA-WP4", "DA-WP5"}
 REQUIRED = [
     "contracts/development/OVC_DEVELOPMENT_ACCELERATION_AUTHORITY_CONTRACT_v0_1.md",
     "registries/development/OVC_DEVELOPMENT_ACCELERATION_BASELINE_PROFILE_v0_1.yaml",
@@ -54,14 +54,16 @@ def main() -> int:
     assert decision["market_authority_delta"] == "NONE"
 
     assert state["programme_id"] == "OVC-DEV-ACCEL-v0.1"
-    assert state["baseline_commit"] == BASELINE
-    assert state["current_packet"] == "DA-00"
+    assert state["current_packet"] in PACKET_IDS
     assert state["operator_decision_id"] == DECISION_ID
     assert state["authority"]["repository_bot_write"] == "DENIED_UNTIL_DA_G4"
     assert state["authority"]["direct_main_write"] == "PROHIBITED"
-    assert state["packets"][0]["status"] == "APPROVED"
-    assert state["packets"][0]["blockers"] == []
-    assert state["packets"][1]["status"] == "PLANNED"
+    packet_by_id = {row["packet_id"]: row for row in state["packets"]}
+    assert set(packet_by_id) == PACKET_IDS
+    assert packet_by_id["DA-00"]["baseline_commit"] == BASELINE
+    assert packet_by_id["DA-00"]["status"] in {"APPROVED", "COMPLETED"}
+    assert packet_by_id["DA-00"]["blockers"] == []
+    assert packet_by_id["DA-WP1"]["status"] in {"PLANNED", "RUNNING", "QA_REVIEW", "APPROVED", "COMPLETED"}
     assert state["open_concurrent_work"][0]["pull_request"] == 202
 
     impl = metrics["implementation_prs"]
@@ -82,33 +84,15 @@ def main() -> int:
     assert gate["reserved_authority_delta"] == "NONE"
     assert gate["current_open_pull_requests"] == [202]
     assert gate["next_packet"] == "DA-WP1"
-
     assert qa["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert qa["blocking_issues"] == []
     assert qa["authority_delta"] == "REPOSITORY_RECORDS_ONLY"
     assert qa["reserved_authority_delta"] == "NONE"
 
-    require_tokens(REQUIRED[0], [
-        "REPOSITORY_BOT_WRITE", "DENIED", "force-push", "Validation",
-        "rewrite history", "Unknown test impact escalates",
-    ])
-    require_tokens(REQUIRED[1], [
-        "repository_bot_write: DENIED_UNTIL_DA_G4",
-        "direct_main_write: PROHIBITED",
-        "unknown_impact_policy: ESCALATE_TO_FINAL_HEAD",
-        "raw_market_data_in_git: PROHIBITED",
-    ])
-    require_tokens(REQUIRED[2], [
-        "packet_id: DA-00", "packet_id: DA-WP1", "packet_id: DA-WP2",
-        "packet_id: DA-WP3", "packet_id: DA-WP4", "packet_id: DA-WP5",
-        "current_authority: DENIED",
-    ])
-    require_tokens(REQUIRED[3], [
-        "unknown_path_policy: FINAL_HEAD",
-        "ambiguous_dependency_policy: BLOCK_AND_REQUIRE_PROFILE_CORRECTION",
-        "reverse_dependency: DENIED",
-        "gate_replay_substitution: PROHIBITED",
-    ])
+    require_tokens(REQUIRED[0], ["REPOSITORY_BOT_WRITE", "DENIED", "force-push", "Validation", "rewrite history", "Unknown test impact escalates"])
+    require_tokens(REQUIRED[1], ["repository_bot_write: DENIED_UNTIL_DA_G4", "direct_main_write: PROHIBITED", "unknown_impact_policy: ESCALATE_TO_FINAL_HEAD", "raw_market_data_in_git: PROHIBITED"])
+    require_tokens(REQUIRED[2], ["packet_id: DA-00", "packet_id: DA-WP1", "packet_id: DA-WP2", "packet_id: DA-WP3", "packet_id: DA-WP4", "packet_id: DA-WP5", "current_authority: DENIED"])
+    require_tokens(REQUIRED[3], ["unknown_path_policy: FINAL_HEAD", "ambiguous_dependency_policy: BLOCK_AND_REQUIRE_PROFILE_CORRECTION", "reverse_dependency: DENIED", "gate_replay_substitution: PROHIBITED"])
 
     print("DA-G0 validation PASS")
     return 0
