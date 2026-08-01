@@ -10,7 +10,7 @@
   "operator_decision_id": "DA-G0.OPERATOR.PASS.20260801T151200Z",
   "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
   "branch": "build/ovc-dev-accel-preflight",
-  "candidate_commit": null,
+  "candidate_commit": "5c977bfaf1acb8f2aaeae94f8233fc2fe2783a24",
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -21,7 +21,7 @@
     }
   ],
   "authority": {
-    "tooling": "LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS_AFTER_DA_G1",
+    "tooling": "FAIL_CLOSED_EXECUTION_GUARD_APPROVED_PENDING_MERGE",
     "repository_bot_write": "DENIED_UNTIL_DA_G4",
     "direct_main_write": "PROHIBITED",
     "market": "NONE",
@@ -64,18 +64,18 @@
     },
     {
       "packet_id": "DA-WP2",
-      "status": "QA_REVIEW",
+      "status": "APPROVED",
       "prerequisites": ["DA-WP1_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE",
+      "authority_required": "AUTO_RATIFIABLE_COMPLETED",
       "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD",
       "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
       "branch": "build/ovc-dev-accel-preflight",
-      "candidate_commit": null,
-      "tests": ["DA-G2 validator", "focused preflight tests", "retained shared-service tests", "complete repository suite"],
+      "candidate_commit": "5c977bfaf1acb8f2aaeae94f8233fc2fe2783a24",
+      "tests": ["DA-G2 workflow 30707486877 PASS", "generic tests workflow 30707486751 PASS"],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_DELEGATED_DECISION.json",
       "merge_commit": null,
-      "blockers": ["FINAL_HEAD_CI_NOT_YET_RECORDED"],
+      "blockers": [],
       "next_packet": "DA-WP3"
     },
     {
@@ -127,5 +127,5 @@
       "next_packet": "DA-G6"
     }
   ],
-  "next_action": "OPEN_DA_WP2_PR_AND_RUN_FINAL_HEAD_QA"
+  "next_action": "SQUASH_MERGE_PR_205_THEN_BEGIN_DA_WP3"
 }
