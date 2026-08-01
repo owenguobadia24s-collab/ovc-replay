@@ -1,0 +1,48 @@
+name: RC-G5 C2 sequence-evidence operator gate readiness
+
+on:
+  pull_request:
+    paths:
+      - 'docs/releases/research-console-v0-3/rc-g5/**'
+      - 'registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json'
+      - 'registries/research_operations/v0_4/**'
+      - 'scripts/research_operations/validate_rc_g5.py'
+      - '.github/workflows/research-operations-v0-4-rc-g5.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  rc-g5:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate consolidated RC-G5 operator packet
+        run: python -u scripts/research_operations/validate_rc_g5.py
+      - name: Focused projection assurance tests
+        run: PYTHONPATH=src:. python -m unittest discover -s tests/research_operations/v0_4 -p 'test_ro4_g5_console_projection.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
+      - name: Authority and repository-boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e apps/research_console/pages/C2_Sequence_Evidence.py
+          test ! -e apps/research_console/pages/RO4_Sequence_Evidence.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json').read_text())
+          g=json.loads(Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_OPERATOR_GATE_PACKET.json').read_text())
+          assert a['enabled'] is False
+          assert a['status']=='DISABLED_PENDING_OPERATOR_RC_G5'
+          assert a['writes']=='NONE'
+          assert a['validation_consumption']=='LOCKED_UNCONSUMED'
+          assert g['operator_decision_required'] is True
+          assert g['auto_ratifiable'] is False
+          assert g['operator_decision'] is None
+          assert g['proposed_authority_delta']=='LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION'
+          PY
