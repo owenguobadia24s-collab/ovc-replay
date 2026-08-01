@@ -6,10 +6,10 @@
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "packet_id": "DA-WP1",
-  "status": "QA_REVIEW",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "baseline_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0",
   "candidate_branch": "build/ovc-dev-accel-shared-services",
-  "candidate_commit": null,
+  "tested_candidate_commit": "44cf443d50dd0c63590d66b5c286c9cbeb80cb77",
   "completed_work": [
     "canonical JSON and role-bound hashing",
     "safe repository-relative path mechanics",
@@ -18,7 +18,8 @@
     "fail-closed QA assertion aggregation",
     "gate, decision and rollback records",
     "closed schemas and pass/block fixtures",
-    "unit, property and authority tests"
+    "unit, property and authority tests",
+    "exact active namespace allowlist extension with recorded dependency justification"
   ],
   "acceptance_conditions": [
     "Equivalent logical content has identical identity across ordering and path separators.",
@@ -27,14 +28,18 @@
     "All schemas are closed Draft 2020-12 objects.",
     "Focused tests and complete repository suite pass at stable final head."
   ],
-  "tests": ["DA-G1 validator", "shared-service focused tests", "complete repository suite"],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G1 shared-service trust", "run_id": 30706304429, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30706304445, "result": "PASS"}
+  ],
   "qa_packet": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_QA_PACKET.json",
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_DELEGATED_DECISION.json",
   "warnings": [],
   "unresolved_issues": [],
   "authority_delta": "LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS",
   "reserved_authority_delta": "NONE",
   "repository_bot_write": "DENIED",
   "rollback": "Revert the bounded DA-WP1 merge; programme-specific implementations remain authoritative.",
-  "recommended_decision": "PASS_AFTER_CI",
+  "recommended_decision": "PASS",
   "next_packet": "DA-WP2"
 }
