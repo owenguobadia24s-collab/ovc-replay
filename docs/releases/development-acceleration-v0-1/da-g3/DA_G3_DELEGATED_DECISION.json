@@ -1,26 +1,23 @@
 {
   "schema": "ovc-development-acceleration-delegated-decision/v1",
-  "decision_id": "DA-G3.DELEGATED.CONDITIONAL.PASS.20260801T162500Z",
+  "decision_id": "DA-G3.DELEGATED.PASS.20260801T163000Z",
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP3",
   "gate_id": "DA-G3",
-  "decision": "PENDING_CI",
+  "decision": "PASS",
   "decision_authority": "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN",
   "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
-  "candidate_commit": null,
-  "acceptance_conditions": [
-    "DA-G3 validator passes",
-    "tiered shadow workflow and focused selector tests pass",
-    "complete repository suite passes",
-    "no unresolved review or blocking warning remains",
-    "authority delta remains wholly non-reserved"
+  "tested_candidate_commit": "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db",
+  "tests": [
+    {"workflow": "Development Acceleration DA-G3 tiered test trust", "run_id": 30708043830, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30708043814, "result": "PASS"}
   ],
-  "qa_status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "qa_status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
   "reserved_authority_delta": "NONE",
   "repository_bot_write": "DENIED",
   "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
-  "rationale": "The packet selects test profiles and emits compact manifests only. It does not weaken final assurance or activate merge, bot-write, default-workflow, market or exposure authority.",
+  "rationale": "All acceptance conditions passed. The selector is deterministic, unknown paths escalate, ambiguity blocks, final assurance remains mandatory and broad adoption remains denied.",
   "rollback": "Stop invoking the selector or revert the bounded DA-WP3 merge through a new non-destructive commit.",
   "next_packet": "DA-WP4"
 }
