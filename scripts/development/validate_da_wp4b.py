@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate DA-WP4B static implementation and fail-closed activation blockers."""
+"""Validate DA-WP4B implementation PASS and fail-closed activation blockers."""
 
 from __future__ import annotations
 
@@ -19,6 +19,8 @@ from ovc.development.receipt_bot import (  # noqa: E402
 
 
 BASELINE = "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3"
+TESTED = "90af31affc116d18d8b1f8d84a05f60f5a1e63f5"
+RUNS = {30711248035, 30711248023, 30711248056}
 REQUIRED = [
     "contracts/development/OVC_RECEIPT_BOT_IMPLEMENTATION_CONTRACT_v0_1.md",
     "schemas/development/receipt_bot_work_packet_v0_1.schema.json",
@@ -48,6 +50,11 @@ def require_tokens(path: str, tokens: list[str]) -> None:
     missing = [token for token in tokens if token not in body]
     if missing:
         raise AssertionError(f"{path}: missing {missing}")
+
+
+def assert_runs(rows: list[dict[str, object]]) -> None:
+    actual = {int(row["run_id"]) for row in rows if row["result"] == "PASS"}
+    assert RUNS.issubset(actual)
 
 
 def main() -> int:
@@ -95,43 +102,65 @@ def main() -> int:
     assert merge_receipt["squash_merge_sha"] == BASELINE
     assert merge_receipt["decision"] == "PASS"
     assert merge_receipt["authority_active"] is False
+
     assert state["baseline_main_commit"] == BASELINE
     assert state["branch"] == "build/ovc-dev-accel-receipt-bot"
-    assert state["status"] == "IMPLEMENTED_STATIC_ACTIVATION_BLOCKED"
+    assert state["tested_candidate_commit"] == TESTED
+    assert state["status"] == "BLOCKED_ACTIVATION_EXTERNAL_EVIDENCE"
     assert state["production_transport"] == "ABSENT_FAIL_CLOSED"
     assert state["credential_state"] == "NOT_PROVISIONED"
     assert state["authority_active"] is False
     assert len(state["blockers"]) == 3
+    assert_runs(state["tests"])
 
     assert packet["packet_id"] == "DA-WP4B"
-    assert packet["status"] == "IMPLEMENTED_STATIC_PENDING_FINAL_HEAD_CI_ACTIVATION_BLOCKED"
+    assert packet["status"] == "IMPLEMENTED_QA_PASS_ACTIVATION_BLOCKED"
     assert packet["baseline_main_commit"] == BASELINE
+    assert packet["tested_candidate_commit"] == TESTED
     assert packet["external_artifacts"] == []
     assert packet["external_artifact_hashes"] == "NONE_AVAILABLE"
     assert len(packet["activation_blockers"]) == 3
+    assert_runs(packet["tests"])
 
     assert activation_record["activation_evaluation"] == "BLOCK"
     assert activation_record["authority_active"] is False
+    assert activation_record["tested_candidate_commit"] == TESTED
     conditions = {row["condition"]: row["result"] for row in activation_record["conditions"]}
+    assert conditions["DENIED_ACTION_TESTS_PASS"] == "PASS"
+    assert conditions["TOKEN_REDACTION_TESTS_PASS"] == "PASS"
+    assert conditions["IDEMPOTENCY_AND_COLLISION_TESTS_PASS"] == "PASS"
+    assert conditions["FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS"] == "PASS"
     assert conditions["MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED"] == "BLOCKED"
     assert conditions["REAL_PROPOSAL_BRANCH_SHADOW_PASS"] == "BLOCKED"
+    assert_runs(activation_record["tests"])
 
-    assert qa["status"] == "PASS_STATIC_PENDING_FINAL_HEAD_CI_ACTIVATION_BLOCKED"
+    assert qa["status"] == "PASS_IMPLEMENTATION_ACTIVATION_BLOCKED"
+    assert qa["tested_candidate_commit"] == TESTED
     assert qa["implementation_blocking_issues"] == []
     assert len(qa["activation_blocking_issues"]) == 3
-    assert qa["qa_recommendation"] == "PASS_IMPLEMENTATION_AFTER_CI_BLOCK_ACTIVATION"
+    assert qa["qa_recommendation"] == "PASS_IMPLEMENTATION_BLOCK_ACTIVATION"
     assert qa["authority_active"] is False
+    assert_runs(qa["tests"])
 
     assert blocker["status"] == "BLOCKED_ACTIVATION_EXTERNAL_EVIDENCE"
     assert len(blocker["blockers"]) == 2
     assert blocker["authority_state"] == "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE"
     assert blocker["authority_active"] is False
 
+    assert programme["programme_status"] == "BLOCKED"
     assert programme["current_packet"] == "DA-WP4B"
     assert programme["current_gate"] == "DA-G4B"
+    assert programme["candidate_commit"] == TESTED
     assert programme["authority"]["repository_bot_write"] == "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE"
     assert programme["authority"]["repository_bot_profile"] == "APPROVED_INACTIVE"
     assert programme["authority"]["direct_main_write"] == "PROHIBITED"
+    packets = {row["packet_id"]: row for row in programme["packets"]}
+    assert packets["DA-WP4B"]["status"] == "BLOCKED"
+    assert packets["DA-WP4B"]["candidate_commit"] == TESTED
+    assert len(packets["DA-WP4B"]["blockers"]) == 3
+    assert programme["activation_gate"]["status"] == "BLOCKED"
+    assert programme["activation_gate"]["authority_active"] is False
+    assert programme["next_action"] == "STOP_BLOCKED_DA_WP4B_PRESERVE_PR_209_UNMERGED"
 
     bodies = "\n".join(read(path) for path in REQUIRED[:15])
     assert '"active": true' not in bodies
@@ -162,12 +191,13 @@ def main() -> int:
     ])
     require_tokens(REQUIRED[15], [
         "packet_id: DA-WP4B",
-        "gate: DA-G4B",
+        "status: BLOCKED",
+        "gate_id: DA-G4B",
         "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED",
         "REAL_PROPOSAL_BRANCH_SHADOW_PASS",
     ])
 
-    print("DA-WP4B static implementation validation PASS; activation BLOCKED")
+    print("DA-WP4B implementation PASS; activation BLOCKED")
     return 0
 
 
