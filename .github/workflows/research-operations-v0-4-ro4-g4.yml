@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate consolidated RO4-G4 packet
+      - name: Validate consolidated RO4-G4 decision packet
         run: python -u scripts/research_operations/validate_ro4_g4.py
       - name: Focused RO4-G4 tests
         run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_4 -p 'test_ro4_g4_annotation_friction.py' -v
@@ -45,11 +45,17 @@ jobs:
           from pathlib import Path
           a=json.loads(Path('registries/research_operations/v0_4/RO4_APPEND_AUTHORITY_v0_1.json').read_text())
           g=json.loads(Path('docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_GATE_PACKET.json').read_text())
-          assert a['enabled'] is False
+          d=json.loads(Path('docs/releases/research-operations-foundation-v0-4/ro4-g4/RO4_G4_OPERATOR_DECISION.json').read_text())
+          assert a['enabled'] is True
+          assert a['status']=='APPROVED_RO4_G4'
+          assert a['gate_decision_id']==d['decision_id']
           assert a['console_write_state']=='PROHIBITED'
           assert a['validation_consumption']=='LOCKED_UNCONSUMED'
-          assert g['operator_decision_required'] is True
+          assert g['operator_decision_required'] is False
           assert g['auto_ratifiable'] is False
+          assert g['decision']=='PASS'
           assert g['external_artifacts']['canonical_records_appended']==0
+          assert d['decision']=='PASS'
+          assert d['console_write']=='PROHIBITED'
           PY
           test ! -d records/research_operations/ro4
