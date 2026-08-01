@@ -10,7 +10,7 @@
   "operator_decision_id": "DA-G0.OPERATOR.PASS.20260801T151200Z",
   "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
   "branch": "build/ovc-dev-accel-test-profiles",
-  "candidate_commit": null,
+  "candidate_commit": "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db",
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -21,8 +21,8 @@
     }
   ],
   "authority": {
-    "tooling": "FAIL_CLOSED_EXECUTION_GUARD_AFTER_DA_G2",
-    "test_selection": "PENDING_DA_G3",
+    "tooling": "DETERMINISTIC_TEST_PROFILE_SELECTION_APPROVED_PENDING_MERGE",
+    "test_selection": "SHADOW_PATH_BOUNDED",
     "repository_bot_write": "DENIED_UNTIL_DA_G4",
     "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
     "direct_main_write": "PROHIBITED",
@@ -82,23 +82,23 @@
     },
     {
       "packet_id": "DA-WP3",
-      "status": "QA_REVIEW",
+      "status": "APPROVED",
       "prerequisites": ["DA-WP1_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE",
+      "authority_required": "AUTO_RATIFIABLE_COMPLETED",
       "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
       "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
       "branch": "build/ovc-dev-accel-test-profiles",
-      "candidate_commit": null,
-      "tests": ["DA-G3 validator", "tiered selector workflow", "focused selector tests", "complete repository suite"],
+      "candidate_commit": "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db",
+      "tests": ["DA-G3 workflow 30708043830 PASS", "tiered shadow workflow 30708043814 PASS"],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_DELEGATED_DECISION.json",
       "merge_commit": null,
-      "blockers": ["FINAL_HEAD_CI_NOT_YET_RECORDED"],
+      "blockers": [],
       "next_packet": "DA-WP4"
     },
     {
       "packet_id": "DA-WP4",
-      "status": "PLANNED",
+      "status": "READY_AFTER_DA_WP3_MERGE",
       "prerequisites": ["DA-WP1_COMPLETED", "DA-WP3_COMPLETED"],
       "authority_required": "AUTO_RATIFIABLE_SHADOW_THEN_OPERATOR_REQUIRED_DA_G4",
       "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
@@ -129,5 +129,5 @@
       "next_packet": "DA-G6"
     }
   ],
-  "next_action": "OPEN_DA_WP3_PR_AND_RUN_FINAL_HEAD_QA"
+  "next_action": "SQUASH_MERGE_PR_206_THEN_BEGIN_DA_WP4"
 }
