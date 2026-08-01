@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-development-acceleration-gate-packet/v1",
+  "gate_id": "DA-G1",
+  "gate_title": "Shared-service trust",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DA-WP1",
+  "status": "QA_REVIEW",
+  "baseline_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0",
+  "candidate_branch": "build/ovc-dev-accel-shared-services",
+  "candidate_commit": null,
+  "completed_work": [
+    "canonical JSON and role-bound hashing",
+    "safe repository-relative path mechanics",
+    "strict dependency-free artifact profiles",
+    "exact artifact references and byte verification",
+    "fail-closed QA assertion aggregation",
+    "gate, decision and rollback records",
+    "closed schemas and pass/block fixtures",
+    "unit, property and authority tests"
+  ],
+  "acceptance_conditions": [
+    "Equivalent logical content has identical identity across ordering and path separators.",
+    "Unsafe paths, over-authorised profiles, missing QA and destructive rollback are rejected.",
+    "Shared services import no market semantic implementation.",
+    "All schemas are closed Draft 2020-12 objects.",
+    "Focused tests and complete repository suite pass at stable final head."
+  ],
+  "tests": ["DA-G1 validator", "shared-service focused tests", "complete repository suite"],
+  "qa_packet": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_QA_PACKET.json",
+  "warnings": [],
+  "unresolved_issues": [],
+  "authority_delta": "LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "rollback": "Revert the bounded DA-WP1 merge; programme-specific implementations remain authoritative.",
+  "recommended_decision": "PASS_AFTER_CI",
+  "next_packet": "DA-WP2"
+}
