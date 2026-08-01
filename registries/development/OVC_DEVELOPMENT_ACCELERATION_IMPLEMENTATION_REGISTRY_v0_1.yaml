@@ -16,15 +16,7 @@ entries:
     authority_required: OPERATOR_RATIFIED_REPOSITORY_RECORDS_ONLY
     authority_delta: REPOSITORY_RECORDS_ONLY
     reads: [Git metadata, pull-request metadata, workflow summaries, governing plan]
-    writes:
-      - contracts/development/**
-      - registries/development/**
-      - docs/development-acceleration/**
-      - docs/releases/development-acceleration-v0-1/da-00/**
-      - docs/releases/development-acceleration-v0-1/da-g0/**
-      - scripts/development/validate_da_g0.py
-      - tests/development/test_da_g0.py
-      - .github/workflows/development-acceleration-da-g0.yml
+    writes: [contracts/development/**, registries/development/**, docs/development-acceleration/**, docs/releases/development-acceleration-v0-1/da-00/**, docs/releases/development-acceleration-v0-1/da-g0/**, scripts/development/validate_da_g0.py, tests/development/test_da_g0.py, .github/workflows/development-acceleration-da-g0.yml]
     gate: DA-G0
     rollback: Revert bounded DA-00 merge through a new commit.
   - implementation_id: OVC-DEV-ACCEL-WP1
@@ -72,28 +64,18 @@ entries:
     authority_required: AUTO_RATIFIABLE_SHADOW_ONLY_THEN_OPERATOR_REQUIRED_DA_G4
     authority_delta: DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY
     reads: [frozen PR snapshots, QA packets, decisions, manual merge receipts, supplied merge results]
-    writes:
-      - contracts/development/**
-      - schemas/development/**
-      - registries/development/**
-      - src/ovc/development/**
-      - tests/development/**
-      - fixtures/development/**
-      - scripts/development/validate_da_g4a.py
-      - .github/workflows/development-acceleration-da-g4a.yml
-      - docs/releases/development-acceleration-v0-1/da-wp3/**
-      - docs/releases/development-acceleration-v0-1/da-g4a/**
-    dependency_justification: DA-G4A needs a deterministic validator, final-head workflow and exact prior-packet merge receipt; all remain inside the ratified development-tooling path boundary.
+    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, tests/development/**, fixtures/development/**, scripts/development/validate_da_g4a.py, .github/workflows/development-acceleration-da-g4a.yml, docs/releases/development-acceleration-v0-1/da-wp3/**, docs/releases/development-acceleration-v0-1/da-g4a/**]
     gate: DA-G4A_THEN_DA-G4
     rollback: Disable closure generator; manual receipt preparation remains available.
   - implementation_id: OVC-DEV-ACCEL-WP4B
     packet_id: DA-WP4B
     title: Receipt-bot bounded implementation and activation evidence
     branch: build/ovc-dev-accel-receipt-bot
-    status: READY_AFTER_DA_G4_MERGE
+    status: QA_REVIEW
     prerequisites: [DA-WP4_COMPLETED, DA-G4_OPERATOR_PASS_RECORDED, DA-G4_GATE_RECORD_MERGED]
     authority_required: OPERATOR_APPROVED_BOUNDED_IMPLEMENTATION_WITH_CONDITIONAL_ACTIVATION
     authority_delta: NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY
+    baseline_commit: d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3
     reads:
       - approved inactive receipt-bot profile
       - exact lawful main SHA
@@ -122,13 +104,17 @@ entries:
       - REAL_PROPOSAL_BRANCH_SHADOW_PASS
       - FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS
       - QA_PASS
+    blockers:
+      - MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE
+      - DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED
+      - REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN
     gate: DA-G4B
-    rollback: Keep or restore the profile inactive, revoke the dedicated identity, close unmerged bot PRs if required and revert the bounded implementation merge through a new non-destructive commit.
+    rollback: Keep the profile inactive, provision no credential, close any unmerged shadow PR if later created and revert the bounded implementation through a new non-destructive commit.
   - implementation_id: OVC-DEV-ACCEL-WP5
     packet_id: DA-WP5
     title: Compact evidence exporter
     branch: build/ovc-dev-accel-evidence-export
-    status: READY_AFTER_DA_WP4B_COMPLETED
+    status: PLANNED
     prerequisites: [DA-WP1_COMPLETED, DA-WP2_COMPLETED, DA-G4_OPERATOR_PASS_RECORDED, DA-WP4B_COMPLETED]
     authority_required: AUTO_RATIFIABLE_OPERATOR_LOCAL_EXPORT
     authority_delta: COPY_ONLY_COMPACT_EVIDENCE_EXPORT
@@ -139,17 +125,22 @@ entries:
 reserved_gates:
   - gate_id: DA-G4
     purpose: Narrow receipt-bot writes to approved bot branches and paths.
-    status: APPROVED_PENDING_SQUASH_MERGE
+    status: COMPLETED
     current_authority: APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE
     decision_id: DA-G4.OPERATOR.PASS.20260801T172600Z
-    tested_candidate_commit: a6a642192663033b412ba48bd891e3d84e886a87
-    tests:
-      - Development Acceleration DA-G4 operator gate readiness / 30710409242 / PASS
-      - OVC tiered test selection shadow / 30710409313 / PASS
-      - tests / 30710409322 / PASS
-    proposed_profile: registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_PROPOSAL_v0_1.json
-    approved_profile: registries/development/OVC_DEVELOPMENT_ACCELERATION_REPOSITORY_BOT_APPROVED_PROFILE_v0_1.json
-    decision_record: docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json
+    merge_commit: d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3
+    merge_receipt: docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json
+    authority_active: false
+  - gate_id: DA-G4B
+    purpose: Verify every activation condition for the approved receipt-bot profile.
+    status: QA_REVIEW_ACTIVATION_BLOCKED
+    current_authority: APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE
+    activation_evidence: docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json
+    blocker_record: docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json
+    blockers:
+      - MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE
+      - DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED
+      - REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN
     authority_active: false
   - gate_id: DA-G6
     purpose: Adopt workflow as default and retire duplicated mechanics.
