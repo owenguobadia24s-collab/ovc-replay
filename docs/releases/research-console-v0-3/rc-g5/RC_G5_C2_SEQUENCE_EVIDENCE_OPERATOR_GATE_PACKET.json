@@ -9,7 +9,7 @@
   "plan_sha256": "89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf",
   "baseline_main_commit": "5b7b83ac7c3d27f214c8b8387a43fcbf6c5d88d6",
   "candidate_branch": "gate/rc-g5-c2-sequence-evidence",
-  "tested_candidate_commit": "22df521bdef980c4bd52afbe322f030d48850177",
+  "tested_candidate_commit": "bea7cd245c1d79c336f3ac9e5502773995681d1c",
   "prerequisite": {
     "packet_id": "RO4-WP5",
     "gate_id": "RO4-G5",
@@ -22,7 +22,7 @@
   "current_authority": {
     "ro4_g4_append_only_records": "APPROVED_BOUNDED_LOCAL",
     "ro4_g5_projection_adapter": "APPROVED_DISABLED",
-    "c2_sequence_evidence_route": "DISABLED_PENDING_RC_G5",
+    "c2_sequence_evidence_route": "DISABLED_PENDING_BOUNDED_ACTIVATION",
     "console_write": "PROHIBITED",
     "validation_consumption": "LOCKED_UNCONSUMED",
     "c2_mutation": "DENIED",
@@ -57,13 +57,13 @@
   },
   "route_and_panel_map": {
     "route_id": "RESEARCH.C2_SEQUENCE_EVIDENCE",
-    "current_state": "DISABLED_PENDING_RC_G5",
-    "approved_state_after_pass": "ENABLED_LOCAL_READ_ONLY",
+    "current_state": "DISABLED_PENDING_BOUNDED_ACTIVATION",
+    "approved_state_after_activation": "ENABLED_LOCAL_READ_ONLY",
     "panels": ["C2_STATE","C2_TRANSITION","PERSISTENCE_CONFLICT","RO4_SEQUENCE","BOUNDARY_FRICTION_READ_ONLY","PD_TRIGGER_TRACE_ONLY","SIGNATURE_DIVERSITY","SAMPLE_DISCLOSURE"],
     "writes": "NONE",
     "remote_deployment": "DENIED"
   },
-  "permanent_banners_after_pass": [
+  "permanent_banners_after_activation": [
     "LOCAL READ ONLY — C2 SEQUENCE EVIDENCE.",
     "NO ANNOTATION OR WRITE ACTIONS ARE AVAILABLE.",
     "VALIDATION IS LOCKED_UNCONSUMED.",
@@ -76,22 +76,14 @@
     {"condition":"Count denominators, PD isolation, synthetic exclusion, sample disclosure and Validation denial","result":"PASS"},
     {"condition":"RO4-G5 focused and complete suite","result":"PASS","workflow_run":30691923987,"job":91348049863,"focused":"11/11","complete":"70/70"},
     {"condition":"RO4-G5 merge receipt","result":"PASS","workflow_run":30692014163,"job":91348285819},
-    {"condition":"RC-G5 gate validator, focused, complete and authority checks","result":"PASS","workflow_run":30692190078,"job":91348752298,"focused":"11/11","complete":"70/70"}
+    {"condition":"RC-G5 final gate validator, focused, complete and authority checks","result":"PASS","workflow_run":30692304504,"job":91349065881,"focused":"11/11","complete":"70/70"}
   ],
   "qa_packet": "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_QA_PACKET.json",
-  "changed_files": [
-    ".github/workflows/research-operations-v0-4-rc-g5.yml",
-    "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_OPERATOR_GATE_PACKET.json",
-    "docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_QA_PACKET.json",
-    "registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json",
-    "registries/research_operations/v0_4/RO4_IMPLEMENTATION_REGISTRY_v0_1.yaml",
-    "registries/research_operations/v0_4/RO4_PROGRAMME_STATE_v0_1.json",
-    "scripts/research_operations/validate_rc_g5.py"
-  ],
+  "decision_record": "docs/releases/research-console-v0-3/rc-g5/RC_G5_OPERATOR_DECISION.json",
   "external_artifacts": {"created":false,"bytes":0,"canonical_records_appended":0},
   "warnings": [
     "The synthetic fixture proves presentation behavior only, not market correctness.",
-    "PASS authorises only a later bounded local activation implementation; this PR does not activate the route.",
+    "Operator PASS authorises only a bounded local activation implementation; this PR does not activate the route.",
     "Validation remains LOCKED_UNCONSUMED and denied before path, panel or record resolution."
   ],
   "unresolved_issues": [],
@@ -101,18 +93,23 @@
     "prohibited":["Delete or rewrite historical evidence","Alter C2 or Pattern Discovery outputs","Consume Validation","Force-push or rewrite history"]
   },
   "exact_work_after_pass": [
-    "Create a bounded activation branch from the then-current lawful main tip.",
+    "Merge this decision packet after final-head checks.",
+    "Create a bounded activation branch from the resulting lawful main tip.",
     "Add fail-closed local route registration accepting only the approved authority registry, schema identities and hashes.",
     "Add the C2 Sequence Evidence surface with eight separated panel classes and permanent banners.",
     "Keep all actions and annotation controls absent; preserve writes NONE and local-only deployment.",
-    "Add focused UI/source tests and run the complete repository suite.",
-    "Prepare an activation receipt and squash-merge only if the implementation remains inside the approved delta."
+    "Add focused UI/source tests, run the complete repository suite and squash-merge only inside the approved delta."
   ],
   "allowed_operator_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
   "recommended_decision": "PASS",
-  "recommendation_rationale": "RO4-G5 is merged; all required binding, no-write, isolation and complete-suite checks pass; no unresolved issue exists; rollback is bounded and non-destructive.",
-  "operator_decision_required": true,
+  "operator_decision_required": false,
   "auto_ratifiable": false,
-  "operator_decision": null,
-  "status": "GATE_READY"
+  "operator_decision": {
+    "decision_id": "RC-G5.OPERATOR.PASS.20260801T084900Z",
+    "decision": "PASS",
+    "authority": "OPERATOR",
+    "approved_at": "2026-08-01T08:49:00Z",
+    "operator_command": "@GitHub OVC APPROVE RC-G5 PASS"
+  },
+  "status": "APPROVED_PENDING_BOUNDED_ACTIVATION"
 }
