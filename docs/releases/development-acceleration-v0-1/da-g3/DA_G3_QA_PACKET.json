@@ -1,0 +1,27 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP3",
+  "gate_id": "DA-G3",
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI",
+  "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-G3-REGISTRY-001", "result": "PASS", "evidence": "Strict dependency-free JSON registry defines FAST, PACKET and FINAL_HEAD profiles and versioned path rules."},
+    {"check_id": "DA-G3-UNKNOWN-002", "result": "PASS", "evidence": "Unknown paths deterministically escalate to FINAL_HEAD and are never skipped."},
+    {"check_id": "DA-G3-AMBIGUITY-003", "result": "PASS", "evidence": "Conflicting highest-priority mappings block and require registry correction."},
+    {"check_id": "DA-G3-GATE-004", "result": "PASS", "evidence": "GATE_REPLAY requires a frozen gate ID/command and cannot substitute for final assurance."},
+    {"check_id": "DA-G3-DETERMINISM-005", "result": "PASS", "evidence": "Changed paths, commands and retained checks are normalized, deduplicated, sorted and role-hashed without runner metadata."},
+    {"check_id": "DA-G3-AUTH-006", "result": "PASS", "evidence": "Selection grants no merge, repository-bot, direct-main, force-push, release, selector, R2, Validation or market authority."},
+    {"check_id": "DA-G3-ADOPTION-007", "result": "PASS", "evidence": "Shadow workflow is path-bounded; broad default adoption remains denied until DA-G6."},
+    {"check_id": "DA-G3-CI-008", "result": "PENDING", "evidence": "Final-head validator, selector workflow, focused tests and complete repository suite pending."}
+  ],
+  "blocking_issues": [],
+  "warnings": [],
+  "qa_recommendation": "PASS_AFTER_FINAL_HEAD_CI",
+  "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
+  "rollback": "Stop invoking the selector or revert the bounded DA-WP3 merge; preserve manifests and existing final-head workflows."
+}
