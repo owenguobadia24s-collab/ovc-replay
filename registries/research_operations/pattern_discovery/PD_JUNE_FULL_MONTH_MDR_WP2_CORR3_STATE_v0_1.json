@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr3-state/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR3",
+  "status": "QA_REVIEW",
+  "prerequisites": [
+    "PD-JUNE-FM-WP1-COMPLETED",
+    "PD-JUNE-FM-WP2-TOOLING-SQUASH-MERGED",
+    "PD-JUNE-FM-WP2-CORR1-COMPLETED",
+    "PD-JUNE-FM-WP2-CORR2-COMPLETED",
+    "OPERATOR_LOCAL_WINDOWS_CLEANUP_FAILURE_REPRODUCED"
+  ],
+  "authority_required": "NONE",
+  "authority_delta": "NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY",
+  "baseline_commit": "0ffc4894d804b2f311b79df6db96f75c25b382b6",
+  "branch": "fix/pd-june-fm-wp2-windows-cleanup",
+  "candidate_commit": null,
+  "tests": [],
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_QA_PACKET.json",
+  "decision_record": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_DELEGATED_DECISION.json",
+  "decision": "PASS_PENDING_FINAL_HEAD_CI",
+  "merge_commit": null,
+  "blockers": [
+    {
+      "blocker_id": "PD-JUNE-FM-WP2-WINDOWS-PASS-B-CLEANUP-001",
+      "status": "CORRECTION_IMPLEMENTED_PENDING_FINAL_HEAD_CI",
+      "quarantine": "C:/Users/Owner/OVIS/ovc-replay-external-artifacts/prospective-source/compute/quarantine/PD-JUNE-FM-WP2.20260801T090640Z.58efee95"
+    }
+  ],
+  "cleanup_policy": {
+    "retryable_errors": ["EACCES", "EPERM", "EBUSY", "WINERROR_5", "WINERROR_32", "WINERROR_145"],
+    "bounded_retry_delays_seconds": [0.05, 0.10, 0.20, 0.40, 0.80, 1.00],
+    "read_only_attribute_clear": "BEST_EFFORT_BEFORE_EACH_RETRY",
+    "persistent_retryable_denial": "MOVE_DUPLICATE_PASS_B_TO_COMPUTE_QUARANTINE_WITH_RECEIPT",
+    "non_retryable_error": "BLOCK_AND_QUARANTINE_CANDIDATE_STAGING",
+    "candidate_payload_mutation": false
+  },
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "source_mutated": false,
+  "frozen_c1_adapter_mutated": false,
+  "frozen_c2_adapter_mutated": false,
+  "formula_or_threshold_mutated": false,
+  "identity_contract_mutated": false,
+  "release_status": "NOT_A_RELEASE",
+  "selector_eligibility": "NONE",
+  "r2_publication": "DENIED",
+  "validation_consumption": "DENIED",
+  "next_packet": "PD-JUNE-FM-WP2-OPERATOR-LOCAL-REPLAY",
+  "next_packet_status": "BLOCKED_PENDING_CORR3_FINAL_HEAD_CI_AND_SQUASH_MERGE",
+  "rollback": "Preserve the accepted source slice, CORR1, CORR2 and all failed quarantines. Revert only CORR3 through a new non-destructive commit."
+}
