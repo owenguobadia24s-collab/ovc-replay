@@ -1,0 +1,70 @@
+schema: ovc-development-acceleration-baseline-profile/v1
+profile_id: OVC.DEVELOPMENT.ACCELERATION.BASELINE.v0.1
+programme_id: OVC-DEV-ACCEL-v0.1
+plan_id: OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1
+plan_version: '0.1'
+status: RATIFIED_FOR_BOUNDED_IMPLEMENTATION
+operator_decision_id: DA-G0.OPERATOR.PASS.20260801T151200Z
+repository: owenguobadia24s-collab/ovc-replay
+baseline_branch: main
+baseline_commit: b9e763150858d02cc92d08efbcf2f6668b187a41
+packet_branch: build/ovc-dev-accel-baseline
+observed_at: '2026-08-01T15:12:00Z'
+current_context:
+  programme: PD-JUNE-FULL-MONTH-MDR
+  completed_packet: PD-JUNE-FM-WP2
+  next_packet: PD-JUNE-FM-WP3
+  concurrent_open_pr:
+    number: 202
+    branch: build/pd-june-fm-wp3-review-population
+    treatment: NON_OVERLAPPING_EXISTING_PROGRAMME_BRANCH_DO_NOT_MUTATE
+external_artifact_root:
+  environment_variable: OVC_EXTERNAL_ARTIFACT_ROOT
+  committed_absolute_path: PROHIBITED
+  raw_market_data_in_git: PROHIBITED
+authority:
+  read_only: ALLOWED
+  local_compute: ALLOWED_AFTER_PACKET_GATE
+  proposal_write: ALLOWED_ON_BOUNDED_PACKET_BRANCHES
+  merge_automation: ELIGIBLE_AUTO_RATIFIABLE_PR_ONLY
+  repository_bot_write: DENIED_UNTIL_DA_G4
+  direct_main_write: PROHIBITED
+  force_push: PROHIBITED
+  history_rewrite: PROHIBITED
+  provider_access: DENIED
+  market_replay_content_change: DENIED
+  formula_change: DENIED
+  threshold_change: DENIED
+  semantic_change: DENIED
+  selector_mutation: DENIED
+  release_publication: DENIED
+  r2_write: DENIED
+  validation_consumption: DENIED
+  probability: NONE
+  risk: NONE
+  exposure: NONE
+  execution: NONE
+allowed_repository_roots:
+  - contracts/development
+  - schemas/development
+  - registries/development
+  - src/ovc/development
+  - scripts/development
+  - scripts/ovc.py
+  - scripts/ovc.ps1
+  - tests/development
+  - fixtures/development
+  - docs/development-acceleration
+  - docs/releases/development-acceleration-v0-1
+  - .github/workflows/ovc-
+  - .github/workflows/development-acceleration-
+forbidden_payload_patterns:
+  - '*.bi5'
+  - '*.csv'
+  - '*.jsonl'
+  - '**/cache/**'
+  - '**/staging/**'
+  - '**/quarantine/**'
+  - '*credential*'
+unknown_impact_policy: ESCALATE_TO_FINAL_HEAD
+rollback: REVERT_BOUNDED_PACKET_MERGE_OR_DISABLE_PROFILE_WITHOUT_HISTORY_REWRITE
