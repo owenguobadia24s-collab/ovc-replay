@@ -10,7 +10,7 @@
   "operator_decision_id": "DA-G0.OPERATOR.PASS.20260801T151200Z",
   "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
   "branch": "build/ovc-dev-accel-closure",
-  "candidate_commit": null,
+  "candidate_commit": "7bd25202458158fe1a77db1fbd2891a9063ae7db",
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -21,7 +21,7 @@
     }
   ],
   "authority": {
-    "tooling": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_PENDING_DA_G4A",
+    "tooling": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_APPROVED_PENDING_MERGE",
     "test_selection": "SHADOW_PATH_BOUNDED",
     "repository_bot_write": "DENIED_UNTIL_DA_G4",
     "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
@@ -98,18 +98,18 @@
     },
     {
       "packet_id": "DA-WP4",
-      "status": "QA_REVIEW",
+      "status": "APPROVED",
       "prerequisites": ["DA-WP1_COMPLETED", "DA-WP3_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE_SHADOW_THEN_OPERATOR_REQUIRED_DA_G4",
+      "authority_required": "AUTO_RATIFIABLE_SHADOW_COMPLETED_THEN_OPERATOR_REQUIRED_DA_G4",
       "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
       "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
       "branch": "build/ovc-dev-accel-closure",
-      "candidate_commit": null,
-      "tests": ["DA-G4A validator", "focused closure tests", "retained development tests", "complete repository suite"],
+      "candidate_commit": "7bd25202458158fe1a77db1fbd2891a9063ae7db",
+      "tests": ["DA-G4A workflow 30708716073 PASS", "tiered shadow workflow 30708716057 PASS"],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_DELEGATED_DECISION.json",
       "merge_commit": null,
-      "blockers": ["FINAL_HEAD_CI_NOT_YET_RECORDED"],
+      "blockers": [],
       "next_packet": "DA-G4"
     },
     {
@@ -129,5 +129,5 @@
       "next_packet": "DA-G6"
     }
   ],
-  "next_action": "OPEN_DA_WP4_PR_AND_RUN_DA_G4A_FINAL_HEAD_QA"
+  "next_action": "SQUASH_MERGE_PR_207_THEN_MATERIALISE_OPERATOR_REQUIRED_DA_G4_GATE"
 }
