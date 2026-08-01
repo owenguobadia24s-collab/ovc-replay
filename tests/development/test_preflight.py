@@ -225,7 +225,8 @@ class PreflightTests(unittest.TestCase):
             rows = json.loads(REFS_PATH.read_text(encoding="utf-8"))
             rows[0]["sha256"] = ZERO
             bad_refs.write_text(json.dumps(rows), encoding="utf-8")
-            blocked = subprocess.run(command[:4] + [str(bad_refs)] + command[5:], cwd=ROOT, capture_output=True, text=True, check=False)
+            blocked_command = command[:5] + [str(bad_refs)] + command[6:]
+            blocked = subprocess.run(blocked_command, cwd=ROOT, capture_output=True, text=True, check=False)
             self.assertEqual(blocked.returncode, 1, blocked.stderr + blocked.stdout)
             self.assertEqual(json.loads(blocked.stdout)["status"], "BLOCK")
 
