@@ -1,0 +1,80 @@
+name: OVC tiered test selection shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/development/**"
+      - "schemas/development/**"
+      - "registries/development/**"
+      - "src/ovc/development/**"
+      - "scripts/development/**"
+      - "tests/development/**"
+      - "fixtures/development/**"
+      - "docs/development-acceleration/**"
+      - "docs/releases/development-acceleration-v0-1/**"
+      - ".github/workflows/ovc-tiered-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  select-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build changed-file inventory
+        id: changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > "$RUNNER_TEMP/changed-paths.txt"
+          else
+            git show --pretty='' --name-only HEAD > "$RUNNER_TEMP/changed-paths.txt"
+          fi
+          test -s "$RUNNER_TEMP/changed-paths.txt"
+      - name: Select deterministic profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python scripts/development/ovc_test_select.py \
+            --registry registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json \
+            --changed-paths-file "$RUNNER_TEMP/changed-paths.txt" \
+            --output "$RUNNER_TEMP/test-selection-manifest.json" \
+            > "$RUNNER_TEMP/test-selection-stdout.json"
+          cmp "$RUNNER_TEMP/test-selection-manifest.json" "$RUNNER_TEMP/test-selection-stdout.json"
+          python - <<'PY' >> "$GITHUB_ENV"
+          import json, os
+          from pathlib import Path
+          manifest = json.loads((Path(os.environ["RUNNER_TEMP"]) / "test-selection-manifest.json").read_text())
+          assert manifest["status"] == "PASS"
+          assert manifest["final_assurance_required"] is True
+          assert manifest["gate_replay_substitution"] == "PROHIBITED"
+          print(f"OVC_SELECTED_PROFILE={manifest['selected_profile']}")
+          PY
+      - name: FAST profile
+        if: env.OVC_SELECTED_PROFILE == 'FAST'
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_*.py' -v
+      - name: PACKET profile
+        if: env.OVC_SELECTED_PROFILE == 'PACKET'
+        run: |
+          PYTHONPATH=src python -m unittest discover -s tests/development -v
+          PYTHONPATH=src python -m unittest discover -s tests/authority -v
+      - name: FINAL_HEAD profile
+        if: env.OVC_SELECTED_PROFILE == 'FINAL_HEAD'
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Retain final assurance boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'required_on_stable_pr_head.*true' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
+          grep -q 'gate_replay_substitution.*PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
+          grep -q 'local_success_substitutes_remote_required_check.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json

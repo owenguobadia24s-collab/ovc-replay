@@ -40,7 +40,7 @@ entries:
     packet_id: DA-WP2
     title: Universal artifact preflight
     branch: build/ovc-dev-accel-preflight
-    status: APPROVED
+    status: COMPLETED
     prerequisites: [DA-WP1_COMPLETED]
     authority_required: AUTO_RATIFIABLE_FAIL_CLOSED_GUARD
     authority_delta: FAIL_CLOSED_EXECUTION_GUARD
@@ -52,7 +52,7 @@ entries:
     packet_id: DA-WP3
     title: Tiered testing and CI profiles
     branch: build/ovc-dev-accel-test-profiles
-    status: READY
+    status: APPROVED
     prerequisites: [DA-WP1_COMPLETED]
     authority_required: AUTO_RATIFIABLE_TEST_SELECTION
     authority_delta: DETERMINISTIC_TEST_PROFILE_SELECTION
@@ -64,7 +64,7 @@ entries:
     packet_id: DA-WP4
     title: Closure and merge-receipt automation
     branch: build/ovc-dev-accel-closure
-    status: PLANNED
+    status: READY_AFTER_DA_WP3_MERGE
     prerequisites: [DA-WP1_COMPLETED, DA-WP3_COMPLETED]
     authority_required: AUTO_RATIFIABLE_SHADOW_ONLY_THEN_OPERATOR_REQUIRED_DA_G4
     authority_delta: DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY
@@ -76,7 +76,7 @@ entries:
     packet_id: DA-WP5
     title: Compact evidence exporter
     branch: build/ovc-dev-accel-evidence-export
-    status: PLANNED
+    status: READY
     prerequisites: [DA-WP1_COMPLETED, DA-WP2_COMPLETED]
     authority_required: AUTO_RATIFIABLE_OPERATOR_LOCAL_EXPORT
     authority_delta: COPY_ONLY_COMPACT_EVIDENCE_EXPORT

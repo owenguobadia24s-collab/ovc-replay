@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-development-acceleration-gate-packet/v1",
+  "gate_id": "DA-G3",
+  "gate_title": "Tiered test selection trust",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DA-WP3",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
+  "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
+  "candidate_branch": "build/ovc-dev-accel-test-profiles",
+  "tested_candidate_commit": "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db",
+  "completed_work": [
+    "tiered test selection contract",
+    "strict test profile registry",
+    "deterministic changed-path selector",
+    "closed selection manifest schema",
+    "selection CLI",
+    "FAST, PACKET, unknown and ambiguity fixtures",
+    "focused selector and no-weakening tests",
+    "path-bounded shadow workflow",
+    "operator guide"
+  ],
+  "acceptance_conditions": [
+    "Known paths select the strongest required registered profile.",
+    "Unknown paths select FINAL_HEAD and are never skipped.",
+    "Ambiguous highest-priority mappings BLOCK.",
+    "GATE_REPLAY never substitutes for FINAL_HEAD.",
+    "Stable-head and changed-base final assurance remain required.",
+    "Default repository adoption remains denied until DA-G6.",
+    "Focused and complete repository suites pass at stable final head."
+  ],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G3 tiered test trust", "run_id": 30708043830, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30708043814, "result": "PASS"}
+  ],
+  "qa_packet": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_QA_PACKET.json",
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_DELEGATED_DECISION.json",
+  "warnings": [],
+  "unresolved_issues": [],
+  "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
+  "rollback": "Stop invoking the selector or revert the bounded DA-WP3 merge; existing final-head workflows remain authoritative.",
+  "recommended_decision": "PASS",
+  "next_packet": "DA-WP4"
+}

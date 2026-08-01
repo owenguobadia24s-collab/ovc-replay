@@ -1,0 +1,148 @@
+{
+  "schema": "ovc-test-profile-registry/v1",
+  "registry_id": "OVC.DEVELOPMENT.ACCELERATION.TEST-PROFILES.v0.1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "profile_order": ["FAST", "PACKET", "FINAL_HEAD"],
+  "profiles": {
+    "FAST": {
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_*.py' -v"]
+    },
+    "PACKET": {
+      "commands": [
+        "PYTHONPATH=src python -m unittest discover -s tests/development -v",
+        "PYTHONPATH=src python -m unittest discover -s tests/authority -v"
+      ]
+    },
+    "FINAL_HEAD": {
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests -v"]
+    }
+  },
+  "rules": [
+    {
+      "rule_id": "DA-TEST-CONTRACTS",
+      "pattern": "contracts/development/**",
+      "priority": 100,
+      "owner": "DA-WP1_PLUS_RELEVANT_PACKET",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["schema-registry-validation", "authority-boundary"]
+    },
+    {
+      "rule_id": "DA-TEST-SCHEMAS",
+      "pattern": "schemas/development/**",
+      "priority": 100,
+      "owner": "DA-WP1_PLUS_RELEVANT_PACKET",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["schema-validation", "golden-fixtures", "authority-boundary"]
+    },
+    {
+      "rule_id": "DA-TEST-REGISTRIES",
+      "pattern": "registries/development/**",
+      "priority": 100,
+      "owner": "DA-WP1_PLUS_RELEVANT_PACKET",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["profile-validation", "dependency-selection-audit", "authority-boundary"]
+    },
+    {
+      "rule_id": "DA-TEST-SOURCE",
+      "pattern": "src/ovc/development/**",
+      "priority": 100,
+      "owner": "DA-WP1_PLUS_RELEVANT_PACKET",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["development-unit", "property", "metamorphic", "security-boundary"]
+    },
+    {
+      "rule_id": "DA-TEST-SCRIPTS",
+      "pattern": "scripts/development/**",
+      "priority": 100,
+      "owner": "RELEVANT_PACKET",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["cli-contract", "windows-linux-logical-equivalence"]
+    },
+    {
+      "rule_id": "DA-TEST-SHARED-CLI-PY",
+      "pattern": "scripts/ovc.py",
+      "priority": 200,
+      "owner": "SHARED_CLI",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests -v"],
+      "retained_checks": ["all-development-cli", "complete-repository-suite"]
+    },
+    {
+      "rule_id": "DA-TEST-SHARED-CLI-PS",
+      "pattern": "scripts/ovc.ps1",
+      "priority": 200,
+      "owner": "SHARED_CLI",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests -v"],
+      "retained_checks": ["powershell-wrapper", "complete-repository-suite"]
+    },
+    {
+      "rule_id": "DA-TEST-TESTS",
+      "pattern": "tests/development/**",
+      "priority": 100,
+      "owner": "RELEVANT_PACKET",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["no-test-weakening-audit"]
+    },
+    {
+      "rule_id": "DA-TEST-FIXTURES",
+      "pattern": "fixtures/development/**",
+      "priority": 100,
+      "owner": "RELEVANT_PACKET",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["fixture-selection-matrix"]
+    },
+    {
+      "rule_id": "DA-TEST-OVC-WORKFLOWS",
+      "pattern": ".github/workflows/ovc-*.yml",
+      "priority": 200,
+      "owner": "DA-WP3",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests -v"],
+      "retained_checks": ["workflow-event-validation", "selection-audit", "complete-repository-suite"]
+    },
+    {
+      "rule_id": "DA-TEST-GATE-WORKFLOWS",
+      "pattern": ".github/workflows/development-acceleration-*.yml",
+      "priority": 200,
+      "owner": "RELEVANT_GATE",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests -v"],
+      "retained_checks": ["workflow-event-validation", "complete-repository-suite"]
+    },
+    {
+      "rule_id": "DA-TEST-DOCS",
+      "pattern": "docs/development-acceleration/**",
+      "priority": 100,
+      "owner": "RELEVANT_PACKET",
+      "minimum_profile": "FAST",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["documentation-integrity"]
+    },
+    {
+      "rule_id": "DA-TEST-COURT-RECORDS",
+      "pattern": "docs/releases/development-acceleration-v0-1/**",
+      "priority": 200,
+      "owner": "RELEVANT_GATE",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src python -m unittest discover -s tests/development -v"],
+      "retained_checks": ["gate-packet", "qa-decision-rollback", "authority-boundary"]
+    }
+  ],
+  "unknown_path_policy": "FINAL_HEAD",
+  "ambiguous_dependency_policy": "BLOCK_AND_REQUIRE_PROFILE_CORRECTION",
+  "final_assurance": {
+    "required_on_stable_pr_head": true,
+    "required_after_base_change": true,
+    "complete_repository_suite": true,
+    "gate_replay_substitution": "PROHIBITED",
+    "local_success_substitutes_remote_required_check": false
+  }
+}
