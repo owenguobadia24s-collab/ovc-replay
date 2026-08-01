@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr3-windows-cleanup-incident/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR3",
+  "reported_at_utc": "2026-08-01T09:06:40Z",
+  "baseline_main": "0ffc4894d804b2f311b79df6db96f75c25b382b6",
+  "failure": "WINERROR_5_ACCESS_DENIED_PASS_B_CLEANUP",
+  "failure_message": "[WinError 5] Access is denied: 'C:\\Users\\Owner\\OVIS\\ovc-replay-external-artifacts\\prospective-source\\compute\\.PD-JUNE-FM-WP2.staging.0417f89838884388afcf9c58e5c4c478\\pass-b\\bars\\15M'",
+  "failed_operation": "DELETE_BYTE_IDENTICAL_DETERMINISM_PASS_B_AFTER_SUCCESSFUL_COMPARISON",
+  "failed_staging_quarantine": "C:/Users/Owner/OVIS/ovc-replay-external-artifacts/prospective-source/compute/quarantine/PD-JUNE-FM-WP2.20260801T090640Z.58efee95",
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "source_slice_mutated": false,
+  "candidate_payload_accepted": false,
+  "provider_network_access_performed": false,
+  "repair_performed": false,
+  "release_mutation_performed": false,
+  "selector_mutation_performed": false,
+  "r2_publication": "DENIED",
+  "validation_consumption": "DENIED",
+  "diagnosis": "The deterministic pass-A and pass-B payloads had already been built and compared. Windows denied deletion of the duplicate pass-B directory. The cleanup exception was treated as a replay failure even though it occurred after the byte-identical comparison and did not indicate source, formula, C1, C2 or payload corruption.",
+  "smallest_lawful_resolution": "Retry removal after clearing read-only attributes and bounded delays. If Windows still denies deletion, move only the duplicate pass-B workspace outside the candidate staging tree into compute quarantine with an explicit cleanup receipt, then continue finalisation without changing candidate bytes or authority.",
+  "preservation_required": [
+    "PRESERVE_FAILED_STAGING_QUARANTINE",
+    "DO_NOT_REUSE_FAILED_STAGING_AS_ACCEPTED_EVIDENCE",
+    "DO_NOT_DELETE_OR_REWRITE_PRIOR_CORR1_OR_CORR2_HISTORY"
+  ]
+}
