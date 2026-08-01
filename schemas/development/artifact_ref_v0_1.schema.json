@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/artifact_ref_v0_1.schema.json",
+  "title": "OVC Artifact Reference v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["logical_name", "relative_path", "size_bytes", "sha256", "media_type", "identity_policy"],
+  "properties": {
+    "logical_name": {"type": "string", "minLength": 1},
+    "relative_path": {"type": "string", "minLength": 1},
+    "size_bytes": {"type": "integer", "minimum": 0},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "schema_id": {"type": ["string", "null"]},
+    "media_type": {"type": "string", "minLength": 1},
+    "identity_policy": {"type": "string", "minLength": 1}
+  }
+}

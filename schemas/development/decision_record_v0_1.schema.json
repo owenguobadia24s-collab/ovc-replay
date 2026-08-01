@@ -1,0 +1,11 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/development/decision_record_v0_1.schema.json",
+  "title":"OVC Development Decision Record v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["decision","decision_authority","plan_id","plan_version","programme_id","packet_id","gate_id","baseline_commit","candidate_commit","tests","qa_status","authority_delta","reserved_authority_delta","rollback","rationale","next_packet","decision_id"],
+  "properties":{
+    "decision":{"enum":["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"]},"decision_authority":{"type":"string","minLength":1},"plan_id":{"type":"string"},"plan_version":{"type":"string"},"programme_id":{"type":"string"},"packet_id":{"type":"string"},"gate_id":{"type":"string"},"baseline_commit":{"type":"string"},"candidate_commit":{"type":"string"},"tests":{"type":"array","items":{"type":"string"}},"qa_status":{"type":"string"},"authority_delta":{"type":"string"},"reserved_authority_delta":{"type":"string"},"rollback":{"type":"string","minLength":1},"rationale":{"type":"string","minLength":1},"next_packet":{"type":["string","null"]},"decision_id":{"type":"string","pattern":"^[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "ovc-development-acceleration-dependency-justification/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP1",
+  "path": "tests/authority/test_active_namespace_allowlist.py",
+  "normal_owner": "ACTIVE_TREE_FOUNDATION_ASSURANCE",
+  "reason": "DA-WP1 creates the explicitly authorised src/ovc/development package. The existing exact namespace allowlist must name the new package or the complete repository suite correctly blocks it.",
+  "permitted_change": "Add only ovc.development to EXPECTED_OVC_PACKAGES.",
+  "prohibited_change": "Do not remove, weaken, wildcard or bypass any active namespace assertion.",
+  "authority_delta": "ASSURANCE_ALLOWLIST_EXTENSION_FOR_EXPLICIT_NEW_PACKAGE_ONLY",
+  "reserved_authority_delta": "NONE",
+  "rollback": "Remove ovc.development from the exact allowlist if the package merge is reverted."
+}
