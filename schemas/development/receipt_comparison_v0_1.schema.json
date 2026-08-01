@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/receipt_comparison_v0_1.schema.json",
+  "title": "OVC Receipt Comparison v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "receipt_proposal_id", "manual_receipt_hash", "status", "differences",
+    "material_fields_equal", "authority", "comparison_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-receipt-comparison/v1"},
+    "receipt_proposal_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "manual_receipt_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "BLOCK"]},
+    "differences": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "material_fields_equal": {"type": "boolean"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dry_run_only", "writes_performed", "merge_performed", "repository_bot_write", "direct_main_write", "force_push"],
+      "properties": {
+        "dry_run_only": {"const": true},
+        "writes_performed": {"const": false},
+        "merge_performed": {"const": false},
+        "repository_bot_write": {"const": "DENIED"},
+        "direct_main_write": {"const": "DENIED"},
+        "force_push": {"const": "DENIED"}
+      }
+    },
+    "comparison_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
