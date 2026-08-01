@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp2-corr3-merge-receipt/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP2",
+  "correction_id": "PD-JUNE-FM-WP2-CORR3",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "authority_delta": "NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY",
+  "reserved_authority_delta": "NONE",
+  "pull_request": 197,
+  "baseline_main": "d94e6cca1db4c4d81f3e70f6868740f272d59302",
+  "final_head": "ddded6c74053acbf7013d3af826405a1dcc9b691",
+  "merge_commit": "b6fd245104520344721f3b97f0236ef03b8f0a8a",
+  "merge_method": "SQUASH",
+  "merge_result": "PASS_SQUASH_MERGED_TO_MAIN",
+  "final_head_tests": [
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838304,
+      "runner": "windows-latest",
+      "scope": "CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353838305,
+      "runner": "ubuntu-24.04",
+      "scope": "CORR3 focused cleanup regressions, retained WP2/CORR1/CORR2 tests and complete repository suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30694100920,
+      "job": 91353882748,
+      "runner": "ubuntu-24.04",
+      "scope": "CORR3 court records, bounded changed files, raw-artifact exclusion and authority assertions",
+      "result": "PASS"
+    }
+  ],
+  "qa_result": "PASS_WINDOWS_CLEANUP_COMPATIBILITY_CORRECTION",
+  "source_slice_mutated": false,
+  "frozen_c1_adapter_mutated": false,
+  "frozen_c2_adapter_mutated": false,
+  "formula_or_threshold_mutated": false,
+  "identity_contract_mutated": false,
+  "release_status": "NOT_A_RELEASE",
+  "selector_eligibility": "NONE",
+  "r2_publication": "DENIED",
+  "validation_consumption": "DENIED",
+  "preserved_quarantines": [
+    "C:/Users/Owner/OVIS/ovc-replay-external-artifacts/prospective-source/compute/quarantine/PD-JUNE-FM-WP2.20260801T082600Z.76382f72",
+    "C:/Users/Owner/OVIS/ovc-replay-external-artifacts/prospective-source/compute/quarantine/PD-JUNE-FM-WP2.20260801T090640Z.58efee95"
+  ],
+  "next_packet": "PD-JUNE-FM-WP2-OPERATOR-LOCAL-REPLAY",
+  "next_packet_status": "READY",
+  "next_action": "PULL_MAIN_AND_RERUN_WP2_PREFLIGHT_THEN_EXECUTE_WITH_A_FRESH_OUTPUT_IDENTITY",
+  "rollback": "Preserve the accepted source slice, CORR1, CORR2 and all quarantines. Revert merge b6fd245104520344721f3b97f0236ef03b8f0a8a only through a new non-destructive commit."
+}
