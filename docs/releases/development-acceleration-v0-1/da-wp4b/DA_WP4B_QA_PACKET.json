@@ -3,19 +3,24 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI_ACTIVATION_BLOCKED",
+  "status": "PASS_IMPLEMENTATION_ACTIVATION_BLOCKED",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "candidate_commit": null,
+  "tested_candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
   "checks": [
     {"check_id": "DA-WP4B-AUTH-001", "result": "PASS", "evidence": "DA-G4 operator PASS is recorded and the approved profile remains active=false."},
     {"check_id": "DA-WP4B-POLICY-002", "result": "PASS", "evidence": "Exact bot branch, path and action allowlists are machine readable; all reserved actions remain denied."},
     {"check_id": "DA-WP4B-PLANNER-003", "result": "PASS", "evidence": "Work-packet parsing, stale-head checks, profile binding, deterministic plan construction and no-write authority are implemented."},
-    {"check_id": "DA-WP4B-IDEMPOTENCY-004", "result": "PENDING_CI", "evidence": "Exact retries and changed-plan collisions are tested."},
-    {"check_id": "DA-WP4B-REDACTION-005", "result": "PENDING_CI", "evidence": "Nested credential values are redacted before audit output."},
-    {"check_id": "DA-WP4B-DENIAL-006", "result": "PENDING_CI", "evidence": "The adapter protocol has no merge, approval, deletion or force-push method."},
+    {"check_id": "DA-WP4B-IDEMPOTENCY-004", "result": "PASS", "evidence": "Exact retry and changed-plan collision tests passed in DA-WP4B run 30711248035."},
+    {"check_id": "DA-WP4B-REDACTION-005", "result": "PASS", "evidence": "Nested credential redaction tests passed in DA-WP4B run 30711248035."},
+    {"check_id": "DA-WP4B-DENIAL-006", "result": "PASS", "evidence": "Adapter protocol denial tests and static no-network/no-process audit passed in DA-WP4B run 30711248035."},
     {"check_id": "DA-WP4B-BRANCH-PROTECTION-007", "result": "BLOCK", "evidence": "Independent no-bypass branch-protection evidence is unavailable."},
     {"check_id": "DA-WP4B-REAL-SHADOW-008", "result": "BLOCK", "evidence": "Dedicated revocable bot identity is not provisioned, so a compliant real proposal-branch shadow cannot run."},
-    {"check_id": "DA-WP4B-CI-009", "result": "PENDING", "evidence": "Final-head validator, focused tests and complete repository suite pending."}
+    {"check_id": "DA-WP4B-CI-009", "result": "PASS", "evidence": "DA-WP4B run 30711248035, tiered run 30711248023 and generic tests run 30711248056 passed on tested candidate 90af31affc116d18d8b1f8d84a05f60f5a1e63f5."}
+  ],
+  "tests": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30711248035, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30711248023, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30711248056, "result": "PASS"}
   ],
   "implementation_blocking_issues": [],
   "activation_blocking_issues": [
@@ -26,7 +31,7 @@
   "warnings": [
     "Repository contents permission is not a native path sandbox; application checks alone do not satisfy the activation boundary."
   ],
-  "qa_recommendation": "PASS_IMPLEMENTATION_AFTER_CI_BLOCK_ACTIVATION",
+  "qa_recommendation": "PASS_IMPLEMENTATION_BLOCK_ACTIVATION",
   "authority_active": false,
   "market_authority_delta": "NONE",
   "validation_authority_delta": "NONE",
