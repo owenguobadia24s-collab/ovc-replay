@@ -14,6 +14,9 @@ from ovc.development.test_selection import load_test_profile_registry, select_te
 
 
 BASELINE = "19f8f25ee57e0d8e026162229aa235990bbd6491"
+TESTED = "fb18864bf477e9b3d0a9d13fe2185c4b6d02b2db"
+DA_G3_RUN = 30708043830
+SHADOW_RUN = 30708043814
 REQUIRED = [
     "contracts/development/OVC_TIERED_TEST_SELECTION_CONTRACT_v0_1.md",
     "registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json",
@@ -47,6 +50,12 @@ def require_tokens(path: str, tokens: list[str]) -> None:
 
 def paths(name: str) -> list[str]:
     return [line for line in read(f"fixtures/development/test_selection/{name}").splitlines() if line]
+
+
+def assert_runs(rows: list[dict[str, object]]) -> None:
+    actual = {(row["run_id"], row["result"]) for row in rows}
+    assert (DA_G3_RUN, "PASS") in actual
+    assert (SHADOW_RUN, "PASS") in actual
 
 
 def main() -> int:
@@ -110,36 +119,46 @@ def main() -> int:
     assert state["current_gate"] == "DA-G3"
     assert state["baseline_commit"] == BASELINE
     assert state["branch"] == "build/ovc-dev-accel-test-profiles"
+    assert state["candidate_commit"] == TESTED
     assert state["authority"]["repository_bot_write"] == "DENIED_UNTIL_DA_G4"
     assert state["authority"]["default_workflow_adoption"] == "DENIED_UNTIL_DA_G6"
     packets = {row["packet_id"]: row for row in state["packets"]}
     assert packets["DA-WP2"]["status"] == "COMPLETED"
     assert packets["DA-WP2"]["merge_commit"] == BASELINE
-    assert packets["DA-WP3"]["status"] == "QA_REVIEW"
-    assert packets["DA-WP3"]["authority_delta"] == "DETERMINISTIC_TEST_PROFILE_SELECTION"
-    assert packets["DA-WP4"]["status"] == "PLANNED"
+    assert packets["DA-WP3"]["status"] == "APPROVED"
+    assert packets["DA-WP3"]["candidate_commit"] == TESTED
+    assert packets["DA-WP3"]["blockers"] == []
+    assert packets["DA-WP4"]["status"] == "READY_AFTER_DA_WP3_MERGE"
     assert state["open_concurrent_work"][0]["pull_request"] == 202
 
     assert gate["gate_id"] == "DA-G3"
     assert gate["packet_id"] == "DA-WP3"
-    assert gate["status"] == "QA_REVIEW"
+    assert gate["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert gate["baseline_commit"] == BASELINE
+    assert gate["tested_candidate_commit"] == TESTED
     assert gate["reserved_authority_delta"] == "NONE"
     assert gate["repository_bot_write"] == "DENIED"
     assert gate["default_workflow_adoption"] == "DENIED_UNTIL_DA_G6"
+    assert gate["recommended_decision"] == "PASS"
     assert gate["next_packet"] == "DA-WP4"
+    assert_runs(gate["tests"])
 
-    assert qa["status"] == "PASS_STATIC_PENDING_FINAL_HEAD_CI"
+    assert qa["status"] == "PASS_APPROVED_PENDING_SQUASH_MERGE"
     assert qa["baseline_commit"] == BASELINE
+    assert qa["tested_candidate_commit"] == TESTED
     assert qa["blocking_issues"] == []
+    assert qa["qa_recommendation"] == "PASS"
     assert qa["reserved_authority_delta"] == "NONE"
     assert qa["repository_bot_write"] == "DENIED"
+    assert_runs(qa["tests"])
 
-    assert decision["decision"] == "PENDING_CI"
+    assert decision["decision"] == "PASS"
     assert decision["decision_authority"] == "DELEGATED_BY_DA_G0_OPERATOR_APPROVED_PLAN"
     assert decision["baseline_commit"] == BASELINE
+    assert decision["tested_candidate_commit"] == TESTED
     assert decision["reserved_authority_delta"] == "NONE"
     assert decision["default_workflow_adoption"] == "DENIED_UNTIL_DA_G6"
+    assert_runs(decision["tests"])
 
     require_tokens(REQUIRED[0], [
         "DETERMINISTIC_TEST_PROFILE_SELECTION", "FAST < PACKET < FINAL_HEAD",
