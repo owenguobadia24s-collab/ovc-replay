@@ -1,0 +1,61 @@
+name: Research Console v0.3 RC-G5 C2 sequence activation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/research_console/Home.py'
+      - 'apps/research_console/ro4_active_projection_source.py'
+      - 'apps/research_console/c2_sequence_evidence.py'
+      - 'apps/research_console/rc_g5_console.py'
+      - 'tests/research_operations/v0_4/test_rc_g5_activation.py'
+      - 'registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json'
+      - 'registries/research_operations/v0_4/**'
+      - 'docs/releases/research-console-v0-3/rc-g5/**'
+      - 'scripts/research_operations/validate_rc_g5_activation.py'
+      - '.github/workflows/research-console-v0-3-rc-g5-activation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  rc-g5-activation:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate bounded RC-G5 activation packet
+        run: PYTHONPATH=src:. python -u scripts/research_operations/validate_rc_g5_activation.py
+      - name: Focused RC-G5 activation tests
+        run: PYTHONPATH=src:. python -m unittest discover -s tests/research_operations/v0_4 -p 'test_rc_g5_activation.py' -v
+      - name: Retained RO4-G5 projection tests
+        run: PYTHONPATH=src:. python -m unittest discover -s tests/research_operations/v0_4 -p 'test_ro4_g5_console_projection.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
+      - name: Authority and repository-boundary assertions
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e apps/research_console/pages/C2_Sequence_Evidence.py
+          test ! -e apps/research_console/pages/RO4_Sequence_Evidence.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json').read_text())
+          g=json.loads(Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_ACTIVATION_GATE_PACKET.json').read_text())
+          d=json.loads(Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_OPERATOR_DECISION.json').read_text())
+          assert a['enabled'] is True
+          assert a['status']=='ENABLED_LOCAL_READ_ONLY'
+          assert a['current_route_state']=='ENABLED_LOCAL_READ_ONLY'
+          assert a['operator_decision_id']==d['decision_id']=='RC-G5.OPERATOR.PASS.20260801T084900Z'
+          assert a['writes']=='NONE'
+          assert a['annotation_actions']=='NONE'
+          assert a['validation_consumption']=='LOCKED_UNCONSUMED'
+          assert a['remote_deployment']=='DENIED'
+          assert g['operator_decision_required'] is False
+          assert g['auto_ratifiable'] is True
+          assert g['proposed_authority_delta']=='ACTIVATE_APPROVED_LOCAL_READ_ONLY_ROUTE'
+          assert g['unresolved_issues']==[]
+          PY
