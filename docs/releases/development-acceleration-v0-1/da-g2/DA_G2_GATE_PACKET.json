@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-development-acceleration-gate-packet/v1",
+  "gate_id": "DA-G2",
+  "gate_title": "Universal artifact preflight trust",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DA-WP2",
+  "status": "QA_REVIEW",
+  "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
+  "candidate_branch": "build/ovc-dev-accel-preflight",
+  "candidate_commit": null,
+  "completed_work": [
+    "read-only universal preflight contract",
+    "exact input-reference and schema-marker validation",
+    "destination collision preflight",
+    "root and path safety checks",
+    "deterministic request and receipt identities",
+    "closed request and receipt schemas",
+    "pass and failure fixtures",
+    "CLI and focused assurance tests"
+  ],
+  "acceptance_conditions": [
+    "Missing, unsafe, ambiguous, mismatched or undeclared inputs never pass.",
+    "Existing destination files, symlinks and non-empty directories block.",
+    "The preflight performs no write and grants no reserved authority.",
+    "Equivalent compact inputs produce identical root-independent receipts.",
+    "Compact fixtures complete below the 30-second target.",
+    "Focused and complete repository suites pass at stable final head."
+  ],
+  "tests": ["DA-G2 validator", "preflight focused tests", "retained shared-service tests", "complete repository suite"],
+  "qa_packet": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_QA_PACKET.json",
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_DELEGATED_DECISION.json",
+  "warnings": [],
+  "unresolved_issues": [],
+  "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD",
+  "reserved_authority_delta": "NONE",
+  "repository_bot_write": "DENIED",
+  "rollback": "Disable universal preflight invocation or revert the bounded DA-WP2 merge; programme-specific validators remain authoritative.",
+  "recommended_decision": "PASS_AFTER_CI",
+  "next_packet": "DA-WP3"
+}
