@@ -88,7 +88,7 @@ def main() -> int:
 
     require_tokens(REQUIRED[0], [
         "REPOSITORY_BOT_WRITE", "DENIED", "force-push", "Validation",
-        "No history rewrite", "Unknown test impact escalates",
+        "rewrite history", "Unknown test impact escalates",
     ])
     require_tokens(REQUIRED[1], [
         "repository_bot_write: DENIED_UNTIL_DA_G4",
