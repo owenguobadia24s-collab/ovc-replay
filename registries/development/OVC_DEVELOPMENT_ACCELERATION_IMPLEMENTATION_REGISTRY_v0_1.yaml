@@ -71,11 +71,12 @@ entries:
     packet_id: DA-WP4B
     title: Receipt-bot bounded implementation and activation evidence
     branch: build/ovc-dev-accel-receipt-bot
-    status: QA_REVIEW
+    status: BLOCKED
     prerequisites: [DA-WP4_COMPLETED, DA-G4_OPERATOR_PASS_RECORDED, DA-G4_GATE_RECORD_MERGED]
     authority_required: OPERATOR_APPROVED_BOUNDED_IMPLEMENTATION_WITH_CONDITIONAL_ACTIVATION
     authority_delta: NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY
     baseline_commit: d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3
+    tested_candidate_commit: 90af31affc116d18d8b1f8d84a05f60f5a1e63f5
     reads:
       - approved inactive receipt-bot profile
       - exact lawful main SHA
@@ -92,6 +93,10 @@ entries:
       - fixtures/development/**
       - docs/releases/development-acceleration-v0-1/da-wp4b/**
       - .github/workflows/development-acceleration-da-wp4b.yml
+    tests:
+      - Development Acceleration DA-WP4B receipt-bot implementation / 30711248035 / PASS
+      - OVC tiered test selection shadow / 30711248023 / PASS
+      - tests / 30711248056 / PASS
     activation_conditions:
       - CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH
       - BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER
@@ -133,8 +138,13 @@ reserved_gates:
     authority_active: false
   - gate_id: DA-G4B
     purpose: Verify every activation condition for the approved receipt-bot profile.
-    status: QA_REVIEW_ACTIVATION_BLOCKED
+    status: BLOCKED
     current_authority: APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE
+    tested_candidate_commit: 90af31affc116d18d8b1f8d84a05f60f5a1e63f5
+    tests:
+      - Development Acceleration DA-WP4B receipt-bot implementation / 30711248035 / PASS
+      - OVC tiered test selection shadow / 30711248023 / PASS
+      - tests / 30711248056 / PASS
     activation_evidence: docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json
     blocker_record: docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json
     blockers:
