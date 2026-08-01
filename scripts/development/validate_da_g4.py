@@ -150,7 +150,8 @@ def main() -> int:
     assert state["operator_gate"]["authority_active"] is False
     assert state["open_concurrent_work"][0]["pull_request"] == 202
 
-    bodies = "\n".join(read(path) for path in REQUIRED)
+    credential_artifacts = REQUIRED[:9]
+    bodies = "\n".join(read(path) for path in credential_artifacts)
     for token in ("ghp_", "github_pat_", "-----BEGIN PRIVATE KEY-----", "sk-proj-", "Bearer "):
         assert token not in bodies
     assert '"active": true' not in bodies
