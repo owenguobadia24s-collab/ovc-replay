@@ -1,0 +1,55 @@
+name: Development Acceleration DA-WP4B receipt-bot implementation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/development/OVC_RECEIPT_BOT_IMPLEMENTATION_CONTRACT_v0_1.md"
+      - "schemas/development/receipt_bot_*"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_*"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json"
+      - "src/ovc/development/receipt_bot.py"
+      - "scripts/development/validate_da_wp4b.py"
+      - "tests/development/test_receipt_bot.py"
+      - "fixtures/development/receipt_bot/**"
+      - "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json"
+      - "docs/releases/development-acceleration-v0-1/da-wp4b/**"
+      - ".github/workflows/development-acceleration-da-wp4b.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  da-wp4b:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'DA-WP4B')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate DA-WP4B packet
+        run: PYTHONPATH=src python -u scripts/development/validate_da_wp4b.py
+      - name: Focused receipt-bot tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_receipt_bot.py' -v
+      - name: Retained DA-G4 authority tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4.py' -v
+      - name: Retained closure tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_closure.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert fail-closed inactive boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'active.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json
+          grep -q 'production_transport.*ABSENT_FAIL_CLOSED' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
+          grep -q 'credential_state.*NOT_PROVISIONED' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
+          grep -q 'activation_evaluation.*BLOCK' docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json
+          grep -q 'authority_active.*false' docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json
+          ! grep -R -E 'subprocess|os\.system|requests|urllib|httpx|PyGithub|github3|git push|git merge|force.push' src/ovc/development/receipt_bot.py
+          ! grep -R -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/receipt_bot.py
