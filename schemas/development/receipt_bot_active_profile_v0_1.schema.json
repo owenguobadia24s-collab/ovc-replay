@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/receipt_bot_active_profile_v0_1.schema.json",
+  "title": "OVC receipt-bot active profile v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile_id",
+    "source_approved_profile_hash",
+    "decision_id",
+    "status",
+    "active",
+    "credential_identity_hash",
+    "branch_protection_evidence_hash",
+    "proposal_shadow_evidence_hash",
+    "activation_evaluation_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-receipt-bot-active-profile/v1"},
+    "profile_id": {"const": "OVC.DEVELOPMENT.ACCELERATION.RECEIPT-BOT.v0.1"},
+    "source_approved_profile_hash": {"const": "e3e13f38dbddbf96da075c4489e2c5e7c7a03b6f42aaa9aa564e0db2813fa0f5"},
+    "decision_id": {"const": "DA-G4.OPERATOR.PASS.20260801T172600Z"},
+    "status": {"const": "ACTIVE"},
+    "active": {"const": true},
+    "credential_identity_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "branch_protection_evidence_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "proposal_shadow_evidence_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "activation_evaluation_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
