@@ -1,9 +1,7 @@
 {
   "authority_delta": "DETERMINISTIC_LOCAL_C1_C2_REPLAY_ACCEPTANCE_ONLY",
   "baseline_commit": "837c9a3e1cbfc18bf01d577896a8f2e01d12f7d2",
-  "blockers": [
-    "FINAL_HEAD_CI_REQUIRED_BEFORE_AUTO_RATIFICATION"
-  ],
+  "blockers": [],
   "checks": [
     {
       "check": "six compact Google Drive files exact size and SHA-256",
@@ -46,8 +44,8 @@
       "result": "PASS"
     },
     {
-      "check": "focused and complete repository CI",
-      "result": "PENDING"
+      "check": "focused acceptance, retained A2/WP1/WP2 and complete repository CI",
+      "result": "PASS"
     }
   ],
   "next_packet": "PD-JUNE-FM-WP3",
@@ -56,12 +54,45 @@
   "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
   "plan_version": "0.1+A1+A2",
   "programme_id": "PD-JUNE-FULL-MONTH-MDR",
-  "qa_result": "PENDING_FINAL_HEAD_CI",
-  "recommendation": "PASS_AFTER_FOCUSED_FULL_AND_AUTHORITY_CHECKS",
+  "qa_result": "PASS_DETERMINISTIC_FULL_MONTH_REPLAY_ACCEPTANCE",
+  "recommendation": "PASS_AUTO_RATIFY_AND_SQUASH_MERGE",
   "reserved_authority_delta": "NONE",
   "rollback": "Preserve the accepted external replay and all quarantines. Revert only this compact acceptance packet through a new non-destructive commit.",
   "schema": "ovc-pd-june-full-month-mdr-wp2-replay-qa/v1",
-  "status": "QA_REVIEW_PENDING_FINAL_HEAD_CI",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
+  "tested_head": "8adc30c33392dcd790d0e981c209106147deab06",
+  "tests": [
+    {
+      "workflow_run": 30695788261,
+      "job": 91358321910,
+      "scope": "exact compact evidence, cross-file bindings, retained WP2/source tests, complete suite and authority boundary",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30695788262,
+      "job": 91358321845,
+      "scope": "A2 court record, retained tests, complete suite and no-repair boundary",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30695788234,
+      "job": 91358321802,
+      "scope": "WP1 intake continuity and complete suite",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30695788288,
+      "job": 91358321848,
+      "scope": "WP2 tooling continuity, retained tests, complete suite and local-only boundary",
+      "result": "PASS"
+    },
+    {
+      "workflow_run": 30695788320,
+      "job": 91358322001,
+      "scope": "generic complete repository unit tests",
+      "result": "PASS"
+    }
+  ],
   "warnings": [
     "Algorithmic NOT_EVALUATED or NOT_EVALUABLE marker count is 13,993 and must remain separately reported in WP3.",
     "The accepted replay is not a release and grants no selector, R2, Validation or write authority."
