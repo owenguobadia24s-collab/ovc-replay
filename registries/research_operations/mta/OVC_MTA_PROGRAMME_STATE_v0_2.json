@@ -10,7 +10,7 @@
   "operator_decision_required": true,
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "gate/mta-g0-ratification",
-  "candidate_commit": null,
+  "tested_candidate_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb",
   "authority": {
     "read": "PROPOSED_CURRENT_AND_PINNED_EXTERNAL_ARTIFACTS",
     "derive": "PROPOSED_DETERMINISTIC_AUDIT_ONLY",
@@ -35,7 +35,7 @@
       "authority_delta": "RATIFY_AUDIT_ONLY_PROGRAMME_AND_EXACT_G0_CONTROLS",
       "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
       "branch": "gate/mta-g0-ratification",
-      "candidate_commit": null,
+      "tested_candidate_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb",
       "input_artifacts": [
         {"id": "MTA_PLAN_DOCX", "sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d"},
         {"id": "PD-JUNE-FM-WP2-ACCEPTANCE", "sha256": "0ef6068d4f77bdeee2b5f1a99200b229dcc55e26"},
@@ -47,7 +47,7 @@
       "registry_amendments": [],
       "capacity": {
         "expected_runtime_s": 60,
-        "actual_runtime_s": 0,
+        "actual_runtime_s": 2,
         "max_runtime_s": 14400,
         "retained_bytes": 0,
         "max_retained_bytes": 10737418240,
@@ -61,7 +61,12 @@
         "RO4_G6_EVIDENCE_ACCUMULATION_BLOCKER"
       ],
       "cross_programme_incidents": [],
-      "tests": ["PENDING_CI"],
+      "tests": [
+        "MTA-G0 workflow 30752745706 PASS",
+        "focused MTA-G0 tests PASS_7",
+        "complete repository suite PASS_70",
+        "generic tests workflow 30752745692 PASS"
+      ],
       "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json",
       "decision_record": null,
       "acknowledgement_record": null,
@@ -82,7 +87,8 @@
     "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
     "gate_packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json",
     "decision_request": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json",
-    "recorded_decision": null
+    "recorded_decision": null,
+    "qa_recommendation": "PASS"
   },
   "next_action": "OPERATOR_DECIDE_MTA_G0"
 }
