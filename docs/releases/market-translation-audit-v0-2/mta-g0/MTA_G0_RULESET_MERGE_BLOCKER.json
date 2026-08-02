@@ -1,0 +1,94 @@
+{
+  "schema": "ovc-mta-g0-ruleset-merge-blocker/v1",
+  "blocker_id": "MTA-G0-BLOCK-001-REQUIRED-CHECK-CONTEXTS-EXPECTED",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "MTA-G0",
+  "status": "BLOCKED_EXTERNAL_REPOSITORY_RULESET",
+  "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
+  "decision": "PASS",
+  "pull_request": 210,
+  "branch": "gate/mta-g0-ratification",
+  "blocked_head": "deaa81849d6046dee758503548b41edc6d8ae1c5",
+  "baseline_main": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "main_unchanged_at_block": true,
+  "passing_final_head_checks": [
+    {
+      "workflow": "Market Translation Audit MTA-G0 gate readiness",
+      "run_id": 30754357839,
+      "run_number": 18,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30754357852,
+      "run_number": 70,
+      "profile": "FINAL_HEAD",
+      "result": "PASS"
+    },
+    {
+      "workflow": "tests",
+      "run_id": 30754357822,
+      "run_number": 1353,
+      "result": "PASS"
+    }
+  ],
+  "review_state": {
+    "unresolved_review_threads": 0,
+    "blocking_review_submissions": 0
+  },
+  "merge_attempt": {
+    "method": "squash",
+    "expected_head_sha": "deaa81849d6046dee758503548b41edc6d8ae1c5",
+    "result": "HTTP_405_REPOSITORY_RULE_VIOLATION",
+    "message": "2 of 2 required status checks are expected"
+  },
+  "reproduction": [
+    "Close and reopen PR 210 without changing the branch head.",
+    "Wait for reopened-head MTA-G0, tiered FINAL_HEAD and generic tests workflows to complete PASS.",
+    "Attempt an exact-head squash merge.",
+    "GitHub rejects the merge with two required status checks still expected."
+  ],
+  "related_repository_evidence": {
+    "programme": "OVC-DEV-ACCEL-v0.1",
+    "pull_request": 209,
+    "ruleset_evidence_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4",
+    "evidence_state": "RULESET_EXPORT_BYTES_OR_REPRODUCIBLE_RETRIEVAL_LOCATION_NOT_AVAILABLE",
+    "reference": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json"
+  },
+  "why_not_correctable_inside_mta_scope": [
+    "The GitHub connector does not expose the repository ruleset or branch-protection required-check context list.",
+    "The available repository evidence supplies only a ruleset hash, not independently reproducible ruleset bytes or a retrieval location.",
+    "Changing branch protection or required-check contexts is an external repository-governance action outside the bounded MTA audit packet.",
+    "Bypassing or weakening required checks would violate the approved plan and OVC branch discipline."
+  ],
+  "preserved_state": {
+    "operator_pass_recorded": true,
+    "june_g2_deferred_without_review_outcome": true,
+    "pr_202": "OPEN_UNMERGED_PRESERVED",
+    "pr_209": "UNRELATED_UNMUTATED",
+    "pr_210": "OPEN_UNMERGED",
+    "branch_history": "PRESERVED",
+    "external_artifacts": "PRESERVED",
+    "selectors": "UNCHANGED",
+    "validation": "LOCKED_UNCONSUMED",
+    "c2e_c2_5_c3": "DENIED"
+  },
+  "smallest_lawful_resolution": [
+    "Provide an independently reproducible export or retrieval location for the active main-branch ruleset.",
+    "Identify the exact two required status-check context names and their expected GitHub App identities.",
+    "Correct the external ruleset only if those contexts are stale or mismatched, without weakening required assurance.",
+    "Re-run the exact required checks on the unchanged or newly lawful PR head, then resume with OVC CONTINUE."
+  ],
+  "prohibited_resolutions": [
+    "BYPASS_BRANCH_PROTECTION",
+    "DISABLE_REQUIRED_CHECKS_WITHOUT_GOVERNED_REPLACEMENT",
+    "DIRECT_MAIN_WRITE",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE",
+    "MERGE_WITH_EXPECTED_CHECKS_UNSATISFIED"
+  ],
+  "rollback": "No destructive rollback. Preserve PR 210 and all decision/evidence records. If the programme is abandoned, close PR 210 without deleting its branch and retain the blocker as the court record.",
+  "continuation_point": "MTA-G0_SQUASH_MERGE_THEN_MTA-WP1"
+}
