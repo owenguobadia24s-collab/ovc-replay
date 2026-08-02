@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-mta-g0-operator-decision/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "gate_id", "programme_id", "decision", "subdecisions", "authority_active", "rollback"],
+  "properties": {
+    "schema": {"const": "ovc-mta-g0-operator-decision/v1"},
+    "gate_id": {"const": "MTA-G0"},
+    "programme_id": {"const": "OVC-MTA-v0.2"},
+    "decision": {"enum": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"]},
+    "subdecisions": {"type": "object"},
+    "authority_active": {"const": false},
+    "rollback": {"type": "string", "minLength": 1}
+  }
+}
