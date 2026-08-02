@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/v0_2/ci_admission_baseline_v0_1.schema.json",
+  "title": "OVC DA2 CI admission baseline",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "baseline_id",
+    "programme_id",
+    "packet_id",
+    "gate_id",
+    "status",
+    "subjects",
+    "aggregate",
+    "reproducibility",
+    "qa_recommendation",
+    "workflow_mutation_authority",
+    "ruleset_mutation_authority",
+    "logical_sha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ovc-da2-ci-admission-baseline/v1"
+    },
+    "baseline_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "programme_id": {
+      "const": "OVC-DEV-ACCEL-v0.2"
+    },
+    "packet_id": {
+      "const": "DA2-00"
+    },
+    "gate_id": {
+      "const": "DA2-G0"
+    },
+    "operator_decision_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "BLOCKED_MISSING_EXACT_RAW_RUN_TIMING_AND_SOURCE_IDENTITY"
+      ]
+    },
+    "authority_delta": {
+      "type": "string"
+    },
+    "ruleset": {
+      "type": "object"
+    },
+    "subjects": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object"
+      }
+    },
+    "aggregate": {
+      "type": "object"
+    },
+    "reproducibility": {
+      "type": "object"
+    },
+    "qa_recommendation": {
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ]
+    },
+    "blocker_id": {
+      "type": "string"
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "workflow_mutation_authority": {
+      "const": "DENIED"
+    },
+    "ruleset_mutation_authority": {
+      "const": "DENIED"
+    },
+    "rollback": {
+      "type": "string"
+    },
+    "logical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}
