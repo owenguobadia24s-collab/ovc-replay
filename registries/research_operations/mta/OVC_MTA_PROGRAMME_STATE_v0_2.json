@@ -4,7 +4,7 @@
   "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
   "plan_source_sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d",
-  "programme_status": "QA_REVIEW",
+  "programme_status": "APPROVED",
   "current_packet": "MTA-00",
   "current_gate": "MTA-G0",
   "operator_decision_required": false,
@@ -14,9 +14,11 @@
     "PD-JUNE-FM-G2.OPERATOR.DEFER.20260802T145100Z"
   ],
   "plan_baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "branch_creation_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "baseline_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
   "branch": "gate/mta-g0-ratification-resume",
-  "tested_candidate_commit": null,
+  "pull_request": 216,
+  "tested_candidate_commit": "bf1acdde1b368af899750ae211f8b71aa6919b5e",
   "authority": {
     "read": "ACTIVE_CURRENT_AND_PINNED_EXTERNAL_ARTIFACTS",
     "derive": "ACTIVE_DETERMINISTIC_AUDIT_ONLY_AFTER_G0_MERGE",
@@ -37,13 +39,15 @@
   "packets": [
     {
       "packet_id": "MTA-00",
-      "status": "QA_REVIEW",
-      "prerequisites": ["MTA_G0_OPERATOR_PASS", "DA_G4B_RULESET_EVIDENCE_MERGED", "CURRENT_MAIN_RECONCILED"],
+      "status": "APPROVED",
+      "prerequisites": ["MTA_G0_OPERATOR_PASS", "DA_G4B_RULESET_EVIDENCE_MERGED", "CURRENT_MAIN_RECONCILED", "FINAL_HEAD_CHECKS_PASS"],
       "authority_required": "OPERATOR_REQUIRED_COMPLETED",
       "authority_delta": "RATIFY_AUDIT_ONLY_PROGRAMME_AND_EXACT_G0_CONTROLS",
-      "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+      "branch_creation_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+      "baseline_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
       "branch": "gate/mta-g0-ratification-resume",
-      "tested_candidate_commit": null,
+      "pull_request": 216,
+      "tested_candidate_commit": "bf1acdde1b368af899750ae211f8b71aa6919b5e",
       "input_artifacts": [
         {"id": "MTA_PLAN_DOCX", "sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d"},
         {"id": "PD-JUNE-FM-WP2-ACCEPTANCE", "sha256": "0ef6068d4f77bdeee2b5f1a99200b229dcc55e26"},
@@ -51,13 +55,17 @@
       ],
       "capacity": {
         "expected_runtime_s": 60,
-        "actual_runtime_s": null,
+        "actual_runtime_s": 3,
         "max_runtime_s": 14400,
         "retained_bytes": 0,
         "max_retained_bytes": 10737418240,
         "state": "WITHIN_CONTRACT"
       },
-      "tests": [],
+      "tests": [
+        "MTA-G0 workflow 30760300813 PASS",
+        "generic tests workflow 30760300767 PASS",
+        "tiered FINAL_HEAD workflow 30760300791 PASS"
+      ],
       "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json",
       "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
       "resolution_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
@@ -75,12 +83,12 @@
   ],
   "operator_gate": {
     "gate_id": "MTA-G0",
-    "status": "APPROVED_PENDING_FINAL_HEAD_RECHECK",
+    "status": "APPROVED_PENDING_SQUASH_MERGE",
     "gate_packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json",
     "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
     "recorded_decision": "PASS",
-    "qa_recommendation": "PASS_PENDING_FINAL_HEAD",
+    "qa_recommendation": "PASS",
     "resolution_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json"
   },
-  "next_action": "OPEN_REPLACEMENT_PR_RUN_EXACT_REQUIRED_FINAL_HEAD_CHECKS_THEN_SQUASH_MERGE"
+  "next_action": "SQUASH_MERGE_PR_216_THEN_RECORD_MERGE_AND_BEGIN_MTA_WP1"
 }
