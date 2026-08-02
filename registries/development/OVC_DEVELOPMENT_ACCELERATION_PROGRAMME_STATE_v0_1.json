@@ -14,7 +14,7 @@
   ],
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
+  "candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
   "merge_commit": null,
   "open_concurrent_work": [
     {
@@ -28,14 +28,20 @@
       "programme_id": "OVC-DEV-ACCEL-v0.1",
       "branch": "build/ovc-dev-accel-receipt-bot",
       "relationship": "DA-WP4B_PRESERVED_UNMERGED_ACTIVATION_BLOCKED"
+    },
+    {
+      "pull_request": 211,
+      "programme_id": "OVC-DEV-ACCEL-v0.1",
+      "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001",
+      "relationship": "DA-G4B_SHADOW_EVIDENCE_PRESERVE_OPEN_UNMERGED"
     }
   ],
   "authority": {
-    "tooling": "RECEIPT_BOT_IMPLEMENTATION_QA_PASS_ACTIVATION_BLOCKED",
+    "tooling": "RECEIPT_BOT_IMPLEMENTATION_AND_SHADOW_CANDIDATE_QA_BLOCKED",
     "test_selection": "SHADOW_PATH_BOUNDED",
     "repository_bot_write": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
     "repository_bot_profile": "APPROVED_INACTIVE",
-    "repository_bot_credential": "NOT_PROVISIONED",
+    "repository_bot_credential": "DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY",
     "repository_bot_production_transport": "ABSENT_FAIL_CLOSED",
     "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
     "direct_main_write": "PROHIBITED",
@@ -151,19 +157,20 @@
       "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
       "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
       "branch": "build/ovc-dev-accel-receipt-bot",
-      "candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
+      "candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
       "tests": [
-        "DA-WP4B workflow 30711248035 PASS",
-        "tiered workflow 30711248023 PASS",
-        "tests workflow 30711248056 PASS"
+        "DA-WP4B shadow correction 30751814800 PASS",
+        "DA-WP4B implementation 30751814840 PASS",
+        "tiered workflow 30751814766 PASS",
+        "tests workflow 30751814813 PASS",
+        "shadow PR tests workflow 30752883818 PASS"
       ],
       "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
       "merge_commit": null,
       "blockers": [
-        "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
-        "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
-        "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+        "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
+        "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
       ],
       "next_packet": "DA-WP5"
     },
@@ -196,15 +203,25 @@
   "activation_gate": {
     "gate_id": "DA-G4B",
     "status": "BLOCKED",
-    "tested_candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
+    "tested_candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
     "activation_evidence": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json",
     "blocker_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json",
+    "shadow_external_audit": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
+    "shadow_qa_review": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json",
+    "shadow_pull_request": 211,
+    "shadow_status": "PASS_CANDIDATE_OPEN_UNMERGED",
     "tests": [
-      "DA-WP4B workflow 30711248035 PASS",
-      "tiered workflow 30711248023 PASS",
-      "tests workflow 30711248056 PASS"
+      "DA-WP4B shadow correction 30751814800 PASS",
+      "DA-WP4B implementation 30751814840 PASS",
+      "tiered workflow 30751814766 PASS",
+      "tests workflow 30751814813 PASS",
+      "shadow PR tests workflow 30752883818 PASS"
+    ],
+    "blockers": [
+      "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
+      "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
     ],
     "authority_active": false
   },
-  "next_action": "STOP_BLOCKED_DA_WP4B_PRESERVE_PR_209_UNMERGED"
+  "next_action": "VERIFY_PR209_FINAL_HEAD_CI_AND_OBTAIN_EXACT_RULESET_EXPORT"
 }
