@@ -3,9 +3,9 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP5",
   "gate_id": "DA-G5",
-  "status": "QA_REVIEW",
+  "status": "PASS",
   "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
-  "candidate_commit": null,
+  "candidate_commit": "81e2b69ac3f31dc350530000218b293e5c47c68b",
   "checks": [
     {"check_id": "DA-G5-CONTRACT-001", "result": "PASS", "evidence": "Export is local, deterministic, copy-only and mechanically scoped."},
     {"check_id": "DA-G5-SCHEMA-002", "result": "PASS", "evidence": "Profile and request use closed JSON Schema Draft 2020-12 objects."},
@@ -16,12 +16,16 @@
     {"check_id": "DA-G5-ATOMICITY-007", "result": "PASS", "evidence": "Manifest is written last and staging is atomically renamed or quarantined."},
     {"check_id": "DA-G5-IDEMPOTENCY-008", "result": "PASS", "evidence": "Identical bundles reuse only after full byte verification; collisions block."},
     {"check_id": "DA-G5-AUTHORITY-009", "result": "PASS", "evidence": "No network, subprocess, repository write, remote write, provider, R2, publication or market authority exists."},
-    {"check_id": "DA-G5-CI-010", "result": "PENDING", "evidence": "Focused, retained and complete repository checks have not yet run on the final PR head."}
+    {"check_id": "DA-G5-CI-010", "result": "PASS", "evidence": "Focused DA-G5 run 30762392337, generic tests 30762287893 and tiered final-head assurance 30762392397 passed on candidate 81e2b69ac3f31dc350530000218b293e5c47c68b."}
   ],
-  "tests": [],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G5 compact evidence export", "run_id": 30762392337, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30762287893, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30762392397, "result": "PASS"}
+  ],
   "blocking_issues": [],
   "warnings": [],
-  "qa_recommendation": "PENDING_FINAL_HEAD_CI",
+  "qa_recommendation": "PASS",
   "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
   "reserved_authority_delta": "NONE",
   "rollback": "Disable the export profile and preserve all accepted bundles and manifests."
