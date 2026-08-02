@@ -14,6 +14,7 @@
     "status",
     "authority_delta",
     "ruleset",
+    "workflow_catalog",
     "subjects",
     "aggregate",
     "reproducibility",
@@ -21,6 +22,7 @@
     "workflow_mutation_authority",
     "ruleset_mutation_authority",
     "rollback",
+    "source_build_logical_sha256",
     "logical_sha256"
   ],
   "properties": {
@@ -33,6 +35,7 @@
     "status": {"const": "PASS"},
     "authority_delta": {"type": "string"},
     "ruleset": {"type": "object"},
+    "workflow_catalog": {"type": "object", "minProperties": 1},
     "subjects": {
       "type": "array",
       "minItems": 2,
@@ -54,6 +57,7 @@
     "workflow_mutation_authority": {"const": "DENIED"},
     "ruleset_mutation_authority": {"const": "DENIED"},
     "rollback": {"type": "string"},
+    "source_build_logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
   }
 }
