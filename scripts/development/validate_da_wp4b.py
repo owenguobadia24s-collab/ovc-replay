@@ -125,7 +125,7 @@ def main() -> int:
     assert_runs(state["tests"])
 
     assert packet["packet_id"] == "DA-WP4B"
-    assert packet["status"] == "IMPLEMENTED_QA_PASS_ACTIVATION_BLOCKED"
+    assert packet["status"] == "IMPLEMENTED_SHADOW_PASS_CANDIDATE_ACTIVATION_BLOCKED"
     assert packet["baseline_main_commit"] == BASELINE
 
     assert activation_record["activation_evaluation"] == "BLOCK"
@@ -175,7 +175,7 @@ def main() -> int:
     assert audit["force_push_performed"] is False
     assert audit["history_rewrite_performed"] is False
     assert audit["result"] == "PASS_CANDIDATE_PENDING_QA"
-    assert hashlib.sha256(audit_bytes).hexdigest() != AUDIT_SHA256  # repository copy adds the self-describing hash field
+    assert hashlib.sha256(audit_bytes).hexdigest() != AUDIT_SHA256
 
     assert shadow_qa["shadow_pull_request"] == 211
     assert shadow_qa["shadow_commit"] == SHADOW_COMMIT
