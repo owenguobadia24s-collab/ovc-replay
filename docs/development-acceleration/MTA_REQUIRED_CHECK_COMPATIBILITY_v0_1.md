@@ -13,7 +13,12 @@ The MTA-G0 pull request therefore includes this documentation-only path so the e
 - pull request: `210`
 - MTA operator decision: `MTA-G0.OPERATOR.PASS.20260802T145100Z`
 - expected selector treatment: unknown changed MTA paths escalate to `FINAL_HEAD`
+- required final-head checks: `OVC tiered test selection shadow`, `Market Translation Audit MTA-G0 gate readiness`, and generic `tests`
 - authority delta: `NONE_REQUIRED_CHECK_COMPATIBILITY_RECORD_ONLY`
+
+## Execution protocol
+
+The branch head carrying this record is the final merge candidate. All required checks must complete on the pull-request merge ref created for this head before the single eligible squash-merge attempt. An earlier merge attempt must not be treated as passing evidence because GitHub may regenerate the synthetic merge ref.
 
 ## Retained boundaries
 
