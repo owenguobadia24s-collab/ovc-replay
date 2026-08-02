@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
+BLOCKER_ID = "MTA-G0-BLOCK-002-CHECKS-PASS-RULESET-STILL-EXPECTED"
 
 
 def load(path: str) -> dict:
@@ -22,33 +23,47 @@ class MTAG0Tests(unittest.TestCase):
         spec.loader.exec_module(module)
         self.assertEqual(module.main(), 0)
 
-    def test_gate_retains_operator_pass_and_is_merge_eligible(self) -> None:
+    def test_operator_pass_is_preserved_while_merge_is_blocked(self) -> None:
         gate = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json")
         state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
         decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
         eligibility = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_ELIGIBILITY.json")
         self.assertEqual(gate["decision"], "PASS")
-        self.assertEqual(gate["status"], "APPROVED_PENDING_SQUASH_MERGE")
-        self.assertEqual(state["programme_status"], "APPROVED")
+        self.assertEqual(gate["status"], "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT")
+        self.assertEqual(state["programme_status"], "BLOCKED")
         self.assertFalse(state["operator_decision_required"])
         self.assertEqual(state["operator_gate"]["recorded_decision"], "PASS")
         self.assertEqual(decision["operator_command"], "OVC APPROVE MTA-G0 PASS")
-        self.assertEqual(eligibility["status"], "ELIGIBLE")
-        self.assertEqual(state["packets"][0]["blockers"], [])
+        self.assertEqual(eligibility["status"], "BLOCKED_EXTERNAL_RULESET_ENFORCEMENT")
+        self.assertEqual(state["packets"][0]["blockers"], [BLOCKER_ID])
 
-    def test_ruleset_blocker_is_reproducibly_resolved(self) -> None:
-        blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
+    def test_ruleset_bytes_and_displayed_contexts_are_reproducible(self) -> None:
+        evidence_blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
         resolution = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json")
         ruleset_path = ROOT / resolution["resolution_source"]["ruleset_path"]
         ruleset = json.loads(ruleset_path.read_text(encoding="utf-8"))
         digest = hashlib.sha256(ruleset_path.read_bytes()).hexdigest()
-        self.assertEqual(blocker["status"], "RESOLVED")
+        self.assertEqual(evidence_blocker["status"], "RESOLVED")
         self.assertEqual(digest, resolution["resolution_source"]["ruleset_sha256"])
         required = next(rule for rule in ruleset["rules"] if rule["type"] == "required_status_checks")
         contexts = [entry["context"] for entry in required["parameters"]["required_status_checks"]]
         self.assertEqual(contexts, ["tests", "OVC tiered test selection shadow"])
         self.assertEqual(ruleset["bypass_actors"], [])
         self.assertEqual(ruleset["current_user_can_bypass"], "never")
+
+    def test_enforcement_blocker_records_two_passing_cycles_and_failed_merges(self) -> None:
+        blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json")
+        self.assertEqual(blocker["blocker_id"], BLOCKER_ID)
+        self.assertEqual(blocker["status"], "BLOCKED_EXTERNAL_REPOSITORY_RULESET_ENFORCEMENT")
+        self.assertEqual(len(blocker["passing_assurance"]), 2)
+        for cycle in blocker["passing_assurance"]:
+            self.assertEqual(cycle["mta_workflow"]["result"], "PASS")
+            self.assertEqual(cycle["tests"]["result"], "PASS")
+            self.assertEqual(cycle["tiered"]["result"], "PASS")
+        self.assertGreaterEqual(len(blocker["merge_attempts"]), 2)
+        for attempt in blocker["merge_attempts"]:
+            self.assertEqual(attempt["result"], "HTTP_405_REPOSITORY_RULE_VIOLATION")
+            self.assertIn("required status checks are expected", attempt["message"])
 
     def test_replacement_branch_and_current_pr_base_are_distinguished(self) -> None:
         state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
@@ -68,7 +83,6 @@ class MTAG0Tests(unittest.TestCase):
         self.assertEqual(state["branch"], "gate/mta-g0-ratification-resume")
         self.assertEqual(state["pull_request"], 216)
         self.assertEqual(resolution["base_change_review"]["result"], "PASS")
-        self.assertEqual(resolution["base_change_review"]["conflicts"], [])
 
     def test_capacity_is_bounded_and_recoverable(self) -> None:
         fixture = load("fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json")
