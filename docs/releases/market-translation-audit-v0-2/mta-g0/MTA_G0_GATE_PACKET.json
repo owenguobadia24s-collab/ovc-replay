@@ -6,19 +6,19 @@
   "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
   "plan_sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d",
-  "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
+  "status": "APPROVED_PENDING_SQUASH_MERGE",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "candidate_branch": "gate/mta-g0-ratification",
-  "tested_candidate_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb",
+  "tested_candidate_commit": "2242ad48d69d3edbc3e8375ac5343ccf2a01f943",
   "current_authority": {
     "opt_a_c1_c2": "UNCHANGED_ACTIVE_EXISTING_AUTHORITY",
     "june_wp2": "PRESERVED_RESEARCH_EVIDENCE_NOT_RELEASE",
-    "june_wp3": "OPEN_UNMERGED_EXTERNAL_REVIEW_CONSTRUCTION",
+    "june_wp3": "DEFERRED_OPEN_UNMERGED_EXTERNAL_REVIEW_CONSTRUCTION",
     "ro4": "SEPARATE_READ_ONLY_SEQUENCE_EVIDENCE_LINE",
     "validation": "LOCKED_UNCONSUMED",
     "c2e_c2_5_c3": "NONE"
   },
-  "proposed_authority_delta": "RATIFY_BOUNDED_READ_AND_DERIVE_AUDIT_PROGRAMME_WITH_SEGMENTED_OPERATOR_CONTROLS",
+  "approved_authority_delta": "RATIFY_BOUNDED_READ_AND_DERIVE_AUDIT_PROGRAMME_WITH_SEGMENTED_OPERATOR_CONTROLS",
   "completed_work": [
     "plan source hash and markdown rendering",
     "repository/open-PR/selector reconciliation",
@@ -29,7 +29,8 @@
     "registry amendment protocol",
     "MTA-RO4 integration contract",
     "programme state and operator decision requests",
-    "validator, fixtures, tests and workflow"
+    "validator, fixtures, tests and workflow",
+    "operator PASS and June review DEFER records"
   ],
   "acceptance_conditions": [
     {"condition": "Main, open PRs, active selectors and source records are reconciled", "status": "PASS"},
@@ -40,11 +41,11 @@
     {"condition": "MTA-A3 and MTA-A6 stops and four G8 decisions are preserved", "status": "PASS"},
     {"condition": "No selector, formula, threshold, reset, clock, release, Validation, semantic or exposure authority", "status": "PASS"},
     {"condition": "Final-head validator, focused tests and complete repository suite pass", "status": "PASS"},
-    {"condition": "Operator records all required MTA-G0 subdecisions", "status": "PENDING_OPERATOR"}
+    {"condition": "Operator records all required MTA-G0 subdecisions", "status": "PASS"}
   ],
   "tests": [
-    {"name": "MTA-G0 gate readiness", "run_id": 30752745706, "status": "PASS", "tested_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb"},
-    {"name": "generic complete repository suite", "run_id": 30752745692, "status": "PASS", "tested_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb"}
+    {"name": "MTA-G0 gate readiness", "run_id": 30752931176, "status": "PASS", "tested_commit": "2242ad48d69d3edbc3e8375ac5343ccf2a01f943"},
+    {"name": "generic complete repository suite", "run_id": 30752931178, "status": "PASS", "tested_commit": "2242ad48d69d3edbc3e8375ac5343ccf2a01f943"}
   ],
   "external_artifact_hashes": [
     {"artifact": "plan_docx", "sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d"},
@@ -54,14 +55,16 @@
   ],
   "qa": {"packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json", "recommendation": "PASS"},
   "decision_request": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json",
+  "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
   "june_disposition_request": "docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION_REQUEST.json",
+  "june_disposition_record": "docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json",
   "warnings": [
-    "PR #202 external bytes are not rehashed in this GitHub-only packet; existing court-record hashes and Drive existence are pinned for operator acceptance.",
+    "PR #202 external bytes are not rehashed in this GitHub-only packet; existing court-record hashes and Drive existence are accepted by the operator.",
     "PR #209 is concurrent blocked work and remains outside scope."
   ],
-  "unresolved_issues": ["MTA_G0_OPERATOR_DECISION_REQUIRED"],
-  "rollback": "Close or revert only the unmerged MTA-G0 branch through non-destructive commits; preserve all source evidence, PR branches and external artifacts.",
-  "recommended_decision": "PASS",
-  "exact_work_after_pass": "Record MTA-G0 and PD-JUNE-FM-G2 decisions, squash-merge the bounded court-record PR, create audit/mta-wp1-flow-registry from the new lawful main tip and continue through MTA-G3 before stopping at MTA-A3.",
+  "unresolved_issues": [],
+  "rollback": "Stop the MTA programme and revert only bounded MTA merges through new non-destructive commits; preserve all source evidence, PR branches and external artifacts.",
+  "decision": "PASS",
+  "decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
   "next_packet": "MTA-WP1"
 }
