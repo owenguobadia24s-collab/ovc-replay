@@ -4,18 +4,17 @@
   "plan_id":"OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
   "plan_version":"0.2",
   "plan_source_sha256":"bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d",
-  "programme_status":"APPROVED",
-  "current_packet":"MTA-WP3",
-  "current_gate":"MTA-G3",
-  "operator_decision_required":false,
-  "operator_decision_id":"MTA-G0.OPERATOR.PASS.20260802T145100Z",
+  "programme_status":"GATE_READY",
+  "current_packet":"MTA-A3",
+  "current_gate":"MTA-A3",
+  "operator_decision_required":true,
+  "operator_decision_id":null,
   "operator_decision_history":["MTA-G0.OPERATOR.PASS.20260802T145100Z","PD-JUNE-FM-G2.OPERATOR.DEFER.20260802T145100Z","MTA-G1.DELEGATED.PASS.20260802T194000Z","MTA-G2.DELEGATED.PASS.20260802T201200Z","MTA-G3.DELEGATED.PASS.20260802T205000Z"],
   "plan_baseline_commit":"d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "baseline_commit":"da29bb4b571e8f0c4706fa3032e941a89d0d5550",
-  "branch":"audit/mta-wp3-c2-translation-superseding",
-  "pull_request":225,
-  "tested_candidate_commit":"9b2a4ce68246b8070125484b96dede62f3489712",
-  "transport_preseal_commit":"bca170e088319e493ef58e96f75a8dbd3bba60fe",
+  "baseline_commit":"e49abc24ef65f16698bd719969e27cb9cb3bb92c",
+  "branch":"gate/mta-a3-acknowledgement",
+  "pull_request":null,
+  "tested_candidate_commit":"327c5d7f7a1330952491716be1945e6219a21ad3",
   "authority":{"read":"ACTIVE_CURRENT_AND_PINNED_EXTERNAL_ARTIFACTS","derive":"ACTIVE_DETERMINISTIC_AUDIT_ONLY","write":"BOUNDED_PACKET_AND_COURT_RECORD_BRANCHES_ONLY","selectors":"UNCHANGED","formula_threshold_reset_clock":"UNCHANGED","c2e_c2_5_c3":"DENIED","validation":"LOCKED_UNCONSUMED","r2":"DENIED","probability_risk_exposure_execution":"NONE"},
   "concurrent_work":[
     {"pull_request":202,"branch":"build/pd-june-fm-wp3-review-population","relationship":"SOURCE_REFERENCE_PRESERVE_DO_NOT_MERGE_WHOLESALE"},
@@ -25,19 +24,19 @@
     {"pull_request":220,"branch":"audit/mta-wp1-flow-registry","relationship":"MERGED_MTA_G1_PACKET"},
     {"pull_request":221,"branch":"audit/mta-wp2-source-c1","relationship":"MERGED_MTA_G2_PACKET"},
     {"pull_request":223,"branch":"audit/mta-wp3-c2-translation","relationship":"SUPERSEDED_PRESERVED_AFTER_STRICT_RULESET_EXPECTED_CHECKS"},
-    {"pull_request":225,"branch":"audit/mta-wp3-c2-translation-superseding","relationship":"CURRENT_MTA_G3_SUPERSEDING_TRANSPORT"}
+    {"pull_request":225,"branch":"audit/mta-wp3-c2-translation-superseding","relationship":"MERGED_MTA_G3_TRANSPORT"}
   ],
   "packets":[
     {"packet_id":"MTA-00","status":"COMPLETED","prerequisites":["MTA_G0_OPERATOR_PASS","FINAL_HEAD_CHECKS_PASS"],"authority_required":"OPERATOR_REQUIRED_COMPLETED","authority_delta":"RATIFY_AUDIT_ONLY_PROGRAMME_AND_EXACT_G0_CONTROLS","baseline_commit":"fed2a3c260c24ffcb5d073ccdf51987800d26f22","branch":"gate/mta-g0-ratification-final","pull_request":219,"candidate_commit":"da6e33f67a5b978e57c3ff99e35b29335823115f","tests":["tests 30763102211 PASS","tiered FINAL_HEAD 30763102234 PASS","MTA-G0 30763102204 PASS"],"qa_packet":"docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json","decision_record":"docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json","merge_receipt":"docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_RECEIPT.json","merge_commit":"eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d","blockers":[],"next_packet":"MTA-WP1"},
     {"packet_id":"MTA-WP1","status":"COMPLETED","prerequisites":["MTA-G0_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"FREEZE_AUDIT_OBJECT_METRIC_COMPUTABILITY_REASON_AND_MARKER_FUNCTION_REGISTRIES","baseline_commit":"eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d","branch":"audit/mta-wp1-flow-registry","pull_request":220,"candidate_commit":"5782251c61d65b64e912c928f3c5d0a6dca8256c","tests":["MTA-G1 30763936949 PASS","tests 30763936801 PASS","tiered FINAL_HEAD 30763936950 PASS"],"qa_packet":"docs/releases/market-translation-audit-v0-2/mta-g1/MTA_WP1_QA_PACKET.json","decision_record":"docs/releases/market-translation-audit-v0-2/mta-g1/MTA_G1_DELEGATED_DECISION.json","merge_receipt":"docs/releases/market-translation-audit-v0-2/mta-g1/MTA_G1_MERGE_RECEIPT.json","merge_commit":"86ccb5e1bd57448339bf8a8447219e836b8cfbee","blockers":[],"next_packet":"MTA-WP2"},
     {"packet_id":"MTA-WP2","status":"COMPLETED","prerequisites":["MTA-G1_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"ACCEPT_CHECKSUM_ADDRESSED_SOURCE_AND_C1_AUDIT_EVIDENCE","baseline_commit":"86ccb5e1bd57448339bf8a8447219e836b8cfbee","branch":"audit/mta-wp2-source-c1","pull_request":221,"candidate_commit":"954f6847b810e758566d9fb4cde214420b3b64c9","tests":["MTA-G2 30765091625 PASS","tests 30765091599 PASS","tiered FINAL_HEAD 30765091573 PASS"],"qa_packet":"docs/releases/market-translation-audit-v0-2/mta-g2/MTA_WP2_QA_PACKET.json","decision_record":"docs/releases/market-translation-audit-v0-2/mta-g2/MTA_G2_DELEGATED_DECISION.json","merge_receipt":"docs/releases/market-translation-audit-v0-2/mta-g2/MTA_G2_MERGE_RECEIPT.json","external_artifact":"GOOGLE_DRIVE:13JdrypDhzzhhU9iRqemWfN7RYN54D9f-:sha256=3fe01f18feb95179a192232a64b7497adb53b0e9247f1473a8175fe6c83e2e44","merge_commit":"726419295104a763f06911e3914c48e12e753b5c","blockers":[],"next_packet":"MTA-WP3"},
-    {"packet_id":"MTA-WP3","status":"APPROVED","prerequisites":["MTA-G2_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE_THEN_OPERATOR_ACKNOWLEDGEMENT","authority_delta":"ACCEPT_CHECKSUM_ADDRESSED_C2_TRANSLATION_AUDIT_EVIDENCE_WITH_MATERIAL_FINDINGS","baseline_commit":"da29bb4b571e8f0c4706fa3032e941a89d0d5550","branch":"audit/mta-wp3-c2-translation-superseding","pull_request":225,"candidate_commit":"9b2a4ce68246b8070125484b96dede62f3489712","superseded_candidate":{"pull_request":223,"branch":"audit/mta-wp3-c2-translation","sealed_head":"3165ce9ecdeff76b9885a6f055514e8317f2b84c","resolution":"SUPERSEDED_PRESERVED"},"tests":["MTA-G3 30766337750 PASS","tests 30766337753 PASS","tiered FINAL_HEAD 30766337844 PASS","exact sealed head MTA-G3 30766447760 PASS","exact sealed head tests 30766447759 PASS","exact sealed head tiered FINAL_HEAD 30766447753 PASS"],"qa_packet":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_WP3_QA_PACKET.json","decision_record":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_G3_DELEGATED_DECISION.json","external_artifact":"GOOGLE_DRIVE:1md3-k0VZED73omuUzui_Qcrj_5FzztSy:sha256=77474a18ccec38e5a3495cbf6af89542d32ea891229a0df208f75f4b124e2158","merge_commit":null,"blockers":[],"material_findings":["MTA-WP3-F1","MTA-WP3-F2","MTA-WP3-F3"],"next_packet":"MTA-A3"},
-    {"packet_id":"MTA-A3","status":"PLANNED","prerequisites":["MTA-G3_PASS_MERGED"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"ACKNOWLEDGE_MATERIAL_C2_FINDINGS_AND_AUTHORISE_MTA_WP4_AUDIT_ONLY_CONTINUATION","blockers":["MTA-G3_NOT_MERGED"],"next_packet":"MTA-WP4"},
+    {"packet_id":"MTA-WP3","status":"COMPLETED","prerequisites":["MTA-G2_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE_THEN_OPERATOR_ACKNOWLEDGEMENT","authority_delta":"ACCEPT_CHECKSUM_ADDRESSED_C2_TRANSLATION_AUDIT_EVIDENCE_WITH_MATERIAL_FINDINGS","baseline_commit":"da29bb4b571e8f0c4706fa3032e941a89d0d5550","branch":"audit/mta-wp3-c2-translation-superseding","pull_request":225,"candidate_commit":"327c5d7f7a1330952491716be1945e6219a21ad3","superseded_candidate":{"pull_request":223,"branch":"audit/mta-wp3-c2-translation","sealed_head":"3165ce9ecdeff76b9885a6f055514e8317f2b84c","resolution":"SUPERSEDED_PRESERVED"},"tests":["MTA-G3 30767068767 PASS","tests 30767068815 PASS","tiered FINAL_HEAD 30767068673 PASS"],"qa_packet":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_WP3_QA_PACKET.json","decision_record":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_G3_DELEGATED_DECISION.json","merge_receipt":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_A3_ACKNOWLEDGEMENT_PACKET.json#mta_g3_merge_receipt","external_artifact":"GOOGLE_DRIVE:1md3-k0VZED73omuUzui_Qcrj_5FzztSy:sha256=77474a18ccec38e5a3495cbf6af89542d32ea891229a0df208f75f4b124e2158","merge_commit":"e49abc24ef65f16698bd719969e27cb9cb3bb92c","blockers":[],"material_findings":["MTA-WP3-F1","MTA-WP3-F2","MTA-WP3-F3"],"next_packet":"MTA-A3"},
+    {"packet_id":"MTA-A3","status":"GATE_READY","prerequisites":["MTA-G3_PASS_MERGED"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"ACKNOWLEDGE_MATERIAL_C2_FINDINGS_AND_AUTHORISE_MTA_WP4_AUDIT_ONLY_CONTINUATION","baseline_commit":"e49abc24ef65f16698bd719969e27cb9cb3bb92c","branch":"gate/mta-a3-acknowledgement","pull_request":null,"candidate_commit":null,"tests":["PENDING_ACKNOWLEDGEMENT_COURT_RECORD_CHECKS"],"gate_packet":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_A3_ACKNOWLEDGEMENT_PACKET.json","decision_record":null,"merge_commit":null,"blockers":["OPERATOR_ACKNOWLEDGEMENT_REQUIRED"],"next_packet":"MTA-WP4"},
     {"packet_id":"MTA-WP4","status":"PLANNED","prerequisites":["MTA-A3_ACKNOWLEDGE_CONTINUE"],"authority_required":"AUTO_EXECUTABLE","blockers":["MTA-A3_NOT_ACKNOWLEDGED"],"next_packet":"MTA-WP5"},
     {"packet_id":"MTA-WP5","status":"PLANNED","prerequisites":["MTA-G4_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE","blockers":[],"next_packet":"MTA-WP6"},
     {"packet_id":"MTA-WP6","status":"PLANNED","prerequisites":["MTA-G5_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE_THEN_OPERATOR_ACKNOWLEDGEMENT","blockers":[],"next_packet":"MTA-A6"},
     {"packet_id":"MTA-WP7","status":"PLANNED","prerequisites":["MTA-A6_ACKNOWLEDGE_CONTINUE"],"authority_required":"AUTO_EXECUTABLE_THEN_OPERATOR_G8","blockers":[],"next_packet":"MTA-G8"}
   ],
-  "operator_gate":{"gate_id":"MTA-G3","status":"APPROVED_PENDING_SUPERSEDING_SQUASH_MERGE","gate_packet":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_G3_GATE_PACKET.json","decision_record":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_G3_DELEGATED_DECISION.json","recorded_decision":"PASS","qa_recommendation":"PASS_WITH_MATERIAL_FINDINGS"},
-  "next_action":"RUN_REQUIRED_CHECKS_ON_SUPERSEDING_CURRENT_MAIN_HEAD_THEN_SQUASH_MERGE_AND_MATERIALISE_MTA_A3"
+  "operator_gate":{"gate_id":"MTA-A3","status":"GATE_READY","gate_packet":"docs/releases/market-translation-audit-v0-2/mta-g3/MTA_A3_ACKNOWLEDGEMENT_PACKET.json","decision_record":null,"recorded_decision":null,"recommended_decision":"ACKNOWLEDGE_CONTINUE"},
+  "next_action":"PRESENT_MTA_A3_CONSOLIDATED_ACKNOWLEDGEMENT_AND_STOP_FOR_OPERATOR_DECISION"
 }
