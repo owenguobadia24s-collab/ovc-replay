@@ -5,9 +5,9 @@
   "gate_id": "DA-G4B",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "tested_candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
-  "status": "BLOCKED_FINAL_HEAD_CI",
-  "operator_decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
+  "tested_candidate_commit": "e3b59a0c5ee2a959706cb445126e5ec47ecaa453",
+  "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
+  "operator_decision_id": "DA-G4B.OPERATOR.PENDING",
   "approved_profile_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "policy": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json",
   "work_packet_schema": "schemas/development/receipt_bot_work_packet_v0_1.schema.json",
@@ -20,17 +20,18 @@
   "authority_active": false,
   "conditions": {
     "OPERATOR_DA_G4_PASS": "PASS",
-    "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH": "PASS_STATIC_INACTIVE_PROFILE",
-    "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER": "PASS_STATIC_PLANNER_AND_PROTOCOL",
+    "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH": "PASS",
+    "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER": "PASS",
     "NO_MERGE_API_AVAILABLE_TO_BOT": "PASS",
     "DENIED_ACTION_TESTS_PASS": "PASS",
     "TOKEN_REDACTION_TESTS_PASS": "PASS",
     "IDEMPOTENCY_AND_COLLISION_TESTS_PASS": "PASS",
     "REVOCATION_TESTS_PASS": "PASS",
     "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "PASS_EXACT_RULESET_EXPORT",
-    "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS_CANDIDATE_PR_211_UNMERGED",
-    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PENDING_AFTER_RULESET_AND_VALIDATOR_UPDATE",
-    "QA_PASS": "PENDING_FINAL_HEAD_CI"
+    "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS_PR_211_UNMERGED",
+    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PASS",
+    "QA_PASS": "PASS",
+    "OPERATOR_DA_G4B_DECISION": "PENDING"
   },
   "shadow_evidence": {
     "app_slug": "ovc-dev-accel-receipt-bot",
@@ -46,13 +47,16 @@
     "open_unmerged": true
   },
   "tests": [
-    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30751814800, "result": "PASS"},
-    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30751814840, "result": "PASS"},
-    {"workflow": "OVC tiered test selection shadow", "run_id": 30751814766, "result": "PASS"},
-    {"workflow": "tests", "run_id": 30751814813, "result": "PASS"},
-    {"workflow": "shadow PR complete repository tests", "run_id": 30752883818, "result": "PASS"}
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30755205496, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30755205526, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30755205480, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30755205470, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30755205478, "result": "PASS"}
   ],
-  "blockers": ["PR209_FINAL_HEAD_CI_PENDING_AFTER_RULESET_AND_VALIDATOR_UPDATE"],
-  "rollback": "Keep the profile inactive, preserve PR 211 unmerged, revoke the dedicated GitHub App installation or key and revert only bounded implementation changes through a new non-destructive commit.",
-  "next_action": "VERIFY_PR209_FINAL_HEAD_CI_THEN_PREPARE_OPERATOR_DA_G4B_DECISION"
+  "blockers": [],
+  "operator_required_boundary": "ACTIVATION_OF_BOUNDED_REPOSITORY_BOT_WRITE_AUTHORITY",
+  "gate_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_GATE_PACKET.json",
+  "decision_request": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION_REQUEST.json",
+  "rollback": "Keep the profile inactive, preserve PR 211 unmerged, and revoke the dedicated GitHub App installation or key if approval is not granted.",
+  "next_action": "STOP_OPERATOR_DA_G4B_DECISION"
 }
