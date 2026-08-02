@@ -81,7 +81,7 @@ class RepositoryBotGateTests(unittest.TestCase):
         self.assertTrue(self.active["active"])
         self.assertEqual(self.active["status"], "ACTIVE")
         self.assertFalse(self.state["operator_decision_required"])
-        self.assertEqual(self.state["activation_gate"]["status"], "APPROVED")
+        self.assertEqual(self.state["activation_gate"]["status"], "COMPLETED")
         self.assertTrue(self.state["activation_gate"]["authority_active"])
 
     def test_no_repository_credentials_materialized(self) -> None:
