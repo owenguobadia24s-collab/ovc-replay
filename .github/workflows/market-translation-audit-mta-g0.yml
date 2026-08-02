@@ -35,7 +35,7 @@ jobs:
         run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_g0.py' -v
       - name: Complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert non-activation and bounded authority
+      - name: Assert blocked state preserves approved authority and denials
         shell: bash
         run: |
           set -euo pipefail
@@ -48,11 +48,17 @@ jobs:
           state = json.loads((root / 'registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json').read_text())
           decision = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json').read_text())
           disposition = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json').read_text())
+          blocker = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json').read_text())
 
-          assert gate['status'] == 'APPROVED_PENDING_SQUASH_MERGE'
+          assert gate['status'] == 'APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET'
           assert gate['decision'] == 'PASS'
+          assert state['programme_status'] == 'BLOCKED'
           assert state['operator_decision_required'] is False
           assert state['operator_gate']['recorded_decision'] == 'PASS'
+          assert blocker['blocker_id'] in state['packets'][0]['blockers']
+          assert blocker['merge_attempt']['result'] == 'HTTP_405_REPOSITORY_RULE_VIOLATION'
+          assert blocker['merge_attempt']['message'] == '2 of 2 required status checks are expected'
+          assert blocker['main_unchanged_at_block'] is True
           assert decision['operator_command'] == 'OVC APPROVE MTA-G0 PASS'
           assert decision['downstream_authority_created'] is False
           assert disposition['decision'] == 'DEFER'
