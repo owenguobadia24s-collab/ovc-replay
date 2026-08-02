@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-development-acceleration-gate-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP5",
+  "gate_id": "DA-G5",
+  "title": "Compact evidence export trust",
+  "status": "PENDING_CI",
+  "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "candidate_commit": null,
+  "current_authority": "LOCAL_DETERMINISTIC_COMPUTE_AND_ACTIVE_BOUNDED_RECEIPT_PROPOSALS",
+  "proposed_authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
+  "reserved_authority_delta": "NONE",
+  "acceptance_conditions": [
+    {"condition": "CLOSED_EXPORT_PROFILE_AND_REQUEST_SCHEMAS", "result": "PASS"},
+    {"condition": "DETERMINISTIC_BUNDLE_AND_MANIFEST_IDENTITY", "result": "PASS"},
+    {"condition": "EXACT_SOURCE_SIZE_AND_SHA256_VERIFICATION", "result": "PASS"},
+    {"condition": "PATH_SYMLINK_TYPE_CONTENT_AND_CAPACITY_GUARDS", "result": "PASS"},
+    {"condition": "ATOMIC_COPY_AND_IDEMPOTENT_COLLISION_CONTROL", "result": "PASS"},
+    {"condition": "NO_NETWORK_REPOSITORY_REMOTE_OR_MARKET_WRITES", "result": "PASS"},
+    {"condition": "FOCUSED_AND_RETAINED_TESTS", "result": "PENDING"},
+    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE", "result": "PENDING"},
+    {"condition": "QA_PASS", "result": "PENDING"}
+  ],
+  "tests": [],
+  "qa_packet": "docs/releases/development-acceleration-v0-1/da-g5/DA_G5_QA_PACKET.json",
+  "blocking_issues": [],
+  "warnings": [],
+  "rollback": "Disable the export profile and stop local execution; preserve accepted bundles and manifests.",
+  "recommended_decision": "PENDING",
+  "decision_authority": "DELEGATED_APPROVED_PLAN_AFTER_PASS",
+  "next_packet": "DA-G6"
+}
