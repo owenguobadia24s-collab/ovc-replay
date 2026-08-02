@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+BLOCKER_ID = "MTA-G0-BLOCK-002-CHECKS-PASS-RULESET-STILL-EXPECTED"
 
 REQUIRED = [
     "docs/plans/research_operations/OVC_Market_Translation_and_Option_Flow_Audit_Implementation_Plan_v0_2_REVISED.md",
@@ -25,6 +26,7 @@ REQUIRED = [
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_ELIGIBILITY.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json",
     "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
     "schemas/research_operations/mta/mta_programme_state_v0_2.schema.json",
     "schemas/research_operations/mta/mta_g0_operator_decision_v0_1.schema.json",
@@ -52,8 +54,9 @@ def main() -> int:
     decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
     disposition_request = load("docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION_REQUEST.json")
     disposition = load("docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json")
-    blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
+    evidence_blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
     resolution = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json")
+    enforcement_blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json")
     fixtures = load("fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json")
     decision_schema = load("schemas/research_operations/mta/mta_g0_operator_decision_v0_1.schema.json")
     state_schema = load("schemas/research_operations/mta/mta_programme_state_v0_2.schema.json")
@@ -71,11 +74,17 @@ def main() -> int:
     assert state["operator_decision_required"] is False
     assert state["operator_gate"]["recorded_decision"] == "PASS"
     assert gate["decision"] == "PASS"
-    assert gate["status"] == "APPROVED_PENDING_SQUASH_MERGE"
-    assert state["programme_status"] == "APPROVED"
-    assert qa["recommendation"] == "PASS"
-    assert eligibility["status"] == "ELIGIBLE"
-    assert not qa["unresolved_issues"]
+
+    assert state["programme_status"] == "BLOCKED"
+    assert state["packets"][0]["status"] == "BLOCKED"
+    assert state["packets"][0]["blockers"] == [BLOCKER_ID]
+    assert state["operator_gate"]["status"] == "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT"
+    assert gate["status"] == "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT"
+    assert gate["unresolved_issues"] == [BLOCKER_ID]
+    assert qa["recommendation"] == "PASS_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT"
+    assert qa["unresolved_issues"] == [BLOCKER_ID]
+    assert eligibility["status"] == "BLOCKED_EXTERNAL_RULESET_ENFORCEMENT"
+    assert eligibility["warnings_blocking"] is True
 
     assert request["exact_command"] == decision["operator_command"] == "OVC APPROVE MTA-G0 PASS"
     assert decision["decision"] == "PASS"
@@ -95,11 +104,16 @@ def main() -> int:
     assert disposition["pull_request_202_disposition"] == "PRESERVE_OPEN_UNMERGED"
     assert "WHOLESALE_MERGE_PR_202" in disposition["prohibited"]
 
-    assert blocker["status"] == "RESOLVED"
-    assert blocker["resolution_record"].endswith("MTA_G0_RULESET_MERGE_RESOLUTION.json")
+    assert evidence_blocker["status"] == "RESOLVED"
     assert resolution["resolution_result"] == "PASS_RULESET_REPRODUCIBLE_REQUIRED_CONTEXTS_IDENTIFIED"
     assert resolution["base_change_review"]["result"] == "PASS"
-    assert resolution["base_change_review"]["conflicts"] == []
+    assert enforcement_blocker["blocker_id"] == BLOCKER_ID
+    assert enforcement_blocker["status"] == "BLOCKED_EXTERNAL_REPOSITORY_RULESET_ENFORCEMENT"
+    assert len(enforcement_blocker["passing_assurance"]) == 2
+    assert all(item["mta_workflow"]["result"] == "PASS" for item in enforcement_blocker["passing_assurance"])
+    assert all(item["tests"]["result"] == "PASS" for item in enforcement_blocker["passing_assurance"])
+    assert all(item["tiered"]["result"] == "PASS" for item in enforcement_blocker["passing_assurance"])
+    assert all(item["result"] == "HTTP_405_REPOSITORY_RULE_VIOLATION" for item in enforcement_blocker["merge_attempts"])
 
     ruleset_relative = resolution["resolution_source"]["ruleset_path"]
     ruleset_path = ROOT / ruleset_relative
@@ -145,7 +159,7 @@ def main() -> int:
     assert decision_schema["properties"]["downstream_authority_created"]["const"] is False
     assert state_schema["properties"]["tested_candidate_commit"]["type"] == ["string", "null"]
 
-    print("MTA-G0 resumed packet validation PASS")
+    print("MTA-G0 blocked-state validation PASS")
     return 0
 
 
