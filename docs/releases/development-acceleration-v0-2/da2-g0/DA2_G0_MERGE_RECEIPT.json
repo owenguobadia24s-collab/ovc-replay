@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-da2-g0-merge-receipt/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-00",
+  "gate_id": "DA2-G0",
+  "operator_decision_id": "DA2-G0.OPERATOR.PASS.20260802T213600+0100",
+  "completion_decision_id": "DA2-G0.EXECUTION.PASS.20260802T223000+0100",
+  "pull_request": 227,
+  "branch": "audit/da2-g0-complete-baseline-superseding",
+  "baseline_commit": "6b4069b8f5082e35435415c6211d2334a6bbdf6d",
+  "candidate_commit": "c12bf676c62d53954f37a1f0d6553ad85c03ddaf",
+  "merge_commit": "b281c2518d203f59adf47b49bf4c9e9143697d9f",
+  "merge_method": "SQUASH",
+  "decision": "PASS",
+  "qa_recommendation": "PASS",
+  "tests": [
+    {
+      "workflow": "tests",
+      "run_id": 30768597345,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30768597278,
+      "profile": "FINAL_HEAD",
+      "result": "PASS"
+    }
+  ],
+  "evidence": {
+    "zip_sha256": "182ae439c0c12f054438edee0c8d2c03e2db79713ae498dd41258c2b17147158",
+    "manifest_sha256": "37311fb333e54cf90da32c734f57dbda5c21ac98e9507ac6f836cafc7927fafc",
+    "compact_baseline_logical_sha256": "f6d6380dd06456d3f52915a18a233a567c4004392ac01fa85257c24499446070",
+    "full_build_logical_sha256": "03295d1e0e9a9ac080649514d64e88df6dc144627399c0948d5d625ed371b8cc",
+    "google_drive_file_id": "1sPYYSukegZGFGzcyFg0TzLDBk2Nd6dsp"
+  },
+  "authority_delta": "ACCEPT_READ_ONLY_CI_ADMISSION_BASELINE_EVIDENCE",
+  "workflow_mutation": false,
+  "ruleset_mutation": false,
+  "rollback": "Supersede non-destructively and preserve raw evidence, hashes, baseline, QA, decisions, incident and merge history.",
+  "next_packet": "DA2-WP1",
+  "next_gate": "DA2-G1",
+  "next_authority": "OPERATOR_REQUIRED"
+}
