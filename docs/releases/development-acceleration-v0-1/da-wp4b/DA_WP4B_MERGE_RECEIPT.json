@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-development-acceleration-merge-receipt/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DA-WP4B",
+  "gate_id": "DA-G4B",
+  "pull_request": 209,
+  "branch": "build/ovc-dev-accel-receipt-bot",
+  "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "final_head_commit": "37c8fd14ff7dfe541769150fb026fb88edc8d042",
+  "squash_merge_commit": "ab7ea801d2e3b6e097a0588f7c8e618864e3be65",
+  "merged_at": "2026-08-02T17:24:01Z",
+  "operator_decision_id": "DA-G4B.OPERATOR.PASS.20260802T163600Z",
+  "decision": "PASS",
+  "authority_state": "ACTIVE_BOUNDED_PROPOSAL_BRANCH_ONLY",
+  "authority_active": true,
+  "bot_merge_authority": false,
+  "required_checks": [
+    {"context": "tests", "run_id": 30758676059, "result": "PASS"},
+    {"context": "OVC tiered test selection shadow", "run_id": 30758676039, "result": "PASS"}
+  ],
+  "packet_assurance": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30758676070, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30758676087, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30758676052, "result": "PASS"}
+  ],
+  "shadow_evidence": {
+    "pull_request": 211,
+    "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001",
+    "commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e",
+    "open_unmerged": true
+  },
+  "permanent_denials_preserved": [
+    "WRITE_MAIN",
+    "MERGE_PULL_REQUEST",
+    "APPROVE_PULL_REQUEST",
+    "FORCE_PUSH",
+    "REWRITE_HISTORY",
+    "PROVIDER_ACCESS",
+    "R2_WRITE",
+    "RELEASE_PUBLICATION",
+    "SELECTOR_MUTATION",
+    "VALIDATION_ACCESS",
+    "MARKET_OR_SEMANTIC_MUTATION",
+    "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_OBJECT"
+  ],
+  "rollback": "Disable the active profile, revoke the dedicated GitHub App identity, close unmerged bot proposals if required, preserve accepted records and revert through a new non-destructive commit.",
+  "next_packet": "DA-WP5",
+  "next_packet_baseline": "ab7ea801d2e3b6e097a0588f7c8e618864e3be65"
+}
