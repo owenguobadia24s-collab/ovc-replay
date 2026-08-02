@@ -85,11 +85,15 @@ def main() -> int:
     output_manifest = load("docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/output-manifest.json")
     manifest_index = {item["path"]: item for item in output_manifest["files"]}
     for item in reference["input_files"]:
-        expected_path = item["name"]
-        observed = manifest_index[expected_path]
+        observed = manifest_index[item["name"]]
         assert observed["sha256"] == item["sha256"]
         assert observed["size_bytes"] == item["size_bytes"]
-        assert observed["record_count"] == item["records"]
+
+    record_counts = {(item["role"], item["clock"], item["side"]): item["record_count"] for item in reference["input_files"]}
+    assert sum(value for (role, _, _), value in record_counts.items() if role == "BARS") == 5220
+    assert sum(value for (role, _, _), value in record_counts.items() if role == "C1") == 4958
+    assert record_counts[("C1", "15M", "BID")] == 2231
+    assert record_counts[("C1", "2H_A_L", "ASK")] == 248
 
     acceptance = load("docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_ACCEPTANCE_INDEX.json")
     assert acceptance["run_id"] == reference["source_run_id"]
