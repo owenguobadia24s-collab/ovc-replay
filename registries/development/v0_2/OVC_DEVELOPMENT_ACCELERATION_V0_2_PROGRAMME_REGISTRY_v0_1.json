@@ -11,25 +11,33 @@
     "maximum_active_continuation_prs": 1,
     "predecessor_pull_request": 224,
     "predecessor_resolution": "SUPERSEDED_PRESERVED",
-    "predecessor_last_lawful_head": "4f7d05291a22d59208437207be041d765ff92a6e",
-    "predecessor_incident_head": "25cc3058d07807a59f90f3261780b58806c39f05",
-    "active_continuation_pull_request": "RESOLVED_AFTER_BRANCH_CREATION"
+    "completed_pull_request": 227,
+    "completed_merge_commit": "b281c2518d203f59adf47b49bf4c9e9143697d9f",
+    "active_role": "DA2_G0_MERGE_RECEIPT",
+    "active_pull_request_resolution": "RECORDED_IN_RECEIPT_PR_CONTROL_RECORD",
+    "next_permanent_packet": "DA2-WP1"
   },
   "packet_history": [
     {
       "packet_id": "DA2-00",
       "gate_id": "DA2-G0",
-      "status": "APPROVED_PENDING_SQUASH_MERGE",
+      "status": "COMPLETED",
       "prerequisites": ["DA-G6"],
       "authority_required": "OPERATOR_REQUIRED",
       "authority_delta": "READ_ONLY_WORKFLOW_TRIGGER_AND_CHECK_PROVENANCE_AUDIT_WITH_COMPACT_REPOSITORY_EVIDENCE",
       "baseline_commit": "6b4069b8f5082e35435415c6211d2334a6bbdf6d",
       "branch": "audit/da2-g0-complete-baseline-superseding",
-      "candidate_commit": "RESOLVED_BY_ATOMIC_GIT_COMMIT",
-      "tests": ["8_FOCUSED_LOCAL_PASS", "CANONICAL_FINAL_HEAD_PENDING"],
+      "pull_request": 227,
+      "candidate_commit": "c12bf676c62d53954f37a1f0d6553ad85c03ddaf",
+      "tests": [
+        "8_FOCUSED_LOCAL_PASS",
+        "tests:30768597345:PASS",
+        "OVC tiered test selection shadow:30768597278:FINAL_HEAD:PASS"
+      ],
       "qa_packet": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_QA_PACKET.json",
       "decision_record": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_COMPLETION_DECISION.json",
-      "merge_commit": null,
+      "merge_receipt": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_MERGE_RECEIPT.json",
+      "merge_commit": "b281c2518d203f59adf47b49bf4c9e9143697d9f",
       "blockers": [],
       "next_packet": "DA2-WP1"
     }
@@ -62,5 +70,5 @@
     "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_AUTHORITY",
     "UNAPPROVED_AGENT_WRITE_AUTHORITY"
   ],
-  "rollback": "Supersede non-destructively and preserve all packet, evidence, QA, incident and decision records."
+  "rollback": "Supersede non-destructively and preserve all packet, evidence, QA, incident, decision and merge records."
 }
