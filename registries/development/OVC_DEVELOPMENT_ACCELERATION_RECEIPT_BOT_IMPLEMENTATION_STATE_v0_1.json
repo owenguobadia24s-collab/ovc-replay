@@ -5,19 +5,20 @@
   "gate_id": "DA-G4B",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "tested_candidate_commit": "e3b59a0c5ee2a959706cb445126e5ec47ecaa453",
-  "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
-  "operator_decision_id": "DA-G4B.OPERATOR.PENDING",
-  "approved_profile_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "tested_candidate_commit": "87132c44e4ce7a4410636283989ceda9677deae7",
+  "status": "APPROVED_ACTIVE_FINAL_HEAD_CI_PENDING",
+  "operator_decision_id": "DA-G4B.OPERATOR.PASS.20260802T163600Z",
+  "approved_profile_state": "ACTIVE_EXACT_APPROVED_PROFILE",
   "policy": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json",
+  "active_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json",
   "work_packet_schema": "schemas/development/receipt_bot_work_packet_v0_1.schema.json",
   "active_profile_schema": "schemas/development/receipt_bot_active_profile_v0_1.schema.json",
   "planner_module": "src/ovc/development/receipt_bot.py",
   "shadow_module": "src/ovc/development/receipt_bot_shadow.py",
-  "production_transport": "ABSENT_FAIL_CLOSED",
+  "production_transport": "ACTIVE_FAIL_CLOSED:scripts/development/run_da_receipt_bot.ps1",
   "shadow_transport": "LOCAL_POWERSHELL_GITHUB_APP_PRE_ACTIVATION_ONLY",
-  "credential_state": "DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY",
-  "authority_active": false,
+  "credential_state": "DEDICATED_REVOCABLE_GITHUB_APP_ACTIVE_BOUNDED",
+  "authority_active": true,
   "conditions": {
     "OPERATOR_DA_G4_PASS": "PASS",
     "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH": "PASS",
@@ -29,9 +30,9 @@
     "REVOCATION_TESTS_PASS": "PASS",
     "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "PASS_EXACT_RULESET_EXPORT",
     "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS_PR_211_UNMERGED",
-    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PASS",
+    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PASS_PRE_ACTIVATION_RERUN_PENDING_POST_ACTIVATION",
     "QA_PASS": "PASS",
-    "OPERATOR_DA_G4B_DECISION": "PENDING"
+    "OPERATOR_DA_G4B_DECISION": "PASS"
   },
   "shadow_evidence": {
     "app_slug": "ovc-dev-accel-receipt-bot",
@@ -46,17 +47,38 @@
     "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e",
     "open_unmerged": true
   },
+  "activation": {
+    "decision_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json",
+    "evaluation_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_ACTIVATION_EVALUATION.json",
+    "evaluation_id": "4815173d1ec559164072013f20d008f2d3a5b120841e8e6cb0350ee1f1164238",
+    "credential_identity_hash": "45d0cfcc0930db45217a529abef33d004d4cfeeae07b470c1d837ccab27ca3fc",
+    "authority_active": true,
+    "merge_authority": false,
+    "direct_main_write": false
+  },
   "tests": [
-    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30755205496, "result": "PASS"},
-    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30755205526, "result": "PASS"},
-    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30755205480, "result": "PASS"},
-    {"workflow": "OVC tiered test selection shadow", "run_id": 30755205470, "result": "PASS"},
-    {"workflow": "tests", "run_id": 30755205478, "result": "PASS"}
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30756179181, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30756179120, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30756179134, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30756179173, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30756179162, "result": "PASS"}
   ],
-  "blockers": [],
-  "operator_required_boundary": "ACTIVATION_OF_BOUNDED_REPOSITORY_BOT_WRITE_AUTHORITY",
-  "gate_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_GATE_PACKET.json",
-  "decision_request": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION_REQUEST.json",
-  "rollback": "Keep the profile inactive, preserve PR 211 unmerged, and revoke the dedicated GitHub App installation or key if approval is not granted.",
-  "next_action": "STOP_OPERATOR_DA_G4B_DECISION"
+  "blockers": ["POST_ACTIVATION_FINAL_HEAD_CI_PENDING"],
+  "permanent_denials": [
+    "WRITE_MAIN",
+    "MERGE_PULL_REQUEST",
+    "APPROVE_PULL_REQUEST",
+    "FORCE_PUSH",
+    "REWRITE_HISTORY",
+    "MODIFY_AUTHORITY_PROFILE",
+    "PROVIDER_ACCESS",
+    "R2_WRITE",
+    "RELEASE_PUBLICATION",
+    "SELECTOR_MUTATION",
+    "VALIDATION_ACCESS",
+    "MARKET_OR_SEMANTIC_MUTATION",
+    "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_OBJECT"
+  ],
+  "rollback": "Disable the active profile, revoke the dedicated GitHub App installation or key, close unmerged bot proposal PRs if required, preserve accepted records and revert through a new non-destructive commit.",
+  "next_action": "RUN_POST_ACTIVATION_FINAL_HEAD_ASSURANCE"
 }
