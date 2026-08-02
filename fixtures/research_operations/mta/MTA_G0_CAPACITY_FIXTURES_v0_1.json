@@ -1,0 +1,17 @@
+{
+  "schema": "ovc-mta-capacity-fixtures/v1",
+  "valid": {
+    "max_runtime_s": 14400,
+    "max_retained_bytes": 10737418240,
+    "shard_hierarchy": ["role", "clock", "side", "week"],
+    "checkpoint_before_pct": 75,
+    "states": ["WITHIN_CONTRACT", "CAPACITY_WARNING", "CAPACITY_EXCEEDED", "CAPACITY_REMEDIATED"]
+  },
+  "invalid": [
+    {"id": "UNBOUNDED_RUNTIME", "max_runtime_s": null},
+    {"id": "OVERSIZED_RETAINED_OUTPUT", "max_retained_bytes": 21474836480},
+    {"id": "SILENT_PARAMETER_SEARCH", "cluster_variants": 4},
+    {"id": "NO_CHECKPOINT", "checkpoint_before_pct": null}
+  ],
+  "recovery": ["HALT", "PRESERVE", "CLASSIFY", "REMEDIATE", "RESUME", "RECOMBINE", "ESCALATE_IF_IRREDUCIBLE"]
+}
