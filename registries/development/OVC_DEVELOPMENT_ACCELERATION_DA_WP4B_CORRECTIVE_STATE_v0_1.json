@@ -5,13 +5,13 @@
   "gate_id": "DA-G4B",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "candidate_commit": "803b739a55d7210aaf03789c89480804e38ade39",
-  "status": "IMPLEMENTED_FINAL_HEAD_CI_PASS_EXTERNAL_SHADOW_BLOCKED",
+  "candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
+  "status": "SHADOW_PASS_CANDIDATE_RULESET_AND_FINAL_CI_BLOCKED",
   "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "authority_active": false,
   "production_transport": "ABSENT_FAIL_CLOSED",
   "shadow_transport": "LOCAL_POWERSHELL_GITHUB_APP_PRE_ACTIVATION_ONLY",
-  "credential_state": "NOT_PROVISIONED",
+  "credential_state": "DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY",
   "corrected_defect": "REAL_SHADOW_REQUIRED_BEFORE_ACTIVATION_WHILE_NORMAL_EXECUTION_REQUIRED_ACTIVATION",
   "corrective_outputs": [
     "contracts/development/OVC_RECEIPT_BOT_PRE_ACTIVATION_SHADOW_CONTRACT_v0_1.md",
@@ -20,37 +20,34 @@
     "fixtures/development/receipt_bot/work_packet_shadow_v0_1.json",
     "fixtures/development/receipt_bot/shadow_receipt_payload_v0_1.json",
     "tests/development/test_receipt_bot_shadow.py",
-    "scripts/development/validate_da_wp4b_shadow.py"
+    "scripts/development/validate_da_wp4b_shadow.py",
+    "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
+    "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json"
   ],
+  "shadow": {
+    "result": "PASS_CANDIDATE_PENDING_FINAL_QA",
+    "pull_request": 211,
+    "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001",
+    "commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e",
+    "created_by": "ovc-dev-accel-receipt-bot[bot]",
+    "open_unmerged": true,
+    "authority_active": false,
+    "production_transport_active": false
+  },
   "retained_blockers": [
-    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
-    "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
-    "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+    "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
+    "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
   ],
   "tests": [
-    {
-      "workflow": "Development Acceleration DA-WP4B shadow correction",
-      "run_id": 30751352404,
-      "result": "PASS"
-    },
-    {
-      "workflow": "Development Acceleration DA-WP4B receipt-bot implementation",
-      "run_id": 30751352387,
-      "result": "PASS"
-    },
-    {
-      "workflow": "OVC tiered test selection shadow",
-      "run_id": 30751352338,
-      "result": "PASS"
-    },
-    {
-      "workflow": "tests",
-      "run_id": 30751352173,
-      "result": "PASS"
-    }
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30751814800, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30751814840, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30751814766, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30751814813, "result": "PASS"},
+    {"workflow": "shadow PR complete repository tests", "run_id": 30752883818, "result": "PASS"}
   ],
   "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_QA_PACKET.json",
+  "shadow_qa_review": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json",
   "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
   "merge_commit": null,
-  "next_action": "OPERATOR_COMPLETES_EXTERNAL_RULESET_AND_GITHUB_APP_SETUP_AND_RUNS_ONE_SHADOW"
+  "next_action": "VERIFY_PR209_FINAL_HEAD_CI_AND_OBTAIN_EXACT_RULESET_EXPORT"
 }
