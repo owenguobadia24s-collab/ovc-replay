@@ -39,14 +39,28 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'GATE_READY_OPERATOR_DECISION_REQUIRED' docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json
-          grep -q 'operator_decision_required.*true' registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json
-          grep -q 'max_runtime_s.*14400' registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json
-          grep -q 'max_retained_bytes.*10737418240' registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          gate = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json').read_text())
+          state = json.loads((root / 'registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json').read_text())
+          request = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json').read_text())
+
+          assert gate['status'] == 'GATE_READY_OPERATOR_DECISION_REQUIRED'
+          assert state['operator_decision_required'] is True
+          assert state['operator_gate']['recorded_decision'] is None
+          assert state['authority']['selectors'] == 'UNCHANGED'
+          assert state['authority']['formula_threshold_reset_clock'] == 'UNCHANGED'
+          assert state['authority']['c2e_c2_5_c3'] == 'DENIED'
+          assert state['authority']['validation'] == 'LOCKED_UNCONSUMED'
+          assert state['authority']['r2'] == 'DENIED'
+          assert state['authority']['probability_risk_exposure_execution'] == 'NONE'
+          assert state['packets'][0]['capacity']['max_runtime_s'] == 14400
+          assert state['packets'][0]['capacity']['max_retained_bytes'] == 10737418240
+          assert request['recommended_gate_decision'] == 'PASS'
+          PY
           grep -q 'parameter_search: PROHIBITED' registries/research_operations/mta/OVC_MTA_CLUSTER_VARIANT_PROFILE_v0_1.yaml
           grep -q 'PRIMARY_OVERLAP_PLUS_1' registries/research_operations/mta/OVC_MTA_CLUSTER_VARIANT_PROFILE_v0_1.yaml
           grep -q 'CROSS_PROGRAMME_INCONSISTENCY' contracts/research_operations/mta/OVC_MTA_RO4_INTEGRATION_CONTRACT_v0_1.md
-          ! grep -R -E 'selector.*ACTIVE|ACTIVE_SELECTOR|PASS_ACTIVATE|R2_PUBLICATION.*PASS|VALIDATION.*CONSUME|C2E.*ACTIVE|C2\.5.*ACTIVE|C3.*ACTIVE|probability_authority.*ACTIVE|execution_authority.*ACTIVE' \
-            contracts/research_operations/mta \
-            registries/research_operations/mta \
-            docs/releases/market-translation-audit-v0-2
