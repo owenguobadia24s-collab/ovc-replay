@@ -3,38 +3,37 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "status": "PASS_IMPLEMENTATION_ACTIVATION_BLOCKED",
+  "status": "PASS_IMPLEMENTATION_AND_SHADOW_CANDIDATE_ACTIVATION_BLOCKED",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "tested_candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
+  "tested_candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
   "checks": [
     {"check_id": "DA-WP4B-AUTH-001", "result": "PASS", "evidence": "DA-G4 operator PASS is recorded and the approved profile remains active=false."},
     {"check_id": "DA-WP4B-POLICY-002", "result": "PASS", "evidence": "Exact bot branch, path and action allowlists are machine readable; all reserved actions remain denied."},
-    {"check_id": "DA-WP4B-PLANNER-003", "result": "PASS", "evidence": "Work-packet parsing, stale-head checks, profile binding, deterministic plan construction and no-write authority are implemented."},
-    {"check_id": "DA-WP4B-IDEMPOTENCY-004", "result": "PASS", "evidence": "Exact retry and changed-plan collision tests passed in DA-WP4B run 30711248035."},
-    {"check_id": "DA-WP4B-REDACTION-005", "result": "PASS", "evidence": "Nested credential redaction tests passed in DA-WP4B run 30711248035."},
-    {"check_id": "DA-WP4B-DENIAL-006", "result": "PASS", "evidence": "Adapter protocol denial tests and static no-network/no-process audit passed in DA-WP4B run 30711248035."},
-    {"check_id": "DA-WP4B-BRANCH-PROTECTION-007", "result": "BLOCK", "evidence": "Independent no-bypass branch-protection evidence is unavailable."},
-    {"check_id": "DA-WP4B-REAL-SHADOW-008", "result": "BLOCK", "evidence": "Dedicated revocable bot identity is not provisioned, so a compliant real proposal-branch shadow cannot run."},
-    {"check_id": "DA-WP4B-CI-009", "result": "PASS", "evidence": "DA-WP4B run 30711248035, tiered run 30711248023 and generic tests run 30711248056 passed on tested candidate 90af31affc116d18d8b1f8d84a05f60f5a1e63f5."}
+    {"check_id": "DA-WP4B-PLANNER-003", "result": "PASS", "evidence": "Work-packet parsing, stale-head checks, profile binding, deterministic planning and no-write production authority are implemented."},
+    {"check_id": "DA-WP4B-IDEMPOTENCY-004", "result": "PASS", "evidence": "Exact retry and changed-plan collision tests passed."},
+    {"check_id": "DA-WP4B-REDACTION-005", "result": "PASS", "evidence": "Nested credential redaction tests passed; no credential bytes are present in recorded evidence."},
+    {"check_id": "DA-WP4B-DENIAL-006", "result": "PASS", "evidence": "Adapter denial tests and static no-network/no-process audit passed."},
+    {"check_id": "DA-WP4B-BRANCH-PROTECTION-007", "result": "BLOCK", "evidence": "The audit records a ruleset hash, but the ruleset export bytes or reproducible retrieval location are absent."},
+    {"check_id": "DA-WP4B-REAL-SHADOW-008", "result": "PASS_CANDIDATE", "evidence": "Dedicated GitHub App created open unmerged PR 211 with one allowlisted receipt and no prohibited action."},
+    {"check_id": "DA-WP4B-CI-009", "result": "PENDING_FINAL_HEAD", "evidence": "Implementation, corrective-shadow and full repository tests passed on prior candidate 343015c8ced74033a1547b5a5699064d62087ea9. Final-head CI is required after evidence-record and validator updates."}
   ],
   "tests": [
-    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30711248035, "result": "PASS"},
-    {"workflow": "OVC tiered test selection shadow", "run_id": 30711248023, "result": "PASS"},
-    {"workflow": "tests", "run_id": 30711248056, "result": "PASS"}
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30751814800, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30751814840, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30751814766, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30751814813, "result": "PASS"},
+    {"workflow": "shadow PR complete repository tests", "run_id": 30752883818, "result": "PASS"}
   ],
   "implementation_blocking_issues": [],
   "activation_blocking_issues": [
-    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
-    "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
-    "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+    "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
+    "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
   ],
-  "warnings": [
-    "Repository contents permission is not a native path sandbox; application checks alone do not satisfy the activation boundary."
-  ],
-  "qa_recommendation": "PASS_IMPLEMENTATION_BLOCK_ACTIVATION",
+  "warnings": [],
+  "qa_recommendation": "PASS_IMPLEMENTATION_AND_SHADOW_CANDIDATE_BLOCK_ACTIVATION",
   "authority_active": false,
   "market_authority_delta": "NONE",
   "validation_authority_delta": "NONE",
   "probability_risk_exposure_execution_delta": "NONE",
-  "rollback": "Keep the profile inactive and provision no credential; preserve tests and evidence for continuation."
+  "rollback": "Keep the profile inactive, keep PR 211 unmerged and revoke the dedicated GitHub App installation or key if the remaining evidence cannot be completed."
 }
