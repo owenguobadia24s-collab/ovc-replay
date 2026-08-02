@@ -21,15 +21,28 @@ class MTAG0Tests(unittest.TestCase):
         spec.loader.exec_module(module)
         self.assertEqual(module.main(), 0)
 
-    def test_gate_is_operator_approved_pending_merge(self) -> None:
+    def test_operator_pass_is_preserved_while_merge_is_blocked(self) -> None:
         gate = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json")
         state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
         decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
-        self.assertEqual(gate["status"], "APPROVED_PENDING_SQUASH_MERGE")
+        blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
+        self.assertEqual(gate["status"], "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET")
+        self.assertEqual(state["programme_status"], "BLOCKED")
         self.assertFalse(state["operator_decision_required"])
         self.assertEqual(state["operator_gate"]["recorded_decision"], "PASS")
         self.assertEqual(decision["operator_command"], "OVC APPROVE MTA-G0 PASS")
-        self.assertEqual(state["packets"][0]["blockers"], [])
+        self.assertIn(blocker["blocker_id"], state["packets"][0]["blockers"])
+
+    def test_required_checks_pass_but_external_rule_blocks_merge(self) -> None:
+        blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
+        self.assertEqual(blocker["status"], "BLOCKED_EXTERNAL_REPOSITORY_RULESET")
+        self.assertTrue(blocker["main_unchanged_at_block"])
+        self.assertEqual(blocker["merge_attempt"]["result"], "HTTP_405_REPOSITORY_RULE_VIOLATION")
+        self.assertEqual(blocker["merge_attempt"]["message"], "2 of 2 required status checks are expected")
+        self.assertEqual(len(blocker["passing_final_head_checks"]), 3)
+        self.assertTrue(all(item["result"] == "PASS" for item in blocker["passing_final_head_checks"]))
+        self.assertEqual(blocker["review_state"]["unresolved_review_threads"], 0)
+        self.assertIn("MERGE_WITH_EXPECTED_CHECKS_UNSATISFIED", blocker["prohibited_resolutions"])
 
     def test_capacity_is_bounded_and_recoverable(self) -> None:
         fixture = load("fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json")
