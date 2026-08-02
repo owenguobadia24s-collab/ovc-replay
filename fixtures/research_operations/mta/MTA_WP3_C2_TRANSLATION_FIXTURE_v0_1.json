@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-mta-wp3-sequence-fixture/v1",
+  "states": [
+    {
+      "c2_state_id": "c2-state:0000000000000000000000000000000000000000000000000000000000000001",
+      "first_valid_time": "2026-06-01T00:15:00Z",
+      "continuity": "RESET",
+      "axes": {
+        "LOCATION": {"status": "NOT_EVALUATED", "value": null, "reason_code": "WINDOW_NOT_COMPLETE"},
+        "MOTION": {"status": "NOT_EVALUATED", "value": null, "reason_code": "WINDOW_NOT_COMPLETE"},
+        "ORGANISATION": {"status": "NOT_EVALUATED", "value": null, "reason_code": "WINDOW_NOT_COMPLETE"},
+        "INTERACTION": {"status": "NOT_EVALUATED", "value": null, "reason_code": "NO_FIRST_VALID_LEVEL"},
+        "QUALITY": {"status": "EVALUATED", "value": "CENSORED", "reason_code": "WINDOW_NOT_COMPLETE"}
+      },
+      "persistence": {"LOCATION": 1, "MOTION": 1, "ORGANISATION": 1, "INTERACTION": 1, "QUALITY": 1}
+    },
+    {
+      "c2_state_id": "c2-state:0000000000000000000000000000000000000000000000000000000000000002",
+      "first_valid_time": "2026-06-01T00:30:00Z",
+      "continuity": "CONTIGUOUS",
+      "axes": {
+        "LOCATION": {"status": "NOT_EVALUATED", "value": null, "reason_code": "WINDOW_NOT_COMPLETE"},
+        "MOTION": {"status": "NOT_EVALUATED", "value": null, "reason_code": "WINDOW_NOT_COMPLETE"},
+        "ORGANISATION": {"status": "NOT_EVALUATED", "value": null, "reason_code": "WINDOW_NOT_COMPLETE"},
+        "INTERACTION": {"status": "EVALUATED", "value": "APPROACHING", "measurement": "0.00042"},
+        "QUALITY": {"status": "EVALUATED", "value": "CENSORED", "reason_code": "WINDOW_NOT_COMPLETE"}
+      },
+      "persistence": {"LOCATION": 2, "MOTION": 2, "ORGANISATION": 2, "INTERACTION": 1, "QUALITY": 2}
+    }
+  ],
+  "transitions": [
+    {
+      "c2_transition_id": "c2-transition:0000000000000000000000000000000000000000000000000000000000000001",
+      "from_state_id": "c2-state:0000000000000000000000000000000000000000000000000000000000000001",
+      "to_state_id": "c2-state:0000000000000000000000000000000000000000000000000000000000000002",
+      "first_valid_time": "2026-06-01T00:30:00Z",
+      "changed_axes": ["INTERACTION"],
+      "status": "OBSERVED"
+    }
+  ]
+}
