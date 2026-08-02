@@ -9,32 +9,24 @@
   "authority_active": false,
   "conditions": [
     {"condition": "OPERATOR_DA_G4_PASS", "result": "PASS", "evidence": "DA-G4.OPERATOR.PASS.20260801T172600Z"},
-    {"condition": "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH", "result": "PASS_STATIC", "evidence": "Closed schema and approved inactive profile identity are frozen; active authority remains false."},
-    {"condition": "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER", "result": "PASS_STATIC", "evidence": "receipt_bot.py and receipt_bot_shadow.py enforce exact branch and path policy before producing or executing the bounded plan."},
-    {"condition": "NO_MERGE_API_AVAILABLE_TO_BOT", "result": "PASS", "evidence": "The adapter surfaces expose create branch, put file and open pull request only."},
-    {"condition": "DENIED_ACTION_TESTS_PASS", "result": "PASS", "evidence": "DA-WP4B and corrective-shadow tests passed on candidate 343015c8ced74033a1547b5a5699064d62087ea9."},
-    {"condition": "TOKEN_REDACTION_TESTS_PASS", "result": "PASS", "evidence": "Nested credential-redaction tests passed; the recorded external audit contains no credential bytes."},
+    {"condition": "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH", "result": "PASS_STATIC", "evidence": "Closed schema and approved inactive profile identity are frozen; authority remains false."},
+    {"condition": "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER", "result": "PASS_STATIC", "evidence": "receipt_bot.py and receipt_bot_shadow.py enforce exact branch and path policy."},
+    {"condition": "NO_MERGE_API_AVAILABLE_TO_BOT", "result": "PASS", "evidence": "Adapter surfaces expose create branch, put file and open pull request only."},
+    {"condition": "DENIED_ACTION_TESTS_PASS", "result": "PASS", "evidence": "DA-WP4B and corrective-shadow denied-action tests passed."},
+    {"condition": "TOKEN_REDACTION_TESTS_PASS", "result": "PASS", "evidence": "Credential-redaction tests passed and recorded evidence contains no credential bytes."},
     {"condition": "IDEMPOTENCY_AND_COLLISION_TESTS_PASS", "result": "PASS", "evidence": "Exact retry and changed-plan collision tests passed."},
-    {"condition": "REVOCATION_TESTS_PASS", "result": "PASS", "evidence": "The dedicated GitHub App identity is recorded as revocable and authority remains inactive."},
-    {"condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED", "result": "BLOCKED", "evidence": "External audit records ruleset SHA-256 ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4, but the ruleset export bytes or a reproducible retrieval location were not supplied for independent verification."},
-    {"condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS", "result": "PASS_CANDIDATE", "evidence": "Dedicated GitHub App created open unmerged PR 211 from bot/ovc-dev-accel-receipts/da-g4b-shadow-001 at 0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e with one allowlisted receipt and no merge, approval, force-push or history rewrite."},
-    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "result": "PENDING", "evidence": "Full repository tests passed on the shadow head; PR 209 final-head CI is required after the bounded DA-G0 validator correction and evidence-record updates."},
-    {"condition": "QA_PASS", "result": "BLOCKED", "evidence": "Shadow candidate QA passed except for independently reproducible ruleset evidence and final-head CI."}
+    {"condition": "REVOCATION_TESTS_PASS", "result": "PASS", "evidence": "Dedicated GitHub App identity is revocable and authority remains inactive."},
+    {"condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED", "result": "PASS", "evidence": "Exact export docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json hashes to ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4; enforcement is active, refs/heads/main is included, bypass_actors is empty, current_user_can_bypass is never, squash-only PR flow and required checks are enforced."},
+    {"condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS", "result": "PASS_CANDIDATE", "evidence": "Dedicated GitHub App created open unmerged PR 211 at 0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e with one allowlisted receipt and no prohibited action."},
+    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "result": "PENDING", "evidence": "PR 209 final-head CI is required after exact ruleset evidence and validator corrections."},
+    {"condition": "QA_PASS", "result": "PENDING", "evidence": "Implementation, shadow and ruleset QA pass; final-head CI remains pending."}
   ],
   "activation_evaluation": "BLOCK",
-  "blockers": [
-    "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
-    "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
-  ],
+  "blockers": ["PR209_FINAL_HEAD_CI_PENDING_AFTER_RULESET_AND_VALIDATOR_UPDATE"],
   "external_evidence": [
-    {
-      "path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
-      "sha256": "79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3"
-    },
-    {
-      "path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json",
-      "sha256": "REPOSITORY_BLOB_HASHED"
-    }
+    {"path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json", "sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea"},
+    {"path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json", "sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"},
+    {"path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json", "sha256": "REPOSITORY_BLOB_HASHED"}
   ],
   "shadow": {
     "app_slug": "ovc-dev-accel-receipt-bot",
@@ -54,6 +46,6 @@
     {"workflow": "tests", "run_id": 30751814813, "result": "PASS"},
     {"workflow": "shadow PR complete repository tests", "run_id": 30752883818, "result": "PASS"}
   ],
-  "non_substitution_rule": "The external audit and shadow PR do not substitute for the missing independently reproducible ruleset export, final-head assurance or an operator-reserved activation decision.",
-  "rollback": "Leave active=false, keep PR 211 unmerged and revoke the dedicated GitHub App installation or key if the remaining evidence cannot be completed."
+  "non_substitution_rule": "Exact ruleset evidence and shadow evidence do not substitute for final-head assurance or the operator-reserved activation decision.",
+  "rollback": "Leave active=false, keep PR 211 unmerged and revoke the dedicated GitHub App installation or key if final assurance or approval fails."
 }
