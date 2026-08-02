@@ -49,9 +49,14 @@ def main() -> int:
     assert state["baseline_commit"] == baseline["repository"]["baseline_commit"] == gate["baseline_commit"]
     assert state["operator_decision_required"] is True
     assert state["operator_gate"]["status"] == "GATE_READY_OPERATOR_DECISION_REQUIRED"
+    assert state["operator_gate"]["recorded_decision"] is None
+    assert state["operator_gate"]["qa_recommendation"] == "PASS"
     assert gate["status"] == "GATE_READY_OPERATOR_DECISION_REQUIRED"
     assert gate["recommended_decision"] == "PASS"
-    assert qa["recommendation"] == "PASS_AFTER_FINAL_HEAD_CI_THEN_OPERATOR_DECISION"
+    assert gate["qa"]["recommendation"] == "PASS"
+    assert qa["status"] == "PASS_OPERATOR_DECISION_REQUIRED"
+    assert qa["recommendation"] == "PASS"
+    assert qa["unresolved_issues"] == ["MTA_G0_OPERATOR_DECISION_REQUIRED"]
     assert disposition["recommended_decision"] == "DEFER"
     assert disposition["review_outcome"] == "NONE"
 
@@ -80,6 +85,10 @@ def main() -> int:
     assert baseline["june_wp3"]["eligible_windows"] == 7116
     assert baseline["june_wp2"]["not_evaluable_markers"] == 13993
     assert baseline["active_authority"]["validation"] == "LOCKED_UNCONSUMED"
+
+    workflow_checks = {item["name"]: item for item in gate["tests"]}
+    assert workflow_checks["MTA-G0 gate readiness"]["status"] == "PASS"
+    assert workflow_checks["generic complete repository suite"]["status"] == "PASS"
 
     digest = hashlib.sha256((ROOT / REQUIRED[0]).read_bytes()).hexdigest()
     assert len(digest) == 64
