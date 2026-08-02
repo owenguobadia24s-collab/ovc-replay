@@ -4,9 +4,9 @@
   "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
   "plan_source_sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d",
-  "programme_status": "BLOCKED",
-  "current_packet": "MTA-00",
-  "current_gate": "MTA-G0",
+  "programme_status": "QA_REVIEW",
+  "current_packet": "MTA-WP1",
+  "current_gate": "MTA-G1",
   "operator_decision_required": false,
   "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
   "operator_decision_history": [
@@ -14,14 +14,13 @@
     "PD-JUNE-FM-G2.OPERATOR.DEFER.20260802T145100Z"
   ],
   "plan_baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "branch_creation_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
-  "baseline_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
-  "branch": "gate/mta-g0-ratification-resume",
-  "pull_request": 216,
-  "tested_candidate_commit": "d9f8efca1865fabb640f3c07e4ae87db62f6b271",
+  "baseline_commit": "eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d",
+  "branch": "audit/mta-wp1-flow-registry",
+  "pull_request": null,
+  "tested_candidate_commit": null,
   "authority": {
     "read": "ACTIVE_CURRENT_AND_PINNED_EXTERNAL_ARTIFACTS",
-    "derive": "ACTIVE_DETERMINISTIC_AUDIT_ONLY_AFTER_G0_MERGE",
+    "derive": "ACTIVE_DETERMINISTIC_AUDIT_ONLY",
     "write": "BOUNDED_PACKET_AND_COURT_RECORD_BRANCHES_ONLY",
     "selectors": "UNCHANGED",
     "formula_threshold_reset_clock": "UNCHANGED",
@@ -32,68 +31,59 @@
   },
   "concurrent_work": [
     {"pull_request": 202, "branch": "build/pd-june-fm-wp3-review-population", "relationship": "SOURCE_REFERENCE_PRESERVE_DO_NOT_MERGE_WHOLESALE"},
-    {"pull_request": 209, "branch": "build/ovc-dev-accel-receipt-bot", "relationship": "MERGED_RULESET_EVIDENCE_SOURCE"},
-    {"pull_request": 210, "branch": "gate/mta-g0-ratification", "relationship": "ORIGINAL_BLOCKED_PR_PRESERVE_UNMERGED"},
-    {"pull_request": 211, "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001", "relationship": "SHADOW_EVIDENCE_DO_NOT_MERGE_OR_MUTATE"},
-    {"pull_request": 216, "branch": "gate/mta-g0-ratification-resume", "relationship": "CURRENT_APPROVED_MERGE_BLOCKED_PR"}
+    {"pull_request": 210, "branch": "gate/mta-g0-ratification", "relationship": "PRESERVED_BLOCKED_HISTORY"},
+    {"pull_request": 216, "branch": "gate/mta-g0-ratification-resume", "relationship": "PRESERVED_BLOCKED_HISTORY"},
+    {"pull_request": 219, "branch": "gate/mta-g0-ratification-final", "relationship": "MERGED_MTA_G0_TRANSPORT"}
   ],
   "packets": [
     {
       "packet_id": "MTA-00",
-      "status": "BLOCKED",
-      "prerequisites": ["MTA_G0_OPERATOR_PASS", "DA_G4B_RULESET_EVIDENCE_MERGED", "CURRENT_MAIN_RECONCILED", "FINAL_HEAD_CHECKS_PASS"],
+      "status": "COMPLETED",
+      "prerequisites": ["MTA_G0_OPERATOR_PASS", "FINAL_HEAD_CHECKS_PASS"],
       "authority_required": "OPERATOR_REQUIRED_COMPLETED",
       "authority_delta": "RATIFY_AUDIT_ONLY_PROGRAMME_AND_EXACT_G0_CONTROLS",
-      "branch_creation_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
-      "baseline_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
-      "branch": "gate/mta-g0-ratification-resume",
-      "pull_request": 216,
-      "tested_candidate_commit": "d9f8efca1865fabb640f3c07e4ae87db62f6b271",
-      "input_artifacts": [
-        {"id": "MTA_PLAN_DOCX", "sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d"},
-        {"id": "PD-JUNE-FM-WP2-ACCEPTANCE", "sha256": "0ef6068d4f77bdeee2b5f1a99200b229dcc55e26"},
-        {"id": "MAIN_RULESET", "sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"}
-      ],
-      "capacity": {
-        "expected_runtime_s": 60,
-        "actual_runtime_s": 3,
-        "max_runtime_s": 14400,
-        "retained_bytes": 0,
-        "max_retained_bytes": 10737418240,
-        "state": "WITHIN_CONTRACT"
-      },
-      "tests": [
-        "MTA-G0 workflow 30760491291 PASS",
-        "generic tests workflow 30760491281 PASS",
-        "tiered FINAL_HEAD workflow 30760491128 PASS",
-        "reopened MTA-G0 workflow 30760770465 PASS",
-        "reopened generic tests workflow 30760770405 PASS",
-        "reopened tiered FINAL_HEAD workflow 30760770440 PASS"
-      ],
+      "baseline_commit": "fed2a3c260c24ffcb5d073ccdf51987800d26f22",
+      "branch": "gate/mta-g0-ratification-final",
+      "pull_request": 219,
+      "candidate_commit": "da6e33f67a5b978e57c3ff99e35b29335823115f",
+      "tests": ["tests 30763102211 PASS", "tiered FINAL_HEAD 30763102234 PASS", "MTA-G0 30763102204 PASS"],
       "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json",
       "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
-      "resolution_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
-      "blocker_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json",
-      "merge_commit": null,
-      "blockers": ["MTA-G0-BLOCK-002-CHECKS-PASS-RULESET-STILL-EXPECTED"],
+      "merge_receipt": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_RECEIPT.json",
+      "merge_commit": "eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d",
+      "blockers": [],
       "next_packet": "MTA-WP1"
     },
-    {"packet_id": "MTA-WP1", "status": "PLANNED", "prerequisites": ["MTA-G0_PASS_MERGED"], "authority_required": "AUTO_EXECUTABLE", "blockers": ["MTA-G0_NOT_MERGED"], "next_packet": "MTA-WP2"},
-    {"packet_id": "MTA-WP2", "status": "PLANNED", "prerequisites": ["MTA-G1_PASS_MERGED"], "authority_required": "AUTO_EXECUTABLE", "next_packet": "MTA-WP3"},
-    {"packet_id": "MTA-WP3", "status": "PLANNED", "prerequisites": ["MTA-G2_PASS_MERGED"], "authority_required": "AUTO_EXECUTABLE_THEN_OPERATOR_ACKNOWLEDGEMENT", "next_packet": "MTA-A3"},
-    {"packet_id": "MTA-WP4", "status": "PLANNED", "prerequisites": ["MTA-A3_ACKNOWLEDGE_CONTINUE"], "authority_required": "AUTO_EXECUTABLE", "next_packet": "MTA-WP5"},
-    {"packet_id": "MTA-WP5", "status": "PLANNED", "prerequisites": ["MTA-G4_PASS_MERGED"], "authority_required": "AUTO_EXECUTABLE", "next_packet": "MTA-WP6"},
-    {"packet_id": "MTA-WP6", "status": "PLANNED", "prerequisites": ["MTA-G5_PASS_MERGED"], "authority_required": "AUTO_EXECUTABLE_THEN_OPERATOR_ACKNOWLEDGEMENT", "next_packet": "MTA-A6"},
-    {"packet_id": "MTA-WP7", "status": "PLANNED", "prerequisites": ["MTA-A6_ACKNOWLEDGE_CONTINUE"], "authority_required": "AUTO_EXECUTABLE_THEN_OPERATOR_G8", "next_packet": "MTA-G8"}
+    {
+      "packet_id": "MTA-WP1",
+      "status": "QA_REVIEW",
+      "prerequisites": ["MTA-G0_PASS_MERGED"],
+      "authority_required": "AUTO_EXECUTABLE",
+      "authority_delta": "FREEZE_AUDIT_OBJECT_METRIC_COMPUTABILITY_REASON_AND_MARKER_FUNCTION_REGISTRIES",
+      "baseline_commit": "eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d",
+      "branch": "audit/mta-wp1-flow-registry",
+      "candidate_commit": null,
+      "tests": ["PENDING_MTA_G1_CI"],
+      "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g1/MTA_WP1_QA_PACKET.json",
+      "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g1/MTA_G1_DELEGATED_DECISION.json",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "MTA-WP2"
+    },
+    {"packet_id":"MTA-WP2","status":"PLANNED","prerequisites":["MTA-G1_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE","blockers":["MTA-G1_NOT_MERGED"],"next_packet":"MTA-WP3"},
+    {"packet_id":"MTA-WP3","status":"PLANNED","prerequisites":["MTA-G2_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE_THEN_OPERATOR_ACKNOWLEDGEMENT","blockers":[],"next_packet":"MTA-A3"},
+    {"packet_id":"MTA-WP4","status":"PLANNED","prerequisites":["MTA-A3_ACKNOWLEDGE_CONTINUE"],"authority_required":"AUTO_EXECUTABLE","blockers":[],"next_packet":"MTA-WP5"},
+    {"packet_id":"MTA-WP5","status":"PLANNED","prerequisites":["MTA-G4_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE","blockers":[],"next_packet":"MTA-WP6"},
+    {"packet_id":"MTA-WP6","status":"PLANNED","prerequisites":["MTA-G5_PASS_MERGED"],"authority_required":"AUTO_EXECUTABLE_THEN_OPERATOR_ACKNOWLEDGEMENT","blockers":[],"next_packet":"MTA-A6"},
+    {"packet_id":"MTA-WP7","status":"PLANNED","prerequisites":["MTA-A6_ACKNOWLEDGE_CONTINUE"],"authority_required":"AUTO_EXECUTABLE_THEN_OPERATOR_G8","blockers":[],"next_packet":"MTA-G8"}
   ],
   "operator_gate": {
-    "gate_id": "MTA-G0",
-    "status": "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT",
-    "gate_packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json",
-    "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
-    "recorded_decision": "PASS",
-    "qa_recommendation": "PASS",
-    "blocker_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json"
+    "gate_id": "MTA-G1",
+    "status": "QA_REVIEW",
+    "gate_packet": "docs/releases/market-translation-audit-v0-2/mta-g1/MTA_G1_GATE_PACKET.json",
+    "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g1/MTA_G1_DELEGATED_DECISION.json",
+    "recorded_decision": "PENDING_AUTO_RATIFICATION",
+    "qa_recommendation": "PENDING_CI"
   },
-  "next_action": "REBIND_EXACT_REQUIRED_CHECK_SOURCES_IN_MAIN_RULESET_THEN_OVC_CONTINUE"
+  "next_action": "RUN_MTA_G1_ASSURANCE_THEN_AUTO_RATIFY_MERGE_AND_START_MTA_WP2"
 }
