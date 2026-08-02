@@ -1,0 +1,27 @@
+{
+  "schema": "ovc-mta-g0-qa-packet/v1",
+  "gate_id": "MTA-G0",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_version": "0.2",
+  "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "candidate_branch": "gate/mta-g0-ratification",
+  "candidate_commit": null,
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI_AND_OPERATOR",
+  "checks": [
+    {"id": "MTA-Q-G0-PLAN", "status": "PASS", "evidence": "plan markdown and source attachment hash pinned"},
+    {"id": "MTA-Q-G0-BASELINE", "status": "PASS", "evidence": "main, open PRs, active selectors, June WP2/WP3 and RO4 reconciled"},
+    {"id": "MTA-Q-G0-CAPACITY", "status": "PASS", "evidence": "four-hour, 10GB, sharding, checkpoint and recovery contract frozen"},
+    {"id": "MTA-Q-G0-CLUSTERS", "status": "PASS", "evidence": "exactly three variants; primary plus one interval authoritative"},
+    {"id": "MTA-Q-G0-AMENDMENT", "status": "PASS", "evidence": "immutable registry amendment protocol frozen"},
+    {"id": "MTA-Q-G0-RO4", "status": "PASS", "evidence": "separate objects and inconsistency incident rule frozen"},
+    {"id": "MTA-Q-G0-AUTHORITY", "status": "PASS", "evidence": "no selector, formula, clock, publication, Validation, semantic or exposure authority"},
+    {"id": "MTA-Q-G0-CI", "status": "PENDING_CI", "evidence": "validator, focused tests and complete repository suite"}
+  ],
+  "capacity": {"expected_runtime_s": 60, "max_runtime_s": 14400, "expected_retained_bytes": 250000, "max_retained_bytes": 10737418240, "state": "WITHIN_CONTRACT"},
+  "warnings": [
+    "External WP3 package byte hashes are pinned from PR #202 and Drive existence is confirmed; this packet does not rehash Drive bytes.",
+    "PR #202 and PR #209 remain open and must not be mutated by MTA-G0."
+  ],
+  "unresolved_issues": ["MTA_G0_OPERATOR_DECISION_REQUIRED", "FINAL_HEAD_CI_REQUIRED"],
+  "recommendation": "PASS_AFTER_FINAL_HEAD_CI_THEN_OPERATOR_DECISION"
+}
