@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-mta-g0-operator-decision/v1",
+  "decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "MTA-G0",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE MTA-G0 PASS",
+  "recorded_at": "2026-08-02T14:51:00Z",
+  "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "tested_candidate_commit": "2242ad48d69d3edbc3e8375ac5343ccf2a01f943",
+  "gate_readiness_tests": [
+    {
+      "workflow": "Market Translation Audit MTA-G0 gate readiness",
+      "run_id": 30752931176,
+      "result": "PASS"
+    },
+    {
+      "workflow": "tests",
+      "run_id": 30752931178,
+      "result": "PASS"
+    }
+  ],
+  "approved_authority_delta": "RATIFY_BOUNDED_READ_AND_DERIVE_AUDIT_PROGRAMME_WITH_SEGMENTED_OPERATOR_CONTROLS",
+  "subdecisions": {
+    "plan_scope": "PASS_AUDIT_ONLY_PROGRAMME",
+    "june_blinded_review": "DEFER_NO_REVIEW_OUTCOME",
+    "pr_202": "PRESERVE_OPEN_UNMERGED",
+    "capacity_contract": "APPROVE_4_HOURS_10GB",
+    "cluster_variants": "APPROVE_EXACT_THREE_PRIMARY_PLUS_1",
+    "ro4_integration": "APPROVE_SEPARATE_OBJECTS_AND_INCONSISTENCY_INCIDENTS",
+    "acknowledgements": "REQUIRE_MTA_A3_AND_MTA_A6",
+    "external_evidence": "ACCEPT_PINNED_EXISTING_COURT_RECORD_HASHES",
+    "audit_population": "APPROVE_JUNE_WITH_MAY_JULY_CONTEXT_NO_VALIDATION"
+  },
+  "authority_active": true,
+  "authority_scope": "AUDIT_ONLY_READ_AND_DETERMINISTIC_DERIVATION",
+  "downstream_authority_created": false,
+  "retained_denials": [
+    "PROVIDER_INTAKE",
+    "SOURCE_REPAIR",
+    "FORMULA_THRESHOLD_RESET_OR_CLOCK_CHANGE",
+    "SELECTOR_MUTATION",
+    "RELEASE_PUBLICATION",
+    "R2_WRITE",
+    "VALIDATION_CONSUMPTION",
+    "C2E_EPISODE_AUTHORITY",
+    "C2_5_EVENT_AUTHORITY",
+    "C3_SEMANTIC_AUTHORITY",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_OR_EXECUTION",
+    "AGENT_WRITE",
+    "DIRECT_MAIN_WRITE",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE"
+  ],
+  "mandatory_stops": [
+    "MTA-A3_AFTER_C2_STRUCTURAL_AUDIT",
+    "MTA-A6_AFTER_OVERLAP_CLUSTER_AUDIT",
+    "MTA-G8_PER_LAYER_OPERATOR_DECISIONS"
+  ],
+  "rollback": "Stop the programme, preserve all accepted source and audit evidence, and revert only bounded MTA implementation merges through new non-destructive commits. Do not delete PR branches, external artifacts or accepted court records.",
+  "next_packet": "MTA-WP1"
+}
