@@ -5,7 +5,8 @@
   "gate_id": "DA-G4B",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "status": "IMPLEMENTED_PENDING_FINAL_HEAD_CI_EXTERNAL_SHADOW_BLOCKED",
+  "candidate_commit": "803b739a55d7210aaf03789c89480804e38ade39",
+  "status": "IMPLEMENTED_FINAL_HEAD_CI_PASS_EXTERNAL_SHADOW_BLOCKED",
   "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "authority_active": false,
   "production_transport": "ABSENT_FAIL_CLOSED",
@@ -26,9 +27,30 @@
     "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
     "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
   ],
-  "tests": [],
+  "tests": [
+    {
+      "workflow": "Development Acceleration DA-WP4B shadow correction",
+      "run_id": 30751352404,
+      "result": "PASS"
+    },
+    {
+      "workflow": "Development Acceleration DA-WP4B receipt-bot implementation",
+      "run_id": 30751352387,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30751352338,
+      "result": "PASS"
+    },
+    {
+      "workflow": "tests",
+      "run_id": 30751352173,
+      "result": "PASS"
+    }
+  ],
   "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_QA_PACKET.json",
   "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
   "merge_commit": null,
-  "next_action": "PASS_FINAL_HEAD_CI_THEN_OPERATOR_COMPLETES_EXTERNAL_RULESET_AND_GITHUB_APP_SETUP_AND_RUNS_ONE_SHADOW"
+  "next_action": "OPERATOR_COMPLETES_EXTERNAL_RULESET_AND_GITHUB_APP_SETUP_AND_RUNS_ONE_SHADOW"
 }
