@@ -3,20 +3,22 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "status": "PASS_ACTIVATION_APPROVED_FINAL_HEAD_RERUN_PENDING",
+  "status": "PASS_COMPLETION_READY",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "approved_candidate_commit": "7b1e3850f614743f93f5b21e2007c4b9101b73a6",
+  "tested_post_activation_head": "f4c33e7ca1de82a1da17a2d7e7c0ff4e4e60db1f",
   "operator_decision_id": "DA-G4B.OPERATOR.PASS.20260802T163600Z",
+  "final_assurance": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_POST_ACTIVATION_FINAL_ASSURANCE.json",
   "checks": [
     {"check_id": "DA-WP4B-AUTH-001", "result": "PASS", "evidence": "DA-G4B operator PASS recorded; exact bounded authority active."},
     {"check_id": "DA-WP4B-POLICY-002", "result": "PASS", "evidence": "Exact branch/path/action allowlists and permanent denials frozen."},
     {"check_id": "DA-WP4B-PLANNER-003", "result": "PASS", "evidence": "Deterministic stale-head, profile, path, idempotency and collision controls pass."},
     {"check_id": "DA-WP4B-REDACTION-004", "result": "PASS", "evidence": "Credential redaction and no-secret checks pass."},
     {"check_id": "DA-WP4B-BRANCH-PROTECTION-005", "result": "PASS", "evidence": "Exact no-bypass ruleset export verified."},
-    {"check_id": "DA-WP4B-REAL-SHADOW-006", "result": "PASS", "evidence": "PR 211 remains open unmerged; no prohibited action."},
+    {"check_id": "DA-WP4B-REAL-SHADOW-006", "result": "PASS", "evidence": "PR 211 remains open and unmerged; no prohibited action."},
     {"check_id": "DA-WP4B-ACTIVE-PROFILE-007", "result": "PASS", "evidence": "Closed active profile binds approved profile, identity, ruleset, shadow and activation evaluation hashes."},
     {"check_id": "DA-WP4B-TRANSPORT-008", "result": "PASS", "evidence": "Production transport exposes only bounded branch/file/PR proposal operations; no bot merge or approval method."},
-    {"check_id": "DA-WP4B-FINAL-HEAD-009", "result": "PENDING", "evidence": "Post-activation final-head CI will run after repository records and transport are complete."}
+    {"check_id": "DA-WP4B-FINAL-HEAD-009", "result": "PASS", "evidence": "Post-activation focused, shadow, closure, tiered and complete repository assurance passed on f4c33e7ca1de82a1da17a2d7e7c0ff4e4e60db1f."}
   ],
   "pre_activation_tests": [
     {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30756179181, "result": "PASS"},
@@ -25,11 +27,17 @@
     {"workflow": "OVC tiered test selection shadow", "run_id": 30756179173, "result": "PASS"},
     {"workflow": "tests", "run_id": 30756179162, "result": "PASS"}
   ],
-  "post_activation_tests": [],
+  "post_activation_tests": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30757948495, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30757948491, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30757948370, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30757948472, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30757948423, "result": "PASS"}
+  ],
   "implementation_blocking_issues": [],
   "activation_blocking_issues": [],
-  "completion_blocking_issues": ["POST_ACTIVATION_FINAL_HEAD_CI_PENDING"],
-  "qa_recommendation": "PASS_ACTIVATION_RETAIN_FINAL_HEAD_ASSURANCE",
+  "completion_blocking_issues": [],
+  "qa_recommendation": "PASS_SQUASH_MERGE_PR209",
   "recorded_operator_decision": "PASS",
   "authority_active": true,
   "bot_merge_authority": false,
