@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-development-acceleration-corrective-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DA-WP4B-CORRECTIVE-SHADOW",
+  "gate_id": "DA-G4B",
+  "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "branch": "build/ovc-dev-accel-receipt-bot",
+  "status": "IMPLEMENTED_PENDING_FINAL_HEAD_CI_EXTERNAL_EXECUTION",
+  "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "authority_active": false,
+  "defect": {
+    "id": "DA-WP4B-SEQUENCING-CYCLE-001",
+    "description": "REAL_PROPOSAL_BRANCH_SHADOW_PASS was required before activation while the only execution function correctly required full activation before any adapter call.",
+    "effect": "The approved real shadow could not be produced through the implementation.",
+    "classification": "CORRECTABLE_IN_PACKET_SCOPE"
+  },
+  "correction": {
+    "pre_activation_mode": "PRE_ACTIVATION_SHADOW",
+    "required_before_shadow": "ALL_ACTIVATION_CONDITIONS_EXCEPT_REAL_PROPOSAL_BRANCH_SHADOW_PASS_AND_QA_PASS",
+    "post_shadow_conditions": [
+      "REAL_PROPOSAL_BRANCH_SHADOW_PASS",
+      "QA_PASS"
+    ],
+    "identity": "DEDICATED_REVOCABLE_GITHUB_APP_INSTALLATION_ONLY",
+    "shadow_actions": [
+      "CREATE_BOT_BRANCH",
+      "CREATE_OR_UPDATE_ALLOWLISTED_FILES",
+      "OPEN_OR_UPDATE_PULL_REQUEST"
+    ],
+    "target_limit": "ONE_JSON_RECEIPT_UNDER_DA_WP4B_SHADOW_PATH",
+    "production_authority_change": "NONE"
+  },
+  "changed_files": [
+    "contracts/development/OVC_RECEIPT_BOT_PRE_ACTIVATION_SHADOW_CONTRACT_v0_1.md",
+    "src/ovc/development/receipt_bot_shadow.py",
+    "scripts/development/run_da_g4b_shadow.ps1",
+    "fixtures/development/receipt_bot/work_packet_shadow_v0_1.json",
+    "fixtures/development/receipt_bot/shadow_receipt_payload_v0_1.json",
+    "tests/development/test_receipt_bot_shadow.py",
+    "scripts/development/validate_da_wp4b_shadow.py",
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_DA_WP4B_CORRECTIVE_STATE_v0_1.json",
+    "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_QA_PACKET.json",
+    ".github/workflows/development-acceleration-da-wp4b-shadow.yml"
+  ],
+  "external_artifacts": [],
+  "external_artifact_hashes": "PENDING_OPERATOR_RULESET_AND_REAL_SHADOW_EVIDENCE",
+  "retained_blockers": [
+    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
+    "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
+    "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+  ],
+  "rollback": "Keep active=false, run no shadow, revoke any later dedicated identity, close any unmerged shadow PR and revert only this corrective packet through a new non-destructive commit.",
+  "recommended_disposition": "PASS_CORRECTIVE_IMPLEMENTATION_AFTER_CI_RETAIN_EXTERNAL_BLOCK"
+}
