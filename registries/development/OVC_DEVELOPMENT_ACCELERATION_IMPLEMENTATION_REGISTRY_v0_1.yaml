@@ -2,175 +2,150 @@ schema: ovc-development-acceleration-implementation-registry/v1
 registry_id: OVC.DEVELOPMENT.ACCELERATION.IMPLEMENTATION.v0.1
 programme_id: OVC-DEV-ACCEL-v0.1
 plan_id: OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1
-operator_decision_id: DA-G0.OPERATOR.PASS.20260801T151200Z
+operator_decision_id: DA-G4B.OPERATOR.PENDING
 operator_decisions:
-  - DA-G0.OPERATOR.PASS.20260801T151200Z
-  - DA-G4.OPERATOR.PASS.20260801T172600Z
+- DA-G0.OPERATOR.PASS.20260801T151200Z
+- DA-G4.OPERATOR.PASS.20260801T172600Z
 entries:
-  - implementation_id: OVC-DEV-ACCEL-DA-00
-    packet_id: DA-00
-    title: Baseline metrics and profile freeze
-    branch: build/ovc-dev-accel-baseline
-    status: COMPLETED
-    prerequisites: [DA-G0]
-    authority_required: OPERATOR_RATIFIED_REPOSITORY_RECORDS_ONLY
-    authority_delta: REPOSITORY_RECORDS_ONLY
-    reads: [Git metadata, pull-request metadata, workflow summaries, governing plan]
-    writes: [contracts/development/**, registries/development/**, docs/development-acceleration/**, docs/releases/development-acceleration-v0-1/da-00/**, docs/releases/development-acceleration-v0-1/da-g0/**, scripts/development/validate_da_g0.py, tests/development/test_da_g0.py, .github/workflows/development-acceleration-da-g0.yml]
-    gate: DA-G0
-    rollback: Revert bounded DA-00 merge through a new commit.
-  - implementation_id: OVC-DEV-ACCEL-WP1
-    packet_id: DA-WP1
-    title: Shared development services
-    branch: build/ovc-dev-accel-shared-services
-    status: COMPLETED
-    prerequisites: [DA-00_COMPLETED]
-    authority_required: AUTO_RATIFIABLE_LOCAL_COMPUTE
-    authority_delta: LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS
-    reads: [approved programme profiles, compact fixtures, repository metadata]
-    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g1/**]
-    gate: DA-G1
-    rollback: Revert shared-service merge; programme-specific implementations remain authoritative.
-  - implementation_id: OVC-DEV-ACCEL-WP2
-    packet_id: DA-WP2
-    title: Universal artifact preflight
-    branch: build/ovc-dev-accel-preflight
-    status: COMPLETED
-    prerequisites: [DA-WP1_COMPLETED]
-    authority_required: AUTO_RATIFIABLE_FAIL_CLOSED_GUARD
-    authority_delta: FAIL_CLOSED_EXECUTION_GUARD
-    reads: [packet profiles, artifact identities, destination state, approved compact external metadata]
-    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g2/**]
-    gate: DA-G2
-    rollback: Disable preflight enforcement and preserve all receipts as non-authoritative evidence.
-  - implementation_id: OVC-DEV-ACCEL-WP3
-    packet_id: DA-WP3
-    title: Tiered testing and CI profiles
-    branch: build/ovc-dev-accel-test-profiles
-    status: COMPLETED
-    prerequisites: [DA-WP1_COMPLETED]
-    authority_required: AUTO_RATIFIABLE_TEST_SELECTION
-    authority_delta: DETERMINISTIC_TEST_PROFILE_SELECTION
-    reads: [changed-file inventory, dependency registry, retained test requirements]
-    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, .github/workflows/ovc-*.yml, docs/releases/development-acceleration-v0-1/da-g3/**]
-    gate: DA-G3
-    rollback: Restore existing workflows; retain selection manifests for audit.
-  - implementation_id: OVC-DEV-ACCEL-WP4
-    packet_id: DA-WP4
-    title: Closure and merge-receipt automation
-    branch: build/ovc-dev-accel-closure
-    status: COMPLETED
-    prerequisites: [DA-WP1_COMPLETED, DA-WP3_COMPLETED]
-    authority_required: AUTO_RATIFIABLE_SHADOW_ONLY_THEN_OPERATOR_REQUIRED_DA_G4
-    authority_delta: DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY
-    reads: [frozen PR snapshots, QA packets, decisions, manual merge receipts, supplied merge results]
-    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, tests/development/**, fixtures/development/**, scripts/development/validate_da_g4a.py, .github/workflows/development-acceleration-da-g4a.yml, docs/releases/development-acceleration-v0-1/da-wp3/**, docs/releases/development-acceleration-v0-1/da-g4a/**]
-    gate: DA-G4A_THEN_DA-G4
-    rollback: Disable closure generator; manual receipt preparation remains available.
-  - implementation_id: OVC-DEV-ACCEL-WP4B
-    packet_id: DA-WP4B
-    title: Receipt-bot bounded implementation and activation evidence
-    branch: build/ovc-dev-accel-receipt-bot
-    status: BLOCKED
-    prerequisites: [DA-WP4_COMPLETED, DA-G4_OPERATOR_PASS_RECORDED, DA-G4_GATE_RECORD_MERGED]
-    authority_required: OPERATOR_APPROVED_BOUNDED_IMPLEMENTATION_WITH_CONDITIONAL_ACTIVATION
-    authority_delta: NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY
-    baseline_commit: d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3
-    tested_candidate_commit: 343015c8ced74033a1547b5a5699064d62087ea9
-    reads:
-      - approved inactive receipt-bot profile
-      - exact lawful main SHA
-      - immutable closure and receipt packets
-      - branch-protection evidence
-      - credential and revocation configuration metadata
-      - dedicated-identity shadow audit and PR metadata
-    writes:
-      - contracts/development/**
-      - schemas/development/**
-      - registries/development/**
-      - src/ovc/development/**
-      - scripts/development/**
-      - tests/development/**
-      - fixtures/development/**
-      - docs/releases/development-acceleration-v0-1/da-wp4b/**
-      - .github/workflows/development-acceleration-da-wp4b.yml
-      - .github/workflows/development-acceleration-da-wp4b-shadow.yml
-    tests:
-      - Development Acceleration DA-WP4B shadow correction / 30751814800 / PASS
-      - Development Acceleration DA-WP4B receipt-bot implementation / 30751814840 / PASS
-      - OVC tiered test selection shadow / 30751814766 / PASS
-      - tests / 30751814813 / PASS
-      - shadow PR complete repository tests / 30752883818 / PASS
-    activation_conditions:
-      - CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH
-      - BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER
-      - NO_MERGE_API_AVAILABLE_TO_BOT
-      - DENIED_ACTION_TESTS_PASS
-      - TOKEN_REDACTION_TESTS_PASS
-      - IDEMPOTENCY_AND_COLLISION_TESTS_PASS
-      - REVOCATION_TESTS_PASS
-      - MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED
-      - REAL_PROPOSAL_BRANCH_SHADOW_PASS
-      - FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS
-      - QA_PASS
-    shadow_evidence:
-      app_slug: ovc-dev-accel-receipt-bot
-      app_id: 4463376
-      installation_id: 150708331
-      pull_request: 211
-      branch: bot/ovc-dev-accel-receipts/da-g4b-shadow-001
-      commit: 0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e
-      open_unmerged: true
-      external_audit: docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json
-      external_audit_sha256: 79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3
-    blockers:
-      - MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION
-      - PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE
-    gate: DA-G4B
-    rollback: Keep the profile inactive, preserve PR 211 unmerged, revoke the dedicated identity if required and revert bounded implementation through a new non-destructive commit.
-  - implementation_id: OVC-DEV-ACCEL-WP5
-    packet_id: DA-WP5
-    title: Compact evidence exporter
-    branch: build/ovc-dev-accel-evidence-export
-    status: PLANNED
-    prerequisites: [DA-WP1_COMPLETED, DA-WP2_COMPLETED, DA-G4_OPERATOR_PASS_RECORDED, DA-WP4B_COMPLETED]
-    authority_required: AUTO_RATIFIABLE_OPERATOR_LOCAL_EXPORT
-    authority_delta: COPY_ONLY_COMPACT_EVIDENCE_EXPORT
-    reads: [registered export profiles, exact compact artifacts, local destination configuration]
-    writes: [contracts/development/**, schemas/development/**, registries/development/**, src/ovc/development/**, scripts/development/**, tests/development/**, fixtures/development/**, docs/releases/development-acceleration-v0-1/da-g5/**]
-    gate: DA-G5
-    rollback: Disable remote destination and retain deterministic local bundles.
+- implementation_id: OVC-DEV-ACCEL-DA-00
+  packet_id: DA-00
+  title: Baseline metrics and profile freeze
+  branch: build/ovc-dev-accel-baseline
+  status: COMPLETED
+  prerequisites:
+  - DA-G0
+  authority_required: OPERATOR_RATIFIED_REPOSITORY_RECORDS_ONLY
+  authority_delta: REPOSITORY_RECORDS_ONLY
+  gate: DA-G0
+  rollback: Revert bounded DA-00 merge through a new commit.
+- implementation_id: OVC-DEV-ACCEL-WP1
+  packet_id: DA-WP1
+  title: Shared development services
+  branch: build/ovc-dev-accel-shared-services
+  status: COMPLETED
+  prerequisites:
+  - DA-00_COMPLETED
+  authority_required: AUTO_RATIFIABLE_LOCAL_COMPUTE
+  authority_delta: LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS
+  gate: DA-G1
+  rollback: Revert shared-service merge; programme-specific implementations remain authoritative.
+- implementation_id: OVC-DEV-ACCEL-WP2
+  packet_id: DA-WP2
+  title: Universal artifact preflight
+  branch: build/ovc-dev-accel-preflight
+  status: COMPLETED
+  prerequisites:
+  - DA-WP1_COMPLETED
+  authority_required: AUTO_RATIFIABLE_FAIL_CLOSED_GUARD
+  authority_delta: FAIL_CLOSED_EXECUTION_GUARD
+  gate: DA-G2
+  rollback: Disable preflight enforcement and preserve all receipts as non-authoritative evidence.
+- implementation_id: OVC-DEV-ACCEL-WP3
+  packet_id: DA-WP3
+  title: Tiered testing and CI profiles
+  branch: build/ovc-dev-accel-test-profiles
+  status: COMPLETED
+  prerequisites:
+  - DA-WP1_COMPLETED
+  authority_required: AUTO_RATIFIABLE_TEST_SELECTION
+  authority_delta: DETERMINISTIC_TEST_PROFILE_SELECTION
+  gate: DA-G3
+  rollback: Restore existing workflows; retain selection manifests for audit.
+- implementation_id: OVC-DEV-ACCEL-WP4
+  packet_id: DA-WP4
+  title: Closure and merge-receipt automation
+  branch: build/ovc-dev-accel-closure
+  status: COMPLETED
+  prerequisites:
+  - DA-WP1_COMPLETED
+  - DA-WP3_COMPLETED
+  authority_required: AUTO_RATIFIABLE_SHADOW_ONLY_THEN_OPERATOR_REQUIRED_DA_G4
+  authority_delta: DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY
+  gate: DA-G4A_THEN_DA-G4
+  rollback: Disable closure generator; manual receipt preparation remains available.
+- implementation_id: OVC-DEV-ACCEL-WP4B
+  packet_id: DA-WP4B
+  title: Receipt-bot bounded implementation and activation evidence
+  branch: build/ovc-dev-accel-receipt-bot
+  status: GATE_READY
+  prerequisites:
+  - DA-WP4_COMPLETED
+  - DA-G4_OPERATOR_PASS_RECORDED
+  - DA-G4_GATE_RECORD_MERGED
+  authority_required: OPERATOR_REQUIRED_DA_G4B
+  authority_delta: ACTIVATE_NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY
+  baseline_commit: d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3
+  tested_candidate_commit: e3b59a0c5ee2a959706cb445126e5ec47ecaa453
+  tests:
+  - Development Acceleration DA-WP4B receipt-bot implementation / 30755205496 / PASS
+  - Development Acceleration DA-WP4B shadow correction / 30755205526 / PASS
+  - Development Acceleration DA-G4A closure shadow / 30755205480 / PASS
+  - OVC tiered test selection shadow / 30755205470 / PASS
+  - tests / 30755205478 / PASS
+  activation_conditions:
+  - CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH
+  - BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER
+  - NO_MERGE_API_AVAILABLE_TO_BOT
+  - DENIED_ACTION_TESTS_PASS
+  - TOKEN_REDACTION_TESTS_PASS
+  - IDEMPOTENCY_AND_COLLISION_TESTS_PASS
+  - REVOCATION_TESTS_PASS
+  - MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED
+  - REAL_PROPOSAL_BRANCH_SHADOW_PASS
+  - FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS
+  - QA_PASS
+  blockers: []
+  gate: DA-G4B
+  gate_packet: docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_GATE_PACKET.json
+  decision_request: docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION_REQUEST.json
+  authority_active: false
+  rollback: Keep profile inactive pending operator decision; after activation disable profile and revoke identity non-destructively if rollback is required.
+- implementation_id: OVC-DEV-ACCEL-WP5
+  packet_id: DA-WP5
+  title: Compact evidence exporter
+  branch: build/ovc-dev-accel-evidence-export
+  status: PLANNED
+  prerequisites:
+  - DA-WP1_COMPLETED
+  - DA-WP2_COMPLETED
+  - DA-G4B_OPERATOR_PASS_RECORDED
+  - DA-WP4B_COMPLETED
+  authority_required: AUTO_RATIFIABLE_OPERATOR_LOCAL_EXPORT
+  authority_delta: COPY_ONLY_COMPACT_EVIDENCE_EXPORT
+  blockers:
+  - DA-G4B_OPERATOR_DECISION_PENDING
+  gate: DA-G5
+  rollback: Disable remote destination and retain deterministic local bundles.
 reserved_gates:
-  - gate_id: DA-G4
-    purpose: Narrow receipt-bot writes to approved bot branches and paths.
-    status: COMPLETED
-    current_authority: APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE
-    decision_id: DA-G4.OPERATOR.PASS.20260801T172600Z
-    merge_commit: d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3
-    merge_receipt: docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json
-    authority_active: false
-  - gate_id: DA-G4B
-    purpose: Verify every activation condition for the approved receipt-bot profile.
-    status: BLOCKED
-    current_authority: APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE
-    tested_candidate_commit: 343015c8ced74033a1547b5a5699064d62087ea9
-    tests:
-      - Development Acceleration DA-WP4B shadow correction / 30751814800 / PASS
-      - Development Acceleration DA-WP4B receipt-bot implementation / 30751814840 / PASS
-      - OVC tiered test selection shadow / 30751814766 / PASS
-      - tests / 30751814813 / PASS
-      - shadow PR complete repository tests / 30752883818 / PASS
-    activation_evidence: docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json
-    blocker_record: docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json
-    shadow_external_audit: docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json
-    shadow_qa_review: docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json
-    shadow_pull_request: 211
-    shadow_status: PASS_CANDIDATE_OPEN_UNMERGED
-    blockers:
-      - MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION
-      - PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE
-    authority_active: false
-  - gate_id: DA-G6
-    purpose: Adopt workflow as default and retire duplicated mechanics.
-    status: PLANNED
-    current_authority: DENIED
+- gate_id: DA-G4
+  purpose: Narrow receipt-bot writes to approved bot branches and paths.
+  status: COMPLETED
+  current_authority: APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE
+  decision_id: DA-G4.OPERATOR.PASS.20260801T172600Z
+  merge_commit: d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3
+  authority_active: false
+- gate_id: DA-G4B
+  purpose: Activate the exact bounded receipt-bot proposal-write profile.
+  status: GATE_READY
+  current_authority: APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE
+  proposed_authority: ACTIVE_BOUNDED_PROPOSAL_BRANCH_ONLY
+  tested_candidate_commit: e3b59a0c5ee2a959706cb445126e5ec47ecaa453
+  tests:
+  - Development Acceleration DA-WP4B receipt-bot implementation / 30755205496 / PASS
+  - Development Acceleration DA-WP4B shadow correction / 30755205526 / PASS
+  - Development Acceleration DA-G4A closure shadow / 30755205480 / PASS
+  - OVC tiered test selection shadow / 30755205470 / PASS
+  - tests / 30755205478 / PASS
+  gate_packet: docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_GATE_PACKET.json
+  decision_request: docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION_REQUEST.json
+  ruleset_sha256: ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4
+  shadow_pull_request: 211
+  blockers: []
+  operator_decision_required: true
+  recommended_decision: PASS
+  operator_command: OVC APPROVE DA-G4B PASS
+  authority_active: false
+- gate_id: DA-G6
+  purpose: Adopt workflow as default and retire duplicated mechanics.
+  status: PLANNED
+  current_authority: DENIED
