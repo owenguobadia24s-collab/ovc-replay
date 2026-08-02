@@ -37,7 +37,7 @@ jobs:
         run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp4.py' -v
       - name: Retained parent resolver and MTA assurance
         run: |
-          PYTHONPATH=src python -m unittest tests.opt_b.c2.test_wp5_first_valid_parent -v
+          PYTHONPATH=src python -m unittest tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2 -v
           PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp3.py
           PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp2.py
           PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp1.py
