@@ -90,6 +90,12 @@ def _exact_keys(value: dict[str, Any], expected: set[str], *, label: str) -> Non
         raise EvidenceExportError("CLOSED_SCHEMA_MISMATCH", f"{label} keys differ: {sorted(actual ^ expected)}")
 
 
+def _string_tuple(value: Any, *, field: str, nonempty: bool = True) -> tuple[str, ...]:
+    if not isinstance(value, list) or (nonempty and not value) or any(not isinstance(item, str) or not item for item in value):
+        raise EvidenceExportError("INVALID_PROFILE", field)
+    return tuple(value)
+
+
 def load_profile(path: Path) -> ExportProfile:
     value = _load_json_object(path)
     expected = {
@@ -101,22 +107,26 @@ def load_profile(path: Path) -> ExportProfile:
     _exact_keys(value, expected, label="profile")
     if value["schema"] != _PROFILE_SCHEMA or value["status"] != "ACTIVE" or value["active"] is not True:
         raise EvidenceExportError("PROFILE_INACTIVE", "exact active profile is required")
+    if not isinstance(value["profile_id"], str) or not isinstance(value["programme_id"], str):
+        raise EvidenceExportError("INVALID_PROFILE", "profile identity")
     for field in ("network_access", "repository_write", "remote_write", "accepted_bundle_deletion"):
         if value[field] != "PROHIBITED":
             raise EvidenceExportError("AUTHORITY_EXCEEDED", f"{field} must be PROHIBITED")
-    if not isinstance(value["max_file_bytes"], int) or value["max_file_bytes"] < 1:
+    if type(value["max_file_bytes"]) is not int or value["max_file_bytes"] < 1:
         raise EvidenceExportError("INVALID_PROFILE", "max_file_bytes")
-    if not isinstance(value["max_bundle_bytes"], int) or value["max_bundle_bytes"] < value["max_file_bytes"]:
+    if type(value["max_bundle_bytes"]) is not int or value["max_bundle_bytes"] < value["max_file_bytes"]:
         raise EvidenceExportError("INVALID_PROFILE", "max_bundle_bytes")
-    roots = tuple(normalize_relative_path(str(item)) for item in value["allowed_source_roots"])
-    extensions = tuple(str(item) for item in value["allowed_extensions"])
-    denied_suffixes = tuple(str(item).lower() for item in value["denied_path_suffixes"])
-    denied_tokens = tuple(str(item) for item in value["denied_content_tokens"])
+    roots = tuple(normalize_relative_path(item) for item in _string_tuple(value["allowed_source_roots"], field="allowed_source_roots"))
+    extensions = _string_tuple(value["allowed_extensions"], field="allowed_extensions")
+    denied_suffixes = tuple(item.lower() for item in _string_tuple(value["denied_path_suffixes"], field="denied_path_suffixes"))
+    denied_tokens = _string_tuple(value["denied_content_tokens"], field="denied_content_tokens")
+    if any(not item.startswith(".") or item != item.lower() for item in extensions):
+        raise EvidenceExportError("INVALID_PROFILE", "allowed_extensions")
     if len(set(roots)) != len(roots) or len(set(extensions)) != len(extensions):
         raise EvidenceExportError("INVALID_PROFILE", "duplicate roots or extensions")
     return ExportProfile(
-        profile_id=str(value["profile_id"]),
-        programme_id=str(value["programme_id"]),
+        profile_id=value["profile_id"],
+        programme_id=value["programme_id"],
         active=True,
         allowed_source_roots=roots,
         allowed_extensions=extensions,
@@ -132,8 +142,10 @@ def load_request(path: Path) -> ExportRequest:
     _exact_keys(value, {"schema", "export_id", "programme_id", "profile_id", "source_commit", "files"}, label="request")
     if value["schema"] != _REQUEST_SCHEMA:
         raise EvidenceExportError("REQUEST_SCHEMA_MISMATCH", str(value["schema"]))
-    export_id = str(value["export_id"])
-    source_commit = str(value["source_commit"])
+    if any(not isinstance(value[field], str) for field in ("export_id", "programme_id", "profile_id", "source_commit")):
+        raise EvidenceExportError("INVALID_REQUEST", "identity fields must be strings")
+    export_id = value["export_id"]
+    source_commit = value["source_commit"]
     if not _EXPORT_ID_RE.fullmatch(export_id):
         raise EvidenceExportError("INVALID_EXPORT_ID", export_id)
     if not _COMMIT_RE.fullmatch(source_commit):
@@ -148,17 +160,19 @@ def load_request(path: Path) -> ExportRequest:
         if not isinstance(row, dict):
             raise EvidenceExportError("INVALID_FILE_ROW", str(index))
         _exact_keys(row, {"path", "size_bytes", "sha256", "role"}, label=f"file[{index}]")
+        if not isinstance(row["path"], str) or not isinstance(row["sha256"], str) or not isinstance(row["role"], str):
+            raise EvidenceExportError("INVALID_FILE_ROW", str(index))
         try:
-            logical_path = normalize_relative_path(str(row["path"]))
+            logical_path = normalize_relative_path(row["path"])
         except IdentityError as exc:
-            raise EvidenceExportError("UNSAFE_PATH", str(row["path"])) from exc
+            raise EvidenceExportError("UNSAFE_PATH", row["path"]) from exc
         if logical_path in seen:
             raise EvidenceExportError("DUPLICATE_PATH", logical_path)
         seen.add(logical_path)
         size = row["size_bytes"]
-        digest = str(row["sha256"])
-        role = str(row["role"])
-        if not isinstance(size, int) or size < 0:
+        digest = row["sha256"]
+        role = row["role"]
+        if type(size) is not int or size < 0:
             raise EvidenceExportError("INVALID_SIZE", logical_path)
         if not _SHA256_RE.fullmatch(digest):
             raise EvidenceExportError("INVALID_SHA256", logical_path)
@@ -167,8 +181,8 @@ def load_request(path: Path) -> ExportRequest:
         files.append(ExportFile(logical_path, size, digest, role))
     return ExportRequest(
         export_id=export_id,
-        programme_id=str(value["programme_id"]),
-        profile_id=str(value["profile_id"]),
+        programme_id=value["programme_id"],
+        profile_id=value["profile_id"],
         source_commit=source_commit,
         files=tuple(files),
     )
@@ -208,7 +222,7 @@ def _scan_content(path: Path, profile: ExportProfile, logical_path: str) -> None
     except UnicodeError as exc:
         raise EvidenceExportError("NON_UTF8_COMPACT_EVIDENCE", logical_path) from exc
     for token in profile.denied_content_tokens:
-        if token and token in text:
+        if token in text:
             raise EvidenceExportError("DENIED_CONTENT", f"{logical_path}:{token}")
     if _POSIX_PRIVATE_PATH_RE.search(text):
         raise EvidenceExportError("PRIVATE_ABSOLUTE_PATH", logical_path)
@@ -225,7 +239,6 @@ def build_plan(repository_root: Path, external_root: Path, request: ExportReques
     total = 0
     for item in request.files:
         logical_path = normalize_relative_path(item.path)
-        lower = logical_path.lower()
         suffix = Path(logical_path).suffix.lower()
         if not _is_under_allowed_root(logical_path, profile.allowed_source_roots):
             raise EvidenceExportError("SOURCE_ROOT_NOT_ALLOWED", logical_path)
@@ -262,7 +275,6 @@ def build_plan(repository_root: Path, external_root: Path, request: ExportReques
     bundle_id = canonical_sha256(identity_content, role="OVC_COMPACT_EVIDENCE_EXPORT_BUNDLE")
     manifest = {
         "schema": _MANIFEST_SCHEMA,
-        "export_id": request.export_id,
         "programme_id": request.programme_id,
         "profile_id": request.profile_id,
         "source_commit": request.source_commit,
@@ -331,6 +343,7 @@ def execute_export(plan: ExportPlan) -> dict[str, Any]:
         verify_bundle(plan)
         return {
             "status": "IDEMPOTENT_REUSE",
+            "export_id": plan.request.export_id,
             "bundle_id": plan.bundle_id,
             "bundle_directory": str(plan.destination),
             "manifest_sha256": canonical_sha256(plan.manifest, role="OVC_COMPACT_EVIDENCE_EXPORT_MANIFEST"),
@@ -356,6 +369,7 @@ def execute_export(plan: ExportPlan) -> dict[str, Any]:
         raise
     return {
         "status": "PASS",
+        "export_id": plan.request.export_id,
         "bundle_id": plan.bundle_id,
         "bundle_directory": str(plan.destination),
         "manifest_sha256": canonical_sha256(plan.manifest, role="OVC_COMPACT_EVIDENCE_EXPORT_MANIFEST"),
