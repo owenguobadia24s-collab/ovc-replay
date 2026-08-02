@@ -1,21 +1,25 @@
 {
   "schema": "ovc-mta-g3-delegated-decision/v1",
-  "decision_id": "MTA-G3.DELEGATED.PENDING",
+  "decision_id": "MTA-G3.DELEGATED.PASS.20260802T205000Z",
   "programme_id": "OVC-MTA-v0.2",
   "gate_id": "MTA-G3",
   "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
-  "status": "PENDING_EXACT_FINAL_HEAD_CI",
-  "decision": null,
+  "status": "APPROVED_PENDING_SQUASH_MERGE",
+  "decision": "PASS",
   "plan_version": "0.2",
   "baseline_commit": "726419295104a763f06911e3914c48e12e753b5c",
-  "candidate_commit": null,
-  "tests": [],
-  "qa_recommendation": "PASS_PENDING_EXACT_FINAL_HEAD_CI_WITH_MATERIAL_FINDINGS",
+  "candidate_commit": "9b2a4ce68246b8070125484b96dede62f3489712",
+  "tests": [
+    {"name":"Market Translation Audit MTA-G3 C2 translation","run_id":30766337750,"result":"PASS"},
+    {"name":"tests","run_id":30766337753,"result":"PASS"},
+    {"name":"OVC tiered test selection shadow","run_id":30766337844,"profile":"FINAL_HEAD","result":"PASS"}
+  ],
+  "qa_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
   "authority_delta": "ACCEPT_CHECKSUM_ADDRESSED_C2_TRANSLATION_AUDIT_EVIDENCE_WITH_MATERIAL_FINDINGS",
   "operator_reserved_action": false,
   "material_findings": ["MTA-WP3-F1", "MTA-WP3-F2", "MTA-WP3-F3"],
-  "rationale": "The packet audits already-frozen C2 evidence without changing formulas, thresholds, clocks, selectors, releases, Validation or downstream authority. Exact translation passes while material structural limitations remain visible for MTA-A3.",
-  "rollback": "Supersede through a new immutable audit version bound to exact input hashes; preserve all prior audit and source evidence.",
+  "rationale": "All frozen C2 state, transition, level, container, relation, axis, persistence, parent-event and reset accounting conditions pass with zero mismatches. The three material structural limitations remain explicit for MTA-A3. The delta accepts audit evidence only and is wholly within the operator-approved plan.",
+  "rollback": "Supersede through a new immutable audit version bound to exact input hashes; preserve all prior audit, finding and source evidence.",
   "merge_commit": null,
   "next_control": "MTA-A3"
 }
