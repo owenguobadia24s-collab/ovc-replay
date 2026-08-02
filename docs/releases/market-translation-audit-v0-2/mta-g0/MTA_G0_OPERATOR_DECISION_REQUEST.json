@@ -1,0 +1,22 @@
+{
+  "schema": "ovc-mta-g0-operator-decision-request/v1",
+  "gate_id": "MTA-G0",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "status": "OPERATOR_DECISION_REQUIRED",
+  "allowed_gate_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "required_subdecisions": {
+    "plan_scope": {"recommended": "PASS", "effect": "Ratify audit-only programme and segmented execution."},
+    "june_blinded_review": {"allowed": ["DEFER", "SUPERSEDE"], "recommended": "DEFER", "effect": "Record no review outcome; preserve evidence."},
+    "pr_202": {"allowed": ["PRESERVE_OPEN_UNMERGED", "CLOSE_PRESERVE_BRANCH_AND_ARTIFACTS"], "recommended": "PRESERVE_OPEN_UNMERGED"},
+    "capacity_contract": {"allowed": ["APPROVE", "REVISE", "BLOCK"], "recommended": "APPROVE_4_HOURS_10GB"},
+    "cluster_variants": {"allowed": ["APPROVE", "REVISE", "BLOCK"], "recommended": "APPROVE_EXACT_THREE_PRIMARY_PLUS_1"},
+    "ro4_integration": {"allowed": ["APPROVE", "REVISE", "BLOCK"], "recommended": "APPROVE_SEPARATE_OBJECTS_AND_INCONSISTENCY_INCIDENTS"},
+    "acknowledgements": {"allowed": ["REQUIRE", "REVISE", "BLOCK"], "recommended": "REQUIRE_MTA_A3_AND_MTA_A6"},
+    "external_evidence": {"allowed": ["ACCEPT_PINNED", "REQUIRE_REHASH", "BLOCK"], "recommended": "ACCEPT_PINNED_EXISTING_COURT_RECORD_HASHES"},
+    "audit_population": {"allowed": ["APPROVE", "REVISE", "BLOCK"], "recommended": "APPROVE_JUNE_WITH_MAY_JULY_CONTEXT_NO_VALIDATION"}
+  },
+  "recommended_gate_decision": "PASS",
+  "exact_command": "OVC APPROVE MTA-G0 PASS",
+  "note": "The approval command records the recommended subdecisions unless the operator states overrides in the same message. No downstream authority is activated."
+}
