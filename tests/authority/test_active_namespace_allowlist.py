@@ -18,6 +18,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.v0_3",
     "ovc.research_operations.v0_4",
     "ovc.research_operations.pattern_discovery",
+    "ovc.research_operations.mta",
 }
 
 
@@ -37,6 +38,13 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
             for path in package_root.rglob("__init__.py")
         }
         self.assertEqual(EXPECTED_OVC_PACKAGES, actual)
+
+    def test_mta_namespace_is_audit_only(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "mta" / "__init__.py").read_text(encoding="utf-8")
+        self.assertIn("no market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("semantic-promotion", init_text)
+        self.assertIn("execution authority", init_text)
 
 
 if __name__ == "__main__":
