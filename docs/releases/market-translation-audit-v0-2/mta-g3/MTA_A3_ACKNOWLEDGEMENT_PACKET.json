@@ -5,8 +5,8 @@
   "plan_version": "0.2",
   "control_id": "MTA-A3",
   "title": "C2 structural translation findings acknowledgement",
-  "status": "GATE_READY",
-  "operator_decision_required": true,
+  "status": "APPROVED",
+  "operator_decision_required": false,
   "completed_packets": ["MTA-00", "MTA-WP1", "MTA-WP2", "MTA-WP3"],
   "baseline_commit": "da29bb4b571e8f0c4706fa3032e941a89d0d5550",
   "superseded_preserved_candidate": {
@@ -25,13 +25,24 @@
   },
   "current_authority": "AUDIT_ONLY_NO_MODEL_OR_SELECTOR_CHANGE",
   "proposed_delta": "ACKNOWLEDGE_MATERIAL_C2_FINDINGS_AND_AUTHORISE_MTA_WP4_AUDIT_ONLY_CONTINUATION",
+  "recorded_decision": {
+    "decision_id": "MTA-A3.OPERATOR.ACKNOWLEDGE_CONTINUE.20260802T222300+0100",
+    "decision": "ACKNOWLEDGE_CONTINUE",
+    "decision_authority": "OPERATOR",
+    "operator_instruction": "OVC APPROVE MTA-A3 ACKNOWLEDGE_CONTINUE",
+    "recorded_at": "2026-08-02T22:23:00+01:00",
+    "acknowledged_findings": ["MTA-WP3-F1", "MTA-WP3-F2", "MTA-WP3-F3"],
+    "authority_effect": "AUTHORISE_MTA_WP4_CLOCK_AND_PARENT_CONTEXT_AUDIT_ONLY",
+    "operator_reserved_activation": "NONE"
+  },
   "acceptance_conditions": [
     {"condition":"All 18 frozen external inputs match manifest hashes and sizes","result":"PASS"},
     {"condition":"All 9,420 C2 states and 7,345 transitions reconstruct exactly","result":"PASS"},
     {"condition":"All levels, containers, relation sets, five axes, persistence and resets account exactly","result":"PASS"},
     {"condition":"Unaccounted records and mismatches are zero","result":"PASS"},
     {"condition":"Material limitations remain visible and non-activating","result":"PASS"},
-    {"condition":"Required current-main MTA-G3, tests and tiered FINAL_HEAD checks pass","result":"PASS"}
+    {"condition":"Required current-main MTA-G3, tests and tiered FINAL_HEAD checks pass","result":"PASS"},
+    {"condition":"Operator explicitly acknowledges the material findings and authorises audit-only continuation","result":"PASS"}
   ],
   "tests": [
     {"candidate":"9b2a4ce68246b8070125484b96dede62f3489712","workflow":"Market Translation Audit MTA-G3 C2 translation","run_id":30766337750,"result":"PASS"},
@@ -84,5 +95,5 @@
     "Audit A-L mapping, first-valid parent links, parent age, refresh, boundary distance and reset causes",
     "Auto-ratify MTA-G4 only if its delta remains audit-only and all acceptance conditions pass"
   ],
-  "rollback": "No model or selector authority changed at MTA-G3. DEFER, BLOCK or QUARANTINE preserves all source, audit, finding, check and merge evidence and prevents MTA-WP4 from starting."
+  "rollback": "The acknowledgement may be superseded by a later operator decision. All MTA-G3 evidence remains preserved; no model, selector, formula, threshold, clock, Validation, publication, risk or execution authority has changed."
 }
