@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-da2-g0-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-00",
+  "gate_id": "DA2-G0",
+  "operator_decision_id": "DA2-G0.OPERATOR.PASS.20260802T213600+0100",
+  "status": "BLOCKED",
+  "qa_recommendation": "BLOCK",
+  "completed": {
+    "operator_pass_recorded": true,
+    "frozen_subjects_preserved": true,
+    "workflow_run_inventory_complete": true,
+    "workflow_runs_accounted": 91,
+    "required_checks_identified": true,
+    "required_check_log_timing_reproduced": true,
+    "deterministic_builder_implemented": true,
+    "focused_tests_implemented": true,
+    "later_narrowing_proposal_prepared": true,
+    "focused_tests_local": "5_PASS"
+  },
+  "findings": {
+    "subject_218_runs": 46,
+    "subject_222_runs": 45,
+    "total_runs": 91,
+    "required_runs": 4,
+    "expected_skipped": 10,
+    "relevant_optional": 1,
+    "unrelated": 76,
+    "unrelated_ratio": 0.8351648351648352,
+    "duplicate_complete_suite_runs": 2,
+    "unrelated_failed_runs": 4
+  },
+  "blocking_conditions": [
+    "Run-level created_at, run_started_at and updated_at are absent from the available connector response.",
+    "Workflow path is absent from the available connector response.",
+    "Required check-suite/check-run GitHub App identity is absent from the available connector response.",
+    "Exact queue and execution durations therefore cannot be reported for all 91 runs without estimation.",
+    "The available connector does not expose a commit tree SHA, so it cannot materialise the required multi-file packet as one Git-data commit; files are preserved on a non-authoritative assembly branch and the final blocked branch is created once."
+  ],
+  "estimated_values_used": false,
+  "workflow_files_changed": false,
+  "ruleset_changed": false,
+  "tests_weakened": false,
+  "smallest_lawful_resolution": "Supply checksum-addressed raw GitHub REST run, job, check-suite and check-run JSON for both frozen SHAs; then rerun the deterministic builder.",
+  "rollback": "Preserve partial evidence and supersede with a complete baseline; no operational mutation exists."
+}
