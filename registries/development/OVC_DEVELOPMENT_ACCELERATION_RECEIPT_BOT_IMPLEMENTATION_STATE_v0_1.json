@@ -5,8 +5,8 @@
   "gate_id": "DA-G4B",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "tested_candidate_commit": "87132c44e4ce7a4410636283989ceda9677deae7",
-  "status": "APPROVED_ACTIVE_FINAL_HEAD_CI_PENDING",
+  "tested_candidate_commit": "f4c33e7ca1de82a1da17a2d7e7c0ff4e4e60db1f",
+  "status": "PASS_READY_FOR_SQUASH_MERGE",
   "operator_decision_id": "DA-G4B.OPERATOR.PASS.20260802T163600Z",
   "approved_profile_state": "ACTIVE_EXACT_APPROVED_PROFILE",
   "policy": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json",
@@ -30,7 +30,7 @@
     "REVOCATION_TESTS_PASS": "PASS",
     "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "PASS_EXACT_RULESET_EXPORT",
     "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS_PR_211_UNMERGED",
-    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PASS_PRE_ACTIVATION_RERUN_PENDING_POST_ACTIVATION",
+    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PASS_POST_ACTIVATION",
     "QA_PASS": "PASS",
     "OPERATOR_DA_G4B_DECISION": "PASS"
   },
@@ -56,14 +56,15 @@
     "merge_authority": false,
     "direct_main_write": false
   },
+  "final_assurance": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_POST_ACTIVATION_FINAL_ASSURANCE.json",
   "tests": [
-    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30756179181, "result": "PASS"},
-    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30756179120, "result": "PASS"},
-    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30756179134, "result": "PASS"},
-    {"workflow": "OVC tiered test selection shadow", "run_id": 30756179173, "result": "PASS"},
-    {"workflow": "tests", "run_id": 30756179162, "result": "PASS"}
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30757948495, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30757948491, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30757948370, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30757948472, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30757948423, "result": "PASS"}
   ],
-  "blockers": ["POST_ACTIVATION_FINAL_HEAD_CI_PENDING"],
+  "blockers": [],
   "permanent_denials": [
     "WRITE_MAIN",
     "MERGE_PULL_REQUEST",
@@ -80,5 +81,5 @@
     "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_OBJECT"
   ],
   "rollback": "Disable the active profile, revoke the dedicated GitHub App installation or key, close unmerged bot proposal PRs if required, preserve accepted records and revert through a new non-destructive commit.",
-  "next_action": "RUN_POST_ACTIVATION_FINAL_HEAD_ASSURANCE"
+  "next_action": "SQUASH_MERGE_PR209_AFTER_FINALIZATION_HEAD_CHECKS_PASS"
 }
