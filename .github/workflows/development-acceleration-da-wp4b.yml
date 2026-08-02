@@ -10,8 +10,11 @@ on:
       - "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
       - "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json"
       - "src/ovc/development/receipt_bot.py"
+      - "scripts/development/run_da_receipt_bot.ps1"
       - "scripts/development/validate_da_wp4b.py"
       - "tests/development/test_receipt_bot.py"
+      - "tests/development/test_da_g4.py"
+      - "tests/development/test_da_g4b.py"
       - "fixtures/development/receipt_bot/**"
       - "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json"
       - "docs/releases/development-acceleration-v0-1/da-wp4b/**"
@@ -32,24 +35,38 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate DA-WP4B packet
+      - name: Validate DA-WP4B activation packet
         run: PYTHONPATH=src python -u scripts/development/validate_da_wp4b.py
-      - name: Focused receipt-bot tests
+      - name: Focused receipt-bot planning tests
         run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_receipt_bot.py' -v
-      - name: Retained DA-G4 authority tests
+      - name: DA-G4 historical authority tests
         run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4.py' -v
+      - name: DA-G4B activation tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4b.py' -v
       - name: Retained closure tests
         run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_closure.py' -v
+      - name: Production runner PowerShell syntax
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path scripts/development/run_da_receipt_bot.ps1),
+            [ref]$null,
+            [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -ne 0) { $errors | Format-List | Out-String | Write-Error }
       - name: Complete repository suite
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert fail-closed inactive boundary
+      - name: Assert exact active authority and permanent denials
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'active.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json
-          grep -q 'production_transport.*ABSENT_FAIL_CLOSED' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
-          grep -q 'credential_state.*DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
-          grep -q 'activation_evaluation.*GATE_READY_OPERATOR_DECISION_REQUIRED' docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json
-          grep -q 'authority_active.*false' docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json
-          ! grep -R -E 'subprocess|os\.system|requests|urllib|httpx|PyGithub|github3|git push|git merge|force.push' src/ovc/development/receipt_bot.py
+          grep -q '"active": true' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json
+          grep -q 'DA-G4B.OPERATOR.PASS.20260802T163600Z' docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json
+          grep -q '"authority_active": true' docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_ACTIVATION_EVALUATION.json
+          grep -q 'ACTIVE_FAIL_CLOSED:scripts/development/run_da_receipt_bot.ps1' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
+          grep -q 'PROHIBITED_TO_BOT' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
+          grep -q 'merge_performed = $false' scripts/development/run_da_receipt_bot.ps1
+          grep -q 'approval_performed = $false' scripts/development/run_da_receipt_bot.ps1
+          ! grep -E '/merges([?"'"']|$)|/reviews([?"'"']|$)|git[[:space:]]+(push|merge|reset)' scripts/development/run_da_receipt_bot.ps1
           ! grep -R -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/receipt_bot.py
