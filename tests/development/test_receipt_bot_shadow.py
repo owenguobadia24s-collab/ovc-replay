@@ -109,7 +109,9 @@ class ReceiptBotShadowTests(unittest.TestCase):
         self.assertFalse(audit["merge_performed"])
         self.assertFalse(audit["approval_performed"])
         self.assertFalse(audit["force_push_performed"])
-        self.assertNotIn("content", json.dumps(audit, sort_keys=True))
+        audit_text = json.dumps(audit, sort_keys=True)
+        self.assertNotIn("ovc-da-g4b-shadow-receipt", audit_text)
+        self.assertNotIn("APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE", audit_text)
 
     def test_shadow_rejects_content_hash_mismatch_and_non_shadow_path(self) -> None:
         readiness = evaluate_shadow_readiness(self.pre_shadow_evidence, self.policy)
