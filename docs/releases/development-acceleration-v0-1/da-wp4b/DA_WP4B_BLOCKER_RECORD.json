@@ -3,37 +3,59 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "status": "BLOCKED_ACTIVATION_EXTERNAL_EVIDENCE",
+  "status": "BLOCKED_ACTIVATION_RULESET_EVIDENCE_AND_FINAL_CI",
+  "resolved_blockers": [
+    {
+      "blocker_id": "DA-WP4B-BLOCK-DEDICATED-IDENTITY",
+      "condition": "DEDICATED_REVOCABLE_IDENTITY_PROVISIONED",
+      "resolution": "Dedicated GitHub App ovc-dev-accel-receipt-bot, App ID 4463376 and installation ID 150708331, is recorded as revocable with the exact approved permissions."
+    },
+    {
+      "blocker_id": "DA-WP4B-BLOCK-REAL-SHADOW",
+      "condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS",
+      "resolution": "The dedicated identity created open unmerged PR 211 with one allowlisted receipt at commit 0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e and no prohibited action."
+    }
+  ],
   "blockers": [
     {
       "blocker_id": "DA-WP4B-BLOCK-BRANCH-PROTECTION",
       "condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED",
-      "reason": "The connected GitHub interface does not expose independently reproducible branch-protection rule-set evidence sufficient to prove that the future dedicated bot identity cannot bypass main protection.",
-      "smallest_lawful_resolution": "Provide a reproducible branch-protection or ruleset export bound to the repository and dedicated bot identity, showing direct main writes and bypass are denied."
+      "reason": "The external audit supplies only ruleset SHA-256 ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4. The referenced ruleset export bytes or a reproducible retrieval location are not available, so independent reproduction is not possible.",
+      "smallest_lawful_resolution": "Provide the exact main-ruleset.json export whose SHA-256 is ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4, or provide an authenticated reproducible retrieval record that yields those bytes."
     },
     {
-      "blocker_id": "DA-WP4B-BLOCK-DEDICATED-IDENTITY",
-      "condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS",
-      "reason": "No dedicated revocable receipt-bot identity with the approved minimal permissions is provisioned. The operator GitHub connector is not that identity and cannot lawfully substitute.",
-      "smallest_lawful_resolution": "Provision the dedicated revocable identity, record only its non-secret identity hash and permission evidence, then run one allowlisted proposal-branch shadow without merge authority."
+      "blocker_id": "DA-WP4B-BLOCK-FINAL-HEAD-CI",
+      "condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS",
+      "reason": "PR 209 changed to record the external audit and correct the stale DA-G0 validator exposed by shadow PR CI. The resulting final head must pass the DA-WP4B, corrective-shadow, tiered and complete test workflows.",
+      "smallest_lawful_resolution": "Allow the required GitHub Actions runs to complete successfully on the final PR 209 head without weakening tests."
     }
   ],
+  "external_evidence": {
+    "audit_path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
+    "audit_sha256": "79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3",
+    "shadow_pull_request": 211,
+    "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e"
+  },
   "preserved_work": [
     "bounded authority contract",
     "closed schemas",
     "inactive exact policy",
     "fail-closed planner and adapter protocol",
+    "pre-activation shadow route",
+    "dedicated revocable identity evidence",
+    "real allowlisted shadow PR",
     "fixtures and tests",
     "activation evidence ledger",
     "rollback and revocation controls"
   ],
   "prohibited_resolution": [
-    "Do not use the operator connector as the bot shadow identity.",
-    "Do not mark branch protection PASS from assumptions or repository permissions alone.",
-    "Do not activate the profile, provision broad credentials or weaken tests.",
+    "Do not infer branch protection from the ruleset hash alone.",
+    "Do not merge PR 211.",
+    "Do not activate the profile or production transport.",
+    "Do not weaken, skip or relabel failing tests.",
     "Do not merge, force-push, rewrite history or delete accepted evidence."
   ],
   "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "authority_active": false,
-  "rollback": "Keep the profile inactive and provision no credential until both blockers are reproducibly resolved."
+  "rollback": "Keep the profile inactive, preserve PR 211 unmerged and revoke the dedicated identity if the remaining evidence cannot be completed."
 }
