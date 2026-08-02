@@ -58,23 +58,24 @@ def main() -> int:
     decision_schema = load("schemas/research_operations/mta/mta_g0_operator_decision_v0_1.schema.json")
     state_schema = load("schemas/research_operations/mta/mta_programme_state_v0_2.schema.json")
 
+    plan_baseline = "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3"
+    branch_creation_base = "544dc2f6477ce415321f9419a62586fcffa0d02c"
+    current_pr_base = "eaefbf55d1702d689d59765558af65e87c0b37fc"
+
     assert state["programme_id"] == gate["programme_id"] == decision["programme_id"] == "OVC-MTA-v0.2"
-    assert state["plan_baseline_commit"] == baseline["repository"]["baseline_commit"] == decision["baseline_main_commit"]
-    assert state["baseline_commit"] == gate["baseline_commit"] == eligibility["base_main"] == "544dc2f6477ce415321f9419a62586fcffa0d02c"
-    assert state["branch"] == gate["candidate_branch"] == eligibility["replacement_branch"] == "gate/mta-g0-ratification-resume"
+    assert state["plan_baseline_commit"] == baseline["repository"]["baseline_commit"] == decision["baseline_main_commit"] == plan_baseline
+    assert state["branch_creation_base_commit"] == gate["branch_creation_base_commit"] == eligibility["branch_creation_base_main"] == resolution["branch_creation_base_main"] == branch_creation_base
+    assert state["baseline_commit"] == gate["baseline_commit"] == eligibility["base_main"] == resolution["current_pull_request_base_main"] == current_pr_base
+    assert state["branch"] == gate["candidate_branch"] == eligibility["replacement_branch"] == resolution["replacement_branch"] == "gate/mta-g0-ratification-resume"
+    assert state["pull_request"] == gate["candidate_pull_request"] == eligibility["replacement_pull_request"] == resolution["replacement_pull_request"] == 216
     assert state["operator_decision_required"] is False
     assert state["operator_gate"]["recorded_decision"] == "PASS"
     assert gate["decision"] == "PASS"
+    assert gate["status"] == "APPROVED_PENDING_SQUASH_MERGE"
+    assert state["programme_status"] == "APPROVED"
+    assert qa["recommendation"] == "PASS"
+    assert eligibility["status"] == "ELIGIBLE"
     assert not qa["unresolved_issues"]
-
-    allowed_gate_status = {"APPROVED_PENDING_FINAL_HEAD_RECHECK", "APPROVED_PENDING_SQUASH_MERGE"}
-    allowed_state_status = {"QA_REVIEW", "APPROVED"}
-    allowed_qa = {"PASS_PENDING_FINAL_HEAD", "PASS"}
-    allowed_eligibility = {"PENDING_FINAL_HEAD_CHECKS", "ELIGIBLE"}
-    assert gate["status"] in allowed_gate_status
-    assert state["programme_status"] in allowed_state_status
-    assert qa["recommendation"] in allowed_qa
-    assert eligibility["status"] in allowed_eligibility
 
     assert request["exact_command"] == decision["operator_command"] == "OVC APPROVE MTA-G0 PASS"
     assert decision["decision"] == "PASS"
@@ -97,7 +98,8 @@ def main() -> int:
     assert blocker["status"] == "RESOLVED"
     assert blocker["resolution_record"].endswith("MTA_G0_RULESET_MERGE_RESOLUTION.json")
     assert resolution["resolution_result"] == "PASS_RULESET_REPRODUCIBLE_REQUIRED_CONTEXTS_IDENTIFIED"
-    assert resolution["replacement_base_main"] == state["baseline_commit"]
+    assert resolution["base_change_review"]["result"] == "PASS"
+    assert resolution["base_change_review"]["conflicts"] == []
 
     ruleset_relative = resolution["resolution_source"]["ruleset_path"]
     ruleset_path = ROOT / ruleset_relative
