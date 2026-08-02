@@ -3,34 +3,38 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "status": "PASS_GATE_READY_OPERATOR_REQUIRED",
+  "status": "PASS_ACTIVATION_APPROVED_FINAL_HEAD_RERUN_PENDING",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "tested_candidate_commit": "e3b59a0c5ee2a959706cb445126e5ec47ecaa453",
+  "approved_candidate_commit": "7b1e3850f614743f93f5b21e2007c4b9101b73a6",
+  "operator_decision_id": "DA-G4B.OPERATOR.PASS.20260802T163600Z",
   "checks": [
-    {"check_id": "DA-WP4B-AUTH-001", "result": "PASS", "evidence": "DA-G4 implementation authority recorded; active=false."},
+    {"check_id": "DA-WP4B-AUTH-001", "result": "PASS", "evidence": "DA-G4B operator PASS recorded; exact bounded authority active."},
     {"check_id": "DA-WP4B-POLICY-002", "result": "PASS", "evidence": "Exact branch/path/action allowlists and permanent denials frozen."},
     {"check_id": "DA-WP4B-PLANNER-003", "result": "PASS", "evidence": "Deterministic stale-head, profile, path, idempotency and collision controls pass."},
     {"check_id": "DA-WP4B-REDACTION-004", "result": "PASS", "evidence": "Credential redaction and no-secret checks pass."},
-    {"check_id": "DA-WP4B-BRANCH-PROTECTION-005", "result": "PASS", "evidence": "Exact ruleset SHA-256 ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4; no bypass."},
-    {"check_id": "DA-WP4B-REAL-SHADOW-006", "result": "PASS", "evidence": "PR 211 open unmerged; dedicated identity; no prohibited action."},
-    {"check_id": "DA-WP4B-FINAL-HEAD-007", "result": "PASS", "evidence": "Focused, tiered and complete runs passed on tested candidate."},
-    {"check_id": "DA-WP4B-OPERATOR-008", "result": "OPERATOR_REQUIRED", "evidence": "Activation of agent write authority is reserved."}
+    {"check_id": "DA-WP4B-BRANCH-PROTECTION-005", "result": "PASS", "evidence": "Exact no-bypass ruleset export verified."},
+    {"check_id": "DA-WP4B-REAL-SHADOW-006", "result": "PASS", "evidence": "PR 211 remains open unmerged; no prohibited action."},
+    {"check_id": "DA-WP4B-ACTIVE-PROFILE-007", "result": "PASS", "evidence": "Closed active profile binds approved profile, identity, ruleset, shadow and activation evaluation hashes."},
+    {"check_id": "DA-WP4B-TRANSPORT-008", "result": "PASS", "evidence": "Production transport exposes only bounded branch/file/PR proposal operations; no bot merge or approval method."},
+    {"check_id": "DA-WP4B-FINAL-HEAD-009", "result": "PENDING", "evidence": "Post-activation final-head CI will run after repository records and transport are complete."}
   ],
-  "tests": [
-    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30755205496, "result": "PASS"},
-    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30755205526, "result": "PASS"},
-    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30755205480, "result": "PASS"},
-    {"workflow": "OVC tiered test selection shadow", "run_id": 30755205470, "result": "PASS"},
-    {"workflow": "tests", "run_id": 30755205478, "result": "PASS"}
+  "pre_activation_tests": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30756179181, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30756179120, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30756179134, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30756179173, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30756179162, "result": "PASS"}
   ],
+  "post_activation_tests": [],
   "implementation_blocking_issues": [],
   "activation_blocking_issues": [],
-  "operator_required_boundary": "ACTIVATION_OF_BOUNDED_REPOSITORY_BOT_WRITE_AUTHORITY",
-  "qa_recommendation": "PASS",
-  "recommended_operator_decision": "PASS",
-  "authority_active": false,
+  "completion_blocking_issues": ["POST_ACTIVATION_FINAL_HEAD_CI_PENDING"],
+  "qa_recommendation": "PASS_ACTIVATION_RETAIN_FINAL_HEAD_ASSURANCE",
+  "recorded_operator_decision": "PASS",
+  "authority_active": true,
+  "bot_merge_authority": false,
   "market_authority_delta": "NONE",
   "validation_authority_delta": "NONE",
   "probability_risk_exposure_execution_delta": "NONE",
-  "rollback": "Keep profile inactive until approval; after activation disable profile and revoke identity non-destructively if rollback is required."
+  "rollback": "Disable the active profile and revoke the identity non-destructively; preserve accepted records and history."
 }
