@@ -22,6 +22,7 @@ REQUIRED = [
     "docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json",
     "schemas/research_operations/mta/mta_programme_state_v0_2.schema.json",
     "schemas/research_operations/mta/mta_g0_operator_decision_v0_1.schema.json",
     "fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json",
@@ -47,17 +48,22 @@ def main() -> int:
     decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
     disposition_request = load("docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION_REQUEST.json")
     disposition = load("docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json")
+    blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
     fixtures = load("fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json")
 
-    assert state["programme_id"] == gate["programme_id"] == decision["programme_id"] == "OVC-MTA-v0.2"
-    assert state["baseline_commit"] == baseline["repository"]["baseline_commit"] == gate["baseline_commit"]
+    assert state["programme_id"] == gate["programme_id"] == decision["programme_id"] == blocker["programme_id"] == "OVC-MTA-v0.2"
+    assert state["baseline_commit"] == baseline["repository"]["baseline_commit"] == gate["baseline_commit"] == blocker["baseline_main"]
+    assert state["programme_status"] == "BLOCKED"
     assert state["operator_decision_required"] is False
-    assert state["operator_gate"]["status"] == "APPROVED_PENDING_SQUASH_MERGE"
+    assert state["operator_gate"]["status"] == "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET"
     assert state["operator_gate"]["recorded_decision"] == "PASS"
-    assert gate["status"] == "APPROVED_PENDING_SQUASH_MERGE"
+    assert state["packets"][0]["status"] == "BLOCKED"
+    assert blocker["blocker_id"] in state["packets"][0]["blockers"]
+    assert gate["status"] == "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET"
     assert gate["decision"] == "PASS"
-    assert qa["recommendation"] == "PASS"
-    assert not qa["unresolved_issues"]
+    assert qa["technical_recommendation"] == "PASS"
+    assert qa["merge_recommendation"] == "BLOCK_UNTIL_REQUIRED_CHECK_CONTEXTS_REPRODUCIBLE"
+    assert blocker["blocker_id"] in qa["unresolved_issues"]
 
     assert request["exact_command"] == decision["operator_command"] == "OVC APPROVE MTA-G0 PASS"
     assert decision["decision"] == "PASS"
@@ -75,6 +81,17 @@ def main() -> int:
     assert disposition["review_outcome"] == "NONE"
     assert disposition["pull_request_202_disposition"] == "PRESERVE_OPEN_UNMERGED"
     assert "WHOLESALE_MERGE_PR_202" in disposition["prohibited"]
+
+    assert blocker["status"] == "BLOCKED_EXTERNAL_REPOSITORY_RULESET"
+    assert blocker["blocked_head"] == state["tested_candidate_commit"] == gate["tested_candidate_commit"]
+    assert blocker["main_unchanged_at_block"] is True
+    assert blocker["merge_attempt"]["result"] == "HTTP_405_REPOSITORY_RULE_VIOLATION"
+    assert blocker["merge_attempt"]["message"] == "2 of 2 required status checks are expected"
+    assert len(blocker["passing_final_head_checks"]) == 3
+    assert all(check["result"] == "PASS" for check in blocker["passing_final_head_checks"])
+    assert blocker["review_state"] == {"unresolved_review_threads": 0, "blocking_review_submissions": 0}
+    assert "MERGE_WITH_EXPECTED_CHECKS_UNSATISFIED" in blocker["prohibited_resolutions"]
+    assert blocker["continuation_point"] == "MTA-G0_SQUASH_MERGE_THEN_MTA-WP1"
 
     cap = fixtures["valid"]
     assert cap["max_runtime_s"] == 14400
@@ -104,7 +121,7 @@ def main() -> int:
 
     digest = hashlib.sha256((ROOT / REQUIRED[0]).read_bytes()).hexdigest()
     assert len(digest) == 64
-    print("MTA-G0 approved decision validation PASS")
+    print("MTA-G0 approved decision and external merge blocker validation PASS")
     return 0
 
 
