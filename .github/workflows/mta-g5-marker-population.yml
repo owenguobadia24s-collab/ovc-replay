@@ -1,0 +1,55 @@
+name: Market Translation Audit MTA-G5 marker population
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/research_operations/mta/OVC_MTA_MARKER_POPULATION_AUDIT_CONTRACT_v0_1.md"
+      - "src/ovc/research_operations/mta/marker_population_audit.py"
+      - "scripts/research_operations/validate_mta_wp5.py"
+      - "tests/research_operations/mta/test_mta_wp5.py"
+      - "docs/releases/market-translation-audit-v0-2/mta-g5/**"
+      - "docs/releases/market-translation-audit-v0-2/mta-g4/MTA_G4_MERGE_RECEIPT.json"
+      - "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json"
+      - ".github/workflows/mta-g5-marker-population.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mta-g5:
+    name: mta-g5
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-WP5')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {show-progress: false}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Validate compact population audit
+        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp5.py
+      - name: Focused MTA-WP5 tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp5.py' -v
+      - name: Retained MTA assurance
+        run: |
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp4.py
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp3.py
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp2.py
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp1.py
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_g0.py
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert audit-only authority
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          v=json.loads(Path('docs/releases/market-translation-audit-v0-2/mta-g5/MTA_WP5_MARKER_POPULATION_AUDIT_REFERENCE.json').read_text())
+          assert v['population']['eligible_windows']==7116
+          assert v['population']['rule_attempts']==56928
+          assert v['population']['source_axis_not_evaluable_markers']==13993
+          assert all(x==0 for x in v['mismatch_counts'].values())
+          assert v['marker_semantic_promotion']=='DENIED'
+          assert v['validation_consumption']=='DENIED'
+          PY
