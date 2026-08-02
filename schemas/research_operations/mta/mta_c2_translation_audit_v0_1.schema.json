@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/mta/mta_c2_translation_audit_v0_1.schema.json",
+  "title": "MTA WP3 C2 translation audit reference",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "programme_id", "packet_id", "gate_id", "plan_version", "baseline_commit",
+    "source_run_id", "source_slice_id", "source_manifest_sha256", "output_manifest_sha256",
+    "deterministic_payload_hash", "external_artifact", "input_files", "record_accounting",
+    "target_axis_status", "target_axis_values", "target_structural_outcomes", "mismatch_counts",
+    "findings", "qa_recommendation", "selector_change", "formula_threshold_change", "clock_change",
+    "c2e_c2_5_c3", "validation_consumption", "r2_publication", "probability_risk_exposure_execution"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-mta-wp3-c2-translation-audit-reference/v1"},
+    "programme_id": {"const": "OVC-MTA-v0.2"},
+    "packet_id": {"const": "MTA-WP3"},
+    "gate_id": {"const": "MTA-G3"},
+    "plan_version": {"const": "0.2"},
+    "baseline_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_run_id": {"type": "string", "minLength": 1},
+    "source_slice_id": {"type": "string", "minLength": 1},
+    "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "output_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "deterministic_payload_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "external_artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider", "file_id", "name", "size_bytes", "sha256", "logical_sha256"],
+      "properties": {
+        "provider": {"const": "GOOGLE_DRIVE"}, "file_id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1}, "size_bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "input_files": {
+      "type": "array", "minItems": 18, "maxItems": 18,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["path", "local_name", "size_bytes", "sha256", "record_count"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1}, "local_name": {"type": "string", "minLength": 1},
+          "size_bytes": {"type": "integer", "minimum": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "record_count": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "record_accounting": {"type": "object"},
+    "target_axis_status": {"type": "object"},
+    "target_axis_values": {"type": "object"},
+    "target_structural_outcomes": {"type": "object"},
+    "mismatch_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "findings": {"type": "array", "minItems": 4, "items": {"type": "object"}},
+    "qa_recommendation": {"const": "PASS_WITH_MATERIAL_FINDINGS"},
+    "selector_change": {"const": "DENIED"},
+    "formula_threshold_change": {"const": "DENIED"},
+    "clock_change": {"const": "DENIED"},
+    "c2e_c2_5_c3": {"const": "DENIED"},
+    "validation_consumption": {"const": "DENIED"},
+    "r2_publication": {"const": "DENIED"},
+    "probability_risk_exposure_execution": {"const": "NONE"}
+  }
+}
