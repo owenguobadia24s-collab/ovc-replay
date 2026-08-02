@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-da2-g1-operator-gate-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-WP1",
+  "gate_id": "DA2-G1",
+  "title": "One PR orchestrator and precise trigger admission",
+  "status": "GATE_READY_AFTER_DA2_G0_MERGE",
+  "authority_required": "OPERATOR_REQUIRED",
+  "operator_decision_required": true,
+  "current_authority": "WORKFLOW_AND_RULESET_MUTATION_DENIED",
+  "proposed_authority_delta": "BOUNDED_GITHUB_ACTIONS_ORCHESTRATION_TRIGGER_AND_REQUIRED_CONTEXT_RECONFIGURATION_ONLY",
+  "observed_basis": {
+    "subjects": 2,
+    "workflow_runs": 91,
+    "unrelated_runs": 76,
+    "unrelated_ratio": 0.8351648351648352,
+    "duplicate_complete_suite_runs": 2,
+    "unrelated_failed_runs": 4,
+    "baseline_logical_sha256": "03295d1e0e9a9ac080649514d64e88df6dc144627399c0948d5d625ed371b8cc"
+  },
+  "proposed_changes": [
+    "Add one canonical PR orchestration workflow selecting FAST, PACKET or FINAL_HEAD from changed files.",
+    "Make legacy packet/gate workflows reusable through workflow_call, manual through workflow_dispatch, push-to-main verification, or precisely path-filtered; remove unconditional broad PR admission.",
+    "Add per-PR concurrency with cancel-in-progress true to every remaining PR workflow.",
+    "Retain one canonical complete-suite check per final head; FAST and PACKET remain focused.",
+    "Stop committing mutable CI run IDs to candidate branches; record them through post-test control or receipt records.",
+    "Add one completion evaluator with stable GitHub Actions source identity.",
+    "Standardise ruleset-required PR assurance on ubuntu-latest and CPython 3.11.",
+    "Update the active ruleset only to the exact approved stable required context set after provenance checks pass."
+  ],
+  "out_of_scope": [
+    "Changing test assertions or application semantics",
+    "Weakening the complete-suite boundary",
+    "Provider or R2 access",
+    "Publication, selector, semantic, threshold, model, family, candidate or theory changes",
+    "ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION",
+    "Market, probability, risk, exposure or execution authority",
+    "New instrument, market, clock, side, dependency, secret or agent write authority"
+  ],
+  "acceptance_conditions": [
+    "Every current pull_request workflow is inventoried and assigned one future trigger mode.",
+    "One orchestrator deterministically selects FAST, PACKET or FINAL_HEAD.",
+    "Exactly one complete repository suite runs per final head.",
+    "Superseded-head runs cancel through per-PR concurrency.",
+    "Required contexts are emitted by the expected github-actions app identity.",
+    "Ruleset health preflight passes before and after the change.",
+    "Synthetic path-admission fixtures prove required workflows trigger and unrelated workflows do not.",
+    "Rollback restores the prior workflow and ruleset snapshots without history rewrite.",
+    "Focused and canonical final-head checks pass with QA PASS."
+  ],
+  "capacity_contract": {
+    "maximum_local_runtime_minutes": 60,
+    "maximum_ci_runtime_minutes": 30,
+    "maximum_repository_artifact_bytes": 2097152,
+    "capacity_exceeded_result": "BLOCK_AND_PRESERVE_PARTIAL_EVIDENCE"
+  },
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "operator_command": "OVC APPROVE DA2-G1 PASS",
+  "workflow_mutation_active": false,
+  "ruleset_mutation_active": false,
+  "rollback": "Restore exact prior workflow files and ruleset snapshot through new non-destructive commits; preserve all DA2 evidence."
+}
