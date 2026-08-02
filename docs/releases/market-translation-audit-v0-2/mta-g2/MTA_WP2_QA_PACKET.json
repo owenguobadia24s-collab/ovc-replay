@@ -4,7 +4,7 @@
   "packet_id": "MTA-WP2",
   "gate_id": "MTA-G2",
   "baseline_commit": "86ccb5e1bd57448339bf8a8447219e836b8cfbee",
-  "candidate_commit": null,
+  "candidate_commit": "954f6847b810e758566d9fb4cde214420b3b64c9",
   "external_audit_id": "MTA.WP2.SOURCE_C1.PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9.v1",
   "external_artifact_sha256": "3fe01f18feb95179a192232a64b7497adb53b0e9247f1473a8175fe6c83e2e44",
   "external_artifact_logical_sha256": "2b6ed6758d55c672464e4147a424e4e3c628c0541dcd507bcc9cb35eebd13991",
@@ -19,7 +19,12 @@
     {"check_id":"MTA-G2-TARGET","status":"PASS","evidence":"Target June accounting is exact: 4,760 derived bars, 4,526 complete/C1, 234 incomplete."},
     {"check_id":"MTA-G2-DETERMINISM","status":"PASS","evidence":"Frozen replay records PASS_BYTE_IDENTICAL; compact external audit is checksum-addressed."},
     {"check_id":"MTA-G2-AUTHORITY","status":"PASS","evidence":"No repair, provider intake, selector, release, R2, Validation, C2E, C2.5, C3 or exposure authority is created."},
-    {"check_id":"MTA-G2-CI","status":"PENDING","evidence":"Exact final-head workflow and required check IDs will be recorded after PR assurance."}
+    {"check_id":"MTA-G2-CI","status":"PASS","evidence":"MTA-G2 run 30764967905, tests run 30764967911 and tiered FINAL_HEAD run 30764967948 passed on candidate 954f6847b810e758566d9fb4cde214420b3b64c9."}
+  ],
+  "tests": [
+    {"name":"Market Translation Audit MTA-G2 source and C1 audit","run_id":30764967905,"result":"PASS"},
+    {"name":"tests","run_id":30764967911,"result":"PASS"},
+    {"name":"OVC tiered test selection shadow","run_id":30764967948,"profile":"FINAL_HEAD","result":"PASS"}
   ],
   "findings": [
     {"finding_id":"MTA-WP2-F1","severity":"INFO","classification":"PAIRED_PROVIDER_ABSENCE","summary":"138 absent M1 timestamps and 95 gap runs per side are exactly paired across BID/ASK and remain explicit censoring rather than repair."},
@@ -28,6 +33,6 @@
   ],
   "warnings": [],
   "unresolved_issues": [],
-  "recommendation": "PASS_PENDING_EXACT_FINAL_HEAD_CI",
+  "recommendation": "PASS",
   "rollback": "Supersede through a new audit version bound to immutable input hashes; preserve the external artifact, compact reference and all source evidence."
 }
