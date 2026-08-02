@@ -162,7 +162,6 @@ def main() -> int:
         "bot/ovc-dev-accel-receipts/*",
         "IDEMPOTENCY_COLLISION",
         "STALE_MAIN_SHA",
-        "CREATE_OR_UPDATE_ALLOWLISTED_FILES",
         "merge_performed = $false",
         "approval_performed = $false",
         "force_push_performed = $false",
