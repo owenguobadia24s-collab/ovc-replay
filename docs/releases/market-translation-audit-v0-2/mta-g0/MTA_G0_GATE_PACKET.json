@@ -9,7 +9,7 @@
   "status": "GATE_READY_OPERATOR_DECISION_REQUIRED",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "candidate_branch": "gate/mta-g0-ratification",
-  "candidate_commit": null,
+  "tested_candidate_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb",
   "current_authority": {
     "opt_a_c1_c2": "UNCHANGED_ACTIVE_EXISTING_AUTHORITY",
     "june_wp2": "PRESERVED_RESEARCH_EVIDENCE_NOT_RELEASE",
@@ -39,8 +39,12 @@
     {"condition": "RO4 and MTA identities and promotion paths remain separate", "status": "PASS"},
     {"condition": "MTA-A3 and MTA-A6 stops and four G8 decisions are preserved", "status": "PASS"},
     {"condition": "No selector, formula, threshold, reset, clock, release, Validation, semantic or exposure authority", "status": "PASS"},
-    {"condition": "Final-head validator, focused tests and complete repository suite pass", "status": "PENDING_CI"},
+    {"condition": "Final-head validator, focused tests and complete repository suite pass", "status": "PASS"},
     {"condition": "Operator records all required MTA-G0 subdecisions", "status": "PENDING_OPERATOR"}
+  ],
+  "tests": [
+    {"name": "MTA-G0 gate readiness", "run_id": 30752745706, "status": "PASS", "tested_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb"},
+    {"name": "generic complete repository suite", "run_id": 30752745692, "status": "PASS", "tested_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb"}
   ],
   "external_artifact_hashes": [
     {"artifact": "plan_docx", "sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d"},
@@ -48,14 +52,14 @@
     {"artifact": "wp3_sealed_evidence", "sha256": "ce1440ba85fc5e2d42200141df3e5d648333e90848a59a956af52b400acfac4b"},
     {"artifact": "wp3_answer_key", "sha256": "48ddb7ff6689c60ef4ce24703119f6557959828e886e02213ae1804c3001ed97"}
   ],
-  "qa": {"packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json", "recommendation": "PASS_AFTER_FINAL_HEAD_CI_THEN_OPERATOR_DECISION"},
+  "qa": {"packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json", "recommendation": "PASS"},
   "decision_request": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json",
   "june_disposition_request": "docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION_REQUEST.json",
   "warnings": [
     "PR #202 external bytes are not rehashed in this GitHub-only packet; existing court-record hashes and Drive existence are pinned for operator acceptance.",
     "PR #209 is concurrent blocked work and remains outside scope."
   ],
-  "unresolved_issues": ["FINAL_HEAD_CI_REQUIRED", "MTA_G0_OPERATOR_DECISION_REQUIRED"],
+  "unresolved_issues": ["MTA_G0_OPERATOR_DECISION_REQUIRED"],
   "rollback": "Close or revert only the unmerged MTA-G0 branch through non-destructive commits; preserve all source evidence, PR branches and external artifacts.",
   "recommended_decision": "PASS",
   "exact_work_after_pass": "Record MTA-G0 and PD-JUNE-FM-G2 decisions, squash-merge the bounded court-record PR, create audit/mta-wp1-flow-registry from the new lawful main tip and continue through MTA-G3 before stopping at MTA-A3.",
