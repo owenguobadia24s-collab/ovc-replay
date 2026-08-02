@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/mta/mta_source_c1_audit_v0_1.schema.json",
+  "title": "OVC MTA Source and C1 Audit v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "audit_id",
+    "programme_id",
+    "plan_id",
+    "plan_version",
+    "packet_id",
+    "gate_id",
+    "generated_at",
+    "audit_mode",
+    "source_run",
+    "input_evidence",
+    "source_audit",
+    "derived_audit",
+    "findings",
+    "qa_recommendation",
+    "authority_delta",
+    "prohibited",
+    "rollback",
+    "artifact_logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-mta-wp2-external-audit/v1"},
+    "audit_id": {"type": "string", "pattern": "^MTA\\.WP2\\.SOURCE_C1\\."},
+    "programme_id": {"const": "OVC-MTA-v0.2"},
+    "plan_id": {"const": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2"},
+    "plan_version": {"const": "0.2"},
+    "packet_id": {"const": "MTA-WP2"},
+    "gate_id": {"const": "MTA-G2"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "audit_mode": {"const": "READ_ONLY_EXTERNAL_ARTIFACT_REPLAY_AUDIT"},
+    "source_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "source_slice_id", "source_manifest_sha256", "replay_payload_logical_sha256", "target_start_utc", "target_end_exclusive_utc", "source_start_utc", "source_end_exclusive_utc", "validation_consumption", "r2_publication"],
+      "properties": {
+        "run_id": {"const": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9"},
+        "source_slice_id": {"const": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"},
+        "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "replay_payload_logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "target_start_utc": {"type": "string", "format": "date-time"},
+        "target_end_exclusive_utc": {"type": "string", "format": "date-time"},
+        "source_start_utc": {"type": "string", "format": "date-time"},
+        "source_end_exclusive_utc": {"type": "string", "format": "date-time"},
+        "validation_consumption": {"const": "DENIED"},
+        "r2_publication": {"const": "DENIED"}
+      }
+    },
+    "input_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["drive_run_folder_id", "source_qa_drive_file_id", "source_qa_sha256", "files"],
+      "properties": {
+        "drive_run_folder_id": {"type": "string", "minLength": 1},
+        "source_qa_drive_file_id": {"type": "string", "minLength": 1},
+        "source_qa_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "files": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["role", "clock", "side", "drive_file_id", "name", "size_bytes", "sha256", "record_count"],
+            "properties": {
+              "role": {"enum": ["BARS", "C1"]},
+              "clock": {"enum": ["15M", "2H_A_L"]},
+              "side": {"enum": ["BID", "ASK"]},
+              "drive_file_id": {"type": "string", "minLength": 1},
+              "name": {"type": "string", "minLength": 1},
+              "size_bytes": {"type": "integer", "minimum": 1},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "record_count": {"type": "integer", "minimum": 1}
+            }
+          }
+        }
+      }
+    },
+    "source_audit": {"type": "object"},
+    "derived_audit": {"type": "object"},
+    "findings": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "qa_recommendation": {"enum": ["PASS", "WARN", "BLOCK", "QUARANTINE"]},
+    "authority_delta": {"const": "AUDIT_EVIDENCE_ONLY"},
+    "prohibited": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "rollback": {"type": "string", "minLength": 1},
+    "artifact_logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

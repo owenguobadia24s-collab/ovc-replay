@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-mta-g2-gate-packet/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "MTA-G2",
+  "title": "OPT-A source coverage and C1 translation audit",
+  "baseline_commit": "86ccb5e1bd57448339bf8a8447219e836b8cfbee",
+  "candidate_commit": "954f6847b810e758566d9fb4cde214420b3b64c9",
+  "completed_packets": ["MTA-00", "MTA-WP1", "MTA-WP2"],
+  "current_authority": "AUDIT_ONLY_READ_DERIVE_AND_BOUNDED_BRANCH_WRITE",
+  "approved_delta": "ACCEPT_CHECKSUM_ADDRESSED_SOURCE_AND_C1_AUDIT_EVIDENCE",
+  "authority_classification": "AUTO_EXECUTABLE_NON_RESERVED",
+  "acceptance_conditions": [
+    {"condition":"All eight external inputs match frozen manifest hashes and sizes","result":"PASS"},
+    {"condition":"All source rows and 10,178 derived bar/C1 records are accounted","result":"PASS"},
+    {"condition":"Every complete bar maps to exactly one valid C1 record","result":"PASS"},
+    {"condition":"No incomplete bar maps to C1","result":"PASS"},
+    {"condition":"Formula, null, identity and lineage mismatches are zero","result":"PASS"},
+    {"condition":"Provider absences and context censoring remain explicit and unrepaired","result":"PASS"},
+    {"condition":"Focused, retained, complete and tiered FINAL_HEAD assurance","result":"PASS"},
+    {"condition":"No reserved authority delta","result":"PASS"}
+  ],
+  "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g2/MTA_WP2_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "warnings": [],
+  "unresolved_issues": [],
+  "external_artifacts": [
+    {"artifact_id":"MTA.WP2.SOURCE_C1.PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9.v1","provider":"GOOGLE_DRIVE","file_id":"13JdrypDhzzhhU9iRqemWfN7RYN54D9f-","size_bytes":22210,"sha256":"3fe01f18feb95179a192232a64b7497adb53b0e9247f1473a8175fe6c83e2e44","logical_sha256":"2b6ed6758d55c672464e4147a424e4e3c628c0541dcd507bcc9cb35eebd13991"}
+  ],
+  "rollback": "Supersede through a new audit version bound to immutable input hashes; preserve all source, external and decision evidence.",
+  "decision": "PASS",
+  "status": "APPROVED_PENDING_SQUASH_MERGE",
+  "exact_work_after_approval": "Run required checks on the ratification head, squash-merge MTA-WP2, record merge receipt, create audit/mta-wp3-c2-structure from main, complete MTA-WP3 and stop at MTA-A3 acknowledgement."
+}
