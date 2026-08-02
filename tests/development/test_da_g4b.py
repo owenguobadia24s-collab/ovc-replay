@@ -32,7 +32,7 @@ class DevelopmentAccelerationG4BTests(unittest.TestCase):
 
     def test_operator_pass_is_recorded_once_and_active(self) -> None:
         self.assertEqual(self.gate["gate_id"], "DA-G4B")
-        self.assertTrue(self.gate["status"].startswith("APPROVED"))
+        self.assertEqual(self.gate["status"], "COMPLETED_READY_FOR_SQUASH_MERGE")
         self.assertEqual(self.request["status"], "DECIDED_PASS")
         self.assertEqual(self.request["recorded_decision"], "PASS")
         self.assertEqual(self.decision["decision_id"], "DA-G4B.OPERATOR.PASS.20260802T163600Z")
