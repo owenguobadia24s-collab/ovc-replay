@@ -49,7 +49,7 @@ jobs:
           grep -q 'active.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json
           grep -q 'production_transport.*ABSENT_FAIL_CLOSED' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
           grep -q 'credential_state.*DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
-          grep -q 'activation_evaluation.*BLOCK' docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json
+          grep -q 'activation_evaluation.*GATE_READY_OPERATOR_DECISION_REQUIRED' docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json
           grep -q 'authority_active.*false' docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json
           ! grep -R -E 'subprocess|os\.system|requests|urllib|httpx|PyGithub|github3|git push|git merge|force.push' src/ovc/development/receipt_bot.py
           ! grep -R -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/receipt_bot.py
