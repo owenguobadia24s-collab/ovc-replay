@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "gate_id": "DA-G6",
+  "status": "QA_REVIEW",
+  "branch": "gate/ovc-dev-accel-da-g6",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-G6-PREREQUISITES-001", "result": "PASS", "evidence": "DA-WP1 through DA-WP5 and DA-G4/DA-G4B are recorded completed."},
+    {"check_id": "DA-G6-PROFILE-002", "result": "PASS", "evidence": "The exact default-workflow profile is closed, inactive and operator-reserved."},
+    {"check_id": "DA-G6-SCOPE-003", "result": "PASS", "evidence": "Default scope is limited to future eligible packets with approved registered profiles."},
+    {"check_id": "DA-G6-RETIREMENT-004", "result": "PASS", "evidence": "The retirement inventory is explicit, non-destructive and exception-aware."},
+    {"check_id": "DA-G6-DENIALS-005", "result": "PASS", "evidence": "Direct-main, bot merge/approval, force-push, history rewrite, deletion, provider, R2, publication, selector, Validation and market/risk/execution authority remain denied."},
+    {"check_id": "DA-G6-ROLLBACK-006", "result": "PASS", "evidence": "Rollback restores prior registered workflow selection without deleting accepted records."},
+    {"check_id": "DA-G6-DECISION-007", "result": "PASS", "evidence": "One consolidated operator decision supports PASS, DEFER, BLOCK, QUARANTINE or SUPERSEDE."},
+    {"check_id": "DA-G6-GATE-HEAD-008", "result": "PENDING", "evidence": "Focused and complete gate-head assurance has not yet run."}
+  ],
+  "tests": [],
+  "blocking_issues": ["GATE_HEAD_CI_PENDING"],
+  "warnings": [],
+  "qa_recommendation": "PENDING_GATE_HEAD_CI",
+  "current_default_workflow_authority": "DENIED_UNTIL_DA_G6",
+  "current_retirement_authority": "DENIED_UNTIL_DA_G6",
+  "proposed_authority_delta": "DEFAULT_WORKFLOW_ADOPTION_AND_NON_DESTRUCTIVE_DUPLICATED_MECHANICS_RETIREMENT",
+  "reserved_authority_delta": "OPERATOR_REQUIRED",
+  "default_workflow_active": false,
+  "retirement_active": false,
+  "rollback": "Keep the proposal inactive before decision; after activation disable it and restore prior registered selection through non-destructive commits."
+}
