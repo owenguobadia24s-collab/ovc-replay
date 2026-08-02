@@ -4,12 +4,12 @@
   "programme_id": "OVC-DEV-ACCEL-v0.2",
   "plan_id": "OVC-DEV-ACCEL-v0.2-DA2-00-CI-ADMISSION-BASELINE",
   "plan_version": "0.1",
-  "status": "GATE_READY",
+  "status": "BLOCKED",
   "governing_control_packet": "docs/releases/development-acceleration-v0-2/da2-g0/DA_G6_PASS_AND_DA2_G0_CONTROL_PACKET.json",
-  "branch": "control/da-g6-pass-da2-g0-packet",
-  "pull_request": 222,
-  "baseline_main": "726419295104a763f06911e3914c48e12e753b5c",
-  "candidate_head_resolution": "EXACT_PULL_REQUEST_HEAD_AFTER_THIS_CORRECTIVE_COMMIT",
+  "branch": "audit/da2-wp0-ci-admission-baseline-blocked",
+  "pull_request": null,
+  "baseline_main": "da29bb4b571e8f0c4706fa3032e941a89d0d5550",
+  "candidate_head_resolution": "PENDING_ASSEMBLY_COMPLETION_THEN_SINGLE_FINAL_BRANCH_CREATION",
   "candidate_protocol": {
     "state": "CANDIDATE_SEALED_AFTER_REQUIRED_CHECKS_PASS",
     "maximum_preseal_head_mutations": 2,
@@ -30,7 +30,7 @@
   },
   "programme_lease": {
     "maximum_active_continuation_prs": 1,
-    "active_continuation_pull_request": 222,
+    "active_continuation_pull_request": null,
     "predecessor_pull_request": 218,
     "predecessor_resolution": "SUPERSEDED_PRESERVED",
     "historical_non_blocking_exception": 211
@@ -39,13 +39,20 @@
     "packet_id": "DA2-00",
     "gate_id": "DA2-G0",
     "title": "PR workflow fan-out baseline and trigger-admission evidence",
-    "status": "GATE_READY",
-    "authority_required": "OPERATOR_REQUIRED",
+    "status": "BLOCKED",
+    "authority_required": "OPERATOR_REQUIRED_COMPLETED",
     "authority_delta": "READ_ONLY_WORKFLOW_TRIGGER_AND_CHECK_PROVENANCE_AUDIT_WITH_COMPACT_REPOSITORY_EVIDENCE",
-    "implementation_authority": "DENIED_PENDING_DA2_G0_PASS",
+    "implementation_authority": "READ_ONLY_AUDIT_APPROVED",
     "workflow_mutation_authority": "DENIED",
     "ruleset_mutation_authority": "DENIED",
-    "next_action": "OPERATOR_DECISION_DA2_G0"
+    "next_action": "SUPPLY_CHECKSUM_ADDRESSED_RAW_GITHUB_REST_RUN_JOB_AND_CHECK_JSON_THEN_OVC_CONTINUE",
+    "qa_packet": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_QA_PACKET.json",
+    "decision_record": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_OPERATOR_DECISION.json",
+    "blocker": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_BLOCKER.json",
+    "partial_baseline": "registries/development/v0_2/OVC_DA2_WORKFLOW_ADMISSION_BASELINE_v0_1.json",
+    "tests": [
+      "LOCAL_FOCUSED_5_PASS"
+    ]
   },
   "ruleset_health": {
     "ruleset_id": 20229411,
@@ -62,16 +69,16 @@
     },
     "source_identity_mismatch_result": "BLOCK"
   },
-  "acceptance_conditions": [
-    "DA_G6_OPERATOR_PASS_BOUND_TO_SEALED_CANDIDATE",
-    "SEALED_DA_G6_CANDIDATE_PRESERVED_WITHOUT_MUTATION",
-    "ONE_ACTIVE_PR_PROGRAMME_LEASE_SATISFIED",
-    "TWO_PRESEAL_HEAD_MUTATION_BUDGET_EXHAUSTED_NOT_EXCEEDED",
-    "REQUIRED_TESTS_CONTEXT_PASS_ON_EXACT_FINAL_HEAD",
-    "REQUIRED_TIERED_CONTEXT_PASS_ON_EXACT_FINAL_HEAD",
-    "NO_REVIEW_OR_BLOCKING_WARNING",
-    "DA2_G0_REMAINS_OPERATOR_REQUIRED_AND_READ_ONLY"
+  "acceptance_conditions": [],
+  "operator_decision_id": "DA2-G0.OPERATOR.PASS.20260802T213600+0100",
+  "operator_decision": "PASS",
+  "blockers": [
+    "MISSING_EXACT_RUN_AND_JOB_API_TIMESTAMPS",
+    "MISSING_WORKFLOW_PATHS",
+    "MISSING_REQUIRED_CHECK_APP_IDENTITIES",
+    "ATOMIC_MULTI_FILE_GIT_DATA_WRITE_UNAVAILABLE_IN_CONNECTOR"
   ],
+  "next_packet": "DA2-WP1_PROPOSAL_ONLY_NOT_AUTHORISED",
   "permanent_denials": [
     "DIRECT_MAIN_WRITE",
     "BOT_MERGE_OR_APPROVAL",
@@ -87,5 +94,5 @@
     "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_AUTHORITY",
     "UNAPPROVED_AGENT_WRITE_AUTHORITY"
   ],
-  "rollback": "Before merge close PR 222 as SUPERSEDED_PRESERVED. After merge supersede the v0.2 registry and disable the default profile through new non-destructive commits while preserving DA-G6, both candidates, checks and decisions."
+  "rollback": "Preserve the operator decision, partial baseline, builder, tests and blocker; supersede through a new immutable packet after exact raw evidence is supplied. No workflow or ruleset mutation exists."
 }
