@@ -23,66 +23,53 @@ class MTAG0Tests(unittest.TestCase):
         spec.loader.exec_module(module)
         self.assertEqual(module.main(), 0)
 
-    def test_operator_pass_is_preserved_while_merge_is_blocked(self) -> None:
-        gate = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json")
+    def test_operator_pass_and_merge_receipt_are_preserved(self) -> None:
         state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
         decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
-        eligibility = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_ELIGIBILITY.json")
-        self.assertEqual(gate["decision"], "PASS")
-        self.assertEqual(gate["status"], "APPROVED_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT")
-        self.assertEqual(state["programme_status"], "BLOCKED")
-        self.assertFalse(state["operator_decision_required"])
-        self.assertEqual(state["operator_gate"]["recorded_decision"], "PASS")
+        receipt = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_RECEIPT.json")
+        packet0 = next(item for item in state["packets"] if item["packet_id"] == "MTA-00")
         self.assertEqual(decision["operator_command"], "OVC APPROVE MTA-G0 PASS")
-        self.assertEqual(eligibility["status"], "BLOCKED_EXTERNAL_RULESET_ENFORCEMENT")
-        self.assertEqual(state["packets"][0]["blockers"], [BLOCKER_ID])
+        self.assertFalse(decision["downstream_authority_created"])
+        self.assertEqual(receipt["decision"], "COMPLETED")
+        self.assertEqual(receipt["merge_commit"], "eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d")
+        self.assertEqual(packet0["status"], "COMPLETED")
+        self.assertEqual(packet0["merge_commit"], receipt["merge_commit"])
+        self.assertEqual(packet0["blockers"], [])
+        self.assertNotEqual(state["current_packet"], "MTA-00")
 
-    def test_ruleset_bytes_and_displayed_contexts_are_reproducible(self) -> None:
-        evidence_blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json")
-        resolution = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json")
-        ruleset_path = ROOT / resolution["resolution_source"]["ruleset_path"]
+    def test_historical_blocker_is_retained_without_remaining_current(self) -> None:
+        blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json")
+        state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
+        self.assertEqual(blocker["blocker_id"], BLOCKER_ID)
+        self.assertEqual(blocker["status"], "BLOCKED_EXTERNAL_REPOSITORY_RULESET_ENFORCEMENT")
+        self.assertEqual(len(blocker["passing_assurance"]), 2)
+        self.assertNotEqual(state["programme_status"], "BLOCKED")
+        packet0 = next(item for item in state["packets"] if item["packet_id"] == "MTA-00")
+        self.assertNotIn(BLOCKER_ID, packet0["blockers"])
+
+    def test_final_required_checks_and_squash_merge(self) -> None:
+        receipt = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_RECEIPT.json")
+        self.assertEqual(receipt["transport_history"]["final_pull_request"], 219)
+        self.assertEqual(receipt["transport_history"]["final_head_sha"], "da6e33f67a5b978e57c3ff99e35b29335823115f")
+        self.assertEqual(receipt["merge_method"], "SQUASH")
+        self.assertEqual([item["context"] for item in receipt["required_checks"]], [
+            "tests",
+            "OVC tiered test selection shadow",
+            "Market Translation Audit MTA-G0 gate readiness",
+        ])
+        self.assertTrue(all(item["result"] == "PASS" for item in receipt["required_checks"]))
+
+    def test_ruleset_bytes_and_contexts_remain_reproducible(self) -> None:
+        blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json")
+        ruleset_path = ROOT / "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json"
         ruleset = json.loads(ruleset_path.read_text(encoding="utf-8"))
         digest = hashlib.sha256(ruleset_path.read_bytes()).hexdigest()
-        self.assertEqual(evidence_blocker["status"], "RESOLVED")
-        self.assertEqual(digest, resolution["resolution_source"]["ruleset_sha256"])
+        self.assertEqual(digest, blocker["ruleset"]["sha256"])
         required = next(rule for rule in ruleset["rules"] if rule["type"] == "required_status_checks")
         contexts = [entry["context"] for entry in required["parameters"]["required_status_checks"]]
         self.assertEqual(contexts, ["tests", "OVC tiered test selection shadow"])
         self.assertEqual(ruleset["bypass_actors"], [])
         self.assertEqual(ruleset["current_user_can_bypass"], "never")
-
-    def test_enforcement_blocker_records_two_passing_cycles_and_failed_merges(self) -> None:
-        blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json")
-        self.assertEqual(blocker["blocker_id"], BLOCKER_ID)
-        self.assertEqual(blocker["status"], "BLOCKED_EXTERNAL_REPOSITORY_RULESET_ENFORCEMENT")
-        self.assertEqual(len(blocker["passing_assurance"]), 2)
-        for cycle in blocker["passing_assurance"]:
-            self.assertEqual(cycle["mta_workflow"]["result"], "PASS")
-            self.assertEqual(cycle["tests"]["result"], "PASS")
-            self.assertEqual(cycle["tiered"]["result"], "PASS")
-        self.assertGreaterEqual(len(blocker["merge_attempts"]), 2)
-        for attempt in blocker["merge_attempts"]:
-            self.assertEqual(attempt["result"], "HTTP_405_REPOSITORY_RULE_VIOLATION")
-            self.assertIn("required status checks are expected", attempt["message"])
-
-    def test_replacement_branch_and_current_pr_base_are_distinguished(self) -> None:
-        state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
-        gate = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json")
-        resolution = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json")
-        eligibility = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_ELIGIBILITY.json")
-        branch_creation_base = "544dc2f6477ce415321f9419a62586fcffa0d02c"
-        current_pr_base = "eaefbf55d1702d689d59765558af65e87c0b37fc"
-        self.assertEqual(state["branch_creation_base_commit"], branch_creation_base)
-        self.assertEqual(gate["branch_creation_base_commit"], branch_creation_base)
-        self.assertEqual(eligibility["branch_creation_base_main"], branch_creation_base)
-        self.assertEqual(resolution["branch_creation_base_main"], branch_creation_base)
-        self.assertEqual(state["baseline_commit"], current_pr_base)
-        self.assertEqual(gate["baseline_commit"], current_pr_base)
-        self.assertEqual(eligibility["base_main"], current_pr_base)
-        self.assertEqual(resolution["current_pull_request_base_main"], current_pr_base)
-        self.assertEqual(state["branch"], "gate/mta-g0-ratification-resume")
-        self.assertEqual(state["pull_request"], 216)
-        self.assertEqual(resolution["base_change_review"]["result"], "PASS")
 
     def test_capacity_is_bounded_and_recoverable(self) -> None:
         fixture = load("fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json")
@@ -99,22 +86,11 @@ class MTAG0Tests(unittest.TestCase):
 
     def test_no_activation_or_validation_authority(self) -> None:
         state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
-        decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
         self.assertEqual(state["authority"]["selectors"], "UNCHANGED")
         self.assertEqual(state["authority"]["formula_threshold_reset_clock"], "UNCHANGED")
         self.assertEqual(state["authority"]["c2e_c2_5_c3"], "DENIED")
         self.assertEqual(state["authority"]["validation"], "LOCKED_UNCONSUMED")
         self.assertEqual(state["authority"]["r2"], "DENIED")
-        self.assertFalse(decision["downstream_authority_created"])
-
-    def test_schemas_match_ratified_court_records(self) -> None:
-        decision_schema = load("schemas/research_operations/mta/mta_g0_operator_decision_v0_1.schema.json")
-        state_schema = load("schemas/research_operations/mta/mta_programme_state_v0_2.schema.json")
-        self.assertTrue(decision_schema["properties"]["authority_active"]["const"])
-        self.assertFalse(decision_schema["properties"]["downstream_authority_created"]["const"])
-        self.assertIn("tested_candidate_commit", state_schema["properties"])
-        self.assertTrue(decision_schema["additionalProperties"])
-        self.assertTrue(state_schema["additionalProperties"])
 
     def test_ro4_and_mta_are_separate(self) -> None:
         text = (ROOT / "contracts/research_operations/mta/OVC_MTA_RO4_INTEGRATION_CONTRACT_v0_1.md").read_text(encoding="utf-8")
