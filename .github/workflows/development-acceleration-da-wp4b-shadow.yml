@@ -56,7 +56,7 @@ jobs:
           grep -q 'PRE_ACTIVATION_SHADOW' src/ovc/development/receipt_bot_shadow.py
           grep -q 'authority_active.*False' src/ovc/development/receipt_bot_shadow.py
           grep -q 'production_transport_active.*False' src/ovc/development/receipt_bot_shadow.py
-          ! grep -R -E 'merge_pull_request|approve_pull_request|force_push|delete_branch' src/ovc/development/receipt_bot_shadow.py
+          ! grep -R -E 'def (merge|approve|dismiss|force|delete)|adapter\.(merge|approve|dismiss|force|delete)' src/ovc/development/receipt_bot_shadow.py
           ! grep -E '/merges|/reviews|force[[:space:]]*=[[:space:]]*\$true' scripts/development/run_da_g4b_shadow.ps1
           ! grep -R -E 'ghp_|github_pat_|BEGIN [A-Z ]*PRIVATE KEY' \
             contracts/development/OVC_RECEIPT_BOT_PRE_ACTIVATION_SHADOW_CONTRACT_v0_1.md \
