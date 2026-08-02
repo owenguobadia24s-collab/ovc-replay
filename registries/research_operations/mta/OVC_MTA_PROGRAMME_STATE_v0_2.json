@@ -4,7 +4,7 @@
   "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
   "plan_source_sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d",
-  "programme_status": "QA_REVIEW",
+  "programme_status": "APPROVED",
   "current_packet": "MTA-WP2",
   "current_gate": "MTA-G2",
   "operator_decision_required": false,
@@ -12,13 +12,14 @@
   "operator_decision_history": [
     "MTA-G0.OPERATOR.PASS.20260802T145100Z",
     "PD-JUNE-FM-G2.OPERATOR.DEFER.20260802T145100Z",
-    "MTA-G1.DELEGATED.PASS.20260802T194000Z"
+    "MTA-G1.DELEGATED.PASS.20260802T194000Z",
+    "MTA-G2.DELEGATED.PASS.20260802T201200Z"
   ],
   "plan_baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "baseline_commit": "86ccb5e1bd57448339bf8a8447219e836b8cfbee",
   "branch": "audit/mta-wp2-source-c1",
-  "pull_request": null,
-  "tested_candidate_commit": null,
+  "pull_request": 221,
+  "tested_candidate_commit": "954f6847b810e758566d9fb4cde214420b3b64c9",
   "authority": {
     "read": "ACTIVE_CURRENT_AND_PINNED_EXTERNAL_ARTIFACTS",
     "derive": "ACTIVE_DETERMINISTIC_AUDIT_ONLY",
@@ -76,15 +77,15 @@
     },
     {
       "packet_id":"MTA-WP2",
-      "status":"QA_REVIEW",
+      "status":"APPROVED",
       "prerequisites":["MTA-G1_PASS_MERGED"],
       "authority_required":"AUTO_EXECUTABLE",
       "authority_delta":"ACCEPT_CHECKSUM_ADDRESSED_SOURCE_AND_C1_AUDIT_EVIDENCE",
       "baseline_commit":"86ccb5e1bd57448339bf8a8447219e836b8cfbee",
       "branch":"audit/mta-wp2-source-c1",
-      "pull_request":null,
-      "candidate_commit":null,
-      "tests":["PENDING_MTA_G2_CI"],
+      "pull_request":221,
+      "candidate_commit":"954f6847b810e758566d9fb4cde214420b3b64c9",
+      "tests":["MTA-G2 30764967905 PASS","tests 30764967911 PASS","tiered FINAL_HEAD 30764967948 PASS"],
       "qa_packet":"docs/releases/market-translation-audit-v0-2/mta-g2/MTA_WP2_QA_PACKET.json",
       "decision_record":"docs/releases/market-translation-audit-v0-2/mta-g2/MTA_G2_DELEGATED_DECISION.json",
       "external_artifact":"GOOGLE_DRIVE:13JdrypDhzzhhU9iRqemWfN7RYN54D9f-:sha256=3fe01f18feb95179a192232a64b7497adb53b0e9247f1473a8175fe6c83e2e44",
@@ -100,11 +101,11 @@
   ],
   "operator_gate": {
     "gate_id":"MTA-G2",
-    "status":"QA_REVIEW",
+    "status":"APPROVED_PENDING_SQUASH_MERGE",
     "gate_packet":"docs/releases/market-translation-audit-v0-2/mta-g2/MTA_G2_GATE_PACKET.json",
     "decision_record":"docs/releases/market-translation-audit-v0-2/mta-g2/MTA_G2_DELEGATED_DECISION.json",
-    "recorded_decision":"PENDING_AUTO_RATIFICATION",
-    "qa_recommendation":"PASS_PENDING_EXACT_FINAL_HEAD_CI"
+    "recorded_decision":"PASS",
+    "qa_recommendation":"PASS"
   },
-  "next_action":"RUN_MTA_G2_ASSURANCE_THEN_AUTO_RATIFY_MERGE_AND_START_MTA_WP3"
+  "next_action":"RUN_REQUIRED_CHECKS_ON_RATIFICATION_HEAD_THEN_SQUASH_MERGE_AND_START_MTA_WP3"
 }
