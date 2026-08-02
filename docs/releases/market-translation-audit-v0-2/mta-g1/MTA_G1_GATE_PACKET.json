@@ -6,26 +6,26 @@
   "gate_id": "MTA-G1",
   "title": "Current-flow registry freeze",
   "baseline_commit": "eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d",
-  "candidate_commit": null,
+  "candidate_commit": "7f8e85261728ee2c8a93690d8b4d438f7f901b36",
   "completed_packets": ["MTA-00", "MTA-WP1"],
   "current_authority": "AUDIT_ONLY_READ_DERIVE_AND_BOUNDED_BRANCH_WRITE",
-  "proposed_delta": "FREEZE_AUDIT_OBJECT_METRIC_COMPUTABILITY_REASON_AND_MARKER_FUNCTION_REGISTRIES",
+  "approved_delta": "FREEZE_AUDIT_OBJECT_METRIC_COMPUTABILITY_REASON_AND_MARKER_FUNCTION_REGISTRIES",
   "authority_classification": "AUTO_EXECUTABLE_NON_RESERVED",
   "acceptance_conditions": [
-    "Every current flow object has stable identity, grain, owner, dependencies and authority.",
-    "Every marker rule is functionally classified without C2.5 semantic authority.",
-    "Every attempted evaluation maps to a closed computability status and exact reason code.",
-    "Every metric has an exact numerator, denominator, unit and zero-denominator policy.",
-    "Material registry amendments require operator acknowledgement and deterministic rerun.",
-    "Focused, retained and complete tests pass on the exact final head."
+    {"condition":"Stable object identities, grains, owners, dependencies and authority","result":"PASS"},
+    {"condition":"Eight marker rules functionally classified without C2.5 authority","result":"PASS"},
+    {"condition":"Closed computability statuses and exact reason codes","result":"PASS"},
+    {"condition":"Exact numerator, denominator, unit and zero policy for every metric","result":"PASS"},
+    {"condition":"Material amendment acknowledgement and rerun controls","result":"PASS"},
+    {"condition":"Focused, retained, complete and tiered FINAL_HEAD assurance","result":"PASS"}
   ],
   "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g1/MTA_WP1_QA_PACKET.json",
-  "qa_recommendation": "PASS_PENDING_EXACT_FINAL_HEAD_CI",
+  "qa_recommendation": "PASS",
   "warnings": [],
   "unresolved_issues": [],
-  "changed_file_classes": ["contract", "schemas", "registries", "fixtures", "implementation", "tests", "workflow", "QA", "programme state"],
   "external_artifacts": [],
   "rollback": "Supersede through a new registry version and amendment; preserve all historical registries and evidence.",
-  "recommended_decision": "PASS_AFTER_FINAL_HEAD_CI",
-  "exact_work_after_approval": "Squash-merge MTA-WP1, record merge receipt, create audit/mta-wp2-source-c1 from main and continue through MTA-G2."
+  "decision": "PASS",
+  "status": "APPROVED_PENDING_SQUASH_MERGE",
+  "exact_work_after_approval": "Run required checks on the ratification head, squash-merge MTA-WP1, record merge receipt, create audit/mta-wp2-source-c1 from main and continue through MTA-G2."
 }
