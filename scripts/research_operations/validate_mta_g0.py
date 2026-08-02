@@ -17,7 +17,9 @@ REQUIRED = [
     "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json",
     "docs/releases/market-translation-audit-v0-2/mta-00/OVC_MTA_BASELINE_MANIFEST_v0_2.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION_REQUEST.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json",
     "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json",
     "schemas/research_operations/mta/mta_programme_state_v0_2.schema.json",
@@ -41,24 +43,38 @@ def main() -> int:
     baseline = load("docs/releases/market-translation-audit-v0-2/mta-00/OVC_MTA_BASELINE_MANIFEST_v0_2.json")
     gate = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json")
     qa = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json")
-    decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json")
-    disposition = load("docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION_REQUEST.json")
+    request = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json")
+    decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
+    disposition_request = load("docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION_REQUEST.json")
+    disposition = load("docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json")
     fixtures = load("fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json")
 
     assert state["programme_id"] == gate["programme_id"] == decision["programme_id"] == "OVC-MTA-v0.2"
     assert state["baseline_commit"] == baseline["repository"]["baseline_commit"] == gate["baseline_commit"]
-    assert state["operator_decision_required"] is True
-    assert state["operator_gate"]["status"] == "GATE_READY_OPERATOR_DECISION_REQUIRED"
-    assert state["operator_gate"]["recorded_decision"] is None
-    assert state["operator_gate"]["qa_recommendation"] == "PASS"
-    assert gate["status"] == "GATE_READY_OPERATOR_DECISION_REQUIRED"
-    assert gate["recommended_decision"] == "PASS"
-    assert gate["qa"]["recommendation"] == "PASS"
-    assert qa["status"] == "PASS_OPERATOR_DECISION_REQUIRED"
+    assert state["operator_decision_required"] is False
+    assert state["operator_gate"]["status"] == "APPROVED_PENDING_SQUASH_MERGE"
+    assert state["operator_gate"]["recorded_decision"] == "PASS"
+    assert gate["status"] == "APPROVED_PENDING_SQUASH_MERGE"
+    assert gate["decision"] == "PASS"
     assert qa["recommendation"] == "PASS"
-    assert qa["unresolved_issues"] == ["MTA_G0_OPERATOR_DECISION_REQUIRED"]
-    assert disposition["recommended_decision"] == "DEFER"
+    assert not qa["unresolved_issues"]
+
+    assert request["exact_command"] == decision["operator_command"] == "OVC APPROVE MTA-G0 PASS"
+    assert decision["decision"] == "PASS"
+    assert decision["decision_authority"] == "OPERATOR"
+    assert decision["approved_authority_delta"] == gate["approved_authority_delta"]
+    assert decision["downstream_authority_created"] is False
+    assert decision["subdecisions"]["june_blinded_review"] == "DEFER_NO_REVIEW_OUTCOME"
+    assert decision["subdecisions"]["pr_202"] == "PRESERVE_OPEN_UNMERGED"
+    assert decision["subdecisions"]["capacity_contract"] == "APPROVE_4_HOURS_10GB"
+    assert decision["subdecisions"]["cluster_variants"] == "APPROVE_EXACT_THREE_PRIMARY_PLUS_1"
+    assert decision["subdecisions"]["acknowledgements"] == "REQUIRE_MTA_A3_AND_MTA_A6"
+
+    assert disposition_request["recommended_decision"] == "DEFER"
+    assert disposition["decision"] == "DEFER"
     assert disposition["review_outcome"] == "NONE"
+    assert disposition["pull_request_202_disposition"] == "PRESERVE_OPEN_UNMERGED"
+    assert "WHOLESALE_MERGE_PR_202" in disposition["prohibited"]
 
     cap = fixtures["valid"]
     assert cap["max_runtime_s"] == 14400
@@ -86,13 +102,9 @@ def main() -> int:
     assert baseline["june_wp2"]["not_evaluable_markers"] == 13993
     assert baseline["active_authority"]["validation"] == "LOCKED_UNCONSUMED"
 
-    workflow_checks = {item["name"]: item for item in gate["tests"]}
-    assert workflow_checks["MTA-G0 gate readiness"]["status"] == "PASS"
-    assert workflow_checks["generic complete repository suite"]["status"] == "PASS"
-
     digest = hashlib.sha256((ROOT / REQUIRED[0]).read_bytes()).hexdigest()
     assert len(digest) == 64
-    print("MTA-G0 validation PASS")
+    print("MTA-G0 approved decision validation PASS")
     return 0
 
 
