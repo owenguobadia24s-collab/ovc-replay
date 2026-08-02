@@ -13,6 +13,7 @@
     "active",
     "default_scope",
     "required_stages",
+    "mandatory_acceleration_conditions",
     "retirement_mode",
     "retired_mechanics",
     "exceptions",
@@ -39,6 +40,37 @@
         "ELIGIBLE_SQUASH_MERGE",
         "PROGRAMME_STATE_CONTINUATION"
       ]
+    },
+    "mandatory_acceleration_conditions": {
+      "const": {
+        "sealed_candidate_two_phase_gate": {
+          "state_sequence": ["IMPLEMENTED", "QA_REVIEW", "CANDIDATE_SEALED", "OPERATOR_DECISION_PENDING", "MERGED", "RECEIPT_RECORDED"],
+          "candidate_sha_binding_required": true,
+          "post_seal_candidate_mutation": "PROHIBITED",
+          "decision_and_receipt_path": "SEPARATELY_GOVERNED_RECEIPT_OR_CONTROL_PATH"
+        },
+        "atomic_git_transaction_and_head_budget": {
+          "transaction": "ONE_BLOB_TREE_COMMIT_FAST_FORWARD_UPDATE",
+          "maximum_preseal_candidate_head_mutations": 2,
+          "maximum_postseal_candidate_head_mutations": 0,
+          "repair_after_budget": "NEW_BOUNDED_SUPERSEDING_BRANCH"
+        },
+        "one_active_pr_programme_lease": {
+          "maximum_active_continuation_prs": 1,
+          "required_predecessor_resolution": ["MERGED", "SUPERSEDED_PRESERVED", "RECORDED_NON_BLOCKING_HISTORICAL_EXCEPTION"],
+          "lease_fields": ["programme_id", "packet_id", "branch", "pull_request", "lease_state", "predecessor_resolution"]
+        },
+        "required_check_provenance_and_ruleset_health": {
+          "required_times": ["BEFORE_BRANCH_CREATION", "AFTER_WORKFLOW_OR_RULESET_CHANGE", "BEFORE_MERGE"],
+          "required_fields": ["ruleset_id", "ruleset_logical_hash", "required_context", "workflow_path", "workflow_name", "job_name", "expected_check_source_identity", "event_type", "branch_pattern", "verified_at"],
+          "source_identity_mismatch_result": "BLOCK"
+        },
+        "canonical_required_pr_runtime": {
+          "runner": "ubuntu-latest",
+          "python": "3.11",
+          "additional_versions": "SCHEDULED_MANUAL_OR_RELEASE_SPECIFIC_UNLESS_EXPLICITLY_REQUIRED"
+        }
+      }
     },
     "retirement_mode": {"const": "NON_DESTRUCTIVE_RETIRED_NON_AUTHORITATIVE"},
     "retired_mechanics": {
