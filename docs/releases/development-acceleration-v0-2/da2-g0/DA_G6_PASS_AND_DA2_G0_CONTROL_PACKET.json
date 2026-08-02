@@ -1,0 +1,284 @@
+{
+  "schema": "ovc-development-acceleration-da-g6-pass-and-da2-g0-control-packet/v1",
+  "record_id": "OVC.DEVELOPMENT.ACCELERATION.DA-G6.PASS.DA2-G0.v1",
+  "created_at": "2026-08-02T21:22:00+01:00",
+  "atomic_transaction": {
+    "mode": "ONE_FILE_ONE_COMMIT_ONE_FAST_FORWARD_BRANCH_UPDATE",
+    "branch": "control/da-g6-pass-da2-g0-packet",
+    "baseline_main": "726419295104a763f06911e3914c48e12e753b5c",
+    "changed_files": [
+      "docs/releases/development-acceleration-v0-2/da2-g0/DA_G6_PASS_AND_DA2_G0_CONTROL_PACKET.json"
+    ],
+    "candidate_head_mutation_budget": {
+      "maximum_preseal": 2,
+      "used": 1,
+      "maximum_postseal": 0
+    }
+  },
+  "programme_lease": {
+    "maximum_active_continuation_prs": 1,
+    "predecessor_pull_request": 218,
+    "predecessor_candidate_sha": "0f0bda757e62120f2a570de6b3c000e9786445c5",
+    "predecessor_resolution": "SUPERSEDED_PRESERVED",
+    "reason": "CURRENT_MAIN_ADVANCED_AFTER_CANDIDATE_SEAL_AND_STRICT_RULESET_EXPECTED_FRESH_REQUIRED_CHECKS",
+    "preservation": "PR, branch, candidate SHA, checks, review record and operator decision remain immutable and accessible",
+    "non_blocking_historical_exception": {
+      "pull_request": 211,
+      "relationship": "DA_G4B_SHADOW_EVIDENCE_PRESERVE_OPEN_UNMERGED"
+    }
+  },
+  "ruleset_health_preflight": {
+    "ruleset_id": 20229411,
+    "ruleset_logical_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4",
+    "ruleset_snapshot": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
+    "enforcement": "active",
+    "strict_required_status_checks": true,
+    "bypass_actors": [],
+    "required_contexts": [
+      "tests",
+      "OVC tiered test selection shadow"
+    ],
+    "canonical_required_pr_runtime": {
+      "runner": "ubuntu-latest",
+      "python": "3.11"
+    },
+    "source_identity_policy": "FAIL_CLOSED_ON_UNACCEPTED_CHECK_SOURCE"
+  },
+  "da_g6_operator_decision": {
+    "programme_id": "OVC-DEV-ACCEL-v0.1",
+    "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+    "gate_id": "DA-G6",
+    "decision_id": "DA-G6.OPERATOR.PASS.20260802T212200+0100",
+    "decision": "PASS",
+    "decision_authority": "OPERATOR",
+    "operator_instruction": "OVC APPROVE DA-G6 PASS",
+    "approved_candidate": {
+      "pull_request": 218,
+      "branch": "gate/ovc-dev-accel-da-g6",
+      "sha": "0f0bda757e62120f2a570de6b3c000e9786445c5",
+      "state": "CANDIDATE_SEALED",
+      "post_seal_mutation": "PROHIBITED"
+    },
+    "assurance": [
+      {
+        "workflow": "Development Acceleration DA-G6 operator gate readiness",
+        "run_id": 30763429924,
+        "result": "PASS"
+      },
+      {
+        "workflow": "tests",
+        "run_id": 30763429943,
+        "result": "PASS"
+      },
+      {
+        "workflow": "OVC tiered test selection shadow",
+        "run_id": 30763429937,
+        "profile": "FINAL_HEAD",
+        "result": "PASS"
+      }
+    ],
+    "qa_recommendation": "PASS",
+    "warnings": [],
+    "unresolved_issues": [],
+    "rollback_defined": true
+  },
+  "default_workflow_activation": {
+    "profile_id": "OVC.DEVELOPMENT.ACCELERATION.DEFAULT-WORKFLOW.v0.1",
+    "status": "APPROVED_EFFECTIVE_ON_SQUASH_MERGE",
+    "active_on_main_after_merge": true,
+    "scope": "FUTURE_ELIGIBLE_OVC_IMPLEMENTATION_PACKETS_WITH_APPROVED_REGISTERED_PROFILE",
+    "mandatory_conditions": {
+      "sealed_candidate_two_phase_gate": {
+        "state_sequence": [
+          "IMPLEMENTED",
+          "QA_REVIEW",
+          "CANDIDATE_SEALED",
+          "OPERATOR_DECISION_PENDING",
+          "MERGED",
+          "RECEIPT_RECORDED"
+        ],
+        "candidate_sha_binding_required": true,
+        "post_seal_candidate_mutation": "PROHIBITED",
+        "decision_and_receipt_path": "SEPARATELY_GOVERNED_RECEIPT_OR_CONTROL_PATH"
+      },
+      "atomic_git_transaction_and_head_budget": {
+        "transaction": "ONE_BLOB_TREE_COMMIT_FAST_FORWARD_UPDATE",
+        "maximum_preseal_candidate_head_mutations": 2,
+        "maximum_postseal_candidate_head_mutations": 0,
+        "repair_after_budget": "NEW_BOUNDED_SUPERSEDING_BRANCH"
+      },
+      "one_active_pr_programme_lease": {
+        "maximum_active_continuation_prs": 1,
+        "allowed_predecessor_resolutions": [
+          "MERGED",
+          "SUPERSEDED_PRESERVED",
+          "RECORDED_NON_BLOCKING_HISTORICAL_EXCEPTION"
+        ]
+      },
+      "required_check_provenance_and_ruleset_health": {
+        "required_times": [
+          "BEFORE_BRANCH_CREATION",
+          "AFTER_WORKFLOW_OR_RULESET_CHANGE",
+          "BEFORE_MERGE"
+        ],
+        "source_identity_mismatch_result": "BLOCK"
+      },
+      "canonical_required_pr_runtime": {
+        "runner": "ubuntu-latest",
+        "python": "3.11",
+        "additional_versions": "SCHEDULED_MANUAL_OR_RELEASE_SPECIFIC_UNLESS_EXPLICITLY_REQUIRED"
+      }
+    },
+    "duplicated_mechanics_retirement": {
+      "status": "RETIRED_NON_AUTHORITATIVE_EFFECTIVE_ON_SQUASH_MERGE",
+      "mode": "NON_DESTRUCTIVE",
+      "mechanics": [
+        "AD_HOC_PACKET_STATE_OUTSIDE_PROGRAMME_REGISTRY",
+        "MANUAL_MERGE_RECEIPT_WHEN_DETERMINISTIC_INPUTS_EXIST",
+        "UNREGISTERED_CHANGED_FILE_TEST_SELECTION",
+        "PACKET_EXECUTION_BYPASSING_UNIVERSAL_PREFLIGHT",
+        "DUPLICATED_SHARED_DEVELOPMENT_MECHANICS"
+      ],
+      "exceptions": [
+        "GOVERNING_PLAN_EXPLICITLY_REQUIRES_PROGRAMME_SPECIFIC_MECHANIC",
+        "NO_APPROVED_DEFAULT_ADAPTER_EXISTS",
+        "OPERATOR_RESERVED_AUTHORITY_REQUIRES_GATE"
+      ]
+    }
+  },
+  "development_acceleration_v0_1_completion": {
+    "programme_id": "OVC-DEV-ACCEL-v0.1",
+    "status": "APPROVED_PENDING_THIS_CONTROL_PACKET_SQUASH_MERGE",
+    "completed_packets": [
+      "DA-00",
+      "DA-WP1",
+      "DA-WP2",
+      "DA-WP3",
+      "DA-WP4",
+      "DA-G4",
+      "DA-WP4B",
+      "DA-G4B",
+      "DA-WP5",
+      "DA-G5",
+      "DA-G6"
+    ],
+    "next_programme": "OVC-DEV-ACCEL-v0.2"
+  },
+  "development_acceleration_v0_2_packet": {
+    "programme_id": "OVC-DEV-ACCEL-v0.2",
+    "plan_id": "OVC-DEV-ACCEL-v0.2-DA2-00-CI-ADMISSION-BASELINE",
+    "plan_version": "0.1",
+    "packet_id": "DA2-00",
+    "gate_id": "DA2-G0",
+    "title": "PR workflow fan-out baseline and trigger-admission evidence",
+    "status": "GATE_READY",
+    "authority_required": "OPERATOR_REQUIRED",
+    "authority_delta": "READ_ONLY_WORKFLOW_TRIGGER_AND_CHECK_PROVENANCE_AUDIT_WITH_COMPACT_REPOSITORY_EVIDENCE",
+    "purpose": "Account for every workflow run triggered by a bounded PR and produce an exact admission baseline before any workflow trigger is changed.",
+    "problem_statement": "A single bounded Development Acceleration PR caused many unrelated workflows to queue or run, increasing wait time and obscuring the two ruleset-required contexts.",
+    "scope": {
+      "in_scope": [
+        "Inventory workflow runs associated with one sealed Development Acceleration candidate and one current control candidate",
+        "Classify every run as REQUIRED, RELEVANT_OPTIONAL, UNRELATED, EXPECTED_SKIPPED or BLOCKING_SOURCE_MISMATCH",
+        "Record workflow path, workflow name, job name, event, path filter, job-level condition, check source identity, queue duration, execution duration and conclusion",
+        "Compute exact fan-out, unrelated-run ratio, duplicate-full-suite count and critical-path duration",
+        "Produce a deterministic compact JSON registry and a proposed minimal trigger-narrowing diff for a later packet"
+      ],
+      "out_of_scope": [
+        "Changing any workflow file",
+        "Changing required status contexts or the active ruleset",
+        "Changing tests, test assertions or application source code",
+        "Changing provider, R2, publication, selector, market, semantic, threshold, model, candidate, Validation, probability, risk, exposure or execution authority",
+        "Adding any instrument, market, clock, side, dependency, secret or agent write authority"
+      ]
+    },
+    "frozen_subjects": [
+      {
+        "pull_request": 218,
+        "candidate_sha": "0f0bda757e62120f2a570de6b3c000e9786445c5",
+        "role": "SEALED_HIGH_FANOUT_BASELINE"
+      },
+      {
+        "branch": "control/da-g6-pass-da2-g0-packet",
+        "baseline_main": "726419295104a763f06911e3914c48e12e753b5c",
+        "role": "CURRENT_ATOMIC_CONTROL_CANDIDATE"
+      }
+    ],
+    "capacity_contract": {
+      "maximum_local_runtime_minutes": 30,
+      "maximum_ci_runtime_minutes": 30,
+      "maximum_repository_evidence_bytes": 1048576,
+      "maximum_external_artifact_bytes": 10485760,
+      "capacity_exceeded_result": "BLOCK_AND_PRESERVE_PARTIAL_CHECKSUM_ADDRESSED_EVIDENCE"
+    },
+    "acceptance_conditions": [
+      "Every workflow run for each frozen subject is accounted exactly once",
+      "The two ruleset-required contexts and their accepted source identities are identified",
+      "Queue and execution durations are reported without estimated values",
+      "Unrelated and duplicate full-suite runs are enumerated by workflow and cause",
+      "The proposed later trigger-narrowing diff changes no test or application semantics",
+      "Deterministic rerun over identical API evidence reproduces the same logical SHA-256",
+      "Focused and canonical final-head checks pass",
+      "QA recommends PASS with no unresolved warning or blocker"
+    ],
+    "deliverables": [
+      "contracts/development/v0_2/OVC_DA2_CI_ADMISSION_BASELINE_CONTRACT_v0_1.md",
+      "schemas/development/v0_2/ci_admission_baseline_v0_1.schema.json",
+      "registries/development/v0_2/OVC_DA2_WORKFLOW_ADMISSION_BASELINE_v0_1.json",
+      "scripts/development/v0_2/build_ci_admission_baseline.py",
+      "tests/development/v0_2/test_ci_admission_baseline.py",
+      "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_QA_PACKET.json",
+      "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_DECISION.json"
+    ],
+    "gate": {
+      "allowed_decisions": [
+        "PASS",
+        "DEFER",
+        "BLOCK",
+        "QUARANTINE",
+        "SUPERSEDE"
+      ],
+      "recommended_decision": "PASS",
+      "operator_command": "OVC APPROVE DA2-G0 PASS",
+      "exact_work_after_pass": [
+        "Create one bounded DA2-00 implementation branch from the then-current lawful main",
+        "Capture immutable GitHub workflow-run evidence for the two frozen subjects",
+        "Build and validate the deterministic admission baseline",
+        "Auto-ratify only the read-only evidence packet if all conditions pass",
+        "Stop before any workflow trigger or ruleset mutation and present the proposed DA2-WP1 narrowing packet"
+      ]
+    },
+    "rollback": "Supersede this planning packet through a new version; preserve the baseline subjects, audit evidence and decisions. No workflow mutation exists to revert."
+  },
+  "permanent_denials": [
+    "DIRECT_MAIN_WRITE",
+    "BOT_MERGE_OR_APPROVAL",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE",
+    "DELETE_ACCEPTED_RECORD",
+    "PROVIDER_ACCESS",
+    "R2_WRITE",
+    "RELEASE_PUBLICATION",
+    "SELECTOR_SEMANTIC_THRESHOLD_MODEL_FAMILY_CANDIDATE_OR_THEORY_PROMOTION",
+    "ACTIVE_DISCOVERY_DEVELOPMENT_OR_VALIDATION",
+    "NEW_MARKET_INSTRUMENT_CLOCK_SIDE_OR_DEPENDENCY",
+    "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_AUTHORITY",
+    "UNAPPROVED_AGENT_WRITE_AUTHORITY"
+  ],
+  "qa": {
+    "packet_formation": "PASS",
+    "da_g6_decision_binding": "PASS",
+    "sealed_candidate_preservation": "PASS",
+    "programme_lease": "PASS",
+    "ruleset_preflight": "PASS",
+    "atomic_transaction": "PASS",
+    "v0_2_scope_boundary": "PASS",
+    "v0_2_implementation_authority": "DENIED_PENDING_DA2_G0",
+    "warnings": [],
+    "blockers": []
+  },
+  "rollback": {
+    "before_merge": "Close the control PR as SUPERSEDED_PRESERVED; the DA-G6 operator decision remains valid against the sealed candidate.",
+    "after_merge": "Disable the default profile and restore prior registered workflow selection through a new non-destructive commit; preserve the operator decision, sealed candidate and this control record. Supersede the v0.2 packet without deleting evidence."
+  }
+}
