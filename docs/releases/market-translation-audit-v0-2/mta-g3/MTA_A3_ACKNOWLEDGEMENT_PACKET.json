@@ -1,19 +1,99 @@
 {
-  "schema": "ovc-mta-a3-acknowledgement-packet/v1",
+  "schema": "ovc-mta-a3-acknowledgement-packet/v2",
   "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
   "control_id": "MTA-A3",
   "title": "C2 structural translation findings acknowledgement",
-  "status": "PENDING_MTA_G3_PASS_AND_MERGE",
-  "operator_decision_required": true,
+  "status": "APPROVED",
+  "operator_decision_required": false,
+  "completed_packets": ["MTA-00", "MTA-WP1", "MTA-WP2", "MTA-WP3"],
+  "baseline_commit": "da29bb4b571e8f0c4706fa3032e941a89d0d5550",
+  "superseded_preserved_candidate": {
+    "pull_request": 223,
+    "branch": "audit/mta-wp3-c2-translation",
+    "sealed_head": "3165ce9ecdeff76b9885a6f055514e8317f2b84c",
+    "resolution": "SUPERSEDED_PRESERVED_AFTER_MAIN_ADVANCE_AND_STRICT_EXPECTED_CHECKS"
+  },
+  "merged_transport": {
+    "pull_request": 225,
+    "branch": "audit/mta-wp3-c2-translation-superseding",
+    "sealed_head": "327c5d7f7a1330952491716be1945e6219a21ad3",
+    "merge_commit": "e49abc24ef65f16698bd719969e27cb9cb3bb92c",
+    "merge_method": "SQUASH",
+    "result": "PASS_MERGED"
+  },
   "current_authority": "AUDIT_ONLY_NO_MODEL_OR_SELECTOR_CHANGE",
   "proposed_delta": "ACKNOWLEDGE_MATERIAL_C2_FINDINGS_AND_AUTHORISE_MTA_WP4_AUDIT_ONLY_CONTINUATION",
+  "recorded_decision": {
+    "decision_id": "MTA-A3.OPERATOR.ACKNOWLEDGE_CONTINUE.20260802T222300+0100",
+    "decision": "ACKNOWLEDGE_CONTINUE",
+    "decision_authority": "OPERATOR",
+    "operator_instruction": "OVC APPROVE MTA-A3 ACKNOWLEDGE_CONTINUE",
+    "recorded_at": "2026-08-02T22:23:00+01:00",
+    "acknowledged_findings": ["MTA-WP3-F1", "MTA-WP3-F2", "MTA-WP3-F3"],
+    "authority_effect": "AUTHORISE_MTA_WP4_CLOCK_AND_PARENT_CONTEXT_AUDIT_ONLY",
+    "operator_reserved_activation": "NONE"
+  },
+  "acceptance_conditions": [
+    {"condition":"All 18 frozen external inputs match manifest hashes and sizes","result":"PASS"},
+    {"condition":"All 9,420 C2 states and 7,345 transitions reconstruct exactly","result":"PASS"},
+    {"condition":"All levels, containers, relation sets, five axes, persistence and resets account exactly","result":"PASS"},
+    {"condition":"Unaccounted records and mismatches are zero","result":"PASS"},
+    {"condition":"Material limitations remain visible and non-activating","result":"PASS"},
+    {"condition":"Required current-main MTA-G3, tests and tiered FINAL_HEAD checks pass","result":"PASS"},
+    {"condition":"Operator explicitly acknowledges the material findings and authorises audit-only continuation","result":"PASS"}
+  ],
+  "tests": [
+    {"candidate":"9b2a4ce68246b8070125484b96dede62f3489712","workflow":"Market Translation Audit MTA-G3 C2 translation","run_id":30766337750,"result":"PASS"},
+    {"candidate":"9b2a4ce68246b8070125484b96dede62f3489712","workflow":"tests","run_id":30766337753,"result":"PASS"},
+    {"candidate":"9b2a4ce68246b8070125484b96dede62f3489712","workflow":"OVC tiered test selection shadow","run_id":30766337844,"profile":"FINAL_HEAD","result":"PASS"},
+    {"candidate":"3165ce9ecdeff76b9885a6f055514e8317f2b84c","workflow":"Market Translation Audit MTA-G3 C2 translation","run_id":30766447760,"result":"PASS"},
+    {"candidate":"3165ce9ecdeff76b9885a6f055514e8317f2b84c","workflow":"tests","run_id":30766447759,"result":"PASS"},
+    {"candidate":"3165ce9ecdeff76b9885a6f055514e8317f2b84c","workflow":"OVC tiered test selection shadow","run_id":30766447753,"profile":"FINAL_HEAD","result":"PASS"},
+    {"candidate":"327c5d7f7a1330952491716be1945e6219a21ad3","workflow":"Market Translation Audit MTA-G3 C2 translation","run_id":30767068767,"result":"PASS"},
+    {"candidate":"327c5d7f7a1330952491716be1945e6219a21ad3","workflow":"tests","run_id":30767068815,"result":"PASS"},
+    {"candidate":"327c5d7f7a1330952491716be1945e6219a21ad3","workflow":"OVC tiered test selection shadow","run_id":30767068673,"profile":"FINAL_HEAD","result":"PASS"}
+  ],
+  "qa": {
+    "packet": "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_WP3_QA_PACKET.json",
+    "recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "warnings": [],
+    "unresolved_issues": []
+  },
   "material_findings": [
-    {"finding_id":"MTA-WP3-F1","summary":"No target C2 state has QUALITY COMPLETE; 3,602 are CENSORED and 4,996 are DEGRADED."},
-    {"finding_id":"MTA-WP3-F2","summary":"PARENT_RANGE is excluded in all 8,598 target state evaluations."},
-    {"finding_id":"MTA-WP3-F3","summary":"LOCATION, MOTION and ORGANISATION are each unavailable in 3,602 target states due to reset warm-up."}
+    {"finding_id":"MTA-WP3-F1","severity":"MATERIAL","classification":"QUALITY_NEVER_COMPLETE","summary":"No target C2 state has QUALITY COMPLETE; 3,602 are CENSORED and 4,996 are DEGRADED."},
+    {"finding_id":"MTA-WP3-F2","severity":"MATERIAL","classification":"PARENT_RANGE_NEVER_ACTIVE","summary":"PARENT_RANGE is excluded in all 8,598 target state evaluations under the current contiguous 24-bar requirement."},
+    {"finding_id":"MTA-WP3-F3","severity":"MATERIAL","classification":"THREE_AXES_NOT_EVALUATED","summary":"LOCATION, MOTION and ORGANISATION are each unavailable in 3,602 target states due to reset warm-up."}
+  ],
+  "changed_files": [
+    ".github/workflows/mta-g3-c2-translation.yml",
+    "contracts/research_operations/mta/OVC_MTA_C2_TRANSLATION_AUDIT_CONTRACT_v0_1.md",
+    "docs/releases/market-translation-audit-v0-2/mta-g2/MTA_G2_MERGE_RECEIPT.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_A3_ACKNOWLEDGEMENT_PACKET.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_G3_DELEGATED_DECISION.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_G3_GATE_PACKET.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_WP3_C2_TRANSLATION_AUDIT_REFERENCE.json",
+    "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_WP3_QA_PACKET.json",
+    "fixtures/research_operations/mta/MTA_WP3_C2_TRANSLATION_FIXTURE_v0_1.json",
+    "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json",
+    "schemas/research_operations/mta/mta_c2_translation_audit_v0_1.schema.json",
+    "scripts/research_operations/validate_mta_wp3.py",
+    "src/ovc/research_operations/mta/c2_translation_audit.py",
+    "tests/research_operations/mta/test_mta_wp3.py"
+  ],
+  "external_artifacts": [
+    {"artifact_id":"MTA.WP3.C2.TRANSLATION.PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9.v1","provider":"GOOGLE_DRIVE","file_id":"1md3-k0VZED73omuUzui_Qcrj_5FzztSy","size_bytes":59568,"sha256":"77474a18ccec38e5a3495cbf6af89542d32ea891229a0df208f75f4b124e2158","logical_sha256":"0672ad64b931fbd03f2f652668f0083d15a7546795443a5d5d12f2c01b003e7e"}
   ],
   "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "DEFER", "BLOCK", "QUARANTINE"],
   "recommended_decision": "ACKNOWLEDGE_CONTINUE",
-  "effect_of_acknowledge_continue": "Authorise MTA-WP4 clock and parent-context audit only. No formula, threshold, clock, selector, C2E, C2.5, C3 or exposure authority is granted.",
-  "rollback": "No authority has changed. A later decision may defer or block the programme while preserving all MTA-G3 evidence."
+  "effect_of_acknowledge_continue": "Authorise MTA-WP4 clock and parent-context audit only. No formula, threshold, clock, selector, model, C2E, C2.5, C3, Validation, R2, probability, risk, exposure or execution authority is granted.",
+  "exact_work_after_acknowledge_continue": [
+    "Record the MTA-A3 operator acknowledgement and programme-state authority delta",
+    "Squash-merge the acknowledgement court record when required checks pass",
+    "Create audit/mta-wp4-clock-parent from the resulting lawful main",
+    "Audit A-L mapping, first-valid parent links, parent age, refresh, boundary distance and reset causes",
+    "Auto-ratify MTA-G4 only if its delta remains audit-only and all acceptance conditions pass"
+  ],
+  "rollback": "The acknowledgement may be superseded by a later operator decision. All MTA-G3 evidence remains preserved; no model, selector, formula, threshold, clock, Validation, publication, risk or execution authority has changed."
 }
