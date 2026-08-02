@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Validate the DA-WP4B pre-activation shadow sequencing correction."""
+"""Validate the DA-WP4B pre-activation shadow correction and evidence state."""
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -29,9 +30,12 @@ REQUIRED = [
     "registries/development/OVC_DEVELOPMENT_ACCELERATION_DA_WP4B_CORRECTIVE_STATE_v0_1.json",
     "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_PACKET.json",
     "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_QA_PACKET.json",
+    "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
+    "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json",
 ]
 POLICY = ROOT / "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json"
 TARGET_PATH = "docs/releases/development-acceleration-v0-1/da-wp4b-shadow/DA_G4B_SHADOW_RECEIPT.json"
+AUDIT_SHA256 = "79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3"
 
 
 def read(path: str) -> str:
@@ -136,23 +140,54 @@ def main() -> int:
     state = json.loads(read(REQUIRED[6]))
     corrective = json.loads(read(REQUIRED[7]))
     qa = json.loads(read(REQUIRED[8]))
+    external = json.loads(read(REQUIRED[9]))
+    shadow_qa = json.loads(read(REQUIRED[10]))
+
     assert state["packet_id"] == "DA-WP4B-CORRECTIVE-SHADOW"
+    assert state["status"] == "SHADOW_PASS_CANDIDATE_RULESET_AND_FINAL_CI_BLOCKED"
     assert state["authority_active"] is False
     assert state["production_transport"] == "ABSENT_FAIL_CLOSED"
     assert state["shadow_transport"] == "LOCAL_POWERSHELL_GITHUB_APP_PRE_ACTIVATION_ONLY"
-    assert len(state["retained_blockers"]) == 3
+    assert state["credential_state"] == "DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY"
+    assert len(state["retained_blockers"]) == 2
+    assert state["shadow"]["pull_request"] == 211
+    assert state["shadow"]["open_unmerged"] is True
+
     assert corrective["defect"]["classification"] == "CORRECTABLE_IN_PACKET_SCOPE"
     assert corrective["correction"]["production_authority_change"] == "NONE"
-    assert len(corrective["retained_blockers"]) == 3
+    assert len(corrective["retained_blockers"]) == 3  # original correction packet remains historical
+
     assert qa["authority_active"] is False
     assert qa["implementation_blocking_issues"] == []
-    assert len(qa["activation_blocking_issues"]) == 3
+    assert len(qa["activation_blocking_issues"]) == 2
+    assert qa["status"] == "PASS_CORRECTION_AND_SHADOW_CANDIDATE_RULESET_AND_FINAL_CI_BLOCKED"
+
+    canonical_external = dict(external)
+    recorded_sha = canonical_external.pop("external_audit_file_sha256")
+    canonical_bytes = json.dumps(canonical_external, indent=2).encode("utf-8") + b"\n"
+    assert hashlib.sha256(canonical_bytes).hexdigest() == recorded_sha == AUDIT_SHA256
+    assert external["app_slug"] == "ovc-dev-accel-receipt-bot"
+    assert external["operator_connector"] is False
+    assert external["pull_request_number"] == 211
+    assert external["authority_active"] is False
+    assert external["production_transport_active"] is False
+    assert external["merge_performed"] is False
+    assert external["approval_performed"] is False
+    assert external["force_push_performed"] is False
+    assert external["history_rewrite_performed"] is False
+
+    assert shadow_qa["shadow_pull_request"] == 211
+    assert shadow_qa["shadow_pr_must_remain_unmerged"] is True
+    assert shadow_qa["authority_active"] is False
+    assert shadow_qa["verified_conditions"]["DEDICATED_REVOCABLE_IDENTITY_PROVISIONED"] == "PASS"
+    assert shadow_qa["verified_conditions"]["REAL_PROPOSAL_BRANCH_SHADOW_PASS"].startswith("PASS_CANDIDATE")
+    assert shadow_qa["verified_conditions"]["MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED"].startswith("BLOCKED")
 
     bodies = "\n".join(read(path) for path in REQUIRED)
     assert '"authority_active": true' not in bodies
     assert '"production_transport": "ACTIVE"' not in bodies
 
-    print("DA-WP4B pre-activation shadow correction PASS; external shadow remains BLOCKED")
+    print("DA-WP4B pre-activation shadow candidate PASS; activation remains BLOCKED")
     return 0
 
 
