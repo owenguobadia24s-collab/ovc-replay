@@ -1,0 +1,19 @@
+{
+  "schema": "ovc-mta-a3-acknowledgement-packet/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "control_id": "MTA-A3",
+  "title": "C2 structural translation findings acknowledgement",
+  "status": "PENDING_MTA_G3_PASS_AND_MERGE",
+  "operator_decision_required": true,
+  "current_authority": "AUDIT_ONLY_NO_MODEL_OR_SELECTOR_CHANGE",
+  "proposed_delta": "ACKNOWLEDGE_MATERIAL_C2_FINDINGS_AND_AUTHORISE_MTA_WP4_AUDIT_ONLY_CONTINUATION",
+  "material_findings": [
+    {"finding_id":"MTA-WP3-F1","summary":"No target C2 state has QUALITY COMPLETE; 3,602 are CENSORED and 4,996 are DEGRADED."},
+    {"finding_id":"MTA-WP3-F2","summary":"PARENT_RANGE is excluded in all 8,598 target state evaluations."},
+    {"finding_id":"MTA-WP3-F3","summary":"LOCATION, MOTION and ORGANISATION are each unavailable in 3,602 target states due to reset warm-up."}
+  ],
+  "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "DEFER", "BLOCK", "QUARANTINE"],
+  "recommended_decision": "ACKNOWLEDGE_CONTINUE",
+  "effect_of_acknowledge_continue": "Authorise MTA-WP4 clock and parent-context audit only. No formula, threshold, clock, selector, C2E, C2.5, C3 or exposure authority is granted.",
+  "rollback": "No authority has changed. A later decision may defer or block the programme while preserving all MTA-G3 evidence."
+}
