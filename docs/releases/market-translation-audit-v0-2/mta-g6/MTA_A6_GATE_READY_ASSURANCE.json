@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-mta-a6-gate-ready-assurance/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "control_id": "MTA-A6",
+  "status": "GATE_READY",
+  "operator_decision_required": true,
+  "pull_request": 234,
+  "branch": "gate/mta-a6-acknowledgement",
+  "candidate_commit": "1360f1a37e115a6bd26c7dfed88969a44326da81",
+  "tests": [
+    {
+      "workflow": "tests",
+      "run_id": 30770118311,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30770118309,
+      "profile": "FINAL_HEAD",
+      "result": "PASS"
+    }
+  ],
+  "qa": {
+    "wp5_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "wp6_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "warnings": [],
+    "unresolved_issues": []
+  },
+  "proposed_delta": "ACKNOWLEDGE_MARKER_AND_OVERLAP_FINDINGS_AND_AUTHORISE_MTA_WP7_AUDIT_SYNTHESIS_ONLY",
+  "operator_reserved_action": true,
+  "recorded_decision": null,
+  "recommended_decision": "ACKNOWLEDGE_CONTINUE",
+  "allowed_decisions": [
+    "ACKNOWLEDGE_CONTINUE",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE"
+  ],
+  "authority_boundary": "NO_FORMULA_THRESHOLD_MARKER_MEANING_CLUSTER_MEANING_MODEL_FAMILY_CANDIDATE_SELECTOR_C2E_C2_5_C3_VALIDATION_R2_PUBLICATION_PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_AUTHORITY",
+  "rollback": "Preserve all accepted evidence and prevent MTA-WP7 from starting unless the operator records ACKNOWLEDGE_CONTINUE."
+}
