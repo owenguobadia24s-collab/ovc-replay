@@ -6,23 +6,23 @@
   "gate_id": "MTA-G3",
   "title": "C2 structural translation audit",
   "baseline_commit": "726419295104a763f06911e3914c48e12e753b5c",
-  "candidate_commit": null,
+  "candidate_commit": "9b2a4ce68246b8070125484b96dede62f3489712",
   "completed_packets": ["MTA-00", "MTA-WP1", "MTA-WP2", "MTA-WP3"],
   "current_authority": "AUDIT_ONLY_READ_DERIVE_AND_BOUNDED_BRANCH_WRITE",
-  "proposed_delta": "ACCEPT_CHECKSUM_ADDRESSED_C2_TRANSLATION_AUDIT_EVIDENCE_WITH_MATERIAL_FINDINGS",
+  "approved_delta": "ACCEPT_CHECKSUM_ADDRESSED_C2_TRANSLATION_AUDIT_EVIDENCE_WITH_MATERIAL_FINDINGS",
   "authority_classification": "AUTO_EXECUTABLE_NON_RESERVED",
   "acceptance_conditions": [
-    "All 18 external input files match frozen manifest hashes and sizes.",
-    "All 9,420 C2 states and 7,345 C2 transitions reconstruct exactly.",
-    "All level, container and relation-set identities and exclusions are accounted for.",
-    "All five axes, persistence counters, transitions and reset warm-up match exactly.",
-    "Unaccounted and mismatch counts are zero.",
-    "Material structural findings remain visible and are not treated as activation authority.",
-    "Focused, retained, complete and tiered FINAL_HEAD assurance pass.",
-    "No reserved authority delta occurs."
+    {"condition":"All 18 external input files match frozen manifest hashes and sizes","result":"PASS"},
+    {"condition":"All 9,420 C2 states and 7,345 C2 transitions reconstruct exactly","result":"PASS"},
+    {"condition":"All level, container and relation-set identities and exclusions are accounted","result":"PASS"},
+    {"condition":"All five axes, persistence, transitions and reset warm-up match","result":"PASS"},
+    {"condition":"Unaccounted and mismatch counts are zero","result":"PASS"},
+    {"condition":"Material findings remain visible without activation authority","result":"PASS"},
+    {"condition":"MTA-G3, complete tests and tiered FINAL_HEAD assurance","result":"PASS"},
+    {"condition":"No reserved authority delta","result":"PASS"}
   ],
   "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_WP3_QA_PACKET.json",
-  "qa_recommendation": "PASS_PENDING_EXACT_FINAL_HEAD_CI_WITH_MATERIAL_FINDINGS",
+  "qa_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
   "warnings": [],
   "unresolved_issues": [],
   "external_artifacts": [
@@ -30,7 +30,7 @@
   ],
   "material_findings": ["MTA-WP3-F1", "MTA-WP3-F2", "MTA-WP3-F3"],
   "rollback": "Supersede through a new immutable audit version bound to exact input hashes; preserve all source, external, finding and decision evidence.",
-  "recommended_decision": "PASS_AFTER_FINAL_HEAD_CI_WITH_MATERIAL_FINDINGS",
-  "status": "QA_REVIEW",
-  "exact_work_after_approval": "Squash-merge MTA-WP3, record the merge receipt, materialise MTA-A3 GATE_READY and stop for one operator acknowledgement before MTA-WP4."
+  "recommended_decision": "PASS_WITH_MATERIAL_FINDINGS",
+  "status": "APPROVED_PENDING_SQUASH_MERGE",
+  "exact_work_after_approval": "Run exact ratification-head assurance, squash-merge MTA-WP3, record the merge receipt, materialise MTA-A3 GATE_READY and stop for one operator acknowledgement before MTA-WP4."
 }
