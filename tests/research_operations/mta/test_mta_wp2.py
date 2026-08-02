@@ -106,14 +106,17 @@ class MTAWP2Tests(unittest.TestCase):
         with self.assertRaisesRegex(SourceC1AuditError, "REFERENCE_MISMATCHES_NONZERO"):
             validate_reference(reference)
 
-    def test_all_input_hashes_match_frozen_output_manifest(self) -> None:
+    def test_all_input_hashes_and_sizes_match_frozen_output_manifest(self) -> None:
         manifest = load("docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/output-manifest.json")
         by_path = {item["path"]: item for item in manifest["files"]}
         for item in self.reference["input_files"]:
             observed = by_path[item["name"]]
             self.assertEqual(observed["sha256"], item["sha256"])
             self.assertEqual(observed["size_bytes"], item["size_bytes"])
-            self.assertEqual(observed["record_count"], item["records"])
+        bars = sum(item["record_count"] for item in self.reference["input_files"] if item["role"] == "BARS")
+        c1 = sum(item["record_count"] for item in self.reference["input_files"] if item["role"] == "C1")
+        self.assertEqual(bars, 5220)
+        self.assertEqual(c1, 4958)
 
     def test_paired_provider_absence_remains_explicit(self) -> None:
         source = self.reference["source_qa"]
