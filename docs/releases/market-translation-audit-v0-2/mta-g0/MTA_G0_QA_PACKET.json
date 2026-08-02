@@ -5,8 +5,8 @@
   "plan_version": "0.2",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "candidate_branch": "gate/mta-g0-ratification",
-  "tested_candidate_commit": "d2066bd5b9f8182c58fed072adb442123d93c0cb",
-  "status": "PASS_OPERATOR_DECISION_REQUIRED",
+  "tested_candidate_commit": "2242ad48d69d3edbc3e8375ac5343ccf2a01f943",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "checks": [
     {"id": "MTA-Q-G0-PLAN", "status": "PASS", "evidence": "plan markdown and source attachment hash pinned"},
     {"id": "MTA-Q-G0-BASELINE", "status": "PASS", "evidence": "main, open PRs, active selectors, June WP2/WP3 and RO4 reconciled"},
@@ -15,14 +15,15 @@
     {"id": "MTA-Q-G0-AMENDMENT", "status": "PASS", "evidence": "immutable registry amendment protocol frozen"},
     {"id": "MTA-Q-G0-RO4", "status": "PASS", "evidence": "separate objects and inconsistency incident rule frozen"},
     {"id": "MTA-Q-G0-AUTHORITY", "status": "PASS", "evidence": "no selector, formula, clock, publication, Validation, semantic or exposure authority"},
-    {"id": "MTA-Q-G0-CI", "status": "PASS", "evidence": "MTA-G0 workflow 30752745706 PASS; validator, 7 focused tests, complete repository suite and static authority assertions"},
-    {"id": "MTA-Q-G0-GENERIC", "status": "PASS", "evidence": "generic tests workflow 30752745692 PASS"}
+    {"id": "MTA-Q-G0-CI", "status": "PASS", "evidence": "MTA-G0 workflow 30752931176 PASS; validator, 7 focused tests, complete repository suite and static authority assertions"},
+    {"id": "MTA-Q-G0-GENERIC", "status": "PASS", "evidence": "generic tests workflow 30752931178 PASS"},
+    {"id": "MTA-Q-G0-OPERATOR", "status": "PASS", "evidence": "MTA-G0.OPERATOR.PASS.20260802T145100Z and PD-JUNE-FM-G2 DEFER recorded"}
   ],
   "capacity": {"expected_runtime_s": 60, "max_runtime_s": 14400, "expected_retained_bytes": 250000, "max_retained_bytes": 10737418240, "state": "WITHIN_CONTRACT"},
   "warnings": [
-    "External WP3 package byte hashes are pinned from PR #202 and Drive existence is confirmed; this packet does not rehash Drive bytes.",
+    "External WP3 package byte hashes are pinned from PR #202 and Drive existence is accepted by operator decision; this packet does not rehash Drive bytes.",
     "PR #202 and PR #209 remain open and must not be mutated by MTA-G0."
   ],
-  "unresolved_issues": ["MTA_G0_OPERATOR_DECISION_REQUIRED"],
+  "unresolved_issues": [],
   "recommendation": "PASS"
 }
