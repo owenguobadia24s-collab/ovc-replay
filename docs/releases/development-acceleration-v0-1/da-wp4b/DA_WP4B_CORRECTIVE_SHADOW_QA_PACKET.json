@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4B-CORRECTIVE-SHADOW",
+  "gate_id": "DA-G4B",
+  "status": "PASS_STATIC_PENDING_FINAL_HEAD_CI_EXTERNAL_SHADOW_BLOCKED",
+  "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "authority_active": false,
+  "assertions": [
+    {
+      "check_id": "DA-G4B-CORR-01",
+      "status": "PASS_STATIC",
+      "assertion": "Pre-activation shadow readiness excludes only the shadow result and final QA from its prerequisites."
+    },
+    {
+      "check_id": "DA-G4B-CORR-02",
+      "status": "PASS_STATIC",
+      "assertion": "Main branch-protection/no-bypass evidence remains mandatory before any shadow adapter call."
+    },
+    {
+      "check_id": "DA-G4B-CORR-03",
+      "status": "PASS_STATIC",
+      "assertion": "Only a dedicated revocable GitHub App installation with exact minimal permissions is accepted."
+    },
+    {
+      "check_id": "DA-G4B-CORR-04",
+      "status": "PASS_STATIC",
+      "assertion": "The shadow is limited to one branch, one hash-bound JSON receipt and one unmerged PR."
+    },
+    {
+      "check_id": "DA-G4B-CORR-05",
+      "status": "PASS_STATIC",
+      "assertion": "Merge, approval, direct-main write, deletion, force-push and history rewrite remain absent and denied."
+    },
+    {
+      "check_id": "DA-G4B-CORR-06",
+      "status": "PENDING_CI",
+      "assertion": "Focused corrective tests, retained DA-WP4B tests and complete repository suite pass on the final head."
+    },
+    {
+      "check_id": "DA-G4B-CORR-07",
+      "status": "BLOCKED_EXTERNAL",
+      "assertion": "Independently reproducible ruleset evidence, dedicated identity provisioning and the one real shadow are not yet available."
+    }
+  ],
+  "implementation_blocking_issues": [],
+  "activation_blocking_issues": [
+    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
+    "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
+    "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+  ],
+  "tests": [],
+  "qa_recommendation": "PASS_CORRECTIVE_IMPLEMENTATION_AFTER_CI_BLOCK_ACTIVATION_UNTIL_EXTERNAL_SHADOW",
+  "rollback": "Preserve active=false and revert only the corrective packet through a new non-destructive commit."
+}
