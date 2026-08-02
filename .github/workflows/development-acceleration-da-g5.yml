@@ -1,0 +1,68 @@
+name: Development Acceleration DA-G5 compact evidence export
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/development/OVC_COMPACT_EVIDENCE_EXPORT_CONTRACT_v0_1.md"
+      - "schemas/development/compact_evidence_export_*"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_EVIDENCE_EXPORT_PROFILE_v0_1.json"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json"
+      - "src/ovc/development/evidence_export.py"
+      - "scripts/development/run_da_wp5_export.py"
+      - "scripts/development/validate_da_wp5.py"
+      - "tests/development/test_evidence_export.py"
+      - "fixtures/development/evidence_export/**"
+      - "docs/releases/development-acceleration-v0-1/da-g5/**"
+      - ".github/workflows/development-acceleration-da-g5.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  da-g5:
+    name: DA-G5 compact evidence export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate DA-WP5 packet
+        run: PYTHONPATH=src python -u scripts/development/validate_da_wp5.py
+      - name: Focused compact evidence export tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_evidence_export.py' -v
+      - name: Retained shared identity tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_shared_services.py' -v
+      - name: Retained preflight tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_preflight.py' -v
+      - name: Runner syntax and missing-root failure
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/development/run_da_wp5_export.py src/ovc/development/evidence_export.py
+          if PYTHONPATH=src env -u OVC_EXTERNAL_ARTIFACT_ROOT python scripts/development/run_da_wp5_export.py \
+            --request fixtures/development/evidence_export/export_request_pass_v0_1.json \
+            > "$RUNNER_TEMP/runner.out" 2> "$RUNNER_TEMP/runner.err"; then
+            echo "runner unexpectedly accepted a missing external root" >&2
+            exit 1
+          fi
+          grep -q 'EXTERNAL_ROOT_REQUIRED' "$RUNNER_TEMP/runner.err"
+          ! grep -q "$GITHUB_WORKSPACE" "$RUNNER_TEMP/runner.err"
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert copy-only authority boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'COPY_ONLY_COMPACT_EVIDENCE_EXPORT' contracts/development/OVC_COMPACT_EVIDENCE_EXPORT_CONTRACT_v0_1.md
+          grep -q '"network_access": "PROHIBITED"' registries/development/OVC_DEVELOPMENT_ACCELERATION_EVIDENCE_EXPORT_PROFILE_v0_1.json
+          grep -q '"repository_write": "PROHIBITED"' registries/development/OVC_DEVELOPMENT_ACCELERATION_EVIDENCE_EXPORT_PROFILE_v0_1.json
+          grep -q '"remote_write": "PROHIBITED"' registries/development/OVC_DEVELOPMENT_ACCELERATION_EVIDENCE_EXPORT_PROFILE_v0_1.json
+          ! grep -E 'subprocess|requests|urllib|httpx|socket|boto3|rclone' src/ovc/development/evidence_export.py scripts/development/run_da_wp5_export.py
+          ! grep -E '\.unlink\(|rmtree\(|os\.remove\(|git[[:space:]]+(push|merge|reset)' src/ovc/development/evidence_export.py scripts/development/run_da_wp5_export.py
+          ! grep -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/evidence_export.py

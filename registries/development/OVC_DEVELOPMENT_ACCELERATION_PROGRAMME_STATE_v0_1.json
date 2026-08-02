@@ -3,7 +3,7 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "programme_status": "READY",
+  "programme_status": "APPROVED",
   "current_packet": "DA-WP5",
   "current_gate": "DA-G5",
   "operator_decision_required": false,
@@ -13,21 +13,23 @@
     "DA-G4.OPERATOR.PASS.20260801T172600Z",
     "DA-G4B.OPERATOR.PASS.20260802T163600Z"
   ],
-  "baseline_commit": "2af1ab1ae153a703e9ccdea9705caf3b6093eecd",
-  "branch": "bot/ovc-dev-accel-receipts/da-wp4b-merge-receipt-v2",
-  "candidate_commit": null,
-  "merge_commit": "ab7ea801d2e3b6e097a0588f7c8e618864e3be65",
+  "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "branch": "build/ovc-dev-accel-evidence-export",
+  "candidate_commit": "81e2b69ac3f31dc350530000218b293e5c47c68b",
+  "merge_commit": null,
   "open_concurrent_work": [
     {"pull_request": 202, "programme_id": "PD-JUNE-FULL-MONTH-MDR", "branch": "build/pd-june-fm-wp3-review-population", "relationship": "NON_OVERLAPPING_DO_NOT_MUTATE"},
-    {"pull_request": 211, "programme_id": "OVC-DEV-ACCEL-v0.1", "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001", "relationship": "DA_G4B_SHADOW_EVIDENCE_PRESERVE_OPEN_UNMERGED"}
+    {"pull_request": 211, "programme_id": "OVC-DEV-ACCEL-v0.1", "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001", "relationship": "DA_G4B_SHADOW_EVIDENCE_PRESERVE_OPEN_UNMERGED"},
+    {"pull_request": 215, "programme_id": "OVC-DEV-ACCEL-v0.1", "branch": "build/ovc-dev-accel-evidence-export", "relationship": "DA_G5_APPROVED_READY_FOR_SQUASH_MERGE"}
   ],
   "authority": {
-    "tooling": "RECEIPT_BOT_ACTIVE_BOUNDED_PROPOSAL_WRITES",
+    "tooling": "RECEIPT_BOT_ACTIVE_AND_COMPACT_EVIDENCE_EXPORT_APPROVED",
     "test_selection": "FINAL_HEAD_PASS",
     "repository_bot_write": "ACTIVE_BOUNDED_PROPOSAL_BRANCH_ONLY",
     "repository_bot_profile": "ACTIVE_EXACT_APPROVED_PROFILE",
     "repository_bot_credential": "DEDICATED_REVOCABLE_GITHUB_APP_ACTIVE_BOUNDED",
     "repository_bot_production_transport": "ACTIVE_FAIL_CLOSED",
+    "compact_evidence_export": "ACTIVE_LOCAL_COPY_ONLY",
     "default_workflow_adoption": "DENIED_UNTIL_DA_G6",
     "direct_main_write": "PROHIBITED",
     "merge_pull_request": "PROHIBITED_TO_BOT",
@@ -47,9 +49,9 @@
     {"packet_id": "DA-WP4", "status": "COMPLETED", "prerequisites": ["DA-WP1_COMPLETED", "DA-WP3_COMPLETED"], "authority_required": "AUTO_RATIFIABLE_SHADOW_COMPLETED_THEN_OPERATOR_REQUIRED_DA_G4", "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY", "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95", "branch": "build/ovc-dev-accel-closure", "candidate_commit": "ab1bb583046ead8f27e7adbd154c60b91b98dd32", "tests": ["DA-G4A workflow 30708852313 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_DELEGATED_DECISION.json", "merge_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1", "blockers": [], "next_packet": "DA-G4"},
     {"packet_id": "DA-G4", "status": "COMPLETED", "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED"], "authority_required": "OPERATOR_REQUIRED_COMPLETED", "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY", "baseline_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1", "branch": "gate/ovc-dev-accel-da-g4", "candidate_commit": "50a07c1e2c1ff0515397c15ad3605a9ec5b6ee0a", "tests": ["DA-G4 workflow 30710704212 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json", "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3", "blockers": [], "next_packet": "DA-WP4B"},
     {"packet_id": "DA-WP4B", "status": "COMPLETED", "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED", "DA-G4_GATE_RECORD_MERGED", "DA-G4B_OPERATOR_PASS_RECORDED"], "authority_required": "OPERATOR_REQUIRED_COMPLETED", "authority_delta": "ACTIVE_BOUNDED_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY", "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3", "branch": "build/ovc-dev-accel-receipt-bot", "candidate_commit": "37c8fd14ff7dfe541769150fb026fb88edc8d042", "tests": ["tests 30758676059 PASS", "tiered 30758676039 PASS", "DA-WP4B 30758676070 PASS", "shadow 30758676087 PASS", "closure 30758676052 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json", "merge_commit": "ab7ea801d2e3b6e097a0588f7c8e618864e3be65", "blockers": [], "next_packet": "DA-WP5"},
-    {"packet_id": "DA-WP5", "status": "READY", "prerequisites": ["DA-WP1_COMPLETED", "DA-WP2_COMPLETED", "DA-G4B_OPERATOR_PASS_RECORDED", "DA-WP4B_COMPLETED"], "authority_required": "AUTO_RATIFIABLE", "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT", "baseline_commit": "2af1ab1ae153a703e9ccdea9705caf3b6093eecd", "branch": "build/ovc-dev-accel-evidence-export", "candidate_commit": null, "tests": [], "qa_packet": null, "decision_record": null, "merge_commit": null, "blockers": [], "next_packet": "DA-G6"}
+    {"packet_id": "DA-WP5", "status": "APPROVED", "prerequisites": ["DA-WP1_COMPLETED", "DA-WP2_COMPLETED", "DA-G4B_OPERATOR_PASS_RECORDED", "DA-WP4B_COMPLETED"], "authority_required": "AUTO_RATIFIABLE", "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT", "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c", "branch": "build/ovc-dev-accel-evidence-export", "candidate_commit": "81e2b69ac3f31dc350530000218b293e5c47c68b", "tests": ["DA-G5 30762392337 PASS", "tests 30762287893 PASS", "tiered 30762392397 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g5/DA_G5_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g5/DA_G5_DELEGATED_DECISION.json", "merge_commit": null, "blockers": [], "next_packet": "DA-G6"}
   ],
   "operator_gate": {"gate_id": "DA-G4", "status": "COMPLETED", "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json", "merge_receipt": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json", "recorded_decision": "PASS", "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3", "authority_active": false},
-  "activation_gate": {"gate_id": "DA-G4B", "status": "COMPLETED", "approved_candidate_commit": "7b1e3850f614743f93f5b21e2007c4b9101b73a6", "tested_post_activation_head": "37c8fd14ff7dfe541769150fb026fb88edc8d042", "decision_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json", "activation_evaluation": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_ACTIVATION_EVALUATION.json", "active_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json", "production_transport": "scripts/development/run_da_receipt_bot.ps1", "final_assurance": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_POST_ACTIVATION_FINAL_ASSURANCE.json", "merge_receipt": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_MERGE_RECEIPT.json", "shadow_pull_request": 211, "shadow_status": "PASS_OPEN_UNMERGED", "ruleset_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4", "blockers": [], "operator_decision_required": false, "recorded_decision": "PASS", "merge_commit": "ab7ea801d2e3b6e097a0588f7c8e618864e3be65", "authority_active": true},
-  "next_action": "BEGIN_DA_WP5_FROM_2af1ab1ae153a703e9ccdea9705caf3b6093eecd"
+  "activation_gate": {"gate_id": "DA-G4B", "status": "COMPLETED", "decision_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json", "merge_receipt": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_MERGE_RECEIPT.json", "shadow_pull_request": 211, "shadow_status": "PASS_OPEN_UNMERGED", "blockers": [], "operator_decision_required": false, "recorded_decision": "PASS", "merge_commit": "ab7ea801d2e3b6e097a0588f7c8e618864e3be65", "authority_active": true},
+  "next_action": "RUN_DA_G5_FINALIZATION_HEAD_CHECKS_THEN_SQUASH_MERGE_PR215"
 }

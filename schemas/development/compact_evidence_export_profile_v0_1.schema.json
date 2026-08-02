@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/development/compact_evidence_export_profile_v0_1.schema.json",
+  "title": "OVC compact evidence export profile v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile_id",
+    "programme_id",
+    "status",
+    "active",
+    "allowed_source_roots",
+    "allowed_extensions",
+    "max_file_bytes",
+    "max_bundle_bytes",
+    "denied_path_suffixes",
+    "denied_content_tokens",
+    "network_access",
+    "repository_write",
+    "remote_write",
+    "accepted_bundle_deletion"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-compact-evidence-export-profile/v1"},
+    "profile_id": {"const": "OVC.DEVELOPMENT.ACCELERATION.COMPACT-EVIDENCE-EXPORT.v0.1"},
+    "programme_id": {"const": "OVC-DEV-ACCEL-v0.1"},
+    "status": {"const": "ACTIVE"},
+    "active": {"const": true},
+    "allowed_source_roots": {
+      "const": [
+        "docs/releases/development-acceleration-v0-1",
+        "registries/development"
+      ]
+    },
+    "allowed_extensions": {"const": [".json", ".yaml", ".yml", ".md", ".txt"]},
+    "max_file_bytes": {"type": "integer", "const": 1048576},
+    "max_bundle_bytes": {"type": "integer", "const": 10485760},
+    "denied_path_suffixes": {
+      "const": [".bi5", ".csv", ".jsonl", ".parquet", ".sqlite", ".db", ".zip", ".tar", ".gz", ".7z", ".exe", ".dll"]
+    },
+    "denied_content_tokens": {
+      "const": ["ghp_", "github_pat_", "Bearer ", "-----BEGIN PRIVATE KEY-----", "sk-proj-", "C:\\Users\\"]
+    },
+    "network_access": {"const": "PROHIBITED"},
+    "repository_write": {"const": "PROHIBITED"},
+    "remote_write": {"const": "PROHIBITED"},
+    "accepted_bundle_deletion": {"const": "PROHIBITED"}
+  }
+}

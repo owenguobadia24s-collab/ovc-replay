@@ -91,14 +91,20 @@ entries:
   packet_id: DA-WP5
   title: Compact evidence exporter
   branch: build/ovc-dev-accel-evidence-export
-  status: READY
+  status: QA_REVIEW
   prerequisites: [DA-WP1_COMPLETED, DA-WP2_COMPLETED, DA-G4B_OPERATOR_PASS_RECORDED, DA-WP4B_COMPLETED]
   authority_required: AUTO_RATIFIABLE_OPERATOR_LOCAL_EXPORT
   authority_delta: COPY_ONLY_COMPACT_EVIDENCE_EXPORT
-  baseline_commit: 2af1ab1ae153a703e9ccdea9705caf3b6093eecd
-  blockers: []
+  baseline_commit: 544dc2f6477ce415321f9419a62586fcffa0d02c
+  candidate_commit: 6b28f8cc189468eddcb48ba8cdb7fa7df0310e65
+  contract: contracts/development/OVC_COMPACT_EVIDENCE_EXPORT_CONTRACT_v0_1.md
+  profile: registries/development/OVC_DEVELOPMENT_ACCELERATION_EVIDENCE_EXPORT_PROFILE_v0_1.json
+  implementation: src/ovc/development/evidence_export.py
+  runner: scripts/development/run_da_wp5_export.py
+  tests: []
+  blockers: [FINAL_HEAD_CI_PENDING]
   gate: DA-G5
-  rollback: Disable remote destination and retain deterministic local bundles.
+  rollback: Disable the export profile and retain deterministic local bundles and manifests.
 reserved_gates:
 - gate_id: DA-G4
   purpose: Narrow receipt-bot writes to approved bot branches and paths.
