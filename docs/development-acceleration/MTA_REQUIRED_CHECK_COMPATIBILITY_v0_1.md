@@ -11,7 +11,9 @@ The MTA-G0 pull request therefore includes this documentation-only path so the e
 - programme requiring assurance: `OVC-MTA-v0.2`
 - gate: `MTA-G0`
 - original pull request: `210`
-- resumed pull request: `PENDING`
+- resumed pull request: `216`
+- branch-creation base: `544dc2f6477ce415321f9419a62586fcffa0d02c`
+- pull-request base at final-head preparation: `eaefbf55d1702d689d59765558af65e87c0b37fc`
 - MTA operator decision: `MTA-G0.OPERATOR.PASS.20260802T145100Z`
 - expected selector treatment: unknown changed MTA paths escalate to `FINAL_HEAD`
 - authority delta: `NONE_REQUIRED_CHECK_COMPATIBILITY_RECORD_ONLY`
@@ -28,7 +30,7 @@ This record does not:
 
 ## Resolution context
 
-The active `main` ruleset is now reproducibly stored at `docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json` and requires the exact contexts `tests` and `OVC tiered test selection shadow`. This record remains necessary only to trigger the latter on the resumed MTA-G0 pull request until a separately governed workflow-path amendment exists.
+The active `main` ruleset is reproducibly stored at `docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json` and requires the exact contexts `tests` and `OVC tiered test selection shadow`. The resumed pull request preserves this documentation-only trigger until a separately governed workflow-path amendment exists.
 
 ## Removal or supersession
 
