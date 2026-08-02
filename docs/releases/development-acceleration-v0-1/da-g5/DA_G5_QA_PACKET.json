@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP5",
+  "gate_id": "DA-G5",
+  "status": "QA_REVIEW",
+  "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "candidate_commit": null,
+  "checks": [
+    {"check_id": "DA-G5-CONTRACT-001", "result": "PASS", "evidence": "Export is local, deterministic, copy-only and mechanically scoped."},
+    {"check_id": "DA-G5-SCHEMA-002", "result": "PASS", "evidence": "Profile and request use closed JSON Schema Draft 2020-12 objects."},
+    {"check_id": "DA-G5-IDENTITY-003", "result": "PASS", "evidence": "Bundle identity and manifest use canonical logical content and exact byte identities."},
+    {"check_id": "DA-G5-PATH-004", "result": "PASS", "evidence": "Traversal, source-root escape, symlink and repository-contained destination are denied."},
+    {"check_id": "DA-G5-CONTENT-005", "result": "PASS", "evidence": "Raw formats, credentials, private absolute paths and non-UTF8 compact records are denied."},
+    {"check_id": "DA-G5-CAPACITY-006", "result": "PASS", "evidence": "Per-file and total capacity are checked before copying."},
+    {"check_id": "DA-G5-ATOMICITY-007", "result": "PASS", "evidence": "Manifest is written last and staging is atomically renamed or quarantined."},
+    {"check_id": "DA-G5-IDEMPOTENCY-008", "result": "PASS", "evidence": "Identical bundles reuse only after full byte verification; collisions block."},
+    {"check_id": "DA-G5-AUTHORITY-009", "result": "PASS", "evidence": "No network, subprocess, repository write, remote write, provider, R2, publication or market authority exists."},
+    {"check_id": "DA-G5-CI-010", "result": "PENDING", "evidence": "Focused, retained and complete repository checks have not yet run on the final PR head."}
+  ],
+  "tests": [],
+  "blocking_issues": [],
+  "warnings": [],
+  "qa_recommendation": "PENDING_FINAL_HEAD_CI",
+  "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
+  "reserved_authority_delta": "NONE",
+  "rollback": "Disable the export profile and preserve all accepted bundles and manifests."
+}
