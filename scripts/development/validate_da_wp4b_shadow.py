@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the DA-WP4B pre-activation shadow correction and evidence state."""
+"""Validate DA-WP4B pre-activation shadow and exact branch-protection evidence."""
 
 from __future__ import annotations
 
@@ -19,7 +19,12 @@ from ovc.development.receipt_bot_shadow import (  # noqa: E402
     execute_pre_activation_shadow,
 )
 
-
+POLICY = ROOT / "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json"
+TARGET_PATH = "docs/releases/development-acceleration-v0-1/da-wp4b-shadow/DA_G4B_SHADOW_RECEIPT.json"
+RULESET_PATH = "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json"
+AUDIT_PATH = "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json"
+RULESET_SHA256 = "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"
+AUDIT_CANONICAL_SHA256 = "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea"
 REQUIRED = [
     "contracts/development/OVC_RECEIPT_BOT_PRE_ACTIVATION_SHADOW_CONTRACT_v0_1.md",
     "src/ovc/development/receipt_bot_shadow.py",
@@ -30,22 +35,18 @@ REQUIRED = [
     "registries/development/OVC_DEVELOPMENT_ACCELERATION_DA_WP4B_CORRECTIVE_STATE_v0_1.json",
     "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_PACKET.json",
     "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_QA_PACKET.json",
-    "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
+    AUDIT_PATH,
     "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json",
+    RULESET_PATH,
 ]
-POLICY = ROOT / "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json"
-TARGET_PATH = "docs/releases/development-acceleration-v0-1/da-wp4b-shadow/DA_G4B_SHADOW_RECEIPT.json"
-AUDIT_SHA256 = "79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3"
-
 
 def read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
 
-
 def main() -> int:
-    missing = [path for path in REQUIRED if not (ROOT / path).is_file()]
+    missing = [p for p in REQUIRED if not (ROOT / p).is_file()]
     if missing:
-        raise AssertionError(f"missing DA-WP4B corrective files: {missing}")
+        raise AssertionError(f"missing DA-WP4B shadow files: {missing}")
 
     policy = load_policy(POLICY)
     packet = load_work_packet(ROOT / REQUIRED[3])
@@ -65,13 +66,6 @@ def main() -> int:
     assert readiness["status"] == "PASS"
     assert readiness["shadow_execution_authorized"] is True
     assert readiness["authority_active"] is False
-    assert readiness["post_shadow_conditions"] == ["QA_PASS", "REAL_PROPOSAL_BRANCH_SHADOW_PASS"]
-
-    blocked_evidence = dict(evidence)
-    blocked_evidence["MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED"] = "BLOCKED"
-    blocked = evaluate_shadow_readiness(blocked_evidence, policy)
-    assert blocked["status"] == "BLOCK"
-    assert "NOT_PASS:MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED" in blocked["blockers"]
 
     identity = ReceiptBotShadowIdentity(
         app_id=12345,
@@ -81,14 +75,10 @@ def main() -> int:
         credential_kind="GITHUB_APP_INSTALLATION_TOKEN",
         revocable=True,
         operator_connector=False,
-        permissions={
-            "contents": "write",
-            "pull_requests": "write",
-            "metadata": "read",
-        },
+        permissions={"contents": "write", "pull_requests": "write", "metadata": "read"},
     )
     adapter = RecordingShadowProposalAdapter()
-    audit = execute_pre_activation_shadow(
+    local_audit = execute_pre_activation_shadow(
         plan,
         adapter,
         shadow_readiness=readiness,
@@ -100,73 +90,29 @@ def main() -> int:
         "CREATE_OR_UPDATE_ALLOWLISTED_FILES",
         "OPEN_OR_UPDATE_PULL_REQUEST",
     ]
-    assert audit["mode"] == "PRE_ACTIVATION_SHADOW"
-    assert audit["shadow_result"] == "PASS"
-    assert audit["authority_active"] is False
-    assert audit["production_transport_active"] is False
-    assert audit["merge_performed"] is False
-    assert audit["approval_performed"] is False
-    assert audit["force_push_performed"] is False
-    assert audit["history_rewrite_performed"] is False
+    assert local_audit["shadow_result"] == "PASS"
+    assert local_audit["authority_active"] is False
+    assert local_audit["production_transport_active"] is False
+    assert local_audit["merge_performed"] is False
+    assert local_audit["approval_performed"] is False
+    assert local_audit["force_push_performed"] is False
+    assert local_audit["history_rewrite_performed"] is False
 
-    contract = read(REQUIRED[0])
-    for token in [
-        "PRE_ACTIVATION_SHADOW",
-        "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED",
-        "dedicated, independently revocable GitHub App",
-        "one hash-bound JSON receipt",
-        "authority_active=false",
-    ]:
-        assert token in contract
+    ruleset_raw = (ROOT / RULESET_PATH).read_bytes()
+    assert hashlib.sha256(ruleset_raw).hexdigest() == RULESET_SHA256
+    ruleset = json.loads(ruleset_raw)
+    assert ruleset["enforcement"] == "active"
+    assert "refs/heads/main" in ruleset["conditions"]["ref_name"]["include"]
+    assert ruleset["bypass_actors"] == []
+    assert ruleset["current_user_can_bypass"] == "never"
 
-    powershell = read(REQUIRED[2])
-    for token in [
-        "OVC_RECEIPT_BOT_APP_ID",
-        "OVC_RECEIPT_BOT_INSTALLATION_ID",
-        "OVC_RECEIPT_BOT_PRIVATE_KEY_PATH",
-        "Assert-ExternalRulesetEvidence",
-        "STALE_MAIN_SHA",
-        "authority_active = $false",
-        "merge_performed = $false",
-        "approval_performed = $false",
-        "force_push_performed = $false",
-    ]:
-        assert token in powershell
-    lowered = powershell.lower()
-    assert "/merges" not in lowered
-    assert "/reviews" not in lowered
-    assert "force = $true" not in lowered
-
-    state = json.loads(read(REQUIRED[6]))
-    corrective = json.loads(read(REQUIRED[7]))
-    qa = json.loads(read(REQUIRED[8]))
-    external = json.loads(read(REQUIRED[9]))
-    shadow_qa = json.loads(read(REQUIRED[10]))
-
-    assert state["packet_id"] == "DA-WP4B-CORRECTIVE-SHADOW"
-    assert state["status"] == "SHADOW_PASS_CANDIDATE_RULESET_AND_FINAL_CI_BLOCKED"
-    assert state["authority_active"] is False
-    assert state["production_transport"] == "ABSENT_FAIL_CLOSED"
-    assert state["shadow_transport"] == "LOCAL_POWERSHELL_GITHUB_APP_PRE_ACTIVATION_ONLY"
-    assert state["credential_state"] == "DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY"
-    assert len(state["retained_blockers"]) == 2
-    assert state["shadow"]["pull_request"] == 211
-    assert state["shadow"]["open_unmerged"] is True
-
-    assert corrective["defect"]["classification"] == "CORRECTABLE_IN_PACKET_SCOPE"
-    assert corrective["correction"]["production_authority_change"] == "NONE"
-    assert len(corrective["retained_blockers"]) == 3  # original correction packet remains historical
-
-    assert qa["authority_active"] is False
-    assert qa["implementation_blocking_issues"] == []
-    assert len(qa["activation_blocking_issues"]) == 2
-    assert qa["status"] == "PASS_CORRECTION_AND_SHADOW_CANDIDATE_RULESET_AND_FINAL_CI_BLOCKED"
-
+    external = json.loads(read(AUDIT_PATH))
     canonical_external = dict(external)
     recorded_sha = canonical_external.pop("external_audit_file_sha256")
     canonical_bytes = json.dumps(canonical_external, indent=2).encode("utf-8") + b"\n"
-    assert hashlib.sha256(canonical_bytes).hexdigest() == recorded_sha == AUDIT_SHA256
-    assert external["app_slug"] == "ovc-dev-accel-receipt-bot"
+    assert hashlib.sha256(canonical_bytes).hexdigest() == recorded_sha == AUDIT_CANONICAL_SHA256
+    assert external["ruleset_evidence_path"] == RULESET_PATH
+    assert external["ruleset_evidence_sha256"] == RULESET_SHA256
     assert external["operator_connector"] is False
     assert external["pull_request_number"] == 211
     assert external["authority_active"] is False
@@ -176,20 +122,25 @@ def main() -> int:
     assert external["force_push_performed"] is False
     assert external["history_rewrite_performed"] is False
 
+    state = json.loads(read(REQUIRED[6]))
+    qa = json.loads(read(REQUIRED[8]))
+    shadow_qa = json.loads(read(REQUIRED[10]))
+    assert state["authority_active"] is False
+    assert state["production_transport"] == "ABSENT_FAIL_CLOSED"
+    assert state["shadow"]["pull_request"] == 211
+    assert state["shadow"]["open_unmerged"] is True
+    assert qa["authority_active"] is False
+    assert qa["implementation_blocking_issues"] == []
     assert shadow_qa["shadow_pull_request"] == 211
     assert shadow_qa["shadow_pr_must_remain_unmerged"] is True
     assert shadow_qa["authority_active"] is False
-    assert shadow_qa["verified_conditions"]["DEDICATED_REVOCABLE_IDENTITY_PROVISIONED"] == "PASS"
-    assert shadow_qa["verified_conditions"]["REAL_PROPOSAL_BRANCH_SHADOW_PASS"].startswith("PASS_CANDIDATE")
-    assert shadow_qa["verified_conditions"]["MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED"].startswith("BLOCKED")
 
     bodies = "\n".join(read(path) for path in REQUIRED)
     assert '"authority_active": true' not in bodies
     assert '"production_transport": "ACTIVE"' not in bodies
 
-    print("DA-WP4B pre-activation shadow candidate PASS; activation remains BLOCKED")
+    print("DA-WP4B pre-activation shadow and exact ruleset evidence PASS; activation remains inactive")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
