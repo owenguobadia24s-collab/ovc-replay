@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/development/default_workflow_adoption_profile_v0_1.schema.json",
+  "title": "OVC Development Acceleration default workflow adoption proposal v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile_id",
+    "programme_id",
+    "gate_id",
+    "status",
+    "active",
+    "default_scope",
+    "required_stages",
+    "retirement_mode",
+    "retired_mechanics",
+    "exceptions",
+    "permanent_denials",
+    "rollback"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-default-workflow-adoption-profile/v1"},
+    "profile_id": {"const": "OVC.DEVELOPMENT.ACCELERATION.DEFAULT-WORKFLOW.v0.1"},
+    "programme_id": {"const": "OVC-DEV-ACCEL-v0.1"},
+    "gate_id": {"const": "DA-G6"},
+    "status": {"const": "PENDING_OPERATOR_DA_G6"},
+    "active": {"const": false},
+    "default_scope": {"const": "FUTURE_ELIGIBLE_OVC_IMPLEMENTATION_PACKETS_WITH_APPROVED_REGISTERED_PROFILE"},
+    "required_stages": {
+      "const": [
+        "AUTHORITY_AND_PREREQUISITE_RESOLUTION",
+        "UNIVERSAL_ARTIFACT_PREFLIGHT",
+        "DETERMINISTIC_IMPLEMENTATION",
+        "TIERED_TEST_SELECTION",
+        "COMPLETE_FINAL_HEAD_ASSURANCE",
+        "QA_AND_GATE_CLASSIFICATION",
+        "DETERMINISTIC_CLOSURE_AND_RECEIPT",
+        "ELIGIBLE_SQUASH_MERGE",
+        "PROGRAMME_STATE_CONTINUATION"
+      ]
+    },
+    "retirement_mode": {"const": "NON_DESTRUCTIVE_RETIRED_NON_AUTHORITATIVE"},
+    "retired_mechanics": {
+      "const": [
+        "AD_HOC_PACKET_STATE_OUTSIDE_PROGRAMME_REGISTRY",
+        "MANUAL_MERGE_RECEIPT_WHEN_DETERMINISTIC_INPUTS_EXIST",
+        "UNREGISTERED_CHANGED_FILE_TEST_SELECTION",
+        "PACKET_EXECUTION_BYPASSING_UNIVERSAL_PREFLIGHT",
+        "DUPLICATED_SHARED_DEVELOPMENT_MECHANICS"
+      ]
+    },
+    "exceptions": {
+      "const": [
+        "GOVERNING_PLAN_EXPLICITLY_REQUIRES_PROGRAMME_SPECIFIC_MECHANIC",
+        "NO_APPROVED_DEFAULT_ADAPTER_EXISTS",
+        "OPERATOR_RESERVED_AUTHORITY_REQUIRES_GATE"
+      ]
+    },
+    "permanent_denials": {
+      "const": [
+        "WRITE_MAIN",
+        "BOT_MERGE_PULL_REQUEST",
+        "BOT_APPROVE_PULL_REQUEST",
+        "BOT_DISMISS_REVIEW",
+        "FORCE_PUSH",
+        "REWRITE_HISTORY",
+        "DELETE_ACCEPTED_RECORD",
+        "PROVIDER_ACCESS",
+        "R2_WRITE",
+        "RELEASE_PUBLICATION",
+        "SELECTOR_OR_SEMANTIC_MUTATION",
+        "ACTIVE_DISCOVERY_DEVELOPMENT_OR_VALIDATION",
+        "NEW_MARKET_INSTRUMENT_CLOCK_SIDE_OR_DEPENDENCY",
+        "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_AUTHORITY",
+        "UNAPPROVED_AGENT_WRITE_AUTHORITY"
+      ]
+    },
+    "rollback": {"const": "DISABLE_DEFAULT_PROFILE_RESTORE_PRIOR_SELECTION_NON_DESTRUCTIVELY_PRESERVE_HISTORY"}
+  }
+}
