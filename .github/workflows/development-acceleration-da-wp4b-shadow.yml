@@ -1,0 +1,66 @@
+name: Development Acceleration DA-WP4B shadow correction
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/development/OVC_RECEIPT_BOT_PRE_ACTIVATION_SHADOW_CONTRACT_v0_1.md"
+      - "src/ovc/development/receipt_bot_shadow.py"
+      - "scripts/development/run_da_g4b_shadow.ps1"
+      - "scripts/development/validate_da_wp4b_shadow.py"
+      - "fixtures/development/receipt_bot/work_packet_shadow_v0_1.json"
+      - "fixtures/development/receipt_bot/shadow_receipt_payload_v0_1.json"
+      - "tests/development/test_receipt_bot_shadow.py"
+      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_DA_WP4B_CORRECTIVE_STATE_v0_1.json"
+      - "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_*.json"
+      - ".github/workflows/development-acceleration-da-wp4b-shadow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  da-wp4b-shadow-correction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate corrective packet
+        run: PYTHONPATH=src python -u scripts/development/validate_da_wp4b_shadow.py
+      - name: Focused pre-activation shadow tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_receipt_bot_shadow.py' -v
+      - name: Retained receipt-bot tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_receipt_bot.py' -v
+      - name: Retained DA-G4 authority tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4.py' -v
+      - name: PowerShell shadow runner syntax
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path scripts/development/run_da_g4b_shadow.ps1),
+            [ref]$null,
+            [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -ne 0) { $errors | Format-List | Out-String | Write-Error }
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert permanent authority denials
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'PRE_ACTIVATION_SHADOW' src/ovc/development/receipt_bot_shadow.py
+          grep -q 'authority_active.*False' src/ovc/development/receipt_bot_shadow.py
+          grep -q 'production_transport_active.*False' src/ovc/development/receipt_bot_shadow.py
+          ! grep -R -E 'merge_pull_request|approve_pull_request|force_push|delete_branch' src/ovc/development/receipt_bot_shadow.py
+          ! grep -E '/merges|/reviews|force[[:space:]]*=[[:space:]]*\$true' scripts/development/run_da_g4b_shadow.ps1
+          ! grep -R -E 'ghp_|github_pat_|BEGIN [A-Z ]*PRIVATE KEY' \
+            contracts/development/OVC_RECEIPT_BOT_PRE_ACTIVATION_SHADOW_CONTRACT_v0_1.md \
+            fixtures/development/receipt_bot/work_packet_shadow_v0_1.json \
+            fixtures/development/receipt_bot/shadow_receipt_payload_v0_1.json \
+            docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_PACKET.json \
+            docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_CORRECTIVE_SHADOW_QA_PACKET.json
