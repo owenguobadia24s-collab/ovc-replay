@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-mta-g0-ruleset-merge-blocker/v1",
+  "blocker_id": "MTA-G0-BLOCK-001-REQUIRED-CHECK-CONTEXTS-EXPECTED",
+  "programme_id": "OVC-MTA-v0.2",
+  "gate_id": "MTA-G0",
+  "status": "RESOLVED",
+  "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
+  "original_pull_request": 210,
+  "original_branch": "gate/mta-g0-ratification",
+  "blocked_head": "8eea35959b211def96355c4426ce7e6e1c871a07",
+  "baseline_main_at_block": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "merge_attempt": {
+    "method": "squash",
+    "result": "HTTP_405_REPOSITORY_RULE_VIOLATION",
+    "message": "2 of 2 required status checks are expected"
+  },
+  "original_missing_evidence": [
+    "REPRODUCIBLE_ACTIVE_MAIN_RULESET",
+    "EXACT_REQUIRED_STATUS_CHECK_CONTEXTS"
+  ],
+  "resolution_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
+  "resolved_by": "DA-G4B_MERGED_REPRODUCIBLE_RULESET_EVIDENCE",
+  "resolved_ruleset_path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
+  "resolved_ruleset_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4",
+  "resolved_required_contexts": ["tests", "OVC tiered test selection shadow"],
+  "replacement_branch": "gate/mta-g0-ratification-resume",
+  "preserved_state": {
+    "operator_pass_recorded": true,
+    "june_g2_deferred_without_review_outcome": true,
+    "pr_202": "OPEN_UNMERGED_PRESERVED",
+    "original_pr_210": "PRESERVE_HISTORY_THEN_CLOSE_AS_SUPERSEDED",
+    "selectors": "UNCHANGED",
+    "validation": "LOCKED_UNCONSUMED",
+    "c2e_c2_5_c3": "DENIED"
+  },
+  "prohibited_resolutions": [
+    "BYPASS_BRANCH_PROTECTION",
+    "DISABLE_REQUIRED_CHECKS_WITHOUT_GOVERNED_REPLACEMENT",
+    "DIRECT_MAIN_WRITE",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE"
+  ],
+  "rollback": "Preserve the original blocker and replacement resolution evidence; close the replacement PR if required without deleting branches or accepted records."
+}
