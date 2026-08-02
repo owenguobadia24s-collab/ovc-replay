@@ -46,7 +46,7 @@ class DevelopmentAccelerationG6Tests(unittest.TestCase):
         ])
         self.assertTrue(control["candidate_sha_binding_required"])
         self.assertEqual(control["post_seal_candidate_mutation"], "PROHIBITED")
-        self.assertIn("exact sealed candidate SHA", self.contract)
+        self.assertIn("exact candidate SHA", self.contract)
         self.assertEqual(
             self.request["candidate_binding"],
             "PASS_DECISION_MUST_REFERENCE_EXACT_CANDIDATE_SHA_AND_FAIL_IF_PR_HEAD_MOVES",
