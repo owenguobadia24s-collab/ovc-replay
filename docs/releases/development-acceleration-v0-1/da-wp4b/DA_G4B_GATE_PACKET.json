@@ -5,9 +5,10 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "APPROVED_POST_ACTIVATION_FINAL_CI_PENDING",
+  "status": "COMPLETED_READY_FOR_SQUASH_MERGE",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "approved_candidate_commit": "7b1e3850f614743f93f5b21e2007c4b9101b73a6",
+  "tested_post_activation_head": "f4c33e7ca1de82a1da17a2d7e7c0ff4e4e60db1f",
   "branch": "build/ovc-dev-accel-receipt-bot",
   "pull_request": 209,
   "completed_packets": ["DA-00", "DA-WP1", "DA-WP2", "DA-WP3", "DA-WP4", "DA-G4", "DA-WP4B", "DA-WP4B-CORRECTIVE-SHADOW"],
@@ -43,7 +44,7 @@
     {"condition": "REVOCATION_TESTS_PASS", "result": "PASS"},
     {"condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED", "result": "PASS"},
     {"condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS", "result": "PASS"},
-    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "result": "PASS_PRE_ACTIVATION_RERUN_PENDING_POST_ACTIVATION"},
+    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "result": "PASS", "evidence": "Post-activation focused, shadow, closure, tiered and full assurance passed on f4c33e7ca1de82a1da17a2d7e7c0ff4e4e60db1f."},
     {"condition": "QA_PASS", "result": "PASS"},
     {"condition": "OPERATOR_DA_G4B_DECISION", "result": "PASS", "evidence": "DA-G4B.OPERATOR.PASS.20260802T163600Z"}
   ],
@@ -54,14 +55,22 @@
     {"workflow": "OVC tiered test selection shadow", "run_id": 30756179173, "result": "PASS"},
     {"workflow": "tests", "run_id": 30756179162, "result": "PASS"}
   ],
-  "post_activation_tests": [],
+  "post_activation_tests": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30757948495, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30757948491, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30757948370, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30757948472, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30757948423, "result": "PASS"}
+  ],
   "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json",
+  "final_assurance": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_POST_ACTIVATION_FINAL_ASSURANCE.json",
   "decision_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json",
   "activation_evaluation": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_ACTIVATION_EVALUATION.json",
   "active_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json",
   "production_transport": "scripts/development/run_da_receipt_bot.ps1",
   "warnings": ["PR 211 remains evidence only and must stay open and unmerged."],
   "unresolved_issues": [],
+  "blocking_issues": [],
   "external_artifacts": [
     {"path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json", "sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea"},
     {"path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json", "sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"}
@@ -72,5 +81,5 @@
   "operator_decision_required": false,
   "authority_active": true,
   "production_transport_active": true,
-  "next_action": "POST_ACTIVATION_FINAL_HEAD_ASSURANCE_THEN_SQUASH_MERGE_PR209"
+  "next_action": "SQUASH_MERGE_PR209_AFTER_FINALIZATION_HEAD_CHECKS_PASS"
 }
