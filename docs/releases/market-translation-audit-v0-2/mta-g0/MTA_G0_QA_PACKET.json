@@ -5,8 +5,8 @@
   "plan_version": "0.2",
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "candidate_branch": "gate/mta-g0-ratification",
-  "tested_candidate_commit": "2242ad48d69d3edbc3e8375ac5343ccf2a01f943",
-  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
+  "tested_candidate_commit": "deaa81849d6046dee758503548b41edc6d8ae1c5",
+  "status": "PASS_TECHNICAL_MERGE_BLOCKED_EXTERNAL_RULESET",
   "checks": [
     {"id": "MTA-Q-G0-PLAN", "status": "PASS", "evidence": "plan markdown and source attachment hash pinned"},
     {"id": "MTA-Q-G0-BASELINE", "status": "PASS", "evidence": "main, open PRs, active selectors, June WP2/WP3 and RO4 reconciled"},
@@ -15,15 +15,22 @@
     {"id": "MTA-Q-G0-AMENDMENT", "status": "PASS", "evidence": "immutable registry amendment protocol frozen"},
     {"id": "MTA-Q-G0-RO4", "status": "PASS", "evidence": "separate objects and inconsistency incident rule frozen"},
     {"id": "MTA-Q-G0-AUTHORITY", "status": "PASS", "evidence": "no selector, formula, clock, publication, Validation, semantic or exposure authority"},
-    {"id": "MTA-Q-G0-CI", "status": "PASS", "evidence": "MTA-G0 workflow 30752931176 PASS; validator, 7 focused tests, complete repository suite and static authority assertions"},
-    {"id": "MTA-Q-G0-GENERIC", "status": "PASS", "evidence": "generic tests workflow 30752931178 PASS"},
-    {"id": "MTA-Q-G0-OPERATOR", "status": "PASS", "evidence": "MTA-G0.OPERATOR.PASS.20260802T145100Z and PD-JUNE-FM-G2 DEFER recorded"}
+    {"id": "MTA-Q-G0-CI", "status": "PASS", "evidence": "reopened-head MTA-G0 workflow 30754357839 PASS; validator, 7 focused tests, complete repository suite and static authority assertions"},
+    {"id": "MTA-Q-G0-TIERED", "status": "PASS", "evidence": "OVC tiered test selection shadow 30754357852 selected FINAL_HEAD and passed"},
+    {"id": "MTA-Q-G0-GENERIC", "status": "PASS", "evidence": "generic tests workflow 30754357822 PASS"},
+    {"id": "MTA-Q-G0-OPERATOR", "status": "PASS", "evidence": "MTA-G0.OPERATOR.PASS.20260802T145100Z and PD-JUNE-FM-G2 DEFER recorded"},
+    {"id": "MTA-Q-G0-MERGE", "status": "BLOCKED_EXTERNAL_RULESET", "evidence": "exact-head squash merge rejected HTTP 405: 2 of 2 required status checks are expected"}
   ],
   "capacity": {"expected_runtime_s": 60, "max_runtime_s": 14400, "expected_retained_bytes": 250000, "max_retained_bytes": 10737418240, "state": "WITHIN_CONTRACT"},
   "warnings": [
     "External WP3 package byte hashes are pinned from PR #202 and Drive existence is accepted by operator decision; this packet does not rehash Drive bytes.",
-    "PR #202 and PR #209 remain open and must not be mutated by MTA-G0."
+    "PR #202 remains open and unmerged. PR #209 is referenced only for ruleset evidence and is unmodified.",
+    "Available ruleset evidence is a SHA-256 only; export bytes or a reproducible retrieval location are unavailable."
   ],
-  "unresolved_issues": [],
-  "recommendation": "PASS"
+  "unresolved_issues": [
+    "MTA-G0-BLOCK-001-REQUIRED-CHECK-CONTEXTS-EXPECTED"
+  ],
+  "technical_recommendation": "PASS",
+  "merge_recommendation": "BLOCK_UNTIL_REQUIRED_CHECK_CONTEXTS_REPRODUCIBLE",
+  "blocker_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_BLOCKER.json"
 }
