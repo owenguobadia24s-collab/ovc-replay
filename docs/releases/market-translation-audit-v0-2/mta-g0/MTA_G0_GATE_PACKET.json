@@ -6,11 +6,13 @@
   "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
   "plan_sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d",
-  "status": "APPROVED_PENDING_FINAL_HEAD_RECHECK",
+  "status": "APPROVED_PENDING_SQUASH_MERGE",
   "plan_baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "branch_creation_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "baseline_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
   "candidate_branch": "gate/mta-g0-ratification-resume",
-  "tested_candidate_commit": null,
+  "candidate_pull_request": 216,
+  "tested_candidate_commit": "bf1acdde1b368af899750ae211f8b71aa6919b5e",
   "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
   "decision": "PASS",
   "current_authority": {
@@ -25,21 +27,26 @@
   "completed_work": [
     "operator PASS and June review DEFER preserved",
     "original blocked PR and branch history preserved",
-    "current lawful main reconciled",
     "reproducible active ruleset and exact required contexts identified",
-    "replacement branch created from current main",
+    "replacement PR created against current lawful main",
     "contracts, schemas, fixtures, programme state and tests reconstructed",
-    "operator-decision and programme-state schema inconsistencies corrected"
+    "operator-decision and programme-state schema inconsistencies corrected",
+    "MTA workflow, generic tests and tiered FINAL_HEAD assurance passed"
   ],
   "acceptance_conditions": [
     {"condition": "Operator MTA-G0 PASS and all subdecisions preserved", "status": "PASS"},
     {"condition": "Active main ruleset independently reproducible", "status": "PASS"},
     {"condition": "Exact required contexts identified as tests and OVC tiered test selection shadow", "status": "PASS"},
-    {"condition": "Replacement branch starts from current lawful main", "status": "PASS"},
+    {"condition": "Current PR base reconciled with branch creation base", "status": "PASS"},
     {"condition": "No selector, formula, threshold, reset, clock, release, Validation, semantic or exposure authority", "status": "PASS"},
-    {"condition": "Final-head MTA workflow, required checks and complete repository suite pass", "status": "PENDING"}
+    {"condition": "Final-head MTA workflow, required checks and complete repository suite pass", "status": "PASS"},
+    {"condition": "Zero unresolved review threads", "status": "PASS"}
   ],
-  "tests": [],
+  "tests": [
+    {"name": "Market Translation Audit MTA-G0 gate readiness", "run_id": 30760300813, "status": "PASS", "tested_commit": "bf1acdde1b368af899750ae211f8b71aa6919b5e"},
+    {"name": "tests", "run_id": 30760300767, "status": "PASS", "tested_commit": "bf1acdde1b368af899750ae211f8b71aa6919b5e"},
+    {"name": "OVC tiered test selection shadow", "run_id": 30760300791, "profile": "FINAL_HEAD", "status": "PASS", "tested_commit": "bf1acdde1b368af899750ae211f8b71aa6919b5e"}
+  ],
   "external_artifact_hashes": [
     {"artifact": "plan_docx", "sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d"},
     {"artifact": "main_ruleset", "sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"},
@@ -47,15 +54,15 @@
   ],
   "qa": {
     "packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json",
-    "recommendation": "PASS_PENDING_FINAL_HEAD"
+    "recommendation": "PASS"
   },
   "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
   "resolution_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
   "warnings": [
     "PR #202 remains open and unmerged as a source reference.",
-    "Original PR #210 will be closed only as superseded after replacement PR creation; its branch remains preserved."
+    "Original PR #210 must be closed only as superseded after replacement merge; its branch remains preserved."
   ],
   "unresolved_issues": [],
-  "rollback": "Close the replacement PR without deleting either branch; preserve all operator decisions, source evidence and ruleset records.",
+  "rollback": "Revert only the bounded MTA-G0 squash merge through a new non-destructive commit; preserve all operator decisions, source evidence and ruleset records.",
   "next_packet": "MTA-WP1"
 }
