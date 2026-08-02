@@ -1,0 +1,62 @@
+{
+  "schema": "ovc-development-acceleration-qa-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4B-CORRECTIVE-SHADOW",
+  "gate_id": "DA-G4B",
+  "status": "PASS_CORRECTION_AND_SHADOW_CANDIDATE_RULESET_AND_FINAL_CI_BLOCKED",
+  "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
+  "authority_active": false,
+  "assertions": [
+    {
+      "check_id": "DA-G4B-CORR-01",
+      "status": "PASS",
+      "assertion": "Pre-activation shadow readiness excludes only the shadow result and final QA from its prerequisites."
+    },
+    {
+      "check_id": "DA-G4B-CORR-02",
+      "status": "BLOCKED_EXTERNAL_ARTIFACT",
+      "assertion": "Main branch-protection/no-bypass evidence remains mandatory; only its hash is present, so the ruleset export is not independently reproducible."
+    },
+    {
+      "check_id": "DA-G4B-CORR-03",
+      "status": "PASS",
+      "assertion": "A dedicated revocable GitHub App installation with the exact minimal permissions created the shadow."
+    },
+    {
+      "check_id": "DA-G4B-CORR-04",
+      "status": "PASS",
+      "assertion": "PR 211 is limited to one branch, one hash-bound JSON receipt and one unmerged PR."
+    },
+    {
+      "check_id": "DA-G4B-CORR-05",
+      "status": "PASS",
+      "assertion": "Merge, approval, direct-main write, deletion, force-push and history rewrite remain absent and denied."
+    },
+    {
+      "check_id": "DA-G4B-CORR-06",
+      "status": "PENDING_FINAL_HEAD_CI",
+      "assertion": "Focused corrective tests, retained DA-WP4B tests, tiered selection and the complete repository suite must pass on the final PR 209 head after evidence updates."
+    },
+    {
+      "check_id": "DA-G4B-CORR-07",
+      "status": "PASS_CANDIDATE",
+      "assertion": "The external audit and GitHub metadata verify the dedicated identity and one real allowlisted unmerged shadow PR."
+    }
+  ],
+  "implementation_blocking_issues": [],
+  "activation_blocking_issues": [
+    "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
+    "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
+  ],
+  "tests": [
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30751814800, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30751814840, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30751814766, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30751814813, "result": "PASS"},
+    {"workflow": "shadow PR complete repository tests", "run_id": 30752883818, "result": "PASS"}
+  ],
+  "external_audit": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
+  "external_audit_sha256": "79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3",
+  "qa_recommendation": "PASS_CORRECTIVE_IMPLEMENTATION_AND_SHADOW_CANDIDATE_BLOCK_ACTIVATION_UNTIL_RULESET_EXPORT_AND_FINAL_CI",
+  "rollback": "Preserve active=false, keep PR 211 unmerged and revert only the corrective packet through a new non-destructive commit."
+}

@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-receipt-bot-activation-evidence/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "packet_id": "DA-WP4B",
+  "gate_id": "DA-G4B",
+  "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "approved_candidate_commit": "7b1e3850f614743f93f5b21e2007c4b9101b73a6",
+  "tested_post_activation_head": "f4c33e7ca1de82a1da17a2d7e7c0ff4e4e60db1f",
+  "operator_decision_id": "DA-G4B.OPERATOR.PASS.20260802T163600Z",
+  "authority_state": "ACTIVE_BOUNDED_PROPOSAL_BRANCH_ONLY",
+  "authority_active": true,
+  "active_profile": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json",
+  "production_transport": "scripts/development/run_da_receipt_bot.ps1",
+  "final_assurance": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_POST_ACTIVATION_FINAL_ASSURANCE.json",
+  "conditions": [
+    {"condition": "OPERATOR_DA_G4_PASS", "result": "PASS"},
+    {"condition": "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH", "result": "PASS"},
+    {"condition": "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER", "result": "PASS"},
+    {"condition": "NO_MERGE_API_AVAILABLE_TO_BOT", "result": "PASS"},
+    {"condition": "DENIED_ACTION_TESTS_PASS", "result": "PASS"},
+    {"condition": "TOKEN_REDACTION_TESTS_PASS", "result": "PASS"},
+    {"condition": "IDEMPOTENCY_AND_COLLISION_TESTS_PASS", "result": "PASS"},
+    {"condition": "REVOCATION_TESTS_PASS", "result": "PASS"},
+    {"condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED", "result": "PASS", "evidence": "PASS_EXACT_RULESET_EXPORT"},
+    {"condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS", "result": "PASS", "evidence": "PASS_PR_211_UNMERGED"},
+    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "result": "PASS", "evidence": "Post-activation assurance passed on f4c33e7ca1de82a1da17a2d7e7c0ff4e4e60db1f."},
+    {"condition": "QA_PASS", "result": "PASS"},
+    {"condition": "OPERATOR_DA_G4B_DECISION", "result": "PASS", "evidence": "DA-G4B.OPERATOR.PASS.20260802T163600Z"}
+  ],
+  "activation_evaluation": "PASS",
+  "activation_evaluation_id": "4815173d1ec559164072013f20d008f2d3a5b120841e8e6cb0350ee1f1164238",
+  "blockers": [],
+  "operator_decision_required": false,
+  "external_evidence": [
+    {"path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json", "sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea"},
+    {"path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json", "sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"}
+  ],
+  "shadow": {"app_slug": "ovc-dev-accel-receipt-bot", "app_id": 4463376, "installation_id": 150708331, "pull_request": 211, "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001", "commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e", "open_unmerged": true},
+  "pre_activation_tests": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30756179181, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30756179120, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30756179134, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30756179173, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30756179162, "result": "PASS"}
+  ],
+  "post_activation_tests": [
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30757948495, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30757948491, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-G4A closure shadow", "run_id": 30757948370, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30757948472, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30757948423, "result": "PASS"}
+  ],
+  "permanent_denials_preserved": true,
+  "rollback": "Disable the active profile, revoke the dedicated identity, preserve accepted records and revert through a new non-destructive commit."
+}
