@@ -3,18 +3,19 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "status": "TECHNICAL_BLOCKERS_RESOLVED_OPERATOR_BOUNDARY",
+  "status": "OPERATOR_APPROVED_POST_ACTIVATION_FINAL_HEAD_CI_PENDING",
   "resolved_blockers": [
     {"blocker_id": "DA-WP4B-BLOCK-DEDICATED-IDENTITY", "condition": "DEDICATED_REVOCABLE_IDENTITY_PROVISIONED", "resolution": "PASS"},
     {"blocker_id": "DA-WP4B-BLOCK-REAL-SHADOW", "condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS", "resolution": "PASS_PR_211_OPEN_UNMERGED"},
     {"blocker_id": "DA-WP4B-BLOCK-BRANCH-PROTECTION", "condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED", "resolution": "PASS_EXACT_EXPORT_ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"},
-    {"blocker_id": "DA-WP4B-BLOCK-FINAL-HEAD-CI", "condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "resolution": "PASS"}
+    {"blocker_id": "DA-WP4B-BLOCK-PRE-ACTIVATION-FINAL-HEAD", "condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "resolution": "PASS"},
+    {"blocker_id": "DA-WP4B-OPERATOR-BOUNDARY", "condition": "OPERATOR_DA_G4B_DECISION", "resolution": "PASS_DA-G4B.OPERATOR.PASS.20260802T163600Z"}
   ],
-  "blockers": [],
-  "operator_required_boundary": {"condition": "OPERATOR_DA_G4B_DECISION", "reason": "Activation of bounded repository-bot write authority is operator-reserved.", "operator_command": "OVC APPROVE DA-G4B PASS"},
+  "blockers": ["POST_ACTIVATION_FINAL_HEAD_CI_PENDING"],
   "external_evidence": {"audit_path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json", "audit_sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea", "ruleset_path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json", "ruleset_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4", "shadow_pull_request": 211, "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e"},
-  "prohibited_resolution": ["Do not activate without the operator decision.", "Do not merge PR 211.", "Do not weaken tests.", "Do not force-push, rewrite history or delete accepted evidence."],
-  "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
-  "authority_active": false,
-  "rollback": "Keep profile inactive and revoke the dedicated identity if approval is withheld."
+  "permanent_denials": ["WRITE_MAIN", "MERGE_PULL_REQUEST", "APPROVE_PULL_REQUEST", "FORCE_PUSH", "REWRITE_HISTORY", "MODIFY_AUTHORITY_PROFILE", "PROVIDER_ACCESS", "R2_WRITE", "VALIDATION_ACCESS", "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_OBJECT"],
+  "authority_state": "ACTIVE_BOUNDED_PROPOSAL_BRANCH_ONLY",
+  "authority_active": true,
+  "bot_merge_authority": false,
+  "rollback": "Disable the active profile, revoke the dedicated identity, preserve accepted records and revert through a new non-destructive commit."
 }
