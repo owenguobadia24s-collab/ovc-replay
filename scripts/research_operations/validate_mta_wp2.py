@@ -98,7 +98,8 @@ def main() -> int:
     acceptance = load("docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_ACCEPTANCE_INDEX.json")
     assert acceptance["run_id"] == reference["source_run_id"]
     assert acceptance["source_manifest_sha256"] == reference["source_manifest_sha256"]
-    assert acceptance["deterministic_replay"]["result"] == "PASS_BYTE_IDENTICAL"
+    assert acceptance["deterministic_independent_rerun"] == "PASS_BYTE_IDENTICAL"
+    assert acceptance["deterministic_payload_hash"] == reference["replay_payload_logical_sha256"]
     assert acceptance["population"]["c1_target"] == 4526
 
     source_acceptance = load("docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json")
