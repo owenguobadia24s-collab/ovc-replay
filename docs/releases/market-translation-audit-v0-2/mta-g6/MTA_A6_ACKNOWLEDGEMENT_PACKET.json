@@ -1,1 +1,102 @@
-{"allowed_decisions":["ACKNOWLEDGE_CONTINUE","DEFER","BLOCK","QUARANTINE"],"control_id":"MTA-A6","current_authority":"AUDIT_ONLY_NO_CLUSTER_OR_MARKER_PROMOTION","effect_of_acknowledge_continue":"Authorise MTA-WP7 synthesis of audit findings only. No semantic, model, threshold, family, candidate, selector, C2E, C2.5, C3, Validation, publication, risk, exposure or execution authority.","material_findings":[{"finding_id":"MTA-WP5-F1","summary":"Both cross-scale marker rules are never evaluable in the frozen June population."},{"finding_id":"MTA-WP5-F2","summary":"26,516 of 56,928 rule attempts are NOT_EVALUABLE; the separate source-axis marker census is 13,993."},{"finding_id":"MTA-WP6-F2","summary":"The authoritative primary overlap variant produces 20 components from 1,779 centre-time occurrences."},{"finding_id":"MTA-WP6-F3","summary":"1,456 occurrences are materially sensitive and 323 structurally unstable across overlap variants; none are robust under the frozen classification rule."}],"operator_decision_required":true,"programme_id":"OVC-MTA-v0.2","proposed_delta":"ACKNOWLEDGE_MARKER_AND_OVERLAP_FINDINGS_AND_AUTHORISE_MTA_WP7_AUDIT_SYNTHESIS_ONLY","recommended_decision":"ACKNOWLEDGE_CONTINUE","schema":"ovc-mta-a6-acknowledgement-packet/v1","status":"PENDING_MTA_G6_PASS_AND_MERGE","title":"Marker population and overlap findings acknowledgement"}
+{
+  "schema": "ovc-mta-a6-acknowledgement-packet/v2",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "control_id": "MTA-A6",
+  "title": "Marker population and overlap findings acknowledgement",
+  "status": "GATE_READY",
+  "operator_decision_required": true,
+  "completed_packets": ["MTA-00","MTA-WP1","MTA-WP2","MTA-WP3","MTA-A3","MTA-WP4","MTA-WP5","MTA-WP6"],
+  "baseline_commit": "c5b6123e0186ab23fc0d37410a0075175a9e50f6",
+  "merged_packets": {
+    "MTA-WP5": {
+      "pull_request": 232,
+      "branch": "audit/mta-wp5-marker-population",
+      "implementation_head": "3ab0c4e0095389bc79f5349a96d00f809ee6d7f3",
+      "ratification_head": "d541de1a1f39443d41456c2c547cf2e37407177a",
+      "merge_commit": "b5ff54da904462c909f8d6e9f2cb4930c0bda966",
+      "decision_id": "MTA-G5.DELEGATED.PASS.20260802T231800+0100",
+      "result": "PASS_MERGED"
+    },
+    "MTA-WP6": {
+      "pull_request": 233,
+      "branch": "audit/mta-wp6-overlap-independence",
+      "implementation_head": "a9ea3067bb96482e903d5fcb177fcd55607e7051",
+      "ratification_head": "3d19437864cc8b2ac0e0d83588ad4b5750c165b2",
+      "merge_commit": "c5b6123e0186ab23fc0d37410a0075175a9e50f6",
+      "decision_id": "MTA-G6.DELEGATED.PASS.20260802T232300+0100",
+      "result": "PASS_MERGED"
+    }
+  },
+  "current_authority": "AUDIT_ONLY_NO_MARKER_CLUSTER_MODEL_OR_SELECTOR_PROMOTION",
+  "proposed_delta": "ACKNOWLEDGE_MARKER_AND_OVERLAP_FINDINGS_AND_AUTHORISE_MTA_WP7_AUDIT_SYNTHESIS_ONLY",
+  "acceptance_conditions": [
+    {"condition":"All 7,116 eligible windows and 56,928 rule attempts account exactly","result":"PASS"},
+    {"condition":"Attempted, evaluable, fired, not-fired and not-evaluable populations remain explicit","result":"PASS"},
+    {"condition":"The separate 13,993 source-axis not-evaluable marker census is not conflated with rule-level outcomes","result":"PASS"},
+    {"condition":"All 7,116 windows collapse exactly to 1,779 centre-time occurrences","result":"PASS"},
+    {"condition":"Strict, primary and permissive component memberships account exactly with zero mismatch","result":"PASS"},
+    {"condition":"Required MTA-G5, MTA-G6, repository and tiered FINAL_HEAD checks pass","result":"PASS"},
+    {"condition":"No semantic, threshold, model, family, candidate, selector, Validation, publication, risk or execution authority is created","result":"PASS"}
+  ],
+  "tests": [
+    {"candidate":"3ab0c4e0095389bc79f5349a96d00f809ee6d7f3","workflow":"Market Translation Audit MTA-G5 marker population","run_id":30769744017,"result":"PASS"},
+    {"candidate":"3ab0c4e0095389bc79f5349a96d00f809ee6d7f3","workflow":"tests","run_id":30769743947,"result":"PASS"},
+    {"candidate":"3ab0c4e0095389bc79f5349a96d00f809ee6d7f3","workflow":"OVC tiered test selection shadow","run_id":30769743965,"profile":"FINAL_HEAD","result":"PASS"},
+    {"candidate":"d541de1a1f39443d41456c2c547cf2e37407177a","workflow":"Market Translation Audit MTA-G5 marker population","run_id":30769810052,"result":"PASS"},
+    {"candidate":"d541de1a1f39443d41456c2c547cf2e37407177a","workflow":"tests","run_id":30769809981,"result":"PASS"},
+    {"candidate":"d541de1a1f39443d41456c2c547cf2e37407177a","workflow":"OVC tiered test selection shadow","run_id":30769810047,"profile":"FINAL_HEAD","result":"PASS"},
+    {"candidate":"a9ea3067bb96482e903d5fcb177fcd55607e7051","workflow":"Market Translation Audit MTA-G6 overlap independence","run_id":30769928912,"result":"PASS"},
+    {"candidate":"a9ea3067bb96482e903d5fcb177fcd55607e7051","workflow":"tests","run_id":30769928907,"result":"PASS"},
+    {"candidate":"a9ea3067bb96482e903d5fcb177fcd55607e7051","workflow":"OVC tiered test selection shadow","run_id":30769928862,"profile":"FINAL_HEAD","result":"PASS"},
+    {"candidate":"3d19437864cc8b2ac0e0d83588ad4b5750c165b2","workflow":"Market Translation Audit MTA-G6 overlap independence","run_id":30769996755,"result":"PASS"},
+    {"candidate":"3d19437864cc8b2ac0e0d83588ad4b5750c165b2","workflow":"tests","run_id":30769996539,"result":"PASS"},
+    {"candidate":"3d19437864cc8b2ac0e0d83588ad4b5750c165b2","workflow":"OVC tiered test selection shadow","run_id":30769996713,"profile":"FINAL_HEAD","result":"PASS"}
+  ],
+  "qa": {
+    "wp5_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "wp6_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "warnings": [],
+    "unresolved_issues": []
+  },
+  "material_findings": [
+    {"finding_id":"MTA-WP5-F1","severity":"MATERIAL","classification":"CROSS_SCALE_RULES_NEVER_EVALUABLE","summary":"LOCAL_PARENT_CONFLICT and ALIGNMENT_GAINED are NOT_EVALUABLE for all 7,116 eligible windows because the frozen 2H parent states have no evaluated LOCATION or MOTION direction."},
+    {"finding_id":"MTA-WP5-F2","severity":"MATERIAL","classification":"RULE_LEVEL_NOT_EVALUABLE_POPULATION","summary":"26,516 of 56,928 rule attempts are NOT_EVALUABLE; the separate frozen source-axis not-evaluable marker census is 13,993."},
+    {"finding_id":"MTA-WP5-F3","severity":"MATERIAL","classification":"PARENT_USABILITY_LOW","summary":"Only 615 of 4,072 target 15M parent resolutions (15.103143%) carry a non-empty parent level set."},
+    {"finding_id":"MTA-WP6-F2","severity":"MATERIAL","classification":"PRIMARY_CLUSTER_DENSITY","summary":"The authoritative PRIMARY_OVERLAP_PLUS_1 variant produces 20 connected components from 1,779 centre-time occurrences, with maximum component size 166."},
+    {"finding_id":"MTA-WP6-F3","severity":"MATERIAL","classification":"CLUSTER_SENSITIVITY","summary":"1,456 occurrences are MATERIAL_SENSITIVITY and 323 STRUCTURALLY_UNSTABLE across the three frozen overlap variants; none classify ROBUST under the frozen comparison rule."}
+  ],
+  "population_summary": {
+    "eligible_windows": 7116,
+    "rule_attempts": 56928,
+    "rule_level_evaluable": 30412,
+    "rule_level_not_evaluable": 26516,
+    "source_axis_not_evaluable_markers": 13993,
+    "candidate_class_counts": {"TRIGGER":1410,"MATCHED_NON_TRIGGER_CONTROL":3368,"ALGORITHM_NOT_EVALUABLE_CONTROL":2338},
+    "full_local_vector_usability_rate_percent": "65.261383",
+    "parent_usability_rate_percent": "15.103143"
+  },
+  "overlap_summary": {
+    "occurrence_count": 1779,
+    "strict_overlap": {"cluster_count":24,"max_cluster_size":92},
+    "primary_overlap_plus_1": {"cluster_count":20,"max_cluster_size":166},
+    "permissive_overlap_plus_4": {"cluster_count":18,"max_cluster_size":251},
+    "sensitivity_counts": {"MATERIAL_SENSITIVITY":1456,"STRUCTURALLY_UNSTABLE":323}
+  },
+  "external_artifacts": [
+    {"artifact_id":"MTA.WP5.MARKER.POPULATION.v1","provider":"GOOGLE_DRIVE","file_id":"1Aqjax8L_5dj_QPs31zIpC0AdeWMMz4GO","size_bytes":7444145,"sha256":"7044c02b1c20883736d1de1906c8099d2c9c0898effef95936b66efb82a5ad75","logical_sha256":"254a7cbbebcb2e412a4bbc97b141b8b874d1baa16279baa02a9817fd9978240a"},
+    {"artifact_id":"MTA.WP6.OVERLAP.INDEPENDENCE.v1","provider":"GOOGLE_DRIVE","file_id":"167VslSePpzwLBIrawKJ6XC5tmWtop8rv","size_bytes":1683479,"sha256":"eb1ae33c89e8c1afe6e8ea2afabe85e611a4ff5ef63f8c4a42652924c757a087","logical_sha256":"3824d6d6b8a8ad12c1f69b5a27cee8625856219e7e4dfc600040667d21c84149"}
+  ],
+  "allowed_decisions": ["ACKNOWLEDGE_CONTINUE","DEFER","BLOCK","QUARANTINE"],
+  "recommended_decision": "ACKNOWLEDGE_CONTINUE",
+  "effect_of_acknowledge_continue": "Authorise MTA-WP7 synthesis of accepted audit findings only. No formula, threshold, marker meaning, cluster meaning, model, family, candidate, selector, C2E, C2.5, C3, Validation, R2 publication, probability, risk, exposure or execution authority is granted.",
+  "exact_work_after_acknowledge_continue": [
+    "Record the MTA-A6 operator acknowledgement and programme-state authority delta",
+    "Squash-merge the acknowledgement court record after required checks pass",
+    "Create audit/mta-wp7-synthesis from the resulting lawful main",
+    "Synthesize accepted audit evidence and readiness recommendations without promotion or activation",
+    "Stop at operator-required MTA-G8 before any remediation, promotion or downstream implementation"
+  ],
+  "rollback": "DEFER, BLOCK or QUARANTINE preserves all source, population, occurrence, cluster, sensitivity, test, QA, decision and merge evidence and prevents MTA-WP7 from starting. ACKNOWLEDGE_CONTINUE may later be superseded without deleting evidence."
+}
