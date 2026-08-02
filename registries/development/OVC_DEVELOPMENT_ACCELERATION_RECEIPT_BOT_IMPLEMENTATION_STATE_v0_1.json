@@ -5,41 +5,55 @@
   "gate_id": "DA-G4B",
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "tested_candidate_commit": "90af31affc116d18d8b1f8d84a05f60f5a1e63f5",
-  "status": "BLOCKED_ACTIVATION_EXTERNAL_EVIDENCE",
+  "tested_candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
+  "status": "BLOCKED_ACTIVATION_RULESET_EVIDENCE_AND_FINAL_CI",
   "operator_decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
   "approved_profile_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "policy": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json",
   "work_packet_schema": "schemas/development/receipt_bot_work_packet_v0_1.schema.json",
   "active_profile_schema": "schemas/development/receipt_bot_active_profile_v0_1.schema.json",
   "planner_module": "src/ovc/development/receipt_bot.py",
+  "shadow_module": "src/ovc/development/receipt_bot_shadow.py",
   "production_transport": "ABSENT_FAIL_CLOSED",
-  "credential_state": "NOT_PROVISIONED",
+  "shadow_transport": "LOCAL_POWERSHELL_GITHUB_APP_PRE_ACTIVATION_ONLY",
+  "credential_state": "DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY",
   "authority_active": false,
   "conditions": {
     "OPERATOR_DA_G4_PASS": "PASS",
-    "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH": "PENDING_NO_ACTIVE_PROFILE",
+    "CLOSED_ACTIVE_PROFILE_SCHEMA_MATCH": "PASS_STATIC_INACTIVE_PROFILE",
     "BRANCH_AND_PATH_ENFORCING_WRITER_ADAPTER": "PASS_STATIC_PLANNER_AND_PROTOCOL",
     "NO_MERGE_API_AVAILABLE_TO_BOT": "PASS",
     "DENIED_ACTION_TESTS_PASS": "PASS",
     "TOKEN_REDACTION_TESTS_PASS": "PASS",
     "IDEMPOTENCY_AND_COLLISION_TESTS_PASS": "PASS",
     "REVOCATION_TESTS_PASS": "PASS",
-    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "BLOCKED_EVIDENCE_UNAVAILABLE",
-    "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "BLOCKED_DEDICATED_IDENTITY_UNAVAILABLE",
-    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PASS",
-    "QA_PASS": "BLOCKED_BY_EXTERNAL_ACTIVATION_EVIDENCE"
+    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "BLOCKED_RULESET_EXPORT_NOT_REPRODUCIBLE",
+    "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS_CANDIDATE_PR_211_UNMERGED",
+    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PENDING_AFTER_EVIDENCE_UPDATE",
+    "QA_PASS": "BLOCKED_BY_RULESET_AND_FINAL_HEAD"
+  },
+  "shadow_evidence": {
+    "app_slug": "ovc-dev-accel-receipt-bot",
+    "app_id": 4463376,
+    "installation_id": 150708331,
+    "external_audit": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
+    "external_audit_sha256": "79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3",
+    "shadow_pull_request": 211,
+    "shadow_branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001",
+    "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e",
+    "open_unmerged": true
   },
   "tests": [
-    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30711248035, "result": "PASS"},
-    {"workflow": "OVC tiered test selection shadow", "run_id": 30711248023, "result": "PASS"},
-    {"workflow": "tests", "run_id": 30711248056, "result": "PASS"}
+    {"workflow": "Development Acceleration DA-WP4B shadow correction", "run_id": 30751814800, "result": "PASS"},
+    {"workflow": "Development Acceleration DA-WP4B receipt-bot implementation", "run_id": 30751814840, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30751814766, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30751814813, "result": "PASS"},
+    {"workflow": "shadow PR complete repository tests", "run_id": 30752883818, "result": "PASS"}
   ],
   "blockers": [
-    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_EVIDENCE_UNAVAILABLE",
-    "DEDICATED_REVOCABLE_IDENTITY_NOT_PROVISIONED",
-    "REAL_PROPOSAL_BRANCH_SHADOW_NOT_RUN"
+    "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
+    "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
   ],
-  "rollback": "Keep the profile inactive, provision no credential, close any unmerged shadow PR if later created, and revert the bounded implementation through a new non-destructive commit.",
-  "next_action": "PRESERVE_BRANCH_AND_OPEN_PR_UNMERGED_PENDING_EXTERNAL_ACTIVATION_EVIDENCE"
+  "rollback": "Keep the profile inactive, preserve PR 211 unmerged, revoke the dedicated GitHub App installation or key and revert only bounded implementation changes through a new non-destructive commit.",
+  "next_action": "VERIFY_PR209_FINAL_HEAD_CI_AND_OBTAIN_EXACT_RULESET_EXPORT"
 }
