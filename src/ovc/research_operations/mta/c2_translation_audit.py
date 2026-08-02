@@ -78,7 +78,7 @@ def validate_reference(reference: Mapping[str, Any]) -> dict[str, Any]:
     )
 
     statuses = reference.get("target_axis_status")
-    _require(isinstance(statuses, dict) and tuple(statuses) == AXES, "REFERENCE_AXIS_STATUS_SHAPE_MISMATCH")
+    _require(isinstance(statuses, dict) and set(statuses) == set(AXES), "REFERENCE_AXIS_STATUS_SHAPE_MISMATCH")
     for axis in AXES:
         _require(isinstance(statuses.get(axis), dict), f"REFERENCE_AXIS_STATUS_MISSING:{axis}")
         _require(sum(statuses[axis].values()) == 8598, f"REFERENCE_AXIS_DENOMINATOR_MISMATCH:{axis}")
@@ -146,9 +146,9 @@ def validate_sequence_fixture(fixture: Mapping[str, Any]) -> dict[str, Any]:
         state_id = state.get("c2_state_id")
         _require(isinstance(state_id, str) and state_id.startswith("c2-state:"), "FIXTURE_STATE_ID_INVALID")
         _require(state_id not in by_id, "FIXTURE_DUPLICATE_STATE_ID")
-        _require(tuple(state.get("axes", {})) == AXES, "FIXTURE_AXIS_SHAPE_MISMATCH")
+        _require(set(state.get("axes", {})) == set(AXES), "FIXTURE_AXIS_SHAPE_MISMATCH")
         persistence = state.get("persistence")
-        _require(isinstance(persistence, dict) and tuple(persistence) == AXES, "FIXTURE_PERSISTENCE_SHAPE_MISMATCH")
+        _require(isinstance(persistence, dict) and set(persistence) == set(AXES), "FIXTURE_PERSISTENCE_SHAPE_MISMATCH")
         _require(all(isinstance(value, int) and value > 0 for value in persistence.values()), "FIXTURE_PERSISTENCE_INVALID")
         _require(state.get("continuity") in {"RESET", "CONTIGUOUS"}, "FIXTURE_CONTINUITY_INVALID")
         by_id[state_id] = state
