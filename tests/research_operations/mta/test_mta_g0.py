@@ -22,15 +22,18 @@ class MTAG0Tests(unittest.TestCase):
         spec.loader.exec_module(module)
         self.assertEqual(module.main(), 0)
 
-    def test_gate_retains_operator_pass_and_waits_only_for_final_head(self) -> None:
+    def test_gate_retains_operator_pass_and_is_merge_eligible(self) -> None:
         gate = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json")
         state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
         decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
+        eligibility = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_ELIGIBILITY.json")
         self.assertEqual(gate["decision"], "PASS")
-        self.assertIn(gate["status"], {"APPROVED_PENDING_FINAL_HEAD_RECHECK", "APPROVED_PENDING_SQUASH_MERGE"})
+        self.assertEqual(gate["status"], "APPROVED_PENDING_SQUASH_MERGE")
+        self.assertEqual(state["programme_status"], "APPROVED")
         self.assertFalse(state["operator_decision_required"])
         self.assertEqual(state["operator_gate"]["recorded_decision"], "PASS")
         self.assertEqual(decision["operator_command"], "OVC APPROVE MTA-G0 PASS")
+        self.assertEqual(eligibility["status"], "ELIGIBLE")
         self.assertEqual(state["packets"][0]["blockers"], [])
 
     def test_ruleset_blocker_is_reproducibly_resolved(self) -> None:
@@ -47,13 +50,25 @@ class MTAG0Tests(unittest.TestCase):
         self.assertEqual(ruleset["bypass_actors"], [])
         self.assertEqual(ruleset["current_user_can_bypass"], "never")
 
-    def test_replacement_branch_is_based_on_current_lawful_main(self) -> None:
+    def test_replacement_branch_and_current_pr_base_are_distinguished(self) -> None:
         state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
+        gate = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json")
         resolution = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json")
-        self.assertEqual(state["baseline_commit"], "544dc2f6477ce415321f9419a62586fcffa0d02c")
+        eligibility = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_ELIGIBILITY.json")
+        branch_creation_base = "544dc2f6477ce415321f9419a62586fcffa0d02c"
+        current_pr_base = "eaefbf55d1702d689d59765558af65e87c0b37fc"
+        self.assertEqual(state["branch_creation_base_commit"], branch_creation_base)
+        self.assertEqual(gate["branch_creation_base_commit"], branch_creation_base)
+        self.assertEqual(eligibility["branch_creation_base_main"], branch_creation_base)
+        self.assertEqual(resolution["branch_creation_base_main"], branch_creation_base)
+        self.assertEqual(state["baseline_commit"], current_pr_base)
+        self.assertEqual(gate["baseline_commit"], current_pr_base)
+        self.assertEqual(eligibility["base_main"], current_pr_base)
+        self.assertEqual(resolution["current_pull_request_base_main"], current_pr_base)
         self.assertEqual(state["branch"], "gate/mta-g0-ratification-resume")
-        self.assertEqual(resolution["replacement_base_main"], state["baseline_commit"])
+        self.assertEqual(state["pull_request"], 216)
         self.assertEqual(resolution["base_change_review"]["result"], "PASS")
+        self.assertEqual(resolution["base_change_review"]["conflicts"], [])
 
     def test_capacity_is_bounded_and_recoverable(self) -> None:
         fixture = load("fixtures/research_operations/mta/MTA_G0_CAPACITY_FIXTURES_v0_1.json")
