@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-mta-wp3-qa-packet/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "packet_id": "MTA-WP3",
+  "gate_id": "MTA-G3",
+  "baseline_commit": "726419295104a763f06911e3914c48e12e753b5c",
+  "candidate_commit": "9b2a4ce68246b8070125484b96dede62f3489712",
+  "external_audit_id": "MTA.WP3.C2.TRANSLATION.PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9.v1",
+  "external_artifact_sha256": "77474a18ccec38e5a3495cbf6af89542d32ea891229a0df208f75f4b124e2158",
+  "external_artifact_logical_sha256": "0672ad64b931fbd03f2f652668f0083d15a7546795443a5d5d12f2c01b003e7e",
+  "checks": [
+    {"check_id":"MTA-G3-INPUT-HASHES","status":"PASS","evidence":"All 18 C1, C2 state, C2 transition and 2H parent-event files match the frozen output manifest by SHA-256 and byte size."},
+    {"check_id":"MTA-G3-STATE-IDENTITY","status":"PASS","evidence":"All 9,420 C2 state IDs reconstruct exactly; 8,598 are June target states."},
+    {"check_id":"MTA-G3-TRANSITION-IDENTITY","status":"PASS","evidence":"All 7,345 C2 transition IDs and exact changed-axis sets reconstruct; 6,783 are June target transitions."},
+    {"check_id":"MTA-G3-LEVELS","status":"PASS","evidence":"RANGE_HIGH, RANGE_LOW, MIDPOINT, SWING_HIGH and SWING_LOW identities, first-valid times and exclusions reconstruct exactly."},
+    {"check_id":"MTA-G3-CONTAINERS","status":"PASS_WITH_MATERIAL_FINDING","evidence":"LOCAL_RANGE, PARENT_RANGE and SWING_ENVELOPE identities/exclusions reconstruct; PARENT_RANGE is excluded in all 8,598 target evaluations."},
+    {"check_id":"MTA-G3-RELATIONS","status":"PASS","evidence":"Every complete relation inventory and relation-set ID reconstructs with no hidden level selection."},
+    {"check_id":"MTA-G3-AXES","status":"PASS_WITH_MATERIAL_FINDINGS","evidence":"All five axes reconstruct. LOCATION, MOTION and ORGANISATION are NOT_EVALUATED in 3,602 target states; QUALITY is never COMPLETE."},
+    {"check_id":"MTA-G3-PERSISTENCE-RESET","status":"PASS","evidence":"Persistence counters, scope continuity, gap resets and post-reset warm-up reproduce exactly."},
+    {"check_id":"MTA-G3-PARENT-EVENTS","status":"PASS","evidence":"Incomplete 2H buckets clear parent levels and complete first-valid buckets restore them exactly."},
+    {"check_id":"MTA-G3-ACCOUNTING","status":"PASS","evidence":"16,765 accepted C2 state/transition IDs are reconstructed with zero unaccounted records and zero mismatches."},
+    {"check_id":"MTA-G3-AUTHORITY","status":"PASS","evidence":"No formula, threshold, clock, selector, release, C2E, C2.5, C3, Validation, R2 or exposure authority is created."},
+    {"check_id":"MTA-G3-CI","status":"PASS","evidence":"MTA-G3 run 30766337750, tests run 30766337753 and tiered FINAL_HEAD run 30766337844 passed on candidate 9b2a4ce68246b8070125484b96dede62f3489712."}
+  ],
+  "findings": [
+    {"finding_id":"MTA-WP3-F1","severity":"MATERIAL","classification":"QUALITY_NEVER_COMPLETE","summary":"Target QUALITY is 3,602 CENSORED and 4,996 DEGRADED, with zero COMPLETE states."},
+    {"finding_id":"MTA-WP3-F2","severity":"MATERIAL","classification":"PARENT_RANGE_NEVER_ACTIVE","summary":"PARENT_RANGE is excluded in all 8,598 target state evaluations under the current contiguous 24-bar parent-range requirement."},
+    {"finding_id":"MTA-WP3-F3","severity":"MATERIAL","classification":"THREE_AXES_NOT_EVALUATED","summary":"LOCATION, MOTION and ORGANISATION are each NOT_EVALUATED for 3,602 target states due to LOCAL_RANGE warm-up after resets."},
+    {"finding_id":"MTA-WP3-F4","severity":"INFO","classification":"EXACT_TRANSLATION","summary":"Every accepted C2 identity and computation reconstructs exactly from the frozen source chain."}
+  ],
+  "warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+  "rollback": "Supersede through a new audit version bound to immutable input hashes; preserve the external artifact, compact reference, findings and all source evidence."
+}
