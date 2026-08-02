@@ -46,11 +46,18 @@ jobs:
           root = Path('.')
           gate = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json').read_text())
           state = json.loads((root / 'registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json').read_text())
-          request = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION_REQUEST.json').read_text())
+          decision = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json').read_text())
+          disposition = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/PD_JUNE_FM_G2_DISPOSITION_DECISION.json').read_text())
 
-          assert gate['status'] == 'GATE_READY_OPERATOR_DECISION_REQUIRED'
-          assert state['operator_decision_required'] is True
-          assert state['operator_gate']['recorded_decision'] is None
+          assert gate['status'] == 'APPROVED_PENDING_SQUASH_MERGE'
+          assert gate['decision'] == 'PASS'
+          assert state['operator_decision_required'] is False
+          assert state['operator_gate']['recorded_decision'] == 'PASS'
+          assert decision['operator_command'] == 'OVC APPROVE MTA-G0 PASS'
+          assert decision['downstream_authority_created'] is False
+          assert disposition['decision'] == 'DEFER'
+          assert disposition['review_outcome'] == 'NONE'
+          assert disposition['pull_request_202_disposition'] == 'PRESERVE_OPEN_UNMERGED'
           assert state['authority']['selectors'] == 'UNCHANGED'
           assert state['authority']['formula_threshold_reset_clock'] == 'UNCHANGED'
           assert state['authority']['c2e_c2_5_c3'] == 'DENIED'
@@ -59,7 +66,6 @@ jobs:
           assert state['authority']['probability_risk_exposure_execution'] == 'NONE'
           assert state['packets'][0]['capacity']['max_runtime_s'] == 14400
           assert state['packets'][0]['capacity']['max_retained_bytes'] == 10737418240
-          assert request['recommended_gate_decision'] == 'PASS'
           PY
           grep -q 'parameter_search: PROHIBITED' registries/research_operations/mta/OVC_MTA_CLUSTER_VARIANT_PROFILE_v0_1.yaml
           grep -q 'PRIMARY_OVERLAP_PLUS_1' registries/research_operations/mta/OVC_MTA_CLUSTER_VARIANT_PROFILE_v0_1.yaml
