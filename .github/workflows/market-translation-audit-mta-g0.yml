@@ -1,0 +1,52 @@
+name: Market Translation Audit MTA-G0 gate readiness
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "docs/plans/research_operations/OVC_Market_Translation_and_Option_Flow_Audit_Implementation_Plan_v0_2_REVISED.md"
+      - "contracts/research_operations/mta/**"
+      - "registries/research_operations/mta/**"
+      - "schemas/research_operations/mta/**"
+      - "fixtures/research_operations/mta/**"
+      - "docs/releases/market-translation-audit-v0-2/**"
+      - "scripts/research_operations/validate_mta_g0.py"
+      - "tests/research_operations/mta/**"
+      - ".github/workflows/market-translation-audit-mta-g0.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mta-g0:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-G0')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate MTA-G0 packet
+        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_g0.py
+      - name: Focused MTA-G0 tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_g0.py' -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert non-activation and bounded authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'GATE_READY_OPERATOR_DECISION_REQUIRED' docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json
+          grep -q 'operator_decision_required.*true' registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json
+          grep -q 'max_runtime_s.*14400' registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json
+          grep -q 'max_retained_bytes.*10737418240' registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json
+          grep -q 'parameter_search: PROHIBITED' registries/research_operations/mta/OVC_MTA_CLUSTER_VARIANT_PROFILE_v0_1.yaml
+          grep -q 'PRIMARY_OVERLAP_PLUS_1' registries/research_operations/mta/OVC_MTA_CLUSTER_VARIANT_PROFILE_v0_1.yaml
+          grep -q 'CROSS_PROGRAMME_INCONSISTENCY' contracts/research_operations/mta/OVC_MTA_RO4_INTEGRATION_CONTRACT_v0_1.md
+          ! grep -R -E 'selector.*ACTIVE|ACTIVE_SELECTOR|PASS_ACTIVATE|R2_PUBLICATION.*PASS|VALIDATION.*CONSUME|C2E.*ACTIVE|C2\.5.*ACTIVE|C3.*ACTIVE|probability_authority.*ACTIVE|execution_authority.*ACTIVE' \
+            contracts/research_operations/mta \
+            registries/research_operations/mta \
+            docs/releases/market-translation-audit-v0-2
