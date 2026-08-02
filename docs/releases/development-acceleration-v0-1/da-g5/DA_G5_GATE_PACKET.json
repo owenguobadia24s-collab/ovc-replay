@@ -4,11 +4,11 @@
   "packet_id": "DA-WP5",
   "gate_id": "DA-G5",
   "title": "Compact evidence export trust",
-  "status": "PENDING_CI",
+  "status": "APPROVED_READY_FOR_SQUASH_MERGE",
   "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
-  "candidate_commit": null,
+  "candidate_commit": "81e2b69ac3f31dc350530000218b293e5c47c68b",
   "current_authority": "LOCAL_DETERMINISTIC_COMPUTE_AND_ACTIVE_BOUNDED_RECEIPT_PROPOSALS",
-  "proposed_authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
+  "approved_authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
   "reserved_authority_delta": "NONE",
   "acceptance_conditions": [
     {"condition": "CLOSED_EXPORT_PROFILE_AND_REQUEST_SCHEMAS", "result": "PASS"},
@@ -17,16 +17,22 @@
     {"condition": "PATH_SYMLINK_TYPE_CONTENT_AND_CAPACITY_GUARDS", "result": "PASS"},
     {"condition": "ATOMIC_COPY_AND_IDEMPOTENT_COLLISION_CONTROL", "result": "PASS"},
     {"condition": "NO_NETWORK_REPOSITORY_REMOTE_OR_MARKET_WRITES", "result": "PASS"},
-    {"condition": "FOCUSED_AND_RETAINED_TESTS", "result": "PENDING"},
-    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE", "result": "PENDING"},
-    {"condition": "QA_PASS", "result": "PENDING"}
+    {"condition": "FOCUSED_AND_RETAINED_TESTS", "result": "PASS", "evidence": "DA-G5 workflow 30762392337."},
+    {"condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE", "result": "PASS", "evidence": "Generic tests 30762287893 and tiered final-head run 30762392397."},
+    {"condition": "QA_PASS", "result": "PASS"}
   ],
-  "tests": [],
+  "tests": [
+    {"workflow": "Development Acceleration DA-G5 compact evidence export", "run_id": 30762392337, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30762287893, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30762392397, "result": "PASS"}
+  ],
   "qa_packet": "docs/releases/development-acceleration-v0-1/da-g5/DA_G5_QA_PACKET.json",
+  "decision_record": "docs/releases/development-acceleration-v0-1/da-g5/DA_G5_DELEGATED_DECISION.json",
   "blocking_issues": [],
   "warnings": [],
   "rollback": "Disable the export profile and stop local execution; preserve accepted bundles and manifests.",
-  "recommended_decision": "PENDING",
-  "decision_authority": "DELEGATED_APPROVED_PLAN_AFTER_PASS",
+  "recommended_decision": "PASS",
+  "recorded_decision": "PASS",
+  "decision_authority": "DELEGATED_APPROVED_PLAN",
   "next_packet": "DA-G6"
 }
