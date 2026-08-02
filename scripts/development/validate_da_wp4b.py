@@ -169,7 +169,7 @@ def main() -> int:
         "history_rewrite_performed = $false",
     ):
         assert token in runner
-    assert not re.search(r"/merges(?:\?|\"|'|$)|/reviews(?:\?|\"|'|$)|git\s+push|git\s+merge|reset\s+--hard", runner, re.I)
+    assert not re.search(r"/merges(?:\?|\"|'|$)|/reviews(?:\?|\"|'|$)|git\s+(?:push|merge|reset)", runner, re.I)
     for token in ("ghp_", "github_pat_", "-----BEGIN PRIVATE KEY-----", "sk-proj-", "Bearer "):
         assert token not in "\n".join(read(path) for path in REQUIRED if path != RUNNER)
 
