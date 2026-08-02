@@ -1,0 +1,49 @@
+{
+  "schema": "ovc-development-acceleration-merge-receipt/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.1",
+  "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DA-WP5",
+  "gate_id": "DA-G5",
+  "pull_request": 215,
+  "branch": "build/ovc-dev-accel-evidence-export",
+  "baseline_main_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "approved_candidate_commit": "81e2b69ac3f31dc350530000218b293e5c47c68b",
+  "squash_merge_commit_resolution": {
+    "method": "PARENT_OF_FIRST_COMMIT_ON_RECEIPT_BRANCH",
+    "receipt_branch": "bot/ovc-dev-accel-receipts/da-wp5-merge-receipt",
+    "base_ref_at_branch_creation": "main",
+    "reproducible_command": "git rev-list --max-parents=1 --first-parent bot/ovc-dev-accel-receipts/da-wp5-merge-receipt"
+  },
+  "decision_id": "DA-G5.DELEGATED.PASS.20260802T163600Z",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_APPROVED_PLAN",
+  "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
+  "reserved_authority_delta": "NONE",
+  "required_checks": [
+    {"context": "tests", "run_id": 30762287893, "result": "PASS"},
+    {"context": "OVC tiered test selection shadow", "run_id": 30762392397, "result": "PASS"}
+  ],
+  "packet_assurance": [
+    {"workflow": "Development Acceleration DA-G5 compact evidence export", "run_id": 30762392337, "result": "PASS"}
+  ],
+  "external_artifacts": [],
+  "blocking_issues": [],
+  "permanent_denials_preserved": [
+    "NETWORK_ACCESS",
+    "REPOSITORY_WRITE",
+    "REMOTE_WRITE",
+    "PROVIDER_ACCESS",
+    "R2_WRITE",
+    "RELEASE_PUBLICATION",
+    "SELECTOR_MUTATION",
+    "VALIDATION_ACCESS",
+    "MARKET_OR_SEMANTIC_MUTATION",
+    "PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_OBJECT",
+    "ACCEPTED_BUNDLE_DELETION",
+    "FORCE_PUSH",
+    "REWRITE_HISTORY"
+  ],
+  "rollback": "Disable the compact evidence export profile and stop local invocation. Preserve accepted bundles, manifests and repository history.",
+  "next_gate": "DA-G6"
+}
