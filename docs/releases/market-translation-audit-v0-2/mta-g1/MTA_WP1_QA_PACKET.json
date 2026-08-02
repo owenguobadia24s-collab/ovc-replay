@@ -4,7 +4,8 @@
   "packet_id": "MTA-WP1",
   "gate_id": "MTA-G1",
   "baseline_commit": "eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d",
-  "candidate_commit": null,
+  "candidate_commit": "7f8e85261728ee2c8a93690d8b4d438f7f901b36",
+  "logical_registry_sha256": "87eb566c7584a2bca615661b0994a045863f8e1a36d9457dfbaa1818ef5961d5",
   "scope": "CURRENT_FLOW_OBJECT_METRIC_COMPUTABILITY_REASON_AND_MARKER_FUNCTION_REGISTRY_FREEZE",
   "checks": [
     {"check_id":"MTA-G1-SCHEMA","status":"PASS","evidence":"Closed registry-entry and amendment schemas exist; fixture and focused tests exercise blocking cases."},
@@ -15,10 +16,15 @@
     {"check_id":"MTA-G1-AMENDMENTS","status":"PASS","evidence":"Material registry amendments require a new version, operator acknowledgement, rerun and supersession map."},
     {"check_id":"MTA-G1-RO4-SEPARATION","status":"PASS","evidence":"RO4 sequence/friction records remain reference-only separate objects."},
     {"check_id":"MTA-G1-AUTHORITY","status":"PASS","evidence":"C2E is deferred; C2.5 and C3 are prohibited; Validation, R2, probability, risk, exposure and execution remain denied."},
-    {"check_id":"MTA-G1-CI","status":"PENDING","evidence":"Exact final-head workflow run IDs will be recorded after PR assurance."}
+    {"check_id":"MTA-G1-CI","status":"PASS","evidence":"MTA-G1 run 30763837693, tests run 30763837704 and tiered FINAL_HEAD run 30763837691 passed on candidate 7f8e85261728ee2c8a93690d8b4d438f7f901b36."}
+  ],
+  "tests": [
+    {"name":"MTA-G1 flow registry","run_id":30763837693,"result":"PASS"},
+    {"name":"tests","run_id":30763837704,"result":"PASS"},
+    {"name":"OVC tiered test selection shadow","run_id":30763837691,"profile":"FINAL_HEAD","result":"PASS"}
   ],
   "warnings": [],
   "unresolved_issues": [],
-  "recommendation": "PASS_PENDING_EXACT_FINAL_HEAD_CI",
+  "recommendation": "PASS",
   "rollback": "Supersede registry versions through an amendment and deterministic rerun; preserve all prior registries and outputs."
 }
