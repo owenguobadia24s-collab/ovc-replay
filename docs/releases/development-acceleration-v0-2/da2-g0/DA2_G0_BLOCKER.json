@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-da2-g0-blocker/v1",
+  "blocker_id": "DA2-G0.BLOCKER.RAW-RUN-TIMING-AND-SOURCE-IDENTITY",
+  "status": "BLOCKED",
+  "classification": "REQUIRED_ARTIFACT_UNAVAILABLE_OR_NON_REPRODUCIBLE",
+  "subjects": [
+    "0f0bda757e62120f2a570de6b3c000e9786445c5",
+    "a1d027ffdf891e666f8a87363ce193684335347f"
+  ],
+  "available_evidence": {
+    "complete_run_inventory": true,
+    "run_count": 91,
+    "run_id_name_workflow_id_status_conclusion": true,
+    "required_check_job_logs": true,
+    "ruleset_snapshot": true
+  },
+  "missing_evidence": [
+    "raw workflow run JSON containing path, created_at, run_started_at and updated_at",
+    "raw job JSON containing started_at and completed_at for every run",
+    "required check-suite and check-run app identities",
+    "Git base tree SHA or equivalent atomic multi-file write capability for one-commit candidate materialisation"
+  ],
+  "prohibited_substitutions": [
+    "estimated timestamps",
+    "UI-observed durations",
+    "commit-to-log time as run queue time",
+    "context name as app identity"
+  ],
+  "operator_commands": {
+    "runs_218": "gh api --paginate 'repos/owenguobadia24s-collab/ovc-replay/actions/runs?head_sha=0f0bda757e62120f2a570de6b3c000e9786445c5&event=pull_request&per_page=100' > DA2_G0_218_RUNS.json",
+    "runs_222": "gh api --paginate 'repos/owenguobadia24s-collab/ovc-replay/actions/runs?head_sha=a1d027ffdf891e666f8a87363ce193684335347f&event=pull_request&per_page=100' > DA2_G0_222_RUNS.json",
+    "jobs": "For each returned run id: gh api --paginate repos/owenguobadia24s-collab/ovc-replay/actions/runs/RUN_ID/jobs?per_page=100",
+    "checks": "gh api repos/owenguobadia24s-collab/ovc-replay/commits/SHA/check-runs and /check-suites"
+  },
+  "handling": "Do not include authorization headers or tokens. Compute SHA-256 over exact saved bytes and provide the files plus hashes. The assembly branch is non-authoritative; do not merge it.",
+  "continuation": "OVC CONTINUE after the checksum-addressed raw evidence is available.",
+  "rollback": "Preserve this blocker and partial evidence; supersede non-destructively."
+}
