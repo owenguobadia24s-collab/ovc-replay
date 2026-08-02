@@ -3,18 +3,23 @@
   "gate_id": "MTA-G0",
   "programme_id": "OVC-MTA-v0.2",
   "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
-  "source_head": null,
-  "base_main": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "source_head": "bf1acdde1b368af899750ae211f8b71aa6919b5e",
+  "branch_creation_base_main": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "base_main": "eaefbf55d1702d689d59765558af65e87c0b37fc",
   "replacement_branch": "gate/mta-g0-ratification-resume",
   "original_pull_request": 210,
-  "replacement_pull_request": null,
+  "replacement_pull_request": 216,
   "required_status_checks": ["tests", "OVC tiered test selection shadow"],
-  "tests": [],
-  "qa": "PASS_PENDING_FINAL_HEAD",
+  "tests": [
+    {"workflow": "Market Translation Audit MTA-G0 gate readiness", "run_id": 30760300813, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30760300767, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30760300791, "profile": "FINAL_HEAD", "result": "PASS"}
+  ],
+  "qa": "PASS",
   "warnings_blocking": false,
   "unresolved_reviews": 0,
   "reserved_authority_delta": "NONE",
   "ruleset_resolution": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
-  "rollback": "Close the replacement PR without deleting either branch; preserve decisions and evidence.",
-  "status": "PENDING_FINAL_HEAD_CHECKS"
+  "rollback": "Revert only the bounded squash merge through a new non-destructive commit; preserve decisions and evidence.",
+  "status": "ELIGIBLE"
 }
