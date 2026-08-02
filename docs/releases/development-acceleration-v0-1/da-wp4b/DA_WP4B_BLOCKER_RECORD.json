@@ -3,60 +3,18 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "status": "BLOCKED_FINAL_HEAD_CI",
+  "status": "TECHNICAL_BLOCKERS_RESOLVED_OPERATOR_BOUNDARY",
   "resolved_blockers": [
-    {
-      "blocker_id": "DA-WP4B-BLOCK-DEDICATED-IDENTITY",
-      "condition": "DEDICATED_REVOCABLE_IDENTITY_PROVISIONED",
-      "resolution": "Dedicated revocable GitHub App with exact approved permissions is recorded."
-    },
-    {
-      "blocker_id": "DA-WP4B-BLOCK-REAL-SHADOW",
-      "condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS",
-      "resolution": "Dedicated identity created open unmerged PR 211 at 0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e with no prohibited action."
-    },
-    {
-      "blocker_id": "DA-WP4B-BLOCK-BRANCH-PROTECTION",
-      "condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED",
-      "resolution": "Exact export docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json hashes to ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4 and proves active main protection with no bypass actors."
-    }
+    {"blocker_id": "DA-WP4B-BLOCK-DEDICATED-IDENTITY", "condition": "DEDICATED_REVOCABLE_IDENTITY_PROVISIONED", "resolution": "PASS"},
+    {"blocker_id": "DA-WP4B-BLOCK-REAL-SHADOW", "condition": "REAL_PROPOSAL_BRANCH_SHADOW_PASS", "resolution": "PASS_PR_211_OPEN_UNMERGED"},
+    {"blocker_id": "DA-WP4B-BLOCK-BRANCH-PROTECTION", "condition": "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED", "resolution": "PASS_EXACT_EXPORT_ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"},
+    {"blocker_id": "DA-WP4B-BLOCK-FINAL-HEAD-CI", "condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS", "resolution": "PASS"}
   ],
-  "blockers": [
-    {
-      "blocker_id": "DA-WP4B-BLOCK-FINAL-HEAD-CI",
-      "condition": "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS",
-      "reason": "PR 209 changed to add exact ruleset evidence and correct stale validators; the resulting head must pass DA-WP4B, corrective-shadow, tiered and complete test workflows.",
-      "smallest_lawful_resolution": "Allow required GitHub Actions runs to complete successfully on the final PR 209 head without weakening tests."
-    }
-  ],
-  "external_evidence": {
-    "audit_path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
-    "audit_sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea",
-    "ruleset_path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
-    "ruleset_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4",
-    "shadow_pull_request": 211,
-    "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e"
-  },
-  "preserved_work": [
-    "bounded authority contract",
-    "closed schemas",
-    "inactive exact policy",
-    "fail-closed planner and adapter protocol",
-    "pre-activation shadow route",
-    "dedicated revocable identity evidence",
-    "real allowlisted shadow PR",
-    "exact main ruleset export",
-    "fixtures and tests",
-    "activation evidence ledger",
-    "rollback and revocation controls"
-  ],
-  "prohibited_resolution": [
-    "Do not merge PR 211.",
-    "Do not activate the profile or production transport.",
-    "Do not weaken, skip or relabel failing tests.",
-    "Do not merge, force-push, rewrite history or delete accepted evidence."
-  ],
+  "blockers": [],
+  "operator_required_boundary": {"condition": "OPERATOR_DA_G4B_DECISION", "reason": "Activation of bounded repository-bot write authority is operator-reserved.", "operator_command": "OVC APPROVE DA-G4B PASS"},
+  "external_evidence": {"audit_path": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json", "audit_sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea", "ruleset_path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json", "ruleset_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4", "shadow_pull_request": 211, "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e"},
+  "prohibited_resolution": ["Do not activate without the operator decision.", "Do not merge PR 211.", "Do not weaken tests.", "Do not force-push, rewrite history or delete accepted evidence."],
   "authority_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "authority_active": false,
-  "rollback": "Keep the profile inactive, preserve PR 211 unmerged and revoke the dedicated identity if final assurance cannot be completed."
+  "rollback": "Keep profile inactive and revoke the dedicated identity if approval is withheld."
 }
