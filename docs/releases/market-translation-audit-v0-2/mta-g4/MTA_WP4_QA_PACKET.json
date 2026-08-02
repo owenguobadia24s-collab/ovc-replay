@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-mta-wp4-qa-packet/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "packet_id": "MTA-WP4",
+  "gate_id": "MTA-G4",
+  "baseline_commit": "ba1f5880dbc5aa53ed8f929a83f42a8dcebdedfb",
+  "candidate_commit": "3f85426ff546c30bf866efe546a2a7a0536906a2",
+  "external_artifact_sha256": "e63228a1244790263059efbb949e2917d8e1889aac26503ea9e05955cf1c6000",
+  "checks": [
+    {"check_id":"MTA-G4-A-L-MAPPING","status":"PASS"},
+    {"check_id":"MTA-G4-PARENT-EVENTS","status":"PASS"},
+    {"check_id":"MTA-G4-FIRST-VALID","status":"PASS"},
+    {"check_id":"MTA-G4-INCOMPLETE-CLEAR","status":"PASS"},
+    {"check_id":"MTA-G4-RESET-CAUSES","status":"PASS"},
+    {"check_id":"MTA-G4-BID-ASK","status":"PASS"},
+    {"check_id":"MTA-G4-AUTHORITY","status":"PASS"},
+    {"check_id":"MTA-G4-CI","status":"PASS","evidence":["MTA-G4 30769046814 PASS","tests 30769046886 PASS","tiered FINAL_HEAD 30769046660 PASS"]}
+  ],
+  "findings": [
+    {"classification":"A_L_MAPPING_EXACT","finding_id":"MTA-WP4-F1","severity":"INFO","summary":"All 2H_A_L bars map deterministically to twelve fixed UTC two-hour blocks A through L; no off-grid bar or BID/ASK membership mismatch exists."},
+    {"classification":"PARENT_CONTEXT_LOW_AVAILABILITY","finding_id":"MTA-WP4-F2","severity":"MATERIAL","summary":"Only 615 of 4072 target 15M with-parent state evaluations (15.103143%) resolve a non-empty first-valid 2H parent level snapshot."},
+    {"classification":"PARENT_CLEAR_ON_INCOMPLETE_2H","finding_id":"MTA-WP4-F3","severity":"MATERIAL","summary":"Every incomplete 2H bucket emits an explicit clear event; no prior parent context is bridged across incomplete required membership."},
+    {"classification":"RESET_CAUSES_EXACT","finding_id":"MTA-WP4-F4","severity":"MATERIAL","summary":"Per side, 53 15M scope resets classify as 1 source-partition start, 48 provider-gap resets, 4 scheduled weekend closures and 0 unknown resets."},
+    {"classification":"NO_FUTURE_PARENT_USAGE","finding_id":"MTA-WP4-F5","severity":"INFO","summary":"All parent resolutions use only events first-valid at or before the local close; future-parent usage is zero."}
+  ],
+  "warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+  "rollback": "Supersede by a new immutable audit version; preserve all prior source, ledgers and findings."
+}
