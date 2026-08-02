@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-mta-programme-state/v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "programme_id", "plan_id", "plan_version", "programme_status", "current_packet", "current_gate", "operator_decision_required", "baseline_commit", "branch", "authority", "packets", "operator_gate", "next_action"],
+  "properties": {
+    "schema": {"const": "ovc-mta-programme-state/v2"},
+    "programme_id": {"const": "OVC-MTA-v0.2"},
+    "plan_id": {"const": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2"},
+    "plan_version": {"const": "0.2"},
+    "plan_source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "programme_status": {"enum": ["PLANNED", "READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "APPROVED", "BLOCKED", "QUARANTINED", "SUPERSEDED", "COMPLETED"]},
+    "current_packet": {"type": "string"},
+    "current_gate": {"type": "string"},
+    "operator_decision_required": {"type": "boolean"},
+    "baseline_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "branch": {"type": "string"},
+    "candidate_commit": {"type": ["string", "null"]},
+    "authority": {"type": "object"},
+    "concurrent_work": {"type": "array"},
+    "packets": {"type": "array", "minItems": 8},
+    "operator_gate": {"type": "object"},
+    "next_action": {"type": "string"}
+  }
+}
