@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-mta-gate-packet/v1",
+  "gate_id": "MTA-G0",
+  "gate_title": "Audit programme, capacity and cross-programme boundary ratification",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "plan_sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d",
+  "status": "APPROVED_PENDING_FINAL_HEAD_RECHECK",
+  "plan_baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "candidate_branch": "gate/mta-g0-ratification-resume",
+  "tested_candidate_commit": null,
+  "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
+  "decision": "PASS",
+  "current_authority": {
+    "opt_a_c1_c2": "UNCHANGED_ACTIVE_EXISTING_AUTHORITY",
+    "june_wp2": "PRESERVED_RESEARCH_EVIDENCE_NOT_RELEASE",
+    "june_wp3": "DEFERRED_OPEN_UNMERGED_EXTERNAL_REVIEW_CONSTRUCTION",
+    "ro4": "SEPARATE_READ_ONLY_SEQUENCE_EVIDENCE_LINE",
+    "validation": "LOCKED_UNCONSUMED",
+    "c2e_c2_5_c3": "NONE"
+  },
+  "approved_authority_delta": "RATIFY_BOUNDED_READ_AND_DERIVE_AUDIT_PROGRAMME_WITH_SEGMENTED_OPERATOR_CONTROLS",
+  "completed_work": [
+    "operator PASS and June review DEFER preserved",
+    "original blocked PR and branch history preserved",
+    "current lawful main reconciled",
+    "reproducible active ruleset and exact required contexts identified",
+    "replacement branch created from current main",
+    "contracts, schemas, fixtures, programme state and tests reconstructed",
+    "operator-decision and programme-state schema inconsistencies corrected"
+  ],
+  "acceptance_conditions": [
+    {"condition": "Operator MTA-G0 PASS and all subdecisions preserved", "status": "PASS"},
+    {"condition": "Active main ruleset independently reproducible", "status": "PASS"},
+    {"condition": "Exact required contexts identified as tests and OVC tiered test selection shadow", "status": "PASS"},
+    {"condition": "Replacement branch starts from current lawful main", "status": "PASS"},
+    {"condition": "No selector, formula, threshold, reset, clock, release, Validation, semantic or exposure authority", "status": "PASS"},
+    {"condition": "Final-head MTA workflow, required checks and complete repository suite pass", "status": "PENDING"}
+  ],
+  "tests": [],
+  "external_artifact_hashes": [
+    {"artifact": "plan_docx", "sha256": "bd8fd1bea923e3bb5bc5cf19487ca4c545b78c21e4299d1a80878eb94c9c640d"},
+    {"artifact": "main_ruleset", "sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4"},
+    {"artifact": "wp3_reviewer_package", "sha256": "1b68c2c58e895c700152b697ceb1cdc1bf9cf5ef9807c9f69893512c0104bd46"}
+  ],
+  "qa": {
+    "packet": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_QA_PACKET.json",
+    "recommendation": "PASS_PENDING_FINAL_HEAD"
+  },
+  "decision_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json",
+  "resolution_record": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
+  "warnings": [
+    "PR #202 remains open and unmerged as a source reference.",
+    "Original PR #210 will be closed only as superseded after replacement PR creation; its branch remains preserved."
+  ],
+  "unresolved_issues": [],
+  "rollback": "Close the replacement PR without deleting either branch; preserve all operator decisions, source evidence and ruleset records.",
+  "next_packet": "MTA-WP1"
+}
