@@ -1,0 +1,101 @@
+{
+  "schema": "ovc-mta-g0-required-check-enforcement-blocker/v1",
+  "blocker_id": "MTA-G0-BLOCK-002-CHECKS-PASS-RULESET-STILL-EXPECTED",
+  "programme_id": "OVC-MTA-v0.2",
+  "gate_id": "MTA-G0",
+  "status": "BLOCKED_EXTERNAL_REPOSITORY_RULESET_ENFORCEMENT",
+  "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
+  "pull_request": 216,
+  "branch": "gate/mta-g0-ratification-resume",
+  "head_sha": "d9f8efca1865fabb640f3c07e4ae87db62f6b271",
+  "base_sha": "eaefbf55d1702d689d59765558af65e87c0b37fc",
+  "ruleset": {
+    "id": 20229411,
+    "name": "OVC main protection",
+    "sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4",
+    "path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
+    "enforcement": "active",
+    "strict_required_status_checks_policy": true,
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "required_contexts": ["tests", "OVC tiered test selection shadow"]
+  },
+  "passing_assurance": [
+    {
+      "merge_candidate_sha": "04fd92abb371e6e3ab2f6e1ac196e39a50d0c707",
+      "mta_workflow": {"run_id": 30760491291, "result": "PASS"},
+      "tests": {"run_id": 30760491281, "result": "PASS"},
+      "tiered": {"run_id": 30760491128, "profile": "FINAL_HEAD", "result": "PASS"}
+    },
+    {
+      "merge_candidate_sha": "2825954092ce531e01f9fb8d9ba65ef2f06ffba8",
+      "mta_workflow": {"run_id": 30760770465, "result": "PASS"},
+      "tests": {"run_id": 30760770405, "result": "PASS"},
+      "tiered": {"run_id": 30760770440, "profile": "FINAL_HEAD", "result": "PASS"}
+    }
+  ],
+  "review_state": {
+    "unresolved_review_threads": 0,
+    "blocking_review_submissions": 0
+  },
+  "merge_attempts": [
+    {
+      "method": "squash",
+      "expected_head_sha": "d9f8efca1865fabb640f3c07e4ae87db62f6b271",
+      "after_merge_candidate": "04fd92abb371e6e3ab2f6e1ac196e39a50d0c707",
+      "result": "HTTP_405_REPOSITORY_RULE_VIOLATION",
+      "message": "2 of 2 required status checks are expected"
+    },
+    {
+      "method": "squash",
+      "expected_head_sha": "d9f8efca1865fabb640f3c07e4ae87db62f6b271",
+      "after_close_reopen_and_merge_candidate": "2825954092ce531e01f9fb8d9ba65ef2f06ffba8",
+      "result": "HTTP_405_REPOSITORY_RULE_VIOLATION",
+      "message": "2 of 2 required status checks are expected"
+    }
+  ],
+  "diagnosis": {
+    "known": [
+      "Both required workflow jobs completed successfully twice on GitHub-generated PR merge candidates.",
+      "The PR remains mergeable and has no unresolved review threads.",
+      "The merge API continues to classify both required contexts as expected rather than successful.",
+      "Closing and reopening the PR regenerated the merge candidate and reran both checks without correcting enforcement state."
+    ],
+    "unknown": [
+      "The exact GitHub check-suite identity or integration binding the ruleset expects.",
+      "Whether the ruleset contexts were selected from a stale or different check source despite identical displayed names.",
+      "Whether GitHub repository administration must rebind the required checks to the current GitHub Actions check runs."
+    ]
+  },
+  "why_not_correctable_inside_mta_scope": [
+    "The connector exposes workflow results but not the ruleset required-check source or integration identity configuration.",
+    "Changing or bypassing main protection is an external repository-governance action and is not authorised by the MTA packet.",
+    "Direct main writes, force-push, history rewrite and merging with expected checks unsatisfied are prohibited."
+  ],
+  "smallest_lawful_resolution": [
+    "Open repository Settings > Rules > Rulesets > OVC main protection and inspect both required status-check source identities.",
+    "Re-select `tests` and `OVC tiered test selection shadow` from the current GitHub Actions check runs if their source binding is stale or absent; do not remove or weaken either requirement.",
+    "Confirm PR 216 shows both checks as satisfied under the ruleset rather than merely successful in Actions.",
+    "Issue `OVC CONTINUE` so the exact-head squash merge can be retried."
+  ],
+  "preserved_state": {
+    "operator_pass": "RECORDED",
+    "june_g2": "DEFERRED_WITHOUT_OUTCOME",
+    "pr_202": "OPEN_UNMERGED_PRESERVED",
+    "pr_210": "OPEN_UNMERGED_PRESERVED",
+    "pr_216": "OPEN_UNMERGED_BLOCKED",
+    "selectors": "UNCHANGED",
+    "validation": "LOCKED_UNCONSUMED",
+    "c2e_c2_5_c3": "DENIED"
+  },
+  "prohibited_resolutions": [
+    "BYPASS_BRANCH_PROTECTION",
+    "REMOVE_OR_WEAKEN_REQUIRED_CHECKS",
+    "DIRECT_MAIN_WRITE",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE",
+    "MERGE_WITH_EXPECTED_CHECKS_UNSATISFIED"
+  ],
+  "rollback": "No destructive rollback. Preserve PR 216, both MTA-G0 branches, all decisions, checks and blocker evidence. If abandoned, close PR 216 without deleting branches.",
+  "continuation_point": "MTA-G0_SQUASH_MERGE_PR_216_THEN_MTA-WP1"
+}

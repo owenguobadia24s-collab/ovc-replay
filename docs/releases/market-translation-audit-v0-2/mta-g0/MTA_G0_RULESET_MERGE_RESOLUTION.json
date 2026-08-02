@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-mta-g0-ruleset-merge-resolution/v1",
+  "resolution_id": "MTA-G0-RESOLUTION-001-DA-G4B-RULESET-EVIDENCE",
+  "programme_id": "OVC-MTA-v0.2",
+  "gate_id": "MTA-G0",
+  "original_pull_request": 210,
+  "original_branch": "gate/mta-g0-ratification",
+  "replacement_branch": "gate/mta-g0-ratification-resume",
+  "replacement_pull_request": 216,
+  "original_blocker": "MTA-G0-BLOCK-001-REQUIRED-CHECK-CONTEXTS-EXPECTED",
+  "resolved_at": "2026-08-02T17:52:00Z",
+  "resolution_source": {
+    "programme": "OVC-DEV-ACCEL-v0.1",
+    "gate": "DA-G4B",
+    "merge_commit": "ab7ea801d2e3b6e097a0588f7c8e618864e3be65",
+    "post_merge_receipt_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+    "ruleset_path": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
+    "ruleset_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4",
+    "ruleset_id": 20229411,
+    "ruleset_name": "OVC main protection",
+    "enforcement": "active",
+    "bypass_actors": [],
+    "current_user_can_bypass": "never"
+  },
+  "required_status_checks": [
+    {"context": "tests", "expected_source": "GitHub Actions workflow job"},
+    {"context": "OVC tiered test selection shadow", "expected_source": "GitHub Actions workflow job"}
+  ],
+  "strict_required_status_checks_policy": true,
+  "branch_creation_base_main": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "current_pull_request_base_main": "eaefbf55d1702d689d59765558af65e87c0b37fc",
+  "base_change_review": {
+    "changed_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
+    "relationship": "COMPATIBLE_UNRELATED_DEVELOPMENT_ACCELERATION_GOVERNANCE",
+    "authority_delta": "NONE_FOR_MTA",
+    "conflicts": [],
+    "mergeable": true,
+    "result": "PASS"
+  },
+  "resolution_result": "PASS_RULESET_REPRODUCIBLE_REQUIRED_CONTEXTS_IDENTIFIED",
+  "required_check_evidence": [
+    {"workflow": "Market Translation Audit MTA-G0 gate readiness", "run_id": 30760300813, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30760300767, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30760300791, "profile": "FINAL_HEAD", "result": "PASS"}
+  ],
+  "remaining_condition": "NONE_AFTER_FINAL_HEAD_CLOSURE",
+  "prohibited": [
+    "BYPASS_BRANCH_PROTECTION",
+    "WEAKEN_REQUIRED_CHECKS",
+    "DIRECT_MAIN_WRITE",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE"
+  ],
+  "rollback": "Close the replacement PR without deleting either branch; preserve the operator decision, blocker and ruleset evidence."
+}
