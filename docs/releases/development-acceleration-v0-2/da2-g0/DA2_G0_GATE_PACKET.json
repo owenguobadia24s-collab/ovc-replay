@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-da2-g0-gate-completion-packet/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-00",
+  "gate_id": "DA2-G0",
+  "status": "APPROVED_PENDING_FINAL_HEAD_ASSURANCE_AND_SQUASH_MERGE",
+  "baseline_commit": "6b4069b8f5082e35435415c6211d2334a6bbdf6d",
+  "candidate_commit": "RESOLVED_BY_ATOMIC_GIT_COMMIT",
+  "completed_work": [
+    "RAW_EVIDENCE_VERIFIED",
+    "DETERMINISTIC_BASELINE_BUILT",
+    "SOURCE_IDENTITY_VERIFIED",
+    "TIMING_ACCOUNTED",
+    "QA_PASS",
+    "DA2_G1_PACKET_PREPARED"
+  ],
+  "acceptance_conditions": [
+    {"condition": "Every workflow run accounted exactly once", "result": "PASS"},
+    {"condition": "Required contexts and accepted source identities identified", "result": "PASS"},
+    {"condition": "Exact queue and execution durations without estimates", "result": "PASS"},
+    {"condition": "Unrelated and duplicate full-suite runs enumerated", "result": "PASS"},
+    {"condition": "Deterministic rerun reproduces logical SHA-256", "result": "PASS"},
+    {"condition": "Focused tests", "result": "PASS_LOCAL"},
+    {"condition": "Canonical final-head checks", "result": "PENDING_CI"}
+  ],
+  "qa_packet": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_QA_PACKET.json",
+  "external_reference": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_RAW_EVIDENCE_REFERENCE.json",
+  "warnings": [],
+  "blocking_issues": [],
+  "recommended_decision": "PASS_AFTER_FINAL_HEAD_CI",
+  "rollback": "Supersede non-destructively; preserve evidence and decision history."
+}
