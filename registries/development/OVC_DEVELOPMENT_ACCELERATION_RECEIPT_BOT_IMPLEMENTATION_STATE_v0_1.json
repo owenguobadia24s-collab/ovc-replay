@@ -6,7 +6,7 @@
   "baseline_main_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
   "tested_candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
-  "status": "BLOCKED_ACTIVATION_RULESET_EVIDENCE_AND_FINAL_CI",
+  "status": "BLOCKED_FINAL_HEAD_CI",
   "operator_decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
   "approved_profile_state": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
   "policy": "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_POLICY_v0_1.json",
@@ -27,17 +27,19 @@
     "TOKEN_REDACTION_TESTS_PASS": "PASS",
     "IDEMPOTENCY_AND_COLLISION_TESTS_PASS": "PASS",
     "REVOCATION_TESTS_PASS": "PASS",
-    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "BLOCKED_RULESET_EXPORT_NOT_REPRODUCIBLE",
+    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "PASS_EXACT_RULESET_EXPORT",
     "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS_CANDIDATE_PR_211_UNMERGED",
-    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PENDING_AFTER_EVIDENCE_UPDATE",
-    "QA_PASS": "BLOCKED_BY_RULESET_AND_FINAL_HEAD"
+    "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PENDING_AFTER_RULESET_AND_VALIDATOR_UPDATE",
+    "QA_PASS": "PENDING_FINAL_HEAD_CI"
   },
   "shadow_evidence": {
     "app_slug": "ovc-dev-accel-receipt-bot",
     "app_id": 4463376,
     "installation_id": 150708331,
     "external_audit": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
-    "external_audit_sha256": "79e29f05f4e34999a6fa23cb5c0ed922a761dbce202b2f568ef97575af2b13d3",
+    "external_audit_sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea",
+    "ruleset_export": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
+    "ruleset_export_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4",
     "shadow_pull_request": 211,
     "shadow_branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001",
     "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e",
@@ -50,10 +52,7 @@
     {"workflow": "tests", "run_id": 30751814813, "result": "PASS"},
     {"workflow": "shadow PR complete repository tests", "run_id": 30752883818, "result": "PASS"}
   ],
-  "blockers": [
-    "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
-    "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
-  ],
+  "blockers": ["PR209_FINAL_HEAD_CI_PENDING_AFTER_RULESET_AND_VALIDATOR_UPDATE"],
   "rollback": "Keep the profile inactive, preserve PR 211 unmerged, revoke the dedicated GitHub App installation or key and revert only bounded implementation changes through a new non-destructive commit.",
-  "next_action": "VERIFY_PR209_FINAL_HEAD_CI_AND_OBTAIN_EXACT_RULESET_EXPORT"
+  "next_action": "VERIFY_PR209_FINAL_HEAD_CI_THEN_PREPARE_OPERATOR_DA_G4B_DECISION"
 }
