@@ -5,17 +5,22 @@
   "plan_version": "0.1",
   "packet_id": "DA-WP5",
   "gate_id": "DA-G5",
-  "decision_id": null,
-  "decision": "PENDING",
-  "decision_authority": "DELEGATED_APPROVED_PLAN_AFTER_PASS",
+  "decision_id": "DA-G5.DELEGATED.PASS.20260802T163600Z",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_APPROVED_PLAN",
   "baseline_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
-  "candidate_commit": null,
+  "candidate_commit": "81e2b69ac3f31dc350530000218b293e5c47c68b",
   "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
   "reserved_authority_delta": "NONE",
-  "tests": [],
-  "qa_result": "PENDING_FINAL_HEAD_CI",
+  "tests": [
+    {"workflow": "Development Acceleration DA-G5 compact evidence export", "run_id": 30762392337, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30762287893, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30762392397, "result": "PASS"}
+  ],
+  "qa_result": "PASS",
   "blocking_issues": [],
   "warnings": [],
+  "non_reserved_rationale": "The delta is local deterministic copy-only evidence export under an approved plan. It performs no repository, network, provider, R2, publication, selector, Validation, market, probability, risk, exposure or execution write and grants no new operator-reserved authority.",
   "rollback": "Disable the export profile and preserve accepted bundles, manifests and repository history.",
   "next_gate": "DA-G6"
 }
