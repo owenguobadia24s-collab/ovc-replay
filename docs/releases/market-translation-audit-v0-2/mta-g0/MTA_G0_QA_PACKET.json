@@ -4,22 +4,27 @@
   "programme_id": "OVC-MTA-v0.2",
   "plan_version": "0.2",
   "plan_baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-  "replacement_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "branch_creation_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "replacement_pull_request_base_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
   "candidate_branch": "gate/mta-g0-ratification-resume",
-  "tested_candidate_commit": null,
-  "status": "READY_FOR_FINAL_HEAD_RECHECK",
+  "tested_candidate_commit": "bf1acdde1b368af899750ae211f8b71aa6919b5e",
+  "status": "PASS_APPROVED_PENDING_SQUASH_MERGE",
   "checks": [
     {"id": "MTA-Q-G0-PLAN", "status": "PASS", "evidence": "operator-ratified plan and source hash preserved"},
-    {"id": "MTA-Q-G0-BASE", "status": "PASS", "evidence": "replacement branch created from lawful main 544dc2f6477ce415321f9419a62586fcffa0d02c"},
-    {"id": "MTA-Q-G0-RULESET", "status": "PASS", "evidence": "active ruleset bytes are reproducible at the merged DA-G4B path and bind exact required contexts"},
+    {"id": "MTA-Q-G0-BASE", "status": "PASS", "evidence": "branch creation base 544dc2f and current PR base eaefbf55 reconciled as compatible Development Acceleration governance"},
+    {"id": "MTA-Q-G0-RULESET", "status": "PASS", "evidence": "active ruleset bytes are reproducible and bind exact contexts tests and OVC tiered test selection shadow"},
     {"id": "MTA-Q-G0-CAPACITY", "status": "PASS", "evidence": "four-hour and 10GB contract preserved"},
     {"id": "MTA-Q-G0-CLUSTERS", "status": "PASS", "evidence": "exactly three frozen variants preserved"},
     {"id": "MTA-Q-G0-AUTHORITY", "status": "PASS", "evidence": "audit-only authority; all selector, Validation and downstream denials preserved"},
-    {"id": "MTA-Q-G0-SCHEMAS", "status": "PASS", "evidence": "operator decision and programme-state schemas corrected to match the ratified court records"},
-    {"id": "MTA-Q-G0-FINAL-HEAD", "status": "PENDING", "evidence": "replacement PR required checks have not yet completed"}
+    {"id": "MTA-Q-G0-SCHEMAS", "status": "PASS", "evidence": "operator decision and programme-state schemas match the ratified court records"},
+    {"id": "MTA-Q-G0-MTA-WORKFLOW", "status": "PASS", "evidence": "run 30760300813 passed validator, 10 focused tests, complete repository suite and bounded-authority assertions"},
+    {"id": "MTA-Q-G0-GENERIC", "status": "PASS", "evidence": "required tests run 30760300767 passed"},
+    {"id": "MTA-Q-G0-TIERED", "status": "PASS", "evidence": "required OVC tiered test selection shadow run 30760300791 passed FINAL_HEAD"},
+    {"id": "MTA-Q-G0-REVIEWS", "status": "PASS", "evidence": "zero unresolved review threads at closure preparation"}
   ],
   "capacity": {
     "expected_runtime_s": 60,
+    "actual_runtime_s": 3,
     "max_runtime_s": 14400,
     "expected_retained_bytes": 250000,
     "max_retained_bytes": 10737418240,
@@ -30,5 +35,5 @@
     "Original PR #210 and branch history must be preserved when superseded."
   ],
   "unresolved_issues": [],
-  "recommendation": "PASS_PENDING_FINAL_HEAD"
+  "recommendation": "PASS"
 }
