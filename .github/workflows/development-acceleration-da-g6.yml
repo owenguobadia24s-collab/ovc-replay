@@ -28,7 +28,7 @@ jobs:
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
       - name: Validate DA-G6 packet
         run: PYTHONPATH=src python -u scripts/development/validate_da_g6.py
       - name: Focused DA-G6 tests
@@ -39,22 +39,28 @@ jobs:
           PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4b.py' -v
       - name: Retained DA-G5 exporter tests
         run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_evidence_export.py' -v
-      - name: Complete repository suite
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert inactive operator boundary
+      - name: Assert inactive operator boundary and five controls
         shell: bash
         run: |
           set -euo pipefail
-          grep -q '"status": "PENDING_OPERATOR_DA_G6"' registries/development/OVC_DEVELOPMENT_ACCELERATION_DEFAULT_WORKFLOW_PROPOSAL_v0_1.json
-          grep -q '"active": false' registries/development/OVC_DEVELOPMENT_ACCELERATION_DEFAULT_WORKFLOW_PROPOSAL_v0_1.json
-          grep -q '"operator_decision_required": true' docs/releases/development-acceleration-v0-1/da-g6/DA_G6_GATE_PACKET.json
-          grep -q '"default_workflow_active": false' docs/releases/development-acceleration-v0-1/da-g6/DA_G6_GATE_PACKET.json
-          grep -q '"retirement_active": false' docs/releases/development-acceleration-v0-1/da-g6/DA_G6_GATE_PACKET.json
-          grep -q 'NON_DESTRUCTIVE_RETIRED_NON_AUTHORITATIVE' registries/development/OVC_DEVELOPMENT_ACCELERATION_DEFAULT_WORKFLOW_PROPOSAL_v0_1.json
-          ! grep -R -E '"default_workflow_active": true|"retirement_active": true' \
-            contracts/development/OVC_DEVELOPMENT_ACCELERATION_DEFAULT_WORKFLOW_ADOPTION_PROPOSAL_v0_1.md \
-            schemas/development/default_workflow_adoption_profile_v0_1.schema.json \
+          profile=registries/development/OVC_DEVELOPMENT_ACCELERATION_DEFAULT_WORKFLOW_PROPOSAL_v0_1.json
+          gate=docs/releases/development-acceleration-v0-1/da-g6/DA_G6_GATE_PACKET.json
+          grep -q '"status": "PENDING_OPERATOR_DA_G6"' "$profile"
+          grep -q '"active": false' "$profile"
+          grep -q 'sealed_candidate_two_phase_gate' "$profile"
+          grep -q 'atomic_git_transaction_and_head_budget' "$profile"
+          grep -q 'one_active_pr_programme_lease' "$profile"
+          grep -q 'required_check_provenance_and_ruleset_health' "$profile"
+          grep -q 'canonical_required_pr_runtime' "$profile"
+          grep -q '"python": "3.11"' "$profile"
+          grep -q '"operator_decision_required": true' "$gate"
+          grep -q '"default_workflow_active": false' "$gate"
+          grep -q '"retirement_active": false' "$gate"
+          grep -q '"predecessor_resolution": "MERGED"' "$gate"
+          ! grep -R -E '"default_workflow_active": true|"retirement_active": true|"active": true' \
             registries/development/OVC_DEVELOPMENT_ACCELERATION_DEFAULT_WORKFLOW_PROPOSAL_v0_1.json \
-            docs/releases/development-acceleration-v0-1/da-g6 \
-            scripts/development/validate_da_g6.py \
-            tests/development/test_da_g6.py
+            docs/releases/development-acceleration-v0-1/da-g6/DA_G6_GATE_PACKET.json \
+            docs/releases/development-acceleration-v0-1/da-g6/DA_G6_QA_PACKET.json \
+            docs/releases/development-acceleration-v0-1/da-g6/DA_G6_OPERATOR_DECISION_REQUEST.json
+
+# The canonical complete repository suite remains supplied once by .github/workflows/tests.yml.
