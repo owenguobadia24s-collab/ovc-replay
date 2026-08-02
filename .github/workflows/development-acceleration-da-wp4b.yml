@@ -68,5 +68,5 @@ jobs:
           grep -q 'PROHIBITED_TO_BOT' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
           grep -q 'merge_performed = $false' scripts/development/run_da_receipt_bot.ps1
           grep -q 'approval_performed = $false' scripts/development/run_da_receipt_bot.ps1
-          ! grep -E '/merges([?"'"']|$)|/reviews([?"'"']|$)|git[[:space:]]+(push|merge|reset)' scripts/development/run_da_receipt_bot.ps1
+          ! grep -E "/merges|/reviews|git[[:space:]]+(push|merge|reset)" scripts/development/run_da_receipt_bot.ps1
           ! grep -R -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/receipt_bot.py
