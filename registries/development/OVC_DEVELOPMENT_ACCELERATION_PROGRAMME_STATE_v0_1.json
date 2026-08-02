@@ -3,42 +3,24 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "plan_id": "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "programme_status": "BLOCKED",
+  "programme_status": "GATE_READY",
   "current_packet": "DA-WP4B",
   "current_gate": "DA-G4B",
-  "operator_decision_required": false,
-  "operator_decision_id": "DA-G4.OPERATOR.PASS.20260801T172600Z",
-  "operator_decision_history": [
-    "DA-G0.OPERATOR.PASS.20260801T151200Z",
-    "DA-G4.OPERATOR.PASS.20260801T172600Z"
-  ],
+  "operator_decision_required": true,
+  "operator_decision_id": "DA-G4B.OPERATOR.PENDING",
+  "operator_decision_history": ["DA-G0.OPERATOR.PASS.20260801T151200Z", "DA-G4.OPERATOR.PASS.20260801T172600Z"],
   "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
   "branch": "build/ovc-dev-accel-receipt-bot",
-  "candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
+  "candidate_commit": "e3b59a0c5ee2a959706cb445126e5ec47ecaa453",
   "merge_commit": null,
   "open_concurrent_work": [
-    {
-      "pull_request": 202,
-      "programme_id": "PD-JUNE-FULL-MONTH-MDR",
-      "branch": "build/pd-june-fm-wp3-review-population",
-      "relationship": "NON_OVERLAPPING_DO_NOT_MUTATE"
-    },
-    {
-      "pull_request": 209,
-      "programme_id": "OVC-DEV-ACCEL-v0.1",
-      "branch": "build/ovc-dev-accel-receipt-bot",
-      "relationship": "DA-WP4B_PRESERVED_UNMERGED_ACTIVATION_BLOCKED"
-    },
-    {
-      "pull_request": 211,
-      "programme_id": "OVC-DEV-ACCEL-v0.1",
-      "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001",
-      "relationship": "DA-G4B_SHADOW_EVIDENCE_PRESERVE_OPEN_UNMERGED"
-    }
+    {"pull_request": 202, "programme_id": "PD-JUNE-FULL-MONTH-MDR", "branch": "build/pd-june-fm-wp3-review-population", "relationship": "NON_OVERLAPPING_DO_NOT_MUTATE"},
+    {"pull_request": 209, "programme_id": "OVC-DEV-ACCEL-v0.1", "branch": "build/ovc-dev-accel-receipt-bot", "relationship": "DA_G4B_GATE_READY_PRESERVE_UNMERGED"},
+    {"pull_request": 211, "programme_id": "OVC-DEV-ACCEL-v0.1", "branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001", "relationship": "DA_G4B_SHADOW_EVIDENCE_PRESERVE_OPEN_UNMERGED"}
   ],
   "authority": {
-    "tooling": "RECEIPT_BOT_IMPLEMENTATION_AND_SHADOW_CANDIDATE_QA_BLOCKED",
-    "test_selection": "SHADOW_PATH_BOUNDED",
+    "tooling": "RECEIPT_BOT_IMPLEMENTATION_QA_PASS_GATE_READY",
+    "test_selection": "FINAL_HEAD_PASS",
     "repository_bot_write": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_NOT_ACTIVE",
     "repository_bot_profile": "APPROVED_INACTIVE",
     "repository_bot_credential": "DEDICATED_REVOCABLE_GITHUB_APP_PROVISIONED_SHADOW_ONLY",
@@ -53,175 +35,16 @@
     "execution": "NONE"
   },
   "packets": [
-    {
-      "packet_id": "DA-00",
-      "status": "COMPLETED",
-      "prerequisites": ["DA-G0_OPERATOR_PASS"],
-      "authority_required": "OPERATOR_REQUIRED_COMPLETED",
-      "authority_delta": "REPOSITORY_RECORDS_ONLY",
-      "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41",
-      "branch": "build/ovc-dev-accel-baseline",
-      "candidate_commit": "d8a91e3937c369fc23bff6a89bbe5766657503e4",
-      "tests": ["DA-G0 workflow 30705908466 PASS", "generic tests workflow 30705908452 PASS"],
-      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_QA_PACKET.json",
-      "decision_record": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_OPERATOR_DECISION.json",
-      "merge_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0",
-      "blockers": [],
-      "next_packet": "DA-WP1"
-    },
-    {
-      "packet_id": "DA-WP1",
-      "status": "COMPLETED",
-      "prerequisites": ["DA-00_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE_COMPLETED",
-      "authority_delta": "LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS",
-      "baseline_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0",
-      "branch": "build/ovc-dev-accel-shared-services",
-      "candidate_commit": "603e95964155f43bc8e58d9cf70fa73c99d14e5e",
-      "tests": ["DA-G1 workflow 30706417632 PASS", "generic tests workflow 30706417598 PASS"],
-      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_QA_PACKET.json",
-      "decision_record": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_DELEGATED_DECISION.json",
-      "merge_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
-      "blockers": [],
-      "next_packet": "DA-WP2"
-    },
-    {
-      "packet_id": "DA-WP2",
-      "status": "COMPLETED",
-      "prerequisites": ["DA-WP1_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE_COMPLETED",
-      "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD",
-      "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230",
-      "branch": "build/ovc-dev-accel-preflight",
-      "candidate_commit": "f512e5d7732ef6cae6f1fe2fda565d61718e2448",
-      "tests": ["DA-G2 workflow 30707597230 PASS", "complete repository suite within DA-G2 workflow 30707597230 PASS"],
-      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_QA_PACKET.json",
-      "decision_record": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_DELEGATED_DECISION.json",
-      "merge_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
-      "blockers": [],
-      "next_packet": "DA-WP3"
-    },
-    {
-      "packet_id": "DA-WP3",
-      "status": "COMPLETED",
-      "prerequisites": ["DA-WP1_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE_COMPLETED",
-      "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION",
-      "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491",
-      "branch": "build/ovc-dev-accel-test-profiles",
-      "candidate_commit": "724a6a456922a82986276b7e741b6a6279fb33d3",
-      "tests": ["DA-G3 workflow 30708172648 PASS", "tiered shadow workflow 30708172596 PASS"],
-      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_QA_PACKET.json",
-      "decision_record": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_DELEGATED_DECISION.json",
-      "merge_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
-      "blockers": [],
-      "next_packet": "DA-WP4"
-    },
-    {
-      "packet_id": "DA-WP4",
-      "status": "COMPLETED",
-      "prerequisites": ["DA-WP1_COMPLETED", "DA-WP3_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE_SHADOW_COMPLETED_THEN_OPERATOR_REQUIRED_DA_G4",
-      "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY",
-      "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95",
-      "branch": "build/ovc-dev-accel-closure",
-      "candidate_commit": "ab1bb583046ead8f27e7adbd154c60b91b98dd32",
-      "tests": ["DA-G4A workflow 30708852313 PASS", "tiered shadow workflow 30708852304 PASS"],
-      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json",
-      "decision_record": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_DELEGATED_DECISION.json",
-      "merge_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
-      "blockers": [],
-      "next_packet": "DA-G4"
-    },
-    {
-      "packet_id": "DA-G4",
-      "status": "COMPLETED",
-      "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED"],
-      "authority_required": "OPERATOR_REQUIRED_COMPLETED",
-      "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
-      "baseline_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1",
-      "branch": "gate/ovc-dev-accel-da-g4",
-      "candidate_commit": "50a07c1e2c1ff0515397c15ad3605a9ec5b6ee0a",
-      "tests": ["DA-G4 workflow 30710704212 PASS", "tiered workflow 30710704215 PASS", "tests workflow 30710704156 PASS"],
-      "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json",
-      "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
-      "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-      "blockers": [],
-      "next_packet": "DA-WP4B"
-    },
-    {
-      "packet_id": "DA-WP4B",
-      "status": "BLOCKED",
-      "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED", "DA-G4_GATE_RECORD_MERGED"],
-      "authority_required": "OPERATOR_APPROVED_BOUNDED_IMPLEMENTATION_WITH_CONDITIONAL_ACTIVATION",
-      "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY",
-      "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-      "branch": "build/ovc-dev-accel-receipt-bot",
-      "candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
-      "tests": [
-        "DA-WP4B shadow correction 30751814800 PASS",
-        "DA-WP4B implementation 30751814840 PASS",
-        "tiered workflow 30751814766 PASS",
-        "tests workflow 30751814813 PASS",
-        "shadow PR tests workflow 30752883818 PASS"
-      ],
-      "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json",
-      "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
-      "merge_commit": null,
-      "blockers": [
-        "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
-        "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
-      ],
-      "next_packet": "DA-WP5"
-    },
-    {
-      "packet_id": "DA-WP5",
-      "status": "PLANNED",
-      "prerequisites": ["DA-WP1_COMPLETED", "DA-WP2_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED", "DA-WP4B_COMPLETED"],
-      "authority_required": "AUTO_RATIFIABLE",
-      "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT",
-      "baseline_commit": null,
-      "branch": "build/ovc-dev-accel-evidence-export",
-      "candidate_commit": null,
-      "tests": [],
-      "qa_packet": null,
-      "decision_record": null,
-      "merge_commit": null,
-      "blockers": ["DA-WP4B_BLOCKED"],
-      "next_packet": "DA-G6"
-    }
+    {"packet_id": "DA-00", "status": "COMPLETED", "prerequisites": ["DA-G0_OPERATOR_PASS"], "authority_required": "OPERATOR_REQUIRED_COMPLETED", "authority_delta": "REPOSITORY_RECORDS_ONLY", "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41", "branch": "build/ovc-dev-accel-baseline", "candidate_commit": "d8a91e3937c369fc23bff6a89bbe5766657503e4", "tests": ["DA-G0 workflow 30705908466 PASS", "generic tests workflow 30705908452 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g0/DA_G0_OPERATOR_DECISION.json", "merge_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0", "blockers": [], "next_packet": "DA-WP1"},
+    {"packet_id": "DA-WP1", "status": "COMPLETED", "prerequisites": ["DA-00_COMPLETED"], "authority_required": "AUTO_RATIFIABLE_COMPLETED", "authority_delta": "LOCAL_COMPUTE_AND_GENERATED_COMPACT_RECORDS", "baseline_commit": "2baa3029160cbb1390bfd335d78ac0d573ed5ab0", "branch": "build/ovc-dev-accel-shared-services", "candidate_commit": "603e95964155f43bc8e58d9cf70fa73c99d14e5e", "tests": ["DA-G1 workflow 30706417632 PASS", "generic tests workflow 30706417598 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g1/DA_G1_DELEGATED_DECISION.json", "merge_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230", "blockers": [], "next_packet": "DA-WP2"},
+    {"packet_id": "DA-WP2", "status": "COMPLETED", "prerequisites": ["DA-WP1_COMPLETED"], "authority_required": "AUTO_RATIFIABLE_COMPLETED", "authority_delta": "FAIL_CLOSED_EXECUTION_GUARD", "baseline_commit": "90ea70f5ee9d706fc34c5186e182034a73e9a230", "branch": "build/ovc-dev-accel-preflight", "candidate_commit": "f512e5d7732ef6cae6f1fe2fda565d61718e2448", "tests": ["DA-G2 workflow 30707597230 PASS", "complete repository suite within DA-G2 workflow 30707597230 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g2/DA_G2_DELEGATED_DECISION.json", "merge_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491", "blockers": [], "next_packet": "DA-WP3"},
+    {"packet_id": "DA-WP3", "status": "COMPLETED", "prerequisites": ["DA-WP1_COMPLETED"], "authority_required": "AUTO_RATIFIABLE_COMPLETED", "authority_delta": "DETERMINISTIC_TEST_PROFILE_SELECTION", "baseline_commit": "19f8f25ee57e0d8e026162229aa235990bbd6491", "branch": "build/ovc-dev-accel-test-profiles", "candidate_commit": "724a6a456922a82986276b7e741b6a6279fb33d3", "tests": ["DA-G3 workflow 30708172648 PASS", "tiered shadow workflow 30708172596 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g3/DA_G3_DELEGATED_DECISION.json", "merge_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95", "blockers": [], "next_packet": "DA-WP4"},
+    {"packet_id": "DA-WP4", "status": "COMPLETED", "prerequisites": ["DA-WP1_COMPLETED", "DA-WP3_COMPLETED"], "authority_required": "AUTO_RATIFIABLE_SHADOW_COMPLETED_THEN_OPERATOR_REQUIRED_DA_G4", "authority_delta": "DRY_RUN_CLOSURE_AND_RECEIPT_COMPARISON_ONLY", "baseline_commit": "51c066cd851f3a222dde04bdd5f2e9769afe7a95", "branch": "build/ovc-dev-accel-closure", "candidate_commit": "ab1bb583046ead8f27e7adbd154c60b91b98dd32", "tests": ["DA-G4A workflow 30708852313 PASS", "tiered shadow workflow 30708852304 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g4a/DA_G4A_DELEGATED_DECISION.json", "merge_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1", "blockers": [], "next_packet": "DA-G4"},
+    {"packet_id": "DA-G4", "status": "COMPLETED", "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED"], "authority_required": "OPERATOR_REQUIRED_COMPLETED", "authority_delta": "NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY", "baseline_commit": "a561f30506c02dd26175d4a4f9e821d3074735a1", "branch": "gate/ovc-dev-accel-da-g4", "candidate_commit": "50a07c1e2c1ff0515397c15ad3605a9ec5b6ee0a", "tests": ["DA-G4 workflow 30710704212 PASS", "tiered workflow 30710704215 PASS", "tests workflow 30710704156 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_QA_PACKET.json", "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json", "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3", "blockers": [], "next_packet": "DA-WP4B"},
+    {"packet_id": "DA-WP4B", "status": "GATE_READY", "prerequisites": ["DA-WP4_COMPLETED", "DA-G4_OPERATOR_PASS_RECORDED", "DA-G4_GATE_RECORD_MERGED"], "authority_required": "OPERATOR_REQUIRED_DA_G4B", "authority_delta": "ACTIVATE_NARROW_REPOSITORY_BOT_PROPOSAL_BRANCH_WRITE_FOR_DEVELOPMENT_ACCELERATION_RECEIPTS_ONLY", "baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3", "branch": "build/ovc-dev-accel-receipt-bot", "candidate_commit": "e3b59a0c5ee2a959706cb445126e5ec47ecaa453", "tests": ["Development Acceleration DA-WP4B receipt-bot implementation 30755205496 PASS", "Development Acceleration DA-WP4B shadow correction 30755205526 PASS", "Development Acceleration DA-G4A closure shadow 30755205480 PASS", "OVC tiered test selection shadow 30755205470 PASS", "tests 30755205478 PASS"], "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json", "decision_record": null, "merge_commit": null, "blockers": [], "next_packet": "DA-WP5"},
+    {"packet_id": "DA-WP5", "status": "PLANNED", "prerequisites": ["DA-WP1_COMPLETED", "DA-WP2_COMPLETED", "DA-G4B_OPERATOR_PASS_RECORDED", "DA-WP4B_COMPLETED"], "authority_required": "AUTO_RATIFIABLE", "authority_delta": "COPY_ONLY_COMPACT_EVIDENCE_EXPORT", "baseline_commit": null, "branch": "build/ovc-dev-accel-evidence-export", "candidate_commit": null, "tests": [], "qa_packet": null, "decision_record": null, "merge_commit": null, "blockers": ["DA-G4B_OPERATOR_DECISION_PENDING"], "next_packet": "DA-G6"}
   ],
-  "operator_gate": {
-    "gate_id": "DA-G4",
-    "status": "COMPLETED",
-    "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json",
-    "merge_receipt": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json",
-    "recorded_decision": "PASS",
-    "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
-    "authority_active": false
-  },
-  "activation_gate": {
-    "gate_id": "DA-G4B",
-    "status": "BLOCKED",
-    "tested_candidate_commit": "343015c8ced74033a1547b5a5699064d62087ea9",
-    "activation_evidence": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json",
-    "blocker_record": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_BLOCKER_RECORD.json",
-    "shadow_external_audit": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
-    "shadow_qa_review": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_QA_REVIEW.json",
-    "shadow_pull_request": 211,
-    "shadow_status": "PASS_CANDIDATE_OPEN_UNMERGED",
-    "tests": [
-      "DA-WP4B shadow correction 30751814800 PASS",
-      "DA-WP4B implementation 30751814840 PASS",
-      "tiered workflow 30751814766 PASS",
-      "tests workflow 30751814813 PASS",
-      "shadow PR tests workflow 30752883818 PASS"
-    ],
-    "blockers": [
-      "MAIN_BRANCH_PROTECTION_RULESET_EXPORT_NOT_AVAILABLE_FOR_INDEPENDENT_REPRODUCTION",
-      "PR209_FINAL_HEAD_CI_PENDING_AFTER_EVIDENCE_RECORD_UPDATE"
-    ],
-    "authority_active": false
-  },
-  "next_action": "VERIFY_PR209_FINAL_HEAD_CI_AND_OBTAIN_EXACT_RULESET_EXPORT"
+  "operator_gate": {"gate_id": "DA-G4", "status": "COMPLETED", "decision_record": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_OPERATOR_DECISION.json", "merge_receipt": "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json", "recorded_decision": "PASS", "merge_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3", "authority_active": false},
+  "activation_gate": {"gate_id": "DA-G4B", "status": "GATE_READY", "tested_candidate_commit": "e3b59a0c5ee2a959706cb445126e5ec47ecaa453", "gate_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_GATE_PACKET.json", "decision_request": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION_REQUEST.json", "activation_evidence": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_ACTIVATION_EVIDENCE.json", "qa_packet": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_WP4B_QA_PACKET.json", "shadow_pull_request": 211, "shadow_status": "PASS_OPEN_UNMERGED", "ruleset_sha256": "ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4", "tests": ["Development Acceleration DA-WP4B receipt-bot implementation 30755205496 PASS", "Development Acceleration DA-WP4B shadow correction 30755205526 PASS", "Development Acceleration DA-G4A closure shadow 30755205480 PASS", "OVC tiered test selection shadow 30755205470 PASS", "tests 30755205478 PASS"], "blockers": [], "operator_decision_required": true, "recommended_decision": "PASS", "operator_command": "OVC APPROVE DA-G4B PASS", "authority_active": false},
+  "next_action": "STOP_OPERATOR_DA_G4B_DECISION"
 }
