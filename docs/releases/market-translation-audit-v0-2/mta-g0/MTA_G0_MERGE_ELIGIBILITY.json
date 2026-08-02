@@ -3,7 +3,7 @@
   "gate_id": "MTA-G0",
   "programme_id": "OVC-MTA-v0.2",
   "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
-  "source_head": "bf1acdde1b368af899750ae211f8b71aa6919b5e",
+  "source_head": "d9f8efca1865fabb640f3c07e4ae87db62f6b271",
   "branch_creation_base_main": "544dc2f6477ce415321f9419a62586fcffa0d02c",
   "base_main": "eaefbf55d1702d689d59765558af65e87c0b37fc",
   "replacement_branch": "gate/mta-g0-ratification-resume",
@@ -11,15 +11,19 @@
   "replacement_pull_request": 216,
   "required_status_checks": ["tests", "OVC tiered test selection shadow"],
   "tests": [
-    {"workflow": "Market Translation Audit MTA-G0 gate readiness", "run_id": 30760300813, "result": "PASS"},
-    {"workflow": "tests", "run_id": 30760300767, "result": "PASS"},
-    {"workflow": "OVC tiered test selection shadow", "run_id": 30760300791, "profile": "FINAL_HEAD", "result": "PASS"}
+    {"workflow": "Market Translation Audit MTA-G0 gate readiness", "run_id": 30760491291, "result": "PASS"},
+    {"workflow": "tests", "run_id": 30760491281, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30760491128, "profile": "FINAL_HEAD", "result": "PASS"},
+    {"workflow": "reopened Market Translation Audit MTA-G0 gate readiness", "run_id": 30760770465, "result": "PASS"},
+    {"workflow": "reopened tests", "run_id": 30760770405, "result": "PASS"},
+    {"workflow": "reopened OVC tiered test selection shadow", "run_id": 30760770440, "profile": "FINAL_HEAD", "result": "PASS"}
   ],
   "qa": "PASS",
-  "warnings_blocking": false,
+  "warnings_blocking": true,
   "unresolved_reviews": 0,
   "reserved_authority_delta": "NONE",
-  "ruleset_resolution": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json",
-  "rollback": "Revert only the bounded squash merge through a new non-destructive commit; preserve decisions and evidence.",
-  "status": "ELIGIBLE"
+  "merge_attempt_result": "HTTP_405_TWO_OF_TWO_REQUIRED_STATUS_CHECKS_EXPECTED",
+  "blocker": "docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json",
+  "rollback": "No destructive rollback. Preserve the open PR, branches, decisions and evidence.",
+  "status": "BLOCKED_EXTERNAL_RULESET_ENFORCEMENT"
 }
