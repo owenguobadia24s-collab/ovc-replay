@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-mta-g0-merge-receipt/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "gate_id": "MTA-G0",
+  "operator_decision_id": "MTA-G0.OPERATOR.PASS.20260802T145100Z",
+  "transport_history": {
+    "preserved_prs": [210, 216],
+    "final_pull_request": 219,
+    "final_branch": "gate/mta-g0-ratification-final",
+    "final_head_sha": "da6e33f67a5b978e57c3ff99e35b29335823115f",
+    "base_main_sha": "fed2a3c260c24ffcb5d073ccdf51987800d26f22"
+  },
+  "required_checks": [
+    {"context":"tests","run_id":30763102211,"result":"PASS"},
+    {"context":"OVC tiered test selection shadow","run_id":30763102234,"profile":"FINAL_HEAD","result":"PASS"},
+    {"context":"Market Translation Audit MTA-G0 gate readiness","run_id":30763102204,"result":"PASS"}
+  ],
+  "merge_method": "SQUASH",
+  "merge_commit": "eacf7a71e6242ee9adf5206b5e21e7ed66e1d85d",
+  "merged_at": "2026-08-02T19:23:21Z",
+  "decision": "COMPLETED",
+  "authority_delta": "RATIFY_AUDIT_ONLY_PROGRAMME_AND_EXACT_G0_CONTROLS",
+  "downstream_authority_created": false,
+  "next_packet": "MTA-WP1",
+  "rollback": "Revert only through a new non-destructive commit; preserve operator decisions, blocker history, branches, PRs and evidence."
+}
