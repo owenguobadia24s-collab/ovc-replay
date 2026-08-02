@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-mta-wp1-registry-fixtures/v1",
+  "valid_attempts": [
+    {"status":"EVALUATED_FIRED","reason_code":null},
+    {"status":"EVALUATED_NOT_FIRED","reason_code":null},
+    {"status":"NOT_EVALUATED_OUT_OF_SCOPE","reason_code":"OUTSIDE_JUNE_TARGET"},
+    {"status":"NOT_EVALUABLE_SOURCE_MISSING","reason_code":"SOURCE_INTERVAL_MISSING"},
+    {"status":"NOT_EVALUABLE_PARENT_MISSING","reason_code":"PARENT_STATE_MISSING"},
+    {"status":"NOT_EVALUABLE_AXIS_MISSING","reason_code":"LOCATION_NOT_EVALUABLE"},
+    {"status":"NOT_EVALUABLE_HISTORY_INSUFFICIENT","reason_code":"HISTORY_LENGTH_INSUFFICIENT"},
+    {"status":"NOT_EVALUABLE_GAP_OR_RESET","reason_code":"PROVIDER_GAP"},
+    {"status":"CONFLICT","reason_code":"AXIS_CONFLICT"},
+    {"status":"CENSORED","reason_code":"TARGET_BOUNDARY_CENSORING"},
+    {"status":"QUARANTINED","reason_code":"SCHEMA_OR_HASH_FAILURE"}
+  ],
+  "invalid_attempts": [
+    {"id":"SILENT_NEUTRALISATION","status":"EVALUATED_NOT_FIRED","reason_code":"LOCATION_NOT_EVALUABLE","expected_error":"EVALUATED_ATTEMPT_HAS_REASON"},
+    {"id":"MISSING_REASON","status":"NOT_EVALUABLE_AXIS_MISSING","reason_code":null,"expected_error":"NON_EVALUATED_ATTEMPT_MISSING_REASON"},
+    {"id":"WRONG_REASON_FAMILY","status":"NOT_EVALUABLE_PARENT_MISSING","reason_code":"LOCATION_NOT_EVALUABLE","expected_error":"STATUS_REASON_MISMATCH"},
+    {"id":"UNKNOWN_REASON","status":"QUARANTINED","reason_code":"UNKNOWN_CODE","expected_error":"UNKNOWN_REASON_CODE"},
+    {"id":"UNKNOWN_STATUS","status":"NEUTRAL","reason_code":null,"expected_error":"UNKNOWN_COMPUTABILITY_STATUS"}
+  ],
+  "valid_amendment": {
+    "amendment_id":"MTA.REGISTRY_AMENDMENT.FIXTURE_VALID_001",
+    "created_at":"2026-08-02T19:30:00Z",
+    "materiality":"MATERIAL_MEANING_OR_ROUTING",
+    "prior_registry_version":"0.1",
+    "new_registry_version":"0.2",
+    "changes":[{"entry_id":"MTA.MARKER_FUNCTION.BOUNDARY_ZONE_ENTRY.v1","operation":"SUPERSEDE","prior_sha256":"1111111111111111111111111111111111111111111111111111111111111111","new_sha256":"2222222222222222222222222222222222222222222222222222222222222222","summary":"Fixture-only changed routing definition."}],
+    "rationale":"Exercise mandatory operator acknowledgement and rerun controls.",
+    "evidence_refs":["FIXTURE:EVIDENCE:001"],
+    "affected_packets":["MTA-WP5","MTA-WP6"],
+    "rerun_required":true,
+    "operator_acknowledgement_required":true,
+    "supersession_map":[{"prior_id":"MTA.MARKER_FUNCTION.BOUNDARY_ZONE_ENTRY.v1","new_id":"MTA.MARKER_FUNCTION.BOUNDARY_ZONE_ENTRY.v2"}],
+    "status":"ACKNOWLEDGEMENT_REQUIRED"
+  },
+  "invalid_amendments": [
+    {"id":"SAME_VERSION","overrides":{"new_registry_version":"0.1"},"expected_error":"AMENDMENT_REUSES_REGISTRY_VERSION"},
+    {"id":"NO_OPERATOR_ACK","overrides":{"operator_acknowledgement_required":false},"expected_error":"MATERIAL_AMENDMENT_WITHOUT_OPERATOR_ACK"},
+    {"id":"NO_RERUN","overrides":{"rerun_required":false},"expected_error":"MATERIAL_AMENDMENT_WITHOUT_RERUN"},
+    {"id":"EMPTY_EVIDENCE","overrides":{"evidence_refs":[]},"expected_error":"AMENDMENT_EVIDENCE_EMPTY"}
+  ]
+}
