@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-mta-g0-operator-decision/v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "decision_id",
+    "gate_id",
+    "programme_id",
+    "decision",
+    "decision_authority",
+    "operator_command",
+    "subdecisions",
+    "authority_active",
+    "downstream_authority_created",
+    "retained_denials",
+    "rollback"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-mta-g0-operator-decision/v1"},
+    "decision_id": {"type": "string", "minLength": 1},
+    "gate_id": {"const": "MTA-G0"},
+    "programme_id": {"const": "OVC-MTA-v0.2"},
+    "decision": {"enum": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"]},
+    "decision_authority": {"const": "OPERATOR"},
+    "operator_command": {"const": "OVC APPROVE MTA-G0 PASS"},
+    "subdecisions": {"type": "object"},
+    "authority_active": {"const": true},
+    "authority_scope": {"const": "AUDIT_ONLY_READ_AND_DETERMINISTIC_DERIVATION"},
+    "downstream_authority_created": {"const": false},
+    "retained_denials": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "rollback": {"type": "string", "minLength": 1}
+  }
+}

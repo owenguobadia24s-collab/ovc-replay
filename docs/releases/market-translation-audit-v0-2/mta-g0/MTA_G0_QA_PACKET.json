@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-mta-g0-qa-packet/v1",
+  "gate_id": "MTA-G0",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_version": "0.2",
+  "plan_baseline_commit": "d8a7f07f5abe376b917cf6f95f6e9ccc1864b7c3",
+  "branch_creation_base_commit": "544dc2f6477ce415321f9419a62586fcffa0d02c",
+  "replacement_pull_request_base_commit": "eaefbf55d1702d689d59765558af65e87c0b37fc",
+  "candidate_branch": "gate/mta-g0-ratification-resume",
+  "tested_candidate_commit": "d9f8efca1865fabb640f3c07e4ae87db62f6b271",
+  "status": "PASS_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT",
+  "checks": [
+    {"id": "MTA-Q-G0-PLAN", "status": "PASS", "evidence": "operator-ratified plan and source hash preserved"},
+    {"id": "MTA-Q-G0-RULESET-BYTES", "status": "PASS", "evidence": "active ruleset bytes and displayed required contexts are reproducible"},
+    {"id": "MTA-Q-G0-CAPACITY", "status": "PASS", "evidence": "four-hour and 10GB contract preserved"},
+    {"id": "MTA-Q-G0-CLUSTERS", "status": "PASS", "evidence": "exactly three frozen variants preserved"},
+    {"id": "MTA-Q-G0-AUTHORITY", "status": "PASS", "evidence": "audit-only authority; all selector, Validation and downstream denials preserved"},
+    {"id": "MTA-Q-G0-MTA-WORKFLOW", "status": "PASS", "evidence": "runs 30760491291 and 30760770465 passed"},
+    {"id": "MTA-Q-G0-GENERIC", "status": "PASS", "evidence": "runs 30760491281 and 30760770405 passed"},
+    {"id": "MTA-Q-G0-TIERED", "status": "PASS", "evidence": "runs 30760491128 and 30760770440 passed FINAL_HEAD"},
+    {"id": "MTA-Q-G0-REVIEWS", "status": "PASS", "evidence": "zero unresolved review threads and blocking reviews"},
+    {"id": "MTA-Q-G0-RULESET-ENFORCEMENT", "status": "BLOCKED", "evidence": "GitHub merge API rejects both passing merge candidates with `2 of 2 required status checks are expected`"}
+  ],
+  "capacity": {
+    "expected_runtime_s": 60,
+    "actual_runtime_s": 3,
+    "max_runtime_s": 14400,
+    "expected_retained_bytes": 250000,
+    "max_retained_bytes": 10737418240,
+    "state": "WITHIN_CONTRACT"
+  },
+  "warnings": [
+    "External WP3 package byte hashes remain accepted from the operator-ratified G0 record and are not rehashed by this repository-only packet.",
+    "GitHub ruleset source-identity binding remains unavailable through the connector."
+  ],
+  "unresolved_issues": ["MTA-G0-BLOCK-002-CHECKS-PASS-RULESET-STILL-EXPECTED"],
+  "recommendation": "PASS_MERGE_BLOCKED_EXTERNAL_RULESET_ENFORCEMENT"
+}
