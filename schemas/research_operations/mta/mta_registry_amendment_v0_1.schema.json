@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/mta/mta_registry_amendment_v0_1.schema.json",
+  "title": "OVC MTA Registry Amendment v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "amendment_id",
+    "created_at",
+    "materiality",
+    "prior_registry_version",
+    "new_registry_version",
+    "changes",
+    "rationale",
+    "evidence_refs",
+    "affected_packets",
+    "rerun_required",
+    "operator_acknowledgement_required",
+    "status"
+  ],
+  "properties": {
+    "amendment_id": {"type": "string", "pattern": "^MTA\\.REGISTRY_AMENDMENT\\.[A-Z0-9_.-]+$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "materiality": {"enum": ["NON_MATERIAL_METADATA", "MATERIAL_MEANING_OR_ROUTING"]},
+    "prior_registry_version": {"type": "string", "minLength": 1},
+    "new_registry_version": {"type": "string", "minLength": 1},
+    "changes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["entry_id", "operation", "prior_sha256", "new_sha256", "summary"],
+        "properties": {
+          "entry_id": {"type": "string", "minLength": 1},
+          "operation": {"enum": ["ADD", "SUPERSEDE", "CORRECT_METADATA"]},
+          "prior_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "new_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "summary": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "rationale": {"type": "string", "minLength": 1},
+    "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "affected_packets": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "rerun_required": {"type": "boolean"},
+    "operator_acknowledgement_required": {"type": "boolean"},
+    "supersession_map": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["prior_id", "new_id"],
+        "properties": {
+          "prior_id": {"type": "string"},
+          "new_id": {"type": "string"}
+        }
+      }
+    },
+    "status": {"enum": ["DRAFT", "ACKNOWLEDGEMENT_REQUIRED", "APPROVED_FOR_RERUN", "COMPLETED", "REJECTED"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"materiality": {"const": "MATERIAL_MEANING_OR_ROUTING"}}},
+      "then": {"properties": {"operator_acknowledgement_required": {"const": true}, "rerun_required": {"const": true}}}
+    }
+  ]
+}
