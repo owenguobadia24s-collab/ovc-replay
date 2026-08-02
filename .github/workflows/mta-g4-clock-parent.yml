@@ -1,0 +1,60 @@
+name: Market Translation Audit MTA-G4 clock and parent context
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "contracts/research_operations/mta/OVC_MTA_CLOCK_PARENT_AUDIT_CONTRACT_v0_1.md"
+      - "schemas/research_operations/mta/mta_clock_parent_audit_v0_1.schema.json"
+      - "src/ovc/research_operations/mta/clock_parent_audit.py"
+      - "fixtures/research_operations/mta/MTA_WP4_PARENT_EVENT_FIXTURE_v0_1.json"
+      - "scripts/research_operations/validate_mta_wp4.py"
+      - "tests/research_operations/mta/test_mta_wp4.py"
+      - "docs/releases/market-translation-audit-v0-2/mta-g4/**"
+      - "docs/releases/market-translation-audit-v0-2/mta-g3/MTA_A3_MERGE_RECEIPT.json"
+      - "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json"
+      - ".github/workflows/mta-g4-clock-parent.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mta-g4:
+    name: mta-g4
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-WP4')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate MTA-WP4 compact and external binding
+        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp4.py
+      - name: Focused MTA-WP4 tests
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp4.py' -v
+      - name: Retained parent resolver and MTA assurance
+        run: |
+          PYTHONPATH=src python -m unittest tests.opt_b.c2.test_wp5_first_valid_parent -v
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp3.py
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp2.py
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp1.py
+          PYTHONPATH=src python -u scripts/research_operations/validate_mta_g0.py
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert audit-only authority
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('docs/releases/market-translation-audit-v0-2/mta-g4/MTA_WP4_CLOCK_PARENT_AUDIT_REFERENCE.json')
+          v=json.loads(p.read_text())
+          assert all(value == 0 for value in v['mismatch_counts'].values())
+          assert v['aggregate']['unknown_reset_count'] == 0
+          assert v['clock_change'] == 'DENIED'
+          assert v['continuity_rule_change'] == 'DENIED'
+          assert v['selector_change'] == 'DENIED'
+          assert v['validation_consumption'] == 'DENIED'
+          PY
