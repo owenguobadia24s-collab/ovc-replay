@@ -3,7 +3,7 @@
   "programme_id": "OVC-DEV-ACCEL-v0.1",
   "packet_id": "DA-WP4B",
   "gate_id": "DA-G4B",
-  "reviewed_at": "2026-08-02T15:28:00Z",
+  "reviewed_at": "2026-08-02T15:55:00Z",
   "external_audit": "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_SHADOW_EXTERNAL_AUDIT.json",
   "external_audit_sha256": "3d21a03d1772491da6cd1722712a816abd200b1f7f69fa76548ffa3b6a6476ea",
   "ruleset_export": "docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json",
@@ -12,53 +12,19 @@
   "shadow_branch": "bot/ovc-dev-accel-receipts/da-g4b-shadow-001",
   "shadow_commit": "0535db3ed4904fa9b2d1a4b6ba3deb9a338ab90e",
   "checks": [
-    {
-      "check_id": "DA-G4B-SHADOW-IDENTITY-01",
-      "result": "PASS",
-      "evidence": "PR 211 was created by the dedicated revocable GitHub App; operator_connector=false."
-    },
-    {
-      "check_id": "DA-G4B-SHADOW-PERMISSIONS-02",
-      "result": "PASS",
-      "evidence": "Exact approved permissions are contents write, pull requests write and metadata read."
-    },
-    {
-      "check_id": "DA-G4B-SHADOW-SCOPE-03",
-      "result": "PASS",
-      "evidence": "PR 211 contains one commit and one file at the allowlisted shadow receipt path."
-    },
-    {
-      "check_id": "DA-G4B-SHADOW-CONTENT-04",
-      "result": "PASS",
-      "evidence": "Target receipt SHA-256 matches the audit."
-    },
-    {
-      "check_id": "DA-G4B-SHADOW-DENIALS-05",
-      "result": "PASS",
-      "evidence": "Authority and production transport remain inactive; merge, approval, force-push and history rewrite are false; PR 211 remains open and unmerged."
-    },
-    {
-      "check_id": "DA-G4B-SHADOW-REPOSITORY-ASSURANCE-06",
-      "result": "PENDING_FINAL_HEAD",
-      "evidence": "Prior full repository assurance passed; final PR 209 head must pass after exact ruleset and validator updates."
-    },
-    {
-      "check_id": "DA-G4B-SHADOW-RULESET-07",
-      "result": "PASS",
-      "evidence": "Exact ruleset export hashes to ed6fe8eb2c030fc185adbf70ae4571fca3fee2f3fbab8002267c8da2b221c0c4, enforcement is active, main is included, bypass actors are empty and current_user_can_bypass is never."
-    }
+    {"check_id": "DA-G4B-SHADOW-IDENTITY-01", "result": "PASS"},
+    {"check_id": "DA-G4B-SHADOW-PERMISSIONS-02", "result": "PASS"},
+    {"check_id": "DA-G4B-SHADOW-SCOPE-03", "result": "PASS"},
+    {"check_id": "DA-G4B-SHADOW-CONTENT-04", "result": "PASS"},
+    {"check_id": "DA-G4B-SHADOW-DENIALS-05", "result": "PASS"},
+    {"check_id": "DA-G4B-SHADOW-REPOSITORY-ASSURANCE-06", "result": "PASS"},
+    {"check_id": "DA-G4B-SHADOW-RULESET-07", "result": "PASS"}
   ],
-  "verified_conditions": {
-    "DEDICATED_REVOCABLE_IDENTITY_PROVISIONED": "PASS",
-    "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS_CANDIDATE_PENDING_FINAL_HEAD_CI",
-    "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "PASS_EXACT_RULESET_EXPORT"
-  },
-  "blocking_issues": [
-    "PR209_FINAL_HEAD_CI_PENDING_AFTER_RULESET_AND_VALIDATOR_UPDATE"
-  ],
+  "verified_conditions": {"DEDICATED_REVOCABLE_IDENTITY_PROVISIONED": "PASS", "REAL_PROPOSAL_BRANCH_SHADOW_PASS": "PASS", "MAIN_BRANCH_PROTECTION_NO_BOT_BYPASS_VERIFIED": "PASS", "FINAL_HEAD_COMPLETE_REPOSITORY_ASSURANCE_PASS": "PASS"},
+  "blocking_issues": [],
   "warnings": [],
-  "qa_recommendation": "PASS_SHADOW_AND_RULESET_PENDING_FINAL_HEAD_CI",
+  "qa_recommendation": "PASS",
   "authority_active": false,
   "shadow_pr_must_remain_unmerged": true,
-  "rollback": "Keep the receipt-bot profile inactive; preserve PR 211 unmerged and revoke the GitHub App installation or key if final assurance fails."
+  "rollback": "Keep profile inactive until operator approval; preserve PR 211 unmerged."
 }
