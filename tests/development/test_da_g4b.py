@@ -86,7 +86,7 @@ class DevelopmentAccelerationG4BTests(unittest.TestCase):
             "force_push_performed = $false", "history_rewrite_performed = $false",
         ):
             self.assertIn(token, self.runner)
-        self.assertIsNone(re.search(r"/merges(?:\?|\"|'|$)|/reviews(?:\?|\"|'|$)|git\s+push|git\s+merge|reset\s+--hard", self.runner, re.I))
+        self.assertIsNone(re.search(r"/merges(?:\?|\"|'|$)|/reviews(?:\?|\"|'|$)|git\s+(?:push|merge|reset)", self.runner, re.I))
         self.assertNotIn("DELETE", self.runner)
         self.assertNotIn("force = $true", self.runner)
 
