@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/development/v0_2/ci_admission_baseline_v0_2.schema.json",
+  "title": "OVC DA2 CI admission baseline v0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "baseline_id",
+    "programme_id",
+    "packet_id",
+    "gate_id",
+    "operator_decision_id",
+    "status",
+    "authority_delta",
+    "ruleset",
+    "subjects",
+    "aggregate",
+    "reproducibility",
+    "qa_recommendation",
+    "workflow_mutation_authority",
+    "ruleset_mutation_authority",
+    "rollback",
+    "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-da2-ci-admission-baseline/v2"},
+    "baseline_id": {"const": "OVC.DA2.CI.ADMISSION.BASELINE.v2"},
+    "programme_id": {"const": "OVC-DEV-ACCEL-v0.2"},
+    "packet_id": {"const": "DA2-00"},
+    "gate_id": {"const": "DA2-G0"},
+    "operator_decision_id": {"const": "DA2-G0.OPERATOR.PASS.20260802T213600+0100"},
+    "status": {"const": "PASS"},
+    "authority_delta": {"type": "string"},
+    "ruleset": {"type": "object"},
+    "subjects": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["subject_id", "pull_request", "commit_sha", "runs", "timing_anomalies", "summary"]
+      }
+    },
+    "aggregate": {
+      "type": "object",
+      "required": ["run_count", "classification_counts", "unrelated_ratio", "unrelated_failed_runs", "duplicate_complete_suite_runs", "queue_seconds_total", "execution_seconds_total", "skipped_job_timing_anomalies", "required_runs"]
+    },
+    "reproducibility": {
+      "type": "object",
+      "required": ["zip_sha256", "zip_bytes", "manifest_sha256", "manifest_entries", "manifest_verified", "secret_scan", "raw_api_fields_complete", "required_source_identities_complete", "estimated_values_used", "skipped_job_inversions_preserved_as_not_evaluable", "external_reference"]
+    },
+    "qa_recommendation": {"const": "PASS"},
+    "workflow_mutation_authority": {"const": "DENIED"},
+    "ruleset_mutation_authority": {"const": "DENIED"},
+    "rollback": {"type": "string"},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
