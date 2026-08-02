@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-da2-g0-qa-packet/v2",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-00",
+  "gate_id": "DA2-G0",
+  "status": "PASS",
+  "qa_recommendation": "PASS",
+  "baseline_logical_sha256": "03295d1e0e9a9ac080649514d64e88df6dc144627399c0948d5d625ed371b8cc",
+  "external_zip_sha256": "182ae439c0c12f054438edee0c8d2c03e2db79713ae498dd41258c2b17147158",
+  "checks": [
+    {"check_id": "DA2-G0-MANIFEST", "result": "PASS", "evidence": "104 manifest entries match exact bytes and SHA-256; manifest SHA-256 verified."},
+    {"check_id": "DA2-G0-CREDENTIAL-SCAN", "result": "PASS", "evidence": "No GitHub/OpenAI/AWS token, authorization header or private-key patterns found."},
+    {"check_id": "DA2-G0-RUN-ACCOUNTING", "result": "PASS", "evidence": "91 of 91 workflow runs accounted exactly once."},
+    {"check_id": "DA2-G0-CLASSIFICATION", "result": "PASS", "evidence": "4 REQUIRED, 1 RELEVANT_OPTIONAL, 10 EXPECTED_SKIPPED and 76 UNRELATED."},
+    {"check_id": "DA2-G0-TIMING", "result": "PASS", "evidence": "Exact run queue/execution timestamps complete; two skipped-job inversions preserved as non-evaluable with no estimate."},
+    {"check_id": "DA2-G0-SOURCE-IDENTITY", "result": "PASS", "evidence": "Both required contexts resolve through check suites and check runs to github-actions app ID 15368."},
+    {"check_id": "DA2-G0-DETERMINISM", "result": "PASS", "evidence": "Repeated build over identical ZIP and registry reproduces logical SHA-256."},
+    {"check_id": "DA2-G0-CAPACITY", "result": "PASS", "evidence": "ZIP 150,580 bytes; compact baseline 38,607 bytes; both below limits."},
+    {"check_id": "DA2-G0-FOCUSED-TESTS", "result": "PASS", "evidence": "8 focused tests pass locally, including materialized packet validation."}
+  ],
+  "findings": {
+    "run_count": 91,
+    "unrelated_runs": 76,
+    "unrelated_ratio": 0.8351648351648352,
+    "unrelated_failed_runs": 4,
+    "duplicate_complete_suite_runs": 2,
+    "required_run_execution_seconds": [52.0, 25.0, 10.0, 21.0],
+    "subject_critical_path_seconds": {"PR218_DA_G6_SEALED": 457.0, "PR222_DA2_G0_CONTROL": 388.0},
+    "skipped_job_timing_anomalies": 2
+  },
+  "warnings": [],
+  "blocking_issues": [],
+  "workflow_files_changed": false,
+  "ruleset_changed": false,
+  "tests_weakened": false,
+  "rollback": "Supersede non-destructively; no operational mutation exists."
+}
