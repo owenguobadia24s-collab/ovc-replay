@@ -1,0 +1,24 @@
+schema: ovc-mta-cluster-variant-profile/v1
+profile_id: OVC_MTA_CLUSTER_VARIANT_PROFILE_v0_1
+source_interval: 15M
+variants:
+  - id: STRICT_OVERLAP
+    adjacency_intervals: 0
+    connection_rule: SOURCE_INTERVALS_MUST_INTERSECT
+    authority: SENSITIVITY_ONLY
+  - id: PRIMARY_OVERLAP_PLUS_1
+    adjacency_intervals: 1
+    adjacency_minutes: 15
+    connection_rule: INTERSECT_OR_SEPARATION_AT_MOST_ONE_SOURCE_INTERVAL
+    authority: AUTHORITATIVE_FOR_MTA_G6_FINAL_POPULATION_AND_G8
+  - id: PERMISSIVE_OVERLAP_PLUS_4
+    adjacency_intervals: 4
+    adjacency_minutes: 60
+    connection_rule: INTERSECT_OR_SEPARATION_AT_MOST_FOUR_SOURCE_INTERVALS
+    authority: SENSITIVITY_ONLY
+sensitivity:
+  robust_max_count_delta_pct: 25
+  material_sensitivity_count_delta_pct: 25
+  structurally_unstable_count_delta_pct: 50
+parameter_search: PROHIBITED
+primary_override_by_sensitivity: PROHIBITED
