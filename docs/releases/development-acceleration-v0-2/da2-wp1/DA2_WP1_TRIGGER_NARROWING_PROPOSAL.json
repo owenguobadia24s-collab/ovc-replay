@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-da2-wp1-trigger-narrowing-proposal/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-WP1",
+  "title": "One orchestrator and precise PR trigger admission",
+  "status": "PROPOSAL_ONLY_BLOCKED_PENDING_DA2_G0_COMPLETE_BASELINE",
+  "authority_required": "OPERATOR_REQUIRED_WORKFLOW_MUTATION",
+  "workflow_mutation_active": false,
+  "ruleset_mutation_active": false,
+  "observed_basis": {
+    "subjects": 2,
+    "runs": 91,
+    "unrelated_runs": 76,
+    "unrelated_ratio": 0.8351648351648352,
+    "duplicate_complete_suite_runs": 2,
+    "old_development_workflows_skipped_but_triggered_per_subject": 5
+  },
+  "proposed_changes": [
+    "Introduce one PR orchestration workflow selecting FAST, PACKET or FINAL_HEAD from changed files.",
+    "Retain exactly one canonical complete-suite check per final head.",
+    "Convert historical release and gate workflows to workflow_call, workflow_dispatch, precise path filters or push-to-main verification.",
+    "Add per-PR concurrency with cancel-in-progress true.",
+    "Keep tiered FAST and PACKET checks focused; prevent tiered FINAL_HEAD from duplicating the canonical complete suite.",
+    "Record mutable run IDs after candidate seal in a receipt/control branch.",
+    "Batch branch updates and push one coherent candidate.",
+    "Use one CI completion evaluator that inspects required checks once.",
+    "Add an admission preflight ensuring required contexts will trigger for the proposed changed paths.",
+    "Fail closed when required-check workflow path or app identity does not match the ruleset registry."
+  ],
+  "acceptance_preconditions": [
+    "DA2-G0 complete checksum-addressed raw baseline",
+    "Exact workflow paths and app identities",
+    "Measured critical path and queue times for every run",
+    "No changes to test assertions or application semantics",
+    "Operator approval before workflow or ruleset mutation"
+  ],
+  "rollback": "Restore prior workflow triggers through a new non-destructive commit; preserve baseline and all decisions."
+}
