@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-da2-g1-ruleset-reverification/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "related_programme_id": "OVC-PG-v0.2",
+  "related_packet": "PG-WP6",
+  "ruleset_id": 20229411,
+  "ruleset_name": "OVC main protection",
+  "source": "OPERATOR_SUPPLIED_GITHUB_REST_RESPONSE",
+  "source_file": "DA2_G1_RULESET_AFTER(1).json",
+  "source_bytes": 1204,
+  "source_sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d",
+  "accepted_repository_verification": {
+    "path": "docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_RULESET_VERIFICATION.json",
+    "evidence_sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d",
+    "exact_hash_match": true
+  },
+  "observed": {
+    "enforcement": "active",
+    "target": "branch",
+    "main_condition": "refs/heads/main",
+    "deletion_protection": true,
+    "non_fast_forward_protection": true,
+    "pull_request_required": true,
+    "allowed_merge_methods": [
+      "squash"
+    ],
+    "required_review_thread_resolution": true,
+    "strict_required_status_checks_policy": true,
+    "required_status_checks": [
+      {
+        "context": "OVC merge readiness",
+        "integration_id": 15368
+      }
+    ],
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "updated_at": "2026-08-03T12:00:10.081+01:00"
+  },
+  "checks": [
+    {
+      "check_id": "EXACT_ACCEPTED_EVIDENCE_HASH",
+      "result": "PASS"
+    },
+    {
+      "check_id": "ACTIVE_ENFORCEMENT",
+      "result": "PASS"
+    },
+    {
+      "check_id": "MAIN_INCLUDED",
+      "result": "PASS"
+    },
+    {
+      "check_id": "STRICT_POLICY",
+      "result": "PASS"
+    },
+    {
+      "check_id": "SOLE_REQUIRED_CONTEXT_AND_SOURCE",
+      "result": "PASS"
+    },
+    {
+      "check_id": "ZERO_BYPASS",
+      "result": "PASS"
+    },
+    {
+      "check_id": "SQUASH_ONLY",
+      "result": "PASS"
+    }
+  ],
+  "finding": "RULESET_CONFIGURATION_WAS_CORRECT; PR_BRANCH_WAS_ONE_MAIN_COMMIT_BEHIND_UNDER_STRICT_POLICY",
+  "corrective_action": "FAST_FORWARD_REFRESH_TO_LATEST_MAIN_THEN_RERUN_REQUIRED_CHECKS",
+  "corrective_result": "PASS_AND_MERGED",
+  "merge_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
+  "authority_effect": "NONE_BEYOND_REVERIFYING_EXISTING_DA2_PROTECTION",
+  "result": "PASS"
+}
