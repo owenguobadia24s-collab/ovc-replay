@@ -68,7 +68,7 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
             "OVC APPROVE PG-G6 CANON=PASS MIGRATION=PASS ENFORCEMENT=DEFER READ_ONLY_ROUTE=DEFER",
             packet["exact_recommended_operator_command"],
         )
-        self.assertIn("no separately validated active admission-enforcement consumer", " ".join(packet["decision_parts"]["ENFORCEMENT"]["defer_rationale"]))
+        self.assertIn("no separately validated active enforcement consumer", " ".join(packet["decision_parts"]["ENFORCEMENT"]["defer_rationale"]))
         self.assertIn("no validated network or Control Plane route implementation", " ".join(packet["decision_parts"]["READ_ONLY_ROUTE"]["defer_rationale"]))
 
     def test_migration_pass_preserves_provisional_uncertainty_and_coverage_warning(self) -> None:
@@ -92,7 +92,7 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         self.assertEqual("a639002606cf3842e510f3c9420738d0718d8590", receipt["merge_commit"])
         self.assertEqual("SUCCESS", receipt["exact_head_assurance"]["tests"]["conclusion"])
         self.assertEqual("SUCCESS", receipt["exact_head_assurance"]["merge_readiness"]["conclusion"])
-        self.assertEqual(128, receipt["exact_head_assurance"]["test_count"])
+        self.assertEqual(128, receipt["exact_head_assurance"]["tests"]["test_count"])
         self.assertEqual("DISABLED_PENDING_PG_G6", receipt["repository_evidence"]["adapter_status"])
 
     def test_adapter_remains_disabled_and_unregistered_at_gate(self) -> None:
