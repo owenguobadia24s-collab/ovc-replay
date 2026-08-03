@@ -18,12 +18,11 @@ def load_json(path: Path) -> dict:
 
 
 class ProgrammeGenesisG6Tests(unittest.TestCase):
-    def test_operator_four_part_decision_is_recorded(self) -> None:
+    def test_operator_four_part_decision_is_recorded_and_completed(self) -> None:
         state = load_json(STATE_PATH)
         decision = load_json(DECISION_PATH)
+        packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("APPROVED", state["status"])
-        self.assertEqual("PG-G6", state["current_packet"])
-        self.assertEqual("PG-G6", state["current_gate"])
         self.assertFalse(state["operator_decision_required"])
         self.assertEqual(
             "PG-G6.OPERATOR.CANON_PASS.MIGRATION_PASS.ENFORCEMENT_DEFER.READ_ONLY_ROUTE_DEFER.20260803T204000+0100",
@@ -37,6 +36,8 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         self.assertEqual("PASS", decision["decisions"]["MIGRATION"]["decision"])
         self.assertEqual("DEFER", decision["decisions"]["ENFORCEMENT"]["decision"])
         self.assertEqual("DEFER", decision["decisions"]["READ_ONLY_ROUTE"]["decision"])
+        self.assertEqual("COMPLETED", packets["PG-G6"]["status"])
+        self.assertEqual("af20e5d159729ba26b5af6d4026125ebbfe45269", packets["PG-G6"]["merge_commit"])
 
     def test_authority_delta_is_orthogonal_and_bounded(self) -> None:
         authority = load_json(STATE_PATH)["authority"]
@@ -45,6 +46,7 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         self.assertEqual("PROVISIONAL_NON_CANONICAL_ONLY", authority["canonical_migration_adoption"])
         self.assertEqual("DEFERRED_DISABLED", authority["admission_enforcement"])
         self.assertEqual("DEFERRED_DISABLED_UNREGISTERED", authority["control_plane_route"])
+        self.assertEqual("DENIED_PENDING_PG_G7", authority["candidate_persistence"])
         self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
         self.assertEqual("NONE", authority["market_model_selector_release_validation"])
         self.assertEqual("NONE", authority["agent_probability_risk_exposure_execution"])
@@ -65,8 +67,7 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         self.assertIn("READ_ONLY_ROUTE PASS does not activate", independence)
 
     def test_decision_preserves_provisional_migration_uncertainty(self) -> None:
-        decision = load_json(DECISION_PATH)
-        migration = decision["decisions"]["MIGRATION"]
+        migration = load_json(DECISION_PATH)["decisions"]["MIGRATION"]
         self.assertEqual("PROVISIONAL_NON_CANONICAL", migration["record_status"])
         self.assertEqual("NONE_BEYOND_PROGRAMME_OWNED_SOURCE", migration["authority_effect_on_imported_values"])
         self.assertEqual(14, migration["migration_warning_count_retained"])
@@ -102,17 +103,14 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         for part in ("CANON", "MIGRATION", "ENFORCEMENT", "READ_ONLY_ROUTE"):
             self.assertEqual(qa["qa_recommendation"][part], decision["decisions"][part]["decision"])
 
-    def test_pg_wp6_is_ready_only_for_disabled_build(self) -> None:
+    def test_pg_wp6_advancement_does_not_activate_upkeep(self) -> None:
         state = load_json(STATE_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
-        self.assertEqual("APPROVED", packets["PG-G6"]["status"])
-        self.assertEqual("READY", packets["PG-WP6"]["status"])
-        self.assertEqual(
-            ["PG-G6_CANON_PASS_MIGRATION_PASS_MERGED", "PG-G6_ENFORCEMENT_DEFERRED", "PG-G6_READ_ONLY_ROUTE_DEFERRED"],
-            packets["PG-WP6"]["prerequisites"],
-        )
-        self.assertIsNone(packets["PG-WP6"]["baseline_commit"])
-        self.assertEqual("AUTO_EXECUTABLE_BUILD_OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
+        self.assertEqual("APPROVED", packets["PG-WP6"]["status"])
+        self.assertEqual("af20e5d159729ba26b5af6d4026125ebbfe45269", packets["PG-WP6"]["baseline_commit"])
+        self.assertEqual("AUTO_EXECUTABLE_BUILD_COMPLETED_OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
+        self.assertEqual("READY", packets["PG-G7"]["status"])
+        self.assertEqual("OPERATOR_REQUIRED", packets["PG-G7"]["authority_required"])
         self.assertEqual("DENIED_PENDING_PG_G7", state["authority"]["automatic_upkeep"])
 
 
