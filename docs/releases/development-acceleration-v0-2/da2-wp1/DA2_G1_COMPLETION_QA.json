@@ -1,0 +1,27 @@
+{
+  "schema": "ovc-da2-g1-completion-qa/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-WP1",
+  "gate_id": "DA2-G1",
+  "status": "PASS",
+  "qa_recommendation": "PASS",
+  "operator_decision_id": "DA2-G1.OPERATOR.PASS.20260803T100600+0100",
+  "workflow_migration": {
+    "pull_request": 240,
+    "candidate_commit": "fa852b33c8dba2541f6cf72b7b92227304fc9996",
+    "merge_commit": "467193141ff0d202f43200ca4eef79c5e83c08fa",
+    "tests": [
+      {"workflow":"tests","run_id":30805933493,"result":"PASS","complete_suite_count":1},
+      {"workflow":"OVC tiered test selection shadow","run_id":30805933496,"profile":"FINAL_HEAD","result":"PASS"},
+      {"workflow":"OVC tiered test selection shadow","run_id":30805933496,"job":"OVC merge readiness","result":"PASS"}
+    ],
+    "review_threads": 0,
+    "blocking_reviews": 0
+  },
+  "ruleset_verification": "docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_RULESET_VERIFICATION.json",
+  "ruleset_result": "PASS",
+  "blocking_issues": [],
+  "warnings": ["The connector-capability probe branch record/da2-g1-ruleset-verification is SUPERSEDED_PRESERVED and must not be merged."],
+  "permanent_denials_preserved": true,
+  "rollback": "Restore workflow definitions and the previous required-context set through new non-destructive commits; preserve all decisions, evidence, superseded candidates and merge history."
+}
