@@ -22,15 +22,15 @@ class ProgrammeGenesisG0Tests(unittest.TestCase):
     def test_pg_g0_pass_is_recorded_and_releases_only_bounded_build(self) -> None:
         state = load_json(STATE_PATH)
         decision = load_json(DECISION_PATH)
+        packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("OVC-PG-v0.2", state["programme_id"])
         self.assertEqual("0.2", state["plan_version"])
-        self.assertFalse(state["operator_decision_required"])
-        self.assertEqual("PG-G0.OPERATOR.PASS.20260803T184400+0100", state["operator_decision_id"])
+        self.assertEqual("PG-G0.OPERATOR.PASS.20260803T184400+0100", decision["decision_id"])
         self.assertEqual("PASS", decision["decision"])
         self.assertEqual("OVC APPROVE PG-G0 PASS", decision["operator_command"])
         self.assertEqual(263, decision["approved_pull_request"])
-        packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("COMPLETED", packets["PG-00"]["status"])
+        self.assertEqual("docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_OPERATOR_DECISION.json", packets["PG-00"]["decision_record"])
         authority = state["authority"]
         self.assertEqual("RATIFIED", authority["programme_governance_design"])
         self.assertEqual("APPROVED_BOUNDED_IMPLEMENTATION", authority["programme_governance_build"])
