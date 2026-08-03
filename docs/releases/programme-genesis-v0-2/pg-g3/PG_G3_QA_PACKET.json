@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-programme-genesis-pg-g3-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP3",
+  "gate_id": "PG-G3",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "baseline_commit": "4f9dcc4e9bcc3a3a15fb3a6e56f368284ca0d7ec",
+  "candidate_branch": "build/pg-wp3-dependency-graph",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "checks": [
+    {"check_id": "PG-G3-TYPED-NODES-EDGES", "status": "PASS", "evidence": "Dependency graph schema and frozen edge registry constrain node and edge semantics."},
+    {"check_id": "PG-G3-HARD-CYCLE", "status": "PASS", "evidence": "Hard dependency cycles are canonically detected and quarantined; bounded self-graph has zero."},
+    {"check_id": "PG-G3-INFERRED-HARD", "status": "PASS", "evidence": "ADAPTER_INFERRED cannot satisfy a source-explicit hard prerequisite."},
+    {"check_id": "PG-G3-AUTHORITY-PATH", "status": "PASS", "evidence": "Graph edges require authority_effect NONE and non-NONE attempts quarantine."},
+    {"check_id": "PG-G3-IMPACT", "status": "PASS", "evidence": "Impact analysis returns deterministic upstream/downstream sets and no authority effect."},
+    {"check_id": "PG-G3-MIGRATION-BOUNDARY", "status": "PASS", "evidence": "Fixture and report set migration_enabled false and block PG-WP4 behind PG-G3A."},
+    {"check_id": "PG-G3-FOCUSED-TESTS", "status": "PENDING_CI", "evidence": "tests/governance/test_pg_wp3.py"},
+    {"check_id": "PG-G3-REPOSITORY-SUITE", "status": "PENDING_CI", "evidence": "GitHub Actions tests"},
+    {"check_id": "PG-G3-MERGE-READINESS", "status": "PENDING_CI", "evidence": "OVC merge readiness"}
+  ],
+  "warnings": [
+    "SELF_GRAPH_ONLY_NO_EXISTING_PROGRAMME_IMPORT",
+    "ZERO_HARD_CYCLES_APPLIES_ONLY_TO_BOUNDED_PRE_MIGRATION_GRAPH",
+    "FUTURE_MIGRATED_EDGES_REQUIRE_SOURCE_FAITHFUL_VALIDATION",
+    "MIGRATION_DENIED_PENDING_PG_G3A"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
+  "auto_ratifiable": true,
+  "next_boundary": "PG-G3A_OPERATOR_ACKNOWLEDGEMENT",
+  "rollback": "Discard and rebuild graph projections; preserve source records, validation report and all findings."
+}
