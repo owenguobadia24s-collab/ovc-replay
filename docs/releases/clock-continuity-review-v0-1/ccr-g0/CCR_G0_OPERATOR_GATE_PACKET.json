@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-clock-continuity-review-g0-gate-packet/v1",
+  "programme_id": "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+  "plan_id": "OVC-CLOCK-CONTINUITY-REVIEW-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "CCR-G0",
+  "title": "Clock and continuity review contract approval",
+  "status": "GATE_READY",
+  "operator_decision_required": true,
+  "source_decision": "MTA-G8.OPERATOR.MULTIPART.20260803T114000+0100",
+  "baseline_commit": "c5e34469e2f445bc596cd04a3808eb529dab3a36",
+  "current_authority": "PLAN_PREPARATION_ONLY",
+  "proposed_delta": "AUTHORISE_AUDIT_ONLY_EXECUTION_OF_CURRENT_CLOCK_RECONSTRUCTION_RESET_CENSUS_AND_THREE_FROZEN_SHADOW_VARIANTS",
+  "frozen_variants": [
+    "V0_CURRENT_STRICT_CONTINUITY_AUTHORITATIVE",
+    "V1_PLANNED_CLOSURE_CLASSIFIED_CONTINUITY_SHADOW_ONLY",
+    "V2_PROVIDER_GAP_SEGMENTED_CONTINUITY_SHADOW_ONLY"
+  ],
+  "acceptance_conditions": [
+    "CURRENT_2H_A_L_CLOCK_REMAINS_AUTHORITATIVE",
+    "NO_INTERPOLATION_OR_SYNTHETIC_BARS",
+    "NO_CLOCK_OR_CONTINUITY_ACTIVATION",
+    "EXACT_SOURCE_AND_IDENTITY_ACCOUNTING",
+    "FOUR_HOUR_AND_TEN_GB_PACKET_BOUNDS",
+    "CAPACITY_EXCEEDED_FAIL_CLOSED_PATH",
+    "FINAL_OPERATOR_GATE_BEFORE_ANY_IMPLEMENTATION_PLAN"
+  ],
+  "material_baseline_findings": {
+    "parent_usable_target_resolutions": 615,
+    "parent_target_resolutions": 4072,
+    "parent_usability_rate_percent": "15.103143",
+    "active_parent_range_target_states": 0,
+    "target_states_with_three_axes_not_evaluated": 3602,
+    "provider_gap_resets_per_side": 48
+  },
+  "authority_boundary": {
+    "clock_change": "DENIED",
+    "continuity_change": "DENIED",
+    "formula_threshold_selector_release_change": "DENIED",
+    "validation_consumption": "DENIED",
+    "publication": "DENIED",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "exact_operator_command": "OVC APPROVE CCR-G0 PASS",
+  "rollback": "Preserve the plan and gate packet; do not start CCR-WP1 unless PASS is recorded."
+}
