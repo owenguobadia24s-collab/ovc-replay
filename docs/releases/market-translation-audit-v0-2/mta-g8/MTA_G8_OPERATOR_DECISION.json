@@ -1,0 +1,96 @@
+{
+  "schema": "ovc-mta-g8-operator-decision/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "MTA-G8",
+  "status": "APPROVED",
+  "decision_id": "MTA-G8.OPERATOR.MULTIPART.20260803T114000+0100",
+  "recorded_at": "2026-08-03T11:40:00+01:00",
+  "operator_command": "OVC APPROVE MTA-G8 CLOCK=PASS C2E=PASS C2.5=PASS C3=DEFER",
+  "court_record_baseline_main": "5f17e8ca1c79116bd25fa39dd647b620735d6adc",
+  "gate_ready_lineage": {
+    "pull_request": 236,
+    "branch": "gate/mta-g8-consolidated-decision",
+    "head": "09af88f7cbf76c06828bd40f3a1525f5a4153f3d",
+    "base": "595dbcfeb951e1c1ab2570debd671b91ec5ec07b",
+    "status": "PRESERVED_SUPERSEDED_BY_CURRENT_MAIN_DECISION_TRANSPORT",
+    "assurance": [
+      {"workflow": "Market Translation Audit MTA-G8 consolidated gate readiness", "run_id": 30803652730, "result": "PASS"},
+      {"workflow": "tests", "run_id": 30803652831, "result": "PASS"},
+      {"workflow": "OVC tiered test selection shadow", "run_id": 30803652696, "profile": "FINAL_HEAD", "result": "PASS"}
+    ]
+  },
+  "decisions": {
+    "MTA-G8-CLOCK": {
+      "decision": "PASS",
+      "authority_delta": "AUTHORISE_PREPARATION_OF_SEPARATE_CLOCK_AND_CONTINUITY_REVIEW_PLAN_ONLY",
+      "activation": "DENIED"
+    },
+    "MTA-G8-C2E": {
+      "decision": "PASS",
+      "authority_delta": "AUTHORISE_PREPARATION_OF_NEUTRAL_C2E_EPISODE_LAYER_PLAN_WITH_OVERLAP_SENSITIVITY_SAFEGUARDS_ONLY",
+      "activation": "DENIED"
+    },
+    "MTA-G8-C2.5": {
+      "decision": "PASS",
+      "authority_delta": "AUTHORISE_PREPARATION_OF_ONE_BOUNDED_C2_5_EVENT_CONTRACT_DESIGN_PLAN_ONLY",
+      "bounded_rule_set": [
+        "BOUNDARY_ZONE_ENTRY",
+        "BREACH_ACTIVE",
+        "LONG_PERSISTENCE",
+        "REPEATED_SWITCHING"
+      ],
+      "excluded_rules": {
+        "RETURN_INSIDE": "DEFER_ZERO_FIRES",
+        "COMPRESSION_TO_DISPLACEMENT": "DEFER_ZERO_FIRES",
+        "LOCAL_PARENT_CONFLICT": "BLOCK_NOT_EVALUABLE",
+        "ALIGNMENT_GAINED": "BLOCK_NOT_EVALUABLE"
+      },
+      "promotion": "DENIED"
+    },
+    "MTA-G8-C3": {
+      "decision": "DEFER",
+      "authority_delta": "NONE",
+      "semantic_design": "DENIED",
+      "revisit_conditions": [
+        "C2_QUALITY_REMEDIATED_AND_REAUDITED",
+        "PARENT_CONTEXT_REMEDIATED_AND_REAUDITED",
+        "INDEPENDENCE_ROBUSTNESS_REASSESSED",
+        "RO4_COMPARABLE_EVIDENCE_AVAILABLE"
+      ]
+    }
+  },
+  "accepted_material_findings": {
+    "complete_c2_quality_states": 0,
+    "active_parent_range_target_states": 0,
+    "rule_attempts": 56928,
+    "not_evaluable_rule_attempts": 26516,
+    "parent_usable_target_resolutions": 615,
+    "parent_target_resolutions": 4072,
+    "eligible_windows": 7116,
+    "exact_occurrences": 1779,
+    "primary_connected_components": 20,
+    "robust_occurrences": 0,
+    "ro4_comparison": "NOT_DETERMINABLE"
+  },
+  "authorised_next_packets": [
+    "MTA-PLAN-CLOCK",
+    "MTA-PLAN-C2E",
+    "MTA-PLAN-C2.5"
+  ],
+  "deferred_packets": ["MTA-PLAN-C3"],
+  "authority_boundary": {
+    "clock_or_continuity_change": "DENIED",
+    "c2e_activation": "DENIED",
+    "c2_5_activation_or_promotion": "DENIED",
+    "c3_semantic_design_or_promotion": "DENIED",
+    "formula_threshold_selector_release_change": "DENIED",
+    "validation_consumption": "DENIED",
+    "r2_publication": "DENIED",
+    "probability_risk_exposure_execution": "NONE",
+    "agent_or_research_write": "DENIED"
+  },
+  "exact_work_after_decision": "Record this decision on current main, then prepare three separate governed implementation plans only. Do not implement or activate any downstream capability without a new operator gate.",
+  "rollback": "Supersede any prepared plan through a new immutable decision. Preserve this decision, the gate-ready PR lineage, all audit evidence, QA, tests and negative findings."
+}
