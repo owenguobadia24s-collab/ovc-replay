@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-programme-event-type-registry/v1",
+  "registry_id": "OVC-PG-EVENT-TYPE-REGISTRY-0.1",
+  "version": "0.1",
+  "status": "FROZEN_CANDIDATE",
+  "ordering": ["first_valid_at", "precedence", "event_id"],
+  "default_authority_effect": "NONE",
+  "event_types": [
+    {"event_type": "GENESIS_PROPOSED", "precedence": 10, "actor_classes": ["HUMAN_OPERATOR", "DELEGATED_AUTOMATION"], "accepted_decision_required": true, "authority_effects": ["NONE", "PROPOSED"]},
+    {"event_type": "GENESIS_ACCEPTED", "precedence": 20, "actor_classes": ["HUMAN_OPERATOR"], "accepted_decision_required": true, "authority_effects": ["GRANTED_BY_ACCEPTED_DECISION"]},
+    {"event_type": "PLAN_RATIFIED", "precedence": 30, "actor_classes": ["HUMAN_OPERATOR"], "accepted_decision_required": true, "authority_effects": ["GRANTED_BY_ACCEPTED_DECISION", "NONE"]},
+    {"event_type": "PACKET_STARTED", "precedence": 40, "actor_classes": ["HUMAN_OPERATOR", "DELEGATED_AUTOMATION", "REPOSITORY_EVENT"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "PACKET_IMPLEMENTED", "precedence": 50, "actor_classes": ["DELEGATED_AUTOMATION", "REPOSITORY_EVENT"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "QA_REVIEWED", "precedence": 60, "actor_classes": ["DELEGATED_AUTOMATION", "REPOSITORY_EVENT", "HUMAN_OPERATOR"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "GATE_READY", "precedence": 70, "actor_classes": ["DELEGATED_AUTOMATION", "REPOSITORY_EVENT"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "GATE_DECIDED", "precedence": 80, "actor_classes": ["HUMAN_OPERATOR", "DELEGATED_AUTOMATION"], "accepted_decision_required": true, "authority_effects": ["NONE", "GRANTED_BY_ACCEPTED_DECISION", "RESTRICTED_BY_ACCEPTED_DECISION", "RETIRED_BY_ACCEPTED_DECISION"]},
+    {"event_type": "PR_MERGED", "precedence": 90, "actor_classes": ["REPOSITORY_EVENT"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "BLOCKER_OPENED", "precedence": 100, "actor_classes": ["HUMAN_OPERATOR", "DELEGATED_AUTOMATION", "REPOSITORY_EVENT", "MIGRATION_ADAPTER"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "BLOCKER_CLOSED", "precedence": 110, "actor_classes": ["HUMAN_OPERATOR", "DELEGATED_AUTOMATION", "REPOSITORY_EVENT"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "STATE_SOURCE_CONFLICT", "precedence": 120, "actor_classes": ["DELEGATED_AUTOMATION", "MIGRATION_ADAPTER"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "STALE_PROJECTION", "precedence": 130, "actor_classes": ["DELEGATED_AUTOMATION", "MIGRATION_ADAPTER"], "accepted_decision_required": false, "authority_effects": ["NONE"]},
+    {"event_type": "MIGRATION_RECORDED", "precedence": 140, "actor_classes": ["MIGRATION_ADAPTER", "HUMAN_OPERATOR"], "accepted_decision_required": true, "authority_effects": ["NONE"]},
+    {"event_type": "PROGRAMME_COMPLETED", "precedence": 150, "actor_classes": ["HUMAN_OPERATOR", "DELEGATED_AUTOMATION"], "accepted_decision_required": true, "authority_effects": ["NONE"]},
+    {"event_type": "PROGRAMME_SUPERSEDED", "precedence": 160, "actor_classes": ["HUMAN_OPERATOR"], "accepted_decision_required": true, "authority_effects": ["RETIRED_BY_ACCEPTED_DECISION"]}
+  ],
+  "forbidden_event_behaviour": [
+    "OUTCOME_FIRST_RELABEL",
+    "SILENT_EVENT_REORDERING",
+    "EVENT_CREATES_PROGRAMME_WITHOUT_GENESIS_DECISION",
+    "PR_OR_TEST_EVENT_GRANTS_AUTHORITY",
+    "MIGRATION_EVENT_REMOVES_UNCERTAINTY",
+    "UPKEEP_EVENT_WRITES_MAIN_OR_MERGES"
+  ],
+  "activation_gate": "PG-G6",
+  "rollback": "Supersede the registry non-destructively. Rebuild projections from preserved accepted events."
+}
