@@ -5,14 +5,20 @@
   "plan_version": "0.2",
   "gate_id": "PG-G3A",
   "title": "Acknowledge dependency graph plausibility before migration",
-  "status": "PENDING_PG_G3_PASS_AND_MERGE",
-  "authority_required": "OPERATOR_REQUIRED_ACKNOWLEDGEMENT",
-  "baseline_commit": "4f9dcc4e9bcc3a3a15fb3a6e56f368284ca0d7ec",
-  "candidate_branch": "build/pg-wp3-dependency-graph",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "status": "APPROVED",
+  "authority_required": "OPERATOR_REQUIRED_COMPLETED",
+  "baseline_commit": "e3e6c12a293e0c1802cc2686678690d01318161b",
+  "candidate_branch": "gate/pg-g3a-graph-acknowledgement",
+  "approved_candidate_commit": "206ea2da78d08c5f2188ad4a083647ea1891fca1",
+  "final_decision_head": "PENDING_EXACT_HEAD",
   "completed_packets": ["PG-00", "PG-WP1", "PG-WP2", "PG-WP3"],
-  "current_authority": "TYPED_GRAPH_VALIDATION_AND_DERIVED_IMPACT_ANALYSIS_ONLY",
-  "proposed_delta": "ACKNOWLEDGE_GRAPH_PLAUSIBILITY_AND_RELEASE_SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_WORK_ONLY",
+  "pg_g3_merge_receipt": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json",
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_QA_PACKET.json",
+  "decision_record": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_OPERATOR_DECISION.json",
+  "decision": "ACKNOWLEDGE_CONTINUE",
+  "operator_command": "OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE",
+  "current_authority_before_decision": "TYPED_GRAPH_VALIDATION_AND_DERIVED_IMPACT_ANALYSIS_ONLY",
+  "approved_delta": "RELEASE_SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_WORK_ONLY",
   "graph_summary": {
     "scope": "PRE_MIGRATION_PROGRAMME_GENESIS_SELF_GRAPH",
     "nodes": 10,
@@ -27,42 +33,50 @@
     "duplicate_identities": 0,
     "authority_path_violations": 0
   },
-  "plausibility_points": [
-    "Dependency direction is dependent to prerequisite for REQUIRES, GOVERNED_BY and BLOCKED_BY.",
-    "PG-WP3 depends on the accepted PG-G2 decision; PG-G3A depends on PG-WP3; PG-WP4 is blocked by PG-G3A.",
-    "PRODUCES is informational and does not satisfy a prerequisite.",
-    "Every graph edge is authority-neutral; decisions remain explicit source nodes.",
-    "Hard cycles quarantine rather than being silently repaired or omitted.",
-    "Inferred edges cannot satisfy hard prerequisites."
+  "acknowledged_plausibility": [
+    "REQUIRES, GOVERNED_BY and BLOCKED_BY run dependent to prerequisite.",
+    "PRODUCES runs producer to output and remains informational.",
+    "Every graph edge is authority-neutral and decisions remain explicit source nodes.",
+    "Hard cycles quarantine and inferred edges cannot satisfy hard prerequisites.",
+    "The zero-cycle finding applies only to the bounded pre-migration self-graph."
   ],
-  "acceptance_conditions": [
-    "PG-G3_HAS_DELEGATED_PASS_AND_MERGED",
-    "EXACT_HEAD_TESTS_AND_MERGE_READINESS_PASS",
+  "accepted_conditions": [
+    "PG-G3_DELEGATED_PASS_MERGED_AT_E3E6C12A293E0C1802CC2686678690D01318161B",
+    "PG-G3_EXACT_HEAD_TESTS_AND_MERGE_READINESS_PASSED",
     "GRAPH_VALIDATION_REPORT_HAS_NO_BLOCKING_FINDINGS",
-    "OPERATOR_ACCEPTS_EDGE_DIRECTIONS_AND_HARDNESS_AS_PLAUSIBLE",
-    "OPERATOR_ACCEPTS_ZERO_HARD_CYCLE_RESULT_FOR_BOUNDED_SELF_GRAPH",
-    "OPERATOR_ACCEPTS_AUTHORITY_NEUTRAL_PATH_MODEL",
-    "MIGRATION_REMAINS_SOURCE_FAITHFUL_PROVISIONAL_AND_UNCERTAINTY_PRESERVING"
+    "MIGRATION_REMAINS_SOURCE_FAITHFUL_PROVISIONAL_AND_UNCERTAINTY_PRESERVING",
+    "FUTURE_MIGRATED_EDGES_AND_PROGRAMME_FACTS_ARE_NOT_PRE_ACCEPTED"
   ],
+  "tests": {
+    "pg_g3_exact_head_tests": {"run_id": 30841743173, "conclusion": "SUCCESS"},
+    "pg_g3_exact_head_merge_readiness": {"run_id": 30841743174, "conclusion": "SUCCESS"},
+    "pg_g3a_tested_head_tests": {"run_id": 30842268666, "conclusion": "SUCCESS"},
+    "pg_g3a_tested_head_merge_readiness": {"run_id": 30842268762, "conclusion": "SUCCESS"},
+    "final_decision_head_assurance": "PENDING"
+  },
+  "qa": {
+    "status": "PASS",
+    "recommendation": "ACKNOWLEDGE_CONTINUE",
+    "blocking_findings": 0,
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0
+  },
   "warnings": [
-    "ACKNOWLEDGEMENT_DOES_NOT_ACCEPT_ANY FUTURE_MIGRATED_EDGE_OR_PROGRAMME FACT",
-    "ZERO_CYCLE_RESULT_APPLIES_ONLY_TO_THE_BOUNDED_PRE_MIGRATION_SELF_GRAPH",
+    "ACKNOWLEDGEMENT_DOES_NOT_ACCEPT_FUTURE_MIGRATED_EDGE_OR_PROGRAMME_FACT",
     "EXISTING_PROGRAMME_SOURCE_GAPS_AND_CONFLICTS_MUST_REMAIN_VISIBLE",
+    "MIGRATION_OUTPUTS_REMAIN_PROVISIONAL_AND_NON_CANONICAL_UNTIL_PG_G6",
     "ADMISSION_ENFORCEMENT_CONTROL_PLANE_ROUTE_AND_UPKEEP_REMAIN_DISABLED"
   ],
   "unresolved_issues": [],
-  "changed_files": [
-    "contracts/governance/programme_genesis/DEPENDENCY_GRAPH_AND_IMPACT_CONTRACT_v0_1.md",
-    "schemas/governance/programme_genesis/dependency_graph_v0_1.schema.json",
-    "src/ovc/programme_genesis/graph.py",
-    "fixtures/governance/programme_genesis/valid_pg_dependency_graph_v0_1.json",
-    "tests/governance/test_pg_wp3.py",
-    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_GRAPH_VALIDATION_REPORT.json"
+  "reserved_authority_denials": [
+    "CANONICAL_MIGRATION_ADOPTION",
+    "ADMISSION_ENFORCEMENT",
+    "CONTROL_PLANE_ROUTE",
+    "AUTOMATIC_UPKEEP",
+    "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION",
+    "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
   ],
-  "external_artifacts": [],
-  "rollback": "Preserve all PG-G3 records, leave PG-WP4 blocked, disable graph consumers and supersede only through a later non-destructive decision.",
-  "recommended_decision": "ACKNOWLEDGE_CONTINUE_AFTER_PG_G3_PASS_MERGED",
-  "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
-  "exact_operator_command": "OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE",
-  "work_after_approval": "Create migration/pg-wp4-existing-programmes from lawful main; import source-faithfully with permanent migration uncertainty and no enforcement."
+  "rollback": "Preserve all PG-G3 and PG-G3A records, stop or supersede PG-WP4 non-destructively, retain every uncertainty marker, and never rewrite programme-owned state or accepted authority.",
+  "next_packet": "PG-WP4",
+  "work_after_approval": "Run final decision-head assurance, squash-merge PR 267, create migration/pg-wp4-existing-programmes from lawful main, and import source-faithfully with permanent migration uncertainty and no enforcement."
 }

@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-programme-genesis-pg-g3a-operator-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "PG-G3A",
+  "decision_id": "PG-G3A.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T194700+0100",
+  "decision": "ACKNOWLEDGE_CONTINUE",
+  "decided_at": "2026-08-03T19:47:00+01:00",
+  "operator": "HUMAN_OPERATOR",
+  "operator_command": "OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE",
+  "baseline_commit": "e3e6c12a293e0c1802cc2686678690d01318161b",
+  "approved_candidate_branch": "gate/pg-g3a-graph-acknowledgement",
+  "approved_candidate_commit": "206ea2da78d08c5f2188ad4a083647ea1891fca1",
+  "approved_pull_request": 267,
+  "accepted_evidence": {
+    "acknowledgement_packet": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_OPERATOR_ACKNOWLEDGEMENT_PACKET.json",
+    "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_QA_PACKET.json",
+    "graph_validation_report": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_GRAPH_VALIDATION_REPORT.json",
+    "pg_g3_merge_receipt": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json",
+    "tests": {"run_id": 30842268666, "conclusion": "SUCCESS"},
+    "merge_readiness": {"run_id": 30842268762, "conclusion": "SUCCESS"},
+    "blocking_findings": 0,
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0
+  },
+  "acknowledged_facts": [
+    "The bounded pre-migration Programme Genesis self-graph contains 10 nodes and 8 edges.",
+    "The bounded graph has zero hard cycles, inferred hard prerequisites, orphan endpoints, duplicate identities and graph authority violations.",
+    "REQUIRES, GOVERNED_BY and BLOCKED_BY run dependent to prerequisite; PRODUCES runs producer to output and is informational.",
+    "Graph edges remain authority-neutral and decisions remain explicit authority sources.",
+    "The zero-cycle and plausibility findings apply only to the bounded pre-migration self-graph."
+  ],
+  "authority_delta": {
+    "pg_wp4_source_faithful_provisional_migration": "APPROVED",
+    "migration_uncertainty": "MANDATORY_PERMANENT_VISIBILITY_UNTIL_NATIVE_GENESIS",
+    "future_migrated_programme_facts": "NOT_PRE_ACCEPTED",
+    "future_migrated_edges": "NOT_PRE_ACCEPTED",
+    "canonical_migration_adoption": "DENIED_PENDING_PG_G6",
+    "admission_enforcement": "DENIED_PENDING_PG_G6",
+    "control_plane_route": "DENIED_PENDING_PG_G6",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7",
+    "market_model_semantic_threshold_selector_release_validation_publication": "NONE",
+    "agent_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "conditions": [
+    "PG-WP4_IMPORTS_MUST_BE_SOURCE_FAITHFUL_AND_PROVISIONAL",
+    "UNKNOWN_INFERRED_STALE_CONFLICTING_OR_NON_REPRODUCIBLE_VALUES_REMAIN_EXPLICIT",
+    "PROGRAMME_OWNED_MACHINE_READABLE_STATE_REMAINS_AUTHORITATIVE",
+    "NO_MIGRATED_RECORD_OR_EDGE_BECOMES_CANONICAL_BY_IMPORT",
+    "NO_ADMISSION_ENFORCEMENT_OR_CONTROL_PLANE_ROUTE_BEFORE_PG_G6",
+    "NO_AUTOMATIC_UPKEEP_BEFORE_PG_G7",
+    "NO_RESERVED_MARKET_RELEASE_AGENT_OR_EXECUTION_AUTHORITY"
+  ],
+  "released_packet": "PG-WP4",
+  "next_action": "RUN_FINAL_DECISION_HEAD_ASSURANCE_SQUASH_MERGE_PR_267_AND_START_PG_WP4_FROM_LAWFUL_MAIN",
+  "rollback": "Preserve this acknowledgement and all PG-G3 evidence. Stop or supersede PG-WP4 non-destructively, retain every imported source and uncertainty marker, and never rewrite programme-owned state or accepted authority."
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-programme-genesis-pg-g3a-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "gate_id": "PG-G3A",
+  "status": "PASS",
+  "baseline_commit": "e3e6c12a293e0c1802cc2686678690d01318161b",
+  "candidate_branch": "gate/pg-g3a-graph-acknowledgement",
+  "tested_candidate_commit": "09f171db2770caae43916aa6cd7e3a79f322a5f1",
+  "checks": [
+    {"check_id": "PG-G3A-MERGE-RECEIPT", "status": "PASS", "evidence": "PG-G3 merge receipt binds PR #266, final candidate dae630a8dba8d46bd82bf7f22cac45a00b177781 and merge e3e6c12a293e0c1802cc2686678690d01318161b."},
+    {"check_id": "PG-G3A-GRAPH-LIMIT", "status": "PASS", "evidence": "The graph claim is explicitly limited to the 10-node/8-edge pre-migration self-graph."},
+    {"check_id": "PG-G3A-MIGRATION-DENIAL", "status": "PASS", "evidence": "Programme state and acknowledgement packet keep migration denied pending operator acknowledgement."},
+    {"check_id": "PG-G3A-NON-ACTIVATION", "status": "PASS", "evidence": "Admission enforcement, Control Plane route, upkeep and all reserved authority remain denied."},
+    {"check_id": "PG-G3A-FOCUSED-ASSURANCE", "status": "PASS", "evidence": "tests/governance/test_pg_g3a.py passed within the complete repository suite."},
+    {"check_id": "PG-G3A-REPOSITORY-SUITE", "status": "PASS", "evidence": "GitHub Actions tests run 30842141037 SUCCESS."},
+    {"check_id": "PG-G3A-MERGE-READINESS", "status": "PASS", "evidence": "OVC tiered test selection shadow / OVC merge readiness run 30842140980 SUCCESS."}
+  ],
+  "corrective_history": [
+    "Initial gate-head assurance exposed a stale PG-G0 regression assertion that assumed no later operator gate could be active.",
+    "The assertion was narrowed to immutable PG-G0 decision and packet evidence while PG-G3A retained its required current operator-decision state; all 108 tests then passed."
+  ],
+  "warnings": [
+    "ACKNOWLEDGEMENT_ACCEPTS_PLAUSIBILITY_ONLY_NOT_MIGRATED_FACTS",
+    "ZERO_CYCLES_APPLIES_ONLY_TO_PRE_MIGRATION_SELF_GRAPH",
+    "MIGRATION_OUTPUTS_REMAIN_PROVISIONAL_WITH_PERMANENT_UNCERTAINTY",
+    "PG_G6_AND_PG_G7_OPERATOR_BOUNDARIES_REMAIN"
+  ],
+  "blockers": [],
+  "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
+  "operator_decision_required": true,
+  "rollback": "Preserve all evidence and leave PG-WP4 blocked if acknowledgement is not granted."
+}
