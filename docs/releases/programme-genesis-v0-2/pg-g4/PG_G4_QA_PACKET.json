@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-programme-genesis-pg-g4-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP4",
+  "gate_id": "PG-G4",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "baseline_commit": "4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a",
+  "candidate_branch": "migration/pg-wp4-existing-programmes",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "checks": [
+    {"check_id": "PG-G4-SOURCE-DISCOVERY", "status": "PASS_DESIGN", "evidence": "Discovery is restricted to programme-state JSON records under registered roots and excludes native PG state."},
+    {"check_id": "PG-G4-SOURCE-IDENTITY", "status": "PASS_DESIGN", "evidence": "Every migration record binds repository-relative path and exact source SHA-256."},
+    {"check_id": "PG-G4-SOURCE-FAITHFULNESS", "status": "PASS_DESIGN", "evidence": "Preserved values are copied exactly and alias use is exposed in source_field_map."},
+    {"check_id": "PG-G4-NO-INFERENCE", "status": "PASS_DESIGN", "evidence": "inferred_fields is empty by default and schema-constrained to zero items."},
+    {"check_id": "PG-G4-UNCERTAINTY", "status": "PASS_DESIGN", "evidence": "Every non-native import carries visible permanent MIGRATION_UNCERTAINTY."},
+    {"check_id": "PG-G4-CONFLICT-LEDGER", "status": "PASS_DESIGN", "evidence": "Duplicate programme sources with divergent material fields produce blocking visible findings without repair."},
+    {"check_id": "PG-G4-REPOSITORY-CENSUS", "status": "PENDING_CI", "evidence": "Deterministic repository-wide migration build."},
+    {"check_id": "PG-G4-FOCUSED-TESTS", "status": "PENDING_CI", "evidence": "tests/governance/test_pg_wp4.py"},
+    {"check_id": "PG-G4-REPOSITORY-SUITE", "status": "PENDING_CI", "evidence": "GitHub Actions tests"},
+    {"check_id": "PG-G4-MERGE-READINESS", "status": "PENDING_CI", "evidence": "OVC merge readiness"}
+  ],
+  "warnings": [
+    "MIGRATION_RECORDS_ARE_PROVISIONAL_NON_CANONICAL",
+    "NO_IMPORTED_PROGRAMME_FACT_OR_EDGE_IS_ACCEPTED_BY_IMPORT",
+    "UNRESOLVED_NATIVE_GENESIS_FIELDS_REMAIN_VISIBLE",
+    "CANONICAL_ADOPTION_ENFORCEMENT_AND_ROUTE_REMAIN_DENIED_PENDING_PG_G6",
+    "AUTOMATIC_UPKEEP_REMAINS_DENIED_PENDING_PG_G7"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_AND_REPOSITORY_CENSUS_PASS",
+  "auto_ratifiable": true,
+  "rollback": "Discard derived migration snapshots, preserve source bytes and findings, and supersede implementation non-destructively."
+}
