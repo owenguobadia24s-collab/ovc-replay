@@ -6,7 +6,7 @@
 - Packet / gate: `PG-WP2` / `PG-G2`
 - Authority: append-only programme-event capture and deterministic derived projection only
 
-This contract grants no programme admission enforcement, migration, dependency-graph acceptance, Control Plane route, upkeep, market/model authority, selector or release mutation, Validation, publication, agent write, probability, risk, exposure, trading or execution authority.
+This contract grants no programme admission enforcement, migration, dependency-graph acceptance, Control Plane route, upkeep, market/model authority, selector or release mutation, Validation, publication, agent write, probability, risk, exposure, trading or execution authority. Existing programme migration remains denied before `PG-G3A`.
 
 ## Append-only ledger
 
