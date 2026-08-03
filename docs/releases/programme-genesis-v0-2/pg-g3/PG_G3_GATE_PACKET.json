@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-programme-genesis-pg-g3-gate/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP3",
+  "gate_id": "PG-G3",
+  "title": "Typed dependency graph and impact analysis",
+  "status": "APPROVED",
+  "authority_required": "DELEGATED_AUTO_RATIFIED_THEN_OPERATOR_ACKNOWLEDGEMENT",
+  "baseline_commit": "4f9dcc4e9bcc3a3a15fb3a6e56f368284ca0d7ec",
+  "candidate_branch": "build/pg-wp3-dependency-graph",
+  "implementation_candidate_commit": "e723b11aeaffa69b5aa8c3d0eafb8d455ee0c622",
+  "approved_delta": "ACCEPT_TYPED_GRAPH_VALIDATORS_IMPACT_ANALYSIS_AND_PRE_MIGRATION_VALIDATION_REPORT_ONLY",
+  "acceptance_conditions": [
+    "NODE_AND_EDGE_TYPES_ARE_FROZEN_AND_SOURCE_LINKED",
+    "HARD_CYCLES_SELF_EDGES_ORPHANS_AND_DUPLICATES_FAIL_CLOSED",
+    "INFERRED_EDGES_CANNOT_SATISFY_HARD_PREREQUISITES",
+    "GRAPH_EDGES_CANNOT_GRANT_AUTHORITY",
+    "IMPACT_ANALYSIS_IS_DETERMINISTIC_AND_AUTHORITY_NEUTRAL",
+    "PRE_MIGRATION_GRAPH_REPORT_IS_COMPLETE_AND_LIMITED",
+    "PG_WP4_REMAINS_BLOCKED_PENDING_PG_G3A",
+    "REPOSITORY_AND_MERGE_READINESS_PASS",
+    "NO_RESERVED_AUTHORITY_DELTA"
+  ],
+  "tests": {
+    "repository": {"run_id": 30841455854, "conclusion": "SUCCESS"},
+    "merge_readiness": {"run_id": 30841453429, "conclusion": "SUCCESS"}
+  },
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_QA_PACKET.json",
+  "graph_validation_report": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_GRAPH_VALIDATION_REPORT.json",
+  "qa_recommendation": "PASS",
+  "warnings": ["NO_EXISTING_PROGRAMME_MIGRATION", "SELF_GRAPH_ONLY", "NO_GRAPH_AUTHORITY", "NO_ENFORCEMENT_ROUTE_OR_UPKEEP"],
+  "unresolved_issues": [],
+  "reserved_authority_denials": ["MIGRATION_BEFORE_PG_G3A", "MARKET_OR_MODEL_CHANGE", "SELECTOR_OR_RELEASE_MUTATION", "VALIDATION_OR_PUBLICATION", "AGENT_WRITE", "PROBABILITY_RISK_EXPOSURE_EXECUTION"],
+  "delegated_authority_basis": "PG-G0 operator PASS and approved plan delegation for wholly non-reserved gates",
+  "decision_record": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_DELEGATED_DECISION.json",
+  "rollback": "Discard derived graph projections and impact outputs; preserve source records, graph fixtures, validation report and findings.",
+  "decision": "PASS",
+  "next_packet": "PG-G3A"
+}

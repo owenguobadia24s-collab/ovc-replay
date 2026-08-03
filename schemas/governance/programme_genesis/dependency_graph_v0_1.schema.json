@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/governance/programme_genesis/dependency_graph_v0_1.schema.json",
+  "title": "OVC Programme Genesis dependency graph v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "graph_id", "source_commit", "registry_versions", "nodes", "edges", "authority_effect", "migration_enabled"],
+  "properties": {
+    "schema": {"const": "ovc-programme-dependency-graph/v1"},
+    "graph_id": {"type": "string", "pattern": "^PGGRAPH\\."},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "registry_versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge_types", "programme_classes"],
+      "properties": {
+        "edge_types": {"const": "0.1"},
+        "programme_classes": {"const": "0.1"}
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "edges": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/edge"}
+    },
+    "authority_effect": {"const": "NONE_DERIVED_GRAPH_ONLY"},
+    "migration_enabled": {"const": false},
+    "notes": {"type": ["string", "null"]}
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "identity", "authority_role"],
+      "properties": {
+        "source_type": {"enum": ["OPERATOR_DECISION", "DELEGATED_DECISION", "PROGRAMME_STATE", "PLAN", "CONTRACT", "REGISTRY", "COMMIT", "PULL_REQUEST", "CONTEXT_ONLY"]},
+        "identity": {"type": "string", "minLength": 1},
+        "path": {"type": ["string", "null"]},
+        "authority_role": {"enum": ["AUTHORITATIVE", "SUPPORTING", "PROPOSAL_ONLY", "CONTEXT_ONLY"]}
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "node_type", "title", "status", "partition_id", "authority_class", "source_refs"],
+      "properties": {
+        "node_id": {"type": "string", "minLength": 1},
+        "node_type": {"enum": ["PROGRAMME", "PLAN", "PACKET", "GATE", "DECISION", "CONTRACT", "REGISTRY", "ARTIFACT", "BLOCKER", "RELEASE", "SELECTOR", "EXTERNAL_EVIDENCE"]},
+        "programme_id": {"type": ["string", "null"]},
+        "title": {"type": "string", "minLength": 1},
+        "status": {"enum": ["PROPOSED", "ACTIVE", "ACCEPTED", "COMPLETED", "BLOCKED", "QUARANTINED", "SUPERSEDED", "PLANNED", "UNKNOWN"]},
+        "partition_id": {"type": "string", "minLength": 1},
+        "authority_class": {"enum": ["AUTHORITATIVE_SOURCE", "DERIVED", "PROPOSAL_ONLY", "NO_AUTHORITY"]},
+        "source_refs": {"type": "array", "items": {"$ref": "#/$defs/source_ref"}, "minItems": 1}
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge_id", "from_node", "to_node", "edge_type", "source_kind", "hardness", "authority_effect", "source_refs", "status"],
+      "properties": {
+        "edge_id": {"type": "string", "pattern": "^PGEDGE\\."},
+        "from_node": {"type": "string", "minLength": 1},
+        "to_node": {"type": "string", "minLength": 1},
+        "edge_type": {"enum": ["REQUIRES", "GOVERNED_BY", "PARENT_OF", "SUPERSEDES", "PRODUCES", "CONSUMES", "BLOCKED_BY", "VALIDATED_BY", "REFERENCES", "CONFLICTS_WITH"]},
+        "source_kind": {"enum": ["SOURCE_EXPLICIT", "ADAPTER_INFERRED"]},
+        "hardness": {"enum": ["HARD", "SOFT", "INFORMATIONAL"]},
+        "authority_effect": {"const": "NONE"},
+        "source_refs": {"type": "array", "items": {"$ref": "#/$defs/source_ref"}, "minItems": 1},
+        "status": {"enum": ["PROPOSED", "ACCEPTED", "REJECTED", "QUARANTINED", "SUPERSEDED"]}
+      }
+    }
+  }
+}

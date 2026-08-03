@@ -1,0 +1,70 @@
+{
+  "schema": "ovc-programme-genesis-pg-g3-graph-validation/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP3",
+  "gate_id": "PG-G3",
+  "graph_id": "PGGRAPH.OVC-PG-v0.2.VALIDATION.001",
+  "source_fixture": "fixtures/governance/programme_genesis/valid_pg_dependency_graph_v0_1.json",
+  "scope": "PRE_MIGRATION_PROGRAMME_GENESIS_SELF_GRAPH_AND_MIGRATION_BOUNDARY",
+  "status": "PASS",
+  "implementation_candidate_commit": "e723b11aeaffa69b5aa8c3d0eafb8d455ee0c622",
+  "assurance": {
+    "repository_tests": {"run_id": 30841455854, "conclusion": "SUCCESS"},
+    "merge_readiness": {"run_id": 30841453429, "conclusion": "SUCCESS"}
+  },
+  "census": {
+    "nodes": 10,
+    "edges": 8,
+    "node_types": {"PROGRAMME": 1, "PLAN": 1, "PACKET": 4, "GATE": 1, "DECISION": 3},
+    "edge_types": {"REQUIRES": 5, "GOVERNED_BY": 1, "BLOCKED_BY": 1, "PRODUCES": 1},
+    "hardness": {"HARD": 7, "SOFT": 0, "INFORMATIONAL": 1},
+    "source_kind": {"SOURCE_EXPLICIT": 8, "ADAPTER_INFERRED": 0}
+  },
+  "validation_findings": {
+    "duplicate_node_ids": 0,
+    "duplicate_edge_ids": 0,
+    "orphan_endpoints": 0,
+    "unknown_edge_types": 0,
+    "invalid_hardness": 0,
+    "inferred_hard_prerequisites": 0,
+    "hard_dependency_cycles": 0,
+    "non_hard_cycles": 0,
+    "graph_authority_grants": 0,
+    "missing_edge_sources": 0
+  },
+  "authority_paths": {
+    "status": "PASS",
+    "rule": "Every edge has authority_effect NONE; accepted decisions are source nodes rather than graph-created authority.",
+    "reserved_authority_delta": "NONE"
+  },
+  "representative_impact_analysis": {
+    "changed_node": "DECISION.PG-G2",
+    "direct_downstream": ["PACKET.PG-WP3"],
+    "transitive_downstream": ["GATE.PG-G3A", "PACKET.PG-WP3", "PACKET.PG-WP4"],
+    "interpretation": "The accepted PG-G2 decision enables WP3; the graph acknowledgement then gates migration. The path conveys dependency only, not authority.",
+    "authority_effect": "NONE_DERIVED_ANALYSIS_ONLY"
+  },
+  "migration_boundary": {
+    "migration_enabled": false,
+    "pg_wp4_status": "BLOCKED_PENDING_PG_G3A_ACKNOWLEDGE_CONTINUE",
+    "imported_existing_programmes": 0,
+    "imported_existing_edges": 0,
+    "uncertainty_policy": "FROZEN_NOT_YET_APPLIED"
+  },
+  "corrective_history": [
+    "Initial discoverable assurance exposed that PRODUCES uses forward producer-to-output direction while dependency edges use dependent-to-prerequisite direction.",
+    "Impact traversal was corrected by edge type without changing the frozen registry or authority model; exact-head repository and merge-readiness checks then passed."
+  ],
+  "limitations": [
+    "This is the pre-migration constitutional self-graph, not a claim that existing programme dependencies are already known.",
+    "Existing programmes and inferred adapter edges remain unimported until PG-G3A ACKNOWLEDGE_CONTINUE.",
+    "Graph validation proves validator behaviour and the proposed edge semantics; it does not accept future migrated edges."
+  ],
+  "operator_review_questions": [
+    "Are REQUIRES, GOVERNED_BY, BLOCKED_BY and PRODUCES directions plausible for the pre-migration core?",
+    "Is the zero hard-cycle result credible for the bounded self-graph?",
+    "Does the authority path correctly keep decisions as sources and graph edges authority-neutral?",
+    "Is PG-WP4 visibly and correctly blocked behind PG-G3A?"
+  ],
+  "rollback": "Preserve the report and disable graph consumers; supersede graph records non-destructively and do not begin migration."
+}
