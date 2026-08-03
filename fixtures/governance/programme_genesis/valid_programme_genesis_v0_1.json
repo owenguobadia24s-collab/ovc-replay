@@ -1,0 +1,52 @@
+{
+  "record_type": "PROGRAMME_GENESIS",
+  "schema_version": "0.1",
+  "genesis_id": "GENESIS.OVC-PG-v0.2.001",
+  "programme_id": "OVC-PG-v0.2",
+  "programme_class": "CONSTITUTIONAL_GOVERNANCE",
+  "title": "Programme Genesis, Portfolio Ledger and Dependency Graph",
+  "version": "0.2",
+  "purpose": "Create a source-linked append-only programme-governance ledger and typed dependency graph without rewriting programme-owned authority.",
+  "scope": {
+    "included": ["Genesis records", "portfolio events", "typed dependency graph", "derived read model"],
+    "excluded": ["market semantics", "selector activation", "publication", "Validation", "agent write", "exposure and execution"],
+    "termination_condition": "Stop at operator-required PG-G3A, PG-G6 or PG-G7 or at any blocker."
+  },
+  "creation_triggers": ["CROSS_CUTTING_SHARED_SERVICE", "PORTFOLIO_LEVEL_OPERATOR_DECISION"],
+  "scope_audit_ref": "PGSCOPE.PG-DEMO.001",
+  "constitutional_parent": "OVIS_CONTROL_PLANE",
+  "programme_parents": [],
+  "governing_sources": [
+    {
+      "source_type": "OPERATOR_DECISION",
+      "identity": "PG-G0.OPERATOR.PASS.20260803T184400+0100",
+      "path": "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_OPERATOR_DECISION.json",
+      "hash": null,
+      "precedence": 1,
+      "authority_role": "AUTHORITATIVE"
+    },
+    {
+      "source_type": "PLAN",
+      "identity": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+      "path": "docs/plans/governance/OVC_Programme_Genesis_Portfolio_Ledger_and_Dependency_Graph_v0_2_REVISED_Implementation_Plan.md",
+      "hash": null,
+      "precedence": 5,
+      "authority_role": "SUPPORTING"
+    }
+  ],
+  "authority_envelope_ref": "PGAUTH.OVC-PG-v0.2.001",
+  "lifecycle": {
+    "status": "RUNNING",
+    "current_packet": "PG-WP1",
+    "current_gate": "PG-G1",
+    "blockers": [],
+    "next_action": "FREEZE_CONTRACT_SCHEMAS_REGISTRIES_AND_FIXTURES"
+  },
+  "provenance": {
+    "created_at": "2026-08-03T18:44:00+01:00",
+    "actor": "HUMAN_OPERATOR",
+    "commit": "d0d2445b035f3fc93a177b94b23120be7dfa274b",
+    "supersedes": null
+  },
+  "rollback": "Disable derived Programme Genesis services and preserve the accepted plan, operator decision, source records and event history."
+}
