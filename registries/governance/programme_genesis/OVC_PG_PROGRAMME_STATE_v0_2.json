@@ -3,14 +3,14 @@
   "programme_id": "OVC-PG-v0.2",
   "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
-  "status": "APPROVED",
+  "status": "BLOCKED",
   "current_packet": "PG-WP6",
   "current_gate": "PG-G7",
   "operator_decision_required": false,
   "operator_decision_id": "PG-G6.OPERATOR.CANON_PASS.MIGRATION_PASS.ENFORCEMENT_DEFER.READ_ONLY_ROUTE_DEFER.20260803T204000+0100",
   "baseline_commit": "af20e5d159729ba26b5af6d4026125ebbfe45269",
   "branch": "build/pg-wp6-bounded-upkeep",
-  "candidate_commit": "PENDING_FINAL_DECISION_HEAD",
+  "candidate_commit": "PENDING_BLOCKER_STATE_HEAD",
   "authority": {
     "programme_governance_design": "RATIFIED",
     "programme_governance_build": "APPROVED_BOUNDED_IMPLEMENTATION",
@@ -24,7 +24,7 @@
     "control_plane_adapter": "APPROVED_DISABLED_CANDIDATE",
     "admission_enforcement": "DEFERRED_DISABLED",
     "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED",
-    "upkeep_candidate_preview": "APPROVED_DISABLED_IMPLEMENTATION",
+    "upkeep_candidate_preview": "APPROVED_DISABLED_IMPLEMENTATION_UNMERGED",
     "candidate_persistence": "DENIED_PENDING_PG_G7",
     "automatic_upkeep": "DENIED_PENDING_PG_G7",
     "market_model_selector_release_validation": "NONE",
@@ -114,27 +114,29 @@
       "merge_commit": "af20e5d159729ba26b5af6d4026125ebbfe45269", "blockers": [], "next_packet": "PG-WP6"
     },
     {
-      "packet_id": "PG-WP6", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "APPROVED",
+      "packet_id": "PG-WP6", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "BLOCKED",
       "prerequisites": ["PG-G6_CANON_PASS_MIGRATION_PASS_MERGED", "PG-G6_ENFORCEMENT_DEFERRED", "PG-G6_READ_ONLY_ROUTE_DEFERRED"],
       "authority_required": "AUTO_EXECUTABLE_BUILD_COMPLETED_OPERATOR_REQUIRED_AT_PG_G7",
       "authority_delta": "DISABLED_BOUNDED_CANDIDATE_EVENT_UPKEEP_IMPLEMENTATION_ONLY",
       "baseline_commit": "af20e5d159729ba26b5af6d4026125ebbfe45269",
-      "branch": "build/pg-wp6-bounded-upkeep", "candidate_commit": "PENDING_FINAL_DECISION_HEAD",
-      "tests": ["focused 30848244629 PASS 13", "tests 30848358386 PASS 149", "OVC merge readiness 30848357368 PASS"],
+      "branch": "build/pg-wp6-bounded-upkeep", "candidate_commit": "09586d5b30e278fd73f96b48dedfe85651744704",
+      "tests": ["focused 30848244629 PASS 13", "tests 30849246986 PASS", "OVC merge readiness 30849246990 PASS job 91805042186"],
       "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g7/PG_WP6_QA_PACKET.json",
       "decision_record": "docs/releases/programme-genesis-v0-2/pg-g7/PG_WP6_DELEGATED_BUILD_DECISION.json",
-      "merge_commit": null, "blockers": [], "next_packet": "PG-G7"
+      "merge_commit": null,
+      "blockers": ["PG-WP6.BLOCKER.REQUIRED_CONTEXT_EXPECTED.20260803"],
+      "next_packet": "PG-G7"
     },
     {
-      "packet_id": "PG-G7", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "READY",
+      "packet_id": "PG-G7", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "PLANNED",
       "prerequisites": ["PG-WP6_DELEGATED_PASS_MERGED"], "authority_required": "OPERATOR_REQUIRED",
       "authority_delta": "ACTIVATE_BOUNDED_APPEND_ONLY_CANDIDATE_EVENT_PERSISTENCE_ON_DEDICATED_BRANCH_ONLY",
       "baseline_commit": null, "branch": "gate/pg-g7-upkeep-activation", "candidate_commit": null,
       "tests": [], "qa_packet": null, "decision_record": null, "merge_commit": null,
-      "blockers": [], "next_packet": null
+      "blockers": ["PG-WP6.BLOCKER.REQUIRED_CONTEXT_EXPECTED.20260803"], "next_packet": null
     }
   ],
-  "blockers": [],
-  "next_action": "RUN_FINAL_HEAD_ASSURANCE_SQUASH_MERGE_PG_WP6_THEN_CREATE_PG_G7_OPERATOR_GATE",
-  "rollback": "Keep the upkeep registry disabled, discard candidate previews and implementation outputs, and preserve all programme sources, findings, hashes, tests, decisions and receipts."
+  "blockers": ["PG-WP6.BLOCKER.REQUIRED_CONTEXT_EXPECTED.20260803"],
+  "next_action": "REPAIR_DA2_REQUIRED_CONTEXT_ACCEPTANCE_RERUN_EXACT_CHECKS_MERGE_PR_277_THEN_PREPARE_PG_G7",
+  "rollback": "Keep the upkeep registry disabled and preserve PR 277, every successful workflow run, programme source, finding, hash, test, decision and receipt."
 }
