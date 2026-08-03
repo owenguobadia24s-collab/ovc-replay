@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-programme-genesis-pg-wp6-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP6",
+  "next_gate": "PG-G7",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "baseline_commit": "af20e5d159729ba26b5af6d4026125ebbfe45269",
+  "candidate_branch": "build/pg-wp6-bounded-upkeep",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "checks": [
+    {"check_id": "PG-WP6-DISABLED-REGISTRY", "status": "PASS_DESIGN", "evidence": "Registry and candidate persistence are disabled; PG-G7 is required."},
+    {"check_id": "PG-WP6-DETERMINISTIC-IDENTITY", "status": "PASS_DESIGN", "evidence": "Canonical source-linked content produces deterministic candidate IDs."},
+    {"check_id": "PG-WP6-EXISTING-PROGRAMMES-ONLY", "status": "PASS_DESIGN", "evidence": "Unknown programme identities fail closed."},
+    {"check_id": "PG-WP6-SOURCE-AND-TIME", "status": "PASS_DESIGN", "evidence": "Canonical source paths, SHA-256 and first-valid timestamps are required."},
+    {"check_id": "PG-WP6-CANDIDATE-BOUNDARY", "status": "PASS_DESIGN", "evidence": "Candidates remain unapproved with no authority effect."},
+    {"check_id": "PG-WP6-BRANCH-BOUNDARY", "status": "PASS_DESIGN", "evidence": "Only dedicated candidate branches are accepted; main is prohibited."},
+    {"check_id": "PG-WP6-BOUNDED-PREVIEW", "status": "PASS_DESIGN", "evidence": "Preview is in-memory, deterministic, duplicate-safe and capped per run."},
+    {"check_id": "PG-WP6-PERSISTENCE-DENIAL", "status": "PASS_DESIGN", "evidence": "Persistence fails before PG-G7 and creates no output."},
+    {"check_id": "PG-WP6-APPEND-ONLY", "status": "PASS_DESIGN", "evidence": "Any future approved persistence remains dedicated-branch and append-only."},
+    {"check_id": "PG-WP6-FOCUSED-TESTS", "status": "PENDING_CI", "evidence": "Focused upkeep and CLI tests."},
+    {"check_id": "PG-WP6-REPOSITORY-SUITE", "status": "PENDING_CI", "evidence": "Complete repository tests."},
+    {"check_id": "PG-WP6-MERGE-READINESS", "status": "PENDING_CI", "evidence": "OVC final-head assurance."}
+  ],
+  "warnings": [
+    "AUTOMATIC_UPKEEP_REMAINS_DISABLED_PENDING_PG_G7",
+    "CANDIDATES_ARE_NOT_ACCEPTED_PROGRAMME_EVENTS",
+    "NO_PROGRAMME_CREATION_APPROVAL_MERGE_OR_MAIN_WRITE",
+    "ENFORCEMENT_AND_READ_ONLY_ROUTE_REMAIN_DISABLED"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_TESTS_AND_DISABLED_STATE_ASSURANCE_PASS",
+  "auto_ratifiable": true,
+  "next_boundary": "PG-G7_OPERATOR_DECISION",
+  "rollback": "Keep the registry disabled, discard previews, and preserve source findings and evidence."
+}
