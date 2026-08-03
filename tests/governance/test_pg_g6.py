@@ -42,8 +42,11 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         self.assertEqual("PROVISIONAL_NON_CANONICAL_ONLY", authority["canonical_migration_adoption"])
         self.assertEqual("DEFERRED_DISABLED", authority["admission_enforcement"])
         self.assertEqual("DEFERRED_DISABLED_UNREGISTERED", authority["control_plane_route"])
-        self.assertEqual("DENIED_PENDING_PG_G7", authority["candidate_persistence"])
-        self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
+        self.assertEqual("ACTIVE_BOUNDED_APPEND_ONLY", authority["candidate_persistence"])
+        self.assertEqual("ACTIVE_BOUNDED_CANDIDATE_EVENT_PERSISTENCE_ONLY", authority["automatic_upkeep"])
+        self.assertEqual("DENIED", authority["programme_creation"])
+        self.assertEqual("DENIED", authority["programme_event_acceptance"])
+        self.assertEqual("DENIED", authority["approval_merge_main_write_publication"])
         self.assertEqual("NONE", authority["market_model_selector_release_validation"])
         self.assertEqual("NONE", authority["agent_probability_risk_exposure_execution"])
 
@@ -92,19 +95,19 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         for part in ("CANON", "MIGRATION", "ENFORCEMENT", "READ_ONLY_ROUTE"):
             self.assertEqual(qa["qa_recommendation"][part], decision["decisions"][part]["decision"])
 
-    def test_pg_wp6_merge_resolves_blocker_without_activating_pg_g7(self) -> None:
+    def test_pg_wp6_merge_is_preserved_and_pg_g7_is_approved(self) -> None:
         state = load_json(STATE_PATH)
         receipt = load_json(WP6_RECEIPT_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("COMPLETED", packets["PG-WP6"]["status"])
         self.assertEqual("ac5a86931fb9426c55e2cf1e00656ce69908828b", packets["PG-WP6"]["merge_commit"])
         self.assertEqual([], packets["PG-WP6"]["blockers"])
-        self.assertEqual("GATE_READY", packets["PG-G7"]["status"])
+        self.assertEqual("APPROVED", packets["PG-G7"]["status"])
+        self.assertEqual("OPERATOR_REQUIRED_COMPLETED", packets["PG-G7"]["authority_required"])
         self.assertEqual([], packets["PG-G7"]["blockers"])
         self.assertEqual([], state["blockers"])
         self.assertEqual("RESOLVED", receipt["blocker_resolution"]["result"])
-        self.assertEqual("DENIED_PENDING_PG_G7", state["authority"]["automatic_upkeep"])
-        self.assertEqual("AWAIT_OPERATOR_PG_G7_DECISION", state["next_action"])
+        self.assertEqual("RUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_PR_278_AND_RECORD_TERMINAL_RECEIPT", state["next_action"])
 
 
 if __name__ == "__main__":
