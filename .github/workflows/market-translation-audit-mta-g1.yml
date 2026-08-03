@@ -1,58 +1,40 @@
-name: Market Translation Audit MTA-G1 flow registry
+name: MARKET TRANSLATION AUDIT MTA G1 — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "contracts/research_operations/mta/**"
-      - "registries/research_operations/mta/**"
-      - "schemas/research_operations/mta/**"
-      - "fixtures/research_operations/mta/**"
-      - "src/ovc/research_operations/mta/**"
-      - "scripts/research_operations/validate_mta_wp1.py"
-      - "tests/research_operations/mta/**"
-      - "docs/releases/market-translation-audit-v0-2/**"
-      - ".github/workflows/market-translation-audit-mta-g1.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  mta-g1:
-    name: mta-g1
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-WP1')
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate MTA-WP1 registry bundle
-        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp1.py
-      - name: Focused MTA-WP1 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp1.py' -v
-      - name: Retained MTA-G0 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_g0.py' -v
-      - name: Complete repository suite
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert no semantic or selector authority
-        shell: bash
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root = Path('.')
-          marker = json.loads((root / 'registries/research_operations/mta/MTA_MARKER_FUNCTION_REGISTRY_v0_1.json').read_text())
-          flow = json.loads((root / 'registries/research_operations/mta/MTA_FLOW_OBJECT_REGISTRY_v0_1.json').read_text())
-          assert len(marker['entries']) == 8
-          assert all(item['authority']['semantic_promotion'] == 'DENIED' for item in marker['entries'])
-          assert all(item['authority']['selector_or_release_mutation'] == 'DENIED' for item in marker['entries'])
-          by_name = {item['name']: item for item in flow['entries']}
-          assert by_name['OPT-B.C2E episode']['status'] == 'DEFERRED'
-          assert by_name['OPT-B.C2.5 event']['status'] == 'PROHIBITED'
-          assert by_name['OPT-B.C3 structural meaning']['status'] == 'PROHIBITED'
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/market-translation-audit-mta-g1.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

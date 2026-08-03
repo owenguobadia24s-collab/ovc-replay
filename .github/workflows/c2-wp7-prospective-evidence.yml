@@ -1,43 +1,40 @@
-name: C2-WP7 prospective evidence accumulation
+name: C2 WP7 PROSPECTIVE EVIDENCE — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  prospective-evidence:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run canonical repository tests
-        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
-      - name: Validate C2-WP7 prospective evidence contract
-        run: PYTHONPATH=src:. python scripts/opt_b/validate_c2_wp7_prospective_evidence.py
-      - name: Enforce zero baseline and retained boundaries
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          baseline = json.loads(Path('fixtures/opt_b/c2/wp7/C2_PROSPECTIVE_EVIDENCE_ZERO_BASELINE.json').read_text())
-          assert baseline['counts']['total'] == 0
-          assert baseline['historical_backfill'] == 0
-          assert baseline['validation_consumed'] is False
-          for field in ('c2e_authority', 'probability_authority', 'exposure_authority', 'trading_authority', 'execution_authority'):
-              assert baseline[field] == 'NONE'
-          registry = Path('registries/research/C2_PROSPECTIVE_EVIDENCE_REGISTRY.yaml').read_text()
-          assert 'append_mode: APPEND_ONLY' in registry
-          assert 'c2_prospective_evidence_record_v0_2.schema.json' in registry
-          assert 'LIVE_PROSPECTIVE' in registry
-          assert 'TIME_GATED_REPLAY' in registry
-          assert 'NON_EVIDENTIARY_REPLAY' in registry
-          assert 'next_gate: CAPTURE_FIRST_REAL_PROSPECTIVE_EVIDENCE_BATCH' in registry
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c2-wp7-prospective-evidence.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

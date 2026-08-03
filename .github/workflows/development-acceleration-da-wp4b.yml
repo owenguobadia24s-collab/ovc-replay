@@ -1,72 +1,40 @@
-name: Development Acceleration DA-WP4B receipt-bot implementation
+name: DEVELOPMENT ACCELERATION DA WP4B — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "contracts/development/OVC_RECEIPT_BOT_IMPLEMENTATION_CONTRACT_v0_1.md"
-      - "schemas/development/receipt_bot_*"
-      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_*"
-      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_IMPLEMENTATION_REGISTRY_v0_1.yaml"
-      - "registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json"
-      - "src/ovc/development/receipt_bot.py"
-      - "scripts/development/run_da_receipt_bot.ps1"
-      - "scripts/development/validate_da_wp4b.py"
-      - "tests/development/test_receipt_bot.py"
-      - "tests/development/test_da_g4.py"
-      - "tests/development/test_da_g4b.py"
-      - "fixtures/development/receipt_bot/**"
-      - "docs/releases/development-acceleration-v0-1/da-g4/DA_G4_MERGE_RECEIPT.json"
-      - "docs/releases/development-acceleration-v0-1/da-wp4b/**"
-      - ".github/workflows/development-acceleration-da-wp4b.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  da-wp4b:
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'DA-WP4B')
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate DA-WP4B activation packet
-        run: PYTHONPATH=src python -u scripts/development/validate_da_wp4b.py
-      - name: Focused receipt-bot planning tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_receipt_bot.py' -v
-      - name: DA-G4 historical authority tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4.py' -v
-      - name: DA-G4B activation tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g4b.py' -v
-      - name: Retained closure tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_closure.py' -v
-      - name: Production runner PowerShell syntax
-        shell: pwsh
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          $errors = $null
-          [System.Management.Automation.Language.Parser]::ParseFile(
-            (Resolve-Path scripts/development/run_da_receipt_bot.ps1),
-            [ref]$null,
-            [ref]$errors
-          ) | Out-Null
-          if ($errors.Count -ne 0) { $errors | Format-List | Out-String | Write-Error }
-      - name: Complete repository suite
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/development-acceleration-da-wp4b.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert exact active authority and permanent denials
-        shell: bash
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          grep -q '"active": true' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json
-          grep -q 'DA-G4B.OPERATOR.PASS.20260802T163600Z' docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json
-          grep -q '"authority_active": true' docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_ACTIVATION_EVALUATION.json
-          grep -q 'ACTIVE_FAIL_CLOSED:scripts/development/run_da_receipt_bot.ps1' registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_IMPLEMENTATION_STATE_v0_1.json
-          grep -q 'PROHIBITED_TO_BOT' registries/development/OVC_DEVELOPMENT_ACCELERATION_PROGRAMME_STATE_v0_1.json
-          grep -q 'merge_performed = $false' scripts/development/run_da_receipt_bot.ps1
-          grep -q 'approval_performed = $false' scripts/development/run_da_receipt_bot.ps1
-          ! grep -E "/merges|/reviews|git[[:space:]]+(push|merge|reset)" scripts/development/run_da_receipt_bot.ps1
-          ! grep -R -E 'from ovc\.opt_|import ovc\.opt_|pattern_discovery|research_operations' src/ovc/development/receipt_bot.py
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

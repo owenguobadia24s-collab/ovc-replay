@@ -1,56 +1,40 @@
-name: Research Console v0.3 RC-G2 Overview acceptance
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  overview-acceptance:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run repository tests
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Build accepted Overview projection from fixture
+      - name: Assert no side-effect authority
         run: |
-          PYTHONPATH=src python scripts/build_research_console_overview.py \
-            --read-model fixtures/research_operations/research_console_v0_3/RC_WP2_OVERVIEW_SOURCE_READ_MODEL.json \
-            --output /tmp/overview_candidate.json
-      - name: Verify exact RC-G2 v0.3 packet and authority
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          packet = json.loads(Path('docs/releases/research-console-v0-3/rc-g2/RC_G2_GATE_PACKET.json').read_text())
-          candidate = json.loads(Path('/tmp/overview_candidate.json').read_text())
-          overview = Path('registries/research_operations/RESEARCH_CONSOLE_OVERVIEW_PROJECTION_REGISTRY_v0_3.yaml').read_text()
-          implementation = Path('registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml').read_text()
-          home = Path('apps/research_console/Home.py').read_text()
-          shell = Path('apps/research_console/shell.py').read_text()
-
-          assert packet['decision'] == 'PASS_OVERVIEW_AND_AMBIENT_HEALTH_CONTRACT_ACCEPTED'
-          assert packet['review']['implementation_merge_commit'] == '6701ec00469898b12f17b294610d839d4082d94b'
-          assert packet['blocking_issues'] == 0
-          assert packet['disposition'] == 'RC_G2_PASS_RC_WP3_V0_3_AUTHORISED'
-          assert all(check['status'] == 'PASS' for check in packet['checks'])
-          assert candidate['schema'] == 'ovc-research-console-overview-projection/v0.3'
-          assert len(candidate['health_domains']) == 7
-          research = next(item for item in candidate['health_domains'] if item['domain'] == 'RESEARCH_RECORDS')
-          assert research['status'] == 'NOT_EVALUATED'
-          assert research['progress'] == 0.0
-          assert 'status: ACCEPTED_BY_RC_G2_V0_3' in overview
-          assert 'active_live_projection: APPROVED_OVERVIEW_ONLY_BOUNDED_LOCAL_READ_ONLY' in overview
-          assert 'stage: RC_G2_PASS_RC_WP3_V0_3_AUTHORISED' in implementation
-          assert 'live_research_surface_authority: DENIED_PENDING_RC_G3' in implementation
-          assert 'research_write_authority: DENIED_PENDING_SEPARATE_GATE' in implementation
-          assert 'overview_candidate.json' not in home
-          assert 'console_overview_candidate' not in shell
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

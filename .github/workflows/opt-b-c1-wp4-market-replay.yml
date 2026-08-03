@@ -1,112 +1,40 @@
-name: OPT-B.C1 WP4 market replay
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
-  actions: read
+
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  packet-tests:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: PYTHONPATH=src python -m unittest discover -s tests -v
-
-  replay-and-qa:
-    needs: packet-tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 180
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Download exact active Discovery release
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30179286521
-          name: a2-g3-opt-a-gbpusd-discovery-2021-2023-v2
-          path: wp4-input/discovery
-
-      - name: Download exact active Development release
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30179286521
-          name: a2-g3-opt-a-gbpusd-development-2024-v2
-          path: wp4-input/development
-
-      - name: Assert B1-G0 scope and Validation exclusion
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          test -d wp4-input/discovery/canonical
-          test -d wp4-input/development/canonical
-          test ! -e wp4-input/validation
-          grep -F 'status: APPROVED_BY_B1_G0' registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml
-          grep -F 'validation_consumption: LOCKED_UNCONSUMED' registries/authority/ACTIVE_AUTHORITY.yaml
-
-      - name: Build candidate replay A
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          python scripts/opt_b/run_c1_wp4_replay.py \
-            --discovery-root wp4-input/discovery \
-            --development-root wp4-input/development \
-            --output-root wp4-candidate-a
-
-      - name: Build deterministic replay B
-        run: |
-          python scripts/opt_b/run_c1_wp4_replay.py \
-            --discovery-root wp4-input/discovery \
-            --development-root wp4-input/development \
-            --output-root wp4-candidate-b
-
-      - name: Verify exact deterministic inventories
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          a=json.loads(Path('wp4-candidate-a/WP4_INVENTORY.json').read_text())
-          b=json.loads(Path('wp4-candidate-b/WP4_INVENTORY.json').read_text())
-          def normalized(x):
-              return [(Path(i['path']).relative_to(Path(i['path']).parts[0]).as_posix(), i['size_bytes'], i['sha256']) for i in x['files']]
-          assert normalized(a)==normalized(b), 'deterministic inventory mismatch'
-          report=json.loads(Path('wp4-candidate-a/WP4_REPLAY_REPORT.json').read_text())
-          assert report['status']=='LOCAL_CANDIDATE_QA_PASS'
-          assert report['validation_consumption']=='LOCKED_UNCONSUMED_EXCLUDED'
-          assert report['inventory_file_count'] > 0
-          assert all(r['quarantine_records_excluded'] >= 0 for r in report['roles'])
-          Path('wp4-candidate-a/WP4_DETERMINISM_RECEIPT.json').write_text(json.dumps({
-              'schema':'ovc-c1-wp4-determinism-receipt/v1',
-              'status':'PASS','inventory_match':True,
-              'candidate_a_files':report['inventory_file_count'],
-              'candidate_a_bytes':report['inventory_bytes'],
-          },sort_keys=True,separators=(',',':'))+'\n')
-          PY
-
-      - name: Upload local candidate release
-        uses: actions/upload-artifact@v4
-        with:
-          name: c1-wp4-gbpusd-discovery-development-local-candidate
-          path: wp4-candidate-a/**
-          compression-level: 0
-          retention-days: 30
-
-      - name: Upload compact WP4 QA packet
-        uses: actions/upload-artifact@v4
-        with:
-          name: c1-wp4-replay-qa-report
-          path: |
-            wp4-candidate-a/WP4_REPLAY_REPORT.json
-            wp4-candidate-a/WP4_INVENTORY.json
-            wp4-candidate-a/WP4_DETERMINISM_RECEIPT.json
-          retention-days: 90
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

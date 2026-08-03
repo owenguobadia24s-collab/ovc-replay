@@ -1,149 +1,40 @@
-name: PD-JUNE-FM-WP2 CORR3 Windows cleanup compatibility
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'src/ovc/research_operations/prospective_source/full_month_mdr_replay.py'
-      - 'tests/research_operations/prospective_source/test_pd_june_full_month_mdr_wp2_corr3.py'
-      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_*.json'
-      - 'registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json'
-      - '.github/workflows/pd-june-full-month-mdr-wp2-corr3.yml'
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  cross-platform-tests:
-    name: corr3-${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04, windows-latest]
-    runs-on: ${{ matrix.os }}
+  historical-verification:
+    name: historical manual verification
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
           fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Compile corrected replay entrypoint and focused test
-        run: >-
-          python -m py_compile
-          src/ovc/research_operations/prospective_source/full_month_mdr_replay.py
-          tests/research_operations/prospective_source/test_pd_june_full_month_mdr_wp2_corr3.py
-      - name: Run focused CORR3 cleanup regressions
-        env:
-          PYTHONPATH: src;.
-        if: runner.os == 'Windows'
-        run: python -m unittest tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr3 -v
-      - name: Run focused CORR3 cleanup regressions
-        env:
-          PYTHONPATH: src:.
-        if: runner.os != 'Windows'
-        run: python -m unittest tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr3 -v
-      - name: Run retained WP2, CORR1 and CORR2 tests
-        env:
-          PYTHONPATH: src;.
-        if: runner.os == 'Windows'
-        run: >-
-          python -m unittest
-          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2
-          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr2
-          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr
-          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp1_source_acceptance
-          -v
-      - name: Run retained WP2, CORR1 and CORR2 tests
-        env:
-          PYTHONPATH: src:.
-        if: runner.os != 'Windows'
-        run: >-
-          python -m unittest
-          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2
-          tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2_corr2
-          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr
-          tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp1_source_acceptance
-          -v
-      - name: Run complete repository suite
-        env:
-          PYTHONPATH: src;.
-        if: runner.os == 'Windows'
-        run: python -m unittest discover -s tests -v
-      - name: Run complete repository suite
-        env:
-          PYTHONPATH: src:.
-        if: runner.os != 'Windows'
-        run: python -m unittest discover -s tests -v
-
-  court-and-boundary:
-    runs-on: ubuntu-24.04
-    needs: cross-platform-tests
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Parse completed CORR3 court records
-        env:
-          PYTHONPATH: src:.
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
-
-          final_head = 'ddded6c74053acbf7013d3af826405a1dcc9b691'
-          merge_commit = 'b6fd245104520344721f3b97f0236ef03b8f0a8a'
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
-          incident = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_WINDOWS_CLEANUP_INCIDENT.json').read_text())
-          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_QA_PACKET.json').read_text())
-          decision = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_DELEGATED_DECISION.json').read_text())
-          receipt = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_MERGE_RECEIPT.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json').read_text())
-
-          assert incident['failure'] == 'WINERROR_5_ACCESS_DENIED_PASS_B_CLEANUP'
-          assert incident['source_slice_mutated'] is False
-          assert qa['status'] == 'COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY'
-          assert qa['qa_result'] == 'PASS_WINDOWS_CLEANUP_COMPATIBILITY_CORRECTION'
-          assert qa['final_head'] == final_head
-          assert qa['merge_commit'] == merge_commit
-          assert qa['authority_delta'] == 'NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY'
-          assert decision['decision'] == 'PASS'
-          assert decision['status'] == 'COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_REPLAY_READY'
-          assert decision['final_head'] == final_head
-          assert decision['merge_commit'] == merge_commit
-          assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
-          assert decision['reserved_authority_delta'] == 'NONE'
-          assert receipt['pull_request'] == 197
-          assert receipt['final_head'] == final_head
-          assert receipt['merge_commit'] == merge_commit
-          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
-          assert state['status'] == 'COMPLETED'
-          assert state['merge_commit'] == merge_commit
-          assert state['next_packet_status'] == 'READY'
-          assert state['qa_result'] == qa['qa_result']
-          assert state['decision'] == 'PASS'
-          assert state['source_mutated'] is False
-          assert state['identity_contract_mutated'] is False
-          assert subject.PRICE_SET_ID.startswith('RPS.PRICESET.')
-          assert subject.SOURCE_MANIFEST_ID.startswith('RPS.SOURCE-MANIFEST.')
-          assert subject.C1_SET_ID.startswith('RPS.C1SET.')
-          assert subject.C1_MANIFEST_ID.startswith('RPS.C1MANIFEST.')
-          assert subject.implementation.execute is subject.execute
-          PY
-      - name: Enforce bounded correction and authority boundary
-        shell: bash
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          changed="$(git diff --name-only origin/main...HEAD)"
-          ! grep -Eq '^src/ovc/research_operations/prospective_source/full_month_mdr_compute.py$|^src/ovc/opt_b/c1/adapter.py$|^src/ovc/opt_b/c2/adapter.py$|^src/ovc/opt_b/c1/formulas.py$' <<<"$changed"
-          ! find . -type f \( -name '*.bi5' -o -name 'GBPUSD_M1_*_20260530_20260703_UTC.csv' -o -name 'GBPUSD_H1_*_20260530_20260703_UTC.csv' -o -name 'replay-run.json' -o -name 'replay-receipt.json' \) -not -path './.git/*' | grep -q .
-          grep -q 'NONE_WINDOWS_FILESYSTEM_COMPATIBILITY_CORRECTION_ONLY' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json
-          grep -q '"source_mutated": false' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json
-          grep -q '"identity_contract_mutated": false' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json
-          grep -q '"r2_publication": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json
-          grep -q '"validation_consumption": "DENIED"' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_WP2_CORR3_STATE_v0_1.json
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

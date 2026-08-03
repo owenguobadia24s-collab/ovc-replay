@@ -1,118 +1,40 @@
-name: PD-JUNE-FM-WP2 deterministic full-month replay tooling
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'src/ovc/research_operations/prospective_source/full_month_mdr_compute.py'
-      - 'src/ovc/research_operations/prospective_source/full_month_mdr_replay.py'
-      - 'scripts/run_pd_june_full_month_mdr_wp2.ps1'
-      - 'tests/research_operations/prospective_source/test_pd_june_full_month_mdr_wp2.py'
-      - 'schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp2_*.schema.json'
-      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_*.json'
-      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP2_WINDOWS_OPERATOR_GUIDE.md'
-      - 'registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json'
-      - '.github/workflows/pd-june-full-month-mdr-wp2.yml'
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  wp2-replay-tooling:
-    runs-on: ubuntu-24.04
+  historical-verification:
+    name: historical manual verification
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Compile and parse WP2 tooling court records
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src:. python -m py_compile \
-            src/ovc/research_operations/prospective_source/full_month_mdr_compute.py \
-            src/ovc/research_operations/prospective_source/full_month_mdr_replay.py
-          PYTHONPATH=src:. python - <<'PY'
-          import json
-          from pathlib import Path
-          from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
-
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
-          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_QA_PACKET.json').read_text())
-          decision = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_DELEGATED_DECISION.json').read_text())
-          receipt = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP2_TOOLING_MERGE_RECEIPT.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
-          schema = json.loads(Path('schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp2_replay_v0_1.schema.json').read_text())
-          receipt_schema = json.loads(Path('schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp2_tooling_merge_receipt_v0_1.schema.json').read_text())
-          index = subject.load_source_acceptance_index(Path.cwd())
-
-          assert index['acceptance']['decision'] == 'PASS'
-          assert index['manifest']['logical_sha256'] == subject.SOURCE_MANIFEST_LOGICAL_SHA256
-          assert qa['packet_id'] == 'PD-JUNE-FM-WP2'
-          assert qa['authority_delta'] == 'DETERMINISTIC_LOCAL_C1_C2_REPLAY_TOOLING_ONLY'
-          assert qa['status'] == 'TOOLING_COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_EXECUTION_REQUIRED'
-          assert decision['decision_authority'] == 'DELEGATED_BY_OPERATOR_APPROVED_PLAN'
-          assert decision['reserved_authority_delta'] == 'NONE'
-          assert decision['status'] == 'TOOLING_COMPLETED_SQUASH_MERGED_OPERATOR_LOCAL_EXECUTION_REQUIRED'
-          assert receipt['pull_request'] == 180
-          assert receipt['final_head'] == 'b2ea2ae786ed266363c3035a67e5ba029e61c45c'
-          assert receipt['merge_commit'] == 'b3ac2561aff225442465e6914a1e1e29adbfab62'
-          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
-          assert receipt['next_action'] == 'OPERATOR_LOCAL_WP2_PREFLIGHT_AND_EXECUTE'
-          assert state['packet_id'] in {'PD-JUNE-FM-WP2', 'PD-JUNE-FM-WP3'}
-          assert state['status'] in {'GATE_READY', 'QA_REVIEW', 'APPROVED', 'COMPLETED'}
-          assert state['tooling_merge_commit'] == receipt['merge_commit']
-          assert state['replay_status'] in {
-              'NOT_YET_EXECUTED_OPERATOR_LOCAL_BOUNDARY',
-              'COMPLETE_LOCAL_WP2_CANDIDATE_ACCEPTANCE_PENDING_CI',
-              'PASS_ACCEPTED_FOR_WP3',
-          }
-          assert state['next_packet'] == 'PD-JUNE-FM-WP3'
-          assert state['next_packet_status'] in {
-              'BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS',
-              'BLOCKED_PENDING_WP2_ACCEPTANCE_CI_AND_SQUASH_MERGE',
-              'BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE',
-              'READY',
-          }
-          assert schema['properties']['slice_id']['const'] == subject.SLICE_ID
-          assert receipt_schema['properties']['merge_commit']['const'] == receipt['merge_commit']
-          assert subject.EXPECTED_C1_RECORDS == 4958
-          assert subject.EXPECTED_TARGET_C1_RECORDS == 4526
-          assert subject.EXPECTED_C2_STATES == 9420
-          assert subject.EXPECTED_TARGET_C2_STATES == 8598
-          PY
-      - name: Run focused WP2 tooling tests
-        run: PYTHONPATH=src:. python -m unittest tests.research_operations.prospective_source.test_pd_june_full_month_mdr_wp2 -v
-      - name: Run retained full-month source and A2 tests
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          PYTHONPATH=src:. python -m unittest \
-            tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr \
-            tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp1_source_acceptance \
-            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_intake \
-            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_a2 \
-            -v
-      - name: Run complete repository suite
-        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
-      - name: Enforce local-only and repository authority boundary
-        shell: bash
-        run: |
-          set -euo pipefail
-          ! find . -type f \( -name '*.bi5' -o -name 'GBPUSD_M1_*_20260530_20260703_UTC.csv' -o -name 'GBPUSD_H1_*_20260530_20260703_UTC.csv' -o -name 'replay-run.json' -o -name 'replay-receipt.json' \) -not -path './.git/*' | grep -q .
-          PYTHONPATH=src:. python - <<'PY'
-          import tempfile
-          from pathlib import Path
-          from ovc.research_operations.prospective_source import full_month_mdr_replay as subject
-
-          with tempfile.TemporaryDirectory() as repository:
-              try:
-                  subject.execute(Path(repository), authority_gate=subject.AUTHORITY_GATE, environ={'GITHUB_ACTIONS':'true'})
-              except subject.ComputeError as exc:
-                  assert 'prohibited in CI' in str(exc)
-              else:
-                  raise AssertionError('WP2 replay unexpectedly allowed in CI')
-          assert subject.OPERATION_MODE == 'TIME_GATED_REPLAY'
-          assert subject.DERIVED_AUTHORITY == 'TIME_GATED_REPLAY_DERIVED'
-          PY
-          grep -q 'FORMULA_CHANGE' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
-          grep -q 'SELECTOR_OR_RELEASE_MUTATION' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
-          grep -q 'R2_PUBLICATION' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
-          grep -q 'VALIDATION_CONSUMPTION' registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

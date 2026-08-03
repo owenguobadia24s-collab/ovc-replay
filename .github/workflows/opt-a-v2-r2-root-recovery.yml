@@ -1,192 +1,40 @@
-name: OPT-A v2 exact R2 parent-root recovery
+name: OPT A V2 R2 ROOT RECOVERY — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - .github/workflows/opt-a-v2-r2-root-recovery.yml
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  recover-and-verify:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 120
-    env:
-      RCLONE_CONFIG_OVC_R2_TYPE: s3
-      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
-      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
-      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
-      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
-      RCLONE_CONFIG_OVC_R2_REGION: auto
-      RCLONE_CONFIG_OVC_R2_ACL: private
-      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
-
     steps:
-      - name: Checkout court record
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-
-      - name: Install repository package and rclone
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          python -m pip install -e .
-          sudo apt-get update
-          sudo apt-get install -y rclone
-
-      - name: Require read-capable R2 credentials
-        shell: bash
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/opt-a-v2-r2-root-recovery.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo "::error::Missing R2 access-key GitHub secret"; exit 1; }
-          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo "::error::Missing R2 secret-key GitHub secret"; exit 1; }
-          rclone listremotes | grep -Fx 'ovc_r2:'
-
-      - name: Build exact recovery specification from A2-G4
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p recovery
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          review = json.loads(Path(
-              'docs/releases/opt-a-v2/publication/A2_G4_OPERATOR_REVIEW.json'
-          ).read_text(encoding='utf-8'))
-
-          expected = {
-              'discovery': {
-                  'release_id': 'OPT-A.GBPUSD.DISCOVERY.2021_2023.v2',
-                  'manifest_id': 'MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2',
-                  'manifest_sha256': '0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c',
-              },
-              'development': {
-                  'release_id': 'OPT-A.GBPUSD.DEVELOPMENT.2024.v2',
-                  'manifest_id': 'MANIFEST.OPT-A.GBPUSD.DEVELOPMENT.2024.v2.r2',
-                  'manifest_sha256': '25e1be8a7edb0e96017c45bf35f4e788345f94b22a8ed9bb0874c86338ba64cc',
-              },
-          }
-
-          spec = {'schema': 'ovc-opt-a-v2-r2-root-recovery-spec/v1', 'roles': {}}
-          for role, binding in expected.items():
-              item = review['releases'][role]
-              for field, value in binding.items():
-                  assert item[field] == value, (role, field, item[field], value)
-              assert item['lifecycle_state'] == 'REMOTE_VERIFIED'
-              manifest_key = item['remote_manifest_key']
-              assert manifest_key.endswith('/manifest.json')
-              spec['roles'][role] = {
-                  **binding,
-                  'remote_manifest_key': manifest_key,
-                  'remote_root': manifest_key[:-len('/manifest.json')],
-                  'manifest_bound_payload_objects': item['file_count'],
-                  'manifest_bound_payload_bytes': item['total_size_bytes'],
-              }
-
-          Path('recovery/recovery-spec.json').write_text(
-              json.dumps(spec, indent=2, sort_keys=True) + '\n', encoding='utf-8'
-          )
-          PY
-
-      - name: Recover Discovery and Development roots from canonical R2
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p recovered
-          python - <<'PY' > recovery/roles.tsv
-          import json
-          from pathlib import Path
-          spec = json.loads(Path('recovery/recovery-spec.json').read_text())
-          for role in ('discovery', 'development'):
-              item = spec['roles'][role]
-              print('\t'.join((role, item['remote_root'], item['manifest_sha256'])))
-          PY
-
-          while IFS=$'\t' read -r role remote_root manifest_sha; do
-            local_root="recovered/${role}"
-            mkdir -p "$local_root"
-            rclone copy \
-              --s3-no-check-bucket \
-              --checkers 16 \
-              --transfers 8 \
-              --retries 3 \
-              --low-level-retries 10 \
-              "ovc_r2:${remote_root}" \
-              "$local_root"
-            test -f "$local_root/manifest.json"
-            printf '%s  %s\n' "$manifest_sha" "$local_root/manifest.json" | sha256sum --check --strict
-          done < recovery/roles.tsv
-
-      - name: Verify exact C2 price-parent contract and every manifest-declared byte
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          from ovc.opt_b.c2.price_parent import OPT_A_RELEASE_BINDINGS, verify_opt_a_release
-
-          report = {
-              'schema': 'ovc-opt-a-v2-r2-root-recovery-report/v1',
-              'status': 'PASS_EXACT_R2_ROOTS_RECOVERED_AND_FULL_BYTE_VERIFIED',
-              'workflow_run_id': '${{ github.run_id }}',
-              'workflow_commit': '${{ github.sha }}',
-              'source': 'CLOUDFLARE_R2_CANONICAL',
-              'roles': [],
-              'validation_consumption': 'LOCKED_UNCONSUMED',
-              'market_replay': 'NOT_EXECUTED',
-              'local_candidate_release': 'NONE',
-              'selector': 'NONE',
-              'probability': 'NONE',
-              'exposure': 'NONE',
-              'trading': 'NONE',
-              'execution': 'NONE',
-          }
-
-          for role in ('DISCOVERY', 'DEVELOPMENT'):
-              binding = OPT_A_RELEASE_BINDINGS[role]
-              verified = verify_opt_a_release(Path('recovered') / role.lower(), binding)
-              report['roles'].append({
-                  'role': role,
-                  'release_id': binding.release_id,
-                  'manifest_id': binding.manifest_id,
-                  'manifest_sha256': verified.manifest_sha256,
-                  'manifest_bound_payload_objects': binding.payload_file_count,
-                  'manifest_bound_payload_bytes': binding.payload_bytes,
-                  'price_files': binding.price_file_count,
-                  'root': role.lower(),
-                  'verification': 'PASS_C2_EXACT_PRICE_PARENT_CONTRACT',
-              })
-
-          report['totals'] = {
-              'manifest_bound_payload_objects': sum(item['manifest_bound_payload_objects'] for item in report['roles']),
-              'manifest_bound_payload_bytes': sum(item['manifest_bound_payload_bytes'] for item in report['roles']),
-              'price_files': sum(item['price_files'] for item in report['roles']),
-          }
-          Path('recovery/OPT_A_V2_R2_ROOT_RECOVERY_REPORT.json').write_text(
-              json.dumps(report, indent=2, sort_keys=True) + '\n', encoding='utf-8'
-          )
-          print(json.dumps(report, indent=2, sort_keys=True))
-          PY
-
-      - name: Upload exact recovered parent roots
-        uses: actions/upload-artifact@v4
-        with:
-          name: opt-a-v2-r2-exact-parent-roots
-          path: recovered/
-          if-no-files-found: error
-          retention-days: 90
-
-      - name: Upload recovery specification and verification report
-        uses: actions/upload-artifact@v4
-        with:
-          name: opt-a-v2-r2-root-recovery-report
-          path: recovery/
-          if-no-files-found: error
-          retention-days: 90
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

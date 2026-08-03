@@ -1,84 +1,40 @@
-name: C2-G5 local candidate freeze and QA
+name: C2 G5 CANDIDATE FREEZE — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
-  actions: read
+
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  candidate-freeze:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 180
     steps:
-      - name: Checkout exact branch court record
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run canonical repository tests
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c2-g5-candidate-freeze.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Download accepted C2-G4 replay artifact 8634383302
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30210057332
-          name: c2-g4-exact-parent-replay-output
-          path: c2-g4-artifact
-      - name: Construct, double-materialize, freeze and full-byte verify C2 candidates
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          PYTHONPATH=src python scripts/opt_b/freeze_c2_g5_candidate.py \
-            --artifact-root c2-g4-artifact \
-            --repo-root . \
-            --output-root c2-g5-frozen
-      - name: Enforce retained authority boundary
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('c2-g5-frozen/C2_G5_GATE_PACKET.json').read_text())
-          report = json.loads(Path('c2-g5-frozen/C2_G5_FREEZE_REPORT.json').read_text())
-          assert gate['decision'] == 'PASS_LOCAL_CANDIDATE_RELEASE_FROZEN'
-          assert report['status'] == 'PASS_LOCAL_CANDIDATE_RELEASE_FROZEN'
-          assert gate['verification']['deterministic_output_equivalence'] == 'PASS_TWO_INDEPENDENT_BYTE_IDENTICAL_MATERIALIZATIONS'
-          assert gate['verification']['full_byte_local_verification'] == 'PASS'
-          assert gate['verification']['blocking_qa_issues'] == 0
-          assert gate['verification']['unresolved_qa_issues'] == 0
-          assert gate['authority_delta']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert gate['authority_delta']['publication'] == 'NONE'
-          assert gate['authority_delta']['selector'] == 'NONE'
-          assert gate['authority_delta']['activation'] == 'NONE'
-          assert gate['authority_delta']['probability'] == 'NONE'
-          assert gate['authority_delta']['exposure'] == 'NONE'
-          assert gate['authority_delta']['trading'] == 'NONE'
-          assert gate['authority_delta']['execution'] == 'NONE'
-          PY
-      - name: Upload frozen Discovery candidate
-        uses: actions/upload-artifact@v4
-        with:
-          name: c2-opt-b-c2-gbpusd-discovery-2021-2023-v1-frozen-candidate
-          path: c2-g5-frozen/OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1/**
-          if-no-files-found: error
-          retention-days: 90
-      - name: Upload frozen Development candidate
-        uses: actions/upload-artifact@v4
-        with:
-          name: c2-opt-b-c2-gbpusd-development-2024-v1-frozen-candidate
-          path: c2-g5-frozen/OPT-B.C2.GBPUSD.DEVELOPMENT.2024.v1/**
-          if-no-files-found: error
-          retention-days: 90
-      - name: Upload C2-G5 gate and freeze reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: c2-g5-candidate-freeze-gate-packet
-          path: |
-            c2-g5-frozen/C2_G5_GATE_PACKET.json
-            c2-g5-frozen/C2_G5_FREEZE_REPORT.json
-          if-no-files-found: error
-          retention-days: 90
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

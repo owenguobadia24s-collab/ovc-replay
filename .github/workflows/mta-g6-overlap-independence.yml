@@ -1,55 +1,40 @@
-name: Market Translation Audit MTA-G6 overlap independence
+name: MTA G6 OVERLAP INDEPENDENCE — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "contracts/research_operations/mta/OVC_MTA_OVERLAP_INDEPENDENCE_AUDIT_CONTRACT_v0_1.md"
-      - "src/ovc/research_operations/mta/overlap_independence_audit.py"
-      - "scripts/research_operations/validate_mta_wp6.py"
-      - "tests/research_operations/mta/test_mta_wp6.py"
-      - "docs/releases/market-translation-audit-v0-2/mta-g6/**"
-      - "docs/releases/market-translation-audit-v0-2/mta-g5/MTA_G5_MERGE_RECEIPT.json"
-      - "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json"
-      - ".github/workflows/mta-g6-overlap-independence.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  mta-g6:
-    name: mta-g6
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-WP6')
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: {show-progress: false}
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
-        with: {python-version: "3.11"}
-      - name: Validate compact overlap audit
-        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp6.py
-      - name: Focused MTA-WP6 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp6.py' -v
-      - name: Retained MTA assurance
+        with:
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp5.py
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp4.py
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp3.py
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp2.py
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp1.py
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_g0.py
-      - name: Complete repository suite
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/mta-g6-overlap-independence.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert audit-only authority
+      - name: Assert no side-effect authority
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          v=json.loads(Path('docs/releases/market-translation-audit-v0-2/mta-g6/MTA_WP6_OVERLAP_INDEPENDENCE_AUDIT_REFERENCE.json').read_text())
-          assert v['occurrence_count']==1779
-          assert v['variants_summary']['PRIMARY_OVERLAP_PLUS_1']['cluster_count']==20
-          assert all(x==0 for x in v['mismatch_counts'].values())
-          assert v['cluster_semantic_promotion']=='DENIED'
-          assert v['validation_consumption']=='DENIED'
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."
