@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-programme-genesis-pg-g0-operator-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "PG-G0",
+  "decision_id": "PG-G0.OPERATOR.PASS.20260803T184400+0100",
+  "decision": "PASS",
+  "decided_at": "2026-08-03T18:44:00+01:00",
+  "operator_command": "OVC APPROVE PG-G0 PASS",
+  "operator": "HUMAN_OPERATOR",
+  "baseline_commit": "5fb26ce08ff1a386f76bc8c6784350ab6fddcfb7",
+  "approved_candidate_branch": "gate/pg-g0-ratification",
+  "approved_candidate_commit": "45eac87e3040ae1abd572d5dca89ab84c9a249c6",
+  "approved_pull_request": 263,
+  "assurance": {
+    "tests": {
+      "run_id": 30837901652,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_merge_readiness": {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30837901857,
+      "conclusion": "SUCCESS"
+    },
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0,
+    "qa_recommendation": "PASS"
+  },
+  "authority_delta": {
+    "programme_governance_implementation": "APPROVED_BOUNDED_BUILD_AUTHORITY",
+    "released_packet": "PG-WP1",
+    "portfolio_migration": "DENIED_PENDING_PG_G3A",
+    "admission_enforcement": "DENIED_PENDING_PG_G6",
+    "control_plane_route": "DENIED_PENDING_PG_G6",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7",
+    "market_model_semantic_threshold_selector_release_validation_publication": "NONE",
+    "agent_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "conditions": [
+    "PG-G3A_REMAINS_MANDATORY_BEFORE_ANY_EXISTING_PROGRAMME_MIGRATION",
+    "MIGRATION_UNCERTAINTY_REMAINS_PERMANENTLY_VISIBLE_UNTIL_NATIVE_GENESIS",
+    "PROGRAMME_OWNED_STATE_REMAINS_AUTHORITATIVE",
+    "PG-G6_AND_PG-G7_REMAIN_OPERATOR_REQUIRED",
+    "NO_RESERVED_AUTHORITY_IS_GRANTED"
+  ],
+  "merge_instruction": {
+    "method": "SQUASH",
+    "expected_head_after_this_record": "PENDING",
+    "target": "main"
+  },
+  "next_action": "RERUN_REQUIRED_CHECKS_ON_DECISION_HEAD_THEN_SQUASH_MERGE_PR_263_AND_START_PG_WP1",
+  "rollback": "Do not erase this decision. If implementation must stop, preserve the decision and merged ratification record, disable or supersede derived Programme Genesis services through a later non-destructive decision, and retain all source records, PRs, commits and evidence."
+}
