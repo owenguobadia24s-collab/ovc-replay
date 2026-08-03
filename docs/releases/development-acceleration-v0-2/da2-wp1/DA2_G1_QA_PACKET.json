@@ -1,0 +1,26 @@
+{
+  "blocking_issues": [
+    "FINAL_HEAD_CI_PENDING",
+    "POST_MERGE_RULESET_APPLICATION_PENDING"
+  ],
+  "checks": [
+    {"check_id": "ONLY_TWO_PR_WORKFLOWS", "result": "PASS_LOCAL"},
+    {"check_id": "ONE_COMPLETE_SUITE", "result": "PASS_LOCAL"},
+    {"check_id": "CONCURRENCY_CANCELLATION", "result": "PASS_LOCAL"},
+    {"check_id": "CANONICAL_RUNTIME_3_11", "result": "PASS_LOCAL"},
+    {"check_id": "HISTORICAL_DEFINITIONS_PRESERVED", "result": "PASS_LOCAL"},
+    {"check_id": "CURRENT_REQUIRED_CONTEXT_COMPATIBILITY", "result": "PENDING_CI"},
+    {"check_id": "TARGET_MERGE_READINESS_CONTEXT", "result": "PENDING_CI"},
+    {"check_id": "RULESET_APPLICATION", "result": "PENDING_POST_MERGE"}
+  ],
+  "gate_id": "DA2-G1",
+  "packet_id": "DA2-WP1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "qa_recommendation": "PENDING_FINAL_HEAD_CI_AND_RULESET_APPLICATION",
+  "rollback": "Restore workflow definitions from 595dbcfeb951e1c1ab2570debd671b91ec5ec07b and prior ruleset snapshot non-destructively.",
+  "ruleset_mutation_authority": "APPROVED_BOUNDED_PENDING_APPLICATION",
+  "schema": "ovc-da2-g1-qa-packet/v1",
+  "status": "QA_REVIEW",
+  "warnings": ["Unused probe/initial branches remain preserved and unmerged; no commits were added."],
+  "workflow_mutation_authority": "APPROVED_BOUNDED"
+}

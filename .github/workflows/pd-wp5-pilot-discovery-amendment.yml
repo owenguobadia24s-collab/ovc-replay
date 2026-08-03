@@ -1,111 +1,40 @@
-name: PD-WP5 Pilot Discovery amendment
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - "contracts/research_operations/pattern_discovery/PD_WP5_PILOT_DISCOVERY_OPERATION_CONTRACT_v0_1.md"
-      - "schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_gate_state_v0_1.schema.json"
-      - "registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json"
-      - "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
-      - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
-      - "registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json"
-      - "docs/releases/pattern-discovery-v0-3/pd-wp5/**"
-      - "tests/research_operations/pattern_discovery/test_pd_wp5_pilot_discovery_amendment.py"
-      - ".github/workflows/pd-wp5-pilot-discovery-amendment.yml"
-      - ".github/workflows/pd-wp5-first-live-operation.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  amendment:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Focused Pilot Discovery amendment tests
-        run: >-
-          PYTHONPATH=src python -m unittest discover
-          -s tests/research_operations/pattern_discovery
-          -p 'test_pd_wp5_pilot_discovery_amendment.py'
-          -v
-      - name: Canonical repository tests
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Validate machine-readable gate and schema JSON
-        shell: bash
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          python -m json.tool schemas/research_operations/pattern_discovery/pd_g4b_pilot_discovery_gate_state_v0_1.schema.json >/dev/null
-          python -m json.tool registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json >/dev/null
-          python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json >/dev/null
-          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
-          python -m json.tool registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json >/dev/null
-      - name: Assert exact approved Pilot Discovery authority boundary
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json').read_text())
-          pd = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
-          rps = json.loads(Path('registries/research_operations/prospective_source/RPS_G4A_GATE_STATE_v0_1.json').read_text())
-          assert gate['gate_status'] == 'APPROVED'
-          assert gate['decision'] == 'PASS'
-          assert gate['operator_approval_required'] is False
-          assert gate['operator_approval_command'] == 'OVC APPROVE PD-G4B'
-          assert gate['research_role'] == 'PILOT_DISCOVERY'
-          assert gate['operation_mode'] == 'TIME_GATED_REPLAY'
-          assert gate['source_slice_id'] == 'RPS.DUKASCOPY.GBPUSD.20260622_20260625.v1'
-          assert gate['compute_run_id'] == 'RPS.RUN.7aeb551335d766ee3bf503e6'
-          assert gate['source_binding_id'] == 'RPS.BINDING.32fb3003efa072916c11e907'
-          assert gate['signed_replay_acceptance_id'] == 'RPS.REPLAY-ACCEPT.0844eddf74e144ced487cc48'
-          assert gate['pilot_only'] is True
-          assert gate['promotion_eligibility'] == 'NON_PROMOTABLE'
-          assert gate['canonical_discovery_population'] is False
-          assert gate['canonical_append'] == 'DENIED'
-          assert gate['next_gate'] == 'PD-G5P'
-          assert pd['packet_status'] == 'APPROVED'
-          assert pd['next_packet'] == 'PD-WP5-PILOT'
-          assert pd['next_gate'] == 'PD-G5P'
-          assert pd['decision'] == 'PASS'
-          assert rps['gate_status'] == 'SUPERSEDED_FOR_PILOT_DISCOVERY'
-          assert rps['future_live_gate'] == 'RPS-LIVE-G1'
-          assert rps['provider_request_authority'] == 'DENIED'
-          PY
-      - name: Assert no executable, provider or market payload added by amendment
-        shell: bash
-        run: |
-          set -euo pipefail
-          changed="$(git diff --name-only HEAD^1 HEAD)"
-          echo "$changed"
-          if echo "$changed" | grep -E '(^|/)(id_ed25519|.*\.bi5|.*\.csv|.*\.jsonl|raw|cache)(/|$)'; then
-            echo "Prohibited raw/provider/key/payload path added by amendment."
-            exit 1
-          fi
-          if echo "$changed" | grep -E '^src/'; then
-            echo "Executable source change found in design-only amendment."
-            exit 1
-          fi
-      - name: Assert retained prohibitions
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('registries/research_operations/pattern_discovery/PD_G4B_PILOT_DISCOVERY_GATE_STATE_v0_1.json').read_text())
-          prohibited = set(gate['retained_prohibitions'])
-          required = {
-              'SEMANTIC_PROMOTION', 'FAMILY_PROMOTION', 'ACTIVE_NOVELTY_RANKING',
-              'SELECTOR_MUTATION', 'RELEASE_MUTATION', 'DIRECT_R2_WRITE',
-              'VALIDATION_CONSUMPTION', 'PROBABILITY', 'RISK', 'EXPOSURE',
-              'TRADING', 'EXECUTION', 'AGENT_WRITE', 'LIVE_PROSPECTIVE_RELABEL'
-          }
-          assert required <= prohibited
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

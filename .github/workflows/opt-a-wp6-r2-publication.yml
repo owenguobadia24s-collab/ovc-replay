@@ -4,15 +4,16 @@ on:
   push:
     branches:
       - publish/opt-a-v2-role-releases-r2
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
   contents: read
   actions: read
   issues: write
+
+concurrency:
+  group: ovc-legacy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   packet-tests:
@@ -26,7 +27,7 @@ jobs:
       - run: pytest -q tests/opt_a/test_wp6_publication_packet.py
 
   publish-and-verify:
-    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-publish]'))
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[no-publish]'))
     needs: packet-tests
     runs-on: ubuntu-latest
     timeout-minutes: 180

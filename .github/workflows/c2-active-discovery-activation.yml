@@ -1,38 +1,40 @@
-name: C2 ACTIVE_DISCOVERY selector and legacy retirement
+name: C2 ACTIVE DISCOVERY ACTIVATION — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  activation-review:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run canonical repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce exact selector and retirement transaction
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('docs/releases/opt-b-c2-v2/activation/C2_ACTIVE_DISCOVERY_GATE_PACKET.json').read_text())
-          assert gate['decision'] == 'PASS_ACTIVE_DISCOVERY_SELECTOR_AND_LEGACY_RETIREMENT'
-          assert gate['activation']['manifest_sha256'] == 'c5723e9e6837816c9ff0ed023112890aee6589e22518fe8365cbff2653169a33'
-          assert gate['prerequisites']['c2_r2_remote_verification'] == 'PASS_FULL_REMOTE_BYTE_VERIFICATION'
-          assert gate['legacy_retirement']['state'] == 'HISTORICAL_SUPERSEDED'
-          assert gate['rollback']['action'] == 'SET_ALL_C2_SELECTORS_NONE'
-          assert gate['rollback']['legacy_reactivation'] == 'PROHIBITED'
-          assert gate['retained']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert gate['retained']['trading'] == 'NONE'
-          assert gate['retained']['execution'] == 'NONE'
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c2-active-discovery-activation.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

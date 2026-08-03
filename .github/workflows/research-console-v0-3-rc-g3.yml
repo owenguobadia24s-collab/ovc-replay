@@ -1,31 +1,40 @@
-name: Research Console v0.3 RC-G3 adapter consumption acceptance
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'apps/research_console/**'
-      - 'tests/research_operations/test_rc_g3_v0_3_ro2_adapter_acceptance.py'
-      - 'docs/releases/research-console-v0-3/rc-g3/**'
-      - 'registries/research_operations/**'
-      - '.github/workflows/research-console-v0-3-rc-g3.yml'
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  rc-g3-acceptance:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run RC-G3 focused acceptance tests
-        run: PYTHONPATH=src:. python -m unittest tests.research_operations.test_rc_g3_v0_3_ro2_adapter_acceptance -v
-      - name: Run RO2 adapter tests
-        run: PYTHONPATH=src:. python -m unittest discover -s tests/research_operations/v0_2 -p 'test_*.py' -v
-      - name: Run full repository suite
-        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

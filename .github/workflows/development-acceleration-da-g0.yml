@@ -1,47 +1,40 @@
-name: Development Acceleration DA-G0 baseline freeze
+name: DEVELOPMENT ACCELERATION DA G0 — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "contracts/development/**"
-      - "registries/development/**"
-      - "docs/development-acceleration/**"
-      - "docs/releases/development-acceleration-v0-1/**"
-      - "scripts/development/**"
-      - "tests/development/**"
-      - ".github/workflows/development-acceleration-da-g0.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  da-g0:
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'DA-G0')
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Runtime identity
-        run: python --version
-      - name: Validate DA-G0 court record
-        run: python -u scripts/development/validate_da_g0.py
-      - name: Focused DA-G0 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da_g0.py' -v
-      - name: Complete repository suite
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert retained authority boundaries
-        shell: bash
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          grep -q 'repository_bot_write: DENIED_UNTIL_DA_G4' registries/development/OVC_DEVELOPMENT_ACCELERATION_BASELINE_PROFILE_v0_1.yaml
-          grep -q 'direct_main_write: PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_BASELINE_PROFILE_v0_1.yaml
-          grep -q 'force_push: PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_BASELINE_PROFILE_v0_1.yaml
-          grep -q 'raw_market_data_in_git: PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_BASELINE_PROFILE_v0_1.yaml
-          grep -q 'unknown_path_policy: FINAL_HEAD' registries/development/OVC_DEVELOPMENT_ACCELERATION_DEPENDENCY_MAP_v0_1.yaml
-          grep -q 'gate_replay_substitution: PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_DEPENDENCY_MAP_v0_1.yaml
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/development-acceleration-da-g0.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

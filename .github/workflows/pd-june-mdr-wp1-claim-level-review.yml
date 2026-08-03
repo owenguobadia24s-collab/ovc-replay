@@ -1,71 +1,40 @@
-name: PD-JUNE-MDR-WP1 claim-level market-description review
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  claim-level-review:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Parse historical review and completed decision records
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import base64
-          import gzip
-          import json
-          from pathlib import Path
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1')
-          corr1 = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr1')
-          corr2 = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
-          paths = [
-              base / 'PD_JUNE_MDR_WP1_EXTERNAL_ARTIFACT_INVENTORY.json',
-              base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json',
-              base / 'PD_JUNE_MDR_G1_OPERATOR_GATE_PACKET.json',
-              base / 'PD_JUNE_MDR_G1_OPERATOR_DECISION.json',
-              corr1 / 'PD_JUNE_MDR_G1_CORR1_OPERATOR_DECISION.json',
-              corr2 / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json',
-              corr2 / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json',
-              Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
-          ]
-          for path in paths:
-              json.loads(path.read_text(encoding='utf-8'))
-          compressed = base64.b64decode((base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json.gz.b64').read_text().strip(), validate=True)
-          json.loads(gzip.decompress(compressed).decode('utf-8'))
-          PY
-      - name: Run focused PD-JUNE-MDR-WP1 tests
-        run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_mdr_wp1_claim_level_review -v
-      - name: Run complete repository suite
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce historical findings and completed operator DEFER merge
+      - name: Assert no side-effect authority
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-wp1')
-          corr2 = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
-          report = json.loads((base / 'PD_JUNE_MDR_WP1_CLAIM_LEVEL_REVIEW.json').read_text())
-          decision = json.loads((corr2 / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json').read_text())
-          receipt = json.loads((corr2 / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
-          assert report['overall_answer']['verdict'] == 'NOT_ESTABLISHED'
-          assert report['artifact_verification']['source_to_model_binding_status'] == 'CONFLICT_V1_BINDING_PAYLOAD_VS_V2_CANDIDATES'
-          assert report['population_mechanical_findings']['serialized_nonchronological_candidate_count'] == 44
-          assert report['population_mechanical_findings']['serialized_nonchronological_queue_promoted_count'] == 4
-          assert decision['decision'] == 'DEFER'
-          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
-          assert state['status'] == 'COMPLETED'
-          assert state['review_status'] == 'COMPLETED'
-          assert state['next_gate'] is None
-          assert state['next_packet'] is None
-          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
-          assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

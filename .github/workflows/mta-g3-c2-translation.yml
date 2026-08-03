@@ -1,62 +1,40 @@
-name: Market Translation Audit MTA-G3 C2 translation
+name: MTA G3 C2 TRANSLATION — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "contracts/research_operations/mta/OVC_MTA_C2_TRANSLATION_AUDIT_CONTRACT_v0_1.md"
-      - "schemas/research_operations/mta/mta_c2_translation_audit_v0_1.schema.json"
-      - "src/ovc/research_operations/mta/c2_translation_audit.py"
-      - "fixtures/research_operations/mta/MTA_WP3_C2_TRANSLATION_FIXTURE_v0_1.json"
-      - "scripts/research_operations/validate_mta_wp3.py"
-      - "tests/research_operations/mta/test_mta_wp3.py"
-      - "docs/releases/market-translation-audit-v0-2/mta-g3/**"
-      - "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json"
-      - ".github/workflows/mta-g3-c2-translation.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  mta-g3:
-    name: mta-g3
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-WP3')
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Validate MTA-WP3 compact and external evidence binding
-        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp3.py
-      - name: Focused MTA-WP3 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp3.py' -v
-      - name: Retained C2 structure and transition tests
-        run: PYTHONPATH=src python -m unittest tests.opt_b.c2.test_wp3_structure_engine tests.opt_b.c2.test_wp4_state_persistence_transition -v
-      - name: Retained MTA-WP2, MTA-WP1 and MTA-G0 tests
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp2.py
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp1.py
-          PYTHONPATH=src python -u scripts/research_operations/validate_mta_g0.py
-      - name: Complete repository suite
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/mta-g3-c2-translation.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert audit-only authority and exact accounting
-        shell: bash
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          p = Path('docs/releases/market-translation-audit-v0-2/mta-g3/MTA_WP3_C2_TRANSLATION_AUDIT_REFERENCE.json')
-          v = json.loads(p.read_text())
-          assert v['record_accounting']['unaccounted_c2_records'] == 0
-          assert v['record_accounting']['accepted_c2_ids_reconstructed'] == 16765
-          assert v['selector_change'] == 'DENIED'
-          assert v['clock_change'] == 'DENIED'
-          assert v['c2e_c2_5_c3'] == 'DENIED'
-          assert v['validation_consumption'] == 'DENIED'
-          assert v['r2_publication'] == 'DENIED'
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

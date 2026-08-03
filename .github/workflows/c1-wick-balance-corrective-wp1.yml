@@ -1,141 +1,40 @@
-name: C1 wick-balance corrective WP1
+name: C1 WICK BALANCE CORRECTIVE WP1 — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  corrective-tests:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
           fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-
-      - name: Focused corrective tests
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          mkdir -p c1c-wp1-diagnostics
-          set +e
-          PYTHONPATH=src python -m unittest discover -s tests/opt_b/c1 -p 'test_c1_wick_balance_corrective.py' -v > c1c-wp1-diagnostics/focused.log 2>&1
-          status=$?
-          echo "$status" > c1c-wp1-diagnostics/focused.status
-          cat c1c-wp1-diagnostics/focused.log
-          exit 0
-
-      - name: Canonical repository tests
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c1-wick-balance-corrective-wp1.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          set +e
-          PYTHONPATH=src python -m unittest discover -s tests -v > c1c-wp1-diagnostics/canonical.log 2>&1
-          status=$?
-          echo "$status" > c1c-wp1-diagnostics/canonical.status
-          tail -n 100 c1c-wp1-diagnostics/canonical.log
-          exit 0
-
-      - name: Frozen authority guard with lawful successor transaction
-        run: |
-          set +e
-          {
-            git diff --exit-code origin/main -- \
-              registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml \
-              contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md \
-              schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json
-            grep -F 'formula: upper_wick_share - lower_wick_share' registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml
-            grep -F 'C1_IMPLEMENTATION_ID = "C1.IMPLEMENTATION.v0.2"' src/ovc/opt_b/c1/formulas.py
-            ! grep -F '(lower - upper) / r' src/ovc/opt_b/c1/formulas.py scripts/opt_b/run_c1_wp4_replay.py
-            if ! git diff --quiet origin/main -- \
-              registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml \
-              registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml \
-              registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml; then
-              python - <<'PY'
-          import json
-          from pathlib import Path
-          transaction=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json').read_text())
-          receipt=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json').read_text())
-          c1=Path('registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml').read_text()
-          c2=Path('registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml').read_text()
-          authority=Path('registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml').read_text()
-          assert transaction['status']=='APPROVED_MATERIALISED_EFFECTIVE_ON_MAIN_MERGE'
-          assert transaction['atomic_on_main_merge'] is True
-          assert receipt['status']=='PASS_C2_V2_IDENTITY_REPLAY_PUBLICATION_FULL_REMOTE_BYTE_VERIFICATION'
-          assert receipt['semantic_state_drift_count']==0
-          assert receipt['semantic_transition_drift_count']==0
-          assert c1.count('selector_state: ACTIVE')==2
-          assert 'C1.IMPLEMENTATION.v0.2' in c1
-          assert c2.count('selector_state: ACTIVE')==1
-          assert 'OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2' in c2
-          assert 'C2_V2_ACTIVE_DISCOVERY_C1_V2_PARENT_BSTATE_HISTORICAL_SUPERSEDED' in authority
-          assert transaction['retained_prohibitions']['validation_consumption']=='LOCKED_UNCONSUMED'
-          PY
-            fi
-          } > c1c-wp1-diagnostics/authority.log 2>&1
-          status=$?
-          echo "$status" > c1c-wp1-diagnostics/authority.status
-          cat c1c-wp1-diagnostics/authority.log
-          exit 0
-
-      - name: Emit compact QA evidence
-        run: |
-          mkdir -p c1c-wp1-evidence
-          python - <<'PY'
-          import hashlib, json
-          from pathlib import Path
-          files = [
-              'src/ovc/opt_b/c1/formulas.py',
-              'scripts/opt_b/run_c1_wp4_replay.py',
-              'scripts/opt_b/audit_c1_wick_balance.py',
-              'tests/opt_b/c1/test_c1_wick_balance_corrective.py',
-          ]
-          inventory = []
-          for name in files:
-              payload = Path(name).read_bytes()
-              inventory.append({'path': name, 'size_bytes': len(payload), 'sha256': hashlib.sha256(payload).hexdigest()})
-          statuses = {
-              name: int(Path(f'c1c-wp1-diagnostics/{name}.status').read_text())
-              for name in ('focused', 'canonical', 'authority')
-          }
-          passed = all(value == 0 for value in statuses.values())
-          evidence = {
-              'schema': 'ovc-c1c-wp1-qa-evidence/v1',
-              'programme_id': 'OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1',
-              'packet_id': 'C1C-WP1',
-              'gate_id': 'C1C-G1',
-              'status': 'PASS' if passed else 'BLOCK',
-              'qa_recommendation': 'PASS' if passed else 'BLOCK',
-              'test_statuses': statuses,
-              'formula_registry_id': 'C1.FORMULAS.v0.1',
-              'implementation_id': 'C1.IMPLEMENTATION.v0.2',
-              'formula_registry_mutation': False,
-              'selector_mutation': Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json').exists(),
-              'release_mutation': False,
-              'validation_consumption': 'LOCKED_UNCONSUMED',
-              'files': inventory,
-          }
-          Path('c1c-wp1-evidence/C1C_WP1_QA_EVIDENCE.json').write_text(json.dumps(evidence, indent=2, sort_keys=True) + '\n')
-          PY
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: c1c-wp1-diagnostics
-          path: c1c-wp1-diagnostics/**
-          retention-days: 30
-
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: c1c-wp1-qa-evidence
-          path: c1c-wp1-evidence/**
-          retention-days: 90
-
-      - name: Require all checks PASS
-        run: |
-          test "$(cat c1c-wp1-diagnostics/focused.status)" = "0"
-          test "$(cat c1c-wp1-diagnostics/canonical.status)" = "0"
-          test "$(cat c1c-wp1-diagnostics/authority.status)" = "0"
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

@@ -1,70 +1,40 @@
-name: Market Translation Audit MTA-G0 gate readiness
+name: MARKET TRANSLATION AUDIT MTA G0 — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "docs/plans/research_operations/OVC_Market_Translation_and_Option_Flow_Audit_Implementation_Plan_v0_2_REVISED.md"
-      - "contracts/research_operations/mta/**"
-      - "registries/research_operations/mta/**"
-      - "schemas/research_operations/mta/**"
-      - "fixtures/research_operations/mta/**"
-      - "docs/releases/market-translation-audit-v0-2/**"
-      - "docs/development-acceleration/MTA_REQUIRED_CHECK_COMPATIBILITY_v0_1.md"
-      - "scripts/research_operations/validate_mta_g0.py"
-      - "tests/research_operations/mta/**"
-      - ".github/workflows/market-translation-audit-mta-g0.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  mta-g0:
-    name: mta-g0
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-G0')
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate MTA-G0 resumed packet
-        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_g0.py
-      - name: Focused MTA-G0 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_g0.py' -v
-      - name: Complete repository suite
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert bounded authority and reproducible ruleset
-        shell: bash
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import hashlib, json
-          from pathlib import Path
-
-          root = Path('.')
-          state = json.loads((root / 'registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json').read_text())
-          gate = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_GATE_PACKET.json').read_text())
-          decision = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json').read_text())
-          resolution = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_RULESET_MERGE_RESOLUTION.json').read_text())
-          ruleset_path = root / resolution['resolution_source']['ruleset_path']
-          ruleset = json.loads(ruleset_path.read_text())
-          digest = hashlib.sha256(ruleset_path.read_bytes()).hexdigest()
-
-          assert decision['operator_command'] == 'OVC APPROVE MTA-G0 PASS'
-          assert decision['downstream_authority_created'] is False
-          assert state['operator_decision_required'] is False
-          assert state['authority']['selectors'] == 'UNCHANGED'
-          assert state['authority']['validation'] == 'LOCKED_UNCONSUMED'
-          assert state['authority']['c2e_c2_5_c3'] == 'DENIED'
-          assert gate['decision'] == 'PASS'
-          assert resolution['resolution_result'] == 'PASS_RULESET_REPRODUCIBLE_REQUIRED_CONTEXTS_IDENTIFIED'
-          assert digest == resolution['resolution_source']['ruleset_sha256']
-          contexts = [item['context'] for item in ruleset['rules'][-1]['parameters']['required_status_checks']]
-          assert contexts == ['tests', 'OVC tiered test selection shadow']
-          assert ruleset['bypass_actors'] == []
-          assert ruleset['current_user_can_bypass'] == 'never'
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/market-translation-audit-mta-g0.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

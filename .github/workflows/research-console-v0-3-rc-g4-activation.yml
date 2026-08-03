@@ -1,96 +1,40 @@
-name: RC-G4 local read-only C1 activation
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - "apps/research_console/Home.py"
-      - "apps/research_console/c1_projection_source.py"
-      - "apps/research_console/c1_fact_assurance.py"
-      - "apps/research_console/rc_g4_console.py"
-      - "apps/research_console/state.py"
-      - "registries/research_operations/RESEARCH_CONSOLE_RC_G4_ACCEPTANCE_v0_3.yaml"
-      - "registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json"
-      - "registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml"
-      - "docs/releases/research-console-v0-3/rc-g4/**"
-      - "tests/research_operations/v0_3/test_rc_g4_activation.py"
-      - ".github/workflows/research-console-v0-3-rc-g4-activation.yml"
-  push:
-    branches:
-      - "activate/research-console-v0-3-rc-g4-c1"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  rc-g4-activation:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
           fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Compile activation modules
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python -m py_compile \
-            apps/research_console/c1_projection_source.py \
-            apps/research_console/c1_fact_assurance.py \
-            apps/research_console/rc_g4_console.py \
-            apps/research_console/Home.py
-      - name: Run focused RC-G4 activation tests
-        env:
-          PYTHONPATH: src:.
-        run: python -m unittest tests.research_operations.v0_3.test_rc_g4_activation -v
-      - name: Re-run accepted RO3-G4 and operator-gate tests
-        env:
-          PYTHONPATH: src:.
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          python -m unittest tests.research_operations.v0_3.test_lineage_adapters -v
-          python -m unittest tests.research_operations.v0_3.test_rc_g4_operator_gate -v
-      - name: Run complete repository suite
-        env:
-          PYTHONPATH: src:.
-        run: python -m unittest discover -s tests -v
-      - name: Enforce exact approved authority delta
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          state = json.loads(Path('registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json').read_text())
-          packet = next(item for item in state['packets'] if item['packet_id'] == 'RC-G4-ACTIVATION')
-          assert packet['status'] in {'RUNNING', 'APPROVED', 'COMPLETED'}
-          assert packet['baseline_commit'] == '19066a5201e33a51b0e785dbdc932999f39fd9da'
-          assert packet['authority_delta'] == 'LOCAL_READ_ONLY_C1_PRESENTATION'
-          assert packet['authority_required'] == 'AUTO_EXECUTABLE_WITHIN_OPERATOR_APPROVED_DELTA'
-
-          decision = Path('docs/releases/research-console-v0-3/rc-g4/RC_G4_OPERATOR_DECISION.md').read_text()
-          acceptance = Path('registries/research_operations/RESEARCH_CONSOLE_RC_G4_ACCEPTANCE_v0_3.yaml').read_text()
-          source = Path('apps/research_console/c1_projection_source.py').read_text()
-          view = Path('apps/research_console/c1_fact_assurance.py').read_text()
-          wrapper = Path('apps/research_console/rc_g4_console.py').read_text()
-
-          assert 'Decision:** `PASS`' in decision
-          assert 'LOCAL_READ_ONLY_C1_PRESENTATION' in decision
-          assert 'route_state: ENABLED_LOCAL_READ_ONLY' in acceptance
-          assert 'validation_consumption: LOCKED_UNCONSUMED' in acceptance
-          assert 'DOWNSTREAM TRACE — READ ONLY. C2 AND PATTERN DISCOVERY AUTHORITY IS UNCHANGED.' in source
-          assert 'DOWNSTREAM_AUTHORITY_BANNER' in view
-          assert 'LOCAL_READ_ONLY_C1_PRESENTATION' in wrapper
-          assert 'st.button' not in view
-          PY
-
-          changed="$(git diff --name-only 19066a5201e33a51b0e785dbdc932999f39fd9da...HEAD)"
-          if printf '%s\n' "$changed" | grep -E '^(contracts/opt_b/|schemas/opt_b/|registries/opt_b/(c1|c2)/|src/ovc/opt_b/|registries/authority/|legacy/|quarantine/)'; then
-            echo 'RC-G4 activation changed a forbidden authority surface' >&2
-            exit 1
-          fi
-          if printf '%s\n' "$changed" | grep -E '(^|/)(selector|threshold|risk|exposure|execution|probability)' ; then
-            echo 'RC-G4 activation introduced a reserved authority surface' >&2
-            exit 1
-          fi
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."
