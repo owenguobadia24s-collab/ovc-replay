@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-c2e-neutral-episode-g0-gate-packet/v1",
+  "programme_id": "OVC-C2E-NEUTRAL-EPISODE-v0.1",
+  "plan_id": "OVC-C2E-NEUTRAL-EPISODE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "C2E-G0",
+  "title": "Neutral episode layer contract approval",
+  "status": "GATE_READY",
+  "operator_decision_required": true,
+  "source_decision": "MTA-G8.OPERATOR.MULTIPART.20260803T114000+0100",
+  "baseline_commit": "d318f090b33fdc33ce95f3ab91307414199dd2d1",
+  "current_authority": "PLAN_PREPARATION_ONLY_C2E_DEFERRED",
+  "proposed_delta": "AUTHORISE_BOUNDED_NON_SEMANTIC_C2E_IMPLEMENTATION_AND_SHADOW_EVIDENCE_ONLY",
+  "acceptance_conditions": [
+    "FIXED_CLOCK_REMAINS_AUTHORITATIVE",
+    "NEUTRAL_EPISODE_OBJECT_HAS_NO_SEMANTIC_PREDICTIVE_OR_CANDIDATE_FIELDS",
+    "PRIMARY_STRICT_AND_PERMISSIVE_BOUNDARY_VARIANTS_FROZEN",
+    "ZERO_FUTURE_INFORMATION",
+    "ALL_CENSORING_EXPLICIT",
+    "MTA_AND_RO4_OBJECTS_REMAIN_SEPARATE",
+    "FOUR_HOUR_AND_TEN_GB_PACKET_BOUNDS",
+    "FINAL_OPERATOR_GATE_BEFORE_ACTIVATION_OR_RELEASE"
+  ],
+  "material_baseline_findings": {
+    "eligible_windows": 7116,
+    "exact_occurrences": 1779,
+    "primary_components": 20,
+    "strict_components": 24,
+    "permissive_components": 18,
+    "material_sensitivity_occurrences": 1456,
+    "structurally_unstable_occurrences": 323,
+    "robust_occurrences": 0,
+    "ro4_comparison": "NOT_DETERMINABLE"
+  },
+  "authority_boundary": {
+    "c2e_activation": "DENIED",
+    "semantic_or_candidate_promotion": "DENIED",
+    "clock_formula_threshold_selector_release_change": "DENIED",
+    "validation_consumption": "DENIED",
+    "publication": "DENIED",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "exact_operator_command": "OVC APPROVE C2E-G0 PASS",
+  "rollback": "Preserve the plan and gate packet; do not start C2E-WP1 unless PASS is recorded."
+}

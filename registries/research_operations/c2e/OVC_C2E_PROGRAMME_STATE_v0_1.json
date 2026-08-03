@@ -1,0 +1,24 @@
+{
+  "schema": "ovc-c2e-neutral-episode-programme-state/v1",
+  "programme_id": "OVC-C2E-NEUTRAL-EPISODE-v0.1",
+  "plan_id": "OVC-C2E-NEUTRAL-EPISODE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "current_packet": "C2E-00",
+  "current_gate": "C2E-G0",
+  "operator_decision_required": true,
+  "source_decision": "MTA-G8.OPERATOR.MULTIPART.20260803T114000+0100",
+  "baseline_commit": "d318f090b33fdc33ce95f3ab91307414199dd2d1",
+  "branch": "plan/c2e-neutral-episode-layer-v0-1",
+  "packets": [
+    {"packet_id":"C2E-00","status":"GATE_READY","prerequisites":["MTA-G8-C2E_PASS"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"AUTHORISE_NON_SEMANTIC_C2E_IMPLEMENTATION_AND_SHADOW_ONLY","baseline_commit":"d318f090b33fdc33ce95f3ab91307414199dd2d1","branch":"plan/c2e-neutral-episode-layer-v0-1","candidate_commit":"PENDING_FINAL_HEAD","tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2E-WP1"},
+    {"packet_id":"C2E-WP1","status":"PLANNED","prerequisites":["C2E-G0_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"DETERMINISTIC_NEUTRAL_EPISODE_BUILDER","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2E-WP2"},
+    {"packet_id":"C2E-WP2","status":"PLANNED","prerequisites":["C2E-G1_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"FULL_POPULATION_SHADOW_BUILD","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2E-WP3"},
+    {"packet_id":"C2E-WP3","status":"PLANNED","prerequisites":["C2E-G2_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"OVERLAP_AND_INDEPENDENCE_SENSITIVITY","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2E-WP4"},
+    {"packet_id":"C2E-WP4","status":"PLANNED","prerequisites":["C2E-G3_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"RO4_REFERENCE_AND_CONTRADICTION_AUDIT","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2E-WP5"},
+    {"packet_id":"C2E-WP5","status":"PLANNED","prerequisites":["C2E-G4_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"LOCAL_READ_ONLY_PRESENTATION","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2E-WP6"},
+    {"packet_id":"C2E-WP6","status":"PLANNED","prerequisites":["C2E-G5_PASS"],"authority_required":"OPERATOR_REQUIRED_FINAL","authority_delta":"EVIDENCE_DISPOSITION_ONLY","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":null}
+  ],
+  "authority_boundary": "NO_C2E_ACTIVATION_SEMANTIC_CANDIDATE_SELECTOR_VALIDATION_PUBLICATION_RISK_OR_EXECUTION_AUTHORITY",
+  "next_action": "OPERATOR_DECIDE_C2E_G0"
+}
