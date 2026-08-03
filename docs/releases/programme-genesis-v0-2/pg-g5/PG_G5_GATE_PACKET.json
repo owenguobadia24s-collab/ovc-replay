@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-programme-genesis-pg-g5-gate/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP5",
+  "gate_id": "PG-G5",
+  "title": "Deterministic read model, health and disabled Control Plane adapter",
+  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "authority_required": "DELEGATED_AUTO_RATIFIABLE_IF_PASS",
+  "baseline_commit": "ff903e24898094e1ba9408563f76197a9808e583",
+  "candidate_branch": "build/pg-wp5-read-model-control-plane",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "current_authority": "PROVISIONAL_MIGRATION_MECHANISM_ONLY",
+  "proposed_delta": "ACCEPT_DETERMINISTIC_READ_MODEL_HEALTH_COMPACT_REPORT_AND_DISABLED_ADAPTER_CANDIDATE_AND_RELEASE_PG_G6_PACKET",
+  "acceptance_conditions": [
+    "READ_MODEL_IS_DETERMINISTIC_SOURCE_COMMIT_BOUND_AND_REPLACEABLE",
+    "PROGRAMME_OWNED_STATE_REMAINS_AUTHORITATIVE",
+    "MIGRATION_UNCERTAINTY_UNRESOLVED_FIELDS_CONFLICTS_AND_SOURCE_HASHES_REMAIN_VISIBLE",
+    "HEALTH_REHASHES_SOURCES_AND_FAILS_CLOSED_WITHOUT_REPAIR",
+    "COMPACT_REPORT_PRESERVES_COUNTS_WARNINGS_AND_AUTHORITY_DENIALS",
+    "ADAPTER_REMAINS_DISABLED_UNREGISTERED_READ_ONLY_NON_WRITING_NON_ENFORCING_AND_NON_LISTENING",
+    "LOCAL_PAYLOAD_AVAILABILITY_DOES_NOT_GRANT_ROUTE_AUTHORITY",
+    "REPOSITORY_EVIDENCE_HAS_EIGHT_PROGRAMMES_FOURTEEN_MIGRATION_WARNINGS_SEVEN_HEALTH_WARNINGS_ZERO_BLOCKERS",
+    "FOCUSED_REPOSITORY_AND_MERGE_READINESS_CHECKS_PASS",
+    "QA_RECOMMENDS_PASS",
+    "NO_RESERVED_AUTHORITY_DELTA"
+  ],
+  "tests": {
+    "focused": "PENDING",
+    "repository": "PENDING",
+    "read_model_assurance": "PENDING",
+    "merge_readiness": "PENDING"
+  },
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g5/PG_G5_QA_PACKET.json",
+  "read_model_manifest": "docs/releases/programme-genesis-v0-2/pg-g5/PG_WP5_READ_MODEL_MANIFEST.json",
+  "qa_recommendation": "PENDING_EXACT_HEAD_CI",
+  "warnings": [
+    "READ_MODEL_AND_ADAPTER_OUTPUTS_ARE_NON_CANONICAL_DERIVED_CANDIDATES",
+    "MIGRATION_WARNINGS_REMAIN_VISIBLE",
+    "NO_CANON_MIGRATION_ENFORCEMENT_OR_ROUTE_ADOPTION_BEFORE_PG_G6",
+    "NO_AUTOMATIC_UPKEEP_BEFORE_PG_G7"
+  ],
+  "unresolved_issues": [],
+  "reserved_authority_denials": [
+    "PORTFOLIO_CANON_ADOPTION_BEFORE_PG_G6",
+    "MIGRATION_ADOPTION_BEFORE_PG_G6",
+    "ADMISSION_ENFORCEMENT_BEFORE_PG_G6",
+    "CONTROL_PLANE_ROUTE_BEFORE_PG_G6",
+    "AUTOMATIC_UPKEEP_BEFORE_PG_G7",
+    "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION",
+    "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
+  ],
+  "rollback": "Discard and rebuild derived read models, health and compact reports; keep the adapter disabled and preserve all sources and findings.",
+  "recommended_decision": "PASS_IF_REQUIRED_CHECKS_AND_REPOSITORY_EVIDENCE_PASS",
+  "next_packet": "PG-G6"
+}
