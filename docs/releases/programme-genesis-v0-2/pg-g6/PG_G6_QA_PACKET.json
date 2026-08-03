@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-programme-genesis-pg-g6-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "gate_id": "PG-G6",
+  "status": "PASS",
+  "baseline_commit": "a639002606cf3842e510f3c9420738d0718d8590",
+  "candidate_branch": "gate/pg-g6-portfolio-adoption",
+  "tested_candidate_commit": "ea416bea3234d894c9be0993bb2d14872e134059",
+  "final_packet_head_assurance": "REQUIRED_AFTER_QA_AND_PACKET_MATERIALISATION",
+  "checks": [
+    {"check_id": "PG-G6-CONSOLIDATED-DECISION", "status": "PASS", "evidence": "One packet contains four independent decision parts with allowed outcomes, effects and rollback."},
+    {"check_id": "PG-G6-CANON-EVIDENCE", "status": "PASS", "evidence": "PG-G0 through PG-G5 completed; exact-head PG-G5 tests and merge readiness passed; source precedence and fail-closed authority are implemented."},
+    {"check_id": "PG-G6-MIGRATION-EVIDENCE", "status": "PASS_WITH_WARNINGS", "evidence": "Seven unique source-linked records, zero blocking conflicts, fourteen migration warnings and seven health warnings retained."},
+    {"check_id": "PG-G6-ENFORCEMENT-READINESS", "status": "DEFER_RECOMMENDED", "evidence": "Frozen contracts and registries exist, but no separately validated active admission-enforcement consumer is merged."},
+    {"check_id": "PG-G6-ROUTE-READINESS", "status": "DEFER_RECOMMENDED", "evidence": "Local payload and disabled adapter exist, but no implemented network or Control Plane route is merged."},
+    {"check_id": "PG-G6-DECISION-INDEPENDENCE", "status": "PASS", "evidence": "Each part explicitly denies implication of the other three and has independent rollback."},
+    {"check_id": "PG-G6-RESERVED-AUTHORITY", "status": "PASS", "evidence": "PG-G7 upkeep and all market/model/release/agent/risk/execution authority remain denied."},
+    {"check_id": "PG-G6-FOCUSED-TESTS", "status": "PASS", "evidence": "tests/governance/test_pg_g6.py passed within repository run 30846208616."},
+    {"check_id": "PG-G6-REPOSITORY-SUITE", "status": "PASS", "evidence": "GitHub Actions tests run 30846208616 SUCCESS; 137 tests."},
+    {"check_id": "PG-G6-MERGE-READINESS", "status": "PASS", "evidence": "OVC tiered test selection shadow / OVC merge readiness run 30846208553 SUCCESS."}
+  ],
+  "corrective_history": [
+    "Initial gate assurance exposed stale test paths and an over-specific route-readiness string assertion.",
+    "Assertions were aligned to the immutable PG-G5 receipt structure and the actual decision evidence without changing any gate recommendation, authority boundary or acceptance condition.",
+    "The complete 137-test repository suite and OVC merge readiness then passed on tested candidate ea416bea3234d894c9be0993bb2d14872e134059."
+  ],
+  "evidence_summary": {
+    "programme_count": 8,
+    "migrated_programme_count": 7,
+    "migration_warning_count": 14,
+    "health_warning_count": 7,
+    "blocking_count": 0,
+    "adapter_status": "DISABLED_PENDING_PG_G6",
+    "pg_g5_merge_commit": "a639002606cf3842e510f3c9420738d0718d8590",
+    "tested_head_tests": {"run_id": 30846208616, "conclusion": "SUCCESS", "test_count": 137},
+    "tested_head_merge_readiness": {"run_id": 30846208553, "conclusion": "SUCCESS"}
+  },
+  "warnings": [
+    "ONLY_SEVEN_PROGRAMME_OWNED_STATE_RECORDS_WERE_DISCOVERED",
+    "FOURTEEN_MIGRATION_AND_SEVEN_HEALTH_WARNINGS_REMAIN_VISIBLE",
+    "ACTIVE_ENFORCEMENT_IMPLEMENTATION_IS_ABSENT",
+    "READ_ONLY_ROUTE_IMPLEMENTATION_IS_ABSENT",
+    "PG_G7_REMAINS_REQUIRED_BEFORE_AUTOMATIC_UPKEEP"
+  ],
+  "blockers": [],
+  "qa_recommendation": {
+    "CANON": "PASS",
+    "MIGRATION": "PASS",
+    "ENFORCEMENT": "DEFER",
+    "READ_ONLY_ROUTE": "DEFER"
+  },
+  "operator_decision_required": true,
+  "rollback": "Apply rollback independently per decision part and preserve all evidence, warnings, decisions and source records."
+}
