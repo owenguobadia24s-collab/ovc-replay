@@ -6,7 +6,12 @@
   "graph_id": "PGGRAPH.OVC-PG-v0.2.VALIDATION.001",
   "source_fixture": "fixtures/governance/programme_genesis/valid_pg_dependency_graph_v0_1.json",
   "scope": "PRE_MIGRATION_PROGRAMME_GENESIS_SELF_GRAPH_AND_MIGRATION_BOUNDARY",
-  "status": "PENDING_EXACT_HEAD_CI",
+  "status": "PASS",
+  "implementation_candidate_commit": "e723b11aeaffa69b5aa8c3d0eafb8d455ee0c622",
+  "assurance": {
+    "repository_tests": {"run_id": 30841455854, "conclusion": "SUCCESS"},
+    "merge_readiness": {"run_id": 30841453429, "conclusion": "SUCCESS"}
+  },
   "census": {
     "nodes": 10,
     "edges": 8,
@@ -28,7 +33,7 @@
     "missing_edge_sources": 0
   },
   "authority_paths": {
-    "status": "PASS_PENDING_CI_CONFIRMATION",
+    "status": "PASS",
     "rule": "Every edge has authority_effect NONE; accepted decisions are source nodes rather than graph-created authority.",
     "reserved_authority_delta": "NONE"
   },
@@ -46,6 +51,10 @@
     "imported_existing_edges": 0,
     "uncertainty_policy": "FROZEN_NOT_YET_APPLIED"
   },
+  "corrective_history": [
+    "Initial discoverable assurance exposed that PRODUCES uses forward producer-to-output direction while dependency edges use dependent-to-prerequisite direction.",
+    "Impact traversal was corrected by edge type without changing the frozen registry or authority model; exact-head repository and merge-readiness checks then passed."
+  ],
   "limitations": [
     "This is the pre-migration constitutional self-graph, not a claim that existing programme dependencies are already known.",
     "Existing programmes and inferred adapter edges remain unimported until PG-G3A ACKNOWLEDGE_CONTINUE.",
