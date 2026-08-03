@@ -13,6 +13,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.opt_b",
     "ovc.opt_b.c1",
     "ovc.opt_b.c2",
+    "ovc.programme_genesis",
     "ovc.research_operations",
     "ovc.research_operations.v0_2",
     "ovc.research_operations.v0_3",
@@ -44,6 +45,13 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("no market", init_text)
         self.assertIn("selector", init_text)
         self.assertIn("semantic-promotion", init_text)
+        self.assertIn("execution authority", init_text)
+
+    def test_programme_genesis_namespace_is_governance_only(self) -> None:
+        init_text = (SRC / "ovc" / "programme_genesis" / "__init__.py").read_text(encoding="utf-8")
+        self.assertIn("governance-only", init_text)
+        self.assertIn("no market", init_text)
+        self.assertIn("selector", init_text)
         self.assertIn("execution authority", init_text)
 
 
