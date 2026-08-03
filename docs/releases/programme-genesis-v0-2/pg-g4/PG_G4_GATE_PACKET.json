@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-programme-genesis-pg-g4-gate/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP4",
+  "gate_id": "PG-G4",
+  "title": "Source-faithful provisional programme migration",
+  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "authority_required": "DELEGATED_AUTO_RATIFIABLE_IF_PASS",
+  "baseline_commit": "4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a",
+  "candidate_branch": "migration/pg-wp4-existing-programmes",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "current_authority": "SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_APPROVED_BY_PG_G3A",
+  "proposed_delta": "ACCEPT_MIGRATION_MECHANISM_REPRODUCIBLE_SOURCE_CENSUS_UNCERTAINTY_AND_CONFLICT_LEDGER_AND_RELEASE_PG_WP5",
+  "acceptance_conditions": [
+    "REGISTERED_PROGRAMME_STATE_DISCOVERY_IS_DETERMINISTIC",
+    "NATIVE_PG_STATE_IS_EXCLUDED_FROM_LEGACY_MIGRATION",
+    "EVERY_IMPORTED_SOURCE_IS_BOUND_BY_PATH_AND_SHA256",
+    "SOURCE_VALUES_ARE_PRESERVED_WITHOUT_REPAIR_OR_NORMALISATION",
+    "INFERRED_FIELDS_REMAIN_EMPTY_WITHOUT_ACCEPTED_RULE",
+    "UNKNOWN_UNRESOLVED_AND_CONFLICTING_FIELDS_REMAIN_VISIBLE",
+    "EVERY_IMPORT_CARRIES_PERMANENT_MIGRATION_UNCERTAINTY",
+    "DUPLICATE_DIVERGENT_PROGRAMME_SOURCES_BLOCK_CURRENT_STATE_CLAIMS",
+    "REPOSITORY_CENSUS_HAS_NO_BLOCKING_CONFLICTS",
+    "FOCUSED_REPOSITORY_AND_MERGE_READINESS_CHECKS_PASS",
+    "QA_RECOMMENDS_PASS",
+    "NO_RESERVED_AUTHORITY_DELTA"
+  ],
+  "tests": {
+    "focused": "PENDING",
+    "repository": "PENDING",
+    "migration_assurance": "PENDING",
+    "merge_readiness": "PENDING"
+  },
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g4/PG_G4_QA_PACKET.json",
+  "migration_manifest": "docs/releases/programme-genesis-v0-2/pg-g4/PG_WP4_MIGRATION_MANIFEST.json",
+  "qa_recommendation": "PENDING_EXACT_HEAD_CI",
+  "warnings": [
+    "PROVISIONAL_NON_CANONICAL_OUTPUTS_ONLY",
+    "NO_FUTURE_MIGRATED_FACT_OR_EDGE_PRE_ACCEPTANCE",
+    "NO_ADMISSION_ENFORCEMENT_OR_CONTROL_PLANE_ROUTE",
+    "NO_AUTOMATIC_UPKEEP"
+  ],
+  "unresolved_issues": [],
+  "reserved_authority_denials": [
+    "CANONICAL_MIGRATION_ADOPTION_BEFORE_PG_G6",
+    "ADMISSION_ENFORCEMENT_BEFORE_PG_G6",
+    "CONTROL_PLANE_ROUTE_BEFORE_PG_G6",
+    "AUTOMATIC_UPKEEP_BEFORE_PG_G7",
+    "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION",
+    "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
+  ],
+  "rollback": "Discard and rebuild derived migration snapshots from preserved programme-owned state; retain all source hashes and uncertainty findings.",
+  "recommended_decision": "PASS_IF_REQUIRED_CHECKS_AND_REPOSITORY_CENSUS_PASS",
+  "next_packet": "PG-WP5"
+}
