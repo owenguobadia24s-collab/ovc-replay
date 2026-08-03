@@ -1,30 +1,40 @@
-name: RPS-G3 derived compute evidence acceptance
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - "docs/releases/prospective-source-v0-1/rps-wp3/**"
-      - "registries/research_operations/prospective_source/RPS_G3_ACCEPTANCE_STATE_v0_1.json"
-      - "tests/research_operations/prospective_source/test_rps_wp3_compact_compute_evidence.py"
-      - ".github/workflows/rps-g3-compute-evidence-acceptance.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  acceptance:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Focused RPS-G3 evidence tests
-        run: >-
-          PYTHONPATH=src python -m unittest discover
-          -s tests/research_operations/prospective_source
-          -p 'test_rps_wp3_compact_compute_evidence.py'
-          -v
-      - name: Canonical repository tests
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

@@ -1,74 +1,40 @@
-name: RC-G5 C2 sequence-evidence operator gate readiness
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - 'docs/releases/research-console-v0-3/rc-g5/**'
-      - 'registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json'
-      - 'registries/research_operations/v0_4/**'
-      - 'scripts/research_operations/validate_rc_g5.py'
-      - '.github/workflows/research-operations-v0-4-rc-g5.yml'
+  workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  rc-g5:
-    runs-on: ubuntu-24.04
+  historical-verification:
+    name: historical manual verification
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate consolidated RC-G5 operator packet
-        run: python -u scripts/research_operations/validate_rc_g5.py
-      - name: Focused projection assurance tests
-        run: PYTHONPATH=src:. python -m unittest discover -s tests/research_operations/v0_4 -p 'test_ro4_g5_console_projection.py' -v
-      - name: Complete repository suite
-        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
-      - name: Authority and repository-boundary assertions
-        shell: bash
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          test ! -e apps/research_console/pages/C2_Sequence_Evidence.py
-          test ! -e apps/research_console/pages/RO4_Sequence_Evidence.py
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          a=json.loads(Path('registries/research_console/RC_G5_C2_SEQUENCE_EVIDENCE_AUTHORITY_v0_1.json').read_text())
-          g=json.loads(Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_C2_SEQUENCE_EVIDENCE_OPERATOR_GATE_PACKET.json').read_text())
-          d=Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_OPERATOR_DECISION.json')
-          activation=Path('docs/releases/research-console-v0-3/rc-g5/RC_G5_ACTIVATION_GATE_PACKET.json')
-          assert a['writes']=='NONE'
-          assert a['annotation_actions']=='NONE'
-          assert a['validation_consumption']=='LOCKED_UNCONSUMED'
-          assert a['remote_deployment']=='DENIED'
-          assert g['auto_ratifiable'] is False
-          assert g['proposed_authority_delta']=='LOCAL_READ_ONLY_C2_SEQUENCE_EVIDENCE_PRESENTATION'
-          if g['status'] in {'GATE_READY','GATE_READY_PENDING_FINAL_HEAD_CI'}:
-              assert a['enabled'] is False
-              assert a['status']=='DISABLED_PENDING_OPERATOR_RC_G5'
-              assert g['operator_decision_required'] is True
-              assert g['operator_decision'] is None
-          else:
-              assert g['status']=='APPROVED_PENDING_BOUNDED_ACTIVATION'
-              assert g['operator_decision_required'] is False
-              assert g['operator_decision']['decision']=='PASS'
-              assert d.is_file()
-              decision=json.loads(d.read_text())
-              assert decision['decision']=='PASS'
-              assert decision['decision_id']==a['operator_decision_id']==g['operator_decision']['decision_id']
-              if a['status']=='APPROVED_PENDING_BOUNDED_ACTIVATION':
-                  assert a['enabled'] is False
-                  assert a['current_route_state']=='DISABLED_PENDING_BOUNDED_ACTIVATION'
-              else:
-                  assert a['status']=='ENABLED_LOCAL_READ_ONLY'
-                  assert a['enabled'] is True
-                  assert a['current_route_state']=='ENABLED_LOCAL_READ_ONLY'
-                  assert activation.is_file()
-                  active=json.loads(activation.read_text())
-                  assert active['operator_decision_required'] is False
-                  assert active['auto_ratifiable'] is True
-                  assert active['proposed_authority_delta']=='ACTIVATE_APPROVED_LOCAL_READ_ONLY_ROUTE'
-                  assert active['unresolved_issues']==[]
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

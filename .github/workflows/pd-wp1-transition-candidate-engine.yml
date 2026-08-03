@@ -1,53 +1,40 @@
-name: PD-WP1 Transition and Candidate Engine
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - "src/ovc/research_operations/pattern_discovery/**"
-      - "contracts/research_operations/pattern_discovery/PATTERN_DISCOVERY_TRANSITION_AND_WINDOW_ENGINE_CONTRACT_v0_1.md"
-      - "fixtures/research_operations/pattern_discovery/pd_wp1/**"
-      - "tests/research_operations/pattern_discovery/**"
-      - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
-      - "docs/releases/pattern-discovery-v0-3/pd-wp1/**"
-      - ".github/workflows/pd-wp1-transition-candidate-engine.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  pd-wp1:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Run PD-WP1 focused tests
-        env:
-          PYTHONPATH: src
-        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_wp1_transition_candidate_engine
-
-      - name: Run PD-G0 retained-boundary tests
-        env:
-          PYTHONPATH: src
-        run: python -m unittest tests.research_operations.pattern_discovery.test_pd_g0_design_freeze
-
-      - name: Run canonical repository tests
-        env:
-          PYTHONPATH: src
+      - name: Retired workflow notice
         run: |
-          set +e
-          python -m unittest discover -s tests -p 'test_*.py' > canonical-tests.log 2>&1
-          status=$?
-          cat canonical-tests.log
-          exit $status
-
-      - name: Upload canonical diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pd-wp1-canonical-tests
-          path: canonical-tests.log
-          if-no-files-found: error
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."
