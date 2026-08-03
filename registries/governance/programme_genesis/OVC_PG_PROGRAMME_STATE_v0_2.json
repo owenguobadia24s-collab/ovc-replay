@@ -3,14 +3,14 @@
   "programme_id": "OVC-PG-v0.2",
   "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "current_packet": "PG-G7",
   "current_gate": "PG-G7",
   "operator_decision_required": false,
   "operator_decision_id": "PG-G7.OPERATOR.PASS.20260803T222900+0100",
   "baseline_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
-  "branch": "gate/pg-g7-upkeep-activation",
-  "candidate_commit": "PENDING_FINAL_DECISION_HEAD",
+  "branch": "closure/pg-g7-completion",
+  "candidate_commit": "54127ead1099c7030c210691689b621bd3728d91",
   "authority": {
     "programme_governance_design": "RATIFIED",
     "programme_governance_build": "APPROVED_BOUNDED_IMPLEMENTATION",
@@ -130,16 +130,17 @@
       "merge_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b", "blockers": [], "next_packet": "PG-G7"
     },
     {
-      "packet_id": "PG-G7", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "APPROVED",
+      "packet_id": "PG-G7", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "COMPLETED",
       "prerequisites": ["PG-WP6_DELEGATED_PASS_MERGED"], "authority_required": "OPERATOR_REQUIRED_COMPLETED",
       "authority_delta": "ACTIVATE_BOUNDED_APPEND_ONLY_CANDIDATE_EVENT_PERSISTENCE_ON_DEDICATED_BRANCH_ONLY", "baseline_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
-      "branch": "gate/pg-g7-upkeep-activation", "candidate_commit": "PENDING_FINAL_DECISION_HEAD",
-      "tests": [], "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_QA_PACKET.json",
+      "branch": "gate/pg-g7-upkeep-activation", "candidate_commit": "54127ead1099c7030c210691689b621bd3728d91",
+      "tests": ["tests 30855307573 PASS 156", "OVC merge readiness 30855307561 PASS job 91824891459"],
+      "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_QA_PACKET.json",
       "decision_record": "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_OPERATOR_DECISION.json",
-      "merge_commit": null, "blockers": [], "next_packet": null
+      "merge_commit": "b86f63a757621d52ff3ba4937c5706835bf34180", "blockers": [], "next_packet": null
     }
   ],
   "blockers": [],
-  "next_action": "RUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_PR_278_AND_RECORD_TERMINAL_RECEIPT",
+  "next_action": "PROGRAMME_COMPLETED_NO_NEXT_PACKET",
   "rollback": "Set enabled and candidate_persistence false through a new non-destructive decision, stop candidate generation, discard unaccepted working candidates, and preserve accepted decisions, source findings, hashes, PRs and merge receipts."
 }
