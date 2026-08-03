@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-c2-5-bounded-event-contract-g0-gate-packet/v1",
+  "programme_id": "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
+  "plan_id": "OVC-C2.5-BOUNDED-EVENT-CONTRACT-DESIGN-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "C25-G0",
+  "title": "Bounded C2.5 event-contract design approval",
+  "status": "GATE_READY",
+  "operator_decision_required": true,
+  "source_decision": "MTA-G8.OPERATOR.MULTIPART.20260803T114000+0100",
+  "baseline_commit": "1a5a1b593f83450e1964b3a93c587e9bb656db11",
+  "current_authority": "PLAN_PREPARATION_ONLY_C2_5_PROHIBITED",
+  "proposed_delta": "AUTHORISE_DRAFT_CONTRACT_IMPLEMENTATION_AND_NON_PROMOTABLE_SHADOW_EVALUATION_FOR_FOUR_RULES_ONLY",
+  "bounded_rule_set": [
+    "BOUNDARY_ZONE_ENTRY",
+    "BREACH_ACTIVE",
+    "LONG_PERSISTENCE",
+    "REPEATED_SWITCHING"
+  ],
+  "excluded_rules": {
+    "RETURN_INSIDE": "DEFER_ZERO_FIRES",
+    "COMPRESSION_TO_DISPLACEMENT": "DEFER_ZERO_FIRES",
+    "LOCAL_PARENT_CONFLICT": "BLOCK_NOT_EVALUABLE",
+    "ALIGNMENT_GAINED": "BLOCK_NOT_EVALUABLE"
+  },
+  "acceptance_conditions": [
+    "ZERO_FORMULA_OR_THRESHOLD_DRIFT",
+    "FIRST_VALID_IDENTITY_DETERMINISTIC",
+    "ALL_NOT_EVALUABLE_REASONS_EXPLICIT",
+    "PRIMARY_STRICT_AND_PERMISSIVE_OVERLAP_VARIANTS_REPORTED",
+    "CRITERION_LEVEL_EVIDENCE_NO_SINGLE_READINESS_BADGE",
+    "C2E_LINKAGE_FAILS_CLOSED",
+    "FOUR_HOUR_AND_TEN_GB_PACKET_BOUNDS",
+    "FOUR_INDEPENDENT_RULE_DECISIONS_AT_C25_G6"
+  ],
+  "material_baseline_evidence": {
+    "BOUNDARY_ZONE_ENTRY": {"attempted": 7116, "evaluable": 4556, "fired": 388},
+    "BREACH_ACTIVE": {"attempted": 7116, "evaluable": 6226, "fired": 588},
+    "LONG_PERSISTENCE": {"attempted": 7116, "evaluable": 4644, "fired": 306},
+    "REPEATED_SWITCHING": {"attempted": 7116, "evaluable": 4204, "fired": 316},
+    "exact_occurrences": 1779,
+    "primary_components": 20,
+    "robust_occurrences": 0
+  },
+  "authority_boundary": {
+    "event_promotion_or_activation": "DENIED",
+    "new_rule_or_reclassification": "DENIED",
+    "formula_threshold_clock_selector_release_change": "DENIED",
+    "semantic_candidate_or_predictive_authority": "DENIED",
+    "validation_consumption": "DENIED",
+    "publication": "DENIED",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "exact_operator_command": "OVC APPROVE C25-G0 PASS",
+  "rollback": "Preserve the plan and gate packet; do not start C25-WP1 unless PASS is recorded."
+}
