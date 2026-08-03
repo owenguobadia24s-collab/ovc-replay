@@ -1,0 +1,18 @@
+{
+  "schema":"ovc-ccr-g5-assurance/v1",
+  "programme_id":"OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+  "gate_id":"CCR-G5",
+  "tested_candidate_commit":"06e0ad2473692643e012cdff729e52e86e77a3f7",
+  "tests":[
+    {"workflow":"tests","run_id":30815041332,"result":"PASS"},
+    {"workflow":"OVC tiered test selection shadow","run_id":30815041433,"job":"OVC profile assurance","profile":"FINAL_HEAD","result":"PASS"},
+    {"workflow":"OVC tiered test selection shadow","run_id":30815041433,"job":"OVC tiered test selection shadow","result":"PASS"},
+    {"workflow":"OVC tiered test selection shadow","run_id":30815041433,"job":"OVC merge readiness","result":"PASS"}
+  ],
+  "focused_tests":"tests/research_operations/clock_continuity/test_ccr_review.py",
+  "qa_recommendation":"PASS_WITH_MATERIAL_FINDINGS",
+  "operator_decision_required":true,
+  "recorded_decision":null,
+  "authority_boundary":"NO_CLOCK_OR_CONTINUITY_ACTIVATION",
+  "rollback":"Preserve all evidence and leave the PR unmerged until the operator decides CCR-G5."
+}
