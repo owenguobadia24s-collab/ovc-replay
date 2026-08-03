@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[2]
 STATE_PATH = ROOT / "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json"
 BASELINE_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_BASELINE_MANIFEST.json"
 QA_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_QA_PACKET.json"
+DECISION_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_OPERATOR_DECISION.json"
 MAINTENANCE_PATH = ROOT / "registries/governance/programme_genesis/MAINTENANCE_AUTHORITY_REGISTRY_v0_1.json"
 SYNC_PATH = ROOT / "contracts/governance/programme_genesis/STATE_SYNCHRONISATION_CONTRACT_v0_1.md"
 PLAN_PATH = ROOT / "docs/plans/governance/OVC_Programme_Genesis_Portfolio_Ledger_and_Dependency_Graph_v0_2_REVISED_Implementation_Plan.md"
@@ -16,19 +17,23 @@ def load_json(path: Path) -> dict:
         return json.load(handle)
 
 
-def test_pg_g0_packet_is_operator_gated_and_non_market() -> None:
+def test_pg_g0_pass_is_recorded_and_releases_only_bounded_build() -> None:
     state = load_json(STATE_PATH)
+    decision = load_json(DECISION_PATH)
 
     assert state["programme_id"] == "OVC-PG-v0.2"
     assert state["plan_version"] == "0.2"
-    assert state["status"] == "GATE_READY"
-    assert state["current_packet"] == "PG-00"
-    assert state["current_gate"] == "PG-G0"
-    assert state["operator_decision_required"] is True
-    assert state["next_action"] == "OPERATOR_DECIDE_PG_G0"
+    assert state["current_packet"] == "PG-WP1"
+    assert state["current_gate"] == "PG-G1"
+    assert state["operator_decision_required"] is False
+    assert state["operator_decision_id"] == "PG-G0.OPERATOR.PASS.20260803T184400+0100"
+    assert decision["decision"] == "PASS"
+    assert decision["operator_command"] == "OVC APPROVE PG-G0 PASS"
+    assert decision["approved_pull_request"] == 263
 
     authority = state["authority"]
-    assert authority["programme_governance_build"] == "DENIED_PENDING_PG_G0"
+    assert authority["programme_governance_design"] == "RATIFIED"
+    assert authority["programme_governance_build"] == "APPROVED_BOUNDED_IMPLEMENTATION"
     assert authority["portfolio_migration"] == "DENIED_PENDING_PG_G3A"
     assert authority["admission_enforcement"] == "DENIED_PENDING_PG_G6"
     assert authority["automatic_upkeep"] == "DENIED_PENDING_PG_G7"
@@ -41,6 +46,8 @@ def test_pg_mandatory_operator_stops_are_preserved() -> None:
     assert state["mandatory_operator_gates"] == ["PG-G0", "PG-G3A", "PG-G6", "PG-G7"]
 
     packets = {packet["packet_id"]: packet for packet in state["packets"]}
+    assert packets["PG-00"]["status"] == "COMPLETED"
+    assert packets["PG-00"]["merge_commit"] == "d0d2445b035f3fc93a177b94b23120be7dfa274b"
     assert packets["PG-WP3"]["next_packet"] == "PG-G3A"
     assert packets["PG-G3A"]["authority_required"] == "OPERATOR_REQUIRED_ACKNOWLEDGEMENT"
     assert packets["PG-WP4"]["prerequisites"] == ["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"]
@@ -56,22 +63,20 @@ def test_pg_g0_baseline_and_source_identity_are_pinned() -> None:
     assert baseline["namespace_freeze"]["short_code"] == "PG"
     assert baseline["blockers"] == []
 
-    plan_sources = {
-        source["document_id"]: source
-        for source in baseline["governing_source_documents"]
-    }
+    plan_sources = {source["document_id"]: source for source in baseline["governing_source_documents"]}
     pg_source = plan_sources["OVC-PG-IMPLEMENTATION-PLAN-0.2"]
     assert pg_source["external_identity"] == "file_00000000a0e4822f8ed73a5903ded4d7"
     assert pg_source["repository_path"] == str(PLAN_PATH.relative_to(ROOT)).replace("\\", "/")
 
 
-def test_maintenance_registry_fails_closed_and_denies_reserved_authority() -> None:
+def test_maintenance_registry_is_frozen_but_enforcement_remains_disabled() -> None:
     registry = load_json(MAINTENANCE_PATH)
 
-    assert registry["status"] == "PROPOSED_PENDING_PG_G0"
+    assert registry["status"] == "FROZEN_DISABLED_PENDING_PG_G6"
     assert registry["default_outcome"] == "NOT_EVALUABLE_REQUIRES_SCOPE_REVIEW"
     assert registry["decision_gate"] == "PG-G0"
     assert registry["activation_gate"] == "PG-G6"
+    assert registry["enforcement_enabled"] is False
     assert len(registry["entries"]) >= 5
 
     denials = set(registry["reserved_authority_denials"])
@@ -95,15 +100,13 @@ def test_state_synchronisation_preserves_source_authority() -> None:
     assert "Before `PG-G6`, all enforcement consumers remain disabled" in contract
 
 
-def test_qa_packet_has_no_hidden_blocker_or_self_ratification() -> None:
+def test_predecision_qa_packet_remains_immutable_evidence() -> None:
     qa = load_json(QA_PATH)
+    decision = load_json(DECISION_PATH)
 
     assert qa["status"] == "QA_REVIEW_PENDING_EXACT_HEAD_CI"
     assert qa["blockers"] == []
     assert qa["qa_recommendation"] == "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS"
     assert qa["authority_delta"] == "NONE_UNTIL_OPERATOR_PG_G0_PASS"
-
-    checks = {check["check_id"]: check for check in qa["checks"]}
-    assert checks["PG-G0-MANDATORY-OPERATOR-STOPS"]["status"] == "PASS"
-    assert checks["PG-G0-FOCUSED-TEST"]["status"] == "PENDING_CI"
-    assert checks["PG-G0-REPOSITORY-SUITE"]["status"] == "PENDING_CI"
+    assert decision["assurance"]["tests"]["conclusion"] == "SUCCESS"
+    assert decision["assurance"]["ovc_merge_readiness"]["conclusion"] == "SUCCESS"
