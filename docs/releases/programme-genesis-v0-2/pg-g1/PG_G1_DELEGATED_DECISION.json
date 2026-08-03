@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-programme-genesis-pg-g1-delegated-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP1",
+  "gate_id": "PG-G1",
+  "decision_id": "PG-G1.DELEGATED.PASS.20260803T190500+0100",
+  "decision": "PASS",
+  "authority": "DELEGATED_BY_PG_G0_AND_APPROVED_PLAN_CONTINUOUS_EXECUTION",
+  "implementation_candidate_commit": "f51723e8150c7b2873cce50619915566ed2aae60",
+  "tests": {
+    "repository_run": 30839394377,
+    "repository_conclusion": "SUCCESS",
+    "merge_readiness_run": 30839395519,
+    "merge_readiness_conclusion": "SUCCESS"
+  },
+  "qa": {
+    "packet": "docs/releases/programme-genesis-v0-2/pg-g1/PG_G1_QA_PACKET.json",
+    "recommendation": "PASS",
+    "blockers": []
+  },
+  "authority_delta": "ACCEPT_CONTRACT_SCHEMA_REGISTRY_FIXTURE_BASELINE_AND_RELEASE_PG_WP2_ONLY",
+  "non_reserved_rationale": [
+    "No programme admission enforcement is activated.",
+    "No existing programme is migrated.",
+    "No Control Plane route or automatic upkeep is activated.",
+    "No market, model, selector, release, Validation, publication, agent, probability, risk, exposure or execution authority changes."
+  ],
+  "rollback": "Preserve this decision and contract version. Supersede non-destructively and leave all consumers disabled.",
+  "merge": {"pull_request": 264, "method": "SQUASH", "merge_commit": "PENDING"},
+  "next_packet": "PG-WP2"
+}
