@@ -5,12 +5,13 @@
   "plan_version": "0.2",
   "gate_id": "PG-G3A",
   "title": "Acknowledge dependency graph plausibility before migration",
-  "status": "PENDING_PG_G3_PASS_AND_MERGE",
+  "status": "GATE_READY",
   "authority_required": "OPERATOR_REQUIRED_ACKNOWLEDGEMENT",
-  "baseline_commit": "4f9dcc4e9bcc3a3a15fb3a6e56f368284ca0d7ec",
-  "candidate_branch": "build/pg-wp3-dependency-graph",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "baseline_commit": "e3e6c12a293e0c1802cc2686678690d01318161b",
+  "candidate_branch": "gate/pg-g3a-graph-acknowledgement",
+  "candidate_commit": "PENDING_EXACT_HEAD",
   "completed_packets": ["PG-00", "PG-WP1", "PG-WP2", "PG-WP3"],
+  "pg_g3_merge_receipt": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json",
   "current_authority": "TYPED_GRAPH_VALIDATION_AND_DERIVED_IMPACT_ANALYSIS_ONLY",
   "proposed_delta": "ACKNOWLEDGE_GRAPH_PLAUSIBILITY_AND_RELEASE_SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_WORK_ONLY",
   "graph_summary": {
@@ -30,25 +31,38 @@
   "plausibility_points": [
     "Dependency direction is dependent to prerequisite for REQUIRES, GOVERNED_BY and BLOCKED_BY.",
     "PG-WP3 depends on the accepted PG-G2 decision; PG-G3A depends on PG-WP3; PG-WP4 is blocked by PG-G3A.",
-    "PRODUCES is informational and does not satisfy a prerequisite.",
+    "PRODUCES is informational, runs producer to output, and does not satisfy a prerequisite.",
     "Every graph edge is authority-neutral; decisions remain explicit source nodes.",
     "Hard cycles quarantine rather than being silently repaired or omitted.",
     "Inferred edges cannot satisfy hard prerequisites."
   ],
   "acceptance_conditions": [
-    "PG-G3_HAS_DELEGATED_PASS_AND_MERGED",
-    "EXACT_HEAD_TESTS_AND_MERGE_READINESS_PASS",
+    "PG-G3_DELEGATED_PASS_MERGED_AT_E3E6C12A293E0C1802CC2686678690D01318161B",
+    "PG-G3_EXACT_HEAD_TESTS_AND_MERGE_READINESS_PASSED",
     "GRAPH_VALIDATION_REPORT_HAS_NO_BLOCKING_FINDINGS",
     "OPERATOR_ACCEPTS_EDGE_DIRECTIONS_AND_HARDNESS_AS_PLAUSIBLE",
     "OPERATOR_ACCEPTS_ZERO_HARD_CYCLE_RESULT_FOR_BOUNDED_SELF_GRAPH",
     "OPERATOR_ACCEPTS_AUTHORITY_NEUTRAL_PATH_MODEL",
     "MIGRATION_REMAINS_SOURCE_FAITHFUL_PROVISIONAL_AND_UNCERTAINTY_PRESERVING"
   ],
+  "tests": {
+    "pg_g3_exact_head_tests": {"run_id": 30841743173, "conclusion": "SUCCESS"},
+    "pg_g3_exact_head_merge_readiness": {"run_id": 30841743174, "conclusion": "SUCCESS"},
+    "pg_g3a_gate_head_tests": "PENDING",
+    "pg_g3a_gate_head_merge_readiness": "PENDING"
+  },
+  "qa": {
+    "pg_g3_recommendation": "PASS",
+    "blocking_findings": 0,
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0
+  },
   "warnings": [
-    "ACKNOWLEDGEMENT_DOES_NOT_ACCEPT_ANY FUTURE_MIGRATED_EDGE_OR_PROGRAMME FACT",
+    "ACKNOWLEDGEMENT_DOES_NOT_ACCEPT_ANY_FUTURE_MIGRATED_EDGE_OR_PROGRAMME_FACT",
     "ZERO_CYCLE_RESULT_APPLIES_ONLY_TO_THE_BOUNDED_PRE_MIGRATION_SELF_GRAPH",
     "EXISTING_PROGRAMME_SOURCE_GAPS_AND_CONFLICTS_MUST_REMAIN_VISIBLE",
-    "ADMISSION_ENFORCEMENT_CONTROL_PLANE_ROUTE_AND_UPKEEP_REMAIN_DISABLED"
+    "ADMISSION_ENFORCEMENT_CONTROL_PLANE_ROUTE_AND_UPKEEP_REMAIN_DISABLED",
+    "MIGRATION_OUTPUTS_REMAIN_PROVISIONAL_AND_NON_CANONICAL_UNTIL_PG_G6"
   ],
   "unresolved_issues": [],
   "changed_files": [
@@ -57,12 +71,21 @@
     "src/ovc/programme_genesis/graph.py",
     "fixtures/governance/programme_genesis/valid_pg_dependency_graph_v0_1.json",
     "tests/governance/test_pg_wp3.py",
-    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_GRAPH_VALIDATION_REPORT.json"
+    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_GRAPH_VALIDATION_REPORT.json",
+    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json"
   ],
   "external_artifacts": [],
+  "reserved_authority_denials": [
+    "CANONICAL_MIGRATION_ADOPTION",
+    "ADMISSION_ENFORCEMENT",
+    "CONTROL_PLANE_ROUTE",
+    "AUTOMATIC_UPKEEP",
+    "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION",
+    "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
+  ],
   "rollback": "Preserve all PG-G3 records, leave PG-WP4 blocked, disable graph consumers and supersede only through a later non-destructive decision.",
-  "recommended_decision": "ACKNOWLEDGE_CONTINUE_AFTER_PG_G3_PASS_MERGED",
+  "recommended_decision": "ACKNOWLEDGE_CONTINUE",
   "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "exact_operator_command": "OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE",
-  "work_after_approval": "Create migration/pg-wp4-existing-programmes from lawful main; import source-faithfully with permanent migration uncertainty and no enforcement."
+  "work_after_approval": "Record the acknowledgement, squash-merge this gate packet, create migration/pg-wp4-existing-programmes from lawful main, and import source-faithfully with permanent migration uncertainty and no enforcement."
 }
