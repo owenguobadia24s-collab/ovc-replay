@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/governance/programme_genesis/portfolio_read_model_bundle_v0_1.schema.json",
+  "title": "OVC Programme Genesis read-model bundle v0.1",
+  "type": "object",
+  "oneOf": [
+    {"$ref": "#/$defs/read_model"},
+    {"$ref": "#/$defs/health_report"},
+    {"$ref": "#/$defs/compact_report"},
+    {"$ref": "#/$defs/disabled_adapter"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "commit_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "programme_row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "programme_id", "source_kind", "source_path", "source_sha256", "status",
+        "current_packet", "current_gate", "authority", "blockers", "next_action",
+        "confidence", "migration_uncertainty", "unresolved_fields", "conflicting_fields",
+        "native_governance_deadline", "authority_effect", "canonical"
+      ],
+      "properties": {
+        "programme_id": {"type": "string", "minLength": 1},
+        "source_kind": {"enum": ["MIGRATED_PROGRAMME_STATE", "NATIVE_PROGRAMME_STATE"]},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "status": {},
+        "current_packet": {},
+        "current_gate": {},
+        "authority": {},
+        "blockers": {"type": "array"},
+        "next_action": {},
+        "confidence": {"enum": ["HIGH", "MEDIUM", "LOW", "NATIVE"]},
+        "migration_uncertainty": {"type": ["object", "null"]},
+        "unresolved_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "conflicting_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "native_governance_deadline": {"type": ["string", "null"]},
+        "authority_effect": {"const": "NONE"},
+        "canonical": {"type": "boolean"}
+      }
+    },
+    "read_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "programme_id", "source_commit", "status", "authority_effect",
+        "canonical_adoption", "admission_enforcement", "control_plane_route",
+        "automatic_upkeep", "programmes", "health_summary", "migration_findings",
+        "graph_summary", "source_snapshot_sha256", "read_model_replaceable", "rollback",
+        "read_model_sha256"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-programme-portfolio-read-model/v1"},
+        "programme_id": {"const": "OVC-PG-v0.2"},
+        "source_commit": {"$ref": "#/$defs/commit_sha"},
+        "status": {"enum": ["PASS", "PASS_WITH_WARNINGS"]},
+        "authority_effect": {"const": "NONE_READ_ONLY_DERIVED_VIEW"},
+        "canonical_adoption": {"const": "DENIED_PENDING_PG_G6"},
+        "admission_enforcement": {"const": "DENIED_PENDING_PG_G6"},
+        "control_plane_route": {"const": "DENIED_PENDING_PG_G6"},
+        "automatic_upkeep": {"const": "DENIED_PENDING_PG_G7"},
+        "programmes": {"type": "array", "items": {"$ref": "#/$defs/programme_row"}, "minItems": 1},
+        "health_summary": {"type": "object"},
+        "migration_findings": {"type": "array"},
+        "graph_summary": {"type": "object"},
+        "source_snapshot_sha256": {"$ref": "#/$defs/sha256"},
+        "read_model_replaceable": {"const": true},
+        "rollback": {"type": "string", "minLength": 20},
+        "read_model_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "health_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "programme_id", "status", "read_model_sha256", "finding_count",
+        "warning_count", "blocking_count", "findings", "control_plane_adapter",
+        "authority_effect", "rollback", "health_sha256"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-programme-portfolio-health/v1"},
+        "programme_id": {"const": "OVC-PG-v0.2"},
+        "status": {"enum": ["PASS", "PASS_WITH_WARNINGS", "FAIL"]},
+        "read_model_sha256": {"$ref": "#/$defs/sha256"},
+        "finding_count": {"type": "integer", "minimum": 0},
+        "warning_count": {"type": "integer", "minimum": 0},
+        "blocking_count": {"type": "integer", "minimum": 0},
+        "findings": {"type": "array"},
+        "control_plane_adapter": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["adapter_id", "enabled", "route_registered", "write_enabled", "enforcement_enabled", "activation_gate"],
+          "properties": {
+            "adapter_id": {"type": "string", "minLength": 1},
+            "enabled": {"const": false},
+            "route_registered": {"const": false},
+            "write_enabled": {"const": false},
+            "enforcement_enabled": {"const": false},
+            "activation_gate": {"const": "PG-G6"}
+          }
+        },
+        "authority_effect": {"const": "NONE_HEALTH_ONLY"},
+        "rollback": {"type": "string", "minLength": 20},
+        "health_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "compact_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "programme_id", "source_commit", "read_model_status", "health_status",
+        "programme_count", "migrated_programme_count", "migration_warning_count",
+        "health_warning_count", "health_blocking_count", "status_counts",
+        "control_plane_adapter_status", "canonical_adoption", "admission_enforcement",
+        "control_plane_route", "automatic_upkeep", "authority_effect", "report_sha256"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-programme-portfolio-compact-report/v1"},
+        "programme_id": {"const": "OVC-PG-v0.2"},
+        "source_commit": {"$ref": "#/$defs/commit_sha"},
+        "read_model_status": {"enum": ["PASS", "PASS_WITH_WARNINGS"]},
+        "health_status": {"enum": ["PASS", "PASS_WITH_WARNINGS", "FAIL"]},
+        "programme_count": {"type": "integer", "minimum": 1},
+        "migrated_programme_count": {"type": "integer", "minimum": 0},
+        "migration_warning_count": {"type": "integer", "minimum": 0},
+        "health_warning_count": {"type": "integer", "minimum": 0},
+        "health_blocking_count": {"type": "integer", "minimum": 0},
+        "status_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "control_plane_adapter_status": {"const": "DISABLED"},
+        "canonical_adoption": {"const": "DENIED_PENDING_PG_G6"},
+        "admission_enforcement": {"const": "DENIED_PENDING_PG_G6"},
+        "control_plane_route": {"const": "DENIED_PENDING_PG_G6"},
+        "automatic_upkeep": {"const": "DENIED_PENDING_PG_G7"},
+        "authority_effect": {"const": "NONE_COMPACT_REPORT_ONLY"},
+        "report_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "disabled_adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "adapter_id", "status", "route_registered", "read_only", "write_enabled",
+        "enforcement_enabled", "payload_available_locally", "payload", "authority_effect",
+        "activation_gate", "adapter_projection_sha256"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-control-plane-programme-portfolio-adapter/v1"},
+        "adapter_id": {"type": "string", "minLength": 1},
+        "status": {"const": "DISABLED_PENDING_PG_G6"},
+        "route_registered": {"const": false},
+        "read_only": {"const": true},
+        "write_enabled": {"const": false},
+        "enforcement_enabled": {"const": false},
+        "payload_available_locally": {"const": true},
+        "payload": {"$ref": "#/$defs/compact_report"},
+        "authority_effect": {"const": "NONE_DISABLED_ADAPTER_CANDIDATE"},
+        "activation_gate": {"const": "PG-G6"},
+        "adapter_projection_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}
