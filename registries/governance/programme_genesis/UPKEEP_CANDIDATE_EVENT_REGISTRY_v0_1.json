@@ -2,11 +2,11 @@
   "schema": "ovc-programme-genesis-upkeep-candidate-registry/v1",
   "registry_id": "OVC-PG-UPKEEP-CANDIDATE-REGISTRY-v0.1",
   "programme_id": "OVC-PG-v0.2",
-  "status": "FROZEN_DISABLED_PENDING_PG_G7",
-  "enabled": false,
+  "status": "ACTIVE_BOUNDED_APPEND_ONLY",
+  "enabled": true,
   "preview_enabled": true,
   "activation_gate": "PG-G7",
-  "activation_decision_id": null,
+  "activation_decision_id": "PG-G7.OPERATOR.PASS.20260803T222900+0100",
   "candidate_branch_prefix": "upkeep/pg-candidate-events/",
   "candidate_root": "registries/governance/programme_genesis/upkeep_candidates",
   "max_events_per_run": 100,
@@ -31,7 +31,7 @@
   "authority_effect": "NONE",
   "capabilities": {
     "in_memory_preview": true,
-    "candidate_persistence": false,
+    "candidate_persistence": true,
     "programme_creation": false,
     "programme_event_acceptance": false,
     "approval": false,
@@ -59,7 +59,6 @@
     "trading"
   ],
   "reserved_authority_denials": [
-    "AUTOMATIC_UPKEEP_BEFORE_PG_G7",
     "PROGRAMME_CREATION_OR_ADMISSION",
     "PROGRAMME_EVENT_ACCEPTANCE",
     "APPROVAL_OR_MERGE",
@@ -70,5 +69,5 @@
     "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION",
     "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
   ],
-  "rollback": "Set enabled false, discard previews and candidate working files, and preserve source findings, hashes and decisions."
+  "rollback": "Set enabled and candidate_persistence false through a new non-destructive decision, stop candidate generation, discard unaccepted working candidates, and preserve accepted decisions, source findings, hashes, PRs and merge receipts."
 }

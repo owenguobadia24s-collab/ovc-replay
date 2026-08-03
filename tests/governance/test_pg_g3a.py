@@ -71,14 +71,15 @@ class ProgrammeGenesisG3ATests(unittest.TestCase):
         self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
         self.assertEqual("COMPLETED", packets["PG-WP4"]["status"])
 
-    def test_current_state_preserves_post_g6_bounded_outcomes(self) -> None:
+    def test_current_state_preserves_post_g7_bounded_outcomes(self) -> None:
         state = load_json(STATE_PATH)
         authority = state["authority"]
         self.assertTrue(str(authority["portfolio_migration"]).startswith("APPROVED"))
         self.assertEqual("PROVISIONAL_NON_CANONICAL_ONLY", authority["canonical_migration_adoption"])
         self.assertEqual("DEFERRED_DISABLED", authority["admission_enforcement"])
         self.assertEqual("DEFERRED_DISABLED_UNREGISTERED", authority["control_plane_route"])
-        self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
+        self.assertEqual("ACTIVE_BOUNDED_CANDIDATE_EVENT_PERSISTENCE_ONLY", authority["automatic_upkeep"])
+        self.assertEqual("ACTIVE_BOUNDED_APPEND_ONLY", authority["candidate_persistence"])
         self.assertEqual("NONE", authority["market_model_selector_release_validation"])
         self.assertEqual("NONE", authority["agent_probability_risk_exposure_execution"])
 

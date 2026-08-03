@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-programme-genesis-pg-g7-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "gate_id": "PG-G7",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "baseline_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
+  "candidate_branch": "gate/pg-g7-upkeep-activation",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "checks": [
+    {
+      "check_id": "PG-WP6-MERGED",
+      "status": "PASS",
+      "evidence": "ac5a86931fb9426c55e2cf1e00656ce69908828b"
+    },
+    {
+      "check_id": "RULESET-REVERIFIED",
+      "status": "PASS",
+      "evidence_sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d"
+    },
+    {
+      "check_id": "STRICT-BRANCH-REFRESH",
+      "status": "PASS",
+      "evidence": "behind_by changed from 1 to 0 without force"
+    },
+    {
+      "check_id": "DISABLED-UNTIL-DECISION",
+      "status": "PASS",
+      "evidence": "registry enabled false; candidate_persistence false"
+    },
+    {
+      "check_id": "BOUNDED-PERSISTENCE-DESIGN",
+      "status": "PASS",
+      "evidence": "dedicated branch and candidate root only"
+    },
+    {
+      "check_id": "PERMANENT-DENIALS",
+      "status": "PASS",
+      "evidence": "no creation, acceptance, approval, merge, main write, publication, enforcement, route or execution authority"
+    },
+    {
+      "check_id": "GATE-BRANCH-TESTS",
+      "status": "PENDING_CI"
+    },
+    {
+      "check_id": "GATE-BRANCH-MERGE-READINESS",
+      "status": "PENDING_CI"
+    }
+  ],
+  "warnings": [
+    "PG-G7 PASS is an operator-reserved activation of deferred candidate persistence.",
+    "Candidates remain CANDIDATE_UNAPPROVED and authority-neutral.",
+    "No automatic PR creation, approval, merge or main write is authorised."
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_TESTS_PASS",
+  "operator_decision_required": true,
+  "rollback": "Keep the registry disabled and preserve every decision, source finding, hash, test and merge receipt."
+}

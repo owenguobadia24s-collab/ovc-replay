@@ -15,7 +15,7 @@ from ovc.programme_genesis import (
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Preview bounded Programme Genesis upkeep candidate events.")
+    parser = argparse.ArgumentParser(description="Preview or persist bounded Programme Genesis upkeep candidate events.")
     parser.add_argument("--finding-file", required=True, type=Path, help="JSON object or array of explicit source findings")
     parser.add_argument(
         "--registry",
@@ -25,7 +25,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--existing-programme-id", action="append", required=True)
     parser.add_argument("--target-branch", required=True)
     parser.add_argument("--repository-root", type=Path, default=Path("."))
-    parser.add_argument("--persist", action="store_true", help="Attempt persistence; denied while registry is disabled")
+    parser.add_argument("--persist", action="store_true", help="Persist append-only candidates when the PG-G7 registry is active")
     return parser.parse_args()
 
 
@@ -56,10 +56,16 @@ def main() -> int:
                 )
                 for candidate in candidates
             ]
-            output = {"status": "PERSISTED", "paths": paths, "candidates": candidates}
+            output = {
+                "status": "PERSISTED_BOUNDED_APPEND_ONLY",
+                "authority_effect": "NONE",
+                "candidate_count": len(candidates),
+                "paths": paths,
+                "candidates": candidates,
+            }
         else:
             output = {
-                "status": "PREVIEW_ONLY_DISABLED_PENDING_PG_G7",
+                "status": "PREVIEW_ONLY",
                 "authority_effect": "NONE",
                 "candidate_count": len(candidates),
                 "candidates": candidates,
@@ -68,7 +74,7 @@ def main() -> int:
         sys.stdout.write("\n")
         return 0
     except (OSError, json.JSONDecodeError, UpkeepError, KeyError) as exc:
-        print(f"PG upkeep preview failed: {exc}", file=sys.stderr)
+        print(f"PG upkeep candidate operation failed: {exc}", file=sys.stderr)
         return 2
 
 
