@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-programme-genesis-pg-g2-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP2",
+  "gate_id": "PG-G2",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "baseline_commit": "e9938883d0346e305efee57bd6618da61d4cb844",
+  "candidate_branch": "build/pg-wp2-portfolio-ledger",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "checks": [
+    {"check_id": "PG-G2-APPEND-ONLY", "status": "PASS", "evidence": "AppendOnlyLedger exposes append/read/inventory only and preserves existing byte prefixes."},
+    {"check_id": "PG-G2-DUPLICATE-DENIAL", "status": "PASS", "evidence": "Duplicate event IDs fail closed."},
+    {"check_id": "PG-G2-AUTHORITY-SOURCE", "status": "PASS", "evidence": "Non-NONE authority effect requires authoritative operator-decision source."},
+    {"check_id": "PG-G2-DETERMINISTIC-ORDER", "status": "PASS", "evidence": "Projection order is first-valid time, event precedence and event ID."},
+    {"check_id": "PG-G2-PARTITION-CONSISTENCY", "status": "PASS", "evidence": "Unique programme identities and orphan-event denial are enforced across partitions."},
+    {"check_id": "PG-G2-STATE-SOURCE", "status": "PASS", "evidence": "Source state remains effective; conflict and staleness are explicit without repair."},
+    {"check_id": "PG-G2-FOCUSED-TESTS", "status": "PENDING_CI", "evidence": "tests/governance/test_pg_wp2.py"},
+    {"check_id": "PG-G2-REPOSITORY-SUITE", "status": "PENDING_CI", "evidence": "GitHub Actions tests"},
+    {"check_id": "PG-G2-MERGE-READINESS", "status": "PENDING_CI", "evidence": "OVC merge readiness"}
+  ],
+  "warnings": ["COMPACT_FIXTURE_EXECUTION_ONLY", "NO_EXISTING_PROGRAMME_MIGRATION", "NO_GRAPH_ACCEPTANCE", "ENFORCEMENT_DISABLED_PENDING_PG_G6"],
+  "blockers": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
+  "auto_ratifiable": true,
+  "rollback": "Discard and rebuild projections; preserve append-only events and source state."
+}
