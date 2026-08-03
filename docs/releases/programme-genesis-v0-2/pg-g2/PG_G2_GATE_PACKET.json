@@ -6,12 +6,12 @@
   "packet_id": "PG-WP2",
   "gate_id": "PG-G2",
   "title": "Append-only portfolio ledger and deterministic projection",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
-  "authority_required": "DELEGATED_AUTO_RATIFIABLE_IF_PASS",
+  "status": "APPROVED",
+  "authority_required": "DELEGATED_AUTO_RATIFIED",
   "baseline_commit": "e9938883d0346e305efee57bd6618da61d4cb844",
   "candidate_branch": "build/pg-wp2-portfolio-ledger",
-  "candidate_commit": "PENDING_FINAL_HEAD",
-  "proposed_delta": "ACCEPT_APPEND_ONLY_LEDGER_PARTITIONED_PROJECTION_AND_SOURCE_STATE_SYNCHRONISATION_AND_RELEASE_PG_WP3",
+  "implementation_candidate_commit": "341a5dd667c1337b5748581a3f8766d32fbede9a",
+  "approved_delta": "ACCEPT_APPEND_ONLY_LEDGER_PARTITIONED_PROJECTION_AND_SOURCE_STATE_SYNCHRONISATION_AND_RELEASE_PG_WP3",
   "acceptance_conditions": [
     "EVENTS_APPEND_ONLY_AND_CANONICALLY_HASHED",
     "DUPLICATE_OR_UNREGISTERED_EVENTS_FAIL_CLOSED",
@@ -23,13 +23,18 @@
     "REPOSITORY_AND_MERGE_READINESS_PASS",
     "NO_RESERVED_AUTHORITY_DELTA"
   ],
-  "tests": {"focused": "PENDING", "repository": "PENDING", "merge_readiness": "PENDING"},
+  "tests": {
+    "repository": {"run_id": 30840593872, "conclusion": "SUCCESS", "test_count": 94},
+    "merge_readiness": {"run_id": 30840593849, "conclusion": "SUCCESS"}
+  },
   "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g2/PG_G2_QA_PACKET.json",
-  "qa_recommendation": "PENDING_EXACT_HEAD_CI",
+  "qa_recommendation": "PASS",
   "warnings": ["NO_MIGRATION", "NO_GRAPH_ACCEPTANCE", "NO_ENFORCEMENT_OR_ROUTE", "NO_UPKEEP"],
   "unresolved_issues": [],
   "reserved_authority_denials": ["MARKET_OR_MODEL_CHANGE", "SELECTOR_OR_RELEASE_MUTATION", "VALIDATION_OR_PUBLICATION", "AGENT_WRITE", "PROBABILITY_RISK_EXPOSURE_EXECUTION"],
+  "delegated_authority_basis": "PG-G0 operator PASS and approved plan delegation for wholly non-reserved gates",
+  "decision_record": "docs/releases/programme-genesis-v0-2/pg-g2/PG_G2_DELEGATED_DECISION.json",
   "rollback": "Discard derived projections, preserve append-only ledgers and source records, and supersede implementation non-destructively.",
-  "recommended_decision": "PASS_IF_REQUIRED_CHECKS_PASS",
+  "decision": "PASS",
   "next_packet": "PG-WP3"
 }
