@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-programme-genesis-pg-g7-operator-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "PG-G7",
+  "decision_id": "PG-G7.OPERATOR.PASS.20260803T222900+0100",
+  "decision": "PASS",
+  "operator_command": "OVC APPROVE PG-G7 PASS",
+  "operator_authority": "HUMAN_OPERATOR",
+  "recorded_at": "2026-08-03T22:29:00+01:00",
+  "baseline_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
+  "accepted_gate_ready_head": "6549f9534e1843294730e5a54c485cd40f81c92e",
+  "pull_request": 278,
+  "predecision_assurance": {
+    "repository_tests": {"run_id": 30852254701, "conclusion": "SUCCESS", "test_count": 154},
+    "ovc_final_head": {"run_id": 30852254708, "conclusion": "SUCCESS"},
+    "merge_readiness": {"job_id": 91814856425, "conclusion": "SUCCESS"},
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0,
+    "branch_behind_main": 0
+  },
+  "authority_delta": {
+    "candidate_persistence": "ACTIVE_BOUNDED_APPEND_ONLY",
+    "automatic_upkeep": "ACTIVE_BOUNDED_CANDIDATE_EVENT_PERSISTENCE_ONLY",
+    "write_scope": "registries/governance/programme_genesis/upkeep_candidates/*.json",
+    "branch_scope": "upkeep/pg-candidate-events/*",
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "authority_effect": "NONE",
+    "programme_creation": "DENIED",
+    "programme_event_acceptance": "DENIED",
+    "approval": "DENIED",
+    "merge": "DENIED",
+    "main_write": "DENIED",
+    "publication": "DENIED",
+    "admission_enforcement": "DEFERRED_DISABLED",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED",
+    "market_model_selector_release_validation": "NONE",
+    "agent_probability_risk_exposure_execution": "NONE"
+  },
+  "conditions": [
+    "Only existing programme identities may receive candidates.",
+    "Every candidate must bind an explicit source path and SHA-256.",
+    "Candidate identity remains deterministic and append-only.",
+    "Candidate persistence is limited to the dedicated candidate root and branch prefix.",
+    "Overwrite, main write, programme creation, accepted Programme Events, approval, merge and publication remain prohibited.",
+    "Every output remains CANDIDATE_UNAPPROVED with authority_effect NONE.",
+    "Per-run caps, first-valid time, duplicate rejection and forbidden authority-field checks remain fail-closed."
+  ],
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_QA_PACKET.json",
+  "gate_packet": "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_OPERATOR_DECISION_PACKET.json",
+  "external_evidence": {
+    "name": "DA2_G1_RULESET_AFTER(1).json",
+    "sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d"
+  },
+  "rollback": "Set enabled and candidate_persistence false through a new non-destructive decision, stop candidate generation, discard unaccepted working candidates, and preserve accepted decisions, source findings, hashes, PRs and merge receipts.",
+  "next_action": "MATERIALISE_ACTIVATION_RUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_AND_RECORD_TERMINAL_RECEIPT"
+}
