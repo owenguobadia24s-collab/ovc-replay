@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-programme-genesis-pg-g4-delegated-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP4",
+  "gate_id": "PG-G4",
+  "decision_id": "PG-G4.DELEGATED.PASS.20260803T200800+0100",
+  "decision": "PASS",
+  "authority": "DELEGATED_BY_PG_G3A_AND_APPROVED_PLAN_CONTINUOUS_EXECUTION",
+  "implementation_candidate_commit": "883d490f4c660e2bc96d2f8e8cab752f65e86f6b",
+  "tests": {
+    "repository_run": 30844283023,
+    "repository_conclusion": "SUCCESS",
+    "test_count": 119,
+    "merge_readiness_run": 30844282914,
+    "merge_readiness_conclusion": "SUCCESS"
+  },
+  "migration_census": {
+    "record_count": 7,
+    "unique_programme_count": 7,
+    "warning_count": 14,
+    "blocking_conflict_count": 0,
+    "snapshot_sha256": "26300c67dc94b6b5ac1c40c015b36d4bd17a9a2edd0e4510083307cc31f0f7e5",
+    "import_status": "PROVISIONAL_NON_CANONICAL",
+    "authority_effect": "NONE"
+  },
+  "qa": {
+    "packet": "docs/releases/programme-genesis-v0-2/pg-g4/PG_G4_QA_PACKET.json",
+    "recommendation": "PASS",
+    "blockers": []
+  },
+  "authority_delta": "ACCEPT_MIGRATION_MECHANISM_REPRODUCIBLE_SOURCE_CENSUS_UNCERTAINTY_AND_CONFLICT_LEDGER_AND_RELEASE_PG_WP5_ONLY",
+  "non_reserved_rationale": [
+    "Every import remains provisional, non-canonical and authority-neutral.",
+    "Programme-owned machine-readable state remains authoritative.",
+    "No inferred fields are introduced and all unresolved native Genesis fields remain visible.",
+    "Fourteen uncertainty or source-coverage warnings remain visible and no blocking conflicts exist.",
+    "Canonical adoption, admission enforcement and the Control Plane route remain denied pending PG-G6.",
+    "Automatic upkeep remains denied pending PG-G7.",
+    "No market, model, selector, release, Validation, publication, agent, probability, risk, exposure or execution authority changes."
+  ],
+  "rollback": "Preserve this decision and source hashes; discard derived migration snapshots and supersede implementation non-destructively.",
+  "merge": {"pull_request": 269, "method": "SQUASH", "merge_commit": "PENDING"},
+  "next_packet": "PG-WP5"
+}
