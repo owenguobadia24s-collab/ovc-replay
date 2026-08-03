@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp3-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP3",
+  "baseline_commit": "b9e763150858d02cc92d08efbcf2f6668b187a41",
+  "branch": "build/pd-june-fm-wp3-review-population",
+  "status": "QA_REVIEW_PENDING_FINAL_HEAD_CI",
+  "qa_result": "PENDING_FINAL_HEAD_CI",
+  "recommendation": "PASS_AFTER_FOCUSED_FULL_AND_AUTHORITY_CHECKS",
+  "checks": [
+    {"check": "whole-June candidate population audited", "result": "PASS_7116_ELIGIBLE_WINDOWS"},
+    {"check": "balanced week side scope trigger and control coverage", "result": "PASS_40_CARDS"},
+    {"check": "all UTC sessions represented", "result": "PASS"},
+    {"check": "four pre event and four post event observations", "result": "PASS_360_OBSERVATIONS"},
+    {"check": "actual active level values and exact level identities", "result": "PASS"},
+    {"check": "relation identities and persistence history", "result": "PASS"},
+    {"check": "15M OHLC and five C2 axes", "result": "PASS"},
+    {"check": "corresponding 2H parent state", "result": "PASS"},
+    {"check": "trigger timestamp and deterministic calculation inputs", "result": "PASS"},
+    {"check": "source completeness classes separated", "result": "PASS"},
+    {"check": "source boundary insufficiency", "result": "PASS_ZERO"},
+    {"check": "review card presentation omissions", "result": "PASS_ZERO"},
+    {"check": "blinding and separate sealed answer key", "result": "PASS"},
+    {"check": "external artifact hashes and Drive identities", "result": "PASS"},
+    {"check": "focused, retained and complete repository CI", "result": "PENDING"
+  ],
+  "warnings": [
+    "The full replay contains 13,993 algorithmic not-evaluable markers; these remain explicit evidence.",
+    "The 2H parent axes are frequently not evaluated and their exact reason codes remain visible.",
+    "No operator review outcome exists yet."
+  ],
+  "blockers": ["FINAL_HEAD_CI_REQUIRED_BEFORE_AUTO_RATIFICATION"],
+  "authority_delta": "BLINDED_REVIEW_CONSTRUCTION_AND_COMPLETENESS_QA_ONLY",
+  "reserved_authority_delta": "NONE",
+  "next_gate": "PD-JUNE-FM-G2",
+  "next_gate_authority": "OPERATOR_REQUIRED_BLINDED_REVIEW",
+  "rollback": "Preserve the accepted WP2 replay and external WP3 artifacts. Revert only WP3 construction through a new non-destructive commit."
+}

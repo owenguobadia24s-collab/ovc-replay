@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp3-delegated-decision/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "plan_id": "OVC-PD-JUNE-FULL-MONTH-MDR.v0.1",
+  "plan_version": "0.1+A1+A2",
+  "packet_id": "PD-JUNE-FM-WP3",
+  "title": "Whole-June completeness audit and blinded review construction",
+  "decision": "PASS_PENDING_FINAL_HEAD_CI",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "status": "APPROVED_CONDITIONALLY_PENDING_REQUIRED_TESTS",
+  "authority_delta": "BLINDED_REVIEW_CONSTRUCTION_AND_COMPLETENESS_QA_ONLY",
+  "reserved_authority_delta": "NONE",
+  "rationale": "WP3 constructs review-only evidence from the accepted deterministic WP2 replay. It changes no source, formula, threshold, semantic, model, candidate, family, theory, selector, release or authority state. The answer key remains sealed and operator review remains reserved for G2.",
+  "acceptance_conditions": [
+    "WHOLE_JUNE_POPULATION_AUDIT_COMPLETE",
+    "ALL_WEEKS_SIDES_LOCAL_AND_PARENT_SCOPES_COVERED",
+    "TRIGGER_NONTRIGGER_AND_ALGORITHMIC_NOT_EVALUABLE_CONTROLS_BALANCED",
+    "ALL_REQUIRED_CARD_EVIDENCE_PRESENT",
+    "SOURCE_BOUNDARY_INSUFFICIENCY_ZERO",
+    "REVIEW_CARD_PRESENTATION_OMISSIONS_ZERO",
+    "SEALED_ANSWER_KEY_SEPARATE_AND_HASHED",
+    "FINAL_HEAD_FOCUSED_RETAINED_FULL_AND_AUTHORITY_CI_PASS",
+    "NO_UNRESOLVED_REVIEW_OR_BLOCKING_WARNING"
+  ],
+  "retained_prohibitions": [
+    "FORMULA_CHANGE",
+    "THRESHOLD_CHANGE",
+    "SEMANTIC_TRIGGER_CANDIDATE_DISTANCE_CLUSTER_OR_MODEL_CHANGE",
+    "CANDIDATE_FAMILY_NOVELTY_OR_THEORY_PROMOTION",
+    "SELECTOR_OR_RELEASE_MUTATION",
+    "CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND",
+    "R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_OR_AGENT_WRITE"
+  ],
+  "qa_packet": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp3-review/PD_JUNE_FM_WP3_QA_PACKET.json",
+  "next_action": "FINAL_HEAD_CI_THEN_ELIGIBLE_AUTOMATIC_SQUASH_MERGE_AND_PREPARE_OPERATOR_G2_PACKET",
+  "rollback": "Preserve the accepted WP2 replay and all external WP3 evidence. Revert only WP3 construction through a new non-destructive commit."
+}

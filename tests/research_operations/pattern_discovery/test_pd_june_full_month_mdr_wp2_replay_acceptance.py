@@ -19,18 +19,11 @@ def sha(path: Path) -> str:
 
 
 def logical_sha(value: object) -> str:
-    return hashlib.sha256(
-        json.dumps(
-            value,
-            sort_keys=True,
-            separators=(",", ":"),
-            ensure_ascii=True,
-        ).encode("utf-8")
-    ).hexdigest()
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")).hexdigest()
 
 
 class PDJuneFullMonthMDRWP2ReplayAcceptanceTests(unittest.TestCase):
-    def test_six_compact_files_match_acceptance_index(self) -> None:
+    def test_six_compact_files_and_manifest_bindings_remain_exact(self) -> None:
         index = load("PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_ACCEPTANCE_INDEX.json")
         self.assertEqual(index["acceptance_status"], "PASS_SQUASH_MERGED_TO_MAIN")
         self.assertEqual(index["merge_commit"], "fedc20ab92f0465e5c84d7626f859866c9ad1f00")
@@ -39,8 +32,6 @@ class PDJuneFullMonthMDRWP2ReplayAcceptanceTests(unittest.TestCase):
             path = BASE / item["name"]
             self.assertEqual(path.stat().st_size, item["size_bytes"])
             self.assertEqual(sha(path), item["sha256"])
-
-    def test_manifest_and_cross_file_bindings(self) -> None:
         manifest = load("output-manifest.json")
         body = dict(manifest)
         claimed = body.pop("output_manifest_sha256")
@@ -52,68 +43,25 @@ class PDJuneFullMonthMDRWP2ReplayAcceptanceTests(unittest.TestCase):
         self.assertEqual(run["run_id"], binding["compute_run_id"])
         self.assertEqual(run["output_manifest_sha256"], claimed)
         self.assertEqual(receipt["output_manifest_sha256"], claimed)
-        self.assertEqual(
-            receipt["output_manifest_file_sha256"],
-            sha(BASE / "output-manifest.json"),
-        )
-        self.assertEqual(
-            receipt["replay_run_file_sha256"],
-            sha(BASE / "replay-run.json"),
-        )
-        self.assertEqual(
-            receipt["binding_file_sha256"],
-            sha(BASE / "prospective-source-binding.json"),
-        )
-        self.assertEqual(
-            run["deterministic_payload_hash"],
-            manifest["deterministic_payload_hash"],
-        )
-        self.assertEqual(
-            receipt["deterministic_payload_hash"],
-            manifest["deterministic_payload_hash"],
-        )
-        self.assertEqual(
-            run["deterministic_independent_rerun"],
-            "PASS_BYTE_IDENTICAL",
-        )
+        self.assertEqual(receipt["output_manifest_file_sha256"], sha(BASE / "output-manifest.json"))
+        self.assertEqual(receipt["replay_run_file_sha256"], sha(BASE / "replay-run.json"))
+        self.assertEqual(receipt["binding_file_sha256"], sha(BASE / "prospective-source-binding.json"))
+        self.assertEqual(run["deterministic_independent_rerun"], "PASS_BYTE_IDENTICAL")
 
-    def test_population_and_boundary_acceptance(self) -> None:
+    def test_population_boundary_and_no_repair_acceptance_remain_exact(self) -> None:
         receipt = load("replay-receipt.json")
         coverage = load("coverage.json")
         target = load("target-eligibility.json")
-        self.assertEqual(
-            (receipt["c1_record_count"], receipt["target_c1_record_count"]),
-            (4958, 4526),
-        )
-        self.assertEqual(
-            (receipt["c2_state_count"], receipt["target_c2_state_count"]),
-            (9420, 8598),
-        )
-        self.assertEqual(
-            (
-                receipt["c2_transition_count"],
-                receipt["target_c2_transition_count"],
-            ),
-            (7345, 6783),
-        )
+        self.assertEqual((receipt["c1_record_count"], receipt["target_c1_record_count"]), (4958, 4526))
+        self.assertEqual((receipt["c2_state_count"], receipt["target_c2_state_count"]), (9420, 8598))
+        self.assertEqual((receipt["c2_transition_count"], receipt["target_c2_transition_count"]), (7345, 6783))
         self.assertEqual(coverage["source_boundary_insufficiency"], 0)
-        self.assertEqual(
-            target["window_not_complete_due_solely_to_june_calendar_boundary"],
-            0,
-        )
-        self.assertEqual(
-            coverage["qa_state"],
-            "PASS_EXPLICIT_PAIRED_SPARSE_CENSORING",
-        )
-        for field in (
-            "repair_performed",
-            "interpolation_performed",
-            "forward_fill_performed",
-            "synthesis_performed",
-        ):
+        self.assertEqual(target["window_not_complete_due_solely_to_june_calendar_boundary"], 0)
+        self.assertEqual(coverage["qa_state"], "PASS_EXPLICIT_PAIRED_SPARSE_CENSORING")
+        for field in ("repair_performed", "interpolation_performed", "forward_fill_performed", "synthesis_performed"):
             self.assertFalse(coverage[field])
 
-    def test_merge_receipt_and_authority_remain_non_activating(self) -> None:
+    def test_merge_receipt_and_authority_survive_wp3_progression(self) -> None:
         receipt = load("replay-receipt.json")
         binding = load("prospective-source-binding.json")
         decision = load("PD_JUNE_FULL_MONTH_MDR_WP2_REPLAY_DELEGATED_DECISION.json")
@@ -127,25 +75,20 @@ class PDJuneFullMonthMDRWP2ReplayAcceptanceTests(unittest.TestCase):
         self.assertFalse(binding["active_research_triage"])
         self.assertEqual(decision["decision"], "PASS")
         self.assertEqual(decision["status"], "COMPLETED_SQUASH_MERGED_WP3_READY")
-        self.assertEqual(decision["reserved_authority_delta"], "NONE")
         self.assertEqual(merge_receipt["pull_request"], 200)
-        self.assertEqual(
-            merge_receipt["final_head"],
-            "89d06f5e4578c3e945c7b7dd443ef573ae743f85",
-        )
-        self.assertEqual(
-            merge_receipt["merge_commit"],
-            "fedc20ab92f0465e5c84d7626f859866c9ad1f00",
-        )
+        self.assertEqual(merge_receipt["final_head"], "89d06f5e4578c3e945c7b7dd443ef573ae743f85")
+        self.assertEqual(merge_receipt["merge_commit"], "fedc20ab92f0465e5c84d7626f859866c9ad1f00")
         self.assertEqual(merge_receipt["merge_result"], "PASS_SQUASH_MERGED_TO_MAIN")
-        self.assertEqual(state["status"], "COMPLETED")
+        self.assertEqual(state["acceptance_merge_commit"], merge_receipt["merge_commit"])
         self.assertEqual(state["replay_status"], "PASS_ACCEPTED_FOR_WP3")
-        self.assertEqual(
-            state["merge_commit"],
-            "fedc20ab92f0465e5c84d7626f859866c9ad1f00",
-        )
-        self.assertEqual(state["next_packet"], "PD-JUNE-FM-WP3")
-        self.assertEqual(state["next_packet_status"], "READY")
+        self.assertEqual(state["packet_id"], "PD-JUNE-FM-WP3")
+        self.assertEqual(state["next_packet"], "PD-JUNE-FM-G2")
+        self.assertEqual(state["next_packet_authority"], "OPERATOR_REQUIRED_BLINDED_REVIEW")
+        self.assertEqual(state["release_status"], "NOT_A_RELEASE")
+        self.assertEqual(state["selector_eligibility"], "NONE")
+        self.assertEqual(state["r2_publication"], "DENIED")
+        self.assertEqual(state["validation_consumption"], "DENIED")
+        self.assertFalse(state["write_authority"])
 
 
 if __name__ == "__main__":

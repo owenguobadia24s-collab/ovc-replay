@@ -1,0 +1,85 @@
+{
+  "schema": "ovc-pd-june-full-month-mdr-wp3-selection-completeness-qa/v1",
+  "programme_id": "PD-JUNE-FULL-MONTH-MDR",
+  "packet_id": "PD-JUNE-FM-WP3",
+  "review_id": "PD-JUNE-FM-WP3-BLINDED-REVIEW-v1",
+  "source_run_id": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9",
+  "eligible_window_candidate_count": 7116,
+  "selected_card_count": 40,
+  "observation_count": 360,
+  "batch_count": 5,
+  "cards_per_batch": 8,
+  "selection": {
+    "trigger": 20,
+    "matched_nontrigger_control": 10,
+    "algorithmic_not_evaluable_control": 10,
+    "weeks": {
+      "W1_2026-06-01_07": 8,
+      "W2_2026-06-08_14": 8,
+      "W3_2026-06-15_21": 8,
+      "W4_2026-06-22_28": 8,
+      "W5_2026-06-29_30": 8
+    },
+    "sides": {"BID": 20, "ASK": 20},
+    "scopes": {"LOCAL": 20, "WITH_2H_PARENT": 20},
+    "sessions": {
+      "ASIA_00_08": 10,
+      "LONDON_08_13": 13,
+      "NEW_YORK_13_21": 12,
+      "LATE_21_24": 5
+    },
+    "fired_trigger_reasons": {
+      "BOUNDARY_ZONE_ENTRY": 6,
+      "BREACH_ACTIVE": 5,
+      "LONG_PERSISTENCE": 5,
+      "REPEATED_SWITCHING": 6
+    },
+    "stratum_rule": "EXACTLY_ONE_TRIGGER_AND_ONE_CONTROL_PER_WEEK_SIDE_SCOPE",
+    "sequence_records": 9,
+    "pre_event_records": 4,
+    "post_event_records": 4,
+    "deterministic_rank": "SHA256(source_run|side|scope|center_time|selection_class)"
+  },
+  "card_content": {
+    "complete_pre_post_sequence": "PASS_4_PRE_EVENT_1_EVENT_4_POST_EVENT",
+    "actual_active_level_values": "PASS_EXACT_LEVEL_IDENTITIES_RECONSTRUCTED_AND_MATCHED_TO_STATE_LEVEL_IDS",
+    "relation_identities": "PASS_RELATION_SET_LEVEL_AND_CONTAINER_IDS_PRESENT",
+    "persistence_history": "PASS_ALL_ROWS",
+    "local_15m_ohlc_and_five_axes": "PASS_ALL_ROWS",
+    "corresponding_2h_parent_state": "PASS_ALL_ROWS_LATEST_AT_OR_BEFORE_LOCAL",
+    "trigger_timestamp": "PASS_EVENT_ROW_R05",
+    "deterministic_calculation_inputs": "PASS_EVALUATOR_V0_1_INPUTS_WITHOUT_ANSWER_DISCLOSURE",
+    "source_completeness_classification": "PASS_ALL_ROWS",
+    "review_questions_separated": "PASS_TRIGGER_COHERENCE_DESCRIPTIVENESS_DISPOSITION",
+    "review_card_presentation_omission_count": 0
+  },
+  "source_completeness": {
+    "source_boundary_insufficiency": 0,
+    "window_not_complete_due_solely_to_june_calendar_boundary": 0,
+    "provider_gap_policy": "EXPLICIT_INCOMPLETE_PARENT_CENSORING_NO_BRIDGING",
+    "algorithmic_not_evaluable_markers_full_replay": 13993,
+    "all_sequence_rows_target_june": true,
+    "repair_performed": false,
+    "interpolation_performed": false,
+    "forward_fill_performed": false,
+    "synthesis_performed": false
+  },
+  "blinding": {
+    "selection_class_withheld_from_cards": true,
+    "trigger_reason_withheld_from_cards": true,
+    "sealed_answer_key_separate": true,
+    "sealed_answer_key_sha256": "48ddb7ff6689c60ef4ce24703119f6557959828e886e02213ae1804c3001ed97",
+    "blind_card_hashes_present": true
+  },
+  "qa_result": "PASS_WP3_COMPLETE_BALANCED_AND_BLINDED",
+  "warnings": [
+    "The 13,993 algorithmic not-evaluable markers remain evidence and are not silently removed.",
+    "The 2H parent structural axes are frequently not evaluated; exact states and reasons remain visible on cards.",
+    "No review outcome is yet available and no candidate, semantic, family or theory promotion is authorised."
+  ],
+  "release_status": "NOT_A_RELEASE",
+  "selector_eligibility": "NONE",
+  "r2_publication": "DENIED",
+  "validation_consumption": "DENIED",
+  "write_authority": false
+}

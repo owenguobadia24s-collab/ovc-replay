@@ -44,7 +44,7 @@ jobs:
           assert plan['paired_sparse_m1_policy'] == 'ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING'
           assert plan['provider_execution_in_ci'] == 'DENIED'
           assert state['packet_id'] in {'PD-JUNE-FM-WP1', 'PD-JUNE-FM-WP2', 'PD-JUNE-FM-WP3'}
-          assert state['plan_amendment'] == 'PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE'
+          assert state['plan_version'] == '0.1+A1+A2'
           assert state['next_packet_status'] in {
               'BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS',
               'BLOCKED_PENDING_WP1_FINAL_HEAD_CI_AND_SQUASH_MERGE',
@@ -53,6 +53,8 @@ jobs:
               'BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS',
               'BLOCKED_PENDING_WP2_ACCEPTANCE_CI_AND_SQUASH_MERGE',
               'BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE',
+              'BLOCKED_PENDING_WP3_FINAL_HEAD_CI_AND_SQUASH_MERGE',
+              'GATE_READY_OPERATOR_REQUIRED',
           }
           assert qa['status'] in {'IMPLEMENTED_PENDING_CI', 'PASS_FINAL_HEAD_CI', 'COMPLETED_SQUASH_MERGED_TO_MAIN'}
           PY
