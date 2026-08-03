@@ -6,13 +6,13 @@
   "packet_id": "PG-WP4",
   "gate_id": "PG-G4",
   "title": "Source-faithful provisional programme migration",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
-  "authority_required": "DELEGATED_AUTO_RATIFIABLE_IF_PASS",
+  "status": "APPROVED",
+  "authority_required": "DELEGATED_AUTO_RATIFIED",
   "baseline_commit": "4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a",
   "candidate_branch": "migration/pg-wp4-existing-programmes",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "implementation_candidate_commit": "883d490f4c660e2bc96d2f8e8cab752f65e86f6b",
   "current_authority": "SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_APPROVED_BY_PG_G3A",
-  "proposed_delta": "ACCEPT_MIGRATION_MECHANISM_REPRODUCIBLE_SOURCE_CENSUS_UNCERTAINTY_AND_CONFLICT_LEDGER_AND_RELEASE_PG_WP5",
+  "approved_delta": "ACCEPT_MIGRATION_MECHANISM_REPRODUCIBLE_SOURCE_CENSUS_UNCERTAINTY_AND_CONFLICT_LEDGER_AND_RELEASE_PG_WP5",
   "acceptance_conditions": [
     "REGISTERED_PROGRAMME_STATE_DISCOVERY_IS_DETERMINISTIC",
     "NATIVE_PG_STATE_IS_EXCLUDED_FROM_LEGACY_MIGRATION",
@@ -28,16 +28,22 @@
     "NO_RESERVED_AUTHORITY_DELTA"
   ],
   "tests": {
-    "focused": "PENDING",
-    "repository": "PENDING",
-    "migration_assurance": "PENDING",
-    "merge_readiness": "PENDING"
+    "repository": {"run_id": 30844283023, "conclusion": "SUCCESS", "test_count": 119},
+    "merge_readiness": {"run_id": 30844282914, "conclusion": "SUCCESS"},
+    "migration_census": {
+      "record_count": 7,
+      "unique_programme_count": 7,
+      "warning_count": 14,
+      "blocking_conflict_count": 0,
+      "snapshot_sha256": "26300c67dc94b6b5ac1c40c015b36d4bd17a9a2edd0e4510083307cc31f0f7e5"
+    }
   },
   "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g4/PG_G4_QA_PACKET.json",
   "migration_manifest": "docs/releases/programme-genesis-v0-2/pg-g4/PG_WP4_MIGRATION_MANIFEST.json",
-  "qa_recommendation": "PENDING_EXACT_HEAD_CI",
+  "qa_recommendation": "PASS",
   "warnings": [
     "PROVISIONAL_NON_CANONICAL_OUTPUTS_ONLY",
+    "FOURTEEN_UNCERTAINTY_OR_SOURCE_COVERAGE_WARNINGS_REMAIN_VISIBLE",
     "NO_FUTURE_MIGRATED_FACT_OR_EDGE_PRE_ACCEPTANCE",
     "NO_ADMISSION_ENFORCEMENT_OR_CONTROL_PLANE_ROUTE",
     "NO_AUTOMATIC_UPKEEP"
@@ -51,7 +57,9 @@
     "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION",
     "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
   ],
+  "delegated_authority_basis": "PG-G3A operator ACKNOWLEDGE_CONTINUE and approved plan delegation for wholly non-reserved gates",
+  "decision_record": "docs/releases/programme-genesis-v0-2/pg-g4/PG_G4_DELEGATED_DECISION.json",
   "rollback": "Discard and rebuild derived migration snapshots from preserved programme-owned state; retain all source hashes and uncertainty findings.",
-  "recommended_decision": "PASS_IF_REQUIRED_CHECKS_AND_REPOSITORY_CENSUS_PASS",
+  "decision": "PASS",
   "next_packet": "PG-WP5"
 }
