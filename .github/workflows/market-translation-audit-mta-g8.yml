@@ -27,6 +27,17 @@ jobs:
         run: PYTHONPATH=src python -m unittest discover -s tests -v
       - name: Assert operator gate remains unrecorded and activation denied
         run: |
-          grep -q '"operator_decision_required": true' docs/releases/market-translation-audit-v0-2/mta-g8/MTA_G8_CONSOLIDATED_OPERATOR_DECISION_PACKET.json
-          ! grep -R '"recorded_decision": "PASS"' docs/releases/market-translation-audit-v0-2/mta-g8
-          ! grep -R '"c2e_activation": "APPROVED"' docs/releases/market-translation-audit-v0-2/mta-g8
+          PYTHONPATH=src python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("docs/releases/market-translation-audit-v0-2/mta-g8")
+          packet = json.loads((root / "MTA_G8_CONSOLIDATED_OPERATOR_DECISION_PACKET.json").read_text())
+          assert packet["operator_decision_required"] is True
+          assert all(item["recorded_decision"] is None for item in packet["decisions"].values())
+          denied = packet["authority_boundary"]
+          assert all(value in {"DENIED", "NONE"} for value in denied.values())
+          assert denied["c2e_activation"] == "DENIED"
+          assert denied["c2_5_activation_or_promotion"] == "DENIED"
+          assert denied["c3_semantic_promotion"] == "DENIED"
+          PY
