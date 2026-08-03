@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-mta-g8-gate-ready-assurance/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "gate_id": "MTA-G8",
+  "status": "GATE_READY",
+  "operator_decision_required": true,
+  "pull_request": 236,
+  "branch": "gate/mta-g8-consolidated-decision",
+  "candidate_commit": "9d10633185fc2910269c20595b99bb358d1e7509",
+  "tests": [
+    {
+      "workflow": "Market Translation Audit MTA-G8 consolidated gate readiness",
+      "run_id": 30803405712,
+      "result": "PASS"
+    },
+    {
+      "workflow": "tests",
+      "run_id": 30803405718,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30803405675,
+      "profile": "FINAL_HEAD",
+      "result": "PASS"
+    }
+  ],
+  "corrected_incident": {
+    "failed_run_id": 30803291066,
+    "classification": "SERIALIZATION_SENSITIVE_GREPPED_ASSERTION",
+    "resolution": "REPLACED_WITH_JSON_AWARE_PYTHON_ASSERTIONS",
+    "weakened_acceptance": false
+  },
+  "qa": {
+    "recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "warnings": [
+      "MTA-WP7-W1_RUNTIME_MEASUREMENT_NOT_AVAILABLE_IN_PINNED_COMPACT_RECORD",
+      "RO4-G6-BLOCK-001-EVIDENCE-NOT-YET-COLLECTED"
+    ],
+    "unresolved_issues": []
+  },
+  "recommended_decisions": {
+    "MTA-G8-CLOCK": "PASS",
+    "MTA-G8-C2E": "PASS",
+    "MTA-G8-C2.5": "PASS",
+    "MTA-G8-C3": "DEFER"
+  },
+  "authority_boundary": "PLAN_PREPARATION_ONLY_NO_ACTIVATION_PROMOTION_VALIDATION_PUBLICATION_RISK_OR_EXECUTION",
+  "recorded_decisions": null,
+  "rollback": "Preserve all programme evidence and leave the gate unmerged unless the operator records all four decisions."
+}
