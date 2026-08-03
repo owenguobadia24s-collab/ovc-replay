@@ -5,7 +5,7 @@
   "gate_id": "PG-G4",
   "baseline_commit": "4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a",
   "branch": "migration/pg-wp4-existing-programmes",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "implementation_candidate_commit": "883d490f4c660e2bc96d2f8e8cab752f65e86f6b",
   "authority_source": "PG-G3A.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T194700+0100",
   "authority_delta": "SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_WITH_PERMANENT_UNCERTAINTY_ONLY",
   "artifacts": [
@@ -15,6 +15,7 @@
     "src/ovc/programme_genesis/migration.py",
     "scripts/governance/build_pg_wp4_migration.py",
     "tests/governance/test_pg_wp4.py",
+    "tests/governance/test_pg_wp4_census_output.py",
     ".github/workflows/pg-wp4-migration.yml"
   ],
   "frozen_invariants": [
@@ -32,12 +33,29 @@
   "generated_output": {
     "repository_location": "NONE_REPLACEABLE_DERIVED_OUTPUT",
     "workflow_output": "$RUNNER_TEMP/pg-wp4/migration-snapshot.json",
-    "record_count": "PENDING_CI",
-    "unique_programme_count": "PENDING_CI",
-    "warning_count": "PENDING_CI",
-    "blocking_conflict_count": "PENDING_CI",
-    "snapshot_sha256": "PENDING_CI"
+    "record_count": 7,
+    "unique_programme_count": 7,
+    "warning_count": 14,
+    "blocking_conflict_count": 0,
+    "snapshot_sha256": "26300c67dc94b6b5ac1c40c015b36d4bd17a9a2edd0e4510083307cc31f0f7e5",
+    "programme_ids": [
+      "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
+      "OVC-C2E-NEUTRAL-EPISODE-v0.1",
+      "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+      "OVC-DEV-ACCEL-v0.1",
+      "OVC-MTA-v0.2",
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
+      "PD-JUNE-FULL-MONTH-MDR"
+    ],
+    "evidence_run": 30844283023,
+    "evidence_test_count": 119,
+    "status": "PASS"
   },
+  "warnings": [
+    "FOURTEEN_NON_BLOCKING_UNCERTAINTY_OR_SOURCE_COVERAGE_FINDINGS_RETAINED",
+    "NO_MIGRATION_WARNING_IS_SILENTLY_RESOLVED",
+    "NO_IMPORTED_RECORD_IS_CANONICAL"
+  ],
   "external_artifacts": [],
   "reserved_authority": "NONE",
   "blockers": [],
