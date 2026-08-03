@@ -9,9 +9,11 @@
   "authority_required": "OPERATOR_REQUIRED_ACKNOWLEDGEMENT",
   "baseline_commit": "e3e6c12a293e0c1802cc2686678690d01318161b",
   "candidate_branch": "gate/pg-g3a-graph-acknowledgement",
-  "candidate_commit": "PENDING_EXACT_HEAD",
+  "tested_candidate_commit": "09f171db2770caae43916aa6cd7e3a79f322a5f1",
+  "final_packet_commit": "PENDING_EXACT_HEAD",
   "completed_packets": ["PG-00", "PG-WP1", "PG-WP2", "PG-WP3"],
   "pg_g3_merge_receipt": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json",
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_QA_PACKET.json",
   "current_authority": "TYPED_GRAPH_VALIDATION_AND_DERIVED_IMPACT_ANALYSIS_ONLY",
   "proposed_delta": "ACKNOWLEDGE_GRAPH_PLAUSIBILITY_AND_RELEASE_SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_WORK_ONLY",
   "graph_summary": {
@@ -48,15 +50,21 @@
   "tests": {
     "pg_g3_exact_head_tests": {"run_id": 30841743173, "conclusion": "SUCCESS"},
     "pg_g3_exact_head_merge_readiness": {"run_id": 30841743174, "conclusion": "SUCCESS"},
-    "pg_g3a_gate_head_tests": "PENDING",
-    "pg_g3a_gate_head_merge_readiness": "PENDING"
+    "pg_g3a_tested_head_tests": {"run_id": 30842141037, "conclusion": "SUCCESS", "test_count": 108},
+    "pg_g3a_tested_head_merge_readiness": {"run_id": 30842140980, "conclusion": "SUCCESS"},
+    "final_packet_head_assurance": "PENDING"
   },
   "qa": {
-    "pg_g3_recommendation": "PASS",
+    "status": "PASS",
+    "recommendation": "ACKNOWLEDGE_CONTINUE",
     "blocking_findings": 0,
     "unresolved_review_threads": 0,
     "blocking_reviews": 0
   },
+  "corrective_history": [
+    "Initial gate-head assurance exposed a stale PG-G0 regression assertion that assumed no later operator gate could be active.",
+    "The assertion was narrowed to immutable PG-G0 decision and packet evidence while PG-G3A retained its current operator-decision state; all 108 tests passed."
+  ],
   "warnings": [
     "ACKNOWLEDGEMENT_DOES_NOT_ACCEPT_ANY_FUTURE_MIGRATED_EDGE_OR_PROGRAMME_FACT",
     "ZERO_CYCLE_RESULT_APPLIES_ONLY_TO_THE_BOUNDED_PRE_MIGRATION_SELF_GRAPH",
@@ -71,8 +79,10 @@
     "src/ovc/programme_genesis/graph.py",
     "fixtures/governance/programme_genesis/valid_pg_dependency_graph_v0_1.json",
     "tests/governance/test_pg_wp3.py",
+    "tests/governance/test_pg_g3a.py",
     "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_GRAPH_VALIDATION_REPORT.json",
-    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json"
+    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json",
+    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_QA_PACKET.json"
   ],
   "external_artifacts": [],
   "reserved_authority_denials": [
