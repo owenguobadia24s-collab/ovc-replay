@@ -21,6 +21,7 @@ CONTRACT_PATH = ROOT / "contracts/governance/programme_genesis/BOUNDED_UPKEEP_CA
 PROGRAMME_IDS = {"OVC-PG-v0.2", "OVC-MTA-v0.2"}
 TARGET_BRANCH = "upkeep/pg-candidate-events/2026-08-03-health"
 SOURCE_SHA = "a" * 64
+DECISION_ID = "PG-G7.OPERATOR.PASS.20260803T222900+0100"
 
 
 def registry() -> dict:
@@ -33,10 +34,7 @@ def finding(identity: str = "finding-001", programme_id: str = "OVC-MTA-v0.2") -
         "event_type": "HEALTH_FINDING_CANDIDATE",
         "source_kind": "PROGRAMME_HEALTH_FINDING",
         "source_finding_id": identity,
-        "source_ref": {
-            "path": "docs/releases/example/health.json",
-            "sha256": SOURCE_SHA,
-        },
+        "source_ref": {"path": "docs/releases/example/health.json", "sha256": SOURCE_SHA},
         "observed_at": "2026-08-03T19:00:00+00:00",
         "first_valid_at": "2026-08-03T19:00:00+00:00",
         "proposed_payload": {
@@ -47,9 +45,9 @@ def finding(identity: str = "finding-001", programme_id: str = "OVC-MTA-v0.2") -
     }
 
 
-def candidate(item: dict | None = None, *, active_registry: dict | None = None) -> dict:
+def candidate(item: dict | None = None, *, value: dict | None = None) -> dict:
     item = deepcopy(item or finding())
-    active_registry = active_registry or registry()
+    value = value or registry()
     return build_candidate_event(
         programme_id=item["programme_id"],
         event_type=item["event_type"],
@@ -61,28 +59,34 @@ def candidate(item: dict | None = None, *, active_registry: dict | None = None) 
         first_valid_at=item["first_valid_at"],
         proposed_payload=item["proposed_payload"],
         target_branch=TARGET_BRANCH,
-        registry=active_registry,
+        registry=value,
         existing_programme_ids=PROGRAMME_IDS,
     )
 
 
 class ProgrammeGenesisWP6Tests(unittest.TestCase):
-    def test_registry_is_frozen_disabled_pending_pg_g7(self) -> None:
+    def test_registry_is_active_bounded_after_pg_g7(self) -> None:
         value = registry()
-        self.assertEqual("FROZEN_DISABLED_PENDING_PG_G7", value["status"])
-        self.assertFalse(value["enabled"])
+        self.assertEqual("ACTIVE_BOUNDED_APPEND_ONLY", value["status"])
+        self.assertTrue(value["enabled"])
         self.assertTrue(value["preview_enabled"])
         self.assertEqual("PG-G7", value["activation_gate"])
-        self.assertIsNone(value["activation_decision_id"])
-        self.assertFalse(value["capabilities"]["candidate_persistence"])
-        self.assertFalse(value["capabilities"]["programme_creation"])
-        self.assertFalse(value["capabilities"]["programme_event_acceptance"])
-        self.assertFalse(value["capabilities"]["approval"])
-        self.assertFalse(value["capabilities"]["merge"])
-        self.assertFalse(value["capabilities"]["main_write"])
-        self.assertFalse(value["capabilities"]["publication"])
+        self.assertEqual(DECISION_ID, value["activation_decision_id"])
+        self.assertTrue(value["capabilities"]["candidate_persistence"])
+        for capability in (
+            "programme_creation",
+            "programme_event_acceptance",
+            "approval",
+            "merge",
+            "main_write",
+            "publication",
+            "admission_enforcement",
+            "control_plane_route",
+            "agent_write",
+        ):
+            self.assertFalse(value["capabilities"][capability], capability)
         self.assertEqual("NONE", value["authority_effect"])
-        self.assertIn("AUTOMATIC_UPKEEP_BEFORE_PG_G7", value["reserved_authority_denials"])
+        self.assertNotIn("AUTOMATIC_UPKEEP_BEFORE_PG_G7", value["reserved_authority_denials"])
 
     def test_candidate_identity_and_preview_are_deterministic(self) -> None:
         first = candidate()
@@ -139,10 +143,7 @@ class ProgrammeGenesisWP6Tests(unittest.TestCase):
 
     def test_nested_authority_payloads_are_rejected(self) -> None:
         invalid = finding()
-        invalid["proposed_payload"] = {
-            "observation": "review needed",
-            "nested": {"approved": True},
-        }
+        invalid["proposed_payload"] = {"observation": "review needed", "nested": {"approved": True}}
         with self.assertRaisesRegex(UpkeepError, "forbidden authority fields"):
             candidate(invalid)
         invalid_list = finding()
@@ -166,14 +167,11 @@ class ProgrammeGenesisWP6Tests(unittest.TestCase):
             validate_candidate_event(changed_payload, registry(), existing_programme_ids=PROGRAMME_IDS)
 
     def test_wrong_or_main_branch_is_rejected(self) -> None:
-        item = candidate()
-        item["target_branch"] = "main"
-        with self.assertRaisesRegex(UpkeepError, "dedicated upkeep prefix"):
-            validate_candidate_event(item, registry(), existing_programme_ids=PROGRAMME_IDS)
-        item = candidate()
-        item["target_branch"] = "feature/general"
-        with self.assertRaisesRegex(UpkeepError, "dedicated upkeep prefix"):
-            validate_candidate_event(item, registry(), existing_programme_ids=PROGRAMME_IDS)
+        for branch in ("main", "feature/general"):
+            item = candidate()
+            item["target_branch"] = branch
+            with self.assertRaisesRegex(UpkeepError, "dedicated upkeep prefix"):
+                validate_candidate_event(item, registry(), existing_programme_ids=PROGRAMME_IDS)
 
     def test_preview_is_bounded_and_creates_no_files(self) -> None:
         value = registry()
@@ -202,42 +200,25 @@ class ProgrammeGenesisWP6Tests(unittest.TestCase):
             )
             self.assertEqual([], list(root.rglob("*")))
 
-    def test_persistence_is_denied_before_pg_g7_without_writing(self) -> None:
-        with tempfile.TemporaryDirectory() as temp_dir:
-            root = Path(temp_dir)
-            with self.assertRaisesRegex(UpkeepError, "disabled pending PG-G7"):
-                persist_candidate_event(
-                    root,
-                    candidate(),
-                    registry=registry(),
-                    branch_name=TARGET_BRANCH,
-                    existing_programme_ids=PROGRAMME_IDS,
-                )
-            self.assertEqual([], list(root.rglob("*")))
-
-    def test_synthetic_future_activation_is_dedicated_and_append_only(self) -> None:
-        active = registry()
-        active["enabled"] = True
-        active["activation_decision_id"] = "PG-G7.OPERATOR.PASS.TEST_ONLY"
-        active["capabilities"]["candidate_persistence"] = True
-        item = candidate(active_registry=active)
+    def test_active_persistence_is_dedicated_and_append_only(self) -> None:
+        item = candidate()
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             destination = persist_candidate_event(
                 root,
                 item,
-                registry=active,
+                registry=registry(),
                 branch_name=TARGET_BRANCH,
                 existing_programme_ids=PROGRAMME_IDS,
             )
             self.assertTrue(destination.is_file())
-            stored = json.loads(destination.read_text(encoding="utf-8"))
-            self.assertEqual(item, stored)
+            self.assertEqual(item, json.loads(destination.read_text(encoding="utf-8")))
+            self.assertTrue(str(destination.relative_to(root)).startswith("registries/governance/programme_genesis/upkeep_candidates/"))
             with self.assertRaisesRegex(UpkeepError, "already exists"):
                 persist_candidate_event(
                     root,
                     item,
-                    registry=active,
+                    registry=registry(),
                     branch_name=TARGET_BRANCH,
                     existing_programme_ids=PROGRAMME_IDS,
                 )
@@ -246,8 +227,21 @@ class ProgrammeGenesisWP6Tests(unittest.TestCase):
                 persist_candidate_event(
                     temp_dir,
                     item,
-                    registry=active,
+                    registry=registry(),
                     branch_name="feature/not-upkeep",
+                    existing_programme_ids=PROGRAMME_IDS,
+                )
+
+    def test_activation_decision_is_required_even_when_enabled(self) -> None:
+        value = registry()
+        value["activation_decision_id"] = None
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with self.assertRaisesRegex(UpkeepError, "accepted PG-G7 activation decision"):
+                persist_candidate_event(
+                    temp_dir,
+                    candidate(value=value),
+                    registry=value,
+                    branch_name=TARGET_BRANCH,
                     existing_programme_ids=PROGRAMME_IDS,
                 )
 
@@ -257,11 +251,9 @@ class ProgrammeGenesisWP6Tests(unittest.TestCase):
         self.assertEqual("NONE", schema["properties"]["authority_effect"]["const"])
         self.assertIn("upkeep/pg-candidate-events", schema["properties"]["target_branch"]["pattern"])
         contract = CONTRACT_PATH.read_text(encoding="utf-8")
-        self.assertIn("It does not activate automatic upkeep", contract)
         self.assertIn("cannot create or admit a programme", contract)
-        self.assertIn("persistence is denied", contract)
         self.assertIn("may not create programmes, approve candidates, merge pull requests or write `main`", contract)
-        self.assertIn("Code availability, passing tests and a merged disabled implementation do not grant upkeep authority", contract)
+        self.assertIn("Every candidate remains unapproved", contract)
 
 
 if __name__ == "__main__":
