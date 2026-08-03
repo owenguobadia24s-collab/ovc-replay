@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 STATE_PATH = ROOT / "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json"
 PACKET_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_OPERATOR_ACKNOWLEDGEMENT_PACKET.json"
+DECISION_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3A_OPERATOR_DECISION.json"
 RECEIPT_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json"
 REPORT_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_GRAPH_VALIDATION_REPORT.json"
 
@@ -16,15 +17,20 @@ def load_json(path: Path) -> dict:
 
 
 class ProgrammeGenesisG3ATests(unittest.TestCase):
-    def test_programme_stops_at_operator_acknowledgement(self) -> None:
+    def test_operator_acknowledgement_is_recorded_and_releases_only_provisional_migration(self) -> None:
         state = load_json(STATE_PATH)
-        self.assertEqual("GATE_READY", state["status"])
+        decision = load_json(DECISION_PATH)
+        self.assertEqual("APPROVED", state["status"])
         self.assertEqual("PG-G3A", state["current_packet"])
         self.assertEqual("PG-G3A", state["current_gate"])
-        self.assertTrue(state["operator_decision_required"])
-        self.assertIsNone(state["operator_decision_id"])
-        self.assertEqual("DENIED_PENDING_PG_G3A", state["authority"]["portfolio_migration"])
-        self.assertEqual("AWAIT_OPERATOR_PG_G3A_ACKNOWLEDGEMENT", state["next_action"])
+        self.assertFalse(state["operator_decision_required"])
+        self.assertEqual("PG-G3A.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T194700+0100", state["operator_decision_id"])
+        self.assertEqual("ACKNOWLEDGE_CONTINUE", decision["decision"])
+        self.assertEqual("OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE", decision["operator_command"])
+        self.assertEqual("APPROVED_SOURCE_FAITHFUL_PROVISIONAL_PENDING_PG_G4", state["authority"]["portfolio_migration"])
+        self.assertEqual("DENIED_PENDING_PG_G6", state["authority"]["canonical_migration_adoption"])
+        self.assertEqual("DENIED_PENDING_PG_G6", state["authority"]["admission_enforcement"])
+        self.assertEqual("DENIED_PENDING_PG_G7", state["authority"]["automatic_upkeep"])
 
     def test_pg_wp3_receipt_binds_exact_merge_and_assurance(self) -> None:
         receipt = load_json(RECEIPT_PATH)
@@ -35,12 +41,12 @@ class ProgrammeGenesisG3ATests(unittest.TestCase):
         self.assertEqual("SUCCESS", receipt["exact_head_assurance"]["merge_readiness"]["conclusion"])
         self.assertEqual("DENIED_PENDING_OPERATOR_ACKNOWLEDGEMENT", receipt["migration_status"])
 
-    def test_acknowledgement_packet_is_consolidated_and_non_activating(self) -> None:
+    def test_acknowledgement_packet_is_approved_but_non_canonical(self) -> None:
         packet = load_json(PACKET_PATH)
-        self.assertEqual("GATE_READY", packet["status"])
-        self.assertEqual("OPERATOR_REQUIRED_ACKNOWLEDGEMENT", packet["authority_required"])
-        self.assertEqual("ACKNOWLEDGE_CONTINUE", packet["recommended_decision"])
-        self.assertEqual("OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE", packet["exact_operator_command"])
+        self.assertEqual("APPROVED", packet["status"])
+        self.assertEqual("OPERATOR_REQUIRED_COMPLETED", packet["authority_required"])
+        self.assertEqual("ACKNOWLEDGE_CONTINUE", packet["decision"])
+        self.assertEqual("OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE", packet["operator_command"])
         self.assertEqual([], packet["unresolved_issues"])
         self.assertEqual(0, packet["qa"]["blocking_findings"])
         self.assertIn("CANONICAL_MIGRATION_ADOPTION", packet["reserved_authority_denials"])
@@ -58,13 +64,23 @@ class ProgrammeGenesisG3ATests(unittest.TestCase):
         self.assertEqual(0, report["migration_boundary"]["imported_existing_programmes"])
         self.assertTrue(any("pre-migration constitutional self-graph" in item for item in report["limitations"]))
 
-    def test_pg_wp4_cannot_start_without_acknowledgement_merge(self) -> None:
+    def test_pg_wp4_is_ready_but_cannot_start_before_acknowledgement_merge(self) -> None:
         state = load_json(STATE_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("COMPLETED", packets["PG-WP3"]["status"])
-        self.assertEqual("GATE_READY", packets["PG-G3A"]["status"])
+        self.assertEqual("APPROVED", packets["PG-G3A"]["status"])
         self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
-        self.assertEqual("PLANNED", packets["PG-WP4"]["status"])
+        self.assertEqual("READY", packets["PG-WP4"]["status"])
+        self.assertIsNone(packets["PG-WP4"]["baseline_commit"])
+
+    def test_decision_does_not_pre_accept_migrated_facts_or_edges(self) -> None:
+        decision = load_json(DECISION_PATH)
+        delta = decision["authority_delta"]
+        self.assertEqual("NOT_PRE_ACCEPTED", delta["future_migrated_programme_facts"])
+        self.assertEqual("NOT_PRE_ACCEPTED", delta["future_migrated_edges"])
+        self.assertEqual("DENIED_PENDING_PG_G6", delta["canonical_migration_adoption"])
+        self.assertEqual("NONE", delta["market_model_semantic_threshold_selector_release_validation_publication"])
+        self.assertEqual("NONE", delta["agent_probability_risk_exposure_trading_execution"])
 
 
 if __name__ == "__main__":
