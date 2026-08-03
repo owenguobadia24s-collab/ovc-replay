@@ -1,0 +1,83 @@
+{
+  "schema": "ovc-programme-genesis-pg-g0-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-00",
+  "gate_id": "PG-G0",
+  "baseline_commit": "5fb26ce08ff1a386f76bc8c6784350ab6fddcfb7",
+  "candidate_branch": "gate/pg-g0-ratification",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "checks": [
+    {
+      "check_id": "PG-G0-SOURCE-IDENTITY",
+      "status": "PASS",
+      "evidence": [
+        "file_00000000a0e4822f8ed73a5903ded4d7",
+        "docs/plans/governance/OVC_Programme_Genesis_Portfolio_Ledger_and_Dependency_Graph_v0_2_REVISED_Implementation_Plan.md"
+      ]
+    },
+    {
+      "check_id": "PG-G0-BASELINE-PIN",
+      "status": "PASS",
+      "evidence": ["5fb26ce08ff1a386f76bc8c6784350ab6fddcfb7"]
+    },
+    {
+      "check_id": "PG-G0-OPEN-PR-INVENTORY",
+      "status": "PASS_WITH_WARNINGS",
+      "evidence": ["PR-258", "PR-216", "PR-210", "PR-202"]
+    },
+    {
+      "check_id": "PG-G0-NAMESPACE-COLLISION",
+      "status": "PASS",
+      "evidence": ["NO_EXISTING_PG_BRANCH_OR_REPOSITORY_PROGRAMME_GENESIS_OWNER_FOUND"]
+    },
+    {
+      "check_id": "PG-G0-AUTHORITY-BOUNDARY",
+      "status": "PASS",
+      "evidence": [
+        "NO_MARKET_AUTHORITY",
+        "NO_SELECTOR_OR_RELEASE_AUTHORITY",
+        "NO_VALIDATION_AUTHORITY",
+        "NO_AGENT_WRITE",
+        "NO_PROBABILITY_RISK_EXPOSURE_EXECUTION"
+      ]
+    },
+    {
+      "check_id": "PG-G0-MANDATORY-OPERATOR-STOPS",
+      "status": "PASS",
+      "evidence": ["PG-G0", "PG-G3A", "PG-G6", "PG-G7"]
+    },
+    {
+      "check_id": "PG-G0-STATE-SYNCHRONISATION",
+      "status": "PASS",
+      "evidence": ["contracts/governance/programme_genesis/STATE_SYNCHRONISATION_CONTRACT_v0_1.md"]
+    },
+    {
+      "check_id": "PG-G0-MAINTENANCE-AUTHORITY",
+      "status": "PASS",
+      "evidence": ["registries/governance/programme_genesis/MAINTENANCE_AUTHORITY_REGISTRY_v0_1.json"]
+    },
+    {
+      "check_id": "PG-G0-FOCUSED-TEST",
+      "status": "PENDING_CI",
+      "evidence": ["tests/governance/test_pg_g0.py"]
+    },
+    {
+      "check_id": "PG-G0-REPOSITORY-SUITE",
+      "status": "PENDING_CI",
+      "evidence": ["tests", "OVC merge readiness"]
+    }
+  ],
+  "warnings": [
+    "FULL_EXISTING_PROGRAMME_MIGRATION_IS_NOT_PART_OF_PG_00",
+    "OPEN_PR_258_REMAINS_AT_AN_UNRELATED_OPERATOR_GATE",
+    "STALE_OPEN_PRS_210_AND_216_REMAIN_PRESERVED",
+    "EXTERNAL_DOCX_BYTES_ARE_IDENTIFIED_BY_FILE_LIBRARY_ID;_THE_REPOSITORY_RATIFICATION_COPY_IS_THE_PROPOSED_CANONICAL_PLAN_SOURCE"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
+  "authority_delta": "NONE_UNTIL_OPERATOR_PG_G0_PASS",
+  "rollback": "Close or preserve this PR without merge; do not start PG-WP1."
+}
