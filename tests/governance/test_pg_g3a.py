@@ -17,20 +17,18 @@ def load_json(path: Path) -> dict:
 
 
 class ProgrammeGenesisG3ATests(unittest.TestCase):
-    def test_operator_acknowledgement_is_recorded_and_releases_only_provisional_migration(self) -> None:
-        state = load_json(STATE_PATH)
+    def test_operator_acknowledgement_is_immutable_and_bounded(self) -> None:
         decision = load_json(DECISION_PATH)
-        self.assertEqual("APPROVED", state["status"])
-        self.assertEqual("PG-G3A", state["current_packet"])
-        self.assertEqual("PG-G3A", state["current_gate"])
-        self.assertFalse(state["operator_decision_required"])
-        self.assertEqual("PG-G3A.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T194700+0100", state["operator_decision_id"])
+        self.assertEqual("PG-G3A.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T194700+0100", decision["decision_id"])
         self.assertEqual("ACKNOWLEDGE_CONTINUE", decision["decision"])
         self.assertEqual("OVC APPROVE PG-G3A ACKNOWLEDGE_CONTINUE", decision["operator_command"])
-        self.assertEqual("APPROVED_SOURCE_FAITHFUL_PROVISIONAL_PENDING_PG_G4", state["authority"]["portfolio_migration"])
-        self.assertEqual("DENIED_PENDING_PG_G6", state["authority"]["canonical_migration_adoption"])
-        self.assertEqual("DENIED_PENDING_PG_G6", state["authority"]["admission_enforcement"])
-        self.assertEqual("DENIED_PENDING_PG_G7", state["authority"]["automatic_upkeep"])
+        delta = decision["authority_delta"]
+        self.assertEqual("APPROVED", delta["pg_wp4_source_faithful_provisional_migration"])
+        self.assertEqual("NOT_PRE_ACCEPTED", delta["future_migrated_programme_facts"])
+        self.assertEqual("NOT_PRE_ACCEPTED", delta["future_migrated_edges"])
+        self.assertEqual("DENIED_PENDING_PG_G6", delta["canonical_migration_adoption"])
+        self.assertEqual("DENIED_PENDING_PG_G6", delta["admission_enforcement"])
+        self.assertEqual("DENIED_PENDING_PG_G7", delta["automatic_upkeep"])
 
     def test_pg_wp3_receipt_binds_exact_merge_and_assurance(self) -> None:
         receipt = load_json(RECEIPT_PATH)
@@ -64,23 +62,25 @@ class ProgrammeGenesisG3ATests(unittest.TestCase):
         self.assertEqual(0, report["migration_boundary"]["imported_existing_programmes"])
         self.assertTrue(any("pre-migration constitutional self-graph" in item for item in report["limitations"]))
 
-    def test_pg_wp4_is_ready_but_cannot_start_before_acknowledgement_merge(self) -> None:
+    def test_acknowledgement_merge_is_preserved_as_pg_wp4_prerequisite(self) -> None:
         state = load_json(STATE_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("COMPLETED", packets["PG-WP3"]["status"])
-        self.assertEqual("APPROVED", packets["PG-G3A"]["status"])
+        self.assertIn(packets["PG-G3A"]["status"], {"APPROVED", "COMPLETED"})
+        self.assertEqual("4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a", packets["PG-G3A"]["merge_commit"])
         self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
-        self.assertEqual("READY", packets["PG-WP4"]["status"])
-        self.assertIsNone(packets["PG-WP4"]["baseline_commit"])
+        self.assertIn(packets["PG-WP4"]["status"], {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "APPROVED", "COMPLETED"})
 
-    def test_decision_does_not_pre_accept_migrated_facts_or_edges(self) -> None:
-        decision = load_json(DECISION_PATH)
-        delta = decision["authority_delta"]
-        self.assertEqual("NOT_PRE_ACCEPTED", delta["future_migrated_programme_facts"])
-        self.assertEqual("NOT_PRE_ACCEPTED", delta["future_migrated_edges"])
-        self.assertEqual("DENIED_PENDING_PG_G6", delta["canonical_migration_adoption"])
-        self.assertEqual("NONE", delta["market_model_semantic_threshold_selector_release_validation_publication"])
-        self.assertEqual("NONE", delta["agent_probability_risk_exposure_trading_execution"])
+    def test_current_state_retains_post_acknowledgement_denials(self) -> None:
+        state = load_json(STATE_PATH)
+        authority = state["authority"]
+        self.assertTrue(str(authority["portfolio_migration"]).startswith("APPROVED"))
+        self.assertEqual("DENIED_PENDING_PG_G6", authority["canonical_migration_adoption"])
+        self.assertEqual("DENIED_PENDING_PG_G6", authority["admission_enforcement"])
+        self.assertEqual("DENIED_PENDING_PG_G6", authority["control_plane_route"])
+        self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
+        self.assertEqual("NONE", authority["market_model_selector_release_validation"])
+        self.assertEqual("NONE", authority["agent_probability_risk_exposure_execution"])
 
 
 if __name__ == "__main__":
