@@ -52,8 +52,9 @@ class ProgrammeGenesisG0Tests(unittest.TestCase):
         self.assertEqual("OPERATOR_REQUIRED_COMPLETED", packets["PG-G3A"]["authority_required"])
         self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
         self.assertEqual("OPERATOR_REQUIRED_COMPLETED_FOUR_PART_DECISION", packets["PG-G6"]["authority_required"])
-        self.assertEqual("AUTO_EXECUTABLE_BUILD_OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
+        self.assertEqual("AUTO_EXECUTABLE_BUILD_COMPLETED_OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
         self.assertEqual("PG-G7", packets["PG-WP6"]["next_packet"])
+        self.assertEqual("OPERATOR_REQUIRED", packets["PG-G7"]["authority_required"])
 
     def test_pg_g0_baseline_and_source_identity_are_pinned(self) -> None:
         baseline = load_json(BASELINE_PATH)
