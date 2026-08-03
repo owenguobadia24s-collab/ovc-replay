@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-da2-g1-merge-receipt/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-WP1",
+  "gate_id": "DA2-G1",
+  "operator_decision_id": "DA2-G1.OPERATOR.PASS.20260803T100600+0100",
+  "pull_request": 240,
+  "branch": "build/da2-wp1-orchestration-superseding-v3",
+  "baseline_commit": "595dbcfeb951e1c1ab2570debd671b91ec5ec07b",
+  "candidate_commit": "fa852b33c8dba2541f6cf72b7b92227304fc9996",
+  "merge_commit": "467193141ff0d202f43200ca4eef79c5e83c08fa",
+  "merge_method": "SQUASH",
+  "workflow_migration": "PASS_MERGED",
+  "tests": [
+    {"workflow":"tests","run_id":30805933493,"result":"PASS","complete_suite_count":1},
+    {"workflow":"OVC tiered test selection shadow","run_id":30805933496,"job":"OVC profile assurance","profile":"FINAL_HEAD","result":"PASS"},
+    {"workflow":"OVC tiered test selection shadow","run_id":30805933496,"job":"OVC tiered test selection shadow","result":"PASS"},
+    {"workflow":"OVC tiered test selection shadow","run_id":30805933496,"job":"OVC merge readiness","result":"PASS"}
+  ],
+  "listener_invariant": "ONLY_TESTS_AND_OVC_TIERED_TEST_SELECTION_SHADOW_ADMIT_PULL_REQUESTS",
+  "authority_delta_applied": "BOUNDED_WORKFLOW_ORCHESTRATION_AND_TRIGGER_ADMISSION",
+  "ruleset_delta_applied": false,
+  "ruleset_id": 20229411,
+  "current_required_contexts": ["tests","OVC tiered test selection shadow"],
+  "target_required_contexts": ["OVC merge readiness"],
+  "next_action": "APPLY_RULESET_UPDATE_PAYLOAD_AND_VERIFY_SOURCE_PROVENANCE",
+  "rollback": "Restore workflow definitions from baseline 595dbcfeb951e1c1ab2570debd671b91ec5ec07b through a new non-destructive commit; preserve all decisions, candidates, CI evidence and merge history."
+}
