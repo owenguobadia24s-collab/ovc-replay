@@ -4,7 +4,6 @@ import hashlib
 import json
 import re
 from copy import deepcopy
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -42,14 +41,8 @@ _STATE_FIELD_ALIASES: dict[str, tuple[str, ...]] = {
 }
 
 _TERMINAL_STATUSES = {"COMPLETED", "SUPERSEDED", "HISTORICAL", "RETIRED", "QUARANTINED"}
-_STATE_FILENAME_RE = re.compile(r"(?:PROGRAMME|PROGRAM)[_-]?STATE|STATE[_-]v\d", re.IGNORECASE)
+_STATE_FILENAME_RE = re.compile(r"(?:PROGRAMME|PROGRAM)[_-]?STATE", re.IGNORECASE)
 _SAFE_ID_RE = re.compile(r"[^A-Za-z0-9._-]+")
-
-
-@dataclass(frozen=True)
-class MigrationSource:
-    path: str
-    required: bool = True
 
 
 def canonical_json_bytes(value: Any) -> bytes:
