@@ -1,0 +1,184 @@
+{
+  "schema": "ovc-programme-genesis-pg-g6-operator-decision-packet/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "PG-G6",
+  "title": "Programme portfolio adoption, migration, enforcement and read-only route",
+  "status": "GATE_READY_PENDING_EXACT_HEAD_ASSURANCE",
+  "authority_required": "OPERATOR_REQUIRED_FOUR_PART_DECISION",
+  "baseline_commit": "a639002606cf3842e510f3c9420738d0718d8590",
+  "candidate_branch": "gate/pg-g6-portfolio-adoption",
+  "candidate_commit": "PENDING_EXACT_HEAD",
+  "completed_packets": ["PG-00", "PG-WP1", "PG-WP2", "PG-WP3", "PG-G3A", "PG-WP4", "PG-WP5"],
+  "merge_receipts": [
+    "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json",
+    "docs/releases/programme-genesis-v0-2/pg-g5/PG_G5_MERGE_RECEIPT.json"
+  ],
+  "current_authority": {
+    "programme_governance_contracts_and_implementation": "APPROVED_NON_CANONICAL",
+    "migration_mechanism": "APPROVED_PROVISIONAL_NON_CANONICAL",
+    "portfolio_read_model": "APPROVED_NON_CANONICAL_DERIVED_VIEW",
+    "control_plane_adapter": "DISABLED_UNREGISTERED",
+    "portfolio_canon": "DENIED_PENDING_PG_G6",
+    "migration_adoption": "DENIED_PENDING_PG_G6",
+    "admission_enforcement": "DENIED_PENDING_PG_G6",
+    "read_only_route": "DENIED_PENDING_PG_G6",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7"
+  },
+  "evidence_summary": {
+    "repository_test_count": 128,
+    "pg_g5_exact_head_tests": {"run_id": 30845551409, "conclusion": "SUCCESS"},
+    "pg_g5_exact_head_merge_readiness": {"run_id": 30845551423, "conclusion": "SUCCESS"},
+    "programme_rows": 8,
+    "native_programme_rows": 1,
+    "migrated_programme_rows": 7,
+    "migration_warning_count": 14,
+    "health_warning_count": 7,
+    "health_blocking_count": 0,
+    "migration_blocking_conflict_count": 0,
+    "adapter_status": "DISABLED_PENDING_PG_G6",
+    "read_model_sha256": "f37b2f98ccf9c7b30ef16f57b0c831601348510b6b91144f0a734a7a0b9808a4",
+    "health_sha256": "7b7f24d8d03702813be24625025b2d470f644d14bd9c9186c4a5ff45e97bd029",
+    "report_sha256": "50772daa28787afc5270dce7853593f35211d8464d29221cd59ee1125f9f38b9",
+    "adapter_projection_sha256": "4beaa00d625340c3d67a1afdf8631ca40e3c5d8915f8731165f5f41814d037f7",
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0
+  },
+  "decision_parts": {
+    "CANON": {
+      "question": "Adopt Programme Genesis v0.2 contracts, source precedence, append-only event model, typed dependency semantics, health rules and deterministic portfolio read-model contract as the OVC programme-governance canon?",
+      "current_status": "DENIED_PENDING_PG_G6",
+      "recommended_decision": "PASS",
+      "pass_effect": [
+        "Programme Genesis v0.2 becomes the authoritative programme-governance framework for new and migrated programme records.",
+        "Source precedence, fail-closed authority, append-only corrections, scope-audit rules, typed edges and state-synchronisation invariants become binding.",
+        "Derived portfolio views remain subordinate to programme-owned state and accepted decisions.",
+        "PASS does not itself adopt migrated programme facts, activate enforcement, register a route or enable upkeep."
+      ],
+      "defer_effect": "All merged Programme Genesis artifacts remain approved implementation evidence but non-canonical; no later Programme Genesis authority may activate.",
+      "acceptance_basis": [
+        "PG-G0 operator ratification",
+        "PG-G1 through PG-G5 PASS",
+        "128 exact-head repository tests",
+        "zero blocking health findings",
+        "defined non-destructive rollback"
+      ],
+      "rollback": "Supersede the canon non-destructively, disable derived Programme Genesis services and preserve all accepted source records, decisions and events."
+    },
+    "MIGRATION": {
+      "question": "Adopt the seven source-linked migration records as accepted provisional portfolio records while retaining permanent MIGRATION_UNCERTAINTY until native Genesis?",
+      "current_status": "DENIED_PENDING_PG_G6",
+      "recommended_decision": "PASS",
+      "pass_effect": [
+        "Seven exact-path/SHA-bound programme-state imports become accepted provisional portfolio records.",
+        "They remain PROVISIONAL_NON_CANONICAL with authority_effect NONE and do not become native Genesis records.",
+        "Fourteen migration warnings and seven unresolved-field health warnings remain visible.",
+        "No imported edge or value gains authority beyond the underlying programme-owned source.",
+        "Active or in-flight migrated programmes receive a visible waiver only until their next authority-changing gate or programme boundary; terminal programmes require native Genesis before reactivation or supersession."
+      ],
+      "defer_effect": "The seven records remain reproducible migration candidates and may be viewed locally, but they are not adopted into the accepted portfolio inventory.",
+      "acceptance_basis": [
+        "7 records and 7 unique programme identities",
+        "0 blocking source conflicts",
+        "exact source path and SHA-256 re-verification",
+        "empty inferred_fields",
+        "permanent uncertainty and native-governance deadlines"
+      ],
+      "warnings": [
+        "The migration census covers only programme-owned state records discoverable under the frozen registry.",
+        "It does not claim that every historical OVC programme has a machine-readable programme-state record.",
+        "Warnings are accepted as visible provisional limitations, not resolved facts."
+      ],
+      "rollback": "Withdraw provisional migration adoption without rewriting source state; retain every imported source hash, warning and decision and rebuild later from programme-owned records."
+    },
+    "ENFORCEMENT": {
+      "question": "Activate new-programme admission enforcement using the frozen creation test, three-programme negative-fit scope audit and maintenance-authority registry?",
+      "current_status": "DENIED_PENDING_PG_G6",
+      "recommended_decision": "DEFER",
+      "pass_effect": [
+        "New programme proposals outside an accepted maintenance entry must pass the Genesis creation test and three-programme negative-fit scope audit.",
+        "Unmatched or ambiguous work becomes NOT_EVALUABLE and requires a Genesis proposal gate.",
+        "Enforcement must remain fail-closed and cannot create programmes or grant reserved authority."
+      ],
+      "defer_effect": "Contracts and registries remain binding guidance, but no automated admission consumer may block or admit repository work.",
+      "defer_rationale": [
+        "The merged baseline contains frozen admission contracts and registries but no separately validated active enforcement consumer.",
+        "The accepted migration inventory contains only seven discovered programme-state records and retains fourteen warnings.",
+        "Activating enforcement before a complete executable consumer and broader portfolio coverage would create false precision."
+      ],
+      "minimum_future_pass_evidence": [
+        "Dedicated fail-closed enforcement implementation",
+        "tests for maintenance-match, scope-audit, ambiguity and bypass cases",
+        "complete declared inventory or explicit bounded coverage contract",
+        "rollback and non-blocking shadow comparison"
+      ],
+      "rollback": "Set enforcement_enabled false, preserve every enforcement finding and revert to proposal-only review without rewriting accepted programme records."
+    },
+    "READ_ONLY_ROUTE": {
+      "question": "Register and activate the Programme Genesis read-only Control Plane route using the accepted compact report and full read model?",
+      "current_status": "DENIED_PENDING_PG_G6",
+      "recommended_decision": "DEFER",
+      "pass_effect": [
+        "Register the candidate /programmes route as read-only.",
+        "Expose programme state, health, uncertainty and dependency summaries without mutation methods.",
+        "Keep write, enforcement, agent and upkeep capabilities disabled."
+      ],
+      "defer_effect": "The deterministic payload and disabled adapter projection remain locally available, but no route is registered and no listener is activated.",
+      "defer_rationale": [
+        "The merged baseline proves local payload computability and a disabled adapter contract, not an implemented network or Control Plane route.",
+        "The adapter registry explicitly has route_registered false and network_listener false.",
+        "Setting route_registered true without a validated route implementation would create a non-reproducible authority claim."
+      ],
+      "minimum_future_pass_evidence": [
+        "Bounded read-only route implementation",
+        "authentication and access-boundary contract where applicable",
+        "route schema and full uncertainty visibility tests",
+        "proof of no mutation, enforcement or agent-write methods",
+        "route disable rollback"
+      ],
+      "rollback": "Unregister and disable the route, retain local deterministic reports and preserve all access and health evidence."
+    }
+  },
+  "decision_independence": [
+    "CANON PASS does not imply MIGRATION, ENFORCEMENT or READ_ONLY_ROUTE PASS.",
+    "MIGRATION PASS does not convert provisional records into native Genesis or grant authority to imported values.",
+    "ENFORCEMENT PASS does not register the read-only route or enable writes.",
+    "READ_ONLY_ROUTE PASS does not activate enforcement, mutation or upkeep.",
+    "Any DEFER leaves the corresponding capability disabled without blocking independent PASS decisions unless an explicit dependency is stated."
+  ],
+  "recommended_combined_decision": {
+    "CANON": "PASS",
+    "MIGRATION": "PASS",
+    "ENFORCEMENT": "DEFER",
+    "READ_ONLY_ROUTE": "DEFER",
+    "rationale": "The governance model and provisional migration records are reproducible and fail-closed, while active enforcement and route implementations are not yet independently materialised and validated."
+  },
+  "allowed_decisions_per_part": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_recommended_operator_command": "OVC APPROVE PG-G6 CANON=PASS MIGRATION=PASS ENFORCEMENT=DEFER READ_ONLY_ROUTE=DEFER",
+  "alternative_command_template": "OVC APPROVE PG-G6 CANON=<PASS|DEFER|BLOCK|QUARANTINE|SUPERSEDE> MIGRATION=<PASS|DEFER|BLOCK|QUARANTINE|SUPERSEDE> ENFORCEMENT=<PASS|DEFER|BLOCK|QUARANTINE|SUPERSEDE> READ_ONLY_ROUTE=<PASS|DEFER|BLOCK|QUARANTINE|SUPERSEDE>",
+  "reserved_authority_denials": [
+    "AUTOMATIC_UPKEEP_BEFORE_PG_G7",
+    "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION",
+    "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "WRITE_OR_MUTATION_AUTHORITY_BY_READ_ONLY_ROUTE",
+    "MIGRATED_FACT_OR_EDGE_AUTHORITY_BY_IMPORT"
+  ],
+  "warnings": [
+    "FOURTEEN_MIGRATION_WARNINGS_AND_SEVEN_HEALTH_WARNINGS_REMAIN_VISIBLE",
+    "ONLY_SEVEN_PROGRAMME_OWNED_STATE_RECORDS_WERE_DISCOVERED_FOR_MIGRATION",
+    "NO_ACTIVE_ENFORCEMENT_CONSUMER_IS_MERGED",
+    "NO_NETWORK_OR_CONTROL_PLANE_ROUTE_IMPLEMENTATION_IS_MERGED",
+    "AUTOMATIC_UPKEEP_REMAINS_A_SEPARATE_PG_G7_OPERATOR_DECISION"
+  ],
+  "unresolved_issues": [],
+  "external_artifacts": [],
+  "rollback": "Apply rollback independently per decision part; preserve every accepted source, migration warning, read-model hash, graph record, gate decision, PR and commit.",
+  "work_after_recommended_approval": [
+    "Record the four-part PG-G6 operator decision and merge the decision packet.",
+    "Mark Programme Genesis v0.2 canon adopted and the seven migration records accepted provisional if those parts PASS.",
+    "Keep admission enforcement and the Control Plane route disabled if DEFER is selected.",
+    "Create PG-WP6 bounded candidate-event upkeep branch only if the accepted PG-G6 parts satisfy its prerequisites.",
+    "Build the collector disabled and stop at operator-required PG-G7 before any upkeep activation."
+  ]
+}
