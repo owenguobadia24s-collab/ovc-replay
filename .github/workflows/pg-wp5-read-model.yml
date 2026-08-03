@@ -1,0 +1,117 @@
+name: Programme Genesis PG-WP5 read-model assurance
+
+on:
+  push:
+    branches:
+      - "build/pg-wp5-read-model-control-plane"
+    paths:
+      - "src/ovc/programme_genesis/read_model.py"
+      - "src/ovc/programme_genesis/__init__.py"
+      - "scripts/governance/build_pg_wp5_read_model.py"
+      - "contracts/governance/programme_genesis/PORTFOLIO_READ_MODEL_AND_DISABLED_ADAPTER_CONTRACT_v0_1.md"
+      - "schemas/governance/programme_genesis/portfolio_read_model_bundle_v0_1.schema.json"
+      - "registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json"
+      - "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json"
+      - "docs/releases/programme-genesis-v0-2/pg-g5/**"
+      - "tests/governance/test_pg_wp5.py"
+      - "tests/governance/test_pg_wp5_evidence_output.py"
+      - ".github/workflows/pg-wp5-read-model.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: pg-wp5-read-model-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  read-model-assurance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused PG-WP5 tests
+        run: >-
+          PYTHONPATH=src python -m unittest
+          tests.governance.test_pg_wp5
+          tests.governance.test_pg_wp5_evidence_output -v
+      - name: Build deterministic local read-model outputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/pg-wp5"
+          mkdir -p "$OUT"
+          PYTHONPATH=src python scripts/governance/build_pg_wp5_read_model.py \
+            --root "$GITHUB_WORKSPACE" \
+            --source-commit "$GITHUB_SHA" \
+            --output-dir "$OUT" \
+            | tee "$OUT/summary.json"
+          for file in \
+            migration-snapshot.json \
+            portfolio-read-model.json \
+            portfolio-health.json \
+            portfolio-compact-report.json \
+            disabled-control-plane-adapter.json \
+            summary.json; do
+            python -m json.tool "$OUT/$file" >/dev/null
+          done
+      - name: Assert disabled adapter and retained authority boundaries
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/pg-wp5"
+          python - "$OUT" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          out = pathlib.Path(sys.argv[1])
+          read_model = json.loads((out / "portfolio-read-model.json").read_text(encoding="utf-8"))
+          health = json.loads((out / "portfolio-health.json").read_text(encoding="utf-8"))
+          report = json.loads((out / "portfolio-compact-report.json").read_text(encoding="utf-8"))
+          adapter = json.loads((out / "disabled-control-plane-adapter.json").read_text(encoding="utf-8"))
+
+          assert read_model["authority_effect"] == "NONE_READ_ONLY_DERIVED_VIEW"
+          assert read_model["health_summary"]["programme_count"] == 8
+          assert read_model["health_summary"]["migrated_programme_count"] == 7
+          assert read_model["health_summary"]["migration_warning_count"] == 14
+          assert health["status"] == "PASS_WITH_WARNINGS"
+          assert health["blocking_count"] == 0
+          assert health["warning_count"] == 7
+          assert report["control_plane_adapter_status"] == "DISABLED"
+          assert report["canonical_adoption"] == "DENIED_PENDING_PG_G6"
+          assert report["admission_enforcement"] == "DENIED_PENDING_PG_G6"
+          assert report["control_plane_route"] == "DENIED_PENDING_PG_G6"
+          assert report["automatic_upkeep"] == "DENIED_PENDING_PG_G7"
+          assert adapter["status"] == "DISABLED_PENDING_PG_G6"
+          assert adapter["route_registered"] is False
+          assert adapter["write_enabled"] is False
+          assert adapter["enforcement_enabled"] is False
+          assert adapter["read_only"] is True
+          assert adapter["activation_gate"] == "PG-G6"
+          print(json.dumps({
+              "read_model_sha256": read_model["read_model_sha256"],
+              "health_sha256": health["health_sha256"],
+              "report_sha256": report["report_sha256"],
+              "adapter_projection_sha256": adapter["adapter_projection_sha256"],
+              "health_status": health["status"],
+              "adapter_status": adapter["status"],
+          }, sort_keys=True))
+          PY
+      - name: Assert no route, write, enforcement or network activation
+        run: |
+          set -euo pipefail
+          grep -q '"enabled": false' registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json
+          grep -q '"route_registered": false' registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json
+          grep -q '"write_enabled": false' registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json
+          grep -q '"enforcement_enabled": false' registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json
+          grep -q '"network_listener": false' registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json
+          if grep -nE 'listen\(|serve\(|uvicorn|flask|fastapi|socket|requests\.|httpx\.|write.*main|force.push' \
+            src/ovc/programme_genesis/read_model.py \
+            scripts/governance/build_pg_wp5_read_model.py; then
+            echo "Forbidden active route, network or repository-write capability found."
+            exit 1
+          fi
