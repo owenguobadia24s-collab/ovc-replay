@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-programme-genesis-wp4-migration-manifest/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP4",
+  "gate_id": "PG-G4",
+  "baseline_commit": "4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a",
+  "branch": "migration/pg-wp4-existing-programmes",
+  "implementation_candidate_commit": "883d490f4c660e2bc96d2f8e8cab752f65e86f6b",
+  "authority_source": "PG-G3A.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T194700+0100",
+  "authority_delta": "SOURCE_FAITHFUL_PROVISIONAL_MIGRATION_WITH_PERMANENT_UNCERTAINTY_ONLY",
+  "artifacts": [
+    "contracts/governance/programme_genesis/EXISTING_PROGRAMME_MIGRATION_CONTRACT_v0_1.md",
+    "registries/governance/programme_genesis/MIGRATION_SOURCE_REGISTRY_v0_1.json",
+    "schemas/governance/programme_genesis/programme_migration_snapshot_v0_1.schema.json",
+    "src/ovc/programme_genesis/migration.py",
+    "scripts/governance/build_pg_wp4_migration.py",
+    "tests/governance/test_pg_wp4.py",
+    "tests/governance/test_pg_wp4_census_output.py",
+    ".github/workflows/pg-wp4-migration.yml"
+  ],
+  "frozen_invariants": [
+    "PROGRAMME_OWNED_STATE_REMAINS_AUTHORITATIVE",
+    "EVERY_SOURCE_BOUND_BY_REPOSITORY_PATH_AND_SHA256",
+    "IMPORTED_VALUES_PRESERVED_WITHOUT_NORMALISATION_OR_REPAIR",
+    "INFERRED_FIELDS_EMPTY_BY_DEFAULT",
+    "UNKNOWN_AND_MISSING_NATIVE_FIELDS_REMAIN_EXPLICIT",
+    "EVERY_NON_NATIVE_RECORD_CARRIES_MIGRATION_UNCERTAINTY",
+    "DUPLICATE_PROGRAMME_SOURCES_ARE_NOT_SILENTLY_MERGED",
+    "MIGRATION_RECORDS_ARE_PROVISIONAL_NON_CANONICAL",
+    "CANON_ADOPTION_ENFORCEMENT_AND_ROUTE_DENIED_PENDING_PG_G6",
+    "AUTOMATIC_UPKEEP_DENIED_PENDING_PG_G7"
+  ],
+  "generated_output": {
+    "repository_location": "NONE_REPLACEABLE_DERIVED_OUTPUT",
+    "workflow_output": "$RUNNER_TEMP/pg-wp4/migration-snapshot.json",
+    "record_count": 7,
+    "unique_programme_count": 7,
+    "warning_count": 14,
+    "blocking_conflict_count": 0,
+    "snapshot_sha256": "26300c67dc94b6b5ac1c40c015b36d4bd17a9a2edd0e4510083307cc31f0f7e5",
+    "programme_ids": [
+      "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
+      "OVC-C2E-NEUTRAL-EPISODE-v0.1",
+      "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+      "OVC-DEV-ACCEL-v0.1",
+      "OVC-MTA-v0.2",
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
+      "PD-JUNE-FULL-MONTH-MDR"
+    ],
+    "evidence_run": 30844283023,
+    "evidence_test_count": 119,
+    "status": "PASS"
+  },
+  "warnings": [
+    "FOURTEEN_NON_BLOCKING_UNCERTAINTY_OR_SOURCE_COVERAGE_FINDINGS_RETAINED",
+    "NO_MIGRATION_WARNING_IS_SILENTLY_RESOLVED",
+    "NO_IMPORTED_RECORD_IS_CANONICAL"
+  ],
+  "external_artifacts": [],
+  "reserved_authority": "NONE",
+  "blockers": [],
+  "rollback": "Discard generated migration snapshots and rebuild from preserved programme-owned states; supersede contracts or code non-destructively."
+}

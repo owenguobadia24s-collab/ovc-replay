@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-programme-genesis-pg-g4-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP4",
+  "gate_id": "PG-G4",
+  "status": "PASS",
+  "baseline_commit": "4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a",
+  "candidate_branch": "migration/pg-wp4-existing-programmes",
+  "implementation_candidate_commit": "883d490f4c660e2bc96d2f8e8cab752f65e86f6b",
+  "checks": [
+    {"check_id": "PG-G4-SOURCE-DISCOVERY", "status": "PASS", "evidence": "Discovery selected seven programme-state JSON records and excluded native PG and packet-level state records."},
+    {"check_id": "PG-G4-SOURCE-IDENTITY", "status": "PASS", "evidence": "Every migration record bound repository-relative path and exact SHA-256; repository tests re-read and re-hashed every source."},
+    {"check_id": "PG-G4-SOURCE-FAITHFULNESS", "status": "PASS", "evidence": "Preserved values and alias maps passed exact equality tests; no source repair or rewrite exists."},
+    {"check_id": "PG-G4-NO-INFERENCE", "status": "PASS", "evidence": "All seven repository records have empty inferred_fields and the schema forbids items."},
+    {"check_id": "PG-G4-UNCERTAINTY", "status": "PASS", "evidence": "All seven records carry visible permanent MIGRATION_UNCERTAINTY and unresolved native fields."},
+    {"check_id": "PG-G4-CONFLICT-LEDGER", "status": "PASS", "evidence": "Conflict fixtures block; repository census has zero blocking conflicts and retains 14 warnings."},
+    {"check_id": "PG-G4-REPOSITORY-CENSUS", "status": "PASS", "evidence": "7 records, 7 unique programme IDs, 14 warnings, 0 blockers, logical SHA-256 26300c67dc94b6b5ac1c40c015b36d4bd17a9a2edd0e4510083307cc31f0f7e5."},
+    {"check_id": "PG-G4-FOCUSED-TESTS", "status": "PASS", "evidence": "Focused migration tests were discovered in complete repository run 30844283023."},
+    {"check_id": "PG-G4-REPOSITORY-SUITE", "status": "PASS", "evidence": "GitHub Actions tests run 30844283023 SUCCESS; 119 tests."},
+    {"check_id": "PG-G4-MERGE-READINESS", "status": "PASS", "evidence": "OVC tiered test selection shadow / OVC merge readiness run 30844282914 SUCCESS."}
+  ],
+  "census": {
+    "record_count": 7,
+    "unique_programme_count": 7,
+    "warning_count": 14,
+    "blocking_conflict_count": 0,
+    "snapshot_sha256": "26300c67dc94b6b5ac1c40c015b36d4bd17a9a2edd0e4510083307cc31f0f7e5"
+  },
+  "corrective_history": [
+    "The initial dedicated PR workflow violated the active one-PR-orchestration contract and caused OVC FINAL_HEAD failure.",
+    "The migration workflow was changed to push/manual assurance with concurrency; canonical PR tests and OVC merge readiness remained the only PR orchestration workflows.",
+    "Discovery was narrowed from generic STATE filenames to PROGRAMME_STATE or PROGRAM_STATE records so packet-level states cannot create false duplicate programme conflicts."
+  ],
+  "warnings": [
+    "MIGRATION_RECORDS_ARE_PROVISIONAL_NON_CANONICAL",
+    "FOURTEEN_UNCERTAINTY_OR_SOURCE_COVERAGE_WARNINGS_REMAIN_VISIBLE",
+    "NO_IMPORTED_PROGRAMME_FACT_OR_EDGE_IS_ACCEPTED_BY_IMPORT",
+    "UNRESOLVED_NATIVE_GENESIS_FIELDS_REMAIN_VISIBLE",
+    "CANONICAL_ADOPTION_ENFORCEMENT_AND_ROUTE_REMAIN_DENIED_PENDING_PG_G6",
+    "AUTOMATIC_UPKEEP_REMAINS_DENIED_PENDING_PG_G7"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "auto_ratifiable": true,
+  "rollback": "Discard derived migration snapshots, preserve source bytes and findings, and supersede implementation non-destructively."
+}

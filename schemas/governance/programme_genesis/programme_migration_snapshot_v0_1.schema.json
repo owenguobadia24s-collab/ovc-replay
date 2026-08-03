@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/governance/programme_genesis/programme_migration_snapshot_v0_1.schema.json",
+  "title": "OVC Programme Genesis migration snapshot v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "status",
+    "import_status",
+    "authority_effect",
+    "migration_uncertainty_required",
+    "source_roots",
+    "excluded_paths",
+    "record_count",
+    "unique_programme_count",
+    "records",
+    "conflict_ledger",
+    "blocking_conflict_count",
+    "canonical_adoption",
+    "admission_enforcement",
+    "control_plane_route",
+    "automatic_upkeep",
+    "rollback",
+    "snapshot_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-programme-migration-snapshot/v1"},
+    "programme_id": {"const": "OVC-PG-v0.2"},
+    "packet_id": {"const": "PG-WP4"},
+    "status": {"enum": ["PASS", "BLOCK"]},
+    "import_status": {"const": "PROVISIONAL_NON_CANONICAL"},
+    "authority_effect": {"const": "NONE"},
+    "migration_uncertainty_required": {"const": true},
+    "source_roots": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1},
+    "excluded_paths": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "record_count": {"type": "integer", "minimum": 1},
+    "unique_programme_count": {"type": "integer", "minimum": 1},
+    "records": {"type": "array", "items": {"$ref": "#/$defs/migration_record"}, "minItems": 1},
+    "conflict_ledger": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "blocking_conflict_count": {"type": "integer", "minimum": 0},
+    "canonical_adoption": {"const": "DENIED_PENDING_PG_G6"},
+    "admission_enforcement": {"const": "DENIED_PENDING_PG_G6"},
+    "control_plane_route": {"const": "DENIED_PENDING_PG_G6"},
+    "automatic_upkeep": {"const": "DENIED_PENDING_PG_G7"},
+    "rollback": {"type": "string", "minLength": 20},
+    "snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "migration_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_type",
+        "schema_version",
+        "migration_id",
+        "programme_id",
+        "source",
+        "import_status",
+        "authority_effect",
+        "confidence",
+        "source_coverage",
+        "preserved_values",
+        "inferred_fields",
+        "unresolved_fields",
+        "conflicting_fields",
+        "native_governance_deadline",
+        "migration_uncertainty",
+        "rollback"
+      ],
+      "properties": {
+        "record_type": {"const": "MIGRATION_RECORD"},
+        "schema_version": {"const": "0.1"},
+        "migration_id": {"type": "string", "pattern": "^PGMIG\\."},
+        "programme_id": {"type": "string", "minLength": 1},
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "format", "schema", "precedence", "authority_role"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "format": {"const": "JSON"},
+            "schema": {"type": ["string", "null"]},
+            "precedence": {"const": 3},
+            "authority_role": {"const": "AUTHORITATIVE_PROGRAMME_STATE"}
+          }
+        },
+        "import_status": {"const": "PROVISIONAL_NON_CANONICAL"},
+        "authority_effect": {"const": "NONE"},
+        "confidence": {"enum": ["HIGH", "MEDIUM", "LOW"]},
+        "source_coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present_fields", "missing_descriptive_fields", "source_field_map"],
+          "properties": {
+            "present_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "missing_descriptive_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+            "source_field_map": {"type": "object", "additionalProperties": {"type": "string"}}
+          }
+        },
+        "preserved_values": {"type": "object"},
+        "inferred_fields": {"type": "array", "maxItems": 0},
+        "unresolved_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "conflicting_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "native_governance_deadline": {"enum": ["BEFORE_REACTIVATION_OR_SUPERSESSION", "BEFORE_NEXT_AUTHORITY_CHANGING_GATE_OR_PROGRAMME_BOUNDARY"]},
+        "migration_uncertainty": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "banner", "reason", "removal_condition"],
+          "properties": {
+            "required": {"const": true},
+            "banner": {"const": "MIGRATION_UNCERTAINTY"},
+            "reason": {"const": "NON_NATIVE_GENESIS_IMPORT"},
+            "removal_condition": {"const": "ACCEPTED_NATIVE_GENESIS_AT_A_LATER_AUTHORITY_CHANGING_GATE"}
+          }
+        },
+        "rollback": {"type": "string", "minLength": 20}
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["finding_type", "severity", "programme_id", "authority_effect"],
+      "properties": {
+        "finding_type": {"enum": ["MIGRATION_SOURCE_CONFLICT", "MIGRATION_UNRESOLVED_FIELDS", "MIGRATION_SOURCE_COVERAGE_GAP"]},
+        "severity": {"enum": ["WARN", "BLOCK"]},
+        "programme_id": {"type": "string", "minLength": 1},
+        "authority_effect": {"const": "NONE"}
+      }
+    }
+  }
+}
