@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-programme-genesis-pg-g3-delegated-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP3",
+  "gate_id": "PG-G3",
+  "decision_id": "PG-G3.DELEGATED.PASS.20260803T193200+0100",
+  "decision": "PASS",
+  "authority": "DELEGATED_BY_PG_G0_AND_APPROVED_PLAN_CONTINUOUS_EXECUTION",
+  "implementation_candidate_commit": "e723b11aeaffa69b5aa8c3d0eafb8d455ee0c622",
+  "tests": {
+    "repository_run": 30841455854,
+    "repository_conclusion": "SUCCESS",
+    "merge_readiness_run": 30841453429,
+    "merge_readiness_conclusion": "SUCCESS"
+  },
+  "qa": {
+    "packet": "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_QA_PACKET.json",
+    "recommendation": "PASS",
+    "blockers": []
+  },
+  "authority_delta": "ACCEPT_TYPED_GRAPH_VALIDATION_IMPACT_ANALYSIS_AND_PRE_MIGRATION_REPORT_ONLY",
+  "non_reserved_rationale": [
+    "The graph is a governance-only derived projection.",
+    "Every edge remains authority-neutral and hard inferred edges quarantine.",
+    "No existing programme or dependency has been migrated.",
+    "PG-WP4 remains blocked until operator PG-G3A ACKNOWLEDGE_CONTINUE.",
+    "Admission enforcement, read-only route and upkeep remain disabled.",
+    "No market, model, selector, release, Validation, publication, agent, probability, risk, exposure or execution authority changes."
+  ],
+  "rollback": "Preserve this decision and graph validation records; discard derived graph outputs and leave migration blocked.",
+  "merge": {"pull_request": 266, "method": "SQUASH", "merge_commit": "PENDING"},
+  "next_packet": "PG-G3A"
+}
