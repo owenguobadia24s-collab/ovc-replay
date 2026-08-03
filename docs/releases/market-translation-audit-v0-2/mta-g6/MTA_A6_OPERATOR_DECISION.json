@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-mta-a6-operator-decision/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_id": "OVC-MARKET-TRANSLATION-OPTION-FLOW-AUDIT-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "control_id": "MTA-A6",
+  "decision": "ACKNOWLEDGE_CONTINUE",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE MTA-A6 ACKNOWLEDGE_CONTINUE",
+  "decision_id": "MTA-A6.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T100600+0100",
+  "decision_time": "2026-08-03T10:06:00+01:00",
+  "baseline_main": "c5b6123e0186ab23fc0d37410a0075175a9e50f6",
+  "gate_ready_head": "6a94c464bf676be7b835aaeadf1c4a7e6fe36e55",
+  "pull_request": 234,
+  "accepted_findings": [
+    "MTA-WP5-F1",
+    "MTA-WP5-F2",
+    "MTA-WP5-F3",
+    "MTA-WP6-F2",
+    "MTA-WP6-F3"
+  ],
+  "accepted_population": {
+    "eligible_windows": 7116,
+    "rule_attempts": 56928,
+    "rule_level_evaluable": 30412,
+    "rule_level_not_evaluable": 26516,
+    "source_axis_not_evaluable_markers": 13993,
+    "parent_usable_target_resolutions": 615,
+    "parent_target_resolutions": 4072,
+    "parent_usability_rate_percent": "15.103143"
+  },
+  "accepted_overlap": {
+    "occurrence_count": 1779,
+    "strict_overlap": {"cluster_count": 24, "max_cluster_size": 92},
+    "primary_overlap_plus_1": {"cluster_count": 20, "max_cluster_size": 166},
+    "permissive_overlap_plus_4": {"cluster_count": 18, "max_cluster_size": 251},
+    "sensitivity_counts": {"MATERIAL_SENSITIVITY": 1456, "STRUCTURALLY_UNSTABLE": 323}
+  },
+  "authority_delta": "AUTHORISE_MTA_WP7_AUDIT_SYNTHESIS_ONLY",
+  "authority_denials": {
+    "formula_threshold_reset_clock": "UNCHANGED",
+    "marker_or_cluster_meaning": "DENIED",
+    "model_family_candidate_selector": "DENIED",
+    "c2e_c2_5_c3": "DENIED",
+    "validation": "LOCKED_UNCONSUMED",
+    "r2_publication": "DENIED",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "tests": [
+    {"workflow": "tests", "run_id": 30770173667, "result": "PASS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30770173774, "profile": "FINAL_HEAD", "result": "PASS"}
+  ],
+  "qa": {
+    "wp5_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "wp6_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+    "warnings": [],
+    "unresolved_issues": []
+  },
+  "next_packet": "MTA-WP7",
+  "rollback": "Supersede this acknowledgement without deleting source, population, occurrence, cluster, sensitivity, test, QA or decision evidence."
+}
