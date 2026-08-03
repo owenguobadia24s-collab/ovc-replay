@@ -5,16 +5,18 @@
   "plan_version": "0.2",
   "gate_id": "PG-G6",
   "title": "Programme portfolio adoption, migration, enforcement and read-only route",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_ASSURANCE",
+  "status": "GATE_READY",
   "authority_required": "OPERATOR_REQUIRED_FOUR_PART_DECISION",
   "baseline_commit": "a639002606cf3842e510f3c9420738d0718d8590",
   "candidate_branch": "gate/pg-g6-portfolio-adoption",
-  "candidate_commit": "PENDING_EXACT_HEAD",
+  "tested_candidate_commit": "ea416bea3234d894c9be0993bb2d14872e134059",
+  "final_packet_head_assurance": "REQUIRED_AND_RECORDED_IN_PR_EXACT_HEAD_METADATA_AFTER_THIS_PACKET_COMMIT",
   "completed_packets": ["PG-00", "PG-WP1", "PG-WP2", "PG-WP3", "PG-G3A", "PG-WP4", "PG-WP5"],
   "merge_receipts": [
     "docs/releases/programme-genesis-v0-2/pg-g3/PG_G3_MERGE_RECEIPT.json",
     "docs/releases/programme-genesis-v0-2/pg-g5/PG_G5_MERGE_RECEIPT.json"
   ],
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g6/PG_G6_QA_PACKET.json",
   "current_authority": {
     "programme_governance_contracts_and_implementation": "APPROVED_NON_CANONICAL",
     "migration_mechanism": "APPROVED_PROVISIONAL_NON_CANONICAL",
@@ -27,9 +29,11 @@
     "automatic_upkeep": "DENIED_PENDING_PG_G7"
   },
   "evidence_summary": {
-    "repository_test_count": 128,
-    "pg_g5_exact_head_tests": {"run_id": 30845551409, "conclusion": "SUCCESS"},
+    "repository_test_count": 137,
+    "pg_g5_exact_head_tests": {"run_id": 30845551409, "conclusion": "SUCCESS", "test_count": 128},
     "pg_g5_exact_head_merge_readiness": {"run_id": 30845551423, "conclusion": "SUCCESS"},
+    "pg_g6_tested_head_tests": {"run_id": 30846208616, "conclusion": "SUCCESS", "test_count": 137},
+    "pg_g6_tested_head_merge_readiness": {"run_id": 30846208553, "conclusion": "SUCCESS"},
     "programme_rows": 8,
     "native_programme_rows": 1,
     "migrated_programme_rows": 7,
@@ -42,6 +46,7 @@
     "health_sha256": "7b7f24d8d03702813be24625025b2d470f644d14bd9c9186c4a5ff45e97bd029",
     "report_sha256": "50772daa28787afc5270dce7853593f35211d8464d29221cd59ee1125f9f38b9",
     "adapter_projection_sha256": "4beaa00d625340c3d67a1afdf8631ca40e3c5d8915f8731165f5f41814d037f7",
+    "blocking_findings": 0,
     "unresolved_review_threads": 0,
     "blocking_reviews": 0
   },
@@ -60,7 +65,7 @@
       "acceptance_basis": [
         "PG-G0 operator ratification",
         "PG-G1 through PG-G5 PASS",
-        "128 exact-head repository tests",
+        "137 PG-G6 gate-head repository tests",
         "zero blocking health findings",
         "defined non-destructive rollback"
       ],
