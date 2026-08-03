@@ -1,4 +1,8 @@
-"""Deterministic Programme Genesis ledger and projection utilities."""
+"""Governance-only Programme Genesis ledger and projection utilities.
+
+This namespace has no market, model, selector, publication, Validation,
+agent-write, probability, risk, exposure, trading, or execution authority.
+"""
 
 from .ledger import AppendOnlyLedger, LedgerError, canonical_event_bytes, event_digest
 from .projection import ProjectionError, build_partitioned_projection, project_programme
