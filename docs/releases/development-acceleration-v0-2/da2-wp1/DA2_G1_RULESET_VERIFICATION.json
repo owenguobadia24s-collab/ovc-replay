@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-da2-g1-ruleset-verification/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-WP1",
+  "gate_id": "DA2-G1",
+  "ruleset_id": 20229411,
+  "ruleset_name": "OVC main protection",
+  "evidence_file": "DA2_G1_RULESET_AFTER.json",
+  "evidence_bytes": 1204,
+  "evidence_sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d",
+  "source": "OPERATOR_SUPPLIED_GITHUB_REST_RESPONSE",
+  "observed_updated_at": "2026-08-03T12:00:10.081+01:00",
+  "checks": [
+    {"check_id":"RULESET_IDENTITY","result":"PASS","expected":{"id":20229411,"name":"OVC main protection","target":"branch"}},
+    {"check_id":"ACTIVE_ENFORCEMENT","result":"PASS","expected":"active"},
+    {"check_id":"ZERO_BYPASS_ACTORS","result":"PASS","observed":0},
+    {"check_id":"DELETION_PROTECTION","result":"PASS"},
+    {"check_id":"NON_FAST_FORWARD_PROTECTION","result":"PASS"},
+    {"check_id":"PULL_REQUEST_REQUIRED","result":"PASS"},
+    {"check_id":"SQUASH_ONLY","result":"PASS","observed":["squash"]},
+    {"check_id":"REVIEW_THREAD_RESOLUTION","result":"PASS","observed":true},
+    {"check_id":"STRICT_REQUIRED_CHECK_POLICY","result":"PASS","observed":true},
+    {"check_id":"SOLE_REQUIRED_CONTEXT","result":"PASS","observed":[{"context":"OVC merge readiness","integration_id":15368}]},
+    {"check_id":"SOURCE_PROVENANCE","result":"PASS","observed":{"app_id":15368,"app_slug":"github-actions"}}
+  ],
+  "previous_required_contexts": ["tests","OVC tiered test selection shadow"],
+  "active_required_contexts": ["OVC merge readiness"],
+  "authority_effect": "EXACT_OPERATOR_APPROVED_RULESET_MIGRATION_VERIFIED",
+  "blocking_issues": [],
+  "warnings": [],
+  "result": "PASS"
+}
