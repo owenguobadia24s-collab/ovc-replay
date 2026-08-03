@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-programme-genesis-pg-g1-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP1",
+  "gate_id": "PG-G1",
+  "status": "PASS",
+  "baseline_commit": "d0d2445b035f3fc93a177b94b23120be7dfa274b",
+  "candidate_branch": "build/pg-wp1-genesis-contract",
+  "implementation_candidate_commit": "f51723e8150c7b2873cce50619915566ed2aae60",
+  "authority_delta": "CONTRACT_SCHEMA_REGISTRY_AND_FIXTURE_FREEZE_ONLY",
+  "checks": [
+    {"check_id": "PG-G1-CONTRACT-BOUNDARY", "status": "PASS", "evidence": "PROGRAMME_GENESIS_AUTHORITY_CONTRACT_v0_1.md denies all reserved authority and preserves source precedence."},
+    {"check_id": "PG-G1-SCHEMA-COVERAGE", "status": "PASS", "evidence": "Genesis, event, dependency edge, authority envelope and scope-audit schemas are materialised."},
+    {"check_id": "PG-G1-SCOPE-GAMING", "status": "PASS", "evidence": "Scope audit requires exactly three negative-fit comparisons and all fail-closed checks."},
+    {"check_id": "PG-G1-EDGE-AUTHORITY", "status": "PASS", "evidence": "Every dependency edge has authority_effect=NONE; inferred hard prerequisites are prohibited."},
+    {"check_id": "PG-G1-REGISTRY-UNIQUENESS", "status": "PASS", "evidence": "Class, edge and event IDs are stable and unique under focused tests."},
+    {"check_id": "PG-G1-VALID-INVALID-FIXTURES", "status": "PASS", "evidence": "Valid fixtures pass focused validation and the scope-gaming fixture is rejected."},
+    {"check_id": "PG-G1-FOCUSED-TESTS", "status": "PASS", "evidence": "Covered by complete repository tests run 30839394377 on f51723e8150c7b2873cce50619915566ed2aae60."},
+    {"check_id": "PG-G1-REPOSITORY-SUITE", "status": "PASS", "evidence": "GitHub Actions tests run 30839394377 SUCCESS."},
+    {"check_id": "PG-G1-MERGE-READINESS", "status": "PASS", "evidence": "OVC tiered test selection shadow / OVC merge readiness run 30839395519 SUCCESS."}
+  ],
+  "warnings": [
+    "REGISTRIES_ARE_FROZEN_CANDIDATES_AND_DO_NOT_ENFORCE_ADMISSION",
+    "NO_LEDGER_OR_GRAPH_IMPLEMENTATION_EXISTS_UNTIL_PG_WP2_AND_PG_WP3",
+    "MIGRATION_REMAINS_DENIED_PENDING_PG_G3A"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "auto_ratifiable": true,
+  "rollback": "Preserve the contract packet and supersede through a later version; do not activate enforcement, migration, routes or upkeep."
+}

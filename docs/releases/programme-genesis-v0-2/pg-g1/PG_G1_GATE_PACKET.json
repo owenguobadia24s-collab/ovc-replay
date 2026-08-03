@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-programme-genesis-pg-g1-gate/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP1",
+  "gate_id": "PG-G1",
+  "title": "Programme Genesis contract and registry freeze",
+  "status": "APPROVED",
+  "authority_required": "DELEGATED_AUTO_RATIFIED",
+  "baseline_commit": "d0d2445b035f3fc93a177b94b23120be7dfa274b",
+  "candidate_branch": "build/pg-wp1-genesis-contract",
+  "implementation_candidate_commit": "f51723e8150c7b2873cce50619915566ed2aae60",
+  "current_authority": "BOUNDED_PROGRAMME_GOVERNANCE_IMPLEMENTATION",
+  "approved_delta": "ACCEPT_VERSIONED_GENESIS_CONTRACT_SCHEMAS_REGISTRIES_AND_FIXTURES_AND_RELEASE_PG_WP2",
+  "acceptance_conditions": [
+    "CONTRACT_PRESERVES_SOURCE_PRECEDENCE_AND_APPEND_ONLY_CORRECTION",
+    "SCHEMAS_COVER_GENESIS_EVENTS_EDGES_AUTHORITY_AND_SCOPE_AUDIT",
+    "SCOPE_AUDIT_REQUIRES_EXACTLY_THREE_NEGATIVE_FIT_COMPARISONS",
+    "MISSING_OR_INFERRED_AUTHORITY_FAILS_CLOSED",
+    "EDGE_AND_EVENT_REGISTRIES_CANNOT_GRANT_AUTHORITY",
+    "VALID_AND_INVALID_FIXTURES_ARE_DISTINGUISHED",
+    "FOCUSED_AND_REPOSITORY_TESTS_PASS",
+    "QA_RECOMMENDS_PASS",
+    "NO_RESERVED_AUTHORITY_DELTA"
+  ],
+  "tests": {
+    "repository": {"run_id": 30839394377, "conclusion": "SUCCESS"},
+    "merge_readiness": {"run_id": 30839395519, "conclusion": "SUCCESS"}
+  },
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g1/PG_G1_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "warnings": ["NO_ADMISSION_ENFORCEMENT", "NO_MIGRATION", "NO_CONTROL_PLANE_ROUTE", "NO_AUTOMATIC_UPKEEP"],
+  "unresolved_issues": [],
+  "reserved_authority_denials": ["MARKET_OR_MODEL_CHANGE", "SELECTOR_OR_RELEASE_MUTATION", "VALIDATION_OR_PUBLICATION", "AGENT_WRITE", "PROBABILITY_RISK_EXPOSURE_EXECUTION"],
+  "delegated_authority_basis": "PG-G0 operator PASS and plan v0.2 continuous-execution delegation for wholly non-reserved gates",
+  "decision_record": "docs/releases/programme-genesis-v0-2/pg-g1/PG_G1_DELEGATED_DECISION.json",
+  "rollback": "Preserve and supersede the contract packet non-destructively; leave all consumers disabled.",
+  "decision": "PASS",
+  "next_packet": "PG-WP2"
+}

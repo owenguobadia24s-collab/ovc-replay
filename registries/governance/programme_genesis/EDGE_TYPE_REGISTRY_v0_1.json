@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-programme-edge-type-registry/v1",
+  "registry_id": "OVC-PG-EDGE-TYPE-REGISTRY-0.1",
+  "version": "0.1",
+  "status": "FROZEN_CANDIDATE",
+  "authority_effect": "NONE",
+  "direction_rule": "from_node is the dependent or governed object; to_node is the prerequisite, parent or referenced authority source unless the type explicitly states otherwise",
+  "edge_types": [
+    {"edge_type": "REQUIRES", "meaning": "from_node cannot lawfully proceed without to_node", "allowed_hardness": ["HARD", "SOFT"], "hard_requires_source_explicit": true, "may_grant_authority": false},
+    {"edge_type": "GOVERNED_BY", "meaning": "from_node is bounded by an accepted contract, gate or authority envelope at to_node", "allowed_hardness": ["HARD"], "hard_requires_source_explicit": true, "may_grant_authority": false},
+    {"edge_type": "PARENT_OF", "meaning": "from_node is the constitutional or lifecycle parent of to_node; direction is parent to child", "allowed_hardness": ["INFORMATIONAL"], "hard_requires_source_explicit": false, "may_grant_authority": false},
+    {"edge_type": "SUPERSEDES", "meaning": "from_node supersedes to_node without deleting history", "allowed_hardness": ["INFORMATIONAL"], "hard_requires_source_explicit": true, "may_grant_authority": false},
+    {"edge_type": "PRODUCES", "meaning": "from_node produces to_node as a derived artifact", "allowed_hardness": ["INFORMATIONAL"], "hard_requires_source_explicit": false, "may_grant_authority": false},
+    {"edge_type": "CONSUMES", "meaning": "from_node reads to_node under one-way authority", "allowed_hardness": ["HARD", "SOFT", "INFORMATIONAL"], "hard_requires_source_explicit": true, "may_grant_authority": false},
+    {"edge_type": "BLOCKED_BY", "meaning": "from_node is blocked by to_node", "allowed_hardness": ["HARD"], "hard_requires_source_explicit": true, "may_grant_authority": false},
+    {"edge_type": "VALIDATED_BY", "meaning": "from_node has QA or validation evidence at to_node", "allowed_hardness": ["SOFT", "INFORMATIONAL"], "hard_requires_source_explicit": false, "may_grant_authority": false},
+    {"edge_type": "REFERENCES", "meaning": "from_node has non-authoritative reference to to_node", "allowed_hardness": ["INFORMATIONAL"], "hard_requires_source_explicit": false, "may_grant_authority": false},
+    {"edge_type": "CONFLICTS_WITH", "meaning": "sources disagree and require explicit resolution", "allowed_hardness": ["HARD", "SOFT"], "hard_requires_source_explicit": false, "may_grant_authority": false}
+  ],
+  "prohibited_edge_effects": [
+    "DOWNSTREAM_TO_UPSTREAM_AUTHORITY_GRANT",
+    "TEST_RESULT_TO_AUTHORITY_GRANT",
+    "MERGED_PR_TO_AUTHORITY_GRANT",
+    "ADAPTER_INFERENCE_SATISFIES_HARD_PREREQUISITE",
+    "GRAPH_POSITION_IMPLIES_COMPLETION",
+    "CYCLE_HIDDEN_BY_EDGE_OMISSION"
+  ],
+  "rollback": "Supersede non-destructively; preserve prior edge identities, source kind and acceptance history."
+}

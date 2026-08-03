@@ -1,0 +1,49 @@
+{
+  "record_type": "SCOPE_AUDIT",
+  "schema_version": "0.1",
+  "scope_audit_id": "PGSCOPE.PG-DEMO.001",
+  "proposal_id": "PG-DEMO",
+  "creation_triggers": ["CROSS_CUTTING_SHARED_SERVICE", "PORTFOLIO_LEVEL_OPERATOR_DECISION"],
+  "comparisons": [
+    {
+      "existing_programme_id": "OVC-DEV-ACCEL-v0.2",
+      "similarity_basis": ["cross-repository governance", "multi-packet implementation"],
+      "packet_fit": "NO",
+      "correction_fit": "NO",
+      "incident_fit": "NO",
+      "maintenance_fit": "NO",
+      "negative_fit_evidence": "Development Acceleration governs CI orchestration and ruleset mechanics, not portfolio identity, programme admission or cross-programme dependency authority.",
+      "source_refs": ["docs/releases/development-acceleration-v0-2"]
+    },
+    {
+      "existing_programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.1",
+      "similarity_basis": ["shared service", "typed read model", "governance records"],
+      "packet_fit": "NO",
+      "correction_fit": "NO",
+      "incident_fit": "NO",
+      "maintenance_fit": "NO",
+      "negative_fit_evidence": "Research Operations owns evidence and operator research records; it does not own programme Genesis, portfolio event sourcing or programme admission decisions.",
+      "source_refs": ["registries/research_operations"]
+    },
+    {
+      "existing_programme_id": "OVC-MTA-v0.2",
+      "similarity_basis": ["cross-programme audit", "dependency findings", "operator gates"],
+      "packet_fit": "NO",
+      "correction_fit": "NO",
+      "incident_fit": "NO",
+      "maintenance_fit": "NO",
+      "negative_fit_evidence": "MTA is a market-translation audit with no constitutional authority to create or govern the portfolio-level programme ledger and dependency graph.",
+      "source_refs": ["docs/releases/market-translation-audit-v0-2"]
+    }
+  ],
+  "fit_checks": {
+    "all_three_compared": true,
+    "no_existing_fit": true,
+    "maintenance_registry_checked": true,
+    "reserved_authority_fail_closed": true
+  },
+  "result": "ADMISSIBLE_FOR_GENESIS_REVIEW",
+  "review_gate": "PG-G0",
+  "source_refs": ["OVC-PG-IMPLEMENTATION-PLAN-0.2", "MAINTENANCE_AUTHORITY_REGISTRY_v0_1"],
+  "notes": "Fixture proves scope-gaming resistance only; it grants no authority."
+}

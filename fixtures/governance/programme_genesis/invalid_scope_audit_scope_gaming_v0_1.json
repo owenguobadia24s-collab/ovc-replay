@@ -1,0 +1,29 @@
+{
+  "record_type": "SCOPE_AUDIT",
+  "schema_version": "0.1",
+  "scope_audit_id": "PGSCOPE.INVALID.001",
+  "proposal_id": "INVALID-DEMO",
+  "creation_triggers": ["MULTI_PACKET_LIFECYCLE"],
+  "comparisons": [
+    {
+      "existing_programme_id": "OVC-DEV-ACCEL-v0.2",
+      "similarity_basis": ["repository tooling"],
+      "packet_fit": "UNKNOWN",
+      "correction_fit": "UNKNOWN",
+      "incident_fit": "UNKNOWN",
+      "maintenance_fit": "UNKNOWN",
+      "negative_fit_evidence": "No lawful negative-fit evidence was produced for the closest existing programme.",
+      "source_refs": ["MISSING"]
+    }
+  ],
+  "fit_checks": {
+    "all_three_compared": false,
+    "no_existing_fit": false,
+    "maintenance_registry_checked": false,
+    "reserved_authority_fail_closed": false
+  },
+  "result": "ADMISSIBLE_FOR_GENESIS_REVIEW",
+  "review_gate": "PG-G0",
+  "source_refs": ["CHAT_ONLY"],
+  "notes": "Deliberately invalid fixture: fewer than three comparisons, UNKNOWN fit and failed checks."
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-programme-class-registry/v1",
+  "registry_id": "OVC-PG-PROGRAMME-CLASS-REGISTRY-0.1",
+  "version": "0.1",
+  "status": "FROZEN_CANDIDATE",
+  "authority_effect": "NONE_CLASSIFICATION_AND_PARTITIONING_ONLY",
+  "default_outcome": "UNKNOWN_CLASS_BLOCKS_NATIVE_GENESIS",
+  "classes": [
+    {"class_id": "CONSTITUTIONAL_GOVERNANCE", "description": "Cross-programme authority, canon, admission or portfolio governance.", "partition": "GOVERNANCE", "may_self_grant_authority": false},
+    {"class_id": "MARKET_TRUTH", "description": "Provider intake, sealed observations, clocks and source releases.", "partition": "MARKET_TRUTH", "may_self_grant_authority": false},
+    {"class_id": "MARKET_TRANSLATION", "description": "Deterministic descriptive market facts, state, events and structural context.", "partition": "MARKET_TRANSLATION", "may_self_grant_authority": false},
+    {"class_id": "RESEARCH_EVIDENCE", "description": "Evidence identity, research records, comparisons, experiments and validation packets.", "partition": "RESEARCH_EVIDENCE", "may_self_grant_authority": false},
+    {"class_id": "OPERATOR_SURFACE", "description": "Read models, console routes, health and governed proposal surfaces.", "partition": "OPERATIONS", "may_self_grant_authority": false},
+    {"class_id": "DEVELOPMENT_INFRASTRUCTURE", "description": "CI, QA, orchestration, repository hygiene and development acceleration.", "partition": "DEVELOPMENT", "may_self_grant_authority": false},
+    {"class_id": "RELEASE_PUBLICATION", "description": "Candidate release, remote verification, publication and selector governance.", "partition": "RELEASE", "may_self_grant_authority": false},
+    {"class_id": "EXPOSURE_DOMAIN", "description": "Future eligibility, forecast, risk or execution programmes.", "partition": "EXPOSURE", "may_self_grant_authority": false, "operator_gate_required": true},
+    {"class_id": "HISTORICAL_OR_SUPERSEDED", "description": "Preserved historical programme without current authority.", "partition": "HISTORY", "may_self_grant_authority": false}
+  ],
+  "reserved_authority_denials": [
+    "SELECTOR_ACTIVATION_BY_CLASS",
+    "PUBLICATION_BY_CLASS",
+    "VALIDATION_ACCESS_BY_CLASS",
+    "MODEL_OR_SEMANTIC_PROMOTION_BY_CLASS",
+    "AGENT_WRITE_BY_CLASS",
+    "PROBABILITY_RISK_EXPOSURE_EXECUTION_BY_CLASS"
+  ],
+  "activation_gate": "PG-G6",
+  "rollback": "Supersede the registry through a new version. Preserve all prior class IDs and historical assignments."
+}
