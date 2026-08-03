@@ -1,1 +1,63 @@
-{"schema":"ovc-mta-g7-gate-packet/v1","programme_id":"OVC-MTA-v0.2","plan_version":"0.2","gate_id":"MTA-G7","title":"Readiness synthesis and read-only routes","status":"QA_REVIEW","baseline_commit":"57dcbe5ea2587ee2b8ac4138c297bea7fe8e64aa","candidate_commit":null,"completed_packets":["MTA-00","MTA-WP1","MTA-WP2","MTA-WP3","MTA-A3","MTA-WP4","MTA-WP5","MTA-WP6","MTA-A6","MTA-WP7"],"authority_classification":"AUTO_EXECUTABLE_NON_RESERVED","proposed_delta":"ACCEPT_READINESS_SYNTHESIS_AND_LOCAL_READ_ONLY_AUDIT_ROUTES_ONLY","acceptance_conditions":["all nine routes exact","criterion-level readiness exact","C2.5 per-rule dispositions exact","RO4 remains separate","capacity explicit","focused retained complete and FINAL_HEAD tests pass","no reserved authority delta"],"qa_packet":"docs/releases/market-translation-audit-v0-2/mta-g7/MTA_WP7_QA_PACKET.json","qa_recommendation":"PASS_PENDING_EXACT_FINAL_HEAD_CI_WITH_MATERIAL_FINDINGS","recommended_decision":"PASS_AFTER_FINAL_HEAD_CI_WITH_MATERIAL_FINDINGS","operator_reserved_action":false,"exact_work_after_approval":"Squash-merge MTA-WP7, create the consolidated four-part MTA-G8 operator decision packet, and stop.","rollback":"Supersede through a new immutable synthesis version; preserve all evidence.","warnings":["MTA-WP7-W1_RUNTIME_MEASUREMENT_NOT_AVAILABLE_IN_PINNED_COMPACT_RECORD"],"unresolved_issues":[]}
+{
+  "schema": "ovc-mta-g7-gate-packet/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "plan_version": "0.2",
+  "gate_id": "MTA-G7",
+  "title": "Readiness synthesis and read-only routes",
+  "status": "APPROVED_PENDING_RATIFICATION_HEAD_ASSURANCE_AND_SQUASH_MERGE",
+  "baseline_commit": "57dcbe5ea2587ee2b8ac4138c297bea7fe8e64aa",
+  "candidate_commit": "3bc2288043d9e816fd0944d8b5e338c45c72cbc6",
+  "completed_packets": [
+    "MTA-00",
+    "MTA-WP1",
+    "MTA-WP2",
+    "MTA-WP3",
+    "MTA-A3",
+    "MTA-WP4",
+    "MTA-WP5",
+    "MTA-WP6",
+    "MTA-A6",
+    "MTA-WP7"
+  ],
+  "authority_classification": "AUTO_EXECUTABLE_NON_RESERVED",
+  "proposed_delta": "ACCEPT_READINESS_SYNTHESIS_AND_LOCAL_READ_ONLY_AUDIT_ROUTES_ONLY",
+  "acceptance_conditions": [
+    "all nine routes exact",
+    "criterion-level readiness exact",
+    "C2.5 per-rule dispositions exact",
+    "RO4 remains separate",
+    "capacity explicit",
+    "focused retained complete and FINAL_HEAD tests pass",
+    "no reserved authority delta"
+  ],
+  "qa_packet": "docs/releases/market-translation-audit-v0-2/mta-g7/MTA_WP7_QA_PACKET.json",
+  "qa_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+  "recommended_decision": "PASS",
+  "operator_reserved_action": false,
+  "exact_work_after_approval": "Squash-merge MTA-WP7, create the consolidated four-part MTA-G8 operator decision packet, and stop.",
+  "rollback": "Supersede through a new immutable synthesis version; preserve all evidence.",
+  "warnings": [
+    "MTA-WP7-W1_RUNTIME_MEASUREMENT_NOT_AVAILABLE_IN_PINNED_COMPACT_RECORD"
+  ],
+  "unresolved_issues": [],
+  "recorded_decision": "PASS",
+  "decision_id": "MTA-G7.DELEGATED.PASS.20260803T103200+0100",
+  "tests": [
+    {
+      "workflow": "Market Translation Audit MTA-G7 readiness synthesis",
+      "run_id": 30801668099,
+      "result": "PASS"
+    },
+    {
+      "workflow": "tests",
+      "run_id": 30801668027,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30801667957,
+      "profile": "FINAL_HEAD",
+      "result": "PASS"
+    }
+  ]
+}

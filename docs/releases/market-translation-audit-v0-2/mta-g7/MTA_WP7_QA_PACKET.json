@@ -1,1 +1,73 @@
-{"schema":"ovc-mta-wp7-qa-packet/v1","programme_id":"OVC-MTA-v0.2","packet_id":"MTA-WP7","gate_id":"MTA-G7","baseline_commit":"57dcbe5ea2587ee2b8ac4138c297bea7fe8e64aa","candidate_commit":null,"checks":[{"check_id":"MTA-G7-SOURCE-IDENTITY","status":"PASS"},{"check_id":"MTA-G7-NINE-ROUTES","status":"PASS"},{"check_id":"MTA-G7-PER-RULE-C2-5","status":"PASS"},{"check_id":"MTA-G7-RO4-SEPARATION","status":"PASS"},{"check_id":"MTA-G7-CAPACITY","status":"PASS_WITH_RUNTIME_MEASUREMENT_NOT_RECORDED"},{"check_id":"MTA-G7-AUTHORITY","status":"PASS"},{"check_id":"MTA-G7-CI","status":"PENDING"}],"material_findings":["MTA-WP3-F1","MTA-WP3-F2","MTA-WP3-F3","MTA-WP4-F2","MTA-WP5-F1","MTA-WP5-F2","MTA-WP5-F3","MTA-WP6-F2","MTA-WP6-F3"],"warnings":["MTA-WP7-W1_RUNTIME_MEASUREMENT_NOT_AVAILABLE_IN_PINNED_COMPACT_RECORD"],"unresolved_issues":[],"recommendation":"PASS_PENDING_EXACT_FINAL_HEAD_CI_WITH_MATERIAL_FINDINGS","rollback":"Supersede by a new immutable readiness synthesis and preserve all evidence."}
+{
+  "schema": "ovc-mta-wp7-qa-packet/v1",
+  "programme_id": "OVC-MTA-v0.2",
+  "packet_id": "MTA-WP7",
+  "gate_id": "MTA-G7",
+  "baseline_commit": "57dcbe5ea2587ee2b8ac4138c297bea7fe8e64aa",
+  "candidate_commit": "3bc2288043d9e816fd0944d8b5e338c45c72cbc6",
+  "checks": [
+    {
+      "check_id": "MTA-G7-SOURCE-IDENTITY",
+      "status": "PASS"
+    },
+    {
+      "check_id": "MTA-G7-NINE-ROUTES",
+      "status": "PASS"
+    },
+    {
+      "check_id": "MTA-G7-PER-RULE-C2-5",
+      "status": "PASS"
+    },
+    {
+      "check_id": "MTA-G7-RO4-SEPARATION",
+      "status": "PASS"
+    },
+    {
+      "check_id": "MTA-G7-CAPACITY",
+      "status": "PASS_WITH_RUNTIME_MEASUREMENT_NOT_RECORDED"
+    },
+    {
+      "check_id": "MTA-G7-AUTHORITY",
+      "status": "PASS"
+    },
+    {
+      "check_id": "MTA-G7-CI",
+      "status": "PASS"
+    }
+  ],
+  "material_findings": [
+    "MTA-WP3-F1",
+    "MTA-WP3-F2",
+    "MTA-WP3-F3",
+    "MTA-WP4-F2",
+    "MTA-WP5-F1",
+    "MTA-WP5-F2",
+    "MTA-WP5-F3",
+    "MTA-WP6-F2",
+    "MTA-WP6-F3"
+  ],
+  "warnings": [
+    "MTA-WP7-W1_RUNTIME_MEASUREMENT_NOT_AVAILABLE_IN_PINNED_COMPACT_RECORD"
+  ],
+  "unresolved_issues": [],
+  "recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+  "rollback": "Supersede by a new immutable readiness synthesis and preserve all evidence.",
+  "tests": [
+    {
+      "workflow": "Market Translation Audit MTA-G7 readiness synthesis",
+      "run_id": 30801668099,
+      "result": "PASS"
+    },
+    {
+      "workflow": "tests",
+      "run_id": 30801668027,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30801667957,
+      "profile": "FINAL_HEAD",
+      "result": "PASS"
+    }
+  ]
+}
