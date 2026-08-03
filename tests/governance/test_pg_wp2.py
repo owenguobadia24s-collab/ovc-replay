@@ -70,9 +70,11 @@ class ProgrammeGenesisWP2Tests(unittest.TestCase):
     def test_canonical_event_identity_is_order_and_runtime_independent(self) -> None:
         event = make_event("PGE.OVC-PG-v0.2.PACKET_STARTED.001", "PACKET_STARTED", "2026-08-03T18:00:00+01:00")
         reordered = dict(reversed(list(event.items())))
-        self.assertEqual(canonical_event_bytes(event), canonical_event_bytes(reordered))
+        payload = canonical_event_bytes(event)
+        self.assertEqual(payload, canonical_event_bytes(reordered))
         self.assertEqual(event_digest(event), event_digest(reordered))
-        self.assertNotIn(b" ", canonical_event_bytes(event))
+        self.assertNotIn(b'": ', payload)
+        self.assertNotIn(b', "', payload)
 
     def test_append_only_ledger_preserves_existing_bytes_and_rejects_duplicates(self) -> None:
         allowed, _ = event_registry()
@@ -169,7 +171,7 @@ class ProgrammeGenesisWP2Tests(unittest.TestCase):
         self.assertIn("append only", text)
         self.assertIn("programme-owned machine-readable state is the effective state", text)
         self.assertIn("enforcement remains disabled before `PG-G6`", text)
-        self.assertIn("PG-G3A", text)
+        self.assertIn("migration remains denied before `PG-G3A`", text)
         self.assertIn("Never rewrite the ledger or programme-owned state", text)
 
 
