@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-programme-genesis-wp5-read-model-manifest/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP5",
+  "gate_id": "PG-G5",
+  "baseline_commit": "ff903e24898094e1ba9408563f76197a9808e583",
+  "branch": "build/pg-wp5-read-model-control-plane",
+  "implementation_candidate_commit": "8e09dac3c45fa0658a15e95f9710c1bb99554069",
+  "authority_delta": "DETERMINISTIC_READ_MODEL_HEALTH_COMPACT_REPORT_AND_DISABLED_ADAPTER_ONLY",
+  "artifacts": [
+    "contracts/governance/programme_genesis/PORTFOLIO_READ_MODEL_AND_DISABLED_ADAPTER_CONTRACT_v0_1.md",
+    "registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json",
+    "schemas/governance/programme_genesis/portfolio_read_model_bundle_v0_1.schema.json",
+    "src/ovc/programme_genesis/read_model.py",
+    "scripts/governance/build_pg_wp5_read_model.py",
+    "tests/governance/test_pg_wp5.py",
+    "tests/governance/test_pg_wp5_evidence_output.py",
+    ".github/workflows/pg-wp5-read-model.yml"
+  ],
+  "frozen_invariants": [
+    "PROGRAMME_OWNED_STATE_REMAINS_AUTHORITATIVE",
+    "READ_MODEL_IS_REPLACEABLE_AND_AUTHORITY_NEUTRAL",
+    "MIGRATION_UNCERTAINTY_AND_UNRESOLVED_FIELDS_REMAIN_VISIBLE",
+    "MIGRATED_SOURCE_PATHS_AND_SHA256_ARE_REVERIFIED",
+    "HEALTH_NEVER_REPAIRS_OR_SUPPRESSES_SOURCES",
+    "COMPACT_REPORT_DOES_NOT_CONCEAL_DETAILED_FINDINGS",
+    "ADAPTER_ENABLED_FALSE",
+    "ROUTE_REGISTERED_FALSE",
+    "WRITE_ENABLED_FALSE",
+    "ENFORCEMENT_ENABLED_FALSE",
+    "NETWORK_LISTENER_FALSE",
+    "LOCAL_PAYLOAD_AVAILABILITY_IS_NOT_ROUTE_AUTHORITY",
+    "PG_G6_REQUIRED_FOR_CANON_MIGRATION_ENFORCEMENT_AND_ROUTE",
+    "PG_G7_REQUIRED_FOR_AUTOMATIC_UPKEEP"
+  ],
+  "repository_evidence": {
+    "programme_count": 8,
+    "native_programme_count": 1,
+    "migrated_programme_count": 7,
+    "migration_warning_count": 14,
+    "health_warning_count": 7,
+    "health_blocking_count": 0,
+    "adapter_status": "DISABLED_PENDING_PG_G6",
+    "read_model_status": "PASS_WITH_WARNINGS",
+    "health_status": "PASS_WITH_WARNINGS",
+    "read_model_sha256": "f37b2f98ccf9c7b30ef16f57b0c831601348510b6b91144f0a734a7a0b9808a4",
+    "health_sha256": "7b7f24d8d03702813be24625025b2d470f644d14bd9c9186c4a5ff45e97bd029",
+    "report_sha256": "50772daa28787afc5270dce7853593f35211d8464d29221cd59ee1125f9f38b9",
+    "adapter_projection_sha256": "4beaa00d625340c3d67a1afdf8631ca40e3c5d8915f8731165f5f41814d037f7",
+    "tests_run": 30845314582,
+    "test_count": 128,
+    "merge_readiness_run": 30845315282
+  },
+  "warnings": [
+    "FOURTEEN_MIGRATION_WARNINGS_REMAIN_VISIBLE",
+    "SEVEN_HEALTH_WARNINGS_REMAIN_VISIBLE",
+    "READ_MODEL_AND_ADAPTER_OUTPUTS_REMAIN_NON_CANONICAL"
+  ],
+  "external_artifacts": [],
+  "reserved_authority": "NONE",
+  "blockers": [],
+  "rollback": "Discard and rebuild read-model outputs; keep the adapter disabled and preserve all programme sources, migration findings and decisions."
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-programme-genesis-pg-g5-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP5",
+  "gate_id": "PG-G5",
+  "status": "PASS",
+  "baseline_commit": "ff903e24898094e1ba9408563f76197a9808e583",
+  "candidate_branch": "build/pg-wp5-read-model-control-plane",
+  "implementation_candidate_commit": "8e09dac3c45fa0658a15e95f9710c1bb99554069",
+  "checks": [
+    {"check_id": "PG-G5-DETERMINISTIC-READ-MODEL", "status": "PASS", "evidence": "Rows, counts and four logical hashes reproduced under 128 repository tests."},
+    {"check_id": "PG-G5-SOURCE-AUTHORITY", "status": "PASS", "evidence": "Programme-owned state remains authoritative and all read-model rows are authority-neutral."},
+    {"check_id": "PG-G5-MIGRATION-VISIBILITY", "status": "PASS", "evidence": "Seven migrated rows retain source path/SHA, uncertainty, unresolved fields and canonical=false."},
+    {"check_id": "PG-G5-HEALTH", "status": "PASS", "evidence": "Health rehashed all seven sources, retained seven warnings, and produced zero blockers; tamper/missing-source fixtures fail closed."},
+    {"check_id": "PG-G5-COMPACT-REPORT", "status": "PASS", "evidence": "Compact report preserved eight programmes, fourteen migration warnings, seven health warnings, zero blockers and all PG-G6/PG-G7 denials."},
+    {"check_id": "PG-G5-DISABLED-ADAPTER", "status": "PASS", "evidence": "Adapter projection is DISABLED_PENDING_PG_G6 with route/write/enforcement false; activation attempts quarantine and fail projection."},
+    {"check_id": "PG-G5-REPOSITORY-EVIDENCE", "status": "PASS", "evidence": "Read-model f37b2f98ccf9c7b30ef16f57b0c831601348510b6b91144f0a734a7a0b9808a4; health 7b7f24d8d03702813be24625025b2d470f644d14bd9c9186c4a5ff45e97bd029; compact 50772daa28787afc5270dce7853593f35211d8464d29221cd59ee1125f9f38b9; adapter 4beaa00d625340c3d67a1afdf8631ca40e3c5d8915f8731165f5f41814d037f7."},
+    {"check_id": "PG-G5-FOCUSED-TESTS", "status": "PASS", "evidence": "Focused PG-WP5 and evidence-output tests passed in run 30845314582."},
+    {"check_id": "PG-G5-REPOSITORY-SUITE", "status": "PASS", "evidence": "GitHub Actions tests run 30845314582 SUCCESS; 128 tests."},
+    {"check_id": "PG-G5-MERGE-READINESS", "status": "PASS", "evidence": "OVC tiered test selection shadow / OVC merge readiness run 30845315282 SUCCESS."}
+  ],
+  "repository_evidence": {
+    "programme_count": 8,
+    "native_programme_count": 1,
+    "migrated_programme_count": 7,
+    "migration_warning_count": 14,
+    "health_warning_count": 7,
+    "health_blocking_count": 0,
+    "read_model_status": "PASS_WITH_WARNINGS",
+    "health_status": "PASS_WITH_WARNINGS",
+    "adapter_status": "DISABLED_PENDING_PG_G6"
+  },
+  "warnings": [
+    "READ_MODEL_IS_DERIVED_AND_NON_CANONICAL_PENDING_PG_G6",
+    "FOURTEEN_MIGRATION_WARNINGS_AND_SEVEN_HEALTH_WARNINGS_REMAIN_VISIBLE",
+    "CONTROL_PLANE_ADAPTER_IS_LOCAL_DISABLED_CANDIDATE_ONLY",
+    "CANON_MIGRATION_ENFORCEMENT_AND_ROUTE_REQUIRE_INDEPENDENT_PG_G6_DECISIONS",
+    "AUTOMATIC_UPKEEP_REMAINS_DENIED_PENDING_PG_G7"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "auto_ratifiable": true,
+  "next_boundary": "PG-G6_OPERATOR_FOUR_PART_DECISION",
+  "rollback": "Discard derived read models, reports and adapter projections; keep the adapter disabled and preserve all source evidence."
+}

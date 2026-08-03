@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-programme-genesis-pg-g5-delegated-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP5",
+  "gate_id": "PG-G5",
+  "decision_id": "PG-G5.DELEGATED.PASS.20260803T202200+0100",
+  "decision": "PASS",
+  "authority": "DELEGATED_BY_PG_G3A_AND_APPROVED_PLAN_CONTINUOUS_EXECUTION",
+  "implementation_candidate_commit": "8e09dac3c45fa0658a15e95f9710c1bb99554069",
+  "tests": {
+    "repository_run": 30845314582,
+    "repository_conclusion": "SUCCESS",
+    "test_count": 128,
+    "merge_readiness_run": 30845315282,
+    "merge_readiness_conclusion": "SUCCESS"
+  },
+  "repository_evidence": {
+    "programme_count": 8,
+    "native_programme_count": 1,
+    "migrated_programme_count": 7,
+    "migration_warning_count": 14,
+    "health_warning_count": 7,
+    "health_blocking_count": 0,
+    "read_model_status": "PASS_WITH_WARNINGS",
+    "health_status": "PASS_WITH_WARNINGS",
+    "adapter_status": "DISABLED_PENDING_PG_G6",
+    "read_model_sha256": "f37b2f98ccf9c7b30ef16f57b0c831601348510b6b91144f0a734a7a0b9808a4",
+    "health_sha256": "7b7f24d8d03702813be24625025b2d470f644d14bd9c9186c4a5ff45e97bd029",
+    "report_sha256": "50772daa28787afc5270dce7853593f35211d8464d29221cd59ee1125f9f38b9",
+    "adapter_projection_sha256": "4beaa00d625340c3d67a1afdf8631ca40e3c5d8915f8731165f5f41814d037f7"
+  },
+  "qa": {
+    "packet": "docs/releases/programme-genesis-v0-2/pg-g5/PG_G5_QA_PACKET.json",
+    "recommendation": "PASS",
+    "blockers": []
+  },
+  "authority_delta": "ACCEPT_DETERMINISTIC_READ_MODEL_HEALTH_COMPACT_REPORT_AND_DISABLED_ADAPTER_CANDIDATE_AND_RELEASE_PG_G6_PACKET_ONLY",
+  "non_reserved_rationale": [
+    "The read model and reports are replaceable derived views with no authority effect.",
+    "Programme-owned machine-readable state remains authoritative.",
+    "Fourteen migration warnings and seven health warnings remain visible; zero blockers exist.",
+    "The Control Plane adapter is disabled, unregistered, non-listening, non-writing and non-enforcing.",
+    "Portfolio canon, migration adoption, admission enforcement and the read-only route remain independent operator decisions at PG-G6.",
+    "Automatic upkeep remains denied pending PG-G7.",
+    "No market, model, selector, release, Validation, publication, agent, probability, risk, exposure or execution authority changes."
+  ],
+  "rollback": "Preserve this decision, keep the adapter disabled, and discard/rebuild derived read-model outputs from accepted source records.",
+  "merge": {"pull_request": 270, "method": "SQUASH", "merge_commit": "PENDING"},
+  "next_packet": "PG-G6"
+}
