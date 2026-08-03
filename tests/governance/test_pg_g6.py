@@ -23,7 +23,7 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         state = load_json(STATE_PATH)
         decision = load_json(DECISION_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
-        self.assertIn(state["status"], {"APPROVED", "GATE_READY", "COMPLETED"})
+        self.assertEqual("COMPLETED", state["status"])
         self.assertEqual(
             "OVC APPROVE PG-G6 CANON=PASS MIGRATION=PASS ENFORCEMENT=DEFER READ_ONLY_ROUTE=DEFER",
             decision["operator_command"],
@@ -95,19 +95,19 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         for part in ("CANON", "MIGRATION", "ENFORCEMENT", "READ_ONLY_ROUTE"):
             self.assertEqual(qa["qa_recommendation"][part], decision["decisions"][part]["decision"])
 
-    def test_pg_wp6_merge_is_preserved_and_pg_g7_is_approved(self) -> None:
+    def test_pg_wp6_merge_is_preserved_and_pg_g7_is_completed(self) -> None:
         state = load_json(STATE_PATH)
         receipt = load_json(WP6_RECEIPT_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("COMPLETED", packets["PG-WP6"]["status"])
         self.assertEqual("ac5a86931fb9426c55e2cf1e00656ce69908828b", packets["PG-WP6"]["merge_commit"])
         self.assertEqual([], packets["PG-WP6"]["blockers"])
-        self.assertEqual("APPROVED", packets["PG-G7"]["status"])
-        self.assertEqual("OPERATOR_REQUIRED_COMPLETED", packets["PG-G7"]["authority_required"])
+        self.assertEqual("COMPLETED", packets["PG-G7"]["status"])
+        self.assertEqual("b86f63a757621d52ff3ba4937c5706835bf34180", packets["PG-G7"]["merge_commit"])
         self.assertEqual([], packets["PG-G7"]["blockers"])
         self.assertEqual([], state["blockers"])
         self.assertEqual("RESOLVED", receipt["blocker_resolution"]["result"])
-        self.assertEqual("RUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_PR_278_AND_RECORD_TERMINAL_RECEIPT", state["next_action"])
+        self.assertEqual("PROGRAMME_COMPLETED_NO_NEXT_PACKET", state["next_action"])
 
 
 if __name__ == "__main__":

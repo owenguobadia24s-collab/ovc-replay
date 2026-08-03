@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-programme-genesis-pg-g7-merge-receipt/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "PG-G7",
+  "decision_id": "PG-G7.OPERATOR.PASS.20260803T222900+0100",
+  "operator_command": "OVC APPROVE PG-G7 PASS",
+  "pull_request": 278,
+  "branch": "gate/pg-g7-upkeep-activation",
+  "baseline_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
+  "accepted_gate_ready_head": "6549f9534e1843294730e5a54c485cd40f81c92e",
+  "final_decision_head": "54127ead1099c7030c210691689b621bd3728d91",
+  "merge_commit": "b86f63a757621d52ff3ba4937c5706835bf34180",
+  "merge_method": "SQUASH",
+  "exact_head_assurance": {
+    "repository_tests": {"run_id": 30855307573, "conclusion": "SUCCESS", "test_count": 156},
+    "ovc_final_head": {"run_id": 30855307561, "conclusion": "SUCCESS"},
+    "merge_readiness": {"job_id": 91824891459, "conclusion": "SUCCESS"},
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0,
+    "branch_behind_main": 0
+  },
+  "authority_after_merge": {
+    "candidate_persistence": "ACTIVE_BOUNDED_APPEND_ONLY",
+    "automatic_upkeep": "ACTIVE_BOUNDED_CANDIDATE_EVENT_PERSISTENCE_ONLY",
+    "write_scope": "registries/governance/programme_genesis/upkeep_candidates/*.json",
+    "branch_scope": "upkeep/pg-candidate-events/*",
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "authority_effect": "NONE",
+    "programme_creation": "DENIED",
+    "programme_event_acceptance": "DENIED",
+    "approval_merge_main_write_publication": "DENIED",
+    "admission_enforcement": "DEFERRED_DISABLED",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED",
+    "market_model_selector_release_validation": "NONE",
+    "agent_probability_risk_exposure_execution": "NONE"
+  },
+  "programme_result": "COMPLETED",
+  "next_packet": null,
+  "external_evidence": {
+    "name": "DA2_G1_RULESET_AFTER(1).json",
+    "sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d"
+  },
+  "rollback": "Set enabled and candidate_persistence false through a new non-destructive decision, stop candidate generation, discard unaccepted working candidates, and preserve accepted decisions, source findings, hashes, PRs and merge receipts."
+}
