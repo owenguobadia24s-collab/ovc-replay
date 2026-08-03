@@ -1,0 +1,72 @@
+{
+  "schema": "ovc-programme-genesis-pg-g6-operator-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "PG-G6",
+  "decision_id": "PG-G6.OPERATOR.CANON_PASS.MIGRATION_PASS.ENFORCEMENT_DEFER.READ_ONLY_ROUTE_DEFER.20260803T204000+0100",
+  "decision_time_local": "2026-08-03T20:40:00+01:00",
+  "authority_source": "HUMAN_OPERATOR",
+  "operator_command": "OVC APPROVE PG-G6 CANON=PASS MIGRATION=PASS ENFORCEMENT=DEFER READ_ONLY_ROUTE=DEFER",
+  "baseline_commit": "a639002606cf3842e510f3c9420738d0718d8590",
+  "predecision_gate_head": "691a3864ba1e27c94ea718e68da1510c0280a364",
+  "predecision_exact_head_assurance": {
+    "tests": {"run_id": 30846392821, "conclusion": "SUCCESS", "test_count": 137},
+    "merge_readiness": {"run_id": 30846392812, "conclusion": "SUCCESS"},
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0,
+    "blocking_findings": 0
+  },
+  "decisions": {
+    "CANON": {
+      "decision": "PASS",
+      "authority_effect": "PROGRAMME_GENESIS_V0_2_ADOPTED_AS_OVC_PROGRAMME_GOVERNANCE_CANON",
+      "does_not_imply": ["MIGRATION_FACT_AUTHORITY", "ADMISSION_ENFORCEMENT", "READ_ONLY_ROUTE", "AUTOMATIC_UPKEEP"]
+    },
+    "MIGRATION": {
+      "decision": "PASS",
+      "authority_effect": "SEVEN_EXACT_PATH_SHA_BOUND_RECORDS_ACCEPTED_AS_PROVISIONAL_PORTFOLIO_RECORDS",
+      "record_status": "PROVISIONAL_NON_CANONICAL",
+      "authority_effect_on_imported_values": "NONE_BEYOND_PROGRAMME_OWNED_SOURCE",
+      "migration_warning_count_retained": 14,
+      "health_warning_count_retained": 7,
+      "coverage_claim": "ONLY_DISCOVERED_PROGRAMME_OWNED_STATE_RECORDS"
+    },
+    "ENFORCEMENT": {
+      "decision": "DEFER",
+      "authority_effect": "ADMISSION_ENFORCEMENT_REMAINS_DISABLED",
+      "reason": "NO_SEPARATELY_VALIDATED_ACTIVE_ADMISSION_ENFORCEMENT_CONSUMER",
+      "future_gate_required": true
+    },
+    "READ_ONLY_ROUTE": {
+      "decision": "DEFER",
+      "authority_effect": "CONTROL_PLANE_ROUTE_REMAINS_UNREGISTERED_AND_DISABLED",
+      "reason": "NO_VALIDATED_NETWORK_OR_CONTROL_PLANE_ROUTE_IMPLEMENTATION",
+      "future_gate_required": true
+    }
+  },
+  "reserved_authority_denials": [
+    "AUTOMATIC_UPKEEP_BEFORE_PG_G7",
+    "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION",
+    "AGENT_WRITE_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "WRITE_OR_MUTATION_AUTHORITY_BY_READ_ONLY_VIEW",
+    "MIGRATED_FACT_OR_EDGE_AUTHORITY_BY_IMPORT"
+  ],
+  "warnings": [
+    "FOURTEEN_MIGRATION_WARNINGS_REMAIN_VISIBLE",
+    "SEVEN_HEALTH_WARNINGS_REMAIN_VISIBLE",
+    "ONLY_SEVEN_PROGRAMME_OWNED_STATE_RECORDS_WERE_DISCOVERED",
+    "ADMISSION_ENFORCEMENT_IS_DEFERRED_AND_DISABLED",
+    "READ_ONLY_ROUTE_IS_DEFERRED_AND_UNREGISTERED"
+  ],
+  "unresolved_issues": [],
+  "rollback": {
+    "CANON": "Supersede the canon non-destructively and preserve all accepted source records, events and decisions.",
+    "MIGRATION": "Withdraw provisional migration adoption without rewriting programme-owned state; retain every source hash, warning and decision.",
+    "ENFORCEMENT": "No activation occurred; preserve disabled state.",
+    "READ_ONLY_ROUTE": "No route registration occurred; preserve disabled and unregistered state."
+  },
+  "next_packet": "PG-WP6",
+  "continuation_authority": "BUILD_DISABLED_BOUNDED_CANDIDATE_EVENT_UPKEEP_ONLY",
+  "next_operator_gate": "PG-G7"
+}
