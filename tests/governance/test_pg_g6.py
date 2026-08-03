@@ -10,6 +10,7 @@ DECISION_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g6/PG_G6_OPERATO
 QA_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g6/PG_G6_QA_PACKET.json"
 MERGE_RECEIPT_PATH = ROOT / "docs/releases/programme-genesis-v0-2/pg-g5/PG_G5_MERGE_RECEIPT.json"
 ADAPTER_PATH = ROOT / "registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json"
+BLOCKER_ID = "PG-WP6.BLOCKER.REQUIRED_CONTEXT_EXPECTED.20260803"
 
 
 def load_json(path: Path) -> dict:
@@ -22,7 +23,7 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         state = load_json(STATE_PATH)
         decision = load_json(DECISION_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
-        self.assertEqual("APPROVED", state["status"])
+        self.assertEqual("BLOCKED", state["status"])
         self.assertFalse(state["operator_decision_required"])
         self.assertEqual(
             "PG-G6.OPERATOR.CANON_PASS.MIGRATION_PASS.ENFORCEMENT_DEFER.READ_ONLY_ROUTE_DEFER.20260803T204000+0100",
@@ -103,15 +104,17 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
         for part in ("CANON", "MIGRATION", "ENFORCEMENT", "READ_ONLY_ROUTE"):
             self.assertEqual(qa["qa_recommendation"][part], decision["decisions"][part]["decision"])
 
-    def test_pg_wp6_advancement_does_not_activate_upkeep(self) -> None:
+    def test_merge_blocker_preserves_disabled_upkeep_and_defers_pg_g7(self) -> None:
         state = load_json(STATE_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
-        self.assertEqual("APPROVED", packets["PG-WP6"]["status"])
-        self.assertEqual("af20e5d159729ba26b5af6d4026125ebbfe45269", packets["PG-WP6"]["baseline_commit"])
-        self.assertEqual("AUTO_EXECUTABLE_BUILD_COMPLETED_OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
-        self.assertEqual("READY", packets["PG-G7"]["status"])
-        self.assertEqual("OPERATOR_REQUIRED", packets["PG-G7"]["authority_required"])
+        self.assertEqual("BLOCKED", packets["PG-WP6"]["status"])
+        self.assertEqual([BLOCKER_ID], packets["PG-WP6"]["blockers"])
+        self.assertIsNone(packets["PG-WP6"]["merge_commit"])
+        self.assertEqual("PLANNED", packets["PG-G7"]["status"])
+        self.assertEqual([BLOCKER_ID], packets["PG-G7"]["blockers"])
+        self.assertEqual([BLOCKER_ID], state["blockers"])
         self.assertEqual("DENIED_PENDING_PG_G7", state["authority"]["automatic_upkeep"])
+        self.assertEqual("REPAIR_DA2_REQUIRED_CONTEXT_ACCEPTANCE_RERUN_EXACT_CHECKS_MERGE_PR_277_THEN_PREPARE_PG_G7", state["next_action"])
 
 
 if __name__ == "__main__":
