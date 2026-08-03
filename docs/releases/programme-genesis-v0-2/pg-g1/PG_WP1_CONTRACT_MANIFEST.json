@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-programme-genesis-wp1-contract-manifest/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP1",
+  "gate_id": "PG-G1",
+  "baseline_commit": "d0d2445b035f3fc93a177b94b23120be7dfa274b",
+  "branch": "build/pg-wp1-genesis-contract",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "authority_delta": "FREEZE_GENESIS_CONTRACT_SCHEMAS_REGISTRIES_AND_FIXTURES_ONLY",
+  "artifacts": {
+    "contracts": [
+      "contracts/governance/programme_genesis/PROGRAMME_GENESIS_AUTHORITY_CONTRACT_v0_1.md",
+      "contracts/governance/programme_genesis/STATE_SYNCHRONISATION_CONTRACT_v0_1.md"
+    ],
+    "schemas": [
+      "schemas/governance/programme_genesis/programme_genesis_bundle_v0_1.schema.json",
+      "schemas/governance/programme_genesis/scope_audit_v0_1.schema.json"
+    ],
+    "registries": [
+      "registries/governance/programme_genesis/PROGRAMME_CLASS_REGISTRY_v0_1.json",
+      "registries/governance/programme_genesis/EDGE_TYPE_REGISTRY_v0_1.json",
+      "registries/governance/programme_genesis/EVENT_TYPE_REGISTRY_v0_1.json",
+      "registries/governance/programme_genesis/MAINTENANCE_AUTHORITY_REGISTRY_v0_1.json"
+    ],
+    "fixtures": [
+      "fixtures/governance/programme_genesis/valid_scope_audit_v0_1.json",
+      "fixtures/governance/programme_genesis/valid_programme_genesis_v0_1.json",
+      "fixtures/governance/programme_genesis/invalid_scope_audit_scope_gaming_v0_1.json"
+    ],
+    "tests": [
+      "tests/governance/test_pg_wp1.py",
+      "tests/governance/test_pg_g0.py"
+    ]
+  },
+  "frozen_invariants": [
+    "PROGRAMME_OWNED_STATE_IS_AUTHORITATIVE",
+    "EXACTLY_THREE_NEGATIVE_FIT_COMPARISONS",
+    "MISSING_AUTHORITY_IS_NONE",
+    "ADAPTER_INFERRED_EDGE_CANNOT_SATISFY_HARD_PREREQUISITE",
+    "PR_TEST_QA_AND_GRAPH_POSITION_DO_NOT_GRANT_AUTHORITY",
+    "PG_G3A_BEFORE_MIGRATION",
+    "PG_G6_BEFORE_ENFORCEMENT_OR_ROUTE",
+    "PG_G7_BEFORE_UPKEEP"
+  ],
+  "reserved_authority": "NONE",
+  "blockers": [],
+  "rollback": "Disable and supersede derived candidates; preserve contracts, schemas, registries, fixtures, decisions and history."
+}
