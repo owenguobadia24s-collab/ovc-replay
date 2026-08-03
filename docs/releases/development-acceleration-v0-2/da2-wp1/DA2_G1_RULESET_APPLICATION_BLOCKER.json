@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-da2-g1-ruleset-application-blocker/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-WP1",
+  "gate_id": "DA2-G1",
+  "status": "BLOCKED_EXTERNAL_RULESET_WRITE_ENDPOINT_UNAVAILABLE",
+  "classification": "REQUIRED_EXTERNAL_AUTHORITY_ACTION_UNAVAILABLE_TO_CONNECTED_TOOL",
+  "workflow_migration_merge_commit": "467193141ff0d202f43200ca4eef79c5e83c08fa",
+  "ruleset_id": 20229411,
+  "ruleset_name": "OVC main protection",
+  "current_required_contexts": ["tests","OVC tiered test selection shadow"],
+  "target_required_contexts": ["OVC merge readiness"],
+  "target_integration": {"app_id":15368,"app_slug":"github-actions"},
+  "preserved_rules": ["deletion","non_fast_forward","pull_request_squash_only","required_review_thread_resolution","strict_required_status_checks","no_bypass_actors"],
+  "payload": "docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_RULESET_UPDATE_PAYLOAD.json",
+  "application_command": "gh api --method PUT -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2026-03-10' repos/owenguobadia24s-collab/ovc-replay/rulesets/20229411 --input docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_RULESET_UPDATE_PAYLOAD.json",
+  "verification_command": "gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2026-03-10' repos/owenguobadia24s-collab/ovc-replay/rulesets/20229411 > DA2_G1_RULESET_AFTER.json",
+  "required_verification": ["enforcement_active","bypass_actors_empty","deletion_present","non_fast_forward_present","pull_request_squash_only","review_thread_resolution_required","strict_required_status_checks_true","single_required_context_OVC_merge readiness","integration_id_15368"],
+  "failure_result": "PRESERVE_OLD_REQUIRED_CONTEXTS_AND_REMAIN_BLOCKED",
+  "workflow_or_ruleset_weakening": false,
+  "smallest_lawful_resolution": "Apply the exact payload using an Administration-write credential, save the returned ruleset JSON, then run OVC CONTINUE.",
+  "rollback": "PUT the preserved pre-migration ruleset snapshot from docs/releases/development-acceleration-v0-1/da-wp4b/main-ruleset.json through a new authorised ruleset update; do not disable protection or add bypass actors."
+}
