@@ -1,0 +1,32 @@
+name: Market Translation Audit MTA-G8 consolidated gate readiness
+on:
+  pull_request:
+    paths:
+      - "docs/releases/market-translation-audit-v0-2/mta-g8/**"
+      - "schemas/research_operations/mta/mta_g8_operator_decision_packet_v0_1.schema.json"
+      - "src/ovc/research_operations/mta/g8_gate.py"
+      - "scripts/research_operations/validate_mta_g8.py"
+      - "tests/research_operations/mta/test_mta_g8.py"
+      - "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json"
+      - ".github/workflows/market-translation-audit-mta-g8.yml"
+  workflow_dispatch:
+jobs:
+  mta-g8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Validate consolidated MTA-G8 packet
+        run: PYTHONPATH=src python scripts/research_operations/validate_mta_g8.py
+      - name: Focused MTA-G8 tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.mta.test_mta_g8 -v
+      - name: Retained MTA assurance
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert operator gate remains unrecorded and activation denied
+        run: |
+          grep -q '"operator_decision_required": true' docs/releases/market-translation-audit-v0-2/mta-g8/MTA_G8_CONSOLIDATED_OPERATOR_DECISION_PACKET.json
+          ! grep -R '"recorded_decision": "PASS"' docs/releases/market-translation-audit-v0-2/mta-g8
+          ! grep -R '"c2e_activation": "APPROVED"' docs/releases/market-translation-audit-v0-2/mta-g8

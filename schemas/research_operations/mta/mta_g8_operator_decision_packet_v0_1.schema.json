@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/mta_g8_operator_decision_packet_v0_1.schema.json",
+  "title": "OVC MTA-G8 consolidated operator decision packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "gate_id",
+    "status",
+    "operator_decision_required",
+    "decisions",
+    "recommended_consolidated_decision",
+    "authority_boundary",
+    "rollback"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-mta-g8-consolidated-operator-decision-packet/v1"},
+    "programme_id": {"const": "OVC-MTA-v0.2"},
+    "gate_id": {"const": "MTA-G8"},
+    "status": {"const": "GATE_READY"},
+    "operator_decision_required": {"const": true},
+    "baseline_main": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "decisions": {"type": "object", "required": ["MTA-G8-CLOCK", "MTA-G8-C2E", "MTA-G8-C2.5", "MTA-G8-C3"]},
+    "recommended_consolidated_decision": {"type": "object"},
+    "authority_boundary": {"type": "object"},
+    "rollback": {"type": "string"}
+  }
+}
