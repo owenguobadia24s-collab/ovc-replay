@@ -1,0 +1,97 @@
+name: Programme Genesis PG-WP4 migration assurance
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/programme_genesis/migration.py"
+      - "src/ovc/programme_genesis/__init__.py"
+      - "scripts/governance/build_pg_wp4_migration.py"
+      - "contracts/governance/programme_genesis/EXISTING_PROGRAMME_MIGRATION_CONTRACT_v0_1.md"
+      - "schemas/governance/programme_genesis/programme_migration_snapshot_v0_1.schema.json"
+      - "registries/governance/programme_genesis/MIGRATION_SOURCE_REGISTRY_v0_1.json"
+      - "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json"
+      - "docs/releases/programme-genesis-v0-2/pg-g4/**"
+      - "tests/governance/test_pg_wp4.py"
+      - ".github/workflows/pg-wp4-migration.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  migration-assurance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused PG-WP4 tests
+        run: >-
+          PYTHONPATH=src python -m unittest
+          tests.governance.test_pg_wp4 -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Build reproducible provisional migration snapshot
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pg-wp4"
+          PYTHONPATH=src python scripts/governance/build_pg_wp4_migration.py \
+            --root "$GITHUB_WORKSPACE" \
+            --output "$RUNNER_TEMP/pg-wp4/migration-snapshot.json" \
+            | tee "$RUNNER_TEMP/pg-wp4/summary.json"
+          python -m json.tool "$RUNNER_TEMP/pg-wp4/migration-snapshot.json" >/dev/null
+          python -m json.tool "$RUNNER_TEMP/pg-wp4/summary.json" >/dev/null
+      - name: Assert source-faithful non-canonical boundary
+        run: |
+          set -euo pipefail
+          SNAPSHOT="$RUNNER_TEMP/pg-wp4/migration-snapshot.json"
+          python - "$SNAPSHOT" <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import sys
+
+          root = pathlib.Path.cwd()
+          snapshot = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+          assert snapshot["status"] == "PASS", snapshot["status"]
+          assert snapshot["blocking_conflict_count"] == 0
+          assert snapshot["record_count"] == snapshot["unique_programme_count"]
+          assert snapshot["record_count"] >= 5
+          assert snapshot["authority_effect"] == "NONE"
+          assert snapshot["import_status"] == "PROVISIONAL_NON_CANONICAL"
+          assert snapshot["canonical_adoption"] == "DENIED_PENDING_PG_G6"
+          assert snapshot["admission_enforcement"] == "DENIED_PENDING_PG_G6"
+          assert snapshot["control_plane_route"] == "DENIED_PENDING_PG_G6"
+          assert snapshot["automatic_upkeep"] == "DENIED_PENDING_PG_G7"
+          assert "OVC-PG-v0.2" not in {record["programme_id"] for record in snapshot["records"]}
+          for record in snapshot["records"]:
+              source = root / record["source"]["path"]
+              assert source.is_file(), source
+              assert hashlib.sha256(source.read_bytes()).hexdigest() == record["source"]["sha256"]
+              assert record["authority_effect"] == "NONE"
+              assert record["import_status"] == "PROVISIONAL_NON_CANONICAL"
+              assert record["inferred_fields"] == []
+              assert record["migration_uncertainty"]["banner"] == "MIGRATION_UNCERTAINTY"
+          print(json.dumps({
+              "record_count": snapshot["record_count"],
+              "warning_count": sum(item["severity"] == "WARN" for item in snapshot["conflict_ledger"]),
+              "snapshot_sha256": snapshot["snapshot_sha256"],
+              "status": snapshot["status"],
+          }, sort_keys=True))
+          PY
+      - name: Assert no raw market, activation or source repair path
+        run: |
+          set -euo pipefail
+          if grep -nE 'datafeed|provider|rclone|R2|selector.*activate|write.*main|force.push' \
+            src/ovc/programme_genesis/migration.py \
+            scripts/governance/build_pg_wp4_migration.py; then
+            echo "Forbidden migration capability found."
+            exit 1
+          fi
+          grep -q 'never rewrite the source programme state' src/ovc/programme_genesis/migration.py
+          grep -q 'PROVISIONAL_NON_CANONICAL' src/ovc/programme_genesis/migration.py
+          grep -q 'DENIED_PENDING_PG_G6' src/ovc/programme_genesis/migration.py
+          grep -q 'DENIED_PENDING_PG_G7' src/ovc/programme_genesis/migration.py
