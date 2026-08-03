@@ -1,0 +1,168 @@
+{
+  "schema": "ovc-programme-genesis-pg-g7-operator-decision-packet/v1",
+  "gate_id": "PG-G7",
+  "title": "Bounded candidate-event upkeep activation",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "status": "GATE_READY_PENDING_EXACT_HEAD_ASSURANCE",
+  "authority_required": "OPERATOR_REQUIRED",
+  "baseline_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
+  "candidate_branch": "gate/pg-g7-upkeep-activation",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "completed_packets": [
+    "PG-00",
+    "PG-WP1",
+    "PG-WP2",
+    "PG-WP3",
+    "PG-G3A",
+    "PG-WP4",
+    "PG-WP5",
+    "PG-G6",
+    "PG-WP6"
+  ],
+  "current_authority": {
+    "upkeep_preview": "APPROVED_DISABLED_IMPLEMENTATION_MERGED",
+    "candidate_persistence": "DENIED_PENDING_PG_G7",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7",
+    "programme_creation": "DENIED",
+    "programme_event_acceptance": "DENIED",
+    "approval_merge_main_write_publication": "DENIED",
+    "admission_enforcement": "DEFERRED_DISABLED",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED",
+    "market_model_selector_release_validation": "NONE",
+    "agent_probability_risk_exposure_execution": "NONE"
+  },
+  "proposed_authority_delta": {
+    "candidate_persistence": "ACTIVATE_BOUNDED_APPEND_ONLY",
+    "write_scope": "registries/governance/programme_genesis/upkeep_candidates/*.json",
+    "branch_scope": "upkeep/pg-candidate-events/*",
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "authority_effect": "NONE",
+    "programme_creation": "REMAINS_DENIED",
+    "programme_event_acceptance": "REMAINS_DENIED",
+    "approval_merge_main_write_publication": "REMAINS_DENIED",
+    "admission_enforcement": "REMAINS_DEFERRED_DISABLED",
+    "control_plane_route": "REMAINS_DEFERRED_DISABLED_UNREGISTERED",
+    "market_model_selector_release_validation": "NONE",
+    "agent_probability_risk_exposure_execution": "NONE"
+  },
+  "acceptance_conditions": [
+    {
+      "id": "PG-G7-A1",
+      "condition": "PG-WP6 disabled implementation is merged from an exact tested head.",
+      "result": "PASS",
+      "evidence": "PG_WP6_MERGE_RECEIPT.json"
+    },
+    {
+      "id": "PG-G7-A2",
+      "condition": "Candidate identity is deterministic and source-linked.",
+      "result": "PASS",
+      "evidence": "tests/governance/test_pg_wp6.py"
+    },
+    {
+      "id": "PG-G7-A3",
+      "condition": "Only existing programme identities and allowlisted event/source types are accepted.",
+      "result": "PASS",
+      "evidence": "upkeep contract, registry and tests"
+    },
+    {
+      "id": "PG-G7-A4",
+      "condition": "Persistence is append-only, refuses overwrite and is limited to the dedicated candidate root.",
+      "result": "PASS",
+      "evidence": "persist_candidate_event and synthetic activation tests"
+    },
+    {
+      "id": "PG-G7-A5",
+      "condition": "Main, merge, approval, publication, programme creation and accepted Programme Events remain impossible.",
+      "result": "PASS",
+      "evidence": "contract, registry, source inspection and tests"
+    },
+    {
+      "id": "PG-G7-A6",
+      "condition": "Per-run cap, duplicate rejection, first-valid time and forbidden authority payload checks fail closed.",
+      "result": "PASS",
+      "evidence": "focused and repository tests"
+    },
+    {
+      "id": "PG-G7-A7",
+      "condition": "DA2 strict ruleset and exact required context are re-verified without bypass.",
+      "result": "PASS",
+      "evidence": "DA2_G1_RULESET_REVERIFICATION_20260803.json"
+    },
+    {
+      "id": "PG-G7-A8",
+      "condition": "Rollback is explicit and non-destructive.",
+      "result": "PASS",
+      "evidence": "registry and gate packet"
+    }
+  ],
+  "tests": {
+    "pg_wp6_focused": {
+      "run_id": 30848244629,
+      "result": "PASS",
+      "test_count": 13
+    },
+    "final_repository": {
+      "run_id": 30851369267,
+      "result": "PASS"
+    },
+    "final_ovc_workflow": {
+      "run_id": 30851368942,
+      "result": "PASS"
+    },
+    "required_merge_readiness": {
+      "job_id": 91812017432,
+      "result": "PASS"
+    },
+    "gate_branch_exact_head": "PENDING"
+  },
+  "qa": {
+    "packet": "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_QA_PACKET.json",
+    "recommendation": "PASS"
+  },
+  "warnings": [
+    "PASS enables repository candidate-file persistence on dedicated upkeep branches.",
+    "Every output remains an unapproved candidate and has no authority effect.",
+    "A separate human-governed decision is still required to convert any candidate into an accepted Programme Event.",
+    "Admission enforcement and the read-only Control Plane route remain deferred.",
+    "The collector cannot open or merge PRs, approve changes, write main, create programmes or publish."
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/releases/programme-genesis-v0-2/pg-g7/PG_WP6_MERGE_RECEIPT.json",
+    "docs/releases/programme-genesis-v0-2/pg-g7/DA2_G1_RULESET_REVERIFICATION_20260803.json",
+    "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_OPERATOR_DECISION_PACKET.json",
+    "docs/releases/programme-genesis-v0-2/pg-g7/PG_G7_QA_PACKET.json",
+    "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json",
+    "tests/governance/test_pg_g6.py",
+    "tests/governance/test_pg_g7.py"
+  ],
+  "external_artifacts": [
+    {
+      "name": "DA2_G1_RULESET_AFTER(1).json",
+      "bytes": 1204,
+      "sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d",
+      "role": "RULESET_REVERIFICATION"
+    }
+  ],
+  "allowed_decisions": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
+  "recommended_decision": "PASS",
+  "exact_operator_command": "OVC APPROVE PG-G7 PASS",
+  "work_after_approval": [
+    "Record the operator decision and exact accepted head.",
+    "Set the upkeep registry to ACTIVE_BOUNDED_APPEND_ONLY with enabled true and candidate_persistence true.",
+    "Bind activation_decision_id to the accepted PG-G7 decision.",
+    "Keep all permanent prohibitions and branch/path caps unchanged.",
+    "Run focused and complete repository tests plus OVC merge readiness.",
+    "Squash-merge the bounded activation PR when all checks pass.",
+    "Record the merge receipt and mark OVC-PG-v0.2 completed unless a new bounded packet is separately admitted."
+  ],
+  "rollback": "Set enabled and candidate_persistence false through a new non-destructive decision, stop candidate generation, discard unaccepted working candidates, and preserve accepted decisions, source findings, hashes, PRs and merge receipts."
+}
