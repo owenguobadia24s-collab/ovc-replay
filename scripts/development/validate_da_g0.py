@@ -9,9 +9,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = "b9e763150858d02cc92d08efbcf2f6668b187a41"
 DECISION_ID = "DA-G0.OPERATOR.PASS.20260801T151200Z"
-CURRENT_PACKET_IDS = {
+NON_TERMINAL_PACKET_IDS = {
     "DA-00", "DA-WP1", "DA-WP2", "DA-WP3", "DA-WP4", "DA-G4", "DA-WP4B", "DA-WP5",
 }
+TERMINAL_PACKET_IDS = NON_TERMINAL_PACKET_IDS | {"DA-G6"}
+TERMINAL_MERGE = "da29bb4b571e8f0c4706fa3032e941a89d0d5550"
 REQUIRED = [
     "contracts/development/OVC_DEVELOPMENT_ACCELERATION_AUTHORITY_CONTRACT_v0_1.md",
     "registries/development/OVC_DEVELOPMENT_ACCELERATION_BASELINE_PROFILE_v0_1.yaml",
@@ -56,10 +58,23 @@ def main() -> int:
     assert decision["direct_main_write"] == "PROHIBITED"
     assert decision["market_authority_delta"] == "NONE"
 
-    # Current programme state may lawfully advance through DA-G4/DA-G4B, but
-    # the original DA-G0 denial and every permanent safety boundary must persist.
+    # Current programme state may advance through DA-G4/DA-G4B/DA-G6, but
+    # the original DA-G0 denial and every permanent safety boundary persist.
     assert state["programme_id"] == "OVC-DEV-ACCEL-v0.1"
-    assert state["current_packet"] in CURRENT_PACKET_IDS
+    terminal = state["programme_status"] == "COMPLETED"
+    if terminal:
+        assert state["current_packet"] is None
+        assert state["current_gate"] is None
+        assert state["merge_commit"] == TERMINAL_MERGE
+        assert state["next_action"] == "PROGRAMME_COMPLETED_NO_NEXT_PACKET"
+        assert state["completion"]["status"] == "COMPLETED"
+        assert state["completion"]["terminal_merge_commit"] == TERMINAL_MERGE
+        assert state["completion"]["blockers"] == []
+        expected_packet_ids = TERMINAL_PACKET_IDS
+    else:
+        assert state["current_packet"] in NON_TERMINAL_PACKET_IDS
+        expected_packet_ids = NON_TERMINAL_PACKET_IDS
+
     assert DECISION_ID in state["operator_decision_history"]
     authority = state["authority"]
     repository_bot_write = authority["repository_bot_write"]
@@ -79,6 +94,12 @@ def main() -> int:
         assert "DA-G4B.OPERATOR.PASS.20260802T163600Z" in state["operator_decision_history"]
         assert state["activation_gate"]["recorded_decision"] == "PASS"
         assert state["activation_gate"]["authority_active"] is True
+    if terminal:
+        assert "DA-G6.OPERATOR.PASS.20260802T212200+0100" in state["operator_decision_history"]
+        assert authority["default_workflow_adoption"] == "ACTIVE"
+        assert authority["duplicated_mechanics"] == "RETIRED_NON_AUTHORITATIVE_NON_DESTRUCTIVE"
+        assert state["default_workflow_gate"]["recorded_decision"] == "PASS"
+        assert state["default_workflow_gate"]["authority_active"] is True
     assert authority["direct_main_write"] == "PROHIBITED"
     assert authority["force_push"] == "PROHIBITED"
     assert authority["history_rewrite"] == "PROHIBITED"
@@ -88,13 +109,20 @@ def main() -> int:
     assert authority["execution"] == "NONE"
 
     packet_by_id = {row["packet_id"]: row for row in state["packets"]}
-    assert set(packet_by_id) == CURRENT_PACKET_IDS
+    assert set(packet_by_id) == expected_packet_ids
     assert packet_by_id["DA-00"]["baseline_commit"] == BASELINE
     assert packet_by_id["DA-00"]["status"] in {"APPROVED", "COMPLETED"}
     assert packet_by_id["DA-00"]["blockers"] == []
     assert packet_by_id["DA-WP1"]["status"] in {"PLANNED", "RUNNING", "QA_REVIEW", "APPROVED", "COMPLETED"}
     assert packet_by_id["DA-G4"]["status"] == "COMPLETED"
     assert packet_by_id["DA-WP4B"]["status"] in {"RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "APPROVED", "BLOCKED", "COMPLETED"}
+    if terminal:
+        assert packet_by_id["DA-WP5"]["status"] == "COMPLETED"
+        assert packet_by_id["DA-WP5"]["merge_commit"] == "eaefbf55d1702d689d59765558af65e87c0b37fc"
+        assert packet_by_id["DA-G6"]["status"] == "COMPLETED"
+        assert packet_by_id["DA-G6"]["merge_commit"] == TERMINAL_MERGE
+        assert packet_by_id["DA-G6"]["blockers"] == []
+        assert packet_by_id["DA-G6"]["next_packet"] is None
     assert any(row["pull_request"] == 202 for row in state["open_concurrent_work"])
 
     impl = metrics["implementation_prs"]
@@ -122,7 +150,23 @@ def main() -> int:
 
     require_tokens(REQUIRED[0], ["REPOSITORY_BOT_WRITE", "DENIED", "force-push", "Validation", "rewrite history", "Unknown test impact escalates"])
     require_tokens(REQUIRED[1], ["repository_bot_write: DENIED_UNTIL_DA_G4", "direct_main_write: PROHIBITED", "unknown_impact_policy: ESCALATE_TO_FINAL_HEAD", "raw_market_data_in_git: PROHIBITED"])
-    require_tokens(REQUIRED[2], ["packet_id: DA-00", "packet_id: DA-WP1", "packet_id: DA-WP2", "packet_id: DA-WP3", "packet_id: DA-WP4", "packet_id: DA-WP5", "current_authority: DENIED"])
+    implementation_tokens = [
+        "packet_id: DA-00",
+        "packet_id: DA-WP1",
+        "packet_id: DA-WP2",
+        "packet_id: DA-WP3",
+        "packet_id: DA-WP4",
+        "packet_id: DA-WP5",
+    ]
+    if terminal:
+        implementation_tokens.extend([
+            "programme_status: COMPLETED",
+            "packet_id: DA-G6",
+            "current_authority: ACTIVE_DEFAULT_WORKFLOW_WITH_NON_DESTRUCTIVE_RETIREMENT",
+        ])
+    else:
+        implementation_tokens.append("current_authority: DENIED")
+    require_tokens(REQUIRED[2], implementation_tokens)
     require_tokens(REQUIRED[3], ["unknown_path_policy: FINAL_HEAD", "ambiguous_dependency_policy: BLOCK_AND_REQUIRE_PROFILE_CORRECTION", "reverse_dependency: DENIED", "gate_replay_substitution: PROHIBITED"])
 
     print("DA-G0 validation PASS")
