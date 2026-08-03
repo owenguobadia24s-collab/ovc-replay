@@ -1,4 +1,5 @@
 import json
+import unittest
 from pathlib import Path
 
 
@@ -44,103 +45,99 @@ def validate_scope_audit(record: dict) -> list[str]:
     return errors
 
 
-def test_contract_freezes_fail_closed_authority_and_operator_boundaries() -> None:
-    text = CONTRACT.read_text(encoding="utf-8")
-    assert "Missing authority is `NONE`, never inherited" in text
-    assert "PG-G3A" in text
-    assert "PG-G6" in text
-    assert "PG-G7" in text
-    assert "may not rewrite" in text
-    assert "Reverse authority is prohibited" in text
-    assert "does not create or activate a programme" in text
+class ProgrammeGenesisWP1Tests(unittest.TestCase):
+    def test_contract_freezes_fail_closed_authority_and_operator_boundaries(self) -> None:
+        text = CONTRACT.read_text(encoding="utf-8")
+        self.assertIn("Missing authority is `NONE`, never inherited", text)
+        self.assertIn("PG-G3A", text)
+        self.assertIn("PG-G6", text)
+        self.assertIn("PG-G7", text)
+        self.assertIn("may not rewrite", text)
+        self.assertIn("Reverse authority is prohibited", text)
+        self.assertIn("does not create or activate a programme", text)
+
+    def test_schema_bundle_defines_all_core_wp1_objects(self) -> None:
+        schema = load_json(SCHEMA_ROOT / "programme_genesis_bundle_v0_1.schema.json")
+        definitions = schema["$defs"]
+        self.assertTrue({"programme_genesis", "programme_event", "dependency_edge", "authority_envelope"}.issubset(definitions))
+        genesis_required = set(definitions["programme_genesis"]["required"])
+        self.assertTrue({"scope_audit_ref", "authority_envelope_ref", "governing_sources", "rollback"}.issubset(genesis_required))
+        self.assertEqual("NONE", definitions["dependency_edge"]["properties"]["authority_effect"]["const"])
+        self.assertEqual("NONE", definitions["programme_event"]["properties"]["authority_effect"]["enum"][0])
+
+    def test_scope_audit_schema_requires_three_comparisons_and_fail_closed_checks(self) -> None:
+        schema = load_json(SCHEMA_ROOT / "scope_audit_v0_1.schema.json")
+        comparison_rule = schema["properties"]["comparisons"]
+        self.assertEqual(3, comparison_rule["minItems"])
+        self.assertEqual(3, comparison_rule["maxItems"])
+        checks = schema["properties"]["fit_checks"]["properties"]
+        self.assertTrue(all(rule["const"] is True for rule in checks.values()))
+        valid = load_json(FIXTURE_ROOT / "valid_scope_audit_v0_1.json")
+        invalid = load_json(FIXTURE_ROOT / "invalid_scope_audit_scope_gaming_v0_1.json")
+        self.assertEqual([], validate_scope_audit(valid))
+        errors = validate_scope_audit(invalid)
+        self.assertIn("exactly_three_comparisons", errors)
+        self.assertTrue(any(error.startswith("fit_check:") for error in errors))
+
+    def test_valid_genesis_fixture_is_source_linked_and_non_exposure(self) -> None:
+        record = load_json(FIXTURE_ROOT / "valid_programme_genesis_v0_1.json")
+        self.assertEqual("PROGRAMME_GENESIS", record["record_type"])
+        self.assertEqual("CONSTITUTIONAL_GOVERNANCE", record["programme_class"])
+        self.assertTrue(record["scope_audit_ref"].startswith("PGSCOPE."))
+        self.assertTrue(record["authority_envelope_ref"].startswith("PGAUTH."))
+        self.assertGreaterEqual(len(record["governing_sources"]), 2)
+        self.assertTrue(any(source["source_type"] == "OPERATOR_DECISION" for source in record["governing_sources"]))
+        excluded = " ".join(record["scope"]["excluded"]).lower()
+        self.assertIn("exposure", excluded)
+        self.assertIn("execution", excluded)
+
+    def test_programme_class_registry_is_partition_only_and_non_authoritative(self) -> None:
+        registry = load_json(PG_ROOT / "PROGRAMME_CLASS_REGISTRY_v0_1.json")
+        classes = registry["classes"]
+        ids = [item["class_id"] for item in classes]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual("NONE_CLASSIFICATION_AND_PARTITIONING_ONLY", registry["authority_effect"])
+        self.assertTrue(all(item["may_self_grant_authority"] is False for item in classes))
+        self.assertEqual("PG-G6", registry["activation_gate"])
+
+    def test_edge_registry_blocks_reverse_and_inferred_hard_authority(self) -> None:
+        registry = load_json(PG_ROOT / "EDGE_TYPE_REGISTRY_v0_1.json")
+        types = {item["edge_type"]: item for item in registry["edge_types"]}
+        self.assertTrue(types["REQUIRES"]["hard_requires_source_explicit"])
+        self.assertTrue(types["GOVERNED_BY"]["hard_requires_source_explicit"])
+        self.assertTrue(all(item["may_grant_authority"] is False for item in types.values()))
+        prohibited = set(registry["prohibited_edge_effects"])
+        self.assertIn("ADAPTER_INFERENCE_SATISFIES_HARD_PREREQUISITE", prohibited)
+        self.assertIn("TEST_RESULT_TO_AUTHORITY_GRANT", prohibited)
+
+    def test_event_registry_orders_deterministically_and_requires_decisions_for_authority(self) -> None:
+        registry = load_json(PG_ROOT / "EVENT_TYPE_REGISTRY_v0_1.json")
+        self.assertEqual(["first_valid_at", "precedence", "event_id"], registry["ordering"])
+        events = registry["event_types"]
+        names = [item["event_type"] for item in events]
+        self.assertEqual(len(names), len(set(names)))
+        precedence = [item["precedence"] for item in events]
+        self.assertEqual(len(precedence), len(set(precedence)))
+        by_name = {item["event_type"]: item for item in events}
+        self.assertTrue(by_name["GENESIS_ACCEPTED"]["accepted_decision_required"])
+        self.assertEqual(["NONE"], by_name["PR_MERGED"]["authority_effects"])
+        self.assertEqual(["NONE"], by_name["QA_REVIEWED"]["authority_effects"])
+
+    def test_wp1_files_do_not_activate_reserved_capabilities(self) -> None:
+        combined = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in [
+                CONTRACT,
+                PG_ROOT / "PROGRAMME_CLASS_REGISTRY_v0_1.json",
+                PG_ROOT / "EDGE_TYPE_REGISTRY_v0_1.json",
+                PG_ROOT / "EVENT_TYPE_REGISTRY_v0_1.json",
+            ]
+        )
+        self.assertIn("FROZEN_CANDIDATE", combined)
+        self.assertIn("PG-G6", combined)
+        self.assertIn("PG-G7", combined)
+        self.assertNotIn('may_self_grant_authority": true', combined)
 
 
-def test_schema_bundle_defines_all_core_wp1_objects() -> None:
-    schema = load_json(SCHEMA_ROOT / "programme_genesis_bundle_v0_1.schema.json")
-    definitions = schema["$defs"]
-    assert {"programme_genesis", "programme_event", "dependency_edge", "authority_envelope"}.issubset(definitions)
-
-    genesis_required = set(definitions["programme_genesis"]["required"])
-    assert {"scope_audit_ref", "authority_envelope_ref", "governing_sources", "rollback"}.issubset(genesis_required)
-    assert definitions["dependency_edge"]["properties"]["authority_effect"]["const"] == "NONE"
-    assert definitions["programme_event"]["properties"]["authority_effect"]["enum"][0] == "NONE"
-
-
-def test_scope_audit_schema_requires_three_comparisons_and_fail_closed_checks() -> None:
-    schema = load_json(SCHEMA_ROOT / "scope_audit_v0_1.schema.json")
-    comparison_rule = schema["properties"]["comparisons"]
-    assert comparison_rule["minItems"] == 3
-    assert comparison_rule["maxItems"] == 3
-    checks = schema["properties"]["fit_checks"]["properties"]
-    assert all(rule["const"] is True for rule in checks.values())
-
-    valid = load_json(FIXTURE_ROOT / "valid_scope_audit_v0_1.json")
-    invalid = load_json(FIXTURE_ROOT / "invalid_scope_audit_scope_gaming_v0_1.json")
-    assert validate_scope_audit(valid) == []
-    errors = validate_scope_audit(invalid)
-    assert "exactly_three_comparisons" in errors
-    assert any(error.startswith("fit_check:") for error in errors)
-
-
-def test_valid_genesis_fixture_is_source_linked_and_non_exposure() -> None:
-    record = load_json(FIXTURE_ROOT / "valid_programme_genesis_v0_1.json")
-    assert record["record_type"] == "PROGRAMME_GENESIS"
-    assert record["programme_class"] == "CONSTITUTIONAL_GOVERNANCE"
-    assert record["scope_audit_ref"].startswith("PGSCOPE.")
-    assert record["authority_envelope_ref"].startswith("PGAUTH.")
-    assert len(record["governing_sources"]) >= 2
-    assert any(source["source_type"] == "OPERATOR_DECISION" for source in record["governing_sources"])
-    excluded = " ".join(record["scope"]["excluded"]).lower()
-    assert "exposure" in excluded
-    assert "execution" in excluded
-
-
-def test_programme_class_registry_is_partition_only_and_non_authoritative() -> None:
-    registry = load_json(PG_ROOT / "PROGRAMME_CLASS_REGISTRY_v0_1.json")
-    classes = registry["classes"]
-    ids = [item["class_id"] for item in classes]
-    assert len(ids) == len(set(ids))
-    assert registry["authority_effect"] == "NONE_CLASSIFICATION_AND_PARTITIONING_ONLY"
-    assert all(item["may_self_grant_authority"] is False for item in classes)
-    assert registry["activation_gate"] == "PG-G6"
-
-
-def test_edge_registry_blocks_reverse_and_inferred_hard_authority() -> None:
-    registry = load_json(PG_ROOT / "EDGE_TYPE_REGISTRY_v0_1.json")
-    types = {item["edge_type"]: item for item in registry["edge_types"]}
-    assert types["REQUIRES"]["hard_requires_source_explicit"] is True
-    assert types["GOVERNED_BY"]["hard_requires_source_explicit"] is True
-    assert all(item["may_grant_authority"] is False for item in types.values())
-    prohibited = set(registry["prohibited_edge_effects"])
-    assert "ADAPTER_INFERENCE_SATISFIES_HARD_PREREQUISITE" in prohibited
-    assert "TEST_RESULT_TO_AUTHORITY_GRANT" in prohibited
-
-
-def test_event_registry_orders_deterministically_and_requires_decisions_for_authority() -> None:
-    registry = load_json(PG_ROOT / "EVENT_TYPE_REGISTRY_v0_1.json")
-    assert registry["ordering"] == ["first_valid_at", "precedence", "event_id"]
-    events = registry["event_types"]
-    names = [item["event_type"] for item in events]
-    assert len(names) == len(set(names))
-    precedence = [item["precedence"] for item in events]
-    assert len(precedence) == len(set(precedence))
-    by_name = {item["event_type"]: item for item in events}
-    assert by_name["GENESIS_ACCEPTED"]["accepted_decision_required"] is True
-    assert by_name["PR_MERGED"]["authority_effects"] == ["NONE"]
-    assert by_name["QA_REVIEWED"]["authority_effects"] == ["NONE"]
-
-
-def test_wp1_files_do_not_activate_reserved_capabilities() -> None:
-    combined = "\n".join(
-        path.read_text(encoding="utf-8")
-        for path in [
-            CONTRACT,
-            PG_ROOT / "PROGRAMME_CLASS_REGISTRY_v0_1.json",
-            PG_ROOT / "EDGE_TYPE_REGISTRY_v0_1.json",
-            PG_ROOT / "EVENT_TYPE_REGISTRY_v0_1.json",
-        ]
-    )
-    assert "FROZEN_CANDIDATE" in combined
-    assert "PG-G6" in combined
-    assert "PG-G7" in combined
-    assert "may_self_grant_authority\": true" not in combined
+if __name__ == "__main__":
+    unittest.main()

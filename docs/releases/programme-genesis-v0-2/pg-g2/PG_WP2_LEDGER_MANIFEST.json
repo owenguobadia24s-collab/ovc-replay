@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-programme-genesis-wp2-ledger-manifest/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP2",
+  "gate_id": "PG-G2",
+  "baseline_commit": "e9938883d0346e305efee57bd6618da61d4cb844",
+  "branch": "build/pg-wp2-portfolio-ledger",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "artifacts": [
+    "contracts/governance/programme_genesis/PORTFOLIO_LEDGER_AND_PROJECTION_CONTRACT_v0_1.md",
+    "src/ovc/programme_genesis/__init__.py",
+    "src/ovc/programme_genesis/ledger.py",
+    "src/ovc/programme_genesis/projection.py",
+    "src/ovc/programme_genesis/synchronisation.py",
+    "tests/governance/test_pg_wp2.py"
+  ],
+  "invariants": [
+    "APPEND_ONLY_JSONL",
+    "DUPLICATE_EVENT_IDS_REJECTED",
+    "AUTHORITY_EFFECT_REQUIRES_ACCEPTED_OPERATOR_DECISION",
+    "DETERMINISTIC_FIRST_VALID_PRECEDENCE_ID_ORDER",
+    "PARTITIONED_REBUILD_WITH_CROSS_PARTITION_IDENTITY_CHECKS",
+    "PROGRAMME_OWNED_STATE_REMAINS_EFFECTIVE",
+    "STALE_PROJECTION_AND_STATE_SOURCE_CONFLICT_ARE_EXPLICIT",
+    "ENFORCEMENT_DISABLED_PENDING_PG_G6"
+  ],
+  "external_outputs": "NONE_COMPACT_FIXTURE_TEST_ONLY",
+  "blockers": [],
+  "rollback": "Discard derived projections and supersede code; preserve event ledgers and programme-owned source records."
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-programme-genesis-pg-g2-delegated-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP2",
+  "gate_id": "PG-G2",
+  "decision_id": "PG-G2.DELEGATED.PASS.20260803T191900+0100",
+  "decision": "PASS",
+  "authority": "DELEGATED_BY_PG_G0_AND_APPROVED_PLAN_CONTINUOUS_EXECUTION",
+  "implementation_candidate_commit": "341a5dd667c1337b5748581a3f8766d32fbede9a",
+  "tests": {
+    "repository_run": 30840593872,
+    "repository_conclusion": "SUCCESS",
+    "test_count": 94,
+    "merge_readiness_run": 30840593849,
+    "merge_readiness_conclusion": "SUCCESS"
+  },
+  "qa": {
+    "packet": "docs/releases/programme-genesis-v0-2/pg-g2/PG_G2_QA_PACKET.json",
+    "recommendation": "PASS",
+    "blockers": []
+  },
+  "authority_delta": "ACCEPT_APPEND_ONLY_LEDGER_PARTITIONED_PROJECTION_AND_SOURCE_STATE_SYNCHRONISATION_AND_RELEASE_PG_WP3_ONLY",
+  "non_reserved_rationale": [
+    "The ledger and projection are governance-only derived services.",
+    "Programme-owned machine-readable state remains authoritative and is never repaired.",
+    "Existing programme migration remains denied before PG-G3A.",
+    "Admission enforcement and read-only routing remain denied before PG-G6.",
+    "Automatic upkeep remains denied before PG-G7.",
+    "No market, model, selector, release, Validation, publication, agent, probability, risk, exposure or execution authority changes."
+  ],
+  "rollback": "Preserve this decision and append-only source events; discard derived projections and supersede implementation non-destructively.",
+  "merge": {"pull_request": 265, "method": "SQUASH", "merge_commit": "PENDING"},
+  "next_packet": "PG-WP3"
+}
