@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-programme-genesis-pg-g5-qa/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP5",
+  "gate_id": "PG-G5",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "baseline_commit": "ff903e24898094e1ba9408563f76197a9808e583",
+  "candidate_branch": "build/pg-wp5-read-model-control-plane",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "checks": [
+    {"check_id": "PG-G5-DETERMINISTIC-READ-MODEL", "status": "PASS_DESIGN", "evidence": "Rows, counts and logical hashes are deterministically ordered and source-commit bound."},
+    {"check_id": "PG-G5-SOURCE-AUTHORITY", "status": "PASS_DESIGN", "evidence": "Programme-owned source state remains authoritative and the read model is explicitly replaceable."},
+    {"check_id": "PG-G5-MIGRATION-VISIBILITY", "status": "PASS_DESIGN", "evidence": "Migration uncertainty, unresolved fields, conflicts, source path and SHA remain visible per migrated programme."},
+    {"check_id": "PG-G5-HEALTH", "status": "PASS_DESIGN", "evidence": "Health rehashes sources and fails closed on missing/tampered inputs or adapter activation."},
+    {"check_id": "PG-G5-COMPACT-REPORT", "status": "PASS_DESIGN", "evidence": "Compact output exposes counts and denials without replacing detailed findings."},
+    {"check_id": "PG-G5-DISABLED-ADAPTER", "status": "PASS_DESIGN", "evidence": "Adapter remains disabled, unregistered, read-only, non-listening, non-writing and non-enforcing pending PG-G6."},
+    {"check_id": "PG-G5-REPOSITORY-EVIDENCE", "status": "PENDING_CI", "evidence": "Expected eight programmes, fourteen migration warnings, seven health warnings, zero blockers and disabled adapter."},
+    {"check_id": "PG-G5-FOCUSED-TESTS", "status": "PENDING_CI", "evidence": "tests/governance/test_pg_wp5.py and evidence-output tests."},
+    {"check_id": "PG-G5-REPOSITORY-SUITE", "status": "PENDING_CI", "evidence": "GitHub Actions tests."},
+    {"check_id": "PG-G5-MERGE-READINESS", "status": "PENDING_CI", "evidence": "OVC merge readiness."}
+  ],
+  "warnings": [
+    "READ_MODEL_IS_DERIVED_AND_NON_CANONICAL_PENDING_PG_G6",
+    "FOURTEEN_MIGRATION_WARNINGS_AND_SEVEN_HEALTH_WARNINGS_ARE_EXPECTED_TO_REMAIN_VISIBLE",
+    "CONTROL_PLANE_ADAPTER_IS_LOCAL_DISABLED_CANDIDATE_ONLY",
+    "CANON_MIGRATION_ENFORCEMENT_AND_ROUTE_REQUIRE_INDEPENDENT_PG_G6_DECISIONS",
+    "AUTOMATIC_UPKEEP_REMAINS_DENIED_PENDING_PG_G7"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_AND_REPOSITORY_EVIDENCE_PASS",
+  "auto_ratifiable": true,
+  "next_boundary": "PG-G6_OPERATOR_FOUR_PART_DECISION",
+  "rollback": "Discard derived read models, reports and adapter projections; keep the adapter disabled and preserve all source evidence."
+}
