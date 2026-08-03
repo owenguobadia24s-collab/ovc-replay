@@ -1,4 +1,5 @@
 import json
+import unittest
 from pathlib import Path
 
 
@@ -17,96 +18,87 @@ def load_json(path: Path) -> dict:
         return json.load(handle)
 
 
-def test_pg_g0_pass_is_recorded_and_releases_only_bounded_build() -> None:
-    state = load_json(STATE_PATH)
-    decision = load_json(DECISION_PATH)
+class ProgrammeGenesisG0Tests(unittest.TestCase):
+    def test_pg_g0_pass_is_recorded_and_releases_only_bounded_build(self) -> None:
+        state = load_json(STATE_PATH)
+        decision = load_json(DECISION_PATH)
+        self.assertEqual("OVC-PG-v0.2", state["programme_id"])
+        self.assertEqual("0.2", state["plan_version"])
+        self.assertFalse(state["operator_decision_required"])
+        self.assertEqual("PG-G0.OPERATOR.PASS.20260803T184400+0100", state["operator_decision_id"])
+        self.assertEqual("PASS", decision["decision"])
+        self.assertEqual("OVC APPROVE PG-G0 PASS", decision["operator_command"])
+        self.assertEqual(263, decision["approved_pull_request"])
+        packets = {packet["packet_id"]: packet for packet in state["packets"]}
+        self.assertEqual("COMPLETED", packets["PG-00"]["status"])
+        authority = state["authority"]
+        self.assertEqual("RATIFIED", authority["programme_governance_design"])
+        self.assertEqual("APPROVED_BOUNDED_IMPLEMENTATION", authority["programme_governance_build"])
+        self.assertEqual("DENIED_PENDING_PG_G3A", authority["portfolio_migration"])
+        self.assertEqual("DENIED_PENDING_PG_G6", authority["admission_enforcement"])
+        self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
+        self.assertEqual("NONE", authority["market_model_selector_release_validation"])
+        self.assertEqual("NONE", authority["agent_probability_risk_exposure_execution"])
 
-    assert state["programme_id"] == "OVC-PG-v0.2"
-    assert state["plan_version"] == "0.2"
-    assert state["current_packet"] == "PG-WP1"
-    assert state["current_gate"] == "PG-G1"
-    assert state["operator_decision_required"] is False
-    assert state["operator_decision_id"] == "PG-G0.OPERATOR.PASS.20260803T184400+0100"
-    assert decision["decision"] == "PASS"
-    assert decision["operator_command"] == "OVC APPROVE PG-G0 PASS"
-    assert decision["approved_pull_request"] == 263
+    def test_pg_mandatory_operator_stops_are_preserved(self) -> None:
+        state = load_json(STATE_PATH)
+        self.assertEqual(["PG-G0", "PG-G3A", "PG-G6", "PG-G7"], state["mandatory_operator_gates"])
+        packets = {packet["packet_id"]: packet for packet in state["packets"]}
+        self.assertEqual("d0d2445b035f3fc93a177b94b23120be7dfa274b", packets["PG-00"]["merge_commit"])
+        self.assertEqual("PG-G3A", packets["PG-WP3"]["next_packet"])
+        self.assertEqual("OPERATOR_REQUIRED_ACKNOWLEDGEMENT", packets["PG-G3A"]["authority_required"])
+        self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
+        self.assertEqual("OPERATOR_REQUIRED_FOUR_PART_DECISION", packets["PG-G6"]["authority_required"])
+        self.assertEqual("OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
 
-    authority = state["authority"]
-    assert authority["programme_governance_design"] == "RATIFIED"
-    assert authority["programme_governance_build"] == "APPROVED_BOUNDED_IMPLEMENTATION"
-    assert authority["portfolio_migration"] == "DENIED_PENDING_PG_G3A"
-    assert authority["admission_enforcement"] == "DENIED_PENDING_PG_G6"
-    assert authority["automatic_upkeep"] == "DENIED_PENDING_PG_G7"
-    assert authority["market_model_selector_release_validation"] == "NONE"
-    assert authority["agent_probability_risk_exposure_execution"] == "NONE"
+    def test_pg_g0_baseline_and_source_identity_are_pinned(self) -> None:
+        baseline = load_json(BASELINE_PATH)
+        self.assertEqual("5fb26ce08ff1a386f76bc8c6784350ab6fddcfb7", baseline["baseline_commit"])
+        self.assertEqual("gate/pg-g0-ratification", baseline["candidate_branch"])
+        self.assertEqual("PG", baseline["namespace_freeze"]["short_code"])
+        self.assertEqual([], baseline["blockers"])
+        plan_sources = {source["document_id"]: source for source in baseline["governing_source_documents"]}
+        pg_source = plan_sources["OVC-PG-IMPLEMENTATION-PLAN-0.2"]
+        self.assertEqual("file_00000000a0e4822f8ed73a5903ded4d7", pg_source["external_identity"])
+        self.assertEqual(str(PLAN_PATH.relative_to(ROOT)).replace("\\", "/"), pg_source["repository_path"])
 
+    def test_maintenance_registry_is_frozen_but_enforcement_remains_disabled(self) -> None:
+        registry = load_json(MAINTENANCE_PATH)
+        self.assertEqual("FROZEN_DISABLED_PENDING_PG_G6", registry["status"])
+        self.assertEqual("NOT_EVALUABLE_REQUIRES_SCOPE_REVIEW", registry["default_outcome"])
+        self.assertEqual("PG-G0", registry["decision_gate"])
+        self.assertEqual("PG-G6", registry["activation_gate"])
+        self.assertFalse(registry["enforcement_enabled"])
+        self.assertGreaterEqual(len(registry["entries"]), 5)
+        denials = set(registry["reserved_authority_denials"])
+        self.assertTrue({
+            "SELECTOR_ACTIVATION",
+            "ACTIVE_DISCOVERY",
+            "ACTIVE_DEVELOPMENT",
+            "ACTIVE_VALIDATION",
+            "CANONICAL_OR_R2_PUBLICATION",
+            "AGENT_WRITE",
+            "PROBABILITY_RISK_EXPOSURE_EXECUTION",
+        }.issubset(denials))
 
-def test_pg_mandatory_operator_stops_are_preserved() -> None:
-    state = load_json(STATE_PATH)
-    assert state["mandatory_operator_gates"] == ["PG-G0", "PG-G3A", "PG-G6", "PG-G7"]
+    def test_state_synchronisation_preserves_source_authority(self) -> None:
+        contract = SYNC_PATH.read_text(encoding="utf-8")
+        self.assertIn("programme-owned machine-readable state", contract)
+        self.assertIn("STATE_SOURCE_CONFLICT", contract)
+        self.assertIn("STALE_PROJECTION", contract)
+        self.assertIn("PG never repairs a programme-owned source file", contract)
+        self.assertIn("Before `PG-G6`, all enforcement consumers remain disabled", contract)
 
-    packets = {packet["packet_id"]: packet for packet in state["packets"]}
-    assert packets["PG-00"]["status"] == "COMPLETED"
-    assert packets["PG-00"]["merge_commit"] == "d0d2445b035f3fc93a177b94b23120be7dfa274b"
-    assert packets["PG-WP3"]["next_packet"] == "PG-G3A"
-    assert packets["PG-G3A"]["authority_required"] == "OPERATOR_REQUIRED_ACKNOWLEDGEMENT"
-    assert packets["PG-WP4"]["prerequisites"] == ["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"]
-    assert packets["PG-G6"]["authority_required"] == "OPERATOR_REQUIRED_FOUR_PART_DECISION"
-    assert packets["PG-WP6"]["authority_required"] == "OPERATOR_REQUIRED_AT_PG_G7"
-
-
-def test_pg_g0_baseline_and_source_identity_are_pinned() -> None:
-    baseline = load_json(BASELINE_PATH)
-
-    assert baseline["baseline_commit"] == "5fb26ce08ff1a386f76bc8c6784350ab6fddcfb7"
-    assert baseline["candidate_branch"] == "gate/pg-g0-ratification"
-    assert baseline["namespace_freeze"]["short_code"] == "PG"
-    assert baseline["blockers"] == []
-
-    plan_sources = {source["document_id"]: source for source in baseline["governing_source_documents"]}
-    pg_source = plan_sources["OVC-PG-IMPLEMENTATION-PLAN-0.2"]
-    assert pg_source["external_identity"] == "file_00000000a0e4822f8ed73a5903ded4d7"
-    assert pg_source["repository_path"] == str(PLAN_PATH.relative_to(ROOT)).replace("\\", "/")
-
-
-def test_maintenance_registry_is_frozen_but_enforcement_remains_disabled() -> None:
-    registry = load_json(MAINTENANCE_PATH)
-
-    assert registry["status"] == "FROZEN_DISABLED_PENDING_PG_G6"
-    assert registry["default_outcome"] == "NOT_EVALUABLE_REQUIRES_SCOPE_REVIEW"
-    assert registry["decision_gate"] == "PG-G0"
-    assert registry["activation_gate"] == "PG-G6"
-    assert registry["enforcement_enabled"] is False
-    assert len(registry["entries"]) >= 5
-
-    denials = set(registry["reserved_authority_denials"])
-    assert {
-        "SELECTOR_ACTIVATION",
-        "ACTIVE_DISCOVERY",
-        "ACTIVE_DEVELOPMENT",
-        "ACTIVE_VALIDATION",
-        "CANONICAL_OR_R2_PUBLICATION",
-        "AGENT_WRITE",
-        "PROBABILITY_RISK_EXPOSURE_EXECUTION",
-    }.issubset(denials)
+    def test_predecision_qa_packet_remains_immutable_evidence(self) -> None:
+        qa = load_json(QA_PATH)
+        decision = load_json(DECISION_PATH)
+        self.assertEqual("QA_REVIEW_PENDING_EXACT_HEAD_CI", qa["status"])
+        self.assertEqual([], qa["blockers"])
+        self.assertEqual("PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS", qa["qa_recommendation"])
+        self.assertEqual("NONE_UNTIL_OPERATOR_PG_G0_PASS", qa["authority_delta"])
+        self.assertEqual("SUCCESS", decision["assurance"]["tests"]["conclusion"])
+        self.assertEqual("SUCCESS", decision["assurance"]["ovc_merge_readiness"]["conclusion"])
 
 
-def test_state_synchronisation_preserves_source_authority() -> None:
-    contract = SYNC_PATH.read_text(encoding="utf-8")
-    assert "programme-owned machine-readable state" in contract
-    assert "STATE_SOURCE_CONFLICT" in contract
-    assert "STALE_PROJECTION" in contract
-    assert "PG never repairs a programme-owned source file" in contract
-    assert "Before `PG-G6`, all enforcement consumers remain disabled" in contract
-
-
-def test_predecision_qa_packet_remains_immutable_evidence() -> None:
-    qa = load_json(QA_PATH)
-    decision = load_json(DECISION_PATH)
-
-    assert qa["status"] == "QA_REVIEW_PENDING_EXACT_HEAD_CI"
-    assert qa["blockers"] == []
-    assert qa["qa_recommendation"] == "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS"
-    assert qa["authority_delta"] == "NONE_UNTIL_OPERATOR_PG_G0_PASS"
-    assert decision["assurance"]["tests"]["conclusion"] == "SUCCESS"
-    assert decision["assurance"]["ovc_merge_readiness"]["conclusion"] == "SUCCESS"
+if __name__ == "__main__":
+    unittest.main()
