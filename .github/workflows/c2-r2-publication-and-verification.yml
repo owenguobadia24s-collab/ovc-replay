@@ -1,147 +1,40 @@
-name: C2 R2 publication and full remote verification
+name: C2 R2 PUBLICATION AND VERIFICATION — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
-  actions: read
 
 concurrency:
-  group: c2-r2-publication-and-verification
-  cancel-in-progress: false
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  publish-and-verify:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 180
-    env:
-      RCLONE_CONFIG_OVC_R2_TYPE: s3
-      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
-      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
-      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
-      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
-      RCLONE_CONFIG_OVC_R2_REGION: auto
-      RCLONE_CONFIG_OVC_R2_ACL: private
-      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run repository tests
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c2-r2-publication-and-verification.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Install and validate rclone
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y rclone
-          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}"
-          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}"
-          rclone lsf --s3-no-check-bucket ovc_r2:ovc-evidence >/dev/null
-      - name: Download exact Discovery candidate
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30212281089
-          name: c2-opt-b-c2-gbpusd-discovery-2021-2023-v1-frozen-candidate
-          path: publish/discovery
-      - name: Download exact Development candidate
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30212281089
-          name: c2-opt-b-c2-gbpusd-development-2024-v1-frozen-candidate
-          path: publish/development
-      - name: Verify approval and every local byte
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import hashlib, json
-          from pathlib import Path
-          approval=json.loads(Path('docs/releases/opt-b-c2-v2/publication-readiness/C2_PUBLICATION_APPROVAL.json').read_text())
-          assert approval['decision']=='APPROVE_EXACT_R2_PUBLICATION_ONLY'
-          expected={x['role']:x for x in approval['approved_releases']}
-          for role, dirname in [('DISCOVERY','discovery'),('DEVELOPMENT','development')]:
-              root=Path('publish')/dirname
-              manifest_path=root/'manifest.json'
-              manifest=json.loads(manifest_path.read_text())
-              exp=expected[role]
-              assert manifest['release_id']==exp['release_id']
-              assert manifest['manifest_id']==exp['manifest_id']
-              assert hashlib.sha256(manifest_path.read_bytes()).hexdigest()==exp['manifest_file_sha256']
-              copy=dict(manifest); self_hash=copy.pop('manifest_sha256')
-              canonical=(json.dumps(copy,sort_keys=True,separators=(',',':'))+'\n').encode()
-              assert hashlib.sha256(canonical).hexdigest()==self_hash==exp['manifest_sha256']
-              total=0
-              for item in manifest['files']:
-                  p=root/item['path']
-                  assert p.is_file() and not p.is_symlink()
-                  assert p.stat().st_size==item['size_bytes']
-                  h=hashlib.sha256()
-                  with p.open('rb') as f:
-                      for chunk in iter(lambda:f.read(1024*1024),b''): h.update(chunk)
-                  assert h.hexdigest()==item['sha256']
-                  total+=p.stat().st_size
-              assert total==manifest['total_bytes']==exp['manifest_bound_bytes']
-          PY
-      - name: Publish absent roots or verify exact existing roots
-        run: |
-          set -euo pipefail
-          mkdir -p publish/output
-          python - <<'PY'
-          import hashlib, json, os, subprocess
-          from datetime import datetime, timezone
-          from pathlib import Path
-          approval=json.loads(Path('docs/releases/opt-b-c2-v2/publication-readiness/C2_PUBLICATION_APPROVAL.json').read_text())
-          expected={x['role']:x for x in approval['approved_releases']}
-          releases=[]; total_objects=0; total_bytes=0
-          for role, dirname in [('DISCOVERY','discovery'),('DEVELOPMENT','development')]:
-              root=Path('publish')/dirname
-              manifest_path=root/'manifest.json'
-              manifest=json.loads(manifest_path.read_text())
-              exp=expected[role]
-              prefix=f"ovc_r2:ovc-evidence/{exp['remote_prefix'].rstrip('/')}"
-              listing=subprocess.run(['rclone','lsf','--recursive','--s3-no-check-bucket',prefix],capture_output=True,text=True)
-              existing=[x for x in listing.stdout.splitlines() if x]
-              expected_keys=[item['path'] for item in manifest['files']]+['manifest.json']
-              mode='VERIFY_EXISTING' if existing else 'PUBLISH_NEW'
-              if existing and sorted(existing)!=sorted(expected_keys):
-                  raise SystemExit(f'remote collision/incomplete inventory for {role}: {existing}')
-              if not existing:
-                  for item in manifest['files']:
-                      subprocess.run(['rclone','copyto','--immutable','--s3-no-check-bucket',str(root/item['path']),f"{prefix}/{item['path']}"],check=True)
-                  subprocess.run(['rclone','copyto','--immutable','--s3-no-check-bucket',str(manifest_path),f'{prefix}/manifest.json'],check=True)
-              verified=[]
-              for item in manifest['files']:
-                  remote=f"{prefix}/{item['path']}"
-                  proc=subprocess.Popen(['rclone','cat','--s3-no-check-bucket',remote],stdout=subprocess.PIPE)
-                  h=hashlib.sha256(); n=0
-                  while True:
-                      chunk=proc.stdout.read(1024*1024)
-                      if not chunk: break
-                      n+=len(chunk); h.update(chunk)
-                  rc=proc.wait()
-                  if rc or n!=item['size_bytes'] or h.hexdigest()!=item['sha256']:
-                      raise SystemExit(f'remote mismatch: {remote}')
-                  verified.append({'path':item['path'],'size_bytes':n,'sha256':h.hexdigest()})
-                  total_objects+=1; total_bytes+=n
-              data=subprocess.check_output(['rclone','cat','--s3-no-check-bucket',f'{prefix}/manifest.json'])
-              mh=hashlib.sha256(data).hexdigest()
-              if data!=manifest_path.read_bytes() or mh!=exp['manifest_file_sha256']:
-                  raise SystemExit(f'manifest mismatch: {role}')
-              total_objects+=1; total_bytes+=len(data)
-              releases.append({'role':role,'release_id':manifest['release_id'],'manifest_id':manifest['manifest_id'],'manifest_sha256':manifest['manifest_sha256'],'manifest_file_sha256':mh,'publication_mode':mode,'remote_prefix':exp['remote_prefix'],'payload_object_count':len(manifest['files']),'remote_object_count':len(manifest['files'])+1,'payload_bytes':manifest['total_bytes'],'remote_verified':True,'objects':verified})
-          receipt={'schema':'ovc-c2-r2-publication-verification/v1','status':'PASS_FULL_REMOTE_BYTE_VERIFICATION','workflow_run_id':int(os.environ['GITHUB_RUN_ID']),'workflow_commit':os.environ['GITHUB_SHA'],'verified_at':datetime.now(timezone.utc).isoformat(),'source_candidate_run_id':30212281089,'publication_order':'PAYLOAD_FIRST_MANIFEST_LAST','release_count':2,'remote_object_count':total_objects,'remote_verified_bytes_including_manifests':total_bytes,'releases':releases,'selector':'NONE','activation':'NONE','validation_consumption':'LOCKED_UNCONSUMED'}
-          Path('publish/output/C2_R2_REMOTE_VERIFICATION_RECEIPT.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
-          PY
-      - name: Upload remote verification receipt
-        uses: actions/upload-artifact@v4
-        with:
-          name: c2-r2-publication-remote-verification
-          path: publish/output/C2_R2_REMOTE_VERIFICATION_RECEIPT.json
-          retention-days: 90
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

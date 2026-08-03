@@ -1,93 +1,40 @@
-name: PD-JUNE-FULL-MONTH-MDR FM00 source boundary
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  fm00-source-boundary:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Parse and reproduce amended source profile
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src python - <<'PY'
-          import json
-          from pathlib import Path
-          from ovc.research_operations.pattern_discovery.full_month_mdr import build_source_profile
-
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
-          authority = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json').read_text())
-          amendment = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json').read_text())
-          stored = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_SOURCE_PROFILE.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
-          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_FM00_QA_PACKET.json').read_text())
-          schema = json.loads(Path('schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_v0_1.schema.json').read_text())
-
-          assert stored == build_source_profile()
-          assert authority['decision'] == 'PASS'
-          assert authority['decision_authority'] == 'OPERATOR'
-          assert amendment['decision'] == 'PASS'
-          assert amendment['decision_authority'] == 'OPERATOR'
-          assert amendment['bounded_interpretation'] == 'WAIVE_NATIVE_JULY_H1_MONTHLY_TRANSPORT_ONLY_RETAIN_JULY_M1_CONTEXT'
-          assert qa['status'] == 'APPROVED_MERGE_READY_AFTER_FINAL_HEAD_CI'
-          assert qa['qa_result'] == 'PASS_SOURCE_BOUNDARY_AND_AUTHORITY_FREEZE'
-          assert qa['recommendation'] == 'PASS_FM00_AND_SQUASH_MERGE_THEN_CONTINUE_TO_WP1_TOOLING'
-          assert schema['properties']['source_slice_id']['const'] == stored['source_slice_id']
-          assert stored['plan_amendment'] == 'PD-JUNE-FM-A1-JULY-NATIVE-H1-WAIVER'
-          assert stored['m1_daily_partition_count_per_side'] == 34
-          assert stored['h1_monthly_transport_count_per_side'] == 2
-          assert stored['h1_monthly_transport_months_utc'] == ['2026-05', '2026-06']
-          assert stored['native_july_h1_transport'] == 'WAIVED_BY_OPERATOR_A1_PROVIDER_OBJECT_UNAVAILABLE'
-          assert stored['post_target_h1_context'] == 'M1_DERIVED_FROM_COMPLETE_JULY_CONTEXT_BARS'
-          assert state['packet_id'] in {'PD-JUNE-FM-WP1', 'PD-JUNE-FM-WP2'}
-          assert state['status'] in {'QA_REVIEW', 'GATE_READY', 'APPROVED', 'COMPLETED', 'READY', 'RUNNING', 'IMPLEMENTED'}
-          assert state['next_packet'] in {'PD-JUNE-FM-WP2', 'PD-JUNE-FM-WP3'}
-          assert state['provider_execution_in_ci'] == 'DENIED'
-          PY
-      - name: Run focused FM00 tests
-        run: PYTHONPATH=src python -m unittest tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr -v
-      - name: Run complete repository suite
-        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
-      - name: Enforce unchanged target and retained authority
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
-          authority = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json').read_text())
-          amendment = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json').read_text())
-          profile = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_SOURCE_PROFILE.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
-
-          assert profile['target_start_utc'] == '2026-06-01T00:00:00Z'
-          assert profile['target_end_exclusive_utc'] == '2026-07-01T00:00:00Z'
-          assert profile['source_start_utc'] == '2026-05-30T00:00:00Z'
-          assert profile['source_end_exclusive_utc'] == '2026-07-03T00:00:00Z'
-          assert profile['target_eligibility'] == 'TARGET_JUNE_ONLY'
-          assert profile['m1_daily_partition_dates_utc'][-2:] == ['2026-07-01', '2026-07-02']
-          assert profile['provider_execution_in_ci'] == 'DENIED'
-          assert profile['release_status'] == 'NOT_A_RELEASE'
-          assert profile['selector_eligibility'] == 'NONE'
-          assert profile['r2_publication'] == 'DENIED'
-          assert profile['validation_consumption'] == 'DENIED'
-          assert amendment['authority_delta'] == 'WAIVE_NATIVE_JULY_H1_IMPORT_DERIVE_POST_TARGET_H1_FROM_M1'
-          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
-          for prohibited in (
-              'FORMULA_CHANGE',
-              'THRESHOLD_CHANGE',
-              'SELECTOR_OR_RELEASE_MUTATION',
-              'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND',
-              'R2_PUBLICATION',
-              'VALIDATION_CONSUMPTION',
-          ):
-              assert prohibited in authority['retained_prohibitions']
-              assert prohibited in amendment['retained_prohibitions']
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

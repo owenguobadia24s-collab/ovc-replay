@@ -1,44 +1,40 @@
-name: RPS-WP3 derived prospective compute
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - 'contracts/research_operations/prospective_source/RPS_DERIVED_COMPUTE_AND_BINDING_CONTRACT_v0_1.md'
-      - 'schemas/research_operations/prospective_source/prospective_compute_receipt_v0_1.schema.json'
-      - 'src/ovc/opt_b/c1/adapter.py'
-      - 'src/ovc/opt_b/c2/adapter.py'
-      - 'src/ovc/research_operations/prospective_source/prospective_compute.py'
-      - 'tests/research_operations/prospective_source/test_rps_wp3_prospective_compute.py'
-      - 'scripts/run_rps_wp3_compute.ps1'
-      - '.github/workflows/rps-wp3-derived-compute.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'src/ovc/research_operations/prospective_source/prospective_compute.py'
-      - 'tests/research_operations/prospective_source/test_rps_wp3_prospective_compute.py'
+  workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  trust:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Focused prospective compute tests
-        run: PYTHONPATH=src python -m unittest tests.research_operations.prospective_source.test_rps_wp3_prospective_compute -v
-      - name: Canonical repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert external execute denied in CI
-        env:
-          CI: 'true'
-          OVC_EXTERNAL_ARTIFACT_ROOT: /tmp/ovc-rps-wp3-external
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set +e
-          PYTHONPATH=src python -m ovc.research_operations.prospective_source.prospective_compute execute --repository-root "$PWD" --gate RPS-G2
-          code=$?
-          set -e
-          test "$code" -eq 2
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

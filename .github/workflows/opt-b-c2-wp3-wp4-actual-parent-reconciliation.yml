@@ -1,52 +1,40 @@
-name: OPT-B.C2 WP3-WP4 actual-parent reconciliation
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  actual-parent-reconciliation:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run focused reconciliation tests
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src python -m unittest \
-            tests.opt_b.c2.test_wp3_structure_engine \
-            tests.opt_b.c2.test_wp4_state_persistence_transition \
-            tests.opt_b.c2.test_c2_wp5_replay -v
-      - name: Verify reconciliation authority
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          gate = json.loads(Path(
-              'docs/releases/opt-b-c2-v2/wp3-wp4-reconciliation/WP3_WP4_RECONCILIATION_GATE_PACKET.json'
-          ).read_text())
-          authority = Path(
-              'registries/implementation/OPT_B_C2_WP3_WP4_ACTUAL_PARENT_RECONCILIATION.yaml'
-          ).read_text()
-          contract = Path(
-              'contracts/opt_b/c2/C1_V2_AND_OPT_A_PRICE_PARENT_TO_C2_INPUT_PROFILE_v0_2.md'
-          ).read_text()
-          schema = json.loads(Path(
-              'schemas/opt_b/c2/c2_actual_parent_handoff_v0_2.schema.json'
-          ).read_text())
-
-          assert gate['decision'] == 'PASS_ACTUAL_C1_AND_EXACT_OPT_A_PRICE_PARENT_ENGINE_TRUST'
-          assert gate['blocking_issues'] == 0
-          assert gate['authority']['local_candidate_release'] == 'NONE'
-          assert gate['authority']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert 'actual_c1_primitive_adapter: TRUSTED_FIXTURE_EXACT_SHAPE' in authority
-          assert 'synthetic_embedded_price_assumption: SUPERSEDED' in authority
-          assert 'C1 record remains the atomic-fact authority' in contract
-          assert schema['properties']['role']['enum'] == ['DISCOVERY', 'DEVELOPMENT']
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

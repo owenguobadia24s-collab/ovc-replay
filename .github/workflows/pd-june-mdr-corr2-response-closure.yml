@@ -1,81 +1,40 @@
-name: PD-JUNE-MDR-CORR2 response validation and return gate
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  corr2-response-closure:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Parse CORR2 closure, decision and merge court records
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import hashlib
-          import json
-          from pathlib import Path
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
-          paths = [
-              base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.completed.json',
-              base / 'PD_JUNE_MDR_CORR2_RESPONSE_VALIDATION_RECEIPT.json',
-              base / 'PD_JUNE_MDR_CORR2_SCORED_REVIEW.json',
-              base / 'PD_JUNE_MDR_CORR2_POST_UNBLINDING_COMPARISON.json',
-              base / 'PD_JUNE_MDR_CORR2_CLOSURE_QA_PACKET.json',
-              base / 'PD_JUNE_MDR_G1_CORR2_RETURN_GATE_PACKET.json',
-              base / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json',
-              base / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json',
-              Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json'),
-              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_corr2_response_closure_v0_1.schema.json'),
-              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_g1_corr2_operator_decision_v0_1.schema.json'),
-              Path('schemas/research_operations/pattern_discovery/pd_june_mdr_g1_corr2_merge_receipt_v0_1.schema.json'),
-          ]
-          records = {str(path): json.loads(path.read_text(encoding='utf-8')) for path in paths}
-          response_path = base / 'PD_JUNE_MDR_CORR2_BLINDED_REVIEW_RESPONSE.completed.json'
-          validation = records[str(base / 'PD_JUNE_MDR_CORR2_RESPONSE_VALIDATION_RECEIPT.json')]
-          assert hashlib.sha256(response_path.read_bytes()).hexdigest() == validation['response_file_sha256']
-          assert validation['response_file_sha256'] == '1fb60b05b0a85cc95074bb2867b67f1debbdd2310ca5e98a3af2ba0b934e9a8d'
-          PY
-      - name: Run focused CORR2 response-closure tests
-        run: |
-          PYTHONPATH=src python -m unittest \
-            tests.research_operations.pattern_discovery.test_pd_june_mdr_corr2_control_agreement \
-            tests.research_operations.pattern_discovery.test_pd_june_mdr_corr2_response_closure \
-            -v
-      - name: Run complete repository suite
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce completed DEFER merge receipt and retained authority
+      - name: Assert no side-effect authority
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-mdr-corr2')
-          score = json.loads((base / 'PD_JUNE_MDR_CORR2_SCORED_REVIEW.json').read_text())
-          decision = json.loads((base / 'PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json').read_text())
-          receipt = json.loads((base / 'PD_JUNE_MDR_G1_CORR2_MERGE_RECEIPT.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_2026_REVIEW_ASSURANCE_STATE_v0_1.json').read_text())
-          assert score['bounded_result'] == 'DEFER_OR_BLOCK_EXACT_JUNE_CONTROLLED_REPEAT_REVIEW'
-          assert decision['decision'] == 'DEFER'
-          assert decision['decision_authority'] == 'OPERATOR'
-          assert decision['next_packet'] is None
-          assert receipt['merge_result'] == 'PASS_SQUASH_MERGED_TO_MAIN'
-          assert receipt['packet_merge_commit'] == '306e449acdaddbb0131fd01aca6098dd8ab0b7ef'
-          assert receipt['next_packet'] is None
-          assert state['status'] == 'COMPLETED'
-          assert state['review_status'] == 'COMPLETED'
-          assert state['merge_status'] == 'PASS_SQUASH_MERGED_TO_MAIN'
-          assert state['merge_commit'] == '306e449acdaddbb0131fd01aca6098dd8ab0b7ef'
-          assert state['next_gate'] is None
-          assert state['next_packet'] is None
-          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
-          assert state['second_june_replay'] == 'DENIED_NOT_REQUIRED'
-          for prohibited in ('PROVIDER_INTAKE', 'MACHINE_REPLAY', 'CANONICAL_2021_2023_DISCOVERY_PROCESSING_OR_APPEND', 'R2_PUBLICATION', 'VALIDATION_CONSUMPTION'):
-              assert prohibited in state['retained_prohibitions']
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

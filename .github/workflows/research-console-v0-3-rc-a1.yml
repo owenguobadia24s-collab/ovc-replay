@@ -1,41 +1,40 @@
-name: Research Console v0.3 RC-A1 amendment acceptance
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  amendment-acceptance:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Verify RC-A1 acceptance packet
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          packet = json.loads(Path('docs/releases/research-console-v0-3/rc-a1/RC_A1_GATE_PACKET.json').read_text())
-          registry = Path('registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml').read_text()
-          workspace = Path('registries/research_operations/RESEARCH_CONSOLE_WORKSPACE_REGISTRY_v0_3.yaml').read_text()
-          migration = Path('registries/research_operations/RESEARCH_CONSOLE_ROUTE_MIGRATION_REGISTRY_v0_3.yaml').read_text()
-          context = Path('registries/research_operations/RESEARCH_CONSOLE_CONTEXT_STATE_REGISTRY_v0_3.yaml').read_text()
-          surfaces = Path('registries/research_operations/RESEARCH_CONSOLE_GLOBAL_SURFACE_REGISTRY_v0_3.yaml').read_text()
-          assert packet['decision'] == 'PASS_V0_3_INFORMATION_ARCHITECTURE_ACCEPTED'
-          assert packet['blocking_issues'] == 0
-          assert packet['authority_delta']['rc_wp1_v0_3'] == 'AUTHORISED_FIXTURE_ONLY_LOCAL_PRESENTATION'
-          assert workspace.count('workspace_id:') == 3
-          assert migration.count('v0_2_route_id:') == 14
-          assert 'post_cutoff_access: DENIED' in context
-          assert 'command_palette_cannot_bypass_action_registry: true' in surfaces
-          assert 'stage: RC_A1_PASS_RC_WP1_V0_3_AUTHORISED' in registry
-          assert 'research_write_authority: DENIED_PENDING_SEPARATE_GATE' in registry
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

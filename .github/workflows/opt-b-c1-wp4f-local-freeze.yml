@@ -1,67 +1,40 @@
-name: OPT-B.C1 WP4F local release freeze
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
-  actions: read
+
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  packet-tests:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: PYTHONPATH=src python -m unittest discover -s tests -v
-
-  freeze-and-verify:
-    needs: packet-tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Download exact B1-G1 accepted candidate
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30185680001
-          name: c1-wp4-gbpusd-discovery-development-local-candidate
-          path: candidate
-      - name: Build frozen release roots and verify every byte
-        run: python scripts/opt_b/freeze_c1_wp4f_release.py --candidate-root candidate --output-root frozen
-      - name: Assert authority boundary
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          grep -F '"status":"PASS"' frozen/WP4F_FREEZE_REPORT.json
-          grep -E 'state: C1_(B1_G1_PASS_EXACT_CANDIDATE_FREEZE_AUTHORISED_NO_PUBLICATION_AUTHORITY|B1_G2_PASS_PUBLICATION_READY_WP5_AUTHORISED_NO_SELECTOR|WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_NO_SELECTOR|B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED)' registries/authority/ACTIVE_AUTHORITY.yaml
-          grep -E 'selector: (NONE|SHADOW)' registries/authority/ACTIVE_AUTHORITY.yaml
-          grep -F 'validation_consumption: LOCKED_UNCONSUMED' registries/authority/ACTIVE_AUTHORITY.yaml
-          grep -F 'c2_consumption: DENIED_PENDING_SEPARATE_HANDOFF_REVIEW' registries/authority/ACTIVE_AUTHORITY.yaml
-      - name: Upload frozen Discovery release
-        uses: actions/upload-artifact@v4
-        with:
-          name: c1-opt-b-c1-gbpusd-discovery-2021-2023-v1-frozen
-          path: frozen/OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1/**
-          compression-level: 0
-          retention-days: 90
-      - name: Upload frozen Development release
-        uses: actions/upload-artifact@v4
-        with:
-          name: c1-opt-b-c1-gbpusd-development-2024-v1-frozen
-          path: frozen/OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1/**
-          compression-level: 0
-          retention-days: 90
-      - name: Upload freeze report
-        uses: actions/upload-artifact@v4
-        with:
-          name: c1-wp4f-freeze-verification-report
-          path: frozen/WP4F_FREEZE_REPORT.json
-          retention-days: 90
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

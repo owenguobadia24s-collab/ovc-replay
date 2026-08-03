@@ -1,93 +1,40 @@
-name: RO3-G1 deterministic C1 indexes
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - "contracts/research_operations/v0_3/RO3_C1_INDEX_CONTRACT_v0_1.md"
-      - "schemas/research_operations/v0_3/**"
-      - "registries/research_operations/v0_3/**"
-      - "fixtures/research_operations/v0_3/wp1_c1_index_cases.json"
-      - "src/ovc/research_operations/v0_3/**"
-      - "tests/research_operations/v0_3/test_c1_index*.py"
-      - "benchmarks/research_operations/v0_3/**"
-      - "docs/releases/research-operations-foundation-v0-3/ro3-g1/**"
-      - ".github/workflows/research-operations-v0-3-ro3-g1.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  ro3-g1:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Capture focused C1 index test result
-        shell: bash
+      - name: Retired workflow notice
         run: |
-          set +e
-          PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_c1_index.py' -v > ro3-g1-focused.log 2>&1
-          status=$?
-          printf '%s\n' "$status" > ro3-g1-focused.status
-          cat ro3-g1-focused.log
-          exit 0
-      - name: Upload focused diagnostics
-        uses: actions/upload-artifact@v4
-        with:
-          name: ro3-g1-focused-diagnostics
-          path: |
-            ro3-g1-focused.log
-            ro3-g1-focused.status
-          if-no-files-found: error
-      - name: Require focused test PASS
-        run: test "$(cat ro3-g1-focused.status)" = "0"
-      - name: Full-corpus shape benchmark and deterministic rerun
-        env:
-          RO3_BENCHMARK_OUTPUT: ro3-c1-index-benchmark-runtime.json
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_c1_index_performance.py' -v
-      - name: Upload benchmark evidence
-        uses: actions/upload-artifact@v4
-        with:
-          name: ro3-c1-index-benchmark-runtime
-          path: ro3-c1-index-benchmark-runtime.json
-          if-no-files-found: error
-      - name: Capture canonical repository test result
-        shell: bash
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          set +e
-          PYTHONPATH=src python -m unittest discover -s tests -v > ro3-g1-canonical.log 2>&1
-          status=$?
-          printf '%s\n' "$status" > ro3-g1-canonical.status
-          tail -n 200 ro3-g1-canonical.log
-          exit 0
-      - name: Upload canonical diagnostics
-        uses: actions/upload-artifact@v4
-        with:
-          name: ro3-g1-canonical-diagnostics
-          path: |
-            ro3-g1-canonical.log
-            ro3-g1-canonical.status
-          if-no-files-found: error
-      - name: Require canonical suite PASS
-        run: test "$(cat ro3-g1-canonical.status)" = "0"
-      - name: Boundary assertions
-        shell: bash
-        run: |
-          set -euo pipefail
-          grep -q 'LOCKED_UNCONSUMED' contracts/research_operations/v0_3/RO3_C1_INDEX_CONTRACT_v0_1.md
-          grep -q 'writes.*NONE' src/ovc/research_operations/v0_3/c1_index.py
-          test ! -e var/research_operations/v0_3/research.sqlite
-          ! grep -R --line-number -E 'selector_write|threshold_write|r2_write|ACTIVE_VALIDATION' src/ovc/research_operations/v0_3/c1_index.py
-      - name: Verify ratified gate packet when materialised
-        shell: bash
-        run: |
-          if test -f docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json; then
-            grep -q '"decision": "PASS"' docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json
-            grep -q '"qa_recommendation": "PASS"' docs/releases/research-operations-foundation-v0-3/ro3-g1/RO3_G1_GATE_PACKET.json
-            test -f benchmarks/research_operations/v0_3/C1_INDEX_PERFORMANCE_BENCHMARK_v0_1.json
-          fi
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

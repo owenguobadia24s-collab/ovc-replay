@@ -1,35 +1,40 @@
-name: OPT-B.C2 WP4 state engine trust
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  c2-g3-engine-trust:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Verify C2-G3 packet and authority boundary
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate=json.loads(Path('docs/releases/opt-b-c2-v2/wp4/WP4_GATE_PACKET.json').read_text())
-          authority=Path('registries/implementation/OPT_B_C2_WP4_ENGINE_TRUST.yaml').read_text()
-          assert gate['decision']=='PASS_C2_PARALLEL_STATE_PERSISTENCE_AND_TRANSITION_ENGINE_TRUST'
-          assert gate['blocking_issues']==0
-          assert gate['fixture_trust']=='PASS_SYNTHETIC_ONLY'
-          assert gate['authority_delta']['candidate_release']=='DENIED_PENDING_REPLAY_QA'
-          assert gate['authority_delta']['selector']=='NONE'
-          assert 'validation_consumption: LOCKED_UNCONSUMED' in authority
-          assert 'probability: NONE' in authority
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

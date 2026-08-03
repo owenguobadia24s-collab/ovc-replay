@@ -1,50 +1,40 @@
-name: OPT-B.C1 C1-to-C2 handoff and active activation
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  handoff-active-gate:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run active handoff tests
-        run: PYTHONPATH=src python -m unittest tests.opt_b.c1.test_c1_c2_handoff_active -v
-      - name: Verify exact authority boundary and lawful corrective successor
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('docs/releases/opt-b-c1-v2/c1-c2-handoff/C1_C2_HANDOFF_GATE_PACKET.json').read_text())
-          selectors = Path('registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml').read_text()
-          releases = Path('registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml').read_text()
-          authority = Path('registries/authority/C1_TO_C2_ACTIVE_HANDOFF_AUTHORITY.yaml').read_text()
-          corrective = Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G4_G5_COORDINATED_SELECTOR_TRANSACTION.json')
-          assert gate['decision'] == 'PASS_C1_ACTIVE_C2_BUILD_AND_REPLAY_SCOPE_AUTHORISED'
-          assert gate['blocking_issues'] == 0
-          assert selectors.count('selector_state: ACTIVE') == 2
-          assert 'authority_state: ACTIVE_DISCOVERY' in selectors
-          assert 'authority_state: ACTIVE_DEVELOPMENT' in selectors
-          assert selectors.count('selector_state: NONE') == 1
-          assert 'LOCKED_UNCONSUMED' in selectors
-          assert 'C1_TO_C2_HANDOFF_PASS_C1_ACTIVE_C2_SCOPE_AUTHORISED' in releases
-          assert gate['c2_scope']['selector'] == 'NONE'
-          assert gate['c2_scope']['activation'] == 'DENIED_PENDING_C2_GATES'
-          if corrective.exists():
-              transaction = json.loads(corrective.read_text())
-              assert transaction['status'] == 'APPROVED_MATERIALISED_EFFECTIVE_ON_MAIN_MERGE'
-              assert transaction['atomic_on_main_merge'] is True
-              assert 'OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2' in selectors
-              assert 'OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v2' in selectors
-              assert 'status: PASS_C1_V2_ACTIVE_C2_V2_ACTIVE_DISCOVERY' in authority
-              assert 'c2_activation: ACTIVE_DISCOVERY' in authority
-              assert transaction['retained_prohibitions']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

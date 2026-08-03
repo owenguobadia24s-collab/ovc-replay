@@ -1,50 +1,40 @@
-name: C1C-G5 CORR3 terminal-state hotfix
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - 'src/ovc/research_operations/pattern_discovery/corr3_corr2_state_compat.py'
-      - 'src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure_entry.py'
-      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_corr2_terminal_state_hotfix.py'
-      - '.github/workflows/c1c-g5-corr3-terminal-state-hotfix.yml'
-  push:
-    branches:
-      - 'hotfix/c1c-g5-corr3-corr2-terminal-state'
+  workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  terminal-state-compatibility:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run focused hotfix tests
-        env:
-          PYTHONPATH: src
-        run: >-
-          python -m unittest
-          tests.research_operations.pattern_discovery.test_c1c_g5_corr3_corr2_terminal_state_hotfix
-          -v
-      - name: Run retained CORR3 tests
-        env:
-          PYTHONPATH: src
-        run: >-
-          python -m unittest
-          tests.research_operations.pattern_discovery.test_c1c_g5_corr3_structural_comparison
-          tests.research_operations.pattern_discovery.test_c1c_g5_corr3_console_boundary
-          tests.research_operations.pattern_discovery.test_c1c_g5_corr3_merge_state
-          -v
-      - name: Run complete repository tests
-        env:
-          PYTHONPATH: src
-        run: python -m unittest discover -s tests -v
-      - name: Enforce bounded compatibility surface
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          ! grep -R "machine_replay.*ALLOWED\|canonical_append.*ALLOWED\|selector_mutation.*ALLOWED" \
-            src/ovc/research_operations/pattern_discovery/corr3_corr2_state_compat.py
-          grep -q 'COMPLETED_IN_MAIN_AND_SIGNED_OPERATOR_REREVIEW_COMPLETE' \
-            src/ovc/research_operations/pattern_discovery/corr3_corr2_state_compat.py
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

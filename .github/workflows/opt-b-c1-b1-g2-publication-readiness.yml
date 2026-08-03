@@ -1,144 +1,40 @@
-name: OPT-B.C1 B1-G2 publication readiness
+name: OPT B C1 B1 G2 PUBLICATION READINESS — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
-  actions: read
+
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  packet-tests:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run repository tests
-        shell: bash
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set +e
-          PYTHONPATH=src python -m unittest discover -s tests -v > unit-tests.log 2>&1
-          status=$?
-          tail -n 160 unit-tests.log
-          exit $status
-
-  exact-frozen-release-review:
-    needs: packet-tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      RCLONE_CONFIG_OVC_R2_TYPE: s3
-      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
-      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
-      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
-      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
-      RCLONE_CONFIG_OVC_R2_REGION: auto
-      RCLONE_CONFIG_OVC_R2_ACL: private
-      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install rclone
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/opt-b-c1-b1-g2-publication-readiness.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y rclone
-      - name: Require configured R2 credentials
-        run: |
-          set -euo pipefail
-          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo "::error::Missing R2 access-key secret"; exit 1; }
-          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo "::error::Missing R2 secret-key secret"; exit 1; }
-          rclone listremotes | grep -Fx 'ovc_r2:'
-      - name: Download exact WP4F Discovery release
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30187276514
-          name: c1-opt-b-c1-gbpusd-discovery-2021-2023-v1-frozen
-          path: b1-g2/discovery
-      - name: Download exact WP4F Development release
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30187276514
-          name: c1-opt-b-c1-gbpusd-development-2024-v1-frozen
-          path: b1-g2/development
-      - name: Download exact WP4F freeze report
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: 30187276514
-          name: c1-wp4f-freeze-verification-report
-          path: b1-g2/report
-      - name: Confirm pre-publication absence or accepted post-WP5 successor
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p b1-g2/output
-          if grep -Eq 'status: (WP5_PASS_REMOTE_VERIFIED_PENDING_B1_G4_REVIEW|B1_G5_PASS_SHADOW_SELECTED_C2_DENIED)' registries/opt_b/c1/C1_RELEASE_REGISTRY.yaml; then
-            echo POST_WP5_REMOTE_VERIFIED > b1-g2/output/review-mode.txt
-            python - <<'PY'
-          import json
-          from pathlib import Path
-          receipt = json.loads(Path('docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json').read_text())
-          assert receipt['status'] == 'PASS_FULL_REMOTE_BYTE_VERIFICATION'
-          assert receipt['release_count'] == 2
-          assert receipt['remote_object_count'] == 194
-          assert receipt['selector_activation'] == 'NONE'
-          assert receipt['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert all(item['remote_verified'] for item in receipt['releases'])
-          Path('b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json').write_text(json.dumps({
-              'schema': 'ovc-c1-b1-g2-successor-review/v1',
-              'status': 'PASS',
-              'review_mode': 'POST_WP5_REMOTE_VERIFIED',
-              'selector_activation': 'NONE',
-              'validation_consumption': 'LOCKED_UNCONSUMED',
-              'source_wp5_receipt': 'docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json',
-          }, sort_keys=True, separators=(',', ':')) + '\n')
-          PY
-          else
-            echo PRE_WP5_COLLISION_ABSENCE > b1-g2/output/review-mode.txt
-            : > b1-g2/output/remote-collision-preflight.txt
-            while IFS='|' read -r release manifest; do
-              prefix="canonical/releases/${release}/${manifest}/"
-              listing=$(rclone lsf --recursive --s3-no-check-bucket "ovc_r2:${prefix}" 2>/dev/null || true)
-              if [ -n "$listing" ]; then
-                echo "::error::Remote collision under ${prefix}"
-                printf '%s\n' "$listing"
-                exit 1
-              fi
-              printf '%s ABSENT\n' "$prefix" | tee -a b1-g2/output/remote-collision-preflight.txt
-            done <<'EOF'
-          OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1|MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v1.r1
-          OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1|MANIFEST.C1.OPT-B.C1.GBPUSD.DEVELOPMENT.2024.v1.r1
-          EOF
-          fi
-      - name: Verify every frozen byte and publication binding before WP5
-        if: ${{ hashFiles('b1-g2/output/remote-collision-preflight.txt') != '' }}
-        run: |
-          python scripts/opt_b/review_c1_b1_g2_release.py \
-            --discovery-root b1-g2/discovery \
-            --development-root b1-g2/development \
-            --freeze-report b1-g2/report/WP4F_FREEZE_REPORT.json \
-            --remote-collision-state PASS_ABSENT \
-            --output b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json
-      - name: Assert retained historical B1-G2 authority boundary
-        run: |
-          grep -F '"status":"PASS"' b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json
-          grep -F '"selector_activation":"NONE"' b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json
-          grep -F '"validation_consumption":"LOCKED_UNCONSUMED"' b1-g2/output/B1_G2_PUBLICATION_READINESS_RECEIPT.json
-      - name: Upload B1-G2 verification receipt
-        uses: actions/upload-artifact@v4
-        with:
-          name: c1-b1-g2-publication-readiness-receipt
-          path: b1-g2/output/*
-          retention-days: 90
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

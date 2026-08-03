@@ -1,62 +1,40 @@
-name: Market Translation Audit MTA-G2 source and C1 audit
+name: MARKET TRANSLATION AUDIT MTA G2 — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - "contracts/research_operations/mta/**"
-      - "schemas/research_operations/mta/**"
-      - "registries/research_operations/mta/**"
-      - "src/ovc/research_operations/mta/**"
-      - "scripts/research_operations/validate_mta_wp2.py"
-      - "tests/research_operations/mta/**"
-      - "fixtures/research_operations/mta/**"
-      - "docs/releases/market-translation-audit-v0-2/**"
-      - ".github/workflows/market-translation-audit-mta-g2.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  mta-g2:
-    name: mta-g2
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.pull_request.title, 'MTA-WP2')
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate MTA-WP2 compact and external evidence binding
-        run: PYTHONPATH=src python -u scripts/research_operations/validate_mta_wp2.py
-      - name: Focused MTA-WP2 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp2.py' -v
-      - name: Retained MTA-WP1 and MTA-G0 tests
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_wp1.py' -v
-          PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -p 'test_mta_g0.py' -v
-      - name: Complete repository suite
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/market-translation-audit-mta-g2.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert audit-only authority and exact accounting
-        shell: bash
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root = Path('.')
-          ref = json.loads((root / 'docs/releases/market-translation-audit-v0-2/mta-g2/MTA_WP2_EXTERNAL_AUDIT_REFERENCE.json').read_text())
-          assert ref['qa_recommendation'] == 'PASS'
-          assert ref['authority_delta'] == 'AUDIT_EVIDENCE_ONLY'
-          assert ref['validation_consumption'] == 'DENIED'
-          assert ref['r2_publication'] == 'DENIED'
-          assert ref['repair_performed'] is False
-          assert ref['record_accounting']['audited_derived_records_total'] == 10178
-          assert ref['record_accounting']['unaccounted_derived_records'] == 0
-          assert all(value == 0 for value in ref['mismatch_counts'].values())
-          assert len(ref['input_files']) == 8
-          assert len({(x['role'], x['clock'], x['side']) for x in ref['input_files']}) == 8
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

@@ -1,170 +1,40 @@
-name: C1 wick-balance corrective WP2
+name: C1 WICK BALANCE CORRECTIVE WP2 — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
-  actions: read
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  exact-corpus-candidates:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 45
-    env:
-      SOURCE_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
           fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-
-      - name: Download exact OPT-A Discovery parent
-        uses: actions/download-artifact@v4
-        with:
-          name: a2-g3-opt-a-gbpusd-discovery-2021-2023-v2
-          path: inputs/opt-a-discovery
-          repository: owenguobadia24s-collab/ovc-replay
-          run-id: 30179286521
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download exact OPT-A Development parent
-        uses: actions/download-artifact@v4
-        with:
-          name: a2-g3-opt-a-gbpusd-development-2024-v2
-          path: inputs/opt-a-development
-          repository: owenguobadia24s-collab/ovc-replay
-          run-id: 30179286521
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download active C1 Discovery release
-        uses: actions/download-artifact@v4
-        with:
-          name: c1-opt-b-c1-gbpusd-discovery-2021-2023-v1-frozen
-          path: inputs/c1-discovery-v1
-          repository: owenguobadia24s-collab/ovc-replay
-          run-id: 30187276514
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download active C1 Development release
-        uses: actions/download-artifact@v4
-        with:
-          name: c1-opt-b-c1-gbpusd-development-2024-v1-frozen
-          path: inputs/c1-development-v1
-          repository: owenguobadia24s-collab/ovc-replay
-          run-id: 30187276514
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download active-parent C2 Discovery release
-        uses: actions/download-artifact@v4
-        with:
-          name: c2-opt-b-c2-gbpusd-discovery-2021-2023-v1-frozen-candidate
-          path: inputs/c2-discovery-v1
-          repository: owenguobadia24s-collab/ovc-replay
-          run-id: 30212281089
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Download active-parent C2 Development release
-        uses: actions/download-artifact@v4
-        with:
-          name: c2-opt-b-c2-gbpusd-development-2024-v1-frozen-candidate
-          path: inputs/c2-development-v1
-          repository: owenguobadia24s-collab/ovc-replay
-          run-id: 30212281089
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run exact impact audit, two replays and local candidate freeze
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src python scripts/opt_b/run_c1_corrective_wp2.py \
-            --opt-a-discovery inputs/opt-a-discovery \
-            --opt-a-development inputs/opt-a-development \
-            --active-c1-discovery inputs/c1-discovery-v1 \
-            --active-c1-development inputs/c1-development-v1 \
-            --active-c2-discovery inputs/c2-discovery-v1 \
-            --active-c2-development inputs/c2-development-v1 \
-            --output-root c1c-wp2-output \
-            --source-commit "$SOURCE_COMMIT"
-
-      - name: Materialize pinned RO3 assurance implementation
-        run: |
-          git fetch origin 260e5b5ad4c80c116b50c2245e3893df3845faa0
-          git checkout 260e5b5ad4c80c116b50c2245e3893df3845faa0 -- \
-            scripts/research_operations/run_ro3_g3_assurance.py \
-            src/ovc/research_operations/v0_3/__init__.py \
-            src/ovc/research_operations/v0_3/metamorphic.py \
-            fixtures/research_operations/v0_3/wp3_metamorphic_cases.json \
-            registries/research_operations/v0_3/RO3_ASSURANCE_CHECK_REGISTRY_v0_1.yaml \
-            schemas/research_operations/v0_3/c1_determinism_receipt_v0_1.schema.json \
-            schemas/research_operations/v0_3/c1_metamorphic_assertion_v0_1.schema.json \
-            schemas/research_operations/v0_3/c1_metamorphic_run_v0_1.schema.json \
-            tests/research_operations/v0_3/test_invariant_registry_independence.py
-
-      - name: Run pinned RO3 formula assurance against corrected implementation
-        run: |
-          PYTHONPATH=src python scripts/research_operations/run_ro3_corrective_assurance.py \
-            --output c1c-wp2-output/evidence/RO3_G3_CORRECTIVE_ASSURANCE_EVIDENCE.json \
-            --require-pass
-          PYTHONPATH=src python -m unittest \
-            tests.research_operations.v0_3.test_metamorphic_corrective_retest \
-            tests.research_operations.v0_3.test_invariant_registry_independence -v
-
-      - name: Canonical repository tests
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c1-wick-balance-corrective-wp2.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-
-      - name: Authority and output assertions
+      - name: Assert no side-effect authority
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root = Path('c1c-wp2-output/evidence')
-          evidence = json.loads((root / 'C1C_WP2_EVIDENCE.json').read_text())
-          assurance = json.loads((root / 'RO3_G3_CORRECTIVE_ASSURANCE_EVIDENCE.json').read_text())
-          assert evidence['active_release_impact']['affected_records'] == 0
-          assert evidence['active_release_impact']['affected_files'] == 0
-          assert evidence['active_release_impact']['counterfactual_wrong_library_divergence_records'] == 208185
-          assert evidence['candidates']['discovery']['record_shards_byte_identical_to_active_v1'] is True
-          assert evidence['candidates']['development']['record_shards_byte_identical_to_active_v1'] is True
-          assert evidence['downstream_surface']['c2_identity_replay_record_count_if_v2_selected'] == 728344
-          assert evidence['downstream_surface']['c2_identity_replay_file_count_if_v2_selected'] == 24
-          assert evidence['qa']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert assurance['status'] == 'PASS'
-          assert assurance['qa_recommendation'] == 'PASS'
-          assert assurance['actual_implementation_run']['failed_assertion_count'] == 0
-          assert assurance['negative_control_detected'] is True
-          print(json.dumps({
-              'status': evidence['status'],
-              'active_affected_records': evidence['active_release_impact']['affected_records'],
-              'counterfactual_divergence_records': evidence['active_release_impact']['counterfactual_wrong_library_divergence_records'],
-              'c2_identity_replay_records': evidence['downstream_surface']['c2_identity_replay_record_count_if_v2_selected'],
-              'ro3_assurance': assurance['status'],
-          }, indent=2, sort_keys=True))
-          PY
-          git diff --exit-code HEAD -- \
-            registries/opt_b/c1/C1_FORMULA_REGISTRY_v0_1.yaml \
-            contracts/opt_b/c1/OVC_OPT_B_C1_PRIMITIVE_CONTRACT_v0_1.md \
-            schemas/opt_b/c1/c1_bar_primitives_v0_1.schema.json \
-            registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml \
-            registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml \
-            registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: c1c-wp2-evidence
-          path: c1c-wp2-output/evidence/**
-          retention-days: 90
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: c1c-discovery-2021-2023-v2-local-candidate
-          path: c1c-wp2-output/candidates/discovery/**
-          retention-days: 90
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: c1c-development-2024-v2-local-candidate
-          path: c1c-wp2-output/candidates/development/**
-          retention-days: 90
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

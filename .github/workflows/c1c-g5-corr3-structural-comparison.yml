@@ -1,94 +1,40 @@
-name: C1C-G5 CORR3 structural comparison
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - 'apps/research_console/pattern_discovery_corr2.py'
-      - 'contracts/research_operations/pattern_discovery/C1C_G5_CORR3_STRUCTURAL_COMPARISON_REVIEW_CONTRACT_v0_1.md'
-      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/**'
-      - 'schemas/research_operations/pattern_discovery/c1c_g5_corr3_*'
-      - 'schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_final_gate_input_v0_2.schema.json'
-      - 'scripts/run_c1c_g5_corr3_review.ps1'
-      - 'src/ovc/research_operations/pattern_discovery/corr3_evidence.py'
-      - 'src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure.py'
-      - 'src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure_entry.py'
-      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_*'
-      - '.github/workflows/c1c-g5-corr3-structural-comparison.yml'
-  push:
-    branches:
-      - 'build/c1c-g5-corr3-structural-comparison'
-    paths:
-      - 'apps/research_console/pattern_discovery_corr2.py'
-      - 'contracts/research_operations/pattern_discovery/C1C_G5_CORR3_STRUCTURAL_COMPARISON_REVIEW_CONTRACT_v0_1.md'
-      - 'docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr3/**'
-      - 'schemas/research_operations/pattern_discovery/c1c_g5_corr3_*'
-      - 'schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_final_gate_input_v0_2.schema.json'
-      - 'scripts/run_c1c_g5_corr3_review.ps1'
-      - 'src/ovc/research_operations/pattern_discovery/corr3_evidence.py'
-      - 'src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure.py'
-      - 'src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure_entry.py'
-      - 'tests/research_operations/pattern_discovery/test_c1c_g5_corr3_*'
-      - '.github/workflows/c1c-g5-corr3-structural-comparison.yml'
+  workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  corr3-review-closure:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run CORR3 focused tests
-        env:
-          PYTHONPATH: src
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python -m unittest \
-            tests.research_operations.pattern_discovery.test_c1c_g5_corr3_structural_comparison \
-            tests.research_operations.pattern_discovery.test_c1c_g5_corr3_console_boundary -v
-      - name: Run retained CORR2 tests
-        env:
-          PYTHONPATH: src
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          python -m unittest \
-            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_review_closure \
-            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_console \
-            tests.research_operations.pattern_discovery.test_c1c_g5_corr2_signature_compat -v
-      - name: Run repository tests
-        env:
-          PYTHONPATH: src
-        run: python -m unittest discover -s tests -v
-      - name: Enforce nonactivating authority boundary
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          runner = Path('src/ovc/research_operations/pattern_discovery/pilot_corr3_review_closure.py').read_text()
-          evidence = Path('src/ovc/research_operations/pattern_discovery/corr3_evidence.py').read_text()
-          contract = Path('contracts/research_operations/pattern_discovery/C1C_G5_CORR3_STRUCTURAL_COMPARISON_REVIEW_CONTRACT_v0_1.md').read_text()
-          combined = runner + evidence
-          forbidden = (
-              'run_pilot_from_states(',
-              'load_exact_c2_states(',
-              'build_cluster_versions(',
-              'build_partition_cluster_version(',
-              'requests.',
-              'urllib',
-              'boto3',
-              'rclone',
-          )
-          found = [token for token in forbidden if token in combined]
-          if found:
-              raise SystemExit(f'Forbidden CORR3 capability present: {found}')
-          required = (
-              'DENIED_NOT_REQUIRED',
-              'canonical_append',
-              'NON_PROMOTABLE',
-              'PDPILOT-CANDIDATE-bab63b935155e4d9033aed81',
-          )
-          missing = [token for token in required if token not in combined and token not in contract]
-          if missing:
-              raise SystemExit(f'Required CORR3 boundary missing: {missing}')
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."
