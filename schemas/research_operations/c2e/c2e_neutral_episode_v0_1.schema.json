@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/c2e_neutral_episode_v0_1.schema.json",
+  "title": "OVC neutral C2E episode shadow record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","episode_id","source_release_id","instrument","side","scope","variant","start_transition_id","start_first_valid_time","end_transition_id","end_first_valid_time","state_ids","transition_ids","termination","censoring","authority_labels","source_hashes","algorithm_version"],
+  "properties": {
+    "schema": {"const":"ovc-c2e-neutral-episode/v1"},
+    "episode_id": {"type":"string","pattern":"^c2e-shadow:[0-9a-f]{64}$"},
+    "source_release_id": {"type":"string","minLength":1},
+    "instrument": {"const":"GBPUSD"},
+    "side": {"enum":["BID","ASK"]},
+    "scope": {"type":"string","minLength":1},
+    "variant": {"enum":["STRICT","PRIMARY","PERMISSIVE"]},
+    "start_transition_id": {"type":"string","minLength":1},
+    "start_first_valid_time": {"type":"string","format":"date-time"},
+    "end_transition_id": {"type":"string","minLength":1},
+    "end_first_valid_time": {"type":"string","format":"date-time"},
+    "state_ids": {"type":"array","minItems":2,"items":{"type":"string"}},
+    "transition_ids": {"type":"array","minItems":1,"items":{"type":"string"}},
+    "fixed_clock_membership": {"type":"array","items":{"type":"string"}},
+    "parent_change_count": {"type":"integer","minimum":0},
+    "termination": {"enum":["RESET","CENSORING","ADJACENCY_BREAK","SOURCE_END","SCOPE_END"]},
+    "censoring": {"type":"object","required":["status","reason"],"properties":{"status":{"enum":["COMPLETE","CENSORED"]},"reason":{"type":["string","null"]}}},
+    "overlap_variant_membership": {"type":"object"},
+    "sensitivity": {"enum":["STABLE","MATERIAL_SENSITIVITY","STRUCTURALLY_UNSTABLE","NOT_ASSESSED"]},
+    "ro4_references": {"type":"array","items":{"type":"string"}},
+    "authority_labels": {"const":["NEUTRAL","NON_SEMANTIC","NON_PREDICTIVE","NON_PROMOTABLE","SHADOW_ONLY"]},
+    "source_hashes": {"type":"object"},
+    "algorithm_version": {"const":"C2E.NEUTRAL.BUILDER.v0.1"}
+  }
+}

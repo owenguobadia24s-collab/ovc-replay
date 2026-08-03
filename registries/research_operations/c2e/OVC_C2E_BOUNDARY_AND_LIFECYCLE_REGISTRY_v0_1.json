@@ -1,0 +1,18 @@
+{
+  "schema": "ovc-c2e-boundary-lifecycle-registry/v1",
+  "registry_id": "OVC.C2E.BOUNDARY.LIFECYCLE.v1",
+  "algorithm_version": "C2E.NEUTRAL.BUILDER.v0.1",
+  "primary_variant": "PRIMARY",
+  "variants": {
+    "STRICT": {"max_transition_gap_minutes":0,"terminate_on_reset":true,"terminate_on_censoring":true,"authority":"SENSITIVITY_ONLY"},
+    "PRIMARY": {"max_transition_gap_minutes":15,"terminate_on_reset":true,"terminate_on_censoring":true,"authority":"AUTHORITATIVE_FOR_SHADOW_EVIDENCE"},
+    "PERMISSIVE": {"max_transition_gap_minutes":60,"terminate_on_reset":true,"terminate_on_censoring":true,"authority":"SENSITIVITY_ONLY"}
+  },
+  "lifecycle": ["STARTED","CONTINUING","TERMINATED","CENSORED"],
+  "termination_reasons": ["RESET","CENSORING","ADJACENCY_BREAK","SOURCE_END","SCOPE_END"],
+  "permitted_inputs": ["C2_STATE_ID","C2_TRANSITION_ID","FIRST_VALID_TIME","CHANGED_AXES","AXIS_EVALUABILITY","RESET_RECORD","PARENT_IDENTITY_CHANGE","SOURCE_DISCONTINUITY"],
+  "trace_only_marker_rules": ["BOUNDARY_ZONE_ENTRY","BREACH_ACTIVE","LONG_PERSISTENCE","REPEATED_SWITCHING"],
+  "prohibited_fields": ["SEMANTIC_NAME","PATTERN_FAMILY","THEORY","OUTCOME","RETURN","PROBABILITY","CANDIDATE_STATUS","PROMOTION_STATUS","TRADING_SIGNAL"],
+  "capacity": {"max_runtime_seconds":14400,"max_retained_bytes":10737418240,"checkpoint_minutes":30},
+  "activation": "DENIED"
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "ovc-c25-bounded-rule-registry/v1",
+  "registry_id": "OVC.C25.BOUNDED.RULES.v1",
+  "contract_version": "0.1",
+  "included_rules": [
+    {"rule_id":"BOUNDARY_ZONE_ENTRY","attempted":7116,"evaluable":4556,"fired":388,"authority":"DRAFT_SHADOW_ONLY"},
+    {"rule_id":"BREACH_ACTIVE","attempted":7116,"evaluable":6226,"fired":588,"authority":"DRAFT_SHADOW_ONLY"},
+    {"rule_id":"LONG_PERSISTENCE","attempted":7116,"evaluable":4644,"fired":306,"authority":"DRAFT_SHADOW_ONLY"},
+    {"rule_id":"REPEATED_SWITCHING","attempted":7116,"evaluable":4204,"fired":316,"authority":"DRAFT_SHADOW_ONLY"}
+  ],
+  "excluded_rules": [
+    {"rule_id":"RETURN_INSIDE","disposition":"DEFER_ZERO_FIRES"},
+    {"rule_id":"COMPRESSION_TO_DISPLACEMENT","disposition":"DEFER_ZERO_FIRES"},
+    {"rule_id":"LOCAL_PARENT_CONFLICT","disposition":"BLOCK_NOT_EVALUABLE"},
+    {"rule_id":"ALIGNMENT_GAINED","disposition":"BLOCK_NOT_EVALUABLE"}
+  ],
+  "overlap_variants": ["STRICT","PRIMARY","PERMISSIVE"],
+  "evidence_display": "CRITERION_LEVEL_ONLY",
+  "single_readiness_badge": "PROHIBITED",
+  "hidden_composite_score": "PROHIBITED",
+  "c2e_linkage": "OPTIONAL_FAIL_CLOSED",
+  "capacity": {"max_runtime_seconds":14400,"max_retained_bytes":10737418240,"checkpoint_minutes":30},
+  "event_authority": "DENIED"
+}

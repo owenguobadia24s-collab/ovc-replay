@@ -1,0 +1,14 @@
+{
+  "schema": "ovc-ccr-variant-metric-registry/v1",
+  "registry_id": "OVC.CCR.VARIANTS.METRICS.v1",
+  "variants": [
+    {"variant_id":"V0_CURRENT_STRICT_CONTINUITY_AUTHORITATIVE","authority":"AUTHORITATIVE_BASELINE","preserve_history_across_planned_closure":false,"reset_on_provider_gap":true,"create_missing_bars":false},
+    {"variant_id":"V1_PLANNED_CLOSURE_CLASSIFIED_CONTINUITY_SHADOW_ONLY","authority":"SHADOW_ONLY_NON_PROMOTABLE","preserve_history_across_planned_closure":true,"reset_on_provider_gap":true,"create_missing_bars":false},
+    {"variant_id":"V2_PROVIDER_GAP_SEGMENTED_CONTINUITY_SHADOW_ONLY","authority":"SHADOW_ONLY_NON_PROMOTABLE","preserve_history_across_planned_closure":false,"reset_on_provider_gap":true,"create_missing_bars":false}
+  ],
+  "reset_causes": ["SOURCE_PARTITION_START","SCHEDULED_MARKET_CLOSURE","PROVIDER_GAP","MALFORMED_ADJACENCY","UNKNOWN_DISCONTINUITY"],
+  "metrics": ["CLOCK_MEMBERSHIP_MISMATCH_COUNT","RESET_COUNT_BY_CAUSE","RESET_DURATION_SECONDS_BY_CAUSE","WARMUP_BARS_BY_AXIS","WARMUP_SECONDS_BY_AXIS","AXIS_NOT_EVALUABLE_RATE","FULL_VECTOR_USABILITY_RATE","PARENT_USABILITY_RATE","PARENT_RANGE_ACTIVE_COUNT","PARENT_RANGE_EXCLUDED_COUNT","CHANGED_IDENTITY_COUNT_BY_SHADOW","POST_RESET_TRANSITION_LOSS","RUNTIME_SECONDS","CHECKPOINT_COUNT","ARTIFACT_SIZE_BYTES"],
+  "population": {"instrument":"GBPUSD","clocks":["M1","15M","2H_A_L"],"sides":["BID","ASK"],"target_start":"2026-06-01T00:00:00Z","target_end_exclusive":"2026-07-01T00:00:00Z"},
+  "parameter_search": "PROHIBITED",
+  "activation": "DENIED"
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/c25_draft_event_contract_v0_1.schema.json",
+  "title": "OVC bounded C2.5 draft event contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","contract_id","rule_id","rule_version","contract_version","formula_reference","threshold_reference","required_inputs","evaluability","first_valid_time_definition","occurrence_identity","start_condition","continuation_condition","termination_condition","censoring","deduplication","overlap_variants","c2e_linkage","authority_labels"],
+  "properties": {
+    "schema": {"const":"ovc-c25-draft-event-contract/v1"},
+    "contract_id": {"type":"string","pattern":"^C25\\.DRAFT\\.[A-Z0-9_]+\\.v0_1$"},
+    "rule_id": {"enum":["BOUNDARY_ZONE_ENTRY","BREACH_ACTIVE","LONG_PERSISTENCE","REPEATED_SWITCHING"]},
+    "rule_version": {"type":"string","minLength":1},
+    "contract_version": {"const":"0.1"},
+    "formula_reference": {"type":"string","minLength":1},
+    "threshold_reference": {"type":"string","minLength":1},
+    "required_inputs": {"type":"array","minItems":1,"items":{"type":"string"}},
+    "evaluability": {"type":"object"},
+    "first_valid_time_definition": {"type":"string","minLength":1},
+    "occurrence_identity": {"type":"string","minLength":1},
+    "start_condition": {"type":"string","minLength":1},
+    "continuation_condition": {"type":"string","minLength":1},
+    "termination_condition": {"type":"string","minLength":1},
+    "censoring": {"type":"object"},
+    "deduplication": {"type":"object"},
+    "overlap_variants": {"const":["STRICT","PRIMARY","PERMISSIVE"]},
+    "c2e_linkage": {"enum":["OPTIONAL_FAIL_CLOSED","NOT_AVAILABLE"]},
+    "criterion_level_evidence": {"type":"object"},
+    "authority_labels": {"const":["DRAFT_CONTRACT","NON_SEMANTIC","NON_PREDICTIVE","NON_PROMOTED","SHADOW_ONLY"]}
+  }
+}
