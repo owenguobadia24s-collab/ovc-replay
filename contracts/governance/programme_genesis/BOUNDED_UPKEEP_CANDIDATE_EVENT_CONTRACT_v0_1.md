@@ -27,9 +27,8 @@ Every candidate event must:
 
 ## Permanent prohibitions
 
-The collector cannot:
+The collector cannot create or admit a programme. It also cannot:
 
-- create or admit a programme;
 - create an accepted Programme Event;
 - approve, ratify, merge, publish or write `main`;
 - alter programme-owned state;
