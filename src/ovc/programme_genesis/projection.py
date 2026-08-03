@@ -6,7 +6,7 @@ from collections import defaultdict
 from copy import deepcopy
 from typing import Any, Iterable, Mapping
 
-from .ledger import canonical_event_bytes, validate_event
+from .ledger import validate_event
 
 
 class ProjectionError(ValueError):
@@ -52,6 +52,7 @@ def project_programme(
     }
     blockers: dict[str, dict[str, Any]] = {}
     for event in ordered:
+        event_id = event["event_id"]
         payload = event["payload"]
         event_type = event["event_type"]
         if event_type == "GENESIS_ACCEPTED":
