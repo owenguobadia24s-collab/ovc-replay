@@ -9,19 +9,18 @@ from apps.research_console.c1_projection_source import (
     load_c1_projection,
     projection_identity as c1_projection_identity,
 )
-from apps.research_console.rc_g5_console import run_console
+from apps.research_console.mta_console import run_console
 from apps.research_console.ro2_projection_source import load_ro2_projection, projection_identity
 from apps.research_console.ro4_active_projection_source import (
     load_active_projection,
     projection_identity as c2_sequence_projection_identity,
 )
 
-
 def load_represented_identity(
     c1_projection: Mapping[str, Any] | None = None,
     c2_sequence_projection: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Load authorised local read-model, RO2, C1 and RC-G5 C2 sequence identities."""
+    """Load authorised local read-model, RO2, C1, RC-G5 and MTA-WP7 identities."""
 
     model_path = Path(os.environ.get("OVC_RESEARCH_READ_MODEL", "var/research_operations/read_model/current.json"))
     identity: dict[str, Any] = {
@@ -34,6 +33,7 @@ def load_represented_identity(
         "c1_availability": "NOT_EVALUATED",
         "c2_sequence_route_state": "ENABLED_LOCAL_READ_ONLY",
         "c2_sequence_availability": "NOT_EVALUATED",
+        "mta_route_state": "ENABLED_LOCAL_READ_ONLY",
     }
     if model_path.is_file():
         try:
@@ -67,7 +67,6 @@ def load_represented_identity(
     if c2_identity["availability"] == "AVAILABLE":
         identity["freshness"] = "RC_G5_C2_SEQUENCE_ACCEPTED_LOCAL_READ_ONLY_PRESENTATION"
     return identity
-
 
 _c1_projection = load_c1_projection()
 _c2_sequence_projection = load_active_projection()

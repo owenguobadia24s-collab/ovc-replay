@@ -1,0 +1,34 @@
+name: Market Translation Audit MTA-G7 readiness synthesis
+on:
+  pull_request:
+    paths:
+      - "contracts/research_operations/mta/**"
+      - "schemas/research_operations/mta/**"
+      - "registries/research_operations/mta/**"
+      - "fixtures/research_operations/mta/**"
+      - "src/ovc/research_operations/mta/**"
+      - "apps/research_console/**"
+      - "scripts/research_operations/validate_mta_wp7.py"
+      - "tests/research_operations/mta/**"
+      - "docs/releases/market-translation-audit-v0-2/mta-g7/**"
+      - ".github/workflows/market-translation-audit-mta-g7.yml"
+  workflow_dispatch:
+jobs:
+  mta-g7:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Validate MTA-WP7 synthesis
+        run: PYTHONPATH=src python scripts/research_operations/validate_mta_wp7.py
+      - name: Focused MTA-WP7 tests
+        run: PYTHONPATH=src python -m unittest tests.research_operations.mta.test_mta_wp7 -v
+      - name: Retained MTA assurance
+        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/mta -v
+      - name: Complete repository suite
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert audit-only authority
+        run: |
+          ! grep -R '"c2e_c2_5_c3_activation": "APPROVED"' docs/releases/market-translation-audit-v0-2/mta-g7
+          ! grep -R '"research_write": "APPROVED"' docs/releases/market-translation-audit-v0-2/mta-g7

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/mta_readiness_synthesis_v0_1.schema.json",
+  "title": "OVC MTA WP7 readiness synthesis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "gate_id",
+    "route_registry",
+    "readiness",
+    "authority",
+    "qa_recommendation"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-mta-wp7-readiness-synthesis-reference/v1"},
+    "programme_id": {"const": "OVC-MTA-v0.2"},
+    "packet_id": {"const": "MTA-WP7"},
+    "gate_id": {"const": "MTA-G7"},
+    "plan_version": {"const": "0.2"},
+    "baseline_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_run_id": {"type": "string"},
+    "source_slice_id": {"type": "string"},
+    "source_evidence": {"type": "object"},
+    "accepted_findings": {"type": "array", "minItems": 11},
+    "flow_summary": {"type": "object"},
+    "translation_summary": {"type": "object"},
+    "computability_summary": {"type": "object"},
+    "context_summary": {"type": "object"},
+    "marker_summary": {"type": "object"},
+    "cluster_summary": {"type": "object"},
+    "ro4_comparison": {"type": "object"},
+    "readiness": {"type": "object", "required": ["clock", "c2e", "c2_5", "c3"]},
+    "route_registry": {"type": "array", "minItems": 9, "maxItems": 9},
+    "capacity": {"type": "object"},
+    "authority": {"type": "object"},
+    "qa_recommendation": {"const": "PASS_WITH_MATERIAL_FINDINGS"},
+    "operator_gate_required_after_g7": {"const": true}
+  }
+}
