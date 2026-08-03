@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/governance/programme_genesis/programme_genesis_bundle_v0_1.schema.json",
+  "title": "OVC Programme Genesis object bundle v0.1",
+  "type": "object",
+  "oneOf": [
+    {"$ref": "#/$defs/programme_genesis"},
+    {"$ref": "#/$defs/programme_event"},
+    {"$ref": "#/$defs/dependency_edge"},
+    {"$ref": "#/$defs/authority_envelope"}
+  ],
+  "$defs": {
+    "non_empty_string": {"type": "string", "minLength": 1},
+    "sha256_or_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"},
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "identity", "precedence", "authority_role"],
+      "properties": {
+        "source_type": {"enum": ["GENESIS", "OPERATOR_DECISION", "PROGRAMME_STATE", "MANIFEST", "PLAN", "COMMIT", "PULL_REQUEST", "EXTERNAL_ARTIFACT", "CONTEXT_ONLY"]},
+        "identity": {"$ref": "#/$defs/non_empty_string"},
+        "path": {"type": ["string", "null"]},
+        "hash": {"type": ["string", "null"]},
+        "precedence": {"type": "integer", "minimum": 1, "maximum": 8},
+        "authority_role": {"enum": ["AUTHORITATIVE", "SUPPORTING", "PROPOSAL_ONLY", "CONTEXT_ONLY"]}
+      }
+    },
+    "authority_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "authority_envelope_id", "programme_id", "current_authority", "reserved_denials", "future_operator_gates", "source_refs"],
+      "properties": {
+        "record_type": {"const": "AUTHORITY_ENVELOPE"},
+        "authority_envelope_id": {"type": "string", "pattern": "^PGAUTH\\."},
+        "programme_id": {"$ref": "#/$defs/non_empty_string"},
+        "current_authority": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}, "uniqueItems": true},
+        "reserved_denials": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}, "minItems": 1, "uniqueItems": true},
+        "future_operator_gates": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}, "uniqueItems": true},
+        "source_refs": {"type": "array", "items": {"$ref": "#/$defs/source_ref"}, "minItems": 1},
+        "supersedes": {"type": ["string", "null"]}
+      }
+    },
+    "programme_genesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "schema_version", "genesis_id", "programme_id", "programme_class", "title", "version", "purpose", "scope", "creation_triggers", "scope_audit_ref", "constitutional_parent", "programme_parents", "governing_sources", "authority_envelope_ref", "lifecycle", "provenance", "rollback"],
+      "properties": {
+        "record_type": {"const": "PROGRAMME_GENESIS"},
+        "schema_version": {"const": "0.1"},
+        "genesis_id": {"type": "string", "pattern": "^GENESIS\\."},
+        "programme_id": {"$ref": "#/$defs/non_empty_string"},
+        "programme_class": {"$ref": "#/$defs/non_empty_string"},
+        "title": {"$ref": "#/$defs/non_empty_string"},
+        "version": {"$ref": "#/$defs/non_empty_string"},
+        "purpose": {"$ref": "#/$defs/non_empty_string"},
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["included", "excluded", "termination_condition"],
+          "properties": {
+            "included": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}, "minItems": 1},
+            "excluded": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}, "minItems": 1},
+            "termination_condition": {"$ref": "#/$defs/non_empty_string"}
+          }
+        },
+        "creation_triggers": {"type": "array", "items": {"enum": ["NEW_AUTHORITY_DOMAIN", "MULTI_PACKET_LIFECYCLE", "INDEPENDENT_RESEARCH_OR_RELEASE_LINE", "CROSS_CUTTING_SHARED_SERVICE", "PROGRAMME_SUPERSESSION", "PORTFOLIO_LEVEL_OPERATOR_DECISION"]}, "minItems": 1, "uniqueItems": true},
+        "scope_audit_ref": {"type": "string", "pattern": "^PGSCOPE\\."},
+        "constitutional_parent": {"$ref": "#/$defs/non_empty_string"},
+        "programme_parents": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}, "uniqueItems": true},
+        "governing_sources": {"type": "array", "items": {"$ref": "#/$defs/source_ref"}, "minItems": 2},
+        "authority_envelope_ref": {"type": "string", "pattern": "^PGAUTH\\."},
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "current_packet", "current_gate", "blockers", "next_action"],
+          "properties": {
+            "status": {"enum": ["PLANNED", "READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "APPROVED", "BLOCKED", "QUARANTINED", "SUPERSEDED", "COMPLETED"]},
+            "current_packet": {"type": ["string", "null"]},
+            "current_gate": {"type": ["string", "null"]},
+            "blockers": {"type": "array", "items": {"$ref": "#/$defs/non_empty_string"}},
+            "next_action": {"type": ["string", "null"]}
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["created_at", "actor", "commit", "supersedes"],
+          "properties": {
+            "created_at": {"type": "string", "format": "date-time"},
+            "actor": {"$ref": "#/$defs/non_empty_string"},
+            "commit": {"$ref": "#/$defs/sha256_or_commit"},
+            "supersedes": {"type": ["string", "null"]}
+          }
+        },
+        "rollback": {"$ref": "#/$defs/non_empty_string"}
+      }
+    },
+    "programme_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "schema_version", "event_id", "programme_id", "event_type", "observed_at", "first_valid_at", "actor_class", "source_refs", "authority_effect", "payload", "supersedes", "rollback"],
+      "properties": {
+        "record_type": {"const": "PROGRAMME_EVENT"},
+        "schema_version": {"const": "0.1"},
+        "event_id": {"type": "string", "pattern": "^PGE\\."},
+        "programme_id": {"$ref": "#/$defs/non_empty_string"},
+        "event_type": {"$ref": "#/$defs/non_empty_string"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "first_valid_at": {"type": "string", "format": "date-time"},
+        "actor_class": {"enum": ["HUMAN_OPERATOR", "DELEGATED_AUTOMATION", "REPOSITORY_EVENT", "MIGRATION_ADAPTER"]},
+        "source_refs": {"type": "array", "items": {"$ref": "#/$defs/source_ref"}, "minItems": 1},
+        "authority_effect": {"enum": ["NONE", "PROPOSED", "GRANTED_BY_ACCEPTED_DECISION", "RESTRICTED_BY_ACCEPTED_DECISION", "RETIRED_BY_ACCEPTED_DECISION"]},
+        "payload": {"type": "object"},
+        "supersedes": {"type": ["string", "null"]},
+        "rollback": {"$ref": "#/$defs/non_empty_string"}
+      }
+    },
+    "dependency_edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "schema_version", "edge_id", "from_node", "to_node", "edge_type", "source_kind", "hardness", "authority_effect", "source_refs", "status"],
+      "properties": {
+        "record_type": {"const": "DEPENDENCY_EDGE"},
+        "schema_version": {"const": "0.1"},
+        "edge_id": {"type": "string", "pattern": "^PGEDGE\\."},
+        "from_node": {"$ref": "#/$defs/non_empty_string"},
+        "to_node": {"$ref": "#/$defs/non_empty_string"},
+        "edge_type": {"$ref": "#/$defs/non_empty_string"},
+        "source_kind": {"enum": ["SOURCE_EXPLICIT", "ADAPTER_INFERRED"]},
+        "hardness": {"enum": ["HARD", "SOFT", "INFORMATIONAL"]},
+        "authority_effect": {"const": "NONE"},
+        "source_refs": {"type": "array", "items": {"$ref": "#/$defs/source_ref"}, "minItems": 1},
+        "status": {"enum": ["PROPOSED", "ACCEPTED", "REJECTED", "QUARANTINED", "SUPERSEDED"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"hardness": {"const": "HARD"}}},
+          "then": {"properties": {"source_kind": {"const": "SOURCE_EXPLICIT"}}}
+        }
+      ]
+    }
+  }
+}
