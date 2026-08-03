@@ -3,22 +3,22 @@
   "programme_id": "OVC-PG-v0.2",
   "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "current_packet": "PG-WP5",
   "current_gate": "PG-G5",
   "operator_decision_required": false,
   "operator_decision_id": "PG-G3A.OPERATOR.ACKNOWLEDGE_CONTINUE.20260803T194700+0100",
   "baseline_commit": "ff903e24898094e1ba9408563f76197a9808e583",
   "branch": "build/pg-wp5-read-model-control-plane",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "candidate_commit": "PENDING_FINAL_DECISION_HEAD",
   "authority": {
     "programme_governance_design": "RATIFIED",
     "programme_governance_build": "APPROVED_BOUNDED_IMPLEMENTATION",
     "portfolio_migration": "APPROVED_PROVISIONAL_MIGRATION_MECHANISM",
     "migration_import_status": "PROVISIONAL_NON_CANONICAL",
     "migration_uncertainty": "MANDATORY",
-    "portfolio_read_model": "IMPLEMENTED_NON_CANONICAL_QA_REVIEW",
-    "control_plane_adapter": "DISABLED_UNREGISTERED_PENDING_PG_G6",
+    "portfolio_read_model": "APPROVED_NON_CANONICAL_DERIVED_VIEW",
+    "control_plane_adapter": "APPROVED_DISABLED_CANDIDATE_PENDING_PG_G6",
     "canonical_migration_adoption": "DENIED_PENDING_PG_G6",
     "admission_enforcement": "DENIED_PENDING_PG_G6",
     "control_plane_route": "DENIED_PENDING_PG_G6",
@@ -89,30 +89,31 @@
       "merge_commit": "ff903e24898094e1ba9408563f76197a9808e583", "blockers": [], "next_packet": "PG-WP5"
     },
     {
-      "packet_id": "PG-WP5", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "QA_REVIEW",
-      "prerequisites": ["PG-G4_PASS_MERGED"], "authority_required": "AUTO_EXECUTABLE",
+      "packet_id": "PG-WP5", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "APPROVED",
+      "prerequisites": ["PG-G4_PASS_MERGED"], "authority_required": "AUTO_EXECUTABLE_COMPLETED",
       "authority_delta": "READ_MODEL_CLI_HEALTH_AND_DISABLED_CONTROL_PLANE_ADAPTERS", "baseline_commit": "ff903e24898094e1ba9408563f76197a9808e583",
-      "branch": "build/pg-wp5-read-model-control-plane", "candidate_commit": "PENDING_FINAL_HEAD",
-      "tests": ["tests/governance/test_pg_wp5.py", "tests/governance/test_pg_wp5_evidence_output.py"],
+      "branch": "build/pg-wp5-read-model-control-plane", "candidate_commit": "PENDING_FINAL_DECISION_HEAD",
+      "tests": ["tests 30845314582 PASS 128", "OVC merge readiness 30845315282 PASS"],
       "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g5/PG_G5_QA_PACKET.json",
-      "decision_record": null, "merge_commit": null, "blockers": [], "next_packet": "PG-G6"
+      "decision_record": "docs/releases/programme-genesis-v0-2/pg-g5/PG_G5_DELEGATED_DECISION.json",
+      "merge_commit": null, "blockers": [], "next_packet": "PG-G6"
     },
     {
-      "packet_id": "PG-G6", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "PLANNED",
+      "packet_id": "PG-G6", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "READY",
       "prerequisites": ["PG-G5_PASS_MERGED"], "authority_required": "OPERATOR_REQUIRED_FOUR_PART_DECISION",
       "authority_delta": "ADOPT_CANON_MIGRATION_ENFORCEMENT_AND_READ_ONLY_ROUTE_INDEPENDENTLY", "baseline_commit": null,
-      "branch": "gate/pg-g6-portfolio-adoption", "candidate_commit": null, "tests": [], "qa_packet": null,
-      "decision_record": null, "merge_commit": null, "blockers": [], "next_packet": "PG-WP6"
+      "branch": "gate/pg-g6-portfolio-adoption", "candidate_commit": null, "tests": [],
+      "qa_packet": null, "decision_record": null, "merge_commit": null, "blockers": [], "next_packet": "PG-WP6"
     },
     {
       "packet_id": "PG-WP6", "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2", "plan_version": "0.2", "status": "PLANNED",
       "prerequisites": ["PG-G6_RELEVANT_PARTS_PASS_MERGED"], "authority_required": "OPERATOR_REQUIRED_AT_PG_G7",
       "authority_delta": "BUILD_DISABLED_BOUNDED_CANDIDATE_EVENT_UPKEEP", "baseline_commit": null,
-      "branch": "build/pg-wp6-bounded-upkeep", "candidate_commit": null, "tests": [], "qa_packet": null,
-      "decision_record": null, "merge_commit": null, "blockers": [], "next_packet": "PG-G7"
+      "branch": "build/pg-wp6-bounded-upkeep", "candidate_commit": null, "tests": [],
+      "qa_packet": null, "decision_record": null, "merge_commit": null, "blockers": [], "next_packet": "PG-G7"
     }
   ],
   "blockers": [],
-  "next_action": "COMPLETE_PG_WP5_QA_AUTO_RATIFY_PG_G5_SQUASH_MERGE_THEN_STOP_AT_PG_G6",
+  "next_action": "RUN_FINAL_DECISION_HEAD_ASSURANCE_SQUASH_MERGE_PG_WP5_THEN_STOP_AT_PG_G6",
   "rollback": "Preserve accepted decisions and programme sources. Discard derived read models, health reports, compact reports and adapter projections; keep the adapter disabled and unregistered."
 }
