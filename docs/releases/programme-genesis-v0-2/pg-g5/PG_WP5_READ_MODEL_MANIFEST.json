@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-programme-genesis-wp5-read-model-manifest/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "packet_id": "PG-WP5",
+  "gate_id": "PG-G5",
+  "baseline_commit": "ff903e24898094e1ba9408563f76197a9808e583",
+  "branch": "build/pg-wp5-read-model-control-plane",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "authority_delta": "DETERMINISTIC_READ_MODEL_HEALTH_COMPACT_REPORT_AND_DISABLED_ADAPTER_ONLY",
+  "artifacts": [
+    "contracts/governance/programme_genesis/PORTFOLIO_READ_MODEL_AND_DISABLED_ADAPTER_CONTRACT_v0_1.md",
+    "registries/governance/programme_genesis/CONTROL_PLANE_ADAPTER_REGISTRY_v0_1.json",
+    "schemas/governance/programme_genesis/portfolio_read_model_bundle_v0_1.schema.json",
+    "src/ovc/programme_genesis/read_model.py",
+    "scripts/governance/build_pg_wp5_read_model.py",
+    "tests/governance/test_pg_wp5.py",
+    "tests/governance/test_pg_wp5_evidence_output.py",
+    ".github/workflows/pg-wp5-read-model.yml"
+  ],
+  "frozen_invariants": [
+    "PROGRAMME_OWNED_STATE_REMAINS_AUTHORITATIVE",
+    "READ_MODEL_IS_REPLACEABLE_AND_AUTHORITY_NEUTRAL",
+    "MIGRATION_UNCERTAINTY_AND_UNRESOLVED_FIELDS_REMAIN_VISIBLE",
+    "MIGRATED_SOURCE_PATHS_AND_SHA256_ARE_REVERIFIED",
+    "HEALTH_NEVER_REPAIRS_OR_SUPPRESSES_SOURCES",
+    "COMPACT_REPORT_DOES_NOT_CONCEAL_DETAILED_FINDINGS",
+    "ADAPTER_ENABLED_FALSE",
+    "ROUTE_REGISTERED_FALSE",
+    "WRITE_ENABLED_FALSE",
+    "ENFORCEMENT_ENABLED_FALSE",
+    "NETWORK_LISTENER_FALSE",
+    "LOCAL_PAYLOAD_AVAILABILITY_IS_NOT_ROUTE_AUTHORITY",
+    "PG_G6_REQUIRED_FOR_CANON_MIGRATION_ENFORCEMENT_AND_ROUTE",
+    "PG_G7_REQUIRED_FOR_AUTOMATIC_UPKEEP"
+  ],
+  "expected_repository_evidence": {
+    "programme_count": 8,
+    "native_programme_count": 1,
+    "migrated_programme_count": 7,
+    "migration_warning_count": 14,
+    "health_warning_count": 7,
+    "health_blocking_count": 0,
+    "adapter_status": "DISABLED_PENDING_PG_G6",
+    "logical_hashes": "PENDING_CI"
+  },
+  "external_artifacts": [],
+  "reserved_authority": "NONE",
+  "blockers": [],
+  "rollback": "Discard and rebuild read-model outputs; keep the adapter disabled and preserve all programme sources, migration findings and decisions."
+}
