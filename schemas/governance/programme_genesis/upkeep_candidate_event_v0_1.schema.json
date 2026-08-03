@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/governance/programme_genesis/upkeep_candidate_event_v0_1.schema.json",
+  "title": "OVC Programme Genesis upkeep candidate event v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_event_id",
+    "programme_id",
+    "event_type",
+    "source_kind",
+    "source_finding_id",
+    "source_ref",
+    "observed_at",
+    "first_valid_at",
+    "proposed_payload",
+    "status",
+    "authority_effect",
+    "target_branch"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-upkeep-candidate-event/v1"},
+    "candidate_event_id": {"type": "string", "pattern": "^PG-UPKEEP-[0-9a-f]{24}$"},
+    "programme_id": {"type": "string", "minLength": 1},
+    "event_type": {
+      "enum": [
+        "STATE_DIVERGENCE_CANDIDATE",
+        "STALE_PROJECTION_CANDIDATE",
+        "SOURCE_CONFLICT_CANDIDATE",
+        "HEALTH_FINDING_CANDIDATE",
+        "MAINTENANCE_CANDIDATE"
+      ]
+    },
+    "source_kind": {
+      "enum": [
+        "PROGRAMME_HEALTH_FINDING",
+        "STATE_SYNCHRONISATION_FINDING",
+        "DEPENDENCY_GRAPH_FINDING",
+        "MAINTENANCE_REVIEW_FINDING"
+      ]
+    },
+    "source_finding_id": {"type": "string", "minLength": 1},
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*\\.\\.).+$"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "first_valid_at": {"type": "string", "format": "date-time"},
+    "proposed_payload": {"type": "object"},
+    "status": {"const": "CANDIDATE_UNAPPROVED"},
+    "authority_effect": {"const": "NONE"},
+    "target_branch": {"type": "string", "pattern": "^upkeep/pg-candidate-events/[A-Za-z0-9._/-]+$"}
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-programme-genesis-upkeep-candidate-registry/v1",
+  "registry_id": "OVC-PG-UPKEEP-CANDIDATE-REGISTRY-v0.1",
+  "programme_id": "OVC-PG-v0.2",
+  "status": "FROZEN_DISABLED_PENDING_PG_G7",
+  "enabled": false,
+  "preview_enabled": true,
+  "activation_gate": "PG-G7",
+  "activation_decision_id": null,
+  "candidate_branch_prefix": "upkeep/pg-candidate-events/",
+  "candidate_root": "registries/governance/programme_genesis/upkeep_candidates",
+  "max_events_per_run": 100,
+  "allowed_event_types": [
+    "STATE_DIVERGENCE_CANDIDATE",
+    "STALE_PROJECTION_CANDIDATE",
+    "SOURCE_CONFLICT_CANDIDATE",
+    "HEALTH_FINDING_CANDIDATE",
+    "MAINTENANCE_CANDIDATE"
+  ],
+  "allowed_source_kinds": [
+    "PROGRAMME_HEALTH_FINDING",
+    "STATE_SYNCHRONISATION_FINDING",
+    "DEPENDENCY_GRAPH_FINDING",
+    "MAINTENANCE_REVIEW_FINDING"
+  ],
+  "write_targets": [
+    "registries/governance/programme_genesis/upkeep_candidates"
+  ],
+  "prohibited_branches": ["main", "master"],
+  "candidate_status": "CANDIDATE_UNAPPROVED",
+  "authority_effect": "NONE",
+  "capabilities": {
+    "in_memory_preview": true,
+    "candidate_persistence": false,
+    "programme_creation": false,
+    "programme_event_acceptance": false,
+    "approval": false,
+    "merge": false,
+    "main_write": false,
+    "publication": false,
+    "admission_enforcement": false,
+    "control_plane_route": false,
+    "agent_write": false
+  },
+  "forbidden_payload_keys": [
+    "accepted",
+    "approval",
+    "approved",
+    "authority_grant",
+    "authority_granted",
+    "decision",
+    "execution",
+    "main_write",
+    "merge",
+    "programme_creation",
+    "publication",
+    "risk",
+    "selector_activation",
+    "trading"
+  ],
+  "reserved_authority_denials": [
+    "AUTOMATIC_UPKEEP_BEFORE_PG_G7",
+    "PROGRAMME_CREATION_OR_ADMISSION",
+    "PROGRAMME_EVENT_ACCEPTANCE",
+    "APPROVAL_OR_MERGE",
+    "MAIN_WRITE",
+    "PUBLICATION",
+    "ADMISSION_ENFORCEMENT",
+    "CONTROL_PLANE_ROUTE",
+    "MARKET_MODEL_SEMANTIC_THRESHOLD_SELECTOR_RELEASE_VALIDATION",
+    "AGENT_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
+  ],
+  "rollback": "Set enabled false, discard previews and candidate working files, and preserve source findings, hashes and decisions."
+}

@@ -1,0 +1,54 @@
+name: PG-WP6 bounded upkeep assurance
+
+on:
+  push:
+    branches:
+      - "build/pg-wp6-bounded-upkeep"
+      - "gate/pg-g7-upkeep-activation"
+    paths:
+      - "contracts/governance/programme_genesis/BOUNDED_UPKEEP_CANDIDATE_EVENT_CONTRACT_v0_1.md"
+      - "registries/governance/programme_genesis/UPKEEP_CANDIDATE_EVENT_REGISTRY_v0_1.json"
+      - "schemas/governance/programme_genesis/upkeep_candidate_event_v0_1.schema.json"
+      - "src/ovc/programme_genesis/upkeep.py"
+      - "src/ovc/programme_genesis/__init__.py"
+      - "scripts/governance/preview_pg_upkeep_candidates.py"
+      - "tests/governance/test_pg_wp6.py"
+      - "tests/governance/test_pg_wp6_cli.py"
+      - "docs/releases/programme-genesis-v0-2/pg-g7/**"
+      - "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json"
+      - ".github/workflows/pg-wp6-bounded-upkeep.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: pg-wp6-bounded-upkeep-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  bounded-upkeep:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Focused bounded-upkeep tests
+        run: PYTHONPATH=src python3 -m unittest tests.governance.test_pg_wp6 tests.governance.test_pg_wp6_cli -v
+      - name: Confirm disabled authority boundary
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("registries/governance/programme_genesis/UPKEEP_CANDIDATE_EVENT_REGISTRY_v0_1.json")
+          value = json.loads(path.read_text(encoding="utf-8"))
+          assert value["status"] == "FROZEN_DISABLED_PENDING_PG_G7"
+          assert value["enabled"] is False
+          assert value["capabilities"]["candidate_persistence"] is False
+          assert value["capabilities"]["programme_creation"] is False
+          assert value["capabilities"]["approval"] is False
+          assert value["capabilities"]["merge"] is False
+          assert value["capabilities"]["main_write"] is False
+          assert value["authority_effect"] == "NONE"
+          PY
