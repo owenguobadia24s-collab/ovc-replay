@@ -69,7 +69,7 @@ class ProgrammeGenesisG6Tests(unittest.TestCase):
             packet["exact_recommended_operator_command"],
         )
         self.assertIn("no separately validated active enforcement consumer", " ".join(packet["decision_parts"]["ENFORCEMENT"]["defer_rationale"]))
-        self.assertIn("no validated network or Control Plane route implementation", " ".join(packet["decision_parts"]["READ_ONLY_ROUTE"]["defer_rationale"]))
+        self.assertIn("not an implemented network or Control Plane route", " ".join(packet["decision_parts"]["READ_ONLY_ROUTE"]["defer_rationale"]))
 
     def test_migration_pass_preserves_provisional_uncertainty_and_coverage_warning(self) -> None:
         packet = load_json(PACKET_PATH)
