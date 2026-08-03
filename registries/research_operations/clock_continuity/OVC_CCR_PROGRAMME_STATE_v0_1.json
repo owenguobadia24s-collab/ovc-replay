@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-clock-continuity-review-programme-state/v1",
+  "programme_id": "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+  "plan_id": "OVC-CLOCK-CONTINUITY-REVIEW-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "current_packet": "CCR-00",
+  "current_gate": "CCR-G0",
+  "operator_decision_required": true,
+  "source_decision": "MTA-G8.OPERATOR.MULTIPART.20260803T114000+0100",
+  "baseline_commit": "c5e34469e2f445bc596cd04a3808eb529dab3a36",
+  "branch": "plan/clock-continuity-review-v0-1",
+  "packets": [
+    {"packet_id":"CCR-00","status":"GATE_READY","prerequisites":["MTA-G8-CLOCK_PASS"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"AUTHORISE_AUDIT_ONLY_REVIEW_EXECUTION","baseline_commit":"c5e34469e2f445bc596cd04a3808eb529dab3a36","branch":"plan/clock-continuity-review-v0-1","candidate_commit":"PENDING_FINAL_HEAD","tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"CCR-WP1"},
+    {"packet_id":"CCR-WP1","status":"PLANNED","prerequisites":["CCR-G0_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"CURRENT_CLOCK_RECONSTRUCTION_AUDIT","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"CCR-WP2"},
+    {"packet_id":"CCR-WP2","status":"PLANNED","prerequisites":["CCR-G1_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"RESET_AND_WARMUP_CENSUS","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"CCR-WP3"},
+    {"packet_id":"CCR-WP3","status":"PLANNED","prerequisites":["CCR-G2_PASS"],"authority_required":"AUTO_EXECUTABLE_WITH_FROZEN_SHADOWS","authority_delta":"THREE_VARIANT_NON_CANONICAL_SHADOW_COMPARISON","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"CCR-WP4"},
+    {"packet_id":"CCR-WP4","status":"PLANNED","prerequisites":["CCR-G3_PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"TRANSLATION_CONSEQUENCE_REVIEW","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"CCR-WP5"},
+    {"packet_id":"CCR-WP5","status":"PLANNED","prerequisites":["CCR-G4_PASS"],"authority_required":"OPERATOR_REQUIRED_FINAL","authority_delta":"RECOMMENDATION_ONLY","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":null}
+  ],
+  "authority_boundary": "NO_CLOCK_CONTINUITY_FORMULA_THRESHOLD_SELECTOR_RELEASE_VALIDATION_PUBLICATION_RISK_OR_EXECUTION_CHANGE",
+  "next_action": "OPERATOR_DECIDE_CCR_G0"
+}
