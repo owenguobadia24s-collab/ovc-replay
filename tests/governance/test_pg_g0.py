@@ -19,7 +19,7 @@ def load_json(path: Path) -> dict:
 
 
 class ProgrammeGenesisG0Tests(unittest.TestCase):
-    def test_pg_g0_pass_is_recorded_and_releases_only_bounded_build(self) -> None:
+    def test_pg_g0_pass_is_recorded_and_later_authority_remains_bounded(self) -> None:
         state = load_json(STATE_PATH)
         decision = load_json(DECISION_PATH)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
@@ -37,7 +37,8 @@ class ProgrammeGenesisG0Tests(unittest.TestCase):
         authority = state["authority"]
         self.assertEqual("RATIFIED", authority["programme_governance_design"])
         self.assertEqual("APPROVED_BOUNDED_IMPLEMENTATION", authority["programme_governance_build"])
-        self.assertEqual("DENIED_PENDING_PG_G6", authority["admission_enforcement"])
+        self.assertEqual("DEFERRED_DISABLED", authority["admission_enforcement"])
+        self.assertEqual("DEFERRED_DISABLED_UNREGISTERED", authority["control_plane_route"])
         self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
         self.assertEqual("NONE", authority["market_model_selector_release_validation"])
         self.assertEqual("NONE", authority["agent_probability_risk_exposure_execution"])
@@ -50,8 +51,9 @@ class ProgrammeGenesisG0Tests(unittest.TestCase):
         self.assertEqual("PG-G3A", packets["PG-WP3"]["next_packet"])
         self.assertEqual("OPERATOR_REQUIRED_COMPLETED", packets["PG-G3A"]["authority_required"])
         self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
-        self.assertEqual("OPERATOR_REQUIRED_FOUR_PART_DECISION", packets["PG-G6"]["authority_required"])
-        self.assertEqual("OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
+        self.assertEqual("OPERATOR_REQUIRED_COMPLETED_FOUR_PART_DECISION", packets["PG-G6"]["authority_required"])
+        self.assertEqual("AUTO_EXECUTABLE_BUILD_OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
+        self.assertEqual("PG-G7", packets["PG-WP6"]["next_packet"])
 
     def test_pg_g0_baseline_and_source_identity_are_pinned(self) -> None:
         baseline = load_json(BASELINE_PATH)
@@ -64,7 +66,7 @@ class ProgrammeGenesisG0Tests(unittest.TestCase):
         self.assertEqual("file_00000000a0e4822f8ed73a5903ded4d7", pg_source["external_identity"])
         self.assertEqual(str(PLAN_PATH.relative_to(ROOT)).replace("\\", "/"), pg_source["repository_path"])
 
-    def test_maintenance_registry_is_frozen_but_enforcement_remains_disabled(self) -> None:
+    def test_maintenance_registry_is_frozen_and_enforcement_remains_disabled(self) -> None:
         registry = load_json(MAINTENANCE_PATH)
         self.assertEqual("FROZEN_DISABLED_PENDING_PG_G6", registry["status"])
         self.assertEqual("NOT_EVALUABLE_REQUIRES_SCOPE_REVIEW", registry["default_outcome"])
