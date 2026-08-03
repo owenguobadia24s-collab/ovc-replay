@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-programme-genesis-pg-wp6-merge-blocker/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "packet_id": "PG-WP6",
+  "next_gate": "PG-G7",
+  "status": "BLOCKED",
+  "blocker_id": "PG-WP6.BLOCKER.REQUIRED_CONTEXT_EXPECTED.20260803",
+  "classification": "EXTERNAL_REPOSITORY_RULE_REQUIRED_CONTEXT_NOT_ACCEPTED",
+  "pull_request": 277,
+  "branch": "build/pg-wp6-bounded-upkeep",
+  "base_branch": "main",
+  "base_commit": "3ab905f838df0ebe8edd4ef3d443d5a111ca70c6",
+  "latest_assured_head_before_blocker_record": "09586d5b30e278fd73f96b48dedfe85651744704",
+  "evidence": [
+    {
+      "head": "c29d039963058599dda088031d9a2d51e73cecda",
+      "tests": {"run_id": 30848710532, "conclusion": "SUCCESS"},
+      "ovc_workflow": {"run_id": 30848711006, "conclusion": "SUCCESS", "required_job": "OVC merge readiness", "job_conclusion": "SUCCESS"},
+      "merge_result": "HTTP_405_REQUIRED_STATUS_CHECK_OVC_MERGE_READINESS_EXPECTED"
+    },
+    {
+      "head": "ba3e1b6ca2a874fcd2d321a62438d26d8a15b54d",
+      "tests": {"run_id": 30848918926, "conclusion": "SUCCESS"},
+      "ovc_workflow": {"run_id": 30848919291, "conclusion": "SUCCESS", "required_job": "OVC merge readiness", "job_id": 91804001920, "job_conclusion": "SUCCESS"},
+      "merge_result": "HTTP_405_REQUIRED_STATUS_CHECK_OVC_MERGE_READINESS_EXPECTED"
+    },
+    {
+      "head": "09586d5b30e278fd73f96b48dedfe85651744704",
+      "tests": {"run_id": 30849246986, "conclusion": "SUCCESS"},
+      "ovc_workflow": {"run_id": 30849246990, "conclusion": "SUCCESS", "required_job": "OVC merge readiness", "job_id": 91805042186, "job_conclusion": "SUCCESS"},
+      "merge_result": "HTTP_405_REQUIRED_STATUS_CHECK_OVC_MERGE_READINESS_EXPECTED"
+    }
+  ],
+  "ruleset_contract": {
+    "ruleset_id": 20229411,
+    "required_context": "OVC merge readiness",
+    "expected_source": {"app_id": 15368, "app_slug": "github-actions"},
+    "strict": true,
+    "source": "contracts/development/v0_2/OVC_DA2_PR_ORCHESTRATION_CONTRACT_v0_1.md"
+  },
+  "diagnosis": [
+    "The canonical tests workflow completed successfully on each exact PR head.",
+    "The OVC merge readiness job completed successfully in the canonical GitHub Actions workflow on each replay.",
+    "The protected merge endpoint nevertheless reports the required context as expected rather than successful.",
+    "The failure is outside PG-WP6 implementation scope and cannot be lawfully corrected by weakening tests, faking a status, bypassing the ruleset or writing main directly."
+  ],
+  "authority_state": {
+    "pg_wp6_implementation": "DELEGATED_PASS_PRESERVED_UNMERGED",
+    "candidate_persistence": "DENIED_PENDING_PG_G7",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7",
+    "pg_g7": "NOT_READY_UNTIL_PG_WP6_MERGED"
+  },
+  "smallest_lawful_resolution": [
+    "Repair or re-verify DA2 ruleset 20229411 so the successful GitHub Actions OVC merge readiness check is accepted on the exact PR head or merge candidate.",
+    "Do not add a forged status, bypass actor, direct main write, force-push or weakened required check.",
+    "After repair, rerun canonical tests and OVC merge readiness on the unchanged or refreshed exact head, squash-merge PR 277, record the merge receipt and continue to PG-G7."
+  ],
+  "rollback": "Keep the upkeep registry disabled and preserve PR 277, all successful workflow runs, the delegated PASS, source findings, hashes and decisions."
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-programme-genesis-pg-wp6-delegated-decision/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "PG-WP6",
+  "decision_id": "PG-WP6.DELEGATED.PASS.DISABLED_BUILD.20260803",
+  "decision": "PASS",
+  "authority_source": "DELEGATED_BY_RATIFIED_PLAN_AND_PG_G6_OPERATOR_DECISION",
+  "baseline_commit": "af20e5d159729ba26b5af6d4026125ebbfe45269",
+  "assured_implementation_commit": "29755d22a89ff7b73049e8c7c1cad8682e07816c",
+  "tests": {
+    "focused": {"workflow_id": 30848244629, "conclusion": "SUCCESS", "test_count": 13},
+    "repository": {"run_id": 30848358386, "conclusion": "SUCCESS", "test_count": 149},
+    "merge_readiness": {"workflow_id": 30848357368, "conclusion": "SUCCESS"}
+  },
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g7/PG_WP6_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "authority_delta": {
+    "disabled_candidate_preview": "APPROVED_IMPLEMENTATION",
+    "candidate_persistence": "DENIED_PENDING_PG_G7",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7",
+    "programme_creation": "DENIED",
+    "programme_event_acceptance": "DENIED",
+    "approval_merge_main_write_publication": "DENIED",
+    "admission_enforcement": "DEFERRED_DISABLED",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED",
+    "market_model_semantic_threshold_selector_release_validation": "NONE",
+    "agent_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "auto_ratifiable_rationale": [
+    "The implementation remains disabled and authority-neutral.",
+    "Every preview is unapproved with authority_effect NONE.",
+    "Persistence is blocked before PG-G7 and writes no file.",
+    "No programme creation, approval, merge or main-write surface exists.",
+    "All focused, repository and orchestration checks passed.",
+    "Rollback is non-destructive."
+  ],
+  "warnings": [
+    "PG_G7_REMAINS_OPERATOR_REQUIRED_BEFORE_ANY_CANDIDATE_PERSISTENCE",
+    "CANDIDATES_ARE_NOT_ACCEPTED_PROGRAMME_EVENTS"
+  ],
+  "blockers": [],
+  "rollback": "Keep the registry disabled, discard previews and implementation outputs, and preserve all source findings, hashes, tests and decisions.",
+  "next_gate": "PG-G7"
+}
