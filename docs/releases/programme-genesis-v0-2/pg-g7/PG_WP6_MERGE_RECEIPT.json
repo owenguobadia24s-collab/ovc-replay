@@ -1,0 +1,82 @@
+{
+  "schema": "ovc-programme-genesis-pg-wp6-merge-receipt/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "packet_id": "PG-WP6",
+  "gate_id": "PG-G7",
+  "pull_request": 277,
+  "branch": "build/pg-wp6-bounded-upkeep",
+  "baseline_commit": "af20e5d159729ba26b5af6d4026125ebbfe45269",
+  "latest_main_before_refresh": "3ab905f838df0ebe8edd4ef3d443d5a111ca70c6",
+  "blocked_head": "6e84541892f4660dd272ef00bb9686d376f77932",
+  "refreshed_final_head": "dd818f157aee2814b60091e9562e598de6012c38",
+  "merge_commit": "ac5a86931fb9426c55e2cf1e00656ce69908828b",
+  "merge_method": "SQUASH",
+  "strict_ruleset_reverification": {
+    "ruleset_id": 20229411,
+    "ruleset_name": "OVC main protection",
+    "evidence_file": "DA2_G1_RULESET_AFTER(1).json",
+    "evidence_bytes": 1204,
+    "evidence_sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d",
+    "matches_repository_verification_sha256": true,
+    "enforcement": "active",
+    "main_included": true,
+    "strict_required_status_checks_policy": true,
+    "required_context": {
+      "context": "OVC merge readiness",
+      "integration_id": 15368
+    },
+    "bypass_actors": 0,
+    "result": "PASS"
+  },
+  "blocker_resolution": {
+    "blocker_id": "PG-WP6.BLOCKER.REQUIRED_CONTEXT_EXPECTED.20260803",
+    "resolution_id": "PG-WP6.RESOLUTION.STRICT_BRANCH_REFRESH.20260803",
+    "root_cause": "STRICT_RULESET_REQUIRED_BRANCH_UP_TO_DATE_WITH_MAIN",
+    "before_refresh": {
+      "compare_status": "diverged",
+      "ahead_by": 25,
+      "behind_by": 1,
+      "merge_base": "af20e5d159729ba26b5af6d4026125ebbfe45269"
+    },
+    "action": "FAST_FORWARD_FEATURE_BRANCH_TO_GITHUB_GENERATED_MERGE_COMMIT_WITH_LATEST_MAIN_AS_PARENT",
+    "force_push": false,
+    "history_rewrite": false,
+    "after_refresh": {
+      "compare_status": "ahead",
+      "ahead_by": 26,
+      "behind_by": 0,
+      "merge_base": "3ab905f838df0ebe8edd4ef3d443d5a111ca70c6"
+    },
+    "result": "RESOLVED"
+  },
+  "exact_head_assurance": {
+    "tests": {
+      "run_id": 30851369267,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_workflow": {
+      "run_id": 30851368942,
+      "conclusion": "SUCCESS"
+    },
+    "merge_readiness": {
+      "job_id": 91812017432,
+      "conclusion": "SUCCESS"
+    },
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0
+  },
+  "authority_after_merge": {
+    "disabled_candidate_preview": "MERGED",
+    "candidate_persistence": "DENIED_PENDING_PG_G7",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7",
+    "programme_creation": "DENIED",
+    "approval_merge_main_write_publication": "DENIED",
+    "admission_enforcement": "DEFERRED_DISABLED",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED",
+    "market_model_selector_release_validation": "NONE",
+    "agent_probability_risk_exposure_execution": "NONE"
+  },
+  "next_gate": "PG-G7",
+  "rollback": "Preserve the merge and receipt; keep the upkeep registry disabled unless PG-G7 is accepted. Any correction must be additive and non-destructive."
+}
