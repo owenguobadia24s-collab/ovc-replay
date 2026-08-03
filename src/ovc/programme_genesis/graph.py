@@ -103,12 +103,10 @@ def validate_graph(
             hard_adjacency.setdefault(to_node, set())
 
     hard_cycles = _find_cycles(hard_adjacency)
-    for cycle in hard_cycles:
-        findings.append({"code": "HARD_DEPENDENCY_CYCLE", "severity": "QUARANTINE", "cycle": cycle})
+    findings.extend({"code": "HARD_DEPENDENCY_CYCLE", "severity": "QUARANTINE", "cycle": cycle} for cycle in hard_cycles)
     all_cycles = _find_cycles(all_adjacency)
     soft_cycles = [cycle for cycle in all_cycles if cycle not in hard_cycles]
-    for cycle in soft_cycles:
-        findings.append({"code": "NON_HARD_CYCLE", "severity": "WARN", "cycle": cycle})
+    findings.extend({"code": "NON_HARD_CYCLE", "severity": "WARN", "cycle": cycle} for cycle in soft_cycles)
 
     blocking = [finding for finding in findings if finding["severity"] in {"BLOCK", "QUARANTINE"}]
     ordered_nodes = sorted(node_rows, key=lambda item: item["node_id"])
@@ -142,13 +140,18 @@ def impact_analysis(
 
     prerequisites: dict[str, set[str]] = defaultdict(set)
     dependents: dict[str, set[str]] = defaultdict(set)
+    forward_types = {"PARENT_OF", "PRODUCES"}
     for edge in edge_rows:
         if edge.get("status") not in {"ACCEPTED", "PROPOSED"}:
             continue
         source = edge["from_node"]
         target = edge["to_node"]
-        prerequisites[source].add(target)
-        dependents[target].add(source)
+        if edge.get("edge_type") in forward_types:
+            prerequisites[target].add(source)
+            dependents[source].add(target)
+        else:
+            prerequisites[source].add(target)
+            dependents[target].add(source)
 
     def traverse(start: Iterable[str], adjacency: Mapping[str, set[str]]) -> list[str]:
         seen = set(start)
