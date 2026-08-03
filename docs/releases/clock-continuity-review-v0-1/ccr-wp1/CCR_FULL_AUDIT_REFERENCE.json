@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-ccr-full-audit-reference/v1",
+  "programme_id": "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+  "source_decision": "CCR-G0.OPERATOR.PASS.20260803T125100+0100",
+  "external_artifact": {"provider":"GOOGLE_DRIVE","file_id":"17aSvdnbnNivG5efnVnI8PII7veQpBeSx","size_bytes":50836,"sha256":"57edecdef747a14ef9d1d27f6dd94f4a7bfb1bfde5035a266cec2144a2e71bfa"},
+  "source_run_id": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9",
+  "source_manifest_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+  "clock_reconstruction": {
+    "15M": {
+      "ASK": {"records":2231,"target_records":2036,"duration_membership_mismatches":0,"parent_m1_count_distribution":{"15":2231}},
+      "BID": {"records":2231,"target_records":2036,"duration_membership_mismatches":0,"parent_m1_count_distribution":{"15":2231}}
+    },
+    "2H_A_L": {
+      "ASK": {"records":248,"target_records":227,"duration_membership_mismatches":0,"parent_m1_count_distribution":{"120":248}},
+      "BID": {"records":248,"target_records":227,"duration_membership_mismatches":0,"parent_m1_count_distribution":{"120":248}}
+    }
+  },
+  "reset_census": {
+    "ASK": {"total":53,"target":45,"causes":{"PROVIDER_GAP":48,"SCHEDULED_WEEKEND_CLOSURE":4,"SOURCE_PARTITION_START":1},"target_causes":{"PROVIDER_GAP":41,"SCHEDULED_WEEKEND_CLOSURE":4},"unknown_count":0},
+    "BID": {"total":53,"target":45,"causes":{"PROVIDER_GAP":48,"SCHEDULED_WEEKEND_CLOSURE":4,"SOURCE_PARTITION_START":1},"target_causes":{"PROVIDER_GAP":41,"SCHEDULED_WEEKEND_CLOSURE":4},"unknown_count":0}
+  },
+  "warmup_summary": {
+    "ASK": {"LOCATION":{"PROVIDER_GAP":{"resets":41,"recovered":41,"bars_min":31,"bars_median":"32","bars_max":56,"seconds_median":"29700","unrecovered":0},"SCHEDULED_WEEKEND_CLOSURE":{"resets":4,"recovered":4,"bars_min":31,"bars_median":"31.0","bars_max":31,"seconds_median":"27900.0","unrecovered":0}}},
+    "BID": {"LOCATION":{"PROVIDER_GAP":{"resets":41,"recovered":41,"bars_min":31,"bars_median":"32","bars_max":56,"seconds_median":"29700","unrecovered":0},"SCHEDULED_WEEKEND_CLOSURE":{"resets":4,"recovered":4,"bars_min":31,"bars_median":"31.0","bars_max":31,"seconds_median":"27900.0","unrecovered":0}}}
+  },
+  "variants": {
+    "V0_CURRENT_STRICT_CONTINUITY_AUTHORITATIVE": {"status":"OBSERVED_AUTHORITATIVE","target_parent_available":615,"target_parent_total":4072,"target_parent_availability_rate_percent":"15.103143","active_parent_range_target_states":0,"target_three_axes_not_evaluated":3602,"identity_changes":0},
+    "V1_PLANNED_CLOSURE_CLASSIFIED_CONTINUITY_SHADOW_ONLY": {"status":"COUNTERFACTUAL_ELIGIBILITY_ONLY_NO_STATE_VALUES_RECOMPUTED","potentially_changed_state_ids_total":496,"scheduled_closures_per_side":4,"bars_created":0,"activation":"DENIED"},
+    "V2_PROVIDER_GAP_SEGMENTED_CONTINUITY_SHADOW_ONLY": {"status":"CAUSE_SEGMENTATION_ONLY_STRICT_RESETS_PRESERVED","provider_gap_resets_per_side":48,"target_provider_gap_resets_per_side":41,"identity_changes":0,"bars_created":0,"activation":"DENIED"}
+  },
+  "translation_consequences": {"complete_c2_quality_states":0,"active_parent_range_target_states":0,"target_parent_available":615,"target_parent_total":4072,"target_parent_availability_rate_percent":"15.103143","target_three_axes_not_evaluated":3602,"planned_closure_counterfactual_state_scope_rows":496,"interpretation":"CURRENT_CLOCK_MAPPING_IS_EXACT; LOW_USABILITY_ARISES_FROM_STRICT_CONTINUITY_WARMUP_AND_PARENT_LEVEL_AVAILABILITY, NOT_CLOCK_GRID_MISASSIGNMENT"},
+  "recommendation": {"clock":"KEEP_CURRENT_2H_A_L_UTC_CLOCK","provider_gap_handling":"KEEP_FAIL_CLOSED_STRICT_RESETS","planned_closure_handling":"PREPARE_SEPARATE_CONTINUITY_REMEDIATION_PLAN","recommended_operator_decision":"PASS_REVIEW_PLAN_ONLY","activation":"DENIED"},
+  "findings": [
+    {"finding_id":"CCR-F1","classification":"CLOCK_GRID_EXACT","severity":"INFO"},
+    {"finding_id":"CCR-F2","classification":"STRICT_RESET_WARMUP_MATERIAL","severity":"MATERIAL"},
+    {"finding_id":"CCR-F3","classification":"PLANNED_CLOSURE_SHADOW_MATERIAL","severity":"MATERIAL"},
+    {"finding_id":"CCR-F4","classification":"PARENT_CONTEXT_LOW_AVAILABILITY","severity":"MATERIAL"},
+    {"finding_id":"CCR-F5","classification":"PROVIDER_GAP_FAIL_CLOSED","severity":"INFO"}
+  ],
+  "qa_recommendation": "PASS_WITH_MATERIAL_FINDINGS",
+  "authority": {"current_clock":"2H_A_L_UTC_AUTHORITATIVE_UNCHANGED","clock_or_continuity_activation":"DENIED","formula_threshold_selector_release_change":"DENIED","validation_publication_probability_risk_exposure_execution":"NONE"}
+}
