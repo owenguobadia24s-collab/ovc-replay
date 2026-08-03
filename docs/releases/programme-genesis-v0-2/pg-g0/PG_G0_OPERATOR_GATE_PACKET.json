@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-programme-genesis-pg-g0-operator-gate/v1",
+  "programme_id": "OVC-PG-v0.2",
+  "plan_id": "OVC-PG-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "PG-G0",
+  "title": "Programme Genesis v0.2 REVISED implementation ratification",
+  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "operator_decision_required": true,
+  "baseline_commit": "5fb26ce08ff1a386f76bc8c6784350ab6fddcfb7",
+  "candidate_branch": "gate/pg-g0-ratification",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "completed_packets": ["PG-00"],
+  "current_authority": {
+    "programme_governance": "DESIGN_PROPOSAL_ONLY",
+    "implementation": "DENIED_PENDING_PG_G0",
+    "migration": "DENIED_PENDING_PG_G3A",
+    "enforcement_and_route": "DENIED_PENDING_PG_G6",
+    "automatic_upkeep": "DENIED_PENDING_PG_G7",
+    "market_model_selector_release_validation_agent_exposure_execution": "NONE"
+  },
+  "proposed_delta": "RATIFY_BOUNDED_PROGRAMME_GOVERNANCE_IMPLEMENTATION_ONLY_AND_RELEASE_PG_WP1",
+  "acceptance_conditions": [
+    "PROGRAMME_IS_OVIS_GOVERNANCE_NOT_A_MARKET_OPTION_OR_RESEARCH_FINDING",
+    "LATEST_LAWFUL_MAIN_AND_OPEN_PULL_REQUESTS_INSPECTED",
+    "NO_EXISTING_PROGRAMME_OWNS_PORTFOLIO_GENESIS_LEDGER_OR_DEPENDENCY_GRAPH_AUTHORITY",
+    "PROGRAMME_CREATION_TEST_AND_THREE_PROGRAMME_SCOPE_AUDIT_REQUIREMENT_APPROVED",
+    "CLASS_AUTHORITY_EVENT_AND_EDGE_VOCABULARY_DIRECTION_APPROVED_FOR_IMPLEMENTATION",
+    "MAINTENANCE_AUTHORITY_REGISTRY_MODEL_APPROVED_BUT_NOT_ENFORCED",
+    "STATE_SYNCHRONISATION_CONTRACT_PRESERVES_PROGRAMME_OWNED_STATE",
+    "PG_G3A_MANDATORY_OPERATOR_ACKNOWLEDGEMENT_BEFORE_MIGRATION",
+    "PERMANENT_MIGRATION_UNCERTAINTY_AND_INFERRED_FIELD_DISCLOSURE",
+    "PARTITIONED_BUILD_WITH_CROSS_PARTITION_CONSISTENCY",
+    "PG_G6_FOUR_PART_ADOPTION_AND_PG_G7_UPKEEP_REMAIN_OPERATOR_REQUIRED",
+    "NO_RESERVED_MARKET_RELEASE_VALIDATION_AGENT_OR_EXPOSURE_AUTHORITY"
+  ],
+  "tests": {
+    "focused": "tests/governance/test_pg_g0.py",
+    "repository_required": ["tests", "OVC merge readiness"],
+    "status": "PENDING_EXACT_HEAD_CI"
+  },
+  "qa_packet": "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_QA_PACKET.json",
+  "qa_recommendation": "PASS_IF_REQUIRED_CHECKS_PASS",
+  "warnings": [
+    "FULL_PROGRAMME_MIGRATION_AND_CONFLICT_CENSUS_ARE_DEFERRED_TO_PG_WP4_AFTER_PG_G3A",
+    "EVERY_IMPORTED_PROGRAMME_REMAINS_VISIBLY_PROVISIONAL_UNTIL_NATIVE_GENESIS",
+    "OPEN_PR_258_REMAINS_AT_CCR_G5_AND_IS_NOT_MODIFIED",
+    "OPEN_PRS_202_210_216_REMAIN_PRESERVED_AND_UNMERGED",
+    "THE_EXTERNAL_DOCX_IS_IDENTIFIED_BY_FILE_LIBRARY_ID_AND_THE_REPOSITORY_RATIFICATION_COPY_BECOMES_GOVERNING_ONLY_AFTER_PASS"
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/plans/governance/OVC_Programme_Genesis_Portfolio_Ledger_and_Dependency_Graph_v0_2_REVISED_Implementation_Plan.md",
+    "contracts/governance/programme_genesis/STATE_SYNCHRONISATION_CONTRACT_v0_1.md",
+    "registries/governance/programme_genesis/MAINTENANCE_AUTHORITY_REGISTRY_v0_1.json",
+    "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json",
+    "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_BASELINE_MANIFEST.json",
+    "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_QA_PACKET.json",
+    "docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_OPERATOR_GATE_PACKET.json",
+    "tests/governance/test_pg_g0.py"
+  ],
+  "external_artifacts": [
+    {
+      "type": "SOURCE_PLAN_DOCX",
+      "identity": "file_00000000a0e4822f8ed73a5903ded4d7",
+      "hash_status": "FILE_LIBRARY_IDENTITY_PRESERVED_REPOSITORY_RATIFICATION_COPY_MATERIALISED"
+    }
+  ],
+  "rollback": "Preserve the branch, plan, baseline, tests and gate packet. Do not merge and do not begin PG-WP1 unless PASS is recorded. A later version may supersede this plan non-destructively.",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "exact_operator_command": "OVC APPROVE PG-G0 PASS",
+  "work_after_approval": "Record the immutable PG-G0 decision, merge the bounded ratification packet after exact-head checks, create build/pg-wp1-genesis-contract from the new lawful main, and continue automatically through wholly non-reserved PASS gates until PG-G3A or a blocker."
+}
