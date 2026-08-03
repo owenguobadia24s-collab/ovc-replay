@@ -1,60 +1,40 @@
-name: PD-JUNE-FM-WP1 frozen source acceptance
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_*.json'
-      - 'docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/PD_JUNE_FULL_MONTH_MDR_G1_DELEGATED_DECISION.json'
-      - 'schemas/research_operations/pattern_discovery/pd_june_full_month_mdr_wp1_source_acceptance_v0_1.schema.json'
-      - 'registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json'
-      - 'scripts/research_operations/validate_pd_june_full_month_mdr_wp1_source_acceptance.py'
-      - 'tests/research_operations/pattern_discovery/test_pd_june_full_month_mdr_wp1_source_acceptance.py'
-      - '.github/workflows/pd-june-full-month-mdr-wp1-source-acceptance.yml'
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  source-acceptance:
-    runs-on: ubuntu-24.04
+  historical-verification:
+    name: historical manual verification
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate compact source acceptance packet
-        run: PYTHONPATH=src:. python scripts/research_operations/validate_pd_june_full_month_mdr_wp1_source_acceptance.py
-      - name: Focused source acceptance tests
-        run: PYTHONPATH=src:. python -m unittest tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr_wp1_source_acceptance -v
-      - name: Retained intake and A2 continuity tests
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src:. python -m unittest \
-            tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr \
-            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_intake \
-            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_a2 \
-            -v
-      - name: Complete repository suite
-        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
-      - name: Enforce repository and authority boundary
-        shell: bash
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          ! find . -type f \( -name 'GBPUSD_M1_*_20260530_20260703_UTC.csv' -o -name 'GBPUSD_H1_*_20260530_20260703_UTC.csv' -o -name '*.bi5' \) -not -path './.git/*' | grep -q .
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
-          index = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_WP1_SOURCE_ACCEPTANCE_INDEX.json').read_text())
-          decision = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_G1_DELEGATED_DECISION.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
-          assert index['manifest']['release_status'] == 'NOT_A_RELEASE'
-          assert index['manifest']['selector_eligibility'] == 'NONE'
-          assert index['manifest']['r2_publication'] == 'DENIED'
-          assert index['manifest']['validation_consumption'] == 'DENIED'
-          assert index['qa']['post_target_context']['repair_performed'] is False
-          assert decision['reserved_authority_delta'] == 'NONE'
-          assert state['canonical_2021_2023_discovery'] == 'DEFERRED_NOT_AUTHORISED'
-          assert state['provider_execution_in_ci'] == 'DENIED'
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

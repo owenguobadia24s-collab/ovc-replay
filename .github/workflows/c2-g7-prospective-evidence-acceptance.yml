@@ -1,36 +1,40 @@
-name: C2-G7 prospective evidence operation acceptance
+name: C2 G7 PROSPECTIVE EVIDENCE ACCEPTANCE — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  acceptance:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run canonical repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce C2-G7 acceptance boundary
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('docs/releases/opt-b-c2-v2/c2-g7/C2_G7_GATE_PACKET.json').read_text())
-          assert gate['decision'] == 'PASS_PROSPECTIVE_EVIDENCE_OPERATION_ACCEPTED'
-          assert gate['prerequisites']['zero_baseline'] is True
-          assert gate['prerequisites']['historical_backfill'] is False
-          assert gate['retained']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert gate['retained']['trading_authority'] == 'NONE'
-          assert gate['retained']['execution_authority'] == 'NONE'
-          assert gate['blocking_issues'] == 0
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c2-g7-prospective-evidence-acceptance.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

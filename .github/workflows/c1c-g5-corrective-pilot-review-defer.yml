@@ -1,58 +1,40 @@
-name: C1C-G5 corrective pilot review DEFER
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/**
-      - registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json
-      - tests/research_operations/pattern_discovery/test_c1c_g5_corrective_pilot_review_defer.py
-      - .github/workflows/c1c-g5-corrective-pilot-review-defer.yml
+  workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  operator-defer:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Verify operator DEFER and CORR2 boundary
-        env:
-          PYTHONPATH: src
-        run: python -m unittest tests.research_operations.pattern_discovery.test_c1c_g5_corrective_pilot_review_defer -v
-      - name: Run complete repository suite
-        env:
-          PYTHONPATH: src
-        run: python -m unittest discover -s tests -v
-      - name: Enforce retained authority and lawful successor
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root=Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate')
-          decision=json.loads((root/'C1C_G5_CORRECTIVE_PILOT_REVIEW_OPERATOR_DECISION.json').read_text())
-          state=json.loads(Path('registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
-          assert decision['decision']=='DEFER'
-          assert decision['authorised_next_packet']['packet_id']=='C1C-G5-CORR2'
-          assert decision['authorised_next_packet']['machine_replay']=='DENIED_NOT_REQUIRED'
-          assert state['status'] in {
-              'OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED',
-              'C1C_G5_CORR2_IMPLEMENTED_OPERATOR_LOCAL_REREVIEW_REQUIRED',
-              'C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED',
-          }
-          assert state['corr2']['status'] in {
-              'READY', 'RUNNING', 'IMPLEMENTED', 'QA_REVIEW', 'GATE_READY', 'COMPLETED_IN_MAIN'
-          }
-          assert state['corr2']['authority_delta']=='NONACTIVATING_REVIEW_WORKFLOW_CORRECTION_ONLY'
-          assert state['corr2']['second_machine_replay']=='DENIED_NOT_REQUIRED'
-          assert state['next_gate']=='C1C-G5-CORRECTIVE-PILOT-REVIEW'
-          retained=decision['retained_prohibitions']
-          assert retained['canonical_append']=='DENIED'
-          assert retained['validation_consumption']=='LOCKED_UNCONSUMED'
-          for key in ('semantic_promotion','family_promotion','candidate_promotion','novelty_promotion','threshold_or_model_change','probability','risk','exposure','trading','execution','agent_write'):
-              assert retained[key]=='NONE'
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

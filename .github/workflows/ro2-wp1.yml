@@ -1,70 +1,40 @@
-name: RO2-WP1 workspace-index acceptance
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'contracts/research_operations/v0_2/**'
-      - 'schemas/research_operations/v0_2/**'
-      - 'registries/research_operations/v0_2/**'
-      - 'fixtures/research_operations/v0_2/**'
-      - 'src/ovc/research_operations/v0_2/**'
-      - 'tests/research_operations/v0_2/**'
-      - 'docs/releases/research-operations-foundation-v0-2/**'
-      - '.github/workflows/ro2-wp1.yml'
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  ro2-wp1-acceptance:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
-      - name: Checkout exact PR court record
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
         with:
-          python-version: '3.12'
-      - name: Validate RO2-G0 parent design
-        run: PYTHONPATH=src python scripts/research_operations/validate_ro2_g0_design.py
-      - name: Run focused RO2-WP1 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_2 -p 'test_workspace_index.py' -v
-      - name: Verify deterministic fixture hash across independent builds
-        run: |
-          PYTHONPATH=src python - <<'PY'
-          import json
-          from pathlib import Path
-          from ovc.research_operations.v0_2.workspace_index import build_indexes
-          fixture = json.loads(Path('fixtures/research_operations/v0_2/wp1_workspace_index_cases.json').read_text())
-          first = build_indexes(fixture['approved_releases'], fixture['validation_metadata'])
-          second = build_indexes(list(reversed(fixture['approved_releases'])), fixture['validation_metadata'])
-          assert first['logical_index_hash'] == second['logical_index_hash']
-          assert first['validation']['availability'] == 'METADATA_ONLY'
-          assert first['validation']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          print(first['logical_index_hash'])
-          PY
-      - name: Run full repository suite
-        id: full_suite
-        continue-on-error: true
-        shell: bash
-        run: |
-          set +e
-          PYTHONPATH=src python -m unittest discover -s tests -v > full-suite.log 2>&1
-          status=$?
-          echo "exit_code=$status" >> "$GITHUB_OUTPUT"
-          tail -n 240 full-suite.log
-          exit 0
-      - name: Upload full-suite diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
         with:
-          name: ro2-wp1-full-suite-diagnostics
-          path: full-suite.log
-          if-no-files-found: error
-          retention-days: 14
-      - name: Enforce full-suite result
-        if: steps.full_suite.outputs.exit_code != '0'
-        run: exit 1
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

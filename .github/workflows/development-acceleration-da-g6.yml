@@ -1,0 +1,40 @@
+name: DEVELOPMENT ACCELERATION DA G6 — historical manual verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  historical-verification:
+    name: historical manual verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/development-acceleration-da-g6.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

@@ -4,14 +4,15 @@ on:
   push:
     branches:
       - build/opt-a-v2-role-workspaces
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
   contents: read
   actions: read
+
+concurrency:
+  group: ovc-legacy-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:

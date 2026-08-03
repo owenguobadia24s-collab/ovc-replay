@@ -1,0 +1,16 @@
+{
+  "schema":"ovc-da2-workflow-admission-modes/v3",
+  "programme_id":"OVC-DEV-ACCEL-v0.2",
+  "packet_id":"DA2-WP1",
+  "gate_id":"DA2-G1",
+  "operator_decision_id":"DA2-G1.OPERATOR.PASS.20260803T100600+0100",
+  "baseline_main":"595dbcfeb951e1c1ab2570debd671b91ec5ec07b",
+  "status":"IMPLEMENTED_PENDING_FINAL_HEAD_CI_AND_RULESET_APPLICATION",
+  "inventory_method":"ALL_WORKFLOW_FILES_SCANNED_AT_VALIDATION_TIME",
+  "canonical_pull_request_workflows":[".github/workflows/tests.yml",".github/workflows/ovc-tiered-tests.yml"],
+  "push_manual_preserved_workflows":[".github/workflows/opt-a-a2-g3-role-release-freeze.yml",".github/workflows/opt-a-wp5-role-workspaces.yml",".github/workflows/opt-a-wp6-r2-publication.yml"],
+  "default_mode_for_all_other_workflows":"NON_PULL_REQUEST_MANUAL_OR_EXISTING_NON_PR_MODE",
+  "required_context_migration":{"current_contexts":["tests","OVC tiered test selection shadow"],"target_contexts":["OVC merge readiness"],"accepted_source":{"app_id":15368,"app_slug":"github-actions"},"application_state":"PENDING_POST_MERGE_RULESET_UPDATE"},
+  "invariants":{"one_complete_suite_per_pr_head":true,"fast_packet_are_focused":true,"cancel_superseded_runs":true,"candidate_ci_run_ids_prohibited":true,"history_preserved":true,"direct_main_write":false,"force_push":false},
+  "rollback":"Restore exact workflow definitions from 595dbcfeb951e1c1ab2570debd671b91ec5ec07b and restore the prior ruleset snapshot through new non-destructive commits."
+}

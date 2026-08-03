@@ -1,107 +1,40 @@
-name: C1C-G5 structured v2 corrective review
+name: C1C G5 STRUCTURED REVIEW V2 — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - .github/workflows/c1c-g5-structured-review-v2.yml
-      - contracts/research_operations/pattern_discovery/C1C_G5_STRUCTURED_CORRECTIVE_REVIEW_CONTRACT_v0_1.md
-      - src/ovc/research_operations/pattern_discovery/pilot_corrective_review_v2.py
-      - scripts/run_c1c_g5_structured_review_v2.ps1
-      - schemas/research_operations/pattern_discovery/c1c_g5_corrective_*.schema.json
-      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/**
-      - registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json
-      - tests/research_operations/pattern_discovery/test_c1c_g5_structured_review_v2.py
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  verify-structured-review:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
           fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-
-      - name: Focused C1C-G5 structured review tests
-        run: >-
-          PYTHONPATH=src python -m unittest discover
-          -s tests/research_operations/pattern_discovery
-          -p 'test_c1c_g5_structured_review_v2.py'
-          -v
-
-      - name: Pattern Discovery dependent tests
-        run: >-
-          PYTHONPATH=src python -m unittest discover
-          -s tests/research_operations/pattern_discovery
-          -p 'test_*.py'
-          -v
-
-      - name: Complete repository tests
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c1c-g5-structured-review-v2.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-
-      - name: Validate JSON packets and schemas
-        shell: bash
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json >/dev/null
-          python -m json.tool docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_STRUCTURED_REVIEW_V2_QA_PACKET.json >/dev/null
-          python -m json.tool registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json >/dev/null
-          for schema in \
-            schemas/research_operations/pattern_discovery/c1c_g5_corrective_review_defect_ledger_v0_1.schema.json \
-            schemas/research_operations/pattern_discovery/c1c_g5_corrective_review_evidence_inventory_v0_1.schema.json \
-            schemas/research_operations/pattern_discovery/c1c_g5_corrective_pilot_review_gate_input_v0_1.schema.json; do
-            python -m json.tool "$schema" >/dev/null
-          done
-
-      - name: Assert retained authority and lawful successor
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          state=json.loads(Path('registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
-          index=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/structured-review-v2/C1C_G5_CORRECTIVE_V2_EVIDENCE_INDEX.json').read_text())
-          if state['status']=='BLOCKED_OPERATOR_LOCAL_STRUCTURED_V2_REVIEW_REQUIRED':
-              assert state['blocker_id']=='C1C-G5-BLOCK-002'
-          else:
-              assert state['status'] in {
-                  'OPERATOR_DEFER_RECORDED_C1C_G5_CORR2_AUTHORISED',
-                  'C1C_G5_CORR2_IMPLEMENTED_OPERATOR_LOCAL_REREVIEW_REQUIRED',
-                  'C1C_G5_CORR2_COMPLETED_IN_MAIN_OPERATOR_LOCAL_REREVIEW_REQUIRED',
-              }
-              assert state['operator_decision']['decision']=='DEFER'
-              assert state['prior_blocker']['blocker_id']=='C1C-G5-BLOCK-002'
-              assert state['prior_blocker']['evidence_preserved'] is True
-              assert state['corr2']['packet_id']=='C1C-G5-CORR2'
-          assert state['corrective_rerun']['machine_execution_status']=='COMPLETE_SIGNED_HASH_VERIFIED'
-          assert state['corrective_rerun']['review_v1_status']=='PRESERVED_SIGNED_INCOMPLETE_UNDER_V2_CONTRACT'
-          assert state['corrective_rerun']['second_machine_replay_required'] is False
-          assert state['next_gate']=='C1C-G5-CORRECTIVE-PILOT-REVIEW'
-          assert index['review_v1_assessment']['v2_contract_result']=='FAIL_CLOSED_REVIEW_REFINALIZATION_REQUIRED'
-          assert index['second_machine_replay_required'] is False
-          assert index['canonical_append']=='DENIED'
-          for key in ('semantic_promotion','family_promotion','novelty_promotion','threshold_change','probability','risk','exposure','trading','execution','agent_write'):
-              assert state['retained_authority'][key]=='NONE'
-          assert state['retained_authority']['validation_consumption']=='LOCKED_UNCONSUMED'
-          PY
-
-      - name: Prove operator-local actions are denied in CI
-        shell: bash
-        run: |
-          set +e
-          PYTHONPATH=src CI=true python -m ovc.research_operations.pattern_discovery.pilot_corrective_review_v2 prepare \
-            --repository-root . \
-            --pilot-run-id PD.PILOT.RUN.96c16f11717e787f971851ee > /tmp/prepare.log 2>&1
-          status=$?
-          cat /tmp/prepare.log
-          test "$status" -ne 0
-          grep -q 'PROHIBITED_IN_CI' /tmp/prepare.log
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."
