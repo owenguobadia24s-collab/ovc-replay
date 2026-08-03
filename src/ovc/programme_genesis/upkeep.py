@@ -66,11 +66,7 @@ def load_upkeep_registry(path: Path | str) -> dict[str, Any]:
 
 
 def _candidate_identity_payload(event: Mapping[str, Any]) -> dict[str, Any]:
-    return {
-        key: deepcopy(value)
-        for key, value in event.items()
-        if key != "candidate_event_id"
-    }
+    return {key: deepcopy(value) for key, value in event.items() if key != "candidate_event_id"}
 
 
 def candidate_event_id(event: Mapping[str, Any]) -> str:
@@ -227,6 +223,9 @@ def persist_candidate_event(
 ) -> Path:
     if registry.get("enabled") is not True:
         raise UpkeepError("automatic upkeep persistence is disabled pending PG-G7")
+    capabilities = registry.get("capabilities")
+    if not isinstance(capabilities, Mapping) or capabilities.get("candidate_persistence") is not True:
+        raise UpkeepError("candidate persistence capability is not enabled")
     decision_id = registry.get("activation_decision_id")
     if not isinstance(decision_id, str) or not decision_id.startswith("PG-G7."):
         raise UpkeepError("accepted PG-G7 activation decision is required")
