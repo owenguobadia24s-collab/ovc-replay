@@ -1,0 +1,80 @@
+{
+  "schema": "ovc-maintenance-authority-registry/v1",
+  "registry_id": "OVC.MAINTENANCE.AUTHORITY.v0.1",
+  "programme_id": "OVC-PG-v0.2",
+  "status": "PROPOSED_PENDING_PG_G0",
+  "default_outcome": "NOT_EVALUABLE_REQUIRES_SCOPE_REVIEW",
+  "principles": [
+    "MAINTENANCE_NEVER_CREATES_A_PROGRAMME_BY_TOOLING_CONVENIENCE",
+    "MATCH_REQUIRES_WORK_TYPE_PATH_TITLE_AUTHORITY_AND_SIZE",
+    "NO_RESERVED_AUTHORITY",
+    "NO_DESTRUCTIVE_ACTION",
+    "NO_DIRECT_MAIN_WRITE",
+    "SCOPE_EXPANSION_ESCALATES"
+  ],
+  "entries": [
+    {
+      "maintenance_id": "MAINT.DOC.CLARIFICATION.v1",
+      "work_type": "DOCUMENTATION_CLARIFICATION",
+      "allowed_paths": ["docs/**", "README.md"],
+      "title_patterns": ["docs:", "documentation:", "clarify"],
+      "max_changed_files": 12,
+      "authority_ceiling": "NO_AUTHORITY_DELTA",
+      "required_parent": "EXISTING_PROGRAMME_OR_CANON_OWNER",
+      "escalation": "NEW_CONTRACT_SEMANTICS_OR_SCOPE_REQUIRES_PACKET_OR_GENESIS_REVIEW"
+    },
+    {
+      "maintenance_id": "MAINT.TEST.FIXTURE.CORRECTION.v1",
+      "work_type": "TEST_OR_FIXTURE_CORRECTION",
+      "allowed_paths": ["tests/**", "fixtures/**"],
+      "title_patterns": ["test:", "fixture:", "correct"],
+      "max_changed_files": 20,
+      "authority_ceiling": "PRESERVE_EXISTING_ASSERTIONS_AND_AUTHORITY",
+      "required_parent": "OWNING_PROGRAMME_OR_ACTIVE_PACKET",
+      "escalation": "WEAKENED_ASSERTION_NEW_BEHAVIOUR_OR_NEW_DEPENDENCY_REQUIRES_PACKET_REVIEW"
+    },
+    {
+      "maintenance_id": "MAINT.RECEIPT.STATE_RECONCILIATION.v1",
+      "work_type": "RECEIPT_OR_TERMINAL_STATE_RECONCILIATION",
+      "allowed_paths": ["docs/releases/**", "registries/**", "tests/**"],
+      "title_patterns": ["receipt:", "reconcile", "terminal state"],
+      "max_changed_files": 15,
+      "authority_ceiling": "COURT_RECORD_CORRECTION_ONLY",
+      "required_parent": "PROGRAMME_WITH_ACCEPTED_MERGE_OR_DECISION_EVIDENCE",
+      "escalation": "AUTHORITY_CHANGE_OR_UNRESOLVED_SOURCE_CONFLICT_REQUIRES_OPERATOR_GATE"
+    },
+    {
+      "maintenance_id": "MAINT.REPRODUCIBILITY.RERUN.v1",
+      "work_type": "RERUN_RETEST_OR_HASH_REPRODUCTION",
+      "allowed_paths": ["docs/releases/**", "tests/**", "scripts/**"],
+      "title_patterns": ["rerun", "retest", "reproduce", "hash"],
+      "max_changed_files": 10,
+      "authority_ceiling": "EVIDENCE_REPRODUCTION_ONLY",
+      "required_parent": "EXISTING_GATE_PACKET_OR_INCIDENT",
+      "escalation": "CHANGED_POPULATION_CONTRACT_OR_RESULT_DISPOSITION_REQUIRES_PACKET_REVIEW"
+    },
+    {
+      "maintenance_id": "MAINT.GENERATED.PORTFOLIO.REFRESH.v1",
+      "work_type": "GENERATED_PORTFOLIO_REFRESH",
+      "allowed_paths": ["docs/generated/programme_portfolio/**", "var/programme_portfolio/**"],
+      "title_patterns": ["portfolio refresh", "projection rebuild"],
+      "max_changed_files": 25,
+      "authority_ceiling": "DERIVED_READ_MODEL_ONLY",
+      "required_parent": "OVC-PG-v0.2_AFTER_PG_G6",
+      "escalation": "SOURCE_STATE_CHANGE_CONFLICT_OR_ENFORCEMENT_DELTA_REQUIRES_OWNING_PROGRAMME_ACTION"
+    }
+  ],
+  "reserved_authority_denials": [
+    "SELECTOR_ACTIVATION",
+    "ACTIVE_DISCOVERY",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "SEMANTIC_MODEL_FAMILY_CANDIDATE_PROMOTION",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "DESTRUCTIVE_ACTION",
+    "AGENT_WRITE",
+    "PROBABILITY_RISK_EXPOSURE_EXECUTION"
+  ],
+  "decision_gate": "PG-G0",
+  "activation_gate": "PG-G6"
+}
