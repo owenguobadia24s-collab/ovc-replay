@@ -31,10 +31,12 @@ class ProgrammeGenesisG0Tests(unittest.TestCase):
         self.assertEqual(263, decision["approved_pull_request"])
         self.assertEqual("COMPLETED", packets["PG-00"]["status"])
         self.assertEqual("docs/releases/programme-genesis-v0-2/pg-g0/PG_G0_OPERATOR_DECISION.json", packets["PG-00"]["decision_record"])
+        self.assertEqual("DENIED_PENDING_PG_G3A", decision["authority_delta"]["portfolio_migration"])
+        self.assertEqual("DENIED_PENDING_PG_G6", decision["authority_delta"]["admission_enforcement"])
+        self.assertEqual("DENIED_PENDING_PG_G7", decision["authority_delta"]["automatic_upkeep"])
         authority = state["authority"]
         self.assertEqual("RATIFIED", authority["programme_governance_design"])
         self.assertEqual("APPROVED_BOUNDED_IMPLEMENTATION", authority["programme_governance_build"])
-        self.assertEqual("DENIED_PENDING_PG_G3A", authority["portfolio_migration"])
         self.assertEqual("DENIED_PENDING_PG_G6", authority["admission_enforcement"])
         self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
         self.assertEqual("NONE", authority["market_model_selector_release_validation"])
@@ -46,7 +48,7 @@ class ProgrammeGenesisG0Tests(unittest.TestCase):
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("d0d2445b035f3fc93a177b94b23120be7dfa274b", packets["PG-00"]["merge_commit"])
         self.assertEqual("PG-G3A", packets["PG-WP3"]["next_packet"])
-        self.assertEqual("OPERATOR_REQUIRED_ACKNOWLEDGEMENT", packets["PG-G3A"]["authority_required"])
+        self.assertEqual("OPERATOR_REQUIRED_COMPLETED", packets["PG-G3A"]["authority_required"])
         self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
         self.assertEqual("OPERATOR_REQUIRED_FOUR_PART_DECISION", packets["PG-G6"]["authority_required"])
         self.assertEqual("OPERATOR_REQUIRED_AT_PG_G7", packets["PG-WP6"]["authority_required"])
