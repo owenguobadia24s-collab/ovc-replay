@@ -40,7 +40,7 @@ Projection order is exactly:
 
 ## Source-state synchronisation
 
-Programme-owned machine-readable state is the effective state. The synchroniser compares but never writes the source:
+programme-owned machine-readable state is the effective state. The synchroniser compares but never writes the source:
 
 - a source/projection commit mismatch emits `STALE_PROJECTION`;
 - a material field mismatch emits `STATE_SOURCE_CONFLICT`;
