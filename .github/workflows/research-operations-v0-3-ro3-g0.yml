@@ -1,60 +1,40 @@
-name: RO3-G0 C1 fact-assurance design freeze
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - "contracts/research_operations/v0_3/**"
-      - "schemas/research_operations/v0_3/**"
-      - "registries/research_operations/v0_3/**"
-      - "fixtures/research_operations/v0_3/**"
-      - "docs/research-console/v0_3/RO3_C1_CONSOLE_PROJECTION_MAP_v0_1.md"
-      - "docs/releases/research-operations-foundation-v0-3/**"
-      - "scripts/research_operations/validate_ro3_g0_design.py"
-      - "tests/research_operations/v0_3/test_ro3_g0_design.py"
-      - ".github/workflows/research-operations-v0-3-ro3-g0.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  ro3-g0:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
           show-progress: false
-      - name: Runtime identity
-        run: python --version
-      - name: Capture RO3-G0 validator result
-        shell: bash
-        run: |
-          set +e
-          python -u scripts/research_operations/validate_ro3_g0_design.py > ro3-g0-validator.log 2>&1
-          status=$?
-          printf '%s\n' "$status" > ro3-g0-validator.status
-          cat ro3-g0-validator.log
-          exit 0
-      - name: Upload validator diagnostics
-        uses: actions/upload-artifact@v4
+      - uses: actions/setup-python@v5
         with:
-          name: ro3-g0-validator-diagnostics
-          path: |
-            ro3-g0-validator.log
-            ro3-g0-validator.status
-          if-no-files-found: error
-      - name: Require validator PASS
-        shell: bash
-        run: test "$(cat ro3-g0-validator.status)" = "0"
-      - name: Focused RO3-G0 tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_3 -p 'test_ro3_g0_design.py' -v
-      - name: Canonical repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Assert design boundary remains unactivated
-        shell: bash
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          grep -q 'runtime_implementation_started.*NO' docs/releases/research-operations-foundation-v0-3/ro3-g0/RO3_G0_GATE_PACKET.json
-          grep -q 'live_console_c1_route: DISABLED_PENDING_RC_G4' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
-          grep -q 'OPERATOR_REQUIRED_NOT_AUTO_RATIFIABLE' registries/research_operations/v0_3/RO3_PROGRAMME_STATE_v0_1.json
-          grep -q 'c1_formulas_releases_selectors: IMMUTABLE' registries/research_operations/v0_3/RO3_IMPLEMENTATION_REGISTRY_v0_1.yaml
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

@@ -1,31 +1,40 @@
-name: OPT-B.C1 WP5 controlled dispatcher
+name: OVC historical packet verification
 
 on:
-  push:
-    branches:
-      - build/opt-b-c1-v2-wp5-dispatch
-      - build/opt-b-c1-v2-wp5-reconcile-request
-    paths:
-      - docs/releases/opt-b-c1-v2/wp5/WP5_EXECUTION_REQUEST.md
-  pull_request:
-    branches:
-      - main
-    paths:
-      - docs/releases/opt-b-c1-v2/wp5/WP5_EXECUTION_REQUEST.md
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
-  actions: write
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  dispatch-publication:
-    if: github.event_name == 'workflow_dispatch' || github.head_ref == 'build/opt-b-c1-v2-wp5-dispatch' || github.head_ref == 'build/opt-b-c1-v2-wp5-reconcile-request' || github.ref_name == 'build/opt-b-c1-v2-wp5-dispatch' || github.ref_name == 'build/opt-b-c1-v2-wp5-reconcile-request'
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
-      - name: Dispatch idempotent WP5 reconciliation workflow
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          gh workflow run opt-b-c1-wp5-idempotent-reconcile.yml --repo "${GITHUB_REPOSITORY}" --ref main
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

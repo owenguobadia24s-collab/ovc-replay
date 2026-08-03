@@ -3,36 +3,23 @@ name: OVC tiered test selection shadow
 on:
   pull_request:
     branches: [main]
-    paths:
-      - "contracts/development/**"
-      - "schemas/development/**"
-      - "registries/development/**"
-      - "src/ovc/development/**"
-      - "scripts/development/**"
-      - "tests/development/**"
-      - "fixtures/development/**"
-      - "docs/development-acceleration/**"
-      - "docs/releases/development-acceleration-v0-1/**"
-      - "contracts/research_operations/mta/**"
-      - "schemas/research_operations/mta/**"
-      - "registries/research_operations/mta/**"
-      - "src/ovc/research_operations/mta/**"
-      - "scripts/research_operations/validate_mta_*.py"
-      - "tests/research_operations/mta/**"
-      - "fixtures/research_operations/mta/**"
-      - "docs/releases/market-translation-audit-v0-2/**"
-      - ".github/workflows/market-translation-audit-mta-*.yml"
-      - ".github/workflows/ovc-tiered-tests.yml"
-      - ".github/workflows/tests.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+  checks: read
+  pull-requests: read
+
+concurrency:
+  group: ovc-pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  select-and-run:
-    name: OVC tiered test selection shadow
+  profile:
+    name: OVC profile assurance
     runs-on: ubuntu-latest
+    outputs:
+      selected_profile: ${{ steps.select.outputs.profile }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,9 +27,8 @@ jobs:
           show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.11"
       - name: Build changed-file inventory
-        id: changes
         shell: bash
         run: |
           set -euo pipefail
@@ -53,6 +39,7 @@ jobs:
           fi
           test -s "$RUNNER_TEMP/changed-paths.txt"
       - name: Select deterministic profile
+        id: select
         shell: bash
         run: |
           set -euo pipefail
@@ -62,26 +49,37 @@ jobs:
             --output "$RUNNER_TEMP/test-selection-manifest.json" \
             > "$RUNNER_TEMP/test-selection-stdout.json"
           cmp "$RUNNER_TEMP/test-selection-manifest.json" "$RUNNER_TEMP/test-selection-stdout.json"
-          python - <<'PY' >> "$GITHUB_ENV"
+          profile=$(python - <<'PY'
           import json, os
           from pathlib import Path
           manifest = json.loads((Path(os.environ["RUNNER_TEMP"]) / "test-selection-manifest.json").read_text())
           assert manifest["status"] == "PASS"
           assert manifest["final_assurance_required"] is True
           assert manifest["gate_replay_substitution"] == "PROHIBITED"
-          print(f"OVC_SELECTED_PROFILE={manifest['selected_profile']}")
+          print(manifest["selected_profile"])
           PY
+          )
+          echo "profile=$profile" >> "$GITHUB_OUTPUT"
+          echo "OVC_SELECTED_PROFILE=$profile" >> "$GITHUB_ENV"
       - name: FAST profile
-        if: env.OVC_SELECTED_PROFILE == 'FAST'
-        run: PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_*.py' -v
+        if: steps.select.outputs.profile == 'FAST'
+        run: |
+          python -m compileall -q src scripts
+          PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_*.py' -v
       - name: PACKET profile
-        if: env.OVC_SELECTED_PROFILE == 'PACKET'
+        if: steps.select.outputs.profile == 'PACKET'
         run: |
           PYTHONPATH=src python -m unittest discover -s tests/development -v
           PYTHONPATH=src python -m unittest discover -s tests/authority -v
-      - name: FINAL_HEAD profile
-        if: env.OVC_SELECTED_PROFILE == 'FINAL_HEAD'
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: FINAL_HEAD profile without duplicate complete suite
+        if: steps.select.outputs.profile == 'FINAL_HEAD'
+        run: |
+          PYTHONPATH=src python -m unittest discover -s tests/development -v
+          PYTHONPATH=src python -m unittest discover -s tests/authority -v
+      - name: Validate orchestration contract
+        run: |
+          PYTHONPATH=src python -u scripts/development/v0_2/validate_da2_g1.py
+          PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da2_g1_orchestration.py' -v
       - name: Retain final assurance boundary
         shell: bash
         run: |
@@ -89,3 +87,46 @@ jobs:
           grep -q 'required_on_stable_pr_head.*true' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
           grep -q 'gate_replay_substitution.*PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
           grep -q 'local_success_substitutes_remote_required_check.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
+
+  legacy-required-context:
+    name: OVC tiered test selection shadow
+    needs: profile
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Compatibility context passed after ${{ needs.profile.outputs.selected_profile }} profile assurance."
+
+  merge-readiness:
+    name: OVC merge readiness
+    needs: profile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate required checks once
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const sha = context.payload.pull_request?.head?.sha || context.sha;
+            const deadline = Date.now() + 20 * 60 * 1000;
+            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+            while (Date.now() < deadline) {
+              const response = await github.rest.checks.listForRef({
+                owner,
+                repo,
+                ref: sha,
+                per_page: 100,
+                filter: 'latest'
+              });
+              const tests = response.data.check_runs.filter(run => run.name === 'tests');
+              if (tests.some(run => run.status === 'completed' && run.conclusion === 'success')) {
+                core.info(`Canonical tests passed on ${sha}.`);
+                return;
+              }
+              const failed = tests.find(run => run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
+              if (failed) {
+                core.setFailed(`Canonical tests concluded ${failed.conclusion}.`);
+                return;
+              }
+              await sleep(10000);
+            }
+            core.setFailed(`Canonical tests did not complete successfully within the readiness window for ${sha}.`);

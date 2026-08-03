@@ -1,65 +1,40 @@
-name: OPT-B.C1 B1-G1 candidate freeze review
+name: OPT B C1 B1 G1 FREEZE REVIEW — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
-  actions: read
+
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  packet-tests:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: PYTHONPATH=src python -m unittest discover -s tests -v
-
-  exact-candidate-review:
-    needs: packet-tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    env:
-      CANDIDATE_ARTIFACT_ID: '8626942276'
-      CANDIDATE_ARCHIVE_SHA256: fb52ea4f84fa7c1d79c9c524470d6722ab82b09a5ed4d4f0278fda4d330eabfc
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Download exact WP4 candidate archive
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          curl --fail --location \
-            --header "Authorization: Bearer ${GH_TOKEN}" \
-            --header "Accept: application/vnd.github+json" \
-            --header "X-GitHub-Api-Version: 2022-11-28" \
-            --output c1-wp4-candidate.zip \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${CANDIDATE_ARTIFACT_ID}/zip"
-          echo "${CANDIDATE_ARCHIVE_SHA256}  c1-wp4-candidate.zip" | sha256sum --check --strict
-          mkdir candidate
-          unzip -q c1-wp4-candidate.zip -d candidate
-
-      - name: Verify every candidate byte and record identity
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/opt-b-c1-b1-g1-freeze-review.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          python scripts/opt_b/verify_c1_b1_g1_candidate.py \
-            --artifact-root candidate \
-            --archive c1-wp4-candidate.zip \
-            --output b1-g1/B1_G1_VERIFICATION_RECEIPT.json
-          cmp \
-            docs/releases/opt-b-c1-v2/b1-g1/B1_G1_VERIFICATION_RECEIPT.json \
-            b1-g1/B1_G1_VERIFICATION_RECEIPT.json
-
-      - name: Upload reproducible B1-G1 verification receipt
-        uses: actions/upload-artifact@v4
-        with:
-          name: c1-b1-g1-exact-candidate-verification
-          path: b1-g1/B1_G1_VERIFICATION_RECEIPT.json
-          retention-days: 90
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

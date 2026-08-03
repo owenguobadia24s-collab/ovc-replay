@@ -1,39 +1,40 @@
-name: OPT-B.C1 B1-G3 candidate release
+name: OPT B C1 B1 G3 CANDIDATE RELEASE — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  candidate-release-gate:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Verify B1-G3 exact candidate release packet
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('docs/releases/opt-b-c1-v2/b1-g3/B1_G3_GATE_PACKET.json').read_text())
-          wp5 = json.loads(Path('docs/releases/opt-b-c1-v2/wp5/WP5_REMOTE_VERIFICATION_RECEIPT.json').read_text())
-          assert gate['decision'] == 'PASS_EXISTING_CANDIDATE_RELEASE_RECONCILED_NO_AUTHORITY_REGRESSION'
-          assert gate['totals'] == {
-              'duplicate_record_ids': 0,
-              'record_count': 212764,
-              'record_file_count': 192,
-              'verified_payload_bytes': 36170710,
-          }
-          assert wp5['status'] == 'PASS_FULL_REMOTE_BYTE_VERIFICATION'
-          assert gate['authority_delta']['selector_activation'] == 'NONE'
-          assert gate['authority_delta']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert gate['authority_delta']['c2_consumption'] == 'DENIED_PENDING_SEPARATE_HANDOFF_REVIEW'
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/opt-b-c1-b1-g3-candidate-release.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

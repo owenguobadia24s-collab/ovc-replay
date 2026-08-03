@@ -1,67 +1,40 @@
-name: PD-JUNE-FULL-MONTH-MDR WP1 intake tooling
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  wp1-intake-tooling:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Parse current A2 court records and provider plan
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          PYTHONPATH=src:. python - <<'PY'
-          import json
-          from pathlib import Path
-          from ovc.research_operations.prospective_source import dukascopy_full_month_mdr_a2 as subject
-
-          base = Path('docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr')
-          authority = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_OPERATOR_AUTHORITY.json').read_text())
-          a1 = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A1_OPERATOR_DECISION.json').read_text())
-          a2 = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A2_OPERATOR_DECISION.json').read_text())
-          diagnostic = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A2_SOURCE_DIAGNOSTIC_SUMMARY.json').read_text())
-          qa = json.loads((base / 'PD_JUNE_FULL_MONTH_MDR_A2_QA_PACKET.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_JUNE_FULL_MONTH_MDR_PROGRAMME_STATE_v0_1.json').read_text())
-          plan = subject.provider_request_plan()
-
-          assert authority['decision'] == 'PASS'
-          assert a1['decision'] == 'PASS'
-          assert a2['decision'] == 'PASS'
-          assert a2['decision_authority'] == 'OPERATOR'
-          assert diagnostic['observations']['m1_bid_ask_timestamp_pairing'] == 'PASS_EXACT'
-          assert diagnostic['observations']['native_may_june_ohlc_mismatches'] == 0
-          assert plan['provider_object_count'] == 72
-          assert plan['plan_amendment'] == 'PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE'
-          assert plan['paired_sparse_m1_policy'] == 'ACCEPT_EXACTLY_PAIRED_PROVIDER_ABSENCE_WITH_EXPLICIT_CENSORING'
-          assert plan['provider_execution_in_ci'] == 'DENIED'
-          assert state['packet_id'] in {'PD-JUNE-FM-WP1', 'PD-JUNE-FM-WP2', 'PD-JUNE-FM-WP3'}
-          assert state['plan_amendment'] == 'PD-JUNE-FM-A2-PAIRED-SPARSE-M1-ACCEPTANCE'
-          assert state['next_packet_status'] in {
-              'BLOCKED_PENDING_FROZEN_LOCAL_SOURCE_SLICE_AND_COMPACT_RECEIPTS',
-              'BLOCKED_PENDING_WP1_FINAL_HEAD_CI_AND_SQUASH_MERGE',
-              'READY_AFTER_WP1_SOURCE_ACCEPTANCE_MERGE',
-              'READY',
-              'BLOCKED_PENDING_WP2_LOCAL_REPLAY_AND_COMPACT_RECEIPTS',
-              'BLOCKED_PENDING_WP2_ACCEPTANCE_CI_AND_SQUASH_MERGE',
-              'BLOCKED_PENDING_WP2_ACCEPTANCE_MERGE',
-          }
-          assert qa['status'] in {'IMPLEMENTED_PENDING_CI', 'PASS_FINAL_HEAD_CI', 'COMPLETED_SQUASH_MERGED_TO_MAIN'}
-          PY
-      - name: Run focused full-month intake tests
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          PYTHONPATH=src:. python -m unittest \
-            tests.research_operations.pattern_discovery.test_pd_june_full_month_mdr \
-            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_intake \
-            tests.research_operations.prospective_source.test_pd_june_full_month_mdr_a2 \
-            -v
-      - name: Run complete repository suite
-        run: PYTHONPATH=src:. python -m unittest discover -s tests -v
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

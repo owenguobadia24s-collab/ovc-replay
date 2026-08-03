@@ -1,32 +1,40 @@
-name: RO2-WP2 inspection acceptance
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'contracts/research_operations/v0_2/**'
-      - 'src/ovc/research_operations/v0_2/**'
-      - 'tests/research_operations/v0_2/**'
-      - 'registries/research_operations/v0_2/**'
-      - 'docs/releases/research-operations-foundation-v0-2/**'
-      - '.github/workflows/ro2-wp2.yml'
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  ro2-wp2-acceptance:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Validate RO2-G0 parent design
-        run: PYTHONPATH=src python scripts/research_operations/validate_ro2_g0_design.py
-      - name: Run RO2-WP1 and RO2-WP2 focused tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/research_operations/v0_2 -p 'test_*.py' -v
-      - name: Run full repository suite
+          python-version: "3.11"
+      - name: Retired workflow notice
+        run: |
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

@@ -1,116 +1,40 @@
-name: PD-G5P Pilot Discovery DEFER decision verification
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    paths:
-      - "docs/releases/pattern-discovery-v0-3/pd-g5p/**"
-      - "registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json"
-      - "registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json"
-      - "registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml"
-      - "tests/research_operations/pattern_discovery/test_pd_g5p_gate_ready.py"
-      - ".github/workflows/pd-g5p-pilot-operations-gate-ready.yml"
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  gate-decision:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Focused PD-G5P exact evidence and DEFER tests
-        shell: bash
+      - name: Retired workflow notice
         run: |
-          set +e
-          PYTHONPATH=src python -m unittest discover \
-            -s tests/research_operations/pattern_discovery \
-            -p 'test_pd_g5p_gate_ready.py' \
-            -v > /tmp/pd-g5p-focused.log 2>&1
-          status=$?
-          cat /tmp/pd-g5p-focused.log
-          exit "$status"
-      - name: Preserve focused test diagnostics
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pd-g5p-focused-test-log
-          path: /tmp/pd-g5p-focused.log
-          if-no-files-found: error
-          retention-days: 7
-      - name: Canonical repository tests
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Validate machine-readable gate packet and state
-        shell: bash
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_COMPACT_EVIDENCE_INDEX.json >/dev/null
-          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_QA_PACKET.json >/dev/null
-          python -m json.tool docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json >/dev/null
-          python -m json.tool registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json >/dev/null
-          python -m json.tool registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json >/dev/null
-      - name: Assert operator DEFER decision and CORR1 continuation
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          root = Path('docs/releases/pattern-discovery-v0-3/pd-g5p')
-          decision_record = 'docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_DECISION.md'
-          gate = json.loads((root / 'PD_G5P_OPERATOR_GATE_PACKET.json').read_text())
-          qa = json.loads((root / 'PD_G5P_QA_PACKET.json').read_text())
-          state = json.loads(Path('registries/research_operations/pattern_discovery/PD_G5P_PILOT_OPERATIONS_ACCEPTANCE_STATE_v0_1.json').read_text())
-          parent = json.loads(Path('registries/research_operations/pattern_discovery/PD_WP5_STATE_v0_1.json').read_text())
-          decision = (root / 'PD_G5P_OPERATOR_DECISION.md').read_text()
-          assert gate['gate_status'] == 'COMPLETED'
-          assert gate['decision'] == 'DEFER'
-          assert gate['operator_approval_required'] is False
-          assert gate['recommended_decision'] == 'DEFER'
-          assert gate['proposed_delta_status'] == 'DEFERRED_NOT_GRANTED'
-          assert gate['decision_record'] == decision_record
-          assert gate['next_packet'] == 'PD-WP5-CORR1'
-          assert qa['qa_recommendation'] == 'DEFER'
-          assert state['gate_status'] == 'COMPLETED'
-          assert state['decision'] == 'DEFER'
-          assert state['operator_approval_required'] is False
-          assert state['canonical_discovery_available'] is False
-          assert state['decision_record'] == decision_record
-          assert state['next_packet'] == 'PD-WP5-CORR1'
-          assert parent['packet_status'] == 'COMPLETED'
-          assert parent['decision'] == 'DEFER'
-          assert parent['next_packet'] == 'PD-WP5-CORR1'
-          assert parent['second_pilot_replay'] == 'DENIED'
-          assert 'OVC APPROVE PD-G5P DEFER' in decision
-          PY
-      - name: Assert retained prohibitions and bounded evidence
-        shell: bash
-        run: |
-          set -euo pipefail
-          if find docs/releases/pattern-discovery-v0-3/pd-g5p -type f -size +100k | grep .; then
-            echo 'Unexpected large artifact in PD-G5P gate packet.'
-            exit 1
-          fi
-          test "$(find docs/releases/pattern-discovery-v0-3/pd-g5p/evidence/raw -name '*.b64' | wc -l)" -eq 7
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('docs/releases/pattern-discovery-v0-3/pd-g5p/PD_G5P_OPERATOR_GATE_PACKET.json').read_text())
-          authority = gate['current_authority']
-          assert authority['pilot_only'] is True
-          assert authority['promotion_eligibility'] == 'NON_PROMOTABLE'
-          assert authority['canonical_discovery_population'] is False
-          assert authority['canonical_append'] == 'DENIED'
-          assert authority['live_prospective_relabelling'] == 'DENIED'
-          for key in ('semantic_promotion', 'family_promotion', 'active_novelty_ranking', 'selector_mutation', 'release_mutation', 'r2_publication', 'validation_consumption'):
-              assert authority[key] == 'DENIED', (key, authority[key])
-          for key in ('probability_authority', 'risk_authority', 'exposure_authority', 'trading_authority', 'execution_authority', 'agent_write_authority'):
-              assert authority[key] == 'NONE', (key, authority[key])
-          registry = Path('registries/research_operations/pattern_discovery/PATTERN_DISCOVERY_IMPLEMENTATION_REGISTRY_v0_3.yaml').read_text()
-          assert 'current_authority: PD_G5P_DEFERRED_PD_WP5_CORR1_AUTHORISED' in registry
-          assert 'SECOND_PILOT_REPLAY_WITHOUT_OPERATOR_APPROVAL' in registry
-          assert 'canonical_append_enabled: false' in registry
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

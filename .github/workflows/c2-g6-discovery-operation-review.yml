@@ -1,39 +1,40 @@
-name: C2-G6 discovery operation review
+name: C2 G6 DISCOVERY OPERATION REVIEW — historical manual verification
 
 on:
-  pull_request:
-    branches: [main]
   workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  discovery-operation-review:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.historical_ref || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run canonical repository tests
-        run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: Enforce C2-G6 prospective-only boundary
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          set -euo pipefail
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          gate = json.loads(Path('docs/releases/opt-b-c2-v2/c2-g6/C2_G6_GATE_PACKET.json').read_text())
-          assert gate['decision'] == 'PASS_DISCOVERY_OPERATION_OPEN_PROSPECTIVE_ONLY'
-          assert gate['operation']['status'] == 'OPEN_PROSPECTIVE_RESEARCH'
-          assert gate['operation']['pre_cutoff_rows_admissible'] is False
-          assert gate['operation']['effective_commit'] == '2a3f262fc0539786b67ae6c3e20604eb4d4adc2b'
-          assert gate['prerequisites']['c2_discovery_authority'] == 'ACTIVE_DISCOVERY'
-          assert gate['prerequisites']['legacy_b_state'] == 'HISTORICAL_SUPERSEDED'
-          assert gate['retained']['validation_consumption'] == 'LOCKED_UNCONSUMED'
-          assert gate['retained']['trading'] == 'NONE'
-          assert gate['retained']['execution'] == 'NONE'
-          assert gate['blocking_issues'] == 0
-          PY
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: 595dbcfeb951e1c1ab2570debd671b91ec5ec07b:.github/workflows/c2-g6-discovery-operation-review.yml"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
+        run: |
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."

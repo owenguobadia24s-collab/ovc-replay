@@ -1,64 +1,40 @@
-name: C1C-G5 CORR2 merge state
+name: OVC historical packet verification
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_IMPLEMENTATION_RECEIPT.json
-      - docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_MERGE_RECEIPT.json
-      - registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json
-      - tests/research_operations/pattern_discovery/test_c1c_g5_corr2_merge_state.py
-      - .github/workflows/c1c-g5-corr2-merge-state.yml
+  workflow_dispatch:
+    inputs:
+      historical_ref:
+        description: Git ref to verify; defaults to current ref
+        required: false
+        type: string
 
 permissions:
   contents: read
 
+concurrency:
+  group: ovc-manual-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  verify-merge-state:
+  historical-verification:
+    name: historical manual verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.historical_ref || github.sha }}
           fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Verify exact merge receipt and blocker boundary
-        env:
-          PYTHONPATH: src:.
-        run: python -m unittest tests.research_operations.pattern_discovery.test_c1c_g5_corr2_merge_state -v
-      - name: Run retained DEFER and structured-review state tests
-        env:
-          PYTHONPATH: src:.
+          python-version: "3.11"
+      - name: Retired workflow notice
         run: |
-          python -m unittest \
-            tests.research_operations.pattern_discovery.test_c1c_g5_corrective_pilot_review_defer \
-            tests.research_operations.pattern_discovery.test_c1c_g5_structured_review_merge_state -v
-      - name: Run complete repository suite
-        env:
-          PYTHONPATH: src:.
-        run: python -m unittest discover -s tests -v
-      - name: Enforce registry-only post-merge scope
+          echo "This completed packet/gate workflow is retired from pull-request admission."
+          echo "Historical definition: commit 595dbcfeb951e1c1ab2570debd671b91ec5ec07b"
+          echo "The exact historical workflow remains in Git history."
+      - name: Canonical historical verification
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Assert no side-effect authority
         run: |
-          set -euo pipefail
-          git diff --exit-code origin/main -- \
-            src \
-            apps \
-            contracts \
-            schemas \
-            scripts \
-            registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml \
-            registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml \
-            registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          state=json.loads(Path('registries/research_operations/pattern_discovery/PD_C1C_G5_PILOT_CORRECTIVE_STATE_v0_1.json').read_text())
-          merge=json.loads(Path('docs/releases/opt-b-c1-v2/corrective/c1c-g5/corr2/C1C_G5_CORR2_MERGE_RECEIPT.json').read_text())
-          assert state['corr2']['merge_commit']=='66593aa2bca3b781058e1bc81f96bf2e57b18005'
-          assert merge['merge_commit']=='66593aa2bca3b781058e1bc81f96bf2e57b18005'
-          assert state['blocker']['blocker_id']=='C1C-G5-BLOCK-003'
-          assert state['blocker']['status']=='OPEN_OPERATOR_LOCAL_TWO_OBJECT_REREVIEW_REQUIRED'
-          assert merge['retained_authority']['canonical_append']=='DENIED'
-          assert merge['retained_authority']['validation_consumption']=='LOCKED_UNCONSUMED'
-          PY
+          echo "Provider, R2, publication, selector, Validation, risk, exposure and execution actions are not performed."
