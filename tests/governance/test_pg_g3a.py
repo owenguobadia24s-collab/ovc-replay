@@ -69,15 +69,15 @@ class ProgrammeGenesisG3ATests(unittest.TestCase):
         self.assertIn(packets["PG-G3A"]["status"], {"APPROVED", "COMPLETED"})
         self.assertEqual("4919a3ce7bb9682f43c8bf41ed3b0a0bd4b4168a", packets["PG-G3A"]["merge_commit"])
         self.assertEqual(["PG-G3A_ACKNOWLEDGE_CONTINUE_MERGED"], packets["PG-WP4"]["prerequisites"])
-        self.assertIn(packets["PG-WP4"]["status"], {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "APPROVED", "COMPLETED"})
+        self.assertEqual("COMPLETED", packets["PG-WP4"]["status"])
 
-    def test_current_state_retains_post_acknowledgement_denials(self) -> None:
+    def test_current_state_preserves_post_g6_bounded_outcomes(self) -> None:
         state = load_json(STATE_PATH)
         authority = state["authority"]
         self.assertTrue(str(authority["portfolio_migration"]).startswith("APPROVED"))
-        self.assertEqual("DENIED_PENDING_PG_G6", authority["canonical_migration_adoption"])
-        self.assertEqual("DENIED_PENDING_PG_G6", authority["admission_enforcement"])
-        self.assertEqual("DENIED_PENDING_PG_G6", authority["control_plane_route"])
+        self.assertEqual("PROVISIONAL_NON_CANONICAL_ONLY", authority["canonical_migration_adoption"])
+        self.assertEqual("DEFERRED_DISABLED", authority["admission_enforcement"])
+        self.assertEqual("DEFERRED_DISABLED_UNREGISTERED", authority["control_plane_route"])
         self.assertEqual("DENIED_PENDING_PG_G7", authority["automatic_upkeep"])
         self.assertEqual("NONE", authority["market_model_selector_release_validation"])
         self.assertEqual("NONE", authority["agent_probability_risk_exposure_execution"])
