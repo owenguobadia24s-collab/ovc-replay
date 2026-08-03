@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-da2-g1-completion-merge-receipt/v1",
+  "programme_id": "OVC-DEV-ACCEL-v0.2",
+  "packet_id": "DA2-WP1",
+  "gate_id": "DA2-G1",
+  "operator_decision_id": "DA2-G1.OPERATOR.PASS.20260803T100600+0100",
+  "completion_decision_id": "DA2-G1.DELEGATED.COMPLETION.PASS.20260803T124600+0100",
+  "pull_request": 254,
+  "branch": "candidate/da2-g1-ruleset-closure-v4",
+  "baseline_commit": "44c647a8c71ba42df20a1d4fa0c32c59e5b185eb",
+  "candidate_commit": "a17fb5e8fdd18d334f3846b448528e75ee38551a",
+  "merge_commit": "555b184ffe9f0326e514ce34b6bd3357df32737f",
+  "merge_method": "SQUASH",
+  "tests": [
+    {"workflow":"tests","run_id":30813732349,"result":"PASS","complete_suite_count":1},
+    {"workflow":"OVC tiered test selection shadow","run_id":30813732362,"job_id":91686319588,"profile":"FINAL_HEAD","result":"PASS"},
+    {"workflow":"OVC tiered test selection shadow","run_id":30813732362,"job_id":91686374586,"job":"OVC merge readiness","result":"PASS","source":{"app_id":15368,"app_slug":"github-actions"}}
+  ],
+  "ruleset": {
+    "id": 20229411,
+    "required_contexts": ["OVC merge readiness"],
+    "strict": true,
+    "bypass_actors": 0,
+    "evidence_sha256": "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d"
+  },
+  "review_threads": 0,
+  "blocking_reviews": 0,
+  "qa_recommendation": "PASS",
+  "authority_delta": "COURT_RECORD_AND_PROGRAMME_TERMINAL_STATE_ONLY",
+  "next_packet": null,
+  "rollback": "Correct the receipt or programme state only through a new non-destructive commit. Preserve the accepted ruleset evidence, operator decision, implementation merge and closure merge."
+}

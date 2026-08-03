@@ -11,6 +11,7 @@ VERIFY = BASE / "DA2_G1_RULESET_VERIFICATION.json"
 QA = BASE / "DA2_G1_COMPLETION_QA.json"
 DECISION = BASE / "DA2_G1_COMPLETION_DECISION.json"
 INCIDENT = BASE / "DA2_G1_ASSEMBLY_INCIDENT.json"
+RECEIPT = BASE / "DA2_G1_COMPLETION_MERGE_RECEIPT.json"
 PROGRAMME = ROOT / "registries/development/v0_2/OVC_DEVELOPMENT_ACCELERATION_V0_2_PROGRAMME_REGISTRY_v0_1.json"
 EXPECTED_RAW_SHA256 = "e346492b2e8f3df93f2801e4f69d9b7be04798652d00edee0ec18c5c184f306d"
 
@@ -58,7 +59,17 @@ def main() -> int:
     if programme["status"] == "APPROVED":
         assert programme["current_packet"]["blockers"] == []
     else:
+        assert RECEIPT.is_file()
+        receipt = load(RECEIPT)
         assert programme["current_packet"] is None
+        assert programme["completed_packets"] == ["DA2-00", "DA2-WP1"]
+        assert receipt["pull_request"] == 254
+        assert receipt["candidate_commit"] == "a17fb5e8fdd18d334f3846b448528e75ee38551a"
+        assert receipt["merge_commit"] == "555b184ffe9f0326e514ce34b6bd3357df32737f"
+        assert receipt["qa_recommendation"] == "PASS"
+        assert receipt["next_packet"] is None
+        assert programme["completion"]["merge_receipt"] == str(RECEIPT.relative_to(ROOT)).replace("\\", "/")
+        assert programme["completion"]["closure_merge_commit"] == receipt["merge_commit"]
     print("DA2-G1 completion validation PASS")
     return 0
 

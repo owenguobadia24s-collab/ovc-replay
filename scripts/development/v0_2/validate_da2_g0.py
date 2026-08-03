@@ -89,16 +89,25 @@ def main() -> int:
     assert decision["decision"] == "PASS"
     assert decision["authority_delta"] == "ACCEPT_READ_ONLY_CI_ADMISSION_BASELINE_EVIDENCE"
     assert incident["disposition"] == "SUPERSEDED_PRESERVED"
-    assert programme["completed_packets"][-1] == "DA2-00"
-    assert programme["current_packet"]["packet_id"] == "DA2-WP1"
-    assert programme["current_packet"]["status"] == "GATE_READY"
-    assert programme["current_packet"]["authority_required"] == "OPERATOR_REQUIRED"
+    assert programme["completed_packets"][0] == "DA2-00"
+
+    if programme["status"] == "COMPLETED":
+        assert programme["completed_packets"] == ["DA2-00", "DA2-WP1"]
+        assert programme["current_packet"] is None
+        assert programme["completion"]["gate_id"] == "DA2-G1"
+        assert programme["completion"]["blockers"] == []
+        assert programme["completion"]["next_packet"] is None
+    else:
+        assert programme["current_packet"]["packet_id"] == "DA2-WP1"
+        assert programme["current_packet"]["status"] == "GATE_READY"
+        assert programme["current_packet"]["authority_required"] == "OPERATOR_REQUIRED"
+
     assert next_gate["workflow_mutation_active"] is False
     assert next_gate["ruleset_mutation_active"] is False
     assert next_gate["operator_decision_required"] is True
     assert classifications["required_context_sources"]["tests"] == {"app_id": 15368, "app_slug": "github-actions"}
 
-    print("DA2-G0 validation PASS; exact baseline complete and DA2-G1 remains inactive")
+    print("DA2-G0 validation PASS; exact baseline preserved through programme completion")
     return 0
 
 
