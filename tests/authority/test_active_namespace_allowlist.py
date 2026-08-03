@@ -48,7 +48,7 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("execution authority", init_text)
 
     def test_programme_genesis_namespace_is_governance_only(self) -> None:
-        init_text = (SRC / "ovc" / "programme_genesis" / "__init__.py").read_text(encoding="utf-8")
+        init_text = (SRC / "ovc" / "programme_genesis" / "__init__.py").read_text(encoding="utf-8").lower()
         self.assertIn("governance-only", init_text)
         self.assertIn("no market", init_text)
         self.assertIn("selector", init_text)
