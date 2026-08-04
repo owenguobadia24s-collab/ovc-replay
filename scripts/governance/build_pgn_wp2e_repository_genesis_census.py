@@ -13,6 +13,13 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 POLICY_PATH = ROOT / "registries/governance/programme_genesis/PGN_REPOSITORY_GENESIS_CLASSIFICATION_POLICY_v0_1.json"
 OUTPUT_PATH = ROOT / "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json"
+GENERATED_PREFIXES = (
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/",
+    "registries/governance/programme_genesis/pgn_census/",
+)
+GENERATED_EXACT_PATHS = {
+    POLICY_PATH.relative_to(ROOT).as_posix(),
+}
 
 ID_KEYS = {"programme_id", "program_id", "proposed_programme_id", "plan_id", "release_id"}
 TEXT_PATTERNS = {
@@ -43,6 +50,10 @@ def read_json(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise AssertionError(f"not object: {path.relative_to(ROOT)}")
     return value
+
+
+def is_generated_path(relative_path: str) -> bool:
+    return relative_path in GENERATED_EXACT_PATHS or relative_path.startswith(GENERATED_PREFIXES)
 
 
 def clean_id(value: str) -> str | None:
@@ -93,7 +104,7 @@ def discover_sources(policy: dict[str, Any]) -> tuple[dict[str, list[dict[str, A
             if not path.is_file() or path.suffix.lower() not in TEXT_SUFFIXES:
                 continue
             rel = path.relative_to(ROOT).as_posix()
-            if rel == OUTPUT_PATH.relative_to(ROOT).as_posix() or any(part in SKIP_PARTS for part in path.parts):
+            if is_generated_path(rel) or any(part in SKIP_PARTS for part in path.parts):
                 continue
             data = path.read_bytes()
             file_count += 1
@@ -126,7 +137,10 @@ def release_initiatives(policy: dict[str, Any]) -> dict[str, list[dict[str, Any]
         if not root.exists():
             continue
         for child in sorted(p for p in root.iterdir() if p.is_dir()):
-            files = sorted(p for p in child.rglob("*") if p.is_file())
+            files = sorted(
+                p for p in child.rglob("*")
+                if p.is_file() and not is_generated_path(p.relative_to(ROOT).as_posix())
+            )
             if not files:
                 continue
             digest = hashlib.sha256()
