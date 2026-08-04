@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MATERIALIZER = ROOT / "scripts/governance/materialize_pgn_wp2e_census.py"
 OUT = ROOT / "registries/governance/programme_genesis/pgn_census"
 MAIN = OUT / "PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json"
-CHUNK_SIZE = 10
+CHUNK_SIZE = 18
 
 
 def canonical(value: Any) -> bytes:
@@ -48,11 +48,24 @@ def write(path: Path, value: Any) -> dict[str, Any]:
     }
 
 
+def slim_object(item: dict[str, Any]) -> dict[str, Any]:
+    primary = item["primary_source"]
+    return {
+        "object_id": item["object_id"],
+        "object_kind": item["object_kind"],
+        "classification": item["classification"],
+        "source_count": item["source_count"],
+        "source_set_sha256": item["source_set_sha256"],
+        "primary_source_path": primary["path"],
+        "successors": item["successors"],
+    }
+
+
 def build_bundle(root: Path = ROOT) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
     compact = load_materializer().materialize(root)
     files: dict[str, dict[str, Any]] = {}
     object_refs: list[dict[str, Any]] = []
-    objects = compact["objects"]
+    objects = [slim_object(item) for item in compact["objects"]]
     for index, start in enumerate(range(0, len(objects), CHUNK_SIZE)):
         chunk = {
             "schema": "ovc-pgn-repository-genesis-object-ledger/v2",
