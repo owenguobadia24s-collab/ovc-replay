@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MATERIALIZER = ROOT / "scripts/governance/materialize_pgn_wp2e_census.py"
 OUT = ROOT / "registries/governance/programme_genesis/pgn_census"
 MAIN = OUT / "PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json"
-CHUNK_SIZE = 30
+CHUNK_SIZE = 10
 
 
 def canonical(value: Any) -> bytes:
