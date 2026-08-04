@@ -15,14 +15,16 @@
     {"id": "C2AR-G0-QA-05", "name": "PCCR overlap is explicit and execution remains denied", "status": "PASS", "evidence": "C2AR_G0_BASELINE_MANIFEST.json"},
     {"id": "C2AR-G0-QA-06", "name": "Focused tests", "status": "PENDING_EXACT_HEAD_CI", "evidence": "tests/opt_b/c2/anatomy_redesign/test_c2ar_g0.py"},
     {"id": "C2AR-G0-QA-07", "name": "Complete repository and final-head assurance", "status": "PENDING_EXACT_HEAD_CI", "evidence": "GitHub Actions"},
-    {"id": "C2AR-G0-QA-08", "name": "No raw market data or R2 write", "status": "PASS", "evidence": "changed-file boundary"}
+    {"id": "C2AR-G0-QA-08", "name": "No raw market data or R2 write", "status": "PASS", "evidence": "changed-file boundary"},
+    {"id": "C2AR-G0-QA-09", "name": "Frozen PGN-WP2E census excludes post-census C2AR gate-preparation artifacts without changing accepted census bytes", "status": "PASS", "evidence": "scripts/governance/build_pgn_wp2e_repository_genesis_census.py and tests/governance/test_pgn_wp2e.py"}
   ],
   "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
   "warnings": [
     "PCCR_G0_REMAINS_NOT_ADMITTED_AND_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_IS_HELD",
     "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_ANY_MAIN_ADVANCE_REQUIRES_NON_DESTRUCTIVE_REBASE_AND_RETEST",
-    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY"
+    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY",
+    "C2AR_GATE_PREPARATION_IS_POST_PGN_WP2E_CENSUS_AND_DOES_NOT_RETROACTIVELY_MUTATE_THE_ACCEPTED_108_OBJECT_CENSUS"
   ],
   "unresolved_issues": [],
-  "rollback": "Close the PR or revert the preparation commit. Active C2 and PCCR authority remain unchanged."
+  "rollback": "Close the PR or revert the preparation and bounded census-compatibility commits. Active C2, PCCR and the accepted PGN-WP2E materialized census remain unchanged."
 }
