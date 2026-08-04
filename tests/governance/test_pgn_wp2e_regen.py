@@ -25,6 +25,7 @@ class PGNWP2ERegenerationEvidenceTests(unittest.TestCase):
         directory = ROOT / "registries/governance/programme_genesis/pgn_census"
         for name in (
             "PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_01.jsonc",
+            "PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_04.jsonc",
             "PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_05.jsonc",
             "PGN_REPOSITORY_GENESIS_COVERAGE_UNRESOLVED_v0_2.jsonc",
         ):
