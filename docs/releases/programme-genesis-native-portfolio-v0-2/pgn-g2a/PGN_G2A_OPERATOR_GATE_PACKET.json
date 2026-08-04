@@ -9,7 +9,7 @@
   "operator_decision_required": false,
   "baseline_commit": "3eb774894676ad620fe1aa826a8e48445f75ec4d",
   "candidate_branch": "gate/pgn-g2a-census-ack",
-  "predecision_evaluated_commit": "e66aa9f22e663bec762498f4f5ead5f0d429e5c9",
+  "postdecision_evaluated_commit": "6710732e9c6caa4ca603aef665c38edc237d8b33",
   "decision_id": "PGN-G2A.OPERATOR.ADJUST_SCOPE.20260804T113500+0100",
   "decision": "ADJUST_SCOPE",
   "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2a/PGN_G2A_OPERATOR_DECISION.json",
@@ -70,10 +70,12 @@
   ],
   "tests": {
     "focused": "tests/governance/test_pgn_g2a.py",
-    "predecision_repository_run": 30899289720,
-    "predecision_test_count": 180,
-    "predecision_conclusion": "SUCCESS",
-    "postdecision_status": "PENDING_EXACT_HEAD_CI"
+    "repository_run": 30901795049,
+    "repository_conclusion": "SUCCESS",
+    "ovc_final_head_run": 30901794677,
+    "ovc_conclusion": "SUCCESS",
+    "merge_readiness_job": 91967638390,
+    "merge_readiness_conclusion": "SUCCESS"
   },
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2a/PGN_G2A_QA_PACKET.json",
   "qa_recommendation": "PASS_ADJUST_SCOPE_AND_PROCEED_TO_PGN_WP2E",
@@ -87,5 +89,5 @@
   "rollback": "Preserve the prior census and operator decision; discard and rebuild PGN-WP2E evidence without constructing candidates.",
   "next_packet": "PGN-WP2E",
   "next_gate": "PGN-G2B",
-  "next_action": "MERGE_ADJUST_SCOPE_DECISION_THEN_EXECUTE_EXPANDED_REPOSITORY_GENESIS_CENSUS"
+  "next_action": "SQUASH_MERGE_ADJUST_SCOPE_DECISION_THEN_EXECUTE_EXPANDED_REPOSITORY_GENESIS_CENSUS"
 }
