@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-pgn-wp2-census-manifest/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP2",
+  "gate_id": "PGN-G2",
+  "baseline_commit": "c9e3881232c9499bb7f47d439b33b9c1c43aaa78",
+  "branch": "audit/pgn-wp2-portfolio-census",
+  "evaluated_candidate_commit": "fc27fb2642beb5e2452ed458d4e3d27aed6a132e",
+  "builder_census_sha256": "7f26a513c7696bf065f4b30b5337d44677adc1f2fb48e7864593f6f708f704ad",
+  "authority_delta": "EXACT_PORTFOLIO_CENSUS_DOSSIERS_SURPRISE_LEDGER_AND_REVIEW_GROUP_PROPOSAL_ONLY",
+  "artifacts": {
+    "builder": "scripts/governance/build_pgn_wp2_census.py",
+    "tests": "tests/governance/test_pgn_wp2.py",
+    "census": "registries/governance/programme_genesis/pgn_census/PGN_PORTFOLIO_CENSUS_v0_1.json",
+    "qa": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2/PGN_G2_QA_PACKET.json",
+    "decision": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2/PGN_G2_DELEGATED_DECISION.json"
+  },
+  "population": {
+    "legacy_adoption_targets": 7,
+    "existing_native_excluded": ["OVC-PG-v0.2"],
+    "current_governance_excluded": ["OVC-PG-NATIVE-PORTFOLIO-v0.2"],
+    "non_admitted": ["PCCR-G0-PREPARATION"],
+    "review_group_sizes": [3, 3, 1]
+  },
+  "assurance": {
+    "repository_run": 30898445965,
+    "repository_conclusion": "SUCCESS",
+    "ovc_final_head_run": 30898445834,
+    "ovc_conclusion": "SUCCESS",
+    "merge_readiness_job": 91956878971,
+    "merge_readiness_conclusion": "SUCCESS"
+  },
+  "candidate_construction": "DENIED_PENDING_PGN_G2A",
+  "native_adoption": "DENIED_PENDING_PGN_G3",
+  "reserved_authority": "NONE",
+  "blockers": [],
+  "rollback": "Discard and deterministically rebuild the census from source programme states; do not construct candidates before PGN-G2A."
+}

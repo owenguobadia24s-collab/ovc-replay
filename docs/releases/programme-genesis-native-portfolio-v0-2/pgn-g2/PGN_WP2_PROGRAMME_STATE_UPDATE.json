@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP2",
+  "gate_id": "PGN-G2",
+  "status": "APPROVED_PENDING_MERGE",
+  "prerequisites": ["PGN-G1_PASS_MERGED_c9e3881232c9499bb7f47d439b33b9c1c43aaa78"],
+  "authority_required": "AUTO_EXECUTABLE_EVIDENCE_ONLY",
+  "authority_delta": "EXACT_PORTFOLIO_CENSUS_DOSSIERS_SURPRISE_LEDGER_AND_REVIEW_GROUP_PROPOSAL",
+  "baseline_commit": "c9e3881232c9499bb7f47d439b33b9c1c43aaa78",
+  "branch": "audit/pgn-wp2-portfolio-census",
+  "evaluated_candidate_commit": "fc27fb2642beb5e2452ed458d4e3d27aed6a132e",
+  "tests": [
+    "tests run 30898445965 SUCCESS",
+    "OVC FINAL_HEAD run 30898445834 SUCCESS",
+    "OVC merge readiness job 91956878971 SUCCESS"
+  ],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2/PGN_G2_QA_PACKET.json",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2/PGN_G2_DELEGATED_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "PGN-G2A",
+  "authority_after": {
+    "census": "COMPLETE_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+    "candidate_construction": "DENIED_PENDING_PGN_G2A",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+    "reserved_authority": "NONE"
+  },
+  "next_action": "RUN_FINAL_ASSURANCE_SQUASH_MERGE_PR_283_AND_PREPARE_PGN_G2A_OPERATOR_GATE",
+  "rollback": "Discard and deterministically rebuild the census; preserve all source identities, QA and decision evidence, and stop before candidate construction."
+}
