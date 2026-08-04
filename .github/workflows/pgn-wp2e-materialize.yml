@@ -1,0 +1,70 @@
+name: PGN WP2E census materialisation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/pgn-wp2e-materialize.yml'
+      - 'scripts/governance/build_pgn_wp2e_repository_genesis_census.py'
+      - 'registries/governance/programme_genesis/PGN_REPOSITORY_GENESIS_CLASSIFICATION_POLICY_v0_1.json'
+      - 'registries/**'
+      - 'docs/plans/**'
+      - 'docs/releases/**'
+      - 'docs/history/**'
+      - 'legacy/quarantine/abcd-engine-v1-c0ad7ba/**'
+
+permissions:
+  contents: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  materialize:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate exact census
+        run: |
+          python3 - <<'PY'
+          import importlib.util
+          import json
+          from pathlib import Path
+
+          root = Path.cwd()
+          script = root / 'scripts/governance/build_pgn_wp2e_repository_genesis_census.py'
+          spec = importlib.util.spec_from_file_location('pgn_wp2e', script)
+          assert spec and spec.loader
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          output = root / 'registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json'
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps(module.build_census(root), indent=2, sort_keys=True, ensure_ascii=False) + '\n', encoding='utf-8')
+          print(output)
+          PY
+      - name: Verify exact generated file
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          path = Path('registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json')
+          value = json.loads(path.read_text(encoding='utf-8'))
+          print(json.dumps({
+              'object_count': value['object_count'],
+              'classification_counts': value['classification_counts'],
+              'census_sha256': value['census_sha256'],
+              'file_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+          }, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pgn-wp2e-census
+          path: registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json
+          if-no-files-found: error
+          retention-days: 1
