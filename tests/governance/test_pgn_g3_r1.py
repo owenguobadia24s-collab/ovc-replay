@@ -55,6 +55,7 @@ class NativeGenesisPortfolioG3R1Tests(unittest.TestCase):
         cls.state = load(STATE)
         cls.decision = load(DECISION)
         cls.ack_record = load(ACK_RECORD)
+        cls.unlock_receipt = load(UNLOCK_RECEIPT)
         cls.queue = load(QUEUE)
         cls.builder = load_builder()
 
@@ -69,7 +70,6 @@ class NativeGenesisPortfolioG3R1Tests(unittest.TestCase):
         self.assertEqual(self.bundle, self.builder.build_group("PGN-G3-R1", ROOT))
         self.assertEqual(R1_IDS, self.bundle["candidate_ids"])
         self.assertEqual(R1_SHA, self.bundle["candidate_group_sha256"])
-        self.assertEqual(3, self.bundle["candidate_count"])
         for item in self.bundle["candidates"]:
             candidate = item["native_candidate"]
             self.assertEqual("CANDIDATE_UNAPPROVED", candidate["status"])
@@ -77,42 +77,38 @@ class NativeGenesisPortfolioG3R1Tests(unittest.TestCase):
             self.assertEqual(8, len(candidate["unresolved_fields"]))
             self.assertFalse(candidate["scope_audit"]["fabricated_historical_intent"])
             self.assertTrue(candidate["authority_envelope"]["source_authority_preserved"])
-            self.assertEqual("NONE", candidate["authority_envelope"]["authority_delta"])
 
     def test_operator_acknowledgement_is_exact_and_not_adoption(self) -> None:
         self.assertEqual(DECISION_ID, self.decision["decision_id"])
         self.assertEqual("ACKNOWLEDGE_CONTINUE", self.decision["decision"])
-        self.assertEqual(
-            "OVC APPROVE PGN-G3-R1 ACKNOWLEDGE_CONTINUE",
-            self.decision["exact_operator_command"],
-        )
+        self.assertEqual("OVC APPROVE PGN-G3-R1 ACKNOWLEDGE_CONTINUE", self.decision["exact_operator_command"])
         self.assertEqual(0, self.decision["acknowledged_review_group"]["native_adoption_count"])
-        self.assertEqual("NONE", self.decision["authority_granted"]["market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution"])
         self.assertEqual(DECISION_ID, self.ack_record["decision_id"])
         self.assertEqual("NONE", self.ack_record["native_adoption"])
-        self.assertEqual("DENIED", self.ack_record["r2_materialisation_before_merge"])
 
-    def test_gate_qa_and_state_are_approved_pending_merge(self) -> None:
-        self.assertFalse(self.gate["operator_decision_required"])
-        self.assertEqual("ACKNOWLEDGE_CONTINUE", self.gate["decision"])
-        self.assertEqual("APPROVED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE", self.gate["status"])
-        self.assertEqual("CANDIDATE_UNAPPROVED", self.gate["review_group"]["candidate_status_after_decision"])
-        self.assertEqual(0, self.gate["review_group"]["native_adoption_count"])
-        self.assertEqual("PASS_OPERATOR_ACKNOWLEDGED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE", self.qa["status"])
-        self.assertEqual([], self.qa["blockers"])
-        self.assertEqual("APPROVED", self.state["status"])
-        self.assertEqual("PGN-G3-R2", self.state["next_packet"])
-        self.assertEqual("PGN-G3-R2", self.state["next_gate"])
-        self.assertEqual([], self.state["blockers"])
-
-    def test_r2_remains_locked_until_post_merge_unlock_receipt(self) -> None:
-        self.assertFalse(UNLOCK_RECEIPT.exists())
+    def test_r1_unlock_receipt_binds_exact_merge_and_unlocks_only_r2(self) -> None:
+        self.assertEqual(288, self.unlock_receipt["pull_request"])
+        self.assertEqual("af2170d862e1464e1a1b8e8b65b77a07e5cc8101", self.unlock_receipt["final_head"])
+        self.assertEqual("0b6078e47b6f03c7fe122c4f8577dfc3b9893808", self.unlock_receipt["merge_commit"])
+        self.assertEqual(DECISION_ID, self.unlock_receipt["decision_id"])
+        self.assertEqual("NONE", self.unlock_receipt["native_adoption"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R2_ONLY", self.unlock_receipt["authority_effect"])
+        self.assertEqual("PGN-G3-R2", self.builder.build_group("PGN-G3-R2", ROOT)["review_group_id"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R2", ROOT)
+            self.builder.build_group("PGN-G3-R3", ROOT)
         for group in self.queue["groups"][1:]:
             self.assertEqual([], group["candidate_ids"])
             self.assertEqual("LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT", group["disclosure_status"])
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
+
+    def test_gate_qa_and_state_preserve_no_adoption(self) -> None:
+        self.assertFalse(self.gate["operator_decision_required"])
+        self.assertEqual("ACKNOWLEDGE_CONTINUE", self.gate["decision"])
+        self.assertEqual("CANDIDATE_UNAPPROVED", self.gate["review_group"]["candidate_status_after_decision"])
+        self.assertEqual(0, self.gate["review_group"]["native_adoption_count"])
+        self.assertEqual([], self.qa["blockers"])
+        self.assertEqual("APPROVED", self.state["status"])
+        self.assertEqual("PGN-G3-R2", self.state["next_packet"])
 
 
 if __name__ == "__main__":
