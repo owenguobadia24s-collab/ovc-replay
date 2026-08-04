@@ -1,0 +1,62 @@
+{
+  "schema": "ovc-c2ar-g0-baseline-manifest/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "gate_id": "C2AR-G0",
+  "captured_at": "2026-08-04T19:28:00+01:00",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "default_branch": "main",
+  "lawful_main_tip": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
+  "candidate_branch": "gate/c2ar-g0-ratification",
+  "open_pull_requests": [
+    {"number": 290, "title": "PGN-G3-R3 — acknowledge third native Genesis review group", "classification": "OPERATOR_GATE_ACTIVE"},
+    {"number": 275, "title": "Seal CCR, C2E, C2.5 and PCCR merge receipts", "classification": "RECEIPT_STATE_SYNC"},
+    {"number": 271, "title": "CCR-G5 PASS; block C2E and C2.5 before WP1 (strict head)", "classification": "SUPERSEDED_OR_RECEIPT_PENDING"},
+    {"number": 268, "title": "CCR-G5 PASS; block C2E and C2.5 before WP1", "classification": "SUPERSEDED"},
+    {"number": 258, "title": "CCR-G5 — clock and continuity disposition (current main)", "classification": "SUPERSEDED_OR_HISTORICAL"},
+    {"number": 216, "title": "MTA-G0 — approved; merge blocked by required-check enforcement", "classification": "EXTERNAL_RULESET_BLOCKED"},
+    {"number": 210, "title": "MTA-G0 — approved; merge blocked by required-check ruleset", "classification": "SUPERSEDED_EXTERNAL_RULESET_BLOCKED"},
+    {"number": 211, "title": "DA-G4B shadow — bounded receipt proposal", "classification": "DO_NOT_MERGE_SHADOW"},
+    {"number": 202, "title": "PD-JUNE-FM-WP3 — construct whole-June blinded review population", "classification": "OPEN_DEFERRED_REVIEW"}
+  ],
+  "active_c2_authority": {
+    "state": "ACTIVE_DISCOVERY",
+    "selector_set_id": "SELECTOR.OPT-B.C2.GBPUSD.v2",
+    "discovery_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+    "discovery_manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "discovery_manifest_sha256": "c60b48ac18653eaf253c48f63645dbaa11bd94cee9a28a83ed7ae7bad5cac180",
+    "development_release_state": "REMOTE_VERIFIED_REFERENCE_ONLY",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "legacy_b_state": "HISTORICAL_SUPERSEDED",
+    "source_paths": [
+      "registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml",
+      "registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml"
+    ],
+    "mutation_under_c2ar_g0": "DENIED"
+  },
+  "overlap_and_concurrency": {
+    "pccr": {
+      "programme_id": "OVC-PCCR-v0.1",
+      "status": "NOT_ADMITTED_GATE_READY",
+      "current_gate": "PCCR-G0",
+      "execution_authority": "DENIED",
+      "c2ar_g0_treatment": "PRESERVE_NOT_ADMITTED_AND_PLACE_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_ON_HOLD",
+      "source_path": "registries/research_operations/planned_closure_continuity/PCCR_G0_PREPARATION_STATE_v0_1.json"
+    },
+    "pgn": {
+      "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+      "open_gate": "PGN-G3-R3",
+      "effect_on_c2ar": "NONE_BEFORE_ANY_LATER_MAIN_CHANGE; RETEST_AND_REBASE_NON_DESTRUCTIVELY_IF_MAIN_ADVANCES"
+    }
+  },
+  "canonical_tests": {
+    "focused": "tests/opt_b/c2/anatomy_redesign/test_c2ar_g0.py",
+    "full_suite": "python -m unittest discover -s tests -v",
+    "required_remote_checks": ["tests", "OVC tiered test selection shadow", "OVC merge readiness"],
+    "status": "PENDING_EXACT_HEAD_CI"
+  },
+  "raw_market_data_added": false,
+  "r2_write_authority": "NONE",
+  "external_artifact_execution": "NONE_AT_G0"
+}
