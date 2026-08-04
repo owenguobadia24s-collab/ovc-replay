@@ -5,11 +5,12 @@
   "plan_version": "0.2",
   "gate_id": "PGN-G3-R2",
   "title": "Acknowledge the second progressive native Genesis candidate review group",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "status": "GATE_READY",
   "operator_decision_required": true,
   "baseline_commit": "0b6078e47b6f03c7fe122c4f8577dfc3b9893808",
   "candidate_branch": "gate/pgn-g3-r2-market-construction-audit",
-  "candidate_commit": "PENDING_EXACT_HEAD",
+  "candidate_commit": "BOUND_BY_PR_289_FINAL_HEAD",
+  "assured_gate_head": "bceb5682b5b60ac69c12de285ec5b94b8e169608",
   "completed_packets": [
     "PGN-00",
     "PGN-WP1",
@@ -105,7 +106,22 @@
       "tests",
       "OVC merge readiness"
     ],
-    "status": "PENDING_EXACT_HEAD_CI"
+    "assured_gate_head": "bceb5682b5b60ac69c12de285ec5b94b8e169608",
+    "repository_tests": {
+      "run_id": 30915713305,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_final_head": {
+      "run_id": 30915711102,
+      "job_id": 92013193970,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_merge_readiness": {
+      "run_id": 30915711102,
+      "job_id": 92013286707,
+      "conclusion": "SUCCESS"
+    },
+    "final_packet_head_assurance": "REQUIRED_ON_PR_289_HEAD"
   },
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r2/PGN_G3_R2_QA_PACKET.json",
   "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
@@ -123,7 +139,8 @@
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r2/PGN_G3_R2_QA_PACKET.json",
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r2/PGN_G3_R2_OPERATOR_GATE_PACKET.json",
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r2/PGN_G3_R2_PROGRAMME_STATE_UPDATE.json",
-    "tests/governance/test_pgn_g3_r2.py"
+    "tests/governance/test_pgn_g3_r2.py",
+    "tests/governance/test_pgn_wp3.py"
   ],
   "rollback": "Preserve PGN-WP3, the R1 acknowledgement and sealed commitments. Choose DEFER, ADJUST_SCOPE or QUARANTINE without creating an R2 acknowledgement receipt and without disclosing PGN-G3-R3.",
   "allowed_decisions": [
