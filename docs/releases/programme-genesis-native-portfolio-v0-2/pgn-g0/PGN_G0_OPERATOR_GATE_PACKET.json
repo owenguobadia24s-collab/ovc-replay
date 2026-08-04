@@ -1,0 +1,78 @@
+{
+  "schema": "ovc-pgn-pg-g0-operator-gate/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "gate_id": "PGN-G0",
+  "title": "Native Genesis Portfolio Adoption v0.2 REVISED implementation ratification",
+  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "operator_decision_required": true,
+  "baseline_commit": "2e5b577e51cde05b027c6220560432c11513af14",
+  "candidate_branch": "gate/pgn-g0-ratification",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "completed_packets": ["PGN-00"],
+  "current_authority": {
+    "programme": "PROPOSED_ONLY",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+    "cross_programme_edges": "DENIED_PENDING_PGN_G5",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
+    "shadow_corpus": "DENIED_PENDING_PGN_G9A",
+    "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
+    "market_model_selector_release_validation_agent_exposure_execution": "NONE"
+  },
+  "proposed_delta": "RATIFY_BOUNDED_REVISED_IMPLEMENTATION_ONLY_AND_RELEASE_PGN_WP1",
+  "acceptance_conditions": [
+    "LATEST_LAWFUL_MAIN_AND_OPEN_PULL_REQUESTS_INSPECTED",
+    "SOURCE_DOCX_AND_REPOSITORY_RATIFICATION_COPY_ARE_HASH_BOUND",
+    "PROGRAMME_IS_CONSTITUTIONAL_PORTFOLIO_GOVERNANCE_NOT_MARKET_OR_EXPOSURE_WORK",
+    "PGN_G2A_OPERATOR_ACKNOWLEDGEMENT_BLOCKS_ALL_CANDIDATE_CONSTRUCTION_AFTER_CENSUS",
+    "PGN_G3_REVIEW_PROTOCOL_GROUPS_BY_CLASS_OR_DOMAIN_WITH_MAXIMUM_THREE_AND_MANDATORY_ACKNOWLEDGEMENT",
+    "EDGE_CHALLENGE_PROTOCOL_REQUIRES_48_HOURS_OR_EXPLICIT_OWNER_WAIVERS_AND_DOWNGRADES_CHALLENGED_EDGES",
+    "ADMISSION_PREVIEW_IS_PERMANENTLY_NON_BINDING_WITH_ACKNOWLEDGED_INVOCATION_LOGGING",
+    "SHADOW_CORPUS_REQUIRES_INDEPENDENT_OPERATOR_ACCEPTANCE_MULTI_SOURCE_NEGATIVES_AND_ADVERSARIAL_CASES",
+    "PORTFOLIO_READ_MODEL_HAS_60_SECOND_SOFT_TARGET_VISIBLE_LATENCY_WARNINGS_AND_PARTITION_STRATEGY",
+    "NATIVE_ADOPTION_EDGE_ADOPTION_ROUTE_CORPUS_AND_ENFORCEMENT_REMAIN_SEPARATE_OPERATOR_DECISIONS",
+    "PROGRAMME_OWNED_STATE_AND_ACCEPTED_DECISIONS_REMAIN_AUTHORITATIVE",
+    "PROPOSED_PGN_STATE_DOES_NOT_ENTER_OR_MUTATE_THE_ACCEPTED_SEVEN_RECORD_LEGACY_MIGRATION_CENSUS",
+    "NO_GRAPH_TEST_QA_PR_OR_ROUTE_AVAILABILITY_GRANTS_AUTHORITY",
+    "NO_RESERVED_MARKET_RELEASE_VALIDATION_AGENT_OR_EXPOSURE_AUTHORITY"
+  ],
+  "tests": {
+    "focused": "tests/governance/test_pgn_g0.py",
+    "repository_required": ["tests", "OVC merge readiness"],
+    "status": "PENDING_EXACT_HEAD_CI"
+  },
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_QA_PACKET.json",
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
+  "warnings": [
+    "PGN_G0_DOES_NOT_ACKNOWLEDGE_THE_CENSUS_OR_ANY_CANDIDATE",
+    "PGN_G0_DOES_NOT_ACCEPT_ANY_NATIVE_RECORD_OR_DEPENDENCY_EDGE",
+    "PGN_G0_DOES_NOT_REGISTER_A_ROUTE_ACCEPT_A_CORPUS_OR_ENABLE_ENFORCEMENT",
+    "PROPOSED_STATE_USES_A_NON_DISCOVERABLE_LEDGER_FILENAME_AND_PRESERVES_THE_INITIAL_PATH_AS_A_NON_PROGRAMME_MARKER",
+    "OPEN_HISTORICAL_AND_SUPERSEDED_PULL_REQUESTS_REMAIN_PRESERVED"
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/plans/governance/OVC_Native_Genesis_Portfolio_Adoption_Dependency_Canon_and_Control_Plane_Implementation_Plan_v0_2_REVISED.md",
+    "registries/governance/programme_genesis/OVC_PGN_PORTFOLIO_LEDGER_v0_2.json",
+    "registries/governance/programme_genesis/OVC_PGN_PROGRAMME_STATE_v0_2.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_SOURCE_PLAN_HASH.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_BASELINE_MANIFEST.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_QA_PACKET.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_OPERATOR_GATE_PACKET.json",
+    "tests/governance/test_pgn_g0.py"
+  ],
+  "external_artifacts": [
+    {
+      "type": "SOURCE_PLAN_DOCX",
+      "identity": "file_0000000092a081f79225cc1bef1d6249",
+      "sha256": "2991ea0556c2ccc21cb2159bfe7b14af74d221a08a8f49e1ee72ced1fb79ce1d",
+      "repository_markdown_sha256": "836a04b317cd2da40de758830a18349fe9133ebb3c65c4b2c541e6961f323b78"
+    }
+  ],
+  "rollback": "Preserve the branch, plan, baseline, QA, tests and gate packet. Do not merge and do not begin PGN-WP1 unless PASS is recorded. Supersede only through a later non-destructive plan and decision record.",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "exact_operator_command": "OVC APPROVE PGN-G0 PASS",
+  "work_after_approval": "Record the immutable PGN-G0 decision, squash-merge the bounded ratification packet after exact-head checks, create build/pgn-wp1-contracts from the new lawful main, continue through PGN-WP2 and PGN-G2, then stop at operator-required PGN-G2A before any candidate construction."
+}
