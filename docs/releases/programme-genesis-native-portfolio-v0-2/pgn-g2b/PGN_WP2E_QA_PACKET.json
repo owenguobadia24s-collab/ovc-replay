@@ -6,8 +6,8 @@
   "packet_id": "PGN-WP2E",
   "gate_id": "PGN-G2B",
   "baseline_commit": "c707cd35b88e18cc7cb5677685ce8e27496561a7",
-  "candidate_commit": "PENDING_FINAL_HEAD",
-  "status": "PASS_PENDING_FINAL_HEAD_ASSURANCE",
+  "accepted_implementation_head": "ab45783ac579af28ea6ec3cc227626fcd73206ae",
+  "status": "PASS",
   "census_assessment": {
     "object_count": 108,
     "classification_counts": {
@@ -22,7 +22,10 @@
     "exclusion_count": 72,
     "lineage_consolidation_count": 1,
     "candidate_count": 0,
-    "blocking_conflicts": 0
+    "blocking_conflicts": 0,
+    "detailed_census_sha256": "9595b9f061b11ce0cd29148eedda150769cb24e402d45946d0f67121ae22c170",
+    "materialized_census_sha256": "54319e45d77689880a19383c23ae5f7311550d125680c9c88fed4a237ff321c0",
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
   },
   "checks": {
     "classification_enum_exact": "PASS",
@@ -37,10 +40,19 @@
     "unresolved_history_visible": "PASS",
     "prior_census_preserved": "PASS",
     "pgn_wp3_absent": "PASS",
-    "repository_tests_intermediate": "PASS_RUN_30905310835",
-    "repository_tests_final_head": "PENDING",
-    "ovc_final_head": "PENDING",
-    "ovc_merge_readiness": "PENDING"
+    "repository_tests": {
+      "run_id": 30906873666,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_final_head": {
+      "run_id": 30906872133,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_merge_readiness": {
+      "job_id": 91983936492,
+      "conclusion": "SUCCESS"
+    },
+    "decision_sealing_head_assurance": "REQUIRED_BEFORE_MERGE"
   },
   "warnings": [
     "THE_REQUESTED_INITIAL_OVC_REPLAY_COMMIT_IS_NOT_RESOLVABLE_FROM_THE_CURRENT_GIT_GRAPH",
@@ -50,7 +62,7 @@
     "CLASSIFICATIONS_HAVE_NO_ADOPTION_EFFECT_BEFORE_PGN_G2B"
   ],
   "blockers": [],
-  "qa_recommendation": "PASS_AFTER_FINAL_HEAD_REQUIRED_CHECKS",
+  "qa_recommendation": "PASS",
   "authority_delta": "NONE_EXPANDED_CENSUS_EVIDENCE_ONLY",
   "rollback": "Discard and deterministically rebuild the expanded census without constructing candidates."
 }
