@@ -34,7 +34,7 @@ class NativeGenesisPortfolioG2ATests(unittest.TestCase):
         target_ids = {item["programme_id"] for item in gate["census"]["targets"]}
         self.assertEqual(7, gate["census"]["legacy_adoption_target_count"])
         self.assertEqual({item["programme_id"] for item in census["adoption_targets"]}, target_ids)
-        sizes = [item["candidate_count"] for item in gate["census"]["proposed_review_groups"]]
+        sizes = [item["candidate_count"] for item in gate["census"]["review_groups"]]
         self.assertEqual([3, 3, 1], sizes)
         self.assertTrue(all(size <= 3 for size in sizes))
         self.assertEqual(0, gate["census"]["candidates_constructed"])
@@ -44,9 +44,9 @@ class NativeGenesisPortfolioG2ATests(unittest.TestCase):
         gate = load(GATE)
         exclusions = {item["programme_id"]: item["reason"] for item in gate["census"]["exclusions"]}
         self.assertEqual("ALREADY_NATIVE", exclusions["OVC-PG-v0.2"])
-        self.assertEqual("CURRENT_RATIFIED_GOVERNANCE_PROGRAMME_NOT_A_LEGACY_CONVERSION_TARGET", exclusions["OVC-PG-NATIVE-PORTFOLIO-v0.2"])
-        self.assertEqual("PCCR-G0-PREPARATION", gate["census"]["non_admitted_objects"][0]["object_id"])
-        self.assertIn("PCCR_PREPARATION_EXISTS_BUT_IS_NOT_ADMITTED", gate["census"]["surprise_findings"])
+        self.assertEqual("CURRENT_GOVERNANCE_PROGRAMME_NOT_A_LEGACY_TARGET", exclusions["OVC-PG-NATIVE-PORTFOLIO-v0.2"])
+        self.assertEqual("PCCR-G0-PREPARATION", gate["census"]["non_admitted"][0]["object_id"])
+        self.assertIn("PCCR_PREPARATION_EXISTS_BUT_IS_NOT_ADMITTED", gate["census"]["surprises"])
 
     def test_operator_decision_options_and_recommendation_are_bounded(self) -> None:
         gate = load(GATE)
@@ -56,7 +56,7 @@ class NativeGenesisPortfolioG2ATests(unittest.TestCase):
         )
         self.assertEqual("ACKNOWLEDGE_CONTINUE", gate["recommended_decision"])
         self.assertEqual("OVC APPROVE PGN-G2A ACKNOWLEDGE_CONTINUE", gate["exact_operator_command"])
-        self.assertIn("PGN_G3_REMAINS_REQUIRED_FOR_PER_PROGRAMME_NATIVE_ADOPTION", gate["acceptance_conditions"])
+        self.assertIn("PGN_G3_REMAINS_REQUIRED_FOR_EVERY_NATIVE_ADOPTION", gate["acceptance_conditions"])
 
     def test_state_stops_before_candidate_construction(self) -> None:
         state = load(STATE)
