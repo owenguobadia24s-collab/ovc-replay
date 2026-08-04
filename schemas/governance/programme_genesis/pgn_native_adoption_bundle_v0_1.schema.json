@@ -1,0 +1,411 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-pgn-native-adoption-bundle/v1",
+  "title": "OVC PGN native adoption and control bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "object_type",
+    "authority_effect"
+  ],
+  "properties": {
+    "object_type": {
+      "enum": [
+        "NATIVE_CANDIDATE",
+        "REVIEW_GROUP",
+        "EDGE_CHALLENGE",
+        "WARNING_CLOSURE",
+        "PREVIEW_INVOCATION",
+        "SHADOW_CORPUS",
+        "REBUILD_EVIDENCE"
+      ]
+    },
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "native_candidate": {
+      "$ref": "#/$defs/native_candidate"
+    },
+    "review_group": {
+      "$ref": "#/$defs/review_group"
+    },
+    "edge_challenge": {
+      "$ref": "#/$defs/edge_challenge"
+    },
+    "warning_closure": {
+      "$ref": "#/$defs/warning_closure"
+    },
+    "preview_invocation": {
+      "$ref": "#/$defs/preview_invocation"
+    },
+    "shadow_corpus": {
+      "$ref": "#/$defs/shadow_corpus"
+    },
+    "rebuild_evidence": {
+      "$ref": "#/$defs/rebuild_evidence"
+    }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "source_kind"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_kind": {
+          "enum": [
+            "OPERATOR_DECISION",
+            "PROGRAMME_STATE",
+            "MANIFEST",
+            "PLAN",
+            "CONTRACT",
+            "MERGED_COMMIT",
+            "OPEN_PR",
+            "OTHER"
+          ]
+        }
+      }
+    },
+    "native_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "programme_id",
+        "candidate_class",
+        "status",
+        "sources",
+        "authority_envelope",
+        "scope_audit",
+        "migration_crosswalk",
+        "unresolved_fields",
+        "lifecycle"
+      ],
+      "properties": {
+        "programme_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_class": {
+          "type": "string",
+          "not": {
+            "const": "UNKNOWN_CLASS"
+          }
+        },
+        "status": {
+          "const": "CANDIDATE_UNAPPROVED"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        },
+        "authority_envelope": {
+          "type": "object"
+        },
+        "scope_audit": {
+          "type": "object"
+        },
+        "migration_crosswalk": {
+          "type": "object"
+        },
+        "unresolved_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lifecycle": {
+          "type": "object"
+        }
+      }
+    },
+    "review_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "group_id",
+        "grouping_basis",
+        "candidate_ids",
+        "acknowledgement_required",
+        "adoption_effect"
+      ],
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grouping_basis": {
+          "enum": [
+            "PROGRAMME_CLASS",
+            "AUTHORITY_DOMAIN"
+          ]
+        },
+        "candidate_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "acknowledgement_required": {
+          "const": true
+        },
+        "adoption_effect": {
+          "const": "NONE"
+        }
+      }
+    },
+    "edge_challenge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge_id",
+        "challenged",
+        "effective_source_kind",
+        "effective_hardness",
+        "satisfies_hard_prerequisite",
+        "challenge_window_hours"
+      ],
+      "properties": {
+        "edge_id": {
+          "type": "string"
+        },
+        "challenged": {
+          "type": "boolean"
+        },
+        "effective_source_kind": {
+          "enum": [
+            "SOURCE_EXPLICIT",
+            "ADAPTER_INFERRED"
+          ]
+        },
+        "effective_hardness": {
+          "enum": [
+            "HARD",
+            "SOFT",
+            "INFORMATIONAL"
+          ]
+        },
+        "satisfies_hard_prerequisite": {
+          "type": "boolean"
+        },
+        "challenge_window_hours": {
+          "const": 48
+        },
+        "waived_by_all_notified_owners": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "challenged": {
+                "const": true
+              }
+            },
+            "required": [
+              "challenged"
+            ]
+          },
+          "then": {
+            "properties": {
+              "effective_source_kind": {
+                "const": "ADAPTER_INFERRED"
+              },
+              "effective_hardness": {
+                "enum": [
+                  "SOFT",
+                  "INFORMATIONAL"
+                ]
+              },
+              "satisfies_hard_prerequisite": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "warning_closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "warning_id",
+        "disposition",
+        "evidence",
+        "before_health_sha256",
+        "after_health_sha256",
+        "bulk_suppression"
+      ],
+      "properties": {
+        "warning_id": {
+          "type": "string"
+        },
+        "disposition": {
+          "enum": [
+            "CLOSED_EVIDENCE_BACKED",
+            "UNRESOLVED",
+            "NOT_APPLICABLE_AUTHORISED",
+            "BLOCKED"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        },
+        "before_health_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "after_health_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "bulk_suppression": {
+          "const": false
+        }
+      }
+    },
+    "preview_invocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invocation_id",
+        "disclaimer",
+        "disclaimer_acknowledged",
+        "authority_effect",
+        "gate_satisfaction",
+        "operator_review_blocked"
+      ],
+      "properties": {
+        "invocation_id": {
+          "type": "string"
+        },
+        "disclaimer": {
+          "const": "This evaluation is non-binding advisory evidence only. It does not satisfy any gate requirement and does not prevent operator review of proposals that fail preview criteria. PGN-G10 enforcement, if activated, may produce different results."
+        },
+        "disclaimer_acknowledged": {
+          "const": true
+        },
+        "authority_effect": {
+          "const": "NONE"
+        },
+        "gate_satisfaction": {
+          "const": false
+        },
+        "operator_review_blocked": {
+          "const": false
+        }
+      }
+    },
+    "shadow_corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "corpus_id",
+        "version",
+        "sha256",
+        "accepted",
+        "negative_programme_sources",
+        "adversarial_case_set_count",
+        "implementation_team_sole_curator"
+      ],
+      "properties": {
+        "corpus_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "accepted": {
+          "type": "boolean"
+        },
+        "negative_programme_sources": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "adversarial_case_set_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "implementation_team_sole_curator": {
+          "const": false
+        }
+      }
+    },
+    "rebuild_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "programme_count",
+        "elapsed_seconds",
+        "soft_target_seconds",
+        "warning",
+        "partition_order",
+        "validation_skipped"
+      ],
+      "properties": {
+        "programme_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "elapsed_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "soft_target_seconds": {
+          "const": 60
+        },
+        "warning": {
+          "enum": [
+            "NONE",
+            "REBUILD_LATENCY_WARNING"
+          ]
+        },
+        "partition_order": {
+          "const": [
+            "programme_class",
+            "constitutional_parent",
+            "cross_partition_reconciliation"
+          ]
+        },
+        "validation_skipped": {
+          "const": false
+        }
+      }
+    }
+  }
+}
