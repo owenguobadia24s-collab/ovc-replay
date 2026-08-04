@@ -7,7 +7,7 @@
   "gate_id": "PGN-G1",
   "baseline_commit": "113254f4ceadff6d08546c945e7912590d4a905d",
   "branch": "build/pgn-wp1-contracts",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "evaluated_candidate_commit": "dcc56dd2f960245787a011197e15e9559885526f",
   "authority_delta": "FREEZE_NATIVE_ADOPTION_REVIEW_EDGE_WARNING_ROUTE_PERFORMANCE_PREVIEW_AND_CORPUS_CONTROLS_ONLY",
   "artifacts": {
     "contract": "contracts/governance/programme_genesis/PGN_PORTFOLIO_ADOPTION_CONTROL_CONTRACT_v0_1.md",
@@ -19,7 +19,9 @@
       "fixtures/governance/programme_genesis/pgn_challenged_edge_downgraded_v0_1.json",
       "fixtures/governance/programme_genesis/pgn_advisory_preview_invocation_v0_1.json"
     ],
-    "tests": ["tests/governance/test_pgn_wp1.py", "tests/governance/test_pgn_g0.py"]
+    "tests": ["tests/governance/test_pgn_wp1.py", "tests/governance/test_pgn_g0.py"],
+    "qa": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g1/PGN_G1_QA_PACKET.json",
+    "decision": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g1/PGN_G1_DELEGATED_DECISION.json"
   },
   "frozen_invariants": [
     "PGN_G2A_BEFORE_CANDIDATE_CONSTRUCTION",
@@ -32,6 +34,13 @@
     "CORPUS_REQUIRES_INDEPENDENT_MULTI_SOURCE_ADVERSARIAL_ACCEPTANCE",
     "READ_MODEL_SOFT_TARGET_60_SECONDS_WITH_VISIBLE_WARNING"
   ],
+  "assurance": {
+    "repository_run": 30897407801,
+    "test_count": 167,
+    "ovc_final_head_run": 30897407491,
+    "merge_readiness_job": 91953546120,
+    "conclusion": "SUCCESS"
+  },
   "reserved_authority": "NONE",
   "blockers": [],
   "rollback": "Supersede the controls non-destructively and preserve all source, warning, challenge, decision, PR, commit and receipt history."
