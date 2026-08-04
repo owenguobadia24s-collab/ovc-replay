@@ -5,14 +5,13 @@
   "plan_version": "0.2",
   "gate_id": "PGN-G2A",
   "title": "Acknowledge or adjust the exact native-adoption census before candidate construction",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "status": "GATE_READY",
   "operator_decision_required": true,
   "baseline_commit": "3eb774894676ad620fe1aa826a8e48445f75ec4d",
   "candidate_branch": "gate/pgn-g2a-census-ack",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "evaluated_candidate_commit": "5c3296f12adb416a8b90e047c8a71c4b2b89192e",
   "completed_packets": ["PGN-00", "PGN-WP1", "PGN-WP2"],
   "current_authority": {
-    "plan_ratification": "RATIFIED_BOUNDED_IMPLEMENTATION",
     "census": "COMPLETE_PENDING_OPERATOR_ACKNOWLEDGEMENT",
     "candidate_construction": "DENIED_PENDING_PGN_G2A",
     "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
@@ -23,128 +22,65 @@
     "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
     "market_model_selector_release_validation_agent_exposure_execution": "NONE"
   },
-  "proposed_delta": "ACKNOWLEDGE_THE_EXACT_CENSUS_CLASS_RECOMMENDATIONS_EXCLUSIONS_SURPRISES_AND_REVIEW_GROUPS_AND_RELEASE_CANDIDATE_CONSTRUCTION_FOR_ACKNOWLEDGED_TARGETS_ONLY",
+  "proposed_delta": "ACKNOWLEDGE_THE_EXACT_CENSUS_AND_RELEASE_CANDIDATE_CONSTRUCTION_FOR_ACKNOWLEDGED_TARGETS_ONLY",
   "census": {
     "path": "registries/governance/programme_genesis/pgn_census/PGN_PORTFOLIO_CENSUS_v0_1.json",
     "builder_sha256": "7f26a513c7696bf065f4b30b5337d44677adc1f2fb48e7864593f6f708f704ad",
     "legacy_adoption_target_count": 7,
     "targets": [
-      {
-        "programme_id": "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
-        "current_status": "BLOCKED",
-        "class_recommendation": "MARKET_TRANSLATION",
-        "source_confidence": "MEDIUM"
-      },
-      {
-        "programme_id": "OVC-C2E-NEUTRAL-EPISODE-v0.1",
-        "current_status": "BLOCKED",
-        "class_recommendation": "MARKET_TRANSLATION",
-        "source_confidence": "MEDIUM"
-      },
-      {
-        "programme_id": "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
-        "current_status": "COMPLETED",
-        "class_recommendation": "MARKET_TRANSLATION",
-        "source_confidence": "MEDIUM"
-      },
-      {
-        "programme_id": "OVC-DEV-ACCEL-v0.1",
-        "current_status": "COMPLETED",
-        "class_recommendation": "DEVELOPMENT_INFRASTRUCTURE",
-        "source_confidence": "MEDIUM"
-      },
-      {
-        "programme_id": "OVC-MTA-v0.2",
-        "current_status": "COMPLETED",
-        "class_recommendation": "RESEARCH_EVIDENCE",
-        "source_confidence": "MEDIUM"
-      },
-      {
-        "programme_id": "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
-        "current_status": "BLOCKED",
-        "class_recommendation": "RESEARCH_EVIDENCE",
-        "source_confidence": "MEDIUM"
-      },
-      {
-        "programme_id": "PD-JUNE-FULL-MONTH-MDR",
-        "current_status": "COMPLETED",
-        "class_recommendation": "RESEARCH_EVIDENCE",
-        "source_confidence": "LOW"
-      }
+      {"programme_id":"OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1","status":"BLOCKED","class_recommendation":"MARKET_TRANSLATION","source_confidence":"MEDIUM"},
+      {"programme_id":"OVC-C2E-NEUTRAL-EPISODE-v0.1","status":"BLOCKED","class_recommendation":"MARKET_TRANSLATION","source_confidence":"MEDIUM"},
+      {"programme_id":"OVC-CLOCK-CONTINUITY-REVIEW-v0.1","status":"COMPLETED","class_recommendation":"MARKET_TRANSLATION","source_confidence":"MEDIUM"},
+      {"programme_id":"OVC-DEV-ACCEL-v0.1","status":"COMPLETED","class_recommendation":"DEVELOPMENT_INFRASTRUCTURE","source_confidence":"MEDIUM"},
+      {"programme_id":"OVC-MTA-v0.2","status":"COMPLETED","class_recommendation":"RESEARCH_EVIDENCE","source_confidence":"MEDIUM"},
+      {"programme_id":"OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4","status":"BLOCKED","class_recommendation":"RESEARCH_EVIDENCE","source_confidence":"MEDIUM"},
+      {"programme_id":"PD-JUNE-FULL-MONTH-MDR","status":"COMPLETED","class_recommendation":"RESEARCH_EVIDENCE","source_confidence":"LOW"}
     ],
     "exclusions": [
-      {
-        "programme_id": "OVC-PG-v0.2",
-        "reason": "ALREADY_NATIVE"
-      },
-      {
-        "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
-        "reason": "CURRENT_RATIFIED_GOVERNANCE_PROGRAMME_NOT_A_LEGACY_CONVERSION_TARGET"
-      }
+      {"programme_id":"OVC-PG-v0.2","reason":"ALREADY_NATIVE"},
+      {"programme_id":"OVC-PG-NATIVE-PORTFOLIO-v0.2","reason":"CURRENT_GOVERNANCE_PROGRAMME_NOT_A_LEGACY_TARGET"}
     ],
-    "non_admitted_objects": [
-      {
-        "object_id": "PCCR-G0-PREPARATION",
-        "disposition": "EXCLUDE_PENDING_SEPARATE_PROGRAMME_ADMISSION"
-      }
-    ],
-    "surprise_findings": [
+    "non_admitted": [{"object_id":"PCCR-G0-PREPARATION","disposition":"EXCLUDE_PENDING_SEPARATE_ADMISSION"}],
+    "surprises": [
       "PCCR_PREPARATION_EXISTS_BUT_IS_NOT_ADMITTED",
-      "PGN_CURRENT_PROGRAMME_STATE_IS_INTENTIONALLY_SEPARATE_FROM_LEGACY_MIGRATION_DISCOVERY"
+      "PGN_CURRENT_PROGRAMME_STATE_IS_SEPARATE_FROM_LEGACY_MIGRATION_DISCOVERY"
     ],
-    "proposed_review_groups": [
-      {
-        "group_id": "PGN-G3-R1-MARKET-TRANSLATION",
-        "candidate_count": 3,
-        "candidate_ids": [
-          "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
-          "OVC-C2E-NEUTRAL-EPISODE-v0.1",
-          "OVC-CLOCK-CONTINUITY-REVIEW-v0.1"
-        ]
-      },
-      {
-        "group_id": "PGN-G3-R2-RESEARCH-EVIDENCE",
-        "candidate_count": 3,
-        "candidate_ids": [
-          "OVC-MTA-v0.2",
-          "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
-          "PD-JUNE-FULL-MONTH-MDR"
-        ]
-      },
-      {
-        "group_id": "PGN-G3-R3-DEVELOPMENT-INFRASTRUCTURE",
-        "candidate_count": 1,
-        "candidate_ids": ["OVC-DEV-ACCEL-v0.1"]
-      }
+    "review_groups": [
+      {"group_id":"PGN-G3-R1-MARKET-TRANSLATION","candidate_count":3,"candidate_ids":["OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1","OVC-C2E-NEUTRAL-EPISODE-v0.1","OVC-CLOCK-CONTINUITY-REVIEW-v0.1"]},
+      {"group_id":"PGN-G3-R2-RESEARCH-EVIDENCE","candidate_count":3,"candidate_ids":["OVC-MTA-v0.2","OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4","PD-JUNE-FULL-MONTH-MDR"]},
+      {"group_id":"PGN-G3-R3-DEVELOPMENT-INFRASTRUCTURE","candidate_count":1,"candidate_ids":["OVC-DEV-ACCEL-v0.1"]}
     ],
     "candidates_constructed": 0,
     "blocking_conflicts": 0
   },
   "acceptance_conditions": [
-    "EXACT_SEVEN_TARGET_POPULATION_IS_ACKNOWLEDGED_OR_EXPLICITLY_ADJUSTED",
-    "EVERY_TARGET_SOURCE_PATH_AND_SHA256_IS_REPRODUCIBLE",
-    "ALREADY_NATIVE_PROGRAMME_GENESIS_IS_EXCLUDED",
-    "CURRENT_PGN_PROGRAMME_IS_NOT_TREATED_AS_A_LEGACY_CONVERSION_TARGET",
-    "PCCR_PREPARATION_REMAINS_NOT_ADMITTED_UNLESS_A_SEPARATE_ADMISSION_DECISION_OCCURS",
-    "CLASS_ASSIGNMENTS_ARE_ACKNOWLEDGED_AS_CANDIDATE_CONSTRUCTION_BOUNDS_NOT_FINAL_NATIVE_ADOPTION",
-    "REVIEW_GROUPS_ARE_ACKNOWLEDGED_WITH_MAXIMUM_THREE_AND_PROGRESSIVE_DISCLOSURE",
+    "EXACT_SEVEN_TARGET_POPULATION_ACKNOWLEDGED_OR_EXPLICITLY_ADJUSTED",
+    "EVERY_TARGET_SOURCE_PATH_AND_SHA256_REPRODUCIBLE",
+    "PROGRAMME_GENESIS_AND_CURRENT_PGN_EXCLUDED",
+    "PCCR_REMAINS_NOT_ADMITTED_PENDING_SEPARATE_ADMISSION",
+    "CLASS_RECOMMENDATIONS_BOUND_CANDIDATE_CONSTRUCTION_BUT_ARE_NOT_NATIVE_ADOPTION",
+    "REVIEW_GROUPS_MAXIMUM_THREE_AND_PROGRESSIVE_DISCLOSURE_ACKNOWLEDGED",
     "NO_NATIVE_CANDIDATE_HAS_BEEN_CONSTRUCTED",
-    "ALL_MIGRATION_UNCERTAINTY_AND_UNRESOLVED_FIELDS_REMAIN_VISIBLE",
-    "PGN_G3_REMAINS_REQUIRED_FOR_PER_PROGRAMME_NATIVE_ADOPTION",
-    "NO_RESERVED_MARKET_RELEASE_VALIDATION_AGENT_OR_EXPOSURE_AUTHORITY"
+    "MIGRATION_UNCERTAINTY_AND_UNRESOLVED_FIELDS_REMAIN_VISIBLE",
+    "PGN_G3_REMAINS_REQUIRED_FOR_EVERY_NATIVE_ADOPTION",
+    "NO_RESERVED_AUTHORITY"
   ],
   "tests": {
     "focused": "tests/governance/test_pgn_g2a.py",
-    "repository_required": ["tests", "OVC merge readiness"],
-    "status": "PENDING_EXACT_HEAD_CI"
+    "repository_run": 30898985673,
+    "repository_conclusion": "SUCCESS",
+    "ovc_final_head_run": 30898985574,
+    "ovc_conclusion": "SUCCESS",
+    "merge_readiness_job": 91958615968,
+    "merge_readiness_conclusion": "SUCCESS"
   },
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2a/PGN_G2A_QA_PACKET.json",
   "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
   "warnings": [
     "ALL_SEVEN_TARGETS_RETAIN_MIGRATION_UNCERTAINTY_AND_UNRESOLVED_NATIVE_FIELDS",
     "PD_JUNE_FULL_MONTH_MDR_SOURCE_CONFIDENCE_IS_LOW",
-    "THREE_TARGETS_ARE_CURRENTLY_BLOCKED_AND_NATIVE_CONVERSION_MUST_PRESERVE_THAT_LIFECYCLE",
-    "ACKNOWLEDGEMENT_RELEASES_CANDIDATE_CONSTRUCTION_ONLY_AND_IS_NOT_NATIVE_ADOPTION"
+    "THREE_TARGETS_ARE_BLOCKED_AND_CANDIDATES_MUST_PRESERVE_THAT_LIFECYCLE",
+    "ACKNOWLEDGEMENT_IS_NOT_NATIVE_ADOPTION"
   ],
   "unresolved_issues": [],
   "changed_files": [
@@ -154,9 +90,9 @@
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2a/PGN_G2A_PROGRAMME_STATE_UPDATE.json",
     "tests/governance/test_pgn_g2a.py"
   ],
-  "rollback": "Preserve the accepted census, gate branch, tests and evidence. Choose DEFER or ADJUST_SCOPE; do not construct candidates until an acknowledgement or adjusted scope decision is merged.",
+  "rollback": "Preserve the census, gate branch, tests and evidence. Choose DEFER or ADJUST_SCOPE and do not construct candidates until a decision is merged.",
   "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "ADJUST_SCOPE", "DEFER", "BLOCK", "QUARANTINE"],
   "recommended_decision": "ACKNOWLEDGE_CONTINUE",
   "exact_operator_command": "OVC APPROVE PGN-G2A ACKNOWLEDGE_CONTINUE",
-  "work_after_approval": "Record the immutable PGN-G2A decision and acknowledged target set, squash-merge the gate packet, then construct native candidates only for the acknowledged seven targets. Prepare progressive PGN-G3 review group 1 first; do not disclose group 2 until group 1 acknowledgement is recorded."
+  "work_after_approval": "Record the immutable decision, merge this gate packet, construct candidates only for the acknowledged targets, and prepare review group 1 before any later group is disclosed."
 }
