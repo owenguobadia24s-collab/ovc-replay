@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP3",
+  "gate_id": "PGN-G3-R1",
+  "status": "QA_REVIEW",
+  "prerequisites": [
+    "PGN_G2B_ACKNOWLEDGE_CONTINUE_MERGED_38de6b53a692d2f9f71c506b833bf6ffb92820f6"
+  ],
+  "authority_required": "AUTO_EXECUTABLE_CANDIDATE_ONLY",
+  "authority_delta": "BUILD_EXACT_SIXTEEN_UNAPPROVED_NATIVE_GENESIS_CANDIDATES_AND_PROGRESSIVE_REVIEW_QUEUE",
+  "baseline_commit": "38de6b53a692d2f9f71c506b833bf6ffb92820f6",
+  "branch": "migration/pgn-wp3-native-candidates",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "tests": [],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/PGN_WP3_QA_PACKET.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "candidate_count": 16,
+  "candidate_set_sha256": "7dad0cee63ba6d533eff097f333645914e92d87e1964634786312f9ede58354a",
+  "review": {
+    "group_count": 6,
+    "current_group": "PGN-G3-R1",
+    "current_group_candidate_count": 3,
+    "later_groups_locked": true
+  },
+  "authority": {
+    "candidate_construction": "SEALED_COMMITMENTS_IMPLEMENTED_UNAPPROVED",
+    "native_adoption": "DENIED_PENDING_PGN_G3",
+    "later_group_disclosure": "DENIED_PENDING_PGN_G3_R1_ACKNOWLEDGEMENT",
+    "reserved_authority": "NONE",
+    "future_group_materialization": "DENIED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT"
+  },
+  "next_packet": "PGN-G3-R1",
+  "next_gate": "PGN-G3-R1",
+  "next_action": "EXACT_HEAD_ASSURANCE_AUTO_RATIFY_MERGE_THEN_PREPARE_OPERATOR_PGN_G3_R1_ACKNOWLEDGEMENT_GATE",
+  "rollback": "Discard and deterministically rebuild sealed candidate commitments and the progressive queue from the acknowledged census. Preserve all sources, classifications and the PGN-G2B decision.",
+  "candidate_commitment_set_sha256": "749a0965d29f4a869906b24878da7d272fb95643808d79d577752ecf2810566c"
+}
