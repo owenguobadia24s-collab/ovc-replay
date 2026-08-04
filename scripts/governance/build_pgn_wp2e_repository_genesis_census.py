@@ -15,7 +15,7 @@ POLICY_PATH = ROOT / "registries/governance/programme_genesis/PGN_REPOSITORY_GEN
 OUTPUT_PATH = ROOT / "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json"
 GENERATED_PREFIXES = (
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3",
     "registries/governance/programme_genesis/pgn_census/",
     "registries/governance/programme_genesis/pgn_candidates/",
 )
