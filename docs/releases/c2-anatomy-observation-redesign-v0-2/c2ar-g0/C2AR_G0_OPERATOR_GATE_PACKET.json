@@ -5,25 +5,28 @@
   "plan_version": "0.2-REVISED",
   "gate_id": "C2AR-G0",
   "title": "Ratify C2 Engine Anatomy and Observation Redesign Implementation Plan v0.2 REVISED",
-  "status": "GATE_READY",
-  "operator_decision_required": true,
+  "status": "APPROVED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
+  "operator_decision_required": false,
+  "decision": "PASS",
+  "decision_id": "C2AR-G0.OPERATOR.PASS.20260804T195100+0100",
+  "decision_record": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_OPERATOR_DECISION.json",
   "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
   "candidate_branch": "gate/c2ar-g0-ratification",
   "candidate_commit": "BOUND_BY_PR_291_FINAL_HEAD",
-  "assured_prepacket_head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a",
-  "completed_packets": ["C2AR-00"],
+  "assured_predecision_head": "da96e2de4d05486718d1d52307220d3774cb7675",
+  "completed_packets": ["C2AR-00", "C2AR-G0-OPERATOR-DECISION"],
   "source_binding": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_SOURCE_PLAN_HASH.json",
   "current_authority": {
-    "plan_status": "PROPOSED_ONLY",
-    "wp0_execution": "DENIED_PENDING_C2AR_G0",
+    "plan_status": "RATIFIED_PENDING_MERGE",
+    "wp0_execution": "APPROVED_AFTER_G0_MERGE_RECEIPT",
     "active_c2_selector": "UNCHANGED_ACTIVE_DISCOVERY",
     "active_formula_threshold_clock_lattice_release": "UNCHANGED",
     "c2e_c2_5_c3_validation_publication": "NONE",
     "probability_risk_exposure_trading_execution": "NONE",
     "agent_write": "NONE"
   },
-  "proposed_delta": "RATIFY_REVISED_IMPLEMENTATION_PLAN_AND_RELEASE_C2AR_WP0_BASELINE_CONTROLS_ONLY",
-  "ratified_terms_on_pass": [
+  "approved_delta": "RATIFY_REVISED_IMPLEMENTATION_PLAN_AND_RELEASE_C2AR_WP0_BASELINE_CONTROLS_ONLY",
+  "ratified_terms": [
     "TWO_TIER_CONTRACT_MATURITY_WITH_SHADOW_EXPERIMENT_MUTABILITY_THROUGH_WP5_5",
     "MANDATORY_SYNTHETIC_END_TO_END_SMOKE_AT_C2AR_G5_5_BEFORE_CEAR_G6",
     "GOVERNED_FINITE_CROSSWALK_LIFECYCLE",
@@ -47,17 +50,17 @@
     "EXACT_HEAD_FOCUSED_FULL_SUITE_AND_MERGE_READINESS_CHECKS_PASS"
   ],
   "tests": {
-    "assured_prepacket_head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a",
-    "complete_repository_suite": {"workflow": "tests", "run_id": 30939970245, "result": "PASS"},
-    "final_head_profile": {"workflow": "OVC tiered test selection shadow", "run_id": 30939970246, "profile": "FINAL_HEAD", "result": "PASS"},
-    "merge_readiness": {"workflow": "OVC tiered test selection shadow", "run_id": 30939970246, "job": "OVC merge readiness", "result": "PASS"},
-    "final_pr_head": "REQUIRED_AFTER_THIS_GATE_METADATA_COMMIT_AND_BOUND_BY_PR_291"
+    "assured_predecision_head": "da96e2de4d05486718d1d52307220d3774cb7675",
+    "complete_repository_suite": {"workflow": "tests", "run_id": 30940702849, "result": "PASS"},
+    "final_head_profile": {"workflow": "OVC tiered test selection shadow", "run_id": 30940697823, "profile": "FINAL_HEAD", "result": "PASS"},
+    "merge_readiness": {"workflow": "OVC tiered test selection shadow", "run_id": 30940697823, "job": "OVC merge readiness", "result": "PASS"},
+    "final_pr_head": "REQUIRED_AFTER_STATE_AND_GATE_DECISION_METADATA"
   },
   "qa_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_QA_PACKET.json",
   "qa_recommendation": "PASS_IF_PR_291_FINAL_HEAD_REQUIRED_CHECKS_PASS",
   "warnings": [
     "PCCR_G0_REMAINS_NOT_ADMITTED_AND_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_IS_HELD",
-    "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_ANY_MAIN_ADVANCE_REQUIRES_NON_DESTRUCTIVE_REBASE_AND_RETEST",
+    "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_REMAINS_INDEPENDENT",
     "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY",
     "C2AR_GATE_PREPARATION_IS_POST_PGN_WP2E_CENSUS_AND_IS_EXCLUDED_FROM_REBUILD_OF_THAT_FROZEN_PREDECISION_EVIDENCE"
   ],
@@ -69,15 +72,16 @@
     "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_AUTHORITY_AND_CAPACITY_ENVELOPE.json",
     "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_QA_PACKET.json",
     "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_OPERATOR_GATE_PACKET.json",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_OPERATOR_DECISION.json",
     "scripts/governance/build_pgn_wp2e_repository_genesis_census.py",
     "tests/opt_b/c2/anatomy_redesign/test_c2ar_g0.py"
   ],
   "external_artifacts": [
     {"type": "SOURCE_PLAN_DOCX", "identity": "file_000000009e7081f79eabf21adb3dc2d3", "sha256": "b76fb70533ccba161eb9d043f393ff875a3bcf8170009dc0a380c234a04f628d", "size_bytes": 78065}
   ],
-  "rollback": "Preserve the branch, source hash, baseline and gate evidence. Do not merge and do not execute C2AR-WP0 unless PASS is recorded. Revert the bounded PGN census-compatibility exclusion with the C2AR gate packet if this proposal is abandoned. Active C2, PCCR and accepted PGN census bytes remain unchanged.",
+  "rollback": "Preserve the append-only operator decision. If exact-head assurance or merge fails, do not execute C2AR-WP0 until a lawful merged decision receipt exists. Active C2, PCCR and accepted PGN census bytes remain unchanged.",
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "recommended_decision": "PASS",
   "exact_operator_command": "OVC APPROVE C2AR-G0 PASS",
-  "work_after_approval": "Record the immutable C2AR-G0 decision, squash-merge PR 291 when exact final-head checks remain PASS, create build/c2ar-00-programme-bootstrap from the new lawful main, execute C2AR-WP0 and auto-ratify C2AR-G0A if all baseline acceptance conditions pass."
+  "work_after_approval": "Squash-merge PR 291 after exact final-head checks pass, create build/c2ar-00-programme-bootstrap from the new lawful main, execute C2AR-WP0 and auto-ratify C2AR-G0A if all baseline acceptance conditions pass."
 }
