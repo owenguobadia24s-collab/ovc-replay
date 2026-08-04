@@ -5,24 +5,21 @@
   "plan_version": "0.2",
   "packet_id": "PGN-G3-R1",
   "gate_id": "PGN-G3-R1",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "prerequisites": [
     "PGN_WP3_PASS_MERGED_48f30a628e977f34ef068c7e7d67fba95654b5a9"
   ],
-  "authority_required": "OPERATOR_REQUIRED",
-  "authority_delta": "ACKNOWLEDGE_R1_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R2_DISCLOSURE_ONLY",
+  "authority_required": "OPERATOR_DECISION_RECORDED_PENDING_MERGE",
+  "authority_delta": "ACKNOWLEDGE_R1_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R2_DISCLOSURE_ONLY_AFTER_MERGE",
   "baseline_commit": "48f30a628e977f34ef068c7e7d67fba95654b5a9",
   "branch": "gate/pgn-g3-r1-market-translation",
   "candidate_commit": "BOUND_BY_PR_288_FINAL_HEAD",
-  "assured_gate_head": "e105b5060cd889df1ccec9209e7ec61d9e77d5b7",
   "tests": [
-    "REPOSITORY_TESTS_RUN_30913175956_SUCCESS",
-    "OVC_FINAL_HEAD_RUN_30913172165_JOB_92004643626_SUCCESS",
-    "OVC_MERGE_READINESS_RUN_30913172165_JOB_92004731559_SUCCESS",
-    "FINAL_PACKET_HEAD_ASSURANCE_REQUIRED"
+    "FINAL_HEAD_ASSURANCE_PENDING"
   ],
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r1/PGN_G3_R1_QA_PACKET.json",
-  "decision_record": null,
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r1/PGN_G3_R1_OPERATOR_DECISION.json",
+  "operator_decision_id": "PGN-G3-R1.OPERATOR.ACKNOWLEDGE_CONTINUE.20260804T142700+0100",
   "merge_commit": null,
   "blockers": [],
   "review": {
@@ -35,13 +32,14 @@
     "later_group_ids_disclosed": false
   },
   "authority": {
-    "r1_acknowledgement": "DENIED_PENDING_OPERATOR_DECISION",
+    "r1_acknowledgement": "APPROVED_PENDING_MERGE",
     "native_adoption": "DENIED_PENDING_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
-    "next_group_disclosure": "DENIED_PENDING_R1_ACKNOWLEDGEMENT_RECEIPT_MERGE",
+    "next_group_disclosure": "AUTHORISED_AFTER_R1_DECISION_MERGE_AND_POST_MERGE_UNLOCK_RECEIPT",
+    "later_groups_beyond_r2": "LOCKED",
     "reserved_authority": "NONE"
   },
-  "next_packet": "PGN-G3-R1-ACKNOWLEDGEMENT",
-  "next_gate": "PGN-G3-R1",
-  "next_action": "AWAIT_OPERATOR_PGN_G3_R1_ACKNOWLEDGE_CONTINUE_OR_ALTERNATIVE_DO_NOT_DISCLOSE_PGN_G3_R2",
-  "rollback": "Preserve PGN-WP3 and sealed commitments. Do not create an acknowledgement receipt or disclose R2 unless the operator approves R1."
+  "next_packet": "PGN-G3-R2",
+  "next_gate": "PGN-G3-R2",
+  "next_action": "RUN_FINAL_HEAD_ASSURANCE_SQUASH_MERGE_PR_288_CREATE_POST_MERGE_R1_UNLOCK_RECEIPT_THEN_MATERIALISE_PGN_G3_R2_ONLY",
+  "rollback": "Preserve PGN-WP3, R1 evidence and the operator decision. Stop before R2 if the decision is not merged or the unlock receipt cannot bind the exact merge."
 }
