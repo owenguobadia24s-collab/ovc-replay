@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-G2B",
+  "gate_id": "PGN-G2B",
+  "status": "GATE_READY",
+  "prerequisites": [
+    "PGN-WP2E_PASS_MERGED_dcdc968ea936dd1e66f7fa1a6cf9c0a4528a52c1"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "ACKNOWLEDGE_OR_ADJUST_EXPANDED_CENSUS_EXCLUSIONS_LINEAGE_AND_EXACT_LEGACY_CANDIDATE_SCOPE",
+  "baseline_commit": "dcdc968ea936dd1e66f7fa1a6cf9c0a4528a52c1",
+  "branch": "gate/pgn-g2b-expanded-census-ack",
+  "candidate_commit": "PENDING_EXACT_HEAD",
+  "tests": [],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_QA_PACKET.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "census": {
+    "manifest": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
+    "object_count": 108,
+    "legacy_candidate_scope_count": 16,
+    "native_programme_count": 2,
+    "superseded_count": 1,
+    "absorbed_count": 0,
+    "bounded_packet_count": 70,
+    "proposal_not_admitted_count": 1,
+    "unresolved_count": 18,
+    "exclusion_count": 72,
+    "lineage_consolidation_count": 1,
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
+  },
+  "authority": {
+    "expanded_census": "APPROVED_EVIDENCE_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+    "candidate_construction": "DENIED_PENDING_PGN_G2B",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "reserved_authority": "NONE"
+  },
+  "next_packet": "PGN-WP3",
+  "next_gate": "PGN-G3",
+  "next_action": "AWAIT_OPERATOR_PGN_G2B_ACKNOWLEDGE_CONTINUE_OR_ADJUST_SCOPE_DO_NOT_BEGIN_PGN_WP3",
+  "rollback": "Preserve the merged census, gate evidence and branch. Do not construct candidates until an operator decision is merged."
+}
