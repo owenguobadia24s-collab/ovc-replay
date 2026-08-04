@@ -17,6 +17,7 @@ GENERATED_PREFIXES = (
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/",
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3",
     "docs/releases/c2-anatomy-observation-redesign-v0-2/",
+    "registries/opt_b/c2/anatomy_redesign/",
     "registries/governance/programme_genesis/pgn_census/",
     "registries/governance/programme_genesis/pgn_candidates/",
 )
