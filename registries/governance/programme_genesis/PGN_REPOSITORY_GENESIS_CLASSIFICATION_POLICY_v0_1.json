@@ -1,0 +1,97 @@
+{
+  "schema": "ovc-pgn-repository-genesis-classification-policy/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "packet_id": "PGN-WP2E",
+  "gate_id": "PGN-G2B",
+  "baseline_main": "c707cd35b88e18cc7cb5677685ce8e27496561a7",
+  "coverage_start": "INITIAL_OVC_REPLAY_COMMIT",
+  "earliest_reproducible_repository_snapshot": {
+    "source_commit": "c0ad7ba22618babdde731e2a338f68f688d4210c",
+    "inventory_path": "docs/history/repository-freezes/ovc-replay-v1-c0ad7ba/TRACKED_FILE_INVENTORY.json",
+    "tracked_file_count": 339,
+    "availability": "CONTENT_MIRRORED_AND_QUARANTINED_SOURCE_COMMIT_NOT_RESOLVABLE_IN_CURRENT_GIT_GRAPH"
+  },
+  "classification_enum": [
+    "NATIVE_PROGRAMME",
+    "LEGACY_PROGRAMME_REQUIRING_CONVERSION",
+    "SUPERSEDED_PROGRAMME",
+    "ABSORBED_INTO_SUCCESSOR",
+    "BOUNDED_PACKET_NOT_A_PROGRAMME",
+    "PROPOSAL_NOT_ADMITTED",
+    "UNRESOLVED"
+  ],
+  "object_kind_enum": [
+    "FORMAL_PROGRAMME",
+    "IMPLEMENTATION_PROGRAMME",
+    "SUPERSEDED_PROGRAMME_VERSION",
+    "ADMITTED_PROPOSAL",
+    "NON_ADMITTED_PROPOSAL",
+    "MAJOR_BOUNDED_INITIATIVE",
+    "IMPLEMENTATION_PLAN",
+    "HISTORICAL_RELEASE",
+    "COVERAGE_BOUNDARY"
+  ],
+  "discovery_roots": [
+    "registries",
+    "docs/plans",
+    "docs/releases",
+    "docs/history",
+    "legacy/quarantine/abcd-engine-v1-c0ad7ba"
+  ],
+  "source_keys": [
+    "programme_id",
+    "program_id",
+    "proposed_programme_id",
+    "plan_id",
+    "release_id"
+  ],
+  "native_programmes": [
+    "OVC-PG-v0.2",
+    "OVC-PG-NATIVE-PORTFOLIO-v0.2"
+  ],
+  "proposal_not_admitted": [
+    "OVC-PCCR-v0.1"
+  ],
+  "explicit_classifications": {
+    "OPT-A.GBPUSD.2026H1.v1": {
+      "classification": "SUPERSEDED_PROGRAMME",
+      "object_kind": "HISTORICAL_RELEASE",
+      "successors": [
+        "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "OPT-A.GBPUSD.VALIDATION.2025.v2"
+      ],
+      "evidence": "docs/releases/opt-a-v2/governance/OPT_A_V1_SUPERSESSION_RECORD.json"
+    },
+    "OVC-PCCR-v0.1": {
+      "classification": "PROPOSAL_NOT_ADMITTED",
+      "object_kind": "NON_ADMITTED_PROPOSAL",
+      "evidence": "registries/research_operations/planned_closure_continuity/PCCR_G0_PREPARATION_STATE_v0_1.json"
+    },
+    "COVERAGE::PRE_C0AD7BA_GIT_HISTORY": {
+      "classification": "UNRESOLVED",
+      "object_kind": "COVERAGE_BOUNDARY",
+      "evidence": "docs/history/repository-freezes/ovc-replay-v1-c0ad7ba/TRACKED_FILE_INVENTORY.json"
+    }
+  },
+  "bounded_release_prefixes": [
+    "docs/releases/",
+    "docs/history/releases/",
+    "legacy/quarantine/abcd-engine-v1-c0ad7ba/docs/history/releases/"
+  ],
+  "lineage_rules": {
+    "require_explicit_evidence": true,
+    "infer_from_name_similarity": false,
+    "allow_absorption_without_successor": false,
+    "allow_supersession_without_evidence": false,
+    "cycle_policy": "BLOCK"
+  },
+  "authority": {
+    "candidate_construction": "DENIED_PENDING_PGN_G2B",
+    "native_adoption": "DENIED_PENDING_PGN_G3_AFTER_PGN_G2B",
+    "classification_effect": "EVIDENCE_ONLY_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+    "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
+  },
+  "rollback": "Discard and deterministically rebuild PGN-WP2E outputs from the source policy and repository-controlled evidence. Preserve PGN-G2A, the prior seven-programme census and all historical sources."
+}
