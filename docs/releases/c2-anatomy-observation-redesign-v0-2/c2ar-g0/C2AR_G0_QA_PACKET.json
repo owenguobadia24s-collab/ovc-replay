@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-c2ar-g0-qa-packet/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "gate_id": "C2AR-G0",
+  "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
+  "candidate_branch": "gate/c2ar-g0-ratification",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "checks": [
+    {"id": "C2AR-G0-QA-01", "name": "Source plan SHA-256 binding", "status": "PASS", "evidence": "C2AR_G0_SOURCE_PLAN_HASH.json"},
+    {"id": "C2AR-G0-QA-02", "name": "Current main and open PR baseline", "status": "PASS", "evidence": "C2AR_G0_BASELINE_MANIFEST.json"},
+    {"id": "C2AR-G0-QA-03", "name": "Active C2 selector and release preservation", "status": "PASS", "evidence": "C2AR_G0_BASELINE_MANIFEST.json"},
+    {"id": "C2AR-G0-QA-04", "name": "Authority, maturity, gate and capacity envelope fail closed", "status": "PASS", "evidence": "C2AR_G0_AUTHORITY_AND_CAPACITY_ENVELOPE.json"},
+    {"id": "C2AR-G0-QA-05", "name": "PCCR overlap is explicit and execution remains denied", "status": "PASS", "evidence": "C2AR_G0_BASELINE_MANIFEST.json"},
+    {"id": "C2AR-G0-QA-06", "name": "Focused tests", "status": "PENDING_EXACT_HEAD_CI", "evidence": "tests/opt_b/c2/anatomy_redesign/test_c2ar_g0.py"},
+    {"id": "C2AR-G0-QA-07", "name": "Complete repository and final-head assurance", "status": "PENDING_EXACT_HEAD_CI", "evidence": "GitHub Actions"},
+    {"id": "C2AR-G0-QA-08", "name": "No raw market data or R2 write", "status": "PASS", "evidence": "changed-file boundary"}
+  ],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
+  "warnings": [
+    "PCCR_G0_REMAINS_NOT_ADMITTED_AND_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_IS_HELD",
+    "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_ANY_MAIN_ADVANCE_REQUIRES_NON_DESTRUCTIVE_REBASE_AND_RETEST",
+    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY"
+  ],
+  "unresolved_issues": [],
+  "rollback": "Close the PR or revert the preparation commit. Active C2 and PCCR authority remain unchanged."
+}
