@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-G3-R3",
+  "gate_id": "PGN-G3-R3",
+  "status": "GATE_READY",
+  "prerequisites": [
+    "PGN_G3_R2_ACKNOWLEDGE_CONTINUE_MERGED_4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "ACKNOWLEDGE_R3_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R4_DISCLOSURE_ONLY",
+  "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
+  "branch": "gate/pgn-g3-r3-development-infrastructure",
+  "candidate_commit": "PENDING_EXACT_HEAD",
+  "tests": [],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_QA_PACKET.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "review": {
+    "current_group": "PGN-G3-R3",
+    "review_domain": "DEVELOPMENT_INFRASTRUCTURE",
+    "candidate_count": 3,
+    "candidate_group_sha256": "95c6d187900a4c0ad94fff94cfeb63791f8cf7b6c537379df7a666143a02f296",
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "later_groups_locked": true,
+    "later_group_ids_disclosed": false
+  },
+  "authority": {
+    "r3_acknowledgement": "DENIED_PENDING_OPERATOR_DECISION",
+    "native_adoption": "DENIED_PENDING_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
+    "next_group_disclosure": "DENIED_PENDING_R3_ACKNOWLEDGEMENT_RECEIPT_MERGE",
+    "reserved_authority": "NONE"
+  },
+  "next_packet": "PGN-G3-R3-ACKNOWLEDGEMENT",
+  "next_gate": "PGN-G3-R3",
+  "next_action": "AWAIT_OPERATOR_PGN_G3_R3_ACKNOWLEDGE_CONTINUE_OR_ALTERNATIVE_DO_NOT_DISCLOSE_PGN_G3_R4",
+  "rollback": "Preserve PGN-WP3, R1, R2 receipts and sealed commitments. Do not create an R3 acknowledgement receipt or disclose R4 unless the operator approves R3."
+}
