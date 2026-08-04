@@ -26,7 +26,7 @@ R2_IDS = [
     "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
     "OVC-MTA-v0.2",
 ]
-R2_SHA = "b07bbb1af425b663a5d9b0fe8a720af3bade9f6d8a8a10ccef32dd88425a16e1"
+R2_SHA = "b3585068a9bc0ce7568b5b9058014677d48afc212c35d3fefc6f599a8a202dff"
 
 
 def load(path: Path) -> dict:
