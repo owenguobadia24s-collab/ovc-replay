@@ -7,6 +7,7 @@ on:
       - '.github/workflows/pgn-wp2e-materialize.yml'
       - 'scripts/governance/build_pgn_wp2e_repository_genesis_census.py'
       - 'scripts/governance/materialize_pgn_wp2e_census.py'
+      - 'scripts/governance/materialize_pgn_wp2e_bundle.py'
       - 'registries/governance/programme_genesis/PGN_REPOSITORY_GENESIS_CLASSIFICATION_POLICY_v0_1.json'
       - 'registries/**'
       - 'docs/plans/**'
@@ -30,27 +31,39 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Generate compact exact census
-        run: python3 scripts/governance/materialize_pgn_wp2e_census.py
-      - name: Verify exact generated file
+      - name: Generate exact reviewable census bundle
+        run: python3 scripts/governance/materialize_pgn_wp2e_bundle.py
+      - name: Verify bundle manifest
         run: |
           python3 - <<'PY'
           import hashlib
           import json
           from pathlib import Path
-          path = Path('registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json')
+          root = Path('registries/governance/programme_genesis/pgn_census')
+          path = root / 'PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json'
           value = json.loads(path.read_text(encoding='utf-8'))
+          refs = list(value['object_ledgers']) + [value['exclusion_ledger'], value['lineage_consolidation_ledger'], value['coverage_and_unresolved_ledger']]
+          for ref in refs:
+              child = Path(ref['path'])
+              assert child.is_file(), child
+              assert hashlib.sha256(child.read_bytes()).hexdigest() == ref['sha256'], child
           print(json.dumps({
               'object_count': value['object_count'],
               'classification_counts': value['classification_counts'],
               'detailed_census_sha256': value['detailed_census_sha256'],
               'materialized_census_sha256': value['materialized_census_sha256'],
-              'file_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+              'bundle_manifest_sha256': value['bundle_manifest_sha256'],
+              'manifest_file_sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
           }, sort_keys=True))
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: pgn-wp2e-census-compact
-          path: registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json
+          name: pgn-wp2e-census-bundle
+          path: |
+            registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json
+            registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_*.json
+            registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_EXCLUSIONS_v0_2.json
+            registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_LINEAGE_v0_2.json
+            registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_COVERAGE_UNRESOLVED_v0_2.json
           if-no-files-found: error
           retention-days: 1
