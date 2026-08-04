@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP1",
+  "gate_id": "PGN-G1",
+  "status": "APPROVED_PENDING_MERGE",
+  "prerequisites": ["PGN-G0_PASS_MERGED_113254f4ceadff6d08546c945e7912590d4a905d"],
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "FREEZE_NATIVE_ADOPTION_REVIEW_EDGE_WARNING_ROUTE_PERFORMANCE_PREVIEW_AND_CORPUS_CONTROLS_ONLY",
+  "baseline_commit": "113254f4ceadff6d08546c945e7912590d4a905d",
+  "branch": "build/pgn-wp1-contracts",
+  "evaluated_candidate_commit": "dcc56dd2f960245787a011197e15e9559885526f",
+  "tests": [
+    "tests run 30897407801 SUCCESS 167",
+    "OVC FINAL_HEAD run 30897407491 SUCCESS",
+    "OVC merge readiness job 91953546120 SUCCESS"
+  ],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g1/PGN_G1_QA_PACKET.json",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g1/PGN_G1_DELEGATED_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "PGN-WP2",
+  "authority_after": {
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+    "census_acknowledgement": "DENIED_PENDING_PGN_G2A",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
+    "shadow_corpus_acceptance": "DENIED_PENDING_PGN_G9A",
+    "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
+    "reserved_market_and_exposure_authority": "NONE"
+  },
+  "next_action": "RUN_EXACT_HEAD_ASSURANCE_AND_SQUASH_MERGE_PR_282_THEN_START_PGN_WP2",
+  "rollback": "Revert or supersede the bounded WP1 artifacts through a new non-destructive commit while preserving PGN-G0, sources, QA and decision evidence."
+}

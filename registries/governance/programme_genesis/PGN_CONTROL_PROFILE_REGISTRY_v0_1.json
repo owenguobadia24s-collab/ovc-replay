@@ -1,0 +1,90 @@
+{
+  "schema": "ovc-pgn-control-profile-registry/v1",
+  "registry_id": "OVC-PGN-CONTROL-PROFILE-0.1",
+  "version": "0.1",
+  "status": "FROZEN_CANDIDATE",
+  "authority_effect": "NONE",
+  "native_adoption": {
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "unknown_class_disposition": "BLOCK",
+    "required_objects": [
+      "source_dossier",
+      "native_candidate",
+      "authority_envelope",
+      "scope_audit",
+      "migration_crosswalk",
+      "unresolved_field_ledger",
+      "lifecycle_projection"
+    ],
+    "adoption_gate": "PGN-G3"
+  },
+  "census": {
+    "candidate_construction_before_acknowledgement": false,
+    "acknowledgement_gate": "PGN-G2A"
+  },
+  "review_protocol": {
+    "group_by": ["PROGRAMME_CLASS", "AUTHORITY_DOMAIN"],
+    "maximum_candidates_per_group": 3,
+    "acknowledgement_before_next_group": true,
+    "group_acknowledgement_authority_effect": "NONE"
+  },
+  "edge_challenge": {
+    "window_hours": 48,
+    "early_close_condition": "ALL_NOTIFIED_OWNERS_EXPLICITLY_WAIVE",
+    "challenged_effective_source_kind": "ADAPTER_INFERRED",
+    "challenged_allowed_hardness": ["SOFT", "INFORMATIONAL"],
+    "challenged_satisfies_hard_prerequisite": false,
+    "restoration_requires": "ACCEPTED_SOURCE_EXPLICIT_EVIDENCE",
+    "edge_adoption_gate": "PGN-G5"
+  },
+  "warning_closure": {
+    "bulk_suppression": false,
+    "before_after_health_hashes_required": true,
+    "source_mutation_to_fit_projection": false
+  },
+  "control_plane": {
+    "build_status": "DISABLED_UNREGISTERED_NON_LISTENING",
+    "allowed_methods": ["GET"],
+    "prohibited_methods": ["POST", "PUT", "PATCH", "DELETE"],
+    "activation_gate": "PGN-G8"
+  },
+  "admission_preview": {
+    "disclaimer": "This evaluation is non-binding advisory evidence only. It does not satisfy any gate requirement and does not prevent operator review of proposals that fail preview criteria. PGN-G10 enforcement, if activated, may produce different results.",
+    "acknowledgement_log_required": true,
+    "authority_effect": "NONE",
+    "gate_satisfaction": false,
+    "operator_review_blocked": false
+  },
+  "shadow_corpus": {
+    "acceptance_gate": "PGN-G9A",
+    "minimum_distinct_negative_programme_sources": 2,
+    "minimum_adversarial_case_sets": 1,
+    "implementation_team_may_be_sole_curator": false,
+    "mutation_requires_new_version": true
+  },
+  "read_model_performance": {
+    "baseline_programme_count": 8,
+    "soft_target_seconds": 60,
+    "warning_code": "REBUILD_LATENCY_WARNING",
+    "partition_order": [
+      "programme_class",
+      "constitutional_parent",
+      "cross_partition_reconciliation"
+    ],
+    "validation_may_be_skipped": false
+  },
+  "reserved_authority_denials": [
+    "SELECTOR_ACTIVATION",
+    "ACTIVE_DISCOVERY",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "SEMANTIC_MODEL_FAMILY_CANDIDATE_THEORY_PROMOTION",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "REAL_PROVIDER_INTAKE",
+    "AUTHORITATIVE_RELEASE_FREEZE",
+    "RETIREMENT_OF_ACTIVE_AUTHORITY",
+    "AGENT_WRITE",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
+  ],
+  "rollback": "Supersede non-destructively and preserve every source, warning, challenge, decision, PR, commit and receipt."
+}
