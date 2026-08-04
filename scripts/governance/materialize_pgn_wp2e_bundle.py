@@ -63,7 +63,7 @@ def build_bundle(root: Path = ROOT) -> tuple[dict[str, Any], dict[str, dict[str,
             "object_count": len(objects[start : start + CHUNK_SIZE]),
             "objects": objects[start : start + CHUNK_SIZE],
         }
-        path = OUT / f"PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_{index:02d}.json"
+        path = OUT / f"PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_{index:02d}.jsonc"
         ref = write(path, chunk)
         files[ref["path"]] = chunk
         object_refs.append({**ref, "object_count": chunk["object_count"], "start_index": start})
@@ -75,7 +75,7 @@ def build_bundle(root: Path = ROOT) -> tuple[dict[str, Any], dict[str, dict[str,
         "entry_count": len(compact["exclusion_ledger"]),
         "entries": compact["exclusion_ledger"],
     }
-    exclusion_path = OUT / "PGN_REPOSITORY_GENESIS_EXCLUSIONS_v0_2.json"
+    exclusion_path = OUT / "PGN_REPOSITORY_GENESIS_EXCLUSIONS_v0_2.jsonc"
     exclusion_ref = write(exclusion_path, exclusion)
     files[exclusion_ref["path"]] = exclusion
 
@@ -86,7 +86,7 @@ def build_bundle(root: Path = ROOT) -> tuple[dict[str, Any], dict[str, dict[str,
         "entry_count": len(compact["lineage_consolidation_ledger"]),
         "entries": compact["lineage_consolidation_ledger"],
     }
-    lineage_path = OUT / "PGN_REPOSITORY_GENESIS_LINEAGE_v0_2.json"
+    lineage_path = OUT / "PGN_REPOSITORY_GENESIS_LINEAGE_v0_2.jsonc"
     lineage_ref = write(lineage_path, lineage)
     files[lineage_ref["path"]] = lineage
 
@@ -97,7 +97,7 @@ def build_bundle(root: Path = ROOT) -> tuple[dict[str, Any], dict[str, dict[str,
         "coverage": compact["coverage"],
         **compact["coverage_and_unresolved_ledger"],
     }
-    unresolved_path = OUT / "PGN_REPOSITORY_GENESIS_COVERAGE_UNRESOLVED_v0_2.json"
+    unresolved_path = OUT / "PGN_REPOSITORY_GENESIS_COVERAGE_UNRESOLVED_v0_2.jsonc"
     unresolved_ref = write(unresolved_path, unresolved)
     files[unresolved_ref["path"]] = unresolved
 
