@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-pgn-g2a-operator-decision/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "gate_id": "PGN-G2A",
+  "decision_id": "PGN-G2A.OPERATOR.ADJUST_SCOPE.20260804T113500+0100",
+  "decision": "ADJUST_SCOPE",
+  "decided_at": "2026-08-04T11:35:00+01:00",
+  "authority_source": "OPERATOR_EXPLICIT_COMMAND",
+  "operator_instruction": "Expand PGN-WP2 into a repository-genesis programme census covering every formal programme, implementation programme, superseded programme version, admitted and non-admitted proposal, and major bounded initiative created since the initial ovc-replay commit. For each historical object classify NATIVE_PROGRAMME, LEGACY_PROGRAMME_REQUIRING_CONVERSION, SUPERSEDED_PROGRAMME, ABSORBED_INTO_SUCCESSOR, BOUNDED_PACKET_NOT_A_PROGRAMME, PROPOSAL_NOT_ADMITTED, or UNRESOLVED. Do not begin PGN-WP3 candidate construction until the expanded census, exclusions and lineage consolidations are acknowledged.",
+  "accepted_findings": {
+    "prior_seven_programme_census": "VALID_PARTIAL_CENSUS_NOT_SUFFICIENT_FOR_PGN_WP3",
+    "candidate_construction": "NOT_AUTHORISED",
+    "native_adoption": "NOT_AUTHORISED"
+  },
+  "scope_delta": {
+    "new_packet_id": "PGN-WP2E",
+    "title": "Expanded Repository-Genesis Programme Census",
+    "coverage_start": "INITIAL_OVC_REPLAY_COMMIT",
+    "required_object_kinds": [
+      "FORMAL_PROGRAMME",
+      "IMPLEMENTATION_PROGRAMME",
+      "SUPERSEDED_PROGRAMME_VERSION",
+      "ADMITTED_PROPOSAL",
+      "NON_ADMITTED_PROPOSAL",
+      "MAJOR_BOUNDED_INITIATIVE"
+    ],
+    "required_classifications": [
+      "NATIVE_PROGRAMME",
+      "LEGACY_PROGRAMME_REQUIRING_CONVERSION",
+      "SUPERSEDED_PROGRAMME",
+      "ABSORBED_INTO_SUCCESSOR",
+      "BOUNDED_PACKET_NOT_A_PROGRAMME",
+      "PROPOSAL_NOT_ADMITTED",
+      "UNRESOLVED"
+    ],
+    "required_outputs": [
+      "EXPANDED_SOURCE_LINKED_CENSUS",
+      "EXCLUSION_LEDGER",
+      "LINEAGE_AND_SUCCESSOR_CONSOLIDATION_LEDGER",
+      "COVERAGE_AND_UNRESOLVED_LEDGER",
+      "NEW_OPERATOR_ACKNOWLEDGEMENT_PACKET"
+    ]
+  },
+  "authority_after_decision": {
+    "expanded_census_research_and_materialisation": "AUTHORISED_AUTO_EXECUTABLE",
+    "read_only_repository_history_inspection": "AUTHORISED",
+    "candidate_construction": "DENIED_PENDING_EXPANDED_CENSUS_ACKNOWLEDGEMENT",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3_AFTER_EXPANDED_ACKNOWLEDGEMENT",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
+  },
+  "mandatory_stop": {
+    "gate_id": "PGN-G2B",
+    "condition": "EXPANDED_CENSUS_EXCLUSIONS_AND_LINEAGE_CONSOLIDATIONS_READY_FOR_OPERATOR_ACKNOWLEDGEMENT",
+    "prohibition": "DO_NOT_BEGIN_PGN_WP3_CANDIDATE_CONSTRUCTION"
+  },
+  "rollback": "Preserve the prior seven-programme census as a valid partial snapshot and this scope decision. Discard and deterministically rebuild PGN-WP2E evidence without constructing native candidates.",
+  "next_action": "COMPLETE_AND_MERGE_PGN_G2A_ADJUST_SCOPE_THEN_EXECUTE_PGN_WP2E"
+}

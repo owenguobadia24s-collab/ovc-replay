@@ -1,0 +1,93 @@
+{
+  "schema": "ovc-pgn-g2a-operator-gate/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "gate_id": "PGN-G2A",
+  "title": "Acknowledge or adjust the exact native-adoption census before candidate construction",
+  "status": "COMPLETED_ADJUST_SCOPE",
+  "operator_decision_required": false,
+  "baseline_commit": "3eb774894676ad620fe1aa826a8e48445f75ec4d",
+  "candidate_branch": "gate/pgn-g2a-census-ack",
+  "postdecision_evaluated_commit": "6710732e9c6caa4ca603aef665c38edc237d8b33",
+  "decision_id": "PGN-G2A.OPERATOR.ADJUST_SCOPE.20260804T113500+0100",
+  "decision": "ADJUST_SCOPE",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2a/PGN_G2A_OPERATOR_DECISION.json",
+  "completed_packets": ["PGN-00", "PGN-WP1", "PGN-WP2"],
+  "prior_census_disposition": {
+    "path": "registries/governance/programme_genesis/pgn_census/PGN_PORTFOLIO_CENSUS_v0_1.json",
+    "legacy_adoption_target_count": 7,
+    "status": "VALID_PARTIAL_CENSUS_NOT_SUFFICIENT_FOR_PGN_WP3",
+    "candidates_constructed": 0,
+    "blocking_conflicts": 0
+  },
+  "approved_scope_adjustment": {
+    "packet_id": "PGN-WP2E",
+    "title": "Expanded Repository-Genesis Programme Census",
+    "coverage": "EVERY_HISTORICAL_OBJECT_CREATED_SINCE_INITIAL_OVC_REPLAY_COMMIT",
+    "object_kinds": [
+      "FORMAL_PROGRAMME",
+      "IMPLEMENTATION_PROGRAMME",
+      "SUPERSEDED_PROGRAMME_VERSION",
+      "ADMITTED_PROPOSAL",
+      "NON_ADMITTED_PROPOSAL",
+      "MAJOR_BOUNDED_INITIATIVE"
+    ],
+    "classification_enum": [
+      "NATIVE_PROGRAMME",
+      "LEGACY_PROGRAMME_REQUIRING_CONVERSION",
+      "SUPERSEDED_PROGRAMME",
+      "ABSORBED_INTO_SUCCESSOR",
+      "BOUNDED_PACKET_NOT_A_PROGRAMME",
+      "PROPOSAL_NOT_ADMITTED",
+      "UNRESOLVED"
+    ],
+    "required_evidence": [
+      "EXPANDED_SOURCE_LINKED_CENSUS",
+      "EXCLUSION_LEDGER",
+      "LINEAGE_AND_SUCCESSOR_CONSOLIDATION_LEDGER",
+      "COVERAGE_AND_UNRESOLVED_LEDGER"
+    ]
+  },
+  "authority_after_decision": {
+    "expanded_census_research_and_materialisation": "AUTHORISED_AUTO_EXECUTABLE",
+    "candidate_construction": "DENIED_PENDING_PGN_G2B",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3_AFTER_PGN_G2B",
+    "cross_programme_edges": "DENIED_PENDING_PGN_G5",
+    "migration_warning_closure": "DENIED_PENDING_PGN_G6",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
+    "shadow_corpus": "DENIED_PENDING_PGN_G9A",
+    "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
+    "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
+  },
+  "acceptance_conditions": [
+    "OPERATOR_ADJUST_SCOPE_DECISION_RECORDED_IMMUTABLY",
+    "PRIOR_SEVEN_PROGRAMME_CENSUS_PRESERVED_AS_PARTIAL_EVIDENCE",
+    "PGN_WP2E_COVERAGE_AND_CLASSIFICATION_ENUM_FROZEN",
+    "PGN_WP3_CANDIDATE_CONSTRUCTION_REMAINS_DENIED",
+    "NEW_OPERATOR_ACKNOWLEDGEMENT_REQUIRED_FOR_EXPANDED_CENSUS_EXCLUSIONS_AND_LINEAGE",
+    "NO_RESERVED_MARKET_RELEASE_VALIDATION_PUBLICATION_AGENT_OR_EXPOSURE_AUTHORITY"
+  ],
+  "tests": {
+    "focused": "tests/governance/test_pgn_g2a.py",
+    "repository_run": 30901795049,
+    "repository_conclusion": "SUCCESS",
+    "ovc_final_head_run": 30901794677,
+    "ovc_conclusion": "SUCCESS",
+    "merge_readiness_job": 91967638390,
+    "merge_readiness_conclusion": "SUCCESS"
+  },
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2a/PGN_G2A_QA_PACKET.json",
+  "qa_recommendation": "PASS_ADJUST_SCOPE_AND_PROCEED_TO_PGN_WP2E",
+  "warnings": [
+    "THE_SEVEN_PROGRAMME_CENSUS_IS_NOT_REPRESENTED_AS_REPOSITORY_HISTORY_COMPLETE",
+    "INITIAL_REPOSITORY_COMMIT_AND_DELETED_HISTORY_MUST_BE_SOURCE_BOUND_OR_CLASSIFIED_UNRESOLVED",
+    "LINEAGE_CONSOLIDATIONS_REQUIRE_EXPLICIT_EVIDENCE_AND_CANNOT_BE_INFERRED_FROM_NAMES_ALONE",
+    "PGN_WP3_REMAINS_BLOCKED"
+  ],
+  "unresolved_issues": [],
+  "rollback": "Preserve the prior census and operator decision; discard and rebuild PGN-WP2E evidence without constructing candidates.",
+  "next_packet": "PGN-WP2E",
+  "next_gate": "PGN-G2B",
+  "next_action": "SQUASH_MERGE_ADJUST_SCOPE_DECISION_THEN_EXECUTE_EXPANDED_REPOSITORY_GENESIS_CENSUS"
+}

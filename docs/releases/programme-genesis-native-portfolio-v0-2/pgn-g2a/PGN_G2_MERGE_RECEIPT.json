@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-pgn-g2-merge-receipt/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP2",
+  "gate_id": "PGN-G2",
+  "decision_id": "PGN-G2.DELEGATED.PASS.20260804T105700+0100",
+  "pull_request": 283,
+  "branch": "audit/pgn-wp2-portfolio-census",
+  "baseline_commit": "c9e3881232c9499bb7f47d439b33b9c1c43aaa78",
+  "accepted_candidate_head": "fc27fb2642beb5e2452ed458d4e3d27aed6a132e",
+  "final_head": "35d5cdd92c5860ceef40120392d17b9a362de35b",
+  "merge_commit": "3eb774894676ad620fe1aa826a8e48445f75ec4d",
+  "merge_method": "SQUASH",
+  "exact_head_assurance": {
+    "repository_tests": {"run_id": 30898621942, "conclusion": "SUCCESS"},
+    "ovc_final_head": {"run_id": 30898621955, "conclusion": "SUCCESS"},
+    "merge_readiness": {"job_id": 91957488424, "conclusion": "SUCCESS"},
+    "unresolved_review_threads": 0,
+    "branch_behind_main": 0
+  },
+  "census": {
+    "path": "registries/governance/programme_genesis/pgn_census/PGN_PORTFOLIO_CENSUS_v0_1.json",
+    "builder_sha256": "7f26a513c7696bf065f4b30b5337d44677adc1f2fb48e7864593f6f708f704ad",
+    "legacy_target_count": 7,
+    "review_group_sizes": [3, 3, 1],
+    "candidate_construction": false
+  },
+  "authority_after_merge": {
+    "census": "COMPLETE_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+    "candidate_construction": "DENIED_PENDING_PGN_G2A",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "reserved_authority": "NONE"
+  },
+  "next_gate": "PGN-G2A",
+  "rollback": "Preserve the merge and receipt; supersede the census through a new evidence packet if the operator adjusts scope. Do not construct candidates before PGN-G2A."
+}
