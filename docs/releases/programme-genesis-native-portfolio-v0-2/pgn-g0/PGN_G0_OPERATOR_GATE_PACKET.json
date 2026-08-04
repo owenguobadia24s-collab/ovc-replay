@@ -5,15 +5,14 @@
   "plan_version": "0.2",
   "gate_id": "PGN-G0",
   "title": "Native Genesis Portfolio Adoption v0.2 REVISED implementation ratification",
-  "status": "APPROVED_PENDING_MERGE",
-  "operator_decision_required": false,
-  "operator_decision_id": "PGN-G0.OPERATOR.PASS.20260804T102500+0100",
+  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "operator_decision_required": true,
   "baseline_commit": "2e5b577e51cde05b027c6220560432c11513af14",
   "candidate_branch": "gate/pgn-g0-ratification",
-  "candidate_commit": "21683439f482c6536af38ba54b1d45ecfd718b38",
+  "candidate_commit": "PENDING_FINAL_HEAD",
   "completed_packets": ["PGN-00"],
   "current_authority": {
-    "programme": "RATIFIED_BOUNDED_IMPLEMENTATION",
+    "programme": "PROPOSED_ONLY",
     "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
     "cross_programme_edges": "DENIED_PENDING_PGN_G5",
     "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
@@ -21,7 +20,7 @@
     "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
     "market_model_selector_release_validation_agent_exposure_execution": "NONE"
   },
-  "approved_delta": "RATIFY_BOUNDED_REVISED_IMPLEMENTATION_ONLY_AND_RELEASE_PGN_WP1_AFTER_MERGE",
+  "proposed_delta": "RATIFY_BOUNDED_REVISED_IMPLEMENTATION_ONLY_AND_RELEASE_PGN_WP1",
   "acceptance_conditions": [
     "LATEST_LAWFUL_MAIN_AND_OPEN_PULL_REQUESTS_INSPECTED",
     "SOURCE_DOCX_AND_REPOSITORY_RATIFICATION_COPY_ARE_HASH_BOUND",
@@ -40,14 +39,11 @@
   ],
   "tests": {
     "focused": "tests/governance/test_pgn_g0.py",
-    "repository_run": 30896647236,
-    "repository_test_count": 161,
-    "ovc_final_head_run": 30896648639,
-    "merge_readiness_job": 91951095098,
-    "status": "SUCCESS"
+    "repository_required": ["tests", "OVC merge readiness"],
+    "status": "PENDING_EXACT_HEAD_CI"
   },
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_QA_PACKET.json",
-  "qa_recommendation": "PASS",
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
   "warnings": [
     "PGN_G0_DOES_NOT_ACKNOWLEDGE_THE_CENSUS_OR_ANY_CANDIDATE",
     "PGN_G0_DOES_NOT_ACCEPT_ANY_NATIVE_RECORD_OR_DEPENDENCY_EDGE",
@@ -56,9 +52,27 @@
     "OPEN_HISTORICAL_AND_SUPERSEDED_PULL_REQUESTS_REMAIN_PRESERVED"
   ],
   "unresolved_issues": [],
-  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_OPERATOR_DECISION.json",
-  "rollback": "Revert the bounded ratification merge through a new non-destructive commit, stop before PGN-WP1, and preserve the plan, decision, source hashes, PR, tests and gate evidence.",
-  "decision": "PASS",
-  "operator_command": "OVC APPROVE PGN-G0 PASS",
-  "work_after_merge": "Create build/pgn-wp1-contracts from lawful main, continue through PGN-WP2 and PGN-G2, then stop at operator-required PGN-G2A before candidate construction."
+  "changed_files": [
+    "docs/plans/governance/OVC_Native_Genesis_Portfolio_Adoption_Dependency_Canon_and_Control_Plane_Implementation_Plan_v0_2_REVISED.md",
+    "registries/governance/programme_genesis/OVC_PGN_PORTFOLIO_LEDGER_v0_2.json",
+    "registries/governance/programme_genesis/OVC_PGN_PROGRAMME_STATE_v0_2.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_SOURCE_PLAN_HASH.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_BASELINE_MANIFEST.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_QA_PACKET.json",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_OPERATOR_GATE_PACKET.json",
+    "tests/governance/test_pgn_g0.py"
+  ],
+  "external_artifacts": [
+    {
+      "type": "SOURCE_PLAN_DOCX",
+      "identity": "file_0000000092a081f79225cc1bef1d6249",
+      "sha256": "2991ea0556c2ccc21cb2159bfe7b14af74d221a08a8f49e1ee72ced1fb79ce1d",
+      "repository_markdown_sha256": "836a04b317cd2da40de758830a18349fe9133ebb3c65c4b2c541e6961f323b78"
+    }
+  ],
+  "rollback": "Preserve the branch, plan, baseline, QA, tests and gate packet. Do not merge and do not begin PGN-WP1 unless PASS is recorded. Supersede only through a later non-destructive plan and decision record.",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "exact_operator_command": "OVC APPROVE PGN-G0 PASS",
+  "work_after_approval": "Record the immutable PGN-G0 decision, squash-merge the bounded ratification packet after exact-head checks, create build/pgn-wp1-contracts from the new lawful main, continue through PGN-WP2 and PGN-G2, then stop at operator-required PGN-G2A before any candidate construction."
 }
