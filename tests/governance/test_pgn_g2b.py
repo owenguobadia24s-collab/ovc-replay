@@ -103,8 +103,14 @@ class NativeGenesisPortfolioG2BTests(unittest.TestCase):
         self.assertEqual("PGN-WP3", state["next_packet"])
         self.assertEqual("PGN-G3-R1", state["next_gate"])
         self.assertEqual([], state["blockers"])
-        forbidden = list(ROOT.glob("**/PGN_WP3*")) + list(ROOT.glob("**/pgn-wp3*"))
-        self.assertEqual([], forbidden)
+        expected = [
+            ROOT / "registries/governance/programme_genesis/PGN_WP3_CLASS_REGISTRY_v0_1.json",
+            ROOT / "registries/governance/programme_genesis/pgn_candidates/PGN_WP3_NATIVE_CANDIDATE_PORTFOLIO_v0_1.json",
+            ROOT / "registries/governance/programme_genesis/pgn_candidates/PGN_WP3_PROGRESSIVE_REVIEW_QUEUE_v0_1.json",
+        ]
+        for path in expected:
+            self.assertTrue(path.is_file(), path)
+        self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
 
     def test_qa_passes_operator_decision_and_preserves_warnings(self) -> None:
         qa = load(QA)
