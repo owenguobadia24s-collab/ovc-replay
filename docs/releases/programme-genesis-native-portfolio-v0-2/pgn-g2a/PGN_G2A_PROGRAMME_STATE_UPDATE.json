@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-G2A",
+  "gate_id": "PGN-G2A",
+  "status": "GATE_READY",
+  "prerequisites": ["PGN-G2_PASS_MERGED_3eb774894676ad620fe1aa826a8e48445f75ec4d"],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "ACKNOWLEDGE_OR_ADJUST_EXACT_CENSUS_BEFORE_CANDIDATE_CONSTRUCTION",
+  "baseline_commit": "3eb774894676ad620fe1aa826a8e48445f75ec4d",
+  "branch": "gate/pgn-g2a-census-ack",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "tests": [],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2a/PGN_G2A_QA_PACKET.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "PGN-WP3",
+  "census": {
+    "path": "registries/governance/programme_genesis/pgn_census/PGN_PORTFOLIO_CENSUS_v0_1.json",
+    "target_count": 7,
+    "review_group_sizes": [3, 3, 1],
+    "candidates_constructed": 0,
+    "pccr": "NOT_ADMITTED_PROPOSAL_PREPARATION"
+  },
+  "authority": {
+    "candidate_construction": "DENIED_PENDING_PGN_G2A",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "reserved_authority": "NONE"
+  },
+  "next_action": "AWAIT_OPERATOR_PGN_G2A_ACKNOWLEDGE_CONTINUE_OR_ADJUST_SCOPE",
+  "rollback": "Preserve the census, evidence and gate branch; do not construct candidates until an operator decision is merged."
+}
