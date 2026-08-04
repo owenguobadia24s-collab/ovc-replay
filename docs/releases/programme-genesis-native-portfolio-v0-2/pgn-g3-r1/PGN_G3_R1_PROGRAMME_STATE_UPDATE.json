@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-G3-R1",
+  "gate_id": "PGN-G3-R1",
+  "status": "GATE_READY",
+  "prerequisites": [
+    "PGN_WP3_PASS_MERGED_48f30a628e977f34ef068c7e7d67fba95654b5a9"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "ACKNOWLEDGE_R1_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R2_DISCLOSURE_ONLY",
+  "baseline_commit": "48f30a628e977f34ef068c7e7d67fba95654b5a9",
+  "branch": "gate/pgn-g3-r1-market-translation",
+  "candidate_commit": "PENDING_EXACT_HEAD",
+  "tests": [],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r1/PGN_G3_R1_QA_PACKET.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "review": {
+    "current_group": "PGN-G3-R1",
+    "review_domain": "MARKET_TRANSLATION_CORE",
+    "candidate_count": 3,
+    "candidate_group_sha256": "6938fbcb52ae6d52d13e56a40cd76d6446f1376e3340309a5dde8d861684bfb1",
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "later_groups_locked": true,
+    "later_group_ids_disclosed": false
+  },
+  "authority": {
+    "r1_acknowledgement": "DENIED_PENDING_OPERATOR_DECISION",
+    "native_adoption": "DENIED_PENDING_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
+    "next_group_disclosure": "DENIED_PENDING_R1_ACKNOWLEDGEMENT_RECEIPT_MERGE",
+    "reserved_authority": "NONE"
+  },
+  "next_packet": "PGN-G3-R1-ACKNOWLEDGEMENT",
+  "next_gate": "PGN-G3-R1",
+  "next_action": "AWAIT_OPERATOR_PGN_G3_R1_ACKNOWLEDGE_CONTINUE_OR_ALTERNATIVE_DO_NOT_DISCLOSE_PGN_G3_R2",
+  "rollback": "Preserve PGN-WP3 and sealed commitments. Do not create an acknowledgement receipt or disclose R2 unless the operator approves R1."
+}
