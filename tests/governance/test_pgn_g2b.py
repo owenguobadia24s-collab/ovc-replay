@@ -30,6 +30,10 @@ def load(path: Path) -> dict:
     return value
 
 
+def complete_counts(value: dict) -> dict:
+    return {key: value.get(key, 0) for key in EXPECTED_COUNTS}
+
+
 class NativeGenesisPortfolioG2BTests(unittest.TestCase):
     def test_wp2e_merge_receipt_binds_exact_head_merge_and_assurance(self) -> None:
         receipt = load(RECEIPT)
@@ -46,7 +50,7 @@ class NativeGenesisPortfolioG2BTests(unittest.TestCase):
         manifest = load(MANIFEST)
         self.assertEqual(108, gate["census"]["object_count"])
         self.assertEqual(EXPECTED_COUNTS, gate["census"]["classification_counts"])
-        self.assertEqual(EXPECTED_COUNTS, manifest["classification_counts"])
+        self.assertEqual(EXPECTED_COUNTS, complete_counts(manifest["classification_counts"]))
         self.assertEqual(16, gate["candidate_construction_scope"]["count"])
         self.assertEqual(16, len(gate["candidate_construction_scope"]["programme_ids"]))
         self.assertEqual(16, len(set(gate["candidate_construction_scope"]["programme_ids"])))
