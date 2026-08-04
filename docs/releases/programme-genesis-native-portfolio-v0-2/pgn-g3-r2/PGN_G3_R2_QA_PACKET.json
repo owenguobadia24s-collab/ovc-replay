@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-pgn-g3-progressive-review-qa/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-G3-R2",
+  "gate_id": "PGN-G3-R2",
+  "baseline_commit": "0b6078e47b6f03c7fe122c4f8577dfc3b9893808",
+  "candidate_commit": "PENDING_EXACT_HEAD",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "assessment": {
+    "review_domain": "MARKET_CONSTRUCTION_AND_AUDIT",
+    "candidate_count": 3,
+    "candidate_ids": [
+      "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+      "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
+      "OVC-MTA-v0.2"
+    ],
+    "candidate_group_sha256": "b07bbb1af425b663a5d9b0fe8a720af3bade9f6d8a8a10ccef32dd88425a16e1",
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "native_adoption_count": 0,
+    "authority_effect": "NONE",
+    "unresolved_fields_per_candidate": 8,
+    "later_group_ids_disclosed": 0,
+    "later_group_bodies_materialized": 0
+  },
+  "checks": {
+    "r1_acknowledgement_receipt_exact": "PASS",
+    "r2_matches_sealed_commitment": "PASS",
+    "maximum_three_candidates": "PASS",
+    "candidate_identities_exact": "PASS",
+    "source_hashes_preserved": "PASS",
+    "source_values_modified": "ABSENT_PASS",
+    "source_lifecycle_modified": "ABSENT_PASS",
+    "historical_intent_fabricated": "ABSENT_PASS",
+    "unresolved_fields_visible": "PASS",
+    "candidate_status_unapproved": "PASS",
+    "group_acknowledgement_is_adoption": "FALSE_PASS",
+    "native_adoption_absent": "PASS",
+    "reserved_authority_absent": "PASS",
+    "future_group_disclosure_absent": "PASS",
+    "r3_remains_locked": "PASS",
+    "repository_tests": "PENDING_EXACT_HEAD_CI",
+    "ovc_final_head": "PENDING_EXACT_HEAD_CI",
+    "ovc_merge_readiness": "PENDING_EXACT_HEAD_CI"
+  },
+  "warnings": [
+    "ALL_THREE_OBJECTS_REMAIN_CANDIDATE_UNAPPROVED",
+    "EIGHT_NATIVE_FIELDS_REMAIN_UNRESOLVED_PER_CANDIDATE",
+    "ACKNOWLEDGEMENT_UNLOCKS_ONLY_THE_NEXT_PROGRESSIVE_REVIEW_GROUP",
+    "ACKNOWLEDGEMENT_DOES_NOT_ADOPT_ANY_CANDIDATE",
+    "PGN_G3_NATIVE_ADOPTION_REMAINS_A_SEPARATE_OPERATOR_REQUIRED_DECISION"
+  ],
+  "blockers": [],
+  "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
+  "authority_delta": "NONE_UNTIL_OPERATOR_ACKNOWLEDGEMENT_THEN_DISCLOSE_NEXT_GROUP_ONLY",
+  "rollback": "Preserve the R1 receipt and sealed commitments. Defer, adjust or quarantine R2 without disclosing PGN-G3-R3."
+}
