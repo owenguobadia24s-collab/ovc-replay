@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-pgn-g2a-qa/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "gate_id": "PGN-G2A",
+  "baseline_commit": "3eb774894676ad620fe1aa826a8e48445f75ec4d",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "status": "QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "census_assessment": {
+    "legacy_adoption_targets": 7,
+    "source_bound_targets": 7,
+    "existing_native_excluded": 1,
+    "current_governance_excluded": 1,
+    "non_admitted_objects": 1,
+    "surprise_findings": 2,
+    "review_group_sizes": [3, 3, 1],
+    "groups_over_maximum_three": 0,
+    "candidates_constructed": 0,
+    "blocking_conflicts": 0
+  },
+  "warnings": [
+    "ALL_SEVEN_TARGETS_RETAIN_MIGRATION_UNCERTAINTY_AND_TEN_UNRESOLVED_NATIVE_FIELDS",
+    "PD_JUNE_FULL_MONTH_MDR_HAS_LOW_SOURCE_CONFIDENCE_DUE_TO_MISSING_AUTHORITY_AND_NEXT_ACTION",
+    "PCCR_PREPARATION_IS_NOT_ADMITTED_AND_IS_EXCLUDED_FROM_CONVERSION",
+    "CLASS_ASSIGNMENTS_AND_REVIEW_GROUPS_ARE_RECOMMENDATIONS_NOT_ACCEPTED_FACTS"
+  ],
+  "checks": {
+    "census_source_identity": "PASS",
+    "seven_target_population": "PASS",
+    "exclusions_explicit": "PASS",
+    "pccr_non_admitted": "PASS",
+    "review_groups_maximum_three": "PASS",
+    "candidate_construction_denied": "PASS",
+    "operator_adjustment_path_present": "PASS",
+    "focused_tests": "PENDING_EXACT_HEAD_CI",
+    "repository_tests": "PENDING_EXACT_HEAD_CI",
+    "ovc_merge_readiness": "PENDING_EXACT_HEAD_CI"
+  },
+  "blockers": [],
+  "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
+  "authority_delta": "NONE_UNTIL_OPERATOR_PGN_G2A_DECISION",
+  "rollback": "Preserve the census and gate packet; defer or adjust scope without constructing candidates."
+}
