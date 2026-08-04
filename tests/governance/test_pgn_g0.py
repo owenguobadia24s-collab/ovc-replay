@@ -6,7 +6,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PLAN = ROOT / "docs/plans/governance/OVC_Native_Genesis_Portfolio_Adoption_Dependency_Canon_and_Control_Plane_Implementation_Plan_v0_2_REVISED.md"
-STATE = ROOT / "registries/governance/programme_genesis/OVC_PGN_PROGRAMME_STATE_v0_2.json"
+STATE = ROOT / "registries/governance/programme_genesis/OVC_PGN_PORTFOLIO_LEDGER_v0_2.json"
+STATE_MARKER = ROOT / "registries/governance/programme_genesis/OVC_PGN_PROGRAMME_STATE_v0_2.json"
 BASELINE = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_BASELINE_MANIFEST.json"
 SOURCE_HASH = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_SOURCE_PLAN_HASH.json"
 QA = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_QA_PACKET.json"
@@ -50,6 +51,7 @@ class NativeGenesisPortfolioG0Tests(unittest.TestCase):
 
     def test_programme_state_stops_at_operator_pgn_g0(self) -> None:
         state = load(STATE)
+        marker = load(STATE_MARKER)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("OVC-PG-NATIVE-PORTFOLIO-v0.2", state["programme_id"])
         self.assertEqual("GATE_READY", state["status"])
@@ -64,6 +66,8 @@ class NativeGenesisPortfolioG0Tests(unittest.TestCase):
         self.assertEqual("DENIED_PENDING_PGN_G3", state["authority"]["native_genesis_adoption"])
         self.assertEqual("DEFERRED_DISABLED_PENDING_PGN_G10", state["authority"]["admission_enforcement"])
         self.assertEqual([], state["blockers"])
+        self.assertNotIn("programme_id", marker)
+        self.assertEqual(str(STATE.relative_to(ROOT)).replace("\\", "/"), marker["authoritative_candidate_path"])
 
     def test_gate_packet_is_complete_and_non_authorising(self) -> None:
         gate = load(GATE)
