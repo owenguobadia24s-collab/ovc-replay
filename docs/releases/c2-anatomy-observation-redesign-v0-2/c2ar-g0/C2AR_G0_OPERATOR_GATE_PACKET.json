@@ -41,6 +41,7 @@
     "WP5_5_TOPOLOGY_SMOKE_BLOCKS_CEAR_G6_ON_INTERFACE_MISMATCH",
     "CROSSWALK_OWNER_FREEZE_TRIGGER_TRANSFER_AND_RUNTIME_DEPRECATION_ARE_EXPLICIT",
     "PCCR_OVERLAP_DOES_NOT_CREATE_PARALLEL_CALENDAR_OR_CONTINUITY_EXECUTION",
+    "POST_PGN_WP2E_C2AR_GATE_PREPARATION_DOES_NOT_RETROACTIVELY_MUTATE_THE_ACCEPTED_108_OBJECT_CENSUS",
     "NO_PROVIDER_INTAKE_SOURCE_REPAIR_SELECTOR_RELEASE_R2_VALIDATION_C2E_C2_5_C3_OR_EXPOSURE_AUTHORITY",
     "EXACT_HEAD_FOCUSED_FULL_SUITE_AND_MERGE_READINESS_CHECKS_PASS"
   ],
@@ -54,7 +55,8 @@
   "warnings": [
     "PCCR_G0_REMAINS_NOT_ADMITTED_AND_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_IS_HELD",
     "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_ANY_MAIN_ADVANCE_REQUIRES_NON_DESTRUCTIVE_REBASE_AND_RETEST",
-    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY"
+    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY",
+    "C2AR_GATE_PREPARATION_IS_POST_PGN_WP2E_CENSUS_AND_IS_EXCLUDED_FROM_REBUILD_OF_THAT_FROZEN_PREDECISION_EVIDENCE"
   ],
   "unresolved_issues": [],
   "changed_files": [
@@ -64,12 +66,13 @@
     "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_AUTHORITY_AND_CAPACITY_ENVELOPE.json",
     "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_QA_PACKET.json",
     "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_OPERATOR_GATE_PACKET.json",
+    "scripts/governance/build_pgn_wp2e_repository_genesis_census.py",
     "tests/opt_b/c2/anatomy_redesign/test_c2ar_g0.py"
   ],
   "external_artifacts": [
     {"type": "SOURCE_PLAN_DOCX", "identity": "file_000000009e7081f79eabf21adb3dc2d3", "sha256": "b76fb70533ccba161eb9d043f393ff875a3bcf8170009dc0a380c234a04f628d", "size_bytes": 78065}
   ],
-  "rollback": "Preserve the branch, source hash, baseline and gate evidence. Do not merge and do not execute C2AR-WP0 unless PASS is recorded. Active C2 and PCCR remain unchanged.",
+  "rollback": "Preserve the branch, source hash, baseline and gate evidence. Do not merge and do not execute C2AR-WP0 unless PASS is recorded. Revert the bounded PGN census-compatibility exclusion with the C2AR gate packet if this proposal is abandoned. Active C2, PCCR and accepted PGN census bytes remain unchanged.",
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "recommended_decision": "PASS",
   "exact_operator_command": "OVC APPROVE C2AR-G0 PASS",
