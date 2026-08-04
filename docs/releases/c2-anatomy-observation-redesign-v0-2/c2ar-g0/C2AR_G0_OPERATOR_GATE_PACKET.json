@@ -5,11 +5,12 @@
   "plan_version": "0.2-REVISED",
   "gate_id": "C2AR-G0",
   "title": "Ratify C2 Engine Anatomy and Observation Redesign Implementation Plan v0.2 REVISED",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "status": "GATE_READY",
   "operator_decision_required": true,
   "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
   "candidate_branch": "gate/c2ar-g0-ratification",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "candidate_commit": "BOUND_BY_PR_291_FINAL_HEAD",
+  "assured_prepacket_head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a",
   "completed_packets": ["C2AR-00"],
   "source_binding": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_SOURCE_PLAN_HASH.json",
   "current_authority": {
@@ -46,12 +47,14 @@
     "EXACT_HEAD_FOCUSED_FULL_SUITE_AND_MERGE_READINESS_CHECKS_PASS"
   ],
   "tests": {
-    "focused": "tests/opt_b/c2/anatomy_redesign/test_c2ar_g0.py",
-    "repository_required": ["tests", "OVC tiered test selection shadow", "OVC merge readiness"],
-    "status": "PENDING_EXACT_HEAD_CI"
+    "assured_prepacket_head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a",
+    "complete_repository_suite": {"workflow": "tests", "run_id": 30939970245, "result": "PASS"},
+    "final_head_profile": {"workflow": "OVC tiered test selection shadow", "run_id": 30939970246, "profile": "FINAL_HEAD", "result": "PASS"},
+    "merge_readiness": {"workflow": "OVC tiered test selection shadow", "run_id": 30939970246, "job": "OVC merge readiness", "result": "PASS"},
+    "final_pr_head": "REQUIRED_AFTER_THIS_GATE_METADATA_COMMIT_AND_BOUND_BY_PR_291"
   },
   "qa_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_QA_PACKET.json",
-  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_CHECKS_PASS",
+  "qa_recommendation": "PASS_IF_PR_291_FINAL_HEAD_REQUIRED_CHECKS_PASS",
   "warnings": [
     "PCCR_G0_REMAINS_NOT_ADMITTED_AND_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_IS_HELD",
     "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_ANY_MAIN_ADVANCE_REQUIRES_NON_DESTRUCTIVE_REBASE_AND_RETEST",
@@ -76,5 +79,5 @@
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "recommended_decision": "PASS",
   "exact_operator_command": "OVC APPROVE C2AR-G0 PASS",
-  "work_after_approval": "Record the immutable C2AR-G0 decision, update exact candidate head and CI evidence, squash-merge the bounded ratification packet when eligible, create build/c2ar-00-programme-bootstrap from the new lawful main, execute C2AR-WP0 and auto-ratify C2AR-G0A if all baseline acceptance conditions pass."
+  "work_after_approval": "Record the immutable C2AR-G0 decision, squash-merge PR 291 when exact final-head checks remain PASS, create build/c2ar-00-programme-bootstrap from the new lawful main, execute C2AR-WP0 and auto-ratify C2AR-G0A if all baseline acceptance conditions pass."
 }
