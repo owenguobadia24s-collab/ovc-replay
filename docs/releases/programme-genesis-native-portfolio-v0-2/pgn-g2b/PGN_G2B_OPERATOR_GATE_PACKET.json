@@ -5,16 +5,25 @@
   "plan_version": "0.2",
   "gate_id": "PGN-G2B",
   "title": "Acknowledge or adjust the expanded repository-genesis census, exclusions and lineage consolidations",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
-  "operator_decision_required": true,
+  "status": "APPROVED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
+  "operator_decision_required": false,
+  "operator_decision": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_OPERATOR_DECISION.json",
+  "operator_decision_id": "PGN-G2B.OPERATOR.ACKNOWLEDGE_CONTINUE.20260804T132000+0100",
+  "decision": "ACKNOWLEDGE_CONTINUE",
   "baseline_commit": "dcdc968ea936dd1e66f7fa1a6cf9c0a4528a52c1",
   "candidate_branch": "gate/pgn-g2b-expanded-census-ack",
-  "candidate_commit": "PENDING_EXACT_HEAD",
-  "completed_packets": ["PGN-00", "PGN-WP1", "PGN-WP2", "PGN-G2A", "PGN-WP2E"],
-  "current_authority": {
-    "expanded_census": "APPROVED_EVIDENCE_PENDING_OPERATOR_ACKNOWLEDGEMENT",
-    "candidate_construction": "DENIED_PENDING_PGN_G2B",
-    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+  "candidate_commit": "BOUND_BY_PR_286_FINAL_HEAD_AND_POST_MERGE_RECEIPT",
+  "completed_packets": [
+    "PGN-00",
+    "PGN-WP1",
+    "PGN-WP2",
+    "PGN-G2A",
+    "PGN-WP2E"
+  ],
+  "authority_after_decision": {
+    "expanded_census": "ACKNOWLEDGED",
+    "candidate_construction": "AUTHORISED_PGN_WP3_EXACT_SIXTEEN_ONLY",
+    "native_genesis_adoption": "DENIED_PENDING_PROGRESSIVE_PGN_G3_REVIEW_AND_PGN_G3",
     "cross_programme_edges": "DENIED_PENDING_PGN_G5",
     "migration_warning_closure": "DENIED_PENDING_PGN_G6",
     "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
@@ -22,7 +31,7 @@
     "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
     "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
   },
-  "proposed_delta": "ACKNOWLEDGE_THE_EXPANDED_CENSUS_EXCLUSIONS_AND_EXPLICIT_LINEAGE_CONSOLIDATION_AND_RELEASE_PGN_WP3_NATIVE_CANDIDATE_CONSTRUCTION_FOR_THE_EXACT_SIXTEEN_LEGACY_PROGRAMMES_ONLY",
+  "approved_delta": "ACKNOWLEDGE_THE_EXPANDED_CENSUS_EXCLUSIONS_AND_EXPLICIT_LINEAGE_CONSOLIDATION_AND_RELEASE_PGN_WP3_NATIVE_CANDIDATE_CONSTRUCTION_FOR_THE_EXACT_SIXTEEN_LEGACY_PROGRAMMES_ONLY",
   "census": {
     "manifest": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
     "object_count": 108,
@@ -61,15 +70,22 @@
       "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
       "PD-JUNE-FULL-MONTH-MDR"
     ],
-    "authority_if_acknowledged": "CONSTRUCT_NATIVE_GENESIS_CANDIDATES_ONLY",
+    "authority": "CONSTRUCT_NATIVE_GENESIS_CANDIDATES_ONLY",
     "native_adoption": "STILL_DENIED_PENDING_PGN_G3",
     "preserve_existing_lifecycle_and_authority": true
   },
   "excluded_from_candidate_construction": {
-    "native_programmes": ["OVC-PG-v0.2", "OVC-PG-NATIVE-PORTFOLIO-v0.2"],
-    "superseded_programmes": ["OPT-A.GBPUSD.2026H1.v1"],
+    "native_programmes": [
+      "OVC-PG-v0.2",
+      "OVC-PG-NATIVE-PORTFOLIO-v0.2"
+    ],
+    "superseded_programmes": [
+      "OPT-A.GBPUSD.2026H1.v1"
+    ],
     "bounded_packets_and_release_objects": 70,
-    "proposals_not_admitted": ["OVC-PCCR-v0.1"],
+    "proposals_not_admitted": [
+      "OVC-PCCR-v0.1"
+    ],
     "unresolved_objects": 18
   },
   "lineage_consolidations": [
@@ -91,44 +107,37 @@
     "initial_commit_resolved": false,
     "pre_snapshot_history_classification": "UNRESOLVED"
   },
-  "acceptance_conditions": [
-    "EXACT_108_OBJECT_CENSUS_IS_ACKNOWLEDGED_OR_EXPLICITLY_ADJUSTED",
-    "EXACT_SIXTEEN_LEGACY_PROGRAMME_CANDIDATE_SCOPE_IS_ACKNOWLEDGED_OR_ADJUSTED",
-    "TWO_NATIVE_PROGRAMMES_ARE_EXCLUDED_FROM_CONVERSION",
-    "SEVENTY_BOUNDED_PACKETS_AND_RELEASE_OBJECTS_ARE_EXCLUDED_FROM_CONVERSION",
-    "OVC_PCCR_V0_1_REMAINS_NOT_ADMITTED",
-    "OPT_A_GBPUSD_2026H1_V1_SUPERSESSION_LINEAGE_IS_ACKNOWLEDGED",
-    "EIGHTEEN_UNRESOLVED_OBJECTS_REMAIN_EXCLUDED_PENDING_SEPARATE_RESOLUTION",
-    "ZERO_ABSORPTIONS_ARE_ACCEPTED_WITHOUT_EXPLICIT_EVIDENCE",
-    "PGN_WP3_HAS_NOT_BEGUN",
-    "PGN_G3_REMAINS_REQUIRED_FOR_EVERY_NATIVE_ADOPTION",
-    "NO_RESERVED_MARKET_RELEASE_VALIDATION_PUBLICATION_AGENT_OR_EXPOSURE_AUTHORITY"
-  ],
+  "acceptance_conditions": {
+    "exact_108_object_census_acknowledged": "PASS",
+    "exact_sixteen_legacy_candidate_scope_acknowledged": "PASS",
+    "native_programmes_excluded": "PASS",
+    "bounded_packets_excluded": "PASS",
+    "pccr_not_admitted": "PASS",
+    "opt_a_v1_supersession_lineage_acknowledged": "PASS",
+    "unresolved_objects_excluded": "PASS",
+    "zero_absorptions_without_evidence": "PASS",
+    "pgn_wp3_not_started_before_decision": "PASS",
+    "pgn_g3_required_for_adoption": "PASS",
+    "reserved_authority_absent": "PASS"
+  },
   "tests": {
     "focused": "tests/governance/test_pgn_g2b.py",
-    "repository_required": ["tests", "OVC merge readiness"],
-    "status": "PENDING_EXACT_HEAD_CI"
+    "repository_required": [
+      "tests",
+      "OVC merge readiness"
+    ],
+    "status": "PENDING_FINAL_HEAD_CI"
   },
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_QA_PACKET.json",
-  "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
+  "qa_recommendation": "PASS_MERGE_OPERATOR_DECISION_AND_CONTINUE_TO_PGN_WP3_AFTER_FINAL_HEAD_ASSURANCE",
   "warnings": [
     "INITIAL_OVC_REPLAY_COMMIT_NOT_RESOLVABLE_IN_CURRENT_GIT_GRAPH",
     "EIGHTEEN_HISTORICAL_OBJECTS_REMAIN_UNRESOLVED",
     "ZERO_ABSORPTIONS_RECORDED_WITHOUT_EXPLICIT_EVIDENCE",
-    "OVC_OPT_A_V2_IMPLEMENTATION_PLAN_0_2_IS_IN_THE_LEGACY_PROGRAMME_SCOPE_BY_CURRENT_SOURCE_EVIDENCE",
+    "OVC_OPT_A_V2_IMPLEMENTATION_PLAN_0_2_REMAINS_IN_THE_ACKNOWLEDGED_LEGACY_SCOPE",
     "ACKNOWLEDGEMENT_RELEASES_CANDIDATE_CONSTRUCTION_ONLY_AND_IS_NOT_NATIVE_ADOPTION"
   ],
   "unresolved_issues": [],
-  "changed_files": [
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_WP2E_MERGE_RECEIPT.json",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_QA_PACKET.json",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_OPERATOR_GATE_PACKET.json",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_PROGRAMME_STATE_UPDATE.json",
-    "tests/governance/test_pgn_g2b.py"
-  ],
-  "rollback": "Preserve the merged census and gate evidence. Choose DEFER or ADJUST_SCOPE; do not construct candidates until an acknowledgement or adjusted-scope decision is merged.",
-  "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "ADJUST_SCOPE", "DEFER", "BLOCK", "QUARANTINE"],
-  "recommended_decision": "ACKNOWLEDGE_CONTINUE",
-  "exact_operator_command": "OVC APPROVE PGN-G2B ACKNOWLEDGE_CONTINUE",
-  "work_after_approval": "Record the immutable PGN-G2B decision, squash-merge the gate packet, then begin PGN-WP3 candidate construction only for the acknowledged legacy programme set. Preserve every source lifecycle and all existing authority limits; do not adopt any candidate before PGN-G3."
+  "rollback": "Preserve the acknowledged census and operator decision. Stop PGN-WP3 and mark BLOCKED if exact candidate scope, source fidelity or authority preservation fails.",
+  "next_action": "RUN_FINAL_HEAD_ASSURANCE_SQUASH_MERGE_PGN_G2B_THEN_BEGIN_PGN_WP3"
 }
