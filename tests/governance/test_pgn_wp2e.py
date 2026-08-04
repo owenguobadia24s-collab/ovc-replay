@@ -147,11 +147,22 @@ class NativeGenesisRepositoryCensusWP2ETests(unittest.TestCase):
         self.assertEqual(7, prior["adoption_target_count"])
         self.assertEqual("DENIED_PENDING_PGN_G2A", prior["candidate_construction_authority"])
 
-    def test_wp3_candidate_construction_remains_absent_and_denied(self) -> None:
+    def test_wp2e_census_remains_frozen_predecision_evidence_after_wp3(self) -> None:
         self.assertEqual("DENIED_PENDING_PGN_G2B", self.census["authority"]["candidate_construction"])
         self.assertEqual("NONE", self.census["authority"]["authority_effect"])
-        forbidden = list(ROOT.glob("**/PGN_WP3*")) + list(ROOT.glob("**/pgn-wp3*"))
-        self.assertEqual([], forbidden)
+        candidate_manifest = json.loads(
+            (
+                ROOT
+                / "registries/governance/programme_genesis/pgn_candidates/PGN_WP3_NATIVE_CANDIDATE_PORTFOLIO_v0_1.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual("SEALED_CANDIDATE_COMMITMENTS_UNAPPROVED", candidate_manifest["status"])
+        self.assertEqual("NONE", candidate_manifest["authority_effect"])
+        self.assertEqual(16, candidate_manifest["candidate_count"])
+        self.assertEqual(
+            "DENIED_PENDING_PROGRESSIVE_PGN_G3_REVIEW_AND_PGN_G3",
+            candidate_manifest["authority"]["native_adoption"],
+        )
         self.assertEqual("OPERATOR_ACKNOWLEDGE_EXPANDED_CENSUS_EXCLUSIONS_AND_LINEAGE_AT_PGN_G2B", self.census["next_action"])
 
     def test_compact_summary_is_printable_for_exact_head_assurance(self) -> None:
