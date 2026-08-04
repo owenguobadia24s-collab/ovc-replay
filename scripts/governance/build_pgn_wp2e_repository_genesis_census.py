@@ -21,6 +21,11 @@ TEXT_PATTERNS = {
     "release_id": re.compile(r"(?im)^\s*(?:[-*]\s*)?(?:release(?:\s+id)?)\s*[:=]\s*[`\"']?([^`\"'\n]+)"),
 }
 VALID_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:+/\-]{2,159}$")
+INVALID_IDENTITIES = {
+    "ACTIVE", "ALLOWED", "BLOCKED", "DENIED", "DISABLED", "ENABLED", "FALSE",
+    "MISSING", "NONE", "NOT_APPLICABLE", "NULL", "PENDING", "PROHIBITED",
+    "TRUE", "UNKNOWN", "UNSET",
+}
 SKIP_PARTS = {".git", "__pycache__", ".pytest_cache", ".venv", "node_modules"}
 TEXT_SUFFIXES = {".json", ".yaml", ".yml", ".md", ".txt", ".csv"}
 
@@ -43,6 +48,8 @@ def read_json(path: Path) -> dict[str, Any]:
 def clean_id(value: str) -> str | None:
     value = value.strip().strip("`\"'[](){}.,; ")
     value = value.split("  ", 1)[0].strip()
+    if value.upper() in INVALID_IDENTITIES:
+        return None
     if " " in value or not VALID_ID.fullmatch(value):
         return None
     return value
@@ -166,10 +173,12 @@ def classify(object_id: str, sources: list[dict[str, Any]], policy: dict[str, An
     joined = "\n".join(path.lower() for path in paths)
     if object_id in policy["native_programmes"]:
         return "NATIVE_PROGRAMME", "FORMAL_PROGRAMME", [], "EXPLICIT_NATIVE"
-    if object_id in policy["proposal_not_admitted"] or "not_admitted" in joined or "preparation_state" in joined:
-        return "PROPOSAL_NOT_ADMITTED", "NON_ADMITTED_PROPOSAL", [], "ADMISSION_EVIDENCE"
+    if object_id in policy["proposal_not_admitted"]:
+        return "PROPOSAL_NOT_ADMITTED", "NON_ADMITTED_PROPOSAL", [], "EXPLICIT_NON_ADMISSION"
     if roles == {"IMPLEMENTATION_PLAN_IDENTITY"}:
         return "BOUNDED_PACKET_NOT_A_PROGRAMME", "IMPLEMENTATION_PLAN", [], "PLAN_ID_ONLY"
+    if "PROGRAMME_IDENTITY" in roles and ("not_admitted" in joined or "preparation_state" in joined):
+        return "PROPOSAL_NOT_ADMITTED", "NON_ADMITTED_PROPOSAL", [], "ADMISSION_EVIDENCE"
     if roles == {"RELEASE_IDENTITY"}:
         if historical_only:
             return "UNRESOLVED", "HISTORICAL_RELEASE", [], "HISTORICAL_RELEASE_WITHOUT_EXPLICIT_LINEAGE"
