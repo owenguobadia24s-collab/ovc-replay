@@ -1,0 +1,79 @@
+{
+  "schema": "ovc-pgn-wp2e-implementation-packet/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP2E",
+  "gate_id": "PGN-G2B",
+  "baseline_commit": "c707cd35b88e18cc7cb5677685ce8e27496561a7",
+  "branch": "audit/pgn-wp2e-repository-genesis-census",
+  "candidate_commit": "ab45783ac579af28ea6ec3cc227626fcd73206ae",
+  "status": "IMPLEMENTED",
+  "operator_scope_decision": "PGN-G2A.OPERATOR.ADJUST_SCOPE.20260804T113500+0100",
+  "deliverables": [
+    "registries/governance/programme_genesis/PGN_REPOSITORY_GENESIS_CLASSIFICATION_POLICY_v0_1.json",
+    "scripts/governance/build_pgn_wp2e_repository_genesis_census.py",
+    "scripts/governance/materialize_pgn_wp2e_census.py",
+    "scripts/governance/materialize_pgn_wp2e_bundle.py",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_00.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_01.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_02.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_03.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_04.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_OBJECTS_v0_2_05.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_EXCLUSIONS_v0_2.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_LINEAGE_v0_2.jsonc",
+    "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_COVERAGE_UNRESOLVED_v0_2.jsonc",
+    "tests/governance/test_pgn_wp2e.py",
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_WP2E_QA_PACKET.json"
+  ],
+  "coverage": {
+    "requested_start": "INITIAL_OVC_REPLAY_COMMIT",
+    "earliest_reproducible_snapshot": "c0ad7ba22618babdde731e2a338f68f688d4210c",
+    "frozen_inventory_count": 339,
+    "initial_commit_resolution": "UNRESOLVED",
+    "source_planes": ["CURRENT_REPOSITORY", "FROZEN_HISTORY", "LEGACY_QUARANTINE"],
+    "scanned_file_counts": {
+      "registries": 190,
+      "docs_plans": 16,
+      "docs_releases": 657,
+      "docs_history": 29,
+      "legacy_quarantine": 237
+    }
+  },
+  "census": {
+    "object_count": 108,
+    "classification_counts": {
+      "NATIVE_PROGRAMME": 2,
+      "LEGACY_PROGRAMME_REQUIRING_CONVERSION": 16,
+      "SUPERSEDED_PROGRAMME": 1,
+      "ABSORBED_INTO_SUCCESSOR": 0,
+      "BOUNDED_PACKET_NOT_A_PROGRAMME": 70,
+      "PROPOSAL_NOT_ADMITTED": 1,
+      "UNRESOLVED": 18
+    },
+    "exclusion_count": 72,
+    "lineage_consolidation_count": 1,
+    "detailed_census_sha256": "9595b9f061b11ce0cd29148eedda150769cb24e402d45946d0f67121ae22c170",
+    "materialized_census_sha256": "54319e45d77689880a19383c23ae5f7311550d125680c9c88fed4a237ff321c0",
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
+  },
+  "assurance": {
+    "repository_tests": {"run_id": 30906873666, "conclusion": "SUCCESS"},
+    "ovc_final_head": {"run_id": 30906872133, "conclusion": "SUCCESS"},
+    "merge_readiness": {"job_id": 91983936492, "conclusion": "SUCCESS"}
+  },
+  "authority": {
+    "candidate_construction": "DENIED_PENDING_PGN_G2B",
+    "native_adoption": "DENIED_PENDING_PGN_G3_AFTER_PGN_G2B",
+    "authority_effect": "NONE"
+  },
+  "warnings": [
+    "INITIAL_OVC_REPLAY_COMMIT_NOT_RESOLVABLE_IN_CURRENT_GIT_GRAPH",
+    "C0AD7BA_339_FILE_FREEZE_IS_EARLIEST_REPRODUCIBLE_CONTENT_BOUNDARY",
+    "EIGHTEEN_HISTORICAL_OBJECTS_REMAIN_UNRESOLVED",
+    "ZERO_ABSORPTIONS_RECORDED_BECAUSE_NO_EXPLICIT_ABSORPTION_EVIDENCE_EXISTS"
+  ],
+  "rollback": "Discard and rebuild the expanded census from repository-controlled evidence. Preserve the prior seven-programme census, PGN-G2A decision and every source object."
+}

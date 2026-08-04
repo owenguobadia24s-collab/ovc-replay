@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-pgn-wp2e-delegated-decision/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP2E",
+  "gate_id": "PGN-G2B",
+  "decision_id": "PGN-WP2E.DELEGATED.PASS.20260804T121500+0100",
+  "decision": "PASS",
+  "authority_source": "PGN-G2A.OPERATOR.ADJUST_SCOPE.20260804T113500+0100",
+  "authority_classification": "AUTO_EXECUTABLE_EXPANDED_CENSUS_EVIDENCE_ONLY",
+  "baseline_commit": "c707cd35b88e18cc7cb5677685ce8e27496561a7",
+  "accepted_implementation_head": "ab45783ac579af28ea6ec3cc227626fcd73206ae",
+  "branch": "audit/pgn-wp2e-repository-genesis-census",
+  "pull_request": 285,
+  "tests": {
+    "repository_run": 30906873666,
+    "repository_conclusion": "SUCCESS",
+    "ovc_final_head_run": 30906872133,
+    "ovc_conclusion": "SUCCESS",
+    "merge_readiness_job": 91983936492,
+    "merge_readiness_conclusion": "SUCCESS",
+    "decision_sealing_head_assurance": "REQUIRED_BEFORE_SQUASH_MERGE"
+  },
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_WP2E_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "accepted_census": {
+    "manifest": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
+    "object_count": 108,
+    "classification_counts": {
+      "NATIVE_PROGRAMME": 2,
+      "LEGACY_PROGRAMME_REQUIRING_CONVERSION": 16,
+      "SUPERSEDED_PROGRAMME": 1,
+      "ABSORBED_INTO_SUCCESSOR": 0,
+      "BOUNDED_PACKET_NOT_A_PROGRAMME": 70,
+      "PROPOSAL_NOT_ADMITTED": 1,
+      "UNRESOLVED": 18
+    },
+    "exclusion_count": 72,
+    "lineage_consolidation_count": 1,
+    "detailed_census_sha256": "9595b9f061b11ce0cd29148eedda150769cb24e402d45946d0f67121ae22c170",
+    "materialized_census_sha256": "54319e45d77689880a19383c23ae5f7311550d125680c9c88fed4a237ff321c0",
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
+  },
+  "warnings": [
+    "INITIAL_OVC_REPLAY_COMMIT_NOT_RESOLVABLE_IN_CURRENT_GIT_GRAPH",
+    "C0AD7BA_339_FILE_FREEZE_IS_EARLIEST_REPRODUCIBLE_CONTENT_BOUNDARY",
+    "EIGHTEEN_HISTORICAL_OBJECTS_REMAIN_UNRESOLVED",
+    "ZERO_ABSORPTIONS_RECORDED_WITHOUT_EXPLICIT_EVIDENCE"
+  ],
+  "authority_delta": "NONE_CENSUS_EVIDENCE_ONLY",
+  "authority_after_decision": {
+    "expanded_census": "APPROVED_EVIDENCE_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+    "candidate_construction": "DENIED_PENDING_PGN_G2B",
+    "native_adoption": "DENIED_PENDING_PGN_G3_AFTER_PGN_G2B",
+    "cross_programme_edges": "DENIED_PENDING_PGN_G5",
+    "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
+  },
+  "reserved_authority": "NONE",
+  "next_gate": "PGN-G2B",
+  "next_packet": null,
+  "rollback": "Preserve PGN-G2A and all source evidence; supersede or rebuild the derived expanded census through a new bounded packet. Do not construct candidates before PGN-G2B acknowledgement."
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP2E",
+  "gate_id": "PGN-G2B",
+  "status": "APPROVED",
+  "prerequisites": [
+    "PGN-G2A_ADJUST_SCOPE_MERGED_c707cd35b88e18cc7cb5677685ce8e27496561a7"
+  ],
+  "authority_required": "AUTO_EXECUTABLE_SATISFIED",
+  "authority_delta": "EXPANDED_REPOSITORY_GENESIS_CENSUS_EVIDENCE_ONLY",
+  "baseline_commit": "c707cd35b88e18cc7cb5677685ce8e27496561a7",
+  "branch": "audit/pgn-wp2e-repository-genesis-census",
+  "accepted_candidate_commit": "ab45783ac579af28ea6ec3cc227626fcd73206ae",
+  "tests": [
+    "repository tests run 30906873666 SUCCESS",
+    "OVC FINAL_HEAD run 30906872133 SUCCESS",
+    "OVC merge readiness job 91983936492 SUCCESS",
+    "decision sealing head assurance required before merge"
+  ],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_WP2E_QA_PACKET.json",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_WP2E_DELEGATED_DECISION.json",
+  "decision_id": "PGN-WP2E.DELEGATED.PASS.20260804T121500+0100",
+  "decision": "PASS",
+  "merge_commit": null,
+  "blockers": [],
+  "census": {
+    "manifest": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
+    "object_count": 108,
+    "native_programme_count": 2,
+    "legacy_conversion_count": 16,
+    "superseded_count": 1,
+    "absorbed_count": 0,
+    "bounded_packet_count": 70,
+    "proposal_not_admitted_count": 1,
+    "unresolved_count": 18,
+    "exclusion_count": 72,
+    "lineage_consolidation_count": 1,
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
+  },
+  "authority": {
+    "expanded_census": "APPROVED_EVIDENCE_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+    "candidate_construction": "DENIED_PENDING_PGN_G2B",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3_AFTER_PGN_G2B",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "reserved_authority": "NONE"
+  },
+  "next_packet": null,
+  "next_gate": "PGN-G2B",
+  "next_action": "RUN_DECISION_SEALING_FINAL_HEAD_ASSURANCE_SQUASH_MERGE_PGN_WP2E_THEN_PREPARE_PGN_G2B_OPERATOR_ACKNOWLEDGEMENT",
+  "rollback": "Preserve the operator scope decision and source evidence; supersede or rebuild the derived census without beginning PGN-WP3."
+}

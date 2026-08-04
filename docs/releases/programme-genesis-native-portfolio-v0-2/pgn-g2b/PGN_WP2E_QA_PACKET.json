@@ -1,0 +1,68 @@
+{
+  "schema": "ovc-pgn-wp2e-qa/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP2E",
+  "gate_id": "PGN-G2B",
+  "baseline_commit": "c707cd35b88e18cc7cb5677685ce8e27496561a7",
+  "accepted_implementation_head": "ab45783ac579af28ea6ec3cc227626fcd73206ae",
+  "status": "PASS",
+  "census_assessment": {
+    "object_count": 108,
+    "classification_counts": {
+      "NATIVE_PROGRAMME": 2,
+      "LEGACY_PROGRAMME_REQUIRING_CONVERSION": 16,
+      "SUPERSEDED_PROGRAMME": 1,
+      "ABSORBED_INTO_SUCCESSOR": 0,
+      "BOUNDED_PACKET_NOT_A_PROGRAMME": 70,
+      "PROPOSAL_NOT_ADMITTED": 1,
+      "UNRESOLVED": 18
+    },
+    "exclusion_count": 72,
+    "lineage_consolidation_count": 1,
+    "candidate_count": 0,
+    "blocking_conflicts": 0,
+    "detailed_census_sha256": "9595b9f061b11ce0cd29148eedda150769cb24e402d45946d0f67121ae22c170",
+    "materialized_census_sha256": "54319e45d77689880a19383c23ae5f7311550d125680c9c88fed4a237ff321c0",
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
+  },
+  "checks": {
+    "classification_enum_exact": "PASS",
+    "repository_controlled_sources_only": "PASS",
+    "source_hashes_reproducible": "PASS",
+    "every_discovered_object_classified_once": "PASS",
+    "materialized_manifest_and_child_hashes": "PASS",
+    "native_and_legacy_boundaries": "PASS",
+    "proposal_exclusions": "PASS",
+    "lineage_no_self_loop": "PASS",
+    "name_only_absorption_rejected": "PASS",
+    "unresolved_history_visible": "PASS",
+    "prior_census_preserved": "PASS",
+    "pgn_wp3_absent": "PASS",
+    "repository_tests": {
+      "run_id": 30906873666,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_final_head": {
+      "run_id": 30906872133,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_merge_readiness": {
+      "job_id": 91983936492,
+      "conclusion": "SUCCESS"
+    },
+    "decision_sealing_head_assurance": "REQUIRED_BEFORE_MERGE"
+  },
+  "warnings": [
+    "THE_REQUESTED_INITIAL_OVC_REPLAY_COMMIT_IS_NOT_RESOLVABLE_FROM_THE_CURRENT_GIT_GRAPH",
+    "THE_C0AD7BA_FROZEN_339_FILE_SNAPSHOT_IS_THE_EARLIEST_REPRODUCIBLE_CONTENT_BOUNDARY",
+    "EIGHTEEN_HISTORICAL_IDENTITIES_WITHOUT_EXPLICIT_SUCCESSOR_EVIDENCE_REMAIN_UNRESOLVED",
+    "NO_ABSORBED_INTO_SUCCESSOR_CLASSIFICATION_IS_RECORDED_BECAUSE_NO_EXPLICIT_ABSORPTION_EVIDENCE_EXISTS",
+    "CLASSIFICATIONS_HAVE_NO_ADOPTION_EFFECT_BEFORE_PGN_G2B"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "authority_delta": "NONE_EXPANDED_CENSUS_EVIDENCE_ONLY",
+  "rollback": "Discard and deterministically rebuild the expanded census without constructing candidates."
+}
