@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-G2B",
+  "gate_id": "PGN-G2B",
+  "status": "APPROVED",
+  "prerequisites": [
+    "PGN-WP2E_PASS_MERGED_dcdc968ea936dd1e66f7fa1a6cf9c0a4528a52c1"
+  ],
+  "authority_required": "OPERATOR_REQUIRED_COMPLETED",
+  "authority_delta": "ACKNOWLEDGED_EXPANDED_CENSUS_AND_RELEASED_EXACT_SIXTEEN_PROGRAMME_CANDIDATE_CONSTRUCTION_ONLY",
+  "baseline_commit": "dcdc968ea936dd1e66f7fa1a6cf9c0a4528a52c1",
+  "branch": "gate/pgn-g2b-expanded-census-ack",
+  "candidate_commit": "BOUND_BY_PR_286_FINAL_HEAD_AND_POST_MERGE_RECEIPT",
+  "tests": [
+    "PENDING_FINAL_HEAD_REPOSITORY_TESTS",
+    "PENDING_FINAL_HEAD_OVC_ASSURANCE",
+    "PENDING_FINAL_HEAD_MERGE_READINESS"
+  ],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_QA_PACKET.json",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_OPERATOR_DECISION.json",
+  "operator_decision_id": "PGN-G2B.OPERATOR.ACKNOWLEDGE_CONTINUE.20260804T132000+0100",
+  "merge_commit": null,
+  "blockers": [],
+  "census": {
+    "manifest": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
+    "object_count": 108,
+    "legacy_candidate_scope_count": 16,
+    "native_programme_count": 2,
+    "superseded_count": 1,
+    "absorbed_count": 0,
+    "bounded_packet_count": 70,
+    "proposal_not_admitted_count": 1,
+    "unresolved_count": 18,
+    "exclusion_count": 72,
+    "lineage_consolidation_count": 1,
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
+  },
+  "authority": {
+    "expanded_census": "ACKNOWLEDGED",
+    "candidate_construction": "AUTHORISED_PGN_WP3_EXACT_SIXTEEN_ONLY",
+    "native_genesis_adoption": "DENIED_PENDING_PROGRESSIVE_PGN_G3_REVIEW_AND_PGN_G3",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "reserved_authority": "NONE"
+  },
+  "next_packet": "PGN-WP3",
+  "next_gate": "PGN-G3-R1",
+  "next_action": "FINAL_HEAD_ASSURANCE_MERGE_DECISION_THEN_BEGIN_PGN_WP3_EXACT_SIXTEEN_ONLY",
+  "rollback": "Preserve the acknowledged census and decision. Stop and block PGN-WP3 on any scope, source-fidelity or authority-preservation failure."
+}

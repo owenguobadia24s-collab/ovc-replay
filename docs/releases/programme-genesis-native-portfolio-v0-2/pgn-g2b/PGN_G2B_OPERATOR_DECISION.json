@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-pgn-g2b-operator-decision/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "gate_id": "PGN-G2B",
+  "decision_id": "PGN-G2B.OPERATOR.ACKNOWLEDGE_CONTINUE.20260804T132000+0100",
+  "decision": "ACKNOWLEDGE_CONTINUE",
+  "exact_operator_command": "OVC APPROVE PGN-G2B ACKNOWLEDGE_CONTINUE",
+  "recorded_at": "2026-08-04T13:20:00+01:00",
+  "operator_authority": "EXPLICIT_OPERATOR_APPROVAL",
+  "baseline_commit": "dcdc968ea936dd1e66f7fa1a6cf9c0a4528a52c1",
+  "candidate_branch": "gate/pgn-g2b-expanded-census-ack",
+  "acknowledged_evidence": {
+    "census_manifest": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
+    "object_count": 108,
+    "classification_counts": {
+      "NATIVE_PROGRAMME": 2,
+      "LEGACY_PROGRAMME_REQUIRING_CONVERSION": 16,
+      "SUPERSEDED_PROGRAMME": 1,
+      "ABSORBED_INTO_SUCCESSOR": 0,
+      "BOUNDED_PACKET_NOT_A_PROGRAMME": 70,
+      "PROPOSAL_NOT_ADMITTED": 1,
+      "UNRESOLVED": 18
+    },
+    "exclusion_count": 72,
+    "lineage_consolidation_count": 1,
+    "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68"
+  },
+  "candidate_construction_scope": {
+    "count": 16,
+    "programme_ids": [
+      "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+      "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
+      "OVC-C2E-NEUTRAL-EPISODE-v0.1",
+      "OVC-CLOCK-CONTINUITY-REVIEW-v0.1",
+      "OVC-DEV-ACCEL-v0.1",
+      "OVC-DEV-ACCEL-v0.2",
+      "OVC-DISCOVERY-OPERATING-HUB.v0.1",
+      "OVC-MTA-v0.2",
+      "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
+      "OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1",
+      "OVC-RESEARCH-CONSOLE.v0.2",
+      "OVC-RESEARCH-CONSOLE.v0.3",
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1",
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2",
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
+      "PD-JUNE-FULL-MONTH-MDR"
+    ],
+    "authority_granted": "CONSTRUCT_NATIVE_GENESIS_CANDIDATES_ONLY",
+    "preserve_source_lifecycle_and_authority": true
+  },
+  "excluded_from_candidate_construction": {
+    "native_programmes": [
+      "OVC-PG-v0.2",
+      "OVC-PG-NATIVE-PORTFOLIO-v0.2"
+    ],
+    "superseded_programmes": [
+      "OPT-A.GBPUSD.2026H1.v1"
+    ],
+    "bounded_packets_and_release_objects": 70,
+    "proposals_not_admitted": [
+      "OVC-PCCR-v0.1"
+    ],
+    "unresolved_objects": 18
+  },
+  "warnings_acknowledged": [
+    "INITIAL_OVC_REPLAY_COMMIT_NOT_RESOLVABLE_IN_CURRENT_GIT_GRAPH",
+    "C0AD7BA_339_FILE_FREEZE_IS_EARLIEST_REPRODUCIBLE_CONTENT_BOUNDARY",
+    "EIGHTEEN_HISTORICAL_OBJECTS_REMAIN_UNRESOLVED_AND_EXCLUDED",
+    "ZERO_ABSORPTIONS_RECORDED_WITHOUT_EXPLICIT_EVIDENCE",
+    "OVC_OPT_A_V2_IMPLEMENTATION_PLAN_0_2_REMAINS_IN_THE_ACKNOWLEDGED_LEGACY_SCOPE"
+  ],
+  "authority_after_decision": {
+    "expanded_census": "ACKNOWLEDGED",
+    "pgn_wp3_candidate_construction": "AUTHORISED_EXACT_SIXTEEN_ONLY",
+    "native_genesis_adoption": "DENIED_PENDING_PROGRESSIVE_PGN_G3_REVIEW_AND_PGN_G3",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "migration_warning_closure": "DENIED_PENDING_PGN_G6",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
+    "shadow_corpus_acceptance": "DENIED_PENDING_PGN_G9A",
+    "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
+    "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
+  },
+  "rollback": "Preserve the acknowledged census and decision. Stop candidate construction and mark PGN-WP3 BLOCKED if any candidate exceeds the exact sixteen-object scope, alters source authority or cannot be reproduced.",
+  "next_action": "MERGE_PGN_G2B_DECISION_THEN_BEGIN_PGN_WP3_FOR_EXACT_SIXTEEN_LEGACY_PROGRAMMES"
+}
