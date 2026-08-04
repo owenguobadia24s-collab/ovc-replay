@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-pgn-pgn-g0-operator-decision/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "gate_id": "PGN-G0",
+  "decision_id": "PGN-G0.OPERATOR.PASS.20260804T102500+0100",
+  "decision": "PASS",
+  "operator_command": "OVC APPROVE PGN-G0 PASS",
+  "decided_at": "2026-08-04T10:25:00+01:00",
+  "actor": "HUMAN_OPERATOR",
+  "baseline_commit": "2e5b577e51cde05b027c6220560432c11513af14",
+  "accepted_gate_ready_head": "b903d0db352299d7d3fa064bad73d617ac97a05a",
+  "pull_request": 280,
+  "authority_delta": {
+    "plan_ratification": "RATIFIED_BOUNDED_IMPLEMENTATION_ONLY",
+    "release_packet": "PGN-WP1",
+    "native_genesis_adoption": "DENIED_PENDING_PGN_G3",
+    "census_acknowledgement": "DENIED_PENDING_PGN_G2A",
+    "cross_programme_edge_adoption": "DENIED_PENDING_PGN_G5",
+    "migration_warning_closure": "DENIED_PENDING_PGN_G6",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
+    "shadow_corpus_acceptance": "DENIED_PENDING_PGN_G9A",
+    "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
+    "market_model_semantic_threshold_selector_release_validation_publication": "NONE",
+    "agent_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "accepted_safeguards": [
+    "PGN_G2A_CENSUS_ACKNOWLEDGEMENT_BEFORE_CANDIDATE_CONSTRUCTION",
+    "PGN_G3_PROGRESSIVE_DISCLOSURE_MAXIMUM_THREE_PER_GROUP",
+    "EDGE_CHALLENGE_PROTOCOL_48_HOURS_OR_ALL_OWNER_WAIVERS",
+    "PERMANENT_NON_BINDING_ADMISSION_PREVIEW_DISCLAIMER_AND_ACK_LOG",
+    "INDEPENDENT_MULTI_SOURCE_ADVERSARIAL_CORPUS_ACCEPTANCE",
+    "READ_MODEL_60_SECOND_SOFT_TARGET_AND_PARTITION_STRATEGY"
+  ],
+  "assurance": {
+    "repository_tests": {
+      "run_id": 30895530541,
+      "conclusion": "SUCCESS",
+      "test_count": 161
+    },
+    "ovc_final_head": {
+      "run_id": 30895530797,
+      "conclusion": "SUCCESS"
+    },
+    "merge_readiness": {
+      "job_id": 91947436721,
+      "conclusion": "SUCCESS"
+    },
+    "unresolved_review_threads": 0,
+    "blocking_reviews": 0,
+    "pr_mergeable": true
+  },
+  "continuation": {
+    "after_merge": [
+      "PGN-WP1",
+      "PGN-WP2",
+      "PGN-G2"
+    ],
+    "mandatory_stop": "PGN-G2A",
+    "candidate_construction_before_pgn_g2a": "DENIED"
+  },
+  "rollback": "Revert the bounded ratification merge through a new non-destructive commit, stop before PGN-WP1, and preserve the plan, decision, source hashes, PR, tests and gate evidence."
+}
