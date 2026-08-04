@@ -1,0 +1,112 @@
+{
+  "schema": "ovc-pgn-wp3-progressive-review-queue/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP3",
+  "baseline_commit": "38de6b53a692d2f9f71c506b833bf6ffb92820f6",
+  "status": "PGN_G3_R1_DISCLOSED_REMAINING_GROUPS_LOCKED",
+  "authority_effect": "NONE",
+  "maximum_candidates_per_group": 3,
+  "group_count": 6,
+  "candidate_count": 16,
+  "candidate_set_sha256": "7dad0cee63ba6d533eff097f333645914e92d87e1964634786312f9ede58354a",
+  "groups": [
+    {
+      "group_id": "PGN-G3-R1",
+      "sequence": 1,
+      "grouping_basis": "AUTHORITY_DOMAIN",
+      "review_domain": "MARKET_TRANSLATION_CORE",
+      "candidate_count": 3,
+      "candidate_ids": [
+        "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
+        "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
+        "OVC-C2E-NEUTRAL-EPISODE-v0.1"
+      ],
+      "sealed_candidate_ids_sha256": "c5ee2aefc527ac665848cbd332dcd6126c3b5e9271192c284044936a6d891151",
+      "sealed_candidate_bodies_sha256": "6938fbcb52ae6d52d13e56a40cd76d6446f1376e3340309a5dde8d861684bfb1",
+      "disclosure_status": "DISCLOSED_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+      "acknowledgement_required": true,
+      "adoption_effect": "NONE",
+      "unlock_condition": null
+    },
+    {
+      "group_id": "PGN-G3-R2",
+      "sequence": 2,
+      "grouping_basis": "AUTHORITY_DOMAIN",
+      "review_domain": "MARKET_CONSTRUCTION_AND_AUDIT",
+      "candidate_count": 3,
+      "candidate_ids": [],
+      "sealed_candidate_ids_sha256": "9444e2b5ea74ba8d3ca3641a94ea8f859ddcf6e68e24cdbae85c0a0646386516",
+      "sealed_candidate_bodies_sha256": "b3585068a9bc0ce7568b5b9058014677d48afc212c35d3fefc6f599a8a202dff",
+      "disclosure_status": "LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT",
+      "acknowledgement_required": true,
+      "adoption_effect": "NONE",
+      "unlock_condition": "PGN-G3-R1_ACKNOWLEDGEMENT_RECEIPT_MERGED"
+    },
+    {
+      "group_id": "PGN-G3-R3",
+      "sequence": 3,
+      "grouping_basis": "AUTHORITY_DOMAIN",
+      "review_domain": "DEVELOPMENT_INFRASTRUCTURE",
+      "candidate_count": 3,
+      "candidate_ids": [],
+      "sealed_candidate_ids_sha256": "73344242e5e153d946284cc5ead9027daaa23c803d73fbf6aa93b9cac5f2670b",
+      "sealed_candidate_bodies_sha256": "95c6d187900a4c0ad94fff94cfeb63791f8cf7b6c537379df7a666143a02f296",
+      "disclosure_status": "LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT",
+      "acknowledgement_required": true,
+      "adoption_effect": "NONE",
+      "unlock_condition": "PGN-G3-R2_ACKNOWLEDGEMENT_RECEIPT_MERGED"
+    },
+    {
+      "group_id": "PGN-G3-R4",
+      "sequence": 4,
+      "grouping_basis": "AUTHORITY_DOMAIN",
+      "review_domain": "RESEARCH_CONSOLE_AND_FOUNDATION_I",
+      "candidate_count": 3,
+      "candidate_ids": [],
+      "sealed_candidate_ids_sha256": "85b2004036e7471132ba5daf26f44098b4c262c167cd2bd0918472ae5b0636f6",
+      "sealed_candidate_bodies_sha256": "70526ebfa5fe9ffd484720c43d892546efb88d5f69bb6eca16890819dae9ffc9",
+      "disclosure_status": "LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT",
+      "acknowledgement_required": true,
+      "adoption_effect": "NONE",
+      "unlock_condition": "PGN-G3-R3_ACKNOWLEDGEMENT_RECEIPT_MERGED"
+    },
+    {
+      "group_id": "PGN-G3-R5",
+      "sequence": 5,
+      "grouping_basis": "AUTHORITY_DOMAIN",
+      "review_domain": "RESEARCH_FOUNDATION_AND_MONTHLY_REVIEW",
+      "candidate_count": 3,
+      "candidate_ids": [],
+      "sealed_candidate_ids_sha256": "106bd042d548a7faf1ee21cc361418c69e26ad93a7058684d4a2e1f8af5444e1",
+      "sealed_candidate_bodies_sha256": "36945653326c1bf23c7da0b00516351a2cb31e14f047f3d6b0fb395a6b12b6e1",
+      "disclosure_status": "LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT",
+      "acknowledgement_required": true,
+      "adoption_effect": "NONE",
+      "unlock_condition": "PGN-G3-R4_ACKNOWLEDGEMENT_RECEIPT_MERGED"
+    },
+    {
+      "group_id": "PGN-G3-R6",
+      "sequence": 6,
+      "grouping_basis": "AUTHORITY_DOMAIN",
+      "review_domain": "OPERATOR_REVIEW_ASSURANCE",
+      "candidate_count": 1,
+      "candidate_ids": [],
+      "sealed_candidate_ids_sha256": "5d25794f3b1d3cf7154fb80792010a55fab31126cc5de4031096d7b4b998a271",
+      "sealed_candidate_bodies_sha256": "bfe34292f0815eeae2ec1da9438ee9d20e4436a9444c1d3627d233b26ea245c5",
+      "disclosure_status": "LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT",
+      "acknowledgement_required": true,
+      "adoption_effect": "NONE",
+      "unlock_condition": "PGN-G3-R5_ACKNOWLEDGEMENT_RECEIPT_MERGED"
+    }
+  ],
+  "rules": {
+    "current_group": "PGN-G3-R1",
+    "next_group_disclosure_before_acknowledgement": "DENIED",
+    "group_acknowledgement_is_adoption": false,
+    "per_programme_adoption_gate": "PGN-G3",
+    "future_group_member_ids_disclosed": false
+  },
+  "rollback": "Keep all later groups locked and rebuild the queue from the exact sealed candidate commitments."
+}
