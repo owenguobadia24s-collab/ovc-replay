@@ -1,0 +1,72 @@
+{
+  "schema": "ovc-pgn-wp3-delegated-decision/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP3",
+  "decision_id": "PGN-WP3.DELEGATED.PASS.20260804T140000+0100",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION_UNDER_APPROVED_PLAN",
+  "baseline_commit": "38de6b53a692d2f9f71c506b833bf6ffb92820f6",
+  "assured_candidate_head": "6bac402eb1104ca9f59cba963c439e9bcfeb5238",
+  "branch": "migration/pgn-wp3-native-candidates",
+  "operator_prerequisite": "PGN-G2B.OPERATOR.ACKNOWLEDGE_CONTINUE.20260804T132000+0100",
+  "acceptance": {
+    "exact_acknowledged_population": "PASS_16_OF_16",
+    "candidate_identity_and_hash_binding": "PASS",
+    "source_authority_preservation": "PASS",
+    "retrospective_scope_audit": "PASS",
+    "unresolved_field_visibility": "PASS",
+    "historical_intent_fabrication_absent": "PASS",
+    "progressive_review_maximum_three": "PASS",
+    "only_pgn_g3_r1_disclosed": "PASS",
+    "later_group_materialization_fail_closed": "PASS",
+    "native_adoption_absent": "PASS",
+    "reserved_authority_absent": "PASS"
+  },
+  "tests": {
+    "repository_tests": {
+      "run_id": 30912145517,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_final_head": {
+      "run_id": 30912146132,
+      "job_id": 92001244049,
+      "conclusion": "SUCCESS"
+    },
+    "merge_readiness": {
+      "run_id": 30912146132,
+      "job_id": 92001305407,
+      "conclusion": "SUCCESS"
+    }
+  },
+  "evidence": {
+    "candidate_count": 16,
+    "candidate_set_sha256": "7dad0cee63ba6d533eff097f333645914e92d87e1964634786312f9ede58354a",
+    "candidate_commitment_set_sha256": "749a0965d29f4a869906b24878da7d272fb95643808d79d577752ecf2810566c",
+    "candidate_portfolio_manifest_sha256": "39e7eb32440d91881b1844caef86345a2fe8a57dfcf2def88494ad6f2b6f316c",
+    "progressive_review_queue_sha256": "08d50c50270f911b975014affbea0d4e368ff6ef691b3d200dcf9eebffd5d126",
+    "review_group_count": 6,
+    "current_group": "PGN-G3-R1",
+    "current_group_candidate_count": 3,
+    "later_groups_locked": true
+  },
+  "authority_delta": "NONE_CANDIDATE_CONSTRUCTION_ONLY",
+  "authority_after_decision": {
+    "candidate_commitments": "APPROVED_AS_UNAPPROVED_REVIEW_EVIDENCE",
+    "native_adoption": "DENIED_PENDING_PROGRESSIVE_PGN_G3_OPERATOR_REVIEW",
+    "later_group_disclosure": "DENIED_PENDING_CURRENT_GROUP_ACKNOWLEDGEMENT",
+    "cross_programme_edges": "DENIED_PENDING_PGN_G5",
+    "migration_warning_closure": "DENIED_PENDING_PGN_G6",
+    "reserved_authority": "NONE"
+  },
+  "warnings": [
+    "EIGHT_CANDIDATE_FIELDS_REMAIN_EXPLICITLY_UNRESOLVED_PER_CANDIDATE",
+    "CLASS_ASSIGNMENTS_AND_COMMITMENTS_ARE_CANDIDATE_ONLY",
+    "NO_HISTORICAL_PURPOSE_OR_SCOPE_TEXT_WAS_FABRICATED",
+    "ONLY_PGN_G3_R1_MAY_BE_MATERIALIZED_BEFORE_AN_ACKNOWLEDGEMENT_RECEIPT"
+  ],
+  "rollback": "Discard and deterministically rebuild the sealed candidate commitments and review queue from the PGN-G2B acknowledged census. Preserve all source records and decisions.",
+  "next_packet": "PGN-G3-R1",
+  "next_action": "FINAL_HEAD_ASSURANCE_SQUASH_MERGE_PGN_WP3_THEN_PREPARE_OPERATOR_PGN_G3_R1_ACKNOWLEDGEMENT_GATE"
+}
