@@ -16,12 +16,14 @@ OUTPUT_PATH = ROOT / "registries/governance/programme_genesis/pgn_census/PGN_REP
 GENERATED_PREFIXES = (
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/",
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/",
     "registries/governance/programme_genesis/pgn_census/",
     "registries/governance/programme_genesis/pgn_candidates/",
 )
 GENERATED_EXACT_PATHS = {
     POLICY_PATH.relative_to(ROOT).as_posix(),
     "registries/governance/programme_genesis/PGN_WP3_CLASS_REGISTRY_v0_1.json",
+    "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_PROGRAMME_PREPARATION_STATE_v0_2.json",
 }
 
 ID_KEYS = {"programme_id", "program_id", "proposed_programme_id", "plan_id", "release_id"}

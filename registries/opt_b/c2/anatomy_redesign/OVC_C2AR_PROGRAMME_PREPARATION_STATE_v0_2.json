@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-c2ar-programme-preparation-state/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "admission_status": "RATIFIED_PENDING_MERGE",
+  "status": "APPROVED",
+  "current_packet": "C2AR-00",
+  "current_gate": "C2AR-G0",
+  "operator_decision_required": false,
+  "operator_decision_id": "C2AR-G0.OPERATOR.PASS.20260804T195100+0100",
+  "decision_record": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0/C2AR_G0_OPERATOR_DECISION.json",
+  "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
+  "branch": "gate/c2ar-g0-ratification",
+  "candidate_commit": "BOUND_BY_PR_291_FINAL_HEAD",
+  "assured_predecision_head": "da96e2de4d05486718d1d52307220d3774cb7675",
+  "authority_required": "OPERATOR_APPROVED",
+  "authority_delta": "RATIFY_REVISED_IMPLEMENTATION_AND_RELEASE_C2AR_WP0_ONLY",
+  "tests": [
+    {"workflow": "tests", "run_id": 30940702849, "result": "PASS", "head": "da96e2de4d05486718d1d52307220d3774cb7675"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30940697823, "profile": "FINAL_HEAD", "result": "PASS", "head": "da96e2de4d05486718d1d52307220d3774cb7675"},
+    {"workflow": "OVC merge readiness", "run_id": 30940697823, "result": "PASS", "head": "da96e2de4d05486718d1d52307220d3774cb7675"}
+  ],
+  "final_pr_head_assurance": "REQUIRED_AFTER_STATE_AND_GATE_DECISION_METADATA",
+  "blockers": [],
+  "warnings": [
+    "PCCR_G0_REMAINS_NOT_ADMITTED_AND_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_IS_HELD",
+    "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_REMAINS_INDEPENDENT",
+    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY",
+    "C2AR_GATE_PREPARATION_IS_POST_PGN_WP2E_CENSUS_AND_DOES_NOT_RETROACTIVELY_MUTATE_THE_ACCEPTED_108_OBJECT_CENSUS"
+  ],
+  "packets": [
+    {"packet_id": "C2AR-WP0", "status": "READY_PENDING_G0_MERGE_RECEIPT", "prerequisites": ["C2AR-G0:PASS", "C2AR-G0:MERGED"], "authority_required": "AUTO_EXECUTABLE_AFTER_G0", "authority_delta": "BASELINE_SOURCE_BINDING_LEGACY_FREEZE_PROGRAMME_CONTROLS", "next_packet": "C2AR-WP1"},
+    {"packet_id": "C2AR-WP1", "status": "PLANNED", "prerequisites": ["C2AR-WP0:COMPLETED"], "authority_required": "AUTO_RATIFIABLE_CEAR_G1", "authority_delta": "NORMATIVE_OBSERVATION_CALENDAR_LATTICE_CONTINUITY_BOUNDARY", "next_packet": "C2AR-WP2"},
+    {"packet_id": "C2AR-WP2", "status": "PLANNED", "prerequisites": ["CEAR-G1:PASS"], "authority_required": "AUTO_RATIFIABLE_CEAR_G2", "authority_delta": "NORMATIVE_HORIZON_AND_DISCREPANCY_BOUNDARY", "next_packet": "C2AR-WP3"},
+    {"packet_id": "C2AR-WP3", "status": "PLANNED", "prerequisites": ["CEAR-G2:PASS"], "authority_required": "AUTO_RATIFIABLE_CEAR_G3", "authority_delta": "NORMATIVE_LEVEL_GRAPH_LIFECYCLE_BOUNDARY", "next_packet": "C2AR-WP4"},
+    {"packet_id": "C2AR-WP4", "status": "PLANNED", "prerequisites": ["CEAR-G3:PASS"], "authority_required": "AUTO_RATIFIABLE_CEAR_G4", "authority_delta": "NORMATIVE_CONTAINER_GRAPH_BOUNDARY", "next_packet": "C2AR-WP5"},
+    {"packet_id": "C2AR-WP5", "status": "PLANNED", "prerequisites": ["CEAR-G4:PASS"], "authority_required": "AUTO_RATIFIABLE_CEAR_G5", "authority_delta": "NORMATIVE_RELATION_TOPOLOGY_BOUNDARY", "next_packet": "C2AR-WP5.5"},
+    {"packet_id": "C2AR-WP5.5", "status": "PLANNED", "prerequisites": ["CEAR-G5:PASS"], "authority_required": "AUTO_RATIFIABLE_C2AR_G5_5", "authority_delta": "SYNTHETIC_FULL_PIPELINE_TOPOLOGY_PROOF", "next_packet": "C2AR-WP6"},
+    {"packet_id": "C2AR-WP6", "status": "PLANNED", "prerequisites": ["C2AR-G5.5:PASS"], "authority_required": "OPERATOR_REQUIRED_CEAR_G6", "authority_delta": "INTEGRATED_SHADOW_CONTRACT_AND_FORMULA_PROFILE_FREEZE", "next_packet": "C2AR-WP7"},
+    {"packet_id": "C2AR-WP7", "status": "PLANNED", "prerequisites": ["CEAR-G6:PASS"], "authority_required": "OPERATOR_REQUIRED_CEAR_G7", "authority_delta": "TRANSITION_AND_DETECTOR_POLICY_FREEZE", "next_packet": "C2AR-WP8"},
+    {"packet_id": "C2AR-WP8", "status": "PLANNED", "prerequisites": ["CEAR-G7:PASS"], "authority_required": "OPERATOR_REQUIRED_CEAR_G8", "authority_delta": "PARENT_CONTEXT_RESOLVER_POLICY_FREEZE", "next_packet": "C2AR-WP9"},
+    {"packet_id": "C2AR-WP9", "status": "PLANNED", "prerequisites": ["CEAR-G8:PASS"], "authority_required": "OPERATOR_REQUIRED_CEAR_G9", "authority_delta": "COMPUTABILITY_CONSUMER_DENOMINATOR_OVERLAP_POLICY_FREEZE", "next_packet": "C2AR-WP10"},
+    {"packet_id": "C2AR-WP10", "status": "PLANNED", "prerequisites": ["CEAR-G9:PASS"], "authority_required": "OPERATOR_REQUIRED_CEAR_G10", "authority_delta": "RULE_RECONSTRUCTION_DISPOSITIONS", "next_packet": "C2AR-WP11"},
+    {"packet_id": "C2AR-WP11", "status": "PLANNED", "prerequisites": ["CEAR-G10:PASS"], "authority_required": "AUTO_IF_NO_RESERVED_DELTA_C2AR_G11", "authority_delta": "INTEGRATED_SHADOW_CLOSEOUT", "next_packet": null}
+  ],
+  "contract_maturity": {"normative_boundary": "APPROVED_FOR_PACKET_FREEZE", "shadow_experiment_revision": "MUTABLE_VERSIONED_THROUGH_WP5_5", "integrated_freeze": "PENDING_CEAR_G6"},
+  "smoke_integration": {"fixture_id": "C2AR.SMOKE.CANONICAL.v1", "status": "NOT_STARTED", "defects": []},
+  "crosswalk": {"owner": "C2AR_PROGRAMME", "state": "MAINTAINED_SHADOW", "freeze_trigger": "ACTIVATION_PLAN_APPROVED"},
+  "next_action": "RUN_EXACT_DECISION_METADATA_HEAD_ASSURANCE_AND_SQUASH_MERGE_PR_291",
+  "rollback": "Preserve the operator decision. If exact-head assurance or merge fails, do not execute WP0 until a lawful merged receipt exists."
+}
