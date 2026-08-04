@@ -12,6 +12,7 @@ BASELINE = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/
 SOURCE_HASH = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_SOURCE_PLAN_HASH.json"
 QA = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_QA_PACKET.json"
 GATE = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_OPERATOR_GATE_PACKET.json"
+DECISION = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g0/PGN_G0_OPERATOR_DECISION.json"
 
 
 def load(path: Path) -> dict:
@@ -49,22 +50,26 @@ class NativeGenesisPortfolioG0Tests(unittest.TestCase):
         ):
             self.assertIn(required, text)
 
-    def test_programme_state_stops_at_operator_pgn_g0(self) -> None:
+    def test_operator_pass_advances_only_bounded_implementation(self) -> None:
         state = load(STATE)
         marker = load(STATE_MARKER)
+        decision = load(DECISION)
         packets = {packet["packet_id"]: packet for packet in state["packets"]}
         self.assertEqual("OVC-PG-NATIVE-PORTFOLIO-v0.2", state["programme_id"])
-        self.assertEqual("GATE_READY", state["status"])
-        self.assertTrue(state["operator_decision_required"])
-        self.assertEqual("PGN-G0", state["current_gate"])
-        self.assertEqual("AWAIT_OPERATOR_PGN_G0_DECISION", state["next_action"])
-        self.assertEqual("GATE_READY", packets["PGN-00"]["status"])
+        self.assertEqual("APPROVED", state["status"])
+        self.assertFalse(state["operator_decision_required"])
+        self.assertEqual("PGN-G0.OPERATOR.PASS.20260804T102500+0100", state["operator_decision_id"])
+        self.assertEqual("PASS", decision["decision"])
+        self.assertEqual("OVC APPROVE PGN-G0 PASS", decision["operator_command"])
+        self.assertEqual("APPROVED", packets["PGN-00"]["status"])
         self.assertEqual("PLANNED", packets["PGN-WP1"]["status"])
         self.assertIn("PGN-G2A", state["mandatory_operator_gates"])
         self.assertIn("PGN-G3-R*", state["mandatory_operator_gates"])
         self.assertIn("PGN-G9A", state["mandatory_operator_gates"])
         self.assertEqual("DENIED_PENDING_PGN_G3", state["authority"]["native_genesis_adoption"])
+        self.assertEqual("DENIED_PENDING_PGN_G2A", state["authority"]["census_acknowledgement"])
         self.assertEqual("DEFERRED_DISABLED_PENDING_PGN_G10", state["authority"]["admission_enforcement"])
+        self.assertEqual("RUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_PR_280_THEN_START_PGN_WP1", state["next_action"])
         self.assertEqual([], state["blockers"])
         self.assertNotIn("programme_id", marker)
         self.assertEqual(str(STATE.relative_to(ROOT)).replace("\\", "/"), marker["authoritative_candidate_path"])
