@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-pgn-wp1-contract-manifest/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-WP1",
+  "gate_id": "PGN-G1",
+  "baseline_commit": "113254f4ceadff6d08546c945e7912590d4a905d",
+  "branch": "build/pgn-wp1-contracts",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "authority_delta": "FREEZE_NATIVE_ADOPTION_REVIEW_EDGE_WARNING_ROUTE_PERFORMANCE_PREVIEW_AND_CORPUS_CONTROLS_ONLY",
+  "artifacts": {
+    "contract": "contracts/governance/programme_genesis/PGN_PORTFOLIO_ADOPTION_CONTROL_CONTRACT_v0_1.md",
+    "schema": "schemas/governance/programme_genesis/pgn_native_adoption_bundle_v0_1.schema.json",
+    "registry": "registries/governance/programme_genesis/PGN_CONTROL_PROFILE_REGISTRY_v0_1.json",
+    "fixtures": [
+      "fixtures/governance/programme_genesis/pgn_valid_review_group_v0_1.json",
+      "fixtures/governance/programme_genesis/pgn_invalid_review_group_four_candidates_v0_1.json",
+      "fixtures/governance/programme_genesis/pgn_challenged_edge_downgraded_v0_1.json",
+      "fixtures/governance/programme_genesis/pgn_advisory_preview_invocation_v0_1.json"
+    ],
+    "tests": ["tests/governance/test_pgn_wp1.py", "tests/governance/test_pgn_g0.py"]
+  },
+  "frozen_invariants": [
+    "PGN_G2A_BEFORE_CANDIDATE_CONSTRUCTION",
+    "PGN_G3_REVIEW_GROUP_MAXIMUM_THREE",
+    "GROUP_ACKNOWLEDGEMENT_HAS_NO_ADOPTION_EFFECT",
+    "CHALLENGED_EDGE_IS_ADAPTER_INFERRED_AND_NOT_HARD",
+    "WARNING_CLOSURE_IS_INDIVIDUAL_AND_EVIDENCE_BACKED",
+    "CONTROL_PLANE_BUILD_IS_READ_ONLY_DISABLED_AND_UNREGISTERED",
+    "ADMISSION_PREVIEW_IS_PERMANENTLY_NON_BINDING",
+    "CORPUS_REQUIRES_INDEPENDENT_MULTI_SOURCE_ADVERSARIAL_ACCEPTANCE",
+    "READ_MODEL_SOFT_TARGET_60_SECONDS_WITH_VISIBLE_WARNING"
+  ],
+  "reserved_authority": "NONE",
+  "blockers": [],
+  "rollback": "Supersede the controls non-destructively and preserve all source, warning, challenge, decision, PR, commit and receipt history."
+}
