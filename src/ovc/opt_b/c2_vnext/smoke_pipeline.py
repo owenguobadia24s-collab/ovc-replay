@@ -154,7 +154,8 @@ def run_canonical_smoke(fixture: Mapping[str, Any]) -> dict[str, Any]:
         first_valid_time=current["first_valid_time"], probe_label="CLOSE",
     )
     level_relations = [relate_point_to_level(close_probe, item, precision=5) for item in levels]
-    container_relations = [relate_point_to_container(close_probe, item, precision=5) for item in containers]
+    trailing_container_relation = relate_point_to_container(close_probe, trailing_container, precision=5)
+    structural_container_relation = relate_point_to_container(close_probe, swing_container, precision=5)
     level_set = build_relation_set(
         scope_type="LOCAL_LEVELS", subject_observation_id=current["observation_id"],
         candidate_object_ids=[item["level_id"] for item in levels] + ["LEVEL.C2AR.SMOKE.EXCLUDED"],
@@ -164,8 +165,10 @@ def run_canonical_smoke(fixture: Mapping[str, Any]) -> dict[str, Any]:
     )
     container_set = build_relation_set(
         scope_type="LOCAL_MEASUREMENT_CONTAINERS", subject_observation_id=current["observation_id"],
-        candidate_object_ids=[item["container_id"] for item in containers],
-        relations=container_relations, exclusions=[], as_of_time=current["first_valid_time"],
+        candidate_object_ids=[trailing_container["container_id"], swing_container["container_id"]],
+        relations=[trailing_container_relation],
+        exclusions=[{"object_id": swing_container["container_id"], "reason": "KIND_NOT_ALLOWED_FOR_SCOPE"}],
+        as_of_time=current["first_valid_time"],
     )
     crossing = fixed_object_crossing(
         object_id=swing_high["level_id"], object_value=swing_high["value"],
@@ -175,12 +178,13 @@ def run_canonical_smoke(fixture: Mapping[str, Any]) -> dict[str, Any]:
         ordered_path=[observations[1]["close"], 1.18, 1.24, observations[2]["close"]],
     )
 
+    container_relations = [trailing_container_relation, structural_container_relation]
     stages = {
         "observation": {"population_id": population["population_id"], "count": len(observations), "sha256": sha256(observations)},
         "horizon": {"membership_id": horizon["membership_id"], "status": horizon["status"], "member_count": len(horizon["member_observation_ids"]), "sha256": sha256(horizon)},
         "level": {"level_ids": [item["level_id"] for item in levels], "candidate_status_counts": _status_counts([*high_candidates, *low_candidates]), "selector_result_id": level_projection["selector_result_id"], "sha256": sha256({"levels": levels, "graph": swing_graph, "projection": level_projection})},
         "container": {"container_ids": [item["container_id"] for item in containers], "pairing_evidence_id": pairing["pairing_evidence_id"], "measurement_projection_id": measurement_projection["projection_result_id"], "structural_projection_id": structural_projection["projection_result_id"], "sha256": sha256({"containers": containers, "graph": container_graph, "measurement_projection": measurement_projection, "structural_projection": structural_projection})},
-        "relation": {"relation_set_ids": [level_set["relation_set_id"], container_set["relation_set_id"]], "relation_count": len(level_relations) + len(container_relations), "crossing_evidence_id": crossing["crossing_evidence_id"], "sha256": sha256({"level_relations": level_relations, "container_relations": container_relations, "sets": [level_set, container_set], "crossing": crossing})},
+        "relation": {"relation_set_ids": [level_set["relation_set_id"], container_set["relation_set_id"]], "relation_count": len(level_relations) + 1, "crossing_evidence_id": crossing["crossing_evidence_id"], "sha256": sha256({"level_relations": level_relations, "container_relations": container_relations, "sets": [level_set, container_set], "crossing": crossing})},
     }
     chronology = {
         "all_level_first_valid_by_current": all(item["first_valid_time"] <= current["first_valid_time"] for item in levels),
@@ -202,7 +206,7 @@ def run_canonical_smoke(fixture: Mapping[str, Any]) -> dict[str, Any]:
         "ambiguity_and_exclusion": {
             "level_selector_tie_count": len(level_projection["tie_ids"]),
             "level_selector_selected": level_projection["selected_level_id"],
-            "explicit_relation_exclusion_count": len(level_set["exclusions"]),
+            "explicit_relation_exclusion_count": len(level_set["exclusions"]) + len(container_set["exclusions"]),
             "censored_candidate_count": sum(1 for item in [*high_candidates, *low_candidates] if item["status"] == "CENSORED_CONFIRMATION"),
         },
         "authority": authority,
