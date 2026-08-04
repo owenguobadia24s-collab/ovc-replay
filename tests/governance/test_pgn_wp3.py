@@ -12,6 +12,7 @@ MANIFEST = CANDIDATE_DIR / "PGN_WP3_NATIVE_CANDIDATE_PORTFOLIO_v0_1.json"
 QUEUE = CANDIDATE_DIR / "PGN_WP3_PROGRESSIVE_REVIEW_QUEUE_v0_1.json"
 SCRIPT = ROOT / "scripts/governance/build_pgn_wp3_native_candidates.py"
 G2B_DECISION = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g2b/PGN_G2B_OPERATOR_DECISION.json"
+REVIEW_RECEIPT_DIR = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews"
 
 EXPECTED_IDS = [
     "OVC-C1-WICK-BALANCE-CORRECTIVE-PROGRAMME-0.1",
@@ -133,14 +134,31 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
         self.assertFalse(self.queue["rules"]["future_group_member_ids_disclosed"])
         self.assertFalse(self.queue["rules"]["group_acknowledgement_is_adoption"])
 
-    def test_r1_materializes_but_r2_fails_closed_without_receipt(self) -> None:
+    def test_progressive_materialization_follows_merged_receipts(self) -> None:
         r1 = self.builder.build_group("PGN-G3-R1", ROOT)
         self.assertEqual(3, r1["candidate_count"])
         self.assertEqual(EXPECTED_IDS[:3], r1["candidate_ids"])
         self.assertEqual("NONE", r1["authority_effect"])
         self.assertEqual("DENIED_PENDING_PGN_G3", r1["native_adoption"])
-        with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R2", ROOT)
+
+        r1_receipt = REVIEW_RECEIPT_DIR / "PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json"
+        r2_receipt = REVIEW_RECEIPT_DIR / "PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json"
+        if r1_receipt.exists():
+            r2 = self.builder.build_group("PGN-G3-R2", ROOT)
+            self.assertEqual("PGN-G3-R2", r2["review_group_id"])
+            self.assertEqual("NONE", r2["authority_effect"])
+            self.assertEqual("DENIED_PENDING_PGN_G3", r2["native_adoption"])
+            if r2_receipt.exists():
+                self.assertEqual(
+                    "PGN-G3-R3",
+                    self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"],
+                )
+            else:
+                with self.assertRaises(PermissionError):
+                    self.builder.build_group("PGN-G3-R3", ROOT)
+        else:
+            with self.assertRaises(PermissionError):
+                self.builder.build_group("PGN-G3-R2", ROOT)
 
     def test_materialized_manifest_and_queue_match_builder(self) -> None:
         manifest, queue = self.builder.build_bundle(ROOT)
@@ -164,21 +182,17 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
             )
         )
 
-    def test_no_adoption_decision_or_future_group_receipt_exists(self) -> None:
+    def test_no_adoption_decision_and_receipts_are_progressive(self) -> None:
         self.assertEqual(
             "DENIED_PENDING_PROGRESSIVE_PGN_G3_REVIEW_AND_PGN_G3",
             self.manifest["authority"]["native_adoption"],
         )
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
-        self.assertEqual(
-            [],
-            list(
-                ROOT.glob(
-                    "docs/releases/programme-genesis-native-portfolio-v0-2/"
-                    "pgn-g3/reviews/PGN_G3_R*_ACKNOWLEDGEMENT_RECEIPT.json"
-                )
-            ),
-        )
+        receipts = sorted(path.name for path in REVIEW_RECEIPT_DIR.glob("PGN_G3_R*_ACKNOWLEDGEMENT_RECEIPT.json"))
+        self.assertEqual(["PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json"], receipts)
+        receipt = load(REVIEW_RECEIPT_DIR / receipts[0])
+        self.assertEqual("NONE", receipt["native_adoption"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R2_ONLY", receipt["authority_effect"])
 
 
 if __name__ == "__main__":
