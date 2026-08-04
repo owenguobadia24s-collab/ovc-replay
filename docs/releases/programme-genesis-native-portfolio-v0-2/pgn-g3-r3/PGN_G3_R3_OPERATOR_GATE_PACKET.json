@@ -5,11 +5,12 @@
   "plan_version": "0.2",
   "gate_id": "PGN-G3-R3",
   "title": "Acknowledge the third progressive native Genesis candidate review group",
-  "status": "GATE_READY_PENDING_EXACT_HEAD_CI",
+  "status": "GATE_READY",
   "operator_decision_required": true,
   "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
   "candidate_branch": "gate/pgn-g3-r3-development-infrastructure",
-  "candidate_commit": "PENDING_EXACT_HEAD",
+  "candidate_commit": "BOUND_BY_PR_290_FINAL_HEAD",
+  "assured_gate_head": "066b807f1cae47f788cf555b505f6a4dbcd7d2d3",
   "completed_packets": [
     "PGN-00",
     "PGN-WP1",
@@ -106,7 +107,22 @@
       "tests",
       "OVC merge readiness"
     ],
-    "status": "PENDING_EXACT_HEAD_CI"
+    "assured_gate_head": "066b807f1cae47f788cf555b505f6a4dbcd7d2d3",
+    "repository_tests": {
+      "run_id": 30918849189,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_final_head": {
+      "run_id": 30918849159,
+      "job_id": 92023844302,
+      "conclusion": "SUCCESS"
+    },
+    "ovc_merge_readiness": {
+      "run_id": 30918849159,
+      "job_id": 92023928963,
+      "conclusion": "SUCCESS"
+    },
+    "final_packet_head_assurance": "REQUIRED_ON_PR_290_HEAD"
   },
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_QA_PACKET.json",
   "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
@@ -124,6 +140,7 @@
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_QA_PACKET.json",
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_OPERATOR_GATE_PACKET.json",
     "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_PROGRAMME_STATE_UPDATE.json",
+    "tests/governance/test_pgn_g3_r1.py",
     "tests/governance/test_pgn_g3_r2.py",
     "tests/governance/test_pgn_g3_r3.py",
     "tests/governance/test_pgn_wp3.py"
