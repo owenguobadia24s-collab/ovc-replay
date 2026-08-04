@@ -10,14 +10,22 @@
   "operator_decision_required": true,
   "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
   "branch": "gate/c2ar-g0-ratification",
-  "candidate_commit": "PENDING_FINAL_HEAD",
+  "candidate_commit": "BOUND_BY_PR_291_FINAL_HEAD",
+  "assured_prepacket_head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a",
   "authority_required": "OPERATOR_REQUIRED",
   "authority_delta": "RATIFY_REVISED_IMPLEMENTATION_AND_RELEASE_C2AR_WP0_ONLY",
+  "tests": [
+    {"workflow": "tests", "run_id": 30939970245, "result": "PASS", "head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30939970246, "profile": "FINAL_HEAD", "result": "PASS", "head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a"},
+    {"workflow": "OVC merge readiness", "run_id": 30939970246, "result": "PASS", "head": "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a"}
+  ],
+  "final_pr_head_assurance": "REQUIRED_AFTER_GATE_METADATA_COMMIT",
   "blockers": [],
   "warnings": [
     "PCCR_G0_REMAINS_NOT_ADMITTED_AND_OVERLAPPING_CALENDAR_CONTINUITY_EXECUTION_IS_HELD",
     "PGN_G3_R3_IS_AN_OPEN_OPERATOR_GATE_AND_ANY_MAIN_ADVANCE_REQUIRES_NON_DESTRUCTIVE_REBASE_AND_RETEST",
-    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY"
+    "ACTIVE_C2_DISCOVERY_SELECTOR_AND_RELEASES_REMAIN_READ_ONLY",
+    "C2AR_GATE_PREPARATION_IS_POST_PGN_WP2E_CENSUS_AND_DOES_NOT_RETROACTIVELY_MUTATE_THE_ACCEPTED_108_OBJECT_CENSUS"
   ],
   "packets": [
     {"packet_id": "C2AR-WP0", "status": "PLANNED", "prerequisites": ["C2AR-G0:PASS"], "authority_required": "AUTO_EXECUTABLE_AFTER_G0", "authority_delta": "BASELINE_SOURCE_BINDING_LEGACY_FREEZE_PROGRAMME_CONTROLS", "next_packet": "C2AR-WP1"},
