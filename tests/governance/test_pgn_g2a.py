@@ -78,11 +78,14 @@ class NativeGenesisPortfolioG2ATests(unittest.TestCase):
 
     def test_qa_recommends_adjusted_scope_and_preserves_uncertainty(self) -> None:
         qa = load(QA)
-        self.assertEqual("PASS_ADJUST_SCOPE_PENDING_EXACT_HEAD_CI", qa["status"])
+        self.assertEqual("PASS_ADJUST_SCOPE", qa["status"])
         self.assertEqual("PASS_ADJUST_SCOPE_AND_PROCEED_TO_PGN_WP2E", qa["qa_recommendation"])
         self.assertFalse(qa["assessment"]["repository_history_complete"])
         self.assertFalse(qa["assessment"]["candidate_construction_authorised"])
         self.assertEqual("PGN-G2B", qa["assessment"]["expanded_acknowledgement_gate"])
+        self.assertEqual("PASS_RUN_30901795049", qa["checks"]["repository_tests"])
+        self.assertEqual("PASS_RUN_30901794677", qa["checks"]["ovc_final_head"])
+        self.assertEqual("PASS_JOB_91967638390", qa["checks"]["ovc_merge_readiness"])
         self.assertGreaterEqual(len(qa["warnings"]), 5)
         self.assertEqual([], qa["blockers"])
 
