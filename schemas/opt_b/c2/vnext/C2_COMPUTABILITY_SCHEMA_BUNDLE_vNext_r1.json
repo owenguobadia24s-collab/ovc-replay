@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/c2/vnext/computability/v1",
+  "title": "C2 vNext Computability Schema Bundle",
+  "maturity": "SHADOW_FROZEN_READ_ONLY",
+  "active": false,
+  "canonical": false,
+  "$defs": {
+    "dependencyEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dependency_id", "edge_type"],
+      "properties": {
+        "dependency_id": {"type": "string", "minLength": 1},
+        "edge_type": {"enum": ["REQUIRED", "OPTIONAL", "WARNING_ONLY", "ALTERNATIVE", "PROHIBITED"]},
+        "group_id": {"type": ["string", "null"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"edge_type": {"const": "ALTERNATIVE"}}},
+          "then": {"required": ["group_id"], "properties": {"group_id": {"type": "string", "minLength": 1}}}
+        }
+      ]
+    },
+    "dependencyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dependency_id", "edge_type", "status", "reason_codes"],
+      "properties": {
+        "dependency_id": {"type": "string", "minLength": 1},
+        "edge_type": {"enum": ["REQUIRED", "OPTIONAL", "WARNING_ONLY", "ALTERNATIVE", "PROHIBITED"]},
+        "status": {"type": "string", "minLength": 1},
+        "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "computabilityRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "record_id", "component_id", "profile_id", "unit_id", "as_of_time",
+        "availability_status", "computability_status", "assurance_status",
+        "consumer_policy_id", "consumer_eligibility_status", "authority_status",
+        "dependency_graph_id", "dependency_edges", "dependency_results",
+        "missing_dependency_ids", "satisfied_alternative_groups", "reason_codes",
+        "warnings", "age_evidence", "source_ids", "active", "canonical", "authority", "content_sha256"
+      ],
+      "properties": {
+        "schema": {"const": "c2_computability_record/vnext-r1"},
+        "record_id": {"type": "string", "pattern": "^C2\\.(COMPUTABILITY|CONSUMER\\.ELIGIBILITY)\\."},
+        "component_id": {"type": "string", "minLength": 1},
+        "profile_id": {"type": "string", "minLength": 1},
+        "unit_id": {"type": "string", "minLength": 1},
+        "as_of_time": {"type": "string", "minLength": 1},
+        "availability_status": {"enum": ["AVAILABLE", "UNAVAILABLE", "NOT_REQUESTED"]},
+        "computability_status": {"enum": ["COMPUTABLE", "NOT_COMPUTABLE", "NOT_APPLICABLE", "CENSORED", "CONFLICTED"]},
+        "assurance_status": {"enum": ["ASSURED", "UNASSURED", "CONFLICTED", "NOT_ASSESSED"]},
+        "consumer_policy_id": {"type": ["string", "null"]},
+        "consumer_eligibility_status": {"enum": ["ELIGIBLE", "INELIGIBLE", "NOT_EVALUATED"]},
+        "authority_status": {"enum": ["AUTHORIZED", "UNAUTHORIZED"]},
+        "eligibility_policy_version": {"type": "string"},
+        "staleness_policy_id": {"type": ["string", "null"]},
+        "dependency_graph_id": {"type": "string", "minLength": 1},
+        "dependency_edges": {"type": "array", "items": {"$ref": "#/$defs/dependencyEdge"}},
+        "dependency_results": {"type": "array", "items": {"$ref": "#/$defs/dependencyResult"}},
+        "missing_dependency_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "satisfied_alternative_groups": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}},
+        "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "warnings": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "age_evidence": {"type": "object"},
+        "source_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "active": {"const": false},
+        "canonical": {"const": false},
+        "authority": {"const": "SHADOW_FROZEN_READ_ONLY"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "denominatorRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "denominator_record_id", "scope_id", "scope_definition", "unit_type",
+        "consumer_policy_id", "dependency_graph_id", "eligibility_policy_version",
+        "denominator_definition", "numerator_definition", "overlap_policy_id",
+        "censor_conflict_treatment", "instrument_scope", "side_handling", "release_id",
+        "calendar_id", "clock_and_lattice_profile", "counts", "population_unit_ids",
+        "included_unit_ids", "numerator_unit_ids", "partition_checks", "rate",
+        "raw_counts_separate_from_rate", "active", "canonical", "authority", "content_sha256"
+      ],
+      "properties": {
+        "schema": {"const": "c2_denominator_record/vnext-r1"},
+        "denominator_record_id": {"type": "string", "pattern": "^C2\\.DENOMINATOR\\."},
+        "scope_id": {"type": "string", "minLength": 1},
+        "scope_definition": {"type": "string", "minLength": 1},
+        "unit_type": {"enum": ["OBSERVATION", "TRANSITION_PAIR", "OBJECT_TRACK", "WINDOW", "BUNDLE", "RELATION", "DETECTOR_OUTPUT"]},
+        "consumer_policy_id": {"type": "string", "minLength": 1},
+        "dependency_graph_id": {"type": "string", "minLength": 1},
+        "eligibility_policy_version": {"type": "string"},
+        "denominator_definition": {"type": "string", "minLength": 1},
+        "numerator_definition": {"type": "string", "minLength": 1},
+        "overlap_policy_id": {"type": "string", "minLength": 1},
+        "censor_conflict_treatment": {"type": "string", "minLength": 1},
+        "instrument_scope": {"type": "string", "minLength": 1},
+        "side_handling": {"type": "string", "minLength": 1},
+        "release_id": {"type": "string", "minLength": 1},
+        "calendar_id": {"type": "string", "minLength": 1},
+        "clock_and_lattice_profile": {"type": "string", "minLength": 1},
+        "counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["population_count", "requested_count", "not_requested_count", "applicable_count", "not_applicable_count", "available_count", "computable_count", "not_computable_count", "censored_count", "conflicted_count", "assured_count", "eligible_count", "included_count", "numerator_count", "denominator_count"],
+          "patternProperties": {".*_count$": {"type": "integer", "minimum": 0}}
+        },
+        "population_unit_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "included_unit_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "numerator_unit_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "partition_checks": {"type": "object", "additionalProperties": {"const": true}},
+        "rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "raw_counts_separate_from_rate": {"const": true},
+        "active": {"const": false},
+        "canonical": {"const": false},
+        "authority": {"const": "SHADOW_FROZEN_READ_ONLY"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "overlapReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "overlap_report_id", "claim_id", "unit_type", "cluster_policy_id", "raw_unit_ids", "raw_unit_count", "cluster_count", "clustered_unique_unit_count", "unclustered_unit_ids", "multi_cluster_unit_ids", "clusters", "canonical_weighting_selected", "canonical_deduplication_selected", "numeric_adjustment_selected", "raw_population_mutated", "active", "canonical", "authority", "content_sha256"],
+      "properties": {
+        "schema": {"const": "c2_overlap_report/vnext-r1"},
+        "overlap_report_id": {"type": "string", "pattern": "^C2\\.OVERLAP\\."},
+        "claim_id": {"type": "string", "minLength": 1},
+        "unit_type": {"type": "string", "minLength": 1},
+        "cluster_policy_id": {"type": "string", "minLength": 1},
+        "raw_unit_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "raw_unit_count": {"type": "integer", "minimum": 0},
+        "cluster_count": {"type": "integer", "minimum": 0},
+        "clustered_unique_unit_count": {"type": "integer", "minimum": 0},
+        "unclustered_unit_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "multi_cluster_unit_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "clusters": {"type": "array", "items": {"type": "object"}},
+        "canonical_weighting_selected": {"const": false},
+        "canonical_deduplication_selected": {"const": false},
+        "numeric_adjustment_selected": {"const": false},
+        "raw_population_mutated": {"const": false},
+        "active": {"const": false},
+        "canonical": {"const": false},
+        "authority": {"const": "SHADOW_FROZEN_READ_ONLY"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

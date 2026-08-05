@@ -1,0 +1,112 @@
+{
+  "schema": "ovc-c2ar-wp9-implementation-evidence/v1",
+  "programme": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "governing_plan": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION/0.3-REVISED",
+  "packet": "C2AR-WP9-IMPLEMENTATION",
+  "gate": "C2AR-G9A",
+  "operator_authority": "CEAR-G9.OPERATOR.PASS.20260805T081600+0100",
+  "baseline_commit": "255b7556bd3e9a0493a4fc3ee3300b9e1532623f",
+  "branch": "build/c2ar-wp9-computability",
+  "pull_request": 317,
+  "status": "IMPLEMENTED_PENDING_FINAL_ASSURANCE",
+  "implementation": {
+    "module": "src/ovc/opt_b/c2_vnext/computability.py",
+    "contract": "contracts/opt_b/c2/C2_COMPUTABILITY_CONTRACT_vNext.md",
+    "schema_bundle": "schemas/opt_b/c2/vnext/C2_COMPUTABILITY_SCHEMA_BUNDLE_vNext_r1.json",
+    "policy_registry": "registries/opt_b/c2/vnext/C2_COMPUTABILITY_POLICY_REGISTRY_v0_1.jsonc",
+    "fixture_pack": "fixtures/opt_b/c2/vnext/C2_COMPUTABILITY_FIXTURE_PACK_v0_1.json",
+    "legacy_crosswalk": "registries/opt_b/c2/vnext/C2_LEGACY_QUALITY_CROSSWALK_v0_1.jsonc",
+    "test": "tests/opt_b/c2/vnext/test_computability.py"
+  },
+  "capabilities": [
+    "PER_COMPONENT_AVAILABILITY_COMPUTABILITY_ASSURANCE_ELIGIBILITY_AND_AUTHORITY",
+    "VERSIONED_PROFILE_SPECIFIC_DEPENDENCY_GRAPH",
+    "SELECTIVE_EXACT_DEPENDENT_FAILURE_PROPAGATION",
+    "DISTINCT_NOT_REQUESTED_NOT_APPLICABLE_NOT_COMPUTABLE_CENSORED_CONFLICTED_OUTCOMES",
+    "INACTIVE_EXACT_CONSUMER_POLICY_EVALUATION",
+    "RAW_AGE_REQUIREMENTS_WITHOUT_NUMERIC_THRESHOLD",
+    "EXPLICIT_POPULATION_DENOMINATOR_ACCOUNTING",
+    "COMPARABLE_TRANSITION_PAIR_UNIT_SUPPORT",
+    "CLAIM_SPECIFIC_OVERLAP_CLUSTER_REPORTING",
+    "FAIL_CLOSED_POPULATION_COMPARABILITY",
+    "TRANSPARENT_NON_GOVERNING_LEGACY_QUALITY_PROJECTION"
+  ],
+  "synthetic_fixture_evidence": {
+    "case_count": 8,
+    "case_classes": [
+      "REQUIRED_SUCCESS_OPTIONAL_MISSING",
+      "REQUIRED_MISSING",
+      "ALTERNATIVE_SATISFIED",
+      "ALTERNATIVE_UNSATISFIED",
+      "PROHIBITED_PRESENT",
+      "CENSORED",
+      "NOT_REQUESTED",
+      "NOT_APPLICABLE"
+    ],
+    "denominator_population": {
+      "unit_type": "TRANSITION_PAIR",
+      "population_count": 6,
+      "requested_count": 5,
+      "not_requested_count": 1,
+      "applicable_count": 4,
+      "not_applicable_count": 1,
+      "computable_count": 2,
+      "not_computable_count": 1,
+      "censored_count": 1,
+      "conflicted_count": 0,
+      "eligible_count": 2,
+      "included_count": 2,
+      "numerator_count": 1,
+      "denominator_count": 2,
+      "rate": 0.5,
+      "all_partition_checks": "PASS"
+    },
+    "overlap_population": {
+      "unit_type": "TRANSITION_PAIR",
+      "raw_unit_count": 4,
+      "cluster_count": 2,
+      "clustered_unique_unit_count": 3,
+      "multi_cluster_unit_count": 1,
+      "unclustered_unit_count": 1,
+      "raw_population_preserved": true,
+      "canonical_adjustment_selected": false
+    }
+  },
+  "acceptance_results": [
+    {"condition": "PART_9_ACCEPTED_COMPUTABILITY_BOUNDARIES_IMPLEMENTED", "result": "PASS"},
+    {"condition": "OPTIONAL_DEPENDENCY_DOES_NOT_BLOCK_RAW_OUTPUT", "result": "PASS"},
+    {"condition": "AMBIGUITY_BLOCKS_UNIQUE_SELECTION_NOT_COMPLETE_INVENTORY", "result": "PASS"},
+    {"condition": "CENSORSHIP_NEVER_BECOMES_ZERO_OR_NEUTRAL", "result": "PASS"},
+    {"condition": "NUMERATOR_AND_DENOMINATOR_UNITS_COMPATIBLE", "result": "PASS"},
+    {"condition": "CLUSTER_POLICY_ID_SHARED_BY_CLUSTER_REPORT_AND_DENOMINATOR", "result": "PASS"},
+    {"condition": "ALL_POPULATION_LEDGERS_RECONCILE", "result": "PASS"},
+    {"condition": "GLOBAL_QUALITY_NON_GOVERNING", "result": "PASS"},
+    {"condition": "NO_DOWNSTREAM_AUTHORITY_GRANTED", "result": "PASS"}
+  ],
+  "negative_evidence": [
+    "ACTIVE_CONSUMER_POLICY_REJECTED",
+    "NUMERIC_STALENESS_THRESHOLD_REJECTED",
+    "PROHIBITED_DEPENDENCY_PRESENCE_CONFLICTED",
+    "DUPLICATE_POPULATION_UNIT_REJECTED",
+    "MIXED_UNIT_DENOMINATOR_REJECTED",
+    "OUT_OF_POPULATION_CLUSTER_MEMBER_REJECTED",
+    "UNAUTHORIZED_EPISODE_CLUSTER_REJECTED",
+    "POLICY_OR_UNIT_MISMATCH_NOT_COMPARABLE",
+    "PROHIBITED_OUTCOME_OR_VALIDATION_FIELD_REJECTED"
+  ],
+  "authority": {
+    "implementation": "SHADOW_FROZEN_READ_ONLY",
+    "active_consumer": "NONE",
+    "numeric_staleness_threshold": "NONE",
+    "canonical_overlap_adjustment": "NONE",
+    "global_quality_gating": "NONE",
+    "active_c2": "UNCHANGED",
+    "semantic_event_episode_rule": "NONE",
+    "publication_validation": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "external_artifacts": [],
+  "market_data": false,
+  "r2_writes": false,
+  "rollback": "Remove the inactive module, schemas, registries and routing from the unmerged branch or disable their shadow imports after merge. Preserve CEAR-G9 and all evidence. Active C2 requires no rollback."
+}
