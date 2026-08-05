@@ -23,7 +23,9 @@ R5_IDS = [
     "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
     "PD-JUNE-FULL-MONTH-MDR",
 ]
+R6_IDS = ["OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1"]
 R5_SHA = "36945653326c1bf23c7da0b00516351a2cb31e14f047f3d6b0fb395a6b12b6e1"
+R6_SHA = "bfe34292f0815eeae2ec1da9438ee9d20e4436a9444c1d3627d233b26ea245c5"
 DECISION_ID = "PGN-G3-R5.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T190200+0100"
 
 
@@ -46,6 +48,7 @@ class NativeGenesisPortfolioG3R5Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.r4_receipt = load(R4_RECEIPT)
+        cls.r5_receipt = load(R5_RECEIPT)
         cls.bundle = load(BUNDLE)
         cls.crosswalk = load(CROSSWALK)
         cls.qa = load(QA)
@@ -130,10 +133,22 @@ class NativeGenesisPortfolioG3R5Tests(unittest.TestCase):
         self.assertEqual("PGN-G3-R6", self.state["next_gate"])
         self.assertEqual([], self.state["blockers"])
 
-    def test_r6_remains_locked_before_post_merge_receipt(self) -> None:
-        self.assertFalse(R5_RECEIPT.exists())
-        with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R6", ROOT)
+    def test_post_merge_receipt_is_exact_and_unlocks_only_r6(self) -> None:
+        self.assertEqual(332, self.r5_receipt["pull_request"])
+        self.assertEqual("0c33793a05738018f1560456ab2468babee4407d", self.r5_receipt["final_head"])
+        self.assertEqual("04e1c0bfe8b8888f201b217990104be002262fc7", self.r5_receipt["merge_commit"])
+        for key in ("repository_tests", "ovc_final_head", "merge_readiness", "compatibility"):
+            self.assertEqual("SUCCESS", self.r5_receipt["exact_head_assurance"][key]["conclusion"])
+        self.assertEqual(0, self.r5_receipt["exact_head_assurance"]["unresolved_review_threads"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R6_ONLY", self.r5_receipt["authority_effect"])
+        self.assertEqual("NONE", self.r5_receipt["native_adoption"])
+        self.assertEqual("NONE", self.r5_receipt["cross_programme_edge_acceptance"])
+        r6 = self.builder.build_group("PGN-G3-R6", ROOT)
+        self.assertEqual(R6_IDS, r6["candidate_ids"])
+        self.assertEqual(R6_SHA, r6["candidate_group_sha256"])
+        self.assertEqual(1, r6["candidate_count"])
+        self.assertEqual("NONE", r6["authority_effect"])
+        self.assertEqual("DENIED_PENDING_PGN_G3", r6["native_adoption"])
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
 
 
