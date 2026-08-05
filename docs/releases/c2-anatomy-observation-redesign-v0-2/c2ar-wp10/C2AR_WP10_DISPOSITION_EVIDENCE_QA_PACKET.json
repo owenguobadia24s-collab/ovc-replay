@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-c2ar-wp10-disposition-evidence-qa/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "packet_id": "C2AR-WP10-DISPOSITION-EVIDENCE",
+  "gate_retained": "CEAR-G10",
+  "status": "QA_REVIEW",
+  "scope": [
+    "COMPACT_REPLAY_RECONCILIATION",
+    "CANDIDATE_LINEAGE_AND_COUNTEREXAMPLES",
+    "MATCHED_CONTROL_COVERAGE",
+    "CLOCK_SIDE_SEQUENCE_AND_TIME_STABILITY",
+    "REDUNDANCY_AND_COOCCURRENCE",
+    "PREREGISTERED_PARAMETER_PERTURBATION",
+    "LEGACY_BENCHMARK_COMPARISON_OR_EXPLICIT_DEFER"
+  ],
+  "focused_tests": {
+    "command": "PYTHONPATH=src python tests/opt_b/c2/vnext/test_disposition_evidence.py -v",
+    "result": "PASS",
+    "test_count": 4
+  },
+  "verified_boundaries": {
+    "bulk_external_payloads_remain_outside_git": true,
+    "source_replay_is_read_only": true,
+    "terminal_receipts_must_pass": true,
+    "run_manifests_must_reconcile": true,
+    "evaluations_must_account_for_every_opportunity": true,
+    "controls_must_disclose_unmatched_requests": true,
+    "hidden_nearest_or_best_control_selection": false,
+    "legacy_upstream_effect": "NONE",
+    "candidate_selection_or_promotion_effect": "NONE",
+    "active_c2_effect": "NONE"
+  },
+  "warnings": [
+    "OPERATOR_LOCAL_EXTERNAL_REPLAY_BYTES_REQUIRED",
+    "LEGACY_BENCHMARK_MAPPINGS_MUST_DEFER_UNLESS_EXACT_VNEXT_OPPORTUNITY_IDENTITIES_EXIST"
+  ],
+  "qa_recommendation": "PASS_TOOLING_PACKET_PRESERVE_CEAR_G10_OPERATOR_GATE",
+  "operator_decision_required": false,
+  "reserved_authority_effect": "NONE",
+  "rollback": "Remove the analyser, entrypoint, tests and compact-analysis metadata. Preserve the completed external replay and PR 319 blocked evidence."
+}
