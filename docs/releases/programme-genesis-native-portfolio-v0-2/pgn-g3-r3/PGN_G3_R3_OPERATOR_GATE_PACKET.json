@@ -4,13 +4,20 @@
   "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
   "plan_version": "0.2",
   "gate_id": "PGN-G3-R3",
-  "title": "Acknowledge the third progressive native Genesis candidate review group",
+  "title": "Acknowledge the amended third progressive native Genesis candidate review group",
   "status": "GATE_READY",
   "operator_decision_required": true,
   "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
+  "main_at_scope_adjustment": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
   "candidate_branch": "gate/pgn-g3-r3-development-infrastructure",
   "candidate_commit": "BOUND_BY_PR_290_FINAL_HEAD",
-  "assured_gate_head": "066b807f1cae47f788cf555b505f6a4dbcd7d2d3",
+  "assured_gate_head": "PENDING_FINAL_HEAD_CI_AFTER_SCOPE_AMENDMENT",
+  "scope_adjustment_decision": {
+    "decision_id": "PGN-G3-R3.OPERATOR.ADJUST_SCOPE.20260805T152000+0100",
+    "decision": "ADJUST_SCOPE",
+    "record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_ADJUST_SCOPE_OPERATOR_DECISION.json",
+    "authority_effect": "NONE"
+  },
   "completed_packets": [
     "PGN-00",
     "PGN-WP1",
@@ -20,11 +27,12 @@
     "PGN-G2B",
     "PGN-WP3",
     "PGN-G3-R1",
-    "PGN-G3-R2"
+    "PGN-G3-R2",
+    "PGN-G3-R3-ARTIFACT-GOVERNANCE-AMENDMENT"
   ],
   "current_authority": {
     "candidate_commitments": "APPROVED_AS_UNAPPROVED_REVIEW_EVIDENCE",
-    "current_review_group": "PGN-G3-R3_DISCLOSED_PENDING_OPERATOR_ACKNOWLEDGEMENT",
+    "current_review_group": "PGN-G3-R3_AMENDED_DISCLOSED_PENDING_OPERATOR_ACKNOWLEDGEMENT",
     "later_review_groups": "LOCKED",
     "native_genesis_adoption": "DENIED_PENDING_COMPLETION_OF_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
     "cross_programme_edges": "DENIED_PENDING_PGN_G5",
@@ -34,7 +42,7 @@
     "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
     "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
   },
-  "proposed_delta": "ACKNOWLEDGE_REVIEW_OF_PGN_G3_R3_WITHOUT_ADOPTING_ANY_CANDIDATE_AND_AUTHORISE_DISCLOSURE_AND_MATERIALISATION_OF_PGN_G3_R4_ONLY",
+  "proposed_delta": "ACKNOWLEDGE_REVIEW_OF_AMENDED_PGN_G3_R3_WITHOUT_ADOPTING_ANY_CANDIDATE_AND_AUTHORISE_DISCLOSURE_AND_MATERIALISATION_OF_PGN_G3_R4_ONLY",
   "review_group": {
     "review_group_id": "PGN-G3-R3",
     "review_domain": "DEVELOPMENT_INFRASTRUCTURE",
@@ -42,40 +50,25 @@
     "candidate_group_sha256": "95c6d187900a4c0ad94fff94cfeb63791f8cf7b6c537379df7a666143a02f296",
     "candidate_bundle": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_CANDIDATE_REVIEW_BUNDLE.json",
     "candidates": [
-      {
-        "programme_id": "OVC-DEV-ACCEL-v0.1",
-        "candidate_class": "DEVELOPMENT_INFRASTRUCTURE",
-        "candidate_status": "CANDIDATE_UNAPPROVED",
-        "source_dossier": "docs/releases/development-acceleration-v0-1/da-00/DA_00_BASELINE_METRICS_PACKET.json",
-        "source_set_sha256": "3108c11cd06667571f206a76487488061804cd82453a8be9e2d4260fd8d5c40e",
-        "source_authority_preserved": true,
-        "source_lifecycle_modified": false,
-        "unresolved_field_count": 8,
-        "adoption_effect": "NONE"
-      },
-      {
-        "programme_id": "OVC-DEV-ACCEL-v0.2",
-        "candidate_class": "DEVELOPMENT_INFRASTRUCTURE",
-        "candidate_status": "CANDIDATE_UNAPPROVED",
-        "source_dossier": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_COMPLETION_DECISION.json",
-        "source_set_sha256": "cce403c401b5084e6b2d8c757235fa8fbe89b66619a4aaa6528fb4fa0cedd09a",
-        "source_authority_preserved": true,
-        "source_lifecycle_modified": false,
-        "unresolved_field_count": 8,
-        "adoption_effect": "NONE"
-      },
-      {
-        "programme_id": "OVC-DISCOVERY-OPERATING-HUB.v0.1",
-        "candidate_class": "RESEARCH_INFRASTRUCTURE",
-        "candidate_status": "CANDIDATE_UNAPPROVED",
-        "source_dossier": "docs/releases/discovery-operating-hub-v0-1/programme-disposition/DO_PROGRAMME_OPERATOR_DEFER_DECISION.json",
-        "source_set_sha256": "e7d196ff713c86392dec63f91423578a4724cd417750fe7225c3cc33958d37b3",
-        "source_authority_preserved": true,
-        "source_lifecycle_modified": false,
-        "unresolved_field_count": 8,
-        "adoption_effect": "NONE"
-      }
+      {"programme_id": "OVC-DEV-ACCEL-v0.1", "candidate_class": "DEVELOPMENT_INFRASTRUCTURE", "candidate_status": "CANDIDATE_UNAPPROVED", "source_dossier": "docs/releases/development-acceleration-v0-1/da-00/DA_00_BASELINE_METRICS_PACKET.json", "source_set_sha256": "3108c11cd06667571f206a76487488061804cd82453a8be9e2d4260fd8d5c40e", "unresolved_field_count": 8, "adoption_effect": "NONE"},
+      {"programme_id": "OVC-DEV-ACCEL-v0.2", "candidate_class": "DEVELOPMENT_INFRASTRUCTURE", "candidate_status": "CANDIDATE_UNAPPROVED", "source_dossier": "docs/releases/development-acceleration-v0-2/da2-g0/DA2_G0_COMPLETION_DECISION.json", "source_set_sha256": "cce403c401b5084e6b2d8c757235fa8fbe89b66619a4aaa6528fb4fa0cedd09a", "unresolved_field_count": 8, "adoption_effect": "NONE"},
+      {"programme_id": "OVC-DISCOVERY-OPERATING-HUB.v0.1", "candidate_class": "RESEARCH_INFRASTRUCTURE", "candidate_status": "CANDIDATE_UNAPPROVED", "source_dossier": "docs/releases/discovery-operating-hub-v0-1/programme-disposition/DO_PROGRAMME_OPERATOR_DEFER_DECISION.json", "source_set_sha256": "e7d196ff713c86392dec63f91423578a4724cd417750fe7225c3cc33958d37b3", "unresolved_field_count": 8, "adoption_effect": "NONE"}
     ]
+  },
+  "artifact_governance_amendment": {
+    "contract": "contracts/governance/programme_genesis/OVC_PGN_ARTIFACT_GOVERNANCE_CROSSWALK_CONTRACT_v0_1.md",
+    "schema": "schemas/governance/programme_genesis/pgn_artifact_governance_crosswalk_v0_1.schema.json",
+    "protocol": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_REVIEW_PROTOCOL_AMENDMENT_v0_1.json",
+    "r1_retrospective_supplement": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r1/PGN_G3_R1_ARTIFACT_GOVERNANCE_SUPPLEMENT.json",
+    "r2_retrospective_supplement": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r2/PGN_G3_R2_ARTIFACT_GOVERNANCE_SUPPLEMENT.json",
+    "r3_crosswalk": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_ARTIFACT_GOVERNANCE_CROSSWALK.json",
+    "groups_covered_now": ["PGN-G3-R1", "PGN-G3-R2", "PGN-G3-R3"],
+    "groups_required_prospectively": ["PGN-G3-R4", "PGN-G3-R5", "PGN-G3-R6"],
+    "candidate_crosswalk_count": 9,
+    "r3_candidate_relation_count": 2,
+    "r3_unresolved_relation_count": 0,
+    "candidate_relations_can_satisfy_native_adoption": false,
+    "authority_effect": "NONE"
   },
   "shared_candidate_limits": {
     "historical_purpose": "UNRESOLVED_EXACT_SOURCE_TEXT",
@@ -93,35 +86,26 @@
     "EXACT_THREE_R3_CANDIDATES_HAVE_BEEN_REVIEWED",
     "ALL_THREE_REMAIN_CANDIDATE_UNAPPROVED",
     "SOURCE_IDENTITIES_HASHES_LIFECYCLES_AND_AUTHORITY_ARE_PRESERVED",
-    "UNRESOLVED_FIELDS_ARE_VISIBLE_AND_NOT_SILENTLY_FILLED",
-    "NO_HISTORICAL_INTENT_IS_FABRICATED",
+    "R1_AND_R2_RETROSPECTIVE_CROSSWALK_SUPPLEMENTS_EXIST",
+    "R3_ARTIFACT_GOVERNANCE_CROSSWALK_IS_SCHEMA_VALID",
+    "EVERY_RELATIONSHIP_HAS_EXACT_EVIDENCE_PATH_AND_HASH",
+    "CANDIDATE_RELATIONS_REMAIN_VISIBLE_AND_NON_AUTHORITATIVE",
+    "R4_R5_R6_CROSSWALK_REQUIREMENT_IS_MATERIALISED",
     "ACKNOWLEDGEMENT_IS_NOT_NATIVE_ADOPTION",
-    "NO_PGN_G3_NATIVE_ADOPTION_DECISION_EXISTS",
-    "NO_LATER_GROUP_MEMBER_IDENTITIES_OR_BODIES_ARE_DISCLOSED",
-    "PGN_G3_R4_REMAINS_LOCKED_UNTIL_THE_R3_ACKNOWLEDGEMENT_RECEIPT_IS_MERGED",
+    "NO_CROSS_PROGRAMME_HARD_DEPENDENCY_IS_ACCEPTED",
+    "NO_CONSTITUTIONAL_PARENTAGE_OR_AUTHORITY_INHERITANCE_IS_ACCEPTED",
+    "PGN_G3_R4_REMAINS_LOCKED_UNTIL_THE_AMENDED_R3_ACKNOWLEDGEMENT_RECEIPT_IS_MERGED",
     "NO_RESERVED_MARKET_RELEASE_VALIDATION_PUBLICATION_AGENT_OR_EXPOSURE_AUTHORITY"
   ],
   "tests": {
-    "focused": "tests/governance/test_pgn_g3_r3.py",
-    "repository_required": [
-      "tests",
-      "OVC merge readiness"
+    "focused": [
+      "tests/governance/test_pgn_g3_r3.py",
+      "tests/governance/test_pgn_g3_artifact_governance_crosswalk.py"
     ],
-    "assured_gate_head": "066b807f1cae47f788cf555b505f6a4dbcd7d2d3",
-    "repository_tests": {
-      "run_id": 30918849189,
-      "conclusion": "SUCCESS"
-    },
-    "ovc_final_head": {
-      "run_id": 30918849159,
-      "job_id": 92023844302,
-      "conclusion": "SUCCESS"
-    },
-    "ovc_merge_readiness": {
-      "run_id": 30918849159,
-      "job_id": 92023928963,
-      "conclusion": "SUCCESS"
-    },
+    "repository_required": ["tests", "OVC merge readiness"],
+    "repository_tests": {"conclusion": "PENDING_SCOPE_AMENDMENT_FINAL_HEAD"},
+    "ovc_final_head": {"conclusion": "PENDING_SCOPE_AMENDMENT_FINAL_HEAD"},
+    "ovc_merge_readiness": {"conclusion": "PENDING_SCOPE_AMENDMENT_FINAL_HEAD"},
     "final_packet_head_assurance": "REQUIRED_ON_PR_290_HEAD"
   },
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_QA_PACKET.json",
@@ -129,31 +113,14 @@
   "warnings": [
     "ALL_THREE_OBJECTS_REMAIN_CANDIDATE_UNAPPROVED",
     "EIGHT_NATIVE_FIELDS_REMAIN_UNRESOLVED_PER_CANDIDATE",
+    "TWO_R3_PLAN_RELATIONSHIPS_REMAIN_CANDIDATE_RELATIONS",
     "ACKNOWLEDGEMENT_UNLOCKS_ONLY_THE_NEXT_PROGRESSIVE_REVIEW_GROUP",
-    "ACKNOWLEDGEMENT_DOES_NOT_ADOPT_ANY_CANDIDATE",
     "PGN_G3_NATIVE_ADOPTION_REMAINS_A_SEPARATE_OPERATOR_REQUIRED_DECISION"
   ],
   "unresolved_issues": [],
-  "changed_files": [
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews/PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_CANDIDATE_REVIEW_BUNDLE.json",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_QA_PACKET.json",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_OPERATOR_GATE_PACKET.json",
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_PROGRAMME_STATE_UPDATE.json",
-    "tests/governance/test_pgn_g3_r1.py",
-    "tests/governance/test_pgn_g3_r2.py",
-    "tests/governance/test_pgn_g3_r3.py",
-    "tests/governance/test_pgn_wp3.py"
-  ],
-  "rollback": "Preserve PGN-WP3, R1, R2 acknowledgement and sealed commitments. Choose DEFER, ADJUST_SCOPE or QUARANTINE without creating an R3 acknowledgement receipt and without disclosing PGN-G3-R4.",
-  "allowed_decisions": [
-    "ACKNOWLEDGE_CONTINUE",
-    "ADJUST_SCOPE",
-    "DEFER",
-    "BLOCK",
-    "QUARANTINE"
-  ],
+  "rollback": "Preserve PGN-WP3, R1 and R2 acknowledgement receipts, the operator scope-adjustment decision and sealed commitments. Supersede incorrect crosswalks append-only and do not disclose PGN-G3-R4.",
+  "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "ADJUST_SCOPE", "DEFER", "BLOCK", "QUARANTINE"],
   "recommended_decision": "ACKNOWLEDGE_CONTINUE",
   "exact_operator_command": "OVC APPROVE PGN-G3-R3 ACKNOWLEDGE_CONTINUE",
-  "work_after_approval": "Record and merge the immutable R3 acknowledgement receipt. Keep all R3 candidates unapproved. Then disclose and materialise PGN-G3-R4 only; do not adopt any candidate and do not disclose later groups."
+  "work_after_approval": "Record and merge the amended R3 acknowledgement receipt. Keep all candidates unapproved. Then disclose and materialise PGN-G3-R4 with its mandatory artifact-governance crosswalk; do not adopt any candidate or disclose later groups."
 }
