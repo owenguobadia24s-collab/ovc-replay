@@ -1,0 +1,83 @@
+{
+  "schema": "ovc-c2ar-wp10-input-resolution-qa-packet/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "packet_id": "C2AR-WP10-INPUT-RESOLUTION",
+  "gate_retained": "CEAR-G10",
+  "qa_packet_id": "C2AR.WP10.INPUT_RESOLUTION.QA.20260805.v1",
+  "baseline_commit": "f04ddc7263972687913b112c7ff03ba183931d55",
+  "candidate_commit": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99",
+  "branch": "build/c2ar-wp10-input-resolution-full-replay",
+  "pull_request": 320,
+  "assurance_surface_pull_request": 321,
+  "scope_assessed": [
+    "FAIL_CLOSED_INPUT_BINDING_BUILDER_AND_VALIDATOR",
+    "OPERATOR_LOCAL_FULL_REPLAY_COMMAND_SURFACE",
+    "COMPLETE_TARGET_JUNE_REGISTERED_SEQUENCE_OPPORTUNITY_CONSTRUCTION",
+    "TWO_CLEAN_RUN_AND_CHECKPOINT_RESTART_ORCHESTRATION",
+    "LOGICAL_HASH_COUNT_ARTIFACT_AND_CAPACITY_RECEIPTS",
+    "AUTHORITY_AND_LEGACY_OUTCOME_VALIDATION_ISOLATION"
+  ],
+  "tests": [
+    {
+      "workflow": "tests",
+      "run_id": 30997804837,
+      "job_id": 92279033685,
+      "head": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99",
+      "test_count": 282,
+      "result": "PASS"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 30997804906,
+      "profile": "FINAL_HEAD",
+      "head": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99",
+      "result": "PASS"
+    },
+    {
+      "check": "OVC merge readiness",
+      "run_id": 30997804906,
+      "head": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99",
+      "result": "PASS"
+    },
+    {
+      "check": "unresolved review threads",
+      "pull_request": 320,
+      "result": "ZERO"
+    }
+  ],
+  "verified_results": {
+    "repository_import_and_syntax": "PASS",
+    "focused_input_binding_and_request_accounting_tests": "PASS",
+    "complete_repository_regression_suite": "PASS",
+    "frozen_repository_census": "PASS_UNCHANGED",
+    "active_c2_authority": "UNCHANGED_READ_ONLY",
+    "legacy_c2_upstream_use": "ZERO",
+    "outcome_dependency": "ZERO",
+    "validation_dependency": "ZERO",
+    "selector_publication_r2_and_execution_authority": "DENIED",
+    "real_operator_local_replay_executed": "NO_EXTERNAL_SOURCE_ENVIRONMENT_UNAVAILABLE_TO_CI"
+  },
+  "acceptance_conditions": {
+    "runner_binding_schema_entrypoint_and_tests_complete": "PASS",
+    "two_clean_run_and_restart_logic_implemented": "PASS",
+    "large_outputs_external_only": "PASS",
+    "authority_delta_auto_executable_only": "PASS",
+    "real_replay_receipts_available": "BLOCKED_PENDING_OPERATOR_LOCAL_EXECUTION",
+    "cear_g10_candidate_dispositions_ready": "NOT_EVALUABLE"
+  },
+  "warnings": [
+    "CANONICAL_WORKFLOWS_REQUIRED_TEMPORARY_DRAFT_ASSURANCE_PR_321_BECAUSE_STACKED_PR_TARGET_DOES_NOT_TRIGGER_MAIN_ONLY_WORKFLOWS",
+    "PASS_APPLIES_ONLY_TO_TOOLING_PACKET_NOT_CEAR_G10",
+    "REAL_SOURCE_BYTES_REMAIN_OPERATOR_LOCAL",
+    "PR_319_MUST_REMAIN_UNMERGED_TO_MAIN",
+    "WP11_REMAINS_LOCKED"
+  ],
+  "unresolved_issues": [
+    "CEAR-G10-BLOCKER-001",
+    "OPERATOR_LOCAL_FULL_REPLAY_EXECUTION_AND_COMPACT_EVIDENCE_RETURN_REQUIRED"
+  ],
+  "qa_recommendation": "PASS_TOOLING_PACKET_PRESERVE_CEAR_G10_BLOCK",
+  "rollback": "Close PR 320 or revert its bounded commit from the retained PR 319 branch. No accepted WP9 or active C2 state changes."
+}

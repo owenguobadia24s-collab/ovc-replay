@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-c2ar-programme-state-delta/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "state_id": "C2AR.STATE.WP10.INPUT_RESOLUTION.INTEGRATED_BLOCKED.v1",
+  "supersedes_state_path": "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_CEAR_G10_FINAL_BLOCKED_STATE_v0_3.jsonc",
+  "status": "BLOCKED",
+  "current_packet": "C2AR-WP10",
+  "completed_subpacket": "C2AR-WP10-INPUT-RESOLUTION",
+  "current_gate": "CEAR-G10",
+  "operator_decision_required": false,
+  "decision_readiness": "NOT_READY_OPERATOR_LOCAL_REPLAY_REQUIRED",
+  "blocker_id": "CEAR-G10-BLOCKER-001",
+  "main_baseline": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
+  "branch": "build/c2ar-wp10-functional-discovery-rules",
+  "pull_request": 319,
+  "input_resolution_pull_request": 320,
+  "input_resolution_final_head": "6e40dcb7edc8f76f219c56707e6bb9b391729fb0",
+  "input_resolution_integration_commit": "220a6094a52382634c405bd2c06bc44778bc4683",
+  "qa_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_RESOLUTION_QA_PACKET.json",
+  "decision_record": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_RESOLUTION_DELEGATED_DECISION.json",
+  "merge_receipt": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_RESOLUTION_MERGE_RECEIPT.json",
+  "assurance": [
+    {"workflow": "tests", "run_id": 30998287421, "result": "PASS", "head": "220a6094a52382634c405bd2c06bc44778bc4683"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30998287677, "profile": "FINAL_HEAD", "result": "PASS", "head": "220a6094a52382634c405bd2c06bc44778bc4683"},
+    {"check": "OVC merge readiness", "run_id": 30998287677, "result": "PASS", "head": "220a6094a52382634c405bd2c06bc44778bc4683"}
+  ],
+  "completed_preparation": {
+    "functional_discovery_machinery": "IMPLEMENTED",
+    "full_replay_input_binding_builder": "IMPLEMENTED_ASSURED_AND_INTEGRATED",
+    "full_replay_schema": "IMPLEMENTED_ASSURED_AND_INTEGRATED",
+    "operator_local_entrypoint": "IMPLEMENTED_ASSURED_AND_INTEGRATED",
+    "complete_sequence_opportunity_builder": "IMPLEMENTED_ASSURED_AND_INTEGRATED",
+    "two_clean_run_orchestration": "IMPLEMENTED_ASSURED_AND_INTEGRATED",
+    "checkpoint_restart_orchestration": "IMPLEMENTED_ASSURED_AND_INTEGRATED",
+    "determinism_count_artifact_and_capacity_receipts": "IMPLEMENTED_ASSURED_AND_INTEGRATED",
+    "operator_local_real_vnext_population_execution": "PENDING"
+  },
+  "remaining_required_artifacts": [
+    "GENERATED_C2_VNEXT_FULL_REPLAY_INPUT_BINDING",
+    "TWO_OPERATOR_LOCAL_CLEAN_RUN_MANIFESTS",
+    "DETERMINISM_RECEIPT_PASS",
+    "RESTART_RECEIPT_PASS",
+    "CAPACITY_RECEIPTS_PASS",
+    "COMPACT_REAL_POPULATION_RECONCILIATION_AND_QA_PACKET"
+  ],
+  "authority": {
+    "input_resolution_tooling": "COMPLETED_INACTIVE_ONLY",
+    "discovery_method": "CANDIDATE_NOT_ADMITTED",
+    "real_functional_candidates": "NONE",
+    "real_rule_candidates": "NONE",
+    "research_consumer_permission": "NONE",
+    "all_reserved_downstream_authority": "NONE",
+    "active_c2": "UNCHANGED_READ_ONLY"
+  },
+  "qa_recommendation": "PASS_TOOLING_PACKET_PRESERVE_CEAR_G10_BLOCK",
+  "blockers": [
+    "CEAR-G10-BLOCKER-001",
+    "OPERATOR_LOCAL_ACCEPTED_SOURCE_BYTES_AND_EXECUTION_ENVIRONMENT_REQUIRED",
+    "REAL_REPLAY_RECEIPTS_NOT_YET_PRODUCED"
+  ],
+  "main_merge_status": "PROHIBITED",
+  "continuation_point": "C2AR-WP10_OPERATOR_LOCAL_FULL_REPLAY_EXECUTION",
+  "exact_operator_sequence": [
+    ".\\scripts\\c2ar\\run_vnext_full_replay.ps1 -Command build-binding",
+    ".\\scripts\\c2ar\\run_vnext_full_replay.ps1 -Command preflight",
+    ".\\scripts\\c2ar\\run_vnext_full_replay.ps1 -Command execute",
+    "OVC CONTINUE"
+  ],
+  "next_packet": "C2AR-WP10-REAL-POPULATION-EVIDENCE-INGEST",
+  "wp11_status": "LOCKED",
+  "rollback": "Revert the input-resolution integration from the retained PR 319 branch. Main, accepted WP9 and active C2 remain unchanged."
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "ovc-c2ar-programme-state-delta/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "state_id": "C2AR.STATE.CEAR_G10.BLOCKED.INPUT_UNAVAILABLE.v1",
+  "supersedes_state_path": "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_WP9_MERGED_STATE_v0_3.jsonc",
+  "status": "BLOCKED",
+  "current_packet": "C2AR-WP10",
+  "current_gate": "CEAR-G10",
+  "operator_decision_required": false,
+  "decision_readiness": "NOT_READY_REQUIRED_ARTIFACT_BLOCKER",
+  "recommended_disposition": "BLOCK",
+  "blocker_id": "CEAR-G10-BLOCKER-001",
+  "blocker_class": "REQUIRED_ARTIFACT_UNAVAILABLE_OR_NON_REPRODUCIBLE",
+  "baseline_commit": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
+  "branch": "build/c2ar-wp10-functional-discovery-rules",
+  "pull_request": 319,
+  "candidate_commit": "BOUND_BY_PR_319_FINAL_BLOCKED_HEAD",
+  "gate_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/CEAR_G10_BLOCKED_PACKET.json",
+  "qa_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/CEAR_G10_BLOCKED_QA_PACKET.json",
+  "input_audit": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_AVAILABILITY_AUDIT.json",
+  "synthetic_preparation_evidence": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_SYNTHETIC_PREPARATION_EVIDENCE.json",
+  "completed_preparation": {
+    "discovery_view_and_method_candidate": "IMPLEMENTED_NON_EFFECTIVE",
+    "complete_opportunity_builder": "IMPLEMENTED_AND_SYNTHETICALLY_TESTED",
+    "neutral_fingerprints": "IMPLEMENTED_AND_SYNTHETICALLY_TESTED",
+    "motifs_and_provisional_families": "IMPLEMENTED_AND_SYNTHETICALLY_TESTED",
+    "functional_cores": "IMPLEMENTED_AND_SYNTHETICALLY_TESTED",
+    "restricted_rule_compiler_and_evaluator": "IMPLEMENTED_AND_SYNTHETICALLY_TESTED",
+    "matched_controls": "IMPLEMENTED_AND_SYNTHETICALLY_TESTED",
+    "legacy_benchmark_comparison": "IMPLEMENTED_AND_SYNTHETICALLY_TESTED",
+    "real_vnext_population_execution": "BLOCKED"
+  },
+  "missing_required_artifacts": [
+    "C2_VNEXT_FULL_POPULATION_REPLAY_MANIFEST",
+    "READABLE_CONTENT_ADDRESSED_VNEXT_REPLAY_PAYLOADS",
+    "EXACT_FROZEN_COMPONENT_PROFILE_POLICY_AND_CODE_BINDINGS",
+    "COMPLETE_OPPORTUNITY_INPUT_UNIT_LEDGER",
+    "TWO_CLEAN_IDENTICAL_RUN_HASH_RECEIPT",
+    "CAPACITY_CHECKPOINT_AND_RESTART_RECEIPT"
+  ],
+  "available_but_insufficient_evidence": {
+    "legacy_manifest": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/output-manifest.json",
+    "legacy_release": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+    "legacy_manifest_sha256": "e805eaa0f8603da644d23d83297fdc5e62142f8051d8583c9c28c9469a3b704b",
+    "legacy_payload_hash": "d784f47395d904b2d78d77cde0a8a40287877692d8b92889ab2eeedef621a24b",
+    "availability": "MANIFEST_ONLY_PAYLOAD_BYTES_NOT_READABLE",
+    "substitution": "PROHIBITED"
+  },
+  "authority": {
+    "discovery_method": "CANDIDATE_NOT_ADMITTED",
+    "synthetic_motifs_families_functional_cores_and_rules": "PROVISIONAL_DISCOVERY_RESEARCH_ONLY_NOT_DISPOSITION_ELIGIBLE",
+    "real_functional_candidates": "NONE",
+    "real_rule_candidates": "NONE",
+    "legacy_benchmark_dispositions": "NONE",
+    "research_consumer_permission": "NONE",
+    "selector_event_episode_semantic_outcome": "NONE",
+    "c2e_c2_5_c3": "NONE",
+    "canonical_r2_publication": "NONE",
+    "validation_probability_risk_exposure_execution": "NONE",
+    "active_c2": "UNCHANGED_READ_ONLY"
+  },
+  "acceptance": {
+    "condition_70": "BLOCKED",
+    "condition_71": "NOT_EVALUABLE",
+    "condition_72": "NOT_EVALUABLE",
+    "condition_73": "PASS"
+  },
+  "tests": {
+    "pre_blocker_complete_suite": {"run_id": 30988288881, "result": "PASS", "test_count": 274, "head": "92a996721bfcd88b4038a7330e6a266059516f3e"},
+    "pre_blocker_final_head": {"run_id": 30988288848, "result": "PASS", "head": "92a996721bfcd88b4038a7330e6a266059516f3e"},
+    "final_blocked_head": "PENDING"
+  },
+  "qa_recommendation": "BLOCK",
+  "blockers": ["CEAR-G10-BLOCKER-001"],
+  "warnings": [
+    "PREPARATION_CODE_PASSES_BUT_MUST_REMAIN_UNMERGED",
+    "LEGACY_V1_SYNTHETIC_SAMPLED_OR_MANIFEST_ONLY_EVIDENCE_CANNOT_SUBSTITUTE_FOR_VNEXT_FULL_POPULATION",
+    "NO_CEAR_G10_OPERATOR_DISPOSITION_SURFACE_EXISTS_YET",
+    "WP11_REMAINS_LOCKED",
+    "ACTIVE_C2_REMAINS_UNCHANGED"
+  ],
+  "smallest_lawful_resolution": "SUPPLY_OR_PRODUCE_CONTENT_ADDRESSED_COMPLETE_REVISED_VNEXT_REPLAY_WITH_READABLE_PAYLOADS_EXACT_BINDINGS_TWO_CLEAN_IDENTICAL_HASHES_AND_CAPACITY_RECEIPTS",
+  "continuation_point": "C2AR-WP10_INPUT_RESOLUTION_BEFORE_REAL_OPPORTUNITY_BUILD",
+  "exact_resume_command": "OVC CONTINUE",
+  "merge_status": "PROHIBITED_WHILE_BLOCKED",
+  "next_packet": "C2AR-WP10_AFTER_INPUT_RESOLUTION",
+  "wp11_status": "LOCKED",
+  "rollback": "Retain PR 319 and branch evidence unmerged. Closing the PR does not affect accepted WP9 or active C2."
+}

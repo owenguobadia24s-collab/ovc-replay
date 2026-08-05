@@ -1,0 +1,43 @@
+{
+  "acceptance": {
+    "CEAR-G10-A70": "PASS_COMPLETE_CONTENT_ADDRESSED_REPLAY",
+    "CEAR-G10-A71": "PASS_14_CANDIDATE_LINEAGE_CONTROL_COUNTEREXAMPLE_STABILITY_SURFACES",
+    "CEAR-G10-A72": "PASS_WITH_TWO_INDEPENDENT_LEGACY_MAPPING_DEFERS",
+    "CEAR-G10-A73": "PASS_RESERVED_AUTHORITY_UNCHANGED"
+  },
+  "blocking_warnings": [],
+  "gate_id": "CEAR-G10",
+  "nonblocking_warnings": [
+    {
+      "candidate_ids": [
+        "C2.RULE.CANDIDATE.1863494da8e1614cba3cf183",
+        "C2.RULE.CANDIDATE.b5af87038319d59d331d365e"
+      ],
+      "disposition": "NONBLOCKING_UNMATCHED_REQUESTS_AND_REASONS_EXPLICIT_NO_FALLBACK",
+      "id": "CEAR-G10-WARN-001",
+      "summary": "INCOMPLETE_EXACT_STRATUM_CONTROL_COVERAGE"
+    },
+    {
+      "disposition": "PRESERVE_SCOPE_WARNING_NO_2H_CLAIM_OR_AUTHORITY",
+      "id": "CEAR-G10-WARN-002",
+      "summary": "ZERO_2H_A_L_MATCHES_ACROSS_ALL_14_RULE_CANDIDATES"
+    },
+    {
+      "disposition": "DEFER_INDEPENDENTLY",
+      "id": "CEAR-G10-WARN-003",
+      "summary": "TWO_LEGACY_MAPPINGS_NOT_EVALUABLE_NO_LAWFUL_CROSSWALK"
+    }
+  ],
+  "operator_decision_required": true,
+  "packet_id": "C2AR-WP10",
+  "prepared_at": "2026-08-05T14:37:00+01:00",
+  "recommendation": "PASS_METHOD_PASS_ALL_14_FUNCTIONAL_AND_RULE_RESEARCH_CANDIDATES_DEFER_BOTH_LEGACY_MAPPINGS_PASS_READ_ONLY_SHADOW_RESEARCH_CONSUMERS",
+  "schema": "ovc-cear-g10-gate-ready-qa/v1",
+  "status": "PASS_WITH_NONBLOCKING_WARNINGS",
+  "unresolved_nonblocking_issues": [
+    {
+      "id": "CEAR-G10-LEGACY-BENCHMARK-CROSSWALK-001",
+      "recommended_decision": "DEFER"
+    }
+  ]
+}

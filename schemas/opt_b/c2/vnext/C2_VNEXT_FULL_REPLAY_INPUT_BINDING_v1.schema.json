@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/c2/vnext/C2_VNEXT_FULL_REPLAY_INPUT_BINDING_v1.schema.json",
+  "title": "C2 vNext Full Replay Input Binding v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "binding_id",
+    "programme_id",
+    "plan_id",
+    "plan_version",
+    "packet_id",
+    "gate_id",
+    "role",
+    "instrument",
+    "source",
+    "interval",
+    "scope",
+    "code",
+    "frozen_policy",
+    "execution",
+    "requirements",
+    "authority",
+    "created_at_utc",
+    "binding_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2-vnext-full-replay-input-binding/v1"},
+    "binding_id": {"const": "C2VNEXT.JUNE.DISCOVERY.INPUT.v1"},
+    "programme_id": {"const": "OVC-C2-ANATOMY-REDESIGN-v0.2"},
+    "plan_id": {"const": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION"},
+    "plan_version": {"const": "0.3-REVISED"},
+    "packet_id": {"const": "C2AR-WP10-INPUT-RESOLUTION"},
+    "gate_id": {"const": "CEAR-G10"},
+    "role": {"const": "DISCOVERY"},
+    "instrument": {"const": "GBPUSD"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slice_id", "manifest_sha256", "external_root", "files", "provider_execution", "legacy_c2_payload_use"],
+      "properties": {
+        "slice_id": {"const": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"},
+        "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "external_root": {"type": "string", "minLength": 1},
+        "provider_execution": {"const": "NONE"},
+        "legacy_c2_payload_use": {"const": "PROHIBITED"},
+        "files": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["object_id", "clock", "side", "relative_path", "row_count", "size_bytes", "sha256", "schema_fingerprint", "first_timestamp_utc", "last_timestamp_utc"],
+            "properties": {
+              "object_id": {"type": "string", "minLength": 1},
+              "clock": {"enum": ["M1", "H1"]},
+              "side": {"enum": ["BID", "ASK"]},
+              "relative_path": {"type": "string", "minLength": 1},
+              "row_count": {"type": "integer", "minimum": 1},
+              "size_bytes": {"type": "integer", "minimum": 1},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "schema_fingerprint": {"type": "string", "minLength": 1},
+              "first_timestamp_utc": {"type": "string", "format": "date-time"},
+              "last_timestamp_utc": {"type": "string", "format": "date-time"}
+            }
+          }
+        }
+      }
+    },
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_start_utc", "target_start_utc", "target_end_exclusive_utc", "context_end_exclusive_utc", "target_eligibility"],
+      "properties": {
+        "context_start_utc": {"const": "2026-05-30T00:00:00Z"},
+        "target_start_utc": {"const": "2026-06-01T00:00:00Z"},
+        "target_end_exclusive_utc": {"const": "2026-07-01T00:00:00Z"},
+        "context_end_exclusive_utc": {"const": "2026-07-03T00:00:00Z"},
+        "target_eligibility": {"const": "TARGET_JUNE_ONLY"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clocks", "sides", "frames", "opportunity_types", "object_families", "sequence_lengths", "population_scope"],
+      "properties": {
+        "clocks": {"const": ["15M", "2H_A_L"]},
+        "sides": {"const": ["BID", "ASK"]},
+        "frames": {"const": ["LOCAL"]},
+        "opportunity_types": {"const": ["REGISTERED_SEQUENCE_WINDOW"]},
+        "object_families": {"const": ["AXIS_BUNDLE"]},
+        "sequence_lengths": {"const": [2, 3, 4, 5, 6, 8, 12]},
+        "population_scope": {"const": "COMPLETE_REGISTERED_LAWFUL_DISCOVERY_POPULATION"}
+      }
+    },
+    "code": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_main_baseline", "expected_code_commit", "repository_files", "repository_inventory_sha256"],
+      "properties": {
+        "expected_main_baseline": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "expected_code_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "repository_inventory_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "repository_files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "size_bytes", "sha256"],
+            "properties": {
+              "path": {"type": "string", "minLength": 1},
+              "size_bytes": {"type": "integer", "minimum": 1},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+          }
+        }
+      }
+    },
+    "frozen_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["integrated_freeze_id", "integrated_freeze_sha256", "method_registry_path", "method_registry_sha256", "method_pack_id", "discovery_view_id", "maturity"],
+      "properties": {
+        "integrated_freeze_id": {"const": "C2AR.INTEGRATED.SHADOW.FREEZE.v1"},
+        "integrated_freeze_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "method_registry_path": {"type": "string", "minLength": 1},
+        "method_registry_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "method_pack_id": {"const": "C2.BOTTOM_UP.FUNCTIONAL.DISCOVERY.METHOD.v1"},
+        "discovery_view_id": {"const": "C2.DISCOVERY.VIEW.GBPUSD.SHADOW_FROZEN.v1"},
+        "maturity": {"const": "SHADOW_FROZEN"}
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_runtime_seconds", "max_output_bytes", "clean_run_count", "workspace_policy", "checkpoint_policy", "resume_enabled", "exercise_restart"],
+      "properties": {
+        "max_runtime_seconds": {"type": "integer", "minimum": 1},
+        "max_output_bytes": {"type": "integer", "minimum": 1},
+        "clean_run_count": {"const": 2},
+        "workspace_policy": {"const": "FRESH_PER_RUN"},
+        "checkpoint_policy": {"const": "SCOPE_ATOMIC"},
+        "resume_enabled": {"const": true},
+        "exercise_restart": {"const": true}
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["readable_payloads", "complete_accounting", "first_valid_chronology", "identical_logical_hashes", "legacy_upstream_influence", "outcome_inputs", "validation_inputs"],
+      "properties": {
+        "readable_payloads": {"const": true},
+        "complete_accounting": {"const": true},
+        "first_valid_chronology": {"const": true},
+        "identical_logical_hashes": {"const": true},
+        "legacy_upstream_influence": {"const": false},
+        "outcome_inputs": {"const": false},
+        "validation_inputs": {"const": false}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_selector", "release_publication", "r2_write", "validation_consumption", "semantic_promotion", "probability_risk_exposure_execution", "agent_write"],
+      "properties": {
+        "active_selector": {"const": "DENIED"},
+        "release_publication": {"const": "DENIED"},
+        "r2_write": {"const": "DENIED"},
+        "validation_consumption": {"const": "DENIED"},
+        "semantic_promotion": {"const": "DENIED"},
+        "probability_risk_exposure_execution": {"const": "DENIED"},
+        "agent_write": {"const": "DENIED"}
+      }
+    },
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "binding_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

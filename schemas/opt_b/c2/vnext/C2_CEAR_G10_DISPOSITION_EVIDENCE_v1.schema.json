@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c2-vnext-cear-g10-disposition-evidence/v1",
+  "title": "CEAR-G10 compact disposition evidence",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema",
+    "programme_id",
+    "plan_id",
+    "plan_version",
+    "packet_id",
+    "gate_id",
+    "status",
+    "analysis_code_commit",
+    "replay_binding",
+    "population",
+    "method_pack",
+    "rule_candidates",
+    "functional_candidate_count",
+    "rule_candidate_count",
+    "redundancy_and_cooccurrence_surface",
+    "parameter_and_perturbation_surface",
+    "legacy_benchmark_surface",
+    "acceptance_conditions",
+    "qa_recommendation",
+    "authority",
+    "active",
+    "canonical",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ovc-c2-vnext-cear-g10-disposition-evidence/v1"
+    },
+    "gate_id": {
+      "const": "CEAR-G10"
+    },
+    "status": {
+      "const": "GATE_READY_OPERATOR_DISPOSITIONS_REQUIRED"
+    },
+    "analysis_code_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "rule_candidates": {
+      "type": "array",
+      "minItems": 1
+    },
+    "functional_candidate_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "rule_candidate_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "active_selector",
+        "release_publication",
+        "r2_write",
+        "validation_consumption",
+        "semantic_promotion",
+        "probability_risk_exposure_execution",
+        "agent_write"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "active_selector": {"const": "DENIED"},
+        "release_publication": {"const": "DENIED"},
+        "r2_write": {"const": "DENIED"},
+        "validation_consumption": {"const": "DENIED"},
+        "semantic_promotion": {"const": "DENIED"},
+        "probability_risk_exposure_execution": {"const": "DENIED"},
+        "agent_write": {"const": "DENIED"}
+      }
+    },
+    "active": {
+      "const": false
+    },
+    "canonical": {
+      "const": false
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

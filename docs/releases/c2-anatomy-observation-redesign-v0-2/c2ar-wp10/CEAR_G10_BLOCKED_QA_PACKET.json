@@ -1,0 +1,86 @@
+{
+  "schema": "ovc-cear-g10-blocked-qa-packet/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "packet_id": "C2AR-WP10",
+  "gate_id": "CEAR-G10",
+  "baseline_commit": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
+  "candidate_branch": "build/c2ar-wp10-functional-discovery-rules",
+  "candidate_commit": "BOUND_BY_PR_319_FINAL_BLOCKED_HEAD",
+  "reviewed_artifacts": [
+    "contracts/opt_b/c2/C2_FUNCTIONAL_DISCOVERY_AND_RULE_CANDIDATE_CONTRACT_vNext.md",
+    "src/ovc/opt_b/c2_vnext/functional_discovery.py",
+    "registries/opt_b/c2/vnext/C2_FUNCTIONAL_DISCOVERY_METHOD_CANDIDATE_v0_1.jsonc",
+    "schemas/opt_b/c2/vnext/C2_FUNCTIONAL_DISCOVERY_SCHEMA_BUNDLE_vNext_r1.json",
+    "fixtures/opt_b/c2/vnext/C2_FUNCTIONAL_DISCOVERY_SYNTHETIC_FIXTURE_v0_1.json",
+    "tests/opt_b/c2/vnext/test_functional_discovery.py",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_AVAILABILITY_AUDIT.json",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_SYNTHETIC_PREPARATION_EVIDENCE.json",
+    "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/output-manifest.json"
+  ],
+  "findings": [
+    {"id": "G10-QA-01", "finding": "The discovery-view, opportunity, fingerprint, motif, family, functional-core, restricted AST, evaluation, control and legacy-benchmark preparation is deterministic and internally complete on synthetic fixtures.", "result": "PASS"},
+    {"id": "G10-QA-02", "finding": "Outcome, future, profitability, Validation, semantic and legacy-seed fields are technically blocked from discovery dependencies.", "result": "PASS"},
+    {"id": "G10-QA-03", "finding": "Synthetic opportunity and evaluation populations reconcile exactly, and every negative result remains addressable.", "result": "PASS"},
+    {"id": "G10-QA-04", "finding": "Motifs, families, functional cores and rule candidates remain provisional, inactive, noncanonical and semantically neutral.", "result": "PASS"},
+    {"id": "G10-QA-05", "finding": "Matched controls use exact registered strata and duration bins with no nearest, best or fallback selection.", "result": "PASS"},
+    {"id": "G10-QA-06", "finding": "Legacy rules are isolated to post-discovery benchmark comparison and have zero seed, filter, score, stop or promotion effect.", "result": "PASS"},
+    {"id": "G10-QA-07", "finding": "The repository-accessible full-month manifest is bound to legacy active C2 v1 rather than the revised vNext SHADOW_FROZEN pipeline.", "result": "BLOCK"},
+    {"id": "G10-QA-08", "finding": "The legacy manifest lists external payloads, but their bytes are not repository-accessible and therefore the population cannot be independently reproduced here.", "result": "BLOCK"},
+    {"id": "G10-QA-09", "finding": "No content-addressed revised vNext full replay manifest, complete payload, clean-run hash pair or capacity/restart receipt is available.", "result": "BLOCK"},
+    {"id": "G10-QA-10", "finding": "Synthetic evidence cannot support real market functional-candidate, rule-candidate, legacy-benchmark or research-consumer dispositions.", "result": "BLOCK"},
+    {"id": "G10-QA-11", "finding": "Active C2 and all selector, event, episode, semantic, outcome, publication, Validation and execution authorities remain unchanged.", "result": "PASS"}
+  ],
+  "acceptance_conditions": [
+    {"condition_id": "CEAR-G10-A70", "condition": "Complete registered discovery opportunity population, denominator ledger and deterministic method pack reconcile with no legacy-rule or outcome leakage.", "result": "BLOCKED_REQUIRED_VNEXT_POPULATION_UNAVAILABLE"},
+    {"condition_id": "CEAR-G10-A71", "condition": "Every retained functional and rule candidate has exact real-population lineage, controls, counterexamples, stability and first-valid evidence.", "result": "NOT_EVALUABLE"},
+    {"condition_id": "CEAR-G10-A72", "condition": "Every method, functional candidate, rule candidate and legacy benchmark mapping can receive an operator disposition.", "result": "NOT_EVALUABLE"},
+    {"condition_id": "CEAR-G10-A73", "condition": "No selector, C2E, C2.5, C3, outcome, Validation or exposure authority is activated.", "result": "PASS"}
+  ],
+  "blocking_warnings": [
+    "REVISED_C2_VNEXT_FULL_POPULATION_REPLAY_UNAVAILABLE",
+    "DECLARED_EXTERNAL_PAYLOAD_BYTES_NOT_READABLE",
+    "NO_TWO_CLEAN_VNEXT_REPLAY_HASH_RECEIPT",
+    "REAL_FUNCTIONAL_AND_RULE_CANDIDATE_EVIDENCE_NOT_EVALUABLE"
+  ],
+  "warnings": [
+    "LEGACY_ACTIVE_C2_V1_MANIFEST_EXISTS_BUT_IS_NOT_A_LAWFUL_VNEXT_SUBSTITUTE",
+    "SYNTHETIC_PREPARATION_PASSES_BUT_IS_NOT_CEAR_G10_DISPOSITION_ELIGIBLE",
+    "METHOD_CANDIDATE_REMAINS_NOT_ADMITTED",
+    "NO_RESEARCH_CONSUMER_PERMISSION_IS_GRANTED"
+  ],
+  "unresolved_issues": [
+    {
+      "issue_id": "CEAR-G10-BLOCKER-001",
+      "issue": "CONTENT_ADDRESSED_REPRODUCIBLE_C2_VNEXT_FULL_POPULATION_IS_UNAVAILABLE",
+      "blocking": true,
+      "owner": "C2AR_PROGRAMME_OR_OPERATOR_ARTIFACT_OWNER"
+    }
+  ],
+  "tests": {
+    "pre_blocker_complete_suite": {"run_id": 30988288881, "result": "PASS", "test_count": 274, "head": "92a996721bfcd88b4038a7330e6a266059516f3e"},
+    "pre_blocker_final_head": {"run_id": 30988288848, "result": "PASS", "head": "92a996721bfcd88b4038a7330e6a266059516f3e"},
+    "final_blocked_head": "REQUIRED_AFTER_BLOCKER_PACKET_AND_STATE"
+  },
+  "capacity": {
+    "synthetic_fixture": "PASS_IN_ORDINARY_CI",
+    "real_replay": "NOT_RUN_REQUIRED_INPUT_UNAVAILABLE",
+    "capacity_exceeded": false,
+    "capacity_status": "NOT_EVALUABLE_FOR_REAL_POPULATION"
+  },
+  "external_artifacts": [
+    {
+      "artifact": "LEGACY_JUNE_FULL_MONTH_PAYLOAD_SET",
+      "manifest_sha256": "e805eaa0f8603da644d23d83297fdc5e62142f8051d8583c9c28c9469a3b704b",
+      "payload_hash": "d784f47395d904b2d78d77cde0a8a40287877692d8b92889ab2eeedef621a24b",
+      "availability": "MANIFEST_ONLY_NOT_READABLE",
+      "sufficiency": "NOT_A_VNEXT_SUBSTITUTE"
+    }
+  ],
+  "active_authority_delta": "NONE",
+  "qa_recommendation": "BLOCK",
+  "recommendation_rationale": "The reusable bottom-up machinery passes, but the gate cannot lawfully evaluate or disposition methods and candidates without the exact complete revised vNext population. Substituting legacy, synthetic, sampled or manifest-only evidence would violate the approved plan.",
+  "smallest_lawful_resolution": "SUPPLY_OR_PRODUCE_A_CONTENT_ADDRESSED_COMPLETE_C2_VNEXT_SHADOW_FROZEN_REPLAY_WITH_READABLE_PAYLOADS_EXACT_BINDINGS_TWO_CLEAN_IDENTICAL_RUN_HASHES_AND_CAPACITY_RECEIPTS_THEN_RESUME_WITH_OVC_CONTINUE",
+  "rollback": "Preserve the branch, synthetic proof, QA and blocker. Do not merge or admit the method candidate. Active C2 remains unchanged."
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-cear-g10-blocked-assurance-receipt/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "packet_id": "C2AR-WP10",
+  "gate_id": "CEAR-G10",
+  "pull_request": 319,
+  "baseline_commit": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
+  "assured_pre_metadata_head": "99f8926e9fa015e8096dfb363ae13563c094387d",
+  "recorded_at": "2026-08-05T09:13:00+01:00",
+  "assurance": [
+    {"workflow": "tests", "run_id": 30989038688, "result": "PASS", "test_count": 280, "head": "99f8926e9fa015e8096dfb363ae13563c094387d"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30989038687, "profile": "FINAL_HEAD", "result": "PASS", "head": "99f8926e9fa015e8096dfb363ae13563c094387d"},
+    {"check": "OVC merge readiness", "run_id": 30989038687, "result": "PASS", "head": "99f8926e9fa015e8096dfb363ae13563c094387d"},
+    {"check": "unresolved review threads", "result": "ZERO", "pull_request": 319}
+  ],
+  "verified_results": {
+    "functional_discovery_preparation": "PASS",
+    "synthetic_determinism": "PASS",
+    "complete_synthetic_accounting": "PASS",
+    "no_outcome_validation_or_legacy_seed_dependencies": "PASS",
+    "active_and_reserved_authority_unchanged": "PASS",
+    "frozen_repository_census_unchanged": "PASS",
+    "required_real_vnext_population_available": "BLOCKED",
+    "real_functional_and_rule_candidate_dispositions": "NOT_EVALUABLE"
+  },
+  "qa_recommendation": "BLOCK",
+  "blocking_warnings": [
+    "REVISED_C2_VNEXT_FULL_POPULATION_REPLAY_UNAVAILABLE",
+    "DECLARED_EXTERNAL_PAYLOAD_BYTES_NOT_READABLE",
+    "NO_TWO_CLEAN_VNEXT_REPLAY_HASH_RECEIPT",
+    "REAL_FUNCTIONAL_AND_RULE_CANDIDATE_EVIDENCE_NOT_EVALUABLE"
+  ],
+  "unresolved_issues": ["CEAR-G10-BLOCKER-001"],
+  "merge_authority": "PROHIBITED_WHILE_BLOCKED",
+  "active_authority_effect": "NONE",
+  "final_head_assurance": "REQUIRED_AFTER_THIS_RECEIPT_AND_FINAL_BLOCKED_STATE_METADATA",
+  "rollback": "Preserve the passing branch and blocker evidence unmerged. No active-system rollback is required."
+}
