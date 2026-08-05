@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-cear-g9-predecision-qa/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "packet_id": "C2AR-WP9",
+  "gate_id": "CEAR-G9",
+  "baseline_commit": "8ef7efb131a87ee9304c8e41494d64980dbc875d",
+  "candidate_branch": "gate/c2ar-wp9-cear-g9-computability",
+  "candidate_commit": "BOUND_BY_PR_FINAL_HEAD",
+  "reviewed_artifacts": [
+    "registries/opt_b/c2/vnext/C2_COMPUTABILITY_CONSUMER_POLICY_CANDIDATE_v0_1.jsonc",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp9/CEAR_G9_GATE_PACKET.json",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp9/CEAR_G9_GATE_PACKET.md",
+    "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_CEAR_G9_GATE_READY_STATE_v0_2.jsonc",
+    "tests/test_c2ar_cear_g9_gate.py"
+  ],
+  "findings": [
+    {"id": "G9-QA-01", "finding": "Availability, computability, assurance, consumer eligibility and authority are independently represented and no implication between them is introduced.", "result": "PASS"},
+    {"id": "G9-QA-02", "finding": "Computability is per component and profile and replaces global failure propagation with exact dependency-linked propagation.", "result": "PASS"},
+    {"id": "G9-QA-03", "finding": "Versioned required, optional, warning-only, alternative and prohibited dependency edges are explicit and hidden fallback is prohibited.", "result": "PASS"},
+    {"id": "G9-QA-04", "finding": "Not requested, not applicable, not computable, censored and conflicted remain distinct with exact reason-code families.", "result": "PASS"},
+    {"id": "G9-QA-05", "finding": "Location, motion, organisation, interaction and parent-dependent profiles preserve separate dependency and partial-computability behavior.", "result": "PASS"},
+    {"id": "G9-QA-06", "finding": "Consumer eligibility is exact-consumer and per-component, requires computability and authority, and cannot silently exclude evidence.", "result": "PASS"},
+    {"id": "G9-QA-07", "finding": "Staleness remains consumer-specific and linked to raw age evidence while no numeric threshold or active consumer is selected.", "result": "PASS"},
+    {"id": "G9-QA-08", "finding": "Denominator accounting exposes required counts, compatible units, formulas and partition identities without hiding missingness.", "result": "PASS"},
+    {"id": "G9-QA-09", "finding": "Transition rates use comparable pairs and raw counts remain separate from rates.", "result": "PASS"},
+    {"id": "G9-QA-10", "finding": "Overlap remains claim-specific with raw-unit retention and exact cluster evidence; no canonical adjustment is selected.", "result": "PASS"},
+    {"id": "G9-QA-11", "finding": "Comparability fails closed across incompatible unit, scope, release, clock, dependency, consumer, denominator, overlap or censorship policies.", "result": "PASS"},
+    {"id": "G9-QA-12", "finding": "Global QUALITY is non-governing and cannot drive eligibility or denominator inclusion or hide component reasons.", "result": "PASS"},
+    {"id": "G9-QA-13", "finding": "The proposed implementation delta remains inactive, noncanonical, read-only shadow work and preserves all active and downstream authority boundaries.", "result": "PASS"},
+    {"id": "G9-QA-14", "finding": "No external artifact, market data or R2 write is required and rollback is non-destructive.", "result": "PASS"}
+  ],
+  "warnings": [
+    "NO_ACTIVE_CONSUMER_POLICY_IS_SELECTED_AT_CEAR_G9",
+    "NO_NUMERIC_STALENESS_OR_FRESHNESS_THRESHOLD_IS_SELECTED",
+    "NO_CANONICAL_OVERLAP_WEIGHTING_DEDUPLICATION_OR_ADJUSTMENT_IS_SELECTED",
+    "SHARED_EPISODE_CLUSTERS_REMAIN_UNAVAILABLE_WITHOUT_SEPARATE_EPISODE_AUTHORITY",
+    "GLOBAL_QUALITY_REMAINS_NON_GOVERNING"
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "external_artifacts": [],
+  "market_data_required": false,
+  "r2_write_required": false,
+  "active_authority_delta": "NONE_BEFORE_OPERATOR_PASS",
+  "recommended_decision": "PASS",
+  "recommendation_rationale": "The candidate faithfully separates usability dimensions, makes dependency propagation and denominator accounting auditable, preserves raw overlap evidence, prevents hidden exclusion and grants only bounded inactive noncanonical shadow implementation authority.",
+  "required_assurance_before_operator_ready": [
+    "GATE_TEST_PASS",
+    "COMPLETE_REPOSITORY_SUITE_PASS",
+    "FINAL_HEAD_ASSURANCE_PASS",
+    "MERGE_READINESS_PASS",
+    "ZERO_UNRESOLVED_REVIEW_THREADS"
+  ],
+  "rollback": "Close the unmerged gate PR to preserve lawful main. No active system rollback is required because the candidate has no runtime effect."
+}
