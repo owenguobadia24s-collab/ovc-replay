@@ -80,7 +80,7 @@ class NativeGenesisPortfolioG3R2Tests(unittest.TestCase):
         self.assertEqual(DECISION_ID, self.ack_record["decision_id"])
         self.assertEqual("NONE", self.ack_record["native_adoption"])
 
-    def test_r2_unlock_receipt_binds_exact_merge_and_unlocks_only_r3(self) -> None:
+    def test_r2_unlock_receipt_binds_exact_merge_and_progression_remains_receipt_gated(self) -> None:
         self.assertEqual(289, self.receipt["pull_request"])
         self.assertEqual("68420178ea9518a335d08e0672f83390970c5c56", self.receipt["final_head"])
         self.assertEqual("4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606", self.receipt["merge_commit"])
@@ -90,8 +90,9 @@ class NativeGenesisPortfolioG3R2Tests(unittest.TestCase):
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R3_ONLY", self.receipt["authority_effect"])
         self.assertEqual("NONE", self.receipt["native_adoption"])
         self.assertEqual("PGN-G3-R3", self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"])
+        self.assertEqual("PGN-G3-R4", self.builder.build_group("PGN-G3-R4", ROOT)["review_group_id"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R4", ROOT)
+            self.builder.build_group("PGN-G3-R5", ROOT)
 
     def test_gate_qa_and_state_preserve_no_adoption(self) -> None:
         self.assertFalse(self.gate["operator_decision_required"])
