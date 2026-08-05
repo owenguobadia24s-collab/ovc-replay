@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = ROOT / "docs/releases/c2-anatomy-observation-redesign-v0-3/plan-ratification"
+BASE = ROOT / "docs/releases/c2-anatomy-observation-redesign-v0-2/plan-v0-3-ratification"
 BINDING = BASE / "C2AR_PLAN_V0_3_SOURCE_BINDING.json"
 DECISION = BASE / "C2AR_PLAN_V0_3_OPERATOR_RATIFICATION.json"
 QA = BASE / "C2AR_PLAN_V0_3_RATIFICATION_QA.json"
@@ -27,6 +27,7 @@ class C2ARPlanV03RatificationTests(unittest.TestCase):
         self.assertEqual("b76fb70533ccba161eb9d043f393ff875a3bcf8170009dc0a380c234a04f628d", binding["superseded_plan"]["sha256"])
         self.assertEqual("MATCH", binding["hash_verification"]["result"])
         self.assertEqual(2, binding["hash_verification"]["reads"])
+        self.assertEqual("C2AR_PROGRAMME_RELEASE_ROOT_POST_PGN_WP2E_GENERATED_EVIDENCE", binding["repository_evidence_location"])
 
     def test_operator_ratification_preserves_parts_one_through_nine(self) -> None:
         decision = load(DECISION)
@@ -37,6 +38,10 @@ class C2ARPlanV03RatificationTests(unittest.TestCase):
         self.assertEqual("BOTTOM_UP_FUNCTIONAL_DISCOVERY", decision["approved_effect"]["replace_part_10_route"])
         self.assertEqual("BENCHMARK_COMPARATORS_AND_CROSSWALK_OBJECTS_ONLY", decision["approved_effect"]["legacy_rules"])
         self.assertEqual("IMPLEMENTED_SHADOW_COMPLETE_ACTIVE_C2_UNCHANGED", decision["approved_effect"]["completion_boundary"])
+        self.assertEqual(
+            "docs/releases/c2-anatomy-observation-redesign-v0-2/plan-v0-3-ratification/C2AR_PLAN_V0_3_SOURCE_BINDING.json",
+            decision["source_binding"],
+        )
 
     def test_part_ten_is_bottom_up_neutral_and_legacy_seed_free(self) -> None:
         method = load(DECISION)["part_10_methodology"]
