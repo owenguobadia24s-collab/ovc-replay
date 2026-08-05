@@ -7,22 +7,25 @@
   "gate_id": "PGN-G3-R3",
   "status": "GATE_READY",
   "prerequisites": [
-    "PGN_G3_R2_ACKNOWLEDGE_CONTINUE_MERGED_4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606"
+    "PGN_G3_R2_ACKNOWLEDGE_CONTINUE_MERGED_4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
+    "PGN_G3_R3_OPERATOR_ADJUST_SCOPE_20260805T152000_PLUS0100"
   ],
   "authority_required": "OPERATOR_REQUIRED",
-  "authority_delta": "ACKNOWLEDGE_R3_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R4_DISCLOSURE_ONLY",
+  "authority_delta": "ACKNOWLEDGE_AMENDED_R3_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R4_DISCLOSURE_ONLY",
   "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
+  "main_at_scope_adjustment": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
   "branch": "gate/pgn-g3-r3-development-infrastructure",
   "candidate_commit": "BOUND_BY_PR_290_FINAL_HEAD",
-  "assured_gate_head": "066b807f1cae47f788cf555b505f6a4dbcd7d2d3",
+  "assured_gate_head": "PENDING_FINAL_HEAD_CI_AFTER_SCOPE_AMENDMENT",
   "tests": [
-    "REPOSITORY_TESTS_RUN_30918849189_SUCCESS",
-    "OVC_FINAL_HEAD_RUN_30918849159_JOB_92023844302_SUCCESS",
-    "OVC_MERGE_READINESS_RUN_30918849159_JOB_92023928963_SUCCESS",
+    "FOCUSED_TEST_PGN_G3_ARTIFACT_GOVERNANCE_CROSSWALK_ADDED",
+    "REPOSITORY_TESTS_PENDING_SCOPE_AMENDMENT_FINAL_HEAD",
+    "OVC_FINAL_HEAD_PENDING_SCOPE_AMENDMENT_FINAL_HEAD",
+    "OVC_MERGE_READINESS_PENDING_SCOPE_AMENDMENT_FINAL_HEAD",
     "FINAL_PACKET_HEAD_ASSURANCE_REQUIRED"
   ],
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_QA_PACKET.json",
-  "decision_record": null,
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_ADJUST_SCOPE_OPERATOR_DECISION.json",
   "merge_commit": null,
   "blockers": [],
   "review": {
@@ -31,17 +34,25 @@
     "candidate_count": 3,
     "candidate_group_sha256": "95c6d187900a4c0ad94fff94cfeb63791f8cf7b6c537379df7a666143a02f296",
     "candidate_status": "CANDIDATE_UNAPPROVED",
+    "artifact_governance_crosswalk_status": "R1_R2_RETROSPECTIVE_AND_R3_DIRECT_MATERIALISED_UNAPPROVED",
+    "crosswalk_candidate_count": 9,
+    "r3_candidate_relation_count": 2,
     "later_groups_locked": true,
-    "later_group_ids_disclosed": false
+    "later_group_ids_disclosed": false,
+    "r4_r5_r6_crosswalk_required": true
   },
   "authority": {
+    "scope_adjustment": "OPERATOR_APPROVED_IMPLEMENTED",
     "r3_acknowledgement": "DENIED_PENDING_OPERATOR_DECISION",
     "native_adoption": "DENIED_PENDING_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
     "next_group_disclosure": "DENIED_PENDING_R3_ACKNOWLEDGEMENT_RECEIPT_MERGE",
+    "cross_programme_edges": "DENIED_PENDING_PGN_G5",
+    "constitutional_parentage": "UNRESOLVED_UNACCEPTED",
+    "authority_inheritance": "NONE",
     "reserved_authority": "NONE"
   },
-  "next_packet": "PGN-G3-R3-ACKNOWLEDGEMENT",
+  "next_packet": "PGN-G3-R3-AMENDED-ACKNOWLEDGEMENT",
   "next_gate": "PGN-G3-R3",
-  "next_action": "AWAIT_OPERATOR_PGN_G3_R3_ACKNOWLEDGE_CONTINUE_OR_ALTERNATIVE_DO_NOT_DISCLOSE_PGN_G3_R4",
-  "rollback": "Preserve PGN-WP3, R1, R2 receipts and sealed commitments. Do not create an R3 acknowledgement receipt or disclose R4 unless the operator approves R3."
+  "next_action": "RUN_EXACT_HEAD_ASSURANCE_THEN_AWAIT_OPERATOR_PGN_G3_R3_ACKNOWLEDGE_CONTINUE_OR_ALTERNATIVE_DO_NOT_DISCLOSE_PGN_G3_R4",
+  "rollback": "Preserve PGN-WP3, R1 and R2 receipts, the scope-adjustment decision and sealed commitments. Supersede crosswalks append-only and do not create an R3 acknowledgement receipt or disclose R4 without operator approval."
 }
