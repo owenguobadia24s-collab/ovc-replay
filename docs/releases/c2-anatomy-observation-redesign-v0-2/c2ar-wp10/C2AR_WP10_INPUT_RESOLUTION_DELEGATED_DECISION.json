@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-c2ar-delegated-packet-decision/v1",
+  "decision_id": "C2AR-WP10-INPUT-RESOLUTION.DELEGATED.PASS.20260805T113300+0100",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "packet_id": "C2AR-WP10-INPUT-RESOLUTION",
+  "gate_retained": "CEAR-G10",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_INSIDE_OPERATOR_APPROVED_PLAN",
+  "baseline_commit": "f04ddc7263972687913b112c7ff03ba183931d55",
+  "candidate_commit": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99",
+  "pull_request": 320,
+  "qa_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_RESOLUTION_QA_PACKET.json",
+  "qa_recommendation": "PASS_TOOLING_PACKET_PRESERVE_CEAR_G10_BLOCK",
+  "authority_delta": "DETERMINISTIC_FAIL_CLOSED_BINDING_REPLAY_AND_ASSURANCE_TOOLING_ONLY",
+  "reserved_authority_effect": "NONE",
+  "acceptance": {
+    "implementation_schema_tests_and_runbook": "PASS",
+    "complete_repository_suite": "PASS_282_TESTS_RUN_30997804837",
+    "final_head_profile": "PASS_RUN_30997804906",
+    "merge_readiness": "PASS_RUN_30997804906",
+    "unresolved_review_threads": "ZERO",
+    "operator_local_real_replay": "PENDING_NOT_PART_OF_TOOLING_PASS"
+  },
+  "warnings": [
+    "CEAR_G10_REMAINS_BLOCKED",
+    "PR_319_REMAINS_UNMERGED_TO_MAIN",
+    "REAL_REPLAY_EVIDENCE_NOT_YET_AVAILABLE",
+    "WP11_REMAINS_LOCKED"
+  ],
+  "unresolved_issues": ["CEAR-G10-BLOCKER-001"],
+  "merge_authority": "ELIGIBLE_INTO_RETAINED_PR_319_BRANCH_ONLY_AFTER_FINAL_METADATA_ASSURANCE",
+  "main_merge_authority": "NONE",
+  "rollback": "Revert the bounded branch integration or close PR 320. Active C2 and completed WP9 remain unchanged.",
+  "next_work": "INTEGRATE_TOOLING_THEN_RUN_OPERATOR_LOCAL_REPLAY_AND_RETURN_COMPACT_EVIDENCE"
+}
