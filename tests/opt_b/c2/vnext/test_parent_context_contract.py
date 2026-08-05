@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[4]
 CONTRACT = ROOT / "contracts/opt_b/c2/C2_PARENT_CONTEXT_RESOLVER_CONTRACT_vNext.md"
 LINK_SCHEMA = ROOT / "schemas/opt_b/c2/vnext/c2_parent_context_link.schema.json"
 BUNDLE_SCHEMA = ROOT / "schemas/opt_b/c2/vnext/c2_parent_context_bundle.schema.json"
-REGISTRY = ROOT / "registries/opt_b/c2/vnext/C2_PARENT_CONTEXT_RESOLVER_REGISTRY_v1.json"
+REGISTRY = ROOT / "registries/opt_b/c2/vnext/C2_PARENT_CONTEXT_RESOLVER_REGISTRY_v1.jsonc"
 FIXTURES = ROOT / "fixtures/opt_b/c2/vnext/parent_context_resolver_cases_v1.json"
 
 
