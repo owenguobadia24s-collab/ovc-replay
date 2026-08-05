@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-c2ar-g9a-qa-packet/v1",
+  "programme": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION/0.3-REVISED",
+  "packet": "C2AR-WP9-IMPLEMENTATION",
+  "gate": "C2AR-G9A",
+  "gate_class": "AUTO_RATIFIABLE_WITHIN_CEAR_G9_PASS",
+  "baseline_commit": "255b7556bd3e9a0493a4fc3ee3300b9e1532623f",
+  "candidate_branch": "build/c2ar-wp9-computability",
+  "candidate_commit": "BOUND_BY_PR_317_FINAL_HEAD",
+  "operator_authority": "CEAR-G9.OPERATOR.PASS.20260805T081600+0100",
+  "reviewed_evidence": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp9-implementation/C2AR_WP9_IMPLEMENTATION_EVIDENCE.json",
+  "findings": [
+    {"id": "G9A-QA-01", "finding": "Availability, computability, assurance, eligibility and authority are separate in code, schema and registry.", "result": "PASS"},
+    {"id": "G9A-QA-02", "finding": "Required, optional, warning-only, alternative and prohibited dependencies have exact selective behavior and visible identities.", "result": "PASS"},
+    {"id": "G9A-QA-03", "finding": "Optional and warning dependencies do not suppress raw components; required failure affects only declared dependents.", "result": "PASS"},
+    {"id": "G9A-QA-04", "finding": "Not requested, not applicable, not computable, censored and conflicted outcomes remain distinct.", "result": "PASS"},
+    {"id": "G9A-QA-05", "finding": "Consumer evaluation is exact-policy, inactive, noncanonical, authority-sensitive and contains no numeric staleness threshold.", "result": "PASS"},
+    {"id": "G9A-QA-06", "finding": "Denominator records expose complete terminal-disposition counts and all required accounting identities.", "result": "PASS"},
+    {"id": "G9A-QA-07", "finding": "Transition rates use transition-pair units and mixed-unit denominators fail closed.", "result": "PASS"},
+    {"id": "G9A-QA-08", "finding": "Overlap reports preserve raw units, require exact claim and policy identities, and select no weighting, deduplication or numeric adjustment.", "result": "PASS"},
+    {"id": "G9A-QA-09", "finding": "Population comparisons fail closed on unit, scope, release, clock, dependency, consumer, denominator, overlap or censorship-policy mismatch.", "result": "PASS"},
+    {"id": "G9A-QA-10", "finding": "Legacy QUALITY is represented only as a transparent non-governing crosswalk and projection.", "result": "PASS"},
+    {"id": "G9A-QA-11", "finding": "Outcome, Validation and reserved authority fields are prohibited from technical inputs.", "result": "PASS"},
+    {"id": "G9A-QA-12", "finding": "No market data, external artifact, R2 write, active selector or downstream activation is present.", "result": "PASS"}
+  ],
+  "warnings": [
+    "DISCOVERY_INPUT_CONSUMER_REMAINS_UNAUTHORIZED_PENDING_CEAR_G10",
+    "PARENT_DEPENDENT_CONSUMER_HAS_RAW_AGE_REQUIREMENTS_BUT_NO_NUMERIC_STALENESS_THRESHOLD",
+    "OVERLAP_REPORTS_ARE_DESCRIPTIVE_AND_NOT_CANONICALLY_ADJUSTED",
+    "SHARED_EPISODE_CLUSTERS_REQUIRE_SEPARATE_EPISODE_AUTHORITY"
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "capacity": {
+    "fixture_only": true,
+    "case_count": 8,
+    "market_replay": false,
+    "external_artifact_bytes": 0,
+    "capacity_exceeded": false
+  },
+  "tests": "PENDING_FINAL_HEAD_ASSURANCE",
+  "active_authority_delta": "NONE",
+  "qa_recommendation": "PASS",
+  "delegated_decision_recommendation": "PASS",
+  "rollback": "Disable or remove the inactive WP9 shadow package while retaining contracts, fixtures, QA and CEAR-G9. Active C2 remains unchanged."
+}
