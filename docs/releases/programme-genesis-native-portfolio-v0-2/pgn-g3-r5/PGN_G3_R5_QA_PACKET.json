@@ -6,17 +6,23 @@
   "packet_id": "PGN-G3-R5",
   "gate_id": "PGN-G3-R5",
   "baseline_commit": "0bd0a686ee0d3f365db46776cf92ada9a1ce6eff",
-  "candidate_commit": "BOUND_BY_PR_FINAL_HEAD",
-  "status": "PASS_RECOMMEND_ACKNOWLEDGE_CONTINUE_PENDING_FINAL_HEAD_ASSURANCE",
-  "prerequisite_receipt": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews/PGN_G3_R4_ACKNOWLEDGEMENT_RECEIPT.json",
+  "candidate_commit": "BOUND_BY_PR_332_FINAL_HEAD",
+  "assured_predecision_head": "cb2d260a640acdae96f55f0230ae39d0a2c6495c",
+  "status": "PASS_OPERATOR_ACKNOWLEDGED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
+  "decision_id": "PGN-G3-R5.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T190200+0100",
   "assessment": {
     "review_domain": "RESEARCH_FOUNDATION_AND_MONTHLY_REVIEW",
     "candidate_count": 3,
-    "candidate_ids": ["OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2", "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4", "PD-JUNE-FULL-MONTH-MDR"],
+    "candidate_ids": [
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2",
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
+      "PD-JUNE-FULL-MONTH-MDR"
+    ],
     "candidate_group_sha256": "36945653326c1bf23c7da0b00516351a2cb31e14f047f3d6b0fb395a6b12b6e1",
     "candidate_status": "CANDIDATE_UNAPPROVED",
     "native_adoption_count": 0,
-    "authority_effect": "NONE",
+    "authority_effect_before_merge": "NONE",
+    "authority_effect_after_merge_and_exact_receipt": "DISCLOSE_AND_MATERIALISE_PGN_G3_R6_ONLY",
     "unresolved_fields_per_candidate": 8,
     "crosswalk_status": "MATERIALISED_UNAPPROVED",
     "crosswalk_candidate_count": 3,
@@ -29,6 +35,7 @@
   },
   "checks": {
     "r4_acknowledgement_receipt_exact_and_merged": "PASS",
+    "operator_acknowledge_continue_command_exact": "PASS",
     "exact_three_r5_candidates_materialised": "PASS",
     "candidate_group_hash_matches_deterministic_builder": "PASS",
     "all_candidates_unapproved": "PASS",
@@ -44,10 +51,10 @@
     "constitutional_parentage_acceptance_absent": "PASS",
     "authority_inheritance_absent": "PASS",
     "r6_remains_locked_before_r5_acknowledgement_receipt": "PASS",
-    "focused_tests": "REQUIRED_ON_PR_HEAD",
-    "complete_repository_suite": "REQUIRED_ON_PR_HEAD",
-    "ovc_final_head": "REQUIRED_ON_PR_HEAD",
-    "ovc_merge_readiness": "REQUIRED_ON_PR_HEAD"
+    "predecision_repository_tests": "PASS_RUN_31024925175_JOB_92370794697",
+    "predecision_ovc_final_head": "PASS_RUN_31024925180_JOB_92370794821",
+    "predecision_ovc_merge_readiness": "PASS_RUN_31024925180_JOB_92370857661",
+    "final_decision_head_assurance": "REQUIRED_ON_PR_332_FINAL_HEAD"
   },
   "warnings": [
     "ALL_THREE_R5_OBJECTS_REMAIN_CANDIDATE_UNAPPROVED",
@@ -55,11 +62,11 @@
     "RO2_V0_2_EXACT_REPOSITORY_PLAN_ID_OR_BODY_NOT_IDENTIFIED",
     "RO4_V0_4_REMAINS_BLOCKED_AT_RO4_G6_EVIDENCE_NOT_YET_COLLECTED",
     "PD_JUNE_PROVIDER_INCIDENT_CREATED_NO_ACCEPTED_SOURCE_SLICE_AND_IS_NOT_A_RELEASE",
-    "ACKNOWLEDGEMENT_WOULD_UNLOCK_ONLY_PGN_G3_R6_AFTER_MERGE_AND_EXACT_RECEIPT",
+    "ACKNOWLEDGEMENT_UNLOCKS_ONLY_PGN_G3_R6_AFTER_MERGE_AND_EXACT_RECEIPT",
     "PGN_G3_NATIVE_ADOPTION_AND_PGN_G5_EDGE_ACCEPTANCE_REMAIN_SEPARATE_OPERATOR_DECISIONS"
   ],
   "blockers": [],
-  "qa_recommendation": "ACKNOWLEDGE_CONTINUE",
-  "authority_delta": "NONE",
-  "rollback": "Preserve the R4 receipt, R5 candidate bundle, crosswalk and all source evidence. A non-PASS or absent operator decision leaves R6 locked and changes no candidate, programme or source authority."
+  "qa_recommendation": "PASS_OPERATOR_ACKNOWLEDGED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
+  "authority_delta": "NONE_BEFORE_MERGE_THEN_DISCLOSE_NEXT_GROUP_ONLY_AFTER_EXACT_POST_MERGE_RECEIPT",
+  "rollback": "Preserve the R4 receipt, R5 candidate bundle, crosswalk, operator decision and all source evidence. If final-head assurance or merge fails, do not create the R5 receipt and do not disclose R6."
 }
