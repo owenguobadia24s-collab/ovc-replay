@@ -1,0 +1,139 @@
+{
+  "schema": "ovc-cear-g9-gate-packet/v1",
+  "gate_id": "CEAR-G9",
+  "gate_title": "Computability, Consumer Denominator and Overlap Policy Freeze",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "packet_id": "C2AR-WP9",
+  "decision_authority": "OPERATOR_REQUIRED",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "lawful_baseline_commit": "8ef7efb131a87ee9304c8e41494d64980dbc875d",
+  "candidate_branch": "gate/c2ar-wp9-cear-g9-computability",
+  "candidate_commit": "BOUND_BY_PR_FINAL_HEAD",
+  "completed_prerequisites": [
+    {
+      "packet_id": "C2AR-WP8-IMPLEMENTATION",
+      "gate_id": "C2AR-G8A",
+      "operator_decision_merge": "4624aef9e536aaf1bf195a1a2469ac5f5ddf8fe3",
+      "implementation_merge": "502870c7c61d4e72f2ce1679bdc2a3edf55d550f",
+      "receipt_merge": "8ef7efb131a87ee9304c8e41494d64980dbc875d"
+    }
+  ],
+  "current_authority": {
+    "integrated_c2_vnext": "SHADOW_FROZEN_READ_ONLY",
+    "parent_context_resolver": "SHADOW_FROZEN_READ_ONLY_INACTIVE_NONCANONICAL",
+    "per_component_computability": "IMPLEMENTED_ONLY_INSIDE_EXISTING_COMPONENTS_WITHOUT_GENERAL_CONSUMER_POLICY",
+    "consumer_eligibility_policy": "NOT_GRANTED",
+    "denominator_policy": "NOT_GRANTED",
+    "overlap_adjustment_policy": "NOT_GRANTED",
+    "global_quality_gating": "NOT_GRANTED",
+    "active_c2": "UNCHANGED_READ_ONLY",
+    "semantic_event_episode": "NONE",
+    "canonical_publication_validation": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "proposed_authority_delta": {
+    "central_policy": "USABILITY_IS_PER_COMPONENT_AND_PER_CONSUMER_WITH_EXPLICIT_DEPENDENCIES_DENOMINATORS_AND_OVERLAP_EVIDENCE_NOT_ONE_GLOBAL_DEGRADED_OR_QUALITY_STATE",
+    "authorise_after_pass": [
+      "VERSIONED_COMPUTABILITY_AND_DEPENDENCY_CONTRACTS",
+      "VERSIONED_CONSUMER_ELIGIBILITY_INTERFACE_WITHOUT_ACTIVE_CONSUMER_SELECTION",
+      "DENOMINATOR_AND_COMPARABILITY_ACCOUNTING_CONTRACTS",
+      "CLAIM_SPECIFIC_OVERLAP_EVIDENCE_INTERFACE_WITHOUT_CANONICAL_ADJUSTMENT",
+      "CLOSED_SCHEMAS_AND_REGISTRIES",
+      "SYNTHETIC_FIXTURES",
+      "DETERMINISTIC_INACTIVE_NONCANONICAL_SHADOW_IMPLEMENTATION",
+      "FAIL_CLOSED_TESTS_AND_QA",
+      "READ_ONLY_SHADOW_OUTPUTS"
+    ],
+    "separate_dimensions": ["AVAILABILITY", "COMPUTABILITY", "ASSURANCE", "CONSUMER_ELIGIBILITY", "AUTHORITY"],
+    "dependency_edges": ["REQUIRED", "OPTIONAL", "WARNING_ONLY", "ALTERNATIVE", "PROHIBITED"],
+    "selective_propagation": "FAILURES_PROPAGATE_ONLY_THROUGH_EXACT_DECLARED_DEPENDENCIES",
+    "missingness_dispositions": ["NOT_REQUESTED", "NOT_APPLICABLE", "NOT_COMPUTABLE", "CENSORED", "CONFLICTED"],
+    "consumer_eligibility": "PER_COMPONENT_PER_EXACT_CONSUMER_POLICY_WITH_NO_HIDDEN_FALLBACK_OR_SILENT_EXCLUSION",
+    "staleness": "CONSUMER_SPECIFIC_POLICY_ID_AND_RAW_AGE_EVIDENCE_WITHOUT_NUMERIC_THRESHOLD_SELECTION",
+    "denominator": "REGISTERED_SCOPE_UNIT_CONSUMER_POLICY_TERMINAL_DISPOSITION_COUNTS_AND_ACCOUNTING_IDENTITIES",
+    "transition_rates": "COMPARABLE_TRANSITION_PAIRS_NOT_SINGLE_OBSERVATIONS",
+    "overlap": "RAW_COUNTS_PRESERVED_AND_CLAIM_SPECIFIC_CLUSTERS_EXPLICIT_WITHOUT_CANONICAL_WEIGHTING_OR_DEDUPLICATION",
+    "comparability": "SAME_UNIT_SCOPE_RELEASE_CLOCK_DEPENDENCY_CONSUMER_DENOMINATOR_OVERLAP_AND_CENSOR_POLICY_OR_EXPLICIT_NOT_COMPARABLE",
+    "quality": "GLOBAL_QUALITY_RETIRED_AS_A_GOVERNING_STATE_AND_RETAINED_ONLY_AS_TRANSPARENT_NON_GOVERNING_COMPATIBILITY_PROJECTION"
+  },
+  "acceptance_conditions": [
+    {"id": "G9-A1", "condition": "Availability, computability, assurance, consumer eligibility and authority are separate dimensions and none implies another.", "required": true},
+    {"id": "G9-A2", "condition": "Computability and eligibility are recorded per component, profile, observation or unit and exact consumer rather than as one global degraded state.", "required": true},
+    {"id": "G9-A3", "condition": "Dependency graphs are versioned, profile-specific and limited to required, optional, warning-only, alternative and prohibited edges with no hidden fallback.", "required": true},
+    {"id": "G9-A4", "condition": "Dependency failure propagates only to exact declared dependents and all propagated reason and dependency IDs remain visible.", "required": true},
+    {"id": "G9-A5", "condition": "Not requested, not applicable, not computable, censored and conflicted remain distinct terminal dispositions with exact reason codes.", "required": true},
+    {"id": "G9-A6", "condition": "Location profiles, raw and normalized motion, organisation metrics, interaction tracks and parent-dependent profiles retain separate dependency and usability results.", "required": true},
+    {"id": "G9-A7", "condition": "Consumer eligibility is consumer-specific, requires computability and lawful authority, records assurance requirements and performs no silent exclusion.", "required": true},
+    {"id": "G9-A8", "condition": "Staleness is consumer-specific and linked to raw age evidence while no universal or numeric threshold is selected at CEAR-G9.", "required": true},
+    {"id": "G9-A9", "condition": "Every rate exposes registered scope, compatible unit, requested, applicable, computable, censored, conflicted, eligible, included, numerator and denominator counts with accounting identities.", "required": true},
+    {"id": "G9-A10", "condition": "Transition rates use comparable transition pairs and raw counts remain separate from rates.", "required": true},
+    {"id": "G9-A11", "condition": "Overlap is claim-specific, raw units are preserved and any adjusted claim requires exact cluster membership and one shared cluster policy ID without selecting a canonical adjustment.", "required": true},
+    {"id": "G9-A12", "condition": "Comparisons fail closed as not comparable when unit, scope, release, clock, dependency, consumer, denominator, overlap or censorship policy differs.", "required": true},
+    {"id": "G9-A13", "condition": "Global QUALITY cannot govern eligibility or denominator inclusion and cannot hide component status or reasons.", "required": true},
+    {"id": "G9-A14", "condition": "Active C2, semantic or episode authority, rules, publication, Validation and probability, risk, exposure or execution remain unchanged.", "required": true}
+  ],
+  "explicitly_not_granted": [
+    "ACTIVE_OR_CANONICAL_CONSUMER_ELIGIBILITY_POLICY",
+    "NUMERIC_STALENESS_FRESHNESS_THRESHOLD",
+    "CANONICAL_OVERLAP_WEIGHTING_DEDUPLICATION_OR_ADJUSTMENT",
+    "ACTIVE_RATE_OR_DENOMINATOR_PUBLICATION",
+    "GLOBAL_QUALITY_GATING",
+    "HIDDEN_FALLBACK_OR_SILENT_EXCLUSION",
+    "SEMANTIC_EVENT_OR_EPISODE_PROMOTION",
+    "C2E_OR_C2_5_ACTIVATION",
+    "RULE_OR_THEORY_PROMOTION",
+    "NEW_PROVIDER_INTAKE",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "ACTIVE_C2_SELECTOR_OR_RELEASE_CHANGE",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "AGENT_WRITE_AUTHORITY"
+  ],
+  "candidate_registry": "registries/opt_b/c2/vnext/C2_COMPUTABILITY_CONSUMER_POLICY_CANDIDATE_v0_1.jsonc",
+  "tests": {
+    "gate_test": "tests/test_c2ar_cear_g9_gate.py",
+    "complete_repository_suite": "REQUIRED",
+    "final_head_assurance": "REQUIRED",
+    "merge_readiness": "REQUIRED",
+    "zero_unresolved_review_threads": "REQUIRED"
+  },
+  "qa": {
+    "packet": "CEAR_G9_PREDECISION_QA.json",
+    "recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_issues": []
+  },
+  "warnings": [
+    "NO_ACTIVE_CONSUMER_POLICY_IS_SELECTED_AT_CEAR_G9",
+    "NO_NUMERIC_STALENESS_OR_FRESHNESS_THRESHOLD_IS_SELECTED",
+    "NO_CANONICAL_OVERLAP_WEIGHTING_DEDUPLICATION_OR_ADJUSTMENT_IS_SELECTED",
+    "SHARED_EPISODE_CLUSTERS_REMAIN_UNAVAILABLE_WITHOUT_SEPARATE_EPISODE_AUTHORITY",
+    "GLOBAL_QUALITY_REMAINS_NON_GOVERNING"
+  ],
+  "changed_files": [
+    "registries/opt_b/c2/vnext/C2_COMPUTABILITY_CONSUMER_POLICY_CANDIDATE_v0_1.jsonc",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp9/CEAR_G9_GATE_PACKET.json",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp9/CEAR_G9_GATE_PACKET.md",
+    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp9/CEAR_G9_PREDECISION_QA.json",
+    "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_CEAR_G9_GATE_READY_STATE_v0_2.jsonc",
+    "tests/test_c2ar_cear_g9_gate.py"
+  ],
+  "external_artifacts": [],
+  "external_artifact_hashes": [],
+  "rollback": "Before approval, close the gate PR unmerged and preserve the WP8 receipt main. After approval, preserve the immutable decision and supersede only through a new versioned operator record. Any later WP9 shadow implementation can be disabled without active C2 rollback.",
+  "recommended_decision": "PASS",
+  "recommendation_rationale": "The proposal preserves the accepted per-component usability redesign, makes missingness and denominators auditable, prevents hidden fallback and silent exclusion, keeps overlap claim-specific, and grants only bounded inactive noncanonical shadow implementation authority without selecting thresholds, active consumers or canonical adjustments.",
+  "exact_approval_command": "OVC APPROVE CEAR-G9 PASS",
+  "exact_work_after_pass": [
+    "RECORD_AND_MERGE_THE_IMMUTABLE_CEAR_G9_OPERATOR_DECISION",
+    "CREATE_C2AR_WP9_IMPLEMENTATION_BRANCH_FROM_LAWFUL_MAIN",
+    "IMPLEMENT_CONTRACTS_SCHEMAS_REGISTRIES_FIXTURES_DETERMINISTIC_CODE_AND_TESTS_AS_INACTIVE_NONCANONICAL_SHADOW_ONLY",
+    "RUN_FOCUSED_RETAINED_AND_COMPLETE_REPOSITORY_TESTS",
+    "GENERATE_QA_AND_AUTO_RATIFY_C2AR_G9A_IF_ALL_CONDITIONS_PASS",
+    "SQUASH_MERGE_AND_SEAL_THE_WP9_RECEIPT",
+    "PREPARE_ONE_OPERATOR_REQUIRED_CEAR_G10_RULE_RECONSTRUCTION_DISPOSITION_PACKET_AND_STOP"
+  ],
+  "stop_boundary": "DO_NOT_MERGE_THIS_GATE_PR_OR_IMPLEMENT_OR_EXECUTE_ANY_COMPUTABILITY_CONSUMER_DENOMINATOR_OR_OVERLAP_POLICY_UNTIL_OPERATOR_DECISION"
+}

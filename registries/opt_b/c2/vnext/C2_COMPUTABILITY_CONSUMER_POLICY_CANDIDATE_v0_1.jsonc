@@ -1,0 +1,246 @@
+{
+  "schema": "ovc-c2ar-computability-consumer-policy-candidate/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "packet_id": "C2AR-WP9",
+  "gate_id": "CEAR-G9",
+  "candidate_id": "C2AR.COMPUTABILITY.CONSUMER.POLICY.CANDIDATE.v1",
+  "status": "PROPOSED_OPERATOR_GATE",
+  "effective": false,
+  "active": false,
+  "canonical": false,
+  "implementation_authority": "DENIED_PENDING_CEAR_G9",
+  "authority": "CANDIDATE_ONLY_NO_RUNTIME_EFFECT",
+  "central_decision": "USABILITY_IS_PER_COMPONENT_AND_PER_CONSUMER_WITH_EXPLICIT_DEPENDENCIES_DENOMINATORS_AND_OVERLAP_EVIDENCE_NOT_ONE_GLOBAL_DEGRADED_OR_QUALITY_STATE",
+  "separate_dimensions": [
+    {
+      "dimension": "AVAILABILITY",
+      "statuses": ["AVAILABLE", "UNAVAILABLE", "NOT_REQUESTED"],
+      "meaning": "Whether the exact source object or measurement exists and was requested; availability alone does not imply computability."
+    },
+    {
+      "dimension": "COMPUTABILITY",
+      "statuses": ["COMPUTABLE", "PARTIALLY_COMPUTABLE", "NOT_COMPUTABLE", "NOT_APPLICABLE", "CENSORED", "CONFLICTED"],
+      "meaning": "Whether the declared component can be deterministically produced under its exact dependency graph; partial status is allowed only for explicitly named subcomponents."
+    },
+    {
+      "dimension": "ASSURANCE",
+      "statuses": ["ASSURED", "UNASSURED", "CONFLICTED", "NOT_ASSESSED"],
+      "meaning": "Whether the produced evidence passed its declared assurance checks; assurance does not grant consumer eligibility or authority."
+    },
+    {
+      "dimension": "CONSUMER_ELIGIBILITY",
+      "statuses": ["ELIGIBLE", "INELIGIBLE", "NOT_EVALUATED"],
+      "meaning": "Whether one exact consumer policy accepts the component; the same component may be eligible for one consumer and ineligible for another."
+    },
+    {
+      "dimension": "AUTHORITY",
+      "statuses": ["AUTHORIZED", "UNAUTHORIZED"],
+      "meaning": "Whether the consumer is lawfully allowed to use the evidence; code, computability, assurance or eligibility never grants authority."
+    }
+  ],
+  "terminal_dispositions": [
+    "NOT_REQUESTED",
+    "NOT_APPLICABLE",
+    "COMPUTABLE",
+    "NOT_COMPUTABLE",
+    "CENSORED",
+    "CONFLICTED"
+  ],
+  "reason_code_families": {
+    "request_and_applicability": ["NOT_REQUESTED", "NOT_APPLICABLE", "CONSUMER_NOT_REGISTERED"],
+    "warmup_and_population": ["WARMUP_INSUFFICIENT", "POPULATION_INSUFFICIENT", "COMPARABLE_PAIR_UNAVAILABLE"],
+    "source_and_continuity": ["SOURCE_MISSING", "SOURCE_INCOMPLETE", "CONTINUITY_GAP", "CLOCK_SLOT_MISSING", "IDENTITY_MISMATCH"],
+    "censorship": ["LEFT_CENSORED", "RIGHT_CENSORED", "BOUNDARY_CENSORED", "SOURCE_CENSORED"],
+    "ambiguity": ["AMBIGUOUS_IDENTITY", "MULTIPLE_ELIGIBLE_NO_GOVERNED_SELECTION", "REFERENCE_UNRESOLVED"],
+    "staleness": ["STALE_FOR_CONSUMER", "STALENESS_POLICY_UNAVAILABLE", "AGE_EVIDENCE_UNAVAILABLE"],
+    "model_and_dependency": ["MODEL_UNAVAILABLE", "DEPENDENCY_NOT_COMPUTABLE", "ALTERNATIVE_GROUP_UNSATISFIED", "PROHIBITED_DEPENDENCY_PRESENT"],
+    "conflict": ["SOURCE_CONFLICT", "DEFINITION_CONFLICT", "ASSURANCE_CONFLICT", "POLICY_CONFLICT"],
+    "authority": ["CONSUMER_UNAUTHORIZED", "VALIDATION_LOCKED", "PUBLICATION_DENIED", "SEMANTIC_AUTHORITY_DENIED"]
+  },
+  "dependency_graph": {
+    "versioned": true,
+    "profile_specific": true,
+    "edge_types": ["REQUIRED", "OPTIONAL", "WARNING_ONLY", "ALTERNATIVE", "PROHIBITED"],
+    "required_edge_failure": "PROPAGATE_ONLY_TO_THE_DECLARED_DEPENDENT_COMPONENT",
+    "optional_edge_failure": "RETAIN_COMPONENT_COMPUTABILITY_AND_RECORD_WARNING",
+    "warning_only_edge_failure": "NO_COMPUTABILITY_EFFECT_RECORD_WARNING_ONLY",
+    "alternative_edge_rule": "AT_LEAST_ONE_MEMBER_OF_THE_EXACT_NAMED_GROUP_MUST_BE_COMPUTABLE",
+    "prohibited_edge_rule": "PRESENCE_FAILS_CLOSED_WITH_PROHIBITED_DEPENDENCY_PRESENT",
+    "hidden_fallback": false,
+    "dependency_ids_required": true,
+    "reason_propagation_required": true,
+    "global_failure_propagation": false
+  },
+  "axis_and_profile_rules": [
+    {
+      "axis": "LOCATION",
+      "rule": "LOCAL_TRAILING_LOCAL_STRUCTURAL_PARENT_MEASUREMENT_AND_PARENT_STRUCTURAL_PROFILES_HAVE_SEPARATE_DEPENDENCY_GRAPHS_AND_USABILITY_RESULTS"
+    },
+    {
+      "axis": "MOTION",
+      "rule": "RAW_MOTION_REQUIRES_DECLARED_SEQUENCE_AND_CONTINUITY_ONLY_WHILE_NORMALIZED_MOTION_ADDITIONALLY_REQUIRES_ONE_EXACT_NAMED_SCALE"
+    },
+    {
+      "axis": "ORGANISATION",
+      "rule": "EACH_METRIC_IS_INDEPENDENTLY_COMPUTABLE_AND_PARTIAL_AXIS_OUTPUT_MUST_EXPOSE_EVERY_AVAILABLE_AND_UNAVAILABLE_METRIC"
+    },
+    {
+      "axis": "INTERACTION",
+      "rule": "COMPUTABILITY_IS_PER_EXACT_OBJECT_ID_AND_TRACK_AND_NEVER_INFERRED_FROM_ANOTHER_OBJECT_OR_NEARBY_TRACK"
+    },
+    {
+      "axis": "QUALITY_COMPATIBILITY_PROJECTION",
+      "rule": "GLOBAL_QUALITY_IS_RETIRED_AS_A_GOVERNING_STATE_AND_MAY_EXIST_ONLY_AS_A_TRANSPARENT_NON_GOVERNING_COMPATIBILITY_PROJECTION"
+    },
+    {
+      "axis": "PARENT_DEPENDENT_PROFILES",
+      "rule": "MISSING_OR_NOT_COMPUTABLE_PARENT_CONTEXT_AFFECTS_ONLY_PROFILES_WITH_A_REQUIRED_PARENT_DEPENDENCY"
+    }
+  ],
+  "consumer_policy": {
+    "consumer_policy_id_required": true,
+    "consumer_identity_required": true,
+    "dependency_graph_id_required": true,
+    "eligibility_result_per_component": true,
+    "eligibility_requires_computable": true,
+    "eligibility_requires_authorized": true,
+    "assurance_requirement_declared_by_consumer": true,
+    "staleness_policy_id_required_when_age_is_used": true,
+    "universal_staleness_policy": false,
+    "numeric_staleness_threshold_selected": false,
+    "consumer_specific_numeric_parameters": "NOT_GRANTED_AT_CEAR_G9",
+    "silent_exclusion": false,
+    "hidden_fallback": false
+  },
+  "denominator_contract": {
+    "registered_scope_id_required": true,
+    "consumer_policy_id_required": true,
+    "unit_type_required": true,
+    "supported_unit_types": ["OBSERVATION", "TRANSITION_PAIR", "OBJECT_TRACK", "WINDOW", "BUNDLE", "RELATION", "DETECTOR_OUTPUT"],
+    "required_counts": [
+      "population_count",
+      "requested_count",
+      "not_requested_count",
+      "applicable_count",
+      "not_applicable_count",
+      "available_count",
+      "computable_count",
+      "not_computable_count",
+      "censored_count",
+      "conflicted_count",
+      "assured_count",
+      "eligible_count",
+      "included_count",
+      "numerator_count",
+      "denominator_count"
+    ],
+    "partition_identities": [
+      "POPULATION_COUNT_EQUALS_REQUESTED_COUNT_PLUS_NOT_REQUESTED_COUNT",
+      "REQUESTED_COUNT_EQUALS_APPLICABLE_COUNT_PLUS_NOT_APPLICABLE_COUNT",
+      "APPLICABLE_COUNT_EQUALS_COMPUTABLE_COUNT_PLUS_NOT_COMPUTABLE_COUNT_PLUS_CENSORED_COUNT_PLUS_CONFLICTED_COUNT",
+      "ELIGIBLE_COUNT_LESS_THAN_OR_EQUAL_TO_COMPUTABLE_COUNT",
+      "INCLUDED_COUNT_LESS_THAN_OR_EQUAL_TO_ELIGIBLE_COUNT",
+      "NUMERATOR_COUNT_LESS_THAN_OR_EQUAL_TO_DENOMINATOR_COUNT"
+    ],
+    "availability_assurance_and_authority_counts": "ORTHOGONAL_COUNTS_NOT_SUBSTITUTES_FOR_TERMINAL_DISPOSITION_COUNTS",
+    "transition_rate_unit": "COMPARABLE_TRANSITION_PAIRS_NOT_SINGLE_OBSERVATIONS",
+    "raw_counts_separate_from_rates": true,
+    "rate_formula_fields_required": ["numerator_definition", "denominator_definition", "unit_type", "scope_id", "consumer_policy_id", "overlap_policy_id", "censor_conflict_treatment"],
+    "silent_missingness_exclusion": false,
+    "mixed_unit_rate": false
+  },
+  "overlap_contract": {
+    "overlap_is_claim_specific": true,
+    "raw_unit_counts_always_preserved": true,
+    "cluster_types": [
+      "SHARED_OBSERVATION",
+      "SHARED_WINDOW",
+      "SHARED_OBJECT_TRACK",
+      "SHARED_BUNDLE",
+      "BID_ASK_PAIR",
+      "SHARED_EPISODE"
+    ],
+    "shared_episode_status": "DECLARED_BUT_UNAVAILABLE_WITHOUT_SEPARATE_EPISODE_AUTHORITY",
+    "modes": ["RAW_UNIT_COUNT", "CLAIM_SPECIFIC_CLUSTERED"],
+    "cluster_policy_id_required_for_adjusted_claim": true,
+    "cluster_membership_evidence_required": true,
+    "cluster_unit_and_claim_required": true,
+    "canonical_weighting_or_deduplication_selected": false,
+    "numeric_overlap_adjustment_selected": false,
+    "comparison_rule": "CLUSTER_ADJUSTED_RATES_MAY_BE_COMPARED_ONLY_WHEN_THE_SAME_CLUSTER_POLICY_ID_UNIT_AND_CLAIM_DEFINITION_ARE_USED",
+    "raw_and_adjusted_rate_mixing": false,
+    "generic_overlap_correction": false
+  },
+  "comparability_contract": {
+    "required_equal_fields": [
+      "unit_type",
+      "scope_definition",
+      "instrument_scope",
+      "side_handling",
+      "release_id",
+      "calendar_id",
+      "clock_and_lattice_profile",
+      "dependency_graph_id",
+      "consumer_policy_id",
+      "eligibility_policy_version",
+      "denominator_definition",
+      "overlap_policy_id",
+      "censor_conflict_treatment"
+    ],
+    "transition_pairs_require_same_pair_construction_policy": true,
+    "cross_side_pooling": "PROHIBITED_UNLESS_THE_UNIT_IS_AN_EXPLICIT_REGISTERED_BID_ASK_PAIR",
+    "silent_pooling": false,
+    "incomparable_result": "NOT_COMPARABLE_WITH_EXACT_REASON_CODES"
+  },
+  "quality_compatibility_projection": {
+    "governing": false,
+    "may_hide_component_status": false,
+    "may_drive_eligibility": false,
+    "may_drive_denominator_inclusion": false,
+    "must_expose_source_component_ids": true,
+    "must_expose_all_reason_codes": true,
+    "global_degraded_state": null
+  },
+  "required_record_fields": [
+    "record_id",
+    "component_id",
+    "profile_id",
+    "observation_or_unit_id",
+    "as_of_time",
+    "availability_status",
+    "computability_status",
+    "assurance_status",
+    "consumer_policy_id",
+    "consumer_eligibility_status",
+    "authority_status",
+    "dependency_graph_id",
+    "dependency_results",
+    "reason_codes",
+    "age_evidence",
+    "scope_id",
+    "unit_type",
+    "source_ids",
+    "content_sha256"
+  ],
+  "explicitly_not_granted": [
+    "ACTIVE_OR_CANONICAL_CONSUMER_ELIGIBILITY_POLICY",
+    "NUMERIC_STALENESS_FRESHNESS_THRESHOLD",
+    "CANONICAL_OVERLAP_WEIGHTING_DEDUPLICATION_OR_ADJUSTMENT",
+    "ACTIVE_RATE_OR_DENOMINATOR_PUBLICATION",
+    "GLOBAL_QUALITY_GATING",
+    "HIDDEN_FALLBACK_OR_SILENT_EXCLUSION",
+    "SEMANTIC_EVENT_OR_EPISODE_PROMOTION",
+    "C2E_OR_C2_5_ACTIVATION",
+    "RULE_OR_THEORY_PROMOTION",
+    "NEW_PROVIDER_INTAKE",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "ACTIVE_C2_SELECTOR_OR_RELEASE_CHANGE",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "AGENT_WRITE_AUTHORITY"
+  ],
+  "proposed_post_pass_authority": "IMPLEMENT_VERSIONED_INACTIVE_NONCANONICAL_SHADOW_FROZEN_COMPUTABILITY_DEPENDENCY_CONSUMER_DENOMINATOR_OVERLAP_AND_COMPARABILITY_CONTRACTS_SCHEMAS_REGISTRIES_FIXTURES_CODE_TESTS_AND_READ_ONLY_OUTPUTS_ONLY",
+  "rollback": "Discard this non-effective candidate before approval. After approval, material policy changes require a new version and operator-authorised SUPERSEDE record; never mutate accepted status, dependency, denominator, overlap or comparability identities in place."
+}
