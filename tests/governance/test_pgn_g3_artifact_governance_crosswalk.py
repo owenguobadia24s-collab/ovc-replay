@@ -10,6 +10,7 @@ BASE = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2"
 R1 = BASE / "pgn-g3-r1/PGN_G3_R1_ARTIFACT_GOVERNANCE_SUPPLEMENT.json"
 R2 = BASE / "pgn-g3-r2/PGN_G3_R2_ARTIFACT_GOVERNANCE_SUPPLEMENT.json"
 R3 = BASE / "pgn-g3-r3/PGN_G3_R3_ARTIFACT_GOVERNANCE_CROSSWALK.json"
+R4 = BASE / "pgn-g3-r4/PGN_G3_R4_ARTIFACT_GOVERNANCE_CROSSWALK.json"
 PROTOCOL = BASE / "pgn-g3-r3/PGN_G3_REVIEW_PROTOCOL_AMENDMENT_v0_1.json"
 DECISION = BASE / "pgn-g3-r3/PGN_G3_R3_ADJUST_SCOPE_OPERATOR_DECISION.json"
 SCHEMA = ROOT / "schemas/governance/programme_genesis/pgn_artifact_governance_crosswalk_v0_1.schema.json"
@@ -76,6 +77,7 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         cls.r1 = load(R1)
         cls.r2 = load(R2)
         cls.r3 = load(R3)
+        cls.r4 = load(R4)
         cls.protocol = load(PROTOCOL)
         cls.decision = load(DECISION)
         cls.r3_receipt = load(R3_RECEIPT)
@@ -115,31 +117,51 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         self.assertEqual("NONE", self.r3_receipt["native_adoption"])
         self.assertEqual("LOCKED", self.r3_receipt["later_groups_beyond_r4"])
 
-    def test_r1_r2_retrospective_and_r3_direct_crosswalks_are_complete(self) -> None:
+    def test_materialised_crosswalks_are_complete_and_authority_neutral(self) -> None:
         self.assertEqual("RETROSPECTIVE_SUPPLEMENT_MATERIALISED_UNAPPROVED", self.r1["status"])
         self.assertEqual("RETROSPECTIVE_SUPPLEMENT_MATERIALISED_UNAPPROVED", self.r2["status"])
         self.assertEqual("MATERIALISED_UNAPPROVED", self.r3["status"])
-        for value in (self.r1, self.r2, self.r3):
+        self.assertEqual("MATERIALISED_UNAPPROVED", self.r4["status"])
+        for value in (self.r1, self.r2, self.r3, self.r4):
             assert_authority_neutral(self, value)
 
-        ids = [candidate["programme_id"] for value in (self.r1, self.r2, self.r3) for candidate in value["candidates"]]
-        self.assertEqual(9, len(ids))
-        self.assertEqual(9, len(set(ids)))
+        ids = [candidate["programme_id"] for value in (self.r1, self.r2, self.r3, self.r4) for candidate in value["candidates"]]
+        self.assertEqual(12, len(ids))
+        self.assertEqual(12, len(set(ids)))
         self.assertIn("OVC-DEV-ACCEL-v0.2", ids)
-        self.assertIn("OVC-C2E-NEUTRAL-EPISODE-v0.1", ids)
-        self.assertIn("OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2", ids)
+        self.assertIn("OVC-RESEARCH-CONSOLE.v0.3", ids)
+        self.assertIn("OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1", ids)
 
     def test_candidate_relations_remain_visible_and_non_authoritative(self) -> None:
-        candidates = [
+        r3_candidates = [
             relationship
             for candidate in self.r3["candidates"]
             for relationship in candidate["relationships"]
             if relationship["evidence_status"] == "CANDIDATE_RELATION"
         ]
-        self.assertEqual(2, len(candidates))
-        self.assertEqual({"OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1", "OVC-DEV-ACCEL-v0.2-DA2-00-CI-ADMISSION-BASELINE"}, {item["artifact_id"] for item in candidates})
-        self.assertTrue(all(item["ambiguity_or_competing_owner"] for item in candidates))
-        self.assertTrue(all(item["authority_effect"] == "NONE" for item in candidates))
+        r4_candidates = [
+            relationship
+            for candidate in self.r4["candidates"]
+            for relationship in candidate["relationships"]
+            if relationship["evidence_status"] == "CANDIDATE_RELATION"
+        ]
+        self.assertEqual(2, len(r3_candidates))
+        self.assertEqual(1, len(r4_candidates))
+        self.assertEqual("OVC-RESEARCH-CONSOLE-V0.2-IMPLEMENTATION-PLAN-0.1", r4_candidates[0]["artifact_id"])
+        self.assertTrue(all(item["ambiguity_or_competing_owner"] for item in r3_candidates + r4_candidates))
+        self.assertTrue(all(item["authority_effect"] == "NONE" for item in r3_candidates + r4_candidates))
+
+    def test_r4_supersession_lineage_preserves_no_authority_transfer(self) -> None:
+        lineage = [
+            relationship
+            for candidate in self.r4["candidates"]
+            for relationship in candidate["relationships"]
+            if relationship["evidence_status"] == "LINEAGE_EXPLICIT"
+        ]
+        self.assertEqual(2, len(lineage))
+        self.assertTrue(all(item["relationship_type"] == "LINEAGE_RECORD_OF" for item in lineage))
+        self.assertTrue(all(item["authority_effect"] == "NONE" for item in lineage))
+        self.assertTrue(all(item["ambiguity_or_competing_owner"] for item in lineage))
 
     def test_opt_a_lineage_and_validation_lock_are_preserved(self) -> None:
         opt_a = next(candidate for candidate in self.r2["candidates"] if candidate["programme_id"] == "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2")
