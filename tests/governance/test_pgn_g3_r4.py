@@ -29,6 +29,11 @@ R4_IDS = [
     "OVC-RESEARCH-CONSOLE.v0.3",
     "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1",
 ]
+R5_IDS = [
+    "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.2",
+    "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
+    "PD-JUNE-FULL-MONTH-MDR",
+]
 R4_SHA = "70526ebfa5fe9ffd484720c43d892546efb88d5f69bb6eca16890819dae9ffc9"
 DECISION_ID = "PGN-G3-R4.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T163200+0100"
 
@@ -52,6 +57,7 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.r3_receipt = load(R3_RECEIPT)
+        cls.r4_receipt = load(R4_RECEIPT)
         cls.bundle = load(BUNDLE)
         cls.crosswalk = load(CROSSWALK)
         cls.qa = load(QA)
@@ -63,18 +69,9 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
 
     def test_r3_receipt_is_exact_prerequisite(self) -> None:
         self.assertEqual(326, self.r3_receipt["pull_request"])
-        self.assertEqual(
-            "fca07b4943790fe405e30ccc6aea7785155d7d81",
-            self.r3_receipt["final_head"],
-        )
-        self.assertEqual(
-            "129e1437e48d26d6ef2c8d2013a95a2b35e0e43f",
-            self.r3_receipt["merge_commit"],
-        )
-        self.assertEqual(
-            "DISCLOSE_AND_MATERIALISE_PGN_G3_R4_ONLY",
-            self.r3_receipt["authority_effect"],
-        )
+        self.assertEqual("fca07b4943790fe405e30ccc6aea7785155d7d81", self.r3_receipt["final_head"])
+        self.assertEqual("129e1437e48d26d6ef2c8d2013a95a2b35e0e43f", self.r3_receipt["merge_commit"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R4_ONLY", self.r3_receipt["authority_effect"])
         self.assertEqual("NONE", self.r3_receipt["native_adoption"])
 
     def test_r4_bundle_matches_deterministic_builder(self) -> None:
@@ -83,8 +80,6 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
         self.assertEqual(R4_IDS, self.bundle["candidate_ids"])
         self.assertEqual(R4_SHA, self.bundle["candidate_group_sha256"])
         self.assertEqual(3, self.bundle["candidate_count"])
-        with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R5", ROOT)
 
     def test_all_candidates_remain_unapproved_and_source_preserving(self) -> None:
         for item in self.bundle["candidates"]:
@@ -96,10 +91,7 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
             self.assertEqual(8, len(candidate["unresolved_fields"]))
             self.assertTrue(candidate["authority_envelope"]["source_authority_preserved"])
             self.assertEqual("NONE", candidate["authority_envelope"]["authority_delta"])
-            self.assertEqual(
-                "DENIED_PENDING_PGN_G3",
-                candidate["authority_envelope"]["native_adoption"],
-            )
+            self.assertEqual("DENIED_PENDING_PGN_G3", candidate["authority_envelope"]["native_adoption"])
             self.assertFalse(candidate["scope_audit"]["fabricated_historical_intent"])
             self.assertFalse(candidate["migration_crosswalk"]["source_values_modified"])
             self.assertFalse(candidate["lifecycle"]["source_lifecycle_modified"])
@@ -108,24 +100,19 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
         self.assertEqual("PGN-G3-R4", self.crosswalk["review_group_id"])
         self.assertEqual("MATERIALISED_UNAPPROVED", self.crosswalk["status"])
         self.assertEqual("NONE", self.crosswalk["authority_effect"])
+        self.assertEqual(3, self.crosswalk["candidate_count"])
         relations = [
             relation
             for candidate in self.crosswalk["candidates"]
             for relation in candidate["relationships"]
         ]
-        candidate_relations = [
-            item for item in relations if item["evidence_status"] == "CANDIDATE_RELATION"
-        ]
-        lineage_relations = [
-            item for item in relations if item["evidence_status"] == "LINEAGE_EXPLICIT"
-        ]
+        candidate_relations = [item for item in relations if item["evidence_status"] == "CANDIDATE_RELATION"]
+        lineage_relations = [item for item in relations if item["evidence_status"] == "LINEAGE_EXPLICIT"]
         self.assertEqual(1, len(candidate_relations))
-        self.assertEqual(
-            "OVC-RESEARCH-CONSOLE-V0.2-IMPLEMENTATION-PLAN-0.1",
-            candidate_relations[0]["artifact_id"],
-        )
+        self.assertEqual("OVC-RESEARCH-CONSOLE-V0.2-IMPLEMENTATION-PLAN-0.1", candidate_relations[0]["artifact_id"])
         self.assertEqual(2, len(lineage_relations))
         self.assertTrue(all(item["authority_effect"] == "NONE" for item in relations))
+        self.assertTrue(all(candidate["candidate_status"] == "CANDIDATE_UNAPPROVED" for candidate in self.crosswalk["candidates"]))
 
     def test_operator_acknowledgement_is_exact_and_not_adoption(self) -> None:
         self.assertEqual(DECISION_ID, self.decision["decision_id"])
@@ -135,51 +122,43 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
             "OVC APPROVE PGN-G3-R4 ACKNOWLEDGE_CONTINUE",
             self.decision["exact_operator_command"],
         )
-        self.assertEqual(
-            0,
-            self.decision["acknowledged_review_group"]["native_adoption_count"],
-        )
-        self.assertEqual(
-            "NONE", self.decision["authority_granted"]["native_genesis_adoption"]
-        )
-        self.assertEqual(
-            "NONE",
-            self.decision["authority_granted"]["cross_programme_edge_acceptance"],
-        )
+        self.assertEqual(0, self.decision["acknowledged_review_group"]["native_adoption_count"])
+        self.assertEqual("NONE", self.decision["authority_granted"]["native_genesis_adoption"])
+        self.assertEqual("NONE", self.decision["authority_granted"]["cross_programme_edge_acceptance"])
         self.assertEqual(DECISION_ID, self.ack_record["decision_id"])
         self.assertEqual("NONE", self.ack_record["native_adoption"])
         self.assertEqual("DENIED", self.ack_record["r5_materialisation_before_merge"])
-        self.assertEqual("LOCKED", self.ack_record["later_groups_beyond_r5"])
 
-    def test_gate_qa_and_state_are_approved_pending_replacement_merge(self) -> None:
+    def test_gate_qa_and_state_are_approved_pending_merge(self) -> None:
         self.assertFalse(self.gate["operator_decision_required"])
         self.assertEqual("ACKNOWLEDGE_CONTINUE", self.gate["decision"])
-        self.assertEqual(
-            "APPROVED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
-            self.gate["status"],
-        )
-        self.assertEqual(
-            "CANDIDATE_UNAPPROVED",
-            self.gate["review_group"]["candidate_status_after_decision"],
-        )
+        self.assertEqual("APPROVED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE", self.gate["status"])
+        self.assertEqual("CANDIDATE_UNAPPROVED", self.gate["review_group"]["candidate_status_after_decision"])
         self.assertEqual(0, self.gate["review_group"]["native_adoption_count"])
-        self.assertEqual(
-            "PASS_OPERATOR_ACKNOWLEDGED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
-            self.qa["status"],
-        )
+        self.assertEqual("PASS_OPERATOR_ACKNOWLEDGED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE", self.qa["status"])
         self.assertEqual([], self.qa["blockers"])
         self.assertEqual("APPROVED", self.state["status"])
-        self.assertEqual(
-            "OPERATOR_REQUIRED_SATISFIED", self.state["authority_required"]
-        )
+        self.assertEqual("OPERATOR_REQUIRED_SATISFIED", self.state["authority_required"])
         self.assertEqual("PGN-G3-R5", self.state["next_packet"])
         self.assertEqual("PGN-G3-R5", self.state["next_gate"])
         self.assertEqual([], self.state["blockers"])
 
-    def test_r5_remains_locked_until_exact_post_merge_receipt(self) -> None:
-        self.assertFalse(R4_RECEIPT.exists())
+    def test_post_merge_receipt_is_exact_and_unlocks_only_r5(self) -> None:
+        self.assertEqual(330, self.r4_receipt["pull_request"])
+        self.assertEqual(328, self.r4_receipt["superseded_pull_request"])
+        self.assertEqual("9b76695b434383a2de7ea654c3a2af52756702ad", self.r4_receipt["final_head"])
+        self.assertEqual("19b00bb8f489bc07bf84db87eff41ba5dd21b308", self.r4_receipt["merge_commit"])
+        for key in ("repository_tests", "ovc_final_head", "merge_readiness"):
+            self.assertEqual("SUCCESS", self.r4_receipt["exact_head_assurance"][key]["conclusion"])
+        self.assertEqual(0, self.r4_receipt["exact_head_assurance"]["unresolved_review_threads"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R5_ONLY", self.r4_receipt["authority_effect"])
+        self.assertEqual("NONE", self.r4_receipt["native_adoption"])
+        self.assertEqual("NONE", self.r4_receipt["cross_programme_edge_acceptance"])
+        r5 = self.builder.build_group("PGN-G3-R5", ROOT)
+        self.assertEqual(R5_IDS, r5["candidate_ids"])
+        self.assertEqual("NONE", r5["authority_effect"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R5", ROOT)
+            self.builder.build_group("PGN-G3-R6", ROOT)
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
 
 

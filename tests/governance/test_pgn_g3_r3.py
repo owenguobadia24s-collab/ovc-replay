@@ -154,8 +154,11 @@ class NativeGenesisPortfolioG3R3Tests(unittest.TestCase):
         r4 = self.builder.build_group("PGN-G3-R4", ROOT)
         self.assertEqual(R4_IDS, r4["candidate_ids"])
         self.assertEqual("NONE", r4["authority_effect"])
+        r5 = self.builder.build_group("PGN-G3-R5", ROOT)
+        self.assertEqual("PGN-G3-R5", r5["review_group_id"])
+        self.assertEqual("NONE", r5["authority_effect"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R5", ROOT)
+            self.builder.build_group("PGN-G3-R6", ROOT)
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
 
 

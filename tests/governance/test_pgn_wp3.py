@@ -112,13 +112,13 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
         self.assertFalse(self.queue["rules"]["group_acknowledgement_is_adoption"])
 
     def test_progressive_materialization_follows_exact_receipts(self) -> None:
-        for group_id in ("PGN-G3-R1", "PGN-G3-R2", "PGN-G3-R3", "PGN-G3-R4"):
+        for group_id in ("PGN-G3-R1", "PGN-G3-R2", "PGN-G3-R3", "PGN-G3-R4", "PGN-G3-R5"):
             group = self.builder.build_group(group_id, ROOT)
             self.assertEqual(group_id, group["review_group_id"])
             self.assertEqual("NONE", group["authority_effect"])
             self.assertEqual("DENIED_PENDING_PGN_G3", group["native_adoption"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R5", ROOT)
+            self.builder.build_group("PGN-G3-R6", ROOT)
 
     def test_materialized_manifest_and_queue_match_builder(self) -> None:
         manifest, queue = self.builder.build_bundle(ROOT)
@@ -154,6 +154,7 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
                 "PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json",
                 "PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json",
                 "PGN_G3_R3_ACKNOWLEDGEMENT_RECEIPT.json",
+                "PGN_G3_R4_ACKNOWLEDGEMENT_RECEIPT.json",
             ],
             receipts,
         )
@@ -161,6 +162,7 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
             "DISCLOSE_AND_MATERIALISE_PGN_G3_R2_ONLY",
             "DISCLOSE_AND_MATERIALISE_PGN_G3_R3_ONLY",
             "DISCLOSE_AND_MATERIALISE_PGN_G3_R4_ONLY",
+            "DISCLOSE_AND_MATERIALISE_PGN_G3_R5_ONLY",
         ]
         for name, effect in zip(receipts, expected_effects):
             receipt = load(REVIEW_RECEIPT_DIR / name)

@@ -91,8 +91,9 @@ class NativeGenesisPortfolioG3R2Tests(unittest.TestCase):
         self.assertEqual("NONE", self.receipt["native_adoption"])
         self.assertEqual("PGN-G3-R3", self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"])
         self.assertEqual("PGN-G3-R4", self.builder.build_group("PGN-G3-R4", ROOT)["review_group_id"])
+        self.assertEqual("PGN-G3-R5", self.builder.build_group("PGN-G3-R5", ROOT)["review_group_id"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R5", ROOT)
+            self.builder.build_group("PGN-G3-R6", ROOT)
 
     def test_gate_qa_and_state_preserve_no_adoption(self) -> None:
         self.assertFalse(self.gate["operator_decision_required"])
