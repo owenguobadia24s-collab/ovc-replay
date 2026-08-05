@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/governance/programme_genesis/pgn_artifact_governance_crosswalk_v0_1.schema.json",
+  "title": "OVC PGN Artifact-Governance Crosswalk v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "plan_id",
+    "review_group_id",
+    "status",
+    "authority_effect",
+    "candidate_count",
+    "candidates"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-pgn-artifact-governance-crosswalk/v1"},
+    "programme_id": {"const": "OVC-PG-NATIVE-PORTFOLIO-v0.2"},
+    "plan_id": {"const": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED"},
+    "review_group_id": {"pattern": "^PGN-G3-R[1-6]$"},
+    "status": {"enum": ["MATERIALISED_UNAPPROVED", "RETROSPECTIVE_SUPPLEMENT_MATERIALISED_UNAPPROVED"]},
+    "authority_effect": {"const": "NONE"},
+    "candidate_count": {"type": "integer", "minimum": 1, "maximum": 3},
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "prospective_requirement": {"type": "boolean"},
+    "notes": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "hash_kind", "hash", "role"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "hash_kind": {"enum": ["GIT_BLOB_SHA", "SHA256", "SOURCE_SET_SHA256", "COMMIT_SHA"]},
+        "hash": {"type": "string", "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"},
+        "role": {"type": "string", "minLength": 1}
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "governing_programme_id",
+        "relationship_type",
+        "direction",
+        "evidence_status",
+        "evidence_sources",
+        "ambiguity_or_competing_owner",
+        "authority_effect"
+      ],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "governing_programme_id": {"type": "string", "minLength": 1},
+        "relationship_type": {
+          "enum": [
+            "EVIDENCE_ROOT_OF",
+            "PLAN_GOVERNED_BY",
+            "RELEASE_PRODUCED_BY",
+            "GATE_PACKET_OF",
+            "DECISION_RECORD_OF",
+            "HISTORICAL_EVIDENCE_OF",
+            "LINEAGE_RECORD_OF",
+            "REFERENCES",
+            "CONSUMES",
+            "UNRESOLVED_RELATION"
+          ]
+        },
+        "direction": {"enum": ["ARTIFACT_TO_PROGRAMME", "PROGRAMME_TO_ARTIFACT"]},
+        "evidence_status": {
+          "enum": [
+            "SOURCE_EXPLICIT",
+            "LINEAGE_EXPLICIT",
+            "PATH_AND_CONTENT_CORROBORATED",
+            "CANDIDATE_RELATION",
+            "UNRESOLVED"
+          ]
+        },
+        "evidence_sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/evidence"}
+        },
+        "ambiguity_or_competing_owner": {"type": ["string", "null"]},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "programme_id",
+        "candidate_status",
+        "crosswalk_status",
+        "relationships",
+        "coverage",
+        "authority_effect"
+      ],
+      "properties": {
+        "programme_id": {"type": "string", "minLength": 1},
+        "candidate_status": {"const": "CANDIDATE_UNAPPROVED"},
+        "crosswalk_status": {"const": "MATERIALISED_UNAPPROVED"},
+        "relationships": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/relationship"}
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "release_roots",
+            "plans_and_amendments",
+            "immutable_release_identities",
+            "gate_and_decision_collections",
+            "historical_evidence_roots",
+            "lineage_records"
+          ],
+          "properties": {
+            "release_roots": {"type": "string"},
+            "plans_and_amendments": {"type": "string"},
+            "immutable_release_identities": {"type": "string"},
+            "gate_and_decision_collections": {"type": "string"},
+            "historical_evidence_roots": {"type": "string"},
+            "lineage_records": {"type": "string"}
+          }
+        },
+        "authority_effect": {"const": "NONE"}
+      }
+    }
+  }
+}
