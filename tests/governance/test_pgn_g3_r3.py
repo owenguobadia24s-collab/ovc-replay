@@ -34,6 +34,7 @@ R4_IDS = [
     "OVC-RESEARCH-CONSOLE.v0.3",
     "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1",
 ]
+R6_IDS = ["OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1"]
 R3_SHA = "95c6d187900a4c0ad94fff94cfeb63791f8cf7b6c537379df7a666143a02f296"
 DECISION_ID = "PGN-G3-R3.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T154400+0100"
 
@@ -142,7 +143,7 @@ class NativeGenesisPortfolioG3R3Tests(unittest.TestCase):
         self.assertEqual("PGN-G3-R4", self.state["next_gate"])
         self.assertEqual([], self.state["blockers"])
 
-    def test_post_merge_receipt_is_exact_and_unlocks_only_r4(self) -> None:
+    def test_post_merge_receipt_is_exact_and_unlocks_progressively(self) -> None:
         self.assertEqual(326, self.r3_receipt["pull_request"])
         self.assertEqual("fca07b4943790fe405e30ccc6aea7785155d7d81", self.r3_receipt["final_head"])
         self.assertEqual("129e1437e48d26d6ef2c8d2013a95a2b35e0e43f", self.r3_receipt["merge_commit"])
@@ -154,11 +155,10 @@ class NativeGenesisPortfolioG3R3Tests(unittest.TestCase):
         r4 = self.builder.build_group("PGN-G3-R4", ROOT)
         self.assertEqual(R4_IDS, r4["candidate_ids"])
         self.assertEqual("NONE", r4["authority_effect"])
-        r5 = self.builder.build_group("PGN-G3-R5", ROOT)
-        self.assertEqual("PGN-G3-R5", r5["review_group_id"])
-        self.assertEqual("NONE", r5["authority_effect"])
-        with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R6", ROOT)
+        self.assertEqual("PGN-G3-R5", self.builder.build_group("PGN-G3-R5", ROOT)["review_group_id"])
+        r6 = self.builder.build_group("PGN-G3-R6", ROOT)
+        self.assertEqual(R6_IDS, r6["candidate_ids"])
+        self.assertEqual("NONE", r6["authority_effect"])
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
 
 
