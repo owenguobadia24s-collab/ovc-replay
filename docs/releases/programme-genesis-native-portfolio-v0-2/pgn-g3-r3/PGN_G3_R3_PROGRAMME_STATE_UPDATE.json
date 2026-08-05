@@ -5,27 +5,28 @@
   "plan_version": "0.2",
   "packet_id": "PGN-G3-R3",
   "gate_id": "PGN-G3-R3",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "prerequisites": [
     "PGN_G3_R2_ACKNOWLEDGE_CONTINUE_MERGED_4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
     "PGN_G3_R3_OPERATOR_ADJUST_SCOPE_20260805T152000_PLUS0100"
   ],
-  "authority_required": "OPERATOR_REQUIRED",
-  "authority_delta": "ACKNOWLEDGE_AMENDED_R3_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R4_DISCLOSURE_ONLY",
+  "authority_required": "OPERATOR_REQUIRED_SATISFIED",
+  "authority_delta": "ACKNOWLEDGE_AMENDED_R3_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R4_DISCLOSURE_ONLY_AFTER_MERGE_AND_EXACT_RECEIPT",
   "baseline_commit": "4d3ce5ecaf92897d69b1c7bf4945ca4f6935e606",
   "main_at_scope_adjustment": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
+  "main_at_acknowledgement": "3b0ce7915a1821132995cb30b20ebf74ebfc032a",
   "branch": "gate/pgn-g3-r3-development-infrastructure",
   "candidate_commit": "BOUND_BY_PR_290_FINAL_HEAD",
-  "assured_gate_head": "PENDING_FINAL_HEAD_CI_AFTER_SCOPE_AMENDMENT",
+  "assured_predecision_head": "91ace3a4cc3722562376944ae8cd47fec8c50d83",
   "tests": [
-    "FOCUSED_TEST_PGN_G3_ARTIFACT_GOVERNANCE_CROSSWALK_ADDED",
-    "REPOSITORY_TESTS_PENDING_SCOPE_AMENDMENT_FINAL_HEAD",
-    "OVC_FINAL_HEAD_PENDING_SCOPE_AMENDMENT_FINAL_HEAD",
-    "OVC_MERGE_READINESS_PENDING_SCOPE_AMENDMENT_FINAL_HEAD",
-    "FINAL_PACKET_HEAD_ASSURANCE_REQUIRED"
+    "PREDECISION_REPOSITORY_TESTS_RUN_31016223357_SUCCESS",
+    "PREDECISION_OVC_FINAL_HEAD_RUN_31016223171_JOB_92340845690_SUCCESS",
+    "PREDECISION_OVC_MERGE_READINESS_RUN_31016223171_JOB_92340891881_SUCCESS",
+    "FINAL_DECISION_HEAD_ASSURANCE_REQUIRED"
   ],
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_QA_PACKET.json",
-  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_ADJUST_SCOPE_OPERATOR_DECISION.json",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r3/PGN_G3_R3_OPERATOR_DECISION.json",
+  "decision_id": "PGN-G3-R3.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T154400+0100",
   "merge_commit": null,
   "blockers": [],
   "review": {
@@ -34,6 +35,7 @@
     "candidate_count": 3,
     "candidate_group_sha256": "95c6d187900a4c0ad94fff94cfeb63791f8cf7b6c537379df7a666143a02f296",
     "candidate_status": "CANDIDATE_UNAPPROVED",
+    "native_adoption_count": 0,
     "artifact_governance_crosswalk_status": "R1_R2_RETROSPECTIVE_AND_R3_DIRECT_MATERIALISED_UNAPPROVED",
     "crosswalk_candidate_count": 9,
     "r3_candidate_relation_count": 2,
@@ -43,16 +45,16 @@
   },
   "authority": {
     "scope_adjustment": "OPERATOR_APPROVED_IMPLEMENTED",
-    "r3_acknowledgement": "DENIED_PENDING_OPERATOR_DECISION",
+    "r3_acknowledgement": "APPROVED_EFFECTIVE_WHEN_DECISION_MERGES",
     "native_adoption": "DENIED_PENDING_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
-    "next_group_disclosure": "DENIED_PENDING_R3_ACKNOWLEDGEMENT_RECEIPT_MERGE",
+    "next_group_disclosure": "DENIED_PENDING_PR_290_MERGE_AND_EXACT_POST_MERGE_RECEIPT",
     "cross_programme_edges": "DENIED_PENDING_PGN_G5",
     "constitutional_parentage": "UNRESOLVED_UNACCEPTED",
     "authority_inheritance": "NONE",
     "reserved_authority": "NONE"
   },
-  "next_packet": "PGN-G3-R3-AMENDED-ACKNOWLEDGEMENT",
-  "next_gate": "PGN-G3-R3",
-  "next_action": "RUN_EXACT_HEAD_ASSURANCE_THEN_AWAIT_OPERATOR_PGN_G3_R3_ACKNOWLEDGE_CONTINUE_OR_ALTERNATIVE_DO_NOT_DISCLOSE_PGN_G3_R4",
-  "rollback": "Preserve PGN-WP3, R1 and R2 receipts, the scope-adjustment decision and sealed commitments. Supersede crosswalks append-only and do not create an R3 acknowledgement receipt or disclose R4 without operator approval."
+  "next_packet": "PGN-G3-R4",
+  "next_gate": "PGN-G3-R4",
+  "next_action": "RUN_FINAL_HEAD_ASSURANCE_SQUASH_MERGE_PR_290_CREATE_EXACT_R3_POST_MERGE_RECEIPT_THEN_DISCLOSE_AND_MATERIALISE_PGN_G3_R4_WITH_REQUIRED_CROSSWALK_ONLY",
+  "rollback": "Preserve PGN-WP3, R1 and R2 receipts, both R3 operator decisions and all crosswalk evidence. Without a successful merge and exact post-merge receipt, do not disclose R4."
 }
