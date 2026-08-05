@@ -3,53 +3,39 @@
   "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
   "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
   "plan_version": "0.3-REVISED",
-  "state_id": "C2AR.STATE.WP10.INPUT_RESOLUTION.QA_REVIEW.v1",
+  "state_id": "C2AR.STATE.WP10.INPUT_RESOLUTION.ASSURED.v1",
   "supersedes_state_path": "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_CEAR_G10_FINAL_BLOCKED_STATE_v0_3.jsonc",
-  "status": "QA_REVIEW",
-  "current_packet": "C2AR-WP10-INPUT-RESOLUTION",
+  "status": "BLOCKED",
+  "current_packet": "C2AR-WP10",
+  "current_subpacket": "C2AR-WP10-INPUT-RESOLUTION",
   "current_gate": "CEAR-G10",
   "operator_decision_required": false,
   "decision_readiness": "NOT_READY_OPERATOR_LOCAL_REPLAY_REQUIRED",
-  "recommended_disposition": "PRESERVE_BLOCK_AND_EXECUTE_INPUT_RESOLUTION",
+  "recommended_disposition": "PRESERVE_BLOCK_AND_RUN_OPERATOR_LOCAL_REPLAY",
   "blocker_id": "CEAR-G10-BLOCKER-001",
   "baseline_commit": "f04ddc7263972687913b112c7ff03ba183931d55",
   "branch": "build/c2ar-wp10-input-resolution-full-replay",
-  "candidate_commit": "BOUND_BY_BRANCH_HEAD_AFTER_ATOMIC_COMMIT",
-  "prerequisites": [
-    "C2AR-WP9_AND_C2AR-G9A_COMPLETED_ON_MAIN_8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
-    "PR_319_WP10_PREPARATION_RETAINED_UNMERGED_AT_f04ddc7263972687913b112c7ff03ba183931d55",
-    "ACCEPTED_JUNE_SOURCE_SLICE_RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"
+  "pull_request": 320,
+  "candidate_commit": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99",
+  "qa_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_RESOLUTION_QA_PACKET.json",
+  "decision_record": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_INPUT_RESOLUTION_DELEGATED_DECISION.json",
+  "assurance": [
+    {"workflow": "tests", "run_id": 30997804837, "result": "PASS", "test_count": 282, "head": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30997804906, "profile": "FINAL_HEAD", "result": "PASS", "head": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99"},
+    {"check": "OVC merge readiness", "run_id": 30997804906, "result": "PASS", "head": "07f0c1e5c6ec9fc7905fa9b838ed82cd1ca7bc99"},
+    {"check": "unresolved review threads", "pull_request": 320, "result": "ZERO"}
   ],
-  "authority_required": "NONE_FOR_DETERMINISTIC_TOOLING_AND_OPERATOR_LOCAL_SHADOW_REPLAY",
-  "authority_delta": "ADD_FAIL_CLOSED_INPUT_BINDING_BUILDER_FULL_REPLAY_ORCHESTRATOR_TWO_CLEAN_RUN_AND_RESTART_ASSURANCE_ONLY",
-  "implemented_artifacts": [
-    "src/ovc/opt_b/c2_vnext/full_replay.py",
-    "scripts/c2ar/run_vnext_full_replay.ps1",
-    "schemas/opt_b/c2/vnext/C2_VNEXT_FULL_REPLAY_INPUT_BINDING_v1.schema.json",
-    "tests/opt_b/c2/vnext/test_full_replay.py",
-    "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_FULL_REPLAY_OPERATOR_RUNBOOK.md"
-  ],
-  "implemented_controls": {
-    "binding_from_actual_source_and_repository_bytes": true,
-    "readable_payload_verification": true,
-    "complete_target_june_registered_sequence_population": true,
-    "bid_and_ask_15m_and_2h_a_l": true,
-    "explicit_warmup_censorship_conflict_and_non_computability": true,
-    "legacy_c2_upstream_use": "PROHIBITED",
-    "outcome_and_validation_dependencies": "PROHIBITED",
-    "clean_run_count": 2,
-    "checkpoint_restart_exercise": true,
-    "logical_hash_count_and_artifact_reconciliation": true,
-    "capacity_limits": true
+  "completed_preparation": {
+    "functional_discovery_machinery": "IMPLEMENTED_IN_PR_319",
+    "full_replay_input_binding_builder": "IMPLEMENTED_AND_ASSURED",
+    "full_replay_schema": "IMPLEMENTED_AND_ASSURED",
+    "operator_local_entrypoint": "IMPLEMENTED_AND_ASSURED",
+    "complete_sequence_opportunity_builder": "IMPLEMENTED_AND_ASSURED",
+    "two_clean_run_orchestration": "IMPLEMENTED_AND_ASSURED",
+    "checkpoint_restart_orchestration": "IMPLEMENTED_AND_ASSURED",
+    "determinism_count_artifact_and_capacity_receipts": "IMPLEMENTED_AND_ASSURED",
+    "operator_local_real_vnext_population_execution": "BLOCKED_PENDING_EXTERNAL_EXECUTION"
   },
-  "tests": [
-    "tests/opt_b/c2/vnext/test_full_replay.py",
-    "COMPLETE_REPOSITORY_SUITE_PENDING_CI",
-    "FINAL_HEAD_PENDING_CI"
-  ],
-  "qa_packet": "PENDING_BRANCH_CI_AND_OPERATOR_LOCAL_FULL_REPLAY",
-  "decision_record": "CEAR_G10_BLOCKED_PACKET_REMAINS_EFFECTIVE_UNTIL_REAL_REPLAY_EVIDENCE_EXISTS",
-  "merge_commit": null,
   "remaining_required_artifacts": [
     "GENERATED_C2_VNEXT_FULL_REPLAY_INPUT_BINDING",
     "TWO_OPERATOR_LOCAL_CLEAN_RUN_MANIFESTS",
@@ -58,24 +44,22 @@
     "CAPACITY_RECEIPTS_PASS",
     "COMPACT_REAL_POPULATION_RECONCILIATION_AND_QA_PACKET"
   ],
+  "authority": {
+    "input_resolution_tooling": "DELEGATED_PASS_INACTIVE_ONLY",
+    "discovery_method": "CANDIDATE_NOT_ADMITTED",
+    "real_functional_candidates": "NONE",
+    "real_rule_candidates": "NONE",
+    "research_consumer_permission": "NONE",
+    "all_reserved_downstream_authority": "NONE",
+    "active_c2": "UNCHANGED_READ_ONLY"
+  },
+  "qa_recommendation": "PASS_TOOLING_PACKET_PRESERVE_CEAR_G10_BLOCK",
   "blockers": [
     "CEAR-G10-BLOCKER-001",
     "OPERATOR_LOCAL_ACCEPTED_SOURCE_BYTES_AND_EXECUTION_ENVIRONMENT_REQUIRED",
     "REAL_REPLAY_RECEIPTS_NOT_YET_PRODUCED"
   ],
-  "authority": {
-    "discovery_method": "CANDIDATE_NOT_ADMITTED",
-    "real_functional_candidates": "NONE",
-    "real_rule_candidates": "NONE",
-    "research_consumer_permission": "NONE",
-    "selector_event_episode_semantic_outcome": "NONE",
-    "canonical_r2_publication": "NONE",
-    "validation_probability_risk_exposure_execution": "NONE",
-    "agent_write": "NONE",
-    "active_c2": "UNCHANGED_READ_ONLY"
-  },
-  "merge_status": "STACKED_CORRECTIVE_PR_MAY_NOT_MERGE_TO_MAIN_WHILE_PR_319_AND_CEAR_G10_REMAIN_BLOCKED",
-  "next_packet": "C2AR-WP10-REAL-POPULATION-EVIDENCE-INGEST",
+  "merge_status": "ELIGIBLE_INTO_RETAINED_PR_319_BRANCH_ONLY_MAIN_MERGE_PROHIBITED",
   "continuation_point": "C2AR-WP10_OPERATOR_LOCAL_FULL_REPLAY_EXECUTION",
   "exact_operator_sequence": [
     ".\\scripts\\c2ar\\run_vnext_full_replay.ps1 -Command build-binding",
@@ -83,6 +67,7 @@
     ".\\scripts\\c2ar\\run_vnext_full_replay.ps1 -Command execute",
     "OVC CONTINUE"
   ],
+  "next_packet": "C2AR-WP10-REAL-POPULATION-EVIDENCE-INGEST",
   "wp11_status": "LOCKED",
-  "rollback": "Close the corrective stacked PR and preserve PR 319 blocked evidence. No accepted WP9 state or active C2 authority is changed."
+  "rollback": "Close or revert the bounded tooling integration from the retained PR 319 branch. Accepted WP9 and active C2 remain unchanged."
 }
