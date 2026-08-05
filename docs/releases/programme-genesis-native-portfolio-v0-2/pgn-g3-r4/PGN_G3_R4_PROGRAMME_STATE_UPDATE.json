@@ -5,23 +5,24 @@
   "plan_version": "0.2",
   "packet_id": "PGN-G3-R4",
   "gate_id": "PGN-G3-R4",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "prerequisites": [
     "PGN_G3_R3_ACKNOWLEDGE_CONTINUE_MERGED_129e1437e48d26d6ef2c8d2013a95a2b35e0e43f",
     "PGN_G3_R3_POST_MERGE_RECEIPT_MERGED_1b06d5881b19d6b8f5a76c93f274b2f94df19fac"
   ],
-  "authority_required": "OPERATOR_REQUIRED",
+  "authority_required": "OPERATOR_REQUIRED_SATISFIED",
   "authority_delta": "ACKNOWLEDGE_R4_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R5_DISCLOSURE_ONLY_AFTER_DECISION_MERGE_AND_EXACT_RECEIPT",
   "baseline_commit": "1b06d5881b19d6b8f5a76c93f274b2f94df19fac",
   "branch": "gate/pgn-g3-r4-research-console-foundation",
-  "candidate_commit": "BOUND_BY_PR_FINAL_HEAD",
+  "candidate_commit": "BOUND_BY_PR_328_FINAL_HEAD",
   "tests": [
-    "REPOSITORY_TESTS_REQUIRED_ON_PR_FINAL_HEAD",
-    "OVC_FINAL_HEAD_REQUIRED_ON_PR_FINAL_HEAD",
-    "OVC_MERGE_READINESS_REQUIRED_ON_PR_FINAL_HEAD"
+    "REPOSITORY_TESTS_REQUIRED_ON_PR_328_FINAL_HEAD",
+    "OVC_FINAL_HEAD_REQUIRED_ON_PR_328_FINAL_HEAD",
+    "OVC_MERGE_READINESS_REQUIRED_ON_PR_328_FINAL_HEAD"
   ],
   "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_QA_PACKET.json",
-  "decision_record": null,
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_OPERATOR_DECISION.json",
+  "decision_id": "PGN-G3-R4.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T175400+0100",
   "merge_commit": null,
   "blockers": [],
   "review": {
@@ -39,16 +40,16 @@
     "r5_r6_crosswalk_required": true
   },
   "authority": {
-    "r4_acknowledgement": "DENIED_PENDING_OPERATOR_DECISION",
+    "r4_acknowledgement": "APPROVED_EFFECTIVE_WHEN_DECISION_MERGES",
     "native_adoption": "DENIED_PENDING_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
-    "next_group_disclosure": "DENIED_PENDING_R4_OPERATOR_DECISION_MERGE_AND_EXACT_POST_MERGE_RECEIPT",
+    "next_group_disclosure": "DENIED_PENDING_PR_328_MERGE_AND_EXACT_POST_MERGE_RECEIPT",
     "cross_programme_edges": "DENIED_PENDING_PGN_G5",
     "constitutional_parentage": "UNRESOLVED_UNACCEPTED",
     "authority_inheritance": "NONE",
     "reserved_authority": "NONE"
   },
-  "next_packet": "PGN-G3-R4-OPERATOR-DECISION",
-  "next_gate": "PGN-G3-R4",
-  "next_action": "OPERATOR_DECIDE_OVC_APPROVE_PGN_G3_R4_ACKNOWLEDGE_CONTINUE_OR_OTHER_ALLOWED_DISPOSITION",
-  "rollback": "Preserve the R3 receipt and R4 materialisation. Without operator acknowledgement, successful merge and exact receipt, do not disclose R5 and do not modify any R4 candidate or source record."
+  "next_packet": "PGN-G3-R5",
+  "next_gate": "PGN-G3-R5",
+  "next_action": "RUN_FINAL_HEAD_ASSURANCE_SQUASH_MERGE_PR_328_CREATE_EXACT_R4_POST_MERGE_RECEIPT_THEN_DISCLOSE_AND_MATERIALISE_PGN_G3_R5_WITH_REQUIRED_CROSSWALK_ONLY",
+  "rollback": "Preserve the R3 receipt, R4 operator decision and all crosswalk evidence. Without a successful merge and exact post-merge receipt, do not disclose R5."
 }
