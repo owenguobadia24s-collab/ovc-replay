@@ -1,0 +1,70 @@
+{
+  "schema": "ovc-c2ar-programme-state-delta/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.3-REVISED",
+  "state_id": "C2AR.STATE.WP10.DISPOSITION_EVIDENCE.APPROVED.v1",
+  "supersedes_state_path": "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_WP10_DISPOSITION_EVIDENCE_STATE_v0_3.jsonc",
+  "status": "APPROVED",
+  "current_packet": "C2AR-WP10",
+  "approved_subpacket": "C2AR-WP10-DISPOSITION-EVIDENCE",
+  "current_gate": "CEAR-G10",
+  "operator_decision_required": false,
+  "decision_readiness": "NOT_READY_OPERATOR_LOCAL_COMPACT_ANALYSIS_REQUIRED",
+  "main_baseline": "8ff30900da9af11a2defe612fa6b1f0e86fb7a5f",
+  "baseline_commit": "1b0f4ff29c2e2bd344e3631e4a939540d8d504c2",
+  "branch": "build/c2ar-wp10-disposition-evidence",
+  "pull_request": 322,
+  "assured_pre_metadata_head": "b856a32b380ea44f344587484d33888396a809f6",
+  "candidate_commit": "BOUND_BY_FINAL_METADATA_HEAD",
+  "assurance_receipt": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_DISPOSITION_EVIDENCE_ASSURANCE_RECEIPT.json",
+  "qa_packet": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_DISPOSITION_EVIDENCE_FINAL_QA_PACKET.json",
+  "decision_record": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp10/C2AR_WP10_DISPOSITION_EVIDENCE_DELEGATED_DECISION.json",
+  "assurance": [
+    {
+      "workflow": "tests",
+      "run_id": 31002575692,
+      "result": "PASS",
+      "test_count": 286,
+      "head": "b856a32b380ea44f344587484d33888396a809f6"
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 31002575047,
+      "profile": "FINAL_HEAD",
+      "result": "PASS",
+      "head": "b856a32b380ea44f344587484d33888396a809f6"
+    },
+    {
+      "check": "OVC merge readiness",
+      "run_id": 31002575047,
+      "result": "PASS",
+      "head": "b856a32b380ea44f344587484d33888396a809f6"
+    },
+    {
+      "check": "unresolved review threads",
+      "pull_request": 322,
+      "result": "ZERO"
+    }
+  ],
+  "authority": {
+    "disposition_evidence_tooling": "DELEGATED_PASS_INACTIVE_ONLY",
+    "discovery_method": "CANDIDATE_NOT_ADMITTED",
+    "functional_candidates": "NONE",
+    "rule_candidates": "NONE",
+    "legacy_benchmark_dispositions": "NONE",
+    "research_consumer_permission": "NONE",
+    "selector_event_episode_semantic_outcome": "NONE",
+    "canonical_r2_publication": "NONE",
+    "validation_probability_risk_exposure_execution": "NONE",
+    "active_c2": "UNCHANGED_READ_ONLY"
+  },
+  "remaining_required_artifact": "CEAR_G10_DISPOSITION_EVIDENCE.json",
+  "retained_branch_merge_status": "ELIGIBLE_AFTER_FINAL_METADATA_ASSURANCE",
+  "main_merge_status": "PROHIBITED",
+  "continuation_point": "C2AR-WP10_OPERATOR_LOCAL_DISPOSITION_EVIDENCE",
+  "exact_operator_command": ".\\scripts\\c2ar\\run_vnext_disposition_evidence.ps1",
+  "exact_resume_command": "OVC CONTINUE",
+  "wp11_status": "LOCKED",
+  "rollback": "Revert the bounded integration from the retained PR 319 branch. Preserve the completed external replay, main and active C2."
+}
