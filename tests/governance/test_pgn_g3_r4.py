@@ -34,6 +34,7 @@ R5_IDS = [
     "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4",
     "PD-JUNE-FULL-MONTH-MDR",
 ]
+R6_IDS = ["OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1"]
 R4_SHA = "70526ebfa5fe9ffd484720c43d892546efb88d5f69bb6eca16890819dae9ffc9"
 DECISION_ID = "PGN-G3-R4.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T163200+0100"
 
@@ -143,7 +144,7 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
         self.assertEqual("PGN-G3-R5", self.state["next_gate"])
         self.assertEqual([], self.state["blockers"])
 
-    def test_post_merge_receipt_is_exact_and_unlocks_only_r5(self) -> None:
+    def test_post_merge_receipt_is_exact_and_progression_reaches_r6(self) -> None:
         self.assertEqual(330, self.r4_receipt["pull_request"])
         self.assertEqual(328, self.r4_receipt["superseded_pull_request"])
         self.assertEqual("9b76695b434383a2de7ea654c3a2af52756702ad", self.r4_receipt["final_head"])
@@ -157,8 +158,9 @@ class NativeGenesisPortfolioG3R4Tests(unittest.TestCase):
         r5 = self.builder.build_group("PGN-G3-R5", ROOT)
         self.assertEqual(R5_IDS, r5["candidate_ids"])
         self.assertEqual("NONE", r5["authority_effect"])
-        with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R6", ROOT)
+        r6 = self.builder.build_group("PGN-G3-R6", ROOT)
+        self.assertEqual(R6_IDS, r6["candidate_ids"])
+        self.assertEqual("NONE", r6["authority_effect"])
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
 
 

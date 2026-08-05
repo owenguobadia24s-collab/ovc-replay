@@ -27,6 +27,7 @@ R1_IDS = [
     "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1",
     "OVC-C2E-NEUTRAL-EPISODE-v0.1",
 ]
+R6_IDS = ["OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1"]
 R1_SHA = "6938fbcb52ae6d52d13e56a40cd76d6446f1376e3340309a5dde8d861684bfb1"
 DECISION_ID = "PGN-G3-R1.OPERATOR.ACKNOWLEDGE_CONTINUE.20260804T142700+0100"
 
@@ -100,12 +101,11 @@ class NativeGenesisPortfolioG3R1Tests(unittest.TestCase):
         self.assertEqual("NONE", self.r2_receipt["native_adoption"])
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R3_ONLY", self.r2_receipt["authority_effect"])
 
-        self.assertEqual("PGN-G3-R2", self.builder.build_group("PGN-G3-R2", ROOT)["review_group_id"])
-        self.assertEqual("PGN-G3-R3", self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"])
-        self.assertEqual("PGN-G3-R4", self.builder.build_group("PGN-G3-R4", ROOT)["review_group_id"])
-        self.assertEqual("PGN-G3-R5", self.builder.build_group("PGN-G3-R5", ROOT)["review_group_id"])
-        with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R6", ROOT)
+        for group_id in ("PGN-G3-R2", "PGN-G3-R3", "PGN-G3-R4", "PGN-G3-R5"):
+            self.assertEqual(group_id, self.builder.build_group(group_id, ROOT)["review_group_id"])
+        r6 = self.builder.build_group("PGN-G3-R6", ROOT)
+        self.assertEqual(R6_IDS, r6["candidate_ids"])
+        self.assertEqual("NONE", r6["authority_effect"])
 
         for group in self.queue["groups"][1:]:
             self.assertEqual([], group["candidate_ids"])
