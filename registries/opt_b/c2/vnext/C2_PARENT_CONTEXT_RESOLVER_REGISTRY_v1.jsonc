@@ -1,0 +1,98 @@
+{
+  "schema": "ovc-c2-parent-context-resolver-registry/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "packet_id": "C2AR-WP8-IMPLEMENTATION",
+  "gate_id": "C2AR-G8A",
+  "operator_decision_id": "CEAR-G8.OPERATOR.PASS.20260805T062900+0100",
+  "registry_id": "C2.PARENT.CONTEXT.RESOLVER.REGISTRY.v1",
+  "status": "SHADOW_FROZEN_READ_ONLY",
+  "active": false,
+  "canonical": false,
+  "resolver": {
+    "resolver_id": "C2.PARENT.CONTEXT.RESOLVER.v1",
+    "version": "1",
+    "local_clock": "15M",
+    "parent_clock": "2H_A_L",
+    "parent_anchor": "UTC_0000",
+    "chronology_rule": "PARENT_INTERVAL_END_LESS_THAN_OR_EQUAL_TO_LOCAL_FIRST_VALID_TIME",
+    "equal_timestamp_allowed": true,
+    "expected_slot_resolution": "BEFORE_COMPLETENESS_FILTERING",
+    "valid_slot_status": "COMPLETE",
+    "failed_slot_policy": "CLEAR_DEPENDENTS_NO_SILENT_CARRY_FORWARD",
+    "older_parent_fallback": false,
+    "required_identity_fields": [
+      "instrument_id",
+      "side",
+      "release_id",
+      "calendar_id",
+      "parent_lattice_id",
+      "source_id"
+    ]
+  },
+  "link_products": [
+    "FIXED_PARENT_OBSERVATION_LINK",
+    "PARENT_MEASUREMENT_LINK",
+    "PARENT_STRUCTURAL_LINK_BY_DEPTH",
+    "PARENT_AXIS_CONTEXT_LINK",
+    "LOCAL_IN_PARENT_FRAME_PROFILE",
+    "HIGHER_ORDER_LOCAL_CLOCK_LINK",
+    "HIGHER_SCALE_EPISODE_LINK"
+  ],
+  "parent_roles": [
+    "PARENT_MEASUREMENT",
+    "PARENT_STRUCTURAL",
+    "PARENT_AXIS_CONTEXT"
+  ],
+  "selection": {
+    "rule": "EXACTLY_ONE_ELIGIBLE_OBJECT_FOR_DECLARED_ROLE_AND_DEPTH",
+    "zero_eligible": "NO_ELIGIBLE_PARENT_OBJECT",
+    "multiple_eligible": "MULTIPLE_ELIGIBLE_NO_GOVERNED_SELECTION",
+    "fallback_id": null,
+    "prohibited": [
+      "LATEST_OBJECT",
+      "NEAREST_OBJECT",
+      "WIDEST_OBJECT",
+      "SMALLEST_OBJECT",
+      "BEST_OBJECT",
+      "BEST_LATTICE",
+      "BEST_PARENT",
+      "FALLBACK_OBJECT"
+    ]
+  },
+  "refresh_statuses": [
+    "LINKED",
+    "REFRESHED",
+    "UNCHANGED",
+    "CLEARED",
+    "NOT_COMPUTABLE"
+  ],
+  "raw_age_dimensions": [
+    "elapsed_duration_seconds",
+    "eligible_local_observation_count",
+    "parent_slot_count",
+    "registered_closure_count",
+    "parent_observation_age_seconds",
+    "parent_object_age_seconds",
+    "role_projection_age_seconds"
+  ],
+  "universal_staleness_threshold": null,
+  "episode_authority": "NONE",
+  "consumer_denominator_authority": "NONE",
+  "semantic_authority": "NONE",
+  "explicitly_not_granted": [
+    "ACTIVE_OR_CANONICAL_PARENT_SELECTION",
+    "HIDDEN_PARENT_LATTICE_STRUCTURE_OR_OBJECT_SELECTION",
+    "NUMERIC_STALENESS_FRESHNESS_THRESHOLD",
+    "SEMANTIC_EVENT_OR_EPISODE_PROMOTION",
+    "C2E_OR_C2_5_ACTIVATION",
+    "CONSUMER_DENOMINATOR_OR_OVERLAP_POLICY",
+    "RULE_OR_THEORY_PROMOTION",
+    "NEW_PROVIDER_INTAKE",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "VALIDATION_CONSUMPTION",
+    "ACTIVE_C2_SELECTOR_OR_RELEASE_CHANGE",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "AGENT_WRITE_AUTHORITY"
+  ],
+  "rollback": "Disable shadow consumers and deterministically rebuild from immutable inputs; material policy changes require an operator-authorised SUPERSEDE version."
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "ovc-c2-parent-context-resolver-fixtures/v1",
+  "fixture_pack_id": "C2AR.WP8.PARENT.CONTEXT.SYNTHETIC.v1",
+  "synthetic": true,
+  "authoritative_market_data": false,
+  "active": false,
+  "canonical": false,
+  "cases": [
+    {
+      "case_id": "WP8.EXACT_EXPECTED_PARENT",
+      "purpose": "Exact expected completed slot and unique parent role objects link separately.",
+      "expected": {
+        "fixed_parent": "LINKED",
+        "measurement": "LINKED",
+        "structural_s0": "LINKED",
+        "axis": "LINKED",
+        "fallback_parent_id": null
+      }
+    },
+    {
+      "case_id": "WP8.MISSING_EXPECTED_WITH_OLDER_AVAILABLE",
+      "purpose": "An older complete parent never substitutes for the missing expected slot.",
+      "expected": {
+        "fixed_parent": "EXPECTED_PARENT_SLOT_MISSING",
+        "dependent_links": "NOT_COMPUTABLE",
+        "fallback_parent_id": null
+      }
+    },
+    {
+      "case_id": "WP8.GAPPED_EXPECTED_SLOT",
+      "purpose": "The expected slot is resolved before filtering and GAPPED clears dependents.",
+      "expected": {
+        "fixed_parent": "EXPECTED_PARENT_SLOT_GAPPED",
+        "dependent_links": "NOT_COMPUTABLE"
+      }
+    },
+    {
+      "case_id": "WP8.MULTIPLE_STRUCTURAL_OBJECTS",
+      "purpose": "Unresolved multiplicity produces explicit null rather than hidden selection.",
+      "expected": {
+        "structural_s0": "MULTIPLE_ELIGIBLE_NO_GOVERNED_SELECTION",
+        "selected_id": null,
+        "fallback_id": null
+      }
+    },
+    {
+      "case_id": "WP8.IDENTITY_OR_FUTURE_MISMATCH",
+      "purpose": "Side, release, calendar, lattice, source and first-valid mismatches fail closed.",
+      "expected": {
+        "fixed_parent": "NOT_COMPUTABLE"
+      }
+    },
+    {
+      "case_id": "WP8.EQUAL_FIRST_VALID_BOUNDARY",
+      "purpose": "Parent and local first-valid timestamps may be equal at a completed boundary.",
+      "expected": {
+        "fixed_parent": "LINKED",
+        "parent_observation_age_seconds": 0
+      }
+    },
+    {
+      "case_id": "WP8.EPISODE_SEPARATION",
+      "purpose": "Episode candidates remain visible but unavailable without separate authority.",
+      "expected": {
+        "episode": "EPISODE_AUTHORITY_UNAVAILABLE",
+        "selected_id": null
+      }
+    }
+  ]
+}
