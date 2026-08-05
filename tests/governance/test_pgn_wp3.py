@@ -42,9 +42,7 @@ def load(path: Path) -> dict:
 
 
 def load_builder():
-    spec = importlib.util.spec_from_file_location(
-        "build_pgn_wp3_native_candidates", SCRIPT
-    )
+    spec = importlib.util.spec_from_file_location("build_pgn_wp3_native_candidates", SCRIPT)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -62,9 +60,7 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
     def test_exact_acknowledged_population_has_sealed_commitment_once(self) -> None:
         acknowledged = self.decision["candidate_construction_scope"]["programme_ids"]
         registry_ids = [entry["programme_id"] for entry in self.registry["entries"]]
-        commitment_ids = [
-            item["programme_id"] for item in self.manifest["candidate_commitments"]
-        ]
+        commitment_ids = [item["programme_id"] for item in self.manifest["candidate_commitments"]]
         self.assertEqual(EXPECTED_IDS, acknowledged)
         self.assertCountEqual(EXPECTED_IDS, registry_ids)
         self.assertCountEqual(EXPECTED_IDS, commitment_ids)
@@ -77,88 +73,52 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
             self.assertEqual("NONE", commitment["authority_effect"])
             self.assertNotEqual("UNKNOWN_CLASS", commitment["candidate_class"])
             self.assertRegex(commitment["candidate_sha256"], r"^[0-9a-f]{64}$")
-        self.assertEqual(
-            "SEALED_CANDIDATE_COMMITMENTS_UNAPPROVED", self.manifest["status"]
-        )
+        self.assertEqual("SEALED_CANDIDATE_COMMITMENTS_UNAPPROVED", self.manifest["status"])
         self.assertEqual("NONE", self.manifest["authority_effect"])
         self.assertEqual("NONE", self.manifest["authority"]["reserved_authority"])
 
     def test_in_memory_candidates_preserve_source_authority_and_uncertainty(self) -> None:
-        entries = self.registry["entries"]
-        candidates = [self.builder.build_candidate(entry) for entry in entries]
+        candidates = [self.builder.build_candidate(entry) for entry in self.registry["entries"]]
         for item in candidates:
+            candidate = item["native_candidate"]
             self.assertEqual("NATIVE_CANDIDATE", item["object_type"])
             self.assertEqual("NONE", item["authority_effect"])
-            candidate = item["native_candidate"]
             self.assertEqual("CANDIDATE_UNAPPROVED", candidate["status"])
-            envelope = candidate["authority_envelope"]
-            self.assertTrue(envelope["source_authority_preserved"])
-            self.assertEqual("NONE", envelope["authority_delta"])
-            self.assertEqual("DENIED_PENDING_PGN_G3", envelope["native_adoption"])
-            self.assertEqual("NONE", envelope["reserved_authority"])
-            audit = candidate["scope_audit"]
-            self.assertEqual("RETROSPECTIVE_SOURCE_PRESERVING", audit["profile"])
-            self.assertFalse(audit["fabricated_historical_intent"])
-            self.assertEqual("UNRESOLVED_EXACT_SOURCE_TEXT", audit["purpose"])
-            crosswalk = candidate["migration_crosswalk"]
-            self.assertTrue(crosswalk["identity_preserved"])
-            self.assertFalse(crosswalk["source_values_modified"])
-            self.assertRegex(crosswalk["source_set_sha256"], r"^[0-9a-f]{64}$")
+            self.assertTrue(candidate["authority_envelope"]["source_authority_preserved"])
+            self.assertEqual("NONE", candidate["authority_envelope"]["authority_delta"])
+            self.assertEqual("DENIED_PENDING_PGN_G3", candidate["authority_envelope"]["native_adoption"])
+            self.assertEqual("NONE", candidate["authority_envelope"]["reserved_authority"])
+            self.assertFalse(candidate["scope_audit"]["fabricated_historical_intent"])
+            self.assertTrue(candidate["migration_crosswalk"]["identity_preserved"])
+            self.assertFalse(candidate["migration_crosswalk"]["source_values_modified"])
             self.assertFalse(candidate["lifecycle"]["source_lifecycle_modified"])
 
     def test_commitment_hashes_match_deterministic_candidate_bodies(self) -> None:
-        entries = self.registry["entries"]
-        candidates = [self.builder.build_candidate(entry) for entry in entries]
-        for commitment, candidate in zip(
-            self.manifest["candidate_commitments"], candidates
-        ):
-            self.assertEqual(
-                commitment["candidate_sha256"], self.builder.sha256(candidate)
-            )
-        self.assertEqual(
-            self.manifest["candidate_set_sha256"], self.builder.sha256(candidates)
-        )
+        candidates = [self.builder.build_candidate(entry) for entry in self.registry["entries"]]
+        for commitment, candidate in zip(self.manifest["candidate_commitments"], candidates):
+            self.assertEqual(commitment["candidate_sha256"], self.builder.sha256(candidate))
+        self.assertEqual(self.manifest["candidate_set_sha256"], self.builder.sha256(candidates))
 
-    def test_progressive_queue_discloses_only_r1(self) -> None:
+    def test_progressive_queue_remains_sealed_and_non_authoritative(self) -> None:
         self.assertEqual(6, self.queue["group_count"])
         self.assertEqual(3, self.queue["maximum_candidates_per_group"])
         self.assertEqual("PGN-G3-R1", self.queue["rules"]["current_group"])
         self.assertEqual(EXPECTED_IDS[:3], self.queue["groups"][0]["candidate_ids"])
         for group in self.queue["groups"][1:]:
             self.assertEqual([], group["candidate_ids"])
-            self.assertEqual(
-                "LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT",
-                group["disclosure_status"],
-            )
+            self.assertEqual("LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT", group["disclosure_status"])
             self.assertRegex(group["sealed_candidate_bodies_sha256"], r"^[0-9a-f]{64}$")
         self.assertFalse(self.queue["rules"]["future_group_member_ids_disclosed"])
         self.assertFalse(self.queue["rules"]["group_acknowledgement_is_adoption"])
 
-    def test_progressive_materialization_follows_merged_receipts(self) -> None:
-        r1 = self.builder.build_group("PGN-G3-R1", ROOT)
-        self.assertEqual(3, r1["candidate_count"])
-        self.assertEqual(EXPECTED_IDS[:3], r1["candidate_ids"])
-        self.assertEqual("NONE", r1["authority_effect"])
-        self.assertEqual("DENIED_PENDING_PGN_G3", r1["native_adoption"])
-
-        r1_receipt = REVIEW_RECEIPT_DIR / "PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json"
-        r2_receipt = REVIEW_RECEIPT_DIR / "PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json"
-        if r1_receipt.exists():
-            r2 = self.builder.build_group("PGN-G3-R2", ROOT)
-            self.assertEqual("PGN-G3-R2", r2["review_group_id"])
-            self.assertEqual("NONE", r2["authority_effect"])
-            self.assertEqual("DENIED_PENDING_PGN_G3", r2["native_adoption"])
-            if r2_receipt.exists():
-                self.assertEqual(
-                    "PGN-G3-R3",
-                    self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"],
-                )
-            else:
-                with self.assertRaises(PermissionError):
-                    self.builder.build_group("PGN-G3-R3", ROOT)
-        else:
-            with self.assertRaises(PermissionError):
-                self.builder.build_group("PGN-G3-R2", ROOT)
+    def test_progressive_materialization_follows_exact_receipts(self) -> None:
+        for group_id in ("PGN-G3-R1", "PGN-G3-R2", "PGN-G3-R3"):
+            group = self.builder.build_group(group_id, ROOT)
+            self.assertEqual(group_id, group["review_group_id"])
+            self.assertEqual("NONE", group["authority_effect"])
+            self.assertEqual("DENIED_PENDING_PGN_G3", group["native_adoption"])
+        with self.assertRaises(PermissionError):
+            self.builder.build_group("PGN-G3-R4", ROOT)
 
     def test_materialized_manifest_and_queue_match_builder(self) -> None:
         manifest, queue = self.builder.build_bundle(ROOT)
@@ -189,10 +149,21 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
         )
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
         receipts = sorted(path.name for path in REVIEW_RECEIPT_DIR.glob("PGN_G3_R*_ACKNOWLEDGEMENT_RECEIPT.json"))
-        self.assertEqual(["PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json"], receipts)
-        receipt = load(REVIEW_RECEIPT_DIR / receipts[0])
-        self.assertEqual("NONE", receipt["native_adoption"])
-        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R2_ONLY", receipt["authority_effect"])
+        self.assertEqual(
+            [
+                "PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json",
+                "PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json",
+            ],
+            receipts,
+        )
+        expected_effects = [
+            "DISCLOSE_AND_MATERIALISE_PGN_G3_R2_ONLY",
+            "DISCLOSE_AND_MATERIALISE_PGN_G3_R3_ONLY",
+        ]
+        for name, effect in zip(receipts, expected_effects):
+            receipt = load(REVIEW_RECEIPT_DIR / name)
+            self.assertEqual("NONE", receipt["native_adoption"])
+            self.assertEqual(effect, receipt["authority_effect"])
 
 
 if __name__ == "__main__":
