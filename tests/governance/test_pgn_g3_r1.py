@@ -14,10 +14,11 @@ GATE = BASE / "PGN_G3_R1_OPERATOR_GATE_PACKET.json"
 STATE = BASE / "PGN_G3_R1_PROGRAMME_STATE_UPDATE.json"
 DECISION = BASE / "PGN_G3_R1_OPERATOR_DECISION.json"
 ACK_RECORD = BASE / "PGN_G3_R1_OPERATOR_ACKNOWLEDGEMENT_RECORD.json"
-UNLOCK_RECEIPT = ROOT / (
-    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews/"
-    "PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json"
+REVIEW_RECEIPT_DIR = ROOT / (
+    "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews"
 )
+R1_RECEIPT = REVIEW_RECEIPT_DIR / "PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json"
+R2_RECEIPT = REVIEW_RECEIPT_DIR / "PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json"
 QUEUE = ROOT / "registries/governance/programme_genesis/pgn_candidates/PGN_WP3_PROGRESSIVE_REVIEW_QUEUE_v0_1.json"
 BUILDER = ROOT / "scripts/governance/build_pgn_wp3_native_candidates.py"
 
@@ -55,7 +56,8 @@ class NativeGenesisPortfolioG3R1Tests(unittest.TestCase):
         cls.state = load(STATE)
         cls.decision = load(DECISION)
         cls.ack_record = load(ACK_RECORD)
-        cls.unlock_receipt = load(UNLOCK_RECEIPT)
+        cls.r1_receipt = load(R1_RECEIPT)
+        cls.r2_receipt = load(R2_RECEIPT)
         cls.queue = load(QUEUE)
         cls.builder = load_builder()
 
@@ -86,16 +88,23 @@ class NativeGenesisPortfolioG3R1Tests(unittest.TestCase):
         self.assertEqual(DECISION_ID, self.ack_record["decision_id"])
         self.assertEqual("NONE", self.ack_record["native_adoption"])
 
-    def test_r1_unlock_receipt_binds_exact_merge_and_unlocks_only_r2(self) -> None:
-        self.assertEqual(288, self.unlock_receipt["pull_request"])
-        self.assertEqual("af2170d862e1464e1a1b8e8b65b77a07e5cc8101", self.unlock_receipt["final_head"])
-        self.assertEqual("0b6078e47b6f03c7fe122c4f8577dfc3b9893808", self.unlock_receipt["merge_commit"])
-        self.assertEqual(DECISION_ID, self.unlock_receipt["decision_id"])
-        self.assertEqual("NONE", self.unlock_receipt["native_adoption"])
-        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R2_ONLY", self.unlock_receipt["authority_effect"])
+    def test_r1_receipt_remains_exact_while_later_receipts_advance_progressively(self) -> None:
+        self.assertEqual(288, self.r1_receipt["pull_request"])
+        self.assertEqual("af2170d862e1464e1a1b8e8b65b77a07e5cc8101", self.r1_receipt["final_head"])
+        self.assertEqual("0b6078e47b6f03c7fe122c4f8577dfc3b9893808", self.r1_receipt["merge_commit"])
+        self.assertEqual(DECISION_ID, self.r1_receipt["decision_id"])
+        self.assertEqual("NONE", self.r1_receipt["native_adoption"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R2_ONLY", self.r1_receipt["authority_effect"])
+
+        self.assertEqual(289, self.r2_receipt["pull_request"])
+        self.assertEqual("NONE", self.r2_receipt["native_adoption"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R3_ONLY", self.r2_receipt["authority_effect"])
+
         self.assertEqual("PGN-G3-R2", self.builder.build_group("PGN-G3-R2", ROOT)["review_group_id"])
+        self.assertEqual("PGN-G3-R3", self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R3", ROOT)
+            self.builder.build_group("PGN-G3-R4", ROOT)
+
         for group in self.queue["groups"][1:]:
             self.assertEqual([], group["candidate_ids"])
             self.assertEqual("LOCKED_PENDING_PREVIOUS_GROUP_ACKNOWLEDGEMENT", group["disclosure_status"])
