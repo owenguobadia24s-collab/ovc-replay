@@ -12,6 +12,7 @@ R2 = BASE / "pgn-g3-r2/PGN_G3_R2_ARTIFACT_GOVERNANCE_SUPPLEMENT.json"
 R3 = BASE / "pgn-g3-r3/PGN_G3_R3_ARTIFACT_GOVERNANCE_CROSSWALK.json"
 R4 = BASE / "pgn-g3-r4/PGN_G3_R4_ARTIFACT_GOVERNANCE_CROSSWALK.json"
 R5 = BASE / "pgn-g3-r5/PGN_G3_R5_ARTIFACT_GOVERNANCE_CROSSWALK.json"
+R6 = BASE / "pgn-g3-r6/PGN_G3_R6_ARTIFACT_GOVERNANCE_CROSSWALK.json"
 PROTOCOL = BASE / "pgn-g3-r3/PGN_G3_REVIEW_PROTOCOL_AMENDMENT_v0_1.json"
 DECISION = BASE / "pgn-g3-r3/PGN_G3_R3_ADJUST_SCOPE_OPERATOR_DECISION.json"
 SCHEMA = ROOT / "schemas/governance/programme_genesis/pgn_artifact_governance_crosswalk_v0_1.schema.json"
@@ -22,6 +23,7 @@ R1_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R1_ACKNOWLEDGEMENT_RECEIPT.json"
 R2_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json"
 R3_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R3_ACKNOWLEDGEMENT_RECEIPT.json"
 R4_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R4_ACKNOWLEDGEMENT_RECEIPT.json"
+R5_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R5_ACKNOWLEDGEMENT_RECEIPT.json"
 
 ALLOWED_EVIDENCE = {"SOURCE_EXPLICIT", "LINEAGE_EXPLICIT", "PATH_AND_CONTENT_CORROBORATED", "CANDIDATE_RELATION", "UNRESOLVED"}
 ALLOWED_RELATIONSHIPS = {"EVIDENCE_ROOT_OF", "PLAN_GOVERNED_BY", "RELEASE_PRODUCED_BY", "GATE_PACKET_OF", "DECISION_RECORD_OF", "HISTORICAL_EVIDENCE_OF", "LINEAGE_RECORD_OF", "REFERENCES", "CONSUMES", "UNRESOLVED_RELATION"}
@@ -64,10 +66,12 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         cls.r3 = load(R3)
         cls.r4 = load(R4)
         cls.r5 = load(R5)
+        cls.r6 = load(R6)
         cls.protocol = load(PROTOCOL)
         cls.decision = load(DECISION)
         cls.r3_receipt = load(R3_RECEIPT)
         cls.r4_receipt = load(R4_RECEIPT)
+        cls.r5_receipt = load(R5_RECEIPT)
         cls.schema = load(SCHEMA)
         cls.valid = load(VALID)
         cls.invalid = load(INVALID)
@@ -94,30 +98,32 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
     def test_protocol_and_receipts_unlock_only_the_current_group(self) -> None:
         self.assertEqual([f"PGN-G3-R{i}" for i in range(1, 7)], self.protocol["applies_to"])
         self.assertEqual("DENIED_PENDING_PGN_G5", self.protocol["cross_programme_edge_acceptance"])
-        for path in (R1_RECEIPT, R2_RECEIPT, R3_RECEIPT, R4_RECEIPT):
+        for path in (R1_RECEIPT, R2_RECEIPT, R3_RECEIPT, R4_RECEIPT, R5_RECEIPT):
             self.assertTrue(path.exists())
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R4_ONLY", self.r3_receipt["authority_effect"])
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R5_ONLY", self.r4_receipt["authority_effect"])
-        self.assertEqual("NONE", self.r4_receipt["native_adoption"])
-        self.assertEqual("LOCKED", self.r4_receipt["later_groups_beyond_r5"])
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R6_ONLY", self.r5_receipt["authority_effect"])
+        self.assertEqual("NONE", self.r5_receipt["native_adoption"])
+        self.assertEqual("LOCKED", self.r5_receipt["later_groups_beyond_r6"])
 
     def test_materialised_crosswalks_are_complete_and_authority_neutral(self) -> None:
         self.assertEqual("RETROSPECTIVE_SUPPLEMENT_MATERIALISED_UNAPPROVED", self.r1["status"])
         self.assertEqual("RETROSPECTIVE_SUPPLEMENT_MATERIALISED_UNAPPROVED", self.r2["status"])
-        for value in (self.r3, self.r4, self.r5):
+        for value in (self.r3, self.r4, self.r5, self.r6):
             self.assertEqual("MATERIALISED_UNAPPROVED", value["status"])
-        for value in (self.r1, self.r2, self.r3, self.r4, self.r5):
+        for value in (self.r1, self.r2, self.r3, self.r4, self.r5, self.r6):
             assert_authority_neutral(self, value)
-        ids = [candidate["programme_id"] for value in (self.r1, self.r2, self.r3, self.r4, self.r5) for candidate in value["candidates"]]
-        self.assertEqual(15, len(ids))
-        self.assertEqual(15, len(set(ids)))
+        ids = [candidate["programme_id"] for value in (self.r1, self.r2, self.r3, self.r4, self.r5, self.r6) for candidate in value["candidates"]]
+        self.assertEqual(16, len(ids))
+        self.assertEqual(16, len(set(ids)))
         self.assertIn("OVC-DEV-ACCEL-v0.2", ids)
         self.assertIn("OVC-RESEARCH-CONSOLE.v0.3", ids)
         self.assertIn("OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.4", ids)
         self.assertIn("PD-JUNE-FULL-MONTH-MDR", ids)
+        self.assertIn("OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1", ids)
 
     def test_candidate_relations_remain_visible_and_non_authoritative(self) -> None:
-        candidate_relations = [relationship for value in (self.r3, self.r4, self.r5) for candidate in value["candidates"] for relationship in candidate["relationships"] if relationship["evidence_status"] == "CANDIDATE_RELATION"]
+        candidate_relations = [relationship for value in (self.r3, self.r4, self.r5, self.r6) for candidate in value["candidates"] for relationship in candidate["relationships"] if relationship["evidence_status"] == "CANDIDATE_RELATION"]
         self.assertEqual(3, len(candidate_relations))
         self.assertEqual({"OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1", "OVC-DEV-ACCEL-v0.2-DA2-00-CI-ADMISSION-BASELINE", "OVC-RESEARCH-CONSOLE-V0.2-IMPLEMENTATION-PLAN-0.1"}, {item["artifact_id"] for item in candidate_relations})
         self.assertTrue(all(item["ambiguity_or_competing_owner"] for item in candidate_relations))
@@ -129,6 +135,15 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         pd = next(candidate for candidate in self.r5["candidates"] if candidate["programme_id"] == "PD-JUNE-FULL-MONTH-MDR")
         self.assertEqual("NONE_INCIDENT_EXPLICITLY_NOT_A_RELEASE", pd["coverage"]["immutable_release_identities"])
         self.assertTrue(all(relationship["authority_effect"] == "NONE" for candidate in self.r5["candidates"] for relationship in candidate["relationships"]))
+
+    def test_r6_preserves_terminal_defer_and_no_continuation(self) -> None:
+        candidate = self.r6["candidates"][0]
+        self.assertEqual("NOT_APPLICABLE_NO_MARKET_RELEASE_CREATED_BY_PROGRAMME", candidate["coverage"]["immutable_release_identities"])
+        self.assertIn("TERMINAL_COMPLETED_DEFER_STATE", candidate["coverage"]["lineage_records"])
+        terminal = next(item for item in candidate["relationships"] if item["artifact_id"].endswith("PD_JUNE_MDR_G1_CORR2_OPERATOR_DECISION.json"))
+        self.assertEqual("SOURCE_EXPLICIT", terminal["evidence_status"])
+        self.assertIn("NOT_ESTABLISHED", terminal["ambiguity_or_competing_owner"])
+        self.assertEqual("NONE", terminal["authority_effect"])
 
     def test_opt_a_lineage_and_validation_lock_are_preserved(self) -> None:
         opt_a = next(candidate for candidate in self.r2["candidates"] if candidate["programme_id"] == "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2")
