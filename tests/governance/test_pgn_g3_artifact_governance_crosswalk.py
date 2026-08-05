@@ -78,6 +78,7 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         cls.r3 = load(R3)
         cls.protocol = load(PROTOCOL)
         cls.decision = load(DECISION)
+        cls.r3_receipt = load(R3_RECEIPT)
         cls.schema = load(SCHEMA)
         cls.valid = load(VALID)
         cls.invalid = load(INVALID)
@@ -101,7 +102,7 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         self.assertIn("NATIVE_ADOPTION", self.decision["denied"])
         self.assertIn("CROSS_PROGRAMME_HARD_DEPENDENCY_ACCEPTANCE", self.decision["denied"])
 
-    def test_protocol_applies_to_all_six_groups_and_keeps_r4_locked(self) -> None:
+    def test_protocol_applies_to_all_six_groups_and_receipt_unlocks_only_r4(self) -> None:
         expected = [f"PGN-G3-R{i}" for i in range(1, 7)]
         self.assertEqual(expected, self.protocol["applies_to"])
         self.assertEqual("PGN_G3_R3_AMENDED_ACKNOWLEDGEMENT_RECEIPT_MERGED", self.protocol["r4_unlock_condition"])
@@ -109,7 +110,10 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         self.assertEqual("NONE", self.protocol["authority_effect"])
         self.assertTrue(R1_RECEIPT.exists())
         self.assertTrue(R2_RECEIPT.exists())
-        self.assertFalse(R3_RECEIPT.exists())
+        self.assertTrue(R3_RECEIPT.exists())
+        self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R4_ONLY", self.r3_receipt["authority_effect"])
+        self.assertEqual("NONE", self.r3_receipt["native_adoption"])
+        self.assertEqual("LOCKED", self.r3_receipt["later_groups_beyond_r4"])
 
     def test_r1_r2_retrospective_and_r3_direct_crosswalks_are_complete(self) -> None:
         self.assertEqual("RETROSPECTIVE_SUPPLEMENT_MATERIALISED_UNAPPROVED", self.r1["status"])

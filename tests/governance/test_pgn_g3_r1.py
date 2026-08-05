@@ -102,8 +102,9 @@ class NativeGenesisPortfolioG3R1Tests(unittest.TestCase):
 
         self.assertEqual("PGN-G3-R2", self.builder.build_group("PGN-G3-R2", ROOT)["review_group_id"])
         self.assertEqual("PGN-G3-R3", self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"])
+        self.assertEqual("PGN-G3-R4", self.builder.build_group("PGN-G3-R4", ROOT)["review_group_id"])
         with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R4", ROOT)
+            self.builder.build_group("PGN-G3-R5", ROOT)
 
         for group in self.queue["groups"][1:]:
             self.assertEqual([], group["candidate_ids"])
