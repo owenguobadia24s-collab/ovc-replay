@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/c2/vnext/c2_parent_context_link.schema.json",
+  "title": "C2 Parent Context Link vNext r1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "link_id",
+    "link_kind",
+    "local_observation_id",
+    "local_first_valid_time",
+    "as_of_time",
+    "parent_scope_id",
+    "parent_clock",
+    "parent_lattice_id",
+    "parent_calendar_id",
+    "expected_parent_slot_start",
+    "expected_parent_slot_end",
+    "parent_observation_id",
+    "parent_object_id",
+    "parent_definition_hash",
+    "parent_first_valid_time",
+    "instrument_id",
+    "side",
+    "release_id",
+    "evidence_status",
+    "computability",
+    "reason_codes",
+    "resolver_id",
+    "resolver_version",
+    "candidate_ids",
+    "eligible_ids",
+    "exclusions",
+    "selected_id",
+    "selection_reason",
+    "fallback_id",
+    "refresh_status",
+    "previous_link_id",
+    "age_evidence",
+    "source_ids",
+    "active",
+    "canonical",
+    "semantic_authority",
+    "episode_authority",
+    "thresholds",
+    "authority",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "c2_parent_context_link/vnext-r1"},
+    "link_id": {"type": "string", "minLength": 1},
+    "link_kind": {
+      "enum": [
+        "FIXED_PARENT_OBSERVATION_LINK",
+        "PARENT_MEASUREMENT_LINK",
+        "PARENT_STRUCTURAL_LINK_BY_DEPTH",
+        "PARENT_AXIS_CONTEXT_LINK"
+      ]
+    },
+    "local_observation_id": {"type": "string", "minLength": 1},
+    "local_first_valid_time": {"type": "string", "format": "date-time"},
+    "as_of_time": {"type": "string", "format": "date-time"},
+    "parent_scope_id": {"type": "string", "minLength": 1},
+    "parent_clock": {"const": "2H_A_L"},
+    "parent_lattice_id": {"type": "string", "minLength": 1},
+    "parent_calendar_id": {"type": "string", "minLength": 1},
+    "expected_parent_slot_start": {"type": "string", "format": "date-time"},
+    "expected_parent_slot_end": {"type": "string", "format": "date-time"},
+    "parent_observation_id": {"type": ["string", "null"]},
+    "parent_object_id": {"type": ["string", "null"]},
+    "parent_definition_hash": {"type": ["string", "null"]},
+    "parent_first_valid_time": {"type": ["string", "null"], "format": "date-time"},
+    "instrument_id": {"type": "string", "minLength": 1},
+    "side": {"type": "string", "minLength": 1},
+    "release_id": {"type": "string", "minLength": 1},
+    "evidence_status": {"enum": ["LINKED", "NOT_COMPUTABLE"]},
+    "computability": {"enum": ["COMPUTABLE", "NOT_COMPUTABLE"]},
+    "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "resolver_id": {"const": "C2.PARENT.CONTEXT.RESOLVER.v1"},
+    "resolver_version": {"const": "1"},
+    "candidate_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "eligible_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "exclusions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate_id", "reason_codes"],
+        "properties": {
+          "candidate_id": {"type": "string", "minLength": 1},
+          "reason_codes": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true}
+        }
+      }
+    },
+    "selected_id": {"type": ["string", "null"]},
+    "selection_reason": {"type": "string", "minLength": 1},
+    "fallback_id": {"type": "null"},
+    "refresh_status": {"enum": ["LINKED", "REFRESHED", "UNCHANGED", "CLEARED", "NOT_COMPUTABLE"]},
+    "previous_link_id": {"type": ["string", "null"]},
+    "age_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "elapsed_duration_seconds",
+        "eligible_local_observation_count",
+        "parent_slot_count",
+        "registered_closure_count",
+        "parent_observation_age_seconds",
+        "parent_object_age_seconds",
+        "role_projection_age_seconds"
+      ],
+      "properties": {
+        "elapsed_duration_seconds": {"type": ["integer", "null"], "minimum": 0},
+        "eligible_local_observation_count": {"type": ["integer", "null"], "minimum": 0},
+        "parent_slot_count": {"type": ["integer", "null"], "minimum": 0},
+        "registered_closure_count": {"type": ["integer", "null"], "minimum": 0},
+        "parent_observation_age_seconds": {"type": ["integer", "null"], "minimum": 0},
+        "parent_object_age_seconds": {"type": ["integer", "null"], "minimum": 0},
+        "role_projection_age_seconds": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "source_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "structural_depth": {"type": "integer", "minimum": 0},
+    "active": {"const": false},
+    "canonical": {"const": false},
+    "semantic_authority": {"const": "NONE"},
+    "episode_authority": {"const": "NONE"},
+    "thresholds": {"type": "array", "maxItems": 0},
+    "authority": {"const": "SHADOW_FROZEN_READ_ONLY"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"link_kind": {"const": "PARENT_STRUCTURAL_LINK_BY_DEPTH"}}},
+      "then": {"required": ["structural_depth"]},
+      "else": {"not": {"required": ["structural_depth"]}}
+    },
+    {
+      "if": {"properties": {"computability": {"const": "COMPUTABLE"}}},
+      "then": {"properties": {"selected_id": {"type": "string", "minLength": 1}}}
+    }
+  ]
+}
