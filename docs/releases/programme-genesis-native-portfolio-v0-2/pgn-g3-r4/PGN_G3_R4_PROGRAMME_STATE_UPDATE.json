@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-pgn-packet-state-update/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "packet_id": "PGN-G3-R4",
+  "gate_id": "PGN-G3-R4",
+  "status": "APPROVED",
+  "prerequisites": [
+    "PGN_G3_R3_ACKNOWLEDGE_CONTINUE_MERGED_129e1437e48d26d6ef2c8d2013a95a2b35e0e43f",
+    "PGN_G3_R3_POST_MERGE_RECEIPT_MERGED_1b06d5881b19d6b8f5a76c93f274b2f94df19fac"
+  ],
+  "authority_required": "OPERATOR_REQUIRED_SATISFIED",
+  "authority_delta": "ACKNOWLEDGE_R4_REVIEW_WITHOUT_ADOPTION_AND_UNLOCK_PGN_G3_R5_DISCLOSURE_ONLY_AFTER_REPLACEMENT_DECISION_MERGE_AND_EXACT_RECEIPT",
+  "baseline_commit": "0c030056bf9ae8f5a06e3de1429deaf017c0c64a",
+  "source_review_branch": "gate/pgn-g3-r4-research-console-foundation",
+  "source_review_pull_request": 328,
+  "source_review_head": "2e33b54ea1c67990b0622d886166884a9b181895",
+  "branch": "gate/pgn-g3-r4-ack-current-main",
+  "candidate_commit": "BOUND_BY_REPLACEMENT_PR_FINAL_HEAD",
+  "tests": [
+    "SOURCE_REVIEW_REPOSITORY_TESTS_RUN_31020352414_JOB_92355151610_SUCCESS",
+    "SOURCE_REVIEW_OVC_FINAL_HEAD_RUN_31020352328_JOB_92355151135_SUCCESS",
+    "SOURCE_REVIEW_OVC_MERGE_READINESS_RUN_31020352328_JOB_92355200131_SUCCESS",
+    "REPLACEMENT_FINAL_DECISION_HEAD_ASSURANCE_REQUIRED"
+  ],
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_QA_PACKET.json",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_OPERATOR_DECISION.json",
+  "decision_id": "PGN-G3-R4.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T163200+0100",
+  "merge_commit": null,
+  "blockers": [],
+  "review": {
+    "current_group": "PGN-G3-R4",
+    "review_domain": "RESEARCH_CONSOLE_AND_FOUNDATION_I",
+    "candidate_count": 3,
+    "candidate_group_sha256": "70526ebfa5fe9ffd484720c43d892546efb88d5f69bb6eca16890819dae9ffc9",
+    "candidate_status": "CANDIDATE_UNAPPROVED",
+    "native_adoption_count": 0,
+    "artifact_governance_crosswalk_status": "MATERIALISED_UNAPPROVED",
+    "candidate_relation_count": 1,
+    "lineage_explicit_relation_count": 2,
+    "later_groups_locked": true,
+    "later_group_ids_disclosed": false,
+    "r5_r6_crosswalk_required": true
+  },
+  "authority": {
+    "r4_acknowledgement": "APPROVED_EFFECTIVE_WHEN_REPLACEMENT_DECISION_MERGES",
+    "native_adoption": "DENIED_PENDING_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
+    "next_group_disclosure": "DENIED_PENDING_REPLACEMENT_DECISION_MERGE_AND_EXACT_POST_MERGE_RECEIPT",
+    "cross_programme_edges": "DENIED_PENDING_PGN_G5",
+    "constitutional_parentage": "UNRESOLVED_UNACCEPTED",
+    "authority_inheritance": "NONE",
+    "reserved_authority": "NONE"
+  },
+  "next_packet": "PGN-G3-R5",
+  "next_gate": "PGN-G3-R5",
+  "next_action": "RUN_REPLACEMENT_FINAL_HEAD_ASSURANCE_SQUASH_MERGE_CREATE_EXACT_R4_POST_MERGE_RECEIPT_THEN_DISCLOSE_AND_MATERIALISE_PGN_G3_R5_WITH_REQUIRED_CROSSWALK_ONLY",
+  "rollback": "Preserve the R3 receipt, R4 source review, decision and crosswalk evidence. Without successful replacement merge and exact post-merge receipt, do not disclose R5."
+}

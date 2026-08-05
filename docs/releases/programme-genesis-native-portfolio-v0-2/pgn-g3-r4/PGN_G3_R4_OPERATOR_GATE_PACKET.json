@@ -1,0 +1,126 @@
+{
+  "schema": "ovc-pgn-g3-progressive-review-operator-gate/v1",
+  "programme_id": "OVC-PG-NATIVE-PORTFOLIO-v0.2",
+  "plan_id": "OVC-PGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2",
+  "gate_id": "PGN-G3-R4",
+  "title": "Acknowledge the fourth progressive native Genesis candidate review group",
+  "status": "APPROVED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
+  "operator_decision_required": false,
+  "decision": "ACKNOWLEDGE_CONTINUE",
+  "decision_id": "PGN-G3-R4.OPERATOR.ACKNOWLEDGE_CONTINUE.20260805T163200+0100",
+  "decision_record": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_OPERATOR_DECISION.json",
+  "exact_operator_command": "OVC APPROVE PGN-G3-R4 ACKNOWLEDGE_CONTINUE",
+  "baseline_commit": "0c030056bf9ae8f5a06e3de1429deaf017c0c64a",
+  "source_review_branch": "gate/pgn-g3-r4-research-console-foundation",
+  "source_review_pull_request": 328,
+  "source_review_head": "2e33b54ea1c67990b0622d886166884a9b181895",
+  "candidate_branch": "gate/pgn-g3-r4-ack-current-main",
+  "candidate_commit": "BOUND_BY_REPLACEMENT_PR_FINAL_HEAD",
+  "completed_packets": [
+    "PGN-00",
+    "PGN-WP1",
+    "PGN-WP2",
+    "PGN-G2A",
+    "PGN-WP2E",
+    "PGN-G2B",
+    "PGN-WP3",
+    "PGN-G3-R1",
+    "PGN-G3-R2",
+    "PGN-G3-R3",
+    "PGN-G3-R3-POST-MERGE-RECEIPT",
+    "PGN-G3-R4-MATERIALISATION",
+    "PGN-G3-R4-OPERATOR-DECISION"
+  ],
+  "current_authority": {
+    "candidate_commitments": "APPROVED_AS_UNAPPROVED_REVIEW_EVIDENCE",
+    "current_review_group": "PGN-G3-R4_ACKNOWLEDGED_PENDING_REPLACEMENT_MERGE",
+    "later_review_groups": "LOCKED",
+    "native_genesis_adoption": "DENIED_PENDING_COMPLETION_OF_PROGRESSIVE_REVIEW_AND_SEPARATE_PGN_G3_OPERATOR_DECISIONS",
+    "cross_programme_edges": "DENIED_PENDING_PGN_G5",
+    "migration_warning_closure": "DENIED_PENDING_PGN_G6",
+    "control_plane_route": "DEFERRED_DISABLED_UNREGISTERED_PENDING_PGN_G8",
+    "shadow_corpus": "DENIED_PENDING_PGN_G9A",
+    "admission_enforcement": "DEFERRED_DISABLED_PENDING_PGN_G10",
+    "market_model_selector_release_validation_publication_agent_probability_risk_exposure_execution": "NONE"
+  },
+  "approved_delta": "ACKNOWLEDGE_REVIEW_OF_PGN_G3_R4_WITHOUT_ADOPTING_ANY_CANDIDATE_AND_AUTHORISE_DISCLOSURE_AND_MATERIALISATION_OF_PGN_G3_R5_ONLY_AFTER_REPLACEMENT_DECISION_MERGE_AND_EXACT_POST_MERGE_RECEIPT",
+  "review_group": {
+    "review_group_id": "PGN-G3-R4",
+    "review_domain": "RESEARCH_CONSOLE_AND_FOUNDATION_I",
+    "candidate_count": 3,
+    "candidate_group_sha256": "70526ebfa5fe9ffd484720c43d892546efb88d5f69bb6eca16890819dae9ffc9",
+    "candidate_bundle": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_CANDIDATE_REVIEW_BUNDLE.json",
+    "candidate_ids": [
+      "OVC-RESEARCH-CONSOLE.v0.2",
+      "OVC-RESEARCH-CONSOLE.v0.3",
+      "OVC-RESEARCH-OPERATIONS-FOUNDATION.v0.1"
+    ],
+    "candidate_status_after_decision": "CANDIDATE_UNAPPROVED",
+    "native_adoption_count": 0,
+    "unresolved_field_count_per_candidate": 8,
+    "source_authority_preserved": true,
+    "historical_intent_fabricated": false
+  },
+  "artifact_governance": {
+    "contract": "contracts/governance/programme_genesis/OVC_PGN_ARTIFACT_GOVERNANCE_CROSSWALK_CONTRACT_v0_1.md",
+    "schema": "schemas/governance/programme_genesis/pgn_artifact_governance_crosswalk_v0_1.schema.json",
+    "crosswalk": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_ARTIFACT_GOVERNANCE_CROSSWALK.json",
+    "candidate_count": 3,
+    "candidate_relation_count": 1,
+    "lineage_explicit_relation_count": 2,
+    "unresolved_relation_count": 0,
+    "candidate_relations_can_satisfy_native_adoption": false,
+    "authority_effect": "NONE"
+  },
+  "acceptance_conditions": [
+    "EXACT_THREE_R4_CANDIDATES_ACKNOWLEDGED",
+    "ALL_THREE_REMAIN_CANDIDATE_UNAPPROVED",
+    "SOURCE_IDENTITIES_HASHES_LIFECYCLES_AND_AUTHORITY_REMAIN_PRESERVED",
+    "R4_ARTIFACT_GOVERNANCE_CROSSWALK_IS_SCHEMA_VALID",
+    "EVERY_RELATIONSHIP_HAS_EXACT_EVIDENCE_PATH_AND_HASH",
+    "RESEARCH_CONSOLE_V0_2_PLAN_RELATION_REMAINS_VISIBLE_AND_NON_AUTHORITATIVE",
+    "V0_3_SUPERSESSION_LINEAGE_DOES_NOT_TRANSFER_AUTHORITY",
+    "ACKNOWLEDGEMENT_IS_NOT_NATIVE_ADOPTION",
+    "NO_CROSS_PROGRAMME_HARD_DEPENDENCY_IS_ACCEPTED",
+    "NO_CONSTITUTIONAL_PARENTAGE_OR_AUTHORITY_INHERITANCE_IS_ACCEPTED",
+    "NO_R5_DISCLOSURE_BEFORE_REPLACEMENT_DECISION_SQUASH_MERGE_AND_EXACT_POST_MERGE_RECEIPT",
+    "R6_REMAINS_LOCKED",
+    "NO_RESERVED_MARKET_RELEASE_VALIDATION_PUBLICATION_AGENT_OR_EXPOSURE_AUTHORITY"
+  ],
+  "tests": {
+    "focused": [
+      "tests/governance/test_pgn_g3_r4.py",
+      "tests/governance/test_pgn_g3_artifact_governance_crosswalk.py",
+      "tests/governance/test_pgn_wp3.py"
+    ],
+    "source_review_repository_tests": {
+      "run_id": 31020352414,
+      "job_id": 92355151610,
+      "conclusion": "SUCCESS"
+    },
+    "source_review_ovc_final_head": {
+      "run_id": 31020352328,
+      "job_id": 92355151135,
+      "conclusion": "SUCCESS"
+    },
+    "source_review_ovc_merge_readiness": {
+      "run_id": 31020352328,
+      "job_id": 92355200131,
+      "conclusion": "SUCCESS"
+    },
+    "replacement_final_head_assurance": "REQUIRED_ON_REPLACEMENT_PR_FINAL_HEAD"
+  },
+  "qa_packet": "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r4/PGN_G3_R4_QA_PACKET.json",
+  "qa_recommendation": "PASS_OPERATOR_ACKNOWLEDGED_PENDING_FINAL_HEAD_ASSURANCE_AND_MERGE",
+  "warnings": [
+    "ALL_THREE_OBJECTS_REMAIN_CANDIDATE_UNAPPROVED",
+    "EIGHT_NATIVE_FIELDS_REMAIN_UNRESOLVED_PER_CANDIDATE",
+    "ONE_R4_PLAN_RELATIONSHIP_REMAINS_CANDIDATE_ONLY",
+    "ACKNOWLEDGEMENT_UNLOCKS_ONLY_PGN_G3_R5_AFTER_REPLACEMENT_MERGE_AND_EXACT_RECEIPT",
+    "PGN_G3_NATIVE_ADOPTION_REMAINS_A_SEPARATE_OPERATOR_REQUIRED_DECISION"
+  ],
+  "unresolved_issues": [],
+  "rollback": "Preserve the R3 receipt, R4 source review, operator decision, candidate bundle and crosswalk. If replacement final-head assurance or merge fails, do not create the R4 receipt and do not disclose R5.",
+  "work_after_approval": "Run exact-head assurance on the replacement PR, squash-merge it, create the exact R4 post-merge acknowledgement receipt, disclose and materialise PGN-G3-R5 with its mandatory artifact-governance crosswalk, and stop at PGN-G3-R5."
+}
