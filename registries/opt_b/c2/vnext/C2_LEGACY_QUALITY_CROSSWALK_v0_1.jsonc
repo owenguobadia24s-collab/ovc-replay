@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-c2-legacy-quality-crosswalk/v1",
+  "crosswalk_id": "C2.LEGACY.QUALITY.CROSSWALK.v1",
+  "status": "MAINTAINED_SHADOW",
+  "owner": "C2AR_PROGRAMME",
+  "operator_decision_id": "CEAR-G9.OPERATOR.PASS.20260805T081600+0100",
+  "mapping_principle": "LEGACY_GLOBAL_QUALITY_MAY_BE_EXPLAINED_BUT_NEVER_USED_TO_SUPPRESS_OR_GOVERN_VNEXT_COMPONENTS",
+  "mappings": [
+    {
+      "legacy_field": "quality_status",
+      "mapping_type": "SPLIT",
+      "vnext_fields": [
+        "availability_status",
+        "computability_status",
+        "assurance_status",
+        "consumer_eligibility_status",
+        "authority_status"
+      ],
+      "equivalence": false,
+      "reason": "LEGACY_GLOBAL_STATUS_COLLAPSES_ORTHOGONAL_DIMENSIONS"
+    },
+    {
+      "legacy_field": "degraded",
+      "mapping_type": "NOT_COMPARABLE",
+      "vnext_fields": ["reason_codes", "warnings", "dependency_results"],
+      "equivalence": false,
+      "reason": "VNEXT_HAS_NO_GOVERNING_GLOBAL_DEGRADED_STATE"
+    },
+    {
+      "legacy_field": "evaluable",
+      "mapping_type": "PARTIAL",
+      "vnext_fields": ["computability_status", "consumer_eligibility_status"],
+      "equivalence": false,
+      "reason": "TECHNICAL_COMPUTABILITY_AND_CONSUMER_ELIGIBILITY_ARE_SEPARATE"
+    },
+    {
+      "legacy_field": "missing_reason",
+      "mapping_type": "SPLIT",
+      "vnext_fields": ["missing_dependency_ids", "reason_codes", "dependency_results"],
+      "equivalence": false,
+      "reason": "EXACT_DEPENDENCY_IDENTITIES_AND_TERMINAL_DISPOSITIONS_ARE_REQUIRED"
+    }
+  ],
+  "compatibility_projection": {
+    "projection_id": "C2.LEGACY.QUALITY.COMPATIBILITY.v1",
+    "global_quality_status": null,
+    "governing": false,
+    "may_hide_component_status": false,
+    "may_drive_eligibility": false,
+    "may_drive_denominator_inclusion": false,
+    "required_outputs": ["source_record_ids", "component_status_counts", "source_reason_codes"]
+  },
+  "disagreement_classes": [
+    "LEGACY_SUPPRESSED_VNEXT_RAW_COMPONENT_AVAILABLE",
+    "LEGACY_EVALUABLE_VNEXT_CONSUMER_INELIGIBLE",
+    "LEGACY_DEGRADED_VNEXT_PARTIAL_COMPONENT_SET",
+    "LEGACY_REASON_AMBIGUOUS_VNEXT_EXACT_DEPENDENCY_REASON",
+    "NOT_COMPARABLE_POLICY_BASIS"
+  ],
+  "freeze_trigger": "SEPARATE_ACTIVATION_PLAN_APPROVED",
+  "runtime_deprecation_trigger": "ALL_CROSSWALK_DEPRECATION_CONDITIONS_EVIDENCED_AND_OPERATOR_APPROVED",
+  "active": false,
+  "canonical": false,
+  "authority": "SHADOW_FROZEN_READ_ONLY"
+}
