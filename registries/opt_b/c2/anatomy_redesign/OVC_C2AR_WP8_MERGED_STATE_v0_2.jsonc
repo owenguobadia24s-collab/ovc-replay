@@ -1,0 +1,49 @@
+{
+  "schema": "ovc-c2ar-programme-state-delta/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "state_id": "C2AR.STATE.WP8.MERGED.COMPLETED.v1",
+  "supersedes_state_path": "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_WP8_IMPLEMENTED_STATE_v0_2.jsonc",
+  "status": "COMPLETED",
+  "packet_id": "C2AR-WP8-IMPLEMENTATION",
+  "gate_id": "C2AR-G8A",
+  "operator_decision_required": false,
+  "operator_authority": "CEAR-G8.OPERATOR.PASS.20260805T062900+0100",
+  "delegated_decision_id": "C2AR-G8A.DELEGATED.PASS.20260805T065400+0100",
+  "baseline_commit": "4624aef9e536aaf1bf195a1a2469ac5f5ddf8fe3",
+  "branch": "build/c2ar-wp8-parent-context-resolver",
+  "pull_request": 313,
+  "final_head_commit": "79da235d330174adbd2784b9a98c8f5a7b231031",
+  "merge_commit": "502870c7c61d4e72f2ce1679bdc2a3edf55d550f",
+  "merge_receipt": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp8/C2AR_G8A_MERGE_RECEIPT.json",
+  "tests": [
+    {"workflow_run": 30979715522, "scope": "COMPLETE_REPOSITORY_SUITE", "result": "PASS"},
+    {"workflow_run": 30979715507, "profile": "FINAL_HEAD", "result": "PASS"},
+    {"check": "OVC_MERGE_READINESS", "workflow_run": 30979715507, "result": "PASS"},
+    {"check": "UNRESOLVED_REVIEW_THREADS", "count": 0, "result": "PASS"}
+  ],
+  "authority": {
+    "parent_context_resolver": "SHADOW_FROZEN_READ_ONLY_INACTIVE_NONCANONICAL",
+    "active_parent_selection": "NONE",
+    "hidden_selection": "NONE",
+    "universal_staleness_threshold": "NONE",
+    "semantic_event_episode": "NONE",
+    "c2e_c2_5": "NONE",
+    "consumer_denominator_overlap": "NONE",
+    "rule_theory": "NONE",
+    "active_c2": "UNCHANGED_READ_ONLY",
+    "release_publication_validation": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "blockers": [],
+  "warnings": [
+    "NO_UNIVERSAL_STALENESS_OR_FRESHNESS_THRESHOLD_EXISTS",
+    "EPISODE_CONTEXT_REMAINS_UNAVAILABLE_WITHOUT_SEPARATE_AUTHORITY",
+    "FAILED_EXPECTED_PARENT_SLOT_CLEARS_DEPENDENTS_WITHOUT_CARRY_FORWARD"
+  ],
+  "rollback": "Disable shadow consumers and deterministically rebuild outputs; active C2 remains unchanged.",
+  "next_packet": "C2AR-WP9-PREPARATION",
+  "next_gate": "CEAR-G9",
+  "next_action": "PREPARE_ONE_CONSOLIDATED_OPERATOR_REQUIRED_CEAR_G9_COMPUTABILITY_CONSUMER_DENOMINATOR_AND_OVERLAP_POLICY_PACKET"
+}
