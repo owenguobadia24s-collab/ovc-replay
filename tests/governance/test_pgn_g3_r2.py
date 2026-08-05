@@ -24,6 +24,7 @@ R2_IDS = [
     "OVC-OPT-A-V2-IMPLEMENTATION-PLAN-0.2",
     "OVC-MTA-v0.2",
 ]
+R6_IDS = ["OVC-PD-JUNE-2026-OPERATOR-REVIEW-AND-MARKET-DESCRIPTION-ASSURANCE.v0.1"]
 R2_SHA = "b3585068a9bc0ce7568b5b9058014677d48afc212c35d3fefc6f599a8a202dff"
 DECISION_ID = "PGN-G3-R2.OPERATOR.ACKNOWLEDGE_CONTINUE.20260804T150800+0100"
 
@@ -89,11 +90,11 @@ class NativeGenesisPortfolioG3R2Tests(unittest.TestCase):
         self.assertEqual(0, self.receipt["exact_head_assurance"]["unresolved_review_threads"])
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R3_ONLY", self.receipt["authority_effect"])
         self.assertEqual("NONE", self.receipt["native_adoption"])
-        self.assertEqual("PGN-G3-R3", self.builder.build_group("PGN-G3-R3", ROOT)["review_group_id"])
-        self.assertEqual("PGN-G3-R4", self.builder.build_group("PGN-G3-R4", ROOT)["review_group_id"])
-        self.assertEqual("PGN-G3-R5", self.builder.build_group("PGN-G3-R5", ROOT)["review_group_id"])
-        with self.assertRaises(PermissionError):
-            self.builder.build_group("PGN-G3-R6", ROOT)
+        for group_id in ("PGN-G3-R3", "PGN-G3-R4", "PGN-G3-R5"):
+            self.assertEqual(group_id, self.builder.build_group(group_id, ROOT)["review_group_id"])
+        r6 = self.builder.build_group("PGN-G3-R6", ROOT)
+        self.assertEqual(R6_IDS, r6["candidate_ids"])
+        self.assertEqual("NONE", r6["authority_effect"])
 
     def test_gate_qa_and_state_preserve_no_adoption(self) -> None:
         self.assertFalse(self.gate["operator_decision_required"])
