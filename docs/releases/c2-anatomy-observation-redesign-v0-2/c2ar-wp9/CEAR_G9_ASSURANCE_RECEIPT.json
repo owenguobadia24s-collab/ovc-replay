@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-cear-g9-assurance-receipt/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "packet_id": "C2AR-WP9",
+  "gate_id": "CEAR-G9",
+  "pull_request": 315,
+  "baseline_commit": "8ef7efb131a87ee9304c8e41494d64980dbc875d",
+  "assured_pre_metadata_head": "21a73ecbf45cb8d753f0cf5dc71c70b5d22d661f",
+  "recorded_at": "2026-08-05T07:13:00+01:00",
+  "assurance": [
+    {"workflow": "tests", "run_id": 30980493127, "result": "PASS", "head": "21a73ecbf45cb8d753f0cf5dc71c70b5d22d661f", "test_count": 256},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 30980493153, "profile": "FINAL_HEAD", "result": "PASS", "head": "21a73ecbf45cb8d753f0cf5dc71c70b5d22d661f"},
+    {"check": "OVC merge readiness", "run_id": 30980493153, "result": "PASS", "head": "21a73ecbf45cb8d753f0cf5dc71c70b5d22d661f"},
+    {"check": "unresolved review threads", "result": "ZERO", "pull_request": 315}
+  ],
+  "gate_policy_results": {
+    "five_dimensions_separate": "PASS",
+    "per_component_per_consumer_usability": "PASS",
+    "versioned_selective_dependency_graph": "PASS",
+    "no_hidden_fallback": "PASS",
+    "distinct_terminal_dispositions_and_reasons": "PASS",
+    "axis_profile_independence": "PASS",
+    "consumer_specific_eligibility_without_active_policy": "PASS",
+    "raw_age_without_numeric_staleness_threshold": "PASS",
+    "explicit_denominator_accounting": "PASS",
+    "transition_pair_units": "PASS",
+    "claim_specific_overlap_without_canonical_adjustment": "PASS",
+    "fail_closed_comparability": "PASS",
+    "global_quality_non_governing": "PASS",
+    "active_and_downstream_authority_unchanged": "PASS"
+  },
+  "qa_recommendation": "PASS",
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "external_artifacts": [],
+  "active_authority_effect": "NONE",
+  "final_gate_ready_condition": "RERUN_COMPLETE_REPOSITORY_FINAL_HEAD_ASSURANCE_AND_MERGE_READINESS_AFTER_THIS_RECEIPT_AND_FINAL_STATE_ARE_MATERIALISED",
+  "stop_boundary": "PR_315_REMAINS_UNMERGED_PENDING_OPERATOR_DECISION",
+  "rollback": "Close PR 315 unmerged and preserve main at the WP8 receipt. The candidate and assurance records have no runtime effect."
+}
