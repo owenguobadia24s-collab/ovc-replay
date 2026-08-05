@@ -1,0 +1,132 @@
+{
+  "schema": "ovc-c2-computability-policy-registry/v1",
+  "registry_id": "C2.COMPUTABILITY.POLICY.REGISTRY.v1",
+  "status": "SHADOW_FROZEN_READ_ONLY",
+  "effective": true,
+  "active": false,
+  "canonical": false,
+  "operator_decision_id": "CEAR-G9.OPERATOR.PASS.20260805T081600+0100",
+  "plan_version": "0.3-REVISED",
+  "dependency_graph": {
+    "dependency_graph_id": "C2.COMPUTABILITY.DEPENDENCY.GRAPH.v1",
+    "version": "1",
+    "profile_specific": true,
+    "edge_types": ["REQUIRED", "OPTIONAL", "WARNING_ONLY", "ALTERNATIVE", "PROHIBITED"],
+    "required_failure": "BLOCK_EXACT_DEPENDENT_ONLY",
+    "optional_failure": "WARN_NO_BLOCK",
+    "warning_only_failure": "RECORD_ONLY",
+    "alternative_rule": "ONE_EXACT_NAMED_MEMBER_REQUIRED",
+    "prohibited_presence": "CONFLICTED",
+    "hidden_fallback": false,
+    "global_failure_propagation": false
+  },
+  "dimensions": {
+    "availability": ["AVAILABLE", "UNAVAILABLE", "NOT_REQUESTED"],
+    "computability": ["COMPUTABLE", "NOT_COMPUTABLE", "NOT_APPLICABLE", "CENSORED", "CONFLICTED"],
+    "assurance": ["ASSURED", "UNASSURED", "CONFLICTED", "NOT_ASSESSED"],
+    "consumer_eligibility": ["ELIGIBLE", "INELIGIBLE", "NOT_EVALUATED"],
+    "authority": ["AUTHORIZED", "UNAUTHORIZED"]
+  },
+  "consumer_policies": [
+    {
+      "consumer_policy_id": "C2.CONSUMER.DISCOVERY_INPUT.v1",
+      "version": "1",
+      "consumer_id": "C2.BOTTOM_UP.DISCOVERY.PREPARATION",
+      "status": "REGISTERED_INACTIVE",
+      "active": false,
+      "canonical": false,
+      "assurance_required": true,
+      "required_age_dimensions": [],
+      "staleness_policy_id": null,
+      "authority": "UNAUTHORIZED_UNTIL_EXACT_CEAR_G10_RESEARCH_CONSUMER_PERMISSION"
+    },
+    {
+      "consumer_policy_id": "C2.CONSUMER.READ_ONLY_QA.v1",
+      "version": "1",
+      "consumer_id": "C2.WP9.QA",
+      "status": "REGISTERED_INACTIVE",
+      "active": false,
+      "canonical": false,
+      "assurance_required": false,
+      "required_age_dimensions": [],
+      "staleness_policy_id": null,
+      "authority": "AUTHORIZED_BOUNDED_SYNTHETIC_QA_ONLY"
+    },
+    {
+      "consumer_policy_id": "C2.CONSUMER.PARENT_DEPENDENT_PROFILE.v1",
+      "version": "1",
+      "consumer_id": "C2.PARENT.DEPENDENT.SHADOW.PROFILE",
+      "status": "REGISTERED_INACTIVE",
+      "active": false,
+      "canonical": false,
+      "assurance_required": true,
+      "required_age_dimensions": ["observation_age_seconds", "definition_age_seconds"],
+      "staleness_policy_id": "C2.STALENESS.RAW_AGE_EVIDENCE_ONLY.v1",
+      "authority": "UNAUTHORIZED_NO_NUMERIC_STALENESS_THRESHOLD"
+    }
+  ],
+  "denominator_policy": {
+    "denominator_policy_id": "C2.DENOMINATOR.ACCOUNTING.v1",
+    "supported_unit_types": ["OBSERVATION", "TRANSITION_PAIR", "OBJECT_TRACK", "WINDOW", "BUNDLE", "RELATION", "DETECTOR_OUTPUT"],
+    "transition_unit": "COMPARABLE_TRANSITION_PAIR",
+    "raw_counts_separate_from_rates": true,
+    "silent_missingness_exclusion": false,
+    "mixed_units": false,
+    "required_partition_checks": [
+      "POPULATION_EQUALS_REQUESTED_PLUS_NOT_REQUESTED",
+      "REQUESTED_EQUALS_APPLICABLE_PLUS_NOT_APPLICABLE",
+      "APPLICABLE_EQUALS_COMPUTABLE_PLUS_NOT_COMPUTABLE_PLUS_CENSORED_PLUS_CONFLICTED",
+      "ELIGIBLE_LTE_COMPUTABLE",
+      "INCLUDED_LTE_ELIGIBLE",
+      "NUMERATOR_LTE_DENOMINATOR"
+    ]
+  },
+  "overlap_policy": {
+    "overlap_policy_id": "C2.OVERLAP.CLAIM_SPECIFIC.v1",
+    "claim_specific": true,
+    "raw_population_preserved": true,
+    "cluster_types": ["SHARED_OBSERVATION", "SHARED_WINDOW", "SHARED_OBJECT_TRACK", "SHARED_BUNDLE", "BID_ASK_PAIR", "SHARED_EPISODE"],
+    "shared_episode_requires_separate_authority": true,
+    "canonical_weighting": null,
+    "canonical_deduplication": null,
+    "numeric_adjustment": null
+  },
+  "comparability_policy": {
+    "required_equal_fields": [
+      "unit_type",
+      "scope_definition",
+      "instrument_scope",
+      "side_handling",
+      "release_id",
+      "calendar_id",
+      "clock_and_lattice_profile",
+      "dependency_graph_id",
+      "consumer_policy_id",
+      "eligibility_policy_version",
+      "denominator_definition",
+      "overlap_policy_id",
+      "censor_conflict_treatment"
+    ],
+    "mismatch_result": "NOT_COMPARABLE",
+    "silent_pooling": false
+  },
+  "legacy_quality_projection": {
+    "projection_id": "C2.LEGACY.QUALITY.COMPATIBILITY.v1",
+    "governing": false,
+    "global_quality_status": null,
+    "may_hide_component_status": false,
+    "may_drive_eligibility": false,
+    "may_drive_denominator_inclusion": false
+  },
+  "explicitly_not_granted": [
+    "ACTIVE_OR_CANONICAL_CONSUMER_POLICY",
+    "NUMERIC_STALENESS_OR_FRESHNESS_THRESHOLD",
+    "CANONICAL_OVERLAP_WEIGHTING_DEDUPLICATION_OR_ADJUSTMENT",
+    "ACTIVE_RATE_PUBLICATION",
+    "GLOBAL_QUALITY_GATING",
+    "SEMANTIC_EVENT_EPISODE_OR_RULE_AUTHORITY",
+    "C2E_C2_5_C3_ACTIVATION",
+    "VALIDATION_PUBLICATION_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
+  ],
+  "authority": "SHADOW_FROZEN_READ_ONLY"
+}
