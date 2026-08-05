@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-c2ar-g8a-qa/v1",
+  "programme_id": "OVC-C2-ANATOMY-REDESIGN-v0.2",
+  "plan_id": "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION",
+  "plan_version": "0.2-REVISED",
+  "packet_id": "C2AR-WP8-IMPLEMENTATION",
+  "gate_id": "C2AR-G8A",
+  "operator_authority": "CEAR-G8.OPERATOR.PASS.20260805T062900+0100",
+  "baseline_commit": "4624aef9e536aaf1bf195a1a2469ac5f5ddf8fe3",
+  "pull_request": 313,
+  "assured_pre_metadata_head": "7fcd55c4045318af10a8fd4b12167bec4ba67048",
+  "implementation_status": "IMPLEMENTED_INACTIVE_NONCANONICAL_SHADOW_FROZEN",
+  "findings": [
+    {"id": "G8A-QA-01", "finding": "The resolver computes the latest expected completed UTC-anchored two-hour slot and permits equality at the local first-valid boundary.", "result": "PASS"},
+    {"id": "G8A-QA-02", "finding": "The exact expected slot is resolved before completeness filtering and missing or invalid expected slots clear dependent links without older-parent carry-forward.", "result": "PASS"},
+    {"id": "G8A-QA-03", "finding": "Instrument, side, release, calendar, lattice, source and first-valid chronology mismatches fail closed.", "result": "PASS"},
+    {"id": "G8A-QA-04", "finding": "Fixed observation, measurement, structural-by-depth, axis, higher-order local-clock and episode projections remain separate typed products.", "result": "PASS"},
+    {"id": "G8A-QA-05", "finding": "Parent objects are linked by authoritative identity and definition hash and are not recreated as local parent ranges.", "result": "PASS"},
+    {"id": "G8A-QA-06", "finding": "Role projections expose complete candidate inventories, eligibility, exclusions, nullable selection and permanently null fallback fields.", "result": "PASS"},
+    {"id": "G8A-QA-07", "finding": "Zero eligible objects and unresolved multiplicity return explicit null without hidden latest, nearest, widest, smallest, best or fallback selection.", "result": "PASS"},
+    {"id": "G8A-QA-08", "finding": "Context refresh is represented as lifecycle evidence and not as a local market transition.", "result": "PASS"},
+    {"id": "G8A-QA-09", "finding": "Age remains multidimensional raw evidence and no universal freshness or staleness threshold is implemented.", "result": "PASS"},
+    {"id": "G8A-QA-10", "finding": "Computability remains component-scoped with no global degraded collapse.", "result": "PASS"},
+    {"id": "G8A-QA-11", "finding": "Episode candidates remain separately visible and unavailable without independent C2E or C2.5 authority.", "result": "PASS"},
+    {"id": "G8A-QA-12", "finding": "All outputs remain inactive, noncanonical and SHADOW_FROZEN_READ_ONLY with active C2 and downstream authority unchanged.", "result": "PASS"}
+  ],
+  "corrective_history": [
+    {
+      "finding": "The initial .json registry filename was detected by the frozen programme census as a new formal programme object.",
+      "classification": "CORRECTABLE_IN_SCOPE_GOVERNANCE_DISCOVERY_SIDE_EFFECT",
+      "resolution": "Renamed the non-programme resolver registry to .jsonc and updated its bounded test reference without weakening the census or changing resolver semantics.",
+      "failed_head": "ba89bba069ed197b99e13dafc038798668d74c47",
+      "corrected_head": "7fcd55c4045318af10a8fd4b12167bec4ba67048",
+      "result": "RESOLVED"
+    }
+  ],
+  "tests": [
+    {"scope": "complete_repository_suite", "workflow_run": 30979508827, "head": "7fcd55c4045318af10a8fd4b12167bec4ba67048", "test_count": 245, "result": "PASS"},
+    {"scope": "tiered_final_head_and_merge_readiness", "workflow_run": 30979508834, "head": "7fcd55c4045318af10a8fd4b12167bec4ba67048", "result": "PASS"},
+    {"scope": "unresolved_review_threads", "pull_request": 313, "count": 0, "result": "PASS"}
+  ],
+  "warnings": [
+    "NO_UNIVERSAL_STALENESS_OR_FRESHNESS_THRESHOLD_EXISTS",
+    "EPISODE_CONTEXT_REMAINS_UNAVAILABLE_WITHOUT_SEPARATE_OPERATOR_AUTHORITY",
+    "FAILED_EXPECTED_PARENT_SLOT_CLEARS_DEPENDENTS_WITHOUT_CARRY_FORWARD",
+    "HIGHER_ORDER_LOCAL_CLOCK_STRUCTURE_IS_NOT_EQUIVALENT_TO_FIXED_PARENT_CONTEXT"
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "external_artifacts": [],
+  "market_data_required": false,
+  "r2_write_required": false,
+  "active_authority_effect": "NONE",
+  "recommendation": "PASS",
+  "recommendation_rationale": "All CEAR-G8 acceptance conditions are implemented deterministically inside the approved inactive, noncanonical shadow envelope. The only encountered defect was a repository-census filename side effect, which was corrected without altering the frozen census or resolver policy.",
+  "final_head_requirement": "RERUN_COMPLETE_REPOSITORY_SUITE_FINAL_HEAD_ASSURANCE_MERGE_READINESS_AND_REVIEW_THREAD_CHECK_AFTER_GATE_METADATA_IS_MATERIALISED",
+  "rollback": "Disable shadow consumers and rebuild outputs from immutable inputs. Preserve the CEAR-G8 decision, identities, chronology, no-fallback rule and typed-context separation."
+}
