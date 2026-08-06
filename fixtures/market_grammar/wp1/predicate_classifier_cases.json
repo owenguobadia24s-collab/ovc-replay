@@ -1,0 +1,213 @@
+{
+  "cases": [
+    {
+      "case_id": "INVARIANT_STRUCTURAL",
+      "expected_class": "INVARIANT",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "organisation.compression_state",
+        "first_valid_time": "2026-06-01T00:15:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"COMPRESSED": 10}
+      }
+    },
+    {
+      "case_id": "COMMON_SINGLE_VALUE",
+      "expected_class": "COMMON",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "interaction.reclaim_present",
+        "first_valid_time": "2026-06-01T00:30:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"TRUE": 8}
+      }
+    },
+    {
+      "case_id": "NORMAL_VARIATION_WITHOUT_RULE",
+      "expected_class": "NORMAL_VARIATION",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "motion.character",
+        "first_valid_time": "2026-06-01T00:45:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"ROTATIONAL": 5, "TRENDING": 5}
+      }
+    },
+    {
+      "case_id": "LOGICAL_CONFLICT_WITH_EXACT_RULE",
+      "expected_class": "LOGICAL_CONFLICT",
+      "exclusivity_rule_id": "MG-EXCL-MOTION-DIRECTION-v0.1",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "motion.direction",
+        "first_valid_time": "2026-06-01T01:00:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"DOWN": 5, "UP": 5}
+      }
+    },
+    {
+      "case_id": "SAME_VALUES_WRONG_FEATURE_NO_CONFLICT",
+      "expected_class": "NORMAL_VARIATION",
+      "exclusivity_rule_id": "MG-EXCL-MOTION-DIRECTION-v0.1",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "motion.local_bias",
+        "first_valid_time": "2026-06-01T01:15:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"DOWN": 5, "UP": 5}
+      }
+    },
+    {
+      "case_id": "HIGH_CARDINALITY_PROVENANCE",
+      "expected_class": "HIGH_CARDINALITY_VARIATION",
+      "expected_structural_eligible": false,
+      "stats": {
+        "clock_id": "15M",
+        "domain": "PROVENANCE",
+        "feature_key": "source_release_id",
+        "first_valid_time": "2026-06-01T01:30:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {
+          "REL-01": 1,
+          "REL-02": 1,
+          "REL-03": 1,
+          "REL-04": 1,
+          "REL-05": 1,
+          "REL-06": 1,
+          "REL-07": 1,
+          "REL-08": 1
+        }
+      }
+    },
+    {
+      "case_id": "MISSINGNESS_VARIATION",
+      "expected_class": "MISSINGNESS_VARIATION",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "COMPUTABILITY",
+        "feature_key": "computability_status",
+        "first_valid_time": "2026-06-01T01:45:00Z",
+        "missing_count": 3,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"COMPUTABLE": 7}
+      }
+    },
+    {
+      "case_id": "OPTIONAL_SINGLE_VALUE",
+      "expected_class": "OPTIONAL",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "interaction.rejection_present",
+        "first_valid_time": "2026-06-01T02:00:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"TRUE": 4}
+      }
+    },
+    {
+      "case_id": "RARE_SINGLE_VALUE",
+      "expected_class": "RARE",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "interaction.failure_present",
+        "first_valid_time": "2026-06-01T02:15:00Z",
+        "missing_count": 0,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"TRUE": 1}
+      }
+    }
+  ],
+  "invalid_cases": [
+    {
+      "case_id": "CLOCK_ID_CANNOT_BE_STRUCTURAL",
+      "expected_error_contains": "reserved for CONTEXT",
+      "operation": "VALIDATE_DOMAIN",
+      "requested_domain": "STRUCTURAL",
+      "feature_key": "clock_id"
+    },
+    {
+      "case_id": "PROVENANCE_CANNOT_PROVE_CONFLICT",
+      "expected_error_contains": "cannot prove logical conflict",
+      "operation": "CREATE_EXCLUSIVITY_RULE",
+      "rule": {
+        "clock_scope": "SAME_CLOCK",
+        "domain": "PROVENANCE",
+        "feature_key": "source_release_id",
+        "mutually_exclusive_values": ["A", "B"],
+        "object_scope": "STATE_RECORD",
+        "registry_version": "0.1",
+        "rule_id": "INVALID-PROVENANCE-CONFLICT",
+        "time_scope": "EXACT_FIRST_VALID_TIME"
+      }
+    },
+    {
+      "case_id": "WILDCARD_SCOPE_REJECTED",
+      "expected_error_contains": "wildcards are forbidden",
+      "operation": "CREATE_EXCLUSIVITY_RULE",
+      "rule": {
+        "clock_scope": "SAME_CLOCK",
+        "domain": "STRUCTURAL",
+        "feature_key": "motion.*",
+        "mutually_exclusive_values": ["UP", "DOWN"],
+        "object_scope": "STATE_RECORD",
+        "registry_version": "0.1",
+        "rule_id": "INVALID-WILDCARD",
+        "time_scope": "EXACT_FIRST_VALID_TIME"
+      }
+    },
+    {
+      "case_id": "CROSS_CLOCK_SCOPE_REJECTED",
+      "expected_error_contains": "clock_scope must be SAME_CLOCK",
+      "operation": "CREATE_EXCLUSIVITY_RULE",
+      "rule": {
+        "clock_scope": "ANY_CLOCK",
+        "domain": "STRUCTURAL",
+        "feature_key": "motion.direction",
+        "mutually_exclusive_values": ["UP", "DOWN"],
+        "object_scope": "STATE_RECORD",
+        "registry_version": "0.1",
+        "rule_id": "INVALID-CROSS-CLOCK",
+        "time_scope": "EXACT_FIRST_VALID_TIME"
+      }
+    },
+    {
+      "case_id": "COUNT_OVERFLOW_REJECTED",
+      "expected_error_contains": "exceeds total_eligible",
+      "operation": "CREATE_STATS",
+      "stats": {
+        "clock_id": "15M",
+        "domain": "STRUCTURAL",
+        "feature_key": "motion.direction",
+        "first_valid_time": "2026-06-01T02:30:00Z",
+        "missing_count": 3,
+        "object_scope": "STATE_RECORD",
+        "total_eligible": 10,
+        "value_counts": {"UP": 8}
+      }
+    }
+  ],
+  "fixture_id": "MG-WP1-PREDICATE-CLASSIFIER-CASES-v0.1",
+  "schema": "ovc-mg-wp1-predicate-classifier-fixture/v1"
+}

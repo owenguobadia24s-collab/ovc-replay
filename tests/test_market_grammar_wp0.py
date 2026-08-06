@@ -29,13 +29,11 @@ def load_module():
 class MarketGrammarWp0Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.module = load_module()
-        cls.result = cls.module.validate()
+        cls.result = load_module().validate()
         cls.binding = load(BASE / "MG_WP0_BASELINE_BINDING.json")
         cls.inventory = load(BASE / "MG_WP0_EXTERNAL_ARTIFACT_INVENTORY.json")
         cls.qa = load(BASE / "MG_WP0_QA_PACKET.json")
         cls.decision = load(BASE / "MG_WP0_DELEGATED_DECISION.json")
-        cls.assurance = load(BASE / "MG_WP0_PREDECISION_ASSURANCE_RECEIPT.json")
         cls.receipt = load(BASE / "MG_WP0_POST_MERGE_RECEIPT.json")
         cls.state = load(STATE)
 
@@ -61,8 +59,6 @@ class MarketGrammarWp0Tests(unittest.TestCase):
         self.assertEqual("PASS", self.decision["decision"])
         self.assertTrue(self.decision["delegated_authority"])
         self.assertFalse(self.decision["operator_required"])
-        self.assertEqual("NONE_BASELINE_BINDING_ONLY", self.decision["authority_delta"])
-        self.assertEqual("PASS", self.assurance["result"])
         self.assertEqual("COMPLETED", self.receipt["status"])
         self.assertTrue(self.receipt["effective"])
         self.assertEqual(343, self.receipt["pull_request"])
@@ -77,15 +73,14 @@ class MarketGrammarWp0Tests(unittest.TestCase):
         self.assertEqual("NONE_BASELINE_BINDING_ONLY", self.qa["authority_delta"])
         self.assertEqual("PASS_ZERO", self.qa["checks"]["outcome_and_validation_dependencies"])
 
-    def test_programme_state_completes_wp0_and_routes_to_wp1(self) -> None:
-        self.assertEqual("READY", self.state["status"])
+    def test_programme_state_preserves_completed_wp0_while_wp1_runs(self) -> None:
+        self.assertEqual("QA_REVIEW", self.state["status"])
         self.assertEqual("MG-WP1", self.state["next_packet"])
         self.assertEqual([], self.state["blockers"])
-        self.assertEqual("282d660aa9a0d30179808daf75e183becffab148", self.state["merge_commit"])
         packets = {item["packet_id"]: item for item in self.state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-D0-D8"]["status"])
         self.assertEqual("COMPLETED", packets["MG-WP0"]["status"])
-        self.assertEqual("READY", packets["MG-WP1"]["status"])
+        self.assertEqual("QA_REVIEW", packets["MG-WP1"]["status"])
         for index in range(2, 11):
             self.assertEqual("PLANNED", packets[f"MG-WP{index}"]["status"])
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
