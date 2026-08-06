@@ -15,6 +15,7 @@ CANDIDATES = ROOT / "registries/governance/programme_genesis/pgn_candidates/PGN_
 DECISION = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/post-snapshot-admissions/MG_POST_SNAPSHOT_OPERATOR_ADMISSION_DECISION.json"
 QA = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/post-snapshot-admissions/MG_POST_SNAPSHOT_ADMISSION_QA_PACKET.json"
 STATE = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/post-snapshot-admissions/MG_POST_SNAPSHOT_ADMISSION_STATE.json"
+RECEIPT = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/post-snapshot-admissions/MG_POST_SNAPSHOT_ADMISSION_POST_MERGE_RECEIPT.json"
 
 MG_PROGRAMME = "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1"
 
@@ -65,6 +66,7 @@ class NativeGenesisFrozenSnapshotAndAdmissionTests(unittest.TestCase):
         cls.decision = load(DECISION)
         cls.qa = load(QA)
         cls.state = load(STATE)
+        cls.receipt = load(RECEIPT)
 
     def test_policy_freezes_exact_operator_classification_enum(self) -> None:
         policy = load(POLICY)
@@ -208,7 +210,7 @@ class NativeGenesisFrozenSnapshotAndAdmissionTests(unittest.TestCase):
         self.assertEqual(16, frozen["candidate_portfolio_count"])
         self.assertEqual("PROHIBITED", frozen["mutation"])
 
-    def test_operator_decision_qa_and_state_match_admission(self) -> None:
+    def test_operator_decision_qa_state_and_receipt_match_admission(self) -> None:
         self.assertEqual(MG_PROGRAMME, self.decision["programme_id"])
         self.assertEqual(
             "PASS_BOUNDED_POST_SNAPSHOT_ADMISSION",
@@ -219,17 +221,29 @@ class NativeGenesisFrozenSnapshotAndAdmissionTests(unittest.TestCase):
             self.decision["authority_delta"],
         )
         self.assertEqual([], self.qa["blockers"])
-        self.assertEqual(
-            "PASS_AND_MERGE_AFTER_EXACT_HEAD_ASSURANCE",
-            self.qa["qa_recommendation"],
-        )
-        self.assertEqual("APPROVED", self.state["status"])
+        self.assertEqual("PASS_COMPLETED", self.qa["qa_recommendation"])
+        self.assertEqual("PASS_COMPLETED", self.qa["status"])
+        self.assertEqual("COMPLETED", self.state["status"])
         self.assertEqual(
             "SATISFIED_OPERATOR_DECISION",
             self.state["authority_required"],
         )
         self.assertEqual("MG-G0-REBASE_AND_RERUN", self.state["next_packet"])
-        self.assertIsNone(self.state["merge_commit"])
+        self.assertEqual(
+            "448f8bfa85f4ddc9a7db6cfa8ae3f3aece1c1375",
+            self.state["merge_commit"],
+        )
+        self.assertTrue(self.receipt["effective"])
+        self.assertEqual(339, self.receipt["pull_request"])
+        self.assertEqual(
+            "e9a299b776f90801588bccf665d187d8c29f3382",
+            self.receipt["final_head"],
+        )
+        self.assertEqual(
+            "448f8bfa85f4ddc9a7db6cfa8ae3f3aece1c1375",
+            self.receipt["merge_commit"],
+        )
+        self.assertEqual("NONE", self.receipt["reserved_authority"])
 
     def test_compact_summary_is_printable_for_exact_head_assurance(self) -> None:
         summary = {
