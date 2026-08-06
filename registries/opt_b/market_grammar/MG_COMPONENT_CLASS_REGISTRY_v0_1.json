@@ -1,0 +1,37 @@
+{
+  "authority": "SHADOW_EXPERIMENT",
+  "classification_order": [
+    "INVARIANT",
+    "LOGICAL_CONFLICT",
+    "MISSINGNESS_VARIATION",
+    "HIGH_CARDINALITY_VARIATION",
+    "NORMAL_VARIATION",
+    "COMMON",
+    "OPTIONAL",
+    "RARE"
+  ],
+  "classes": [
+    {"id": "INVARIANT", "meaning": "One value is present in every eligible record with no missingness."},
+    {"id": "COMMON", "meaning": "One value is present in at least 70 percent of eligible records without an earlier class applying."},
+    {"id": "NORMAL_VARIATION", "meaning": "Multiple lawful values are observed without exact logical-exclusivity proof."},
+    {"id": "HIGH_CARDINALITY_VARIATION", "meaning": "Identity-like or otherwise highly varied values exceed the frozen cardinality rule."},
+    {"id": "MISSINGNESS_VARIATION", "meaning": "Present and explicitly missing observations coexist."},
+    {"id": "LOGICAL_CONFLICT", "meaning": "At least two values conflict under one exact versioned exclusivity rule and scope."},
+    {"id": "OPTIONAL", "meaning": "One value is present in at least 20 percent but less than 70 percent of eligible records."},
+    {"id": "RARE", "meaning": "The component is present in fewer than 20 percent of eligible records."}
+  ],
+  "frequency_alone_proves_logical_conflict": false,
+  "id": "MG-COMPONENT-CLASSES-v0.1",
+  "legacy_direct_mappings": {"CONTRADICTORY": null},
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "schema": "ovc-mg-component-class-registry/v1",
+  "status": "FROZEN_FOR_SHADOW_IMPLEMENTATION_ONLY",
+  "thresholds": {
+    "common_present_ratio_min": 0.7,
+    "high_cardinality_distinct_min": 8,
+    "high_cardinality_distinct_to_present_ratio_min": 0.5,
+    "high_cardinality_present_count_min": 8,
+    "optional_present_ratio_min": 0.2
+  },
+  "version": "0.1"
+}

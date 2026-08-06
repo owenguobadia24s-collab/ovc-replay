@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/market_grammar/exclusivity_rule_v0_1.schema.json",
+  "title": "MG Exclusivity Rule v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "rule_id",
+    "feature_key",
+    "domain",
+    "object_scope",
+    "clock_scope",
+    "time_scope",
+    "mutually_exclusive_values",
+    "registry_version"
+  ],
+  "properties": {
+    "rule_id": {"type": "string", "minLength": 1, "not": {"pattern": "\\*"}},
+    "feature_key": {"type": "string", "minLength": 1, "not": {"pattern": "\\*"}},
+    "domain": {"enum": ["STRUCTURAL", "TEMPORAL", "OBJECT_BINDING", "CONTEXT"]},
+    "object_scope": {
+      "enum": ["STATE_RECORD", "RELATION_RECORD", "EPISODE_RECORD", "PARSE_NODE"]
+    },
+    "clock_scope": {"const": "SAME_CLOCK"},
+    "time_scope": {"const": "EXACT_FIRST_VALID_TIME"},
+    "mutually_exclusive_values": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "registry_version": {"type": "string", "minLength": 1}
+  }
+}

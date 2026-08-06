@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/opt_b/market_grammar/component_stats_v0_1.schema.json",
+  "title": "MG Component Statistics v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "feature_key",
+    "domain",
+    "object_scope",
+    "clock_id",
+    "first_valid_time",
+    "total_eligible",
+    "missing_count",
+    "value_counts"
+  ],
+  "properties": {
+    "feature_key": {"type": "string", "minLength": 1},
+    "domain": {
+      "enum": [
+        "STRUCTURAL",
+        "TEMPORAL",
+        "OBJECT_BINDING",
+        "CONTEXT",
+        "COMPUTABILITY",
+        "PROVENANCE"
+      ]
+    },
+    "object_scope": {
+      "enum": ["STATE_RECORD", "RELATION_RECORD", "EPISODE_RECORD", "PARSE_NODE"]
+    },
+    "clock_id": {"type": "string", "minLength": 1},
+    "first_valid_time": {"type": "string", "minLength": 1},
+    "total_eligible": {"type": "integer", "minimum": 0},
+    "missing_count": {"type": "integer", "minimum": 0},
+    "value_counts": {
+      "type": "object",
+      "minProperties": 0,
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    }
+  }
+}

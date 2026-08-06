@@ -1,0 +1,47 @@
+{
+  "authority": "SHADOW_EXPERIMENT",
+  "id": "MG-EXCLUSIVITY-v0.1",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "rules": [
+    {
+      "clock_scope": "SAME_CLOCK",
+      "domain": "STRUCTURAL",
+      "feature_key": "motion.direction",
+      "mutually_exclusive_values": ["DOWN", "FLAT", "UP"],
+      "object_scope": "STATE_RECORD",
+      "registry_version": "0.1",
+      "rule_id": "MG-EXCL-MOTION-DIRECTION-v0.1",
+      "time_scope": "EXACT_FIRST_VALID_TIME"
+    },
+    {
+      "clock_scope": "SAME_CLOCK",
+      "domain": "STRUCTURAL",
+      "feature_key": "location.position",
+      "mutually_exclusive_values": ["ABOVE", "BELOW", "INSIDE"],
+      "object_scope": "RELATION_RECORD",
+      "registry_version": "0.1",
+      "rule_id": "MG-EXCL-LOCATION-POSITION-v0.1",
+      "time_scope": "EXACT_FIRST_VALID_TIME"
+    },
+    {
+      "clock_scope": "SAME_CLOCK",
+      "domain": "TEMPORAL",
+      "feature_key": "episode.lifecycle",
+      "mutually_exclusive_values": [
+        "CENSORED",
+        "COMPLETED",
+        "OPEN",
+        "TERMINATED",
+        "UNRESOLVED"
+      ],
+      "object_scope": "EPISODE_RECORD",
+      "registry_version": "0.1",
+      "rule_id": "MG-EXCL-EPISODE-LIFECYCLE-v0.1",
+      "time_scope": "EXACT_FIRST_VALID_TIME"
+    }
+  ],
+  "schema": "ovc-mg-exclusivity-registry/v1",
+  "status": "FROZEN_FOR_SHADOW_IMPLEMENTATION_ONLY",
+  "version": "0.1",
+  "wildcards": "PROHIBITED"
+}
