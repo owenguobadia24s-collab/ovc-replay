@@ -24,6 +24,7 @@ R2_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R2_ACKNOWLEDGEMENT_RECEIPT.json"
 R3_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R3_ACKNOWLEDGEMENT_RECEIPT.json"
 R4_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R4_ACKNOWLEDGEMENT_RECEIPT.json"
 R5_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R5_ACKNOWLEDGEMENT_RECEIPT.json"
+R6_RECEIPT = BASE / "pgn-g3/reviews/PGN_G3_R6_ACKNOWLEDGEMENT_RECEIPT.json"
 
 ALLOWED_EVIDENCE = {"SOURCE_EXPLICIT", "LINEAGE_EXPLICIT", "PATH_AND_CONTENT_CORROBORATED", "CANDIDATE_RELATION", "UNRESOLVED"}
 ALLOWED_RELATIONSHIPS = {"EVIDENCE_ROOT_OF", "PLAN_GOVERNED_BY", "RELEASE_PRODUCED_BY", "GATE_PACKET_OF", "DECISION_RECORD_OF", "HISTORICAL_EVIDENCE_OF", "LINEAGE_RECORD_OF", "REFERENCES", "CONSUMES", "UNRESOLVED_RELATION"}
@@ -72,6 +73,7 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         cls.r3_receipt = load(R3_RECEIPT)
         cls.r4_receipt = load(R4_RECEIPT)
         cls.r5_receipt = load(R5_RECEIPT)
+        cls.r6_receipt = load(R6_RECEIPT)
         cls.schema = load(SCHEMA)
         cls.valid = load(VALID)
         cls.invalid = load(INVALID)
@@ -95,16 +97,18 @@ class PgnG3ArtifactGovernanceCrosswalkTests(unittest.TestCase):
         self.assertIn("NATIVE_ADOPTION", self.decision["denied"])
         self.assertIn("CROSS_PROGRAMME_HARD_DEPENDENCY_ACCEPTANCE", self.decision["denied"])
 
-    def test_protocol_and_receipts_unlock_only_the_current_group(self) -> None:
+    def test_protocol_and_receipts_complete_progressively(self) -> None:
         self.assertEqual([f"PGN-G3-R{i}" for i in range(1, 7)], self.protocol["applies_to"])
         self.assertEqual("DENIED_PENDING_PGN_G5", self.protocol["cross_programme_edge_acceptance"])
-        for path in (R1_RECEIPT, R2_RECEIPT, R3_RECEIPT, R4_RECEIPT, R5_RECEIPT):
+        for path in (R1_RECEIPT, R2_RECEIPT, R3_RECEIPT, R4_RECEIPT, R5_RECEIPT, R6_RECEIPT):
             self.assertTrue(path.exists())
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R4_ONLY", self.r3_receipt["authority_effect"])
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R5_ONLY", self.r4_receipt["authority_effect"])
         self.assertEqual("DISCLOSE_AND_MATERIALISE_PGN_G3_R6_ONLY", self.r5_receipt["authority_effect"])
-        self.assertEqual("NONE", self.r5_receipt["native_adoption"])
-        self.assertEqual("LOCKED", self.r5_receipt["later_groups_beyond_r6"])
+        self.assertEqual("PREPARE_SEPARATE_PER_PROGRAMME_PGN_G3_NATIVE_ADOPTION_OPERATOR_DECISION_PACKET_ONLY", self.r6_receipt["authority_effect"])
+        self.assertEqual("COMPLETED", self.r6_receipt["progressive_review_status"])
+        self.assertEqual("NONE", self.r6_receipt["native_adoption"])
+        self.assertEqual("NONE", self.r6_receipt["cross_programme_edge_acceptance"])
 
     def test_materialised_crosswalks_are_complete_and_authority_neutral(self) -> None:
         self.assertEqual("RETROSPECTIVE_SUPPLEMENT_MATERIALISED_UNAPPROVED", self.r1["status"])
