@@ -14,6 +14,7 @@ QA = BASE / "PGN_G3_QA_PACKET.json"
 STATE = BASE / "PGN_G3_PROGRAMME_STATE_UPDATE.json"
 PORTFOLIO = ROOT / "registries/governance/programme_genesis/pgn_candidates/PGN_WP3_NATIVE_CANDIDATE_PORTFOLIO_v0_1.json"
 RECEIPTS = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews"
+POST_MERGE_RECEIPT = BASE / "PGN_G3_POST_MERGE_RECEIPT.json"
 
 UNRESOLVED = {
     "PURPOSE_EXACT_SOURCE_TEXT",
@@ -43,6 +44,7 @@ class PgnG3NativeAdoptionGateTests(unittest.TestCase):
         cls.gate = load(GATE)
         cls.qa = load(QA)
         cls.state = load(STATE)
+        cls.post_merge_receipt = load(POST_MERGE_RECEIPT)
         cls.portfolio = load(PORTFOLIO)
 
     def test_exact_candidate_population_identity_class_and_hash(self) -> None:
@@ -163,14 +165,14 @@ class PgnG3NativeAdoptionGateTests(unittest.TestCase):
         self.assertEqual(16, self.qa["assessment"]["decision_counts"]["DEFER"])
         self.assertEqual(0, self.qa["assessment"]["native_records_created"])
 
-    def test_programme_state_is_approved_for_merge_and_receipt_only(self) -> None:
-        self.assertEqual("APPROVED", self.state["status"])
+    def test_programme_state_and_receipt_close_pgn_g3_without_adoption(self) -> None:
+        self.assertEqual("COMPLETED", self.state["status"])
         self.assertEqual(
             "SATISFIED_OPERATOR_DECISION",
             self.state["authority_required"],
         )
         self.assertIsNone(self.state["next_gate"])
-        self.assertEqual("PGN-G3-POST-MERGE-RECEIPT", self.state["next_packet"])
+        self.assertEqual("POST_SNAPSHOT_MG_OPERATOR_ADMISSION", self.state["next_packet"])
         self.assertEqual(
             "NONE_DEFERRED",
             self.state["authority"]["native_adoption"],
@@ -178,8 +180,24 @@ class PgnG3NativeAdoptionGateTests(unittest.TestCase):
         self.assertEqual("DENIED", self.state["authority"]["cross_programme_edges"])
         self.assertEqual("NONE", self.state["authority"]["reserved_authority"])
         self.assertEqual(str(DECISION.relative_to(ROOT)), self.state["decision_record"])
-        self.assertIsNone(self.state["merge_commit"])
+        self.assertEqual(
+            "0724fc6b528aa9f362a5dec92d7cd7755a4a9a6b",
+            self.state["merge_commit"],
+        )
+        self.assertEqual(str(POST_MERGE_RECEIPT.relative_to(ROOT)), self.state["post_merge_receipt"])
         self.assertEqual("INDEFINITE", self.state["deferred"]["PGN-WP4"])
+        self.assertTrue(self.post_merge_receipt["effective"])
+        self.assertEqual(337, self.post_merge_receipt["pull_request"])
+        self.assertEqual(
+            "9318c33df1085bfcc0dd1c78dd5642c1e1624b1a",
+            self.post_merge_receipt["final_head"],
+        )
+        self.assertEqual(
+            "0724fc6b528aa9f362a5dec92d7cd7755a4a9a6b",
+            self.post_merge_receipt["merge_commit"],
+        )
+        self.assertEqual(0, self.post_merge_receipt["native_records_created"])
+        self.assertEqual("NONE", self.post_merge_receipt["authority_effect"])
 
     def test_no_native_record_is_materialised(self) -> None:
         self.assertEqual(
