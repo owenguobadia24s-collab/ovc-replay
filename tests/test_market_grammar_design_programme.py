@@ -30,18 +30,12 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             + replay["counts"]["censored"]
             + replay["counts"]["not_evaluable"],
         )
-        self.assertEqual(
-            "UNCHANGED_READ_ONLY",
-            lock["integrated_shadow_closeout"]["active_c2"],
-        )
+        self.assertEqual("UNCHANGED_READ_ONLY", lock["integrated_shadow_closeout"]["active_c2"])
         self.assertIn("NO_MARKET_OR_ACTIVATION_AUTHORITY", lock["authority_effect"])
 
     def test_c2e_supersession_is_narrow_and_preserves_activation_denial(self) -> None:
         record = load("MG_D0_OPERATOR_SCOPE_AND_C2E_SUPERSESSION.json")
-        self.assertEqual(
-            "C2E-G1.OPERATOR.BLOCK.20260803T194600+0100",
-            record["supersedes_decision_id"],
-        )
+        self.assertEqual("C2E-G1.OPERATOR.BLOCK.20260803T194600+0100", record["supersedes_decision_id"])
         self.assertIn("C2E_ACTIVATION", record["preserved_denials"])
         self.assertIn("C2E_AUTHORITATIVE_CONSUMPTION", record["preserved_denials"])
         self.assertEqual("LIMITED_IMMUTABLE_SUPERSESSION", record["authority_effect"])
@@ -52,18 +46,12 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
         self.assertEqual("BLOCKED", blocked["status"])
         self.assertEqual("BLOCK", blocked["qa_recommendation"])
         self.assertEqual("FAIL_3_OF_352", freeze["repository_tests"]["result"])
-        self.assertEqual(
-            "PGN_PORTFOLIO_CENSUS_OR_ADMISSION_SCOPE_CHANGE",
-            freeze["reserved_authority_delta"],
-        )
+        self.assertEqual("PGN_PORTFOLIO_CENSUS_OR_ADMISSION_SCOPE_CHANGE", freeze["reserved_authority_delta"])
 
     def test_post_snapshot_admission_resolves_only_mg_g0_block(self) -> None:
         resolution = load("MG_G0_POST_SNAPSHOT_ADMISSION_RESOLUTION.json")
         self.assertEqual("RESOLVED_FOR_MG_G0_RERUN", resolution["status"])
-        self.assertEqual(
-            "PASS_OPERATOR_ADMISSION_MATERIALISED_AND_RECEIPTED",
-            resolution["resolution"],
-        )
+        self.assertEqual("PASS_OPERATOR_ADMISSION_MATERIALISED_AND_RECEIPTED", resolution["resolution"])
         self.assertEqual(108, resolution["snapshot_preservation"]["object_count"])
         self.assertEqual(72, resolution["snapshot_preservation"]["exclusion_count"])
         self.assertEqual(16, resolution["snapshot_preservation"]["candidate_count"])
@@ -73,24 +61,12 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
             resolution["admission"]["authority"],
         )
-        receipt = json.loads(
-            (
-                PGN_BASE
-                / "post-snapshot-admissions"
-                / "MG_POST_SNAPSHOT_ADMISSION_POST_MERGE_RECEIPT.json"
-            ).read_text(encoding="utf-8")
-        )
+        receipt = json.loads((PGN_BASE / "post-snapshot-admissions" / "MG_POST_SNAPSHOT_ADMISSION_POST_MERGE_RECEIPT.json").read_text(encoding="utf-8"))
         self.assertTrue(receipt["effective"])
         self.assertEqual("NONE", receipt["reserved_authority"])
 
     def test_implementation_registry_prohibits_reverse_and_outcome_dependencies(self) -> None:
-        path = (
-            ROOT
-            / "registries"
-            / "opt_b"
-            / "market_grammar"
-            / "OVC_MARKET_GRAMMAR_IMPLEMENTATION_REGISTRY_v0_1.jsonc"
-        )
+        path = ROOT / "registries" / "opt_b" / "market_grammar" / "OVC_MARKET_GRAMMAR_IMPLEMENTATION_REGISTRY_v0_1.jsonc"
         registry = json.loads(path.read_text(encoding="utf-8"))
         prohibited = set(registry["forbidden_dependencies"])
         self.assertIn("C2E_READS_C2G", prohibited)
@@ -109,35 +85,23 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
         self.assertEqual("COMPLETED", receipt["status"])
         self.assertTrue(receipt["effective"])
         self.assertEqual(341, receipt["pull_request"])
-        self.assertEqual(
-            "5eb4a21125e41c3d7ce2fe416d571aa9aa3f95f3",
-            receipt["final_head"],
-        )
-        self.assertEqual(
-            "114558efdf38f56499f6276da917190c3cb729ea",
-            receipt["merge_commit"],
-        )
+        self.assertEqual("5eb4a21125e41c3d7ce2fe416d571aa9aa3f95f3", receipt["final_head"])
+        self.assertEqual("114558efdf38f56499f6276da917190c3cb729ea", receipt["merge_commit"])
         self.assertEqual("NONE", receipt["reserved_authority"])
         self.assertEqual("PASS_COMPLETED", qa["status"])
         self.assertEqual("PASS_COMPLETED", qa["qa_recommendation"])
         self.assertEqual([], qa["blockers"])
 
-    def test_programme_state_preserves_completed_g0_while_wp0_runs(self) -> None:
-        path = (
-            ROOT
-            / "registries"
-            / "opt_b"
-            / "market_grammar"
-            / "OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc"
-        )
+    def test_programme_state_preserves_completed_g0_while_wp0_is_approved(self) -> None:
+        path = ROOT / "registries" / "opt_b" / "market_grammar" / "OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc"
         state = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual("QA_REVIEW", state["status"])
-        self.assertEqual("AUTO_EXECUTABLE", state["authority_required"])
-        self.assertEqual("MG-WP0", state["next_packet"])
+        self.assertEqual("APPROVED", state["status"])
+        self.assertEqual("SATISFIED_DELEGATED_DECISION", state["authority_required"])
+        self.assertEqual("MG-WP0-MERGE-RECEIPT", state["next_packet"])
         self.assertEqual([], state["blockers"])
         packets = {item["packet_id"]: item for item in state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-D0-D8"]["status"])
-        self.assertEqual("QA_REVIEW", packets["MG-WP0"]["status"])
+        self.assertEqual("APPROVED", packets["MG-WP0"]["status"])
         for i in range(1, 11):
             self.assertEqual("PLANNED", packets[f"MG-WP{i}"]["status"])
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])

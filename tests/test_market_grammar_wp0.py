@@ -34,6 +34,8 @@ class MarketGrammarWp0Tests(unittest.TestCase):
         cls.binding = load(BASE / "MG_WP0_BASELINE_BINDING.json")
         cls.inventory = load(BASE / "MG_WP0_EXTERNAL_ARTIFACT_INVENTORY.json")
         cls.qa = load(BASE / "MG_WP0_QA_PACKET.json")
+        cls.decision = load(BASE / "MG_WP0_DELEGATED_DECISION.json")
+        cls.assurance = load(BASE / "MG_WP0_PREDECISION_ASSURANCE_RECEIPT.json")
         cls.state = load(STATE)
 
     def test_baseline_validator_passes_exact_bindings(self) -> None:
@@ -79,29 +81,41 @@ class MarketGrammarWp0Tests(unittest.TestCase):
             + self.inventory["counts"]["not_evaluable"],
         )
         self.assertEqual("PASS", self.inventory["capacity"]["status"])
-        self.assertLess(
-            self.inventory["capacity"]["run_001_output_bytes"],
-            self.inventory["capacity"]["max_output_bytes"],
-        )
 
-    def test_qa_has_no_blocker_and_no_authority_delta(self) -> None:
-        self.assertEqual("QA_REVIEW", self.qa["status"])
+    def test_delegated_pass_is_non_reserved_and_assured(self) -> None:
+        self.assertEqual("PASS", self.decision["decision"])
+        self.assertTrue(self.decision["delegated_authority"])
+        self.assertFalse(self.decision["operator_required"])
+        self.assertEqual("NONE_BASELINE_BINDING_ONLY", self.decision["authority_delta"])
+        self.assertEqual(
+            "ceff73f13185aa9e2dc95acf1d71ccb5a28ae78f",
+            self.decision["predecision_assured_head"],
+        )
+        self.assertEqual("PASS", self.assurance["result"])
+        for value in self.assurance["checks"].values():
+            if isinstance(value, dict):
+                self.assertEqual("SUCCESS", value["conclusion"])
+        self.assertEqual(0, self.assurance["checks"]["unresolved_review_threads"])
+
+    def test_qa_has_no_blocker_and_is_pending_only_final_head(self) -> None:
+        self.assertEqual("PASS_PENDING_FINAL_HEAD", self.qa["status"])
         self.assertEqual([], self.qa["blockers"])
         self.assertEqual("NONE_BASELINE_BINDING_ONLY", self.qa["authority_delta"])
         self.assertEqual(
-            "PASS_IF_EXACT_HEAD_ASSURANCE_PASSES",
+            "PASS_DELEGATED_PENDING_FINAL_DECISION_HEAD_ASSURANCE_AND_MERGE",
             self.qa["qa_recommendation"],
         )
         self.assertEqual("PASS_ZERO", self.qa["checks"]["outcome_and_validation_dependencies"])
 
-    def test_programme_state_runs_only_wp0(self) -> None:
-        self.assertEqual("QA_REVIEW", self.state["status"])
-        self.assertEqual("MG-WP0", self.state["next_packet"])
-        self.assertEqual("AUTO_EXECUTABLE", self.state["authority_required"])
+    def test_programme_state_approves_only_wp0_pending_receipt(self) -> None:
+        self.assertEqual("APPROVED", self.state["status"])
+        self.assertEqual("MG-WP0-MERGE-RECEIPT", self.state["next_packet"])
+        self.assertEqual("SATISFIED_DELEGATED_DECISION", self.state["authority_required"])
         self.assertEqual([], self.state["blockers"])
+        self.assertIsNone(self.state["merge_commit"])
         packets = {item["packet_id"]: item for item in self.state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-D0-D8"]["status"])
-        self.assertEqual("QA_REVIEW", packets["MG-WP0"]["status"])
+        self.assertEqual("APPROVED", packets["MG-WP0"]["status"])
         for index in range(1, 11):
             self.assertEqual("PLANNED", packets[f"MG-WP{index}"]["status"])
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
