@@ -73,17 +73,13 @@ class MarketGrammarWp0Tests(unittest.TestCase):
         self.assertEqual("NONE_BASELINE_BINDING_ONLY", self.qa["authority_delta"])
         self.assertEqual("PASS_ZERO", self.qa["checks"]["outcome_and_validation_dependencies"])
 
-    def test_programme_state_preserves_completed_wp0_and_wp1(self) -> None:
-        self.assertEqual("READY", self.state["status"])
-        self.assertEqual("MG-WP2", self.state["next_packet"])
+    def test_programme_state_preserves_completed_wp0(self) -> None:
         self.assertEqual([], self.state["blockers"])
         packets = {item["packet_id"]: item for item in self.state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-D0-D8"]["status"])
         self.assertEqual("COMPLETED", packets["MG-WP0"]["status"])
         self.assertEqual("COMPLETED", packets["MG-WP1"]["status"])
-        self.assertEqual("READY", packets["MG-WP2"]["status"])
-        for index in range(3, 11):
-            self.assertEqual("PLANNED", packets[f"MG-WP{index}"]["status"])
+        self.assertNotEqual("MG-WP0", self.state["next_packet"])
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
 
 

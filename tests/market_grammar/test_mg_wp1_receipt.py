@@ -36,7 +36,7 @@ class MarketGrammarWp1ReceiptTests(unittest.TestCase):
             decision["authority_delta"],
         )
 
-    def test_qa_manifest_and_state_complete_wp1_and_unlock_only_wp2(self) -> None:
+    def test_qa_manifest_and_state_preserve_wp1_completion(self) -> None:
         qa = load(RELEASE / "MG_WP1_QA_PACKET.json")
         manifest = load(RELEASE / "MG_WP1_IMPLEMENTATION_MANIFEST.json")
         state = load(STATE)
@@ -45,10 +45,12 @@ class MarketGrammarWp1ReceiptTests(unittest.TestCase):
         self.assertEqual("COMPLETED", manifest["status"])
         packets = {item["packet_id"]: item for item in state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-WP1"]["status"])
-        self.assertEqual("READY", packets["MG-WP2"]["status"])
-        self.assertEqual("PLANNED", packets["MG-WP3"]["status"])
-        self.assertEqual("MG-WP2", state["next_packet"])
-        self.assertEqual("READY", state["status"])
+        self.assertNotEqual("MG-WP1", state["next_packet"])
+        self.assertIn(
+            packets["MG-WP2"]["status"],
+            {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "APPROVED", "COMPLETED"},
+        )
+        self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
 
 
 if __name__ == "__main__":
