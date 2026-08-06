@@ -122,7 +122,7 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
         self.assertEqual("PASS_COMPLETED", qa["qa_recommendation"])
         self.assertEqual([], qa["blockers"])
 
-    def test_programme_state_routes_to_ready_mg_wp0(self) -> None:
+    def test_programme_state_preserves_completed_g0_while_wp0_runs(self) -> None:
         path = (
             ROOT
             / "registries"
@@ -131,17 +131,13 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             / "OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc"
         )
         state = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual("READY", state["status"])
-        self.assertEqual("SATISFIED_DELEGATED_DECISION", state["authority_required"])
+        self.assertEqual("QA_REVIEW", state["status"])
+        self.assertEqual("AUTO_EXECUTABLE", state["authority_required"])
         self.assertEqual("MG-WP0", state["next_packet"])
         self.assertEqual([], state["blockers"])
-        self.assertEqual(
-            "114558efdf38f56499f6276da917190c3cb729ea",
-            state["merge_commit"],
-        )
         packets = {item["packet_id"]: item for item in state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-D0-D8"]["status"])
-        self.assertEqual("READY", packets["MG-WP0"]["status"])
+        self.assertEqual("QA_REVIEW", packets["MG-WP0"]["status"])
         for i in range(1, 11):
             self.assertEqual("PLANNED", packets[f"MG-WP{i}"]["status"])
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
