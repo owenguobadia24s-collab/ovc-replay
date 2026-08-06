@@ -5,7 +5,7 @@ import json
 import unittest
 from pathlib import Path
 
-from ovc_market_grammar import (
+from ovc.opt_b.market_grammar import (
     ComponentClass,
     ComponentStats,
     ExclusivityRule,

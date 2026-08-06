@@ -6,7 +6,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ovc_market_grammar import (
+from ovc.opt_b.market_grammar import (
     ComponentStats,
     ExclusivityRule,
     classify_component,

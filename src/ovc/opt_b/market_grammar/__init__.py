@@ -1,4 +1,9 @@
-"""Inactive, noncanonical market-grammar research components."""
+"""Shadow-only market-grammar research namespace.
+
+This package has no active market or selector authority, no canonical grammar,
+no Validation or semantic-promotion authority, and no probability, risk,
+exposure or execution authority.
+"""
 
 from .predicate_domains import (
     ComponentClass,
