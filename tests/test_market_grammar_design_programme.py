@@ -51,7 +51,8 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             "PGN_PORTFOLIO_CENSUS_OR_ADMISSION_SCOPE_CHANGE",
             packet["reserved_authority_delta"],
         )
-        self.assertEqual("FAIL_3_OF_347", packet["repository_tests"]["result"])
+        self.assertEqual("FAIL_3_OF_352", packet["repository_tests"]["result"])
+        self.assertEqual("PASS_5_OF_5", packet["repository_tests"]["programme_specific_tests"])
 
     def test_implementation_registry_prohibits_reverse_and_outcome_dependencies(self) -> None:
         path = (
