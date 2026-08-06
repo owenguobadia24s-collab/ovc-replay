@@ -1,0 +1,80 @@
+{
+  "baseline_commit": "372b072959863957d80c4dc12f393ae97bba482e",
+  "components": [
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2E",
+      "name": "Variable-duration episode ledger",
+      "reads": ["C2_STATE", "C2_RELATION", "C2_TRANSITION"],
+      "writes": ["C2E_EPISODE", "C2E_PHASE", "C2E_INTERRUPTION"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2G-S",
+      "name": "Sensitivity packs",
+      "reads": ["TYPED_STRUCTURAL_RECORD"],
+      "writes": ["SENSITIVITY_RESULT"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2G-H",
+      "name": "Family hierarchy DAG",
+      "reads": ["SENSITIVITY_RESULT"],
+      "writes": ["FAMILY_NODE", "FAMILY_EDGE"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2G-V",
+      "name": "Family variants",
+      "reads": ["FAMILY_NODE", "ASSIGNMENT"],
+      "writes": ["FAMILY_VARIANT"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2G-A",
+      "name": "Assignment ledger",
+      "reads": ["FAMILY_NODE", "FAMILY_VARIANT"],
+      "writes": ["ASSIGNMENT"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2G-T",
+      "name": "Transition families",
+      "reads": ["C2_TRANSITION"],
+      "writes": ["TRANSITION_FAMILY"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2G-E",
+      "name": "Episode families and grammar candidates",
+      "reads": ["C2E_EPISODE"],
+      "writes": ["EPISODE_FAMILY", "GRAMMAR_CANDIDATE"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2G-M",
+      "name": "Multi-clock families",
+      "reads": ["CONTEXT_ALIGNMENT", "TYPED_STRUCTURAL_RECORD"],
+      "writes": ["MULTI_CLOCK_FAMILY"]
+    },
+    {
+      "authority": "SHADOW_EXPERIMENT",
+      "id": "C2P",
+      "name": "Typed compiler and parser",
+      "reads": ["FROZEN_GRAMMAR_RELEASE", "C2_STATE", "C2_RELATION", "C2_TRANSITION", "C2E_EPISODE", "OPTIONAL_C2_5_EVENT"],
+      "writes": ["C2P_PARSE_RESULT"]
+    }
+  ],
+  "forbidden_dependencies": [
+    "C2E_READS_C2G",
+    "C2G_REWRITES_C2_OR_C2E",
+    "C2P_MUTATES_GRAMMAR",
+    "OUTCOME_INPUT_TO_C2E_C2G_C2P_CONSTRUCTION",
+    "PROVENANCE_AS_STRUCTURAL_MATCH_FEATURE"
+  ],
+  "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION",
+  "plan_version": "0.1",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "schema": "ovc-market-grammar-implementation-registry/v1",
+  "status": "APPROVED_FOR_BOUNDED_SHADOW_BUILD"
+}

@@ -1,0 +1,40 @@
+{
+  "authority_delta": "NONE",
+  "baseline_commit": "372b072959863957d80c4dc12f393ae97bba482e",
+  "blocker": {
+    "classification": "GOVERNING_PROGRAMME_CENSUS_CONFLICT",
+    "details": [
+      "PGN-WP2E frozen repository-genesis census expected 108 objects but the new formal programme produces 111",
+      "PGN-WP2E exclusion ledger expected 72 objects but the new files produce 74",
+      "materialized PGN-WP2E bundle no longer matches the current deterministic builder",
+      "the new programme is discovered as a seventeenth LEGACY_PROGRAMME_REQUIRING_CONVERSION while the sealed PGN-WP3 candidate population remains sixteen"
+    ],
+    "operator_boundary": "PGN-G3-R6 is open and operator-required; changing the reviewed census, candidate set or adoption scope is not auto-executable",
+    "smallest_lawful_resolution": "Complete or otherwise dispose PGN-G3-R6, then record an operator-approved supplemental census/admission treatment for OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1 without rewriting frozen PGN-WP2E evidence. Rebase and rerun MG-G0 from the resulting main."
+  },
+  "completed_design_sections": ["MG-D0", "MG-D1", "MG-D2", "MG-D3", "MG-D4", "MG-D5", "MG-D6", "MG-D7", "MG-D8"],
+  "contracts_maturity": "SHADOW_EXPERIMENT_NOT_MERGEABLE",
+  "decision": "BLOCK",
+  "gate_id": "MG-G0",
+  "next_packet": null,
+  "packet_id": "MG-D0-D8",
+  "precondition": "PASS_VERIFIED_SHADOW_EVIDENCE",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "qa_recommendation": "BLOCK",
+  "repository_tests": {
+    "run_id": 31104276459,
+    "job_id": 92625289159,
+    "result": "FAIL_3_OF_352",
+    "programme_specific_tests": "PASS_5_OF_5",
+    "failing_suite": "tests/governance/test_pgn_wp2e.py",
+    "failures": [
+      "test_census_is_deterministic_and_every_object_is_classified_once",
+      "test_exclusions_are_machine_readable_and_prior_census_is_preserved",
+      "test_materialized_bundle_matches_deterministic_builder_and_child_hashes"
+    ]
+  },
+  "reserved_authority_delta": "PGN_PORTFOLIO_CENSUS_OR_ADMISSION_SCOPE_CHANGE",
+  "rollback": "Close or retain the draft PR and delete no evidence. Revert this branch only if the programme is abandoned; preserve the verified shadow-evidence lock and C2E supersession proposal as non-effective records.",
+  "schema": "ovc-mg-d8-design-freeze-packet/v1",
+  "status": "BLOCKED"
+}
