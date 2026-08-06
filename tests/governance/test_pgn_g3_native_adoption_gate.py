@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-native-adoption"
 MATRIX = BASE / "PGN_G3_NATIVE_ADOPTION_READINESS_MATRIX.json"
 TEMPLATE = BASE / "PGN_G3_OPERATOR_DECISION_TEMPLATE.json"
+DECISION = BASE / "PGN_G3_OPERATOR_DECISION.json"
 GATE = BASE / "PGN_G3_OPERATOR_GATE_PACKET.json"
 QA = BASE / "PGN_G3_QA_PACKET.json"
 STATE = BASE / "PGN_G3_PROGRAMME_STATE_UPDATE.json"
@@ -38,6 +39,7 @@ class PgnG3NativeAdoptionGateTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.matrix = load(MATRIX)
         cls.template = load(TEMPLATE)
+        cls.decision = load(DECISION)
         cls.gate = load(GATE)
         cls.qa = load(QA)
         cls.state = load(STATE)
@@ -81,7 +83,7 @@ class PgnG3NativeAdoptionGateTests(unittest.TestCase):
         self.assertEqual("NONE", r6["native_adoption"])
         self.assertEqual("NONE", r6["cross_programme_edge_acceptance"])
 
-    def test_no_candidate_is_ready_for_pass(self) -> None:
+    def test_no_candidate_was_ready_for_pass(self) -> None:
         self.assertEqual(0, self.matrix["ready_for_pass_count"])
         self.assertEqual(
             {"PASS": 0, "DEFER": 16, "BLOCK": 0, "QUARANTINE": 0},
@@ -97,7 +99,7 @@ class PgnG3NativeAdoptionGateTests(unittest.TestCase):
             self.assertEqual("DEFER", entry["recommended_decision"])
             self.assertEqual("NONE", entry["authority_effect"])
 
-    def test_decision_template_requires_one_operator_decision_per_programme(self) -> None:
+    def test_predecision_template_remains_immutable(self) -> None:
         self.assertEqual("PER_PROGRAMME_REQUIRED", self.template["decision_mode"])
         self.assertEqual(16, self.template["candidate_count"])
         self.assertEqual(
@@ -113,39 +115,73 @@ class PgnG3NativeAdoptionGateTests(unittest.TestCase):
             self.assertEqual("DEFER", decision["recommended_decision"])
             self.assertIsNone(decision["operator_decision"])
 
-    def test_gate_and_qa_are_ready_but_do_not_grant_adoption(self) -> None:
-        self.assertEqual("GATE_READY", self.gate["status"])
-        self.assertTrue(self.gate["operator_decision_required"])
-        self.assertEqual("DEFER_ALL", self.gate["recommended_decision"])
+    def test_operator_decision_materialises_exactly_sixteen_defers(self) -> None:
+        commitments = {
+            item["programme_id"]: item["candidate_sha256"]
+            for item in self.portfolio["candidate_commitments"]
+        }
+        decisions = self.decision["decisions"]
+        self.assertEqual(16, self.decision["candidate_count"])
         self.assertEqual(
-            "OVC APPROVE PGN-G3 DECISIONS=DEFER_ALL",
-            self.gate["exact_recommended_command"],
+            {"PASS": 0, "DEFER": 16, "BLOCK": 0, "QUARANTINE": 0},
+            self.decision["decision_counts"],
         )
-        self.assertEqual(0, self.gate["recommended_decision_effect"]["native_records_created"])
-        self.assertEqual("NONE", self.gate["recommended_decision_effect"]["authority_effect"])
-        self.assertEqual("PASS_GATE_READY_RECOMMEND_DEFER_ALL", self.qa["status"])
-        self.assertEqual([], self.qa["gate_readiness_blockers"])
-        self.assertEqual(16, self.qa["assessment"]["recommended_decision_counts"]["DEFER"])
-        self.assertEqual(0, self.qa["assessment"]["ready_for_pass_count"])
+        self.assertEqual(16, len(decisions))
+        self.assertEqual(16, len({item["programme_id"] for item in decisions}))
+        self.assertEqual(set(commitments), {item["programme_id"] for item in decisions})
+        for item in decisions:
+            self.assertEqual("DEFER", item["decision"])
+            self.assertEqual(
+                commitments[item["programme_id"]],
+                item["candidate_sha256"],
+            )
+            self.assertEqual(
+                "CANDIDATE_UNAPPROVED_DEFERRED",
+                item["candidate_status_after_decision"],
+            )
+            self.assertFalse(item["native_record_created"])
+            self.assertEqual("NONE", item["authority_effect"])
 
-    def test_programme_state_stops_at_operator_required_pgn_g3(self) -> None:
-        self.assertEqual("GATE_READY", self.state["status"])
-        self.assertEqual("OPERATOR_REQUIRED", self.state["authority_required"])
-        self.assertEqual("PGN-G3", self.state["next_gate"])
+    def test_gate_and_qa_record_operator_defer_all_without_authority(self) -> None:
         self.assertEqual(
-            "PENDING_OPERATOR_PGN_G3_DECISIONS",
+            "APPROVED_PENDING_EXACT_HEAD_ASSURANCE_AND_MERGE",
+            self.gate["status"],
+        )
+        self.assertFalse(self.gate["operator_decision_required"])
+        self.assertEqual(str(DECISION.relative_to(ROOT)), self.gate["operator_decision"])
+        self.assertEqual(
+            {"PASS": 0, "DEFER": 16, "BLOCK": 0, "QUARANTINE": 0},
+            self.gate["decision_counts"],
+        )
+        self.assertEqual(0, self.gate["decision_effect"]["native_records_created"])
+        self.assertEqual("NONE", self.gate["decision_effect"]["authority_effect"])
+        self.assertEqual(
+            "PASS_OPERATOR_DEFER_ALL_PENDING_FINAL_HEAD_ASSURANCE",
+            self.qa["status"],
+        )
+        self.assertEqual([], self.qa["gate_completion_blockers"])
+        self.assertEqual(16, self.qa["assessment"]["decision_counts"]["DEFER"])
+        self.assertEqual(0, self.qa["assessment"]["native_records_created"])
+
+    def test_programme_state_is_approved_for_merge_and_receipt_only(self) -> None:
+        self.assertEqual("APPROVED", self.state["status"])
+        self.assertEqual(
+            "SATISFIED_OPERATOR_DECISION",
+            self.state["authority_required"],
+        )
+        self.assertIsNone(self.state["next_gate"])
+        self.assertEqual("PGN-G3-POST-MERGE-RECEIPT", self.state["next_packet"])
+        self.assertEqual(
+            "NONE_DEFERRED",
             self.state["authority"]["native_adoption"],
         )
-        self.assertEqual(
-            "DENIED_PENDING_PGN_G5",
-            self.state["authority"]["cross_programme_edges"],
-        )
+        self.assertEqual("DENIED", self.state["authority"]["cross_programme_edges"])
         self.assertEqual("NONE", self.state["authority"]["reserved_authority"])
-        self.assertIsNone(self.state["decision_record"])
+        self.assertEqual(str(DECISION.relative_to(ROOT)), self.state["decision_record"])
         self.assertIsNone(self.state["merge_commit"])
+        self.assertEqual("INDEFINITE", self.state["deferred"]["PGN-WP4"])
 
-    def test_no_operator_adoption_decision_or_native_record_is_materialised(self) -> None:
-        self.assertFalse((BASE / "PGN_G3_OPERATOR_DECISION.json").exists())
+    def test_no_native_record_is_materialised(self) -> None:
         self.assertEqual(
             [],
             list(ROOT.glob(
