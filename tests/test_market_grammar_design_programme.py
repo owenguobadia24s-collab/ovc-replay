@@ -73,10 +73,6 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
             resolution["admission"]["authority"],
         )
-        self.assertIn("SELECTOR_ACTIVATION", resolution["prohibited_authority"])
-        self.assertIn("RULE_PROMOTION", resolution["prohibited_authority"])
-        self.assertIn("EXECUTION", resolution["prohibited_authority"])
-
         receipt = json.loads(
             (
                 PGN_BASE
@@ -101,33 +97,32 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
         self.assertIn("C2G_REWRITES_C2_OR_C2E", prohibited)
         self.assertIn("OUTCOME_INPUT_TO_C2E_C2G_C2P_CONSTRUCTION", prohibited)
 
-    def test_mg_g0_delegated_pass_is_exact_and_non_reserved(self) -> None:
+    def test_mg_g0_is_completed_and_receipt_binds_exact_merge(self) -> None:
         decision = load("MG_G0_DELEGATED_DECISION.json")
         assurance = load("MG_G0_PREDECISION_ASSURANCE_RECEIPT.json")
+        receipt = load("MG_G0_POST_MERGE_RECEIPT.json")
         qa = load("MG_G0_QA_PACKET.json")
         self.assertEqual("PASS", decision["decision"])
         self.assertTrue(decision["delegated_authority"])
         self.assertFalse(decision["operator_required"])
-        self.assertEqual(
-            "5014df8756d2430cbd83442e18a552467af729a4",
-            decision["predecision_assured_head"],
-        )
-        self.assertIn("SELECTOR_ACTIVATION", decision["prohibited_authority"])
-        self.assertIn("RULE_PROMOTION", decision["prohibited_authority"])
         self.assertEqual("PASS", assurance["result"])
-        for value in assurance["checks"].values():
-            if isinstance(value, dict):
-                self.assertEqual("SUCCESS", value["conclusion"])
-        self.assertEqual(0, assurance["checks"]["unresolved_review_threads"])
-        self.assertEqual([], qa["blockers"])
-        self.assertEqual("PASS_PENDING_FINAL_HEAD", qa["status"])
+        self.assertEqual("COMPLETED", receipt["status"])
+        self.assertTrue(receipt["effective"])
+        self.assertEqual(341, receipt["pull_request"])
         self.assertEqual(
-            "PASS_DELEGATED_PENDING_FINAL_DECISION_HEAD_ASSURANCE_AND_MERGE",
-            qa["qa_recommendation"],
+            "5eb4a21125e41c3d7ce2fe416d571aa9aa3f95f3",
+            receipt["final_head"],
         )
-        self.assertEqual("PASS_NO_RESERVED_DELTA", qa["checks"]["reserved_authority_boundary"])
+        self.assertEqual(
+            "114558efdf38f56499f6276da917190c3cb729ea",
+            receipt["merge_commit"],
+        )
+        self.assertEqual("NONE", receipt["reserved_authority"])
+        self.assertEqual("PASS_COMPLETED", qa["status"])
+        self.assertEqual("PASS_COMPLETED", qa["qa_recommendation"])
+        self.assertEqual([], qa["blockers"])
 
-    def test_programme_state_is_approved_pending_merge_receipt(self) -> None:
+    def test_programme_state_routes_to_ready_mg_wp0(self) -> None:
         path = (
             ROOT
             / "registries"
@@ -136,14 +131,18 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             / "OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc"
         )
         state = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual("APPROVED", state["status"])
+        self.assertEqual("READY", state["status"])
         self.assertEqual("SATISFIED_DELEGATED_DECISION", state["authority_required"])
-        self.assertEqual("MG-G0-MERGE-RECEIPT", state["next_packet"])
+        self.assertEqual("MG-WP0", state["next_packet"])
         self.assertEqual([], state["blockers"])
-        self.assertIsNone(state["merge_commit"])
+        self.assertEqual(
+            "114558efdf38f56499f6276da917190c3cb729ea",
+            state["merge_commit"],
+        )
         packets = {item["packet_id"]: item for item in state["packets"]}
-        self.assertEqual("APPROVED", packets["MG-D0-D8"]["status"])
-        for i in range(11):
+        self.assertEqual("COMPLETED", packets["MG-D0-D8"]["status"])
+        self.assertEqual("READY", packets["MG-WP0"]["status"])
+        for i in range(1, 11):
             self.assertEqual("PLANNED", packets[f"MG-WP{i}"]["status"])
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
 
