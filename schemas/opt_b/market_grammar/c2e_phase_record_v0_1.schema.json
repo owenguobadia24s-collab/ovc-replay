@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/market_grammar/c2e_phase_record_v0_1",
+  "title": "C2E Phase Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["phase_id","episode_id","phase_index","phase_kind","first_valid_time","source_record_id","state_key","transition_kind","parent_record_id"],
+  "properties": {
+    "phase_id": {"type":"string","pattern":"^C2E\\.PH\\.[0-9a-f]{64}$"},
+    "episode_id": {"type":"string","pattern":"^C2E\\.EP\\.[0-9a-f]{64}$"},
+    "phase_index": {"type":"integer","minimum":0},
+    "phase_kind": {"enum":["START","STATE","TRANSITION","INTERRUPTION","PARENT_CHANGE","COMPLETION"]},
+    "first_valid_time": {"type":"string","format":"date-time"},
+    "source_record_id": {"type":"string","minLength":1},
+    "state_key": {"type":"string","minLength":1},
+    "transition_kind": {"type":"string","minLength":1},
+    "parent_record_id": {"type":["string","null"]}
+  }
+}

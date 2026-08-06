@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-mg-c2e-boundary-policy/v1",
+  "policy_id": "MG-C2E-BOUNDARY-v0.1",
+  "status": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT",
+  "canonical": false,
+  "threshold_free": true,
+  "ordered_rules": [
+    {"ordinal": 1, "condition": "FIRST_EVALUABLE_RECORD", "action": "START_EPISODE"},
+    {"ordinal": 2, "condition": "COMPUTABILITY_NOT_EVALUABLE", "action": "CENSOR_ACTIVE_AND_RECORD_REASON"},
+    {"ordinal": 3, "condition": "EXPLICIT_RESET", "action": "CENSOR_ACTIVE_BEFORE_RESET_RECORD"},
+    {"ordinal": 4, "condition": "PARENT_RECORD_CHANGE", "action": "INTERRUPT_ACTIVE_AND_START_NEW"},
+    {"ordinal": 5, "condition": "INTERRUPTION_TRANSITION", "action": "EMIT_INTERRUPTION_PHASE_CONTINUE"},
+    {"ordinal": 6, "condition": "COMPLETION_OR_TERMINATION_TRANSITION", "action": "INCLUDE_AND_COMPLETE"},
+    {"ordinal": 7, "condition": "END_AT_BUILD_CUTOFF", "action": "OPEN_AT_CUTOFF"}
+  ],
+  "prohibited_inputs": [
+    "C2G_FAMILY_OR_CLUSTER",
+    "DISTANCE_OR_MEDOID",
+    "FUTURE_PATH",
+    "GRAMMAR_OR_PARSE",
+    "MFE_OR_MAE",
+    "OUTCOME_OR_RETURN",
+    "PROBABILITY",
+    "SEMANTIC_LABEL",
+    "TRADE_OR_EXPOSURE"
+  ],
+  "authority_effect": "NONE"
+}

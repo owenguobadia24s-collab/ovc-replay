@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-mg-wp2-qa-packet/v1",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "packet_id": "MG-WP2",
+  "baseline_commit": "0eb0f0835d20fd90ea9381f328ba5a09ae504055",
+  "status": "QA_REVIEW",
+  "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
+  "implementation_manifest": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp2/MG_WP2_IMPLEMENTATION_MANIFEST.json",
+  "checks": {
+    "episode_phase_binding_contracts": "PASS_IMPLEMENTED",
+    "deterministic_identity": "PASS_IMPLEMENTED",
+    "unordered_input_invariance": "PASS_IMPLEMENTED",
+    "exact_scope_partition": "PASS_IMPLEMENTED",
+    "future_information_denial": "PASS_IMPLEMENTED",
+    "c2g_and_outcome_denial": "PASS_IMPLEMENTED",
+    "computability_and_conflict_explicit": "PASS_IMPLEMENTED",
+    "reset_parent_completion_censoring": "PASS_IMPLEMENTED",
+    "nesting_chronology_and_acyclicity": "PASS_IMPLEMENTED",
+    "fixture_valid_cases": "PASS_IMPLEMENTED_4",
+    "fixture_invalid_cases": "PASS_IMPLEMENTED_5",
+    "reserved_authority": "PASS_ZERO",
+    "complete_repository_suite": "REQUIRED_ON_FINAL_HEAD"
+  },
+  "tests": {
+    "focused": "tests/market_grammar/test_episode_ledger.py;tests/market_grammar/test_episode_ledger_fixtures.py;tests/market_grammar/test_mg_wp2_packet.py",
+    "repository_complete_suite": "REQUIRED_ON_FINAL_HEAD",
+    "ovc_final_head": "REQUIRED_ON_FINAL_HEAD",
+    "compatibility": "REQUIRED_ON_FINAL_HEAD",
+    "merge_readiness": "REQUIRED_ON_FINAL_HEAD",
+    "unresolved_review_threads": "MUST_EQUAL_0"
+  },
+  "blockers": [],
+  "warnings": [],
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_ASSURANCE_PASSES",
+  "rollback": "Remove or supersede inactive C2E implementation while preserving evidence; do not weaken chronology, leakage or scope checks."
+}

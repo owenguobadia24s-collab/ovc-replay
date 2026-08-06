@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/market_grammar/c2e_episode_record_v0_1",
+  "title": "C2E Episode Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["episode_id","source_release_id","instrument_id","side","scope_id","clock_id","start_first_valid_time","end_first_valid_time","member_record_ids","member_source_sha256","parent_record_ids","phases","status","boundary_cause","boundary_record_id","censoring_reason","policy_id","authority_state","semantic_state"],
+  "properties": {
+    "episode_id": {"type":"string","pattern":"^C2E\\.EP\\.[0-9a-f]{64}$"},
+    "source_release_id": {"type":"string","minLength":1},
+    "instrument_id": {"type":"string","minLength":1},
+    "side": {"enum":["BID","ASK"]},
+    "scope_id": {"type":"string","minLength":1},
+    "clock_id": {"type":"string","minLength":1},
+    "start_first_valid_time": {"type":"string","format":"date-time"},
+    "end_first_valid_time": {"type":"string","format":"date-time"},
+    "member_record_ids": {"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string","minLength":1}},
+    "member_source_sha256": {"type":"array","minItems":1,"items":{"type":"string","pattern":"^[0-9a-f]{64}$"}},
+    "parent_record_ids": {"type":"array","uniqueItems":true,"items":{"type":"string","minLength":1}},
+    "phases": {"type":"array","minItems":1,"items":{"$ref":"c2e_phase_record_v0_1.schema.json"}},
+    "status": {"enum":["COMPLETED","INTERRUPTED","CENSORED","OPEN_AT_CUTOFF"]},
+    "boundary_cause": {"enum":["START_OF_INPUT","PARENT_CHANGE","RESET","COMPLETION","COMPUTABILITY_BREAK","END_OF_INPUT"]},
+    "boundary_record_id": {"type":["string","null"]},
+    "censoring_reason": {"type":["string","null"]},
+    "policy_id": {"const":"MG-C2E-BOUNDARY-v0.1"},
+    "authority_state": {"const":"SHADOW_EXPERIMENT"},
+    "semantic_state": {"const":"NEUTRAL_NON_SEMANTIC_NON_PREDICTIVE"}
+  }
+}
