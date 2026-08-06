@@ -100,23 +100,39 @@ def _normalise_key(feature_key: str) -> str:
 
 
 def infer_domain(feature_key: str) -> PredicateDomain:
-    """Infer the only lawful default domain for a named field."""
+    """Infer the only lawful default domain for a named field.
+
+    Exact typed names take precedence over suffix heuristics. This keeps
+    ``parent_record_id`` as an object binding while preserving bare
+    ``record_id`` and generic source-record identities as provenance.
+    """
 
     key = _normalise_key(feature_key)
     leaf = key.rsplit(".", 1)[-1]
+
+    if leaf in _PROVENANCE_EXACT:
+        return PredicateDomain.PROVENANCE
+    if leaf in _COMPUTABILITY_EXACT:
+        return PredicateDomain.COMPUTABILITY
+    if leaf in _TEMPORAL_EXACT:
+        return PredicateDomain.TEMPORAL
+    if leaf in _OBJECT_BINDING_EXACT:
+        return PredicateDomain.OBJECT_BINDING
+    if leaf in _CONTEXT_EXACT:
+        return PredicateDomain.CONTEXT
+
     if (
-        leaf in _PROVENANCE_EXACT
-        or leaf.startswith(("source_", "provider_", "manifest_"))
+        leaf.startswith(("source_", "provider_", "manifest_"))
         or leaf.endswith(("_sha256", "_hash", "_record_id"))
     ):
         return PredicateDomain.PROVENANCE
-    if leaf in _COMPUTABILITY_EXACT or leaf.startswith("missing_"):
+    if leaf.startswith("missing_"):
         return PredicateDomain.COMPUTABILITY
-    if leaf in _TEMPORAL_EXACT or leaf.endswith(("_time", "_duration")):
+    if leaf.endswith(("_time", "_duration")):
         return PredicateDomain.TEMPORAL
-    if leaf in _OBJECT_BINDING_EXACT or leaf.endswith(("_object_id", "_episode_id")):
+    if leaf.endswith(("_object_id", "_episode_id")):
         return PredicateDomain.OBJECT_BINDING
-    if leaf in _CONTEXT_EXACT or leaf.endswith("_clock_id"):
+    if leaf.endswith("_clock_id"):
         return PredicateDomain.CONTEXT
     return PredicateDomain.STRUCTURAL
 
@@ -125,7 +141,7 @@ def validate_predicate_domain(
     feature_key: str,
     requested_domain: PredicateDomain | str,
 ) -> PredicateDomain:
-    """Validate a declared domain and block provenance contamination."""
+    """Validate a declared domain and block non-structural contamination."""
 
     domain = PredicateDomain(requested_domain)
     inferred = infer_domain(feature_key)
