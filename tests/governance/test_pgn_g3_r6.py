@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-r6"
 R5_RECEIPT = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews/PGN_G3_R5_ACKNOWLEDGEMENT_RECEIPT.json"
+R6_RECEIPT = ROOT / "docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3/reviews/PGN_G3_R6_ACKNOWLEDGEMENT_RECEIPT.json"
 BUNDLE = BASE / "PGN_G3_R6_CANDIDATE_REVIEW_BUNDLE.json"
 CROSSWALK = BASE / "PGN_G3_R6_ARTIFACT_GOVERNANCE_CROSSWALK.json"
 QA = BASE / "PGN_G3_R6_QA_PACKET.json"
@@ -41,6 +42,7 @@ class NativeGenesisPortfolioG3R6Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.r5_receipt = load(R5_RECEIPT)
+        cls.r6_receipt = load(R6_RECEIPT)
         cls.bundle = load(BUNDLE)
         cls.crosswalk = load(CROSSWALK)
         cls.qa = load(QA)
@@ -134,6 +136,19 @@ class NativeGenesisPortfolioG3R6Tests(unittest.TestCase):
         self.assertEqual("DENIED_PENDING_R6_RECEIPT_AND_SEPARATE_PER_PROGRAMME_PGN_G3_OPERATOR_DECISIONS", self.state["authority"]["native_adoption"])
         self.assertEqual("DENIED_PENDING_PGN_G5", self.state["authority"]["cross_programme_edges"])
         self.assertEqual("NONE", self.state["authority"]["reserved_authority"])
+
+    def test_post_merge_receipt_completes_review_and_unlocks_only_adoption_packet_preparation(self) -> None:
+        self.assertEqual(334, self.r6_receipt["pull_request"])
+        self.assertEqual("5f3721698fa82de997128ec3a679d172ea3ef6fb", self.r6_receipt["final_head"])
+        self.assertEqual("03cebfe54d980f63bd0dd054d1338731b483f0e0", self.r6_receipt["merge_commit"])
+        for key in ("repository_tests", "ovc_final_head", "merge_readiness", "compatibility"):
+            self.assertEqual("SUCCESS", self.r6_receipt["exact_head_assurance"][key]["conclusion"])
+        self.assertEqual(0, self.r6_receipt["exact_head_assurance"]["unresolved_review_threads"])
+        self.assertEqual("COMPLETED", self.r6_receipt["progressive_review_status"])
+        self.assertEqual("PREPARE_SEPARATE_PER_PROGRAMME_PGN_G3_NATIVE_ADOPTION_OPERATOR_DECISION_PACKET_ONLY", self.r6_receipt["authority_effect"])
+        self.assertEqual("NONE", self.r6_receipt["native_adoption"])
+        self.assertEqual("NONE", self.r6_receipt["cross_programme_edge_acceptance"])
+        self.assertEqual("NONE", self.r6_receipt["reserved_authority"])
         self.assertEqual([], list(ROOT.glob("**/PGN_G3_NATIVE_ADOPTION_DECISION*")))
 
 

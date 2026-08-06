@@ -160,6 +160,7 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
                 "PGN_G3_R3_ACKNOWLEDGEMENT_RECEIPT.json",
                 "PGN_G3_R4_ACKNOWLEDGEMENT_RECEIPT.json",
                 "PGN_G3_R5_ACKNOWLEDGEMENT_RECEIPT.json",
+                "PGN_G3_R6_ACKNOWLEDGEMENT_RECEIPT.json",
             ],
             receipts,
         )
@@ -169,11 +170,13 @@ class NativeGenesisPortfolioWP3Tests(unittest.TestCase):
             "DISCLOSE_AND_MATERIALISE_PGN_G3_R4_ONLY",
             "DISCLOSE_AND_MATERIALISE_PGN_G3_R5_ONLY",
             "DISCLOSE_AND_MATERIALISE_PGN_G3_R6_ONLY",
+            "PREPARE_SEPARATE_PER_PROGRAMME_PGN_G3_NATIVE_ADOPTION_OPERATOR_DECISION_PACKET_ONLY",
         ]
         for name, effect in zip(receipts, expected_effects):
             receipt = load(REVIEW_RECEIPT_DIR / name)
             self.assertEqual("NONE", receipt["native_adoption"])
             self.assertEqual(effect, receipt["authority_effect"])
+        self.assertEqual("COMPLETED", load(REVIEW_RECEIPT_DIR / receipts[-1])["progressive_review_status"])
 
 
 if __name__ == "__main__":
