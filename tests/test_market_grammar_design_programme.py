@@ -101,16 +101,33 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
         self.assertIn("C2G_REWRITES_C2_OR_C2E", prohibited)
         self.assertIn("OUTCOME_INPUT_TO_C2E_C2G_C2P_CONSTRUCTION", prohibited)
 
-    def test_mg_g0_is_qa_review_and_all_implementation_remains_inactive(self) -> None:
+    def test_mg_g0_delegated_pass_is_exact_and_non_reserved(self) -> None:
+        decision = load("MG_G0_DELEGATED_DECISION.json")
+        assurance = load("MG_G0_PREDECISION_ASSURANCE_RECEIPT.json")
         qa = load("MG_G0_QA_PACKET.json")
-        self.assertEqual("QA_REVIEW", qa["status"])
-        self.assertEqual([], qa["blockers"])
+        self.assertEqual("PASS", decision["decision"])
+        self.assertTrue(decision["delegated_authority"])
+        self.assertFalse(decision["operator_required"])
         self.assertEqual(
-            "DELEGATED_PASS_IF_EXACT_HEAD_ASSURANCE_PASSES",
+            "5014df8756d2430cbd83442e18a552467af729a4",
+            decision["predecision_assured_head"],
+        )
+        self.assertIn("SELECTOR_ACTIVATION", decision["prohibited_authority"])
+        self.assertIn("RULE_PROMOTION", decision["prohibited_authority"])
+        self.assertEqual("PASS", assurance["result"])
+        for value in assurance["checks"].values():
+            if isinstance(value, dict):
+                self.assertEqual("SUCCESS", value["conclusion"])
+        self.assertEqual(0, assurance["checks"]["unresolved_review_threads"])
+        self.assertEqual([], qa["blockers"])
+        self.assertEqual("PASS_PENDING_FINAL_HEAD", qa["status"])
+        self.assertEqual(
+            "PASS_DELEGATED_PENDING_FINAL_DECISION_HEAD_ASSURANCE_AND_MERGE",
             qa["qa_recommendation"],
         )
         self.assertEqual("PASS_NO_RESERVED_DELTA", qa["checks"]["reserved_authority_boundary"])
 
+    def test_programme_state_is_approved_pending_merge_receipt(self) -> None:
         path = (
             ROOT
             / "registries"
@@ -119,12 +136,13 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             / "OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc"
         )
         state = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual("QA_REVIEW", state["status"])
-        self.assertEqual("AUTO_EXECUTABLE", state["authority_required"])
-        self.assertEqual("MG-D0-D8", state["next_packet"])
+        self.assertEqual("APPROVED", state["status"])
+        self.assertEqual("SATISFIED_DELEGATED_DECISION", state["authority_required"])
+        self.assertEqual("MG-G0-MERGE-RECEIPT", state["next_packet"])
         self.assertEqual([], state["blockers"])
+        self.assertIsNone(state["merge_commit"])
         packets = {item["packet_id"]: item for item in state["packets"]}
-        self.assertEqual("QA_REVIEW", packets["MG-D0-D8"]["status"])
+        self.assertEqual("APPROVED", packets["MG-D0-D8"]["status"])
         for i in range(11):
             self.assertEqual("PLANNED", packets[f"MG-WP{i}"]["status"])
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
