@@ -1,0 +1,48 @@
+{
+  "authority_effect": "NONE",
+  "baseline_commit": "372b072959863957d80c4dc12f393ae97bba482e",
+  "blocking_warnings": [
+    "GOVERNING_PROGRAMME_CENSUS_CONFLICT",
+    "PGN_G3_R6_OPERATOR_REQUIRED_OPEN"
+  ],
+  "checks": {
+    "c2ar_integrated_shadow_closeout": "PASS_VERIFIED",
+    "c2e_prior_block_preserved_by_narrow_supersession_proposal": "PASS",
+    "external_shadow_artifact_reproducibility": "PASS",
+    "first_valid_chronology": "PASS",
+    "identity_and_source_hash_lock": "PASS",
+    "no_outcome_or_validation_construction_dependency": "PASS",
+    "programme_specific_governance_tests": "PASS_5_OF_5",
+    "repository_complete_suite": "FAIL_3_OF_352",
+    "repository_genesis_census_consistency": "BLOCK",
+    "reserved_authority_boundary": "BLOCK_OPERATOR_REQUIRED"
+  },
+  "failed_tests": [
+    "governance.test_pgn_wp2e.NativeGenesisRepositoryCensusWP2ETests.test_census_is_deterministic_and_every_object_is_classified_once",
+    "governance.test_pgn_wp2e.NativeGenesisRepositoryCensusWP2ETests.test_exclusions_are_machine_readable_and_prior_census_is_preserved",
+    "governance.test_pgn_wp2e.NativeGenesisRepositoryCensusWP2ETests.test_materialized_bundle_matches_deterministic_builder_and_child_hashes"
+  ],
+  "gate_id": "MG-G0",
+  "github_actions": {
+    "complete_suite_job_id": 92625289159,
+    "complete_suite_run_id": 31104276459,
+    "observed_counts": {
+      "census_objects": 111,
+      "exclusions": 74,
+      "legacy_programmes_requiring_conversion": 17
+    },
+    "sealed_counts": {
+      "census_objects": 108,
+      "exclusions": 72,
+      "legacy_programmes_requiring_conversion": 16
+    }
+  },
+  "packet_id": "MG-D0-D8",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "qa_recommendation": "BLOCK",
+  "reserved_authority_delta": "PGN_PORTFOLIO_CENSUS_OR_ADMISSION_SCOPE_CHANGE",
+  "rollback": "Preserve this blocked packet and all verified shadow evidence. Do not mutate frozen PGN-WP2E evidence or the sealed PGN-WP3 candidate portfolio.",
+  "schema": "ovc-mg-d8-blocked-qa-packet/v1",
+  "smallest_lawful_resolution": "Complete or dispose PGN-G3-R6, record an operator-approved supplemental admission/census treatment for this programme, then rebase and rerun MG-G0.",
+  "status": "BLOCKED"
+}
