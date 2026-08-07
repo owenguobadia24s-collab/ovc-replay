@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-mcarbi-g1-operator-decision-packet/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "plan_id": "OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "MCARBI-WP1",
+  "gate_id": "MCARBI-G1",
+  "gate_title": "Candidate Triage Freeze",
+  "gate_class": "OPERATOR_REQUIRED",
+  "status": "APPROVED",
+  "baseline_commit": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
+  "audit_execution_baseline": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
+  "candidate_branch": "audit/mcarbi-wp1-source-triage",
+  "completed_packets": ["MCARBI-WP0", "MCARBI-WP1"],
+  "current_authority": "BOUNDED_MCARB_IMPLEMENTATION; MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD; NO_MARKET_BENCHMARK",
+  "court_record_reconciliation": {
+    "latest_main": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
+    "main_movement_after_wp1_start": "SRFDI-G8R-WP0/WP1 capacity-remediation implementation only",
+    "mcarb_or_opt_a_source_contract_conflict": false,
+    "srfd_authority_not_inherited_by_mcarb": true,
+    "srfd_method_representation_distance_family_sensitivity_promotion": "NONE",
+    "srfd_wp9": "DENIED",
+    "srfd_june": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "approved_delta": "Freeze the 44-candidate implementation-eligibility registry and branch-local dependency graph. Accept AL_SOURCE_PARTIAL with side-specific M1 provider activity eligible, cross-side/tick/spread-proxy limits preserved. No scientific value selection and no market execution.",
+  "acceptance_conditions": [
+    {"condition":"all 44 candidates have explicit disposition/dependency/chronology/cost/Stage-A/blocking scope","status":"SATISFIED"},
+    {"condition":"source audit tied to exact retained non-Validation artifacts","status":"SATISFIED"},
+    {"condition":"AL failures are branch-local and cannot block ET-price/VS-price","status":"SATISFIED"},
+    {"condition":"no new provider intake or Validation access","status":"SATISFIED"},
+    {"condition":"Stage-A proposed set is non-executable and provisional","status":"SATISFIED"},
+    {"condition":"latest lawful main reconciled after base movement","status":"SATISFIED_NO_MCARB_SOURCE_OR_AUTHORITY_CONFLICT"}
+  ],
+  "tests_and_qa": {
+    "qa_packet": "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_QA_PACKET.json",
+    "qa_recommendation": "PASS_WP1_TO_OPERATOR_G1_WITH_AL_SOURCE_PARTIAL",
+    "repository_ci": "REQUIRED_ON_EXACT_DECISION_HEAD_BEFORE_MERGE"
+  },
+  "warnings": [
+    "AL source outcome is PARTIAL, not global PASS.",
+    "Cross-side BID/ASK activity semantics remain unresolved for AL-10.",
+    "No retained tick/update family was found; AL-02/03 remain T3 and AL-11 lacks real tick proxy-quality evidence.",
+    "Provider-native H1 volume is not exact semantic corroboration and includes a material 2022-10-18T12Z mismatch.",
+    "Authoritative per-row volume quality_state distribution is not serialized in accepted canonical CSV payloads; do not invent it."
+  ],
+  "unresolved_issues": [
+    "AL-10 cross-side semantic comparability",
+    "retained tick/update evidence absent for AL-02/03",
+    "AL-11 real-data proxy-quality evidence not evaluable",
+    "VS-04/05 and ET-VAR exact variants still require later VariantSpec/preregistration"
+  ],
+  "authority_firewall": {
+    "stage_a_run": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "provider_intake": "DENIED",
+    "selector": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "operator_decision": {
+    "decision_id": "MCARBI-G1.OPERATOR.ACCEPT_TRIAGE.20260807T204800+0100",
+    "decision": "ACCEPT_TRIAGE",
+    "recorded_at": "2026-08-07T20:48:00+01:00",
+    "decision_record": "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_G1_OPERATOR_DECISION.json"
+  },
+  "rollback": "Preserve immutable source-audit and decision evidence. Any eligibility change requires versioned supersession; no retained source bytes may be changed.",
+  "next_action_after_accept": "Run exact-head CI, squash-merge bounded G1 state if eligible, then execute MCARBI-WP2 contracts/schemas/registries."
+}
