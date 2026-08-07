@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mg_ei_wp1_revised_c2_source_row_v0_1",
+  "title": "MG EI-WP1 revised-C2 empirical source row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_id",
+    "source_release_id",
+    "instrument_id",
+    "side",
+    "evaluation_scope_id",
+    "clock_id",
+    "first_valid_time",
+    "axes",
+    "changed_axes",
+    "source_sha256"
+  ],
+  "properties": {
+    "record_id": {"type": "string", "minLength": 1},
+    "source_release_id": {"const": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1"},
+    "instrument_id": {"const": "GBPUSD"},
+    "side": {"enum": ["BID", "ASK"]},
+    "evaluation_scope_id": {"const": "GBPUSD-15M-LOCAL-v0.1"},
+    "clock_id": {"const": "15M"},
+    "first_valid_time": {"type": "string", "format": "date-time"},
+    "parent_context_record_id": {"type": ["string", "null"]},
+    "parent_clock_id": {"enum": ["2H_A_L", null]},
+    "continuity_status": {
+      "enum": ["CONTIGUOUS", "SEGMENT_START", "GAP_RESET", "CLOSURE_BOUNDARY", "PARTITION_BOUNDARY", "UNKNOWN_BREAK", null]
+    },
+    "reset_reason": {"type": ["string", "null"]},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "changed_axes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"]}
+    },
+    "axes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"],
+      "properties": {
+        "LOCATION": {"$ref": "#/$defs/axis"},
+        "MOTION": {"$ref": "#/$defs/axis"},
+        "ORGANISATION": {"$ref": "#/$defs/axis"},
+        "INTERACTION": {"$ref": "#/$defs/axis"},
+        "QUALITY": {"$ref": "#/$defs/axis"}
+      }
+    },
+    "diagnostic_metadata": {
+      "type": "object",
+      "description": "Diagnostic only; excluded from adapted state semantics and identity.",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "axis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value"],
+      "properties": {
+        "status": {"enum": ["EVALUATED", "NOT_EVALUATED", "NOT_EVALUABLE", "CENSORED", "CONFLICT", "QUARANTINED"]},
+        "value": {"type": ["string", "null"]},
+        "reason_code": {"type": ["string", "null"]},
+        "measurement": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"required": ["parent_context_record_id"], "properties": {"parent_context_record_id": {"type": "string"}}},
+      "then": {"required": ["parent_clock_id"], "properties": {"parent_clock_id": {"const": "2H_A_L"}}}
+    }
+  ],
+  "not": {
+    "anyOf": [
+      {"required": ["outcome"]}, {"required": ["future"]}, {"required": ["family_id"]}, {"required": ["grammar_id"]}, {"required": ["probability"]}
+    ]
+  }
+}

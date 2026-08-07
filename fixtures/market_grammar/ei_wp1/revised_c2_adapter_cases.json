@@ -1,0 +1,82 @@
+{
+  "schema": "ovc-mg-ei-wp1-fixture/v1",
+  "authority": "SYNTHETIC_NON_AUTHORITATIVE",
+  "binding": {
+    "binding_sha256": "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "logical_population_sha256": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7",
+    "integrated_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+    "source_release_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1"
+  },
+  "build_cutoff": "2026-06-01T01:00:00Z",
+  "rows": [
+    {
+      "record_id": "EI.WP1.C2.BID.001",
+      "source_release_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+      "instrument_id": "GBPUSD",
+      "side": "BID",
+      "evaluation_scope_id": "GBPUSD-15M-LOCAL-v0.1",
+      "clock_id": "15M",
+      "first_valid_time": "2026-06-01T00:15:00Z",
+      "parent_context_record_id": "EI.WP1.2H.BID.000",
+      "parent_clock_id": "2H_A_L",
+      "continuity_status": "SEGMENT_START",
+      "reset_reason": null,
+      "source_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "changed_axes": [],
+      "axes": {
+        "LOCATION": {"status":"EVALUATED","value":"LOWER_REGION","reason_code":null,"measurement":"0.25"},
+        "MOTION": {"status":"EVALUATED","value":"UP_STALL","reason_code":null,"measurement":"0.10"},
+        "ORGANISATION": {"status":"EVALUATED","value":"FORMING","reason_code":null,"measurement":"0.40"},
+        "INTERACTION": {"status":"EVALUATED","value":"APPROACHING","reason_code":null,"measurement":"0.12"},
+        "QUALITY": {"status":"EVALUATED","value":"COMPLETE","reason_code":null,"measurement":null}
+      },
+      "diagnostic_metadata": {"machine_name":"host-a","local_path":"C:/ignored/a"}
+    },
+    {
+      "record_id": "EI.WP1.C2.BID.002",
+      "source_release_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+      "instrument_id": "GBPUSD",
+      "side": "BID",
+      "evaluation_scope_id": "GBPUSD-15M-LOCAL-v0.1",
+      "clock_id": "15M",
+      "first_valid_time": "2026-06-01T00:30:00Z",
+      "parent_context_record_id": "EI.WP1.2H.BID.000",
+      "parent_clock_id": "2H_A_L",
+      "continuity_status": "CONTIGUOUS",
+      "reset_reason": null,
+      "source_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "changed_axes": ["MOTION", "INTERACTION"],
+      "axes": {
+        "LOCATION": {"status":"EVALUATED","value":"LOWER_REGION","reason_code":null,"measurement":"0.27"},
+        "MOTION": {"status":"NOT_EVALUATED","value":null,"reason_code":"NO_CONTIGUOUS_PRIOR_STATE","measurement":null},
+        "ORGANISATION": {"status":"EVALUATED","value":"FORMING","reason_code":null,"measurement":"0.42"},
+        "INTERACTION": {"status":"NOT_EVALUABLE","value":null,"reason_code":"AMBIGUOUS_BOUNDARY","measurement":null},
+        "QUALITY": {"status":"EVALUATED","value":"DEGRADED","reason_code":null,"measurement":null}
+      },
+      "diagnostic_metadata": {"machine_name":"host-a","local_path":"C:/ignored/a"}
+    },
+    {
+      "record_id": "EI.WP1.C2.ASK.001",
+      "source_release_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+      "instrument_id": "GBPUSD",
+      "side": "ASK",
+      "evaluation_scope_id": "GBPUSD-15M-LOCAL-v0.1",
+      "clock_id": "15M",
+      "first_valid_time": "2026-06-01T00:45:00Z",
+      "parent_context_record_id": "EI.WP1.2H.ASK.001",
+      "parent_clock_id": "2H_A_L",
+      "continuity_status": "GAP_RESET",
+      "reset_reason": "SOURCE_CONTINUITY_GAP",
+      "source_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "changed_axes": ["LOCATION", "QUALITY"],
+      "axes": {
+        "LOCATION": {"status":"EVALUATED","value":"MID_REGION","reason_code":null,"measurement":"0.51"},
+        "MOTION": {"status":"EVALUATED","value":"BALANCED","reason_code":null,"measurement":"0.00"},
+        "ORGANISATION": {"status":"EVALUATED","value":"ORDERED","reason_code":null,"measurement":"0.60"},
+        "INTERACTION": {"status":"EVALUATED","value":"TESTING","reason_code":null,"measurement":"0.00"},
+        "QUALITY": {"status":"EVALUATED","value":"COMPLETE","reason_code":null,"measurement":null}
+      },
+      "diagnostic_metadata": {"machine_name":"host-b","local_path":"D:/ignored/b"}
+    }
+  ]
+}
