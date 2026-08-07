@@ -41,18 +41,29 @@
       "latest_lawful_main_at_assurance": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
       "branch": "build/srfdi-g8r-wp0-authority-foundation",
       "candidate_commit": "002e952f887b839d133d65d654b40a2eae832826",
-      "tests": [
-        "tests:31211404793:success",
-        "OVC tiered test selection shadow:31211404993:success",
-        "OVC merge readiness:92974905358:success"
-      ],
+      "tests": ["tests:31211404793:success", "OVC tiered test selection shadow:31211404993:success", "OVC merge readiness:92974905358:success"],
       "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp0/SRFDI_G8R_WP0_QA_GATE_PACKET.json",
       "decision_record": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp0/SRFDI_G8R_G0_OPERATOR_DECISION.json",
-      "merge_commit": null,
+      "merge_commit": "feac57eec78363008bd713a4f73c5053691ca648",
       "blockers": [],
       "next_packet": "SRFDI-G8R-WP1"
     },
-    {"packet_id": "SRFDI-G8R-WP1", "status": "READY", "prerequisites": ["SRFDI-G8R-WP0"], "authority_required": "AUTO_RATIFIABLE", "blockers": []},
+    {
+      "packet_id": "SRFDI-G8R-WP1",
+      "status": "RUNNING",
+      "prerequisites": ["SRFDI-G8R-WP0"],
+      "authority_required": "AUTO_RATIFIABLE",
+      "authority_delta": "PHYSICAL_STORAGE_ONLY_AND_COMPUTE_ONLY_EQUIVALENT",
+      "baseline_commit": "feac57eec78363008bd713a4f73c5053691ca648",
+      "branch": "build/srfdi-g8r-wp1-pair-storage-exact",
+      "candidate_commit": null,
+      "tests": [],
+      "qa_packet": null,
+      "decision_record": null,
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "SRFDI-G8R-WP2"
+    },
     {"packet_id": "SRFDI-G8R-WP2", "status": "PLANNED", "prerequisites": ["SRFDI-G8R-WP1"], "authority_required": "AUTO_RATIFIABLE", "blockers": []},
     {"packet_id": "SRFDI-G8R-WP3", "status": "PLANNED", "prerequisites": ["SRFDI-G8R-WP2", "SRFDI-G8R-G2F=ACKNOWLEDGE_CONTINUE"], "authority_required": "AUTO_RATIFIABLE", "blockers": ["G8R_G2F_NOT_ACKNOWLEDGED"]},
     {"packet_id": "SRFDI-G8R-WP4", "status": "PLANNED", "prerequisites": ["SRFDI-G8R-WP3"], "authority_required": "AUTO_RATIFIABLE", "blockers": []},
@@ -64,5 +75,5 @@
   "h0_environment_fingerprint": "SRFD.H0.352f1131575c17938fada017b26bbe053458eb15ff298794c3a63579ebc46c30",
   "candidate_numpy_backend": "CANDIDATE_UNADMITTED",
   "pr_371": "PRESERVE_DO_NOT_MERGE",
-  "next_action": "MERGE_WP0_THEN_START_WP1_FROM_LATEST_LAWFUL_MAIN"
+  "next_action": "COMPLETE_WP1_AUTO_RATIFY_G1_MERGE_THEN_START_WP2"
 }
