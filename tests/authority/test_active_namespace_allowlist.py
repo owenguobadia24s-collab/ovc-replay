@@ -23,6 +23,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.v0_4",
     "ovc.research_operations.pattern_discovery",
     "ovc.research_operations.mta",
+    "ovc.research_operations.mcarb",
 }
 
 
@@ -73,9 +74,18 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("execution authority", init_text)
 
     def test_mta_namespace_is_audit_only(self) -> None:
-        init_text = (SRC / "ovc" / "research_operations" / "mta" / "__init__.py").read_text(encoding="utf-8")
+        init_text = (SRC / "ovc" / "research_operations" / "mta" / "__init__.py").read_text(encoding="utf-8").lower()
         self.assertIn("no market", init_text)
         self.assertIn("selector", init_text)
+        self.assertIn("semantic-promotion", init_text)
+        self.assertIn("execution authority", init_text)
+
+    def test_mcarb_namespace_is_research_only(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "mcarb" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("research-only", init_text)
+        self.assertIn("no market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("validation", init_text)
         self.assertIn("semantic-promotion", init_text)
         self.assertIn("execution authority", init_text)
 
