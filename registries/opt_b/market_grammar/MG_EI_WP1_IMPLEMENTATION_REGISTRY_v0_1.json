@@ -3,34 +3,14 @@
   "programme_id": "OVC-MARKET-GRAMMAR-EMPIRICAL-INTEGRATION-JUNE-v0.1",
   "packet_id": "EI-WP1",
   "baseline_commit": "cb91ff3fc0a28a9f416aacb86aa92e74d5e676b4",
-  "status": "IMPLEMENTED_PENDING_QA",
+  "status": "COMPLETED",
   "authority": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_READ_ONLY_ADAPTER",
   "adapter_id": "MG-EI-WP1-REVISED-C2-ADAPTER-v0.1",
-  "reads": [
-    "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
-    "C2VNEXT.JUNE.DISCOVERY.INPUT.v1",
-    "REVISED_C2_EMPIRICAL_STATE_ROW_v0_1"
-  ],
+  "reads": ["C2AR.INTEGRATED.SHADOW.PACKAGE.v1","C2VNEXT.JUNE.DISCOVERY.INPUT.v1","REVISED_C2_EMPIRICAL_STATE_ROW_v0_1"],
   "writes": ["C2LedgerInput_REPLACEABLE_SHADOW_MAPPING_ONLY"],
-  "source_scope": {
-    "instrument": "GBPUSD",
-    "clock": "15M",
-    "side": ["BID", "ASK"],
-    "evaluation_scope_id": "GBPUSD-15M-LOCAL-v0.1",
-    "parent_clock": "2H_A_L"
-  },
-  "binding": {
-    "binding_sha256": "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
-    "logical_population_sha256": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7",
-    "integrated_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"
-  },
-  "state_semantics": {
-    "axis_order": ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"],
-    "state_key_uses_measurements": false,
-    "missingness_neutralisation": false,
-    "semantic_completion_inference": false,
-    "diagnostic_metadata_in_identity": false
-  },
+  "source_scope": {"instrument":"GBPUSD","clock":"15M","side":["BID","ASK"],"evaluation_scope_id":"GBPUSD-15M-LOCAL-v0.1","parent_clock":"2H_A_L"},
+  "binding": {"binding_sha256":"126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8","logical_population_sha256":"3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7","integrated_package_sha256":"150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"},
+  "state_semantics": {"axis_order":["LOCATION","MOTION","ORGANISATION","INTERACTION","QUALITY"],"state_key_uses_measurements":false,"missingness_neutralisation":false,"semantic_completion_inference":false,"diagnostic_metadata_in_identity":false},
   "selector_controls": false,
   "canonical_controls": false,
   "promotion_controls": false,
@@ -40,5 +20,8 @@
   "provider_intake": false,
   "promotion_authority": "NONE",
   "raw_market_data_in_git": false,
+  "decision_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_DELEGATED_DECISION.json",
+  "post_merge_receipt": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_POST_MERGE_RECEIPT.json",
+  "merge_commit": "05a0e74be218a7f6b58bec024cb242af462fa94a",
   "rollback": "Remove or supersede the EI-WP1 adapter/schema/fixtures while preserving EI-WP0, MG-WP10 and all accepted evidence unchanged."
 }
