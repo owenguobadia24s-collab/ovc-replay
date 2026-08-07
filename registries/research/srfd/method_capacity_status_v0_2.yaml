@@ -1,0 +1,66 @@
+registry_id: OVC-SRFD-METHOD-CAPACITY-STATUS-0.2
+version: 0.2
+authority_state: FIXTURE_LOCAL_CAPACITY_REMEDIATION_ONLY
+scientific_effect: NONE
+source_plan: OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED
+source_packet: SRFDI-G8R-WP4
+status_vocabulary:
+  SUPPORTED_T0: measured_or_bounded_inside_frozen_t0
+  SUPPORTED_T1: supported_only_inside_t1_planning_tier
+  METHOD_CAPACITY_UNSUPPORTED_AT_T0: exact_method_config_outside_t0_but_still_scientifically_visible
+  REQUIRES_SEPARATE_CAPACITY_TIER: exact_execution_outside_governed_tiers
+  CAPACITY_UNRESOLVED: evidence_insufficient_or_backend_unadmitted
+  CAPACITY_EXCEEDED_AT_MEASUREMENT: measured_run_crossed_declared_resource_bound
+rules:
+  no_status_selects_a_scientific_method: true
+  no_status_may_drop_a_required_method_configuration: true
+  partial_benchmark_escape_hatch: PROHIBITED
+  scientific_scope_change_on_capacity_failure: PROHIBITED
+  unsupported_method_remains_visible: true
+  missing_status_blocks_capacity_resolution: true
+  capacity_freeze_gate: SRFDI-G8R-G6
+  original_capacity_gate: SRFDI-G8-REPRESENTED
+planning_tiers:
+  T0:
+    scope: BOUNDED_JUNE_FEASIBILITY_DESIGN_ONLY_NO_RUN_AUTHORITY
+    max_wall_seconds: 14400
+    max_rss_bytes: 17179869184
+    max_external_bytes: 10737418240
+    status: PROVISIONAL_DESIGN_DEFAULT_NOT_FROZEN
+  T1:
+    scope: FUTURE_2021_2023_METHODOLOGY_PLANNING_ONLY
+    max_wall_seconds: 86400
+    max_rss_bytes: 34359738368
+    max_external_bytes: 107374182400
+    status: PLANNING_ONLY_NO_LONG_HORIZON_AUTHORITY
+required_family_methods:
+  - method_id: GREEDY_LEXICOGRAPHIC_MEDOID_STAR
+    family_registry_status: BASELINE_SHADOW_BENCHMARK_ONLY
+    capacity_status: CAPACITY_UNRESOLVED
+    evidence_basis: WP3_SMALL_N_REFERENCE_EQUIVALENCE_ONLY
+  - method_id: COMPLETE_LINKAGE
+    family_registry_status: SHADOW_BENCHMARK
+    capacity_status: CAPACITY_UNRESOLVED
+    evidence_basis: WP3_SMALL_N_REFERENCE_EQUIVALENCE_ONLY
+  - method_id: AVERAGE_LINKAGE
+    family_registry_status: SHADOW_BENCHMARK
+    capacity_status: CAPACITY_UNRESOLVED
+    evidence_basis: WP3_SMALL_N_REFERENCE_EQUIVALENCE_ONLY
+  - method_id: BOUNDED_PAM
+    family_registry_status: SHADOW_BENCHMARK
+    capacity_status: CAPACITY_UNRESOLVED
+    evidence_basis: WP3_SMALL_N_REFERENCE_EQUIVALENCE_ONLY
+conditional_methods:
+  - method_id: HDBSCAN
+    capacity_status: CAPACITY_UNRESOLVED
+    enabled: false
+  - method_id: OPTICS
+    capacity_status: CAPACITY_UNRESOLVED
+    enabled: false
+  - method_id: MATRIX_PROFILE
+    capacity_status: CAPACITY_UNRESOLVED
+    enabled: false
+canonical_family_method: NONE
+wp9: DENIED
+june: DENIED
+validation_2025: LOCKED_UNCONSUMED
