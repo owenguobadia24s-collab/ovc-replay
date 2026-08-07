@@ -3,27 +3,37 @@ programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
 packet_id: MCARBI-WP7
-status: QA_REVIEW
+status: GATE_READY
 prerequisites:
   - MCARBI-G6 FREEZE_STAGE_A_READINESS merged at faf4e5af7c143995a2954dddb136cbe66a9e528d
 authority_required: OPERATOR_ACK
 authority_delta: NONE_PENDING_MCARBI_G7; proposed exact Stage-A preregistration freeze only
 baseline_commit: faf4e5af7c143995a2954dddb136cbe66a9e528d
 branch: prereg/mcarbi-wp7-stage-a
-candidate_commit: PENDING_EVIDENCE_HEAD
+candidate_commit: f96eac7db1e6b72c0396224aadc8bc74fd9073c0
+candidate_commit_role: PREREGISTRATION_EVIDENCE_HEAD_BEFORE_GATE_METADATA
 tests:
-  - tests/research_operations/mcarb/test_mcarbi_wp7_preregistration.py
-  - exact-head repository suite required
-  - OVC FINAL_HEAD and merge-readiness required
+  - tests/research_operations/mcarb/test_mcarbi_wp7_preregistration.py: PASS under repository suite
+  - repository suite run 31220059853: PASS
+  - OVC FINAL_HEAD run 31220059836: PASS
+  - profile assurance job 93002432588: PASS
+  - merge readiness job 93002481188: PASS
+  - gate-materialization exact-head assurance: pending
 qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_QA_PACKET.json
 decision_record: null
-gate_packet: null
+gate_packet: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_G7_OPERATOR_ACK_PACKET.json
 preregistration: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_STAGE_A_PREREGISTRATION.json
 preregistration_git_blob_sha1: 8dcc4fe4e51b3b7d07e4dcc440c6b5b6a784f6f7
 parameter_registry: registries/research/mcarb/MCARB_STAGE_A_PARAMETER_REGISTRY_v0_1.json
 merge_commit: null
 blockers: []
 source_audit_outcome: AL_SOURCE_PARTIAL
+recommended_gate_decision: PREREGISTRATION_FREEZE
+allowed_gate_decisions:
+  - PREREGISTRATION_FREEZE
+  - ADJUST
+  - DEFER
+exact_operator_command: OVC APPROVE MCARBI-G7 PREREGISTRATION_FREEZE
 market_benchmark_authority: NONE
 stage_a_authority: NONE
 active_discovery_authority: NONE
@@ -34,4 +44,4 @@ c2_c2e_sri_family_semantic_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
 next_packet: MCARBI-G7-OPERATOR-ACK
-continuation_point: AFTER_EXACT_HEAD_ASSURANCE_MATERIALISE_G7_PACKET_AND_STOP; STAGE_A_RUN_REQUIRES_SEPARATE_MCARBI_G_STAGE_A_AUTH
+continuation_point: AFTER_G7_ACK_RECORD_AND_MERGE_THEN_STOP_AT_MCARBI_G_STAGE_A_AUTH; STAGE_A_RUN_REQUIRES_SEPARATE_AUTHORIZE_STAGE_A
