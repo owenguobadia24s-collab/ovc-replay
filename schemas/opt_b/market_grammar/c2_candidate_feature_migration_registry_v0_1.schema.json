@@ -1,0 +1,94 @@
+{
+  "$id": "https://ovc.local/schemas/opt_b/market_grammar/c2_candidate_feature_migration_registry_v0_1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {
+      "const": "SHADOW_EXPERIMENT"
+    },
+    "canonical": {
+      "const": false
+    },
+    "feature_dictionary": {
+      "additionalProperties": {
+        "items": false,
+        "maxItems": 3,
+        "minItems": 3,
+        "prefixItems": [
+          {
+            "enum": [
+              "STRUCTURAL",
+              "TEMPORAL",
+              "OBJECT_BINDING",
+              "CONTEXT",
+              "COMPUTABILITY",
+              "PROVENANCE"
+            ]
+          },
+          {
+            "enum": [
+              "context",
+              "location",
+              "condition",
+              "episode_phase",
+              "event",
+              "response",
+              "transition",
+              "possible_resolution",
+              "evidence_gate",
+              "diagnostic_only"
+            ]
+          },
+          {
+            "enum": [
+              "STRUCTURAL_PREDICATE",
+              "TEMPORAL_GUARD",
+              "OBJECT_BINDING_GUARD",
+              "CONTEXT_GUARD",
+              "COMPUTABILITY_GUARD",
+              "DIAGNOSTIC_ONLY_PROVENANCE"
+            ]
+          }
+        ],
+        "type": "array"
+      },
+      "type": "object"
+    },
+    "feature_dictionary_format": {
+      "const": [
+        "domain",
+        "typed_layer",
+        "usage"
+      ]
+    },
+    "packet_id": {
+      "const": "MG-WP7"
+    },
+    "programme_id": {
+      "const": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1"
+    },
+    "promotion_authority": {
+      "const": "NONE"
+    },
+    "registry_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schema": {
+      "const": "ovc-mg-cear-g10-feature-migration-registry/v1"
+    }
+  },
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "authority",
+    "feature_dictionary_format",
+    "feature_dictionary",
+    "canonical",
+    "promotion_authority",
+    "registry_sha256"
+  ],
+  "title": "OVC MG CEAR-G10 Typed Feature Migration Registry v0.1",
+  "type": "object"
+}

@@ -9,6 +9,6 @@ class MarketGrammarWp6PacketTests(unittest.TestCase):
  def test_c2p_schemas_are_closed(self):
   for name in ('c2p_ast_node_v0_1.schema.json','c2p_grammar_release_v0_1.schema.json','c2p_parse_result_v0_1.schema.json'):
    schema=load(SCHEMAS/name); self.assertFalse(schema['additionalProperties']); self.assertEqual('https://json-schema.org/draft/2020-12/schema',schema['$schema'])
- def test_state_preserves_upstream_and_routes_only_wp6(self):
-  state=load(STATE); p={x['packet_id']:x for x in state['packets']}; self.assertEqual('COMPLETED',p['MG-WP5']['status']); self.assertIn(p['MG-WP6']['status'],{'RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual('PLANNED',p['MG-WP7']['status']); self.assertEqual('OPERATOR_REQUIRED',p['MG-WP10']['authority_required']); self.assertNotIn(state['status'],{'BLOCKED','QUARANTINED'})
+ def test_state_preserves_upstream_and_allows_only_lawful_progression_after_wp6(self):
+  state=load(STATE); p={x['packet_id']:x for x in state['packets']}; self.assertEqual('COMPLETED',p['MG-WP5']['status']); self.assertEqual('COMPLETED',p['MG-WP6']['status']); self.assertIn(p['MG-WP7']['status'],{'READY','RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual('OPERATOR_REQUIRED',p['MG-WP10']['authority_required']); self.assertNotIn(state['status'],{'BLOCKED','QUARANTINED'})
 if __name__=='__main__': unittest.main()
