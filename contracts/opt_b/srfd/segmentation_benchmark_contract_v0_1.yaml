@@ -1,0 +1,13 @@
+contract_id: OVC-SRFD-SEGMENTATION-BENCHMARK-CONTRACT-0.1
+version: 0.1
+authority_state: FIXTURE_ONLY
+temporal_modes:
+  - ONLINE_CAUSAL
+  - CONFIRMATION_DELAYED
+  - RETROSPECTIVE
+rules:
+  causal_first_valid_chronology_required: true
+  retrospective_namespace_isolated: true
+  retrospective_to_causal_write: HARD_DENY
+  split_merge_nest_censor_lineage_explicit: true
+  C2E_activation: DENIED

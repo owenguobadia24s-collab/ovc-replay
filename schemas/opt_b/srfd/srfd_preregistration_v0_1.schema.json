@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "OVC-SRFD-PREREGISTRATION-0.1",
+  "type": "object",
+  "required": [
+    "object_type", "schema_version", "authority_state", "research_questions",
+    "hypotheses", "falsifiers", "eligible_population", "representation_candidates",
+    "segmentation_candidates", "distance_candidates", "family_method_candidates",
+    "configuration_bounds", "stability_metrics", "family_strength_rules",
+    "invariant_core_rules", "ambiguity_rules", "residual_rules",
+    "failure_attribution_order", "capacity_limits", "stop_conditions",
+    "required_output_tables", "operator_decision_surfaces"
+  ],
+  "properties": {
+    "object_type": {"const": "SRFDPreregistration"},
+    "schema_version": {"type": "string"},
+    "authority_state": {"enum": ["FIXTURE_ONLY", "CANDIDATE", "SHADOW_EXPERIMENT"]}
+  }
+}

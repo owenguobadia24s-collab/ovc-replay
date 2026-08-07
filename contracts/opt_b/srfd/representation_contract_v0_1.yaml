@@ -1,0 +1,21 @@
+contract_id: OVC-SRFD-REPRESENTATION-CONTRACT-0.1
+version: 0.1
+authority_state: FIXTURE_ONLY
+namespaces:
+  - structural_raw
+  - structural_derived
+  - structural_normalized
+  - comparison_only
+rules:
+  raw_values_are_never_overwritten: true
+  normalization_is_downstream_SRFD_transform: true
+  normalization_requires_fit_population_and_cutoff: true
+  future_population_statistics_forbidden: true
+  zero_imputation_for_missing_dimensions_forbidden: true
+  comparability_domain_required_before_pairwise_comparison: true
+  representation_quality_does_not_grant_canonicality: true
+ordering_semantics:
+  - STATIC_VECTOR
+  - ORDERED_SEQUENCE
+  - MULTI_CHANNEL_SEQUENCE
+  - HYBRID
