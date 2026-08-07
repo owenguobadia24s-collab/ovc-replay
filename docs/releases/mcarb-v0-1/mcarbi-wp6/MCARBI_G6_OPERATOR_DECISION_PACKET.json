@@ -1,0 +1,115 @@
+{
+  "schema":"ovc-mcarbi-g6-operator-decision-packet/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "plan_id":"OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version":"0.1-REVISED",
+  "gate_id":"MCARBI-G6",
+  "gate_title":"Measured Capacity + Stage-A Population Readiness Freeze",
+  "gate_class":"OPERATOR_REQUIRED",
+  "status":"GATE_READY",
+  "baseline_commit":"ccd1d359da25b395b242652c35aab70fdf401827",
+  "candidate_evidence_head":"c7f9fa9b85adbe5790b7199fa9aac86bbb5d1b8b",
+  "candidate_branch":"capacity/mcarbi-wp6-stage-a-readiness",
+  "completed_packets":["MCARBI-WP0","MCARBI-WP1","MCARBI-WP2","MCARBI-WP3","MCARBI-WP4","MCARBI-WP5","MCARBI-WP6"],
+  "current_authority":"BOUNDED_IMPLEMENTATION_COMPLETE_THROUGH_WP6; AL_SOURCE_PARTIAL; NO_STAGE_A_MARKET_RUN",
+  "proposed_delta":"Freeze the measured MCARB Stage-A implementation-capacity budget and accept the proposed non-executable Stage-A population eligibility candidate only. This does not authorize Stage-A market benchmark execution, ACTIVE_DISCOVERY, scientific interpretation, representation/family/threshold selection, or any downstream promotion.",
+  "acceptance_conditions":[
+    {"condition":"WP0-WP5 prerequisites completed and merged","status":"SATISFIED"},
+    {"condition":"exact eligible-count/coverage enumerator present","status":"SATISFIED"},
+    {"condition":"non-Validation accepted observation artifacts only","status":"SATISFIED"},
+    {"condition":"no new provider intake","status":"SATISFIED"},
+    {"condition":"complete 2021-2024 full-month census performed","status":"SATISFIED_48_MONTHS"},
+    {"condition":"Stage-A minimum population candidate identified without outcome-based selection","status":"SATISFIED_WITH_OPERATOR_INTERPRETATION_REQUIRED_FOR_TWO_MONTH_AGGREGATE"},
+    {"condition":"C0/C1 capacity measured on GitHub-hosted environment","status":"SATISFIED"},
+    {"condition":"capacity within 4h/16GiB/10GiB budget","status":"SATISFIED"},
+    {"condition":"correctable deterministic defect repaired and dependent suite rerun","status":"SATISFIED"},
+    {"condition":"no Stage-A execution or scientific interpretation","status":"SATISFIED"}
+  ],
+  "population_readiness":{
+    "census_months":48,
+    "single_months_meeting_full_floor":0,
+    "binding_limitation":"K/L maintenance/closure coverage prevents every single month from reaching >=15 eligible days for all A-L slots.",
+    "minimum_contiguous_aggregate_span_months":2,
+    "qualifying_two_month_windows":6,
+    "proposed_selection_rule":"PRESERVE_DEVELOPMENT_FOR_LATER_COMPARISON; THEN_MINIMUM_CONTIGUOUS_FULL_MONTH_SPAN_SATISFYING_AGGREGATE_FLOOR; THEN_MINIMUM_PAIRED_2H_COUNT; THEN_EARLIEST_UTC",
+    "proposed_release_id":"OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "proposed_interval":"[2023-11-01T00:00:00Z,2024-01-01T00:00:00Z)",
+    "paired_2h":449,
+    "paired_side_records":898,
+    "eligible_market_days":43,
+    "slot_day_counts":{"A":39,"B":37,"C":36,"D":42,"E":42,"F":42,"G":42,"H":41,"I":42,"J":40,"K":29,"L":17},
+    "minimum_slot_day_count":17,
+    "bid_ask_timestamp_sets_equal":true,
+    "status":"PROPOSED_ELIGIBLE_NON_EXECUTABLE"
+  },
+  "capacity":{
+    "receipt":"docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_CAPACITY_RECEIPT.json",
+    "measurement_head":"8ae954a840c0819119b0d7af71e74dd2db129adf",
+    "C0":{"n_per_side":64,"wall_seconds":0.09100223299999755,"peak_python_tracemalloc_bytes":178113},
+    "C1":{"n_per_side":449,"input_bar_count":898,"wall_seconds":0.6294220679999967,"peak_python_tracemalloc_bytes":1189135},
+    "budget":{"max_runtime_seconds":14400,"max_peak_memory_bytes":17179869184,"max_external_artifact_bytes":10737418240},
+    "result":"PASS",
+    "qualification":"SYNTHETIC_IMPLEMENTATION_CAPACITY_ONLY_NOT_MARKET_SCIENCE"
+  },
+  "tests_and_qa":{
+    "repository_suite":{"run_id":31215957617,"job_id":92989412484,"tests":433,"conclusion":"success"},
+    "final_head_assurance":{"run_id":31215957698,"profile_job_id":92989413012,"merge_readiness_job_id":92989450054,"conclusion":"success"},
+    "qa_packet":"docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_QA_PACKET.json",
+    "qa_recommendation":"FREEZE_STAGE_A_READINESS",
+    "final_gate_materialization_exact_head_ci":"REQUIRED_BEFORE_OPERATOR_DECISION_INTEGRATION"
+  },
+  "corrective_defects":[{
+    "id":"MCARBI-WP6-DEFECT-001",
+    "finding":"Process-global Decimal precision mutation in dependence.py changed unrelated SRFD exact arithmetic when the capacity test exercised MCARB late in the full suite.",
+    "resolution":"Use decimal.localcontext() inside Pearson only; no global context mutation.",
+    "corrected_head":"8ae954a840c0819119b0d7af71e74dd2db129adf",
+    "verification":"433-test complete suite PASS and OVC FINAL_HEAD/merge-readiness PASS"
+  }],
+  "warnings":[
+    "The plan text states one complete UTC calendar month, but no single 2021-2024 non-Validation month meets the all-slot floor. FREEZE_STAGE_A_READINESS therefore explicitly accepts a two-contiguous-month aggregate readiness population rather than silently weakening the slot threshold.",
+    "K/L are the binding coverage limitation; this is preserved as evidence, not repaired or filled.",
+    "AL_SOURCE_PARTIAL remains binding. AL-02/03, AL-10 and AL-11/12/13 remain excluded from the initial Stage-A set.",
+    "C0/C1 timings are synthetic implementation-capacity measurements and do not establish market-data runtime or scientific utility.",
+    "The proposed population is Discovery only and intentionally preserves 2024 Development for later comparison.",
+    "Validation 2025 remains locked/unconsumed."
+  ],
+  "unresolved_issues_after_freeze":[
+    "WP7 must freeze exact ET-VAR and other VariantSpecs/normalizations/thresholds before any run.",
+    "MCARBI-G7 operator acknowledgement remains required for preregistration freeze.",
+    "MCARBI-G-STAGE-A-AUTH remains the only gate able to authorize bounded Stage-A market benchmark execution."
+  ],
+  "external_artifacts":[
+    {"artifact_id":8624691154,"name":"opt-a-v2-observations-discovery-2021-2023","sha256":"371eac7f02d9e013c8686b5acae630acdc044cec56b36bc61225c01af17cbedb","role":"ACCEPTED_DISCOVERY_OBSERVATION_ARTIFACT"},
+    {"artifact_id":8624691530,"name":"opt-a-v2-observations-development-2024","sha256":"d502e4f493869761af7e72ca9a91c8fd93ef1b909367ac9482e3c4ea8a0bfc48","role":"ACCEPTED_DEVELOPMENT_OBSERVATION_ARTIFACT"}
+  ],
+  "changed_files":[
+    "src/ovc/research_operations/mcarb/population.py",
+    "src/ovc/research_operations/mcarb/capacity.py",
+    "src/ovc/research_operations/mcarb/dependence.py",
+    "tests/research_operations/mcarb/test_mcarbi_wp6_capacity_population.py",
+    "tests/test_zzz_mcarbi_wp6_capacity_receipt.py",
+    "docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_G5_COMPLETION_RECEIPT.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_POPULATION_COVERAGE_AUDIT.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_STAGE_A_POPULATION_PROPOSAL.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_CAPACITY_RECEIPT.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_QA_PACKET.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_G6_OPERATOR_DECISION_PACKET.json",
+    "registries/research/mcarb/MCARBI_PROGRAMME_STATE.yaml"
+  ],
+  "authority_firewall":{
+    "stage_a_market_run":"DENIED_UNTIL_MCARBI_G_STAGE_A_AUTH_AUTHORIZE_STAGE_A",
+    "active_discovery":"NONE",
+    "provider_intake":"DENIED",
+    "validation_2025":"LOCKED_UNCONSUMED",
+    "selector":"NONE",
+    "representation_threshold_family_semantic_promotion":"NONE",
+    "c2_c2e_sri_publication":"NONE",
+    "probability_risk_exposure_execution":"NONE",
+    "pr_371":"PRESERVE_DO_NOT_MERGE"
+  },
+  "rollback":"Preserve measurement and coverage evidence. A REDESIGN/DEFER/BLOCK decision leaves the proposed population non-executable. A later change to the frozen readiness population requires versioned supersession; no source artifact is mutated or deleted.",
+  "recommended_decision":"FREEZE_STAGE_A_READINESS",
+  "allowed_decisions":["FREEZE_STAGE_A_READINESS","REDESIGN","DEFER","BLOCK"],
+  "exact_operator_command":"OVC APPROVE MCARBI-G6 FREEZE_STAGE_A_READINESS",
+  "next_action_after_freeze":"Record and merge G6 decision, then execute MCARBI-WP7 Stage-A preregistration preparation and stop at MCARBI-G7 operator acknowledgement. Do not run Stage A without separate MCARBI-G-STAGE-A-AUTH AUTHORIZE_STAGE_A."
+}
