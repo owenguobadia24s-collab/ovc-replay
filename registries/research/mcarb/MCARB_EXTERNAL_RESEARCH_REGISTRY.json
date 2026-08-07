@@ -1,0 +1,18 @@
+{
+  "schema": "ovc-mcarb-external-research-registry/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "authority_effect": "NONE",
+  "records": [
+    {"id":"ER-A01","source":"Dukascopy JForex IBar API","url":"https://www.dukascopy.com/client/javadoc3/com/dukascopy/api/IBar.html","disposition":"ACCEPT_AS_DESIGN_PRINCIPLE","use":"provider bar-volume semantics; OVC binding still audited"},
+    {"id":"ER-A02","source":"Dukascopy JForex ITick API","url":"https://www.dukascopy.com/client/javadoc3/com/dukascopy/api/ITick.html","disposition":"REGISTER_AS_OPTION","use":"tick activity/best-level volume capability; not proof of retained OVC data"},
+    {"id":"ER-AL01","source":"Ito & Hashimoto (2006), Intraday Seasonality in Activities of the Foreign Exchange Markets","disposition":"ACCEPT_AS_DESIGN_PRINCIPLE","use":"clock-slot conditioning for activity/volatility"},
+    {"id":"ER-AL02","source":"Cai, Howorka & Wongswan, Federal Reserve IFDP 863","disposition":"ACCEPT_AS_DESIGN_PRINCIPLE","use":"distinguish actual trading volume from quote-frequency proxies"},
+    {"id":"ER-AL03","source":"Chaboud, Chernenko & Wright, high-frequency EBS activity","disposition":"REGISTER_AS_BENCHMARK","use":"external comparator for true interdealer trading volume semantics"},
+    {"id":"ER-ET01","source":"Glattfelder, Dupuis & Olsen, Patterns in high-frequency FX data","identifier":"arXiv:0809.1040; DOI:10.1080/14697688.2010.481632","disposition":"REGISTER_AS_BENCHMARK","use":"directional-change event time"},
+    {"id":"ER-ET02","source":"Berardi & Serva, Time and foreign exchange markets","disposition":"REGISTER_AS_OPTION","use":"calendar vs business/intrinsic time"},
+    {"id":"ER-ET03","source":"Oomen, Properties of Realized Variance Under Alternative Sampling Schemes","disposition":"REGISTER_AS_BENCHMARK","use":"calendar/business/transaction-time sampling"},
+    {"id":"ER-VS01","source":"Andersen & Bollerslev (1997), Intraday Periodicity and Volatility Persistence","identifier":"DOI:10.1016/S0927-5398(97)00004-2","disposition":"ACCEPT_AS_DESIGN_PRINCIPLE","use":"intraday periodicity controls"},
+    {"id":"ER-VS02","source":"Andersen, Bollerslev, Diebold & Labys (2003), Modeling and Forecasting Realized Volatility","identifier":"DOI:10.1111/1468-0262.00418","disposition":"REGISTER_AS_BENCHMARK","use":"realized-volatility measurement family only"},
+    {"id":"ER-VS03","source":"Corsi (2009), A Simple Approximate Long-Memory Model of Realized Volatility","disposition":"REGISTER_AS_BENCHMARK","use":"multihorizon volatility comparator only"}
+  ]
+}

@@ -1,0 +1,37 @@
+schema: ovc-programme-state/v1
+programme_id: OVC-MCARB-v0.1
+plan_id: OVC-MCARB-DESIGN-SPEC-0.1
+plan_version: '0.1'
+packet_id: MCARB-D8
+status: APPROVED
+prerequisites:
+  - current OVC architecture and court-record reconciliation
+  - OPT-A volume and provider-source contract inspection
+  - current SRFDI-G8 REDESIGN state reconciliation
+  - bounded external research crosswalk
+authority_required: OPERATOR_REQUIRED
+authority_delta: DESIGN_ACCEPTED_ONLY; implementation-plan execution may proceed through MCARBI-G0; no benchmark execution authority
+baseline_commit: d90432957df146bf448287cedf4da73a8c861ebe
+branch: design/mcarb-v0-1
+candidate_commit: cd81eb332e4eac38b5e812da11210e120d11e4db
+tests:
+  - MCARB design structural QA PASS
+  - DOCX render and all-page visual QA PASS (34 pages)
+  - tests workflow 31202014293 SUCCESS
+  - OVC tiered test selection shadow 31202014178 SUCCESS
+qa_packet: docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_QA_PACKET.json
+decision_record: docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_OPERATOR_DECISION.json
+merge_commit: null
+blockers: []
+next_packet: MCARBI-WP0
+validation: LOCKED_UNCONSUMED
+benchmark_run_authority: NONE
+provider_intake_authority: NONE
+retained_source_reread_authority: UNRESOLVED_REQUIRES_MCARBI_G0_PREREQUISITE_RESOLUTION
+selector_authority: NONE
+publication_authority: NONE
+probability_risk_exposure_execution: NONE
+operator_decision:
+  decision_id: MCARB-D8.OPERATOR.PASS.20260807T200100+0100
+  decision: PASS
+  recorded_at: '2026-08-07T20:01:00+01:00'
