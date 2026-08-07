@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-mcarb-branch-dependency-graph/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "packet_id": "MCARBI-WP1",
+  "gate_id": "MCARBI-G1",
+  "branches": {
+    "AL_M1_SIDE_SPECIFIC": {
+      "status": "PARTIAL_PASS",
+      "permits": ["AL-01","AL-04","AL-05","AL-06","AL-07","AL-08","AL-09","AL-14","AL-15","AL-16","AL-18","AL-19","AL-20"],
+      "cannot_block": ["ET_PRICE","VS_PRICE"]
+    },
+    "AL_CROSS_SIDE": {
+      "status": "UNRESOLVED",
+      "blocks": ["AL-10"],
+      "cannot_block": ["AL_M1_SIDE_SPECIFIC","ET_PRICE","VS_PRICE"]
+    },
+    "AL_TICK_UPDATE": {
+      "status": "SOURCE_NOT_FOUND",
+      "blocks": ["AL-02","AL-03","EXACT_TICK_SPREAD_TRUTH"],
+      "cannot_block": ["AL_M1_SIDE_SPECIFIC","ET_PRICE","VS_PRICE"]
+    },
+    "AL_SPREAD_PROXY": {
+      "status": "PARTIAL_NOT_STAGE_A",
+      "blocks": ["AL-11","AL-12","AL-13"],
+      "cannot_block": ["AL_M1_SIDE_SPECIFIC","ET_PRICE","VS_PRICE"]
+    },
+    "ET_PRICE": {
+      "status": "ELIGIBLE",
+      "permits": ["ET-DC","ET-X","ET-VAR"],
+      "cannot_block": ["VS_PRICE","AL"]
+    },
+    "ET_ACTIVITY": {
+      "status": "CONDITIONAL",
+      "requires": ["AL_M1_SIDE_SPECIFIC"],
+      "permits": ["ET-ACT"]
+    },
+    "VS_PRICE": {
+      "status": "ELIGIBLE",
+      "permits": ["VS-01","VS-02","VS-03"],
+      "cannot_block": ["ET_PRICE","AL"]
+    },
+    "VS_VARIANTS": {
+      "status": "DEFERRED_OR_VARIANT_REQUIRED",
+      "requires": ["VariantSpec"],
+      "permits": ["VS-04","VS-05","VS-06..VS-16"]
+    },
+    "VS_AL_CONDITIONAL": {
+      "status": "CONDITIONAL",
+      "requires": ["AL_M1_SIDE_SPECIFIC","VS_PRICE"],
+      "permits": ["VS-17","VS-18"]
+    }
+  },
+  "pack_dependencies": {
+    "R0": ["PRICE"],
+    "R1": ["PRICE","AL_M1_SIDE_SPECIFIC"],
+    "R2": ["PRICE","ET_PRICE"],
+    "R3": ["PRICE","VS_PRICE"],
+    "R4": ["R1","R3"],
+    "R4X": ["R1","R2"],
+    "R5": ["R2","R3"],
+    "R6": ["R1","R2","R3"]
+  },
+  "market_execution_authority": "NONE"
+}
