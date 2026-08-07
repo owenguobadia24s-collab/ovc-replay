@@ -1,0 +1,104 @@
+{
+  "schema": "ovc-mcarbi-wp0-preflight/v2",
+  "programme_id": "OVC-MCARB-v0.1",
+  "plan_id": "OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "MCARBI-WP0",
+  "gate_id": "MCARBI-G0",
+  "execution_command": "OVC Run OVC_Market_Context_Auxiliary_Representation_Benchmark_Programme_Implementation_Plan_v0_1_REVISED",
+  "rerun_reason": "MCARB-D8 prerequisite satisfied and merged; rerun from latest lawful main before G0 decision",
+  "latest_lawful_main": "00c100ece613bbc5bb8de0c8f8ca45425e036037",
+  "branch": "gate/mcarbi-g0-preflight-v2",
+  "plan_source_receipt": "docs/implementation-plans/mcarb-v0-1/OVC_MCARB_IMPLEMENTATION_PLAN_v0_1_REVISED_SOURCE_RECEIPT.json",
+  "prerequisite_checks": [
+    {
+      "id": "MCARB_D8_ACCEPTANCE",
+      "required": true,
+      "status": "PASS",
+      "evidence": {
+        "design_pr": 381,
+        "design_pr_state": "MERGED",
+        "operator_decision_id": "MCARB-D8.OPERATOR.PASS.20260807T200100+0100",
+        "decision_record": "docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_OPERATOR_DECISION.json",
+        "merge_commit": "00c100ece613bbc5bb8de0c8f8ca45425e036037"
+      }
+    },
+    {
+      "id": "LATEST_MAIN_AND_BRANCH_BASE",
+      "required": true,
+      "status": "PASS",
+      "evidence": {
+        "main": "00c100ece613bbc5bb8de0c8f8ca45425e036037",
+        "branch_base": "00c100ece613bbc5bb8de0c8f8ca45425e036037"
+      }
+    },
+    {
+      "id": "ACTIVE_OPT_A_C1_C2_AND_VALIDATION_LOCK",
+      "required": true,
+      "status": "PASS",
+      "evidence": {
+        "opt_a_discovery": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "opt_a_development": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "opt_a_validation": "OPT-A.GBPUSD.VALIDATION.2025.v2",
+        "validation_consumption": "LOCKED_UNCONSUMED",
+        "validation_default_access": "DENIED",
+        "c1_state": "SHADOW",
+        "c2_selector": "NONE"
+      }
+    },
+    {
+      "id": "SRFD_CAPACITY_AND_PR371_COMPATIBILITY",
+      "required": true,
+      "status": "PASS_WITH_BOUNDARY",
+      "evidence": {
+        "srfd_status": "REDESIGN_REQUIRED",
+        "srfd_current_gate": "SRFDI-G8",
+        "srfd_market_benchmark": "DENIED",
+        "srfd_june": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+        "srfd_capacity_freeze": "DENIED",
+        "preserved_blocker_pr": 371,
+        "pr371_policy": "PRESERVE_DO_NOT_MERGE"
+      },
+      "boundary": "MCARB inherits neither SRFD family/method authority nor SRFD capacity PASS; compatible infrastructure reuse requires explicit compatible contracts."
+    },
+    {
+      "id": "RETAINED_SOURCE_READ_REREAD_AUTHORITY",
+      "required": true,
+      "status": "REQUIRES_EXPLICIT_OPERATOR_CLAUSE_AT_MCARBI_G0",
+      "evidence": {
+        "existing_research_ops": "bounded local audit/read/verify/report infrastructure exists",
+        "ro_g3_provider_access": "NOT_APPROVED",
+        "mcarb_specific_source_reread_authority": "NOT_YET_RECORDED",
+        "proposed_exact_scope": "READ_ONLY_EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_SOURCE_OBJECTS_AND_ACCEPTED_SOURCE_ARTIFACTS_NEEDED_FOR_MCARB_SOURCE_SEMANTICS_AUDIT; NO_NEW_PROVIDER_INTAKE; NO_VALIDATION_2025; NO_MUTATION"
+      },
+      "effect_before_operator_clause": "No retained market-object payload read may begin.",
+      "resolution_path": "Atomic MCARBI-G0 operator PASS may explicitly grant the bounded audit-read clause immediately before implementation authority becomes effective. PASS without that clause is not lawful."
+    },
+    {
+      "id": "NEW_PROVIDER_INTAKE",
+      "required": true,
+      "status": "PASS_PROHIBITION_CONFIRMED",
+      "evidence": {
+        "provider_intake_authority": "NONE",
+        "plan_rule": "NO_NEW_PROVIDER_INTAKE"
+      }
+    }
+  ],
+  "open_pr_reconciliation": {
+    "mcarb_design_pr": {"number":381,"state":"MERGED"},
+    "prior_mcarbi_preflight_pr": {"number":382,"state":"STALE_SUPERSEDED_BY_CURRENT_MAIN_RERUN"},
+    "preserved_blocker_pr": {"number":371,"policy":"PRESERVE_DO_NOT_MERGE"},
+    "unsafe_merge_action_taken": false
+  },
+  "preflight_result": "GATE_READY_REQUIRES_OPERATOR_AUDIT_READ_CLAUSE",
+  "blocking_prerequisites_outside_gate": [],
+  "operator_resolution_required_at_gate": [
+    "MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD_AUTHORITY"
+  ],
+  "authority_effect": "NONE_BEFORE_MCARBI_G0_OPERATOR_PASS",
+  "market_benchmark_execution": "DENIED",
+  "validation_2025": "LOCKED_UNCONSUMED",
+  "provider_intake": "DENIED",
+  "selector_or_production_activation": "NONE",
+  "next_action": "PRESENT_CONSOLIDATED_MCARBI_G0_OPERATOR_DECISION_PACKET_AND_STOP"
+}
