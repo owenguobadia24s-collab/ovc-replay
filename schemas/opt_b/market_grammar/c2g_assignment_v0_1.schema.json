@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://schemas/opt_b/market_grammar/c2g_assignment_v0_1",
+  "title":"C2G Assignment v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["assignment_id","pack_id","record_id","status","primary_family_id","nearest_distance","candidate_distances","reason","authority_state"],
+  "properties":{
+    "assignment_id":{"type":"string","pattern":"^C2G\\.ASN\\.[0-9a-f]{64}$"},
+    "pack_id":{"type":"string"},
+    "record_id":{"type":"string","minLength":1},
+    "status":{"enum":["ASSIGNED","AMBIGUOUS","RESIDUAL","UNASSIGNED","NOT_EVALUABLE"]},
+    "primary_family_id":{"type":["string","null"]},
+    "nearest_distance":{"type":["string","null"]},
+    "candidate_distances":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["family_id","distance"],"properties":{"family_id":{"type":"string"},"distance":{"type":"string"}}}},
+    "reason":{"type":"string","minLength":1},
+    "authority_state":{"const":"SHADOW_EXPERIMENT"}
+  }
+}

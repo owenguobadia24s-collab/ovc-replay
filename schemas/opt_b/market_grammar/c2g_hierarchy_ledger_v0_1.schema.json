@@ -1,0 +1,18 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://schemas/opt_b/market_grammar/c2g_hierarchy_ledger_v0_1",
+  "title":"C2G Hierarchy Ledger v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["hierarchy_id","result_ids","edges","split_events","merge_events","adjacent_metrics","schema_version","authority_state"],
+  "properties":{
+    "hierarchy_id":{"type":"string","pattern":"^C2G\\.HIER\\.[0-9a-f]{64}$"},
+    "result_ids":{"type":"array","minItems":2,"uniqueItems":true,"items":{"type":"string"}},
+    "edges":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["edge_id","relation","parent_family_id","child_family_id","parent_pack_id","child_pack_id","parent_sensitivity","child_sensitivity","containment","jaccard","medoid_persisted","directional"],"properties":{"edge_id":{"type":"string","pattern":"^C2G\\.EDGE\\.[0-9a-f]{64}$"},"relation":{"enum":["PARENT_OF","PARTIAL_OVERLAP_WITH"]},"parent_family_id":{"type":"string"},"child_family_id":{"type":"string"},"parent_pack_id":{"type":"string"},"child_pack_id":{"type":"string"},"parent_sensitivity":{"type":"string"},"child_sensitivity":{"type":"string"},"containment":{"type":"string"},"jaccard":{"type":"string"},"medoid_persisted":{"type":"boolean"},"directional":{"type":"boolean"}}}},
+    "split_events":{"type":"array","items":{"type":"object"}},
+    "merge_events":{"type":"array","items":{"type":"object"}},
+    "adjacent_metrics":{"type":"array","items":{"type":"object"}},
+    "schema_version":{"const":"0.1"},
+    "authority_state":{"const":"SHADOW_EXPERIMENT"}
+  }
+}

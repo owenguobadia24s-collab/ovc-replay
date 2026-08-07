@@ -1,0 +1,18 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://schemas/opt_b/market_grammar/c2g_sensitivity_result_v0_1",
+  "title":"C2G Sensitivity Result v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["result_id","pack","build_cutoff","input_record_ids","families","assignments","schema_version","authority_state"],
+  "properties":{
+    "result_id":{"type":"string","pattern":"^C2G\\.RES\\.[0-9a-f]{64}$"},
+    "pack":{"$ref":"c2g_sensitivity_pack_v0_1.schema.json"},
+    "build_cutoff":{"type":"string","format":"date-time"},
+    "input_record_ids":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string"}},
+    "families":{"type":"array","items":{"$ref":"c2g_family_node_v0_1.schema.json"}},
+    "assignments":{"type":"array","items":{"$ref":"c2g_assignment_v0_1.schema.json"}},
+    "schema_version":{"const":"0.1"},
+    "authority_state":{"const":"SHADOW_EXPERIMENT"}
+  }
+}

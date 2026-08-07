@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/market_grammar/c2g_family_node_v0_1",
+  "title": "C2G Family Node v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["family_id","pack_id","sensitivity","source_release_id","instrument_id","side","scope_id","clock_id","record_type","medoid_record_id","member_record_ids","dispersion","authority_state"],
+  "properties": {
+    "family_id": {"type":"string","pattern":"^C2G\\.FAM\\.[0-9a-f]{64}$"},
+    "pack_id": {"type":"string"},
+    "sensitivity": {"type":"string"},
+    "source_release_id": {"type":"string","minLength":1},
+    "instrument_id": {"type":"string","minLength":1},
+    "side": {"enum":["BID","ASK"]},
+    "scope_id": {"type":"string","minLength":1},
+    "clock_id": {"type":"string","minLength":1},
+    "record_type": {"enum":["STATE","TRANSITION","EPISODE"]},
+    "medoid_record_id": {"type":"string","minLength":1},
+    "member_record_ids": {"type":"array","minItems":2,"uniqueItems":true,"items":{"type":"string","minLength":1}},
+    "dispersion": {"type":"string"},
+    "authority_state": {"const":"SHADOW_EXPERIMENT"}
+  }
+}

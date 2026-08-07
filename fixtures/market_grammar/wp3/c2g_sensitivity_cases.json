@@ -1,0 +1,49 @@
+{
+  "schema":"ovc-mg-wp3-fixture-pack/v1",
+  "authority":"SYNTHETIC_NON_AUTHORITATIVE",
+  "pack_registry_id":"MG-C2G-SENSITIVITY-PACK-REGISTRY-v0.1",
+  "valid_cases":[
+    {
+      "case_id":"WP3-V1-STABLE-TWO-FAMILIES",
+      "pack_ids":["MG-C2G-S-0.20-v0.1","MG-C2G-S-0.35-v0.1"],
+      "build_cutoff":"2026-06-01T01:00:00Z",
+      "records":[
+        {"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:00:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.1","location":"0.1","motion":"0.1","organisation":"0.1","quality":"0.1"}},
+        {"record_id":"R2","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:05:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.12","location":"0.12","motion":"0.12","organisation":"0.12","quality":"0.12"}},
+        {"record_id":"R3","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:10:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.8","location":"0.8","motion":"0.8","organisation":"0.8","quality":"0.8"}},
+        {"record_id":"R4","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.82","location":"0.82","motion":"0.82","organisation":"0.82","quality":"0.82"}}
+      ],
+      "expected":{"family_counts":[2,2],"not_evaluable_counts":[0,0],"hierarchy_directional_edges":2,"hierarchy_split_count":0}
+    },
+    {
+      "case_id":"WP3-V2-MISSING-IS-NOT-EVALUABLE",
+      "pack_ids":["MG-C2G-S-0.20-v0.1","MG-C2G-S-0.35-v0.1"],
+      "build_cutoff":"2026-06-01T01:00:00Z",
+      "records":[
+        {"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:00:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.1","location":"0.1","motion":"0.1","organisation":"0.1","quality":"0.1"}},
+        {"record_id":"R2","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:05:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.12","location":"0.12","motion":"0.12","organisation":"0.12","quality":"0.12"}},
+        {"record_id":"R3","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:10:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"location":"0.8"}}
+      ],
+      "expected":{"family_counts":[1,1],"not_evaluable_counts":[1,1],"hierarchy_directional_edges":1,"hierarchy_split_count":0}
+    },
+    {
+      "case_id":"WP3-V3-COARSE-PARENT-SPLITS",
+      "pack_ids":["MG-C2G-S-0.20-v0.1","MG-C2G-S-0.50-v0.1"],
+      "build_cutoff":"2026-06-01T01:00:00Z",
+      "records":[
+        {"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:00:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0","location":"0","motion":"0","organisation":"0","quality":"0"}},
+        {"record_id":"R2","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:05:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.05","location":"0.05","motion":"0.05","organisation":"0.05","quality":"0.05"}},
+        {"record_id":"R3","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:10:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.4","location":"0.4","motion":"0.4","organisation":"0.4","quality":"0.4"}},
+        {"record_id":"R4","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.45","location":"0.45","motion":"0.45","organisation":"0.45","quality":"0.45"}}
+      ],
+      "expected":{"family_counts":[2,1],"not_evaluable_counts":[0,0],"hierarchy_directional_edges":2,"hierarchy_split_count":1}
+    }
+  ],
+  "invalid_cases":[
+    {"case_id":"WP3-I1-PROVENANCE-CONTAMINATION","pack_id":"MG-C2G-S-0.20-v0.1","build_cutoff":"2026-06-01T01:00:00Z","records":[{"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:00:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"source_release_id":"0.1","location":"0.1"}}],"expected_error":"non-structural feature is forbidden"},
+    {"case_id":"WP3-I2-OUTCOME-FIELD","pack_id":"MG-C2G-S-0.20-v0.1","build_cutoff":"2026-06-01T01:00:00Z","records":[{"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:00:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.1","location":"0.1","motion":"0.1","organisation":"0.1","quality":"0.1"},"mfe":"0.2"}],"expected_error":"future/outcome/downstream"},
+    {"case_id":"WP3-I3-FUTURE-RECORD","pack_id":"MG-C2G-S-0.20-v0.1","build_cutoff":"2026-06-01T00:00:00Z","records":[{"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:05:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.1","location":"0.1","motion":"0.1","organisation":"0.1","quality":"0.1"}}],"expected_error":"future structural record"},
+    {"case_id":"WP3-I4-DUPLICATE-ID","pack_id":"MG-C2G-S-0.20-v0.1","build_cutoff":"2026-06-01T01:00:00Z","records":[{"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:00:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.1","location":"0.1","motion":"0.1","organisation":"0.1","quality":"0.1"}},{"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:05:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.2","location":"0.2","motion":"0.2","organisation":"0.2","quality":"0.2"}}],"expected_error":"duplicate record_id"},
+    {"case_id":"WP3-I5-ENVIRONMENT-FIELD","pack_id":"MG-C2G-S-0.20-v0.1","build_cutoff":"2026-06-01T01:00:00Z","records":[{"record_id":"R1","record_type":"STATE","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:00:00Z","source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","structural_features":{"interaction":"0.1","location":"0.1","motion":"0.1","organisation":"0.1","quality":"0.1"},"machine_name":"host-a"}],"expected_error":"unsupported structural record fields"}
+  ]
+}

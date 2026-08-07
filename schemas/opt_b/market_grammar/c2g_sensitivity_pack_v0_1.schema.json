@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/market_grammar/c2g_sensitivity_pack_v0_1",
+  "title": "C2G Sensitivity Pack v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pack_id","sensitivity","feature_weights","assignment_radius","ambiguity_margin","minimum_support","variant_radius","containment_threshold","partial_overlap_threshold","missingness_policy","metric_id","tie_break","canonical"],
+  "properties": {
+    "pack_id": {"type":"string","pattern":"^MG-C2G-S-[0-9]+\\.[0-9]+-v0\\.1$"},
+    "sensitivity": {"type":"string"},
+    "feature_weights": {"type":"object","minProperties":1,"additionalProperties":{"type":"string"}},
+    "assignment_radius": {"type":"string"},
+    "ambiguity_margin": {"type":"string"},
+    "minimum_support": {"type":"integer","minimum":2},
+    "variant_radius": {"type":"string"},
+    "containment_threshold": {"type":"string"},
+    "partial_overlap_threshold": {"type":"string"},
+    "missingness_policy": {"const":"NOT_EVALUABLE"},
+    "metric_id": {"const":"WEIGHTED_MANHATTAN_V0_1"},
+    "tie_break": {"const":"MAX_COVERAGE_MIN_TOTAL_DISTANCE_LEXICOGRAPHIC_ID"},
+    "canonical": {"const":false}
+  }
+}
