@@ -1,0 +1,31 @@
+name: SRFDI G8R feasibility bridge
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ovc/opt_b/srfd/**'
+      - 'tools/srfd/g8r_measure_bridge.py'
+      - 'tests/srfd/g8r/**'
+      - '.github/workflows/srfdi-g8r-bridge.yml'
+concurrency:
+  group: srfdi-g8r-bridge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Measure P0/P1 bridge
+        env:
+          PYTHONPATH: src
+          G8R_BRIDGE_OUTPUT: g8r-bridge-evidence
+        run: python tools/srfd/g8r_measure_bridge.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: srfdi-g8r-bridge-${{ github.sha }}
+          path: g8r-bridge-evidence
+          if-no-files-found: error
+          retention-days: 14
