@@ -3,30 +3,54 @@ programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
 packet_id: MCARBI-WP6
-status: QA_REVIEW
+status: GATE_READY
 prerequisites:
   - MCARBI-G5 delegated PASS merged at ccd1d359da25b395b242652c35aab70fdf401827
+  - accepted Discovery and Development observation artifacts hash-verified
+  - Validation 2025 not read
+  - no new provider intake
 authority_required: OPERATOR_REQUIRED
-authority_delta: NONE_PENDING_MCARBI_G6; proposed capacity/population readiness freeze only
+authority_delta: NONE_PENDING_MCARBI_G6; proposed capacity budget and Stage-A population eligibility freeze only
 baseline_commit: ccd1d359da25b395b242652c35aab70fdf401827
 branch: capacity/mcarbi-wp6-stage-a-readiness
-candidate_commit: PENDING
+candidate_commit: c7f9fa9b85adbe5790b7199fa9aac86bbb5d1b8b
+candidate_commit_role: EVIDENCE_HEAD_BEFORE_GATE_PACKET_AND_STATE_METADATA
 tests:
-  - exact population coverage enumerator tests required
-  - measured C0/C1 GitHub-hosted receipt required
-  - exact-head repository suite required
+  - 48-month exact population coverage census: PASS
+  - measured C0/C1 GitHub-hosted capacity: PASS
+  - repository suite run 31215957617: 433 tests PASS
+  - OVC FINAL_HEAD run 31215957698: PASS
+  - merge readiness job 92989450054: PASS
+  - gate-materialization exact-head assurance: pending
 qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_QA_PACKET.json
 decision_record: null
+gate_packet: docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_G6_OPERATOR_DECISION_PACKET.json
+capacity_receipt: docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_CAPACITY_RECEIPT.json
+population_proposal: docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_STAGE_A_POPULATION_PROPOSAL.json
 merge_commit: null
 blockers: []
-next_packet: MCARBI-G6-OPERATOR-DECISION
 source_audit_outcome: AL_SOURCE_PARTIAL
+population_readiness:
+  census_months: 48
+  qualifying_single_months: 0
+  minimum_contiguous_span_months: 2
+  proposed_release: OPT-A.GBPUSD.DISCOVERY.2021_2023.v2
+  proposed_interval: '[2023-11-01T00:00:00Z,2024-01-01T00:00:00Z)'
+  paired_2h: 449
+  eligible_days: 43
+  minimum_slot_days: 17
+  status: PROPOSED_ELIGIBLE_NON_EXECUTABLE
+capacity_status: PASS_MEASURED_SYNTHETIC
+recommended_gate_decision: FREEZE_STAGE_A_READINESS
+next_packet: MCARBI-G6-OPERATOR-DECISION
 market_benchmark_authority: NONE
 stage_a_authority: NONE
+active_discovery_authority: NONE
 provider_intake_authority: NONE
 validation_2025: LOCKED_UNCONSUMED
 selector_authority: NONE
 c2_c2e_sri_family_semantic_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
-continuation_point: AFTER_MEASURED_CAPACITY_MATERIALISE_G6_PACKET_AND_STOP
+exact_operator_command: OVC APPROVE MCARBI-G6 FREEZE_STAGE_A_READINESS
+continuation_point: AFTER_G6_FREEZE_EXECUTE_WP7_PREREGISTRATION_AND_STOP_AT_G7; STAGE_A_RUN_REQUIRES_SEPARATE_G_STAGE_A_AUTH
