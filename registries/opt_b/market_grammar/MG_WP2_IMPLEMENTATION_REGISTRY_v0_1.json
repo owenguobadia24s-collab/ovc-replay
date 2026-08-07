@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-mg-wp2-implementation-registry/v1",
+  "packet_id": "MG-WP2",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "status": "IMPLEMENTED_PENDING_QA",
+  "authority": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
+  "reads": ["TYPED_C2_STATE_AND_TRANSITION_RECORDS","C2_COMPUTABILITY_AND_RESET_RECORDS","MG_C2E_BOUNDARY_POLICY_v0_1"],
+  "writes": ["NEUTRAL_EPISODE_RECORD","PHASE_RECORD","NOT_EVALUABLE_RECORD","EPISODE_BINDING","EPISODE_LEDGER"],
+  "forbidden_reads": ["C2G","C2P","C3","OPT_C","OPT_D","FUTURE_PATH","OUTCOMES","PROBABILITY","RISK","EXPOSURE","EXECUTION"],
+  "artifacts": [
+    "contracts/opt_b/market_grammar/MG_C2E_EPISODE_LEDGER_CONTRACT_v0_1.md",
+    "schemas/opt_b/market_grammar/c2e_episode_record_v0_1.schema.json",
+    "schemas/opt_b/market_grammar/c2e_phase_record_v0_1.schema.json",
+    "schemas/opt_b/market_grammar/c2e_ledger_v0_1.schema.json",
+    "schemas/opt_b/market_grammar/c2e_binding_v0_1.schema.json",
+    "registries/opt_b/market_grammar/MG_C2E_BOUNDARY_POLICY_v0_1.json",
+    "registries/opt_b/market_grammar/MG_C2E_LIFECYCLE_REGISTRY_v0_1.json",
+    "src/ovc/opt_b/market_grammar/episode_ledger.py",
+    "fixtures/market_grammar/wp2/c2e_ledger_cases.json",
+    "scripts/market_grammar/run_mg_wp2_fixture.py",
+    "tests/market_grammar/test_episode_ledger.py",
+    "tests/market_grammar/test_episode_ledger_fixtures.py"
+  ],
+  "rollback": "Remove or supersede inactive implementation; preserve contracts, fixtures, QA and decisions."
+}

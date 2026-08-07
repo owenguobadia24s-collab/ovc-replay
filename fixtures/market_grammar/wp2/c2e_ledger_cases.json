@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-mg-wp2-fixture-pack/v1",
+  "authority": "SYNTHETIC_NON_AUTHORITATIVE",
+  "policy_id": "MG-C2E-BOUNDARY-v0.1",
+  "valid_cases": [
+    {
+      "case_id": "COMPLETED_EPISODE",
+      "build_cutoff": "2026-06-01T01:00:00Z",
+      "records": [
+        {"record_id":"R1","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+        {"record_id":"R2","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:30:00Z","state_key":"STATE_B","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+        {"record_id":"R3","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:45:00Z","state_key":"STATE_B","transition_kind":"COMPLETION","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+      ],
+      "expected": {"episode_count":1,"not_evaluable_count":0,"statuses":["COMPLETED"],"boundary_causes":["COMPLETION"]}
+    },
+    {
+      "case_id": "PARENT_CHANGE_AND_CUTOFF",
+      "build_cutoff": "2026-06-01T00:30:00Z",
+      "records": [
+        {"record_id":"P1","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"ASK","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"},
+        {"record_id":"P2","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"ASK","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:30:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_B","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}
+      ],
+      "expected": {"episode_count":2,"not_evaluable_count":0,"statuses":["INTERRUPTED","OPEN_AT_CUTOFF"],"boundary_causes":["PARENT_CHANGE","END_OF_INPUT"]}
+    },
+    {
+      "case_id": "EXPLICIT_NON_EVALUABLE",
+      "build_cutoff": "2026-06-01T00:45:00Z",
+      "records": [
+        {"record_id":"N1","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"1111111111111111111111111111111111111111111111111111111111111111"},
+        {"record_id":"N2","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:30:00Z","state_key":"UNKNOWN","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"CONFLICT","not_evaluable_reason":"AXIS_CONFLICT","reset_reason":null,"source_sha256":"2222222222222222222222222222222222222222222222222222222222222222"},
+        {"record_id":"N3","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:45:00Z","state_key":"STATE_C","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"3333333333333333333333333333333333333333333333333333333333333333"}
+      ],
+      "expected": {"episode_count":2,"not_evaluable_count":1,"statuses":["CENSORED","OPEN_AT_CUTOFF"],"boundary_causes":["COMPUTABILITY_BREAK","END_OF_INPUT"],"not_evaluable_statuses":["CONFLICT"]}
+    },
+    {
+      "case_id": "RESET_AND_INTERRUPTION_PHASE",
+      "build_cutoff": "2026-06-01T00:45:00Z",
+      "records": [
+        {"record_id":"S1","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"4444444444444444444444444444444444444444444444444444444444444444"},
+        {"record_id":"S2","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:30:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":"SOURCE_GAP","source_sha256":"5555555555555555555555555555555555555555555555555555555555555555"},
+        {"record_id":"S3","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:45:00Z","state_key":"STATE_B","transition_kind":"INTERRUPTION","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"6666666666666666666666666666666666666666666666666666666666666666"}
+      ],
+      "expected": {"episode_count":2,"not_evaluable_count":0,"statuses":["CENSORED","OPEN_AT_CUTOFF"],"boundary_causes":["RESET","END_OF_INPUT"],"phase_kinds":[["START"],["START","INTERRUPTION"]]}
+    }
+  ],
+  "invalid_cases": [
+    {"case_id":"FUTURE_RECORD","build_cutoff":"2026-06-01T00:15:00Z","records":[{"record_id":"I1","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:30:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"7777777777777777777777777777777777777777777777777777777777777777"}],"expected_error":"future"},
+    {"case_id":"OUTCOME_FIELD","build_cutoff":"2026-06-01T00:30:00Z","records":[{"record_id":"I2","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"8888888888888888888888888888888888888888888888888888888888888888","mfe":0.001}],"expected_error":"future/outcome"},
+    {"case_id":"C2G_FIELD","build_cutoff":"2026-06-01T00:30:00Z","records":[{"record_id":"I3","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"9999999999999999999999999999999999999999999999999999999999999999","family_id":"F1"}],"expected_error":"future/outcome"},
+    {"case_id":"MIXED_SCOPE","build_cutoff":"2026-06-01T02:00:00Z","records":[{"record_id":"I4","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab"},{"record_id":"I5","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"2H_A_L","first_valid_time":"2026-06-01T02:00:00Z","state_key":"STATE_A","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac"}],"expected_error":"share release"},
+    {"case_id":"MISSING_REASON","build_cutoff":"2026-06-01T00:30:00Z","records":[{"record_id":"I6","source_release_id":"REL.SYNTH.v1","instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","clock_id":"15M","first_valid_time":"2026-06-01T00:15:00Z","state_key":"UNKNOWN","transition_kind":"NONE","parent_record_id":"PARENT_A","computability_status":"NOT_EVALUABLE","not_evaluable_reason":null,"reset_reason":null,"source_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaad"}],"expected_error":"explicit not_evaluable_reason"}
+  ]
+}

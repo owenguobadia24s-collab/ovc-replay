@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/market_grammar/c2e_binding_v0_1",
+  "title": "C2E Episode Binding v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["binding_id","child_episode_id","parent_episode_id","relation","first_valid_time"],
+  "properties": {
+    "binding_id": {"type":"string","pattern":"^C2E\\.BD\\.[0-9a-f]{64}$"},
+    "child_episode_id": {"type":"string","pattern":"^C2E\\.EP\\.[0-9a-f]{64}$"},
+    "parent_episode_id": {"type":"string","pattern":"^C2E\\.EP\\.[0-9a-f]{64}$"},
+    "relation": {"enum":["NESTED_WITHIN","CONTEXT_PARENT","DERIVED_FROM"]},
+    "first_valid_time": {"type":"string","format":"date-time"}
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-mg-wp2-implementation-manifest/v1",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "packet_id": "MG-WP2",
+  "baseline_main": "19e9e42e72dcbb863443ba7181957f2da57e365e",
+  "status": "IMPLEMENTED_PENDING_QA",
+  "authority": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
+  "policy_id": "MG-C2E-BOUNDARY-v0.1",
+  "artifacts": [
+    "contracts/opt_b/market_grammar/MG_C2E_EPISODE_LEDGER_CONTRACT_v0_1.md",
+    "schemas/opt_b/market_grammar/c2e_episode_record_v0_1.schema.json",
+    "schemas/opt_b/market_grammar/c2e_phase_record_v0_1.schema.json",
+    "schemas/opt_b/market_grammar/c2e_ledger_v0_1.schema.json",
+    "schemas/opt_b/market_grammar/c2e_binding_v0_1.schema.json",
+    "registries/opt_b/market_grammar/MG_C2E_BOUNDARY_POLICY_v0_1.json",
+    "registries/opt_b/market_grammar/MG_C2E_LIFECYCLE_REGISTRY_v0_1.json",
+    "registries/opt_b/market_grammar/MG_WP2_IMPLEMENTATION_REGISTRY_v0_1.json",
+    "src/ovc/opt_b/market_grammar/episode_ledger.py",
+    "src/ovc/opt_b/market_grammar/__init__.py",
+    "fixtures/market_grammar/wp2/c2e_ledger_cases.json",
+    "scripts/market_grammar/run_mg_wp2_fixture.py",
+    "tests/market_grammar/test_episode_ledger.py",
+    "tests/market_grammar/test_episode_ledger_fixtures.py",
+    "tests/market_grammar/test_mg_wp2_packet.py"
+  ],
+  "input_boundary": {
+    "allowed": ["TYPED_C2_STATE", "TYPED_C2_TRANSITION", "COMPUTABILITY", "RESET", "PARENT_BINDING"],
+    "forbidden": ["C2G", "C2P", "C3", "OPT_C", "OPT_D", "FUTURE_PATH", "OUTCOME", "PROBABILITY", "RISK", "EXPOSURE", "EXECUTION"]
+  },
+  "outputs": ["NEUTRAL_EPISODE", "PHASE", "NOT_EVALUABLE_RECORD", "TYPED_EPISODE_BINDING", "EPISODE_LEDGER"],
+  "prohibitions": [
+    "CANONICAL_EPISODE_DEFINITION",
+    "SEMANTIC_EPISODE_NAME",
+    "FAMILY_OR_GRAMMAR_PROMOTION",
+    "SELECTOR_ACTIVATION",
+    "C3_HANDOFF",
+    "PUBLICATION_OR_VALIDATION",
+    "PROBABILITY_RISK_EXPOSURE_EXECUTION"
+  ],
+  "rollback": "Remove or supersede the inactive builder while preserving contract, schemas, registries, fixtures, QA and decisions. Never infer continuity across missingness or rewrite C2 history."
+}
