@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-srfdi-g8r-wp2-qa-gate-packet/v1",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_artifact_sha256": "f1e6515f68a97ee50c5273cb13312622376ac9650c6cf7612c48c18588fb0408",
+  "packet_id": "SRFDI-G8R-WP2",
+  "gate_id": "SRFDI-G8R-G2",
+  "gate_class": "AUTO_RATIFIABLE",
+  "baseline_commit": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
+  "implementation_candidate_commit": "0101e3f2df3cfb36cf86938c1a91f2d4e56d1e72",
+  "pr_number": 386,
+  "change_classes": ["COMPUTE_ONLY_EQUIVALENT", "PHYSICAL_STORAGE_ONLY", "ORCHESTRATION_ONLY", "OBSERVABILITY_ONLY"],
+  "acceptance": {
+    "prepared_exact_distance_matches_reference": "PASS",
+    "deterministic_worker_1_2_4_equivalence": "PASS",
+    "semantic_cache_identity_and_corruption_quarantine": "PASS",
+    "verified_complete_tile_restart_no_recompute": "PASS",
+    "measured_p0_p1_feasibility_bridge": "PASS",
+    "bridge_logical_equivalence": "PASS",
+    "no_multiplicative_speedup_claim": "PASS",
+    "storage_io_tile_ladder_measured": "PASS",
+    "numpy_remains_candidate_unadmitted": "PASS",
+    "temporary_bridge_workflow_deleted_under_operator_authority": "PASS",
+    "external_bridge_artifact_bound_into_repository_evidence": "PASS",
+    "scientific_semantics_unchanged": "PASS"
+  },
+  "tests": {
+    "repository_suite": {"run_id": 31213146317, "conclusion": "success"},
+    "tiered": {"run_id": 31213146164, "conclusion": "success"},
+    "profile_assurance_job_id": 92980452215,
+    "compatibility_job_id": 92980488473,
+    "merge_readiness_job_id": 92980488280,
+    "merge_readiness_conclusion": "success",
+    "feasibility_bridge_run_id": 31212253831,
+    "feasibility_bridge_conclusion": "success"
+  },
+  "external_evidence": {
+    "artifact_id": 9007134518,
+    "artifact_digest": "sha256:82d6a4f7c4a191015b95f172038d68145f0b1cc56809f08a59b30d0eb3523159",
+    "workflow_head_sha": "a34cd1d57432fc21aee23243ed67442dbca9ed3e",
+    "feasibility_receipt_logical_hash": "ff7411b8bfc4bb5bbb94fb4ddd36ee9a21777139bf81a523c832961bad392848",
+    "storage_io_receipt_logical_hash": "a1ccfa78f2ea8701ea99e55854adbdc52c871ff5f810bcf07310295433a5323d"
+  },
+  "bridge_summary": {
+    "disposition": "PLAUSIBLE",
+    "p1_pairwise_marginal_improvement_factor": 1.2095848760012702,
+    "p1_reference_external_bytes": 8551680,
+    "p1_candidate_external_bytes": 261120,
+    "p1_worker_1_wall_seconds": 1.6692144249999998,
+    "p1_worker_2_wall_seconds": 0.8788604490000012,
+    "p1_worker_4_wall_seconds": 0.8753040539999972,
+    "remaining_bottleneck": "FAMILY_METHOD_OPTIMIZATION_NOT_YET_AUTHORISED"
+  },
+  "authority": {
+    "wp9": "DENIED",
+    "june": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "method_or_semantic_promotion": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "non_blocking_observations": [
+    "P2-P4 forecasts are extrapolated from P1 pairwise evidence only.",
+    "Family-method optimisation remains outside current authority.",
+    "NumPy remains CANDIDATE_UNADMITTED."
+  ],
+  "qa_recommendation": "PASS",
+  "rollback": "Revert WP2 compute/orchestration/storage-equivalent files non-destructively; preserve measured bridge evidence and revert to the last admitted exact/reference path.",
+  "decision": "PASS",
+  "next_packet": "SRFDI-G8R-WP3",
+  "next_operator_stop": "SRFDI-G8R-G2F"
+}
