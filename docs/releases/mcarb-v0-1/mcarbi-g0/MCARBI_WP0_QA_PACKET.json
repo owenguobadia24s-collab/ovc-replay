@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-mcarbi-wp0-qa-packet/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "plan_id": "OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "packet_id": "MCARBI-WP0",
+  "gate_id": "MCARBI-G0",
+  "baseline_commit": "d90432957df146bf448287cedf4da73a8c861ebe",
+  "branch": "gate/mcarbi-g0-preflight",
+  "qa_scope": "COURT_RECORD_PREFLIGHT_AND_PLAN_PREREQUISITE_RECONCILIATION_ONLY",
+  "checks": [
+    {"check": "implementation_plan_identity_and_hash_recorded", "result": "PASS"},
+    {"check": "latest_lawful_main_pinned", "result": "PASS"},
+    {"check": "mcarb_d8_operator_acceptance_recorded", "result": "FAIL"},
+    {"check": "opt_a_c1_c2_release_and_selector_state_reconciled", "result": "PASS"},
+    {"check": "validation_default_deny_and_locked_unconsumed_confirmed", "result": "PASS"},
+    {"check": "srfd_g8_redesign_and_pr371_preservation_reconciled", "result": "PASS_WITH_BOUNDARY"},
+    {"check": "mcarb_specific_retained_source_read_reread_authority_resolved", "result": "UNRESOLVED"},
+    {"check": "new_provider_intake_authority_absent", "result": "PASS"},
+    {"check": "market_benchmark_execution_attempted", "result": "PASS_FALSE"},
+    {"check": "validation_read_attempted", "result": "PASS_FALSE"},
+    {"check": "selector_or_production_activation_attempted", "result": "PASS_FALSE"}
+  ],
+  "blocking_findings": [
+    "MCARB-D8 remains OPERATOR_REQUIRED, GATE_READY, OPEN and UNMERGED with no decision record.",
+    "MCARB-specific authority to reread retained source-object bytes for the source-semantics audit is not court-recorded."
+  ],
+  "non_blocking_boundaries": [
+    "SRFDI remains REDESIGN_REQUIRED and grants MCARB no inherited method or capacity authority.",
+    "PR #371 remains preserved and unmodified.",
+    "Validation 2025 remains LOCKED_UNCONSUMED and default DENIED.",
+    "No new provider intake is authorised or required for MCARBI-G0 preflight."
+  ],
+  "tests": {
+    "repository_code_changes": false,
+    "targeted_runtime_tests": "NOT_APPLICABLE_TO_PREFLIGHT_ONLY_PACKET",
+    "complete_repository_suite": "DEFER_UNTIL_PR_CI; NO CODE OR CONTRACT IMPLEMENTATION HAS STARTED"
+  },
+  "qa_recommendation": "DEFER_PENDING_PREREQUISITES",
+  "recommended_operator_action": "Resolve MCARB-D8 first. After D8 PASS is recorded/merged, explicitly resolve retained-source reread authority for MCARB audit-only operations, then rerun MCARBI-WP0 from the latest lawful main.",
+  "authority_delta": "NONE",
+  "rollback": "Revert only MCARBI-WP0 preflight/receipt records. No source, release, selector, SRFD, C2 or Validation state was mutated."
+}
