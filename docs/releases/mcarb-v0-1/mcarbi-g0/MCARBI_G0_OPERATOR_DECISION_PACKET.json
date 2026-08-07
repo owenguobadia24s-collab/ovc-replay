@@ -7,18 +7,17 @@
   "gate_id": "MCARBI-G0",
   "gate_title": "MCARB Implementation Plan Ratification / Prerequisite Check",
   "gate_class": "OPERATOR_REQUIRED",
-  "status": "GATE_READY",
+  "status": "APPROVED_PENDING_MERGE",
   "baseline_commit": "00c100ece613bbc5bb8de0c8f8ca45425e036037",
   "candidate_branch": "gate/mcarbi-g0-preflight-v2",
-  "current_authority": "MCARB_DESIGN_ACCEPTED; IMPLEMENTATION_NOT_YET_AUTHORISED; MARKET_BENCHMARK_DENIED",
-  "proposed_delta": "Ratify OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED and authorise bounded repository implementation of contracts, registries, deterministic AL/ET/VS transforms, RepresentationPack compilation, fixtures, QA, local capacity profiling and preregistration preparation. Also explicitly authorise read-only audit access to already-governed non-Validation retained Dukascopy source objects and accepted source artifacts solely for MCARB source-semantics/court-record audit. No new provider intake and no market benchmark execution.",
+  "current_authority": "MCARB_DESIGN_ACCEPTED; MCARBI-G0_OPERATOR_PASS_RECORDED; MARKET_BENCHMARK_DENIED",
+  "approved_delta": "Ratify OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED and authorise bounded repository implementation of contracts, registries, deterministic AL/ET/VS transforms, RepresentationPack compilation, fixtures, QA, local capacity profiling and preregistration preparation. Explicitly authorise MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD for already-governed non-Validation retained Dukascopy source objects and accepted source artifacts solely for MCARBI-WP1 source-semantics/court-record audit. No new provider intake and no market benchmark execution.",
   "completed_work": [
     "MCARB-D8 operator PASS recorded and design PR #381 squash-merged to main at 00c100ece613bbc5bb8de0c8f8ca45425e036037.",
-    "Re-pinned latest lawful main and created a fresh bounded MCARBI-WP0 branch.",
+    "Re-pinned latest lawful main and created fresh bounded MCARBI-WP0 branch.",
     "Recorded exact revised implementation-plan SHA-256 8e69914e0928fb4d5d9dfa1c9422cb2e37a53a53e53f3ac5f4f88dbae6143ce3.",
     "Reconciled OPT-A/C1/C2 release state, Validation lock, SRFDI-G8 REDESIGN and PR #371 preservation.",
-    "Separated generic RO read/verify infrastructure from the MCARB-specific retained-source payload-read authority required by the plan.",
-    "Produced preflight and QA evidence only; no source payload read or implementation has started."
+    "Operator explicitly granted audit-only retained-source read/re-read authority with no provider intake or Validation access."
   ],
   "acceptance_conditions": [
     {"condition": "MCARB-D8 design acceptance recorded and integrated", "status": "SATISFIED"},
@@ -26,12 +25,11 @@
     {"condition": "active OPT-A/C1/C2 identities and Validation lock confirmed", "status": "SATISFIED"},
     {"condition": "no unresolved SRFD capacity / PR371 authority conflict", "status": "SATISFIED_WITH_EXPLICIT_BOUNDARY"},
     {"condition": "no new provider intake implied", "status": "SATISFIED"},
-    {"condition": "read/re-read authority for retained source objects explicitly resolved for audit-only operations", "status": "SATISFIED_ONLY_IF_OPERATOR_PASS_INCLUDES_AUDIT_READ_CLAUSE"}
+    {"condition": "read/re-read authority for retained source objects explicitly resolved for audit-only operations", "status": "SATISFIED_BY_OPERATOR_CLAUSE"}
   ],
   "audit_read_clause": {
-    "required_for_pass": true,
     "authority_name": "MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD",
-    "scope": "Read-only access to existing governed non-Validation retained Dukascopy source objects and accepted source artifacts already present in the OVC evidence estate, solely to answer MCARB source-semantics/court-record audit questions.",
+    "scope": "EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY",
     "permitted_operations": [
       "read and hash already-retained source bytes referenced by accepted manifests/receipts",
       "inspect provider volume field/unit/quality semantics by accepted release, side and grain",
@@ -48,18 +46,17 @@
       "selector/threshold/representation/family/semantic activation or promotion",
       "probability/risk/exposure/trading/execution authority"
     ],
-    "expiry": "Ends when MCARBI-WP1 source audit and candidate-triage evidence is accepted or the authority is explicitly superseded; does not survive as generic provider-access authority."
+    "expiry": "Ends when MCARBI-WP1 source-audit and candidate-triage evidence is accepted or explicitly superseded; no generic provider-access authority survives."
   },
   "tests_and_qa": {
     "qa_packet": "docs/releases/mcarb-v0-1/mcarbi-g0/MCARBI_WP0_QA_PACKET.json",
     "preflight_packet": "docs/releases/mcarb-v0-1/mcarbi-g0/MCARBI_WP0_PREFLIGHT.json",
-    "qa_recommendation": "PASS_ONLY_WITH_EXPLICIT_AUDIT_READ_CLAUSE; OTHERWISE_DEFER",
-    "runtime_code_tests": "NOT_APPLICABLE_NO_IMPLEMENTATION_STARTED",
-    "repository_ci": "REQUIRED_ON_EXACT_PR_HEAD"
+    "qa_recommendation": "PASS_WITH_EXPLICIT_AUDIT_READ_CLAUSE",
+    "exact_head_assurance": "RERUN_REQUIRED_AFTER_DECISION_RECORD"
   },
   "warnings": [
-    "AL source semantics remain scientifically unresolved; G0 audit-read authority does not imply AL_SOURCE_PASS.",
-    "Tick/update-count retained-data availability remains unproven and no new intake may be used to cure absence.",
+    "AL source semantics remain scientifically unresolved; audit-read authority does not imply AL_SOURCE_PASS.",
+    "Tick/update-count retained-data availability remains unproven and no new intake may cure absence.",
     "SRFDI-G8 is REDESIGN_REQUIRED; MCARB inherits neither capacity PASS nor family/method authority."
   ],
   "unresolved_issues_after_pass": [
@@ -67,19 +64,12 @@
     "AL source semantics and retained tick/update availability",
     "later Stage-A population/capacity/preregistration gates"
   ],
-  "changed_files": [
-    "docs/implementation-plans/mcarb-v0-1/OVC_MCARB_IMPLEMENTATION_PLAN_v0_1_REVISED_SOURCE_RECEIPT.json",
-    "docs/releases/mcarb-v0-1/mcarbi-g0/MCARBI_WP0_PREFLIGHT.json",
-    "docs/releases/mcarb-v0-1/mcarbi-g0/MCARBI_WP0_QA_PACKET.json",
-    "docs/releases/mcarb-v0-1/mcarbi-g0/MCARBI_G0_OPERATOR_DECISION_PACKET.json",
-    "registries/research/mcarb/MCARBI_PROGRAMME_STATE.yaml",
-    "registries/research/mcarb/MCARB_PROGRAMME_STATE.yaml"
-  ],
-  "external_artifact": {
-    "implementation_plan_filename": "OVC_Market_Context_Auxiliary_Representation_Benchmark_Programme_Implementation_Plan_v0_1_REVISED(1).docx",
-    "sha256": "8e69914e0928fb4d5d9dfa1c9422cb2e37a53a53e53f3ac5f4f88dbae6143ce3",
-    "size_bytes": 71279,
-    "pages": 31
+  "decision_record": "docs/releases/mcarb-v0-1/mcarbi-g0/MCARBI_G0_OPERATOR_DECISION.json",
+  "operator_decision": {
+    "decision_id": "MCARBI-G0.OPERATOR.PASS.20260807T201800+0100",
+    "decision": "PASS",
+    "audit_read": "EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY",
+    "recorded_at": "2026-08-07T20:18:00+01:00"
   },
   "authority_firewall": {
     "market_benchmark": "DENIED_UNTIL_MCARBI_G_STAGE_A_AUTH",
@@ -90,11 +80,6 @@
     "probability_risk_exposure_execution": "NONE",
     "pr_371": "PRESERVE_DO_NOT_MERGE"
   },
-  "rollback": "Disable/revert rebuildable MCARB implementation through a new non-destructive commit while preserving source-audit, gate, QA and decision evidence. The audit-read clause may be revoked by explicit operator supersession; no source object may be deleted or rewritten.",
-  "recommended_decision": "PASS",
-  "recommended_decision_condition": "PASS must include audit_read_clause.authority_name exactly; PASS without the clause is treated as DEFER because Section 1.1 would remain unsatisfied.",
-  "allowed_decisions": ["PASS","ADJUST_SCOPE","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
-  "operator_decision": null,
-  "exact_operator_command": "OVC APPROVE MCARBI-G0 PASS AUDIT_READ=EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY",
-  "next_action_after_pass": "Record G0 decision and audit-read authority, merge bounded G0 state, then execute MCARBI-WP1 source audit + all-44-candidate triage and stop at MCARBI-G1."
+  "rollback": "Revoke bounded authority by explicit supersession and revert rebuildable MCARB implementation non-destructively; preserve decision/source-audit evidence and retained source bytes.",
+  "next_action_after_merge": "Execute MCARBI-WP1 source audit + all-44-candidate triage and stop at MCARBI-G1."
 }
