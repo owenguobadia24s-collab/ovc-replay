@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-mcarbi-g1-operator-decision-packet/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "plan_id": "OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "MCARBI-WP1",
+  "gate_id": "MCARBI-G1",
+  "gate_title": "Candidate Triage Freeze",
+  "gate_class": "OPERATOR_REQUIRED",
+  "status": "GATE_READY",
+  "baseline_commit": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
+  "candidate_branch": "audit/mcarbi-wp1-source-triage",
+  "completed_packets": ["MCARBI-WP0","MCARBI-WP1"],
+  "current_authority": "BOUNDED_MCARB_IMPLEMENTATION; MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD; NO_MARKET_BENCHMARK",
+  "proposed_delta": "Freeze the 44-candidate implementation-eligibility registry and branch-local dependency graph. Accept AL_SOURCE_PARTIAL with side-specific M1 provider activity eligible, cross-side/tick/spread-proxy limits preserved. No scientific value selection and no market execution.",
+  "acceptance_conditions": [
+    {"condition":"all 44 candidates have explicit disposition/dependency/chronology/cost/Stage-A/blocking scope","status":"SATISFIED"},
+    {"condition":"source audit tied to exact retained non-Validation artifacts","status":"SATISFIED"},
+    {"condition":"AL failures are branch-local and cannot block ET-price/VS-price","status":"SATISFIED"},
+    {"condition":"no new provider intake or Validation access","status":"SATISFIED"},
+    {"condition":"Stage-A proposed set is non-executable and provisional","status":"SATISFIED"}
+  ],
+  "tests_and_qa": {
+    "qa_packet": "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_QA_PACKET.json",
+    "qa_recommendation": "PASS_WP1_TO_OPERATOR_G1_WITH_AL_SOURCE_PARTIAL",
+    "repository_ci": "REQUIRED_ON_EXACT_PR_HEAD"
+  },
+  "warnings": [
+    "AL source outcome is PARTIAL, not global PASS.",
+    "Cross-side BID/ASK activity semantics remain unresolved for AL-10.",
+    "No retained tick/update family was found; AL-02/03 remain T3 and AL-11 lacks real tick proxy-quality evidence.",
+    "Provider-native H1 volume is not exact semantic corroboration and includes a material 2022-10-18T12Z mismatch.",
+    "Authoritative per-row volume quality_state distribution is not serialized in accepted canonical CSV payloads; do not invent it."
+  ],
+  "unresolved_issues": [
+    "AL-10 cross-side semantic comparability",
+    "retained tick/update evidence absent for AL-02/03",
+    "AL-11 real-data proxy-quality evidence not evaluable",
+    "VS-04/05 and ET-VAR exact variants still require later VariantSpec/preregistration"
+  ],
+  "changed_files": [
+    "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_AUXILIARY_DATA_AUDIT.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_STAGE_A_PROPOSED_SET.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_QA_PACKET.json",
+    "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_G1_OPERATOR_DECISION_PACKET.json",
+    "registries/research/mcarb/MCARB_CANDIDATE_DISPOSITION_REGISTRY_v0_1.json",
+    "registries/research/mcarb/MCARB_BRANCH_DEPENDENCY_GRAPH_v0_1.json",
+    "registries/research/mcarb/MCARBI_PROGRAMME_STATE.yaml"
+  ],
+  "external_artifacts": [
+    {"artifact_id":8624129176,"name":"wp4-provider-population-2021","sha256":"611b4a97b70ed0a8db6a7748b03c129b14ea19d251580d5bb40611a0d3267557"},
+    {"artifact_id":8624155769,"name":"wp4-provider-population-2022","sha256":"f0a2437e8cee54bc4b63479a42f950c3a66224c79f230481fe77095f6587a4ab"},
+    {"artifact_id":8624113131,"name":"wp4-provider-population-2023","sha256":"48d65c265c6589a122f9141ec6bd9929c19b0a325b4d899227e61544a2a9c9a9"},
+    {"artifact_id":8624285770,"name":"wp4-provider-population-2024","sha256":"bac87b3a68df7b01bf116b5a501576cfa39bc30561e73de812b41a251c32b265"},
+    {"artifact_id":8633917454,"name":"opt-a-v2-r2-exact-parent-roots","sha256":"6ba85619d21e4ac84bab2838adb237c4cb8fdd5b69bacd185c862712ddd8e47e"}
+  ],
+  "authority_firewall": {
+    "stage_a_run": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "provider_intake": "DENIED",
+    "selector": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "rollback": "Do not mutate source evidence. If adjusted/deferred, preserve audit receipts and revise eligibility registry in a new bounded commit.",
+  "recommended_decision": "ACCEPT_TRIAGE",
+  "allowed_decisions": ["ACCEPT_TRIAGE","ADJUST_TRIAGE","DEFER","BLOCK"],
+  "exact_operator_command": "OVC APPROVE MCARBI-G1 ACCEPT_TRIAGE",
+  "next_action_after_accept": "Execute MCARBI-WP2 contracts/schemas/registries; G2 is auto-ratifiable if QA passes and authority delta remains bounded."
+}
