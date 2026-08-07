@@ -1,0 +1,140 @@
+{
+  "schema": "ovc-srfdi-capacity-receipt/v1",
+  "object_type": "SRFDCapacityReceipt",
+  "authority_state": "FIXTURE_ONLY",
+  "measurement_source": {
+    "candidate_commit": "ffd249f995dff926b74ba4885daf66931093a790",
+    "tests_workflow_run_id": 31198080679,
+    "tests_conclusion": "success",
+    "tiered_workflow_run_id": 31198079684,
+    "tiered_conclusion": "success",
+    "merge_readiness_job_id": 92931182499,
+    "merge_readiness_conclusion": "success",
+    "runner": "GitHub-hosted Ubuntu 24.04 / CPython 3.11.15"
+  },
+  "mode": "SYNTHETIC_GOLDEN_FULL_ENUMERATION",
+  "sampling": "NONE",
+  "approximation_state": "EXACT_SYNTHETIC_GOLDEN",
+  "budget": {
+    "max_runtime_seconds": 14400,
+    "max_peak_rss_bytes": 17179869184,
+    "max_external_bytes": 10737418240
+  },
+  "measurements": {
+    "representation": {
+      "population_count": 256,
+      "dimensions": 5,
+      "elapsed_seconds": 0.18805936200000417,
+      "records_per_second": 1361.2722986904228,
+      "bytes_per_record": 785.27734375,
+      "tracemalloc_peak_bytes": 323608,
+      "process_peak_rss_bytes": 38166528,
+      "output_hash": "31028ef154370cc6e099b22b3c96edbe1122273455de8e176e934ba14fdf58cf"
+    },
+    "pairwise": {
+      "population_count": 128,
+      "dimensions": 5,
+      "pair_count": 8128,
+      "elapsed_seconds": 3.3875337479999956,
+      "pairs_per_second": 2399.385690193871,
+      "bytes_per_pair": 262.0,
+      "tracemalloc_peak_bytes": 88476,
+      "process_peak_rss_bytes": 38166528,
+      "output_hash": "6e31498039b3b6949f3cf60a83b96ff1d69b84563a5b15f81732381425d8113c",
+      "sampling": "NONE_FULL_SYNTHETIC_PAIR_POPULATION",
+      "approximation_state": "EXACT_SYNTHETIC_GOLDEN"
+    },
+    "family_methods": {
+      "population_count": 48,
+      "methods": {
+        "AVERAGE_LINKAGE": {
+          "elapsed_seconds": 0.34484521000000257,
+          "profile_population_count": 48,
+          "declared_projection_exponent": 3,
+          "family_count": 12,
+          "residual_count": 0,
+          "tracemalloc_peak_bytes": 129280,
+          "output_hash": "b8a69e7129d48a2f59e72efc0944e9cc4526500fa2d9694642053665c73d089f"
+        },
+        "BOUNDED_PAM": {
+          "elapsed_seconds": 0.01791964100000598,
+          "profile_population_count": 48,
+          "declared_projection_exponent": 2,
+          "family_count": 1,
+          "residual_count": 17,
+          "tracemalloc_peak_bytes": 18543,
+          "output_hash": "61c189570a376ed41c39586e389f4cf087e040dbddd7ca1df1a7c77d3f337f5b"
+        },
+        "COMPLETE_LINKAGE": {
+          "elapsed_seconds": 0.2895556510000006,
+          "profile_population_count": 48,
+          "declared_projection_exponent": 3,
+          "family_count": 12,
+          "residual_count": 0,
+          "tracemalloc_peak_bytes": 206989,
+          "output_hash": "560512179ba2222a4f4771e553fda7935c8441557e82f4df692af1a5377e587a"
+        },
+        "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": {
+          "elapsed_seconds": 0.03939678999999785,
+          "profile_population_count": 48,
+          "declared_projection_exponent": 3,
+          "family_count": 7,
+          "residual_count": 0,
+          "tracemalloc_peak_bytes": 67571,
+          "output_hash": "2b93e505a6309e0a17e8bb4a9e15ced0671a7759c9a8d0c5fe20dd807281d8b9"
+        }
+      }
+    },
+    "checkpoint_restart": {
+      "full_elapsed_seconds": 0.07934258900000657,
+      "resume_elapsed_seconds": 0.049028577000001405,
+      "logical_equivalence": true,
+      "byte_equivalence": true
+    },
+    "process_peak_rss_bytes": 38166528
+  },
+  "reference_population": {
+    "population_count": 8598,
+    "basis": {
+      "source": "existing June full-month MDR coverage record only",
+      "path": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/coverage.json",
+      "field": "target_c2_state_count",
+      "source_blob_sha": "2e283c6ec0b2d0fb5c65adfce1e22d80b2cd4427",
+      "qualification": "not an SRFD eligible-population binding and not a June benchmark run"
+    },
+    "binding_status": "NON_BINDING_CAPACITY_REFERENCE_ONLY",
+    "srfd_eligible_population": "NOT_BOUND_AT_WP8"
+  },
+  "reference_projection": {
+    "population_count": 8598,
+    "pair_count": 36958503,
+    "representation_seconds": 6.316149978422015,
+    "pairwise_seconds": 15403.318920774984,
+    "pairwise_external_bytes": 9683127786,
+    "family_method_seconds": {
+      "AVERAGE_LINKAGE": 1981950.5205316744,
+      "BOUNDED_PAM": 574.9654012103325,
+      "COMPLETE_LINKAGE": 1664181.367699249,
+      "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 226427.64400808184
+    },
+    "worst_family_method": "AVERAGE_LINKAGE",
+    "worst_family_method_seconds": 1981950.5205316744,
+    "projected_runtime_seconds": 1997360.155602428,
+    "capacity_status": "CAPACITY_EXCEEDED",
+    "reasons": ["CAPACITY_EXCEEDED_RUNTIME"]
+  },
+  "interpretation_limits": {
+    "reference_projection_is_not_measured_June_runtime": true,
+    "family_method_projection_uses_declared_complexity_scaling_from_48_fixture_records": true,
+    "comparability_partitioning_not_applied_to_8598_reference": true,
+    "episode_population_reduction_not_assumed": true,
+    "exact_SRFD_June_population_not_bound": true,
+    "no_method_is_selected_or_rejected_by_this_receipt": true
+  },
+  "june_market_records_read": false,
+  "june_benchmark_executed": false,
+  "validation_consumed": false,
+  "canonical_method_selected": false,
+  "capacity_profile_id": "SRFD.CAPACITY.PROFILE.8ffc59c4175f75f26fe08040614baa7aaedee897890aebe7e2c611cfb812e724",
+  "measurement_logical_hash": "1c1eab438536d26e7d4b86a0d250b8cc65c92ed2bba6bc3cf3be33d05bafc27b"
+}
