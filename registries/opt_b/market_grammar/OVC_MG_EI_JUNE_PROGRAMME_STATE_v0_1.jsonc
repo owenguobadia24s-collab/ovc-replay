@@ -3,14 +3,14 @@
   "programme_id": "OVC-MARKET-GRAMMAR-EMPIRICAL-INTEGRATION-JUNE-v0.1",
   "plan_id": "OVC-MG-EI-JUNE-IMPLEMENTATION",
   "plan_version": "0.1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "baseline_commit": "cb91ff3fc0a28a9f416aacb86aa92e74d5e676b4",
   "branch": "build/mg-ei-wp1-real-c2-adapter",
-  "candidate_commit": null,
+  "candidate_commit": "9b83f7b807b6d629cd23ddc8b8e1106c52122fbf",
   "merge_commit": "a9cb8e53348314582c3d02a1edcf49dd87689dad",
-  "authority_required": "AUTO_EXECUTABLE_WITHIN_MG_WP10_OPERATOR_APPROVAL",
+  "authority_required": "SATISFIED_DELEGATED_DECISION",
   "authority_delta": "READ_ONLY_REAL_REVISED_C2_SHADOW_ADAPTER_ONLY",
-  "decision_record": null,
+  "decision_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_DELEGATED_DECISION.json",
   "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_QA_PACKET.json",
   "blockers": [],
   "warnings": [
@@ -19,64 +19,13 @@
     "WP8_C2_TO_C2G_PROJECTION_REMAINS_MOCKED_UNTIL_EI_WP2",
     "NO_CANONICAL_SELECTION_OR_PROMOTION_AUTHORITY"
   ],
-  "next_action": "RUN_EI_WP1_EXACT_HEAD_ASSURANCE_AUTO_RATIFY_AND_SQUASH_MERGE",
+  "next_action": "RUN_EI_WP1_DECISION_HEAD_ASSURANCE_AND_SQUASH_MERGE",
   "next_packet": "EI-WP1",
   "packets": [
-    {
-      "packet_id": "EI-WP0",
-      "status": "COMPLETED",
-      "prerequisites": ["MG-WP10-COMPLETED", "PGN-POST-SNAPSHOT-MG-EI-JUNE-002"],
-      "authority_required": "SATISFIED_DELEGATED_DECISION",
-      "authority_delta": "NONE_FOUNDATION_AND_EXACT_EVIDENCE_BINDING_ONLY",
-      "baseline_commit": "a3ed3cf66432cfc7f33141a44c05252e85813df8",
-      "branch": "build/mg-ei-wp0-foundation",
-      "candidate_commit": "9a1518098d6b4ee42f04308005ac9b82d35f8d46",
-      "tests": "PASS_EXACT_HEAD",
-      "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/EI_WP0_QA_PACKET.json",
-      "decision_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/EI_WP0_DELEGATED_DECISION.json",
-      "merge_commit": "a9cb8e53348314582c3d02a1edcf49dd87689dad",
-      "blockers": [],
-      "next_packet": "EI-WP1"
-    },
-    {
-      "packet_id": "EI-WP1",
-      "status": "QA_REVIEW",
-      "prerequisites": ["EI-WP0"],
-      "authority_required": "AUTO_EXECUTABLE_WITHIN_MG_WP10_OPERATOR_APPROVAL",
-      "authority_delta": "READ_ONLY_REAL_REVISED_C2_SHADOW_ADAPTER_ONLY",
-      "baseline_commit": "cb91ff3fc0a28a9f416aacb86aa92e74d5e676b4",
-      "branch": "build/mg-ei-wp1-real-c2-adapter",
-      "candidate_commit": null,
-      "tests": "FOCUSED_AND_EXACT_HEAD_REQUIRED",
-      "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_QA_PACKET.json",
-      "decision_record": null,
-      "merge_commit": null,
-      "blockers": [],
-      "next_packet": "EI-WP2"
-    },
-    {
-      "packet_id": "EI-WP2",
-      "status": "PLANNED",
-      "prerequisites": ["EI-WP1"],
-      "authority_required": "AUTO_EXECUTABLE_WITHIN_MG_WP10_OPERATOR_APPROVAL",
-      "authority_delta": "READ_ONLY_REAL_C2_TO_C2G_PROJECTION_ONLY",
-      "next_packet": "EI-WP3"
-    },
-    {
-      "packet_id": "EI-WP3",
-      "status": "PLANNED",
-      "prerequisites": ["EI-WP2"],
-      "authority_required": "AUTO_EXECUTABLE_WITHIN_MG_WP10_OPERATOR_APPROVAL",
-      "authority_delta": "EMPIRICAL_SHADOW_REPLAY_AND_REPRODUCIBILITY_EVIDENCE_ONLY",
-      "next_packet": "EI-WP4"
-    },
-    {
-      "packet_id": "EI-WP4",
-      "status": "PLANNED",
-      "prerequisites": ["EI-WP3"],
-      "authority_required": "AUTO_EXECUTABLE_IF_NO_RESERVED_DELTA_ELSE_OPERATOR_REQUIRED",
-      "authority_delta": "EMPIRICAL_COMPARISON_AND_CLOSEOUT_ONLY_UNLESS_SEPARATE_RESERVED_PROPOSAL",
-      "next_packet": null
-    }
+    {"packet_id":"EI-WP0","status":"COMPLETED","prerequisites":["MG-WP10-COMPLETED","PGN-POST-SNAPSHOT-MG-EI-JUNE-002"],"authority_required":"SATISFIED_DELEGATED_DECISION","authority_delta":"NONE_FOUNDATION_AND_EXACT_EVIDENCE_BINDING_ONLY","baseline_commit":"a3ed3cf66432cfc7f33141a44c05252e85813df8","branch":"build/mg-ei-wp0-foundation","candidate_commit":"9a1518098d6b4ee42f04308005ac9b82d35f8d46","tests":"PASS_EXACT_HEAD","qa_packet":"docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/EI_WP0_QA_PACKET.json","decision_record":"docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/EI_WP0_DELEGATED_DECISION.json","merge_commit":"a9cb8e53348314582c3d02a1edcf49dd87689dad","blockers":[],"next_packet":"EI-WP1"},
+    {"packet_id":"EI-WP1","status":"APPROVED","prerequisites":["EI-WP0"],"authority_required":"SATISFIED_DELEGATED_DECISION","authority_delta":"READ_ONLY_REAL_REVISED_C2_SHADOW_ADAPTER_ONLY","baseline_commit":"cb91ff3fc0a28a9f416aacb86aa92e74d5e676b4","branch":"build/mg-ei-wp1-real-c2-adapter","candidate_commit":"9b83f7b807b6d629cd23ddc8b8e1106c52122fbf","tests":"IMPLEMENTATION_HEAD_PASS_DECISION_HEAD_REQUIRED","qa_packet":"docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_QA_PACKET.json","decision_record":"docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_DELEGATED_DECISION.json","merge_commit":null,"blockers":[],"next_packet":"EI-WP2"},
+    {"packet_id":"EI-WP2","status":"PLANNED","prerequisites":["EI-WP1"],"authority_required":"AUTO_EXECUTABLE_WITHIN_MG_WP10_OPERATOR_APPROVAL","authority_delta":"READ_ONLY_REAL_C2_TO_C2G_PROJECTION_ONLY","next_packet":"EI-WP3"},
+    {"packet_id":"EI-WP3","status":"PLANNED","prerequisites":["EI-WP2"],"authority_required":"AUTO_EXECUTABLE_WITHIN_MG_WP10_OPERATOR_APPROVAL","authority_delta":"EMPIRICAL_SHADOW_REPLAY_AND_REPRODUCIBILITY_EVIDENCE_ONLY","next_packet":"EI-WP4"},
+    {"packet_id":"EI-WP4","status":"PLANNED","prerequisites":["EI-WP3"],"authority_required":"AUTO_EXECUTABLE_IF_NO_RESERVED_DELTA_ELSE_OPERATOR_REQUIRED","authority_delta":"EMPIRICAL_COMPARISON_AND_CLOSEOUT_ONLY_UNLESS_SEPARATE_RESERVED_PROPOSAL","next_packet":null}
   ]
 }
