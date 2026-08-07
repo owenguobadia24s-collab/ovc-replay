@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-mg-delegated-decision/v1",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION",
+  "plan_version": "0.1",
+  "packet_id": "MG-WP9",
+  "baseline_commit": "49310ef33c9f4ffe8ba1e12ae65180b25bdcd17c",
+  "candidate_implementation_commit": "271765559242e8bafb43e0cba81f17ba3e643919",
+  "implementation_pr": 361,
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION",
+  "decision_scope": "CONDITIONAL_ON_EXACT_DECISION_HEAD_ASSURANCE_BEFORE_MERGE",
+  "qa": "PASS_CONDITIONAL_ON_EXACT_DECISION_HEAD_ASSURANCE",
+  "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_READ_ONLY_REVIEW_ONLY",
+  "reserved_authority_delta": "NONE",
+  "rationale": "MG-WP9 implements only a deterministic replaceable read model over already-completed market-grammar evidence. The implementation head passed the complete repository suite, FINAL_HEAD assurance, compatibility and merge readiness with zero unresolved review threads. The review model has no mutation, canonical selection, selector, promotion or publication controls. Delegated PASS is therefore lawful, subject to repeating the required assurance on the decision head before squash merge.",
+  "implementation_head_tests": {
+    "complete_repository_suite": {"run_id": 31172336380, "job_id": 92846687691, "result": "PASS"},
+    "final_head": {"run_id": 31172336334, "job_id": 92846687047, "result": "PASS"},
+    "compatibility": {"run_id": 31172336334, "job_id": 92846751733, "result": "PASS"},
+    "merge_readiness": {"run_id": 31172336334, "job_id": 92846751735, "result": "PASS"},
+    "unresolved_review_threads": 0
+  },
+  "decision_head_assurance": "REQUIRED_BEFORE_MERGE",
+  "warnings": [
+    "WP9_IS_A_REPLACEABLE_DERIVED_READ_MODEL_AND_NEVER_OUTRANKS_RAW_SOURCE_RECORDS",
+    "WP8_REVISED_C2_AND_C2G_PROJECTION_MOCKED_BOUNDARIES_REMAIN_VISIBLE",
+    "TYPED_EMPIRICAL_MATCH_PARITY_REMAINS_NOT_EVALUATED"
+  ],
+  "rollback": "Revert the bounded MG-WP9 squash commit while preserving all WP1-WP8 evidence, decisions and raw source records.",
+  "next_packet": "MG-WP10"
+}

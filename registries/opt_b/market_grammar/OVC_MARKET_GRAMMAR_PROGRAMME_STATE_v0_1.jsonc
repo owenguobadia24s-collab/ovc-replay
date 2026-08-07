@@ -1,13 +1,13 @@
 {
-  "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
-  "authority_required": "AUTO_EXECUTABLE",
-  "baseline_commit": "6d5d08d379f4cbdd280560766b59badb985152df",
+  "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_READ_ONLY_REVIEW_ONLY",
+  "authority_required": "SATISFIED_DELEGATED_DECISION",
+  "baseline_commit": "49310ef33c9f4ffe8ba1e12ae65180b25bdcd17c",
   "blockers": [],
-  "branch": null,
-  "candidate_commit": null,
-  "decision_record": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp8/MG_WP8_DELEGATED_DECISION.json",
-  "merge_commit": "6d5d08d379f4cbdd280560766b59badb985152df",
-  "next_action": "BEGIN_MG_WP9_FROM_LATEST_MAIN",
+  "branch": "build/mg-wp9-read-only-review",
+  "candidate_commit": "271765559242e8bafb43e0cba81f17ba3e643919",
+  "decision_record": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp9/MG_WP9_DELEGATED_DECISION.json",
+  "merge_commit": "49310ef33c9f4ffe8ba1e12ae65180b25bdcd17c",
+  "next_action": "RUN_EXACT_DECISION_HEAD_ASSURANCE_AND_SQUASH_MERGE_MG_WP9",
   "next_packet": "MG-WP9",
   "packets": [
     {"authority_required":"SATISFIED_DELEGATED_DECISION","next_packet":"MG-WP0","packet_id":"MG-D0-D8","prerequisites":["C2AR-G11","PGN-POST-SNAPSHOT-MG-001"],"status":"COMPLETED"},
@@ -20,14 +20,18 @@
     {"authority_required":"SATISFIED_DELEGATED_DECISION","next_packet":"MG-WP7","packet_id":"MG-WP6","prerequisites":["MG-WP5"],"status":"COMPLETED"},
     {"authority_required":"SATISFIED_DELEGATED_DECISION","baseline_commit":"9dbd2615cdb1b87c60a1fdb4920ae75877ff6736","candidate_commit":"2992f966f9422417dba3fef9183ef4bb2a038954","decision_record":"docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp7/MG_WP7_DELEGATED_DECISION.json","merge_commit":"5a88edfb4a6b32aca3ee95f28bd7d5be192a5df7","next_packet":"MG-WP8","packet_id":"MG-WP7","prerequisites":["MG-WP6"],"qa_packet":"docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp7/MG_WP7_QA_PACKET.json","status":"COMPLETED"},
     {"authority_required":"SATISFIED_DELEGATED_DECISION","baseline_commit":"8f149391aba1c2132968b6167f487620b4f95e5b","candidate_commit":"eb666577a39cee6817843ebfa4a2c21097fdfd61","decision_record":"docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp8/MG_WP8_DELEGATED_DECISION.json","merge_commit":"6d5d08d379f4cbdd280560766b59badb985152df","next_packet":"MG-WP9","packet_id":"MG-WP8","prerequisites":["MG-WP7"],"qa_packet":"docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp8/MG_WP8_QA_PACKET.json","status":"COMPLETED"},
-    {"authority_required":"AUTO_EXECUTABLE","next_packet":"MG-WP10","packet_id":"MG-WP9","prerequisites":["MG-WP8"],"status":"READY"},
+    {"authority_required":"SATISFIED_DELEGATED_DECISION","baseline_commit":"49310ef33c9f4ffe8ba1e12ae65180b25bdcd17c","candidate_commit":"271765559242e8bafb43e0cba81f17ba3e643919","decision_record":"docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp9/MG_WP9_DELEGATED_DECISION.json","next_packet":"MG-WP10","packet_id":"MG-WP9","prerequisites":["MG-WP8"],"qa_packet":"docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp9/MG_WP9_QA_PACKET.json","status":"APPROVED"},
     {"authority_required":"OPERATOR_REQUIRED","next_packet":null,"packet_id":"MG-WP10","prerequisites":["MG-WP9"],"status":"PLANNED"}
   ],
   "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION",
   "plan_version": "0.1",
   "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
-  "qa_packet": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp8/MG_WP8_QA_PACKET.json",
+  "qa_packet": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp9/MG_WP9_QA_PACKET.json",
   "schema": "ovc-programme-state/v1",
-  "status": "READY",
-  "warnings": []
+  "status": "APPROVED",
+  "warnings": [
+    "WP9_DERIVED_READ_MODEL_NEVER_OUTRANKS_RAW_SOURCE_RECORDS",
+    "WP9_PRESERVES_WP8_MOCKED_BOUNDARY_WARNINGS",
+    "WP9_TYPED_EMPIRICAL_PARITY_REMAINS_NOT_EVALUATED"
+  ]
 }
