@@ -80,7 +80,8 @@ class MarketGrammarWp0Tests(unittest.TestCase):
         self.assertEqual("COMPLETED", packets["MG-WP0"]["status"])
         self.assertEqual("COMPLETED", packets["MG-WP1"]["status"])
         self.assertNotEqual("MG-WP0", self.state["next_packet"])
-        self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
+        self.assertEqual("SATISFIED_OPERATOR_DECISION", packets["MG-WP10"]["authority_required"])
+        self.assertIn(packets["MG-WP10"]["status"], {"APPROVED", "COMPLETED"})
 
 
 if __name__ == "__main__":

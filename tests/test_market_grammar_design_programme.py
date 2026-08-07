@@ -75,7 +75,8 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
             packets["MG-WP2"]["status"],
             {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "APPROVED", "COMPLETED"},
         )
-        self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
+        self.assertEqual("SATISFIED_OPERATOR_DECISION", packets["MG-WP10"]["authority_required"])
+        self.assertIn(packets["MG-WP10"]["status"], {"APPROVED", "COMPLETED"})
 
 
 if __name__ == "__main__":
