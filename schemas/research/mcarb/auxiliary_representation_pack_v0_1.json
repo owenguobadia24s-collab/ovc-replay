@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {"const": "RESEARCH_PACK_ONLY_NO_PROMOTION"},
+    "comparability_domain_id": {"minLength": 1, "type": "string"},
+    "complexity": {"properties": {"categorical_cardinality": {"minimum": 0, "type": "integer"}, "effective_information": {"type": ["number", "null"]}, "feature_count": {"minimum": 0, "type": "integer"}, "free_parameter_count": {"minimum": 0, "type": "integer"}, "lookback_burden": {"minimum": 0, "type": "integer"}, "missingness_burden": {"minimum": 0, "type": "integer"}}, "required": ["feature_count", "free_parameter_count", "lookback_burden", "missingness_burden", "categorical_cardinality"], "type": "object"},
+    "diagnostic_only": {"type": "boolean"},
+    "domains": {"items": {"enum": ["PRICE", "AL", "ET", "VS"]}, "type": "array", "uniqueItems": true},
+    "field_ids": {"items": {"minLength": 1, "type": "string"}, "type": "array", "uniqueItems": true},
+    "normalization_ids": {"items": {"minLength": 1, "type": "string"}, "type": "array", "uniqueItems": true},
+    "pack_id": {"enum": ["R0", "R1", "R2", "R3", "R4", "R4X", "R5", "R6", "D-AL", "D-ET", "D-VS"]},
+    "variant_ids": {"items": {"minLength": 1, "type": "string"}, "type": "array", "uniqueItems": true}
+  },
+  "required": ["pack_id", "domains", "field_ids", "variant_ids", "normalization_ids", "comparability_domain_id", "complexity", "diagnostic_only", "authority"],
+  "title": "MCARB Auxiliary RepresentationPack v0.1",
+  "type": "object"
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "admissible_cutoff": {"format": "date-time", "type": "string"},
+    "authority": {"const": "RESEARCH_ONLY_NO_MARKET_RUN"},
+    "calculation_version": {"minLength": 1, "type": "string"},
+    "candidate_id": {"pattern": "^(AL-|ET-|VS-)", "type": "string"},
+    "comparability_domain_id": {"minLength": 1, "type": "string"},
+    "domain": {"enum": ["AL", "ET", "VS"]},
+    "first_valid_time": {"format": "date-time", "type": "string"},
+    "instrument_id": {"const": "GBPUSD"},
+    "interval_end": {"format": "date-time", "type": "string"},
+    "interval_start": {"format": "date-time", "type": "string"},
+    "missingness_state": {"enum": ["AVAILABLE", "PARTIAL", "NOT_EVALUABLE", "SOURCE_FIELD_ABSENT", "SOURCE_INTERVAL_GAP", "INSUFFICIENT_HISTORY", "WARMUP_INCOMPLETE", "SIDE_UNAVAILABLE", "PARAMETER_NOT_APPLICABLE", "RETROSPECTIVE_ONLY", "STALE", "CONFLICT", "QUARANTINED"]},
+    "parent_ids": {"items": {"minLength": 1, "type": "string"}, "type": "array"},
+    "record_id": {"minLength": 1, "type": "string"},
+    "side": {"enum": ["BID", "ASK"]},
+    "value": {"type": ["string", "integer", "number", "object", "array", "null"]},
+    "variant_id": {"type": ["string", "null"]}
+  },
+  "required": ["record_id", "instrument_id", "side", "interval_start", "interval_end", "first_valid_time", "admissible_cutoff", "parent_ids", "comparability_domain_id", "missingness_state", "authority", "domain", "candidate_id", "calculation_version", "variant_id", "value"],
+  "title": "MCARB Auxiliary Measurement v0.1",
+  "type": "object"
+}

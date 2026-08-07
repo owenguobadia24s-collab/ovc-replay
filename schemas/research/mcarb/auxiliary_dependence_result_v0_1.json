@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {"const": "DESCRIPTIVE_ONLY"},
+    "comparability_domain_id": {"minLength": 1, "type": "string"},
+    "control_ids": {"items": {"type": "string"}, "type": "array"},
+    "left_field_id": {"minLength": 1, "type": "string"},
+    "method": {"enum": ["PEARSON", "RANK", "MUTUAL_INFORMATION"]},
+    "method_status": {"enum": ["ENABLED", "DISABLED_UNTIL_PREREGISTERED"]},
+    "n_comparable": {"minimum": 0, "type": "integer"},
+    "result_id": {"minLength": 1, "type": "string"},
+    "right_field_id": {"minLength": 1, "type": "string"},
+    "value": {"type": ["number", "null"]}
+  },
+  "required": ["result_id", "left_field_id", "right_field_id", "method", "method_status", "comparability_domain_id", "n_comparable", "value", "control_ids", "authority"],
+  "title": "MCARB Auxiliary DependenceResult v0.1",
+  "type": "object"
+}
