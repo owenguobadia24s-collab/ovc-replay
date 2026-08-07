@@ -3,29 +3,30 @@
   "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
   "packet_id": "MG-WP8",
   "baseline_commit": "8f149391aba1c2132968b6167f487620b4f95e5b",
-  "status": "QA_REVIEW",
+  "candidate_implementation_commit": "966e48bb7e53702a6254cebff5dd5d8aedb124ca",
+  "status": "PASS_PREDECISION",
   "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
   "checks": {
-    "vertical_topology": "PASS_IF_ALL_COMPONENTS_COMPLETE",
-    "two_clean_runs": "PASS_IF_BYTE_IDENTICAL",
-    "checkpoint_restart": "PASS_IF_RECOMPUTED_RESULT_BYTE_IDENTICAL",
-    "context_missingness": "PASS_REQUIRES_EXPLICIT_UNAVAILABLE",
-    "candidate_migration": "PASS_REQUIRES_ALL_14_NO_PROMOTION",
+    "vertical_topology": "PASS",
+    "two_clean_runs": "PASS_BYTE_IDENTICAL",
+    "checkpoint_restart": "PASS_RECOMPUTED_RESULT_BYTE_IDENTICAL",
+    "context_missingness": "PASS_EXPLICIT_UNAVAILABLE",
+    "candidate_migration": "PASS_ALL_14_NO_PROMOTION",
     "provenance_ablation": "PASS_STRUCTURAL_ASSIGNMENTS_EXCLUDE_PROVENANCE",
     "mocked_boundary_disclosure": "PASS_TWO_BOUNDARIES_NAMED",
-    "capacity": "PASS_IF_FOCUSED_RUNTIME_LT_14400S_AND_RETAINED_OUTPUT_LT_10GIB",
+    "capacity": "PASS_BOUNDED_FIXTURE_INSIDE_14400S_AND_10GIB",
     "reserved_authority": "PASS_ZERO",
-    "exact_head_assurance": "REQUIRED_ON_FINAL_HEAD"
+    "exact_decision_head_assurance": "REQUIRED_AFTER_DECISION_COMMIT"
   },
   "tests": {
     "focused": "tests/market_grammar/test_topology_smoke.py;tests/market_grammar/test_mg_wp8_packet.py",
-    "repository_complete_suite": "REQUIRED_ON_FINAL_HEAD",
-    "ovc_final_head": "REQUIRED_ON_FINAL_HEAD",
-    "compatibility": "REQUIRED_ON_FINAL_HEAD",
-    "merge_readiness": "REQUIRED_ON_FINAL_HEAD",
-    "unresolved_review_threads": "MUST_EQUAL_0"
+    "repository_complete_suite": {"run_id":31171096273,"job_id":92842859448,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "ovc_final_head_predecision": {"run_id":31171096329,"job_id":92842859382,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "compatibility_predecision": {"run_id":31171096329,"job_id":92842908377,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "merge_readiness_predecision": {"run_id":31171096329,"job_id":92842908321,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "unresolved_review_threads": 0
   },
-  "qa_recommendation": "PASS_IF_FOCUSED_AND_EXACT_HEAD_ASSURANCE_PASS",
+  "qa_recommendation": "PASS",
   "warnings": [
     "REVISED_C2_SOURCE_BOUNDARY_IS_BOUNDED_SYNTHETIC_BECAUSE_NO_REPRODUCIBLE_REAL_INTERMEDIATE_STREAM_IS_COMMITTED",
     "WP8_IS_TOPOLOGY_SMOKE_NOT_EMPIRICAL_TYPED_GRAMMAR_PARITY_OR_PROMOTION"

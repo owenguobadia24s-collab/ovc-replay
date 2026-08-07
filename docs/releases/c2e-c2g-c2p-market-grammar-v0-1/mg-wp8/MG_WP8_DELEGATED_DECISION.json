@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-mg-delegated-decision/v1",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION",
+  "plan_version": "0.1",
+  "packet_id": "MG-WP8",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION",
+  "baseline_commit": "8f149391aba1c2132968b6167f487620b4f95e5b",
+  "candidate_implementation_commit": "966e48bb7e53702a6254cebff5dd5d8aedb124ca",
+  "decision_commit": "BOUND_BY_PR_FINAL_HEAD",
+  "implementation_pr": 359,
+  "qa": "PASS",
+  "reserved_authority_delta": "NONE",
+  "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
+  "rationale": "The bounded topology smoke completed with the real C2E, C2G, clock-alignment and C2P implementations; two clean runs, shuffled chronology, checkpoint restart, explicit missing context, provenance separation, all fourteen migration records and the capacity envelope are covered by the complete repository suite. The two mocked boundaries are explicit and grant no market authority.",
+  "warnings": [
+    "REVISED_C2_SOURCE_BOUNDARY_IS_BOUNDED_SYNTHETIC",
+    "WP8_IS_TOPOLOGY_SMOKE_NOT_EMPIRICAL_PARITY_OR_PROMOTION"
+  ],
+  "tests": {
+    "complete_repository_suite": {"run_id":31171096273,"job_id":92842859448,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "final_head_predecision": {"run_id":31171096329,"job_id":92842859382,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "compatibility_predecision": {"run_id":31171096329,"job_id":92842908377,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "merge_readiness_predecision": {"run_id":31171096329,"job_id":92842908321,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "unresolved_review_threads": 0,
+    "exact_decision_head_assurance": "REQUIRED_AFTER_DECISION_COMMIT"
+  },
+  "rollback": "Before merge, close PR 359 or revert the bounded decision commit. After merge, revert the bounded WP8 squash commit while preserving all prior market-grammar evidence.",
+  "next_action": "RUN_EXACT_DECISION_HEAD_ASSURANCE_THEN_SQUASH_MERGE_IF_PASS"
+}
