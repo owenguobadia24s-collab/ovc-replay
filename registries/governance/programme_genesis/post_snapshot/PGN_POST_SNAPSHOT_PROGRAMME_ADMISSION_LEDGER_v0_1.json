@@ -1,28 +1,31 @@
 {
-  "admission_count": 1,
+  "schema": "ovc-pgn-post-snapshot-programme-admission-ledger/v1",
+  "ledger_id": "PGN-POST-SNAPSHOT-ADMISSIONS-v0.1",
+  "status": "ACTIVE_APPEND_ONLY",
+  "baseline_main": "8397a979328a7f086fd7e669b37f3206f9ff1c95",
+  "admission_count": 2,
   "admissions": [
     {
+      "ordinal": 1,
       "admission_id": "PGN-POST-SNAPSHOT-MG-001",
-      "admission_mode": "POST_SNAPSHOT_OUTSIDE_DEFERRED_PGN_NATIVE_MIGRATION",
+      "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+      "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION-PLAN-0.1",
       "admission_status": "OPERATOR_ADMITTED_BOUNDED_PROGRAMME",
+      "admission_mode": "POST_SNAPSHOT_OUTSIDE_DEFERRED_PGN_NATIVE_MIGRATION",
       "admitted_at": "2026-08-06T14:55:00+01:00",
+      "decision_id": "MG-POST-SNAPSHOT-ADMISSION.OPERATOR.20260806T145500+0100",
+      "pgn_native_migration_dependency": "DEFERRED_NOT_REQUIRED",
+      "frozen_snapshot_effect": "NONE",
+      "sealed_sixteen_candidate_population_effect": "NONE",
       "authority": {
-        "canonical_family_sensitivity_grammar": "NONE",
-        "c3_handoff": "NONE",
         "granted": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
         "inherited_authority": "NONE",
-        "publication_validation_probability_risk_exposure_execution": "NONE",
+        "selector_activation": "NONE",
+        "canonical_family_sensitivity_grammar": "NONE",
         "rule_promotion": "NONE",
-        "selector_activation": "NONE"
+        "c3_handoff": "NONE",
+        "publication_validation_probability_risk_exposure_execution": "NONE"
       },
-      "decision_id": "MG-POST-SNAPSHOT-ADMISSION.OPERATOR.20260806T145500+0100",
-      "frozen_snapshot_effect": "NONE",
-      "ordinal": 1,
-      "pgn_native_migration_dependency": "DEFERRED_NOT_REQUIRED",
-      "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION-PLAN-0.1",
-      "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
-      "rollback": "Close or supersede the bounded MG programme without deleting its evidence. Do not edit the frozen PGN snapshot or sealed sixteen-candidate portfolio.",
-      "sealed_sixteen_candidate_population_effect": "NONE",
       "source_repository_exact_paths": [
         "docs/plans/OVC_C2E_C2G_C2P_INTEGRATED_MARKET_GRAMMAR_IMPLEMENTATION_PLAN_v0_1.md",
         "tests/test_market_grammar_design_programme.py"
@@ -31,25 +34,57 @@
         "docs/design/c2e-c2g-c2p-market-grammar/",
         "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/",
         "registries/opt_b/market_grammar/"
-      ]
+      ],
+      "rollback": "Close or supersede the bounded MG programme without deleting its evidence. Do not edit the frozen PGN snapshot or sealed sixteen-candidate portfolio."
+    },
+    {
+      "ordinal": 2,
+      "admission_id": "PGN-POST-SNAPSHOT-MG-EI-JUNE-002",
+      "programme_id": "OVC-MARKET-GRAMMAR-EMPIRICAL-INTEGRATION-JUNE-v0.1",
+      "plan_id": "OVC-MG-EI-JUNE-IMPLEMENTATION",
+      "admission_status": "OPERATOR_ADMITTED_BOUNDED_PROGRAMME",
+      "admission_mode": "POST_SNAPSHOT_OUTSIDE_DEFERRED_PGN_NATIVE_MIGRATION",
+      "admitted_at": "2026-08-07T12:38:00+01:00",
+      "decision_id": "MG-EI-JUNE-POST-SNAPSHOT-ADMISSION.OPERATOR.MG-WP10.20260807",
+      "operator_decision_path": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/MG_EI_JUNE_POST_SNAPSHOT_OPERATOR_ADMISSION_DECISION.json",
+      "parent_operator_decision_path": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp10/MG_WP10_OPERATOR_DECISION.json",
+      "pgn_native_migration_dependency": "DEFERRED_NOT_REQUIRED",
+      "frozen_snapshot_effect": "NONE",
+      "sealed_sixteen_candidate_population_effect": "NONE",
+      "authority": {
+        "granted": "BOUNDED_EMPIRICAL_INTEGRATION_ACCEPTED_JUNE_EVIDENCE_SHADOW_EXPERIMENT_ONLY",
+        "inherited_authority": "MG-WP10_OPERATOR_PASS_BOUNDED_ONLY",
+        "selector_activation": "NONE",
+        "canonical_family_sensitivity_grammar": "NONE",
+        "rule_candidate_semantic_promotion": "NONE",
+        "c3_handoff": "NONE",
+        "publication_active_authority_probability_risk_exposure_execution": "NONE"
+      },
+      "source_repository_exact_paths": [
+        "docs/plans/OVC_MARKET_GRAMMAR_EMPIRICAL_INTEGRATION_JUNE_IMPLEMENTATION_PLAN_v0_1.md",
+        "contracts/opt_b/market_grammar/OVC_MG_EI_JUNE_AUTHORITY_AND_EVIDENCE_CONTRACT_v0_1.md",
+        "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp10/MG_WP10_OPERATOR_DECISION.json"
+      ],
+      "source_repository_prefixes": [
+        "docs/releases/market-grammar-empirical-integration-june-v0-1/",
+        "registries/opt_b/market_grammar/",
+        "src/ovc/opt_b/market_grammar/"
+      ],
+      "rollback": "Close or supersede only the bounded empirical-integration programme. Preserve the frozen PGN snapshot, the first post-snapshot admission and all MG-WP0 through MG-WP10 evidence."
     }
   ],
-  "authority_effect": "BOUNDED_MG_SHADOW_IMPLEMENTATION_ADMISSION_ONLY",
-  "baseline_main": "8397a979328a7f086fd7e669b37f3206f9ff1c95",
+  "authority_effect": "BOUNDED_POST_SNAPSHOT_PROGRAMME_ADMISSIONS_ONLY",
   "frozen_snapshot": {
+    "manifest_path": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
+    "manifest_git_blob_sha1": "d562b7427ab0c306df04e2472a517d1b0bceb8b7",
     "bundle_manifest_sha256": "b3fe76028609c7ab45b0779411df8206f0aaf22eecaaf6ff20f4106f49387b68",
+    "child_file_identity_sha256": "0ecec2bed3094cf659e25a1c74612d64ae10aec6f0c22114f4be6b11747c3584",
+    "object_count": 108,
+    "exclusion_count": 72,
     "candidate_portfolio_count": 16,
     "candidate_set_sha256": "7dad0cee63ba6d533eff097f333645914e92d87e1964634786312f9ede58354a",
-    "child_file_identity_sha256": "0ecec2bed3094cf659e25a1c74612d64ae10aec6f0c22114f4be6b11747c3584",
-    "exclusion_count": 72,
-    "manifest_git_blob_sha1": "d562b7427ab0c306df04e2472a517d1b0bceb8b7",
-    "manifest_path": "registries/governance/programme_genesis/pgn_census/PGN_REPOSITORY_GENESIS_CENSUS_v0_2.json",
-    "mutation": "PROHIBITED",
-    "object_count": 108
+    "mutation": "PROHIBITED"
   },
-  "ledger_id": "PGN-POST-SNAPSHOT-ADMISSIONS-v0.1",
   "operator_decision": "docs/releases/programme-genesis-native-portfolio-v0-2/post-snapshot-admissions/MG_POST_SNAPSHOT_OPERATOR_ADMISSION_DECISION.json",
-  "rollback": "Preserve the frozen snapshot and append-only admissions. Never recalculate historical PGN-WP2E counts from later repository additions.",
-  "schema": "ovc-pgn-post-snapshot-programme-admission-ledger/v1",
-  "status": "ACTIVE_APPEND_ONLY"
+  "rollback": "Preserve the frozen snapshot and append-only admissions. Never recalculate historical PGN-WP2E counts from later repository additions."
 }

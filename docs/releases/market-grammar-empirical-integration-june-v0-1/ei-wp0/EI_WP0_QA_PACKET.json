@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-mg-ei-june-wp0-qa/v1",
+  "programme_id": "OVC-MARKET-GRAMMAR-EMPIRICAL-INTEGRATION-JUNE-v0.1",
+  "packet_id": "EI-WP0",
+  "baseline_commit": "a3ed3cf66432cfc7f33141a44c05252e85813df8",
+  "status": "QA_REVIEW",
+  "authority_delta": "NONE_FOUNDATION_AND_EXACT_EVIDENCE_BINDING_ONLY",
+  "checks": {
+    "mg_wp10_operator_parent": "PASS_REQUIRED",
+    "pgn_frozen_snapshot_mutation": "PASS_ZERO",
+    "post_snapshot_admission_append_only": "PASS_REQUIRED",
+    "raw_source_object_count": "PASS_4_OF_4",
+    "raw_source_byte_counts": "PASS_4_OF_4",
+    "raw_source_sha256": "PASS_4_OF_4",
+    "binding_identity": "PASS_ACCEPTED_LOCK",
+    "population_identity": "PASS_ACCEPTED_LOCK",
+    "new_provider_intake": "PASS_ZERO",
+    "new_instrument_market_clock_side": "PASS_ZERO",
+    "selector_or_canonical_controls": "PASS_ZERO",
+    "promotion_publication_c3_active_authority": "PASS_ZERO",
+    "probability_risk_exposure_execution": "PASS_ZERO",
+    "rollback": "PASS_DEFINED",
+    "exact_head_assurance": "REQUIRED"
+  },
+  "external_verification": {
+    "source_folder_id": "1x5v1UV3UdMzIwtgmSzTNreaPqzw0jDJm",
+    "source_objects_folder_id": "1bodyRFpOG5qfMpCknW_O9DrTJZc6opZQ",
+    "preflight_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/EI_WP0_EVIDENCE_PREFLIGHT.json",
+    "result": "PASS_RAW_SOURCE_REPRODUCIBLE"
+  },
+  "tests": {
+    "focused": [
+      "tests/market_grammar/test_mg_ei_wp0.py",
+      "tests/governance/test_pgn_wp2e.py"
+    ],
+    "complete_repository_suite": "REQUIRED_ON_FINAL_HEAD",
+    "final_head": "REQUIRED_ON_FINAL_HEAD",
+    "compatibility": "REQUIRED_ON_FINAL_HEAD",
+    "merge_readiness": "REQUIRED_ON_FINAL_HEAD",
+    "unresolved_review_threads": "MUST_EQUAL_0"
+  },
+  "qa_recommendation": "PASS_IF_FOCUSED_AND_EXACT_HEAD_ASSURANCE_PASS",
+  "blockers": [],
+  "rollback": "Revert only EI-WP0 admission/foundation records. Preserve the MG-WP10 operator decision, the first post-snapshot admission and the sealed PGN snapshot."
+}

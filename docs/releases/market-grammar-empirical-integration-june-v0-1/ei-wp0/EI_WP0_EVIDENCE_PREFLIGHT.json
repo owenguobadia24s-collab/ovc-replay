@@ -1,0 +1,68 @@
+{
+  "schema": "ovc-mg-ei-june-evidence-preflight/v1",
+  "programme_id": "OVC-MARKET-GRAMMAR-EMPIRICAL-INTEGRATION-JUNE-v0.1",
+  "packet_id": "EI-WP0",
+  "baseline_main": "a3ed3cf66432cfc7f33141a44c05252e85813df8",
+  "authority_state": "SHADOW_EXPERIMENT",
+  "canonical": false,
+  "active": false,
+  "status": "PASS_RAW_SOURCE_REPRODUCIBLE",
+  "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+  "source_drive_folder": {
+    "folder_id": "1x5v1UV3UdMzIwtgmSzTNreaPqzw0jDJm",
+    "source_objects_folder_id": "1bodyRFpOG5qfMpCknW_O9DrTJZc6opZQ"
+  },
+  "retrieval_class": "READ_ONLY_RECOVERY_OF_ALREADY_ACCEPTED_EVIDENCE_NOT_PROVIDER_INTAKE",
+  "objects": [
+    {
+      "name": "GBPUSD_M1_BID_20260530_20260703_UTC.csv",
+      "drive_id": "1YNe_JqSmxkI1YhLvTiFfQO-YtQQ8EtAG",
+      "expected_bytes": 2164613,
+      "observed_bytes": 2164613,
+      "expected_sha256": "d704b3bac2d51e839505ee5bc2ba7589ce44310353bbb6a464a1850fe1af5789",
+      "observed_sha256": "d704b3bac2d51e839505ee5bc2ba7589ce44310353bbb6a464a1850fe1af5789",
+      "result": "PASS"
+    },
+    {
+      "name": "GBPUSD_M1_ASK_20260530_20260703_UTC.csv",
+      "drive_id": "1TbNgAAnJxRYEkDjpeWMtslSPs5kSwITQ",
+      "expected_bytes": 2165135,
+      "observed_bytes": 2165135,
+      "expected_sha256": "bc643e62ebbc35940f93aaaaead147b6f9170b1a030a473436b2dc84d6992057",
+      "observed_sha256": "bc643e62ebbc35940f93aaaaead147b6f9170b1a030a473436b2dc84d6992057",
+      "result": "PASS"
+    },
+    {
+      "name": "GBPUSD_H1_BID_20260530_20260703_UTC.csv",
+      "drive_id": "1h46pG1_hQDcSJiles_M1qLAkJLS84zXT",
+      "expected_bytes": 35893,
+      "observed_bytes": 35893,
+      "expected_sha256": "b6116ea784be785089e881c8b8a69c8d5d202cb57f3d058f71d159071bd51c24",
+      "observed_sha256": "b6116ea784be785089e881c8b8a69c8d5d202cb57f3d058f71d159071bd51c24",
+      "result": "PASS"
+    },
+    {
+      "name": "GBPUSD_H1_ASK_20260530_20260703_UTC.csv",
+      "drive_id": "1Vb2qwO8Z2MDOKF5uXGnBhCcoZa89G0MH",
+      "expected_bytes": 36025,
+      "observed_bytes": 36025,
+      "expected_sha256": "a25dcf89cb35afbbc6fb722e7f379511ceb83af0a5f1fc1b32c94e8adc304e5d",
+      "observed_sha256": "a25dcf89cb35afbbc6fb722e7f379511ceb83af0a5f1fc1b32c94e8adc304e5d",
+      "result": "PASS"
+    }
+  ],
+  "accepted_binding": {
+    "binding_id": "C2VNEXT.JUNE.DISCOVERY.INPUT.v1",
+    "binding_sha256": "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "binding_status": "INHERITED_FROM_ACCEPTED_MG_WP0_HASH_LOCK_AND_PRIOR_REPLAY_RECEIPTS"
+  },
+  "accepted_population": {
+    "logical_population_sha256": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7",
+    "integrated_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+    "counts": {"requested":33320,"computable":27996,"censored":1638,"not_evaluable":3686}
+  },
+  "verification_method": "SHA256_AND_BYTE_COUNT_OVER_EXACT_DRIVE_DOWNLOADED_SOURCE_BYTES_IN_EPHEMERAL_EXTERNAL_WORKSPACE",
+  "git_storage": "RAW_SOURCE_BYTES_EXCLUDED",
+  "blockers": [],
+  "rollback": "If any later adapter observes a source identity mismatch, quarantine the empirical packet and preserve this preflight plus the accepted parent evidence unchanged."
+}
