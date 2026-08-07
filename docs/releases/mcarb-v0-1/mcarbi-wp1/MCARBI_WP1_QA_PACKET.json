@@ -4,7 +4,8 @@
   "plan_id": "OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
   "packet_id": "MCARBI-WP1",
   "gate_id": "MCARBI-G1",
-  "baseline_commit": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
+  "baseline_commit": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
+  "audit_execution_baseline": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
   "checks": [
     {"check":"audit_authority_exact_scope","result":"PASS"},
     {"check":"validation_artifact_or_path_read","result":"PASS_FALSE"},
@@ -23,14 +24,17 @@
     {"check":"candidate_ids_unique","result":"PASS"},
     {"check":"branch_local_failure_isolation","result":"PASS"},
     {"check":"stage_a_execution_attempted","result":"PASS_FALSE"},
-    {"check":"selector_or_semantic_promotion_attempted","result":"PASS_FALSE"}
+    {"check":"selector_or_semantic_promotion_attempted","result":"PASS_FALSE"},
+    {"check":"latest_main_reconciliation","result":"PASS_NO_MCARB_OR_OPT_A_SOURCE_CONFLICT","latest_main":"5d1274c5b8b26c6afa6ba9053ed2425d78329719"},
+    {"check":"concurrent_srfd_g8r_authority_inheritance","result":"PASS_FALSE","srfd_state":"RUNNING_CAPACITY_REMEDIATION_FIXTURE_LOCAL_ONLY","method_representation_distance_family_sensitivity_promotion":"NONE"}
   ],
   "warnings": [
     "AL source outcome is PARTIAL, not global PASS.",
     "Cross-side BID/ASK activity semantics remain unresolved for AL-10.",
     "No retained tick/update family was found; AL-02/03 remain T3 and AL-11 lacks real tick proxy-quality evidence.",
     "Provider-native H1 volume is not exact semantic corroboration and includes a material 2022-10-18T12Z mismatch.",
-    "Authoritative per-row volume quality_state distribution is not serialized in accepted canonical CSV payloads; do not invent it."
+    "Authoritative per-row volume quality_state distribution is not serialized in accepted canonical CSV payloads; do not invent it.",
+    "Main advanced through SRFDI-G8R capacity-remediation work after the audit began; current SRFD authority remains fixture/local capacity remediation only and grants MCARB no inherited scientific or benchmark authority."
   ],
   "qa_recommendation": "PASS_WP1_TO_OPERATOR_G1_WITH_AL_SOURCE_PARTIAL",
   "recommended_g1_decision": "ACCEPT_TRIAGE",
