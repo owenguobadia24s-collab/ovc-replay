@@ -1,0 +1,35 @@
+{
+  "$id": "https://ovc.local/schemas/opt_b/market_grammar/mg_wp9_review_model_v0_1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assignment_explanations": {"type": "object"},
+    "authority": {"const": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_READ_ONLY_REVIEW"},
+    "candidate_migration": {"type": "object"},
+    "canonical": {"const": false},
+    "context_review": {"type": "object"},
+    "counterexample_ledger": {"type": "array"},
+    "family_graph": {"type": "object"},
+    "grammar_review": {"type": "object"},
+    "input_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "issue_ledger": {"type": "array"},
+    "medoid_variant_stability": {"type": "object"},
+    "mutation_controls": {"const": false},
+    "packet_id": {"const": "MG-WP9"},
+    "programme_id": {"const": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1"},
+    "provenance_policy": {"type": "object"},
+    "result_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "schema": {"const": "ovc-mg-wp9-review-model/v1"},
+    "sensitivity_comparison": {"type": "object"},
+    "source_bindings": {"type": "object"}
+  },
+  "required": [
+    "schema", "programme_id", "packet_id", "authority", "canonical", "mutation_controls",
+    "input_sha256", "source_bindings", "sensitivity_comparison", "family_graph",
+    "medoid_variant_stability", "assignment_explanations", "grammar_review", "context_review",
+    "candidate_migration", "counterexample_ledger", "issue_ledger", "provenance_policy",
+    "result_sha256"
+  ],
+  "title": "OVC MG-WP9 Read-Only Review Model v0.1",
+  "type": "object"
+}
