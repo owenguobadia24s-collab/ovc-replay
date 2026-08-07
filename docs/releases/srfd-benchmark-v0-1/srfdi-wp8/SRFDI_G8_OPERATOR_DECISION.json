@@ -1,0 +1,73 @@
+{
+  "schema": "ovc-srfdi-g8-operator-decision/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "SRFDI-WP8",
+  "gate_id": "SRFDI-G8",
+  "gate_class": "OPERATOR_REQUIRED",
+  "operator_command": "OVC APPROVE SRFDI-G8 REDESIGN",
+  "decision": "REDESIGN",
+  "decision_time_local": "2026-08-07T17:54:00+01:00",
+  "predecision_head": "4a458bb98860434481a111ecf8d8276358a1a434",
+  "evidence_bindings": {
+    "gate_packet": {
+      "path": "docs/releases/srfd-benchmark-v0-1/srfdi-wp8/SRFDI_G8_OPERATOR_CAPACITY_PACKET.json",
+      "blob_sha": "d31a53bf455ff1379afd796cc0d918a137b40f91"
+    },
+    "measurement_receipt": {
+      "path": "docs/releases/srfd-benchmark-v0-1/srfdi-wp8/SRFDI_WP8_MEASURED_CAPACITY_RECEIPT.json",
+      "blob_sha": "8bc52acca61830b66ca91017d7e3404f9273f0ad"
+    },
+    "tests_workflow_run_id": 31198080679,
+    "tiered_workflow_run_id": 31198079684,
+    "merge_readiness_job_id": 92931182499
+  },
+  "accepted_findings": {
+    "measured_fixture_capacity_evidence": "ACCEPTED_AS_G8_EVIDENCE",
+    "reference_projection_status": "CAPACITY_EXCEEDED_RUNTIME",
+    "reference_population_count": 8598,
+    "reference_population_qualification": "NON_BINDING_CAPACITY_REFERENCE_ONLY",
+    "exact_srfd_june_capacity": "NOT_ESTABLISHED",
+    "method_selection": "NONE"
+  },
+  "decision_effect": {
+    "capacity_freeze": "DENIED",
+    "capacity_redesign_preparation": "AUTHORISED_BOUNDED_DESIGN_ONLY",
+    "wp9_start": "DENIED_UNTIL_REDESIGN_IS_SEPARATELY_GOVERNED_AND_G8_IS_REPRESENTED",
+    "june_benchmark": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "representation_or_normalization_selection": "NONE",
+    "distance_or_family_method_selection": "NONE",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "redesign_boundary": {
+    "purpose": "Prepare a bounded capacity redesign that addresses the measured runtime failure without silently changing scientific semantics or consuming June/Validation evidence.",
+    "must_preserve": [
+      "exact and visible population accounting",
+      "comparability blockers before distance computation",
+      "explicit residual and NO_STABLE_FAMILY outcomes",
+      "deterministic identities and restartability",
+      "no hidden sampling or approximation",
+      "no outcome/future-data dependency",
+      "June benchmark denial and Validation lock"
+    ],
+    "design_questions_may_include": [
+      "lawful population partitioning before pair construction",
+      "blockwise or streaming exact distance execution",
+      "cache and reuse strategy",
+      "method-specific complexity and admission limits",
+      "capacity-aware orchestration and controlled CAPACITY_EXCEEDED handling"
+    ],
+    "not_authorised": [
+      "starting WP9",
+      "binding the June SRFD eligible population",
+      "running June market records",
+      "selecting a canonical representation, distance, segmentation or family method",
+      "lowering benchmark acceptance standards to fit the budget"
+    ]
+  },
+  "next_action": "PREPARE_BOUNDED_SRFDI_G8_CAPACITY_REDESIGN_PROPOSAL_ONLY",
+  "authority_effect": "REDESIGN_PREPARATION_ONLY_NO_MARKET_OR_METHOD_AUTHORITY"
+}
