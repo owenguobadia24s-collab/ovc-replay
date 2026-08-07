@@ -46,9 +46,12 @@ class SRFDIG8RWP0AuthorityTests(unittest.TestCase):
         self.assertEqual("CURRENT_JSON_REFERENCE", self.freeze["reference_oracle"])
         self.assertEqual("UNADMITTED", self.freeze["candidate_numpy_backend"])
 
-    def test_state_requires_g2f_before_wp3(self) -> None:
+    def test_completed_wp0_routes_to_wp1_and_preserves_g2f_stop(self) -> None:
         self.assertEqual("RUNNING", self.state["status"])
-        self.assertEqual("SRFDI-G8R-WP0", self.state["active_packet"])
+        self.assertEqual("SRFDI-G8R-WP1", self.state["active_packet"])
+        self.assertEqual("SRFDI-G8R-G1", self.state["current_gate"])
+        wp0 = next(item for item in self.state["packets"] if item["packet_id"] == "SRFDI-G8R-WP0")
+        self.assertEqual("COMPLETED", wp0["status"])
         self.assertIn("SRFDI-G8R-G2F", self.state["mandatory_operator_stops"])
         wp3 = next(item for item in self.state["packets"] if item["packet_id"] == "SRFDI-G8R-WP3")
         self.assertIn("G8R_G2F_NOT_ACKNOWLEDGED", wp3["blockers"])
