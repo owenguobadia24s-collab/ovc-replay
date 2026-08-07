@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-mcarbi-wp1-qa-packet/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "plan_id": "OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "packet_id": "MCARBI-WP1",
+  "gate_id": "MCARBI-G1",
+  "baseline_commit": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
+  "audit_execution_baseline": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
+  "checks": [
+    {"check":"audit_authority_exact_scope","result":"PASS"},
+    {"check":"validation_artifact_or_path_read","result":"PASS_FALSE"},
+    {"check":"new_provider_request_fetch_intake","result":"PASS_FALSE"},
+    {"check":"downloaded_artifact_sha256_matches_court_record","result":"PASS","count":5},
+    {"check":"non_validation_intake_records_checked","result":"PASS","count":192},
+    {"check":"single_non_validation_schema_fingerprint","result":"PASS","value":"de97a0f1f775835cf19cfda5839afdc7baaaaa3a79b22204d52afcdbc0a6c41e"},
+    {"check":"volume_unit_token_stable","result":"PASS","value":"units"},
+    {"check":"accepted_m1_derived_volume_exact_decimal_aggregation","result":"PASS","mismatches":0},
+    {"check":"provider_native_h1_exact_equivalence","result":"WARN_NOT_EXACT_ONE_MATERIAL_2022_CONFLICT"},
+    {"check":"retained_tick_update_source","result":"WARN_NOT_FOUND"},
+    {"check":"cross_side_semantic_comparability","result":"WARN_UNRESOLVED"},
+    {"check":"al11_proxy_quality_against_tick_truth","result":"WARN_NOT_EVALUABLE"},
+    {"check":"candidate_registry_exact_count","result":"PASS","count":44},
+    {"check":"candidate_registry_domain_counts","result":"PASS","counts":{"AL":20,"ET":6,"VS":18}},
+    {"check":"candidate_ids_unique","result":"PASS"},
+    {"check":"branch_local_failure_isolation","result":"PASS"},
+    {"check":"stage_a_execution_attempted","result":"PASS_FALSE"},
+    {"check":"selector_or_semantic_promotion_attempted","result":"PASS_FALSE"},
+    {"check":"latest_main_reconciliation","result":"PASS_NO_MCARB_OR_OPT_A_SOURCE_CONFLICT","latest_main":"5d1274c5b8b26c6afa6ba9053ed2425d78329719"},
+    {"check":"concurrent_srfd_g8r_authority_inheritance","result":"PASS_FALSE","srfd_state":"RUNNING_CAPACITY_REMEDIATION_FIXTURE_LOCAL_ONLY","method_representation_distance_family_sensitivity_promotion":"NONE"}
+  ],
+  "warnings": [
+    "AL source outcome is PARTIAL, not global PASS.",
+    "Cross-side BID/ASK activity semantics remain unresolved for AL-10.",
+    "No retained tick/update family was found; AL-02/03 remain T3 and AL-11 lacks real tick proxy-quality evidence.",
+    "Provider-native H1 volume is not exact semantic corroboration and includes a material 2022-10-18T12Z mismatch.",
+    "Authoritative per-row volume quality_state distribution is not serialized in accepted canonical CSV payloads; do not invent it.",
+    "Main advanced through SRFDI-G8R capacity-remediation work after the audit began; current SRFD authority remains fixture/local capacity remediation only and grants MCARB no inherited scientific or benchmark authority."
+  ],
+  "qa_recommendation": "PASS_WP1_TO_OPERATOR_G1_WITH_AL_SOURCE_PARTIAL",
+  "recommended_g1_decision": "ACCEPT_TRIAGE",
+  "authority_delta": "NONE_UNTIL_G1_OPERATOR_DECISION; G1_FREEZES_ELIGIBILITY_GRAPH_ONLY",
+  "rollback": "Preserve source-audit and triage evidence; abandon/revert branch-local proposed registry if G1 adjusts or defers. No source bytes were mutated."
+}
