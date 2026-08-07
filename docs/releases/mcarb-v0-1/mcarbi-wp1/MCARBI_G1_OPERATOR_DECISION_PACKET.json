@@ -8,29 +8,44 @@
   "gate_title": "Candidate Triage Freeze",
   "gate_class": "OPERATOR_REQUIRED",
   "status": "GATE_READY",
-  "baseline_commit": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
+  "baseline_commit": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
+  "audit_execution_baseline": "d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1",
   "candidate_branch": "audit/mcarbi-wp1-source-triage",
   "completed_packets": ["MCARBI-WP0","MCARBI-WP1"],
   "current_authority": "BOUNDED_MCARB_IMPLEMENTATION; MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD; NO_MARKET_BENCHMARK",
+  "court_record_reconciliation": {
+    "latest_main": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
+    "main_movement_after_wp1_start": "SRFDI-G8R-WP0/WP1 capacity-remediation implementation only",
+    "mcarb_or_opt_a_source_contract_conflict": false,
+    "srfd_current_state": "OVC-SRFDI-G8R-v0.2 RUNNING; active packet WP2; capacity-remediation fixture/local authority only",
+    "srfd_authority_not_inherited_by_mcarb": true,
+    "srfd_method_representation_distance_family_sensitivity_promotion": "NONE",
+    "srfd_wp9": "DENIED",
+    "srfd_june": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
   "proposed_delta": "Freeze the 44-candidate implementation-eligibility registry and branch-local dependency graph. Accept AL_SOURCE_PARTIAL with side-specific M1 provider activity eligible, cross-side/tick/spread-proxy limits preserved. No scientific value selection and no market execution.",
   "acceptance_conditions": [
     {"condition":"all 44 candidates have explicit disposition/dependency/chronology/cost/Stage-A/blocking scope","status":"SATISFIED"},
     {"condition":"source audit tied to exact retained non-Validation artifacts","status":"SATISFIED"},
     {"condition":"AL failures are branch-local and cannot block ET-price/VS-price","status":"SATISFIED"},
     {"condition":"no new provider intake or Validation access","status":"SATISFIED"},
-    {"condition":"Stage-A proposed set is non-executable and provisional","status":"SATISFIED"}
+    {"condition":"Stage-A proposed set is non-executable and provisional","status":"SATISFIED"},
+    {"condition":"latest lawful main reconciled after base movement","status":"SATISFIED_NO_MCARB_SOURCE_OR_AUTHORITY_CONFLICT"}
   ],
   "tests_and_qa": {
     "qa_packet": "docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_QA_PACKET.json",
     "qa_recommendation": "PASS_WP1_TO_OPERATOR_G1_WITH_AL_SOURCE_PARTIAL",
-    "repository_ci": "REQUIRED_ON_EXACT_PR_HEAD"
+    "repository_ci": "REQUIRED_ON_EXACT_PR_HEAD_AFTER_THIS_RECONCILIATION"
   },
   "warnings": [
     "AL source outcome is PARTIAL, not global PASS.",
     "Cross-side BID/ASK activity semantics remain unresolved for AL-10.",
     "No retained tick/update family was found; AL-02/03 remain T3 and AL-11 lacks real tick proxy-quality evidence.",
     "Provider-native H1 volume is not exact semantic corroboration and includes a material 2022-10-18T12Z mismatch.",
-    "Authoritative per-row volume quality_state distribution is not serialized in accepted canonical CSV payloads; do not invent it."
+    "Authoritative per-row volume quality_state distribution is not serialized in accepted canonical CSV payloads; do not invent it.",
+    "SRFD capacity-remediation work advanced on main during WP1; MCARB inherits no SRFD capacity, representation, distance, method, family or sensitivity authority."
   ],
   "unresolved_issues": [
     "AL-10 cross-side semantic comparability",
