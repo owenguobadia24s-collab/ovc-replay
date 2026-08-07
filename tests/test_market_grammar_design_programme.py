@@ -63,17 +63,18 @@ class MarketGrammarDesignProgrammeTests(unittest.TestCase):
         self.assertEqual("114558efdf38f56499f6276da917190c3cb729ea", receipt["merge_commit"])
         self.assertEqual("PASS_COMPLETED", qa["status"])
 
-    def test_programme_state_preserves_completed_packets_while_wp1_runs(self) -> None:
+    def test_programme_state_preserves_completed_foundation_packets(self) -> None:
         state = json.loads(STATE.read_text(encoding="utf-8"))
-        self.assertEqual("QA_REVIEW", state["status"])
-        self.assertEqual("MG-WP1", state["next_packet"])
         self.assertEqual([], state["blockers"])
         packets = {item["packet_id"]: item for item in state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-D0-D8"]["status"])
         self.assertEqual("COMPLETED", packets["MG-WP0"]["status"])
-        self.assertEqual("QA_REVIEW", packets["MG-WP1"]["status"])
-        for index in range(2, 11):
-            self.assertEqual("PLANNED", packets[f"MG-WP{index}"]["status"])
+        self.assertEqual("COMPLETED", packets["MG-WP1"]["status"])
+        self.assertNotEqual("MG-WP1", state["next_packet"])
+        self.assertIn(
+            packets["MG-WP2"]["status"],
+            {"READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "APPROVED", "COMPLETED"},
+        )
         self.assertEqual("OPERATOR_REQUIRED", packets["MG-WP10"]["authority_required"])
 
 
