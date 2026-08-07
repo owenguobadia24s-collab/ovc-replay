@@ -1,0 +1,15 @@
+contract_id: OVC-SRFD-COMPARABILITY-DOMAIN-CONTRACT-0.1
+version: 0.1
+authority_state: FIXTURE_ONLY
+required_dimensions:
+  - instrument
+  - side
+  - units
+  - clock
+  - representation_schema
+  - source_quality
+rules:
+  hard_incompatibility_returns_NOT_COMPARABLE: true
+  no_partial_comparison_across_hard_incompatibility: true
+  material_domain_change: OPERATOR_RESERVED_SCOPE_CHANGE
+  date_is_occurrence_context_not_structural_identity_by_default: true

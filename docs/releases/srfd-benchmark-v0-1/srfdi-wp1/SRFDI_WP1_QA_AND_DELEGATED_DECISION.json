@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-srfdi-auto-gate/v1",
+  "packet_id": "SRFDI-WP1",
+  "gate_id": "SRFDI-G1",
+  "gate_class": "AUTO_RATIFIABLE",
+  "baseline_commit": "06e657d54afa21670576b181be3f938f2ea01c89",
+  "tested_candidate_commit": "00e102513814be9654a86e2035db4885acb33f16",
+  "tests": {
+    "repository_suite": {"workflow_run_id": 31196280091, "conclusion": "success"},
+    "tiered_assurance": {"workflow_run_id": 31196281208, "conclusion": "success"}
+  },
+  "acceptance": {
+    "core_contracts_schemas_registries": "PASS",
+    "schema_positive_negative": "PASS",
+    "canonical_hash_stability": "PASS",
+    "machine_path_worker_identity_exclusion": "PASS",
+    "representation_crosswalk": "PASS",
+    "conditional_dependencies_disabled": "PASS",
+    "authority_denials": "PASS",
+    "repository_wide_tests": "PASS"
+  },
+  "decision": "PASS",
+  "delegated_rationale": "All SRFDI-WP1 acceptance conditions passed without scope, dependency or authority expansion. The packet is eligible for automatic ratification under the approved implementation plan.",
+  "authority_after_pass": "FIXTURE_LOCAL_CONTRACT_CAPABILITY_ONLY",
+  "explicit_non_authority": ["market_benchmark", "canonical_representation", "canonical_family", "selector", "C2E_activation", "C2G_activation", "publication", "Validation", "probability", "risk", "exposure", "execution"],
+  "pr_371": "PRESERVE_DO_NOT_MERGE",
+  "june_benchmark": "DENIED",
+  "validation_2025": "LOCKED_UNCONSUMED",
+  "final_head_requirement": "This decision metadata must itself pass repository-wide and OVC merge-readiness checks before merge.",
+  "next_packet": "SRFDI-WP2"
+}

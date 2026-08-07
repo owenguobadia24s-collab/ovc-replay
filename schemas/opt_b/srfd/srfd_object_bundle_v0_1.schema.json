@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "OVC-SRFD-OBJECT-BUNDLE-0.1",
+  "type": "object",
+  "required": ["object_type", "schema_version", "authority_state"],
+  "properties": {
+    "object_type": {
+      "enum": [
+        "SRFDRepresentationSpec", "SRFDRepresentationRecord",
+        "SRFDSegmentationBenchmarkSpec", "SRFDSegmentationResult",
+        "SRFDDistanceSpec", "SRFDDistanceResult", "SRFDFamilyMethodSpec",
+        "SRFDFamilyCatalog", "SRFDAssignmentRecord", "SRFDSensitivityPack",
+        "SRFDOccurrenceContext", "SRFDComparabilityDomain",
+        "SRFDFamilyCorrespondence", "SRFDInvariantCore", "SRFDResidualAmbiguity",
+        "SRFDMethodDisagreement", "SRFDStabilityMetricSpec",
+        "SRFDStabilityMetricResult", "SRFDBenchmarkRun", "SRFDFailureAttribution",
+        "SRFDCapacityReceipt", "SRFDCheckpointReceipt", "SRFDPreregistration",
+        "SRFDDecisionPacket"
+      ]
+    },
+    "schema_version": {"type": "string", "minLength": 1},
+    "authority_state": {"enum": ["FIXTURE_ONLY", "CANDIDATE", "SHADOW_EXPERIMENT"]},
+    "qa_state": {"enum": ["NOT_EVALUATED", "PASS", "WARN", "BLOCK", "QUARANTINED"]}
+  },
+  "allOf": [
+    {"not": {"required": ["outcome"]}},
+    {"not": {"required": ["probability"]}},
+    {"not": {"required": ["risk"]}},
+    {"not": {"required": ["exposure"]}},
+    {"not": {"required": ["execution"]}},
+    {"not": {"required": ["validation_consumed"]}},
+    {"not": {"required": ["selector_activation"]}}
+  ]
+}
