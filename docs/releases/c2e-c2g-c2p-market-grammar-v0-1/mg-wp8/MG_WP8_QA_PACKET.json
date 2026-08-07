@@ -4,7 +4,9 @@
   "packet_id": "MG-WP8",
   "baseline_commit": "8f149391aba1c2132968b6167f487620b4f95e5b",
   "candidate_implementation_commit": "966e48bb7e53702a6254cebff5dd5d8aedb124ca",
-  "status": "PASS_PREDECISION",
+  "decision_head": "eb666577a39cee6817843ebfa4a2c21097fdfd61",
+  "merge_commit": "6d5d08d379f4cbdd280560766b59badb985152df",
+  "status": "PASS",
   "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
   "checks": {
     "vertical_topology": "PASS",
@@ -16,14 +18,14 @@
     "mocked_boundary_disclosure": "PASS_TWO_BOUNDARIES_NAMED",
     "capacity": "PASS_BOUNDED_FIXTURE_INSIDE_14400S_AND_10GIB",
     "reserved_authority": "PASS_ZERO",
-    "exact_decision_head_assurance": "REQUIRED_AFTER_DECISION_COMMIT"
+    "exact_decision_head_assurance": "PASS"
   },
   "tests": {
     "focused": "tests/market_grammar/test_topology_smoke.py;tests/market_grammar/test_mg_wp8_packet.py",
-    "repository_complete_suite": {"run_id":31171096273,"job_id":92842859448,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
-    "ovc_final_head_predecision": {"run_id":31171096329,"job_id":92842859382,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
-    "compatibility_predecision": {"run_id":31171096329,"job_id":92842908377,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
-    "merge_readiness_predecision": {"run_id":31171096329,"job_id":92842908321,"result":"PASS","head":"966e48bb7e53702a6254cebff5dd5d8aedb124ca"},
+    "repository_complete_suite": {"head":"eb666577a39cee6817843ebfa4a2c21097fdfd61","run_id":31171388133,"job_id":92843746215,"result":"PASS"},
+    "ovc_final_head": {"head":"eb666577a39cee6817843ebfa4a2c21097fdfd61","run_id":31171388124,"job_id":92843746234,"result":"PASS"},
+    "compatibility": {"head":"eb666577a39cee6817843ebfa4a2c21097fdfd61","run_id":31171388124,"job_id":92843797000,"result":"PASS"},
+    "merge_readiness": {"head":"eb666577a39cee6817843ebfa4a2c21097fdfd61","run_id":31171388124,"job_id":92843796979,"result":"PASS"},
     "unresolved_review_threads": 0
   },
   "qa_recommendation": "PASS",
@@ -32,5 +34,5 @@
     "WP8_IS_TOPOLOGY_SMOKE_NOT_EMPIRICAL_TYPED_GRAMMAR_PARITY_OR_PROMOTION"
   ],
   "blockers": [],
-  "rollback": "Remove or supersede the bounded WP8 topology smoke while preserving prior completed market-grammar packets."
+  "rollback": "Revert the bounded WP8 squash commit while preserving prior completed market-grammar packets and upstream records."
 }
