@@ -1,0 +1,42 @@
+{
+  "schema":"ovc-srfdi-g8r-wp1-qa-gate-packet/v1",
+  "plan_id":"OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_artifact_sha256":"f1e6515f68a97ee50c5273cb13312622376ac9650c6cf7612c48c18588fb0408",
+  "packet_id":"SRFDI-G8R-WP1",
+  "gate_id":"SRFDI-G8R-G1",
+  "gate_class":"AUTO_RATIFIABLE",
+  "baseline_commit":"feac57eec78363008bd713a4f73c5053691ca648",
+  "implementation_candidate_commit":"431d439c151184bf15781796d83bb6f2af65dd13",
+  "pr_number":385,
+  "change_classes":["PHYSICAL_STORAGE_ONLY","COMPUTE_ONLY_EQUIVALENT"],
+  "acceptance":{
+    "condensed_pair_index_bijection":"PASS",
+    "deterministic_range_tiling":"PASS",
+    "exact_fixed_point_reconstruction":"PASS",
+    "8_16_byte_overflow_guards":"PASS",
+    "atomic_tile_lifecycle":"PASS",
+    "relocation_identity":"PASS",
+    "corruption_detection":"PASS",
+    "radius_specific_exact_surfaces":"PASS",
+    "not_comparable_fails_before_compaction":"PASS",
+    "scientific_semantics_unchanged":"PASS"
+  },
+  "tests":{
+    "repository_suite":{"run_id":31211826587,"conclusion":"success"},
+    "tiered":{"run_id":31211826303,"conclusion":"success"},
+    "profile_assurance_job_id":92976193541,
+    "compatibility_job_id":92976249897,
+    "merge_readiness_job_id":92976249913,
+    "merge_readiness_conclusion":"success"
+  },
+  "authority":{
+    "wp9":"DENIED","june":"DENIED","validation_2025":"LOCKED_UNCONSUMED","method_or_semantic_promotion":"NONE","publication":"NONE","probability_risk_exposure_execution":"NONE","pr_371":"PRESERVE_DO_NOT_MERGE"
+  },
+  "blocking_warnings":[],
+  "unresolved_issues":[],
+  "qa_recommendation":"PASS",
+  "rollback":"Revert WP1 physical/compute-equivalent files non-destructively; retain WP0 and parent G8 evidence.",
+  "decision":"PASS",
+  "next_packet":"SRFDI-G8R-WP2",
+  "next_operator_stop":"SRFDI-G8R-G2F"
+}
