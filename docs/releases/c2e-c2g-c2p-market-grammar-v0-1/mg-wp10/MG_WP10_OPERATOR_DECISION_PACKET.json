@@ -1,0 +1,94 @@
+{
+  "schema": "ovc-mg-operator-decision-packet/v1",
+  "gate_id": "MG-WP10",
+  "title": "Consolidated terminal market-grammar decision",
+  "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
+  "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "baseline_commit": "372b072959863957d80c4dc12f393ae97bba482e",
+  "candidate_commit": "f4f2098a6a460cd06d2a856f9ef470d1321d230d",
+  "completed_packets": ["MG-D0-D8","MG-WP0","MG-WP1","MG-WP2","MG-WP3","MG-WP4","MG-WP5","MG-WP6","MG-WP7","MG-WP8","MG-WP9"],
+  "current_authority": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_READ_ONLY",
+  "proposed_authority_delta": "AUTHORISE_BOUNDED_EMPIRICAL_MARKET_GRAMMAR_INTEGRATION_ON_THE_EXISTING_ACCEPTED_JUNE_REVISED_C2_EVIDENCE_UNDER_SHADOW_EXPERIMENT_ONLY",
+  "proposed_delta_limits": [
+    "GBPUSD and the already accepted June evidence only",
+    "15M evaluation with 2H_A_L context only",
+    "no new provider intake or source identity",
+    "no selector or canonical selection",
+    "no family, variant, rule, candidate, grammar or semantic promotion",
+    "no C3 handoff or publication",
+    "no active research authority change"
+  ],
+  "acceptance_conditions": {
+    "programme_packets_complete": true,
+    "wp9_qa": "PASS",
+    "wp9_exact_head": "PASS",
+    "unresolved_review_threads": 0,
+    "blockers": [],
+    "rollback_defined": true
+  },
+  "tests": {
+    "wp9_decision_complete_suite": "PASS run 31173411989 job 92850017753",
+    "wp9_decision_final_head": "PASS run 31173412481 job 92850019168",
+    "wp9_decision_compatibility": "PASS run 31173412481 job 92850067853",
+    "wp9_decision_merge_readiness": "PASS run 31173412481 job 92850067838",
+    "wp9_receipt_complete_suite": "PASS run 31173783174 job 92851182558",
+    "wp9_receipt_final_head": "PASS run 31173783218 job 92851182851",
+    "wp9_receipt_compatibility": "PASS run 31173783218 job 92851226750",
+    "wp9_receipt_merge_readiness": "PASS run 31173783218 job 92851226788",
+    "gate_branch_required": ["complete repository suite","FINAL_HEAD","compatibility","merge readiness","zero unresolved review threads"]
+  },
+  "qa": {
+    "recommendation": "PASS_FOR_BOUNDED_EMPIRICAL_SHADOW_INTEGRATION_ONLY",
+    "warnings": [
+      "WP8 revised-C2 source boundary was mocked for topology smoke",
+      "WP8 C2-to-C2G projection boundary was mocked for topology smoke",
+      "typed empirical parity remains NOT_EVALUATED",
+      "all sensitivity packs, families, variants and grammars remain noncanonical"
+    ],
+    "blockers": []
+  },
+  "unresolved_issues": [
+    "materialise a reproducible real revised-C2 intermediate stream from the accepted evidence lock",
+    "exercise the structural projection on the accepted population",
+    "collect empirical evidence before any canonical selection or promotion"
+  ],
+  "changed_files": {
+    "source": [
+      "src/ovc/opt_b/market_grammar/predicate_domains.py",
+      "src/ovc/opt_b/market_grammar/episode_ledger.py",
+      "src/ovc/opt_b/market_grammar/family_hierarchy.py",
+      "src/ovc/opt_b/market_grammar/family_variants.py",
+      "src/ovc/opt_b/market_grammar/clock_alignment.py",
+      "src/ovc/opt_b/market_grammar/typed_grammar.py",
+      "src/ovc/opt_b/market_grammar/candidate_migration.py",
+      "src/ovc/opt_b/market_grammar/topology_smoke.py",
+      "src/ovc/opt_b/market_grammar/review_surfaces.py"
+    ],
+    "roots": ["contracts/opt_b/market_grammar/","schemas/opt_b/market_grammar/","registries/opt_b/market_grammar/","scripts/market_grammar/","tests/market_grammar/","docs/releases/c2e-c2g-c2p-market-grammar-v0-1/"]
+  },
+  "external_artifact_hashes": {
+    "binding_sha256": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "m1_bid": "d704b3bac2d51e839505ee5bc2ba7589ce44310353bbb6a464a1850fe1af5789",
+    "m1_ask": "bc643e62ebbc35940f93aaaaead147b6f9170b1a030a473436b2dc84d6992057",
+    "h1_bid": "b6116ea784be785089e881c8b8a69c8d5d202cb57f3d058f71d159071bd51c24",
+    "h1_ask": "a25dcf89cb35afbbc6fb722e7f379511ceb83af0a5f1fc1b32c94e8adc304e5d",
+    "integrated_package": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+    "logical_population": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7"
+  },
+  "external_inventory": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp0/MG_WP0_EXTERNAL_ARTIFACT_INVENTORY.json",
+  "rollback": "If not approved, retain the completed inactive shadow programme at main f4f2098a6a460cd06d2a856f9ef470d1321d230d. If later empirical work fails, revert or quarantine only that new bounded work and preserve MG-WP0 through MG-WP9.",
+  "recommended_decision": "PASS",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "exact_work_after_approval": [
+    "record the operator MG-WP10 decision and complete this programme",
+    "create a separately bounded empirical-integration programme from latest main",
+    "bind it to the exact accepted external hashes above",
+    "replace the two mocked WP8 boundaries with reproducible real read-only adapters",
+    "run two clean builds plus restart verification over the accepted June population",
+    "produce sensitivity, hierarchy, variant, grammar, migration, counterexample and context comparisons",
+    "stop again before any canonical selection, promotion, selector change, publication or C3 handoff"
+  ],
+  "operator_command_for_recommended_decision": "OVC APPROVE MG-WP10 PASS"
+}
