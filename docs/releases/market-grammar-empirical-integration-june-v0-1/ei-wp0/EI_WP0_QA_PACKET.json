@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-mg-ei-june-wp0-qa/v1",
+  "programme_id": "OVC-MARKET-GRAMMAR-EMPIRICAL-INTEGRATION-JUNE-v0.1",
+  "packet_id": "EI-WP0",
+  "baseline_commit": "a3ed3cf66432cfc7f33141a44c05252e85813df8",
+  "status": "PASS",
+  "authority_delta": "NONE_FOUNDATION_AND_EXACT_EVIDENCE_BINDING_ONLY",
+  "checks": {
+    "mg_wp10_operator_parent": "PASS",
+    "pgn_frozen_snapshot_mutation": "PASS_ZERO",
+    "post_snapshot_admission_append_only": "PASS",
+    "raw_source_object_count": "PASS_4_OF_4",
+    "raw_source_byte_counts": "PASS_4_OF_4",
+    "raw_source_sha256": "PASS_4_OF_4",
+    "binding_identity": "PASS_ACCEPTED_LOCK",
+    "population_identity": "PASS_ACCEPTED_LOCK",
+    "new_provider_intake": "PASS_ZERO",
+    "new_instrument_market_clock_side": "PASS_ZERO",
+    "selector_or_canonical_controls": "PASS_ZERO",
+    "promotion_publication_c3_active_authority": "PASS_ZERO",
+    "probability_risk_exposure_execution": "PASS_ZERO",
+    "rollback": "PASS_DEFINED",
+    "implementation_head_assurance": "PASS",
+    "decision_head_assurance": "REQUIRED_BEFORE_MERGE"
+  },
+  "external_verification": {
+    "source_folder_id": "1x5v1UV3UdMzIwtgmSzTNreaPqzw0jDJm",
+    "source_objects_folder_id": "1bodyRFpOG5qfMpCknW_O9DrTJZc6opZQ",
+    "preflight_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/EI_WP0_EVIDENCE_PREFLIGHT.json",
+    "result": "PASS_RAW_SOURCE_REPRODUCIBLE"
+  },
+  "tests": {
+    "implementation_head_complete_suite": "PASS run 31176738761 job 92860271389",
+    "implementation_head_final_head": "PASS run 31176738727 job 92860271331",
+    "implementation_head_compatibility": "PASS run 31176738727 job 92860316090",
+    "implementation_head_merge_readiness": "PASS run 31176738727 job 92860316330",
+    "implementation_head_unresolved_review_threads": 0,
+    "decision_head_complete_suite": "REQUIRED",
+    "decision_head_final_head": "REQUIRED",
+    "decision_head_compatibility": "REQUIRED",
+    "decision_head_merge_readiness": "REQUIRED"
+  },
+  "qa_recommendation": "PASS_DELEGATED_PENDING_DECISION_HEAD_ASSURANCE",
+  "blockers": [],
+  "rollback": "Revert only EI-WP0 admission/foundation records. Preserve the MG-WP10 operator decision, the first post-snapshot admission and the sealed PGN snapshot."
+}
