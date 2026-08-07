@@ -1,0 +1,36 @@
+{
+  "$id": "https://ovc.local/schemas/opt_b/market_grammar/mg_wp8_topology_smoke_result_v0_1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {"const": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY"},
+    "candidate_migration": {"type": "object"},
+    "canonical": {"const": false},
+    "capacity": {"type": "object"},
+    "component_counts": {"type": "object"},
+    "component_ids": {"type": "object"},
+    "context_status_counts": {"type": "object"},
+    "grammar_release": {"type": "object"},
+    "input_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "missing_context_resolution": {"type": "object"},
+    "mocked_boundaries": {"items": {"type": "object"}, "minItems": 1, "type": "array"},
+    "packet_id": {"const": "MG-WP8"},
+    "parse_result": {"type": "object"},
+    "programme_id": {"const": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1"},
+    "provenance_ablation": {"type": "object"},
+    "published": {"const": false},
+    "read_only_projection": {"type": "object"},
+    "result_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "schema": {"const": "ovc-mg-wp8-topology-smoke-result/v1"},
+    "sensitivity_comparison": {"type": "object"}
+  },
+  "required": [
+    "schema", "programme_id", "packet_id", "authority", "canonical", "published",
+    "input_sha256", "mocked_boundaries", "component_counts", "component_ids",
+    "context_status_counts", "missing_context_resolution", "sensitivity_comparison",
+    "candidate_migration", "provenance_ablation", "grammar_release", "parse_result",
+    "read_only_projection", "capacity", "result_sha256"
+  ],
+  "title": "OVC MG-WP8 Topology Smoke Result v0.1",
+  "type": "object"
+}

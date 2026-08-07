@@ -16,6 +16,6 @@ class MarketGrammarWp7PacketTests(unittest.TestCase):
  def test_c2_candidate_migration_schemas_are_closed(self):
   for name in ("c2_candidate_migration_v0_1.schema.json","c2_candidate_migration_ledger_v0_1.schema.json","c2_candidate_feature_migration_registry_v0_1.schema.json"):
    schema=load(SCHEMAS/name); self.assertFalse(schema["additionalProperties"]); self.assertEqual("https://json-schema.org/draft/2020-12/schema",schema["$schema"])
- def test_state_completes_wp7_and_unlocks_only_wp8(self):
-  state=load(STATE); packets={x["packet_id"]:x for x in state["packets"]}; self.assertEqual("COMPLETED",packets["MG-WP7"]["status"]); self.assertEqual("SATISFIED_DELEGATED_DECISION",packets["MG-WP7"]["authority_required"]); self.assertEqual("READY",packets["MG-WP8"]["status"]); self.assertEqual("PLANNED",packets["MG-WP9"]["status"]); self.assertEqual("OPERATOR_REQUIRED",packets["MG-WP10"]["authority_required"]); self.assertEqual("MG-WP8",state["next_packet"]); self.assertNotIn(state["status"],{"BLOCKED","QUARANTINED"})
+ def test_state_preserves_completed_wp7_while_wp8_progresses(self):
+  state=load(STATE); packets={x["packet_id"]:x for x in state["packets"]}; self.assertEqual("COMPLETED",packets["MG-WP7"]["status"]); self.assertEqual("SATISFIED_DELEGATED_DECISION",packets["MG-WP7"]["authority_required"]); self.assertIn(packets["MG-WP8"]["status"],{"READY","RUNNING","IMPLEMENTED","QA_REVIEW","APPROVED","COMPLETED"}); self.assertEqual("OPERATOR_REQUIRED",packets["MG-WP10"]["authority_required"]); self.assertNotIn(state["status"],{"BLOCKED","QUARANTINED"})
 if __name__=="__main__": unittest.main()
