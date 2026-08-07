@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-mcarb-auxiliary-source-audit/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "packet_id": "MCARB-D1/D8",
+  "baseline_commit": "d90432957df146bf448287cedf4da73a8c861ebe",
+  "status": "PRELIMINARY_COURT_RECORD_AUDIT_COMPLETE_FORMAL_SOURCE_SEMANTICS_AUDIT_REQUIRED",
+  "authority_effect": "NONE",
+  "confirmed": {
+    "provider": "DUKASCOPY",
+    "instrument": "GBPUSD",
+    "native_source_families": ["M1_BID", "M1_ASK", "H1_BID", "H1_ASK"],
+    "observation_volume_field": true,
+    "volume_nullable": true,
+    "volume_quality_states": ["KNOWN_ADDITIVE", "KNOWN_NON_ADDITIVE", "UNKNOWN_UNIT", "MISSING", "INCONSISTENT_UNIT", "NOT_COMPARABLE"],
+    "bid_ask_volume_separate_by_contract": true,
+    "active_discovery_release": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "active_development_release": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+    "validation_release": "OPT-A.GBPUSD.VALIDATION.2025.v2",
+    "validation_state": "LOCKED_UNCONSUMED"
+  },
+  "unresolved": [
+    {"claim": "actual active-payload volume provider field/unit/interpretation distribution", "marker": "REQUIRES_SOURCE_SEMANTICS_AUDIT"},
+    {"claim": "known-additive volume quality distribution by year/side/source grain", "marker": "REQUIRES_SOURCE_SEMANTICS_AUDIT"},
+    {"claim": "tick-level source objects retained in durable OVC evidence", "marker": "REQUIRES_COURT_RECORD_VERIFICATION"},
+    {"claim": "tick count / quote-update count retained or recoverable without provider request", "marker": "REQUIRES_COURT_RECORD_VERIFICATION"},
+    {"claim": "historical synchronized tick spread reconstructible from retained estate", "marker": "REQUIRES_COURT_RECORD_VERIFICATION"},
+    {"claim": "durable reread path for original source-object bytes without new provider intake", "marker": "REQUIRES_COURT_RECORD_VERIFICATION"}
+  ],
+  "prohibited_inferences": [
+    "Dukascopy volume == global spot-FX traded volume",
+    "BID/ASK provider activity == buyer/seller intent",
+    "M1/H1 paired bar proxy == exact historical tick spread"
+  ],
+  "sources": [
+    "schemas/opt_a/opt_a_observation_bar_v0_2.json",
+    "contracts/opt_a/OPT_A_CLOCK_AGGREGATION_GAP_VOLUME_RECONCILIATION_CONTRACT_v0_2.md",
+    "contracts/opt_a/OPT_A_PROVIDER_INTAKE_AND_SOURCE_OBJECT_CONTRACT_v0_2.md",
+    "registries/releases/OPT_A_RELEASE_REGISTRY.yaml",
+    "docs/releases/opt-a-v2/intake/WP4_POPULATION_INTAKE_SUMMARY.json",
+    "docs/releases/opt-a-v2/intake/WP4_ACTIONS_ARTIFACT_INVENTORY.json"
+  ],
+  "next_requirement": "FORMAL_SOURCE_SEMANTICS_AND_AVAILABILITY_AUDIT_BEFORE_IMPLEMENTATION_PLAN"
+}
