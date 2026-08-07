@@ -1,0 +1,27 @@
+{
+  "schema":"ovc-mcarbi-wp7-qa/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "packet_id":"MCARBI-WP7",
+  "gate_id":"MCARBI-G7",
+  "status":"QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "checks":[
+    {"check":"g6_population_preserved","result":"PASS_BY_CONSTRUCTION"},
+    {"check":"candidate_scope_g1_g6_bounded","result":"PASS_BY_TEST_REQUIRED"},
+    {"check":"parameters_thresholds_variants_explicit","result":"PASS_BY_TEST_REQUIRED"},
+    {"check":"normalization_reference_pre_evaluation","result":"PASS_BY_TEST_REQUIRED"},
+    {"check":"pack_exact_fields_no_implicit_catalogue","result":"PASS_BY_TEST_REQUIRED"},
+    {"check":"dependence_ablation_shuffle_matched_complexity_preregistered","result":"PASS_BY_CONSTRUCTION"},
+    {"check":"sampling_hidden_defaults_outcome_selection","result":"PASS_FALSE_BY_TEST_REQUIRED"},
+    {"check":"validation_2025_read","result":"PASS_FALSE"},
+    {"check":"provider_intake","result":"PASS_FALSE"},
+    {"check":"stage_a_execution_attempted","result":"PASS_FALSE"}
+  ],
+  "qa_recommendation":"PENDING_EXACT_HEAD_CI_THEN_PREREGISTRATION_FREEZE",
+  "authority_delta":"NONE_PENDING_MCARBI_G7_OPERATOR_ACK",
+  "warnings":[
+    "ET threshold/target/lattice values are proposed benchmark parameters for operator preregistration freeze, not structural truth or production thresholds.",
+    "AL-05 uses a non-overlapping pre-evaluation Discovery reference population and must abstain if its frozen slot/side reference has fewer than 15 eligible records.",
+    "AL remains provider activity evidence only; no global-volume or order-flow semantics are admitted."
+  ],
+  "rollback":"Preserve preregistration proposal evidence. ADJUST or DEFER at G7 leaves it non-executable and requires a versioned replacement."
+}
