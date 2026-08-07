@@ -1,0 +1,104 @@
+{
+  "schema": "ovc-mcarbi-wp0-preflight/v1",
+  "programme_id": "OVC-MCARB-v0.1",
+  "plan_id": "OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "MCARBI-WP0",
+  "gate_id": "MCARBI-G0",
+  "execution_command": "OVC Run OVC_Market_Context_Auxiliary_Representation_Benchmark_Programme_Implementation_Plan_v0_1_REVISED",
+  "preflight_time_local": "2026-08-07T19:49:00+01:00",
+  "latest_lawful_main": "d90432957df146bf448287cedf4da73a8c861ebe",
+  "branch": "gate/mcarbi-g0-preflight",
+  "plan_source_receipt": "docs/implementation-plans/mcarb-v0-1/OVC_MCARB_IMPLEMENTATION_PLAN_v0_1_REVISED_SOURCE_RECEIPT.json",
+  "prerequisite_checks": [
+    {
+      "id": "MCARB_D8_ACCEPTANCE",
+      "required": true,
+      "status": "FAIL_NOT_ACCEPTED",
+      "evidence": {
+        "design_pr": 381,
+        "design_pr_state": "OPEN_UNMERGED",
+        "design_gate_status": "GATE_READY",
+        "design_operator_decision": null,
+        "design_branch": "design/mcarb-v0-1",
+        "design_head": "cd81eb332e4eac38b5e812da11210e120d11e4db"
+      },
+      "effect": "MCARBI-G0 PASS IS NOT LAWFUL UNTIL MCARB-D8 PASS OR EXPLICIT SUPERSESSION"
+    },
+    {
+      "id": "LATEST_MAIN_AND_BRANCH_BASE",
+      "required": true,
+      "status": "PASS",
+      "evidence": {
+        "main": "d90432957df146bf448287cedf4da73a8c861ebe",
+        "branch_base": "d90432957df146bf448287cedf4da73a8c861ebe"
+      }
+    },
+    {
+      "id": "ACTIVE_OPT_A_C1_C2_AND_VALIDATION_LOCK",
+      "required": true,
+      "status": "PASS",
+      "evidence": {
+        "opt_a_discovery": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+        "opt_a_development": "OPT-A.GBPUSD.DEVELOPMENT.2024.v2",
+        "opt_a_validation": "OPT-A.GBPUSD.VALIDATION.2025.v2",
+        "validation_consumption": "LOCKED_UNCONSUMED",
+        "validation_default_access": "DENIED",
+        "c1_state": "SHADOW",
+        "c2_selector": "NONE"
+      }
+    },
+    {
+      "id": "SRFD_CAPACITY_AND_PR371_COMPATIBILITY",
+      "required": true,
+      "status": "PASS_WITH_BOUNDARY",
+      "evidence": {
+        "srfd_status": "REDESIGN_REQUIRED",
+        "srfd_current_gate": "SRFDI-G8",
+        "srfd_market_benchmark": "DENIED",
+        "srfd_june": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+        "srfd_capacity_freeze": "DENIED",
+        "preserved_blocker_pr": 371,
+        "pr371_policy": "PRESERVE_DO_NOT_MERGE"
+      },
+      "boundary": "MCARB MAY NOT INHERIT SRFD METHOD OR CAPACITY AUTHORITY; COMPATIBLE INFRASTRUCTURE PATTERNS REQUIRE EXPLICIT LATER DEPENDENCY CONTRACTS"
+    },
+    {
+      "id": "RETAINED_SOURCE_READ_REREAD_AUTHORITY",
+      "required": true,
+      "status": "UNRESOLVED",
+      "evidence": {
+        "design_warning": "durable source-object reread path remains unresolved",
+        "existing_research_ops": "bounded local read/verify/report infrastructure exists",
+        "mcarb_specific_source_reread_authority": "NOT_RECORDED"
+      },
+      "effect": "SOURCE-AUDIT OPERATIONS REQUIRING RETAINED MARKET OBJECT BYTES MUST NOT START"
+    },
+    {
+      "id": "NEW_PROVIDER_INTAKE",
+      "required": true,
+      "status": "PASS_PROHIBITION_CONFIRMED",
+      "evidence": {
+        "provider_intake_authority": "NONE",
+        "plan_rule": "NO_NEW_PROVIDER_INTAKE"
+      }
+    }
+  ],
+  "open_pr_reconciliation": {
+    "mcarb_design_pr": 381,
+    "preserved_blocker_pr": 371,
+    "other_legacy_open_prs": "PRESENT_BUT_NO_MCARBI_G0_AUTHORITY_DELTA_IDENTIFIED",
+    "unsafe_merge_action_taken": false
+  },
+  "preflight_result": "DEFER_PENDING_PREREQUISITES",
+  "blocking_prerequisites": [
+    "MCARB_D8_ACCEPTANCE_NOT_RECORDED",
+    "MCARB_SPECIFIC_RETAINED_SOURCE_READ_REREAD_AUTHORITY_UNRESOLVED"
+  ],
+  "authority_effect": "NONE",
+  "market_benchmark_execution": "DENIED",
+  "validation_2025": "LOCKED_UNCONSUMED",
+  "provider_intake": "DENIED",
+  "selector_or_production_activation": "NONE",
+  "next_action": "PRESENT_CONSOLIDATED_MCARBI_G0_OPERATOR_DECISION_PACKET_AND_STOP"
+}
