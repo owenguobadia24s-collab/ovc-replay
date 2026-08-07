@@ -6,11 +6,11 @@
   "gate_id": "MCARB-D8",
   "gate_title": "MCARB v0.1 Design Acceptance",
   "gate_class": "OPERATOR_REQUIRED",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "baseline_commit": "d90432957df146bf448287cedf4da73a8c861ebe",
-  "candidate_commit": "b33049dda7aed3d1925093d96ac77acbdb95249c",
+  "candidate_commit": "cd81eb332e4eac38b5e812da11210e120d11e4db",
   "completed_stages": ["MCARB-D0","MCARB-D1","MCARB-D2","MCARB-D3","MCARB-D4","MCARB-D5","MCARB-D6","MCARB-D7"],
-  "current_authority": "DESIGN_ONLY_NO_BENCHMARK_AUTHORITY",
+  "current_authority": "DESIGN_ACCEPTED_IMPLEMENTATION_PLAN_PREPARATION_PERMITTED_NO_BENCHMARK_AUTHORITY",
   "proposed_delta": "Accept MCARB v0.1 design canon and permit a separate implementation plan to be prepared. No implementation, source reread, provider intake or benchmark-run authority.",
   "acceptance_conditions": [
     "Design sections 0-34 and Appendices A-J complete.",
@@ -20,7 +20,12 @@
     "Source availability gaps are explicitly unresolved rather than assumed.",
     "Authority notice and reserved decisions are complete."
   ],
-  "tests": "PASS — structural design QA plus 34-page DOCX render and visual inspection",
+  "tests": {
+    "tests_run_id": 31202014293,
+    "tests_conclusion": "success",
+    "ovc_final_head_run_id": 31202014178,
+    "ovc_final_head_conclusion": "success"
+  },
   "qa": "PASS_WITH_CONDITIONS",
   "warnings": [
     "Formal source-semantics audit has not yet established actual active-payload volume semantics/unit distribution.",
@@ -38,6 +43,7 @@
     "docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_SOURCE_SEMANTICS_AUDIT.json",
     "docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_QA_PACKET.json",
     "docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_OPERATOR_DECISION_PACKET.json",
+    "docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_OPERATOR_DECISION.json",
     "registries/research/mcarb/MCARB_EXTERNAL_RESEARCH_REGISTRY.json",
     "registries/research/mcarb/MCARB_PROGRAMME_STATE.yaml"
   ],
@@ -47,9 +53,15 @@
     "design_docx_sha256": "f07913a77842609f9b4d993c66113cee7d12441ae6049ffe9cf072a98d8effb2",
     "design_markdown_sha256": "7ceae68412b0dc710aea38763d9250f531015fa2e74a49189b8c3c7ddbbc723b"
   },
-  "rollback": "Revert only the bounded MCARB design branch/PR. Active C2, releases, selectors, SRFD and source evidence remain unchanged.",
+  "rollback": "Preserve the operator PASS and design evidence as immutable history. Any future change must be a new explicit supersession decision; do not rewrite history.",
   "recommended_decision": "PASS",
-  "pass_effect": "DESIGN_ACCEPTED; CREATE_SEPARATE_IMPLEMENTATION_PLAN_NEXT; BENCHMARK_EXECUTION_REMAINS_DENIED",
+  "pass_effect": "DESIGN_ACCEPTED; IMPLEMENTATION_PLAN_EXECUTION_MAY_PROCEED_TO_MCARBI_G0; BENCHMARK_EXECUTION_REMAINS_DENIED",
   "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
-  "operator_decision": null
+  "operator_decision": {
+    "decision_id": "MCARB-D8.OPERATOR.PASS.20260807T200100+0100",
+    "decision": "PASS",
+    "authority": "OPERATOR",
+    "recorded_at": "2026-08-07T20:01:00+01:00",
+    "record": "docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_OPERATOR_DECISION.json"
+  }
 }
