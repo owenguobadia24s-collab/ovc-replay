@@ -25,6 +25,8 @@ class SRFDIG8RCapacityV2WP0Tests(unittest.TestCase):
     def test_h0_capture_is_measured_machine_path_independent_identity(self) -> None:
         with tempfile.TemporaryDirectory() as root:
             receipt = capture_h0_environment(artifact_root=root, io_payload_bytes=64 * 1024)
+        line = render_h0_line(receipt)
+        print(line, flush=True)
         self.assertEqual("MEASURED", receipt["measurement_class"])
         self.assertTrue(receipt["environment_fingerprint"].startswith("SRFD.H0."))
         self.assertFalse(receipt["hostname_in_identity"])
@@ -34,16 +36,18 @@ class SRFDIG8RCapacityV2WP0Tests(unittest.TestCase):
         self.assertEqual("CANDIDATE_UNADMITTED", receipt["candidate_backend"]["numpy"]["admission_state"])
         self.assertGreater(receipt["storage"]["io"]["payload_bytes"], 0)
         self.assertGreater(receipt["storage"]["io"]["write_seconds"], 0)
-        self.assertTrue(render_h0_line(receipt).startswith("SRFDI_G8R_H0="))
+        self.assertTrue(line.startswith("SRFDI_G8R_H0="))
 
     def test_reference_component_profile_uses_fixture_only_oracle(self) -> None:
         receipt = reference_component_profile()
+        line = render_reference_profile_line(receipt)
+        print(line, flush=True)
         self.assertEqual("CURRENT_JSON_REFERENCE", receipt["reference_oracle"])
         self.assertEqual("MEASURED", receipt["measurement_class"])
         self.assertFalse(receipt["june_market_records_read"])
         self.assertFalse(receipt["validation_consumed"])
         self.assertEqual("NONE", receipt["receipt"]["sampling"])
-        self.assertTrue(render_reference_profile_line(receipt).startswith("SRFDI_G8R_REFERENCE_PROFILE="))
+        self.assertTrue(line.startswith("SRFDI_G8R_REFERENCE_PROFILE="))
 
     def test_feasibility_bridge_schema_is_operator_gated_before_wp3(self) -> None:
         schema = feasibility_bridge_schema()
