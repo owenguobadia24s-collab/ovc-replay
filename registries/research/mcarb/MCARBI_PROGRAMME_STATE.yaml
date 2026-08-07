@@ -3,7 +3,7 @@ programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
 packet_id: MCARBI-WP1
-status: GATE_READY
+status: APPROVED
 prerequisites:
   - MCARBI-G0 PASS merged at d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1
   - audit-read scope EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
@@ -11,7 +11,7 @@ prerequisites:
   - Validation 2025 locked/unconsumed
   - latest lawful main reconciled after concurrent SRFD G8R capacity-remediation progress
 authority_required: OPERATOR_REQUIRED
-authority_delta: NONE_PENDING_MCARBI_G1; proposed eligibility freeze only
+authority_delta: FREEZE_44_CANDIDATE_IMPLEMENTATION_ELIGIBILITY_CLASSES_AND_BRANCH_LOCAL_DEPENDENCY_GRAPH_ONLY
 baseline_commit: 5d1274c5b8b26c6afa6ba9053ed2425d78329719
 audit_execution_baseline: d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1
 branch: audit/mcarbi-wp1-source-triage
@@ -22,11 +22,15 @@ tests:
   - exact accepted M1-derived aggregation checks: PASS, zero mismatches
   - candidate registry count: 44 unique (AL=20 ET=6 VS=18)
   - latest-main reconciliation: PASS_NO_MCARB_OR_OPT_A_SOURCE_CONFLICT
-  - repository exact-head CI pending reconciled PR head
+  - exact-head repository CI required after operator decision materialisation
 qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_QA_PACKET.json
-decision_record: null
+decision_record: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_G1_OPERATOR_DECISION.json
 merge_commit: null
 blockers: []
+operator_decision:
+  decision_id: MCARBI-G1.OPERATOR.ACCEPT_TRIAGE.20260807T204800+0100
+  decision: ACCEPT_TRIAGE
+  recorded_at: '2026-08-07T20:48:00+01:00'
 source_audit:
   outcome: AL_SOURCE_PARTIAL
   m1_side_specific_provider_activity: PASS_FOR_TRIAGE
@@ -37,17 +41,11 @@ source_audit:
 court_record_reconciliation:
   latest_main: 5d1274c5b8b26c6afa6ba9053ed2425d78329719
   concurrent_programme: OVC-SRFDI-G8R-v0.2
-  concurrent_state: RUNNING_CAPACITY_REMEDIATION_FIXTURE_LOCAL_ONLY
-  mcarb_or_opt_a_source_conflict: false
   inherited_srfd_authority: NONE
-  srfd_method_representation_distance_family_sensitivity_promotion: NONE
-  srfd_wp9: DENIED
-  srfd_june: DENIED
 candidate_registry: registries/research/mcarb/MCARB_CANDIDATE_DISPOSITION_REGISTRY_v0_1.json
 dependency_graph: registries/research/mcarb/MCARB_BRANCH_DEPENDENCY_GRAPH_v0_1.json
 stage_a_proposal: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_STAGE_A_PROPOSED_SET.json
-recommended_gate_decision: ACCEPT_TRIAGE
-next_packet: MCARBI-G1-OPERATOR-DECISION
+next_packet: MCARBI-WP2
 market_benchmark_authority: NONE
 stage_a_authority: NONE
 provider_intake_authority: NONE
@@ -58,4 +56,4 @@ selector_authority: NONE
 c2_c2e_sri_family_semantic_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
-continuation_point: AFTER_MCARBI_G1_ACCEPT_TRIAGE_EXECUTE_WP2_CONTRACTS_SCHEMAS_REGISTRIES
+continuation_point: AFTER_G1_MERGE_EXECUTE_WP2_CONTRACTS_SCHEMAS_REGISTRIES
