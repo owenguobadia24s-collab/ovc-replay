@@ -5,28 +5,37 @@
   "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
   "plan_id": "OVC-C2E-C2G-C2P-INTEGRATED-MARKET-GRAMMAR-IMPLEMENTATION",
   "plan_version": "0.1",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "baseline_commit": "372b072959863957d80c4dc12f393ae97bba482e",
-  "candidate_commit": "f4f2098a6a460cd06d2a856f9ef470d1321d230d",
+  "candidate_commit": "6f8d6aef111c1ee88e9444f7614e0963f4f1a78d",
   "gate_branch": "gate/mg-wp10-terminal-decision",
   "gate_readiness_receipt": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp10/MG_WP10_GATE_READINESS_ASSURANCE.json",
+  "predecision_exact_head_receipt": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp10/MG_WP10_PREDECISION_EXACT_HEAD_ASSURANCE.json",
+  "operator_decision_record": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp10/MG_WP10_OPERATOR_DECISION.json",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR_EXPLICIT",
+  "operator_command": "OVC APPROVE MG-WP10 PASS",
+  "approved_at": "2026-08-07T12:38:00+01:00",
   "completed_packets": ["MG-D0-D8","MG-WP0","MG-WP1","MG-WP2","MG-WP3","MG-WP4","MG-WP5","MG-WP6","MG-WP7","MG-WP8","MG-WP9"],
   "current_authority": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_READ_ONLY",
-  "proposed_authority_delta": "AUTHORISE_BOUNDED_EMPIRICAL_MARKET_GRAMMAR_INTEGRATION_ON_THE_EXISTING_ACCEPTED_JUNE_REVISED_C2_EVIDENCE_UNDER_SHADOW_EXPERIMENT_ONLY",
-  "proposed_delta_limits": [
+  "approved_authority_delta": "AUTHORISE_BOUNDED_EMPIRICAL_MARKET_GRAMMAR_INTEGRATION_ON_THE_EXISTING_ACCEPTED_JUNE_REVISED_C2_EVIDENCE_UNDER_SHADOW_EXPERIMENT_ONLY",
+  "approved_delta_limits": [
     "GBPUSD and the already accepted June evidence only",
     "15M evaluation with 2H_A_L context only",
     "no new provider intake or source identity",
     "no selector or canonical selection",
     "no family, variant, rule, candidate, grammar or semantic promotion",
     "no C3 handoff or publication",
-    "no active research authority change"
+    "no Active Discovery, Active Development or Active Validation authority",
+    "no probability, risk, exposure or execution authority"
   ],
   "acceptance_conditions": {
     "programme_packets_complete": true,
     "wp9_qa": "PASS",
     "wp9_exact_head": "PASS",
     "gate_packet_first_head_assurance": "PASS",
+    "gate_packet_exact_head_assurance": "PASS",
+    "operator_decision": "PASS",
     "unresolved_review_threads": 0,
     "blockers": [],
     "rollback_defined": true
@@ -41,12 +50,17 @@
     "wp9_receipt_compatibility": "PASS run 31173783218 job 92851226750",
     "wp9_receipt_merge_readiness": "PASS run 31173783218 job 92851226788",
     "mg_wp10_first_head": "d6b0ee4b0f19fae40e916390dcecbc59c2a960dd",
-    "mg_wp10_complete_suite": "PASS run 31174321933 job 92852847211",
-    "mg_wp10_final_head": "PASS run 31174322260 job 92852848267",
-    "mg_wp10_compatibility": "PASS run 31174322260 job 92852898060",
-    "mg_wp10_merge_readiness": "PASS run 31174322260 job 92852898228",
+    "mg_wp10_first_head_complete_suite": "PASS run 31174321933 job 92852847211",
+    "mg_wp10_first_head_final_head": "PASS run 31174322260 job 92852848267",
+    "mg_wp10_first_head_compatibility": "PASS run 31174322260 job 92852898060",
+    "mg_wp10_first_head_merge_readiness": "PASS run 31174322260 job 92852898228",
+    "mg_wp10_exact_gate_head": "6f8d6aef111c1ee88e9444f7614e0963f4f1a78d",
+    "mg_wp10_exact_gate_head_complete_suite": "PASS run 31174491998 job 92853371245",
+    "mg_wp10_exact_gate_head_final_head": "PASS run 31174492004 job 92853371443",
+    "mg_wp10_exact_gate_head_compatibility": "PASS run 31174492004 job 92853401228",
+    "mg_wp10_exact_gate_head_merge_readiness": "PASS run 31174492004 job 92853401100",
     "mg_wp10_unresolved_review_threads": 0,
-    "final_exact_head_after_readiness_receipt": "REQUIRED"
+    "decision_commit_exact_head_assurance": "REQUIRED_BEFORE_MERGE"
   },
   "qa": {
     "recommendation": "PASS_FOR_BOUNDED_EMPIRICAL_SHADOW_INTEGRATION_ONLY",
@@ -87,7 +101,7 @@
     "logical_population": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7"
   },
   "external_inventory": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp0/MG_WP0_EXTERNAL_ARTIFACT_INVENTORY.json",
-  "rollback": "If not approved, retain the completed inactive shadow programme at main f4f2098a6a460cd06d2a856f9ef470d1321d230d. If later empirical work fails, revert or quarantine only that new bounded work and preserve MG-WP0 through MG-WP9.",
+  "rollback": "If the authorised empirical programme fails, quarantine or revert only that bounded empirical work and preserve MG-WP0 through MG-WP10; do not grant or retain any reserved authority.",
   "recommended_decision": "PASS",
   "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
   "exact_work_after_approval": [
@@ -99,5 +113,5 @@
     "produce sensitivity, hierarchy, variant, grammar, migration, counterexample and context comparisons",
     "stop again before any canonical selection, promotion, selector change, publication or C3 handoff"
   ],
-  "operator_command_for_recommended_decision": "OVC APPROVE MG-WP10 PASS"
+  "next_programme_id": "OVC-MARKET-GRAMMAR-EMPIRICAL-INTEGRATION-JUNE-v0.1"
 }
