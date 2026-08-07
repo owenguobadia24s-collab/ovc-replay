@@ -1,0 +1,90 @@
+{
+  "schema": "ovc-srfdi-g8r-wp3-qa-gate-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_artifact_sha256": "f1e6515f68a97ee50c5273cb13312622376ac9650c6cf7612c48c18588fb0408",
+  "packet_id": "SRFDI-G8R-WP3",
+  "gate_id": "SRFDI-G8R-G3",
+  "gate_class": "AUTO_RATIFIABLE",
+  "baseline_commit": "f0b7897c2a3b2234c5a8d80a8b1cedc67578af5e",
+  "latest_assurance_base": "faf4e5af7c143995a2954dddb136cbe66a9e528d",
+  "implementation_measurement_head": "7dc01401aacc1cd06c4e64fff013f4fd884e9363",
+  "pr_number": 398,
+  "change_classes": [
+    "COMPUTE_ONLY_EQUIVALENT",
+    "OBSERVABILITY_ONLY"
+  ],
+  "acceptance": {
+    "prepared_decimal_surface_matches_reference": "PASS",
+    "medoid_star_exact_reference_equivalence": "PASS",
+    "complete_linkage_exact_reference_equivalence": "PASS",
+    "average_linkage_exact_reference_equivalence": "PASS",
+    "bounded_pam_exact_reference_equivalence": "PASS",
+    "lexicographic_tie_behavior_preserved": "PASS",
+    "residual_and_singleton_semantics_preserved": "PASS",
+    "adversarial_tie_heavy_population_sweep": "PASS",
+    "measured_family_capacity_receipt_present": "PASS",
+    "all_measured_rungs_faster_than_reference": "PASS",
+    "no_large_n_capacity_freeze_claim": "PASS",
+    "numpy_remains_candidate_unadmitted": "PASS",
+    "june_market_records_not_read": "PASS",
+    "validation_not_consumed": "PASS",
+    "scientific_semantics_unchanged": "PASS"
+  },
+  "measurement": {
+    "receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp3/SRFDI_G8R_WP3_FAMILY_METHOD_CAPACITY_RECEIPT.json",
+    "workflow_run_id": 31219397993,
+    "workflow_job_id": 93000343637,
+    "repository_test_count": 434,
+    "population_counts": [48, 96],
+    "sampling": "NONE_FULL_SYNTHETIC_DISTANCE_SURFACE",
+    "source_profile_logical_hash": "b1cd9a94bc98b0cf2f1c94c256827fc2ecfcd722915a14a016034b9687fe56d9",
+    "speedup_factors_at_n96": {
+      "AVERAGE_LINKAGE": 15.281985815286507,
+      "BOUNDED_PAM": 1.3705839128497586,
+      "COMPLETE_LINKAGE": 16.596689622223796,
+      "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 3.7538309355102735
+    }
+  },
+  "tests": {
+    "measurement_repository_suite": {
+      "run_id": 31219397993,
+      "job_id": 93000343637,
+      "conclusion": "success",
+      "tests": 434
+    },
+    "measurement_tiered": {
+      "run_id": 31219397830,
+      "conclusion": "success"
+    },
+    "measurement_profile_assurance_job": 92999693241,
+    "measurement_merge_readiness_job": 92999733970
+  },
+  "authority": {
+    "capacity_remediation_implementation": "AUTHORISED_FIXTURE_LOCAL_ONLY",
+    "wp9": "DENIED",
+    "june": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "method_representation_distance_family_sensitivity_promotion": "NONE",
+    "c2e_c2g_c2p_c25_c3_activation": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "non_blocking_observations": [
+    "The N=48 and N=96 measurements are small-N fixture/local evidence; they are not a large-N capacity freeze.",
+    "The average-linkage optimized path deliberately recomputes base-pair sums for each newly merged cluster to preserve exact Decimal operation order rather than using recursively rounded averages.",
+    "NumPy remains CANDIDATE_UNADMITTED and no dependency change is proposed.",
+    "End-to-end multi-N capacity, restart, storage and hardware sizing remain downstream G8R work."
+  ],
+  "qa_recommendation": "PASS",
+  "decision": "PASS",
+  "authority_delta": "NONE_BEYOND_COMPUTE_ONLY_EQUIVALENT_FAMILY_METHOD_CAPACITY_REMEDIATION",
+  "scientific_delta": "NONE",
+  "rollback": "Non-destructive revert of WP3 optimized family-method backend, capacity profiler and WP3 evidence only; retain WP0-WP2 and G2F authority records unchanged and fall back to CURRENT_FAMILY_REFERENCE.",
+  "next_packet": "SRFDI-G8R-WP4",
+  "final_merge_condition": "Replay the bounded final WP3 packet onto the latest lawful main tip, rerun repository suite, tiered assurance and OVC merge readiness, then squash-merge only if all remain PASS."
+}
