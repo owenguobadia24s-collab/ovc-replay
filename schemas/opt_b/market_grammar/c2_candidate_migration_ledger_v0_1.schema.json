@@ -1,0 +1,127 @@
+{
+  "$id": "https://ovc.local/schemas/opt_b/market_grammar/c2_candidate_migration_ledger_v0_1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {
+      "const": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY"
+    },
+    "candidate_count": {
+      "const": 14
+    },
+    "canonical": {
+      "const": false
+    },
+    "domain_totals": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "feature_registry_id": {
+      "const": "MG.CEAR_G10.TYPED_FEATURE_MIGRATION.v0.1"
+    },
+    "feature_registry_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "ledger_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "legacy_core_classification_totals": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "migration_policy": {
+      "type": "object"
+    },
+    "migration_records": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "migration_id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "path": {
+            "pattern": "^registries/opt_b/market_grammar/cear_g10_migrations/C2_RULE_CANDIDATE_[0-9a-f]{24}\\.json$",
+            "type": "string"
+          },
+          "record_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "rule_candidate_id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "rule_candidate_id",
+          "migration_id",
+          "record_sha256",
+          "path"
+        ],
+        "type": "object"
+      },
+      "maxItems": 14,
+      "minItems": 14,
+      "type": "array"
+    },
+    "migration_status_counts": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "packet_id": {
+      "const": "MG-WP7"
+    },
+    "programme_id": {
+      "const": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1"
+    },
+    "promotion_authority": {
+      "const": "NONE"
+    },
+    "schema": {
+      "const": "ovc-mg-cear-g10-migration-ledger/v1"
+    },
+    "selected_clause_classification_totals": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "source_artifacts": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "authority",
+    "candidate_count",
+    "migration_status_counts",
+    "domain_totals",
+    "selected_clause_classification_totals",
+    "legacy_core_classification_totals",
+    "source_artifacts",
+    "canonical",
+    "promotion_authority",
+    "ledger_sha256",
+    "feature_registry_id",
+    "feature_registry_sha256",
+    "migration_policy",
+    "migration_records"
+  ],
+  "title": "OVC MG CEAR-G10 Candidate Migration Ledger v0.1",
+  "type": "object"
+}

@@ -1,0 +1,108 @@
+{
+  "$id": "https://ovc.local/schemas/opt_b/market_grammar/c2_candidate_migration_v0_1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "domain_counts": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "evaluation": {
+      "type": "object"
+    },
+    "family_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "functional_core_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "legacy_clause_count": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "legacy_component_classification_counts": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "migration_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "migration_status": {
+      "enum": [
+        "MAPPED",
+        "SUPERSEDED",
+        "QUARANTINED",
+        "UNRESOLVED"
+      ]
+    },
+    "rule_candidate_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "selected_clause_classification_counts": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "source_clause_inventory_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_rule_content_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "typed_feature_indices_by_domain": {
+      "additionalProperties": {
+        "items": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "type": "array",
+        "uniqueItems": true
+      },
+      "type": "object"
+    },
+    "typed_layer_counts": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "type": "object"
+    },
+    "typed_mapping_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "migration_id",
+    "rule_candidate_id",
+    "functional_core_id",
+    "family_id",
+    "migration_status",
+    "source_rule_content_sha256",
+    "source_clause_inventory_sha256",
+    "typed_mapping_sha256",
+    "legacy_clause_count",
+    "legacy_component_classification_counts",
+    "selected_clause_classification_counts",
+    "domain_counts",
+    "typed_layer_counts",
+    "typed_feature_indices_by_domain",
+    "evaluation"
+  ],
+  "title": "OVC MG CEAR-G10 Candidate Migration v0.1",
+  "type": "object"
+}
