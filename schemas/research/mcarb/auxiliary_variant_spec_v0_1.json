@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {"const": "RESEARCH_CONFIGURATION_ONLY"},
+    "candidate_id": {"minLength": 1, "type": "string"},
+    "first_valid_rule": {"minLength": 1, "type": "string"},
+    "normalization_id": {"type": ["string", "null"]},
+    "parameters": {"type": "object"},
+    "retrospective": {"type": "boolean"},
+    "status": {"enum": ["ACTIVE_FOR_FIXTURES", "CONDITIONAL", "DEFERRED", "DISABLED"]},
+    "variant_id": {"minLength": 1, "type": "string"}
+  },
+  "required": ["variant_id", "candidate_id", "status", "parameters", "normalization_id", "first_valid_rule", "retrospective", "authority"],
+  "title": "MCARB Auxiliary VariantSpec v0.1",
+  "type": "object"
+}

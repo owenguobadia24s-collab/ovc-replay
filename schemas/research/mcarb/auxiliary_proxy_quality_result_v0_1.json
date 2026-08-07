@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {"const": "PROXY_QA_ONLY"},
+    "candidate_id": {"minLength": 1, "type": "string"},
+    "information_loss": {"type": ["number", "null"]},
+    "proxy_id": {"minLength": 1, "type": "string"},
+    "reason_codes": {"items": {"type": "string"}, "type": "array"},
+    "result_id": {"minLength": 1, "type": "string"},
+    "status": {"enum": ["PASS", "PARTIAL", "NOT_EVALUABLE", "FAIL", "QUARANTINED"]},
+    "truth_source": {"type": ["string", "null"]}
+  },
+  "required": ["result_id", "candidate_id", "proxy_id", "truth_source", "status", "information_loss", "reason_codes", "authority"],
+  "title": "MCARB Auxiliary ProxyQualityResult v0.1",
+  "type": "object"
+}

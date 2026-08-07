@@ -2,58 +2,31 @@ schema: ovc-programme-state/v1
 programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
-packet_id: MCARBI-WP1
+packet_id: MCARBI-WP2
 status: APPROVED
 prerequisites:
-  - MCARBI-G0 PASS merged at d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1
-  - audit-read scope EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
-  - no new provider intake
-  - Validation 2025 locked/unconsumed
-  - latest lawful main reconciled after concurrent SRFD G8R capacity-remediation progress
-authority_required: OPERATOR_REQUIRED
-authority_delta: FREEZE_44_CANDIDATE_IMPLEMENTATION_ELIGIBILITY_CLASSES_AND_BRANCH_LOCAL_DEPENDENCY_GRAPH_ONLY
-baseline_commit: 5d1274c5b8b26c6afa6ba9053ed2425d78329719
-audit_execution_baseline: d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1
-branch: audit/mcarbi-wp1-source-triage
-candidate_commit: null
+  - MCARBI-G1 ACCEPT_TRIAGE merged at a00b14c1a59ca267be767efc1af35e5c52762b9f
+authority_required: AUTO_RATIFIABLE
+authority_delta: CONTRACTS_SCHEMAS_REGISTRIES_ONLY
+baseline_commit: a00b14c1a59ca267be767efc1af35e5c52762b9f
+branch: build/mcarbi-wp2-contracts
+candidate_commit: PENDING
 tests:
-  - retained artifacts verified by exact SHA-256: 5
-  - non-Validation provider intake records inspected: 192
-  - exact accepted M1-derived aggregation checks: PASS, zero mismatches
-  - candidate registry count: 44 unique (AL=20 ET=6 VS=18)
-  - latest-main reconciliation: PASS_NO_MCARB_OR_OPT_A_SOURCE_CONFLICT
-  - exact-head repository CI required after operator decision materialisation
-qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_QA_PACKET.json
-decision_record: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_G1_OPERATOR_DECISION.json
+  - targeted WP2 contract tests required
+  - exact-head repository suite required before merge
+qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp2/MCARBI_WP2_QA_GATE_PACKET.json
+decision_record: docs/releases/mcarb-v0-1/mcarbi-wp2/MCARBI_G2_DELEGATED_DECISION.json
 merge_commit: null
 blockers: []
-operator_decision:
-  decision_id: MCARBI-G1.OPERATOR.ACCEPT_TRIAGE.20260807T204800+0100
-  decision: ACCEPT_TRIAGE
-  recorded_at: '2026-08-07T20:48:00+01:00'
-source_audit:
-  outcome: AL_SOURCE_PARTIAL
-  m1_side_specific_provider_activity: PASS_FOR_TRIAGE
-  provider_native_h1_equivalence: PARTIAL_NOT_EXACTLY_COMPARABLE
-  cross_side_semantic_comparability: UNRESOLVED
-  retained_tick_update_source: TICK_SOURCE_NOT_FOUND
-  al11_proxy_quality: NOT_EVALUABLE_FOR_STAGE_A
-court_record_reconciliation:
-  latest_main: 5d1274c5b8b26c6afa6ba9053ed2425d78329719
-  concurrent_programme: OVC-SRFDI-G8R-v0.2
-  inherited_srfd_authority: NONE
-candidate_registry: registries/research/mcarb/MCARB_CANDIDATE_DISPOSITION_REGISTRY_v0_1.json
-dependency_graph: registries/research/mcarb/MCARB_BRANCH_DEPENDENCY_GRAPH_v0_1.json
-stage_a_proposal: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_STAGE_A_PROPOSED_SET.json
-next_packet: MCARBI-WP2
+next_packet: MCARBI-WP3
+source_audit_outcome: AL_SOURCE_PARTIAL
 market_benchmark_authority: NONE
 stage_a_authority: NONE
 provider_intake_authority: NONE
-retained_source_reread_authority: MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD
-retained_source_reread_scope: EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
+retained_source_reread_authority: EXPIRED_AFTER_G1_ACCEPTANCE
 validation_2025: LOCKED_UNCONSUMED
 selector_authority: NONE
 c2_c2e_sri_family_semantic_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
-continuation_point: AFTER_G1_MERGE_EXECUTE_WP2_CONTRACTS_SCHEMAS_REGISTRIES
+continuation_point: AFTER_G2_MERGE_EXECUTE_WP3_CORE_MEASUREMENT_ENGINES
