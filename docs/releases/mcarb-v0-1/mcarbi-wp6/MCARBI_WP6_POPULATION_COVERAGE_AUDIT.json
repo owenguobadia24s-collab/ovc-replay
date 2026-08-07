@@ -1,0 +1,38 @@
+{
+  "schema":"ovc-mcarbi-stage-a-population-coverage-audit/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "packet_id":"MCARBI-WP6",
+  "purpose":"POPULATION_READINESS_ENUMERATION_ONLY_NO_AUXILIARY_BENCHMARK",
+  "instrument":"GBPUSD",
+  "validation_2025_read":false,
+  "provider_intake":false,
+  "accepted_observation_artifacts":[
+    {"role":"DISCOVERY","artifact_id":8624691154,"sha256":"371eac7f02d9e013c8686b5acae630acdc044cec56b36bc61225c01af17cbedb","release_id":"OPT-A.GBPUSD.DISCOVERY.2021_2023.v2"},
+    {"role":"DEVELOPMENT","artifact_id":8624691530,"sha256":"d502e4f493869761af7e72ca9a91c8fd93ef1b909367ac9482e3c4ea8a0bfc48","release_id":"OPT-A.GBPUSD.DEVELOPMENT.2024.v2"}
+  ],
+  "method":"For each full UTC calendar month, parse only accepted canonical 2H_A_L timestamps from the already-produced observation artifact; intersect BID/ASK timestamps; count dates with >=1 accepted pair and count dates per A-L slot. No AL/ET/VS transform, family method or outcome field is read.",
+  "stage_a_floor":{"minimum_full_calendar_months":1,"minimum_eligible_market_days":20,"minimum_days_each_A_L_slot":15},
+  "census":{"months_checked":48,"single_months_meeting_full_floor":0,"finding":"NO_SINGLE_MONTH_MEETS_ALL_12_SLOT_DAY_FLOOR; K/L maintenance/closure coverage is the binding constraint in every month."},
+  "minimum_contiguous_span_meeting_aggregate_floor":{"months":2,"qualifying_windows":6},
+  "qualifying_two_month_windows":[
+    {"start":"2023-11","end":"2023-12","role":"DISCOVERY","paired_2h":449,"eligible_days":43,"minimum_slot_days":17},
+    {"start":"2023-10","end":"2023-11","role":"DISCOVERY","paired_2h":459,"eligible_days":47,"minimum_slot_days":16},
+    {"start":"2024-10","end":"2024-11","role":"DEVELOPMENT","paired_2h":469,"eligible_days":50,"minimum_slot_days":15},
+    {"start":"2023-03","end":"2023-04","role":"DISCOVERY","paired_2h":472,"eligible_days":51,"minimum_slot_days":16},
+    {"start":"2023-02","end":"2023-03","role":"DISCOVERY","paired_2h":477,"eligible_days":47,"minimum_slot_days":22},
+    {"start":"2022-10","end":"2022-11","role":"DISCOVERY","paired_2h":479,"eligible_days":50,"minimum_slot_days":20}
+  ],
+  "proposed_window":{
+    "selection_rule":"PRESERVE_DEVELOPMENT_FOR_LATER_COMPARISON; THEN_MINIMUM_CONTIGUOUS_FULL_MONTH_SPAN_SATISFYING_AGGREGATE_FLOOR; THEN_MINIMUM_PAIRED_2H_COUNT; THEN_EARLIEST_UTC",
+    "release_id":"OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "interval":"[2023-11-01T00:00:00Z,2024-01-01T00:00:00Z)",
+    "month_detail":[
+      {"month":"2023-11","paired_2h":233,"eligible_days":22,"slot_days":{"A":21,"B":20,"C":19,"D":22,"E":22,"F":22,"G":22,"H":21,"I":22,"J":20,"K":14,"L":8}},
+      {"month":"2023-12","paired_2h":216,"eligible_days":21,"slot_days":{"A":18,"B":17,"C":17,"D":20,"E":20,"F":20,"G":20,"H":20,"I":20,"J":20,"K":15,"L":9}}
+    ],
+    "aggregate":{"paired_2h":449,"eligible_days":43,"slot_days":{"A":39,"B":37,"C":36,"D":42,"E":42,"F":42,"G":42,"H":41,"I":42,"J":40,"K":29,"L":17},"minimum_slot_days":17,"bid_ask_timestamp_sets_equal":true},
+    "exact_accepted_rows_per_side":{"M1":60383,"15M":3941,"H1_M1_DERIVED":943,"2H_A_L":449},
+    "status":"PROPOSED_ELIGIBLE_NON_EXECUTABLE"
+  },
+  "interpretation_boundary":"The two-month proposal is a readiness/capacity population candidate only. It is not a scientific population selection, does not consume Validation, does not authorize ACTIVE_DISCOVERY benchmark execution, and does not create Stage-A run authority."
+}
