@@ -3,25 +3,29 @@
   "programme_id":"OVC-MCARB-v0.1",
   "packet_id":"MCARBI-WP7",
   "gate_id":"MCARBI-G7",
-  "status":"QA_REVIEW_PENDING_EXACT_HEAD_CI",
+  "status":"GATE_READY_PENDING_FINAL_MATERIALIZATION_CI",
+  "evidence_head":"f96eac7db1e6b72c0396224aadc8bc74fd9073c0",
   "checks":[
-    {"check":"g6_population_preserved","result":"PASS_BY_CONSTRUCTION"},
-    {"check":"candidate_scope_g1_g6_bounded","result":"PASS_BY_TEST_REQUIRED"},
-    {"check":"parameters_thresholds_variants_explicit","result":"PASS_BY_TEST_REQUIRED"},
-    {"check":"normalization_reference_pre_evaluation","result":"PASS_BY_TEST_REQUIRED"},
-    {"check":"pack_exact_fields_no_implicit_catalogue","result":"PASS_BY_TEST_REQUIRED"},
-    {"check":"dependence_ablation_shuffle_matched_complexity_preregistered","result":"PASS_BY_CONSTRUCTION"},
-    {"check":"sampling_hidden_defaults_outcome_selection","result":"PASS_FALSE_BY_TEST_REQUIRED"},
+    {"check":"g6_population_preserved","result":"PASS"},
+    {"check":"candidate_scope_g1_g6_bounded","result":"PASS"},
+    {"check":"parameters_thresholds_variants_explicit","result":"PASS"},
+    {"check":"normalization_reference_pre_evaluation","result":"PASS"},
+    {"check":"pack_exact_fields_no_implicit_catalogue","result":"PASS"},
+    {"check":"dependence_ablation_shuffle_matched_complexity_preregistered","result":"PASS"},
+    {"check":"sampling_hidden_defaults_outcome_selection","result":"PASS_FALSE"},
     {"check":"validation_2025_read","result":"PASS_FALSE"},
     {"check":"provider_intake","result":"PASS_FALSE"},
     {"check":"stage_a_execution_attempted","result":"PASS_FALSE"}
   ],
-  "qa_recommendation":"PENDING_EXACT_HEAD_CI_THEN_PREREGISTRATION_FREEZE",
+  "assurance":{"repository_suite_run_id":31220059853,"repository_suite_conclusion":"SUCCESS","tiered_final_head_run_id":31220059836,"profile_assurance_job_id":93002432588,"profile_assurance_conclusion":"SUCCESS","merge_readiness_job_id":93002481188,"merge_readiness_conclusion":"SUCCESS","gate_materialization_exact_head_ci":"PENDING_ON_FINAL_METADATA_HEAD"},
+  "qa_recommendation":"PREREGISTRATION_FREEZE",
   "authority_delta":"NONE_PENDING_MCARBI_G7_OPERATOR_ACK",
   "warnings":[
-    "ET threshold/target/lattice values are proposed benchmark parameters for operator preregistration freeze, not structural truth or production thresholds.",
+    "ET threshold/target/lattice values are proposed benchmark sensitivity parameters for operator preregistration freeze, not structural truth, production thresholds or selector settings.",
+    "ET-X is an exogenous decimal-lattice crossing comparator only and carries no breakout/support/resistance semantics.",
     "AL-05 uses a non-overlapping pre-evaluation Discovery reference population and must abstain if its frozen slot/side reference has fewer than 15 eligible records.",
-    "AL remains provider activity evidence only; no global-volume or order-flow semantics are admitted."
+    "AL_SOURCE_PARTIAL remains binding; AL is provider activity evidence only, with no global-volume or order-flow semantics.",
+    "Stage-A remains non-executable after G7 unless MCARBI-G-STAGE-A-AUTH separately records AUTHORIZE_STAGE_A."
   ],
   "rollback":"Preserve preregistration proposal evidence. ADJUST or DEFER at G7 leaves it non-executable and requires a versioned replacement."
 }
