@@ -1,0 +1,36 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"mg_ei_wp2_structural_projection_v0_1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["record_id","record_type","source_release_id","instrument_id","side","scope_id","clock_id","first_valid_time","source_sha256","structural_features","computability_status","not_evaluable_reason"],
+  "properties":{
+    "record_id":{"type":"string","minLength":1},
+    "record_type":{"const":"STATE"},
+    "source_release_id":{"const":"C2AR.INTEGRATED.SHADOW.PACKAGE.v1"},
+    "instrument_id":{"const":"GBPUSD"},
+    "side":{"enum":["BID","ASK"]},
+    "scope_id":{"const":"GBPUSD-15M-LOCAL-v0.1"},
+    "clock_id":{"const":"15M"},
+    "first_valid_time":{"type":"string","format":"date-time"},
+    "source_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "computability_status":{"enum":["EVALUABLE","NOT_EVALUABLE"]},
+    "not_evaluable_reason":{"type":["string","null"]},
+    "structural_features":{
+      "type":"object",
+      "additionalProperties":false,
+      "properties":{
+        "location":{"$ref":"#/$defs/coordinate"},
+        "motion":{"$ref":"#/$defs/coordinate"},
+        "organisation":{"$ref":"#/$defs/coordinate"},
+        "interaction":{"$ref":"#/$defs/coordinate"},
+        "quality":{"$ref":"#/$defs/coordinate"}
+      }
+    }
+  },
+  "$defs":{"coordinate":{"type":"string","pattern":"^(0(\\.[0-9]+)?|1(\\.0+)?)$"}},
+  "allOf":[
+    {"if":{"properties":{"computability_status":{"const":"EVALUABLE"}}},"then":{"properties":{"not_evaluable_reason":{"type":"null"},"structural_features":{"required":["location","motion","organisation","interaction","quality"],"minProperties":5,"maxProperties":5}}}},
+    {"if":{"properties":{"computability_status":{"const":"NOT_EVALUABLE"}}},"then":{"properties":{"not_evaluable_reason":{"type":"string","minLength":1},"structural_features":{"maxProperties":0}}}}
+  ]
+}

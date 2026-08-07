@@ -161,7 +161,7 @@ class RevisedC2AdapterTests(unittest.TestCase):
         packets = {item["packet_id"]: item for item in state["packets"]}
         self.assertEqual("COMPLETED", packets["EI-WP0"]["status"])
         self.assertIn(packets["EI-WP1"]["status"], {"RUNNING", "IMPLEMENTED", "QA_REVIEW", "APPROVED", "COMPLETED"})
-        self.assertEqual("PLANNED", packets["EI-WP2"]["status"])
+        self.assertIn(packets["EI-WP2"]["status"], {"RUNNING", "IMPLEMENTED", "QA_REVIEW", "APPROVED", "COMPLETED"})
 
 
 if __name__ == "__main__":
