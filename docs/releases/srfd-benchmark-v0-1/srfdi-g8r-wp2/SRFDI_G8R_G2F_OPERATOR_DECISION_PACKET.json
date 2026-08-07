@@ -3,7 +3,11 @@
   "gate_id": "SRFDI-G8R-G2F",
   "title": "FEASIBILITY BRIDGE ACKNOWLEDGEMENT BEFORE FAMILY-METHOD OPTIMISATION",
   "gate_class": "OPERATOR_REQUIRED_ACKNOWLEDGEMENT",
-  "status": "GATE_READY",
+  "status": "APPROVED",
+  "decision": "ACKNOWLEDGE_CONTINUE",
+  "decision_time": "2026-08-07T21:53:00+01:00",
+  "authority_source": "OPERATOR_EXPLICIT_COMMAND",
+  "operator_command": "OVC APPROVE SRFDI-G8R-G2F ACKNOWLEDGE_CONTINUE",
   "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
   "plan_version": "0.2-REVISED",
   "plan_artifact_sha256": "f1e6515f68a97ee50c5273cb13312622376ac9650c6cf7612c48c18588fb0408",
@@ -12,21 +16,9 @@
   "baseline_commit": "d90432957df146bf448287cedf4da73a8c861ebe",
   "current_main_commit": "5b760e1fe207b391186832f2f7094bcdf1713e37",
   "completed_packets": [
-    {
-      "packet_id": "SRFDI-G8R-WP0",
-      "merge_commit": "feac57eec78363008bd713a4f73c5053691ca648",
-      "decision": "PASS"
-    },
-    {
-      "packet_id": "SRFDI-G8R-WP1",
-      "merge_commit": "5d1274c5b8b26c6afa6ba9053ed2425d78329719",
-      "decision": "PASS"
-    },
-    {
-      "packet_id": "SRFDI-G8R-WP2",
-      "merge_commit": "5b760e1fe207b391186832f2f7094bcdf1713e37",
-      "decision": "PASS"
-    }
+    {"packet_id": "SRFDI-G8R-WP0", "merge_commit": "feac57eec78363008bd713a4f73c5053691ca648", "decision": "PASS"},
+    {"packet_id": "SRFDI-G8R-WP1", "merge_commit": "5d1274c5b8b26c6afa6ba9053ed2425d78329719", "decision": "PASS"},
+    {"packet_id": "SRFDI-G8R-WP2", "merge_commit": "5b760e1fe207b391186832f2f7094bcdf1713e37", "decision": "PASS"}
   ],
   "current_authority": {
     "capacity_remediation_implementation": "AUTHORISED_FIXTURE_LOCAL_ONLY",
@@ -39,8 +31,7 @@
     "probability_risk_exposure_execution": "NONE",
     "pr_371": "PRESERVE_DO_NOT_MERGE"
   },
-  "proposed_delta": {
-    "decision": "ACKNOWLEDGE_CONTINUE",
+  "approved_delta": {
     "effect": "Permit SRFDI-G8R-WP3 to begin exact family-method capacity optimisation under the already-approved fixture/local capacity-remediation authority.",
     "scientific_authority_delta": "NONE",
     "reserved_authority_delta": "NONE",
@@ -79,6 +70,10 @@
     "latest_main_replay_tiered": "31216361304:success",
     "latest_main_replay_profile_assurance_job": "92990697419:success",
     "latest_main_replay_merge_readiness_job": "92990777442:success",
+    "g2f_gate_repository_suite": "31216711390:success",
+    "g2f_gate_tiered": "31216711443:success",
+    "g2f_gate_profile_assurance_job": "92991820912:success",
+    "g2f_gate_merge_readiness_job": "92991853780:success",
     "qa_recommendation": "PASS"
   },
   "feasibility_bridge": {
@@ -97,7 +92,7 @@
     "p1_worker_1_wall_seconds": 1.6692144249999998,
     "p1_worker_2_wall_seconds": 0.8788604490000012,
     "p1_worker_4_wall_seconds": 0.8753040539999972,
-    "remaining_bottleneck": "FAMILY_METHOD_OPTIMIZATION_NOT_YET_AUTHORISED",
+    "remaining_bottleneck": "FAMILY_METHOD_OPTIMIZATION_NOT_YET_EXECUTED",
     "bounded_forecast_qualification": "P2-P4 are extrapolated from P1 pairwise evidence only; no family-method capacity conclusion is yet established.",
     "external_artifact_id": 9007134518,
     "external_artifact_digest": "sha256:82d6a4f7c4a191015b95f172038d68145f0b1cc56809f08a59b30d0eb3523159",
@@ -111,24 +106,7 @@
   ],
   "blocking_warnings": [],
   "unresolved_issues": [],
-  "changed_files_at_wp2": [
-    "src/ovc/opt_b/srfd/distance_optimized.py",
-    "src/ovc/opt_b/srfd/semantic_cache.py",
-    "tools/srfd/g8r_measure_bridge.py",
-    "tests/srfd/g8r/test_g8r_wp2_kernel_cache_parallel.py",
-    "registries/implementation/srfd/OVC_SRFDI_G8R_STATE_v0_2.json",
-    "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp2/*"
-  ],
-  "rollback": "Do not acknowledge G2F; retain WP0-WP2 as completed capacity-remediation evidence and leave WP3 blocked. If later rollback of WP2 is required, use a non-destructive revert and return to the last admitted exact/reference path; preserve measurement evidence.",
-  "recommended_decision": "ACKNOWLEDGE_CONTINUE",
-  "allowed_decisions": ["ACKNOWLEDGE_CONTINUE", "DEFER", "BLOCK"],
-  "exact_work_after_approval": [
-    "Record the operator G2F acknowledgement and update programme state.",
-    "Create SRFDI-G8R-WP3 from the then-latest lawful main tip.",
-    "Implement exact family-method capacity optimisations for medoid-star, complete linkage, average linkage and bounded PAM without changing their scientific semantics, deterministic ordering or tie rules.",
-    "Prove reference/optimised equivalence on adversarial fixtures, residual/singleton cases and deterministic tie cases.",
-    "Measure family-method component capacity and update the bounded capacity model.",
-    "Auto-ratify SRFDI-G8R-G3 only if QA is PASS and the authority delta remains wholly AUTO_EXECUTABLE."
-  ],
-  "operator_command": "OVC APPROVE SRFDI-G8R-G2F ACKNOWLEDGE_CONTINUE"
+  "rollback": "If WP3 later fails, preserve this acknowledgement and WP0-WP2 evidence, mark the downstream packet blocked or quarantined as appropriate, and use only non-destructive reverts within packet scope.",
+  "next_packet": "SRFDI-G8R-WP3",
+  "next_action": "MERGE_G2F_GATE_STATE_THEN_START_WP3_FROM_LATEST_LAWFUL_MAIN"
 }
