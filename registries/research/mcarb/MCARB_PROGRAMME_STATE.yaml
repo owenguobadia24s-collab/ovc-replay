@@ -10,7 +10,7 @@ prerequisites:
   - current SRFDI-G8 REDESIGN state reconciliation
   - bounded external research crosswalk
 authority_required: OPERATOR_REQUIRED
-authority_delta: DESIGN_ACCEPTED_ONLY; implementation-plan execution may proceed through MCARBI-G0; no benchmark execution authority
+authority_delta: DESIGN_ACCEPTED_ONLY; MCARBI-G0 has separately authorised bounded implementation and audit-only retained-source reads; no market benchmark authority
 baseline_commit: d90432957df146bf448287cedf4da73a8c861ebe
 branch: design/mcarb-v0-1
 candidate_commit: 686a0aef73020aaaf3a83b69f429ab311ba8a071
@@ -23,11 +23,12 @@ qa_packet: docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_QA_PACKET.json
 decision_record: docs/releases/mcarb-v0-1/mcarb-d8/MCARB_D8_OPERATOR_DECISION.json
 merge_commit: 00c100ece613bbc5bb8de0c8f8ca45425e036037
 blockers: []
-next_packet: MCARBI-WP0
+next_packet: MCARBI-WP1
 validation: LOCKED_UNCONSUMED
 benchmark_run_authority: NONE
 provider_intake_authority: NONE
-retained_source_reread_authority: UNRESOLVED_REQUIRES_MCARBI_G0_EXPLICIT_CLAUSE
+retained_source_reread_authority: MCARB_AUDIT_ONLY_RETAINED_SOURCE_READ_REREAD
+retained_source_reread_scope: EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
 selector_authority: NONE
 publication_authority: NONE
 probability_risk_exposure_execution: NONE
@@ -35,3 +36,9 @@ operator_decision:
   decision_id: MCARB-D8.OPERATOR.PASS.20260807T200100+0100
   decision: PASS
   recorded_at: '2026-08-07T20:01:00+01:00'
+implementation_gate:
+  gate_id: MCARBI-G0
+  decision_id: MCARBI-G0.OPERATOR.PASS.20260807T201800+0100
+  decision: PASS
+  audit_read: EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
+  merge_commit: null
