@@ -9,9 +9,11 @@ prerequisites:
   - audit-read scope EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
   - no new provider intake
   - Validation 2025 locked/unconsumed
+  - latest lawful main reconciled after concurrent SRFD G8R capacity-remediation progress
 authority_required: OPERATOR_REQUIRED
 authority_delta: NONE_PENDING_MCARBI_G1; proposed eligibility freeze only
-baseline_commit: d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1
+baseline_commit: 5d1274c5b8b26c6afa6ba9053ed2425d78329719
+audit_execution_baseline: d4c0ce5a9d82bf1ee12a6ee9f0b8b650d0ed8ad1
 branch: audit/mcarbi-wp1-source-triage
 candidate_commit: null
 tests:
@@ -19,7 +21,8 @@ tests:
   - non-Validation provider intake records inspected: 192
   - exact accepted M1-derived aggregation checks: PASS, zero mismatches
   - candidate registry count: 44 unique (AL=20 ET=6 VS=18)
-  - repository exact-head CI pending PR
+  - latest-main reconciliation: PASS_NO_MCARB_OR_OPT_A_SOURCE_CONFLICT
+  - repository exact-head CI pending reconciled PR head
 qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_QA_PACKET.json
 decision_record: null
 merge_commit: null
@@ -31,6 +34,15 @@ source_audit:
   cross_side_semantic_comparability: UNRESOLVED
   retained_tick_update_source: TICK_SOURCE_NOT_FOUND
   al11_proxy_quality: NOT_EVALUABLE_FOR_STAGE_A
+court_record_reconciliation:
+  latest_main: 5d1274c5b8b26c6afa6ba9053ed2425d78329719
+  concurrent_programme: OVC-SRFDI-G8R-v0.2
+  concurrent_state: RUNNING_CAPACITY_REMEDIATION_FIXTURE_LOCAL_ONLY
+  mcarb_or_opt_a_source_conflict: false
+  inherited_srfd_authority: NONE
+  srfd_method_representation_distance_family_sensitivity_promotion: NONE
+  srfd_wp9: DENIED
+  srfd_june: DENIED
 candidate_registry: registries/research/mcarb/MCARB_CANDIDATE_DISPOSITION_REGISTRY_v0_1.json
 dependency_graph: registries/research/mcarb/MCARB_BRANCH_DEPENDENCY_GRAPH_v0_1.json
 stage_a_proposal: docs/releases/mcarb-v0-1/mcarbi-wp1/MCARBI_WP1_STAGE_A_PROPOSED_SET.json
