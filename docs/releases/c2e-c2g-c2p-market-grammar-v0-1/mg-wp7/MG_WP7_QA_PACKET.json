@@ -2,11 +2,12 @@
   "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
   "baseline_commit": "9dbd2615cdb1b87c60a1fdb4920ae75877ff6736",
   "blockers": [],
+  "candidate_commit": "2992f966f9422417dba3fef9183ef4bb2a038954",
   "checks": {
     "accepted_source_hashes": "PASS_BOUND_3_EXTERNAL_ARTIFACTS",
     "candidate_disposition": "PASS_14_MAPPED_0_PROMOTED",
     "candidate_inventory": "PASS_14_OF_14",
-    "complete_repository_suite": "REQUIRED_ON_FINAL_HEAD",
+    "complete_repository_suite": "PASS",
     "counterexample_binding": "PASS_SOURCE_COUNTS_AND_HASHES_RETAINED",
     "deterministic_identity": "PASS_ORDER_INVARIANT_BY_TEST",
     "domain_separation": "PASS_STRUCTURAL_228_TEMPORAL_74_CONTEXT_45_COMPUTABILITY_172_PROVENANCE_140",
@@ -17,19 +18,40 @@
     "reserved_authority": "PASS_ZERO",
     "source_clause_accounting": "PASS_659_OF_659"
   },
+  "merge_commit": "5a88edfb4a6b32aca3ee95f28bd7d5be192a5df7",
   "packet_id": "MG-WP7",
   "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
-  "qa_recommendation": "PASS_IF_EXACT_HEAD_ASSURANCE_PASSES",
+  "qa_recommendation": "PASS",
   "rollback": "Remove or supersede inactive migration implementation; preserve compact source bindings, external hashes and prior decisions.",
   "schema": "ovc-mg-wp7-qa-packet/v1",
-  "status": "QA_REVIEW",
+  "status": "PASS",
   "tests": {
-    "compatibility": "REQUIRED_ON_FINAL_HEAD",
+    "compatibility": {
+      "head": "2992f966f9422417dba3fef9183ef4bb2a038954",
+      "job_id": 92838041240,
+      "result": "PASS",
+      "run_id": 31169544791
+    },
     "focused": "tests/market_grammar/test_candidate_migration.py;tests/market_grammar/test_mg_wp7_packet.py",
-    "merge_readiness": "REQUIRED_ON_FINAL_HEAD",
-    "ovc_final_head": "REQUIRED_ON_FINAL_HEAD",
-    "repository_complete_suite": "REQUIRED_ON_FINAL_HEAD",
-    "unresolved_review_threads": "MUST_EQUAL_0"
+    "merge_readiness": {
+      "head": "2992f966f9422417dba3fef9183ef4bb2a038954",
+      "job_id": 92838041253,
+      "result": "PASS",
+      "run_id": 31169544791
+    },
+    "ovc_final_head": {
+      "head": "2992f966f9422417dba3fef9183ef4bb2a038954",
+      "job_id": 92838003333,
+      "result": "PASS",
+      "run_id": 31169544791
+    },
+    "repository_complete_suite": {
+      "head": "2992f966f9422417dba3fef9183ef4bb2a038954",
+      "job_id": 92837999030,
+      "result": "PASS",
+      "run_id": 31169543812
+    },
+    "unresolved_review_threads": 0
   },
   "warnings": [
     "WP7_DOES_NOT_RECOMPUTE_EMPIRICAL_MATCH_SETS_AFTER_PROVENANCE_ABLATION;EXACT_TYPED_GRAMMAR_PARITY_REMAINS_NOT_EVALUATED"
