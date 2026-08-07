@@ -72,23 +72,24 @@ class MarketGrammarEmpiricalIntegrationWp0Tests(unittest.TestCase):
         self.assertEqual(16, frozen['candidate_portfolio_count'])
         self.assertEqual('PROHIBITED', frozen['mutation'])
 
-    def test_programme_state_is_delegated_approved_and_routes_to_wp1(self) -> None:
+    def test_programme_state_completes_wp0_and_routes_only_to_wp1(self) -> None:
         state = load(STATE)
-        self.assertEqual('APPROVED', state['status'])
-        self.assertEqual('SATISFIED_DELEGATED_DECISION', state['authority_required'])
+        self.assertEqual('READY', state['status'])
         self.assertEqual([], state['blockers'])
+        self.assertEqual('EI-WP1', state['next_packet'])
         packets = {item['packet_id']: item for item in state['packets']}
-        self.assertEqual('APPROVED', packets['EI-WP0']['status'])
+        self.assertEqual('COMPLETED', packets['EI-WP0']['status'])
         self.assertEqual('SATISFIED_DELEGATED_DECISION', packets['EI-WP0']['authority_required'])
-        self.assertEqual('PLANNED', packets['EI-WP1']['status'])
+        self.assertEqual('a9cb8e53348314582c3d02a1edcf49dd87689dad', packets['EI-WP0']['merge_commit'])
+        self.assertEqual('READY', packets['EI-WP1']['status'])
         self.assertEqual('READ_ONLY_REAL_REVISED_C2_SHADOW_ADAPTER_ONLY', packets['EI-WP1']['authority_delta'])
         self.assertIn('OPERATOR_REQUIRED', packets['EI-WP4']['authority_required'])
-        self.assertEqual('EI-WP0', state['next_packet'])
 
-    def test_wp0_qa_and_delegated_decision_have_zero_reserved_delta(self) -> None:
+    def test_wp0_qa_decision_and_receipt_have_zero_reserved_delta(self) -> None:
         qa = load(BASE / 'EI_WP0_QA_PACKET.json')
         decision = load(BASE / 'EI_WP0_DELEGATED_DECISION.json')
         assurance = load(BASE / 'EI_WP0_PREDECISION_ASSURANCE.json')
+        receipt = load(BASE / 'EI_WP0_POST_MERGE_RECEIPT.json')
         self.assertEqual('PASS', qa['status'])
         self.assertEqual([], qa['blockers'])
         self.assertEqual('PASS_ZERO', qa['checks']['new_provider_intake'])
@@ -98,7 +99,11 @@ class MarketGrammarEmpiricalIntegrationWp0Tests(unittest.TestCase):
         self.assertEqual('PASS', decision['decision'])
         self.assertEqual('NONE', decision['reserved_authority_delta'])
         self.assertEqual('PASS_IMPLEMENTATION_HEAD', assurance['result'])
-        self.assertEqual(0, assurance['checks']['unresolved_review_threads'])
+        self.assertEqual('COMPLETED', receipt['status'])
+        self.assertEqual('9a1518098d6b4ee42f04308005ac9b82d35f8d46', receipt['final_head'])
+        self.assertEqual('a9cb8e53348314582c3d02a1edcf49dd87689dad', receipt['merge_commit'])
+        self.assertEqual('NONE', receipt['reserved_authority_delta'])
+        self.assertEqual(0, receipt['exact_head_assurance']['unresolved_review_threads'])
 
 if __name__ == '__main__':
     unittest.main()
