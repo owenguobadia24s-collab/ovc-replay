@@ -1,0 +1,81 @@
+{
+  "schema": "ovc-srfdi-g8-operator-capacity-packet/v1",
+  "packet_id": "SRFDI-WP8",
+  "gate_id": "SRFDI-G8",
+  "gate_class": "OPERATOR_REQUIRED",
+  "baseline_commit": "5b791d1550147de541faa645817b6cf523ac362f",
+  "measurement_source_commit": "ffd249f995dff926b74ba4885daf66931093a790",
+  "status": "GATE_READY_PENDING_OPERATOR_DECISION",
+  "allowed_decisions": [
+    "FREEZE_MEASURED_CAPACITY",
+    "REDESIGN",
+    "DEFER",
+    "BLOCK"
+  ],
+  "provisional_T0": {
+    "max_runtime_seconds": 14400,
+    "max_peak_rss_bytes": 17179869184,
+    "max_external_bytes": 10737418240
+  },
+  "exact_head_measurement_assurance": {
+    "tests_workflow_run_id": 31198080679,
+    "tests_conclusion": "success",
+    "tests_count": 427,
+    "tiered_workflow_run_id": 31198079684,
+    "tiered_conclusion": "success",
+    "merge_readiness_job_id": 92931182499,
+    "merge_readiness_conclusion": "success"
+  },
+  "measured_fixture_capacity": {
+    "representation_records_per_second": 1361.2722986904228,
+    "pairwise_pairs_per_second": 2399.385690193871,
+    "pairwise_bytes_per_pair": 262.0,
+    "measured_process_peak_rss_bytes": 38166528,
+    "checkpoint_restart_logical_equivalence": true,
+    "checkpoint_restart_byte_equivalence": true
+  },
+  "reference_only_june_count": {
+    "target_c2_state_count": 8598,
+    "source_path": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/coverage.json",
+    "source_blob_sha": "2e283c6ec0b2d0fb5c65adfce1e22d80b2cd4427",
+    "status": "NON_BINDING_CAPACITY_REFERENCE_ONLY",
+    "warning": "This is not the SRFD eligible population. Exact SRFD June population/source binding is reserved to WP9/G-JUNE-AUTH."
+  },
+  "reference_projection": {
+    "pair_count": 36958503,
+    "pairwise_runtime_seconds": 15403.318920774984,
+    "pairwise_runtime_hours": 4.278699700215273,
+    "pairwise_external_bytes": 9683127786,
+    "pairwise_external_gib": 9.018115499988198,
+    "family_method_projected_seconds": {
+      "AVERAGE_LINKAGE": 1981950.5205316744,
+      "COMPLETE_LINKAGE": 1664181.367699249,
+      "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 226427.64400808184,
+      "BOUNDED_PAM": 574.9654012103325
+    },
+    "conservative_total_runtime_seconds": 1997360.155602428,
+    "conservative_total_runtime_days": 23.117594393546618,
+    "capacity_status": "CAPACITY_EXCEEDED",
+    "blocking_reason": "CAPACITY_EXCEEDED_RUNTIME"
+  },
+  "capacity_evidence_disposition": {
+    "provisional_T0_runtime": "NOT_SATISFIED_FOR_8598_STATE_REFERENCE_PROJECTION",
+    "provisional_T0_external_storage": "SATISFIED_FOR_PAIRWISE_REFERENCE_PROJECTION",
+    "provisional_T0_measured_memory": "SATISFIED_AT_SYNTHETIC_PROFILE_SCALE_ONLY",
+    "exact_June_SRFD_capacity": "NOT_ESTABLISHED_BECAUSE_SRFD_ELIGIBLE_POPULATION_IS_NOT_BOUND_AT_WP8"
+  },
+  "measurement_receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-wp8/SRFDI_WP8_MEASURED_CAPACITY_RECEIPT.json",
+  "interpretation_limits": [
+    "The 8598 count is an existing June C2-state reference, not the frozen SRFD benchmark population.",
+    "The pairwise projection assumes one unpartitioned comparable population and is therefore conservative.",
+    "Family-method projections extrapolate the current fixture implementations using their declared complexity exponents; they are capacity warnings, not measured June runtimes.",
+    "No representation, segmentation, distance, family method, sensitivity or invariant core is selected or rejected by this capacity packet."
+  ],
+  "operator_decision": null,
+  "recommendation": null,
+  "stop_rule": "STOP_AT_SRFDI-G8; do not create or execute WP9 until a later explicit operator instruction",
+  "june_benchmark": "DENIED",
+  "validation_2025": "LOCKED_UNCONSUMED",
+  "pr_371": "PRESERVE_DO_NOT_MERGE",
+  "authority_effect": "NONE_PENDING_OPERATOR_DECISION"
+}
