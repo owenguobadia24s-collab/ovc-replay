@@ -1,0 +1,19 @@
+{
+  "schema":"ovc-mcarbi-capacity-receipt/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "plan_id":"OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "packet_id":"MCARBI-WP6",
+  "measurement_head":"8ae954a840c0819119b0d7af71e74dd2db129adf",
+  "pr_merge_ref_checkout":"adae44f0b10be3dda32d4e2676fcc3f23f57b58c",
+  "measurement_run":{"workflow":"tests","run_id":31215957617,"job_id":92989412484,"conclusion":"success","repository_suite_tests":433,"repository_suite_seconds":7.411},
+  "assurance_run":{"workflow":"OVC tiered test selection shadow","run_id":31215957698,"profile_assurance_job_id":92989413012,"merge_readiness_job_id":92989450054,"conclusion":"success"},
+  "environment":{"runner_version":"2.336.0","runner_image":"ubuntu-24.04","runner_image_version":"20260720.247.2","azure_region":"eastus","python":"3.11.15","platform":"Linux-6.17.0-1020-azure-x86_64-with-glibc2.39","cpu_count":4,"github_actions":true},
+  "budget":{"max_runtime_seconds":14400,"max_peak_memory_bytes":17179869184,"max_external_artifact_bytes":10737418240},
+  "C0":{"n_per_side":64,"input_bar_count":128,"transform_count":788,"event_count":26,"pack_compile_count":1024,"dependence_vector_count":4,"wall_seconds":0.09100223299999755,"peak_python_tracemalloc_bytes":178113,"measurement_class":"MEASURED_SYNTHETIC_LOCAL_PROCESS"},
+  "C1":{"n_per_side":449,"input_bar_count":898,"transform_count":5536,"event_count":154,"pack_compile_count":7184,"dependence_vector_count":4,"wall_seconds":0.6294220679999967,"peak_python_tracemalloc_bytes":1189135,"measurement_class":"MEASURED_SYNTHETIC_LOCAL_PROCESS"},
+  "stage_a_cardinality_reference":{"paired_2h_observations":449,"paired_side_records":898,"exact_unordered_pairs_per_side":100576,"pair_count_status":"COUNT_ONLY_NOT_FULL_PAIRWISE_COMPUTE"},
+  "budget_result":{"c0_runtime_pass":true,"c1_runtime_pass":true,"c0_peak_python_memory_pass":true,"c1_peak_python_memory_pass":true,"external_artifact_bytes":0,"external_artifact_budget_pass":true,"overall":"PASS"},
+  "corrective_defect":{"id":"MCARBI-WP6-DEFECT-001","finding":"MCARB dependence module mutated process-global Decimal precision and caused unrelated exact SRFD permutation tests to fail when the capacity tail test exercised the module late in the suite.","resolution":"Replace global getcontext().prec mutation with an isolated localcontext precision inside Pearson calculation.","corrected_head":"8ae954a840c0819119b0d7af71e74dd2db129adf","rerun":"433 tests PASS plus FINAL_HEAD/merge-readiness PASS"},
+  "interpretation_boundary":"C0/C1 are measured synthetic implementation-capacity receipts only. They consume no market values, prove no scientific utility, select no representation/family/threshold, and create no Stage-A execution authority.",
+  "authority":"CAPACITY_EVIDENCE_ONLY_NO_MARKET_RUN"
+}
