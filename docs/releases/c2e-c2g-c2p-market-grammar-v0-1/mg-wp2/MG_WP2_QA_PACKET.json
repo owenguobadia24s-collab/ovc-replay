@@ -3,9 +3,13 @@
   "programme_id": "OVC-C2E-C2G-C2P-MARKET-GRAMMAR-REMEDIATION-v0.1",
   "packet_id": "MG-WP2",
   "baseline_commit": "19e9e42e72dcbb863443ba7181957f2da57e365e",
-  "status": "QA_REVIEW",
+  "status": "COMPLETED",
   "authority_delta": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY",
   "implementation_manifest": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp2/MG_WP2_IMPLEMENTATION_MANIFEST.json",
+  "predecision_assurance": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp2/MG_WP2_PREDECISION_ASSURANCE_RECEIPT.json",
+  "decision": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp2/MG_WP2_DELEGATED_DECISION.json",
+  "merge_commit": "bd2d6e01c1c0b228ad40e457170e14effed0c409",
+  "post_merge_receipt": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp2/MG_WP2_POST_MERGE_RECEIPT.json",
   "checks": {
     "episode_phase_binding_contracts": "PASS_IMPLEMENTED",
     "deterministic_identity": "PASS_IMPLEMENTED",
@@ -19,18 +23,18 @@
     "fixture_valid_cases": "PASS_IMPLEMENTED_4",
     "fixture_invalid_cases": "PASS_IMPLEMENTED_5",
     "reserved_authority": "PASS_ZERO",
-    "complete_repository_suite": "REQUIRED_ON_FINAL_HEAD"
+    "complete_repository_suite": "PASS_31161307600_92812038918"
   },
   "tests": {
-    "focused": "tests/market_grammar/test_episode_ledger.py;tests/market_grammar/test_episode_ledger_fixtures.py;tests/market_grammar/test_mg_wp2_packet.py",
-    "repository_complete_suite": "REQUIRED_ON_FINAL_HEAD",
-    "ovc_final_head": "REQUIRED_ON_FINAL_HEAD",
-    "compatibility": "REQUIRED_ON_FINAL_HEAD",
-    "merge_readiness": "REQUIRED_ON_FINAL_HEAD",
-    "unresolved_review_threads": "MUST_EQUAL_0"
+    "focused": "PASS_tests/market_grammar/test_episode_ledger.py_tests/market_grammar/test_episode_ledger_fixtures.py_tests/market_grammar/test_mg_wp2_packet.py",
+    "repository_complete_suite": "PASS_31161307600_92812038918",
+    "ovc_final_head": "PASS_31161307572_92812038936",
+    "compatibility": "PASS_31161307572_92812072421",
+    "merge_readiness": "PASS_31161307572_92812072432",
+    "unresolved_review_threads": "PASS_0"
   },
   "blockers": [],
   "warnings": [],
-  "qa_recommendation": "PASS_IF_EXACT_HEAD_ASSURANCE_PASSES",
+  "qa_recommendation": "PASS",
   "rollback": "Remove or supersede inactive C2E implementation while preserving evidence; do not weaken chronology, leakage or scope checks."
 }
