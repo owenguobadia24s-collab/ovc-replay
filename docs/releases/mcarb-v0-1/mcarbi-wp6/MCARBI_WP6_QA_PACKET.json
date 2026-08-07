@@ -1,6 +1,7 @@
 {
   "schema":"ovc-mcarbi-wp6-qa/v1",
   "programme_id":"OVC-MCARB-v0.1",
+  "plan_id":"OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
   "packet_id":"MCARBI-WP6",
   "gate_id":"MCARBI-G6",
   "checks":[
@@ -10,11 +11,28 @@
     {"check":"single_month_floor_census","result":"PASS_EXACT_NO_SINGLE_MONTH_QUALIFIES","months":48},
     {"check":"minimum_contiguous_span","result":"PASS_TWO_MONTHS"},
     {"check":"proposed_population_floor","result":"PASS_AGGREGATE","paired_2h":449,"eligible_days":43,"min_slot_days":17},
-    {"check":"C0_C1_capacity_profile","result":"PENDING_GITHUB_HOSTED_MEASUREMENT"},
+    {"check":"bid_ask_timestamp_sets_equal_proposed_window","result":"PASS_TRUE"},
+    {"check":"C0_C1_capacity_profile","result":"PASS_MEASURED_GITHUB_HOSTED","receipt":"docs/releases/mcarb-v0-1/mcarbi-wp6/MCARBI_WP6_CAPACITY_RECEIPT.json"},
+    {"check":"capacity_runtime_budget","result":"PASS","c0_seconds":0.09100223299999755,"c1_seconds":0.6294220679999967,"budget_seconds":14400},
+    {"check":"capacity_python_peak_memory_budget","result":"PASS","c0_bytes":178113,"c1_bytes":1189135,"budget_bytes":17179869184},
+    {"check":"capacity_external_artifact_budget","result":"PASS","bytes":0,"budget_bytes":10737418240},
+    {"check":"corrective_decimal_context_defect","result":"PASS_CORRECTED_AND_DEPENDENT_SUITE_RERUN"},
+    {"check":"repository_complete_suite","result":"PASS","run_id":31215957617,"tests":433},
+    {"check":"final_head_profile_assurance","result":"PASS","run_id":31215957698,"job_id":92989413012},
+    {"check":"merge_readiness","result":"PASS","run_id":31215957698,"job_id":92989450054},
     {"check":"stage_a_execution_attempted","result":"PASS_FALSE"},
     {"check":"scientific_interpretation_attempted","result":"PASS_FALSE"}
   ],
-  "qa_recommendation":"PENDING_MEASURED_CAPACITY_THEN_FREEZE_STAGE_A_READINESS_IF_WITHIN_BUDGET",
-  "authority_delta":"NONE_PENDING_OPERATOR_G6",
-  "rollback":"Preserve coverage/readiness evidence; abandon proposal or revise through G6 decision. No market source or release is mutated."
+  "warnings":[
+    "No single 2021-2024 non-Validation calendar month meets the >=15-day floor for every A-L slot; K/L availability is the binding constraint.",
+    "The proposed 2023-11/12 two-month Discovery span is a readiness/capacity population candidate only; operator G6 decides whether the aggregate interpretation of the floor is acceptable.",
+    "C0/C1 measurements are synthetic implementation-capacity evidence, not a market benchmark or scientific result.",
+    "AL_SOURCE_PARTIAL remains binding; blocked cross-side/tick/proxy candidates remain excluded.",
+    "MCARBI-WP6-DEFECT-001 was corrected in scope: Decimal precision is now calculation-local and the full dependent suite passes."
+  ],
+  "qa_recommendation":"FREEZE_STAGE_A_READINESS",
+  "authority_delta":"NONE_PENDING_OPERATOR_G6; proposed freeze is capacity budget plus population eligibility only",
+  "stage_a_run_authority":"DENIED_UNTIL_MCARBI_G_STAGE_A_AUTH",
+  "validation_2025":"LOCKED_UNCONSUMED",
+  "rollback":"Preserve immutable coverage/capacity evidence; abandon or version the population proposal through G6. No market source/release is mutated and no Stage-A execution has occurred."
 }
