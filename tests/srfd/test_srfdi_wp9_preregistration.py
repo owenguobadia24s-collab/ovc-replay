@@ -13,8 +13,9 @@ PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_1.js
 HASH_RECEIPT = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_WP9_PREREGISTRATION_HASH_RECEIPT.json"
 MANIFEST = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFD_JUNE_RUN_MANIFEST_TEMPLATE_v0_1.json"
 DEP_CAPACITY = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_WP9_DEPENDENCY_CAPACITY_STATE.json"
-MERGE_RECEIPT = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g8-represented/SRFDI_G8_REPRESENTED_MERGE_RECEIPT.json"
-DECISION = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_OPERATOR_DECISION.json"
+G8_MERGE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g8-represented/SRFDI_G8_REPRESENTED_MERGE_RECEIPT.json"
+G9_DECISION = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_OPERATOR_DECISION.json"
+G9_MERGE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_MERGE_RECEIPT.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_1.json"
 
 
@@ -26,20 +27,23 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         cls.hash_receipt = json.loads(HASH_RECEIPT.read_text())
         cls.manifest = json.loads(MANIFEST.read_text())
         cls.dep_capacity = json.loads(DEP_CAPACITY.read_text())
-        cls.merge_receipt = json.loads(MERGE_RECEIPT.read_text())
-        cls.decision = json.loads(DECISION.read_text()) if DECISION.exists() else None
+        cls.g8_merge = json.loads(G8_MERGE.read_text())
+        cls.g9_decision = json.loads(G9_DECISION.read_text())
+        cls.g9_merge = json.loads(G9_MERGE.read_text())
         cls.state = json.loads(STATE.read_text())
 
-    def test_preregistration_schema_and_exact_hashes(self) -> None:
+    def test_preregistration_schema_and_exact_hashes_remain_unchanged(self) -> None:
         validate_document(self.prereg, "SRFDPreregistration")
-        self.assertEqual("76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792", sha256(self.prereg_bytes).hexdigest())
-        self.assertEqual("a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e", logical_sha256(self.prereg))
-        self.assertEqual("76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792", self.hash_receipt["byte_sha256"])
-        self.assertEqual("a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e", self.hash_receipt["logical_sha256"])
-        self.assertEqual("CANDIDATE_PENDING_SRFDI_G9", self.hash_receipt["authority_state"])
-        if self.decision is not None:
-            self.assertEqual(self.hash_receipt["byte_sha256"], self.decision["preregistration"]["byte_sha256"])
-            self.assertEqual(self.hash_receipt["logical_sha256"], self.decision["preregistration"]["logical_sha256"])
+        byte_hash = sha256(self.prereg_bytes).hexdigest()
+        logical_hash = logical_sha256(self.prereg)
+        self.assertEqual("76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792", byte_hash)
+        self.assertEqual("a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e", logical_hash)
+        self.assertEqual(byte_hash, self.hash_receipt["byte_sha256"])
+        self.assertEqual(logical_hash, self.hash_receipt["logical_sha256"])
+        self.assertEqual(byte_hash, self.g9_decision["preregistration"]["byte_sha256"])
+        self.assertEqual(logical_hash, self.g9_decision["preregistration"]["logical_sha256"])
+        self.assertEqual(byte_hash, self.g9_merge["preregistration"]["byte_sha256"])
+        self.assertEqual(logical_hash, self.g9_merge["preregistration"]["logical_sha256"])
 
     def test_candidate_grid_is_exact_predeclared_and_dependency_bounded(self) -> None:
         bounds = self.prereg["configuration_bounds"]
@@ -90,45 +94,22 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.manifest["validation_2025"])
         self.assertEqual("FORBIDDEN", self.manifest["required_before_run_authority"]["source"]["provider_fetch"])
 
-    def test_parent_gate_merge_is_bound_and_wp9_lifecycle_is_fail_closed(self) -> None:
-        self.assertEqual("0f3ae4379978a1381f479cfe1c5fe9c269981c19", self.merge_receipt["merge_commit"])
-        self.assertEqual("FREEZE_MEASURED_CAPACITY", self.merge_receipt["decision"])
-        self.assertEqual("SRFDI-WP9", self.state["active_packet"])
-        self.assertEqual("SRFDI-G9", self.state["current_gate"])
-        self.assertEqual("DENIED_PENDING_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
-        self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
-
+    def test_completed_g8_and_g9_lifecycle_are_preserved_through_g9s_supersession(self) -> None:
+        self.assertEqual("0f3ae4379978a1381f479cfe1c5fe9c269981c19", self.g8_merge["merge_commit"])
+        self.assertEqual("FREEZE_MEASURED_CAPACITY", self.g8_merge["decision"])
+        self.assertEqual("PREREGISTRATION_FREEZE", self.g9_decision["decision"])
+        self.assertEqual("d56986b90796b5547bc2b5d17146e6c7b62f43cf", self.g9_merge["merge_commit"])
         wp9 = next(p for p in self.state["packets"] if p["packet_id"] == "SRFDI-WP9")
-        if self.decision is not None:
-            self.assertEqual("APPROVED", self.state["status"])
-            self.assertFalse(self.state["operator_decision_required"])
-            self.assertEqual("COMPLETED_OPERATOR_FROZEN", self.state["authority"]["preregistration_preparation"])
-            self.assertEqual("FROZEN_EXACT_VERSION", self.state["authority"]["preregistration"])
-            self.assertEqual("APPROVED", wp9["status"])
-            self.assertEqual("PREREGISTRATION_FREEZE", wp9["decision"])
-            self.assertEqual(
-                "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_OPERATOR_DECISION.json",
-                wp9["decision_record"],
-            )
-            self.assertIsNone(wp9["merge_commit"])
-            self.assertIn("JUNE_BENCHMARK_DENIED_PENDING_SRFDI_G_JUNE_AUTH", wp9["blockers"])
-            return
-
-        self.assertEqual("AUTHORISED_BOUNDED_PREPARATION", self.state["authority"]["preregistration_preparation"])
-        if self.state["status"] == "RUNNING":
-            self.assertFalse(self.state["operator_decision_required"])
-            self.assertEqual("RUNNING", wp9["status"])
-            self.assertIsNone(wp9["decision_record"])
-            self.assertIsNone(wp9["merge_commit"])
-            return
-
-        self.assertEqual("GATE_READY", self.state["status"])
-        self.assertTrue(self.state["operator_decision_required"])
-        self.assertEqual("GATE_READY", wp9["status"])
-        self.assertIsNone(wp9["decision_record"])
-        self.assertIsNone(wp9["merge_commit"])
-        self.assertIn("SRFDI_G9_PREREGISTRATION_ACKNOWLEDGEMENT_REQUIRED_BEFORE_FREEZE", wp9["blockers"])
-        self.assertIn("JUNE_BENCHMARK_DENIED_PENDING_SRFDI_G_JUNE_AUTH", wp9["blockers"])
+        self.assertEqual("COMPLETED", wp9["status"])
+        self.assertEqual(self.g9_merge["merge_commit"], wp9["merge_commit"])
+        self.assertEqual("SRFDI-WP9S", self.state["active_packet"])
+        self.assertEqual("SRFDI-G9S-FREEZE", self.state["current_gate"])
+        self.assertEqual("READY", self.state["status"])
+        self.assertFalse(self.state["operator_decision_required"])
+        self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
+        self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
+        self.assertEqual("APPROVED_BOUNDED_SRFDI_WP9S_ONLY", self.state["authority"]["preregistration_supersession"])
+        self.assertEqual("FROZEN_HISTORICAL_SUPERSEDED_FOR_EXECUTION", self.state["g9_disposition"]["status"])
 
     def test_required_outputs_and_stop_conditions_are_explicit(self) -> None:
         self.assertIn("ARTIFACT_MANIFEST_AND_HASH_TABLE", self.prereg["required_output_tables"])
