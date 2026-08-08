@@ -103,18 +103,22 @@ class SRFDIJuneAuthGateReadyV02Tests(unittest.TestCase):
         self.assertEqual("PRESERVE_DO_NOT_MERGE", self.state["pr_371"])
         self.assertEqual("2a0d3c529ea5aca6a1d8c67adc29d3f6dd55a3efcd75992661a69e205cea010c", self.state["exact_bindings"]["manifest_binding_sha256"])
 
-    def test_v02_state_remains_immutable_when_current_pointer_advances_after_operator_decision(self) -> None:
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json", self.pointer["authoritative_state"])
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_2.json", self.pointer["prior_state"])
-        self.assertEqual("fca974ef48e4178be299bf65e520e2268e8b67c3", self.pointer["effective_after_main"])
-        self.assertEqual("READY", self.pointer["status"])
-        self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
-        self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_UNCONSUMED", self.pointer["june_execution"])
-        self.assertEqual("PRESERVE_DO_NOT_MERGE", self.pointer["pr_371"])
+    def test_v02_state_remains_immutable_after_later_g9c_supersession(self) -> None:
         self.assertEqual("GATE_READY", self.state["status"])
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
+        self.assertTrue(self.state["operator_decision_required"])
         self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
+        self.assertEqual("PRESERVE_DO_NOT_MERGE", self.state["pr_371"])
+
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json", self.pointer["authoritative_state"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json", self.pointer["prior_state"])
+        self.assertEqual("249afca5984022b7e9cbbd414bf2a74a2a255d1a", self.pointer["effective_after_main"])
+        self.assertEqual("FROZEN_AWAITING_NEW_JUNE_AUTH_PREPARATION", self.pointer["status"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION-v0.3", self.pointer["current_gate"])
+        self.assertFalse(self.pointer["operator_decision_required"])
+        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
+        self.assertFalse(self.pointer["superseded_authority_token_consumed"])
+        self.assertEqual("PRESERVE_CLOSED_UNMERGED_HISTORICAL_EVIDENCE", self.pointer["pr_371"])
 
 
 if __name__ == "__main__":
