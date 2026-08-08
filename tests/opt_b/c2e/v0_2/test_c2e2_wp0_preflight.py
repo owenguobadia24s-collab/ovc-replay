@@ -81,8 +81,13 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertFalse(self.qa["assertions"]["real_source_replay_performed"])
         self.assertEqual(self.state["authority"]["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
         self.assertEqual(self.accepted_state["authority"]["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
-        self.assertEqual(self.pointer["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
+        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json")
+        self.assertEqual(self.pointer["status"], "BLOCKED")
+        self.assertEqual(self.pointer["current_gate"], "C2E2-G6-RUN-AUTH")
+        self.assertEqual(self.pointer["operator_decision"], "DEFER")
+        self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
+        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
 
 if __name__ == "__main__":
