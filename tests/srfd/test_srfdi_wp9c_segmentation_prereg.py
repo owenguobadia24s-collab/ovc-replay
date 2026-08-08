@@ -16,6 +16,7 @@ REGISTRY = ROOT / "registries/research/srfd/segmentation_boundary_packs_v0_3.jso
 PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_3.json"
 MANIFEST = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9c/SRFD_JUNE_RUN_MANIFEST_v0_3_CANDIDATE.json"
 PACKET = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9c/SRFDI_G9C_FREEZE_OPERATOR_PACKET.json"
+DECISION = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9c/SRFDI_G9C_FREEZE_OPERATOR_DECISION.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json"
 CURRENT_POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 
@@ -41,6 +42,7 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
         cls.prereg = json.loads(PREREG.read_text())
         cls.manifest = json.loads(MANIFEST.read_text())
         cls.packet = json.loads(PACKET.read_text())
+        cls.decision = json.loads(DECISION.read_text())
         cls.state = json.loads(STATE.read_text())
         cls.current_pointer = json.loads(CURRENT_POINTER.read_text())
 
@@ -115,16 +117,36 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
             self.manifest["candidate_sets"]["segmentation_visible_nonexecuted"],
         )
 
-    def test_old_authority_is_unconsumed_and_candidate_freeze_does_not_authorize_june(self) -> None:
+    def test_operator_freeze_decision_is_exact_and_bounded(self) -> None:
+        self.assertEqual("SRFDI-G9C-FREEZE", self.decision["gate_id"])
+        self.assertEqual("PREREGISTRATION_FREEZE", self.decision["decision"])
+        self.assertEqual("OPERATOR", self.decision["decision_authority"])
+        self.assertEqual(
+            "OVC APPROVE SRFDI-G9C-FREEZE PREREGISTRATION_FREEZE",
+            self.decision["operator_command"],
+        )
+        self.assertEqual(
+            "bc227cfed2c1e1c4485bbbb154a389e3e1e6ad00",
+            self.decision["approved_candidate"]["predecision_head"],
+        )
+        self.assertEqual("PASS", self.decision["predecision_assurance"]["result"])
+        self.assertEqual(
+            self.prereg["segmentation_supersession"]["registry_logical_sha256"],
+            self.decision["approved_candidate"]["segmentation_boundary_pack_registry_logical_sha256"],
+        )
+
+    def test_old_authority_is_unconsumed_and_freeze_still_does_not_authorize_june(self) -> None:
         self.assertFalse(self.prereg["authority_transition"]["current_v0_2_token_consumed"])
-        self.assertEqual("SRFDI-G9C-FREEZE", self.packet["gate_id"])
         self.assertEqual("PREREGISTRATION_FREEZE", self.packet["recommended_decision"])
         self.assertEqual("DENIED_PENDING_NEW_EXACT_AUTHORIZATION", self.packet["authority_after_recommended_decision"]["june_execution"])
-        self.assertEqual("GATE_READY", self.state["status"])
+        self.assertEqual("APPROVED_PENDING_MERGE", self.state["status"])
         self.assertEqual("SRFDI-G9C-FREEZE", self.state["current_gate"])
-        self.assertTrue(self.state["operator_decision_required"])
+        self.assertFalse(self.state["operator_decision_required"])
+        self.assertEqual("FROZEN_EXACT_VERSION_PENDING_MERGE_TO_MAIN", self.state["authority"]["preregistration_v0_3"])
+        self.assertEqual("SUPERSEDED_UNUSED_UNCONSUMED", self.state["authority"]["prior_june_authority_token"])
+        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
 
-    def test_candidate_does_not_mutate_authoritative_pointer_before_operator_freeze(self) -> None:
+    def test_candidate_does_not_mutate_authoritative_pointer_before_merge(self) -> None:
         self.assertEqual(
             "registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json",
             self.current_pointer["authoritative_state"],
