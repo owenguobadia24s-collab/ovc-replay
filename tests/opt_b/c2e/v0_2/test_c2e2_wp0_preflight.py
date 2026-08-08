@@ -11,6 +11,7 @@ MATRIX = BASE / "C2E2_WP0_SUPERSESSION_MATRIX.json"
 QA = BASE / "C2E2_WP0_QA_PACKET.json"
 STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_2.json"
 ACCEPTED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_3.json"
+HISTORICAL_DEFERRED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 RO_C2E = ROOT / "registries/research_operations/c2e/OVC_C2E_PROGRAMME_STATE_v0_1.json"
 C2AR = ROOT / "registries/opt_b/c2/vnext/C2_INTEGRATED_SHADOW_PACKAGE_APPROVED_v1.jsonc"
@@ -69,7 +70,7 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertTrue(all(not item["lawful_c2e2_base"] for item in self.prs["open_prs"]))
         self.assertEqual(self.matrix["historical_bytes_rewritten"], False)
 
-    def test_wp0_predecision_and_accepted_lifecycle_preserve_source_replay_denial(self):
+    def test_wp0_history_and_current_pointer_preserve_source_replay_denial(self):
         self.assertEqual(self.state["status"], "QA_REVIEW")
         self.assertEqual(self.state["current_gate"], "C2E2-G1")
         self.assertEqual(self.accepted_state["status"], "READY")
@@ -81,8 +82,19 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertFalse(self.qa["assertions"]["real_source_replay_performed"])
         self.assertEqual(self.state["authority"]["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
         self.assertEqual(self.accepted_state["authority"]["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
-        self.assertEqual(self.pointer["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
+        historical_defer = json.loads(HISTORICAL_DEFERRED_STATE.read_text())
+        self.assertEqual(historical_defer["authority"]["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
+        self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
+        self.assertEqual(self.pointer["status"], "GATE_READY")
+        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
+        self.assertFalse(self.pointer["operator_decision_required"])
+        self.assertEqual(self.pointer["operator_decision"], "DEFER")
+        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
+        self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
+        self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
+        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
 
 
 if __name__ == "__main__":
