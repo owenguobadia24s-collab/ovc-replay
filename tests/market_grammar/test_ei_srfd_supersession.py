@@ -37,7 +37,7 @@ class EiSrfdSupersessionTests(unittest.TestCase):
         self.assertEqual("COMPLETED_PRESERVED_AS_HISTORICAL_IMPLEMENTATION_EVIDENCE", decision["historical_preservation"]["EI-WP2"])
         self.assertEqual("SUPERSEDED_NO_EMPIRICAL_RUN_WAS_STARTED", decision["supersession"]["EI-WP3"])
         self.assertEqual("NONE", decision["authority_effect"]["scientific_promotion"])
-        self.assertEqual("UNCHANGED_REMAINS_GOVERNED_BY_SRFDI-G-JUNE-AUTH", decision["authority_effect"]["srfd_june_execution"])
+        self.assertEqual("UNCHANGED_ALREADY_AUTHORIZED_BY_SEPARATE_SRFDI-G-JUNE-AUTH", decision["authority_effect"]["srfd_june_execution"])
 
     def test_crosswalk_points_to_implemented_frozen_srfd_route(self) -> None:
         crosswalk = load(CROSSWALK)
@@ -81,9 +81,9 @@ class EiSrfdSupersessionTests(unittest.TestCase):
 
     def test_qa_requires_exact_head_and_has_no_new_authority(self) -> None:
         qa = load(QA)
-        self.assertEqual("QA_REVIEW", qa["status"])
+        self.assertEqual("PASS_IMPLEMENTATION_HEAD", qa["status"])
         self.assertEqual([], qa["blockers"])
-        self.assertEqual("PASS_IF_EXACT_HEAD_ASSURANCE_PASSES", qa["qa_recommendation"])
+        self.assertEqual("PASS", qa["qa_recommendation"])
         self.assertIn("SRFDI-G-JUNE-AUTH", qa["warnings"][0])
 
 
