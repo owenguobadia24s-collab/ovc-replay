@@ -3,7 +3,8 @@
 **Gate:** `OC-D0`  
 **Decision authority:** `OPERATOR_REQUIRED`  
 **Design:** `OVC-OCCURRENCE-CONTEXT-DESIGN-SPEC-0.1`  
-**Baseline:** `main@549b09e6a6e98366db12a07e57bb2d0991c3b6f6`  
+**Original inspected baseline:** `main@549b09e6a6e98366db12a07e57bb2d0991c3b6f6`  
+**Latest lawful main reconciled:** `main@a35543c0845f1af70d896a449bd9739af753b8f4`  
 **Candidate design branch:** `plan/occurrence-context-v0-1`  
 **Status:** `GATE_READY`  
 **Authority delta on PASS:** design acceptance only; permits preparation of a separate implementation plan.
@@ -14,31 +15,32 @@ Accept a standalone OccurrenceContext contract before C2P. The context layer bin
 
 Core firewall:
 
-> OccurrenceContext can describe the circumstances of a structural occurrence, but it cannot change what that structural occurrence historically was.
+> **OccurrenceContext can describe the circumstances of a structural occurrence, but it cannot change what that structural occurrence historically was.**
 
 ## Court-record reconciliation
 
 - End-to-end architecture v0.2 REVISED was operator-ratified at `06e657d54afa21670576b181be3f938f2ea01c89`.
 - MCARB-D8 PASS is recorded at `00c100ece613bbc5bb8de0c8f8ca45425e036037`; MCARBI terminal closeout is `664b7d2de0c8f475936d857bc929ad1b7eb88421`.
-- Current C2E v0.2 main state remains `C2E2-G6-RUN-AUTH / GATE_READY`, with active C2E and active boundary pack `NONE`.
+- C2E2-G6 was subsequently operator-DEFERRED and squash-merged at `a35543c0845f1af70d896a449bd9739af753b8f4`. Current C2E main state is `BLOCKED / DEFER`; `real_source_replay=DENIED_DEFERRED_AT_C2E2_G6`; `active_c2e=NONE`; `active_boundary_pack=NONE`; WP6 remains denied pending a future append-only exact G6 supersession.
 - SFC is `COMPLETED / DEFERRED` after `SFC-G0 DEFER`; standalone OccurrenceContext does not depend on SFC reopening.
 - Main contains only a generic SRFD `SRFDOccurrenceContext` object-type allowance, not a standalone forward context service.
-- Open PRs #446, #444, #433 and #418 are preserved as proposal/evidence streams and are not imported as main authority.
+- Open SRFD capacity/remediation and synthetic-rehearsal PRs remain proposal/evidence streams and are not imported as OC authority.
+- `OC_D0_COURT_RECORD_RECONCILIATION_ADDENDUM.md` records the main movement that occurred during packet preparation and controls over stale baseline wording in the long-form design document.
 
 ## Acceptance conditions
 
 PASS should require acceptance of all of the following:
 
 1. `occurrence_key` derives only from immutable structural anchor identity.
-2. context versions are independent append-only records with deterministic IDs/hashes.
-3. session/date/era/market-condition/MCARB values do not enter structural identity.
+2. Context versions are independent append-only records with deterministic IDs/hashes.
+3. Session/date/era/market-condition/MCARB values do not enter structural identity.
 4. `REPRESENTATION_INPUT` remains denied by default and requires an exact separately governed RepresentationPack admission.
 5. MCARB evidence is referenced by typed ID/hash/version/admission, not copied as mutable vectors.
 6. C2/C2E no-mutation is a blocking implementation invariant.
-7. future C2P base identity is context-independent.
+7. Future C2P base identity is context-independent.
 8. C2.5/C3 must declare field-level context dependencies.
 9. Validation remains locked/unconsumed; no occurrence-level Validation context may be constructed under current authority.
-10. new instrument/clock/side, scientific MCARB activation, selector/family/semantic/publication or exposure authority remain separately reserved.
+10. New instrument/clock/side, scientific MCARB activation, selector/family/semantic/publication or exposure authority remain separately reserved.
 
 ## Proposed implementation handoff
 
@@ -53,15 +55,17 @@ Recommended implementation sequence:
 
 Base implementation plan would use operator-required `OC-G0` and terminal `OC-G6`; bounded build/test gates between them are auto-ratifiable only while their authority delta remains entirely non-reserved.
 
-## Authority after PASS
+## Exact authority after PASS
 
 - OccurrenceContext design: `ACCEPTED`.
 - OccurrenceContext implementation: `NONE` until a later implementation plan is ratified.
 - C2P: `NOT_STARTED`.
 - C2/C2E/SRI/FDI/MCARB semantics: unchanged.
+- C2E real-source replay: `DENIED_DEFERRED_AT_C2E2_G6`.
 - Validation: `LOCKED_UNCONSUMED`.
-- Context structural input: denied by default.
-- Selector/family/semantic/publication/probability/risk/exposure/execution: none.
+- Context structural input: `DENIED_BY_DEFAULT`.
+- New instrument/clock/side: `DENIED`.
+- Selector/family/semantic/publication/probability/risk/exposure/execution: `NONE`.
 
 ## Rollback
 
