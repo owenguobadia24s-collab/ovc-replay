@@ -11,7 +11,9 @@ from ovc.opt_b.srfd.wp10a_real_capacity import (
     FROZEN_ELIGIBLE_COUNT,
     FROZEN_FAMILY_CONFIGURATION_COUNT,
     FROZEN_PAIR_COUNT,
+    execute_domain_family_grid,
     gower_distance_matrix,
+    gower_pattern_surface,
     verify_gower_batch_against_reference,
 )
 
@@ -28,6 +30,19 @@ def record(record_id: str, values: dict[str, str], *, domain: str = "D") -> dict
         "comparison_only": {},
         "missingness": [],
         "comparability_domain_id": domain,
+        "ordering_semantics": "STATIC_VECTOR",
+    }
+
+
+def null_record(record_id: str) -> dict[str, object]:
+    return {
+        "representation_id": record_id,
+        "structural_raw": {},
+        "structural_derived": {},
+        "structural_normalized": {},
+        "comparison_only": {"null_control_token": f"UNIQUE::{record_id}"},
+        "missingness": [],
+        "comparability_domain_id": "NULL",
         "ordering_semantics": "STATIC_VECTOR",
     }
 
@@ -61,9 +76,14 @@ class SRFDIWP10ARealCapacityHarnessTests(unittest.TestCase):
             record("C", {"LOCATION.value": "HIGH", "MOTION.value": "DOWN"}),
         ]
         matrix = gower_distance_matrix(records)
-        receipt = verify_gower_batch_against_reference(records, matrix, sample_pairs=99)
+        surface = gower_pattern_surface(records)
+        receipt = verify_gower_batch_against_reference(records, surface, sample_pairs=99)
         self.assertEqual("PASS", receipt["result"])
         self.assertEqual(3, receipt["checked_pairs"])
+        self.assertEqual(matrix.ids, surface.ids)
+        for left in matrix.ids:
+            for right in matrix.ids:
+                self.assertEqual(matrix.distance(left, right), surface.distance(left, right))
         spec = DistanceSpec(
             "CHECK",
             "GOWER_MIXED",
@@ -73,23 +93,32 @@ class SRFDIWP10ARealCapacityHarnessTests(unittest.TestCase):
         self.assertEqual("1.000000000000", compute_distance(records[0], records[2], spec)["distance"])
 
     def test_null_control_gower_domain_is_all_one(self) -> None:
-        records = []
-        for item in ("N1", "N2", "N3"):
-            records.append(
-                {
-                    "representation_id": item,
-                    "structural_raw": {},
-                    "structural_derived": {},
-                    "structural_normalized": {},
-                    "comparison_only": {"null_control_token": f"UNIQUE::{item}"},
-                    "missingness": [],
-                    "comparability_domain_id": "NULL",
-                    "ordering_semantics": "STATIC_VECTOR",
-                }
-            )
+        records = [null_record(item) for item in ("N1", "N2", "N3")]
         matrix = gower_distance_matrix(records)
+        surface = gower_pattern_surface(records)
         self.assertTrue(all(value == "1.000000000000" for value in matrix.values.values()))
-        self.assertEqual("PASS", verify_gower_batch_against_reference(records, matrix)["result"])
+        self.assertEqual("PASS", verify_gower_batch_against_reference(records, surface)["result"])
+
+    def test_domain_receipt_is_full_grid_and_catalog_hash_is_repeatable(self) -> None:
+        records = [
+            record(f"R{index:02d}", {"A": str(index % 3), "B": str((index // 2) % 2)})
+            for index in range(12)
+        ]
+        first = execute_domain_family_grid("REPEAT", records)
+        second = execute_domain_family_grid("REPEAT", list(reversed(records)))
+        self.assertEqual(54, first["configuration_count"])
+        self.assertEqual(66, first["pair_count"])
+        self.assertEqual(first["catalog_hashes_sha256"], second["catalog_hashes_sha256"])
+        self.assertEqual(first["unique_pattern_count"], second["unique_pattern_count"])
+        self.assertFalse(first["null_control_fast_path"])
+
+    def test_null_domain_uses_exact_all_residual_fast_path(self) -> None:
+        records = [null_record(f"N{index:02d}") for index in range(12)]
+        receipt = execute_domain_family_grid("NULL-FAST", records)
+        self.assertEqual(54, receipt["configuration_count"])
+        self.assertEqual(66, receipt["pair_count"])
+        self.assertEqual(12, receipt["unique_pattern_count"])
+        self.assertTrue(receipt["null_control_fast_path"])
 
     def test_frozen_capacity_totals_remain_exact(self) -> None:
         self.assertEqual(8598, FROZEN_ELIGIBLE_COUNT)
