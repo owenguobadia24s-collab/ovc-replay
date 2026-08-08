@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-srfdi-stability-metric-spec-registry/v4",
+  "title": "SRFD Stability Metric Spec Registry v0.4",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema", "registry_id", "version", "programme_id", "packet_id", "gate_id", "authority_state", "metric_order", "stability_metric_specs", "common_contract", "firewalls", "scientific_effect"],
+  "properties": {
+    "schema": {"const": "ovc-srfdi-stability-metric-spec-registry/v4"},
+    "version": {"const": "0.4"},
+    "authority_state": {"const": "CANDIDATE_PENDING_OPERATOR_FREEZE"},
+    "metric_order": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR"},
+        {"const": "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR"},
+        {"const": "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR"},
+        {"const": "RESIDUAL_RATE_WITH_DENOMINATOR"},
+        {"const": "AMBIGUITY_RATE_WITH_DENOMINATOR"}
+      ],
+      "items": false,
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "stability_metric_specs": {
+      "type": "object",
+      "minProperties": 5,
+      "maxProperties": 5,
+      "required": ["CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR", "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR", "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR", "RESIDUAL_RATE_WITH_DENOMINATOR", "AMBIGUITY_RATE_WITH_DENOMINATOR"],
+      "additionalProperties": false
+    }
+  }
+}
