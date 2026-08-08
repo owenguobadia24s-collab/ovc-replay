@@ -1,0 +1,69 @@
+{
+  "schema": "ovc-srfdi-g8r-wp6-hardware-sizing-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "packet_id": "SRFDI-G8R-WP6",
+  "authority_state": "EVIDENCE_ONLY_PENDING_G8R_G6",
+  "scientific_effect": "NONE",
+  "h0": {
+    "status": "MEASURED_GITHUB_HOSTED",
+    "fingerprint": "SRFD.H0.a509562092bc40c68210291e76368b0e747bae1588eaacd8a46dba7cacb3619d",
+    "cpu_model": "AMD EPYC 7763 64-Core Processor",
+    "physical_cores": 2,
+    "logical_threads": 4,
+    "installed_memory_bytes": 16766423040,
+    "filesystem_type": "ext4",
+    "storage_total_bytes": 154894188544,
+    "storage_free_bytes_at_capture": 93843329024,
+    "non_binding_8598_serial_cold_projection_seconds": 4264.711176858039,
+    "non_binding_8598_projection_status": "SUPPORTED_T0",
+    "parallel_credit_in_projection": false,
+    "cache_credit_in_projection": false
+  },
+  "worker_scaling": {
+    "population_count": 256,
+    "worker_1_seconds": 1.8908195189999901,
+    "worker_2_seconds": 1.0438778120000052,
+    "worker_4_seconds": 0.9567331640000134,
+    "worker_1_to_2_speedup": 1.811341803862367,
+    "worker_1_to_4_speedup": 1.9763290227074888,
+    "best_measured_worker_count": 4,
+    "interpretation": "Four logical workers were best on this two-physical-core H0 fixture, but the conservative 8598 projection takes no parallel speedup credit."
+  },
+  "h1_candidate": {
+    "status": "EVIDENCE_DERIVED_PENDING_G8R_G6",
+    "finding": "H0_EQUIVALENT_OR_BETTER_IS_SUFFICIENT_FOR_CURRENT_NON_BINDING_T0_REFERENCE",
+    "minimum_cpu_physical_cores": 2,
+    "minimum_cpu_logical_threads": 4,
+    "measured_peak_process_rss_bytes": 579379200,
+    "ram_formula_minimum_1_5x_measured_peak_bytes": 869068800,
+    "active_external_working_set_with_reserve_bytes": 310451426,
+    "storage_formula_minimum_2x_working_set_with_20pct_free_bytes": 776128565,
+    "runtime_headroom_fraction_against_t0": 0.7038395016070805,
+    "rss_headroom_fraction_against_t0": 0.966275691986084,
+    "external_storage_headroom_fraction_against_t0": 0.9710869578644633,
+    "gpu_requirement": "NONE",
+    "qualification": "Formula minima are SRFD-workload-only lower bounds, not OS/repository/tooling requirements and not a hardware purchase specification. A concrete execution host should retain ordinary operating-system and repository margin."
+  },
+  "h2": {
+    "status": "PROVISIONAL_CAPACITY_UNRESOLVED",
+    "t1_max_wall_seconds": 86400,
+    "t1_max_peak_rss_bytes": 34359738368,
+    "t1_max_external_bytes": 107374182400,
+    "population_binding": "NOT_AVAILABLE_WITHIN_CURRENT_AUTHORITY",
+    "reason": "Future 2021-2023 or other long-horizon SRFD population is not lawfully bound in G8R. No concrete H2 host class is inferred from an unstated population.",
+    "gpu_requirement": "NONE_UNLESS_SEPARATELY_ADMITTED_EXACT_BACKEND"
+  },
+  "cross_runner_note": {
+    "wp0_h0_fingerprint": "SRFD.H0.352f1131575c17938fada017b26bbe053458eb15ff298794c3a63579ebc46c30",
+    "wp6_h0_fingerprint": "SRFD.H0.a509562092bc40c68210291e76368b0e747bae1588eaacd8a46dba7cacb3619d",
+    "finding": "GITHUB_HOSTED_CPU_SKU_CHANGED_BETWEEN_MEASUREMENTS",
+    "effect": "NO_CROSS_RUNNER_PURE_SPEEDUP_CLAIM; WP6 CAPACITY IS ANCHORED TO ITS OWN MEASURED H0 AND EXPLICIT RESOURCE HEADROOM."
+  },
+  "purchase_recommendation": "NONE",
+  "june_market_records_read": false,
+  "validation_consumed": false,
+  "wp9": "DENIED",
+  "conclusion": "H0_MEASURED_H1_EVIDENCE_DERIVED_H2_PROVISIONAL_PENDING_OPERATOR_G6"
+}

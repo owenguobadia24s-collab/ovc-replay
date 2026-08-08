@@ -1,0 +1,116 @@
+{
+  "schema": "ovc-srfdi-g8r-wp6-g8-representation-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "packet_id": "SRFDI-G8R-WP6",
+  "purpose": "BEFORE_AFTER_CAPACITY_EVIDENCE_FOR_G8R_G6_AND_LATER_SRFDI_G8_REPRESENTATION",
+  "authority_state": "EVIDENCE_ONLY_PENDING_OPERATOR_G8R_G6",
+  "scientific_effect": "NONE",
+  "original_wp8_source": "docs/releases/srfd-benchmark-v0-1/srfdi-wp8/SRFDI_WP8_MEASURED_CAPACITY_RECEIPT.json",
+  "redesigned_source": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_MULTI_N_CAPACITY_RECEIPT.json",
+  "non_binding_reference_population": 8598,
+  "comparison": [
+    {
+      "metric": "representation_records_per_second",
+      "before": 1361.2722986904228,
+      "after": 7127.647252737986,
+      "after_rung": 256,
+      "comparison_class": "DIRECTIONAL_ONLY_INSTRUMENTATION_AND_RUNNER_DIFFER",
+      "improvement_factor": null
+    },
+    {
+      "metric": "pair_distance_pairs_per_second",
+      "before": 2399.385690193871,
+      "after": 16901.40235892663,
+      "after_rung": 128,
+      "comparison_class": "DIRECTIONAL_ONLY_BACKEND_INSTRUMENTATION_AND_RUNNER_DIFFER",
+      "improvement_factor": null
+    },
+    {
+      "metric": "physical_pair_payload_bytes_per_pair",
+      "before": 262,
+      "after": 8,
+      "comparison_class": "EXACT_PHYSICAL_STORAGE_COMPARISON",
+      "reduction_factor": 32.75
+    },
+    {
+      "metric": "pair_artifact_bytes_at_non_binding_8598",
+      "before": 9683127786,
+      "after": 295668024,
+      "comparison_class": "EXACT_PAIR_PAYLOAD_MODEL",
+      "reduction_factor": 32.75
+    },
+    {
+      "metric": "medoid_star_runtime_seconds_at_non_binding_8598",
+      "before": 226427.64400808184,
+      "after": 60.467407933136975,
+      "comparison_class": "INCOMPARABLE_PROJECTION_METHODS_OLD_FIXED_EXPONENT_VS_NEW_MULTI_N_OBSERVED_SLOPE",
+      "improvement_factor": null
+    },
+    {
+      "metric": "complete_linkage_runtime_seconds_at_non_binding_8598",
+      "before": 1664181.367699249,
+      "after": 638.3583089592898,
+      "comparison_class": "INCOMPARABLE_PROJECTION_METHODS_OLD_FIXED_EXPONENT_VS_NEW_MULTI_N_OBSERVED_SLOPE",
+      "improvement_factor": null
+    },
+    {
+      "metric": "average_linkage_runtime_seconds_at_non_binding_8598",
+      "before": 1981950.5205316744,
+      "after": 1315.1335247195932,
+      "comparison_class": "INCOMPARABLE_PROJECTION_METHODS_OLD_FIXED_EXPONENT_VS_NEW_MULTI_N_OBSERVED_SLOPE",
+      "improvement_factor": null
+    },
+    {
+      "metric": "bounded_pam_runtime_seconds_at_non_binding_8598",
+      "before": 574.9654012103325,
+      "after": 65.02323423084194,
+      "comparison_class": "INCOMPARABLE_PROJECTION_METHODS_OLD_FIXED_EXPONENT_VS_NEW_MULTI_N_OBSERVED_SLOPE",
+      "improvement_factor": null
+    },
+    {
+      "metric": "peak_process_rss_bytes",
+      "before": 38166528,
+      "before_profile_scale": "PAIR_N128_OR_REPRESENTATION_N256",
+      "after": 579379200,
+      "after_profile_scale": "FULL_WP6_LADDER_THROUGH_N1024",
+      "comparison_class": "INCOMPARABLE_POPULATION_SCALE",
+      "improvement_factor": null
+    },
+    {
+      "metric": "checkpoint_restart_overhead",
+      "before": {"full_seconds": 0.079342589, "resume_seconds": 0.049028577},
+      "after": {"exact_tile_write_seconds": 0.30205469699998844, "exact_tile_read_seconds": 0.07867327900001442, "verified_reuse_check_seconds": 0.0000018830000101388578},
+      "comparison_class": "INCOMPARABLE_CHECKPOINT_UNITS_STAGE_STATE_VS_EXACT_TILE",
+      "improvement_factor": null
+    },
+    {
+      "metric": "cache_reuse",
+      "before": "NO_CAPACITY_CREDIT",
+      "after": "VERIFIED_COMPLETE_TILE_NO_RECOMPUTE_BUT_ZERO_CACHE_SPEEDUP_CREDIT_IN_PROJECTION",
+      "comparison_class": "QUALITATIVE_CORRECTNESS_ONLY"
+    },
+    {
+      "metric": "full_required_capacity_projection_seconds_at_non_binding_8598",
+      "before": 1997360.155602428,
+      "before_days": 23.117594393546618,
+      "before_status": "CAPACITY_EXCEEDED_RUNTIME",
+      "after": 4264.711176858039,
+      "after_hours": 1.1846419935716774,
+      "after_status": "SUPPORTED_T0",
+      "comparison_class": "CAPACITY_CLASS_COMPARISON_ONLY_DIFFERENT_PROJECTION_METHODS",
+      "improvement_factor": null
+    }
+  ],
+  "direct_same-run_wp3_family_equivalence_note": {
+    "source": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp3/SRFDI_G8R_WP3_FAMILY_METHOD_CAPACITY_RECEIPT.json",
+    "finding": "WP3 independently established reference-equivalent optimized family methods on N48 and N96. Those same-run measurements are the appropriate source for direct implementation speedup factors; this G8 packet does not restate cross-run speedup claims."
+  },
+  "overall_finding": "REDESIGNED_PHYSICAL_AND_COMPUTE_PATH_MOVES_THE_NON_BINDING_8598_REFERENCE_FROM_CAPACITY_EXCEEDED_TO_PROJECTED_SUPPORTED_T0_WITHOUT_SCIENTIFIC_SCOPE_REDUCTION",
+  "qualification": "The 8598 count remains a non-binding reference only. It is not a frozen SRFD population, not an episode count and not June authorization. Projection classes are displayed explicitly and no cross-class speedup factor is claimed.",
+  "wp9": "DENIED",
+  "june": "DENIED",
+  "validation_2025": "LOCKED_UNCONSUMED",
+  "pr_371": "PRESERVE_DO_NOT_MERGE"
+}
