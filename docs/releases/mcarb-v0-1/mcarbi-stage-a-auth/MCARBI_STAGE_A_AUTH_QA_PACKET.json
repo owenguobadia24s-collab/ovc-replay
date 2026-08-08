@@ -1,0 +1,30 @@
+{
+  "schema":"ovc-mcarbi-stage-a-auth-qa/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "plan_id":"OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "gate_id":"MCARBI-G-STAGE-A-AUTH",
+  "status":"GATE_READY_PENDING_EXACT_HEAD_ASSURANCE",
+  "qa_scope":"AUTHORITY_PACKET_ONLY_NO_MARKET_RUN",
+  "checks":[
+    {"check":"g7_operator_decision_merged","result":"PASS","evidence":"1ea248b943600b4f1f40916e06fe29ae2ac8beeb"},
+    {"check":"frozen_preregistration_blob_identity","result":"PASS","evidence":"8dcc4fe4e51b3b7d07e4dcc440c6b5b6a784f6f7"},
+    {"check":"frozen_parameter_registry_blob_identity","result":"PASS","evidence":"2afaf18ffebb674b181b7493b2ca62738a54f037"},
+    {"check":"stage_a_population_non_validation_discovery_only","result":"PASS"},
+    {"check":"provider_intake_required","result":"PASS_FALSE"},
+    {"check":"validation_2025_access_required","result":"PASS_FALSE"},
+    {"check":"selector_or_scientific_promotion_bundled","result":"PASS_FALSE"},
+    {"check":"capacity_and_stop_rules_frozen","result":"PASS"},
+    {"check":"one_logical_run_boundary_explicit","result":"PASS"},
+    {"check":"changed_parameter_rerun_without_new_authority","result":"PROHIBITED"},
+    {"check":"gate_packet_exact_head_repository_suite","result":"PENDING_PR_HEAD_ASSURANCE_COMMENT"},
+    {"check":"gate_packet_exact_head_final_head_and_merge_readiness","result":"PENDING_PR_HEAD_ASSURANCE_COMMENT"}
+  ],
+  "qa_recommendation":"AUTHORIZE_STAGE_A_AFTER_EXACT_HEAD_ASSURANCE_PASS",
+  "blocking_warnings":[],
+  "non_blocking_warnings":[
+    "AL_SOURCE_PARTIAL remains binding.",
+    "Stage-A output is research evidence only and cannot promote thresholds, representations, families or semantics.",
+    "A manifest/source/capacity/authority breach must fail closed and preserve evidence."
+  ],
+  "rollback":"DEFER/BLOCK/QUARANTINE leaves Stage-A unexecuted. A later unconsumed authorization may be superseded by explicit versioned decision; no frozen preregistration artifact is mutated."
+}
