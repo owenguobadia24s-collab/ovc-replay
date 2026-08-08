@@ -77,15 +77,20 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", authority["scientific_promotion"])
         self.assertEqual("NONE", authority["probability_risk_exposure_execution"])
 
-    def test_current_pointer_has_not_self_frozen_or_granted_fresh_run(self) -> None:
-        self.assertEqual("SRFDI-WP10A", self.pointer["next_packet"])
+    def test_current_pointer_advances_only_after_operator_pass_and_grants_no_fresh_run(self) -> None:
         self.assertEqual("SRFDI-G10A-FREEZE", self.pointer["current_gate"])
         self.assertTrue(self.pointer["authority_token_consumed"])
         self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
-        self.assertEqual(
-            "AUTHORIZED_BOUNDED_REAL_DATA_FAMILY_GRID_CAPACITY_REMEDIATION_ONLY",
-            self.pointer["wp10a_execution"],
-        )
+        self.assertIn(self.pointer["status"], {"READY", "APPROVED_PENDING_MERGE", "COMPLETED"})
+        if self.pointer["status"] == "READY":
+            self.assertEqual("SRFDI-WP10A", self.pointer["next_packet"])
+            self.assertEqual(
+                "AUTHORIZED_BOUNDED_REAL_DATA_FAMILY_GRID_CAPACITY_REMEDIATION_ONLY",
+                self.pointer["wp10a_execution"],
+            )
+        else:
+            self.assertIn(self.pointer["next_packet"], {"SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", "SRFDI-G-JUNE-AUTH"})
+            self.assertNotEqual("AUTHORIZED_BOUNDED_REAL_DATA_FAMILY_GRID_CAPACITY_REMEDIATION_ONLY", self.pointer["wp10a_execution"])
 
     def test_pass_would_freeze_only_backend_and_still_require_new_june_authority(self) -> None:
         delta = self.packet["proposed_authority_delta_if_PASS"]
