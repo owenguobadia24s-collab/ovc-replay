@@ -7,8 +7,8 @@
   "plan_artifact_sha256": "f1e6515f68a97ee50c5273cb13312622376ac9650c6cf7612c48c18588fb0408",
   "status": "RUNNING",
   "baseline_commit": "d90432957df146bf448287cedf4da73a8c861ebe",
-  "active_packet": "SRFDI-G8R-WP4",
-  "current_gate": "SRFDI-G8R-G4",
+  "active_packet": "SRFDI-G8R-WP5",
+  "current_gate": "SRFDI-G8R-G5",
   "authority": {
     "capacity_remediation_implementation": "AUTHORISED_FIXTURE_LOCAL_ONLY",
     "wp9": "DENIED",
@@ -43,7 +43,13 @@
     "wp4_method_capacity_contract": "contracts/research/srfd/method_capacity_contract_v0_2.md",
     "wp4_method_capacity_registry": "registries/research/srfd/method_capacity_status_v0_2.yaml",
     "wp4_qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp4/SRFDI_G8R_WP4_QA_GATE_PACKET.json",
-    "wp4_decision": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp4/SRFDI_G8R_G4_DELEGATED_DECISION.json"
+    "wp4_decision": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp4/SRFDI_G8R_G4_DELEGATED_DECISION.json",
+    "wp5_backend_lock": "registries/research/srfd/g8r_backend_lock_v0_2.json",
+    "wp5_reference_optimized_equivalence": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp5/SRFDI_G8R_WP5_REFERENCE_OPTIMIZED_EQUIVALENCE_RECEIPT.json",
+    "wp5_parallel_determinism": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp5/SRFDI_G8R_WP5_PARALLEL_DETERMINISM_RECEIPT.json",
+    "wp5_restart_equivalence": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp5/SRFDI_G8R_WP5_RESTART_EQUIVALENCE_RECEIPT.json",
+    "wp5_qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp5/SRFDI_G8R_WP5_QA_GATE_PACKET.json",
+    "wp5_decision": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp5/SRFDI_G8R_G5_DELEGATED_DECISION.json"
   },
   "operator_gates": {
     "SRFDI-G8R-G2F": {
@@ -134,33 +140,57 @@
     },
     {
       "packet_id": "SRFDI-G8R-WP4",
-      "status": "APPROVED",
+      "status": "COMPLETED",
       "prerequisites": ["SRFDI-G8R-WP3"],
       "authority_required": "AUTO_RATIFIABLE",
       "authority_delta": "ORCHESTRATION_AND_CAPACITY_STATUS_ONLY",
       "baseline_commit": "203d6dc8184610e52d0a857885fe78269f57b284",
       "branch": "build/srfdi-g8r-wp4-capacity-scheduler",
-      "candidate_commit": "45088d1739990bc068c28af2d247a1c3d4050752",
+      "candidate_commit": "79c8edfb72d1faaacd74f248f88203ac7e0e1411",
       "tests": [
-        "tests:31220577700:success",
-        "tiered:31220577694:success",
-        "profile_assurance:93004033190:success",
-        "merge_readiness:93004071209:success"
+        "implementation_tests:31220577700:success",
+        "implementation_tiered:31220577694:success",
+        "implementation_profile_assurance:93004033190:success",
+        "implementation_merge_readiness:93004071209:success",
+        "final_tests:31220830685:success",
+        "final_tiered:31220830644:success",
+        "final_profile_assurance:93004812267:success",
+        "final_merge_readiness:93004856929:success"
       ],
       "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp4/SRFDI_G8R_WP4_QA_GATE_PACKET.json",
       "decision_record": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp4/SRFDI_G8R_G4_DELEGATED_DECISION.json",
-      "merge_commit": null,
+      "merge_commit": "0d201f950e4e387cf4e52abb2d09b8bf71f6e63b",
       "blockers": [],
       "next_packet": "SRFDI-G8R-WP5"
     },
     {
       "packet_id": "SRFDI-G8R-WP5",
-      "status": "PLANNED",
+      "status": "APPROVED",
       "prerequisites": ["SRFDI-G8R-WP4"],
       "authority_required": "AUTO_RATIFIABLE",
-      "blockers": ["WP4_NOT_MERGED"]
+      "authority_delta": "QA_OBSERVABILITY_AND_EXACT_BACKEND_LOCK_ONLY",
+      "baseline_commit": "0d201f950e4e387cf4e52abb2d09b8bf71f6e63b",
+      "branch": "build/srfdi-g8r-wp5-adversarial-equivalence",
+      "candidate_commit": "63bf56be91ae55f31a09556d3e10ec2ef8f350d3",
+      "tests": [
+        "implementation_tests:31221221574:success:443_tests",
+        "implementation_tiered:31221221509:success",
+        "implementation_profile_assurance:93006023478:success",
+        "implementation_merge_readiness:93006066182:success"
+      ],
+      "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp5/SRFDI_G8R_WP5_QA_GATE_PACKET.json",
+      "decision_record": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp5/SRFDI_G8R_G5_DELEGATED_DECISION.json",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "SRFDI-G8R-WP6"
     },
-    {"packet_id": "SRFDI-G8R-WP6", "status": "PLANNED", "prerequisites": ["SRFDI-G8R-WP5"], "authority_required": "OPERATOR_REQUIRED", "blockers": []}
+    {
+      "packet_id": "SRFDI-G8R-WP6",
+      "status": "PLANNED",
+      "prerequisites": ["SRFDI-G8R-WP5"],
+      "authority_required": "OPERATOR_REQUIRED",
+      "blockers": ["WP5_NOT_MERGED"]
+    }
   ],
   "mandatory_operator_stops": ["SRFDI-G8R-G6", "SRFDI-G8-REPRESENTED"],
   "h0_status": "MEASURED_GITHUB_HOSTED_H0_CAPTURED",
@@ -169,6 +199,7 @@
   "bridge_disposition": "PLAUSIBLE",
   "wp3_family_capacity_disposition": "PASS_REFERENCE_EQUIVALENT_SMALL_N_REMEDIATION",
   "wp4_scheduler_disposition": "PASS_CAPACITY_STATUS_AND_COMPLETE_DAG_GOVERNANCE",
+  "wp5_equivalence_disposition": "PASS_FULL_ADVERSARIAL_REFERENCE_EQUIVALENCE",
   "pr_371": "PRESERVE_DO_NOT_MERGE",
-  "next_action": "RUN_LATEST_MAIN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_WP4_IF_PASS_THEN_START_WP5"
+  "next_action": "RUN_PACKET_MATERIALIZATION_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_WP5_IF_PASS_THEN_START_WP6_AND_STOP_AT_G6"
 }

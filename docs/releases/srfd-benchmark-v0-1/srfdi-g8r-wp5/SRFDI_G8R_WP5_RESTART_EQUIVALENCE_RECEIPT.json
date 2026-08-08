@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-srfdi-g8r-restart-equivalence-receipt/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "packet_id": "SRFDI-G8R-WP5",
+  "source_head": "79346ed5b8c3e90e53c00035beb20fe4a0196860",
+  "measurement_class": "MEASURED_FIXTURE_LOCAL_RESTART_EQUIVALENCE",
+  "authority_state": "FIXTURE_LOCAL_CAPACITY_REMEDIATION_ONLY",
+  "scientific_effect": "NONE",
+  "acceptance": {
+    "completed_tile_no_recompute_same_hash": "PASS",
+    "completed_tile_attempt_identity_preserved": "PASS",
+    "hash_mismatch_quarantined": "PASS",
+    "semantic_cache_corruption_quarantined": "PASS",
+    "cross_scope_cache_reuse_rejected": "PASS",
+    "tile_atomic_publish": "PASS",
+    "tile_relocation_readback_equivalent": "PASS",
+    "corrupt_tile_read_fails_closed": "PASS",
+    "logical_identity_path_independent": "PASS"
+  },
+  "failure_codes": [
+    "QA_CACHE_CORRUPTION",
+    "G8R_SURFACE_NOT_QUANTIZED",
+    "G8R_SURFACE_COEFFICIENT_OVERFLOW"
+  ],
+  "restart_rules": {
+    "reuse_requires_matching_semantic_identity": true,
+    "reuse_requires_matching_content_hash": true,
+    "complete_tile_recompute_when_valid": "PROHIBITED",
+    "corrupt_or_mismatched_tile": "QUARANTINE_AND_RECOMPUTE_ONLY_UNDER_SAME_LOGICAL_EXPERIMENT",
+    "hostname_or_local_path_in_logical_identity": false
+  },
+  "test_evidence": {
+    "repository_suite_run_id": 31221221574,
+    "repository_suite_conclusion": "success",
+    "repository_test_count": 443,
+    "tiered_run_id": 31221221509,
+    "tiered_conclusion": "success",
+    "merge_readiness_job_id": 93006066182,
+    "merge_readiness_conclusion": "success"
+  },
+  "june_market_records_read": false,
+  "validation_consumed": false,
+  "conclusion": "PASS_RESTART_AND_CACHE_EQUIVALENCE_ON_GOVERNED_FIXTURES"
+}

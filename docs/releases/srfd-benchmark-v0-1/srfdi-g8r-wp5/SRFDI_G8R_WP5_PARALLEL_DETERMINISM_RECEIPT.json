@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-srfdi-g8r-parallel-determinism-receipt/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "packet_id": "SRFDI-G8R-WP5",
+  "source_head": "79346ed5b8c3e90e53c00035beb20fe4a0196860",
+  "measurement_class": "MEASURED_FIXTURE_LOCAL_PARALLEL_DETERMINISM",
+  "authority_state": "FIXTURE_LOCAL_CAPACITY_REMEDIATION_ONLY",
+  "scientific_effect": "NONE",
+  "distance_methods": ["L1_TYPED", "L2_TYPED"],
+  "worker_counts": [1,2,4],
+  "tile_pair_count": 17,
+  "population_count": 16,
+  "input_orders": ["CANONICAL", "REVERSED"],
+  "acceptance": {
+    "worker_1_equals_worker_2": "PASS",
+    "worker_1_equals_worker_4": "PASS",
+    "canonical_equals_reversed_input": "PASS",
+    "tile_order_stable": "PASS",
+    "pair_identity_stable": "PASS",
+    "distance_value_bytes_logically_equivalent": "PASS",
+    "scientific_order_or_tie_semantics_changed": "NO"
+  },
+  "deterministic_rules": {
+    "canonical_input_order": "representation_id",
+    "pair_order": "condensed_pair_index",
+    "tile_order": "k_start_then_k_end",
+    "worker_completion_order_effect": "NONE",
+    "hidden_sampling": "PROHIBITED"
+  },
+  "test_evidence": {
+    "repository_suite_run_id": 31221221574,
+    "repository_suite_conclusion": "success",
+    "tiered_run_id": 31221221509,
+    "tiered_conclusion": "success",
+    "profile_assurance_job_id": 93006023478,
+    "profile_assurance_conclusion": "success",
+    "merge_readiness_job_id": 93006066182,
+    "merge_readiness_conclusion": "success"
+  },
+  "june_market_records_read": false,
+  "validation_consumed": false,
+  "conclusion": "PASS_PARALLEL_DETERMINISM_ON_GOVERNED_FIXTURES"
+}
