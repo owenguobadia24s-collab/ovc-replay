@@ -94,7 +94,7 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.manifest["validation_2025"])
         self.assertEqual("FORBIDDEN", self.manifest["required_before_run_authority"]["source"]["provider_fetch"])
 
-    def test_completed_g8_and_g9_lifecycle_are_bound_before_g9s(self) -> None:
+    def test_completed_g8_and_g9_lifecycle_are_preserved_through_g9s_supersession(self) -> None:
         self.assertEqual("0f3ae4379978a1381f479cfe1c5fe9c269981c19", self.g8_merge["merge_commit"])
         self.assertEqual("FREEZE_MEASURED_CAPACITY", self.g8_merge["decision"])
         self.assertEqual("PREREGISTRATION_FREEZE", self.g9_decision["decision"])
@@ -102,13 +102,14 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         wp9 = next(p for p in self.state["packets"] if p["packet_id"] == "SRFDI-WP9")
         self.assertEqual("COMPLETED", wp9["status"])
         self.assertEqual(self.g9_merge["merge_commit"], wp9["merge_commit"])
-        self.assertEqual("SRFDI-G9S", self.state["active_packet"])
-        self.assertEqual("SRFDI-G9S", self.state["current_gate"])
-        self.assertEqual("GATE_READY", self.state["status"])
-        self.assertTrue(self.state["operator_decision_required"])
+        self.assertEqual("SRFDI-WP9S", self.state["active_packet"])
+        self.assertEqual("SRFDI-G9S-FREEZE", self.state["current_gate"])
+        self.assertEqual("READY", self.state["status"])
+        self.assertFalse(self.state["operator_decision_required"])
         self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
-        self.assertEqual("DENIED_PENDING_SRFDI_G9S", self.state["authority"]["preregistration_supersession"])
+        self.assertEqual("APPROVED_BOUNDED_SRFDI_WP9S_ONLY", self.state["authority"]["preregistration_supersession"])
+        self.assertEqual("FROZEN_HISTORICAL_SUPERSEDED_FOR_EXECUTION", self.state["g9_disposition"]["status"])
 
     def test_required_outputs_and_stop_conditions_are_explicit(self) -> None:
         self.assertIn("ARTIFACT_MANIFEST_AND_HASH_TABLE", self.prereg["required_output_tables"])

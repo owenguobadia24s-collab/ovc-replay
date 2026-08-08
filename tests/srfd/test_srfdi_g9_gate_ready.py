@@ -55,14 +55,15 @@ class SRFDIG9GateReadyTests(unittest.TestCase):
         self.assertIn("FROZEN_REPRESENTATION_PACK_FIELD_MAPPING_NOT_MATERIALISED", wp9["blockers"])
 
     def test_later_state_does_not_retroactively_grant_june(self) -> None:
-        self.assertEqual("SRFDI-G9S", self.state["current_gate"])
-        self.assertEqual("SRFDI-G9S", self.state["active_packet"])
-        self.assertEqual("GATE_READY", self.state["status"])
-        self.assertTrue(self.state["operator_decision_required"])
+        self.assertEqual("SRFDI-G9S-FREEZE", self.state["current_gate"])
+        self.assertEqual("SRFDI-WP9S", self.state["active_packet"])
+        self.assertEqual("READY", self.state["status"])
+        self.assertFalse(self.state["operator_decision_required"])
         self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
-        self.assertEqual("DENIED_PENDING_SRFDI_G9S", self.state["authority"]["preregistration_supersession"])
-        self.assertEqual("SRFDI-G9S", self.state["stop_at"])
+        self.assertEqual("APPROVED_BOUNDED_SRFDI_WP9S_ONLY", self.state["authority"]["preregistration_supersession"])
+        self.assertEqual("SRFDI-G9S-FREEZE", self.state["stop_at"])
+        self.assertEqual("FROZEN_HISTORICAL_SUPERSEDED_FOR_EXECUTION", self.state["g9_disposition"]["status"])
 
     def test_gate_keeps_population_unbound_and_june_separate(self) -> None:
         summary = self.gate["frozen_protocol_summary"]
