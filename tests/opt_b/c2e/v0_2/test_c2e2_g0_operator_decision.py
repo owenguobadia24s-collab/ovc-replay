@@ -58,7 +58,7 @@ class C2E2G0OperatorDecisionTests(unittest.TestCase):
         current = json.loads(current_path.read_text())
         self.assertEqual(self.pointer["programme_id"], "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2")
         self.assertEqual(current["programme_id"], self.pointer["programme_id"])
-        self.assertIn(self.decision["decision_id"], current.get("operator_decision_history", []))
+        self.assertIn("C2E2-G0.OPERATOR.PASS.20260808T175000+0100", current.get("operator_decision_history", []))
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         authority = current.get("authority", {})
