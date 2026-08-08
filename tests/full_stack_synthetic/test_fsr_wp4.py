@@ -7,7 +7,7 @@ from pathlib import Path
 
 from ovc.opt_a.fsr_synthetic import build_opt_a_fixture, c1_handoff_records
 from ovc.opt_b.c1.builder import build as build_c1
-from ovc.opt_b.c2_vnext.fsr_rehearsal import run_fsr_c2_vnext
+from ovc.opt_b.c2_vnext.fsr_rehearsal_strict import run_fsr_c2_vnext_strict
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -32,8 +32,8 @@ class FSRWP4Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             opt_a = build_opt_a_fixture(Path(root) / "fixture", repo_root=REPO_ROOT)
             c1 = _c1_stream(c1_handoff_records(opt_a))
-            first = run_fsr_c2_vnext(opt_a, c1)
-            second = run_fsr_c2_vnext(opt_a, c1)
+            first = run_fsr_c2_vnext_strict(opt_a, c1)
+            second = run_fsr_c2_vnext_strict(opt_a, c1)
 
             self.assertEqual(first["logical_sha256"], second["logical_sha256"])
             self.assertEqual(first["population"]["expected_slot_count"], 192)
@@ -41,6 +41,9 @@ class FSRWP4Tests(unittest.TestCase):
             self.assertEqual(first["population"]["evidence_counts"].get("PRESENT_COMPLETE"), 190)
             self.assertEqual(first["population"]["evidence_counts"].get("ABSENT"), 2)
             self.assertGreaterEqual(first["population"]["continuity_counts"].get("GAP_RESET", 0), 2)
+            self.assertGreaterEqual(first["continuity_reset_count"], 2)
+            self.assertEqual(first["cross_segment_transition_count"], 0)
+            self.assertEqual(first["chronology"]["cross_segment_transitions"], 0)
             self.assertGreater(first["snapshot_count"], 8)
             self.assertEqual(first["axis_output_count"], first["snapshot_count"] * 5)
             self.assertGreater(first["transition_count"], 0)
@@ -49,6 +52,8 @@ class FSRWP4Tests(unittest.TestCase):
             self.assertTrue(first["chronology"]["all_c2_first_valid_not_before_interval_end"])
             self.assertTrue(first["chronology"]["all_formula_as_of_not_after_snapshot"])
             self.assertFalse(first["chronology"]["hidden_construction_consumed"])
+            self.assertTrue(first["scope_assurance"]["all_measurement_relation_sets_have_one_container_relation"])
+            self.assertGreaterEqual(first["scope_assurance"]["structural_container_exclusions"], 0)
             self.assertEqual(first["authority"]["active_selector"], "NONE")
             self.assertEqual(first["authority"]["validation_consumption"], "DENIED")
             self.assertEqual(first["authority"]["semantic_event_episode_promotion"], "NONE")
