@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-srfdi-programme-state/v8",
+  "state_role": "AUTHORITATIVE_CURRENT_BLOCKED_PRE_RUN",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "BLOCKED_PRE_RUN",
+  "active_packet": "SRFDI-WP10-v0.3",
+  "current_gate": "SRFDI-WP10-v0.3-PREFLIGHT-BLOCKED",
+  "operator_decision_required": true,
+  "authority": {
+    "june": "AUTHORIZED_EXACT_V0_3_BUT_BLOCKED_UNCONSUMED",
+    "market_benchmark": "AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED_NOT_EXECUTABLE_WHILE_PREFLIGHT_BLOCKED",
+    "authority_token": "UNCONSUMED",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "exact_bindings": {
+    "authorization_merge_commit": "4514497651c43bd81313609e57b808d9f1e2caff",
+    "preflight_block_merge_commit": "337d978b3bf4c7831a439eb57ab2e31bb4ec2e6a",
+    "manifest_binding_sha256": "148cf9c6958ffc737a3b5fd1800c48c1544bf34e835a97c884e77d4b49904067",
+    "authority_token_id": "SRFD.JUNE.AUTH.8e07a6f1ce7a1c6a37faa23ec7eb227f3e45dba1aeb53c970960d7ff9bbf9722",
+    "authority_token_consumed": false,
+    "prior_v0_2_token_consumed": false,
+    "preregistration_v0_3_logical_sha256": "acb27ff21d4df6da6ea72972bda7a6ee1ce28a7f06827b949f55d8b03ec04bb5",
+    "segmentation_registry_v0_3_logical_sha256": "6c2451fb5b766d2ae25a13a311ba17c8dede342757d607219e62881be4ac31c0",
+    "source_binding_sha256": "4d13c3ee8ae2ad25e30088f4f2de48f8320e3633c2e4ea6a5c2c9a7fdc2a62b7",
+    "population_id": "SRFD.POP.6efa7dd55636d036c12e580e0793abacf8c805bcf6d77bb6e2edf7cffbc113bd",
+    "eligible_record_count": 8598,
+    "eligible_record_ids_sha256": "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e"
+  },
+  "preflight": {
+    "result": "BLOCK",
+    "reason_code": "WP10_STABILITY_METRIC_RULE_UNBOUND",
+    "source_hashes": "PASS",
+    "provider_fetch": "NOT_PERFORMED",
+    "benchmark_scientific_outputs_generated": false,
+    "token_consumed": false,
+    "blocker_record": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-3/SRFDI_WP10_V03_PREFLIGHT_BLOCKER.json",
+    "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-3/SRFDI_WP10_V03_PREFLIGHT_QA_PACKET.json",
+    "merge_receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-3/SRFDI_WP10_V03_PREFLIGHT_BLOCK_MERGE_RECEIPT.json"
+  },
+  "missing_frozen_rule_surfaces": [
+    "AMBIGUITY_RATE_WITH_DENOMINATOR",
+    "CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR",
+    "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR",
+    "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR"
+  ],
+  "next_action": "OPERATOR_GOVERNED_VERSIONED_PREREGISTRATION_SUPERSESSION_FOR_STABILITY_AND_AMBIGUITY_METRIC_RULES",
+  "stop_at": "MATERIAL_FROZEN_CONTRACT_CHANGE_REQUIRES_OPERATOR",
+  "pr_371": "PRESERVE_CLOSED_UNMERGED_HISTORICAL_EVIDENCE",
+  "rollback": "Preserve the v0.3 token unconsumed and all merged authority/blocker evidence. Do not execute June or inspect SRFD scientific outputs. Any correction must be additive/versioned, operator-frozen, and followed by a new exact June authorization."
+}

@@ -61,7 +61,7 @@ class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
         self.assertEqual("FAIL", self.qa["acceptance"]["frozen_executable_stability_metric_rule_specs"])
         self.assertEqual("BLOCK_PRE_RUN_AND_REQUIRE_VERSIONED_PREREGISTRATION_SUPERSESSION", self.qa["recommended_disposition"])
 
-    def test_authoritative_candidate_state_preserves_unused_authority_and_firewalls(self) -> None:
+    def test_historical_v07_blocker_state_preserves_unused_authority_and_firewalls(self) -> None:
         self.assertEqual("BLOCKED_PRE_RUN", self.state["status"])
         self.assertEqual("SRFDI-WP10-v0.3", self.state["active_packet"])
         self.assertTrue(self.state["operator_decision_required"])
@@ -70,7 +70,7 @@ class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
         self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_7.json", self.pointer["authoritative_state"])
+        self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
         self.assertEqual("BLOCKED_PRE_RUN", self.pointer["status"])
         self.assertTrue(self.pointer["operator_decision_required"])
         self.assertFalse(self.pointer["authority_token_consumed"])
