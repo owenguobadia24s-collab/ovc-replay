@@ -30,7 +30,7 @@ class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
         self.assertTrue(all(row["conclusion"] == "SUCCESS" for row in self.receipt["final_assurance"].values()))
         self.assertEqual(self.receipt["authority_delta"], "NONE")
 
-    def test_authoritative_state_is_gate_ready_at_operator_reserved_ag0(self):
+    def test_historical_wp7_state_is_gate_ready_at_operator_reserved_ag0(self):
         self.assertEqual(self.state["status"], "GATE_READY")
         self.assertEqual(self.state["current_gate"], "C2E-AG0")
         self.assertTrue(self.state["operator_decision_required"])
@@ -42,18 +42,19 @@ class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
 
-    def test_pointer_advances_without_rewriting_g6_defer(self):
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_17.json")
+    def test_current_pointer_preserves_wp7_and_records_ag0_defer(self):
+        self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
         self.assertEqual(self.pointer["status"], "GATE_READY")
         self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertTrue(self.pointer["operator_decision_required"])
-        self.assertIsNone(self.pointer["operator_decision"])
+        self.assertFalse(self.pointer["operator_decision_required"])
+        self.assertEqual(self.pointer["operator_decision"], "DEFER")
         self.assertEqual(self.pointer["replay_status"], "DEFERRED")
         self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
         self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["next_action"], "STOP_AT_C2E_AG0_OPERATOR_DECISION")
+        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
+        self.assertTrue(self.pointer["next_action"].startswith("STOP_C2E_AG0_DEFERRED"))
 
     def test_ag0_gate_is_consolidated_and_does_not_hide_replay_gap(self):
         self.assertEqual(self.gate["gate_id"], "C2E-AG0")
