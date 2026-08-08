@@ -56,7 +56,14 @@ class SRFDIG10ACapacitySupersessionGateReadyTests(unittest.TestCase):
         self.assertEqual("SUPERSEDE", self.decision["decision"])
         self.assertEqual("OPERATOR", self.decision["decision_authority"])
         self.assertEqual("APPROVED", self.post_decision["status"])
-        self.assertTrue(self.post_decision["exact_bindings"]["authority_token_consumed"])
+        self.assertEqual(
+            "CONSUMED_NOT_REUSABLE",
+            self.post_decision["authority"]["authority_token_v0_4"],
+        )
+        self.assertEqual(
+            self.decision["admitted_blocker"]["authority_token_id"],
+            self.post_decision["exact_bindings"]["authority_token_id"],
+        )
         self.assertEqual("SRFDI-WP10A", self.post_decision["active_packet"])
 
     def test_capacity_blocker_and_consumed_token_are_pinned(self) -> None:
