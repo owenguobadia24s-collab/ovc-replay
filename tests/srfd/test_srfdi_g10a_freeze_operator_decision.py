@@ -55,15 +55,29 @@ class SRFDIG10AFreezeOperatorDecisionTests(unittest.TestCase):
         self.assertEqual("FROZEN_BY_OPERATOR_PENDING_MAIN_MERGE", self.state["authority"]["capacity_backend"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", self.state["authority"]["authority_token_v0_4"])
         self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.state["next_packet"])
-        self.assertIn(self.pointer["authoritative_state"], {"registries/implementation/srfd/OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json", "registries/implementation/srfd/OVC_SRFDI_STATE_v0_19_G10A_FREEZE_COMPLETED.json"})
-        self.assertIn(self.pointer["status"], {"APPROVED_PENDING_MERGE", "COMPLETED"})
-        self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
-        if self.pointer["status"] == "APPROVED_PENDING_MERGE":
+        self.assertIn(self.pointer["authoritative_state"], {
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_19_G10A_FREEZE_COMPLETED.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_20_JUNE_AUTH_V0_5_AUTHORIZED.json",
+        })
+        if self.pointer["authoritative_state"].endswith("OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json"):
+            self.assertEqual("APPROVED_PENDING_MERGE", self.pointer["status"])
             self.assertEqual("SRFDI-G10A-FREEZE", self.pointer["current_gate"])
             self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.pointer["next_packet"])
-        else:
+            self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
+        elif self.pointer["authoritative_state"].endswith("OVC_SRFDI_STATE_v0_19_G10A_FREEZE_COMPLETED.json"):
+            self.assertEqual("COMPLETED", self.pointer["status"])
             self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
             self.assertEqual("SRFDI-G-JUNE-AUTH-PREP", self.pointer["next_packet"])
+            self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
+        else:
+            self.assertEqual("READY", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v0.5", self.pointer["next_packet"])
+            self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
+            self.assertEqual("DENIED", self.pointer["provider_fetch"])
+            self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
 
     def test_predecision_assurance_and_blocker_evidence_are_exact(self) -> None:
         assurance = self.decision["predecision_assurance"]
