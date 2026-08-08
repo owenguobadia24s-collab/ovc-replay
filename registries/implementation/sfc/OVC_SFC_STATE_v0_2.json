@@ -1,0 +1,82 @@
+{
+  "schema": "ovc-sfc-programme-state/v3",
+  "programme_id": "OVC-SFC-v0.1",
+  "plan_id": "OVC_SRI_FDI_Conformance_Implementation_Plan_v0_1_REVISED",
+  "plan_version": "0.1_REVISED",
+  "programme_disposition": "DEFERRED",
+  "status": "COMPLETED",
+  "latest_checked_main": "8a80748cab202b81430326294b03660f22f17c6b",
+  "decision_time_main": "12d98171cefb4b901490d91a2d259122ff8ef9d8",
+  "active_packet": null,
+  "current_gate": "SFC-G0",
+  "operator_decision_required": false,
+  "operator_decision": "DEFER",
+  "operator_decision_id": "SFC-G0.OPERATOR.DEFER.20260808T1843+0100",
+  "continuation_authority": "NONE_UNTIL_EXPLICIT_OPERATOR_REOPEN",
+  "upstream_c2e_v0_2": {
+    "observed_programme_state_at_last_recheck": "READY / C2E2-WP3 / C2E2-G4",
+    "observed_state_source": "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json",
+    "dependency_readiness": "NOT_FINALIZED_FOR_SFC_G2",
+    "blocker_reason_codes": ["SFC_UPSTREAM_C2E_V0_2_NOT_YET_FINALIZED"]
+  },
+  "srfd_reconciliation": {
+    "main_state": "AUTHORIZED_READY_UNCONSUMED",
+    "main_token_id": "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686",
+    "main_token_consumed": false,
+    "open_block_evidence_pr": 433,
+    "open_block_evidence_claim": "CONSUMED_NOT_REUSABLE / CAPACITY_UNRESOLVED_REAL_DATA_FULL_GRID",
+    "status": "UNRESOLVED_OPERATOR_RESERVED_AUTHORITY_RECORD_CONFLICT"
+  },
+  "packets": [
+    {
+      "packet_id": "SFC-WP0",
+      "plan_id": "OVC_SRI_FDI_Conformance_Implementation_Plan_v0_1_REVISED",
+      "plan_version": "0.1_REVISED",
+      "status": "COMPLETED",
+      "prerequisites": [],
+      "authority_required": "OPERATOR_AT_G0",
+      "authority_delta": "NONE_DEFER",
+      "baseline_commit": "d989b65aecd3da034c1bbf905c2631c3308e5e2f",
+      "branch": "gate/sfc-g0-defer",
+      "candidate_commit": "cd701dd96d8088fe7c11e3ad50867859784cbea5",
+      "tests": [
+        "tests run 31270343683 SUCCESS",
+        "OVC tiered run 31270343694 SUCCESS",
+        "OVC profile assurance job 93135085896 SUCCESS",
+        "OVC merge readiness job 93135101884 SUCCESS"
+      ],
+      "qa_packet": "docs/releases/sri-fdi-conformance-v0-1/sfc-g0/SFC_G0_QA_PACKET.json",
+      "decision_record": "docs/releases/sri-fdi-conformance-v0-1/sfc-g0/SFC_G0_OPERATOR_DECISION.json",
+      "merge_commit": "8a80748cab202b81430326294b03660f22f17c6b",
+      "blockers": [
+        "SFC_G0_OPERATOR_DEFER",
+        "SRFD_V0_4_TOKEN_STATE_CONFLICT_NOT_RECONCILED_ON_MAIN",
+        "FINALIZED_C2E_V0_2_EPISODE_STREAM_NOT_YET_MATERIALIZED"
+      ],
+      "next_packet": null
+    },
+    {"packet_id": "SFC-WP1", "status": "PLANNED", "prerequisites": ["EXPLICIT_OPERATOR_REOPEN_AND_SFC_G0_PASS"]},
+    {"packet_id": "SFC-WP2", "status": "PLANNED", "prerequisites": ["SFC-WP1", "C2E_V0_2_TYPED_HANDOFF_READY", "EXPLICIT_OPERATOR_REOPEN"]},
+    {"packet_id": "SFC-WP3", "status": "PLANNED", "prerequisites": ["EXPLICIT_OPERATOR_REOPEN"]},
+    {"packet_id": "SFC-WP4", "status": "PLANNED", "prerequisites": ["EXPLICIT_OPERATOR_REOPEN"]},
+    {"packet_id": "SFC-WP5", "status": "PLANNED", "prerequisites": ["EXPLICIT_OPERATOR_REOPEN"]},
+    {"packet_id": "SFC-WP6", "status": "PLANNED", "prerequisites": ["EXPLICIT_OPERATOR_REOPEN"]},
+    {"packet_id": "SFC-WP7", "status": "PLANNED", "authority_required": "OPERATOR_AT_G7", "prerequisites": ["EXPLICIT_OPERATOR_REOPEN"]}
+  ],
+  "authority": {
+    "sfc_implementation": "NONE",
+    "june_execution": "NO_NEW_SFC_AUTHORITY",
+    "srfd_june_authority_interlock": "NOT_ACTIVATED_G0_DEFERRED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "frozen_science": {
+    "srfd_v0_4_rulepack_path": "registries/research/srfd/stability_metric_specs_v0_4.json",
+    "srfd_v0_4_rulepack_git_blob_sha": "e4f5ce02a103000a48ed98e2110b8f1a7d497fcd",
+    "preservation": "REQUIRED_UNCHANGED"
+  },
+  "merge_receipt": "docs/releases/sri-fdi-conformance-v0-1/sfc-g0/SFC_G0_MERGE_RECEIPT.json",
+  "next_packet": null,
+  "next_action": "STOP_SFC_DEFERRED_AWAIT_EXPLICIT_OPERATOR_REOPEN_AND_RERUN_WP0"
+}
