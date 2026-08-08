@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-srfdi-wp2c-qa/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "SRFDI-WP2C",
+  "baseline_commit": "664b7d2de0c8f475936d857bc929ad1b7eb88421",
+  "implementation_head": "a7ce51524cbc4933f41e5a9284bda5d2757bac15",
+  "pr_number": 414,
+  "qa_result": "PASS",
+  "qa_recommendation": "DELEGATED_PASS_ENGINEERING_ONLY_THEN_STOP_BLOCKED_AT_SRFDI_G_JUNE_AUTH",
+  "acceptance_checks": {
+    "schema_preserving_c1_c2_source_adapter": "PASS",
+    "independent_parent_c1_target_window_reproduction": "PASS",
+    "native_five_axis_payload_preservation": "PASS",
+    "no_post_g9_representation_field_selection": "PASS",
+    "missingness_retained_without_zero_imputation": "PASS",
+    "malformed_target_structural_exclusion_visible": "PASS",
+    "source_lineage_and_authority_tamper_fail_closed": "PASS",
+    "future_outcome_and_reserved_fields_denied": "PASS",
+    "population_identity_order_independent": "PASS",
+    "neutral_c2e_input_adapter_deterministic_no_parent_inference": "PASS",
+    "operator_manifest_mutual_hash_binding": "PASS",
+    "synthetic_authorize_june_verifier_contract": "PASS_NON_AUTHORISING_TEST_ONLY",
+    "default_june_market_benchmark_guard_remains_denied": "PASS",
+    "provider_fetch": "NOT_PERFORMED",
+    "june_market_benchmark": "NOT_EXECUTED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "scientific_promotion": "NONE",
+    "selector_change": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "tests": {
+    "initial_repository_suite": "31248919860:FAIL_ONE_NEW_ASSERTION_ONLY",
+    "initial_failure": "test_adapter_preserves_native_axes_without_selecting_representation_fields expected optional absent fields to remain absent rather than accepting normalized None keys",
+    "correction": "Adjusted only the test assertion to verify all source-provided axis fields/values are preserved while allowing explicit None normalization; implementation semantics unchanged.",
+    "corrected_repository_suite": "31249027172:SUCCESS",
+    "corrected_tiered": "31249027183:SUCCESS",
+    "corrected_profile_assurance": "93082289283:SUCCESS",
+    "corrected_compatibility": "93082305368:SUCCESS",
+    "corrected_merge_readiness": "93082305349:SUCCESS"
+  },
+  "warnings": [
+    "The source adapter deliberately does not create generic structural aliases consumed by RepresentationPack; doing so would select scientific feature semantics after G9 freeze.",
+    "The neutral C2E input adapter exposes an inactive deterministic shadow input surface only and does not authorize or select C2E episode semantics.",
+    "A positive synthetic run-authority verifier test proves fail-closed binding mechanics only; no real AUTHORIZE_JUNE decision exists."
+  ],
+  "unresolved_downstream_blockers": [
+    "FROZEN_REPRESENTATION_PACK_FIELD_MAPPING_NOT_MATERIALISED"
+  ],
+  "downstream_blocker_evidence": "docs/releases/srfd-benchmark-v0-1/srfdi-wp2c/SRFDI_WP2C_REPRESENTATION_PACK_GAP_AUDIT.json",
+  "authority_delta": "AUTO_EXECUTABLE_SCHEMA_PRESERVING_READ_ONLY_ADAPTER_AND_INERT_FAIL_CLOSED_AUTHORITY_VERIFIER_ONLY",
+  "rollback": "Revert the bounded WP2C merge with a later commit or leave adapters unused. Do not mutate upstream evidence, G9 preregistration, provider state or Validation.",
+  "next_action": "AUTO_RATIFY_AND_SQUASH_MERGE_WP2C_IF_FINAL_HEAD_ASSURANCE_PASSES_THEN_RECORD_MERGE_AND_STOP_AT_SRFDI_G_JUNE_AUTH_BLOCKED_FOR_OPERATOR_GOVERNED_PREREGISTRATION_SUPERSESSION"
+}

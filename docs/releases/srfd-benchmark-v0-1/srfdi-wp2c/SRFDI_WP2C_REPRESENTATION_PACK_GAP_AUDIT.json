@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-srfdi-wp2c-representation-pack-gap-audit/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "SRFDI-WP2C",
+  "audit_result": "FROZEN_REPRESENTATION_PACK_FIELD_MAPPING_NOT_MATERIALISED",
+  "blocking_scope": "SRFDI-G-JUNE-AUTH_AND_ACTUAL_JUNE_BENCHMARK_ONLY",
+  "wp2c_engineering_effect": "NON_BLOCKING_FOR_SCHEMA_PRESERVING_ADAPTER_AND_FAIL_CLOSED_AUTHORITY_VERIFIER",
+  "repository_search_findings": [
+    {
+      "path": "registries/research/srfd/representations.yaml",
+      "finding": "Contains SRFDI-R1..R9 implementation/architecture crosswalk metadata, but no exact real-source RepresentationPack.required_fields, typed component selection, normalization constants, sequence-channel definitions, or transform semantics."
+    },
+    {
+      "path": "registries/research/srfd/configurations.yaml",
+      "finding": "Contains configuration identity component names and freeze rule only; no concrete real-source representation packs."
+    },
+    {
+      "path": "src/ovc/opt_b/srfd/representation.py",
+      "finding": "Defines the generic RepresentationPack API and compilers; it does not define G9-frozen real-source pack instances for SRFDI-R1..R9."
+    },
+    {
+      "path": "tests/srfd/test_srfdi_wp2_representation.py",
+      "finding": "The only repository materialisation found for RepresentationPack uses fixture fields such as location/motion under a fixture comparability domain; it is not a June real-source scientific mapping."
+    },
+    {
+      "search": "required_fields SRFDI-R",
+      "finding": "Repository code search returned only the generic representation implementation and fixture test."
+    },
+    {
+      "search": "REP.RAW REP.NORM representation_pack",
+      "finding": "Repository code search returned only the fixture test."
+    }
+  ],
+  "frozen_g9_effect": {
+    "preregistration_byte_sha256": "76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792",
+    "preregistration_logical_sha256": "a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e",
+    "candidate_ids_frozen": "SRFDI-R1..SRFDI-R9",
+    "exact_real_source_field_mapping_frozen": false,
+    "post_freeze_invention_allowed": false
+  },
+  "examples_of_forbidden_silent_choice": [
+    "choose axis.value versus axis.measurement as the coordinate for a representation",
+    "collapse native typed axis payloads into five scalars without a frozen transform",
+    "select level/container/relation IDs as features after results are visible",
+    "choose sequence channels or episode summary fields not present in the frozen preregistration",
+    "invent normalization constants or category encodings"
+  ],
+  "smallest_lawful_resolution": "OPERATOR_GOVERNED_PREREGISTRATION_SUPERSESSION_OR_NEW_VERSION_WITH_EXACT_REAL_SOURCE_REPRESENTATION_PACKS",
+  "authority_effect": {
+    "june_execution": "DENIED",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "scientific_promotion": "NONE",
+    "selector_change": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  }
+}
