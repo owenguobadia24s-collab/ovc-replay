@@ -70,7 +70,7 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertTrue(all(not item["lawful_c2e2_base"] for item in self.prs["open_prs"]))
         self.assertEqual(self.matrix["historical_bytes_rewritten"], False)
 
-    def test_wp0_predecision_and_accepted_lifecycle_preserve_source_replay_denial(self):
+    def test_wp0_history_and_current_pointer_preserve_source_replay_denial(self):
         self.assertEqual(self.state["status"], "QA_REVIEW")
         self.assertEqual(self.state["current_gate"], "C2E2-G1")
         self.assertEqual(self.accepted_state["status"], "READY")
@@ -84,10 +84,11 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertEqual(self.accepted_state["authority"]["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
         historical_defer = json.loads(HISTORICAL_DEFERRED_STATE.read_text())
         self.assertEqual(historical_defer["authority"]["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_16.json")
-        self.assertEqual(self.pointer["status"], "BLOCKED")
-        self.assertEqual(self.pointer["current_gate"], "C2E2-G6-RUN-AUTH")
-        self.assertEqual(self.pointer["operator_decision"], "DEFER")
+        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_17.json")
+        self.assertEqual(self.pointer["status"], "GATE_READY")
+        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
+        self.assertTrue(self.pointer["operator_decision_required"])
+        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
         self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
         self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
