@@ -8,6 +8,7 @@ STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_1.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 RO_C2E = ROOT / "registries/research_operations/c2e/OVC_C2E_PROGRAMME_STATE_v0_1.json"
 C2AR = ROOT / "registries/opt_b/c2/vnext/C2_INTEGRATED_SHADOW_PACKAGE_APPROVED_v1.jsonc"
+HISTORICAL_DEFERRED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json"
 
 
 class C2E2G0OperatorDecisionTests(unittest.TestCase):
@@ -48,14 +49,19 @@ class C2E2G0OperatorDecisionTests(unittest.TestCase):
         self.assertEqual(self.state["current_packet"], "C2E2-WP0")
         self.assertEqual(self.state["current_gate"], "C2E2-G1")
         self.assertFalse(self.state["operator_decision_required"])
+        self.assertTrue(HISTORICAL_DEFERRED_STATE.is_file())
+        historical_defer = json.loads(HISTORICAL_DEFERRED_STATE.read_text())
+        self.assertEqual(historical_defer["status"], "BLOCKED")
+        self.assertEqual(historical_defer["current_gate"], "C2E2-G6-RUN-AUTH")
         current = self.pointer["authoritative_state"]
-        self.assertEqual(current, "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json")
+        self.assertEqual(current, "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_16.json")
         self.assertTrue((ROOT / current).is_file())
         self.assertEqual(self.pointer["programme_id"], "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2")
         self.assertEqual(self.pointer["status"], "BLOCKED")
         self.assertEqual(self.pointer["current_gate"], "C2E2-G6-RUN-AUTH")
         self.assertEqual(self.pointer["operator_decision"], "DEFER")
         self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
+        self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
