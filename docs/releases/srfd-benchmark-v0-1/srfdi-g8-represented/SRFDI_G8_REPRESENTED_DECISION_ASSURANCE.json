@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-srfdi-g8-represented-decision-assurance/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "gate_id": "SRFDI-G8-REPRESENTED",
+  "decision": "FREEZE_MEASURED_CAPACITY",
+  "operator_command": "OVC APPROVE SRFDI-G8-REPRESENTED FREEZE_MEASURED_CAPACITY",
+  "predecision_head": "fffb2d5a49f3b65ae42f7e8097cc29f2aa60b974",
+  "passing_decision_head": "ec02733ba1f8f3f154701827598358c460c66e83",
+  "latest_lawful_main_observed": "9cb6a6c9aa010dacbd020a925e33f7a4a135405a",
+  "assurance": {
+    "repository_suite": {"run_id": 31233948936, "job_id": 93042961381, "conclusion": "success"},
+    "tiered": {"run_id": 31233948928, "conclusion": "success"},
+    "profile_assurance": {"job_id": 93042961341, "conclusion": "success"},
+    "tiered_compatibility": {"job_id": 93042978132, "conclusion": "success"},
+    "merge_readiness": {"job_id": 93042978130, "conclusion": "success"}
+  },
+  "corrected_defect": "The first post-decision head incorrectly exposed parent WP9 eligibility inside the completed G8R subprogramme authority record. The subprogramme was restored to WP9=DENIED and June=DENIED; parent programme state alone carries post-merge WP9 eligibility.",
+  "qa_result": "PASS",
+  "blocking_warnings": [],
+  "unresolved_review_threads": 0,
+  "authority_delta": "CAPACITY_FREEZE_ONLY",
+  "firewalls": {
+    "june": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "scientific_promotion": "NONE",
+    "selector": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "rollback": "If final metadata-head assurance fails or main changes incompatibly, do not merge; correct only bounded defects and rerun. The operator decision remains historical evidence.",
+  "final_metadata_head_assurance": "REQUIRED_BEFORE_SQUASH_MERGE"
+}
