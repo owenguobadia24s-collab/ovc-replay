@@ -5,12 +5,14 @@ from pathlib import Path
 import unittest
 
 from ovc.opt_b.srfd.distance import DistanceSpec, compute_distance
+from ovc.opt_b.srfd.real_source_packs import compile_real_source_representation
 from ovc.opt_b.srfd.wp10a_real_capacity import (
     FROZEN_C2_FILE_SHA256,
     FROZEN_DOMAIN_COUNT,
     FROZEN_ELIGIBLE_COUNT,
     FROZEN_FAMILY_CONFIGURATION_COUNT,
     FROZEN_PAIR_COUNT,
+    _capacity_adapted_record,
     execute_domain_family_grid,
     gower_distance_matrix,
     gower_pattern_surface,
@@ -19,6 +21,7 @@ from ovc.opt_b.srfd.wp10a_real_capacity import (
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_MANIFEST = ROOT / "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/output-manifest.json"
+PACK_REGISTRY = ROOT / "registries/research/srfd/real_source_representation_packs_v0_2.json"
 
 
 def record(record_id: str, values: dict[str, str], *, domain: str = "D") -> dict[str, object]:
@@ -47,6 +50,47 @@ def null_record(record_id: str) -> dict[str, object]:
     }
 
 
+def c2_row() -> dict[str, object]:
+    axes = {
+        name: {"status": "EVALUATED", "value": value, "reason_code": None}
+        for name, value in {
+            "LOCATION": "MID",
+            "MOTION": "UP",
+            "ORGANISATION": "ORDERED",
+            "INTERACTION": "NONE",
+            "QUALITY": "GOOD",
+        }.items()
+    }
+    return {
+        "active_c2_model_release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1",
+        "axes": axes,
+        "c1_manifest_id": "C1.MANIFEST",
+        "c1_release_id": "C1.RELEASE",
+        "c2_state_id": "C2.TEST",
+        "clock": "15M",
+        "container_ids": [],
+        "continuity": "CONTIGUOUS",
+        "eligibility_class": "TARGET_JUNE",
+        "evaluation_scope_id": "15M-LOCAL",
+        "first_valid_time": "2026-06-01T00:15:00Z",
+        "level_ids": [],
+        "live_prospective_append": "DENIED",
+        "operation_mode": "TIME_GATED_REPLAY",
+        "opt_a_manifest_id": "A.MANIFEST",
+        "opt_a_release_id": "A.RELEASE",
+        "parameter_pack_id": "C2.PARAM",
+        "parent_c1_record_id": "C1.TEST",
+        "parent_opt_a_bar_id": "A.BAR",
+        "persistence": {},
+        "relation_set_id": "REL.SET",
+        "release_membership": False,
+        "role": "DISCOVERY",
+        "side": "BID",
+        "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+        "target_eligible": True,
+    }
+
+
 class SRFDIWP10ARealCapacityHarnessTests(unittest.TestCase):
     def test_frozen_c2_hashes_are_anchored_in_accepted_output_manifest(self) -> None:
         manifest = json.loads(OUTPUT_MANIFEST.read_text())
@@ -68,6 +112,23 @@ class SRFDIWP10ARealCapacityHarnessTests(unittest.TestCase):
             elif "2H_A_L/BID/GBPUSD-2H-A-L-LOCAL" in path:
                 observed["C2_2H_BID_LOCAL"] = item["sha256"]
         self.assertEqual(FROZEN_C2_FILE_SHA256, observed)
+
+    def test_capacity_adapter_preserves_v02_envelope_and_compiles_r1(self) -> None:
+        adapted = _capacity_adapted_record(c2_row())
+        self.assertEqual("SCHEMA_PRESERVING_NO_REPRESENTATION_FIELD_SELECTION", adapted["adapter_semantics"])
+        self.assertEqual("SRFDI-SOURCE-ADAPTER-v0.2", adapted["adapter_id"])
+        self.assertEqual("MIXED_TYPED_C2", adapted["units"])
+        self.assertEqual("EVALUABLE", adapted["computability_status"])
+        self.assertEqual("PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9", adapted["source_lineage"]["source_release_id"])
+        registry = json.loads(PACK_REGISTRY.read_text())
+        compiled = compile_real_source_representation(
+            adapted,
+            registry,
+            "SRFDI-R1",
+            source_population_id="SRFD.TEST.POP",
+        )
+        self.assertEqual("SRFDI-R1", compiled["implementation_class_id"])
+        self.assertEqual(adapted["source_lineage"], compiled["source_lineage"])
 
     def test_direct_gower_batch_is_exactly_reference_equivalent(self) -> None:
         records = [
