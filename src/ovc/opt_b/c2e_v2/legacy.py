@@ -44,6 +44,7 @@ def run_legacy_fixture_conformance() -> dict[str, Any]:
             "episode_ids": [item.episode_id for item in ledger.episodes],
             "episode_count": len(ledger.episodes),
             "not_evaluable_count": len(ledger.not_evaluable),
+            "not_evaluable_statuses": [item.computability_status.value for item in ledger.not_evaluable],
             "statuses": [item.status.value for item in ledger.episodes],
             "boundary_causes": [item.boundary_cause.value for item in ledger.episodes],
             "phase_kinds": [[phase.phase_kind.value for phase in item.phases] for item in ledger.episodes],
