@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,7 +10,7 @@ from ovc.fsr_adjudication import adjudicate_hidden_construction
 from ovc.fsr_full_stack import run_full_stack
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SOURCE_COMMIT = "FSR.WP11.POST_FREEZE.SAME_HEAD"
+SOURCE_COMMIT = os.environ.get("GITHUB_SHA", "FSR.WP11.POST_FREEZE.LOCAL_HEAD")
 
 
 class FSRWP11AdjudicationTests(unittest.TestCase):
@@ -44,8 +45,8 @@ class FSRWP11AdjudicationTests(unittest.TestCase):
             self.assertFalse(adjudication["authority"]["canonical"])
             self.assertFalse(adjudication["authority"]["promotable"])
 
-            # Deliberately emit only post-freeze summaries to the CI log so the final
-            # dossier can quote exact counts without exposing the hidden ledger itself.
+            # Emit only post-freeze summaries so the final dossier can quote exact
+            # counts/hashes without exposing the hidden construction ledger itself.
             print("FSR_RUN_MANIFEST=" + json.dumps(result["run_manifest"], sort_keys=True))
             print(
                 "FSR_ADJUDICATION_SUMMARY="
