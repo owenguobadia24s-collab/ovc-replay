@@ -75,7 +75,7 @@ class SRFDIJuneAuthOperatorDecisionV02Tests(unittest.TestCase):
         )
         june_authority_v02.guard_bounded_june_run(token, self.manifest)
 
-    def test_programme_state_advances_only_to_authorized_wp10(self) -> None:
+    def test_programme_state_advances_only_to_authorized_wp10_before_later_preflight(self) -> None:
         self.assertEqual("READY", self.state["status"])
         self.assertEqual("SRFDI-WP10", self.state["active_packet"])
         self.assertFalse(self.state["operator_decision_required"])
@@ -83,9 +83,14 @@ class SRFDIJuneAuthOperatorDecisionV02Tests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
         self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json", self.pointer["authoritative_state"])
-        self.assertEqual("SRFDI-WP10", self.pointer["next_packet"])
-        self.assertEqual("SRFDI-G11", self.pointer["stop_at"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json", self.pointer["authoritative_state"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json", self.pointer["prior_state"])
+        self.assertEqual("BLOCKED", self.pointer["status"])
+        self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+        self.assertTrue(self.pointer["operator_decision_required"])
+        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_UNCONSUMED_BLOCKED_PRE_RUN", self.pointer["june_execution"])
+        self.assertFalse(self.pointer["authority_token_consumed"])
+        self.assertEqual("SRFDI-WP10-PREFLIGHT-BLOCKED", self.pointer["stop_at"])
 
 
 if __name__ == "__main__":
