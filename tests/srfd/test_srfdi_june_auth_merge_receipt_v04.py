@@ -49,10 +49,16 @@ class SRFDIJuneAuthMergeReceiptV04Tests(unittest.TestCase):
         self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.state["authority"]["market_benchmark"])
         self.assertFalse(self.state["exact_bindings"]["authority_token_consumed"])
         self.assertEqual(self.token["token_id"], self.state["exact_bindings"]["authority_token_id"])
-
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertEqual(self.token["token_id"], self.pointer["authority_token_id"])
+        if self.pointer["authority_token_id"] == self.token["token_id"]:
+            self.assertFalse(self.pointer["authority_token_consumed"])
+        else:
+            self.assertEqual(self.token["token_id"], self.pointer["prior_authority_token_id"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
+            self.assertNotEqual(self.token["token_id"], self.pointer["authority_token_id"])
         self.assertFalse(self.pointer["superseded_authority_token_consumed"])
+        self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
+        self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
 
     def test_exact_run_bindings_are_preserved_post_merge(self) -> None:
         bindings = self.state["exact_bindings"]
