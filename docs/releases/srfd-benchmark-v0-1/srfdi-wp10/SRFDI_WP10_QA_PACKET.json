@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-srfdi-wp10-qa/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "SRFDI-WP10",
+  "gate_id": "SRFDI-G10",
+  "baseline_main": "35b91e0e7b2dfbbe44bd51a278a1735f3fcb55b0",
+  "branch": "build/srfdi-wp10-bounded-june-benchmark",
+  "qa_result": "BLOCK_PRE_RUN",
+  "recommended_decision": "BLOCK",
+  "run_status": "NOT_STARTED",
+  "authority_token_status": "AUTHORIZED_UNCONSUMED",
+  "checks": {
+    "operator_june_authority_merged": "PASS",
+    "authorized_manifest_and_token_exact": "PASS",
+    "source_population_binding_exact": "PASS",
+    "preregistration_hash_exact": "PASS",
+    "representation_pack_registry_exact": "PASS",
+    "capacity_limits_exact": "PASS",
+    "provider_validation_reserved_authority_firewalls": "PASS",
+    "segmentation_candidate_ids_frozen": "PASS",
+    "segmentation_temporal_classes_registered": "PASS",
+    "segmentation_boundary_pack_identity_frozen": "BLOCK",
+    "segmentation_source_fields_frozen": "BLOCK",
+    "directional_change_threshold_surface_frozen": "BLOCK",
+    "pelt_penalty_and_min_length_surface_frozen": "BLOCK",
+    "exact_complete_execution_dag_materialised": "BLOCK",
+    "safe_pre_run_stop_before_scientific_output": "PASS"
+  },
+  "blocking_reason_codes": [
+    "PREREG_SEGMENTATION_BOUNDARY_PACK_NOT_MATERIALISED",
+    "PREREG_SEGMENTATION_SOURCE_FIELDS_NOT_MATERIALISED",
+    "PREREG_SEGMENTATION_PARAMETER_SURFACES_NOT_MATERIALISED",
+    "PREREG_EXACT_RUN_DAG_INCOMPLETE"
+  ],
+  "qa_basis": [
+    "The frozen v0.2 preregistration enumerates segmentation candidates but contains no segmentation parameter ladder or boundary-pack/source-field identities.",
+    "registries/research/srfd/segmentation_methods.yaml contains only id, temporal_mode and status and remains a fixture-only registry.",
+    "src/ovc/opt_b/srfd/segmentation.py requires execution-time inputs state_field, value_field, threshold and penalty that are not bound by the frozen preregistration.",
+    "The governing plan requires the preregistration to freeze the exact candidate grid and thresholds/rules before June and requires WP10 to execute only that exact frozen run.",
+    "The governing design declares directional-change threshold surfaces and PELT cost/penalty/min-length surfaces explicit identity-bearing benchmark inputs.",
+    "No June scientific benchmark output was generated or inspected during this preflight."
+  ],
+  "independent_scientific_disposition": "NOT_EVALUABLE_NO_RUN",
+  "warnings": [
+    "The operator AUTHORIZE_JUNE decision is valid but remains unconsumed because its exact run cannot be materialised without inventing frozen scientific parameters.",
+    "A partial family-only or representation-only run would not satisfy the authorized exact run and is prohibited.",
+    "The missing segmentation specification cannot be corrected inside WP10 without materially changing the frozen preregistration and authorized manifest identity."
+  ],
+  "rollback": "Stop before run. Preserve the existing authorized-but-unconsumed token and immutable v0.2 evidence. No source mutation, provider fetch, Validation read, selector/promotion/publication action, force-push or partial scientific execution is permitted.",
+  "next_action": "OPERATOR_REQUIRED_PREREGISTRATION_SUPERSESSION_DECISION_OR_PRESERVE_BLOCK"
+}
