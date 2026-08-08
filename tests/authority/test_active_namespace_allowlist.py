@@ -18,6 +18,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.opt_b.c2_vnext",
     "ovc.opt_b.c2e_v2",
     "ovc.opt_b.market_grammar",
+    "ovc.opt_b.sfc",
     "ovc.opt_b.srfd",
     "ovc.programme_genesis",
     "ovc.research_operations",
@@ -83,6 +84,18 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("no active market", init_text)
         self.assertIn("selector", init_text)
         self.assertIn("canonical grammar", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("semantic-promotion", init_text)
+        self.assertIn("execution authority", init_text)
+
+    def test_sfc_namespace_is_inactive_shadow_conformance_only(self) -> None:
+        init_text = (SRC / "ovc" / "opt_b" / "sfc" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("inactive", init_text)
+        self.assertIn("shadow-only", init_text)
+        self.assertIn("no active market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("canonical representation", init_text)
+        self.assertIn("family", init_text)
         self.assertIn("validation", init_text)
         self.assertIn("semantic-promotion", init_text)
         self.assertIn("execution authority", init_text)
