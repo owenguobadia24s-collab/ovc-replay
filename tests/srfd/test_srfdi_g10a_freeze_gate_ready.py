@@ -77,8 +77,8 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", authority["scientific_promotion"])
         self.assertEqual("NONE", authority["probability_risk_exposure_execution"])
 
-    def test_current_pointer_advances_only_after_operator_pass_and_grants_no_fresh_run(self) -> None:
-        self.assertEqual("SRFDI-G10A-FREEZE", self.pointer["current_gate"])
+    def test_current_pointer_may_advance_after_operator_pass_without_granting_fresh_run(self) -> None:
+        self.assertIn(self.pointer["current_gate"], {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH"})
         self.assertTrue(self.pointer["authority_token_consumed"])
         self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
         self.assertIn(self.pointer["status"], {"READY", "APPROVED_PENDING_MERGE", "COMPLETED"})
@@ -88,9 +88,15 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
                 "AUTHORIZED_BOUNDED_REAL_DATA_FAMILY_GRID_CAPACITY_REMEDIATION_ONLY",
                 self.pointer["wp10a_execution"],
             )
-        else:
-            self.assertIn(self.pointer["next_packet"], {"SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", "SRFDI-G-JUNE-AUTH"})
+        elif self.pointer["status"] == "APPROVED_PENDING_MERGE":
+            self.assertEqual("SRFDI-G10A-FREEZE", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.pointer["next_packet"])
             self.assertNotEqual("AUTHORIZED_BOUNDED_REAL_DATA_FAMILY_GRID_CAPACITY_REMEDIATION_ONLY", self.pointer["wp10a_execution"])
+        else:
+            self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-G-JUNE-AUTH-PREP", self.pointer["next_packet"])
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual("COMPLETED_CAPACITY_BACKEND_FROZEN", self.pointer["wp10a_execution"])
 
     def test_pass_would_freeze_only_backend_and_still_require_new_june_authority(self) -> None:
         delta = self.packet["proposed_authority_delta_if_PASS"]
