@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 REGISTRY = ROOT / "registries/research/srfd/stability_metric_specs_v0_4.json"
 PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_4.json"
 V03 = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_3.json"
+V02 = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_2.json"
 
 
 def catalog(*families: tuple[str, list[str]], residual: list[str] | None = None, noise: list[str] | None = None) -> dict:
@@ -35,14 +36,17 @@ class SRFDIWP9DStabilityPreregistrationTests(unittest.TestCase):
         cls.registry = json.loads(REGISTRY.read_text())
         cls.prereg = json.loads(PREREG.read_text())
         cls.v03 = json.loads(V03.read_text())
+        cls.v02 = json.loads(V02.read_text())
 
     def test_registry_and_preregistration_are_exactly_hash_bound(self) -> None:
         self.assertEqual(
-            "69994c70e44a9057e364ba5251bc8d4d7e3b85de507af9847012f67f004461a3",
+            "371a058e26c05a351a99689ad23b7f844fbc956a6d81449fd237a2f420bf564b",
             validate_metric_registry(self.registry),
         )
+        self.assertEqual(self.v02["stability_metrics"], self.registry["metric_order"])
         self.assertEqual(self.registry["stability_metric_specs"], self.prereg["stability_metric_specs"])
         self.assertEqual(self.registry["metric_order"], self.prereg["stability_metrics"])
+        self.assertEqual("371a058e26c05a351a99689ad23b7f844fbc956a6d81449fd237a2f420bf564b", self.prereg["metric_supersession"]["registry_logical_sha256"])
         self.assertEqual("STABILITY_AND_AMBIGUITY_METRIC_EXECUTION_SPECIFICATION_ONLY", self.prereg["supersession"]["supersession_scope"])
         self.assertEqual("acb27ff21d4df6da6ea72972bda7a6ee1ce28a7f06827b949f55d8b03ec04bb5", self.prereg["supersession"]["base_preregistration_logical_sha256"])
         validate_frozen_stability_metric_rules(self.prereg)
