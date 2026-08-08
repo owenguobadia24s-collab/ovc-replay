@@ -103,14 +103,16 @@ class SRFDIJuneAuthGateReadyV02Tests(unittest.TestCase):
         self.assertEqual("PRESERVE_DO_NOT_MERGE", self.state["pr_371"])
         self.assertEqual("2a0d3c529ea5aca6a1d8c67adc29d3f6dd55a3efcd75992661a69e205cea010c", self.state["exact_bindings"]["manifest_binding_sha256"])
 
-    def test_v02_state_remains_immutable_when_current_pointer_advances_after_operator_decision(self) -> None:
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json", self.pointer["authoritative_state"])
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_2.json", self.pointer["prior_state"])
-        self.assertEqual("fca974ef48e4178be299bf65e520e2268e8b67c3", self.pointer["effective_after_main"])
-        self.assertEqual("READY", self.pointer["status"])
+    def test_v02_state_remains_immutable_when_current_pointer_advances_beyond_operator_decision(self) -> None:
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json", self.pointer["authoritative_state"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json", self.pointer["prior_state"])
+        self.assertEqual("35b91e0e7b2dfbbe44bd51a278a1735f3fcb55b0", self.pointer["effective_after_main"])
+        self.assertEqual("BLOCKED", self.pointer["status"])
         self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
-        self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_UNCONSUMED", self.pointer["june_execution"])
+        self.assertTrue(self.pointer["operator_decision_required"])
+        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_UNCONSUMED_BLOCKED_PRE_RUN", self.pointer["june_execution"])
+        self.assertFalse(self.pointer["authority_token_consumed"])
+        self.assertEqual("SRFDI-WP10-PREFLIGHT-BLOCKED", self.pointer["stop_at"])
         self.assertEqual("PRESERVE_DO_NOT_MERGE", self.pointer["pr_371"])
         self.assertEqual("GATE_READY", self.state["status"])
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
