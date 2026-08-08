@@ -9,7 +9,6 @@ BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9d"
 RECEIPT = BASE / "SRFDI_G9D_FREEZE_MERGE_RECEIPT.json"
 DECISION = BASE / "SRFDI_G9D_FREEZE_OPERATOR_DECISION.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_10.json"
-POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 
 
 class SRFDIWP9DMergeReceiptTests(unittest.TestCase):
@@ -18,7 +17,6 @@ class SRFDIWP9DMergeReceiptTests(unittest.TestCase):
         cls.receipt = json.loads(RECEIPT.read_text())
         cls.decision = json.loads(DECISION.read_text())
         cls.state = json.loads(STATE.read_text())
-        cls.pointer = json.loads(POINTER.read_text())
 
     def test_receipt_binds_exact_operator_decision_head_assurance_and_merge(self) -> None:
         self.assertEqual("SRFDI-G9D-FREEZE", self.receipt["gate_id"])
@@ -50,12 +48,12 @@ class SRFDIWP9DMergeReceiptTests(unittest.TestCase):
         self.assertEqual(8598, bindings["eligible_record_count"])
         self.assertFalse(bindings["prior_v0_3_authority_token_consumed"])
 
-    def test_current_pointer_routes_only_to_fresh_june_authority_preparation(self) -> None:
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_10.json", self.pointer["authoritative_state"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION-v0.4", self.pointer["current_gate"])
-        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
-        self.assertFalse(self.pointer["authority_token_consumed"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["stop_at"])
+    def test_historical_v10_routes_only_to_fresh_june_authority_preparation(self) -> None:
+        self.assertEqual("FROZEN_AWAITING_NEW_JUNE_AUTH_PREPARATION", self.state["status"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION-v0.4", self.state["current_gate"])
+        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
+        self.assertFalse(self.state["exact_bindings"]["prior_v0_3_authority_token_consumed"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["stop_at"])
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ MANIFEST = BASE / "SRFD_JUNE_AUTHORIZED_MANIFEST_v0_4.json"
 TOKEN = BASE / "SRFD_JUNE_AUTHORITY_TOKEN_v0_4.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_11_APPROVED_PENDING_MERGE.json"
 PREDECISION = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_11_CANDIDATE.json"
-POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
+HISTORICAL_PREFREEZE_AUTH_STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_10.json"
 
 
 class SRFDIJuneAuthOperatorDecisionV04Tests(unittest.TestCase):
@@ -25,7 +25,7 @@ class SRFDIJuneAuthOperatorDecisionV04Tests(unittest.TestCase):
         cls.token = json.loads(TOKEN.read_text())
         cls.state = json.loads(STATE.read_text())
         cls.predecision = json.loads(PREDECISION.read_text())
-        cls.pointer = json.loads(POINTER.read_text())
+        cls.historical = json.loads(HISTORICAL_PREFREEZE_AUTH_STATE.read_text())
 
     def test_operator_decision_is_exact_and_bounded(self) -> None:
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.decision["gate_id"])
@@ -67,12 +67,13 @@ class SRFDIJuneAuthOperatorDecisionV04Tests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
-    def test_predecision_candidate_and_main_pointer_remain_preserved_until_merge_closeout(self) -> None:
+    def test_predecision_candidate_and_historical_v10_preserve_premerge_denial(self) -> None:
         self.assertEqual("GATE_READY_SUBJECT_TO_EXACT_HEAD_CI", self.predecision["status"])
         self.assertTrue(self.predecision["operator_decision_required"])
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_10.json", self.pointer["authoritative_state"])
-        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
-        self.assertFalse(self.pointer["authority_token_consumed"])
+        self.assertEqual("FROZEN_AWAITING_NEW_JUNE_AUTH_PREPARATION", self.historical["status"])
+        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.historical["authority"]["june"])
+        self.assertEqual("SUPERSEDED_UNUSED_UNCONSUMED", self.historical["authority"]["prior_june_authority_token_v0_3"])
+        self.assertFalse(self.historical["exact_bindings"]["prior_v0_3_authority_token_consumed"])
 
     def test_exact_scientific_and_population_bindings_remain_unchanged(self) -> None:
         bindings = self.state["exact_bindings"]
