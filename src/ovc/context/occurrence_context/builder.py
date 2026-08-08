@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 from .chronology import compute_first_valid_time
 from .firewall import assert_no_forbidden_fields
@@ -20,6 +20,19 @@ ALIAS_ANCHORS = {"SRI_OCCURRENCE_REPRESENTATION", "FDI_OCCURRENCE_ASSIGNMENT"}
 ALLOWED_SIDES = {"BID", "ASK"}
 ALLOWED_AUTHORITY_STATES = {"INACTIVE", "SHADOW", "RESEARCH_ONLY", "UNAVAILABLE", "QUARANTINED"}
 ALLOWED_AVAILABILITY = {"AVAILABLE", "PARTIAL", "NOT_EVALUABLE", "UNAVAILABLE", "STALE", "CONFLICT", "CENSORED", "QUARANTINED"}
+_EPHEMERAL_LINEAGE_KEYS = {
+    "path",
+    "local_path",
+    "hostname",
+    "host",
+    "worker",
+    "worker_id",
+    "pid",
+    "runtime",
+    "runtime_seconds",
+    "wall_clock_runtime",
+    "presentation_order",
+}
 
 
 class OccurrenceContextError(ValueError):
@@ -53,14 +66,46 @@ def build_occurrence_key(anchor: OccurrenceAnchorRef) -> str:
     return sha256_payload("OVC.OCCURRENCE", payload)
 
 
+def _canonical_mapping_sequence(values: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    by_serialized: dict[str, dict[str, Any]] = {}
+    for value in values:
+        copied = deepcopy(dict(value))
+        by_serialized[canonical_json(copied)] = copied
+    return [by_serialized[key] for key in sorted(by_serialized)]
+
+
+def _canonical_dependency_items(request: BuildRequest) -> list[dict[str, Any]]:
+    return _canonical_mapping_sequence(tuple(item.to_dict() for item in request.dependency_refs))
+
+
 def _dependency_set_hash(request: BuildRequest) -> str:
-    items = [item.to_dict() for item in request.dependency_refs]
-    items.sort(key=canonical_json)
-    return sha256_payload("OVC.OCCURRENCE_CONTEXT.DEPENDENCIES", items)
+    return sha256_payload("OVC.OCCURRENCE_CONTEXT.DEPENDENCIES", _canonical_dependency_items(request))
 
 
 def _registry_binding_hash(request: BuildRequest) -> str:
     return sha256_payload("OVC.OCCURRENCE_CONTEXT.REGISTRIES", dict(request.registry_bindings))
+
+
+def _strip_ephemeral_lineage(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {
+            str(key): _strip_ephemeral_lineage(child)
+            for key, child in value.items()
+            if str(key).lower() not in _EPHEMERAL_LINEAGE_KEYS
+        }
+    if isinstance(value, tuple):
+        return [_strip_ephemeral_lineage(child) for child in value]
+    if isinstance(value, list):
+        return [_strip_ephemeral_lineage(child) for child in value]
+    return deepcopy(value)
+
+
+def _canonical_context_mapping(value: Mapping[str, Any], *, sorted_array_fields: tuple[str, ...] = ()) -> dict[str, Any]:
+    result = deepcopy(dict(value))
+    for field in sorted_array_fields:
+        if field in result and isinstance(result[field], (list, tuple)):
+            result[field] = sorted(set(str(item) for item in result[field]))
+    return result
 
 
 def _validate_request(request: BuildRequest) -> None:
@@ -102,7 +147,8 @@ def build_context(request: BuildRequest) -> dict[str, Any]:
         request.registry_first_valid_times,
         request.confirmation_time,
     )
-    dependency_set_hash = _dependency_set_hash(request)
+    dependency_items = _canonical_dependency_items(request)
+    dependency_set_hash = sha256_payload("OVC.OCCURRENCE_CONTEXT.DEPENDENCIES", dependency_items)
     registry_binding_hash = _registry_binding_hash(request)
     identity_payload = {
         "schema_version": "0.1",
@@ -116,6 +162,11 @@ def build_context(request: BuildRequest) -> dict[str, Any]:
         "first_valid_time": first_valid_time,
     }
     context_id = sha256_payload("OVC.OCCURRENCE_CONTEXT", identity_payload)
+    calendar_context = _canonical_context_mapping(request.calendar_context, sorted_array_fields=("era_partition_ids",))
+    session_context = _canonical_context_mapping(request.session_context, sorted_array_fields=("session_membership_ids", "reason_codes"))
+    parent_context_refs = _canonical_mapping_sequence(tuple(request.parent_context_refs))
+    auxiliary_refs = _canonical_mapping_sequence(tuple(request.auxiliary_refs))
+    semantic_lineage = _strip_ephemeral_lineage(request.lineage)
     record: dict[str, Any] = {
         "schema": "occurrence_context/v0_1",
         "schema_version": "0.1",
@@ -127,20 +178,20 @@ def build_context(request: BuildRequest) -> dict[str, Any]:
         "source_context": deepcopy(dict(request.source_context)),
         "research_role": request.research_role,
         "occurrence_interval": deepcopy(dict(request.occurrence_interval)),
-        "calendar_context": deepcopy(dict(request.calendar_context)),
-        "session_context": deepcopy(dict(request.session_context)),
+        "calendar_context": calendar_context,
+        "session_context": session_context,
         "clock_scale_context": deepcopy(dict(request.clock_scale_context)),
-        "parent_context_refs": deepcopy(list(request.parent_context_refs)),
+        "parent_context_refs": parent_context_refs,
         "market_condition_context": deepcopy(dict(request.market_condition_context)) if request.market_condition_context is not None else None,
         "episode_relative_context": deepcopy(dict(request.episode_relative_context)) if request.episode_relative_context is not None else None,
-        "auxiliary_refs": deepcopy(list(request.auxiliary_refs)),
+        "auxiliary_refs": auxiliary_refs,
         "context_role_map_id": request.context_role_map_id,
-        "dependency_refs": [deepcopy(item.to_dict()) for item in request.dependency_refs],
+        "dependency_refs": dependency_items,
         "first_valid_time": first_valid_time,
         "availability": {"status": request.availability_status},
         "reason_codes": sorted(set(request.reason_codes)),
         "authority_state": request.authority_state,
-        "lineage": {**deepcopy(dict(request.lineage)), "dependency_set_hash": dependency_set_hash, "registry_binding_hash": registry_binding_hash},
+        "lineage": {**semantic_lineage, "dependency_set_hash": dependency_set_hash, "registry_binding_hash": registry_binding_hash},
     }
     assert_no_forbidden_fields(record)
     record["logical_hash"] = logical_hash(record)
