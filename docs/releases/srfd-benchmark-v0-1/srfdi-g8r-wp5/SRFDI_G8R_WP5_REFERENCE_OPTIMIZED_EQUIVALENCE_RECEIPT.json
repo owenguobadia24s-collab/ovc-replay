@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-srfdi-g8r-reference-optimized-equivalence-receipt/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "packet_id": "SRFDI-G8R-WP5",
+  "source_head": "79346ed5b8c3e90e53c00035beb20fe4a0196860",
+  "measurement_class": "MEASURED_FIXTURE_LOCAL_EQUIVALENCE",
+  "authority_state": "FIXTURE_LOCAL_CAPACITY_REMEDIATION_ONLY",
+  "scientific_effect": "NONE",
+  "reference_oracles": {
+    "pair_index": "EXACT_CONDENSED_INDEX_BIJECTION",
+    "distance": "CURRENT_JSON_REFERENCE_DISTANCE_KERNEL",
+    "family": "CURRENT_FAMILY_REFERENCE"
+  },
+  "optimized_backends": {
+    "distance": "PYTHON_STDLIB_EXACT",
+    "family": "PYTHON_STDLIB_EXACT_FAMILY_OPTIMIZED"
+  },
+  "equivalence_checks": {
+    "pair_index_bijection_n_2_through_128": "PASS",
+    "pair_index_boundary_n_100000": "PASS",
+    "fixed_point_8_byte_boundary": "PASS",
+    "fixed_point_16_byte_boundary": "PASS",
+    "precision_rejection": "PASS",
+    "coefficient_overflow_rejection": "PASS",
+    "distance_l1_reference_equivalence": "PASS",
+    "distance_l2_reference_equivalence": "PASS",
+    "distance_input_order_equivalence": "PASS",
+    "family_medoid_star_reference_equivalence": "PASS",
+    "family_complete_linkage_reference_equivalence": "PASS",
+    "family_average_linkage_reference_equivalence": "PASS",
+    "family_bounded_pam_reference_equivalence": "PASS",
+    "tie_heavy_family_surfaces": "PASS"
+  },
+  "family_adversarial_matrix_grid": {
+    "population_sizes": [2,3,4,5,6,7,8,9],
+    "seeds": [0,1,2,3],
+    "distance_values": ["0","0.05","0.10","0.15","0.20","0.25","0.5","1"],
+    "sampling": "NONE_FOR_DECLARED_FIXTURE_GRID"
+  },
+  "test_evidence": {
+    "repository_suite_run_id": 31221221574,
+    "repository_suite_conclusion": "success",
+    "repository_test_count": 443,
+    "tiered_run_id": 31221221509,
+    "tiered_conclusion": "success",
+    "merge_readiness_job_id": 93006066182,
+    "merge_readiness_conclusion": "success"
+  },
+  "backend_lock": "registries/research/srfd/g8r_backend_lock_v0_2.json",
+  "conditional_backends": {
+    "numpy": "CANDIDATE_UNADMITTED",
+    "scipy": "NOT_ADMITTED",
+    "jit_gpu": "NOT_ADMITTED"
+  },
+  "negative_results_preserved": true,
+  "june_market_records_read": false,
+  "validation_consumed": false,
+  "wp9": "DENIED",
+  "canonical_family_method": "NONE",
+  "conclusion": "PASS_REFERENCE_OPTIMIZED_EXACT_EQUIVALENCE_ON_GOVERNED_FIXTURES"
+}
