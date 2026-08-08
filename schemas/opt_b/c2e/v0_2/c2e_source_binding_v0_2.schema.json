@@ -1,0 +1,17 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://schemas/opt_b/c2e/v0_2/c2e_source_binding_v0_2",
+  "type":"object",
+  "required":["c2ar_package_id","c2ar_package_sha256","research_consumer_permission","active","canonical","source_release_id","source_manifest_id","c2_release_id","c2_contract_id","source_build_commit"],
+  "properties":{
+    "c2ar_package_id":{"const":"C2AR.INTEGRATED.SHADOW.PACKAGE.v1"},
+    "c2ar_package_sha256":{"const":"150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"},
+    "research_consumer_permission":{"const":"READ_ONLY_SHADOW_RESEARCH_ONLY"},
+    "active":{"const":false},"canonical":{"const":false},
+    "source_release_id":{"type":"string","minLength":1},"source_manifest_id":{"type":"string","minLength":1},
+    "c2_release_id":{"type":"string","minLength":1},"c2_contract_id":{"type":"string","minLength":1},
+    "source_build_commit":{"type":"string","minLength":1},
+    "binding_status":{"type":"string"}
+  },
+  "additionalProperties":true
+}

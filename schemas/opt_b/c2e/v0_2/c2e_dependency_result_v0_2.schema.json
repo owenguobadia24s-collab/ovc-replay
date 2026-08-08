@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://schemas/opt_b/c2e/v0_2/c2e_dependency_result_v0_2",
+  "type":"object",
+  "required":["dependency_id","role","status","source_record_ids","reason_codes"],
+  "properties":{
+    "dependency_id":{"type":"string","minLength":1},
+    "role":{"enum":["REQUIRED","OPTIONAL","WARNING_ONLY","PROHIBITED"]},
+    "status":{"enum":["AVAILABLE","COMPUTABLE","ASSURED","ELIGIBLE","AUTHORIZED","PRESENT","MISSING","UNAVAILABLE","NOT_COMPUTABLE","CENSORED","CONFLICTED","INELIGIBLE","UNAUTHORIZED","NOT_APPLICABLE","NOT_EVALUATED"]},
+    "source_record_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "reason_codes":{"type":"array","items":{"type":"string"},"uniqueItems":true}
+  },
+  "additionalProperties":false
+}

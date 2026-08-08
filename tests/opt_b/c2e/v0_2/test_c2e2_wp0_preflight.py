@@ -10,6 +10,8 @@ PRS = BASE / "C2E2_WP0_OPEN_PR_INVENTORY.json"
 MATRIX = BASE / "C2E2_WP0_SUPERSESSION_MATRIX.json"
 QA = BASE / "C2E2_WP0_QA_PACKET.json"
 STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_2.json"
+ACCEPTED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_3.json"
+POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 RO_C2E = ROOT / "registries/research_operations/c2e/OVC_C2E_PROGRAMME_STATE_v0_1.json"
 C2AR = ROOT / "registries/opt_b/c2/vnext/C2_INTEGRATED_SHADOW_PACKAGE_APPROVED_v1.jsonc"
 
@@ -23,6 +25,8 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         cls.matrix = json.loads(MATRIX.read_text())
         cls.qa = json.loads(QA.read_text())
         cls.state = json.loads(STATE.read_text())
+        cls.accepted_state = json.loads(ACCEPTED_STATE.read_text())
+        cls.pointer = json.loads(POINTER.read_text())
         cls.ro = json.loads(RO_C2E.read_text())
         cls.c2ar = json.loads(C2AR.read_text())
 
@@ -65,13 +69,20 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertTrue(all(not item["lawful_c2e2_base"] for item in self.prs["open_prs"]))
         self.assertEqual(self.matrix["historical_bytes_rewritten"], False)
 
-    def test_wp0_is_qa_review_only_and_source_replay_denied(self):
-        self.assertEqual(self.qa["status"], "QA_REVIEW")
-        self.assertEqual(self.qa["blocking_warnings"], [])
-        self.assertFalse(self.qa["assertions"]["real_source_replay_performed"])
+    def test_wp0_predecision_and_accepted_lifecycle_preserve_source_replay_denial(self):
         self.assertEqual(self.state["status"], "QA_REVIEW")
         self.assertEqual(self.state["current_gate"], "C2E2-G1")
+        self.assertEqual(self.accepted_state["status"], "READY")
+        self.assertEqual(self.accepted_state["current_packet"], "C2E2-WP1")
+        self.assertEqual(self.accepted_state["current_gate"], "C2E2-G2")
+        self.assertEqual(self.qa["status"], "PASS")
+        self.assertEqual(self.qa["recommendation"], "PASS")
+        self.assertEqual(self.qa["blocking_warnings"], [])
+        self.assertFalse(self.qa["assertions"]["real_source_replay_performed"])
         self.assertEqual(self.state["authority"]["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
+        self.assertEqual(self.accepted_state["authority"]["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
+        self.assertEqual(self.pointer["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
+        self.assertEqual(self.pointer["active_c2e"], "NONE")
 
 
 if __name__ == "__main__":
