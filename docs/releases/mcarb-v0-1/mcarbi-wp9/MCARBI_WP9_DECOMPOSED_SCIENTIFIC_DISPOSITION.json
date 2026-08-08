@@ -1,0 +1,99 @@
+{
+  "schema":"ovc-mcarbi-wp9-decomposed-scientific-disposition/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "plan_id":"OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version":"0.1-REVISED",
+  "packet_id":"MCARBI-WP9",
+  "source_run_id":"MCARB.STAGEA.b45ff34cbb8c1865a77311f6",
+  "source_g8_merge_commit":"1caf4e67a66b6b95dbfb57055b93f18cb4b56788",
+  "status":"PROPOSED_OPERATOR_DISPOSITION",
+  "allowed_vocabulary":["MATERIAL_ADDITIONAL_INFORMATION","LIMITED_CONTEXTUAL_INFORMATION","REDUNDANT_WITH_PRICE_STRUCTURE","UNSTABLE_ACROSS_TIME","METHOD_DEPENDENT","NOT_REPRODUCIBLE","NOT_EVALUABLE","NO_ADDITIONAL_INFORMATION","REJECT","UNRESOLVED"],
+  "stage_a_claim_boundary":{
+    "evaluated":["source_binding","causal_chronology_and_first_valid","missingness_and_abstention","capacity","deterministic_restart","descriptive_dependence","gross_exact_R0_conditional_redundancy","exact_vector_separation_with_matched_dimensional_noise_control","paired_side_diagnostics","frozen_ET_grid_coverage"],
+    "not_evaluated":["long_run_chronological_stability","cross_scale_stability","family_or_representation_quality","downstream_residual_reduction","C2E_boundary_quality","counterexample_separation","production_placement","predictive_value","causal_value","selector_merit"]
+  },
+  "source_limits":[
+    "AL_SOURCE_PARTIAL remains binding: Dukascopy activity is provider activity evidence, not centralized FX traded volume or order flow.",
+    "AL-05 has 806/898 available records and 92 preregistered abstentions from insufficient frozen side/slot reference support.",
+    "AL-07, VS-01 and VS-02 each have 812/898 available records and 86 preregistered abstentions from non-contiguous prior bars.",
+    "Stage A covers one frozen two-month evaluation interval and cannot support an UNSTABLE_ACROSS_TIME or stable-across-time conclusion."
+  ],
+  "domain_dispositions":[
+    {"id":"AL","disposition":"UNRESOLVED","reason":"Stage A proves admissible provider-activity measurements and substantial variation conditional on exact R0, but matched-complexity controls and absent downstream representation/stability criteria prevent either an additional-information or redundancy conclusion.","failure_attribution":["SOURCE_SEMANTICS_PARTIAL"],"promotion_consequence":"NONE"},
+    {"id":"ET","disposition":"UNRESOLVED","reason":"All frozen ET variants are causal, reproducible and fully observed, with threshold-dependent event incidence and residual variation outside exact R0; Stage A did not test chronology-stable representation/family utility, so method value cannot be concluded.","failure_attribution":[],"promotion_consequence":"NONE"},
+    {"id":"VS","disposition":"UNRESOLVED","reason":"VS measures are reproducible and retain substantial variation conditional on exact R0, but exact-vector separation is matched by dimensional noise and Stage A did not test recurrence/stability or downstream representation utility.","failure_attribution":[],"promotion_consequence":"NONE"}
+  ],
+  "candidate_dispositions":{
+    "AL":[
+      {"id":"AL-01","disposition":"UNRESOLVED","availability":"898/898","stage_a_evidence":"gross residual fraction 0.494815 vs shuffle 0.422174 and matched-noise 0.625330","reason":"Observed variation outside exact R0 is descriptive only; no stable incremental utility criterion was tested."},
+      {"id":"AL-05","disposition":"UNRESOLVED","availability":"806/898","stage_a_evidence":"92 causal abstentions; gross residual 0.638240 vs shuffle 0.661418 and matched-noise 0.651502","reason":"Usable in most partitions but incomplete frozen reference support and no downstream utility/stability test prevent a conclusion."},
+      {"id":"AL-07","disposition":"UNRESOLVED","availability":"812/898","stage_a_evidence":"86 gap/closure abstentions; gross residual 0.478128 vs shuffle 0.463018 and matched-noise 0.552632","reason":"Descriptive acceleration survives as a lawful measurement but does not demonstrate incremental representation value."},
+      {"id":"AL-08","disposition":"UNRESOLVED","availability":"898/898","stage_a_evidence":"gross residual 0.445313 vs shuffle 0.488747 and matched-noise 0.605004","reason":"BID provider activity is admissible but does not carry buyer-intent/order-flow semantics and was not tested for chronology-stable incremental representation value."},
+      {"id":"AL-09","disposition":"UNRESOLVED","availability":"898/898","stage_a_evidence":"gross residual 0.551066 vs shuffle 0.422881 and matched-noise 0.614024","reason":"ASK provider activity is admissible but does not carry seller-intent/order-flow semantics and was not tested for chronology-stable incremental representation value."}
+    ],
+    "ET":[
+      {"id":"ET-DC@0.0005","method":"ET-DC","parameter":"0.0005","disposition":"UNRESOLVED","event_rate":0.4053452115812918,"reason":"Causal/reproducible event surface; Stage A does not establish representation utility or stability."},
+      {"id":"ET-DC@0.0010","method":"ET-DC","parameter":"0.0010","disposition":"UNRESOLVED","event_rate":0.2739420935412027,"reason":"Causal/reproducible event surface; Stage A does not establish representation utility or stability."},
+      {"id":"ET-DC@0.0020","method":"ET-DC","parameter":"0.0020","disposition":"UNRESOLVED","event_rate":0.1648106904231626,"reason":"Causal/reproducible event surface; Stage A does not establish representation utility or stability."},
+      {"id":"ET-DC@0.0040","method":"ET-DC","parameter":"0.0040","disposition":"UNRESOLVED","event_rate":0.06013363028953229,"reason":"Causal/reproducible event surface; Stage A does not establish representation utility or stability."},
+      {"id":"ET-X@0.0050","method":"ET-X","parameter":"0.0050","disposition":"UNRESOLVED","mean_crossing_count":0.25167037861915367,"reason":"Neutral decimal-lattice crossing evidence is reproducible but no support/resistance/breakout semantics or incremental representation value is established."},
+      {"id":"ET-X@0.0100","method":"ET-X","parameter":"0.0100","disposition":"UNRESOLVED","mean_crossing_count":0.11915367483296214,"reason":"Neutral decimal-lattice crossing evidence is reproducible but no support/resistance/breakout semantics or incremental representation value is established."},
+      {"id":"ET-VAR@0.0010","method":"ET-VAR","parameter":"0.0010","disposition":"UNRESOLVED","event_rate":0.5868596881959911,"reason":"Causal cumulative-variation clock is reproducible; Stage A does not establish representation utility or stability."},
+      {"id":"ET-VAR@0.0020","method":"ET-VAR","parameter":"0.0020","disposition":"UNRESOLVED","event_rate":0.40979955456570156,"reason":"Causal cumulative-variation clock is reproducible; Stage A does not establish representation utility or stability."},
+      {"id":"ET-VAR@0.0040","method":"ET-VAR","parameter":"0.0040","disposition":"UNRESOLVED","event_rate":0.2561247216035635,"reason":"Causal cumulative-variation clock is reproducible; Stage A does not establish representation utility or stability."},
+      {"id":"ET-VAR@0.0080","method":"ET-VAR","parameter":"0.0080","disposition":"UNRESOLVED","event_rate":0.14587973273942094,"reason":"Causal cumulative-variation clock is reproducible; Stage A does not establish representation utility or stability."}
+    ],
+    "VS":[
+      {"id":"VS-01","disposition":"UNRESOLVED","availability":"812/898","stage_a_evidence":"gross residual 0.767893 vs shuffle 0.632685 and matched-noise 0.568302","reason":"Large variation outside exact R0 is not itself evidence of useful incremental structure; stability/representation utility was not tested."},
+      {"id":"VS-02","disposition":"UNRESOLVED","availability":"812/898","stage_a_evidence":"gross residual 0.908676 vs shuffle 0.658300 and matched-noise 0.571275","reason":"Large variation outside exact R0 is not itself evidence of useful incremental structure; stability/representation utility was not tested."},
+      {"id":"VS-03","disposition":"UNRESOLVED","availability":"898/898","stage_a_evidence":"gross residual 0.759658 vs shuffle 0.654757 and matched-noise 0.628921","reason":"Range evidence is fully available but Stage A does not establish chronology-stable incremental representation value."}
+    ]
+  },
+  "pack_dispositions":[
+    {"id":"R0","evidence":"PRICE baseline","disposition":"NOT_EVALUABLE","reason":"Baseline comparator; it does not assert an auxiliary-information claim."},
+    {"id":"R1","evidence":"PRICE+AL","disposition":"UNRESOLVED","eligible_records":732,"repeated_r0_pairs":5675,"aux_exact_vector_separated_pairs":5675,"matched_noise_separated_pairs":5675,"reason":"Raw separation is completely matched by equal-dimensional deterministic noise; no stable downstream representation criterion was tested."},
+    {"id":"R2","evidence":"PRICE+ET","disposition":"UNRESOLVED","eligible_records":898,"repeated_r0_pairs":7251,"aux_exact_vector_separated_pairs":6753,"matched_noise_separated_pairs":7251,"reason":"Raw separation is below matched-dimensional noise and cannot establish merit; downstream representation/stability criteria remain untested."},
+    {"id":"R3","evidence":"PRICE+VS","disposition":"UNRESOLVED","eligible_records":812,"repeated_r0_pairs":5697,"aux_exact_vector_separated_pairs":5697,"matched_noise_separated_pairs":5697,"reason":"Raw separation is completely matched by equal-dimensional deterministic noise; no stable downstream representation criterion was tested."},
+    {"id":"R4","evidence":"PRICE+AL+VS","disposition":"UNRESOLVED","eligible_records":732,"repeated_r0_pairs":5675,"aux_exact_vector_separated_pairs":5675,"matched_noise_separated_pairs":5675,"reason":"No evidence of incremental interaction merit beyond dimensionality and descriptive dependence."},
+    {"id":"R4X","evidence":"PRICE+AL+ET","disposition":"UNRESOLVED","eligible_records":732,"repeated_r0_pairs":5675,"aux_exact_vector_separated_pairs":5675,"matched_noise_separated_pairs":5675,"reason":"No evidence of incremental interaction merit beyond dimensionality and descriptive dependence."},
+    {"id":"R5","evidence":"PRICE+ET+VS","disposition":"UNRESOLVED","eligible_records":812,"repeated_r0_pairs":5697,"aux_exact_vector_separated_pairs":5697,"matched_noise_separated_pairs":5697,"reason":"No evidence of incremental interaction merit beyond dimensionality and descriptive dependence."},
+    {"id":"R6","evidence":"PRICE+AL+ET+VS","disposition":"UNRESOLVED","eligible_records":732,"repeated_r0_pairs":5675,"aux_exact_vector_separated_pairs":5675,"matched_noise_separated_pairs":5675,"reason":"Full auxiliary vector does not beat the matched-complexity separation control on the Stage-A diagnostic; required stability and representation-quality criteria were not tested."},
+    {"id":"D-AL","evidence":"AL diagnostic-only","disposition":"UNRESOLVED","reason":"Diagnostic pack is admissible but Stage A cannot infer production-structure or stable representation value."},
+    {"id":"D-ET","evidence":"ET diagnostic-only","disposition":"UNRESOLVED","reason":"Diagnostic pack is admissible but Stage A cannot infer production-structure or stable representation value."},
+    {"id":"D-VS","evidence":"VS diagnostic-only","disposition":"UNRESOLVED","reason":"Diagnostic pack is admissible but Stage A cannot infer production-structure or stable representation value."}
+  ],
+  "cross_domain_interaction_dispositions":[
+    {"id":"AL_GIVEN_VS_R4","disposition":"NOT_EVALUABLE","reason":"Stage A recorded dependence and raw pack vectors but no chronology-stable incremental representation criterion isolating AL conditional on VS."},
+    {"id":"VS_GIVEN_AL_R4","disposition":"NOT_EVALUABLE","reason":"Stage A recorded dependence and raw pack vectors but no chronology-stable incremental representation criterion isolating VS conditional on AL."},
+    {"id":"AL_GIVEN_ET_R4X","disposition":"NOT_EVALUABLE","reason":"Stage A recorded dependence and raw pack vectors but no chronology-stable incremental representation criterion isolating AL conditional on ET."},
+    {"id":"ET_GIVEN_AL_R4X","disposition":"NOT_EVALUABLE","reason":"Stage A recorded dependence and raw pack vectors but no chronology-stable incremental representation criterion isolating ET conditional on AL."},
+    {"id":"ET_GIVEN_VS_R5","disposition":"NOT_EVALUABLE","reason":"Stage A recorded dependence and raw pack vectors but no chronology-stable incremental representation criterion isolating ET conditional on VS."},
+    {"id":"VS_GIVEN_ET_R5","disposition":"NOT_EVALUABLE","reason":"Stage A recorded dependence and raw pack vectors but no chronology-stable incremental representation criterion isolating VS conditional on ET."},
+    {"id":"AL_ET_VS_INCREMENTAL_R6","disposition":"NOT_EVALUABLE","reason":"Stage A lacks a downstream chronology-stable criterion on which to execute the full nested incremental attribution question."}
+  ],
+  "module_disposition":{
+    "id":"DUKASCOPY_NATIVE_AUXILIARY_MODULE","disposition":"UNRESOLVED","reason":"The bounded Stage-A run establishes lawful reproducible auxiliary evidence machinery and shows information variation not identical to exact R0, but it does not establish stable descriptive improvement beyond matched complexity or downstream representation quality. A terminal positive, redundancy or null conclusion would exceed the frozen Stage-A evidence boundary.",
+    "terminal_null_eligibility":"NOT_ELIGIBLE_ON_STAGE_A_EVIDENCE",
+    "no_additional_information_reason":"The plan permits NO_ADDITIONAL_INFORMATION only after every eligible Stage-A and later admitted Dukascopy-native pack is shown redundant or without reproducible increment after matched-complexity, nested-ablation and chronology controls. Stage A leaves chronological stability, representation/family utility and several increment criteria unevaluated."
+  },
+  "failure_attribution":{
+    "source_semantics":"SOURCE_SEMANTICS_PARTIAL for AL only",
+    "dimensionality":"DIMENSIONALITY_ARTIFACT risk demonstrated for raw exact-vector separation; therefore separation count is excluded as a merit decision rule",
+    "missingness":"Visible and bounded; not sufficient to classify the module MISSINGNESS_DOMINATED",
+    "threshold_dependence":"Event incidence varies across the preregistered ET grids, but scientific value was not measured, so METHOD_DEPENDENT/THRESHOLD_DEPENDENT is not asserted",
+    "temporal_stability":"Not tested; UNSTABLE_ACROSS_TIME is not asserted",
+    "reproducibility":"PASS; NOT_REPRODUCIBLE is not supported"
+  },
+  "future_stage_recommendation":{
+    "recommendation":"DEFER_AUTOMATIC_EXPANSION; preserve Stage-A evidence. If the operator wants a scientific resolution, prepare a separately governed longitudinal representation-utility benchmark that tests recurrence, chronological stability, matched-complexity/nested incremental benefit and downstream representation quality before any placement decision.",
+    "authority_effect":"NONE",
+    "does_not_authorize":["new market run","rerun of Stage A","ACTIVE_DISCOVERY","ACTIVE_DEVELOPMENT","ACTIVE_VALIDATION","new provider intake","new instrument/clock/side","selector","threshold/representation/family/candidate/semantic promotion","C2/C2E/SRI mutation","canonical/R2 publication","probability","risk","exposure","trading/execution"]
+  },
+  "external_evidence":{
+    "artifact_id":9014838569,
+    "artifact_archive_sha256":"fbbedde4c1f0bd43b06e03ed245e38df0d4cf0adabcca84776aa86ebee2b5ec2",
+    "evidence_vector_sha256":"c1882b91e5e30d64f38cb2984c1c0720bf8495ce34d11a8caa2fe5188ef6bb82",
+    "record_logical_sha256":"b9a0eb0291792694acf749f7cae27a69b32e5ec5cdfd95b2a207863a71639fe2"
+  },
+  "operator_decision_required":"MCARBI-G9"
+}
