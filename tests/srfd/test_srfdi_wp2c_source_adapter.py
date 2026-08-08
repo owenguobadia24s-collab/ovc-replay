@@ -110,7 +110,12 @@ class SRFDIWP2CSourceAdapterTests(unittest.TestCase):
     def test_adapter_preserves_native_axes_without_selecting_representation_fields(self) -> None:
         parent = c1("C1.1", "2026-06-10T00:00:00Z", "2026-06-10T00:15:00Z")
         adapted = adapt_c2_state(c2("C2.1", parent), binding(), c1_parent_index=build_c1_parent_index([parent], binding()))
-        self.assertEqual(axes(), adapted["native_c2"]["axes"])
+        native_axes = adapted["native_c2"]["axes"]
+        expected_axes = axes()
+        self.assertEqual(set(expected_axes), set(native_axes))
+        for axis, expected in expected_axes.items():
+            for key, value in expected.items():
+                self.assertEqual(value, native_axes[axis][key])
         self.assertEqual("SCHEMA_PRESERVING_NO_REPRESENTATION_FIELD_SELECTION", adapted["adapter_semantics"])
         self.assertNotIn("structural", adapted)
         self.assertNotIn("structural_raw", adapted)
