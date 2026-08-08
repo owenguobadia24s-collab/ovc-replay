@@ -1,0 +1,523 @@
+{
+  "ambiguity_rules": {
+    "ambiguous_record": "RETAIN_WITH_ALL_COMPETING_FAMILY_REFERENCES_AND_CONFIGURATION_IDS",
+    "cross_method_conflict": "RETAIN_AS_METHOD_DISAGREEMENT",
+    "forced_resolution": "FORBIDDEN",
+    "missingness_conflict": "DO_NOT_COLLAPSE_INTO_AMBIGUITY"
+  },
+  "authority_firewalls": {
+    "june_benchmark": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+    "pr_371": "PRESERVE_DO_NOT_MERGE",
+    "probability_risk_exposure_execution": "NONE",
+    "publication": "NONE",
+    "scientific_promotion": "NONE",
+    "selector_change": "NONE",
+    "validation_2025": "LOCKED_UNCONSUMED"
+  },
+  "authority_state": "CANDIDATE",
+  "capacity_limits": {
+    "cache_reuse_credit": false,
+    "capacity_class": "T0_FROZEN_MEASURED",
+    "capacity_gate_merge_commit": "0f3ae4379978a1381f479cfe1c5fe9c269981c19",
+    "max_external_bytes": 10737418240,
+    "max_peak_rss_bytes": 17179869184,
+    "max_wall_seconds": 14400,
+    "parallel_speedup_credit": false,
+    "reference_population_binding": "NON_BINDING_CAPACITY_REFERENCE_ONLY",
+    "reference_population_count": 8598,
+    "reference_serial_cold_projection_seconds": 4264.711176858039
+  },
+  "configuration_bounds": {
+    "conditional_methods_excluded": [
+      {
+        "id": "HDBSCAN",
+        "reason": "CONDITIONAL_DEPENDENCY_DISABLED"
+      },
+      {
+        "id": "OPTICS",
+        "reason": "CONDITIONAL_DEPENDENCY_DISABLED"
+      },
+      {
+        "id": "MATRIX_PROFILE",
+        "reason": "CONDITIONAL_RECURRENCE_EVIDENCE_DISABLED"
+      }
+    ],
+    "configuration_identity_components": [
+      "population",
+      "representation",
+      "normalization",
+      "distance",
+      "family_method",
+      "parameters",
+      "missingness_policy",
+      "residual_policy",
+      "tie_policy",
+      "implementation_version",
+      "evaluation_cutoff",
+      "approximation_state"
+    ],
+    "distance_ids": [
+      "L1_TYPED",
+      "L2_TYPED",
+      "GOWER_MIXED",
+      "DTW_SEQUENCE"
+    ],
+    "family_method_ids": [
+      "GREEDY_LEXICOGRAPHIC_MEDOID_STAR",
+      "COMPLETE_LINKAGE",
+      "AVERAGE_LINKAGE",
+      "BOUNDED_PAM"
+    ],
+    "family_parameter_ladders": {
+      "average_linkage_radius": [
+        "0.04",
+        "0.08",
+        "0.16"
+      ],
+      "bounded_pam_k": [
+        2,
+        4,
+        8
+      ],
+      "bounded_pam_max_assignment_distance": [
+        "0.10",
+        "0.20",
+        "0.40"
+      ],
+      "bounded_pam_max_iterations": [
+        8
+      ],
+      "complete_linkage_radius": [
+        "0.04",
+        "0.08",
+        "0.16"
+      ],
+      "medoid_star_radius": [
+        "0.04",
+        "0.08",
+        "0.16"
+      ],
+      "shared_minimum_support": [
+        2,
+        4,
+        8
+      ]
+    },
+    "full_assignment_target": false,
+    "grid_definition": "EXACT_CARTESIAN_PRODUCT_SUBJECT_ONLY_TO_PREDECLARED_COMPARABILITY_AND_COMPUTABILITY_EXCLUSIONS",
+    "ladder_basis": {
+      "family_capacity_anchor_assignment_distance": "0.20",
+      "family_capacity_anchor_pam_k": 4,
+      "family_capacity_anchor_radius": "0.08",
+      "rule": "POWER_OF_TWO_LOW_ANCHOR_HIGH_LADDER_AROUND_MEASURED_SYNTHETIC_CAPACITY_CONFIGURATION",
+      "source_path": "src/ovc/opt_b/srfd/family_capacity.py"
+    },
+    "normalization_policy": {
+      "benchmark_target_fit": "FORBIDDEN",
+      "fit_artifact_hash_required": true,
+      "fit_scope": "PRE_BENCHMARK_OR_FIXTURE_ONLY",
+      "missingness": "EXPLICIT",
+      "zero_imputation": "FORBIDDEN"
+    },
+    "qualifying_configuration_rule": [
+      "All declared inputs and dimensions are computable under the frozen representation contract.",
+      "Representation and distance share a lawful comparability domain.",
+      "The configuration passes deterministic replay and source-lineage checks.",
+      "The method is enabled in the frozen family-method candidate list.",
+      "The configuration remains inside frozen T0 capacity or terminates with an explicit capacity reason.",
+      "A failed configuration remains in the audit ledger and is excluded from invariant-core denominators only by an explicit preregistered reason."
+    ],
+    "representation_ids": [
+      "SRFDI-R1",
+      "SRFDI-R2",
+      "SRFDI-R3",
+      "SRFDI-R4",
+      "SRFDI-R5",
+      "SRFDI-R6",
+      "SRFDI-R7",
+      "SRFDI-R8",
+      "SRFDI-R9"
+    ],
+    "segmentation_ids": [
+      "C2E_CAUSAL_ADAPTER",
+      "RUN_CHANGE_SEGMENTATION",
+      "DIRECTIONAL_CHANGE",
+      "PELT_REFERENCE",
+      "NULL_BOUNDARY_CONTROL"
+    ],
+    "tie_policy": "LEXICOGRAPHIC_STABLE"
+  },
+  "distance_candidates": [
+    {
+      "exact": true,
+      "id": "L1_TYPED",
+      "status": "SHADOW_BENCHMARK"
+    },
+    {
+      "exact": true,
+      "id": "L2_TYPED",
+      "status": "SHADOW_BENCHMARK"
+    },
+    {
+      "exact": true,
+      "id": "GOWER_MIXED",
+      "status": "SHADOW_BENCHMARK"
+    },
+    {
+      "exact": true,
+      "id": "DTW_SEQUENCE",
+      "status": "SHADOW_BENCHMARK"
+    }
+  ],
+  "eligible_population": {
+    "benchmark_window": {
+      "end_exclusive_utc": "2026-07-01T00:00:00Z",
+      "start_inclusive_utc": "2026-06-01T00:00:00Z"
+    },
+    "binding_procedure": [
+      "At SRFDI-G-JUNE-AUTH bind an already-lawful upstream source release and exact source hashes; do not fetch a provider or mutate upstream evidence.",
+      "Construct the eligible record-id set from records whose benchmark observation timestamp is inside the frozen target window and whose source lineage, comparability and required structural fields pass the frozen contracts.",
+      "Apply only preregistered structural exclusions. Do not filter using any benchmark family, stability, recurrence or downstream semantic result.",
+      "Sort eligible record ids lexicographically, record every exclusion with a reason code, and hash both the eligible-id list and exclusion ledger before benchmark execution.",
+      "The historical count 8598 is not adopted as the eligible population unless the frozen binding procedure independently reproduces exactly that count and its record-id hash at the later authority gate."
+    ],
+    "binding_state": "PROCEDURE_FROZEN_COUNT_NOT_BOUND",
+    "context_window_reference": {
+      "end_exclusive_utc": "2026-07-03T00:00:00Z",
+      "start_utc": "2026-05-30T00:00:00Z"
+    },
+    "existing_metadata_reference": {
+      "binding": "NON_BINDING_CAPACITY_AND_COVERAGE_REFERENCE_ONLY",
+      "git_blob_sha1": "2e283c6ec0b2d0fb5c65adfce1e22d80b2cd4427",
+      "path": "docs/releases/pattern-discovery-v0-3/pd-june-full-month-mdr/wp2-replay/coverage.json",
+      "target_c2_state_count_reference": 8598
+    },
+    "instrument": "GBPUSD",
+    "required_binding_fields_at_june_gate": [
+      "source_release_id",
+      "source_commit",
+      "source_hashes",
+      "eligible_record_count",
+      "eligible_record_ids_sha256",
+      "exclusion_count",
+      "exclusion_ledger_sha256",
+      "benchmark_window",
+      "context_window"
+    ]
+  },
+  "failure_attribution_order": [
+    "AUTHORITY_OR_SOURCE_BINDING",
+    "SOURCE_LINEAGE_OR_HASH",
+    "POPULATION_ELIGIBILITY",
+    "REPRESENTATION_COMPUTABILITY",
+    "COMPARABILITY_DOMAIN",
+    "DISTANCE_COMPUTATION",
+    "FAMILY_METHOD_COMPUTATION",
+    "CAPACITY_LIMIT",
+    "DETERMINISM_OR_RESTART_EQUIVALENCE",
+    "OUTPUT_MANIFEST_OR_HASH"
+  ],
+  "falsifiers": [
+    {
+      "condition": "No invariant core satisfies the frozen strong-family evidence rule in any qualifying comparison set.",
+      "id": "F1",
+      "targets": [
+        "H1"
+      ]
+    },
+    {
+      "condition": "Family evidence appears only after forcing assignment, suppressing residuals, changing the preregistered grid, or excluding a failed qualifying configuration after benchmark visibility.",
+      "id": "F2",
+      "targets": [
+        "H1",
+        "H2"
+      ]
+    },
+    {
+      "condition": "Apparent family evidence is confined to one enabled family-method class or collapses under the frozen sensitivity grid.",
+      "id": "F3",
+      "targets": [
+        "H1",
+        "H3"
+      ]
+    },
+    {
+      "condition": "Residual, noise, singleton or ambiguity records cannot be reconstructed exactly from the declared population and family catalogs.",
+      "id": "F4",
+      "targets": [
+        "H2"
+      ]
+    }
+  ],
+  "family_method_candidates": [
+    {
+      "dependency": "STANDARD_LIBRARY",
+      "id": "GREEDY_LEXICOGRAPHIC_MEDOID_STAR",
+      "status": "BASELINE_SHADOW_BENCHMARK_ONLY"
+    },
+    {
+      "dependency": "STANDARD_LIBRARY",
+      "id": "COMPLETE_LINKAGE",
+      "status": "SHADOW_BENCHMARK"
+    },
+    {
+      "dependency": "STANDARD_LIBRARY",
+      "id": "AVERAGE_LINKAGE",
+      "status": "SHADOW_BENCHMARK"
+    },
+    {
+      "dependency": "STANDARD_LIBRARY",
+      "id": "BOUNDED_PAM",
+      "status": "SHADOW_BENCHMARK"
+    }
+  ],
+  "family_strength_rules": {
+    "global_composite_score": "FORBIDDEN",
+    "method_dependent_structure": {
+      "condition": "FAMILY_EVIDENCE_PRESENT_BUT_STRONG_FAMILY_RULE_NOT_SATISFIED_AND_AT_LEAST_ONE_ENABLED_METHOD_DISAGREES"
+    },
+    "no_stable_family": {
+      "condition": "NO_STRONG_FAMILY_EVIDENCE_IN_ANY_QUALIFYING_COMPARISON_SET"
+    },
+    "strong_family_evidence": {
+      "ambiguity_visibility_required": true,
+      "core_support_rule": "SUPPORT_NUMERATOR_EQUALS_SUPPORT_DENOMINATOR",
+      "full_assignment_required": false,
+      "minimum_distinct_enabled_family_methods": 2,
+      "minimum_distinct_qualifying_configurations": 3,
+      "post_result_threshold_change": "FORBIDDEN",
+      "residual_visibility_required": true
+    }
+  },
+  "gate_id": "SRFDI-G9",
+  "governing_commit": "0f3ae4379978a1381f479cfe1c5fe9c269981c19",
+  "hypotheses": [
+    {
+      "id": "H1",
+      "statement": "At least one qualifying configuration set will contain family evidence that survives every configuration in its declared invariant-core denominator and is supported by at least two distinct enabled family-method classes."
+    },
+    {
+      "id": "H2",
+      "statement": "Any stable family evidence will retain explicit residual and ambiguity populations rather than requiring full assignment."
+    },
+    {
+      "id": "H3",
+      "statement": "Method disagreement and split/merge evidence will remain measurable and will not be collapsed into a global composite score."
+    }
+  ],
+  "invariant_core_rules": {
+    "construction_minimum_catalog_support": 2,
+    "denominator": "ALL_QUALIFYING_CONFIGURATIONS_IN_THE_DECLARED_COMPARISON_SET",
+    "dissenting_methods_visible": true,
+    "failed_configuration_handling": "EXCLUDE_ONLY_WITH_EXPLICIT_REASON_AND_PRESERVE_IN_FAILURE_LEDGER",
+    "hidden_consensus": "FORBIDDEN",
+    "split_merge_edges_visible": true,
+    "strong_core_support": "UNANIMOUS_ACROSS_QUALIFYING_DENOMINATOR"
+  },
+  "object_type": "SRFDPreregistration",
+  "operator_decision_surfaces": [
+    {
+      "effect": "RESEARCH_EVIDENCE_ONLY_NO_PROMOTION",
+      "id": "STABLE_FAMILY_EVIDENCE_PRESENT"
+    },
+    {
+      "effect": "RESEARCH_EVIDENCE_ONLY_NO_PROMOTION",
+      "id": "METHOD_DEPENDENT_STRUCTURE"
+    },
+    {
+      "effect": "LAWFUL_RESEARCH_RESULT_NO_PROMOTION",
+      "id": "NO_STABLE_FAMILY"
+    },
+    {
+      "effect": "DEFER_OR_REDESIGN_NO_PROMOTION",
+      "id": "UNRESOLVED"
+    }
+  ],
+  "packet_id": "SRFDI-WP9",
+  "post_result_choices": "FORBIDDEN",
+  "preregistration_id": "OVC-SRFD-JUNE-PREREG-v0.1-CANDIDATE",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "representation_candidates": [
+    {
+      "id": "SRFDI-R1",
+      "name": "RAW_C2",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R2",
+      "name": "C2E_AGGREGATE",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R3",
+      "name": "ORDERED_TRANSITIONS",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R4",
+      "name": "NORMALIZED_PATH",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R5",
+      "name": "HYBRID",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R6",
+      "name": "ABLATION",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R7",
+      "name": "CONTEXT_VARIANTS",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R8",
+      "name": "MISSINGNESS_AWARE",
+      "registry_status": "FIXTURE_ONLY"
+    },
+    {
+      "id": "SRFDI-R9",
+      "name": "NULL_CONTROL",
+      "registry_status": "FIXTURE_ONLY"
+    }
+  ],
+  "required_output_tables": [
+    "POPULATION_AND_EXCLUSION_LEDGER",
+    "CONFIGURATION_GRID_AND_PREFLIGHT_STATUS",
+    "REPRESENTATION_COMPUTABILITY_SUMMARY",
+    "DISTANCE_SURFACE_SUMMARY",
+    "FAMILY_CATALOG_SUMMARY_BY_CONFIGURATION",
+    "RESIDUAL_NOISE_SINGLETON_SUMMARY",
+    "SENSITIVITY_METRICS_WITH_DENOMINATORS",
+    "FAMILY_CORRESPONDENCE_SPLIT_MERGE_TABLE",
+    "INVARIANT_CORE_SUPPORT_TABLE",
+    "METHOD_DISAGREEMENT_TABLE",
+    "FAILURE_ATTRIBUTION_LEDGER",
+    "CAPACITY_ACTUALS_AND_STOP_STATUS",
+    "ARTIFACT_MANIFEST_AND_HASH_TABLE"
+  ],
+  "research_questions": [
+    {
+      "id": "RQ1",
+      "question": "Does at least one preregistered structural representation yield non-trivial family structure that is stable across its qualifying configuration set?"
+    },
+    {
+      "id": "RQ2",
+      "question": "Which representation, segmentation, distance and family-method combinations are stable or unstable under the preregistered sensitivity grid without post-result parameter changes?"
+    },
+    {
+      "id": "RQ3",
+      "question": "Are any apparent families invariant across more than one family-method class, rather than being artifacts of one method or one configuration?"
+    },
+    {
+      "id": "RQ4",
+      "question": "How much of the eligible population remains residual, ambiguous, non-comparable or not computable under each preregistered configuration?"
+    }
+  ],
+  "residual_rules": {
+    "all_residual": "LAWFUL_NO_STABLE_FAMILY_RESULT",
+    "bounded_pam_beyond_assignment_distance": "RESIDUAL",
+    "denominator_effect": "RETAIN_IN_POPULATION_DENOMINATORS_UNLESS_STRUCTURALLY_INELIGIBLE_BEFORE_FAMILY_COMPUTATION",
+    "forced_assignment": "FORBIDDEN",
+    "residual_noise_singleton_visibility": "REQUIRED",
+    "small_cluster_below_minimum_support": "RESIDUAL"
+  },
+  "schema_version": "0.1",
+  "segmentation_candidates": [
+    {
+      "id": "C2E_CAUSAL_ADAPTER",
+      "status": "SHADOW_BENCHMARK",
+      "temporal_mode": "ONLINE_CAUSAL"
+    },
+    {
+      "id": "RUN_CHANGE_SEGMENTATION",
+      "status": "SHADOW_BENCHMARK",
+      "temporal_mode": "ONLINE_CAUSAL"
+    },
+    {
+      "id": "DIRECTIONAL_CHANGE",
+      "status": "SHADOW_BENCHMARK",
+      "temporal_mode": "CONFIRMATION_DELAYED"
+    },
+    {
+      "id": "PELT_REFERENCE",
+      "status": "SHADOW_BENCHMARK",
+      "temporal_mode": "RETROSPECTIVE"
+    },
+    {
+      "id": "NULL_BOUNDARY_CONTROL",
+      "status": "CONTROL_ONLY",
+      "temporal_mode": "RETROSPECTIVE"
+    }
+  ],
+  "source_bindings": {
+    "configurations_registry": {
+      "git_blob_sha1": "d6493c150d9fd556b3b35718f1e344c3d7b04e80",
+      "path": "registries/research/srfd/configurations.yaml"
+    },
+    "distances_registry": {
+      "git_blob_sha1": "446318bee94cf96f83287f8fb2667e1dff8f8da3",
+      "path": "registries/research/srfd/distances.yaml"
+    },
+    "family_methods_registry": {
+      "git_blob_sha1": "b793d8f1b3768e492c31dab6441d70ad21eacfbb",
+      "path": "registries/research/srfd/family_methods.yaml"
+    },
+    "preregistration_schema": {
+      "git_blob_sha1": "b6b64fca596ef6074c07b7d9622503f6ef3aa6f8",
+      "path": "schemas/opt_b/srfd/srfd_preregistration_v0_1.schema.json"
+    },
+    "representations_registry": {
+      "git_blob_sha1": "107d94a8adffbddb83483d8e26beb333b0bc33f5",
+      "path": "registries/research/srfd/representations.yaml"
+    },
+    "segmentation_registry": {
+      "git_blob_sha1": "c0cd7cb0e68b5371add6b4f75c6c0665dfc4b921",
+      "path": "registries/research/srfd/segmentation_methods.yaml"
+    },
+    "stability_metrics_registry": {
+      "git_blob_sha1": "56c7fae05ddf68fe25c0aa4bb89f2b6614d5c4dc",
+      "path": "registries/research/srfd/stability_metrics.yaml"
+    }
+  },
+  "stability_metrics": [
+    {
+      "composite": false,
+      "id": "MEMBER_SURVIVAL_RATE"
+    },
+    {
+      "composite": false,
+      "id": "FAMILY_JACCARD"
+    },
+    {
+      "composite": false,
+      "id": "SPLIT_MERGE_COUNT"
+    },
+    {
+      "composite": false,
+      "id": "RESIDUAL_RATE"
+    },
+    {
+      "composite": false,
+      "id": "METHOD_DISAGREEMENT_RATE"
+    }
+  ],
+  "stop_conditions": [
+    "PREREGISTRATION_HASH_MISMATCH",
+    "UNAUTHORISED_JUNE_EXECUTION_ATTEMPT",
+    "PROVIDER_FETCH_ATTEMPT",
+    "VALIDATION_2025_READ_ATTEMPT",
+    "SOURCE_HASH_OR_RELEASE_MISMATCH",
+    "ELIGIBLE_POPULATION_BINDING_INCOMPLETE",
+    "POST_RESULT_CONFIGURATION_OR_THRESHOLD_CHANGE",
+    "MISSING_QUALIFYING_CONFIGURATION_WITHOUT_REASON",
+    "NONDETERMINISTIC_OUTPUT_OR_RESTART_MISMATCH",
+    "CORRUPT_OR_UNVERIFIED_CHECKPOINT",
+    "T0_RUNTIME_EXCEEDED",
+    "T0_MEMORY_EXCEEDED",
+    "T0_EXTERNAL_BYTES_EXCEEDED"
+  ]
+}
