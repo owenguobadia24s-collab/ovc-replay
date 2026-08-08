@@ -57,11 +57,11 @@ class SRFDIG9SFreezeDecisionTests(unittest.TestCase):
         self.assertEqual("DENIED", self.manifest["run_authority"])
 
     def test_unavailable_packs_remain_explicit(self) -> None:
-        rows = {row["implementation_class_id"]: row for row in self.packs["representation_packs"]}
+        rows = {row["id"]: row for row in self.packs["packs"]}
         for pack_id in ("SRFDI-R2", "SRFDI-R3", "SRFDI-R4", "SRFDI-R5", "SRFDI-R7"):
-            self.assertEqual("DEPENDENCY_UNAVAILABLE", rows[pack_id]["availability"])
+            self.assertEqual("DEPENDENCY_UNAVAILABLE", rows[pack_id]["status"])
         for pack_id in ("SRFDI-R1", "SRFDI-R6", "SRFDI-R8", "SRFDI-R9"):
-            self.assertEqual("AVAILABLE_PREBENCHMARK", rows[pack_id]["availability"])
+            self.assertEqual("AVAILABLE_PREBENCHMARK", rows[pack_id]["status"])
 
 
 if __name__ == "__main__":
