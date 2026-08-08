@@ -14,11 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
-      - name: Verify authorized baseline
+          fetch-depth: 1
+      - name: Checkout exact authorized baseline
         shell: bash
         run: |
-          test "$(git rev-parse HEAD^)" = "ffefd1ee3d7ee664f2a94f74d05993d6e711a149"
+          git fetch --no-tags --depth=1 origin ffefd1ee3d7ee664f2a94f74d05993d6e711a149
+          git checkout --detach ffefd1ee3d7ee664f2a94f74d05993d6e711a149
+          test "$(git rev-parse HEAD)" = "ffefd1ee3d7ee664f2a94f74d05993d6e711a149"
           test -f registries/implementation/srfd/OVC_SRFDI_STATE_v0_21_JUNE_AUTH_V0_6_AUTHORIZED.json
           python3 - <<'PY'
           import json
