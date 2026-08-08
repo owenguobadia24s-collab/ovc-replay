@@ -46,17 +46,19 @@ class C2EAG0DeferTerminalReceiptTests(unittest.TestCase):
         self.assertEqual(authority["c2e_activation"], "DENIED")
         self.assertEqual(authority["active_boundary_pack"], "NONE")
 
-    def test_pointer_is_terminal_for_this_decision_and_forward_only(self):
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_19.json")
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertEqual(self.pointer["operator_decision"], "DEFER")
-        self.assertFalse(self.pointer["operator_decision_required"])
+    def test_historical_ag0_defer_is_preserved_when_current_pointer_advances_append_only(self):
+        self.assertEqual(self.pointer["predecessor_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_19.json")
+        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_20.json")
+        self.assertEqual(self.pointer["current_gate"], "C2E2-G6-RUN-AUTH-SUPERSESSION")
+        self.assertEqual(self.pointer["status"], "BLOCKED")
+        self.assertEqual(self.pointer["requested_operator_decision"], "PASS")
+        self.assertEqual(self.pointer["effective_gate_state"], "BLOCKED_PREREQUISITES_UNSATISFIED")
         self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
-        self.assertEqual(self.pointer["merge_receipt"], "docs/releases/c2e-causal-episode-v0-2/c2e-ag0/C2E_AG0_DEFER_TERMINAL_MERGE_RECEIPT.json")
-        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
+        self.assertEqual(self.pointer["replay_status"], "BLOCKED_PRE_RUN")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertTrue(self.pointer["next_action"].startswith("STOP_C2E_AG0_DEFERRED"))
+        self.assertIsNone(self.pointer["run_token"])
+        self.assertTrue(self.pointer["next_action"].startswith("STOP_BLOCKED"))
 
 
 if __name__ == "__main__":
