@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-srfdi-g8-represented-operator-decision/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "capacity_redesign_plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "gate_id": "SRFDI-G8-REPRESENTED",
+  "gate_title": "Measured Capacity Re-presentation After G8 Redesign",
+  "authority_class": "OPERATOR_REQUIRED",
+  "decision": "FREEZE_MEASURED_CAPACITY",
+  "operator_command": "OVC APPROVE SRFDI-G8-REPRESENTED FREEZE_MEASURED_CAPACITY",
+  "decision_time": "2026-08-08T02:52:00+01:00",
+  "authority_source": "OPERATOR_EXPLICIT_COMMAND",
+  "predecision_head": "fffb2d5a49f3b65ae42f7e8097cc29f2aa60b974",
+  "predecision_tests": {
+    "repository_suite": "31232581629:success",
+    "tiered": "31232581618:success",
+    "profile_assurance": "93039161732:success",
+    "merge_readiness": "93039182732:success",
+    "unresolved_review_threads": 0
+  },
+  "accepted_evidence": {
+    "measurement_ladder": [64, 128, 256, 512, 1024],
+    "sampling": "NONE_ON_DECLARED_SYNTHETIC_RUNG_POPULATIONS",
+    "non_binding_reference_population": 8598,
+    "capacity_status": "SUPPORTED_T0",
+    "projected_serial_cold_seconds": 4264.711176858039,
+    "projected_serial_cold_hours": 1.1846419935716774,
+    "parallel_speedup_credit": false,
+    "cache_reuse_credit": false,
+    "all_required_family_methods": "SUPPORTED_T0"
+  },
+  "decision_effect": {
+    "capacity_freeze": "FREEZE_MEASURED_CAPACITY",
+    "wp9": "ELIGIBLE_AFTER_THIS_DECISION_IS_MERGED",
+    "preregistration_preparation": "AUTHORISED_AFTER_THIS_DECISION_IS_MERGED",
+    "june_benchmark": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "representation_normalization_distance_family_sensitivity_promotion": "NONE",
+    "selector": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "qualifications": [
+    "N=2048 and N=4096+ were not directly measured; the 8598 reference remains an explicit extrapolation from the measured N64-N1024 ladder.",
+    "The 8598 count is not a frozen SRFD eligible population and is not June authorization.",
+    "The WP6 H0 CPU fingerprint differs from WP0; no cross-run pure speedup ratio is accepted.",
+    "H2 remains provisional until a lawful long-horizon population is bound."
+  ],
+  "rollback": "Preserve this operator decision as historical evidence. If later capacity evidence invalidates the frozen envelope, open a new bounded redesign/supersession packet; do not rewrite this decision or silently weaken the benchmark.",
+  "post_decision_assurance": "REQUIRED_BEFORE_SQUASH_MERGE",
+  "next_action": "RUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_THEN_START_SRFDI_WP9_FROM_LATEST_LAWFUL_MAIN"
+}
