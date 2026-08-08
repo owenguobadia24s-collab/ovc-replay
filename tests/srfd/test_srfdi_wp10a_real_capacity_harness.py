@@ -161,8 +161,13 @@ class SRFDIWP10ARealCapacityHarnessTests(unittest.TestCase):
         self.assertEqual("PASS", verify_gower_batch_against_reference(records, surface)["result"])
 
     def test_domain_receipt_is_full_grid_and_catalog_hash_is_repeatable(self) -> None:
+        categories_a = ("LOW", "MID", "HIGH")
+        categories_b = ("UP", "DOWN")
         records = [
-            record(f"R{index:02d}", {"A": str(index % 3), "B": str((index // 2) % 2)})
+            record(
+                f"R{index:02d}",
+                {"A": categories_a[index % 3], "B": categories_b[(index // 2) % 2]},
+            )
             for index in range(12)
         ]
         first = execute_domain_family_grid("REPEAT", records)
