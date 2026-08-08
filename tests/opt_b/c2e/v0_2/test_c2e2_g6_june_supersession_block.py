@@ -33,7 +33,7 @@ class C2E2G6JuneSupersessionBlockTests(unittest.TestCase):
         self.assertEqual(source["status"], "PASS_FROZEN_AND_IDENTIFIED")
         self.assertEqual(source["c2_package_id"], "C2AR.INTEGRATED.SHADOW.PACKAGE.v1")
         self.assertEqual(source["c2_package_sha256"], "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3")
-        self.assertEqual(source["input_binding_sha256"], "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8")
+        self.assertEqual(source["input_binding_sha256"], "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8")
         self.assertEqual(source["logical_population_sha256"], "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7")
         self.assertEqual(source["source_manifest_sha256"], "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3")
         self.assertEqual(source["requested_records"], 33320)
