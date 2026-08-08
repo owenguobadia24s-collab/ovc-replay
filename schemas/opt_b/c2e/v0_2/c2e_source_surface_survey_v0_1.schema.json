@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/c2e/v0_2/c2e_source_surface_survey_v0_1",
+  "title": "C2E2 revised-C2 source-surface survey",
+  "type": "object",
+  "required": ["schema", "programme_id", "packet_id", "baseline_commit", "c2ar_package_id", "c2ar_package_sha256", "fields", "summary"],
+  "properties": {
+    "schema": {"const": "c2e_source_surface_survey/v0_1"},
+    "programme_id": {"const": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2"},
+    "packet_id": {"const": "C2E2-WP0"},
+    "baseline_commit": {"type": "string", "minLength": 40},
+    "c2ar_package_id": {"type": "string"},
+    "c2ar_package_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["normative_field", "required", "physical_source", "join_key", "source_record_identity", "first_valid_source", "evidence_source", "availability_disposition", "gap_consequence"],
+        "properties": {
+          "normative_field": {"type": "string"},
+          "required": {"type": "boolean"},
+          "physical_source": {"type": "string"},
+          "join_key": {"type": "array", "items": {"type": "string"}},
+          "source_record_identity": {"type": "string"},
+          "first_valid_source": {"type": "string"},
+          "evidence_source": {"type": "string"},
+          "availability_disposition": {"enum": ["DIRECTLY_AVAILABLE", "AVAILABLE_BY_LAWFUL_JOIN", "OPTIONAL_NOT_PRESENT", "REQUIRED_MISSING", "AMBIGUOUS_SOURCE", "FORBIDDEN_DERIVATION"]},
+          "gap_consequence": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "summary": {"type": "object"}
+  },
+  "additionalProperties": true
+}
