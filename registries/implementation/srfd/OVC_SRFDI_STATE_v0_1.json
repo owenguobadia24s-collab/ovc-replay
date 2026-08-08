@@ -40,8 +40,8 @@
     "represented_gate_merge_commit": "0f3ae4379978a1381f479cfe1c5fe9c269981c19",
     "wp9_start": "AUTHORISED_BOUNDED_PREREGISTRATION_PREPARATION"
   },
-  "next_action": "IMPLEMENT_SRFDI_WP9_PREREGISTRATION_AND_STOP_AT_SRFDI_G9_ACKNOWLEDGEMENT",
-  "operator_decision_required": false,
+  "next_action": "OPERATOR_ACKNOWLEDGEMENT_REQUIRED_AT_SRFDI_G9_DO_NOT_MERGE_OR_EXECUTE_JUNE",
+  "operator_decision_required": true,
   "packets": [
     {
       "blockers": [],
@@ -128,15 +128,21 @@
         "JUNE_BENCHMARK_DENIED_PENDING_SRFDI_G_JUNE_AUTH"
       ],
       "branch": "build/srfdi-wp9-preregistration",
-      "candidate_commit": null,
+      "candidate_commit": "e3ca1b16400989add9cced248a78309364cfedce",
       "decision_record": null,
       "gate": "SRFDI-G9",
+      "gate_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_OPERATOR_PACKET.json",
       "merge_commit": null,
       "next_packet": "SRFDI-WP10",
       "packet_id": "SRFDI-WP9",
-      "qa_packet": null,
-      "status": "RUNNING",
-      "tests": []
+      "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_WP9_QA_PACKET.json",
+      "status": "GATE_READY",
+      "tests": [
+        "repository_suite:31234826392:success",
+        "tiered:31234826401:success",
+        "profile_assurance:93045292548:success",
+        "merge_readiness:93045306916:success"
+      ]
     },
     {
       "authority_required": "AUTO_RATIFIABLE",
@@ -164,6 +170,6 @@
   "programme_baseline_commit": "43b0dc46b9df259364304087b75e949cfdd0d853",
   "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
   "schema": "ovc-srfdi-programme-state/v1",
-  "status": "RUNNING",
+  "status": "GATE_READY",
   "stop_at": "SRFDI-G9"
 }
