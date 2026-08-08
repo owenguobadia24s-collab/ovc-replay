@@ -3,43 +3,46 @@ programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
 packet_id: MCARBI-WP9
-status: APPROVED
+status: COMPLETED
 prerequisites:
   - MCARBI-G6 FREEZE_STAGE_A_READINESS merged at faf4e5af7c143995a2954dddb136cbe66a9e528d
   - MCARBI-G7 PREREGISTRATION_FREEZE merged at 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
   - MCARBI-G-STAGE-A-AUTH AUTHORIZE_STAGE_A merged at 9cb6a6c9aa010dacbd020a925e33f7a4a135405a
   - MCARBI-WP8 and delegated MCARBI-G8 PASS merged at 1caf4e67a66b6b95dbfb57055b93f18cb4b56788
+  - MCARBI-G9 operator decision and MCARBI-WP9 merged at afa4b14801025343935915ee01699d9fb79501c5
 authority_required: OPERATOR_REQUIRED_SATISFIED
 authority_delta: SCIENTIFIC_EVIDENCE_STATUS_DISPOSITIONS_ONLY_NO_OPERATIONAL_AUTHORITY
 baseline_commit: 1caf4e67a66b6b95dbfb57055b93f18cb4b56788
-branch: disposition/mcarbi-wp9-g9
+branch: closeout/mcarbi-v0-1
 candidate_evidence_head: 265f16da4a285359908cb023b02c54f1dcd6ba11
 operator_approved_gate_head: e61f8a8d1663309d70e59873bac4a6f717fcf0bf
-candidate_commit: OPERATOR_DECISION_COMMIT_PENDING
+operator_decision_commit: badf3c4ea929162fbbb9d97911292ea6535d2047
+candidate_commit: TERMINAL_CLOSEOUT_METADATA
+merge_commit: afa4b14801025343935915ee01699d9fb79501c5
 tests:
-  - tests/research_operations/mcarb/test_mcarbi_wp9_disposition.py: PASS via repository suite 31235290508
-  - exact-head repository suite 31235290508: PASS
-  - OVC FINAL_HEAD/profile run 31235290421: PASS
-  - profile assurance job 93046503087: PASS
-  - merge readiness job 93046519746: PASS
-  - compatibility job 93046519724: PASS
+  - tests/research_operations/mcarb/test_mcarbi_wp9_disposition.py: PASS via repository suite 31236185236
+  - post-decision exact-head repository suite 31236185236: PASS
+  - OVC FINAL_HEAD/profile run 31236185234: PASS
+  - profile assurance job 93049010590: PASS
+  - merge readiness job 93049033960: PASS
+  - compatibility job 93049033982: PASS
   - unresolved review threads: 0
 qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_WP9_QA_PACKET.json
 decision_record: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_G9_OPERATOR_DECISION.json
 gate_packet: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_G9_OPERATOR_DECISION_PACKET.json
 scientific_disposition: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_WP9_DECOMPOSED_SCIENTIFIC_DISPOSITION.json
+programme_closeout: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_PROGRAMME_CLOSEOUT.json
 source_run_id: MCARB.STAGEA.b45ff34cbb8c1865a77311f6
 source_g8_merge_commit: 1caf4e67a66b6b95dbfb57055b93f18cb4b56788
 external_artifact_id: 9014838569
 external_artifact_sha256: fbbedde4c1f0bd43b06e03ed245e38df0d4cf0adabcca84776aa86ebee2b5ec2
 evidence_vector_sha256: c1882b91e5e30d64f38cb2984c1c0720bf8495ce34d11a8caa2fe5188ef6bb82
 record_logical_sha256: b9a0eb0291792694acf749f7cae27a69b32e5ec5cdfd95b2a207863a71639fe2
-merge_commit: PENDING_PR_SQUASH
 blockers: []
 source_audit_outcome: AL_SOURCE_PARTIAL
 stage_a_authority: CONSUMED_NO_RERUN_AUTHORITY
 stage_a_authority_consumption: CONSUMED_COMPLETED
-scientific_disposition_status: OPERATOR_APPROVED_MCARBI_G9
+scientific_disposition_status: OPERATOR_APPROVED_MCARBI_G9_MERGED
 approved_dispositions:
   AL: UNRESOLVED
   ET: UNRESOLVED
@@ -63,5 +66,5 @@ probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
 operator_decision: DECOMPOSED_SCIENTIFIC_DISPOSITION
 operator_command: OVC APPROVE MCARBI-G9 DECOMPOSED_SCIENTIFIC_DISPOSITION AL=UNRESOLVED ET=UNRESOLVED VS=UNRESOLVED PACKS=UNRESOLVED CROSS_DOMAIN=NOT_EVALUABLE MODULE=UNRESOLVED
-next_packet: MCARBI-PROGRAMME-TERMINAL-CLOSEOUT
-continuation_point: AFTER_SQUASH_MERGE_RECORD_ACTUAL_MERGE_SHA_AND_MARK_PROGRAMME_COMPLETED; NO_FOLLOW_ON_EMPIRICAL_AUTHORITY
+next_packet: null
+continuation_point: PROGRAMME_COMPLETE_NO_AUTOMATIC_FOLLOW_ON; FUTURE_EMPIRICAL_WORK_REQUIRES_SEPARATE_ADMISSION_AND_AUTHORITY
