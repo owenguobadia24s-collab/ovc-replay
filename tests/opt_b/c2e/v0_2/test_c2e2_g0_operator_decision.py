@@ -43,12 +43,16 @@ class C2E2G0OperatorDecisionTests(unittest.TestCase):
         self.assertFalse(self.c2ar["active"])
         self.assertFalse(self.c2ar["canonical"])
 
-    def test_programme_state_opens_only_wp0(self):
+    def test_g0_historical_state_stays_immutable_while_pointer_advances(self):
         self.assertEqual(self.state["status"], "READY")
         self.assertEqual(self.state["current_packet"], "C2E2-WP0")
         self.assertEqual(self.state["current_gate"], "C2E2-G1")
         self.assertFalse(self.state["operator_decision_required"])
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_1.json")
+        current = self.pointer["authoritative_state"]
+        self.assertTrue(current.startswith("registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_"))
+        self.assertTrue((ROOT / current).is_file())
+        self.assertEqual(self.pointer["programme_id"], "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2")
+        self.assertEqual(self.pointer["real_source_replay"], "DENIED_PENDING_C2E2_G6_RUN_AUTH")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
 
 
