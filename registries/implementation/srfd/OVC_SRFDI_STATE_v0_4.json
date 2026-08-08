@@ -1,0 +1,53 @@
+{
+  "active_packet": "SRFDI-WP9C",
+  "authority": {
+    "implementation": "BOUNDED_PREREGISTRATION_REMEDIATION_ONLY",
+    "june": "DENIED_PENDING_SRFDI_G9C_FREEZE_AND_NEW_EXACT_AUTHORIZATION",
+    "population_binding": "UNCHANGED_EXACT_BOUND_8598_ID_HASH",
+    "preregistration_v0_2": "PRESERVED_FROZEN_HISTORICAL",
+    "preregistration_v0_3": "CANDIDATE_PENDING_FREEZE",
+    "prior_june_authority_token": "UNCONSUMED_SUSPENDED_BY_KNOWN_PREFLIGHT_BLOCKER",
+    "probability_risk_exposure_execution": "NONE",
+    "provider_fetch": "DENIED",
+    "segmentation_registry_v0_3": "CANDIDATE_PENDING_FREEZE",
+    "selector_family_semantic_publication": "NONE",
+    "source_binding": "UNCHANGED_EXACT_BOUND_READ_ONLY",
+    "validation_2025": "LOCKED_UNCONSUMED"
+  },
+  "current_gate": "SRFDI-G9C-FREEZE",
+  "exact_bindings": {
+    "base_main": "f4ccc16fcef3adbf9d1ee37eb66fa974b0ba13e3",
+    "base_preregistration_v0_2_sha256": "13c17cf64c576b35e53047de753a5fd1a49bbdc7205c387bbcedb5a34441b804",
+    "candidate_preregistration_v0_3_logical_sha256": "acb27ff21d4df6da6ea72972bda7a6ee1ce28a7f06827b949f55d8b03ec04bb5",
+    "eligible_record_count": 8598,
+    "eligible_record_ids_sha256": "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e",
+    "exclusion_ledger_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "old_authority_token_consumed": false,
+    "old_authority_token_id": "SRFD.JUNE.AUTH.5fd1ed170fac6994b8ac65db05b7907bda8dad7ec49084572dad1e9040e7bf81",
+    "population_id": "SRFD.POP.6efa7dd55636d036c12e580e0793abacf8c805bcf6d77bb6e2edf7cffbc113bd",
+    "run_manifest_v0_3_candidate_logical_sha256": "5785878daf7616ab245aa7ab569de0d98a839b2d56ff5fa36f2ff0754ca804be",
+    "segmentation_registry_v0_3_logical_sha256": "6c2451fb5b766d2ae25a13a311ba17c8dede342757d607219e62881be4ac31c0",
+    "source_binding_sha256": "4d13c3ee8ae2ad25e30088f4f2de48f8320e3633c2e4ea6a5c2c9a7fdc2a62b7"
+  },
+  "next_action": "OPERATOR_REVIEW_SRFDI_G9C_FREEZE_AFTER_EXACT_HEAD_QA",
+  "operator_decision_required": true,
+  "packets": [
+    {"packet_id": "SRFDI-WP0..WP8", "status": "PRESERVED_COMPLETED"},
+    {"packet_id": "SRFDI-WP9", "status": "PRESERVED_HISTORICAL_SUPERSEDED_FOR_EXECUTION"},
+    {"packet_id": "SRFDI-WP9S", "status": "PRESERVED_FROZEN_V0_2_BASE"},
+    {"packet_id": "SRFDI-WP2C/WP2D", "status": "PRESERVED_COMPLETED_SOURCE_BINDING"},
+    {"packet_id": "SRFDI-G-JUNE-AUTH", "status": "PRESERVED_APPROVED_V0_2_TOKEN_UNCONSUMED_BLOCKED_PRE_RUN"},
+    {"packet_id": "SRFDI-WP10", "status": "BLOCKED_PRE_RUN_EVIDENCE_PR422_NOT_COMPLETED"},
+    {"decision_required": "OPERATOR", "gate": "SRFDI-G9C-FREEZE", "packet_id": "SRFDI-WP9C", "status": "GATE_READY"},
+    {"blockers": ["WP9C_NOT_FROZEN", "NEW_JUNE_AUTH_NOT_GRANTED", "WP10_NOT_COMPLETED"], "packet_id": "SRFDI-WP11", "status": "PLANNED_BLOCKED"}
+  ],
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "pr_371": "PRESERVE_CLOSED_UNMERGED_HISTORICAL_EVIDENCE",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "rollback": "Close/supersede WP9C candidate without merge; v0.3 has no main authority before operator freeze. Preserve all historical evidence.",
+  "schema": "ovc-srfdi-programme-state/v4",
+  "state_role": "CANDIDATE_ON_WP9C_BRANCH_NOT_MAIN_AUTHORITY_UNTIL_OPERATOR_DECISION_AND_MERGE",
+  "status": "GATE_READY",
+  "stop_at": "SRFDI-G9C-FREEZE",
+  "supersedes_state_if_merged_after_operator_freeze": "registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json"
+}
