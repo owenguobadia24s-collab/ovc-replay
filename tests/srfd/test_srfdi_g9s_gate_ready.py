@@ -60,11 +60,11 @@ class SRFDIG9SSupersessionGateTests(unittest.TestCase):
         self.assertEqual("SRFDI-G9S-FREEZE", self.qa["required_future_stop"])
 
     def test_programme_state_advances_only_to_wp9s_and_preserves_firewalls(self) -> None:
-        self.assertEqual("READY", self.state["status"])
+        self.assertEqual("GATE_READY", self.state["status"])
         self.assertEqual("SRFDI-WP9S", self.state["active_packet"])
         self.assertEqual("SRFDI-G9S-FREEZE", self.state["current_gate"])
-        self.assertFalse(self.state["operator_decision_required"])
-        self.assertEqual("APPROVED_BOUNDED_SRFDI_WP9S_ONLY", self.state["authority"]["preregistration_supersession"])
+        self.assertTrue(self.state["operator_decision_required"])
+        self.assertEqual("WP9S_IMPLEMENTED_CANDIDATE_GATE_READY", self.state["authority"]["preregistration_supersession"])
         self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
         self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
@@ -74,7 +74,7 @@ class SRFDIG9SSupersessionGateTests(unittest.TestCase):
         self.assertEqual("COMPLETED", row["status"])
         self.assertEqual("SUPERSEDE", row["decision"])
         wp9s = next(row for row in self.state["packets"] if row["packet_id"] == "SRFDI-WP9S")
-        self.assertEqual("READY", wp9s["status"])
+        self.assertEqual("GATE_READY", wp9s["status"])
 
 
 if __name__ == "__main__":
