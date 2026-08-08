@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import Any, Mapping, Sequence
 
 REQUIRED_STABILITY_METRICS = (
-    "RESIDUAL_RATE_WITH_DENOMINATOR",
-    "AMBIGUITY_RATE_WITH_DENOMINATOR",
     "CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR",
     "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR",
     "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR",
+    "RESIDUAL_RATE_WITH_DENOMINATOR",
+    "AMBIGUITY_RATE_WITH_DENOMINATOR",
 )
 
 
@@ -18,14 +18,36 @@ class WP10PreflightError(ValueError):
         super().__init__(f"{reason_code}: {detail}")
 
 
-def validate_frozen_stability_metric_rules(preregistration: Mapping[str, Any]) -> None:
-    metrics = preregistration.get("stability_metrics")
+def _effective_stability_source(
+    preregistration: Mapping[str, Any],
+    base_preregistration: Mapping[str, Any] | None,
+) -> Mapping[str, Any]:
+    if "stability_metrics" in preregistration:
+        return preregistration
+    supersession = preregistration.get("supersession")
+    if isinstance(supersession, Mapping) and supersession.get("supersession_scope") == "SEGMENTATION_EXECUTION_SPECIFICATION_ONLY":
+        if base_preregistration is None:
+            raise WP10PreflightError(
+                "WP10_STABILITY_METRIC_BASE_UNBOUND",
+                "v0.3 inherits non-segmentation scientific surfaces but the frozen base preregistration was not supplied",
+            )
+        return base_preregistration
+    raise WP10PreflightError("WP10_STABILITY_METRIC_SET_UNBOUND", "stability_metrics sequence required")
+
+
+def validate_frozen_stability_metric_rules(
+    preregistration: Mapping[str, Any],
+    *,
+    base_preregistration: Mapping[str, Any] | None = None,
+) -> None:
+    source = _effective_stability_source(preregistration, base_preregistration)
+    metrics = source.get("stability_metrics")
     if isinstance(metrics, (str, bytes, bytearray)) or not isinstance(metrics, Sequence):
         raise WP10PreflightError("WP10_STABILITY_METRIC_SET_UNBOUND", "stability_metrics sequence required")
     if tuple(metrics) != REQUIRED_STABILITY_METRICS:
         raise WP10PreflightError("WP10_STABILITY_METRIC_SET_DRIFT", "exact frozen stability metric set required")
 
-    specs = preregistration.get("stability_metric_specs")
+    specs = source.get("stability_metric_specs")
     if not isinstance(specs, Mapping):
         raise WP10PreflightError(
             "WP10_STABILITY_METRIC_RULE_UNBOUND",
