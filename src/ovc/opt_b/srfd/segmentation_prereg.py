@@ -84,7 +84,7 @@ def run_change_from_c2_ledger(items: Iterable[Any]) -> dict[str, Any]:
         result = segment_runs(stream, state_field="state_key")
         for segment in result["segments"]:
             all_segments.append({"stream_index": stream_index, **segment})
-        for boundary in result["boundaries"]:
+        for boundary in result["boundary_events"]:
             all_boundaries.append({"stream_index": stream_index, **boundary})
     payload = {
         "method_id": "RUN_CHANGE_SEGMENTATION",
