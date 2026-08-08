@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-srfdi-g9c-freeze-operator-decision/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "SRFDI-G9C-FREEZE",
+  "decision": "PREREGISTRATION_FREEZE",
+  "decision_authority": "OPERATOR",
+  "decision_id": "SRFDI-G9C-FREEZE-20260808-PREREGISTRATION-FREEZE",
+  "operator_command": "OVC APPROVE SRFDI-G9C-FREEZE PREREGISTRATION_FREEZE",
+  "decision_time": "2026-08-08T13:39:00+01:00",
+  "approved_candidate": {
+    "predecision_head": "bc227cfed2c1e1c4485bbbb154a389e3e1e6ad00",
+    "pr_number": 424,
+    "base_v0_2_preregistration_sha256": "13c17cf64c576b35e53047de753a5fd1a49bbdc7205c387bbcedb5a34441b804",
+    "v0_3_preregistration_logical_sha256": "acb27ff21d4df6da6ea72972bda7a6ee1ce28a7f06827b949f55d8b03ec04bb5",
+    "segmentation_boundary_pack_registry_logical_sha256": "6c2451fb5b766d2ae25a13a311ba17c8dede342757d607219e62881be4ac31c0",
+    "run_manifest_v0_3_candidate_logical_sha256": "5785878daf7616ab245aa7ab569de0d98a839b2d56ff5fa36f2ff0754ca804be",
+    "source_binding_sha256": "4d13c3ee8ae2ad25e30088f4f2de48f8320e3633c2e4ea6a5c2c9a7fdc2a62b7",
+    "eligible_record_count": 8598,
+    "eligible_record_ids_sha256": "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e",
+    "exclusion_ledger_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "predecision_assurance": {
+    "repository_suite_run": 31257374089,
+    "tiered_workflow_run": 31257374081,
+    "profile_assurance_job": 93102731201,
+    "compatibility_job": 93102750120,
+    "result": "PASS"
+  },
+  "authority_effect": {
+    "preregistration_v0_2": "PRESERVED_FROZEN_HISTORICAL",
+    "preregistration_v0_3": "FROZEN_EXACT_VERSION",
+    "segmentation_registry_v0_3": "FROZEN_EXACT_VERSION",
+    "scientific_scope_change": "SEGMENTATION_EXECUTION_SPECIFICATION_ONLY",
+    "prior_v0_2_june_authorization": "PRESERVED_IMMUTABLE_SUPERSEDED_UNUSED",
+    "prior_v0_2_authority_token": "SUPERSEDED_UNUSED_UNCONSUMED",
+    "june_execution": "DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH",
+    "new_june_authority_packet_preparation": "AUTHORISED_AFTER_PR424_MERGE_AND_EXACT_POST_FREEZE_BINDING",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_change": "NONE",
+    "family_promotion": "NONE",
+    "semantic_promotion": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "method_dispositions": {
+    "C2E_CAUSAL_ADAPTER": "VISIBLE_NONEXECUTED_DEPENDENCY_UNAVAILABLE",
+    "RUN_CHANGE_SEGMENTATION": "EXECUTE_T0_BOUNDARY_EVIDENCE",
+    "DIRECTIONAL_CHANGE": "VISIBLE_NONEXECUTED_SOURCE_UNAVAILABLE",
+    "PELT_REFERENCE": "VISIBLE_NONEXECUTED_CAPACITY_UNRESOLVED_AT_T0",
+    "NULL_BOUNDARY_CONTROL": "EXECUTE_T0_CONTROL"
+  },
+  "warnings": [
+    "This decision freezes preregistration v0.3 only; it does not authorize a June market benchmark.",
+    "The prior v0.2 June authorization and token remain preserved as historical evidence but are superseded unused because they bind a different manifest.",
+    "C2E, directional-change and PELT remain explicitly visible and non-executed under their declared blockers; no method may be silently dropped.",
+    "Representation, distance, family and sensitivity grids remain unchanged from the frozen v0.2 base.",
+    "PR #422 remains pre-run blocker evidence and must not be represented as completed WP10.",
+    "PR #371 remains closed/unmerged historical evidence."
+  ],
+  "rollback": "Before any new June authority is granted, supersede this freeze only through a new explicit operator decision while preserving this immutable decision and all v0.2/v0.3 historical evidence. No force-push, destructive rewrite, provider intake, Validation consumption or scientific promotion is authorised.",
+  "next_work": [
+    "Run exact-head assurance including this immutable operator decision and approved-pending-merge state.",
+    "Squash-merge PR #424 only if all required checks pass and the PR head is pinned.",
+    "Record the PR #424 merge receipt from the resulting main tip and advance the authoritative SRFDI state to the frozen v0.3 supersession.",
+    "Prepare and present a new SRFDI-G-JUNE-AUTH packet binding the frozen v0.3 preregistration, segmentation registry and post-freeze implementation commit.",
+    "Stop before any June execution until that separate operator authorization is granted."
+  ]
+}
