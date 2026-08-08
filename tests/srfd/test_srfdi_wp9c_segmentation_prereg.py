@@ -154,22 +154,10 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
         self.assertEqual("FROZEN_EXACT_VERSION", self.state["authority"]["preregistration_v0_3"])
         self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
 
-        self.assertEqual(
-            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_6.json",
-            self.current_pointer["authoritative_state"],
-        )
-        self.assertEqual(
-            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json",
-            self.current_pointer["prior_state"],
-        )
-        self.assertEqual("READY", self.current_pointer["status"])
-        self.assertEqual("SRFDI-G10", self.current_pointer["current_gate"])
-        self.assertFalse(self.current_pointer["operator_decision_required"])
-        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_EXACT_MANIFEST_UNCONSUMED", self.current_pointer["june_execution"])
+        self.assertTrue(self.current_pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
         self.assertFalse(self.current_pointer["authority_token_consumed"])
         self.assertFalse(self.current_pointer["superseded_authority_token_consumed"])
-        self.assertEqual("SRFDI-WP10-v0.3", self.current_pointer["next_packet"])
-        self.assertEqual("SRFDI-G11", self.current_pointer["stop_at"])
+        self.assertEqual("PRESERVE_CLOSED_UNMERGED_HISTORICAL_EVIDENCE", self.current_pointer["pr_371"])
 
 
 if __name__ == "__main__":

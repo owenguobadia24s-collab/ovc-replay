@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-srfdi-wp10-v0-3-preflight-qa/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "packet_id": "SRFDI-WP10-v0.3",
+  "qa_stage": "PRE_RUN",
+  "qa_result": "BLOCK",
+  "reason_code": "WP10_STABILITY_METRIC_RULE_UNBOUND",
+  "acceptance": {
+    "exact_authority_binding": "PASS",
+    "authority_token_unconsumed": "PASS",
+    "accepted_source_hash_preflight": "PASS",
+    "provider_fetch_forbidden": "PASS",
+    "validation_locked": "PASS",
+    "frozen_representation_segmentation_distance_family_bindings_present": "PASS",
+    "frozen_stability_metric_names_present": "PASS",
+    "frozen_executable_stability_metric_rule_specs": "FAIL",
+    "safe_stop_before_scientific_output": "PASS"
+  },
+  "missing_frozen_rule_surfaces": [
+    "AMBIGUITY_RATE_WITH_DENOMINATOR",
+    "CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR",
+    "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR",
+    "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR"
+  ],
+  "available_primitive_not_sufficient_to_invent_rule": {
+    "RESIDUAL_RATE_WITH_DENOMINATOR": "sensitivity.py::sensitivity_metrics is executable",
+    "CROSS_METHOD_CORRESPONDENCE": "sensitivity.py::build_correspondence exposes raw pairwise overlap/Jaccard/containment primitives only; no frozen aggregation/success rule",
+    "INVARIANT_CORE": "sensitivity.py::build_invariant_cores exists but does not define the missing chronological/ambiguity/cross-sensitivity metrics"
+  },
+  "scientific_result_visibility": "NONE",
+  "june_token_state": "AUTHORIZED_BUT_UNCONSUMED_BLOCKED_PRE_RUN",
+  "recommended_disposition": "BLOCK_PRE_RUN_AND_REQUIRE_VERSIONED_PREREGISTRATION_SUPERSESSION",
+  "merge_safety": "This QA/blocker evidence may be merged because it grants no authority and consumes no market benchmark token.",
+  "rollback": "Preserve the unconsumed token and all historical authority records; do not execute June until a new exact frozen preregistration and new matching authorization exist."
+}
