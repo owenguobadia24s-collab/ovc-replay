@@ -72,7 +72,7 @@ class C2E2G6OperatorDeferTests(unittest.TestCase):
         current = json.loads(current_path.read_text())
         self.assertIn(self.decision["decision_id"], current.get("operator_decision_history", []))
         self.assertEqual(self.deferred["authority"]["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
-        self.assertEqual(self.deferred["authority"]["wp6_execution"], "DENIED")
+        self.assertEqual(self.terminal["authority"]["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertEqual(current["authority"]["c2e_activation"], "DENIED")
