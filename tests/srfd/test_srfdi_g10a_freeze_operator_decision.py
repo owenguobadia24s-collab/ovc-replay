@@ -56,16 +56,27 @@ class SRFDIG10AFreezeOperatorDecisionTests(unittest.TestCase):
         self.assertTrue(self.freeze["prohibitions"]["fresh_scientific_june_run"])
         self.assertTrue(self.freeze["prohibitions"]["validation_read"])
 
-    def test_state_and_pointer_route_only_to_merge_closeout(self) -> None:
+    def test_historical_state_is_exact_while_pointer_may_advance_after_closeout(self) -> None:
         self.assertEqual("APPROVED", self.state["status"])
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual("FROZEN_BY_OPERATOR_PENDING_MAIN_MERGE", self.state["authority"]["capacity_backend"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", self.state["authority"]["authority_token_v0_4"])
         self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.state["next_packet"])
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json", self.pointer["authoritative_state"])
-        self.assertEqual("APPROVED_PENDING_MERGE", self.pointer["status"])
-        self.assertFalse(self.pointer["operator_decision_required"])
+        self.assertIn(
+            self.pointer["authoritative_state"],
+            {
+                "registries/implementation/srfd/OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json",
+                "registries/implementation/srfd/OVC_SRFDI_STATE_v0_19_G10A_FREEZE_COMPLETED.json",
+            },
+        )
+        self.assertIn(self.pointer["status"], {"APPROVED_PENDING_MERGE", "COMPLETED"})
         self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
+        if self.pointer["status"] == "APPROVED_PENDING_MERGE":
+            self.assertEqual("SRFDI-G10A-FREEZE", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.pointer["next_packet"])
+        else:
+            self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-G-JUNE-AUTH-PREP", self.pointer["next_packet"])
 
     def test_predecision_assurance_and_blocker_evidence_are_exact(self) -> None:
         assurance = self.decision["predecision_assurance"]
