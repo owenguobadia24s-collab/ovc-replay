@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-c2e2-g6-run-auth-supersession-preflight/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "packet_id": "C2E2-G6-JUNE-SUPERSESSION-PREFLIGHT",
+  "gate_id": "C2E2-G6-RUN-AUTH",
+  "baseline_main": "cea693980a69fb2211172bcac28065867ccc6401",
+  "operator_request": "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-supersession-20260808/C2E2_G6_JUNE_OPERATOR_PASS_REQUEST.json",
+  "historical_defer_record": "docs/releases/c2e-causal-episode-v0-2/c2e2-g6/C2E2_G6_RUN_AUTH_OPERATOR_DECISION.json",
+  "source_population": {
+    "status": "PASS_FROZEN_AND_IDENTIFIED",
+    "c2_package_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+    "c2_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+    "input_binding_id": "C2VNEXT.JUNE.DISCOVERY.INPUT.v1",
+    "input_binding_sha256": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "logical_population_sha256": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7",
+    "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+    "source_manifest_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+    "instrument": "GBPUSD",
+    "sides": ["ASK", "BID"],
+    "clocks": ["15M", "2H_A_L"],
+    "context_start_utc": "2026-05-30T00:00:00Z",
+    "target_start_utc": "2026-06-01T00:00:00Z",
+    "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+    "context_end_exclusive_utc": "2026-07-03T00:00:00Z",
+    "requested_records": 33320,
+    "computable_records": 27996,
+    "censored_records": 1638,
+    "not_evaluable_records": 3686,
+    "target_eligibility": "TARGET_JUNE_ONLY",
+    "population_scope": "COMPLETE_REGISTERED_LAWFUL_DISCOVERY_POPULATION"
+  },
+  "external_payload_readability": {
+    "status": "PASS_VERIFIED_READ_ONLY",
+    "google_drive_replay_root_id": "1hdeIfHTvHzXPnYOSkArZGFY6FScJrNWh",
+    "run_001_folder_id": "1LlHn-dzzI24qikltaN9uC8gVM2_EN3o0",
+    "output_manifest_file_id": "1iW7a9eaHIcc_k1-aVTDTaHrVCr12Hb7Q",
+    "sample_large_payload_file_id": "19JV4u8eKGMIiABHJ_cOEWqNJ29IGykfI",
+    "sample_large_payload_size_bytes": 50013398,
+    "sample_c1_payload_file_id": "1QjOaKE2ugCf0JaBqHoUw1F9fYCHFLOQF",
+    "sample_c1_payload_size_bytes": 5915717,
+    "verification": "READABLE_BYTES_OBTAINED_WITHOUT_PROVIDER_INTAKE_OR_REPAIR"
+  },
+  "c2e_input_surface": {
+    "status": "PASS_BY_EXISTING_WP0_SOURCE_SURVEY",
+    "required_field_families": 24,
+    "directly_available": 8,
+    "available_by_lawful_join": 16,
+    "required_missing": 0,
+    "ambiguous_source": 0,
+    "forbidden_derivation": 0,
+    "source_survey": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp0/C2E2_C2_SOURCE_SURFACE_SURVEY_v0_1.json"
+  },
+  "empirical_boundary_pack": {
+    "status": "FAIL_MISSING_PREREGISTERED_EMPIRICAL_PACK",
+    "eligible_pack_ids": [],
+    "registry_path": "registries/opt_b/c2e/v0_2/C2E_BOUNDARY_PACK_REGISTRY_v0_2.json",
+    "only_known_review_subject": "C2E.BOUNDARY.PACK.5e4f9df8a35d1608416c65329b5a98b2",
+    "only_known_review_scope": "SYNTHETIC_ONLY_NONEMPIRICAL",
+    "reason": "The governing design deliberately leaves exact BIRTH, CONTINUATION, PHASE_MUTATION, parent-change, SPLIT, MERGE, NEST and TERMINATE predicates as empirical pack science. No separately preregistered June-eligible CANDIDATE/SHADOW pack is present in the court record. Synthetic fixture thresholds cannot be promoted or reused as empirical truth."
+  },
+  "c2e_resource_envelope": {
+    "status": "FAIL_OPERATOR_ENVELOPE_NOT_EXACTLY_SPECIFIED",
+    "required_exact_fields": [
+      "max_wall_clock_seconds",
+      "max_peak_rss_bytes",
+      "max_external_output_bytes",
+      "worker_count"
+    ],
+    "upstream_c2ar_reference_only": {
+      "max_runtime_seconds": 14400,
+      "max_output_bytes": 10737418240,
+      "authority_effect": "NONE_NOT_C2E_RUN_AUTHORITY"
+    },
+    "wp5_synthetic_measurements_role": "EVIDENCE_ONLY_NOT_AN_OPERATOR_RESOURCE_LIMIT"
+  },
+  "preflight_result": "BLOCK_PRE_RUN",
+  "blocking_reason_codes": [
+    "EMPIRICAL_BOUNDARY_PACK_NOT_AVAILABLE_UNDER_SEPARATE_PREREG_AUTHORITY",
+    "EXACT_C2E_RESOURCE_ENVELOPE_UNSPECIFIED"
+  ],
+  "run_token": null,
+  "wp6_execution": "NOT_STARTED",
+  "raw_market_data_committed": false,
+  "provider_intake": "NONE",
+  "validation_consumption": "NONE",
+  "authority_delta": "NONE"
+}
