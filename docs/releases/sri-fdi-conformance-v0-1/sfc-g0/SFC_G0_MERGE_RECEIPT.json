@@ -1,0 +1,26 @@
+{
+  "schema": "sfc-g0-merge-receipt/v1",
+  "programme_id": "OVC-SFC-v0.1",
+  "plan_id": "OVC_SRI_FDI_Conformance_Implementation_Plan_v0_1_REVISED",
+  "plan_version": "0.1_REVISED",
+  "packet_id": "SFC-WP0",
+  "gate_id": "SFC-G0",
+  "operator_decision": "DEFER",
+  "pr_number": 438,
+  "branch": "gate/sfc-g0-defer",
+  "candidate_head": "cd701dd96d8088fe7c11e3ad50867859784cbea5",
+  "base_main": "85074e549d241c16de08a334dc96e255515549c9",
+  "merge_method": "squash",
+  "merge_commit": "8a80748cab202b81430326294b03660f22f17c6b",
+  "tests": [
+    {"workflow": "tests", "run_id": 31270343683, "run_number": 2526, "result": "SUCCESS"},
+    {"workflow": "OVC tiered test selection shadow", "run_id": 31270343694, "run_number": 1063, "result": "SUCCESS"},
+    {"job": "OVC profile assurance", "job_id": 93135085896, "result": "SUCCESS"},
+    {"job": "OVC merge readiness", "job_id": 93135101884, "result": "SUCCESS"}
+  ],
+  "qa_recommendation": "DEFER",
+  "authority_delta": "NONE",
+  "rollback": "Non-destructive revert only if the merge receipt/state record is malformed. Preserve the historical operator DEFER decision and all referenced evidence.",
+  "next_packet": null,
+  "next_action": "STOP_SFC_DEFERRED_AWAIT_EXPLICIT_OPERATOR_REOPEN_AND_RERUN_WP0"
+}
