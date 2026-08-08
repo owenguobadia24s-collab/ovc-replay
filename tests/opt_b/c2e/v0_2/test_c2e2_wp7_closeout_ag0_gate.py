@@ -43,17 +43,18 @@ class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
 
     def test_pointer_advances_without_rewriting_g6_defer(self):
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_17.json")
+        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_18.json")
         self.assertEqual(self.pointer["status"], "GATE_READY")
         self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertTrue(self.pointer["operator_decision_required"])
-        self.assertIsNone(self.pointer["operator_decision"])
+        self.assertFalse(self.pointer["operator_decision_required"])
+        self.assertEqual(self.pointer["operator_decision"], "DEFER")
+        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
         self.assertEqual(self.pointer["replay_status"], "DEFERRED")
         self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
         self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["next_action"], "STOP_AT_C2E_AG0_OPERATOR_DECISION")
+        self.assertIn("STOP_C2E_AG0_DEFERRED", self.pointer["next_action"])
 
     def test_ag0_gate_is_consolidated_and_does_not_hide_replay_gap(self):
         self.assertEqual(self.gate["gate_id"], "C2E-AG0")
