@@ -27,6 +27,16 @@ T0_MAX_WALL_SECONDS = 14400
 T0_MAX_PEAK_RSS_BYTES = 17179869184
 T0_MAX_EXTERNAL_BYTES = 10737418240
 
+FROZEN_SOURCE_RELEASE_ID = "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9"
+FROZEN_SOURCE_COMMIT = "837c9a3e1cbfc18bf01d577896a8f2e01d12f7d2"
+FROZEN_SOURCE_SLICE_ID = "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1"
+FROZEN_SOURCE_MANIFEST_SHA256 = "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3"
+FROZEN_OUTPUT_MANIFEST_SHA256 = "e805eaa0f8603da644d23d83297fdc5e62142f8051d8583c9c28c9469a3b704b"
+FROZEN_ACTIVE_C2_RELEASE_ID = "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v1"
+FROZEN_OPERATION_MODE = "TIME_GATED_REPLAY"
+FROZEN_ROLE = "DISCOVERY"
+NON_EVALUATED_PRECEDENCE = ("QUARANTINED", "CONFLICT", "CENSORED", "NOT_EVALUABLE", "NOT_EVALUATED")
+
 FROZEN_C2_FILE_SHA256 = {
     "C2_15M_ASK_LOCAL": "f0df9558afc5740aabd2dd9f75e958880efd5343b70982d77f4c1e3252ba4e8a",
     "C2_15M_ASK_PARENT": "4b67517f54d02b1f601c451b4f4ed9eb5a1dee05712ef44c1463b06f8500f879",
@@ -128,38 +138,96 @@ def verify_and_load_frozen_c2_files(
     return all_rows, receipts
 
 
+def _computability(axes: Mapping[str, Mapping[str, Any]]) -> tuple[str, str | None]:
+    for status in NON_EVALUATED_PRECEDENCE:
+        if any(str(item["status"]) == status for item in axes.values()):
+            reasons = [
+                f"{name}:{item['status']}:{item.get('reason_code') or 'UNSPECIFIED'}"
+                for name, item in axes.items()
+                if item["status"] != "EVALUATED"
+            ]
+            return status, "|".join(reasons)
+    return "EVALUABLE", None
+
+
 def _capacity_adapted_record(row: Mapping[str, Any]) -> dict[str, Any]:
-    axes = row.get("axes")
-    if not isinstance(axes, Mapping):
+    if str(row.get("active_c2_model_release_id")) != FROZEN_ACTIVE_C2_RELEASE_ID:
+        raise WP10ACapacityError("SOURCE_BINDING_MISMATCH", "active C2 release")
+    if str(row.get("source_slice_id")) != FROZEN_SOURCE_SLICE_ID:
+        raise WP10ACapacityError("SOURCE_BINDING_MISMATCH", "source slice")
+    if str(row.get("operation_mode")) != FROZEN_OPERATION_MODE or str(row.get("role")) != FROZEN_ROLE:
+        raise WP10ACapacityError("AUTH_SCOPE_EXPANSION", "operation mode/role")
+    if bool(row.get("release_membership")):
+        raise WP10ACapacityError("AUTH_SCOPE_EXPANSION", "release membership")
+    if str(row.get("live_prospective_append", "DENIED")) != "DENIED":
+        raise WP10ACapacityError("AUTH_SCOPE_EXPANSION", "live prospective append")
+
+    raw_axes = row.get("axes")
+    if not isinstance(raw_axes, Mapping):
         raise WP10ACapacityError("QA_SCHEMA_FAILURE", "native C2 axes required")
     axis_payload: dict[str, dict[str, Any]] = {}
-    all_evaluated = True
     for axis_name in ("LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"):
-        axis = axes.get(axis_name)
+        axis = raw_axes.get(axis_name)
         if not isinstance(axis, Mapping):
             raise WP10ACapacityError("QA_SCHEMA_FAILURE", f"axis={axis_name}")
-        status = str(axis.get("status", ""))
+        status = str(axis.get("status") or "").upper()
+        if not status:
+            raise WP10ACapacityError("QA_SCHEMA_FAILURE", f"axis status={axis_name}")
+        value = axis.get("value")
+        reason = axis.get("reason_code")
+        measurement = axis.get("measurement")
         axis_payload[axis_name] = {
             "status": status,
-            "value": axis.get("value"),
-            "reason_code": axis.get("reason_code"),
+            "value": str(value) if value is not None else None,
+            "reason_code": str(reason) if reason is not None else None,
+            "measurement": str(measurement) if measurement is not None else None,
         }
-        if status != "EVALUATED":
-            all_evaluated = False
-    release = str(row.get("active_c2_model_release_id", ""))
-    scope = str(row.get("evaluation_scope_id", ""))
+    computability_status, computability_reason = _computability(axis_payload)
+    scope = str(row.get("evaluation_scope_id") or "")
+    record_id = str(row.get("c2_state_id") or "")
+    parent_c1 = str(row.get("parent_c1_record_id") or "")
+    source_lineage = {
+        "source_release_id": FROZEN_SOURCE_RELEASE_ID,
+        "source_commit": FROZEN_SOURCE_COMMIT,
+        "source_slice_id": FROZEN_SOURCE_SLICE_ID,
+        "source_manifest_sha256": FROZEN_SOURCE_MANIFEST_SHA256,
+        "output_manifest_sha256": FROZEN_OUTPUT_MANIFEST_SHA256,
+        "active_c2_model_release_id": FROZEN_ACTIVE_C2_RELEASE_ID,
+        "c1_record_id": parent_c1,
+        "c1_release_id": str(row.get("c1_release_id") or ""),
+        "c1_manifest_id": str(row.get("c1_manifest_id") or ""),
+        "opt_a_release_id": str(row.get("opt_a_release_id") or ""),
+        "opt_a_manifest_id": str(row.get("opt_a_manifest_id") or ""),
+        "parent_opt_a_bar_id": str(row.get("parent_opt_a_bar_id") or ""),
+    }
     return {
-        "record_id": str(row.get("c2_state_id", "")),
-        "first_valid_time": str(row.get("first_valid_time", "")),
+        "record_id": record_id,
+        "first_valid_time": str(row.get("first_valid_time") or ""),
         "instrument": "GBPUSD",
-        "side": str(row.get("side", "")),
-        "clock": str(row.get("clock", "")),
-        "units": "C2_TYPED",
-        "representation_schema": f"C2_TYPED_AXES:{release}:{scope}",
+        "side": str(row.get("side") or "").upper(),
+        "clock": str(row.get("clock") or ""),
+        "units": "MIXED_TYPED_C2",
+        "representation_schema": f"C2_TYPED_AXES:{FROZEN_ACTIVE_C2_RELEASE_ID}:{scope}",
         "source_quality": "ACCEPTED_FROZEN_C2",
-        "computability_status": "EVALUABLE" if all_evaluated else "NOT_EVALUATED",
-        "not_evaluable_reason": None if all_evaluated else "C2_AXIS_NOT_EVALUATED",
-        "native_c2": {"axes": axis_payload},
+        "evaluation_scope_id": scope,
+        "eligibility_class": str(row.get("eligibility_class") or ""),
+        "target_eligible": bool(row.get("target_eligible")),
+        "computability_status": computability_status,
+        "not_evaluable_reason": computability_reason,
+        "native_c2": {
+            "axes": axis_payload,
+            "level_ids": sorted(str(item) for item in row.get("level_ids", ())),
+            "container_ids": sorted(str(item) for item in row.get("container_ids", ())),
+            "relation_set_id": str(row.get("relation_set_id") or ""),
+            "persistence": dict(row["persistence"]) if isinstance(row.get("persistence"), Mapping) else row.get("persistence"),
+            "continuity": str(row.get("continuity") or ""),
+            "parameter_pack_id": str(row.get("parameter_pack_id") or ""),
+        },
+        "source_lineage": source_lineage,
+        "source_logical_sha256": logical_sha256(dict(row)),
+        "adapter_semantics": "SCHEMA_PRESERVING_NO_REPRESENTATION_FIELD_SELECTION",
+        "adapter_id": "SRFDI-SOURCE-ADAPTER-v0.2",
+        "evaluated_reason_policy": "PRESERVE_OPTIONAL_DESCRIPTIVE_REASON_CODE",
     }
 
 
@@ -188,17 +256,17 @@ def compile_capacity_domains(
                 )
             )
         requests.extend((("SRFDI-R8", None), ("SRFDI-R9", None)))
-        for representation_id, variant_id in requests:
+        for implementation_class_id, variant_id in requests:
             compiled = compile_real_source_representation(
                 source,
                 registry,
-                representation_id=representation_id,
+                implementation_class_id,
                 source_population_id=FROZEN_POPULATION_ID,
                 variant_id=variant_id,
             )
             domain_id = str(compiled["comparability_domain_id"])
             domains.setdefault(domain_id, []).append(compiled)
-            counter_key = variant_id or representation_id
+            counter_key = variant_id or implementation_class_id
             representation_counts[counter_key] = representation_counts.get(counter_key, 0) + 1
     for records in domains.values():
         records.sort(key=lambda item: str(item["representation_id"]))
