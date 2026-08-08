@@ -15,7 +15,7 @@ QA = BASE / "SRFDI_WP9D_QA_PACKET.json"
 ASSURANCE = BASE / "SRFDI_WP9D_ASSURANCE_RECEIPT.json"
 GATE = BASE / "SRFDI_G9D_FREEZE_OPERATOR_PACKET.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_9_CANDIDATE.json"
-POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
+HISTORICAL_PREFREEZE_STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_8.json"
 
 
 class SRFDIWP9DGateReadyTests(unittest.TestCase):
@@ -28,7 +28,7 @@ class SRFDIWP9DGateReadyTests(unittest.TestCase):
         cls.assurance = json.loads(ASSURANCE.read_text())
         cls.gate = json.loads(GATE.read_text())
         cls.state = json.loads(STATE.read_text())
-        cls.pointer = json.loads(POINTER.read_text())
+        cls.historical_prefreeze_state = json.loads(HISTORICAL_PREFREEZE_STATE.read_text())
 
     def test_scientific_hashes_are_exact_and_mutually_bound(self) -> None:
         self.assertEqual("371a058e26c05a351a99689ad23b7f844fbc956a6d81449fd237a2f420bf564b", validate_metric_registry(self.registry))
@@ -65,11 +65,14 @@ class SRFDIWP9DGateReadyTests(unittest.TestCase):
         self.assertEqual("DENIED", self.state["authority"]["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
 
-    def test_current_authoritative_pointer_is_unchanged_before_freeze(self) -> None:
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_8.json", self.pointer["authoritative_state"])
-        self.assertEqual("BLOCKED_PRE_RUN", self.pointer["status"])
-        self.assertEqual("MATERIAL_FROZEN_CONTRACT_CHANGE_REQUIRES_OPERATOR", self.pointer["stop_at"])
-        self.assertFalse(self.pointer["authority_token_consumed"])
+    def test_historical_prefreeze_authority_is_preserved_after_freeze(self) -> None:
+        # The current pointer is intentionally mutable. The immutable v0.8 record is
+        # the historical proof of the authority state that existed before G9D.
+        self.assertEqual("BLOCKED_PRE_RUN", self.historical_prefreeze_state["status"])
+        self.assertEqual("SRFDI-WP10-v0.3", self.historical_prefreeze_state["active_packet"])
+        self.assertFalse(self.historical_prefreeze_state["exact_bindings"]["authority_token_consumed"])
+        self.assertEqual("DENIED", self.historical_prefreeze_state["authority"]["provider_fetch"])
+        self.assertEqual("LOCKED_UNCONSUMED", self.historical_prefreeze_state["authority"]["validation_2025"])
 
     def test_inert_manifest_never_reuses_v03_authority(self) -> None:
         self.assertEqual("CANDIDATE_NO_RUN_AUTHORITY", self.manifest["status"])
