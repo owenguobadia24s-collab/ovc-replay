@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-srfdi-wp9d-corrective-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "SRFDI-WP9D",
+  "title": "Corrective stability-and-ambiguity-metric preregistration supersession",
+  "baseline_main": "284a5e750f5345e055bcc6dd95003fefcebbb8d5",
+  "branch": "build/srfdi-wp9d-stability-ambiguity-v0-4",
+  "trigger": {
+    "primary_reason_code": "WP10_STABILITY_METRIC_RULE_UNBOUND",
+    "blocker_merge_commit": "337d978b3bf4c7831a439eb57ab2e31bb4ec2e6a",
+    "june_benchmark_started": false,
+    "june_scientific_outputs_inspected": false,
+    "v0_3_authority_token_consumed": false
+  },
+  "scope": {
+    "changed_scientific_surface": "STABILITY_AND_AMBIGUITY_METRIC_EXECUTION_SPECIFICATION_ONLY",
+    "unchanged": ["QUESTIONS_FALSIFIERS", "REPRESENTATION", "DISTANCE", "FAMILY_METHOD", "SENSITIVITY_PARAMETER_LADDERS", "STRONG_FAMILY_INVARIANT_CORE", "RESIDUAL_MISSINGNESS_POLICY", "SEGMENTATION_V0_3", "SOURCE_BINDING", "POPULATION_BINDING", "T0_CAPACITY"],
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "deliverables": {
+    "contract": "contracts/opt_b/srfd/SRFDI_WP9D_STABILITY_AMBIGUITY_PREREGISTRATION_SUPERSESSION_v0_1.md",
+    "schema": "schemas/research/srfd/stability_metric_specs_v0_4.schema.json",
+    "metric_registry": "registries/research/srfd/stability_metric_specs_v0_4.json",
+    "metric_registry_logical_sha256": "69994c70e44a9057e364ba5251bc8d4d7e3b85de507af9847012f67f004461a3",
+    "preregistration_candidate": "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_4.json",
+    "preregistration_candidate_logical_sha256": "c2b5b0682124a49d35aacd8e3d6831cba1e7b4cd639074df907439933763e886",
+    "run_manifest_candidate": "docs/releases/srfd-benchmark-v0-1/srfdi-wp9d/SRFD_JUNE_RUN_MANIFEST_v0_4_CANDIDATE.json",
+    "run_manifest_candidate_logical_sha256": "958a1d64252c109d21955a699e8411107ed71921a7f46ef5f964af3b1ec19c9c",
+    "implementation": "src/ovc/opt_b/srfd/stability_metrics_v04.py",
+    "test": "tests/srfd/test_srfdi_wp9d_stability_prereg.py"
+  },
+  "metric_disposition": {
+    "RESIDUAL_RATE_WITH_DENOMINATOR": "EXISTING_RULE_BOUND_EXPLICITLY",
+    "AMBIGUITY_RATE_WITH_DENOMINATOR": "EXACT_MAX_POSITIVE_JACCARD_TIE_NO_FORCED_WINNER",
+    "CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR": "DIRECTIONAL_FULL_ANCHOR_CONTAINMENT_ADJACENT_RUNG_ONLY",
+    "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR": "DIRECTIONAL_EXACT_MEMBER_SET_CORRESPONDENCE_NO_METHOD_WINNER",
+    "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR": "FIXED_JUNE_HALF_TEMPORAL_SPAN_NO_HALF_SAMPLE_REFIT"
+  },
+  "current_authority": {
+    "v0_3_june_token": "AUTHORIZED_BUT_PREFLIGHT_BLOCKED_UNCONSUMED",
+    "june_execution": "BLOCKED_PRE_RUN",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED"
+  },
+  "next_gate": "SRFDI-G9D-FREEZE",
+  "status": "IMPLEMENTED_CANDIDATE_PENDING_EXACT_HEAD_QA",
+  "stop_condition": "STOP_FOR_OPERATOR_AT_SRFDI_G9D_FREEZE",
+  "rollback": "Close or supersede this branch without merge. Preserve v0.2/v0.3 preregistration, all authority/blocker evidence, and the unused v0.3 token."
+}
