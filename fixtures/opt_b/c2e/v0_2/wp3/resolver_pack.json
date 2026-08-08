@@ -1,0 +1,25 @@
+{
+  "version":"SYNTHETIC.WP3.v1","supersedes":null,
+  "population_scope":{"instrument_id":"GBPUSD","side":"BID","clock_id":"UTC_15M","scale_id":"15M","scope_id":"LOCAL_15M","source_population_id":"SYNTHETIC_ONLY"},
+  "rules":[
+    {"boundary_rule_id":"R.GAP","candidate_type":"GAP","lifecycle_action":"CENSOR_GAP","priority_class":2,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":[]},"parameters":{},"parameter_precisions":{}},
+    {"boundary_rule_id":"R.TERM","candidate_type":"TERMINATE","lifecycle_action":"TERMINATE","priority_class":5,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":[]},"parameters":{},"parameter_precisions":{}},
+    {"boundary_rule_id":"R.A","candidate_type":"PHASE_A","lifecycle_action":"PHASE_MUTATION","priority_class":6,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":[]},"parameters":{},"parameter_precisions":{}},
+    {"boundary_rule_id":"R.B","candidate_type":"PHASE_B","lifecycle_action":"PHASE_MUTATION","priority_class":6,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":[]},"parameters":{},"parameter_precisions":{}},
+    {"boundary_rule_id":"R.C","candidate_type":"PHASE_C","lifecycle_action":"PHASE_MUTATION","priority_class":6,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":[]},"parameters":{},"parameter_precisions":{}},
+    {"boundary_rule_id":"R.CONT","candidate_type":"CONTINUE","lifecycle_action":"CONTINUATION","priority_class":7,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":[]},"parameters":{},"parameter_precisions":{}},
+    {"boundary_rule_id":"R.BIRTH","candidate_type":"BIRTH","lifecycle_action":"BIRTH","priority_class":8,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":[]},"parameters":{},"parameter_precisions":{}}
+  ],
+  "compatibility_matrix":[
+    {"candidate_type_a":"GAP","candidate_type_b":"CONTINUE","disposition":"ORDERED_BY_PRIORITY"},
+    {"candidate_type_a":"GAP","candidate_type_b":"BIRTH","disposition":"ORDERED_BY_PRIORITY"},
+    {"candidate_type_a":"TERMINATE","candidate_type_b":"CONTINUE","disposition":"ORDERED_BY_PRIORITY"},
+    {"candidate_type_a":"PHASE_A","candidate_type_b":"PHASE_B","disposition":"COMPATIBLE_COMPOUND"},
+    {"candidate_type_a":"PHASE_B","candidate_type_b":"PHASE_C","disposition":"COMPATIBLE_COMPOUND"},
+    {"candidate_type_a":"PHASE_A","candidate_type_b":"PHASE_C","disposition":"INCOMPATIBLE_CONFLICT"}
+  ],
+  "ownership":{"peer_mode":"SINGLE_OWNER"},"topology":{"cycle_policy":"DENY"},
+  "discontinuity":{"source_gap":"CENSOR_GAP","release_end":"CENSOR_RELEASE_END"},
+  "conflict_policy":{"equal_priority_incompatible":"INCOMPATIBLE_CONFLICT","lexical_winner":false},
+  "implementation_hashes":{"resolver.py":"synthetic"},"registry_hashes":{"priority":"synthetic","compatibility":"synthetic"},"authority":"SHADOW"
+}
