@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-srfdi-g9-gate-ready-assurance/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "SRFDI-WP9",
+  "gate_id": "SRFDI-G9",
+  "implementation_candidate_commit": "e3ca1b16400989add9cced248a78309364cfedce",
+  "initial_gate_ready_head": "f833562b1d033946ecf2a7f752e90823b808d4ef",
+  "initial_gate_ready_assurance": {
+    "repository_suite": "31235033662:failure",
+    "tiered": "31235033659:failure_due_required_suite_failure",
+    "failure_class": "STALE_LIFECYCLE_TEST_ASSERTION_ONLY",
+    "failure": "test_parent_gate_merge_is_bound_and_wp9_is_only_preparation asserted operator_decision_required=false after programme state correctly transitioned to SRFDI-G9 GATE_READY"
+  },
+  "corrective_action": "Make the focused WP9 preregistration test lifecycle-aware while retaining the exact represented-G8 merge binding, bounded preregistration-preparation authority, G9 operator stop, June denial, Validation lock and no-freeze-before-operator-decision semantics.",
+  "corrected_passing_head": "57d508cf7392b8d03b32428970e0918c8b38add6",
+  "corrected_assurance": {
+    "repository_suite": {"run_id": 31235171978, "job_id": 93046191892, "conclusion": "success"},
+    "tiered": {"run_id": 31235171973, "conclusion": "success"},
+    "profile_assurance": {"job_id": 93046191887, "conclusion": "success"},
+    "tiered_compatibility": {"job_id": 93046206533, "conclusion": "success"},
+    "merge_readiness": {"job_id": 93046206538, "conclusion": "success"}
+  },
+  "preregistration_identity": {
+    "path": "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_1.json",
+    "byte_sha256": "76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792",
+    "logical_sha256": "a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e",
+    "authority_state": "CANDIDATE_PENDING_OPERATOR_ACKNOWLEDGEMENT"
+  },
+  "qa_result": "PASS",
+  "recommended_decision": "PREREGISTRATION_FREEZE",
+  "unresolved_issues": [],
+  "unresolved_review_threads": 0,
+  "authority_firewalls": {
+    "june": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "scientific_promotion": "NONE",
+    "selector": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "final_metadata_head_assurance": "REQUIRED_BEFORE_OPERATOR_PRESENTATION"
+}
