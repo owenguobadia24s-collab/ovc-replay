@@ -2,88 +2,62 @@ schema: ovc-programme-state/v1
 programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
-packet_id: MCARBI-WP8
-status: APPROVED
+packet_id: MCARBI-WP9
+status: GATE_READY
 prerequisites:
   - MCARBI-G6 FREEZE_STAGE_A_READINESS merged at faf4e5af7c143995a2954dddb136cbe66a9e528d
   - MCARBI-G7 PREREGISTRATION_FREEZE merged at 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
   - MCARBI-G-STAGE-A-AUTH AUTHORIZE_STAGE_A merged at 9cb6a6c9aa010dacbd020a925e33f7a4a135405a
-authority_required: OPERATOR_REQUIRED_ALREADY_GRANTED_AND_CONSUMED
-authority_delta: NONE_AT_MCARBI_G8
-baseline_commit: 9cb6a6c9aa010dacbd020a925e33f7a4a135405a
-branch: run/mcarbi-wp8-stage-a
-candidate_commit: TERMINAL_STABLE_HEAD_PENDING_ASSURANCE
+  - MCARBI-WP8 and delegated MCARBI-G8 PASS merged at 1caf4e67a66b6b95dbfb57055b93f18cb4b56788
+authority_required: OPERATOR_REQUIRED
+authority_delta: SCIENTIFIC_EVIDENCE_STATUS_DISPOSITIONS_ONLY_NO_OPERATIONAL_AUTHORITY
+baseline_commit: 1caf4e67a66b6b95dbfb57055b93f18cb4b56788
+branch: disposition/mcarbi-wp9-g9
+candidate_evidence_head: 265f16da4a285359908cb023b02c54f1dcd6ba11
+gate_packet_head: 0699366da32ec605b99d81fe209706c94494bb56
+candidate_commit: FINAL_STABLE_HEAD_PENDING_EXACT_ASSURANCE
 tests:
-  - pre-run repository suite run 31233871345: PASS
-  - pre-run OVC FINAL_HEAD run 31233871310: PASS
-  - corrected-workflow pre-continuation repository suite run 31234151173: PASS
-  - corrected-workflow OVC FINAL_HEAD run 31234151174: PASS
-  - successful Stage-A continuation workflow run 31234221037: PASS
-  - successful Stage-A continuation job 93043704394: PASS
-  - fresh/resume scientific outputs byte-identical: PASS
-  - G8 pre-terminal-metadata repository suite run 31234431873: PASS
-  - G8 pre-terminal-metadata OVC FINAL_HEAD run 31234431878: PASS
-  - terminal stable-head repository/FINAL_HEAD assurance: REQUIRED_BEFORE_MERGE
-qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_G8_QA_PACKET.json
-decision_record: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_G8_DELEGATED_DECISION.json
-gate_packet: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_G8_QA_PACKET.json
-preregistration: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_STAGE_A_PREREGISTRATION.json
-preregistration_git_blob_sha1: 8dcc4fe4e51b3b7d07e4dcc440c6b5b6a784f6f7
-parameter_registry: registries/research/mcarb/MCARB_STAGE_A_PARAMETER_REGISTRY_v0_1.json
-parameter_registry_git_blob_sha1: 2afaf18ffebb674b181b7493b2ca62738a54f037
-run_request: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_RUN_REQUEST.json
-continuation_request: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_CONTINUATION_REQUEST.json
-attempt_1_failure: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_ATTEMPT_1_FAILURE.json
-external_artifact_receipt: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_EXTERNAL_ARTIFACT_RECEIPT.json
-evidence_summary: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_STAGE_A_EVIDENCE_SUMMARY.json
-attempts:
-  - attempt: 1
-    workflow_run_id: 31233964807
-    workflow_job_id: 93043000096
-    status: FAILED_CORRECTABLE_IMPLEMENTATION_DEFECT
-    scientific_output_materialized: false
-    evidence_artifact_uploaded: false
-  - attempt: 2
-    workflow_run_id: 31234221037
-    workflow_job_id: 93043704394
-    status: PASS_STAGE_A_EXECUTION_AND_RESTART_EQUIVALENCE
-    run_id: MCARB.STAGEA.b45ff34cbb8c1865a77311f6
-    external_artifact_id: 9014838569
-    external_artifact_sha256: fbbedde4c1f0bd43b06e03ed245e38df0d4cf0adabcca84776aa86ebee2b5ec2
-    scientific_output_materialized: true
+  - tests/research_operations/mcarb/test_mcarbi_wp9_disposition.py
+  - exact-head complete repository suite required
+  - OVC FINAL_HEAD/profile/merge-readiness required
+qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_WP9_QA_PACKET.json
+decision_record: null
+gate_packet: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_G9_OPERATOR_DECISION_PACKET.json
+scientific_disposition: docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_WP9_DECOMPOSED_SCIENTIFIC_DISPOSITION.json
+source_run_id: MCARB.STAGEA.b45ff34cbb8c1865a77311f6
+source_g8_merge_commit: 1caf4e67a66b6b95dbfb57055b93f18cb4b56788
+external_artifact_id: 9014838569
+external_artifact_sha256: fbbedde4c1f0bd43b06e03ed245e38df0d4cf0adabcca84776aa86ebee2b5ec2
+evidence_vector_sha256: c1882b91e5e30d64f38cb2984c1c0720bf8495ce34d11a8caa2fe5188ef6bb82
+record_logical_sha256: b9a0eb0291792694acf749f7cae27a69b32e5ec5cdfd95b2a207863a71639fe2
+merge_commit: null
 blockers: []
 source_audit_outcome: AL_SOURCE_PARTIAL
-preregistration_status: FROZEN_CONSUMED_BY_COMPLETED_STAGE_A_LOGICAL_RUN
-market_benchmark_authority: CONSUMED_NO_RERUN_AUTHORITY
 stage_a_authority: CONSUMED_NO_RERUN_AUTHORITY
 stage_a_authority_consumption: CONSUMED_COMPLETED
-logical_run_id: MCARBI_STAGE_A_AUTHORIZED_LOGICAL_RUN_1
-stage_a_run_id: MCARB.STAGEA.b45ff34cbb8c1865a77311f6
-stage_a_execution_scope:
-  instrument: GBPUSD
-  sides: [BID, ASK]
-  clock: 2H_A_L
-  population_interval: '[2023-11-01T00:00:00Z,2024-01-01T00:00:00Z)'
-  paired_2h: 449
-  paired_side_records: 898
-  normalization_reference_interval: '[2023-09-01T00:00:00Z,2023-11-01T00:00:00Z)'
-  source: EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
-  provider_intake: DENIED
-  rerun_authority: NONE
-mcarbi_g8:
-  status: APPROVED
-  decision: PASS
-  authority: DELEGATED_AUTO_RATIFIABLE
-  scientific_consequence: NONE
-  next_packet: MCARBI-WP9
+scientific_disposition_status: OPERATOR_REQUIRED_PENDING_MCARBI_G9
+proposed_dispositions:
+  AL: UNRESOLVED
+  ET: UNRESOLVED
+  VS: UNRESOLVED
+  PACKS_EXCEPT_R0: UNRESOLVED
+  R0: NOT_EVALUABLE_BASELINE_ONLY
+  CROSS_DOMAIN: NOT_EVALUABLE
+  MODULE: UNRESOLVED
+  TERMINAL_NO_ADDITIONAL_INFORMATION: NOT_ELIGIBLE_ON_STAGE_A_EVIDENCE
+future_stage_recommendation: DEFER_AUTOMATIC_EXPANSION; any longitudinal representation-utility follow-on requires a separate governed plan and authority
 active_discovery_authority: NONE
 active_development_authority: NONE
 active_validation_authority: NONE
 provider_intake_authority: NONE
 validation_2025: LOCKED_UNCONSUMED
 selector_authority: NONE
-c2_c2e_sri_family_semantic_publication_authority: NONE
+threshold_representation_family_candidate_semantic_promotion_authority: NONE
+c2_c2e_sri_publication_authority: NONE
+canonical_r2_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
-next_packet: MCARBI-WP9
-continuation_point: AFTER_TERMINAL_STABLE_HEAD_ASSURANCE_SQUASH_MERGE_WP8_G8_THEN_CREATE_WP9_FROM_LATEST_MAIN_AND_STOP_AT_MCARBI_G9
+recommended_gate_decision: DECOMPOSED_SCIENTIFIC_DISPOSITION
+exact_operator_command: OVC APPROVE MCARBI-G9 DECOMPOSED_SCIENTIFIC_DISPOSITION AL=UNRESOLVED ET=UNRESOLVED VS=UNRESOLVED PACKS=UNRESOLVED CROSS_DOMAIN=NOT_EVALUABLE MODULE=UNRESOLVED
+next_packet: MCARBI-G9-OPERATOR-DECISION
+continuation_point: STOP_AT_MCARBI_G9; AFTER_OPERATOR_DECISION_RECORD_PROGRAMME_TERMINAL_STATE_ONLY_UNLESS_SEPARATE_FOLLOW_ON_IS_ADMITTED
