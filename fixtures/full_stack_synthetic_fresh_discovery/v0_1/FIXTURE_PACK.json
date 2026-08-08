@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-fsr-fixture-pack/v1",
+  "programme_id": "OVC-FULL-STACK-SYNTHETIC-FRESH-DISCOVERY-REHEARSAL-v0.1",
+  "fixture_namespace": "FSR.FRESH.GBPUSD.20230605.v1",
+  "fixture_id_rule": "FSR.FIXTURE.<sha256(generator-spec bytes + hidden-ledger bytes + exact source hashes)[0:24]>",
+  "fixture_id_materialised_by": "src/ovc/opt_a/fsr_synthetic.py::build_opt_a_fixture",
+  "MARKET_EVIDENCE": false,
+  "CANONICAL": false,
+  "PROMOTABLE": false,
+  "SYNTHETIC": true,
+  "instrument_id": "GBPUSD",
+  "interval_start": "2023-06-05T00:00:00Z",
+  "interval_end": "2023-06-06T00:00:00Z",
+  "native_source_objects": [
+    {"name":"GBPUSD_M1_BID_2023-06_FSR.csv","rows":1435,"sha256":"7da5aa942df5c65f756c6ea159a31bea06847ded14ba809e113f18cb7837cbe7"},
+    {"name":"GBPUSD_M1_ASK_2023-06_FSR.csv","rows":1435,"sha256":"32db88aa84e6853fc389976ccfe13c76223b7f1e90530151353f26f469fccdf4"},
+    {"name":"GBPUSD_H1_BID_2023-06_FSR.csv","rows":24,"sha256":"35cf6a6a8b6ad7780c69214180635dc2ba4c52c4c3b37035698f4a33eb756a14"},
+    {"name":"GBPUSD_H1_ASK_2023-06_FSR.csv","rows":24,"sha256":"f920f809e7dff7e268c80c929c9c0382e1bfb3e35e7ad36c0c9145a394c3fccd"}
+  ],
+  "clock_definitions": {
+    "M1": "native synthetic provider-like source",
+    "H1_PROVIDER_NATIVE": "independent control built from complete hidden generator path before M1 gap omission; never repairs M1",
+    "15M": "derived only from 15 exact contiguous M1 records",
+    "H1_M1_DERIVED": "derived only from 60 exact contiguous M1 records",
+    "2H_A_L": "derived only from 120 exact contiguous M1 records"
+  },
+  "gap_declaration": {
+    "start": "2023-06-05T13:17:00Z",
+    "end": "2023-06-05T13:22:00Z",
+    "minutes": 5,
+    "sides": ["BID", "ASK"],
+    "repair": "DENIED"
+  },
+  "construction": {
+    "generator_spec": "GENERATOR_SPEC.json",
+    "hidden_ledger": "hidden/HIDDEN_CONSTRUCTION_LEDGER.json",
+    "hidden_ledger_pipeline_consumable": false,
+    "deterministic_seed": null,
+    "determinism": "INTEGER_TICK_RULES"
+  },
+  "source_artifact_policy": "Exact source CSVs are materialised by the governed generator into the FSR execution artifact; Git stores the generator, expected hashes and compact manifests rather than duplicating generated market-like tables.",
+  "expected_invariants": [
+    "BID and ASK timestamp sets are identical",
+    "ASK OHLC is strictly above corresponding BID OHLC by deterministic positive spread",
+    "timestamps are strictly monotonic Unix milliseconds",
+    "M1 gap is explicit and never repaired by H1",
+    "15M/H1_M1_DERIVED/2H_A_L buckets crossing the gap are quarantined",
+    "first_valid_time is never earlier than source close/confirmation time",
+    "hidden construction labels are absent from pipeline inputs",
+    "same source+code+contracts produces identical hashes and record IDs"
+  ],
+  "authority": {
+    "provider_intake": "NONE",
+    "canonical_release": "NONE",
+    "r2_publication": "NONE",
+    "selector_mutation": "NONE",
+    "semantic_or_family_promotion": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "probability_risk_exposure_execution": "NONE"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-fsr-downstream-consumption-manifest/v1",
+  "programme_id": "OVC-FULL-STACK-SYNTHETIC-FRESH-DISCOVERY-REHEARSAL-v0.1",
+  "fixture_namespace": "FSR.FRESH.GBPUSD.20230605.v1",
+  "allowed_pipeline_inputs": [
+    "generated:source/M1/BID/GBPUSD_M1_BID_2023-06_FSR.csv",
+    "generated:source/M1/ASK/GBPUSD_M1_ASK_2023-06_FSR.csv",
+    "generated:source/H1/BID/GBPUSD_H1_BID_2023-06_FSR.csv",
+    "generated:source/H1/ASK/GBPUSD_H1_ASK_2023-06_FSR.csv",
+    "generated:OPT_A_FIXTURE_MANIFEST.json",
+    "generated:C1_HANDOFF.json",
+    "generated:C1_STREAM.json"
+  ],
+  "forbidden_pipeline_inputs": [
+    "fixtures/full_stack_synthetic_fresh_discovery/v0_1/hidden/HIDDEN_CONSTRUCTION_LEDGER.json"
+  ],
+  "hidden_construction_read_authority": "FSR_WP11_ONLY_AFTER_OUTPUT_FREEZE",
+  "admissible_cutoff_policy": "A derived record may consume only parents with first_valid_time <= its own evaluation cutoff; first_valid_time equals close/confirmation time under the exercised contracts.",
+  "future_path_access": "DENIED",
+  "intended_labels_access": "DENIED",
+  "selector_mutation": "NONE",
+  "validation_consumption": "LOCKED_UNCONSUMED",
+  "publication": "NONE",
+  "promotion": "NONE"
+}

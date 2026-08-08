@@ -1,0 +1,64 @@
+{
+  "ask_spread_rule": "spread_ticks=[12,12,13,13,14,13,12,13] repeated; ASK=BID+spread_ticks*0.00001",
+  "base_bid": "1.26800",
+  "determinism": "FULLY_DETERMINISTIC_INTEGER_TICK_RULES_NO_RANDOMNESS_NO_LIBM",
+  "end": "2023-06-06T00:00:00Z",
+  "fixture_namespace": "FSR.FRESH.GBPUSD.20230605.v1",
+  "gap": {
+    "clock": "M1",
+    "end": "2023-06-05T13:22:00Z",
+    "minutes": 5,
+    "native_h1_independent": true,
+    "sides": [
+      "BID",
+      "ASK"
+    ],
+    "start": "2023-06-05T13:17:00Z"
+  },
+  "instrument_id": "GBPUSD",
+  "native_clocks": [
+    "M1",
+    "H1_PROVIDER_NATIVE"
+  ],
+  "no_future_dependency": true,
+  "ohlc_rule": "open=prior_close; close=open+delta_ticks(i)*0.00001; high=max(open,close)+wiggle_ticks(i)*0.00001; low=min(open,close)-wiggle_ticks(i)*0.00001",
+  "output_columns": [
+    "timestamp",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume"
+  ],
+  "price_sides": [
+    "BID",
+    "ASK"
+  ],
+  "programme_id": "OVC-FULL-STACK-SYNTHETIC-FRESH-DISCOVERY-REHEARSAL-v0.1",
+  "schema": "ovc-fsr-synthetic-generator-spec/v1",
+  "segment_delta_tick_patterns": {
+    "S00": [0, 1, 0, -1, 0, 0],
+    "S01_A": [1, 0, -1, 0],
+    "S01_B": [0, 0, 1, -1, 0, 0],
+    "S02": [1, 2, 1, 1, 2, 0],
+    "S03": [4, 5, 3, 4, 6, 3],
+    "S04": [-2, -2, -1, -3, -1, 0],
+    "S05": [2, 2, -2, -2, 1, -1],
+    "S06": [2, 1, -2, -1, 2, -2, 1, -1],
+    "S07": [-2, -2, -1, -3, -1, 1],
+    "S08_A": [-2, -2, -1, -3, -1, 0],
+    "S08_B": [2, 3, 1, 2, 2, 1],
+    "S09": [3, -3, 2, -2, 3, -3, 1, -1],
+    "S10": [2, 3, 1, 2, 4, 0],
+    "S11": [1, -1, 1, 0, -1, 0, 2, -2],
+    "S12": [-3, -2, -4, 1, -3, -1, 2, -4]
+  },
+  "segment_ids": [
+    "S00", "S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09", "S10", "S11", "S12"
+  ],
+  "start": "2023-06-05T00:00:00Z",
+  "tick_size": "0.00001",
+  "timestamp_encoding": "UNIX_MILLISECONDS_UTC",
+  "volume_rule": "volume pattern [10,12,14,16,15,13,11,17] repeated; +20 S03; +10 S10; UNKNOWN provider unit",
+  "wiggle_tick_pattern": [2, 2, 1, 2, 1, 1, 2, 1]
+}
