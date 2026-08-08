@@ -1,0 +1,43 @@
+name: SRFDI WP10 v0.6 source snapshot
+
+on:
+  push:
+    branches:
+      - tool/srfdi-wp10-v0-6-snapshot
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Verify authorized baseline
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD^)" = "ffefd1ee3d7ee664f2a94f74d05993d6e711a149"
+          test -f registries/implementation/srfd/OVC_SRFDI_STATE_v0_21_JUNE_AUTH_V0_6_AUTHORIZED.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('registries/implementation/srfd/CURRENT_STATE_POINTER.json'))
+          assert p['authority_token_id']=='SRFD.JUNE.AUTH.3c63cd70ea57151a264443b436f94075bd8fb13f8a45f318a245cff96fefd168'
+          assert p['authority_token_consumed'] is False
+          assert p['provider_fetch']=='DENIED'
+          assert p['validation_2025']=='LOCKED_UNCONSUMED'
+          PY
+      - name: Package exact source tree
+        shell: bash
+        run: |
+          tar --exclude=.git -czf /tmp/ovc-replay-srfdi-wp10-v06-source.tar.gz .
+          sha256sum /tmp/ovc-replay-srfdi-wp10-v06-source.tar.gz | tee /tmp/ovc-replay-srfdi-wp10-v06-source.tar.gz.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ovc-replay-srfdi-wp10-v06-source
+          path: |
+            /tmp/ovc-replay-srfdi-wp10-v06-source.tar.gz
+            /tmp/ovc-replay-srfdi-wp10-v06-source.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 3
