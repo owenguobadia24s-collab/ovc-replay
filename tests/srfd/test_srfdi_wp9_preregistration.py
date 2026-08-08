@@ -90,10 +90,25 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         self.assertEqual("FREEZE_MEASURED_CAPACITY", self.merge_receipt["decision"])
         self.assertEqual("SRFDI-WP9", self.state["active_packet"])
         self.assertEqual("SRFDI-G9", self.state["current_gate"])
-        self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual("AUTHORISED_BOUNDED_PREPARATION", self.state["authority"]["preregistration_preparation"])
         self.assertEqual("DENIED_PENDING_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
+
+        wp9 = next(p for p in self.state["packets"] if p["packet_id"] == "SRFDI-WP9")
+        if self.state["status"] == "RUNNING":
+            self.assertFalse(self.state["operator_decision_required"])
+            self.assertEqual("RUNNING", wp9["status"])
+            self.assertIsNone(wp9["decision_record"])
+            self.assertIsNone(wp9["merge_commit"])
+            return
+
+        self.assertEqual("GATE_READY", self.state["status"])
+        self.assertTrue(self.state["operator_decision_required"])
+        self.assertEqual("GATE_READY", wp9["status"])
+        self.assertIsNone(wp9["decision_record"])
+        self.assertIsNone(wp9["merge_commit"])
+        self.assertIn("SRFDI_G9_PREREGISTRATION_ACKNOWLEDGEMENT_REQUIRED_BEFORE_FREEZE", wp9["blockers"])
+        self.assertIn("JUNE_BENCHMARK_DENIED_PENDING_SRFDI_G_JUNE_AUTH", wp9["blockers"])
 
     def test_required_outputs_and_stop_conditions_are_explicit(self) -> None:
         self.assertIn("ARTIFACT_MANIFEST_AND_HASH_TABLE", self.prereg["required_output_tables"])
