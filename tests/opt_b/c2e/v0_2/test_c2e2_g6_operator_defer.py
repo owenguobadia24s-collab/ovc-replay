@@ -8,6 +8,7 @@ GATE = BASE / "C2E2_G6_RUN_AUTH_GATE_PACKET.json"
 DECISION = BASE / "C2E2_G6_RUN_AUTH_OPERATOR_DECISION.json"
 GATE_READY_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_14.json"
 DEFERRED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json"
+TERMINAL_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_16.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 
 
@@ -18,6 +19,7 @@ class C2E2G6OperatorDeferTests(unittest.TestCase):
         cls.decision = json.loads(DECISION.read_text())
         cls.gate_ready = json.loads(GATE_READY_STATE.read_text())
         cls.deferred = json.loads(DEFERRED_STATE.read_text())
+        cls.terminal = json.loads(TERMINAL_STATE.read_text())
         cls.pointer = json.loads(POINTER.read_text())
 
     def test_gate_was_operator_required_and_recommended_defer(self):
@@ -63,16 +65,21 @@ class C2E2G6OperatorDeferTests(unittest.TestCase):
         self.assertEqual(self.deferred["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.deferred["authority"]["c2e_activation"], "DENIED")
         self.assertIn(self.decision["decision_id"], self.deferred["operator_decision_history"])
+        self.assertEqual(self.terminal["status"], "BLOCKED")
+        self.assertEqual(self.terminal["authority"]["wp6_execution"], "DENIED")
+        self.assertEqual(self.terminal["packets"][-1]["merge_commit"], "a35543c0845f1af70d896a449bd9739af753b8f4")
 
     def test_current_pointer_stops_without_wp6_or_activation(self):
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json")
+        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_16.json")
         self.assertEqual(self.pointer["status"], "BLOCKED")
         self.assertEqual(self.pointer["current_packet"], None)
         self.assertEqual(self.pointer["current_gate"], "C2E2-G6-RUN-AUTH")
         self.assertEqual(self.pointer["operator_decision"], "DEFER")
         self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
+        self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        self.assertEqual(self.pointer["merge_receipt"], "docs/releases/c2e-causal-episode-v0-2/c2e2-g6/C2E2_G6_DEFER_TERMINAL_MERGE_RECEIPT.json")
         self.assertEqual(self.pointer["next_action"], "FUTURE_APPEND_ONLY_G6_SUPERSESSION_AFTER_EXACT_PREREQUISITES")
 
 
