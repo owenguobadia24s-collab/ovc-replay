@@ -1,52 +1,118 @@
 {
-  "acceptance_conditions": [
-    {
-      "condition": "Research questions, hypotheses and falsifiers are explicit before June SRFD result exposure.",
-      "status": "PASS"
-    },
-    {
-      "condition": "Representation, segmentation, distance, family-method and parameter/sensitivity candidate grid is exact and predeclared.",
-      "status": "PASS"
-    },
-    {
-      "condition": "Strong-family, invariant-core, ambiguity and residual rules are exact, non-composite and selected only from pre-run design/synthetic criteria.",
-      "status": "PASS"
-    },
-    {
-      "condition": "Eligible-population binding procedure is frozen without adopting the historical 8598 reference as the final population.",
-      "status": "PASS"
-    },
-    {
-      "condition": "Failure-attribution precedence, required output tables, stop conditions and run-manifest template are explicit.",
-      "status": "PASS"
-    },
-    {
-      "condition": "Preregistration has exact byte and canonical logical SHA-256 identities.",
-      "status": "PASS"
-    },
-    {
-      "condition": "T0 limits and dependency state are exact; no new dependency was admitted.",
-      "status": "PASS"
-    },
-    {
-      "condition": "June execution/provider fetch and Validation access remain denied.",
-      "status": "PASS"
-    },
-    {
-      "condition": "Scientific promotion, selector, publication, probability, risk, exposure and execution authority remain none.",
-      "status": "PASS"
-    },
-    {
-      "condition": "Repository suite, FINAL_HEAD profile assurance and merge-readiness checks pass on the implementation candidate.",
-      "status": "PASS"
-    }
-  ],
-  "allowed_decisions": [
-    "PREREGISTRATION_FREEZE",
-    "ADJUST",
-    "DEFER"
-  ],
+  "schema": "ovc-srfdi-g9-operator-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "SRFDI-G9",
+  "gate_title": "Final June Preregistration Freeze Acknowledgement",
+  "gate_class": "OPERATOR_ACKNOWLEDGEMENT",
+  "status": "GATE_READY",
   "baseline_commit": "0f3ae4379978a1381f479cfe1c5fe9c269981c19",
+  "implementation_candidate_commit": "e3ca1b16400989add9cced248a78309364cfedce",
+  "corrected_gate_ready_head": "57d508cf7392b8d03b32428970e0918c8b38add6",
+  "completed_packets": ["SRFDI-WP0","SRFDI-WP1","SRFDI-WP2","SRFDI-WP3","SRFDI-WP4","SRFDI-WP5","SRFDI-WP6","SRFDI-WP7","SRFDI-WP8"],
+  "current_authority": {
+    "capacity_freeze": "FROZEN_MEASURED_T0",
+    "wp9": "BOUNDED_PREPARATION_ONLY",
+    "preregistration": "CANDIDATE_NOT_FROZEN",
+    "june": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "scientific_promotion": "NONE",
+    "selector": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "proposed_authority_delta": {
+    "on_preregistration_freeze": "Freeze the exact candidate preregistration bytes and hash for the later bounded June run and permit preparation of the separate SRFDI-G-JUNE-AUTH run-authority packet.",
+    "june_execution_effect": "NONE",
+    "validation_effect": "NONE",
+    "scientific_promotion_effect": "NONE",
+    "selector_effect": "NONE",
+    "publication_probability_risk_exposure_execution_effect": "NONE"
+  },
+  "preregistration_identity": {
+    "path": "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_1.json",
+    "preregistration_id": "OVC-SRFD-JUNE-PREREG-v0.1-CANDIDATE",
+    "byte_sha256": "76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792",
+    "logical_sha256": "a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e"
+  },
+  "frozen_protocol_summary": {
+    "research_questions": 4,
+    "hypotheses": 3,
+    "falsifiers": 4,
+    "representation_candidates": 9,
+    "segmentation_candidates": 5,
+    "distance_candidates": 4,
+    "enabled_family_method_candidates": 4,
+    "disabled_conditional_methods": ["HDBSCAN","OPTICS","MATRIX_PROFILE"],
+    "family_parameter_ladders": {
+      "radius": ["0.04","0.08","0.16"],
+      "minimum_support": [2,4,8],
+      "bounded_pam_k": [2,4,8],
+      "bounded_pam_max_assignment_distance": ["0.10","0.20","0.40"],
+      "bounded_pam_max_iterations": [8]
+    },
+    "strong_family_rule": {
+      "support": "UNANIMOUS_OVER_QUALIFYING_DENOMINATOR",
+      "minimum_distinct_qualifying_configurations": 3,
+      "minimum_distinct_enabled_family_methods": 2,
+      "full_assignment_required": false,
+      "global_composite_score": "FORBIDDEN"
+    },
+    "population_binding": "PROCEDURE_FROZEN_COUNT_NOT_BOUND",
+    "historical_8598_reference": "NON_BINDING_CAPACITY_AND_COVERAGE_REFERENCE_ONLY"
+  },
+  "acceptance_conditions": [
+    {"condition": "Research questions, hypotheses and falsifiers are explicit before June SRFD result exposure.", "status": "PASS"},
+    {"condition": "Representation, segmentation, distance, family-method and parameter/sensitivity candidate grid is exact and predeclared.", "status": "PASS"},
+    {"condition": "Strong-family, invariant-core, ambiguity and residual rules are exact, non-composite and selected only from pre-run design/synthetic criteria.", "status": "PASS"},
+    {"condition": "Eligible-population binding procedure is frozen without adopting the historical 8598 reference as the final population.", "status": "PASS"},
+    {"condition": "Failure-attribution precedence, required output tables, stop conditions and run-manifest template are explicit.", "status": "PASS"},
+    {"condition": "Preregistration has exact byte and canonical logical SHA-256 identities.", "status": "PASS"},
+    {"condition": "T0 limits and dependency state are exact; no new dependency was admitted.", "status": "PASS"},
+    {"condition": "June execution/provider fetch and Validation access remain denied.", "status": "PASS"},
+    {"condition": "Scientific promotion, selector, publication, probability, risk, exposure and execution authority remain none.", "status": "PASS"},
+    {"condition": "Corrected gate-ready repository suite, FINAL_HEAD profile assurance and merge-readiness checks pass.", "status": "PASS"}
+  ],
+  "tests": {
+    "implementation_candidate": {
+      "repository_suite": "31234826392:success",
+      "tiered": "31234826401:success",
+      "profile_assurance": "93045292548:success",
+      "merge_readiness": "93045306916:success"
+    },
+    "initial_gate_ready": {
+      "head": "f833562b1d033946ecf2a7f752e90823b808d4ef",
+      "repository_suite": "31235033662:failure",
+      "failure_class": "STALE_LIFECYCLE_TEST_ASSERTION_ONLY"
+    },
+    "corrected_gate_ready": {
+      "head": "57d508cf7392b8d03b32428970e0918c8b38add6",
+      "repository_suite": "31235171978:success",
+      "repository_suite_job": "93046191892:success",
+      "tiered": "31235171973:success",
+      "profile_assurance": "93046191887:success",
+      "tiered_compatibility": "93046206533:success",
+      "merge_readiness": "93046206538:success"
+    },
+    "gate_ready_assurance": "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_GATE_READY_ASSURANCE.json",
+    "final_metadata_head_assurance": "REQUIRED_BEFORE_OPERATOR_PRESENTATION"
+  },
+  "qa": {
+    "packet": "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_WP9_QA_PACKET.json",
+    "result": "PASS",
+    "recommendation": "PREREGISTRATION_FREEZE"
+  },
+  "warnings": [
+    "The historical 8598 C2-state count remains NON_BINDING_CAPACITY_AND_COVERAGE_REFERENCE_ONLY; exact eligible population and source release are intentionally deferred to SRFDI-G-JUNE-AUTH.",
+    "The radius/support/PAM ladders and strong-family rule were frozen from pre-run design criteria and synthetic capacity anchors, not from June SRFD results.",
+    "The strong-family rule is intentionally strict; NO_STABLE_FAMILY and METHOD_DEPENDENT_STRUCTURE remain lawful results.",
+    "HDBSCAN, OPTICS and MATRIX_PROFILE remain disabled conditional methods and are not silently omitted from the dependency ledger.",
+    "H2 hardware sizing remains provisional until a lawful long-horizon population is bound."
+  ],
+  "unresolved_issues": [],
+  "external_artifacts": {"new_external_artifacts": [], "new_external_hashes": [], "raw_market_data_added": false},
   "changed_files": [
     "contracts/research/srfd/preregistration_freeze_v0_1.md",
     "docs/releases/srfd-benchmark-v0-1/srfdi-g8-represented/SRFDI_G8_REPRESENTED_MERGE_RECEIPT.json",
@@ -54,34 +120,16 @@
     "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_WP9_PREREGISTRATION_HASH_RECEIPT.json",
     "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_WP9_QA_PACKET.json",
     "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_OPERATOR_PACKET.json",
+    "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_GATE_READY_ASSURANCE.json",
     "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFD_JUNE_RUN_MANIFEST_TEMPLATE_v0_1.json",
     "registries/implementation/srfd/OVC_SRFDI_STATE_v0_1.json",
     "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_1.json",
-    "tests/srfd/test_srfdi_wp9_preregistration.py"
+    "tests/srfd/test_srfdi_wp9_preregistration.py",
+    "tests/srfd/test_srfdi_g9_gate_ready.py"
   ],
-  "completed_packets": [
-    "SRFDI-WP0",
-    "SRFDI-WP1",
-    "SRFDI-WP2",
-    "SRFDI-WP3",
-    "SRFDI-WP4",
-    "SRFDI-WP5",
-    "SRFDI-WP6",
-    "SRFDI-WP7",
-    "SRFDI-WP8"
-  ],
-  "current_authority": {
-    "capacity_freeze": "FROZEN_MEASURED_T0",
-    "june": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
-    "pr_371": "PRESERVE_DO_NOT_MERGE",
-    "preregistration": "CANDIDATE_NOT_FROZEN",
-    "probability_risk_exposure_execution": "NONE",
-    "publication": "NONE",
-    "scientific_promotion": "NONE",
-    "selector": "NONE",
-    "validation_2025": "LOCKED_UNCONSUMED",
-    "wp9": "BOUNDED_PREPARATION_ONLY"
-  },
+  "rollback": "If PREREGISTRATION_FREEZE is not accepted, keep June denied and preserve this candidate/evidence. ADJUST must create a new versioned preregistration candidate and rerun complete QA without using June SRFD results.",
+  "recommended_decision": "PREREGISTRATION_FREEZE",
+  "allowed_decisions": ["PREREGISTRATION_FREEZE","ADJUST","DEFER"],
   "exact_operator_command": "OVC APPROVE SRFDI-G9 PREREGISTRATION_FREEZE",
   "exact_work_after_approval": [
     "Record the operator G9 decision without changing the frozen preregistration bytes.",
@@ -89,118 +137,5 @@
     "Run exact-head required assurance and squash-merge PR #408 only if still clean and current with lawful main.",
     "Prepare the separate SRFDI-G-JUNE-AUTH packet with exact source release, eligible population hashes, implementation commit, dependency manifest, artifact root, pre-run QA and rollback.",
     "Stop at SRFDI-G-JUNE-AUTH; do not execute June until AUTHORIZE_JUNE is explicitly granted."
-  ],
-  "external_artifacts": {
-    "new_external_artifacts": [],
-    "new_external_hashes": [],
-    "raw_market_data_added": false
-  },
-  "frozen_protocol_summary": {
-    "disabled_conditional_methods": [
-      "HDBSCAN",
-      "OPTICS",
-      "MATRIX_PROFILE"
-    ],
-    "distance_candidates": 4,
-    "enabled_family_method_candidates": 4,
-    "falsifiers": 4,
-    "family_parameter_ladders": {
-      "bounded_pam_k": [
-        2,
-        4,
-        8
-      ],
-      "bounded_pam_max_assignment_distance": [
-        "0.10",
-        "0.20",
-        "0.40"
-      ],
-      "bounded_pam_max_iterations": [
-        8
-      ],
-      "minimum_support": [
-        2,
-        4,
-        8
-      ],
-      "radius": [
-        "0.04",
-        "0.08",
-        "0.16"
-      ]
-    },
-    "historical_8598_reference": "NON_BINDING_CAPACITY_AND_COVERAGE_REFERENCE_ONLY",
-    "hypotheses": 3,
-    "population_binding": "PROCEDURE_FROZEN_COUNT_NOT_BOUND",
-    "representation_candidates": 9,
-    "research_questions": 4,
-    "segmentation_candidates": 5,
-    "strong_family_rule": {
-      "full_assignment_required": false,
-      "global_composite_score": "FORBIDDEN",
-      "minimum_distinct_enabled_family_methods": 2,
-      "minimum_distinct_qualifying_configurations": 3,
-      "support": "UNANIMOUS_OVER_QUALIFYING_DENOMINATOR"
-    }
-  },
-  "gate_class": "OPERATOR_ACKNOWLEDGEMENT",
-  "gate_id": "SRFDI-G9",
-  "gate_title": "Final June Preregistration Freeze Acknowledgement",
-  "implementation_candidate_commit": "e3ca1b16400989add9cced248a78309364cfedce",
-  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
-  "plan_version": "0.1",
-  "preregistration_identity": {
-    "byte_sha256": "76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792",
-    "logical_sha256": "a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e",
-    "path": "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_1.json",
-    "preregistration_id": "OVC-SRFD-JUNE-PREREG-v0.1-CANDIDATE"
-  },
-  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
-  "proposed_authority_delta": {
-    "june_execution_effect": "NONE",
-    "on_preregistration_freeze": "Freeze the exact candidate preregistration bytes and hash for the later bounded June run and permit preparation of the separate SRFDI-G-JUNE-AUTH run-authority packet.",
-    "publication_probability_risk_exposure_execution_effect": "NONE",
-    "scientific_promotion_effect": "NONE",
-    "selector_effect": "NONE",
-    "validation_effect": "NONE"
-  },
-  "qa": {
-    "packet": "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_WP9_QA_PACKET.json",
-    "recommendation": "PREREGISTRATION_FREEZE",
-    "result": "PASS"
-  },
-  "recommended_decision": "PREREGISTRATION_FREEZE",
-  "rollback": "If PREREGISTRATION_FREEZE is not accepted, keep June denied and preserve this candidate/evidence. ADJUST must create a new versioned preregistration candidate and rerun complete QA without using June SRFD results.",
-  "schema": "ovc-srfdi-g9-operator-packet/v1",
-  "status": "GATE_READY",
-  "tests": {
-    "merge_readiness": {
-      "conclusion": "success",
-      "job_id": 93045306916
-    },
-    "profile_assurance": {
-      "conclusion": "success",
-      "job_id": 93045292548
-    },
-    "repository_suite": {
-      "conclusion": "success",
-      "run_id": 31234826392
-    },
-    "tiered": {
-      "conclusion": "success",
-      "run_id": 31234826401
-    },
-    "tiered_compatibility": {
-      "conclusion": "success",
-      "job_id": 93045306924
-    }
-  },
-  "unresolved_issues": [],
-  "warnings": [
-    "The historical 8598 C2-state count remains NON_BINDING_CAPACITY_AND_COVERAGE_REFERENCE_ONLY; exact eligible population and source release are intentionally deferred to SRFDI-G-JUNE-AUTH.",
-    "The radius/support/PAM ladders and strong-family rule were frozen from pre-run design criteria and synthetic capacity anchors, not from June SRFD results.",
-    "The strong-family rule is intentionally strict; NO_STABLE_FAMILY and METHOD_DEPENDENT_STRUCTURE remain lawful results.",
-    "HDBSCAN, OPTICS and MATRIX_PROFILE remain disabled conditional methods and are not silently omitted from the dependency ledger.",
-    "H2 hardware sizing remains provisional until a lawful long-horizon population is bound."
   ]
 }
