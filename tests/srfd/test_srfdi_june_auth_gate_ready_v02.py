@@ -13,6 +13,8 @@ MANIFEST = BASE / "srfdi-june-auth/SRFD_JUNE_AUTHORITY_MANIFEST_CANDIDATE_v0_2.j
 BINDING = BASE / "srfdi-june-auth/SRFD_JUNE_SOURCE_POPULATION_BINDING_v0_2.json"
 FREEZE_RECEIPT = BASE / "srfdi-wp9s/SRFDI_G9S_FREEZE_MERGE_RECEIPT.json"
 WP2D_RECEIPT = BASE / "srfdi-wp2d/SRFDI_WP2D_MERGE_RECEIPT.json"
+STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_2.json"
+POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 
 
 class SRFDIJuneAuthGateReadyV02Tests(unittest.TestCase):
@@ -22,6 +24,8 @@ class SRFDIJuneAuthGateReadyV02Tests(unittest.TestCase):
         cls.binding = json.loads(BINDING.read_text())
         cls.freeze = json.loads(FREEZE_RECEIPT.read_text())
         cls.wp2d = json.loads(WP2D_RECEIPT.read_text())
+        cls.state = json.loads(STATE.read_text())
+        cls.pointer = json.loads(POINTER.read_text())
 
     def test_prerequisite_freeze_and_corrective_merge_are_exact(self) -> None:
         self.assertEqual("f3b6c011ef2b7975340d0696025cd2da9b24b50e", self.freeze["merge_commit"])
@@ -82,6 +86,32 @@ class SRFDIJuneAuthGateReadyV02Tests(unittest.TestCase):
         self.assertEqual("NONE", self.manifest["probability_risk_exposure_execution"])
         self.assertEqual("fca974ef48e4178be299bf65e520e2268e8b67c3", self.manifest["implementation_commit"])
         self.assertEqual("88ad3ec673493cb82b6b6d4fda90c077535e88d9f630a0535d56df887944ae3f", self.manifest["dependency_manifest_hash"])
+
+    def test_authoritative_programme_state_stops_at_operator_june_gate(self) -> None:
+        self.assertEqual("ovc-srfdi-programme-state/v2", self.state["schema"])
+        self.assertEqual("AUTHORITATIVE_CURRENT", self.state["state_role"])
+        self.assertEqual("GATE_READY", self.state["status"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION", self.state["active_packet"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
+        self.assertTrue(self.state["operator_decision_required"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["stop_at"])
+        self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
+        self.assertEqual("DENIED", self.state["authority"]["provider_fetch"])
+        self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
+        self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
+        self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
+        self.assertEqual("PRESERVE_DO_NOT_MERGE", self.state["pr_371"])
+        self.assertEqual("2a0d3c529ea5aca6a1d8c67adc29d3f6dd55a3efcd75992661a69e205cea010c", self.state["exact_bindings"]["manifest_binding_sha256"])
+
+    def test_current_state_pointer_selects_v02_without_mutating_historical_state(self) -> None:
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_2.json", self.pointer["authoritative_state"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_1.json", self.pointer["prior_state"])
+        self.assertEqual("fca974ef48e4178be299bf65e520e2268e8b67c3", self.pointer["effective_after_main"])
+        self.assertEqual("GATE_READY", self.pointer["status"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
+        self.assertTrue(self.pointer["operator_decision_required"])
+        self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
+        self.assertEqual("PRESERVE_DO_NOT_MERGE", self.pointer["pr_371"])
 
 
 if __name__ == "__main__":
