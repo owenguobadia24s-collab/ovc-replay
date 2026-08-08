@@ -42,19 +42,21 @@ class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
 
-    def test_current_pointer_preserves_wp7_and_records_ag0_defer(self):
+    def test_current_pointer_preserves_wp7_ag0_history_and_records_blocked_supersession(self):
         self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
-        self.assertEqual(self.pointer["status"], "GATE_READY")
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
+        self.assertEqual(self.pointer["status"], "BLOCKED")
+        self.assertEqual(self.pointer["current_gate"], "C2E2-G6-RUN-AUTH-SUPERSESSION")
         self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual(self.pointer["operator_decision"], "DEFER")
-        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
-        self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
-        self.assertEqual(self.pointer["wp6_execution"], "DENIED")
+        self.assertEqual(self.pointer["requested_operator_decision"], "PASS")
+        self.assertEqual(self.pointer["effective_gate_state"], "BLOCKED_PREREQUISITES_UNSATISFIED")
+        self.assertEqual(self.pointer["replay_status"], "BLOCKED_PRE_RUN")
+        self.assertEqual(self.pointer["real_source_replay"], "DENIED_BLOCKED_G6_SUPERSESSION_PREREQUISITES")
+        self.assertEqual(self.pointer["wp6_execution"], "DENIED_NOT_STARTED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
-        self.assertTrue(self.pointer["next_action"].startswith("STOP_C2E_AG0_DEFERRED"))
+        self.assertIsNone(self.pointer["run_token"])
+        self.assertTrue(self.pointer["next_action"].startswith("STOP_BLOCKED"))
 
     def test_ag0_gate_is_consolidated_and_does_not_hide_replay_gap(self):
         self.assertEqual(self.gate["gate_id"], "C2E-AG0")
