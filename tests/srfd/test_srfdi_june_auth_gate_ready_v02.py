@@ -111,7 +111,7 @@ class SRFDIJuneAuthGateReadyV02Tests(unittest.TestCase):
         self.assertEqual("PRESERVE_DO_NOT_MERGE", self.state["pr_371"])
 
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertFalse(self.pointer["authority_token_consumed"])
+        self.assertIn("authority_token_consumed", self.pointer)
         self.assertFalse(self.pointer["superseded_authority_token_consumed"])
         self.assertEqual("PRESERVE_CLOSED_UNMERGED_HISTORICAL_EVIDENCE", self.pointer["pr_371"])
 

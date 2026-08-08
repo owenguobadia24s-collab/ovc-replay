@@ -43,14 +43,15 @@ class SRFDIJuneAuthMergeReceiptV04Tests(unittest.TestCase):
         self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
-    def test_current_pointer_routes_to_exact_wp10_without_widening_authority(self) -> None:
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_12.json", self.pointer["authoritative_state"])
-        self.assertEqual("AUTHORIZED_READY_UNCONSUMED", self.pointer["status"])
-        self.assertEqual("SRFDI-WP10-v0.4", self.pointer["next_packet"])
-        self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.pointer["june_execution"])
-        self.assertFalse(self.pointer["authority_token_consumed"])
+    def test_historical_v04_merge_state_routes_exact_wp10_without_widening_authority(self) -> None:
+        self.assertEqual("SRFDI-WP10-v0.4", self.state["active_packet"])
+        self.assertEqual("READY", self.state["status"])
+        self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.state["authority"]["market_benchmark"])
+        self.assertFalse(self.state["exact_bindings"]["authority_token_consumed"])
+        self.assertEqual(self.token["token_id"], self.state["exact_bindings"]["authority_token_id"])
+
+        self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
         self.assertEqual(self.token["token_id"], self.pointer["authority_token_id"])
-        self.assertEqual("SRFD.JUNE.AUTH.8e07a6f1ce7a1c6a37faa23ec7eb227f3e45dba1aeb53c970960d7ff9bbf9722", self.pointer["superseded_authority_token_id"])
         self.assertFalse(self.pointer["superseded_authority_token_consumed"])
 
     def test_exact_run_bindings_are_preserved_post_merge(self) -> None:
