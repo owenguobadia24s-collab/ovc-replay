@@ -36,7 +36,7 @@ class SRFDIWP10ARealCapacityHarnessTests(unittest.TestCase):
     def test_frozen_c2_hashes_are_anchored_in_accepted_output_manifest(self) -> None:
         manifest = json.loads(OUTPUT_MANIFEST.read_text())
         observed: dict[str, str] = {}
-        for item in manifest["outputs"]:
+        for item in manifest["files"]:
             path = item["path"]
             if "/c2/states/" not in path:
                 continue
