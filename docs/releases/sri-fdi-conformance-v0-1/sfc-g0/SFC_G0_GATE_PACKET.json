@@ -1,0 +1,54 @@
+{
+  "schema": "sfc-g0-gate-packet/v1",
+  "programme_id": "OVC-SFC-v0.1",
+  "gate_id": "SFC-G0",
+  "title": "SFC plan ratification and bounded implementation authority",
+  "plan_id": "OVC_SRI_FDI_Conformance_Implementation_Plan_v0_1_REVISED",
+  "plan_version": "0.1_REVISED",
+  "packet_id": "SFC-WP0",
+  "preflight_main": "d989b65aecd3da034c1bbf905c2631c3308e5e2f",
+  "decision_recording_main": "12d98171cefb4b901490d91a2d259122ff8ef9d8",
+  "completed_packets": ["SFC-WP0_READ_ONLY_PREFLIGHT"],
+  "current_authority": {
+    "sfc_implementation": "NONE",
+    "c2e_activation": "NONE",
+    "june_benchmark": "NO_NEW_AUTHORITY",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "proposed_delta_if_pass": "Bounded SFC contracts/schemas/registries/deterministic adapters/wrappers, synthetic/conformance computation, tests, QA, replay/restart and eligible auto-ratifiable G1-G6 merges only.",
+  "acceptance_conditions": [
+    {"condition": "Plan/source precedence/current scope understood", "result": "PASS"},
+    {"condition": "Mandatory semantic compatibility survey completed", "result": "PASS_WITH_LEGACY_GAPS_IDENTIFIED"},
+    {"condition": "Frozen SRFD v0.4 scientific source pinned", "result": "PASS"},
+    {"condition": "Finalized C2E v0.2 normative producer surface ready for SFC-WP2", "result": "NOT_YET_COMPLETE"},
+    {"condition": "No conflicting operator-reserved authority state", "result": "FAIL_SRFD_MAIN_VS_CURRENT_WORK_TOKEN_STATE_CONFLICT"}
+  ],
+  "tests": {
+    "repository_code_tests": "NOT_RUN_FOR_READ_ONLY_WP0_PREFLIGHT_OR_DEFER_DECISION",
+    "evidence_checks": [
+      "latest main re-resolved",
+      "C2E current-state pointer inspected",
+      "SRFD current-state pointer inspected",
+      "SRFD blocker PR #433 inspected",
+      "v0.4 metric registry source identity inspected",
+      "legacy SFC/SRFD adapter semantics inspected"
+    ]
+  },
+  "qa_recommendation": "DEFER",
+  "warnings": [
+    "C2E2 advanced after the preflight presentation; current main now contains the typed revised-C2 handoff, but C2E2 remains at WP2/G3 with active_c2e=NONE.",
+    "SRFD main still records the v0.4 June token as authorized and unconsumed while open PR #433 records current-work evidence that the same token was consumed and is not reusable."
+  ],
+  "unresolved_issues": [
+    "Reconcile the SRFD v0.4 June token/current-run state through an operator-governed court-record update.",
+    "Wait for finalized C2E v0.2 episode-stream producer artifacts before any later SFC-G2 PASS can occur."
+  ],
+  "external_artifact_hashes": [],
+  "rollback": "Decision-only packet. No SFC implementation exists to roll back. Preserve the DEFER record and all referenced historical/current-work evidence; any future reopening requires a new operator decision against then-current main.",
+  "recommended_decision_presented": "DEFER",
+  "allowed_decisions": ["PASS", "ADJUST_SCOPE", "DEFER", "BLOCK", "QUARANTINE"],
+  "operator_decision": "DEFER",
+  "exact_work_after_decision": "Record DEFER in machine-readable programme state, grant no SFC implementation authority, merge only the decision/evidence record, and stop SFC until an explicit operator reopen/reconsideration command."
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "sfc-g0-qa-packet/v1",
+  "programme_id": "OVC-SFC-v0.1",
+  "packet_id": "SFC-WP0",
+  "gate_id": "SFC-G0",
+  "qa_recommendation": "DEFER",
+  "scope": "Read-only court-record preflight, semantic compatibility census and operator-decision materialization only.",
+  "checks": [
+    {"check_id": "SFC-QA-G0-01", "target": "latest lawful main", "status": "PASS", "evidence": "decision recording main 12d98171cefb4b901490d91a2d259122ff8ef9d8"},
+    {"check_id": "SFC-QA-G0-02", "target": "semantic compatibility survey", "status": "PASS_WITH_GAPS", "evidence": "legacy QUALITY/MG-C2LedgerInput/flattened-state-key assumptions identified as non-normative"},
+    {"check_id": "SFC-QA-G0-03", "target": "frozen SRFD v0.4 source identity", "status": "PASS", "evidence": "registries/research/srfd/stability_metric_specs_v0_4.json blob e4f5ce02a103000a48ed98e2110b8f1a7d497fcd"},
+    {"check_id": "SFC-QA-G0-04", "target": "C2E upstream dependency", "status": "WARN_NOT_FINALIZED", "evidence": "C2E2 current pointer READY at WP2/G3; active_c2e NONE; real-source replay denied"},
+    {"check_id": "SFC-QA-G0-05", "target": "SRFD June authority consistency", "status": "BLOCKING_WARNING", "evidence": "main records authorized/unconsumed token while PR #433 records consumed/not-reusable current-work evidence"},
+    {"check_id": "SFC-QA-G0-06", "target": "reserved authority leakage", "status": "PASS", "evidence": "no SFC implementation, selector, publication, Validation or exposure authority granted"}
+  ],
+  "repository_tests": {
+    "status": "NOT_APPLICABLE_TO_READ_ONLY_PREFLIGHT_DECISION",
+    "reason": "No runtime/source implementation is changed by the operator DEFER record. Repository CI is still required on the decision-record PR before main integration."
+  },
+  "blocking_warnings": ["SRFD_V0_4_TOKEN_STATE_CONFLICT_NOT_RECONCILED_ON_MAIN"],
+  "unresolved_issues": ["FINALIZED_C2E_V0_2_EPISODE_STREAM_NOT_YET_MATERIALIZED"],
+  "authority_effect": "NONE",
+  "qa_conclusion": "The operator's DEFER decision is coherent, fail-closed and narrower than PASS. Record it and pause the programme."
+}
