@@ -53,15 +53,15 @@ class C2E2G6TerminalReceiptTests(unittest.TestCase):
         self.assertEqual(self.receipt["authority_delta"], "NONE")
 
     def test_current_pointer_may_advance_but_g6_replay_denial_persists(self):
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_17.json")
-        self.assertEqual(self.pointer["status"], "GATE_READY")
+        self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
         self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
         self.assertEqual(self.pointer["replay_status"], "DEFERRED")
         self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
         self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["next_action"], "STOP_AT_C2E_AG0_OPERATOR_DECISION")
+        self.assertEqual(self.pointer["operator_decision"], "DEFER")
+        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
 
 
 if __name__ == "__main__":

@@ -54,17 +54,17 @@ class C2E2G0OperatorDecisionTests(unittest.TestCase):
         self.assertEqual(historical_defer["status"], "BLOCKED")
         self.assertEqual(historical_defer["current_gate"], "C2E2-G6-RUN-AUTH")
         current = self.pointer["authoritative_state"]
-        self.assertEqual(current, "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_17.json")
         self.assertTrue((ROOT / current).is_file())
         self.assertEqual(self.pointer["programme_id"], "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2")
         self.assertEqual(self.pointer["status"], "GATE_READY")
         self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertTrue(self.pointer["operator_decision_required"])
-        self.assertIsNone(self.pointer["operator_decision"])
+        self.assertFalse(self.pointer["operator_decision_required"])
+        self.assertEqual(self.pointer["operator_decision"], "DEFER")
         self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
         self.assertEqual(self.pointer["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
 
 
 if __name__ == "__main__":
