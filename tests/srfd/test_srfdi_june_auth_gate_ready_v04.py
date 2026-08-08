@@ -18,7 +18,7 @@ QA = V04 / "SRFDI_G_JUNE_AUTH_QA_PACKET_v0_4.json"
 PACKET = V04 / "SRFDI_G_JUNE_AUTH_OPERATOR_PACKET_v0_4.json"
 FREEZE = BASE / "srfdi-wp9d/SRFDI_G9D_FREEZE_MERGE_RECEIPT.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_11_CANDIDATE.json"
-POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
+HISTORICAL_V10 = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_10.json"
 PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_4.json"
 METRICS = ROOT / "registries/research/srfd/stability_metric_specs_v0_4.json"
 
@@ -32,7 +32,7 @@ class SRFDIJuneAuthGateReadyV04Tests(unittest.TestCase):
         cls.packet = json.loads(PACKET.read_text())
         cls.freeze = json.loads(FREEZE.read_text())
         cls.state = json.loads(STATE.read_text())
-        cls.pointer = json.loads(POINTER.read_text())
+        cls.historical_v10 = json.loads(HISTORICAL_V10.read_text())
         cls.prereg = json.loads(PREREG.read_text())
         cls.metrics = json.loads(METRICS.read_text())
 
@@ -165,17 +165,17 @@ class SRFDIJuneAuthGateReadyV04Tests(unittest.TestCase):
                     expected_implementation_commit="0e94bf4d61272b685a8e972e695e88b6ca4cb3c7",
                 )
 
-    def test_candidate_gate_does_not_mutate_authoritative_pointer_or_grant_june(self) -> None:
+    def test_candidate_gate_preserves_historical_predecision_denial(self) -> None:
         self.assertEqual("GATE_READY_SUBJECT_TO_EXACT_HEAD_CI", self.state["status"])
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
         self.assertTrue(self.state["operator_decision_required"])
         self.assertEqual("DENIED_PENDING_OPERATOR_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
         self.assertEqual("FORBIDDEN_ON_GATE_CANDIDATE_BEFORE_OPERATOR_AUTHORITY", self.state["current_pointer_mutation"])
 
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_10.json", self.pointer["authoritative_state"])
-        self.assertEqual("FROZEN_AWAITING_NEW_JUNE_AUTH_PREPARATION", self.pointer["status"])
-        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
-        self.assertFalse(self.pointer["authority_token_consumed"])
+        self.assertEqual("FROZEN_AWAITING_NEW_JUNE_AUTH_PREPARATION", self.historical_v10["status"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION-v0.4", self.historical_v10["current_gate"])
+        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.historical_v10["authority"]["june"])
+        self.assertFalse(self.historical_v10["exact_bindings"]["prior_v0_3_authority_token_consumed"])
 
     def test_operator_packet_is_one_exact_reserved_decision(self) -> None:
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.packet["gate_id"])
