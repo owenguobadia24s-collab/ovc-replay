@@ -2,45 +2,49 @@ schema: ovc-programme-state/v1
 programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
-packet_id: MCARBI-G-STAGE-A-AUTH
-status: APPROVED
+packet_id: MCARBI-WP8
+status: RUNNING
 prerequisites:
   - MCARBI-G6 FREEZE_STAGE_A_READINESS merged at faf4e5af7c143995a2954dddb136cbe66a9e528d
   - MCARBI-G7 PREREGISTRATION_FREEZE merged at 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
-  - MCARBI-G-STAGE-A-AUTH stable-head assurance PASS at ae26ac042f2ec9d209882456ad1472e9fd8a4b81
-authority_required: OPERATOR_REQUIRED
-authority_delta: AUTHORIZE_ONE_BOUNDED_LOGICAL_STAGE_A_MARKET_BENCHMARK_EXECUTION_ONLY
-baseline_commit: 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
-integration_base_commit: bf11af4d672ee0f086ed2b2825e2d5b6dcf281fb
-branch: gate/mcarbi-stage-a-authorized
-candidate_commit: PENDING_INTEGRATION_COMMIT
+  - MCARBI-G-STAGE-A-AUTH AUTHORIZE_STAGE_A merged at 9cb6a6c9aa010dacbd020a925e33f7a4a135405a
+authority_required: OPERATOR_REQUIRED_ALREADY_GRANTED
+authority_delta: ONE_BOUNDED_LOGICAL_STAGE_A_MARKET_BENCHMARK_EXECUTION_ONLY
+baseline_commit: 9cb6a6c9aa010dacbd020a925e33f7a4a135405a
+branch: run/mcarbi-wp8-stage-a
+candidate_commit: PENDING_STAGE_A_COMPLETION
 tests:
-  - gate repository suite run 31230719888: PASS
-  - gate OVC FINAL_HEAD run 31230719886: PASS
-  - profile assurance job 93033888339: PASS
-  - merge readiness job 93033910806: PASS
-  - compatibility job 93033910848: PASS
-qa_packet: docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_QA_PACKET.json
+  - pre-run repository suite run 31233871345: PASS
+  - pre-run OVC FINAL_HEAD run 31233871310: PASS
+  - WP8 deterministic runner unit tests: PASS under repository suite
+qa_packet: null
 decision_record: docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_OPERATOR_DECISION.json
-gate_packet: docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_GATE_PACKET.json
+gate_packet: null
 preregistration: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_STAGE_A_PREREGISTRATION.json
 preregistration_git_blob_sha1: 8dcc4fe4e51b3b7d07e4dcc440c6b5b6a784f6f7
 parameter_registry: registries/research/mcarb/MCARB_STAGE_A_PARAMETER_REGISTRY_v0_1.json
 parameter_registry_git_blob_sha1: 2afaf18ffebb674b181b7493b2ca62738a54f037
-g7_merge_commit: 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
-merge_commit: null
+run_request: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_RUN_REQUEST.json
+attempt_1_failure: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_ATTEMPT_1_FAILURE.json
+attempts:
+  - attempt: 1
+    workflow_run_id: 31233964807
+    workflow_job_id: 93043000096
+    request_commit: 672cfe7eefebbca6bd57aeb7e171e94add3b6996
+    status: FAILED_CORRECTABLE_IMPLEMENTATION_DEFECT
+    failure: MISSING_INPUT_PAYLOAD_DUE_REMOTE_PATH_PREFIX_ERROR
+    scientific_output_materialized: false
+    evidence_artifact_uploaded: false
+    validation_2025_read: false
+    provider_intake: false
+    r2_write_or_publication: false
 blockers: []
 source_audit_outcome: AL_SOURCE_PARTIAL
-operator_gate:
-  gate_id: MCARBI-G-STAGE-A-AUTH
-  decision: AUTHORIZE_STAGE_A
-  command: OVC APPROVE MCARBI-G-STAGE-A-AUTH AUTHORIZE_STAGE_A
-  decided_at: '2026-08-08T02:18:00+01:00'
-  approved_gate_head: ae26ac042f2ec9d209882456ad1472e9fd8a4b81
-preregistration_status: FROZEN_EXECUTABLE_ONLY_UNDER_ONE_RUN_AUTHORITY
-market_benchmark_authority: AUTHORIZED_ONE_LOGICAL_STAGE_A_RUN_UNCONSUMED
-stage_a_authority: AUTHORIZED_ONE_LOGICAL_STAGE_A_RUN_UNCONSUMED
-stage_a_authority_consumption: UNCONSUMED
+preregistration_status: FROZEN_EXECUTABLE_ONLY_UNDER_AUTHORIZED_LOGICAL_RUN
+market_benchmark_authority: AUTHORIZED_ONE_LOGICAL_STAGE_A_RUN_CONSUMED_IN_PROGRESS
+stage_a_authority: AUTHORIZED_ONE_LOGICAL_STAGE_A_RUN_CONSUMED_IN_PROGRESS
+stage_a_authority_consumption: CONSUMED_IN_PROGRESS
+logical_run_id: MCARBI_STAGE_A_AUTHORIZED_LOGICAL_RUN_1
 stage_a_execution_scope:
   instrument: GBPUSD
   sides: [BID, ASK]
@@ -52,6 +56,7 @@ stage_a_execution_scope:
   source: EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
   provider_intake: DENIED
   checkpoint_resume: SAME_LOGICAL_RUN_BYTE_IDENTICAL_INPUTS_ONLY
+  implementation_defect_retry: SAME_LOGICAL_RUN_SAME_FROZEN_INPUTS_AND_PARAMETERS_ONLY
   changed_parameter_rerun: REQUIRES_NEW_OPERATOR_AUTHORITY
 active_discovery_authority: NONE
 active_development_authority: NONE
@@ -62,5 +67,5 @@ selector_authority: NONE
 c2_c2e_sri_family_semantic_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
-next_packet: MCARBI-WP8
-continuation_point: EXECUTE_EXACT_FROZEN_STAGE_A_ONCE_THEN_AUTO_EVALUATE_MCARBI_G8_AND_PREPARE_MCARBI_WP9_G9; STOP_AT_MCARBI_G9
+next_packet: MCARBI-WP8-CONTINUATION
+continuation_point: CORRECT_REMOTE_OBJECT_ADDRESS_ONLY_AND_CONTINUE_SAME_LOGICAL_RUN; DO_NOT_CHANGE_FROZEN_SOURCE_PARAMETER_POPULATION_OR_SCOPE
