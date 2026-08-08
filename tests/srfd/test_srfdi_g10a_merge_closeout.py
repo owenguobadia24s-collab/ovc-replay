@@ -48,12 +48,23 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("NONE", self.state["authority"]["scientific_promotion"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
-    def test_pointer_routes_to_v16_and_wp10a(self) -> None:
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_16.json", self.pointer["authoritative_state"])
-        self.assertEqual("READY", self.pointer["status"])
-        self.assertEqual("SRFDI-WP10A", self.pointer["next_packet"])
+    def test_v16_remains_historical_while_current_pointer_advances_lawfully(self) -> None:
+        self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
         self.assertEqual("SRFDI-G10A-FREEZE", self.pointer["current_gate"])
         self.assertEqual("b73805d1a846b82cca358815da743041cf2d2d54", self.pointer["effective_after_main"])
+        self.assertIn(
+            self.pointer["authoritative_state"],
+            {
+                "registries/implementation/srfd/OVC_SRFDI_STATE_v0_16.json",
+                "registries/implementation/srfd/OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json",
+            },
+        )
+        if self.pointer["authoritative_state"].endswith("OVC_SRFDI_STATE_v0_16.json"):
+            self.assertEqual("READY", self.pointer["status"])
+            self.assertEqual("SRFDI-WP10A", self.pointer["next_packet"])
+        else:
+            self.assertEqual("APPROVED_PENDING_MERGE", self.pointer["status"])
+            self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.pointer["next_packet"])
 
     def test_closeout_is_delegated_zero_delta_pass(self) -> None:
         self.assertEqual("PASS", self.qa["qa_result"])
