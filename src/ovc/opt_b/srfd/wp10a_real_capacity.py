@@ -355,8 +355,9 @@ def verify_gower_batch_against_reference(
         pairs = pairs[::stride][:sample_pairs]
     for left, right in pairs:
         expected = compute_distance(by_id[left], by_id[right], spec)
-        actual = format(surface.distance(left, right), "f")
-        if expected["distance"] != actual:
+        actual_value = surface.distance(left, right)
+        actual = format(actual_value, "f")
+        if Decimal(str(expected["distance"])) != actual_value:
             raise WP10ACapacityError(
                 "G10A_DISTANCE_EQUIVALENCE_FAILURE",
                 f"{left}|{right}:{expected['distance']}!={actual}",
