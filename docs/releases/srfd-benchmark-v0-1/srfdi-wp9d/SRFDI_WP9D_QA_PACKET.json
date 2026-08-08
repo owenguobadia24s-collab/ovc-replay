@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-srfdi-wp9d-qa-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "packet_id": "SRFDI-WP9D",
+  "gate_id": "SRFDI-G9D-FREEZE",
+  "qa_stage": "PREREGISTRATION_SUPERSESSION_PRE_FREEZE",
+  "qa_result": "PASS",
+  "acceptance": {
+    "triggering_wp10_blocker_addressed_without_june_result_exposure": "PASS",
+    "frozen_v0_2_metric_identity_and_order_preserved": "PASS",
+    "all_five_metric_numerator_denominator_rules_bound": "PASS",
+    "ambiguity_event_and_correspondence_rules_bound": "PASS",
+    "cross_sensitivity_correspondence_rule_bound": "PASS",
+    "cross_method_correspondence_rule_bound": "PASS",
+    "chronology_partition_rule_bound": "PASS",
+    "zero_denominator_failure_semantics_bound": "PASS",
+    "no_forced_resolution_hidden_composite_or_post_result_choice": "PASS",
+    "v0_3_segmentation_unchanged": "PASS",
+    "representation_distance_family_sensitivity_ladders_unchanged": "PASS",
+    "source_population_capacity_unchanged": "PASS",
+    "v0_3_june_token_unconsumed": "PASS",
+    "provider_fetch_denied": "PASS",
+    "validation_locked": "PASS",
+    "pre_metadata_repository_suite_535_of_535": "PASS",
+    "pre_metadata_final_head_profile_and_merge_readiness": "PASS"
+  },
+  "warnings": [
+    "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR is deliberately a descriptive full-catalog temporal-span metric across fixed June halves; it is not an independent half-sample refit stability test and must not be represented as one.",
+    "A PREREGISTRATION_FREEZE decision will supersede the current v0.3 June authorization unused; it will not itself authorize June execution. A new exact SRFDI-G-JUNE-AUTH decision will still be required."
+  ],
+  "unresolved_issues": [],
+  "scientific_bindings": {
+    "metric_registry_logical_sha256": "371a058e26c05a351a99689ad23b7f844fbc956a6d81449fd237a2f420bf564b",
+    "preregistration_v0_4_logical_sha256": "f0da6203124a6aeaa83f89e3f27b2fc980754f874ae96e631009dfc9048f2fa3",
+    "run_manifest_candidate_logical_sha256": "70763e69281b3980eebf0ed7a2008c78ef29e5e463a5694110eec5ca027fb529"
+  },
+  "pre_metadata_assurance_receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-wp9d/SRFDI_WP9D_ASSURANCE_RECEIPT.json",
+  "recommended_disposition": "PREREGISTRATION_FREEZE",
+  "gate_readiness": "PASS_SUBJECT_TO_FINAL_EXACT_HEAD_CI",
+  "authority_effect": "NONE_BEFORE_OPERATOR_DECISION",
+  "rollback": "Close or supersede PR #429 without merge. Preserve v0.2/v0.3 evidence and the unconsumed v0.3 token."
+}
