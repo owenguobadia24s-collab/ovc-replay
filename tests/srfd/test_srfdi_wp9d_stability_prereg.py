@@ -87,7 +87,7 @@ class SRFDIWP9DStabilityPreregistrationTests(unittest.TestCase):
         self.assertFalse(qualifies_adjacent_sensitivity(base, jumped, ladders))
 
     def test_cross_method_requires_exact_member_set_and_shared_support(self) -> None:
-        left = catalog(("A", ["a", "b"]), ("B", ["c"]))
+        left = catalog(("A", ["a", "b"]), ("B", ["c"]), residual=["d"])
         right = catalog(("X", ["a", "b"]), ("Y", ["c", "d"]))
         result = family_survival_rate(left, right, metric_id="CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR")
         self.assertEqual((1, 2, "1/2"), (result["numerator"], result["denominator"], result["rate"]))
