@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 PACKET = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10a/SRFDI_G10A_OPERATOR_PACKET.json"
 QA = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10a/SRFDI_G10A_QA_PACKET.json"
 PREP = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10a/SRFDI_WP10A_PREPARATION_RECORD.json"
+DECISION = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10a/SRFDI_G10A_OPERATOR_DECISION.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_14_SUPERSESSION_GATE_READY_CANDIDATE.json"
 CURRENT = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_2.json"
@@ -21,6 +22,7 @@ class SRFDIG10ACapacitySupersessionGateReadyTests(unittest.TestCase):
         cls.packet = json.loads(PACKET.read_text())
         cls.qa = json.loads(QA.read_text())
         cls.prep = json.loads(PREP.read_text())
+        cls.decision = json.loads(DECISION.read_text())
         cls.state = json.loads(STATE.read_text())
         cls.current = json.loads(CURRENT.read_text())
         cls.prereg = json.loads(PREREG.read_text())
@@ -40,9 +42,7 @@ class SRFDIG10ACapacitySupersessionGateReadyTests(unittest.TestCase):
             self.packet["exact_operator_command"],
         )
 
-    def test_main_pointer_divergence_is_explicit_and_not_mutated(self) -> None:
-        self.assertEqual("AUTHORIZED_READY_UNCONSUMED", self.current["status"])
-        self.assertFalse(self.current["authority_token_consumed"])
+    def test_preparation_divergence_is_immutable_and_operator_decision_resolves_pointer(self) -> None:
         divergence = self.packet["court_record_divergence"]
         self.assertEqual(
             "EXPLICIT_UNRESOLVED_UNTIL_OPERATOR_SUPERSESSION",
@@ -52,6 +52,15 @@ class SRFDIG10ACapacitySupersessionGateReadyTests(unittest.TestCase):
         self.assertTrue(self.packet["current_authority"]["blocker_pr_433_token_consumed"])
         self.assertFalse(self.packet["current_authority"]["main_pointer_token_consumed"])
         self.assertFalse(self.prep["current_state_pointer_changed"])
+
+        self.assertEqual("SUPERSEDE", self.decision["decision"])
+        self.assertEqual("OPERATOR", self.decision["decision_authority"])
+        self.assertEqual(
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_15.json",
+            self.current["authoritative_state"],
+        )
+        self.assertTrue(self.current["authority_token_consumed"])
+        self.assertEqual("SRFDI-WP10A", self.current["next_packet"])
 
     def test_capacity_blocker_and_consumed_token_are_pinned(self) -> None:
         blocker = self.packet["triggering_blocker"]
