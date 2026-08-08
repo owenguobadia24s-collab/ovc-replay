@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-srfdi-g9s-qa-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "SRFDI-G9S",
+  "gate_title": "Preregistration supersession design authority",
+  "gate_class": "OPERATOR_REQUIRED",
+  "baseline_commit": "76846738ee329178b5f5d00bfef8e3ec060bd010",
+  "source_findings": {
+    "wp2c_engineering": "PASS",
+    "wp2c_merge_commit": "76846738ee329178b5f5d00bfef8e3ec060bd010",
+    "remaining_blocker": "FROZEN_REPRESENTATION_PACK_FIELD_MAPPING_NOT_MATERIALISED",
+    "accepted_srfd_design_effect": "Defines representation classes and required contract fields but deliberately leaves representation/normalization scientific choices method-neutral and noncanonical.",
+    "accepted_srfd_implementation_plan_effect": "Requires RepresentationPack lawful_inputs, exact C2/C2E source fields, normalization identity, missingness, comparability and ordering semantics; these exact real-source pack instances were not frozen in G9 v0.1.",
+    "repository_gap": "No exact real-source RepresentationPack.required_fields, typed component selectors, normalization constants, sequence-channel definitions or transform semantics exist for SRFDI-R1..R9."
+  },
+  "frozen_g9_v0_1": {
+    "preregistration_id": "OVC-SRFD-JUNE-PREREG-v0.1-CANDIDATE",
+    "byte_sha256": "76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792",
+    "logical_sha256": "a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e",
+    "candidate_ids": "SRFDI-R1..SRFDI-R9",
+    "exact_real_source_field_mapping_frozen": false,
+    "post_freeze_invention_allowed": false
+  },
+  "qa_checks": {
+    "historical_g9_bytes_preserved": "PASS",
+    "wp2c_adapter_is_schema_preserving": "PASS",
+    "wp2c_run_authority_verifier_is_fail_closed": "PASS",
+    "authoritative_real_source_pack_mapping_exists": "FAIL",
+    "june_can_be_lawfully_authorized_under_current_frozen_v0_1": "FAIL",
+    "silent_post_freeze_mapping_choice_forbidden": "PASS",
+    "validation_2025_unconsumed": "PASS",
+    "provider_fetch_not_required": "PASS",
+    "pr_371_preserved": "PASS"
+  },
+  "qa_result": "BLOCK_CURRENT_G9_V0_1_FOR_JUNE",
+  "qa_recommendation": "SUPERSEDE",
+  "recommended_scope": "Authorize only a bounded preregistration-remediation packet that designs and materialises exact real-source RepresentationPack specifications using frozen upstream contracts and synthetic/schema fixtures. Do not use June records or benchmark results while defining them.",
+  "required_future_stop": "SRFDI-G9S-FREEZE",
+  "future_freeze_requirement": "A new exact preregistration version must return to the operator for byte/logical-hash freeze before SRFDI-G-JUNE-AUTH can be re-presented.",
+  "authority_firewall": {
+    "june_execution": "DENIED",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "scientific_promotion": "NONE",
+    "selector_change": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "blocking_warnings": [
+    "The missing mapping is scientific preregistration content, not a mechanical adapter defect.",
+    "Any exact choice of source fields, transforms, normalization or sequence channels changes the frozen experiment specification and therefore requires operator-governed supersession/new versioning."
+  ],
+  "rollback": "If supersession is not approved, preserve G9 v0.1 as frozen historical evidence, keep June denied, and do not create or infer real-source representation packs."
+}
