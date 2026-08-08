@@ -116,10 +116,12 @@ def _cluster_pair_key(
 def hierarchical_optimized(matrix: DistanceMatrix, spec: FamilyMethodSpec) -> dict[str, object]:
     """Reference-equivalent complete/average linkage with a lazy exact heap.
 
-    Complete linkage uses exact max updates. Average linkage recomputes only distances
-    involving the newly merged cluster from the prepared base surface, in the same
-    lexicographic cluster/member order used by the reference implementation. Recursive
-    averaging of rounded means is intentionally prohibited.
+    Complete linkage uses exact max updates. Average linkage carries an exact base-distance
+    sum and pair count for every live cluster pair. A merged cluster therefore receives
+    ``sum(A∪B,C) = sum(A,C) + sum(B,C)`` and the analogous count, then divides exactly once
+    at the same point where the reference recomputes the full base-member mean. Recursive
+    averaging of rounded means is never used. This preserves the reference Decimal result
+    and lexicographic tie rule while eliminating repeated O(|A||B|) base-surface rescans.
     """
 
     if spec.radius is None or spec.linkage not in {"complete", "average"}:
@@ -133,13 +135,19 @@ def hierarchical_optimized(matrix: DistanceMatrix, spec: FamilyMethodSpec) -> di
     distances: dict[
         tuple[tuple[str, ...], tuple[str, ...]], Decimal
     ] = {}
+    average_aggregates: dict[
+        tuple[tuple[str, ...], tuple[str, ...]], tuple[Decimal, int]
+    ] = {}
     heap: list[
         tuple[Decimal, tuple[str, ...], tuple[str, ...], tuple[str, ...]]
     ] = []
 
     for left, right in combinations(sorted(active), 2):
         distance = prepared.distance(left[0], right[0])
-        distances[_cluster_pair_key(left, right)] = distance
+        key = _cluster_pair_key(left, right)
+        distances[key] = distance
+        if spec.linkage == "average":
+            average_aggregates[key] = (distance, 1)
         merged = tuple(sorted(left + right))
         heapq.heappush(heap, (distance, merged, left, right))
 
@@ -160,21 +168,22 @@ def hierarchical_optimized(matrix: DistanceMatrix, spec: FamilyMethodSpec) -> di
 
         for other in others:
             ordered_left, ordered_right = sorted((merged, other))
+            left_key = _cluster_pair_key(left, other)
+            right_key = _cluster_pair_key(right, other)
+            new_key = _cluster_pair_key(merged, other)
             if spec.linkage == "complete":
                 new_distance = max(
-                    distances[_cluster_pair_key(left, other)],
-                    distances[_cluster_pair_key(right, other)],
+                    distances[left_key],
+                    distances[right_key],
                 )
             else:
-                base_distances = [
-                    prepared.distance(left_member, right_member)
-                    for left_member in ordered_left
-                    for right_member in ordered_right
-                ]
-                new_distance = sum(base_distances, Decimal("0")) / Decimal(
-                    len(base_distances)
-                )
-            distances[_cluster_pair_key(merged, other)] = new_distance
+                left_sum, left_count = average_aggregates[left_key]
+                right_sum, right_count = average_aggregates[right_key]
+                total_sum = left_sum + right_sum
+                total_count = left_count + right_count
+                average_aggregates[new_key] = (total_sum, total_count)
+                new_distance = total_sum / Decimal(total_count)
+            distances[new_key] = new_distance
             union = tuple(sorted(merged + other))
             heapq.heappush(
                 heap,
