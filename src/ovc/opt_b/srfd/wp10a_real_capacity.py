@@ -11,19 +11,8 @@ import time
 from typing import Any, Iterable, Mapping, Sequence
 
 from .distance import DistanceSpec, compute_distance
-from .families import DistanceMatrix, FamilyMethodSpec
-from .family_grid_capacity import (
-    frozen_hierarchical_configuration_id,
-    materialize_frozen_hierarchical_grid,
-)
-from .family_grid_reuse import (
-    build_bounded_pam_core,
-    build_medoid_star_trace,
-    frozen_medoid_configuration_id,
-    frozen_pam_configuration_id,
-    materialize_bounded_pam_core,
-    materialize_medoid_star_trace,
-)
+from .families import DistanceMatrix
+from .pattern_family_capacity import PatternDistanceSurface, materialize_pattern_full_grid
 from .real_source_packs import compile_real_source_representation
 from .serialization import logical_sha256
 
@@ -34,11 +23,6 @@ FROZEN_ELIGIBLE_IDS_SHA256 = "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083
 FROZEN_DOMAIN_COUNT = 36
 FROZEN_PAIR_COUNT = 35380668
 FROZEN_FAMILY_CONFIGURATION_COUNT = 1944
-FROZEN_RADII = ("0.04", "0.08", "0.16")
-FROZEN_MINIMUM_SUPPORT = (2, 4, 8)
-FROZEN_PAM_K = (2, 4, 8)
-FROZEN_PAM_ASSIGNMENT_RADII = ("0.10", "0.20", "0.40")
-FROZEN_PAM_MAX_ITERATIONS = 8
 T0_MAX_WALL_SECONDS = 14400
 T0_MAX_PEAK_RSS_BYTES = 17179869184
 T0_MAX_EXTERNAL_BYTES = 10737418240
@@ -264,50 +248,46 @@ def _combined_value(record: Mapping[str, Any], field: str) -> Any:
     raise WP10ACapacityError("DISTANCE_BINDING_MISMATCH", field)
 
 
-def gower_distance_matrix(records: Sequence[Mapping[str, Any]]) -> DistanceMatrix:
+def gower_pattern_surface(records: Sequence[Mapping[str, Any]]) -> PatternDistanceSurface:
     if len(records) < 2:
         raise WP10ACapacityError("DISTANCE_BINDING_MISMATCH", "domain requires >=2 records")
     fields = _gower_fields(records[0])
-    vectors: dict[str, tuple[Any, ...]] = {}
     for record in records:
         if _gower_fields(record) != fields:
             raise WP10ACapacityError("DISTANCE_BINDING_MISMATCH", "field set changed within domain")
-        representation_id = str(record["representation_id"])
-        vectors[representation_id] = tuple(_combined_value(record, field) for field in fields)
-    ids = tuple(sorted(vectors))
-    quantum = Decimal("0.000000000001")
-    pair_values: dict[str, str] = {}
-    denominator = Decimal(len(fields))
-    for left_index, left in enumerate(ids):
-        left_vector = vectors[left]
-        for right in ids[left_index + 1 :]:
-            right_vector = vectors[right]
-            mismatch_count = sum(
-                0 if left_value == right_value else 1
-                for left_value, right_value in zip(left_vector, right_vector)
-            )
-            distance = (Decimal(mismatch_count) / denominator).quantize(quantum)
-            pair_values[f"{left}|{right}"] = format(distance, "f")
-    return DistanceMatrix.from_pairs(ids, pair_values)
+    return PatternDistanceSurface.from_records(
+        records,
+        fields=fields,
+        value_getter=_combined_value,
+    )
+
+
+def gower_distance_matrix(records: Sequence[Mapping[str, Any]]) -> DistanceMatrix:
+    """Small-fixture semantic oracle; real capacity execution uses pattern compression."""
+    surface = gower_pattern_surface(records)
+    pair_values = {
+        f"{left}|{right}": format(surface.distance(left, right), "f")
+        for left, right in combinations(surface.ids, 2)
+    }
+    return DistanceMatrix.from_pairs(surface.ids, pair_values)
 
 
 def verify_gower_batch_against_reference(
     records: Sequence[Mapping[str, Any]],
-    matrix: DistanceMatrix,
+    surface: Any,
     *,
     sample_pairs: int = 64,
 ) -> dict[str, Any]:
     by_id = {str(record["representation_id"]): record for record in records}
     fields = _gower_fields(records[0])
     spec = DistanceSpec("SRFDI-WP10A-GOWER-CHECK", "GOWER_MIXED", fields)
-    ids = matrix.ids
-    pairs = list(combinations(ids, 2))
+    pairs = list(combinations(surface.ids, 2))
     if len(pairs) > sample_pairs:
         stride = max(1, len(pairs) // sample_pairs)
         pairs = pairs[::stride][:sample_pairs]
     for left, right in pairs:
         expected = compute_distance(by_id[left], by_id[right], spec)
-        actual = format(matrix.distance(left, right), "f")
+        actual = format(surface.distance(left, right), "f")
         if expected["distance"] != actual:
             raise WP10ACapacityError(
                 "G10A_DISTANCE_EQUIVALENCE_FAILURE",
@@ -327,85 +307,53 @@ def _peak_rss_bytes() -> int:
     return value * 1024
 
 
+def _is_exact_null_control(surface: PatternDistanceSurface) -> bool:
+    if surface.fields != ("null_control_token",):
+        return False
+    if surface.unique_pattern_count != len(surface.ids):
+        return False
+    return all(
+        surface.distance(left, right) == Decimal("1.000000000000")
+        for left, right in zip(surface.ids, surface.ids[1:])
+    )
+
+
 def execute_domain_family_grid(
     domain_id: str,
     records: Sequence[Mapping[str, Any]],
 ) -> dict[str, Any]:
     start = time.perf_counter()
-    matrix_start = time.perf_counter()
-    matrix = gower_distance_matrix(records)
-    matrix_seconds = time.perf_counter() - matrix_start
-    gower_equivalence = verify_gower_batch_against_reference(records, matrix)
+    surface_start = time.perf_counter()
+    surface = gower_pattern_surface(records)
+    surface_seconds = time.perf_counter() - surface_start
+    gower_equivalence = verify_gower_batch_against_reference(records, surface)
+    null_fast_path = _is_exact_null_control(surface)
 
-    catalog_hashes: dict[str, str] = {}
-    stage_seconds: dict[str, float] = {"distance_matrix": matrix_seconds}
-
-    hierarchical_start = time.perf_counter()
-    hierarchical = materialize_frozen_hierarchical_grid(matrix, domain_id=domain_id)
-    for configuration_id, catalog in hierarchical["catalogs"].items():
-        catalog_hashes[configuration_id] = str(catalog["logical_hash"])
-    stage_seconds["hierarchical_trace_and_materialization"] = time.perf_counter() - hierarchical_start
-
-    medoid_start = time.perf_counter()
-    for radius in FROZEN_RADII:
-        trace = build_medoid_star_trace(matrix, radius=radius)
-        for support in FROZEN_MINIMUM_SUPPORT:
-            configuration_id = frozen_medoid_configuration_id(
-                domain_id=domain_id,
-                radius=radius,
-                minimum_support=support,
-            )
-            spec = FamilyMethodSpec(
-                "GREEDY_LEXICOGRAPHIC_MEDOID_STAR",
-                configuration_id,
-                radius=radius,
-                minimum_support=support,
-            )
-            catalog = materialize_medoid_star_trace(matrix, trace, spec)
-            catalog_hashes[configuration_id] = str(catalog["logical_hash"])
-    stage_seconds["medoid_trace_and_materialization"] = time.perf_counter() - medoid_start
-
-    pam_start = time.perf_counter()
-    for k in FROZEN_PAM_K:
-        if k > len(matrix.ids):
-            raise WP10ACapacityError("FROZEN_GRID_INCOMPATIBLE", f"domain={domain_id}:k={k}")
-        for assignment_radius in FROZEN_PAM_ASSIGNMENT_RADII:
-            core = build_bounded_pam_core(
-                matrix,
-                k=k,
-                max_assignment_distance=assignment_radius,
-                max_iterations=FROZEN_PAM_MAX_ITERATIONS,
-            )
-            for support in FROZEN_MINIMUM_SUPPORT:
-                configuration_id = frozen_pam_configuration_id(
-                    domain_id=domain_id,
-                    k=k,
-                    max_assignment_distance=assignment_radius,
-                    max_iterations=FROZEN_PAM_MAX_ITERATIONS,
-                    minimum_support=support,
-                )
-                spec = FamilyMethodSpec(
-                    "BOUNDED_PAM",
-                    configuration_id,
-                    k=k,
-                    minimum_support=support,
-                    max_assignment_distance=assignment_radius,
-                    max_iterations=FROZEN_PAM_MAX_ITERATIONS,
-                )
-                catalog = materialize_bounded_pam_core(matrix, core, spec)
-                catalog_hashes[configuration_id] = str(catalog["logical_hash"])
-    stage_seconds["pam_core_and_materialization"] = time.perf_counter() - pam_start
-
-    if len(catalog_hashes) != 54:
-        raise WP10ACapacityError("FROZEN_GRID_INCOMPLETE", f"domain={domain_id}:configs={len(catalog_hashes)}")
+    grid_start = time.perf_counter()
+    grid = materialize_pattern_full_grid(
+        surface,
+        domain_id=domain_id,
+        null_control_all_off_diagonal_one=null_fast_path,
+    )
+    grid_seconds = time.perf_counter() - grid_start
+    if int(grid["configuration_count"]) != 54:
+        raise WP10ACapacityError(
+            "FROZEN_GRID_INCOMPLETE",
+            f"domain={domain_id}:configs={grid['configuration_count']}",
+        )
     payload = {
         "domain_id": domain_id,
-        "population_count": len(matrix.ids),
-        "pair_count": len(matrix.ids) * (len(matrix.ids) - 1) // 2,
-        "configuration_count": len(catalog_hashes),
-        "catalog_hashes_sha256": logical_sha256(dict(sorted(catalog_hashes.items()))),
+        "population_count": len(surface.ids),
+        "unique_pattern_count": surface.unique_pattern_count,
+        "pair_count": len(surface.ids) * (len(surface.ids) - 1) // 2,
+        "configuration_count": int(grid["configuration_count"]),
+        "catalog_hashes_sha256": str(grid["catalog_hashes_sha256"]),
         "gower_equivalence": gower_equivalence,
-        "stage_seconds": {key: round(value, 9) for key, value in stage_seconds.items()},
+        "null_control_fast_path": null_fast_path,
+        "stage_seconds": {
+            "pattern_surface": round(surface_seconds, 9),
+            "full_grid_materialization": round(grid_seconds, 9),
+        },
         "wall_seconds": round(time.perf_counter() - start, 9),
         "peak_rss_bytes_after_domain": _peak_rss_bytes(),
         "scientific_effect": "NONE_CAPACITY_ONLY",
@@ -431,13 +379,19 @@ def execute_full_real_capacity_grid(
         raise WP10ACapacityError("FROZEN_GRID_INCOMPLETE", f"configs={config_count}")
     if pair_count != FROZEN_PAIR_COUNT:
         raise WP10ACapacityError("DISTANCE_PAIR_COUNT_MISMATCH", f"pairs={pair_count}")
+    catalog_grid_hash = logical_sha256(
+        {
+            item["domain_id"]: item["catalog_hashes_sha256"]
+            for item in sorted(domain_receipts, key=lambda row: str(row["domain_id"]))
+        }
+    )
     status = (
         "PASS_FULL_GRID_T0"
         if wall_seconds <= T0_MAX_WALL_SECONDS and peak_rss <= T0_MAX_PEAK_RSS_BYTES
         else "CAPACITY_EXCEEDED"
     )
     payload = {
-        "schema": "ovc-srfdi-wp10a-real-family-grid-capacity/v1",
+        "schema": "ovc-srfdi-wp10a-real-family-grid-capacity/v2",
         "measurement_class": "MEASURED_REAL_DATA_CAPACITY_ONLY",
         "status": status,
         "source_files": [item.to_dict() for item in source_receipts],
@@ -448,6 +402,7 @@ def execute_full_real_capacity_grid(
         "comparability_domain_count": len(domain_receipts),
         "exact_pair_opportunity_count": pair_count,
         "family_configuration_count": config_count,
+        "catalog_grid_hash": catalog_grid_hash,
         "domain_receipts": domain_receipts,
         "wall_seconds": round(wall_seconds, 9),
         "peak_rss_bytes": peak_rss,
@@ -462,6 +417,8 @@ def execute_full_real_capacity_grid(
             "HIERARCHICAL_EXACT_TRACE_REUSE_v1",
             "MEDOID_STAR_EXACT_PREFIX_REUSE_v1",
             "BOUNDED_PAM_EXACT_SUPPORT_MATERIALIZATION_v1",
+            "CATEGORICAL_GOWER_EXACT_PATTERN_COMPRESSION_v1",
+            "NULL_CONTROL_ALL_RESIDUAL_ANALYTIC_v1",
         ],
         "sampling": "NONE_FULL_FROZEN_GRID",
         "method_or_configuration_drop": False,
