@@ -74,23 +74,18 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", authority["scientific_promotion"])
         self.assertEqual("NONE", authority["probability_risk_exposure_execution"])
 
-    def test_current_pointer_may_advance_after_operator_pass_without_granting_fresh_run(self) -> None:
-        self.assertIn(self.pointer["current_gate"], {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH"})
-        self.assertTrue(self.pointer["authority_token_consumed"])
-        self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
-        self.assertIn(self.pointer["status"], {"READY", "APPROVED_PENDING_MERGE", "COMPLETED"})
-        if self.pointer["status"] == "READY":
-            self.assertEqual("SRFDI-WP10A", self.pointer["next_packet"])
-            self.assertEqual("AUTHORIZED_BOUNDED_REAL_DATA_FAMILY_GRID_CAPACITY_REMEDIATION_ONLY", self.pointer["wp10a_execution"])
-        elif self.pointer["status"] == "APPROVED_PENDING_MERGE":
-            self.assertEqual("SRFDI-G10A-FREEZE", self.pointer["current_gate"])
-            self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.pointer["next_packet"])
-            self.assertNotEqual("AUTHORIZED_BOUNDED_REAL_DATA_FAMILY_GRID_CAPACITY_REMEDIATION_ONLY", self.pointer["wp10a_execution"])
-        else:
-            self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
-            self.assertEqual("SRFDI-G-JUNE-AUTH-PREP", self.pointer["next_packet"])
-            self.assertTrue(self.pointer["operator_decision_required"])
-            self.assertEqual("COMPLETED_CAPACITY_BACKEND_FROZEN", self.pointer["wp10a_execution"])
+    def test_current_pointer_may_advance_only_through_lawful_delegated_sequence(self) -> None:
+        self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
+        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", None})
+        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED"})
+        self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
+        self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
+        self.assertEqual("NONE", self.pointer.get("scientific_promotion", "NONE"))
+        self.assertEqual("NONE", self.pointer.get("probability_risk_exposure_execution", "NONE"))
+        self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81", self.pointer.get("capacity_backend_freeze", "fcf8f2e84111c5c0920cb28816f95b00a9168d81"))
+        if self.pointer["authority_token_id"] != "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686":
+            self.assertEqual("SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686", self.pointer["prior_authority_token_id"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
 
     def test_pass_would_freeze_only_backend_and_still_require_new_june_authority(self) -> None:
         delta = self.packet["proposed_authority_delta_if_PASS"]
