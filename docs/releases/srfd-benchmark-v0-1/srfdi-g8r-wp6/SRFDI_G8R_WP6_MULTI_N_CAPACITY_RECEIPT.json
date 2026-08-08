@@ -1,0 +1,187 @@
+{
+  "schema": "ovc-srfdi-g8r-wp6-multi-n-capacity-receipt/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_artifact_sha256": "f1e6515f68a97ee50c5273cb13312622376ac9650c6cf7612c48c18588fb0408",
+  "packet_id": "SRFDI-G8R-WP6",
+  "source_head": "297b6ff3f5160a31aff5e35b959e03eed756744e",
+  "pr_merge_test_head": "67f4f350a5803b66816307128c6398219caf3776",
+  "latest_lawful_main_at_measurement": "1ea248b943600b4f1f40916e06fe29ae2ac8beeb",
+  "measurement_profile_logical_hash": "52fa01541b0d7727662ecde63f4c204a79c44969e0c0c87efacbb31bfbe0771b",
+  "measurement_class": "MEASURED_MULTI_N_WITH_EXPLICIT_EXTRAPOLATION",
+  "authority_state": "FIXTURE_LOCAL_CAPACITY_REMEDIATION_ONLY",
+  "scientific_effect": "NONE",
+  "backend": {
+    "distance": "PYTHON_STDLIB_EXACT",
+    "family": "PYTHON_STDLIB_EXACT_FAMILY_OPTIMIZED",
+    "numpy": "CANDIDATE_UNADMITTED"
+  },
+  "environment": {
+    "fingerprint": "SRFD.H0.a509562092bc40c68210291e76368b0e747bae1588eaacd8a46dba7cacb3619d",
+    "cpu_model": "AMD EPYC 7763 64-Core Processor",
+    "physical_cores": 2,
+    "logical_threads": 4,
+    "installed_memory_bytes": 16766423040,
+    "filesystem_type": "ext4",
+    "storage_total_bytes": 154894188544,
+    "storage_free_bytes_at_capture": 93843329024,
+    "python": "CPython 3.11.15",
+    "runner": "GitHub-hosted Ubuntu 24.04"
+  },
+  "population_rungs": [64, 128, 256, 512, 1024],
+  "rungs": {
+    "64": {
+      "representation_seconds": 0.009563194999998359,
+      "representation_records_per_second": 6692.324061154351,
+      "distance_pair_count": 2016,
+      "distance_seconds": 0.12577733400000568,
+      "distance_pairs_per_second": 16028.325103471418,
+      "family_seconds": {
+        "AVERAGE_LINKAGE": 0.01791768700000773,
+        "BOUNDED_PAM": 0.0048889979999984234,
+        "COMPLETE_LINKAGE": 0.012841868999998951,
+        "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 0.00485404299999459
+      }
+    },
+    "128": {
+      "representation_seconds": 0.0183635019999997,
+      "representation_records_per_second": 6970.348030566398,
+      "distance_pair_count": 8128,
+      "distance_seconds": 0.48090684000000294,
+      "distance_pairs_per_second": 16901.40235892663,
+      "family_seconds": {
+        "AVERAGE_LINKAGE": 0.07673235299999703,
+        "BOUNDED_PAM": 0.015463889999992375,
+        "COMPLETE_LINKAGE": 0.04361150199999031,
+        "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 0.014238047000006304
+      }
+    },
+    "256": {
+      "representation_seconds": 0.035916479999997364,
+      "representation_records_per_second": 7127.647252737986,
+      "distance_pair_count": 32640,
+      "distance_seconds": 1.9146506080000023,
+      "distance_pairs_per_second": 17047.496740982395,
+      "family_seconds": {
+        "AVERAGE_LINKAGE": 0.37603134199999033,
+        "BOUNDED_PAM": 0.05401574200000425,
+        "COMPLETE_LINKAGE": 0.17969686599998624,
+        "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 0.04871906399999659
+      }
+    },
+    "512": {
+      "representation_seconds": 0.07186439599999517,
+      "representation_records_per_second": 7124.529370566677,
+      "distance_pair_count": 130816,
+      "distance_seconds": 7.601150498999999,
+      "distance_pairs_per_second": 17210.026300256788,
+      "family_seconds": {
+        "AVERAGE_LINKAGE": 1.8243814570000012,
+        "BOUNDED_PAM": 0.2106430899999907,
+        "COMPLETE_LINKAGE": 0.8428978980000039,
+        "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 0.17887952099999893
+      }
+    },
+    "1024": {
+      "representation_seconds": 0.14172147299998983,
+      "representation_records_per_second": 7225.4400008957955,
+      "distance_pair_count": 523776,
+      "distance_seconds": 30.395454012000002,
+      "distance_pairs_per_second": 17232.050549178024,
+      "family_seconds": {
+        "AVERAGE_LINKAGE": 9.190267551999995,
+        "BOUNDED_PAM": 0.8615003909999928,
+        "COMPLETE_LINKAGE": 4.29788136800002,
+        "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 0.7481000110000195
+      }
+    }
+  },
+  "worker_sweep": {
+    "population_count": 256,
+    "pair_count": 32640,
+    "tile_pair_count": 8192,
+    "logical_equivalence": true,
+    "rows": [
+      {"worker_count": 1, "wall_seconds": 1.8908195189999901, "pairs_per_second": 17262.356175200966},
+      {"worker_count": 2, "wall_seconds": 1.0438778120000052, "pairs_per_second": 31268.027373303186},
+      {"worker_count": 4, "wall_seconds": 0.9567331640000134, "pairs_per_second": 34116.09550936351}
+    ],
+    "best_measured_worker_count": 4,
+    "one_to_four_worker_speedup": 1.9763290227074888,
+    "projection_uses_parallel_speedup": false
+  },
+  "reference_projection": {
+    "population_count": 8598,
+    "pair_count": 36958503,
+    "binding_status": "NON_BINDING_CAPACITY_REFERENCE_ONLY",
+    "representation_seconds": 1.1915614756793378,
+    "distance_seconds": 2140.929758972161,
+    "family_method_seconds": {
+      "AVERAGE_LINKAGE": 1315.1335247195932,
+      "BOUNDED_PAM": 65.02323423084194,
+      "COMPLETE_LINKAGE": 638.3583089592898,
+      "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": 60.467407933136975
+    },
+    "storage_write_seconds": 43.60738056733658,
+    "full_required_dag_serial_cold_seconds": 4264.711176858039,
+    "full_required_dag_serial_cold_hours": 1.1846419935716774,
+    "peak_measured_process_rss_bytes": 579379200,
+    "external_bytes_with_5pct_reserve": 310451426,
+    "cache_reuse_assumed": false,
+    "parallel_speedup_assumed": false,
+    "capacity_status": "SUPPORTED_T0",
+    "method_capacity_statuses": {
+      "AVERAGE_LINKAGE": "SUPPORTED_T0",
+      "BOUNDED_PAM": "SUPPORTED_T0",
+      "COMPLETE_LINKAGE": "SUPPORTED_T0",
+      "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": "SUPPORTED_T0"
+    }
+  },
+  "effective_slopes": {
+    "distance": [1.934885484606773, 1.9932517971267099, 1.9891366510541364, 1.9995658638456262],
+    "AVERAGE_LINKAGE": [2.0984505844200867, 2.2929460137514233, 2.2784825919968, 2.332699450796986],
+    "BOUNDED_PAM": [1.6612925600304944, 1.8044766379982313, 1.9633487666499168, 2.0320508611616117],
+    "COMPLETE_LINKAGE": [1.763853491402876, 2.0427846643078813, 2.2297926372880665, 2.350195871245584],
+    "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": [1.5524924748239954, 1.7747351474451742, 1.876429908789753, 2.0642429220243015]
+  },
+  "projection_rule": "ANCHOR_AT_N1024_AND_USE_MAXIMUM_OBSERVED_ADJACENT_LOG_N_LOG_TIME_SLOPE; SERIAL_COLD_PATH; NO_CACHE_OR_PARALLEL_SPEEDUP_CREDIT",
+  "t0": {
+    "max_wall_seconds": 14400,
+    "max_peak_rss_bytes": 17179869184,
+    "max_external_bytes": 10737418240,
+    "wall_headroom_fraction": 0.7038395016070805,
+    "rss_headroom_fraction": 0.966275691986084,
+    "external_headroom_fraction": 0.9710869578644633
+  },
+  "t1": {
+    "max_wall_seconds": 86400,
+    "max_peak_rss_bytes": 34359738368,
+    "max_external_bytes": 107374182400,
+    "status": "PLANNING_TIER_ONLY_LONG_HORIZON_POPULATION_NOT_BOUND"
+  },
+  "measurement_limits": {
+    "p3_n2048_measured": false,
+    "p4_n4096_plus_measured": false,
+    "qualification": "The declared measured ladder ends at N=1024. The 8598-object result is explicitly extrapolated from the maximum observed adjacent slopes and has substantial T0 headroom; operator may accept this evidence or require further rungs at G8R-G6.",
+    "reference_population_is_not_srfd_population_freeze": true,
+    "reference_population_is_not_june_binding": true,
+    "no_scientific_method_selected_or_rejected": true
+  },
+  "tests": {
+    "repository_suite_run_id": 31230742861,
+    "repository_suite_conclusion": "success",
+    "repository_test_count": 444,
+    "tiered_run_id": 31230742855,
+    "tiered_conclusion": "success",
+    "profile_assurance_job_id": 93033960819,
+    "profile_assurance_conclusion": "success",
+    "merge_readiness_job_id": 93033981618,
+    "merge_readiness_conclusion": "success"
+  },
+  "june_market_records_read": false,
+  "validation_consumed": false,
+  "wp9": "DENIED",
+  "pr_371": "PRESERVE_DO_NOT_MERGE",
+  "conclusion": "REDESIGNED_CAPACITY_EVIDENCE_SUPPORTS_T0_AT_NON_BINDING_8598_REFERENCE_PENDING_OPERATOR_G6"
+}

@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-srfdi-g8r-wp6-storage-capacity-receipt/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "packet_id": "SRFDI-G8R-WP6",
+  "source_head": "297b6ff3f5160a31aff5e35b959e03eed756744e",
+  "measurement_class": "MEASURED_PLUS_EXACT_STORAGE_MODEL",
+  "scientific_effect": "NONE",
+  "exact_payload_encoding": {
+    "coefficient_width_bytes": 8,
+    "semantic_precision": "UNCHANGED_EXACT_FIXED_POINT",
+    "pair_id_materialization_in_payload": false,
+    "pair_identity_reconstructable_from_condensed_index": true
+  },
+  "measured_tile": {
+    "pair_count": 256000,
+    "payload_bytes": 2048000,
+    "bytes_per_pair": 8,
+    "write_seconds": 0.30205469699998844,
+    "write_mib_per_second": 6.466130205550403,
+    "read_seconds": 0.07867327900001442,
+    "read_mib_per_second": 24.82577343699685,
+    "restart_reuse_check_seconds": 0.0000018830000101388578,
+    "verified_complete_tile_recomputed": false,
+    "content_hash": "2b94159c91d71d6e32b12215e3f056ebe1d198edef208397e27af3a697744108"
+  },
+  "h0_raw_filesystem_io": {
+    "payload_bytes": 4194304,
+    "write_seconds": 0.0034069639999927404,
+    "write_mib_per_second": 1174.065825177056,
+    "fsync_seconds": 0.0022206550000021252,
+    "rename_seconds": 0.00006883899999365894,
+    "first_read_seconds": 0.0006518800000065994,
+    "first_read_mib_per_second": 6136.098668404469,
+    "second_read_seconds": 0.00021389999999144038,
+    "second_read_mib_per_second": 18700.327256475306
+  },
+  "storage_model": [
+    {"population_count": 1000, "pair_count": 499500, "compact_payload_bytes": 3996000, "compact_payload_gib": 0.003721565008163452},
+    {"population_count": 5000, "pair_count": 12497500, "compact_payload_bytes": 99980000, "compact_payload_gib": 0.09311363101005554},
+    {"population_count": 10000, "pair_count": 49995000, "compact_payload_bytes": 399960000, "compact_payload_gib": 0.3724917769432068},
+    {"population_count": 25000, "pair_count": 312487500, "compact_payload_bytes": 2499900000, "compact_payload_gib": 2.3282133042812347},
+    {"population_count": 50000, "pair_count": 1249975000, "compact_payload_bytes": 9999800000, "compact_payload_gib": 9.313039481639862},
+    {"population_count": 100000, "pair_count": 4999950000, "compact_payload_bytes": 39999600000, "compact_payload_gib": 37.252530455589294}
+  ],
+  "non_binding_8598_reference": {
+    "population_count": 8598,
+    "pair_count": 36958503,
+    "compact_payload_bytes": 295668024,
+    "compact_payload_gib": 0.2753623053431511,
+    "external_bytes_with_5pct_manifest_staging_reserve": 310451426,
+    "projected_exact_tile_write_seconds": 43.60738056733658,
+    "measurement_class": "EXTRAPOLATED_FROM_MEASURED_EXACT_TILE_WRITER",
+    "binding_status": "NON_BINDING_CAPACITY_REFERENCE_ONLY"
+  },
+  "comparison_to_original_wp8": {
+    "original_bytes_per_pair": 262,
+    "redesigned_exact_payload_bytes_per_pair": 8,
+    "physical_payload_reduction_factor": 32.75,
+    "original_8598_pair_artifact_bytes": 9683127786,
+    "redesigned_8598_compact_payload_bytes": 295668024,
+    "qualification": "The ratio compares physical pair payloads. Headers, manifests and staging reserve are accounted separately; no scientific information is removed."
+  },
+  "capacity_notes": {
+    "dominant_measured_writer_limit": "FORMAT_HASH_SERIALIZATION_LAYER_NOT_RAW_FILESYSTEM",
+    "cold_storage_projection_used": true,
+    "cache_reuse_credit_used": false,
+    "persistence_semantics_changed": false
+  },
+  "june_market_records_read": false,
+  "validation_consumed": false,
+  "wp9": "DENIED",
+  "conclusion": "PASS_EXACT_COMPACT_STORAGE_WITH_T0_HEADROOM_AT_NON_BINDING_REFERENCE"
+}
