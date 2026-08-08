@@ -1,0 +1,106 @@
+{
+  "schema": "ovc-srfdi-g9s-operator-packet/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "SRFDI-G9S",
+  "gate_title": "Preregistration supersession design authority",
+  "gate_class": "OPERATOR_REQUIRED",
+  "status": "GATE_READY",
+  "baseline_commit": "76846738ee329178b5f5d00bfef8e3ec060bd010",
+  "completed_packets": [
+    "SRFDI-WP0..WP9",
+    "SRFDI-G8R-WP0..WP6",
+    "SRFDI-WP2C"
+  ],
+  "current_authority": {
+    "capacity": "FROZEN_MEASURED_T0",
+    "g9_preregistration_v0_1": "FROZEN_EXACT_VERSION",
+    "june_execution": "DENIED",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "representation_distance_family_selection_or_promotion": "NONE",
+    "selector_change": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "triggering_blocker": {
+    "code": "FROZEN_REPRESENTATION_PACK_FIELD_MAPPING_NOT_MATERIALISED",
+    "source": "docs/releases/srfd-benchmark-v0-1/srfdi-wp2c/SRFDI_WP2C_REPRESENTATION_PACK_GAP_AUDIT.json",
+    "effect": "The current frozen G9 v0.1 preregistration cannot lawfully bind the real June benchmark population/configuration grid because exact real-source RepresentationPack semantics were never frozen."
+  },
+  "evidence": {
+    "wp2c_merge_commit": "76846738ee329178b5f5d00bfef8e3ec060bd010",
+    "wp2c_pr": 414,
+    "wp2c_final_head": "a98d1bb698fcb6bd21761e387972b83e4bc29e26",
+    "wp2c_tests": [
+      "repository_suite:31249176172:success",
+      "tiered:31249176105:success",
+      "profile_assurance:93082674773:success",
+      "compatibility:93082693825:success",
+      "merge_readiness:93082693824:success"
+    ],
+    "wp2c_qa": "PASS_ENGINEERING_ONLY",
+    "downstream_qa": "BLOCK",
+    "frozen_preregistration_byte_sha256": "76a18f79596772343f398256582dab9c37e219d01345c606204230c554599792",
+    "frozen_preregistration_logical_sha256": "a832daad99b6df49199eced0c35632b15974f86b58a8e6481350294a87d3d32e"
+  },
+  "governing_source_resolution": {
+    "ratified_architecture_sha256": "40d73afc16622a48b56c1816801645cddd487fd704bc7e403bfa10908730132c",
+    "accepted_srfd_design_sha256": "6fb6f75ffd42bc40b6e38663c03f05b7a22bde1f29c5ebac09e5f32fc635d04d",
+    "accepted_srfd_implementation_plan_sha256": "a07f0661f76836d3056957a9a942e5404cc00d27e1e7e4731dd870a0b501cbc1",
+    "resolution": "The accepted design freezes method-neutral interfaces and representation classes, but intentionally does not freeze exact real-source field selections, normalization constants or sequence channels. The implementation plan requires those to be explicit in each RepresentationPack. Therefore the missing mapping cannot be invented as a non-semantic implementation detail after G9 freeze."
+  },
+  "proposed_authority_delta_if_SUPERSEDE": {
+    "historical_g9_v0_1": "PRESERVE_IMMUTABLE_AS_SUPERSEDED_FOR_EXECUTION",
+    "authorize_packet": "SRFDI-WP9S",
+    "packet_purpose": "Construct a new preregistration candidate version with exact real-source RepresentationPack specifications before any market benchmark execution.",
+    "allowed_work": [
+      "Define exact lawful C2/C2E input namespaces and required source fields for SRFDI-R1..R9.",
+      "Define typed component selection and deterministic serialization for each pack.",
+      "Define normalization pack identity, fit source, fit cutoff, estimator, transport rule and explicit no-imputation behavior where normalization is used.",
+      "Define ordered-sequence and multichannel sequence channels, duration semantics and chronology for sequence/hybrid packs.",
+      "Define missingness, comparability-domain and representation-computability consequences without using benchmark results.",
+      "Materialise synthetic/schema fixtures and deterministic compiler tests only.",
+      "Create a new preregistration candidate with a new immutable version identity and exact byte/logical hashes for later operator review."
+    ],
+    "prohibited_work": [
+      "Read or execute the June SRFD benchmark population while defining representation packs.",
+      "Use family, distance, clustering, stability or downstream benchmark outcomes to choose fields or transforms.",
+      "Fetch provider data.",
+      "Consume 2025 Validation.",
+      "Change active C2, C2E, C2G, C2P, C2.5 or C3 authority.",
+      "Promote a representation, distance, family method, sensitivity pack or family catalogue.",
+      "Change selectors or publish a canonical release.",
+      "Create probability, risk, exposure, trading or execution authority."
+    ],
+    "required_next_operator_gate": "SRFDI-G9S-FREEZE",
+    "june_authority_after_SUPERSEDE": "STILL_DENIED"
+  },
+  "acceptance_conditions_for_SRFDI_WP9S": [
+    "Every SRFDI-R1..R9 pack has an exact versioned specification or an explicit preregistered NOT_APPLICABLE/DEPENDENCY_UNAVAILABLE reason that does not depend on benchmark results.",
+    "Every required source field is named by stable schema path and type; no generic post-run feature discovery is allowed.",
+    "Normalization packs are pre-benchmark and carry fit identity/cutoff; zero imputation remains forbidden.",
+    "Sequence/hybrid packs have exact channel order, chronology, missingness and duration semantics.",
+    "Population-level eligibility remains separate from representation-level computability/exclusion.",
+    "Synthetic/schema fixtures prove deterministic compilation, order invariance, no hindsight and source-lineage preservation.",
+    "No June or Validation record is read during pack construction/QA.",
+    "A new preregistration candidate returns to the operator at SRFDI-G9S-FREEZE before any June authority gate is re-presented."
+  ],
+  "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g9s/SRFDI_G9S_QA_PACKET.json",
+  "qa_result": "BLOCK_CURRENT_G9_V0_1_FOR_JUNE",
+  "blocking_warnings": [
+    "Exact real-source representation mapping is scientific preregistration content and therefore operator-reserved after freeze.",
+    "Approval of this gate authorizes only construction of a replacement preregistration candidate; it does not freeze that candidate and does not authorize June."
+  ],
+  "unresolved_issues": [
+    "Exact real-source RepresentationPack content has not yet been designed or operator-frozen.",
+    "C2E-dependent packs may require an explicit dependency-unavailable treatment if no lawful real C2E source exists at pack-freeze time."
+  ],
+  "rollback": "If SUPERSEDE is not approved, preserve G9 v0.1 and WP2C evidence unchanged, keep June denied, and do not infer missing mappings. If WP9S is later abandoned, preserve its proposal evidence and retain G9 v0.1 as historical frozen evidence without granting run authority.",
+  "recommended_decision": "SUPERSEDE",
+  "allowed_decisions": ["SUPERSEDE", "DEFER", "BLOCK", "QUARANTINE"],
+  "exact_operator_command": "OVC APPROVE SRFDI-G9S SUPERSEDE",
+  "exact_work_after_approval": "Create SRFDI-WP9S from latest lawful main, design/materialise exact real-source representation packs using synthetic/schema fixtures only, run full QA, prepare a new versioned preregistration candidate, and stop at SRFDI-G9S-FREEZE. Do not execute June."
+}
