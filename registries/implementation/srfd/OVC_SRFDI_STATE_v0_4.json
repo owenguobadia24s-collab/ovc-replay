@@ -1,0 +1,89 @@
+{
+  "schema": "ovc-srfdi-programme-state/v4",
+  "state_role": "AUTHORITATIVE_CURRENT",
+  "supersedes_state": "registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "BLOCKED",
+  "active_packet": "SRFDI-WP10",
+  "current_gate": "SRFDI-G10",
+  "operator_decision_required": true,
+  "authority": {
+    "implementation": "V0_2_BINDING_READY",
+    "preregistration_v0_2": "FROZEN_EXACT_VERSION",
+    "representation_pack_registry_v0_2": "FROZEN_AS_PART_OF_PREREGISTRATION",
+    "source_binding": "EXACT_BOUND_READ_ONLY",
+    "population_binding": "EXACT_BOUND_8598_ID_HASH",
+    "market_benchmark": "AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED_BLOCKED_PRE_RUN",
+    "june": "AUTHORIZED_BOUNDED_JUNE_BENCHMARK_UNCONSUMED_BLOCKED_PRE_RUN",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "exact_bindings": {
+    "june_authority_merge_commit": "35b91e0e7b2dfbbe44bd51a278a1735f3fcb55b0",
+    "decision_id": "SRFDI-G-JUNE-AUTH-20260808-AUTHORIZE-JUNE",
+    "authorized_manifest_binding_sha256": "2a0d3c529ea5aca6a1d8c67adc29d3f6dd55a3efcd75992661a69e205cea010c",
+    "authorized_manifest_logical_sha256": "811514cef8a24dc1078cbf231105cb7d79af75c3899ed90a210d1d7bc3d898ac",
+    "authority_token_id": "SRFD.JUNE.AUTH.5fd1ed170fac6994b8ac65db05b7907bda8dad7ec49084572dad1e9040e7bf81",
+    "authority_token_consumed": false,
+    "preregistration_v0_2_sha256": "13c17cf64c576b35e53047de753a5fd1a49bbdc7205c387bbcedb5a34441b804",
+    "representation_pack_registry_v0_2_sha256": "7d93994836bfcff6c5a0b39db33692f70b1a25782bee43c7b6329d17568561c0",
+    "implementation_commit": "fca974ef48e4178be299bf65e520e2268e8b67c3",
+    "dependency_manifest_sha256": "88ad3ec673493cb82b6b6d4fda90c077535e88d9f630a0535d56df887944ae3f",
+    "source_release_id": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9",
+    "source_binding_sha256": "4d13c3ee8ae2ad25e30088f4f2de48f8320e3633c2e4ea6a5c2c9a7fdc2a62b7",
+    "population_id": "SRFD.POP.6efa7dd55636d036c12e580e0793abacf8c805bcf6d77bb6e2edf7cffbc113bd",
+    "eligible_record_count": 8598,
+    "eligible_record_ids_sha256": "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e"
+  },
+  "blockers": [
+    {
+      "reason_code": "PREREG_SEGMENTATION_BOUNDARY_PACK_NOT_MATERIALISED",
+      "blocking": true,
+      "evidence": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10/SRFDI_WP10_PREFLIGHT_BLOCKER.json"
+    },
+    {
+      "reason_code": "PREREG_SEGMENTATION_SOURCE_FIELDS_NOT_MATERIALISED",
+      "blocking": true,
+      "evidence": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10/SRFDI_WP10_PREFLIGHT_BLOCKER.json"
+    },
+    {
+      "reason_code": "PREREG_SEGMENTATION_PARAMETER_SURFACES_NOT_MATERIALISED",
+      "blocking": true,
+      "evidence": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10/SRFDI_WP10_PREFLIGHT_BLOCKER.json"
+    },
+    {
+      "reason_code": "PREREG_EXACT_RUN_DAG_INCOMPLETE",
+      "blocking": true,
+      "evidence": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10/SRFDI_WP10_QA_PACKET.json"
+    }
+  ],
+  "bindings": {
+    "june_authority_merge_receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth/SRFDI_G_JUNE_AUTH_MERGE_RECEIPT.json",
+    "wp10_preflight_blocker": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10/SRFDI_WP10_PREFLIGHT_BLOCKER.json",
+    "wp10_qa": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10/SRFDI_WP10_QA_PACKET.json",
+    "frozen_preregistration": "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_2.json",
+    "segmentation_registry": "registries/research/srfd/segmentation_methods.yaml",
+    "segmentation_implementation": "src/ovc/opt_b/srfd/segmentation.py"
+  },
+  "packets": [
+    {"packet_id": "SRFDI-G-JUNE-AUTH", "status": "COMPLETED", "decision": "AUTHORIZE_JUNE", "pr_number": 419, "merge_commit": "35b91e0e7b2dfbbe44bd51a278a1735f3fcb55b0"},
+    {"packet_id": "SRFDI-WP10", "status": "BLOCKED", "gate": "SRFDI-G10", "baseline_commit": "35b91e0e7b2dfbbe44bd51a278a1735f3fcb55b0", "branch": "build/srfdi-wp10-bounded-june-benchmark", "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-wp10/SRFDI_WP10_QA_PACKET.json", "decision_record": null, "merge_commit": null, "blockers": ["PREREG_SEGMENTATION_BOUNDARY_PACK_NOT_MATERIALISED", "PREREG_SEGMENTATION_SOURCE_FIELDS_NOT_MATERIALISED", "PREREG_SEGMENTATION_PARAMETER_SURFACES_NOT_MATERIALISED", "PREREG_EXACT_RUN_DAG_INCOMPLETE"], "next_packet": null},
+    {"packet_id": "SRFDI-WP11", "status": "PLANNED", "gate": "SRFDI-G11", "blockers": ["SRFDI_WP10_NOT_COMPLETED"]}
+  ],
+  "benchmark_consumption": {
+    "wp10_started": false,
+    "scientific_results_generated": false,
+    "scientific_results_inspected": false,
+    "authority_token_consumed": false,
+    "benchmark_executed_state": false
+  },
+  "smallest_lawful_resolution": "OPERATOR_REQUIRED_MATERIAL_FROZEN_PREREGISTRATION_SUPERSESSION_USING_ONLY_DESIGN_AND_SYNTHETIC_NULL_FIXTURES_THEN_NEW_FREEZE_AND_NEW_JUNE_AUTHORITY",
+  "next_action": "AWAIT_OPERATOR_DIRECTION_ON_PREREGISTRATION_SUPERSESSION_OR_PRESERVE_BLOCK; DO_NOT_EXECUTE_JUNE",
+  "stop_at": "SRFDI-WP10-PREFLIGHT-BLOCKED",
+  "pr_371": "PRESERVE_DO_NOT_MERGE",
+  "rollback": "No benchmark has started. Preserve the valid but unused v0.2 authorization and token as immutable evidence. Do not modify the frozen preregistration, consume its token, execute a partial run, fetch provider data, read Validation, force-push, or promote any method/family/semantic result."
+}
