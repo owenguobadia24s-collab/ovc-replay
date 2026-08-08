@@ -8,6 +8,8 @@ SRC = ROOT / "src"
 EXPECTED_TOP_LEVEL = {"ovc", "ovc_evidence_store"}
 EXPECTED_OVC_PACKAGES = {
     "ovc",
+    "ovc.context",
+    "ovc.context.occurrence_context",
     "ovc.development",
     "ovc.opt_a",
     "ovc.opt_b",
@@ -44,6 +46,18 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
             for path in package_root.rglob("__init__.py")
         }
         self.assertEqual(EXPECTED_OVC_PACKAGES, actual)
+
+    def test_occurrence_context_namespace_is_inactive_nonstructural_only(self) -> None:
+        context_init = (SRC / "ovc" / "context" / "__init__.py").read_text(encoding="utf-8").lower()
+        occurrence_init = (SRC / "ovc" / "context" / "occurrence_context" / "__init__.py").read_text(encoding="utf-8").lower()
+        combined = context_init + occurrence_init
+        self.assertIn("inactive", combined)
+        self.assertIn("non-structural", combined)
+        self.assertIn("no active market", combined)
+        self.assertIn("representation-input", combined)
+        self.assertIn("validation", combined)
+        self.assertIn("c2p", combined)
+        self.assertIn("execution authority", combined)
 
     def test_c2_vnext_namespace_is_shadow_only(self) -> None:
         init_text = (SRC / "ovc" / "opt_b" / "c2_vnext" / "__init__.py").read_text(encoding="utf-8").lower()
