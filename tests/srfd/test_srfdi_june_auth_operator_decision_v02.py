@@ -84,11 +84,12 @@ class SRFDIJuneAuthOperatorDecisionV02Tests(unittest.TestCase):
         self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json", self.pointer["authoritative_state"])
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json", self.pointer["prior_state"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION-v0.3", self.pointer["next_packet"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["stop_at"])
-        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_6.json", self.pointer["authoritative_state"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json", self.pointer["prior_state"])
+        self.assertEqual("SRFDI-WP10-v0.3", self.pointer["next_packet"])
+        self.assertEqual("SRFDI-G11", self.pointer["stop_at"])
+        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_EXACT_MANIFEST_UNCONSUMED", self.pointer["june_execution"])
+        self.assertFalse(self.pointer["authority_token_consumed"])
         self.assertFalse(self.pointer["superseded_authority_token_consumed"])
 
 
