@@ -3,15 +3,16 @@
   "programme_id":"OVC-SRFD-BENCHMARK-v0.1",
   "plan_id":"OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
   "plan_version":"0.1",
-  "status":"GATE_READY",
+  "status":"APPROVED",
   "programme_baseline_commit":"43b0dc46b9df259364304087b75e949cfdd0d853",
   "active_packet":"SRFDI-WP8",
   "current_gate":"SRFDI-G8-REPRESENTED",
-  "operator_decision_required":true,
+  "operator_decision_required":false,
   "authority":{
     "implementation":"FIXTURE_LOCAL_ONLY",
     "capacity_redesign_preparation":"COMPLETED_ACCEPTED_EVIDENCE",
-    "capacity_freeze":"DENIED_PENDING_SRFDI_G8_REPRESENTED",
+    "capacity_freeze":"FREEZE_MEASURED_CAPACITY_APPROVED_PENDING_MERGE",
+    "preregistration_preparation":"ELIGIBLE_AFTER_GATE_MERGE",
     "market_benchmark":"DENIED",
     "june":"DENIED_PENDING_SRFDI_G_JUNE_AUTH",
     "validation_2025":"LOCKED_UNCONSUMED",
@@ -27,7 +28,8 @@
     "g8_operator_decision":"docs/releases/srfd-benchmark-v0-1/srfdi-wp8/SRFDI_G8_OPERATOR_DECISION.json",
     "g8r_g6_operator_decision":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_G6_OPERATOR_DECISION.json",
     "g8r_wp6_merge_receipt":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_MERGE_RECEIPT.json",
-    "g8_represented_operator_packet":"docs/releases/srfd-benchmark-v0-1/srfdi-g8-represented/SRFDI_G8_REPRESENTED_OPERATOR_PACKET.json"
+    "g8_represented_operator_packet":"docs/releases/srfd-benchmark-v0-1/srfdi-g8-represented/SRFDI_G8_REPRESENTED_OPERATOR_PACKET.json",
+    "g8_represented_operator_decision":"docs/releases/srfd-benchmark-v0-1/srfdi-g8-represented/SRFDI_G8_REPRESENTED_OPERATOR_DECISION.json"
   },
   "packets":[
     {"packet_id":"SRFDI-WP0","status":"APPROVED","gate":"SRFDI-G0","decision":"PASS","merge_commit":"06e657d54afa21670576b181be3f938f2ea01c89","blockers":[]},
@@ -38,22 +40,22 @@
     {"packet_id":"SRFDI-WP5","status":"APPROVED","gate":"SRFDI-G5","decision":"PASS","merge_commit":"bf1fbed49244329b7d7e048c4c2253224149439a","blockers":[]},
     {"packet_id":"SRFDI-WP6","status":"APPROVED","gate":"SRFDI-G6","decision":"PASS","merge_commit":"807a4eb981ca898ef10ff9ba24487f61cb36b935","blockers":[]},
     {"packet_id":"SRFDI-WP7","status":"APPROVED","gate":"SRFDI-G7","decision":"PASS","merge_commit":"5b791d1550147de541faa645817b6cf523ac362f","blockers":[]},
-    {"packet_id":"SRFDI-WP8","status":"G8_REPRESENTED_GATE_READY","gate":"SRFDI-G8-REPRESENTED","decision":"PENDING_OPERATOR","authority_required":"OPERATOR_REQUIRED","original_g8_decision":"REDESIGN","capacity_redesign_subprogramme":"COMPLETED_ACCEPTED","capacity_redesign_merge_commit":"bf11af4d672ee0f086ed2b2825e2d5b6dcf281fb","blockers":["OPERATOR_SRFDI_G8_REPRESENTED_DECISION_REQUIRED"]},
-    {"packet_id":"SRFDI-WP9","status":"PLANNED","gate":"SRFDI-G9","authority_required":"ACKNOWLEDGEMENT","blockers":["SRFDI_G8_REPRESENTED_NOT_YET_FREEZE_MEASURED_CAPACITY","JUNE_BENCHMARK_DENIED"]},
-    {"packet_id":"SRFDI-WP10","status":"PLANNED","gate":"SRFDI-G10","authority_required":"AUTO_RATIFIABLE","blockers":["JUNE_BENCHMARK_DENIED"]},
-    {"packet_id":"SRFDI-WP11","status":"PLANNED","gate":"SRFDI-G11","authority_required":"OPERATOR_REQUIRED","blockers":["JUNE_BENCHMARK_DENIED"]}
+    {"packet_id":"SRFDI-WP8","status":"APPROVED","gate":"SRFDI-G8-REPRESENTED","decision":"FREEZE_MEASURED_CAPACITY","authority_required":"OPERATOR_REQUIRED","original_g8_decision":"REDESIGN","capacity_redesign_subprogramme":"COMPLETED_ACCEPTED","capacity_redesign_merge_commit":"bf11af4d672ee0f086ed2b2825e2d5b6dcf281fb","decision_record":"docs/releases/srfd-benchmark-v0-1/srfdi-g8-represented/SRFDI_G8_REPRESENTED_OPERATOR_DECISION.json","merge_commit":null,"blockers":["G8_REPRESENTED_DECISION_MERGE_PENDING"]},
+    {"packet_id":"SRFDI-WP9","status":"PLANNED","gate":"SRFDI-G9","authority_required":"ACKNOWLEDGEMENT","blockers":["G8_REPRESENTED_DECISION_MERGE_PENDING","JUNE_BENCHMARK_DENIED_PENDING_SRFDI_G_JUNE_AUTH"]},
+    {"packet_id":"SRFDI-WP10","status":"PLANNED","gate":"SRFDI-G10","authority_required":"AUTO_RATIFIABLE","blockers":["JUNE_BENCHMARK_DENIED_PENDING_SRFDI_G_JUNE_AUTH"]},
+    {"packet_id":"SRFDI-WP11","status":"PLANNED","gate":"SRFDI-G11","authority_required":"OPERATOR_REQUIRED","blockers":["JUNE_BENCHMARK_DENIED_PENDING_SRFDI_G_JUNE_AUTH"]}
   ],
   "g8_disposition":{
     "original_decision":"REDESIGN",
-    "represented_decision":"PENDING_OPERATOR",
-    "capacity_freeze":"PENDING_OPERATOR",
+    "represented_decision":"FREEZE_MEASURED_CAPACITY",
+    "capacity_freeze":"APPROVED_PENDING_MERGE",
     "redesign_capacity_evidence":"ACCEPTED",
     "redesign_merge_commit":"bf11af4d672ee0f086ed2b2825e2d5b6dcf281fb",
     "reference_projection":"SUPPORTED_T0_NON_BINDING_REFERENCE",
-    "wp9_start":"DENIED_PENDING_SRFDI_G8_REPRESENTED",
+    "wp9_start":"ELIGIBLE_AFTER_REPRESENTED_GATE_MERGE",
     "june":"DENIED_PENDING_SRFDI_G_JUNE_AUTH"
   },
-  "next_action":"STOP_AT_SRFDI_G8_REPRESENTED_FOR_OPERATOR_DECISION",
-  "stop_at":"SRFDI-G8-REPRESENTED",
+  "next_action":"RUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_SRFDI_G8_REPRESENTED_THEN_START_SRFDI_WP9_FROM_LATEST_LAWFUL_MAIN",
+  "stop_at":"SRFDI-G9",
   "portfolio_census_note":"Created after the sealed PGN census snapshot; filename intentionally avoids legacy migration discovery so the historical census remains immutable."
 }
