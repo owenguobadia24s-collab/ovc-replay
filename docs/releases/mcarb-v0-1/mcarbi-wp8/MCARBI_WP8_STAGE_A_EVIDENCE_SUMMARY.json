@@ -1,0 +1,98 @@
+{
+  "schema":"ovc-mcarbi-wp8-stage-a-evidence-summary/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "packet_id":"MCARBI-WP8",
+  "run_id":"MCARB.STAGEA.b45ff34cbb8c1865a77311f6",
+  "scope":"STAGE_A_MACHINERY_SOURCE_SEMANTICS_CHRONOLOGY_MISSINGNESS_CAPACITY_DEPENDENCE_GROSS_REDUNDANCY_ONLY",
+  "long_run_stability_claim":"PROHIBITED",
+  "population":{"records":898,"ASK":449,"BID":449,"paired_timestamps":449,"slot_min_per_side":17,"slot_max_per_side":42},
+  "r0_recurrence":{
+    "ASK":{"distinct_signatures":156,"repeated_signature_groups":10,"records_in_repeated_groups":303,"max_group_size":276},
+    "BID":{"distinct_signatures":159,"repeated_signature_groups":9,"records_in_repeated_groups":299,"max_group_size":276}
+  },
+  "availability":{
+    "AL-01":{"available":898,"missing":0},
+    "AL-05":{"available":806,"missing":92,"reason":"INSUFFICIENT_FROZEN_REFERENCE"},
+    "AL-07":{"available":812,"missing":86,"reason":"NO_CONTIGUOUS_PRIOR_BAR"},
+    "AL-08":{"available":898,"missing":0},
+    "AL-09":{"available":898,"missing":0},
+    "ET":{"all_10_fields_available":898,"missing":0},
+    "VS-01":{"available":812,"missing":86,"reason":"NO_CONTIGUOUS_PRIOR_BAR"},
+    "VS-02":{"available":812,"missing":86,"reason":"NO_CONTIGUOUS_PRIOR_BAR"},
+    "VS-03":{"available":898,"missing":0}
+  },
+  "event_rates":{
+    "ET-DC.0.0005":0.4053452115812918,
+    "ET-DC.0.0010":0.2739420935412027,
+    "ET-DC.0.0020":0.1648106904231626,
+    "ET-DC.0.0040":0.06013363028953229,
+    "ET-VAR.0.0010":0.5868596881959911,
+    "ET-VAR.0.0020":0.40979955456570156,
+    "ET-VAR.0.0040":0.2561247216035635,
+    "ET-VAR.0.0080":0.14587973273942094,
+    "ET-X.0.0050_mean_crossing_count":0.25167037861915367,
+    "ET-X.0.0100_mean_crossing_count":0.11915367483296214
+  },
+  "pack_exact_vector_diagnostic":{
+    "R0":{"eligible":898,"repeated_r0_pairs":7251,"aux_separated_pairs":0},
+    "R1_AL":{"eligible":732,"abstained":166,"repeated_r0_pairs":5675,"aux_separated_pairs":5675,"matched_noise_separated_pairs":5675},
+    "R2_ET":{"eligible":898,"abstained":0,"repeated_r0_pairs":7251,"aux_separated_pairs":6753,"matched_noise_separated_pairs":7251},
+    "R3_VS":{"eligible":812,"abstained":86,"repeated_r0_pairs":5697,"aux_separated_pairs":5697,"matched_noise_separated_pairs":5697},
+    "R4_AL_VS":{"eligible":732,"abstained":166,"repeated_r0_pairs":5675,"aux_separated_pairs":5675,"matched_noise_separated_pairs":5675},
+    "R4X_AL_ET":{"eligible":732,"abstained":166,"repeated_r0_pairs":5675,"aux_separated_pairs":5675,"matched_noise_separated_pairs":5675},
+    "R5_ET_VS":{"eligible":812,"abstained":86,"repeated_r0_pairs":5697,"aux_separated_pairs":5697,"matched_noise_separated_pairs":5697},
+    "R6_ALL":{"eligible":732,"abstained":166,"repeated_r0_pairs":5675,"aux_separated_pairs":5675,"matched_noise_separated_pairs":5675},
+    "interpretation":"Exact-vector separation alone is not evidence of scientific improvement. AL/VS/hybrid exact-vector separation is matched by equal-dimensional deterministic noise; ET separates fewer exact R0 pairs than matched noise."
+  },
+  "gross_conditional_redundancy":{
+    "definition":"within side/slot/exact-R0 residual SSE divided by within side/slot SSE; high residual means variation remains outside exact R0, not that it is useful or predictive",
+    "AL-01":{"residual":0.494815,"shuffle":0.422174,"matched_noise":0.625330},
+    "AL-05":{"residual":0.638240,"shuffle":0.661418,"matched_noise":0.651502},
+    "AL-07":{"residual":0.478128,"shuffle":0.463018,"matched_noise":0.552632},
+    "AL-08":{"residual":0.445313,"shuffle":0.488747,"matched_noise":0.605004},
+    "AL-09":{"residual":0.551066,"shuffle":0.422881,"matched_noise":0.614024},
+    "ET-DC.range":{"min_residual":0.595763,"max_residual":0.770439},
+    "ET-VAR.range":{"min_residual":0.610603,"max_residual":0.638858},
+    "ET-X.range":{"min_residual":0.684840,"max_residual":0.694062},
+    "VS-01":{"residual":0.767893,"shuffle":0.632685,"matched_noise":0.568302},
+    "VS-02":{"residual":0.908676,"shuffle":0.658300,"matched_noise":0.571275},
+    "VS-03":{"residual":0.759658,"shuffle":0.654757,"matched_noise":0.628921}
+  },
+  "paired_side_diagnostics":{
+    "AL-01_pearson":0.826524,
+    "AL-05_pearson":0.786296,
+    "AL-07_pearson":0.787054,
+    "ET_min_pearson":0.754575,
+    "ET_max_pearson":0.967640,
+    "VS-01_pearson":0.997342,
+    "VS-02_pearson":0.999691,
+    "VS-03_pearson":0.997986,
+    "AL-08_AL-09_note":"paired-side fields are copied as paired provider-activity measurements into both side records; correlation=1 is constructional and not order-flow evidence"
+  },
+  "dependence":{"rows":3672,"methods":["PEARSON","RANK_CORRELATION"],"mutual_information":"OMITTED_NOT_PREREGISTERED","max_abs_pearson":1.0,"max_abs_rank":1.0,"selector_use":"PROHIBITED"},
+  "criterion_vector":{
+    "SOURCE_BINDING":"PASS",
+    "CHRONOLOGY":"PASS_CAUSAL_FIRST_VALID_AT_2H_CLOSE",
+    "MISSINGNESS_TOLERANCE":"PASS_ABSTAIN_NO_IMPUTATION",
+    "CAPACITY":"PASS_MEASURED",
+    "REDUNDANCY":"MEASURED_GROSS_ONLY",
+    "DISCRIMINATION":"MEASURED_WITH_MATCHED_NOISE_CONTROL_NO_MERIT_CLAIM",
+    "INTERPRETABILITY":"PASS_FIELD_LEVEL_LINEAGE",
+    "ROBUSTNESS":"PARTIAL_FROZEN_ET_GRID_ONLY",
+    "RECURRENCE":"NOT_EVALUATED_BEYOND_EXACT_R0_COLLISION_DIAGNOSTIC",
+    "RESIDUAL_REDUCTION":"NOT_EVALUATED_NO_FAMILY_METHOD_IN_STAGE_A",
+    "CHRONOLOGICAL_STABILITY":"NOT_EVALUATED_STAGE_A_SCOPE",
+    "CROSS_SCALE_STABILITY":"NOT_EVALUATED_STAGE_A_SCOPE",
+    "BOUNDARY_QUALITY":"NOT_EVALUATED_STAGE_A_SCOPE",
+    "COUNTEREXAMPLE_SEPARATION":"NOT_EVALUATED_STAGE_A_SCOPE"
+  },
+  "warnings":[
+    "AL_SOURCE_PARTIAL remains binding; provider activity is neither centralized FX traded volume nor order flow.",
+    "AL-05 frozen Sep-Oct reference is insufficient in some K/L partitions and abstains by preregistration.",
+    "Frozen preregistration labels c2_parallel_state_v0_1 while active C2 v2 is the verified identity-replay envelope; Stage A consumed only exact five-axis evidence objects and did not rewrite the source schema.",
+    "Exact-vector discrimination is dimensionality-sensitive and cannot be used as a merit claim.",
+    "Stage A cannot establish long-run chronological stability, cross-scale stability, family quality or production placement."
+  ],
+  "scientific_disposition":"DEFER_TO_MCARBI_WP9_AND_OPERATOR_REQUIRED_MCARBI_G9",
+  "source_evidence_sha256":"c1882b91e5e30d64f38cb2984c1c0720bf8495ce34d11a8caa2fe5188ef6bb82"
+}
