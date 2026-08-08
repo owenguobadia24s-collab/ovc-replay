@@ -45,20 +45,21 @@ class FSRWP11AdjudicationTests(unittest.TestCase):
             self.assertFalse(adjudication["authority"]["canonical"])
             self.assertFalse(adjudication["authority"]["promotable"])
 
-            # Emit only post-freeze summaries so the final dossier can quote exact
-            # counts/hashes without exposing the hidden construction ledger itself.
-            print("FSR_RUN_MANIFEST=" + json.dumps(result["run_manifest"], sort_keys=True))
-            print(
-                "FSR_ADJUDICATION_SUMMARY="
-                + json.dumps(
-                    {
-                        "logical_sha256": adjudication["logical_sha256"],
-                        "comparison_status_counts": adjudication["comparison_status_counts"],
-                        "architecture_fidelity": adjudication["interpretation"]["architecture_fidelity"],
-                    },
-                    sort_keys=True,
-                )
+            # GitHub Actions workflow-command notices create success annotations.
+            # This makes exact post-freeze hashes/counts retrievable without exposing
+            # the hidden construction ledger or adding a new workflow/write path.
+            run_manifest = json.dumps(result["run_manifest"], sort_keys=True, separators=(",", ":"))
+            adjudication_summary = json.dumps(
+                {
+                    "logical_sha256": adjudication["logical_sha256"],
+                    "comparison_status_counts": adjudication["comparison_status_counts"],
+                    "architecture_fidelity": adjudication["interpretation"]["architecture_fidelity"],
+                },
+                sort_keys=True,
+                separators=(",", ":"),
             )
+            print(f"::notice file=tests/full_stack_synthetic/test_fsr_wp11_adjudication.py,title=FSR_RUN_MANIFEST::{run_manifest}")
+            print(f"::notice file=tests/full_stack_synthetic/test_fsr_wp11_adjudication.py,title=FSR_ADJUDICATION_SUMMARY::{adjudication_summary}")
 
 
 if __name__ == "__main__":
