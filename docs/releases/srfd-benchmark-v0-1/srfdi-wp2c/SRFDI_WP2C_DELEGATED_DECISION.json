@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-srfdi-wp2c-delegated-decision/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "SRFDI-WP2C",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION_INSIDE_APPROVED_PLAN",
+  "baseline_commit": "664b7d2de0c8f475936d857bc929ad1b7eb88421",
+  "implementation_head": "a7ce51524cbc4933f41e5a9284bda5d2757bac15",
+  "pr_number": 414,
+  "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-wp2c/SRFDI_WP2C_QA_PACKET.json",
+  "qa_result": "PASS",
+  "authority_delta": {
+    "source_adapter": "READ_ONLY_SCHEMA_PRESERVING",
+    "population_binder": "DETERMINISTIC_PRE_RUN_BINDING_ONLY",
+    "c2e_adapter": "INACTIVE_NEUTRAL_INPUT_SURFACE_ONLY",
+    "june_authority_verifier": "INERT_FAIL_CLOSED_UNLESS_EXACT_FUTURE_OPERATOR_DECISION_AND_MANIFEST_MATCH",
+    "june_execution": "DENIED",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "representation_semantics": "UNCHANGED_NOT_SELECTED",
+    "scientific_promotion": "NONE",
+    "selector_change": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "non_reserved_rationale": "WP2C adds only deterministic read-only adapter/binding mechanics already required by the approved SRFD implementation plan and an inert verifier that cannot authorize June without a future exact operator decision. It makes no frozen scientific choice and grants no reserved authority.",
+  "unresolved_downstream_blocker": "FROZEN_REPRESENTATION_PACK_FIELD_MAPPING_NOT_MATERIALISED",
+  "blocker_effect": "DOES_NOT_BLOCK_WP2C_ENGINEERING_PASS; BLOCKS_SRFDI_G_JUNE_AUTH_AND_ACTUAL_JUNE_EXECUTION",
+  "rollback": "Revert the bounded WP2C merge by later commit or leave all new surfaces unused. No upstream evidence or frozen preregistration mutation is permitted.",
+  "next_action": "FINAL_HEAD_ASSURANCE_THEN_SQUASH_MERGE_PR_414_IF_CLEAN; RECORD_MERGE_RECEIPT; STOP_BLOCKED_AT_SRFDI_G_JUNE_AUTH_FOR_OPERATOR_GOVERNED_PREREGISTRATION_SUPERSESSION_OR_NEW_VERSION"
+}
