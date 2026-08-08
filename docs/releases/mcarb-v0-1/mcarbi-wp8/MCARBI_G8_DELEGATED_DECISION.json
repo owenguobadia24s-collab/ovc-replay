@@ -7,7 +7,7 @@
   "gate_title":"Stage-A Execution QA",
   "gate_class":"AUTO_RATIFIABLE",
   "decision":"PASS",
-  "decision_status":"DELEGATED_PASS_PENDING_FINAL_EXACT_HEAD_ASSURANCE",
+  "decision_status":"DELEGATED_APPROVED_PENDING_ONLY_STABLE_HEAD_MERGE_ASSURANCE",
   "delegated_authority":"APPROVED_PLAN_AUTO_EXECUTABLE_QA_GATE",
   "run_id":"MCARB.STAGEA.b45ff34cbb8c1865a77311f6",
   "logical_run_id":"MCARBI_STAGE_A_AUTHORIZED_LOGICAL_RUN_1",
@@ -15,6 +15,8 @@
   "qa_packet":"docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_G8_QA_PACKET.json",
   "external_artifact_receipt":"docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_EXTERNAL_ARTIFACT_RECEIPT.json",
   "evidence_summary":"docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_STAGE_A_EVIDENCE_SUMMARY.json",
+  "assurance_before_final_metadata":{"head":"6f6c183f4589ff984a2c4dc5eb7d01f5789791f7","repository_suite_run_id":31234431873,"repository_suite":"SUCCESS","tiered_final_head_run_id":31234431878,"profile_assurance":"SUCCESS","merge_readiness":"SUCCESS"},
+  "final_stable_head_rule":"After this terminal decision/state metadata is materialized, the exact stable PR head must again pass repository suite, OVC FINAL_HEAD and merge readiness. Record those immutable run IDs as an append-only PR comment so the tested head is not moved.",
   "authority_delta":"NONE",
   "scientific_consequence":"NONE_AT_G8; all domain/pack dispositions remain reserved for MCARBI-G9",
   "rerun_authority":"NONE; one logical Stage-A run authority is consumed",
@@ -27,6 +29,6 @@
   "rollback":"Preserve G8 PASS as execution-QA evidence. It can be superseded only by versioned evidence if a reproducibility defect is later proven; it grants no scientific or operational promotion.",
   "next_packet":"MCARBI-WP9",
   "next_gate":"MCARBI-G9_OPERATOR_REQUIRED",
-  "merge_sha":"PENDING",
-  "final_assurance":"PENDING_EXACT_HEAD"
+  "merge_sha":"PENDING_PR_SQUASH",
+  "final_assurance":"REQUIRED_ON_TERMINAL_STABLE_HEAD"
 }
