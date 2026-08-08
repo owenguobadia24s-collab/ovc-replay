@@ -48,15 +48,9 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
     def test_candidate_grid_is_exact_predeclared_and_dependency_bounded(self) -> None:
         bounds = self.prereg["configuration_bounds"]
         self.assertEqual([f"SRFDI-R{i}" for i in range(1, 10)], bounds["representation_ids"])
-        self.assertEqual(
-            ["C2E_CAUSAL_ADAPTER", "RUN_CHANGE_SEGMENTATION", "DIRECTIONAL_CHANGE", "PELT_REFERENCE", "NULL_BOUNDARY_CONTROL"],
-            bounds["segmentation_ids"],
-        )
+        self.assertEqual(["C2E_CAUSAL_ADAPTER", "RUN_CHANGE_SEGMENTATION", "DIRECTIONAL_CHANGE", "PELT_REFERENCE", "NULL_BOUNDARY_CONTROL"], bounds["segmentation_ids"])
         self.assertEqual(["L1_TYPED", "L2_TYPED", "GOWER_MIXED", "DTW_SEQUENCE"], bounds["distance_ids"])
-        self.assertEqual(
-            ["GREEDY_LEXICOGRAPHIC_MEDOID_STAR", "COMPLETE_LINKAGE", "AVERAGE_LINKAGE", "BOUNDED_PAM"],
-            bounds["family_method_ids"],
-        )
+        self.assertEqual(["GREEDY_LEXICOGRAPHIC_MEDOID_STAR", "COMPLETE_LINKAGE", "AVERAGE_LINKAGE", "BOUNDED_PAM"], bounds["family_method_ids"])
         self.assertEqual(["0.04", "0.08", "0.16"], bounds["family_parameter_ladders"]["medoid_star_radius"])
         self.assertEqual([2, 4, 8], bounds["family_parameter_ladders"]["shared_minimum_support"])
         self.assertEqual([], self.dep_capacity["dependency_state"]["new_dependencies_added_by_wp9"])
@@ -79,8 +73,7 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         reference = population["existing_metadata_reference"]
         self.assertEqual("NON_BINDING_CAPACITY_AND_COVERAGE_REFERENCE_ONLY", reference["binding"])
         self.assertEqual(8598, reference["target_c2_state_count_reference"])
-        joined = " ".join(population["binding_procedure"])
-        self.assertIn("not adopted as the eligible population", joined)
+        self.assertIn("not adopted as the eligible population", " ".join(population["binding_procedure"]))
         self.assertEqual("DENIED", self.manifest["run_authority"])
 
     def test_capacity_and_manifest_keep_june_and_validation_denied(self) -> None:
@@ -94,7 +87,7 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.manifest["validation_2025"])
         self.assertEqual("FORBIDDEN", self.manifest["required_before_run_authority"]["source"]["provider_fetch"])
 
-    def test_completed_g8_and_g9_lifecycle_are_preserved_through_g9s_supersession(self) -> None:
+    def test_completed_g8_and_g9_lifecycle_are_preserved_through_wp9s_gate_ready(self) -> None:
         self.assertEqual("0f3ae4379978a1381f479cfe1c5fe9c269981c19", self.g8_merge["merge_commit"])
         self.assertEqual("FREEZE_MEASURED_CAPACITY", self.g8_merge["decision"])
         self.assertEqual("PREREGISTRATION_FREEZE", self.g9_decision["decision"])
@@ -104,11 +97,11 @@ class SRFDIWP9PreregistrationTests(unittest.TestCase):
         self.assertEqual(self.g9_merge["merge_commit"], wp9["merge_commit"])
         self.assertEqual("SRFDI-WP9S", self.state["active_packet"])
         self.assertEqual("SRFDI-G9S-FREEZE", self.state["current_gate"])
-        self.assertEqual("READY", self.state["status"])
-        self.assertFalse(self.state["operator_decision_required"])
+        self.assertEqual("GATE_READY", self.state["status"])
+        self.assertTrue(self.state["operator_decision_required"])
         self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
-        self.assertEqual("APPROVED_BOUNDED_SRFDI_WP9S_ONLY", self.state["authority"]["preregistration_supersession"])
+        self.assertEqual("WP9S_IMPLEMENTED_CANDIDATE_GATE_READY", self.state["authority"]["preregistration_supersession"])
         self.assertEqual("FROZEN_HISTORICAL_SUPERSEDED_FOR_EXECUTION", self.state["g9_disposition"]["status"])
 
     def test_required_outputs_and_stop_conditions_are_explicit(self) -> None:

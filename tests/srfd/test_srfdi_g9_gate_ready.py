@@ -48,22 +48,21 @@ class SRFDIG9GateReadyTests(unittest.TestCase):
         self.assertEqual("COMPLETED", wp9["status"])
         self.assertEqual(self.merge["merge_commit"], wp9["merge_commit"])
         self.assertEqual("PREREGISTRATION_FREEZE", wp9["decision"])
-        self.assertEqual(
-            "docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_OPERATOR_DECISION.json",
-            wp9["decision_record"],
-        )
+        self.assertEqual("docs/releases/srfd-benchmark-v0-1/srfdi-wp9/SRFDI_G9_OPERATOR_DECISION.json", wp9["decision_record"])
         self.assertIn("FROZEN_REPRESENTATION_PACK_FIELD_MAPPING_NOT_MATERIALISED", wp9["blockers"])
 
     def test_later_state_does_not_retroactively_grant_june(self) -> None:
         self.assertEqual("SRFDI-G9S-FREEZE", self.state["current_gate"])
         self.assertEqual("SRFDI-WP9S", self.state["active_packet"])
-        self.assertEqual("READY", self.state["status"])
-        self.assertFalse(self.state["operator_decision_required"])
+        self.assertEqual("GATE_READY", self.state["status"])
+        self.assertTrue(self.state["operator_decision_required"])
         self.assertTrue(self.state["authority"]["june"].startswith("DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
-        self.assertEqual("APPROVED_BOUNDED_SRFDI_WP9S_ONLY", self.state["authority"]["preregistration_supersession"])
+        self.assertEqual("WP9S_IMPLEMENTED_CANDIDATE_GATE_READY", self.state["authority"]["preregistration_supersession"])
         self.assertEqual("SRFDI-G9S-FREEZE", self.state["stop_at"])
         self.assertEqual("FROZEN_HISTORICAL_SUPERSEDED_FOR_EXECUTION", self.state["g9_disposition"]["status"])
+        wp9s = next(p for p in self.state["packets"] if p["packet_id"] == "SRFDI-WP9S")
+        self.assertEqual("GATE_READY", wp9s["status"])
 
     def test_gate_keeps_population_unbound_and_june_separate(self) -> None:
         summary = self.gate["frozen_protocol_summary"]
@@ -72,10 +71,7 @@ class SRFDIG9GateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", self.gate["proposed_authority_delta"]["june_execution_effect"])
         self.assertIn("SRFDI-G-JUNE-AUTH", " ".join(self.gate["exact_work_after_approval"]))
         self.assertEqual("UNBOUND_PENDING_SRFDI_G_JUNE_AUTH", self.decision["population_binding"]["exact_population"])
-        self.assertEqual(
-            "DENIED_PENDING_SRFDI_G_JUNE_AUTH_AUTHORIZE_JUNE",
-            self.decision["authority_effect"]["june_execution"],
-        )
+        self.assertEqual("DENIED_PENDING_SRFDI_G_JUNE_AUTH_AUTHORIZE_JUNE", self.decision["authority_effect"]["june_execution"])
 
 
 if __name__ == "__main__":
