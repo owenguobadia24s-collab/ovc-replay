@@ -1,0 +1,91 @@
+{
+  "schema": "ovc-srfdi-wp10-preflight-blocker/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "SRFDI-WP10",
+  "gate_id": "SRFDI-G10",
+  "baseline_main": "35b91e0e7b2dfbbe44bd51a278a1735f3fcb55b0",
+  "branch": "build/srfdi-wp10-bounded-june-benchmark",
+  "status": "BLOCKED_PRE_RUN",
+  "authority_state": {
+    "june_execution": "AUTHORIZED_BOUNDED_JUNE_BENCHMARK_UNCONSUMED_BLOCKED_PRE_RUN",
+    "market_benchmark": "AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED_BLOCKED_PRE_RUN",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "authorization_binding": {
+    "gate_merge_commit": "35b91e0e7b2dfbbe44bd51a278a1735f3fcb55b0",
+    "decision_id": "SRFDI-G-JUNE-AUTH-20260808-AUTHORIZE-JUNE",
+    "authorized_manifest_binding_sha256": "2a0d3c529ea5aca6a1d8c67adc29d3f6dd55a3efcd75992661a69e205cea010c",
+    "authorized_manifest_logical_sha256": "811514cef8a24dc1078cbf231105cb7d79af75c3899ed90a210d1d7bc3d898ac",
+    "authority_token_id": "SRFD.JUNE.AUTH.5fd1ed170fac6994b8ac65db05b7907bda8dad7ec49084572dad1e9040e7bf81",
+    "preregistration_sha256": "13c17cf64c576b35e53047de753a5fd1a49bbdc7205c387bbcedb5a34441b804"
+  },
+  "preflight_result": "BLOCK",
+  "primary_reason_code": "PREREG_SEGMENTATION_EXECUTION_PARAMETERS_NOT_MATERIALISED",
+  "blocking_findings": [
+    {
+      "reason_code": "PREREG_SEGMENTATION_BOUNDARY_PACK_NOT_MATERIALISED",
+      "detail": "The frozen v0.2 preregistration lists segmentation candidate IDs and temporal statuses but does not bind an exact SRFDSegmentationBenchmarkSpec/boundary-pack identity for RUN_CHANGE_SEGMENTATION, DIRECTIONAL_CHANGE, PELT_REFERENCE or NULL_BOUNDARY_CONTROL. Repository search found no versioned segmentation boundary-pack instance outside the generic fixture-only method registry."
+    },
+    {
+      "reason_code": "PREREG_SEGMENTATION_SOURCE_FIELDS_NOT_MATERIALISED",
+      "detail": "The frozen preregistration and segmentation registry do not declare exact source namespaces/fields. The implementation requires state_field for run-change, value_field for directional change, and an ordered numeric signal for PELT; selecting those fields during WP10 would invent scientific execution semantics after preregistration freeze."
+    },
+    {
+      "reason_code": "PREREG_SEGMENTATION_PARAMETER_SURFACES_NOT_MATERIALISED",
+      "detail": "The frozen configuration bounds contain exact family parameter ladders but no segmentation parameter ladders. DIRECTIONAL_CHANGE requires a threshold surface; PELT requires a penalty surface and the governing design requires cost/penalty/min-length surface identity. No such exact values or pack hashes are frozen."
+    },
+    {
+      "reason_code": "PREREG_EXACT_RUN_DAG_INCOMPLETE",
+      "detail": "The governing plan requires WP9 to freeze the exact candidate grid and thresholds/rules, and G-JUNE-AUTH requires exact candidate sets. WP10 may execute only the exact frozen run. Omitting these declared segmentation candidates, inventing parameters now, or substituting fixture values would be an undeclared deviation."
+    }
+  ],
+  "evidence": {
+    "frozen_preregistration": "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_2.json",
+    "segmentation_registry": "registries/research/srfd/segmentation_methods.yaml",
+    "segmentation_implementation": "src/ovc/opt_b/srfd/segmentation.py",
+    "schema_validator": "src/ovc/opt_b/srfd/schema.py",
+    "governing_plan_requirements": [
+      "WP9 freezes exact candidate grid and thresholds/rules before June result exposure.",
+      "Segmentation identity requires temporal class, boundary pack, source fields, delay and causal admissibility.",
+      "G-JUNE-AUTH binds exact representation, segmentation, distance, family and configuration candidate sets.",
+      "WP10 runs only the exact frozen run and G10 cannot PASS on undeclared deviation."
+    ],
+    "repo_search_observation": "No dedicated frozen segmentation parameter/boundary-pack registry was present in registries/research/srfd; segmentation_methods.yaml is the only segmentation registry and contains method id, temporal_mode and status only."
+  },
+  "benchmark_consumption": {
+    "wp10_benchmark_started": false,
+    "june_scientific_outputs_generated": false,
+    "june_scientific_outputs_inspected": false,
+    "distance_surface_executed": false,
+    "family_catalog_executed": false,
+    "segmentation_surface_executed": false,
+    "authority_token_consumed": false
+  },
+  "prohibited_repairs_inside_current_authority": [
+    "Choose directional-change thresholds from June data or implementation convenience.",
+    "Choose a PELT penalty/min-length surface after the v0.2 preregistration freeze.",
+    "Choose C2/C1/bar source fields for segmentation without a frozen boundary pack.",
+    "Drop declared segmentation candidates to make the run executable.",
+    "Use fixture test constants as empirical benchmark parameters without frozen preregistration identity.",
+    "Edit the frozen v0.2 preregistration in place.",
+    "Treat the existing AUTHORIZE_JUNE decision as authority for a materially different run manifest."
+  ],
+  "smallest_lawful_resolution": {
+    "required_authority": "OPERATOR_REQUIRED_MATERIAL_FROZEN_PREREGISTRATION_SUPERSESSION",
+    "steps": [
+      "Preserve v0.2 preregistration, its freeze decision, June authorization and this unused authority token as immutable historical evidence.",
+      "Authorize a bounded pre-run preregistration-remediation packet that uses design criteria plus synthetic/null fixtures only and does not inspect June scientific outputs.",
+      "Materialise versioned SRFDSegmentationBenchmarkSpec/boundary packs with exact source fields, chronology/delay rules and complete directional-change/PELT parameter surfaces.",
+      "Create a new immutable preregistration identity and run-manifest candidate; do not mutate v0.2.",
+      "Present the new preregistration for operator freeze, then present a new exact June execution-authority decision because the existing AUTHORIZE_JUNE binds only the v0.2 manifest hash.",
+      "Only after those approvals may WP10 restart from a clean bounded branch and consume the one newly authorized run."
+    ]
+  },
+  "rollback": "No benchmark run has started. Preserve main and all frozen/authorized v0.2 evidence; close or retain this blocked WP10 branch/PR. Do not consume the existing token, edit frozen preregistration, fetch provider data, read Validation, force-push, or execute a partial benchmark."
+}
