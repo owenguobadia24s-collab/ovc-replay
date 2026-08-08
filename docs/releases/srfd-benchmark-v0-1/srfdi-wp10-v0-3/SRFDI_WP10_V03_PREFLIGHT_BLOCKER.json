@@ -1,0 +1,83 @@
+{
+  "schema": "ovc-srfdi-wp10-v0-3-preflight-blocker/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "SRFDI-WP10-v0.3",
+  "phase": "PRE_RUN_PREFLIGHT",
+  "status": "BLOCKED_PRE_RUN",
+  "baseline_main": "4514497651c43bd81313609e57b808d9f1e2caff",
+  "authority": {
+    "gate": "SRFDI-G-JUNE-AUTH",
+    "decision": "AUTHORIZE_JUNE",
+    "manifest_binding_sha256": "148cf9c6958ffc737a3b5fd1800c48c1544bf34e835a97c884e77d4b49904067",
+    "token_id": "SRFD.JUNE.AUTH.8e07a6f1ce7a1c6a37faa23ec7eb227f3e45dba1aeb53c970960d7ff9bbf9722",
+    "token_consumed": false,
+    "prior_v0_2_token": "SUPERSEDED_UNUSED_UNCONSUMED"
+  },
+  "preflight_passed": {
+    "authorization_merge_present_on_main": true,
+    "authorized_manifest_and_token_present": true,
+    "source_release_read_only_reuse_only": true,
+    "provider_fetch_performed": false,
+    "source_file_hashes_match_accepted_output_manifest": true,
+    "bound_c1_c2_file_count": 10,
+    "source_record_count_expected": 9420,
+    "eligible_record_count_expected": 8598,
+    "eligible_record_ids_sha256_expected": "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "benchmark_scientific_outputs_generated": false
+  },
+  "bound_source_files": [
+    {"path":"payload/c1/15M/ASK.jsonl","sha256":"f95de2c9003ce9fa3b41a6035b9947be46de60172191964efd89c62883df58db"},
+    {"path":"payload/c1/15M/BID.jsonl","sha256":"bd7bc02902666d6d0e10542dbbca8b43af167e610a73b62c625b38712a49d113"},
+    {"path":"payload/c1/2H_A_L/ASK.jsonl","sha256":"70071f48025568c31c2722ec5b9992b9917f74f70df07f6a7e05d5667156f1ba"},
+    {"path":"payload/c1/2H_A_L/BID.jsonl","sha256":"311fe938d14431f57851aaf4e4abeb3002c760c8805b452a5a272e8da37ea3dd"},
+    {"path":"payload/c2/states/15M/ASK/GBPUSD-15M-LOCAL-v0_1.jsonl","sha256":"f0df9558afc5740aabd2dd9f75e958880efd5343b70982d77f4c1e3252ba4e8a"},
+    {"path":"payload/c2/states/15M/ASK/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl","sha256":"4b67517f54d02b1f601c451b4f4ed9eb5a1dee05712ef44c1463b06f8500f879"},
+    {"path":"payload/c2/states/15M/BID/GBPUSD-15M-LOCAL-v0_1.jsonl","sha256":"63a1d24836d3cd0aaad9e5a11e9b9ec51724bfd335fab47f538ed23f36e8c58b"},
+    {"path":"payload/c2/states/15M/BID/GBPUSD-15M-WITH-2H-PARENT-v0_1.jsonl","sha256":"15e487cede1bd8a2ccdbfe4c515c72d10b6e5bea9c54f1c7212a368a146e1b88"},
+    {"path":"payload/c2/states/2H_A_L/ASK/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl","sha256":"f671c18b01d840d3cca8a058f905104146f77254b7ca400378818697242170cb"},
+    {"path":"payload/c2/states/2H_A_L/BID/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl","sha256":"ce7704f1a29dde6e22e0083fbcfda67fef2929875304c2eb9a0874e63d3d27f5"}
+  ],
+  "blocking_contract": "contracts/research/srfd/preregistration_freeze_v0_1.md",
+  "blocking_contract_requirement": "stability metrics and denominators, ambiguity/residual policies, and required scientific decision evidence must be frozen before June; post-benchmark rule selection is prohibited",
+  "blocking_evidence": {
+    "frozen_preregistration": "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_3.json",
+    "inherited_stability_metrics": [
+      "RESIDUAL_RATE_WITH_DENOMINATOR",
+      "AMBIGUITY_RATE_WITH_DENOMINATOR",
+      "CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR",
+      "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR",
+      "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR"
+    ],
+    "stability_metric_specs_present": false,
+    "implemented_exact_metric_support": {
+      "RESIDUAL_RATE_WITH_DENOMINATOR": "IMPLEMENTED_IN_sensitivity.py::sensitivity_metrics",
+      "AMBIGUITY_RATE_WITH_DENOMINATOR": "NO_FROZEN_EVENT_RULE_OR_EXECUTABLE_DENOMINATOR_BINDING",
+      "CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR": "NO_FROZEN_SURVIVAL_OR_CORRESPONDENCE_AGGREGATION_RULE",
+      "CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR": "RAW_CORRESPONDENCE_PRIMITIVE_EXISTS_BUT_NO_FROZEN_CROSS_METHOD_AGGREGATION_OR_SUCCESS_RULE",
+      "CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR": "NO_FROZEN_CHRONOLOGY_PARTITION_OR_NUMERATOR_DENOMINATOR_RULE"
+    }
+  },
+  "reason_code": "WP10_STABILITY_METRIC_RULE_UNBOUND",
+  "block_reason": "Consuming the one-run token would expose June benchmark results before required stability/ambiguity metric rules are frozen. Choosing those rules afterwards would be a material post-preregistration scientific change.",
+  "scientific_execution": {
+    "token_consumed": false,
+    "segmentation_executed": false,
+    "representation_grid_executed": false,
+    "distance_grid_executed": false,
+    "family_grid_executed": false,
+    "sensitivity_or_stability_results_generated": false,
+    "g10_generated": false,
+    "wp11_generated": false
+  },
+  "authority_firewalls": {
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_family_semantic_publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "required_resolution": "NEW_OPERATOR_GOVERNED_PREREGISTRATION_SUPERSESSION_BEFORE_ANY_TOKEN_CONSUMPTION",
+  "resolution_scope": "STABILITY_AND_AMBIGUITY_METRIC_EXECUTION_SPECIFICATION_ONLY; preserve v0.3 representation, segmentation, source, population, distance, family and capacity bindings unless an explicit separately justified change is approved",
+  "rollback": "Leave the v0.3 authority token unconsumed. Do not execute or inspect SRFD benchmark outputs. Preserve all merged authority and preregistration evidence. A correction must be additive/versioned and separately frozen and re-authorized before June execution."
+}
