@@ -8,6 +8,7 @@ from ovc.opt_b.srfd.wp10_preflight import WP10PreflightError, validate_frozen_st
 
 ROOT = Path(__file__).resolve().parents[2]
 PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_3.json"
+BASE_PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_2.json"
 BLOCKER = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-3/SRFDI_WP10_V03_PREFLIGHT_BLOCKER.json"
 QA = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-3/SRFDI_WP10_V03_PREFLIGHT_QA_PACKET.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_7.json"
@@ -18,6 +19,7 @@ class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.prereg = json.loads(PREREG.read_text())
+        cls.base_prereg = json.loads(BASE_PREREG.read_text())
         cls.blocker = json.loads(BLOCKER.read_text())
         cls.qa = json.loads(QA.read_text())
         cls.state = json.loads(STATE.read_text())
@@ -25,9 +27,11 @@ class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
 
     def test_frozen_preregistration_fails_closed_on_missing_metric_rule_specs(self) -> None:
         with self.assertRaises(WP10PreflightError) as caught:
-            validate_frozen_stability_metric_rules(self.prereg)
+            validate_frozen_stability_metric_rules(self.prereg, base_preregistration=self.base_prereg)
         self.assertEqual("WP10_STABILITY_METRIC_RULE_UNBOUND", caught.exception.reason_code)
-        self.assertNotIn("stability_metric_specs", self.prereg)
+        self.assertIn("stability_metrics", self.base_prereg)
+        self.assertNotIn("stability_metric_specs", self.base_prereg)
+        self.assertEqual("SEGMENTATION_EXECUTION_SPECIFICATION_ONLY", self.prereg["supersession"]["supersession_scope"])
 
     def test_block_occurs_before_any_scientific_execution_or_token_consumption(self) -> None:
         self.assertEqual("BLOCKED_PRE_RUN", self.blocker["status"])
