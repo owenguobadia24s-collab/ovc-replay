@@ -1,0 +1,210 @@
+name: MCARBI-WP8 authorized Stage-A benchmark
+
+on:
+  push:
+    branches:
+      - run/mcarbi-wp8-stage-a
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: mcarbi-wp8-stage-a-v0-1
+  cancel-in-progress: false
+
+jobs:
+  stage-a-market:
+    if: contains(github.event.head_commit.message, '[MCARBI-STAGE-A-RUN]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify exact operator authorization and run request
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_RUN_REQUEST.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          authority=json.loads(Path('docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_OPERATOR_DECISION.json').read_text())
+          request=json.loads(Path('docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_WP8_RUN_REQUEST.json').read_text())
+          state=Path('registries/research/mcarb/MCARBI_PROGRAMME_STATE.yaml').read_text()
+          assert authority['decision']=='AUTHORIZE_STAGE_A'
+          assert authority['authority_granted']['scope']=='ONE_BOUNDED_LOGICAL_STAGE_A_MARKET_BENCHMARK_EXECUTION'
+          assert authority['authority_consumption']['status']=='UNCONSUMED'
+          assert request['run_authority_gate']=='MCARBI-G-STAGE-A-AUTH'
+          assert request['decision']=='AUTHORIZE_STAGE_A'
+          assert request['preregistration_git_blob_sha1']=='8dcc4fe4e51b3b7d07e4dcc440c6b5b6a784f6f7'
+          assert request['parameter_registry_git_blob_sha1']=='2afaf18ffebb674b181b7493b2ca62738a54f037'
+          assert request['population_interval']=='[2023-11-01T00:00:00Z,2024-01-01T00:00:00Z)'
+          assert request['logical_run_count']==1
+          assert 'market_benchmark_authority: AUTHORIZED_ONE_LOGICAL_STAGE_A_RUN_UNCONSUMED' in state
+          assert 'validation_2025: LOCKED_UNCONSUMED' in state
+          assert 'provider_intake_authority: NONE' in state
+          PY
+
+      - name: Install and validate read-only R2 client
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y rclone
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo '::error::Missing R2 access-key secret'; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo '::error::Missing R2 secret-key secret'; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
+          rclone lsf --s3-no-check-bucket ovc_r2:ovc-evidence >/dev/null
+
+      - name: Download exact accepted OPT-A Discovery artifact only
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: 30179286521
+          name: a2-g3-opt-a-gbpusd-discovery-2021-2023-v2
+          path: inputs/opt-a
+
+      - name: Read exact accepted C2 v2 Discovery 2H state surface only
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='ovc_r2:ovc-evidence/canonical/releases/OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2/MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1'
+          mkdir -p inputs/c2/files/states/2H_A_L/BID inputs/c2/files/states/2H_A_L/ASK
+          rclone copyto --s3-no-check-bucket "${base}/manifest.json" inputs/c2/manifest.json
+          rclone copyto --s3-no-check-bucket "${base}/files/states/2H_A_L/BID/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl" inputs/c2/files/states/2H_A_L/BID/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl
+          rclone copyto --s3-no-check-bucket "${base}/files/states/2H_A_L/ASK/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl" inputs/c2/files/states/2H_A_L/ASK/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl
+          test ! -e inputs/validation
+
+      - name: Execute frozen Stage-A fresh materialization
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          PYTHONPATH=src python scripts/research_operations/run_mcarbi_stage_a.py \
+            --opt-a-root inputs/opt-a \
+            --c2-root inputs/c2 \
+            --preregistration docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_STAGE_A_PREREGISTRATION.json \
+            --parameter-registry registries/research/mcarb/MCARB_STAGE_A_PARAMETER_REGISTRY_v0_1.json \
+            --authority-decision docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_OPERATOR_DECISION.json \
+            --opt-a-manifest-spec docs/releases/opt-a-v2/publication/WP6_MANIFEST_SPEC.json \
+            --c2-verification-receipt docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json \
+            --output-root evidence/fresh \
+            --source-commit "${GITHUB_SHA}" \
+            --workflow-run-id "${GITHUB_RUN_ID}" | tee evidence/fresh-execution.log
+
+      - name: Resume same logical run from byte-identical checkpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python scripts/research_operations/run_mcarbi_stage_a.py \
+            --opt-a-root inputs/opt-a \
+            --c2-root inputs/c2 \
+            --preregistration docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_STAGE_A_PREREGISTRATION.json \
+            --parameter-registry registries/research/mcarb/MCARB_STAGE_A_PARAMETER_REGISTRY_v0_1.json \
+            --authority-decision docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_OPERATOR_DECISION.json \
+            --opt-a-manifest-spec docs/releases/opt-a-v2/publication/WP6_MANIFEST_SPEC.json \
+            --c2-verification-receipt docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json \
+            --output-root evidence/resumed \
+            --resume-from evidence/fresh/checkpoints \
+            --source-commit "${GITHUB_SHA}" \
+            --workflow-run-id "${GITHUB_RUN_ID}" | tee evidence/resumed-execution.log
+
+      - name: Enforce restart equivalence, capacity and authority firewalls
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp -s evidence/fresh/stage-a-records.jsonl.gz evidence/resumed/stage-a-records.jsonl.gz
+          cmp -s evidence/fresh/stage-a-dependence.jsonl.gz evidence/resumed/stage-a-dependence.jsonl.gz
+          cmp -s evidence/fresh/stage-a-pack-summary.json evidence/resumed/stage-a-pack-summary.json
+          cmp -s evidence/fresh/stage-a-evidence-vector.json evidence/resumed/stage-a-evidence-vector.json
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+          fresh=json.loads(Path('evidence/fresh/stage-a-run-receipt.json').read_text())
+          resumed=json.loads(Path('evidence/resumed/stage-a-run-receipt.json').read_text())
+          evidence=json.loads(Path('evidence/fresh/stage-a-evidence-vector.json').read_text())
+          assert fresh['result']=='PASS_STAGE_A_MACHINERY'
+          assert resumed['result']=='PASS_STAGE_A_MACHINERY'
+          assert fresh['run_id']==resumed['run_id']
+          assert fresh['population_record_count']==resumed['population_record_count']==898
+          assert fresh['capacity_status']==resumed['capacity_status']=='PASS'
+          assert fresh['validation_consumption']==resumed['validation_consumption']=='LOCKED_UNCONSUMED'
+          assert fresh['provider_intake']==resumed['provider_intake']=='DENIED'
+          assert fresh['selector_change']==resumed['selector_change']=='NONE'
+          assert fresh['promotion']==resumed['promotion']=='NONE'
+          assert fresh['publication']==resumed['publication']=='NONE'
+          assert fresh['probability']==resumed['probability']=='NONE'
+          assert fresh['risk']==resumed['risk']=='NONE'
+          assert fresh['exposure']==resumed['exposure']=='NONE'
+          assert fresh['execution_authority']==resumed['execution_authority']=='NONE'
+          assert evidence['source_binding']['validation_payload_read'] is False
+          assert evidence['source_binding']['provider_fetch_or_intake'] is False
+          assert evidence['population']['record_count']==898
+          assert evidence['population']['side_counts']=={'ASK':449,'BID':449}
+          assert evidence['criterion_vector']['CAPACITY']=='PASS_MEASURED'
+          receipt={
+            'schema':'ovc-mcarbi-stage-a-restart-equivalence/v1',
+            'programme_id':'OVC-MCARB-v0.1','packet_id':'MCARBI-WP8','run_id':fresh['run_id'],
+            'fresh_mode':fresh['execution_mode'],'resume_mode':resumed['execution_mode'],
+            'record_stream_sha256':sha('evidence/fresh/stage-a-records.jsonl.gz'),
+            'dependence_sha256':sha('evidence/fresh/stage-a-dependence.jsonl.gz'),
+            'pack_summary_sha256':sha('evidence/fresh/stage-a-pack-summary.json'),
+            'evidence_vector_sha256':sha('evidence/fresh/stage-a-evidence-vector.json'),
+            'result':'PASS_BYTE_IDENTICAL_SCIENTIFIC_OUTPUTS',
+            'checkpoint_resume':'SAME_LOGICAL_RUN_BYTE_IDENTICAL_INPUTS_ONLY',
+          }
+          Path('evidence/MCARBI_WP8_RESTART_EQUIVALENCE.json').write_text(json.dumps(receipt,sort_keys=True,separators=(',',':'))+'\n')
+          workflow={
+            'schema':'ovc-mcarbi-wp8-workflow-receipt/v1','programme_id':'OVC-MCARB-v0.1','packet_id':'MCARBI-WP8',
+            'git_sha':'${{ github.sha }}','workflow_run_id':'${{ github.run_id }}','run_id':fresh['run_id'],
+            'fresh_receipt_sha256':sha('evidence/fresh/stage-a-run-receipt.json'),
+            'resume_receipt_sha256':sha('evidence/resumed/stage-a-run-receipt.json'),
+            'restart_receipt_sha256':sha('evidence/MCARBI_WP8_RESTART_EQUIVALENCE.json'),
+            'stage_a_authority_consumed':True,'logical_run_count':1,
+            'validation_2025':'LOCKED_UNCONSUMED','provider_intake':'DENIED','r2_publication':'NONE',
+            'selector':'NONE','promotion':'NONE','probability_risk_exposure_execution':'NONE',
+            'result':'PASS_STAGE_A_EXECUTION_AND_RESTART_EQUIVALENCE',
+          }
+          Path('evidence/MCARBI_WP8_WORKFLOW_RECEIPT.json').write_text(json.dumps(workflow,sort_keys=True,separators=(',',':'))+'\n')
+          PY
+          bytes=$(du -sb evidence | cut -f1)
+          test "${bytes}" -le 10737418240
+          if find evidence -type f -iname '*validation*' | grep -q .; then
+            echo '::error::Validation-labelled artifact found in Stage-A evidence'; exit 1
+          fi
+
+      - name: Upload derived Stage-A evidence only
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcarbi-wp8-stage-a-evidence
+          path: |
+            evidence/fresh/**
+            evidence/resumed/stage-a-run-receipt.json
+            evidence/resumed/stage-a-records.jsonl.gz
+            evidence/resumed/stage-a-dependence.jsonl.gz
+            evidence/resumed/stage-a-pack-summary.json
+            evidence/resumed/stage-a-evidence-vector.json
+            evidence/fresh-execution.log
+            evidence/resumed-execution.log
+            evidence/MCARBI_WP8_RESTART_EQUIVALENCE.json
+            evidence/MCARBI_WP8_WORKFLOW_RECEIPT.json
+          if-no-files-found: error
+          retention-days: 90
