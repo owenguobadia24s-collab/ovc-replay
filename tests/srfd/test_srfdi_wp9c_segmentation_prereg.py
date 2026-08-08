@@ -17,6 +17,7 @@ PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_3.js
 MANIFEST = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9c/SRFD_JUNE_RUN_MANIFEST_v0_3_CANDIDATE.json"
 PACKET = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp9c/SRFDI_G9C_FREEZE_OPERATOR_PACKET.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json"
+CURRENT_POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 
 
 def row(record_id: str, when: str, state_key: str, *, reset: str | None = None) -> dict[str, object]:
@@ -41,6 +42,7 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
         cls.manifest = json.loads(MANIFEST.read_text())
         cls.packet = json.loads(PACKET.read_text())
         cls.state = json.loads(STATE.read_text())
+        cls.current_pointer = json.loads(CURRENT_POINTER.read_text())
 
     def test_registry_materialises_exact_declared_segmentation_set(self) -> None:
         digest = validate_boundary_pack_registry(self.registry)
@@ -113,7 +115,7 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
             self.manifest["candidate_sets"]["segmentation_visible_nonexecuted"],
         )
 
-    def test_old_authority_is_unconsumed_and_new_freeze_does_not_authorize_june(self) -> None:
+    def test_old_authority_is_unconsumed_and_candidate_freeze_does_not_authorize_june(self) -> None:
         self.assertFalse(self.prereg["authority_transition"]["current_v0_2_token_consumed"])
         self.assertEqual("SRFDI-G9C-FREEZE", self.packet["gate_id"])
         self.assertEqual("PREREGISTRATION_FREEZE", self.packet["recommended_decision"])
@@ -121,6 +123,15 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
         self.assertEqual("GATE_READY", self.state["status"])
         self.assertEqual("SRFDI-G9C-FREEZE", self.state["current_gate"])
         self.assertTrue(self.state["operator_decision_required"])
+
+    def test_candidate_does_not_mutate_authoritative_pointer_before_operator_freeze(self) -> None:
+        self.assertEqual(
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json",
+            self.current_pointer["authoritative_state"],
+        )
+        self.assertEqual("SRFDI-G10", self.current_pointer["current_gate"])
+        self.assertFalse(self.current_pointer["operator_decision_required"])
+        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_UNCONSUMED", self.current_pointer["june_execution"])
 
 
 if __name__ == "__main__":
