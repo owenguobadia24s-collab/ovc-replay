@@ -1,0 +1,21 @@
+{
+  "schema":"ovc-c2e2-programme-state/v1",
+  "programme_id":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version":"0.1-REVISED",
+  "status":"QA_REVIEW",
+  "baseline_commit":"12d98171cefb4b901490d91a2d259122ff8ef9d8",
+  "branch":"build/c2e2-wp2-object-model",
+  "current_packet":"C2E2-WP2",
+  "current_gate":"C2E2-G3",
+  "operator_decision_required":false,
+  "operator_decision_history":["C2E2-G0.OPERATOR.PASS.20260808T175000+0100"],
+  "delegated_decision_history":["C2E2-G1.DELEGATED.PASS","C2E2-G2.DELEGATED.PASS"],
+  "authority":{"wp0_wp5_build_test":"AUTHORIZED","synthetic_shadow":"AUTHORIZED_INACTIVE_NONCANONICAL","real_source_replay":"DENIED_PENDING_C2E2_G6_RUN_AUTH","c2e_activation":"DENIED","active_boundary_pack":"NONE","selector_publication_validation":"DENIED","family_semantic_probability_risk_exposure_execution":"NONE"},
+  "packets":[
+    {"packet_id":"C2E2-WP1","status":"COMPLETED","merge_commit":"12d98171cefb4b901490d91a2d259122ff8ef9d8","decision_record":"docs/releases/c2e-causal-episode-v0-2/c2e2-wp1/C2E2_G2_DELEGATED_DECISION.json","blockers":[]},
+    {"packet_id":"C2E2-WP2","status":"QA_REVIEW","prerequisites":["C2E2-WP1 COMPLETED","C2E2-G2 PASS"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"OBJECT_SCHEMA_REGISTRY_FREEZE_BUILD_TEST_ONLY","baseline_commit":"12d98171cefb4b901490d91a2d259122ff8ef9d8","branch":"build/c2e2-wp2-object-model","qa_packet":"docs/releases/c2e-causal-episode-v0-2/c2e2-wp2/C2E2_WP2_QA_PACKET.json","blockers":[]}
+  ],
+  "next_packet":null,
+  "next_action":"AWAIT_EXACT_HEAD_CI_FOR_C2E2_G3_AUTO_RATIFICATION"
+}
