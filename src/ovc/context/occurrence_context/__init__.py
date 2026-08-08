@@ -1,4 +1,8 @@
-"""Standalone, non-structural OccurrenceContext engineering package."""
+"""Inactive, non-structural standalone OccurrenceContext engineering package.
+
+The package has no active market, representation-input, Validation, C2P,
+selector, publication, probability, risk, exposure, or execution authority.
+"""
 
 from .builder import OccurrenceContextError, build_context, build_occurrence_key
 from .models import BuildRequest, ContextDependencyRef, OccurrenceAnchorRef
