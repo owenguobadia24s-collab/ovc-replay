@@ -3,7 +3,7 @@ programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
 packet_id: MCARBI-WP8
-status: QA_REVIEW
+status: APPROVED
 prerequisites:
   - MCARBI-G6 FREEZE_STAGE_A_READINESS merged at faf4e5af7c143995a2954dddb136cbe66a9e528d
   - MCARBI-G7 PREREGISTRATION_FREEZE merged at 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
@@ -12,7 +12,7 @@ authority_required: OPERATOR_REQUIRED_ALREADY_GRANTED_AND_CONSUMED
 authority_delta: NONE_AT_MCARBI_G8
 baseline_commit: 9cb6a6c9aa010dacbd020a925e33f7a4a135405a
 branch: run/mcarbi-wp8-stage-a
-candidate_commit: PENDING_G8_FINAL_HEAD_ASSURANCE
+candidate_commit: TERMINAL_STABLE_HEAD_PENDING_ASSURANCE
 tests:
   - pre-run repository suite run 31233871345: PASS
   - pre-run OVC FINAL_HEAD run 31233871310: PASS
@@ -21,7 +21,9 @@ tests:
   - successful Stage-A continuation workflow run 31234221037: PASS
   - successful Stage-A continuation job 93043704394: PASS
   - fresh/resume scientific outputs byte-identical: PASS
-  - final G8 repository/FINAL_HEAD assurance: PENDING
+  - G8 pre-terminal-metadata repository suite run 31234431873: PASS
+  - G8 pre-terminal-metadata OVC FINAL_HEAD run 31234431878: PASS
+  - terminal stable-head repository/FINAL_HEAD assurance: REQUIRED_BEFORE_MERGE
 qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_G8_QA_PACKET.json
 decision_record: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_G8_DELEGATED_DECISION.json
 gate_packet: docs/releases/mcarb-v0-1/mcarbi-wp8/MCARBI_G8_QA_PACKET.json
@@ -68,6 +70,12 @@ stage_a_execution_scope:
   source: EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
   provider_intake: DENIED
   rerun_authority: NONE
+mcarbi_g8:
+  status: APPROVED
+  decision: PASS
+  authority: DELEGATED_AUTO_RATIFIABLE
+  scientific_consequence: NONE
+  next_packet: MCARBI-WP9
 active_discovery_authority: NONE
 active_development_authority: NONE
 active_validation_authority: NONE
@@ -77,5 +85,5 @@ selector_authority: NONE
 c2_c2e_sri_family_semantic_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
-next_packet: MCARBI-G8-AUTO-RATIFICATION
-continuation_point: RUN_FINAL_EXACT_HEAD_ASSURANCE; IF_PASS_AUTO_RATIFY_G8_AND_MERGE_WP8_THEN_PREPARE_WP9_G9_OPERATOR_PACKET
+next_packet: MCARBI-WP9
+continuation_point: AFTER_TERMINAL_STABLE_HEAD_ASSURANCE_SQUASH_MERGE_WP8_G8_THEN_CREATE_WP9_FROM_LATEST_MAIN_AND_STOP_AT_MCARBI_G9
