@@ -1,0 +1,18 @@
+{
+  "version":"SYNTHETIC.WP2.v1",
+  "supersedes":null,
+  "population_scope":{"instrument_id":"GBPUSD","side":"BID","clock_id":"UTC_15M","scale_id":"15M","scope_id":"LOCAL_15M","source_population_id":"SYNTHETIC_ONLY"},
+  "rules":[
+    {"boundary_rule_id":"RULE.CONTINUE","candidate_type":"CONTINUATION_CANDIDATE","lifecycle_action":"CONTINUATION","priority_class":7,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":["FDI_C2G"]},"parameters":{"threshold":"0.250000","confirmation_delay_seconds":"0"},"parameter_precisions":{"threshold":6,"confirmation_delay_seconds":0},"time_semantics":{"confirmation":"IMMEDIATE"}},
+    {"boundary_rule_id":"RULE.BIRTH","candidate_type":"BIRTH_CANDIDATE","lifecycle_action":"BIRTH","priority_class":8,"dependencies":{"REQUIRED":["DEP.LOCAL"],"OPTIONAL":[],"WARNING":[],"ONE_OF":[],"PROHIBITED":["FDI_C2G"]},"parameters":{"threshold":"0.500000"},"parameter_precisions":{"threshold":6},"time_semantics":{"confirmation":"IMMEDIATE"}}
+  ],
+  "compatibility_matrix":[{"candidate_type_a":"BIRTH_CANDIDATE","candidate_type_b":"CONTINUATION_CANDIDATE","disposition":"ORDERED_BY_PRIORITY"}],
+  "ownership":{"peer_mode":"SINGLE_OWNER"},
+  "topology":{"cycle_policy":"DENY","nest":"TYPED_ONLY","split":true,"merge":true,"re_parent":true},
+  "discontinuity":{"source_gap":"CENSOR_GAP","release_end":"CENSOR_RELEASE_END","scheduled_closure":"PACK_DECLARED","required_context_loss":"RULE_SPECIFIC"},
+  "conflict_policy":{"equal_priority_incompatible":"INCOMPATIBLE_CONFLICT","lexical_winner":false},
+  "implementation_hashes":{"boundary_pack.py":"synthetic-code-hash"},
+  "registry_hashes":{"priority":"synthetic-priority-hash","compatibility":"synthetic-compat-hash"},
+  "authority":"SHADOW",
+  "metadata":{"description":"non-identity diagnostic metadata"}
+}
