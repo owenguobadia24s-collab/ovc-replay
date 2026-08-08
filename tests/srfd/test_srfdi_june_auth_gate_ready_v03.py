@@ -131,7 +131,7 @@ class SRFDIJuneAuthGateReadyV03Tests(unittest.TestCase):
                 expected_implementation_commit="7e234e52a95dcc7c1d136d7566d271a2c216e137",
             )
 
-    def test_gate_candidate_stops_before_june_and_does_not_mutate_authoritative_pointer(self) -> None:
+    def test_gate_candidate_remains_immutable_after_operator_authority_progression(self) -> None:
         self.assertEqual("GATE_READY", self.state["status"])
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
         self.assertTrue(self.state["operator_decision_required"])
@@ -140,10 +140,12 @@ class SRFDIJuneAuthGateReadyV03Tests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json", self.pointer["authoritative_state"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION-v0.3", self.pointer["current_gate"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_6.json", self.pointer["authoritative_state"])
+        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_5.json", self.pointer["gate_candidate_state"])
+        self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
         self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
+        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_EXACT_MANIFEST_UNCONSUMED", self.pointer["june_execution"])
+        self.assertFalse(self.pointer["authority_token_consumed"])
         self.assertFalse(self.pointer["superseded_authority_token_consumed"])
 
     def test_operator_packet_is_one_exact_reserved_decision(self) -> None:
