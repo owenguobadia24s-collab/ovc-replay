@@ -4,8 +4,9 @@
   "packet_id": "C2E2-WP0",
   "gate_id": "C2E2-G1",
   "baseline_commit": "496066204a147e661484e5d5edcfd6a6d84351f2",
-  "status": "QA_REVIEW",
-  "recommendation": "PASS_IF_EXACT_HEAD_CI",
+  "candidate_commit": "dbe27dfd0a117982c7fee2cdb255c98339f180f5",
+  "status": "PASS",
+  "recommendation": "PASS",
   "assertions": {
     "latest_lawful_main_pinned": "PASS",
     "no_material_c2e_semantic_supersession": "PASS",
@@ -19,12 +20,19 @@
     "open_pr_ancestry_safety": "PASS",
     "real_source_replay_performed": false
   },
+  "tests": {
+    "repository_suite": {"workflow_run": 31268496918, "conclusion": "success"},
+    "tiered_assurance": {"workflow_run": 31268496921, "conclusion": "success"},
+    "profile_assurance_job": {"job_id": 93130389223, "conclusion": "success"},
+    "merge_readiness_job": {"job_id": 93130407574, "conclusion": "success"},
+    "compatibility_job": {"job_id": 93130407575, "conclusion": "success"}
+  },
   "blocking_warnings": [],
   "nonblocking_warnings": [
     "No repository-authoritative SRI implementation contract exists at this baseline; producer handoff therefore remains a stable read-interface guarantee only.",
     "Full C2AR replay payloads remain external; WP0 establishes code/registry/identity availability and does not claim a new source replay."
   ],
-  "required_ci": ["tests", "OVC profile assurance", "OVC tiered test selection shadow", "OVC merge readiness"],
   "authority_delta": "PREFLIGHT_SOURCE_SURVEY_ONLY",
-  "reserved_authority_delta": "NONE"
+  "reserved_authority_delta": "NONE",
+  "rollback": "Revert or supersede only WP0 survey/preflight/state artifacts; preserve C2E2-G0 and historical C2E records."
 }
