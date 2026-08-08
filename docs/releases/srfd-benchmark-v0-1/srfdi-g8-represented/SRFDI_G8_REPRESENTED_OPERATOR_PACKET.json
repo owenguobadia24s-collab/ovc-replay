@@ -8,20 +8,9 @@
   "gate_class": "OPERATOR_REQUIRED",
   "status": "GATE_READY",
   "baseline_commit": "bf11af4d672ee0f086ed2b2825e2d5b6dcf281fb",
-  "candidate_predecision_head": "PENDING_FINAL_GATE_HEAD",
-  "completed_capacity_packets": [
-    "SRFDI-G8R-WP0",
-    "SRFDI-G8R-WP1",
-    "SRFDI-G8R-WP2",
-    "SRFDI-G8R-WP3",
-    "SRFDI-G8R-WP4",
-    "SRFDI-G8R-WP5",
-    "SRFDI-G8R-WP6"
-  ],
-  "governing_decisions": {
-    "original_g8": "REDESIGN",
-    "g8r_g6": "REDESIGN_CAPACITY_ACCEPT"
-  },
+  "candidate_predecision_head": "b97c508fdee5d594096d89589fbaf1a465e0fb7b",
+  "completed_capacity_packets": ["SRFDI-G8R-WP0","SRFDI-G8R-WP1","SRFDI-G8R-WP2","SRFDI-G8R-WP3","SRFDI-G8R-WP4","SRFDI-G8R-WP5","SRFDI-G8R-WP6"],
+  "governing_decisions": {"original_g8":"REDESIGN","g8r_g6":"REDESIGN_CAPACITY_ACCEPT"},
   "current_authority": {
     "capacity_redesign": "ACCEPTED_EVIDENCE_ONLY",
     "capacity_freeze": "DENIED_PENDING_THIS_GATE",
@@ -43,7 +32,7 @@
     "selector_publication_risk_execution_effect": "NONE"
   },
   "accepted_capacity_evidence": {
-    "measurement_ladder": [64, 128, 256, 512, 1024],
+    "measurement_ladder": [64,128,256,512,1024],
     "sampling": "NONE_ON_DECLARED_SYNTHETIC_RUNG_POPULATIONS",
     "reference_population_count": 8598,
     "reference_population_binding": "NON_BINDING_CAPACITY_REFERENCE_ONLY",
@@ -57,23 +46,17 @@
     "parallel_speedup_credit": false,
     "cache_reuse_credit": false
   },
-  "before_after": {
-    "original_wp8_status": "CAPACITY_EXCEEDED_RUNTIME",
-    "original_wp8_projected_seconds": 1997360.155602428,
-    "redesigned_status": "SUPPORTED_T0",
-    "redesigned_projected_seconds": 4264.711176858039,
-    "comparison_rule": "CAPACITY_CLASS_COMPARISON_ONLY_NO_PURE_SPEEDUP_RATIO"
-  },
+  "before_after": {"original_wp8_status":"CAPACITY_EXCEEDED_RUNTIME","original_wp8_projected_seconds":1997360.155602428,"redesigned_status":"SUPPORTED_T0","redesigned_projected_seconds":4264.711176858039,"comparison_rule":"CAPACITY_CLASS_COMPARISON_ONLY_NO_PURE_SPEEDUP_RATIO"},
   "freeze_criteria": [
-    {"condition": "Exact reference equivalence established for optimized distance and all required family methods", "status": "SATISFIED"},
-    {"condition": "H0 capture plus measured I/O/fsync/rename/storage evidence complete", "status": "SATISFIED"},
-    {"condition": "Multi-N capacity evidence is reproducible and measurement classes are explicit", "status": "SATISFIED"},
-    {"condition": "Every required method has an explicit capacity status", "status": "SATISFIED"},
-    {"condition": "No CAPACITY_UNRESOLVED status remains in the proposed T0 path", "status": "SATISFIED"},
-    {"condition": "Storage, RSS and runtime models reconcile within T0 without hidden sampling, cache credit or parallel credit", "status": "SATISFIED"},
-    {"condition": "Unsupported methods/configurations are not silently omitted", "status": "SATISFIED"},
-    {"condition": "No accepted but unimplemented capacity remediation remains likely to materially alter this T0 disposition", "status": "SATISFIED"},
-    {"condition": "June and Validation firewalls remain intact", "status": "SATISFIED"}
+    {"condition":"Exact reference equivalence established for optimized distance and all required family methods","status":"SATISFIED"},
+    {"condition":"H0 capture plus measured I/O/fsync/rename/storage evidence complete","status":"SATISFIED"},
+    {"condition":"Multi-N capacity evidence is reproducible and measurement classes are explicit","status":"SATISFIED"},
+    {"condition":"Every required method has an explicit capacity status","status":"SATISFIED"},
+    {"condition":"No CAPACITY_UNRESOLVED status remains in the proposed T0 path","status":"SATISFIED"},
+    {"condition":"Storage, RSS and runtime models reconcile within T0 without hidden sampling, cache credit or parallel credit","status":"SATISFIED"},
+    {"condition":"Unsupported methods/configurations are not silently omitted","status":"SATISFIED"},
+    {"condition":"No accepted but unimplemented capacity remediation remains likely to materially alter this T0 disposition","status":"SATISFIED"},
+    {"condition":"June and Validation firewalls remain intact","status":"SATISFIED"}
   ],
   "warnings": [
     "N=2048 and N=4096+ were not directly measured; the 8598 capacity result remains an explicit extrapolation from the measured N64-N1024 ladder.",
@@ -84,16 +67,16 @@
   ],
   "unresolved_issues": [],
   "evidence_bindings": {
-    "g6_operator_decision": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_G6_OPERATOR_DECISION.json",
-    "wp6_merge_receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_MERGE_RECEIPT.json",
-    "multi_n_capacity_receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_MULTI_N_CAPACITY_RECEIPT.json",
-    "storage_capacity_receipt": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_STORAGE_CAPACITY_RECEIPT.json",
-    "hardware_sizing_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_HARDWARE_SIZING_PACKET.json",
-    "before_after_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_G8_REPRESENTATION_PACKET.json"
+    "g6_operator_decision":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_G6_OPERATOR_DECISION.json",
+    "wp6_merge_receipt":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_MERGE_RECEIPT.json",
+    "multi_n_capacity_receipt":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_MULTI_N_CAPACITY_RECEIPT.json",
+    "storage_capacity_receipt":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_STORAGE_CAPACITY_RECEIPT.json",
+    "hardware_sizing_packet":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_HARDWARE_SIZING_PACKET.json",
+    "before_after_packet":"docs/releases/srfd-benchmark-v0-1/srfdi-g8r-wp6/SRFDI_G8R_WP6_G8_REPRESENTATION_PACKET.json"
   },
   "rollback": "If FREEZE is not approved, preserve the accepted G8R evidence and G6 merge, retain the original SRFDI-G8 REDESIGN disposition, keep WP9 blocked, and either REDESIGN, DEFER or BLOCK according to the operator decision.",
   "recommended_decision": "FREEZE_MEASURED_CAPACITY",
-  "allowed_decisions": ["FREEZE_MEASURED_CAPACITY", "REDESIGN", "DEFER", "BLOCK"],
+  "allowed_decisions": ["FREEZE_MEASURED_CAPACITY","REDESIGN","DEFER","BLOCK"],
   "exact_operator_command": "OVC APPROVE SRFDI-G8-REPRESENTED FREEZE_MEASURED_CAPACITY",
   "next_action_after_freeze": "Record the represented G8 freeze and make SRFDI-WP9 eligible, while preserving the separate SRFDI-G-JUNE-AUTH boundary before any June benchmark execution."
 }
