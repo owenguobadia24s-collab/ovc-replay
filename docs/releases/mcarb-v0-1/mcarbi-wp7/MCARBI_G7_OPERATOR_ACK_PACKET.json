@@ -1,0 +1,41 @@
+{
+  "schema":"ovc-mcarbi-g7-operator-ack-packet/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "plan_id":"OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version":"0.1-REVISED",
+  "gate_id":"MCARBI-G7",
+  "gate_title":"Stage-A Preregistration Freeze",
+  "gate_class":"OPERATOR_ACK",
+  "status":"GATE_READY",
+  "baseline_commit":"faf4e5af7c143995a2954dddb136cbe66a9e528d",
+  "candidate_evidence_head":"f96eac7db1e6b72c0396224aadc8bc74fd9073c0",
+  "candidate_branch":"prereg/mcarbi-wp7-stage-a",
+  "completed_packets":["MCARBI-WP0","MCARBI-WP1","MCARBI-WP2","MCARBI-WP3","MCARBI-WP4","MCARBI-WP5","MCARBI-WP6","MCARBI-WP7"],
+  "current_authority":"G6_READINESS_FROZEN; NO_STAGE_A_MARKET_RUN",
+  "proposed_delta":"Freeze the exact Stage-A preregistration manifest and parameter registry only. No market execution or scientific disposition authority is created.",
+  "preregistration":{"path":"docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_STAGE_A_PREREGISTRATION.json","git_blob_sha1":"8dcc4fe4e51b3b7d07e4dcc440c6b5b6a784f6f7","parameter_registry":"registries/research/mcarb/MCARB_STAGE_A_PARAMETER_REGISTRY_v0_1.json","population":"[2023-11-01T00:00:00Z,2024-01-01T00:00:00Z)","normalization_reference":"[2023-09-01T00:00:00Z,2023-11-01T00:00:00Z)","ET_DC_thresholds":["0.0005","0.0010","0.0020","0.0040"],"ET_X_lattice_steps":["0.0050","0.0100"],"ET_VAR_targets":["0.0010","0.0020","0.0040","0.0080"],"AL":["AL-01","AL-05","AL-07","AL-08","AL-09"],"VS":["VS-01","VS-02","VS-03"],"packs":["R0","R1","R2","R3","R4","R4X","R5","R6","D-AL","D-ET","D-VS"]},
+  "acceptance_conditions":[
+    {"condition":"G6 population and capacity preserved","status":"SATISFIED"},
+    {"condition":"exact candidate/pack field surface declared","status":"SATISFIED"},
+    {"condition":"ET thresholds/variants and VS variants explicit; undeclared values block","status":"SATISFIED"},
+    {"condition":"AL-05 reference population non-overlapping and first-valid safe","status":"SATISFIED"},
+    {"condition":"dependence, nested ablation, shuffle and matched-complexity controls frozen","status":"SATISFIED"},
+    {"condition":"capacity/checkpoint/falsifier/stop rules explicit","status":"SATISFIED"},
+    {"condition":"no Validation/provider intake/Stage-A execution","status":"SATISFIED"},
+    {"condition":"repository and FINAL_HEAD assurance on evidence head","status":"SATISFIED"}
+  ],
+  "tests_and_qa":{"repository_suite":{"run_id":31220059853,"conclusion":"success"},"final_head":{"run_id":31220059836,"profile_job_id":93002432588,"merge_readiness_job_id":93002481188,"conclusion":"success"},"qa_packet":"docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_QA_PACKET.json","qa_recommendation":"PREREGISTRATION_FREEZE","gate_materialization_exact_head_ci":"REQUIRED_BEFORE_OPERATOR_ACK_INTEGRATION"},
+  "warnings":[
+    "ET numerical grids are benchmark sensitivity parameters proposed for this Stage-A preregistration; they are not production thresholds, semantic truth or selector settings.",
+    "ET-X uses an exogenous decimal lattice as a neutral crossing comparator only; no breakout, support or resistance meaning is admitted.",
+    "AL_SOURCE_PARTIAL remains binding; AL has provider-activity semantics only.",
+    "AL-05 must abstain when its frozen pre-evaluation side/slot reference has fewer than 15 eligible observations.",
+    "Stage-A remains non-executable after G7 until the separate MCARBI-G-STAGE-A-AUTH gate explicitly authorizes it."
+  ],
+  "authority_firewall":{"stage_a_market_run":"DENIED_UNTIL_MCARBI_G_STAGE_A_AUTH_AUTHORIZE_STAGE_A","active_discovery":"NONE","provider_intake":"DENIED","validation_2025":"LOCKED_UNCONSUMED","selector":"NONE","representation_threshold_family_semantic_promotion":"NONE","c2_c2e_sri_publication":"NONE","probability_risk_exposure_execution":"NONE","pr_371":"PRESERVE_DO_NOT_MERGE"},
+  "rollback":"Preserve the G6 readiness record and WP7 proposal. ADJUST or DEFER leaves the manifest non-executable; any replacement must be versioned and re-assured.",
+  "recommended_decision":"PREREGISTRATION_FREEZE",
+  "allowed_decisions":["PREREGISTRATION_FREEZE","ADJUST","DEFER"],
+  "exact_operator_command":"OVC APPROVE MCARBI-G7 PREREGISTRATION_FREEZE",
+  "next_action_after_ack":"Record and merge G7 preregistration freeze, then stop at MCARBI-G-STAGE-A-AUTH. Do not execute Stage A without separate AUTHORIZE_STAGE_A."
+}
