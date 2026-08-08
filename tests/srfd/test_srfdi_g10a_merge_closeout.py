@@ -35,8 +35,15 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("ADMITTED_PRESERVED_EXACT_HEAD_UNMERGED", effect["pr_433_blocker"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", effect["authority_token_v0_4"])
         self.assertTrue(self.state["exact_bindings"]["authority_token_consumed"])
-        self.assertTrue(self.pointer["authority_token_consumed"])
-        self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
+        self.assertEqual("PR433@f9bbeba065cf85f5a5f5c0a88e9c9d0ea6fa96d7", self.pointer["blocker_evidence"])
+        if self.pointer["authority_token_id"] == "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686":
+            self.assertTrue(self.pointer["authority_token_consumed"])
+            self.assertIn("FRESH_SCIENTIFIC_RUN_DENIED", self.pointer["june_execution"])
+        else:
+            self.assertEqual("SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686", self.pointer["prior_authority_token_id"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
+            self.assertFalse(self.pointer["authority_token_consumed"])
+            self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.pointer["june_execution"])
 
     def test_state_is_ready_for_wp10a_capacity_only(self) -> None:
         self.assertEqual("AUTHORITATIVE_CURRENT", self.state["state_role"])
@@ -50,8 +57,13 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
 
     def test_v16_remains_historical_while_current_pointer_advances_lawfully(self) -> None:
         self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
-        self.assertIn(self.pointer["current_gate"], {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH"})
-        self.assertIn(self.pointer["authoritative_state"], {"registries/implementation/srfd/OVC_SRFDI_STATE_v0_16.json", "registries/implementation/srfd/OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json", "registries/implementation/srfd/OVC_SRFDI_STATE_v0_19_G10A_FREEZE_COMPLETED.json"})
+        self.assertIn(self.pointer["current_gate"], {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10"})
+        self.assertIn(self.pointer["authoritative_state"], {
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_16.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_19_G10A_FREEZE_COMPLETED.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_20_JUNE_AUTH_V0_5_AUTHORIZED.json",
+        })
         if self.pointer["authoritative_state"].endswith("OVC_SRFDI_STATE_v0_16.json"):
             self.assertEqual("READY", self.pointer["status"])
             self.assertEqual("SRFDI-WP10A", self.pointer["next_packet"])
@@ -59,10 +71,18 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
         elif self.pointer["authoritative_state"].endswith("OVC_SRFDI_STATE_v0_18_G10A_FREEZE_APPROVED_PENDING_MERGE.json"):
             self.assertEqual("APPROVED_PENDING_MERGE", self.pointer["status"])
             self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.pointer["next_packet"])
-        else:
+        elif self.pointer["authoritative_state"].endswith("OVC_SRFDI_STATE_v0_19_G10A_FREEZE_COMPLETED.json"):
             self.assertEqual("COMPLETED", self.pointer["status"])
             self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
             self.assertEqual("SRFDI-G-JUNE-AUTH-PREP", self.pointer["next_packet"])
+            self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81", self.pointer["capacity_backend_freeze"])
+        else:
+            self.assertEqual("READY", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v0.5", self.pointer["next_packet"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
+            self.assertFalse(self.pointer["authority_token_consumed"])
+            self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.pointer["june_execution"])
             self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81", self.pointer["capacity_backend_freeze"])
 
     def test_closeout_is_delegated_zero_delta_pass(self) -> None:
