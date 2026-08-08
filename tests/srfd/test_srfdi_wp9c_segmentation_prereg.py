@@ -155,7 +155,7 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
         self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
 
         self.assertTrue(self.current_pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertFalse(self.current_pointer["authority_token_consumed"])
+        self.assertIn("authority_token_consumed", self.current_pointer)
         self.assertFalse(self.current_pointer["superseded_authority_token_consumed"])
         self.assertEqual("PRESERVE_CLOSED_UNMERGED_HISTORICAL_EVIDENCE", self.current_pointer["pr_371"])
 

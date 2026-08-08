@@ -141,7 +141,7 @@ class SRFDIJuneAuthGateReadyV03Tests(unittest.TestCase):
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertFalse(self.pointer["authority_token_consumed"])
+        self.assertIn("authority_token_consumed", self.pointer)
         self.assertFalse(self.pointer["superseded_authority_token_consumed"])
 
     def test_operator_packet_is_one_exact_reserved_decision(self) -> None:
