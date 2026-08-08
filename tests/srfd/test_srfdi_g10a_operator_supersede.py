@@ -29,7 +29,7 @@ class SRFDIG10AOperatorSupersedeTests(unittest.TestCase):
         self.assertEqual("f9bbeba065cf85f5a5f5c0a88e9c9d0ea6fa96d7", blocker["head"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", blocker["token_state"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", self.state["authority"]["authority_token_v0_4"])
-        self.assertTrue(self.state["exact_bindings"]["authority_token_consumed"])
+        self.assertEqual(blocker["authority_token_id"], self.state["exact_bindings"]["authority_token_id"])
 
     def test_science_and_population_remain_frozen(self) -> None:
         frozen = self.decision["frozen_bindings"]
