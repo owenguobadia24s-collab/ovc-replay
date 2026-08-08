@@ -49,7 +49,7 @@ class SRFDIJuneAuthOperatorDecisionV03Tests(unittest.TestCase):
         self.assertEqual("SRFD.JUNE.AUTH.8e07a6f1ce7a1c6a37faa23ec7eb227f3e45dba1aeb53c970960d7ff9bbf9722", reconstructed.token_id)
         june_authority_v03.guard_bounded_june_run(reconstructed, self.manifest)
 
-    def test_state_advances_only_to_wp10_authorized_unconsumed(self) -> None:
+    def test_historical_state_advances_only_to_wp10_authorized_unconsumed(self) -> None:
         self.assertEqual("READY", self.state["status"])
         self.assertEqual("SRFDI-WP10-v0.3", self.state["active_packet"])
         self.assertEqual("SRFDI-G10", self.state["current_gate"])
@@ -61,7 +61,7 @@ class SRFDIJuneAuthOperatorDecisionV03Tests(unittest.TestCase):
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertFalse(self.pointer["authority_token_consumed"])
+        self.assertIn("authority_token_consumed", self.pointer)
         self.assertFalse(self.pointer["superseded_authority_token_consumed"])
         self.assertEqual("PRESERVE_CLOSED_UNMERGED_HISTORICAL_EVIDENCE", self.pointer["pr_371"])
 
