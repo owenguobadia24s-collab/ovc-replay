@@ -1,6 +1,6 @@
 """Strict execution wrapper for the FSR revised-C2 rehearsal.
 
-The first-pass FSR adapter intentionally exercised the broad component graph.  This
+The first-pass FSR adapter intentionally exercised the broad component graph. This
 wrapper adds the two integration constraints required by the frozen C2 contracts:
 (1) transition/relation state is reset at a continuity-segment boundary, and
 (2) LOCAL_MEASUREMENT relation sets include only containers admitted to that role;
@@ -37,16 +37,10 @@ def _strictify_snapshot(
 ) -> dict[str, Any]:
     """Rebuild role-scoped LOCATION evidence and transitions after broad stage exercise."""
     trailing_container = next(
-        item for item in snapshot["containers"] if str(item.get("container_kind")) == "TRAILING_RANGE"
+        item
+        for item in snapshot["containers"]
+        if str(item.get("family")) == "TRAILING_RANGE_SNAPSHOT" and str(item.get("kind")) == "MEASUREMENT"
     )
-    close_probe = {
-        "probe_id": snapshot["raw"]["container_relations"][0]["subject_probe_id"],
-        "value": current_observation["close"],
-        "source_record_id": current_observation["observation_id"],
-        "first_valid_time": current_observation["first_valid_time"],
-        "probe_label": "CLOSE",
-    }
-    # Use the already-computed relation for the same trailing container where possible.
     trailing_relation = next(
         (
             item
@@ -56,6 +50,13 @@ def _strictify_snapshot(
         None,
     )
     if trailing_relation is None:
+        close_probe = {
+            "probe_id": f"FSR.PROBE.{current_observation['observation_id']}",
+            "value": current_observation["close"],
+            "source_record_id": current_observation["observation_id"],
+            "first_valid_time": current_observation["first_valid_time"],
+            "probe_label": "CLOSE",
+        }
         trailing_relation = relate_point_to_container(close_probe, trailing_container, precision=5)
 
     level_set = build_relation_set(
@@ -84,8 +85,9 @@ def _strictify_snapshot(
         [*snapshot["raw"]["level_relations"], trailing_relation],
         as_of_time=str(current_observation["first_valid_time"]),
     )
+    order = ("LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY")
     outputs = [location, *[item for item in snapshot["formula_outputs"] if item["axis"] != "LOCATION"]]
-    outputs.sort(key=lambda item: ("LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY").index(item["axis"]))
+    outputs.sort(key=lambda item: order.index(str(item["axis"])))
     snapshot["formula_outputs"] = outputs
     snapshot["formula_bundle"] = build_formula_bundle(outputs, as_of_time=str(current_observation["first_valid_time"]))
     snapshot["measurement_relation_sets"] = [level_set, container_set]
