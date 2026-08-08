@@ -47,20 +47,23 @@ class C2EAG0OperatorDeferTests(unittest.TestCase):
         self.assertEqual(effects["validation"], "DENIED")
         self.assertEqual(effects["family_semantic_probability_risk_exposure_execution"], "NONE")
 
-    def test_state_and_pointer_stop_at_deferred_ag0(self):
+    def test_historical_state_and_current_pointer_remain_append_only(self):
         self.assertEqual(self.state["status"], "GATE_READY")
         self.assertEqual(self.state["current_gate"], "C2E-AG0")
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual(self.state["operator_decision"], "DEFER")
         self.assertIn(self.decision["decision_id"], self.state["operator_decision_history"])
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertEqual(self.pointer["status"], "GATE_READY")
+        self.assertEqual(self.pointer["predecessor_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_19.json")
+        self.assertEqual(self.pointer["current_gate"], "C2E2-G6-RUN-AUTH-SUPERSESSION")
+        self.assertEqual(self.pointer["status"], "BLOCKED")
         self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual(self.pointer["operator_decision"], "DEFER")
+        self.assertEqual(self.pointer["requested_operator_decision"], "PASS")
+        self.assertEqual(self.pointer["effective_gate_state"], "BLOCKED_PREREQUISITES_UNSATISFIED")
         self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
-        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
+        self.assertEqual(self.pointer["replay_status"], "BLOCKED_PRE_RUN")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        self.assertIsNone(self.pointer["run_token"])
         self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
 
 
