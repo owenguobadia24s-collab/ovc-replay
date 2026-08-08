@@ -27,7 +27,7 @@ class SRFDIG10AFreezeOperatorDecisionTests(unittest.TestCase):
         self.assertEqual("OPERATOR", self.decision["decision_authority"])
         self.assertEqual("SRFDI-G10A-FREEZE", self.decision["gate_id"])
         self.assertEqual("GATE_READY", self.gate["status"])
-        self.assertEqual("OVC APPROVE SRFDI-G10A-FREEZE PASS", self.gate["exact_operator_command_if_pass"])
+        self.assertEqual("OVC APPROVE SRFDI-G10A-FREEZE PASS", self.gate["exact_operator_command"])
 
     def test_freeze_is_capacity_only_and_science_population_are_unchanged(self) -> None:
         bindings = self.freeze["frozen_scientific_bindings"]
