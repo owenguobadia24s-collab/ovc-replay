@@ -2,18 +2,18 @@
   "ask_spread_rule": "0.00012 + 0.00002*(0.5+0.5*sin(i/37))",
   "base_bid": "1.26800",
   "determinism": "FULLY_DETERMINISTIC_NO_RANDOMNESS",
-  "end": "2026-01-06T00:00:00Z",
-  "fixture_namespace": "FSR.FRESH.GBPUSD.20260105.v1",
+  "end": "2023-06-06T00:00:00Z",
+  "fixture_namespace": "FSR.FRESH.GBPUSD.20230605.v1",
   "gap": {
     "clock": "M1",
-    "end": "2026-01-05T13:22:00Z",
+    "end": "2023-06-05T13:22:00Z",
     "minutes": 5,
     "native_h1_independent": true,
     "sides": [
       "BID",
       "ASK"
     ],
-    "start": "2026-01-05T13:17:00Z"
+    "start": "2023-06-05T13:17:00Z"
   },
   "instrument_id": "GBPUSD",
   "native_clocks": [
@@ -22,6 +22,14 @@
   ],
   "no_future_dependency": true,
   "ohlc_rule": "open=prior_close; close=open+segment_delta(i); high=max(open,close)+causal_wiggle; low=min(open,close)-0.9*causal_wiggle",
+  "output_columns": [
+    "timestamp",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume"
+  ],
   "price_sides": [
     "BID",
     "ASK"
@@ -43,6 +51,7 @@
     "S11",
     "S12"
   ],
-  "start": "2026-01-05T00:00:00Z",
+  "start": "2023-06-05T00:00:00Z",
+  "timestamp_encoding": "UNIX_MILLISECONDS_UTC",
   "volume_rule": "deterministic synthetic activity integer; UNKNOWN provider unit"
 }
