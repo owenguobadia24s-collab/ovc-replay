@@ -12,7 +12,6 @@ BASE_PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0
 BLOCKER = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-3/SRFDI_WP10_V03_PREFLIGHT_BLOCKER.json"
 QA = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-3/SRFDI_WP10_V03_PREFLIGHT_QA_PACKET.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_7.json"
-POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 
 
 class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
@@ -23,7 +22,6 @@ class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
         cls.blocker = json.loads(BLOCKER.read_text())
         cls.qa = json.loads(QA.read_text())
         cls.state = json.loads(STATE.read_text())
-        cls.pointer = json.loads(POINTER.read_text())
 
     def test_frozen_preregistration_fails_closed_on_missing_metric_rule_specs(self) -> None:
         with self.assertRaises(WP10PreflightError) as caught:
@@ -62,6 +60,8 @@ class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
         self.assertEqual("BLOCK_PRE_RUN_AND_REQUIRE_VERSIONED_PREREGISTRATION_SUPERSESSION", self.qa["recommended_disposition"])
 
     def test_historical_v07_blocker_state_preserves_unused_authority_and_firewalls(self) -> None:
+        # Historical evidence must be read from the immutable v0.7 state itself,
+        # not from CURRENT_STATE_POINTER, which legitimately advances after a later supersession.
         self.assertEqual("BLOCKED_PRE_RUN", self.state["status"])
         self.assertEqual("SRFDI-WP10-v0.3", self.state["active_packet"])
         self.assertTrue(self.state["operator_decision_required"])
@@ -70,10 +70,6 @@ class SRFDIWP10V03PreflightBlockerTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.state["authority"]["validation_2025"])
         self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
-        self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertEqual("BLOCKED_PRE_RUN", self.pointer["status"])
-        self.assertTrue(self.pointer["operator_decision_required"])
-        self.assertFalse(self.pointer["authority_token_consumed"])
 
 
 if __name__ == "__main__":
