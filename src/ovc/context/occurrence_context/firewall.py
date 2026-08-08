@@ -17,13 +17,21 @@ FORBIDDEN_KEYS = {
     "trade",
     "execution",
     "validation_occurrence_payload",
+    "vector",
+    "vectors",
+    "embedding",
+    "embeddings",
+    "features",
+    "feature_vector",
+    "normalized_features",
+    "normalised_features",
 }
 
 
 def _walk(value: Any) -> None:
     if isinstance(value, Mapping):
         for key, child in value.items():
-            if key.lower() in FORBIDDEN_KEYS:
+            if str(key).lower() in FORBIDDEN_KEYS:
                 raise ValueError(f"OC_DEP_FORBIDDEN_FIELD:{key}")
             _walk(child)
     elif isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
