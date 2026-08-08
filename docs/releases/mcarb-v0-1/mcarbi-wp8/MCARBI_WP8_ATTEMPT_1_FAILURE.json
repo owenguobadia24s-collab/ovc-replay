@@ -1,0 +1,40 @@
+{
+  "schema":"ovc-mcarbi-wp8-attempt-failure/v1",
+  "programme_id":"OVC-MCARB-v0.1",
+  "plan_id":"OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "packet_id":"MCARBI-WP8",
+  "logical_run_id":"MCARBI_STAGE_A_AUTHORIZED_LOGICAL_RUN_1",
+  "attempt":1,
+  "workflow_run_id":31233964807,
+  "workflow_job_id":93043000096,
+  "request_commit":"672cfe7eefebbca6bd57aeb7e171e94add3b6996",
+  "status":"FAILED_CORRECTABLE_IMPLEMENTATION_DEFECT",
+  "authority_consumption":"CONSUMED_IN_PROGRESS_SAME_LOGICAL_RUN",
+  "completed_before_failure":[
+    "operator authorization/run-request verification",
+    "read-only R2 credential/config verification",
+    "exact accepted OPT-A Discovery artifact download and archive digest verification",
+    "read-only C2 v2 manifest/state fetch step"
+  ],
+  "failure_step":"Execute frozen Stage-A fresh materialization",
+  "exception":"RuntimeError: MISSING_INPUT_PAYLOAD:states/2H_A_L/BID/GBPUSD-2H-A-L-LOCAL-v0_1.jsonl",
+  "root_cause":"The workflow requested C2 state objects from <release-prefix>/files/states/... but the accepted C1C-G5 publisher writes manifest-bound payloads directly as <release-prefix>/<manifest-item.path>, i.e. <release-prefix>/states/.... The runner correctly expected the local files/states/... staging path, but the erroneous remote source path yielded no staged payload.",
+  "court_record_support":{
+    "publisher":"scripts/opt_b/run_c1c_g5_c2_remediation.py::publish_candidate",
+    "publication_rule":"remote = prefix + '/' + manifest item path; no inserted 'files/' component",
+    "remote_verification_receipt":"docs/releases/opt-b-c1-v2/corrective/c1c-g5/C1C_G5_C2_V2_REMOTE_VERIFICATION_RECEIPT.json"
+  },
+  "scientific_output_materialized":false,
+  "stage_a_records_materialized":false,
+  "evidence_artifact_uploaded":false,
+  "validation_2025_read":false,
+  "provider_intake":false,
+  "r2_write_or_publication":false,
+  "parameter_change":false,
+  "population_change":false,
+  "scope_change":false,
+  "corrective_action":"Retry as continuation of the same logical run using the identical frozen inputs and parameters, correcting only the remote object address from /files/states/... to /states/.... Add explicit non-empty staged-file checks before execution.",
+  "new_operator_authority_required":false,
+  "rationale":"OVC failure behaviour permits repair and rerun of a correctable defect inside packet scope. The retry changes no frozen source identity, parameter, population, scientific method or authority delta and is therefore continuation of the already-authorized logical run.",
+  "rollback":"Preserve this failed-attempt receipt permanently. Do not delete or conceal the failed attempt. If the corrected continuation changes any frozen scientific input/parameter/scope, stop and obtain new operator authority."
+}
