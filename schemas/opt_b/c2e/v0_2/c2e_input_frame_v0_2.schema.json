@@ -1,0 +1,22 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://schemas/opt_b/c2e/v0_2/c2e_input_frame_v0_2",
+  "type":"object",
+  "required":["schema","frame_id","source_binding","identity","chronology","structural","context","evidence","lineage","lineage_hash","logical_hash","authority"],
+  "properties":{
+    "schema":{"const":"c2e_input_frame/v0_2"},
+    "frame_id":{"type":"string","pattern":"^C2E\\.FRAME\\."},
+    "source_binding":{"type":"object"},
+    "identity":{"type":"object","required":["instrument_id","side","scope_id","scale_id","clock_id","lattice_id","observation_id","c2_record_id","parameter_pack_id","contract_id","schema_id"]},
+    "chronology":{"type":"object","required":["source_time","first_valid_time","evaluation_cutoff","continuity_segment_id"]},
+    "structural":{"type":"object","required":["location_record_ids","motion_record_ids","organisation_record_ids","interaction_record_ids","level_record_ids","container_record_ids","transition_record_ids","run_record_ids"],"not":{"required":["QUALITY"]}},
+    "context":{"type":"object","required":["fixed_parent_links","structural_object_links","parent_axis_links"]},
+    "evidence":{"type":"object","required":["dependency_results","availability_status","technical_status","assurance","consumer_eligibility","authority_state","reason_codes"]},
+    "lineage":{"type":"object","required":["parent_record_ids","artifact_hashes","source_build_commit"]},
+    "lineage_hash":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "logical_hash":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "authority":{"const":"INACTIVE_NONCANONICAL_BUILD_TEST_ONLY"},
+    "diagnostic_namespace":{}
+  },
+  "additionalProperties":false
+}
