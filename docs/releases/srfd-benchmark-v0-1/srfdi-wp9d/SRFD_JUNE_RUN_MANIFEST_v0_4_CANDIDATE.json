@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-srfdi-june-run-manifest-candidate/v4",
+  "manifest_id": "OVC-SRFD-JUNE-RUN-MANIFEST-v0.4-CANDIDATE",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "packet_id": "SRFDI-WP9D",
+  "status": "CANDIDATE_NO_RUN_AUTHORITY",
+  "authority": {"june_execution":"DENIED_PENDING_SRFDI_G9D_FREEZE_AND_NEW_SRFDI_G_JUNE_AUTH","provider_fetch":"DENIED","validation_2025":"LOCKED_UNCONSUMED","selector_family_semantic_publication":"NONE","probability_risk_exposure_execution":"NONE"},
+  "preregistration": {"path":"registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_4.json","logical_sha256":"c2b5b0682124a49d35aacd8e3d6831cba1e7b4cd639074df907439933763e886","base_v0_3_logical_sha256":"acb27ff21d4df6da6ea72972bda7a6ee1ce28a7f06827b949f55d8b03ec04bb5"},
+  "stability_metric_registry": {"path":"registries/research/srfd/stability_metric_specs_v0_4.json","logical_sha256":"69994c70e44a9057e364ba5251bc8d4d7e3b85de507af9847012f67f004461a3"},
+  "segmentation_registry": {"path":"registries/research/srfd/segmentation_boundary_packs_v0_3.json","logical_sha256":"6c2451fb5b766d2ae25a13a311ba17c8dede342757d607219e62881be4ac31c0","change":"NONE"},
+  "candidate_sets": {"representation":"INHERIT_EXACT_V0_2","distance":"INHERIT_EXACT_V0_2","family":"INHERIT_EXACT_V0_2","sensitivity":"INHERIT_EXACT_V0_2","segmentation":"INHERIT_EXACT_FROZEN_V0_3","stability_metrics":["RESIDUAL_RATE_WITH_DENOMINATOR","AMBIGUITY_RATE_WITH_DENOMINATOR","CROSS_SENSITIVITY_SURVIVAL_WITH_DENOMINATOR","CROSS_METHOD_CORRESPONDENCE_WITH_DENOMINATOR","CHRONOLOGICAL_STABILITY_WITH_DENOMINATOR"]},
+  "execution_dag": [
+    {"stage":"population","action":"VERIFY_EXACT_FROZEN_SOURCE_POPULATION"},
+    {"stage":"segmentation_boundary_evidence","action":"INHERIT_EXACT_FROZEN_V0_3"},
+    {"stage":"representation","action":"INHERIT_EXACT_V0_2"},
+    {"stage":"compatibility","action":"INHERIT_EXACT_V0_2"},
+    {"stage":"distance","action":"INHERIT_EXACT_V0_2"},
+    {"stage":"family","action":"INHERIT_EXACT_V0_2"},
+    {"stage":"sensitivity","action":"INHERIT_EXACT_V0_2_GRID_AND_EXECUTE_V0_4_METRIC_RULES"},
+    {"stage":"correspondence","action":"USE_FROZEN_V0_4_ORDERED_PAIR_QUALIFICATION_AND_EXACT_SET_RULES"},
+    {"stage":"chronology","action":"USE_FIXED_V0_4_JUNE_HALF_PARTITIONS_WITHOUT_REFIT"},
+    {"stage":"invariant_core","action":"INHERIT_EXACT_V0_2"},
+    {"stage":"failure_attribution","action":"MATERIALISE_ZERO_DENOMINATOR_AND_NONQUALIFYING_PAIR_REASON_CODES_NO_SILENT_DROP"},
+    {"stage":"packet","action":"BUILD_G10_QA_AND_G11_SCIENTIFIC_PACKET_ONLY"}
+  ],
+  "source_population": {"source_release_id":"PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9","source_binding_sha256":"4d13c3ee8ae2ad25e30088f4f2de48f8320e3633c2e4ea6a5c2c9a7fdc2a62b7","population_id":"SRFD.POP.6efa7dd55636d036c12e580e0793abacf8c805bcf6d77bb6e2edf7cffbc113bd","eligible_record_count":8598,"eligible_record_ids_sha256":"fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e","context_record_count":822,"exclusion_count":0,"exclusion_ledger_sha256":"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945","membership_change":"FORBIDDEN"},
+  "capacity": {"tier":"T0","change":"NONE","max_external_bytes":10737418240,"max_rss_bytes":17179869184,"max_wall_seconds":14400},
+  "implementation_binding_rule": {"implementation_commit":"BIND_AFTER_G9D_MERGE_BEFORE_NEW_JUNE_AUTH","scientific_hashes_frozen_at_g9d":true,"permitted_post_freeze_change":"ENGINEERING_ONLY_IMPLEMENTATION_OF_ALREADY_FROZEN_METRIC_CONTRACTS_WITH_EQUIVALENCE_TESTS","scientific_semantic_change_requires_new_preregistration":true},
+  "rollback": "Before new June authority, discard/supersede this candidate additively. Never mutate v0.2/v0.3 evidence or consume the existing blocked v0.3 token."
+}
