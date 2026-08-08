@@ -1,0 +1,80 @@
+{
+  "schema": "ovc-srfdi-g-june-auth-operator-decision/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "SRFDI-G-JUNE-AUTH",
+  "decision": "AUTHORIZE_JUNE",
+  "decision_id": "SRFDI-G-JUNE-AUTH-20260808-AUTHORIZE-JUNE",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE SRFDI-G-JUNE-AUTH AUTHORIZE_JUNE",
+  "decision_time": "2026-08-08T11:53:00+01:00",
+  "approved_candidate": {
+    "pr_number": 419,
+    "predecision_head": "7e70047dbb66f1d60809a4990d74aa024665378b",
+    "baseline_main": "fca974ef48e4178be299bf65e520e2268e8b67c3",
+    "authorized_manifest_sha256": "2a0d3c529ea5aca6a1d8c67adc29d3f6dd55a3efcd75992661a69e205cea010c",
+    "source_release_id": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9",
+    "source_binding_sha256": "4d13c3ee8ae2ad25e30088f4f2de48f8320e3633c2e4ea6a5c2c9a7fdc2a62b7",
+    "population_id": "SRFD.POP.6efa7dd55636d036c12e580e0793abacf8c805bcf6d77bb6e2edf7cffbc113bd",
+    "eligible_record_count": 8598,
+    "eligible_record_ids_sha256": "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e",
+    "preregistration_v0_2_sha256": "13c17cf64c576b35e53047de753a5fd1a49bbdc7205c387bbcedb5a34441b804",
+    "representation_pack_registry_v0_2_sha256": "7d93994836bfcff6c5a0b39db33692f70b1a25782bee43c7b6329d17568561c0",
+    "implementation_commit": "fca974ef48e4178be299bf65e520e2268e8b67c3",
+    "dependency_manifest_sha256": "88ad3ec673493cb82b6b6d4fda90c077535e88d9f630a0535d56df887944ae3f"
+  },
+  "authorized_manifest_sha256": "2a0d3c529ea5aca6a1d8c67adc29d3f6dd55a3efcd75992661a69e205cea010c",
+  "assurance": {
+    "repository_suite_run": 31253353342,
+    "tiered_workflow_run": 31253353323,
+    "profile_assurance_job": 93092997224,
+    "compatibility_job": 93093013948,
+    "merge_readiness_job": 93093013945,
+    "unresolved_review_threads": 0,
+    "result": "PASS"
+  },
+  "authority_effect": {
+    "june_execution": "AUTHORIZED_BOUNDED_JUNE_BENCHMARK",
+    "market_benchmark": "AUTHORIZED_ONE_EXACT_BOUND_RUN",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "scientific_promotion": "NONE",
+    "selector_change": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "run_scope": {
+    "instrument": "GBPUSD",
+    "source_release_id": "PD-JUNE-FM.RUN.9810cfa8a2e2930be2e503b9",
+    "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+    "benchmark_start_inclusive_utc": "2026-06-01T00:00:00Z",
+    "benchmark_end_exclusive_utc": "2026-07-01T00:00:00Z",
+    "context_start_utc": "2026-05-30T00:00:00Z",
+    "context_end_exclusive_utc": "2026-07-03T00:00:00Z",
+    "available_representation_ids": ["SRFDI-R1", "SRFDI-R6", "SRFDI-R8", "SRFDI-R9"],
+    "dependency_unavailable_representation_ids": ["SRFDI-R2", "SRFDI-R3", "SRFDI-R4", "SRFDI-R5", "SRFDI-R7"],
+    "distance_compatibility": "FROZEN_V0_2_GOWER_MIXED_ONLY_FOR_AVAILABLE_PACKS",
+    "capacity_class": "T0_FROZEN_MEASURED",
+    "max_wall_seconds": 14400,
+    "max_peak_rss_bytes": 17179869184,
+    "max_external_bytes": 10737418240
+  },
+  "warnings": [
+    "This authority grants exactly one bounded June benchmark execution under the exact authorized manifest only.",
+    "SRFDI-R2/R3/R4/R5/R7 remain dependency-unavailable and must not be silently substituted.",
+    "GOWER_MIXED compatibility is preregistered and is not a scientific promotion.",
+    "3,602 eligible records are NOT_EVALUATED and remain inside population membership under the frozen missingness policy.",
+    "No provider fetch, Validation consumption, selector change, scientific promotion, publication, probability, risk, exposure or execution authority is granted."
+  ],
+  "rollback": "Before run consumption, revoke only by explicit versioned operator supersession. Once execution begins, preserve partial/checkpoint evidence and fail closed on any binding, capacity or QA mismatch. Do not mutate upstream source, fetch a provider, consume Validation, rewrite history or silently alter the frozen preregistration.",
+  "next_work": [
+    "Materialise the exact authorized v2 manifest and fail-closed JuneRunAuthorityToken.",
+    "Run exact-head assurance on the decision-aware PR head.",
+    "Squash-merge PR #419 if the head remains pinned and all checks pass.",
+    "Create SRFDI-WP10 from the resulting latest lawful main.",
+    "Execute the one authorized bounded June SRFD benchmark against the exact accepted read-only source and population under T0 limits.",
+    "Generate WP10 benchmark evidence and QA without scientific promotion.",
+    "Continue through auto-ratifiable engineering gates and stop at the next operator-required scientific disposition gate."
+  ]
+}
