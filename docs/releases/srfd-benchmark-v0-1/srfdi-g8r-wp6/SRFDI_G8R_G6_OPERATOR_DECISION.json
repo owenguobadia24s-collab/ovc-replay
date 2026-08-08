@@ -1,0 +1,67 @@
+{
+  "schema": "ovc-srfdi-g8r-g6-operator-decision/v1",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "subprogramme_id": "OVC-SRFDI-G8R-v0.2",
+  "plan_id": "OVC-SRFDI-G8-CAPACITY-REDESIGN-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "plan_version": "0.2-REVISED",
+  "gate_id": "SRFDI-G8R-G6",
+  "decision": "REDESIGN_CAPACITY_ACCEPT",
+  "status": "APPROVED_PENDING_MERGE",
+  "authority_source": "OPERATOR_EXPLICIT_COMMAND",
+  "operator_command": "OVC APPROVE SRFDI-G8R-G6 REDESIGN_CAPACITY_ACCEPT",
+  "decision_time": "2026-08-08T02:07:00+01:00",
+  "baseline_main": "1ea248b943600b4f1f40916e06fe29ae2ac8beeb",
+  "evidence_head": "9d06525d3b28babe3d08fc7c9bd18a0f2fa72e22",
+  "pr_number": 403,
+  "accepted_evidence": {
+    "multi_n_population_ladder": [64, 128, 256, 512, 1024],
+    "sampling": "NONE_ON_DECLARED_SYNTHETIC_RUNG_POPULATIONS",
+    "non_binding_reference_population": 8598,
+    "non_binding_reference_capacity_status": "SUPPORTED_T0",
+    "projected_serial_cold_seconds": 4264.711176858039,
+    "projected_serial_cold_hours": 1.1846419935716774,
+    "projected_external_bytes_with_reserve": 310451426,
+    "peak_measured_process_rss_bytes": 579379200,
+    "required_family_methods": {
+      "GREEDY_LEXICOGRAPHIC_MEDOID_STAR": "SUPPORTED_T0",
+      "COMPLETE_LINKAGE": "SUPPORTED_T0",
+      "AVERAGE_LINKAGE": "SUPPORTED_T0",
+      "BOUNDED_PAM": "SUPPORTED_T0"
+    },
+    "parallel_speedup_credit_in_projection": false,
+    "cache_reuse_credit_in_projection": false,
+    "reference_population_binding": "NON_BINDING_CAPACITY_REFERENCE_ONLY"
+  },
+  "tests_and_qa": {
+    "measurement_repository_suite": "31230742861:success:444_tests",
+    "measurement_tiered": "31230742855:success",
+    "measurement_profile_assurance": "93033960819:success",
+    "measurement_merge_readiness": "93033981618:success",
+    "gate_ready_repository_suite": "31231228270:success",
+    "gate_ready_tiered": "31231228310:success",
+    "gate_ready_profile_assurance": "93035325474:success",
+    "gate_ready_merge_readiness": "93035346879:success",
+    "qa_recommendation": "REDESIGN_CAPACITY_ACCEPT",
+    "blocking_warnings": []
+  },
+  "accepted_warnings": [
+    "N=2048 and N=4096+ were not directly measured; the 8598 capacity result remains an explicit extrapolation from the measured N64-N1024 ladder.",
+    "The WP6 GitHub-hosted H0 CPU fingerprint differs from WP0; no pure speedup ratio is accepted.",
+    "The 8598 reference population is non-binding and is not an SRFD June eligible-population binding.",
+    "H2 remains provisional until a lawful long-horizon population is bound."
+  ],
+  "authority_effect": {
+    "wp6_capacity_evidence": "ACCEPTED",
+    "g8_represented_preparation": "AUTHORISED_PRESENTATION_ONLY",
+    "wp9": "DENIED_PENDING_SRFDI_G8_REPRESENTED_FREEZE_MEASURED_CAPACITY",
+    "june": "DENIED_PENDING_SRFDI_G_JUNE_AUTH",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "method_representation_distance_family_sensitivity_promotion": "NONE",
+    "selector": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE",
+    "pr_371": "PRESERVE_DO_NOT_MERGE"
+  },
+  "rollback": "If decision integration or exact-head assurance fails, preserve the G6 gate-ready evidence and original SRFDI-G8 REDESIGN decision, do not merge PR 403, and keep WP9/June/Validation denied.",
+  "next_action": "RERUN_EXACT_HEAD_ASSURANCE_SQUASH_MERGE_PR403_THEN_PRESENT_SRFDI_G8_REPRESENTED"
+}
