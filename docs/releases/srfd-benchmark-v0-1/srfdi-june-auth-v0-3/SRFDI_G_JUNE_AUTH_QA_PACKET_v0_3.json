@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-srfdi-g-june-auth-qa-packet/v3",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "SRFDI-G-JUNE-AUTH-PREPARATION-v0.3",
+  "gate_id": "SRFDI-G-JUNE-AUTH",
+  "baseline_commit": "88ab1e3e0060fe98b41f47fa7f4f7fdc7e7e64ca",
+  "scientific_implementation_commit": "7e234e52a95dcc7c1d136d7566d271a2c216e137",
+  "manifest_binding_sha256": "148cf9c6958ffc737a3b5fd1800c48c1544bf34e835a97c884e77d4b49904067",
+  "acceptance": {
+    "g9c_freeze_merge_exact": "PASS",
+    "v0_3_preregistration_hash_exact": "PASS",
+    "v0_3_segmentation_registry_hash_exact": "PASS",
+    "v0_2_representation_pack_registry_inherited_exact": "PASS",
+    "source_binding_unchanged_exact": "PASS",
+    "population_count_and_id_hash_unchanged_exact": "PASS",
+    "prior_v0_2_token_superceded_unused_unconsumed": "PASS",
+    "implementation_verifier_fail_closed": "PASS",
+    "dependency_manifest_unchanged": "PASS",
+    "t0_capacity_binding_preserved": "PASS",
+    "segmentation_execute_and_visible_nonexecuted_sets_exact": "PASS",
+    "provider_fetch_forbidden": "PASS",
+    "validation_locked_unconsumed": "PASS",
+    "reserved_authority_firewalls_preserved": "PASS",
+    "june_execution_not_started": "PASS"
+  },
+  "scientific_delta": "NONE_AFTER_G9C_FREEZE; AUTHORITY_BINDING_ENVELOPE_ONLY",
+  "segmentation_dispositions": {
+    "C2E_CAUSAL_ADAPTER": "VISIBLE_NONEXECUTED_DEPENDENCY_UNAVAILABLE",
+    "RUN_CHANGE_SEGMENTATION": "EXECUTE_T0_BOUNDARY_EVIDENCE_IF_AUTHORIZED",
+    "DIRECTIONAL_CHANGE": "VISIBLE_NONEXECUTED_SOURCE_UNAVAILABLE",
+    "PELT_REFERENCE": "VISIBLE_NONEXECUTED_CAPACITY_UNRESOLVED_AT_T0",
+    "NULL_BOUNDARY_CONTROL": "EXECUTE_T0_CONTROL_IF_AUTHORIZED"
+  },
+  "authority_now": {
+    "june_execution": "DENIED_PENDING_OPERATOR_SRFDI_G_JUNE_AUTH",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_change": "NONE",
+    "scientific_promotion": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "tests_required_before_operator_presentation": [
+    "tests/srfd/test_srfdi_june_auth_gate_ready_v03.py",
+    "complete repository suite",
+    "OVC tiered test selection shadow",
+    "OVC profile assurance",
+    "OVC merge readiness"
+  ],
+  "qa_conclusion": "PASS_GATE_READY_SUBJECT_TO_EXACT_HEAD_CI",
+  "recommended_decision": "AUTHORIZE_JUNE",
+  "warnings": [
+    "AUTHORIZE_JUNE would grant one exact bounded June benchmark run only; it grants no scientific promotion.",
+    "C2E_CAUSAL_ADAPTER, DIRECTIONAL_CHANGE and PELT_REFERENCE remain declared and visible but non-executed under their frozen blockers.",
+    "Only RUN_CHANGE_SEGMENTATION and NULL_BOUNDARY_CONTROL execute in the v0.3 segmentation branch under T0.",
+    "The superseded v0.2 authority token must never be consumed.",
+    "3,602 eligible records remain NOT_EVALUATED inside the frozen population and are not removed by representation computability.",
+    "Provider fetch and upstream mutation remain forbidden."
+  ],
+  "rollback": "Before operator approval, close or supersede this gate candidate and leave June denied. Do not mutate G9C frozen scientific artifacts or consume the superseded v0.2 token."
+}

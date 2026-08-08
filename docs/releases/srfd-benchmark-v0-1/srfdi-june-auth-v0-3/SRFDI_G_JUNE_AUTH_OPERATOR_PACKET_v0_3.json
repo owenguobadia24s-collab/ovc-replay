@@ -1,0 +1,124 @@
+{
+  "schema": "ovc-srfdi-g-june-auth-operator-packet/v3",
+  "programme_id": "OVC-SRFD-BENCHMARK-v0.1",
+  "plan_id": "OVC-SRFD-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "SRFDI-G-JUNE-AUTH-PREPARATION-v0.3",
+  "gate_id": "SRFDI-G-JUNE-AUTH",
+  "gate_title": "Authorize exact bounded June SRFD benchmark execution under frozen v0.3 segmentation preregistration",
+  "gate_class": "OPERATOR_REQUIRED",
+  "status": "GATE_READY_SUBJECT_TO_EXACT_HEAD_CI",
+  "baseline_commit": "88ab1e3e0060fe98b41f47fa7f4f7fdc7e7e64ca",
+  "candidate_commit": "7e234e52a95dcc7c1d136d7566d271a2c216e137",
+  "manifest_candidate": "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-3/SRFD_JUNE_AUTHORITY_MANIFEST_CANDIDATE_v0_3.json",
+  "manifest_binding_sha256": "148cf9c6958ffc737a3b5fd1800c48c1544bf34e835a97c884e77d4b49904067",
+  "qa_packet": "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-3/SRFDI_G_JUNE_AUTH_QA_PACKET_v0_3.json",
+  "qa_result": "PASS_GATE_READY_SUBJECT_TO_EXACT_HEAD_CI",
+  "allowed_decisions": [
+    "AUTHORIZE_JUNE",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE"
+  ],
+  "recommended_decision": "AUTHORIZE_JUNE",
+  "exact_operator_command": "OVC APPROVE SRFDI-G-JUNE-AUTH AUTHORIZE_JUNE",
+  "completed_packets": [
+    "SRFDI-WP0..WP8",
+    "SRFDI-WP9/G9 historical",
+    "SRFDI-G8R-WP0..WP6",
+    "SRFDI-WP2C/WP2D",
+    "SRFDI-G9S/WP9S/G9S-FREEZE",
+    "SRFDI-G-JUNE-AUTH-v0.2 preserved superseded unused",
+    "SRFDI-WP10-v0.2 pre-run blocker evidence only",
+    "SRFDI-WP9C/G9C-FREEZE"
+  ],
+  "current_authority": {
+    "preregistration_v0_3": "FROZEN_EXACT_VERSION",
+    "segmentation_registry_v0_3": "FROZEN_EXACT_VERSION",
+    "source_population": "EXACT_BOUND_UNCHANGED",
+    "prior_v0_2_authority_token": "SUPERSEDED_UNUSED_UNCONSUMED",
+    "market_benchmark": "DENIED",
+    "june_execution": "DENIED_PENDING_OPERATOR_SRFDI_G_JUNE_AUTH",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_change": "NONE",
+    "scientific_promotion": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "exact_bindings": {
+    "g9c_freeze_merge_commit": "249afca5984022b7e9cbbd414bf2a74a2a255d1a",
+    "preregistration_v0_3_logical_sha256": "acb27ff21d4df6da6ea72972bda7a6ee1ce28a7f06827b949f55d8b03ec04bb5",
+    "segmentation_registry_v0_3_logical_sha256": "6c2451fb5b766d2ae25a13a311ba17c8dede342757d607219e62881be4ac31c0",
+    "representation_pack_registry_v0_2_logical_sha256": "7d93994836bfcff6c5a0b39db33692f70b1a25782bee43c7b6329d17568561c0",
+    "source_binding_sha256": "4d13c3ee8ae2ad25e30088f4f2de48f8320e3633c2e4ea6a5c2c9a7fdc2a62b7",
+    "population_id": "SRFD.POP.6efa7dd55636d036c12e580e0793abacf8c805bcf6d77bb6e2edf7cffbc113bd",
+    "eligible_record_count": 8598,
+    "eligible_record_ids_sha256": "fbb03d1db6cfa91f63330433e835c2bd659d1128b682817083d6f7af9f2aca4e",
+    "exclusion_ledger_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "scientific_implementation_commit": "7e234e52a95dcc7c1d136d7566d271a2c216e137",
+    "dependency_manifest_sha256": "88ad3ec673493cb82b6b6d4fda90c077535e88d9f630a0535d56df887944ae3f",
+    "capacity_class": "T0_FROZEN_MEASURED",
+    "max_wall_seconds": 14400,
+    "max_peak_rss_bytes": 17179869184,
+    "max_external_bytes": 10737418240
+  },
+  "segmentation_execution": {
+    "declared": [
+      "C2E_CAUSAL_ADAPTER",
+      "RUN_CHANGE_SEGMENTATION",
+      "DIRECTIONAL_CHANGE",
+      "PELT_REFERENCE",
+      "NULL_BOUNDARY_CONTROL"
+    ],
+    "execute_if_authorized": [
+      "RUN_CHANGE_SEGMENTATION",
+      "NULL_BOUNDARY_CONTROL"
+    ],
+    "visible_nonexecuted": {
+      "C2E_CAUSAL_ADAPTER": "DEPENDENCY_UNAVAILABLE",
+      "DIRECTIONAL_CHANGE": "SOURCE_UNAVAILABLE",
+      "PELT_REFERENCE": "CAPACITY_UNRESOLVED_AT_T0"
+    }
+  },
+  "proposed_authority_delta_if_AUTHORIZE_JUNE": {
+    "market_benchmark": "AUTHORIZED_ONE_EXACT_BOUND_RUN",
+    "june_execution": "AUTHORIZED_BOUNDED_JUNE_BENCHMARK_EXACT_MANIFEST_ONLY",
+    "provider_fetch": "DENIED",
+    "validation_2025": "LOCKED_UNCONSUMED",
+    "selector_change": "NONE",
+    "scientific_promotion": "NONE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "acceptance_conditions": {
+    "exact_g9c_freeze_binding": "PASS",
+    "exact_v0_3_preregistration_and_segmentation_registry": "PASS",
+    "unchanged_source_and_8598_population_binding": "PASS",
+    "superseded_v0_2_token_unused": "PASS",
+    "fail_closed_v0_3_authority_verifier": "PASS",
+    "frozen_t0_capacity_and_method_dispositions": "PASS",
+    "manifest_candidate_inert_and_hash_bound": "PASS",
+    "reserved_authority_firewalls": "PASS",
+    "provider_fetch_forbidden": "PASS",
+    "june_not_started": "PASS",
+    "exact_head_repository_and_orchestration_assurance": "REQUIRED_PASS_BEFORE_PRESENTATION"
+  },
+  "exact_work_after_approval": [
+    "Record an immutable SRFDI-G-JUNE-AUTH operator decision binding authorized_manifest_sha256 148cf9c6958ffc737a3b5fd1800c48c1544bf34e835a97c884e77d4b49904067.",
+    "Materialise an authorized v0.3 manifest only by changing run_authority to AUTHORIZED_BY_SRFDI_G_JUNE_AUTH and adding the exact operator decision authority_binding; do not alter frozen scientific, source, population, implementation, dependency or capacity bindings.",
+    "Generate and verify a new fail-closed JuneRunAuthorityToken with june_authority_v03; never consume the superseded v0.2 token.",
+    "Run preflight against the exact already-accepted read-only June source artifacts; provider fetch and upstream mutation remain forbidden.",
+    "Execute one bounded WP10-v0.3 June benchmark under T0 with checkpoints and explicit status records for all declared segmentation methods.",
+    "Generate G10 QA and WP11 scientific evidence without promoting any representation, distance, family, sensitivity, segmentation, selector or semantic result and without consuming Validation.",
+    "Stop at the next operator-reserved scientific disposition gate."
+  ],
+  "warnings": [
+    "The old v0.2 June authorization is historical only and cannot authorize the v0.3 manifest.",
+    "C2E_CAUSAL_ADAPTER, DIRECTIONAL_CHANGE and PELT_REFERENCE remain visible non-executed methods; they must not be silently substituted or dropped.",
+    "Only RUN_CHANGE_SEGMENTATION and NULL_BOUNDARY_CONTROL execute under the frozen T0 v0.3 segmentation contract.",
+    "3,602 records remain NOT_EVALUATED inside the exact 8,598-record population.",
+    "AUTHORIZE_JUNE is execution authority for one exact benchmark only, not scientific promotion authority."
+  ],
+  "rollback": "Before approval, close or supersede this gate PR and leave June denied. After approval but before execution, fail closed if any binding differs. Never force-push, rewrite history, consume the superseded token, fetch provider data, mutate upstream source, consume Validation, or alter frozen scientific parameters."
+}

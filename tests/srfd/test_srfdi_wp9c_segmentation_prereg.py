@@ -149,21 +149,27 @@ class SRFDIWP9CCorrectivePreregistrationTests(unittest.TestCase):
         self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
         self.assertFalse(self.state["operator_decision_required"])
 
-    def test_authoritative_pointer_advances_to_v04_without_june_authority(self) -> None:
+    def test_historical_v04_freeze_state_is_preserved_while_current_pointer_advances(self) -> None:
+        self.assertEqual("FROZEN_AWAITING_NEW_JUNE_AUTH_PREPARATION", self.state["status"])
+        self.assertEqual("FROZEN_EXACT_VERSION", self.state["authority"]["preregistration_v0_3"])
+        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.state["authority"]["june"])
+
         self.assertEqual(
-            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_6.json",
             self.current_pointer["authoritative_state"],
         )
         self.assertEqual(
-            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_3.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_4.json",
             self.current_pointer["prior_state"],
         )
-        self.assertEqual("249afca5984022b7e9cbbd414bf2a74a2a255d1a", self.current_pointer["effective_after_main"])
-        self.assertEqual("FROZEN_AWAITING_NEW_JUNE_AUTH_PREPARATION", self.current_pointer["status"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH-PREPARATION-v0.3", self.current_pointer["current_gate"])
+        self.assertEqual("READY", self.current_pointer["status"])
+        self.assertEqual("SRFDI-G10", self.current_pointer["current_gate"])
         self.assertFalse(self.current_pointer["operator_decision_required"])
-        self.assertEqual("DENIED_PENDING_NEW_EXACT_SRFDI_G_JUNE_AUTH", self.current_pointer["june_execution"])
+        self.assertEqual("AUTHORIZED_BOUNDED_JUNE_BENCHMARK_EXACT_MANIFEST_UNCONSUMED", self.current_pointer["june_execution"])
+        self.assertFalse(self.current_pointer["authority_token_consumed"])
         self.assertFalse(self.current_pointer["superseded_authority_token_consumed"])
+        self.assertEqual("SRFDI-WP10-v0.3", self.current_pointer["next_packet"])
+        self.assertEqual("SRFDI-G11", self.current_pointer["stop_at"])
 
 
 if __name__ == "__main__":
