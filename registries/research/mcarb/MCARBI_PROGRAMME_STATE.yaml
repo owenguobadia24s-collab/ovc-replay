@@ -2,47 +2,65 @@ schema: ovc-programme-state/v1
 programme_id: OVC-MCARB-v0.1
 plan_id: OVC-MCARB-IMPLEMENTATION-PLAN-0.1-REVISED
 plan_version: 0.1-REVISED
-packet_id: MCARBI-WP7
+packet_id: MCARBI-G-STAGE-A-AUTH
 status: APPROVED
 prerequisites:
   - MCARBI-G6 FREEZE_STAGE_A_READINESS merged at faf4e5af7c143995a2954dddb136cbe66a9e528d
-  - MCARBI-WP7 stable-head assurance PASS at 1459fce02c8a1231e19324a5f7902c9bc44a9977
-authority_required: OPERATOR_ACK
-authority_delta: PREREGISTRATION_FROZEN_ONLY_NO_STAGE_A_RUN
-baseline_commit: faf4e5af7c143995a2954dddb136cbe66a9e528d
-integration_base_commit: 0d201f950e4e387cf4e52abb2d09b8bf71f6e63b
-branch: gate/mcarbi-g7-preregistration-freeze
+  - MCARBI-G7 PREREGISTRATION_FREEZE merged at 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
+  - MCARBI-G-STAGE-A-AUTH stable-head assurance PASS at ae26ac042f2ec9d209882456ad1472e9fd8a4b81
+authority_required: OPERATOR_REQUIRED
+authority_delta: AUTHORIZE_ONE_BOUNDED_LOGICAL_STAGE_A_MARKET_BENCHMARK_EXECUTION_ONLY
+baseline_commit: 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
+integration_base_commit: bf11af4d672ee0f086ed2b2825e2d5b6dcf281fb
+branch: gate/mcarbi-stage-a-authorized
 candidate_commit: PENDING_INTEGRATION_COMMIT
 tests:
-  - tests/research_operations/mcarb/test_mcarbi_wp7_preregistration.py: PASS
-  - repository suite run 31220346485: PASS
-  - OVC FINAL_HEAD run 31220346527: PASS
-  - profile assurance job 93003319613: PASS
-  - merge readiness job 93003363154: PASS
-qa_packet: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_QA_PACKET.json
-decision_record: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_G7_OPERATOR_DECISION.json
-gate_packet: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_G7_OPERATOR_ACK_PACKET.json
+  - gate repository suite run 31230719888: PASS
+  - gate OVC FINAL_HEAD run 31230719886: PASS
+  - profile assurance job 93033888339: PASS
+  - merge readiness job 93033910806: PASS
+  - compatibility job 93033910848: PASS
+qa_packet: docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_QA_PACKET.json
+decision_record: docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_OPERATOR_DECISION.json
+gate_packet: docs/releases/mcarb-v0-1/mcarbi-stage-a-auth/MCARBI_STAGE_A_AUTH_GATE_PACKET.json
 preregistration: docs/releases/mcarb-v0-1/mcarbi-wp7/MCARBI_WP7_STAGE_A_PREREGISTRATION.json
 preregistration_git_blob_sha1: 8dcc4fe4e51b3b7d07e4dcc440c6b5b6a784f6f7
 parameter_registry: registries/research/mcarb/MCARB_STAGE_A_PARAMETER_REGISTRY_v0_1.json
 parameter_registry_git_blob_sha1: 2afaf18ffebb674b181b7493b2ca62738a54f037
-operator_gate:
-  gate_id: MCARBI-G7
-  decision: PREREGISTRATION_FREEZE
-  command: OVC APPROVE MCARBI-G7 PREREGISTRATION_FREEZE
-  decided_at: '2026-08-08T01:29:00+01:00'
+g7_merge_commit: 1ea248b943600b4f1f40916e06fe29ae2ac8beeb
 merge_commit: null
 blockers: []
 source_audit_outcome: AL_SOURCE_PARTIAL
-preregistration_status: FROZEN_NON_EXECUTABLE
-market_benchmark_authority: NONE
-stage_a_authority: NONE
+operator_gate:
+  gate_id: MCARBI-G-STAGE-A-AUTH
+  decision: AUTHORIZE_STAGE_A
+  command: OVC APPROVE MCARBI-G-STAGE-A-AUTH AUTHORIZE_STAGE_A
+  decided_at: '2026-08-08T02:18:00+01:00'
+  approved_gate_head: ae26ac042f2ec9d209882456ad1472e9fd8a4b81
+preregistration_status: FROZEN_EXECUTABLE_ONLY_UNDER_ONE_RUN_AUTHORITY
+market_benchmark_authority: AUTHORIZED_ONE_LOGICAL_STAGE_A_RUN_UNCONSUMED
+stage_a_authority: AUTHORIZED_ONE_LOGICAL_STAGE_A_RUN_UNCONSUMED
+stage_a_authority_consumption: UNCONSUMED
+stage_a_execution_scope:
+  instrument: GBPUSD
+  sides: [BID, ASK]
+  clock: 2H_A_L
+  population_interval: '[2023-11-01T00:00:00Z,2024-01-01T00:00:00Z)'
+  paired_2h: 449
+  paired_side_records: 898
+  normalization_reference_interval: '[2023-09-01T00:00:00Z,2023-11-01T00:00:00Z)'
+  source: EXISTING_GOVERNED_NON_VALIDATION_RETAINED_DUKASCOPY_ONLY
+  provider_intake: DENIED
+  checkpoint_resume: SAME_LOGICAL_RUN_BYTE_IDENTICAL_INPUTS_ONLY
+  changed_parameter_rerun: REQUIRES_NEW_OPERATOR_AUTHORITY
 active_discovery_authority: NONE
+active_development_authority: NONE
+active_validation_authority: NONE
 provider_intake_authority: NONE
 validation_2025: LOCKED_UNCONSUMED
 selector_authority: NONE
 c2_c2e_sri_family_semantic_publication_authority: NONE
 probability_risk_exposure_execution: NONE
 preserved_pr_371: PRESERVE_DO_NOT_MERGE
-next_packet: MCARBI-G-STAGE-A-AUTH
-continuation_point: AFTER_G7_INTEGRATION_MATERIALISE_STAGE_A_AUTH_GATE_AND_STOP; DO_NOT_EXECUTE_STAGE_A_WITHOUT_AUTHORIZE_STAGE_A
+next_packet: MCARBI-WP8
+continuation_point: EXECUTE_EXACT_FROZEN_STAGE_A_ONCE_THEN_AUTO_EVALUATE_MCARBI_G8_AND_PREPARE_MCARBI_WP9_G9; STOP_AT_MCARBI_G9
