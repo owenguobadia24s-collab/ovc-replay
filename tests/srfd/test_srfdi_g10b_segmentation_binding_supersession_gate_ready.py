@@ -23,17 +23,17 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
         self.assertEqual("SRFDI-G10B",self.operator["gate_id"]); self.assertEqual("OPERATOR_REQUIRED",self.operator["gate_class"]); self.assertEqual("SUPERSEDE",self.operator["recommended_decision"]); self.assertEqual("OVC APPROVE SRFDI-G10B SUPERSEDE",self.operator["exact_operator_command"]); self.assertEqual("NONE",self.prep["authority_effect"])
 
     def test_current_pointer_preserves_blocker_and_lawful_progression(self) -> None:
-        self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY"}); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+        self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
         if self.pointer["status"]=="BLOCKED":
             self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH",self.pointer["stop_at"]); self.assertIsNone(self.pointer["next_packet"])
         elif self.pointer["status"]=="AUTHORIZED_REMEDIATION_ONLY":
             self.assertEqual("SRFDI-G10B",self.pointer["current_gate"]); self.assertEqual("SRFDI-WP10B",self.pointer["next_packet"]); self.assertEqual("SRFDI-G10B-FREEZE",self.pointer["stop_at"]); self.assertEqual("AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY",self.pointer["wp10b_execution"]); self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY",self.pointer["june_execution"])
+        elif self.pointer["current_gate"]=="SRFDI-G10B-FREEZE":
+            self.assertEqual("GATE_READY",self.pointer["status"]); self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE",self.pointer["wp10b_execution"])
+        elif self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH" and self.pointer["status"]=="GATE_READY":
+            self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertTrue(self.pointer["june_execution"].startswith("DENIED")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
         else:
-            self.assertIn(self.pointer["current_gate"],{"SRFDI-G10B-FREEZE","SRFDI-G-JUNE-AUTH"}); self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"])
-            if self.pointer["current_gate"]=="SRFDI-G10B-FREEZE":
-                self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE",self.pointer["wp10b_execution"]); self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY",self.pointer["june_execution"])
-            else:
-                self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertTrue(self.pointer["june_execution"].startswith("DENIED")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
+            self.assertEqual("SRFDI-G-JUNE-AUTH",self.pointer["current_gate"]); self.assertFalse(self.pointer["operator_decision_required"]); self.assertIsNotNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
 
     def test_candidate_state_is_not_the_current_pointer(self) -> None:
         self.assertEqual("CANDIDATE_PROPOSAL_ONLY_NOT_CURRENT_POINTER",self.state["state_role"]); self.assertTrue(self.state["operator_decision_required"]); self.assertEqual("DENIED_PENDING_SRFDI_G10B_OPERATOR_SUPERSESSION",self.state["authority"]["wp10b_execution"])

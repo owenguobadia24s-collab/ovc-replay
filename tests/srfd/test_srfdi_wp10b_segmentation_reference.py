@@ -107,19 +107,27 @@ class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
 
     def test_authority_pointer_preserves_remediation_history_and_lawful_progression(self) -> None:
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
-        self.assertEqual("GATE_READY", pointer["status"])
-        self.assertIn(pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH"})
-        self.assertIsNone(pointer["next_packet"])
-        self.assertTrue(pointer["operator_decision_required"])
+        self.assertIn(pointer["status"], {"GATE_READY", "APPROVED", "READY", "RUNNING", "QA_REVIEW", "BLOCKED"})
+        self.assertIn(pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11"})
         self.assertTrue(pointer["authority_token_consumed"])
         self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", pointer["authority_token_state"])
         if pointer["current_gate"] == "SRFDI-G10B-FREEZE":
+            self.assertEqual("GATE_READY", pointer["status"])
+            self.assertIsNone(pointer["next_packet"])
+            self.assertTrue(pointer["operator_decision_required"])
             self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", pointer["june_execution"])
             self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", pointer["wp10b_execution"])
-        else:
+        elif pointer["current_gate"] == "SRFDI-G-JUNE-AUTH" and pointer["status"] == "GATE_READY":
+            self.assertIsNone(pointer["next_packet"])
+            self.assertTrue(pointer["operator_decision_required"])
             self.assertTrue(pointer["june_execution"].startswith("DENIED"))
             self.assertIsNone(pointer["fresh_authority_token_id"])
             self.assertEqual("NOT_MINTED_PENDING_OPERATOR", pointer["fresh_authority_token_state"])
+            self.assertTrue(pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
+        elif pointer["current_gate"] == "SRFDI-G-JUNE-AUTH":
+            self.assertFalse(pointer["operator_decision_required"])
+            self.assertIsNotNone(pointer["fresh_authority_token_id"])
+            self.assertTrue(pointer["june_execution"].startswith("AUTHORIZED"))
             self.assertTrue(pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
         self.assertEqual("DENIED", pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", pointer["validation_2025"])

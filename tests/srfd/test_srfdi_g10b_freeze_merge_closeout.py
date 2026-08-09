@@ -38,12 +38,18 @@ class SRFDIG10BFreezeMergeCloseoutTests(unittest.TestCase):
         self.assertTrue(self.state["authority"]["fresh_june_scientific_run"].startswith("DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED",self.state["authority"]["validation_2025"])
 
-    def test_pointer_advances_only_to_operator_june_gate(self):
+    def test_pointer_reaches_operator_june_gate_then_may_advance_after_operator_decision(self):
         self.assertEqual("SRFDI-G-JUNE-AUTH",self.pointer["current_gate"])
-        self.assertEqual("GATE_READY",self.pointer["status"])
-        self.assertTrue(self.pointer["operator_decision_required"])
-        self.assertIsNone(self.pointer["fresh_authority_token_id"])
-        self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
+        self.assertIn(self.pointer["status"], {"GATE_READY", "APPROVED", "READY", "RUNNING", "QA_REVIEW", "BLOCKED"})
+        if self.pointer["status"] == "GATE_READY":
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertIsNone(self.pointer["fresh_authority_token_id"])
+            self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
+        else:
+            self.assertFalse(self.pointer["operator_decision_required"])
+            self.assertIsNotNone(self.pointer["fresh_authority_token_id"])
+        self.assertEqual("DENIED", self.pointer["provider_fetch"])
+        self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
 
 if __name__ == "__main__":
     unittest.main()

@@ -57,7 +57,7 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
         self.assertTrue(self.state["authority"]["fresh_june_scientific_run"].startswith("DENIED"))
         if self.pointer["next_packet"] == "SRFDI-G-JUNE-AUTH-v0.7-PREP":
             self.assertEqual("DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
-        elif self.pointer["status"] == "READY":
+        elif self.pointer["status"] == "READY" and self.pointer.get("current_gate") != "SRFDI-G-JUNE-AUTH":
             self.assertEqual("SRFDI-WP10-v0.7", self.pointer["next_packet"])
             self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.pointer["june_execution"])
             self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["authority_token_state"])
@@ -81,6 +81,12 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
                 self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
                 self.assertIsNone(self.pointer["fresh_authority_token_id"])
                 self.assertEqual("NOT_MINTED_PENDING_OPERATOR", self.pointer["fresh_authority_token_state"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
+        elif self.pointer.get("current_gate") == "SRFDI-G-JUNE-AUTH" and self.pointer["status"] in {"APPROVED", "READY", "RUNNING", "QA_REVIEW"}:
+            self.assertFalse(self.pointer["operator_decision_required"])
+            self.assertIsNotNone(self.pointer["fresh_authority_token_id"])
+            self.assertTrue(self.pointer["june_execution"].startswith("AUTHORIZED"))
             self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
             self.assertTrue(self.pointer["authority_token_consumed"])
         else:
