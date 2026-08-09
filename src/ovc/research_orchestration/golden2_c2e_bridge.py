@@ -221,9 +221,7 @@ def execute_c2e_loss_preserving(upstream: Mapping[str, Any]) -> dict[str, Any]:
         "status_counts": dict(sorted(status_counts.items())),
         "axis_computability_counts": dict(sorted(axis_counts.items())),
         "fixture_boundary_required_axes": list(REQUIRED_FIXTURE_BOUNDARY_AXES),
-        "conformance_warnings": [
-            "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH"
-        ],
+        "conformance_warnings": [],
         "handoffs": handoffs,
         "sfc_inputs": adapted_inputs,
         "real_source_replay": False,
