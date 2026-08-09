@@ -60,16 +60,24 @@ class C2E2WP6PreflightBlockerTests(unittest.TestCase):
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
-    def test_qa_blocks_and_requires_operator_supersession(self):
+    def test_qa_blocks_and_historical_gate_remains_preserved_after_supersession(self):
         self.assertEqual(self.qa["qa_disposition"], "BLOCK")
         self.assertIn("AUTHORIZED_POPULATION_UNIT_MISMATCH_C2_SEQUENCE_WINDOW_VS_C2_OBSERVATION", self.qa["blocking_warnings"])
         self.assertEqual(self.state["status"], "BLOCKED")
         self.assertTrue(self.state["operator_decision_required"])
         self.assertEqual(self.state["current_gate"], "C2E2-G6-BINDING-SUPERSESSION")
-        self.assertIn(self.pointer["status"], {"BLOCKED", "APPROVED"})
+        self.assertIn(self.pointer["status"], {"BLOCKED", "APPROVED", "GATE_READY"})
         if self.pointer["status"] == "APPROVED":
             self.assertEqual(self.pointer["current_gate"], "C2E2-G6-BINDING-SUPERSESSION")
             self.assertEqual(self.pointer["operator_decision"], "SUPERSEDE")
+        elif self.pointer["status"] == "GATE_READY":
+            self.assertEqual(self.pointer["current_gate"], "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertIn(
+                "C2E2-G6-BINDING-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T084300+0100",
+                self.pointer["operator_decision_history"],
+            )
+        if self.pointer["status"] in {"APPROVED", "GATE_READY"}:
             self.assertEqual(self.pointer["wp6_execution"], "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION")
             self.assertEqual(self.pointer["old_run_token_status"], "INVALIDATED_UNCONSUMED_BY_OPERATOR_SUPERSESSION")
 
