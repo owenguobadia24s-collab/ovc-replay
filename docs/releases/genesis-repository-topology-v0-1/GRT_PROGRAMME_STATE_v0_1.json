@@ -1,44 +1,33 @@
 {
   "schema": "ovc-grt-programme-state/v1",
   "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
-  "status": "GRT_WP9_PASS_WITH_WARNINGS_GRT_WP10_AUTHORISED",
+  "status": "GRT_WP10_PASS_WITH_WARNINGS_GRT_WP11_AUTHORISED",
   "mode": ["GOVERNANCE_ONLY", "DERIVED_READ_MODEL", "READ_ONLY_FIRST"],
   "original_baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
   "reconciled_main_commit_at_g0": "6c034e8924a9cd134f8d05e7743ba2a5e3771b82",
   "main_observed_at_g8_decision": "65fe08e787dc9357ea15114455e842b8ba5aa7cd",
   "branch": "build/genesis-repository-topology-v0.1",
-  "current_packet": "GRT-WP10",
-  "current_gate": "POST_GRT_G8_EXECUTION",
+  "current_packet": "GRT-WP11",
+  "current_gate": "POST_GRT_G8_FINAL_QA",
   "operator_decision_required": false,
   "operator_decisions": {"GRT-G0": "PASS", "GRT-G8": "PASS_WITH_WARNINGS"},
-  "auto_decisions": {"GRT-G1": "PASS", "GRT-G7": "PASS", "GRT-WP9": "PASS_WITH_WARNINGS"},
+  "auto_decisions": {"GRT-G1": "PASS", "GRT-G7": "PASS", "GRT-WP9": "PASS_WITH_WARNINGS", "GRT-WP10": "PASS_WITH_WARNINGS"},
   "accepted_topology": {
     "historical_grt_wp7_topology_sha256": "6fca224dbebabbc3ee754e825f6028013011e5bc08b6f82a21e051cfdddc8138",
     "wp9_source_commit": "573b60ff46ef2bfedd276a969ad38a37c4f52dcc",
-    "wp9_topology_sha256": "18c5af9c9a5e583c2619087dd5d394f9efd99482fe1d138a79927a8c5bd8fd7c"
+    "wp9_topology_sha256": "18c5af9c9a5e583c2619087dd5d394f9efd99482fe1d138a79927a8c5bd8fd7c",
+    "wp10_assured_source_commit": "1115760b8e8a31eedb8b525ed3bf7bc32219fccd",
+    "wp10_assured_topology_sha256": "d311a3a481736c84859d12e8a8a6e1747fcd93728f8bcf9fed36db5d14440518"
   },
-  "presentation": {
-    "implementation_head": "dcd883e877f2852dd7abff0ed9acec6b9cc48319",
-    "gate_ready_head": "dcbfed36f9ed908ab0c1f96361afdb70e26d8990",
-    "status": "ACCEPTED_PASS_WITH_WARNINGS"
-  },
-  "wp9": {
-    "implementation_head": "ea12a19fd9161966150dcc9fa6e8be2b44385d8e",
-    "assured_merge_ref": "573b60ff46ef2bfedd276a969ad38a37c4f52dcc",
-    "repository_tests_run_id": 31307988624,
-    "tiered_shadow_run_id": 31307988713,
-    "repository_test_count": 790,
-    "blocker_count": 0,
-    "warning_count": 438,
-    "status": "PASS_WITH_WARNINGS"
-  },
+  "wp9": {"implementation_head": "ea12a19fd9161966150dcc9fa6e8be2b44385d8e", "repository_tests_run_id": 31307988624, "tiered_shadow_run_id": 31307988713, "status": "PASS_WITH_WARNINGS"},
+  "wp10": {"implementation_head": "e87e3d28a38ae0cf16a4e941877572d00a101cc3", "assured_merge_ref": "1115760b8e8a31eedb8b525ed3bf7bc32219fccd", "repository_tests_run_id": 31308276004, "tiered_shadow_run_id": 31308276019, "repository_test_count": 795, "blocker_count": 0, "warning_count": 441, "status": "PASS_WITH_WARNINGS"},
   "authority": {
     "topology_design": "RATIFIED_DERIVED_ONLY",
     "topology_implementation": "GRT_G7_ACCEPTED_DERIVED_ONLY",
     "read_only_presentation": "GRT_G8_ACCEPTED_PASS_WITH_WARNINGS",
     "post_presentation_conformance": "GRT_WP9_COMPLETE_PASS_WITH_WARNINGS",
-    "post_presentation_diff": "AUTHORISED_GRT_WP10_ONLY",
-    "final_qa_and_gate_preparation": "AUTHORISED_GRT_WP11_ONLY_AFTER_WP10",
+    "post_presentation_diff": "GRT_WP10_COMPLETE_PASS_WITH_WARNINGS",
+    "final_qa_and_gate_preparation": "AUTHORISED_GRT_WP11_ONLY",
     "programme_genesis_canon": "PRESERVED_SOLE_AUTHORITY",
     "programme_auto_admission": "DENIED",
     "programme_auto_reclassification": "DENIED",
@@ -52,13 +41,12 @@
     "probability_risk_exposure_execution_agent": "NONE"
   },
   "warnings": [
-    "WP9_WARNING_POPULATION_RETAINED_UNREPAIRED",
-    "GENESIS_TOPOLOGY_CONFLICT_COUNT_5_AT_WP9_SOURCE_COMMIT",
-    "STALE_PROGRAMME_STATE_COUNT_1_AT_WP9_SOURCE_COMMIT",
-    "GRT_WP10_DIFF_IMPLEMENTATION_PENDING"
+    "WP9_AND_WP10_WARNING_POPULATIONS_RETAINED_UNREPAIRED",
+    "EXACT_DIFF_PAIR_REQUIRES_BOTH_SOURCE_BOUND_READ_MODEL_BYTES",
+    "NO_HISTORICAL_READ_MODEL_IS_INVENTED_FROM_SUMMARY_RECEIPTS"
   ],
   "blockers": [],
-  "next_action": "IMPLEMENT_AND_ASSURE_GRT_WP10_INCREMENTAL_DIFF_THEN_EXECUTE_GRT_WP11_FINAL_QA_AND_STOP_AT_GRT_G11",
+  "next_action": "EXECUTE_GRT_WP11_FINAL_QA_PREPARE_OPERATOR_GRT_G11_AND_STOP",
   "next_operator_gate": "GRT-G11",
   "rollback": "Discard derived post-G8 outputs; preserve all accepted GRT decisions and authoritative upstream state."
 }
