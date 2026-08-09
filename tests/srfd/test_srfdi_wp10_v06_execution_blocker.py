@@ -19,5 +19,16 @@ class SRFDIWP10V06ExecutionBlockerTests(unittest.TestCase):
  def test_firewalls_and_history_are_preserved(self):
   f=self.b['firewalls']; self.assertEqual('DENIED_NO_ATTEMPT',f['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED_NO_ACCESS',f['validation_2025']); self.assertEqual('UNCHANGED_8598',f['source_population']); self.assertEqual('PRESERVED_HISTORICAL_EVIDENCE',f['pr_433']); self.assertEqual('CONSUMED_NOT_REUSABLE',f['prior_v0_4_token']); self.assertEqual('NON_AUTHORITATIVE_UNMERGED_DO_NOT_REUSE',f['attempted_v0_5_token'])
  def test_programme_state_is_fail_closed(self):
-  self.assertEqual('BLOCKED',self.s['status']); self.assertEqual('SRFDI-WP10-v0.6',self.s['active_packet']); self.assertEqual('SRFDI-G10',self.s['current_gate']); self.assertIsNone(self.s['next_packet']); self.assertEqual('STOP_FAIL_CLOSED_NEW_LAWFUL_SUPERSESSION_REQUIRED',self.s['next_action']); self.assertEqual('BLOCKED',self.p['status']); self.assertIsNone(self.p['next_packet']); self.assertEqual('HARD_BLOCKER',self.p['stop_at'])
+  # The immutable incident state must always remain the exact fail-closed court record.
+  self.assertEqual('BLOCKED',self.s['status']); self.assertEqual('SRFDI-WP10-v0.6',self.s['active_packet']); self.assertEqual('SRFDI-G10',self.s['current_gate']); self.assertIsNone(self.s['next_packet']); self.assertEqual('STOP_FAIL_CLOSED_NEW_LAWFUL_SUPERSESSION_REQUIRED',self.s['next_action'])
+  # The moving pointer may later route to a separately governed resilience supersession,
+  # but it must still preserve the consumed v0.6 authority and blocker evidence.
+  self.assertIn(self.p['status'], {'BLOCKED','READY'})
+  self.assertTrue(self.p['authority_token_consumed']); self.assertEqual('CONSUMED_NOT_REUSABLE',self.p['authority_token_state'])
+  self.assertTrue(self.p['blocker_evidence'].endswith('SRFDI_WP10_V06_EXECUTION_BLOCKER.json'))
+  self.assertEqual('DENIED',self.p['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED',self.p['validation_2025']); self.assertEqual('NONE',self.p['scientific_promotion']); self.assertEqual('NONE',self.p['probability_risk_exposure_execution'])
+  if self.p['status']=='BLOCKED':
+   self.assertIsNone(self.p['next_packet']); self.assertEqual('HARD_BLOCKER',self.p['stop_at']); self.assertEqual('SRFDI-G10',self.p['current_gate'])
+  else:
+   self.assertEqual('SRFDI-G-JUNE-AUTH',self.p['current_gate']); self.assertEqual('SRFDI-G-JUNE-AUTH-v0.7-PREP',self.p['next_packet']); self.assertEqual('DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH',self.p['june_execution']); self.assertIsNone(self.p['stop_at'])
 if __name__=='__main__': unittest.main()
