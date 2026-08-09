@@ -36,7 +36,6 @@ from .wp10_v07_contract import (
     T0_MAX_EXTERNAL_BYTES,
     T0_MAX_PEAK_RSS_BYTES,
     T0_MAX_WALL_SECONDS,
-    EXPECTED_SEGMENTATION_COUNTS,
     ConfigurationDescriptor,
     WP10RunnerError,
     adapted_capacity_record,
@@ -56,6 +55,12 @@ from .wp10_v07_analysis import (
     build_invariant_core_support_exact,
     method_disagreement_exact,
 )
+from .wp10b_segmentation_reference import (
+    SegmentationReferenceError,
+    assert_structural_invariants,
+    reference_execute_segmentation,
+)
+
 
 def _load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -76,24 +81,27 @@ def execute_segmentation(rows: Sequence[Mapping[str, Any]], method_id: str) -> d
     ledger = _segmentation_inputs(rows)
     if method_id == "RUN_CHANGE_SEGMENTATION":
         result = run_change_from_c2_ledger(ledger)
-        counts = {
-            "stream_count": int(result["stream_count"]),
-            "segment_count": len(result["segments"]),
-            "boundary_count": len(result["boundaries"]),
-        }
     elif method_id == "NULL_BOUNDARY_CONTROL":
         result = null_boundary_control_from_c2_ledger(ledger)
-        counts = {
-            "stream_count": int(result["stream_count"]),
-            "segment_count": len(result["segments"]),
-            "boundary_count": len(result["boundaries"]),
-        }
     else:
         raise WP10RunnerError("UNDECLARED_METHOD_OR_DEPENDENCY", method_id)
-    if counts != EXPECTED_SEGMENTATION_COUNTS[method_id]:
+
+    try:
+        reference = reference_execute_segmentation(ledger, method_id)
+        counts = assert_structural_invariants(method_id, result)
+        assert_structural_invariants(method_id, reference)
+    except SegmentationReferenceError as exc:
+        raise WP10RunnerError(exc.reason_code, exc.detail) from exc
+
+    if result != reference:
         raise WP10RunnerError(
-            "SEGMENTATION_BINDING_MISMATCH", f"{method_id}:{counts}"
+            "SEGMENTATION_REFERENCE_INEQUIVALENCE",
+            (
+                f"{method_id}:production={logical_sha256(result)}:"
+                f"reference={logical_sha256(reference)}"
+            ),
         )
+
     payload = {
         "schema": "ovc-srfdi-wp10-v07-segmentation-output/v1",
         "method_id": method_id,

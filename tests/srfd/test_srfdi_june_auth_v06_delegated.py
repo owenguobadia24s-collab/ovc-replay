@@ -104,7 +104,13 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
             self.assertEqual("AUTHORIZED_REMEDIATION_ONLY", self.pointer["status"])
             self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
             self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
-        self.assertFalse(self.pointer["operator_decision_required"])
+        if self.pointer.get("current_gate") == "SRFDI-G10B-FREEZE":
+            self.assertEqual("GATE_READY", self.pointer["status"])
+            self.assertIsNone(self.pointer["next_packet"])
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
+        else:
+            self.assertFalse(self.pointer["operator_decision_required"])
 
 
 if __name__ == "__main__":
