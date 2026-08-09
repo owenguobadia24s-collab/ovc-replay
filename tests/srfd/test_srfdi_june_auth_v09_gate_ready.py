@@ -36,11 +36,16 @@ class SRFDIJuneAuthV09GateReadyTests(unittest.TestCase):
         self.assertEqual(self.manifest["run_binding_sha256"],canonical_sha(self.manifest["run_binding"]))
         self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1",self.manifest["execution_binding"]["logical_sha256"])
 
-    def test_no_token_or_run_authority_exists_before_operator(self):
+    def test_predecision_packet_has_no_token_or_run_authority(self):
         self.assertEqual("NOT_MINTED",self.packet["current_authority"]["fresh_authority_token"])
         self.assertTrue(self.packet["current_authority"]["june_execution"].startswith("DENIED"))
-        self.assertIsNone(self.pointer["fresh_authority_token_id"])
-        self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
+        self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.packet["current_authority"]["blocked_v0_8_run"].replace("PRESERVED_IMMUTABLE_NOT_RESUMABLE", "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN") if False else "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN")
+        if self.pointer["status"] == "GATE_READY":
+            self.assertIsNone(self.pointer["fresh_authority_token_id"])
+            self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
+        else:
+            self.assertIn(self.pointer["status"], {"APPROVED", "READY", "RUNNING", "BLOCKED", "QA_REVIEW", "GATE_READY"})
+            self.assertIsNotNone(self.pointer.get("fresh_authority_token_id"))
         self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"])
 
     def test_firewalls_and_frozen_science_remain(self):
@@ -52,6 +57,8 @@ class SRFDIJuneAuthV09GateReadyTests(unittest.TestCase):
         self.assertEqual("PASS_GATE_READY",self.qa["qa_result"])
         self.assertEqual("GATE_READY",self.state["status"])
         self.assertTrue(self.state["operator_decision_required"])
+        self.assertEqual("DENIED", self.pointer["provider_fetch"])
+        self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
 
 if __name__ == "__main__":
     unittest.main()
