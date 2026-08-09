@@ -89,3 +89,27 @@ def evaluate_boundary_predicates_v2(
         "validation_inputs_used": False,
         "authority": "CANDIDATE_INACTIVE_NONCANONICAL",
     }
+
+
+def evaluate_boundary_predicates(
+    current: Mapping[str, Any],
+    previous: Mapping[str, Any] | None = None,
+    *,
+    explicit_source_gap: bool = False,
+    release_end: bool = False,
+) -> dict[str, bool]:
+    """Compatibility view returning only the frozen rule-match map.
+
+    New WP6 execution uses :func:`evaluate_boundary_predicates_v2` directly so
+    the comparison-signature evidence remains visible.  This narrow alias keeps
+    historical helper imports deterministic without creating a second semantic
+    implementation.
+    """
+    return dict(
+        evaluate_boundary_predicates_v2(
+            current,
+            previous,
+            explicit_source_gap=explicit_source_gap,
+            release_end=release_end,
+        )["matched"]
+    )

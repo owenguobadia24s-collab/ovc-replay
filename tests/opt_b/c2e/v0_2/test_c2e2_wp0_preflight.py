@@ -90,7 +90,7 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertEqual(current["programme_id"], "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(current["authority"]["c2e_activation"], "DENIED")
+        self.assertIn(current["authority"]["c2e_activation"], {"DENIED", "DENIED_OPERATOR_RESERVED"})
         self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
 
 

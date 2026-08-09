@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-delegated-gate-decision/v1",
+  "decision_id": "C2E2-WP6-CLOSEOUT.DELEGATED.PASS.20260809",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "C2E2-WP6",
+  "gate_id": "C2E2-WP6-CLOSEOUT",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_OPERATOR_PLAN_AUTHORITY",
+  "authority_delta": "NONE_BEYOND_COMPLETED_BOUNDED_WP6_EVIDENCE",
+  "qa_packet": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_WP6_POSTRUN_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "acceptance_summary": {
+    "exact_population_reconciled": true,
+    "two_clean_runs_or_equivalence_proof": true,
+    "determinism": true,
+    "conflict_observability": true,
+    "counterexamples_preserved": true,
+    "legacy_comparator": "COMPLETE_READ_ONLY",
+    "srfd_comparator": "UNAVAILABLE_CURRENT_LAWFUL_ROUTE_TRANSPARENT_WARNING",
+    "capacity": "PASS_WITHIN_T0",
+    "repository_assurance": "PASS",
+    "activation_effect": "NONE"
+  },
+  "non_reserved_rationale": "This closeout records evidence integrity and packet completion only. It activates no C2E machinery, boundary pack, selector, semantic/family/model/candidate/theory authority, publication, Validation, probability, risk, exposure or execution capability. The next packet is read-only activation-readiness preparation; all activation decisions remain operator-reserved.",
+  "warnings": [
+    "SRFD_CURRENT_COMPARATOR_UNAVAILABLE_DUE_EXISTING_SRFDI_WP10_V07_SEGMENTATION_BINDING_BLOCKER",
+    "SEMANTIC_EQUIVALENCE_PROOF_NOT_CANONICAL_RUNTIME_BYTE_STREAM_EQUIVALENCE"
+  ],
+  "blockers": [],
+  "rollback": "No active authority changed. Preserve WP6 artifacts and consumed-token lineage; leave the candidate boundary pack inactive and decline or quarantine any later activation proposal if subsequent review finds the evidence insufficient.",
+  "next_packet": "C2E2-WP7",
+  "next_action": "SQUASH_MERGE_ELIGIBLE_WP6_PR_THEN_CREATE_WP7_BRANCH_FROM_LATEST_MAIN"
+}

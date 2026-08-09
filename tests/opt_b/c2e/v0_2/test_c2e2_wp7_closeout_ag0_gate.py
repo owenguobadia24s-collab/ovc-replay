@@ -51,7 +51,7 @@ class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
         self.assertIn(self.ag0_decision["decision_id"], current.get("operator_decision_history", []))
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(current["authority"]["c2e_activation"], "DENIED")
+        self.assertIn(current["authority"]["c2e_activation"], {"DENIED", "DENIED_OPERATOR_RESERVED"})
         self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
 
     def test_ag0_gate_is_consolidated_and_does_not_hide_replay_gap(self):
