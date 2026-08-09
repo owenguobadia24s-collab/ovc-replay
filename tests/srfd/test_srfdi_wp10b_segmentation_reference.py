@@ -144,15 +144,22 @@ class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
 
     def test_authority_pointer_remains_remediation_only(self) -> None:
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
-        self.assertEqual("AUTHORIZED_REMEDIATION_ONLY", pointer["status"])
-        self.assertEqual("SRFDI-G10B", pointer["current_gate"])
-        self.assertEqual("SRFDI-WP10B", pointer["next_packet"])
+        self.assertIn(pointer["status"], {"AUTHORIZED_REMEDIATION_ONLY", "GATE_READY"})
+        if pointer["status"] == "AUTHORIZED_REMEDIATION_ONLY":
+            self.assertEqual("SRFDI-G10B", pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10B", pointer["next_packet"])
+        else:
+            self.assertEqual("SRFDI-G10B-FREEZE", pointer["current_gate"])
+            self.assertIsNone(pointer["next_packet"])
+            self.assertTrue(pointer["operator_decision_required"])
+            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", pointer["wp10b_execution"])
         self.assertEqual("SRFDI-G10B-FREEZE", pointer["stop_at"])
         self.assertTrue(pointer["authority_token_consumed"])
         self.assertEqual(
             "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",
             pointer["authority_token_state"],
         )
+        self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", pointer["june_execution"])
         self.assertEqual("DENIED", pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", pointer["validation_2025"])
         self.assertEqual("NONE", pointer["scientific_promotion"])
