@@ -3,19 +3,27 @@
   "programme_id": "OVC-IROF-v0.1",
   "packet_id": "IROF-WP1",
   "gate_id": "IROF-G2",
-  "baseline_commit": "242f2ca509d5d35067cd6263a22e1bdb91befb87",
-  "disposition": "PASS_PENDING_EXACT_HEAD_CI",
+  "initial_baseline_commit": "242f2ca509d5d35067cd6263a22e1bdb91befb87",
+  "reconciled_main_commit": "d7098fa322257a95acfdfc5af0eb8279cdb9964a",
+  "candidate_commit": "adb916f5b426471b4473c561a106c61d63e72898",
+  "disposition": "PASS",
   "checks": [
-    {"check_id": "WP1_REQUIRED_OBJECTS", "status": "PASS", "severity": "BLOCK", "detail": "All 18 required core object contracts are implemented and declared in the core schema."},
-    {"check_id": "WP1_SEMANTIC_ATTEMPT_LOCATION_SEPARATION", "status": "PASS", "severity": "BLOCK", "detail": "Workers, scheduling and physical output roots are excluded from ResearchRunSpec semantic identity."},
-    {"check_id": "WP1_POPULATION_MODE_CONVERGENCE", "status": "PASS", "severity": "BLOCK", "detail": "Synthetic and replay modes share PopulationSpec and downstream run contracts; provenance requirements differ."},
-    {"check_id": "WP1_AUTHORITY_NON_SELF_GRANTING", "status": "PASS", "severity": "BLOCK", "detail": "AuthorityBinding records owner-programme decisions only; package import has no authority effect."},
-    {"check_id": "WP1_WRAPPER_MUTATION_DENIED", "status": "PASS", "severity": "BLOCK", "detail": "StageSpec requires NO_SCIENTIFIC_MUTATION."},
-    {"check_id": "WP1_SCIENTIFIC_EXECUTION_STATUS_SEPARATION", "status": "PASS", "severity": "BLOCK", "detail": "Scientific null/status vocabulary is not included in execution status vocabulary."},
-    {"check_id": "WP1_PROFILE_FUTURE_BOUNDARY", "status": "PASS", "severity": "BLOCK", "detail": "Outcome/ABCD future profiles are unregistered until stage contracts exist."},
-    {"check_id": "WP1_REAL_EXECUTION", "status": "PASS", "severity": "BLOCK", "detail": "No real data are resolved or executed by WP1."}
+    {"check_id":"WP1_REQUIRED_OBJECTS","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_SEMANTIC_ATTEMPT_LOCATION_SEPARATION","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_POPULATION_MODE_CONVERGENCE","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_AUTHORITY_NON_SELF_GRANTING","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_WRAPPER_MUTATION_DENIED","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_SCIENTIFIC_EXECUTION_STATUS_SEPARATION","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_PROFILE_FUTURE_BOUNDARY","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_NAMESPACE_AUTHORITY_ALLOWLIST","status":"PASS","severity":"BLOCK"},
+    {"check_id":"WP1_REAL_EXECUTION","status":"PASS","severity":"BLOCK"}
   ],
-  "required_external_checks": ["focused WP1 tests", "complete repository suite", "OVC tiered/final-head assurance", "zero unresolved review threads"],
-  "qa_recommendation": "PASS_AFTER_EXACT_HEAD_CI",
+  "exact_head_assurance": {
+    "tests_workflow": 31303878969,
+    "tests_conclusion": "success",
+    "ovc_tiered_workflow": 31303878975,
+    "ovc_tiered_conclusion": "success"
+  },
+  "qa_recommendation": "PASS",
   "authority_effect": "NONE"
 }
