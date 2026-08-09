@@ -76,19 +76,29 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
         self.assertEqual("BLOCKED_FAIL_CLOSED", self.blocker["authority"]["resume_under_current_runner"])
         self.assertEqual("NONE", self.blocker["authority"]["new_run_authority"])
 
-    def test_current_programme_state_records_hard_stop_without_authority_widening(self):
-        self.assertEqual("BLOCKED", self.pointer["status"])
-        self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
-        self.assertIsNone(self.pointer["next_packet"])
-        self.assertFalse(self.pointer["operator_decision_required"])
+    def test_historical_blocker_is_exact_while_pointer_may_authorize_remediation_only(self):
+        self.assertEqual("BLOCKED", self.state["status"])
+        self.assertEqual("NONE_UNDER_CURRENT_STANDING_DELEGATION_AFTER_HARD_STOP", self.state["remediation_authority"])
+        self.assertEqual("PRESERVE_EVIDENCE_AND_STOP_FAIL_CLOSED_NO_ROUTINE_OPERATOR_APPROVAL_REQUEST", self.state["next_action"])
+        self.assertIn(self.pointer["status"], {"BLOCKED", "AUTHORIZED_REMEDIATION_ONLY"})
         self.assertEqual(RUN_ID, self.pointer["run_id"])
+        self.assertEqual(TOKEN_ID, self.pointer["authority_token_id"])
+        self.assertTrue(self.pointer["authority_token_consumed"])
+        self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+        self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
         self.assertEqual("NONE", self.pointer["scientific_promotion"])
         self.assertEqual("NONE", self.pointer["probability_risk_exposure_execution"])
-        self.assertEqual("BLOCKED", self.state["status"])
-        self.assertEqual("NONE_UNDER_CURRENT_STANDING_DELEGATION_AFTER_HARD_STOP", self.state["remediation_authority"])
-        self.assertEqual("PRESERVE_EVIDENCE_AND_STOP_FAIL_CLOSED_NO_ROUTINE_OPERATOR_APPROVAL_REQUEST", self.state["next_action"])
+        if self.pointer["status"] == "BLOCKED":
+            self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
+            self.assertIsNone(self.pointer["next_packet"])
+        else:
+            self.assertEqual("SRFDI-G10B", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
+            self.assertEqual("AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY", self.pointer["wp10b_execution"])
+            self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
 
 
 if __name__ == "__main__":

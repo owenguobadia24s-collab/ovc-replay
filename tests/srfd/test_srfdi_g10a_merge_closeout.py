@@ -65,14 +65,19 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
     def test_v16_remains_historical_while_current_pointer_advances_lawfully(self) -> None:
         self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", None})
-        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED", "BLOCKED"})
+        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", "SRFDI-G10B", None})
+        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED", "BLOCKED", "AUTHORIZED_REMEDIATION_ONLY"})
         self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81", self.pointer.get("capacity_backend_freeze", "fcf8f2e84111c5c0920cb28816f95b00a9168d81"))
         self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
         if self.pointer["status"] == "BLOCKED":
             self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
             self.assertIsNone(self.pointer["next_packet"])
+        if self.pointer["status"] == "AUTHORIZED_REMEDIATION_ONLY":
+            self.assertEqual("SRFDI-G10B", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
 
     def test_closeout_is_delegated_zero_delta_pass(self) -> None:
         self.assertEqual("PASS", self.qa["qa_result"])
