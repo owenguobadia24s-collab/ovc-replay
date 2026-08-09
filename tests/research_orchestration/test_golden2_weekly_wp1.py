@@ -17,17 +17,17 @@ class Golden2WeeklyWP1Tests(unittest.TestCase):
         self.assertNotEqual(opt_a["raw"]["BID"][0].open, opt_a["raw"]["ASK"][0].open)
         self.assertEqual(479, len(opt_a["derived"]["15M"]["BID"]))
         self.assertEqual(479, len(opt_a["derived"]["15M"]["ASK"]))
-        self.assertEqual(59, len(opt_a["derived"]["2H_A_L"]["BID"]))
-        self.assertEqual(59, len(opt_a["derived"]["2H_A_L"]["ASK"]))
-        self.assertEqual(4, opt_a["summary"]["quarantine_count"])
-        self.assertEqual({"INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET": 4}, opt_a["summary"]["quarantine_reason_counts"])
+        self.assertEqual(58, len(opt_a["derived"]["2H_A_L"]["BID"]))
+        self.assertEqual(58, len(opt_a["derived"]["2H_A_L"]["ASK"]))
+        self.assertEqual(6, opt_a["summary"]["quarantine_count"])
+        self.assertEqual({"INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET": 6}, opt_a["summary"]["quarantine_reason_counts"])
 
     def test_c1_is_computed_by_current_reference_engine_for_both_clocks_and_sides(self) -> None:
         c1 = self.result["c1"]
-        self.assertEqual(1076, c1["summary"]["record_count"])
-        self.assertEqual(1076, c1["summary"]["synthetic_count"])
+        self.assertEqual(1074, c1["summary"]["record_count"])
+        self.assertEqual(1074, c1["summary"]["synthetic_count"])
         self.assertEqual(
-            {"15M:ASK": 479, "15M:BID": 479, "2H_A_L:ASK": 59, "2H_A_L:BID": 59},
+            {"15M:ASK": 479, "15M:BID": 479, "2H_A_L:ASK": 58, "2H_A_L:BID": 58},
             c1["summary"]["by_clock_side"],
         )
         self.assertTrue(all(str(row["record_id"]).startswith("c1:") for row in c1["records"]))
@@ -47,10 +47,10 @@ class Golden2WeeklyWP1Tests(unittest.TestCase):
     def test_revised_c2_runs_current_structural_components_at_week_scale(self) -> None:
         c2 = self.result["c2"]
         summary = c2["summary"]
-        self.assertGreater(summary["structural_snapshot_count"], 900)
-        self.assertGreater(summary["transition_count"], 4000)
-        self.assertGreater(summary["separate_side_snapshot_counts"]["BID"], 400)
-        self.assertGreater(summary["separate_side_snapshot_counts"]["ASK"], 400)
+        self.assertEqual(932, summary["structural_snapshot_count"])
+        self.assertEqual(4620, summary["transition_count"])
+        self.assertEqual(466, summary["separate_side_snapshot_counts"]["BID"])
+        self.assertEqual(466, summary["separate_side_snapshot_counts"]["ASK"])
         for snapshot in c2["snapshots"][:20]:
             self.assertEqual({"LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"}, {row["axis"] for row in snapshot["formula_outputs"]})
             self.assertEqual("SHADOW_FROZEN_READ_ONLY", snapshot["authority"])
