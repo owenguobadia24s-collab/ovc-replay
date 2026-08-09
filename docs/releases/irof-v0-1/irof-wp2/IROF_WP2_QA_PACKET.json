@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-irof-qa-packet/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "packet_id": "IROF-WP2",
+  "gate_id": "IROF-G3",
+  "plan_version": "0.1",
+  "baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
+  "authority_delta": "deterministic DAG planning and inert adapter protocol only",
+  "static_review": {
+    "status": "PASS",
+    "checks": [
+      "required optional forbidden dependency semantics explicit",
+      "typed parent output and stage input compatibility fail closed",
+      "canonical topological order registration-order independent",
+      "blocked descendants graph-derived",
+      "adapter protocol exposes preflight estimate execute resume verify",
+      "scientific payload mutation firewall present",
+      "extension stage requires registration only, not scheduler redesign"
+    ]
+  },
+  "ci": {"status": "PENDING_EXACT_HEAD"},
+  "warnings": [
+    "Stage registry is planning metadata only; executable current-stage adapters remain deferred to IROF-WP8",
+    "No real population or protected authority is consumed"
+  ],
+  "blocking_issues": [],
+  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "rollback": "remove WP2 planner adapter contract registry fixtures and tests; source-stage behavior remains untouched"
+}
