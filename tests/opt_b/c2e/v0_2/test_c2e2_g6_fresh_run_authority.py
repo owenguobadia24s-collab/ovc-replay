@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from ovc.opt_b.c2e_v2.boundary_pack import freeze_pack
+
 ROOT = Path(__file__).resolve().parents[4]
 BASE = ROOT / "registries/implementation/c2e_v0_2"
 RUN_AUTH = BASE / "run_authority"
@@ -54,7 +56,9 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(logical_hash(self.token), self.token["logical_sha256"])
         self.assertEqual(logical_hash(self.manifest), self.manifest["logical_sha256"])
         self.assertEqual(logical_hash(self.envelope), self.envelope["logical_sha256"])
-        self.assertEqual(logical_hash(self.pack), self.pack["logical_sha256"])
+        frozen_pack = freeze_pack(self.pack)
+        self.assertEqual(frozen_pack["boundary_pack_id"], self.pack["boundary_pack_id"])
+        self.assertEqual(frozen_pack["logical_sha256"], self.pack["logical_sha256"])
         self.assertEqual(self.token["run_manifest_logical_sha256"], self.manifest["logical_sha256"])
         self.assertEqual(self.token["resource_envelope_logical_sha256"], self.envelope["logical_sha256"])
         self.assertEqual(self.token["boundary_pack_logical_sha256"], self.pack["logical_sha256"])
