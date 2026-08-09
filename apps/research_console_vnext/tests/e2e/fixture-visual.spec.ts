@@ -4,8 +4,9 @@ import path from "node:path";
 const screenshotRoot = path.resolve(process.cwd(), "../../artifacts/research_console_vnext/g3v_candidate_screenshots");
 const viewports = [
   { name: "1920x1080", width: 1920, height: 1080, minCanvas: 420 },
-  { name: "1440x810", width: 1440, height: 810, minCanvas: 300 },
-  { name: "1280x720", width: 1280, height: 720, minCanvas: 260 },
+  { name: "1536x864-reference", width: 1536, height: 864, minCanvas: 285 },
+  { name: "1440x810", width: 1440, height: 810, minCanvas: 265 },
+  { name: "1280x720", width: 1280, height: 720, minCanvas: 235 },
 ] as const;
 
 for (const viewport of viewports) {
@@ -26,6 +27,8 @@ for (const viewport of viewports) {
     await expect(page.getByTestId("chart-detail-hud")).toContainText("H");
     await expect(page.getByTestId("chart-detail-hud")).toContainText("L");
     await expect(page.getByTestId("chart-detail-hud")).toContainText("C");
+    await expect(page.locator('[data-chart-layer="reference-overlay"]')).toHaveAttribute("data-presentation-only", "true");
+    await expect(page.locator('[data-chart-layer="navigator"]')).toHaveAttribute("data-presentation-only", "true");
     const barCount = Number(await page.getByTestId("chart-bar-count").textContent());
     expect(barCount).toBeGreaterThanOrEqual(32);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
@@ -52,33 +55,53 @@ for (const [name, investigation, expectedState] of scenarios) {
   });
 }
 
-test("WP3D precision grid aligns principal surfaces and bottom evidence strip", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 810 });
+test("WP3E reference lock reproduces the frozen 1536x864 major geometry", async ({ page }) => {
+  await page.setViewportSize({ width: 1536, height: 864 });
   await page.goto("/market?investigation=FX-PROTOTYPE-01");
-  const context = page.getByRole("complementary", { name: "Context Navigator" });
-  const canvasArticle = page.getByRole("article", { name: "Primary Canvas" });
-  const inspector = page.getByRole("complementary", { name: "Evidence Stack" });
-  const [contextBox, canvasBox, inspectorBox] = await Promise.all([context.boundingBox(), canvasArticle.boundingBox(), inspector.boundingBox()]);
-  expect(contextBox).not.toBeNull(); expect(canvasBox).not.toBeNull(); expect(inspectorBox).not.toBeNull();
-  if (!contextBox || !canvasBox || !inspectorBox) return;
-  expect(Math.abs(contextBox.y - canvasBox.y)).toBeLessThanOrEqual(1);
-  expect(Math.abs(canvasBox.y - inspectorBox.y)).toBeLessThanOrEqual(1);
-  expect(Math.abs((contextBox.x + contextBox.width + 6) - canvasBox.x)).toBeLessThanOrEqual(1.5);
-  expect(Math.abs((canvasBox.x + canvasBox.width + 6) - inspectorBox.x)).toBeLessThanOrEqual(1.5);
+  const tolerance = 2.5;
+  const box = async (selector: string) => {
+    const value = await page.locator(selector).boundingBox();
+    expect(value).not.toBeNull();
+    if (!value) throw new Error(`Missing geometry for ${selector}`);
+    return value;
+  };
+  const nav = await box('[data-rcn-ref="nav-rail"]');
+  const header = await box('[data-rcn-ref="header"]');
+  const contextSummary = await box('[data-rcn-ref="context-summary"]');
+  const context = await box('[data-rcn-ref="context-navigator"]');
+  const canvasArticle = await box('[data-rcn-ref="primary-canvas"]');
+  const inspector = await box('[data-rcn-ref="evidence-inspector"]');
+  const timeline = await box('[data-rcn-ref="episode-timeline"]');
+  const bottom = await box('[data-rcn-ref="bottom-strip"]');
+  const status = await box('[data-rcn-ref="status-bar"]');
 
-  const bottomTitles = ["Structural Evidence Summary", "Developing Episode", "Price Context", "Evidence & Change Conditions"];
-  const boxes = [];
-  for (const title of bottomTitles) {
-    const card = page.getByText(title, { exact: false }).first().locator("xpath=ancestor::article");
-    const box = await card.boundingBox();
-    expect(box).not.toBeNull();
-    if (box) boxes.push(box);
-  }
-  expect(boxes).toHaveLength(4);
+  expect(Math.abs(nav.width - 76)).toBeLessThanOrEqual(tolerance);
+  expect(Math.abs(header.height - 64)).toBeLessThanOrEqual(tolerance);
+  expect(Math.abs(contextSummary.height - 60)).toBeLessThanOrEqual(tolerance);
+  expect(Math.abs(status.height - 24)).toBeLessThanOrEqual(tolerance);
+  expect(Math.abs(context.width - 276)).toBeLessThanOrEqual(tolerance);
+  expect(Math.abs(inspector.width - 410)).toBeLessThanOrEqual(tolerance);
+  expect(Math.abs(timeline.height - 140)).toBeLessThanOrEqual(3.5);
+  expect(Math.abs(bottom.height - 118)).toBeLessThanOrEqual(3.5);
+  expect(Math.abs(context.y - canvasArticle.y)).toBeLessThanOrEqual(1.5);
+  expect(Math.abs(canvasArticle.y - inspector.y)).toBeLessThanOrEqual(1.5);
+  expect(Math.abs((context.x + context.width + 6) - canvasArticle.x)).toBeLessThanOrEqual(1.5);
+  expect(Math.abs((canvasArticle.x + canvasArticle.width + 6) - inspector.x)).toBeLessThanOrEqual(1.5);
+});
+
+test("WP3E keeps all bottom evidence cards on one reference baseline", async ({ page }) => {
+  await page.setViewportSize({ width: 1536, height: 864 });
+  await page.goto("/market?investigation=FX-PROTOTYPE-01");
+  const cards = page.locator('[data-rcn-ref="bottom-strip"] > article');
+  await expect(cards).toHaveCount(4);
+  const boxes = await cards.evaluateAll((nodes) => nodes.map((node) => {
+    const rect = node.getBoundingClientRect();
+    return { y: rect.y, height: rect.height };
+  }));
   const anchor = boxes[0];
-  for (const box of boxes.slice(1)) {
-    expect(Math.abs(box.y - anchor.y)).toBeLessThanOrEqual(1);
-    expect(Math.abs(box.height - anchor.height)).toBeLessThanOrEqual(1);
+  for (const current of boxes.slice(1)) {
+    expect(Math.abs(current.y - anchor.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(current.height - anchor.height)).toBeLessThanOrEqual(1);
   }
 });
 
