@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://research-orchestration/telemetry-receipt/v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["run_id","stage_id","metrics","warnings","capacity_status","scientific_effect"],
+  "properties":{
+    "run_id":{"type":"string","minLength":1},
+    "stage_id":{"type":"string","minLength":1},
+    "metrics":{"type":"array","items":{"type":"object","required":["metric_id","value","unit","availability"],"properties":{"metric_id":{"type":"string"},"value":{"type":["number","integer","null"]},"unit":{"type":"string"},"availability":{"enum":["AVAILABLE","UNAVAILABLE","NOT_APPLICABLE"]},"reason_code":{"type":["string","null"]}}}},
+    "warnings":{"type":"array","items":{"type":"string"}},
+    "capacity_status":{"type":"string"},
+    "scientific_effect":{"const":"NONE"}
+  }
+}

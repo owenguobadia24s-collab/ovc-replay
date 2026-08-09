@@ -1,0 +1,25 @@
+schema: ovc-irof-telemetry-metric-registry/v0.1
+status: INACTIVE_OBSERVABILITY
+scientific_effect: NONE
+metrics:
+  - {metric_id: wall_seconds, unit: seconds, value_type: number}
+  - {metric_id: cpu_seconds, unit: seconds, value_type: number}
+  - {metric_id: core_seconds, unit: core_seconds, value_type: number}
+  - {metric_id: peak_rss_bytes, unit: bytes, value_type: integer}
+  - {metric_id: worker_count, unit: workers, value_type: integer}
+  - {metric_id: bytes_read, unit: bytes, value_type: integer}
+  - {metric_id: bytes_written, unit: bytes, value_type: integer}
+  - {metric_id: persistent_bytes, unit: bytes, value_type: integer}
+  - {metric_id: temporary_bytes, unit: bytes, value_type: integer}
+  - {metric_id: object_count, unit: objects, value_type: integer}
+  - {metric_id: pair_count, unit: pairs, value_type: integer}
+  - {metric_id: tile_count, unit: tiles, value_type: integer}
+  - {metric_id: configuration_count, unit: configurations, value_type: integer}
+  - {metric_id: throughput_per_second, unit: work_units_per_second, value_type: number}
+  - {metric_id: cache_hit_count, unit: hits, value_type: integer}
+  - {metric_id: cache_miss_count, unit: misses, value_type: integer}
+  - {metric_id: restart_count, unit: restarts, value_type: integer}
+availability_states: [AVAILABLE, UNAVAILABLE, NOT_APPLICABLE]
+notes:
+  - unavailable measurements remain explicit and are never estimated silently
+  - metric values and environment identity are execution evidence, not scientific identity
