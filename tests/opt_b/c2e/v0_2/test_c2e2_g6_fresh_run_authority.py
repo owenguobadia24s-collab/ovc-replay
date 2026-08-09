@@ -94,16 +94,19 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
             self.pointer["operator_decision_history"],
         )
 
-    def test_current_state_advances_only_to_authorized_not_started_wp6(self):
-        self.assertEqual(self.pointer["status"], "APPROVED")
-        self.assertEqual(self.pointer["wp6_execution"], "AUTHORIZED_NOT_STARTED")
-        self.assertEqual(self.pointer["real_source_replay"], "AUTHORIZED_NOT_STARTED")
+    def test_authorized_state_is_preserved_through_later_execution_and_qa(self):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["wp6_execution"], "AUTHORIZED_NOT_STARTED")
         self.assertEqual(self.state["authority"]["real_source_replay"], "AUTHORIZED_NOT_STARTED")
+        self.assertEqual(self.pointer["status"], "QA_REVIEW")
+        self.assertEqual(self.pointer["wp6_execution"], "EXECUTED_EVIDENCE_PENDING_QA")
+        self.assertEqual(self.pointer["real_source_replay"], "EXECUTED_TWO_CLEAN_EQUIVALENCE_RUNS")
         self.assertEqual(self.pointer["replacement_run_token_id"], self.token["token_id"])
+        self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertEqual(self.pointer["replacement_boundary_pack_id"], self.pack["boundary_pack_id"])
         self.assertEqual(self.pointer["replacement_resource_envelope_id"], self.envelope["envelope_id"])
+        self.assertEqual(self.pointer["active_c2e"], "NONE")
+        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
 if __name__ == "__main__":
     unittest.main()

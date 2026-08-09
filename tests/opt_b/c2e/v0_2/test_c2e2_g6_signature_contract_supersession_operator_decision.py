@@ -45,12 +45,15 @@ class C2E2G6SignatureContractSupersessionOperatorDecisionTests(unittest.TestCase
         self.assertIn(self.pointer["wp6_execution"], {
             "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
             "AUTHORIZED_NOT_STARTED",
+            "EXECUTED_EVIDENCE_PENDING_QA",
         })
-        if self.pointer["wp6_execution"] == "AUTHORIZED_NOT_STARTED":
+        if self.pointer["wp6_execution"] in {"AUTHORIZED_NOT_STARTED", "EXECUTED_EVIDENCE_PENDING_QA"}:
             self.assertIn(
                 "C2E2-G6-RUN-AUTH.OPERATOR.AUTHORIZE_EXACT_RUN.20260809T145800+0100",
                 self.pointer["operator_decision_history"],
             )
+        if self.pointer["wp6_execution"] == "EXECUTED_EVIDENCE_PENDING_QA":
+            self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
