@@ -62,6 +62,13 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
             self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.pointer["june_execution"])
             self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["authority_token_state"])
             self.assertFalse(self.pointer["authority_token_consumed"])
+        elif self.pointer["status"] == "AUTHORIZED_REMEDIATION_ONLY":
+            self.assertEqual("SRFDI-G10B", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
+            self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
         else:
             self.assertEqual("BLOCKED", self.pointer["status"])
             self.assertIsNone(self.pointer["next_packet"])

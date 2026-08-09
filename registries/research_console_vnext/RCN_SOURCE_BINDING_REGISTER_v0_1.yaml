@@ -1,0 +1,36 @@
+schema: ovc-rcn-source-binding-register/v1
+programme_id: OVC-RC-VNEXT-GREENFIELD-v0.1
+packet_id: RCN-WP0
+baseline_commit: cb77f01ff7a8db1f66c556edc94b8108b9e0ed01
+authority_effect: NONE
+bindings:
+  - source_id: CURRENT_STREAMLIT_CONSOLE
+    path: apps/research_console
+    tree_sha: 3afa6c230e9e4c714ab33e98b372fc0a8cad7643
+    use: CHARACTERIZATION_ONLY_NO_PARITY
+  - source_id: OPT_B_C2_C2E_SRI_FDI
+    path: src/ovc/opt_b
+    tree_sha: 23729b971941e661c7c5ba17ade81ddcca5c1022
+    use: READ_ONLY_SOURCE_OWNED_SEMANTICS
+  - source_id: OCCURRENCE_CONTEXT
+    path: src/ovc/context
+    tree_sha: be24aa6ad53f6bb568590ea7fad9ffe1bbc91d17
+    use: IMMUTABLE_CONTEXT_READS
+  - source_id: RESEARCH_OPERATIONS
+    path: src/ovc/research_operations
+    tree_sha: 691d12d6622f212a54f7716fa6da469a630747fd
+    use: DERIVED_READ_MODEL_EVIDENCE_QA_IDENTITIES
+  - source_id: IROF
+    path: src/ovc/research_orchestration
+    tree_sha: 35b22195c448ac3756392dd794cdefdb515dc7ca
+    use: READ_TELEMETRY_ONLY_NO_ORCHESTRATION_COMMANDS
+  - source_id: PROGRAMME_GENESIS_GRT
+    path: src/ovc/programme_genesis
+    tree_sha: dc43b9ee2d8adbc100e45d3f87e480fe360b06f2
+    use: READ_ONLY_PROGRAMME_AUTHORITY_TOPOLOGY
+prohibitions:
+  - NO_VALIDATION_CONTENT
+  - NO_SELECTOR_OR_AUTHORITY_MUTATION
+  - NO_HISTORICAL_C2E_FALLBACK
+  - NO_BROWSER_REPOSITORY_CRAWL
+  - NO_FRONTEND_SCIENTIFIC_DERIVATION

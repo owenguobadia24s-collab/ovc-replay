@@ -168,7 +168,9 @@ def evaluate_motion_profile(
             ) if key in delta
         })
     delta_facts.sort(key=lambda item: (str(item.get("object_id")), str(item.get("relation_delta_id"))))
-    complete = membership_status in {"COMPLETE", "AVAILABLE", "OK"}
+    # Current typed-horizon evaluation emits COMPUTABLE for a complete lawful membership.
+    # Keep historical read-compatibility without translating or rewriting the source status.
+    complete = membership_status in {"COMPUTABLE", "COMPLETE", "AVAILABLE", "OK"}
     computable = complete and price_delta is not None
     reasons: list[str] = []
     if not complete:

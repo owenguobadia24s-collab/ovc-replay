@@ -56,12 +56,16 @@ class SRFDIG10AFreezeOperatorDecisionTests(unittest.TestCase):
         self.assertEqual("CONSUMED_NOT_REUSABLE", self.state["authority"]["authority_token_v0_4"])
         self.assertEqual("SRFDI-G10A-FREEZE-MERGE-CLOSEOUT", self.state["next_packet"])
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
-        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", None})
+        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", "SRFDI-G10B", None})
         self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
         if self.pointer["authority_token_id"] != "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686":
             self.assertEqual("SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686", self.pointer["prior_authority_token_id"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
+        if self.pointer.get("current_gate") == "SRFDI-G10B":
+            self.assertEqual("AUTHORIZED_REMEDIATION_ONLY", self.pointer["status"])
+            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
 
     def test_predecision_assurance_and_blocker_evidence_are_exact(self) -> None:
         assurance = self.decision["predecision_assurance"]
