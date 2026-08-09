@@ -1,0 +1,62 @@
+{
+  "schema": "ovc-c2e2-wp6-postrun-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "C2E2-WP6",
+  "qa_disposition": "PASS_WITH_NONBLOCKING_WARNINGS",
+  "qa_recommendation": "PASS",
+  "authority_effect": "NONE",
+  "candidate_head": "98acfd21906089924035bb074157b0fa9e3a3312",
+  "source_population": {
+    "materialisation_id": "C2VNEXT.JUNE.REAL.OBSERVATION.MATERIALISATION.v1",
+    "materialisation_logical_sha256": "de9689f65e5067a80d91265742f5ecc0214bf397d96ea037f4edeb6a251afe6d",
+    "logical_population_sha256": "46f02ed89c9c4a3d4b3ef2046b7aa32489c5b63a526dbb8151896331d0ae896d",
+    "frame_count": 4072,
+    "instrument_id": "GBPUSD",
+    "sides": ["ASK", "BID"],
+    "clock_ids": ["UTC_15M"],
+    "parent_clock_ids": ["2H_A_L"]
+  },
+  "frozen_inputs": {
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "boundary_pack_logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "run_manifest_id": "C2E2.WP6.JUNE.OBSERVATION.STABLE.EXACT.v2",
+    "run_manifest_logical_sha256": "69cb801ca95a07a1b582d7ce0e664ba028eff54a7d28828f8bf46b8f33107e21",
+    "resource_envelope_id": "C2E2.RESOURCE.JUNE.OBSERVATION.STABLE.T0.v2",
+    "resource_envelope_logical_sha256": "0761b5de2f231de6b8fc5eb91e4c0bc2dd2b10f9abeb9192aa8703d90db35717",
+    "run_authority_token_id": "C2E2.G6.TOKEN.da591198b34d96ef5fcccb9a",
+    "run_authority_token_effective_status": "CONSUMED_FOR_RUN"
+  },
+  "assertions": [
+    {"id": "WP6-QA-01", "status": "PASS", "assertion": "Exact source, population, pack, manifest, envelope and single-use authority identities are preserved and mutually bound."},
+    {"id": "WP6-QA-02", "status": "PASS", "assertion": "Two clean deterministic external equivalence passes produced identical scientific artifact hashes and one identical logical output digest.", "logical_output_sha256": "18519e37a16bc1f73148f3764ec1444d1fcd36fce82e9a1d585f712fb02d6988"},
+    {"id": "WP6-QA-03", "status": "PASS", "assertion": "Approved semantic equivalence proof covers real-source frame projection, frozen boundary algebra, candidate evaluability, resolution and lifecycle action sequence over all 4,072 frames; zero matched-rule mismatches."},
+    {"id": "WP6-QA-04", "status": "PASS", "assertion": "Population and lifecycle counts reconcile exactly: 4,072 frames, 4,072 membership deltas, 92 episodes, 90 gap censors, two release-end censors and 16,550 stream records."},
+    {"id": "WP6-QA-05", "status": "PASS", "assertion": "Conflict pressure remains explicit and non-coercive: 8,490 matched candidate boundaries, 34 not-evaluable candidates, zero ambiguous boundary sets, zero resolver conflicts, zero conflicted episodes and zero peer-owner collisions."},
+    {"id": "WP6-QA-06", "status": "PASS", "assertion": "Counterexamples and full disagreement/missingness ledgers are preserved; no negative evidence was deleted or converted to neutrality."},
+    {"id": "WP6-QA-07", "status": "PASS", "assertion": "Legacy comparison completed read-only over all 4,072 frames and records 3,524 disagreements attributable to the superseded wrapper-identity behavior."},
+    {"id": "WP6-QA-08", "status": "WARN", "assertion": "Current lawful SRFD comparator route is unavailable because SRFDI-WP10-v0.7 is already hard-blocked by its segmentation binding mismatch; no new SRFD run authority was inferred or consumed. This remains visible for activation-readiness review."},
+    {"id": "WP6-QA-09", "status": "PASS", "assertion": "Performance remained within the frozen T0 envelope on both runs; no capacity recovery, sampling, top-k substitution or semantic weakening occurred."},
+    {"id": "WP6-QA-10", "status": "PASS", "assertion": "Full run archives and the equivalence executor/runner are retained outside Git with recorded SHA-256 identities and Drive object IDs."},
+    {"id": "WP6-QA-11", "status": "PASS", "assertion": "No provider intake, Validation consumption, outcome/family input, semantic promotion, selector mutation, canonical/R2 publication, probability, risk, exposure, execution or agent-write authority occurred."},
+    {"id": "WP6-QA-12", "status": "PASS", "assertion": "Candidate boundary pack remains inactive and non-canonical; active C2E and active boundary pack both remain NONE."},
+    {"id": "WP6-QA-13", "status": "PASS", "assertion": "Repository-wide tests and OVC tiered assurance pass at the exact pre-closeout head 98acfd21906089924035bb074157b0fa9e3a3312.", "workflow_runs": [{"id": 31321002974, "name": "tests", "conclusion": "success"}, {"id": 31321002988, "name": "OVC tiered test selection shadow", "conclusion": "success"}]}
+  ],
+  "blocking_warnings": [],
+  "nonblocking_warnings": [
+    "SRFD_CURRENT_COMPARATOR_UNAVAILABLE_DUE_EXISTING_SRFDI_WP10_V07_SEGMENTATION_BINDING_BLOCKER",
+    "WP6_EQUIVALENCE_PROOF_IS_SEMANTIC_NOT_CANONICAL_RUNTIME_BYTE_STREAM_EQUIVALENCE"
+  ],
+  "unresolved_issues": [],
+  "external_artifacts": {
+    "drive_folder_id": "11so_HTtlGKz_dYVShCP01Dznphm04rPC",
+    "source_materialisation": {"file_id": "185KzULNjd8zZqlfBfdNmtkaqH7PizN1y", "sha256": "8ba9b5654e26793c62bcae3f6b6dc50abe796175a532a8d2b57ef7d2137e7125"},
+    "run_a": {"file_id": "1ow8KUjE77trZU-NnVoSWXgDZwEN1ViTF", "sha256": "3ca7dbcdc4e52c5762155e79b94723de8b0b080081bb4519cf2de6e85058f81f"},
+    "run_b": {"file_id": "1TOIghV9q6pk3euOASotYE17nYV2mwSj-", "sha256": "057d4df279ceec18594738b94167947b580caf9bdec0a9d1f4c2bfe478c70db9"},
+    "equivalence_executor": {"file_id": "1ZxL5oubGYzI_gTyF4v4-HyBgK97fBaVe", "sha256": "98e87b229ad82475970b72da169b115aa99eb736926b97ce2c1b339c9028fe6a"},
+    "equivalence_runner": {"file_id": "1ysVcVnNsuoD0qAdMZ_c1NUFgyingV-Gk", "sha256": "cfdb15f010f1746102a41e33ce5cecfdda2e0d07123cc362ed3ca5494ff8ea18"}
+  },
+  "rollback": "WP6 evidence is append-only. No selector or active pack changed. Rollback is to leave the candidate inactive, preserve the consumed token and evidence, and decline any later activation proposal.",
+  "next_lawful_action": "COMPLETE_WP6_NONRESERVED_CLOSEOUT_THEN_INTEGRATE_AND_START_WP7_FROM_LATEST_LAWFUL_MAIN"
+}
