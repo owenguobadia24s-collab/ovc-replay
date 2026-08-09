@@ -12,13 +12,18 @@ class ZZZZZZGolden2WeeklyOutputTest(unittest.TestCase):
         script = r'''
 import json
 from ovc.research_orchestration.golden2_assurance import run_assurance
+from ovc.research_orchestration.golden2_weekly import build_opt_a_week
 result = run_assurance()
+opt_a = build_opt_a_week()
 compact = {
     "scientific_logical_hash": result["scientific_logical_hash"],
     "receipt_hash": result["receipt_hash"],
     "fresh_repeated_equivalent": result["fresh_repeated_equivalent"],
     "alternate_order_equivalent": result["alternate_order_equivalent"],
     "counts": result["counts"],
+    "opt_a_derived_counts": opt_a["summary"]["derived_counts"],
+    "opt_a_quarantine_count": opt_a["summary"]["quarantine_count"],
+    "opt_a_quarantine_reason_counts": opt_a["summary"]["quarantine_reason_counts"],
     "c2_axis_computability_counts": result["c2_axis_computability_counts"],
     "c2e_fixture_boundary_required_axes": result["c2e_fixture_boundary_required_axes"],
     "conformance_warnings": result["conformance_warnings"],
@@ -42,9 +47,19 @@ compact = {
 print("GOLDEN2_FINAL_RESULT=" + json.dumps(compact, sort_keys=True, separators=(",", ":")))
 assert result["fresh_repeated_equivalent"]
 assert result["alternate_order_equivalent"]
+assert result["counts"] == {
+    "m1_bid": 7195, "m1_ask": 7195, "c1": 1074, "c2_observations": 1344,
+    "c2_structural_snapshots": 932, "c2_transitions": 4620,
+    "c2e_frames": 932, "c2e_episodes": 8, "sri_representations": 8,
+    "comparison_pairs": 28, "families": 2,
+    "c2e_input_c2_snapshots": 932, "c2e_eligible_c2_snapshots": 932,
+}
+assert opt_a["summary"]["derived_counts"] == {"15M": {"BID": 479, "ASK": 479}, "2H_A_L": {"BID": 58, "ASK": 58}}
+assert opt_a["summary"]["quarantine_count"] == 8
+assert opt_a["summary"]["quarantine_reason_counts"] == {"INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET": 8}
 assert "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH" in result["conformance_warnings"]
 assert result["c2e_fixture_boundary_required_axes"] == ["LOCATION", "ORGANISATION"]
-assert result["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0) > 0
+assert result["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0) == 932
 assert not result["real_source_replay"]
 assert not result["validation_consumed"]
 assert result["authority_effect"] == "NONE"
@@ -69,12 +84,14 @@ assert result["authority_effect"] == "NONE"
         compact = json.loads(marker.split("=", 1)[1])
         self.assertTrue(compact["fresh_repeated_equivalent"])
         self.assertTrue(compact["alternate_order_equivalent"])
+        self.assertEqual(1074, compact["counts"]["c1"])
+        self.assertEqual(8, compact["opt_a_quarantine_count"])
         self.assertIn(
             "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH",
             compact["conformance_warnings"],
         )
         self.assertEqual(["LOCATION", "ORGANISATION"], compact["c2e_fixture_boundary_required_axes"])
-        self.assertGreater(compact["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0), 0)
+        self.assertEqual(932, compact["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0))
         self.assertFalse(compact["real_source_replay"])
         self.assertFalse(compact["validation_consumed"])
         self.assertEqual("NONE", compact["authority_effect"])
