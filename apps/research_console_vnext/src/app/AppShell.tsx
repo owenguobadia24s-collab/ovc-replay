@@ -5,6 +5,7 @@ import { AuthorityTriad } from "../components/AuthorityTriad";
 import { InvestigationTabs } from "../features/investigations/InvestigationTabs";
 import "../design/tokens.css";
 import "./foundation.css";
+import "./wp3c-responsive.css";
 
 const nav = [
   ["/market", "▥", "Market Desk"],
