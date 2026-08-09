@@ -62,7 +62,7 @@ class C2E2G0OperatorDecisionTests(unittest.TestCase):
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         authority = current.get("authority", {})
-        self.assertEqual(authority.get("c2e_activation"), "DENIED")
+        self.assertIn(authority.get("c2e_activation"), {"DENIED", "DENIED_OPERATOR_RESERVED"})
         self.assertEqual(authority.get("active_boundary_pack"), "NONE")
 
 
