@@ -1,60 +1,30 @@
 from __future__ import annotations
-
 import json
 from pathlib import Path
 import unittest
-
-ROOT = Path(__file__).resolve().parents[2]
-BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10b"
-OPERATOR = BASE / "SRFDI_G10B_OPERATOR_PACKET.json"
-QA = BASE / "SRFDI_G10B_QA_PACKET.json"
-PREP = BASE / "SRFDI_WP10B_PREPARATION_RECORD.json"
-STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_28_G10B_SUPERSESSION_GATE_READY_CANDIDATE.json"
-POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
-PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_4.json"
-SEGMENTATION = ROOT / "registries/research/srfd/segmentation_boundary_packs_v0_3.json"
-FRESH_V09 = "SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
-V09_BINDING = "ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
-
+ROOT=Path(__file__).resolve().parents[2]
+BASE=ROOT/"docs/releases/srfd-benchmark-v0-1/srfdi-g10b"; OPERATOR=BASE/"SRFDI_G10B_OPERATOR_PACKET.json"; QA=BASE/"SRFDI_G10B_QA_PACKET.json"; PREP=BASE/"SRFDI_WP10B_PREPARATION_RECORD.json"; STATE=ROOT/"registries/implementation/srfd/OVC_SRFDI_STATE_v0_28_G10B_SUPERSESSION_GATE_READY_CANDIDATE.json"; POINTER=ROOT/"registries/implementation/srfd/CURRENT_STATE_POINTER.json"; PREREG=ROOT/"registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_4.json"; SEGMENTATION=ROOT/"registries/research/srfd/segmentation_boundary_packs_v0_3.json"
+FRESH_V09="SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"; V09_BINDING="ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
 class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.operator=json.loads(OPERATOR.read_text()); cls.qa=json.loads(QA.read_text()); cls.prep=json.loads(PREP.read_text()); cls.state=json.loads(STATE.read_text()); cls.pointer=json.loads(POINTER.read_text()); cls.prereg=json.loads(PREREG.read_text()); cls.segmentation=json.loads(SEGMENTATION.read_text())
-
-    def test_gate_is_preparation_only_and_operator_required(self) -> None:
-        self.assertEqual("SRFDI-G10B",self.operator["gate_id"]); self.assertEqual("OPERATOR_REQUIRED",self.operator["gate_class"]); self.assertEqual("SUPERSEDE",self.operator["recommended_decision"]); self.assertEqual("OVC APPROVE SRFDI-G10B SUPERSEDE",self.operator["exact_operator_command"]); self.assertEqual("NONE",self.prep["authority_effect"])
-
-    def test_current_pointer_preserves_blocker_and_lawful_progression(self) -> None:
-        self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
-        if self.pointer["status"]=="BLOCKED":
-            self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH",self.pointer["stop_at"]); self.assertIsNone(self.pointer["next_packet"])
-        elif self.pointer["status"]=="AUTHORIZED_REMEDIATION_ONLY":
-            self.assertEqual("SRFDI-G10B",self.pointer["current_gate"]); self.assertEqual("SRFDI-WP10B",self.pointer["next_packet"]); self.assertEqual("SRFDI-G10B-FREEZE",self.pointer["stop_at"]); self.assertEqual("AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY",self.pointer["wp10b_execution"]); self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY",self.pointer["june_execution"])
-        elif self.pointer["current_gate"]=="SRFDI-G10B-FREEZE":
-            self.assertEqual("GATE_READY",self.pointer["status"]); self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE",self.pointer["wp10b_execution"])
-        elif self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH" and self.pointer["status"]=="GATE_READY":
-            self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertTrue(self.pointer["june_execution"].startswith("DENIED")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
-        elif self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="READY":
-            self.assertEqual("SRFDI-WP10-v0.9",self.pointer["next_packet"]); self.assertFalse(self.pointer["operator_decision_required"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY",self.pointer["june_execution"])
-        else:
-            self.assertEqual("SRFDI-G-JUNE-AUTH",self.pointer["current_gate"]); self.assertFalse(self.pointer["operator_decision_required"]); self.assertIsNotNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
-
-    def test_candidate_state_is_not_the_current_pointer(self) -> None:
-        self.assertEqual("CANDIDATE_PROPOSAL_ONLY_NOT_CURRENT_POINTER",self.state["state_role"]); self.assertTrue(self.state["operator_decision_required"]); self.assertEqual("DENIED_PENDING_SRFDI_G10B_OPERATOR_SUPERSESSION",self.state["authority"]["wp10b_execution"])
-
-    def test_frozen_science_and_segmentation_registry_are_unchanged(self) -> None:
-        frozen=self.operator["frozen_scientific_bindings"]
-        self.assertEqual(8598,frozen["eligible_record_count"]); self.assertEqual(36,frozen["comparability_domain_count"]); self.assertEqual(35380668,frozen["exact_pair_opportunity_count"]); self.assertEqual(1944,frozen["family_configuration_count"]); self.assertEqual(frozen["segmentation_registry_logical_sha256"],self.prereg["inherited_frozen_surfaces"]["segmentation_registry_logical_sha256"]); self.assertEqual("RUN_CHANGE_SEGMENTATION",next(item["method_id"] for item in self.segmentation["packs"] if item["method_id"]=="RUN_CHANGE_SEGMENTATION"))
-
-    def test_posthoc_observed_counts_cannot_become_targets(self) -> None:
-        classification=self.operator["court_record_classification"]
-        self.assertFalse(classification["scientific_registry_contains_expected_output_counts"]); self.assertFalse(classification["preregistration_contains_expected_output_counts"]); self.assertTrue(classification["runner_contract_contains_expected_output_counts"]); self.assertIn("MUST_NOT_BECOME_REPLACEMENT_ACCEPTANCE_TARGETS",classification["posthoc_rebinding_guard"]); prohibited=" ".join(self.operator["proposed_authority_delta_if_SUPERSEDE"]["prohibited_work"]); self.assertIn("232 / 7013 / 6781",prohibited)
-
-    def test_proposed_fix_requires_reference_equivalence_and_invariants(self) -> None:
-        allowed=" ".join(self.operator["proposed_authority_delta_if_SUPERSEDE"]["allowed_work"]); self.assertIn("independent reference execution",allowed); self.assertIn("segment_count = stream_count + boundary_count",allowed); self.assertEqual("SRFDI-G10B-FREEZE",self.operator["proposed_authority_delta_if_SUPERSEDE"]["next_operator_gate"])
-
-    def test_all_reserved_firewalls_remain_closed(self) -> None:
-        current=self.operator["current_authority"]
-        self.assertEqual("NONE",current["new_run_authority"]); self.assertEqual("DENIED",current["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",current["validation_2025"]); self.assertEqual("NONE",current["scientific_promotion"]); self.assertEqual("NONE",current["selector_family_semantic_publication"]); self.assertEqual("NONE",current["probability_risk_exposure_execution"]); self.assertEqual("PASS_FOR_OPERATOR_REVIEW_WITH_POSTHOC_REBINDING_GUARD",self.qa["qa_result"]); self.assertEqual("DENIED",self.pointer.get("provider_fetch","DENIED")); self.assertEqual("LOCKED_UNCONSUMED",self.pointer.get("validation_2025","LOCKED_UNCONSUMED")); self.assertEqual("NONE",self.pointer.get("scientific_promotion","NONE")); self.assertEqual("NONE",self.pointer.get("selector_family_semantic_publication","NONE")); self.assertEqual("NONE",self.pointer.get("probability_risk_exposure_execution","NONE"))
-
-if __name__ == "__main__": unittest.main()
+ @classmethod
+ def setUpClass(cls): cls.operator=json.loads(OPERATOR.read_text()); cls.qa=json.loads(QA.read_text()); cls.prep=json.loads(PREP.read_text()); cls.state=json.loads(STATE.read_text()); cls.pointer=json.loads(POINTER.read_text()); cls.prereg=json.loads(PREREG.read_text()); cls.segmentation=json.loads(SEGMENTATION.read_text())
+ def test_gate_is_preparation_only_and_operator_required(self): self.assertEqual("SRFDI-G10B",self.operator["gate_id"]); self.assertEqual("OPERATOR_REQUIRED",self.operator["gate_class"]); self.assertEqual("SUPERSEDE",self.operator["recommended_decision"]); self.assertEqual("OVC APPROVE SRFDI-G10B SUPERSEDE",self.operator["exact_operator_command"]); self.assertEqual("NONE",self.prep["authority_effect"])
+ def test_current_pointer_preserves_blocker_and_lawful_progression(self):
+  p=self.pointer; self.assertIn(p["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertTrue(p["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",p["authority_token_state"]); self.assertTrue(p["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+  if p["status"]=="BLOCKED": self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH",p["stop_at"]); self.assertIsNone(p["next_packet"])
+  elif p["status"]=="AUTHORIZED_REMEDIATION_ONLY": self.assertEqual("SRFDI-G10B",p["current_gate"]); self.assertEqual("SRFDI-WP10B",p["next_packet"]); self.assertEqual("SRFDI-G10B-FREEZE",p["stop_at"]); self.assertEqual("AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY",p["wp10b_execution"]); self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY",p["june_execution"])
+  elif p["current_gate"]=="SRFDI-G10B-FREEZE": self.assertEqual("GATE_READY",p["status"]); self.assertIsNone(p["next_packet"]); self.assertTrue(p["operator_decision_required"]); self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE",p["wp10b_execution"])
+  elif p["current_gate"]=="SRFDI-G-JUNE-AUTH" and p["status"]=="GATE_READY": self.assertIsNone(p["next_packet"]); self.assertTrue(p["operator_decision_required"]); self.assertTrue(p["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertTrue(p["june_execution"].startswith("DENIED")); self.assertIsNone(p["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",p["fresh_authority_token_state"])
+  elif p["current_gate"]=="SRFDI-G10" and p["status"]=="READY": self.assertEqual("SRFDI-WP10-v0.9",p["next_packet"]); self.assertFalse(p["operator_decision_required"]); self.assertEqual(FRESH_V09,p["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",p["fresh_authority_token_state"]); self.assertFalse(p["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,p["run_binding_sha256"]); self.assertTrue(p["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY",p["june_execution"])
+  elif p["current_gate"]=="SRFDI-G10C": self.assertEqual("GATE_READY",p["status"]); self.assertTrue(p["operator_decision_required"]); self.assertIsNone(p["next_packet"]); self.assertEqual(FRESH_V09,p["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",p["fresh_authority_token_state"]); self.assertFalse(p["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,p["run_binding_sha256"]); self.assertTrue(p["current_blocker_evidence"].endswith("SRFDI_WP10_V09_PREFLIGHT_EXECUTION_INTERFACE_BLOCKER.json")); self.assertEqual("BLOCKED_PRECONSUMPTION_EXECUTION_INTERFACE_MISMATCH_PENDING_SRFDI_G10C",p["june_execution"]); self.assertTrue(p["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
+  else: self.assertEqual("SRFDI-G-JUNE-AUTH",p["current_gate"]); self.assertFalse(p["operator_decision_required"]); self.assertIsNotNone(p["fresh_authority_token_id"]); self.assertTrue(p["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
+ def test_candidate_state_is_not_the_current_pointer(self): self.assertEqual("CANDIDATE_PROPOSAL_ONLY_NOT_CURRENT_POINTER",self.state["state_role"]); self.assertTrue(self.state["operator_decision_required"]); self.assertEqual("DENIED_PENDING_SRFDI_G10B_OPERATOR_SUPERSESSION",self.state["authority"]["wp10b_execution"])
+ def test_frozen_science_and_segmentation_registry_are_unchanged(self):
+  f=self.operator["frozen_scientific_bindings"]; self.assertEqual(8598,f["eligible_record_count"]); self.assertEqual(36,f["comparability_domain_count"]); self.assertEqual(35380668,f["exact_pair_opportunity_count"]); self.assertEqual(1944,f["family_configuration_count"]); self.assertEqual(f["segmentation_registry_logical_sha256"],self.prereg["inherited_frozen_surfaces"]["segmentation_registry_logical_sha256"]); self.assertEqual("RUN_CHANGE_SEGMENTATION",next(item["method_id"] for item in self.segmentation["packs"] if item["method_id"]=="RUN_CHANGE_SEGMENTATION"))
+ def test_posthoc_observed_counts_cannot_become_targets(self):
+  c=self.operator["court_record_classification"]; self.assertFalse(c["scientific_registry_contains_expected_output_counts"]); self.assertFalse(c["preregistration_contains_expected_output_counts"]); self.assertTrue(c["runner_contract_contains_expected_output_counts"]); self.assertIn("MUST_NOT_BECOME_REPLACEMENT_ACCEPTANCE_TARGETS",c["posthoc_rebinding_guard"]); self.assertIn("232 / 7013 / 6781"," ".join(self.operator["proposed_authority_delta_if_SUPERSEDE"]["prohibited_work"]))
+ def test_proposed_fix_requires_reference_equivalence_and_invariants(self):
+  allowed=" ".join(self.operator["proposed_authority_delta_if_SUPERSEDE"]["allowed_work"]); self.assertIn("independent reference execution",allowed); self.assertIn("segment_count = stream_count + boundary_count",allowed); self.assertEqual("SRFDI-G10B-FREEZE",self.operator["proposed_authority_delta_if_SUPERSEDE"]["next_operator_gate"])
+ def test_all_reserved_firewalls_remain_closed(self):
+  c=self.operator["current_authority"]; self.assertEqual("NONE",c["new_run_authority"]); self.assertEqual("DENIED",c["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",c["validation_2025"]); self.assertEqual("NONE",c["scientific_promotion"]); self.assertEqual("NONE",c["selector_family_semantic_publication"]); self.assertEqual("NONE",c["probability_risk_exposure_execution"]); self.assertEqual("PASS_FOR_OPERATOR_REVIEW_WITH_POSTHOC_REBINDING_GUARD",self.qa["qa_result"]); self.assertEqual("DENIED",self.pointer["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",self.pointer["validation_2025"]); self.assertEqual("NONE",self.pointer["scientific_promotion"]); self.assertEqual("NONE",self.pointer["selector_family_semantic_publication"]); self.assertEqual("NONE",self.pointer["probability_risk_exposure_execution"])
+if __name__=="__main__": unittest.main()
