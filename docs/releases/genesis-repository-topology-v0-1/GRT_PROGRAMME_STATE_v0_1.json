@@ -1,16 +1,17 @@
 {
   "schema": "ovc-grt-programme-state/v1",
   "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
-  "status": "GRT_G8_OPERATOR_REVIEW_REQUIRED",
+  "status": "GRT_G8_PASS_WITH_WARNINGS_POST_PRESENTATION_WORK_AUTHORISED",
   "mode": ["GOVERNANCE_ONLY", "DERIVED_READ_MODEL", "READ_ONLY_FIRST"],
   "original_baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
   "reconciled_main_commit_at_g0": "6c034e8924a9cd134f8d05e7743ba2a5e3771b82",
   "latest_main_observed_during_g8": "81942e5b7f4ed3d4c34e8cf9296470b5bc19cc82",
+  "main_observed_at_g8_decision": "65fe08e787dc9357ea15114455e842b8ba5aa7cd",
   "branch": "build/genesis-repository-topology-v0.1",
-  "current_packet": "GRT-WP8",
-  "current_gate": "GRT-G8",
-  "operator_decision_required": true,
-  "operator_decisions": {"GRT-G0": "PASS", "GRT-G8": "PENDING"},
+  "current_packet": "GRT-WP9",
+  "current_gate": "POST_GRT_G8_EXECUTION",
+  "operator_decision_required": false,
+  "operator_decisions": {"GRT-G0": "PASS", "GRT-G8": "PASS_WITH_WARNINGS"},
   "auto_decisions": {"GRT-G1": "PASS", "GRT-G7": "PASS"},
   "accepted_topology": {
     "topology_sha256": "6fca224dbebabbc3ee754e825f6028013011e5bc08b6f82a21e051cfdddc8138",
@@ -19,15 +20,18 @@
   },
   "presentation": {
     "implementation_head": "dcd883e877f2852dd7abff0ed9acec6b9cc48319",
-    "repository_tests_run_id": 31306436393,
-    "tiered_shadow_run_id": 31306436363,
-    "repository_test_count": 777,
-    "status": "GATE_READY_PASS_WITH_WARNINGS_RECOMMENDED"
+    "gate_ready_head": "dcbfed36f9ed908ab0c1f96361afdb70e26d8990",
+    "repository_tests_run_id": 31306623523,
+    "tiered_shadow_run_id": 31306623506,
+    "status": "ACCEPTED_PASS_WITH_WARNINGS"
   },
   "authority": {
     "topology_design": "RATIFIED_DERIVED_ONLY",
     "topology_implementation": "GRT_G7_ACCEPTED_DERIVED_ONLY",
-    "read_only_presentation_build": "GRT_WP8_COMPLETE_PENDING_GRT_G8",
+    "read_only_presentation": "GRT_G8_ACCEPTED_PASS_WITH_WARNINGS",
+    "post_presentation_conformance": "AUTHORISED_GRT_WP9_ONLY",
+    "post_presentation_diff": "AUTHORISED_GRT_WP10_ONLY_AFTER_WP9",
+    "final_qa_and_gate_preparation": "AUTHORISED_GRT_WP11_ONLY_AFTER_WP10",
     "programme_genesis_canon": "PRESERVED_SOLE_AUTHORITY",
     "programme_auto_admission": "DENIED",
     "programme_auto_reclassification": "DENIED",
@@ -44,11 +48,10 @@
     "ANOMALY_POPULATION_RETAINED_FOR_OPERATOR_REVIEW",
     "ONE_GENESIS_TOPOLOGY_CONFLICT_WARNING_UNRESOLVED",
     "ONE_STALE_PROGRAMME_STATE_WARNING_UNRESOLVED",
-    "COMMIT_TO_COMMIT_DIFF_REMAINS_DEFERRED_PENDING_POST_G8_GRT_WP10"
+    "GRT_WP10_DIFF_NOT_YET_IMPLEMENTED"
   ],
   "blockers": [],
-  "next_action": "STOP_AWAIT_GRT_G8_OPERATOR_DECISION",
-  "next_operator_gate": "GRT-G8",
-  "recommended_operator_command": "OVC APPROVE GRT-G8 PASS_WITH_WARNINGS",
-  "rollback": "Discard derived topology and presentation outputs; preserve all GRT decisions and authoritative upstream state."
+  "next_action": "EXECUTE_GRT_WP9_THEN_GRT_WP10_THEN_GRT_WP11_AND_STOP_AT_GRT_G11",
+  "next_operator_gate": "GRT-G11",
+  "rollback": "Discard derived post-G8 outputs; preserve all accepted GRT decisions and authoritative upstream state."
 }
