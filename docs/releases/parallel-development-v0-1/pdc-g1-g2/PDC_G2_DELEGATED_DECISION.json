@@ -1,0 +1,24 @@
+{
+  "schema": "ovc-parallel-development-delegated-decision/v1",
+  "programme_id": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "plan_id": "OVC-PDC-IMPLEMENTATION-PLAN-0.1",
+  "gate_id": "PDC-G2",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "gate_classification": "AUTO_RATIFIABLE",
+  "implementation_candidate_commit": "99d1c15bfa792fa35a302264b2119a52be7e9faa",
+  "tests": {
+    "complete_repository_suite_run": 31335340340,
+    "ovc_tiered_run": 31335340347,
+    "ovc_merge_readiness": "PASS",
+    "result": "PASS"
+  },
+  "qa_recommendation": "PASS",
+  "authority_delta": "SERIALIZED_MAIN_INTEGRATION_READINESS_LANE_WITH_FAIL_CLOSED_BASE_MOVEMENT_GUARDS",
+  "reserved_authority_consumed": false,
+  "rationale": "The existing DA2 two-workflow PR admission and single complete-suite architecture are preserved. Only the final merge-readiness evaluator is serialized repository-wide, and main movement before/during readiness fails closed.",
+  "rollback": "Restore the prior merge-readiness job body through a non-destructive revert/supersession while retaining DA2 parent orchestration.",
+  "post_decision_requirement": "EXACT_FINAL_METADATA_HEAD_ASSURANCE",
+  "next_gate": null,
+  "next_action": "SQUASH_MERGE_AFTER_FINAL_HEAD_ASSURANCE_THEN_TERMINAL_RECEIPT"
+}

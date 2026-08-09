@@ -99,16 +99,32 @@ jobs:
     name: OVC merge readiness
     needs: profile
     runs-on: ubuntu-latest
+    concurrency:
+      group: ovc-main-integration-lane-v1
+      cancel-in-progress: false
     steps:
-      - name: Evaluate required checks once
+      - name: Evaluate required checks once on a stable main snapshot
         uses: actions/github-script@v7
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const sha = context.payload.pull_request?.head?.sha || context.sha;
+            const pr = context.payload.pull_request;
+            const sha = pr?.head?.sha || context.sha;
             const deadline = Date.now() + 20 * 60 * 1000;
             const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+            let mainSnapshot = null;
+            if (pr) {
+              const mainAtStart = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+              mainSnapshot = mainAtStart.data.commit.sha;
+              if (mainSnapshot !== pr.base.sha) {
+                core.setFailed(`OVC_BASE_MOVED_BEFORE_READINESS: event base ${pr.base.sha}, current ${pr.base.ref} ${mainSnapshot}. Rerun against the current base before merge readiness.`);
+                return;
+              }
+              core.info(`OVC integration lane acquired at ${pr.base.ref}@${mainSnapshot}.`);
+            }
+
             while (Date.now() < deadline) {
               const response = await github.rest.checks.listForRef({
                 owner,
@@ -119,7 +135,15 @@ jobs:
               });
               const tests = response.data.check_runs.filter(run => run.name === 'tests');
               if (tests.some(run => run.status === 'completed' && run.conclusion === 'success')) {
-                core.info(`Canonical tests passed on ${sha}.`);
+                if (pr) {
+                  const mainAtEnd = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+                  const finalMain = mainAtEnd.data.commit.sha;
+                  if (finalMain !== mainSnapshot) {
+                    core.setFailed(`OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved from ${mainSnapshot} to ${finalMain}. Fresh integration assurance is required.`);
+                    return;
+                  }
+                }
+                core.info(`Canonical tests passed on ${sha} with stable main snapshot ${mainSnapshot || 'NOT_APPLICABLE'}.`);
                 return;
               }
               const failed = tests.find(run => run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
