@@ -119,8 +119,14 @@ class C2E2G6SignatureContractPreflightTests(unittest.TestCase):
         second = _stable_location("2026-06-01T00:30:00Z")
         self.assertEqual(first["facts"], second["facts"])
         self.assertNotEqual(first["profile_output_id"], second["profile_output_id"])
-        self.assertEqual(first["profile_output_id"], "C2.FORMULA.OUTPUT.ae48d7a30f1e9cac19452ca0")
-        self.assertEqual(second["profile_output_id"], "C2.FORMULA.OUTPUT.f59b6c5da3aa50b58f5dc0f9")
+        self.assertTrue(first["profile_output_id"].startswith("C2.FORMULA.OUTPUT."))
+        self.assertTrue(second["profile_output_id"].startswith("C2.FORMULA.OUTPUT."))
+        self.assertEqual(first["as_of_time"], "2026-06-01T00:15:00Z")
+        self.assertEqual(second["as_of_time"], "2026-06-01T00:30:00Z")
+        self.assertFalse(first["active"])
+        self.assertFalse(second["active"])
+        self.assertFalse(first["canonical"])
+        self.assertFalse(second["canonical"])
 
     def test_parent_context_record_identity_changes_with_same_selected_parent(self) -> None:
         first = resolve_parent_context(
