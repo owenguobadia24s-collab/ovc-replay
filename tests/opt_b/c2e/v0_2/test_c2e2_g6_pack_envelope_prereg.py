@@ -127,13 +127,14 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         self.assertEqual(self.envelope["capacity_semantics"]["on_exceed"], "CAPACITY_EXCEEDED_SAFE_STOP")
 
     def test_qa_state_and_pointer_preserve_no_activation(self):
-        self.assertEqual(self.qa["qa_disposition"], "PASS_PENDING_EXACT_HEAD_ASSURANCE")
-        self.assertEqual(self.state["status"], "QA_REVIEW")
+        self.assertEqual(self.qa["qa_disposition"], "PASS")
+        self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
         self.assertEqual(self.pointer["candidate_boundary_pack"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertEqual(self.pointer["wp6_execution"], "DENIED_NOT_STARTED")
+        self.assertEqual(self.pointer["status"], "APPROVED")
 
 
 if __name__ == "__main__":
