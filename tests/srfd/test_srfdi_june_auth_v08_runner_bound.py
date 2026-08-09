@@ -22,6 +22,7 @@ OLD_V07_TOKEN = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-7/S
 IMPL_BINDING = ROOT / "registries/research/srfd/wp10_v07_runner_implementation_binding_v0_1.json"
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_26_JUNE_AUTH_V0_8_RUNNER_BOUND_AUTHORIZED.json"
+G10B_DECISION = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10b/SRFDI_G10B_OPERATOR_DECISION.json"
 
 
 class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
@@ -37,6 +38,7 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
         cls.impl_binding = json.loads(IMPL_BINDING.read_text())
         cls.pointer = json.loads(POINTER.read_text())
         cls.state = json.loads(STATE.read_text())
+        cls.g10b_decision = json.loads(G10B_DECISION.read_text())
 
     def test_authority_artifacts_reconstruct_exactly(self):
         self.assertEqual(june_authority_v08.DECISION_SHA256, logical_sha256(self.decision))
@@ -52,13 +54,30 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
         self.assertEqual(self.token, reconstructed)
         self.assertEqual(june_authority_v08.EXPECTED_TOKEN, self.token["token_id"])
 
-    def test_runner_implementation_binding_matches_merged_files(self):
+    def test_historical_runner_binding_is_exact_and_only_operator_approved_runner_may_supersede_current_blob(self):
         self.assertEqual(june_authority_v08.RUNNER_IMPLEMENTATION_BINDING_SHA256, logical_sha256(self.impl_binding))
         self.assertEqual(self.impl_binding, june_authority_v08.implementation_binding())
+        g10b_active = (
+            self.pointer.get("status") == "AUTHORIZED_REMEDIATION_ONLY"
+            and self.pointer.get("current_gate") == "SRFDI-G10B"
+            and self.pointer.get("wp10b_execution") == "AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY"
+        )
         for name, path in self.impl_binding["runtime_paths"].items():
             data = (ROOT / path).read_bytes()
             git_blob = sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
-            self.assertEqual(self.impl_binding["runtime_blobs"][name], git_blob, name)
+            historical_blob = self.impl_binding["runtime_blobs"][name]
+            if g10b_active and name == "production_runner":
+                self.assertNotEqual(historical_blob, git_blob)
+                self.assertEqual(
+                    "SUPERSEDED_FOR_EXECUTION_ONLY",
+                    self.g10b_decision["authority_delta"]["wp10_v0_7_output_count_assertion_route"],
+                )
+                self.assertEqual(
+                    "SRFDI-WP10B",
+                    self.g10b_decision["authority_delta"]["authorize_packet"],
+                )
+            else:
+                self.assertEqual(historical_blob, git_blob, name)
         self.assertEqual(june_authority_v08.RUN_BINDING_SHA256, june_authority_v08.build_run_binding().logical_hash)
 
     def test_v07_history_is_preserved_but_cannot_start_new_runner(self):
@@ -100,7 +119,6 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
                 self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["authority_token_state"])
                 self.assertEqual("READY", self.pointer["status"])
         else:
-            # A later lawful authority must preserve this v0.8 token's history explicitly.
             preserved = json.dumps(self.pointer, sort_keys=True)
             self.assertIn(self.token["token_id"], preserved)
 
