@@ -1,0 +1,39 @@
+name: SRFD WP10 exact checkout export
+
+on:
+  push:
+    branches:
+      - ops/srfd-wp10-local-checkout-export
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact authorized main
+        uses: actions/checkout@v4
+        with:
+          ref: e3207b53c7638166cde4dd234ce0472202588903
+          fetch-depth: 1
+      - name: Verify exact checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "e3207b53c7638166cde4dd234ce0472202588903"
+      - name: Package exact tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar --exclude=.git -czf /tmp/ovc-replay-e3207b53.tar.gz .
+          sha256sum /tmp/ovc-replay-e3207b53.tar.gz | tee /tmp/ovc-replay-e3207b53.tar.gz.sha256
+      - name: Upload exact tree
+        uses: actions/upload-artifact@v4
+        with:
+          name: ovc-replay-e3207b53-exact-tree
+          path: |
+            /tmp/ovc-replay-e3207b53.tar.gz
+            /tmp/ovc-replay-e3207b53.tar.gz.sha256
+          if-no-files-found: error
+          retention-days: 1
