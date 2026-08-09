@@ -16,6 +16,15 @@ function tracePath(bars: MarketBar[], valueOf: (bar: MarketBar) => number, low: 
   }).join(" ");
 }
 
+function navigatorPath(bars: MarketBar[], low: number, high: number): string {
+  if (bars.length < 2 || high <= low) return "";
+  return bars.map((bar, index) => {
+    const x = (index / (bars.length - 1)) * 1000;
+    const y = 27 - ((bar.c - low) / (high - low)) * 21;
+    return `${index === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`;
+  }).join(" ");
+}
+
 export function FixtureChart({ bars, selectedTime, onSelectTime }: { bars: MarketBar[]; selectedTime: string | null; onSelectTime: (value: string) => void }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [hoveredTime, setHoveredTime] = useState<string | null>(null);
@@ -35,7 +44,7 @@ export function FixtureChart({ bars, selectedTime, onSelectTime }: { bars: Marke
       const y = 405 - ((bar.l - sessionLow) / (sessionHigh - sessionLow)) * 375;
       return `L${x.toFixed(2)},${y.toFixed(2)}`;
     }).join(" ");
-    return { high, mid, low, fill: `${high} ${lowReverse} Z` };
+    return { high, mid, low, fill: `${high} ${lowReverse} Z`, navigator: navigatorPath(bars, sessionLow, sessionHigh) };
   }, [bars, sessionHigh, sessionLow]);
 
   useEffect(() => {
@@ -64,7 +73,7 @@ export function FixtureChart({ bars, selectedTime, onSelectTime }: { bars: Marke
         timeVisible: true,
         secondsVisible: false,
         rightOffset: 2.5,
-        barSpacing: bars.length > 70 ? 7 : 9,
+        barSpacing: 8,
         minBarSpacing: 5,
       },
       crosshair: {
@@ -115,6 +124,7 @@ export function FixtureChart({ bars, selectedTime, onSelectTime }: { bars: Marke
     </div>
     <div data-chart-layer="range"><span>FIXTURE HIGH <strong>{formatPrice(sessionHigh)}</strong></span><span>LOW <strong>{formatPrice(sessionLow)}</strong></span></div>
     <div data-chart-layer="badge">OHLC H / HL2 / L TRACES · FIXTURE PRESENTATION ONLY</div>
+    {referenceTraces ? <div data-chart-layer="navigator" aria-label="Fixture price range navigator; presentation only" data-presentation-only="true"><svg viewBox="0 0 1000 32" preserveAspectRatio="none"><path d={referenceTraces.navigator}/></svg><i className="navigator-selection"/><b className="navigator-handle navigator-handle-left"/><b className="navigator-handle navigator-handle-right"/></div> : null}
     <div data-chart-layer="footer">
       <span>SELECTED <strong>{selectedTime ? shortStamp(selectedTime) : "move crosshair over fixture bars"}</strong></span>
       <span>BARS <strong data-testid="chart-bar-count">{bars.length}</strong></span>
