@@ -1,0 +1,133 @@
+{
+  "schema": "ovc-c2e2-g6-signature-contract-supersession-gate/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "gate_id": "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION",
+  "gate_title": "Stable causal signature contract supersession before WP6",
+  "authority_class": "OPERATOR_REQUIRED_MATERIAL_FROZEN_HANDOFF_AND_BOUNDARY_SEMANTIC_CHANGE",
+  "allowed_decisions": ["SUPERSEDE", "DEFER", "BLOCK"],
+  "execution_baseline_main": "c09613495556d0f88496208a31824dc968d89930",
+  "candidate_evidence_commit": "c2398d2ed67870f1e98ade307facf5fbfdbd5cc7",
+  "completed_packets": [
+    "C2E2-WP0", "C2E2-WP1", "C2E2-WP2", "C2E2-WP3", "C2E2-WP4", "C2E2-WP5",
+    "C2E2-WP7_REPLAY_DEFERRED", "C2E2-G6-PREREQ-20260809",
+    "C2E2-G6-RUN-AUTH-SUPERSESSION-20260809",
+    "C2E2-G6-BINDING-SUPERSESSION-DECISION"
+  ],
+  "current_authority": {
+    "binding_repair_preparation": "AUTHORIZED_BOUNDED",
+    "replacement_boundary_pack_creation": "AUTHORIZED_INACTIVE_CANDIDATE_ONLY_BUT_BLOCKED_BY_SIGNATURE_CONTRACT",
+    "replacement_resource_envelope_creation": "AUTHORIZED_CANDIDATE_ONLY_BUT_BLOCKED",
+    "replacement_run_manifest_and_token_preparation": "AUTHORIZED_CANDIDATE_ONLY_BUT_BLOCKED",
+    "wp6_execution": "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
+    "real_source_replay": "DENIED_PENDING_FRESH_RUN_AUTH",
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "selector_publication_validation": "DENIED",
+    "family_semantic_probability_risk_exposure_execution": "NONE"
+  },
+  "blocking_finding": {
+    "summary": "Frozen C2E boundary comparison hashes as-of/local-observation-sensitive upstream record IDs rather than stable causal content, causing false PHASE_MUTATION and RE_PARENT on ordinary chronological advancement.",
+    "formula_probe": {
+      "same_location_facts": true,
+      "first_profile_output_id": "C2.FORMULA.OUTPUT.ae48d7a30f1e9cac19452ca0",
+      "second_profile_output_id": "C2.FORMULA.OUTPUT.f59b6c5da3aa50b58f5dc0f9",
+      "profile_ids_equal": false
+    },
+    "parent_probe": {
+      "selected_parent_first": "PARENT.STABLE.22_00",
+      "selected_parent_second": "PARENT.STABLE.22_00",
+      "selected_parent_equal": true,
+      "first_link_id": "C2.PARENT.LINK.a04fa41a118cfea63430b31e",
+      "second_link_id": "C2.PARENT.LINK.3a58c48f4eadcf192b7a7ebb",
+      "link_ids_equal": false
+    },
+    "boundary_probe_matched_rules": [
+      "C2E.RULE.JUNE.BASELINE.RE_PARENT.v1",
+      "C2E.RULE.JUNE.BASELINE.PHASE_MUTATION.v1",
+      "C2E.RULE.JUNE.BASELINE.CONTINUATION.v1"
+    ],
+    "evidence_packet": "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-binding-repair/C2E2_G6_BINDING_REPAIR_SIGNATURE_PREFLIGHT.json"
+  },
+  "acceptance_conditions": {
+    "operator_binding_supersession_merged": "PASS",
+    "old_run_token_invalidated_unconsumed": "PASS",
+    "wp6_not_started": "PASS",
+    "same_facts_record_identity_churn_reproduced": "PASS",
+    "same_selected_parent_link_identity_churn_reproduced": "PASS",
+    "false_boundary_mutations_reproduced": "PASS",
+    "authority_neutral_in_place_repair": "FAIL_IMPOSSIBLE",
+    "replacement_population_safe_to_freeze": "NO"
+  },
+  "tests": [],
+  "qa": {
+    "packet": "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-binding-repair/C2E2_G6_BINDING_REPAIR_QA_PACKET.json",
+    "disposition": "BLOCK",
+    "recommendation": "SUPERSEDE_SIGNATURE_CONTRACT_BEFORE_REPLACEMENT_POPULATION_FREEZE"
+  },
+  "warnings": [
+    "MATERIAL_FROZEN_C2_TO_C2E_HANDOFF_CHANGE_REQUIRED",
+    "MATERIAL_FROZEN_EMPIRICAL_BOUNDARY_IMPLEMENTATION_CHANGE_REQUIRED",
+    "NO_REPLACEMENT_POPULATION_PACK_ENVELOPE_MANIFEST_OR_TOKEN_MAY_BE_FROZEN_BEFORE_DECISION",
+    "FRESH_C2E2_G6_RUN_AUTH_STILL_REQUIRED_AFTER_REPAIR"
+  ],
+  "unresolved_issues": [
+    "VERSIONED_C2E_STABLE_STRUCTURAL_SIGNATURE_SURFACE_NOT_CREATED",
+    "VERSIONED_C2E_STABLE_PARENT_SIGNATURE_SURFACE_NOT_CREATED",
+    "REPLACEMENT_EMPIRICAL_PACK_IMPLEMENTATION_HASH_NOT_FROZEN"
+  ],
+  "external_artifact_hashes": [
+    {"scope":"15M/BID","drive_id":"1QjOaKE2ugCf0JaBqHoUw1F9fYCHFLOQF","sha256":"bd7bc02902666d6d0e10542dbbca8b43af167e610a73b62c625b38712a49d113"},
+    {"scope":"15M/ASK","drive_id":"17YowWR9MUAzPukEN-8szgADP0lT928SJ","sha256":"f95de2c9003ce9fa3b41a6035b9947be46de60172191964efd89c62883df58db"},
+    {"scope":"2H_A_L/BID","drive_id":"1dVyUou3wnEfHmF5EWrKTrZEJzCQ3jQHb","sha256":"311fe938d14431f57851aaf4e4abeb3002c760c8805b452a5a272e8da37ea3dd"},
+    {"scope":"2H_A_L/ASK","drive_id":"1B5MuE6Xofaa0Vpui_fUyVabTiGVlMaRM","sha256":"70071f48025568c31c2722ec5b9992b9917f74f70df07f6a7e05d5667156f1ba"}
+  ],
+  "proposed_authority_delta_if_supersede": {
+    "versioned_c2e_handoff_signature_contract": "AUTHORIZED_BOUNDED_CANDIDATE",
+    "versioned_c2e_input_frame_schema_adapter": "AUTHORIZED_BOUNDED_CANDIDATE",
+    "stable_structural_comparison_signature": "AUTHORIZED_ONLY_AS_CANONICAL_PROJECTION_OF_ALREADY_LAWFUL_FIRST_VALID_LOCATION_MOTION_ORGANISATION_INTERACTION_AND_STRUCTURAL_REFERENCE_CONTENT",
+    "stable_parent_comparison_signature": "AUTHORIZED_ONLY_AS_CANONICAL_PROJECTION_OF_ALREADY_LAWFUL_SELECTED_PARENT_IDS_PARENT_OBJECT_IDS_AND_DEPENDENCY_STATUS_CONTENT",
+    "record_identity_churn_exclusion": "AUTHORIZED_REMOVE_AS_OF_OR_LOCAL_OBSERVATION_SPECIFIC_WRAPPER_IDENTITY_FROM_CHANGE_COMPARISON_ONLY",
+    "new_numeric_thresholds": "DENIED",
+    "new_structural_axes_or_categories": "DENIED",
+    "upstream_c2_identity_mutation": "DENIED",
+    "empirical_rule_meaning": "PRESERVE_STATED_PHASE_MUTATION_AND_RE_PARENT_MEANINGS_ONLY",
+    "replacement_empirical_boundary_pack": "AUTHORIZED_NEW_INACTIVE_CANDIDATE_VERSION_WITH_NEW_IMPLEMENTATION_HASH_ONLY_AFTER_CORRECTION_TESTS_PASS",
+    "replacement_resource_envelope_manifest_token": "AUTHORIZED_CANDIDATE_PREPARATION_ONLY_AFTER_EXACT_FRAME_POPULATION_FREEZE",
+    "wp6_execution": "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "selector_publication_validation": "DENIED",
+    "family_semantic_candidate_theory_promotion": "DENIED",
+    "probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "semantic_guardrails_if_supersede": [
+    "Preserve LOCATION, MOTION, ORGANISATION and INTERACTION as the only structural dimensions; QUALITY remains orthogonal evidence.",
+    "A stable structural comparison signature may contain only deterministic canonical content already present in lawful first-valid upstream structural/profile/reference evidence; wrapper record ID, as_of_time and local observation identity may remain lineage but must not alone create structural change.",
+    "A stable parent comparison signature may contain only the lawful selected parent observation/object identities and dependency/evidence status needed by the existing RE_PARENT meaning; local-observation-specific link/bundle IDs may remain lineage but must not alone create parent change.",
+    "Do not collapse missing/not-computable evidence to neutral or unchanged; dependency state transitions remain explicit causal content where the existing rule declares them relevant.",
+    "No new selector, best/nearest parent, threshold, category, semantic label, family input, future/outcome input or retrospective optimization is introduced.",
+    "Old C2AR, C2E v0.2 handoff and old empirical pack bytes remain immutable historical evidence."
+  ],
+  "recommended_decision": "SUPERSEDE",
+  "recommendation_rationale": "The defect is deterministic and causes the current pack to violate its own stated change predicates. A narrow versioned C2E comparison-signature correction can preserve the existing rule meanings while removing wrapper-identity churn, but that changes a frozen handoff/boundary contract and therefore requires operator authority.",
+  "rollback": "Do not mutate old contracts, schemas, pack, source binding, envelope, manifest or token. If the versioned stable-signature candidate cannot be defined solely from already-lawful first-valid evidence without new scientific selection or thresholds, mark BLOCKED and abandon the candidate. WP6 remains unexecuted.",
+  "work_after_supersede": [
+    "Create a new versioned C2E handoff/signature contract and schema extension that retains stable causal structural and parent comparison signatures while preserving all original lineage IDs.",
+    "Implement deterministic signature projection and update the boundary evaluator to use those signatures only for PHASE_MUTATION and RE_PARENT change comparison.",
+    "Add invariance fixtures proving as_of/local-wrapper identity churn alone does not trigger mutation, plus positive fixtures proving genuine structural-content, parent-selection and dependency-state changes still do.",
+    "Run targeted and repository-wide tests and QA; do not change C2AR upstream identities or introduce thresholds/selectors.",
+    "Rebuild the exact June TARGET_JUNE_ONLY C2EInputFrame population from observation_id identities and lawful joins; freeze exact count/hash only after all mandatory fields reconcile.",
+    "Create a new inactive empirical boundary pack version with the corrected implementation hash, then a pack-bound exact resource envelope and candidate source-run manifest/token.",
+    "Present one fresh C2E2-G6-RUN-AUTH operator packet with all exact new identities/hashes. Do not execute WP6 before PASS at that gate."
+  ],
+  "work_after_defer": "Preserve the signature blocker and current merged supersession state; do not create versioned signature contracts or replacement run objects; WP6 remains denied.",
+  "work_after_block": "Record terminal blocker for empirical WP6 under this programme version; preserve synthetic conformance and all evidence; no real-source C2E replay.",
+  "operator_commands": {
+    "SUPERSEDE": "OVC APPROVE C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION SUPERSEDE",
+    "DEFER": "OVC APPROVE C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION DEFER",
+    "BLOCK": "OVC APPROVE C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION BLOCK"
+  },
+  "next_action": "STOP_FOR_OPERATOR_C2E2_G6_SIGNATURE_CONTRACT_SUPERSESSION"
+}
