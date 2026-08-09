@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-irof-qa-packet/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "packet_id": "IROF-WP4",
+  "gate_id": "IROF-G5",
+  "plan_version": "0.1",
+  "baseline_commit": "62ffe422420438bf559777e62d170632423d239c",
+  "tested_head": "98b7b27226b3cb918e406c15977259dfb3e533b3",
+  "authority_delta": "execution optimisation only; no scientific effect",
+  "ci": {
+    "status": "PASS",
+    "tests_workflow": "31306048668 SUCCESS",
+    "tiered_assurance_workflow": "31306048653 SUCCESS",
+    "merge_readiness": "SUCCESS"
+  },
+  "acceptance": {
+    "exact_hit": "PASS",
+    "semantic_change_miss": "PASS",
+    "path_relocation_hit": "PASS",
+    "corrupt_payload_quarantine_miss": "PASS",
+    "non_complete_no_reuse": "PASS",
+    "parent_change_no_reuse": "PASS",
+    "counter_no_scientific_hash_effect": "PASS",
+    "cached_recomputed_equivalence": "PASS",
+    "srfd_public_behavior_unchanged": "PASS_NO_SOURCE_MODIFICATION"
+  },
+  "final_decision_head_ci": {"status": "PENDING"},
+  "blocking_issues": [],
+  "qa_recommendation": "PASS",
+  "rollback": "disable/remove IROF cache adapter and recompute under unchanged stage contracts"
+}
