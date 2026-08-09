@@ -39,7 +39,8 @@ class SRFDIJuneAuthV09GateReadyTests(unittest.TestCase):
     def test_predecision_packet_has_no_token_or_run_authority(self):
         self.assertEqual("NOT_MINTED",self.packet["current_authority"]["fresh_authority_token"])
         self.assertTrue(self.packet["current_authority"]["june_execution"].startswith("DENIED"))
-        self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.packet["current_authority"]["blocked_v0_8_run"].replace("PRESERVED_IMMUTABLE_NOT_RESUMABLE", "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN") if False else "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN")
+        self.assertEqual("PRESERVED_IMMUTABLE_NOT_RESUMABLE", self.packet["current_authority"]["blocked_v0_8_run"])
+        self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.manifest["historical_blocked_run"]["token_state"])
         if self.pointer["status"] == "GATE_READY":
             self.assertIsNone(self.pointer["fresh_authority_token_id"])
             self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
