@@ -1,29 +1,31 @@
 {
   "schema": "ovc-grt-programme-state/v1",
   "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
-  "status": "GRT_G1_PASS_IMPLEMENTATION_AUTHORISED",
+  "status": "GRT_G7_PASS_GRT_WP8_AUTHORISED",
   "mode": ["GOVERNANCE_ONLY", "DERIVED_READ_MODEL", "READ_ONLY_FIRST"],
   "original_baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
   "reconciled_main_commit_at_g0": "6c034e8924a9cd134f8d05e7743ba2a5e3771b82",
   "branch": "build/genesis-repository-topology-v0.1",
-  "current_packet": "GRT-WP2",
-  "current_gate": "GRT-G1",
+  "current_packet": "GRT-WP8",
+  "current_gate": "GRT-G7",
   "operator_decision_required": false,
-  "operator_decisions": {
-    "GRT-G0": "PASS"
-  },
-  "auto_decisions": {
-    "GRT-G1": "PASS"
+  "operator_decisions": {"GRT-G0": "PASS"},
+  "auto_decisions": {"GRT-G1": "PASS", "GRT-G7": "PASS"},
+  "accepted_topology": {
+    "topology_sha256": "6fca224dbebabbc3ee754e825f6028013011e5bc08b6f82a21e051cfdddc8138",
+    "assured_source_commit": "f958309e4f4681200dd9332fcd2609d7f42a2f38",
+    "implementation_head": "5b64cc3e73cf46840ece6fea02347c511d95bf0c"
   },
   "authority": {
     "topology_design": "RATIFIED_DERIVED_ONLY",
-    "topology_implementation": "APPROVED_BOUNDED_DERIVED_ONLY",
+    "topology_implementation": "GRT_G7_ACCEPTED_DERIVED_ONLY",
+    "read_only_presentation_build": "AUTHORISED_GRT_WP8_ONLY",
     "programme_genesis_canon": "PRESERVED_SOLE_AUTHORITY",
     "programme_auto_admission": "DENIED",
     "programme_auto_reclassification": "DENIED",
     "dependency_auto_promotion": "DENIED",
     "genesis_mutation": "DENIED",
-    "control_plane_route_activation": "DENIED_PENDING_GRT_G8_AND_SEPARATE_EXISTING_ROUTE_AUTHORITY",
+    "control_plane_route_activation": "DENIED_PENDING_GRT_G8_AND_EXISTING_ROUTE_AUTHORITY",
     "control_plane_writes": "DENIED",
     "admission_enforcement": "DEFERRED_DISABLED",
     "validation_consumption": "LOCKED_UNCONSUMED",
@@ -31,7 +33,7 @@
     "probability_risk_exposure_execution_agent": "NONE"
   },
   "blockers": [],
-  "next_action": "IMPLEMENT_GRT_WP2_THROUGH_GRT_WP7_THEN_PREPARE_READ_ONLY_GRT_WP8_PRESENTATION",
+  "next_action": "IMPLEMENT_GRT_WP8_READ_ONLY_RESEARCH_CONSOLE_SYSTEM_PROJECTION_THEN_STOP_AT_GRT_G8",
   "next_operator_gate": "GRT-G8",
-  "rollback": "Discard derived topology artifacts and stop programme work; preserve all accepted operator decisions and authoritative upstream state."
+  "rollback": "Discard derived topology and presentation outputs; preserve all GRT decisions and authoritative upstream state."
 }
