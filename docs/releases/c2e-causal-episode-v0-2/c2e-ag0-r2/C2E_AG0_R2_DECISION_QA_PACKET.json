@@ -1,0 +1,31 @@
+{
+  "schema": "c2e-ag0-r2-decision-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "gate_id": "C2E-AG0",
+  "decision_id": "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
+  "qa_disposition": "PASS",
+  "qa_recommendation": "MERGE_OPERATOR_DECISION_AND_CONTINUE_TO_AG1_PREPARATION",
+  "baseline_main": "554710ca7b94760d84362d8ae5ad568e27478eec",
+  "checks": {
+    "operator_command_exact": "PASS",
+    "gate_packet_exact": "PASS",
+    "review_subject_exact": "PASS",
+    "historical_ag0_defer_preserved": "PASS",
+    "candidate_remains_inactive_noncanonical": "PASS",
+    "active_c2e_remains_none": "PASS",
+    "active_boundary_pack_remains_none": "PASS",
+    "ag1_only_next_progression": "PASS",
+    "ag2_and_ag3_not_authorized": "PASS",
+    "selector_publication_validation_and_risk_authority_unchanged": "PASS"
+  },
+  "warnings": [
+    "SRFD_CURRENT_COMPARATOR_UNAVAILABLE_DUE_EXISTING_SRFDI_WP10_V07_SEGMENTATION_BINDING_BLOCKER",
+    "WP6_EQUIVALENCE_PROOF_IS_SEMANTIC_NOT_CANONICAL_RUNTIME_BYTE_STREAM_EQUIVALENCE",
+    "REAL_SOURCE_RESTART_EQUIVALENCE_NOT_SEPARATELY_MATERIALIZED_IN_WP6_POSTRUN_PACKET"
+  ],
+  "blockers": [],
+  "authority_effect": "AG0_ADMISSIBILITY_ONLY_NO_RUNTIME_ACTIVATION",
+  "rollback": "Append-only supersession only. Leave the candidate inactive/noncanonical and preserve WP6/WP7 evidence, the historical synthetic AG0 DEFER, consumed run authority and all operator decisions. No active selector or historical episode identity is rewritten.",
+  "next_action": "EXACT_HEAD_ASSURANCE_THEN_SQUASH_MERGE_AND_PREPARE_AG1"
+}
