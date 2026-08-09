@@ -7,6 +7,7 @@ from typing import Any, Mapping
 
 
 DEFAULT_TOPOLOGY_PATH = "var/governance/genesis_repository_topology/current/GENESIS_REPOSITORY_TOPOLOGY_READ_MODEL.json"
+DEFAULT_DIFF_PATH = "var/governance/genesis_repository_topology/current/GENESIS_REPOSITORY_TOPOLOGY_DIFF.json"
 
 
 def _empty_projection(reason: str) -> dict[str, Any]:
@@ -31,6 +32,21 @@ def load_repository_topology(path: str | Path | None = None) -> dict[str, Any]:
         return _empty_projection("TOPOLOGY_SCHEMA_MISMATCH")
     if value.get("authority_effect") != "NONE_DERIVED_REPLACEABLE_READ_MODEL":
         return _empty_projection("TOPOLOGY_AUTHORITY_BOUNDARY_MISMATCH")
+    return dict(value)
+
+
+def load_repository_topology_diff(path: str | Path | None = None) -> dict[str, Any]:
+    candidate = Path(path or os.environ.get("OVC_GENESIS_REPOSITORY_TOPOLOGY_DIFF", DEFAULT_DIFF_PATH))
+    if not candidate.is_file():
+        return _empty_projection("TOPOLOGY_DIFF_NOT_PRESENT")
+    try:
+        value = json.loads(candidate.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return _empty_projection("TOPOLOGY_DIFF_INVALID")
+    if value.get("schema") != "ovc-genesis-repository-topology-diff/v1":
+        return _empty_projection("TOPOLOGY_DIFF_SCHEMA_MISMATCH")
+    if value.get("authority_effect") != "NONE_DERIVED_COMMIT_DIFF_ONLY":
+        return _empty_projection("TOPOLOGY_DIFF_AUTHORITY_BOUNDARY_MISMATCH")
     return dict(value)
 
 
@@ -137,5 +153,22 @@ def render_repository_topology_surface(value: Mapping[str, Any]) -> None:
     elif view == "Historical / Supersession View":
         st.dataframe(_bounded_rows(value.get("historical_supersession_projection", [])), use_container_width=True, hide_index=True)
     else:
-        st.info("Commit-to-commit topology diff is deliberately deferred to post-GRT-G8 GRT-WP10. No Git change is treated as programme approval.")
-        st.json({"status": "DEFERRED_PENDING_GRT_WP10", "authority_effect": "NONE_PRESENTATION_ONLY"}, expanded=False)
+        diff = load_repository_topology_diff()
+        if diff.get("schema") != "ovc-genesis-repository-topology-diff/v1":
+            st.info(f"Commit-to-commit topology diff is not materialized: {diff.get('reason', 'NOT_EVALUATED')}.")
+            st.caption("Generate a GRT-WP10 diff locally. Absence never implies no change, approval, repair or adoption.")
+            return
+        before = dict(diff.get("before", {}))
+        after = dict(diff.get("after", {}))
+        st.caption(f"{before.get('source_commit', 'UNKNOWN')} → {after.get('source_commit', 'UNKNOWN')} · authority-neutral derived comparison")
+        cols = st.columns(3)
+        cols[0].metric("Changes", int(diff.get("change_count", 0)))
+        cols[1].metric("Before", str(before.get("topology_sha256", ""))[:12])
+        cols[2].metric("After", str(after.get("topology_sha256", ""))[:12])
+        st.json(diff.get("change_type_counts", {}), expanded=False)
+        rows = _bounded_rows(diff.get("changes", []))
+        if rows:
+            st.dataframe(rows, use_container_width=True, hide_index=True)
+        else:
+            st.info("No logical topology changes are present in this materialized comparison.")
+        st.caption("Diff findings are advisory only: no Git change is treated as programme approval, dependency adoption, authority change or automatic remediation.")
