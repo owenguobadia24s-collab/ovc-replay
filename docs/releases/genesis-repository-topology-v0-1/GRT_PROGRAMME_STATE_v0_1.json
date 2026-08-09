@@ -1,39 +1,54 @@
 {
   "schema": "ovc-grt-programme-state/v1",
   "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
-  "status": "GRT_G7_PASS_GRT_WP8_AUTHORISED",
+  "status": "GRT_G8_OPERATOR_REVIEW_REQUIRED",
   "mode": ["GOVERNANCE_ONLY", "DERIVED_READ_MODEL", "READ_ONLY_FIRST"],
   "original_baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
   "reconciled_main_commit_at_g0": "6c034e8924a9cd134f8d05e7743ba2a5e3771b82",
+  "latest_main_observed_during_g8": "81942e5b7f4ed3d4c34e8cf9296470b5bc19cc82",
   "branch": "build/genesis-repository-topology-v0.1",
   "current_packet": "GRT-WP8",
-  "current_gate": "GRT-G7",
-  "operator_decision_required": false,
-  "operator_decisions": {"GRT-G0": "PASS"},
+  "current_gate": "GRT-G8",
+  "operator_decision_required": true,
+  "operator_decisions": {"GRT-G0": "PASS", "GRT-G8": "PENDING"},
   "auto_decisions": {"GRT-G1": "PASS", "GRT-G7": "PASS"},
   "accepted_topology": {
     "topology_sha256": "6fca224dbebabbc3ee754e825f6028013011e5bc08b6f82a21e051cfdddc8138",
     "assured_source_commit": "f958309e4f4681200dd9332fcd2609d7f42a2f38",
     "implementation_head": "5b64cc3e73cf46840ece6fea02347c511d95bf0c"
   },
+  "presentation": {
+    "implementation_head": "dcd883e877f2852dd7abff0ed9acec6b9cc48319",
+    "repository_tests_run_id": 31306436393,
+    "tiered_shadow_run_id": 31306436363,
+    "repository_test_count": 777,
+    "status": "GATE_READY_PASS_WITH_WARNINGS_RECOMMENDED"
+  },
   "authority": {
     "topology_design": "RATIFIED_DERIVED_ONLY",
     "topology_implementation": "GRT_G7_ACCEPTED_DERIVED_ONLY",
-    "read_only_presentation_build": "AUTHORISED_GRT_WP8_ONLY",
+    "read_only_presentation_build": "GRT_WP8_COMPLETE_PENDING_GRT_G8",
     "programme_genesis_canon": "PRESERVED_SOLE_AUTHORITY",
     "programme_auto_admission": "DENIED",
     "programme_auto_reclassification": "DENIED",
     "dependency_auto_promotion": "DENIED",
     "genesis_mutation": "DENIED",
-    "control_plane_route_activation": "DENIED_PENDING_GRT_G8_AND_EXISTING_ROUTE_AUTHORITY",
+    "control_plane_route_activation": "DENIED",
     "control_plane_writes": "DENIED",
     "admission_enforcement": "DEFERRED_DISABLED",
     "validation_consumption": "LOCKED_UNCONSUMED",
     "market_selector_semantic_release_publication": "NONE",
     "probability_risk_exposure_execution_agent": "NONE"
   },
+  "warnings": [
+    "ANOMALY_POPULATION_RETAINED_FOR_OPERATOR_REVIEW",
+    "ONE_GENESIS_TOPOLOGY_CONFLICT_WARNING_UNRESOLVED",
+    "ONE_STALE_PROGRAMME_STATE_WARNING_UNRESOLVED",
+    "COMMIT_TO_COMMIT_DIFF_REMAINS_DEFERRED_PENDING_POST_G8_GRT_WP10"
+  ],
   "blockers": [],
-  "next_action": "IMPLEMENT_GRT_WP8_READ_ONLY_RESEARCH_CONSOLE_SYSTEM_PROJECTION_THEN_STOP_AT_GRT_G8",
+  "next_action": "STOP_AWAIT_GRT_G8_OPERATOR_DECISION",
   "next_operator_gate": "GRT-G8",
+  "recommended_operator_command": "OVC APPROVE GRT-G8 PASS_WITH_WARNINGS",
   "rollback": "Discard derived topology and presentation outputs; preserve all GRT decisions and authoritative upstream state."
 }
