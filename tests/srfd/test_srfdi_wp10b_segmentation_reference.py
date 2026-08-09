@@ -30,29 +30,8 @@ REFERENCE = ROOT / "src/ovc/opt_b/srfd/wp10b_segmentation_reference.py"
 SEGMENTATION_REGISTRY = ROOT / "registries/research/srfd/segmentation_boundary_packs_v0_3.json"
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 
-
-def row(
-    record_id: str,
-    first_valid_time: str,
-    state_key: str,
-    *,
-    side: str = "BID",
-    scope_id: str = "LOCAL",
-    clock_id: str = "15M",
-    reset_reason: str | None = None,
-) -> dict[str, object]:
-    return {
-        "source_release_id": "PD-JUNE-FM.RUN.TEST",
-        "instrument_id": "GBPUSD",
-        "side": side,
-        "scope_id": scope_id,
-        "clock_id": clock_id,
-        "record_id": record_id,
-        "first_valid_time": first_valid_time,
-        "state_key": state_key,
-        "reset_reason": reset_reason,
-    }
-
+def row(record_id: str, first_valid_time: str, state_key: str, *, side: str = "BID", scope_id: str = "LOCAL", clock_id: str = "15M", reset_reason: str | None = None) -> dict[str, object]:
+    return {"source_release_id":"PD-JUNE-FM.RUN.TEST","instrument_id":"GBPUSD","side":side,"scope_id":scope_id,"clock_id":clock_id,"record_id":record_id,"first_valid_time":first_valid_time,"state_key":state_key,"reset_reason":reset_reason}
 
 def adversarial_ledger() -> list[dict[str, object]]:
     return [
@@ -68,7 +47,6 @@ def adversarial_ledger() -> list[dict[str, object]]:
         row("P02", "2026-06-01T02:00:00Z", "P1", scope_id="PARENT", clock_id="2H"),
     ]
 
-
 class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
     def test_run_change_reference_is_byte_semantically_exact(self) -> None:
         ledger = adversarial_ledger()
@@ -76,10 +54,7 @@ class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
         reference = reference_run_change_from_c2_ledger(ledger)
         self.assertEqual(production, reference)
         counts = assert_structural_invariants("RUN_CHANGE_SEGMENTATION", production)
-        self.assertEqual(
-            counts["stream_count"] + counts["boundary_count"],
-            counts["segment_count"],
-        )
+        self.assertEqual(counts["stream_count"] + counts["boundary_count"], counts["segment_count"])
 
     def test_null_control_reference_is_byte_semantically_exact(self) -> None:
         ledger = adversarial_ledger()
@@ -110,13 +85,7 @@ class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
         ledger = adversarial_ledger()
         drifted = deepcopy(run_change_from_c2_ledger(ledger))
         drifted["segments"][0]["authority_state"] = "DRIFT"
-        with patch(
-            "ovc.opt_b.srfd.wp10_v07_runner._segmentation_inputs",
-            return_value=ledger,
-        ), patch(
-            "ovc.opt_b.srfd.wp10_v07_runner.run_change_from_c2_ledger",
-            return_value=drifted,
-        ):
+        with patch("ovc.opt_b.srfd.wp10_v07_runner._segmentation_inputs", return_value=ledger), patch("ovc.opt_b.srfd.wp10_v07_runner.run_change_from_c2_ledger", return_value=drifted):
             with self.assertRaises(WP10RunnerError) as ctx:
                 execute_segmentation([], "RUN_CHANGE_SEGMENTATION")
         self.assertEqual("SEGMENTATION_REFERENCE_INEQUIVALENCE", ctx.exception.reason_code)
@@ -129,42 +98,33 @@ class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
 
     def test_frozen_segmentation_registry_is_unchanged(self) -> None:
         registry = json.loads(SEGMENTATION_REGISTRY.read_text(encoding="utf-8"))
-        self.assertEqual(
-            FROZEN_SEGMENTATION_PACK_SHA256,
-            validate_boundary_pack_registry(registry),
-        )
+        self.assertEqual(FROZEN_SEGMENTATION_PACK_SHA256, validate_boundary_pack_registry(registry))
 
     def test_invariant_failures_are_explicit(self) -> None:
         with self.assertRaises(SegmentationReferenceError) as ctx:
-            assert_structural_invariants(
-                "RUN_CHANGE_SEGMENTATION",
-                {"stream_count": 2, "segments": [{}], "boundaries": []},
-            )
+            assert_structural_invariants("RUN_CHANGE_SEGMENTATION", {"stream_count": 2, "segments": [{}], "boundaries": []})
         self.assertEqual("SEGMENTATION_STRUCTURAL_INVARIANT_FAILURE", ctx.exception.reason_code)
 
-    def test_authority_pointer_remains_remediation_only(self) -> None:
+    def test_authority_pointer_preserves_remediation_history_and_lawful_progression(self) -> None:
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
-        self.assertIn(pointer["status"], {"AUTHORIZED_REMEDIATION_ONLY", "GATE_READY"})
-        if pointer["status"] == "AUTHORIZED_REMEDIATION_ONLY":
-            self.assertEqual("SRFDI-G10B", pointer["current_gate"])
-            self.assertEqual("SRFDI-WP10B", pointer["next_packet"])
-        else:
-            self.assertEqual("SRFDI-G10B-FREEZE", pointer["current_gate"])
-            self.assertIsNone(pointer["next_packet"])
-            self.assertTrue(pointer["operator_decision_required"])
-            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", pointer["wp10b_execution"])
-        self.assertEqual("SRFDI-G10B-FREEZE", pointer["stop_at"])
+        self.assertEqual("GATE_READY", pointer["status"])
+        self.assertIn(pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH"})
+        self.assertIsNone(pointer["next_packet"])
+        self.assertTrue(pointer["operator_decision_required"])
         self.assertTrue(pointer["authority_token_consumed"])
-        self.assertEqual(
-            "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",
-            pointer["authority_token_state"],
-        )
-        self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", pointer["june_execution"])
+        self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", pointer["authority_token_state"])
+        if pointer["current_gate"] == "SRFDI-G10B-FREEZE":
+            self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", pointer["june_execution"])
+            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", pointer["wp10b_execution"])
+        else:
+            self.assertTrue(pointer["june_execution"].startswith("DENIED"))
+            self.assertIsNone(pointer["fresh_authority_token_id"])
+            self.assertEqual("NOT_MINTED_PENDING_OPERATOR", pointer["fresh_authority_token_state"])
+            self.assertTrue(pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
         self.assertEqual("DENIED", pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", pointer["validation_2025"])
         self.assertEqual("NONE", pointer["scientific_promotion"])
         self.assertEqual("NONE", pointer["probability_risk_exposure_execution"])
-
 
 if __name__ == "__main__":
     unittest.main()

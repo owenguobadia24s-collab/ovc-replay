@@ -38,7 +38,11 @@ class SRFDIWP10V06ExecutionBlockerTests(unittest.TestCase):
    elif self.p['status']=='AUTHORIZED_REMEDIATION_ONLY':
     self.assertEqual('SRFDI-G10B',self.p['current_gate']); self.assertEqual('SRFDI-WP10B',self.p['next_packet']); self.assertEqual('SRFDI-G10B-FREEZE',self.p['stop_at']); self.assertTrue(self.p['authority_token_consumed'])
    elif self.p['status']=='GATE_READY':
-    self.assertEqual('SRFDI-G10B-FREEZE',self.p['current_gate']); self.assertIsNone(self.p['next_packet']); self.assertTrue(self.p['operator_decision_required']); self.assertEqual('COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE',self.p['wp10b_execution']); self.assertTrue(self.p['authority_token_consumed'])
+    self.assertIn(self.p['current_gate'], {'SRFDI-G10B-FREEZE','SRFDI-G-JUNE-AUTH'}); self.assertIsNone(self.p['next_packet']); self.assertTrue(self.p['operator_decision_required']); self.assertTrue(self.p['authority_token_consumed'])
+    if self.p['current_gate']=='SRFDI-G10B-FREEZE':
+     self.assertEqual('COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE',self.p['wp10b_execution'])
+    else:
+     self.assertTrue(self.p['wp10b_execution'].startswith('COMPLETED_FROZEN_ON_MAIN@')); self.assertIsNone(self.p['fresh_authority_token_id']); self.assertEqual('NOT_MINTED_PENDING_OPERATOR',self.p['fresh_authority_token_state']); self.assertTrue(self.p['june_execution'].startswith('DENIED'))
   elif self.p['status']=='BLOCKED':
    self.assertTrue(self.p['blocker_evidence'].endswith('SRFDI_WP10_V06_EXECUTION_BLOCKER.json')); self.assertIsNone(self.p['next_packet']); self.assertEqual('HARD_BLOCKER',self.p['stop_at'])
   elif self.p['next_packet']=='SRFDI-G-JUNE-AUTH-v0.7-PREP':

@@ -79,10 +79,16 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
             self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
             self.assertTrue(self.pointer["authority_token_consumed"])
         if self.pointer["status"] == "GATE_READY":
-            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["current_gate"])
+            self.assertIn(self.pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH"})
             self.assertIsNone(self.pointer["next_packet"])
             self.assertTrue(self.pointer["operator_decision_required"])
-            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
+            if self.pointer["current_gate"] == "SRFDI-G10B-FREEZE":
+                self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
+            else:
+                self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
+                self.assertIsNone(self.pointer["fresh_authority_token_id"])
+                self.assertEqual("NOT_MINTED_PENDING_OPERATOR", self.pointer["fresh_authority_token_state"])
+                self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
             self.assertTrue(self.pointer["authority_token_consumed"])
 
     def test_closeout_is_delegated_zero_delta_pass(self) -> None:
