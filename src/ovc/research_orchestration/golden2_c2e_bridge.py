@@ -182,7 +182,7 @@ def execute_c2e_loss_preserving(upstream: Mapping[str, Any]) -> dict[str, Any]:
                         candidate_id=f"G2.PHASE.{side}.{group_index}",
                         phase_type="SYNTHETIC_MIDPOINT",
                         start_time=first_fvt,
-                        end_time=None,
+                        end_time=fvt,
                         source_record_ids=[frame["frame_id"]],
                         effective_time=fvt,
                         first_valid_time=fvt,
