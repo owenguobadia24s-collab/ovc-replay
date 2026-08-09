@@ -80,7 +80,7 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
         self.assertEqual("BLOCKED", self.state["status"])
         self.assertEqual("NONE_UNDER_CURRENT_STANDING_DELEGATION_AFTER_HARD_STOP", self.state["remediation_authority"])
         self.assertEqual("PRESERVE_EVIDENCE_AND_STOP_FAIL_CLOSED_NO_ROUTINE_OPERATOR_APPROVAL_REQUEST", self.state["next_action"])
-        self.assertIn(self.pointer["status"], {"BLOCKED", "AUTHORIZED_REMEDIATION_ONLY"})
+        self.assertIn(self.pointer["status"], {"BLOCKED", "AUTHORIZED_REMEDIATION_ONLY", "GATE_READY"})
         self.assertEqual(RUN_ID, self.pointer["run_id"])
         self.assertEqual(TOKEN_ID, self.pointer["authority_token_id"])
         self.assertTrue(self.pointer["authority_token_consumed"])
@@ -93,11 +93,17 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
         if self.pointer["status"] == "BLOCKED":
             self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
             self.assertIsNone(self.pointer["next_packet"])
-        else:
+        elif self.pointer["status"] == "AUTHORIZED_REMEDIATION_ONLY":
             self.assertEqual("SRFDI-G10B", self.pointer["current_gate"])
             self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
             self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
             self.assertEqual("AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY", self.pointer["wp10b_execution"])
+            self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
+        else:
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["current_gate"])
+            self.assertIsNone(self.pointer["next_packet"])
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
             self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
 
 

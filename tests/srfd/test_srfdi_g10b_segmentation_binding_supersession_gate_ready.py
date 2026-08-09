@@ -34,7 +34,7 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", self.prep["authority_effect"])
 
     def test_current_pointer_preserves_blocker_and_only_adds_bounded_remediation(self) -> None:
-        self.assertIn(self.pointer["status"], {"BLOCKED", "AUTHORIZED_REMEDIATION_ONLY"})
+        self.assertIn(self.pointer["status"], {"BLOCKED", "AUTHORIZED_REMEDIATION_ONLY", "GATE_READY"})
         self.assertTrue(self.pointer["authority_token_consumed"])
         self.assertEqual(
             "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",
@@ -44,11 +44,17 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
         if self.pointer["status"] == "BLOCKED":
             self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
             self.assertIsNone(self.pointer["next_packet"])
-        else:
+        elif self.pointer["status"] == "AUTHORIZED_REMEDIATION_ONLY":
             self.assertEqual("SRFDI-G10B", self.pointer["current_gate"])
             self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
             self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
             self.assertEqual("AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY", self.pointer["wp10b_execution"])
+            self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
+        else:
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["current_gate"])
+            self.assertIsNone(self.pointer["next_packet"])
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
             self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
 
     def test_candidate_state_is_not_the_current_pointer(self) -> None:
