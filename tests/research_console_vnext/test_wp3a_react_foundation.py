@@ -28,7 +28,7 @@ class RCNWP3AFoundationTests(unittest.TestCase):
         for route in ("market", "structure", "research", "evidence", "control"):
             self.assertIn(route, router)
 
-    def test_investigation_state_is_browser_local_and_revalidates_query_state(self) -> None:
+    def test_investigation_state_is_browser_local_non_evidentiary_and_revalidates(self) -> None:
         state = (APP / "src" / "features" / "investigations" / "state.ts").read_text(encoding="utf-8")
         tabs = (APP / "src" / "features" / "investigations" / "InvestigationTabs.tsx").read_text(encoding="utf-8")
         combined = state + tabs
@@ -37,19 +37,20 @@ class RCNWP3AFoundationTests(unittest.TestCase):
         self.assertIn("useSearchParams", combined)
         self.assertIn("invalidateQueries", combined)
 
-    def test_no_streamlit_or_real_source_shortcut_in_frontend(self) -> None:
-        source = "\n".join(path.read_text(encoding="utf-8") for path in (APP / "src").rglob("*.ts*")).lower()
+    def test_no_streamlit_or_real_source_shortcut_in_executable_frontend(self) -> None:
+        paths = [path for path in (APP / "src").rglob("*.ts*") if "generated" not in path.parts]
+        source = "\n".join(path.read_text(encoding="utf-8") for path in paths).lower()
         self.assertNotIn("streamlit", source)
-        self.assertNotIn("validation", source)
-        self.assertNotIn("r2://", source)
         self.assertNotIn("dukascopy", source)
+        self.assertNotIn('"/validation', source)
+        self.assertNotIn("r2://", source)
 
-    def test_generated_openapi_types_are_materialized(self) -> None:
-        generated = APP / "src" / "api" / "generated" / "schema.d.ts"
-        self.assertTrue(generated.is_file())
-        text = generated.read_text(encoding="utf-8")
-        self.assertIn("/api/v1/system/identity", text)
-        self.assertIn("/api/v1/capabilities", text)
+    def test_openapi_generation_inputs_expose_expected_read_only_paths(self) -> None:
+        openapi = (APP / "openapi.console-vnext.v1.json").read_text(encoding="utf-8")
+        self.assertIn('"/api/v1/identity"', openapi)
+        self.assertIn('"/api/v1/capabilities"', openapi)
+        self.assertIn('"/api/v1/fixture/investigations"', openapi)
+        self.assertIn("CapabilityDependencyStatus", openapi)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { getInvestigations } from "../../api/client";
 import type { Investigation } from "../../api/types";
 import { queryClient } from "../../app/queryClient";
-import { INVESTIGATION_QUERY_KEY, LOCAL_TAB_STORAGE_KEY, mergeLocalTabs, selectActiveInvestigation } from "./state";
+import { INVESTIGATION_EVIDENCE_CLASS, INVESTIGATION_QUERY_KEY, LOCAL_TAB_STORAGE_KEY, mergeLocalTabs, selectActiveInvestigation } from "./state";
 
 function readStoredTabs(): string[] { try { const raw = window.localStorage.getItem(LOCAL_TAB_STORAGE_KEY); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) && parsed.every((value) => typeof value === "string") ? parsed : []; } catch { return []; } }
 
@@ -34,5 +34,5 @@ export function InvestigationTabs(): JSX.Element {
 
   if (investigationsQuery.isPending) return <div className="investigation-tabs">Loading fixture investigations…</div>;
   if (investigationsQuery.isError) return <div className="investigation-tabs">Fixture investigation source unavailable.</div>;
-  return <div className="investigation-tabs" role="tablist" aria-label="Synthetic fixture investigations">{visible.map((item) => <button key={item.investigation_id} type="button" role="tab" aria-selected={item.investigation_id === active?.investigation_id} className={item.investigation_id === active?.investigation_id ? "investigation-tab is-active" : "investigation-tab"} onClick={() => void activate(item)}><span>{item.title}</span><small>{item.state}</small></button>)}</div>;
+  return <div className="investigation-tabs" role="tablist" aria-label={`Synthetic fixture investigations · ${INVESTIGATION_EVIDENCE_CLASS}`}>{visible.map((item) => <button key={item.investigation_id} type="button" role="tab" aria-selected={item.investigation_id === active?.investigation_id} className={item.investigation_id === active?.investigation_id ? "investigation-tab is-active" : "investigation-tab"} onClick={() => void activate(item)}><span>{item.title}</span><small>{item.state}</small></button>)}</div>;
 }
