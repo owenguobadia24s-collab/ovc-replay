@@ -69,6 +69,24 @@ class EpisodeEngine:
         self.stream.append(phase)
         return phase
 
+    def re_parent(self, *, episode_id: str, candidate_id: str, effective_time: str, first_valid_time: str, reason_codes: list[str] | None = None) -> dict[str, Any]:
+        """Record an upstream parent-context mutation without creating C2E topology.
+
+        RE_PARENT in the June baseline means that the already-open episode's
+        selected upstream C2 parent/dependency context changed.  It is therefore
+        a boundary event only; it MUST NOT manufacture a C2E-to-C2E lineage edge.
+        """
+        self._require_open(episode_id)
+        return self._event(
+            episode_ids=[episode_id],
+            candidate_ids=[candidate_id],
+            action="RE_PARENT",
+            priority=4,
+            effective_time=effective_time,
+            first_valid_time=first_valid_time,
+            reason_codes=reason_codes or [],
+        )
+
     def censor(self, *, episode_id: str, candidate_id: str, reason: str, effective_time: str, first_valid_time: str) -> dict[str, Any]:
         self._require_open(episode_id)
         if reason not in {"CENSOR_GAP","CENSOR_RELEASE_END"}:
