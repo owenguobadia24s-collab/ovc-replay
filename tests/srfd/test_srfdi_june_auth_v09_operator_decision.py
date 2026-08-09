@@ -45,7 +45,7 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
 
     def test_decision_envelope_and_manifest_bind_exactly(self):
         self.assertEqual("393e22c14592909ce3a9f9ee519031d68dd6cd3c41d0a496fb6d24b3e8e343d3", logical_sha(self.decision))
-        self.assertEqual("55b0f65a278aaaf5b68ff182577eec2025e21a13600d945d1931b54ad7ff0759", logical_sha(self.envelope))
+        self.assertEqual("515c4fc8c79d6cf41a44198806a83ddad1d6ad63500446c80a521d5359cf4757", logical_sha(self.envelope))
         self.assertEqual("ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a", logical_sha(self.manifest["run_binding"]))
         self.assertEqual(self.manifest["run_binding_sha256"], self.envelope["run_binding_sha256"])
         self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1", self.envelope["execution_binding"]["logical_sha256"])
@@ -57,7 +57,7 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
         state = core.pop("state")
         self.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_MAIN_MERGE", state)
         self.assertEqual("SRFD.JUNE.AUTH." + logical_sha(core), token_id)
-        self.assertEqual("SRFD.JUNE.AUTH.cbff2eeeb66d330f315caaff202674e8f335dbd8452c069628ffaadc2c816108", token_id)
+        self.assertEqual("SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3", token_id)
         self.assertNotEqual(self.token["prior_v0_8_token_id"], token_id)
         self.assertTrue(self.token["single_use"])
         self.assertEqual("ONE_EXACT_BOUND_RUN", self.token["run_cardinality"])
