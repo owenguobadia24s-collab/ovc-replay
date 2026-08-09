@@ -91,7 +91,11 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
             self.assertEqual(self.token["token_id"], self.pointer["prior_v0_6_authority_token_id"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_v0_6_authority_token_state"])
             self.assertEqual("BLOCKED_CONSUMED_TOKEN_PRESERVED", self.pointer["wp10_v0_6_execution_route"])
-        self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V06_EXECUTION_BLOCKER.json"))
+        if self.pointer.get("wp10_v0_7_execution_route"):
+            self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+            self.assertEqual("BLOCKED_SEGMENTATION_BINDING_MISMATCH_CONSUMED_RUN_PRESERVED", self.pointer["wp10_v0_7_execution_route"])
+        else:
+            self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V06_EXECUTION_BLOCKER.json"))
         self.assertFalse(self.pointer["operator_decision_required"])
 
 

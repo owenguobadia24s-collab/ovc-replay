@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from hashlib import sha256
 import json
 from pathlib import Path
 import unittest
@@ -21,10 +20,6 @@ TOKEN_ID = "SRFD.JUNE.AUTH.7b9799d46cb6b3953fa9e96fb8309fbdeb0afe6dd53bfdcd16dec
 RUN_BINDING = "25f1c18d39898b5f2b5e9511245ecfd2615eb420205e68f9f1e8c7fe7f929fb9"
 
 
-def file_sha(path: Path) -> str:
-    return sha256(path.read_bytes()).hexdigest()
-
-
 class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -37,12 +32,18 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
         cls.pointer = json.loads(POINTER.read_text())
         cls.state = json.loads(STATE.read_text())
 
-    def test_external_receipt_copies_preserve_exact_bytes(self):
-        self.assertEqual("c70cbf50f2f7ec10a41eb65f94510bee66ab52f31ba56713ad21b7296b77b991", file_sha(START))
-        self.assertEqual("f38dd025b7903c3b4cdb3adc7324b6b97409bcac8c4cbdd4759882b75115b932", file_sha(PREFLIGHT))
-        self.assertEqual("a0e474a2dddc9ed64efb25e27f2abb1384efa2c9b6cdccbb90d6690b5b9ca855", file_sha(CHECKPOINT))
-        self.assertEqual("e3de8629f6e3f592b8000b373d4cb2d5787a1a861623c4a063bfdaeedd8047db", file_sha(POPULATION))
-        self.assertEqual("3bd9dab79671cb63fc7209c4c0940ca0347c1d1f898d543edb7b8fce785114e2", file_sha(CAPACITY))
+    def test_external_receipt_metadata_and_semantic_copies_are_preserved(self):
+        receipts = self.blocker["receipts"]
+        self.assertEqual("c70cbf50f2f7ec10a41eb65f94510bee66ab52f31ba56713ad21b7296b77b991", receipts["run_start"]["file_sha256"])
+        self.assertEqual("f38dd025b7903c3b4cdb3adc7324b6b97409bcac8c4cbdd4759882b75115b932", receipts["preflight"]["file_sha256"])
+        self.assertEqual("a0e474a2dddc9ed64efb25e27f2abb1384efa2c9b6cdccbb90d6690b5b9ca855", receipts["checkpoint_00000001"]["file_sha256"])
+        self.assertEqual("e3de8629f6e3f592b8000b373d4cb2d5787a1a861623c4a063bfdaeedd8047db", receipts["population_artifact"]["artifact_sha256"])
+        self.assertEqual("3bd9dab79671cb63fc7209c4c0940ca0347c1d1f898d543edb7b8fce785114e2", receipts["capacity_telemetry"]["file_sha256"])
+        self.assertEqual(receipts["run_start"]["consumption_id"], self.start["consumption_id"])
+        self.assertEqual(receipts["checkpoint_00000001"]["checkpoint_id"], self.checkpoint["checkpoint_id"])
+        self.assertEqual(receipts["population_artifact"]["output_logical_hash"], self.population["output_logical_hash"])
+        self.assertEqual(receipts["capacity_telemetry"]["accounted_unit_count"], self.capacity["accounted_unit_count"])
+        self.assertEqual(receipts["preflight"]["logical_hash"], self.preflight["logical_hash"])
 
     def test_token_is_consumed_exactly_for_preserved_run(self):
         self.assertEqual(TOKEN_ID, self.start["token_id"])

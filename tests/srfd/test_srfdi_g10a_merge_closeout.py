@@ -44,8 +44,13 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
             self.assertEqual(old, self.pointer["prior_authority_token_id"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
         if self.pointer["status"] == "BLOCKED":
-            self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V06_EXECUTION_BLOCKER.json"))
-            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
+            self.assertEqual("BLOCKED_CONSUMED_TOKEN_PRESERVED", self.pointer["wp10_v0_6_execution_route"])
+            if self.pointer.get("wp10_v0_7_execution_route"):
+                self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+                self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+            else:
+                self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V06_EXECUTION_BLOCKER.json"))
+                self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
 
     def test_state_is_ready_for_wp10a_capacity_only(self) -> None:
         self.assertEqual("AUTHORITATIVE_CURRENT", self.state["state_role"])

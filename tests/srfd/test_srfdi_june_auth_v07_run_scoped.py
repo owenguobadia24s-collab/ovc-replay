@@ -75,8 +75,6 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
             self.assertEqual("TOKEN_ALREADY_CONSUMED", ctx.exception.reason_code)
 
     def test_historical_v07_state_is_immutable_while_pointer_may_advance(self):
-        # The v0.7 state remains exact historical authority even after a later
-        # implementation-bound token lawfully supersedes its unused start authority.
         self.assertEqual("SRFDI-WP10-v0.7", self.state["active_packet"])
         self.assertEqual(self.token["token_id"], self.state["authority"]["authority_token_id"])
         self.assertFalse(self.state["authority"]["authority_token_consumed"])
@@ -84,11 +82,7 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
         self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.state["authority"]["market_benchmark"])
         self.assertEqual(june_authority_v07.RUN_BINDING_SHA256, self.state["exact_bindings"]["run_binding_sha256"])
 
-        # CURRENT_STATE_POINTER is deliberately forward-moving. If it no longer
-        # carries v0.7 as current, it must preserve v0.7 explicitly as an unused
-        # superseded authority rather than rewriting or pretending consumption.
-        self.assertEqual("READY", self.pointer["status"])
-        self.assertEqual("SRFDI-WP10-v0.7", self.pointer["next_packet"])
+        self.assertIn(self.pointer["status"], {"READY", "BLOCKED"})
         if self.pointer["authority_token_id"] != self.token["token_id"]:
             self.assertEqual(self.token["token_id"], self.pointer["prior_v0_7_authority_token_id"])
             self.assertEqual("SUPERSEDED_UNUSED_UNCONSUMED", self.pointer["prior_v0_7_authority_token_state"])
@@ -97,6 +91,13 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
             self.assertFalse(self.pointer["authority_token_consumed"])
             self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["authority_token_state"])
             self.assertEqual(june_authority_v07.RUN_BINDING_SHA256, self.pointer["run_binding_sha256"])
+        if self.pointer["status"] == "READY":
+            self.assertEqual("SRFDI-WP10-v0.7", self.pointer["next_packet"])
+        else:
+            self.assertIsNone(self.pointer["next_packet"])
+            self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+            self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
         self.assertEqual(june_authority_v07.PRIOR_V06_TOKEN, self.pointer["prior_v0_6_authority_token_id"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_v0_6_authority_token_state"])
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
