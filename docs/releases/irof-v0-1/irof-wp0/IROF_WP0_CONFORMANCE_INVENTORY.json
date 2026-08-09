@@ -1,0 +1,247 @@
+{
+  "schema": "ovc-irof-wp0-conformance-inventory/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "packet_id": "IROF-WP0",
+  "baseline_commit": "07d078101daf9645dafa2dea23999f9d1d688133",
+  "classification_vocabulary": [
+    "CURRENT_COURT_RECORD_IMPLEMENTATION",
+    "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+    "HISTORICAL_SUPERSEDED_IMPLEMENTATION",
+    "FUTURE_TARGET_RESERVED"
+  ],
+  "reuse_actions": ["REUSE", "GENERALIZE", "ADAPT", "DO_NOT_IMPORT"],
+  "components": [
+    {
+      "stage_id": "POPULATION_SOURCE_OPT_A",
+      "classification": "CURRENT_COURT_RECORD_IMPLEMENTATION",
+      "implementation_paths": ["src/ovc/opt_a/provider_population.py", "src/ovc/opt_a/population_integrity.py", "src/ovc/opt_a/release_freeze.py", "src/ovc/opt_a/role_workspace.py"],
+      "authority_owner": "OPT-A / source-release governance",
+      "typed_inputs": ["provider/release or synthetic-source declarations"],
+      "typed_outputs": ["governed source/release population"],
+      "register_now": true,
+      "real_execution_state": "EXISTING_AUTHORITIES_ONLY_NO_NEW_PROVIDER_INTAKE",
+      "reuse_action": "ADAPT",
+      "notes": "IROF may bind existing lawful source releases but cannot freeze a new authoritative release or intake a provider."
+    },
+    {
+      "stage_id": "C1",
+      "classification": "CURRENT_COURT_RECORD_IMPLEMENTATION",
+      "implementation_paths": ["src/ovc/opt_b/c1/"],
+      "authority_owner": "OPT-B.C1",
+      "typed_inputs": ["accepted OPT-A observation handoff"],
+      "typed_outputs": ["C1 observation records"],
+      "register_now": true,
+      "real_execution_state": "FOLLOW_EXISTING_SELECTOR_AND_RELEASE_AUTHORITY",
+      "reuse_action": "ADAPT"
+    },
+    {
+      "stage_id": "C2_REVISED",
+      "classification": "CURRENT_COURT_RECORD_IMPLEMENTATION",
+      "implementation_paths": ["src/ovc/opt_b/c2_vnext/", "src/ovc/opt_b/c2/"],
+      "authority_owner": "OPT-B.C2",
+      "typed_inputs": ["C1 records plus frozen C2 dependencies"],
+      "typed_outputs": ["C2 snapshots", "C2 transitions"],
+      "register_now": true,
+      "real_execution_state": "DISCOVERY_SELECTOR_EXISTS_DEVELOPMENT_REFERENCE_ONLY_VALIDATION_LOCKED",
+      "reuse_action": "ADAPT",
+      "notes": "Historical/superseded C2 implementation paths must not become hidden runtime alternatives. Adapter registration must pin exact implementation identity."
+    },
+    {
+      "stage_id": "C2E_V0_2",
+      "classification": "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+      "implementation_paths": ["src/ovc/opt_b/c2e_v2/"],
+      "authority_owner": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+      "typed_inputs": ["revised C2 input frame"],
+      "typed_outputs": ["neutral C2E episode stream/envelope"],
+      "register_now": true,
+      "real_execution_state": "REAL_SOURCE_NOT_AUTHORISED_NO_ACTIVE_C2E_NO_ACTIVE_BOUNDARY_PACK",
+      "reuse_action": "ADAPT",
+      "notes": "Package is explicitly shadow-only/inactive. Synthetic adapter is lawful; real replay remains denied until its owner programme grants a valid token."
+    },
+    {
+      "stage_id": "OCCURRENCE_CONTEXT",
+      "classification": "CURRENT_COURT_RECORD_IMPLEMENTATION",
+      "implementation_paths": ["src/ovc/context/occurrence_context/"],
+      "authority_owner": "OccurrenceContext v0.1",
+      "typed_inputs": ["occurrence identity plus declared context dependencies"],
+      "typed_outputs": ["OccurrenceContext envelope/projection"],
+      "register_now": true,
+      "real_execution_state": "NONSTRUCTURAL_CONTEXT_ATTACHMENT_ONLY",
+      "reuse_action": "ADAPT",
+      "notes": "Whole-envelope consumption and REPRESENTATION_INPUT are forbidden by default."
+    },
+    {
+      "stage_id": "SRI_REPRESENTATION",
+      "classification": "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+      "implementation_paths": ["src/ovc/opt_b/sfc/representation.py", "schemas/opt_b/sfc/", "registries/opt_b/sfc/SFC_SCHEMA_REGISTRY.json"],
+      "authority_owner": "SRI/FDI Conformance / SFC",
+      "typed_inputs": ["C2EStreamEnvelope"],
+      "typed_outputs": ["RepresentationPopulation", "RepresentationPack", "RepresentationRecord", "RepresentationBundle"],
+      "register_now": true,
+      "real_execution_state": "SYNTHETIC_FIXTURE_SHADOW_ONLY_UNLESS_SEPARATELY_AUTHORISED",
+      "reuse_action": "ADAPT"
+    },
+    {
+      "stage_id": "COMPARABILITY_COMPARISON_DISTANCE",
+      "classification": "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+      "implementation_paths": ["src/ovc/opt_b/sfc/comparison.py", "src/ovc/opt_b/srfd/distance.py", "src/ovc/opt_b/srfd/distance_surface.py"],
+      "authority_owner": "SRI/FDI Conformance + SRFD",
+      "typed_inputs": ["RepresentationRecord/Bundle", "ComparisonSpec"],
+      "typed_outputs": ["ComparabilityDecision", "PairRecord", "distance/similarity surface"],
+      "register_now": true,
+      "real_execution_state": "NO_METHOD_PROMOTION_BY_IROF",
+      "reuse_action": "ADAPT",
+      "notes": "Comparability must precede pair/distance admission; no synthetic numeric distance for non-comparable pairs."
+    },
+    {
+      "stage_id": "FDI_C2G_FAMILY",
+      "classification": "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+      "implementation_paths": ["src/ovc/opt_b/sfc/fdi.py", "src/ovc/opt_b/srfd/families.py", "src/ovc/opt_b/srfd/family_grid_capacity.py", "src/ovc/opt_b/srfd/family_grid_reuse.py"],
+      "authority_owner": "SRI/FDI Conformance + SRFD",
+      "typed_inputs": ["PairRecord/surface", "FamilyMethodSpec"],
+      "typed_outputs": ["FamilyCatalog", "FamilyRecord", "Assignment"],
+      "register_now": true,
+      "real_execution_state": "NO_FAMILY_METHOD_OR_CATALOG_PROMOTION",
+      "reuse_action": "ADAPT"
+    },
+    {
+      "stage_id": "FAMILY_EVIDENCE_STREAM",
+      "classification": "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+      "implementation_paths": ["src/ovc/opt_b/sfc/evidence.py", "schemas/opt_b/sfc/family_evidence_v0_1.schema.json"],
+      "authority_owner": "SRI/FDI Conformance / SFC",
+      "typed_inputs": ["catalog-scoped family and metric evidence"],
+      "typed_outputs": ["FamilyEvidenceStream"],
+      "register_now": true,
+      "real_execution_state": "EVIDENCE_ONLY_NO_SCIENTIFIC_PROMOTION",
+      "reuse_action": "ADAPT"
+    },
+    {
+      "stage_id": "SRFD_ORCHESTRATION_PRIMITIVES",
+      "classification": "CURRENT_COURT_RECORD_IMPLEMENTATION",
+      "implementation_paths": ["src/ovc/opt_b/srfd/orchestration.py", "src/ovc/opt_b/srfd/scheduler.py", "src/ovc/opt_b/srfd/semantic_cache.py", "src/ovc/opt_b/srfd/capacity_v2.py"],
+      "authority_owner": "SRFD",
+      "typed_inputs": ["fixture/research stage state", "resource contracts", "semantic identities"],
+      "typed_outputs": ["checkpoint receipts", "capacity plans", "cache entries", "resource telemetry"],
+      "register_now": false,
+      "real_execution_state": "CURRENT_JUNE_TOKEN_CONSUMED_NOT_REUSABLE_WP10_BLOCKED",
+      "reuse_action": "GENERALIZE",
+      "notes": "Extract execution-neutral primitives into IROF while preserving SRFD behavior by equivalence tests. Do not import SRFD fixture-only authority constants as generic authority."
+    },
+    {
+      "stage_id": "SFC_REPLAY_PRIMITIVES",
+      "classification": "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+      "implementation_paths": ["src/ovc/opt_b/sfc/replay.py"],
+      "authority_owner": "SFC",
+      "typed_inputs": ["typed conformance populations"],
+      "typed_outputs": ["deterministic replay/capacity evidence"],
+      "register_now": false,
+      "real_execution_state": "SYNTHETIC_FIXTURE_SHADOW_ONLY",
+      "reuse_action": "GENERALIZE"
+    },
+    {
+      "stage_id": "RESEARCH_OPERATIONS",
+      "classification": "CURRENT_COURT_RECORD_IMPLEMENTATION",
+      "implementation_paths": ["src/ovc/research_operations/qa.py", "src/ovc/research_operations/catalogue.py", "src/ovc/research_operations/", "src/ovc/research_operations/v0_4/"],
+      "authority_owner": "Research Operations Foundation",
+      "typed_inputs": ["run/artifact/evidence objects"],
+      "typed_outputs": ["QA run", "artifact catalogue", "typed read-model/evidence objects"],
+      "register_now": true,
+      "real_execution_state": "READ_ONLY_EVIDENCE_INTEGRATION",
+      "reuse_action": "REUSE"
+    },
+    {
+      "stage_id": "FSR_FULL_STACK_HARNESS",
+      "classification": "HISTORICAL_SUPERSEDED_IMPLEMENTATION",
+      "implementation_paths": ["PR#418: src/ovc/fsr_full_stack.py and fixture adapters"],
+      "authority_owner": "FSR rehearsal",
+      "typed_inputs": ["synthetic rehearsal fixture"],
+      "typed_outputs": ["historical full-stack rehearsal manifest"],
+      "register_now": false,
+      "real_execution_state": "DRAFT_UNMERGED_HISTORICAL_EVIDENCE_ONLY",
+      "reuse_action": "DO_NOT_IMPORT",
+      "notes": "Scenario/test ideas may be re-expressed; the draft harness is not canonical IROF code."
+    },
+    {
+      "stage_id": "C2P",
+      "classification": "FUTURE_TARGET_RESERVED",
+      "implementation_paths": [],
+      "authority_owner": "future C2P programme",
+      "typed_inputs": [],
+      "typed_outputs": [],
+      "register_now": false,
+      "real_execution_state": "NOT_AUTHORISED_UNREGISTERED",
+      "reuse_action": "DO_NOT_IMPORT"
+    },
+    {
+      "stage_id": "C2_5_REVISED",
+      "classification": "FUTURE_TARGET_RESERVED",
+      "implementation_paths": [],
+      "authority_owner": "future revised C2.5 programme",
+      "typed_inputs": [],
+      "typed_outputs": [],
+      "register_now": false,
+      "real_execution_state": "NOT_AUTHORISED_UNREGISTERED",
+      "reuse_action": "DO_NOT_IMPORT"
+    },
+    {
+      "stage_id": "C3_TYPED_AST",
+      "classification": "FUTURE_TARGET_RESERVED",
+      "implementation_paths": [],
+      "authority_owner": "future C3 programme",
+      "typed_inputs": [],
+      "typed_outputs": [],
+      "register_now": false,
+      "real_execution_state": "NOT_AUTHORISED_UNREGISTERED",
+      "reuse_action": "DO_NOT_IMPORT"
+    },
+    {
+      "stage_id": "OPT_C_NEUTRAL_OUTCOME",
+      "classification": "FUTURE_TARGET_RESERVED",
+      "implementation_paths": [],
+      "authority_owner": "future OPT-C programme",
+      "typed_inputs": [],
+      "typed_outputs": [],
+      "register_now": false,
+      "real_execution_state": "NOT_AUTHORISED_UNREGISTERED",
+      "reuse_action": "DO_NOT_IMPORT"
+    },
+    {
+      "stage_id": "OPT_D_EVIDENCE_VALIDATION",
+      "classification": "FUTURE_TARGET_RESERVED",
+      "implementation_paths": [],
+      "authority_owner": "future OPT-D / Validation programme",
+      "typed_inputs": [],
+      "typed_outputs": [],
+      "register_now": false,
+      "real_execution_state": "VALIDATION_LOCKED_UNCONSUMED_UNREGISTERED",
+      "reuse_action": "DO_NOT_IMPORT"
+    },
+    {
+      "stage_id": "MCARB_AUXILIARY_BRANCH",
+      "classification": "ACCEPTED_BUT_INACTIVE_CAPABILITY",
+      "implementation_paths": ["Market Context & Auxiliary Representation programme surfaces as separately governed"],
+      "authority_owner": "MCARB",
+      "typed_inputs": ["separately governed context/auxiliary inputs"],
+      "typed_outputs": ["auxiliary representation evidence"],
+      "register_now": false,
+      "real_execution_state": "SEPARATE_PACK_AND_AUTHORITY_REQUIRED",
+      "reuse_action": "ADAPT"
+    }
+  ],
+  "canonical_statuses": {
+    "execution": ["READY", "RUNNING", "REUSED", "COMPLETE", "CAPACITY_EXCEEDED", "FAILED", "QUARANTINED", "DEFERRED_BY_OPERATOR", "NOT_AUTHORISED"],
+    "artifact": ["STAGING", "COMPLETE", "QUARANTINED", "SUPERSEDED"],
+    "programme": ["PLANNED", "READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "APPROVED", "BLOCKED", "QUARANTINED", "SUPERSEDED", "COMPLETED"]
+  },
+  "no_synonym_policy": true,
+  "authority_invariants": [
+    "IROF enforces but never creates scientific or market authority",
+    "partial authority tokens may not be composed into a broader real-run grant",
+    "consumed or expired run tokens are never reusable through restart or cache paths",
+    "Validation remains locked/unconsumed",
+    "OccurrenceContext remains nonstructural unless a separately governed representation pack explicitly authorises REPRESENTATION_INPUT",
+    "scientific null outcomes remain distinct from execution and authority failures"
+  ],
+  "crosswalk_complete": true,
+  "authority_effect": "NONE"
+}
