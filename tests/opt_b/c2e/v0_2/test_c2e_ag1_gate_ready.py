@@ -17,7 +17,6 @@ PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 PACK_HASH = "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313"
 AG0_PASS_ID = "C2E-AG0.OPERATOR.PASS.20260809T213300+0100"
 
-
 class C2EAG1GateReadyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -67,10 +66,7 @@ class C2EAG1GateReadyTests(unittest.TestCase):
         self.assertEqual(self.qa["operator_gate_recommendation"], "DEFER")
         self.assertEqual(self.qa["blockers_to_gate_preparation"], [])
         self.assertEqual(self.qa["blockers_to_recommended_ag1_pass"], ["C2E-AG1-GAP-001_RESTART_EQUIVALENCE"])
-        self.assertIn(
-            "REAL_SOURCE_RESTART_EQUIVALENCE_NOT_SEPARATELY_MATERIALIZED_IN_WP6_POSTRUN_PACKET",
-            self.gate["warnings"],
-        )
+        self.assertIn("REAL_SOURCE_RESTART_EQUIVALENCE_NOT_SEPARATELY_MATERIALIZED_IN_WP6_POSTRUN_PACKET", self.gate["warnings"])
 
     def test_no_ag2_or_activation_authority_is_granted_by_gate_preparation(self):
         current = self.gate["current_authority"]
@@ -84,7 +80,7 @@ class C2EAG1GateReadyTests(unittest.TestCase):
         self.assertEqual(delta["active_boundary_pack"], "NONE")
         self.assertEqual(delta["selector_mutation"], "NONE")
 
-    def test_programme_state_and_pointer_stop_at_ag1(self):
+    def test_historical_gate_ready_state_is_exact_while_pointer_may_advance_after_gap_resolution(self):
         self.assertEqual(self.state["status"], "GATE_READY")
         self.assertEqual(self.state["current_packet"], "C2E-AG1-PREP")
         self.assertEqual(self.state["current_gate"], "C2E-AG1")
@@ -93,14 +89,23 @@ class C2EAG1GateReadyTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["active_c2e"], "NONE")
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["ag2_progression"], "DENIED_PENDING_AG1")
-        self.assertEqual(self.pointer["status"], "GATE_READY")
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
-        self.assertTrue(self.pointer["operator_decision_required"])
-        self.assertEqual(self.pointer["recommended_operator_decision"], "DEFER")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["next_action"], "STOP_FOR_OPERATOR_C2E_AG1")
-
+        if self.pointer["status"] == "GATE_READY":
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["recommended_operator_decision"], "DEFER")
+            self.assertEqual(self.pointer["next_action"], "STOP_FOR_OPERATOR_C2E_AG1")
+        else:
+            self.assertEqual(self.pointer["status"], "APPROVED")
+            self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_38.json")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG1-DECISION")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+            self.assertFalse(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["operator_decision"], "PASS")
+            self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(self.pointer["ag2_progression"], "AUTHORIZED_FOR_GATE_PREPARATION_ONLY")
+            self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
 
 if __name__ == "__main__":
     unittest.main()

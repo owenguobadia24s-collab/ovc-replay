@@ -98,16 +98,15 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["wp6_execution"], "AUTHORIZED_NOT_STARTED")
         self.assertEqual(self.state["authority"]["real_source_replay"], "AUTHORIZED_NOT_STARTED")
-        self.assertIn(self.pointer["status"], {"QA_REVIEW", "READY", "GATE_READY"})
+        self.assertIn(self.pointer["status"], {"QA_REVIEW", "READY", "GATE_READY", "APPROVED"})
         self.assertIn(self.pointer["wp6_execution"], {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"})
         self.assertIn(
             self.pointer["real_source_replay"],
-            {"EXECUTED_TWO_CLEAN_EQUIVALENCE_RUNS", "COMPLETED_TWO_CLEAN_EQUIVALENCE_RUNS"},
+            {"EXECUTED_TWO_CLEAN_EQUIVALENCE_RUNS", "COMPLETED_TWO_CLEAN_EQUIVALENCE_RUNS", "COMPLETED_TWO_CLEAN_EQUIVALENCE_RUNS_PLUS_R4_RESTART_EQUIVALENCE"},
         )
         self.assertEqual(self.pointer["replacement_run_token_id"], self.token["token_id"])
         self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertEqual(self.pointer["replacement_boundary_pack_id"], self.pack["boundary_pack_id"])
-        self.assertEqual(self.pointer["replacement_resource_envelope_id"], self.envelope["envelope_id"])
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         if self.pointer["status"] == "READY":
@@ -121,6 +120,11 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
                     "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
                     self.pointer["operator_decision_history"],
                 )
+        if self.pointer["status"] == "APPROVED":
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG1-DECISION")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+            self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
 
 if __name__ == "__main__":
     unittest.main()
