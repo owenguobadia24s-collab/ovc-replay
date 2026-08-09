@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-irof-qa-packet/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "packet_id": "IROF-WP5",
+  "gate_id": "IROF-G6",
+  "plan_version": "0.1",
+  "baseline_commit": "81948879808e61c728397db702edfbe5afaa7344",
+  "authority_delta": "deterministic execution recovery only",
+  "static_review": {
+    "status": "PASS",
+    "checks": [
+      "only COMPLETE stage outputs become reusable",
+      "stage spec/content mismatch invalidates reuse",
+      "corruption quarantines affected unit",
+      "invalid stage forces dependent descendants to rerun",
+      "verified ancestors remain reusable",
+      "opaque substage checkpoints are references only",
+      "attempt/restart lineage is operational not scientific",
+      "fresh/repeated/resumed logical equality is enforced"
+    ]
+  },
+  "ci": {"status": "PENDING_EXACT_HEAD"},
+  "blocking_issues": [],
+  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "rollback": "discard checkpoint/restart metadata and rerun fresh under unchanged stage contracts"
+}

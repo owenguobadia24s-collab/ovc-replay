@@ -17,6 +17,15 @@ from .authority import (
     resolve_requirement,
 )
 from .cache import CacheLookupReceipt, SemanticArtifactCache, assert_cached_recompute_equivalent
+from .checkpoint import (
+    CheckpointLedger,
+    OpaqueSubstageCheckpoint,
+    ResumePlan,
+    RunCheckpointManifest,
+    StageCompletion,
+    assert_fresh_resume_equivalent,
+    build_resume_plan,
+)
 from .models import (
     ArtifactRef,
     AuthorityBinding,
@@ -41,11 +50,13 @@ from .models import (
 __all__ = [
     "ArtifactRef", "AuthorityBinding", "AuthorityPreflightReceipt",
     "AuthorityRequirementRegistry", "AuthorityRequirementSpec", "CacheLookupReceipt",
-    "CapacityBudget", "CapacityReceipt", "CheckpointRecord", "IntegratedRunManifest",
-    "IntegratedRunReceipt", "PipelineProfile", "PopulationResolutionReceipt",
-    "PopulationSpec", "RequirementResolution", "ResearchRunSpec", "RestartLedger",
+    "CapacityBudget", "CapacityReceipt", "CheckpointLedger", "CheckpointRecord",
+    "IntegratedRunManifest", "IntegratedRunReceipt", "OpaqueSubstageCheckpoint",
+    "PipelineProfile", "PopulationResolutionReceipt", "PopulationSpec", "RequirementResolution",
+    "ResearchRunSpec", "RestartLedger", "ResumePlan", "RunCheckpointManifest",
     "RunComparisonRecord", "RunFailure", "SemanticArtifactCache", "SemanticCacheKey",
-    "StageAuthorityReceipt", "StageDependency", "StageExecutionReceipt", "StageInvocation",
-    "StageSpec", "assert_cached_recompute_equivalent", "preflight_plan_authority",
+    "StageAuthorityReceipt", "StageCompletion", "StageDependency", "StageExecutionReceipt",
+    "StageInvocation", "StageSpec", "assert_cached_recompute_equivalent",
+    "assert_fresh_resume_equivalent", "build_resume_plan", "preflight_plan_authority",
     "preflight_population_resolution", "resolve_requirement",
 ]

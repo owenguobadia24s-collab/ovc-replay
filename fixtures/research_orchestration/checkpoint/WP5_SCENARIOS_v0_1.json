@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-irof-checkpoint-fixtures/v0.1",
+  "authority_effect": "NONE",
+  "cases": [
+    {"case_id": "ALL_COMPLETE_RESUME", "expected": "ALL_REUSABLE"},
+    {"case_id": "MISSING_MIDDLE_STAGE", "expected": "RERUN_STAGE_AND_DESCENDANTS"},
+    {"case_id": "CORRUPT_STAGE_CONTENT", "expected": "QUARANTINE_AND_RERUN_DESCENDANTS"},
+    {"case_id": "CHANGED_STAGE_SPEC", "expected": "NO_REUSE_STAGE_AND_DESCENDANTS"},
+    {"case_id": "INCOMPLETE_AS_COMPLETE", "expected_reason": "IROF_CHECKPOINT_INCOMPLETE_AS_COMPLETE"},
+    {"case_id": "CONFLICTING_COMPLETION", "expected_reason": "IROF_CHECKPOINT_COMPLETION_HASH_CONFLICT"},
+    {"case_id": "OPAQUE_SUBSTAGE", "expected": "PRESERVE_REF_WITHOUT_PAYLOAD_INSPECTION"},
+    {"case_id": "CORRUPT_OPAQUE_SUBSTAGE", "expected": "QUARANTINE_OWNER_STAGE_AND_RERUN_DESCENDANTS"},
+    {"case_id": "FRESH_REPEAT_RESUME", "expected": "IDENTICAL_LOGICAL_HASH"}
+  ]
+}
