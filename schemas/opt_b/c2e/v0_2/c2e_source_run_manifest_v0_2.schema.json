@@ -1,0 +1,23 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"c2e_source_run_manifest/v0_2",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","programme_id","plan_id","plan_version","packet_id","gate_id","run_manifest_id","logical_sha256","mode","baseline_main","source_population","raw_source_objects","accepted_c2_replay","boundary_pack","resource_envelope","execution_requirements","authority","rollback"],
+  "properties":{
+    "schema":{"const":"c2e_source_run_manifest/v0_2"},
+    "programme_id":{"const":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2"},
+    "plan_id":{"type":"string","minLength":1},"plan_version":{"type":"string","minLength":1},
+    "packet_id":{"const":"C2E2-WP6"},"gate_id":{"const":"C2E2-G6-RUN-AUTH"},
+    "run_manifest_id":{"type":"string","minLength":1},"logical_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "mode":{"const":"BOUNDED_REAL_SOURCE_SHADOW_REPLAY_ONLY"},"baseline_main":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "source_population":{"type":"object","required":["c2_package_id","c2_package_sha256","input_binding_id","input_binding_sha256","logical_population_sha256","source_slice_id","source_manifest_sha256","instrument","sides","clocks","frame_ids","context_start_utc","target_start_utc","target_end_exclusive_utc","context_end_exclusive_utc","target_eligibility","counts"]},
+    "raw_source_objects":{"type":"array","minItems":4,"maxItems":4,"items":{"type":"object","required":["drive_id","name","size_bytes","sha256"]}},
+    "accepted_c2_replay":{"type":"object","required":["google_drive_replay_root_id","run_001_folder_id","run_001_output_manifest_file_id","two_clean_runs","determinism","restart","reuse_rule"]},
+    "boundary_pack":{"type":"object","required":["boundary_pack_id","logical_sha256","version","authority","active","canonical"]},
+    "resource_envelope":{"type":"object","required":["envelope_id","logical_sha256","limits","on_exceed"]},
+    "execution_requirements":{"type":"object","required":["clean_run_count","restart_equivalence_required","count_reconciliation_required","no_sampling_or_top_k_substitution","comparators_read_only_isolated","external_artifacts_only_for_full_streams","provider_intake","validation_consumption"]},
+    "authority":{"type":"object","required":["wp6_real_source_shadow_replay","active_c2e","active_boundary_pack","selector_mutation","canonical_or_r2_publication","validation","family_semantic_candidate_theory_promotion","probability_risk_exposure_execution","agent_write"]},
+    "rollback":{"type":"string","minLength":1}
+  }
+}
