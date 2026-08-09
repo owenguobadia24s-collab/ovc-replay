@@ -9,6 +9,8 @@ PROFILE = ROOT / "registries/research/srfd/wp10_execution_resilience_profile_v0_
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_23_WP10_EXECUTION_RESILIENCE_READY.json"
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 BLOCKER = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-6/SRFDI_WP10_V06_EXECUTION_BLOCKER.json"
+FRESH_V09 = "SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
+V09_BINDING = "ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
 
 
 class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
@@ -57,6 +59,15 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
         self.assertTrue(self.state["authority"]["fresh_june_scientific_run"].startswith("DENIED"))
         if self.pointer["next_packet"] == "SRFDI-G-JUNE-AUTH-v0.7-PREP":
             self.assertEqual("DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
+        elif self.pointer["current_gate"] == "SRFDI-G10" and self.pointer["status"] == "READY":
+            self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+            self.assertEqual(FRESH_V09, self.pointer["fresh_authority_token_id"])
+            self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
+            self.assertFalse(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual(V09_BINDING, self.pointer["run_binding_sha256"])
+            self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
         elif self.pointer["status"] == "READY" and self.pointer.get("current_gate") != "SRFDI-G-JUNE-AUTH":
             self.assertEqual("SRFDI-WP10-v0.7", self.pointer["next_packet"])
             self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.pointer["june_execution"])

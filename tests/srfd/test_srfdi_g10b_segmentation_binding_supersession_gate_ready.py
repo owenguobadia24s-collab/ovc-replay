@@ -13,6 +13,8 @@ STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_28_G10B_SUPERS
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
 PREREG = ROOT / "registries/research/srfd/SRFD_PREREGISTRATION_CANDIDATE_v0_4.json"
 SEGMENTATION = ROOT / "registries/research/srfd/segmentation_boundary_packs_v0_3.json"
+FRESH_V09 = "SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
+V09_BINDING = "ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
 
 class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
     @classmethod
@@ -32,6 +34,8 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
             self.assertEqual("GATE_READY",self.pointer["status"]); self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE",self.pointer["wp10b_execution"])
         elif self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH" and self.pointer["status"]=="GATE_READY":
             self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertTrue(self.pointer["june_execution"].startswith("DENIED")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
+        elif self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="READY":
+            self.assertEqual("SRFDI-WP10-v0.9",self.pointer["next_packet"]); self.assertFalse(self.pointer["operator_decision_required"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY",self.pointer["june_execution"])
         else:
             self.assertEqual("SRFDI-G-JUNE-AUTH",self.pointer["current_gate"]); self.assertFalse(self.pointer["operator_decision_required"]); self.assertIsNotNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
 
