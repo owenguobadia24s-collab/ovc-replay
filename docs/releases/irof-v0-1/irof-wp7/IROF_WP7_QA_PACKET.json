@@ -1,0 +1,14 @@
+{
+  "schema":"ovc-irof-qa-packet/v0.1",
+  "programme_id":"OVC-IROF-v0.1",
+  "packet_id":"IROF-WP7",
+  "gate_id":"IROF-G8",
+  "plan_version":"0.1",
+  "baseline_commit":"65fe08e787dc9357ea15114455e842b8ba5aa7cd",
+  "authority_delta":"append-only/read-only Research Operations evidence integration only",
+  "static_review":{"status":"PASS","checks":["ArtifactRef maps to existing Research Operations catalogue declarations","local bytes are re-hashed through existing catalogue builder","existing QARunner remains non-mutating","run DAG/status/telemetry project into replaceable read model","same evidence rebuilds deterministic read-model hash","execution failures become market-claim-neutral incidents","null/negative scientific results remain results not incidents","large generated artifacts remain external"]},
+  "ci":{"status":"PENDING_EXACT_HEAD"},
+  "blocking_issues":[],
+  "recommended_decision":"PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "rollback":"remove IROF Research Operations read projection; underlying run artifacts and Research Operations evidence remain unchanged"
+}

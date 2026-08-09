@@ -1,0 +1,17 @@
+{
+  "schema":"ovc-irof-wp7-evidence-fixtures/v0.1",
+  "authority_effect":"NONE",
+  "cases":[
+    {"case_id":"LOCAL_HASH_REVERIFY","expected":"LOCAL_VERIFIED"},
+    {"case_id":"LOCAL_HASH_MISMATCH","expected":"BLOCK"},
+    {"case_id":"UNPORTABLE_LOCAL_PATH","expected_reason":"IROF_EVIDENCE_LOCATION_NOT_PORTABLE"},
+    {"case_id":"REMOTE_R2_DECLARATION","expected":"REMOTE_VERIFIED"},
+    {"case_id":"QA_NON_MUTATION","expected":"PASS"},
+    {"case_id":"QA_MUTATION","expected":"REJECT"},
+    {"case_id":"DETERMINISTIC_READ_MODEL_REBUILD","expected":"SAME_LOGICAL_HASH"},
+    {"case_id":"AUTHORITY_FAILURE_INCIDENT","expected":"MARKET_CLAIM_EFFECT_NONE"},
+    {"case_id":"NULL_SCIENTIFIC_RESULT","expected":"NOT_INCIDENT"},
+    {"case_id":"LARGE_ARTIFACT_LOCAL","expected_reason":"IROF_EVIDENCE_LARGE_ARTIFACT_MUST_BE_EXTERNAL"},
+    {"case_id":"LARGE_ARTIFACT_R2","expected":"PASS"}
+  ]
+}
