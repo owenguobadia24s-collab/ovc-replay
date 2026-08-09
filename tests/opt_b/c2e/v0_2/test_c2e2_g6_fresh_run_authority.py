@@ -98,15 +98,21 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["wp6_execution"], "AUTHORIZED_NOT_STARTED")
         self.assertEqual(self.state["authority"]["real_source_replay"], "AUTHORIZED_NOT_STARTED")
-        self.assertEqual(self.pointer["status"], "QA_REVIEW")
-        self.assertEqual(self.pointer["wp6_execution"], "EXECUTED_EVIDENCE_PENDING_QA")
-        self.assertEqual(self.pointer["real_source_replay"], "EXECUTED_TWO_CLEAN_EQUIVALENCE_RUNS")
+        self.assertIn(self.pointer["status"], {"QA_REVIEW", "READY"})
+        self.assertIn(self.pointer["wp6_execution"], {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"})
+        self.assertIn(
+            self.pointer["real_source_replay"],
+            {"EXECUTED_TWO_CLEAN_EQUIVALENCE_RUNS", "COMPLETED_TWO_CLEAN_EQUIVALENCE_RUNS"},
+        )
         self.assertEqual(self.pointer["replacement_run_token_id"], self.token["token_id"])
         self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertEqual(self.pointer["replacement_boundary_pack_id"], self.pack["boundary_pack_id"])
         self.assertEqual(self.pointer["replacement_resource_envelope_id"], self.envelope["envelope_id"])
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        if self.pointer["status"] == "READY":
+            self.assertEqual(self.pointer["current_packet"], "C2E2-WP7")
+            self.assertEqual(self.pointer["current_gate"], "C2E2-G7")
 
 if __name__ == "__main__":
     unittest.main()
