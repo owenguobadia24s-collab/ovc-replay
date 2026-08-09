@@ -1,2 +1,3 @@
-import { useLocation, useSearchParams } from "react-router-dom";
-export function FoundationWorkspace() { const location = useLocation(); const [searchParams] = useSearchParams(); return <section className="foundation-workspace" aria-label="Fixture-only application foundation"><p className="eyebrow">FIXTURE-ONLY FOUNDATION</p><h1>{location.pathname.slice(1) || "market"}</h1><p>React routing, source revalidation and InvestigationSet state are active. Scientific panels and real source bindings are intentionally deferred to their owning packets and gates.</p><dl><div><dt>Investigation</dt><dd>{searchParams.get("investigation") ?? "resolving"}</dd></div><div><dt>Authority</dt><dd>NONE · PRESENTATION ONLY</dd></div><div><dt>Source mode</dt><dd>SYNTHETIC_FIXTURE / NON_EVIDENTIARY</dd></div></dl></section>; }
+import { WorkspaceFrame } from "../workspace/WorkspaceFrame";
+
+export function FoundationWorkspace() { return <WorkspaceFrame />; }
