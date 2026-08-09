@@ -1,0 +1,101 @@
+{
+  "acceptance_conditions": {
+    "blocker_reproduced": "PASS",
+    "c2e_base_observation_identity_explicit": "PASS",
+    "in_place_hash_preserving_repair": "IMPOSSIBLE_POPULATION_SCOPE_IS_PACK_IDENTITY_BEARING",
+    "one_to_one_identity_safe_crosswalk": "ABSENT",
+    "provider_intake": "NONE",
+    "run_not_started": "PASS",
+    "sequence_window_scope_explicit": "PASS",
+    "token_unconsumed": "PASS",
+    "validation_or_outcome_dependency": "NONE"
+  },
+  "allowed_decisions": ["SUPERSEDE", "DEFER", "BLOCK"],
+  "authority_class": "OPERATOR_REQUIRED_MATERIAL_FROZEN_BINDING_CHANGE",
+  "baseline_commit": "8f3bbe12b13b860206427c270b56cc7fba6c2212",
+  "blocker": {
+    "bound_manifest_sha256": "abf30a7f24f66a315a9f503bfe5ab7346f3c566798c8e0e25693f2f11c81952a",
+    "bound_pack_id": "C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1",
+    "bound_pack_sha256": "22461197d5c711871ba568e850dcbcc1741da9b5bdc6c2aa41af54a56e145ecd",
+    "bound_population_sha256": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7",
+    "finding": "The exact authorized 33,320-row population is REGISTERED_SEQUENCE_WINDOW functional-discovery requests, while the frozen C2E source unit is the base C2 observation_id/C2EInputFrame. No lawful identity-preserving one-to-one crosswalk exists.",
+    "id": "C2E2-WP6-BLOCK-AUTHORIZED-POPULATION-UNIT-MISMATCH-20260809",
+    "record": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_WP6_PREFLIGHT_BLOCKER.json"
+  },
+  "candidate_commit": "8e8fca93ac0d36f21b00b602c15d4a28f3a1d79d",
+  "changed_files": [
+    "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_WP6_PREFLIGHT_BLOCKER.json",
+    "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_WP6_PREFLIGHT_QA_PACKET.json",
+    "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_23.json",
+    "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json",
+    "tests/opt_b/c2e/v0_2/test_c2e2_wp6_preflight_blocker.py",
+    "tests/opt_b/c2e/v0_2/test_c2e2_g6_pack_envelope_prereg.py",
+    "tests/opt_b/c2e/v0_2/test_c2e2_g6_run_auth_supersession.py"
+  ],
+  "completed_packets": ["C2E2-WP0", "C2E2-WP1", "C2E2-WP2", "C2E2-WP3", "C2E2-WP4", "C2E2-WP5", "C2E2-WP7_REPLAY_DEFERRED", "C2E2-G6-PREREQ-20260809", "C2E2-G6-RUN-AUTH-SUPERSESSION-20260809"],
+  "current_authority": {
+    "active_boundary_pack": "NONE",
+    "active_c2e": "NONE",
+    "family_semantic_probability_risk_exposure_execution": "NONE",
+    "real_source_replay": "AUTHORIZED_EXACT_TOKEN_ON_MAIN_BUT_FAIL_CLOSED_PREFLIGHT_BLOCKED",
+    "run_token_consumed": false,
+    "run_token_id": "C2E2.G6.TOKEN.81c25e8dae79234d60858274",
+    "selector_publication_validation": "DENIED",
+    "wp6_execution": "NOT_STARTED"
+  },
+  "external_artifact_hashes": [
+    {"artifact": "accepted C2 full-replay output-manifest.json", "drive_id": "1iW7a9eaHIcc_k1-aVTDTaHrVCr12Hb7Q", "sha256": "2808729f929412f56ad3061b0cbbcd42bdb277bfc779cd1885f605584295a693"},
+    {"artifact": "15M ASK opportunity-requests.jsonl", "sha256": "1271abef17bbfd33e788d41d043931176ff302aa167d64ac4b551024dc91f66f"},
+    {"artifact": "15M BID C1 records", "drive_id": "1QjOaKE2ugCf0JaBqHoUw1F9fYCHFLOQF", "sha256": "bd7bc02902666d6d0e10542dbbca8b43af167e610a73b62c625b38712a49d113"},
+    {"artifact": "15M ASK C1 records", "drive_id": "17YowWR9MUAzPukEN-8szgADP0lT928SJ", "sha256": "f95de2c9003ce9fa3b41a6035b9947be46de60172191964efd89c62883df58db"},
+    {"artifact": "2H BID C1 records", "drive_id": "1dVyUou3wnEfHmF5EWrKTrZEJzCQ3jQHb", "sha256": "311fe938d14431f57851aaf4e4abeb3002c760c8805b452a5a272e8da37ea3dd"},
+    {"artifact": "2H ASK C1 records", "drive_id": "1B5MuE6Xofaa0Vpui_fUyVabTiGVlMaRM", "sha256": "70071f48025568c31c2722ec5b9992b9917f74f70df07f6a7e05d5667156f1ba"}
+  ],
+  "gate_id": "C2E2-G6-BINDING-SUPERSESSION",
+  "gate_title": "WP6 authorized-population unit mismatch supersession",
+  "next_action": "STOP_FOR_OPERATOR_C2E2_G6_BINDING_SUPERSESSION",
+  "operator_commands": {
+    "BLOCK": "OVC APPROVE C2E2-G6-BINDING-SUPERSESSION BLOCK",
+    "DEFER": "OVC APPROVE C2E2-G6-BINDING-SUPERSESSION DEFER",
+    "SUPERSEDE": "OVC APPROVE C2E2-G6-BINDING-SUPERSESSION SUPERSEDE"
+  },
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "proposed_authority_delta_if_supersede": {
+    "active_boundary_pack": "NONE",
+    "active_c2e": "NONE",
+    "family_semantic_probability_risk_exposure_execution": "NONE",
+    "old_boundary_pack": "PRESERVE_INACTIVE_HISTORICAL_NOT_MUTATED",
+    "old_resource_envelope": "PRESERVE_HISTORICAL_NOT_MUTATED",
+    "old_run_token": "OPERATOR_INVALIDATE_UNCONSUMED_PRESERVE_HISTORY",
+    "selector_publication_validation": "DENIED",
+    "superseding_base_c2_observation_frame_population_preparation": "AUTHORIZED_BOUNDED",
+    "superseding_empirical_boundary_pack_creation": "AUTHORIZED_INACTIVE_CANDIDATE_ONLY",
+    "superseding_exact_resource_envelope_creation": "AUTHORIZED_BOUND_TO_NEW_PACK_ONLY",
+    "superseding_run_manifest_and_token_preparation": "AUTHORIZED_CANDIDATE_ONLY",
+    "wp6_execution": "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION"
+  },
+  "qa": {"disposition": "BLOCK", "packet": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_WP6_PREFLIGHT_QA_PACKET.json", "recommendation": "SUPERSEDE_RUN_BINDING_BEFORE_WP6"},
+  "recommendation_rationale": "The mismatch is reproducible, precedes execution, and cannot be repaired without changing the identity-bearing population scope. Continuing the current exact run would violate both the run manifest and frozen C2EInputFrame identity contract.",
+  "recommended_decision": "SUPERSEDE",
+  "rollback": "SUPERSEDE does not rewrite historical bytes. Old pack/envelope/manifest/token stay addressable; old token is invalidated unconsumed by append-only decision. If corrected population cannot be reproduced without new semantics, stop BLOCKED and do not create a run token.",
+  "schema": "ovc-c2e2-g6-binding-supersession-gate/v1",
+  "tests": [
+    {"commit": "8e8fca93ac0d36f21b00b602c15d4a28f3a1d79d", "conclusion": "SUCCESS", "workflow": "tests", "workflow_id": 31299043320},
+    {"commit": "8e8fca93ac0d36f21b00b602c15d4a28f3a1d79d", "conclusion": "SUCCESS", "workflow": "OVC tiered test selection shadow", "workflow_id": 31299043321}
+  ],
+  "unresolved_issues": ["EXACT_BASE_C2_OBSERVATION_FRAME_POPULATION_IDENTITY_NOT_FROZEN", "SUPERSEDING_PACK_ENVELOPE_MANIFEST_TOKEN_NOT_CONSTRUCTED_OR_AUTHORIZED"],
+  "warnings": ["CURRENT_MAIN_TOKEN_REMAINS_AUTHORIZED_UNCONSUMED_UNTIL_OPERATOR_SUPERSESSION", "CORRECTED_C2E_FRAME_POPULATION_COUNT_AND_HASH_MUST_BE_DETERMINISTICALLY_FROZEN_NOT_INFERRED_FROM_4760_SCOPE_ARITHMETIC", "NEW_BOUNDARY_PACK_ID_REQUIRED", "NEW_RESOURCE_ENVELOPE_BINDING_REQUIRED", "NEW_RUN_MANIFEST_AND_TOKEN_REQUIRED"],
+  "work_after_block": "Record terminal C2E2-WP6 BLOCK; preserve synthetic/shadow conformance and all historical evidence; no real-source C2E replay.",
+  "work_after_defer": "Preserve PR #485, current main and the unconsumed token; do not execute WP6 or construct replacement authority objects.",
+  "work_after_supersede": [
+    "Create a bounded repair branch from latest lawful main.",
+    "Deterministically build the exact TARGET_JUNE_ONLY base C2 observation/C2EInputFrame source-population manifest from observation_id identities and lawful C2 structural joins using only existing accepted source/C1/C2 artifacts; no provider intake and no Validation.",
+    "Freeze exact population count/hash and source-field reconciliation; if any mandatory C2E field is physically absent or needs new semantics, BLOCK.",
+    "Prepare a new inactive boundary pack version with unchanged rule/priority/compatibility/ownership semantics and a new population_scope; freeze new pack ID/hash.",
+    "Prepare a new exact resource envelope bound to the new pack; retain the existing numeric limits unless a separate operator-approved capacity change is required.",
+    "Prepare a new exact source-run manifest and single-use token candidate; prove no sampling/top-k/substitution and comparator isolation.",
+    "Run targeted and complete QA, then present one exact C2E2-G6-RUN-AUTH decision packet with all new identities/hashes. Do not execute WP6 before that decision."
+  ]
+}
