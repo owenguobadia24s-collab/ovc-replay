@@ -1,0 +1,30 @@
+name: C2E2 WP6 source bundle
+
+on:
+  push:
+    branches:
+      - build/c2e2-wp6-source-replay
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - name: Build bounded source bundle
+        run: |
+          tar --exclude=.git --exclude='__pycache__' --exclude='.pytest_cache' -czf c2e2-wp6-repo-source.tgz src tests contracts schemas registries fixtures docs pyproject.toml 2>/dev/null || \
+          tar --exclude=.git --exclude='__pycache__' --exclude='.pytest_cache' -czf c2e2-wp6-repo-source.tgz src tests contracts schemas registries fixtures docs
+          sha256sum c2e2-wp6-repo-source.tgz > c2e2-wp6-repo-source.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: c2e2-wp6-repo-source-${{ github.sha }}
+          path: |
+            c2e2-wp6-repo-source.tgz
+            c2e2-wp6-repo-source.sha256
+          if-no-files-found: error
+          retention-days: 1
