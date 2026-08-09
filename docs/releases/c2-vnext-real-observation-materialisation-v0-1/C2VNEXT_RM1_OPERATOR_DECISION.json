@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-c2-vnext-real-observation-materialisation-operator-decision/v1",
+  "decision_id": "C2VNEXT-RM1.OPERATOR.APPROVE.20260809T115300+0100",
+  "recorded_at": "2026-08-09T11:53:00+01:00",
+  "operator_command": "OVC APPROVE **C2 vNext observation-level real-source materialization** packet",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "packet_id": "C2VNEXT-REAL-OBS-MATERIALISATION-20260809",
+  "programme_id": "OVC-C2AR-JUNE-OBSERVATION-MATERIALISATION-CORRECTIVE-v0.1",
+  "baseline_main": "0877d06e458bb7db0c13f435514b3f058b942dfc",
+  "authority_delta": {
+    "exact_accepted_c1_read": "AUTHORIZED",
+    "bounded_real_source_c2_vnext_materialisation": "AUTHORIZED_INACTIVE_SHADOW_ONLY",
+    "external_derived_artifact_write": "AUTHORIZED_HASH_BOUND",
+    "provider_intake": "DENIED_NONE_REQUIRED",
+    "active_c2_selector": "UNCHANGED_DENIED",
+    "semantic_threshold_family_model_theory_promotion": "DENIED",
+    "outcome_validation_publication": "DENIED",
+    "c2e_activation_or_wp6": "DENIED_PENDING_SEPARATE_C2E2_G6_RUN_AUTH",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "source_of_need": "C2E2-G6 replacement-run preparation blocker: required observation_id, four-axis profile_output_id surface and parent-context bundle were not physically materialised in the accepted real replay.",
+  "rollback": "Preserve the materialisation and decision append-only; stop downstream consumption. No source or active authority is mutated.",
+  "next_action_after_pass": "AUTO_EXECUTE_PACKET_QA_AND_MERGE_IF_PASS_THEN_RETURN_TO_C2E2_G6_REPLACEMENT_RUN_PREP"
+}
