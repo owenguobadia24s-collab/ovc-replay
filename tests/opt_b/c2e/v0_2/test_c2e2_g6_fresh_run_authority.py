@@ -107,6 +107,7 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(self.pointer["replacement_run_token_id"], self.token["token_id"])
         self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertEqual(self.pointer["replacement_boundary_pack_id"], self.pack["boundary_pack_id"])
+        self.assertEqual(self.pointer["replacement_resource_envelope_id"], self.envelope["envelope_id"])
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         if self.pointer["status"] == "READY":
