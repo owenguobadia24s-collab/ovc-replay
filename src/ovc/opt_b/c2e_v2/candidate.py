@@ -1,11 +1,11 @@
 """Boundary-candidate construction for C2E v0.2 shadow/replay execution.
 
-The candidate constructor consumes an already-evaluated predicate plus the exact
-rule-scoped dependency roles from the frozen boundary pack.  Dependency result
-rows describe observed status; the rule owns whether a dependency is REQUIRED,
-OPTIONAL, WARNING or PROHIBITED.  This distinction matters for real-source WP6
-because parent context can be optional for CONTINUATION while required for
-RE_PARENT on the same frame.
+Dependency-result rows describe observed upstream availability.  The frozen
+boundary rule owns REQUIRED/OPTIONAL/WARNING meaning for each candidate.  A
+rule's PROHIBITED dependencies are an absence constraint enforced first by the
+C2E reverse-dependency firewall; they are therefore not required as handoff
+rows (putting FDI/C2G/C2.5/C3 into the handoff would itself violate the
+firewall).
 """
 from __future__ import annotations
 
@@ -31,8 +31,10 @@ def _evaluate_rule_scoped_dependencies(
         "WARNING": [str(item) for item in dependencies.get("WARNING", [])],
         "PROHIBITED": [str(item) for item in dependencies.get("PROHIBITED", [])],
     }
-    declared = groups["REQUIRED"] + groups["OPTIONAL"] + groups["WARNING"] + groups["PROHIBITED"]
-    missing = sorted(item for item in declared if item not in by_id)
+    # Only upstream dependencies that may lawfully occur in a C2EInputFrame are
+    # required as rows.  PROHIBITED dependencies are absence constraints.
+    declared_upstream = groups["REQUIRED"] + groups["OPTIONAL"] + groups["WARNING"]
+    missing = sorted(item for item in declared_upstream if item not in by_id)
     if missing:
         raise CandidateError(f"DEP_UNDECLARED_RESULT_MISSING:{','.join(missing)}")
 
@@ -44,8 +46,10 @@ def _evaluate_rule_scoped_dependencies(
     for dep_id in groups["OPTIONAL"] + groups["WARNING"]:
         if by_id[dep_id]["status"] not in SUCCESS:
             warnings.append(f"DEPENDENCY_WARNING:{dep_id}")
+    # Defence in depth for an already-normalized frame.  The handoff firewall
+    # should make this branch unreachable for downstream OVC namespaces.
     for dep_id in groups["PROHIBITED"]:
-        if by_id[dep_id]["status"] in SUCCESS:
+        if dep_id in by_id:
             blocked.append(f"PROHIBITED_DEPENDENCY_PRESENT:{dep_id}")
     return {
         "evaluable": not blocked,
