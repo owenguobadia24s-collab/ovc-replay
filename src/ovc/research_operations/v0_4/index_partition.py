@@ -4,7 +4,6 @@ import hashlib
 import json
 import os
 import platform
-import resource
 import sqlite3
 import sys
 import time

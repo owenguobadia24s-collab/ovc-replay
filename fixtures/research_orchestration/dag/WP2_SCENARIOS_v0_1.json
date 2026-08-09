@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-irof-wp2-dag-fixtures/v0.1",
+  "authority_effect": "NONE",
+  "cases": [
+    {"case_id": "ORDINARY_CHAIN", "expected": "PASS"},
+    {"case_id": "PARENT_ORDER_SHUFFLE", "expected": "SAME_CANONICAL_PLAN"},
+    {"case_id": "CYCLE", "expected_reason": "IROF_DEPENDENCY_CYCLE"},
+    {"case_id": "MISSING_PARENT", "expected_reason": "IROF_MISSING_REQUIRED_DEPENDENCY"},
+    {"case_id": "FORBIDDEN_EDGE", "expected_reason": "IROF_FORBIDDEN_DEPENDENCY"},
+    {"case_id": "OUTPUT_TYPE_MISMATCH", "expected_reason": "IROF_DEPENDENCY_OUTPUT_TYPE_MISMATCH"},
+    {"case_id": "HIDDEN_EXTRA_DEPENDENCY", "expected_reason": "IROF_INPUT_TYPE_UNSATISFIED"},
+    {"case_id": "WRAPPER_MUTATION", "expected_reason": "IROF_WRAPPER_SCIENTIFIC_MUTATION"},
+    {"case_id": "EXTENSION_STAGE", "expected": "PASS_WITHOUT_SCHEDULER_CHANGE"}
+  ]
+}

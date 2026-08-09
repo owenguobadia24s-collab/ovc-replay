@@ -41,13 +41,18 @@ class C2E2G6BindingSupersessionOperatorDecisionTests(unittest.TestCase):
         self.assertEqual(delta["active_c2e"], "NONE")
         self.assertEqual(delta["active_boundary_pack"], "NONE")
 
-    def test_state_and_pointer_continue_to_binding_repair(self):
+    def test_historical_supersession_state_is_preserved_during_later_lawful_progression(self):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual(self.state["next_packet"], "C2E2-G6-BINDING-REPAIR")
         self.assertEqual(self.pointer["old_run_token_status"], "INVALIDATED_UNCONSUMED_BY_OPERATOR_SUPERSESSION")
-        self.assertEqual(self.pointer["next_packet"], "C2E2-G6-BINDING-REPAIR")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
+        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        self.assertEqual(self.pointer["wp6_execution"], "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION")
+        self.assertIn(
+            "C2E2-G6-BINDING-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T084300+0100",
+            self.pointer["operator_decision_history"],
+        )
 
 if __name__ == "__main__":
     unittest.main()

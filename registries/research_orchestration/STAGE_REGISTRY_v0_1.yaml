@@ -1,0 +1,77 @@
+schema: ovc-irof-stage-registry/v0.1
+status: INACTIVE_INFRASTRUCTURE
+scientific_effect: NONE
+stages:
+  - stage_id: POPULATION_SOURCE_OPT_A
+    stage_version: '0.1'
+    stage_kind: SOURCE_BINDING
+    input_types: []
+    output_types: [OPT_A_OBSERVATIONS]
+    dependencies: []
+  - stage_id: C1
+    stage_version: '0.1'
+    stage_kind: OWNER_ADAPTER_PLACEHOLDER
+    input_types: [OPT_A_OBSERVATIONS]
+    output_types: [C1_RECORDS]
+    dependencies: []
+  - stage_id: C2_REVISED
+    stage_version: '0.1'
+    stage_kind: OWNER_ADAPTER_PLACEHOLDER
+    input_types: [C1_RECORDS]
+    output_types: [C2_STATE_STREAM]
+    dependencies:
+      - {stage_id: C1, disposition: REQUIRED, expected_output_types: [C1_RECORDS]}
+  - stage_id: C2E_V0_2
+    stage_version: '0.1'
+    stage_kind: OWNER_ADAPTER_PLACEHOLDER
+    input_types: [C2_STATE_STREAM]
+    output_types: [C2E_STREAM]
+    dependencies:
+      - {stage_id: C2_REVISED, disposition: REQUIRED, expected_output_types: [C2_STATE_STREAM]}
+  - stage_id: OCCURRENCE_CONTEXT
+    stage_version: '0.1'
+    stage_kind: CONTEXT_ATTACHMENT
+    input_types: [C2E_STREAM]
+    output_types: [OCCURRENCE_CONTEXT_RECORDS]
+    dependencies:
+      - {stage_id: C2E_V0_2, disposition: REQUIRED, expected_output_types: [C2E_STREAM]}
+  - stage_id: SRI_REPRESENTATION
+    stage_version: '0.1'
+    stage_kind: OWNER_ADAPTER_PLACEHOLDER
+    input_types: [C2E_STREAM]
+    output_types: [REPRESENTATION_POPULATION]
+    dependencies:
+      - {stage_id: C2E_V0_2, disposition: REQUIRED, expected_output_types: [C2E_STREAM]}
+      - {stage_id: OCCURRENCE_CONTEXT, disposition: OPTIONAL, expected_output_types: [OCCURRENCE_CONTEXT_RECORDS]}
+  - stage_id: COMPARABILITY_COMPARISON_DISTANCE
+    stage_version: '0.1'
+    stage_kind: OWNER_ADAPTER_PLACEHOLDER
+    input_types: [REPRESENTATION_POPULATION]
+    output_types: [COMPARISON_SURFACE]
+    dependencies:
+      - {stage_id: SRI_REPRESENTATION, disposition: REQUIRED, expected_output_types: [REPRESENTATION_POPULATION]}
+  - stage_id: FDI_C2G_FAMILY
+    stage_version: '0.1'
+    stage_kind: OWNER_ADAPTER_PLACEHOLDER
+    input_types: [COMPARISON_SURFACE]
+    output_types: [FAMILY_CATALOG]
+    dependencies:
+      - {stage_id: COMPARABILITY_COMPARISON_DISTANCE, disposition: REQUIRED, expected_output_types: [COMPARISON_SURFACE]}
+  - stage_id: FAMILY_EVIDENCE_STREAM
+    stage_version: '0.1'
+    stage_kind: OWNER_ADAPTER_PLACEHOLDER
+    input_types: [FAMILY_CATALOG]
+    output_types: [FAMILY_EVIDENCE_STREAM]
+    dependencies:
+      - {stage_id: FDI_C2G_FAMILY, disposition: REQUIRED, expected_output_types: [FAMILY_CATALOG]}
+  - stage_id: RESEARCH_OPERATIONS
+    stage_version: '0.1'
+    stage_kind: EVIDENCE_TERMINAL
+    input_types: [FAMILY_EVIDENCE_STREAM]
+    output_types: [RESEARCH_OPERATIONS_EVIDENCE]
+    dependencies:
+      - {stage_id: FAMILY_EVIDENCE_STREAM, disposition: REQUIRED, expected_output_types: [FAMILY_EVIDENCE_STREAM]}
+notes:
+  - Registry entries are planning metadata only; executable adapters are registered later under IROF-WP8.
+  - C1 may receive OPT_A_OBSERVATIONS as an explicit external input in profiles that omit POPULATION_SOURCE_OPT_A.
+  - OccurrenceContext remains context-only by default and is not a structural representation input.
