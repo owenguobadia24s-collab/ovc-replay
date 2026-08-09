@@ -1,0 +1,177 @@
+{
+  "schema": "c2e-ag1-operator-gate-packet/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "gate_id": "C2E-AG1",
+  "gate_title": "Replay adequacy review",
+  "gate_classification": "OPERATOR_RESERVED",
+  "decision_status": "PENDING_OPERATOR",
+  "operator_decision_record": null,
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK"],
+  "baseline_commit": "dd2182f22b0223f7193332dfc7b482509031ceeb",
+  "candidate_commit": "dd2182f22b0223f7193332dfc7b482509031ceeb",
+  "completed_packets": [
+    "C2E2-WP0", "C2E2-WP1", "C2E2-WP2", "C2E2-WP3", "C2E2-WP4", "C2E2-WP5", "C2E2-WP6", "C2E2-WP7", "C2E-AG0-PASS"
+  ],
+  "governing_requirement": {
+    "source": "OVC C2E Causal Episode Layer v0.2 Conformance Implementation Plan v0.1 REVISED",
+    "ag1_minimum_evidence": [
+      "exact_source_run_manifests",
+      "two_clean_run_or_equivalent_determinism_proof",
+      "restart_equivalence",
+      "gap_release_conflict_topology_cases",
+      "counts_and_hashes",
+      "capacity_evidence"
+    ],
+    "continuation": "AG2_ONLY_AFTER_EXPLICIT_AG1_OPERATOR_DECISION"
+  },
+  "review_subject": {
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "version": "JUNE.EMPIRICAL.BASELINE.STABLE_SIGNATURE.v2",
+    "logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "authority": "ADMITTED_AT_AG0_FOR_OPERATOR_GOVERNED_AG_EVALUATION_ONLY",
+    "active": false,
+    "canonical": false,
+    "population_scope": {
+      "instrument_id": "GBPUSD",
+      "sides": ["ASK", "BID"],
+      "clock_ids": ["UTC_15M"],
+      "parent_clock_ids": ["2H_A_L"],
+      "materialisation_id": "C2VNEXT.JUNE.REAL.OBSERVATION.MATERIALISATION.v1",
+      "materialisation_logical_sha256": "de9689f65e5067a80d91265742f5ecc0214bf397d96ea037f4edeb6a251afe6d",
+      "logical_population_sha256": "46f02ed89c9c4a3d4b3ef2046b7aa32489c5b63a526dbb8151896331d0ae896d",
+      "target_frame_count": 4072,
+      "target_start_utc": "2026-06-01T00:00:00Z",
+      "target_end_exclusive_utc": "2026-07-01T00:00:00Z"
+    }
+  },
+  "current_authority": {
+    "ag0_admissibility": "PASS",
+    "ag1_replay_adequacy": "PENDING_OPERATOR",
+    "ag2_progression": "DENIED_PENDING_AG1",
+    "ag3_activation_or_replacement": "DENIED_OPERATOR_RESERVED",
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "selector_publication_validation": "DENIED",
+    "family_semantic_candidate_theory_promotion": "DENIED",
+    "probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "evidence": {
+    "source_run_manifest": {
+      "id": "C2E2.WP6.JUNE.OBSERVATION.STABLE.EXACT.v2",
+      "logical_sha256": "69cb801ca95a07a1b582d7ce0e664ba028eff54a7d28828f8bf46b8f33107e21",
+      "status": "PRESENT_EXACT"
+    },
+    "resource_envelope": {
+      "id": "C2E2.RESOURCE.JUNE.OBSERVATION.STABLE.T0.v2",
+      "logical_sha256": "0761b5de2f231de6b8fc5eb91e4c0bc2dd2b10f9abeb9192aa8703d90db35717",
+      "status": "PRESENT_EXACT"
+    },
+    "determinism": {
+      "two_clean_runs": "PASS_IDENTICAL_SCIENTIFIC_ARTIFACT_HASHES",
+      "logical_output_sha256": "18519e37a16bc1f73148f3764ec1444d1fcd36fce82e9a1d585f712fb02d6988",
+      "semantic_equivalence": "PASS_4072_FRAMES_ZERO_MATCHED_RULE_MISMATCHES",
+      "canonical_runtime_byte_stream_equivalence": "NOT_CLAIMED"
+    },
+    "source_coverage_and_reconciliation": {
+      "frames": 4072,
+      "membership_deltas": 4072,
+      "episodes": 92,
+      "gap_censors": 90,
+      "release_end_censors": 2,
+      "stream_records": 16550,
+      "matched_candidate_boundaries": 8490,
+      "not_evaluable_candidates": 34,
+      "ambiguous_boundary_sets": 0,
+      "resolver_conflicts": 0,
+      "conflicted_episodes": 0,
+      "peer_owner_collisions": 0,
+      "status": "PASS_EXACT_RECONCILIATION"
+    },
+    "topology_and_adversarial_cases": {
+      "fixture_catalogue": "F01-F40",
+      "fixture_status": "PASS_40_OF_40",
+      "wp5_qa": "PASS_QA01_QA24",
+      "layout_hash_seed_restart_reshard": "PASS_SYNTHETIC_ADVERSARIAL",
+      "real_source_re_parent_evidence": "PRESENT",
+      "real_source_conflict_pressure": "PRESENT_ZERO_RESOLVER_CONFLICTS_WITH_EXPLICIT_DENOMINATORS"
+    },
+    "restart_equivalence": {
+      "synthetic_adversarial_restart": "PASS",
+      "real_source_restart_equivalence": "NOT_SEPARATELY_MATERIALIZED_IN_WP6_POSTRUN_PACKET",
+      "ag1_requirement_status": "NOT_MET_FOR_FULL_REAL_SOURCE_REPLAY_ADEQUACY"
+    },
+    "capacity": {
+      "status": "PASS_WITHIN_T0",
+      "capacity_exceeded": false,
+      "max_wall_clock_seconds": 14400,
+      "max_peak_rss_bytes": 17179869184,
+      "max_external_output_bytes": 10737418240,
+      "worker_count": 1,
+      "run_a_seconds": 28.256421,
+      "run_b_seconds": 27.803846,
+      "run_a_max_rss_kib": 867104,
+      "run_b_max_rss_kib": 867164
+    }
+  },
+  "acceptance_conditions": {
+    "exact_source_run_manifest": "PASS",
+    "exact_source_population_and_hashes": "PASS",
+    "two_clean_run_determinism": "PASS",
+    "source_coverage": "PASS_4072_FRAMES",
+    "gap_and_release_reconciliation": "PASS_90_GAP_2_RELEASE_END_CENSORS",
+    "split_merge_nest_reparent_conflict_topology_fixture_evidence": "PASS_SYNTHETIC_ADVERSARIAL_F01_F40",
+    "real_source_conflict_and_ownership_reconciliation": "PASS",
+    "counts_and_logical_hashes": "PASS",
+    "capacity_envelope": "PASS_WITHIN_T0",
+    "restart_equivalence": "NOT_MET_REAL_SOURCE_RESTART_EQUIVALENCE_NOT_SEPARATELY_MATERIALIZED"
+  },
+  "required_evidence_gaps": [
+    {
+      "id": "C2E-AG1-GAP-001",
+      "requirement": "restart_equivalence",
+      "observed": "Synthetic/adversarial restart coverage passes, but the exact real-source WP6 postrun evidence does not separately materialize restart-versus-uninterrupted equivalence.",
+      "disposition_effect": "AG1_PASS_NOT_RECOMMENDED_UNTIL_GAP_IS_RESOLVED_OR_OPERATOR_EXPLICITLY_ACCEPTS_THE_LIMITATION",
+      "must_not_infer": true
+    }
+  ],
+  "warnings": [
+    "REAL_SOURCE_RESTART_EQUIVALENCE_NOT_SEPARATELY_MATERIALIZED_IN_WP6_POSTRUN_PACKET",
+    "WP6_EQUIVALENCE_PROOF_IS_SEMANTIC_NOT_CANONICAL_RUNTIME_BYTE_STREAM_EQUIVALENCE",
+    "SRFD_CURRENT_COMPARATOR_UNAVAILABLE_DUE_EXISTING_SRFDI_WP10_V07_SEGMENTATION_BINDING_BLOCKER_AG2_RELEVANT_NOT_AG1_RESTART_SUBSTITUTE"
+  ],
+  "unresolved_issues": [],
+  "tests_and_qa": {
+    "wp5_synthetic_adversarial": "PASS_40_OF_40_QA01_QA24",
+    "wp6_postrun_qa": "PASS_WITH_NONBLOCKING_WARNINGS",
+    "ag0_decision_merge": "dd2182f22b0223f7193332dfc7b482509031ceeb",
+    "ag0_decision_tests_run": "31334993113 SUCCESS",
+    "ag0_profile_tiered_merge_readiness_run": "31334993123 SUCCESS"
+  },
+  "external_artifact_hashes": [
+    {"artifact": "source_materialisation", "drive_file_id": "185KzULNjd8zZqlfBfdNmtkaqH7PizN1y", "sha256": "8ba9b5654e26793c62bcae3f6b6dc50abe796175a532a8d2b57ef7d2137e7125"},
+    {"artifact": "run_a", "drive_file_id": "1ow8KUjE77trZU-NnVoSWXgDZwEN1ViTF", "sha256": "3ca7dbcdc4e52c5762155e79b94723de8b0b080081bb4519cf2de6e85058f81f"},
+    {"artifact": "run_b", "drive_file_id": "1TOIghV9q6pk3euOASotYE17nYV2mwSj-", "sha256": "057d4df279ceec18594738b94167947b580caf9bdec0a9d1f4c2bfe478c70db9"},
+    {"artifact": "equivalence_executor", "drive_file_id": "1ZxL5oubGYzI_gTyF4v4-HyBgK97fBaVe", "sha256": "98e87b229ad82475970b72da169b115aa99eb736926b97ce2c1b339c9028fe6a"},
+    {"artifact": "equivalence_runner", "drive_file_id": "1ysVcVnNsuoD0qAdMZ_c1NUFgyingV-Gk", "sha256": "cfdb15f010f1746102a41e33ce5cecfdda2e0d07123cc362ed3ca5494ff8ea18"}
+  ],
+  "proposed_delta_if_pass": {
+    "replay_adequacy": "ACCEPT_FOR_EXACT_AG0_ADMITTED_PACK_AND_SOURCE_SCOPE_ONLY",
+    "ag2_progression": "PREPARE_COMPARATIVE_COUNTEREXAMPLE_CONFLICT_OPERATOR_GATE_ONLY",
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "selector_mutation": "NONE",
+    "publication_validation": "NONE",
+    "family_semantic_candidate_theory_promotion": "NONE",
+    "probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "recommended_decision": "DEFER",
+  "recommendation_rationale": "The exact source manifest, population, two-clean-run determinism, reconciliation, adversarial topology/conflict coverage and T0 capacity evidence are present. However, the governing AG1 minimum evidence explicitly includes restart equivalence, while the current court record explicitly states that real-source restart equivalence was not separately materialized and must not be inferred. DEFER preserves the admitted inactive candidate and all evidence without weakening the AG1 evidentiary contract.",
+  "smallest_lawful_resolution": "Materialize restart-versus-uninterrupted equivalence for the exact frozen June source/population/pack. If doing so requires a new real-source replay execution, obtain a fresh exact single-use operator run authority; do not reuse the consumed WP6 token, change population/pack/sampling, or infer the missing result from synthetic restart tests.",
+  "rollback": "No active authority changes at AG1 preparation. Leave the candidate admitted for evaluation but inactive/noncanonical, preserve AG0 PASS, WP6/WP7 evidence and consumed token, and append-only supersede this gate packet if later evidence changes the disposition.",
+  "work_after_pass": "Record an append-only C2E-AG1 PASS for this exact pack/scope, then prepare C2E-AG2 comparative/counterexample/conflict evidence and stop at that operator-reserved gate. Do not activate C2E.",
+  "work_after_defer": "Keep C2E-AG1 GATE_READY, preserve all evidence, and prepare no AG2 progression. Any real-source restart-evidence execution requires its own lawful authority if not already reproducible read-only from existing artifacts.",
+  "work_after_block": "Record AG1 BLOCK and stop; preserve the admitted candidate, all replay evidence, consumed token and historical decisions append-only.",
+  "next_action": "STOP_AT_OPERATOR_GATE_C2E_AG1"
+}
