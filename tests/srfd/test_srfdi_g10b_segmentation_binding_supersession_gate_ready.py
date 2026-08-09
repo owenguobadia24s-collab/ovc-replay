@@ -33,15 +33,23 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
         self.assertEqual("OVC APPROVE SRFDI-G10B SUPERSEDE", self.operator["exact_operator_command"])
         self.assertEqual("NONE", self.prep["authority_effect"])
 
-    def test_current_pointer_remains_fail_closed_and_consumed(self) -> None:
-        self.assertEqual("BLOCKED", self.pointer["status"])
-        self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
-        self.assertIsNone(self.pointer["next_packet"])
+    def test_current_pointer_preserves_blocker_and_only_adds_bounded_remediation(self) -> None:
+        self.assertIn(self.pointer["status"], {"BLOCKED", "AUTHORIZED_REMEDIATION_ONLY"})
         self.assertTrue(self.pointer["authority_token_consumed"])
         self.assertEqual(
             "CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",
             self.pointer["authority_token_state"],
         )
+        self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+        if self.pointer["status"] == "BLOCKED":
+            self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
+            self.assertIsNone(self.pointer["next_packet"])
+        else:
+            self.assertEqual("SRFDI-G10B", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
+            self.assertEqual("AUTHORIZED_SEGMENTATION_EXECUTION_BINDING_REMEDIATION_ONLY", self.pointer["wp10b_execution"])
+            self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
 
     def test_candidate_state_is_not_the_current_pointer(self) -> None:
         self.assertEqual(
@@ -97,6 +105,11 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", current["selector_family_semantic_publication"])
         self.assertEqual("NONE", current["probability_risk_exposure_execution"])
         self.assertEqual("PASS_FOR_OPERATOR_REVIEW_WITH_POSTHOC_REBINDING_GUARD", self.qa["qa_result"])
+        self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
+        self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
+        self.assertEqual("NONE", self.pointer.get("scientific_promotion", "NONE"))
+        self.assertEqual("NONE", self.pointer.get("selector_family_semantic_publication", "NONE"))
+        self.assertEqual("NONE", self.pointer.get("probability_risk_exposure_execution", "NONE"))
 
 
 if __name__ == "__main__":
