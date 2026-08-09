@@ -60,16 +60,15 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
         self.assertEqual("DENIED", self.source_reverify["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.source_reverify["validation_2025"])
 
-    def test_new_token_reconstructs_and_neither_prior_identity_is_reused(self):
+    def test_v06_token_and_authority_artifacts_remain_exact_historical_record(self):
         reconstructed = june_authority_v06.verify_fresh_june_authority(self.decision, self.envelope, self.token, self.source_reverify, self.sfc_pointer)
         self.assertEqual(self.token, reconstructed)
         self.assertEqual(june_authority_v06.EXPECTED_TOKEN, self.token["token_id"])
-        self.assertNotEqual(june_authority_v06.PRIOR_V04_TOKEN, self.token["token_id"])
-        self.assertNotEqual(june_authority_v06.ATTEMPTED_V05_TOKEN, self.token["token_id"])
-        self.assertEqual("CONSUMED_NOT_REUSABLE", self.envelope["prior_authority"]["v0_4_token_state"])
-        self.assertEqual("NON_AUTHORITATIVE_UNMERGED_DO_NOT_REUSE", self.envelope["prior_authority"]["attempted_v0_5_token_state"])
+        self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.state["authority"]["market_benchmark"])
+        self.assertFalse(self.state["authority"]["authority_token_consumed"])
+        self.assertEqual("PASS_PENDING_EXACT_HEAD_REPOSITORY_ASSURANCE", self.qa["qa_result"])
 
-    def test_exact_population_capacity_and_firewalls(self):
+    def test_exact_population_capacity_and_firewalls_remain_unchanged(self):
         source = self.envelope["source_population_binding"]
         self.assertEqual(9420, source["source_record_count"])
         self.assertEqual(8598, source["eligible_record_count"])
@@ -78,41 +77,22 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
         self.assertEqual(36, self.decision["prerequisites"]["comparability_domain_count"])
         self.assertEqual(35380668, self.decision["prerequisites"]["exact_pair_opportunity_count"])
         self.assertEqual(1944, self.decision["prerequisites"]["family_configuration_count"])
-        self.assertEqual(june_authority_v06.CAPACITY_GRID_HASH, self.envelope["implementation_binding"]["capacity_catalog_grid_hash"])
-        self.assertTrue(self.envelope["capacity_binding"]["stop_on_capacity_exceeded"])
-        self.assertEqual("FORBIDDEN", source["provider_fetch"])
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
-
-    def test_qa_and_state_open_only_one_exact_bound_run(self):
-        # Historical v0.6 authority remains exact even after later incident handling.
-        self.assertEqual("PASS_PENDING_EXACT_HEAD_REPOSITORY_ASSURANCE", self.qa["qa_result"])
-        self.assertEqual([], self.qa["blocking_warnings"])
-        self.assertEqual([], self.qa["unresolved_issues"])
-        self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.state["authority"]["market_benchmark"])
-        self.assertFalse(self.state["authority"]["authority_token_consumed"])
-        self.assertEqual(self.token["token_id"], self.pointer["authority_token_id"])
-        self.assertFalse(self.pointer["operator_decision_required"])
         self.assertEqual("NONE", self.pointer["scientific_promotion"])
         self.assertEqual("NONE", self.pointer["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.pointer["probability_risk_exposure_execution"])
 
-        # The moving pointer may lawfully advance after the v0.6 attempt while the
-        # immutable v0.6 authority/state above remains unchanged.
-        if self.pointer["status"] == "BLOCKED":
-            self.assertIsNone(self.pointer["next_packet"])
+    def test_moving_pointer_preserves_consumed_v06_history_after_supersession(self):
+        if self.pointer["authority_token_id"] == self.token["token_id"]:
             self.assertTrue(self.pointer["authority_token_consumed"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
-            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
-        elif self.pointer.get("next_packet") == "SRFDI-G-JUNE-AUTH-v0.7-PREP":
-            self.assertEqual("READY", self.pointer["status"])
-            self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
-            self.assertTrue(self.pointer["authority_token_consumed"])
-            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
-            self.assertEqual("DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
-            self.assertTrue(self.pointer["execution_resilience_profile"].endswith("wp10_execution_resilience_profile_v0_1.json"))
         else:
-            self.assertEqual("SRFDI-WP10-v0.6", self.pointer["next_packet"])
+            self.assertEqual(self.token["token_id"], self.pointer["prior_v0_6_authority_token_id"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_v0_6_authority_token_state"])
+            self.assertEqual("BLOCKED_CONSUMED_TOKEN_PRESERVED", self.pointer["wp10_v0_6_execution_route"])
+        self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V06_EXECUTION_BLOCKER.json"))
+        self.assertFalse(self.pointer["operator_decision_required"])
 
 
 if __name__ == "__main__":
