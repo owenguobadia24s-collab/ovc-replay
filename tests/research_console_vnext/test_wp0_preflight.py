@@ -59,11 +59,14 @@ class RCNWP0PreflightTests(unittest.TestCase):
             hashlib.sha256(canonical.encode()).hexdigest(),
         )
 
-    def test_programme_state_records_g0_pass_without_scientific_authority(self):
+    def test_programme_state_preserves_g0_boundaries_as_execution_progresses(self):
         value = _load(STATE)
-        self.assertEqual(value["status"], "APPROVED")
-        self.assertEqual(value["packet_id"], "RCN-WP0")
-        self.assertEqual(value["next_packet"], "RCN-WP1")
+        self.assertEqual(value["programme_id"], "OVC-RC-VNEXT-GREENFIELD-v0.1")
+        self.assertEqual(value["plan_id"], "OVC-RC-VNEXT-GREENFIELD-IMPLEMENTATION-PLAN-0.1-FINAL-REVISED-1")
+        self.assertIn(value["status"], {"APPROVED", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "COMPLETED"})
+        self.assertEqual(value["stop_boundary"], "RCN-G3V")
+        self.assertNotIn("EXPOSURE", value["authority_delta"])
+        self.assertNotIn("VALIDATION", value["authority_delta"])
 
 
 if __name__ == "__main__":
