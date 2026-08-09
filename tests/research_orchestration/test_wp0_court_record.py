@@ -11,9 +11,10 @@ def load(name: str):
     return json.loads((PACKET / name).read_text(encoding="utf-8"))
 
 
-def test_wp0_court_record_baseline_and_primitive_paths_exist():
+def test_wp0_court_record_reconciles_latest_main_and_primitive_paths_exist():
     record = load("IROF_WP0_COURT_RECORD.json")
-    assert record["baseline_commit"] == "07d078101daf9645dafa2dea23999f9d1d688133"
+    assert record["initial_baseline_commit"] == "07d078101daf9645dafa2dea23999f9d1d688133"
+    assert record["reconciled_main_commit"] == "c09613495556d0f88496208a31824dc968d89930"
     assert record["preexisting_irof_package_conflict"] is False
     for primitive in record["reusable_primitive_git_blobs"].values():
         assert (ROOT / primitive["path"]).exists(), primitive["path"]
@@ -38,12 +39,13 @@ def test_wp0_future_targets_fail_closed_and_validation_stays_locked():
     record = load("IROF_WP0_COURT_RECORD.json")
     assert record["authority_snapshot"]["validation"] == "LOCKED_UNCONSUMED"
     assert record["authority_snapshot"]["srfd_v0_6_token"] == "CONSUMED_NOT_REUSABLE"
+    assert record["authority_snapshot"]["c2e_old_token"] == "INVALIDATED_UNCONSUMED_NOT_REUSABLE"
 
 
-def test_wp0_open_prs_are_not_promoted_to_authority():
+def test_wp0_pr_and_merged_decision_dispositions_do_not_broaden_authority():
     record = load("IROF_WP0_COURT_RECORD.json")
     dispositions = record["open_pr_dispositions"]
     assert dispositions["418"] == "HISTORICAL_FIXTURE_ONLY_DRAFT_DO_NOT_IMPORT"
     assert "NO_IROF_AUTHORITY" in dispositions["487"]
-    assert "NO_IROF_AUTHORITY" in dispositions["485"]
-    assert dispositions["479"] == "C2E_BLOCKER_EVIDENCE_DO_NOT_TREAT_AS_PASS"
+    assert record["merged_during_wp0"]["485"]["merge_commit"] == "c09613495556d0f88496208a31824dc968d89930"
+    assert record["authority_snapshot"]["c2e_real_replay"] == "DENIED_FRESH_OWNER_RUN_AUTH_REQUIRED"

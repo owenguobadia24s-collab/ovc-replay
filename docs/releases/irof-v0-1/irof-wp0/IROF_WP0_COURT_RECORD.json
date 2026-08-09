@@ -2,9 +2,10 @@
   "schema": "ovc-irof-wp0-court-record/v0.1",
   "programme_id": "OVC-IROF-v0.1",
   "packet_id": "IROF-WP0",
-  "baseline_commit": "07d078101daf9645dafa2dea23999f9d1d688133",
-  "baseline_tree": "aaa9066f0b51c9b0754c700d205ee8da15913bd5",
-  "baseline_message": "IROF-G0: ratify design and implementation plan",
+  "initial_baseline_commit": "07d078101daf9645dafa2dea23999f9d1d688133",
+  "reconciled_main_commit": "c09613495556d0f88496208a31824dc968d89930",
+  "reconciled_main_tree": "9fd6846f09924d9c0e71a5190c6ec8b4b04c87ec",
+  "reconciled_main_change": "C2E2-G6 binding supersession merged; mismatched old WP6 token invalidated unconsumed; replacement-object preparation only; WP6 real execution still denied pending fresh C2E2-G6-RUN-AUTH.",
   "current_branch": "feat/irof-wp0-conformance",
   "reusable_primitive_git_blobs": {
     "srfd_orchestration": {"path": "src/ovc/opt_b/srfd/orchestration.py", "git_blob_sha": "7ff5e162c340379661ede44c32a209178a103094", "disposition": "GENERALISE_WITH_EQUIVALENCE"},
@@ -24,8 +25,7 @@
   "open_pr_dispositions": {
     "488": "CURRENT_IROF_WP0_PACKET",
     "487": "SRFD_OWNER_PROGRAMME_RESILIENCE_PROPOSAL_NO_IROF_AUTHORITY",
-    "485": "C2E_OWNER_PROGRAMME_SUPERSESSION_EVIDENCE_NO_IROF_AUTHORITY",
-    "479": "C2E_BLOCKER_EVIDENCE_DO_NOT_TREAT_AS_PASS",
+    "479": "C2E_HISTORICAL_BLOCKER_EVIDENCE_SUPERSEDED_BY_MERGED_BINDING_DECISION",
     "433": "SRFD_CONSUMED_RUN_BLOCKER_EVIDENCE_DO_NOT_MERGE_AS_PASS",
     "422": "HISTORICAL_SRFD_BLOCKER_EVIDENCE",
     "418": "HISTORICAL_FIXTURE_ONLY_DRAFT_DO_NOT_IMPORT",
@@ -33,11 +33,16 @@
     "211": "INACTIVE_SHADOW_PROPOSAL_NO_AUTHORITY",
     "202": "HISTORICAL_SEPARATE_PROGRAMME_PR_NO_IROF_AUTHORITY"
   },
+  "merged_during_wp0": {
+    "485": {"merge_commit": "c09613495556d0f88496208a31824dc968d89930", "effect": "C2E replacement-object preparation authorised; real WP6 execution still denied; active C2E/boundary pack remain NONE."}
+  },
   "authority_snapshot": {
     "irof_engineering": "APPROVED_BOUNDED",
     "c2_discovery_selector": "EXISTS_UNCHANGED",
     "c2e_active": "NONE",
-    "c2e_real_replay": "DENIED_SEPARATE_OWNER_GATE_REQUIRED",
+    "c2e_boundary_pack_active": "NONE",
+    "c2e_real_replay": "DENIED_FRESH_OWNER_RUN_AUTH_REQUIRED",
+    "c2e_old_token": "INVALIDATED_UNCONSUMED_NOT_REUSABLE",
     "srfd_v0_6_token": "CONSUMED_NOT_REUSABLE",
     "srfd_wp10": "BLOCKED_OWNER_PROGRAMME",
     "validation": "LOCKED_UNCONSUMED",
