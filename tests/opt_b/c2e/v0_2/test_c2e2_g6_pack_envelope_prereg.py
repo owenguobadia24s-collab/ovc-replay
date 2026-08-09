@@ -17,38 +17,15 @@ POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 
 def frame(segment="SEG.1", structural_suffix="A", parent_suffix="A"):
     return {
-        "identity": {
-            "instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","scale_id":"15M","clock_id":"15M"
-        },
-        "chronology": {
-            "continuity_segment_id":segment,
-            "first_valid_time":"2026-06-01T00:15:00Z",
-            "evaluation_cutoff":"2026-06-01T00:15:00Z"
-        },
+        "identity": {"instrument_id":"GBPUSD","side":"BID","scope_id":"LOCAL","scale_id":"15M","clock_id":"15M"},
+        "chronology": {"continuity_segment_id":segment,"first_valid_time":"2026-06-01T00:15:00Z","evaluation_cutoff":"2026-06-01T00:15:00Z"},
         "structural": {
-            "location_record_ids":[f"LOC.{structural_suffix}"],
-            "motion_record_ids":[f"MOT.{structural_suffix}"],
-            "organisation_record_ids":[f"ORG.{structural_suffix}"],
-            "interaction_record_ids":[f"INT.{structural_suffix}"],
-            "level_record_ids":[],
-            "container_record_ids":[],
-            "transition_record_ids":[],
-            "run_record_ids":[],
-            "relation_set_id":f"REL.{structural_suffix}",
+            "location_record_ids":[f"LOC.{structural_suffix}"],"motion_record_ids":[f"MOT.{structural_suffix}"],
+            "organisation_record_ids":[f"ORG.{structural_suffix}"],"interaction_record_ids":[f"INT.{structural_suffix}"],
+            "level_record_ids":[],"container_record_ids":[],"transition_record_ids":[],"run_record_ids":[],"relation_set_id":f"REL.{structural_suffix}"
         },
-        "context": {
-            "context_resolution_bundle_id":f"CTX.{parent_suffix}",
-            "fixed_parent_links":[f"PARENT.{parent_suffix}"],
-            "structural_object_links":[],
-            "parent_axis_links":[],
-        },
-        "evidence": {
-            "dependency_results":[],
-            "availability_status":"AVAILABLE",
-            "technical_status":"COMPUTABLE",
-            "authority_state":"READ_ONLY_SHADOW",
-            "reason_codes":[],
-        },
+        "context": {"context_resolution_bundle_id":f"CTX.{parent_suffix}","fixed_parent_links":[f"PARENT.{parent_suffix}"],"structural_object_links":[],"parent_axis_links":[]},
+        "evidence": {"dependency_results":[],"availability_status":"AVAILABLE","technical_status":"COMPUTABLE","authority_state":"READ_ONLY_SHADOW","reason_codes":[]},
         "lineage": {"parent_record_ids":[],"artifact_hashes":{"x":"y"},"source_build_commit":"abc"},
     }
 
@@ -115,12 +92,7 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
 
     def test_exact_resource_envelope_is_bound_and_fail_closed(self):
         limits = self.envelope["limits"]
-        self.assertEqual(limits, {
-            "max_wall_clock_seconds":14400,
-            "max_peak_rss_bytes":17179869184,
-            "max_external_output_bytes":10737418240,
-            "worker_count":1,
-        })
+        self.assertEqual(limits, {"max_wall_clock_seconds":14400,"max_peak_rss_bytes":17179869184,"max_external_output_bytes":10737418240,"worker_count":1})
         self.assertEqual(self.envelope["boundary_pack_binding"]["boundary_pack_id"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
         self.assertEqual(self.envelope["boundary_pack_binding"]["logical_sha256"], '22461197d5c711871ba568e850dcbcc1741da9b5bdc6c2aa41af54a56e145ecd')
         self.assertFalse(self.envelope["authority"]["effective_run_authority"])
@@ -131,10 +103,11 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
+        self.assertEqual(self.state["authority"]["wp6_execution"], "DENIED_NOT_STARTED")
         self.assertEqual(self.pointer["candidate_boundary_pack"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["wp6_execution"], "DENIED_NOT_STARTED")
-        self.assertEqual(self.pointer["status"], "APPROVED")
+        self.assertIn(self.pointer["wp6_execution"], {"DENIED_NOT_STARTED", "AUTHORIZED_PENDING_MERGE_ASSURANCE", "AUTHORIZED_NOT_STARTED"})
+        self.assertIn(self.pointer["status"], {"APPROVED", "QA_REVIEW"})
 
 
 if __name__ == "__main__":

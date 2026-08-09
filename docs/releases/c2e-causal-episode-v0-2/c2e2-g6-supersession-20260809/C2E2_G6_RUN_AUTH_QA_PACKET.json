@@ -1,0 +1,27 @@
+{
+  "schema":"ovc-c2e2-g6-run-auth-qa/v1",
+  "programme_id":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "gate_id":"C2E2-G6-RUN-AUTH",
+  "packet_id":"C2E2-G6-RUN-AUTH-SUPERSESSION-20260809",
+  "baseline_main":"5ea985936f6289bafb362462eb7c2d3a0312472f",
+  "checks":[
+    {"id":"G6S-QA-01","status":"PASS","assertion":"The prior operator PASS command is preserved exactly and is bounded to WP6 plus non-reserved continuation."},
+    {"id":"G6S-QA-02","status":"PASS","assertion":"Historical G6 DEFER and C2E-AG0 DEFER remain immutable lineage rather than overwritten decisions."},
+    {"id":"G6S-QA-03","status":"PASS","assertion":"The exact June revised-C2 population, raw source identities, accepted replay root and source binding are hash-bound."},
+    {"id":"G6S-QA-04","status":"PASS","assertion":"All four accepted raw source objects were re-read by exact byte count and SHA-256 without provider intake or repair."},
+    {"id":"G6S-QA-05","status":"PASS","assertion":"The empirical boundary pack is exact, inactive, noncanonical, threshold-free and forbids downstream/outcome/Validation dependencies."},
+    {"id":"G6S-QA-06","status":"PASS","assertion":"The resource envelope is exact: 14400s wall, 16GiB RSS, 10GiB external output, worker_count=1, fail-closed CAPACITY_EXCEEDED."},
+    {"id":"G6S-QA-07","status":"PASS","assertion":"A single-use exact run token is issued unconsumed and cannot grant selector, activation, publication, Validation or exposure authority."},
+    {"id":"G6S-QA-08","status":"PASS","assertion":"No sampling, top-k substitution, semantic simplification or comparator contamination is authorized."},
+    {"id":"G6S-QA-09","status":"PASS","assertion":"C2E-AG0/AG1/AG2/AG3 remain operator-reserved after WP6."}
+  ],
+  "blocking_warnings":[],
+  "unresolved_issues":[],
+  "qa_disposition":"PASS",
+  "recommendation":"PASS_MERGE_THEN_EXECUTE_EXACT_WP6",
+  "exact_head_tests":[
+    {"commit":"f056628517d5f812b510b760e45e2390e18b3f85","workflow":"tests","workflow_id":31297585959,"conclusion":"SUCCESS"},
+    {"commit":"f056628517d5f812b510b760e45e2390e18b3f85","workflow":"OVC tiered test selection shadow","workflow_id":31297585956,"conclusion":"SUCCESS"}
+  ],
+  "rollback":"Do not consume the token unless the merged decision, manifest, token, pack, envelope, source identities and WP6 runtime preflight all match exactly."
+}
