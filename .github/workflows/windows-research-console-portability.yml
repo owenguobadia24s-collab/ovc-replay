@@ -1,7 +1,7 @@
 name: Windows Research Console Portability
 
 on:
-  pull_request:
+  push:
     paths:
       - "apps/research_console/**"
       - "src/ovc/research_operations/v0_4/**"
@@ -11,6 +11,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: windows-research-console-portability-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   windows-portability:
