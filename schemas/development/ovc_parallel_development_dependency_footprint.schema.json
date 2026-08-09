@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/development/parallel-dependency-footprint/v1",
+  "title": "OVC Parallel Development Dependency Footprint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "plan_id",
+    "baseline_main_sha",
+    "dependency_paths",
+    "semantic_authority_paths",
+    "shared_integration_paths",
+    "candidate_owned_paths",
+    "identity_bindings",
+    "external_identity_bindings"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-parallel-development-dependency-footprint/v1"},
+    "programme_id": {"type": "string", "minLength": 1},
+    "packet_id": {"type": "string", "minLength": 1},
+    "plan_id": {"type": "string", "minLength": 1},
+    "baseline_main_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "dependency_paths": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "semantic_authority_paths": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "shared_integration_paths": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "candidate_owned_paths": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "identity_bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "identity"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "identity": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "external_identity_bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["logical_name", "identity"],
+        "properties": {
+          "logical_name": {"type": "string", "minLength": 1},
+          "identity": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "notes": {"type": "string"}
+  }
+}

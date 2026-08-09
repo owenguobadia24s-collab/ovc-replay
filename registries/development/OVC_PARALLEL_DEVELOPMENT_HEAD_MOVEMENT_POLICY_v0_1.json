@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-parallel-development-head-movement-policy/v1",
+  "policy_id": "OVC.PDC.HEAD_MOVEMENT_POLICY.v0.1",
+  "programme_id": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "classes": [
+    "IRRELEVANT",
+    "INTEGRATION_RELEVANT",
+    "SEMANTIC_AUTHORITY_RELEVANT",
+    "UNRESOLVED_REQUIRES_FOOTPRINT"
+  ],
+  "severity_order": {
+    "IRRELEVANT": 0,
+    "INTEGRATION_RELEVANT": 1,
+    "SEMANTIC_AUTHORITY_RELEVANT": 2,
+    "UNRESOLVED_REQUIRES_FOOTPRINT": 3
+  },
+  "global_integration_patterns": [
+    ".github/workflows/**",
+    "pyproject.toml",
+    "requirements*.txt",
+    "scripts/development/**",
+    "src/ovc/development/**",
+    "tests/development/**",
+    "registries/development/**"
+  ],
+  "rules": {
+    "no_main_movement": "IRRELEVANT",
+    "movement_without_footprint": "UNRESOLVED_REQUIRES_FOOTPRINT",
+    "changed_consumed_dependency": "SEMANTIC_AUTHORITY_RELEVANT",
+    "changed_semantic_or_authority_path": "SEMANTIC_AUTHORITY_RELEVANT",
+    "changed_candidate_owned_or_shared_integration_path": "INTEGRATION_RELEVANT",
+    "changed_global_integration_path": "INTEGRATION_RELEVANT",
+    "otherwise": "IRRELEVANT",
+    "highest_severity_wins": true
+  },
+  "evidence_reuse": {
+    "IRRELEVANT": "PERMITTED_IF_BOUND_IDENTITIES_UNCHANGED",
+    "INTEGRATION_RELEVANT": "PERMITTED_IF_BOUND_IDENTITIES_UNCHANGED",
+    "SEMANTIC_AUTHORITY_RELEVANT": "PROHIBITED_PENDING_SEMANTIC_REPREFLIGHT",
+    "UNRESOLVED_REQUIRES_FOOTPRINT": "PROHIBITED_PENDING_FOOTPRINT"
+  }
+}
