@@ -5,15 +5,23 @@
   "gate_id": "IROF-G3",
   "plan_version": "0.1",
   "baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
-  "tested_head": "92abc88d1ef7f9be4c43b9eba369ee3adc88a71e",
+  "reconciled_main_commit": "6c034e8924a9cd134f8d05e7743ba2a5e3771b82",
+  "tested_pre_reconciliation_head": "391d8da37a7e86f5174d3abf7326329d83490b07",
   "authority_delta": "deterministic DAG planning and inert adapter protocol only",
   "static_review": {"status": "PASS"},
-  "ci": {
+  "pre_reconciliation_ci": {
     "status": "PASS",
-    "tests_workflow": "31304733634 SUCCESS",
-    "tiered_assurance_workflow": "31304733628 SUCCESS",
+    "tests_workflow": "31304904923 SUCCESS",
+    "tiered_assurance_workflow": "31304904928 SUCCESS",
+    "merge_readiness": "93223587306 SUCCESS",
     "review_threads": "ZERO"
   },
+  "base_reconciliation": {
+    "status": "PASS_NO_SCOPE_CONFLICT",
+    "main_change": "SRFDI-G-JUNE-AUTH v0.7 minted one exact owner-programme run-scoped authority",
+    "irof_effect": "NONE; WP2 neither resolves nor consumes SRFD authority"
+  },
+  "exact_reconciled_head_ci": {"status": "PENDING"},
   "acceptance": {
     "canonical_plan_order_independent": "PASS",
     "dependency_validation": "PASS",
@@ -24,6 +32,6 @@
   },
   "warnings": ["Stage registry remains planning metadata; executable source-stage adapters are deferred to IROF-WP8"],
   "blocking_issues": [],
-  "qa_recommendation": "PASS",
+  "qa_recommendation": "PASS_SUBJECT_TO_RECONCILED_HEAD_CI",
   "rollback": "remove WP2 planner adapter contract registry fixtures and tests; source-stage behavior remains untouched"
 }
