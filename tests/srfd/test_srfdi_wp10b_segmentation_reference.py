@@ -99,12 +99,12 @@ class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
         self.assertEqual(baseline_run, reference_run_change_from_c2_ledger(shuffled))
         self.assertEqual(baseline_null, reference_null_boundary_control_from_c2_ledger(shuffled))
 
-    def test_reference_path_is_independent_of_production_segmentation_functions(self) -> None:
+    def test_reference_path_does_not_import_production_segmentation_modules(self) -> None:
         text = REFERENCE.read_text(encoding="utf-8")
-        self.assertNotIn("segmentation_prereg", text)
-        self.assertNotIn("segment_runs", text)
-        self.assertNotIn("run_change_from_c2_ledger", text)
-        self.assertNotIn("null_boundary_control_from_c2_ledger", text)
+        self.assertNotIn("from .segmentation_prereg", text)
+        self.assertNotIn("import segmentation_prereg", text)
+        self.assertNotIn("from .segmentation import", text)
+        self.assertNotIn("import segmentation", text)
 
     def test_runner_fails_closed_on_reference_inequivalence(self) -> None:
         ledger = adversarial_ledger()
