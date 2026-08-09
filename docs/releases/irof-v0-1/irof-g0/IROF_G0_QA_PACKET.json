@@ -1,0 +1,80 @@
+{
+  "schema": "ovc-irof-g0-qa-packet/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "gate_id": "IROF-G0",
+  "baseline_commit": "ffefd1ee3d7ee664f2a94f74d05993d6e711a149",
+  "candidate_design_plan_commit": "b263a50d5030347d332894788cc8dcb20e7996c5",
+  "qa_disposition": "PASS",
+  "authority_effect": "NONE_PRE_RATIFICATION",
+  "checks": [
+    {
+      "check_id": "IROF-G0-QA-01-COURT-RECORD",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "Latest lawful main, tree, material programme pointers and open authority blockers were inspected before design freeze."
+    },
+    {
+      "check_id": "IROF-G0-QA-02-NO-CODE-BEFORE-G0",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "Candidate design/plan commit changes documentation only; no IROF implementation package exists on the candidate."
+    },
+    {
+      "check_id": "IROF-G0-QA-03-CROSS-CUTTING-BOUNDARY",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "Design defines IROF as execution/evidence infrastructure and explicitly denies market/scientific/exposure authority."
+    },
+    {
+      "check_id": "IROF-G0-QA-04-REUSE-INVENTORY",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "SRFD orchestration/scheduler/cache/capacity, SFC replay, C2E assurance, OccurrenceContext and Research Operations primitives are assigned reuse/conformance roles rather than duplicated."
+    },
+    {
+      "check_id": "IROF-G0-QA-05-AUTHORITY-FIREWALL",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "Current SRFD June authorization and current C2E real-replay denial are represented as separate owner authorities; IROF may not union them."
+    },
+    {
+      "check_id": "IROF-G0-QA-06-CONTEXT-BOUNDARY",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "OccurrenceContext remains an orthogonal context branch and current REPRESENTATION_INPUT rejection is preserved."
+    },
+    {
+      "check_id": "IROF-G0-QA-07-DAG-EXTENSIBILITY",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "Future C2P, C2.5, C3, MCARB, OPT-C and OPT-D are registered through StageSpec/dependencies rather than hard-coded scheduler semantics."
+    },
+    {
+      "check_id": "IROF-G0-QA-08-CAPACITY-NO-SCOPE-CHANGE",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "Capacity handling preserves population, methods, grids, thresholds and denominators and admits CAPACITY_EXCEEDED without scientific mutation."
+    },
+    {
+      "check_id": "IROF-G0-QA-09-RESEARCH-OPERATIONS-REUSE",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "Existing canonical identity, artifact catalogue, QA, storage and read model are integration targets; no parallel evidence store is proposed."
+    },
+    {
+      "check_id": "IROF-G0-QA-10-GATE-MODEL",
+      "status": "PASS",
+      "severity": "BLOCK",
+      "detail": "IROF-G0 is the only planned operator-required IROF engineering entry gate; reserved scientific/real-data actions remain owned externally."
+    }
+  ],
+  "warnings": [
+    "C2E real-source replay remains denied/deferred; a full-descriptive real June run is not currently lawful.",
+    "SRFD has one exact bounded June token unconsumed; IROF-G0 does not request or consume it.",
+    "PR #433 remains relevant capacity evidence and PR #418 remains a historical draft fixture source; neither is to be merged into IROF.",
+    "Telemetry availability is platform-dependent and must use explicit UNAVAILABLE/measurement-class semantics."
+  ],
+  "blockers": [],
+  "external_artifacts": [],
+  "recommended_decision": "PASS"
+}
