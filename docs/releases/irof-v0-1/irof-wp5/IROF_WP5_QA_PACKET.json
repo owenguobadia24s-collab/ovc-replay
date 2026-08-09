@@ -5,22 +5,25 @@
   "gate_id": "IROF-G6",
   "plan_version": "0.1",
   "baseline_commit": "81948879808e61c728397db702edfbe5afaa7344",
+  "tested_head": "a62d85da0d7d4326a6aff33c713af86d74f59fdf",
   "authority_delta": "deterministic execution recovery only",
-  "static_review": {
+  "ci": {
     "status": "PASS",
-    "checks": [
-      "only COMPLETE stage outputs become reusable",
-      "stage spec/content mismatch invalidates reuse",
-      "corruption quarantines affected unit",
-      "invalid stage forces dependent descendants to rerun",
-      "verified ancestors remain reusable",
-      "opaque substage checkpoints are references only",
-      "attempt/restart lineage is operational not scientific",
-      "fresh/repeated/resumed logical equality is enforced"
-    ]
+    "tests_workflow": "31306498899 SUCCESS",
+    "tiered_assurance_workflow": "31306498900 SUCCESS",
+    "merge_readiness": "SUCCESS"
   },
-  "ci": {"status": "PENDING_EXACT_HEAD"},
+  "acceptance": {
+    "complete_only_reuse": "PASS",
+    "corruption_quarantine": "PASS",
+    "descendant_rerun": "PASS",
+    "ancestor_reuse": "PASS",
+    "opaque_substage_reference_only": "PASS",
+    "fresh_repeat_resume_equivalence": "PASS",
+    "attempt_identity_non_scientific": "PASS"
+  },
+  "final_decision_head_ci": {"status": "PENDING"},
   "blocking_issues": [],
-  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "qa_recommendation": "PASS",
   "rollback": "discard checkpoint/restart metadata and rerun fresh under unchanged stage contracts"
 }
