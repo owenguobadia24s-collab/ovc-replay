@@ -279,7 +279,7 @@ def materialize_prepared_configuration(
         radius=descriptor.radius,
         minimum_support=descriptor.minimum_support,
         k=descriptor.k,
-        max_iterations=descriptor.max_iterations or 8,
+        max_iterations=(descriptor.max_iterations if descriptor.max_iterations is not None else 20),
         linkage=descriptor.linkage,
         max_assignment_distance=descriptor.max_assignment_distance,
     )
