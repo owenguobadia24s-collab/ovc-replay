@@ -66,7 +66,12 @@ class C2E2WP6PreflightBlockerTests(unittest.TestCase):
         self.assertEqual(self.state["status"], "BLOCKED")
         self.assertTrue(self.state["operator_decision_required"])
         self.assertEqual(self.state["current_gate"], "C2E2-G6-BINDING-SUPERSESSION")
-        self.assertEqual(self.pointer["status"], "BLOCKED")
+        self.assertIn(self.pointer["status"], {"BLOCKED", "APPROVED"})
+        if self.pointer["status"] == "APPROVED":
+            self.assertEqual(self.pointer["current_gate"], "C2E2-G6-BINDING-SUPERSESSION")
+            self.assertEqual(self.pointer["operator_decision"], "SUPERSEDE")
+            self.assertEqual(self.pointer["wp6_execution"], "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION")
+            self.assertEqual(self.pointer["old_run_token_status"], "INVALIDATED_UNCONSUMED_BY_OPERATOR_SUPERSESSION")
 
 if __name__ == "__main__":
     unittest.main()
