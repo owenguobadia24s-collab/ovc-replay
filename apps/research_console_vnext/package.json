@@ -1,0 +1,27 @@
+{
+  "name": "ovc-research-console-vnext",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "types:generate": "openapi-typescript ./openapi.console-vnext.v1.json -o ./src/api/generated/schema.d.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "5.66.8",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-router-dom": "7.1.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.51.1",
+    "@testing-library/react": "16.2.0",
+    "openapi-typescript": "7.6.1",
+    "typescript": "5.7.3",
+    "vite": "6.1.0",
+    "vitest": "3.0.5"
+  }
+}

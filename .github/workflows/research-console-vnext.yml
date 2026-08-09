@@ -6,6 +6,7 @@ on:
       - 'build/rc-vnext-*'
     paths:
       - 'apps/research_api/**'
+      - 'apps/research_console_vnext/**'
       - 'src/ovc/console_vnext/**'
       - 'contracts/research_console_vnext/**'
       - 'schemas/research_console_vnext/**'
@@ -27,3 +28,23 @@ jobs:
         with: {python-version: '3.11'}
       - run: python -m pip install --disable-pip-version-check -r requirements-console-vnext.txt
       - run: PYTHONPATH=src:. python -m unittest tests.research_console_vnext.test_wp2_fastapi_contract -v
+  frontend-foundation:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/research_console_vnext
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.17.0'
+      - run: npm install --no-audit --no-fund
+      - run: npm run types:generate
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rcn-wp3a-package-lock
+          path: apps/research_console_vnext/package-lock.json
+          if-no-files-found: error
