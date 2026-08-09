@@ -5,10 +5,12 @@
   "gate_id":"IROF-G7",
   "plan_version":"0.1",
   "baseline_commit":"47ad9efac2ba4171467395610e1d28403b548d78",
+  "tested_head":"ba35461b5904afc1017f0ffe5d70d6e918db2bf6",
   "authority_delta":"resource scheduling and execution telemetry only; no experiment mutation",
-  "static_review":{"status":"PASS","checks":["capacity failure preserves ExperimentIdentity","scientific_effect always NONE","sampling/method/grid/threshold/denominator/profile mutations forbidden","DAG scheduler selects declared-ready stages only","telemetry required metrics have typed availability","unavailable metrics are explicit not fabricated","telemetry cannot alter semantic output hash","SRFD science-specific completeness rules remain source-owned"]},
-  "ci":{"status":"PENDING_EXACT_HEAD"},
+  "ci":{"status":"PASS","tests_workflow":"31307209101 SUCCESS","tiered_assurance_workflow":"31307209115 SUCCESS","merge_readiness":"SUCCESS"},
+  "acceptance":{"capacity_identity_preserved":"PASS","scientific_mutation_recovery_rejected":"PASS","dag_ready_scheduler":"PASS","typed_metric_coverage":"PASS","unavailable_metric_explicit":"PASS","telemetry_nonsemantic":"PASS"},
+  "final_decision_head_ci":{"status":"PENDING"},
   "blocking_issues":[],
-  "recommended_decision":"PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "qa_recommendation":"PASS",
   "rollback":"fall back to serial/default resource execution under unchanged experiment identity and adapters"
 }
