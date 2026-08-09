@@ -8,7 +8,7 @@ import { INVESTIGATION_EVIDENCE_CLASS, INVESTIGATION_QUERY_KEY, LOCAL_TAB_STORAG
 
 function readStoredTabs(): string[] { try { const raw = window.localStorage.getItem(LOCAL_TAB_STORAGE_KEY); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) && parsed.every((value) => typeof value === "string") ? parsed : []; } catch { return []; } }
 
-export function InvestigationTabs(): JSX.Element {
+export function InvestigationTabs() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [openIds, setOpenIds] = useState<string[]>(readStoredTabs);
   const investigationsQuery = useQuery({ queryKey: ["fixture-investigations"], queryFn: getInvestigations });

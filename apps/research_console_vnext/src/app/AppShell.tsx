@@ -4,7 +4,7 @@ import { getCapabilities, getIdentity } from "../api/client";
 import { InvestigationTabs } from "../features/investigations/InvestigationTabs";
 import "./foundation.css";
 const nav = [["/market", "Market"], ["/structure", "Structure"], ["/research", "Research"], ["/evidence", "Evidence"], ["/control", "Control"]] as const;
-export function AppShell(): JSX.Element {
+export function AppShell() {
   const identity = useQuery({ queryKey: ["identity"], queryFn: getIdentity });
   const capabilities = useQuery({ queryKey: ["capabilities"], queryFn: getCapabilities });
   const sourceCommit = identity.data?.payload.commit ?? "fixture identity pending";
