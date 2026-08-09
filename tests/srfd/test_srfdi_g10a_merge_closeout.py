@@ -33,15 +33,19 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
     def test_consumed_token_and_blocker_remain_preserved(self) -> None:
         effect = self.receipt["court_record_effect"]
         old = "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686"
+        historical_blocker = "PR433@f9bbeba065cf85f5a5f5c0a88e9c9d0ea6fa96d7"
         self.assertEqual("ADMITTED_PRESERVED_EXACT_HEAD_UNMERGED", effect["pr_433_blocker"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", effect["authority_token_v0_4"])
         self.assertTrue(self.state["exact_bindings"]["authority_token_consumed"])
-        self.assertEqual("PR433@f9bbeba065cf85f5a5f5c0a88e9c9d0ea6fa96d7", self.pointer["blocker_evidence"])
+        self.assertEqual(historical_blocker, self.pointer.get("historical_blocker_evidence", self.pointer.get("blocker_evidence")))
         if self.pointer["authority_token_id"] == old:
             self.assertTrue(self.pointer["authority_token_consumed"])
         else:
             self.assertEqual(old, self.pointer["prior_authority_token_id"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
+        if self.pointer["status"] == "BLOCKED":
+            self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V06_EXECUTION_BLOCKER.json"))
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
 
     def test_state_is_ready_for_wp10a_capacity_only(self) -> None:
         self.assertEqual("AUTHORITATIVE_CURRENT", self.state["state_role"])
@@ -57,10 +61,13 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
         self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", None})
-        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED"})
+        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED", "BLOCKED"})
         self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81", self.pointer.get("capacity_backend_freeze", "fcf8f2e84111c5c0920cb28816f95b00a9168d81"))
         self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
+        if self.pointer["status"] == "BLOCKED":
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertIsNone(self.pointer["next_packet"])
 
     def test_closeout_is_delegated_zero_delta_pass(self) -> None:
         self.assertEqual("PASS", self.qa["qa_result"])

@@ -1,0 +1,1 @@
+The consumed v0.6 authorization token is historical evidence only and MUST NOT be reused, retried, resumed, or represented as unconsumed. Any future WP10 attempt requires a new exact authorization after execution-resilience assurance. A verified checkpoint may continue only the same future run_id under its own run-scoped authority.
