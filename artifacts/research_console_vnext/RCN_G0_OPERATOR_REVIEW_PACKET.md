@@ -9,13 +9,13 @@ The operator issued `OVC RUN OVC Research Console vNext Greenfield Replacement I
 `main@cb77f01ff7a8db1f66c556edc94b8108b9e0ed01` (tree `3f6b133fb078c4df0f2b3ecb295432642694e465`). The planning baseline advanced, but no accepted RCN semantic supersession or material conflict was identified. Open PRs are proposal-only.
 
 ## Candidate and QA
-Candidate implementation commit: `d1f10317f222058fb09e836756cfaed59eb8e76c`.
-- repository `tests` run `31317710836`: SUCCESS
-- `OVC tiered test selection shadow` run `31317710875`: SUCCESS
+Candidate commit: `efea3783fd165ada77d9ec2aea67328c6df16d91`.
+- repository `tests` run `31317935239`: SUCCESS; unittest discovery includes the five focused WP0 assertions
+- `OVC tiered test selection shadow` run `31317935252`: SUCCESS
 - inline review threads: 0
 - QA recommendation: PASS
 
-The decision/QA receipt commit that carries this packet is metadata-only and must itself pass exact-head repository assurance before merge.
+This decision receipt is metadata-only; the final PR head is rerun through required repository checks before merge.
 
 ## Authority delta
 Repository implementation authority for RCN-WP1 through RCN-WP3B under `authority_effect=NONE`. No real-source route exposure; no selector, model/family/semantic promotion, Validation, publication, probability, risk, exposure, execution or agent-write authority. Streamlit cleanup remains denied until post-G8 WP9.
