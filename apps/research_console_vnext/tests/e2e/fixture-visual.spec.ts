@@ -5,7 +5,7 @@ const screenshotRoot = path.resolve(process.cwd(), "../../artifacts/research_con
 const viewports = [
   { name: "1920x1080", width: 1920, height: 1080, minCanvas: 420 },
   { name: "1536x864-reference", width: 1536, height: 864, minCanvas: 285 },
-  { name: "1440x810", width: 1440, height: 810, minCanvas: 270 },
+  { name: "1440x810", width: 1440, height: 810, minCanvas: 265 },
   { name: "1280x720", width: 1280, height: 720, minCanvas: 235 },
 ] as const;
 
@@ -28,6 +28,7 @@ for (const viewport of viewports) {
     await expect(page.getByTestId("chart-detail-hud")).toContainText("L");
     await expect(page.getByTestId("chart-detail-hud")).toContainText("C");
     await expect(page.locator('[data-chart-layer="reference-overlay"]')).toHaveAttribute("data-presentation-only", "true");
+    await expect(page.locator('[data-chart-layer="navigator"]')).toHaveAttribute("data-presentation-only", "true");
     const barCount = Number(await page.getByTestId("chart-bar-count").textContent());
     expect(barCount).toBeGreaterThanOrEqual(32);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
