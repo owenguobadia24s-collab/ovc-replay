@@ -36,9 +36,7 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
     def test_authority_artifact_hashes_and_token_reconstruct_exactly(self):
         self.assertEqual("729faf0d9e8128a24f4b1696d15d28aa252af8f5c7c5a82d5d1105f4ca75c244", logical_sha256(self.decision))
         self.assertEqual("7e3f41fbb0f62c5ca6644b5efcaee976799ee86bc5a5066d926d48b07935b716", logical_sha256(self.envelope))
-        reconstructed = june_authority_v07.verify_fresh_june_run_scoped_authority(
-            self.decision, self.envelope, self.token, self.source_reverify
-        )
+        reconstructed = june_authority_v07.verify_fresh_june_run_scoped_authority(self.decision, self.envelope, self.token, self.source_reverify)
         self.assertEqual(self.token, reconstructed)
         self.assertEqual(june_authority_v07.EXPECTED_TOKEN, self.token["token_id"])
         self.assertEqual(june_authority_v07.RUN_BINDING_SHA256, self.token["run_binding_sha256"])
@@ -106,10 +104,17 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
             self.assertTrue(self.pointer["authority_token_consumed"])
             self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
         else:
-            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["current_gate"])
+            self.assertEqual("GATE_READY", self.pointer["status"])
+            self.assertIn(self.pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH"})
             self.assertIsNone(self.pointer["next_packet"])
             self.assertTrue(self.pointer["operator_decision_required"])
-            self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
+            if self.pointer["current_gate"] == "SRFDI-G10B-FREEZE":
+                self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
+            else:
+                self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
+                self.assertIsNone(self.pointer["fresh_authority_token_id"])
+                self.assertEqual("NOT_MINTED_PENDING_OPERATOR", self.pointer["fresh_authority_token_state"])
+                self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
             self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
             self.assertTrue(self.pointer["authority_token_consumed"])
             self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
