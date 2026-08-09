@@ -14,6 +14,8 @@ QA = BASE / "SRFDI_G_JUNE_AUTH_DECISION_QA_v0_9.json"
 MANIFEST = BASE / "SRFD_JUNE_AUTHORITY_MANIFEST_CANDIDATE_v0_9.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_34_G_JUNE_AUTH_V0_9_AUTHORIZED_PENDING_MERGE.json"
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
+FRESH_TOKEN = "SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
+RUN_BINDING = "ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
 
 
 def logical_sha(value):
@@ -46,7 +48,7 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
     def test_decision_envelope_and_manifest_bind_exactly(self):
         self.assertEqual("393e22c14592909ce3a9f9ee519031d68dd6cd3c41d0a496fb6d24b3e8e343d3", logical_sha(self.decision))
         self.assertEqual("515c4fc8c79d6cf41a44198806a83ddad1d6ad63500446c80a521d5359cf4757", logical_sha(self.envelope))
-        self.assertEqual("ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a", logical_sha(self.manifest["run_binding"]))
+        self.assertEqual(RUN_BINDING, logical_sha(self.manifest["run_binding"]))
         self.assertEqual(self.manifest["run_binding_sha256"], self.envelope["run_binding_sha256"])
         self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1", self.envelope["execution_binding"]["logical_sha256"])
         self.assertEqual("eefd860af86aea38e80ec211dd5ea34160171b6f", self.envelope["execution_binding"]["effective_merge"])
@@ -57,7 +59,7 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
         state = core.pop("state")
         self.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_MAIN_MERGE", state)
         self.assertEqual("SRFD.JUNE.AUTH." + logical_sha(core), token_id)
-        self.assertEqual("SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3", token_id)
+        self.assertEqual(FRESH_TOKEN, token_id)
         self.assertNotEqual(self.token["prior_v0_8_token_id"], token_id)
         self.assertTrue(self.token["single_use"])
         self.assertEqual("ONE_EXACT_BOUND_RUN", self.token["run_cardinality"])
@@ -72,16 +74,28 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
         self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.decision["historical_blocked_run"]["token_state"])
         self.assertEqual("FORBIDDEN", self.decision["historical_blocked_run"]["resume"])
 
-    def test_state_and_pointer_are_approved_pending_merge_only(self):
+    def test_pending_merge_state_is_immutable_while_pointer_may_advance_after_exact_merge(self):
         self.assertEqual("APPROVED", self.state["status"])
         self.assertFalse(self.state["operator_decision_required"])
-        self.assertEqual(self.token["token_id"], self.state["authority"]["fresh_authority_token_id"])
-        self.assertEqual("APPROVED", self.pointer["status"])
+        self.assertEqual(FRESH_TOKEN, self.state["authority"]["fresh_authority_token_id"])
+        self.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_MAIN_MERGE", self.state["authority"]["fresh_authority_token_state"])
+        self.assertEqual("SRFDI-G-JUNE-AUTH-v0.9-MERGE-CLOSEOUT", self.state["next_packet"])
+        if self.pointer["current_gate"] == "SRFDI-G-JUNE-AUTH":
+            self.assertEqual("APPROVED", self.pointer["status"])
+            self.assertEqual("SRFDI-G-JUNE-AUTH-v0.9-MERGE-CLOSEOUT", self.pointer["next_packet"])
+            self.assertEqual(FRESH_TOKEN, self.pointer["fresh_authority_token_id"])
+            self.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_MAIN_MERGE", self.pointer["fresh_authority_token_state"])
+        else:
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("READY", self.pointer["status"])
+            self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+            self.assertEqual(FRESH_TOKEN, self.pointer["fresh_authority_token_id"])
+            self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
+            self.assertFalse(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual(RUN_BINDING, self.pointer["run_binding_sha256"])
         self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual(self.token["token_id"], self.pointer["fresh_authority_token_id"])
         self.assertTrue(self.pointer["authority_token_consumed"])
         self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH-v0.9-MERGE-CLOSEOUT", self.pointer["next_packet"])
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
 

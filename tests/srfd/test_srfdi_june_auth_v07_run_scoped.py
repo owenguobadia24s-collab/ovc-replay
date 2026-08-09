@@ -13,6 +13,8 @@ from ovc.opt_b.srfd.wp10_execution_resilience import ExecutionResilienceError, R
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/"docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-7"
 DECISION=BASE/"SRFDI_G_JUNE_AUTH_DELEGATED_DECISION_v0_7.json"; ENVELOPE=BASE/"SRFD_JUNE_AUTHORITY_ENVELOPE_v0_7.json"; TOKEN=BASE/"SRFD_JUNE_AUTHORITY_TOKEN_v0_7.json"; QA=BASE/"SRFDI_G_JUNE_AUTH_QA_v0_7.json"; SOURCE_REVERIFY=ROOT/"docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-6/SRFD_SOURCE_ARTIFACT_REVERIFICATION_v0_6.json"; POINTER=ROOT/"registries/implementation/srfd/CURRENT_STATE_POINTER.json"; STATE=ROOT/"registries/implementation/srfd/OVC_SRFDI_STATE_v0_24_JUNE_AUTH_V0_7_RUN_SCOPED_AUTHORIZED.json"; RESILIENCE_MODULE=ROOT/"src/ovc/opt_b/srfd/wp10_execution_resilience.py"
+FRESH_V09="SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
+V09_BINDING="ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
 
 class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
  @classmethod
@@ -38,13 +40,16 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
   else:
    self.assertFalse(self.pointer["authority_token_consumed"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["authority_token_state"]); self.assertEqual(june_authority_v07.RUN_BINDING_SHA256,self.pointer["run_binding_sha256"])
   gate=self.pointer.get("current_gate")
-  if self.pointer["status"]=="READY" and gate!="SRFDI-G-JUNE-AUTH": self.assertEqual("SRFDI-WP10-v0.7",self.pointer["next_packet"])
+  if self.pointer["status"]=="READY" and gate not in {"SRFDI-G-JUNE-AUTH","SRFDI-G10"}:
+   self.assertEqual("SRFDI-WP10-v0.7",self.pointer["next_packet"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["authority_token_state"]); self.assertFalse(self.pointer["authority_token_consumed"])
+  elif gate=="SRFDI-G10" and self.pointer["status"]=="READY":
+   self.assertEqual("SRFDI-WP10-v0.9",self.pointer["next_packet"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["authority_token_consumed"])
   elif self.pointer["status"]=="BLOCKED": self.assertIsNone(self.pointer["next_packet"]); self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH",self.pointer["stop_at"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
   elif self.pointer["status"]=="AUTHORIZED_REMEDIATION_ONLY": self.assertEqual("SRFDI-G10B",gate); self.assertEqual("SRFDI-WP10B",self.pointer["next_packet"]); self.assertEqual("SRFDI-G10B-FREEZE",self.pointer["stop_at"])
   elif gate=="SRFDI-G10B-FREEZE": self.assertEqual("GATE_READY",self.pointer["status"]); self.assertTrue(self.pointer["operator_decision_required"])
   elif gate=="SRFDI-G-JUNE-AUTH" and self.pointer["status"]=="GATE_READY": self.assertTrue(self.pointer["operator_decision_required"]); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
   elif gate=="SRFDI-G-JUNE-AUTH": self.assertFalse(self.pointer["operator_decision_required"]); self.assertIsNotNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["june_execution"].startswith("AUTHORIZED"))
-  self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual(june_authority_v07.PRIOR_V06_TOKEN,self.pointer["prior_v0_6_authority_token_id"]); self.assertEqual("CONSUMED_NOT_REUSABLE",self.pointer["prior_v0_6_authority_token_state"]); self.assertEqual("DENIED",self.pointer["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",self.pointer["validation_2025"]); self.assertEqual("NONE",self.pointer["scientific_promotion"]); self.assertEqual("NONE",self.pointer["probability_risk_exposure_execution"])
+  self.assertEqual(june_authority_v07.PRIOR_V06_TOKEN,self.pointer["prior_v0_6_authority_token_id"]); self.assertEqual("CONSUMED_NOT_REUSABLE",self.pointer["prior_v0_6_authority_token_state"]); self.assertEqual("DENIED",self.pointer["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",self.pointer["validation_2025"]); self.assertEqual("NONE",self.pointer["scientific_promotion"]); self.assertEqual("NONE",self.pointer["probability_risk_exposure_execution"])
  def test_qa_requires_final_v07_exact_head_before_effect(self):
   self.assertEqual("PASS_PENDING_EXACT_HEAD_REPOSITORY_ASSURANCE",self.qa["qa_result"]); self.assertEqual([],self.qa["blocking_warnings"]); self.assertEqual([],self.qa["unresolved_issues"]); self.assertIn("FULL_REPOSITORY_SUITE",self.qa["exact_head_requirement"]); self.assertIn("TOKEN_BECOMES_EFFECTIVE",self.qa["on_exact_head_pass"])
 
