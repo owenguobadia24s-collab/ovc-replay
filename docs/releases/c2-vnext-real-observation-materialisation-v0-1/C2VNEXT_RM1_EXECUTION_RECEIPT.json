@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-c2-vnext-real-observation-materialisation-execution-receipt/v1",
+  "packet_id": "C2VNEXT-REAL-OBS-MATERIALISATION-20260809",
+  "operator_command": "OVC APPROVE **C2 vNext observation-level real-source materialization** packet",
+  "baseline_main": "0877d06e458bb7db0c13f435514b3f058b942dfc",
+  "materialisation_id": "C2VNEXT.JUNE.REAL.OBSERVATION.MATERIALISATION.v1",
+  "source": {
+    "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+    "source_manifest_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+    "c1_release_id": "RPS.C1SET.GBPUSD.PD-JUNE-FM.20260530_20260703.v1",
+    "c1_manifest_id": "RPS.C1MANIFEST.PD-JUNE-FM.9cad7d7274091b27fb153c99",
+    "c2ar_package_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+    "c2ar_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"
+  },
+  "input_artifacts": {
+    "15M_BID": {"drive_id":"1QjOaKE2ugCf0JaBqHoUw1F9fYCHFLOQF","sha256":"bd7bc02902666d6d0e10542dbbca8b43af167e610a73b62c625b38712a49d113","records":2231},
+    "15M_ASK": {"drive_id":"17YowWR9MUAzPukEN-8szgADP0lT928SJ","sha256":"f95de2c9003ce9fa3b41a6035b9947be46de60172191964efd89c62883df58db","records":2231},
+    "2H_A_L_BID": {"drive_id":"1dVyUou3wnEfHmF5EWrKTrZEJzCQ3jQHb","sha256":"311fe938d14431f57851aaf4e4abeb3002c760c8805b452a5a272e8da37ea3dd","records":248},
+    "2H_A_L_ASK": {"drive_id":"1B5MuE6Xofaa0Vpui_fUyVabTiGVlMaRM","sha256":"70071f48025568c31c2722ec5b9992b9917f74f70df07f6a7e05d5667156f1ba","records":248}
+  },
+  "execution": {
+    "clean_run_count": 2,
+    "run_1_manifest_logical_sha256": "de9689f65e5067a80d91265742f5ecc0214bf397d96ea037f4edeb6a251afe6d",
+    "run_2_manifest_logical_sha256": "de9689f65e5067a80d91265742f5ecc0214bf397d96ea037f4edeb6a251afe6d",
+    "byte_equivalence": "PASS",
+    "wall_seconds_run_1_measured": 21.92,
+    "wall_seconds_run_2_measured": 22.13,
+    "peak_rss_bytes_run_1_measured": 567189504,
+    "peak_rss_bytes_run_2_measured": 566444032,
+    "sampling": "NONE",
+    "provider_intake": "NONE",
+    "validation_consumption": "NONE"
+  },
+  "counts": {
+    "15m_complete_context": 4462,
+    "15m_target_eligible": 4072,
+    "2h_complete_context": 496,
+    "target_parent_linked": 3556,
+    "target_parent_not_computable": 516,
+    "target_axis_profile_refs": {"LOCATION":4072,"MOTION":12216,"ORGANISATION":4072,"INTERACTION":4072}
+  },
+  "qa": {
+    "input_hashes": "PASS",
+    "target_count_reconciliation": "PASS_4072_EQ_2036_BID_PLUS_2036_ASK",
+    "all_target_bundles_resolve": "PASS",
+    "parent_future_leakage": "PASS_ZERO_VIOLATIONS",
+    "profile_content_address_collision_check": "PASS_IDENTICAL_CONTENT_DEDUP_ONLY",
+    "reserved_authority": "PASS_UNCHANGED"
+  },
+  "external_artifacts": {
+    "folder_id": "11so_HTtlGKz_dYVShCP01Dznphm04rPC",
+    "archive_file_id": "185KzULNjd8zZqlfBfdNmtkaqH7PizN1y",
+    "archive_sha256": "8ba9b5654e26793c62bcae3f6b6dc50abe796175a532a8d2b57ef7d2137e7125",
+    "archive_size_bytes": 28156091,
+    "embedded_manifest_file_id": "18CRxFlRtXaGEhXQQWAosOGqIBuNYovdd",
+    "drive_execution_receipt_file_id": "1hRVBVGqDDmLtj0D4wMFtShvYGrl_jmZ8",
+    "drive_execution_receipt_logical_sha256": "e45eca8987d73fb70362d4e1065986325504db68d7653e22604bf3375ef71ad8"
+  },
+  "authority_after": {
+    "active_c2": "UNCHANGED_READ_ONLY",
+    "selector": "NONE",
+    "threshold_selection": "NONE",
+    "semantic_promotion": "NONE",
+    "outcome_authority": "NONE",
+    "publication": "DENIED",
+    "validation": "DENIED",
+    "probability_risk_exposure_execution": "NONE",
+    "c2e_wp6": "DENIED_PENDING_FRESH_EXACT_C2E2_G6_RUN_AUTH"
+  },
+  "next_action": "RETURN_TO_C2E2_G6_REPLACEMENT_RUN_PREP_APPEND_ONLY"
+}
