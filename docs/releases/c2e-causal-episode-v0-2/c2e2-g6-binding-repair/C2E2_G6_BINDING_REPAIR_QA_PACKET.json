@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-c2e2-g6-binding-repair-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "C2E2-G6-BINDING-REPAIR-PREFLIGHT",
+  "baseline_main": "c09613495556d0f88496208a31824dc968d89930",
+  "operator_authority": "C2E2-G6-BINDING-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T084300+0100",
+  "checks": [
+    {"id":"G6BR-QA-01","status":"PASS","assertion":"The operator-approved population-unit supersession is merged; the old WP6 token is invalidated unconsumed and no WP6 run has occurred."},
+    {"id":"G6BR-QA-02","status":"PASS","assertion":"The accepted C2 observation contract and C2E handoff bind C2E to fixed-clock observation_id identities with structural/context evidence referenced separately."},
+    {"id":"G6BR-QA-03","status":"PASS","assertion":"Exact accepted June C1 artifacts reconcile to 2,036 target-complete 15M records per side and support a deterministic diagnostic base-observation ledger without provider intake or Validation."},
+    {"id":"G6BR-QA-04","status":"PASS","assertion":"For equal structural facts with only as_of_time advanced, the frozen LOCATION formula emits a different profile_output_id; the current C2E structural signature therefore treats ordinary record-identity churn as a structural change."},
+    {"id":"G6BR-QA-05","status":"PASS","assertion":"For the same selected 2H parent across consecutive local observations, the frozen parent-context resolver emits different link and bundle IDs; the current C2E parent signature therefore treats ordinary local chronology as a parent change."},
+    {"id":"G6BR-QA-06","status":"PASS","assertion":"The current empirical boundary evaluator reproducibly emits RE_PARENT plus PHASE_MUTATION plus CONTINUATION for a same-continuity pair with unchanged structural facts and unchanged selected parent."},
+    {"id":"G6BR-QA-07","status":"BLOCK","assertion":"A replacement empirical frame population cannot be frozen without either preserving false mutation/re-parent outcomes, suppressing required evidence, or changing the frozen C2E handoff/boundary semantic contract."},
+    {"id":"G6BR-QA-08","status":"PASS","assertion":"No replacement boundary pack, resource envelope, run manifest or token was created, and WP6 execution remains denied."},
+    {"id":"G6BR-QA-09","status":"PASS","assertion":"No selector, activation, publication, Validation, family/semantic, probability, risk, exposure, execution or agent-write authority was exercised."}
+  ],
+  "blocking_warnings": [
+    "FROZEN_STRUCTURAL_SIGNATURE_USES_AS_OF_SENSITIVE_RECORD_IDENTITIES",
+    "FROZEN_PARENT_SIGNATURE_USES_LOCAL_OBSERVATION_SENSITIVE_LINK_IDENTITIES",
+    "CURRENT_BOUNDARY_EVALUATOR_FALSE_POSITIVE_PHASE_MUTATION_AND_RE_PARENT"
+  ],
+  "unresolved_issues": [
+    "VERSIONED_STABLE_STRUCTURAL_CAUSAL_SIGNATURE_CONTRACT_NOT_AUTHORIZED",
+    "VERSIONED_STABLE_PARENT_CAUSAL_SIGNATURE_CONTRACT_NOT_AUTHORIZED",
+    "CORRECTED_HANDOFF_SCHEMA_AND_BOUNDARY_PACK_NOT_AUTHORIZED"
+  ],
+  "qa_disposition": "BLOCK",
+  "recommendation": "SUPERSEDE_SIGNATURE_CONTRACT_BEFORE_REPLACEMENT_POPULATION_FREEZE",
+  "tests": [
+    {"commit":"a4245335ad67d54ca5c9fec23d76791334fd0464","workflow":"tests","workflow_id":31304516076,"conclusion":"SUCCESS"},
+    {"commit":"a4245335ad67d54ca5c9fec23d76791334fd0464","workflow":"OVC tiered test selection shadow","workflow_id":31304516079,"conclusion":"SUCCESS","profile_assurance":"SUCCESS","compatibility":"SUCCESS","merge_readiness":"SUCCESS"}
+  ],
+  "evidence_packet": "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-binding-repair/C2E2_G6_BINDING_REPAIR_SIGNATURE_PREFLIGHT.json",
+  "rollback": "Preserve merged binding-supersession history and old-token invalidation. Do not freeze replacement population/pack/envelope/manifest/token. Any versioned signature correction must be separately operator-authorized and additive; old v0.2 contracts and pack bytes remain immutable."
+}
