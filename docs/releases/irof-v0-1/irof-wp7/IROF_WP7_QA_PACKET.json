@@ -5,10 +5,12 @@
   "gate_id":"IROF-G8",
   "plan_version":"0.1",
   "baseline_commit":"65fe08e787dc9357ea15114455e842b8ba5aa7cd",
+  "tested_head":"551740e0134b46f810df57f92a89f691b2728518",
   "authority_delta":"append-only/read-only Research Operations evidence integration only",
-  "static_review":{"status":"PASS","checks":["ArtifactRef maps to existing Research Operations catalogue declarations","local bytes are re-hashed through existing catalogue builder","existing QARunner remains non-mutating","run DAG/status/telemetry project into replaceable read model","same evidence rebuilds deterministic read-model hash","execution failures become market-claim-neutral incidents","null/negative scientific results remain results not incidents","large generated artifacts remain external"]},
-  "ci":{"status":"PENDING_EXACT_HEAD"},
+  "ci":{"status":"PASS","tests_workflow":"31307652910 SUCCESS","tiered_assurance_workflow":"31307652917 SUCCESS","merge_readiness":"SUCCESS","review_threads":"ZERO"},
+  "acceptance":{"artifact_catalogue_hash_reverification":"PASS","qa_non_mutation":"PASS","deterministic_read_model_rebuild":"PASS","dag_status_telemetry_projection":"PASS","failure_incident_market_claim_effect_none":"PASS","null_negative_scientific_results_not_incidents":"PASS","large_artifact_external_boundary":"PASS"},
+  "final_decision_head_ci":{"status":"PENDING"},
   "blocking_issues":[],
-  "recommended_decision":"PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "qa_recommendation":"PASS",
   "rollback":"remove IROF Research Operations read projection; underlying run artifacts and Research Operations evidence remain unchanged"
 }
