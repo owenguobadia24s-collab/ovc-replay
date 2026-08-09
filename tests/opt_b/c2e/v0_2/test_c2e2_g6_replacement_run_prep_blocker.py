@@ -24,11 +24,14 @@ class C2E2G6ReplacementRunPrepBlockerTests(unittest.TestCase):
             self.assertEqual(fields[axis]["source_record_identity"], "profile_output_id")
         self.assertIn("context_bundle_id", fields["parent_context_refs"]["source_record_identity"])
 
-    def test_old_real_replay_is_still_sequence_window_population(self):
-        scope = self.old_manifest["source_population"]["scope"]
-        self.assertEqual(scope["opportunity_types"], ["REGISTERED_SEQUENCE_WINDOW"])
-        self.assertEqual(scope["object_families"], ["AXIS_BUNDLE"])
-        self.assertEqual(self.blocker["accepted_real_replay_surface"]["output_manifest"]["requested"], 33320)
+    def test_old_real_replay_is_still_discovery_sequence_window_population(self):
+        source = self.old_manifest["source_population"]
+        accepted = self.blocker["accepted_real_replay_surface"]["output_manifest"]
+        self.assertEqual(source["input_binding_id"], "C2VNEXT.JUNE.DISCOVERY.INPUT.v1")
+        self.assertEqual(source["logical_population_sha256"], accepted["logical_population_sha256"])
+        self.assertEqual(accepted["opportunity_types"], ["REGISTERED_SEQUENCE_WINDOW"])
+        self.assertEqual(accepted["object_families"], ["AXIS_BUNDLE"])
+        self.assertEqual(accepted["requested"], 33320)
 
     def test_verified_surface_scan_finds_no_required_observation_profile_parent_ids(self):
         scan = self.blocker["accepted_real_replay_surface"]["marker_scan"]
