@@ -8,7 +8,7 @@ from unittest.mock import patch
 from ovc.opt_b.srfd.pattern_family_capacity import materialize_pattern_full_grid
 from ovc.opt_b.srfd.sensitivity import build_invariant_cores, method_disagreement
 from ovc.opt_b.srfd.wp10_execution_resilience import RunBinding
-from ovc.opt_b.srfd.wp10_v07_runner import (
+from ovc.opt_b.srfd.wp10_v07_contract import (
     FROZEN_CAPACITY_GRID_SHA256,
     FROZEN_ELIGIBLE_IDS_SHA256,
     FROZEN_POPULATION_ID,
@@ -19,16 +19,19 @@ from ovc.opt_b.srfd.wp10_v07_runner import (
     FROZEN_SOURCE_BINDING_SHA256,
     FROZEN_STABILITY_PACK_SHA256,
     WP10RunnerError,
+    verify_frozen_run_binding,
+)
+from ovc.opt_b.srfd.wp10_v07_analysis import (
     build_invariant_core_support_exact,
+    method_disagreement_exact,
+)
+from ovc.opt_b.srfd.wp10_v07_family import (
     frozen_configuration_plan,
     gower_pattern_surface,
     materialize_prepared_configuration,
-    method_disagreement_exact,
-    planned_work_units,
     prepare_domain,
-    start_wp10,
-    verify_frozen_run_binding,
 )
+from ovc.opt_b.srfd.wp10_v07_runner import planned_work_units, start_wp10
 
 
 def exact_binding(**changes: str) -> RunBinding:
