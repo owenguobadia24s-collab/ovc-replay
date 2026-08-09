@@ -81,18 +81,28 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
                 store.consume(self.token, binding)
             self.assertEqual("TOKEN_ALREADY_CONSUMED", ctx.exception.reason_code)
 
-    def test_state_pointer_opens_only_wp10_v07_with_v08_token(self):
-        self.assertEqual("READY", self.pointer["status"])
-        self.assertEqual("SRFDI-WP10-v0.7", self.pointer["next_packet"])
-        self.assertEqual(self.token["token_id"], self.pointer["authority_token_id"])
-        self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["authority_token_state"])
-        self.assertFalse(self.pointer["authority_token_consumed"])
-        self.assertEqual(june_authority_v08.RUN_BINDING_SHA256, self.pointer["run_binding_sha256"])
-        self.assertEqual(june_authority_v08.RUNNER_IMPLEMENTATION_BINDING_SHA256, self.pointer["runner_implementation_binding_sha256"])
+    def test_historical_v08_authority_is_immutable_while_pointer_may_advance(self):
+        self.assertEqual(self.token["token_id"], self.state["authority"]["authority_token_id"])
+        self.assertFalse(self.state["authority"]["authority_token_consumed"])
+        self.assertEqual("AUTHORIZED_UNCONSUMED", self.state["authority"]["authority_token_state"])
+        self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.state["authority"]["market_benchmark"])
+        self.assertEqual(june_authority_v08.RUN_BINDING_SHA256, self.state["exact_bindings"]["run_binding_sha256"])
+        self.assertEqual(june_authority_v08.RUNNER_IMPLEMENTATION_BINDING_SHA256, self.state["exact_bindings"]["runner_implementation_binding_sha256"])
+
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
-        self.assertEqual(self.token["token_id"], self.state["authority"]["authority_token_id"])
-        self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.state["authority"]["market_benchmark"])
+        self.assertEqual("NONE", self.pointer["scientific_promotion"])
+        self.assertEqual("NONE", self.pointer["probability_risk_exposure_execution"])
+        if self.pointer["authority_token_id"] == self.token["token_id"]:
+            if self.pointer["authority_token_consumed"]:
+                self.assertIn("CONSUMED_FOR_RUN", self.pointer["authority_token_state"])
+            else:
+                self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["authority_token_state"])
+                self.assertEqual("READY", self.pointer["status"])
+        else:
+            # A later lawful authority must preserve this v0.8 token's history explicitly.
+            preserved = json.dumps(self.pointer, sort_keys=True)
+            self.assertIn(self.token["token_id"], preserved)
 
     def test_qa_is_fail_closed_pending_exact_authority_pr_head(self):
         self.assertEqual("PASS_PENDING_EXACT_HEAD_REPOSITORY_ASSURANCE", self.qa["qa_result"])

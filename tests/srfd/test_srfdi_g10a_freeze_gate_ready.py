@@ -88,9 +88,14 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
         if self.pointer["status"] == "BLOCKED":
             self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
-            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
             self.assertIsNone(self.pointer["next_packet"])
-            self.assertEqual("HARD_BLOCKER", self.pointer["stop_at"])
+            if self.pointer.get("wp10_v0_7_execution_route"):
+                self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+                self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
+                self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+            else:
+                self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
+                self.assertEqual("HARD_BLOCKER", self.pointer["stop_at"])
 
     def test_pass_would_freeze_only_backend_and_still_require_new_june_authority(self) -> None:
         delta = self.packet["proposed_authority_delta_if_PASS"]
