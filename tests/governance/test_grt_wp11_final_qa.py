@@ -12,6 +12,7 @@ from ovc.programme_genesis.topology_diff import build_topology_diff, verify_topo
 ROOT = Path(__file__).resolve().parents[2]
 STATE_PATH = ROOT / "docs/releases/genesis-repository-topology-v0-1/GRT_PROGRAMME_STATE_v0_1.json"
 G8_DECISION = ROOT / "docs/releases/genesis-repository-topology-v0-1/grt-g8/GRT_G8_OPERATOR_DECISION.json"
+G11_DECISION = ROOT / "docs/releases/genesis-repository-topology-v0-1/grt-g11/GRT_G11_OPERATOR_DECISION.json"
 WP9_AUDIT = ROOT / "docs/releases/genesis-repository-topology-v0-1/grt-wp9/GRT_WP9_CONFORMANCE_AUDIT.json"
 WP10_MANIFEST = ROOT / "docs/releases/genesis-repository-topology-v0-1/grt-wp10/GRT_WP10_IMPLEMENTATION_MANIFEST.json"
 SCHEMA_ROOT = ROOT / "schemas/governance/genesis_repository_topology"
@@ -45,7 +46,11 @@ class GRTWP11FinalQATests(unittest.TestCase):
         state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
         authority = state["authority"]
         self.assertEqual(state["operator_decisions"]["GRT-G8"], "PASS_WITH_WARNINGS")
-        self.assertEqual(state["next_operator_gate"], "GRT-G11")
+        self.assertEqual(state["operator_decisions"]["GRT-G11"], "PASS_WITH_WARNINGS")
+        self.assertIsNone(state["next_operator_gate"])
+        self.assertEqual(state["status"], "COMPLETED_ACCEPTED_DERIVED_READ_ONLY_WITH_WARNINGS")
+        self.assertEqual(authority["programme_closure"], "GRT_G11_ACCEPTED_PASS_WITH_WARNINGS")
+        self.assertEqual(authority["derived_read_only_governance_capability"], "ACCEPTED_WITH_WARNINGS")
         self.assertEqual(authority["programme_genesis_canon"], "PRESERVED_SOLE_AUTHORITY")
         self.assertEqual(authority["programme_auto_admission"], "DENIED")
         self.assertEqual(authority["programme_auto_reclassification"], "DENIED")
@@ -57,6 +62,21 @@ class GRTWP11FinalQATests(unittest.TestCase):
         self.assertEqual(authority["validation_consumption"], "LOCKED_UNCONSUMED")
         self.assertEqual(authority["market_selector_semantic_release_publication"], "NONE")
         self.assertEqual(authority["probability_risk_exposure_execution_agent"], "NONE")
+
+    def test_g11_operator_decision_is_exact_terminal_and_bounded(self) -> None:
+        decision = json.loads(G11_DECISION.read_text(encoding="utf-8"))
+        self.assertEqual(decision["operator_command"], "OVC APPROVE GRT-G11 PASS_WITH_WARNINGS")
+        self.assertEqual(decision["decision"], "PASS_WITH_WARNINGS")
+        self.assertEqual(decision["programme_disposition"], "COMPLETED_ACCEPTED_DERIVED_READ_ONLY_WITH_WARNINGS")
+        self.assertEqual(decision["accepted_gate_ready_head"], "78b5a5a9f9c1bd527cb79119a650dbb6e0fe9899")
+        self.assertEqual(decision["accepted_repository_test_count"], 800)
+        self.assertEqual(decision["accepted_gate_ready_topology"]["blocker_count"], 0)
+        self.assertEqual(decision["authority_effect"], "DERIVED_READ_ONLY_GOVERNANCE_CAPABILITY_ACCEPTED_WITH_WARNINGS_NO_RESERVED_AUTHORITY_DELTA")
+        self.assertIsNone(decision["next_packet"])
+        self.assertIsNone(decision["next_operator_gate"])
+        self.assertIn("NO_CONTROL_PLANE_NETWORK_ROUTE_ACTIVATION", decision["preserved_denials"])
+        self.assertIn("NO_ADMISSION_ENFORCEMENT", decision["preserved_denials"])
+        self.assertIn("NO_VALIDATION_CONSUMPTION", decision["preserved_denials"])
 
     def test_all_grt_schemas_are_valid_json_and_authority_neutral(self) -> None:
         paths = sorted(SCHEMA_ROOT.glob("*.schema.json"))
