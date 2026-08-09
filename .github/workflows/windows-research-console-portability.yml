@@ -1,0 +1,28 @@
+name: Windows Research Console Portability
+
+on:
+  pull_request:
+    paths:
+      - "apps/research_console/**"
+      - "src/ovc/research_operations/v0_4/**"
+      - "tests/research_operations/v0_4/test_windows_console_portability.py"
+      - ".github/workflows/windows-research-console-portability.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-portability:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run native Windows portability regression
+        shell: pwsh
+        run: |
+          $env:PYTHONPATH = "$PWD;$PWD\src"
+          python -m unittest tests.research_operations.v0_4.test_windows_console_portability -v
