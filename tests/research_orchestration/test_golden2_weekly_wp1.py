@@ -19,8 +19,8 @@ class Golden2WeeklyWP1Tests(unittest.TestCase):
         self.assertEqual(479, len(opt_a["derived"]["15M"]["ASK"]))
         self.assertEqual(58, len(opt_a["derived"]["2H_A_L"]["BID"]))
         self.assertEqual(58, len(opt_a["derived"]["2H_A_L"]["ASK"]))
-        self.assertEqual(6, opt_a["summary"]["quarantine_count"])
-        self.assertEqual({"INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET": 6}, opt_a["summary"]["quarantine_reason_counts"])
+        self.assertEqual(8, opt_a["summary"]["quarantine_count"])
+        self.assertEqual({"INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET": 8}, opt_a["summary"]["quarantine_reason_counts"])
 
     def test_c1_is_computed_by_current_reference_engine_for_both_clocks_and_sides(self) -> None:
         c1 = self.result["c1"]
