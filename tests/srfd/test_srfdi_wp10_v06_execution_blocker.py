@@ -27,7 +27,7 @@ class SRFDIWP10V06ExecutionBlockerTests(unittest.TestCase):
   f=self.b['firewalls']; self.assertEqual('DENIED_NO_ATTEMPT',f['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED_NO_ACCESS',f['validation_2025']); self.assertEqual('UNCHANGED_8598',f['source_population']); self.assertEqual('PRESERVED_HISTORICAL_EVIDENCE',f['pr_433']); self.assertEqual('CONSUMED_NOT_REUSABLE',f['prior_v0_4_token']); self.assertEqual('NON_AUTHORITATIVE_UNMERGED_DO_NOT_REUSE',f['attempted_v0_5_token'])
  def test_immutable_incident_state_and_moving_pointer_both_fail_closed(self):
   self.assertEqual('BLOCKED',self.s['status']); self.assertEqual('SRFDI-WP10-v0.6',self.s['active_packet']); self.assertEqual('SRFDI-G10',self.s['current_gate']); self.assertIsNone(self.s['next_packet']); self.assertEqual('STOP_FAIL_CLOSED_NEW_LAWFUL_SUPERSESSION_REQUIRED',self.s['next_action'])
-  self.assertIn(self.p['status'], {'BLOCKED','READY','AUTHORIZED_REMEDIATION_ONLY','GATE_READY'})
+  self.assertIn(self.p['status'], {'BLOCKED','READY','AUTHORIZED_REMEDIATION_ONLY','GATE_READY','APPROVED','RUNNING','QA_REVIEW'})
   self.assertEqual('BLOCKED_CONSUMED_TOKEN_PRESERVED',self.p['wp10_v0_6_execution_route'])
   self.assertEqual('DENIED',self.p['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED',self.p['validation_2025']); self.assertEqual('NONE',self.p['scientific_promotion']); self.assertEqual('NONE',self.p['probability_risk_exposure_execution'])
   if self.p.get('wp10_v0_7_execution_route'):
@@ -43,6 +43,8 @@ class SRFDIWP10V06ExecutionBlockerTests(unittest.TestCase):
      self.assertEqual('COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE',self.p['wp10b_execution'])
     else:
      self.assertTrue(self.p['wp10b_execution'].startswith('COMPLETED_FROZEN_ON_MAIN@')); self.assertIsNone(self.p['fresh_authority_token_id']); self.assertEqual('NOT_MINTED_PENDING_OPERATOR',self.p['fresh_authority_token_state']); self.assertTrue(self.p['june_execution'].startswith('DENIED'))
+   elif self.p.get('current_gate')=='SRFDI-G-JUNE-AUTH':
+    self.assertFalse(self.p['operator_decision_required']); self.assertIsNotNone(self.p['fresh_authority_token_id']); self.assertTrue(self.p['june_execution'].startswith('AUTHORIZED')); self.assertTrue(self.p['authority_token_consumed'])
   elif self.p['status']=='BLOCKED':
    self.assertTrue(self.p['blocker_evidence'].endswith('SRFDI_WP10_V06_EXECUTION_BLOCKER.json')); self.assertIsNone(self.p['next_packet']); self.assertEqual('HARD_BLOCKER',self.p['stop_at'])
   elif self.p['next_packet']=='SRFDI-G-JUNE-AUTH-v0.7-PREP':
