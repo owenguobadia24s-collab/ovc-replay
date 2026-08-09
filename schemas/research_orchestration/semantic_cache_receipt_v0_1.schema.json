@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://research-orchestration/semantic-cache-receipt/v0.1",
+  "title": "IROF Semantic Cache Lookup Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cache_key", "status", "reason_codes", "hit_count", "miss_count"],
+  "properties": {
+    "cache_key": {"type": "string", "minLength": 1},
+    "status": {"enum": ["HIT", "MISS"]},
+    "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "artifact_id": {"type": ["string", "null"]},
+    "bytes_avoided": {"type": ["integer", "null"], "minimum": 0},
+    "work_units_avoided": {"type": ["integer", "null"], "minimum": 0},
+    "hit_count": {"type": "integer", "minimum": 0},
+    "miss_count": {"type": "integer", "minimum": 0}
+  }
+}

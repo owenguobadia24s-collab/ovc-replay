@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-irof-semantic-cache-fixture/v0.1",
+  "authority_effect": "NONE",
+  "cases": [
+    {"case_id": "EXACT_HIT", "expected": "HIT"},
+    {"case_id": "SEMANTIC_PACK_CHANGE", "expected": "MISS"},
+    {"case_id": "PARENT_HASH_CHANGE", "expected": "MISS"},
+    {"case_id": "PATH_RELOCATION", "expected": "HIT"},
+    {"case_id": "CORRUPT_PAYLOAD", "expected": "QUARANTINE_AND_MISS"},
+    {"case_id": "SUPERSEDED_ARTIFACT", "expected": "MISS"},
+    {"case_id": "QUARANTINED_ARTIFACT", "expected": "MISS"},
+    {"case_id": "CACHE_COUNTER_MUTATION", "expected": "NO_SCIENTIFIC_HASH_EFFECT"},
+    {"case_id": "CACHED_VS_RECOMPUTED", "expected": "EXACT_SEMANTIC_EQUIVALENCE"}
+  ]
+}
