@@ -9,7 +9,7 @@ import { DENSITY_MODES, capabilityReason, densityLabel, evidenceByKind, nonEmpty
 import styles from "./WorkspaceFrame.module.css";
 
 const LAYERS = ["C2 state", "C2E lifecycle", "Evidence refs"] as const;
-const AXIS_ORDER = ["location", "motion", "organisation", "interaction", "quality"] as const;
+const AXIS_ORDER = ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION", "QUALITY"] as const;
 function axisLabel(value: string): string { return value.replaceAll("_", " ").replace(/\b\w/g, (m) => m.toUpperCase()); }
 function shortTime(value?: string): string { if (!value) return "—"; const t = value.match(/T(\d{2}:\d{2})/); return t?.[1] ?? value; }
 
