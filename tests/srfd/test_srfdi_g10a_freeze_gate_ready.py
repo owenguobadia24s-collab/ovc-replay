@@ -77,7 +77,7 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
     def test_current_pointer_may_advance_only_through_lawful_delegated_sequence(self) -> None:
         self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
         self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", None})
-        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED"})
+        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED", "BLOCKED"})
         self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
         self.assertEqual("NONE", self.pointer.get("scientific_promotion", "NONE"))
@@ -86,6 +86,11 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
         if self.pointer["authority_token_id"] != "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686":
             self.assertEqual("SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686", self.pointer["prior_authority_token_id"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
+        if self.pointer["status"] == "BLOCKED":
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
+            self.assertIsNone(self.pointer["next_packet"])
+            self.assertEqual("HARD_BLOCKER", self.pointer["stop_at"])
 
     def test_pass_would_freeze_only_backend_and_still_require_new_june_authority(self) -> None:
         delta = self.packet["proposed_authority_delta_if_PASS"]
