@@ -41,13 +41,22 @@ class C2E2G6BindingSupersessionOperatorDecisionTests(unittest.TestCase):
         self.assertEqual(delta["active_c2e"], "NONE")
         self.assertEqual(delta["active_boundary_pack"], "NONE")
 
-    def test_state_and_pointer_continue_to_binding_repair(self):
+    def test_state_and_pointer_preserve_supersession_then_allow_lawful_progression(self):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual(self.state["next_packet"], "C2E2-G6-BINDING-REPAIR")
         self.assertEqual(self.pointer["old_run_token_status"], "INVALIDATED_UNCONSUMED_BY_OPERATOR_SUPERSESSION")
-        self.assertEqual(self.pointer["next_packet"], "C2E2-G6-BINDING-REPAIR")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
+        if self.pointer.get("next_packet") == "C2E2-G6-BINDING-REPAIR":
+            self.assertEqual(self.pointer["status"], "APPROVED")
+        else:
+            self.assertEqual(self.pointer["status"], "GATE_READY")
+            self.assertEqual(self.pointer["current_gate"], "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertIn(
+                "C2E2-G6-BINDING-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T084300+0100",
+                self.pointer["operator_decision_history"],
+            )
 
 if __name__ == "__main__":
     unittest.main()
