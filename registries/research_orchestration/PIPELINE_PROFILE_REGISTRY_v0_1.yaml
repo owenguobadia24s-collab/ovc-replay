@@ -1,0 +1,37 @@
+schema: ovc-irof-pipeline-profile-registry/v0.1
+profiles:
+  - profile_id: C1_ONLY
+    version: '0.1'
+    stages: [C1]
+    terminal_outputs: [C1_RECORDS]
+  - profile_id: C2_ONLY
+    version: '0.1'
+    stages: [C1, C2_REVISED]
+    terminal_outputs: [C2_STATE_STREAM]
+  - profile_id: C2_C2E
+    version: '0.1'
+    stages: [C1, C2_REVISED, C2E_V0_2]
+    terminal_outputs: [C2E_STREAM]
+  - profile_id: STRUCTURAL_CORE
+    version: '0.1'
+    stages: [C1, C2_REVISED, C2E_V0_2, SRI_REPRESENTATION]
+    terminal_outputs: [REPRESENTATION_POPULATION]
+  - profile_id: FAMILY_RESEARCH
+    version: '0.1'
+    stages: [C1, C2_REVISED, C2E_V0_2, SRI_REPRESENTATION, COMPARABILITY_COMPARISON_DISTANCE, FDI_C2G_FAMILY, FAMILY_EVIDENCE_STREAM]
+    terminal_outputs: [FAMILY_EVIDENCE_STREAM]
+  - profile_id: FULL_DESCRIPTIVE
+    version: '0.1'
+    stages: [POPULATION_SOURCE_OPT_A, C1, C2_REVISED, C2E_V0_2, SRI_REPRESENTATION, COMPARABILITY_COMPARISON_DISTANCE, FDI_C2G_FAMILY, FAMILY_EVIDENCE_STREAM, RESEARCH_OPERATIONS]
+    optional_branches: [MCARB_AUXILIARY_BRANCH]
+    terminal_outputs: [RESEARCH_OPERATIONS_EVIDENCE]
+  - profile_id: FULL_DESCRIPTIVE_WITH_CONTEXT
+    version: '0.1'
+    stages: [POPULATION_SOURCE_OPT_A, C1, C2_REVISED, C2E_V0_2, OCCURRENCE_CONTEXT, SRI_REPRESENTATION, COMPARABILITY_COMPARISON_DISTANCE, FDI_C2G_FAMILY, FAMILY_EVIDENCE_STREAM, RESEARCH_OPERATIONS]
+    optional_branches: [MCARB_AUXILIARY_BRANCH]
+    terminal_outputs: [RESEARCH_OPERATIONS_EVIDENCE]
+future_profiles:
+  OUTCOME_RESEARCH: UNREGISTERED_UNTIL_STAGE_CONTRACTS_EXIST
+  FULL_ABCD: UNREGISTERED_UNTIL_STAGE_CONTRACTS_EXIST
+profile_semantics_may_modify_stage_semantics: false
+authority_effect: NONE

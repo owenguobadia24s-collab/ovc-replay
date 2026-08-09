@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://research-orchestration/core-objects/v0.1",
+  "title": "OVC IROF Core Objects v0.1",
+  "type": "object",
+  "$defs": {
+    "PopulationSpec": {
+      "type": "object",
+      "required": ["population_id", "population_mode", "population_schema_version", "instrument", "price_side", "clock_lattice", "role", "source_adapter_id", "validation_access_state", "capacity_tier"],
+      "properties": {
+        "population_id": {"type": "string", "minLength": 1},
+        "population_mode": {"enum": ["SYNTHETIC_FIXTURE", "SYNTHETIC_GENERATED", "SEALED_REAL_REPLAY", "TIME_GATED_REPLAY", "LIVE_PROSPECTIVE"]},
+        "population_schema_version": {"type": "string", "minLength": 1},
+        "source_release_id": {"type": ["string", "null"]},
+        "source_manifest_hash": {"type": ["string", "null"]},
+        "instrument": {"type": "string", "minLength": 1},
+        "price_side": {"type": "string", "minLength": 1},
+        "clock_lattice": {"type": "string", "minLength": 1},
+        "start_time": {"type": ["string", "null"]},
+        "end_time": {"type": ["string", "null"]},
+        "admissible_cutoff": {"type": ["string", "null"]},
+        "role": {"type": "string", "minLength": 1},
+        "expected_source_count": {"type": ["integer", "null"], "minimum": 0},
+        "source_adapter_id": {"type": "string", "minLength": 1},
+        "synthetic_fixture_id": {"type": ["string", "null"]},
+        "generator_spec_id": {"type": ["string", "null"]},
+        "authority_binding_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "validation_access_state": {"type": "string", "minLength": 1},
+        "external_artifact_root_alias": {"type": ["string", "null"]},
+        "capacity_tier": {"enum": ["MICRO", "SMALL", "MEDIUM", "LARGE", "LONG_HORIZON"]},
+        "logical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "PipelineProfile": {
+      "type": "object",
+      "required": ["profile_id", "profile_version", "included_stage_ids", "required_terminal_outputs", "allowed_optional_branches", "prerequisites", "authority_policy_ref", "observability_requirements"],
+      "properties": {
+        "profile_id": {"type": "string", "minLength": 1},
+        "profile_version": {"type": "string", "minLength": 1},
+        "included_stage_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "required_terminal_outputs": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "allowed_optional_branches": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "prerequisites": {"type": "array", "items": {"type": "string"}},
+        "authority_policy_ref": {"type": "string"},
+        "observability_requirements": {"type": "array", "items": {"type": "string"}},
+        "logical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "StageDependency": {
+      "type": "object",
+      "required": ["stage_id", "disposition", "expected_output_types"],
+      "properties": {
+        "stage_id": {"type": "string", "minLength": 1},
+        "disposition": {"enum": ["REQUIRED", "OPTIONAL", "FORBIDDEN"]},
+        "expected_output_types": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "StageSpec": {
+      "type": "object",
+      "required": ["stage_id", "stage_version", "stage_kind", "implementation_identity", "contract_identity", "schema_identity", "input_types", "output_types", "dependencies", "authority_requirements", "pack_requirements", "deterministic_mode", "execution_backend", "checkpoint_capability", "cache_capability", "external_artifact_policy", "qa_requirements", "adapter_identity", "wrapper_mutation_policy"],
+      "properties": {
+        "stage_id": {"type": "string", "minLength": 1},
+        "stage_version": {"type": "string", "minLength": 1},
+        "stage_kind": {"type": "string", "minLength": 1},
+        "implementation_identity": {"type": "string", "minLength": 1},
+        "contract_identity": {"type": "string", "minLength": 1},
+        "schema_identity": {"type": "string", "minLength": 1},
+        "input_types": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "output_types": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "dependencies": {"type": "array", "items": {"$ref": "#/$defs/StageDependency"}},
+        "authority_requirements": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "pack_requirements": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "deterministic_mode": {"enum": ["EXACT", "TOLERANCE_DECLARED", "NONDETERMINISTIC_FORBIDDEN"]},
+        "execution_backend": {"type": "string"},
+        "checkpoint_capability": {"enum": ["NONE", "STAGE", "OPAQUE_SUBSTAGE"]},
+        "cache_capability": {"type": "string"},
+        "cache_scope": {"type": ["string", "null"]},
+        "resource_estimator": {"type": ["string", "null"]},
+        "external_artifact_policy": {"type": "string"},
+        "qa_requirements": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "adapter_identity": {"type": "string"},
+        "wrapper_mutation_policy": {"const": "NO_SCIENTIFIC_MUTATION"},
+        "logical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "StageInvocation": {
+      "type": "object",
+      "required": ["stage_id", "stage_spec_hash", "parent_artifact_hashes", "pack_bindings", "configuration", "invocation_id"],
+      "properties": {
+        "stage_id": {"type": "string"},
+        "stage_spec_hash": {"type": "string"},
+        "parent_artifact_hashes": {"type": "array", "items": {"type": "string"}},
+        "pack_bindings": {"type": "object", "additionalProperties": {"type": "string"}},
+        "configuration": {"type": "object"},
+        "invocation_id": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "AuthorityBinding": {
+      "type": "object",
+      "required": ["binding_id", "owner_programme", "owner_gate", "authority_kind", "subject", "exact_scope", "decision", "status", "source_decision_artifact"],
+      "properties": {
+        "binding_id": {"type": "string"}, "owner_programme": {"type": "string"}, "owner_gate": {"type": "string"}, "authority_kind": {"type": "string"}, "subject": {"type": "string"},
+        "exact_scope": {"type": "object"}, "decision": {"enum": ["ALLOW", "NOT_AUTHORISED", "DEFERRED_BY_OPERATOR"]}, "status": {"type": "string"}, "source_decision_artifact": {"type": "string"},
+        "source_decision_hash": {"type": ["string", "null"]}, "token_state": {"type": ["string", "null"]}, "expires_at": {"type": ["string", "null"]}, "superseded_by": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "ResearchRunSpec": {"type": "object", "required": ["population_hash", "profile_hash", "stage_spec_hashes", "authority_binding_ids", "pack_bindings", "semantic_run_id"], "properties": {"population_hash": {"type": "string"}, "profile_hash": {"type": "string"}, "stage_spec_hashes": {"type": "object", "additionalProperties": {"type": "string"}}, "authority_binding_ids": {"type": "array", "items": {"type": "string"}}, "pack_bindings": {"type": "object", "additionalProperties": {"type": "string"}}, "chronology_policy_id": {"type": ["string", "null"]}, "comparability_domain_id": {"type": ["string", "null"]}, "context_role_identity": {"type": ["string", "null"]}, "code_identity": {"type": ["string", "null"]}, "semantic_run_id": {"type": "string"}, "workers": {"type": ["integer", "null"]}, "scheduling_policy": {"type": ["string", "null"]}, "physical_output_root": {"type": ["string", "null"]}}, "additionalProperties": false},
+    "IntegratedRunManifest": {"type": "object", "required": ["manifest_version", "semantic_run_id", "population_hash", "profile_hash", "stage_invocations", "authority_binding_ids", "logical_hash"], "properties": {"manifest_version": {"type": "string"}, "semantic_run_id": {"type": "string"}, "population_hash": {"type": "string"}, "profile_hash": {"type": "string"}, "stage_invocations": {"type": "array", "items": {"$ref": "#/$defs/StageInvocation"}}, "authority_binding_ids": {"type": "array", "items": {"type": "string"}}, "logical_hash": {"type": "string"}}, "additionalProperties": false},
+    "ArtifactRef": {"type": "object", "required": ["artifact_id", "logical_hash", "artifact_type", "owner_stage_id", "owner_run_id", "lifecycle_state"], "properties": {"artifact_id": {"type": "string"}, "logical_hash": {"type": "string"}, "content_sha256": {"type": ["string", "null"]}, "artifact_type": {"type": "string"}, "owner_stage_id": {"type": "string"}, "owner_run_id": {"type": "string"}, "parent_artifact_ids": {"type": "array", "items": {"type": "string"}}, "semantic_cache_key": {"type": ["string", "null"]}, "authority_classification": {"type": "string"}, "lifecycle_state": {"enum": ["STAGING", "COMPLETE", "QUARANTINED", "SUPERSEDED"]}, "media_type": {"type": ["string", "null"]}, "schema_identity": {"type": ["string", "null"]}, "size_bytes": {"type": ["integer", "null"]}, "locations": {"type": "array", "items": {"type": "object"}}, "created_attempt_id": {"type": ["string", "null"]}, "verification_status": {"type": "string"}}, "additionalProperties": false},
+    "SemanticCacheKey": {"type": "object", "required": ["stage_id", "stage_version", "parent_semantic_hashes", "contract_identity", "schema_identity", "implementation_identity", "pack_bindings", "key"], "properties": {"stage_id": {"type": "string"}, "stage_version": {"type": "string"}, "parent_semantic_hashes": {"type": "array", "items": {"type": "string"}}, "contract_identity": {"type": "string"}, "schema_identity": {"type": "string"}, "implementation_identity": {"type": "string"}, "pack_bindings": {"type": "object", "additionalProperties": {"type": "string"}}, "population_hash": {"type": ["string", "null"]}, "chronology_identity": {"type": ["string", "null"]}, "comparability_identity": {"type": ["string", "null"]}, "context_role_identity": {"type": ["string", "null"]}, "code_identity": {"type": ["string", "null"]}, "key": {"type": "string"}}, "additionalProperties": false},
+    "CheckpointRecord": {"type": "object", "required": ["checkpoint_id", "semantic_run_id", "stage_id", "level", "content_hash", "status"], "properties": {"checkpoint_id": {"type": "string"}, "semantic_run_id": {"type": "string"}, "stage_id": {"type": "string"}, "level": {"type": "string"}, "content_hash": {"type": "string"}, "status": {"type": "string"}, "owner_checkpoint_schema": {"type": ["string", "null"]}, "opaque_ref": {"type": ["string", "null"]}, "attempt_id": {"type": ["string", "null"]}}, "additionalProperties": false},
+    "RestartLedger": {"type": "object", "required": ["semantic_run_id", "attempt_ids", "checkpoint_ids", "restart_count", "recovered_work_units", "repeated_work_units"], "properties": {"semantic_run_id": {"type": "string"}, "attempt_ids": {"type": "array", "items": {"type": "string"}}, "checkpoint_ids": {"type": "array", "items": {"type": "string"}}, "restart_count": {"type": "integer", "minimum": 0}, "recovered_work_units": {"type": "integer", "minimum": 0}, "repeated_work_units": {"type": "integer", "minimum": 0}}, "additionalProperties": false},
+    "CapacityBudget": {"type": "object", "required": ["tier_id"], "properties": {"tier_id": {"type": "string"}, "max_wall_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0}, "max_peak_rss_bytes": {"type": ["integer", "null"], "exclusiveMinimum": 0}, "max_external_bytes": {"type": ["integer", "null"], "exclusiveMinimum": 0}, "max_workers": {"type": ["integer", "null"], "exclusiveMinimum": 0}}, "additionalProperties": false},
+    "CapacityReceipt": {"type": "object", "required": ["run_id", "stage_id", "status", "estimated", "observed", "reason_codes", "scientific_effect"], "properties": {"run_id": {"type": "string"}, "stage_id": {"type": "string"}, "status": {"enum": ["READY", "RUNNING", "REUSED", "COMPLETE", "CAPACITY_EXCEEDED", "FAILED", "QUARANTINED", "DEFERRED_BY_OPERATOR", "NOT_AUTHORISED"]}, "estimated": {"type": "object"}, "observed": {"type": "object"}, "reason_codes": {"type": "array", "items": {"type": "string"}}, "scientific_effect": {"const": "NONE"}}, "additionalProperties": false},
+    "StageExecutionReceipt": {"type": "object", "required": ["run_id", "attempt_id", "stage_id", "stage_version", "status", "input_hashes", "output_artifact_ids", "metrics", "warnings", "reason_codes"], "properties": {"run_id": {"type": "string"}, "attempt_id": {"type": "string"}, "stage_id": {"type": "string"}, "stage_version": {"type": "string"}, "status": {"enum": ["READY", "RUNNING", "REUSED", "COMPLETE", "CAPACITY_EXCEEDED", "FAILED", "QUARANTINED", "DEFERRED_BY_OPERATOR", "NOT_AUTHORISED"]}, "input_hashes": {"type": "array", "items": {"type": "string"}}, "output_artifact_ids": {"type": "array", "items": {"type": "string"}}, "metrics": {"type": "object"}, "warnings": {"type": "array", "items": {"type": "string"}}, "reason_codes": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false},
+    "IntegratedRunReceipt": {"type": "object", "required": ["run_id", "attempt_id", "status", "stage_receipts", "artifact_ids", "aggregate_metrics", "logical_hash"], "properties": {"run_id": {"type": "string"}, "attempt_id": {"type": "string"}, "status": {"enum": ["READY", "RUNNING", "REUSED", "COMPLETE", "CAPACITY_EXCEEDED", "FAILED", "QUARANTINED", "DEFERRED_BY_OPERATOR", "NOT_AUTHORISED"]}, "stage_receipts": {"type": "array", "items": {"$ref": "#/$defs/StageExecutionReceipt"}}, "artifact_ids": {"type": "array", "items": {"type": "string"}}, "qa_manifest_id": {"type": ["string", "null"]}, "aggregate_metrics": {"type": "object"}, "logical_hash": {"type": "string"}}, "additionalProperties": false},
+    "RunFailure": {"type": "object", "required": ["run_id", "failure_class", "reason_code"], "properties": {"run_id": {"type": "string"}, "failure_class": {"enum": ["EXECUTION", "AUTHORITY", "DEPENDENCY"]}, "reason_code": {"type": "string"}, "blocked_stage_id": {"type": ["string", "null"]}, "blocked_descendants": {"type": "array", "items": {"type": "string"}}, "reusable_ancestor_artifact_ids": {"type": "array", "items": {"type": "string"}}, "required_authority": {"type": ["string", "null"]}, "current_authority": {"type": ["string", "null"]}, "owner_programme": {"type": ["string", "null"]}, "owner_gate": {"type": ["string", "null"]}, "detail": {"type": ["string", "null"]}}, "additionalProperties": false},
+    "RunComparisonRecord": {"type": "object", "required": ["left_run_id", "right_run_id", "comparison_kind", "left_logical_hash", "right_logical_hash", "equivalent", "differences"], "properties": {"left_run_id": {"type": "string"}, "right_run_id": {"type": "string"}, "comparison_kind": {"type": "string"}, "left_logical_hash": {"type": "string"}, "right_logical_hash": {"type": "string"}, "equivalent": {"type": "boolean"}, "tolerance_identity": {"type": ["string", "null"]}, "differences": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": false}
+  },
+  "properties": {"object_type": {"type": "string"}, "payload": {"type": "object"}},
+  "required": ["object_type", "payload"],
+  "allOf": [
+    {"if": {"properties": {"object_type": {"const": "PopulationSpec"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/PopulationSpec"}}}},
+    {"if": {"properties": {"object_type": {"const": "PipelineProfile"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/PipelineProfile"}}}},
+    {"if": {"properties": {"object_type": {"const": "StageSpec"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/StageSpec"}}}},
+    {"if": {"properties": {"object_type": {"const": "IntegratedRunManifest"}}}, "then": {"properties": {"payload": {"$ref": "#/$defs/IntegratedRunManifest"}}}}
+  ],
+  "additionalProperties": false
+}

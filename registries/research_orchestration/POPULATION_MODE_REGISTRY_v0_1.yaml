@@ -1,0 +1,30 @@
+schema: ovc-irof-population-mode-registry/v0.1
+modes:
+  SYNTHETIC_FIXTURE:
+    provenance_class: SYNTHETIC
+    requires: [synthetic_fixture_id]
+    downstream_engine: SHARED
+    executable_under_irof_v0_1: true
+  SYNTHETIC_GENERATED:
+    provenance_class: SYNTHETIC
+    requires: [generator_spec_id]
+    downstream_engine: SHARED
+    executable_under_irof_v0_1: true
+  SEALED_REAL_REPLAY:
+    provenance_class: REAL_REPLAY
+    requires: [source_release_id, source_manifest_hash, authority_binding_ids]
+    downstream_engine: SHARED
+    executable_under_irof_v0_1: OWNER_AUTHORITY_REQUIRED
+  TIME_GATED_REPLAY:
+    provenance_class: REAL_REPLAY
+    requires: [source_release_id, source_manifest_hash, admissible_cutoff, authority_binding_ids]
+    downstream_engine: SHARED
+    executable_under_irof_v0_1: OWNER_AUTHORITY_REQUIRED
+  LIVE_PROSPECTIVE:
+    provenance_class: FUTURE_REAL
+    requires: [authority_binding_ids]
+    downstream_engine: SHARED
+    executable_under_irof_v0_1: false
+capacity_tiers: [MICRO, SMALL, MEDIUM, LARGE, LONG_HORIZON]
+capacity_tiers_are_scientific_ranks: false
+authority_effect: NONE
