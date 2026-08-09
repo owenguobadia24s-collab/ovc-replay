@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-parallel-development-gate-packet/v1",
+  "programme_id": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "plan_id": "OVC-PDC-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_ids": ["PDC-G1", "PDC-G2"],
+  "gate_titles": [
+    "Deterministic head-movement classifier acceptance",
+    "Serialized merge-readiness lane acceptance"
+  ],
+  "gate_classification": "AUTO_RATIFIABLE",
+  "baseline_commit": "554710ca7b94760d84362d8ae5ad568e27478eec",
+  "tested_main_base": "eefd860af86aea38e80ec211dd5ea34160171b6f",
+  "implementation_candidate_commit": "99d1c15bfa792fa35a302264b2119a52be7e9faa",
+  "completed_packets": ["PDC-WP0", "PDC-WP1", "PDC-WP2"],
+  "current_authority": "DEVELOPMENT_ACCELERATION_v0.2_ORCHESTRATION",
+  "proposed_delta": "PARALLEL_BUILD_SERIALIZED_INTEGRATION_AND_HEAD_MOVEMENT_CLASSIFICATION",
+  "authority_effect": "NONE_OUTSIDE_DEVELOPMENT_ORCHESTRATION_AND_ASSURANCE",
+  "acceptance_conditions": {
+    "dependency_footprint_schema": "PASS",
+    "movement_receipt_schema": "PASS",
+    "classifier_determinism_and_fail_closed_behavior": "PASS",
+    "movement_classes_and_highest_severity_rule": "PASS",
+    "scientific_evidence_reuse_guard": "PASS",
+    "only_existing_da2_pull_request_workflows": "PASS",
+    "single_complete_repository_suite_preserved": "PASS",
+    "per_pr_cancel_in_progress_preserved": "PASS",
+    "repository_wide_non_cancelling_merge_readiness_lane": "PASS",
+    "base_snapshot_start_and_end_guard": "PASS",
+    "main_head_live_churn_classification": "PASS_IRRELEVANT_FOR_THIS_PACKET"
+  },
+  "pre_decision_test_evidence": {
+    "complete_repository_suite_run": 31335340340,
+    "complete_repository_suite": "PASS",
+    "ovc_tiered_profile_run": 31335340347,
+    "selected_profile": "FINAL_HEAD",
+    "profile_assurance": "PASS",
+    "da2_orchestration_validation": "PASS",
+    "ovc_merge_readiness": "PASS",
+    "tested_head": "99d1c15bfa792fa35a302264b2119a52be7e9faa",
+    "stable_main_snapshot": "eefd860af86aea38e80ec211dd5ea34160171b6f"
+  },
+  "qa_packet": "docs/releases/parallel-development-v0-1/pdc-g1-g2/PDC_G1_G2_QA_PACKET.json",
+  "warnings": [],
+  "unresolved_issues": [],
+  "rollback": "Revert or supersede only PDC classifier, policy, schemas, tests and merge-readiness-lane additions. Preserve DA2 parent orchestration and all historical evidence.",
+  "recommended_decision": "PASS",
+  "post_decision_requirement": "RERUN_EXACT_FINAL_METADATA_HEAD_ASSURANCE_BEFORE_SQUASH_MERGE",
+  "next_after_merge": "TERMINAL_RECEIPT_AND_PROGRAMME_COMPLETION"
+}
