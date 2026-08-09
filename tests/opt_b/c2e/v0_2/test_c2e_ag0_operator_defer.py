@@ -47,21 +47,20 @@ class C2EAG0OperatorDeferTests(unittest.TestCase):
         self.assertEqual(effects["validation"], "DENIED")
         self.assertEqual(effects["family_semantic_probability_risk_exposure_execution"], "NONE")
 
-    def test_state_and_pointer_stop_at_deferred_ag0(self):
+    def test_state_remains_deferred_while_pointer_may_advance(self):
         self.assertEqual(self.state["status"], "GATE_READY")
         self.assertEqual(self.state["current_gate"], "C2E-AG0")
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual(self.state["operator_decision"], "DEFER")
         self.assertIn(self.decision["decision_id"], self.state["operator_decision_history"])
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertEqual(self.pointer["status"], "GATE_READY")
-        self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual(self.pointer["operator_decision"], "DEFER")
-        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
-        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
+        current_path = ROOT / self.pointer["authoritative_state"]
+        self.assertTrue(current_path.is_file())
+        current = json.loads(current_path.read_text())
+        self.assertIn(self.decision["decision_id"], current.get("operator_decision_history", []))
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
+        self.assertEqual(current["authority"]["c2e_activation"], "DENIED")
+        self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
 
 
 if __name__ == "__main__":

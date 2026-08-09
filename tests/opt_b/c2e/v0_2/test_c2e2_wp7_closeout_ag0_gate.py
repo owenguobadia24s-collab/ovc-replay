@@ -9,6 +9,7 @@ RECEIPT = WP7 / "C2E2_WP7_TERMINAL_MERGE_RECEIPT.json"
 STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_17.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 GATE = AG0 / "C2E_AG0_GATE_PACKET.json"
+AG0_DECISION = AG0 / "C2E_AG0_OPERATOR_DECISION.json"
 
 
 class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
@@ -18,6 +19,7 @@ class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
         cls.state = json.loads(STATE.read_text())
         cls.pointer = json.loads(POINTER.read_text())
         cls.gate = json.loads(GATE.read_text())
+        cls.ag0_decision = json.loads(AG0_DECISION.read_text())
 
     def test_wp7_receipt_binds_exact_squash_and_final_assurance(self):
         self.assertEqual(self.receipt["packet_id"], "C2E2-WP7")
@@ -42,19 +44,15 @@ class C2E2WP7CloseoutAG0GateTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
 
-    def test_current_pointer_preserves_wp7_and_records_ag0_defer(self):
-        self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
-        self.assertEqual(self.pointer["status"], "GATE_READY")
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertFalse(self.pointer["operator_decision_required"])
-        self.assertEqual(self.pointer["operator_decision"], "DEFER")
-        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
-        self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
-        self.assertEqual(self.pointer["wp6_execution"], "DENIED")
+    def test_current_pointer_may_advance_but_preserves_wp7_and_ag0_history(self):
+        current_path = ROOT / self.pointer["authoritative_state"]
+        self.assertTrue(current_path.is_file())
+        current = json.loads(current_path.read_text())
+        self.assertIn(self.ag0_decision["decision_id"], current.get("operator_decision_history", []))
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
-        self.assertTrue(self.pointer["next_action"].startswith("STOP_C2E_AG0_DEFERRED"))
+        self.assertEqual(current["authority"]["c2e_activation"], "DENIED")
+        self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
 
     def test_ag0_gate_is_consolidated_and_does_not_hide_replay_gap(self):
         self.assertEqual(self.gate["gate_id"], "C2E-AG0")
