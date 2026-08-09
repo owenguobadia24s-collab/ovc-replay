@@ -19,12 +19,14 @@ class C2E2G6ReplacementRunPreflightTests(unittest.TestCase):
             self.assertEqual(by_name[axis]["source_record_identity"], "profile_output_id")
         self.assertIn("context_bundle_id", by_name["parent_context_refs"]["source_record_identity"])
 
-    def test_old_authorized_manifest_is_sequence_window_not_observation_frame(self):
+    def test_old_authorized_run_manifest_binds_discovery_population_not_observation_frames(self):
         old = json.loads(OLD_MANIFEST.read_text())
-        scope = old["source_population"]["scope"]
-        self.assertEqual(scope["opportunity_types"], ["REGISTERED_SEQUENCE_WINDOW"])
-        self.assertEqual(scope["object_families"], ["AXIS_BUNDLE"])
-        self.assertNotEqual(old["source_population"]["population_unit"], "C2EInputFrame")
+        source = old["source_population"]
+        self.assertEqual(source["input_binding_id"], "C2VNEXT.JUNE.DISCOVERY.INPUT.v1")
+        self.assertEqual(source["logical_population_sha256"], "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7")
+        self.assertEqual(source["counts"]["requested"], 33320)
+        self.assertNotIn("population_unit", source)
+        self.assertNotIn("observation_population_sha256", source)
 
     def test_probe_blocks_sequence_window_artifacts_without_required_surface(self):
         with TemporaryDirectory() as raw:
