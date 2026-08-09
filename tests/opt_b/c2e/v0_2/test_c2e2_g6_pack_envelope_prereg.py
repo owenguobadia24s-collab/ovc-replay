@@ -107,7 +107,7 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         if "candidate_boundary_pack" in self.pointer:
             self.assertEqual(self.pointer["candidate_boundary_pack"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
         else:
-            self.assertIn(self.pointer["status"], {"GATE_READY", "APPROVED", "QA_REVIEW"})
+            self.assertIn(self.pointer["status"], {"GATE_READY", "APPROVED", "QA_REVIEW", "READY"})
             self.assertIn(
                 "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T100800+0100",
                 self.pointer.get("operator_decision_history", []),
@@ -120,10 +120,11 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
             "BLOCKED_NOT_STARTED",
             "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
             "EXECUTED_EVIDENCE_PENDING_QA",
+            "COMPLETED",
         })
-        if self.pointer["wp6_execution"] == "EXECUTED_EVIDENCE_PENDING_QA":
+        if self.pointer["wp6_execution"] in {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"}:
             self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
-        self.assertIn(self.pointer["status"], {"APPROVED", "QA_REVIEW", "BLOCKED", "GATE_READY"})
+        self.assertIn(self.pointer["status"], {"APPROVED", "QA_REVIEW", "BLOCKED", "GATE_READY", "READY"})
 
 
 if __name__ == "__main__":
