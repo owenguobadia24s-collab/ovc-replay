@@ -1,0 +1,31 @@
+{
+  "schema": "c2e2-g6-run-auth-r2-qa-packet/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "gate_id": "C2E2-G6-RUN-AUTH-R2",
+  "parent_gate_id": "C2E-AG1",
+  "gap_id": "C2E-AG1-GAP-001",
+  "candidate_commit": "13728d1b2e1e38ddf2ea625897b97da7bfe0bfc1",
+  "qa_disposition": "PASS_FOR_OPERATOR_RUN_AUTH_REVIEW",
+  "operator_gate_recommendation": "PASS",
+  "checks": [
+    {"id":"QA01","name":"operator gap-remediation intent interpreted without authority expansion","status":"PASS"},
+    {"id":"QA02","name":"read-only run A restart-cut reconstruction","status":"PASS","prefix_records":8229,"episodes":46,"semantic_prefix_hash":"4dc0af22d802272ced022cb4e8d7769b4a5e06cf268bb872cb90dbf1276f4f5e"},
+    {"id":"QA03","name":"read-only run B restart-cut reconstruction","status":"PASS","prefix_records":8229,"episodes":46,"semantic_prefix_hash":"4dc0af22d802272ced022cb4e8d7769b4a5e06cf268bb872cb90dbf1276f4f5e"},
+    {"id":"QA04","name":"run A/B five scientific files byte-identical","status":"PASS","hashes":{"c2e-input-frame-index-v0_3.jsonl":"35b2b71d9214585eec4a5c59b665b7439e1832ff69e742dab712a932f1b2f979","c2e-boundary-evaluations-v2.jsonl":"d4d2c792aec078f886823e463bb4822ebaa5fc2c875c119748fde11222f51ea7","c2e-event-stream-v0_2.jsonl":"36c75f05fadc186489a0089b38230833719b6ebf8eb35a388bf14979c9a473af","c2e-boundary-disagreement-ledger.jsonl":"c9f05ff82926f1759874f95809ba42691657f794b3ebe6330b2266d8765970d7","c2e-not-evaluable-candidates.jsonl":"28a742eaa7164bd5000ab4c1f9effbb669783a5a081e687b41bbcab796328b6a"}},
+    {"id":"QA05","name":"restart harness unit tests","status":"PASS_3_OF_3"},
+    {"id":"QA06","name":"restart harness py_compile","status":"PASS"},
+    {"id":"QA07","name":"new run manifest exact source/pack/population","status":"PASS","run_manifest_logical_sha256":"f7287ba57325ab6f1c2e37485bd6bf34bfe70a5e7ba553ac6a1fd2a7f9107dcc"},
+    {"id":"QA08","name":"new token proposal single-use and inactive","status":"PASS","token_id":"C2E2.G6.R2.TOKEN.bafe14574ee86332a2249715"},
+    {"id":"QA09","name":"existing consumed token reuse remains prohibited","status":"PASS"},
+    {"id":"QA10","name":"resource envelope unchanged","status":"PASS","resource_envelope_logical_sha256":"0761b5de2f231de6b8fc5eb91e4c0bc2dd2b10f9abeb9192aa8703d90db35717"},
+    {"id":"QA11","name":"no provider intake sampling validation activation promotion publication authority","status":"PASS"},
+    {"id":"QA12","name":"full restart execution evidence","status":"PENDING_OPERATOR_RUN_AUTH_NOT_EXECUTED"}
+  ],
+  "blockers_to_gate_preparation": [],
+  "blockers_to_gap_resolution": ["FRESH_EXACT_RESTART_EXECUTION_REQUIRES_C2E2_G6_RUN_AUTH_R2_OPERATOR_PASS"],
+  "warnings": ["FULL_REAL_SOURCE_RESTART_EQUIVALENCE_IS_STILL_NOT_MATERIALIZED_UNTIL_THE_AUTHORIZED_RUN_EXECUTES","THE_EXISTING_C2E2_G6_TOKEN_IS_CONSUMED_AND_MUST_NOT_BE_REUSED","C2E_AG1_REMAINS_PENDING_AFTER_THIS_RUN_AUTHORITY_GATE_AND_AFTER_THE_RUN_UNTIL_A_SEPARATE_OPERATOR_DISPOSITION"],
+  "authority_effect": "NONE",
+  "active_c2e": "NONE",
+  "active_boundary_pack": "NONE",
+  "logical_sha256": "6b60eb0f44ea06d1762d7acc6c3f2390720ed8c5d3c189b2f1963274d4ab2108"
+}
