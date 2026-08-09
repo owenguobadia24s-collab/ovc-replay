@@ -5,6 +5,8 @@
   "gate_id": "IROF-G4",
   "plan_version": "0.1",
   "baseline_commit": "fd380be5052ab946a4e0467a3f4e4aff2ba6ad7e",
+  "reconciled_main_commit": "f462b88504088fe42d03f3f064214d8a56954f02",
+  "tested_pre_reconciliation_head": "d2bd4e59ae78e7eb4b96e676f1e1286e13bc7069",
   "authority_delta": "read-only authority enforcement and dry-run population resolution only",
   "court_record": {
     "c2e_real_replay": "DENIED_PENDING_FRESH_RUN_AUTH",
@@ -12,22 +14,29 @@
     "srfd_v0_7_run_authority": "OWNER_PROGRAMME_SCOPED_UNCONSUMED_AT_AUTHORIZATION",
     "validation": "LOCKED_UNCONSUMED"
   },
-  "static_review": {
+  "pre_reconciliation_ci": {
     "status": "PASS",
-    "checks": [
-      "one-binding complete-scope matching; authority union forbidden",
-      "owner programme and gate exact matching",
-      "token state observed without mutation or consumption",
-      "real source stage requires explicit owner authority",
-      "no real-to-synthetic substitution or profile degradation",
-      "blocked node and transitive descendants reported from canonical DAG",
-      "reusable ancestors are informational only",
-      "Validation denial precedes protected location/object/time/row resolution",
-      "SRFD v0.7 token cannot satisfy C2E owner gate"
-    ]
+    "tests_workflow": "31305612919 SUCCESS",
+    "tiered_assurance_workflow": "31305612913 SUCCESS",
+    "merge_readiness": "SUCCESS"
   },
-  "ci": {"status": "PENDING_EXACT_HEAD"},
+  "base_reconciliation": {
+    "status": "PASS_NO_AUTHORITY_CONFLICT",
+    "main_change": "Windows Research Console portability engineering only",
+    "authority_effect_on_wp3": "NONE"
+  },
+  "acceptance": {
+    "single_binding_complete_scope": "PASS",
+    "owner_programme_gate_matching": "PASS",
+    "token_non_consumption": "PASS",
+    "real_source_fail_closed": "PASS",
+    "no_synthetic_substitution": "PASS",
+    "blocked_descendants": "PASS",
+    "validation_denial_before_resolution": "PASS",
+    "current_c2e_srfd_isolation_regression": "PASS"
+  },
+  "exact_reconciled_head_ci": {"status": "PENDING"},
   "blocking_issues": [],
-  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "qa_recommendation": "PASS_SUBJECT_TO_RECONCILED_HEAD_CI",
   "rollback": "remove WP3 resolver/registry/fixtures/tests only; no owner authority or token state is modified"
 }

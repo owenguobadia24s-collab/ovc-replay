@@ -2,11 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import platform
-import resource
 import sqlite3
-import sys
 import time
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
@@ -16,20 +13,16 @@ from .index_common import (
     canonical_bytes, logical_hash, sha256_file, _load_inventory,
 )
 from .index_partition import _build_partition
+from .platform_metrics import memory_total_bytes as _platform_memory_total_bytes
+from .platform_metrics import peak_rss_bytes as _platform_peak_rss_bytes
+
 
 def _memory_total_bytes() -> int:
-    try:
-        pages = os.sysconf("SC_PHYS_PAGES")
-        page_size = os.sysconf("SC_PAGE_SIZE")
-        return int(pages * page_size)
-    except (AttributeError, ValueError, OSError):
-        return 1
+    return _platform_memory_total_bytes()
 
 
 def _peak_rss_bytes() -> int:
-    usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    # Linux reports KiB; macOS reports bytes.
-    return int(usage if sys.platform == "darwin" else usage * 1024)
+    return _platform_peak_rss_bytes()
 
 
 def assess_window_cardinality(
