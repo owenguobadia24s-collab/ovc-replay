@@ -1,0 +1,52 @@
+schema: ovc-irof-current-adapter-registry/v0.1
+status: INACTIVE_CURRENT_LAYER_BINDINGS
+authority_effect: NONE
+bindings:
+  - stage_id: POPULATION_SOURCE_OPT_A
+    modules: [ovc.opt_a.provider_population, ovc.opt_a.population_integrity, ovc.opt_a.release_freeze]
+    authority_owner: OPT-A / source-release governance
+    execution_mode: EXISTING_AUTHORITY_ONLY
+  - stage_id: C1
+    modules: [ovc.opt_b.c1]
+    authority_owner: OPT-B.C1
+    execution_mode: EXISTING_AUTHORITY_ONLY
+  - stage_id: C2_REVISED
+    modules: [ovc.opt_b.c2_vnext]
+    authority_owner: OPT-B.C2
+    execution_mode: EXISTING_SELECTOR_ONLY
+  - stage_id: C2E_V0_2
+    modules: [ovc.opt_b.c2e_v2]
+    authority_owner: OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2
+    execution_mode: SYNTHETIC_INACTIVE_ONLY
+  - stage_id: OCCURRENCE_CONTEXT
+    modules: [ovc.context.occurrence_context.consumers]
+    authority_owner: OccurrenceContext v0.1
+    execution_mode: CONTEXT_ONLY
+  - stage_id: SRI_REPRESENTATION
+    modules: [ovc.opt_b.sfc.representation]
+    authority_owner: SFC / SRI
+    execution_mode: SYNTHETIC_INACTIVE_ONLY
+  - stage_id: COMPARABILITY_COMPARISON_DISTANCE
+    modules: [ovc.opt_b.sfc.comparison]
+    authority_owner: SFC + SRFD
+    execution_mode: SYNTHETIC_INACTIVE_ONLY
+  - stage_id: FDI_C2G_FAMILY
+    modules: [ovc.opt_b.sfc.fdi]
+    authority_owner: SFC + SRFD
+    execution_mode: SYNTHETIC_INACTIVE_ONLY
+  - stage_id: FAMILY_EVIDENCE_STREAM
+    modules: [ovc.opt_b.sfc.evidence]
+    authority_owner: SFC
+    execution_mode: SYNTHETIC_INACTIVE_ONLY
+  - stage_id: RESEARCH_OPERATIONS
+    modules: [ovc.research_operations.qa, ovc.research_operations.catalogue]
+    authority_owner: Research Operations Foundation
+    execution_mode: READ_ONLY_EVIDENCE
+reserved_unavailable_extensions:
+  MCARB_AUXILIARY_BRANCH:
+    status: SEPARATE_PACK_AND_AUTHORITY_REQUIRED
+    registered: false
+notes:
+  - C2 historical/superseded paths are not runtime alternatives; the binding pins c2_vnext only.
+  - C2E package is inactive/shadow-only; registration does not authorize real replay.
+  - OccurrenceContext is context-only and REPRESENTATION_INPUT is rejected absent separately authorized representation-pack authority.
