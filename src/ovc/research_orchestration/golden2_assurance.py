@@ -5,7 +5,11 @@ from typing import Any
 
 from ovc.research_orchestration.cache import SemanticArtifactCache
 from ovc.research_orchestration.checkpoint import StageCompletion, assert_fresh_resume_equivalent, build_resume_plan
-from ovc.research_orchestration.golden2_downstream import build_golden2_plan, execute_c2e, execute_sfc, project_research_operations, run_weekly_full_chain
+from ovc.research_orchestration.golden2_c2e_bridge import (
+    execute_c2e_loss_preserving as execute_c2e,
+    run_weekly_full_chain_loss_preserving as run_weekly_full_chain,
+)
+from ovc.research_orchestration.golden2_downstream import build_golden2_plan, execute_sfc, project_research_operations
 from ovc.research_orchestration.golden2_metrics import RUN_ID, telemetry
 from ovc.research_orchestration.golden2_weekly import PROGRAMME_ID, build_c1_week, build_c2_week, build_opt_a_week
 from ovc.research_orchestration.models import ArtifactRef, SemanticCacheKey
@@ -102,7 +106,10 @@ def run_assurance() -> dict[str, Any]:
         "fresh_repeated_equivalent": True, "alternate_order_equivalent": True,
         "checkpoint": _checkpoint(outputs), "cache": _cache(fresh), "telemetry": stage_telemetry,
         "whole_run": {"wall_seconds": total_wall, "cpu_seconds": total_cpu, "worker_count": 1},
-        "counts": {"m1_bid": fresh["upstream"]["opt_a"]["summary"]["m1_counts"]["BID"], "m1_ask": fresh["upstream"]["opt_a"]["summary"]["m1_counts"]["ASK"], "c1": fresh["upstream"]["c1"]["summary"]["record_count"], "c2_observations": fresh["upstream"]["c2"]["summary"]["observation_count"], "c2_structural_snapshots": fresh["upstream"]["c2"]["summary"]["structural_snapshot_count"], "c2_transitions": fresh["upstream"]["c2"]["summary"]["transition_count"], "c2e_frames": fresh["c2e"]["frame_count"], "c2e_episodes": fresh["c2e"]["episode_count"], "sri_representations": len(fresh["sfc"]["representations"]), "comparison_pairs": len(fresh["sfc"]["pairs"]), "families": len(fresh["sfc"]["catalog"]["families"])},
+        "counts": {"m1_bid": fresh["upstream"]["opt_a"]["summary"]["m1_counts"]["BID"], "m1_ask": fresh["upstream"]["opt_a"]["summary"]["m1_counts"]["ASK"], "c1": fresh["upstream"]["c1"]["summary"]["record_count"], "c2_observations": fresh["upstream"]["c2"]["summary"]["observation_count"], "c2_structural_snapshots": fresh["upstream"]["c2"]["summary"]["structural_snapshot_count"], "c2_transitions": fresh["upstream"]["c2"]["summary"]["transition_count"], "c2e_frames": fresh["c2e"]["frame_count"], "c2e_episodes": fresh["c2e"]["episode_count"], "sri_representations": len(fresh["sfc"]["representations"]), "comparison_pairs": len(fresh["sfc"]["pairs"]), "families": len(fresh["sfc"]["catalog"]["families"]), "c2e_input_c2_snapshots": fresh["c2e"]["input_c2_snapshot_count"], "c2e_eligible_c2_snapshots": fresh["c2e"]["eligible_c2_snapshot_count"]},
+        "c2_axis_computability_counts": fresh["c2e"]["axis_computability_counts"],
+        "c2e_fixture_boundary_required_axes": fresh["c2e"]["fixture_boundary_required_axes"],
+        "conformance_warnings": fresh["c2e"]["conformance_warnings"],
         "family_evidence_status": fresh["sfc"]["family_evidence_stream"]["status"], "representation_interpretation": fresh["sfc"]["representation_interpretation"],
         "real_source_replay": False, "validation_consumed": False, "authority_effect": "NONE",
     }

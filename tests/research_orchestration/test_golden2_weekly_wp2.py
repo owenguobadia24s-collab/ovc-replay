@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from ovc.research_orchestration.golden2_downstream import run_weekly_full_chain
+from ovc.research_orchestration.golden2_c2e_bridge import run_weekly_full_chain_loss_preserving as run_weekly_full_chain
 
 
 class Golden2WeeklyWP2Tests(unittest.TestCase):
@@ -20,6 +20,20 @@ class Golden2WeeklyWP2Tests(unittest.TestCase):
         self.assertFalse(c2e["real_source_replay"])
         self.assertEqual("NONE", c2e["active_c2e"])
         self.assertEqual("NONE", c2e["active_boundary_pack"])
+
+    def test_current_c2_motion_status_gap_is_preserved_not_repaired(self) -> None:
+        c2e = self.result["c2e"]
+        self.assertEqual(["LOCATION", "ORGANISATION"], c2e["fixture_boundary_required_axes"])
+        self.assertGreater(c2e["axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0), 0)
+        self.assertIn(
+            "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH",
+            c2e["conformance_warnings"],
+        )
+        self.assertEqual(c2e["input_c2_snapshot_count"], sum(
+            count for key, count in c2e["axis_computability_counts"].items() if key.startswith("MOTION:")
+        ))
+        self.assertGreater(c2e["eligible_c2_snapshot_count"], 850)
+        self.assertLessEqual(c2e["eligible_c2_snapshot_count"], c2e["input_c2_snapshot_count"])
 
     def test_sfc_consumes_current_c2e_handoff_without_side_collapse(self) -> None:
         sfc = self.result["sfc"]
