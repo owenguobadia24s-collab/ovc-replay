@@ -36,7 +36,7 @@ export function AppShell() {
         <InvestigationTabs />
         <div className="global-actions"><button className="search-action" type="button" data-navigation-only="true">⌕ <span>Search anything… (Ctrl+K)</span></button><button type="button" aria-label="Help" data-navigation-only="true">?</button><button type="button" aria-label="Alerts" data-navigation-only="true">♧</button><button type="button" aria-label="Theme" data-navigation-only="true">◐</button><div className="operator-chip"><b>OP</b><span>Operator</span></div></div>
       </header>
-      <div className="fixture-banner" role="status">SYNTHETIC FIXTURE · NON-EVIDENTIARY · AUTHORITY EFFECT NONE · REAL-SOURCE ROUTES DENIED UNTIL RCN-G4</div>
+      <div className="fixture-banner" role="status">SYNTHETIC FIXTURE · NON-EVIDENTIARY · AUTHORITY EFFECT NONE · Real-source routes: DENIED UNTIL RCN-G4</div>
       <div className="context-summary" aria-label="Global fixture context">
         <div><span>INSTRUMENT</span><strong>{ctx?.instrument ?? "—"}</strong></div><div><span>CLOCK</span><strong>{ctx?.clock ?? "—"}</strong></div><div><span>SIDE</span><strong>{ctx?.side ?? "—"}</strong></div><div><span>SESSION</span><strong>{ctx?.session ?? "—"}</strong></div><div className="release-cell"><span>FIXTURE SOURCE</span><strong>{sourceCommit}</strong></div><div><span>DATA FRESHNESS</span><strong className="freshness"><i/> {lastBar?.t ?? "PENDING"}</strong></div>
         <div className="summary-authority"><AuthorityTriad available={marketCapability?.available ?? false} authorised={marketCapability?.authorised ?? false} active={marketCapability?.active ?? false} reason={`Fixture capability · ${availableCount} available`}/></div>
