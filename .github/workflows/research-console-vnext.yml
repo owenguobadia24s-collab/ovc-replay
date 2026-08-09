@@ -1,18 +1,9 @@
 name: Research Console vNext
 on:
-  pull_request:
-    paths:
-      - 'apps/research_api/**'
-      - 'src/ovc/console_vnext/**'
-      - 'contracts/research_console_vnext/**'
-      - 'schemas/research_console_vnext/**'
-      - 'registries/research_console_vnext/**'
-      - 'fixtures/research_console_vnext/**'
-      - 'tests/research_console_vnext/**'
-      - 'requirements-console-vnext.txt'
-      - '.github/workflows/research-console-vnext.yml'
   push:
-    branches: [main]
+    branches:
+      - main
+      - 'build/rc-vnext-*'
     paths:
       - 'apps/research_api/**'
       - 'src/ovc/console_vnext/**'
@@ -23,6 +14,10 @@ on:
       - 'tests/research_console_vnext/**'
       - 'requirements-console-vnext.txt'
       - '.github/workflows/research-console-vnext.yml'
+  workflow_dispatch:
+concurrency:
+  group: research-console-vnext-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   api-contract:
     runs-on: ubuntu-latest
