@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-irof-qa-packet/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "packet_id": "IROF-WP3",
+  "gate_id": "IROF-G4",
+  "plan_version": "0.1",
+  "baseline_commit": "fd380be5052ab946a4e0467a3f4e4aff2ba6ad7e",
+  "authority_delta": "read-only authority enforcement and dry-run population resolution only",
+  "court_record": {
+    "c2e_real_replay": "DENIED_PENDING_FRESH_RUN_AUTH",
+    "c2e_active": "NONE",
+    "srfd_v0_7_run_authority": "OWNER_PROGRAMME_SCOPED_UNCONSUMED_AT_AUTHORIZATION",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "static_review": {
+    "status": "PASS",
+    "checks": [
+      "one-binding complete-scope matching; authority union forbidden",
+      "owner programme and gate exact matching",
+      "token state observed without mutation or consumption",
+      "real source stage requires explicit owner authority",
+      "no real-to-synthetic substitution or profile degradation",
+      "blocked node and transitive descendants reported from canonical DAG",
+      "reusable ancestors are informational only",
+      "Validation denial precedes protected location/object/time/row resolution",
+      "SRFD v0.7 token cannot satisfy C2E owner gate"
+    ]
+  },
+  "ci": {"status": "PENDING_EXACT_HEAD"},
+  "blocking_issues": [],
+  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "rollback": "remove WP3 resolver/registry/fixtures/tests only; no owner authority or token state is modified"
+}
