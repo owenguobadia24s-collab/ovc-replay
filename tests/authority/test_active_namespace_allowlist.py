@@ -8,6 +8,9 @@ SRC = ROOT / "src"
 EXPECTED_TOP_LEVEL = {"ovc", "ovc_evidence_store"}
 EXPECTED_OVC_PACKAGES = {
     "ovc",
+    "ovc.console_vnext",
+    "ovc.console_vnext.adapters",
+    "ovc.console_vnext.application",
     "ovc.context",
     "ovc.context.occurrence_context",
     "ovc.development",
@@ -48,6 +51,17 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
             for path in package_root.rglob("__init__.py")
         }
         self.assertEqual(EXPECTED_OVC_PACKAGES, actual)
+
+    def test_console_vnext_namespace_is_local_read_only_application_only(self) -> None:
+        init_text = (SRC / "ovc" / "console_vnext" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("local read-only application only", init_text)
+        self.assertIn("no active market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("publication", init_text)
+        self.assertIn("execution authority", init_text)
+        self.assertIn("agent-write authority", init_text)
+        self.assertIn("fail closed", init_text)
 
     def test_occurrence_context_namespace_is_inactive_nonstructural_only(self) -> None:
         context_init = (SRC / "ovc" / "context" / "__init__.py").read_text(encoding="utf-8").lower()
