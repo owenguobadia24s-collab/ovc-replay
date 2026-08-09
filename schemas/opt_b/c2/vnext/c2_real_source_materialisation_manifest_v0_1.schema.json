@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/c2/vnext/c2_real_source_materialisation_manifest_v0_1",
+  "title": "C2 vNext real-source observation materialisation manifest v0.1",
+  "type": "object",
+  "required": ["schema", "packet_id", "materialisation_id", "source", "scope", "policy", "counts", "files", "authority", "logical_sha256"],
+  "properties": {
+    "schema": {"const": "ovc-c2-vnext-real-source-observation-materialisation/v1"},
+    "packet_id": {"const": "C2VNEXT-REAL-OBS-MATERIALISATION-20260809"},
+    "materialisation_id": {"type": "string", "minLength": 1},
+    "source": {"type": "object"},
+    "scope": {"type": "object"},
+    "policy": {"type": "object"},
+    "counts": {"type": "object"},
+    "files": {"type": "object"},
+    "authority": {"type": "object"},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}
