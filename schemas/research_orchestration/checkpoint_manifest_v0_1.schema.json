@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://research-orchestration/checkpoint-manifest/v0.1",
+  "title": "IROF Run Checkpoint Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "semantic_run_id", "completions", "opaque_substage_checkpoints"],
+  "properties": {
+    "manifest_version": {"const": "0.1"},
+    "semantic_run_id": {"type": "string", "minLength": 1},
+    "completions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stage_id", "stage_spec_hash", "output_logical_hash", "content_hash", "status"],
+        "properties": {
+          "stage_id": {"type": "string", "minLength": 1},
+          "stage_spec_hash": {"type": "string", "minLength": 1},
+          "output_logical_hash": {"type": "string", "minLength": 1},
+          "content_hash": {"type": "string", "minLength": 1},
+          "status": {"const": "COMPLETE"}
+        }
+      }
+    },
+    "opaque_substage_checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["checkpoint_id", "stage_id", "owner_checkpoint_schema", "opaque_ref", "content_hash", "status"],
+        "properties": {
+          "checkpoint_id": {"type": "string", "minLength": 1},
+          "stage_id": {"type": "string", "minLength": 1},
+          "owner_checkpoint_schema": {"type": "string", "minLength": 1},
+          "opaque_ref": {"type": "string", "minLength": 1},
+          "content_hash": {"type": "string", "minLength": 1},
+          "status": {"const": "COMPLETE"}
+        }
+      }
+    }
+  }
+}

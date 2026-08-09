@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-irof-capacity-fixtures/v0.1",
+  "authority_effect": "NONE",
+  "cases": [
+    {"case_id": "WITHIN_BUDGET", "expected": "READY"},
+    {"case_id": "FORCED_WALL_FAILURE", "expected": "CAPACITY_EXCEEDED"},
+    {"case_id": "FORCED_RSS_FAILURE", "expected": "CAPACITY_EXCEEDED"},
+    {"case_id": "WORKER_REDUCTION", "expected": "SAME_EXPERIMENT_IDENTITY"},
+    {"case_id": "SAMPLING_RECOVERY", "expected_reason": "IROF_CAPACITY_EXPERIMENT_MUTATION_FORBIDDEN"},
+    {"case_id": "GRID_REDUCTION_RECOVERY", "expected_reason": "IROF_CAPACITY_EXPERIMENT_MUTATION_FORBIDDEN"},
+    {"case_id": "DAG_READY_ORDER", "expected": "LEXICOGRAPHIC_READY_ONLY"},
+    {"case_id": "TELEMETRY_MISSING_OS_MEASURE", "expected": "EXPLICIT_UNAVAILABLE"},
+    {"case_id": "TELEMETRY_HASH_INVARIANCE", "expected": "UNCHANGED_SEMANTIC_HASH"}
+  ]
+}

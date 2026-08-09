@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://research-orchestration/capacity-receipt/v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["run_id","stage_id","status","estimated","observed","reason_codes","scientific_effect"],
+  "properties":{
+    "run_id":{"type":"string","minLength":1},
+    "stage_id":{"type":"string","minLength":1},
+    "status":{"enum":["READY","RUNNING","COMPLETE","CAPACITY_EXCEEDED","FAILED","QUARANTINED"]},
+    "estimated":{"type":"object"},
+    "observed":{"type":"object"},
+    "reason_codes":{"type":"array","items":{"type":"string"}},
+    "scientific_effect":{"const":"NONE"}
+  }
+}
