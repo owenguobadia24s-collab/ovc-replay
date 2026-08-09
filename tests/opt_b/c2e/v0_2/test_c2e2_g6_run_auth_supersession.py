@@ -54,7 +54,7 @@ class C2E2G6RunAuthSupersessionTests(unittest.TestCase):
         self.assertEqual(self.manifest["boundary_pack"]["logical_sha256"], self.pack["logical_sha256"])
         self.assertEqual(self.manifest["resource_envelope"]["logical_sha256"], self.envelope["logical_sha256"])
         source = self.manifest["source_population"]
-        self.assertEqual(source["input_binding_sha256"], "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8")
+        self.assertEqual(source["input_binding_sha256"], "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8")
         self.assertEqual(source["logical_population_sha256"], "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7")
         self.assertEqual(source["counts"], {"requested":33320,"computable":27996,"censored":1638,"not_evaluable":3686})
         self.assertEqual(len(self.manifest["raw_source_objects"]), 4)
