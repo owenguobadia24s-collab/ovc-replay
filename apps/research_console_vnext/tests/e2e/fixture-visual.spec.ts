@@ -22,6 +22,10 @@ for (const viewport of viewports) {
     await expect(evidenceStack).toContainText("AVAILABLE");
     await expect(evidenceStack).toContainText("AUTHORISED");
     await expect(evidenceStack).toContainText("ACTIVE");
+    await expect(page.getByTestId("chart-detail-hud")).toContainText("O");
+    await expect(page.getByTestId("chart-detail-hud")).toContainText("H");
+    await expect(page.getByTestId("chart-detail-hud")).toContainText("L");
+    await expect(page.getByTestId("chart-detail-hud")).toContainText("C");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
     await page.screenshot({ path: path.join(screenshotRoot, `prototype-${viewport.name}.png`), fullPage: false });
   });
@@ -45,6 +49,36 @@ for (const [name, investigation, expectedState] of scenarios) {
     await page.screenshot({ path: path.join(screenshotRoot, `scenario-${name}-1440x810.png`), fullPage: false });
   });
 }
+
+test("WP3D precision grid aligns principal surfaces and bottom evidence strip", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 810 });
+  await page.goto("/market?investigation=FX-PROTOTYPE-01");
+  const context = page.getByRole("complementary", { name: "Context Navigator" });
+  const canvasArticle = page.getByRole("article", { name: "Primary Canvas" });
+  const inspector = page.getByRole("complementary", { name: "Evidence Stack" });
+  const [contextBox, canvasBox, inspectorBox] = await Promise.all([context.boundingBox(), canvasArticle.boundingBox(), inspector.boundingBox()]);
+  expect(contextBox).not.toBeNull(); expect(canvasBox).not.toBeNull(); expect(inspectorBox).not.toBeNull();
+  if (!contextBox || !canvasBox || !inspectorBox) return;
+  expect(Math.abs(contextBox.y - canvasBox.y)).toBeLessThanOrEqual(1);
+  expect(Math.abs(canvasBox.y - inspectorBox.y)).toBeLessThanOrEqual(1);
+  expect(Math.abs((contextBox.x + contextBox.width + 6) - canvasBox.x)).toBeLessThanOrEqual(1.5);
+  expect(Math.abs((canvasBox.x + canvasBox.width + 6) - inspectorBox.x)).toBeLessThanOrEqual(1.5);
+
+  const bottomTitles = ["Structural Evidence Summary", "Developing Episode", "Price Context", "Evidence & Change Conditions"];
+  const boxes = [];
+  for (const title of bottomTitles) {
+    const card = page.getByText(title, { exact: false }).first().locator("xpath=ancestor::article");
+    const box = await card.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) boxes.push(box);
+  }
+  expect(boxes).toHaveLength(4);
+  const anchor = boxes[0];
+  for (const box of boxes.slice(1)) {
+    expect(Math.abs(box.y - anchor.y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(box.height - anchor.height)).toBeLessThanOrEqual(1);
+  }
+});
 
 test("navigation controls cannot expose mutation semantics", async ({ page }) => {
   await page.goto("/market?investigation=FX-PROTOTYPE-01");
