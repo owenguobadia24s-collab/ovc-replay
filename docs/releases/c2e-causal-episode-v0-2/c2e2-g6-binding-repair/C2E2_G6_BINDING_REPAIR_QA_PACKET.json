@@ -29,7 +29,10 @@
   ],
   "qa_disposition": "BLOCK",
   "recommendation": "SUPERSEDE_SIGNATURE_CONTRACT_BEFORE_REPLACEMENT_POPULATION_FREEZE",
-  "tests": [],
+  "tests": [
+    {"commit":"a4245335ad67d54ca5c9fec23d76791334fd0464","workflow":"tests","workflow_id":31304516076,"conclusion":"SUCCESS"},
+    {"commit":"a4245335ad67d54ca5c9fec23d76791334fd0464","workflow":"OVC tiered test selection shadow","workflow_id":31304516079,"conclusion":"SUCCESS","profile_assurance":"SUCCESS","compatibility":"SUCCESS","merge_readiness":"SUCCESS"}
+  ],
   "evidence_packet": "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-binding-repair/C2E2_G6_BINDING_REPAIR_SIGNATURE_PREFLIGHT.json",
   "rollback": "Preserve merged binding-supersession history and old-token invalidation. Do not freeze replacement population/pack/envelope/manifest/token. Any versioned signature correction must be separately operator-authorized and additive; old v0.2 contracts and pack bytes remain immutable."
 }
