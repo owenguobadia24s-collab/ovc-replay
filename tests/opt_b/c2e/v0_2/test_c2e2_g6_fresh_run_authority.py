@@ -111,8 +111,16 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         if self.pointer["status"] == "READY":
-            self.assertEqual(self.pointer["current_packet"], "C2E2-WP7")
-            self.assertEqual(self.pointer["current_gate"], "C2E2-G7")
+            route = (self.pointer["current_packet"], self.pointer["current_gate"])
+            self.assertIn(route, {
+                ("C2E2-WP7", "C2E2-G7"),
+                ("C2E-AG1-PREP", "C2E-AG1"),
+            })
+            if route == ("C2E-AG1-PREP", "C2E-AG1"):
+                self.assertIn(
+                    "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
+                    self.pointer["operator_decision_history"],
+                )
 
 if __name__ == "__main__":
     unittest.main()

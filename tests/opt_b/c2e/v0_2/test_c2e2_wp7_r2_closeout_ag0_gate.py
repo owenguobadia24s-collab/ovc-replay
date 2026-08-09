@@ -92,7 +92,7 @@ class C2E2WP7R2CloseoutAG0GateTests(unittest.TestCase):
         self.assertEqual(self.gate["unresolved_issues"], [])
         self.assertEqual(len(self.gate["external_artifact_hashes"]), 5)
 
-    def test_authoritative_state_and_pointer_stop_at_ag0_with_no_active_c2e(self):
+    def test_historical_authoritative_state_stays_exact_while_pointer_advances_lawfully(self):
         self.assertEqual(self.state["status"], "GATE_READY")
         self.assertEqual(self.state["current_gate"], "C2E-AG0")
         self.assertTrue(self.state["operator_decision_required"])
@@ -101,13 +101,26 @@ class C2E2WP7R2CloseoutAG0GateTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["active_c2e"], "NONE")
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED_OPERATOR_RESERVED")
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_31.json")
-        self.assertEqual(self.pointer["status"], "GATE_READY")
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertTrue(self.pointer["operator_decision_required"])
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["next_action"], "STOP_FOR_OPERATOR_C2E_AG0_R2")
+        if self.pointer["authoritative_state"].endswith("OVC_C2E2_STATE_v0_31.json"):
+            self.assertEqual(self.pointer["status"], "GATE_READY")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["next_action"], "STOP_FOR_OPERATOR_C2E_AG0_R2")
+        else:
+            self.assertEqual(
+                self.pointer["authoritative_state"],
+                "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_32.json",
+            )
+            self.assertEqual(self.pointer["status"], "READY")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG1-PREP")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+            self.assertFalse(self.pointer["operator_decision_required"])
+            self.assertIn(
+                "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
+                self.pointer["operator_decision_history"],
+            )
 
     def test_historical_synthetic_ag0_defer_remains_immutable_history(self):
         self.assertEqual(self.historical_gate["recommended_decision"], "DEFER")
