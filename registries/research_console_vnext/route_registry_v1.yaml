@@ -1,0 +1,19 @@
+schema: ovc-rcn-route-registry/v1
+mode: FIXTURE_ONLY
+authority_effect: NONE
+routes:
+  - {path: /api/v1/status, method: GET, owner: RCN, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/identity, method: GET, owner: RCN, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/capabilities, method: GET, owner: RCN, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/context/options, method: GET, owner: OCCURRENCE_CONTEXT, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/market/window, method: GET, owner: OPT_A, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/c1/state, method: GET, owner: OPT_B_C1, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/c2/state, method: GET, owner: OPT_B_C2, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/c2e/episodes, method: GET, owner: C2E, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/occurrences/{occurrence_id}/context, method: GET, owner: OCCURRENCE_CONTEXT, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/research/representations, method: GET, owner: SRI, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/research/comparability, method: GET, owner: SFC, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/research/families, method: GET, owner: FDI_C2G, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/research/benchmarks, method: GET, owner: RESEARCH_OPERATIONS, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/evidence/objects, method: GET, owner: RESEARCH_OPERATIONS, source_mode: FIXTURE_ONLY, mutation: DENIED}
+  - {path: /api/v1/fixture/investigations, method: GET, owner: RCN, source_mode: FIXTURE_ONLY, mutation: DENIED}
