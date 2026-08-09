@@ -6,6 +6,8 @@ import { InvestigationTabs } from "../features/investigations/InvestigationTabs"
 import "../design/tokens.css";
 import "./foundation.css";
 import "./wp3c-responsive.css";
+import "./wp3d-precision.css";
+import "./wp3d-viewport.css";
 
 const nav = [
   ["/market", "▥", "Market Desk"],
