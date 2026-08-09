@@ -3,14 +3,13 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
-import resource
 import sqlite3
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Iterator, Mapping
 
 from .index_common import AXES, RO4IndexError, canonical_bytes, logical_hash, sha256_file
+from .platform_metrics import peak_rss_bytes as _platform_peak_rss_bytes
 
 AUTHORITY = "LOCAL_READ_ONLY_DERIVED"
 BANNER = (
@@ -28,8 +27,7 @@ class G2BuildResult:
 
 
 def _peak_rss_bytes() -> int:
-    value = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    return int(value if sys.platform == "darwin" else value * 1024)
+    return _platform_peak_rss_bytes()
 
 
 def _metadata(source: sqlite3.Connection) -> dict[str, Any]:
