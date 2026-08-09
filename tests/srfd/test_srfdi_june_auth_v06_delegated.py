@@ -91,11 +91,17 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
         self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_RUN_UNCONSUMED", self.state["authority"]["market_benchmark"])
         self.assertFalse(self.state["authority"]["authority_token_consumed"])
         self.assertEqual(self.token["token_id"], self.pointer["authority_token_id"])
-        self.assertEqual("SRFDI-WP10-v0.6", self.pointer["next_packet"])
         self.assertFalse(self.pointer["operator_decision_required"])
         self.assertEqual("NONE", self.pointer["scientific_promotion"])
         self.assertEqual("NONE", self.pointer["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.pointer["probability_risk_exposure_execution"])
+        if self.pointer["status"] == "BLOCKED":
+            self.assertIsNone(self.pointer["next_packet"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+        else:
+            self.assertEqual("SRFDI-WP10-v0.6", self.pointer["next_packet"])
 
 
 if __name__ == "__main__":
