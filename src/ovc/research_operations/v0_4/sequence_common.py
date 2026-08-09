@@ -5,15 +5,14 @@ import hashlib
 import json
 import math
 import platform
-import resource
 import sqlite3
-import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Iterator, Mapping, Sequence
 
 from .index_common import AXES, RO4IndexError, canonical_bytes, logical_hash, sha256_file
+from .platform_metrics import peak_rss_bytes as _platform_peak_rss_bytes
 
 SEQUENCE_AUTHORITY = "NON_CANONICAL_SEQUENCE_EVIDENCE"
 CANDIDATE_AUTHORITY = "NON_CANONICAL_RESEARCH_CANDIDATE"
@@ -51,8 +50,7 @@ class SequenceBuildResult:
 
 
 def peak_rss_bytes() -> int:
-    value = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-    return int(value if sys.platform == "darwin" else value * 1024)
+    return _platform_peak_rss_bytes()
 
 
 def metadata(connection: sqlite3.Connection) -> dict[str, Any]:
