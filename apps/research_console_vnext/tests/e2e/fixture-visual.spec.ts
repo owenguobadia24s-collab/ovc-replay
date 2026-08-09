@@ -26,6 +26,8 @@ for (const viewport of viewports) {
     await expect(page.getByTestId("chart-detail-hud")).toContainText("H");
     await expect(page.getByTestId("chart-detail-hud")).toContainText("L");
     await expect(page.getByTestId("chart-detail-hud")).toContainText("C");
+    const barCount = Number(await page.getByTestId("chart-bar-count").textContent());
+    expect(barCount).toBeGreaterThanOrEqual(32);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
     await page.screenshot({ path: path.join(screenshotRoot, `prototype-${viewport.name}.png`), fullPage: false });
   });
