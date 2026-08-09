@@ -85,6 +85,7 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
 
     def test_qa_and_state_open_only_one_exact_bound_run(self):
+        # Historical v0.6 authority remains exact even after later incident handling.
         self.assertEqual("PASS_PENDING_EXACT_HEAD_REPOSITORY_ASSURANCE", self.qa["qa_result"])
         self.assertEqual([], self.qa["blocking_warnings"])
         self.assertEqual([], self.qa["unresolved_issues"])
@@ -95,11 +96,21 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
         self.assertEqual("NONE", self.pointer["scientific_promotion"])
         self.assertEqual("NONE", self.pointer["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.pointer["probability_risk_exposure_execution"])
+
+        # The moving pointer may lawfully advance after the v0.6 attempt while the
+        # immutable v0.6 authority/state above remains unchanged.
         if self.pointer["status"] == "BLOCKED":
             self.assertIsNone(self.pointer["next_packet"])
             self.assertTrue(self.pointer["authority_token_consumed"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
             self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+        elif self.pointer.get("next_packet") == "SRFDI-G-JUNE-AUTH-v0.7-PREP":
+            self.assertEqual("READY", self.pointer["status"])
+            self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["current_gate"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
+            self.assertEqual("DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
+            self.assertTrue(self.pointer["execution_resilience_profile"].endswith("wp10_execution_resilience_profile_v0_1.json"))
         else:
             self.assertEqual("SRFDI-WP10-v0.6", self.pointer["next_packet"])
 
