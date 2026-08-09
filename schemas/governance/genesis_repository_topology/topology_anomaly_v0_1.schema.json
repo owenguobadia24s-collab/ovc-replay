@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/governance/genesis-repository-topology/topology-anomaly/v0.1",
+  "title": "TopologyAnomaly v0.1",
+  "type": "object",
+  "required": ["anomaly_id","anomaly_code","severity","affected_component_ids","affected_programme_ids","source_evidence","denominator","recommended_disposition","detail","authority_effect"],
+  "properties": {
+    "anomaly_id": {"type": "string", "pattern": "^GRT\\.ANOM\\."},
+    "anomaly_code": {"type": "string"},
+    "severity": {"enum": ["INFO","WARNING","BLOCKER"]},
+    "affected_component_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "affected_programme_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "source_evidence": {"type": "array", "items": {"type": "string"}},
+    "denominator": {
+      "type": "object",
+      "required": ["name","count"],
+      "properties": {"name": {"type": "string"}, "count": {"type": "integer", "minimum": 0}},
+      "additionalProperties": false
+    },
+    "recommended_disposition": {"type": "string"},
+    "detail": {"type": "string"},
+    "authority_effect": {"const": "NONE_ADVISORY_ONLY"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-grt-wp10-implementation-manifest/v1",
+  "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
+  "packet_id": "GRT-WP10",
+  "status": "PASS_WITH_WARNINGS",
+  "implementation_head": "e87e3d28a38ae0cf16a4e941877572d00a101cc3",
+  "assured_merge_ref": "1115760b8e8a31eedb8b525ed3bf7bc32219fccd",
+  "repository_tests": {"run_id": 31308276004, "conclusion": "SUCCESS", "test_count": 795, "runtime_seconds": 112.357},
+  "tiered_tests": {"run_id": 31308276019, "conclusion": "SUCCESS"},
+  "implemented_surfaces": [
+    "DETERMINISTIC_READ_MODEL_TO_READ_MODEL_COMMIT_DIFF",
+    "STABLE_PATH_BASED_COMPONENT_COMPARISON",
+    "STABLE_ENDPOINT_DEPENDENCY_COMPARISON",
+    "PROGRAMME_STATE_REFERENCE_CHANGE_DETECTION",
+    "NEW_AND_RESOLVED_ORPHAN_WARNING_DETECTION",
+    "OWNERSHIP_AUTHORITY_IMPLEMENTATION_SUPERSESSION_CHANGE_DETECTION",
+    "DIFF_IDENTITY_AND_TAMPER_VERIFICATION",
+    "LOCAL_READ_ONLY_RESEARCH_CONSOLE_DIFF_VIEW",
+    "LOCAL_CLI_DIFF_MATERIALISATION"
+  ],
+  "change_vocabulary": [
+    "NEW_COMPONENT","REMOVED_COMPONENT","CHANGED_OWNER","CHANGED_AUTHORITY_REFERENCE",
+    "NEW_DEPENDENCY","REMOVED_DEPENDENCY","NEW_ORPHAN","RESOLVED_ORPHAN",
+    "NEW_WARNING","RESOLVED_WARNING","SUPERSESSION_CHANGE","IMPLEMENTATION_STATE_CHANGE",
+    "PROGRAMME_STATE_REFERENCE_CHANGE"
+  ],
+  "current_assured_topology": {
+    "source_commit": "1115760b8e8a31eedb8b525ed3bf7bc32219fccd",
+    "topology_sha256": "d311a3a481736c84859d12e8a8a6e1747fcd93728f8bcf9fed36db5d14440518",
+    "programme_count": 39,
+    "component_count": 3763,
+    "component_edge_count": 9424,
+    "programme_dependency_count": 8,
+    "anomaly_count": 1062,
+    "info_count": 621,
+    "warning_count": 441,
+    "blocker_count": 0
+  },
+  "materialisation_policy": {
+    "default_diff_path": "var/governance/genesis_repository_topology/current/GENESIS_REPOSITORY_TOPOLOGY_DIFF.json",
+    "historical_model_bytes_required_for_exact_pair_diff": true,
+    "absence_of_diff_means_no_change": false,
+    "automatic_repair": false,
+    "automatic_adoption_or_promotion": false
+  },
+  "warnings_retained": [
+    "EXACT_COMMIT_PAIR_DIFF_REQUIRES_BOTH_SOURCE_BOUND_READ_MODEL_BYTES",
+    "NO_HISTORICAL_READ_MODEL_BYTES_ARE_RETROACTIVELY_INVENTED_FROM_SUMMARY_RECEIPTS",
+    "CURRENT_TOPOLOGY_WARNING_POPULATION_REMAINS_UNREPAIRED"
+  ],
+  "authority_effect": "NONE_DERIVED_COMMIT_DIFF_ONLY",
+  "programme_or_dependency_authority_changed": false,
+  "validation_consumed": false,
+  "next_packet": "GRT-WP11",
+  "rollback": "Delete derived diff output and rebuild from the same two source-bound read models; no source authority is mutated."
+}

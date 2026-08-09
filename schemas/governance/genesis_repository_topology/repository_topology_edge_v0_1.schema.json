@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/governance/genesis-repository-topology/repository-topology-edge/v0.1",
+  "title": "RepositoryTopologyEdge v0.1",
+  "type": "object",
+  "required": ["edge_id","from_id","to_id","edge_type","evidence_class","source_ref","authority_effect","confidence_or_evidence_status","first_seen_commit","last_verified_commit"],
+  "properties": {
+    "edge_id": {"type": "string", "pattern": "^GRT\\.EDGE\\."},
+    "from_id": {"type": "string"},
+    "to_id": {"type": "string"},
+    "edge_type": {"enum": ["IMPLEMENTS","OWNED_BY","GOVERNED_BY","DEFINED_BY","VALIDATED_BY","TESTED_BY","EXECUTED_BY","READS","WRITES","PRODUCES","CONSUMES","DEPENDS_ON","OPTIONAL_DEPENDS_ON","SUPERSEDES","SUPERSEDED_BY","MIGRATED_FROM","PROJECTS_TO","EXPOSED_BY","REFERENCES","DERIVED_FROM","SHARES_COMPONENT_WITH"]},
+    "evidence_class": {"enum": ["SOURCE_EXPLICIT","LINEAGE_EXPLICIT","PATH_AND_CONTENT_CORROBORATED","TEST_CORROBORATED","IMPORT_CORROBORATED","CANDIDATE_RELATION","INFERRED","UNRESOLVED"]},
+    "source_ref": {"type": "string"},
+    "authority_effect": {"const": "NONE"},
+    "confidence_or_evidence_status": {"type": "string"},
+    "first_seen_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "last_verified_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+  },
+  "additionalProperties": false
+}

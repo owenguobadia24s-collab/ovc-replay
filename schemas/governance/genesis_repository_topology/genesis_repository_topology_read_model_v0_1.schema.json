@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/governance/genesis-repository-topology/read-model/v0.1",
+  "title": "GenesisRepositoryTopologyReadModel v0.1",
+  "type": "object",
+  "required": ["schema","programme_id","authority_effect","portfolio","programmes","components","programme_component_crosswalk","programme_dependencies","component_dependencies","authority_projection","implementation_projection","release_projection","anomalies","health_summary","historical_supersession_projection","build_metadata","topology_sha256"],
+  "properties": {
+    "schema": {"const": "ovc-genesis-repository-topology-read-model/v1"},
+    "programme_id": {"const": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1"},
+    "authority_effect": {"const": "NONE_DERIVED_REPLACEABLE_READ_MODEL"},
+    "portfolio": {"type": "object"},
+    "programmes": {"type": "array", "items": {"type": "object"}},
+    "components": {"type": "array", "items": {"type": "object"}},
+    "programme_component_crosswalk": {"type": "array", "items": {"type": "object"}},
+    "programme_dependencies": {"type": "array", "items": {"type": "object"}},
+    "component_dependencies": {"type": "array", "items": {"type": "object"}},
+    "authority_projection": {"type": "array"},
+    "implementation_projection": {"type": "array"},
+    "release_projection": {"type": "array"},
+    "anomalies": {"type": "array", "items": {"type": "object"}},
+    "health_summary": {"type": "object", "required": ["severity_counts","anomaly_code_counts","denominators","opaque_score"]},
+    "historical_supersession_projection": {"type": "array"},
+    "build_metadata": {"type": "object", "required": ["repository","source_commit","rule_pack_id","rule_pack_sha256","source_precedence_contract","rebuildable","logical_identity_excludes"]},
+    "topology_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "diagnostics": {"type": "object"}
+  },
+  "additionalProperties": true
+}
