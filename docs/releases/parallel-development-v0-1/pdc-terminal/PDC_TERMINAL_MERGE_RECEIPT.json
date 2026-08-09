@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-parallel-development-terminal-merge-receipt/v1",
+  "programme_id": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "plan_id": "OVC-PDC-IMPLEMENTATION-PLAN-0.1",
+  "programme_status": "COMPLETED",
+  "terminal_classification": "PARALLEL_BUILD_SERIALIZED_INTEGRATION_ACTIVE",
+  "primary_pr": 534,
+  "primary_branch": "build/parallel-development-head-churn-remediation-v0-1",
+  "programme_baseline_main": "554710ca7b94760d84362d8ae5ad568e27478eec",
+  "final_integration_base": "eefd860af86aea38e80ec211dd5ea34160171b6f",
+  "final_reconciled_pr_head": "7666151a1598689e661efbc9b2a31cdc3b9dd100",
+  "squash_merge_commit": "1acbcf6010950c4f1f436a35c0e0e9fa98b883c1",
+  "merge_method": "squash",
+  "final_assurance": {
+    "complete_repository_suite_run": 31335716434,
+    "complete_repository_suite": "PASS",
+    "ovc_tiered_run": 31335716459,
+    "profile": "FINAL_HEAD",
+    "profile_assurance": "PASS",
+    "da2_orchestration_validation": "PASS",
+    "compatibility_context": "PASS",
+    "ovc_merge_readiness": "PASS",
+    "unresolved_review_threads": 0
+  },
+  "head_churn_evidence": {
+    "baseline_to_c2e_ag0": "IRRELEVANT",
+    "baseline_to_srfd_wp10b_freeze": "IRRELEVANT",
+    "semantic_repreflight_required": false,
+    "integration_reconciliation_performed": true,
+    "reconciliation_commit": "7666151a1598689e661efbc9b2a31cdc3b9dd100",
+    "note": "The first merge attempt exposed the repository strict-up-to-date rule despite successful head checks. The branch was fast-forward reconciled to the exact current main through the GitHub-generated merge state without force-push, then the complete repository suite and OVC merge-readiness assurance were rerun and passed before squash merge."
+  },
+  "implemented_controls": [
+    "machine-readable dependency footprints",
+    "IRRELEVANT / INTEGRATION_RELEVANT / SEMANTIC_AUTHORITY_RELEVANT / UNRESOLVED_REQUIRES_FOOTPRINT classification",
+    "immutable-input evidence-reuse guard",
+    "repository-wide non-cancelling final integration lane",
+    "per-PR cancel-in-progress preservation",
+    "fail-closed base snapshot checks before and after merge readiness",
+    "single canonical complete repository suite preservation"
+  ],
+  "authority_delta": "DEVELOPMENT_ORCHESTRATION_ONLY",
+  "reserved_authority_consumed": false,
+  "explicit_non_authority": [
+    "market_or_scientific_semantics",
+    "selector_or_pack_activation",
+    "family_model_candidate_or_theory_promotion",
+    "real_source_or_validation_authority",
+    "canonical_publication",
+    "probability_risk_exposure_execution",
+    "agent_write_authority"
+  ],
+  "rollback": "Use a non-destructive revert or supersession of PDC classifier/policy/workflow controls. Preserve this receipt, the primary squash merge and historical CI evidence.",
+  "next_packet": null
+}

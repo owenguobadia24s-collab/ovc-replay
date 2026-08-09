@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/development/parallel-head-movement-receipt/v1",
+  "title": "OVC Parallel Development Head Movement Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "baseline_main_sha",
+    "current_main_sha",
+    "main_moved",
+    "changed_main_paths",
+    "changed_main_path_count",
+    "classification",
+    "required_actions",
+    "scientific_evidence_reuse",
+    "matches",
+    "footprint_identity",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-parallel-development-head-movement-receipt/v1"},
+    "baseline_main_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "current_main_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "main_moved": {"type": "boolean"},
+    "changed_main_paths": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "changed_main_path_count": {"type": "integer", "minimum": 0},
+    "classification": {
+      "enum": [
+        "IRRELEVANT",
+        "INTEGRATION_RELEVANT",
+        "SEMANTIC_AUTHORITY_RELEVANT",
+        "UNRESOLVED_REQUIRES_FOOTPRINT"
+      ]
+    },
+    "required_actions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "scientific_evidence_reuse": {
+      "enum": [
+        "PERMITTED_IF_BOUND_IDENTITIES_UNCHANGED",
+        "PROHIBITED_PENDING_SEMANTIC_REPREFLIGHT",
+        "PROHIBITED_PENDING_FOOTPRINT"
+      ]
+    },
+    "matches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "rule", "pattern", "classification"],
+        "properties": {
+          "path": {"type": "string"},
+          "rule": {"type": "string"},
+          "pattern": {"type": "string"},
+          "classification": {
+            "enum": ["INTEGRATION_RELEVANT", "SEMANTIC_AUTHORITY_RELEVANT"]
+          }
+        }
+      }
+    },
+    "footprint_identity": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    },
+    "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
