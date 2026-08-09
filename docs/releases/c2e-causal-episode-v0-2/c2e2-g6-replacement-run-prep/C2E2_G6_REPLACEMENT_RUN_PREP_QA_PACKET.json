@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-c2e2-g6-replacement-run-prep-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "C2E2-G6-REPLACEMENT-RUN-PREP",
+  "baseline_main": "382fae47c82138afb2b66073ac5ad5b6c4d193a7",
+  "qa_disposition": "BLOCK",
+  "blocking_warnings": [
+    "MANDATORY_C2_OBSERVATION_RECORD_SURFACE_NOT_MATERIALISED_IN_ACCEPTED_REAL_REPLAY",
+    "MANDATORY_C2_FOUR_AXIS_PROFILE_OUTPUT_SURFACE_NOT_MATERIALISED_IN_ACCEPTED_REAL_REPLAY",
+    "MANDATORY_C2_PARENT_CONTEXT_SURFACE_NOT_MATERIALISED_IN_ACCEPTED_REAL_REPLAY",
+    "NEW_UPSTREAM_REAL_OBSERVATION_LEVEL_C2_ORCHESTRATION_WOULD_EXCEED_C2E_REPLACEMENT_PREP_AUTHORITY"
+  ],
+  "acceptance": {
+    "accepted_source_and_c1_payloads_readable_and_hash_verified": "PASS",
+    "old_sequence_window_population_mismatch_preserved": "PASS",
+    "c2e_handoff_required_observation_identity_confirmed": "PASS",
+    "c2e_handoff_required_profile_output_identities_confirmed": "PASS",
+    "c2e_handoff_required_parent_context_identity_confirmed": "PASS",
+    "required_surface_physically_present_in_accepted_real_replay": "FAIL",
+    "replacement_population_safe_to_freeze_without_new_upstream_semantics": "NO",
+    "no_placeholder_or_suppressed_structural_evidence": "PASS_FAIL_CLOSED",
+    "replacement_pack_envelope_manifest_token_created": "NO",
+    "wp6_executed": "NO"
+  },
+  "evidence": "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-replacement-run-prep/C2E2_G6_REPLACEMENT_RUN_PREP_PREFLIGHT_BLOCKER.json",
+  "authority_delta": "NONE",
+  "rollback": "No replacement run object exists. Preserve merged stable-signature repair and historical C2/C2E artifacts unchanged.",
+  "recommendation": "BLOCK_AND_REQUIRE_SEPARATELY_GOVERNED_UPSTREAM_C2_OBSERVATION_LEVEL_REAL_MATERIALISATION",
+  "next_action": "STOP_BLOCKED_UPSTREAM_C2_OBSERVATION_LEVEL_REAL_MATERIALISATION_REQUIRED"
+}
