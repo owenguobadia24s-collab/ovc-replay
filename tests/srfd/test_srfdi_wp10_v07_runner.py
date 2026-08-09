@@ -104,7 +104,7 @@ class SRFDIWP10V07RunnerTests(unittest.TestCase):
                     "first_valid_time": f"2026-06-{index + 1:02d}T00:00:00Z",
                     "structural_raw": {
                         "A.value": "UP" if index % 2 else "DOWN",
-                        "B.value": str(index % 3),
+                        "B.value": f"B{index % 3}",
                     },
                     "structural_derived": {},
                     "structural_normalized": {},
