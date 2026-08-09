@@ -1,0 +1,40 @@
+schema: ovc-irof-authority-requirement-registry/v0.1
+status: INACTIVE_PREFLIGHT_POLICY
+policy:
+  binding_union: FORBIDDEN
+  token_consumption_during_preflight: FORBIDDEN
+  real_to_synthetic_substitution: FORBIDDEN
+  protected_validation_resolution_before_authority: FORBIDDEN
+requirements:
+  - requirement_id: IROF_SYNTHETIC_EXECUTION
+    owner_programme: OVC-IROF-v0.1
+    owner_gate: IROF-G0
+    authority_kind: SYNTHETIC_EXECUTION
+    subject: IROF_SYNTHETIC_POPULATIONS
+    allowed_binding_statuses: [APPROVED, ACTIVE]
+    require_unconsumed_token: false
+  - requirement_id: OPT_A_SEALED_REPLAY_READ
+    owner_programme: OVC-OPT-A-v2
+    owner_gate: A2-G1
+    authority_kind: SEALED_REPLAY_READ
+    subject: OPT_A_ACCEPTED_RELEASE
+    allowed_binding_statuses: [APPROVED, ACTIVE]
+    require_unconsumed_token: false
+  - requirement_id: C2E_V0_2_REAL_REPLAY
+    owner_programme: OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2
+    owner_gate: C2E2-G6-RUN-AUTH
+    authority_kind: REAL_REPLAY_EXECUTION
+    subject: C2E_V0_2_JUNE_REPLAY
+    allowed_binding_statuses: [APPROVED, ACTIVE, AVAILABLE]
+    require_unconsumed_token: true
+  - requirement_id: VALIDATION_REAL_ACCESS
+    owner_programme: OVC-VALIDATION
+    owner_gate: VALIDATION-ACCESS
+    authority_kind: VALIDATION_ACCESS
+    subject: VALIDATION_POPULATION
+    allowed_binding_statuses: [APPROVED, ACTIVE]
+    require_unconsumed_token: true
+notes:
+  - Owner programme/gate identities are matching constraints, not authority grants.
+  - The current SRFDI-G-JUNE-AUTH v0.7 run token is intentionally absent from IROF requirements because it is owner-programme scoped and cannot satisfy C2E or generic IROF authority.
+  - Exact run/population scope is supplied by the calling requirement spec and must be satisfied by one binding without scope union.
