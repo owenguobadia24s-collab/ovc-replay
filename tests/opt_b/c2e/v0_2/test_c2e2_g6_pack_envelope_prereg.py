@@ -107,8 +107,11 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         if "candidate_boundary_pack" in self.pointer:
             self.assertEqual(self.pointer["candidate_boundary_pack"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
         else:
-            self.assertEqual(self.pointer["current_gate"], "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION")
-            self.assertEqual(self.pointer["status"], "GATE_READY")
+            self.assertIn(self.pointer["status"], {"GATE_READY", "APPROVED"})
+            self.assertIn(
+                "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T100800+0100",
+                self.pointer.get("operator_decision_history", []),
+            )
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertIn(self.pointer["wp6_execution"], {
             "DENIED_NOT_STARTED",
