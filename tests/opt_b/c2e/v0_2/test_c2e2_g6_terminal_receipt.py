@@ -52,16 +52,16 @@ class C2E2G6TerminalReceiptTests(unittest.TestCase):
         self.assertEqual(authority["family_semantic_probability_risk_exposure_execution"], "NONE")
         self.assertEqual(self.receipt["authority_delta"], "NONE")
 
-    def test_current_pointer_may_advance_but_g6_replay_denial_persists(self):
-        self.assertTrue((ROOT / self.pointer["authoritative_state"]).is_file())
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG0")
-        self.assertEqual(self.pointer["replay_status"], "DEFERRED")
-        self.assertEqual(self.pointer["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
-        self.assertEqual(self.pointer["wp6_execution"], "DENIED")
+    def test_current_pointer_may_advance_but_historical_g6_denial_persists(self):
+        current_path = ROOT / self.pointer["authoritative_state"]
+        self.assertTrue(current_path.is_file())
+        current = json.loads(current_path.read_text())
+        self.assertIn(self.decision["decision_id"], current.get("operator_decision_history", []))
+        self.assertEqual(self.state["authority"]["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
+        self.assertEqual(self.state["authority"]["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["operator_decision"], "DEFER")
-        self.assertEqual(self.pointer["candidate_admissibility"], "DEFERRED_NOT_ADMITTED")
+        self.assertEqual(current["authority"]["c2e_activation"], "DENIED")
 
 
 if __name__ == "__main__":
