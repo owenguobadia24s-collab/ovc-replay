@@ -5,22 +5,27 @@
   "gate_id": "IROF-G5",
   "plan_version": "0.1",
   "baseline_commit": "62ffe422420438bf559777e62d170632423d239c",
+  "tested_head": "98b7b27226b3cb918e406c15977259dfb3e533b3",
   "authority_delta": "execution optimisation only; no scientific effect",
-  "static_review": {
+  "ci": {
     "status": "PASS",
-    "checks": [
-      "semantic key excludes physical location and counters",
-      "meaning-bearing parent/pack/code identities cause misses when changed",
-      "non-COMPLETE artifacts are never reused",
-      "content corruption quarantines and misses",
-      "duplicate key semantic conflict quarantines",
-      "cache telemetry does not alter artifact logical hash",
-      "cached/recomputed equivalence is explicit",
-      "SRFD public semantic-cache module remains untouched"
-    ]
+    "tests_workflow": "31306048668 SUCCESS",
+    "tiered_assurance_workflow": "31306048653 SUCCESS",
+    "merge_readiness": "SUCCESS"
   },
-  "ci": {"status": "PENDING_EXACT_HEAD"},
+  "acceptance": {
+    "exact_hit": "PASS",
+    "semantic_change_miss": "PASS",
+    "path_relocation_hit": "PASS",
+    "corrupt_payload_quarantine_miss": "PASS",
+    "non_complete_no_reuse": "PASS",
+    "parent_change_no_reuse": "PASS",
+    "counter_no_scientific_hash_effect": "PASS",
+    "cached_recomputed_equivalence": "PASS",
+    "srfd_public_behavior_unchanged": "PASS_NO_SOURCE_MODIFICATION"
+  },
+  "final_decision_head_ci": {"status": "PENDING"},
   "blocking_issues": [],
-  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "qa_recommendation": "PASS",
   "rollback": "disable/remove IROF cache adapter and recompute under unchanged stage contracts"
 }
