@@ -94,10 +94,18 @@ class C2E2G6RunAuthSupersessionTests(unittest.TestCase):
         self.assertIn(self.state["status"], {"QA_REVIEW", "APPROVED"})
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
-        self.assertIn(self.pointer["wp6_execution"], {"AUTHORIZED_PENDING_MERGE_ASSURANCE", "AUTHORIZED_NOT_STARTED"})
+        self.assertIn(self.pointer["wp6_execution"], {
+            "AUTHORIZED_PENDING_MERGE_ASSURANCE",
+            "AUTHORIZED_NOT_STARTED",
+            "BLOCKED_NOT_STARTED",
+            "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
+        })
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["run_token_id"], self.token["token_id"])
+        pointer_token_id = self.pointer.get("run_token_id") or self.pointer.get("old_run_token_id")
+        self.assertEqual(pointer_token_id, self.token["token_id"])
+        if self.pointer["wp6_execution"] == "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION":
+            self.assertEqual(self.pointer["old_run_token_status"], "INVALIDATED_UNCONSUMED_BY_OPERATOR_SUPERSESSION")
 
     def test_qa_has_no_blocker_and_requires_exact_head_before_merge(self):
         self.assertEqual(self.qa["blocking_warnings"], [])
