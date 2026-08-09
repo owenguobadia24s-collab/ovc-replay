@@ -1,0 +1,14 @@
+{
+  "schema":"ovc-irof-qa-packet/v0.1",
+  "programme_id":"OVC-IROF-v0.1",
+  "packet_id":"IROF-WP6",
+  "gate_id":"IROF-G7",
+  "plan_version":"0.1",
+  "baseline_commit":"47ad9efac2ba4171467395610e1d28403b548d78",
+  "authority_delta":"resource scheduling and execution telemetry only; no experiment mutation",
+  "static_review":{"status":"PASS","checks":["capacity failure preserves ExperimentIdentity","scientific_effect always NONE","sampling/method/grid/threshold/denominator/profile mutations forbidden","DAG scheduler selects declared-ready stages only","telemetry required metrics have typed availability","unavailable metrics are explicit not fabricated","telemetry cannot alter semantic output hash","SRFD science-specific completeness rules remain source-owned"]},
+  "ci":{"status":"PENDING_EXACT_HEAD"},
+  "blocking_issues":[],
+  "recommended_decision":"PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "rollback":"fall back to serial/default resource execution under unchanged experiment identity and adapters"
+}
