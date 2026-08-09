@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-irof-qa-packet/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "packet_id": "IROF-WP4",
+  "gate_id": "IROF-G5",
+  "plan_version": "0.1",
+  "baseline_commit": "62ffe422420438bf559777e62d170632423d239c",
+  "authority_delta": "execution optimisation only; no scientific effect",
+  "static_review": {
+    "status": "PASS",
+    "checks": [
+      "semantic key excludes physical location and counters",
+      "meaning-bearing parent/pack/code identities cause misses when changed",
+      "non-COMPLETE artifacts are never reused",
+      "content corruption quarantines and misses",
+      "duplicate key semantic conflict quarantines",
+      "cache telemetry does not alter artifact logical hash",
+      "cached/recomputed equivalence is explicit",
+      "SRFD public semantic-cache module remains untouched"
+    ]
+  },
+  "ci": {"status": "PENDING_EXACT_HEAD"},
+  "blocking_issues": [],
+  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "rollback": "disable/remove IROF cache adapter and recompute under unchanged stage contracts"
+}
