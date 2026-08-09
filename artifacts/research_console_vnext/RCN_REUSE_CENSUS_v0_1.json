@@ -1,0 +1,33 @@
+{
+  "baseline_commit": "cb77f01ff7a8db1f66c556edc94b8108b9e0ed01",
+  "counts": {"EXTRACT_AND_REFACTOR":14,"HISTORICAL_ONLY":4,"REUSE_AS_DOMAIN_OR_APPLICATION_LOGIC":0,"SUPERSEDE":6},
+  "entries": [
+    {"disposition":"SUPERSEDE","path":"Home.py","reason":"Streamlit entrypoint/presentation","sha":"280c26ada85df82e148c1d3e44ad076015ba6dc8"},
+    {"disposition":"HISTORICAL_ONLY","path":"__init__.py","reason":"old package marker","sha":"60b81acf792f5b7281678287ef949f3f1cca514c"},
+    {"disposition":"SUPERSEDE","path":"assets/console.css","reason":"Streamlit visual layer","sha":"66fff940b88d5404101d42ebdbe351e8fce0db94"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"c1_fact_assurance.py","reason":"source/assurance checks independent of renderer","sha":"73e87fbfdffba6198b1637ffef758a1b49c0e849"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"c1_projection_source.py","reason":"C1 source validation/projection","sha":"0c034bede303e930f516e7e0a51948cb3edd0084"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"c2_sequence_evidence.py","reason":"C2 sequence read projection","sha":"9c0a15a71e93a88e8c157cfd173039a4a005aabd"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"clock_continuity_surface.py","reason":"clock continuity source projection only","sha":"2feeb7d47d9a7d7ff09f3c1326fc66379652f572"},
+    {"disposition":"SUPERSEDE","path":"components.py","reason":"Streamlit components","sha":"d7233cdc9c05f663d57061732d465cafd4ec5089"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"fixtures.py","reason":"fixture/source identities reusable after characterization","sha":"8de8b2adc655a604cede3c9c1d31198a91be1cc3"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"mta_audit_surface.py","reason":"audit projection logic; renderer removed","sha":"9b9f81b0d7ced42aed6846a27b771c28e5b06681"},
+    {"disposition":"SUPERSEDE","path":"mta_console.py","reason":"Streamlit route wrapper","sha":"45b188f84b44d9467ddc8a5c66f19fc4fb43081c"},
+    {"disposition":"HISTORICAL_ONLY","path":"pattern_discovery.py","reason":"historical Pattern Discovery presentation not current-generation source","sha":"63504c1d369dae45750ac52c6854b8c4ea78b7c5"},
+    {"disposition":"HISTORICAL_ONLY","path":"pattern_discovery_corr2.py","reason":"historical corrective presentation","sha":"54831fba6167a2805a6c00d4b2dd14c7848a649d"},
+    {"disposition":"HISTORICAL_ONLY","path":"pattern_discovery_fixtures.py","reason":"historical fixture family; no silent fallback","sha":"cf0996a84b92f5775697fd9afdc54e3e6ff10da7"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"rc_g4_console.py","reason":"accepted route/source guards reusable; Streamlit rendering superseded","sha":"a8f4ed35b871394f092239774c19f2ba36829d9b"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"rc_g5_console.py","reason":"accepted route/source guards reusable; Streamlit rendering superseded","sha":"fc967742a631093b8eff598d9c21929bbfa5ff76"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"repository_topology_surface.py","reason":"GRT read-only loader/projection independent of renderer","sha":"240bd7fec1c8b31317dd6907585cc7f917321883"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"ro2_projection_source.py","reason":"Research Operations source projection","sha":"58173e7ba08158de6e9f875dd45e324856f8ee30"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"ro4_active_projection_source.py","reason":"Research Operations C2 active projection","sha":"1c5c387a754f21fd665be35fab544b1e896a3204"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"ro4_projection_source.py","reason":"Research Operations C2 projection","sha":"0471bfdfd501098c78c72bc993365db19bf45007"},
+    {"disposition":"SUPERSEDE","path":"shell.py","reason":"Streamlit application shell","sha":"de4b8a857fc70062c6903058fe120a1e3d4bb64b"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"state.py","reason":"retain only renderer-neutral context/state semantics after characterization","sha":"6d09a0dbe717a578f90aa09f470561c2768d2420"},
+    {"disposition":"EXTRACT_AND_REFACTOR","path":"system_workspace.py","reason":"system/read-only governance projection","sha":"774b7eb5df40bed5b75fba3556bc3d731658cb80"},
+    {"disposition":"SUPERSEDE","path":"theme.py","reason":"Streamlit theme","sha":"d8d60e36d9eca868ca011dbcdbca8e68a215945b"}
+  ],
+  "rule": "No Streamlit parity/fallback; extract only renderer-neutral source validation/projection logic.",
+  "schema": "ovc-rcn-reuse-census/v1",
+  "source_tree_sha": "3afa6c230e9e4c714ab33e98b372fc0a8cad7643"
+}
