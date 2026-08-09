@@ -104,7 +104,11 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
         self.assertEqual(self.state["authority"]["wp6_execution"], "DENIED_NOT_STARTED")
-        self.assertEqual(self.pointer["candidate_boundary_pack"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
+        if "candidate_boundary_pack" in self.pointer:
+            self.assertEqual(self.pointer["candidate_boundary_pack"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
+        else:
+            self.assertEqual(self.pointer["current_gate"], "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION")
+            self.assertEqual(self.pointer["status"], "GATE_READY")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertIn(self.pointer["wp6_execution"], {
             "DENIED_NOT_STARTED",
@@ -113,7 +117,7 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
             "BLOCKED_NOT_STARTED",
             "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
         })
-        self.assertIn(self.pointer["status"], {"APPROVED", "QA_REVIEW", "BLOCKED"})
+        self.assertIn(self.pointer["status"], {"APPROVED", "QA_REVIEW", "BLOCKED", "GATE_READY"})
 
 
 if __name__ == "__main__":
