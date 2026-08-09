@@ -28,6 +28,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.pattern_discovery",
     "ovc.research_operations.mta",
     "ovc.research_operations.mcarb",
+    "ovc.research_orchestration",
 }
 
 

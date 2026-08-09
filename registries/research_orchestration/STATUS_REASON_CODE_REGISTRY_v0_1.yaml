@@ -1,0 +1,35 @@
+schema: ovc-irof-status-reason-registry/v0.1
+execution_statuses:
+  - READY
+  - RUNNING
+  - REUSED
+  - COMPLETE
+  - CAPACITY_EXCEEDED
+  - FAILED
+  - QUARANTINED
+  - DEFERRED_BY_OPERATOR
+  - NOT_AUTHORISED
+artifact_states:
+  - STAGING
+  - COMPLETE
+  - QUARANTINED
+  - SUPERSEDED
+failure_classes:
+  - EXECUTION
+  - AUTHORITY
+  - DEPENDENCY
+reason_codes:
+  IROF_DUPLICATE_STAGE_ID: registry identity collision
+  IROF_DUPLICATE_PROFILE_ID: registry identity collision
+  IROF_PROFILE_UNKNOWN_STAGE: profile references an unregistered stage
+  IROF_AUTHORITY_NOT_GRANTED: required owner-programme authority is absent
+  IROF_AUTHORITY_TOKEN_CONSUMED: tokenised authority is already consumed
+  IROF_AUTHORITY_TOKEN_INVALIDATED: tokenised authority is invalidated or superseded
+  IROF_VALIDATION_DENIED: Validation resolution/consumption is denied
+  IROF_PROVIDER_INTAKE_DENIED: provider intake is outside IROF authority
+  IROF_ARTIFACT_HASH_MISMATCH: immutable artifact verification failed
+  IROF_CHECKPOINT_INVALID: checkpoint verification failed
+  IROF_DEPENDENCY_UNAVAILABLE: required parent is unavailable
+  IROF_CAPACITY_EXCEEDED: declared capacity envelope exceeded without scientific mutation
+scientific_domain_statuses_are_external: true
+scientific_effect: NONE
