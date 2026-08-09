@@ -12,122 +12,56 @@ EQUIV = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10a/SRFDI_WP10A_EQUIVA
 BACKEND = ROOT / "registries/research/srfd/g10a_family_capacity_backend_candidate_v0_1.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_17_G10A_FREEZE_GATE_READY.json"
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
-
+FRESH_V09 = "SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
+V09_BINDING = "ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
 
 class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.packet = json.loads(PACKET.read_text())
-        cls.qa = json.loads(QA.read_text())
-        cls.capacity = json.loads(CAPACITY.read_text())
-        cls.equiv = json.loads(EQUIV.read_text())
-        cls.backend = json.loads(BACKEND.read_text())
-        cls.state = json.loads(STATE.read_text())
-        cls.pointer = json.loads(POINTER.read_text())
+        cls.packet=json.loads(PACKET.read_text()); cls.qa=json.loads(QA.read_text()); cls.capacity=json.loads(CAPACITY.read_text()); cls.equiv=json.loads(EQUIV.read_text()); cls.backend=json.loads(BACKEND.read_text()); cls.state=json.loads(STATE.read_text()); cls.pointer=json.loads(POINTER.read_text())
 
     def test_gate_is_operator_required_pass_recommended(self) -> None:
-        self.assertEqual("SRFDI-G10A-FREEZE", self.packet["gate_id"])
-        self.assertEqual("OPERATOR_REQUIRED", self.packet["gate_class"])
-        self.assertEqual("GATE_READY", self.packet["status"])
-        self.assertEqual("PASS", self.packet["recommended_decision"])
-        self.assertEqual(["PASS", "DEFER", "BLOCK", "QUARANTINE"], self.packet["allowed_decisions"])
-        self.assertEqual("OVC APPROVE SRFDI-G10A-FREEZE PASS", self.packet["exact_operator_command"])
+        self.assertEqual("SRFDI-G10A-FREEZE",self.packet["gate_id"]); self.assertEqual("OPERATOR_REQUIRED",self.packet["gate_class"]); self.assertEqual("GATE_READY",self.packet["status"]); self.assertEqual("PASS",self.packet["recommended_decision"]); self.assertEqual(["PASS","DEFER","BLOCK","QUARANTINE"],self.packet["allowed_decisions"]); self.assertEqual("OVC APPROVE SRFDI-G10A-FREEZE PASS",self.packet["exact_operator_command"])
 
     def test_full_frozen_grid_and_repeatable_capacity_are_exact(self) -> None:
-        frozen = self.packet["frozen_scientific_bindings"]
-        self.assertEqual(8598, frozen["eligible_record_count"])
-        self.assertEqual(36, frozen["comparability_domain_count"])
-        self.assertEqual(35380668, frozen["exact_pair_opportunity_count"])
-        self.assertEqual(1944, frozen["family_configuration_count"])
-        self.assertEqual("FORBIDDEN", frozen["mutation"])
-        self.assertEqual("PASS_FULL_GRID_T0", self.capacity["run_1"]["status"])
-        self.assertEqual("PASS_FULL_GRID_T0", self.capacity["run_2"]["status"])
-        self.assertTrue(self.capacity["repeatability"]["catalog_grid_hash_equal"])
-        self.assertEqual("68317db2ddb5608d0dd13bad67be78f70263dee5c2dc59790c1c995098c00866", self.capacity["repeatability"]["catalog_grid_hash"])
+        frozen=self.packet["frozen_scientific_bindings"]
+        self.assertEqual(8598,frozen["eligible_record_count"]); self.assertEqual(36,frozen["comparability_domain_count"]); self.assertEqual(35380668,frozen["exact_pair_opportunity_count"]); self.assertEqual(1944,frozen["family_configuration_count"]); self.assertEqual("FORBIDDEN",frozen["mutation"]); self.assertEqual("PASS_FULL_GRID_T0",self.capacity["run_1"]["status"]); self.assertEqual("PASS_FULL_GRID_T0",self.capacity["run_2"]["status"]); self.assertTrue(self.capacity["repeatability"]["catalog_grid_hash_equal"]); self.assertEqual("68317db2ddb5608d0dd13bad67be78f70263dee5c2dc59790c1c995098c00866",self.capacity["repeatability"]["catalog_grid_hash"])
 
     def test_backend_candidate_is_capacity_only_and_unfrozen(self) -> None:
-        self.assertEqual("CANDIDATE_PENDING_OPERATOR_FREEZE", self.backend["status"])
-        self.assertEqual("CAPACITY_REMEDIATION_ONLY_NONSCIENTIFIC", self.backend["authority_state"])
-        self.assertEqual(1944, self.backend["family_configuration_count"])
-        self.assertTrue(self.backend["prohibitions"]["sampling"])
-        self.assertTrue(self.backend["prohibitions"]["scientific_parameter_change"])
-        self.assertTrue(self.backend["prohibitions"]["fresh_scientific_june_run"])
+        self.assertEqual("CANDIDATE_PENDING_OPERATOR_FREEZE",self.backend["status"]); self.assertEqual("CAPACITY_REMEDIATION_ONLY_NONSCIENTIFIC",self.backend["authority_state"]); self.assertEqual(1944,self.backend["family_configuration_count"]); self.assertTrue(self.backend["prohibitions"]["sampling"]); self.assertTrue(self.backend["prohibitions"]["scientific_parameter_change"]); self.assertTrue(self.backend["prohibitions"]["fresh_scientific_june_run"])
 
     def test_equivalence_and_qa_recommend_pass_without_scientific_delta(self) -> None:
-        self.assertEqual("PASS_SUBJECT_TO_FINAL_EXACT_HEAD_REPOSITORY_CI", self.equiv["result"])
-        self.assertEqual("NONE_CAPACITY_ONLY", self.equiv["scientific_effect"])
-        self.assertEqual("PASS_GATE_READY", self.qa["qa_result"])
-        self.assertEqual("PASS", self.qa["qa_recommendation"])
-        self.assertEqual([], self.qa["blocking_warnings"])
-        self.assertEqual([], self.qa["unresolved_issues"])
+        self.assertEqual("PASS_SUBJECT_TO_FINAL_EXACT_HEAD_REPOSITORY_CI",self.equiv["result"]); self.assertEqual("NONE_CAPACITY_ONLY",self.equiv["scientific_effect"]); self.assertEqual("PASS_GATE_READY",self.qa["qa_result"]); self.assertEqual("PASS",self.qa["qa_recommendation"]); self.assertEqual([],self.qa["blocking_warnings"]); self.assertEqual([],self.qa["unresolved_issues"])
 
     def test_gate_ready_state_preserves_consumed_token_and_all_firewalls(self) -> None:
-        self.assertEqual("GATE_READY", self.state["status"])
-        self.assertEqual("SRFDI-WP10A", self.state["active_packet"])
-        self.assertEqual("SRFDI-G10A-FREEZE", self.state["current_gate"])
-        self.assertTrue(self.state["operator_decision_required"])
-        authority = self.state["authority"]
-        self.assertEqual("CONSUMED_NOT_REUSABLE", authority["authority_token_v0_4"])
-        self.assertTrue(authority["fresh_june_scientific_run"].startswith("DENIED"))
-        self.assertEqual("DENIED", authority["provider_fetch"])
-        self.assertEqual("LOCKED_UNCONSUMED", authority["validation_2025"])
-        self.assertEqual("NONE", authority["scientific_promotion"])
-        self.assertEqual("NONE", authority["probability_risk_exposure_execution"])
+        self.assertEqual("GATE_READY",self.state["status"]); self.assertEqual("SRFDI-WP10A",self.state["active_packet"]); self.assertEqual("SRFDI-G10A-FREEZE",self.state["current_gate"]); self.assertTrue(self.state["operator_decision_required"])
+        authority=self.state["authority"]
+        self.assertEqual("CONSUMED_NOT_REUSABLE",authority["authority_token_v0_4"]); self.assertTrue(authority["fresh_june_scientific_run"].startswith("DENIED")); self.assertEqual("DENIED",authority["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",authority["validation_2025"]); self.assertEqual("NONE",authority["scientific_promotion"]); self.assertEqual("NONE",authority["probability_risk_exposure_execution"])
 
     def test_current_pointer_may_advance_only_through_lawful_delegated_sequence(self) -> None:
-        self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
-        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", "SRFDI-G10B", "SRFDI-G10B-FREEZE", None})
-        self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED", "BLOCKED", "AUTHORIZED_REMEDIATION_ONLY", "GATE_READY"})
-        self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
-        self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
-        self.assertEqual("NONE", self.pointer.get("scientific_promotion", "NONE"))
-        self.assertEqual("NONE", self.pointer.get("probability_risk_exposure_execution", "NONE"))
-        self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81", self.pointer.get("capacity_backend_freeze", "fcf8f2e84111c5c0920cb28816f95b00a9168d81"))
-        if self.pointer["authority_token_id"] != "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686":
-            self.assertEqual("SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686", self.pointer["prior_authority_token_id"])
-            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
-        if self.pointer["status"] == "BLOCKED":
-            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
-            self.assertIsNone(self.pointer["next_packet"])
+        self.assertEqual("OVC-SRFD-BENCHMARK-v0.1",self.pointer["programme_id"])
+        self.assertIn(self.pointer.get("current_gate"),{"SRFDI-G10A-FREEZE","SRFDI-G-JUNE-AUTH","SRFDI-G10","SRFDI-G10C","SRFDI-G11","SRFDI-G10B","SRFDI-G10B-FREEZE",None})
+        self.assertIn(self.pointer["status"],{"READY","RUNNING","QA_REVIEW","APPROVED","APPROVED_PENDING_MERGE","COMPLETED","BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY"})
+        self.assertEqual("DENIED",self.pointer.get("provider_fetch","DENIED")); self.assertEqual("LOCKED_UNCONSUMED",self.pointer.get("validation_2025","LOCKED_UNCONSUMED")); self.assertEqual("NONE",self.pointer.get("scientific_promotion","NONE")); self.assertEqual("NONE",self.pointer.get("probability_risk_exposure_execution","NONE")); self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81",self.pointer.get("capacity_backend_freeze","fcf8f2e84111c5c0920cb28816f95b00a9168d81"))
+        if self.pointer["authority_token_id"]!="SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686":
+            self.assertEqual("SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686",self.pointer["prior_authority_token_id"]); self.assertEqual("CONSUMED_NOT_REUSABLE",self.pointer["prior_authority_token_state"])
+        if self.pointer["status"]=="BLOCKED":
+            self.assertEqual("SRFDI-G10",self.pointer["current_gate"]); self.assertIsNone(self.pointer["next_packet"])
             if self.pointer.get("wp10_v0_7_execution_route"):
-                self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
-                self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH", self.pointer["stop_at"])
-                self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+                self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH",self.pointer["stop_at"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+        if self.pointer["status"]=="AUTHORIZED_REMEDIATION_ONLY":
+            self.assertEqual("SRFDI-G10B",self.pointer["current_gate"]); self.assertEqual("SRFDI-WP10B",self.pointer["next_packet"]); self.assertEqual("SRFDI-G10B-FREEZE",self.pointer["stop_at"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["authority_token_consumed"])
+        if self.pointer["status"]=="GATE_READY":
+            self.assertIn(self.pointer["current_gate"],{"SRFDI-G10B-FREEZE","SRFDI-G-JUNE-AUTH","SRFDI-G10C"}); self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"])
+            if self.pointer["current_gate"]=="SRFDI-G10B-FREEZE":
+                self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE",self.pointer["wp10b_execution"])
+            elif self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH":
+                self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"]); self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
             else:
-                self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
-                self.assertEqual("HARD_BLOCKER", self.pointer["stop_at"])
-        if self.pointer["status"] == "AUTHORIZED_REMEDIATION_ONLY":
-            self.assertEqual("SRFDI-G10B", self.pointer["current_gate"])
-            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
-            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
-            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
-            self.assertTrue(self.pointer["authority_token_consumed"])
-        if self.pointer["status"] == "GATE_READY":
-            self.assertIn(self.pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH"})
-            self.assertIsNone(self.pointer["next_packet"])
-            self.assertTrue(self.pointer["operator_decision_required"])
-            if self.pointer["current_gate"] == "SRFDI-G10B-FREEZE":
-                self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
-                self.assertEqual("COMPLETED_ASSURED_CANDIDATE_PENDING_OPERATOR_FREEZE", self.pointer["wp10b_execution"])
-            else:
-                self.assertEqual("SRFDI-G-JUNE-AUTH", self.pointer["stop_at"])
-                self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
-                self.assertIsNone(self.pointer["fresh_authority_token_id"])
-                self.assertEqual("NOT_MINTED_PENDING_OPERATOR", self.pointer["fresh_authority_token_state"])
-                self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
-            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
-            self.assertTrue(self.pointer["authority_token_consumed"])
+                self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertTrue(self.pointer["current_blocker_evidence"].endswith("SRFDI_WP10_V09_PREFLIGHT_EXECUTION_INTERFACE_BLOCKER.json")); self.assertEqual("BLOCKED_PRECONSUMPTION_EXECUTION_INTERFACE_MISMATCH_PENDING_SRFDI_G10C",self.pointer["june_execution"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["authority_token_consumed"])
 
     def test_pass_would_freeze_only_backend_and_still_require_new_june_authority(self) -> None:
-        delta = self.packet["proposed_authority_delta_if_PASS"]
-        self.assertIn("EXACT VERSIONED CAPACITY IMPLEMENTATION", delta["freeze_backend_candidate"])
-        self.assertTrue(delta["fresh_june_scientific_run"].startswith("STILL_DENIED"))
-        self.assertEqual("UNCHANGED_V0_4", delta["scientific_preregistration"])
-        self.assertEqual("DENIED", delta["provider_fetch"])
-        self.assertEqual("LOCKED_UNCONSUMED", delta["validation_2025"])
-        self.assertEqual("NONE", delta["scientific_promotion"])
-        self.assertEqual("NONE", delta["probability_risk_exposure_execution"])
+        delta=self.packet["proposed_authority_delta_if_PASS"]
+        self.assertIn("EXACT VERSIONED CAPACITY IMPLEMENTATION",delta["freeze_backend_candidate"]); self.assertTrue(delta["fresh_june_scientific_run"].startswith("STILL_DENIED")); self.assertEqual("UNCHANGED_V0_4",delta["scientific_preregistration"]); self.assertEqual("DENIED",delta["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",delta["validation_2025"]); self.assertEqual("NONE",delta["scientific_promotion"]); self.assertEqual("NONE",delta["probability_risk_exposure_execution"])
 
-
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__": unittest.main()
