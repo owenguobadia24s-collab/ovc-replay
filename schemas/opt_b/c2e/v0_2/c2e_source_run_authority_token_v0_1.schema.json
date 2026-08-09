@@ -1,0 +1,22 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"c2e_source_run_authority_token/v0_1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","programme_id","gate_id","packet_id","authority_class","run_manifest_id","run_manifest_logical_sha256","boundary_pack_id","boundary_pack_logical_sha256","resource_envelope_id","resource_envelope_logical_sha256","source_binding_id","source_binding_sha256","logical_population_sha256","operator_decision_id","operator_command","issued_after_prerequisite_decision_id","status","single_use","consumed","invalidated","reuse_prohibited","activation_effect","reserved_post_wp6_authority","rollback","token_id","logical_sha256"],
+  "properties":{
+    "schema":{"const":"c2e_source_run_authority_token/v0_1"},
+    "programme_id":{"const":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2"},
+    "gate_id":{"const":"C2E2-G6-RUN-AUTH"},"packet_id":{"const":"C2E2-WP6"},
+    "authority_class":{"const":"ONE_EXACT_BOUNDED_REAL_SOURCE_SHADOW_REPLAY"},
+    "run_manifest_id":{"type":"string","minLength":1},"run_manifest_logical_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "boundary_pack_id":{"type":"string","minLength":1},"boundary_pack_logical_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "resource_envelope_id":{"type":"string","minLength":1},"resource_envelope_logical_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "source_binding_id":{"type":"string","minLength":1},"source_binding_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "logical_population_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "operator_decision_id":{"type":"string","minLength":1},"operator_command":{"type":"string","minLength":1},"issued_after_prerequisite_decision_id":{"type":"string","minLength":1},
+    "status":{"enum":["AUTHORIZED_UNCONSUMED","CONSUMED","INVALIDATED"]},"single_use":{"const":true},"consumed":{"type":"boolean"},"invalidated":{"type":"boolean"},"reuse_prohibited":{"const":true},
+    "activation_effect":{"const":"NONE"},"reserved_post_wp6_authority":{"const":"DENIED_OPERATOR_REQUIRED"},"rollback":{"type":"string","minLength":1},
+    "token_id":{"type":"string","minLength":1},"logical_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"}
+  }
+}
