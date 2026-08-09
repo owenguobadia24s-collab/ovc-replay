@@ -21,11 +21,16 @@ class SRFDIG10AFreezeMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("COMPLETED", self.state["status"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", self.state["authority"]["authority_token_v0_4"])
         self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
-        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", None})
+        self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", "SRFDI-G10B", None})
         self.assertEqual("DENIED", self.pointer.get("provider_fetch", "DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer.get("validation_2025", "LOCKED_UNCONSUMED"))
         if self.pointer["authority_token_id"] != "SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686":
             self.assertEqual("SRFD.JUNE.AUTH.52bcae6e0b748a0c49d578b3b2b529f16754438793cbd261670d91ed0d2a5686", self.pointer["prior_authority_token_id"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
         self.assertIn("fcf8f2e84111c5c0920cb28816f95b00a9168d81", self.pointer.get("capacity_backend_freeze", "fcf8f2e84111c5c0920cb28816f95b00a9168d81"))
+        if self.pointer.get("current_gate") == "SRFDI-G10B":
+            self.assertEqual("AUTHORIZED_REMEDIATION_ONLY", self.pointer["status"])
+            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
 if __name__ == "__main__": unittest.main()
