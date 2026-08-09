@@ -106,7 +106,13 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["wp6_execution"], "DENIED_NOT_STARTED")
         self.assertEqual(self.pointer["candidate_boundary_pack"], 'C2E.BOUNDARY.PACK.22461197d5c711871ba568e850dcbcc1')
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertIn(self.pointer["wp6_execution"], {"DENIED_NOT_STARTED", "AUTHORIZED_PENDING_MERGE_ASSURANCE", "AUTHORIZED_NOT_STARTED", "BLOCKED_NOT_STARTED"})
+        self.assertIn(self.pointer["wp6_execution"], {
+            "DENIED_NOT_STARTED",
+            "AUTHORIZED_PENDING_MERGE_ASSURANCE",
+            "AUTHORIZED_NOT_STARTED",
+            "BLOCKED_NOT_STARTED",
+            "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
+        })
         self.assertIn(self.pointer["status"], {"APPROVED", "QA_REVIEW", "BLOCKED"})
 
 
