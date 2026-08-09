@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/governance/genesis-repository-topology/conformance-snapshot/v0.1",
+  "title": "GRT Repository Conformance Snapshot v0.1",
+  "type": "object",
+  "required": [
+    "schema","programme_id","packet_id","source_commit","topology_sha256","authority_effect",
+    "programme_coverage","component_population","findings","source_provenance",
+    "repair_performed","programme_or_dependency_authority_changed","validation_consumed"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-grt-repository-conformance-snapshot/v1"},
+    "programme_id": {"const": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1"},
+    "packet_id": {"const": "GRT-WP9"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "topology_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "authority_effect": {"const": "NONE_DERIVED_CONFORMANCE_AUDIT_ONLY"},
+    "programme_coverage": {"type": "object"},
+    "component_population": {"type": "object"},
+    "findings": {"type": "object"},
+    "source_provenance": {"type": "object"},
+    "repair_performed": {"const": false},
+    "programme_or_dependency_authority_changed": {"const": false},
+    "validation_consumed": {"const": false}
+  },
+  "additionalProperties": false
+}

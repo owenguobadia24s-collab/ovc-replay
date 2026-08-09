@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-grt-g7-qa-packet/v1",
+  "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
+  "packet_id": "GRT-WP7",
+  "gate_id": "GRT-G7",
+  "implementation_head": "5b64cc3e73cf46840ece6fea02347c511d95bf0c",
+  "assured_pr_merge_commit": "f958309e4f4681200dd9332fcd2609d7f42a2f38",
+  "assurance": {
+    "repository_tests_run_id": 31306156938,
+    "repository_tests_conclusion": "SUCCESS",
+    "repository_test_count": 774,
+    "tiered_shadow_run_id": 31306156931,
+    "tiered_shadow_conclusion": "SUCCESS",
+    "grt_focused_tests": 5,
+    "deterministic_rebuild": "PASS",
+    "authority_mutation": "NONE"
+  },
+  "topology": {
+    "topology_sha256": "6fca224dbebabbc3ee754e825f6028013011e5bc08b6f82a21e051cfdddc8138",
+    "source_commit": "f958309e4f4681200dd9332fcd2609d7f42a2f38",
+    "programme_count": 39,
+    "component_count": 3689,
+    "component_edge_count": 9219,
+    "programme_dependency_count": 8,
+    "anomaly_count": 1032,
+    "severity_counts": {"INFO": 603, "WARNING": 429, "BLOCKER": 0},
+    "programme_coverage_counts": {"COMPLETE": 6, "PARTIAL": 11, "NO_IMPLEMENTATION": 22},
+    "component_type_counts": {"APP":23,"CONTRACT":186,"DECISION_RECORD":306,"DOCUMENT":576,"EVIDENCE_RECORD":401,"FIXTURE":120,"LEGACY_COMPONENT":327,"MANIFEST":46,"PROGRAMME_STATE":20,"PYTHON_MODULE":287,"PYTHON_PACKAGE":23,"REGISTRY":472,"SCHEMA":271,"SCRIPT":100,"TEST":394,"TOOL":10,"WORKFLOW":127},
+    "edge_evidence_class_counts": {"IMPORT_CORROBORATED":550,"PATH_AND_CONTENT_CORROBORATED":6110,"SOURCE_EXPLICIT":1293,"TEST_CORROBORATED":1266},
+    "edge_type_counts": {"DEPENDS_ON":550,"EXECUTED_BY":66,"GOVERNED_BY":1,"OWNED_BY":2667,"REFERENCES":4669,"TESTED_BY":1266}
+  },
+  "performance": {
+    "first_rebuild_seconds": 12.57198,
+    "second_rebuild_seconds": 12.432859,
+    "first_peak_traced_memory_bytes": 56054317,
+    "second_peak_traced_memory_bytes": 55784931,
+    "serialized_read_model_size_bytes": 10459681,
+    "tracked_scan_entry_count": 3689
+  },
+  "acceptance": {
+    "same_logical_identity_on_two_clean_rebuilds": "PASS",
+    "no_timestamp_hostname_path_worker_identity_in_logical_identity": "PASS_BY_CONTRACT_AND_TEST",
+    "no_inferred_hard_prerequisite_promotion": "PASS",
+    "no_topology_authority_mutation": "PASS",
+    "no_validation_consumption": "PASS",
+    "health_is_exact_counts_not_opaque_score": "PASS"
+  },
+  "warnings": [
+    "ANOMALY_POPULATION_IS_LARGE_AND_REQUIRES_OPERATOR_PRESENTATION_AT_GRT_G8",
+    "PROGRAMME_COVERAGE_IS_DERIVED_AND_NOT_NATIVE_ADOPTION",
+    "CONTROL_PLANE_AND_ADMISSION_ENFORCEMENT_REMAIN_DISABLED",
+    "COMMIT_TO_COMMIT_DIFF_REMAINS_DEFERRED_TO_POST_GRT_G8_WP10"
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "gate_class": "AUTO_RATIFIABLE",
+  "authority_effect": "NONE_DERIVED_ASSURANCE_ONLY",
+  "next_packet": "GRT-WP8",
+  "next_operator_gate": "GRT-G8"
+}

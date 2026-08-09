@@ -1,0 +1,97 @@
+{
+  "schema": "ovc-grt-wp11-final-qa/v1",
+  "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
+  "packet_id": "GRT-WP11",
+  "status": "PASS_WITH_WARNINGS_GATE_READY",
+  "qa_head": "e80d093ce1ff33f24d2386a5001e54e1bf18c50b",
+  "assured_merge_ref": "bf32f103eb79f5803ae5bac2d2cc061abc3f924a",
+  "assurance": {
+    "repository_tests": {
+      "run_id": 31308434542,
+      "conclusion": "SUCCESS",
+      "test_count": 800,
+      "runtime_seconds": 115.257
+    },
+    "tiered_profile_merge_readiness": {
+      "run_id": 31308434539,
+      "conclusion": "SUCCESS"
+    },
+    "rollback_equivalence": "PASS",
+    "schema_and_authority_neutrality": "PASS",
+    "wp9_conformance": "PASS_WITH_WARNINGS",
+    "wp10_diff_implementation": "PASS_WITH_WARNINGS"
+  },
+  "current_source_bound_topology": {
+    "source_commit": "bf32f103eb79f5803ae5bac2d2cc061abc3f924a",
+    "topology_sha256": "03ec7e6a70ec6a9d51cf1a8d9077d06d37aad50d26223071f917e47fd8f7a9e5",
+    "programme_count": 39,
+    "component_count": 3765,
+    "component_edge_count": 9434,
+    "programme_dependency_count": 8,
+    "anomaly_count": 1062,
+    "severity_counts": {
+      "INFO": 622,
+      "WARNING": 440,
+      "BLOCKER": 0
+    },
+    "programme_coverage_counts": {
+      "COMPLETE": 6,
+      "PARTIAL": 11,
+      "NO_IMPLEMENTATION": 22
+    },
+    "implementation_denominators": {
+      "implementation_components": 455,
+      "implementation_without_genesis_crosswalk": 114,
+      "implementation_without_programme_owner": 334,
+      "conflicting_programme_ownership": 37,
+      "duplicate_component_ownership": 46
+    },
+    "retained_anomaly_counts": {
+      "GENESIS_TOPOLOGY_CONFLICT": 5,
+      "UNRESOLVED_DEPENDENCY": 116,
+      "STALE_PROGRAMME_STATE": 1,
+      "STALE_DOCUMENTATION": 6,
+      "SUPERSEDED_COMPONENT_STILL_REFERENCED": 23
+    },
+    "conformance_population": {
+      "components_without_any_programme_owner": 2158,
+      "shared_components": 83,
+      "historical_or_legacy_components": 1283,
+      "authority_mismatches_or_conflicts": 6,
+      "unresolved_relationships": 116
+    }
+  },
+  "deterministic_rebuild": {
+    "first_full_rebuild_seconds": 12.875453,
+    "second_full_rebuild_seconds": 12.747764,
+    "first_peak_traced_memory_bytes": 57121888,
+    "second_peak_traced_memory_bytes": 56962061,
+    "serialized_read_model_size_bytes": 10696701,
+    "tracked_scan_entry_count": 3765,
+    "logical_identity_match": true
+  },
+  "wp10_diff_boundary": {
+    "exact_pair_diff_requires_both_source_bound_read_model_bytes": true,
+    "historical_read_model_reconstruction_from_summary_receipts": "DENIED",
+    "absence_of_materialized_diff_means_no_change": false,
+    "automatic_repair": false,
+    "automatic_programme_or_dependency_adoption": false
+  },
+  "warnings_retained": [
+    "LARGE_SOURCE_LINKED_WARNING_AND_UNRESOLVED_POPULATIONS_REMAIN_UNREPAIRED",
+    "GENESIS_TOPOLOGY_CONFLICT_COUNT_5",
+    "STALE_PROGRAMME_STATE_COUNT_1",
+    "EXACT_COMMIT_PAIR_DIFF_REQUIRES_BOTH_SOURCE_BOUND_READ_MODEL_BYTES",
+    "CONCURRENT_REPOSITORY_CHANGE_MEANS_COUNTS_ARE_SOURCE_COMMIT_BOUND"
+  ],
+  "blockers": [],
+  "recommendation": "PASS_WITH_WARNINGS",
+  "authority_effect": "NONE_FINAL_QA_AND_OPERATOR_GATE_PREPARATION_ONLY",
+  "programme_or_dependency_authority_changed": false,
+  "control_plane_route_activated": false,
+  "admission_enforcement_activated": false,
+  "validation_consumed": false,
+  "next_operator_gate": "GRT-G11",
+  "next_action": "STOP_AWAIT_GRT_G11_OPERATOR_DECISION",
+  "rollback": "Discard derived GRT read-model, conformance and diff outputs and deterministically rebuild them from pinned source state. Preserve all operator decisions and authoritative upstream programme/dependency state."
+}

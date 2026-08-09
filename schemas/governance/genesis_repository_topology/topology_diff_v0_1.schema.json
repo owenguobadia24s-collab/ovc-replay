@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/governance/genesis-repository-topology/topology-diff/v0.1",
+  "title": "Genesis Repository Topology Diff v0.1",
+  "type": "object",
+  "required": ["schema","programme_id","packet_id","before","after","change_count","change_type_counts","changes","incremental_projection","authority_effect","programme_or_dependency_authority_changed","validation_consumed","diff_sha256"],
+  "properties": {
+    "schema": {"const": "ovc-genesis-repository-topology-diff/v1"},
+    "programme_id": {"const": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1"},
+    "packet_id": {"const": "GRT-WP10"},
+    "before": {"type": "object", "required": ["source_commit","topology_sha256"]},
+    "after": {"type": "object", "required": ["source_commit","topology_sha256"]},
+    "change_count": {"type": "integer", "minimum": 0},
+    "change_type_counts": {"type": "object"},
+    "changes": {"type": "array", "items": {"type": "object", "required": ["change_type","stable_key","authority_effect"]}},
+    "incremental_projection": {"type": "object"},
+    "authority_effect": {"const": "NONE_DERIVED_COMMIT_DIFF_ONLY"},
+    "programme_or_dependency_authority_changed": {"const": false},
+    "validation_consumed": {"const": false},
+    "diff_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

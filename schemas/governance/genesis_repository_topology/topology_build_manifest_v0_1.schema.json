@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/governance/genesis-repository-topology/build-manifest/v0.1",
+  "title": "TopologyBuildManifest v0.1",
+  "type": "object",
+  "required": ["schema","programme_id","packet_id","source_commit","rule_pack_id","rule_pack_sha256","topology_sha256","determinism","counts","performance","authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-genesis-repository-topology-build-manifest/v1"},
+    "programme_id": {"const": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1"},
+    "packet_id": {"type": "string"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "rule_pack_id": {"type": "string"},
+    "rule_pack_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "topology_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "determinism": {"type": "object"},
+    "counts": {"type": "object"},
+    "performance": {"type": "object"},
+    "authority_effect": {"const": "NONE_DERIVED_BUILD_EVIDENCE"}
+  },
+  "additionalProperties": true
+}
