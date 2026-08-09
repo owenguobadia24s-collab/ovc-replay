@@ -1,0 +1,90 @@
+{
+  "schema": "ovc-c2e2-g6-binding-repair-signature-preflight/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "C2E2-G6-BINDING-REPAIR",
+  "baseline_main": "c09613495556d0f88496208a31824dc968d89930",
+  "operator_authority": "C2E2-G6-BINDING-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T084300+0100",
+  "result": "BLOCK_BEFORE_REPLACEMENT_PACK_FREEZE",
+  "authority_effect": "NONE",
+  "source_reconciliation": {
+    "source_slice_id": "RPS.DUKASCOPY.GBPUSD.20260530_20260703.v1",
+    "source_manifest_sha256": "1578b555f3d5aa2822b603141261f86a047096030e5faacd4380ef2c6d4f52e3",
+    "c1_release_id": "RPS.C1SET.GBPUSD.PD-JUNE-FM.20260530_20260703.v1",
+    "c1_manifest_id": "RPS.C1MANIFEST.PD-JUNE-FM.9cad7d7274091b27fb153c99",
+    "c1_files": [
+      {"scope":"15M/BID","sha256":"bd7bc02902666d6d0e10542dbbca8b43af167e610a73b62c625b38712a49d113","context_complete_records":2231,"target_complete_records":2036},
+      {"scope":"15M/ASK","sha256":"f95de2c9003ce9fa3b41a6035b9947be46de60172191964efd89c62883df58db","context_complete_records":2231,"target_complete_records":2036},
+      {"scope":"2H_A_L/BID","sha256":"311fe938d14431f57851aaf4e4abeb3002c760c8805b452a5a272e8da37ea3dd","context_complete_records":248,"target_complete_records":227},
+      {"scope":"2H_A_L/ASK","sha256":"70071f48025568c31c2722ec5b9992b9917f74f70df07f6a7e05d5667156f1ba","context_complete_records":248,"target_complete_records":227}
+    ],
+    "c2_observation_contract": "contracts/opt_b/c2/C2_OBSERVATION_CONTRACT_vNext.md",
+    "c2e_handoff_contract": "contracts/opt_b/c2e/v0_2/C2_TO_C2E_HANDOFF_CONTRACT_v0_2.md",
+    "local_frame_fixture_scope": {"scope_id":"LOCAL_15M","scale_id":"15M","clock_id":"UTC_15M","lattice_id":"LATTICE.15M.UTC_0000.v1"},
+    "diagnostic_observation_ledger": {
+      "context_start_utc":"2026-05-30T00:00:00Z",
+      "context_end_exclusive_utc":"2026-07-03T00:00:00Z",
+      "context_15m_expected_evidence_slots_both_sides":4632,
+      "context_15m_present_complete_both_sides":4462,
+      "context_15m_absent_expected_both_sides":170,
+      "target_start_utc":"2026-06-01T00:00:00Z",
+      "target_end_exclusive_utc":"2026-07-01T00:00:00Z",
+      "target_15m_expected_evidence_slots_both_sides":4224,
+      "target_15m_projection_eligible_complete_both_sides":4072,
+      "target_15m_absent_expected_both_sides":152,
+      "target_complete_by_side":{"BID":2036,"ASK":2036},
+      "status":"DIAGNOSTIC_ONLY_NOT_FROZEN_FRAME_POPULATION"
+    }
+  },
+  "signature_probe": {
+    "formula_profile": {
+      "upstream_component":"C2.FORMULA.LOCATION.RAW_GEOMETRY.v1",
+      "facts_equal":true,
+      "only_as_of_time_changed":true,
+      "first_profile_output_id":"C2.FORMULA.OUTPUT.ae48d7a30f1e9cac19452ca0",
+      "second_profile_output_id":"C2.FORMULA.OUTPUT.f59b6c5da3aa50b58f5dc0f9",
+      "identity_changed":true,
+      "cause":"profile_output_id digest includes as_of_time"
+    },
+    "parent_context": {
+      "selected_parent_id_first":"PARENT.STABLE.22_00",
+      "selected_parent_id_second":"PARENT.STABLE.22_00",
+      "selected_parent_changed":false,
+      "first_link_id":"C2.PARENT.LINK.a04fa41a118cfea63430b31e",
+      "second_link_id":"C2.PARENT.LINK.3a58c48f4eadcf192b7a7ebb",
+      "first_bundle_id":"C2.PARENT.BUNDLE.107c7fd8d959751ec2ea26c4",
+      "second_bundle_id":"C2.PARENT.BUNDLE.c5c4d7c1e2b04cb9273c6577",
+      "record_identity_changed":true,
+      "cause":"link/bundle identity includes local observation identity and first-valid chronology"
+    },
+    "current_boundary_result": {
+      "same_continuity_segment":true,
+      "matched_rules":["C2E.RULE.JUNE.BASELINE.RE_PARENT.v1","C2E.RULE.JUNE.BASELINE.PHASE_MUTATION.v1","C2E.RULE.JUNE.BASELINE.CONTINUATION.v1"],
+      "false_positive_re_parent":true,
+      "false_positive_phase_mutation":true
+    }
+  },
+  "causal_contract_conflict": [
+    "The empirical PHASE_MUTATION predicate is stated as structural signature change, but the implementation hashes record IDs whose upstream identity changes with as_of_time even when structural facts are unchanged.",
+    "The empirical RE_PARENT predicate is stated as typed parent-context change, but the implementation hashes context/link record IDs whose identity changes with every local observation even when the selected parent is unchanged.",
+    "C2EInputFrame v0.2 does not retain a stable fact-level structural signature or stable selected-parent signature from which the intended predicates can be evaluated after the handoff strips parent-record payloads.",
+    "Freezing a corrected real-source frame population now would therefore either encode false mutation on ordinary chronological advancement or suppress lawful structural/parent evidence by omitting it. Neither is an authority-neutral population-binding repair."
+  ],
+  "why_not_correctable_inside_current_authority": [
+    "Changing empirical boundary signature projection changes actual boundary outcomes and the frozen implementation hash.",
+    "Adding stable causal signature fields changes the frozen C2-to-C2E handoff contract/schema and frame causal surface.",
+    "Changing upstream C2 profile/link identity semantics would change frozen C2AR contracts instead and is outside this repair.",
+    "The operator-approved binding supersession authorizes replacement population/pack/envelope/manifest preparation with unchanged rule semantics; it does not authorize a material frozen handoff/boundary semantic change."
+  ],
+  "run_status": {
+    "replacement_population_frozen":false,
+    "replacement_boundary_pack_created":false,
+    "replacement_resource_envelope_created":false,
+    "replacement_run_manifest_created":false,
+    "replacement_run_token_created":false,
+    "wp6_executed":false
+  },
+  "rollback": "Preserve the merged binding-supersession decision and old-token invalidation. Do not create replacement run authority or mutate any frozen C2/C2E contract. The diagnostic counts and probe are rebuildable evidence only.",
+  "next_action": "OPERATOR_REQUIRED_C2E2_G6_SIGNATURE_CONTRACT_SUPERSESSION"
+}
