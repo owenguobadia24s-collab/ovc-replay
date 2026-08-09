@@ -5,25 +5,25 @@
   "gate_id": "IROF-G3",
   "plan_version": "0.1",
   "baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
+  "tested_head": "92abc88d1ef7f9be4c43b9eba369ee3adc88a71e",
   "authority_delta": "deterministic DAG planning and inert adapter protocol only",
-  "static_review": {
+  "static_review": {"status": "PASS"},
+  "ci": {
     "status": "PASS",
-    "checks": [
-      "required optional forbidden dependency semantics explicit",
-      "typed parent output and stage input compatibility fail closed",
-      "canonical topological order registration-order independent",
-      "blocked descendants graph-derived",
-      "adapter protocol exposes preflight estimate execute resume verify",
-      "scientific payload mutation firewall present",
-      "extension stage requires registration only, not scheduler redesign"
-    ]
+    "tests_workflow": "31304733634 SUCCESS",
+    "tiered_assurance_workflow": "31304733628 SUCCESS",
+    "review_threads": "ZERO"
   },
-  "ci": {"status": "PENDING_EXACT_HEAD"},
-  "warnings": [
-    "Stage registry is planning metadata only; executable current-stage adapters remain deferred to IROF-WP8",
-    "No real population or protected authority is consumed"
-  ],
+  "acceptance": {
+    "canonical_plan_order_independent": "PASS",
+    "dependency_validation": "PASS",
+    "typed_compatibility": "PASS",
+    "blocked_descendants": "PASS",
+    "adapter_firewall": "PASS",
+    "extension_registration_without_scheduler_change": "PASS"
+  },
+  "warnings": ["Stage registry remains planning metadata; executable source-stage adapters are deferred to IROF-WP8"],
   "blocking_issues": [],
-  "recommended_decision": "PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "qa_recommendation": "PASS",
   "rollback": "remove WP2 planner adapter contract registry fixtures and tests; source-stage behavior remains untouched"
 }
