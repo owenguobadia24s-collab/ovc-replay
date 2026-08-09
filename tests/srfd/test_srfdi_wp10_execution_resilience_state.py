@@ -23,9 +23,13 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
         token = self.blocker["authority_token"]
         self.assertEqual("SRFD.JUNE.AUTH.3c63cd70ea57151a264443b436f94075bd8fb13f8a45f318a245cff96fefd168", token["token_id"])
         self.assertEqual("CONSUMED_NOT_REUSABLE", token["state"])
-        self.assertEqual(token["token_id"], self.pointer["authority_token_id"])
-        self.assertTrue(self.pointer["authority_token_consumed"])
-        self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
+        if self.pointer["authority_token_id"] == token["token_id"]:
+            self.assertTrue(self.pointer["authority_token_consumed"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["authority_token_state"])
+        else:
+            self.assertEqual(token["token_id"], self.pointer["prior_v0_6_authority_token_id"])
+            self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_v0_6_authority_token_state"])
+            self.assertEqual("BLOCKED_CONSUMED_TOKEN_PRESERVED", self.pointer["wp10_v0_6_execution_route"])
 
     def test_frozen_science_is_exact(self):
         frozen = self.profile["frozen_scientific_bindings"]
@@ -46,13 +50,18 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
         self.assertEqual("SAME_RUN_ID_FROM_VERIFIED_COMMITTED_CHECKPOINT", scope["resume"])
         self.assertEqual("FAIL_CLOSED", scope["binding_drift"])
 
-    def test_fresh_june_run_still_requires_new_authority(self):
+    def test_historical_resilience_state_required_fresh_authority_and_pointer_may_advance_after_it(self):
         self.assertEqual("READY", self.state["status"])
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
         self.assertEqual("SRFDI-G-JUNE-AUTH-v0.7-PREP", self.state["next_packet"])
         self.assertTrue(self.state["authority"]["fresh_june_scientific_run"].startswith("DENIED"))
-        self.assertEqual("DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
-        self.assertEqual("SRFDI-G-JUNE-AUTH-v0.7-PREP", self.pointer["next_packet"])
+        if self.pointer["next_packet"] == "SRFDI-G-JUNE-AUTH-v0.7-PREP":
+            self.assertEqual("DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
+        else:
+            self.assertEqual("SRFDI-WP10-v0.7", self.pointer["next_packet"])
+            self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.pointer["june_execution"])
+            self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["authority_token_state"])
+            self.assertFalse(self.pointer["authority_token_consumed"])
 
     def test_reserved_authority_firewalls_remain_closed(self):
         for source in (self.profile["firewalls"], self.state["authority"], self.pointer):
