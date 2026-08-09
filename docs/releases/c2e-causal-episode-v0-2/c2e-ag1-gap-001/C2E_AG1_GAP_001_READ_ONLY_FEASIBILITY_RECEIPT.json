@@ -1,0 +1,72 @@
+{
+  "schema": "c2e_ag1_restart_equivalence_read_only_feasibility/v0_1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "parent_gate_id": "C2E-AG1",
+  "gap_id": "C2E-AG1-GAP-001",
+  "requirement": "restart_equivalence",
+  "implementation_head": "13728d1b2e1e38ddf2ea625897b97da7bfe0bfc1",
+  "harness": {
+    "path": "scripts/c2e_v2/run_c2e_ag1_restart_equivalence.py",
+    "git_blob_sha": "c5dd709841c6dc20290e5182d955f3c6363586a4",
+    "mode_executed": "verify-baseline-only"
+  },
+  "frozen_executor": {
+    "drive_file_id": "1ZxL5oubGYzI_gTyF4v4-HyBgK97fBaVe",
+    "sha256": "98e87b229ad82475970b72da169b115aa99eb736926b97ce2c1b339c9028fe6a"
+  },
+  "uninterrupted_baselines": [
+    {
+      "run": "A",
+      "drive_file_id": "1ow8KUjE77trZU-NnVoSWXgDZwEN1ViTF",
+      "archive_sha256": "3ca7dbcdc4e52c5762155e79b94723de8b0b080081bb4519cf2de6e85058f81f",
+      "logical_output_sha256": "18519e37a16bc1f73148f3764ec1444d1fcd36fce82e9a1d585f712fb02d6988"
+    },
+    {
+      "run": "B",
+      "drive_file_id": "1TOIghV9q6pk3euOASotYE17nYV2mwSj-",
+      "archive_sha256": "057d4df279ceec18594738b94167947b580caf9bdec0a9d1f4c2bfe478c70db9",
+      "logical_output_sha256": "18519e37a16bc1f73148f3764ec1444d1fcd36fce82e9a1d585f712fb02d6988"
+    }
+  ],
+  "baseline_scientific_artifact_hashes": {
+    "c2e-input-frame-index-v0_3.jsonl": "35b2b71d9214585eec4a5c59b665b7439e1832ff69e742dab712a932f1b2f979",
+    "c2e-boundary-evaluations-v2.jsonl": "d4d2c792aec078f886823e463bb4822ebaa5fc2c875c119748fde11222f51ea7",
+    "c2e-event-stream-v0_2.jsonl": "36c75f05fadc186489a0089b38230833719b6ebf8eb35a388bf14979c9a473af",
+    "c2e-boundary-disagreement-ledger.jsonl": "c9f05ff82926f1759874f95809ba42691657f794b3ebe6330b2266d8765970d7",
+    "c2e-not-evaluable-candidates.jsonl": "28a742eaa7164bd5000ab4c1f9effbb669783a5a081e687b41bbcab796328b6a"
+  },
+  "checks": [
+    {
+      "baseline": "A",
+      "status": "PASS",
+      "restart_cut": "PARTITION_END:ASK",
+      "prefix_record_count": 8229,
+      "restored_episode_count": 46,
+      "semantic_prefix_hash": "4dc0af22d802272ced022cb4e8d7769b4a5e06cf268bb872cb90dbf1276f4f5e",
+      "real_source_replay_executed": false
+    },
+    {
+      "baseline": "B",
+      "status": "PASS",
+      "restart_cut": "PARTITION_END:ASK",
+      "prefix_record_count": 8229,
+      "restored_episode_count": 46,
+      "semantic_prefix_hash": "4dc0af22d802272ced022cb4e8d7769b4a5e06cf268bb872cb90dbf1276f4f5e",
+      "real_source_replay_executed": false
+    },
+    {
+      "check": "RUN_A_RUN_B_SCIENTIFIC_FILES_BYTE_IDENTICAL",
+      "status": "PASS",
+      "file_count": 5
+    }
+  ],
+  "finding": "The existing uninterrupted stream has a unique natural closed-partition restart cut after ASK release-end censor and before BID genesis. The closed ASK projection can be reconstructed deterministically from the persisted prefix for both lawful baselines.",
+  "full_ag1_requirement_status": "NOT_YET_MET",
+  "remaining_evidence": "A fresh exact execution must actually persist the ASK prefix/checkpoint, discard process state, reload it, execute BID, and prove the resulting five scientific artifacts byte-identical to the uninterrupted WP6 baselines.",
+  "fresh_run_required": true,
+  "provider_intake": "NONE",
+  "authority_effect": "NONE",
+  "active_c2e": "NONE",
+  "active_boundary_pack": "NONE",
+  "logical_sha256": "da9dcb31908df6910bcbfae5e25e46e709b5f04fa992a031871df6413d58fffd"
+}
