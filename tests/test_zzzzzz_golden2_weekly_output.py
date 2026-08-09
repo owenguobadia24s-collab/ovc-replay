@@ -19,6 +19,9 @@ compact = {
     "fresh_repeated_equivalent": result["fresh_repeated_equivalent"],
     "alternate_order_equivalent": result["alternate_order_equivalent"],
     "counts": result["counts"],
+    "c2_axis_computability_counts": result["c2_axis_computability_counts"],
+    "c2e_fixture_boundary_required_axes": result["c2e_fixture_boundary_required_axes"],
+    "conformance_warnings": result["conformance_warnings"],
     "family_evidence_status": result["family_evidence_status"],
     "representation_interpretation": result["representation_interpretation"],
     "checkpoint": result["checkpoint"],
@@ -39,6 +42,9 @@ compact = {
 print("GOLDEN2_FINAL_RESULT=" + json.dumps(compact, sort_keys=True, separators=(",", ":")))
 assert result["fresh_repeated_equivalent"]
 assert result["alternate_order_equivalent"]
+assert "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH" in result["conformance_warnings"]
+assert result["c2e_fixture_boundary_required_axes"] == ["LOCATION", "ORGANISATION"]
+assert result["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0) > 0
 assert not result["real_source_replay"]
 assert not result["validation_consumed"]
 assert result["authority_effect"] == "NONE"
@@ -63,6 +69,12 @@ assert result["authority_effect"] == "NONE"
         compact = json.loads(marker.split("=", 1)[1])
         self.assertTrue(compact["fresh_repeated_equivalent"])
         self.assertTrue(compact["alternate_order_equivalent"])
+        self.assertIn(
+            "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH",
+            compact["conformance_warnings"],
+        )
+        self.assertEqual(["LOCATION", "ORGANISATION"], compact["c2e_fixture_boundary_required_axes"])
+        self.assertGreater(compact["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0), 0)
         self.assertFalse(compact["real_source_replay"])
         self.assertFalse(compact["validation_consumed"])
         self.assertEqual("NONE", compact["authority_effect"])
