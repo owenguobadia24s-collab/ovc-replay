@@ -88,7 +88,7 @@ export function FixtureChart({ bars, selectedTime, onSelectTime }: { bars: Marke
     <div data-chart-layer="badge">FIXTURE · DISPLAY ONLY · NO INDICATOR INFERENCE</div>
     <div data-chart-layer="footer">
       <span>SELECTED <strong>{selectedTime ? shortStamp(selectedTime) : "move crosshair over fixture bars"}</strong></span>
-      <span>BARS <strong>{bars.length}</strong></span>
+      <span>BARS <strong data-testid="chart-bar-count">{bars.length}</strong></span>
       <span>MODE <strong>FIRST-VALID FIXTURE</strong></span>
       <span>CURRENT <strong>{formatPrice(bars.at(-1)?.c)}</strong></span>
     </div>
