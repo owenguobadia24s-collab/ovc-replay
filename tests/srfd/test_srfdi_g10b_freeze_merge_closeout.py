@@ -8,6 +8,8 @@ RECEIPT = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10b-freeze/SRFDI_G10B
 QA = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10b-freeze/SRFDI_G10B_FREEZE_CLOSEOUT_QA.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_32_G10B_FREEZE_COMPLETED.json"
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
+FRESH_V09 = "SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
+V09_BINDING = "ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
 
 class SRFDIG10BFreezeMergeCloseoutTests(unittest.TestCase):
     @classmethod
@@ -38,18 +40,29 @@ class SRFDIG10BFreezeMergeCloseoutTests(unittest.TestCase):
         self.assertTrue(self.state["authority"]["fresh_june_scientific_run"].startswith("DENIED"))
         self.assertEqual("LOCKED_UNCONSUMED",self.state["authority"]["validation_2025"])
 
-    def test_pointer_reaches_operator_june_gate_then_may_advance_after_operator_decision(self):
-        self.assertEqual("SRFDI-G-JUNE-AUTH",self.pointer["current_gate"])
+    def test_pointer_reaches_june_gate_and_may_advance_only_through_exact_v09_authority(self):
+        self.assertIn(self.pointer["current_gate"], {"SRFDI-G-JUNE-AUTH", "SRFDI-G10"})
         self.assertIn(self.pointer["status"], {"GATE_READY", "APPROVED", "READY", "RUNNING", "QA_REVIEW", "BLOCKED"})
-        if self.pointer["status"] == "GATE_READY":
+        if self.pointer["current_gate"] == "SRFDI-G-JUNE-AUTH" and self.pointer["status"] == "GATE_READY":
             self.assertTrue(self.pointer["operator_decision_required"])
             self.assertIsNone(self.pointer["fresh_authority_token_id"])
             self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
-        else:
+        elif self.pointer["current_gate"] == "SRFDI-G-JUNE-AUTH":
             self.assertFalse(self.pointer["operator_decision_required"])
-            self.assertIsNotNone(self.pointer["fresh_authority_token_id"])
+            self.assertEqual(FRESH_V09, self.pointer["fresh_authority_token_id"])
+        else:
+            self.assertEqual("READY", self.pointer["status"])
+            self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+            self.assertFalse(self.pointer["operator_decision_required"])
+            self.assertEqual(FRESH_V09, self.pointer["fresh_authority_token_id"])
+            self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
+            self.assertFalse(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual(V09_BINDING, self.pointer["run_binding_sha256"])
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
+        self.assertEqual("NONE", self.pointer["scientific_promotion"])
+        self.assertEqual("NONE", self.pointer["selector_family_semantic_publication"])
+        self.assertEqual("NONE", self.pointer["probability_risk_exposure_execution"])
 
 if __name__ == "__main__":
     unittest.main()
