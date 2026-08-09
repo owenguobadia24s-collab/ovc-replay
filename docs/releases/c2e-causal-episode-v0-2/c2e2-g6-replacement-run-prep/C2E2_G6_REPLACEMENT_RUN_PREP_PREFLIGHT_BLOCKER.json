@@ -1,0 +1,94 @@
+{
+  "schema": "ovc-c2e2-g6-replacement-run-prep-preflight-blocker/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "packet_id": "C2E2-G6-REPLACEMENT-RUN-PREP",
+  "baseline_main": "382fae47c82138afb2b66073ac5ad5b6c4d193a7",
+  "authority_source": [
+    "C2E2-G6-BINDING-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T084300+0100",
+    "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T100800+0100"
+  ],
+  "result": "BLOCK_BEFORE_REPLACEMENT_POPULATION_FREEZE",
+  "blocker_id": "C2E2-G6-UPSTREAM-C2-OBSERVATION-SURFACE-NOT-MATERIALISED-20260809",
+  "authority_effect": "NONE",
+  "required_handoff_surface": {
+    "survey": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp0/C2E2_C2_SOURCE_SURFACE_SURVEY_v0_1.json",
+    "base_record_identity": "observation_id",
+    "structural_profile_identity": "profile_output_id for LOCATION, MOTION, ORGANISATION and INTERACTION",
+    "parent_context_identity": "context_bundle_id plus fixed/structural parent identities",
+    "binding_rule": "The base C2 record identity is the deterministic C2 vNext observation_id; structural profile/output identities remain separately referenced and are never flattened into a five-axis state key."
+  },
+  "accepted_real_replay_surface": {
+    "output_manifest": {
+      "sha256": "2808729f929412f56ad3061b0cbbcd42bdb277bfc779cd1885f605584295a693",
+      "schema": "ovc-c2-vnext-full-population-replay-manifest/v1",
+      "binding_id": "C2VNEXT.JUNE.DISCOVERY.INPUT.v1",
+      "logical_population_sha256": "3f1089e3a4eefe94147c8c2f912e77899e4ed21fe8b3b8b85993e47bf7151ee7",
+      "opportunity_types": ["REGISTERED_SEQUENCE_WINDOW"],
+      "object_families": ["AXIS_BUNDLE"],
+      "sequence_lengths": [2,3,4,5,6,8,12],
+      "requested": 33320,
+      "fingerprints": 27996
+    },
+    "verified_downloads": [
+      {"artifact":"15M BID C1 records","drive_id":"1QjOaKE2ugCf0JaBqHoUw1F9fYCHFLOQF","sha256":"bd7bc02902666d6d0e10542dbbca8b43af167e610a73b62c625b38712a49d113","line_count":2231},
+      {"artifact":"15M ASK C1 records","drive_id":"17YowWR9MUAzPukEN-8szgADP0lT928SJ","sha256":"f95de2c9003ce9fa3b41a6035b9947be46de60172191964efd89c62883df58db","line_count":2231},
+      {"artifact":"2H BID C1 records","drive_id":"1dVyUou3wnEfHmF5EWrKTrZEJzCQ3jQHb","sha256":"311fe938d14431f57851aaf4e4abeb3002c760c8805b452a5a272e8da37ea3dd","line_count":248},
+      {"artifact":"2H ASK C1 records","drive_id":"1B5MuE6Xofaa0Vpui_fUyVabTiGVlMaRM","sha256":"70071f48025568c31c2722ec5b9992b9917f74f70df07f6a7e05d5667156f1ba","line_count":248},
+      {"artifact":"accepted replay fingerprints","sha256":"77ab3c9d8af9d66dbb1658d4fad09c67dbbbe167ba8fde2bf3ece0ad9531c333","line_count":27996},
+      {"artifact":"representative 15M ASK opportunity requests","sha256":"1271abef17bbfd33e788d41d043931176ff302aa167d64ac4b551024dc91f66f","line_count":14784},
+      {"artifact":"accepted replay rule candidates","sha256":"db9966224abd75619971bbdbff40e078e955ee5b933fa82416ceab2048521230","line_count":14}
+    ],
+    "marker_scan": {
+      "artifacts_scanned": ["15M BID C1","15M ASK C1","2H BID C1","2H ASK C1","fingerprints","opportunity requests","rule candidates"],
+      "observation_id": 0,
+      "profile_output_id": 0,
+      "context_bundle_id": 0,
+      "C2.OBSERVATION": 0,
+      "C2.FORMULA.OUTPUT": 0,
+      "C2.PARENT.BUNDLE": 0
+    }
+  },
+  "repository_orchestration_inspection": {
+    "accepted_real_replay_module": "src/ovc/opt_b/c2_vnext/full_replay.py",
+    "accepted_real_replay_unit": "REGISTERED_SEQUENCE_WINDOW",
+    "accepted_real_replay_materialises_observation_id": false,
+    "accepted_real_replay_invokes_formula_profiles": false,
+    "accepted_real_replay_invokes_parent_context": false,
+    "formula_profile_functions_exist_but_no_real_observation_level_orchestrator_is_frozen": true,
+    "synthetic_topology_smoke_is_not_a_real_source_materialisation_contract": true
+  },
+  "reconciliation": {
+    "base_observation_identity_is_deterministically_definable_from_frozen_observation_contract": true,
+    "accepted_real_replay_contains_exact_base_observation_records": false,
+    "accepted_real_replay_contains_required_four_axis_profile_outputs": false,
+    "accepted_real_replay_contains_required_parent_context_outputs": false,
+    "creating_these_outputs_requires_a_new_real_observation_level_C2_component_orchestration_surface": true,
+    "new_orchestration_surface_is_inside_current_C2E_replacement_prep_authority": false
+  },
+  "why_not_correctable_inside_current_authority": [
+    "The binding supersession expressly requires the corrected population to use existing accepted source/C1/C2 artifacts and to BLOCK if a mandatory C2E field is physically absent or needs new semantics.",
+    "The accepted real C2 replay materialises sequence-window requests/fingerprints rather than observation records, four-axis formula profile outputs or parent-context bundles.",
+    "Choosing and freezing a real-data observation→horizon→level→container→relation→formula→parent orchestration for every target observation would create an upstream C2 materialisation contract that does not currently exist in the accepted replay artifacts.",
+    "The signature-contract supersession explicitly denies upstream C2 identity mutation and authorises only the C2E comparison-signature repair, not a new upstream C2 replay semantics/orchestration surface.",
+    "Synthesising placeholder structural/parent evidence or treating missing materialised outputs as unchanged would suppress lawful causal evidence and violate the fail-closed handoff rule."
+  ],
+  "run_status": {
+    "replacement_c2e_input_frame_population_frozen": false,
+    "replacement_population_count": null,
+    "replacement_population_sha256": null,
+    "replacement_boundary_pack_created": false,
+    "replacement_resource_envelope_created": false,
+    "replacement_run_manifest_created": false,
+    "replacement_run_token_created": false,
+    "wp6_executed": false
+  },
+  "smallest_lawful_resolution": {
+    "requirement": "A separately governed upstream C2 vNext observation-level real-source materialisation packet must freeze deterministic per-observation records, four-axis profile outputs and parent-context bundles from the already accepted June C1/source artifacts using only existing frozen component semantics, with exact provenance, first-valid chronology, determinism and no selector/semantic/outcome/Validation authority.",
+    "after_upstream_materialisation": "Return to C2E2-G6-REPLACEMENT-RUN-PREP append-only, bind exact C2 observation/profile/parent artifact IDs and hashes, build v0.3 C2EInputFrames, freeze population count/hash, then prepare a new inactive boundary pack, unchanged-limit resource envelope, candidate manifest/token and fresh C2E2-G6-RUN-AUTH operator packet.",
+    "cannot_be_self_authorized_by_c2e": true
+  },
+  "rollback": "Preserve the merged v0.3 C2E stable-signature candidate and all historical artifacts. Do not create replacement population, pack, envelope, manifest, token or execute WP6. No active authority changed.",
+  "next_action": "STOP_BLOCKED_UPSTREAM_C2_OBSERVATION_LEVEL_REAL_MATERIALISATION_REQUIRED"
+}
