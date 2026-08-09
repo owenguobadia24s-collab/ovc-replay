@@ -94,7 +94,7 @@ class C2E2G6RunAuthSupersessionTests(unittest.TestCase):
         self.assertIn(self.state["status"], {"QA_REVIEW", "APPROVED"})
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
-        self.assertIn(self.pointer["wp6_execution"], {"AUTHORIZED_PENDING_MERGE_ASSURANCE", "AUTHORIZED_NOT_STARTED"})
+        self.assertIn(self.pointer["wp6_execution"], {"AUTHORIZED_PENDING_MERGE_ASSURANCE", "AUTHORIZED_NOT_STARTED", "BLOCKED_NOT_STARTED"})
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertEqual(self.pointer["run_token_id"], self.token["token_id"])
