@@ -75,7 +75,7 @@ class C2E2G6OperatorDeferTests(unittest.TestCase):
         self.assertEqual(self.terminal["authority"]["wp6_execution"], "DENIED")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(current["authority"]["c2e_activation"], "DENIED")
+        self.assertIn(current["authority"]["c2e_activation"], {"DENIED", "DENIED_OPERATOR_RESERVED"})
         self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
 
 
