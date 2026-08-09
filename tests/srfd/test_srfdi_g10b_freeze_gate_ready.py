@@ -17,7 +17,6 @@ OLD_BINDING = ROOT / "registries/research/srfd/wp10_v07_runner_implementation_bi
 RUNNER = ROOT / "src/ovc/opt_b/srfd/wp10_v07_runner.py"
 REFERENCE = ROOT / "src/ovc/opt_b/srfd/wp10b_segmentation_reference.py"
 
-
 class SRFDIG10BFreezeGateReadyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -59,14 +58,21 @@ class SRFDIG10BFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("PASS", self.gate["recommended_decision"])
         self.assertEqual("OVC APPROVE SRFDI-G10B-FREEZE PASS", self.gate["exact_operator_command"])
 
-    def test_gate_ready_pointer_preserves_all_firewalls(self):
+    def test_gate_ready_history_and_lawful_pointer_progression_preserve_firewalls(self):
+        self.assertEqual("GATE_READY", self.state["status"])
         self.assertEqual("GATE_READY", self.pointer["status"])
-        self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["current_gate"])
+        self.assertIn(self.pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH"})
         self.assertIsNone(self.pointer["next_packet"])
         self.assertTrue(self.pointer["operator_decision_required"])
         self.assertTrue(self.pointer["authority_token_consumed"])
         self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
-        self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
+        if self.pointer["current_gate"] == "SRFDI-G10B-FREEZE":
+            self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
+        else:
+            self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
+            self.assertIsNone(self.pointer["fresh_authority_token_id"])
+            self.assertEqual("NOT_MINTED_PENDING_OPERATOR", self.pointer["fresh_authority_token_state"])
+            self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1", self.pointer["candidate_runner_implementation_binding_sha256"])
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
         self.assertEqual("NONE", self.pointer["scientific_promotion"])
@@ -74,7 +80,6 @@ class SRFDIG10BFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", self.pointer["probability_risk_exposure_execution"])
 
     def test_pass_would_freeze_only_execution_binding(self):
-        self.assertEqual("GATE_READY", self.state["status"])
         delta = self.gate["proposed_authority_delta_if_PASS"]
         self.assertEqual("UNCHANGED_V0_4", delta["scientific_preregistration"])
         self.assertEqual("UNCHANGED_V0_3", delta["segmentation_registry"])
@@ -83,7 +88,6 @@ class SRFDIG10BFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED", delta["validation_2025"])
         self.assertEqual("NONE", delta["scientific_promotion"])
         self.assertEqual("NONE", delta["probability_risk_exposure_execution"])
-
 
 if __name__ == "__main__":
     unittest.main()
