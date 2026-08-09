@@ -60,7 +60,7 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
         self.assertEqual(june_authority_v08.RUNNER_IMPLEMENTATION_BINDING_SHA256, logical_sha256(self.impl_binding))
         self.assertEqual(self.impl_binding, june_authority_v08.implementation_binding())
         g10b_authorized = (
-            self.pointer.get("current_gate") in {"SRFDI-G10B", "SRFDI-G10B-FREEZE"}
+            self.pointer.get("current_gate") in {"SRFDI-G10B", "SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH"}
             and self.pointer.get("status") in {"AUTHORIZED_REMEDIATION_ONLY", "GATE_READY"}
             and self.g10b_decision["operator_command"] == "OVC APPROVE SRFDI-G10B SUPERSEDE"
             and self.g10b_decision["decision"] == "SUPERSEDE"
@@ -83,7 +83,11 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
                 )
                 self.assertTrue(self.pointer["authority_token_consumed"])
                 self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
-                self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
+                if self.pointer["current_gate"] == "SRFDI-G-JUNE-AUTH":
+                    self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
+                    self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1", self.pointer["effective_runner_implementation_binding_sha256"])
+                else:
+                    self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY", self.pointer["june_execution"])
             else:
                 self.assertEqual(historical_blob, git_blob, name)
         self.assertEqual(june_authority_v08.RUN_BINDING_SHA256, june_authority_v08.build_run_binding().logical_hash)
