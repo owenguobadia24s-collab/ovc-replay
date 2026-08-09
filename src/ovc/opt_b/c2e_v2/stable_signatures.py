@@ -11,10 +11,10 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-from typing import Any, Mapping, Sequence
+from typing import Any, Mapping
 
 STRUCTURAL_AXES = ("LOCATION", "MOTION", "ORGANISATION", "INTERACTION")
-STRUCTURAL_COMPONENT_KEYS = {"status", "reason_codes", "facts", "source_object_ids"}
+STRUCTURAL_COMPONENT_KEYS = {"axis", "status", "reason_codes", "facts", "source_object_ids"}
 PARENT_KEYS = {"selected_parent_observation_ids", "selected_parent_object_ids", "dependency_states"}
 DEPENDENCY_KEYS = {"dependency_id", "role", "status", "reason_codes"}
 PROHIBITED_KEYS = {
@@ -70,6 +70,8 @@ def _strings(value: Any, marker: str) -> list[str]:
 def _normalize_component(axis: str, raw: Mapping[str, Any]) -> dict[str, Any]:
     unknown = sorted(set(raw) - STRUCTURAL_COMPONENT_KEYS)
     _require(not unknown, f"UNKNOWN_STRUCTURAL_COMPARISON_FIELD:{axis}:{','.join(unknown)}")
+    if "axis" in raw:
+        _require(str(raw["axis"]) == axis, f"STRUCTURAL_COMPARISON_AXIS_MISMATCH:{axis}")
     _require("status" in raw, f"STRUCTURAL_COMPARISON_STATUS_REQUIRED:{axis}")
     _require("facts" in raw, f"STRUCTURAL_COMPARISON_FACTS_REQUIRED:{axis}")
     reasons = raw.get("reason_codes", [])
