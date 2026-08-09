@@ -93,9 +93,17 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
             self.assertEqual("BLOCKED_CONSUMED_TOKEN_PRESERVED", self.pointer["wp10_v0_6_execution_route"])
         if self.pointer.get("wp10_v0_7_execution_route"):
             self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
-            self.assertEqual("BLOCKED_SEGMENTATION_BINDING_MISMATCH_CONSUMED_RUN_PRESERVED", self.pointer["wp10_v0_7_execution_route"])
+            self.assertIn(self.pointer["wp10_v0_7_execution_route"], {
+                "BLOCKED_SEGMENTATION_BINDING_MISMATCH_CONSUMED_RUN_PRESERVED",
+                "SUPERSEDED_OUTPUT_COUNT_ASSERTION_ONLY_BLOCKED_RUN_PRESERVED",
+            })
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
         else:
             self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V06_EXECUTION_BLOCKER.json"))
+        if self.pointer.get("current_gate") == "SRFDI-G10B":
+            self.assertEqual("AUTHORIZED_REMEDIATION_ONLY", self.pointer["status"])
+            self.assertEqual("SRFDI-WP10B", self.pointer["next_packet"])
+            self.assertEqual("SRFDI-G10B-FREEZE", self.pointer["stop_at"])
         self.assertFalse(self.pointer["operator_decision_required"])
 
 
