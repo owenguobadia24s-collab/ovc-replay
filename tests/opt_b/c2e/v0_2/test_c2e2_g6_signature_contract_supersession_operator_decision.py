@@ -42,7 +42,15 @@ class C2E2G6SignatureContractSupersessionOperatorDecisionTests(unittest.TestCase
             "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T100800+0100",
             self.pointer["operator_decision_history"],
         )
-        self.assertEqual(self.pointer["wp6_execution"], "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION")
+        self.assertIn(self.pointer["wp6_execution"], {
+            "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
+            "AUTHORIZED_NOT_STARTED",
+        })
+        if self.pointer["wp6_execution"] == "AUTHORIZED_NOT_STARTED":
+            self.assertIn(
+                "C2E2-G6-RUN-AUTH.OPERATOR.AUTHORIZE_EXACT_RUN.20260809T145800+0100",
+                self.pointer["operator_decision_history"],
+            )
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
