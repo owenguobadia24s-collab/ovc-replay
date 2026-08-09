@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-irof-qa-packet/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "packet_id": "IROF-WP5",
+  "gate_id": "IROF-G6",
+  "plan_version": "0.1",
+  "baseline_commit": "81948879808e61c728397db702edfbe5afaa7344",
+  "reconciled_main_commit": "9d42780d80bffe2326130d9c2f1fce357d249500",
+  "tested_head": "cf2b588b39cc3d5edc9772ea3cbc045918be4aec",
+  "authority_delta": "deterministic execution recovery only",
+  "ci": {
+    "status": "PASS",
+    "tests_workflow": "31306753669 SUCCESS",
+    "tiered_assurance_workflow": "31306753682 SUCCESS",
+    "merge_readiness": "SUCCESS"
+  },
+  "base_reconciliation": {
+    "status": "PASS_NO_SCOPE_CONFLICT",
+    "main_change": "C2E2-G6 signature-contract SUPERSEDE; bounded C2E repair preparation only; real WP6 remains denied pending fresh exact C2E2-G6 run authority",
+    "irof_wp5_effect": "NONE; generic checkpoint/restart recovery does not resolve or consume C2E authority"
+  },
+  "acceptance": {
+    "complete_only_reuse": "PASS",
+    "corruption_quarantine": "PASS",
+    "descendant_rerun": "PASS",
+    "ancestor_reuse": "PASS",
+    "opaque_substage_reference_only": "PASS",
+    "fresh_repeat_resume_equivalence": "PASS",
+    "attempt_identity_non_scientific": "PASS"
+  },
+  "final_record_head_ci": {"status": "PENDING"},
+  "blocking_issues": [],
+  "qa_recommendation": "PASS",
+  "rollback": "discard checkpoint/restart metadata and rerun fresh under unchanged stage contracts"
+}
