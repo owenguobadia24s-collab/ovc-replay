@@ -66,8 +66,7 @@ class C2EAG0R2OperatorPassTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["ag1_gate_preparation"], "AUTHORIZED")
         self.assertEqual(self.state["authority"]["ag2_progression"], "DENIED_PENDING_AG1")
         self.assertEqual(self.state["authority"]["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["status"], "READY")
-        self.assertFalse(self.pointer["operator_decision_required"])
+        self.assertIn(self.pointer["status"], {"READY", "GATE_READY"})
         self.assertEqual(self.pointer["current_packet"], "C2E-AG1-PREP")
         self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
         self.assertEqual(self.pointer["candidate_boundary_pack_id"], PACK_ID)
@@ -77,6 +76,13 @@ class C2EAG0R2OperatorPassTests(unittest.TestCase):
         )
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        self.assertIn(PASS_ID, self.pointer["operator_decision_history"])
+        if self.pointer["status"] == "READY":
+            self.assertFalse(self.pointer["operator_decision_required"])
+        else:
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["recommended_operator_decision"], "DEFER")
+            self.assertEqual(self.pointer["ag2_progression"], "DENIED_PENDING_AG1")
 
     def test_qa_passes_without_hiding_replay_warnings(self):
         self.assertEqual(self.qa["qa_disposition"], "PASS")
