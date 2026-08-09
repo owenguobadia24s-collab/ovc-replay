@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-grt-wp2-wp7-implementation-manifest/v1",
+  "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
+  "packets": ["GRT-WP2","GRT-WP3","GRT-WP4","GRT-WP5","GRT-WP6","GRT-WP7"],
+  "status": "IMPLEMENTED_AWAITING_EXACT_HEAD_ASSURANCE_AND_GRT_G7",
+  "authority_effect": "NONE_DERIVED_TOPOLOGY_IMPLEMENTATION_ONLY",
+  "capabilities": {
+    "typed_contracts_schemas_rule_pack": "IMPLEMENTED",
+    "deterministic_git_scanner": "IMPLEMENTED",
+    "programme_component_ownership_crosswalk": "IMPLEMENTED_DERIVED_ONLY",
+    "component_dependency_projection": "IMPLEMENTED_DERIVED_ONLY",
+    "programme_dependency_reference_projection": "IMPLEMENTED_SOURCE_REFERENCED_ONLY",
+    "health_anomaly_projection": "IMPLEMENTED_ADVISORY_ONLY",
+    "deterministic_read_model": "IMPLEMENTED",
+    "compact_summary": "IMPLEMENTED",
+    "build_manifest": "IMPLEMENTED",
+    "full_clean_rebuild_twice": "PENDING_EXACT_HEAD_CI"
+  },
+  "frozen_invariants": [
+    "PROGRAMME_GENESIS_REMAINS_CANONICAL",
+    "NO_TOPOLOGY_EDGE_HAS_AUTHORITY_EFFECT",
+    "INFERRED_DEPENDENCY_CANNOT_SATISFY_HARD_GENESIS_PREREQUISITE",
+    "UNKNOWN_OWNER_REMAINS_UNRESOLVED",
+    "NO_OPAQUE_HEALTH_SCORE",
+    "TOPOLOGY_IDENTITY_EXCLUDES_RUNTIME_AND_HOST_METADATA",
+    "READ_MODEL_IS_REPLACEABLE",
+    "NO_VALIDATION_CONSUMPTION",
+    "NO_CONTROL_PLANE_ROUTE_ACTIVATION_OR_WRITE"
+  ],
+  "next_gate": "GRT-G7",
+  "gate_class": "AUTO_RATIFIABLE_IF_DETERMINISTIC_REBUILD_AND_ASSURANCE_PASS",
+  "rollback": "Discard derived implementation and generated outputs; preserve GRT-G0/G1 decisions and all authoritative upstream records."
+}

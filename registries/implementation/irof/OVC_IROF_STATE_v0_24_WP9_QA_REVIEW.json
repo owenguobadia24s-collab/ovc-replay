@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-programme-state/v0.1",
+  "programme_id": "OVC-IROF-v0.1",
+  "plan_id": "OVC-IROF-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "IROF-WP9",
+  "status": "QA_REVIEW",
+  "prerequisites": [
+    "IROF-G9 PASS",
+    "IROF-WP8 squash merged at 1d527cadd1b0c27cbb9ab6e01b059d90cb680c50"
+  ],
+  "authority_required": "SATISFIED_BOUNDED_LOCAL_SYNTHETIC_EXECUTION",
+  "authority_delta": "local synthetic golden integration and determinism assurance only",
+  "baseline_commit": "1d527cadd1b0c27cbb9ab6e01b059d90cb680c50",
+  "branch": "feat/irof-wp9-golden-full-chain",
+  "candidate_commit": null,
+  "tests": [
+    "tests/research_orchestration/test_wp9_full_chain.py PENDING",
+    "tests/research_orchestration/test_wp9_restart_cache_order.py PENDING",
+    "repository exact-head CI PENDING"
+  ],
+  "qa_packet": "docs/releases/irof-v0-1/irof-wp9/IROF_WP9_IMPLEMENTATION_RECEIPT.md",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "warnings": [
+    "C2E real replay remains separately denied; golden C2E records are synthetic producer handoff fixtures only",
+    "family and representation outputs remain inactive conformance evidence with no method promotion",
+    "Validation remains locked and unconsumed"
+  ],
+  "next_packet": "IROF-WP10_AFTER_IROF_G10_PASS_AND_MERGE"
+}

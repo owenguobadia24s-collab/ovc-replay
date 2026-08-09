@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-genesis-repository-topology-wp0-qa/v1",
+  "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
+  "packet_id": "GRT-WP0",
+  "baseline_commit": "1070df70e04bef9541e36461e76e97dfbca6ea20",
+  "status": "PASS_WITH_WARNING",
+  "checks": [
+    {"check_id":"GRT-WP0-QA-01","name":"Latest lawful main pinned","status":"PASS","evidence":"1070df70e04bef9541e36461e76e97dfbca6ea20"},
+    {"check_id":"GRT-WP0-QA-02","name":"Programme Genesis canonical state read","status":"PASS","evidence":"registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json"},
+    {"check_id":"GRT-WP0-QA-03","name":"PGN DEFER_ALL state preserved","status":"PASS","evidence":"docs/releases/programme-genesis-native-portfolio-v0-2/pgn-g3-native-adoption/PGN_G3_OPERATOR_DECISION.json"},
+    {"check_id":"GRT-WP0-QA-04","name":"Research Operations reuse surface identified","status":"PASS","evidence":"registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml"},
+    {"check_id":"GRT-WP0-QA-05","name":"Existing graph/read-model/crosswalk primitives inspected","status":"PASS","evidence":["src/ovc/programme_genesis/graph.py","src/ovc/programme_genesis/read_model.py","src/ovc/research_operations/catalogue.py","src/ovc/research_operations/read_model.py","contracts/governance/programme_genesis/OVC_PGN_ARTIFACT_GOVERNANCE_CROSSWALK_CONTRACT_v0_1.md"]},
+    {"check_id":"GRT-WP0-QA-06","name":"No competing authority registry introduced","status":"PASS","evidence":"WP0 changes are docs/releases preflight/gate artifacts only"},
+    {"check_id":"GRT-WP0-QA-07","name":"No topology implementation before GRT-G0","status":"PASS","evidence":"No src/contracts/schemas/registries/fixtures/tests/scripts/tools/workflows/app code modified"},
+    {"check_id":"GRT-WP0-QA-08","name":"Control Plane route remains disabled","status":"PASS","evidence":"PG-G6 READ_ONLY_ROUTE=DEFER; adapter enabled=false route_registered=false"},
+    {"check_id":"GRT-WP0-QA-09","name":"Potential stale adapter status surfaced without repair","status":"WARN","evidence":"registry still says PENDING_PG_G6 while accepted PG-G6 decision is DEFER"},
+    {"check_id":"GRT-WP0-QA-10","name":"Operator gate stop enforced","status":"PASS","evidence":"GRT-G0 remains OPERATOR_REQUIRED"}
+  ],
+  "blockers": [],
+  "warnings": ["CONTROL_PLANE_ADAPTER_REGISTRY_STATUS_STALE_CANDIDATE"],
+  "recommended_gate_disposition": "PASS",
+  "authority_effect": "NONE"
+}

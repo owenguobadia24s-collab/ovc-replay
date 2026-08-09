@@ -1,0 +1,35 @@
+schema: ovc-irof-scaling-ladder/v0.1
+scientific_pack_id: IROF.WP10.SCIENTIFIC_PACK.v0_1
+scientific_pack_policy: IDENTICAL_ACROSS_LADDER
+cases:
+  - case_id: MICRO
+    n: 8
+    capacity_tier: MICRO
+  - case_id: SMALL
+    n: 16
+    capacity_tier: SMALL
+  - case_id: MEDIUM
+    n: 32
+    capacity_tier: MEDIUM
+  - case_id: LARGE_FIXTURE
+    n: 64
+    capacity_tier: LARGE
+measurement_policy:
+  wall_seconds: RUNTIME_MEASURED
+  cpu_seconds: RUNTIME_MEASURED
+  core_seconds: RUNTIME_MEASURED_SINGLE_WORKER
+  peak_rss_bytes: REPORT_UNAVAILABLE_WHERE_PORTABLE_MEASUREMENT_ABSENT
+  artifact_bytes: EXACT_SERIALIZED_BYTES
+  pair_count: EXACT_WORK_COUNT
+  cache_no_cache: SAME_SCIENTIFIC_OUTPUT_REQUIRED
+  checkpoint_overhead: RUNTIME_MEASURED
+  restart_recovery_cost: RUNTIME_MEASURED
+  parallelism_efficiency: NOT_APPLICABLE_UNLESS_ACTUAL_PARALLEL_EXECUTION_MEASURED
+shape_vocabulary:
+  - APPROX_LINEAR_OBSERVED
+  - SUPER_LINEAR_OBSERVED
+  - KNOWN_QUADRATIC_WORK_COUNT
+  - FIXED_OVERHEAD_DOMINANT
+  - UNRESOLVED
+production_sla_authority: NONE
+authority_effect: NONE
