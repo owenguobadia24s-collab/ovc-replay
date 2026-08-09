@@ -57,9 +57,10 @@ assert result["counts"] == {
 assert opt_a["summary"]["derived_counts"] == {"15M": {"BID": 479, "ASK": 479}, "2H_A_L": {"BID": 58, "ASK": 58}}
 assert opt_a["summary"]["quarantine_count"] == 8
 assert opt_a["summary"]["quarantine_reason_counts"] == {"INCOMPLETE_OR_NONCONTIGUOUS_M1_BUCKET": 8}
-assert "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH" in result["conformance_warnings"]
+assert result["conformance_warnings"] == []
 assert result["c2e_fixture_boundary_required_axes"] == ["LOCATION", "ORGANISATION"]
-assert result["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0) == 932
+assert result["c2_axis_computability_counts"].get("MOTION:COMPUTABLE", 0) == 932
+assert result["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0) == 0
 assert not result["real_source_replay"]
 assert not result["validation_consumed"]
 assert result["authority_effect"] == "NONE"
@@ -86,12 +87,10 @@ assert result["authority_effect"] == "NONE"
         self.assertTrue(compact["alternate_order_equivalent"])
         self.assertEqual(1074, compact["counts"]["c1"])
         self.assertEqual(8, compact["opt_a_quarantine_count"])
-        self.assertIn(
-            "C2_HORIZON_MEMBERSHIP_STATUS_COMPUTABLE_VS_MOTION_PROFILE_COMPLETE_VOCABULARY_MISMATCH",
-            compact["conformance_warnings"],
-        )
+        self.assertEqual([], compact["conformance_warnings"])
         self.assertEqual(["LOCATION", "ORGANISATION"], compact["c2e_fixture_boundary_required_axes"])
-        self.assertEqual(932, compact["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0))
+        self.assertEqual(932, compact["c2_axis_computability_counts"].get("MOTION:COMPUTABLE", 0))
+        self.assertEqual(0, compact["c2_axis_computability_counts"].get("MOTION:NOT_COMPUTABLE", 0))
         self.assertFalse(compact["real_source_replay"])
         self.assertFalse(compact["validation_consumed"])
         self.assertEqual("NONE", compact["authority_effect"])
