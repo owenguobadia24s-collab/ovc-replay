@@ -1,0 +1,15 @@
+{
+  "schema":"ovc-irof-qa-packet/v0.1",
+  "programme_id":"OVC-IROF-v0.1",
+  "packet_id":"IROF-WP8",
+  "gate_id":"IROF-G9",
+  "plan_version":"0.1",
+  "baseline_commit":"9a06287bc0a5f352102a74fe184925817ca31a88",
+  "authority_delta":"inactive current-layer adapter/profile wiring only",
+  "source_state":{"c2e":"SIGNATURE_REPAIR_MERGED; REAL_REPLAY_STILL_DENIED_PENDING_FRESH_EXACT_RUN_AUTH","sfc":"COMPLETED_INACTIVE_NONCANONICAL","occurrence_context":"CONTEXT_ONLY_DEFAULT"},
+  "static_review":{"status":"PASS","checks":["exact current source modules registered","historical C2 fallback excluded","C2E/SFC real execution denied by adapter mode","owner output references/hashes relayed without repair","direct owner callable output remains exact","SRFD v0.4 rule-pack metric fields preserved","OccurrenceContext REPRESENTATION_INPUT rejected by default","required profile registry already complete","MCARB remains unavailable separate extension"]},
+  "ci":{"status":"PENDING_EXACT_HEAD"},
+  "blocking_issues":[],
+  "recommended_decision":"PASS_IF_EXACT_HEAD_CI_AND_REVIEW_THREADS_PASS",
+  "rollback":"unregister IROF current-layer bindings; owner stages, outputs, selectors and contracts remain unchanged"
+}
