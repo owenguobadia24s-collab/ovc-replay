@@ -1,0 +1,44 @@
+{
+  "authority_effect": "NONE",
+  "basis_for_approval": "Plan explicitly permits two clean deterministic source replays OR approved equivalence proof. This proof approves semantic equivalence only for WP6 evidence-integrity acceptance and does not grant runtime, pack, selector, publication or activation authority.",
+  "canonical_runtime": {
+    "candidate_git_blob": "a827da3c76688302a19e3aeafacd1e246f4f0ee3",
+    "ci_head": "ecfd1bd4e27fef7ab97dbac1dfddaa70b393314c",
+    "ci_workflows": [
+      {"conclusion": "success", "id": 31319096188, "name": "tests"},
+      {"conclusion": "success", "id": 31319096190, "name": "OVC tiered test selection shadow"}
+    ],
+    "implementation_head": "dbefa0d3cf5568c812654b1690c5393efec233f5",
+    "source_replay_git_blob": "44963566ffca24c5d8bd6a9e1fd64bdb0fcc55bc",
+    "source_replay_runtime_git_blob": "4f83435e4e726f09e018eac2c1f661bce86670b8",
+    "stable_signatures_git_blob": "e7cd3dd10f2ff8c8dc1168cdffbb88d58ada4306"
+  },
+  "explicit_nonclaim": "NOT_BYTE_EQUIVALENCE_TO_CANONICAL_RUNTIME_SERIALIZED_STREAM",
+  "external_evidence": {
+    "drive_folder_id": "11so_HTtlGKz_dYVShCP01Dznphm04rPC",
+    "executor_file_id": "1ZxL5oubGYzI_gTyF4v4-HyBgK97fBaVe",
+    "run_a_file_id": "1ow8KUjE77trZU-NnVoSWXgDZwEN1ViTF",
+    "run_b_file_id": "1TOIghV9q6pk3euOASotYE17nYV2mwSj-",
+    "runner_file_id": "1ysVcVnNsuoD0qAdMZ_c1NUFgyingV-Gk"
+  },
+  "external_executor": {"class": "EXTERNAL_EQUIVALENCE_EXECUTOR", "sha256": "98e87b229ad82475970b72da169b115aa99eb736926b97ce2c1b339c9028fe6a"},
+  "frozen_rule_match_counts": {
+    "C2E.RULE.JUNE.BASELINE.BIRTH.v1": 92,
+    "C2E.RULE.JUNE.BASELINE.CENSOR_GAP.v1": 90,
+    "C2E.RULE.JUNE.BASELINE.CONTINUATION.v1": 3980,
+    "C2E.RULE.JUNE.BASELINE.PHASE_MUTATION.v1": 3838,
+    "C2E.RULE.JUNE.BASELINE.RE_PARENT.v1": 488
+  },
+  "independent_checks": [
+    {"assertion": "All 4,072 real-source frame matched-rule sets equal a direct recomputation from continuity segment, stable structural signature and stable parent signature under the frozen threshold-free v2 algebra.", "denominator": 4072, "id": "EQ-01", "mismatch_count": 0, "status": "PASS"},
+    {"assertion": "All 488 RE_PARENT matches were independently checked against source parent-context computability; the 34 non-evaluable frames are exactly the 34 source frames lacking computable parent context.", "id": "EQ-02", "matched_count": 488, "not_evaluable_count": 34, "set_equality": true, "status": "PASS"},
+    {"assertion": "Frozen compatibility matrix independently produces zero incompatible evaluable candidate pairs across the exact population.", "conflict_count": 0, "denominator": 4072, "id": "EQ-03", "status": "PASS"},
+    {"action_counts": {"BIRTH": 92, "CENSOR_GAP": 90, "CENSOR_RELEASE_END": 2, "CONTINUATION": 3980, "PHASE_MUTATION": 3838, "RE_PARENT": 454}, "assertion": "Action algebra reconciles exactly: each side starts with BIRTH; every continuity-segment change produces CENSOR_GAP+BIRTH; every contiguous frame produces CONTINUATION; stable-signature changes produce PHASE_MUTATION/RE_PARENT only when evaluable; release end produces exactly two censors.", "id": "EQ-04", "status": "PASS"},
+    {"all_scientific_artifact_hashes_equal": true, "assertion": "Two clean source passes through the hash-pinned external executor produce identical logical output and identical hashes for every scientific artifact; only runtime telemetry differs.", "id": "EQ-05", "logical_output_sha256": "18519e37a16bc1f73148f3764ec1444d1fcd36fce82e9a1d585f712fb02d6988", "status": "PASS"}
+  ],
+  "packet_id": "C2E2-WP6",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "proof_class": "APPROVED_SEMANTIC_EQUIVALENCE_FOR_WP6_EVIDENCE_INTEGRITY",
+  "schema": "ovc-c2e2-wp6-equivalence-proof/v1",
+  "scope": "REAL_SOURCE_FRAME_PROJECTION_BOUNDARY_ALGEBRA_CANDIDATE_EVALUABILITY_RESOLUTION_AND_LIFECYCLE_ACTION_SEQUENCE"
+}
