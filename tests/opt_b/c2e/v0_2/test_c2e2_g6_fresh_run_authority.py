@@ -98,7 +98,7 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["wp6_execution"], "AUTHORIZED_NOT_STARTED")
         self.assertEqual(self.state["authority"]["real_source_replay"], "AUTHORIZED_NOT_STARTED")
-        self.assertIn(self.pointer["status"], {"QA_REVIEW", "READY"})
+        self.assertIn(self.pointer["status"], {"QA_REVIEW", "READY", "GATE_READY"})
         self.assertIn(self.pointer["wp6_execution"], {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"})
         self.assertIn(
             self.pointer["real_source_replay"],
