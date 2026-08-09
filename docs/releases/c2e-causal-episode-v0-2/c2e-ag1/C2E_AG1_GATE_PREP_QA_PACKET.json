@@ -1,0 +1,38 @@
+{
+  "schema": "c2e-ag1-gate-prep-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "gate_id": "C2E-AG1",
+  "packet_id": "C2E-AG1-PREP",
+  "baseline_commit": "dd2182f22b0223f7193332dfc7b482509031ceeb",
+  "qa_disposition": "PASS_FOR_OPERATOR_REVIEW",
+  "operator_gate_recommendation": "DEFER",
+  "authority_effect": "NONE_GATE_PREPARATION_ONLY",
+  "checks": {
+    "ag0_pass_is_merged_and_exact": "PASS",
+    "exact_candidate_pack_and_population_preserved": "PASS",
+    "source_run_manifest_and_resource_envelope_exact": "PASS",
+    "two_clean_run_determinism_present": "PASS",
+    "source_coverage_and_counts_reconcile": "PASS",
+    "gap_release_conflict_topology_evidence_visible": "PASS",
+    "capacity_evidence_within_t0": "PASS",
+    "real_source_restart_gap_visible_not_inferred": "PASS",
+    "ag2_progression_remains_denied": "PASS",
+    "active_c2e_and_active_pack_remain_none": "PASS",
+    "selector_publication_validation_and_risk_authority_unchanged": "PASS"
+  },
+  "ag1_pass_condition_status": {
+    "restart_equivalence": "NOT_MET_REAL_SOURCE_EVIDENCE_GAP",
+    "all_other_minimum_evidence": "PRESENT"
+  },
+  "warnings": [
+    "REAL_SOURCE_RESTART_EQUIVALENCE_NOT_SEPARATELY_MATERIALIZED_IN_WP6_POSTRUN_PACKET",
+    "WP6_EQUIVALENCE_PROOF_IS_SEMANTIC_NOT_CANONICAL_RUNTIME_BYTE_STREAM_EQUIVALENCE",
+    "SRFD_CURRENT_COMPARATOR_UNAVAILABLE_DUE_EXISTING_SRFDI_WP10_V07_SEGMENTATION_BINDING_BLOCKER_AG2_RELEVANT_NOT_AG1_RESTART_SUBSTITUTE"
+  ],
+  "blockers_to_gate_preparation": [],
+  "blockers_to_recommended_ag1_pass": ["C2E-AG1-GAP-001_RESTART_EQUIVALENCE"],
+  "qa_rationale": "The AG1 packet is complete and decision-ready because the required evidence gap is explicit rather than hidden. QA therefore passes gate preparation but recommends DEFER at the operator gate until exact real-source restart equivalence is materialized or the operator explicitly accepts that limitation.",
+  "rollback": "Revert or append-only supersede only AG1 preparation artifacts; preserve AG0 PASS, WP6/WP7 evidence, consumed token, candidate identity and all reserved denials.",
+  "next_action": "RUN_EXACT_HEAD_ASSURANCE_MERGE_ZERO_DELTA_GATE_PREP_THEN_STOP_AT_C2E_AG1"
+}
