@@ -68,6 +68,15 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
             self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY", self.pointer["june_execution"])
             self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
             self.assertTrue(self.pointer["authority_token_consumed"])
+        elif self.pointer["current_gate"] == "SRFDI-G10" and self.pointer["status"] == "RUNNING":
+            self.assertEqual("SRFDI-WP10-v0.9-RESUME", self.pointer["next_packet"])
+            self.assertEqual(FRESH_V09, self.pointer["fresh_authority_token_id"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual(V09_BINDING, self.pointer["run_binding_sha256"])
+            self.assertEqual("RUNNING_EXACT_BOUND_V09_FROM_COMMITTED_CHECKPOINT", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
+            self.assertTrue(self.pointer["authority_token_consumed"])
         elif self.pointer["status"] == "READY" and self.pointer.get("current_gate") != "SRFDI-G-JUNE-AUTH":
             self.assertEqual("SRFDI-WP10-v0.7", self.pointer["next_packet"])
             self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED", self.pointer["june_execution"])
