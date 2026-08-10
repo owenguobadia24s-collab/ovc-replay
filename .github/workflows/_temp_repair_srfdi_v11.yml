@@ -1,4 +1,4 @@
-name: TEMP repair SRFDI v1.1 uploaded byte
+name: TEMP repair SRFDI v1.1 checkpoint performance
 
 on:
   push:
@@ -18,27 +18,28 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: remediate/srfdi-wp10-v11-execution-substrate-20260810
-      - name: Repair exact corrupted byte and verify syntax
+      - name: Add in-process checkpoint latest cache without changing checkpoint identity
         run: |
           python - <<'PY'
           from pathlib import Path
           p=Path('src/ovc/opt_b/srfd/wp10_v11_hardening.py')
-          b=p.read_bytes()
-          if b'\x1b' not in b:
-              print('No ESC byte present')
-          else:
-              if b.count(b'\x1b') != 1:
-                  raise SystemExit(f'unexpected ESC count {b.count(b"\x1b")}')
-              b=b.replace(b'\x1b', b'[')
-              p.write_bytes(b)
-              print('Repaired exactly one ESC byte')
+          text=p.read_text()
+          marker='class WorkUnitContractError(ValueError):\n'
+          cls='''class CachedRunCheckpointStoreV11(RunCheckpointStore):\n    """Cache only the latest validated checkpoint inside one process.\n\n    A fresh process still performs the parent store's complete contiguous-chain\n    validation once. Checkpoint payloads, identities and files remain exactly the\n    parent RunCheckpointStore format; only repeated O(n) rescans during one\n    uninterrupted process are avoided.\n    """\n\n    def __init__(self, root: Path) -> None:\n        super().__init__(root)\n        self._latest_cache: dict[tuple[str, str], Any] = {}\n        self._latest_seen: set[tuple[str, str]] = set()\n\n    def _cache_key(self, start, binding) -> tuple[str, str]:\n        return (start.run_id, binding.logical_hash)\n\n    def latest(self, start, binding, *, allow_missing: bool = False):\n        key = self._cache_key(start, binding)\n        if key in self._latest_seen:\n            receipt = self._latest_cache.get(key)\n            if receipt is None and not allow_missing:\n                raise ExecutionResilienceError("CHECKPOINT_MISSING", "no committed checkpoint exists")\n            return receipt\n        receipt = super().latest(start, binding, allow_missing=allow_missing)\n        self._latest_seen.add(key)\n        self._latest_cache[key] = receipt\n        return receipt\n\n    def commit(self, start, binding, completed):\n        receipt = super().commit(start, binding, completed)\n        key = self._cache_key(start, binding)\n        self._latest_seen.add(key)\n        self._latest_cache[key] = receipt\n        return receipt\n\n\n'''
+          if 'class CachedRunCheckpointStoreV11' not in text:
+              if marker not in text:
+                  raise SystemExit('insertion marker missing')
+              text=text.replace(marker, cls+marker, 1)
+          text=text.replace('checkpoints = RunCheckpointStore(root)', 'checkpoints = CachedRunCheckpointStoreV11(root)')
+          text=text.replace('"checkpoint_store": "RunCheckpointStore",', '"checkpoint_store": "CachedRunCheckpointStoreV11_WIRE_IDENTICAL_RUN_CHECKPOINT_STORE",')
+          p.write_text(text)
           PY
           python -m py_compile src/ovc/opt_b/srfd/wp10_v11_hardening.py
-      - name: Commit repair if needed
+      - name: Commit checkpoint performance hardening if needed
         run: |
           if git diff --quiet; then exit 0; fi
           git config user.name 'ovc-remediation-bot'
           git config user.email 'actions@users.noreply.github.com'
           git add src/ovc/opt_b/srfd/wp10_v11_hardening.py
-          git commit -m 'Fix uploaded SRFDI v1.1 hardening source byte'
+          git commit -m 'Harden SRFDI v1.1 checkpoint path for full rehearsal'
           git push origin HEAD:remediate/srfdi-wp10-v11-execution-substrate-20260810
