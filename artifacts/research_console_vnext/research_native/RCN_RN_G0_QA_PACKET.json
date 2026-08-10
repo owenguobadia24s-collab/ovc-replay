@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-rcn-rn-g0-qa/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.2-RATIFIED",
+  "packet_id": "RCN-RN-WP0",
+  "gate_id": "RCN-RN-G0",
+  "qa_recommendation": "PASS",
+  "acceptance": {
+    "history_preserved": "PASS",
+    "chart_dependency_removal": "NONE",
+    "admission_checklist": "PASS",
+    "new_source_exposure": "NONE",
+    "authority_expansion_beyond_plan": "NONE"
+  },
+  "tests_required": [
+    "tests/research_console_vnext/test_research_native_wp0.py",
+    "complete repository suite",
+    "OVC profile/tiered/merge-readiness"
+  ],
+  "warnings": ["PR #545 is stale and must be closed only after this supersession record is on main."],
+  "blockers": [],
+  "rollback": "Revert the WP0 squash merge with a new non-destructive commit if the materialisation record is incorrect. Do not delete v0.1 evidence, rewrite Git history, remove chart dependencies, or expose real sources."
+}

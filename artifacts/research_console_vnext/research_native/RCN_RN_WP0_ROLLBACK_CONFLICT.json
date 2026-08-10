@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-rcn-rn-wp0-rollback-conflict/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "packet_id": "RCN-RN-WP0",
+  "conflicts": [
+    {
+      "object": "PR #545",
+      "type": "STALE_PRODUCT_ACCEPTANCE_QUESTION",
+      "resolution": "Preserve commits, tests and evidence; supersede only its acceptance question; close the PR after the WP0 court-record merge; never merge it as v0.2 acceptance."
+    }
+  ],
+  "unsafe_conflicts": [],
+  "rollback": "Revert the WP0 squash merge with a new non-destructive commit if the materialisation record is incorrect. Do not delete v0.1 evidence, rewrite Git history, remove chart dependencies, or expose real sources.",
+  "destructive_actions": false
+}
