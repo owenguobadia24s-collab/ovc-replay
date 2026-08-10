@@ -1,0 +1,55 @@
+name: TEMP SRFDI v1.1 ready pointer
+
+on:
+  push:
+    branches:
+      - auth/srfdi-wp10-v11-exact-run-20260810
+    paths:
+      - '.github/workflows/_temp_srfdi_v11_ready_pointer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pointer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: auth/srfdi-wp10-v11-exact-run-20260810
+      - run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('registries/implementation/srfd/CURRENT_STATE_POINTER.json')
+          d=json.loads(p.read_text())
+          d.update({
+            'authoritative_state':'registries/implementation/srfd/OVC_SRFDI_STATE_v0_48_WP10_V11_READY.json',
+            'status':'READY',
+            'current_gate':'SRFDI-G-JUNE-AUTH-v1.1',
+            'active_packet':'SRFDI-WP10-v1.1',
+            'science_identity_sha256':'ae349cc8f8679a5f85d3eb5a7474999ffa0651b161916680725d141904e40737',
+            'run_binding_sha256':'1526610575dcd22b066d494c022ba2f443bb099b4f521872c2984765481c58a6',
+            'fresh_authority_token_id':'SRFD.JUNE.AUTH.f80920b2b4d03e00add6621cdda4abdc761f5abf98dae6f072e643f4aaed7f04',
+            'fresh_authority_token_state':'AUTHORIZED_UNCONSUMED',
+            'fresh_authority_token_consumed':False,
+            'june_execution':'AUTHORIZED_V11_UNCONSUMED_PENDING_EXACT_PREFLIGHT',
+            'next_packet':'SRFDI-WP10-v1.1-PREFLIGHT-AND-RUN',
+            'next_action':'RUN_EXACT_V11_PREFLIGHT_THEN_CONSUME_TOKEN_ON_PASS_AND_EXECUTE',
+            'operator_decision_required':False,
+            'operator_decision':'AUTHORIZE_EXACT_V11_AFTER_PREFLIGHT',
+            'operator_decision_id':'SRFDI-WP10-v1.1-OPERATOR-AUTHORIZE-20260810T210100+0100',
+            'failure_reason':None,
+            'wp10_v1_0_execution_route':'BLOCKED_DISPATCH_OUTPUT_CONTRACT_FAILURE_PRESERVED',
+            'wp10_v1_1_execution_route':'AUTHORIZED_UNCONSUMED_PENDING_EXACT_PREFLIGHT',
+            'provider_fetch':'DENIED','validation_2025':'LOCKED_UNCONSUMED',
+            'scientific_promotion':'NONE','selector_family_semantic_publication':'NONE','probability_risk_exposure_execution':'NONE',
+          })
+          p.write_text(json.dumps(d,sort_keys=True,separators=(',',':'))+'\n')
+          PY
+          git config user.name 'ovc-remediation-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add registries/implementation/srfd/CURRENT_STATE_POINTER.json
+          git commit -m 'Advance SRFDI pointer to v1.1 exact preflight-ready authority'
+          git push origin HEAD:auth/srfdi-wp10-v11-exact-run-20260810
