@@ -32,6 +32,7 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
     if self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH" and self.pointer["status"]=="GATE_READY": self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
     elif self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH": self.assertTrue(self.pointer["june_execution"].startswith("AUTHORIZED")); self.assertIsNotNone(self.pointer["fresh_authority_token_id"])
     elif self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="READY": self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY",self.pointer["june_execution"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
+    elif self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="RUNNING": self.assertEqual("RUNNING_EXACT_BOUND_V09_FROM_COMMITTED_CHECKPOINT",self.pointer["june_execution"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["fresh_authority_token_state"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
     else: self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED_NO_FRESH_RUN_AUTHORITY",self.pointer["june_execution"])
     self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1",self.pointer["effective_runner_implementation_binding_sha256"])
    else: self.assertEqual(historical_blob,git_blob,name)
@@ -52,6 +53,8 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
   else: self.assertIn(self.token["token_id"],json.dumps(self.pointer,sort_keys=True))
   if self.pointer.get("current_gate")=="SRFDI-G10" and self.pointer["status"]=="READY":
    self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertEqual("SRFDI-WP10-v0.9",self.pointer["next_packet"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
+  elif self.pointer.get("current_gate")=="SRFDI-G10" and self.pointer["status"]=="RUNNING":
+   self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["fresh_authority_token_state"]); self.assertEqual("SRFDI-WP10-v0.9-RESUME",self.pointer["next_packet"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
  def test_qa_is_fail_closed_pending_exact_authority_pr_head(self):
   self.assertEqual("PASS_PENDING_EXACT_HEAD_REPOSITORY_ASSURANCE",self.qa["qa_result"]); self.assertEqual([],self.qa["blocking_warnings"]); self.assertEqual([],self.qa["unresolved_issues"]); self.assertIn("FULL_REPOSITORY_SUITE",self.qa["exact_head_requirement"]); self.assertIn("TOKEN_BECOMES_EFFECTIVE",self.qa["on_exact_head_pass"])
 
