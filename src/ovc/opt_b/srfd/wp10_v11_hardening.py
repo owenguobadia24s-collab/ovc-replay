@@ -23,6 +23,43 @@ SYNTHETIC_TOKEN_ID = "SRFD.HARDENING.SYNTHETIC.AUTH.v1"
 SYNTHETIC_EXTERNAL_LIMIT_BYTES = 2 * 1024**3
 
 
+class CachedRunCheckpointStoreV11(RunCheckpointStore):
+    """Cache only the latest validated checkpoint inside one process.
+
+    A fresh process still performs the parent store's complete contiguous-chain
+    validation once. Checkpoint payloads, identities and files remain exactly the
+    parent RunCheckpointStore format; only repeated O(n) rescans during one
+    uninterrupted process are avoided.
+    """
+
+    def __init__(self, root: Path) -> None:
+        super().__init__(root)
+        self._latest_cache: dict[tuple[str, str], Any] = {}
+        self._latest_seen: set[tuple[str, str]] = set()
+
+    def _cache_key(self, start, binding) -> tuple[str, str]:
+        return (start.run_id, binding.logical_hash)
+
+    def latest(self, start, binding, *, allow_missing: bool = False):
+        key = self._cache_key(start, binding)
+        if key in self._latest_seen:
+            receipt = self._latest_cache.get(key)
+            if receipt is None and not allow_missing:
+                raise ExecutionResilienceError("CHECKPOINT_MISSING", "no committed checkpoint exists")
+            return receipt
+        receipt = super().latest(start, binding, allow_missing=allow_missing)
+        self._latest_seen.add(key)
+        self._latest_cache[key] = receipt
+        return receipt
+
+    def commit(self, start, binding, completed):
+        receipt = super().commit(start, binding, completed)
+        key = self._cache_key(start, binding)
+        self._latest_seen.add(key)
+        self._latest_cache[key] = receipt
+        return receipt
+
+
 class WorkUnitContractError(ValueError):
     def __init__(self, reason_code: str, detail: str) -> None:
         self.reason_code = reason_code
@@ -313,7 +350,7 @@ def _run_plan(
         if exc.reason_code != "TOKEN_NOT_CONSUMED":
             raise
         start = authority.consume(synthetic_token(binding), binding)
-    checkpoints = RunCheckpointStore(root)
+    checkpoints = CachedRunCheckpointStoreV11(root)
     artifacts = ContentAddressedArtifactStoreV10(
         root,
         max_external_bytes=SYNTHETIC_EXTERNAL_LIMIT_BYTES,
@@ -416,7 +453,7 @@ def run_full_synthetic_rehearsal(root: Path) -> dict[str, Any]:
         "capacity_status": capacity["capacity_status"],
         "elapsed_wall_seconds_non_identity": elapsed,
         "scheduler": "execute_durable_resumable_units",
-        "checkpoint_store": "RunCheckpointStore",
+        "checkpoint_store": "CachedRunCheckpointStoreV11_WIRE_IDENTICAL_RUN_CHECKPOINT_STORE",
         "artifact_store": "ContentAddressedArtifactStoreV10/ContentAddressedArtifactStore",
         "work_unit_output_contract_validation": "ENFORCED_BEFORE_CAPACITY_ARTIFACT_CHECKPOINT_COMMIT",
         "provider_fetch": "DENIED",
