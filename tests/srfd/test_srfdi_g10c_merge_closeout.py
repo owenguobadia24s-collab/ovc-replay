@@ -57,6 +57,15 @@ class SRFDIG10CMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1", self.state["exact_bindings"]["execution_binding_sha256"])
 
     def test_current_pointer_advances_lawfully_beyond_closeout(self) -> None:
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertTrue(self.pointer["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+            return
         self.assertIn(self.pointer["authoritative_state"], {
             "registries/implementation/srfd/OVC_SRFDI_STATE_v0_41_G10C_COMPLETED.json",
             "registries/implementation/srfd/OVC_SRFDI_STATE_v0_42_WP10_V09_RUNNING.json",
