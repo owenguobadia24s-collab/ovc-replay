@@ -17,6 +17,7 @@ for (const viewport of viewports) {
     await expect(page.getByRole("status")).toContainText("NON-EVIDENTIARY");
     const canvas = page.getByTestId("primary-canvas");
     await expect(canvas).toBeVisible();
+    await expect(canvas).toHaveAttribute("data-chart-dynamics", "wp3f");
     await expect.poll(async () => (await canvas.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(viewport.minCanvas);
     const evidenceStack = page.getByRole("complementary", { name: "Evidence Stack" });
     await expect(evidenceStack).toContainText("C2E: NOT_MATERIALIZED");
@@ -27,7 +28,10 @@ for (const viewport of viewports) {
     await expect(page.getByTestId("chart-detail-hud")).toContainText("H");
     await expect(page.getByTestId("chart-detail-hud")).toContainText("L");
     await expect(page.getByTestId("chart-detail-hud")).toContainText("C");
-    await expect(page.locator('[data-chart-layer="reference-overlay"]')).toHaveAttribute("data-presentation-only", "true");
+    const overlay = page.locator('[data-chart-layer="reference-overlay"]');
+    await expect(overlay).toHaveAttribute("data-presentation-only", "true");
+    await expect(overlay).toHaveAttribute("data-coordinate-binding", "lightweight-chart-api");
+    await expect(page.getByTestId("wp3f-envelope-fill")).toBeVisible();
     await expect(page.locator('[data-chart-layer="navigator"]')).toHaveAttribute("data-presentation-only", "true");
     const barCount = Number(await page.getByTestId("chart-bar-count").textContent());
     expect(barCount).toBeGreaterThanOrEqual(32);
@@ -54,6 +58,25 @@ for (const [name, investigation, expectedState] of scenarios) {
     await page.screenshot({ path: path.join(screenshotRoot, `scenario-${name}-1440x810.png`), fullPage: false });
   });
 }
+
+test("WP3F binds the OHLC envelope to the exact chart coordinate box", async ({ page }) => {
+  await page.setViewportSize({ width: 1536, height: 864 });
+  await page.goto("/market?investigation=FX-PROTOTYPE-01");
+  const chartLayer = page.locator('[data-chart-layer="canvas"]');
+  const overlayLayer = page.locator('[data-chart-layer="reference-overlay"]');
+  await expect(overlayLayer).toHaveAttribute("data-coordinate-binding", "lightweight-chart-api");
+  const chartBox = await chartLayer.boundingBox();
+  const overlayBox = await overlayLayer.boundingBox();
+  expect(chartBox).not.toBeNull();
+  expect(overlayBox).not.toBeNull();
+  if (!chartBox || !overlayBox) throw new Error("WP3F chart geometry unavailable");
+  expect(Math.abs(chartBox.x - overlayBox.x)).toBeLessThanOrEqual(1);
+  expect(Math.abs(chartBox.y - overlayBox.y)).toBeLessThanOrEqual(1);
+  expect(Math.abs(chartBox.width - overlayBox.width)).toBeLessThanOrEqual(1);
+  expect(Math.abs(chartBox.height - overlayBox.height)).toBeLessThanOrEqual(1);
+  const envelopePath = await page.getByTestId("wp3f-envelope-fill").getAttribute("d");
+  expect(envelopePath?.length ?? 0).toBeGreaterThan(250);
+});
 
 test("WP3E reference lock reproduces the frozen 1536x864 major geometry", async ({ page }) => {
   await page.setViewportSize({ width: 1536, height: 864 });
