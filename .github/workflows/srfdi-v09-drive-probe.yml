@@ -19,13 +19,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python -m pip install --quiet gdown
           target="$RUNNER_TEMP/C2_15M_BID_LOCAL.jsonl"
-          curl -L --fail --retry 3 --retry-delay 2 \
-            "https://drive.usercontent.google.com/download?id=1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk&export=download&confirm=t" \
-            -o "$target"
+          gdown --id 1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk --output "$target"
+          sha256sum "$target"
+          wc -c "$target"
           echo "63a1d24836d3cd0aaad9e5a11e9b9ec51724bfd335fab47f538ed23f36e8c58b  $target" | sha256sum -c -
           python - <<'PY'
           from pathlib import Path
-          p=Path(__import__('os').environ['RUNNER_TEMP'])/'C2_15M_BID_LOCAL.jsonl'
+          import os
+          p=Path(os.environ['RUNNER_TEMP'])/'C2_15M_BID_LOCAL.jsonl'
           print({'bytes': p.stat().st_size, 'provider_fetch': 'DENIED', 'retrieval': 'ACCEPTED_GOOGLE_DRIVE_ARTIFACT_ONLY'})
           PY
