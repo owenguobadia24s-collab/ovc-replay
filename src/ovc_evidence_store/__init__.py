@@ -1,5 +1,8 @@
 """Deterministic construction, lifecycle and storage of OVC evidence releases."""
 
+from .capacity import CapacityEnvelope, project_storage_bytes
+from .checkpoints import AppendOnlyCheckpointStore, CheckpointReceipt
+from .content_addressed import ArtifactReceipt, ContentAddressedArtifactStore
 from .external_root import EXTERNAL_ROOT_ENV, resolve_external_root
 from .lifecycle import (
     FREEZE_RECEIPT_SCHEMA,
@@ -28,6 +31,11 @@ from .readiness import publication_readiness
 from .remote import upload, verify_remote
 
 __all__ = [
+    "AppendOnlyCheckpointStore",
+    "ArtifactReceipt",
+    "CapacityEnvelope",
+    "CheckpointReceipt",
+    "ContentAddressedArtifactStore",
     "EXTERNAL_ROOT_ENV",
     "FREEZE_RECEIPT_SCHEMA",
     "MANIFEST_SCHEMA",
@@ -42,6 +50,7 @@ __all__ = [
     "load_publication_approval",
     "load_workspace_inventory",
     "manifest_sha256",
+    "project_storage_bytes",
     "publication_readiness",
     "remote_keys",
     "resolve_external_root",
