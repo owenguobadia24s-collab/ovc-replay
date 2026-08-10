@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-rcn-rn-source-census/v2",
+  "baseline_commit": "28a3679e0f5c2a242db3c2e0618c8966ed2e311b",
+  "route_authority": "FIXTURE_ONLY; REAL_SOURCE_DENIED_UNTIL_RCN_RN_G4",
+  "sources": [
+    {"capability_id":"opt_a","owner":"OPT-A","source_path":"src/ovc/opt_a","repository_materialized":true,"console_binding":"EXISTING_OR_REQUIRES_CHARACTERISATION","real_route":"DENIED_UNTIL_G4"},
+    {"capability_id":"c1","owner":"OPT-B.C1","source_path":"src/ovc/opt_b/c1","repository_materialized":true,"console_binding":"EXISTING_OR_REQUIRES_CHARACTERISATION","real_route":"DENIED_UNTIL_G4"},
+    {"capability_id":"c2","owner":"OPT-B.C2","source_path":"src/ovc/opt_b/c2_vnext","repository_materialized":true,"console_binding":"EXISTING_OR_REQUIRES_CHARACTERISATION","real_route":"DENIED_UNTIL_G4"},
+    {"capability_id":"c2e","owner":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2","source_path":"src/ovc/opt_b/c2e_v2","repository_materialized":true,"console_binding":"OWNER_PRESENT_ACTIVE_STATUS_SOURCE_OWNED","real_route":"DENIED_UNTIL_G4"},
+    {"capability_id":"c2p","owner":"OPT-B.C2P","source_path":null,"repository_materialized":false,"console_binding":"TYPED_DEGRADED_STATE","reason_code":"UPSTREAM_OWNER_NOT_MATERIALIZED_AS_RUNTIME_NAMESPACE","real_route":"DENIED"},
+    {"capability_id":"c2_5","owner":"OPT-B.C2.5","source_path":null,"repository_materialized":false,"console_binding":"TYPED_DEGRADED_STATE","reason_code":"UPSTREAM_OWNER_NOT_MATERIALIZED_AS_RUNTIME_NAMESPACE","real_route":"DENIED"},
+    {"capability_id":"c3","owner":"OPT-B.C3","source_path":null,"repository_materialized":false,"console_binding":"TYPED_DEGRADED_STATE","reason_code":"UPSTREAM_OWNER_NOT_MATERIALIZED_AS_RUNTIME_NAMESPACE","real_route":"DENIED"},
+    {"capability_id":"sri_fdi","owner":"OVC-SFC-v0.1","source_path":"src/ovc/opt_b/sfc","repository_materialized":true,"console_binding":"OWNER_PRESENT_READ_ONLY_WHERE_LAWFUL","real_route":"DENIED_UNTIL_OWNING_GATE"},
+    {"capability_id":"srfd","owner":"OVC-SRFD-BENCHMARK-v0.1","source_path":"src/ovc/opt_b/srfd","repository_materialized":true,"console_binding":"OWNER_PRESENT_READ_ONLY_WHERE_LAWFUL","real_route":"DENIED_UNTIL_OWNING_GATE"},
+    {"capability_id":"mcarb","owner":"OVC-MCARB-v0.1","source_path":null,"repository_materialized":false,"console_binding":"TYPED_DEGRADED_STATE","reason_code":"UPSTREAM_OWNER_NOT_MATERIALIZED_AS_RUNTIME_NAMESPACE","real_route":"DENIED"},
+    {"capability_id":"dmrp_research_operations","owner":"OVC Research Operations / DMRP","source_path":"src/ovc/research_operations","repository_materialized":true,"console_binding":"OWNER_PRESENT_READ_ONLY_WHERE_LAWFUL","real_route":"DENIED_UNTIL_OWNING_GATE"},
+    {"capability_id":"evidence","owner":"OVC Research Operations","source_path":"src/ovc/research_operations","repository_materialized":true,"console_binding":"OWNER_PRESENT_READ_ONLY_WHERE_LAWFUL","real_route":"DENIED_UNTIL_OWNING_GATE"},
+    {"capability_id":"programme_governance","owner":"OVIS / Programme Genesis","source_path":"src/ovc/programme_genesis","repository_materialized":true,"console_binding":"OWNER_PRESENT_READ_ONLY_ONLY","real_route":"DENIED_UNTIL_CONTROL_GATE"},
+    {"capability_id":"irof","owner":"OVC Research Orchestration","source_path":"src/ovc/research_orchestration","repository_materialized":true,"console_binding":"TELEMETRY_READ_ONLY_WHERE_SOURCE_EXISTS","real_route":"DENIED_UNTIL_CONTROL_GATE"}
+  ],
+  "rules": [
+    "SOURCE_OWNER_REMAINS_AUTHORITATIVE",
+    "NO_FRONTEND_SCIENTIFIC_GOLDEN",
+    "NO_LEGACY_FALLBACK_SUBSTITUTION",
+    "UNAVAILABLE_OWNER_RETURNS_TYPED_DEGRADED_STATE",
+    "VALIDATION_DENIED_BEFORE_PATH_OBJECT_COUNT_OR_TIMESTAMP_RESOLUTION"
+  ]
+}
