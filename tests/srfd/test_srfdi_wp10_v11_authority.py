@@ -12,8 +12,11 @@ BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v1-1"
 MANIFEST = BASE / "SRFD_JUNE_AUTHORITY_MANIFEST_CANDIDATE_v1_1.json"
 TOKEN = BASE / "SRFD_JUNE_AUTHORITY_TOKEN_v1_1.json"
 DECISION = BASE / "SRFD_JUNE_AUTHORITY_OPERATOR_DECISION_v1_1.json"
-STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_48_WP10_V11_READY.json"
+READY_STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_48_WP10_V11_READY.json"
+BLOCKED_STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_49_WP10_V11_PREFLIGHT_ENV_BLOCKED.json"
 POINTER = ROOT / "registries/implementation/srfd/CURRENT_STATE_POINTER.json"
+BLOCKER = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1/SRFDI_WP10_V11_PREFLIGHT_ENVIRONMENT_BLOCKER.json"
+
 
 class SRFDIWP10V11AuthorityTests(unittest.TestCase):
     @classmethod
@@ -21,8 +24,10 @@ class SRFDIWP10V11AuthorityTests(unittest.TestCase):
         cls.m = json.loads(MANIFEST.read_text())
         cls.t = json.loads(TOKEN.read_text())
         cls.d = json.loads(DECISION.read_text())
-        cls.s = json.loads(STATE.read_text())
+        cls.ready = json.loads(READY_STATE.read_text())
+        cls.blocked = json.loads(BLOCKED_STATE.read_text())
         cls.p = json.loads(POINTER.read_text())
+        cls.blocker = json.loads(BLOCKER.read_text())
         cls.b = binding_from_manifest(cls.m)
 
     def test_science_is_exactly_unchanged_and_binding_is_latest_main(self):
@@ -62,24 +67,34 @@ class SRFDIWP10V11AuthorityTests(unittest.TestCase):
         self.assertEqual("DENIED", self.t["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.t["validation_2025"])
 
-    def test_authority_requires_exact_preflight_before_consumption(self):
+    def test_authority_decision_required_exact_preflight_and_ready_history_is_preserved(self):
         self.assertEqual("PASS_AUTHORIZE_ONE_EXACT_V11_RUN_AFTER_EXACT_PREFLIGHT", self.d["decision"])
         self.assertIn("EXACT_PREFLIGHT_MUST_PASS_BEFORE_TOKEN_CONSUMPTION", self.d["conditions"])
         self.assertIn("PR574_STALE_BASE_IDENTITIES_MUST_NOT_BE_REUSED", self.d["conditions"])
-        self.assertEqual("READY", self.s["status"])
-        self.assertFalse(self.s["authority"]["fresh_authority_token_consumed"])
-        self.assertEqual("RUN_EXACT_V11_PREFLIGHT_THEN_CONSUME_TOKEN_ON_PASS_AND_EXECUTE", self.s["next_action"])
+        self.assertEqual("READY", self.ready["status"])
+        self.assertFalse(self.ready["authority"]["fresh_authority_token_consumed"])
+        self.assertEqual("RUN_EXACT_V11_PREFLIGHT_THEN_CONSUME_TOKEN_ON_PASS_AND_EXECUTE", self.ready["next_action"])
+        self.assertEqual("BLOCKED", self.blocked["status"])
+        self.assertFalse(self.blocked["authority"]["token_consumed"])
+        self.assertEqual("EXECUTION_ENVIRONMENT_MISMATCH", self.blocked["reason_code"])
 
-    def test_current_pointer_has_no_scientific_promotion_and_stops_at_g11(self):
-        self.assertEqual("READY", self.p["status"])
+    def test_current_pointer_preserves_authority_but_stops_at_exact_preflight_blocker(self):
+        self.assertEqual("BLOCKED", self.p["status"])
         self.assertEqual("SRFDI-G10", self.p["current_gate"])
         self.assertEqual("SRFDI-WP10-v1.1", self.p["active_packet"])
-        self.assertEqual("AUTHORIZED_UNCONSUMED", self.p["fresh_authority_token_state"])
+        self.assertEqual("AUTHORIZED_UNCONSUMED_BLOCKED_PREFLIGHT_ENVIRONMENT_DRIFT", self.p["fresh_authority_token_state"])
+        self.assertFalse(self.p["fresh_authority_token_consumed"])
+        self.assertEqual("EXECUTION_ENVIRONMENT_MISMATCH_DEPENDENCY_INVENTORY", self.p["failure_reason"])
+        self.assertEqual(str(BLOCKER.relative_to(ROOT)).replace("\\", "/"), self.p["failure_receipt"])
+        self.assertFalse(self.blocker["science_execution_started"])
+        self.assertFalse(self.blocker["token_consumed"])
         self.assertEqual("DENIED", self.p["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.p["validation_2025"])
         self.assertEqual("NONE", self.p["scientific_promotion"])
         self.assertEqual("NONE", self.p["probability_risk_exposure_execution"])
-        self.assertEqual("HARD_BLOCKER_OR_SRFDI_G11_OPERATOR_SCIENTIFIC_DISPOSITION", self.p["stop_at"])
+        self.assertEqual("HARD_BLOCKER", self.p["stop_at"])
+        self.assertTrue(self.p["operator_decision_required"])
+
 
 if __name__ == "__main__":
     unittest.main()
