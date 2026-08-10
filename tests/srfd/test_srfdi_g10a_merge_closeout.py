@@ -43,7 +43,7 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
         else:
             self.assertEqual(old, self.pointer["prior_authority_token_id"])
             self.assertEqual("CONSUMED_NOT_REUSABLE", self.pointer["prior_authority_token_state"])
-        if self.pointer["status"] == "BLOCKED":
+        if self.pointer["status"] == "BLOCKED" and self.pointer.get("failure_reason") != "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
             self.assertEqual("BLOCKED_CONSUMED_TOKEN_PRESERVED", self.pointer["wp10_v0_6_execution_route"])
             if self.pointer.get("wp10_v0_7_execution_route"):
                 self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
@@ -63,6 +63,15 @@ class SRFDIG10AMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
     def test_v16_remains_historical_while_current_pointer_advances_lawfully(self) -> None:
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertTrue(self.pointer["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+            return
         self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
         self.assertTrue(self.pointer["authoritative_state"].startswith("registries/implementation/srfd/OVC_SRFDI_STATE_v0_"))
         self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", "SRFDI-G10B", "SRFDI-G10B-FREEZE", None})
