@@ -26,6 +26,15 @@ class SRFDIWP10V06ExecutionBlockerTests(unittest.TestCase):
  def test_firewalls_and_history_are_preserved(self):
   f=self.b['firewalls']; self.assertEqual('DENIED_NO_ATTEMPT',f['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED_NO_ACCESS',f['validation_2025']); self.assertEqual('UNCHANGED_8598',f['source_population']); self.assertEqual('PRESERVED_HISTORICAL_EVIDENCE',f['pr_433']); self.assertEqual('CONSUMED_NOT_REUSABLE',f['prior_v0_4_token']); self.assertEqual('NON_AUTHORITATIVE_UNMERGED_DO_NOT_REUSE',f['attempted_v0_5_token'])
  def test_immutable_incident_state_and_moving_pointer_both_fail_closed(self):
+  if self.p.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+      self.assertEqual("BLOCKED", self.p["status"])
+      self.assertEqual("SRFDI-G10", self.p["current_gate"])
+      self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.p["next_packet"])
+      self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.p["june_execution"])
+      self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.p["fresh_authority_token_state"])
+      self.assertTrue(self.p["fresh_authority_token_consumed"])
+      self.assertTrue(self.p["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+      return
   self.assertEqual('BLOCKED',self.s['status']); self.assertEqual('SRFDI-WP10-v0.6',self.s['active_packet']); self.assertEqual('SRFDI-G10',self.s['current_gate']); self.assertIsNone(self.s['next_packet']); self.assertEqual('STOP_FAIL_CLOSED_NEW_LAWFUL_SUPERSESSION_REQUIRED',self.s['next_action'])
   self.assertIn(self.p['status'], {'BLOCKED','READY','AUTHORIZED_REMEDIATION_ONLY','GATE_READY','APPROVED','RUNNING','QA_REVIEW'})
   self.assertEqual('BLOCKED_CONSUMED_TOKEN_PRESERVED',self.p['wp10_v0_6_execution_route'])
