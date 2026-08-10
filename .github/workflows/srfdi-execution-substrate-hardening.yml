@@ -1,0 +1,66 @@
+name: SRFDI execution substrate hardening
+
+on:
+  pull_request:
+    paths:
+      - "src/ovc/opt_b/srfd/wp10_execution_substrate_hardening.py"
+      - "scripts/srfdi_execution_substrate_hardening.py"
+      - "tests/srfd/test_srfdi_execution_substrate_hardening.py"
+      - "tests/srfd/test_srfdi_wp10_v10_eacr_rebind.py"
+      - "docs/releases/srfd-benchmark-v0-1/srfdi-execution-substrate-hardening-v0-1/**"
+      - ".github/workflows/srfdi-execution-substrate-hardening.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: srfdi-execution-substrate-hardening-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hardening-unit-contracts:
+    name: dispatch and environment contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run focused hardening tests
+        run: PYTHONPATH=src python -m unittest tests.srfd.test_srfdi_execution_substrate_hardening -v
+
+  full-2020-rehearsal:
+    name: full 2020-unit synthetic restart rehearsal
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Execute exact scheduler checkpoint storage rehearsal
+        run: |
+          PYTHONPATH=src python scripts/srfdi_execution_substrate_hardening.py \
+            --root "$RUNNER_TEMP/srfdi-2020-rehearsal" \
+            --output "$RUNNER_TEMP/srfdi-hardening-evidence"
+      - name: Assert rehearsal PASS and 2020 checkpoints
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          root = pathlib.Path(os.environ["RUNNER_TEMP"]) / "srfdi-hardening-evidence"
+          summary = json.loads((root / "SRFDI_EXECUTION_SUBSTRATE_HARDENING_SUMMARY.json").read_text())
+          receipt = json.loads((root / "SRFDI_2020_UNIT_SYNTHETIC_REHEARSAL.json").read_text())
+          assert summary["status"] == "PASS"
+          assert summary["real_june_payload_used"] is False
+          assert receipt["ordered_unit_count"] == 2020
+          assert receipt["completed_unit_count"] == 2020
+          assert receipt["checkpoint_sequence"] == 2020
+          assert receipt["restart_targets"] == [1, 3, 4, 58, 59, 2019, 2020]
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: srfdi-execution-substrate-hardening-evidence
+          path: ${{ runner.temp }}/srfdi-hardening-evidence
+          if-no-files-found: error
+          retention-days: 30
