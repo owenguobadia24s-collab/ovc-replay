@@ -1,0 +1,7 @@
+const axes=['LOCATION','MOTION','ORGANISATION','INTERACTION'];
+export function MatrixView(){return <section><h2>C2 MatrixView</h2><table><thead><tr><th>Dimension</th><th>State</th><th>Evidence</th></tr></thead><tbody>{axes.map((a,i)=><tr key={a}><th>{a}</th><td>{i===2?'NOT_EVALUABLE':'OBSERVED'}</td><td>{i===2?'MISSING_DEPENDENCY':'SYNTHETIC_FIXTURE'}</td></tr>)}</tbody></table><p>Orthogonal evidence plane · no composite winner.</p></section>}
+export function ProofTimeline(){return <section><h2>C2.5 ProofTimeline</h2><ol><li>Definition AST · EVENT_DEF.FX01</li><li>Bindings · C2 LOCATION + C2E phase</li><li>Effective time · 08:00Z</li><li>First-valid time · 08:15Z</li><li>PENDING window · dependency firewall intact</li></ol></section>}
+const ast={type:'STRUCTURAL_STATEMENT',clauses:['episode','event','context?']};
+export function AstRenderer(){return <section><h2>C3 AST Renderer</h2><p>COMPACT · STANDARD · EXPANDED · AUDIT</p><pre>{JSON.stringify(ast,null,2)}</pre><p>AST truth is authoritative; renderer is derived.</p></section>}
+export function BoundedGraph(){return <section><h2>BoundedGraph</h2><p>Backend projection: 120 / 50,000 nodes loaded</p><p>display_projection=true · expansion_handle=RN-GRAPH-NEXT-001</p><details><summary>Accessible ledger alternative</summary><ul><li>C2 → C2E · source-explicit</li><li>C2E → C2P · unavailable</li></ul></details></section>}
+export function SemanticRiskGallery(){return <div className="rnGallery"><MatrixView/><ProofTimeline/><AstRenderer/><BoundedGraph/></div>}
