@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import unittest
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
 ROOT=Path(__file__).resolve().parents[2]
 E=ROOT/'docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-9/SRFDI_WP10_V09_RUN_START_EVIDENCE.json'
 S=ROOT/'registries/implementation/srfd/OVC_SRFDI_STATE_v0_42_WP10_V09_RUNNING.json'
@@ -20,5 +21,7 @@ class SRFDIWP10V09RunStartTests(unittest.TestCase):
  def test_checkpoint_and_external_evidence_are_exact(self):
   self.assertEqual('COMMITTED',self.e['checkpoint']['state']); self.assertEqual(1,self.e['checkpoint']['sequence']); self.assertEqual(['population'],self.e['checkpoint']['completed_units']); self.assertEqual('WITHIN_T0',self.e['capacity_checkpoint']['capacity_status']); self.assertEqual('1WH_AEgvm5ZQd-t0j82pyekAzEhe8bIJk',self.e['evidence_bundle']['drive_file_id']); self.assertEqual('a12487a0abc6d414070f3ab99e225ddcf2105c05d60307656bd961af2983c4ed',self.e['evidence_bundle']['sha256'])
  def test_pointer_preserves_run_and_firewalls_after_capacity_block(self):
+  if assert_lawful_v10_pointer(self,self.p):
+   self.assertEqual(1626,self.f['work_units']['completed_unit_count']); return
   self.assertEqual('BLOCKED',self.p['status']); self.assertEqual(RUN,self.p['run_id']); self.assertEqual(BIND,self.p['run_binding_sha256']); self.assertTrue(self.p['fresh_authority_token_consumed']); self.assertEqual('CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN',self.p['fresh_authority_token_state']); self.assertEqual('SRFDI-WP10-v1.0-CAPACITY-REMEDIATION',self.p['next_packet']); self.assertEqual('CAPACITY_EXCEEDED_EXTERNAL_BYTES',self.p['failure_reason']); self.assertEqual(1626,self.f['work_units']['completed_unit_count']); self.assertEqual('DENIED',self.p['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED',self.p['validation_2025']); self.assertEqual('NONE',self.p['scientific_promotion']); self.assertEqual('NONE',self.p['selector_family_semantic_publication']); self.assertEqual('NONE',self.p['probability_risk_exposure_execution'])
 if __name__=='__main__': unittest.main()

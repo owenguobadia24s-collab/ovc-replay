@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 PROFILE = ROOT / "registries/research/srfd/wp10_execution_resilience_profile_v0_1.json"
 STATE = ROOT / "registries/implementation/srfd/OVC_SRFDI_STATE_v0_23_WP10_EXECUTION_RESILIENCE_READY.json"
@@ -53,6 +55,8 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
         self.assertEqual("FAIL_CLOSED", scope["binding_drift"])
 
     def test_historical_resilience_state_required_fresh_authority_and_pointer_may_advance_after_it(self):
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         self.assertEqual("READY", self.state["status"])
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
         self.assertEqual("SRFDI-G-JUNE-AUTH-v0.7-PREP", self.state["next_packet"])

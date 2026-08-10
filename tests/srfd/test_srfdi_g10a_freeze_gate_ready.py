@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 PACKET = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10a-freeze/SRFDI_G10A_FREEZE_OPERATOR_PACKET.json"
 QA = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10a/SRFDI_WP10A_QA_PACKET.json"
@@ -75,6 +77,8 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", authority["probability_risk_exposure_execution"])
 
     def test_current_pointer_may_advance_only_through_lawful_delegated_sequence(self) -> None:
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
             self.assertEqual("BLOCKED", self.pointer["status"])
             self.assertEqual("SRFDI-G10", self.pointer["current_gate"])

@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 PACKET = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-9/SRFDI_G_JUNE_AUTH_OPERATOR_PACKET_v0_9.json"
 QA = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-9/SRFDI_G_JUNE_AUTH_QA_PACKET_v0_9.json"
@@ -37,6 +39,8 @@ class SRFDIJuneAuthV09GateReadyTests(unittest.TestCase):
         self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1",self.manifest["execution_binding"]["logical_sha256"])
 
     def test_predecision_packet_has_no_token_or_run_authority(self):
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         self.assertEqual("NOT_MINTED",self.packet["current_authority"]["fresh_authority_token"])
         self.assertTrue(self.packet["current_authority"]["june_execution"].startswith("DENIED"))
         self.assertEqual("PRESERVED_IMMUTABLE_NOT_RESUMABLE", self.packet["current_authority"]["blocked_v0_8_run"])

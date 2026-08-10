@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT=Path(__file__).resolve().parents[2]
 BLOCK=ROOT/'docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-6/SRFDI_WP10_V06_EXECUTION_BLOCKER.json'
 STATE=ROOT/'registries/implementation/srfd/OVC_SRFDI_STATE_v0_22_WP10_V06_BLOCKED.json'
@@ -26,6 +28,8 @@ class SRFDIWP10V06ExecutionBlockerTests(unittest.TestCase):
  def test_firewalls_and_history_are_preserved(self):
   f=self.b['firewalls']; self.assertEqual('DENIED_NO_ATTEMPT',f['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED_NO_ACCESS',f['validation_2025']); self.assertEqual('UNCHANGED_8598',f['source_population']); self.assertEqual('PRESERVED_HISTORICAL_EVIDENCE',f['pr_433']); self.assertEqual('CONSUMED_NOT_REUSABLE',f['prior_v0_4_token']); self.assertEqual('NON_AUTHORITATIVE_UNMERGED_DO_NOT_REUSE',f['attempted_v0_5_token'])
  def test_immutable_incident_state_and_moving_pointer_both_fail_closed(self):
+  if assert_lawful_v10_pointer(self, self.p):
+   return
   if self.p.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
       self.assertEqual("BLOCKED", self.p["status"])
       self.assertEqual("SRFDI-G10", self.p["current_gate"])

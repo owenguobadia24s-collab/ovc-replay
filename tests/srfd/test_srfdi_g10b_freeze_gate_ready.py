@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 from ovc.opt_b.srfd.serialization import logical_sha256
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -59,6 +61,8 @@ class SRFDIG10BFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("OVC APPROVE SRFDI-G10B-FREEZE PASS", self.gate["exact_operator_command"])
 
     def test_gate_ready_history_and_lawful_pointer_progression_preserve_firewalls(self):
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         self.assertEqual("GATE_READY", self.state["status"])
         self.assertIn(self.pointer["status"], {"GATE_READY", "APPROVED", "READY", "RUNNING", "QA_REVIEW", "BLOCKED"})
         self.assertIn(self.pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11"})

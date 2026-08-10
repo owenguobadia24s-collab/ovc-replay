@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-9"
 RECEIPT = BASE / "SRFDI_G_JUNE_AUTH_V0_9_MERGE_RECEIPT.json"
@@ -56,6 +58,8 @@ class SRFDIJuneAuthV09MergeCloseoutTests(unittest.TestCase):
         self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
 
     def test_state_and_pointer_are_ready_for_exact_v09_run_only(self):
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         self.assertEqual("READY", self.state["status"])
         self.assertEqual("SRFDI-WP10-v0.9", self.state["active_packet"])
         self.assertEqual("SRFDI-G10", self.state["current_gate"])

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from hashlib import sha1
+from hashlib import sha1, sha256
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
 
 from ovc.opt_b.srfd import june_authority_v08
 from ovc.opt_b.srfd.serialization import logical_sha256
@@ -24,12 +26,20 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
   self.assertEqual(june_authority_v08.DECISION_SHA256,logical_sha256(self.decision)); self.assertEqual(june_authority_v08.ENVELOPE_SHA256,logical_sha256(self.envelope)); self.assertEqual(june_authority_v08.V07_SUPERSESSION_SHA256,logical_sha256(self.supersession)); self.assertEqual(self.token,june_authority_v08.verify_runner_bound_june_authority(self.decision,self.envelope,self.token,self.source_reverify,self.supersession)); self.assertEqual(june_authority_v08.EXPECTED_TOKEN,self.token["token_id"])
  def test_historical_runner_binding_is_exact_and_only_operator_approved_runner_may_supersede_current_blob(self):
   self.assertEqual(june_authority_v08.RUNNER_IMPLEMENTATION_BINDING_SHA256,logical_sha256(self.impl_binding)); self.assertEqual(self.impl_binding,june_authority_v08.implementation_binding())
-  g10b_authorized=(self.pointer.get("current_gate") in {"SRFDI-G10B","SRFDI-G10B-FREEZE","SRFDI-G-JUNE-AUTH","SRFDI-G10","SRFDI-G11"} and self.pointer.get("status") in {"AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW","BLOCKED"} and self.g10b_decision["operator_command"]=="OVC APPROVE SRFDI-G10B SUPERSEDE" and self.g10b_decision["decision"]=="SUPERSEDE")
+  v10_authorized=bool(self.pointer.get("wp10_v1_0_execution_route"))
+  g10b_authorized=(self.pointer.get("current_gate") in {"SRFDI-G10B","SRFDI-G10B-FREEZE","SRFDI-G-JUNE-AUTH","SRFDI-G10","SRFDI-G11"} and self.pointer.get("status") in {"AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW","BLOCKED","RUN_START_AUTHORIZED_PREFLIGHT_PASS","COMPLETED"} and self.g10b_decision["operator_command"]=="OVC APPROVE SRFDI-G10B SUPERSEDE" and self.g10b_decision["decision"]=="SUPERSEDE")
   for name,path in self.impl_binding["runtime_paths"].items():
    data=(ROOT/path).read_bytes(); git_blob=sha1(b"blob "+str(len(data)).encode("ascii")+b"\0"+data).hexdigest(); historical_blob=self.impl_binding["runtime_blobs"][name]
    if g10b_authorized and name=="production_runner":
-    self.assertNotEqual(historical_blob,git_blob); self.assertEqual(self.candidate_binding["runtime_blobs"]["production_runner"],git_blob); self.assertEqual(historical_blob,self.candidate_binding["historical_runner_binding"]["production_runner_blob"]); self.assertEqual("SUPERSEDED_FOR_EXECUTION_ONLY",self.g10b_decision["authority_delta"]["wp10_v0_7_output_count_assertion_route"]); self.assertEqual("SRFDI-WP10B",self.g10b_decision["authority_delta"]["authorize_packet"]); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"])
-    if self.pointer.get("failure_reason")=="CAPACITY_EXCEEDED_EXTERNAL_BYTES": self.assertEqual("BLOCKED",self.pointer["status"]); self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION",self.pointer["next_packet"]); self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED",self.pointer["june_execution"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+    self.assertNotEqual(historical_blob,git_blob)
+    if v10_authorized:
+     self.assertEqual("ccdde1536660d1ffba95323bcb6228fe1da41cbc",git_blob)
+     self.assertEqual("195cce9a44c9071c01f92cbd2b20567c4dae3c79d25bdd7f7778cbed18a3f688",sha256(data).hexdigest())
+    else:
+     self.assertEqual(self.candidate_binding["runtime_blobs"]["production_runner"],git_blob)
+    self.assertEqual(historical_blob,self.candidate_binding["historical_runner_binding"]["production_runner_blob"]); self.assertEqual("SUPERSEDED_FOR_EXECUTION_ONLY",self.g10b_decision["authority_delta"]["wp10_v0_7_output_count_assertion_route"]); self.assertEqual("SRFDI-WP10B",self.g10b_decision["authority_delta"]["authorize_packet"]); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"])
+    if v10_authorized: self.assertTrue(assert_lawful_v10_pointer(self,self.pointer))
+    elif self.pointer.get("failure_reason")=="CAPACITY_EXCEEDED_EXTERNAL_BYTES": self.assertEqual("BLOCKED",self.pointer["status"]); self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION",self.pointer["next_packet"]); self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED",self.pointer["june_execution"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"])
     elif self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH" and self.pointer["status"]=="GATE_READY": self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
     elif self.pointer["current_gate"]=="SRFDI-G-JUNE-AUTH": self.assertTrue(self.pointer["june_execution"].startswith("AUTHORIZED")); self.assertIsNotNone(self.pointer["fresh_authority_token_id"])
     elif self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="READY": self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY",self.pointer["june_execution"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
