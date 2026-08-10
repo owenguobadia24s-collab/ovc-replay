@@ -54,7 +54,7 @@ class C2EAG0R2OperatorPassTests(unittest.TestCase):
         self.assertEqual(effects["ag2_progression"], "DENIED_PENDING_EXPLICIT_AG1_DECISION")
         self.assertEqual(effects["ag3_activation_or_replacement"], "DENIED_OPERATOR_RESERVED_OUTSIDE_AUTOMATIC_EXECUTION")
 
-    def test_state_and_pointer_route_only_to_ag1_preparation_or_later_ag1_pass(self):
+    def test_state_and_pointer_route_only_to_lawful_post_ag0_progression(self):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["ag0_admissibility"], "PASS")
         self.assertEqual(self.state["authority"]["ag1_gate_preparation"], "AUTHORIZED")
@@ -66,23 +66,32 @@ class C2EAG0R2OperatorPassTests(unittest.TestCase):
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertIn(PASS_ID, self.pointer["operator_decision_history"])
-        if self.pointer["status"] in {"READY", "GATE_READY"}:
+        gate = self.pointer["current_gate"]
+        if gate == "C2E-AG1" and self.pointer["status"] in {"READY", "GATE_READY"}:
             self.assertEqual(self.pointer["current_packet"], "C2E-AG1-PREP")
-            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
             if self.pointer["status"] == "READY":
                 self.assertFalse(self.pointer["operator_decision_required"])
             else:
                 self.assertTrue(self.pointer["operator_decision_required"])
                 self.assertEqual(self.pointer["recommended_operator_decision"], "DEFER")
                 self.assertEqual(self.pointer["ag2_progression"], "DENIED_PENDING_AG1")
-        else:
+        elif self.pointer["status"] == "APPROVED":
             self.assertEqual(self.pointer["current_packet"], "C2E-AG1-DECISION")
-            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+            self.assertEqual(gate, "C2E-AG1")
             self.assertFalse(self.pointer["operator_decision_required"])
             self.assertEqual(self.pointer["operator_decision"], "PASS")
             self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
             self.assertEqual(self.pointer["ag2_progression"], "AUTHORIZED_FOR_GATE_PREPARATION_ONLY")
             self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
+        else:
+            self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_39.json")
+            self.assertEqual(self.pointer["status"], "GATE_READY")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG2-PREP")
+            self.assertEqual(gate, "C2E-AG2")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["recommended_operator_decision"], "DEFER")
+            self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(self.pointer["ag3_progression"], "DENIED_PENDING_AG2")
 
     def test_qa_passes_without_hiding_replay_warnings(self):
         self.assertEqual(self.qa["qa_disposition"], "PASS")

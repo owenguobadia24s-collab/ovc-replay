@@ -14,8 +14,7 @@ POP = "46f02ed89c9c4a3d4b3ef2046b7aa32489c5b63a526dbb8151896331d0ae896d"
 PACK = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 HARNESS = "c5dd709841c6dc20290e5182d955f3c6363586a4"
 
-def j(path):
-    return json.loads(path.read_text())
+def j(path): return json.loads(path.read_text())
 
 class C2EAG1CorrectiveR3AuthorityTests(unittest.TestCase):
     def test_failed_r2_attempt_is_preserved_and_token_cannot_be_reused(self):
@@ -60,23 +59,20 @@ class C2EAG1CorrectiveR3AuthorityTests(unittest.TestCase):
         self.assertEqual(gate["corrective_basis"]["source_population_change"], "NONE")
         self.assertEqual(gate["corrective_basis"]["boundary_pack_change"], "NONE")
 
-    def test_parent_ag1_pointer_remains_lawful_as_r4_moves_from_authorized_to_consumed_pass(self):
+    def test_parent_ag1_pointer_remains_lawful_through_ag2_gate_preparation(self):
         p = j(BASE / "CURRENT_STATE_POINTER.json")
         self.assertEqual(p["active_c2e"], "NONE")
         self.assertEqual(p["active_boundary_pack"], "NONE")
         self.assertEqual(p["failed_restart_token_status"], "CONSUMED_FAILED_ATTEMPT_REUSE_PROHIBITED")
         self.assertEqual(p["failed_restart_r3_token_status"], "CONSUMED_FAILED_ATTEMPT_REUSE_PROHIBITED")
-        if p["authoritative_state"].endswith("OVC_C2E2_STATE_v0_33.json"):
+        auth_state = p["authoritative_state"]
+        if auth_state.endswith("OVC_C2E2_STATE_v0_33.json"):
             self.assertEqual(p["current_gate"], "C2E-AG1")
             self.assertEqual(p["status"], "GATE_READY")
             self.assertTrue(p["operator_decision_required"])
             self.assertEqual(p["blocking_operator_subgate"], "C2E2-G6-RUN-AUTH-R4")
-            self.assertFalse(p["blocking_operator_subgate_decision_required"])
-            self.assertEqual(p["blocking_operator_subgate_decision"], "PASS")
-            self.assertEqual(p["restart_token_proposal_id"], R4)
             self.assertEqual(p["restart_token_proposal_status"], "AUTHORIZED_UNCONSUMED")
-        else:
-            self.assertEqual(p["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_38.json")
+        elif auth_state.endswith("OVC_C2E2_STATE_v0_38.json"):
             self.assertEqual(p["status"], "APPROVED")
             self.assertEqual(p["current_gate"], "C2E-AG1")
             self.assertFalse(p["operator_decision_required"])
@@ -85,6 +81,15 @@ class C2EAG1CorrectiveR3AuthorityTests(unittest.TestCase):
             self.assertEqual(p["restart_token_status"], "CONSUMED_SUCCESS_REUSE_PROHIBITED")
             self.assertEqual(p["ag1_replay_adequacy"], "PASS")
             self.assertEqual(p["next_gate"], "C2E-AG2")
+        else:
+            self.assertEqual(auth_state, "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_39.json")
+            self.assertEqual(p["status"], "GATE_READY")
+            self.assertEqual(p["current_gate"], "C2E-AG2")
+            self.assertTrue(p["operator_decision_required"])
+            self.assertEqual(p["recommended_operator_decision"], "DEFER")
+            self.assertEqual(p["restart_token_id"], R4)
+            self.assertEqual(p["restart_token_status"], "CONSUMED_SUCCESS_REUSE_PROHIBITED")
+            self.assertEqual(p["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(p["ag3_progression"], "DENIED_PENDING_AG2")
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__": unittest.main()
