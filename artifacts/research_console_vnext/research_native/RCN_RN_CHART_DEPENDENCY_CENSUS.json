@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-rcn-rn-chart-dependency-census/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "packet_id": "RCN-RN-WP0",
+  "baseline_commit": "550d1250ca19060a6ec9aa8ba17ceb6aeceaabb2",
+  "dependencies": [
+    {
+      "identity": "lightweight-charts@5.0.5",
+      "location": "apps/research_console_vnext/package.json",
+      "consumer_class": "historical-only",
+      "evidence": "Current FixtureChart.tsx is an OVC-owned SVG reference scene and contains no lightweight-charts import in the inspected baseline.",
+      "disposition": "RETAIN_UNTIL_POST_G8_CLEANUP_OR_SEPARATE_HARMLESS_REMOVAL_PROOF"
+    },
+    {
+      "identity": "FixtureChart / chart-named CSS lineage",
+      "location": "apps/research_console_vnext/src/workspace/FixtureChart.tsx and src/app/wp3*-chart/reference CSS",
+      "consumer_class": "RCN-core",
+      "evidence": "Current fixture presentation still owns chart-named historical/reference components and styles.",
+      "disposition": "DO_NOT_DELETE_IN_WP0; crosswalk during WorkbenchFrame migration"
+    },
+    {
+      "identity": "legacy Streamlit charting surfaces",
+      "location": "apps/research_console",
+      "consumer_class": "other-lawful-consumer",
+      "evidence": "Historical/local Research Console remains preserved until separately governed cleanup.",
+      "disposition": "NO_REMOVAL"
+    }
+  ],
+  "chart_core_search_result": "NO_SEPARATE_CHART_CORE_DEPENDENCY_IDENTIFIED_IN_INSPECTED_RCN_PACKAGE",
+  "removal_performed": false,
+  "acceptance": "PASS_NO_REMOVAL"
+}
