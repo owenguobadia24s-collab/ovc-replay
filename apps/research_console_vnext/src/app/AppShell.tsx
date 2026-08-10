@@ -9,6 +9,7 @@ import "./wp3c-responsive.css";
 import "./wp3e-reference-lock.css";
 import "./wp3e-reference-polish.css";
 import "./wp3f-chart-dynamics.css";
+import "./wp3g-reference-scene.css";
 
 const nav = [
   ["/market", "▥", "Market Desk"],
