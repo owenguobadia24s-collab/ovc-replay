@@ -87,12 +87,18 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
             self.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_MAIN_MERGE", self.pointer["fresh_authority_token_state"])
         else:
             self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
-            self.assertEqual("READY", self.pointer["status"])
-            self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+            self.assertIn(self.pointer["status"], {"READY", "RUNNING"})
             self.assertEqual(FRESH_TOKEN, self.pointer["fresh_authority_token_id"])
-            self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
-            self.assertFalse(self.pointer["fresh_authority_token_consumed"])
             self.assertEqual(RUN_BINDING, self.pointer["run_binding_sha256"])
+            if self.pointer["status"] == "READY":
+                self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+                self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
+                self.assertFalse(self.pointer["fresh_authority_token_consumed"])
+            else:
+                self.assertEqual("SRFDI-WP10-v0.9-RESUME", self.pointer["next_packet"])
+                self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+                self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+                self.assertEqual("RUNNING_EXACT_BOUND_V09_FROM_COMMITTED_CHECKPOINT", self.pointer["june_execution"])
         self.assertFalse(self.pointer["operator_decision_required"])
         self.assertTrue(self.pointer["authority_token_consumed"])
         self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["authority_token_state"])
