@@ -57,6 +57,16 @@ class SRFDIWP10ExecutionResilienceStateTests(unittest.TestCase):
         self.assertEqual("SRFDI-G-JUNE-AUTH", self.state["current_gate"])
         self.assertEqual("SRFDI-G-JUNE-AUTH-v0.7-PREP", self.state["next_packet"])
         self.assertTrue(self.state["authority"]["fresh_june_scientific_run"].startswith("DENIED"))
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual(FRESH_V09, self.pointer["fresh_authority_token_id"])
+            self.assertEqual(V09_BINDING, self.pointer["run_binding_sha256"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            return
         if self.pointer["next_packet"] == "SRFDI-G-JUNE-AUTH-v0.7-PREP":
             self.assertEqual("DENIED_PENDING_NEW_RUN_SCOPED_SRFDI_G_JUNE_AUTH", self.pointer["june_execution"])
         elif self.pointer["current_gate"] == "SRFDI-G10" and self.pointer["status"] == "READY":
