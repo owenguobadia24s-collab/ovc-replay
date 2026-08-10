@@ -62,6 +62,8 @@ class SRFDIJuneAuthV08RunnerBoundTests(unittest.TestCase):
    if self.pointer["authority_token_consumed"]: self.assertIn("CONSUMED_FOR_RUN",self.pointer["authority_token_state"])
    else: self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["authority_token_state"]); self.assertEqual("READY",self.pointer["status"])
   else: self.assertIn(self.token["token_id"],json.dumps(self.pointer,sort_keys=True))
+  if self.pointer.get("wp10_v1_0_execution_route"):
+   self.assertTrue(assert_lawful_v10_pointer(self,self.pointer)); return
   if self.pointer.get("failure_reason")=="CAPACITY_EXCEEDED_EXTERNAL_BYTES":
    self.assertEqual("BLOCKED",self.pointer["status"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["fresh_authority_token_state"]); self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION",self.pointer["next_packet"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
   elif self.pointer.get("current_gate")=="SRFDI-G10" and self.pointer["status"]=="READY":
