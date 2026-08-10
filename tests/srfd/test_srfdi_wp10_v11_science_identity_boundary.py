@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import unittest
 
-from ovc.opt_b.srfd.wp10_v10_interface import SCIENCE_BINDING, SCIENCE_IDENTITY_SHA256
+from ovc.opt_b.srfd.wp10_v10_interface import (
+    PACKET_ID as V10_PACKET_ID,
+    PROGRAMME_ID,
+    SCIENCE_BINDING,
+    SCIENCE_IDENTITY_SHA256,
+)
 from ovc.opt_b.srfd.wp10_v11_interface import (
     FROZEN_ENVIRONMENT_PROFILE_SHA256,
     HARDENING_REHEARSAL_SHA256,
@@ -14,7 +19,7 @@ from ovc.opt_b.srfd.wp10_v11_interface import (
 
 def make_binding(*, packet_id: str = "SRFDI-WP10-v1.1", eligible_ids_sha256: str | None = None) -> RunBindingV11:
     return RunBindingV11(
-        programme_id=SCIENCE_BINDING["programme_id"],
+        programme_id=PROGRAMME_ID,
         packet_id=packet_id,
         population_id=SCIENCE_BINDING["population_id"],
         eligible_ids_sha256=eligible_ids_sha256 or SCIENCE_BINDING["eligible_ids_sha256"],
@@ -40,7 +45,8 @@ class SRFDIWP10V11ScienceIdentityBoundaryTests(unittest.TestCase):
         binding = make_binding()
         verify_science_unchanged(binding)
         self.assertEqual("SRFDI-WP10-v1.1", binding.packet_id)
-        self.assertNotEqual(SCIENCE_BINDING["packet_id"], binding.packet_id)
+        self.assertNotEqual(V10_PACKET_ID, binding.packet_id)
+        self.assertNotIn("packet_id", SCIENCE_BINDING)
 
     def test_wrong_v11_packet_id_still_fails_governance_identity(self):
         with self.assertRaises(WP10V11InterfaceError) as ctx:
