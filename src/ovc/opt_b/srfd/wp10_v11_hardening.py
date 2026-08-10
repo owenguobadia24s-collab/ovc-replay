@@ -255,7 +255,7 @@ def synthetic_worker(unit_id: str) -> Mapping[str, Any]:
             {"token_id": SYNTHETIC_TOKEN_ID, "run_binding_sha256": binding.logical_hash},
         )
         return _sealed({
-            "schema": CONTRACTSkind].schema,
+            "schema": CONTRACTS[kind].schema,
             "programme_id": PROGRAMME_ID,
             "packet_id": PACKET_ID,
             "run_id": run_id,
