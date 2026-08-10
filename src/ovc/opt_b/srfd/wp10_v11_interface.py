@@ -15,6 +15,9 @@ from .wp10_v10_interface import (
 PACKET_ID = "SRFDI-WP10-v1.1"
 FROZEN_ENVIRONMENT_PROFILE_SHA256 = "d921fb6b7bf8632b705851c07a85d09218571780201050fde5d6f31dc04df6df"
 HARDENING_REHEARSAL_SHA256 = "b44052db7f4f30a701d157bafaee463ff30cf4e66ad5a2f2715708241498422a"
+# packet_id is execution/governance generation identity, not a scientific input.
+# It is separately frozen by RunBindingV11.to_dict() and must differ from v1.0.
+NON_SCIENCE_BINDING_FIELDS = frozenset({"packet_id"})
 
 
 class WP10V11InterfaceError(ValueError):
@@ -85,6 +88,8 @@ class RunBindingV11:
 def verify_science_unchanged(binding: RunBindingV11) -> None:
     actual = binding.to_dict()
     for key, expected in SCIENCE_BINDING.items():
+        if key in NON_SCIENCE_BINDING_FIELDS:
+            continue
         if actual[key] != expected:
             raise WP10V11InterfaceError("V11_SCIENCE_BINDING_DRIFT", f"{key}:{actual[key]}")
     if actual["science_identity_sha256"] != SCIENCE_IDENTITY_SHA256:
