@@ -70,15 +70,33 @@ def test_run_authority_subgate_is_operator_required_and_no_downstream_authority(
     assert g["proposed_authority_delta_if_pass"]["post_run_authority"] == "NONE_AUTOMATIC_C2E_AG1_REMAINS_OPERATOR_RESERVED"
 
 
-def test_current_pointer_preserves_parent_ag1_gate_and_exposes_blocking_subgate():
+def test_historical_r2_subgate_is_exact_while_current_pointer_may_progress():
     p = _j(BASE / "CURRENT_STATE_POINTER.json")
-    assert p["current_gate"] == "C2E-AG1"
-    assert p["status"] == "GATE_READY"
-    assert p["recommended_operator_decision"] == "DEFER"
-    assert p["next_action"] == "STOP_FOR_OPERATOR_C2E_AG1"
-    assert p["blocking_operator_subgate"] == "C2E2-G6-RUN-AUTH-R2"
-    assert p["blocking_operator_subgate_decision_required"] is True
-    assert p["blocking_operator_subgate_recommended_decision"] == "PASS"
-    assert p["ag1_gap001_execution_evidence"] == "NOT_YET_AUTHORIZED"
     assert p["active_c2e"] == "NONE"
     assert p["active_boundary_pack"] == "NONE"
+    auth = p["authoritative_state"]
+    if auth.endswith("OVC_C2E2_STATE_v0_34.json"):
+        assert p["current_gate"] == "C2E-AG1"
+        assert p["status"] == "GATE_READY"
+        assert p["recommended_operator_decision"] == "DEFER"
+        assert p["next_action"] == "STOP_FOR_OPERATOR_C2E_AG1"
+        assert p["blocking_operator_subgate"] == "C2E2-G6-RUN-AUTH-R2"
+        assert p["blocking_operator_subgate_decision_required"] is True
+        assert p["blocking_operator_subgate_recommended_decision"] == "PASS"
+        assert p["ag1_gap001_execution_evidence"] == "NOT_YET_AUTHORIZED"
+    elif auth.endswith("OVC_C2E2_STATE_v0_38.json"):
+        assert p["current_gate"] == "C2E-AG1"
+        assert p["status"] == "APPROVED"
+        assert p["operator_decision"] == "PASS"
+        assert p["ag1_replay_adequacy"] == "PASS"
+        assert p["restart_token_status"] == "CONSUMED_SUCCESS_REUSE_PROHIBITED"
+        assert p["next_gate"] == "C2E-AG2"
+    else:
+        assert auth == "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_39.json"
+        assert p["current_gate"] == "C2E-AG2"
+        assert p["current_packet"] == "C2E-AG2-PREP"
+        assert p["status"] == "GATE_READY"
+        assert p["operator_decision_required"] is True
+        assert p["recommended_operator_decision"] == "DEFER"
+        assert p["ag1_replay_adequacy"] == "PASS"
+        assert p["ag2_required_evidence_gap"] == "C2E-AG2-GAP-001_SRFD_COMPARATOR_DISAGREEMENT"
