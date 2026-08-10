@@ -1,0 +1,69 @@
+name: SRFDI WP10 v1.1 execution-substrate hardening
+
+on:
+  push:
+    branches:
+      - remediate/srfdi-wp10-v11-execution-substrate-20260810
+    paths:
+      - 'src/ovc/opt_b/srfd/wp10_v11_*.py'
+      - 'scripts/srfd/*wp10_v11*.py'
+      - 'tests/srfd/test_srfdi_wp10_v11_hardening.py'
+      - 'tests/srfd/test_srfdi_historical_state_independence.py'
+      - 'tests/srfd/test_srfdi_wp10_v06_execution_blocker.py'
+      - 'tests/srfd/test_srfdi_wp10_v07_segmentation_binding_blocker.py'
+      - 'tests/srfd/test_srfdi_wp10_v09_run_start.py'
+      - 'tests/srfd/test_srfdi_wp10_v09_capacity_failure.py'
+      - 'tests/srfd/test_srfdi_wp10_execution_resilience_state.py'
+      - 'docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/**'
+      - '.github/workflows/srfdi-wp10-v11-hardening-rehearsal.yml'
+  pull_request:
+    paths:
+      - 'src/ovc/opt_b/srfd/wp10_v11_*.py'
+      - 'scripts/srfd/*wp10_v11*.py'
+      - 'tests/srfd/test_srfdi_wp10_v11_hardening.py'
+      - 'tests/srfd/test_srfdi_historical_state_independence.py'
+      - 'tests/srfd/test_srfdi_wp10_v06_execution_blocker.py'
+      - 'tests/srfd/test_srfdi_wp10_v07_segmentation_binding_blocker.py'
+      - 'tests/srfd/test_srfdi_wp10_v09_run_start.py'
+      - 'tests/srfd/test_srfdi_wp10_v09_capacity_failure.py'
+      - 'tests/srfd/test_srfdi_wp10_execution_resilience_state.py'
+      - 'docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/**'
+      - '.github/workflows/srfdi-wp10-v11-hardening-rehearsal.yml'
+  workflow_dispatch:
+
+jobs:
+  conformance-and-full-rehearsal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install package and test runner
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+      - name: Hardening and historical-state tests
+        run: |
+          python -m pytest -q \
+            tests/srfd/test_srfdi_wp10_v11_hardening.py \
+            tests/srfd/test_srfdi_historical_state_independence.py \
+            tests/srfd/test_srfdi_wp10_v06_execution_blocker.py \
+            tests/srfd/test_srfdi_wp10_v07_segmentation_binding_blocker.py \
+            tests/srfd/test_srfdi_wp10_v09_run_start.py \
+            tests/srfd/test_srfdi_wp10_v09_capacity_failure.py \
+            tests/srfd/test_srfdi_wp10_execution_resilience_state.py
+      - name: Full 2,020-unit synthetic/minimal-payload rehearsal
+        run: |
+          python scripts/srfd/run_wp10_v11_synthetic_rehearsal.py \
+            --root "$RUNNER_TEMP/srfd-wp10-v11-rehearsal" \
+            --output "$RUNNER_TEMP/SRFDI_WP10_V11_REHEARSAL_RECEIPT.json" \
+            --reset
+          cat "$RUNNER_TEMP/SRFDI_WP10_V11_REHEARSAL_RECEIPT.json"
+      - name: Upload rehearsal receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: SRFDI_WP10_V11_REHEARSAL_RECEIPT
+          path: ${{ runner.temp }}/SRFDI_WP10_V11_REHEARSAL_RECEIPT.json
+          if-no-files-found: error
