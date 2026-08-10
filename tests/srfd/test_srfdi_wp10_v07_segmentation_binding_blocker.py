@@ -20,6 +20,7 @@ TOKEN_ID = "SRFD.JUNE.AUTH.7b9799d46cb6b3953fa9e96fb8309fbdeb0afe6dd53bfdcd16dec
 RUN_BINDING = "25f1c18d39898b5f2b5e9511245ecfd2615eb420205e68f9f1e8c7fe7f929fb9"
 FRESH_V09 = "SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3"
 V09_BINDING = "ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a"
+V09_RUN_ID = "SRFD.RUN.25ca319a998d72fb01e0dceff2d455f7abf71a4e6419987246529407467e51e5"
 
 class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
     @classmethod
@@ -43,7 +44,21 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
 
     def test_historical_blocker_is_exact_while_pointer_may_advance_lawfully(self):
         self.assertEqual("BLOCKED",self.state["status"]); self.assertEqual("NONE_UNDER_CURRENT_STANDING_DELEGATION_AFTER_HARD_STOP",self.state["remediation_authority"]); self.assertEqual("PRESERVE_EVIDENCE_AND_STOP_FAIL_CLOSED_NO_ROUTINE_OPERATOR_APPROVAL_REQUEST",self.state["next_action"])
-        self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertEqual(RUN_ID,self.pointer["run_id"]); self.assertEqual(TOKEN_ID,self.pointer["authority_token_id"]); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json")); self.assertEqual("DENIED",self.pointer["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",self.pointer["validation_2025"]); self.assertEqual("NONE",self.pointer["scientific_promotion"]); self.assertEqual("NONE",self.pointer["probability_risk_exposure_execution"])
+        self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertEqual(TOKEN_ID,self.pointer["authority_token_id"]); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json")); self.assertEqual("DENIED",self.pointer["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",self.pointer["validation_2025"]); self.assertEqual("NONE",self.pointer["scientific_promotion"]); self.assertEqual("NONE",self.pointer["probability_risk_exposure_execution"])
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual(V09_RUN_ID, self.pointer["run_id"])
+            self.assertEqual(FRESH_V09, self.pointer["fresh_authority_token_id"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertEqual(V09_BINDING, self.pointer["run_binding_sha256"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            return
+        if self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="RUNNING":
+            self.assertEqual(V09_RUN_ID,self.pointer["run_id"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["fresh_authority_token_state"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
+        else:
+            self.assertEqual(RUN_ID,self.pointer["run_id"])
         if self.pointer["status"]=="BLOCKED":
             self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH",self.pointer["stop_at"]); self.assertIsNone(self.pointer["next_packet"])
         elif self.pointer["status"]=="AUTHORIZED_REMEDIATION_ONLY":
@@ -56,6 +71,8 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
                 self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertTrue(self.pointer["june_execution"].startswith("DENIED")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"])
         elif self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="READY":
             self.assertEqual("SRFDI-WP10-v0.9",self.pointer["next_packet"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.pointer["fresh_authority_token_state"]); self.assertFalse(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertEqual("AUTHORIZED_ONE_EXACT_BOUND_JUNE_RUN_READY",self.pointer["june_execution"])
+        elif self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="RUNNING":
+            self.assertEqual("SRFDI-WP10-v0.9-RESUME",self.pointer["next_packet"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["fresh_authority_token_state"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertEqual("RUNNING_EXACT_BOUND_V09_FROM_COMMITTED_CHECKPOINT",self.pointer["june_execution"])
         else:
             self.assertEqual("SRFDI-G-JUNE-AUTH",self.pointer["current_gate"]); self.assertFalse(self.pointer["operator_decision_required"]); self.assertIsNotNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["june_execution"].startswith("AUTHORIZED")); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@"))
 

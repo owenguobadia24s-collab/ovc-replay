@@ -56,17 +56,35 @@ class SRFDIG10CMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a", self.state["exact_bindings"]["run_binding_sha256"])
         self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1", self.state["exact_bindings"]["execution_binding_sha256"])
 
-    def test_current_pointer_advances_only_closeout_bookkeeping(self) -> None:
-        self.assertEqual("registries/implementation/srfd/OVC_SRFDI_STATE_v0_41_G10C_COMPLETED.json", self.pointer["authoritative_state"])
-        self.assertEqual("READY", self.pointer["status"])
+    def test_current_pointer_advances_lawfully_beyond_closeout(self) -> None:
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertTrue(self.pointer["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+            return
+        self.assertIn(self.pointer["authoritative_state"], {
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_41_G10C_COMPLETED.json",
+            "registries/implementation/srfd/OVC_SRFDI_STATE_v0_42_WP10_V09_RUNNING.json",
+        })
         self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
-        self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
         self.assertFalse(self.pointer["operator_decision_required"])
         self.assertEqual("SUPERSEDE", self.pointer["g10c_operator_decision"])
         self.assertEqual("IMPLEMENTED_ASSURED_ON_MAIN@f25308678b184c2de75b7d6b2206f9d8663d6cc6", self.pointer["wp10_v09_interface"])
         self.assertEqual("SRFD.JUNE.AUTH.a5311fbade60d87553ad76b9085e1bd2ba62fe60c6d9654a2d338b624b5498c3", self.pointer["fresh_authority_token_id"])
-        self.assertFalse(self.pointer["fresh_authority_token_consumed"])
-        self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
+        self.assertEqual("ca25077124a49a02808ed0c855906456d19415df5371266ebc1e90448d022d9a", self.pointer["run_binding_sha256"])
+        if self.pointer["status"] == "READY":
+            self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+            self.assertFalse(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
+        else:
+            self.assertEqual("RUNNING", self.pointer["status"])
+            self.assertEqual("SRFDI-WP10-v0.9-RESUME", self.pointer["next_packet"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
         self.assertEqual("DENIED", self.pointer["provider_fetch"])
         self.assertEqual("LOCKED_UNCONSUMED", self.pointer["validation_2025"])
         self.assertEqual("NONE", self.pointer["scientific_promotion"])

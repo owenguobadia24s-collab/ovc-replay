@@ -63,13 +63,29 @@ class SRFDIJuneAuthV09MergeCloseoutTests(unittest.TestCase):
         self.assertFalse(self.state["authority"]["authority_token_consumed"])
         self.assertEqual("AUTHORIZED_UNCONSUMED", self.state["authority"]["authority_token_state"])
         self.assertEqual(RUN_BINDING, self.state["exact_bindings"]["run_binding_sha256"])
-        self.assertEqual("READY", self.pointer["status"])
-        self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual(FRESH_TOKEN, self.pointer["fresh_authority_token_id"])
+            self.assertEqual(RUN_BINDING, self.pointer["run_binding_sha256"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            return
+        self.assertIn(self.pointer["status"], {"READY", "RUNNING"})
         self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
         self.assertEqual(FRESH_TOKEN, self.pointer["fresh_authority_token_id"])
-        self.assertFalse(self.pointer["fresh_authority_token_consumed"])
-        self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
         self.assertEqual(RUN_BINDING, self.pointer["run_binding_sha256"])
+        if self.pointer["status"] == "READY":
+            self.assertEqual("SRFDI-WP10-v0.9", self.pointer["next_packet"])
+            self.assertFalse(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("AUTHORIZED_UNCONSUMED", self.pointer["fresh_authority_token_state"])
+        else:
+            self.assertEqual("SRFDI-WP10-v0.9-RESUME", self.pointer["next_packet"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertEqual("RUNNING_EXACT_BOUND_V09_FROM_COMMITTED_CHECKPOINT", self.pointer["june_execution"])
 
     def test_closeout_is_zero_delta_and_firewalls_remain_closed(self):
         self.assertEqual("PASS_PENDING_CLOSEOUT_EXACT_HEAD_ASSURANCE", self.qa["qa_result"])
