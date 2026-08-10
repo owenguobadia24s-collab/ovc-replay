@@ -14,7 +14,6 @@ POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 HISTORICAL_GATE = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e-ag0/C2E_AG0_GATE_PACKET.json"
 HISTORICAL_DECISION = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e-ag0/C2E_AG0_OPERATOR_DECISION.json"
 
-
 class C2E2WP7R2CloseoutAG0GateTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -114,25 +113,25 @@ class C2E2WP7R2CloseoutAG0GateTests(unittest.TestCase):
             self.assertEqual(self.pointer["current_packet"], "C2E-AG1-PREP")
             self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
             self.assertFalse(self.pointer["operator_decision_required"])
-            self.assertIn(
-                "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
-                self.pointer["operator_decision_history"],
-            )
-        else:
-            self.assertEqual(
-                authoritative_state,
-                "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_33.json",
-            )
+            self.assertIn("C2E-AG0.OPERATOR.PASS.20260809T213300+0100", self.pointer["operator_decision_history"])
+        elif authoritative_state.endswith("OVC_C2E2_STATE_v0_33.json"):
             self.assertEqual(self.pointer["status"], "GATE_READY")
             self.assertEqual(self.pointer["current_packet"], "C2E-AG1-PREP")
             self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
             self.assertTrue(self.pointer["operator_decision_required"])
             self.assertEqual(self.pointer["recommended_operator_decision"], "DEFER")
-            self.assertIn(
-                "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
-                self.pointer["operator_decision_history"],
-            )
+            self.assertIn("C2E-AG0.OPERATOR.PASS.20260809T213300+0100", self.pointer["operator_decision_history"])
             self.assertEqual(self.pointer["ag2_progression"], "DENIED_PENDING_AG1")
+        else:
+            self.assertEqual(authoritative_state, "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_38.json")
+            self.assertEqual(self.pointer["status"], "APPROVED")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG1-DECISION")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+            self.assertFalse(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["operator_decision"], "PASS")
+            self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(self.pointer["ag2_progression"], "AUTHORIZED_FOR_GATE_PREPARATION_ONLY")
+            self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
 
     def test_historical_synthetic_ag0_defer_remains_immutable_history(self):
         self.assertEqual(self.historical_gate["recommended_decision"], "DEFER")
@@ -149,7 +148,6 @@ class C2E2WP7R2CloseoutAG0GateTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["probability_risk_exposure_execution_agent_write"], "NONE")
         self.assertEqual(self.gate["current_authority"]["active_c2e"], "NONE")
         self.assertEqual(self.gate["current_authority"]["active_boundary_pack"], "NONE")
-
 
 if __name__ == "__main__":
     unittest.main()
