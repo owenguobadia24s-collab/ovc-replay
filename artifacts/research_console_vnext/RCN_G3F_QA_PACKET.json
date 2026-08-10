@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-rcn-g3f-qa/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RC-VNEXT-GREENFIELD-IMPLEMENTATION-PLAN-0.1-FINAL-REVISED-1",
+  "plan_version": "0.1 FINAL REVISED 1",
+  "packet_id": "RCN-WP3F",
+  "gate_id": "RCN-G3F",
+  "candidate_commit": "1b3bb82b5c3b1e09e772ec991a35d8790dafe0b4",
+  "baseline_commit": "058ddf2846ac96e369841803d2079cba3d8a4c8e",
+  "qa_recommendation": "PASS",
+  "authority_effect": "NONE",
+  "automated_assurance": [
+    {"workflow": "Research Console vNext", "run_id": 31375175132, "result": "PASS"},
+    {"workflow": "Complete repository suite", "run_id": 31375199611, "result": "PASS"},
+    {"workflow": "OVC tiered test selection / profile / merge-readiness", "run_id": 31375199578, "result": "PASS"}
+  ],
+  "visual_evidence": {
+    "artifact_id": 9057635871,
+    "digest": "sha256:2b310b28ec59c9fcef6292d1977cc09a9af9b4c600e6e1d88882302f65974267",
+    "screenshot_count": 9,
+    "reference_viewport": "1536x864",
+    "responsive_viewports": ["1920x1080", "1440x810", "1280x720"],
+    "scenarios": ["healthy", "dense", "inactive-c2e", "null-residual", "authority-denied"]
+  },
+  "chart_dynamics_assurance": {
+    "candlestick_values_changed": false,
+    "candlestick_presentation": "higher-contrast body/wick/border styling only",
+    "overlay_coordinate_binding": "LIGHTWEIGHT_CHARTS_TIME_AND_PRICE_COORDINATES",
+    "outer_envelope_inputs": ["bar.h", "bar.l"],
+    "body_ribbon_inputs": ["max(bar.o,bar.c)", "min(bar.o,bar.c)"],
+    "presentation_traces": ["bar.h", "(bar.h+bar.l)/2", "bar.c", "bar.l"],
+    "automated_canvas_overlay_alignment": "PASS_WITHIN_1PX",
+    "presentation_only": true,
+    "scientific_inference": "NONE"
+  },
+  "manual_visual_review": {
+    "result": "PASS_FOR_OPERATOR_REREVIEW",
+    "observations": [
+      "The central chart is materially more visually active than the merged WP3E baseline while the surrounding reference-locked shell geometry remains unchanged.",
+      "Bullish and bearish candles have stronger body, border and wick contrast against the dark chart surface.",
+      "The outer presentation envelope now follows exact source-bar high/low coordinates and visibly wraps the candle path rather than drifting in an independently normalized SVG coordinate space.",
+      "An inner body ribbon and restrained close-flow/high/mid/low traces add depth without introducing a market indicator, signal, probability, forecast or semantic claim.",
+      "The range navigator is visually richer while remaining source-derived and presentation-only.",
+      "Reference, responsive and adverse-state screenshots preserve fixture authority labels, null/residual states, inactive C2E and no horizontal overflow."
+    ]
+  },
+  "fixture_integrity": {
+    "classification": "SYNTHETIC_FIXTURE",
+    "evidence_status": "NON_EVIDENTIARY",
+    "authority_effect": "NONE",
+    "real_source_routes": "DENIED",
+    "wp4_status": "DENIED_UNTIL_EXPLICIT_RCN_G3V_PASS"
+  },
+  "unresolved_issues": [],
+  "warnings": [
+    "Visual acceptance remains reserved to RCN-G3V operator review; RCN-G3F QA PASS does not itself accept the visual baseline or authorize WP4.",
+    "The chart dynamics are presentation treatment over deterministic synthetic fixture OHLC and must not be interpreted as a scientific coverage model or market signal."
+  ],
+  "rollback": "Revert WP3F-only FixtureChart, chart-dynamics stylesheet, import and assurance changes; retain merged WP3E reference-locked fixture capability.",
+  "decision": "PASS"
+}

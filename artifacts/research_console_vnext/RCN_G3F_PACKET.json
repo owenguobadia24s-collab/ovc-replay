@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-rcn-g3f-packet/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RC-VNEXT-GREENFIELD-IMPLEMENTATION-PLAN-0.1-FINAL-REVISED-1",
+  "packet_id": "RCN-WP3F",
+  "gate_id": "RCN-G3F",
+  "title": "Central Chart Visual Dynamics Remediation",
+  "status": "PASS_READY_FOR_MERGE_AND_OPERATOR_REREVIEW",
+  "baseline_commit": "058ddf2846ac96e369841803d2079cba3d8a4c8e",
+  "candidate_commit": "1b3bb82b5c3b1e09e772ec991a35d8790dafe0b4",
+  "authority_effect": "NONE",
+  "mode": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+  "implementation_results": [
+    "Merged WP3E shell geometry is preserved; WP3F changes are concentrated on the central chart and its assurance.",
+    "Synthetic candlestick body, border and wick presentation has stronger bullish/bearish contrast without changing OHLC source values.",
+    "The former approximate independent SVG mapping has been replaced by exact Lightweight Charts timeToCoordinate and priceToCoordinate binding.",
+    "An outer source-derived high/low envelope now wraps the candle path, with an inner open/close body ribbon and restrained high/mid/close/low presentation traces.",
+    "The range navigator has increased visual depth while remaining deterministic and presentation-only.",
+    "Playwright proves chart/overlay coordinate-box alignment within 1px and preserves the 1536x864 WP3E reference geometry plus responsive viewports.",
+    "Fixture/non-evidentiary/authority-none labeling, independent AVAILABLE/AUTHORISED/ACTIVE states, null/residual handling and inactive C2E remain explicit."
+  ],
+  "assurance": {
+    "research_console_run": 31375175132,
+    "repository_run": 31375199611,
+    "ovc_assurance_run": 31375199578,
+    "result": "PASS",
+    "visual_artifact_id": 9057635871,
+    "visual_artifact_digest": "sha256:2b310b28ec59c9fcef6292d1977cc09a9af9b4c600e6e1d88882302f65974267"
+  },
+  "forbidden_authority_preserved": [
+    "real-source exposure",
+    "invented indicators/signals/probabilities/forecasts/outcomes",
+    "scientific semantic changes",
+    "selector/release activation",
+    "Validation access",
+    "publication",
+    "writes",
+    "probability/risk/exposure/execution/agent authority"
+  ],
+  "qa_packet": "artifacts/research_console_vnext/RCN_G3F_QA_PACKET.json",
+  "decision_record": "artifacts/research_console_vnext/RCN_G3F_DECISION.json",
+  "scope_record": "artifacts/research_console_vnext/RCN_WP3F_SCOPE.json",
+  "next_gate": "RCN-G3V",
+  "operator_required_next": true,
+  "operator_decision_set": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "wp4_status": "DENIED_UNTIL_EXPLICIT_RCN_G3V_PASS",
+  "stop_boundary": "RCN-G3V"
+}
