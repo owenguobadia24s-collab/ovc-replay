@@ -6,6 +6,7 @@ import unittest
 
 from ovc.opt_b.srfd import june_authority_v06
 from ovc.opt_b.srfd.serialization import logical_sha256
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-6"
@@ -62,6 +63,8 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
             self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"]); self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
         elif gate=="SRFDI-G-JUNE-AUTH":
             self.assertFalse(self.pointer["operator_decision_required"]); self.assertIsNotNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["june_execution"].startswith("AUTHORIZED"))
+        elif self.pointer.get("active_packet")=="SRFDI-WP10-v1.1":
+            self.assertTrue(assert_lawful_v10_pointer(self,self.pointer))
         else:
             self.assertFalse(self.pointer["operator_decision_required"])
 
