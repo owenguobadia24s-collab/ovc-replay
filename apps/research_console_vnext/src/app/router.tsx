@@ -1,4 +1,4 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import { AppShell } from "./AppShell";
-import { FoundationWorkspace } from "./FoundationWorkspace";
-export const router = createBrowserRouter([{ path: "/", element: <AppShell />, children: [{ index: true, element: <Navigate to="/market" replace /> }, { path: "market", element: <FoundationWorkspace /> }, { path: "structure", element: <FoundationWorkspace /> }, { path: "research", element: <FoundationWorkspace /> }, { path: "evidence", element: <FoundationWorkspace /> }, { path: "control", element: <FoundationWorkspace /> }] }]);
+import { WorkbenchFrame } from "../researchNative/WorkbenchFrame";
+export const router=createBrowserRouter([{path:"/",element:<AppShell/>,children:[{index:true,element:<Navigate to="/market" replace/>},{path:"market",element:<WorkbenchFrame/>},{path:"structure",element:<WorkbenchFrame/>},{path:"research",element:<WorkbenchFrame/>},{path:"evidence",element:<WorkbenchFrame/>},{path:"control",element:<WorkbenchFrame/>}]}]);
