@@ -1,0 +1,44 @@
+name: TEMP repair SRFDI v1.1 uploaded byte
+
+on:
+  push:
+    branches:
+      - remediate/srfdi-wp10-v11-execution-substrate-20260810
+    paths:
+      - '.github/workflows/_temp_repair_srfdi_v11.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: remediate/srfdi-wp10-v11-execution-substrate-20260810
+      - name: Repair exact corrupted byte and verify syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('src/ovc/opt_b/srfd/wp10_v11_hardening.py')
+          b=p.read_bytes()
+          if b'\x1b' not in b:
+              print('No ESC byte present')
+          else:
+              if b.count(b'\x1b') != 1:
+                  raise SystemExit(f'unexpected ESC count {b.count(b"\x1b")}')
+              b=b.replace(b'\x1b', b'[')
+              p.write_bytes(b)
+              print('Repaired exactly one ESC byte')
+          PY
+          python -m py_compile src/ovc/opt_b/srfd/wp10_v11_hardening.py
+      - name: Commit repair if needed
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'ovc-remediation-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add src/ovc/opt_b/srfd/wp10_v11_hardening.py
+          git commit -m 'Fix uploaded SRFDI v1.1 hardening source byte'
+          git push origin HEAD:remediate/srfdi-wp10-v11-execution-substrate-20260810
