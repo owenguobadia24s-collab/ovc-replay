@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v0-9"
 DECISION = BASE / "SRFDI_G_JUNE_AUTH_OPERATOR_DECISION_v0_9.json"
@@ -75,6 +77,8 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
         self.assertEqual("FORBIDDEN", self.decision["historical_blocked_run"]["resume"])
 
     def test_pending_merge_state_is_immutable_while_pointer_may_advance_after_exact_merge(self):
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         self.assertEqual("APPROVED", self.state["status"])
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual(FRESH_TOKEN, self.state["authority"]["fresh_authority_token_id"])

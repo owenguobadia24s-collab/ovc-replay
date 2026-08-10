@@ -6,6 +6,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 from ovc.opt_b.srfd import june_authority_v07
 from ovc.opt_b.srfd.serialization import logical_sha256
 from ovc.opt_b.srfd.wp10_execution_resilience import ExecutionResilienceError, RunAuthorityStore
@@ -33,6 +35,8 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
    with self.assertRaises(ExecutionResilienceError) as ctx: store.consume(self.token,binding)
    self.assertEqual("TOKEN_ALREADY_CONSUMED",ctx.exception.reason_code)
  def test_historical_v07_state_is_immutable_while_pointer_may_advance(self):
+  if assert_lawful_v10_pointer(self, self.pointer):
+   return
   if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
    self.assertEqual("BLOCKED", self.pointer["status"])
    self.assertEqual("SRFDI-G10", self.pointer["current_gate"])

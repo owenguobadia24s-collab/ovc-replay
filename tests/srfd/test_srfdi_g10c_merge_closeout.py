@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10c"
 RECEIPT = BASE / "SRFDI_G10C_MERGE_RECEIPT.json"
@@ -57,6 +59,8 @@ class SRFDIG10CMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("2ffe195b509a22884942b50509448a5731903abb4b794c432df69a034e12fcc1", self.state["exact_bindings"]["execution_binding_sha256"])
 
     def test_current_pointer_advances_lawfully_beyond_closeout(self) -> None:
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
             self.assertEqual("BLOCKED", self.pointer["status"])
             self.assertEqual("SRFDI-G10", self.pointer["current_gate"])

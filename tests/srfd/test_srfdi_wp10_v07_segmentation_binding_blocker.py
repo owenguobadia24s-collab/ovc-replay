@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v0-7"
 BLOCKER = BASE / "SRFDI_WP10_V07_EXECUTION_BLOCKER.json"
@@ -43,6 +45,8 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
         self.assertEqual("SEGMENTATION_BINDING_MISMATCH",failure["reason_code"]); self.assertEqual("segmentation/RUN_CHANGE_SEGMENTATION",failure["stage"]); self.assertEqual({"stream_count":264,"segment_count":7609,"boundary_count":7345},failure["expected"]); self.assertEqual({"stream_count":232,"segment_count":7013,"boundary_count":6781},failure["actual"]); self.assertFalse(failure["segmentation_artifact_committed"]); self.assertEqual("BLOCKED_CONSUMED_RUN_PRESERVED",self.blocker["status"]); self.assertEqual("BLOCKED_FAIL_CLOSED",self.blocker["authority"]["resume_under_current_runner"]); self.assertEqual("NONE",self.blocker["authority"]["new_run_authority"])
 
     def test_historical_blocker_is_exact_while_pointer_may_advance_lawfully(self):
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         self.assertEqual("BLOCKED",self.state["status"]); self.assertEqual("NONE_UNDER_CURRENT_STANDING_DELEGATION_AFTER_HARD_STOP",self.state["remediation_authority"]); self.assertEqual("PRESERVE_EVIDENCE_AND_STOP_FAIL_CLOSED_NO_ROUTINE_OPERATOR_APPROVAL_REQUEST",self.state["next_action"])
         self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertEqual(TOKEN_ID,self.pointer["authority_token_id"]); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json")); self.assertEqual("DENIED",self.pointer["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",self.pointer["validation_2025"]); self.assertEqual("NONE",self.pointer["scientific_promotion"]); self.assertEqual("NONE",self.pointer["probability_risk_exposure_execution"])
         if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":

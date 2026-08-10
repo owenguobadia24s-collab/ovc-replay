@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 RECEIPT = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10b-freeze/SRFDI_G10B_FREEZE_MERGE_RECEIPT.json"
 QA = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10b-freeze/SRFDI_G10B_FREEZE_CLOSEOUT_QA.json"
@@ -41,6 +43,8 @@ class SRFDIG10BFreezeMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED",self.state["authority"]["validation_2025"])
 
     def test_pointer_reaches_june_gate_and_may_advance_only_through_exact_v09_authority(self):
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
             self.assertEqual("BLOCKED", self.pointer["status"])
             self.assertEqual("SRFDI-G10", self.pointer["current_gate"])

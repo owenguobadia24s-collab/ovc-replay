@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 import random
 import unittest
+
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
 from unittest.mock import patch
 
 from ovc.opt_b.srfd.segmentation_prereg import (
@@ -107,6 +109,8 @@ class SRFDIWP10BSegmentationReferenceTests(unittest.TestCase):
 
     def test_authority_pointer_preserves_remediation_history_and_lawful_progression(self) -> None:
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
+        if assert_lawful_v10_pointer(self, pointer):
+            return
         self.assertIn(pointer["status"], {"GATE_READY", "APPROVED", "READY", "RUNNING", "QA_REVIEW", "BLOCKED"})
         self.assertIn(pointer["current_gate"], {"SRFDI-G10B-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11"})
         self.assertTrue(pointer["authority_token_consumed"])

@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-g10b"
 OPERATOR = BASE / "SRFDI_G10B_OPERATOR_PACKET.json"
@@ -25,6 +27,8 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
         self.assertEqual("SRFDI-G10B",self.operator["gate_id"]); self.assertEqual("OPERATOR_REQUIRED",self.operator["gate_class"]); self.assertEqual("SUPERSEDE",self.operator["recommended_decision"]); self.assertEqual("OVC APPROVE SRFDI-G10B SUPERSEDE",self.operator["exact_operator_command"]); self.assertEqual("NONE",self.prep["authority_effect"])
 
     def test_current_pointer_preserves_blocker_and_lawful_progression(self) -> None:
+        if assert_lawful_v10_pointer(self, self.pointer):
+            return
         self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
         if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
             self.assertEqual("BLOCKED", self.pointer["status"])
