@@ -21,7 +21,7 @@ jobs:
           set -euo pipefail
           python -m pip install --quiet gdown
           target="$RUNNER_TEMP/C2_15M_BID_LOCAL.jsonl"
-          gdown --id 1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk --output "$target"
+          gdown 1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk -O "$target"
           sha256sum "$target"
           wc -c "$target"
           echo "63a1d24836d3cd0aaad9e5a11e9b9ec51724bfd335fab47f538ed23f36e8c58b  $target" | sha256sum -c -
