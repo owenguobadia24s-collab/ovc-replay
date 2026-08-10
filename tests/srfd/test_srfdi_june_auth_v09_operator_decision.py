@@ -80,7 +80,16 @@ class SRFDIJuneAuthV09OperatorDecisionTests(unittest.TestCase):
         self.assertEqual(FRESH_TOKEN, self.state["authority"]["fresh_authority_token_id"])
         self.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_MAIN_MERGE", self.state["authority"]["fresh_authority_token_state"])
         self.assertEqual("SRFDI-G-JUNE-AUTH-v0.9-MERGE-CLOSEOUT", self.state["next_packet"])
-        if self.pointer["current_gate"] == "SRFDI-G-JUNE-AUTH":
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual(FRESH_TOKEN, self.pointer["fresh_authority_token_id"])
+            self.assertEqual(RUN_BINDING, self.pointer["run_binding_sha256"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+        elif self.pointer["current_gate"] == "SRFDI-G-JUNE-AUTH":
             self.assertEqual("APPROVED", self.pointer["status"])
             self.assertEqual("SRFDI-G-JUNE-AUTH-v0.9-MERGE-CLOSEOUT", self.pointer["next_packet"])
             self.assertEqual(FRESH_TOKEN, self.pointer["fresh_authority_token_id"])
