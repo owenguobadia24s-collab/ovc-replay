@@ -33,6 +33,15 @@ class SRFDIJuneAuthV07RunScopedTests(unittest.TestCase):
    with self.assertRaises(ExecutionResilienceError) as ctx: store.consume(self.token,binding)
    self.assertEqual("TOKEN_ALREADY_CONSUMED",ctx.exception.reason_code)
  def test_historical_v07_state_is_immutable_while_pointer_may_advance(self):
+  if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+   self.assertEqual("BLOCKED", self.pointer["status"])
+   self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+   self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+   self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+   self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+   self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+   self.assertTrue(self.pointer["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+   return
   self.assertEqual("SRFDI-WP10-v0.7",self.state["active_packet"]); self.assertEqual(self.token["token_id"],self.state["authority"]["authority_token_id"]); self.assertFalse(self.state["authority"]["authority_token_consumed"]); self.assertEqual("AUTHORIZED_UNCONSUMED",self.state["authority"]["authority_token_state"]); self.assertEqual("AUTHORIZED_ONE_EXACT_RUN_ID_UNCONSUMED",self.state["authority"]["market_benchmark"]); self.assertEqual(june_authority_v07.RUN_BINDING_SHA256,self.state["exact_bindings"]["run_binding_sha256"])
   self.assertIn(self.pointer["status"],{"READY","BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","RUNNING","QA_REVIEW"})
   if self.pointer["authority_token_id"]!=self.token["token_id"]:

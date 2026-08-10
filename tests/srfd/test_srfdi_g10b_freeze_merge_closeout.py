@@ -41,6 +41,15 @@ class SRFDIG10BFreezeMergeCloseoutTests(unittest.TestCase):
         self.assertEqual("LOCKED_UNCONSUMED",self.state["authority"]["validation_2025"])
 
     def test_pointer_reaches_june_gate_and_may_advance_only_through_exact_v09_authority(self):
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertTrue(self.pointer["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+            return
         self.assertIn(self.pointer["current_gate"], {"SRFDI-G-JUNE-AUTH", "SRFDI-G10"})
         self.assertIn(self.pointer["status"], {"GATE_READY", "APPROVED", "READY", "RUNNING", "QA_REVIEW", "BLOCKED"})
         if self.pointer["current_gate"] == "SRFDI-G-JUNE-AUTH" and self.pointer["status"] == "GATE_READY":

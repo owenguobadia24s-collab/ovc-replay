@@ -26,6 +26,15 @@ class SRFDIG10BSegmentationBindingSupersessionGateReadyTests(unittest.TestCase):
 
     def test_current_pointer_preserves_blocker_and_lawful_progression(self) -> None:
         self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json"))
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertTrue(self.pointer["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+            return
         if self.pointer["status"]=="BLOCKED":
             self.assertEqual("HARD_BLOCKER_SEGMENTATION_BINDING_MISMATCH",self.pointer["stop_at"]); self.assertIsNone(self.pointer["next_packet"])
         elif self.pointer["status"]=="AUTHORIZED_REMEDIATION_ONLY":

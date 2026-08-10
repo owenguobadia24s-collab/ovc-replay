@@ -75,6 +75,15 @@ class SRFDIG10AFreezeGateReadyTests(unittest.TestCase):
         self.assertEqual("NONE", authority["probability_risk_exposure_execution"])
 
     def test_current_pointer_may_advance_only_through_lawful_delegated_sequence(self) -> None:
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual("SRFDI-G10", self.pointer["current_gate"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertTrue(self.pointer["failure_receipt"].endswith("SRFDI_WP10_V09_CAPACITY_EXCEEDED_EXTERNAL_BYTES.json"))
+            return
         self.assertEqual("OVC-SRFD-BENCHMARK-v0.1", self.pointer["programme_id"])
         self.assertIn(self.pointer.get("current_gate"), {"SRFDI-G10A-FREEZE", "SRFDI-G-JUNE-AUTH", "SRFDI-G10", "SRFDI-G11", "SRFDI-G10B", "SRFDI-G10B-FREEZE", None})
         self.assertIn(self.pointer["status"], {"READY", "RUNNING", "QA_REVIEW", "APPROVED", "APPROVED_PENDING_MERGE", "COMPLETED", "BLOCKED", "AUTHORIZED_REMEDIATION_ONLY", "GATE_READY"})

@@ -45,6 +45,16 @@ class SRFDIWP10V07SegmentationBindingBlockerTests(unittest.TestCase):
     def test_historical_blocker_is_exact_while_pointer_may_advance_lawfully(self):
         self.assertEqual("BLOCKED",self.state["status"]); self.assertEqual("NONE_UNDER_CURRENT_STANDING_DELEGATION_AFTER_HARD_STOP",self.state["remediation_authority"]); self.assertEqual("PRESERVE_EVIDENCE_AND_STOP_FAIL_CLOSED_NO_ROUTINE_OPERATOR_APPROVAL_REQUEST",self.state["next_action"])
         self.assertIn(self.pointer["status"],{"BLOCKED","AUTHORIZED_REMEDIATION_ONLY","GATE_READY","APPROVED","READY","RUNNING","QA_REVIEW"}); self.assertEqual(TOKEN_ID,self.pointer["authority_token_id"]); self.assertTrue(self.pointer["authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["authority_token_state"]); self.assertTrue(self.pointer["blocker_evidence"].endswith("SRFDI_WP10_V07_EXECUTION_BLOCKER.json")); self.assertEqual("DENIED",self.pointer["provider_fetch"]); self.assertEqual("LOCKED_UNCONSUMED",self.pointer["validation_2025"]); self.assertEqual("NONE",self.pointer["scientific_promotion"]); self.assertEqual("NONE",self.pointer["probability_risk_exposure_execution"])
+        if self.pointer.get("failure_reason") == "CAPACITY_EXCEEDED_EXTERNAL_BYTES":
+            self.assertEqual("BLOCKED", self.pointer["status"])
+            self.assertEqual(V09_RUN_ID, self.pointer["run_id"])
+            self.assertEqual(FRESH_V09, self.pointer["fresh_authority_token_id"])
+            self.assertTrue(self.pointer["fresh_authority_token_consumed"])
+            self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN", self.pointer["fresh_authority_token_state"])
+            self.assertEqual(V09_BINDING, self.pointer["run_binding_sha256"])
+            self.assertEqual("SRFDI-WP10-v1.0-CAPACITY-REMEDIATION", self.pointer["next_packet"])
+            self.assertEqual("BLOCKED_CAPACITY_V09_PRESERVED_NOT_COMPLETED", self.pointer["june_execution"])
+            return
         if self.pointer["current_gate"]=="SRFDI-G10" and self.pointer["status"]=="RUNNING":
             self.assertEqual(V09_RUN_ID,self.pointer["run_id"]); self.assertEqual(FRESH_V09,self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["fresh_authority_token_consumed"]); self.assertEqual("CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",self.pointer["fresh_authority_token_state"]); self.assertEqual(V09_BINDING,self.pointer["run_binding_sha256"])
         else:
