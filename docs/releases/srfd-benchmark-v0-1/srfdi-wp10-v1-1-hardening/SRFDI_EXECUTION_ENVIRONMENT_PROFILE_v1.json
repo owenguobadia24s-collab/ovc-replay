@@ -1,0 +1,74 @@
+{
+  "authority_effect": "EXECUTION_GOVERNANCE_ONLY_SCIENTIFIC_DELTA_NONE",
+  "captured_at": "2026-08-10T21:01:00+01:00",
+  "concurrency": {
+    "cgroup_cpu_max": "400000 100000",
+    "effective_cpu_quota_cores": 4.0,
+    "os_cpu_count": 5,
+    "pids_max": "max"
+  },
+  "dependencies": {
+    "fastapi": "0.128.2",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "pip": "25.1.1",
+    "pydantic": "2.13.4",
+    "pytest": "9.0.2",
+    "scipy": "1.17.0",
+    "setuptools": "82.0.1"
+  },
+  "dependency_inventory": {
+    "pip_freeze_line_count": 506,
+    "pip_freeze_sha256": "c605675736ce321c8262bed98b1b47857b0d3e57cc96df1251bc5d4044c44866"
+  },
+  "execution_constraints": {
+    "hard_memory_ceiling_bytes": 4294967296,
+    "hard_memory_ceiling_source": "cgroup_v2_memory.max",
+    "max_worker_concurrency": 1,
+    "minimum_temp_reserve_bytes": 4294967296,
+    "required_min_free_bytes_before_run": 32212254720,
+    "scientific_run_parallelism": "SINGLE_PROCESS_SINGLE_WORKER",
+    "t1_external_artifact_limit_bytes": 25769803776
+  },
+  "logical_sha256": "d921fb6b7bf8632b705851c07a85d09218571780201050fde5d6f31dc04df6df",
+  "memory": {
+    "cgroup_memory_current_bytes_at_capture": 1344008192,
+    "cgroup_memory_high_bytes": null,
+    "cgroup_memory_max_bytes": 4294967296,
+    "cgroup_memory_swap_max_bytes": 8589934592,
+    "host_mem_available_bytes_at_capture": 5624156160,
+    "host_mem_total_bytes": 6368813056,
+    "swap_free_bytes_at_capture": 0,
+    "swap_total_bytes": 0
+  },
+  "os": {
+    "kernel": "Linux version 6.18.35 (root@d700b32cb303) (gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #1 SMP Mon Jul 27 18:07:50 UTC 2026",
+    "machine": "x86_64",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "release": "6.18.35",
+    "system": "Linux"
+  },
+  "process_limits": {
+    "RLIMIT_AS": {"hard": null, "soft": null},
+    "RLIMIT_DATA": {"hard": null, "soft": null},
+    "RLIMIT_NOFILE": {"hard": 16384, "soft": 16384},
+    "RLIMIT_NPROC": {"hard": 7851, "soft": 7851},
+    "RLIMIT_RSS": {"hard": null, "soft": null},
+    "RLIMIT_STACK": {"hard": null, "soft": 8388608}
+  },
+  "profile_id": "SRFDI.EXECUTION.ENV.CAAS.20260810.v1",
+  "purpose": "Freeze actual host/process/storage limits before SRFDI-WP10-v1.1 scientific retry.",
+  "python": {
+    "compiler": "GCC 14.2.0",
+    "executable": "/opt/pyvenv/bin/python",
+    "implementation": "CPython",
+    "version": "3.13.5"
+  },
+  "schema": "ovc-srfdi-execution-environment-profile/v1",
+  "storage": {
+    "root": {"available_bytes": 40547364864, "block_size": 4096, "filesystem_type": "ext4", "free_bytes": 44000112640, "mount_point": "/", "path": "/", "source": "/dev/vda", "total_bytes": 67049664512},
+    "temp_root": {"available_bytes": 40547364864, "block_size": 4096, "filesystem_type": "ext4", "free_bytes": 44000112640, "mount_point": "/", "path": "/tmp", "source": "/dev/vda", "total_bytes": 67049664512},
+    "working_root": {"available_bytes": 40547364864, "block_size": 4096, "filesystem_type": "ext4", "free_bytes": 44000112640, "mount_point": "/", "path": "/mnt/data", "source": "/dev/vda", "total_bytes": 67049664512}
+  },
+  "temp_policy": {"same_filesystem_as_working_root": true, "tempdir": "/tmp"}
+}
