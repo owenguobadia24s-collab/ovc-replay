@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-rcn-wp3f-scope/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RC-VNEXT-GREENFIELD-IMPLEMENTATION-PLAN-0.1-FINAL-REVISED-1",
+  "packet_id": "RCN-WP3F",
+  "title": "Central Chart Visual Dynamics Remediation",
+  "admission": "RCN-G3V operator visual feedback after merged WP3E: candlesticks too bland, overlay too plain and insufficiently covering candles, chart insufficiently dynamic",
+  "baseline_commit": "058ddf2846ac96e369841803d2079cba3d8a4c8e",
+  "branch": "build/rc-vnext-wp3f-chart-dynamics",
+  "authority_effect": "NONE",
+  "mode": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+  "scope": [
+    "preserve the merged WP3E reference-locked shell geometry and all non-chart presentation boundaries",
+    "increase synthetic candlestick body, wick, border and up/down contrast without changing source values",
+    "replace the approximate normalized SVG overlay mapping with Lightweight Charts timeToCoordinate and priceToCoordinate binding",
+    "construct a presentation-only outer OHLC envelope from exact synthetic bar high/low coordinates and an inner body ribbon from exact open/close body extremes",
+    "add derived high, midpoint, close-flow and low presentation traces from the same synthetic source bars",
+    "increase chart depth and local visual energy through bounded overlay fill, halo, flow and navigator treatment",
+    "retain deterministic synthetic fixture values and first-valid fixture mode",
+    "extend Playwright assurance to prove chart/overlay coordinate-box alignment, presentation-only marking, responsive behavior and preserved WP3E geometry"
+  ],
+  "acceptance": [
+    "the central chart is the clear visual focal point and is materially more dynamic than the merged WP3E candidate",
+    "candlesticks are visually stronger and no longer read as bland or generic",
+    "the coverage envelope visibly wraps the candle path and is bound to the exact chart coordinate system rather than an approximate independent coordinate system",
+    "1536x864 reference geometry remains within the existing WP3E tolerance",
+    "1920x1080, 1440x810 and 1280x720 remain usable with no horizontal overflow",
+    "SYNTHETIC FIXTURE, NON-EVIDENTIARY and AUTHORITY EFFECT NONE remain explicit",
+    "AVAILABLE / AUTHORISED / ACTIVE remain independent",
+    "null/residual, inactive C2E and authority-denied scenarios remain explicit",
+    "no market/scientific semantic inference or mutation authority is introduced",
+    "RCN-G3V operator visual rereview remains mandatory after merge"
+  ],
+  "forbidden": [
+    "real-source exposure",
+    "invented indicators, signals, probabilities, forecasts or outcomes",
+    "scientific semantic changes",
+    "selector or release activation",
+    "Validation access",
+    "publication",
+    "writes",
+    "probability/risk/exposure/execution/agent authority"
+  ],
+  "rollback": "Revert WP3F-only FixtureChart, chart-dynamics stylesheet, import and assurance changes; retain merged WP3E reference-locked fixture capability.",
+  "next_gate": "RCN-G3V",
+  "stop_boundary": "RCN-G3V"
+}

@@ -17,7 +17,14 @@ export function InvestigationTabs() {
   const active = useMemo(() => selectActiveInvestigation(items, requested), [items, requested]);
   useEffect(() => { if (!active) return; if (requested !== active.investigation_id) { const next = new URLSearchParams(searchParams); next.set(INVESTIGATION_QUERY_KEY, active.investigation_id); setSearchParams(next, { replace: true }); } const nextIds = mergeLocalTabs(openIds, active.investigation_id); if (nextIds.join("|") !== openIds.join("|")) { setOpenIds(nextIds); window.localStorage.setItem(LOCAL_TAB_STORAGE_KEY, JSON.stringify(nextIds)); } }, [active, openIds, requested, searchParams, setSearchParams]);
   const openItems = openIds.map((id) => items.find((item) => item.investigation_id === id)).filter((item): item is Investigation => Boolean(item));
-  const visible = openItems.length ? openItems : items.slice(0, 3);
+  const visible = useMemo(() => {
+    const seeded = [...openItems];
+    for (const item of items) {
+      if (seeded.length >= 3) break;
+      if (!seeded.some((candidate) => candidate.investigation_id === item.investigation_id)) seeded.push(item);
+    }
+    return seeded.slice(0, 3);
+  }, [items, openItems]);
   async function activate(item: Investigation): Promise<void> { const next = new URLSearchParams(searchParams); next.set(INVESTIGATION_QUERY_KEY, item.investigation_id); setSearchParams(next); setOpenIds((current) => { const updated = mergeLocalTabs(current, item.investigation_id); window.localStorage.setItem(LOCAL_TAB_STORAGE_KEY, JSON.stringify(updated)); return updated; }); await Promise.all([queryClient.invalidateQueries({ queryKey: ["identity"] }), queryClient.invalidateQueries({ queryKey: ["capabilities"] }), queryClient.invalidateQueries({ queryKey: ["fixture-investigations"] })]); }
   if (investigationsQuery.isPending) return <div className="investigation-tabs">Loading fixture investigations…</div>;
   if (investigationsQuery.isError) return <div className="investigation-tabs">Fixture investigation source unavailable.</div>;
