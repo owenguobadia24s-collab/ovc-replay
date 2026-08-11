@@ -1,0 +1,43 @@
+{
+  "schema": "c2e-ag3-gate-prep-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "packet_id": "C2E-AG3-PREP",
+  "gate_id": "C2E-AG3",
+  "qa_disposition": "PASS_TO_PRESENT_OPERATOR_AG3_SUBJECT_TO_EXACT_HEAD_ASSURANCE",
+  "authority_effect": "NONE_GATE_PREPARATION_ONLY",
+  "checks": {
+    "ag0_pass_present": "PASS",
+    "ag1_pass_present": "PASS",
+    "ag1_restart_equivalence_resolved": "PASS",
+    "ag2_pass_present": "PASS",
+    "ag2_comparator_gap_resolved": "PASS",
+    "candidate_pack_exact_identity": "PASS",
+    "candidate_pack_still_immutable_inactive_noncanonical": "PASS",
+    "selector_registry_surface_present": "PASS",
+    "authority_registry_surface_present": "PASS",
+    "activation_proposal_changes_no_repository_authority": "PASS",
+    "exact_rollback_defined": "PASS",
+    "scope_expansion": "NONE",
+    "downstream_authority_delta": "NONE",
+    "operator_stop_preserved": "PASS"
+  },
+  "evidence_summary": {
+    "target_frames": 4072,
+    "restart_equivalence": "PASS_R4",
+    "ag2_transition_denominator": 3980,
+    "ag2_disagreements": 509,
+    "ag2_counterexamples": 12,
+    "resolver_conflicts": 0,
+    "ambiguous_boundary_sets": 0,
+    "peer_owner_collisions": 0
+  },
+  "warnings": [
+    "C2E-AG3 is the mandatory operator-only activation/replacement stop.",
+    "Activation must remain exact-pack and exact-scope; no pack bytes or hash may change.",
+    "No canonical publication, Validation, downstream model, probability, risk, exposure, trading, execution or agent-write authority is bundled."
+  ],
+  "unresolved_issues": [],
+  "recommended_operator_decision": "ACTIVATE_NAMED_PACK",
+  "exact_head_assurance": "PENDING_PR_HEAD_CI",
+  "recommendation": "PASS_GATE_PREP_AND_STOP_FOR_OPERATOR_AG3"
+}

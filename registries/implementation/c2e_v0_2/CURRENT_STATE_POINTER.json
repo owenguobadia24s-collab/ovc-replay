@@ -1,19 +1,20 @@
 {
   "schema": "ovc-c2e2-current-state-pointer/v1",
   "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
-  "authoritative_state": "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_42_AG2_COMPLETED.json",
-  "status": "COMPLETED",
-  "current_gate": "C2E-AG2",
-  "current_packet": "C2E-AG2-CLOSEOUT",
+  "authoritative_state": "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_43_AG3_GATE_READY.json",
+  "status": "GATE_READY",
+  "current_gate": "C2E-AG3",
+  "current_packet": "C2E-AG3-PREP",
   "next_gate": "C2E-AG3",
-  "next_packet": "C2E-AG3-PREP",
-  "next_action": "PREPARE_OPERATOR_RESERVED_C2E_AG3_ACTIVATION_OR_REPLACEMENT_PROPOSAL_ONLY_AND_STOP_BEFORE_AG3",
+  "next_packet": "C2E-AG3-DECISION",
+  "next_action": "STOP_FOR_OPERATOR_C2E_AG3",
   "next_gate_operator_decision_required": true,
-  "operator_decision": "PASS",
-  "operator_decision_required": false,
-  "decision_record": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_OPERATOR_PASS_DECISION.json",
-  "gate_packet": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_GATE_PACKET_REFRESHED.json",
-  "qa_packet": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_POSTMERGE_CLOSEOUT_QA_PACKET.json",
+  "operator_decision": null,
+  "operator_decision_required": true,
+  "recommended_operator_decision": "ACTIVATE_NAMED_PACK",
+  "decision_record": null,
+  "gate_packet": "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_GATE_PACKET.json",
+  "qa_packet": "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_QA_PACKET.json",
   "ag0_admissibility": "PASS",
   "ag1_gap001_execution_evidence": "PASS_R4_EXACT_RESTART_EQUIVALENCE",
   "ag1_gap001_read_only_feasibility": "PASS",
@@ -24,7 +25,7 @@
   "ag2_gap001": "RESOLVED_COMPARATOR_EVIDENCE_PRESENT",
   "ag2_merge_commit": "a61b0e23b2c3d981af1b228eb9f5f56546dbf349",
   "ag3": "NOT_EXECUTED",
-  "ag3_progression": "AUTHORIZED_FOR_OPERATOR_RESERVED_PROPOSAL_PREPARATION_ONLY",
+  "ag3_progression": "GATE_READY_OPERATOR_DECISION_REQUIRED",
   "active_c2e": "NONE",
   "active_boundary_pack": "NONE",
   "candidate_boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
@@ -80,10 +81,5 @@
     "C2E-AG1.OPERATOR.PASS.20260810T003700+0100",
     "C2E-AG2.OPERATOR.PASS.20260811T191400+0100"
   ],
-  "delegated_decision_history": [
-    "C2E2-G7.DELEGATED.PASS.HISTORICAL_REPLAY_DEFERRED",
-    "C2E2-G7-R2.DELEGATED.PASS.20260809",
-    "C2E-AG2-CLOSEOUT.DELEGATED.PASS.20260811"
-  ],
-  "recommended_operator_decision": null
+  "delegated_decision_history": ["C2E2-G7.DELEGATED.PASS.HISTORICAL_REPLAY_DEFERRED", "C2E2-G7-R2.DELEGATED.PASS.20260809", "C2E-AG2-CLOSEOUT.DELEGATED.PASS.20260811"]
 }

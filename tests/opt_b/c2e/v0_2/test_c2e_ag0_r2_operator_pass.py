@@ -66,7 +66,15 @@ class C2EAG0R2OperatorPassTests(unittest.TestCase):
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertIn(PASS_ID, self.pointer["operator_decision_history"])
-        if self.pointer["status"] in {"READY", "GATE_READY"}:
+        if self.pointer["current_gate"] == "C2E-AG3":
+            self.assertEqual(self.pointer["status"], "GATE_READY")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG3-PREP")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
+            self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
+            self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
+        elif self.pointer["status"] in {"READY", "GATE_READY"}:
             self.assertEqual(self.pointer["current_packet"], "C2E-AG1-PREP")
             self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
             if self.pointer["status"] == "READY":

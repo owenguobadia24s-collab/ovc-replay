@@ -1,0 +1,127 @@
+{
+  "schema": "c2e-ag3-operator-gate-packet/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "gate_id": "C2E-AG3",
+  "gate_title": "Active C2E named boundary-pack activation / replacement decision",
+  "gate_classification": "OPERATOR_RESERVED",
+  "decision_status": "PENDING_OPERATOR",
+  "allowed_decisions": ["ACTIVATE_NAMED_PACK", "REPLACE", "DEFER", "BLOCK"],
+  "recommended_decision": "ACTIVATE_NAMED_PACK",
+  "baseline_main": "85d512b5588173f58fbd043607e7bcc45653bb8e",
+  "candidate_evidence_commit": "85d512b5588173f58fbd043607e7bcc45653bb8e",
+  "completed_packets": [
+    "C2E2-WP0", "C2E2-WP1", "C2E2-WP2", "C2E2-WP3", "C2E2-WP4", "C2E2-WP5", "C2E2-WP6", "C2E2-WP7",
+    "C2E-AG0-PASS", "C2E-AG1-PASS", "C2E-AG2-PASS", "C2E-AG2-CLOSEOUT"
+  ],
+  "review_subject": {
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "version": "JUNE.EMPIRICAL.BASELINE.STABLE_SIGNATURE.v2",
+    "source_blob_sha": "dc12ed68d55b14579bcd0050a3f102979781656b",
+    "active": false,
+    "canonical": false,
+    "population_scope": {
+      "instrument_id": "GBPUSD",
+      "sides": ["ASK", "BID"],
+      "clock_ids": ["UTC_15M"],
+      "parent_clock_ids": ["2H_A_L"],
+      "target_start_utc": "2026-06-01T00:00:00Z",
+      "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+      "target_frame_count": 4072,
+      "logical_population_sha256": "46f02ed89c9c4a3d4b3ef2046b7aa32489c5b63a526dbb8151896331d0ae896d"
+    }
+  },
+  "current_authority": {
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "ag0_admissibility": "PASS",
+    "ag1_replay_adequacy": "PASS",
+    "ag2_comparative_review": "PASS_FOR_EXACT_AG0_AG1_ADMITTED_PACK_AND_SCOPE_ONLY",
+    "ag3_activation_or_replacement": "PENDING_OPERATOR",
+    "selector_mutation": "NONE",
+    "canonical_or_r2_publication": "NONE",
+    "validation_consumption": "NONE",
+    "family_semantic_candidate_theory_promotion": "NONE",
+    "probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "proposed_delta_if_activate_named_pack": {
+    "active_c2e": "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND",
+    "active_boundary_pack": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "selector_change": "SET_C2E_BOUNDARY_PACK_REGISTRY_ACTIVE_BOUNDARY_PACK_ID_TO_EXACT_NAMED_PACK",
+    "authority_registry_change": "SET_ACTIVE_C2E_TRUE_AND_BIND_EXACT_NAMED_PACK",
+    "candidate_pack_bytes_or_hash": "UNCHANGED",
+    "canonical_or_r2_publication": "NONE",
+    "validation_consumption": "NONE",
+    "family_semantic_candidate_theory_promotion": "NONE",
+    "probability_risk_exposure_execution_agent_write": "NONE",
+    "scope_expansion": "NONE"
+  },
+  "acceptance_conditions": {
+    "ag0_operator_admissibility": "PASS",
+    "ag1_operator_replay_adequacy": "PASS",
+    "ag1_restart_equivalence": "PASS_R4_EXACT_RESTART_EQUIVALENCE",
+    "ag2_operator_comparative_review": "PASS",
+    "exact_pack_identity": "PASS_ID_AND_LOGICAL_HASH_BOUND",
+    "exact_scope_identity": "PASS_4072_JUNE_LOCAL_15M_ASK_BID_2H_PARENT",
+    "deterministic_replay": "PASS_TWO_CLEAN_EQUIVALENT_RUNS",
+    "restart_reproducibility": "PASS_BYTE_IDENTICAL_SCIENTIFIC_ARTIFACTS",
+    "conflict_pressure": "PASS_0_RESOLVER_CONFLICTS_0_AMBIGUOUS_BOUNDARY_SETS_0_PEER_OWNER_COLLISIONS",
+    "comparative_denominator": "PASS_3980_TRANSITIONS_509_DISAGREEMENTS_ACCEPTED_AT_AG2",
+    "counterexamples": "PASS_12_DETERMINISTIC_EXAMPLES_ACCEPTED_AT_AG2",
+    "selector_surface": "PASS_ACTIVE_BOUNDARY_PACK_ID_AND_PRODUCTION_SELECTION_FIELDS_EXIST",
+    "authority_surface": "PASS_ACTIVE_C2E_AND_ACTIVE_BOUNDARY_PACK_FIELDS_EXIST",
+    "rollback": "PASS_EXACT_DISABLE_TRANSACTION_DEFINED_WITH_EVIDENCE_PRESERVATION",
+    "no_hidden_downstream_authority": "PASS",
+    "no_pack_mutation_required": "PASS"
+  },
+  "evidence": {
+    "activation_readiness": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp7-r2/C2E2_WP7_R2_ACTIVATION_READINESS_PACKET.json",
+    "ag0_decision": "docs/releases/c2e-causal-episode-v0-2/c2e-ag0-r2/C2E_AG0_R2_OPERATOR_DECISION.json",
+    "ag1_decision": "docs/releases/c2e-causal-episode-v0-2/c2e-ag1/C2E_AG1_OPERATOR_PASS_DECISION.json",
+    "ag1_gap_resolution": "docs/releases/c2e-causal-episode-v0-2/c2e-ag1-gap-001/C2E_AG1_GAP_001_RESOLUTION.json",
+    "ag2_decision": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_OPERATOR_PASS_DECISION.json",
+    "ag2_comparator": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_GAP_001_COMPARATOR_EVIDENCE.json",
+    "ag2_disagreement_ledger": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_GAP_001_DISAGREEMENT_LEDGER.json",
+    "ag3_selector_assessment": "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_SELECTOR_TRANSACTION_ASSESSMENT.json",
+    "ag3_activation_proposal": "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_ACTIVATION_PROPOSAL.json"
+  },
+  "external_artifact_hashes": [
+    {"class": "R4_RESTART_EVIDENCE", "sha256": "0d9ada4b409345c143d10d015d1db4820c9ee89bf2904d0251c5a30f00284214", "drive_file_id": "1HqFnXU2AkI0NZZF87WSn4OrCBcQwQNUS"}
+  ],
+  "tests": {
+    "ag2_closeout_final_complete_suite": "PASS_RUN_31530408412",
+    "ag2_closeout_final_ovc_profile_tiered_merge_readiness": "PASS_RUN_31530408433",
+    "ag3_gate_prep_targeted": "PENDING_EXACT_HEAD_CI",
+    "ag3_gate_prep_complete_repository_suite": "PENDING_EXACT_HEAD_CI",
+    "ag3_gate_prep_ovc_assurance": "PENDING_EXACT_HEAD_CI"
+  },
+  "qa": {
+    "disposition": "PASS_TO_PRESENT_OPERATOR_AG3_SUBJECT_TO_EXACT_HEAD_ASSURANCE",
+    "exact_head_assurance": "PENDING_PR_HEAD_CI"
+  },
+  "warnings": [
+    "Activation is scope-bound to the exact named pack and its declared June 2026 GBPUSD ASK/BID UTC_15M with 2H_A_L parent population; it does not authorize another instrument, clock, side or population.",
+    "The immutable candidate pack remains active=false and canonical=false internally; AG3 selection is represented only by selector/authority registries and does not rewrite the pack identity.",
+    "AG2 observed 509/3980 comparator disagreements. That evidence was accepted descriptively and does not establish a comparator winner.",
+    "C2E activation does not grant SRI/FDI family, C2P, C2.5, C3, Validation, publication, probability, risk, exposure, trading, execution or agent-write authority."
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_SELECTOR_TRANSACTION_ASSESSMENT.json",
+    "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_ACTIVATION_PROPOSAL.json",
+    "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_GATE_PACKET.json",
+    "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_QA_PACKET.json",
+    "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_43_AG3_GATE_READY.json",
+    "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json",
+    "tests/opt_b/c2e/v0_2/test_c2e_ag3_gate_ready.py"
+  ],
+  "rollback": "If AG3 is activated later, disable only the external selector/authority registry selection, returning active_c2e=false and active_boundary_pack_id=null while preserving the immutable candidate pack, all AG decisions, replay/restart/comparator evidence and the activation receipt. No deletion or history rewrite is permitted.",
+  "recommendation_rationale": "AG0, AG1 and AG2 are explicit PASS; the exact named candidate is deterministic and restart-reproducible; the formerly missing SRFD disagreement comparator is now present and accepted; conflict/ambiguity/ownership collision counts are zero; selector and active-authority registry fields required by the plan are materialized; rollback is exact and non-destructive; and no downstream authority is bundled. The evidence therefore supports presenting ACTIVATE_NAMED_PACK for the exact admitted scope.",
+  "work_after_activate_named_pack": "After explicit operator AG3 authorization, materialize the exact two-registry selector/authority transaction plus immutable operator decision/activation receipt and programme state. Do not mutate the candidate pack and do not grant any downstream authority.",
+  "work_after_replace": "Require the operator to name the replacement pack. Freeze/replay/review it through the required evidence route before any selector change unless an already-admitted exact pack is explicitly identified by the operator.",
+  "work_after_defer": "Preserve the candidate and all evidence inactive; remain at AG3 with active C2E NONE and active boundary pack NONE.",
+  "work_after_block": "Record AG3 BLOCK, preserve all evidence inactive, and stop until the named blocker is separately resolved.",
+  "next_action": "STOP_AT_OPERATOR_RESERVED_C2E_AG3"
+}
