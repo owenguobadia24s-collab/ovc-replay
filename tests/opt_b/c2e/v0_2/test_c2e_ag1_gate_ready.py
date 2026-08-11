@@ -91,7 +91,16 @@ class C2EAG1GateReadyTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["ag2_progression"], "DENIED_PENDING_AG1")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        if self.pointer["status"] == "GATE_READY":
+        if self.pointer["current_gate"] == "C2E-AG3":
+            self.assertEqual(self.pointer["status"], "GATE_READY")
+            self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_43_AG3_GATE_READY.json")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG3-PREP")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["recommended_operator_decision"], "ACTIVATE_NAMED_PACK")
+            self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
+            self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
+        elif self.pointer["status"] == "GATE_READY":
             self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
             self.assertTrue(self.pointer["operator_decision_required"])
             self.assertEqual(self.pointer["recommended_operator_decision"], "DEFER")
