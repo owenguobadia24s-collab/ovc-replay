@@ -48,7 +48,7 @@ from .wp10_v11_streaming_analysis import stream_analyse_domain_to_file
 
 
 PROFILE_REPOSITORY_PATH = Path(
-    "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/SRFDI_EXECUTION_ENVIRONMENT_PROFILE_v1.json"
+    "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/SRFDI_EXECUTION_ENVIRONMENT_PROFILE_v2.json"
 )
 HARD_MEMORY_CEILING_BYTES = 4 * 1024**3
 
@@ -218,8 +218,8 @@ def _run_from_start_v11(
                 "family_configuration_count": FROZEN_FAMILY_CONFIGURATION_COUNT,
                 "segmentation_counts": segmentation,
                 "visible_nonexecuted_segmentation": {
-                    "C2E_CAUSAL_ADAPTER": "NOT_EXECUTED_DEPENDENCY_UNAVAILABLE",
-                    "DIRECTIONAL_CHANGE": "NOT_EXECUTED_DEPENDENCY_UNAVAILABLE",
+                    "C2E_CAUSAL_ADAPTER": "NOT_EXICUTED_DEPENDENCY_UNAVAILABLE",
+                    "DIRECTIONAL_CHANGE": "NOT_EXICUTED_DEPENDENCY_UNAVAILABLE",
                     "PELT_REFERENCE": "NOT_EXECUTED_CAPACITY_UNRESOLVED_AT_T0",
                 },
                 "domain_analysis_hashes": analysis_hashes,

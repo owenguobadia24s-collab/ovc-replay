@@ -21,13 +21,13 @@ from ovc.opt_b.srfd.wp10_v11_hardening import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-PROFILE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/SRFDI_EXECUTION_ENVIRONMENT_PROFILE_v1.json"
+PROFILE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/SRFDI_EXECUTION_ENVIRONMENT_PROFILE_v2.json"
 
 
 class SRFDIWP10V11HardeningTests(unittest.TestCase):
     def test_frozen_execution_environment_profile_is_hash_bound_and_complete(self):
         profile = load_frozen_profile(PROFILE)
-        self.assertEqual("SRFDI.EXECUTION.ENV.CAAS.20260810.v1", profile["profile_id"])
+        self.assertEqual("SRFDI.EXECUTION.ENV.CAAS.20260811.v2", profile["profile_id"])
         self.assertEqual(4294967296, profile["memory"]["cgroup_memory_max_bytes"])
         self.assertEqual(0, profile["memory"]["swap_total_bytes"])
         self.assertEqual(4.0, profile["concurrency"]["effective_cpu_quota_cores"])
@@ -37,8 +37,9 @@ class SRFDIWP10V11HardeningTests(unittest.TestCase):
         self.assertEqual("3.13.5", profile["python"]["version"])
         self.assertEqual("2.3.5", profile["dependencies"]["numpy"])
         self.assertEqual("1.17.0", profile["dependencies"]["scipy"])
-        self.assertEqual(506, profile["dependency_inventory"]["pip_freeze_line_count"])
-        self.assertEqual("c605675736ce321c8262bed98b1b47857b0d3e57cc96df1251bc5d4044c44866", profile["dependency_inventory"]["pip_freeze_sha256"])
+        self.assertEqual("25.1.1", profile["dependencies"]["pip"])
+        self.assertEqual(507, profile["dependency_inventory"]["pip_freeze_line_count"])
+        self.assertEqual("c7e66045f5f4393b29bb7a0e28628ae6c3607dc50ea0ef77eb5523216898e99a", profile["dependency_inventory"]["pip_freeze_sha256"])
 
     def test_environment_verifier_fails_closed_on_memory_or_dependency_drift(self):
         frozen = load_frozen_profile(PROFILE)
