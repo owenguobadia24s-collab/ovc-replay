@@ -1,0 +1,35 @@
+name: SRFD v1.1 R3 source bundle
+
+on:
+  push:
+    branches:
+      - 'ops/srfdi-wp10-v11-r3-source-bundle-20260811'
+    paths:
+      - '.github/workflows/srfd-v11-r3-source-bundle.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  bundle:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          show-progress: false
+      - name: Build exact local execution bundle
+        run: |
+          tar -czf /tmp/ovc-srfd-v11-r3-source.tgz \
+            src \
+            registries \
+            docs/releases/srfd-benchmark-v0-1
+          sha256sum /tmp/ovc-srfd-v11-r3-source.tgz > /tmp/ovc-srfd-v11-r3-source.tgz.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ovc-srfd-v11-r3-source-bundle
+          path: |
+            /tmp/ovc-srfd-v11-r3-source.tgz
+            /tmp/ovc-srfd-v11-r3-source.tgz.sha256
+          if-no-files-found: error
+          retention-days: 1
