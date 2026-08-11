@@ -48,7 +48,7 @@ from .wp10_v11_streaming_analysis import stream_analyse_domain_to_file
 
 
 PROFILE_REPOSITORY_PATH = Path(
-    "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/SRFDI_EXECUTION_ENVIRONMENT_PROFILE_v1.json"
+    "docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-hardening/SRFDI_EXECUTION_ENVIRONMENT_PROFILE_v2.json"
 )
 HARD_MEMORY_CEILING_BYTES = 4 * 1024**3
 
