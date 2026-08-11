@@ -13,24 +13,21 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
     @router.get('/market/window',tags=['market'])
     def market_window(start:str|None=Query(default=None),end:str|None=Query(default=None),limit:int=Query(default=500,ge=1,le=5000),role:str|None=Query(default=None)):
         _deny_validation(role)
-        try: payload=bounded_time_window(store.resource('market').get('bars',[]),start=start,end=end,limit=limit)
+        try: p=bounded_time_window(store.resource('market').get('bars',[]),start=start,end=end,limit=limit)
         except ValueError as exc: raise ContractError(str(exc)) from exc
-        return store.envelope('market',payload,schema_id='ovc-rcn-market-window/v1',capability_id='MARKET')
+        return store.envelope('market',p,schema_id='ovc-rcn-market-window/v1',capability_id='MARKET')
     @router.get('/c1/state',tags=['structure'])
-    def c1_state(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c1',store.resource('structure').get('c1',{}),schema_id='ovc-rcn-c1-view/v1',capability_id='C1')
+    def c1_state(role:str|None=Query(default=None)): _deny_validation(role); return store.envelope('c1',store.resource('structure').get('c1',{}),schema_id='ovc-rcn-c1-view/v1',capability_id='C1')
     @router.get('/c2/state',tags=['structure'])
-    def c2_state(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c2',store.resource('structure').get('c2',{}),schema_id='ovc-rcn-c2-view/v1',capability_id='C2')
+    def c2_state(role:str|None=Query(default=None)): _deny_validation(role); return store.envelope('c2',store.resource('structure').get('c2',{}),schema_id='ovc-rcn-c2-view/v1',capability_id='C2')
     @router.get('/c2e/episodes',tags=['structure'])
-    def c2e_episodes(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c2e',store.resource('structure').get('c2e',{}),schema_id='ovc-rcn-c2e-view/v1',capability_id='C2E')
+    def c2e_episodes(role:str|None=Query(default=None)): _deny_validation(role); return store.envelope('c2e',store.resource('structure').get('c2e',{}),schema_id='ovc-rcn-c2e-view/v1',capability_id='C2E')
     @router.get('/c2p/objects',tags=['structure','preparation'])
-    def c2p_objects(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c2p_preparation',dict(store.resource('c2p_preparation')),schema_id='ovc-rcn-c2p-preparation/v1',capability_id='C2P')
+    def c2p_objects(role:str|None=Query(default=None)): _deny_validation(role); return store.envelope('c2p_preparation',dict(store.resource('c2p_preparation')),schema_id='ovc-rcn-c2p-preparation/v1',capability_id='C2P')
     @router.get('/c2-5/events',tags=['structure','preparation'])
-    def c2_5_events(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c2_5_preparation',dict(store.resource('c2_5_preparation')),schema_id='ovc-rcn-c2-5-preparation/v1',capability_id='C2_5')
+    def c2_5_events(role:str|None=Query(default=None)): _deny_validation(role); return store.envelope('c2_5_preparation',dict(store.resource('c2_5_preparation')),schema_id='ovc-rcn-c2-5-preparation/v1',capability_id='C2_5')
+    @router.get('/c3/graph',tags=['structure','preparation'])
+    def c3_graph(role:str|None=Query(default=None)): _deny_validation(role); return store.envelope('c3_preparation',dict(store.resource('c3_preparation')),schema_id='ovc-rcn-c3-preparation/v1',capability_id='C3')
     @router.get('/investigate/snapshot',tags=['structure','preparation'])
     def investigate_snapshot(role:str|None=Query(default=None)):
         _deny_validation(role); p=build_fixture_investigate_snapshot(market=store.resource('market'),structure=store.resource('structure'),preparation=store.resource('investigate_preparation')); return store.envelope('investigate_snapshot',p,schema_id='ovc-rcn-investigate-snapshot/v1',capability_id='C2')
