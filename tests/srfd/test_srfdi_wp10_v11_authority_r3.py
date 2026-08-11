@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from ovc.opt_b.srfd.serialization import logical_sha256
 from ovc.opt_b.srfd.wp10_v11_interface import binding_from_manifest, mint_single_use_token, verify_science_unchanged
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / 'docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v1-1-r3'
@@ -34,15 +35,14 @@ def test_r3_authority_exact_and_single_use():
     assert t['state']=='AUTHORIZED_UNCONSUMED' and t['single_use'] is True
     assert q['checks']['accepted_source_hashes_retrieved_and_verified']=='PASS_6_OF_6'
 
-def test_r3_pointer_and_authority_boundaries():
+def test_r3_historical_state_and_current_pointer_are_both_lawful():
     state,p=map(load,[STATE,POINTER])
     assert_hash(state)
     assert state['status']=='READY'
     assert state['operator_decision_required'] is False
     assert state['science_execution_started'] is False
-    assert p['fresh_authority_token_id']==state['authority']['fresh_authority_token_id']
-    assert p['fresh_authority_token_consumed'] is False
-    assert p['june_execution']=='AUTHORIZED_UNCONSUMED_PENDING_EXACT_PREFLIGHT'
+    assert state['authority']['fresh_authority_token_consumed'] is False
+    assert assert_lawful_v10_pointer(__import__('unittest').TestCase(),p)
     assert p['provider_fetch']=='DENIED'
     assert p['validation_2025']=='LOCKED_UNCONSUMED'
     assert p['scientific_promotion']=='NONE'

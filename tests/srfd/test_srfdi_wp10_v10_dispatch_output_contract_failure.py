@@ -24,10 +24,6 @@ class SRFDIWP10V10DispatchOutputContractFailureTests(unittest.TestCase):
  def test_hardening_pass_is_bound_but_real_memory_safe_route_is_still_required(self):
   self.assertEqual('PASS_2020_OF_2020',self.f['hardening_resolution']['rehearsal_status']); self.assertEqual('PASS',self.f['hardening_resolution']['strict_output_contracts']); self.assertIn('MEMORY_SAFE',self.q['blockers'][0]); self.assertEqual('V11_EXECUTION_ROUTE_IMPLEMENTATION_ONLY_NO_SCIENTIFIC_RUN_AUTHORITY',self.q['authority_effect'])
  def test_current_pointer_preserves_v10_failure_while_allowing_exact_v11_progression(self):
-  self.assertEqual('DENIED',self.p['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED',self.p['validation_2025']); self.assertEqual('NONE',self.p['scientific_promotion']); self.assertEqual('NONE',self.p['probability_risk_exposure_execution'])
-  if str(self.p.get('active_packet','')).startswith('SRFDI-WP10-v1.1'):
-   self.assertTrue(assert_lawful_v10_pointer(self,self.p)); self.assertEqual('BLOCKED_DISPATCH_OUTPUT_CONTRACT_FAILURE_PRESERVED',self.p['wp10_v1_0_execution_route'])
-   return
-  self.assertEqual('BLOCKED',self.p['status']); self.assertEqual('SRFDI-WP10-v1.1-REAL-EXECUTION-ROUTE',self.p['next_packet']); self.assertEqual('IMPLEMENTATION_ONLY_NO_RUN_AUTHORITY',self.p['wp10_v1_1_execution_route'])
+  self.assertTrue(assert_lawful_v10_pointer(self,self.p)); self.assertEqual('BLOCKED_DISPATCH_OUTPUT_CONTRACT_FAILURE_PRESERVED',self.p['wp10_v1_0_execution_route']); self.assertEqual('DENIED',self.p['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED',self.p['validation_2025']); self.assertEqual('NONE',self.p['scientific_promotion']); self.assertEqual('NONE',self.p['probability_risk_exposure_execution'])
 
 if __name__=='__main__': unittest.main()

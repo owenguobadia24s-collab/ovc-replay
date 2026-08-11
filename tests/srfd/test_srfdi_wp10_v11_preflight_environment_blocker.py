@@ -44,21 +44,19 @@ class SRFDIWP10V11PreflightEnvironmentBlockerTests(unittest.TestCase):
         self.assertFalse(self.x["cause"]["relevant_dependency_versions_changed"])
         self.assertEqual("NONE", self.x["cause"]["scientific_delta"])
 
-    def test_pointer_advances_lawfully_beyond_supersession_without_starting_science(self):
+    def test_current_pointer_progression_preserves_historical_supersession(self):
         self.assertTrue(assert_lawful_v10_pointer(self, self.p))
-        self.assertEqual("READY", self.p["status"])
-        self.assertFalse(self.p["science_execution_started"])
-        self.assertFalse(self.p["fresh_authority_token_consumed"])
         self.assertEqual(TOKEN, self.p["superseded_v1_1_authority_token_id"])
         self.assertEqual(BINDING, self.p["superseded_v1_1_run_binding_sha256"])
+        self.assertFalse(self.p["superseded_v1_1_authority_token_consumed"])
         self.assertEqual("SUPERSEDED_UNUSED_UNCONSUMED_DO_NOT_REUSE", self.p["superseded_v1_1_authority_token_state"])
 
     def test_reserved_boundaries_remain_closed(self):
-        self.assertEqual("DENIED", self.x["provider_fetch"])
-        self.assertEqual("LOCKED_UNCONSUMED", self.x["validation_2025"])
-        self.assertEqual("NONE", self.x["scientific_promotion"])
-        self.assertEqual("NONE", self.x["selector_family_semantic_publication"])
-        self.assertEqual("NONE", self.x["probability_risk_exposure_execution"])
+        self.assertEqual("DENIED", self.p["provider_fetch"])
+        self.assertEqual("LOCKED_UNCONSUMED", self.p["validation_2025"])
+        self.assertEqual("NONE", self.p["scientific_promotion"])
+        self.assertEqual("NONE", self.p["selector_family_semantic_publication"])
+        self.assertEqual("NONE", self.p["probability_risk_exposure_execution"])
 
 
 if __name__ == "__main__":

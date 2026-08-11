@@ -63,8 +63,10 @@ class SRFDIJuneAuthV06DelegatedTests(unittest.TestCase):
             self.assertIsNone(self.pointer["next_packet"]); self.assertTrue(self.pointer["operator_decision_required"]); self.assertTrue(self.pointer["wp10b_execution"].startswith("COMPLETED_FROZEN_ON_MAIN@")); self.assertIsNone(self.pointer["fresh_authority_token_id"]); self.assertEqual("NOT_MINTED_PENDING_OPERATOR",self.pointer["fresh_authority_token_state"]); self.assertTrue(self.pointer["june_execution"].startswith("DENIED"))
         elif gate=="SRFDI-G-JUNE-AUTH":
             self.assertFalse(self.pointer["operator_decision_required"]); self.assertIsNotNone(self.pointer["fresh_authority_token_id"]); self.assertTrue(self.pointer["june_execution"].startswith("AUTHORIZED"))
-        elif self.pointer.get("active_packet")=="SRFDI-WP10-v1.1":
+        elif self.pointer.get("active_packet")=="SRFDI-WP10-v1.1" or gate in {"SRFDI-G10","SRFDI-G11"}:
             self.assertTrue(assert_lawful_v10_pointer(self,self.pointer))
+            if gate=="SRFDI-G11":
+                self.assertTrue(self.pointer["operator_decision_required"]); self.assertEqual("SRFDI-WP11",self.pointer["active_packet"])
         else:
             self.assertFalse(self.pointer["operator_decision_required"])
 

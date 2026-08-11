@@ -1,0 +1,8 @@
+from __future__ import annotations
+import json
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2]; BASE=ROOT/'docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-1-r3'; STATE=ROOT/'registries/implementation/srfd/OVC_SRFDI_STATE_v0_52_WP10_V11_R3_G10_COMPLETED.json'; POINTER=ROOT/'registries/implementation/srfd/CURRENT_STATE_POINTER.json'
+def load(p): return json.loads(p.read_text())
+def test_postrun_reconciliation_and_g10_pass():
+ r=load(BASE/'SRFDI_WP10_V11_R3_POSTRUN_RECONCILIATION.json'); q=load(BASE/'SRFDI_G10_QA_PACKET.json'); d=load(BASE/'SRFDI_G10_DELEGATED_DECISION.json'); s=load(STATE); p=load(POINTER)
+ assert r['status']=='PASS'; assert r['run_id']=='SRFD.RUN.55601cfe14d85173c767315be04c8b6c333dc8c07103a8064733086c26606dbf'; assert r['run_binding_sha256']=='735b49e435a71ee6129be75e182d4b4bfeda073f7d75e912b6ab711bc6420967'; assert r['preflight']['work_unit_count']==2020; assert r['execution']['completed_work_units']==2020; assert r['execution']['ordered_work_units']==2020; assert r['artifacts']['manifest_count']==2020; assert r['artifacts']['integrity_status']=='PASS'; assert r['source_identity']['verified']=='PASS_6_OF_6'; assert r['capacity']['status']=='WITHIN_T0'; assert r['capacity']['peak_rss_bytes']<=r['capacity']['max_peak_rss_bytes']; assert r['capacity']['external_artifact_bytes']<=r['capacity']['max_external_artifact_bytes']; assert q['qa']=='PASS'; assert d['decision']=='PASS'; assert s['status']=='COMPLETED'; assert p['active_packet']=='SRFDI-WP11'; assert p['fresh_authority_token_consumed'] is True; assert p['provider_fetch']=='DENIED'; assert p['validation_2025']=='LOCKED_UNCONSUMED'; assert p['scientific_promotion']=='NONE'
