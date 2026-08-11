@@ -1,0 +1,22 @@
+{
+  "schema": "ovc-rcn-rn-wp4a-investigate-preparation-fixture/v1",
+  "packet_id": "RCN-RN-WP4A",
+  "mode": "FIXTURE_ONLY_G4_PREPARATION",
+  "population": {
+    "instrument": "GBP/USD",
+    "clocks": ["15M", "2H_A_L"],
+    "sides": ["BID", "ASK"],
+    "scope": "SYNTHETIC_FIXTURE_ONLY"
+  },
+  "transitions": {
+    "availability": "NOT_MATERIALIZED",
+    "reason_code": "TRANSITION_LEDGER_NOT_MATERIALIZED_IN_FIXTURE",
+    "items": []
+  },
+  "binding_candidates": [
+    {"capability_id":"MARKET","owner":"OPT-A","namespace":"src/ovc/opt_a","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"},
+    {"capability_id":"C1","owner":"OPT-B.C1","namespace":"src/ovc/opt_b/c1","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"},
+    {"capability_id":"C2","owner":"OPT-B.C2","namespace":"src/ovc/opt_b/c2_vnext","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"},
+    {"capability_id":"C2E","owner":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2","namespace":"src/ovc/opt_b/c2e_v2","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"}
+  ]
+}

@@ -15,6 +15,7 @@ HISTORICAL_DEFERRED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 RO_C2E = ROOT / "registries/research_operations/c2e/OVC_C2E_PROGRAMME_STATE_v0_1.json"
 C2AR = ROOT / "registries/opt_b/c2/vnext/C2_INTEGRATED_SHADOW_PACKAGE_APPROVED_v1.jsonc"
+PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 
 class C2E2WP0PreflightTests(unittest.TestCase):
@@ -70,7 +71,7 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertTrue(all(not item["lawful_c2e2_base"] for item in self.prs["open_prs"]))
         self.assertEqual(self.matrix["historical_bytes_rewritten"], False)
 
-    def test_wp0_history_and_current_pointer_preserve_historical_authority(self):
+    def test_wp0_history_and_current_pointer_preserve_historical_authority_and_later_progression(self):
         self.assertEqual(self.state["status"], "QA_REVIEW")
         self.assertEqual(self.state["current_gate"], "C2E2-G1")
         self.assertEqual(self.accepted_state["status"], "READY")
@@ -88,10 +89,16 @@ class C2E2WP0PreflightTests(unittest.TestCase):
         self.assertTrue(current_path.is_file())
         current = json.loads(current_path.read_text())
         self.assertEqual(current["programme_id"], "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertIn(current["authority"]["c2e_activation"], {"DENIED", "DENIED_OPERATOR_RESERVED"})
-        self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
+            self.assertEqual(current["authority"]["ag3_activation_or_replacement"], "ACTIVATE_NAMED_PACK_PASS")
+            self.assertEqual(current["authority"]["active_boundary_pack"], PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+            self.assertIn(current["authority"]["c2e_activation"], {"DENIED", "DENIED_OPERATOR_RESERVED"})
+            self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
 
 
 if __name__ == "__main__":

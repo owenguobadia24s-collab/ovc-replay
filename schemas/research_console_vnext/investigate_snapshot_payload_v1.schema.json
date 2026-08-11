@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-rcn-investigate-snapshot-payload/v1",
+  "title": "RCN WP4A Investigate Snapshot Payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["packet_id", "mode", "authority_effect", "real_source_presentation", "population", "market_context", "translation", "structure", "binding_candidates", "invariants"],
+  "properties": {
+    "packet_id": {"const": "RCN-RN-WP4A"},
+    "mode": {"const": "FIXTURE_ONLY_G4_PREPARATION"},
+    "authority_effect": {"const": "NONE"},
+    "real_source_presentation": {"const": "DENIED_PENDING_RCN_RN_G4"},
+    "population": {
+      "type": "object",
+      "required": ["instrument", "clocks", "sides", "scope"],
+      "properties": {
+        "instrument": {"type": "string"},
+        "clocks": {"type": "array", "items": {"type": "string"}},
+        "sides": {"type": "array", "items": {"type": "string"}},
+        "scope": {"const": "SYNTHETIC_FIXTURE_ONLY"}
+      }
+    },
+    "market_context": {
+      "type": "object",
+      "required": ["availability", "bar_count", "scientific_role"],
+      "properties": {
+        "availability": {"type": "string"},
+        "bar_count": {"type": "integer", "minimum": 0},
+        "scientific_role": {"const": "OPTIONAL_CONTEXT_ONLY"}
+      }
+    },
+    "translation": {
+      "type": "object",
+      "required": ["c1"],
+      "properties": {"c1": {"type": "object"}}
+    },
+    "structure": {
+      "type": "object",
+      "required": ["c2", "c2e", "transitions"],
+      "properties": {
+        "c2": {"type": "object"},
+        "c2e": {"type": "object"},
+        "transitions": {"type": "object"}
+      }
+    },
+    "binding_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["capability_id", "owner", "namespace", "activation_state", "real_source_presented", "authority_effect", "gate_required"],
+        "properties": {
+          "capability_id": {"type": "string"},
+          "owner": {"type": "string"},
+          "namespace": {"type": ["string", "null"]},
+          "activation_state": {"const": "PREPARED_NOT_BOUND"},
+          "real_source_presented": {"const": false},
+          "authority_effect": {"const": "NONE"},
+          "gate_required": {"const": "RCN-RN-G4"}
+        }
+      }
+    },
+    "invariants": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}

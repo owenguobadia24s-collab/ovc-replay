@@ -8,6 +8,7 @@ RECEIPT = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_G6_OLD_TOK
 STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_24.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 OLD_REGISTRY = ROOT / "registries/implementation/c2e_v0_2/run_authority/C2E2_SOURCE_REPLAY_AUTHORITY_REGISTRY_v0_1.json"
+PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 class C2E2G6BindingSupersessionOperatorDecisionTests(unittest.TestCase):
     @classmethod
@@ -46,8 +47,13 @@ class C2E2G6BindingSupersessionOperatorDecisionTests(unittest.TestCase):
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual(self.state["next_packet"], "C2E2-G6-BINDING-REPAIR")
         self.assertEqual(self.pointer["old_run_token_status"], "INVALIDATED_UNCONSUMED_BY_OPERATOR_SUPERSESSION")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
+            self.assertIn("C2E-AG3.OPERATOR.ACTIVATE_NAMED_PACK.20260811T220500+0100", self.pointer["operator_decision_history"])
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertIn(self.pointer["wp6_execution"], {
             "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION",
             "AUTHORIZED_NOT_STARTED",

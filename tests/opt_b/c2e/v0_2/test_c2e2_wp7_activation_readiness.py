@@ -16,6 +16,8 @@ PACK = ROOT / "fixtures/opt_b/c2e/v0_2/wp2/boundary_pack.json"
 BOUNDARY_REG = ROOT / "registries/opt_b/c2e/v0_2/C2E_BOUNDARY_PACK_REGISTRY_v0_2.json"
 AUTH_REG = ROOT / "registries/opt_b/c2e/v0_2/C2E_AUTHORITY_REGISTRY_v0_2.json"
 WP5_QA = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-wp5/C2E2_WP5_QA_PACKET.json"
+AG3_DECISION = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e-ag3/C2E_AG3_OPERATOR_ACTIVATE_NAMED_PACK_DECISION.json"
+ACTIVE_PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 
 class C2E2WP7ActivationReadinessTests(unittest.TestCase):
@@ -31,6 +33,7 @@ class C2E2WP7ActivationReadinessTests(unittest.TestCase):
         cls.boundary_reg = json.loads(BOUNDARY_REG.read_text())
         cls.auth_reg = json.loads(AUTH_REG.read_text())
         cls.wp5_qa = json.loads(WP5_QA.read_text())
+        cls.ag3_decision = json.loads(AG3_DECISION.read_text()) if AG3_DECISION.is_file() else None
 
     def test_operator_continuation_is_exact_and_replay_deferred(self):
         self.assertEqual(self.continuation["operator_command"], "OVC CONTINUE C2E2-WP7 REPLAY_STATUS=DEFERRED CONTINUE_THROUGH_AUTO_GATES=YES STOP_AT=C2E-AG0")
@@ -61,7 +64,7 @@ class C2E2WP7ActivationReadinessTests(unittest.TestCase):
         self.assertEqual(evidence["qa_15"], "PASS")
         self.assertFalse(evidence["real_source_market_replay_performed"])
 
-    def test_ag0_ready_only_for_operator_review_and_later_gates_not_ready(self):
+    def test_ag0_ready_only_for_operator_review_and_later_gates_not_ready_at_wp7(self):
         self.assertEqual(self.packet["ag0"]["classification"], "OPERATOR_RESERVED")
         self.assertEqual(self.packet["ag0"]["decision_status"], "READY_FOR_OPERATOR_REVIEW")
         self.assertEqual(self.packet["ag0"]["scope"], "SYNTHETIC_ONLY_NONEMPIRICAL")
@@ -79,17 +82,24 @@ class C2E2WP7ActivationReadinessTests(unittest.TestCase):
         self.assertIn("SOURCE_REPLAY_DEFERRED_AT_C2E2_G6", self.packet["warnings"])
         self.assertIn("NO_EMPIRICAL_BOUNDARY_PACK_FROZEN", self.packet["warnings"])
 
-    def test_no_active_selector_pack_publication_or_validation_delta(self):
-        self.assertFalse(self.boundary_reg["active"])
-        self.assertFalse(self.boundary_reg["canonical"])
-        self.assertIsNone(self.boundary_reg["active_boundary_pack_id"])
-        self.assertFalse(self.auth_reg["active_c2e"])
-        self.assertIsNone(self.auth_reg["active_boundary_pack_id"])
-        self.assertEqual(self.auth_reg["selector_mutation"], "DENIED")
-        self.assertEqual(self.auth_reg["publication"], "DENIED")
-        self.assertEqual(self.auth_reg["validation"], "DENIED")
+    def test_wp7_had_no_active_selector_and_current_registry_only_changes_after_exact_ag3(self):
         self.assertEqual(self.packet["authority_after"]["active_c2e"], "NONE")
         self.assertEqual(self.packet["authority_after"]["active_boundary_pack"], "NONE")
+        self.assertFalse(self.boundary_reg["canonical"])
+        self.assertEqual(self.auth_reg["publication"], "DENIED")
+        self.assertEqual(self.auth_reg["validation"], "DENIED")
+        if self.boundary_reg["active"]:
+            self.assertIsNotNone(self.ag3_decision)
+            self.assertEqual(self.ag3_decision["decision"], "ACTIVATE_NAMED_PACK")
+            self.assertEqual(self.boundary_reg["active_boundary_pack_id"], ACTIVE_PACK_ID)
+            self.assertTrue(self.boundary_reg["production_pack_selected"])
+            self.assertTrue(self.auth_reg["active_c2e"])
+            self.assertEqual(self.auth_reg["active_boundary_pack_id"], ACTIVE_PACK_ID)
+        else:
+            self.assertIsNone(self.boundary_reg["active_boundary_pack_id"])
+            self.assertFalse(self.auth_reg["active_c2e"])
+            self.assertIsNone(self.auth_reg["active_boundary_pack_id"])
+            self.assertEqual(self.auth_reg["selector_mutation"], "DENIED")
 
     def test_g7_delegated_pass_is_packet_only_and_conditioned_on_final_head(self):
         self.assertEqual(self.qa["status"], "PASS")

@@ -10,6 +10,7 @@ GATE_READY_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_
 DEFERRED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json"
 TERMINAL_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_16.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
+PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 
 class C2E2G6OperatorDeferTests(unittest.TestCase):
@@ -73,10 +74,16 @@ class C2E2G6OperatorDeferTests(unittest.TestCase):
         self.assertIn(self.decision["decision_id"], current.get("operator_decision_history", []))
         self.assertEqual(self.deferred["authority"]["real_source_replay"], "DENIED_DEFERRED_AT_C2E2_G6")
         self.assertEqual(self.terminal["authority"]["wp6_execution"], "DENIED")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertIn(current["authority"]["c2e_activation"], {"DENIED", "DENIED_OPERATOR_RESERVED"})
-        self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
+            self.assertEqual(current["authority"]["ag3_activation_or_replacement"], "ACTIVATE_NAMED_PACK_PASS")
+            self.assertEqual(current["authority"]["active_boundary_pack"], PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+            self.assertIn(current["authority"]["c2e_activation"], {"DENIED", "DENIED_OPERATOR_RESERVED"})
+            self.assertEqual(current["authority"]["active_boundary_pack"], "NONE")
 
 
 if __name__ == "__main__":

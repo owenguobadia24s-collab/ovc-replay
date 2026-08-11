@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Any, Iterable, Mapping, Sequence
 
 from ovc.development.identity import canonical_sha256, normalize_relative_path
@@ -25,6 +26,12 @@ _RESERVED_TOKENS = {
     "TRADING",
     "EXECUTION",
 }
+
+
+def _canonical_symbolic_token(value: Any) -> str:
+    """Canonicalize authority vocabulary without changing its semantic word order."""
+    raw = str(value).strip()
+    return re.sub(r"[^A-Za-z0-9]+", "_", raw).strip("_").upper()
 
 
 def _receipt(
@@ -88,8 +95,9 @@ def shadow_authority_resolver(
     requested_delta: str,
     operator_reserved: Iterable[str] = (),
 ) -> dict[str, Any]:
-    requested = str(requested_delta).strip() or "NONE"
-    reserved = {str(value) for value in operator_reserved} | _RESERVED_TOKENS
+    requested_raw = str(requested_delta).strip() or "NONE"
+    requested = _canonical_symbolic_token(requested_raw) or "NONE"
+    reserved = {_canonical_symbolic_token(value) for value in operator_reserved} | _RESERVED_TOKENS
     is_reserved = requested in reserved
     disposition = "BLOCK" if is_reserved else "PASS"
     return _receipt(

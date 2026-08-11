@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Any, Mapping, Sequence
 
 from ovc.development.identity import canonical_sha256, normalize_relative_path
@@ -14,12 +15,18 @@ WRITE_ACTIONS = {"WRITE_FILE", "GIT_COMMIT", "PUSH_BRANCH"}
 SENSITIVE_KEYS = {"secret", "password", "token", "api_key", "credential", "raw_credential"}
 
 
+def _canonical_symbolic_action(value: Any) -> str:
+    """Canonicalize semantic action vocabulary so separator/case aliases cannot evade policy."""
+    raw = str(value).strip()
+    return re.sub(r"[^A-Za-z0-9]+", "_", raw).strip("_").upper()
+
+
 def _prefix_match(path: str, prefixes: Sequence[str]) -> bool:
     return any(path == prefix or path.startswith(prefix.rstrip("/") + "/") for prefix in prefixes)
 
 
 def resolve_security_envelope(*, skill_id: str, capability_ids: Sequence[str], allowed_semantic_actions: Sequence[str], read_prefixes: Sequence[str] = (), write_prefixes: Sequence[str] = (), semantic_owners: Sequence[str] = (), logical_credential_ids: Sequence[str] = (), network_allowlist: Sequence[str] = (), filesystem_zone_profile: str = "WP5-ZONE-PROFILE-READONLY", write_authority_active: bool = False, validation_authority_active: bool = False) -> dict[str, Any]:
-    actions = sorted(set(str(v).upper() for v in allowed_semantic_actions) - HARD_DENY_ACTIONS)
+    actions = sorted(set(_canonical_symbolic_action(v) for v in allowed_semantic_actions) - HARD_DENY_ACTIONS)
     logical = {
         "skill_id":str(skill_id), "capability_ids":sorted(set(str(v) for v in capability_ids)), "allowed_semantic_actions":actions,
         "read_prefixes":sorted({normalize_relative_path(v).rstrip("/") for v in read_prefixes}),
@@ -34,12 +41,12 @@ def resolve_security_envelope(*, skill_id: str, capability_ids: Sequence[str], a
 def build_tool_request(*, action: str, path: str | None = None, semantic_owner: str | None = None, logical_credential_id: str | None = None, network_target: str | None = None, resource_class: str = "GENERAL", raw_credential: str | None = None) -> dict[str, Any]:
     if raw_credential is not None:
         raise ValueError("raw credentials are prohibited in ToolRequest")
-    logical={"action":str(action).upper(),"path":path,"semantic_owner":semantic_owner,"logical_credential_id":logical_credential_id,"network_target":network_target,"resource_class":str(resource_class).upper()}
+    logical={"action":_canonical_symbolic_action(action),"path":path,"semantic_owner":semantic_owner,"logical_credential_id":logical_credential_id,"network_target":network_target,"resource_class":str(resource_class).upper()}
     return {"schema":"ovc-dsai-tool-request/v1",**logical,"request_id":canonical_sha256(logical,role="DSAI_TOOL_REQUEST")}
 
 
 def decide_tool_request(envelope: Mapping[str, Any], request: Mapping[str, Any]) -> dict[str, Any]:
-    action=str(request.get("action","")).upper(); reasons:list[str]=[]
+    action=_canonical_symbolic_action(request.get("action","")); reasons:list[str]=[]
     if action in HARD_DENY_ACTIONS: reasons.append("HARD_DENY_OPERATION")
     if str(request.get("resource_class","GENERAL")).upper()=="VALIDATION" and not envelope.get("validation_authority_active"): reasons.append("VALIDATION_FIREWALL")
     if action not in set(envelope.get("allowed_semantic_actions",[])): reasons.append("SEMANTIC_ACTION_NOT_PERMITTED")
