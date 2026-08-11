@@ -9,7 +9,6 @@ PACK = ROOT / "registries/opt_b/c2e/v0_2/C2E_EMPIRICAL_BOUNDARY_PACK_JUNE_STABLE
 PACK_REGISTRY = ROOT / "registries/opt_b/c2e/v0_2/C2E_BOUNDARY_PACK_REGISTRY_v0_2.json"
 AUTH_REGISTRY = ROOT / "registries/opt_b/c2e/v0_2/C2E_AUTHORITY_REGISTRY_v0_2.json"
 AG2_DECISION = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_OPERATOR_PASS_DECISION.json"
-CONTRACT = ROOT / "contracts/opt_b/c2e/v0_2/C2E_BOUNDARY_PACK_CONTRACT_v0_2.md"
 
 PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 PACK_HASH = "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313"
@@ -32,7 +31,6 @@ class C2EAG3GateReadyTests(unittest.TestCase):
         cls.pack_registry = load(PACK_REGISTRY)
         cls.auth_registry = load(AUTH_REGISTRY)
         cls.ag2 = load(AG2_DECISION)
-        cls.contract = CONTRACT.read_text()
 
     def test_ag3_is_operator_reserved_and_not_executed(self):
         self.assertEqual(self.gate["gate_id"], "C2E-AG3")
@@ -82,8 +80,10 @@ class C2EAG3GateReadyTests(unittest.TestCase):
         self.assertTrue(tx["boundary_pack_registry"]["after"]["production_pack_selected"])
         self.assertTrue(tx["authority_registry"]["after"]["active_c2e"])
         self.assertEqual(tx["authority_registry"]["after"]["active_boundary_pack_id"], PACK_ID)
-        self.assertIn("operator", self.contract.lower())
-        self.assertIn("active", self.contract.lower())
+        self.assertEqual(self.gate["gate_classification"], "OPERATOR_RESERVED")
+        self.assertEqual(self.gate["decision_status"], "PENDING_OPERATOR")
+        self.assertIsNone(self.pack_registry["active_boundary_pack_id"])
+        self.assertFalse(self.auth_registry["active_c2e"])
 
     def test_rollback_disables_selection_without_erasing_evidence(self):
         rb = self.proposal["rollback_if_activated"]
