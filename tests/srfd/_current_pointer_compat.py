@@ -11,10 +11,42 @@ V11_BLOCKED_STATE = "registries/implementation/srfd/OVC_SRFDI_STATE_v0_49_WP10_V
 V11_ENV_SUPERSEDED_STATE = "registries/implementation/srfd/OVC_SRFDI_STATE_v0_50_WP10_V11_ENV_SUPERSEDED.json"
 V11_ENV_V2 = "e08aaf02871d23979b47f2ce928b2098d775eab3e483ff3602db2794afa13eef"
 V11_HARDENING_V2 = "445d4bb6646ad61b045b3cb0bd51078be194c7423277b23df52f8bc85b88d0d8"
+V11_R3_TOKEN = "SRFD.JUNE.AUTH.7c464be44edb1f295efcf55481443a012176429ce6cc9689ce3f1e113b61c1e5"
+V11_R3_BINDING = "735b49e435a71ee6129be75e182d4b4bfeda073f7d75e912b6ab711bc6420967"
+V11_R3_STATE = "registries/implementation/srfd/OVC_SRFDI_STATE_v0_51_WP10_V11_R3_AUTHORIZED.json"
 
 
 def assert_lawful_v10_pointer(testcase, pointer: dict) -> bool:
-    """Accept exact lawful WP10 v1.0/v1.1 lineage, including env-profile supersession."""
+    """Accept exact lawful WP10 v1.0/v1.1 lineage, including env supersession and R3 authority."""
+    if pointer.get("authoritative_state") == V11_R3_STATE:
+        testcase.assertEqual("OVC-SRFD-BENCHMARK-v0.1", pointer["programme_id"])
+        testcase.assertEqual("READY", pointer["status"])
+        testcase.assertEqual("SRFDI-G10", pointer["current_gate"])
+        testcase.assertEqual("SRFDI-WP10-v1.1-FRESH-AUTHORITY-REGENERATION", pointer["active_packet"])
+        testcase.assertEqual("DENIED", pointer["provider_fetch"])
+        testcase.assertEqual("LOCKED_UNCONSUMED", pointer["validation_2025"])
+        testcase.assertEqual("NONE", pointer["scientific_promotion"])
+        testcase.assertEqual("NONE", pointer["selector_family_semantic_publication"])
+        testcase.assertEqual("NONE", pointer["probability_risk_exposure_execution"])
+        testcase.assertEqual(V09_ROUTE, pointer["wp10_v0_9_execution_route"])
+        testcase.assertEqual("BLOCKED_DISPATCH_OUTPUT_CONTRACT_FAILURE_PRESERVED", pointer["wp10_v1_0_execution_route"])
+        testcase.assertEqual(V11_R3_TOKEN, pointer["fresh_authority_token_id"])
+        testcase.assertFalse(pointer["fresh_authority_token_consumed"])
+        testcase.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_EXACT_PREFLIGHT", pointer["fresh_authority_token_state"])
+        testcase.assertEqual(V11_R3_BINDING, pointer["run_binding_sha256"])
+        testcase.assertEqual("AUTHORIZED_UNCONSUMED_PENDING_EXACT_PREFLIGHT", pointer["wp10_v1_1_execution_route"])
+        testcase.assertEqual(V11_TOKEN, pointer["superseded_v1_1_authority_token_id"])
+        testcase.assertEqual(V11_BINDING, pointer["superseded_v1_1_run_binding_sha256"])
+        testcase.assertFalse(pointer["superseded_v1_1_authority_token_consumed"])
+        testcase.assertEqual("SUPERSEDED_UNUSED_UNCONSUMED_DO_NOT_REUSE", pointer["superseded_v1_1_authority_token_state"])
+        testcase.assertEqual(V11_ENV_V2, pointer["v1_1_execution_environment_profile_sha256"])
+        testcase.assertEqual(V11_HARDENING_V2, pointer["v1_1_hardening_rehearsal_sha256"])
+        testcase.assertEqual("SRFDI-WP10-v1.1-EXACT-PREFLIGHT", pointer["next_packet"])
+        testcase.assertEqual("HARD_BLOCKER_OR_SRFDI_G11_OPERATOR_SCIENTIFIC_DISPOSITION", pointer["stop_at"])
+        testcase.assertFalse(pointer["operator_decision_required"])
+        testcase.assertFalse(pointer["science_execution_started"])
+        return True
+
     if pointer.get("authoritative_state") == V11_ENV_SUPERSEDED_STATE:
         testcase.assertEqual("OVC-SRFD-BENCHMARK-v0.1", pointer["programme_id"])
         testcase.assertEqual("READY", pointer["status"])

@@ -6,6 +6,7 @@ import unittest
 
 from ovc.opt_b.srfd.wp10_v10_interface import SCIENCE_IDENTITY_SHA256
 from ovc.opt_b.srfd.wp10_v11_interface import FROZEN_ENVIRONMENT_PROFILE_SHA256, HARDENING_REHEARSAL_SHA256
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v1-1"
@@ -66,17 +67,15 @@ class SRFDIWP10V11AuthorityTests(unittest.TestCase):
         self.assertEqual("NONE", self.state["authority"]["selector_family_semantic_publication"])
         self.assertEqual("NONE", self.state["authority"]["probability_risk_exposure_execution"])
 
-    def test_current_state_requires_fresh_post_merge_authority_regeneration(self):
+    def test_historical_supersession_required_fresh_post_merge_authority_regeneration(self):
         self.assertEqual("READY", self.state["status"])
         self.assertFalse(self.state["science_execution_started"])
         self.assertIsNone(self.state["authority"]["fresh_authority_token_id"])
         self.assertFalse(self.state["authority"]["fresh_authority_token_consumed"])
         self.assertEqual("NONE_PENDING_POST_MERGE_REGENERATION", self.state["authority"]["fresh_authority_token_state"])
-        self.assertEqual(str(SUPERSEDED_STATE.relative_to(ROOT)).replace("\\", "/"), self.p["authoritative_state"])
-        self.assertEqual("ENVIRONMENT_PROFILE_SUPERSEDED_AWAITING_FRESH_AUTHORITY", self.p["wp10_v1_1_execution_route"])
-        self.assertIsNone(self.p["fresh_authority_token_id"])
-        self.assertFalse(self.p["fresh_authority_token_consumed"])
-        self.assertEqual("FRESH_AUTHORITY_REGENERATION_BOUNDARY", self.p["stop_at"])
+        self.assertEqual("REGENERATE_FRESH_V11_EXECUTION_RUN_BINDING_AND_SINGLE_USE_AUTHORITY_FROM_EXACT_MERGED_MAIN", self.state["next_action"])
+        self.assertEqual("AUTHORITY_REGENERATION_BOUNDARY", self.state["stop_condition"])
+        self.assertTrue(assert_lawful_v10_pointer(self, self.p))
 
 
 if __name__ == "__main__":
