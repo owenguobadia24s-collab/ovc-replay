@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-rcn-rn-wp4a-binding-candidates/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "packet_id": "RCN-RN-WP4A_PREPARATION",
+  "baseline_main": "9ca1dc986c6d52d8de7dfdcb598fbf22af76edfa",
+  "status": "PREPARATION_ONLY",
+  "authority_effect": "NONE",
+  "current_authority": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+  "first_real_source_presentation_gate": "RCN-RN-G4",
+  "candidates": [
+    {"capability_id":"MARKET","owner":"OPT-A","namespace":"src/ovc/opt_a","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"},
+    {"capability_id":"C1","owner":"OPT-B.C1","namespace":"src/ovc/opt_b/c1","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"},
+    {"capability_id":"C2","owner":"OPT-B.C2","namespace":"src/ovc/opt_b/c2_vnext","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"},
+    {"capability_id":"C2E","owner":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2","namespace":"src/ovc/opt_b/c2e_v2","activation_state":"PREPARED_NOT_BOUND","real_source_presented":false,"authority_effect":"NONE","gate_required":"RCN-RN-G4"}
+  ],
+  "rules": [
+    "OWNER_NAMESPACE_CHARACTERISATION_IS_NOT_A_RUNTIME_BINDING",
+    "NO_REAL_SOURCE_READ_OR_PRESENTATION_BEFORE_G4",
+    "C2_USABLE_WHEN_C2E_NOT_MATERIALIZED",
+    "NO_HISTORICAL_C2E_FALLBACK",
+    "NO_TRANSITION_SYNTHESIS_FROM_C2_DELTAS",
+    "VALIDATION_DENIED_BEFORE_RESOURCE_RESOLUTION"
+  ]
+}

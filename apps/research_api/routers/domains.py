@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Query
 
 from ovc.console_vnext.application.errors import AuthorityDenied, ContractError
+from ovc.console_vnext.application.investigate_preparation import build_fixture_investigate_snapshot
 
 from ..fixture_store import FixtureStore
 from ..query import bounded_time_window, stable_page
@@ -49,6 +50,21 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
         _deny_validation(role)
         return store.envelope(
             "c2e", store.resource("structure").get("c2e", {}), schema_id="ovc-rcn-c2e-view/v1", capability_id="C2E"
+        )
+
+    @router.get("/investigate/snapshot", tags=["structure", "preparation"])
+    def investigate_snapshot(role: str | None = Query(default=None)):
+        _deny_validation(role)
+        payload = build_fixture_investigate_snapshot(
+            market=store.resource("market"),
+            structure=store.resource("structure"),
+            preparation=store.resource("investigate_preparation"),
+        )
+        return store.envelope(
+            "investigate_snapshot",
+            payload,
+            schema_id="ovc-rcn-investigate-snapshot/v1",
+            capability_id="C2",
         )
 
     @router.get("/occurrences/{occurrence_id}/context", tags=["context"])

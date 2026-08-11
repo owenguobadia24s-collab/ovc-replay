@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-delegated-packet-decision/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_version": "0.3 RATIFIED + WP3E ADDENDUM 0.1",
+  "packet_id": "RCN-RN-WP4A",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_EXECUTABLE_UNDER_OPERATOR_G3V_PASS",
+  "operator_authority_source": "artifacts/research_console_vnext/research_native/RCN_RN_G3V_OPERATOR_PASS_DECISION.json",
+  "baseline_commit": "9ca1dc986c6d52d8de7dfdcb598fbf22af76edfa",
+  "candidate_commit": "1fc83ce851516eb7af5e97201df2ffaef1b93262",
+  "tests": [
+    "Research Console workflow 31533414369 PASS",
+    "Python/API contract PASS",
+    "WP4A preparation contract tests 4/4 PASS",
+    "Generated schema PASS",
+    "TypeScript PASS",
+    "Vitest PASS",
+    "Vite build PASS",
+    "Chromium Playwright PASS"
+  ],
+  "qa_packet": "artifacts/research_console_vnext/research_native/RCN_RN_WP4A_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "authority_delta": "NONE",
+  "current_authority": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+  "non_reserved_rationale": "WP4A only materializes deterministic contracts, schemas, fixture composition, GET-only preparation route, binding declarations and tests already admitted by G3V. No candidate namespace is bound or read as a real console source and no scientific or operational authority changes.",
+  "real_source_routes": "DENIED_UNTIL_RCN_RN_G4",
+  "rollback": "Close/supersede before merge or correct forward by removing the preparation surface after merge. G4 and all real-source authority remain unaffected.",
+  "merge_commit": null,
+  "merge_receipt_pending": true,
+  "next_packet": "RCN-RN-WP4B_PREPARATION"
+}
