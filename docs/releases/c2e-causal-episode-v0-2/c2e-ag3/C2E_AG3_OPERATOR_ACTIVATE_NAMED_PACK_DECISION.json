@@ -1,0 +1,57 @@
+{
+  "schema": "c2e-ag3-operator-decision/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "gate_id": "C2E-AG3",
+  "decision_id": "C2E-AG3.OPERATOR.ACTIVATE_NAMED_PACK.20260811T220500+0100",
+  "decision": "ACTIVATE_NAMED_PACK",
+  "decision_class": "OPERATOR_RESERVED",
+  "operator_instruction": "OVC APPROVE C2E-AG3 ACTIVATE_NAMED_PACK",
+  "decision_time_local": "2026-08-11T22:05:00+01:00",
+  "baseline_main": "2e5e4cc1d18e28f2508aa394b66fb47866bab19c",
+  "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+  "boundary_pack_logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+  "scope": {
+    "instrument_id": "GBPUSD",
+    "sides": ["ASK", "BID"],
+    "clock_ids": ["UTC_15M"],
+    "parent_clock_ids": ["2H_A_L"],
+    "target_start_utc": "2026-06-01T00:00:00Z",
+    "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+    "target_frame_count": 4072,
+    "logical_population_sha256": "46f02ed89c9c4a3d4b3ef2046b7aa32489c5b63a526dbb8151896331d0ae896d"
+  },
+  "prerequisite_decisions": [
+    "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
+    "C2E-AG1.OPERATOR.PASS.20260810T003700+0100",
+    "C2E-AG2.OPERATOR.PASS.20260811T191400+0100"
+  ],
+  "authorized_transaction": {
+    "boundary_pack_registry": {
+      "active_boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+      "production_pack_selected": true,
+      "active": true,
+      "canonical": false
+    },
+    "authority_registry": {
+      "implementation_state": "ACTIVE_C2E_NAMED_PACK_OPERATOR_SELECTED_AG3",
+      "active_c2e": true,
+      "active_boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+      "real_source_replay": "COMPLETED_EXACT_AG_EVIDENCE"
+    }
+  },
+  "authority_delta": {
+    "active_c2e": "GRANTED_EXACT_NAMED_PACK_SCOPE_BOUND",
+    "active_boundary_pack": "GRANTED_EXACT_NAMED_PACK_SCOPE_BOUND",
+    "selector_mutation": "CONSUMED_BY_THIS_EXACT_AG3_TRANSACTION_ONLY",
+    "canonical_or_r2_publication": "NONE",
+    "validation_consumption": "NONE",
+    "family_semantic_candidate_theory_promotion": "NONE",
+    "probability_risk_exposure_execution_agent_write": "NONE",
+    "scope_expansion": "NONE"
+  },
+  "candidate_pack_mutation": "NONE",
+  "runtime_code_mutation": "NONE",
+  "rollback": "Disable the external selection by restoring active_boundary_pack_id=null, production_pack_selected=false, active=false and active_c2e=false while preserving the immutable pack and all AG evidence and decisions. No deletion or history rewrite.",
+  "result": "PASS_ACTIVATE_EXACT_NAMED_PACK"
+}
