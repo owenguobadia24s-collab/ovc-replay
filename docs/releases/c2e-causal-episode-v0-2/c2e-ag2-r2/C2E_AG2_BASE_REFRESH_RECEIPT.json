@@ -1,0 +1,21 @@
+{
+  "schema": "c2e-ag2-base-refresh-receipt/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "gate_id": "C2E-AG2",
+  "operator_decision": "PASS",
+  "previous_pr_base": "d8da7bdf69d8c38302dd773322a38fa3ae913fe5",
+  "observed_current_main": "becbb343ba9ebaa71ae88094590eff7558277d4e",
+  "base_delta_classification": "UNRELATED_DEVELOPMENT_SKILLS_PACKET",
+  "authority_effect": "NONE",
+  "scientific_delta": "NONE",
+  "candidate_delta": "NONE",
+  "purpose": "Create a fresh exact-head PR synchronization event so repository and OVC merge-readiness assurance evaluate C2E-AG2 against the current lawful main snapshot after unrelated main-head churn.",
+  "required_checks": [
+    "complete_repository_tests",
+    "OVC_profile_assurance",
+    "OVC_tiered_test_selection_shadow",
+    "OVC_merge_readiness"
+  ],
+  "merge_rule": "Squash-merge only if all required checks pass on this refreshed head and no unresolved review blocker exists.",
+  "postmerge_rule": "Advance the C2E moving programme-state pointer only after the operator-approved AG2 decision is integrated; then prepare AG3 proposal only and do not execute activation."
+}
