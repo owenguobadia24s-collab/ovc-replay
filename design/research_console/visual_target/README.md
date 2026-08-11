@@ -12,12 +12,12 @@ This directory is the repository-authoritative visual reference set for `OVC-RCN
 
 ## Reference precedence
 
-1. `VT-REF-01.svg` — immediate WorkbenchFrame anatomy and hard semantic instruments.
-2. `VT-REF-02.svg` — four-domain shell, domain identity and large-workbench composition.
-3. `VT-REF-03.svg` — multi-page workflow archetypes.
-4. `VT-REF-04.svg` — high-density terminal detail, linked views and micro-panel rhythm.
+1. `VT-REF-01.webp` — immediate WorkbenchFrame anatomy and hard semantic instruments.
+2. `VT-REF-02.webp` — four-domain shell, domain identity and large-workbench composition.
+3. `VT-REF-03.webp` — multi-page workflow archetypes.
+4. `VT-REF-04.webp` — high-density terminal detail, linked views and micro-panel rhythm.
 
-The `.svg` files embed high-quality WebP projections so the exact visual references are repository-renderable through a text-capable GitHub contents path. `REFERENCE_MANIFEST.json` retains the SHA-256 of the original operator-supplied PNGs and the embedded WebP payloads.
+The `.webp` files are 320px-wide downsampled repository-renderable projections used for visual comparison in code review and Codex execution. They are not byte-identical replacements for the operator-supplied PNGs. `REFERENCE_MANIFEST.json` retains the SHA-256 and dimensions of the original source PNGs as the canonical source identities and separately records the repository projection hashes.
 
 ## Completion rule
 
