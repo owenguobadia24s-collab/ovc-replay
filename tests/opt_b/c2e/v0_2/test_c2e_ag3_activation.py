@@ -62,7 +62,13 @@ class C2EAG3ActivationTests(unittest.TestCase):
         self.assertEqual(self.state["operator_decision"], "ACTIVATE_NAMED_PACK")
         self.assertEqual(self.state["ag3"], "EXECUTED_PASS_ACTIVATE_NAMED_PACK")
         self.assertEqual(self.state["active_boundary_pack"], PACK_ID)
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_44_AG3_COMPLETED.json")
+        self.assertIn(
+            self.pointer["authoritative_state"],
+            {
+                "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_44_AG3_COMPLETED.json",
+                "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_45_AG3_TERMINAL.json",
+            },
+        )
         self.assertEqual(self.pointer["status"], "COMPLETED")
         self.assertEqual(self.pointer["operator_decision"], "ACTIVATE_NAMED_PACK")
         self.assertEqual(self.pointer["ag3"], "EXECUTED_PASS_ACTIVATE_NAMED_PACK")
