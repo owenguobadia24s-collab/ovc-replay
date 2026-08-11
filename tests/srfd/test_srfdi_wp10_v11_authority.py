@@ -73,8 +73,8 @@ class SRFDIWP10V11AuthorityTests(unittest.TestCase):
         self.assertIsNone(self.state["authority"]["fresh_authority_token_id"])
         self.assertFalse(self.state["authority"]["fresh_authority_token_consumed"])
         self.assertEqual("NONE_PENDING_POST_MERGE_REGENERATION", self.state["authority"]["fresh_authority_token_state"])
-        self.assertEqual("SRFDI-WP10-v1.1-FRESH-AUTHORITY-REGENERATION", self.state["next_packet"])
-        self.assertEqual("FRESH_AUTHORITY_REGENERATION_BOUNDARY", self.state["stop_condition"])
+        self.assertEqual("REGENERATE_FRESH_V11_EXECUTION_RUN_BINDING_AND_SINGLE_USE_AUTHORITY_FROM_EXACT_MERGED_MAIN", self.state["next_action"])
+        self.assertEqual("AUTHORITY_REGENERATION_BOUNDARY", self.state["stop_condition"])
         self.assertTrue(assert_lawful_v10_pointer(self, self.p))
 
 
