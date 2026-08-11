@@ -36,24 +36,28 @@ class C2EAG3TerminalCloseoutTests(unittest.TestCase):
         ))
         self.assertEqual(self.receipt["final_assurance"]["unresolved_review_threads"], 0)
 
-    def test_closeout_is_zero_authority_and_terminal(self):
+    def test_closeout_is_zero_authority_terminal_record(self):
         self.assertEqual(self.closeout["decision"], "PASS")
         self.assertEqual(self.closeout["authority_delta"], "NONE")
         self.assertIsNone(self.closeout["next_packet"])
         self.assertIsNone(self.closeout["next_gate"])
         self.assertEqual(self.state["status"], "COMPLETED")
+        self.assertEqual(self.state["state_role"], "NON_AUTHORITATIVE_TERMINAL_CLOSEOUT_RECORD")
+        self.assertEqual(
+            self.state["authoritative_state_remains"],
+            "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_44_AG3_COMPLETED.json",
+        )
         self.assertEqual(self.state["merge_commit"], MERGE_SHA)
         self.assertIsNone(self.state["next_packet"])
         self.assertIsNone(self.state["next_gate"])
 
-    def test_pointer_resolves_terminal_state_and_exact_active_pack(self):
+    def test_authoritative_pointer_remains_completed_activation_state(self):
         self.assertEqual(
             self.pointer["authoritative_state"],
-            "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_45_AG3_TERMINAL.json",
+            "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_44_AG3_COMPLETED.json",
         )
-        self.assertEqual(self.pointer["current_packet"], "C2E-AG3-CLOSEOUT")
+        self.assertEqual(self.pointer["current_packet"], "C2E-AG3-DECISION")
         self.assertEqual(self.pointer["ag3"], "EXECUTED_PASS_ACTIVATE_NAMED_PACK")
-        self.assertEqual(self.pointer["ag3_merge_commit"], MERGE_SHA)
         self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
         self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
         self.assertIsNone(self.pointer["next_gate"])
