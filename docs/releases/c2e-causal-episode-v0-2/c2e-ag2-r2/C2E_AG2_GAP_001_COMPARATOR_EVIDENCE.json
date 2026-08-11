@@ -1,0 +1,187 @@
+{
+  "active_boundary_pack": "NONE",
+  "active_c2e": "NONE",
+  "ag3": "NOT_EXECUTED",
+  "authority_effect": "NONE_COMPARATOR_EVIDENCE_ONLY",
+  "boundary_comparison": {
+    "agreement_count": 3471,
+    "agreement_rate": 0.8721105527638191,
+    "by_side": {
+      "ASK": {
+        "BOTH_BOUNDARY": 1659,
+        "C2E_ONLY": 260,
+        "NEITHER_BOUNDARY": 71,
+        "SRFD_ONLY": 0,
+        "denominator": 1990,
+        "disagreement_rate": 0.1306532663316583
+      },
+      "BID": {
+        "BOTH_BOUNDARY": 1670,
+        "C2E_ONLY": 249,
+        "NEITHER_BOUNDARY": 71,
+        "SRFD_ONLY": 0,
+        "denominator": 1990,
+        "disagreement_rate": 0.12512562814070352
+      }
+    },
+    "c2e_phase_mutation_count": 3838,
+    "counts": {
+      "BOTH_BOUNDARY": 3329,
+      "C2E_ONLY": 509,
+      "NEITHER_BOUNDARY": 142,
+      "SRFD_ONLY": 0
+    },
+    "denominator": 3980,
+    "disagreement_count": 509,
+    "disagreement_ledger_path": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_GAP_001_DISAGREEMENT_LEDGER.json",
+    "disagreement_ledger_sha256": "435173d853b9d26b641771591f2fe603825bd8a39de94ae81636d7d974b396d9",
+    "disagreement_rate": 0.1278894472361809,
+    "full_comparison_rows_sha256": "6b1eea5c203025bd44167c75ca71e4797a50adfb794ea0a27dfce2370afb6084",
+    "set_relation": "ALL_SRFD_RUN_CHANGE_BOUNDARIES_ARE_C2E_PHASE_MUTATION_BOUNDARIES_ON_COMMON_SURFACE",
+    "srfd_run_change_boundary_count": 3329,
+    "surface": "C2E_PHASE_MUTATION_VS_SRFD_RUN_CHANGE_SEGMENTATION"
+  },
+  "common_population": {
+    "c2e_frame_count": 4072,
+    "common_transition_keyset_sha256": "daa82719258bd11f5b00d3363605f4b0b5863c3c468451389c78e6652065964e",
+    "exact_key_set_equality": true,
+    "join_key": [
+      "instrument_id=GBPUSD",
+      "side",
+      "first_valid_time"
+    ],
+    "scope_note": "C2E candidate is LOCAL_15M only; SRFD comparison is restricted to the exact common LOCAL_15M ASK/BID June surface, not the wider 8,598-record SRFD benchmark population.",
+    "srfd_target_eligible_local_15m_count": 4072,
+    "stream_start_count_c2e": 92,
+    "stream_start_count_srfd": 92,
+    "stream_start_set_equality": true,
+    "transition_denominator": 3980
+  },
+  "comparator_identities": {
+    "causal_subject": {
+      "boundary_action": "PHASE_MUTATION",
+      "event_stream_sha256": "36c75f05fadc186489a0089b38230833719b6ebf8eb35a388bf14979c9a473af",
+      "id": "C2E.PHASE_MUTATION@C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+      "input_frame_index_sha256": "35b2b71d9214585eec4a5c59b665b7439e1832ff69e742dab712a932f1b2f979",
+      "source_run_archive": {
+        "drive_file_id": "1ow8KUjE77trZU-NnVoSWXgDZwEN1ViTF",
+        "sha256": "3ca7dbcdc4e52c5762155e79b94723de8b0b080081bb4519cf2de6e85058f81f"
+      },
+      "temporal_mode": "ONLINE_CAUSAL_FIRST_VALID"
+    },
+    "historical_legacy_comparator": {
+      "authority_effect": "NONE_COMPARATOR_ONLY",
+      "denominator": 4072,
+      "disagreement_count": 3524,
+      "mode": "LEGACY_REFERENCE_COMPARATOR_ONLY"
+    },
+    "srfd_causal_comparator": {
+      "id": "RUN_CHANGE_SEGMENTATION",
+      "independent_reference_git_blob": "b7630cd65d31d287b6f0d704c85315fe4fd4b4b2",
+      "segmentation_pack_sha256": "6c2451fb5b766d2ae25a13a311ba17c8dede342757d607219e62881be4ac31c0",
+      "segmentation_prereg_git_blob": "fbc15d6c5126d2272325c8050858c3d0d02f9508",
+      "source_adapter_git_blob": "1f7d16088ab8fd9c4922d57606e84e88c4906bce",
+      "source_files": [
+        {
+          "drive_file_id": "17Yyk_Oqdd_t6BkqnHnUiKGnNpW3hWG1K",
+          "sha256": "f0df9558afc5740aabd2dd9f75e958880efd5343b70982d77f4c1e3252ba4e8a",
+          "side": "ASK"
+        },
+        {
+          "drive_file_id": "1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk",
+          "sha256": "63a1d24836d3cd0aaad9e5a11e9b9ec51724bfd335fab47f538ed23f36e8c58b",
+          "side": "BID"
+        }
+      ],
+      "srfd_run_binding_sha256": "735b49e435a71ee6129be75e182d4b4bfeda073f7d75e912b6ab711bc6420967",
+      "srfd_run_id": "SRFD.RUN.55601cfe14d85173c767315be04c8b6c333dc8c07103a8064733086c26606dbf",
+      "srfd_science_identity_sha256": "ae349cc8f8679a5f85d3eb5a7474999ffa0651b161916680725d141904e40737",
+      "temporal_mode": "ONLINE_CAUSAL"
+    },
+    "srfd_retrospective_control": {
+      "id": "NULL_BOUNDARY_CONTROL",
+      "role": "PREREGISTERED_CONTROL_SENSITIVITY_NOT_EPISODE_ADEQUACY_COMPARATOR",
+      "segmentation_pack_sha256": "6c2451fb5b766d2ae25a13a311ba17c8dede342757d607219e62881be4ac31c0",
+      "temporal_mode": "RETROSPECTIVE_CONTROL"
+    }
+  },
+  "counterexamples": {
+    "count": 12,
+    "path": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_GAP_001_COUNTEREXAMPLES.json",
+    "selection_rule": "FIRST_6_ASK_AND_FIRST_6_BID_DISAGREEMENTS_ORDERED_BY_SIDE_THEN_FIRST_VALID_TIME"
+  },
+  "execution_class": "READ_ONLY_DETERMINISTIC_REPROJECTION_OF_FROZEN_COMPARATOR_SEMANTICS",
+  "gate_id": "C2E-AG2",
+  "negative_and_ambiguity_evidence": {
+    "c2e_ambiguous_boundary_sets": 0,
+    "c2e_episode_count": 92,
+    "c2e_not_evaluable_candidates": 34,
+    "c2e_peer_owner_collisions": 0,
+    "c2e_resolver_conflicts": 0,
+    "srfd_g11_method_disagreement_denominator": 47172,
+    "srfd_g11_method_disagreement_records": 38461,
+    "srfd_g11_no_stable_family_configurations": 325,
+    "srfd_g11_null_control_no_stable_family": "324_OF_324",
+    "status": "PRESERVED_NO_NEGATIVE_EVIDENCE_COERCION"
+  },
+  "next_action": "REFRESH_C2E_AG2_OPERATOR_PACKET_AND_STOP_AT_OPERATOR_RESERVED_AG2",
+  "no_hidden_winner": {
+    "family_fields_consumed": false,
+    "family_or_method_selection_performed": false,
+    "interpretation": "The 509 disagreements are descriptive evidence of two frozen comparator definitions, not a ranking, winner, threshold-selection or activation signal.",
+    "outcome_fields_consumed": false,
+    "promotion_effect": "NONE",
+    "selector_mutation": false,
+    "threshold_tuning_performed": false,
+    "validation_consumed": false
+  },
+  "other_c2e_boundary_surface_accounting": {
+    "BIRTH": {
+      "comparison_treatment": "STREAM_START_SET_EQUALITY_PASS",
+      "count": 92
+    },
+    "CENSOR_GAP": {
+      "comparison_treatment": "DISCONTINUITY_PARTITION_NOT_RUN_CHANGE_TRANSITION",
+      "count": 90
+    },
+    "CENSOR_RELEASE_END": {
+      "comparison_treatment": "RELEASE_CLOSURE_NOT_RUN_CHANGE_TRANSITION",
+      "count": 2
+    },
+    "CONTINUATION": {
+      "comparison_treatment": "TRANSITION_DENOMINATOR_MEMBERSHIP_NOT_SEGMENTATION_BOUNDARY",
+      "count": 3980
+    },
+    "RE_PARENT": {
+      "comparison_treatment": "NOT_COMPARABLE_TO_RUN_CHANGE_LOCAL_AXIS_STATE_KEY_NO_PARENT_CONTEXT",
+      "count": 454
+    }
+  },
+  "packet_id": "C2E-AG2-GAP-001-COMPARATOR-ONLY-EVIDENCE-ADDENDUM",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "prepared_at": "2026-08-11T17:25:00+01:00",
+  "preregistered_control_sensitivity": {
+    "classification_counts": {
+      "BOTH_BOUNDARY": 0,
+      "C2E_ONLY": 3838,
+      "NEITHER_BOUNDARY": 142,
+      "SRFD_ONLY": 0
+    },
+    "comparator_id": "NULL_BOUNDARY_CONTROL",
+    "control_boundary_count": 0,
+    "interpretation": "CONTROL_ONLY. This is not evidence that C2E is superior; it demonstrates the expected contrast against the preregistered retrospective no-boundary control.",
+    "transition_denominator": 3980
+  },
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "result": "C2E_AG2_GAP_001_RESOLVED_COMPARATOR_EVIDENCE_PRESENT",
+  "review_subject": {
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "boundary_pack_logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "frame_count": 4072,
+    "logical_population_sha256": "46f02ed89c9c4a3d4b3ef2046b7aa32489c5b63a526dbb8151896331d0ae896d",
+    "population": "GBPUSD ASK/BID UTC_15M June 2026 LOCAL_15M",
+    "status": "ADMITTED_FOR_AG_EVALUATION_ONLY_INACTIVE_NONCANONICAL"
+  },
+  "schema": "c2e-ag2-gap001-comparator-evidence/v1",
+  "sufficiency_finding": "SUFFICIENT_EXISTING_FROZEN_ARTIFACTS_NO_SRFD_SCIENCE_RERUN_REQUIRED"
+}
