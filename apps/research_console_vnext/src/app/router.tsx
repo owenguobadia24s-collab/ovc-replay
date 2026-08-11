@@ -4,6 +4,7 @@ import { WorkspaceFrame } from "../workspace/WorkspaceFrame";
 import { ProductionConsole } from "../production/ProductionConsole";
 import "../production/productionResponsive.css";
 import "../production/productionResponsiveSemantics.css";
+import "../production/productionResponsivePolish.css";
 
 export const router=createBrowserRouter([
   {path:"/",element:<Navigate to="/structure" replace/>},
