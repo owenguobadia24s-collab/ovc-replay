@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 
-const screenshotRoot = path.resolve(process.cwd(), "../../artifacts/research_console_vnext/wp3e_figma_production_screenshots");
+const screenshotRoot = path.resolve(process.cwd(), "../../artifacts/research_console_vnext/g3v_candidate_screenshots/figma-production");
 mkdirSync(screenshotRoot, { recursive: true });
 
 const routes = [
