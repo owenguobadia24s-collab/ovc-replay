@@ -14,7 +14,7 @@ from .wp10_v10_interface import (
 
 PACKET_ID = "SRFDI-WP10-v1.1"
 FROZEN_ENVIRONMENT_PROFILE_SHA256 = "e08aaf02871d23979b47f2ce928b2098d775eab3e483ff3602db2794afa13eef"
-HARDENING_REHEARSAL_SHA256 = "b44052db7f4f30a701d157bafaee463ff30cf4e66ad5a2f2715708241498422a"
+HARDENING_REHEARSAL_SHA256 = "445d4bb6646ad61b045b3cb0bd51078be194c7423277b23df52f8bc85b88d0d8"
 # packet_id is execution/governance generation identity, not a scientific input.
 # It is separately frozen by RunBindingV11.to_dict() and must differ from v1.0.
 NON_SCIENCE_BINDING_FIELDS = frozenset({"packet_id"})
