@@ -39,17 +39,29 @@ class ResearchNativeWP0Tests(unittest.TestCase):
         self.assertFalse(c["removal_performed"])
         self.assertEqual(c["acceptance"], "PASS_NO_REMOVAL")
 
-    def test_state_preserves_wp3e_boundary_and_keeps_real_sources_denied(self):
+    def test_state_preserves_wp3e_or_g3v_boundary_and_keeps_real_sources_denied(self):
         s = json.loads(STATE.read_text(encoding="utf-8"))
         self.assertEqual(s["schema"], "ovc-rcn-rn-programme-state/v2")
-        self.assertEqual(s["packet_id"], "RCN-RN-WP3E")
-        self.assertEqual(s["status"], "WP3E_ADMITTED_READY")
-        self.assertEqual(s["next_packet"], "RCN-RN-G3V_FINAL_ONLY_AFTER_WP3E_CONVERGENCE")
         self.assertEqual(s["real_source_routes"], "DENIED_UNTIL_RCN_RN_G4")
-        self.assertEqual(s["stop_boundary"], "TYPED_WP3E_STOP_OR_FINAL_G3V_READY")
-        self.assertEqual(s["g3v"], "DEFERRED")
-        self.assertEqual(s["wp4_g4"], "NOT_ADMITTED_WHILE_WP3E_OPEN")
-        self.assertEqual(s["authority_delta"], "NONE")
+        self.assertEqual(s["current_authority"], "FIXTURE_ONLY_LOCAL_READ_ONLY")
+        self.assertEqual(s["blockers"], [])
+
+        if s["packet_id"] == "RCN-RN-WP3E":
+            self.assertEqual(s["status"], "WP3E_ADMITTED_READY")
+            self.assertEqual(s["next_packet"], "RCN-RN-G3V_FINAL_ONLY_AFTER_WP3E_CONVERGENCE")
+            self.assertEqual(s["stop_boundary"], "TYPED_WP3E_STOP_OR_FINAL_G3V_READY")
+            self.assertEqual(s["g3v"], "DEFERRED")
+            self.assertEqual(s["wp4_g4"], "NOT_ADMITTED_WHILE_WP3E_OPEN")
+            self.assertEqual(s["authority_delta"], "NONE")
+        else:
+            self.assertEqual(s["packet_id"], "RCN-RN-G3V")
+            self.assertEqual(s["status"], "GATE_READY")
+            self.assertEqual(s["next_packet"], "RCN-RN-G3V_OPERATOR_DECISION")
+            self.assertEqual(s["stop_boundary"], "RCN-RN-G3V_OPERATOR_DECISION")
+            self.assertEqual(s["g3v"], "READY_FOR_FINAL_OPERATOR_ACCEPTANCE")
+            self.assertEqual(s["wp4_g4"], "NOT_ADMITTED_PENDING_G3V_OPERATOR_DECISION")
+            self.assertEqual(s["authority_required"], "OPERATOR_REQUIRED")
+            self.assertIn("NO_REAL_SOURCE_AUTHORITY", s["authority_delta"])
 
 
 if __name__ == "__main__":
