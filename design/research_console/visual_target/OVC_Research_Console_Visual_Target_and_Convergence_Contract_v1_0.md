@@ -12,12 +12,12 @@ Research Console vNext must visibly converge on the four canonical prototype ref
 The implementation agent must stay on-goal: **render → compare → rank discrepancies → correct → test → rerender**. It must not stop for operator review after each refinement pass. Only a fully converged exact-head candidate reaches G3V.
 
 ## Canonical references
-Repository-renderable assets are stored beside this contract as `VT-REF-01.svg` through `VT-REF-04.svg`. The manifest preserves the SHA-256 of each original operator-supplied PNG and the derived repository asset identity.
+Repository-renderable projections are stored beside this contract as `VT-REF-01.webp` through `VT-REF-04.webp`. These are downsampled visual projections for code-review/Codex comparison; they are not byte-identical replacements for the operator-supplied PNGs. `REFERENCE_MANIFEST.json` preserves the SHA-256 and original dimensions of each canonical source PNG plus the hash of each repository projection.
 
-- `VT-REF-01` — single-workbench anatomy and hard-component composition — `c8ccb963f6a3cbb1464d35c1ba32a791d534327d13969c5779f4737d5cbb1fb5`
-- `VT-REF-02` — four-domain shell and large workbenches — `52cb80f02913ca1f80e90bdebf793470caa70a2332822ff46f7483ca78e6a3b0`
-- `VT-REF-03` — multi-page workflow family — `5d6faeabbcaef4dd3e870dcd408597be7a3e1311751619891b916575d9116e26`
-- `VT-REF-04` — high-density terminal/cross-domain detail — `452f642a5a79a51ee50266d3db51222ac6b05f0c81b96b8531b0ad6b011153ed`
+- `VT-REF-01` — single-workbench anatomy and hard-component composition — source PNG SHA-256 `c8ccb963f6a3cbb1464d35c1ba32a791d534327d13969c5779f4737d5cbb1fb5`
+- `VT-REF-02` — four-domain shell and large workbenches — source PNG SHA-256 `52cb80f02913ca1f80e90bdebf793470caa70a2332822ff46f7483ca78e6a3b0`
+- `VT-REF-03` — multi-page workflow family — source PNG SHA-256 `5d6faeabbcaef4dd3e870dcd408597be7a3e1311751619891b916575d9116e26`
+- `VT-REF-04` — high-density terminal/cross-domain detail — source PNG SHA-256 `452f642a5a79a51ee50266d3db51222ac6b05f0c81b96b8531b0ad6b011153ed`
 
 Prototype data/text is illustrative. Composition, density, hierarchy, panel discipline and analytical-instrument quality are normative. Prototype write-looking controls do **not** grant write authority.
 
