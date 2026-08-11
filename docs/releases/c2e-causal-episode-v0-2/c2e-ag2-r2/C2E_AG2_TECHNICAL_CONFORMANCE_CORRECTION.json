@@ -1,0 +1,56 @@
+{
+  "schema": "c2e-ag2-technical-conformance-correction/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "gate_id": "C2E-AG2",
+  "correction_id": "C2E-AG2.TECHNICAL-CONFORMANCE.20260811",
+  "authority_effect": "NONE_TEST_HARNESS_CONFORMANCE_ONLY",
+  "trigger": {
+    "failing_gate_ready_head": "13e48d66cc1f14d32efc6da4ef27c6112965471a",
+    "tests_workflow_run_id": 31518596024,
+    "tests_job_id": 93869797662,
+    "failure_code": "UNITTEST_DISCOVERY_DEPENDENCY_MISMATCH",
+    "failure_detail": "test_c2e_ag2_comparator_addendum.py imported pytest, while the canonical repository workflow executes stdlib unittest and pytest is not an installed dependency; the second AG2 gate-ready test module also used pytest-style top-level functions and therefore was not discovered by unittest."
+  },
+  "preserved_pre_correction_artifacts": {
+    "gate_packet_path": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_GATE_PACKET_REFRESHED.json",
+    "gate_packet_git_blob": "74089e3be4d829a9c235253bfe229b57765f10c0",
+    "qa_packet_path": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_GAP_001_QA_PACKET.json",
+    "qa_packet_git_blob": "a87776a196c556435c3265077f8a1351a70dc6bb",
+    "preservation_policy": "APPEND_ONLY_NO_RETROACTIVE_REWRITE"
+  },
+  "corrective_changes": [
+    {
+      "path": "tests/opt_b/c2e/v0_2/test_c2e_ag2_comparator_addendum.py",
+      "commit": "7c7d4894a8aab067e67fc118cc4977d34964edbe",
+      "git_blob": "9a424bbc86db83a5c4d59cf807157593afd64ac6",
+      "sha256": "c337bba7c3b34ad48f87470c89fdfb3c6d6e35304d8aa4af1eea5843b7f75bd4",
+      "change": "REMOVE_UNDECLARED_PYTEST_DEPENDENCY_AND_CONVERT_TO_UNITTEST_TESTCASE"
+    },
+    {
+      "path": "tests/opt_b/c2e/v0_2/test_c2e_ag2_gap001_gate_ready.py",
+      "commit": "3605b7e1ae026ad7edf0412b6f4430909e564929",
+      "git_blob": "5555bdfc46920ab96da47ee9583e3243580ba79f",
+      "sha256": "489c60e7b3ca8985d0f24212658d93548ddd663c038903306a95cc0cdea8f5e7",
+      "change": "CONVERT_PYTEST_STYLE_TOP_LEVEL_FUNCTIONS_TO_UNITTEST_TESTCASE_FOR_CANONICAL_DISCOVERY"
+    }
+  ],
+  "scientific_and_authority_invariants": {
+    "comparator_result_changed": false,
+    "comparator_denominator": 3980,
+    "comparator_disagreement_count": 509,
+    "srfd_science_changed": false,
+    "srfd_pack_changed": false,
+    "c2e_boundary_pack_changed": false,
+    "c2e_candidate_identity_changed": false,
+    "new_provider_intake": false,
+    "validation_consumed": false,
+    "selector_mutation": false,
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "ag3": "NOT_EXECUTED"
+  },
+  "required_closeout": "RERUN_CANONICAL_COMPLETE_REPOSITORY_AND_OVC_FINAL_HEAD_ASSURANCE_ON_CORRECTED_EXACT_HEAD_BEFORE_RECORDING_OPERATOR_AG2_PASS",
+  "rollback": "Revert only the two unittest-harness corrections and this additive correction record if a conformance defect is found; preserve comparator evidence, gate packet, SRFD evidence and inactive C2E candidate unchanged."
+}
