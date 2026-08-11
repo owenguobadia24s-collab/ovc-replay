@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 import unittest
 
+from srfd._current_pointer_compat import assert_lawful_v10_pointer
+
 ROOT=Path(__file__).resolve().parents[2]
 FAILURE=ROOT/'docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-0/SRFDI_WP10_V10_EXECUTION_OUTPUT_CONTRACT_FAILURE.json'
 QA=ROOT/'docs/releases/srfd-benchmark-v0-1/srfdi-wp10-v1-0/SRFDI_WP10_V10_EXECUTION_OUTPUT_CONTRACT_FAILURE_QA.json'
@@ -21,7 +23,15 @@ class SRFDIWP10V10DispatchOutputContractFailureTests(unittest.TestCase):
   e=self.f['checkpoint_evidence']; self.assertEqual(282,e['last_unambiguously_bound_runner_sequence']); self.assertEqual(284,e['correct_next_domain_preparation_sequence']); self.assertEqual(285,e['first_invalid_sequence']); self.assertEqual(338,e['last_invalid_sequence']); self.assertEqual(54,e['invalid_configuration_unit_count']); self.assertEqual('FORBIDDEN',e['checkpoint_rewrite']); self.assertEqual('FORBIDDEN',e['checkpoint_truncation']); self.assertEqual('FORBIDDEN',e['same_run_resume'])
  def test_hardening_pass_is_bound_but_real_memory_safe_route_is_still_required(self):
   self.assertEqual('PASS_2020_OF_2020',self.f['hardening_resolution']['rehearsal_status']); self.assertEqual('PASS',self.f['hardening_resolution']['strict_output_contracts']); self.assertIn('MEMORY_SAFE',self.q['blockers'][0]); self.assertEqual('V11_EXECUTION_ROUTE_IMPLEMENTATION_ONLY_NO_SCIENTIFIC_RUN_AUTHORITY',self.q['authority_effect'])
- def test_current_pointer_routes_to_v11_execution_implementation_not_run(self):
-  self.assertEqual('BLOCKED',self.p['status']); self.assertEqual('SRFDI-WP10-v1.1-REAL-EXECUTION-ROUTE',self.p['next_packet']); self.assertEqual('IMPLEMENTATION_ONLY_NO_RUN_AUTHORITY',self.p['wp10_v1_1_execution_route']); self.assertEqual('DENIED',self.p['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED',self.p['validation_2025']); self.assertEqual('NONE',self.p['scientific_promotion']); self.assertEqual('NONE',self.p['probability_risk_exposure_execution'])
+ def test_current_pointer_preserves_v10_failure_while_allowing_exact_v11_progression(self):
+  self.assertEqual('DENIED',self.p['provider_fetch']); self.assertEqual('LOCKED_UNCONSUMED',self.p['validation_2025']); self.assertEqual('NONE',self.p['scientific_promotion']); self.assertEqual('NONE',self.p['probability_risk_exposure_execution'])
+  if self.p.get('active_packet') == 'SRFDI-WP10-v1.1':
+   self.assertTrue(assert_lawful_v10_pointer(self,self.p)); self.assertEqual('BLOCKED_DISPATCH_OUTPUT_CONTRACT_FAILURE_PRESERVED',self.p['wp10_v1_0_execution_route'])
+   if self.p['status']=='BLOCKED':
+    self.assertTrue(self.p['failure_receipt'].endswith('SRFDI_WP10_V11_PREFLIGHT_ENVIRONMENT_BLOCKER.json')); self.assertEqual('BLOCKED_PREFLIGHT_ENVIRONMENT_DRIFT_TOKEN_UNCONSUMED',self.p['wp10_v1_1_execution_route'])
+   else:
+    self.assertEqual('AUTHORIZED_UNCONSUMED_PENDING_EXACT_PREFLIGHT',self.p['wp10_v1_1_execution_route'])
+   return
+  self.assertEqual('BLOCKED',self.p['status']); self.assertEqual('SRFDI-WP10-v1.1-REAL-EXECUTION-ROUTE',self.p['next_packet']); self.assertEqual('IMPLEMENTATION_ONLY_NO_RUN_AUTHORITY',self.p['wp10_v1_1_execution_route'])
 
 if __name__=='__main__': unittest.main()
