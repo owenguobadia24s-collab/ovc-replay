@@ -9,6 +9,7 @@ POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 RO_C2E = ROOT / "registries/research_operations/c2e/OVC_C2E_PROGRAMME_STATE_v0_1.json"
 C2AR = ROOT / "registries/opt_b/c2/vnext/C2_INTEGRATED_SHADOW_PACKAGE_APPROVED_v1.jsonc"
 HISTORICAL_DEFERRED_STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_15.json"
+PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 
 class C2E2G0OperatorDecisionTests(unittest.TestCase):
@@ -59,11 +60,17 @@ class C2E2G0OperatorDecisionTests(unittest.TestCase):
         self.assertEqual(self.pointer["programme_id"], "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2")
         self.assertEqual(current["programme_id"], self.pointer["programme_id"])
         self.assertIn("C2E2-G0.OPERATOR.PASS.20260808T175000+0100", current.get("operator_decision_history", []))
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        authority = current.get("authority", {})
-        self.assertIn(authority.get("c2e_activation"), {"DENIED", "DENIED_OPERATOR_RESERVED"})
-        self.assertEqual(authority.get("active_boundary_pack"), "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
+            self.assertEqual(current["authority"]["ag3_activation_or_replacement"], "ACTIVATE_NAMED_PACK_PASS")
+            self.assertEqual(current["authority"]["active_boundary_pack"], PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+            authority = current.get("authority", {})
+            self.assertIn(authority.get("c2e_activation"), {"DENIED", "DENIED_OPERATOR_RESERVED"})
+            self.assertEqual(authority.get("active_boundary_pack"), "NONE")
 
 
 if __name__ == "__main__":
