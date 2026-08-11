@@ -1,0 +1,31 @@
+{
+  "schema": "c2e-ag2-postmerge-closeout-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "packet_id": "C2E-AG2-CLOSEOUT",
+  "gate_id": "C2E-AG2",
+  "qa": "PASS",
+  "acceptance_conditions": {
+    "operator_pass_record_present": "PASS",
+    "ag2_pr_598_squash_merged": "PASS",
+    "merge_commit_matches_receipt": "PASS",
+    "ag2_final_head_complete_repository_suite": "PASS_RUN_31528132287",
+    "ag2_final_head_ovc_profile_tiered_merge_readiness": "PASS_RUN_31528132398",
+    "moving_pointer_advances_only_after_merge": "PASS",
+    "active_c2e_remains_none": "PASS",
+    "active_boundary_pack_remains_none": "PASS",
+    "ag3_remains_not_executed": "PASS",
+    "next_work_limited_to_ag3_proposal_preparation": "PASS",
+    "postmerge_closeout_first_complete_suite": "FAIL_RUN_31528932168_TEST_POINTER_CONFORMANCE_ONLY_PRESERVED",
+    "postmerge_closeout_first_ovc_assurance": "FAIL_RUN_31528932150_DEPENDENT_TEST_POINTER_CONFORMANCE_PRESERVED",
+    "postmerge_corrective_complete_suite": "PASS_RUN_31529963266",
+    "postmerge_corrective_ovc_profile_tiered_merge_readiness": "PASS_RUN_31529963413"
+  },
+  "technical_correction": "docs/releases/c2e-causal-episode-v0-2/c2e-ag2-r2/C2E_AG2_POSTMERGE_POINTER_TEST_CONFORMANCE_CORRECTION.json",
+  "warnings": [
+    "C2E-AG3 IS OPERATOR-RESERVED ACTIVATION_OR_REPLACEMENT AUTHORITY",
+    "AG2 PASS DOES NOT ACTIVATE C2E OR THE CANDIDATE BOUNDARY PACK"
+  ],
+  "unresolved_issues": [],
+  "authority_delta": "NONE_POSTMERGE_CLOSEOUT_ONLY",
+  "recommendation": "PASS_AND_ADVANCE_TO_C2E_AG3_PROPOSAL_PREPARATION_ONLY"
+}

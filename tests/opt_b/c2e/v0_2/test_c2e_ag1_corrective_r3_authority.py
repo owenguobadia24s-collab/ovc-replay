@@ -75,8 +75,7 @@ class C2EAG1CorrectiveR3AuthorityTests(unittest.TestCase):
             self.assertEqual(p["blocking_operator_subgate_decision"], "PASS")
             self.assertEqual(p["restart_token_proposal_id"], R4)
             self.assertEqual(p["restart_token_proposal_status"], "AUTHORIZED_UNCONSUMED")
-        else:
-            self.assertEqual(p["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_38.json")
+        elif p["authoritative_state"].endswith("OVC_C2E2_STATE_v0_38.json"):
             self.assertEqual(p["status"], "APPROVED")
             self.assertEqual(p["current_gate"], "C2E-AG1")
             self.assertFalse(p["operator_decision_required"])
@@ -85,6 +84,18 @@ class C2EAG1CorrectiveR3AuthorityTests(unittest.TestCase):
             self.assertEqual(p["restart_token_status"], "CONSUMED_SUCCESS_REUSE_PROHIBITED")
             self.assertEqual(p["ag1_replay_adequacy"], "PASS")
             self.assertEqual(p["next_gate"], "C2E-AG2")
+        else:
+            self.assertEqual(p["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_42_AG2_COMPLETED.json")
+            self.assertEqual(p["status"], "COMPLETED")
+            self.assertEqual(p["current_gate"], "C2E-AG2")
+            self.assertFalse(p["operator_decision_required"])
+            self.assertEqual(p["operator_decision"], "PASS")
+            self.assertEqual(p["restart_token_id"], R4)
+            self.assertEqual(p["restart_token_status"], "CONSUMED_SUCCESS_REUSE_PROHIBITED")
+            self.assertEqual(p["ag1_replay_adequacy"], "PASS")
+            self.assertEqual(p["ag2_progression"], "COMPLETED_PASS")
+            self.assertEqual(p["next_gate"], "C2E-AG3")
+            self.assertEqual(p["ag3"], "NOT_EXECUTED")
 
 if __name__ == "__main__":
     unittest.main()
