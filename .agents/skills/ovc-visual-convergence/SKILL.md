@@ -11,10 +11,10 @@ Read before changing the console:
 
 - `design/research_console/visual_target/OVC_Research_Console_Visual_Target_and_Convergence_Contract_v1_0.md`
 - `design/research_console/visual_target/REFERENCE_MANIFEST.json`
-- `design/research_console/visual_target/VT-REF-01.svg` through `VT-REF-04.svg`
+- `design/research_console/visual_target/VT-REF-01.webp` through `VT-REF-04.webp`
 - `docs/plans/research-console-vnext/RCN_RN_WP3E_Autonomous_Visual_Convergence_Addendum_v0_1.md`
 
-The canonical references control composition, density, hierarchy, panel discipline and instrument quality. Prototype data and write-looking controls are illustrative only.
+The repository WebP files are downsampled visual projections; `REFERENCE_MANIFEST.json` preserves the original operator-supplied PNG source identities. The canonical references control composition, density, hierarchy, panel discipline and instrument quality. Prototype data and write-looking controls are illustrative only.
 
 ## Goal
 
