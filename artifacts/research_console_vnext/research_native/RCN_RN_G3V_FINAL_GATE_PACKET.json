@@ -1,0 +1,96 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "RCN-RN-G3V",
+  "title": "Research Console vNext — Final Fixture Visual Acceptance",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_version": "0.3 RATIFIED + WP3E ADDENDUM 0.1",
+  "visual_contract": "OVC-RCN-VISUAL-TARGET-CONVERGENCE-CONTRACT-1.0",
+  "baseline_commit": "d8da7bdf69d8c38302dd773322a38fa3ae913fe5",
+  "candidate_application_commit": "dc3c597097495865098258deb81c210672f4ba69",
+  "stability_evidence_commit": "199561b9031e9bbd70b3858d83c86f93797209ef",
+  "gate_record_commit": "THIS_RECORD_COMMIT",
+  "completed_packets": ["RCN-RN-WP3D", "RCN-RN-WP3E"],
+  "current_authority": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+  "proposed_authority_delta": "ACCEPT_FIXTURE_VISUAL_USABILITY_AND_ADMIT_PARENT_PLAN_WP4_PREPARATION_ONLY",
+  "proposed_delta_exclusions": [
+    "NO_REAL_SOURCE_EXPOSURE_OR_INTAKE",
+    "NO_SELECTOR_OR_MODEL_ACTIVATION",
+    "NO_SCIENTIFIC_PROMOTION",
+    "NO_VALIDATION_AUTHORITY",
+    "NO_PROBABILITY_RISK_EXPOSURE_OR_EXECUTION_AUTHORITY",
+    "NO_CONSOLE_WRITE_AUTHORITY"
+  ],
+  "acceptance_conditions": {
+    "VC_01_18": "PASS",
+    "1920_four_domain_masters": "PASS",
+    "1440_responsive": "PASS",
+    "1280_responsive": "PASS",
+    "two_consecutive_exact_head_stability_passes": "PASS",
+    "semantic_read_only_assurance": "PASS",
+    "full_research_console_ci": "PASS",
+    "blocking_discrepancies": 0
+  },
+  "tests": {
+    "pass_a_workflow_run": 31520133689,
+    "pass_b_workflow_run": 31520659388,
+    "python_api_contract": "PASS",
+    "generated_schema_contract": "PASS",
+    "typescript": "PASS",
+    "vitest": "PASS",
+    "vite_build": "PASS",
+    "chromium_playwright": "PASS",
+    "legacy_visual_suite": "15/15 PASS",
+    "figma_production_suite": "7/7 PASS"
+  },
+  "qa": {
+    "packet": "artifacts/research_console_vnext/research_native/RCN_RN_WP3E_FIGMA_PRODUCTION_QA_PACKET.json",
+    "recommendation": "PASS__FINAL_G3V_READY"
+  },
+  "warnings": [
+    "FIGMA_CODE_CONNECT_UNAVAILABLE_ON_CURRENT_SEAT__NON_BLOCKING_SOURCE_METADATA_FALLBACK_USED"
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "apps/research_console_vnext/src/app/router.tsx",
+    "apps/research_console_vnext/src/design/productionTokens.css",
+    "apps/research_console_vnext/src/production/ProductionConsole.tsx",
+    "apps/research_console_vnext/src/production/productionConsole.css",
+    "apps/research_console_vnext/src/production/productionResponsive.css",
+    "apps/research_console_vnext/src/production/productionResponsivePolish.css",
+    "apps/research_console_vnext/src/production/productionResponsiveSemantics.css",
+    "apps/research_console_vnext/tests/e2e/production-visual.spec.ts",
+    "design/research_console/figma/RCN_Production_Visual_System_Handoff_v0_1.json",
+    "tests/research_console_vnext/test_research_native_wp0.py",
+    "tests/research_console_vnext/test_research_native_wp3b.py",
+    "tests/research_console_vnext/test_research_native_wp3e_figma_production.py",
+    "tests/research_console_vnext/test_wp0_preflight.py",
+    "artifacts/research_console_vnext/research_native/RCN_RN_WP3E_FIGMA_PRODUCTION_BRANCH_TRANSITION.json",
+    "artifacts/research_console_vnext/research_native/RCN_RN_WP3E_FIGMA_PRODUCTION_DISCREPANCY_LEDGER.json",
+    "artifacts/research_console_vnext/research_native/RCN_RN_WP3E_FIGMA_PRODUCTION_QA_PACKET.json",
+    "artifacts/research_console_vnext/research_native/RCN_RN_WP3E_COMPLETION_RECORD.json",
+    "artifacts/research_console_vnext/research_native/RCN_RN_G3V_FINAL_GATE_PACKET.json",
+    "registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json"
+  ],
+  "external_artifact_hashes": {
+    "pass_a_bundle":"sha256:8557363622a331a6e0dec4d098591b7ae78e146a559ce70bc72a42b46dfc7e9f",
+    "pass_b_bundle":"sha256:bae14baf91c171c30ec00c543877ee0218290d4c8c468afce990fa1480da01b2",
+    "structure_1920":"a1d6dd122fed01e1e64ad59720c2b8d2b0239a5ef856b9840a96987ca69e67de",
+    "research_1920":"aec4763f810e2ee0b5105601d39bcf4844b83a1410f98950ba76b82ad2ee1c78",
+    "evidence_1920":"42798e78d52122f22bef34aac87f19b27b4682122f52d6cdd9f7c8cf4ec06ef6",
+    "control_1920":"79f33da97f2286eaf490335d2e5b0ef3d1f8d609ed7a20730252eee18198af3a",
+    "structure_1440":"2f78a3dc7c8776cd882efa374ee8f399d520c40c0c94dc41efe23bc8b167d304",
+    "structure_1280":"71c3740e9e5edf4271005d395dcc8e6452c5e37bd37d0ba34b76cbaec0a0b00c"
+  },
+  "rollback": "Close or supersede this bounded WP3E/G3V branch and PR without merging. Preserve all render and discrepancy evidence. Main remains at its lawful pre-G3V state; G3V remains unpassed and real-source routes remain denied.",
+  "recommended_decision": "PASS",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_work_after_pass": [
+    "Record operator PASS and authority decision in repository court record.",
+    "Squash-merge the bounded WP3E/G3V PR to main after exact-head checks remain green.",
+    "Close WP3E and admit only the parent-plan WP4 preparation boundary.",
+    "Keep real-source exposure/intake denied until separately governed RCN-RN-G4 approval."
+  ],
+  "operator_required": true,
+  "authority_effect_before_operator_decision": "NONE"
+}
