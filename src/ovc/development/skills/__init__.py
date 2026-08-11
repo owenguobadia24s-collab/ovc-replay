@@ -15,7 +15,7 @@ from .knowledge import KnowledgePackError, build_dependency_graph, compile_knowl
 from .registry import RegistryValidationError, load_and_validate_registries, validate_core_object
 from .release import ReleaseBuildError, build_skill_release_bundle, resolve_field_classification
 from .resolution import SkillResolutionError, build_resolution_records, build_skill_read_model
-from .security import HARD_DENY_ACTIONS, build_tool_request, decide_tool_request, issue_credential_handle, negative_reachability_probe, redact_sensitive, resolve_security_envelope, security_containment
+from .security import HARD_DENY_ACTIONS, build_tool_request, decide_tool_request, issue_credential_handle, negative_reachability_probe, redact_sensitive, resolve_security_envelope, sandbox_leakage_probe, security_containment
 from .tool_broker import LocalToolBroker
 
 __all__ = [name for name in globals() if not name.startswith("_")]
