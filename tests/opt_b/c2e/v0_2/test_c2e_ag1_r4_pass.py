@@ -5,6 +5,7 @@ import unittest
 ROOT=Path(__file__).resolve().parents[4]
 BASE=ROOT/"registries/implementation/c2e_v0_2"
 REL=ROOT/"docs/releases/c2e-causal-episode-v0-2"
+PACK_ID="C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 def j(p): return json.loads(p.read_text())
 
@@ -23,18 +24,24 @@ class C2EAG1R4PassTests(unittest.TestCase):
         self.assertTrue(t["reuse_prohibited"])
         self.assertEqual(e["drive_file_id"],"1HqFnXU2AkI0NZZF87WSn4OrCBcQwQNUS")
         self.assertEqual(e["sha256"],"0d9ada4b409345c143d10d015d1db4820c9ee89bf2904d0251c5a30f00284214")
-    def test_ag1_pass_only_allows_later_ag_progression_without_activation(self):
+    def test_ag1_pass_only_allows_later_governed_progression(self):
         d=j(REL/"c2e-ag1/C2E_AG1_OPERATOR_PASS_DECISION.json")
         p=j(BASE/"CURRENT_STATE_POINTER.json")
         self.assertEqual(d["decision"],"PASS")
         self.assertEqual(d["authority_delta"]["ag2_progression"],"AUTHORIZED_FOR_GATE_PREPARATION_ONLY")
         self.assertEqual(d["authority_delta"]["active_c2e"],"NONE")
         self.assertEqual(p["ag1_replay_adequacy"],"PASS")
-        self.assertIn(p["next_gate"],{"C2E-AG2","C2E-AG3"})
-        if p["next_gate"] == "C2E-AG3":
+        if p.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertIsNone(p["next_gate"])
             self.assertEqual(p["ag2_progression"],"COMPLETED_PASS")
-            self.assertEqual(p["ag3"],"NOT_EXECUTED")
-        self.assertEqual(p["active_c2e"],"NONE")
-        self.assertEqual(p["active_boundary_pack"],"NONE")
+            self.assertEqual(p["active_c2e"],"ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(p["active_boundary_pack"],PACK_ID)
+        else:
+            self.assertIn(p["next_gate"],{"C2E-AG2","C2E-AG3"})
+            if p["next_gate"] == "C2E-AG3":
+                self.assertEqual(p["ag2_progression"],"COMPLETED_PASS")
+                self.assertEqual(p["ag3"],"NOT_EXECUTED")
+            self.assertEqual(p["active_c2e"],"NONE")
+            self.assertEqual(p["active_boundary_pack"],"NONE")
 
 if __name__=="__main__": unittest.main()
