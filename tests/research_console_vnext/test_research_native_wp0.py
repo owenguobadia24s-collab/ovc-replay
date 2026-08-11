@@ -55,6 +55,20 @@ class ResearchNativeWP0Tests(unittest.TestCase):
             self.assertEqual(s["authority_delta"], "NONE")
             return
 
+        if s["packet_id"] == "RCN-RN-WP4A":
+            self.assertIn(s["status"], {"RUNNING", "QA_REVIEW", "COMPLETED"})
+            self.assertEqual(s["g3v"], "PASS")
+            self.assertEqual(s["preparation_authority"], "RCN-RN-WP4A_D_PREPARATION_PERMITTED")
+            self.assertEqual(s["stop_boundary"], "RCN-RN-G4_BEFORE_FIRST_REAL_SOURCE_PRESENTATION")
+            self.assertEqual(s["authority_required"], "AUTO_EXECUTABLE_PREPARATION_ONLY")
+            self.assertEqual(s["authority_delta"], "NONE")
+            self.assertIn("REAL_SOURCE_PRESENTATION_DENIED_PENDING_G4", s["wp4_g4"])
+            decision = load("RCN_RN_G3V_OPERATOR_PASS_DECISION.json")
+            self.assertEqual(decision["decision"], "PASS")
+            self.assertEqual(decision["operator_command"], "OVC APPROVE RCN-RN-G3V PASS")
+            self.assertEqual(decision["real_source_routes"], "DENIED_UNTIL_SEPARATE_RCN_RN_G4_OPERATOR_PASS")
+            return
+
         self.assertEqual(s["packet_id"], "RCN-RN-G3V")
         if s["status"] == "GATE_READY":
             self.assertEqual(s["next_packet"], "RCN-RN-G3V_OPERATOR_DECISION")
