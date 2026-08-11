@@ -1,0 +1,62 @@
+{
+  "schema": "c2e-ag3-selector-transaction-assessment/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "gate_id": "C2E-AG3",
+  "baseline_main": "85d512b5588173f58fbd043607e7bcc45653bb8e",
+  "authority_effect": "NONE_PROPOSAL_PREPARATION_ONLY",
+  "assessment": "PASS_SELECTOR_AND_ACTIVE_PACK_REGISTRY_SURFACES_MATERIALIZED",
+  "governing_rule": "C2E-AG3 alone may authorize an explicit named active-pack/selector delta; gate preparation must not execute that delta.",
+  "selector_surface": {
+    "path": "registries/opt_b/c2e/v0_2/C2E_BOUNDARY_PACK_REGISTRY_v0_2.json",
+    "blob_sha": "a6ada5c76a484e3af99552cd379af36a9d576bc9",
+    "current_active_boundary_pack_id": null,
+    "current_production_pack_selected": false,
+    "selection_fields_present": ["active_boundary_pack_id", "production_pack_selected"],
+    "conclusion": "SUFFICIENT_FOR_EXACT_NAMED_PACK_SELECTION_AFTER_OPERATOR_AG3_AUTHORITY"
+  },
+  "authority_surface": {
+    "path": "registries/opt_b/c2e/v0_2/C2E_AUTHORITY_REGISTRY_v0_2.json",
+    "blob_sha": "e00c4ea707958de0aa63e0bda5e1beed7baca513",
+    "current_implementation_state": "INACTIVE_NONCANONICAL_BUILD_TEST",
+    "current_active_c2e": false,
+    "current_active_boundary_pack_id": null,
+    "fields_present": ["implementation_state", "active_c2e", "active_boundary_pack_id", "publication", "validation", "selector_mutation", "family_semantic_probability_risk_exposure_execution", "agent_write"],
+    "conclusion": "SUFFICIENT_FOR_EXACT_ACTIVE_AUTHORITY_RECORD_AFTER_OPERATOR_AG3_AUTHORITY"
+  },
+  "candidate_pack": {
+    "path": "registries/opt_b/c2e/v0_2/C2E_EMPIRICAL_BOUNDARY_PACK_JUNE_STABLE_v0_2.json",
+    "blob_sha": "dc12ed68d55b14579bcd0050a3f102979781656b",
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "authority": "CANDIDATE",
+    "active": false,
+    "canonical": false,
+    "immutable_pack_mutation_required": false
+  },
+  "runtime_boundary": {
+    "new_runtime_code_required_for_ag3_selector_transaction": false,
+    "basis": "The frozen implementation accepts an explicit boundary-pack object and the plan defines AG3 as a selector/active-pack authority delta only. The immutable pack itself remains unchanged; selection is represented by the registry authority surfaces.",
+    "automatic_or_unbounded_execution_created": false
+  },
+  "scope_boundary": {
+    "instrument_id": "GBPUSD",
+    "sides": ["ASK", "BID"],
+    "clock_ids": ["UTC_15M"],
+    "parent_clock_ids": ["2H_A_L"],
+    "target_start_utc": "2026-06-01T00:00:00Z",
+    "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+    "target_frame_count": 4072,
+    "no_scope_expansion": true
+  },
+  "prohibitions": {
+    "pack_content_mutation": "PROHIBITED",
+    "pack_hash_mutation": "PROHIBITED",
+    "canonical_or_r2_publication": "NONE",
+    "validation_consumption": "NONE",
+    "family_semantic_candidate_theory_promotion": "NONE",
+    "probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "unresolved_issues": [],
+  "conclusion": "AG3 may be presented as an exact named-pack activation decision without inventing a new selector mechanism. No activation has been executed."
+}

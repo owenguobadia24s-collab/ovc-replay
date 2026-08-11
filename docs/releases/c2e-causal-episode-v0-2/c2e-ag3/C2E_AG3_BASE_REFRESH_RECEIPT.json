@@ -1,0 +1,25 @@
+{
+  "schema": "c2e-ag3-base-refresh-receipt/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "gate_id": "C2E-AG3",
+  "packet_id": "C2E-AG3-PREP",
+  "observed_current_main": "4cbb5e98b961826bfa55b28e3fef9424a030be61",
+  "pr_base_refreshed_to": "4cbb5e98b961826bfa55b28e3fef9424a030be61",
+  "branch": "gate/c2e-ag3-prep-20260811",
+  "purpose": "Refresh exact-head integration assurance for the operator-reserved AG3 gate-preparation packet after unrelated main-head churn.",
+  "authority_effect": "NONE_GATE_PREPARATION_ONLY",
+  "scientific_delta": "NONE",
+  "candidate_delta": "NONE",
+  "selector_mutation": "NONE",
+  "active_c2e": "NONE",
+  "active_boundary_pack": "NONE",
+  "ag3": "NOT_EXECUTED",
+  "required_checks": [
+    "complete_repository_suite",
+    "OVC_profile_assurance",
+    "OVC_tiered_test_selection_shadow",
+    "OVC_merge_readiness"
+  ],
+  "merge_condition": "All required checks PASS on the refreshed exact head against a stable current-main snapshot, with no unresolved review blocker.",
+  "postmerge_action": "Stop at C2E-AG3 for explicit operator decision; do not execute the proposed selector transaction during gate preparation."
+}
