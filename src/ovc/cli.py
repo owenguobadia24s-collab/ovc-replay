@@ -9,5 +9,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args and args[0] == "ro4":
         from ovc.research_operations.v0_4.record_cli import main as ro4_main
         return ro4_main(args[1:])
+    if args and args[0] == "skills-registry":
+        from ovc.development.skills.registry_cli import main as skills_registry_main
+        return skills_registry_main(args[1:])
     from ovc.research_operations.cli import main as research_main
     return research_main(args)
