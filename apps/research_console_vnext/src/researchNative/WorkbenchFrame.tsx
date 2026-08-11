@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { SemanticRiskGallery } from './SemanticRiskPrototypes';
 import "./researchNative.css";
 import "./researchNativeNarrow.css";
+import "./wp3eConvergence.css";
 
 type BadgeProps = { label: string; value: string };
 export function ObjectBadge({ label, value }: BadgeProps) { return <span className="rnBadge"><b>{label}</b><span>{value}</span></span>; }
@@ -21,17 +22,17 @@ const domainQuestion: Record<string,string> = {
 };
 
 export function EvidencePassport() { return <div className="rnPassport"><div><span className="rnPanelCode">E1</span><div><small>EVIDENCE PASSPORT</small><strong>RN-DEMO-001</strong></div></div><div className="rnPassportBadges"><AuthorityBadge value="NONE"/><AvailabilityBadge value="AVAILABLE"/><ChronologyChip value="08:15Z"/><QAStatus value="PASS"/></div></div>; }
-export function DegradedState({ kind, why, impact }: { kind: string; why: string; impact: string }) { return <section className="rnDegraded" role="status"><div><strong>{kind}</strong><span>DEGRADED SOURCE</span></div><p>You are seeing <b>{kind}</b> because {why}; this affects <b>{impact}</b>; it does not affect identity, authority or the evidence trace.</p><ReasonCode value="UPSTREAM_READ_MODEL_GAP"/></section>; }
+export function DegradedState({ kind, why, impact }: { kind: string; why: string; impact: string }) { return <section className="rnDegraded" role="note" aria-label={`${kind} source condition`}><div><strong>{kind}</strong><span>DEGRADED SOURCE</span></div><p>You are seeing <b>{kind}</b> because {why}; this affects <b>{impact}</b>; it does not affect identity, authority or the evidence trace.</p><ReasonCode value="UPSTREAM_READ_MODEL_GAP"/></section>; }
 
 export function WorkbenchFrame() {
   const domain = domainFor(useLocation().pathname);
-  return <section className="rnFrame" data-density="analytical" aria-label={`${domain} fixture workbench`}>
+  return <section className="rnFrame" data-density="analytical" data-domain={domain} aria-label={`${domain} fixture workbench`}>
     <div className="rnWorkbenchGrid">
       <aside className="rnNav rnContextNavigator" aria-label="Research object navigator">
         <div className="rnPanelHeader"><span className="rnPanelCode">A</span><strong>Context Navigator</strong><button type="button" data-navigation-only="true" aria-label="Navigator menu">•••</button></div>
         <div className="rnFilterBox">⌕ <input aria-label="Filter research objects" placeholder="Filter research objects…" readOnly/><button type="button" data-navigation-only="true">▽</button></div>
         <div className="rnSectionLabel">RESEARCH DOMAIN</div>
-        <div className="rnDomainStack">{['Investigate','Research','Evidence','Control'].map((item) => <div key={item} data-active={item.toUpperCase() === domain}><i/><span>{item}</span><small>{item.toUpperCase() === domain ? 'ACTIVE' : 'AVAILABLE'}</small></div>)}</div>
+        <div className="rnDomainStack">{['Investigate','Research','Evidence','Control'].map((item) => <div key={item} data-domain={item.toUpperCase()} data-active={item.toUpperCase() === domain}><i/><span>{item}</span><small>{item.toUpperCase() === domain ? 'ACTIVE' : 'AVAILABLE'}</small></div>)}</div>
         <div className="rnSectionLabel">SELECTED FIXTURE</div>
         <div className="rnSelectedObject"><small>SYNTHETIC_FIXTURE</small><strong>RN-DEMO-001</strong><span>NON_EVIDENTIARY</span></div>
         <div className="rnSectionLabel">STRUCTURAL DIMENSIONS</div>

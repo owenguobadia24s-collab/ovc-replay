@@ -39,12 +39,14 @@ class ResearchNativeWP0Tests(unittest.TestCase):
         self.assertFalse(c["removal_performed"])
         self.assertEqual(c["acceptance"], "PASS_NO_REMOVAL")
 
-    def test_state_advances_only_to_wp1_and_keeps_real_sources_denied(self):
+    def test_state_progresses_to_final_visual_gate_and_keeps_real_sources_denied(self):
         s = json.loads(STATE.read_text(encoding="utf-8"))
         self.assertEqual(s["schema"], "ovc-rcn-rn-programme-state/v2")
-        self.assertEqual(s["next_packet"], "RCN-RN-WP1")
+        self.assertEqual(s["packet_id"], "RCN-RN-WP3E")
+        self.assertEqual(s["next_packet"], "RCN-RN-G3V_FINAL_ONLY_AFTER_WP3E_CONVERGENCE")
         self.assertEqual(s["real_source_routes"], "DENIED_UNTIL_RCN_RN_G4")
-        self.assertEqual(s["stop_boundary"], "RCN-RN-G3V")
+        self.assertEqual(s["stop_boundary"], "TYPED_WP3E_STOP_OR_FINAL_G3V_READY")
+        self.assertEqual(s["wp4_g4"], "NOT_ADMITTED_WHILE_WP3E_OPEN")
 
 
 if __name__ == "__main__":

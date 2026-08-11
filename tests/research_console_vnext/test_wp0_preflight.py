@@ -63,7 +63,7 @@ class RCNWP0PreflightTests(unittest.TestCase):
         value = _load(STATE)
         self.assertEqual(value["programme_id"], "OVC-RC-VNEXT-GREENFIELD-v0.1")
         self.assertEqual(value["plan_id"], "OVC-RC-VNEXT-GREENFIELD-IMPLEMENTATION-PLAN-0.1-FINAL-REVISED-1")
-        self.assertIn(value["status"], {"APPROVED", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "COMPLETED"})
+        self.assertIn(value["status"], {"APPROVED", "READY", "RUNNING", "IMPLEMENTED", "QA_REVIEW", "GATE_READY", "COMPLETED"})
         self.assertEqual(value["stop_boundary"], "RCN-G3V")
         self.assertNotIn("EXPOSURE", value["authority_delta"])
         self.assertNotIn("VALIDATION", value["authority_delta"])
