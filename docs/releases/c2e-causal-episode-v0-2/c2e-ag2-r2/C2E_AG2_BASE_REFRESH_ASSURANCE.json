@@ -1,0 +1,31 @@
+{
+  "schema": "c2e-ag2-base-refresh-assurance/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "gate_id": "C2E-AG2",
+  "authority_effect": "NONE_INTEGRATION_ASSURANCE_ONLY",
+  "operator_decision": "PASS",
+  "operator_decision_id": "C2E-AG2.OPERATOR.PASS.20260811T191400+0100",
+  "previous_pr_head": "3ef374c6b71dea3d6751759d0e50c7e641b1152c",
+  "original_pr_base": "d8da7bdf69d8c38302dd773322a38fa3ae913fe5",
+  "current_main_at_refresh": "becbb343ba9ebaa71ae88094590eff7558277d4e",
+  "base_movement_class": "UNRELATED_LAWFUL_MAIN_ADVANCE",
+  "base_movement_summary": "Main advanced by one separately governed DSAI-WP2 integration after the AG2 branch was prepared. The AG2 packet has no overlap with that change and remains scientifically and authority-identical. This record creates a new AG2 head so pull-request assurance executes against the current lawful main snapshot without rewriting history or force-pushing.",
+  "invariants": {
+    "comparator_result_changed": false,
+    "srfd_science_changed": false,
+    "c2e_candidate_changed": false,
+    "boundary_pack_changed": false,
+    "operator_ag2_decision_changed": false,
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "ag3": "NOT_EXECUTED"
+  },
+  "required_assurance": [
+    "COMPLETE_REPOSITORY_SUITE",
+    "OVC_FINAL_HEAD_PROFILE_ASSURANCE",
+    "OVC_TIERED_SELECTION_SHADOW",
+    "OVC_MERGE_READINESS_ON_STABLE_CURRENT_MAIN"
+  ],
+  "next_action": "RERUN_FINAL_HEAD_ASSURANCE_AND_SQUASH_MERGE_IF_ALL_REQUIRED_CHECKS_PASS",
+  "rollback": "Preserve this integration-assurance record append-only; it grants no scientific or activation authority."
+}
