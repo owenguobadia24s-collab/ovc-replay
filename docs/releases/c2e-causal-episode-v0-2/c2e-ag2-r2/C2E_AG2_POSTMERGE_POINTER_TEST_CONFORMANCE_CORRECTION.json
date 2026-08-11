@@ -1,0 +1,40 @@
+{
+  "schema": "c2e-ag2-postmerge-pointer-test-conformance-correction/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "packet_id": "C2E-AG2-CLOSEOUT",
+  "gate_id": "C2E-AG2",
+  "authority_effect": "NONE_TEST_AND_PROGRAMME_STATE_CONFORMANCE_ONLY",
+  "failed_head": "0f2553194f37da13ac7ae8c8037b45fac00144e2",
+  "failed_runs": [
+    {"run_id": 31528932168, "scope": "COMPLETE_REPOSITORY_SUITE", "conclusion": "FAILURE"},
+    {"run_id": 31528932150, "scope": "OVC_FINAL_HEAD_PROFILE_TIERED_MERGE_READINESS", "conclusion": "FAILURE"}
+  ],
+  "failure_class": "FORWARD_MOVING_POINTER_HISTORICAL_TEST_COUPLING_AND_COMPACT_STATE_COMPATIBILITY_GAP",
+  "diagnosis": [
+    "The new v0.42 completed state omitted compatibility fields, including the historical authority and decision-history surface, that older tests lawfully inspect through CURRENT_STATE_POINTER.authoritative_state.",
+    "Several historical tests correctly preserved immutable historical versioned states but incorrectly constrained the moving CURRENT_STATE_POINTER to exact interim v0.38/AG1 status or next-gate values after later lawful AG2 completion.",
+    "The new AG2 postmerge conformance test itself passed; comparator evidence, boundary-pack identity and operator decision were unchanged."
+  ],
+  "repair": [
+    "Restore the v0.42 completed state to the full forward-compatible programme-state surface, including authority, operator history, packet record and immutable prior-gate evidence bindings.",
+    "Keep historical versioned-state assertions strict while making only CURRENT_STATE_POINTER assertions explicitly accept the known later lawful AG2-completed state.",
+    "Retain active_c2e=NONE, active_boundary_pack=NONE and C2E-AG3=NOT_EXECUTED in every corrected assertion."
+  ],
+  "scientific_and_authority_invariants": {
+    "comparator_result_changed": false,
+    "srfd_science_changed": false,
+    "c2e_candidate_changed": false,
+    "boundary_pack_changed": false,
+    "operator_ag2_decision_changed": false,
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "ag3": "NOT_EXECUTED"
+  },
+  "required_retest": [
+    "COMPLETE_REPOSITORY_SUITE",
+    "OVC_FINAL_HEAD_PROFILE_ASSURANCE",
+    "OVC_TIERED_SELECTION_SHADOW",
+    "OVC_MERGE_READINESS_ON_STABLE_MAIN"
+  ],
+  "disposition": "CORRECTED_IN_SCOPE_RERUN_REQUIRED"
+}
