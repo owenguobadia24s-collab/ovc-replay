@@ -1,0 +1,112 @@
+{
+  "schema": "c2e-ag3-activation-proposal/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "gate_id": "C2E-AG3",
+  "proposal_id": "C2E-AG3.PROPOSAL.ACTIVATE_NAMED_PACK.20260811",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "authority_required": "OPERATOR_RESERVED_C2E_AG3",
+  "recommended_decision": "ACTIVATE_NAMED_PACK",
+  "baseline_main": "85d512b5588173f58fbd043607e7bcc45653bb8e",
+  "review_subject": {
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "version": "JUNE.EMPIRICAL.BASELINE.STABLE_SIGNATURE.v2",
+    "source_path": "registries/opt_b/c2e/v0_2/C2E_EMPIRICAL_BOUNDARY_PACK_JUNE_STABLE_v0_2.json",
+    "source_blob_sha": "dc12ed68d55b14579bcd0050a3f102979781656b",
+    "pack_internal_active": false,
+    "pack_internal_canonical": false,
+    "pack_internal_fields_remain_immutable": true
+  },
+  "scope": {
+    "instrument_id": "GBPUSD",
+    "sides": ["ASK", "BID"],
+    "clock_ids": ["UTC_15M"],
+    "parent_clock_ids": ["2H_A_L"],
+    "target_start_utc": "2026-06-01T00:00:00Z",
+    "target_end_exclusive_utc": "2026-07-01T00:00:00Z",
+    "target_frame_count": 4072,
+    "logical_population_sha256": "46f02ed89c9c4a3d4b3ef2046b7aa32489c5b63a526dbb8151896331d0ae896d"
+  },
+  "prerequisite_decisions": [
+    "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
+    "C2E-AG1.OPERATOR.PASS.20260810T003700+0100",
+    "C2E-AG2.OPERATOR.PASS.20260811T191400+0100"
+  ],
+  "accepted_evidence": {
+    "implementation": "IMPLEMENTED_SHADOW_CONFORMANT",
+    "real_source_replay": "COMPLETED_TWO_CLEAN_EQUIVALENCE_RUNS_PLUS_R4_RESTART_EQUIVALENCE",
+    "restart_manifest_id": "C2E.AG1.RESTART.EQUIVALENCE.JUNE.EXACT.v1",
+    "restart_manifest_logical_sha256": "f7287ba57325ab6f1c2e37485bd6bf34bfe70a5e7ba553ac6a1fd2a7f9107dcc",
+    "external_restart_artifact_sha256": "0d9ada4b409345c143d10d015d1db4820c9ee89bf2904d0251c5a30f00284214",
+    "ag2_transition_denominator": 3980,
+    "ag2_disagreement_count": 509,
+    "ag2_disagreement_rate_percent": 12.78894472361809,
+    "ag2_both_boundary": 3329,
+    "ag2_c2e_only": 509,
+    "ag2_srfd_only": 0,
+    "ag2_neither_boundary": 142,
+    "ag2_counterexamples": 12,
+    "real_source_resolver_conflicts": 0,
+    "real_source_ambiguous_boundary_sets": 0,
+    "real_source_peer_owner_collisions": 0
+  },
+  "current_authority": {
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "selector_mutation": "NONE",
+    "canonical_or_r2_publication": "NONE",
+    "validation_consumption": "NONE",
+    "family_semantic_candidate_theory_promotion": "NONE",
+    "probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "proposed_operator_transaction_if_activated": {
+    "transaction_class": "EXACT_NAMED_PACK_SELECTOR_AND_ACTIVE_AUTHORITY_DELTA",
+    "boundary_pack_registry": {
+      "path": "registries/opt_b/c2e/v0_2/C2E_BOUNDARY_PACK_REGISTRY_v0_2.json",
+      "before_blob_sha": "a6ada5c76a484e3af99552cd379af36a9d576bc9",
+      "before": {"active_boundary_pack_id": null, "production_pack_selected": false, "active": false, "canonical": false},
+      "after": {"active_boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8", "production_pack_selected": true, "active": true, "canonical": false}
+    },
+    "authority_registry": {
+      "path": "registries/opt_b/c2e/v0_2/C2E_AUTHORITY_REGISTRY_v0_2.json",
+      "before_blob_sha": "e00c4ea707958de0aa63e0bda5e1beed7baca513",
+      "before": {"implementation_state": "INACTIVE_NONCANONICAL_BUILD_TEST", "active_c2e": false, "active_boundary_pack_id": null},
+      "after": {
+        "implementation_state": "ACTIVE_C2E_NAMED_PACK_OPERATOR_SELECTED_AG3",
+        "active_c2e": true,
+        "active_boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+        "real_source_replay": "COMPLETED_EXACT_AG_EVIDENCE",
+        "publication": "DENIED",
+        "validation": "DENIED",
+        "selector_mutation": "DENIED_AFTER_AG3_TRANSACTION_EXCEPT_SEPARATE_OPERATOR_REPLACEMENT",
+        "family_semantic_probability_risk_exposure_execution": "NONE",
+        "agent_write": "NONE"
+      }
+    },
+    "candidate_pack_file_mutation": "NONE",
+    "runtime_code_mutation": "NONE",
+    "publication": "NONE",
+    "validation": "NONE",
+    "downstream_authority": "NONE"
+  },
+  "rollback_if_activated": {
+    "trigger": "OPERATOR_ROLLBACK_OR_LATER_SEPARATELY_AUTHORIZED_REPLACEMENT",
+    "boundary_pack_registry_target": {"active_boundary_pack_id": null, "production_pack_selected": false, "active": false, "canonical": false},
+    "authority_registry_target": {
+      "implementation_state": "IMPLEMENTED_SHADOW_CONFORMANT_POST_AG3_ROLLBACK",
+      "active_c2e": false,
+      "active_boundary_pack_id": null,
+      "real_source_replay": "COMPLETED_EXACT_AG_EVIDENCE",
+      "publication": "DENIED",
+      "validation": "DENIED",
+      "selector_mutation": "DENIED_PENDING_SEPARATE_OPERATOR_DECISION",
+      "family_semantic_probability_risk_exposure_execution": "NONE",
+      "agent_write": "NONE"
+    },
+    "preserve": ["candidate pack bytes/hash", "AG0/AG1/AG2 decisions", "source replay evidence", "restart evidence", "AG2 comparator evidence", "AG3 decision and activation receipt"],
+    "deletion_or_history_rewrite": "PROHIBITED"
+  },
+  "rationale": "All three prerequisite operator evidence gates are PASS, the exact source/restart evidence is reproducible, AG2 comparative evidence is complete and accepted, the named selector/authority registry surfaces exist, and no unresolved blocker remains. Activation is therefore recommended only for the exact named pack and declared scope. It creates no canonical publication, Validation, family/semantic, probability, risk, exposure, execution or agent-write authority.",
+  "execution": "NOT_EXECUTED_STOP_FOR_OPERATOR"
+}
