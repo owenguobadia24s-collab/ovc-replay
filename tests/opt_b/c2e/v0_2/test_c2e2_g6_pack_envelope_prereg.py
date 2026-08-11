@@ -13,6 +13,7 @@ DECISION = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-prereq-20260809
 QA = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-prereq-20260809/C2E2_G6_PACK_ENVELOPE_QA_PACKET.json"
 STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_21.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
+ACTIVE_PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 
 def frame(segment="SEG.1", structural_suffix="A", parent_suffix="A"):
@@ -98,7 +99,7 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         self.assertFalse(self.envelope["authority"]["effective_run_authority"])
         self.assertEqual(self.envelope["capacity_semantics"]["on_exceed"], "CAPACITY_EXCEEDED_SAFE_STOP")
 
-    def test_qa_state_and_pointer_preserve_no_activation(self):
+    def test_qa_state_and_pointer_preserve_historical_non_activation_and_later_progression(self):
         self.assertEqual(self.qa["qa_disposition"], "PASS")
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
@@ -112,7 +113,13 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
                 "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION.OPERATOR.SUPERSEDE.20260809T100800+0100",
                 self.pointer.get("operator_decision_history", []),
             )
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_boundary_pack"], ACTIVE_PACK_ID)
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["status"], "COMPLETED")
+            self.assertIsNone(self.pointer["next_gate"])
+        else:
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertIn(self.pointer["wp6_execution"], {
             "DENIED_NOT_STARTED",
             "AUTHORIZED_PENDING_MERGE_ASSURANCE",
@@ -125,7 +132,7 @@ class C2E2G6PackEnvelopePreregTests(unittest.TestCase):
         if self.pointer["wp6_execution"] in {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"}:
             self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertIn(self.pointer["status"], {"APPROVED", "QA_REVIEW", "BLOCKED", "GATE_READY", "READY", "COMPLETED"})
-        if self.pointer["status"] == "COMPLETED":
+        if self.pointer["status"] == "COMPLETED" and self.pointer.get("ag3") != "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
             self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
             self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
             self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
