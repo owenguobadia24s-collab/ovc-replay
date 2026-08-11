@@ -18,12 +18,7 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
     router = APIRouter()
 
     @router.get("/market/window", tags=["market"])
-    def market_window(
-        start: str | None = Query(default=None),
-        end: str | None = Query(default=None),
-        limit: int = Query(default=500, ge=1, le=5000),
-        role: str | None = Query(default=None),
-    ):
+    def market_window(start: str | None = Query(default=None), end: str | None = Query(default=None), limit: int = Query(default=500, ge=1, le=5000), role: str | None = Query(default=None)):
         _deny_validation(role)
         try:
             payload = bounded_time_window(store.resource("market").get("bars", []), start=start, end=end, limit=limit)
@@ -34,38 +29,29 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
     @router.get("/c1/state", tags=["structure"])
     def c1_state(role: str | None = Query(default=None)):
         _deny_validation(role)
-        return store.envelope(
-            "c1", store.resource("structure").get("c1", {}), schema_id="ovc-rcn-c1-view/v1", capability_id="C1"
-        )
+        return store.envelope("c1", store.resource("structure").get("c1", {}), schema_id="ovc-rcn-c1-view/v1", capability_id="C1")
 
     @router.get("/c2/state", tags=["structure"])
     def c2_state(role: str | None = Query(default=None)):
         _deny_validation(role)
-        return store.envelope(
-            "c2", store.resource("structure").get("c2", {}), schema_id="ovc-rcn-c2-view/v1", capability_id="C2"
-        )
+        return store.envelope("c2", store.resource("structure").get("c2", {}), schema_id="ovc-rcn-c2-view/v1", capability_id="C2")
 
     @router.get("/c2e/episodes", tags=["structure"])
     def c2e_episodes(role: str | None = Query(default=None)):
         _deny_validation(role)
-        return store.envelope(
-            "c2e", store.resource("structure").get("c2e", {}), schema_id="ovc-rcn-c2e-view/v1", capability_id="C2E"
-        )
+        return store.envelope("c2e", store.resource("structure").get("c2e", {}), schema_id="ovc-rcn-c2e-view/v1", capability_id="C2E")
+
+    @router.get("/c2p/objects", tags=["structure", "preparation"])
+    def c2p_objects(role: str | None = Query(default=None)):
+        _deny_validation(role)
+        payload = dict(store.resource("c2p_preparation"))
+        return store.envelope("c2p_preparation", payload, schema_id="ovc-rcn-c2p-preparation/v1", capability_id="C2P")
 
     @router.get("/investigate/snapshot", tags=["structure", "preparation"])
     def investigate_snapshot(role: str | None = Query(default=None)):
         _deny_validation(role)
-        payload = build_fixture_investigate_snapshot(
-            market=store.resource("market"),
-            structure=store.resource("structure"),
-            preparation=store.resource("investigate_preparation"),
-        )
-        return store.envelope(
-            "investigate_snapshot",
-            payload,
-            schema_id="ovc-rcn-investigate-snapshot/v1",
-            capability_id="C2",
-        )
+        payload = build_fixture_investigate_snapshot(market=store.resource("market"), structure=store.resource("structure"), preparation=store.resource("investigate_preparation"))
+        return store.envelope("investigate_snapshot", payload, schema_id="ovc-rcn-investigate-snapshot/v1", capability_id="C2")
 
     @router.get("/occurrences/{occurrence_id}/context", tags=["context"])
     def occurrence_context(occurrence_id: str, role: str | None = Query(default=None)):
@@ -73,37 +59,23 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
         payload = dict(store.resource("context"))
         if payload.get("occurrence_id") != occurrence_id:
             payload = {"availability": "NOT_MATERIALIZED", "occurrence_id": occurrence_id, "reason_code": "UPSTREAM_READ_MODEL_GAP"}
-        return store.envelope(
-            "occurrence_context", payload, schema_id="ovc-rcn-occurrence-context-view/v1", capability_id="CONTEXT"
-        )
+        return store.envelope("occurrence_context", payload, schema_id="ovc-rcn-occurrence-context-view/v1", capability_id="CONTEXT")
 
     @router.get("/research/representations", tags=["research"])
     def representations():
-        return store.envelope(
-            "representations", store.resource("research").get("representations", []),
-            schema_id="ovc-rcn-representation-list/v1", capability_id="RESEARCH"
-        )
+        return store.envelope("representations", store.resource("research").get("representations", []), schema_id="ovc-rcn-representation-list/v1", capability_id="RESEARCH")
 
     @router.get("/research/comparability", tags=["research"])
     def comparability():
-        return store.envelope(
-            "comparability", store.resource("research").get("comparability", []),
-            schema_id="ovc-rcn-comparability-list/v1", capability_id="RESEARCH"
-        )
+        return store.envelope("comparability", store.resource("research").get("comparability", []), schema_id="ovc-rcn-comparability-list/v1", capability_id="RESEARCH")
 
     @router.get("/research/families", tags=["research"])
     def families():
-        return store.envelope(
-            "families", store.resource("research").get("families", []),
-            schema_id="ovc-rcn-family-list/v1", capability_id="FAMILY_EVIDENCE"
-        )
+        return store.envelope("families", store.resource("research").get("families", []), schema_id="ovc-rcn-family-list/v1", capability_id="FAMILY_EVIDENCE")
 
     @router.get("/research/benchmarks", tags=["research"])
     def benchmarks():
-        return store.envelope(
-            "benchmarks", store.resource("research").get("benchmarks", []),
-            schema_id="ovc-rcn-benchmark-list/v1", capability_id="RESEARCH"
-        )
+        return store.envelope("benchmarks", store.resource("research").get("benchmarks", []), schema_id="ovc-rcn-benchmark-list/v1", capability_id="RESEARCH")
 
     @router.get("/evidence/objects", tags=["evidence"])
     def evidence_objects(cursor: int = Query(default=0, ge=0), limit: int = Query(default=50, ge=1, le=200)):
@@ -112,8 +84,6 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
 
     @router.get("/fixture/investigations", tags=["fixture"])
     def fixture_investigations():
-        return store.envelope(
-            "investigations", store.resource("investigations"), schema_id="ovc-rcn-investigation-fixtures/v1", capability_id="SYSTEM"
-        )
+        return store.envelope("investigations", store.resource("investigations"), schema_id="ovc-rcn-investigation-fixtures/v1", capability_id="SYSTEM")
 
     return router
