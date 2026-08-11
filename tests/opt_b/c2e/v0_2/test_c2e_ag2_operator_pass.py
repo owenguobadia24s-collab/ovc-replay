@@ -47,7 +47,7 @@ class C2EAG2OperatorPassTests(unittest.TestCase):
         self.assertEqual(self.gate["gate_id"], "C2E-AG2")
         self.assertEqual(self.gate["decision_status"], "PENDING_OPERATOR")
 
-    def test_pass_accepts_evidence_only_and_never_activates(self):
+    def test_pass_accepts_evidence_only_and_never_activates_at_ag2(self):
         delta = self.decision["authority_delta"]
         self.assertEqual(delta["ag2_comparative_review"], "PASS_FOR_EXACT_AG0_AG1_ADMITTED_PACK_AND_SCOPE_ONLY")
         self.assertEqual(delta["ag3_progression"], "AUTHORIZED_FOR_OPERATOR_RESERVED_PROPOSAL_PREPARATION_ONLY")
@@ -86,7 +86,7 @@ class C2EAG2OperatorPassTests(unittest.TestCase):
         self.assertEqual(bindings["predecision_ovc_assurance_run_id"], 31522204812)
         self.assertEqual(bindings["predecision_ovc_assurance_conclusion"], "SUCCESS")
 
-    def test_postmerge_closeout_advances_pointer_without_activation(self):
+    def test_postmerge_closeout_preserves_ag2_and_pointer_may_advance_only_by_later_ag3(self):
         self.assertEqual(self.premerge_state["status"], "APPROVED")
         self.assertEqual(self.premerge_state["operator_decision_id"], DECISION_ID)
         self.assertIsNone(self.premerge_state["merge_commit"])
@@ -114,26 +114,41 @@ class C2EAG2OperatorPassTests(unittest.TestCase):
             {
                 "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_42_AG2_COMPLETED.json",
                 "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_43_AG3_GATE_READY.json",
+                "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_44_AG3_COMPLETED.json",
             },
         )
         self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
-        self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
         self.assertIn(DECISION_ID, self.pointer["operator_decision_history"])
         if authoritative_state.endswith("OVC_C2E2_STATE_v0_42_AG2_COMPLETED.json"):
+            self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+            self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
             self.assertEqual(self.pointer["status"], "COMPLETED")
             self.assertEqual(self.pointer["current_gate"], "C2E-AG2")
             self.assertEqual(self.pointer["current_packet"], "C2E-AG2-CLOSEOUT")
             self.assertTrue(self.pointer["next_gate_operator_decision_required"])
-        else:
+        elif authoritative_state.endswith("OVC_C2E2_STATE_v0_43_AG3_GATE_READY.json"):
+            self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+            self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
             self.assertEqual(self.pointer["status"], "GATE_READY")
             self.assertEqual(self.pointer["current_gate"], "C2E-AG3")
             self.assertEqual(self.pointer["current_packet"], "C2E-AG3-PREP")
             self.assertTrue(self.pointer["operator_decision_required"])
             self.assertEqual(self.pointer["recommended_operator_decision"], "ACTIVATE_NAMED_PACK")
             self.assertEqual(self.pointer["next_action"], "STOP_FOR_OPERATOR_C2E_AG3")
+        else:
+            self.assertIsNone(self.pointer["next_gate"])
+            self.assertEqual(self.pointer["status"], "COMPLETED")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG3")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG3-DECISION")
+            self.assertFalse(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["operator_decision"], "ACTIVATE_NAMED_PACK")
+            self.assertEqual(self.pointer["ag3"], "EXECUTED_PASS_ACTIVATE_NAMED_PACK")
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
 
 
 if __name__ == "__main__":
