@@ -98,7 +98,7 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["wp6_execution"], "AUTHORIZED_NOT_STARTED")
         self.assertEqual(self.state["authority"]["real_source_replay"], "AUTHORIZED_NOT_STARTED")
-        self.assertIn(self.pointer["status"], {"QA_REVIEW", "READY", "GATE_READY", "APPROVED"})
+        self.assertIn(self.pointer["status"], {"QA_REVIEW", "READY", "GATE_READY", "APPROVED", "COMPLETED"})
         self.assertIn(self.pointer["wp6_execution"], {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"})
         self.assertIn(
             self.pointer["real_source_replay"],
@@ -126,6 +126,12 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
             self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
             self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
             self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
+        if self.pointer["status"] == "COMPLETED":
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG2-CLOSEOUT")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG2")
+            self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
+            self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
+            self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
 
 if __name__ == "__main__":
     unittest.main()

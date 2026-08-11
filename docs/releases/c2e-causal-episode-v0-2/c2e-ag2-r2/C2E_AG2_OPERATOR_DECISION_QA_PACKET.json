@@ -1,0 +1,34 @@
+{
+  "schema": "c2e-ag2-operator-decision-qa/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "plan_version": "0.1-REVISED",
+  "gate_id": "C2E-AG2",
+  "decision_id": "C2E-AG2.OPERATOR.PASS.20260811T191400+0100",
+  "qa_disposition": "PASS_DECISION_CONFORMANCE_PENDING_FINAL_HEAD_CI",
+  "authority_effect": "NONE_BEYOND_OPERATOR_AG2_EVIDENCE_ACCEPTANCE",
+  "checks": {
+    "operator_command_exact": "PASS",
+    "operator_decision_identity_exact": "PASS",
+    "gate_subject_identity_preserved": "PASS",
+    "gap001_resolved_before_decision": "PASS",
+    "predecision_corrected_head_tests": "PASS_RUN_31522204774",
+    "predecision_ovc_assurance": "PASS_RUN_31522204812",
+    "technical_conformance_correction_non_scientific": "PASS",
+    "active_c2e_unchanged": "PASS_NONE",
+    "active_boundary_pack_unchanged": "PASS_NONE",
+    "selector_mutation_none": "PASS",
+    "validation_unconsumed": "PASS",
+    "ag3_not_executed": "PASS",
+    "ag3_scope_limited_to_operator_reserved_proposal_preparation": "PASS",
+    "final_decision_head_ci": "PENDING"
+  },
+  "warnings": [
+    "The historical gate packet remains immutable with decision_status=PENDING_OPERATOR; the operator PASS is recorded in a separate append-only decision artifact.",
+    "The predecision CI harness failure was technical only and is preserved in C2E_AG2_TECHNICAL_CONFORMANCE_CORRECTION.json.",
+    "AG2 PASS does not activate C2E or the candidate boundary pack and does not execute AG3."
+  ],
+  "blockers": [],
+  "rollback": "Supersede only compact decision/state metadata forward if a conformance defect is found. Preserve comparator evidence, gate packet, operator command and inactive candidate append-only.",
+  "next_action": "RUN_FINAL_DECISION_HEAD_ASSURANCE_THEN_MERGE_AG2_DECISION_IF_ELIGIBLE"
+}

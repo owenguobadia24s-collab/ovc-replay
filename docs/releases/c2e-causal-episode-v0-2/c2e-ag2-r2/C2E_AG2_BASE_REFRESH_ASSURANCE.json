@@ -1,0 +1,37 @@
+{
+  "schema": "c2e-ag2-base-refresh-assurance/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "gate_id": "C2E-AG2",
+  "authority_effect": "NONE_INTEGRATION_ASSURANCE_ONLY",
+  "operator_decision": "PASS",
+  "operator_decision_id": "C2E-AG2.OPERATOR.PASS.20260811T191400+0100",
+  "original_pr_base": "d8da7bdf69d8c38302dd773322a38fa3ae913fe5",
+  "refresh_history": [
+    {"main_sha":"becbb343ba9ebaa71ae88094590eff7558277d4e","programme_change":"DSAI-WP2","result":"SUPERSEDED_BY_LATER_MAIN"},
+    {"main_sha":"70e6952f3de8e18a148e664ece6ef5593d35c791","programme_change":"DSAI-WP3","result":"ASSURANCE_PASS_THEN_MAIN_ADVANCED"},
+    {"main_sha":"227b2c6044afa63b4f104338a45f075a21df3799","programme_change":"DSAI-WP4","result":"SUPERSEDED_BY_LATER_MAIN"},
+    {"main_sha":"69d08a102a96fdef4ca59b2c452ae39c7e3063fa","programme_change":"DSAI-WP5","result":"SUPERSEDED_BY_LATER_MAIN"},
+    {"main_sha":"6658483b0ab9cc2a14a0f863d28bf78dcf155073","programme_change":"DSAI-WP6","result":"CURRENT_REFRESH_TARGET_DSAI_AT_OPERATOR_RESERVED_G7"}
+  ],
+  "current_main_at_refresh": "6658483b0ab9cc2a14a0f863d28bf78dcf155073",
+  "base_movement_class": "UNRELATED_LAWFUL_MAIN_ADVANCE",
+  "base_movement_summary": "Main advanced through separately governed DSAI-WP2 through WP6 packets, all with authority delta NONE. DSAI has now reached operator-reserved G7 preparation. AG2 changed paths remain disjoint from those integrations. This record accompanies a non-force merge of current lawful main into the AG2 branch so exact-head assurance is performed on the stable integrated repository state.",
+  "invariants": {
+    "comparator_result_changed": false,
+    "srfd_science_changed": false,
+    "c2e_candidate_changed": false,
+    "boundary_pack_changed": false,
+    "operator_ag2_decision_changed": false,
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE",
+    "ag3": "NOT_EXECUTED"
+  },
+  "required_assurance": [
+    "COMPLETE_REPOSITORY_SUITE",
+    "OVC_FINAL_HEAD_PROFILE_ASSURANCE",
+    "OVC_TIERED_SELECTION_SHADOW",
+    "OVC_MERGE_READINESS_ON_STABLE_CURRENT_MAIN"
+  ],
+  "next_action": "SQUASH_MERGE_AG2_IF_ALL_REQUIRED_CHECKS_PASS_ON_STABLE_CURRENT_MAIN",
+  "rollback": "Preserve this integration-assurance record append-only; it grants no scientific or activation authority."
+}
