@@ -5,8 +5,8 @@ from pathlib import Path
 import unittest
 
 from ovc.development.head_churn import classify_main_head_movement
-from ovc.development.skills import BaseFreshnessPolicy, audit_evidence, build_contract_proposal, evaluate_gate, evaluate_qa, git_packet_dry_run, plan_tests, test_execution_plan
-from ovc.development.skills.registry import validate_against_schema
+from ovc.development.skills import BaseFreshnessPolicy, audit_evidence, build_contract_proposal, build_skill_release_bundle, evaluate_gate, evaluate_qa, git_packet_dry_run, plan_tests, test_execution_plan
+from ovc.development.skills.engineering import classify_head_churn
 
 ROOT = Path(__file__).resolve().parents[2]
 A = "a" * 40
@@ -14,13 +14,19 @@ B = "b" * 40
 
 
 class DSAIWP4EngineeringAssuranceTests(unittest.TestCase):
-    def test_e1_e3_candidates_non_trusted_and_no_write(self) -> None:
+    def test_e1_e3_candidates_non_trusted_contract_bound_and_releases_rebuild(self) -> None:
         registry = json.loads((ROOT / "registries/development/skills/first_generation_candidates_v0_1.json").read_text())
         self.assertEqual(len(registry["entries"]), 10)
         for row in registry["entries"]:
             self.assertEqual(row["maturity"], "EXPERIMENTAL")
             self.assertEqual(row["write_permission"], "DENY")
             self.assertEqual(row["authority_effect"], "NONE")
+            self.assertTrue(row["input_contract_id"])
+            self.assertTrue(row["output_contract_id"])
+            fields = {key: row[key] for key in ("capability_ids","execution_mode","implementation_entrypoint","input_contract_id","output_contract_id","tool_profile_id","write_permission","authority_effect")}
+            fields["failure_policy"] = "FAIL_CLOSED"
+            rebuilt=build_skill_release_bundle(skill_id=row["skill_id"],logical_name=row["logical_name"],semantic_version=row["semantic_version"],fields=fields,field_classification={key:"NORMATIVE" for key in fields},source_refs=["OVC-DSA-DESIGN-SPEC-0.1-REVISED-1-RATIFIED","OVC-DSAI-IMPLEMENTATION-PLAN-0.2"])
+            self.assertEqual(rebuilt["release_id"], row["release_id"])
             self.assertNotEqual(row["maturity"], "TRUSTED")
 
     def test_constructive_output_cannot_embed_authority_decision(self) -> None:
@@ -44,20 +50,20 @@ class DSAIWP4EngineeringAssuranceTests(unittest.TestCase):
         policy = BaseFreshnessPolicy()
         within = policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=5,elapsed_minutes=29,dependency_or_write_overlap=False,mutating=False,merge_candidate=False)
         self.assertEqual(within["status"], "FRESH")
-        expired_commits = policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=6,elapsed_minutes=1,dependency_or_write_overlap=False,mutating=False,merge_candidate=False)
-        expired_time = policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=30,dependency_or_write_overlap=False,mutating=False,merge_candidate=False)
-        overlap = policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=1,dependency_or_write_overlap=True,mutating=False,merge_candidate=False)
-        mutate = policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=1,dependency_or_write_overlap=False,mutating=True,merge_candidate=False)
-        merge = policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=1,dependency_or_write_overlap=False,mutating=False,merge_candidate=True)
-        for row in (expired_commits, expired_time, overlap, mutate, merge):
-            self.assertEqual(row["status"], "RE_PREFLIGHT_REQUIRED")
+        cases = [
+            policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=6,elapsed_minutes=1,dependency_or_write_overlap=False,mutating=False,merge_candidate=False),
+            policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=30,dependency_or_write_overlap=False,mutating=False,merge_candidate=False),
+            policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=1,dependency_or_write_overlap=True,mutating=False,merge_candidate=False),
+            policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=1,dependency_or_write_overlap=False,mutating=True,merge_candidate=False),
+            policy.assess(baseline_main_sha=A,current_main_sha=B,commit_distance=1,elapsed_minutes=1,dependency_or_write_overlap=False,mutating=False,merge_candidate=True),
+        ]
+        self.assertTrue(all(row["status"] == "RE_PREFLIGHT_REQUIRED" for row in cases))
         with self.assertRaises(ValueError): BaseFreshnessPolicy(max_readonly_commit_distance=6)
         with self.assertRaises(ValueError): BaseFreshnessPolicy(max_readonly_elapsed_minutes=31)
 
-    def test_shared_head_churn_service_is_reused_not_forked(self) -> None:
-        result = classify_main_head_movement(baseline_main_sha=A,current_main_sha=A,changed_main_paths=[],footprint=None)
-        self.assertEqual(result["classification"], "IRRELEVANT")
-        self.assertEqual(len(result["receipt_sha256"]), 64)
+    def test_shared_head_churn_wrapper_is_exact_equivalent(self) -> None:
+        kwargs=dict(baseline_main_sha=A,current_main_sha=A,changed_main_paths=[],footprint=None)
+        self.assertEqual(classify_head_churn(**kwargs), classify_main_head_movement(**kwargs))
 
     def test_test_planner_widens_uncertain_impact_and_executor_remains_local(self) -> None:
         plan = plan_tests(changed_paths=["src/ovc/x.py"],direct_tests=["test_x"],impact_known=False)
@@ -89,7 +95,7 @@ class DSAIWP4EngineeringAssuranceTests(unittest.TestCase):
         self.assertEqual(audit_evidence([{"sha256":"a"*64,"stale":True}])["status"], "BLOCK")
 
     def test_new_schemas_keep_closed_top_level_contract(self) -> None:
-        for name in ("first_generation_candidate_registry_v0_1.schema.json","base_freshness_receipt_v0_1.schema.json"):
+        for name in ("first_generation_candidate_registry_v0_1.schema.json","base_freshness_receipt_v0_1.schema.json","wp4_tool_profile_registry_v0_1.schema.json"):
             schema=json.loads((ROOT/"schemas/development/skills"/name).read_text())
             self.assertEqual(schema["$schema"],"https://json-schema.org/draft/2020-12/schema")
             self.assertEqual(schema["type"],"object")
