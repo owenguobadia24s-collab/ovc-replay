@@ -108,19 +108,32 @@ class C2EAG2OperatorPassTests(unittest.TestCase):
         self.assertEqual(self.postmerge_state["next_gate"], "C2E-AG3")
         self.assertIn("PROPOSAL", self.postmerge_state["ag3_progression"])
 
-        self.assertEqual(
-            self.pointer["authoritative_state"],
-            "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_42_AG2_COMPLETED.json",
+        authoritative_state = self.pointer["authoritative_state"]
+        self.assertIn(
+            authoritative_state,
+            {
+                "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_42_AG2_COMPLETED.json",
+                "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_43_AG3_GATE_READY.json",
+            },
         )
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG2")
-        self.assertEqual(self.pointer["current_packet"], "C2E-AG2-CLOSEOUT")
         self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
         self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
-        self.assertTrue(self.pointer["next_gate_operator_decision_required"])
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
         self.assertIn(DECISION_ID, self.pointer["operator_decision_history"])
+        if authoritative_state.endswith("OVC_C2E2_STATE_v0_42_AG2_COMPLETED.json"):
+            self.assertEqual(self.pointer["status"], "COMPLETED")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG2")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG2-CLOSEOUT")
+            self.assertTrue(self.pointer["next_gate_operator_decision_required"])
+        else:
+            self.assertEqual(self.pointer["status"], "GATE_READY")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG3")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG3-PREP")
+            self.assertTrue(self.pointer["operator_decision_required"])
+            self.assertEqual(self.pointer["recommended_operator_decision"], "ACTIVATE_NAMED_PACK")
+            self.assertEqual(self.pointer["next_action"], "STOP_FOR_OPERATOR_C2E_AG3")
 
 
 if __name__ == "__main__":
