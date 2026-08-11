@@ -44,13 +44,14 @@ class SRFDIWP10V11PreflightEnvironmentBlockerTests(unittest.TestCase):
         self.assertFalse(self.x["cause"]["relevant_dependency_versions_changed"])
         self.assertEqual("NONE", self.x["cause"]["scientific_delta"])
 
-    def test_pointer_advances_only_to_supersession_not_execution(self):
+    def test_pointer_advances_lawfully_beyond_supersession_without_starting_science(self):
         self.assertTrue(assert_lawful_v10_pointer(self, self.p))
         self.assertEqual("READY", self.p["status"])
         self.assertFalse(self.p["science_execution_started"])
-        self.assertIsNone(self.p["fresh_authority_token_id"])
         self.assertFalse(self.p["fresh_authority_token_consumed"])
-        self.assertEqual("ENVIRONMENT_PROFILE_SUPERSEDED_AWAITING_FRESH_AUTHORITY", self.p["wp10_v1_1_execution_route"])
+        self.assertEqual(TOKEN, self.p["superseded_v1_1_authority_token_id"])
+        self.assertEqual(BINDING, self.p["superseded_v1_1_run_binding_sha256"])
+        self.assertEqual("SUPERSEDED_UNUSED_UNCONSUMED_DO_NOT_REUSE", self.p["superseded_v1_1_authority_token_state"])
 
     def test_reserved_boundaries_remain_closed(self):
         self.assertEqual("DENIED", self.x["provider_fetch"])
