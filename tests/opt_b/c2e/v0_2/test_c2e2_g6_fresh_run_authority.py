@@ -17,6 +17,7 @@ ENVELOPE = RUN_AUTH / "C2E2_RESOURCE_ENVELOPE_JUNE_OBSERVATION_v0_2.json"
 PACK = ROOT / "registries/opt_b/c2e/v0_2/C2E_EMPIRICAL_BOUNDARY_PACK_JUNE_STABLE_v0_2.json"
 STATE = BASE / "OVC_C2E2_STATE_v0_28.json"
 POINTER = BASE / "CURRENT_STATE_POINTER.json"
+PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 def logical_hash(value):
     body = copy.deepcopy(value)
@@ -37,7 +38,7 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         cls.state = json.loads(STATE.read_text())
         cls.pointer = json.loads(POINTER.read_text())
 
-    def test_operator_authority_is_exact_single_use_and_inactive(self):
+    def test_operator_authority_is_exact_single_use_and_historically_inactive(self):
         self.assertEqual(self.decision["operator_command"], "OVC APPROVE C2E2-G6-RUN-AUTH")
         self.assertEqual(self.decision["decision"], "AUTHORIZE_EXACT_RUN")
         self.assertEqual(self.decision["activation_effect"], "NONE")
@@ -47,9 +48,13 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertFalse(self.token["consumed"])
         self.assertFalse(self.token["invalidated"])
         self.assertEqual(self.token["reserved_post_wp6_authority"], "DENIED_OPERATOR_REQUIRED")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
     def test_exact_replacement_objects_are_mutually_bound(self):
         self.assertEqual(logical_hash(self.decision), self.decision["logical_sha256"])
@@ -94,7 +99,7 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
             self.pointer["operator_decision_history"],
         )
 
-    def test_authorized_state_is_preserved_through_later_execution_and_qa(self):
+    def test_authorized_state_is_preserved_through_later_execution_qa_and_activation(self):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["authority"]["wp6_execution"], "AUTHORIZED_NOT_STARTED")
         self.assertEqual(self.state["authority"]["real_source_replay"], "AUTHORIZED_NOT_STARTED")
@@ -108,30 +113,38 @@ class C2E2FreshG6RunAuthorityTests(unittest.TestCase):
         self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertEqual(self.pointer["replacement_boundary_pack_id"], self.pack["boundary_pack_id"])
         self.assertEqual(self.pointer["replacement_resource_envelope_id"], self.envelope["envelope_id"])
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        if self.pointer["status"] == "READY":
-            route = (self.pointer["current_packet"], self.pointer["current_gate"])
-            self.assertIn(route, {
-                ("C2E2-WP7", "C2E2-G7"),
-                ("C2E-AG1-PREP", "C2E-AG1"),
-            })
-            if route == ("C2E-AG1-PREP", "C2E-AG1"):
-                self.assertIn(
-                    "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
-                    self.pointer["operator_decision_history"],
-                )
-        if self.pointer["status"] == "APPROVED":
-            self.assertEqual(self.pointer["current_packet"], "C2E-AG1-DECISION")
-            self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
-            self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
-            self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
-        if self.pointer["status"] == "COMPLETED":
-            self.assertEqual(self.pointer["current_packet"], "C2E-AG2-CLOSEOUT")
-            self.assertEqual(self.pointer["current_gate"], "C2E-AG2")
-            self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
-            self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
-            self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["status"], "COMPLETED")
+            self.assertEqual(self.pointer["current_packet"], "C2E-AG3-DECISION")
+            self.assertEqual(self.pointer["current_gate"], "C2E-AG3")
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
+            self.assertIsNone(self.pointer["next_gate"])
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+            if self.pointer["status"] == "READY":
+                route = (self.pointer["current_packet"], self.pointer["current_gate"])
+                self.assertIn(route, {
+                    ("C2E2-WP7", "C2E2-G7"),
+                    ("C2E-AG1-PREP", "C2E-AG1"),
+                })
+                if route == ("C2E-AG1-PREP", "C2E-AG1"):
+                    self.assertIn(
+                        "C2E-AG0.OPERATOR.PASS.20260809T213300+0100",
+                        self.pointer["operator_decision_history"],
+                    )
+            if self.pointer["status"] == "APPROVED":
+                self.assertEqual(self.pointer["current_packet"], "C2E-AG1-DECISION")
+                self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+                self.assertEqual(self.pointer["ag1_replay_adequacy"], "PASS")
+                self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
+            if self.pointer["status"] == "COMPLETED":
+                self.assertEqual(self.pointer["current_packet"], "C2E-AG2-CLOSEOUT")
+                self.assertEqual(self.pointer["current_gate"], "C2E-AG2")
+                self.assertEqual(self.pointer["ag2_progression"], "COMPLETED_PASS")
+                self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
+                self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
 
 if __name__ == "__main__":
     unittest.main()

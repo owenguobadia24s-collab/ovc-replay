@@ -15,6 +15,7 @@ STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_22.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
 HISTORICAL_DEFER = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-g6/C2E2_G6_RUN_AUTH_OPERATOR_DECISION.json"
 HISTORICAL_AG0 = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e-ag0/C2E_AG0_OPERATOR_DECISION.json"
+ACTIVE_PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 
 def logical_hash(value):
@@ -90,7 +91,7 @@ class C2E2G6RunAuthSupersessionTests(unittest.TestCase):
         self.assertIn("C2E2-G6-RUN-AUTH.OPERATOR.DEFER.20260808T194700+0100", self.decision["historical_decisions_preserved"])
         self.assertIn("C2E-AG0.OPERATOR.DEFER.20260808T205200+0100", self.decision["historical_decisions_preserved"])
 
-    def test_state_and_pointer_authorize_only_wp6_shadow_run(self):
+    def test_state_and_pointer_preserve_historical_wp6_authority_then_later_progression(self):
         self.assertIn(self.state["status"], {"QA_REVIEW", "APPROVED"})
         self.assertEqual(self.state["authority"]["active_boundary_pack"], "NONE")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
@@ -102,8 +103,12 @@ class C2E2G6RunAuthSupersessionTests(unittest.TestCase):
             "EXECUTED_EVIDENCE_PENDING_QA",
             "COMPLETED",
         })
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], ACTIVE_PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
         pointer_token_id = self.pointer.get("run_token_id") or self.pointer.get("old_run_token_id")
         self.assertEqual(pointer_token_id, self.token["token_id"])
         if self.pointer["wp6_execution"] == "DENIED_UNTIL_FRESH_EXACT_C2E2_G6_RUN_AUTH_OPERATOR_DECISION":

@@ -11,6 +11,7 @@ SURVEY = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-wp0/C2E2_C2_SOURCE_S
 PACK = ROOT / "registries/opt_b/c2e/v0_2/C2E_EMPIRICAL_BOUNDARY_PACK_JUNE_v0_1.json"
 MANIFEST = ROOT / "registries/implementation/c2e_v0_2/run_authority/C2E2_SOURCE_RUN_MANIFEST_JUNE_v0_1.json"
 TOKEN_REGISTRY = ROOT / "registries/implementation/c2e_v0_2/run_authority/C2E2_SOURCE_REPLAY_AUTHORITY_REGISTRY_v0_1.json"
+ACTIVE_PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 class C2E2WP6PreflightBlockerTests(unittest.TestCase):
     @classmethod
@@ -49,7 +50,7 @@ class C2E2WP6PreflightBlockerTests(unittest.TestCase):
         self.assertEqual(self.pack["population_scope"]["logical_population_sha256"], logical)
         self.assertEqual(self.blocker["authorized_boundary_pack"]["population_scope_logical_sha256"], logical)
 
-    def test_no_token_consumption_or_authority_widening(self):
+    def test_no_token_consumption_or_authority_widening_at_historical_blocker(self):
         self.assertEqual(self.token["status"], "AUTHORIZED_UNCONSUMED")
         self.assertFalse(self.token["consumed"])
         self.assertFalse(self.token["invalidated"])
@@ -57,8 +58,12 @@ class C2E2WP6PreflightBlockerTests(unittest.TestCase):
         self.assertFalse(self.blocker["token_consumed"])
         self.assertEqual(self.state["authority"]["wp6_execution"], "BLOCKED_NOT_STARTED")
         self.assertEqual(self.state["authority"]["c2e_activation"], "DENIED")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], ACTIVE_PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
     def test_historical_blocker_and_supersession_remain_preserved_after_later_progression(self):
         self.assertEqual(self.qa["qa_disposition"], "BLOCK")
@@ -84,8 +89,12 @@ class C2E2WP6PreflightBlockerTests(unittest.TestCase):
         if self.pointer["wp6_execution"] in {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"}:
             self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
         self.assertEqual(self.pointer["old_run_token_status"], "INVALIDATED_UNCONSUMED_BY_OPERATOR_SUPERSESSION")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], ACTIVE_PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
 if __name__ == "__main__":
     unittest.main()
