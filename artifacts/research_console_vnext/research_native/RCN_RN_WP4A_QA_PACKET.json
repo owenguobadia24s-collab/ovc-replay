@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-rcn-rn-wp4a-qa/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "packet_id": "RCN-RN-WP4A",
+  "title": "Investigate Translation + Structure preparation QA",
+  "baseline_commit": "9ca1dc986c6d52d8de7dfdcb598fbf22af76edfa",
+  "candidate_commit": "1fc83ce851516eb7af5e97201df2ffaef1b93262",
+  "workflow_run": 31533414369,
+  "result": "PASS",
+  "recommendation": "PASS",
+  "acceptance": {
+    "fixture_only_aggregate_route": "PASS",
+    "c1_exact_preservation": "PASS",
+    "c2_exact_preservation": "PASS",
+    "c2_without_c2e_is_usable": "PASS",
+    "c2e_absence_typed_no_reconstruction": "PASS",
+    "transition_absence_typed_no_synthesis": "PASS",
+    "binding_candidates_prepared_not_bound": "PASS",
+    "validation_denied_before_resource_resolution": "PASS",
+    "get_only_transport_and_openapi": "PASS",
+    "real_source_presentation_denied_pending_g4": "PASS"
+  },
+  "tests": {
+    "python_api_contract": "PASS",
+    "wp4a_targeted_contract_tests": "4/4 PASS",
+    "generated_api_schema": "PASS",
+    "typescript": "PASS",
+    "vitest": "PASS",
+    "vite_build": "PASS",
+    "chromium_playwright": "PASS",
+    "legacy_visual_suite": "PASS",
+    "figma_production_visual_suite": "PASS",
+    "artifact_upload": "PASS"
+  },
+  "warnings": [
+    "GitHub runner reports Node 20 deprecation for upstream actions; workflow executes them under Node 24. This is non-blocking and outside WP4A semantics."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "authority_before": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+  "authority_delta": "NONE",
+  "authority_after": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+  "real_source_routes": "DENIED_UNTIL_RCN_RN_G4",
+  "rollback": "Close or supersede the WP4A branch before merge; after merge remove the preparation route/contracts/fixture/registry in a forward corrective packet. No real-source authority is affected.",
+  "next_packet": "RCN-RN-WP4B_PREPARATION"
+}
