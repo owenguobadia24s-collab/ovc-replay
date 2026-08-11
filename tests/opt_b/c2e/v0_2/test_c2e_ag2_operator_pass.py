@@ -81,7 +81,7 @@ class C2EAG2OperatorPassTests(unittest.TestCase):
         self.assertEqual(bindings["predecision_ovc_assurance_run_id"], 31522204812)
         self.assertEqual(bindings["predecision_ovc_assurance_conclusion"], "SUCCESS")
 
-    def test_state_and_pointer_advance_only_to_ag3_proposal_preparation(self):
+    def test_approved_state_is_premerge_and_moving_pointer_stays_last_merged_state(self):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertEqual(self.state["operator_decision_id"], DECISION_ID)
         self.assertFalse(self.state["operator_decision_required"])
@@ -90,14 +90,23 @@ class C2EAG2OperatorPassTests(unittest.TestCase):
         self.assertEqual(self.state["ag3"], "NOT_EXECUTED")
         self.assertEqual(self.state["next_gate"], "C2E-AG3")
         self.assertIn("PROPOSAL", self.state["ag3_progression"])
-        self.assertEqual(self.pointer["authoritative_state"], "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_41_AG2_APPROVED.json")
-        self.assertEqual(self.pointer["current_gate"], "C2E-AG2")
-        self.assertEqual(self.pointer["operator_decision_id"], DECISION_ID)
-        self.assertIn(DECISION_ID, self.pointer["operator_decision_history"])
+        self.assertIsNone(self.state["merge_commit"])
+
+        # Until the operator-approved AG2 packet is actually merged, the moving pointer
+        # remains the last merged effective state. This preserves all historical
+        # pointer-dependent conformance and prevents unmerged branch state from acting
+        # as repository authority.
+        self.assertEqual(
+            self.pointer["authoritative_state"],
+            "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_38.json",
+        )
+        self.assertEqual(self.pointer["current_gate"], "C2E-AG1")
+        self.assertEqual(self.pointer["current_packet"], "C2E-AG1-DECISION")
+        self.assertEqual(self.pointer["ag2_progression"], "AUTHORIZED_FOR_GATE_PREPARATION_ONLY")
+        self.assertEqual(self.pointer["next_gate"], "C2E-AG2")
         self.assertEqual(self.pointer["active_c2e"], "NONE")
         self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
-        self.assertEqual(self.pointer["ag3"], "NOT_EXECUTED")
-        self.assertEqual(self.pointer["next_gate"], "C2E-AG3")
+        self.assertNotIn(DECISION_ID, self.pointer["operator_decision_history"])
 
 
 if __name__ == "__main__":
