@@ -12,7 +12,7 @@
 When work touches `apps/research_console_vnext/**`, its visual system, screenshot harnesses, or Research Console vNext presentation:
 
 1. Read `design/research_console/visual_target/OVC_Research_Console_Visual_Target_and_Convergence_Contract_v1_0.md`.
-2. Treat `design/research_console/visual_target/VT-REF-01.svg` through `VT-REF-04.svg` as canonical visual references according to `REFERENCE_MANIFEST.json`.
+2. Treat `design/research_console/visual_target/VT-REF-01.webp` through `VT-REF-04.webp` as canonical visual projections according to `REFERENCE_MANIFEST.json`; the manifest preserves the original operator-supplied PNG source identities.
 3. Use `.agents/skills/ovc-visual-convergence/SKILL.md`.
 4. Preserve Investigate / Research / Evidence / Control, source ownership, read-only authority, FVT, missingness, denominators, QA, evidence identity and fail-honest degradation.
 5. Do **not** restore chart-first product identity. Charts may be context instruments where the workbench requires them.
