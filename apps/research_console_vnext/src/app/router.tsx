@@ -3,6 +3,7 @@ import { AppShell } from "./AppShell";
 import { WorkbenchFrame } from "../researchNative/WorkbenchFrame";
 import { ProductionConsole } from "../production/ProductionConsole";
 import "../production/productionResponsive.css";
+import "../production/productionResponsiveSemantics.css";
 
 export const router=createBrowserRouter([
   {path:"/",element:<Navigate to="/structure" replace/>},
