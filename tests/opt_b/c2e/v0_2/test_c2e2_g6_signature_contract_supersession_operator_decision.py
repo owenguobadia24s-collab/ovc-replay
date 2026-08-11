@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[4]
 DECISION = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-g6-signature-contract-supersession/C2E2_G6_SIGNATURE_CONTRACT_SUPERSESSION_OPERATOR_DECISION.json"
 STATE = ROOT / "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_26.json"
 POINTER = ROOT / "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json"
+PACK_ID = "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8"
 
 class C2E2G6SignatureContractSupersessionOperatorDecisionTests(unittest.TestCase):
     @classmethod
@@ -33,7 +34,7 @@ class C2E2G6SignatureContractSupersessionOperatorDecisionTests(unittest.TestCase
         self.assertEqual(delta["active_c2e"], "NONE")
         self.assertEqual(delta["active_boundary_pack"], "NONE")
 
-    def test_decision_state_advances_to_signature_repair_only(self):
+    def test_decision_state_advances_to_signature_repair_and_later_progression_is_explicit(self):
         self.assertEqual(self.state["status"], "APPROVED")
         self.assertFalse(self.state["operator_decision_required"])
         self.assertEqual(self.state["current_gate"], "C2E2-G6-SIGNATURE-CONTRACT-SUPERSESSION")
@@ -55,8 +56,12 @@ class C2E2G6SignatureContractSupersessionOperatorDecisionTests(unittest.TestCase
             )
         if self.pointer["wp6_execution"] in {"EXECUTED_EVIDENCE_PENDING_QA", "COMPLETED"}:
             self.assertEqual(self.pointer["replacement_run_token_status"], "CONSUMED_FOR_RUN")
-        self.assertEqual(self.pointer["active_c2e"], "NONE")
-        self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
+        if self.pointer.get("ag3") == "EXECUTED_PASS_ACTIVATE_NAMED_PACK":
+            self.assertEqual(self.pointer["active_c2e"], "ACTIVE_EXACT_NAMED_PACK_SCOPE_BOUND")
+            self.assertEqual(self.pointer["active_boundary_pack"], PACK_ID)
+        else:
+            self.assertEqual(self.pointer["active_c2e"], "NONE")
+            self.assertEqual(self.pointer["active_boundary_pack"], "NONE")
 
 if __name__ == "__main__":
     unittest.main()
