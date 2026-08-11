@@ -57,10 +57,13 @@ class ProductionFigmaConformance(unittest.TestCase):
         legacy = (ROOT / "apps" / "research_console_vnext" / "tests" / "e2e" / "fixture-visual.spec.ts").read_text()
         production = (ROOT / "apps" / "research_console_vnext" / "tests" / "e2e" / "production-visual.spec.ts").read_text()
         self.assertIn("WP3G measures central-scene pixel distance", legacy)
+        self.assertIn('test(`production ${domain} master is exact at 1920x1080`', production)
+        for domain in ["Investigate", "Research", "Evidence", "Control"]:
+            self.assertIn(f'"{domain}"', production)
         for marker in [
-            "production Investigate master is exact at 1920x1080", "production Research master is exact at 1920x1080",
-            "production Evidence master is exact at 1920x1080", "production Control master is exact at 1920x1080",
-            "Investigate responsive master is exact at 1440x810", "controlled inspector drawer at 1280x720",
+            "Investigate responsive master is exact at 1440x810",
+            "Investigate responsive master uses controlled inspector drawer at 1280x720",
+            "production-domain-rail", "production-primary-canvas", "production-evidence-inspector", "production-evidence-dock",
         ]:
             self.assertIn(marker, production)
 
