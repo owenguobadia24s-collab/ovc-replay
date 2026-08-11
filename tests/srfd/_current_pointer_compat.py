@@ -28,7 +28,7 @@ def assert_lawful_v10_pointer(testcase, pointer: dict) -> bool:
         testcase.assertEqual(V09_ROUTE, pointer["wp10_v0_9_execution_route"])
         testcase.assertEqual("BLOCKED_DISPATCH_OUTPUT_CONTRACT_FAILURE_PRESERVED", pointer["wp10_v1_0_execution_route"])
         testcase.assertEqual(V11_TOKEN, pointer["superseded_v1_1_authority_token_id"])
-        testcase.assertEqual(V11_BINDING, pointer["supersed_v1_1_1_run_binding_sha256"])
+        testcase.assertEqual(V11_BINDING, pointer["superseded_v1_1_run_binding_sha256"])
         testcase.assertFalse(pointer["superseded_v1_1_authority_token_consumed"])
         testcase.assertEqual("SUPERSEDED_UNUSED_UNCONSUMED_DO_NOT_REUSE", pointer["superseded_v1_1_authority_token_state"])
         testcase.assertIsNone(pointer["fresh_authority_token_id"])
