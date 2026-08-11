@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { SemanticRiskGallery } from './SemanticRiskPrototypes';
 import "./researchNative.css";
+import "./researchNativeNarrow.css";
 
 type BadgeProps = { label: string; value: string };
 export function ObjectBadge({ label, value }: BadgeProps) { return <span className="rnBadge"><b>{label}</b><span>{value}</span></span>; }
