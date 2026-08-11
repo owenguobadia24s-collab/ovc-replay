@@ -1,0 +1,82 @@
+{
+  "schema": "c2e-ag2-srfd-g11-refresh/v1",
+  "programme_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2",
+  "plan_id": "OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED",
+  "gate_id": "C2E-AG2",
+  "packet_id": "C2E-AG2-SRFD-G11-REFRESH",
+  "baseline_main": "d8da7bdf69d8c38302dd773322a38fa3ae913fe5",
+  "status": "BLOCKED_REQUIRED_COMPARATOR_EVIDENCE_GAP",
+  "authority_effect": "NONE",
+  "review_subject": {
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "active": false,
+    "canonical": false,
+    "population": "GBPUSD ASK/BID UTC_15M June 2026, 4072 frames, 2H_A_L parent"
+  },
+  "completed_c2e_court_record": {
+    "wp0_through_wp7_g7": "COMPLETED",
+    "ag0_admissibility": "PASS",
+    "ag1_replay_adequacy": "PASS",
+    "real_source_replay": "COMPLETED_TWO_CLEAN_EQUIVALENCE_RUNS_PLUS_R4_RESTART_EQUIVALENCE",
+    "active_c2e": "NONE",
+    "active_boundary_pack": "NONE"
+  },
+  "ag2_requirement_evaluation": {
+    "historical_comparator_disagreement": {
+      "status": "PASS",
+      "frames": 4072,
+      "disagreements": 3524,
+      "source": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_WP6_COMPARATOR_STATUS.json"
+    },
+    "counterexamples": {
+      "status": "PASS",
+      "deterministic_examples": 12,
+      "source": "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6/C2E2_WP6_COUNTEREXAMPLES.json"
+    },
+    "conflict_pressure": {
+      "status": "PASS",
+      "matched_candidate_boundaries": 8490,
+      "resolver_conflicts": 0,
+      "peer_owner_collisions": 0,
+      "episodes": 92
+    },
+    "ambiguity_residual_evidence": {
+      "status": "PASS",
+      "not_evaluable_candidates": 34,
+      "ambiguous_boundary_sets": 0,
+      "negative_evidence": "PRESERVED_NOT_CONVERTED_TO_NEUTRALITY"
+    },
+    "no_hidden_winner_or_promotion": {
+      "status": "PASS",
+      "threshold_tuning": false,
+      "family_or_outcome_input_to_boundary_formation": false,
+      "selection_or_promotion_effect": "NONE"
+    },
+    "srfd_comparator_disagreement": {
+      "status": "NOT_MET",
+      "srfd_terminal_state": "COMPLETED_G11_PASS_NO_ACTIVATION",
+      "srfd_g11_merge_commit": "ee313d5324d724ef82584ba9fe6452770201a7a1",
+      "srfd_run_id": "SRFD.RUN.55601cfe14d85173c767315be04c8b6c333dc8c07103a8064733086c26606dbf",
+      "general_srfd_method_disagreement": {
+        "count": 38461,
+        "denominator": 47172,
+        "domains": 30
+      },
+      "c2e_aggregate_representation": "NOT_EXECUTED_DEPENDENCY_UNAVAILABLE",
+      "c2e_causal_adapter_segmentation": "NOT_EXECUTED_DEPENDENCY_UNAVAILABLE",
+      "reason_code": "C2E_REAL_SOURCE_DEPENDENCY_UNAVAILABLE_IN_FROZEN_SRFD_RUN",
+      "forbidden_inference": "DO_NOT_INFER_C2E_EPISODE_ADEQUACY_FROM_RUN_CHANGE_CONTROL",
+      "conclusion": "The terminal SRFD run contains method-disagreement evidence, but no exact C2E-vs-SRFD boundary disagreement ledger. General SRFD method disagreement cannot be substituted for the missing C2E comparator evidence."
+    }
+  },
+  "residual_gap": {
+    "id": "C2E-AG2-GAP-001",
+    "requirement": "DECLARED_SRFD_COMPARATOR_IDENTITY_AND_C2E_BOUNDARY_DISAGREEMENT_LEDGER",
+    "effect": "C2E-AG2_PASS_NOT_READY",
+    "smallest_lawful_resolution": "Create one separately bounded comparator-only evidence addendum using the already-frozen C2E candidate stream and the completed SRFD comparator/segmentation artifacts on the common June population. Declare exact comparator identities, compute deterministic boundary disagreement records and counterexamples, and preserve family/outcome/selector firewalls. Do not alter the C2E boundary pack, rerun C2E WP0-WP7, or infer missing SRFD C2E-adapter results from general method-disagreement counts. If the existing SRFD artifacts cannot support the comparison reproducibly, prepare a separately governed SRFD comparator addendum; SRFD G11 has no automatic scientific follow-on authority."
+  },
+  "operator_gate_status": "NOT_PRESENTED_FOR_PASS_WHILE_REQUIRED_EVIDENCE_IS_MISSING",
+  "ag3": "NOT_EXECUTED_DENIED",
+  "rollback": "Close/supersede this refresh evidence only. Preserve AG0/AG1 PASS, WP6/WP7 evidence, terminal SRFD G11 evidence and inactive C2E authority unchanged."
+}
