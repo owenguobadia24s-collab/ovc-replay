@@ -65,45 +65,37 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("agent-write authority", init_text)
         self.assertIn("fail closed", init_text)
 
-    def test_occurrence_context_namespace_is_inactive_nonstructural_only(self) -> None:
+    def test_occurrence_context_namespace_is_active_nonstructural_foundation_only(self) -> None:
         context_init = (SRC / "ovc" / "context" / "__init__.py").read_text(encoding="utf-8").lower()
         occurrence_init = (SRC / "ovc" / "context" / "occurrence_context" / "__init__.py").read_text(encoding="utf-8").lower()
         combined = context_init + occurrence_init
-        self.assertIn("inactive", combined)
+        self.assertIn("active-foundation", combined)
         self.assertIn("non-structural", combined)
-        self.assertIn("no active market", combined)
-        self.assertIn("representation-input", combined)
+        self.assertIn("no structural", combined)
+        self.assertIn("representation input remains denied", combined)
         self.assertIn("validation", combined)
         self.assertIn("c2p", combined)
-        self.assertIn("execution authority", combined)
+        self.assertIn("execution", combined)
 
-    def test_c2_vnext_namespace_is_shadow_only(self) -> None:
+    def test_c2_vnext_namespace_exposes_active_core_and_shadow_research_boundary(self) -> None:
         init_text = (SRC / "ovc" / "opt_b" / "c2_vnext" / "__init__.py").read_text(encoding="utf-8").lower()
-        self.assertIn("shadow-only", init_text)
-        self.assertIn("no active market", init_text)
-        self.assertIn("selector", init_text)
+        self.assertIn("active-core", init_text)
+        self.assertIn("functional discovery", init_text)
+        self.assertIn("candidate dispositions", init_text)
+        self.assertIn("remain shadow", init_text)
+        self.assertIn("selector replacement", init_text)
         self.assertIn("validation", init_text)
-        self.assertIn("execution authority", init_text)
+        self.assertIn("execution", init_text)
 
-    def test_c2e_v2_namespace_is_shadow_only(self) -> None:
+    def test_c2e_v2_namespace_exposes_active_engine_without_self_granting_reserved_changes(self) -> None:
         init_text = (SRC / "ovc" / "opt_b" / "c2e_v2" / "__init__.py").read_text(encoding="utf-8").lower()
-        self.assertIn("shadow-only", init_text)
-        self.assertIn("no active market", init_text)
-        self.assertIn("selector", init_text)
+        self.assertIn("active-engine", init_text)
+        self.assertIn("operator-selected", init_text)
+        self.assertIn("exact june population", init_text)
+        self.assertIn("no longer activation identities", init_text)
+        self.assertIn("replace the boundary pack", init_text)
         self.assertIn("validation", init_text)
-        self.assertIn("execution authority", init_text)
-        self.assertIn("no", init_text)
-        self.assertIn("real-source replay", init_text)
-
-    def test_market_grammar_namespace_is_shadow_only(self) -> None:
-        init_text = (SRC / "ovc" / "opt_b" / "market_grammar" / "__init__.py").read_text(encoding="utf-8").lower()
-        self.assertIn("shadow-only", init_text)
-        self.assertIn("no active market", init_text)
-        self.assertIn("selector", init_text)
-        self.assertIn("canonical grammar", init_text)
-        self.assertIn("validation", init_text)
-        self.assertIn("semantic-promotion", init_text)
-        self.assertIn("execution authority", init_text)
+        self.assertIn("execution", init_text)
 
     def test_esl_namespace_is_inactive_conformance_only(self) -> None:
         init_text = (SRC / "ovc" / "opt_b" / "esl" / "__init__.py").read_text(encoding="utf-8").lower()
@@ -118,6 +110,16 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("execution authority", init_text)
         self.assertIn("agent-write authority", init_text)
         self.assertIn("fails closed", init_text)
+
+    def test_market_grammar_namespace_is_shadow_only(self) -> None:
+        init_text = (SRC / "ovc" / "opt_b" / "market_grammar" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("shadow-only", init_text)
+        self.assertIn("no active market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("canonical grammar", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("semantic-promotion", init_text)
+        self.assertIn("execution authority", init_text)
 
     def test_sfc_namespace_is_inactive_shadow_conformance_only(self) -> None:
         init_text = (SRC / "ovc" / "opt_b" / "sfc" / "__init__.py").read_text(encoding="utf-8").lower()
