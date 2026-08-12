@@ -7,7 +7,9 @@ class WP4BC2PPreparation(unittest.TestCase):
  def test_census_and_fixture_agree_on_typed_owner_absence(self):
   f=load(FIX); c=next(x for x in load(INV)['sources'] if x['capability_id']=='c2p'); self.assertFalse(c['repository_materialized']); self.assertIsNone(c['source_path']); self.assertEqual(c['reason_code'],f['reason_code']); self.assertEqual([],f['objects']); self.assertFalse(f['runtime_owner_materialized']); self.assertEqual('RCN-RN-G4',f['gate_required'])
  def test_route_and_state_keep_g4_boundary(self):
-  r=load(ROUTES); s=load(STATE); self.assertEqual('GET_ONLY',r['transport']); self.assertIn('/c2p/objects',r['domains']['INVESTIGATE']); self.assertFalse(r['wp4b_preparation']['runtime_owner_materialized']); self.assertTrue(s['packet_id'].startswith('RCN-RN-WP4') or s['packet_id']=='RCN-RN-G4'); self.assertEqual('NONE',s['authority_delta']); self.assertEqual('DENIED_UNTIL_RCN_RN_G4',s['real_source_routes'])
+  r=load(ROUTES); s=load(STATE); self.assertEqual('GET_ONLY',r['transport']); self.assertIn('/c2p/objects',r['domains']['INVESTIGATE']); self.assertFalse(r['wp4b_preparation']['runtime_owner_materialized']); self.assertTrue(s['packet_id'].startswith('RCN-RN-WP4') or s['packet_id']=='RCN-RN-G4'); self.assertEqual('DENIED_UNTIL_RCN_RN_G4',s['real_source_routes']); self.assertEqual('FIXTURE_ONLY_LOCAL_READ_ONLY',s['current_authority'])
+  if s['packet_id']=='RCN-RN-G4': self.assertEqual('GATE_READY',s['status']); self.assertEqual('OPERATOR_REQUIRED',s['authority_required']); self.assertEqual('PROPOSED_FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION',s['authority_delta']); self.assertIsNone(s['decision_record'])
+  else: self.assertEqual('NONE',s['authority_delta'])
  @unittest.skipIf(importlib.util.find_spec('fastapi') is None,'FastAPI dependency not installed')
  def test_runtime_is_empty_typed_absence_and_validation_denies_before_read(self):
   from fastapi.testclient import TestClient
