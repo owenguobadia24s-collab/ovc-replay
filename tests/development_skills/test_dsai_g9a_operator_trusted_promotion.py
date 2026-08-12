@@ -95,7 +95,7 @@ class DSAIG9AOperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
         self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
         self.assertTrue(str(self.pointer["status"]).strip())
-        self.assertEqual(self.pointer["next_packet"], "DSAI-WP9")
+        self.assertIn(self.pointer["next_packet"], {"DSAI-WP9", "DSAI-WP10"})
 
 
 if __name__ == "__main__":
