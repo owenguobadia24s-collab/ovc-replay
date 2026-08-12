@@ -1,7 +1,7 @@
 import "./pvsComponents.css";
 
 export type DataColumn = { key:string; label:string; type?:"text"|"mono"|"number"|"status"; width?:number };
-export type DataRecord = Record<string,string|number> & { id:string; state?:"default"|"selected"|"warn" };
+export type DataRecord = { id:string; state?:"default"|"selected"|"warn"; [key:string]:string|number|undefined };
 
 export function DataCell({value,type="text"}:{value:string|number;type?:"text"|"mono"|"number"|"status"}) {
   const status = type==="status" ? ` status-${String(value).toLowerCase()}` : "";
@@ -10,7 +10,7 @@ export function DataCell({value,type="text"}:{value:string|number;type?:"text"|"
 
 export function DataTable({columns,rows,total,state="normal"}:{columns:readonly DataColumn[];rows:readonly DataRecord[];total:number;state?:"normal"|"truncated"|"capacity"}) {
   return <div className="pvs-table" data-figma-node="69:805" data-state={state.toUpperCase()}>
-    <table><thead><tr>{columns.map(col=><th key={col.key} style={col.width?{width:col.width}:undefined}>{col.label}</th>)}</tr></thead><tbody>{rows.map(row=><tr key={row.id} className={row.state==="selected"?"is-selected":row.state==="warn"?"is-warn":""}>{columns.map(col=><DataCell key={col.key} value={row[col.key]} type={col.type}/>)}</tr>)}</tbody></table>
+    <table><thead><tr>{columns.map(col=><th key={col.key} style={col.width?{width:col.width}:undefined}>{col.label}</th>)}</tr></thead><tbody>{rows.map(row=><tr key={row.id} className={row.state==="selected"?"is-selected":row.state==="warn"?"is-warn":""}>{columns.map(col=><DataCell key={col.key} value={row[col.key] ?? ""} type={col.type}/>)}</tr>)}</tbody></table>
     <DenominatorFooter visible={rows.length} total={total}/>
     {state!=="normal"&&<VirtualisationMarker state={state} visible={rows.length} total={total}/>}  
   </div>;
