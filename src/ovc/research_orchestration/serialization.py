@@ -38,6 +38,16 @@ def canonical_json_bytes(value: Any) -> bytes:
     return json.dumps(canonical_value(value), sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
 
 
+def canonical_json(value: Any) -> str:
+    """Return the canonical UTF-8 JSON text used by orchestration equality checks.
+
+    This is the text companion to ``canonical_json_bytes`` and preserves the
+    existing no-trailing-newline identity discipline.
+    """
+
+    return canonical_json_bytes(value).decode("utf-8")
+
+
 def logical_sha256(value: Any) -> str:
     return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
 
