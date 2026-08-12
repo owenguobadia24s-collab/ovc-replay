@@ -8,6 +8,9 @@ version = "0.2.0"
 description = "Evidence-first OVC v2 research and deterministic replay foundation"
 requires-python = ">=3.11"
 
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
 [project.scripts]
 ovc = "ovc.cli:main"
 
@@ -18,3 +21,8 @@ package-dir = {"" = "src"}
 where = ["src"]
 include = ["ovc*", "ovc_evidence_store*"]
 exclude = ["legacy*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "tests"]
+addopts = ["-ra", "--import-mode=importlib"]

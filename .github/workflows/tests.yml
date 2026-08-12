@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  unit-tests:
+  legacy-unittest:
     name: tests
     runs-on: ubuntu-latest
     steps:
@@ -27,3 +27,61 @@ jobs:
           python-version: "3.11"
       - name: Complete repository suite
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+
+  pytest-unittest-parity:
+    name: pytest-unittest-parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pytest test extra
+        run: python3 -m pip install -e ".[test]"
+      - name: Execute exact legacy unittest surface under pytest
+        shell: bash
+        run: |
+          set +e
+          python3 tools/ci/pytest_unittest_parity.py run > /tmp/pytest-legacy.log 2>&1
+          status=$?
+          cat /tmp/pytest-legacy.log
+          if [ "$status" -ne 0 ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/pytest-legacy.log').read_text(encoding='utf-8', errors='replace')
+          tail = text[-5000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print(f'::error title=Pytest legacy-surface failure::{tail}')
+          PY
+          fi
+          exit "$status"
+
+  runner-parity:
+    name: runner-parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pytest test extra
+        run: python3 -m pip install -e ".[test]"
+      - name: Prove pytest collection parity for legacy unittest surface
+        shell: bash
+        run: |
+          set +e
+          python3 tools/ci/pytest_unittest_parity.py collect > /tmp/pytest-parity.log 2>&1
+          status=$?
+          cat /tmp/pytest-parity.log
+          if [ "$status" -ne 0 ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/pytest-parity.log').read_text(encoding='utf-8', errors='replace')
+          tail = text[-5000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print(f'::error title=Pytest collection-parity failure::{tail}')
+          PY
+          fi
+          exit "$status"
