@@ -1,0 +1,23 @@
+{
+  "anchor": {"anchor_id": "C2.OBS.1", "anchor_kind": "C2_OBSERVATION", "clock": "UTC", "instrument": "GBPUSD", "scale": "15M", "side": "BID"},
+  "authority_state": "INACTIVE_CONFORMANCE_ONLY",
+  "comparability_domain_id": "GBPUSD.BID.15M.v1",
+  "dependency_refs": [
+    {"comparability_domain_id": "GBPUSD.BID.15M.v1", "evidence_state": "AVAILABLE", "first_valid_time": "2026-06-03T10:15:00Z", "generation_id": "C2.GEN.1", "identity_defining": true, "object_type": "C2Observation", "owner": "C2", "ref_id": "C2.OBS.1", "role": "REQUIRED"},
+    {"comparability_domain_id": "GBPUSD.BID.15M.v1", "evidence_state": "MISSING", "first_valid_time": null, "generation_id": "C2E.GEN.1", "identity_defining": false, "object_type": "EpisodeSnapshot", "owner": "C2E", "ref_id": "C2E.EP.1", "role": "OPTIONAL"}
+  ],
+  "effective_time": "2026-06-03T10:00:00Z",
+  "evaluation_cutoff": "2026-06-03T10:15:00Z",
+  "evidence_frontier": {"comparability_domain_id": "GBPUSD.BID.15M.v1", "dependency_roles": {"C2.OBS.1": "REQUIRED", "C2E.EP.1": "OPTIONAL"}, "evaluation_cutoff": "2026-06-03T10:15:00Z", "latest_required_fvt": "2026-06-03T10:15:00Z", "missing_ref_ids": ["C2E.EP.1"], "optional_ref_ids": ["C2E.EP.1"], "required_ref_ids": ["C2.OBS.1"], "source_generation_ids": ["C2.GEN.1", "C2E.GEN.1"]},
+  "extensions": {},
+  "facets": [
+    {"dimension": "LOCATION", "evidence_state": "AVAILABLE", "reason_codes": [], "source_ref_ids": ["C2.OBS.1"], "value": {"bucket": "MID"}},
+    {"dimension": "MOTION", "evidence_state": "AVAILABLE", "reason_codes": [], "source_ref_ids": ["C2.OBS.1"], "value": {"state": "UP"}},
+    {"dimension": "ORGANISATION", "evidence_state": "NOT_EVALUABLE", "reason_codes": ["NO_ORGANISATION_INPUT"], "source_ref_ids": ["C2.OBS.1"], "value": null},
+    {"dimension": "INTERACTION", "evidence_state": "MISSING", "reason_codes": ["OPTIONAL_INPUT_MISSING"], "source_ref_ids": [], "value": null}
+  ],
+  "first_valid_time": "2026-06-03T10:15:00Z",
+  "occurrence_pack_id": "OPTB-ESL-OCCURRENCE-PACK-GBPUSD-BID-15M-v0.1",
+  "occurrence_record_id": null,
+  "source_generation_ids": ["C2.GEN.1", "C2E.GEN.1"]
+}
