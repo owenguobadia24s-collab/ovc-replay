@@ -6,7 +6,8 @@ Programme: OVC-RC-VNEXT-GREENFIELD-v0.1
 Parent plan: OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED
 Phase: PVS2 / Phase 2 React implementation conformance
 Baseline main: 0f6cffd8e1c1fac50a958152fe5edc5a070467f3
-Branch: build/rcn-pvs-v0-2-phase2-react-conformance
+Branch: build/rc-vnext-pvs-v0-2-phase2-react-conformance
+Superseded preparation branch: build/rcn-pvs-v0-2-phase2-react-conformance (same packet history through ab16a8129e0f33181f846dc19ca229d6a3936bd7; migrated solely to satisfy the repository's existing Research Console assurance branch contract)
 Authority delta: NONE
 
 ## Purpose
