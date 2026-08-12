@@ -1,0 +1,70 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-MG-EI-WP1-CONTRACT-IDENTITY-DISCREPANCY-v0.1",
+  "plan_id": "OVC-MG-EI-WP1-CID-DECISION-PROTOCOL-0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "branch": "governance/mg-ei-wp1-contract-identity-discrepancy-v1",
+  "authority": "DECISION_PREPARATION_ONLY",
+  "authority_delta": "NONE",
+  "blocker_origin": "PYT-WP2-BLOCK-001",
+  "packets": [
+    {
+      "packet_id": "EI-WP1-CID-WP0",
+      "status": "COMPLETED",
+      "prerequisites": [
+        "main:22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+        "PYT-WP2-BLOCK-001:BLOCKED"
+      ],
+      "authority_required": "NONE",
+      "authority_delta": "EVIDENCE_RECONCILIATION_ONLY",
+      "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+      "branch": "governance/mg-ei-wp1-contract-identity-discrepancy-v1",
+      "candidate_commit": null,
+      "tests": [
+        "JSON parse",
+        "digest shape",
+        "accepted Drive manifest raw-hash cross-check"
+      ],
+      "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_GATE_PACKET.json",
+      "decision_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_OPERATOR_DECISION.md",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "EI-WP1-CID-WP1"
+    },
+    {
+      "packet_id": "EI-WP1-CID-WP1",
+      "status": "PLANNED",
+      "prerequisites": [
+        "EI-WP1-CID-G0:PASS_SUPERSEDE"
+      ],
+      "authority_required": "OPERATOR_REQUIRED_SATISFIED_BY_G0",
+      "authority_delta": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_ONLY",
+      "baseline_commit": null,
+      "branch": null,
+      "candidate_commit": null,
+      "tests": [],
+      "qa_packet": null,
+      "decision_record": "EI-WP1-CID-G0",
+      "merge_commit": null,
+      "blockers": [
+        "AWAIT_OPERATOR_DECISION"
+      ],
+      "next_packet": "PYT-WP2-RESUME"
+    }
+  ],
+  "gate": {
+    "gate_id": "EI-WP1-CID-G0",
+    "status": "GATE_READY",
+    "authority_required": "OPERATOR_REQUIRED",
+    "recommended_decision": "PASS_SUPERSEDE",
+    "operator_decision": "PENDING"
+  },
+  "finding": {
+    "authoritative_digest_exists": true,
+    "authoritative_binding_sha256": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "historical_malformed_value": "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8"
+  },
+  "next_action": "OPERATOR_DECISION_EI-WP1-CID-G0"
+}
