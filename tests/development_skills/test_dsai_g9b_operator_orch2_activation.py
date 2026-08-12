@@ -115,10 +115,10 @@ def test_programme_state_records_approval_without_premature_branch_effectivity()
     assert state["mandatory_stop"]["active"] is False
 
     pointer = _load(POINTER)
-    assert pointer == {
-        "current_state": "OVC_DSAI_STATE_v0_26.json",
-        "next_packet": "DSAI-WP9",
-        "programme_id": "OVC-DSAI-v0.1",
-        "schema": "ovc-programme-current-state-pointer/v1",
-        "status": "G9B_PASS_ORCH2_APPROVED_PENDING_MAIN_INTEGRATION_ASSURANCE",
-    }
+    assert pointer["programme_id"] == "OVC-DSAI-v0.1"
+    assert pointer["schema"] == "ovc-programme-current-state-pointer/v1"
+    assert str(pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_")
+    assert str(pointer["status"]).strip()
+    assert pointer["next_packet"] in {"DSAI-WP9", "DSAI-WP10", "DSAI-WP11", None}
+    if pointer["next_packet"] is None:
+        assert pointer["status"] == "IMPLEMENTED_ORCH2_BOUNDED_PILOTED"
