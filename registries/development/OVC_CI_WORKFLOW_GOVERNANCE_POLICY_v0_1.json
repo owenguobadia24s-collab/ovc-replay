@@ -1,0 +1,76 @@
+{
+  "schema": "ovc-ci-workflow-governance-policy/v1",
+  "policy_id": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP3",
+  "baseline_main_sha": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+  "snapshot": {
+    "github_actions_api_total_count": 175,
+    "captured_at": "2026-08-12T17:46:00+01:00",
+    "source": "GitHub Actions workflows API",
+    "expected_repository_workflow_definition_count": 175
+  },
+  "approved_pull_request_workflows": [
+    ".github/workflows/tests.yml",
+    ".github/workflows/ovc-tiered-tests.yml"
+  ],
+  "categories": [
+    "CURRENT_PR_CI",
+    "TEMPORARY",
+    "HISTORICAL_MANUAL_VERIFICATION",
+    "ACTIVE_MANUAL_OPERATION"
+  ],
+  "classification_precedence": [
+    "CURRENT_PR_CI",
+    "TEMPORARY",
+    "HISTORICAL_MANUAL_VERIFICATION",
+    "ACTIVE_MANUAL_OPERATION"
+  ],
+  "rules": {
+    "CURRENT_PR_CI": {
+      "condition": "workflow has pull_request trigger and path is in approved_pull_request_workflows",
+      "unexpected_pull_request_listener": "FAIL_CLOSED"
+    },
+    "TEMPORARY": {
+      "path_basename_prefixes": ["_temp_"],
+      "workflow_name_prefixes_case_insensitive": ["temp ", "temp-"]
+    },
+    "HISTORICAL_MANUAL_VERIFICATION": {
+      "content_markers_case_insensitive": [
+        "historical manual verification",
+        "historical packet verification"
+      ]
+    },
+    "ACTIVE_MANUAL_OPERATION": {
+      "condition": "all remaining workflow definitions after higher-precedence rules"
+    }
+  },
+  "required_trigger_inventory": [
+    "pull_request",
+    "push",
+    "workflow_dispatch",
+    "schedule",
+    "workflow_call",
+    "workflow_run"
+  ],
+  "governance": {
+    "classification_only": true,
+    "workflow_deletion": "PROHIBITED",
+    "workflow_disablement": "PROHIBITED_BY_THIS_PACKET",
+    "trigger_mutation": "PROHIBITED_BY_THIS_PACKET",
+    "required_check_mutation": "PROHIBITED_BY_THIS_PACKET",
+    "historical_evidence_preservation": "REQUIRED",
+    "temporary_workflow_retirement": "REQUIRES_SEPARATE_AUTHORITY"
+  },
+  "action_dependency_hygiene": {
+    "classification": "NON_BLOCKING_REVIEW_ITEM",
+    "known_runner_warning_families": [
+      "actions/checkout@v4 Node target warning",
+      "actions/setup-python@v5 Node target warning"
+    ],
+    "cipr_owned_github_script": "actions/github-script@v9",
+    "automatic_version_bump": false
+  },
+  "authority_delta": "NONE",
+  "rollback": "Remove or supersede only this classification policy, census tooling and QA records. Do not delete or mutate workflow definitions as rollback."
+}
