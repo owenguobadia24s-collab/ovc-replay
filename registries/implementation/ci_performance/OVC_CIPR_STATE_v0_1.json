@@ -3,7 +3,7 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "QA_REVIEW",
+  "status": "GATE_READY",
   "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
   "branch": "gate/ci-performance-g4-suite-topology",
   "packet_id": "CIPR-WP4",
@@ -11,19 +11,24 @@
     "CIPR-WP0-WP2 COMPLETED at main 0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
     "CIPR-WP3 / CIPR-G3 COMPLETED at main 22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
     "PYT-WP1 / PYT-G1 COMPLETED dual-run parity",
-    "current-main aggregate CI performance evidence refreshed"
+    "current-main aggregate CI performance evidence refreshed",
+    "PR #655 exact-head required CI PASS at ea2705b81538a216e802d3e156500c086a46b779",
+    "PR #655 zero review threads and base equals current main"
   ],
   "authority_required": "OPERATOR_REQUIRED",
   "authority_delta": "MATERIAL_CANONICAL_SUITE_TOPOLOGY_CANDIDATE_AUTHORITY",
   "candidate_commit": "NOT_CREATED_OPERATOR_APPROVAL_REQUIRED",
-  "gate_evidence_commit": "PENDING_INITIAL_GATE_COMMIT",
+  "gate_evidence_commit": "ea2705b81538a216e802d3e156500c086a46b779",
   "topology_change_active": false,
   "tests": [
     "Current main tests workflow run 31626433864 PASS: tests + pytest-unittest-parity + runner-parity",
     "Current main legacy unittest complete-suite step 140 seconds",
     "Current main pytest exact-legacy execution step 153 seconds",
     "Current main runner parity collection step 4 seconds",
-    "PENDING exact-head gate evidence branch CI"
+    "Gate evidence tests workflow run 31627457452 PASS: tests job 94217433837; pytest-unittest-parity job 94217434487; runner-parity job 94217433997",
+    "Gate evidence tiered workflow run 31627457418 PASS: FINAL_HEAD/profile job 94217433499; canonical observer job 94217489947; merge readiness job 94218293305",
+    "PR #655 review threads: 0",
+    "PR #655 base 22c5ede9c6e7ccdeba26ea53e7a83890170b10dd equals current main"
   ],
   "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_QA_PACKET.json",
   "decision_record": null,
@@ -52,6 +57,7 @@
   ],
   "notes": [
     "No CI topology mutation exists on this branch; it contains gate evidence and validation only.",
+    "GATE_READY evidence is pinned to exact tested head ea2705b81538a216e802d3e156500c086a46b779.",
     "If operator decision is PASS, implement the exact bounded shadow-sharding delta from the gate packet on a fresh branch from then-current lawful main.",
     "If operator decision is DEFER/BLOCK, retain current CI unchanged and preserve gate evidence."
   ]

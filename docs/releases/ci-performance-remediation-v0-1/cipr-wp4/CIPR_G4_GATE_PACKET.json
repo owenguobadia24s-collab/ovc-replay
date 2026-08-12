@@ -5,9 +5,9 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "PREPARING_GATE_READY",
+  "status": "GATE_READY",
   "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
-  "gate_evidence_commit": "PENDING_INITIAL_GATE_COMMIT",
+  "gate_evidence_commit": "ea2705b81538a216e802d3e156500c086a46b779",
   "candidate_commit": "NOT_CREATED_OPERATOR_APPROVAL_REQUIRED",
   "completed_packets": [
     {
@@ -95,11 +95,31 @@
     "current_main_result": "PASS_ALL_THREE_PYTHON_CHECKS",
     "heavy_inventory": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_HEAVY_TEST_INVENTORY.json",
     "pyt_compatibility": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_PYT_COMPATIBILITY_ASSESSMENT.json",
-    "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_QA_PACKET.json"
+    "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_QA_PACKET.json",
+    "exact_head_gate_evidence": {
+      "head_sha": "ea2705b81538a216e802d3e156500c086a46b779",
+      "tests_workflow_run": 31627457452,
+      "tests_job_id": 94217433837,
+      "pytest_unittest_parity_job_id": 94217434487,
+      "runner_parity_job_id": 94217433997,
+      "tiered_workflow_run": 31627457418,
+      "profile_assurance_job_id": 94217433499,
+      "canonical_observer_job_id": 94217489947,
+      "merge_readiness_job_id": 94218293305,
+      "all_required_results": "PASS",
+      "profile_result": "PASS_FINAL_HEAD",
+      "review_threads": 0,
+      "current_main_sha": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+      "pr_base_sha": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+      "base_matches_current_main": true,
+      "pr_mergeable": true
+    }
   },
   "qa": {
-    "recommendation": "PENDING_EXACT_HEAD_GATE_EVIDENCE_CI",
-    "operator_decision_required": true
+    "recommendation": "PASS_GATE_READY_OPERATOR_DECISION_REQUIRED",
+    "operator_decision_required": true,
+    "blocking_warnings": [],
+    "unresolved_review_threads": 0
   },
   "warnings": [
     "Current aggregate suite has increased to 140 seconds; audit-baseline per-heavy timings are historical and not fresh individual benchmarks.",
