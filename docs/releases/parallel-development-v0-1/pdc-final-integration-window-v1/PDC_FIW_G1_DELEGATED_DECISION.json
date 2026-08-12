@@ -5,7 +5,7 @@
   "packet_id": "PDC-FIW-CORR-WP1",
   "gate_id": "PDC-FIW-G1",
   "title": "Serialized final-integration window corrective assurance",
-  "decision": "SUPERSEDE",
+  "decision": "PASS",
   "authority": {
     "classification": "AUTO_RATIFIABLE_NON_RESERVED",
     "basis": "Operator-directed bounded development-orchestration correction within the ratified Parallel Development / Main-Head Churn Remediation programme.",
@@ -20,6 +20,8 @@
   },
   "baseline_commit": "10a0acac129df1039feafd9200612e7512a6c551",
   "preliminary_evaluated_candidate_commit": "219eb6b9db691a1b7ffb138cf98430e9843794ea",
+  "final_evaluated_candidate_commit": "8b53af4f44f222c7c88c2712485bce0ce206ab08",
+  "final_assurance_base_commit": "1d1ef48ee99ec1abf0dd72f5c8b0b97a9a2fd7d0",
   "pull_request": 679,
   "preliminary_pass_evidence": {
     "tiered_workflow_run_id": 31643275045,
@@ -33,7 +35,8 @@
     "merge_readiness": "PASS",
     "final_integration_window_acquisition_ms": 286,
     "final_integration_window_hold_ms": 180309,
-    "final_integration_window_base_sha": "10a0acac129df1039feafd9200612e7512a6c551"
+    "final_integration_window_base_sha": "10a0acac129df1039feafd9200612e7512a6c551",
+    "disposition": "SUPERSEDED_BY_ADVERSARIAL_CORRECTION"
   },
   "post_decision_adversarial_finding": {
     "candidate_commit": "893a9ff15313c2f63363e93d2686ab74dcdb9ebd",
@@ -44,7 +47,7 @@
     "readiness_result": "FAIL_OVC_BASE_MOVED_BEFORE_READINESS",
     "readiness_acquisition_ms": 250,
     "defect": "The profile admission barrier treated OVC merge readiness being in_progress as sufficient proof of successful lane acquisition; the readiness acquisition step could fail on stale main while profile assurance still proceeded.",
-    "disposition": "CORRECTED_WITHIN_PACKET_SCOPE",
+    "disposition": "RESOLVED",
     "correction": [
       "Profile admission independently rechecks current main before checkout/test selection.",
       "Required-check admission independently rechecks current main before canonical Python jobs.",
@@ -52,16 +55,37 @@
       "The original fail-closed readiness guards remain unchanged."
     ]
   },
+  "final_pass_evidence": {
+    "tiered_workflow_run_id": 31644133217,
+    "tests_workflow_run_id": 31644133220,
+    "profile_assurance": "PASS",
+    "development_tests": 151,
+    "authority_tests": 30,
+    "canonical_tests": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "merge_readiness": "PASS",
+    "final_integration_window_admission": "PASS",
+    "profile_candidate_ancestry": "PASS",
+    "required_check_candidate_ancestry": "PASS",
+    "final_integration_window_acquisition_ms": 904,
+    "final_integration_window_hold_ms": 184529,
+    "final_integration_window_base_sha": "1d1ef48ee99ec1abf0dd72f5c8b0b97a9a2fd7d0",
+    "workflow_census_total": 130,
+    "pull_request_workflow_count": 2,
+    "complete_repository_suite_count": 1,
+    "blocking_review_threads": 0
+  },
   "qa": {
-    "recommendation": "PENDING_REBASED_EXACT_HEAD_ASSURANCE",
+    "recommendation": "PASS",
     "warnings": [
-      "Preliminary PASS is superseded because subsequent adversarial main churn exposed a status-only admission race.",
-      "GitHub runner emitted the existing Node 20 deprecation warning for actions/checkout@v4; it was forced to Node 24 and did not cause the defect."
+      "GitHub runner emitted the existing Node 20 deprecation warning for actions/checkout@v4; it was forced to Node 24 and did not affect assurance."
     ],
     "unresolved_blockers": []
   },
   "rollback": "Revert only the final-integration admission handshakes and expanded hold semantics, restoring the prior PDC v1 readiness-lane timing while preserving the lane identity, historical evidence and the fail-closed stable-main guard.",
+  "delegated_rationale": "The corrected exact-head candidate passed profile, canonical unittest, pytest-unittest parity, runner parity and merge readiness while the serialized lane held current main stable; the adversarial status-only admission race was reproduced, corrected and re-proved; no reserved authority delta or blocking review remains.",
   "merge_commit": null,
   "next_packet": null,
-  "status": "QA_REVIEW_PENDING_CURRENT_MAIN_RECONCILIATION_AND_EXACT_HEAD_PASS"
+  "status": "APPROVED_PENDING_FINAL_RECORD_HEAD_ASSURANCE_AND_SQUASH_MERGE"
 }
