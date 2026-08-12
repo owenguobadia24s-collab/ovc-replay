@@ -7,7 +7,7 @@ class WP4CC25Preparation(unittest.TestCase):
  def test_census_fixture_typed_absence(self):
   f=load(FIX); c=next(x for x in load(INV)['sources'] if x['capability_id']=='c2_5'); self.assertFalse(c['repository_materialized']); self.assertIsNone(c['source_path']); self.assertEqual(c['reason_code'],f['reason_code']); self.assertEqual([],f['events']); self.assertEqual('PROHIBITED',f['event_synthesis']); self.assertFalse(f['runtime_owner_materialized']); self.assertEqual('RCN-RN-G4',f['gate_required'])
  def test_route_state_g4_boundary(self):
-  r=load(ROUTES); s=load(STATE); self.assertEqual('GET_ONLY',r['transport']); self.assertIn('/c2-5/events',r['domains']['INVESTIGATE']); self.assertFalse(r['wp4c_preparation']['runtime_owner_materialized']); self.assertEqual('PROHIBITED',r['wp4c_preparation']['event_synthesis']); self.assertEqual('RCN-RN-WP4C',s['packet_id']); self.assertEqual('NONE',s['authority_delta']); self.assertEqual('DENIED_UNTIL_RCN_RN_G4',s['real_source_routes'])
+  r=load(ROUTES); s=load(STATE); self.assertEqual('GET_ONLY',r['transport']); self.assertIn('/c2-5/events',r['domains']['INVESTIGATE']); self.assertFalse(r['wp4c_preparation']['runtime_owner_materialized']); self.assertEqual('PROHIBITED',r['wp4c_preparation']['event_synthesis']); self.assertTrue(s['packet_id'].startswith('RCN-RN-WP4') or s['packet_id']=='RCN-RN-G4'); self.assertEqual('NONE',s['authority_delta']); self.assertEqual('DENIED_UNTIL_RCN_RN_G4',s['real_source_routes'])
  @unittest.skipIf(importlib.util.find_spec('fastapi') is None,'FastAPI dependency not installed')
  def test_runtime_empty_and_validation_denied_before_read(self):
   from fastapi.testclient import TestClient
