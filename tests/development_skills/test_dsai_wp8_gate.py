@@ -22,7 +22,7 @@ CANDIDATES = ROOT / "registries/development/skills/orchestration_candidates_v0_1
 TRUSTED = ROOT / "registries/development/skills/trusted_promotions_v0_1.json"
 STATE = ROOT / "registries/implementation/dsai/OVC_DSAI_STATE_v0_18.json"
 POINTER = ROOT / "registries/implementation/dsai/CURRENT_STATE_POINTER.json"
-BASELINE = "119e07a41a4b1bf3e4f9d598424a71cb488428b6"
+BASELINE = "a69bf6c1c7a2febcaf5db71eddbf1ac43083ea3a"
 ENVIRONMENT = "windows-local-python311"
 PACKET_EXECUTOR_RELEASE = "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130"
 
