@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-c2p2-blocker/v1",
+  "packet_id": "C2P2-WP1",
+  "status": "RESOLVED",
+  "blocker_id": "C2P2-WP1-CROSS-PROGRAMME-PR649-METADATA-MUTATION",
+  "observed_at": "2026-08-12T18:21:51+01:00",
+  "resolved_at": "2026-08-12T21:17:56+01:00",
+  "affected_external_pr": {
+    "number": 649,
+    "title": "DSAI-WP9: reconcile current main into G9A preparation branch",
+    "programme": "DSAI",
+    "preincident_state": "CLOSED",
+    "preincident_closed_at": "2026-08-12T17:48:42Z",
+    "postrepair_state": "CLOSED",
+    "branch_history_rewritten": false,
+    "force_push": false,
+    "main_changed_by_incident": false,
+    "body_restored_exactly": true
+  },
+  "incident": "A stale PR-number assumption caused C2P execution to target PR #649 while attempting to close a superseded C2P PR. GitHub revealed #649 was an already-closed DSAI PR. The PR was returned to CLOSED; its body was later recovered from GitHub's authoritative PR search record and restored exactly.",
+  "authoritative_recovery": {
+    "source": "GitHub search_prs record for exact PR title/number",
+    "recovered_body": "Non-authority main-head reconciliation only. Merge current main 0f6cffd8e1c1fac50a958152fe5edc5a070467f3 into feature/dsai-wp9-git-merge-qualification so final G9A evidence is tested against the latest lawful main after CIPR-WP0-WP2 changed CI infrastructure. No DSAI authority delta, no merge into main, no force-push/history rewrite.",
+    "verified_current_pr_state": "CLOSED_UNMERGED",
+    "verified_current_body_matches": true
+  },
+  "evidence": {
+    "github_issue_event_closed_id": 29356159478,
+    "github_issue_event_reopened_id": 29358242286,
+    "preincident_closed_event_time": "2026-08-12T17:48:42Z",
+    "repair_closed_time": "2026-08-12T18:21:51Z",
+    "body_restore_github_updated_at": "2026-08-12T20:17:56Z"
+  },
+  "authority_effect": "NONE_ON_C2P_RUNTIME; CROSS_PROGRAMME_METADATA_INTEGRITY_RESTORED",
+  "resolution": "Original PR #649 body restored exactly from authoritative GitHub record. Mandatory safety blocker satisfied.",
+  "continuation_point": "C2P2-WP1 branch build/c2p2-wp1-contracts-v3 remains preserved; current main must be re-preflighted before further C2P mutation because main advanced after this branch baseline.",
+  "rollback": "No branch/history rollback required. PR #649 remains CLOSED and unmerged with its recovered original body."
+}

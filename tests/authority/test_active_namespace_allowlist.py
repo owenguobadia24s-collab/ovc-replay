@@ -21,6 +21,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.opt_b.c2",
     "ovc.opt_b.c2_vnext",
     "ovc.opt_b.c2e_v2",
+    "ovc.opt_b.c2p_v0_2",
     "ovc.opt_b.esl",
     "ovc.opt_b.market_grammar",
     "ovc.opt_b.sfc",
@@ -96,6 +97,20 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("replace the boundary pack", init_text)
         self.assertIn("validation", init_text)
         self.assertIn("execution", init_text)
+
+    def test_c2p_v0_2_namespace_is_inactive_conformance_only(self) -> None:
+        init_text = (SRC / "ovc" / "opt_b" / "c2p_v0_2" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("inactive", init_text)
+        self.assertIn("conformance-only", init_text)
+        self.assertIn("no active market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("empirical objectpack", init_text)
+        self.assertIn("real-source replay", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("publication", init_text)
+        self.assertIn("execution authority", init_text)
+        self.assertIn("agent-write", init_text)
+        self.assertIn("fail closed", init_text)
 
     def test_esl_namespace_is_inactive_conformance_only(self) -> None:
         init_text = (SRC / "ovc" / "opt_b" / "esl" / "__init__.py").read_text(encoding="utf-8").lower()
