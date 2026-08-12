@@ -211,7 +211,7 @@ class DSAIWP8OrchestrationTests(unittest.TestCase):
             source_refs=["OVC-DSA-DESIGN-SPEC-0.1-REVISED-1-RATIFIED#9-10", "OVC-DSAI-IMPLEMENTATION-PLAN-0.2#15"],
         )
         self.assertEqual(release["release_id"], self.candidate["release_id"])
-        self.assertEqual(self.candidate["maturity"], "EXPERIMENTAL")
+        self.assertEqual(self.candidate["maturity"], "QUALIFIED")
         self.assertEqual(self.candidate["write_permission"], "DENY")
         self.assertEqual(self.candidate["merge_permission"], "DENY")
 
