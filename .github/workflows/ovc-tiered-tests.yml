@@ -95,34 +95,107 @@ jobs:
     steps:
       - run: echo "Compatibility context passed after ${{ needs.profile.outputs.selected_profile }} profile assurance."
 
-  canonical-tests-observed:
-    name: OVC canonical tests observed
-    needs: profile
+  merge-readiness:
+    name: OVC merge readiness
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 22
+    concurrency:
+      group: ovc-main-final-integration-window-v2
+      cancel-in-progress: false
     steps:
-      - name: Observe required Python checks before integration-lane acquisition
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Acquire serialized final-integration window on current main
+        id: acquire
         uses: actions/github-script@v9
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const pr = context.payload.pull_request;
-            const sha = pr?.head?.sha || context.sha;
-            const requiredNames = ['tests', 'pytest-unittest-parity', 'runner-parity'];
+            const sha = pr.head.sha;
+            const startedAt = Date.now();
+            const mainAtStart = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+            const mainSnapshot = mainAtStart.data.commit.sha;
+            const emitMetric = result => core.info(`OVC_CI_METRIC ${JSON.stringify({
+              schema: 'ovc-ci-metric/v1',
+              metric: 'final_integration_window_acquisition_ms',
+              value_ms: Date.now() - startedAt,
+              head_sha: sha,
+              base_sha: mainSnapshot,
+              result
+            })}`);
+
+            if (mainSnapshot !== pr.base.sha) {
+              emitMetric('FAIL_BASE_MOVED_BEFORE');
+              core.setFailed(`OVC_BASE_MOVED_BEFORE_READINESS: event base ${pr.base.sha}, current ${pr.base.ref} ${mainSnapshot}. Reconcile the candidate to current main before final required-check assurance.`);
+              return;
+            }
+
+            core.setOutput('base_sha', mainSnapshot);
+            core.setOutput('head_sha', sha);
+            emitMetric('ACQUIRED');
+            core.info(`OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED: ${pr.base.ref}@${mainSnapshot} for ${sha}. Required Python assurance may now start.`);
+      - name: Prove candidate contains the acquired main base
+        shell: bash
+        env:
+          OVC_WINDOW_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
+          OVC_WINDOW_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${OVC_WINDOW_BASE_SHA}" || -z "${OVC_WINDOW_HEAD_SHA}" ]]; then
+            echo "::error title=Final integration window not acquired::Missing acquired base/head identity."
+            exit 1
+          fi
+          git cat-file -e "${OVC_WINDOW_BASE_SHA}^{commit}"
+          git cat-file -e "${OVC_WINDOW_HEAD_SHA}^{commit}"
+          if ! git merge-base --is-ancestor "${OVC_WINDOW_BASE_SHA}" "${OVC_WINDOW_HEAD_SHA}"; then
+            echo "::error title=Candidate not reconciled to current main::OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_WINDOW_HEAD_SHA} does not contain acquired main ${OVC_WINDOW_BASE_SHA}. Reconcile before final assurance."
+            exit 1
+          fi
+      - name: Hold window through final required-check assurance and stable-main readiness
+        uses: actions/github-script@v9
+        env:
+          OVC_WINDOW_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
+          OVC_WINDOW_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const sha = process.env.OVC_WINDOW_HEAD_SHA;
+            const mainSnapshot = process.env.OVC_WINDOW_BASE_SHA;
+            const requiredNames = ['tests', 'pytest-unittest-parity', 'runner-parity', 'OVC profile assurance'];
             const startedAt = Date.now();
             const deadline = startedAt + 20 * 60 * 1000;
             const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
             const emitMetric = result => core.info(`OVC_CI_METRIC ${JSON.stringify({
               schema: 'ovc-ci-metric/v1',
-              metric: 'canonical_tests_observation_wait_ms',
+              metric: 'final_integration_window_hold_ms',
               value_ms: Date.now() - startedAt,
               head_sha: sha,
+              base_sha: mainSnapshot,
               required_checks: requiredNames,
               result
             })}`);
+            const latestNamedRun = (runs, name) => {
+              const matches = runs.filter(run => run.name === name).sort((a, b) => b.id - a.id);
+              return matches[0];
+            };
 
             while (Date.now() < deadline) {
+              const mainNow = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+              const currentMain = mainNow.data.commit.sha;
+              if (currentMain !== mainSnapshot) {
+                emitMetric('FAIL_BASE_MOVED_DURING');
+                core.setFailed(`OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved from ${mainSnapshot} to ${currentMain} while the serialized final-integration window was active. Fresh reconciliation and assurance are required.`);
+                return;
+              }
+
               const response = await github.rest.checks.listForRef({
                 owner,
                 repo,
@@ -130,89 +203,28 @@ jobs:
                 per_page: 100,
                 filter: 'latest'
               });
-              const required = requiredNames.map(name => response.data.check_runs.find(run => run.name === name));
+              const required = requiredNames.map(name => latestNamedRun(response.data.check_runs, name));
               const failed = required.find(run => run && run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
               if (failed) {
-                emitMetric(`FAIL_${failed.name}_${failed.conclusion}`);
-                core.setFailed(`Required Python check ${failed.name} concluded ${failed.conclusion}.`);
+                emitMetric(`FAIL_REQUIRED_${failed.name}_${failed.conclusion}`);
+                core.setFailed(`Required final-assurance check ${failed.name} concluded ${failed.conclusion} while the serialized window was held.`);
                 return;
               }
               const allSuccessful = required.every(run => run && run.status === 'completed' && run.conclusion === 'success');
               if (allSuccessful) {
+                const mainAtEnd = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+                const finalMain = mainAtEnd.data.commit.sha;
+                if (finalMain !== mainSnapshot) {
+                  emitMetric('FAIL_BASE_MOVED_DURING');
+                  core.setFailed(`OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved from ${mainSnapshot} to ${finalMain}. Fresh integration assurance is required.`);
+                  return;
+                }
                 emitMetric('PASS');
-                core.info(`All required Python checks observed successful on ${sha}; final integration lane may now be acquired.`);
+                core.info(`OVC_FINAL_INTEGRATION_WINDOW_PASS: required checks passed on ${sha} while ${pr.base.ref} remained ${mainSnapshot}.`);
                 return;
               }
               await sleep(10000);
             }
+
             emitMetric('TIMEOUT');
-            core.setFailed(`Required Python checks did not all complete successfully within the observation window for ${sha}.`);
-
-  merge-readiness:
-    name: OVC merge readiness
-    needs: [profile, canonical-tests-observed]
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    concurrency:
-      group: ovc-main-integration-lane-v1
-      cancel-in-progress: false
-    steps:
-      - name: Evaluate exact-head checks on a stable main snapshot
-        uses: actions/github-script@v9
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const pr = context.payload.pull_request;
-            const sha = pr?.head?.sha || context.sha;
-            const requiredNames = ['tests', 'pytest-unittest-parity', 'runner-parity'];
-            const startedAt = Date.now();
-            const emitMetric = result => core.info(`OVC_CI_METRIC ${JSON.stringify({
-              schema: 'ovc-ci-metric/v1',
-              metric: 'integration_lane_evaluation_ms',
-              value_ms: Date.now() - startedAt,
-              head_sha: sha,
-              required_checks: requiredNames,
-              result
-            })}`);
-
-            let mainSnapshot = null;
-            if (pr) {
-              const mainAtStart = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
-              mainSnapshot = mainAtStart.data.commit.sha;
-              if (mainSnapshot !== pr.base.sha) {
-                emitMetric('FAIL_BASE_MOVED_BEFORE');
-                core.setFailed(`OVC_BASE_MOVED_BEFORE_READINESS: event base ${pr.base.sha}, current ${pr.base.ref} ${mainSnapshot}. Rerun against the current base before merge readiness.`);
-                return;
-              }
-              core.info(`OVC integration lane acquired at ${pr.base.ref}@${mainSnapshot} after required Python checks were observed successful.`);
-            }
-
-            const response = await github.rest.checks.listForRef({
-              owner,
-              repo,
-              ref: sha,
-              per_page: 100,
-              filter: 'latest'
-            });
-            const required = requiredNames.map(name => response.data.check_runs.find(run => run.name === name));
-            const failed = required.find(run => run && run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
-            const allSuccessful = required.every(run => run && run.status === 'completed' && run.conclusion === 'success');
-            if (!allSuccessful) {
-              emitMetric(failed ? `FAIL_REQUIRED_${failed.name}_${failed.conclusion}` : 'FAIL_REQUIRED_NOT_ALL_SUCCESSFUL');
-              core.setFailed(failed ? `Required Python check ${failed.name} concluded ${failed.conclusion}.` : `Required Python checks were not all successful at final readiness evaluation for ${sha}.`);
-              return;
-            }
-
-            if (pr) {
-              const mainAtEnd = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
-              const finalMain = mainAtEnd.data.commit.sha;
-              if (finalMain !== mainSnapshot) {
-                emitMetric('FAIL_BASE_MOVED_DURING');
-                core.setFailed(`OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved from ${mainSnapshot} to ${finalMain}. Fresh integration assurance is required.`);
-                return;
-              }
-            }
-
-            emitMetric('PASS');
-            core.info(`Required Python checks passed on ${sha} with stable main snapshot ${mainSnapshot || 'NOT_APPLICABLE'}.`);
+            core.setFailed(`Required final-assurance checks did not all complete successfully within the serialized window for ${sha}.`);
