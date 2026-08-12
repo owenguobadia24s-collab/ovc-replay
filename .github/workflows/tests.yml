@@ -28,6 +28,35 @@ jobs:
       - name: Complete repository suite
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
 
+  pytest-unified:
+    name: pytest-unified
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pytest test extra
+        run: python3 -m pip install -e ".[test]"
+      - name: Execute intended unified pytest surface
+        shell: bash
+        run: |
+          set +e
+          python3 -m pytest tests > /tmp/pytest-unified.log 2>&1
+          status=$?
+          cat /tmp/pytest-unified.log
+          if [ "$status" -ne 0 ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/pytest-unified.log').read_text(encoding='utf-8', errors='replace')
+          tail = text[-7000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print(f'::error title=Unified pytest admission failure::{tail}')
+          PY
+          fi
+          exit "$status"
+
   pytest-unittest-parity:
     name: pytest-unittest-parity
     runs-on: ubuntu-latest
