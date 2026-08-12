@@ -1,0 +1,27 @@
+{
+  "schema": "ovc-c2p2-wp0-qa-packet/v1",
+  "packet_id": "C2P2-WP0",
+  "gate_id": "C2P2-G0",
+  "baseline_commit": "2eff94425606df77eb037a717de662e5c7b7c47b",
+  "qa_recommendation": "PASS_PENDING_EXACT_HEAD_CI",
+  "checks": {
+    "ratified_plan_identity": "PASS",
+    "frozen_design_identity": "PASS",
+    "active_stack_reconciliation": "PASS",
+    "upstream_authority_non_mutation": "PASS",
+    "c2p_runtime_remains_inactive": "PASS",
+    "empirical_pack_selection": "NONE",
+    "validation_consumption": "NONE",
+    "concurrent_overlap": "NONBLOCKING_MONITOR_MAIN_HEAD",
+    "programme_state_schema_static_test": "PENDING_CI",
+    "complete_repository_suite": "PENDING_CI",
+    "tiered_final_head_assurance": "PENDING_CI"
+  },
+  "warnings": [
+    "Ratified plan self-SHA is not embedded in the supplied ratified source; exact plan ID/version/ratification/source reference are pinned instead.",
+    "Concurrent CI/test-runner PRs #638 and #639 may move main; re-preflight is mandatory before merge."
+  ],
+  "blockers": [],
+  "authority_delta": "COURT_RECORD_MATERIALISATION_ONLY",
+  "rollback": "Close packet branch before merge or forward-supersede after merge; preserve operator decision and governing source identities."
+}
