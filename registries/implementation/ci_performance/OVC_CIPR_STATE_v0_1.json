@@ -3,28 +3,36 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
   "integration_baseline_commit": "2eff94425606df77eb037a717de662e5c7b7c47b",
   "branch": "build/ci-performance-remediation-v0-1",
   "packet_id": "CIPR-WP0-WP2-GROUPED",
   "prerequisites": [
-    "OVC-DEV-ACCEL-v0.2 complete enough to require canonical exact-head assurance",
+    "OVC-DEV-ACCEL-v0.2 exact-head canonical assurance",
     "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1 COMPLETED",
     "complete CI-performance audit 2026-08-12",
     "CIPR-G0 bounded operator instruction PASS"
   ],
   "authority_required": "NONE_FOR_WP0_WP2",
   "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
-  "candidate_commit": null,
+  "candidate_commit": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
   "tests": [
-    "PENDING exact-head repository suite",
-    "PENDING exact-head OVC tiered/profile assurance",
-    "PENDING tests/development/test_ci_performance_remediation.py"
+    "GitHub Actions tests run 31619766219 / #3634 PASS on reconciled implementation head",
+    "GitHub Actions tiered run 31619766213 / #2005 PASS on reconciled implementation head",
+    "OVC canonical tests observed job 94191496511 PASS",
+    "OVC merge readiness job 94192102168 PASS",
+    "zero review threads"
   ],
-  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PLAN.json",
+  "metrics": {
+    "canonical_tests_observation_wait_ms": 124206,
+    "integration_lane_evaluation_ms": 970
+  },
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
   "decision_record": [
-    "docs/releases/ci-performance-remediation-v0-1/cipr-g0/CIPR_G0_OPERATOR_INSTRUCTION.json"
+    "docs/releases/ci-performance-remediation-v0-1/cipr-g0/CIPR_G0_OPERATOR_INSTRUCTION.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_G1_DELEGATED_DECISION.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_G2_DELEGATED_DECISION.json"
   ],
   "dependency_footprint": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_DEPENDENCY_FOOTPRINT.json",
   "head_movement_receipts": [
@@ -32,11 +40,12 @@
   ],
   "merge_commit": null,
   "blockers": [],
+  "nonblocking_warnings": ["actions/github-script@v7 Node target deprecation warning; runner forced Node 24 successfully; carry to WP3 hygiene"],
   "next_packet": "CIPR-WP3",
   "operator_stop_gate": "CIPR-G4-SUITE-TOPOLOGY",
   "notes": [
-    "Active PYT-WP1 PR #638 overlaps tests.yml; grouped WP0-WP2 deliberately does not modify tests.yml.",
-    "Canonical complete-suite command remains frozen and unchanged through CIPR-G4.",
-    "Main movement 3057d42.. -> 2eff944.. classified IRRELEVANT under PDC v0.1 and reconciled without scientific re-preflight."
+    "Canonical tests.yml remains byte-identical to the baseline binding through CIPR-G4.",
+    "Main movement 3057d42.. -> 2eff944.. classified IRRELEVANT and reconciled without scientific re-preflight.",
+    "G1 and G2 delegated PASS are materialised; this court-record commit must itself receive fresh exact-head repository/tiered assurance before squash merge."
   ]
 }

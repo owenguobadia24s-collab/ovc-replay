@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-delegated-gate-decision/v1",
+  "decision_id": "CIPR-G1-DELEGATED-PASS-2026-08-12",
+  "gate_id": "CIPR-G1",
+  "gate_title": "Integration-lane wait relocation",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "authority": "DELEGATED_BY_OPERATOR_RATIFIED_PLAN",
+  "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+  "candidate_commit": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
+  "completed_packets": ["CIPR-WP0", "CIPR-WP1"],
+  "current_authority": "PDC_GLOBAL_FINAL_INTEGRATION_SERIALIZATION_WITH_EXACT_HEAD_CANONICAL_ASSURANCE",
+  "proposed_delta": "MOVE_CANONICAL_TEST_WAIT_OUTSIDE_SERIAL_LANE_WHILE_RETAINING_SERIAL_FINAL_EVALUATION",
+  "authority_effect": "NONE_OUTSIDE_DEVELOPMENT_CI_ORCHESTRATION",
+  "acceptance": "PASS_ALL",
+  "tests": {
+    "canonical_tests_run": 31619766219,
+    "tiered_run": 31619766213,
+    "merge_readiness_job": 94192102168,
+    "result": "PASS"
+  },
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "warnings": ["GITHUB_SCRIPT_V7_NODE_TARGET_DEPRECATION_NON_BLOCKING"],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "rollback": "Restore prior polling-inside-lane workflow non-destructively; preserve evidence.",
+  "decision": "PASS",
+  "non_reserved_rationale": "The change alters only deterministic CI scheduling mechanics inside the explicitly ratified remediation plan. It retains the globally serialized final readiness evaluation, exact-head canonical suite, stable-main checks, rollback and all scientific/authority denials.",
+  "merge_sha": null,
+  "next_packet": "CIPR-WP2"
+}

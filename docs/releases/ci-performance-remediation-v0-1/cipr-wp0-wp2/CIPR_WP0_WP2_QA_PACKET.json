@@ -1,0 +1,86 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "gate_ids": ["CIPR-G1", "CIPR-G2"],
+  "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+  "integration_baseline_commit": "2eff94425606df77eb037a717de662e5c7b7c47b",
+  "assured_implementation_head": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
+  "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
+  "acceptance": {
+    "canonical_tests_workflow_unchanged": "PASS",
+    "two_pr_listener_surface_preserved": "PASS",
+    "per_pr_cancellation_preserved": "PASS",
+    "canonical_test_wait_outside_global_lane": "PASS",
+    "global_lane_retained_once_on_final_readiness": "PASS",
+    "polling_removed_from_global_lane": "PASS",
+    "stable_main_fail_closed_checks_retained": "PASS",
+    "exact_head_tests_rechecked_inside_final_readiness": "PASS",
+    "structured_latency_metrics_present": "PASS",
+    "canonical_repository_suite": "PASS",
+    "tiered_profile_assurance": "PASS",
+    "merge_readiness": "PASS",
+    "review_threads": "PASS_ZERO"
+  },
+  "tests": [
+    {
+      "workflow": "tests",
+      "run_id": 31619766219,
+      "run_number": 3634,
+      "job_id": 94191391463,
+      "head": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
+      "result": "PASS",
+      "job_started_at": "2026-08-12T16:52:27Z",
+      "job_completed_at": "2026-08-12T16:54:50Z",
+      "complete_suite_step_seconds": 138
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 31619766213,
+      "run_number": 2005,
+      "head": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
+      "result": "PASS",
+      "profile": "FINAL_HEAD",
+      "profile_assurance_job_id": 94191447048,
+      "canonical_observer_job_id": 94191496511,
+      "merge_readiness_job_id": 94192102168
+    }
+  ],
+  "performance_evidence": {
+    "canonical_tests_observation_wait_ms": 124206,
+    "integration_lane_evaluation_ms": 970,
+    "architectural_result": "PASS_HEAD_OF_LINE_WAIT_REMOVED_FROM_GLOBAL_LANE",
+    "interpretation": "The long canonical-test wait occurred in the non-serial observer. The repository-wide integration lane was held for the final evaluation only, approximately 0.97 seconds of measured evaluator time. Heavy canonical-suite compute remains intentionally unchanged pending CIPR-G4."
+  },
+  "head_movement": {
+    "receipt": "CIPR_HEAD_MOVEMENT_3057_TO_2EFF.json",
+    "classification": "IRRELEVANT",
+    "reconciled": true,
+    "scientific_repreflight_required": false
+  },
+  "warnings": [
+    {
+      "id": "GITHUB_SCRIPT_V7_NODE_TARGET_DEPRECATION",
+      "severity": "NON_BLOCKING_HYGIENE",
+      "detail": "GitHub runner emitted a warning that actions/github-script@v7 targets Node 20 and is being forced onto Node 24. The action completed successfully. Dependency-version hygiene is eligible for CIPR-WP3 classification/remediation without changing assurance semantics."
+    }
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "review_threads": 0,
+  "changed_files": [
+    ".github/workflows/ovc-tiered-tests.yml",
+    "tests/development/test_ci_performance_remediation.py",
+    "docs/plans/development/OVC_CI_PERFORMANCE_REMEDIATION_PROTOCOL_v0_1.md",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-g0/CIPR_G0_OPERATOR_INSTRUCTION.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PLAN.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_DEPENDENCY_FOOTPRINT.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_3057_TO_2EFF.json",
+    "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_1.json"
+  ],
+  "external_artifacts": [],
+  "rollback": "Non-destructively revert/supersede the observer/readiness relocation to restore the prior PDC polling-inside-lane implementation. Preserve the audit, plan, QA, decisions and CI logs. No force-push/history rewrite.",
+  "qa_recommendation": "PASS",
+  "next": "Commit delegated G1/G2 decisions, rerun exact-head integration assurance on that court-record head, then squash-merge if main remains the reconciled lawful base."
+}
