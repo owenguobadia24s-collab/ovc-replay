@@ -1,0 +1,90 @@
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+import unittest
+
+
+ROOT = Path(__file__).resolve().parents[2]
+POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_1.json"
+SCRIPT_PATH = ROOT / "scripts/development/ci_workflow_inventory.py"
+
+spec = importlib.util.spec_from_file_location("ci_workflow_inventory", SCRIPT_PATH)
+assert spec and spec.loader
+inventory_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(inventory_module)
+
+
+class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
+    def setUp(self):
+        self.policy = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
+        self.inventory = inventory_module.build_inventory(ROOT, self.policy)
+
+    def test_inventory_matches_repository_count_and_is_exhaustive(self):
+        inventory_module.validate_inventory(self.inventory, self.policy)
+        self.assertEqual(self.inventory["total_workflow_definitions"], 129)
+        self.assertEqual(sum(self.inventory["category_counts"].values()), 129)
+        self.assertTrue(set(self.inventory["category_counts"]).issubset(set(self.policy["categories"])))
+        print(
+            "OVC_CI_WORKFLOW_CENSUS "
+            + json.dumps(
+                {
+                    "total_workflow_definitions": self.inventory["total_workflow_definitions"],
+                    "category_counts": self.inventory["category_counts"],
+                    "trigger_counts": self.inventory["trigger_counts"],
+                },
+                sort_keys=True,
+            )
+        )
+
+    def test_actions_registry_and_repository_definition_layers_are_distinct(self):
+        snapshot = self.policy["snapshot"]
+        self.assertEqual(snapshot["github_actions_registered_total_count"], 175)
+        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 129)
+        self.assertEqual(snapshot["registration_count_excess"], 46)
+        self.assertEqual(
+            snapshot["registration_count_excess_interpretation"],
+            "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK",
+        )
+
+    def test_exactly_two_approved_pull_request_listeners_remain(self):
+        pr_paths = sorted(
+            record["path"]
+            for record in self.inventory["records"]
+            if "pull_request" in record["triggers"]
+        )
+        self.assertEqual(pr_paths, sorted(self.policy["approved_pull_request_workflows"]))
+        self.assertEqual(self.inventory["category_counts"]["CURRENT_PR_CI"], 2)
+
+    def test_classification_is_deterministic(self):
+        second = inventory_module.build_inventory(ROOT, self.policy)
+        self.assertEqual(self.inventory, second)
+
+    def test_non_pr_workflows_are_classified_without_mutation(self):
+        non_pr = [record for record in self.inventory["records"] if "pull_request" not in record["triggers"]]
+        self.assertEqual(len(non_pr), 127)
+        allowed = {"TEMPORARY", "HISTORICAL_MANUAL_VERIFICATION", "ACTIVE_MANUAL_OPERATION"}
+        self.assertTrue(all(record["category"] in allowed for record in non_pr))
+        self.assertFalse(self.inventory["destructive_actions_performed"])
+
+    def test_policy_prohibits_destructive_cleanup_in_wp3(self):
+        governance = self.policy["governance"]
+        self.assertTrue(governance["classification_only"])
+        self.assertEqual(governance["workflow_deletion"], "PROHIBITED")
+        self.assertEqual(governance["workflow_disablement"], "PROHIBITED_BY_THIS_PACKET")
+        self.assertEqual(governance["trigger_mutation"], "PROHIBITED_BY_THIS_PACKET")
+        self.assertEqual(governance["required_check_mutation"], "PROHIBITED_BY_THIS_PACKET")
+        self.assertEqual(governance["historical_evidence_preservation"], "REQUIRED")
+        self.assertEqual(governance["registry_repository_count_mismatch"], "OBSERVE_AND_RECORD_ONLY")
+
+    def test_repository_categories_are_observable_without_requiring_temp_presence(self):
+        categories = self.inventory["category_counts"]
+        self.assertGreater(categories.get("HISTORICAL_MANUAL_VERIFICATION", 0), 0)
+        self.assertGreater(categories.get("ACTIVE_MANUAL_OPERATION", 0), 0)
+        self.assertGreaterEqual(categories.get("TEMPORARY", 0), 0)
+        self.assertIn("TEMPORARY", self.policy["rules"])
+
+
+if __name__ == "__main__":
+    unittest.main()

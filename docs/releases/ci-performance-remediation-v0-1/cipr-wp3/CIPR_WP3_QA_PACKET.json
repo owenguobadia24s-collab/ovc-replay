@@ -1,0 +1,92 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "CIPR-WP3",
+  "gate_ids": ["CIPR-G3"],
+  "baseline_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+  "assured_head": "c48a520f0abaa2c8236827c7902e782a9fc900bc",
+  "authority_delta": "NONE_CLASSIFICATION_ONLY",
+  "acceptance": {
+    "repository_workflow_definition_count_129": "PASS",
+    "external_actions_registry_count_175_recorded_separately": "PASS",
+    "gross_count_difference_46_is_diagnostic_only": "PASS",
+    "all_repository_definitions_classified_exactly_once": "PASS",
+    "approved_pull_request_listener_count_2": "PASS",
+    "historical_manual_category_represented": "PASS_107",
+    "active_manual_category_represented": "PASS_20",
+    "temporary_repository_category": "PASS_ZERO_PRESENT",
+    "no_workflow_deletion_or_disablement": "PASS",
+    "no_trigger_or_required_check_mutation": "PASS",
+    "historical_evidence_preservation": "PASS",
+    "tests": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "tiered_profile_assurance": "PASS_FINAL_HEAD",
+    "canonical_observer": "PASS",
+    "merge_readiness": "PASS_STABLE_MAIN",
+    "review_threads": "PASS_ZERO"
+  },
+  "tests": [
+    {
+      "workflow_run": 31625068355,
+      "head": "c48a520f0abaa2c8236827c7902e782a9fc900bc",
+      "jobs": {
+        "tests": {"job_id": 94209239198, "result": "PASS"},
+        "pytest-unittest-parity": {"job_id": 94209239131, "result": "PASS"},
+        "runner-parity": {"job_id": 94209239259, "result": "PASS"}
+      }
+    },
+    {
+      "workflow_run": 31625068367,
+      "head": "c48a520f0abaa2c8236827c7902e782a9fc900bc",
+      "jobs": {
+        "OVC profile assurance": {"job_id": 94209239487, "result": "PASS_FINAL_HEAD"},
+        "OVC canonical tests observed": {"job_id": 94209298137, "result": "PASS"},
+        "OVC tiered test selection shadow": {"job_id": 94209298218, "result": "PASS"},
+        "OVC merge readiness": {"job_id": 94210080690, "result": "PASS"}
+      }
+    }
+  ],
+  "performance_evidence": {
+    "canonical_tests_observation_wait_ms": 157329,
+    "integration_lane_evaluation_ms": 646,
+    "result": "PASS_REQUIRED_CHECK_WAIT_OUTSIDE_GLOBAL_LANE"
+  },
+  "workflow_census": {
+    "snapshot": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_WORKFLOW_CENSUS_SNAPSHOT.json",
+    "repository_total": 129,
+    "external_registry_total": 175,
+    "gross_difference": 46,
+    "category_counts": {
+      "CURRENT_PR_CI": 2,
+      "TEMPORARY": 0,
+      "HISTORICAL_MANUAL_VERIFICATION": 107,
+      "ACTIVE_MANUAL_OPERATION": 20
+    },
+    "trigger_counts": {
+      "pull_request": 2,
+      "push": 15,
+      "workflow_dispatch": 121,
+      "schedule": 0,
+      "workflow_call": 0,
+      "workflow_run": 0
+    }
+  },
+  "initial_failure": {
+    "head": "26b726c53b842ceb424c4bda4866e8a416c6bf4b",
+    "classification": "CORRECTABLE_IN_SCOPE",
+    "cause": "Initial QA incorrectly equated the external GitHub Actions registered workflow count with current repository workflow definitions.",
+    "repair": "Separated inventory layers and retained the external/repository count mismatch as diagnostic drift only; no acceptance condition was weakened."
+  },
+  "warnings": [
+    "Generic actions/checkout@v4 and actions/setup-python@v5 Node-target runner warnings remain non-blocking upstream-action hygiene; WP3 makes no action-version mutations."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "review_threads": 0,
+  "external_artifacts": [],
+  "rollback": "Revert/supersede only the workflow governance policy, classifier, census and WP3 QA/decision records. Do not delete, disable or mutate workflow definitions or external workflow registrations.",
+  "qa_recommendation": "PASS",
+  "next": "Materialise delegated CIPR-G3 PASS, rerun exact-head required CI on the court-record decision head, then squash-merge if main remains stable."
+}
