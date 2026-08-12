@@ -30,7 +30,10 @@ def load_active_stack(repository_root: Path) -> dict[str, Any]:
     state = _read_json(repository_root / state_rel)
     if state.get("programme_id") != pointer.get("programme_id"):
         raise ActiveStackError("ACTIVE_STACK_POINTER_PROGRAMME_MISMATCH")
-    if state.get("status") not in {"QA_REVIEW", "COMPLETED"}:
+    # QA_REVIEW is usable on an isolated candidate branch, APPROVED after the
+    # delegated implementation-assurance gate, and COMPLETED after main merge.
+    # All other terminal/failure states fail closed.
+    if state.get("status") not in {"QA_REVIEW", "APPROVED", "COMPLETED"}:
         raise ActiveStackError(f"ACTIVE_STACK_NOT_USABLE:{state.get('status')}")
     if state.get("active_spine") != ["OPT-A", "OPT-B.C1.v2", "OPT-B.C2.vNext", "OPT-B.C2E.v0.2"]:
         raise ActiveStackError("ACTIVE_STACK_SPINE_MISMATCH")

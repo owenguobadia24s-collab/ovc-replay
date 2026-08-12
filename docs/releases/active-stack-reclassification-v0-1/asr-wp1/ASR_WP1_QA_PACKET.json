@@ -6,7 +6,7 @@
   "baseline_main": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
   "assured_main_base": "119e07a41a4b1bf3e4f9d598424a71cb488428b6",
   "assured_candidate_head": "253e8e643395ca8714def5011e1ac35823ae2bf9",
-  "status": "PASS",
+  "status": "PASS_PENDING_CORRECTIVE_EXACT_HEAD_RERUN",
   "checks": {
     "operator_authority_exactly_bound": "PASS",
     "c1_v2_preserved_active": "PASS",
@@ -21,10 +21,13 @@
     "frozen_pg_pgn_snapshot_not_retroactively_mutated": "PASS",
     "current_runtime_namespace_declarations_consistent": "PASS",
     "current_implementation_registry_consistent": "PASS",
-    "repository_suite": "PASS_RUN_31598320224",
-    "final_head_assurance": "PASS_RUN_31598320206_JOB_94119187648",
-    "compatibility": "PASS_RUN_31598320206_JOB_94119238562",
-    "merge_readiness": "PASS_RUN_31598320206_JOB_94119238903",
+    "pre_gate_repository_suite": "PASS_RUN_31598320224",
+    "pre_gate_final_head_assurance": "PASS_RUN_31598320206_JOB_94119187648",
+    "pre_gate_compatibility": "PASS_RUN_31598320206_JOB_94119238562",
+    "pre_gate_merge_readiness": "PASS_RUN_31598320206_JOB_94119238903",
+    "decision_head_tiered_assurance": "PASS_RUN_31598838898",
+    "decision_head_repository_suite": "FAIL_RUN_31598838882_CORRECTABLE_RESOLVER_STATE_MACHINE_DEFECT",
+    "corrective_exact_head_rerun": "PENDING",
     "unresolved_review_threads": "PASS_ZERO"
   },
   "corrective_history": [
@@ -42,6 +45,16 @@
       "finding": "MAIN_ADVANCED_TO_119E07A41A4B1BF3E4F9D598424A71CB488428B6_DURING_ASSURANCE",
       "resolution": "NON_DESTRUCTIVE_MERGE_OF_LATEST_LAWFUL_MAIN_THEN_RERUN",
       "authority_effect": "NONE"
+    },
+    {
+      "attempt_head": "52ded220b4e0e08e23b42abe8645663301b8a143",
+      "repository_suite_run": 31598838882,
+      "result": "FAIL_CORRECTABLE",
+      "finding": "ACTIVE_STACK_RESOLVER_ACCEPTED_QA_REVIEW_AND_COMPLETED_BUT_NOT_THE_INTERMEDIATE_APPROVED_STATE_MATERIALISED_BY_ASR_G1",
+      "diagnosis_evidence": "src/ovc/active_stack.py load_active_stack status allowlist excluded APPROVED while the canonical ASR state was advanced to APPROVED",
+      "resolution": "EXTEND_FAIL_CLOSED_USABLE_STATE_MACHINE_TO_QA_REVIEW_APPROVED_COMPLETED_ONLY_AND_RERUN_COMPLETE_EXACT_HEAD_ASSURANCE",
+      "test_weakening": "NONE",
+      "authority_effect": "NONE"
     }
   ],
   "warnings": [
@@ -51,7 +64,7 @@
     "C2 vNext Functional Discovery and Candidate Dispositions remain SHADOW and no family/rule/candidate promotion occurred."
   ],
   "blockers": [],
-  "qa_recommendation": "PASS_AUTO_RATIFY_ASR_G1_AND_SQUASH_MERGE_PR_625_AFTER_EXACT_HEAD_RERUN",
+  "qa_recommendation": "PASS_CONDITIONAL_ON_CORRECTIVE_EXACT_HEAD_REPOSITORY_SUITE_AND_TIERED_ASSURANCE",
   "authority_effect_if_pass": "EXACT_OPERATOR_APPROVED_ACTIVE_STACK_RECLASSIFICATION_ONLY",
   "rollback": "Forward-only supersession; preserve all historical evidence and decisions; no deletion or history rewrite"
 }
