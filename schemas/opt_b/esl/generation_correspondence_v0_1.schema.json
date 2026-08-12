@@ -1,0 +1,16 @@
+{
+  "$id": "ovc://schemas/opt_b/esl/generation_correspondence_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "reason_codes": {"items": {"type": "string"}, "type": "array"},
+    "relation": {"enum": ["ONE_TO_ONE", "SPLIT", "MERGE", "NO_MATCH", "AMBIGUOUS", "SUPERSEDED_BY"]},
+    "source_generation_id": {"type": "string"},
+    "source_ref_ids": {"items": {"type": "string"}, "type": "array"},
+    "target_generation_id": {"type": "string"},
+    "target_ref_ids": {"items": {"type": "string"}, "type": "array"}
+  },
+  "required": ["source_generation_id", "target_generation_id", "relation", "source_ref_ids", "target_ref_ids", "reason_codes"],
+  "title": "GenerationCorrespondence",
+  "type": "object"
+}
