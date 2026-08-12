@@ -3,7 +3,7 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
   "integration_baseline_commit": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
   "branch": "build/ci-performance-remediation-v0-1",
@@ -15,11 +15,19 @@
   ],
   "authority_required": "NONE_FOR_WP0_WP2",
   "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
-  "candidate_commit": null,
+  "candidate_commit": "dcca93a3134b30f53fe63c01173f32113ef84afc",
   "tests": [
-    "PENDING final exact-head tests + pytest-unittest-parity + runner-parity after c92d9f77 reconciliation",
-    "PENDING final exact-head OVC tiered/profile assurance and merge readiness"
+    "GitHub Actions tests run 31621918842 / #3654 PASS: tests + pytest-unittest-parity + runner-parity",
+    "GitHub Actions tiered run 31621918782 / #2023 PASS after job-level retry",
+    "OVC profile assurance PASS FINAL_HEAD",
+    "OVC canonical tests observed PASS",
+    "OVC merge readiness PASS on stable main c92d9f77",
+    "zero review threads"
   ],
+  "metrics": {
+    "canonical_tests_observation_wait_ms": 167480,
+    "integration_lane_evaluation_ms": 583
+  },
   "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
   "decision_record": [
     "docs/releases/ci-performance-remediation-v0-1/cipr-g0/CIPR_G0_OPERATOR_INSTRUCTION.json",
@@ -34,12 +42,15 @@
   ],
   "merge_commit": null,
   "blockers": [],
+  "nonblocking_warnings": [
+    "First merge-readiness attempt was cancelled while pending behind pre-remediation global-lane activity; same-head retry PASS. Residual legacy in-flight workflows are transitional.",
+    "Generic checkout/setup-python Node-target warnings remain upstream-action hygiene for WP3; CIPR-owned github-script upgraded to v9."
+  ],
   "next_packet": "CIPR-WP3",
   "operator_stop_gate": "CIPR-G4-SUITE-TOPOLOGY",
   "notes": [
-    "PYT-WP1 re-preflight requires tests, pytest-unittest-parity and runner-parity before final integration-lane acquisition.",
-    "The later c92d9f77 movement only records PYT-G1 merged-main completion; it is INTEGRATION_RELEVANT and requires branch reconciliation plus exact-head integration assurance, not semantic redesign.",
-    "CIPR compatibility validators were strengthened to the current dual-run parity contract rather than weakened or removed.",
-    "actions/github-script is upgraded from v7 to v9; generic checkout/setup-python Node-target warnings remain upstream-action hygiene for later non-destructive classification."
+    "G1/G2 delegated PASS are materialised against dcca93a3 after full PYT-WP1 re-preflight and c92d9f77 reconciliation.",
+    "The court-record approval commit created from this state must itself receive fresh exact-head tests/tiered assurance before squash merge.",
+    "No canonical complete-suite topology change is authorised before CIPR-G4-SUITE-TOPOLOGY."
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema": "ovc-delegated-gate-decision/v1",
-  "decision_id": "CIPR-G2-DELEGATED-2026-08-12",
+  "decision_id": "CIPR-G2-DELEGATED-PASS-2026-08-12-CURRENT",
   "gate_id": "CIPR-G2",
   "gate_title": "Structured CI latency metrics",
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
@@ -8,12 +8,32 @@
   "plan_version": "0.1",
   "authority": "DELEGATED_BY_OPERATOR_RATIFIED_PLAN",
   "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
-  "candidate_commit": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
-  "decision": "SUPERSEDED",
-  "superseded_by_main": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
-  "reason": "G2 shares the grouped packet head with G1; PYT-WP1 main movement invalidated the grouped exact-head QA basis and requires fresh metric/evaluator evidence.",
+  "integration_baseline_commit": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
+  "candidate_commit": "dcca93a3134b30f53fe63c01173f32113ef84afc",
+  "completed_packets": ["CIPR-WP2"],
+  "current_authority": "DEVELOPMENT_CI_OBSERVABILITY_ONLY",
+  "proposed_delta": "STRUCTURED_NON_AUTHORITATIVE_LATENCY_METRICS_FOR_REQUIRED_CHECK_WAIT_AND_FINAL_LANE_EVALUATION",
   "authority_effect": "NONE",
-  "rollback": "No destructive action; regenerate metrics on the re-preflighted exact head.",
+  "acceptance": "PASS_ALL",
+  "metrics": {
+    "schema": "ovc-ci-metric/v1",
+    "canonical_tests_observation_wait_ms": 167480,
+    "integration_lane_evaluation_ms": 583,
+    "required_checks": ["tests", "pytest-unittest-parity", "runner-parity"]
+  },
+  "tests": {
+    "tests_workflow_run": 31621918842,
+    "tiered_run": 31621918782,
+    "result": "PASS"
+  },
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "warnings": ["TRANSITIONAL_GLOBAL_LANE_PENDING_CANCELLATION_NON_BLOCKING", "UPSTREAM_ACTION_NODE_TARGET_WARNINGS_NON_BLOCKING"],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "rollback": "Remove/supersede only metric emissions if required while preserving safe readiness architecture and historical evidence.",
+  "decision": "PASS",
+  "non_reserved_rationale": "The metrics are read-only deterministic diagnostic evidence and cannot substitute for or alter required checks, merge readiness, scientific decisions or authority.",
   "merge_sha": null,
-  "next_packet": "CIPR-WP2_REPREFLIGHT"
+  "next_packet": "CIPR-WP3"
 }
