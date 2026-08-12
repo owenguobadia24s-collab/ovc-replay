@@ -2,10 +2,14 @@
 
 Programme: `OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-v0.2`  
 Packet: `C2P2-WP1` / Gate: `C2P2-G1`  
-Baseline: `fdf64e0df76c5f75b21de357bac05ec965b9f0f7`  
+Current lawful baseline: `0f6cffd8e1c1fac50a958152fe5edc5a070467f3`  
+Initial WP1 implementation baseline: `fdf64e0df76c5f75b21de357bac05ec965b9f0f7`  
+Branch: `build/c2p2-wp1-contracts-v2`  
 Authority: AUTO-EXECUTABLE mechanical conformance only.
 
 WP1 materialises the exact ratified core contract/schema/registry catalogue, canonical serialization profile, activation-ineligible synthetic ObjectPacks A/B, the core fixture/QA registries, and the reference canonicalizer needed by later synthetic packets. No C2P runtime is activated and no empirical ObjectPack is selected.
+
+The first WP1 PR (#647) was superseded after the final readiness lane correctly rejected a stale PR-event base. Main advanced only through CI/performance assurance work; no C2P semantic or authority overlap was found. This branch is rebuilt from the latest lawful main without force-push or history rewrite.
 
 ## Acceptance surface
 
@@ -20,7 +24,7 @@ WP1 materialises the exact ratified core contract/schema/registry catalogue, can
 
 `python -m unittest tests.opt_b.c2p.v0_2.test_c2p2_wp1_contracts`
 
-Repository-wide CI and tiered final-head assurance are required before G1 auto-ratification.
+Repository-wide CI and tiered final-head assurance are required on this refreshed exact PR head before G1 integration.
 
 ## Rollback
 
