@@ -19,8 +19,10 @@ ROOT = Path(__file__).resolve().parents[2]
 CORPUS = ROOT / "fixtures/development_skills/g7_e5_historical_reference_corpus_v0_1.json"
 REVIEW = ROOT / "fixtures/development_skills/g7_e5_independent_reference_review_worksheet_v0_1.json"
 E4_PASS = ROOT / "records/development/skills/DSAI_G7_E4_OPERATOR_PASS_20260812T115600+0100.json"
+E5_PASS = ROOT / "records/development/skills/DSAI_G7_E5_OPERATOR_PASS_20260812T124000+0100.json"
 EXECUTION = ROOT / "docs/releases/development-skills-architecture-v0-1/dsai-wp7/DSAI_G7_E5_HISTORICAL_REFERENCE_EXECUTION_PACKET.json"
 STATE = ROOT / "registries/implementation/dsai/OVC_DSAI_STATE_v0_15.json"
+NEXT_STATE = ROOT / "registries/implementation/dsai/OVC_DSAI_STATE_v0_16.json"
 POINTER = ROOT / "registries/implementation/dsai/CURRENT_STATE_POINTER.json"
 ENV = ROOT / "fixtures/development_skills/wp2_windows_environment_v0_1.json"
 
@@ -55,8 +57,10 @@ class DSAIG7E5HistoricalReferenceTests(unittest.TestCase):
         cls.corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
         cls.review = json.loads(REVIEW.read_text(encoding="utf-8"))
         cls.e4 = json.loads(E4_PASS.read_text(encoding="utf-8"))
+        cls.e5 = json.loads(E5_PASS.read_text(encoding="utf-8"))
         cls.execution = json.loads(EXECUTION.read_text(encoding="utf-8"))
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
+        cls.next_state = json.loads(NEXT_STATE.read_text(encoding="utf-8"))
         cls.pointer = json.loads(POINTER.read_text(encoding="utf-8"))
         cls.env = json.loads(ENV.read_text(encoding="utf-8"))
         cls.releases = {}
@@ -115,7 +119,8 @@ class DSAIG7E5HistoricalReferenceTests(unittest.TestCase):
             self.assertNotIn("operator_outcome", case["reference"])
             self.assertTrue(case["reference_basis"].strip())
 
-    def test_e5_review_and_programme_state_remain_fail_closed_pending_independence(self):
+    def test_e5_historical_pending_records_remain_immutable_while_pointer_advances_after_independent_pass(self):
+        # The original worksheet/execution/state remain immutable evidence of the pre-review boundary.
         self.assertEqual(self.review["reviewer_signoff"]["overall_disposition"], "PENDING")
         self.assertEqual(self.review["reviewer_signoff"]["review_effort_minutes"], 0)
         self.assertEqual(self.execution["mechanical_execution"]["status"], "PASS")
@@ -126,9 +131,23 @@ class DSAIG7E5HistoricalReferenceTests(unittest.TestCase):
         self.assertEqual(self.state["qualification_closure"]["e4"]["status"], "PASS_INDEPENDENT_OPERATOR_APPROVED")
         self.assertEqual(self.state["qualification_closure"]["e5"]["status"], "MECHANICAL_PASS_INDEPENDENT_REFERENCE_REVIEW_PENDING")
         self.assertEqual(self.state["authority"]["trusted_skills"], [])
-        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_15.json")
-        self.assertEqual(self.pointer["status"], "BLOCKED_E5_INDEPENDENT_REFERENCE_REVIEW")
+
+        # Independent E5 review is an additive decision record, never an in-place rewrite of the pending artifacts.
+        self.assertEqual(self.e5["evaluation_layer"], "E5")
+        self.assertEqual(self.e5["decision"], "PASS")
+        self.assertEqual(self.e5["decision_authority"], "HUMAN_OPERATOR")
+        self.assertEqual(self.e5["corpus"]["accepted"], 42)
+        self.assertEqual(self.e5["findings"]["false_allows"], 0)
+        self.assertEqual(self.e5["authority_effect"], "QUALIFICATION_EVIDENCE_ONLY_NO_TRUSTED_PROMOTION")
+
+        # The moving pointer may advance to the separately materialised G7 decision-ready state.
+        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_16.json")
+        self.assertEqual(self.pointer["status"], "READY_OPERATOR_G7_TRUSTED_DECISION")
         self.assertEqual(self.pointer["next_packet"], "DSAI-WP7")
+        self.assertEqual(self.next_state["programme_status"], "READY_OPERATOR_G7_TRUSTED_DECISION")
+        self.assertEqual(self.next_state["qualification_closure"]["e5"], "PASS_INDEPENDENT")
+        self.assertEqual(self.next_state["qualification_closure"]["composition"]["status"], "QUALIFIED")
+        self.assertEqual(self.next_state["authority"]["trusted_skills"], [])
 
 if __name__ == "__main__":
     unittest.main()
