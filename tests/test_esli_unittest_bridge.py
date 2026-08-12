@@ -2,10 +2,62 @@ from __future__ import annotations
 
 from decimal import Decimal
 from pathlib import Path
+import re
 import runpy
+import sys
+import types
 import unittest
 
 ESL_TESTS = Path(__file__).resolve().parent / "opt_b" / "esl"
+
+
+class _Raises:
+    """Minimal pytest.raises-compatible context for canonical unittest-only CI."""
+
+    def __init__(self, expected, match: str | None = None):
+        self.expected = expected
+        self.match = match
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        if exc_type is None:
+            raise AssertionError(f"DID NOT RAISE {self.expected}")
+        if not issubclass(exc_type, self.expected):
+            return False
+        if self.match is not None and re.search(self.match, str(exc)) is None:
+            raise AssertionError(
+                f"exception message {str(exc)!r} does not match {self.match!r}"
+            )
+        return True
+
+
+class _Mark:
+    @staticmethod
+    def parametrize(*_args, **_kwargs):
+        # Source tests are invoked explicitly by this bridge, so collection metadata
+        # is intentionally inert under canonical unittest discovery.
+        def decorator(fn):
+            return fn
+
+        return decorator
+
+
+def _ensure_pytest_surface() -> None:
+    """Use real pytest when installed; otherwise expose only the source-test APIs used here."""
+
+    try:
+        __import__("pytest")
+        return
+    except ModuleNotFoundError:
+        compat = types.ModuleType("pytest")
+        compat.raises = lambda expected, match=None: _Raises(expected, match)
+        compat.mark = _Mark()
+        sys.modules["pytest"] = compat
+
+
+_ensure_pytest_surface()
 
 
 def _load(filename: str):
