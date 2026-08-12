@@ -46,7 +46,7 @@ class DSAIG7OperatorTrustedPromotionTests(unittest.TestCase):
             "write_authority": "NONE",
         })
 
-    def test_promoted_exact_tuples_equal_the_consolidated_operator_packet_and_qualified_candidate(self):
+    def test_promoted_exact_tuples_equal_the_consolidated_operator_packet_and_remain_registered(self):
         expected = {self.tuple_key(row) for row in self.predecision["promotion_candidates"]}
         qualified = {self.tuple_key(row) for row in self.qpack["exact_tuples"]}
         promoted = {self.tuple_key(row) for row in self.decision["promotions"]}
@@ -54,17 +54,17 @@ class DSAIG7OperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(len(expected), 8)
         self.assertEqual(expected, qualified)
         self.assertEqual(expected, promoted)
-        self.assertEqual(expected, registered)
+        self.assertTrue(expected.issubset(registered))
         self.assertEqual(self.qpack["stale_qualifications"], 0)
         self.assertEqual(self.qpack["known_false_allows"], 0)
         for row in self.qpack["exact_tuples"]:
             self.assertEqual(set(row["evaluation_layers"].values()), {"PASS"})
 
-    def test_trusted_registry_is_exact_match_only_and_never_infers_extra_capability_or_permission(self):
+    def test_trusted_registry_preserves_g7_exact_match_permissions_after_later_promotions(self):
         self.assertTrue(self.trust["effective"])
         self.assertEqual(self.trust["authority_kind"], "TRUSTED_PROMOTION")
         self.assertEqual(self.trust["authority_effect"], "SKILL_MATURITY_SELECTION_ELIGIBILITY_ONLY")
-        self.assertEqual(self.trust["entry_count"], 8)
+        self.assertGreaterEqual(self.trust["entry_count"], 8)
         for row in self.trust["entries"]:
             self.assertEqual(row["maturity"], "TRUSTED")
             self.assertTrue(row["selection_eligible"])
@@ -86,13 +86,13 @@ class DSAIG7OperatorTrustedPromotionTests(unittest.TestCase):
             for row in registry["entries"]:
                 self.assertNotEqual(row.get("maturity"), "TRUSTED")
         promoted_skill_ids = {row["skill_id"] for row in self.trust["entries"]}
-        self.assertEqual(promoted_skill_ids, {
+        g7_skill_ids = {
             "OVC-SKILL-001", "OVC-SKILL-002", "OVC-SKILL-003", "OVC-SKILL-004",
             "OVC-SKILL-020", "OVC-SKILL-022", "OVC-SKILL-023", "OVC-SKILL-024",
-        })
+        }
+        self.assertTrue(g7_skill_ids.issubset(promoted_skill_ids))
 
     def test_state_advances_only_to_wp8_and_preserves_later_reserved_gates(self):
-        # v0_17 remains immutable evidence of the exact post-G7 transition.
         self.assertEqual(self.state["programme_status"], "APPROVED_G7_READY_WP8")
         self.assertEqual(self.state["supersedes_state"], "OVC_DSAI_STATE_v0_16.json")
         self.assertEqual(self.state["trusted_promotion"]["status"], "EFFECTIVE")
@@ -103,9 +103,6 @@ class DSAIG7OperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["orch_1"], "INACTIVE")
         self.assertEqual(self.state["authority"]["orch_2"], "INACTIVE")
         self.assertEqual(self.state["authority"]["validation"], "DENIED")
-
-        # CURRENT_STATE_POINTER is a moving programme projection and may advance after G7.
-        # Historical G7 assurance must validate its namespace, not pin it to v0_17 forever.
         self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
         self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
         self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
