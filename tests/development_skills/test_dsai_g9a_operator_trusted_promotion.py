@@ -89,12 +89,13 @@ class DSAIG9AOperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(authority["validation"], "DENIED")
         self.assertEqual(self.state["packet_updates"]["DSAI-WP9"]["g9b_decision"], "NOT_READY")
 
-    def test_pointer_advances_to_g9b_preparation_only(self):
+    def test_v024_preserves_post_g9a_state_while_live_pointer_may_advance_lawfully(self):
+        self.assertEqual(self.state["programme_status"], "G9A_PASS_READY_G9B_PREPARATION")
         self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
         self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
-        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_24.json")
-        self.assertEqual(self.pointer["status"], "G9A_PASS_READY_G9B_PREPARATION")
-        self.assertEqual(self.pointer["next_packet"], "DSAI-WP9")
+        self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
+        self.assertTrue(str(self.pointer["status"]).strip())
+        self.assertIn(self.pointer["next_packet"], {"DSAI-WP9", "DSAI-WP10"})
 
 
 if __name__ == "__main__":
