@@ -31,6 +31,9 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
     @router.get('/c2-5/events',tags=['structure','preparation'])
     def c2_5_events(role:str|None=Query(default=None)):
         _deny_validation(role); return store.envelope('c2_5_preparation',dict(store.resource('c2_5_preparation')),schema_id='ovc-rcn-c2-5-preparation/v1',capability_id='C2_5')
+    @router.get('/c3/graph',tags=['structure','preparation'])
+    def c3_graph(role:str|None=Query(default=None)):
+        _deny_validation(role); return store.envelope('c3_preparation',dict(store.resource('c3_preparation')),schema_id='ovc-rcn-c3-preparation/v1',capability_id='C3')
     @router.get('/investigate/snapshot',tags=['structure','preparation'])
     def investigate_snapshot(role:str|None=Query(default=None)):
         _deny_validation(role); p=build_fixture_investigate_snapshot(market=store.resource('market'),structure=store.resource('structure'),preparation=store.resource('investigate_preparation')); return store.envelope('investigate_snapshot',p,schema_id='ovc-rcn-investigate-snapshot/v1',capability_id='C2')
