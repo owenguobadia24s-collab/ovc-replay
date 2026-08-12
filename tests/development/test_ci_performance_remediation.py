@@ -29,7 +29,7 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("name: runner-parity", self.tests_workflow)
 
     def test_final_integration_window_is_acquired_before_expensive_assurance(self):
-        self.assertIn("group: ovc-main-final-integration-window-v2", self.readiness)
+        self.assertIn("group: ovc-main-integration-lane-v1", self.readiness)
         self.assertIn("cancel-in-progress: false", self.readiness)
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED", self.readiness)
         self.assertIn("windowCheckName = 'OVC merge readiness'", self.admission)
