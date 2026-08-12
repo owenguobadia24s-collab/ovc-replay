@@ -4,32 +4,30 @@
   "plan_id": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1",
   "plan_version": "0.1",
   "packet_id": "ASR-WP1",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "prerequisites": [
     "ASR-00_OPERATOR_PASS",
-    "BASELINE_MAIN_FA23BAF4D57364AACEF0B28635C54B43FD7DC9A9",
-    "C2AR_INTEGRATED_PACKAGE_EXACT_SHA_150DE1997BE8801BAA59DB6D0FE98B11CB21A6B70525B908537AEB31BFD00CC3",
-    "C2E_AG3_ACTIVE_CURRENT_PACK",
-    "OCCURRENCE_CONTEXT_G6_PASS",
-    "C1_V2_ACTIVE_DISCOVERY_DEVELOPMENT"
+    "ASR-G1_DELEGATED_PASS",
+    "PR_625_EXACT_HEAD_C46F4774737D101E69FB8C5648B247F7E8BFC05E_ASSURED",
+    "PR_625_SQUASH_MERGED_TO_MAIN_50BA5EF6DB7FA3B6601E3A3E2E3FDACB14DB1120"
   ],
   "authority_required": "OPERATOR_REQUIRED_SATISFIED_BY_ASR_00",
   "authority_delta": "EXACT_OPERATOR_APPROVED_ACTIVE_STACK_RECLASSIFICATION_ONLY",
   "baseline_main": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
   "baseline_commit": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
-  "branch": "governance/active-stack-reclassification-v0-1-preflight",
-  "candidate_commit": "3790c8e11b566c158aca925cbb4c29b7f76c3dad",
+  "branch": "administrative/asr-v0-1-closeout",
+  "candidate_commit": "c46f4774737d101e69fb8c5648b247f7e8bfc05e",
   "tests": [
-    {"workflow_run":31600582152,"job":94126676571,"result":"PASS","scope":"complete repository suite"},
-    {"workflow_run":31600582151,"job":94126676259,"result":"PASS","scope":"OVC FINAL_HEAD/profile assurance"},
-    {"workflow_run":31600582151,"job":94126735687,"result":"PASS","scope":"compatibility"},
-    {"workflow_run":31600582151,"job":94126735592,"result":"PASS","scope":"merge readiness stable main a69bf6c1"}
+    {"workflow_run":31601334293,"job":94129216046,"result":"PASS","scope":"exact final PR head complete repository suite"},
+    {"workflow_run":31601334349,"job":94129216213,"result":"PASS","scope":"exact final PR head OVC FINAL_HEAD/profile assurance"},
+    {"workflow_run":31601334349,"job":94129305223,"result":"PASS","scope":"exact final PR head compatibility"},
+    {"workflow_run":31601334349,"job":94129305348,"result":"PASS","scope":"exact final PR head merge readiness stable main 26eb8119"}
   ],
   "qa_packet": "docs/releases/active-stack-reclassification-v0-1/asr-wp1/ASR_WP1_QA_PACKET.json",
   "decision_record": "docs/releases/active-stack-reclassification-v0-1/asr-g1/ASR_G1_DELEGATED_DECISION.json",
-  "merge_commit": null,
+  "merge_commit": "50ba5ef6db7fa3b6601e3a3e2e3fdacb14db1120",
   "blockers": [],
-  "next_packet": "ASR-MERGE",
+  "next_packet": null,
   "effective_on_main_merge": true,
   "operator_decision": {
     "command": "OVC APPROVE OVC ACTIVE STACK RECLASSIFICATION v0.1",
@@ -112,7 +110,7 @@
   "gate": {
     "gate_id": "ASR-G1",
     "owner": "DELEGATED",
-    "status": "APPROVED",
+    "status": "COMPLETED",
     "auto_ratifiable": true,
     "decision": "PASS",
     "condition": "ALL_TESTS_PASS_QA_PASS_NO_AUTHORITY_EXPANSION_NO_CONFLICT"
