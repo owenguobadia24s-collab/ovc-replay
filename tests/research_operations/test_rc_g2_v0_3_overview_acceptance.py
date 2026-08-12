@@ -9,7 +9,7 @@ from ovc.research_operations.console_overview import (
     OverviewProjectionBuilder,
     normalize_health_status,
 )
-from ovc.research_operations.console_overview_candidate import load_read_model
+from scripts.build_research_console_overview import load_read_model
 
 
 ROOT = Path(__file__).resolve().parents[2]
