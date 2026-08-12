@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-unittest-shard-policy/v1",
+  "policy_id": "CIPR.UNITTEST.SHADOW.SHARDS.v0.1",
+  "policy_version": "0.1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+  "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+  "shard_count": 4,
+  "assignment_algorithm": "LEGACY_DISCOVERY_ORDER_HEAVY_PATH_ISOLATION_THEN_ROUND_ROBIN",
+  "heavy_path_to_shard": {
+    "tests/governance/test_genesis_repository_topology.py": 0,
+    "tests/governance/test_grt_wp9_conformance.py": 1,
+    "tests/test_zzzz_srfdi_g8r_wp6_capacity_profile.py": 2,
+    "tests/test_zzzzzz_golden2_weekly_output.py": 3
+  },
+  "invariants": [
+    "exact legacy unittest-discovered population only",
+    "every case identity assigned exactly once",
+    "configured heavyweight source paths isolated to distinct shards",
+    "remaining cases assigned in legacy discovery order by deterministic round robin",
+    "case execution order within each shard preserves legacy discovery order",
+    "no skip, marker, benchmark freshness, assertion or test-content mutation",
+    "no required-check substitution or runner cutover"
+  ],
+  "rollback": "Remove or supersede only this shadow policy/workflow/tooling. Preserve all existing required checks and tests."
+}

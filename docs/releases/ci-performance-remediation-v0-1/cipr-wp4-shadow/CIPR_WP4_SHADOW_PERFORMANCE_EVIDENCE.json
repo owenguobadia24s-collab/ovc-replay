@@ -1,0 +1,94 @@
+{
+  "schema": "ovc-ci-shadow-shard-performance-evidence/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+  "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+  "benchmark_head": "8a331c8fdbd2d6740b0b11867b8f779807689aba",
+  "same_head_canonical": {
+    "workflow_run": 31639135466,
+    "tests_job_id": 94256927267,
+    "result": "PASS",
+    "complete_repository_suite_step_seconds": 159,
+    "job_started_to_completed_seconds": 166
+  },
+  "shadow_repeat_run": {
+    "workflow_run": 31639132742,
+    "attempts": [
+      {
+        "attempt": 1,
+        "result": "PASS",
+        "manifest_proof_seconds": 4,
+        "shard_execute_seconds": {"0": 44, "1": 24, "2": 73, "3": 29},
+        "critical_execute_seconds": 73,
+        "run_created_to_last_job_completed_seconds": 140,
+        "queue_note": "shard 0 experienced material runner queue delay before execution"
+      },
+      {
+        "attempt": 2,
+        "result": "PASS",
+        "manifest_proof_seconds": 4,
+        "shard_execute_seconds": {"0": 43, "1": 26, "2": 51, "3": 29},
+        "critical_execute_seconds": 51,
+        "run_created_to_last_job_completed_seconds": 74
+      },
+      {
+        "attempt": 3,
+        "result": "PASS",
+        "manifest_proof_seconds": 3,
+        "shard_execute_seconds": {"0": 33, "1": 24, "2": 52, "3": 31},
+        "critical_execute_seconds": 52,
+        "run_created_to_last_job_completed_seconds": 76
+      }
+    ],
+    "critical_execute_seconds": {
+      "min": 51,
+      "median": 52,
+      "max": 73,
+      "mean": 58.666667
+    },
+    "run_created_to_last_job_completed_seconds": {
+      "min": 74,
+      "median": 76,
+      "max": 140
+    }
+  },
+  "measured_comparison": {
+    "canonical_complete_suite_step_seconds": 159,
+    "shadow_median_critical_execute_seconds": 52,
+    "compute_critical_path_speedup_multiple": 3.057692,
+    "compute_critical_path_reduction_percent": 67.295597,
+    "interpretation": "The measured test-execution critical path is materially lower under deterministic four-way shadow sharding. This is not a cutover claim: shadow workflow dependency and runner queue time remain separate operational costs, and current required checks are unchanged."
+  },
+  "reconciled_head_confirmation": {
+    "head_sha": "05e535f4888f4740e5ae6ddaf08f039596cce81f",
+    "shadow_workflow_run": 31639950414,
+    "shadow_result": "PASS_ALL_MANIFEST_AND_FOUR_SHARDS",
+    "manifest_job_id": 94259640593,
+    "manifest_proof": "BYTE_IDENTICAL_EXACT_ONE_COMPLETE_UNION",
+    "population_count": 1160,
+    "population_hash": "b04eda58cd461b9214944f58f1b8ff26a975ad94a47805eeef57566579650a1f",
+    "policy_hash": "b49b57efffa550edf0569ea8df89912f4097cff201473307833eb3ca8144366e",
+    "manifest_hash": "e314bacbbbbd354f023bca3c0ddcd0954f02c7e153fa15489b06607339a34d98",
+    "shard_case_counts": {"0": 293, "1": 291, "2": 288, "3": 288},
+    "shard_execute_seconds": {"0": 43, "1": 25, "2": 69, "3": 28},
+    "critical_execute_seconds": 69,
+    "canonical_tests_workflow_run": 31639954004,
+    "canonical_tests_job_id": 94259652490,
+    "canonical_complete_suite_step_seconds": 156,
+    "canonical_result": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "tiered_workflow_run": 31639953912,
+    "profile_assurance": "PASS_FINAL_HEAD",
+    "canonical_observer": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "warnings": [
+    "The manifest hash includes execution/head identity and therefore is not a stable cross-head population identifier; population_hash and policy_hash are the cross-head identity evidence.",
+    "GitHub-hosted runner queue variance materially affected attempt 1; report execution critical path separately from end-to-end wall time.",
+    "Actions checkout@v4, setup-python@v5 and upload-artifact@v4 emit a Node 20 deprecation warning while GitHub forces Node 24; this is non-blocking and no automatic dependency bump is authorized by this packet."
+  ],
+  "conclusion": "PASS_SHADOW_CANDIDATE_DEMONSTRATES_DETERMINISTIC_COMPLETE_UNION_AND_MATERIAL_CRITICAL_PATH_REDUCTION",
+  "cutover_authority_effect": "NONE"
+}

@@ -7,7 +7,8 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_1.json"
+POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_2.json"
+HISTORICAL_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_1.json"
 SCRIPT_PATH = ROOT / "scripts/development/ci_workflow_inventory.py"
 
 spec = importlib.util.spec_from_file_location("ci_workflow_inventory", SCRIPT_PATH)
@@ -19,12 +20,14 @@ spec.loader.exec_module(inventory_module)
 class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def setUp(self):
         self.policy = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
+        self.historical_policy = json.loads(HISTORICAL_POLICY_PATH.read_text(encoding="utf-8"))
         self.inventory = inventory_module.build_inventory(ROOT, self.policy)
 
     def test_inventory_matches_repository_count_and_is_exhaustive(self):
         inventory_module.validate_inventory(self.inventory, self.policy)
-        self.assertEqual(self.inventory["total_workflow_definitions"], 129)
-        self.assertEqual(sum(self.inventory["category_counts"].values()), 129)
+        expected = self.policy["snapshot"]["expected_repository_workflow_definition_count"]
+        self.assertEqual(self.inventory["total_workflow_definitions"], expected)
+        self.assertEqual(sum(self.inventory["category_counts"].values()), expected)
         self.assertTrue(set(self.inventory["category_counts"]).issubset(set(self.policy["categories"])))
         print(
             "OVC_CI_WORKFLOW_CENSUS "
@@ -40,12 +43,23 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
 
     def test_actions_registry_and_repository_definition_layers_are_distinct(self):
         snapshot = self.policy["snapshot"]
-        self.assertEqual(snapshot["github_actions_registered_total_count"], 175)
-        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 129)
-        self.assertEqual(snapshot["registration_count_excess"], 46)
+        self.assertEqual(snapshot["github_actions_registered_total_count"], 177)
+        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 130)
+        self.assertEqual(snapshot["registration_count_excess"], 47)
         self.assertEqual(
             snapshot["registration_count_excess_interpretation"],
             "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK",
+        )
+
+    def test_wp3_v0_1_snapshot_remains_historical_and_unchanged(self):
+        historical = self.historical_policy["snapshot"]
+        self.assertEqual(self.historical_policy["policy_id"], "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.1")
+        self.assertEqual(historical["github_actions_registered_total_count"], 175)
+        self.assertEqual(historical["expected_repository_workflow_definition_count"], 129)
+        self.assertEqual(historical["registration_count_excess"], 46)
+        self.assertEqual(
+            self.policy["supersedes_for_current_inventory"],
+            self.historical_policy["policy_id"],
         )
 
     def test_exactly_two_approved_pull_request_listeners_remain(self):
@@ -57,23 +71,44 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertEqual(pr_paths, sorted(self.policy["approved_pull_request_workflows"]))
         self.assertEqual(self.inventory["category_counts"]["CURRENT_PR_CI"], 2)
 
+    def test_g4_shadow_workflow_is_classified_non_pr_and_shadow_only(self):
+        admission = self.policy["admitted_new_workflow"]
+        record = next(
+            record for record in self.inventory["records"] if record["path"] == admission["path"]
+        )
+        self.assertEqual(record["category"], "ACTIVE_MANUAL_OPERATION")
+        self.assertNotIn("pull_request", record["triggers"])
+        self.assertIn("push", record["triggers"])
+        self.assertIn("workflow_dispatch", record["triggers"])
+        self.assertFalse(admission["pull_request_listener"])
+        self.assertEqual(
+            admission["authority_mode"],
+            "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+        )
+
     def test_classification_is_deterministic(self):
         second = inventory_module.build_inventory(ROOT, self.policy)
         self.assertEqual(self.inventory, second)
 
     def test_non_pr_workflows_are_classified_without_mutation(self):
         non_pr = [record for record in self.inventory["records"] if "pull_request" not in record["triggers"]]
-        self.assertEqual(len(non_pr), 127)
+        expected = self.policy["snapshot"]["expected_repository_workflow_definition_count"] - len(
+            self.policy["approved_pull_request_workflows"]
+        )
+        self.assertEqual(len(non_pr), expected)
         allowed = {"TEMPORARY", "HISTORICAL_MANUAL_VERIFICATION", "ACTIVE_MANUAL_OPERATION"}
         self.assertTrue(all(record["category"] in allowed for record in non_pr))
         self.assertFalse(self.inventory["destructive_actions_performed"])
 
-    def test_policy_prohibits_destructive_cleanup_in_wp3(self):
+    def test_policy_prohibits_destructive_cleanup_and_required_check_mutation(self):
         governance = self.policy["governance"]
         self.assertTrue(governance["classification_only"])
         self.assertEqual(governance["workflow_deletion"], "PROHIBITED")
         self.assertEqual(governance["workflow_disablement"], "PROHIBITED_BY_THIS_PACKET")
-        self.assertEqual(governance["trigger_mutation"], "PROHIBITED_BY_THIS_PACKET")
+        self.assertEqual(
+            governance["trigger_mutation"],
+            "PROHIBITED_EXCEPT_NEW_G4_AUTHORISED_SHADOW_WORKFLOW",
+        )
         self.assertEqual(governance["required_check_mutation"], "PROHIBITED_BY_THIS_PACKET")
         self.assertEqual(governance["historical_evidence_preservation"], "REQUIRED")
         self.assertEqual(governance["registry_repository_count_mismatch"], "OBSERVE_AND_RECORD_ONLY")
