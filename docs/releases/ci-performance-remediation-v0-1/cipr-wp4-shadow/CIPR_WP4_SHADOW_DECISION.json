@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-delegated-decision/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+  "decision_id": "CIPR-WP4-SHADOW-PASS",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_WITHIN_OPERATOR_APPROVED_CIPR_G4",
+  "governing_operator_decision": "PASS B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
+  "baseline_commit": "28ea2620af36a77704782274830a0e87892a960f",
+  "candidate_commit": "05e535f4888f4740e5ae6ddaf08f039596cce81f",
+  "tests": {
+    "shadow_repeat_run": 31639132742,
+    "same_head_canonical_run": 31639135466,
+    "reconciled_shadow_run": 31639950414,
+    "reconciled_tests_run": 31639954004,
+    "reconciled_tiered_run": 31639953912,
+    "result": "PASS_ALL"
+  },
+  "qa": "PASS_DELEGATED_AUTO_RATIFIABLE_WITHIN_G4_AUTHORITY",
+  "measured_delta": {
+    "legacy_population_count": 1160,
+    "canonical_complete_suite_step_seconds": 159,
+    "shadow_median_critical_execute_seconds": 52,
+    "critical_path_speedup_multiple": 3.057692,
+    "required_check_substitution": false
+  },
+  "authority_delta": "NONE_BEYOND_ALREADY_APPROVED_SHADOW_EVALUATION",
+  "scientific_authority_delta": "NONE",
+  "rollback": "Remove or supersede only the shadow workflow, policy, runner and packet-state artifacts. Preserve existing required checks, tests, PYT policy and evidence.",
+  "non_reserved_rationale": "The operator explicitly approved deterministic runner-neutral shadow sharding at CIPR-G4. This decision accepts only the measured shadow candidate inside that envelope and activates no required-check substitution, runner cutover, test semantic change or scientific authority.",
+  "next_action": "SQUASH_MERGE_PACKET_AFTER_FINAL_EXACT_HEAD_PASS_THEN_PREPARE_COORDINATED_PYT_G2_CUTOVER_GATE"
+}
