@@ -40,6 +40,14 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ADMITTED", self.admission)
         self.assertEqual(self.tests_workflow.count("needs: final-integration-window-admitted"), 3)
 
+    def test_pre_assurance_admission_rechecks_current_main_and_ancestry(self):
+        self.assertIn("OVC_PROFILE_BASE_MOVED_BEFORE_ASSURANCE", self.profile)
+        self.assertIn("OVC_PROFILE_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.profile)
+        self.assertIn("OVC_REQUIRED_CHECK_BASE_MOVED_BEFORE_ASSURANCE", self.admission)
+        self.assertIn("OVC_REQUIRED_CHECK_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.admission)
+        self.assertIn("git merge-base --is-ancestor", self.profile)
+        self.assertIn("git merge-base --is-ancestor", self.admission)
+
     def test_dual_run_required_checks_are_fail_closed(self):
         for check_name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
             self.assertIn(check_name, self.readiness)
