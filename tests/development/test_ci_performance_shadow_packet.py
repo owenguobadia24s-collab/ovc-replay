@@ -62,10 +62,10 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
             self.assertIn(name, self.tests_workflow)
         for name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
             self.assertIn(name, self.tiered_workflow)
-        self.assertIn("ovc-main-final-integration-window-v2", self.tiered_workflow)
+        self.assertIn("ovc-main-integration-lane-v1", self.tiered_workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED", self.tiered_workflow)
         self.assertIn("OVC_BASE_MOVED_BEFORE_READINESS", self.tiered_workflow)
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.tiered_workflow)
-        self.assertNotIn("ovc-main-integration-lane-v1", self.tiered_workflow)
 
     def test_packet_state_preserves_non_activation_boundary(self):
         self.assertIn(self.state["status"], {"RUNNING", "APPROVED"})
