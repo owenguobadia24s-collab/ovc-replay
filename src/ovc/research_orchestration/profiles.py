@@ -32,8 +32,11 @@ def builtin_profiles() -> tuple[PipelineProfile, ...]:
     )
 
 
+CURRENT_PROFILES: tuple[PipelineProfile, ...] = builtin_profiles()
+
+
 def profile_by_id(profile_id: str) -> PipelineProfile:
-    matches = [item for item in builtin_profiles() if item.profile_id == profile_id]
+    matches = [item for item in CURRENT_PROFILES if item.profile_id == profile_id]
     if not matches:
         raise KeyError(profile_id)
     return matches[0]
