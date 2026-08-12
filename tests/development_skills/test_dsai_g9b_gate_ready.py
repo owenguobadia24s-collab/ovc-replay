@@ -78,12 +78,14 @@ def test_qualification_and_qa_are_pass_with_no_warnings():
     assert qa["unresolved_reviews"] == []
 
 
-def test_pointer_stops_at_g9b_operator_decision():
+def test_v025_preserves_gate_ready_history_while_live_pointer_may_advance_after_operator_decision():
+    state = _load(STATE)
+    assert state["programme_status"] == "WP9_G9B_GATE_READY"
+    assert state["gate_readiness"]["decision"] == "PENDING_OPERATOR"
+
     pointer = _load(POINTER)
-    assert pointer == {
-        "current_state": "OVC_DSAI_STATE_v0_25.json",
-        "next_packet": "DSAI-WP9",
-        "programme_id": "OVC-DSAI-v0.1",
-        "schema": "ovc-programme-current-state-pointer/v1",
-        "status": "G9B_OPERATOR_DECISION_REQUIRED",
-    }
+    assert pointer["programme_id"] == "OVC-DSAI-v0.1"
+    assert pointer["schema"] == "ovc-programme-current-state-pointer/v1"
+    assert str(pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_")
+    assert str(pointer["status"]).strip()
+    assert pointer["next_packet"] == "DSAI-WP9"
