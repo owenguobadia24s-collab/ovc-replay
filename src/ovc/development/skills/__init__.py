@@ -6,6 +6,7 @@ publication, exposure or execution authority.
 """
 
 from .assurance import audit_evidence, evaluate_gate, evaluate_qa, plan_tests, test_execution_plan
+from .console_projection import FORBIDDEN_CONTROL_TOKENS, SECTION_ORDER, build_skill_control_read_model
 from .corpus import MANDATORY_ADVERSARIAL_FAMILIES, build_curation_record, build_programme_skill_bootstrap_template, evaluate_corpus_qualification_readiness, reusable_fixture_ids, score_historical_replay_case
 from .engineering import build_artifact_proposal, build_contract_proposal, build_fixture_proposal, build_implementation_proposal, build_schema_proposal, classify_head_churn, default_freshness_policy, git_packet_dry_run
 from .environment import EnvironmentManifestError, build_execution_environment_manifest
