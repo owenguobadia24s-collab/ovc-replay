@@ -9,7 +9,13 @@ description = "Evidence-first OVC v2 research and deterministic replay foundatio
 requires-python = ">=3.11"
 
 [project.optional-dependencies]
-test = ["pytest==9.1.1"]
+test = [
+    "pytest==9.1.1",
+    "fastapi==0.115.8",
+    "pydantic==2.10.6",
+    "uvicorn==0.34.0",
+    "httpx==0.28.1",
+]
 
 [project.scripts]
 ovc = "ovc.cli:main"
@@ -25,3 +31,4 @@ exclude = ["legacy*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src", "tests"]
+addopts = ["--import-mode=importlib"]
