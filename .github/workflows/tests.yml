@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  unit-tests:
+  legacy-unittest:
     name: tests
     runs-on: ubuntu-latest
     steps:
@@ -27,3 +27,33 @@ jobs:
           python-version: "3.11"
       - name: Complete repository suite
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+
+  pytest-unittest-parity:
+    name: pytest-unittest-parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pytest test extra
+        run: python3 -m pip install -e ".[test]"
+      - name: Execute exact legacy unittest surface under pytest
+        run: python3 tools/ci/pytest_unittest_parity.py run
+
+  runner-parity:
+    name: runner-parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pytest test extra
+        run: python3 -m pip install -e ".[test]"
+      - name: Prove pytest collection parity for legacy unittest surface
+        run: python3 tools/ci/pytest_unittest_parity.py collect
