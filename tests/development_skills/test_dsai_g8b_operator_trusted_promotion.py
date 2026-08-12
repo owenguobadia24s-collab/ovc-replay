@@ -90,13 +90,13 @@ class DSAIG8BOperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["merge_authority"], "NONE")
         self.assertEqual(self.state["authority"]["validation"], "DENIED")
 
-        # CURRENT_STATE_POINTER is a moving programme projection. Later lawful gates may advance it;
-        # G8B assurance therefore validates the pointer namespace rather than pinning it to v0_19 forever.
+        # CURRENT_STATE_POINTER is a moving programme projection. Later lawful gates and packet closeout may
+        # advance it; historical G8B assurance therefore validates namespace/shape, not a permanent WP8 pin.
         self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
         self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
         self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
         self.assertTrue(str(self.pointer["status"]).strip())
-        self.assertEqual(self.pointer["next_packet"], "DSAI-WP8")
+        self.assertTrue(str(self.pointer["next_packet"]).startswith("DSAI-WP"))
 
 
 if __name__ == "__main__":
