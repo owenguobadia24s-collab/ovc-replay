@@ -1,6 +1,6 @@
 {
   "schema": "ovc-delegated-gate-decision/v1",
-  "decision_id": "CIPR-G2-DELEGATED-PASS-2026-08-12",
+  "decision_id": "CIPR-G2-DELEGATED-2026-08-12",
   "gate_id": "CIPR-G2",
   "gate_title": "Structured CI latency metrics",
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
@@ -9,29 +9,11 @@
   "authority": "DELEGATED_BY_OPERATOR_RATIFIED_PLAN",
   "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
   "candidate_commit": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
-  "completed_packets": ["CIPR-WP2"],
-  "current_authority": "DEVELOPMENT_CI_OBSERVABILITY_ONLY",
-  "proposed_delta": "STRUCTURED_NON_AUTHORITATIVE_LATENCY_METRICS",
+  "decision": "SUPERSEDED",
+  "superseded_by_main": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
+  "reason": "G2 shares the grouped packet head with G1; PYT-WP1 main movement invalidated the grouped exact-head QA basis and requires fresh metric/evaluator evidence.",
   "authority_effect": "NONE",
-  "acceptance": "PASS_ALL",
-  "metrics": {
-    "canonical_tests_observation_wait_ms": 124206,
-    "integration_lane_evaluation_ms": 970,
-    "schema": "ovc-ci-metric/v1"
-  },
-  "tests": {
-    "canonical_tests_run": 31619766219,
-    "tiered_run": 31619766213,
-    "result": "PASS"
-  },
-  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
-  "qa_recommendation": "PASS",
-  "warnings": ["GITHUB_SCRIPT_V7_NODE_TARGET_DEPRECATION_NON_BLOCKING"],
-  "blocking_warnings": [],
-  "unresolved_issues": [],
-  "rollback": "Remove/supersede only structured metric emissions while retaining the safe readiness architecture and historical evidence.",
-  "decision": "PASS",
-  "non_reserved_rationale": "Metrics are read-only diagnostic evidence and do not alter test, merge, scientific or authority decisions.",
+  "rollback": "No destructive action; regenerate metrics on the re-preflighted exact head.",
   "merge_sha": null,
-  "next_packet": "CIPR-WP3"
+  "next_packet": "CIPR-WP2_REPREFLIGHT"
 }

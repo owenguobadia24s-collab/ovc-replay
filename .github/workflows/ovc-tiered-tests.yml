@@ -101,14 +101,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 22
     steps:
-      - name: Observe canonical tests before integration-lane acquisition
-        uses: actions/github-script@v7
+      - name: Observe required Python checks before integration-lane acquisition
+        uses: actions/github-script@v9
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const pr = context.payload.pull_request;
             const sha = pr?.head?.sha || context.sha;
+            const requiredNames = ['tests', 'pytest-unittest-parity', 'runner-parity'];
             const startedAt = Date.now();
             const deadline = startedAt + 20 * 60 * 1000;
             const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -117,6 +118,7 @@ jobs:
               metric: 'canonical_tests_observation_wait_ms',
               value_ms: Date.now() - startedAt,
               head_sha: sha,
+              required_checks: requiredNames,
               result
             })}`);
 
@@ -128,22 +130,23 @@ jobs:
                 per_page: 100,
                 filter: 'latest'
               });
-              const tests = response.data.check_runs.filter(run => run.name === 'tests');
-              if (tests.some(run => run.status === 'completed' && run.conclusion === 'success')) {
-                emitMetric('PASS');
-                core.info(`Canonical tests observed successful on ${sha}; final integration lane may now be acquired.`);
+              const required = requiredNames.map(name => response.data.check_runs.find(run => run.name === name));
+              const failed = required.find(run => run && run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
+              if (failed) {
+                emitMetric(`FAIL_${failed.name}_${failed.conclusion}`);
+                core.setFailed(`Required Python check ${failed.name} concluded ${failed.conclusion}.`);
                 return;
               }
-              const failed = tests.find(run => run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
-              if (failed) {
-                emitMetric(`FAIL_${failed.conclusion}`);
-                core.setFailed(`Canonical tests concluded ${failed.conclusion}.`);
+              const allSuccessful = required.every(run => run && run.status === 'completed' && run.conclusion === 'success');
+              if (allSuccessful) {
+                emitMetric('PASS');
+                core.info(`All required Python checks observed successful on ${sha}; final integration lane may now be acquired.`);
                 return;
               }
               await sleep(10000);
             }
             emitMetric('TIMEOUT');
-            core.setFailed(`Canonical tests did not complete successfully within the observation window for ${sha}.`);
+            core.setFailed(`Required Python checks did not all complete successfully within the observation window for ${sha}.`);
 
   merge-readiness:
     name: OVC merge readiness
@@ -155,19 +158,21 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Evaluate exact-head checks on a stable main snapshot
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const pr = context.payload.pull_request;
             const sha = pr?.head?.sha || context.sha;
+            const requiredNames = ['tests', 'pytest-unittest-parity', 'runner-parity'];
             const startedAt = Date.now();
             const emitMetric = result => core.info(`OVC_CI_METRIC ${JSON.stringify({
               schema: 'ovc-ci-metric/v1',
               metric: 'integration_lane_evaluation_ms',
               value_ms: Date.now() - startedAt,
               head_sha: sha,
+              required_checks: requiredNames,
               result
             })}`);
 
@@ -180,7 +185,7 @@ jobs:
                 core.setFailed(`OVC_BASE_MOVED_BEFORE_READINESS: event base ${pr.base.sha}, current ${pr.base.ref} ${mainSnapshot}. Rerun against the current base before merge readiness.`);
                 return;
               }
-              core.info(`OVC integration lane acquired at ${pr.base.ref}@${mainSnapshot} after canonical tests were observed successful.`);
+              core.info(`OVC integration lane acquired at ${pr.base.ref}@${mainSnapshot} after required Python checks were observed successful.`);
             }
 
             const response = await github.rest.checks.listForRef({
@@ -190,12 +195,12 @@ jobs:
               per_page: 100,
               filter: 'latest'
             });
-            const tests = response.data.check_runs.filter(run => run.name === 'tests');
-            const canonicalPass = tests.some(run => run.status === 'completed' && run.conclusion === 'success');
-            if (!canonicalPass) {
-              const failed = tests.find(run => run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
-              emitMetric(failed ? `FAIL_CANONICAL_${failed.conclusion}` : 'FAIL_CANONICAL_NOT_SUCCESSFUL');
-              core.setFailed(failed ? `Canonical tests concluded ${failed.conclusion}.` : `Canonical tests were not successful at final readiness evaluation for ${sha}.`);
+            const required = requiredNames.map(name => response.data.check_runs.find(run => run.name === name));
+            const failed = required.find(run => run && run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
+            const allSuccessful = required.every(run => run && run.status === 'completed' && run.conclusion === 'success');
+            if (!allSuccessful) {
+              emitMetric(failed ? `FAIL_REQUIRED_${failed.name}_${failed.conclusion}` : 'FAIL_REQUIRED_NOT_ALL_SUCCESSFUL');
+              core.setFailed(failed ? `Required Python check ${failed.name} concluded ${failed.conclusion}.` : `Required Python checks were not all successful at final readiness evaluation for ${sha}.`);
               return;
             }
 
@@ -210,4 +215,4 @@ jobs:
             }
 
             emitMetric('PASS');
-            core.info(`Canonical tests passed on ${sha} with stable main snapshot ${mainSnapshot || 'NOT_APPLICABLE'}.`);
+            core.info(`Required Python checks passed on ${sha} with stable main snapshot ${mainSnapshot || 'NOT_APPLICABLE'}.`);

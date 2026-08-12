@@ -3,22 +3,27 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "packet_id": "CIPR-WP0-WP2-GROUPED",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
-  "baseline_main_sha": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+  "baseline_main_sha": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
   "dependency_paths": [
     ".github/workflows/tests.yml",
     ".github/workflows/ovc-tiered-tests.yml",
     "registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json",
     "docs/plans/development/OVC_PARALLEL_DEVELOPMENT_MAIN_HEAD_CHURN_REMEDIATION_IMPLEMENTATION_PLAN_v0_1.md",
     "registries/development/OVC_PARALLEL_DEVELOPMENT_HEAD_MOVEMENT_POLICY_v0_1.json",
+    "docs/testing/PYTHON_TEST_RUNNER_POLICY_v0_1.md",
+    "registries/implementation/python_test_runner/CURRENT_STATE_POINTER.json",
     "tests/development/test_parallel_integration_lane.py"
   ],
   "semantic_authority_paths": [
     "docs/plans/development/OVC_PARALLEL_DEVELOPMENT_MAIN_HEAD_CHURN_REMEDIATION_IMPLEMENTATION_PLAN_v0_1.md",
-    "registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json"
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json",
+    "docs/testing/PYTHON_TEST_RUNNER_POLICY_v0_1.md",
+    "registries/implementation/python_test_runner/CURRENT_STATE_POINTER.json"
   ],
   "shared_integration_paths": [
     ".github/workflows/tests.yml",
     ".github/workflows/ovc-tiered-tests.yml",
+    "pyproject.toml",
     "scripts/development/**",
     "src/ovc/development/**",
     "tests/development/**",
@@ -34,7 +39,7 @@
   "identity_bindings": [
     {
       "path": ".github/workflows/tests.yml",
-      "identity": "git-blob:27e06c5244b38c9e1a665ee212b356dadda4897f"
+      "identity": "git-blob:b8ab429ee91bbb463715cbb0bc879027165bbe8a"
     },
     {
       "path": ".github/workflows/ovc-tiered-tests.yml",
@@ -47,8 +52,16 @@
     {
       "path": "registries/development/OVC_PARALLEL_DEVELOPMENT_HEAD_MOVEMENT_POLICY_v0_1.json",
       "identity": "git-blob:bba153b58cf8133c54c2a67762a8e86faf96ba80"
+    },
+    {
+      "path": "docs/testing/PYTHON_TEST_RUNNER_POLICY_v0_1.md",
+      "identity": "git-blob:7722bda8e5736d6ffb1f8d0921dfb61e70be07a4"
+    },
+    {
+      "path": "registries/implementation/python_test_runner/CURRENT_STATE_POINTER.json",
+      "identity": "git-blob:edaa0dad9bc655442cd81552aa81f558ef82bb0a"
     }
   ],
   "external_identity_bindings": [],
-  "notes": "No market/replay/scientific artifact is consumed. tests.yml is frozen unchanged through CIPR-G4."
+  "notes": "Re-preflighted after PYT-WP1 merged at e4794f1b. Original programme baseline was 3057d42e. The canonical unittest command is preserved, and the new dual-run parity checks are now consumed required Python assurance until PYT-G2 changes that policy. No market/replay/scientific artifact is consumed."
 }

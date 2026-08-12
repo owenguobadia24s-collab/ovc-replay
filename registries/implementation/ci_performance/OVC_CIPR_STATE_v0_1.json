@@ -3,31 +3,23 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "APPROVED",
+  "status": "QA_REVIEW",
   "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
-  "integration_baseline_commit": "2eff94425606df77eb037a717de662e5c7b7c47b",
+  "integration_baseline_commit": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
   "branch": "build/ci-performance-remediation-v0-1",
   "packet_id": "CIPR-WP0-WP2-GROUPED",
   "prerequisites": [
-    "OVC-DEV-ACCEL-v0.2 exact-head canonical assurance",
     "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1 COMPLETED",
-    "complete CI-performance audit 2026-08-12",
+    "PYT-WP1 / PYT-G1 merged dual-run parity policy",
     "CIPR-G0 bounded operator instruction PASS"
   ],
   "authority_required": "NONE_FOR_WP0_WP2",
   "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
-  "candidate_commit": "fd0d17dedfb3cfb340c10ee97cb4d21329f25bf2",
+  "candidate_commit": null,
   "tests": [
-    "GitHub Actions tests run 31619766219 / #3634 PASS on reconciled implementation head",
-    "GitHub Actions tiered run 31619766213 / #2005 PASS on reconciled implementation head",
-    "OVC canonical tests observed job 94191496511 PASS",
-    "OVC merge readiness job 94192102168 PASS",
-    "zero review threads"
+    "PENDING exact-head tests + pytest-unittest-parity + runner-parity after PYT-WP1 re-preflight",
+    "PENDING exact-head OVC tiered/profile assurance and merge readiness"
   ],
-  "metrics": {
-    "canonical_tests_observation_wait_ms": 124206,
-    "integration_lane_evaluation_ms": 970
-  },
   "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
   "decision_record": [
     "docs/releases/ci-performance-remediation-v0-1/cipr-g0/CIPR_G0_OPERATOR_INSTRUCTION.json",
@@ -36,16 +28,16 @@
   ],
   "dependency_footprint": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_DEPENDENCY_FOOTPRINT.json",
   "head_movement_receipts": [
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_3057_TO_2EFF.json"
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_3057_TO_2EFF.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_2EFF_TO_E479.json"
   ],
   "merge_commit": null,
   "blockers": [],
-  "nonblocking_warnings": ["actions/github-script@v7 Node target deprecation warning; runner forced Node 24 successfully; carry to WP3 hygiene"],
   "next_packet": "CIPR-WP3",
   "operator_stop_gate": "CIPR-G4-SUITE-TOPOLOGY",
   "notes": [
-    "Canonical tests.yml remains byte-identical to the baseline binding through CIPR-G4.",
-    "Main movement 3057d42.. -> 2eff944.. classified IRRELEVANT and reconciled without scientific re-preflight.",
-    "G1 and G2 delegated PASS are materialised; this court-record commit must itself receive fresh exact-head repository/tiered assurance before squash merge."
+    "Prior G1/G2 delegated PASS at fd0d17 was invalidated by SEMANTIC_AUTHORITY_RELEVANT main movement when PYT-WP1 changed the bound tests workflow and test-runner policy.",
+    "Re-preflight preserves the canonical unittest command and additionally requires pytest-unittest-parity and runner-parity before final integration-lane acquisition.",
+    "actions/github-script is upgraded from v7 to current v9 to remove the Node-target deprecation warning observed during QA."
   ]
 }
