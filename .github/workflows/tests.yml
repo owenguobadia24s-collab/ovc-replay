@@ -27,8 +27,6 @@ jobs:
           python-version: "3.11"
       - name: Install test runner and project
         run: python3 -m pip install -e ".[test]"
-      - name: Legacy unittest suite — retained parity baseline
-        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
       - name: Pytest unified suite — candidate primary runner
         shell: bash
         run: |
@@ -45,6 +43,9 @@ jobs:
           PY
           fi
           exit "$status"
+      - name: Legacy unittest suite — retained parity baseline
+        if: always()
+        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
       - name: Prove unittest collection parity under pytest
         if: always()
         run: PYTHONPATH=src python3 scripts/qa/check_python_test_runner_parity.py
