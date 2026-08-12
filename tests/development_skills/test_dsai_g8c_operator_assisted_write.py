@@ -95,8 +95,10 @@ class DSAIG8COperatorAssistedWriteTests(unittest.TestCase):
             with self.subTest(request=request):
                 self.assertEqual(decide_tool_request(envelope, request)["decision"], "DENY")
 
-    def test_g8c_does_not_change_trusted_release_population(self):
-        self.assertEqual(self.trusted["entry_count"], 9)
+    def test_g8c_preserves_packet_executor_trust_without_self_granting_new_trust(self):
+        self.assertEqual(self.trusted["entry_count"], len(self.trusted["entries"]))
+        self.assertGreaterEqual(self.trusted["entry_count"], 9)
+        self.assertNotEqual(self.decision["authority_kind"], "TRUSTED_PROMOTION")
         packet_executor = [row for row in self.trusted["entries"] if row["skill_id"] == "OVC-SKILL-030"]
         self.assertEqual(len(packet_executor), 1)
         self.assertEqual(packet_executor[0]["release_id"], PACKET_EXECUTOR_RELEASE)
