@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-mg-ei-wp1-contract-identity-discrepancy-evidence/v1",
+  "programme_id": "OVC-MG-EI-WP1-CONTRACT-IDENTITY-DISCREPANCY-v0.1",
+  "packet_id": "EI-WP1-CID-WP0",
+  "gate_id": "EI-WP1-CID-G0",
+  "baseline_main": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "status": "PASS_EVIDENCE_SUFFICIENT_FOR_OPERATOR_DECISION",
+  "finding": "AUTHORITATIVE_64_CHARACTER_DIGEST_EXISTS",
+  "binding_id": "C2VNEXT.JUNE.DISCOVERY.INPUT.v1",
+  "historical_malformed_value": {
+    "value": "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "length": 62,
+    "valid_sha256": false,
+    "classification": "TRANSCRIPTION_TRUNCATION"
+  },
+  "authoritative_value": {
+    "value": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "length": 64,
+    "valid_sha256": true,
+    "missing_pair_in_malformed_value": "ef",
+    "insertion_after_prefix": "126a703b89bf"
+  },
+  "repository_evidence": [
+    {
+      "path": "docs/plans/OVC_MARKET_GRAMMAR_EMPIRICAL_INTEGRATION_JUNE_IMPLEMENTATION_PLAN_v0_1.md",
+      "role": "GOVERNING_EI_PLAN",
+      "value": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8"
+    },
+    {
+      "path": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-d0/MG_D0_VERIFIED_SHADOW_EVIDENCE_LOCK.json",
+      "role": "VERIFIED_SHADOW_EVIDENCE_LOCK",
+      "value": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+      "binding_raw_sha256": "b4c4785087396fd445a749382899f0e441a1d9947c39b59e20f7e920b5ccbed2"
+    },
+    {
+      "path": "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp0/MG_WP0_EXTERNAL_ARTIFACT_INVENTORY.json",
+      "role": "READ_ONLY_HASH_LOCK",
+      "value": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+      "binding_raw_sha256": "b4c4785087396fd445a749382899f0e441a1d9947c39b59e20f7e920b5ccbed2",
+      "run_001_raw_sha256": "2808729f929412f56ad3061b0cbbcd42bdb277bfc779cd1885f605584295a693"
+    },
+    {
+      "path": "registries/implementation/c2e_v0_2/run_authority/C2E2_SOURCE_RUN_MANIFEST_JUNE_v0_1.json",
+      "role": "EXACT_SOURCE_RUN_MANIFEST",
+      "value": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8"
+    },
+    {
+      "path": "src/ovc/opt_b/c2_vnext/full_replay.py",
+      "role": "CANONICAL_BINDING_HASH_ALGORITHM",
+      "rule": "sha256(canonical(binding minus binding_sha256))"
+    }
+  ],
+  "external_artifact_evidence": {
+    "provider": "GOOGLE_DRIVE_ALREADY_ACCEPTED_RUN_ARTIFACT",
+    "run_001_folder_id": "1LlHn-dzzI24qikltaN9uC8gVM2_EN3o0",
+    "output_manifest_file_id": "1iW7a9eaHIcc_k1-aVTDTaHrVCr12Hb7Q",
+    "observed_output_manifest_raw_sha256": "2808729f929412f56ad3061b0cbbcd42bdb277bfc779cd1885f605584295a693",
+    "repository_declared_output_manifest_raw_sha256": "2808729f929412f56ad3061b0cbbcd42bdb277bfc779cd1885f605584295a693",
+    "raw_hash_match": true,
+    "decoded_binding_sha256": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "decoded_binding_sha256_length": 64
+  },
+  "conflicting_downstream_artifacts": [
+    "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp0/EI_WP0_EVIDENCE_PREFLIGHT.json",
+    "contracts/opt_b/market_grammar/MG_EI_WP1_REVISED_C2_SOURCE_ADAPTER_CONTRACT_v0_1.md",
+    "src/ovc/opt_b/market_grammar/revised_c2_adapter.py",
+    "fixtures/market_grammar/ei_wp1/revised_c2_adapter_cases.json",
+    "fixtures/market_grammar/ei_wp2/structural_projection_cases.json",
+    "registries/opt_b/market_grammar/MG_EI_WP1_IMPLEMENTATION_REGISTRY_v0_1.json"
+  ],
+  "identity_interpretation": "ONE_ACCEPTED_BINDING_IDENTITY_WITH_DOWNSTREAM_TRANSCRIPTION_DEFECT_NOT_TWO_COMPETING_VALID_DIGESTS",
+  "authority_effect": "NONE",
+  "next": "EI-WP1-CID-G0 OPERATOR DECISION"
+}

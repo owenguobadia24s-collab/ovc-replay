@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-MG-EI-WP1-CONTRACT-IDENTITY-DISCREPANCY-v0.1",
+  "plan_id": "OVC-MG-EI-WP1-CID-DECISION-PROTOCOL-0.1",
+  "plan_version": "0.1",
+  "status": "APPROVED",
+  "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "branch": "governance/mg-ei-wp1-contract-identity-discrepancy-v1",
+  "authority": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_APPROVED",
+  "authority_delta": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_ONLY",
+  "blocker_origin": "PYT-WP2-BLOCK-001",
+  "operator_approval": {
+    "gate_id": "EI-WP1-CID-G0",
+    "decision": "PASS_SUPERSEDE",
+    "command": "OVC APPROVE EI-WP1-CID-G0",
+    "approved_at": "2026-08-12T20:06:00+01:00",
+    "approved_candidate_commit": "4e06beaf04c7dae6b27bd576b08ca7a78ade2a56"
+  },
+  "packets": [
+    {
+      "packet_id": "EI-WP1-CID-WP0",
+      "status": "COMPLETED",
+      "prerequisites": [
+        "main:22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+        "PYT-WP2-BLOCK-001:BLOCKED"
+      ],
+      "authority_required": "NONE",
+      "authority_delta": "EVIDENCE_RECONCILIATION_ONLY",
+      "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+      "branch": "governance/mg-ei-wp1-contract-identity-discrepancy-v1",
+      "candidate_commit": "4e06beaf04c7dae6b27bd576b08ca7a78ade2a56",
+      "tests": [
+        "JSON parse",
+        "digest shape",
+        "accepted Drive manifest raw-hash cross-check"
+      ],
+      "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_GATE_PACKET.json",
+      "decision_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_OPERATOR_DECISION.md",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "EI-WP1-CID-WP1"
+    },
+    {
+      "packet_id": "EI-WP1-CID-WP1",
+      "status": "READY",
+      "prerequisites": [
+        "EI-WP1-CID-G0:PASS_SUPERSEDE"
+      ],
+      "authority_required": "OPERATOR_REQUIRED_SATISFIED_BY_G0",
+      "authority_delta": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_ONLY",
+      "baseline_commit": null,
+      "branch": null,
+      "candidate_commit": null,
+      "tests": [],
+      "qa_packet": null,
+      "decision_record": "EI-WP1-CID-G0:PASS_SUPERSEDE",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "PYT-WP2-RESUME"
+    }
+  ],
+  "gate": {
+    "gate_id": "EI-WP1-CID-G0",
+    "status": "APPROVED",
+    "authority_required": "OPERATOR_REQUIRED",
+    "recommended_decision": "PASS_SUPERSEDE",
+    "operator_decision": "PASS_SUPERSEDE"
+  },
+  "finding": {
+    "authoritative_digest_exists": true,
+    "authoritative_binding_sha256": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "historical_malformed_value": "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8"
+  },
+  "next_action": "EXECUTE_EI-WP1-CID-WP1_VERSIONED_SUPERSESSION"
+}
