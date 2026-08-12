@@ -81,10 +81,17 @@ class WP4DC3Preparation(unittest.TestCase):
         self.assertEqual("NONE", admission["authority_delta_before_g4"])
         self.assertEqual("DENIED_UNTIL_RCN_RN_G4", admission["real_source_presentation"])
         self.assertEqual(611, admission["historical_wp4d_pr"])
-        self.assertEqual("RCN-RN-WP4D", state["packet_id"])
-        self.assertIn(state["status"], {"RUNNING", "QA_REVIEW", "APPROVED", "COMPLETED"})
-        self.assertEqual("NONE", state["authority_delta"])
+        self.assertEqual("FIXTURE_ONLY_LOCAL_READ_ONLY", state["current_authority"])
         self.assertEqual("DENIED_UNTIL_RCN_RN_G4", state["real_source_routes"])
+        if state["packet_id"] == "RCN-RN-G4":
+            self.assertEqual("GATE_READY", state["status"])
+            self.assertEqual("OPERATOR_REQUIRED", state["authority_required"])
+            self.assertEqual("PROPOSED_FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION", state["authority_delta"])
+            self.assertIsNone(state["decision_record"])
+        else:
+            self.assertEqual("RCN-RN-WP4D", state["packet_id"])
+            self.assertIn(state["status"], {"RUNNING", "QA_REVIEW", "APPROVED", "COMPLETED"})
+            self.assertEqual("NONE", state["authority_delta"])
 
     @unittest.skipIf(importlib.util.find_spec("fastapi") is None, "FastAPI dependency not installed")
     def test_runtime_is_empty_typed_absence_and_validation_is_denied_before_read(self):
