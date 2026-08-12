@@ -50,11 +50,21 @@ The historical ABCD implementation is retained under `legacy/quarantine/abcd-eng
 
 ## Development
 
-Python 3.11 or newer is required.
+Python 3.11 or newer is required. Pytest is the target unified Python test runner and all existing `unittest.TestCase` tests remain supported through pytest's unittest compatibility layer.
+
+```powershell
+python -m pip install -e ".[test]"
+python -m pytest -v
+```
+
+During the bounded runner-parity migration, CI also preserves and executes the previous standalone command and checks that pytest collects every legacy unittest case:
 
 ```powershell
 $env:PYTHONPATH = (Resolve-Path .\src)
 python -m unittest discover -s tests -v
+python tools/ci/check_pytest_unittest_parity.py
 ```
+
+The standalone unittest CI command may be removed only after a merged-main parity PASS is materialised under `registries/implementation/python_test_runner/`; the unittest tests themselves are not removed by that cutover.
 
 Historical v1 repository state is pinned at `archive/ovc-replay-v1-c0ad7ba-20260725` and commit `c0ad7ba22618babdde731e2a338f68f688d4210c`.

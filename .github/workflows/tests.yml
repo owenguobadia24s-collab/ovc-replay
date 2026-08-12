@@ -15,9 +15,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  unit-tests:
+  python-tests:
     name: tests
     runs-on: ubuntu-latest
+    env:
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,5 +27,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Complete repository suite
+      - name: Install pytest test extra
+        run: python3 -m pip install -e ".[test]"
+      - name: Legacy unittest suite (preserved during parity proof)
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+      - name: Pytest unified suite candidate
+        run: python3 -m pytest -v
+      - name: Prove pytest/unittest collection parity
+        run: python3 tools/ci/check_pytest_unittest_parity.py
