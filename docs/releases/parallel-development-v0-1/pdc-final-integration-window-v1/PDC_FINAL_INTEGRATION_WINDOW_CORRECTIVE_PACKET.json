@@ -17,7 +17,8 @@
   },
   "problem_statement": "The existing global integration lane was acquired only after expensive required Python checks completed, so otherwise-green assurance could be invalidated by a main-head advance discovered at final readiness.",
   "correction": {
-    "window_concurrency_group": "ovc-main-final-integration-window-v2",
+    "window_concurrency_group": "ovc-main-integration-lane-v1",
+    "lane_identity_reused_for_backward_compatibility": true,
     "acquire_before_required_assurance": true,
     "required_check_admission_handshake": "tests workflow waits until OVC merge readiness is in_progress on the exact PR head",
     "candidate_must_contain_acquired_main": true,
@@ -29,6 +30,7 @@
   "acceptance_conditions": [
     "Only the existing tests.yml and ovc-tiered-tests.yml pull-request workflows remain.",
     "Only one PR can hold the repository-wide final-integration window at a time and queued windows are not cancelled.",
+    "The existing global integration-lane identity is reused so in-flight older readiness jobs and the corrective window cannot execute concurrently.",
     "The canonical required Python jobs do not start until the exact-head OVC merge-readiness check has acquired the serialized window.",
     "A stale event base or a candidate that does not contain the acquired current-main commit fails before expensive required checks start.",
     "Any main movement while the final-integration window is held fails closed with the existing readiness movement guard class.",
@@ -39,7 +41,7 @@
     "reserved_authority_changes": [],
     "selector_scientific_validation_publication_exposure_authority": "UNCHANGED"
   },
-  "rollback": "Revert only the final-integration admission handshake and v2 concurrency-window changes, restoring the prior PDC v1 readiness lane while preserving all historical evidence and the fail-closed stable-main guard.",
+  "rollback": "Revert only the final-integration admission handshake and expanded hold semantics, restoring the prior PDC v1 readiness-lane timing while preserving the lane identity, all historical evidence and the fail-closed stable-main guard.",
   "qa": {
     "required": [
       "targeted tests/development/test_parallel_integration_lane.py",
