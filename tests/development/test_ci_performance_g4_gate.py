@@ -40,7 +40,7 @@ class CiPerformanceG4GateTests(unittest.TestCase):
         self.assertIn("DEFER", self.gate["decision_options"])
         self.assertIn("BLOCK", self.gate["decision_options"])
 
-    def test_no_implementation_candidate_exists_before_operator_approval(self):
+    def test_no_implementation_candidate_exists_in_gate_packet(self):
         self.assertEqual(
             self.gate["candidate_commit"],
             "NOT_CREATED_OPERATOR_APPROVAL_REQUIRED",
@@ -90,11 +90,26 @@ class CiPerformanceG4GateTests(unittest.TestCase):
         self.assertEqual(self.heavy["audit_baseline_summary"]["historical_heavy_sum_seconds"], 98.6)
         self.assertIn("not been re-benchmarked individually", self.heavy["audit_baseline_summary"]["freshness_warning"])
 
-    def test_state_stops_at_g4_before_any_topology_activation(self):
+    def test_state_preserves_no_topology_activation_across_gate_transition(self):
         self.assertEqual(self.state["packet_id"], "CIPR-WP4")
-        self.assertEqual(self.state["operator_stop_gate"], "CIPR-G4-SUITE-TOPOLOGY")
-        self.assertEqual(self.state["authority_required"], "OPERATOR_REQUIRED")
         self.assertFalse(self.state["topology_change_active"])
+        if self.state["status"] == "GATE_READY":
+            self.assertEqual(self.state["operator_stop_gate"], "CIPR-G4-SUITE-TOPOLOGY")
+            self.assertEqual(self.state["authority_required"], "OPERATOR_REQUIRED")
+            self.assertIsNone(self.state["decision_record"])
+        elif self.state["status"] == "APPROVED":
+            self.assertIsNone(self.state["operator_stop_gate"])
+            self.assertEqual(self.state["authority_required"], "SATISFIED_OPERATOR_PASS")
+            self.assertEqual(
+                self.state["decision_record"],
+                "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_DECISION.json",
+            )
+            self.assertEqual(
+                self.state["authority_delta"],
+                "BOUNDED_RUNNER_NEUTRAL_DETERMINISTIC_REQUIRED_SHARD_SHADOW_EVALUATION",
+            )
+        else:
+            self.fail(f"unexpected CIPR-G4 state: {self.state['status']}")
 
 
 if __name__ == "__main__":
