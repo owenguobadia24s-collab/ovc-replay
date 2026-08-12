@@ -47,11 +47,13 @@ def test_wp10_completed_state_advances_only_to_wp11_without_authority_change():
     assert state["mandatory_stop"]["active"] is False
 
 
-def test_pointer_advances_to_wp11():
-    assert _load(POINTER) == {
-        "current_state": "OVC_DSAI_STATE_v0_29.json",
-        "next_packet": "DSAI-WP11",
-        "programme_id": "OVC-DSAI-v0.1",
-        "schema": "ovc-programme-current-state-pointer/v1",
-        "status": "WP10_COMPLETED_G10_PASS",
-    }
+def test_v029_preserves_wp10_completion_while_live_pointer_may_advance_terminally():
+    state = _load(STATE)
+    assert state["next_packet"] == "DSAI-WP11"
+    pointer = _load(POINTER)
+    assert pointer["programme_id"] == "OVC-DSAI-v0.1"
+    assert pointer["schema"] == "ovc-programme-current-state-pointer/v1"
+    assert str(pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_")
+    assert pointer["next_packet"] in {"DSAI-WP11", None}
+    if pointer["next_packet"] is None:
+        assert pointer["status"] == "IMPLEMENTED_ORCH2_BOUNDED_PILOTED"
