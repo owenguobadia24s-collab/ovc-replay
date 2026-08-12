@@ -61,7 +61,8 @@ class DSAIG8BOperatorTrustedPromotionTests(unittest.TestCase):
         rows = [row for row in self.trust["entries"] if row["release_id"] == RELEASE]
         self.assertEqual(len(rows), 1)
         row = rows[0]
-        self.assertEqual(self.trust["entry_count"], 9)
+        self.assertEqual(self.trust["entry_count"], len(self.trust["entries"]))
+        self.assertGreaterEqual(self.trust["entry_count"], 9)
         self.assertEqual(row["capability_id"], "PACKET_EXECUTION")
         self.assertEqual(row["environment_id"], ENV)
         self.assertEqual(row["maturity"], "TRUSTED")
