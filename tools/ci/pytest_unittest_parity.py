@@ -107,8 +107,8 @@ def _pytest_env() -> dict[str, str]:
     env["OVC_PYTEST_LEGACY_ONLY"] = "1"
     env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
     existing = env.get("PYTHONPATH", "")
-    src = str(ROOT / "src")
-    env["PYTHONPATH"] = src if not existing else os.pathsep.join((src, existing))
+    required = (str(ROOT / "src"), str(TEST_ROOT))
+    env["PYTHONPATH"] = os.pathsep.join((*required, existing)) if existing else os.pathsep.join(required)
     return env
 
 
