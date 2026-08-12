@@ -17,7 +17,11 @@ from ovc.development.skills.governance import (
 
 ROOT = Path(__file__).resolve().parents[2]
 CORPUS = ROOT / "fixtures/development_skills/g7_e5_historical_reference_corpus_v0_1.json"
+REVIEW = ROOT / "fixtures/development_skills/g7_e5_independent_reference_review_worksheet_v0_1.json"
 E4_PASS = ROOT / "records/development/skills/DSAI_G7_E4_OPERATOR_PASS_20260812T115600+0100.json"
+EXECUTION = ROOT / "docs/releases/development-skills-architecture-v0-1/dsai-wp7/DSAI_G7_E5_HISTORICAL_REFERENCE_EXECUTION_PACKET.json"
+STATE = ROOT / "registries/implementation/dsai/OVC_DSAI_STATE_v0_15.json"
+POINTER = ROOT / "registries/implementation/dsai/CURRENT_STATE_POINTER.json"
 ENV = ROOT / "fixtures/development_skills/wp2_windows_environment_v0_1.json"
 
 def run_case(case):
@@ -49,7 +53,11 @@ class DSAIG7E5HistoricalReferenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.corpus = json.loads(CORPUS.read_text(encoding="utf-8"))
+        cls.review = json.loads(REVIEW.read_text(encoding="utf-8"))
         cls.e4 = json.loads(E4_PASS.read_text(encoding="utf-8"))
+        cls.execution = json.loads(EXECUTION.read_text(encoding="utf-8"))
+        cls.state = json.loads(STATE.read_text(encoding="utf-8"))
+        cls.pointer = json.loads(POINTER.read_text(encoding="utf-8"))
         cls.env = json.loads(ENV.read_text(encoding="utf-8"))
         cls.releases = {}
         for path in (
@@ -106,6 +114,21 @@ class DSAIG7E5HistoricalReferenceTests(unittest.TestCase):
             self.assertFalse(case["operator_outcome_used_for_scoring"])
             self.assertNotIn("operator_outcome", case["reference"])
             self.assertTrue(case["reference_basis"].strip())
+
+    def test_e5_review_and_programme_state_remain_fail_closed_pending_independence(self):
+        self.assertEqual(self.review["reviewer_signoff"]["overall_disposition"], "PENDING")
+        self.assertEqual(self.review["reviewer_signoff"]["review_effort_minutes"], 0)
+        self.assertEqual(self.execution["mechanical_execution"]["status"], "PASS")
+        self.assertEqual(self.execution["mechanical_execution"]["reference_matches"], 42)
+        self.assertEqual(self.execution["independent_reference_review"]["status"], "PENDING")
+        self.assertEqual(self.execution["trusted_promotions"], [])
+        self.assertEqual(self.state["programme_status"], "BLOCKED_E5_INDEPENDENT_REFERENCE_REVIEW")
+        self.assertEqual(self.state["qualification_closure"]["e4"]["status"], "PASS_INDEPENDENT_OPERATOR_APPROVED")
+        self.assertEqual(self.state["qualification_closure"]["e5"]["status"], "MECHANICAL_PASS_INDEPENDENT_REFERENCE_REVIEW_PENDING")
+        self.assertEqual(self.state["authority"]["trusted_skills"], [])
+        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_15.json")
+        self.assertEqual(self.pointer["status"], "BLOCKED_E5_INDEPENDENT_REFERENCE_REVIEW")
+        self.assertEqual(self.pointer["next_packet"], "DSAI-WP7")
 
 if __name__ == "__main__":
     unittest.main()
