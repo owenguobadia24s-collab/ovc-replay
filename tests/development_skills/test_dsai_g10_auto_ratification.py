@@ -56,12 +56,13 @@ def test_g10_state_preserves_console_and_dsai_authority_boundaries():
     assert state["mandatory_stop"]["active"] is False
 
 
-def test_live_pointer_waits_for_wp10_integration_before_wp11():
+def test_v028_preserves_preintegration_history_while_live_pointer_may_advance():
+    state = _load(STATE)
+    assert state["next_packet"] == "DSAI-WP10"
     pointer = _load(POINTER)
-    assert pointer == {
-        "current_state": "OVC_DSAI_STATE_v0_28.json",
-        "next_packet": "DSAI-WP10",
-        "programme_id": "OVC-DSAI-v0.1",
-        "schema": "ovc-programme-current-state-pointer/v1",
-        "status": "WP10_G10_AUTO_RATIFIED_PENDING_INTEGRATION",
-    }
+    assert pointer["programme_id"] == "OVC-DSAI-v0.1"
+    assert pointer["schema"] == "ovc-programme-current-state-pointer/v1"
+    assert str(pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_")
+    assert pointer["next_packet"] in {"DSAI-WP10", "DSAI-WP11", None}
+    if pointer["next_packet"] is None:
+        assert pointer["status"] == "IMPLEMENTED_ORCH2_BOUNDED_PILOTED"

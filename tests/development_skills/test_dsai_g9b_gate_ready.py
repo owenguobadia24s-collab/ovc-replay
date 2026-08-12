@@ -88,4 +88,6 @@ def test_v025_preserves_gate_ready_history_while_live_pointer_may_advance_after_
     assert pointer["schema"] == "ovc-programme-current-state-pointer/v1"
     assert str(pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_")
     assert str(pointer["status"]).strip()
-    assert pointer["next_packet"] == "DSAI-WP9"
+    assert pointer["next_packet"] in {"DSAI-WP9", "DSAI-WP10", "DSAI-WP11", None}
+    if pointer["next_packet"] is None:
+        assert pointer["status"] == "IMPLEMENTED_ORCH2_BOUNDED_PILOTED"
