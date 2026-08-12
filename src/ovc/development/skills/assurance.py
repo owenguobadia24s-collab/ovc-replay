@@ -39,6 +39,12 @@ def test_execution_plan(*, test_plan: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+# This is a public engineering-assurance utility, not a pytest test case.  The
+# name is retained for API compatibility while pytest-native collection is
+# explicitly prevented from treating imports of the helper as tests.
+test_execution_plan.__test__ = False
+
+
 def evaluate_qa(assertions: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     rows = [dict(row) for row in assertions]
     if not rows:
