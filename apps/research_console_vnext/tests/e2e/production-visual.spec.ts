@@ -6,10 +6,10 @@ const screenshotRoot = path.resolve(process.cwd(), "../../artifacts/research_con
 mkdirSync(screenshotRoot, { recursive: true });
 
 const routes = [
-  ["structure", "/structure", "Investigate", "C2 structural state matrix + synchronized C2E episode rail"],
-  ["research", "/research", "Research", "Representation, distance and family-stability comparison"],
-  ["evidence", "/evidence", "Evidence", "Bounded lineage, dependency and QA projection"],
-  ["control", "/control", "Control", "Programme state, gates, authority and dependency consequences"],
+  ["structure", "/structure", "Investigate", "C2 structural state matrix + synchronized C2E episode rail", "106:2"],
+  ["research", "/research", "Research", "Representation, distance and family-stability comparison", "111:2"],
+  ["evidence", "/evidence", "Evidence", "Bounded lineage, dependency and QA projection", "113:2"],
+  ["control", "/control", "Control", "Programme state, gates, authority and dependency consequences", "115:2"],
 ] as const;
 
 const box = async (page: Page, selector: string) => {
@@ -22,6 +22,8 @@ const near = (actual: number, expected: number, tolerance = 1.5) => expect(Math.
 
 async function assertTrustSpine(page: Page) {
   const shell = page.getByLabel("Fixture-only production research console");
+  await expect(shell).toHaveAttribute("data-figma-manifest", "269:2");
+  await expect(shell).toHaveAttribute("data-pvs-release", "RCN-vNext-OPT-B-ESL-PVS-v0.2");
   await expect(shell).toContainText("SYNTHETIC_FIXTURE");
   await expect(shell).toContainText("NON-EVIDENTIARY");
   await expect(shell).toContainText("AVAILABLE");
@@ -36,12 +38,13 @@ async function assertTrustSpine(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
 }
 
-for (const [name, route, domain, title] of routes) {
+for (const [name, route, domain, title, masterNode] of routes) {
   test(`production ${domain} master is exact at 1920x1080`, async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto(route);
     await expect(page.getByLabel("Fixture-only production research console")).toHaveAttribute("data-domain", domain);
     await expect(page.getByText(title, { exact: true })).toBeVisible();
+    await expect(page.locator('[data-rcn-ref="production-primary-canvas"]')).toHaveAttribute("data-figma-node", masterNode);
     await assertTrustSpine(page);
 
     const rail = await box(page, '[data-rcn-ref="production-domain-rail"]');
@@ -114,6 +117,27 @@ test("Investigate responsive master uses controlled inspector drawer at 1280x720
   await expect(page.getByLabel("Evidence Inspector")).toContainText("1,234 / 10,000");
   await expect(page.getByLabel("Evidence Inspector")).toContainText("12 / 12");
   await page.screenshot({ path: path.join(screenshotRoot, "structure-1280x720.png"), fullPage: false });
+});
+
+test("PVS v0.2 shell components remain bound to the canonical Figma component IDs", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.goto("/structure");
+  const expected = [
+    ['production-domain-rail','44:159'],['production-header','46:213'],['production-context-strip','47:292'],
+    ['production-navigator','49:338'],['production-evidence-inspector','64:277'],['production-evidence-dock','65:71'],['production-status-bar','50:316'],
+  ] as const;
+  for (const [ref,node] of expected) await expect(page.locator(`[data-rcn-ref="${ref}"]`)).toHaveAttribute("data-figma-node", node);
+});
+
+test("Control preserves the RCN-RN-G4 real-source boundary and exposes no mutation surface", async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.goto("/control");
+  const shell = page.getByLabel("Fixture-only production research console");
+  await expect(shell).toContainText("RCN-RN-G4 · OPERATOR REQUIRED");
+  await expect(shell).toContainText("REAL SOURCE");
+  await expect(shell).toContainText("DENIED");
+  await expect(shell).toContainText("NO WRITE SURFACE");
+  await expect(page.getByRole("button", { name: /approve|activate|merge|execute|run/i })).toHaveCount(0);
 });
 
 test("root enters the research-native product through Structure, not legacy Market", async ({ page }) => {

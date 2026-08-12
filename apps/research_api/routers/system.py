@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Query
 
 from ovc.console_vnext.application.errors import AuthorityDenied
+from ovc.development.skills import build_skill_control_read_model
 
 from ..fixture_store import FixtureStore
 
@@ -40,6 +41,17 @@ def build_system_router(store: FixtureStore) -> APIRouter:
         _deny_validation(role)
         return store.envelope(
             "context", store.resource("context"), schema_id="ovc-rcn-context-options/v1", capability_id="CONTEXT"
+        )
+
+    @router.get("/control/skills", tags=["control"])
+    def skill_control_projection(role: str | None = Query(default=None)):
+        _deny_validation(role)
+        payload = build_skill_control_read_model(store.resource("dsai_control_sources"))
+        return store.envelope(
+            "control.skills",
+            payload,
+            schema_id="ovc-dsai-skill-control-read-model/v1",
+            capability_id="SYSTEM",
         )
 
     return router

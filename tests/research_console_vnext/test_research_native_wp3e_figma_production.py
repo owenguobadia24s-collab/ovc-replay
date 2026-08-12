@@ -3,6 +3,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "apps" / "research_console_vnext" / "src"
+PRODUCTION = APP / "production"
 
 
 class ProductionFigmaConformance(unittest.TestCase):
@@ -14,19 +15,41 @@ class ProductionFigmaConformance(unittest.TestCase):
             self.assertIn(f'{{path:"{route}",element:<ProductionConsole/>}}', router)
 
     def test_production_console_preserves_source_authority_and_fail_honest_semantics(self):
-        source = (APP / "production" / "ProductionConsole.tsx").read_text()
+        source = "\n".join(
+            (PRODUCTION / name).read_text()
+            for name in ["ProductionConsole.tsx", "PvsShell.tsx", "pvsContracts.ts"]
+        )
         for marker in [
             "SYNTHETIC_FIXTURE", "NON-EVIDENTIARY", "AUTHORITY EFFECT", "AVAILABLE", "AUTHORISED", "ACTIVE",
             "FVT", "MISSINGNESS", "DENOMINATOR", "C2 STATE MATRIX", "C2E EPISODE / CHRONOLOGY RAIL",
             "REPRESENTATION × METHOD COMPARISON", "NO METHOD SELECTOR AUTHORITY", "NO_STABLE_FAMILY",
             "Object lineage / dependencies / QA projection", "display_projection non-canonical",
-            "PROGRAMME / PACKET / GATE LEDGER", "G3V · OPERATOR REQUIRED", "NO WRITE SURFACE", "REAL SOURCE", "DENIED",
+            "PROGRAMME / PACKET / GATE LEDGER", "RCN-RN-G4 · OPERATOR REQUIRED", "NO WRITE SURFACE", "REAL SOURCE", "DENIED",
         ]:
             self.assertIn(marker, source)
         self.assertNotIn("Math.random", source)
         self.assertNotIn("fetch(", source)
         self.assertNotIn("localStorage", source)
         self.assertNotIn("sessionStorage", source)
+        for method in ["POST", "PUT", "PATCH", "DELETE"]:
+            self.assertNotIn(f'method: "{method}"', source)
+
+    def test_phase2_runtime_uses_extracted_figma_bound_shell(self):
+        console = (PRODUCTION / "ProductionConsole.tsx").read_text()
+        shell = (PRODUCTION / "PvsShell.tsx").read_text()
+        contracts = (PRODUCTION / "pvsContracts.ts").read_text()
+        for component in [
+            "GlobalDomainRail", "ApplicationHeader", "ContextAuthorityStrip", "WorkbenchNavigator",
+            "EvidenceInspector", "EvidenceDock", "StatusBar",
+        ]:
+            self.assertIn(component, console)
+            self.assertIn(f"function {component}", shell)
+        for node in ["44:159", "46:213", "47:292", "49:338", "64:277", "65:71", "50:316"]:
+            self.assertIn(node, shell)
+        for route in ["/structure", "/research", "/evidence", "/control"]:
+            self.assertIn(route, contracts)
+        self.assertIn('data-figma-manifest="269:2"', console)
+        self.assertIn('data-pvs-release="RCN-vNext-OPT-B-ESL-PVS-v0.2"', console)
 
     def test_production_tokens_are_semantic_not_legacy_colour_aliases(self):
         tokens = (APP / "design" / "productionTokens.css").read_text()
@@ -42,7 +65,7 @@ class ProductionFigmaConformance(unittest.TestCase):
         self.assertNotIn("--rcn-amber", tokens)
 
     def test_responsive_contract_encodes_figma_geometry_and_drawer_non_equivalence(self):
-        responsive = (APP / "production" / "productionResponsive.css").read_text()
+        responsive = (PRODUCTION / "productionResponsive.css").read_text()
         for marker in [
             "@media (max-width:1550px)", ".pc-header{left:48px;height:48px}",
             ".pc-navigator{left:48px;top:90px;width:200px;bottom:140px", ".pc-primary{left:248px;right:280px;top:90px;bottom:140px",

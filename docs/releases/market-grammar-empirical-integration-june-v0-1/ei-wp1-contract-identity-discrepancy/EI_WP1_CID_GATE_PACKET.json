@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-operator-required-gate-packet/v1",
+  "gate_id": "EI-WP1-CID-G0",
+  "gate_title": "EI-WP1 frozen binding identity discrepancy",
+  "programme_id": "OVC-MG-EI-WP1-CONTRACT-IDENTITY-DISCREPANCY-v0.1",
+  "plan_id": "OVC-MG-EI-WP1-CID-DECISION-PROTOCOL-0.1",
+  "plan_version": "0.1",
+  "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "candidate_commit": "4e06beaf04c7dae6b27bd576b08ca7a78ade2a56",
+  "completed_packets": ["EI-WP1-CID-WP0"],
+  "current_authority": "INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_WITH_PYT_WP2_BLOCKED",
+  "proposed_delta": "VERSIONED_SUPERSESSION_OF_FROZEN_EI_WP1_BINDING_CONTRACT_FROM_MALFORMED_62_CHAR_TRANSCRIPTION_TO_PREEXISTING_AUTHORITATIVE_64_CHAR_SHA256",
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_effect_if_approved": "FROZEN_CONTRACT_SUPERSESSION_ONLY_NO_MARKET_OR_SCIENTIFIC_AUTHORITY",
+  "finding": {
+    "authoritative_digest_exists": true,
+    "binding_id": "C2VNEXT.JUNE.DISCOVERY.INPUT.v1",
+    "authoritative_binding_sha256": "126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "historical_malformed_value": "126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8",
+    "historical_malformed_length": 62,
+    "classification": "FORWARD_TRANSCRIPTION_TRUNCATION_OF_EXISTING_IDENTITY"
+  },
+  "acceptance_conditions": [
+    "authoritative 64-character value is present in governing EI plan",
+    "authoritative 64-character value is present in prior verified MG-D0/MG-WP0 evidence locks",
+    "accepted C2E source run manifest binds same binding ID to same 64-character value",
+    "accepted Drive run-001 output-manifest raw SHA-256 matches repository frozen raw-manifest hash",
+    "decoded accepted output-manifest contains same 64-character binding value",
+    "runtime binding-hash algorithm requires and validates SHA-256 semantics",
+    "historical 62-character artifacts are preserved unchanged",
+    "forward repair is versioned rather than in-place",
+    "no source identity, source bytes, population, selector, scientific or market authority changes"
+  ],
+  "evidence_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_EVIDENCE_REPORT.json",
+  "tests": {
+    "decision_packet_json_parse": "PASS",
+    "digest_length_62": "PASS",
+    "digest_length_64": "PASS",
+    "authoritative_digest_hex64": "PASS",
+    "drive_output_manifest_raw_sha256_match": "PASS"
+  },
+  "qa_recommendation": "PASS_SUPERSEDE",
+  "warnings": [
+    "PYT-WP2 remains blocked until an approved v0.2 supersession is merged.",
+    "Unified pytest exposed additional historical/current-state failures that remain separate from this identity discrepancy."
+  ],
+  "unresolved_issues": [],
+  "changed_files_expected_after_approval": [
+    "new v0.2 EI-WP1 contract",
+    "new v0.2 fixture/implementation registry",
+    "new correspondence/supersession record",
+    "forward runtime consumer update",
+    "targeted regression tests"
+  ],
+  "external_artifacts": [{
+    "provider": "Google Drive",
+    "file_id": "1iW7a9eaHIcc_k1-aVTDTaHrVCr12Hb7Q",
+    "sha256": "2808729f929412f56ad3061b0cbbcd42bdb277bfc779cd1885f605584295a693",
+    "role": "ACCEPTED_RUN_001_OUTPUT_MANIFEST"
+  }],
+  "rollback": "Before approval: no frozen artifact changed. After approved supersession: disable/supersede v0.2 forward surface while preserving both historical v0.1 and the operator decision; never accept the malformed 62-character value as SHA-256.",
+  "recommended_decision": "PASS_SUPERSEDE",
+  "allowed_decisions": ["PASS_SUPERSEDE","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "operator_decision": "PASS_SUPERSEDE",
+  "operator_approval": {
+    "command": "OVC APPROVE EI-WP1-CID-G0",
+    "approved_at": "2026-08-12T20:06:00+01:00",
+    "approved_candidate_commit": "4e06beaf04c7dae6b27bd576b08ca7a78ade2a56"
+  },
+  "next_after_pass": "Implement EI-WP1-CID-WP1 as a bounded versioned supersession packet, run targeted plus repository assurance, merge if eligible, then resume PYT-WP2 from current main."
+}
