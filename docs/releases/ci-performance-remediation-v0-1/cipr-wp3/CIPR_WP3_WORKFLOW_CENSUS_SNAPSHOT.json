@@ -3,34 +3,55 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "packet_id": "CIPR-WP3",
   "baseline_main_sha": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+  "assured_head_sha": "c48a520f0abaa2c8236827c7902e782a9fc900bc",
+  "status": "PASS",
   "github_actions_registry": {
     "registered_workflow_total": 175,
     "source": "GitHub Actions workflows API",
     "status": "OBSERVED_EXTERNAL_REGISTRY"
   },
   "repository_scan": {
-    "status": "PENDING_CORRECTED_EXACT_HEAD_CI",
-    "expected_total_workflow_definitions": 129,
-    "expected_pull_request_listener_count": 2,
+    "total_workflow_definitions": 129,
+    "pull_request_listener_count": 2,
     "approved_pull_request_paths": [
       ".github/workflows/tests.yml",
       ".github/workflows/ovc-tiered-tests.yml"
     ],
-    "category_counts": null,
-    "trigger_counts": null
+    "category_counts": {
+      "ACTIVE_MANUAL_OPERATION": 20,
+      "CURRENT_PR_CI": 2,
+      "HISTORICAL_MANUAL_VERIFICATION": 107,
+      "TEMPORARY": 0
+    },
+    "trigger_counts": {
+      "pull_request": 2,
+      "push": 15,
+      "schedule": 0,
+      "workflow_call": 0,
+      "workflow_dispatch": 121,
+      "workflow_run": 0
+    }
+  },
+  "corroborating_source_search": {
+    "historical_manual_verification_file_count": 107,
+    "historical_packet_verification_file_count": 79,
+    "files_containing_both_historical_markers": 79,
+    "historical_category_interpretation": "The 79 historical-packet-verification matches are a subset of the 107 historical-manual-verification matches, so precedence yields 107 unique historical/manual-verification repository definitions.",
+    "pull_request_file_count": 2,
+    "workflow_dispatch_file_count": 121,
+    "push_file_count": 15,
+    "schedule_file_count": 0,
+    "workflow_call_file_count": 0,
+    "workflow_run_file_count": 0
   },
   "registry_repository_relation": {
     "gross_count_excess": 46,
     "interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK",
-    "not_authorized_inference": "Do not infer that all 46 excess registrations are unique orphaned paths without an explicit path-level crosswalk."
+    "not_authorized_inference": "The 46-count excess is not evidence of 46 unique orphaned workflow paths and grants no deletion, disablement or retirement authority."
   },
   "classification_policy": "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_1.json",
   "classifier": "scripts/development/ci_workflow_inventory.py",
   "correction_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_INVENTORY_LAYER_CORRECTION.json",
   "destructive_actions_performed": false,
-  "authority_delta": "NONE",
-  "notes": [
-    "The first WP3 candidate correctly exposed that the GitHub Actions registry and current-main workflow definitions are distinct inventory layers.",
-    "Exact repository category and trigger counts will be copied from corrected exact-head CI output before delegated CIPR-G3 ratification."
-  ]
+  "authority_delta": "NONE"
 }

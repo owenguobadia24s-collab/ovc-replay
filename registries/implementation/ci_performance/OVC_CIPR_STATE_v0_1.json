@@ -3,7 +3,7 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "baseline_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
   "branch": "build/ci-performance-wp3-workflow-governance",
   "packet_id": "CIPR-WP3",
@@ -14,17 +14,36 @@
   ],
   "authority_required": "NONE_FOR_WP3",
   "authority_delta": "NONE_CLASSIFICATION_ONLY",
-  "candidate_commit": null,
+  "candidate_commit": "c48a520f0abaa2c8236827c7902e782a9fc900bc",
   "tests": [
-    "Initial WP3 head 26b726c5 correctly failed: repository definitions=129, external Actions registry=175",
-    "PENDING corrected deterministic workflow census validation",
-    "PENDING exact-head tests + pytest-unittest-parity + runner-parity",
-    "PENDING exact-head tiered FINAL_HEAD/profile observer and merge readiness"
+    "GitHub Actions tests workflow run 31625068355 PASS: tests + pytest-unittest-parity + runner-parity",
+    "GitHub Actions tiered workflow run 31625068367 PASS: FINAL_HEAD profile + observer + stable-main merge readiness",
+    "OVC canonical tests observed metric 157329 ms outside global lane",
+    "OVC merge readiness evaluator 646 ms inside stable global lane",
+    "zero review threads"
   ],
-  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_QA_PLAN.json",
-  "decision_record": [],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_QA_PACKET.json",
+  "decision_record": [
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_G3_DELEGATED_DECISION.json"
+  ],
+  "workflow_census": {
+    "snapshot": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_WORKFLOW_CENSUS_SNAPSHOT.json",
+    "repository_workflow_definitions": 129,
+    "github_actions_registered_workflows": 175,
+    "gross_difference": 46,
+    "category_counts": {
+      "CURRENT_PR_CI": 2,
+      "TEMPORARY": 0,
+      "HISTORICAL_MANUAL_VERIFICATION": 107,
+      "ACTIVE_MANUAL_OPERATION": 20
+    }
+  },
   "merge_commit": null,
   "blockers": [],
+  "nonblocking_warnings": [
+    "GitHub Actions registry exposes 46 more registered records than current repository definitions; retained as diagnostic drift pending an explicit path-level crosswalk, with no cleanup authority.",
+    "Generic checkout/setup-python Node-target warnings remain upstream-action hygiene."
+  ],
   "next_packet": "CIPR-WP4",
   "operator_stop_gate": "CIPR-G4-SUITE-TOPOLOGY",
   "completed_packets": [
@@ -35,15 +54,10 @@
       "terminal_receipt": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_TERMINAL_RECEIPT.json"
     }
   ],
-  "inventory_layers": {
-    "repository_workflow_definitions": 129,
-    "github_actions_registered_workflows": 175,
-    "gross_count_excess": 46,
-    "excess_interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK"
-  },
   "notes": [
-    "WP3 is strictly non-destructive: workflow deletion, disablement, trigger mutation and required-check mutation are prohibited.",
-    "Initial QA assumption equating external registry count with repository definitions was corrected without weakening tests.",
-    "TEMPORARY repository category may legitimately be zero even though temporary workflow registrations are visible in the external Actions registry."
+    "Initial WP3 count-model defect was repaired in scope without weakening acceptance conditions.",
+    "CIPR-G3 delegated PASS is materialised against c48a520f after exact-head QA.",
+    "The court-record decision commit created from this state must itself receive fresh exact-head required CI before eligible squash merge.",
+    "CIPR-WP4 must stop at operator-required CIPR-G4-SUITE-TOPOLOGY before any canonical-suite topology or runner-admission mutation."
   ]
 }
