@@ -122,7 +122,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python3 -m pytest tests > /tmp/pytest-unified.log 2>&1
+          python3 -m pytest tests --continue-on-collection-errors > /tmp/pytest-unified.log 2>&1
           status=$?
           cat /tmp/pytest-unified.log
           if [ "$status" -ne 0 ]; then
