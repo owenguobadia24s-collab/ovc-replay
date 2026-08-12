@@ -1,0 +1,16 @@
+{
+  "$id": "ovc://schemas/opt_b/esl/occurrence_anchor_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "anchor_id": {"minLength": 1, "type": "string"},
+    "anchor_kind": {"minLength": 1, "type": "string"},
+    "clock": {"const": "UTC"},
+    "instrument": {"minLength": 1, "type": "string"},
+    "scale": {"minLength": 1, "type": "string"},
+    "side": {"minLength": 1, "type": "string"}
+  },
+  "required": ["anchor_kind", "anchor_id", "instrument", "side", "scale", "clock"],
+  "title": "OccurrenceAnchor",
+  "type": "object"
+}

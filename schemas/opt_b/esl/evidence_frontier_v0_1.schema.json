@@ -1,0 +1,18 @@
+{
+  "$id": "ovc://schemas/opt_b/esl/evidence_frontier_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "comparability_domain_id": {"type": ["string", "null"]},
+    "dependency_roles": {"additionalProperties": {"enum": ["REQUIRED", "OPTIONAL", "CONDITIONAL_REQUIRED", "STRATIFIER", "FILTER", "DISPLAY_ONLY", "PROVENANCE_ONLY", "FORBIDDEN"]}, "type": "object"},
+    "evaluation_cutoff": {"pattern": "Z$", "type": "string"},
+    "latest_required_fvt": {"pattern": "Z$", "type": ["string", "null"]},
+    "missing_ref_ids": {"items": {"type": "string"}, "type": "array", "uniqueItems": true},
+    "optional_ref_ids": {"items": {"type": "string"}, "type": "array", "uniqueItems": true},
+    "required_ref_ids": {"items": {"type": "string"}, "type": "array", "uniqueItems": true},
+    "source_generation_ids": {"items": {"type": "string"}, "type": "array", "uniqueItems": true}
+  },
+  "required": ["evaluation_cutoff", "required_ref_ids", "optional_ref_ids", "missing_ref_ids", "source_generation_ids", "latest_required_fvt", "dependency_roles", "comparability_domain_id"],
+  "title": "EvidenceFrontier",
+  "type": "object"
+}
