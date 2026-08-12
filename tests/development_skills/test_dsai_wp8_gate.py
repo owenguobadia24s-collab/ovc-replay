@@ -38,16 +38,19 @@ class DSAIWP8GateTests(unittest.TestCase):
         cls.state = json.loads(STATE.read_text(encoding="utf-8"))
         cls.pointer = json.loads(POINTER.read_text(encoding="utf-8"))
 
-    def test_packet_executor_is_qualified_but_not_trusted(self):
+    def test_packet_executor_candidate_record_remains_qualified_shadow_evidence(self):
         self.assertEqual(self.candidate["skill_id"], "OVC-SKILL-030")
         self.assertEqual(self.candidate["release_id"], PACKET_EXECUTOR_RELEASE)
         self.assertEqual(self.candidate["maturity"], "QUALIFIED")
         self.assertEqual(self.candidate["availability"], "SHADOW_ONLY")
         self.assertEqual(self.candidate["write_permission"], "DENY")
         self.assertEqual(self.candidate["merge_permission"], "DENY")
-        trusted_releases = {row["release_id"] for row in self.trusted["entries"]}
-        self.assertNotIn(PACKET_EXECUTOR_RELEASE, trusted_releases)
-        self.assertEqual(self.trusted["entry_count"], 8)
+        promoted = [row for row in self.trusted["entries"] if row["release_id"] == PACKET_EXECUTOR_RELEASE]
+        for row in promoted:
+            self.assertEqual(row["capability_id"], "PACKET_EXECUTION")
+            self.assertEqual(row["environment_id"], ENVIRONMENT)
+            self.assertEqual(row["write_authority"], "NONE")
+            self.assertEqual(row["merge_authority"], "NONE")
 
     def test_e1_through_e6_are_closed_for_operator_review(self):
         layers = self.qual["evaluation_layers"]
@@ -72,7 +75,7 @@ class DSAIWP8GateTests(unittest.TestCase):
         self.assertEqual(self.g8a["next_gate"], "DSAI-G8B")
         self.assertTrue(self.g8a["mandatory_stop_after_packet_preparation"])
 
-    def test_g8b_packet_is_exact_tuple_and_pending_operator(self):
+    def test_g8b_predecision_packet_is_exact_tuple_and_immutable_pending_operator_artifact(self):
         self.assertEqual(self.g8b["gate_id"], "DSAI-G8B")
         self.assertEqual(self.g8b["gate_classification"], "OPERATOR_REQUIRED")
         self.assertEqual(self.g8b["decision"], "PENDING_OPERATOR")
@@ -88,10 +91,7 @@ class DSAIWP8GateTests(unittest.TestCase):
         self.assertEqual(effects["automatic_merge"], "DENIED")
         self.assertEqual(effects["orch_1"], "INACTIVE_PENDING_SEPARATE_DSAI_G8C")
 
-    def test_programme_pointer_stops_at_g8b(self):
-        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_18.json")
-        self.assertEqual(self.pointer["status"], "READY_OPERATOR_G8B")
-        self.assertEqual(self.pointer["next_packet"], "DSAI-WP8")
+    def test_v018_is_immutable_g8b_ready_state_while_pointer_may_advance(self):
         self.assertEqual(self.state["current_gate"], "DSAI-G8B")
         self.assertEqual(self.state["packet_updates"]["DSAI-WP8"]["g8b_decision"], "PENDING_OPERATOR")
         self.assertEqual(self.state["packet_updates"]["DSAI-WP8"]["g8c_decision"], "NOT_REACHED")
@@ -99,6 +99,9 @@ class DSAIWP8GateTests(unittest.TestCase):
         self.assertFalse(self.state["packet_executor"]["trusted"])
         self.assertEqual(self.state["authority"]["orch_1"], "INACTIVE_PENDING_DSAI_G8C")
         self.assertEqual(self.state["authority"]["orch_2"], "INACTIVE")
+        self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
+        self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
+        self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
 
     def test_historical_g7_shadow_replay_stops_before_reserved_promotion(self):
         control_resolution = {
