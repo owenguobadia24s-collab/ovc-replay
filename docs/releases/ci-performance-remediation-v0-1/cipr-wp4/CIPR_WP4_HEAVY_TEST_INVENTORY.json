@@ -1,0 +1,72 @@
+{
+  "schema": "ovc-ci-heavy-test-inventory/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP4",
+  "gate_id": "CIPR-G4-SUITE-TOPOLOGY",
+  "baseline_main_sha": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "current_main_aggregate": {
+    "workflow_run": 31626433864,
+    "head_sha": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+    "legacy_unittest": {
+      "job_id": 94213861905,
+      "job_result": "PASS",
+      "job_wall_seconds": 146,
+      "complete_repository_suite_step_seconds": 140,
+      "command": "PYTHONPATH=src python3 -m unittest discover -s tests -v"
+    },
+    "pytest_legacy_parity": {
+      "job_id": 94213861902,
+      "job_result": "PASS",
+      "job_wall_seconds": 165,
+      "pytest_install_seconds": 6,
+      "execute_exact_legacy_surface_seconds": 153
+    },
+    "runner_parity": {
+      "job_id": 94213862023,
+      "job_result": "PASS",
+      "job_wall_seconds": 15,
+      "pytest_install_seconds": 4,
+      "collection_parity_seconds": 4
+    },
+    "observation": "Plain pytest execution of the exact legacy surface is currently slower than the standalone unittest command. Runner replacement alone is therefore not a demonstrated CI latency remediation."
+  },
+  "audit_baseline_heavy_tests": [
+    {
+      "path": "tests/governance/test_genesis_repository_topology.py",
+      "role": "repository clean-rebuild determinism",
+      "historical_wall_seconds": 25.6,
+      "mechanism": "two clean repository-topology rebuilds"
+    },
+    {
+      "path": "tests/governance/test_grt_wp9_conformance.py",
+      "role": "repository-wide topology/conformance snapshot",
+      "historical_wall_seconds": 12.7,
+      "mechanism": "repository-wide topology/conformance scan"
+    },
+    {
+      "path": "tests/test_zzzz_srfdi_g8r_wp6_capacity_profile.py",
+      "role": "SRFDI multi-N capacity/profile evidence",
+      "historical_wall_seconds": 46.4,
+      "mechanism": "capacity/profile workload through N=1024"
+    },
+    {
+      "path": "tests/test_zzzzzz_golden2_weekly_output.py",
+      "role": "GOLDEN2 isolated weekly output assurance",
+      "historical_wall_seconds": 13.9,
+      "mechanism": "isolated-process end-to-end weekly output"
+    }
+  ],
+  "audit_baseline_summary": {
+    "historical_heavy_sum_seconds": 98.6,
+    "historical_full_suite_seconds": 114.06,
+    "historical_share_percent_approx": 86.5,
+    "freshness_warning": "Per-heavy-test timings are from the CI performance audit baseline and have not been re-benchmarked individually on 22c5ede9. Current aggregate suite execution is 140 seconds, so these timings must not be presented as exact current per-test durations."
+  },
+  "performance_hypothesis": {
+    "recommended_architecture": "DETERMINISTIC_REQUIRED_SHARD_UNION",
+    "estimated_final_assurance_critical_path_seconds": "55-75",
+    "estimate_basis": "Historical heavy-work concentration plus current aggregate suite duration. This is an engineering estimate, not measured candidate performance.",
+    "required_proof_after_approval": "Benchmark exact-head shard wall time, union completeness, deterministic repeatability and parity before any cutover."
+  },
+  "authority_effect": "NONE_EVIDENCE_ONLY"
+}
