@@ -4,52 +4,60 @@
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "status": "APPROVED",
-  "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
-  "integration_baseline_commit": "ce320c64d07682a0eba2fa6228da07e1d1879270",
-  "branch": "build/ci-performance-remediation-v0-1",
-  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "baseline_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+  "branch": "build/ci-performance-wp3-workflow-governance",
+  "packet_id": "CIPR-WP3",
   "prerequisites": [
-    "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1 COMPLETED",
-    "PYT-WP1 / PYT-G1 COMPLETED with dual-run parity policy",
-    "CIPR-G0 bounded operator instruction PASS"
+    "CIPR-WP0-WP2 COMPLETED at main 0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+    "CIPR-G1 PASS_DELEGATED",
+    "CIPR-G2 PASS_DELEGATED"
   ],
-  "authority_required": "NONE_FOR_WP0_WP2",
-  "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
-  "candidate_commit": "14cb9f507b7f8ef9ed78105728b8194efca088ba",
+  "authority_required": "NONE_FOR_WP3",
+  "authority_delta": "NONE_CLASSIFICATION_ONLY",
+  "candidate_commit": "c48a520f0abaa2c8236827c7902e782a9fc900bc",
   "tests": [
-    "G1/G2 current PASS evidence remains valid at the semantic contract level",
-    "PENDING fresh exact-head tests + pytest-unittest-parity + runner-parity after ce320c64 merge reconciliation",
-    "PENDING fresh tiered FINAL_HEAD/profile observer and stable-main readiness after ce320c64 merge reconciliation"
+    "GitHub Actions tests workflow run 31625068355 PASS: tests + pytest-unittest-parity + runner-parity",
+    "GitHub Actions tiered workflow run 31625068367 PASS: FINAL_HEAD profile + observer + stable-main merge readiness",
+    "OVC canonical tests observed metric 157329 ms outside global lane",
+    "OVC merge readiness evaluator 646 ms inside stable global lane",
+    "zero review threads"
   ],
-  "metrics": {
-    "approved_implementation_observer_wait_ms": 167480,
-    "approved_implementation_lane_evaluation_ms": 583
-  },
-  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_QA_PACKET.json",
   "decision_record": [
-    "docs/releases/ci-performance-remediation-v0-1/cipr-g0/CIPR_G0_OPERATOR_INSTRUCTION.json",
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_G1_DELEGATED_DECISION.json",
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_G2_DELEGATED_DECISION.json"
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_G3_DELEGATED_DECISION.json"
   ],
-  "dependency_footprint": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_DEPENDENCY_FOOTPRINT.json",
-  "head_movement_receipts": [
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_3057_TO_2EFF.json",
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_2EFF_TO_E479.json",
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_E479_TO_C92.json",
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_C92_TO_FDF.json",
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_FDF_TO_CE32.json"
-  ],
+  "workflow_census": {
+    "snapshot": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_WORKFLOW_CENSUS_SNAPSHOT.json",
+    "repository_workflow_definitions": 129,
+    "github_actions_registered_workflows": 175,
+    "gross_difference": 46,
+    "category_counts": {
+      "CURRENT_PR_CI": 2,
+      "TEMPORARY": 0,
+      "HISTORICAL_MANUAL_VERIFICATION": 107,
+      "ACTIVE_MANUAL_OPERATION": 20
+    }
+  },
   "merge_commit": null,
   "blockers": [],
   "nonblocking_warnings": [
-    "Pre-remediation in-flight workflows can still transiently contend for the legacy global lane until they terminate.",
-    "Generic checkout/setup-python Node-target warnings remain upstream-action hygiene for WP3; CIPR-owned github-script uses v9."
+    "GitHub Actions registry exposes 46 more registered records than current repository definitions; retained as diagnostic drift pending an explicit path-level crosswalk, with no cleanup authority.",
+    "Generic checkout/setup-python Node-target warnings remain upstream-action hygiene."
   ],
-  "next_packet": "CIPR-WP3",
+  "next_packet": "CIPR-WP4",
   "operator_stop_gate": "CIPR-G4-SUITE-TOPOLOGY",
+  "completed_packets": [
+    {
+      "packet_id": "CIPR-WP0-WP2-GROUPED",
+      "status": "COMPLETED",
+      "merge_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+      "terminal_receipt": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_TERMINAL_RECEIPT.json"
+    }
+  ],
   "notes": [
-    "fdf64e0d -> ce320c64 is INTEGRATION_RELEVANT only: DSAI post-pilot records/tests changed, no bound CIPR/PYT/PDC contract changed.",
-    "Branch must now contain current main as an actual merge parent so the PR event base refreshes; head-only synchronization commits were insufficient.",
-    "No semantic re-preflight is required; exact-head integration assurance must rerun after reconciliation."
+    "Initial WP3 count-model defect was repaired in scope without weakening acceptance conditions.",
+    "CIPR-G3 delegated PASS is materialised against c48a520f after exact-head QA.",
+    "The court-record decision commit created from this state must itself receive fresh exact-head required CI before eligible squash merge.",
+    "CIPR-WP4 must stop at operator-required CIPR-G4-SUITE-TOPOLOGY before any canonical-suite topology or runner-admission mutation."
   ]
 }
