@@ -27,25 +27,49 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
 
     def test_per_pr_cancellation_is_preserved(self):
         self.assertIn("group: ovc-pr-${{ github.event.pull_request.number || github.ref }}", self.workflow)
+        self.assertIn("group: ovc-tests-${{ github.event.pull_request.number || github.ref }}", self.tests_workflow)
         self.assertIn("cancel-in-progress: true", self.workflow)
+        self.assertIn("cancel-in-progress: true", self.tests_workflow)
 
-    def test_merge_readiness_has_one_global_non_cancelling_lane(self):
-        self.assertIn("group: ovc-main-integration-lane-v1", self.workflow)
+    def test_final_integration_window_is_global_and_non_cancelling(self):
+        self.assertIn("group: ovc-main-final-integration-window-v2", self.workflow)
         self.assertIn("cancel-in-progress: false", self.workflow)
+        self.assertNotIn("group: ovc-main-integration-lane-v1", self.workflow)
 
-    def test_main_snapshot_must_be_stable(self):
+    def test_window_is_acquired_before_expensive_required_checks_are_admitted(self):
+        self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED", self.workflow)
+        self.assertIn("final-integration-window-admitted:", self.tests_workflow)
+        self.assertIn("OVC final integration window admitted", self.tests_workflow)
+        self.assertIn("windowCheckName = 'OVC merge readiness'", self.tests_workflow)
+        self.assertIn("windowRun?.status === 'in_progress'", self.tests_workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ADMITTED", self.tests_workflow)
+        self.assertEqual(self.tests_workflow.count("needs: final-integration-window-admitted"), 3)
+
+    def test_candidate_must_contain_acquired_current_main(self):
+        self.assertIn("git merge-base --is-ancestor", self.workflow)
+        self.assertIn("OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.workflow)
+        self.assertIn("github.event.pull_request.head.sha", self.workflow)
+
+    def test_main_snapshot_must_be_stable_for_entire_window(self):
         self.assertIn("OVC_BASE_MOVED_BEFORE_READINESS", self.workflow)
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.workflow)
         self.assertIn("mainSnapshot !== pr.base.sha", self.workflow)
+        self.assertIn("currentMain !== mainSnapshot", self.workflow)
         self.assertIn("finalMain !== mainSnapshot", self.workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_PASS", self.workflow)
+
+    def test_required_checks_are_observed_inside_held_window(self):
+        self.assertIn(
+            "const requiredNames = ['tests', 'pytest-unittest-parity', 'runner-parity', 'OVC profile assurance'];",
+            self.workflow,
+        )
+        self.assertIn("final_integration_window_hold_ms", self.workflow)
+        self.assertNotIn("canonical-tests-observed:", self.workflow)
 
     def test_no_duplicate_complete_repository_suite(self):
         full_suite = "python3 -m unittest discover -s tests -v"
         self.assertEqual(self.tests_workflow.count(full_suite), 1)
         self.assertNotIn(full_suite, self.workflow)
-        self.assertIn("const requiredNames =", self.workflow)
-        for check_name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
-            self.assertIn(check_name, self.workflow)
 
 
 if __name__ == "__main__":
