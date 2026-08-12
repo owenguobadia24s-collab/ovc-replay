@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+  "status": "QA_REVIEW_PENDING_REMOTE_EVIDENCE",
+  "baseline_main": "28ea2620af36a77704782274830a0e87892a960f",
+  "candidate_commit": "PENDING_PACKET_COMMIT",
+  "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+  "acceptance_conditions": [
+    "targeted deterministic allocation/governance tests pass",
+    "manifest proof passes with byte-identical repeated generation",
+    "manifest population equals exact legacy unittest discovery with zero omission and zero duplication",
+    "all four shadow shards pass independently",
+    "shadow aggregate outcome equals canonical full unittest outcome on the same candidate head",
+    "existing tests, pytest-unittest-parity and runner-parity checks pass",
+    "FINAL_HEAD/profile, canonical observer and stable-main readiness pass",
+    "no xdist, pytest-native admission, required-check substitution, benchmark-semantic change or scientific authority delta occurs",
+    "performance evidence records shard wall times, critical path and runner overhead",
+    "at least three comparable shadow executions are recorded where practicable before cutover recommendation"
+  ],
+  "targeted_commands": [
+    "PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_unittest_shard_shadow.py' -v",
+    "PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_ci_performance_shadow_packet.py' -v",
+    "PYTHONPATH=src python tools/ci/unittest_shard_shadow.py prove --policy registries/implementation/ci_performance/CIPR_UNITTEST_SHARD_POLICY_v0_1.json"
+  ],
+  "remote_runs": [],
+  "performance_evidence": [],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "qa_recommendation": "PENDING",
+  "rollback": "Remove or supersede only shadow-candidate machinery; preserve current required CI and all evidence."
+}

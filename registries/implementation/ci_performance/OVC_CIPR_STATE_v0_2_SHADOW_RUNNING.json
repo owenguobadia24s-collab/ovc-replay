@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "RUNNING",
+  "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+  "baseline_commit": "28ea2620af36a77704782274830a0e87892a960f",
+  "branch": "build/ci-performance-shadow-shards",
+  "candidate_commit": "PENDING_PACKET_COMMIT",
+  "prerequisites": [
+    "CIPR-G4-SUITE-TOPOLOGY operator PASS B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
+    "CIPR-G4 decision/evidence squash-merged at main 28ea2620af36a77704782274830a0e87892a960f",
+    "PYT-WP1/PYT-G1 legacy unittest preservation remains in force"
+  ],
+  "authority_required": "SATISFIED_OPERATOR_PASS",
+  "authority_delta": "BOUNDED_RUNNER_NEUTRAL_DETERMINISTIC_REQUIRED_SHARD_SHADOW_EVALUATION",
+  "required_check_substitution_active": false,
+  "runner_cutover_active": false,
+  "scientific_authority_delta": false,
+  "tests": [
+    "PENDING targeted",
+    "PENDING canonical exact-head",
+    "PENDING shadow matrix"
+  ],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHARD_QA_PACKET.json",
+  "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "warnings": [
+    "Open PYT-WP2 PR #643 modifies .github/workflows/tests.yml; this packet deliberately avoids that path.",
+    "Shadow results do not substitute for any existing required check."
+  ],
+  "next_packet": "CIPR-WP4-SHADOW-EVALUATION",
+  "operator_stop_gate": null,
+  "rollback": "Remove or supersede only shadow-candidate policy/tool/workflow/state artifacts; preserve existing required CI."
+}

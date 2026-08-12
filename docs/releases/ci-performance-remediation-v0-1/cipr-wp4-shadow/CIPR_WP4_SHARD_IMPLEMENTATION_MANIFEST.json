@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-ci-shadow-shard-implementation-manifest/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+  "status": "IMPLEMENTED_AWAITING_REMOTE_QA",
+  "baseline_main": "28ea2620af36a77704782274830a0e87892a960f",
+  "branch": "build/ci-performance-shadow-shards",
+  "candidate_commit": "PENDING_PACKET_COMMIT",
+  "operator_authority": {
+    "gate": "CIPR-G4-SUITE-TOPOLOGY",
+    "decision": "PASS",
+    "selected_option": "B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
+    "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_DECISION.json"
+  },
+  "implementation": {
+    "policy": "registries/implementation/ci_performance/CIPR_UNITTEST_SHARD_POLICY_v0_1.json",
+    "tool": "tools/ci/unittest_shard_shadow.py",
+    "workflow": ".github/workflows/ci-unittest-shard-shadow.yml",
+    "algorithm": "LEGACY_DISCOVERY_ORDER_HEAVY_PATH_ISOLATION_THEN_ROUND_ROBIN",
+    "shard_count": 4,
+    "workflow_triggers": [
+      "push:build/ci-performance-shadow-shards",
+      "workflow_dispatch"
+    ],
+    "pull_request_listener_added": false,
+    "existing_required_workflows_modified": false
+  },
+  "concurrent_programme_reconciliation": {
+    "open_pyt_wp2_pr": 643,
+    "overlap_detected": [
+      ".github/workflows/tests.yml"
+    ],
+    "bounded_resolution": "DO_NOT_MODIFY_TESTS_YML; USE_SEPARATE_PUSH_ONLY_SHADOW_WORKFLOW",
+    "pytest_native_admission": "UNCHANGED",
+    "standalone_unittest": "PRESERVED"
+  },
+  "invariants": [
+    "exact legacy unittest-discovered population only",
+    "zero omission and zero duplication",
+    "byte-identical manifest on repeated generation for the same execution/head/policy",
+    "four audited heavyweight source files isolated one per shard",
+    "remaining cases deterministic round-robin in legacy discovery order",
+    "each shard executes unittest TestCase objects through the current unittest runner",
+    "no test skip/marker/assertion/benchmark freshness change",
+    "no xdist or unordered process-parallel runner",
+    "no required-check substitution",
+    "no stable-main readiness change"
+  ],
+  "rollback": "Remove or supersede the shadow workflow, policy and tool only. Existing tests.yml, parity checks, tiered assurance and merge readiness remain unchanged."
+}
