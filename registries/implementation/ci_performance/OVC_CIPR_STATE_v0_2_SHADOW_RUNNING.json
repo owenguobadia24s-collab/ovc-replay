@@ -6,16 +6,17 @@
   "status": "APPROVED",
   "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
   "baseline_commit": "28ea2620af36a77704782274830a0e87892a960f",
-  "reconciled_main": "54c1af1fcc07b224a67917a9f131ef32ae013d98",
+  "reconciled_main": "577451c6e5d3faed0c7174ddc0d0bd70fe7d5e2a",
   "branch": "build/ci-performance-shadow-shards",
-  "candidate_commit": "05e535f4888f4740e5ae6ddaf08f039596cce81f",
+  "candidate_commit": "6b8c0aab50d4faaca67a1d079b8b34e8206e9719",
   "prerequisites": [
     "CIPR-G4-SUITE-TOPOLOGY operator PASS B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
     "CIPR-G4 decision/evidence squash-merged at main 28ea2620af36a77704782274830a0e87892a960f",
     "PYT-WP1/PYT-G1 legacy unittest preservation remains in force",
     "three-repeat shadow benchmark PASS on 8a331c8fdbd2d6740b0b11867b8f779807689aba",
     "same-head canonical assurance PASS",
-    "reconciled implementation head 05e535f4888f4740e5ae6ddaf08f039596cce81f PASS all shadow and canonical assurance"
+    "shadow-only approved state transition head 19c8e704dd0ce0b4927a2dae7332aaa833a2099b run 31640624851 PASS manifest plus all four shards",
+    "reconciled exact-head 6b8c0aab50d4faaca67a1d079b8b34e8206e9719 PASS canonical tests and tiered assurance"
   ],
   "authority_required": "SATISFIED_OPERATOR_PASS",
   "authority_delta": "BOUNDED_RUNNER_NEUTRAL_DETERMINISTIC_REQUIRED_SHARD_SHADOW_EVALUATION",
@@ -26,9 +27,10 @@
     "Shadow run 31639132742 attempts 1-3 PASS",
     "Same-head canonical run 31639135466 PASS",
     "Reconciled shadow run 31639950414 PASS",
-    "Reconciled tests run 31639954004 PASS tests + pytest-unittest-parity + runner-parity",
-    "Reconciled tiered run 31639953912 PASS FINAL_HEAD + observer + merge readiness",
-    "PR #675 review threads 0"
+    "Approved-state shadow run 31640624851 PASS manifest + shards 0-3",
+    "Final reconciliation tests run 31640940105 PASS tests + pytest-unittest-parity + runner-parity",
+    "Final reconciliation tiered run 31640940109 PASS FINAL_HEAD + observer + merge readiness",
+    "PR #675 review threads 0 before final metadata refresh"
   ],
   "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHARD_QA_PACKET.json",
   "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHADOW_DECISION.json",
