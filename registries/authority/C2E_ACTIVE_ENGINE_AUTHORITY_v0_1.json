@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-c2e-active-engine-authority/v0_1",
+  "authority_id": "AUTH.OPT-B.C2E.v0.2.ACTIVE.ENGINE.v0.1",
+  "programme_id": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1",
+  "effective_on_main_merge": true,
+  "state": "ACTIVE_ENGINE_CURRENT_OPERATOR_SELECTED_PACK_MARKET_ENVELOPE_BOUND",
+  "engine": "OPT-B.C2E.v0.2",
+  "historical_terminal_state": "registries/implementation/c2e_v0_2/OVC_C2E2_STATE_v0_45_AG3_TERMINAL.json",
+  "historical_current_pointer": "registries/implementation/c2e_v0_2/CURRENT_STATE_POINTER.json",
+  "active_boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+  "active_boundary_pack_logical_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+  "boundary_pack_status": "ACTIVE_OPERATOR_SELECTED_NONCANONICAL",
+  "scope_generalization": {
+    "prior_scope": "EXACT_NAMED_PACK_AND_JUNE_POPULATION_RUN_SCOPE_BOUND",
+    "current_scope": "GOVERNED_ACTIVE_C2_VNEXT_POPULATIONS_WITHIN_EXISTING_MARKET_ENVELOPE",
+    "exact_population_identity_binding": "NONE",
+    "exact_run_token_binding": "NONE_FOR_ACTIVATION_IDENTITY",
+    "exact_date_window_binding": "NONE",
+    "boundary_pack_binding": "RETAIN_EXACT_CURRENT_OPERATOR_SELECTED_PACK"
+  },
+  "market_envelope": {
+    "instrument": "GBPUSD",
+    "sides": ["BID", "ASK"],
+    "clocks": ["15M", "2H_A_L"],
+    "research_roles": ["DISCOVERY", "DEVELOPMENT"],
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "upstream_requirement": "OPT-B.C2.vNext_ACTIVE_CORE",
+  "execution_rule": "AUTO_EXECUTABLE_FOR_ALREADY_GOVERNED_ACTIVE_C2_VNEXT_INPUTS_WHEN_CURRENT_PACK_AND_MARKET_ENVELOPE_ARE_UNCHANGED",
+  "new_activation_not_required_for": [
+    "NEW_DATE_INTERVAL_WITHIN_GOVERNED_DISCOVERY_OR_DEVELOPMENT_SOURCE",
+    "NEW_POPULATION_IDENTITY_WITHIN_GOVERNED_DISCOVERY_OR_DEVELOPMENT_SOURCE",
+    "DETERMINISTIC_REPLAY_OR_RESTART_OF_SAME_GOVERNED_INPUT"
+  ],
+  "operator_required_for": [
+    "BOUNDARY_PACK_SELECTION_OR_REPLACEMENT",
+    "BOUNDARY_RULE_SEMANTIC_CHANGE",
+    "THRESHOLD_OR_PARAMETER_PROMOTION",
+    "NEW_INSTRUMENT_MARKET_SIDE_OR_CLOCK",
+    "VALIDATION_CONSUMPTION",
+    "REAL_PROVIDER_INTAKE_REQUIRING_NEW_APPROVAL",
+    "CANONICAL_OR_R2_PUBLICATION"
+  ],
+  "downstream_authority": "NONE_AUTOMATIC",
+  "probability_risk_exposure_trading_execution_agent_write": "NONE",
+  "historical_june_evidence": "PRESERVED_UNCHANGED",
+  "rollback": "FORWARD_SUPERSESSION_ONLY_REINSTATE_EXACT_SCOPE_BY_NEW_OPERATOR_DECISION"
+}

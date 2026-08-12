@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-active-stack-reclassification-wp1-qa/v0_1",
+  "programme_id": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1",
+  "packet_id": "ASR-WP1",
+  "gate_id": "ASR-G1",
+  "baseline_main": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
+  "assured_main_base": "a69bf6c1c7a2febcaf5db71eddbf1ac43083ea3a",
+  "assured_candidate_head": "3790c8e11b566c158aca925cbb4c29b7f76c3dad",
+  "status": "PASS",
+  "checks": {
+    "operator_authority_exactly_bound": "PASS",
+    "c1_v2_preserved_active": "PASS",
+    "legacy_c2_retired_for_new_evidence": "PASS",
+    "c2_vnext_core_active_exact_package": "PASS",
+    "c2_vnext_research_candidates_remain_shadow": "PASS",
+    "c2e_scope_generalized_without_pack_replacement": "PASS",
+    "occurrence_context_foundation_nonstructural": "PASS",
+    "research_operations_foundation_no_escalation": "PASS",
+    "shadow_non_evaluable_legacy_locked_classes_disjoint": "PASS",
+    "validation_and_exposure_firewalls": "PASS",
+    "frozen_pg_pgn_snapshot_not_retroactively_mutated": "PASS",
+    "current_runtime_namespace_declarations_consistent": "PASS",
+    "current_implementation_registry_consistent": "PASS",
+    "esli_wp1_concurrent_main_integration_reconciled_without_authority_conflict": "PASS",
+    "repository_suite": "PASS_RUN_31600582152_JOB_94126676571",
+    "final_head_assurance": "PASS_RUN_31600582151_JOB_94126676259",
+    "compatibility": "PASS_RUN_31600582151_JOB_94126735687",
+    "merge_readiness": "PASS_RUN_31600582151_JOB_94126735592_STABLE_MAIN_A69BF6C1",
+    "unresolved_review_threads": "PASS_ZERO"
+  },
+  "corrective_history": [
+    {
+      "attempt_head": "2d8a62eb89e43dc46fb0169456e644ff9867adf8",
+      "repository_suite_run": 31596653716,
+      "result": "FAIL_CORRECTABLE",
+      "finding": "NEW_PROGRAMME_STATE_FILENAME_ENTERED_FROZEN_PG_PGN_MIGRATION_DISCOVERY_AND_CHANGED_EXPECTED_7_TO_8",
+      "resolution": "PRESERVE_PRE_CI_CANDIDATE_WITHOUT_PROGRAMME_ID; MOVE_MACHINE_PROGRAMME_STATE_FIELDS_TO_CANONICAL_ASR_STATE; ADD_REGRESSION_PROVING_POST_SNAPSHOT_ASR_EXCLUSION",
+      "test_weakening": "NONE"
+    },
+    {
+      "attempt_head": "c33e187d7ecdaf602d0624f2e612ea2feb956c44",
+      "result": "MERGE_READINESS_BASE_MOVED_ONLY",
+      "finding": "MAIN_ADVANCED_TO_119E07A41A4B1BF3E4F9D598424A71CB488428B6_DURING_ASSURANCE",
+      "resolution": "NON_DESTRUCTIVE_MERGE_OF_LATEST_LAWFUL_MAIN_THEN_RERUN",
+      "authority_effect": "NONE"
+    },
+    {
+      "attempt_head": "52ded220b4e0e08e23b42abe8645663301b8a143",
+      "repository_suite_run": 31598838882,
+      "result": "FAIL_CORRECTABLE",
+      "finding": "ACTIVE_STACK_RESOLVER_EXCLUDED_INTERMEDIATE_APPROVED_STATE",
+      "resolution": "EXTEND_FAIL_CLOSED_USABLE_STATE_MACHINE_TO_QA_REVIEW_APPROVED_COMPLETED_ONLY_AND_RERUN_COMPLETE_EXACT_HEAD_ASSURANCE",
+      "test_weakening": "NONE",
+      "authority_effect": "NONE"
+    },
+    {
+      "attempt_head": "2ca62b99fa95664977b489f309a023e7272c593b",
+      "repository_suite_run": 31599612081,
+      "tiered_run": 31599612083,
+      "result": "CODE_PASS_MAIN_MOVED",
+      "finding": "REPOSITORY_SUITE_PROFILE_AND_COMPATIBILITY_PASS_BUT_MERGE_READINESS_OBSERVED_MAIN_ADVANCE_TO_ESLI_WP1",
+      "resolution": "NON_DESTRUCTIVE_MERGE_OF_A69BF6C1_AND_EXPLICIT_ALLOWLIST_RECONCILIATION_THEN_FULL_RERUN",
+      "authority_effect": "NONE"
+    }
+  ],
+  "warnings": [
+    "Historical C2 selector/authority records and the 2026-07-26 ACTIVE_AUTHORITY snapshot intentionally preserve their historical ACTIVE/stale wording; the current active-stack pointer and explicit supersession overlays govern new evidence.",
+    "Historical Pattern Discovery and other exact-replay paths bound to legacy C2 identities remain historical/reproducibility paths until separately migrated; they are not eligible as new-evidence routes.",
+    "RO4-G6 evidence accumulation remains blocked pending actual evidence; ACTIVE_FOUNDATION classification does not auto-pass it.",
+    "C2 vNext Functional Discovery and Candidate Dispositions remain SHADOW and no family/rule/candidate promotion occurred.",
+    "ESLI StructuralOccurrence invariant runtime merged concurrently as inactive conformance-only work and remains NON_EVALUABLE for current operational evidence under this stack classification."
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_AUTO_RATIFY_ASR_G1_AND_SQUASH_MERGE_PR_625_AFTER_FINAL_EVIDENCE_HEAD_EXACT_ASSURANCE",
+  "authority_effect_if_pass": "EXACT_OPERATOR_APPROVED_ACTIVE_STACK_RECLASSIFICATION_ONLY",
+  "rollback": "Forward-only supersession; preserve all historical evidence and decisions; no deletion or history rewrite"
+}
