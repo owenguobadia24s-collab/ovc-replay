@@ -17,6 +17,7 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         admission_marker = "\n  final-integration-window-admitted:\n"
         self.assertIn(readiness_marker, self.workflow)
         self.assertIn(admission_marker, self.tests_workflow)
+        self.profile = self.workflow.split("\n  profile:\n", 1)[1].split("\n  legacy-required-context:\n", 1)[0]
         self.readiness = self.workflow.split(readiness_marker, 1)[1]
         after_admission = self.tests_workflow.split(admission_marker, 1)[1]
         self.admission = after_admission.split("\n  legacy-unittest:\n", 1)[0]
@@ -32,6 +33,8 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("group: ovc-main-integration-lane-v1", self.readiness)
         self.assertIn("cancel-in-progress: false", self.readiness)
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED", self.readiness)
+        self.assertIn("windowCheckName = 'OVC merge readiness'", self.profile)
+        self.assertIn("OVC_PROFILE_FINAL_INTEGRATION_WINDOW_ADMITTED", self.profile)
         self.assertIn("windowCheckName = 'OVC merge readiness'", self.admission)
         self.assertIn("windowRun?.status === 'in_progress'", self.admission)
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ADMITTED", self.admission)
@@ -41,6 +44,7 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         for check_name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
             self.assertIn(check_name, self.readiness)
         self.assertIn("required.every", self.readiness)
+        self.assertIn("OVC_PROFILE_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED", self.profile)
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED", self.admission)
 
     def test_final_readiness_holds_global_lane_through_required_assurance(self):
@@ -70,7 +74,7 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("required_checks: requiredNames", self.readiness)
 
     def test_github_script_node_target_deprecation_is_remediated(self):
-        self.assertEqual(self.workflow.count("actions/github-script@v9"), 2)
+        self.assertEqual(self.workflow.count("actions/github-script@v9"), 3)
         self.assertEqual(self.tests_workflow.count("actions/github-script@v9"), 1)
         self.assertNotIn("actions/github-script@v7", self.workflow)
         self.assertNotIn("actions/github-script@v7", self.tests_workflow)
