@@ -114,16 +114,14 @@ def evaluate_branch_update_guard(
 
 def evaluate_e4_applicability_matrix(matrix: Mapping[str, Any]) -> dict[str, Any]:
     """Fail closed if any exact implemented Skill lacks explicit family applicability."""
-    families = tuple(str(v) for v in matrix.get("families", []))
+    family_rows = {str(row.get("family")): row for row in matrix.get("families", [])}
+    families = tuple(family_rows)
     skills = list(matrix.get("skills", []))
     reasons: list[str] = []
     if len(families) != 18:
         reasons.append("E4_FAMILY_CATALOGUE_INCOMPLETE")
     if len(skills) != 14:
         reasons.append("E4_EXACT_SKILL_SCOPE_INCOMPLETE")
-    family_rows = {str(row.get("family")): row for row in matrix.get("families", [])}
-    if set(family_rows) != set(families):
-        reasons.append("E4_FAMILY_RATIONALE_CATALOGUE_MISMATCH")
     for family, row in family_rows.items():
         if not str(row.get("rationale", "")).strip():
             reasons.append(f"E4_FAMILY_RATIONALE_MISSING:{family}")
