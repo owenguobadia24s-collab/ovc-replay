@@ -5,7 +5,7 @@
   "packet_id": "PDC-FIW-CORR-WP1",
   "gate_id": "PDC-FIW-G1",
   "title": "Serialized final-integration window corrective assurance",
-  "decision": "PASS",
+  "decision": "SUPERSEDE",
   "authority": {
     "classification": "AUTO_RATIFIABLE_NON_RESERVED",
     "basis": "Operator-directed bounded development-orchestration correction within the ratified Parallel Development / Main-Head Churn Remediation programme.",
@@ -19,23 +19,9 @@
     "agent_write_authority": false
   },
   "baseline_commit": "10a0acac129df1039feafd9200612e7512a6c551",
-  "evaluated_candidate_commit": "219eb6b9db691a1b7ffb138cf98430e9843794ea",
+  "preliminary_evaluated_candidate_commit": "219eb6b9db691a1b7ffb138cf98430e9843794ea",
   "pull_request": 679,
-  "acceptance": {
-    "serialized_global_window": "PASS",
-    "pre_assurance_current_main_pin": "PASS",
-    "candidate_contains_acquired_main": "PASS",
-    "profile_admitted_only_inside_window": "PASS",
-    "required_python_checks_admitted_only_inside_window": "PASS",
-    "stable_main_held_through_assurance": "PASS",
-    "fail_closed_base_movement_guard_preserved": "PASS",
-    "workflow_count_delta": 0,
-    "workflow_census_total": 130,
-    "pull_request_workflow_count": 2,
-    "complete_repository_suite_count": 1,
-    "blocking_review_threads": 0
-  },
-  "tests": {
+  "preliminary_pass_evidence": {
     "tiered_workflow_run_id": 31643275045,
     "tests_workflow_run_id": 31643275215,
     "profile_assurance": "PASS",
@@ -49,16 +35,33 @@
     "final_integration_window_hold_ms": 180309,
     "final_integration_window_base_sha": "10a0acac129df1039feafd9200612e7512a6c551"
   },
+  "post_decision_adversarial_finding": {
+    "candidate_commit": "893a9ff15313c2f63363e93d2686ab74dcdb9ebd",
+    "tiered_workflow_run_id": 31643668165,
+    "tests_workflow_run_id": 31643668160,
+    "event_base_sha": "10a0acac129df1039feafd9200612e7512a6c551",
+    "advanced_main_sha": "bd5218b47c1ebc028f1455a4f4f3ef86bded34a7",
+    "readiness_result": "FAIL_OVC_BASE_MOVED_BEFORE_READINESS",
+    "readiness_acquisition_ms": 250,
+    "defect": "The profile admission barrier treated OVC merge readiness being in_progress as sufficient proof of successful lane acquisition; the readiness acquisition step could fail on stale main while profile assurance still proceeded.",
+    "disposition": "CORRECTED_WITHIN_PACKET_SCOPE",
+    "correction": [
+      "Profile admission independently rechecks current main before checkout/test selection.",
+      "Required-check admission independently rechecks current main before canonical Python jobs.",
+      "Both admission routes prove exact PR-head ancestry against the admitted base before expensive assurance.",
+      "The original fail-closed readiness guards remain unchanged."
+    ]
+  },
   "qa": {
-    "recommendation": "PASS",
+    "recommendation": "PENDING_REBASED_EXACT_HEAD_ASSURANCE",
     "warnings": [
-      "GitHub runner emitted the existing Node 20 deprecation warning for actions/checkout@v4; it was forced to Node 24 and did not affect assurance."
+      "Preliminary PASS is superseded because subsequent adversarial main churn exposed a status-only admission race.",
+      "GitHub runner emitted the existing Node 20 deprecation warning for actions/checkout@v4; it was forced to Node 24 and did not cause the defect."
     ],
     "unresolved_blockers": []
   },
   "rollback": "Revert only the final-integration admission handshakes and expanded hold semantics, restoring the prior PDC v1 readiness-lane timing while preserving the lane identity, historical evidence and the fail-closed stable-main guard.",
-  "delegated_rationale": "All packet acceptance conditions passed on one exact candidate head while main remained pinned; QA recommends PASS; no reserved authority delta, blocking warning, unresolved review thread or non-reproducible artifact remains.",
   "merge_commit": null,
   "next_packet": null,
-  "status": "APPROVED_PENDING_FINAL_EXACT_HEAD_ASSURANCE_AND_SQUASH_MERGE"
+  "status": "QA_REVIEW_PENDING_CURRENT_MAIN_RECONCILIATION_AND_EXACT_HEAD_PASS"
 }
