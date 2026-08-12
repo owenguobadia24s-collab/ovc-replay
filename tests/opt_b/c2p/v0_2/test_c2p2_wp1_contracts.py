@@ -1,4 +1,5 @@
 from __future__ import annotations
+import hashlib
 import json
 import unittest
 from decimal import Decimal
@@ -39,11 +40,13 @@ class WP1ContractsTest(unittest.TestCase):
         self.assertIsNone(packs["active_object_pack_id"])
         self.assertEqual(len(packs["entries"]),2)
         self.assertTrue(all(not e["activation_eligible"] and e["real_source_forbidden"] for e in packs["entries"]))
+        self.assertTrue(all(len(e["object_pack_hash"]) == 64 for e in packs["entries"]))
 
-    def test_synthetic_packs_are_concrete_and_distinct(self):
+    def test_synthetic_packs_are_concrete_distinct_and_hash_pinned(self):
         a=json.loads((FIX_DIR/"C2P_SYNTH_OBJECTPACK_MINIMAL_A_v1.json").read_text(encoding="utf-8"))
         b=json.loads((FIX_DIR/"C2P_SYNTH_OBJECTPACK_MINIMAL_B_v1.json").read_text(encoding="utf-8"))
         self.assertNotEqual(a["object_pack_id"],b["object_pack_id"])
+        self.assertNotEqual(a["object_pack_hash"],b["object_pack_hash"])
         for p in (a,b):
             self.assertEqual(p["status"],"SYNTHETIC_ONLY_NONEMPIRICAL")
             self.assertFalse(p["activation_eligible"])
@@ -51,6 +54,30 @@ class WP1ContractsTest(unittest.TestCase):
             self.assertEqual(p["confirmation_contract"]["successive_member_candidates"],3)
             self.assertFalse(p["retirement_contract"]["censoring_is_retirement"])
             self.assertFalse(p["retirement_contract"]["missingness_is_retirement"])
+            for key in ("candidate_contract","tracklet_contract","confirmation_contract","matching_contract","retrieval_contract","continuity_contract","retirement_contract","split_merge_contract","chronology_contract","serialization_contract","operations_contract"):
+                self.assertIn(key,p)
+                self.assertIsInstance(p[key],dict)
+            unhashed=dict(p); expected=unhashed.pop("object_pack_hash")
+            raw=json.dumps(unhashed,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
+            self.assertEqual(expected,hashlib.sha256(raw).hexdigest())
+
+    def test_design_field_families_are_explicit(self):
+        candidate=json.loads((SCHEMA_DIR/"c2p_candidate_v0_2.json").read_text())
+        tracklet=json.loads((SCHEMA_DIR/"c2p_tracklet_v0_2.json").read_text())
+        assertion=json.loads((SCHEMA_DIR/"c2p_object_assertion_v0_2.json").read_text())
+        snapshot=json.loads((SCHEMA_DIR/"c2p_object_snapshot_v0_2.json").read_text())
+        checkpoint=json.loads((SCHEMA_DIR/"c2p_checkpoint_v0_2.json").read_text())
+        self.assertTrue({"source_refs","evidence_status"}.issubset(candidate["required"]))
+        self.assertTrue({"decision_frontier","observability_state","evaluation_state"}.issubset(tracklet["required"]))
+        self.assertIn("CONFIRMED",tracklet["properties"]["state"]["enum"])
+        self.assertNotIn("PROMOTED",tracklet["properties"]["state"]["enum"])
+        self.assertTrue({"genesis_event_id","lifecycle_state"}.issubset(assertion["required"]))
+        self.assertTrue({"geometry","state_payload","evaluation_cutoff"}.issubset(snapshot["required"]))
+        self.assertTrue({"run_manifest_id","object_pack_hashes","open_tracklet_ids","assertion_map_digest","index_digest","projection_digest"}.issubset(checkpoint["required"]))
+        edges=json.loads((REG_DIR/"C2P_LINEAGE_EDGE.json").read_text())
+        edge_ids={e["id"] for e in edges["entries"]}
+        self.assertTrue({"SPLIT_FROM","MERGED_FROM","RECURRENCE_OF"}.issubset(edge_ids))
+        self.assertEqual(edges["forbidden"],["SAME_OBJECT_AS"])
 
     def test_canonical_profile_goldens_and_rejections(self):
         x={"b":Decimal("1.2300"),"a":None,"c":["é",Decimal("2.000")]}
