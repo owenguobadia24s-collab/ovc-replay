@@ -1,0 +1,22 @@
+{
+  "schema": "ovc-parallel-development-head-movement-receipt/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "policy_id": "OVC.PDC.HEAD_MOVEMENT_POLICY.v0.1",
+  "baseline_main_sha": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
+  "current_main_sha": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
+  "changed_paths": [
+    "docs/releases/python-test-runner-migration-v0-1/pyt-wp1/PYT_G1_DECISION.json",
+    "registries/implementation/python_test_runner/PYT_STATE_v0_1_DUAL_RUN_PARITY.json"
+  ],
+  "classification": "INTEGRATION_RELEVANT",
+  "rationale": [
+    "the movement records PYT-G1 merged-main completion and therefore changes a CIPR prerequisite coordination state",
+    "no bound CI workflow, test-runner policy, test command, required check surface or PDC policy changed",
+    "the authority delta in the changed PYT records remains NONE and the dual-run parity contract is unchanged"
+  ],
+  "evidence_reuse": "IMPLEMENTATION_LOGIC_REUSABLE_INTEGRATION_ASSURANCE_MUST_RERUN",
+  "required_response": "reconcile the branch with current main and rerun exact-head tests, pytest-unittest-parity, runner-parity, tiered profile assurance and final stable-main merge readiness",
+  "semantic_represetup_required": false,
+  "scientific_replay_required": false
+}

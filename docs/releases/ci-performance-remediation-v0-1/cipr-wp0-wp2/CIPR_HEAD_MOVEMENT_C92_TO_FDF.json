@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-parallel-development-head-movement-receipt/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "policy_id": "OVC.PDC.HEAD_MOVEMENT_POLICY.v0.1",
+  "baseline_main_sha": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
+  "current_main_sha": "fdf64e0df76c5f75b21de357bac05ec965b9f0f7",
+  "changed_paths": [
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_G0_DECISION.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_G0_GATE_PACKET.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_GOVERNING_SOURCE_IDENTITIES.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_WP0_COURT_RECORD_CENSUS.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_WP0_QA_PACKET.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_WP0_REQUIREMENT_ARTIFACT_CENSUS.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/README.md",
+    "registries/implementation/c2p_v0_2/CURRENT_STATE_POINTER.json",
+    "registries/implementation/c2p_v0_2/OVC_C2P2_STATE_v0_1.json",
+    "tests/opt_b/c2p/v0_2/test_c2p2_wp0_materialisation.py"
+  ],
+  "classification": "INTEGRATION_RELEVANT",
+  "rationale": [
+    "no CIPR-owned workflow, DA/PDC policy, Python test-runner policy, required-check definition, development validator or CI programme record changed",
+    "a new unrelated C2P test entered the canonical complete-suite population, so fresh integration assurance against the new main base is required",
+    "the C2P movement grants no CI authority and does not change CIPR semantics"
+  ],
+  "evidence_reuse": "G1_G2_DECISIONS_RETAINED_FRESH_INTEGRATION_ASSURANCE_REQUIRED",
+  "required_response": "emit a new PR synchronization head, run tests + pytest-unittest-parity + runner-parity and tiered final stable-main readiness against fdf64e0d, then merge only if main remains stable",
+  "semantic_represetup_required": false,
+  "scientific_replay_required": false
+}
