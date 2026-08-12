@@ -55,16 +55,20 @@ def decide_tool_request(envelope: Mapping[str, Any], request: Mapping[str, Any])
     target=request.get("network_target")
     if target and target not in set(envelope.get("network_allowlist",[])): reasons.append("NETWORK_DENY_DEFAULT")
     path=request.get("path"); normalized_path=None
-    if path:
+    if action in WRITE_ACTIONS:
+        if not envelope.get("write_authority_active"): reasons.append("WRITE_AUTHORITY_INACTIVE")
+        owner=request.get("semantic_owner")
+        if not owner or owner not in set(envelope.get("semantic_owners",[])): reasons.append("SEMANTIC_OWNERSHIP_DENIED")
+        if not path:
+            reasons.append("WRITE_PATH_REQUIRED")
+        else:
+            try: normalized_path=normalize_relative_path(str(path))
+            except (ValueError,OSError): reasons.append("FILESYSTEM_ESCAPE_OR_UNSAFE_PATH")
+            if normalized_path is not None and not _prefix_match(normalized_path,envelope.get("write_prefixes",[])): reasons.append("WRITE_PATH_OUT_OF_SCOPE")
+    elif path:
         try: normalized_path=normalize_relative_path(str(path))
         except (ValueError,OSError): reasons.append("FILESYSTEM_ESCAPE_OR_UNSAFE_PATH")
-        if normalized_path is not None:
-            if action in WRITE_ACTIONS:
-                if not envelope.get("write_authority_active"): reasons.append("WRITE_AUTHORITY_INACTIVE")
-                if not _prefix_match(normalized_path,envelope.get("write_prefixes",[])): reasons.append("WRITE_PATH_OUT_OF_SCOPE")
-                owner=request.get("semantic_owner")
-                if not owner or owner not in set(envelope.get("semantic_owners",[])): reasons.append("SEMANTIC_OWNERSHIP_DENIED")
-            elif not _prefix_match(normalized_path,envelope.get("read_prefixes",[])): reasons.append("READ_PATH_OUT_OF_SCOPE")
+        if normalized_path is not None and not _prefix_match(normalized_path,envelope.get("read_prefixes",[])): reasons.append("READ_PATH_OUT_OF_SCOPE")
     decision="DENY" if reasons else "ALLOW"
     logical={"envelope_id":envelope.get("envelope_id"),"request_id":request.get("request_id"),"action":action,"decision":decision,"reason_codes":sorted(set(reasons)),"normalized_path":normalized_path}
     return {"schema":"ovc-dsai-security-decision-record/v1",**logical,"authority_effect":"NONE","raw_credentials_exposed":False,"decision_id":canonical_sha256(logical,role="DSAI_SECURITY_DECISION")}

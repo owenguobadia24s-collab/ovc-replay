@@ -5,6 +5,7 @@ import unittest
 from ovc.development.skills import LocalToolBroker, build_tool_request, decide_tool_request, issue_credential_handle, negative_reachability_probe, redact_sensitive, resolve_security_envelope, sandbox_leakage_probe, security_containment
 from ovc.development.skills.registry import validate_against_schema
 ROOT=Path(__file__).resolve().parents[2]
+G8C_AUTHORITY="DSAI-G8C.OPERATOR.PASS.ORCH1_ASSISTED_WRITE.20260812T164000+0100"
 def envelope(**overrides):
     base=dict(skill_id="OVC-SKILL-020",capability_ids=["TEST_EXECUTION"],allowed_semantic_actions=["READ_REPOSITORY","READ_FILE","RUN_TESTS","WRITE_FILE"],read_prefixes=["src/ovc","tests"],write_prefixes=["src/ovc/development/skills"],semantic_owners=["DSAI"],logical_credential_ids=["GITHUB_LOGICAL"],network_allowlist=[]); base.update(overrides); return resolve_security_envelope(**base)
 class DSAIWP5SecurityRuntimeTests(unittest.TestCase):
@@ -14,7 +15,16 @@ class DSAIWP5SecurityRuntimeTests(unittest.TestCase):
             req=build_tool_request(action=case["action"],resource_class="VALIDATION" if case["family"]=="VALIDATION_LEAKAGE" else "GENERAL"); row=decide_tool_request(env,req); self.assertEqual(row["decision"],"DENY",case); self.assertFalse(row["raw_credentials_exposed"])
     def test_filesystem_scope_and_semantic_ownership(self):
         env=envelope(write_authority_active=True); good=decide_tool_request(env,build_tool_request(action="WRITE_FILE",path="src/ovc/development/skills/x.py",semantic_owner="DSAI")); self.assertEqual(good["decision"],"ALLOW")
-        for row in [decide_tool_request(env,build_tool_request(action="WRITE_FILE",path="registries/authority/x.json",semantic_owner="DSAI")),decide_tool_request(env,build_tool_request(action="WRITE_FILE",path="src/ovc/development/skills/x.py",semantic_owner="OTHER")),decide_tool_request(env,build_tool_request(action="READ_FILE",path="../secret"))]: self.assertEqual(row["decision"],"DENY")
+        denied=[
+            decide_tool_request(env,build_tool_request(action="WRITE_FILE",path="registries/authority/x.json",semantic_owner="DSAI")),
+            decide_tool_request(env,build_tool_request(action="WRITE_FILE",path="src/ovc/development/skills/x.py",semantic_owner="OTHER")),
+            decide_tool_request(env,build_tool_request(action="WRITE_FILE",path=None,semantic_owner="DSAI")),
+            decide_tool_request(env,build_tool_request(action="WRITE_FILE",path="src/ovc/development/skills/x.py",semantic_owner=None)),
+            decide_tool_request(env,build_tool_request(action="READ_FILE",path="../secret")),
+        ]
+        for row in denied: self.assertEqual(row["decision"],"DENY")
+        self.assertIn("WRITE_PATH_REQUIRED",denied[2]["reason_codes"])
+        self.assertIn("SEMANTIC_OWNERSHIP_DENIED",denied[3]["reason_codes"])
     def test_network_is_deny_by_default(self):
         row=decide_tool_request(envelope(),build_tool_request(action="READ_FILE",path="src/ovc/x.py",network_target="example.com")); self.assertEqual(row["decision"],"DENY"); self.assertIn("NETWORK_DENY_DEFAULT",row["reason_codes"])
     def test_credentials_are_logical_and_redacted(self):
@@ -27,9 +37,14 @@ class DSAIWP5SecurityRuntimeTests(unittest.TestCase):
         self.assertEqual(sandbox_leakage_probe(environment={"PATH":"/usr/bin"},discovered_paths=["src/ovc/development/skills"])["status"],"PASS")
         self.assertEqual(sandbox_leakage_probe(environment={"PATH":"/usr/bin","OVC_VALIDATION_ROOT":"hidden"},discovered_paths=[])["status"],"BLOCK")
         self.assertEqual(sandbox_leakage_probe(environment={"PATH":"/usr/bin"},discovered_paths=["validation/private"])["status"],"BLOCK")
-    def test_tool_broker_inactive_default_and_test_mode_no_side_effect(self):
+    def test_tool_broker_inactive_default_and_g8c_assisted_write_authorization(self):
         env=envelope(); req=build_tool_request(action="READ_FILE",path="src/ovc/development/skills/security.py"); self.assertEqual(LocalToolBroker().dispatch(envelope=env,request=req)["status"],"DENY"); test=LocalToolBroker(test_mode=True).dispatch(envelope=env,request=req); self.assertEqual(test["status"],"PASS"); self.assertFalse(test["side_effect_performed"])
-        write_env=envelope(write_authority_active=True); write=LocalToolBroker(test_mode=True).dispatch(envelope=write_env,request=build_tool_request(action="WRITE_FILE",path="src/ovc/development/skills/x.py",semantic_owner="DSAI")); self.assertEqual(write["status"],"DENY"); self.assertEqual(write["reason"],"WP5_WRITE_ADAPTER_INACTIVE")
+        write_env=envelope(write_authority_active=True)
+        write_req=build_tool_request(action="WRITE_FILE",path="src/ovc/development/skills/x.py",semantic_owner="DSAI")
+        pre_g8c=LocalToolBroker(test_mode=True).dispatch(envelope=write_env,request=write_req); self.assertEqual(pre_g8c["status"],"DENY"); self.assertEqual(pre_g8c["reason"],"WP5_WRITE_ADAPTER_INACTIVE")
+        missing_record=LocalToolBroker(test_mode=True,assisted_write_active=True).dispatch(envelope=write_env,request=write_req); self.assertEqual(missing_record["status"],"DENY"); self.assertEqual(missing_record["reason"],"G8C_AUTHORITY_RECORD_REQUIRED")
+        assisted=LocalToolBroker(test_mode=True,assisted_write_active=True,assisted_write_authority_id=G8C_AUTHORITY).dispatch(envelope=write_env,request=write_req)
+        self.assertEqual(assisted["status"],"PASS"); self.assertEqual(assisted["reason"],"ASSISTED_WRITE_AUTHORIZED"); self.assertTrue(assisted["side_effect_authorized"]); self.assertFalse(assisted["side_effect_performed"]); self.assertEqual(assisted["merge_authority"],"NONE")
     def test_s3_s4_containment_is_synchronous(self):
         for level in ("S3","S4"): row=security_containment(severity=level); self.assertTrue(row["privileged_actions_denied"]); self.assertTrue(row["terminate_sandbox"])
         self.assertFalse(security_containment(severity="S1")["terminate_sandbox"])
