@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { DenominatorFooter } from "./PvsData";
 import "./pvsComponents.css";
+import "./pvsInstruments.css";
 
 export type MatrixEvidenceState="POSITIVE"|"NEGATIVE"|"MIXED"|"NO_EVIDENCE"|"MISSING"|"NOT_EVALUABLE";
 export type MatrixDatum={dimension:string;state:string;evidence:MatrixEvidenceState;detail:string};
