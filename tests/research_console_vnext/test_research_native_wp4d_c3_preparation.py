@@ -101,8 +101,8 @@ class WP4DC3Preparation(unittest.TestCase):
         response = client.get("/api/v1/c3/graph")
         self.assertEqual(200, response.status_code)
         envelope = response.json()
-        self.assertEqual("C3", envelope["capability_id"])
-        self.assertEqual("NONE", envelope["authority_effect"])
+        self.assertEqual("C3", envelope["capability"]["capability_id"])
+        self.assertEqual("NONE", envelope["capability"]["authority_effect"])
         payload = envelope["payload"]
         self.assertEqual("NOT_MATERIALIZED", payload["availability"])
         self.assertFalse(payload["runtime_owner_materialized"])
