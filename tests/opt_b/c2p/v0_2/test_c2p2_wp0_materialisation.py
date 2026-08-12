@@ -14,12 +14,16 @@ RELEASE = ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0"
 class C2P2WP0MaterialisationTest(unittest.TestCase):
     def test_exact_ratified_plan_and_authority_boundary(self) -> None:
         state = json.loads(STATE.read_text(encoding="utf-8"))
+        self.assertEqual(state["schema"], "ovc-c2p2-programme-state/v2")
         self.assertEqual(state["programme_id"], "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-v0.2")
         self.assertEqual(state["plan_id"], "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED")
+        self.assertEqual(state["plan_version"], "0.2")
+        self.assertEqual(state["ratification"]["decision"], "PASS")
+        self.assertFalse(state["ratification"]["repository_materialized"])
         self.assertEqual(state["governing_design_sha256"], "ed656705f13162cb5b9ac231d73a32870f7127f4fb464fe3e3a6ebd48a5608cd")
         self.assertEqual(state["authority"]["c2p_runtime"], "NONE")
-        self.assertEqual(state["authority"]["empirical_objectpack"], "NONE")
-        self.assertEqual(state["authority"]["real_source_c2p"], "NONE")
+        self.assertEqual(state["authority"]["empirical_object_pack_selection"], "NONE")
+        self.assertEqual(state["authority"]["real_source_replay"], "DENIED_FUTURE_C2P2_RS0")
         self.assertEqual(state["authority"]["validation"], "LOCKED_UNCONSUMED")
 
     def test_pointer_and_materialisation_evidence_resolve(self) -> None:
@@ -36,7 +40,7 @@ class C2P2WP0MaterialisationTest(unittest.TestCase):
 
     def test_wp1_is_first_implementation_packet(self) -> None:
         state = json.loads(STATE.read_text(encoding="utf-8"))
-        by_id = {packet["packet_id"]: packet for packet in state["packets"]}
+        by_id = {packet["packet_id"]: packet for packet in state["packet_register"]}
         self.assertEqual(state["next_packet"], "C2P2-WP1")
         self.assertEqual(by_id["C2P2-WP1"]["status"], "READY")
         self.assertEqual(by_id["C2P2-WP1"]["authority_required"], "AUTO_EXECUTABLE")
