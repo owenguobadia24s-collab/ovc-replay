@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-parallel-development-head-movement-receipt/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "policy_id": "OVC.PDC.HEAD_MOVEMENT_POLICY.v0.1",
+  "baseline_main_sha": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+  "current_main_sha": "2eff94425606df77eb037a717de662e5c7b7c47b",
+  "changed_paths": [
+    "fixtures/development/skills/orch1_low_risk_pilot_v0_1.json",
+    "records/development/skills/DSAI_WP8_ORCH1_PILOT_RUN_20260812T172700+0100.json",
+    "tests/development_skills/test_dsai_wp8_orch1_pilot.py"
+  ],
+  "classification": "IRRELEVANT",
+  "rationale": [
+    "no changed path intersects CIPR dependency_paths, semantic_authority_paths, shared_integration_paths or candidate_owned_paths",
+    "tests/development_skills/** does not match the PDC global integration pattern tests/development/**",
+    "no bound workflow, PDC policy, DA test profile, or canonical tests identity changed"
+  ],
+  "evidence_reuse": "PERMITTED_IF_BOUND_IDENTITIES_UNCHANGED",
+  "required_response": "reconcile branch with current main and rerun exact-head integration assurance",
+  "semantic_represetup_required": false,
+  "scientific_replay_required": false
+}
