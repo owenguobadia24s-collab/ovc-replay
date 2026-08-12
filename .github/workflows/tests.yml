@@ -25,5 +25,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Complete repository suite
+      - name: Install test runner and project
+        run: python3 -m pip install -e ".[test]"
+      - name: Legacy unittest suite — retained parity baseline
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+      - name: Pytest unified suite — candidate primary runner
+        run: PYTHONPATH=src python3 -m pytest tests -ra
+      - name: Prove unittest collection parity under pytest
+        run: PYTHONPATH=src python3 scripts/qa/check_python_test_runner_parity.py
