@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-dsai2-g3-operator-decision/v1",
+  "decision_id": "DSAI2-G3.PENDING.20260812",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "gate_id": "DSAI2-G3",
+  "gate_class": "OPERATOR_REQUIRED",
+  "status": "PENDING_OPERATOR",
+  "decision": null,
+  "recommended_decision": "PASS",
+  "activation_performed": false,
+  "authority_delta_if_pass": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY"
+  },
+  "explicit_non_effects_until_pass": [
+    "ORCH-3 remains INACTIVE_SHADOW_ONLY",
+    "ORCH-4 remains INACTIVE_SHADOW_ONLY",
+    "ORCH-5 remains INACTIVE_SHADOW_ONLY",
+    "parallel merge remains denied",
+    "PDC serialized final integration remains mandatory",
+    "no packet-class expansion",
+    "no operator-gate auto-cross",
+    "no Validation or scientific/execution authority"
+  ],
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"]
+}

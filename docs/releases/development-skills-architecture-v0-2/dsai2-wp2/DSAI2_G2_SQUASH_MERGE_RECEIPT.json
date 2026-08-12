@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-dsai2-g2-squash-merge-receipt/v1",
+  "receipt_id": "DSAI2-WP0-WP2.G2.SQUASH_MERGE.20260812",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "gate_id": "DSAI2-G2",
+  "gate_decision": "PASS_DELEGATED_AUTO_RATIFIED",
+  "authority_delta": "NONE",
+  "pull_request": 688,
+  "merge_method": "squash",
+  "target_branch": "main",
+  "baseline_main": "788dd4ea04b8df53f51369de84fff348de7c61d9",
+  "approved_head": "93bd46715c50ffc725f8b4ea89765a699b5ea026",
+  "result_main_sha": "28ef05024d3bd12d9917eecc17e3b5dece4a2613",
+  "final_assurance": {
+    "tests": {
+      "run_id": 31649971549,
+      "run_number": 3908,
+      "conclusion": "success",
+      "jobs": ["OVC final integration window admitted", "tests", "pytest-unittest-parity", "runner-parity"]
+    },
+    "tiered": {
+      "run_id": 31649971565,
+      "run_number": 2255,
+      "conclusion": "success",
+      "jobs": ["OVC profile assurance", "OVC tiered test selection shadow", "OVC merge readiness"]
+    },
+    "stable_main_before_merge": "788dd4ea04b8df53f51369de84fff348de7c61d9",
+    "submitted_reviews": 0,
+    "inline_review_comments": 0
+  },
+  "integrated_scope": [
+    "empirical repository coordination corpus",
+    "ORCH-3 packet-train shadow conformance runtime",
+    "ORCH-4 conflict-classification shadow conformance runtime",
+    "ORCH-5 portfolio-scheduling shadow conformance runtime",
+    "future fail-closed bounded authority resolver and schema"
+  ],
+  "authority_after_merge": {
+    "ORCH-2": "ACTIVE_BOUNDED_SINGLE_PACKET_SERIAL_REQUIRED",
+    "ORCH-3": "INACTIVE_SHADOW_ONLY",
+    "ORCH-4": "INACTIVE_SHADOW_ONLY",
+    "ORCH-5": "INACTIVE_SHADOW_ONLY",
+    "parallel_merge": false,
+    "validation": "DENIED",
+    "scientific_execution_authority": "NONE"
+  },
+  "next_gate": "DSAI2-G3",
+  "next_gate_class": "OPERATOR_REQUIRED",
+  "rollback": "Forward-supersede or remove DSAI v0.2 shadow/conformance surfaces while preserving DSAI v0.1 bounded ORCH-2 and the PDC serialized final-integration window."
+}
