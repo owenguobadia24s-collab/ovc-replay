@@ -5,7 +5,7 @@
   "packet_id": "PDC-FIW-CORR-WP1",
   "baseline_main_sha": "10a0acac129df1039feafd9200612e7512a6c551",
   "branch": "fix/pdc-serialized-final-integration-window-v1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "operator_instruction": "Create and execute a serialized final-integration window",
   "trigger": {
     "class": "MAIN_HEAD_CHURN_WASTED_FINAL_ASSURANCE",
@@ -37,7 +37,7 @@
     "readiness_result": "FAIL_OVC_BASE_MOVED_BEFORE_READINESS",
     "finding": "Status-only admission allowed profile assurance to start despite the readiness acquisition step failing on stale main.",
     "repair": "Both profile and canonical-required admission paths now independently recheck current main and candidate ancestry before expensive assurance.",
-    "final_disposition": "PENDING_CURRENT_MAIN_RECONCILIATION_AND_EXACT_HEAD_PASS"
+    "final_disposition": "RESOLVED"
   },
   "acceptance_conditions": [
     "Only the existing tests.yml and ovc-tiered-tests.yml pull-request workflows remain.",
@@ -67,8 +67,25 @@
     "preliminary_tiered_workflow_run_id": 31643275045,
     "preliminary_tests_workflow_run_id": 31643275215,
     "preliminary_decision": "SUPERSEDED_BY_ADVERSARIAL_CORRECTION",
-    "decision": "PENDING_REBASED_EXACT_HEAD_ASSURANCE",
-    "recommendation": "PENDING_REBASED_EXACT_HEAD_ASSURANCE"
+    "final_evaluated_candidate_commit": "8b53af4f44f222c7c88c2712485bce0ce206ab08",
+    "final_assurance_base_commit": "1d1ef48ee99ec1abf0dd72f5c8b0b97a9a2fd7d0",
+    "final_tiered_workflow_run_id": 31644133217,
+    "final_tests_workflow_run_id": 31644133220,
+    "development_tests": 151,
+    "authority_tests": 30,
+    "canonical_tests": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "profile_assurance": "PASS",
+    "merge_readiness": "PASS",
+    "workflow_census_total": 130,
+    "pull_request_workflow_count": 2,
+    "complete_repository_suite_count": 1,
+    "final_integration_window_acquisition_ms": 904,
+    "final_integration_window_hold_ms": 184529,
+    "blocking_review_threads": 0,
+    "decision": "PASS",
+    "recommendation": "PASS"
   },
   "decision_record": "docs/releases/parallel-development-v0-1/pdc-final-integration-window-v1/PDC_FIW_G1_DELEGATED_DECISION.json"
 }
