@@ -5,7 +5,7 @@
   "packet_id": "PDC-FIW-CORR-WP1",
   "baseline_main_sha": "10a0acac129df1039feafd9200612e7512a6c551",
   "branch": "fix/pdc-serialized-final-integration-window-v1",
-  "status": "APPROVED",
+  "status": "QA_REVIEW",
   "operator_instruction": "Create and execute a serialized final-integration window",
   "trigger": {
     "class": "MAIN_HEAD_CHURN_WASTED_FINAL_ASSURANCE",
@@ -20,20 +20,31 @@
     "window_concurrency_group": "ovc-main-integration-lane-v1",
     "lane_identity_reused_for_backward_compatibility": true,
     "acquire_before_final_assurance": true,
-    "profile_admission_handshake": "OVC profile assurance waits until OVC merge readiness is in_progress on the exact PR head before checkout/test selection",
-    "required_check_admission_handshake": "tests workflow waits until OVC merge readiness is in_progress on the exact PR head",
+    "profile_admission_handshake": "OVC profile assurance waits for the exact-head OVC merge readiness holder, independently rechecks current main, then proves PR-head ancestry before checkout/test selection proceeds.",
+    "required_check_admission_handshake": "tests workflow waits for the exact-head OVC merge readiness holder, independently rechecks current main, then proves PR-head ancestry before canonical Python jobs proceed.",
     "candidate_must_contain_acquired_main": true,
     "main_polled_while_window_held": true,
     "fail_closed_guard_preserved": true,
     "new_pull_request_workflow": false,
     "workflow_count_delta": 0
   },
+  "adversarial_correction_evidence": {
+    "candidate_commit": "893a9ff15313c2f63363e93d2686ab74dcdb9ebd",
+    "tiered_workflow_run_id": 31643668165,
+    "event_base_sha": "10a0acac129df1039feafd9200612e7512a6c551",
+    "advanced_main_sha": "bd5218b47c1ebc028f1455a4f4f3ef86bded34a7",
+    "readiness_acquisition_ms": 250,
+    "readiness_result": "FAIL_OVC_BASE_MOVED_BEFORE_READINESS",
+    "finding": "Status-only admission allowed profile assurance to start despite the readiness acquisition step failing on stale main.",
+    "repair": "Both profile and canonical-required admission paths now independently recheck current main and candidate ancestry before expensive assurance.",
+    "final_disposition": "PENDING_CURRENT_MAIN_RECONCILIATION_AND_EXACT_HEAD_PASS"
+  },
   "acceptance_conditions": [
     "Only the existing tests.yml and ovc-tiered-tests.yml pull-request workflows remain.",
     "Only one PR can hold the repository-wide final-integration window at a time and queued windows are not cancelled.",
     "The existing global integration-lane identity is reused so in-flight older readiness jobs and the corrective window cannot execute concurrently.",
-    "OVC profile assurance and the canonical required Python jobs do not begin their expensive assurance work until the exact-head OVC merge-readiness check has acquired the serialized window.",
-    "A stale event base or a candidate that does not contain the acquired current-main commit fails before final assurance starts.",
+    "OVC profile assurance and the canonical required Python jobs independently verify current-main freshness and candidate ancestry before expensive assurance begins.",
+    "A stale event base or a candidate that does not contain the admitted current-main commit fails before final assurance starts.",
     "Any main movement while the final-integration window is held fails closed with the existing readiness movement guard class.",
     "The complete repository suite remains present exactly once and no required-check semantics are weakened."
   ],
@@ -52,18 +63,12 @@
       "runner-parity",
       "OVC merge readiness on the same exact head"
     ],
-    "evaluated_candidate_commit": "219eb6b9db691a1b7ffb138cf98430e9843794ea",
-    "tiered_workflow_run_id": 31643275045,
-    "tests_workflow_run_id": 31643275215,
-    "development_tests": 148,
-    "authority_tests": 30,
-    "workflow_census_total": 130,
-    "pull_request_workflow_count": 2,
-    "final_integration_window_acquisition_ms": 286,
-    "final_integration_window_hold_ms": 180309,
-    "blocking_review_threads": 0,
-    "decision": "PASS",
-    "recommendation": "PASS"
+    "preliminary_evaluated_candidate_commit": "219eb6b9db691a1b7ffb138cf98430e9843794ea",
+    "preliminary_tiered_workflow_run_id": 31643275045,
+    "preliminary_tests_workflow_run_id": 31643275215,
+    "preliminary_decision": "SUPERSEDED_BY_ADVERSARIAL_CORRECTION",
+    "decision": "PENDING_REBASED_EXACT_HEAD_ASSURANCE",
+    "recommendation": "PENDING_REBASED_EXACT_HEAD_ASSURANCE"
   },
   "decision_record": "docs/releases/parallel-development-v0-1/pdc-final-integration-window-v1/PDC_FIW_G1_DELEGATED_DECISION.json"
 }
