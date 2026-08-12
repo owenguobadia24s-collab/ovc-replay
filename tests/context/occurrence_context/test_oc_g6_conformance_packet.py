@@ -22,14 +22,35 @@ def git_blob_sha(path: Path) -> str:
 
 
 class OCG6ConformancePacketTests(unittest.TestCase):
-    def test_terminal_state_stops_at_operator_gate(self):
+    def test_historical_terminal_state_stops_at_operator_gate_and_current_pointer_succeeds_it(self):
         state = json.loads(STATE.read_text())
         pointer = json.loads(POINTER.read_text())
+
+        # v0_8 is immutable pre-decision OC-G6 evidence and must continue to
+        # prove that execution stopped at the operator-reserved gate.
         self.assertEqual(state["status"], "GATE_READY")
         self.assertEqual(state["current_gate"], "OC-G6")
         self.assertTrue(state["operator_decision_required"])
         self.assertIsNone(state["operator_decision"])
-        self.assertEqual(pointer["next_action"], "AWAIT_EXPLICIT_OPERATOR_OC_G6_DECISION")
+        self.assertEqual(
+            state["next_action"],
+            "STOP_AT_OPERATOR_REQUIRED_OC_G6; AWAIT_EXPLICIT_OPERATOR_DECISION",
+        )
+
+        # The moving pointer is current-state evidence.  It may advance only by
+        # preserving the later explicit operator decision rather than rewriting
+        # the historical gate-ready record in place.
+        self.assertEqual(
+            pointer["authoritative_state"],
+            "registries/implementation/occurrence_context/OVC_OC_IMPLEMENTATION_STATE_v0_10.json",
+        )
+        self.assertEqual(pointer["status"], "COMPLETED")
+        self.assertFalse(pointer["operator_decision_required"])
+        self.assertEqual(pointer["operator_decision"], "PASS")
+        self.assertEqual(
+            pointer["next_action"],
+            "PROGRAMME_COMPLETE_AWAIT_SEPARATE_DOWNSTREAM_AUTHORITY",
+        )
 
     def test_terminal_qa_has_all_required_design_checks_and_fixtures(self):
         qa = json.loads((G6 / "OC_G6_TERMINAL_QA_PACKET.json").read_text())
