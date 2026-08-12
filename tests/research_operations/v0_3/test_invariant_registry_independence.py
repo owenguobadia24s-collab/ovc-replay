@@ -11,6 +11,8 @@ REGISTRY_PATH = ROOT / "registries/research_operations/v0_3/C1_METAMORPHIC_INVAR
 METAMORPHIC_PATH = ROOT / "src/ovc/research_operations/v0_3/metamorphic.py"
 C1_SOURCE_ROOT = ROOT / "src/ovc/opt_b/c1"
 G0_MERGE_COMMIT = "4d701ad78af8597e182565eb301739501b51dff6"
+G0_BLOB_SHA = "568309747bbf4e9d368c704893f4a9d0b8af406b"
+G3_RETEST_EVIDENCE_PATH = ROOT / "docs/releases/research-operations-foundation-v0-3/ro3-g3-retest/RO3_G3_RETEST_ASSURANCE_EVIDENCE.json"
 
 
 class InvariantRegistryIndependenceTests(unittest.TestCase):
@@ -43,18 +45,19 @@ class InvariantRegistryIndependenceTests(unittest.TestCase):
 
     def test_registry_git_blob_is_unchanged_from_ro3_g0(self) -> None:
         relative = REGISTRY_PATH.relative_to(ROOT).as_posix()
-        g0_blob = subprocess.check_output(
-            ["git", "rev-parse", f"{G0_MERGE_COMMIT}:{relative}"],
-            cwd=ROOT,
-            text=True,
-        ).strip()
+        evidence = json.loads(G3_RETEST_EVIDENCE_PATH.read_text(encoding="utf-8"))
+        frozen = evidence["frozen_canon"]
+        self.assertEqual(G0_MERGE_COMMIT, frozen["invariant_registry_g0_merge_commit"])
+        self.assertEqual(G0_BLOB_SHA, frozen["invariant_registry_g0_blob_sha"])
+        self.assertTrue(frozen["unchanged_since_ro3_g0"])
+
         current_blob = subprocess.check_output(
             ["git", "hash-object", relative],
             cwd=ROOT,
             text=True,
         ).strip()
-        self.assertEqual(g0_blob, current_blob)
-        self.assertEqual(current_blob, "568309747bbf4e9d368c704893f4a9d0b8af406b")
+        self.assertEqual(G0_BLOB_SHA, current_blob)
+        self.assertEqual(frozen["invariant_registry_current_blob_sha"], current_blob)
 
 
 if __name__ == "__main__":

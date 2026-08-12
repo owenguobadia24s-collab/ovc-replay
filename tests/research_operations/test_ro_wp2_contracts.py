@@ -38,12 +38,34 @@ class ROWP2ContractsTests(unittest.TestCase):
 
     def test_command_registry_has_no_network_or_git_authority(self) -> None:
         registry = json.loads((ROOT / "registries/research_operations/RESEARCH_OPERATIONS_COMMAND_REGISTRY_v0_1.json").read_text())
-        self.assertEqual(12, len(registry["commands"]))
-        self.assertEqual("APPROVED_BOUNDED_LOCAL_OPERATION_RO_G2_PASS", registry["status"])
+        self.assertEqual(16, len(registry["commands"]))
+        self.assertEqual(
+            "APPROVED_BOUNDED_LOCAL_OPERATION_WITH_RO4_G4_APPEND_ONLY_COMMANDS",
+            registry["status"],
+        )
+        self.assertEqual(
+            "RO4-G4.OPERATOR.PASS.20260801T080400Z",
+            registry["ro4_g4_gate_decision_id"],
+        )
+        ro4_commands = {
+            item["command"]: item["write_class"]
+            for item in registry["commands"]
+            if item["command"].startswith("ovc ro4 ")
+        }
+        self.assertEqual(
+            {
+                "ovc ro4 annotate-boundary": "APPEND_ONLY_RECORD_AND_AUDIT",
+                "ovc ro4 record-friction": "APPEND_ONLY_RECORD_AND_AUDIT",
+                "ovc ro4 review-sequence": "APPEND_ONLY_RECORD_AND_AUDIT",
+                "ovc ro4 supersede": "APPEND_ONLY_RECORD_AND_AUDIT",
+            },
+            ro4_commands,
+        )
         self.assertEqual("NONE", registry["network_operations"])
         self.assertEqual("NONE", registry["git_operations"])
         self.assertEqual("NONE", registry["r2_operations"])
         self.assertEqual("NONE", registry["market_classification"])
+        self.assertEqual("PROHIBITED", registry["console_write"])
 
     def test_artifact_schema_uses_portable_locations(self) -> None:
         schema = json.loads((ROOT / "schemas/research_operations/artifact_catalogue_v0_1.schema.json").read_text())
