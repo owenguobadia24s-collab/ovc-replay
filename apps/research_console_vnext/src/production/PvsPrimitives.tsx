@@ -50,5 +50,5 @@ export function SegmentedControl<T extends string>({label,options,value}:{label:
 }
 
 export function DensityControl({value="Analytical"}:{value?:"Focus"|"Analytical"|"Dense"}) {
-  return <SegmentedControl label="Display density" options={["Focus","Analytical","Dense"] as const} value={value}/>;
+  return <div data-figma-node="37:202"><SegmentedControl label="Display density" options={["Focus","Analytical","Dense"] as const} value={value}/></div>;
 }
