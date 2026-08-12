@@ -140,10 +140,9 @@ class DSAIG7E5HistoricalReferenceTests(unittest.TestCase):
         self.assertEqual(self.e5["findings"]["false_allows"], 0)
         self.assertEqual(self.e5["authority_effect"], "QUALIFICATION_EVIDENCE_ONLY_NO_TRUSTED_PROMOTION")
 
-        # The moving pointer may advance to the separately materialised G7 decision-ready state.
-        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_16.json")
-        self.assertEqual(self.pointer["status"], "READY_OPERATOR_G7_TRUSTED_DECISION")
-        self.assertEqual(self.pointer["next_packet"], "DSAI-WP7")
+        # v0_16 is immutable historical G7-decision-ready evidence; the moving pointer is intentionally forward-only.
+        self.assertNotEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_15.json")
+        self.assertNotEqual(self.pointer["status"], "BLOCKED_E5_INDEPENDENT_REFERENCE_REVIEW")
         self.assertEqual(self.next_state["programme_status"], "READY_OPERATOR_G7_TRUSTED_DECISION")
         self.assertEqual(self.next_state["qualification_closure"]["e5"], "PASS_INDEPENDENT")
         self.assertEqual(self.next_state["qualification_closure"]["composition"]["status"], "QUALIFIED")
