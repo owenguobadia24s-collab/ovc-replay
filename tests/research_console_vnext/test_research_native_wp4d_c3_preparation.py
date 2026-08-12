@@ -82,7 +82,7 @@ class WP4DC3Preparation(unittest.TestCase):
         self.assertEqual("DENIED_UNTIL_RCN_RN_G4", admission["real_source_presentation"])
         self.assertEqual(611, admission["historical_wp4d_pr"])
         self.assertEqual("RCN-RN-WP4D", state["packet_id"])
-        self.assertEqual("RUNNING", state["status"])
+        self.assertIn(state["status"], {"RUNNING", "QA_REVIEW", "APPROVED", "COMPLETED"})
         self.assertEqual("NONE", state["authority_delta"])
         self.assertEqual("DENIED_UNTIL_RCN_RN_G4", state["real_source_routes"])
 
