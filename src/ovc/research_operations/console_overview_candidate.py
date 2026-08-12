@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Any
 
 from .console_overview import (
@@ -9,7 +11,38 @@ from .console_overview import (
     STATUS_PRIORITY,
     normalize_health_status,
 )
-from .read_model import ReadModelNode
+from .read_model import ReadModelNode, ResearchReadModel
+
+
+def load_read_model(path: Path) -> ResearchReadModel:
+    """Load the deterministic research read-model fixture used by overview projection tools.
+
+    This helper historically lived only in the build script even though the accepted
+    RC-G2 test contract imports it from the candidate projection module. Keeping the
+    loader here makes the tested API and the script implementation agree without
+    changing projection semantics.
+    """
+
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    nodes = tuple(
+        ReadModelNode(
+            object_id=str(node["object_id"]),
+            object_type=str(node["object_type"]),
+            authority=str(node["authority"]),
+            status=str(node["status"]),
+            source_refs=tuple(str(value) for value in node.get("source_refs", [])),
+            payload=dict(node.get("payload", {})),
+        )
+        for node in raw.get("nodes", [])
+    )
+    return ResearchReadModel(
+        schema=str(raw["schema"]),
+        source_commit=str(raw["source_commit"]),
+        catalogue_sha256=raw.get("catalogue_sha256"),
+        nodes=nodes,
+        health=tuple(dict(item) for item in raw.get("health", [])),
+        logical_sha256=str(raw["logical_sha256"]),
+    )
 
 
 class CandidateOverviewProjectionBuilder(OverviewProjectionBuilder):

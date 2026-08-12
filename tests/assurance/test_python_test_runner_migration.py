@@ -24,11 +24,13 @@ class PythonTestRunnerMigrationContractTests(unittest.TestCase):
         self.assertIn("python3 -m pytest -v", workflow)
         self.assertIn("python3 tools/ci/check_pytest_unittest_parity.py", workflow)
 
-    def test_pytest_is_pinned_as_test_extra(self) -> None:
+    def test_pytest_is_pinned_as_test_extra_and_legacy_paths_are_collectable(self) -> None:
         pyproject = PYPROJECT.read_text(encoding="utf-8")
-        self.assertIn('test = ["pytest==9.1.1"]', pyproject)
+        self.assertIn('"pytest==9.1.1"', pyproject)
         self.assertIn('[tool.pytest.ini_options]', pyproject)
         self.assertIn('testpaths = ["tests"]', pyproject)
+        self.assertIn('--import-mode=importlib', pyproject)
+        self.assertIn('pythonpath = ["src", "tests"]', pyproject)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ from ovc.context.occurrence_context.consumers import validate_consumption_manife
 
 from .adapters import AdapterEstimate, AdapterExecution, AdapterPreflight, AdapterVerification
 from .models import StageInvocation, StageSpec
-from .serialization import canonical_json
+from .serialization import canonical_json_bytes
 
 
 class CurrentAdapterError(ValueError):
@@ -114,7 +114,7 @@ def invoke_owner_callable(module_name: str, callable_name: str, /, *args: Any, *
 
 
 def assert_exact_owner_output(reference: Any, candidate: Any) -> None:
-    if canonical_json(reference) != canonical_json(candidate):
+    if canonical_json_bytes(reference) != canonical_json_bytes(candidate):
         raise CurrentAdapterError("IROF_CURRENT_ADAPTER_SCIENTIFIC_OUTPUT_DRIFT", "owner output changed")
 
 
