@@ -30,6 +30,21 @@ jobs:
       - name: Legacy unittest suite — retained parity baseline
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
       - name: Pytest unified suite — candidate primary runner
-        run: PYTHONPATH=src python3 -m pytest tests -ra
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python3 -m pytest tests -ra > /tmp/ovc-pytest.log 2>&1
+          status=$?
+          cat /tmp/ovc-pytest.log
+          if [ "$status" -ne 0 ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/ovc-pytest.log').read_text(encoding='utf-8', errors='replace')
+          tail = text[-3500:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          print(f'::error title=Pytest unified suite failure::{tail}')
+          PY
+          fi
+          exit "$status"
       - name: Prove unittest collection parity under pytest
+        if: always()
         run: PYTHONPATH=src python3 scripts/qa/check_python_test_runner_parity.py
