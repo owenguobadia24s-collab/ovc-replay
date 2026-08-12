@@ -22,14 +22,23 @@ NATIVE_MODULES = (
 
 
 class DSAIPostG9ANativeSurfaceTests(unittest.TestCase):
-    """Run post-G9A pytest-native conformance tests under canonical unittest CI.
+    """Run post-G9A pytest-native conformance tests under canonical unittest CI."""
 
-    The repository's canonical ``tests`` workflow is unittest discovery. These modules
-    were intentionally authored as pure deterministic functions, so this bridge executes
-    every local ``test_*`` function rather than leaving the newer DSAI assurance surface
-    invisible to the canonical runner. The only supported fixture is ``tmp_path``, backed
-    by an isolated TemporaryDirectory for the disposable Git sandbox tests.
-    """
+    def _invoke(self, module_name: str, name: str, fn) -> None:
+        params = list(inspect.signature(fn).parameters)
+        try:
+            if not params:
+                fn()
+                return
+            if params == ["tmp_path"]:
+                with tempfile.TemporaryDirectory(prefix="ovc-dsai-native-") as tmp:
+                    fn(Path(tmp))
+                return
+            self.fail(f"Unsupported native fixture signature {module_name}.{name}{tuple(params)}")
+        except Exception as exc:
+            detail = f"{module_name}.{name}: {type(exc).__name__}: {exc}"
+            print(f"::error title=DSAI native-surface failure::{detail}", flush=True)
+            raise
 
     def _run_native_module(self, module_name: str) -> None:
         module = importlib.import_module(module_name)
@@ -40,16 +49,8 @@ class DSAIPostG9ANativeSurfaceTests(unittest.TestCase):
         ]
         self.assertTrue(functions, f"No native test functions found in {module_name}")
         for name, fn in functions:
-            params = list(inspect.signature(fn).parameters)
             with self.subTest(module=module_name, native_test=name):
-                if not params:
-                    fn()
-                    continue
-                if params == ["tmp_path"]:
-                    with tempfile.TemporaryDirectory(prefix="ovc-dsai-native-") as tmp:
-                        fn(Path(tmp))
-                    continue
-                self.fail(f"Unsupported native fixture signature {module_name}.{name}{tuple(params)}")
+                self._invoke(module_name, name, fn)
 
     def test_post_g9a_native_modules_are_exercised_by_canonical_unittest(self):
         for module_name in NATIVE_MODULES:
