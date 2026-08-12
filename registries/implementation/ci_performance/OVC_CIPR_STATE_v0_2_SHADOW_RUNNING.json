@@ -3,15 +3,19 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "RUNNING",
+  "status": "APPROVED",
   "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
   "baseline_commit": "28ea2620af36a77704782274830a0e87892a960f",
+  "reconciled_main": "54c1af1fcc07b224a67917a9f131ef32ae013d98",
   "branch": "build/ci-performance-shadow-shards",
-  "candidate_commit": "PENDING_PACKET_COMMIT",
+  "candidate_commit": "05e535f4888f4740e5ae6ddaf08f039596cce81f",
   "prerequisites": [
     "CIPR-G4-SUITE-TOPOLOGY operator PASS B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
     "CIPR-G4 decision/evidence squash-merged at main 28ea2620af36a77704782274830a0e87892a960f",
-    "PYT-WP1/PYT-G1 legacy unittest preservation remains in force"
+    "PYT-WP1/PYT-G1 legacy unittest preservation remains in force",
+    "three-repeat shadow benchmark PASS on 8a331c8fdbd2d6740b0b11867b8f779807689aba",
+    "same-head canonical assurance PASS",
+    "reconciled implementation head 05e535f4888f4740e5ae6ddaf08f039596cce81f PASS all shadow and canonical assurance"
   ],
   "authority_required": "SATISFIED_OPERATOR_PASS",
   "authority_delta": "BOUNDED_RUNNER_NEUTRAL_DETERMINISTIC_REQUIRED_SHARD_SHADOW_EVALUATION",
@@ -19,19 +23,24 @@
   "runner_cutover_active": false,
   "scientific_authority_delta": false,
   "tests": [
-    "PENDING targeted",
-    "PENDING canonical exact-head",
-    "PENDING shadow matrix"
+    "Shadow run 31639132742 attempts 1-3 PASS",
+    "Same-head canonical run 31639135466 PASS",
+    "Reconciled shadow run 31639950414 PASS",
+    "Reconciled tests run 31639954004 PASS tests + pytest-unittest-parity + runner-parity",
+    "Reconciled tiered run 31639953912 PASS FINAL_HEAD + observer + merge readiness",
+    "PR #675 review threads 0"
   ],
   "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHARD_QA_PACKET.json",
-  "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_DECISION.json",
+  "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHADOW_DECISION.json",
+  "performance_evidence": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHADOW_PERFORMANCE_EVIDENCE.json",
   "merge_commit": null,
   "blockers": [],
   "warnings": [
-    "Open PYT-WP2 PR #643 modifies .github/workflows/tests.yml; this packet deliberately avoids that path.",
-    "Shadow results do not substitute for any existing required check."
+    "Runner queue variance is material and must remain separate from execution critical path.",
+    "Node 20 deprecation warning from pinned GitHub Actions is non-blocking; no dependency bump is implied.",
+    "Required-check substitution and runner cutover remain operator-reserved at coordinated PYT-G2/cutover gate."
   ],
-  "next_packet": "CIPR-WP4-SHADOW-EVALUATION",
-  "operator_stop_gate": null,
-  "rollback": "Remove or supersede only shadow-candidate policy/tool/workflow/state artifacts; preserve existing required CI."
+  "next_packet": "CIPR-WP5-COORDINATED-PYT-G2-CUTOVER-GATE",
+  "operator_stop_gate": "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER",
+  "rollback": "Remove or supersede only shadow-candidate policy/tool/workflow/state artifacts; preserve existing required CI, PYT policy and all evidence."
 }

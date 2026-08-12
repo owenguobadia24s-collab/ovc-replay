@@ -3,34 +3,49 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
-  "status": "IMPLEMENTED_AWAITING_REMOTE_QA",
+  "status": "IMPLEMENTED_SHADOW_EVIDENCED",
   "baseline_main": "28ea2620af36a77704782274830a0e87892a960f",
+  "reconciled_main": "54c1af1fcc07b224a67917a9f131ef32ae013d98",
   "branch": "build/ci-performance-shadow-shards",
-  "candidate_commit": "PENDING_PACKET_COMMIT",
+  "candidate_commit": "05e535f4888f4740e5ae6ddaf08f039596cce81f",
   "operator_authority": {
     "gate": "CIPR-G4-SUITE-TOPOLOGY",
     "decision": "PASS",
     "selected_option": "B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
-    "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_DECISION.json"
+    "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_DECISION.json",
+    "decision_merge": "28ea2620af36a77704782274830a0e87892a960f"
   },
   "implementation": {
     "policy": "registries/implementation/ci_performance/CIPR_UNITTEST_SHARD_POLICY_v0_1.json",
     "tool": "tools/ci/unittest_shard_shadow.py",
     "workflow": ".github/workflows/ci-unittest-shard-shadow.yml",
+    "workflow_inventory_policy": "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_2.json",
     "algorithm": "LEGACY_DISCOVERY_ORDER_HEAVY_PATH_ISOLATION_THEN_ROUND_ROBIN",
     "shard_count": 4,
-    "workflow_triggers": [
-      "push:build/ci-performance-shadow-shards",
-      "workflow_dispatch"
-    ],
+    "workflow_triggers": ["push:build/ci-performance-shadow-shards", "workflow_dispatch"],
     "pull_request_listener_added": false,
     "existing_required_workflows_modified": false
   },
+  "population_proof": {
+    "population_count": 1160,
+    "population_hash": "b04eda58cd461b9214944f58f1b8ff26a975ad94a47805eeef57566579650a1f",
+    "policy_hash": "b49b57efffa550edf0569ea8df89912f4097cff201473307833eb3ca8144366e",
+    "proof": "BYTE_IDENTICAL_EXACT_ONE_COMPLETE_UNION",
+    "zero_omissions": true,
+    "zero_duplicates": true,
+    "repeatable": true
+  },
+  "remote_evidence": {
+    "three_repeat_shadow_run": 31639132742,
+    "same_head_canonical_run": 31639135466,
+    "reconciled_shadow_run": 31639950414,
+    "reconciled_tests_run": 31639954004,
+    "reconciled_tiered_run": 31639953912,
+    "performance_evidence": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHADOW_PERFORMANCE_EVIDENCE.json"
+  },
   "concurrent_programme_reconciliation": {
     "open_pyt_wp2_pr": 643,
-    "overlap_detected": [
-      ".github/workflows/tests.yml"
-    ],
+    "overlap_detected": [".github/workflows/tests.yml"],
     "bounded_resolution": "DO_NOT_MODIFY_TESTS_YML; USE_SEPARATE_PUSH_ONLY_SHADOW_WORKFLOW",
     "pytest_native_admission": "UNCHANGED",
     "standalone_unittest": "PRESERVED"
