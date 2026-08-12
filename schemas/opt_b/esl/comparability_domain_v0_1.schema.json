@@ -1,0 +1,16 @@
+{
+  "$id": "ovc://schemas/opt_b/esl/comparability_domain_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "clock": {"const": "UTC"},
+    "comparability_domain_id": {"minLength": 1, "type": "string"},
+    "generation_scope": {"type": "string"},
+    "instrument": {"type": "string"},
+    "scale": {"type": "string"},
+    "side": {"type": "string"}
+  },
+  "required": ["comparability_domain_id", "instrument", "side", "scale", "clock", "generation_scope"],
+  "title": "ComparabilityDomain",
+  "type": "object"
+}

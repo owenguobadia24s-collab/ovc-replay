@@ -1,0 +1,23 @@
+{
+  "$id": "ovc://schemas/opt_b/esl/structural_occurrence_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "anchor": {"$ref": "occurrence_anchor_v0_1.schema.json"},
+    "authority_state": {"const": "INACTIVE_CONFORMANCE_ONLY"},
+    "comparability_domain_id": {"type": ["string", "null"]},
+    "dependency_refs": {"items": {"additionalProperties": false, "properties": {"comparability_domain_id": {"type": ["string", "null"]}, "evidence_state": {"enum": ["AVAILABLE", "MISSING", "NOT_EVALUABLE", "NOT_COMPARABLE", "CENSORED", "AMBIGUOUS", "CONFLICT", "QUARANTINED", "UNRESOLVED"]}, "first_valid_time": {"type": ["string", "null"]}, "generation_id": {"type": "string"}, "identity_defining": {"type": "boolean"}, "object_type": {"type": "string"}, "owner": {"type": "string"}, "ref_id": {"type": "string"}, "role": {"enum": ["REQUIRED", "OPTIONAL", "CONDITIONAL_REQUIRED", "STRATIFIER", "FILTER", "DISPLAY_ONLY", "PROVENANCE_ONLY", "FORBIDDEN"]}}, "required": ["ref_id", "owner", "object_type", "role", "evidence_state", "first_valid_time", "generation_id", "comparability_domain_id", "identity_defining"], "type": "object"}, "type": "array"},
+    "effective_time": {"pattern": "Z$", "type": "string"},
+    "evaluation_cutoff": {"pattern": "Z$", "type": "string"},
+    "evidence_frontier": {"$ref": "evidence_frontier_v0_1.schema.json"},
+    "extensions": {"type": "object"},
+    "facets": {"items": {"additionalProperties": false, "properties": {"dimension": {"enum": ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION"]}, "evidence_state": {"enum": ["AVAILABLE", "MISSING", "NOT_EVALUABLE", "NOT_COMPARABLE", "CENSORED", "AMBIGUOUS", "CONFLICT", "QUARANTINED", "UNRESOLVED"]}, "reason_codes": {"items": {"type": "string"}, "type": "array"}, "source_ref_ids": {"items": {"type": "string"}, "type": "array"}, "value": {"type": ["object", "null"]}}, "required": ["dimension", "evidence_state", "source_ref_ids", "value", "reason_codes"], "type": "object"}, "type": "array"},
+    "first_valid_time": {"pattern": "Z$", "type": "string"},
+    "occurrence_pack_id": {"type": "string"},
+    "occurrence_record_id": {"type": ["string", "null"]},
+    "source_generation_ids": {"items": {"type": "string"}, "type": "array", "uniqueItems": true}
+  },
+  "required": ["occurrence_record_id", "occurrence_pack_id", "anchor", "evaluation_cutoff", "first_valid_time", "effective_time", "facets", "dependency_refs", "evidence_frontier", "source_generation_ids", "comparability_domain_id", "authority_state", "extensions"],
+  "title": "StructuralOccurrenceRecord",
+  "type": "object"
+}

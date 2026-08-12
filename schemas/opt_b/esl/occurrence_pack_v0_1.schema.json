@@ -1,0 +1,17 @@
+{
+  "$id": "ovc://schemas/opt_b/esl/occurrence_pack_v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "anchor_kind": {"minLength": 1, "type": "string"},
+    "comparability_domain_id": {"type": ["string", "null"]},
+    "identity_projection_fields": {"items": {"type": "string"}, "minItems": 1, "type": "array", "uniqueItems": true},
+    "occurrence_pack_id": {"minLength": 1, "type": "string"},
+    "optional_source_types": {"items": {"type": "string"}, "type": "array", "uniqueItems": true},
+    "required_dimensions": {"items": {"enum": ["LOCATION", "MOTION", "ORGANISATION", "INTERACTION"]}, "minItems": 1, "type": "array", "uniqueItems": true},
+    "required_source_types": {"items": {"type": "string"}, "type": "array", "uniqueItems": true}
+  },
+  "required": ["occurrence_pack_id", "anchor_kind", "required_dimensions", "required_source_types", "optional_source_types", "identity_projection_fields"],
+  "title": "OccurrencePack",
+  "type": "object"
+}
