@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-parallel-development-head-movement-receipt/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "policy_id": "OVC.PDC.HEAD_MOVEMENT_POLICY.v0.1",
+  "baseline_main_sha": "fdf64e0df76c5f75b21de357bac05ec965b9f0f7",
+  "current_main_sha": "ce320c64d07682a0eba2fa6228da07e1d1879270",
+  "changed_paths": [
+    "docs/releases/development-skills-architecture-v0-1/dsai-wp8/DSAI_WP8_ORCH1_POST_PILOT_RECONCILIATION.json",
+    "registries/implementation/dsai/CURRENT_STATE_POINTER.json",
+    "registries/implementation/dsai/OVC_DSAI_STATE_v0_21.json",
+    "tests/development_skills/test_dsai_g8b_operator_trusted_promotion.py",
+    "tests/development_skills/test_dsai_g8c_operator_assisted_write.py",
+    "tests/development_skills/test_dsai_wp8_post_pilot_reconciliation.py"
+  ],
+  "classification": "INTEGRATION_RELEVANT",
+  "rationale": [
+    "no CIPR-owned workflow, DA/PDC policy, Python test-runner policy, required-check definition, development validator or CI programme record changed",
+    "DSAI state/test progression is outside the CIPR semantic dependency footprint",
+    "the canonical complete-suite population changed through development_skills tests, so fresh exact-head integration assurance against current main is required"
+  ],
+  "evidence_reuse": "G1_G2_DECISIONS_RETAINED_FRESH_INTEGRATION_ASSURANCE_REQUIRED",
+  "required_response": "merge current lawful main into the feature branch without rewriting history, rerun tests + pytest-unittest-parity + runner-parity and tiered final stable-main readiness, then merge only if main remains stable",
+  "semantic_represetup_required": false,
+  "scientific_replay_required": false
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-MG-EI-WP1-CONTRACT-IDENTITY-DISCREPANCY-v0.1",
+  "plan_id": "OVC-MG-EI-WP1-CID-DECISION-PROTOCOL-0.1",
+  "plan_version": "0.1",
+  "status": "APPROVED",
+  "baseline_commit": "8617a57c716a0720fc66fbf6962f9c7215f14c49",
+  "branch": "fix/mg-ei-wp1-contract-identity-v0-2",
+  "authority": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_APPROVED",
+  "authority_delta": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_ONLY",
+  "operator_approval": {
+    "gate_id": "EI-WP1-CID-G0",
+    "decision": "PASS_SUPERSEDE",
+    "gate_merge_commit": "8617a57c716a0720fc66fbf6962f9c7215f14c49"
+  },
+  "packets": [
+    {
+      "packet_id": "EI-WP1-CID-WP0",
+      "status": "COMPLETED",
+      "prerequisites": ["PYT-WP2-BLOCK-001:BLOCKED"],
+      "authority_required": "NONE",
+      "authority_delta": "EVIDENCE_RECONCILIATION_ONLY",
+      "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+      "branch": "governance/mg-ei-wp1-contract-identity-discrepancy-v1",
+      "candidate_commit": "4e06beaf04c7dae6b27bd576b08ca7a78ade2a56",
+      "tests": ["JSON parse","digest shape","accepted Drive manifest raw-hash cross-check"],
+      "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_GATE_PACKET.json",
+      "decision_record": "EI-WP1-CID-G0:PASS_SUPERSEDE",
+      "merge_commit": "8617a57c716a0720fc66fbf6962f9c7215f14c49",
+      "blockers": [],
+      "next_packet": "EI-WP1-CID-WP1"
+    },
+    {
+      "packet_id": "EI-WP1-CID-WP1",
+      "status": "APPROVED",
+      "prerequisites": ["EI-WP1-CID-G0:PASS_SUPERSEDE","main:8617a57c716a0720fc66fbf6962f9c7215f14c49"],
+      "authority_required": "OPERATOR_REQUIRED_SATISFIED_BY_G0",
+      "authority_delta": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_ONLY",
+      "baseline_commit": "8617a57c716a0720fc66fbf6962f9c7215f14c49",
+      "branch": "fix/mg-ei-wp1-contract-identity-v0-2",
+      "candidate_commit": "185802e38422394fb4894e2f547d4fcfb24017f4",
+      "tests": ["tests workflow 31632833282:PASS","tiered assurance 31632833322:PASS","merge readiness:PASS"],
+      "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_WP1_QA.json",
+      "decision_record": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_WP1_DELEGATED_DECISION.json",
+      "merge_commit": null,
+      "blockers": [],
+      "next_packet": "PYT-WP2-RESUME"
+    }
+  ],
+  "gate": {"gate_id":"EI-WP1-CID-G0","status":"APPROVED","operator_decision":"PASS_SUPERSEDE"},
+  "qa": "PASS",
+  "blockers": [],
+  "next_action": "FINAL_HEAD_ASSURANCE_THEN_SQUASH_MERGE_PR_666"
+}

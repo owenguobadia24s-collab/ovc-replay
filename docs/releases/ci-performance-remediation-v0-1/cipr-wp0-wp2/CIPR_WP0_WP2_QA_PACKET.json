@@ -1,0 +1,103 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "gate_ids": ["CIPR-G1", "CIPR-G2"],
+  "status": "PASS",
+  "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+  "integration_baseline_commit": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
+  "assured_implementation_head": "dcca93a3134b30f53fe63c01173f32113ef84afc",
+  "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
+  "acceptance": {
+    "canonical_unittest_command_preserved": "PASS",
+    "pyt_wp1_dual_run_required_checks_preserved": "PASS",
+    "two_pr_listener_surface_preserved": "PASS",
+    "per_pr_cancellation_preserved": "PASS",
+    "required_check_wait_outside_global_lane": "PASS",
+    "global_lane_retained_once_on_final_readiness": "PASS",
+    "polling_removed_from_global_lane": "PASS",
+    "stable_main_fail_closed_checks_retained": "PASS",
+    "exact_head_required_checks_rechecked_inside_final_readiness": "PASS",
+    "structured_latency_metrics_present": "PASS",
+    "da2_pdc_compatibility_validators": "PASS_STRONGER_CURRENT_CONTRACT",
+    "tests": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "tiered_profile_assurance": "PASS_FINAL_HEAD",
+    "canonical_observer": "PASS",
+    "merge_readiness": "PASS_STABLE_MAIN",
+    "review_threads": "PASS_ZERO"
+  },
+  "tests": [
+    {
+      "workflow": "tests",
+      "run_id": 31621918842,
+      "run_number": 3654,
+      "head": "dcca93a3134b30f53fe63c01173f32113ef84afc",
+      "result": "PASS",
+      "jobs": {
+        "tests": "PASS",
+        "pytest-unittest-parity": "PASS",
+        "runner-parity": "PASS"
+      }
+    },
+    {
+      "workflow": "OVC tiered test selection shadow",
+      "run_id": 31621918782,
+      "run_number": 2023,
+      "head": "dcca93a3134b30f53fe63c01173f32113ef84afc",
+      "result": "PASS",
+      "profile": "FINAL_HEAD",
+      "profile_assurance_job_id": 94199895481,
+      "canonical_observer_job_id": 94199896417,
+      "merge_readiness_job_id": 94199896251
+    }
+  ],
+  "performance_evidence": {
+    "canonical_tests_observation_wait_ms": 167480,
+    "integration_lane_evaluation_ms": 583,
+    "required_checks": ["tests", "pytest-unittest-parity", "runner-parity"],
+    "architectural_result": "PASS_HEAD_OF_LINE_TEST_WAIT_REMOVED_FROM_GLOBAL_LANE",
+    "interpretation": "The long exact-head Python assurance wait occurred entirely in the non-serial observer. Once the final integration lane was acquired, the measured stable-main/required-check evaluation completed in 583 ms. The canonical suite and PYT-WP1 dual-run assurance were not weakened or removed."
+  },
+  "head_movement": [
+    {
+      "from": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+      "to": "2eff94425606df77eb037a717de662e5c7b7c47b",
+      "classification": "IRRELEVANT",
+      "reconciled": true
+    },
+    {
+      "from": "2eff94425606df77eb037a717de662e5c7b7c47b",
+      "to": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
+      "classification": "SEMANTIC_AUTHORITY_RELEVANT",
+      "repreflighted": true
+    },
+    {
+      "from": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
+      "to": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
+      "classification": "INTEGRATION_RELEVANT",
+      "reconciled": true
+    }
+  ],
+  "warnings": [
+    {
+      "id": "TRANSITIONAL_GLOBAL_LANE_PENDING_CANCELLATION",
+      "severity": "NON_BLOCKING_TRANSITIONAL",
+      "detail": "The first post-observer merge-readiness job was cancelled while pending behind the repository-wide concurrency group during coexistence with pre-remediation PR workflows. A job-level retry completed PASS on the same head and stable main. The remediation reduces future lane occupancy to a sub-second final evaluator but cannot rewrite already-running legacy PR workflow definitions."
+    },
+    {
+      "id": "UPSTREAM_ACTION_NODE_TARGET_WARNINGS",
+      "severity": "NON_BLOCKING_HYGIENE",
+      "detail": "GitHub runner warnings remain for generic checkout/setup-python action Node targets. The CIPR-owned github-script dependency was upgraded to v9 and runs without the earlier v7 warning. Remaining action-version hygiene is classified for non-destructive WP3 review."
+    }
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "review_threads": 0,
+  "external_artifacts": [],
+  "rollback": "Non-destructively revert/supersede the observer/readiness relocation and compatibility-validator updates while preserving this plan, QA, decisions and CI evidence. Restore the prior PDC readiness implementation only if required; never force-push or rewrite history.",
+  "qa_recommendation": "PASS",
+  "next": "Materialise delegated G1/G2 PASS, rerun exact-head assurance on the court-record decision head, squash-merge when current main remains c92d9f77 or is lawfully reconciled, then continue with CIPR-WP3."
+}

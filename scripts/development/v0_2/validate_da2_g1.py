@@ -11,6 +11,7 @@ DECISION=ROOT/'docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_OPERAT
 RULESET=ROOT/'docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_RULESET_MIGRATION_PACKET.json'
 CANONICAL={'.github/workflows/tests.yml','.github/workflows/ovc-tiered-tests.yml'}
 FULL='python3 -m unittest discover -s tests -v'
+REQUIRED_PYTHON_CHECKS=("'tests'","'pytest-unittest-parity'","'runner-parity'")
 def load(p): return json.loads(p.read_text(encoding='utf-8'))
 def main():
  r=load(REG); g=load(GATE); q=load(QA); d=load(DECISION); rs=load(RULESET)
@@ -30,7 +31,8 @@ def main():
  assert full=={'.github/workflows/tests.yml'}, f'complete-suite PR workflows: {sorted(full)}'
  tests=actual['.github/workflows/tests.yml'].read_text(); tiered=actual['.github/workflows/ovc-tiered-tests.yml'].read_text()
  assert tests.count(FULL)==1 and 'python-version: "3.11"' in tests
- assert FULL not in tiered and 'python-version: "3.11"' in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered and "run.name === 'tests'" in tiered
+ assert FULL not in tiered and 'python-version: "3.11"' in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered
+ assert 'const requiredNames =' in tiered and all(name in tiered for name in REQUIRED_PYTHON_CHECKS), 'tiered workflow must retain exact-head legacy and PYT-WP1 parity checks'
  for path in r['push_manual_preserved_workflows']:
   text=actual[path].read_text(); assert 'pull_request:' not in text and 'push:' in text and 'workflow_dispatch:' in text and 'concurrency:' in text and 'cancel-in-progress: true' in text, path
  assert d['decision']=='PASS'

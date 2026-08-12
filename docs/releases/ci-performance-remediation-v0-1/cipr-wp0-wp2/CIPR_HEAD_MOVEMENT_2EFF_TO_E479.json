@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-parallel-development-head-movement-receipt/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "policy_id": "OVC.PDC.HEAD_MOVEMENT_POLICY.v0.1",
+  "baseline_main_sha": "2eff94425606df77eb037a717de662e5c7b7c47b",
+  "current_main_sha": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
+  "changed_paths": [
+    ".github/workflows/tests.yml",
+    "conftest.py",
+    "docs/releases/python-test-runner-migration-v0-1/pyt-wp1/PYT_G1_DECISION.json",
+    "docs/releases/python-test-runner-migration-v0-1/pyt-wp1/PYT_WP1_BASE_RECHECK.json",
+    "docs/releases/python-test-runner-migration-v0-1/pyt-wp1/PYT_WP1_QA_PLAN.json",
+    "docs/testing/PYTHON_TEST_RUNNER_POLICY_v0_1.md",
+    "pyproject.toml",
+    "registries/implementation/python_test_runner/CURRENT_STATE_POINTER.json",
+    "registries/implementation/python_test_runner/PYT_STATE_v0_1_DUAL_RUN_PARITY.json",
+    "tests/test_python_test_runner_migration.py",
+    "tools/ci/pytest_unittest_parity.py"
+  ],
+  "classification": "SEMANTIC_AUTHORITY_RELEVANT",
+  "rationale": [
+    "the bound consumed dependency .github/workflows/tests.yml changed",
+    "PYT-WP1 introduced a new governing Python test-runner policy and dual-run parity assurance surface",
+    "the movement therefore requires full CI-assurance re-preflight and rebinding rather than reuse of the prior G1/G2 decision"
+  ],
+  "evidence_reuse": "PROHIBITED_PENDING_SEMANTIC_REPREFLIGHT",
+  "required_response": "re-preflight current main, bind PYT-WP1 policy and tests workflow, require tests + pytest-unittest-parity + runner-parity before final integration-lane acquisition, rerun exact-head assurance, and replace prior delegated decisions only after PASS",
+  "semantic_represetup_required": true,
+  "scientific_replay_required": false
+}

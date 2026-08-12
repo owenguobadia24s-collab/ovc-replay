@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-delegated-gate-decision/v1",
+  "decision_id": "CIPR-G3-DELEGATED-PASS-2026-08-12",
+  "gate_id": "CIPR-G3",
+  "gate_title": "Workflow inventory governance",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "authority": "DELEGATED_BY_OPERATOR_RATIFIED_PLAN",
+  "baseline_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+  "candidate_commit": "c48a520f0abaa2c8236827c7902e782a9fc900bc",
+  "completed_packets": ["CIPR-WP3"],
+  "current_authority": "NON_DESTRUCTIVE_DEVELOPMENT_CI_OBSERVATION",
+  "proposed_delta": "MACHINE_READABLE_WORKFLOW_CLASSIFICATION_AND_DRIFT_CENSUS_ONLY",
+  "authority_effect": "NONE",
+  "acceptance": "PASS_ALL",
+  "tests": {
+    "tests_workflow_run": 31625068355,
+    "tiered_workflow_run": 31625068367,
+    "result": "PASS"
+  },
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "census": {
+    "repository_workflow_definitions": 129,
+    "github_actions_registered_workflows": 175,
+    "gross_difference": 46,
+    "difference_authority_effect": "NONE_DIAGNOSTIC_ONLY",
+    "current_pr_ci": 2,
+    "temporary_repository_definitions": 0,
+    "historical_manual_verification": 107,
+    "active_manual_operation": 20
+  },
+  "warnings": ["UPSTREAM_ACTION_NODE_TARGET_WARNINGS_NON_BLOCKING"],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "rollback": "Remove/supersede the WP3 governance policy, classifier, census, QA and decision records only. No workflow deletion, disablement, retirement or trigger mutation is part of rollback.",
+  "decision": "PASS",
+  "non_reserved_rationale": "WP3 is a deterministic read-only classification/census packet inside the ratified CI remediation plan. It performs no workflow mutation, cleanup, required-check change, scientific decision or authority grant; historical evidence is preserved and rollback is non-destructive.",
+  "merge_sha": null,
+  "next_packet": "CIPR-WP4"
+}

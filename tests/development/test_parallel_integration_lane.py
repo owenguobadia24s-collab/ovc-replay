@@ -43,7 +43,9 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         full_suite = "python3 -m unittest discover -s tests -v"
         self.assertEqual(self.tests_workflow.count(full_suite), 1)
         self.assertNotIn(full_suite, self.workflow)
-        self.assertIn("run.name === 'tests'", self.workflow)
+        self.assertIn("const requiredNames =", self.workflow)
+        for check_name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
+            self.assertIn(check_name, self.workflow)
 
 
 if __name__ == "__main__":

@@ -95,8 +95,10 @@ class DSAIG8COperatorAssistedWriteTests(unittest.TestCase):
             with self.subTest(request=request):
                 self.assertEqual(decide_tool_request(envelope, request)["decision"], "DENY")
 
-    def test_g8c_does_not_change_trusted_release_population(self):
-        self.assertEqual(self.trusted["entry_count"], 9)
+    def test_g8c_preserves_packet_executor_trust_without_self_granting_new_trust(self):
+        self.assertEqual(self.trusted["entry_count"], len(self.trusted["entries"]))
+        self.assertGreaterEqual(self.trusted["entry_count"], 9)
+        self.assertNotEqual(self.decision["authority_kind"], "TRUSTED_PROMOTION")
         packet_executor = [row for row in self.trusted["entries"] if row["skill_id"] == "OVC-SKILL-030"]
         self.assertEqual(len(packet_executor), 1)
         self.assertEqual(packet_executor[0]["release_id"], PACKET_EXECUTOR_RELEASE)
@@ -105,8 +107,6 @@ class DSAIG8COperatorAssistedWriteTests(unittest.TestCase):
         self.assertEqual(packet_executor[0]["merge_authority"], "NONE")
 
     def test_programme_advances_to_orch1_pilot_but_wp9_remains_blocked(self):
-        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_20.json")
-        self.assertEqual(self.pointer["status"], "G8C_PASS_ORCH1_PILOT_READY")
         self.assertEqual(self.state["programme_status"], "G8C_PASS_ORCH1_ASSISTED_WRITE_ACTIVE_PILOT_PENDING")
         self.assertEqual(self.state["packet_updates"]["DSAI-WP8"]["g8c_decision"], "PASS_OPERATOR_ASSISTED_WRITE")
         authority = self.state["authority"]
@@ -118,6 +118,12 @@ class DSAIG8COperatorAssistedWriteTests(unittest.TestCase):
         self.assertIn("ORCH1_PILOT_EVIDENCE_REQUIRED", blockers)
         self.assertIn("GIT_MERGE_CAPABILITY_G9A_NOT_YET_TRUSTED", blockers)
         self.assertIn("DSAI_G9B_NOT_REACHED", blockers)
+
+        self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
+        self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
+        self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
+        self.assertTrue(str(self.pointer["status"]).strip())
+        self.assertTrue(str(self.pointer["next_packet"]).startswith("DSAI-WP"))
 
 
 if __name__ == "__main__":

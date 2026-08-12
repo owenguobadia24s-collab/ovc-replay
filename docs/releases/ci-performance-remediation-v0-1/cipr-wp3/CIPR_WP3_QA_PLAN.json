@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-qa-plan/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP3",
+  "gate_ids": ["CIPR-G3"],
+  "baseline_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+  "authority_delta": "NONE_CLASSIFICATION_ONLY",
+  "acceptance_conditions": [
+    "deterministic repository scan covers exactly 129 workflow definitions present on the exact candidate head",
+    "GitHub Actions external registry observation remains separately recorded at 175 registered workflows",
+    "gross count difference 46 is documented only as a drift indicator pending path-level crosswalk",
+    "exactly tests.yml and ovc-tiered-tests.yml are pull_request listeners",
+    "all 129 repository workflow definitions receive exactly one governance category",
+    "historical/manual-verification and active-manual-operation repository categories are represented; TEMPORARY may be zero if absent from exact-head repository tree",
+    "no workflow file is deleted, disabled or trigger-mutated",
+    "historical evidence preservation remains REQUIRED",
+    "canonical required Python checks PASS on exact candidate head",
+    "OVC tiered FINAL_HEAD/profile, observer and stable-main merge readiness PASS on exact candidate head",
+    "zero blocking warning, unresolved issue or review thread remains"
+  ],
+  "targeted_tests": [
+    "PYTHONPATH=src python -m unittest tests.development.test_ci_workflow_inventory -v",
+    "PYTHONPATH=src python scripts/development/ci_workflow_inventory.py --validate"
+  ],
+  "repository_tests": [
+    "tests",
+    "pytest-unittest-parity",
+    "runner-parity",
+    "OVC profile assurance",
+    "OVC canonical tests observed",
+    "OVC merge readiness"
+  ],
+  "rollback": "Revert/supersede only the workflow-governance policy, classifier, census and WP3 QA/decision records. Do not delete or mutate workflow definitions or registered workflow records.",
+  "qa_recommendation": "PENDING_CORRECTED_EXECUTION"
+}
