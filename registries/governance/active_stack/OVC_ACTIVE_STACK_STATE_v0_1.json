@@ -4,7 +4,7 @@
   "plan_id": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1",
   "plan_version": "0.1",
   "packet_id": "ASR-WP1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "prerequisites": [
     "ASR-00_OPERATOR_PASS",
     "BASELINE_MAIN_FA23BAF4D57364AACEF0B28635C54B43FD7DC9A9",
@@ -18,13 +18,18 @@
   "baseline_main": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
   "baseline_commit": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
   "branch": "governance/active-stack-reclassification-v0-1-preflight",
-  "candidate_commit": null,
-  "tests": [],
+  "candidate_commit": "253e8e643395ca8714def5011e1ac35823ae2bf9",
+  "tests": [
+    {"workflow_run":31598320224,"job":94119260007,"result":"PASS","scope":"complete repository suite"},
+    {"workflow_run":31598320206,"job":94119187648,"result":"PASS","scope":"OVC FINAL_HEAD/profile assurance"},
+    {"workflow_run":31598320206,"job":94119238562,"result":"PASS","scope":"compatibility"},
+    {"workflow_run":31598320206,"job":94119238903,"result":"PASS","scope":"merge readiness stable main"}
+  ],
   "qa_packet": "docs/releases/active-stack-reclassification-v0-1/asr-wp1/ASR_WP1_QA_PACKET.json",
-  "decision_record": "docs/releases/active-stack-reclassification-v0-1/asr-00/ASR_00_OPERATOR_DECISION.json",
+  "decision_record": "docs/releases/active-stack-reclassification-v0-1/asr-g1/ASR_G1_DELEGATED_DECISION.json",
   "merge_commit": null,
   "blockers": [],
-  "next_packet": "ASR-G1",
+  "next_packet": "ASR-MERGE",
   "effective_on_main_merge": true,
   "operator_decision": {
     "command": "OVC APPROVE OVC ACTIVE STACK RECLASSIFICATION v0.1",
@@ -57,23 +62,10 @@
     "research_roles": ["DISCOVERY", "DEVELOPMENT"],
     "validation": "LOCKED_UNCONSUMED"
   },
-  "active_spine": [
-    "OPT-A",
-    "OPT-B.C1.v2",
-    "OPT-B.C2.vNext",
-    "OPT-B.C2E.v0.2"
-  ],
+  "active_spine": ["OPT-A", "OPT-B.C1.v2", "OPT-B.C2.vNext", "OPT-B.C2E.v0.2"],
   "classifications": {
-    "ACTIVE": [
-      "OPT-A",
-      "OPT-B.C1.v2",
-      "OPT-B.C2.vNext",
-      "OPT-B.C2E.v0.2"
-    ],
-    "ACTIVE_FOUNDATION": [
-      "OCCURRENCE_CONTEXT.v0.1",
-      "RESEARCH_OPERATIONS_FOUNDATION"
-    ],
+    "ACTIVE": ["OPT-A", "OPT-B.C1.v2", "OPT-B.C2.vNext", "OPT-B.C2E.v0.2"],
+    "ACTIVE_FOUNDATION": ["OCCURRENCE_CONTEXT.v0.1", "RESEARCH_OPERATIONS_FOUNDATION"],
     "SHADOW": [
       "OPT-B.C2.vNext.FUNCTIONAL_DISCOVERY",
       "OPT-B.C2.vNext.CANDIDATE_DISPOSITIONS",
@@ -95,16 +87,8 @@
       "OPT-C.NEXT",
       "OPT-D.NEXT"
     ],
-    "LEGACY_INACTIVE": [
-      "OPT-B.C2.v2",
-      "B-STATE_PREDECESSOR_LINEAGE",
-      "LEGACY_OPT-C",
-      "LEGACY_OPT-D",
-      "LEGACY_ABCD_PIPELINE"
-    ],
-    "LOCKED": [
-      "VALIDATION_2025_CURRENT_STACK"
-    ]
+    "LEGACY_INACTIVE": ["OPT-B.C2.v2", "B-STATE_PREDECESSOR_LINEAGE", "LEGACY_OPT-C", "LEGACY_OPT-D", "LEGACY_ABCD_PIPELINE"],
+    "LOCKED": ["VALIDATION_2025_CURRENT_STACK"]
   },
   "authority_overlays": {
     "c2_vnext": "registries/opt_b/c2/vnext/C2_VNEXT_ACTIVE_RUNTIME_AUTHORITY_v0_1.json",
@@ -128,9 +112,9 @@
   "gate": {
     "gate_id": "ASR-G1",
     "owner": "DELEGATED",
-    "status": "QA_REVIEW",
+    "status": "APPROVED",
     "auto_ratifiable": true,
-    "decision": null,
+    "decision": "PASS",
     "condition": "ALL_TESTS_PASS_QA_PASS_NO_AUTHORITY_EXPANSION_NO_CONFLICT"
   },
   "rollback": "Forward-only supersession; preserve historical authority records and evidence; no deletion or history rewrite"
