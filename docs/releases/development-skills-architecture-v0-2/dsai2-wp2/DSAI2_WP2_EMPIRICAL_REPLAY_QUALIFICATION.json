@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-dsai2-wp2-empirical-replay-qualification/v1",
+  "qualification_id": "DSAI2-WP2.EMPIRICAL.REPLAY.20260812",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "packet_id": "DSAI2-WP2",
+  "source_corpus": "docs/releases/development-skills-architecture-v0-2/dsai2-wp0/DSAI2_EMPIRICAL_REPOSITORY_CORPUS_v0_1.json",
+  "source_main_sha": "788dd4ea04b8df53f51369de84fff348de7c61d9",
+  "candidate_head": "286f1b35ab800df24a95e88ebf40a7f972577468",
+  "observed": {
+    "event_count": 28,
+    "distinct_pr_count": 26,
+    "distinct_programme_count": 8,
+    "main_head_churn_pressure_events": 18,
+    "event_type_counts": {
+      "APPROVED_GATE_STALE": 1,
+      "CONCURRENT_PROGRAMMES": 1,
+      "CROSS_PROGRAM_DEPENDENCY": 2,
+      "GREEN_ASSURANCE_DISCARDED": 3,
+      "HEAD_OF_LINE_BLOCKING": 1,
+      "LIVE_PARALLEL_PACKET": 2,
+      "MAIN_SYNC_RECONCILIATION": 8,
+      "PACKET_TRAIN_PROGRESS": 2,
+      "RECONCILIATION_NONMERGEABLE": 1,
+      "SERIAL_INTEGRATION_CORRECTION": 2,
+      "STALE_BASE_SUPERSESSION": 5
+    }
+  },
+  "signals": {
+    "orch3_packet_train_progress_observed": true,
+    "orch4_parallel_build_and_head_churn_observed": true,
+    "orch4_serialized_final_integration_observed": true,
+    "orch5_cross_programme_dependency_observed": true,
+    "orch5_concurrent_programmes_observed": true
+  },
+  "conformance_results": {
+    "ORCH-3": "PASS_IMPLEMENTATION_JUSTIFIED_SHADOW_ONLY",
+    "ORCH-4": "PASS_IMPLEMENTATION_JUSTIFIED_SHADOW_ONLY",
+    "ORCH-5": "PASS_IMPLEMENTATION_JUSTIFIED_SHADOW_ONLY",
+    "ambiguity_fallback": "PASS_SERIAL_REQUIRED",
+    "parallel_merge": "PASS_DENIED",
+    "pdc_serial_final_integration": "PASS_REQUIRED",
+    "self_activation": "PASS_PROHIBITED"
+  },
+  "decision": "PASS_EMPIRICAL_CORPUS_SUPPORTS_ORCH345_CONFORMANCE_AND_OPERATOR_GATE_PREPARATION",
+  "authority_delta": "NONE",
+  "activation_performed": false,
+  "next_gate": "DSAI2-G3",
+  "next_gate_class": "OPERATOR_REQUIRED",
+  "rollback": "Evidence-only qualification; preserve bounded ORCH-2 and PDC serialized integration if DSAI2-G3 is not approved."
+}

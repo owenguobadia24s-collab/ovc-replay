@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-dsai2-orch345-conformance-contract/v1",
+  "contract_id": "DSAI2.ORCH345.CONFORMANCE.v0.1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "authority_effect": "NONE",
+  "execution_mode": "SHADOW_ONLY",
+  "stages": {
+    "ORCH-3": {
+      "mode": "SEQUENTIAL_PACKET_TRAIN",
+      "programme_bounded": true,
+      "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+      "gate_class_allowlist": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+      "required_authority_delta": "NONE"
+    },
+    "ORCH-4": {
+      "mode": "PARALLEL_BUILD_SERIAL_INTEGRATION",
+      "parallel_safe_class": "PARALLEL_BUILD_ALLOWED_SERIAL_INTEGRATION",
+      "ambiguity_fallback": "SERIAL_REQUIRED",
+      "required_conflict_dimensions": ["write_paths", "declared_dependencies", "semantic_owners", "authority_surfaces", "frozen_surfaces", "gate_class", "authority_delta"],
+      "parallel_merge": false
+    },
+    "ORCH-5": {
+      "mode": "PORTFOLIO_DISPATCH_ONLY",
+      "authority_source": "EXISTING_PACKET_AND_PROGRAMME_AUTHORITY_ONLY",
+      "cross_programme_dependency_edges": "EXPLICIT_ONLY",
+      "operator_gate_behavior": "WAIT_WITHOUT_BLOCKING_INDEPENDENT_WORK",
+      "parallel_merge": false
+    }
+  },
+  "integration_policy": {
+    "policy_id": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED",
+    "required_terminal_state": "PARALLEL_BUILD_SERIALIZED_FINAL_INTEGRATION_WINDOW_ACTIVE",
+    "target_branch": "main",
+    "merge_method": "squash",
+    "exact_base_head_checks_scope_revalidation": true,
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false
+  },
+  "activation": {
+    "gate_id": "DSAI2-G3",
+    "gate_class": "OPERATOR_REQUIRED",
+    "self_grant_prohibited": true,
+    "authority_record_must_be_present_on_main": true
+  },
+  "hard_boundaries": {
+    "validation": "DENIED",
+    "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE",
+    "unrestricted_agent_write": "DENIED",
+    "operator_required_gate_auto_cross": "DENIED"
+  }
+}

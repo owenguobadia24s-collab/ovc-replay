@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai-orch345-authority/v1",
+  "title": "OVC DSAI v0.2 bounded ORCH-3/4/5 authority",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "programme_id", "plan_id", "gate_id", "approved", "effective", "enabled_orchestrators", "enabled_packet_classes", "modes", "integration_policy", "validation", "reserved_scientific_execution_authority"],
+  "properties": {
+    "schema": {"const": "ovc-dsai-orch345-authority/v1"},
+    "programme_id": {"const": "OVC-DSAI-v0.2"},
+    "plan_id": {"const": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2"},
+    "gate_id": {"const": "DSAI2-G3"},
+    "approved": {"const": true},
+    "effective": {"const": true},
+    "enabled_orchestrators": {"const": ["ORCH-3", "ORCH-4", "ORCH-5"]},
+    "enabled_packet_classes": {"const": ["LOW_RISK_IMPLEMENTATION"]},
+    "modes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ORCH-3", "ORCH-4", "ORCH-5"],
+      "properties": {
+        "ORCH-3": {"const": "SERIAL_PACKET_TRAIN"},
+        "ORCH-4": {"const": "PARALLEL_BUILD_SERIAL_INTEGRATION"},
+        "ORCH-5": {"const": "PORTFOLIO_DISPATCH_ONLY"}
+      }
+    },
+    "integration_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["serialized_final_integration_window", "parallel_merge", "target_branch", "merge_method", "direct_main_mutation", "force_push", "history_rewrite"],
+      "properties": {
+        "serialized_final_integration_window": {"const": true},
+        "parallel_merge": {"const": false},
+        "target_branch": {"const": "main"},
+        "merge_method": {"const": "squash"},
+        "direct_main_mutation": {"const": false},
+        "force_push": {"const": false},
+        "history_rewrite": {"const": false}
+      }
+    },
+    "validation": {"const": "DENIED"},
+    "reserved_scientific_execution_authority": {"const": "NONE"}
+  }
+}
