@@ -22,7 +22,7 @@ from ovc.development.skills.release import build_skill_release_bundle
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "fixtures/development_skills/wp8_orch0_cases_v0_1.json"
 CANDIDATES = ROOT / "registries/development/skills/orchestration_candidates_v0_1.json"
-BASELINE = "7c102c741eafc68962c5f87d1797b8653ba8339c"
+BASELINE = "119e07a41a4b1bf3e4f9d598424a71cb488428b6"
 ENVIRONMENT = "windows-local-python311"
 TRUSTED = {
     "PACKET_PREFLIGHT": "OVC-SKILL-001@0.1.0+sha256:6609c3cffb8be1b81da4870e6d6c752057c7deed4e35f7d5eabaaca5e0f440f7",
