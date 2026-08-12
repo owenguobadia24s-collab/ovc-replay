@@ -8,6 +8,7 @@ from pathlib import Path
 from ovc.opt_b.market_grammar.episode_ledger import C2LedgerInput
 from ovc.opt_b.market_grammar.revised_c2_adapter import (
     ADAPTER_ID,
+    BINDING_SHA256,
     EmpiricalBinding,
     RevisedC2AdapterError,
     adapt_revised_c2_row,
@@ -15,9 +16,11 @@ from ovc.opt_b.market_grammar.revised_c2_adapter import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-FIXTURE = ROOT / "fixtures/market_grammar/ei_wp1/revised_c2_adapter_cases.json"
+FIXTURE = ROOT / "fixtures/market_grammar/ei_wp1/revised_c2_adapter_cases_v0_2.json"
+HISTORICAL_FIXTURE = ROOT / "fixtures/market_grammar/ei_wp1/revised_c2_adapter_cases.json"
 STATE = ROOT / "registries/opt_b/market_grammar/OVC_MG_EI_JUNE_PROGRAMME_STATE_v0_1.jsonc"
-REGISTRY = ROOT / "registries/opt_b/market_grammar/MG_EI_WP1_IMPLEMENTATION_REGISTRY_v0_1.json"
+REGISTRY = ROOT / "registries/opt_b/market_grammar/MG_EI_WP1_IMPLEMENTATION_REGISTRY_v0_2.json"
+CORRESPONDENCE = ROOT / "registries/opt_b/market_grammar/MG_EI_WP1_BINDING_IDENTITY_CORRESPONDENCE_v0_1.json"
 SCHEMA = ROOT / "schemas/opt_b/market_grammar/mg_ei_wp1_revised_c2_source_row_v0_1.schema.json"
 QA = ROOT / "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1/EI_WP1_QA_PACKET.json"
 
@@ -35,6 +38,20 @@ class RevisedC2AdapterTests(unittest.TestCase):
         cls.fixture = load(FIXTURE)
         cls.binding = EmpiricalBinding.from_mapping(cls.fixture["binding"])
         cls.rows = cls.fixture["rows"]
+
+    def test_authoritative_binding_supersedes_forward_execution_without_rewriting_history(self) -> None:
+        self.assertEqual("MG-EI-WP1-REVISED-C2-ADAPTER-v0.2", ADAPTER_ID)
+        self.assertEqual("126a703b89bfef8fc60a4beb1248b20b424621334c8fff254c122555e44663f8", BINDING_SHA256)
+        self.assertEqual(BINDING_SHA256, self.fixture["binding"]["binding_sha256"])
+        historical = load(HISTORICAL_FIXTURE)
+        self.assertEqual("126a703b89bf8fc60a4beb1248b20b424621334c8fff254c122555e44663f8", historical["binding"]["binding_sha256"])
+        self.assertEqual(62, len(historical["binding"]["binding_sha256"]))
+        with self.assertRaisesRegex(RevisedC2AdapterError, "SHA256_REQUIRED:binding_sha256"):
+            EmpiricalBinding.from_mapping(historical["binding"])
+        correspondence = load(CORRESPONDENCE)
+        self.assertEqual("TRANSCRIPTION_CORRECTION_NO_SOURCE_IDENTITY_CHANGE", correspondence["relationship"])
+        self.assertEqual(BINDING_SHA256, correspondence["forward_authoritative_identity"]["binding_sha256"])
+        self.assertEqual(historical["binding"]["binding_sha256"], correspondence["historical_artifact"]["binding_sha256_text"])
 
     def test_valid_rows_map_to_exact_c2ledger_contract(self) -> None:
         result = adapt_revised_c2_rows(self.rows, binding=self.binding, build_cutoff=self.fixture["build_cutoff"])
@@ -152,6 +169,8 @@ class RevisedC2AdapterTests(unittest.TestCase):
     def test_schema_registry_qa_and_programme_state_are_read_only(self) -> None:
         schema = load(SCHEMA); registry = load(REGISTRY); qa = load(QA); state = load(STATE)
         self.assertFalse(schema["additionalProperties"])
+        self.assertEqual("MG-EI-WP1-REVISED-C2-ADAPTER-v0.2", registry["adapter_id"])
+        self.assertEqual(BINDING_SHA256, registry["binding"]["binding_sha256"])
         self.assertFalse(registry["selector_controls"])
         self.assertFalse(registry["canonical_controls"])
         self.assertFalse(registry["promotion_controls"])

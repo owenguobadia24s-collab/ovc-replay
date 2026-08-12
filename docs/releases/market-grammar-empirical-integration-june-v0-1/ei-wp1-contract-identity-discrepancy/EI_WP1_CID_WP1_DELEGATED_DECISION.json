@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-mg-ei-wp1-cid-wp1-decision/v1",
+  "programme_id": "OVC-MG-EI-WP1-CONTRACT-IDENTITY-DISCREPANCY-v0.1",
+  "packet_id": "EI-WP1-CID-WP1",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR_APPROVED_EI-WP1-CID-G0_PLUS_DELEGATED_NON_RESERVED_PACKET_CLOSEOUT",
+  "operator_gate": "EI-WP1-CID-G0:PASS_SUPERSEDE",
+  "tested_head": "185802e38422394fb4894e2f547d4fcfb24017f4",
+  "baseline_main": "8617a57c716a0720fc66fbf6962f9c7215f14c49",
+  "tests_workflow_run": 31632833282,
+  "tiered_assurance_run": 31632833322,
+  "qa": "PASS",
+  "qa_packet": "docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp1-contract-identity-discrepancy/EI_WP1_CID_WP1_QA.json",
+  "authority_delta": "VERSIONED_FROZEN_CONTRACT_SUPERSESSION_ONLY_ALREADY_APPROVED_BY_EI-WP1-CID-G0",
+  "new_reserved_authority_delta": "NONE",
+  "acceptance": {
+    "v0_1_historical_artifacts_preserved": true,
+    "v0_2_forward_binding_exact_authoritative_sha256": true,
+    "malformed_62_char_value_rejected_fail_closed": true,
+    "correspondence_record_explicit": true,
+    "source_population_package_instrument_clocks_sides_unchanged": true,
+    "complete_repository_suite_pass": true,
+    "compatibility_pass": true,
+    "stable_main_merge_readiness_pass": true,
+    "unresolved_review_threads": 0
+  },
+  "warnings": [],
+  "blockers": [],
+  "rollback": "Disable/supersede v0.2 forward execution and return consumers to blocked state while preserving v0.1 historical artifacts and the operator decision.",
+  "next": "Run exact-head assurance on the packet-and-decision head, squash-merge PR if stable/green, record merge receipt, then resume PYT-WP2 from current main."
+}
