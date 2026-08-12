@@ -3,29 +3,38 @@
   "programme_id": "OVC-DSAI-v0.2",
   "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
   "plan_version": "0.2",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "baseline_commit": "788dd4ea04b8df53f51369de84fff348de7c61d9",
   "branch": "build/dsai-v0-2-orch345-conformance",
-  "packet_id": "DSAI2-WP2",
+  "packet_id": "DSAI2-WP0-WP2",
   "prerequisites": [
     "OVC-DSAI-v0.1 terminal IMPLEMENTED_ORCH2_BOUNDED_PILOTED",
     "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1 terminal PARALLEL_BUILD_SERIALIZED_FINAL_INTEGRATION_WINDOW_ACTIVE",
     "DSAI2-G0 operator admission"
   ],
-  "authority_required": "NONE_FOR_WP0_WP2; OPERATOR_REQUIRED_AT_DSAI2-G3",
+  "authority_required": "NONE_FOR_DSAI2_G2; OPERATOR_REQUIRED_AT_DSAI2-G3",
   "authority_delta": "NONE",
-  "candidate_commit": null,
-  "tests": ["pending exact-head repository assurance"],
+  "candidate_commit": "286f1b35ab800df24a95e88ebf40a7f972577468",
+  "tests": [
+    "tests run 31649609632 / #3907 PASS: final-integration admission, tests, pytest-unittest-parity, runner-parity",
+    "tiered run 31649609643 / #2254 PASS: FINAL_HEAD profile, tiered compatibility, merge readiness"
+  ],
   "qa_packet": "docs/releases/development-skills-architecture-v0-2/dsai2-wp2/DSAI2_WP2_QA_PACKET.json",
-  "decision_record": null,
+  "decision_record": "docs/releases/development-skills-architecture-v0-2/dsai2-wp2/DSAI2_G2_DECISION.json",
   "merge_commit": null,
   "blockers": [],
   "next_packet": "DSAI2-G3",
+  "completed_packets": ["DSAI2-WP0", "DSAI2-WP1", "DSAI2-WP2"],
+  "empirical_replay": "docs/releases/development-skills-architecture-v0-2/dsai2-wp2/DSAI2_WP2_EMPIRICAL_REPLAY_QUALIFICATION.json",
   "current_authority": {
     "ORCH-2": "ACTIVE_BOUNDED_SINGLE_PACKET_SERIAL_REQUIRED",
     "ORCH-3": "INACTIVE_SHADOW_ONLY",
     "ORCH-4": "INACTIVE_SHADOW_ONLY",
     "ORCH-5": "INACTIVE_SHADOW_ONLY"
+  },
+  "gate_disposition": {
+    "DSAI2-G2": "PASS_DELEGATED_AUTO_RATIFIED",
+    "DSAI2-G3": "NOT_YET_EFFECTIVE_OPERATOR_REQUIRED_AFTER_CONFORMANCE_INTEGRATION"
   },
   "target_terminal_state": "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH"
 }

@@ -6,17 +6,28 @@
   "gate_id": "DSAI2-G2",
   "gate_class": "AUTO_RATIFIABLE",
   "authority_delta": "NONE",
-  "status": "PENDING_CI",
+  "status": "PASS",
+  "candidate_head": "286f1b35ab800df24a95e88ebf40a7f972577468",
+  "baseline_main": "788dd4ea04b8df53f51369de84fff348de7c61d9",
   "checks": {
     "empirical_corpus_frozen": "PASS",
-    "orch3_packet_train_runtime": "IMPLEMENTED_PENDING_CI",
-    "orch4_conflict_matrix_runtime": "IMPLEMENTED_PENDING_CI",
-    "orch5_portfolio_scheduler_runtime": "IMPLEMENTED_PENDING_CI",
+    "empirical_replay_qualification": "PASS",
+    "orch3_packet_train_runtime": "PASS",
+    "orch4_conflict_matrix_runtime": "PASS",
+    "orch5_portfolio_scheduler_runtime": "PASS",
+    "ambiguity_serial_fallback": "PASS",
     "pdc_serial_integration_preserved": "PASS",
-    "activation_self_grant": "PROHIBITED"
+    "activation_self_grant": "PROHIBITED_PASS"
+  },
+  "initial_exact_head_assurance": {
+    "tests": {"run_id":31649609632,"run_number":3907,"conclusion":"success","jobs":{"final_integration_window_admitted":"success","tests":"success","pytest_unittest_parity":"success","runner_parity":"success"}},
+    "tiered": {"run_id":31649609643,"run_number":2254,"conclusion":"success","jobs":{"profile_assurance":"success","tiered_selection":"success","merge_readiness":"success"}},
+    "stable_main": "788dd4ea04b8df53f51369de84fff348de7c61d9",
+    "submitted_reviews": 0,
+    "inline_review_comments": 0
   },
   "warnings": [],
   "blocking_warnings": [],
-  "recommendation": "PENDING_EXACT_HEAD_ASSURANCE",
+  "recommendation": "PASS_AUTO_RATIFY_DSAI2_G2",
   "rollback": "Remove or forward-supersede only DSAI v0.2 shadow/conformance artifacts; preserve DSAI v0.1 ORCH-2 authority and PDC final-integration window."
 }
