@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "QA_REVIEW",
+  "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+  "branch": "build/ci-performance-remediation-v0-1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "prerequisites": [
+    "OVC-DEV-ACCEL-v0.2 complete enough to require canonical exact-head assurance",
+    "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1 COMPLETED",
+    "complete CI-performance audit 2026-08-12",
+    "CIPR-G0 bounded operator instruction PASS"
+  ],
+  "authority_required": "NONE_FOR_WP0_WP2",
+  "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
+  "candidate_commit": null,
+  "tests": [
+    "PENDING exact-head repository suite",
+    "PENDING exact-head OVC tiered/profile assurance",
+    "PENDING tests/development/test_ci_performance_remediation.py"
+  ],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PLAN.json",
+  "decision_record": [
+    "docs/releases/ci-performance-remediation-v0-1/cipr-g0/CIPR_G0_OPERATOR_INSTRUCTION.json"
+  ],
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "CIPR-WP3",
+  "operator_stop_gate": "CIPR-G4-SUITE-TOPOLOGY",
+  "notes": [
+    "Active PYT-WP1 PR overlaps tests.yml; grouped WP0-WP2 deliberately does not modify tests.yml.",
+    "Canonical complete-suite command remains frozen and unchanged through CIPR-G4."
+  ]
+}

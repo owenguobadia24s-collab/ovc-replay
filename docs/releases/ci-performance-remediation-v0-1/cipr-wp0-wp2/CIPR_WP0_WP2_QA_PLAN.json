@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-qa-plan/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP0-WP2-GROUPED",
+  "gate_ids": ["CIPR-G1", "CIPR-G2"],
+  "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
+  "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
+  "acceptance_conditions": [
+    "exactly tests.yml and ovc-tiered-tests.yml listen to pull_request",
+    "tests.yml remains unchanged by this packet",
+    "per-PR cancel-in-progress remains enabled",
+    "canonical-tests-observed waits for exact-head tests outside global integration concurrency",
+    "OVC merge readiness depends on canonical-tests-observed",
+    "ovc-main-integration-lane-v1 exists exactly once and only in merge-readiness",
+    "merge-readiness contains no polling/sleep loop",
+    "merge-readiness re-reads exact-head tests success",
+    "OVC_BASE_MOVED_BEFORE_READINESS and OVC_BASE_MOVED_DURING_READINESS remain fail-closed",
+    "structured OVC_CI_METRIC lines cover observation wait and integration evaluation",
+    "complete repository suite passes on exact candidate head",
+    "OVC tiered/profile assurance and merge readiness pass on exact candidate head",
+    "no unresolved review thread or blocking warning remains"
+  ],
+  "targeted_tests": [
+    "PYTHONPATH=src python -m unittest tests.development.test_ci_performance_remediation -v",
+    "PYTHONPATH=src python -m unittest tests.development.test_parallel_integration_lane -v"
+  ],
+  "repository_tests": [
+    "canonical GitHub Actions tests workflow on exact head",
+    "OVC tiered test selection shadow workflow on exact head"
+  ],
+  "performance_assertion": "Global integration-lane occupancy is bounded to final readiness evaluation after canonical tests have already succeeded; architectural head-of-line waiting behind in-progress tests is removed.",
+  "rollback": "Revert/supersede the observer and merge-readiness workflow changes while preserving the plan, QA and CI evidence; do not delete historical evidence.",
+  "qa_recommendation": "PENDING_EXECUTION"
+}
