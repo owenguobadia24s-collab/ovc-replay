@@ -123,7 +123,10 @@ class DSAIG8COperatorAssistedWriteTests(unittest.TestCase):
         self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
         self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
         self.assertTrue(str(self.pointer["status"]).strip())
-        self.assertTrue(str(self.pointer["next_packet"]).startswith("DSAI-WP"))
+        allowed_live_next = {"DSAI-WP9", "DSAI-WP10", "DSAI-WP11", None}
+        self.assertIn(self.pointer["next_packet"], allowed_live_next)
+        if self.pointer["next_packet"] is None:
+            self.assertEqual(self.pointer["status"], "IMPLEMENTED_ORCH2_BOUNDED_PILOTED")
 
 
 if __name__ == "__main__":
