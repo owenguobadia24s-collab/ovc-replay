@@ -116,6 +116,8 @@ jobs:
           python-version: "3.11"
       - name: Install pytest test extra
         run: python3 -m pip install -e ".[test]"
+      - name: Install declared pytest-native console dependencies
+        run: python3 -m pip install -r requirements-console-vnext.txt
       - name: Execute intended unified pytest surface
         shell: bash
         run: |
