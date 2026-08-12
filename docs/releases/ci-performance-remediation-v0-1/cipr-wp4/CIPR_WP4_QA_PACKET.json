@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "CIPR-WP4",
+  "gate_ids": ["CIPR-G4-SUITE-TOPOLOGY"],
+  "status": "GATE_READY",
+  "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "gate_evidence_head": "ea2705b81538a216e802d3e156500c086a46b779",
+  "implementation_candidate_commit": "NOT_CREATED_OPERATOR_APPROVAL_REQUIRED",
+  "authority_delta": "OPERATOR_REQUIRED_MATERIAL_TEST_TOPOLOGY_CHANGE",
+  "evidence": {
+    "current_main_tests_run": 31626433864,
+    "legacy_unittest_complete_suite_seconds": 140,
+    "pytest_exact_legacy_surface_seconds": 153,
+    "runner_collection_parity_seconds": 4,
+    "heavy_inventory": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_HEAVY_TEST_INVENTORY.json",
+    "pyt_compatibility": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_PYT_COMPATIBILITY_ASSESSMENT.json",
+    "exact_head_gate_evidence": {
+      "pr": 655,
+      "branch": "gate/ci-performance-g4-suite-topology",
+      "head_sha": "ea2705b81538a216e802d3e156500c086a46b779",
+      "tests_workflow_run": 31627457452,
+      "tests_job": {"job_id": 94217433837, "result": "PASS"},
+      "pytest_unittest_parity_job": {"job_id": 94217434487, "result": "PASS"},
+      "runner_parity_job": {"job_id": 94217433997, "result": "PASS"},
+      "tiered_workflow_run": 31627457418,
+      "profile_assurance_job": {"job_id": 94217433499, "result": "PASS_FINAL_HEAD"},
+      "canonical_observer_job": {"job_id": 94217489947, "result": "PASS"},
+      "merge_readiness_job": {"job_id": 94218293305, "result": "PASS"},
+      "compatibility_shadow_job": {"job_id": 94217489884, "result": "PASS"},
+      "review_threads": 0,
+      "current_main_sha": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+      "pr_base_sha": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+      "base_matches_current_main": true,
+      "pr_mergeable": true
+    }
+  },
+  "acceptance_for_gate_ready": [
+    "gate artifacts are internally consistent and machine-validated",
+    "current canonical standalone unittest command remains unchanged",
+    "current exact-head checks tests, pytest-unittest-parity and runner-parity remain unchanged",
+    "no shard workflow, xdist configuration, test marker, test skip, benchmark freshness rule or required-check mutation is activated on the gate branch",
+    "exact-head repository CI passes on the gate-evidence head",
+    "OVC tiered FINAL_HEAD/profile, observer and stable-main merge readiness pass on the gate-evidence head",
+    "zero blocking warnings, unresolved issues or review threads remain"
+  ],
+  "warnings": [
+    "Per-heavy-test durations are audit-baseline historical rather than individually re-benchmarked at current main; current aggregate timings are fresh.",
+    "PYT-WP1/PYT-G1 requires standalone unittest preservation until PYT-G2 and has not admitted pytest-native tests.",
+    "A shadow shard candidate alone will not shorten merge critical path while the existing full legacy/parity checks remain required; it is a proof stage for a later coordinated cutover."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "external_artifacts": [],
+  "rollback": "Delete nothing and activate nothing. If the gate is DEFER/BLOCK, retain this evidence branch/records and continue current main CI unchanged. If post-approval shadow implementation is later reverted, remove only the candidate shadow shard machinery while retaining existing required checks and all evidence.",
+  "qa_recommendation": "PASS_GATE_READY_OPERATOR_DECISION_REQUIRED",
+  "operator_decision_required": true
+}
