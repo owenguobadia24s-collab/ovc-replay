@@ -21,6 +21,43 @@ jobs:
     outputs:
       selected_profile: ${{ steps.select.outputs.profile }}
     steps:
+      - name: Wait for serialized final-integration window acquisition
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const sha = context.payload.pull_request.head.sha;
+            const windowCheckName = 'OVC merge readiness';
+            const deadline = Date.now() + 23 * 60 * 1000;
+            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+            const latestNamedRun = runs => {
+              const matches = runs.filter(run => run.name === windowCheckName).sort((a, b) => b.id - a.id);
+              return matches[0];
+            };
+
+            while (Date.now() < deadline) {
+              const response = await github.rest.checks.listForRef({
+                owner,
+                repo,
+                ref: sha,
+                per_page: 100,
+                filter: 'latest'
+              });
+              const windowRun = latestNamedRun(response.data.check_runs);
+              if (windowRun?.status === 'in_progress') {
+                core.info(`OVC_PROFILE_FINAL_INTEGRATION_WINDOW_ADMITTED: ${windowCheckName} is in progress for ${sha}.`);
+                return;
+              }
+              if (windowRun?.status === 'completed') {
+                core.setFailed(`OVC_PROFILE_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED: ${windowCheckName} completed ${windowRun.conclusion} before profile assurance was admitted for ${sha}.`);
+                return;
+              }
+              await sleep(5000);
+            }
+
+            core.setFailed(`OVC_PROFILE_FINAL_INTEGRATION_WINDOW_ADMISSION_TIMEOUT: ${windowCheckName} did not acquire the serialized lane for ${sha}.`);
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -139,7 +176,7 @@ jobs:
             core.setOutput('base_sha', mainSnapshot);
             core.setOutput('head_sha', sha);
             emitMetric('ACQUIRED');
-            core.info(`OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED: ${pr.base.ref}@${mainSnapshot} for ${sha}. Required Python assurance may now start.`);
+            core.info(`OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED: ${pr.base.ref}@${mainSnapshot} for ${sha}. Final assurance may now start.`);
       - name: Prove candidate contains the acquired main base
         shell: bash
         env:
