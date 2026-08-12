@@ -31,10 +31,10 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn("cancel-in-progress: true", self.workflow)
         self.assertIn("cancel-in-progress: true", self.tests_workflow)
 
-    def test_final_integration_window_is_global_and_non_cancelling(self):
-        self.assertIn("group: ovc-main-final-integration-window-v2", self.workflow)
+    def test_final_integration_window_reuses_global_lane_and_is_non_cancelling(self):
+        self.assertIn("group: ovc-main-integration-lane-v1", self.workflow)
         self.assertIn("cancel-in-progress: false", self.workflow)
-        self.assertNotIn("group: ovc-main-integration-lane-v1", self.workflow)
+        self.assertEqual(self.workflow.count("group: ovc-main-integration-lane-v1"), 1)
 
     def test_window_is_acquired_before_expensive_required_checks_are_admitted(self):
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED", self.workflow)
