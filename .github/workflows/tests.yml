@@ -9,14 +9,89 @@ on:
 
 permissions:
   contents: read
+  checks: read
 
 concurrency:
   group: ovc-tests-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  final-integration-window-admitted:
+    name: OVC final integration window admitted
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Wait for serialized final-integration window acquisition
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const sha = pr.head.sha;
+            const windowCheckName = 'OVC merge readiness';
+            const startedAt = Date.now();
+            const deadline = startedAt + 23 * 60 * 1000;
+            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+            const latestNamedRun = runs => {
+              const matches = runs.filter(run => run.name === windowCheckName).sort((a, b) => b.id - a.id);
+              return matches[0];
+            };
+
+            while (Date.now() < deadline) {
+              const response = await github.rest.checks.listForRef({
+                owner,
+                repo,
+                ref: sha,
+                per_page: 100,
+                filter: 'latest'
+              });
+              const windowRun = latestNamedRun(response.data.check_runs);
+              if (windowRun?.status === 'in_progress') {
+                const mainNow = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+                const currentMain = mainNow.data.commit.sha;
+                if (currentMain !== pr.base.sha) {
+                  core.setFailed(`OVC_REQUIRED_CHECK_BASE_MOVED_BEFORE_ASSURANCE: event base ${pr.base.sha}, current ${pr.base.ref} ${currentMain}; expensive required checks will not start.`);
+                  return;
+                }
+                core.info(`OVC_FINAL_INTEGRATION_WINDOW_ADMITTED: ${windowCheckName} is in progress for ${sha} and ${pr.base.ref} remains ${currentMain}; candidate ancestry will be proved before expensive required checks start.`);
+                return;
+              }
+              if (windowRun?.status === 'completed') {
+                if (windowRun.conclusion === 'success') {
+                  core.info(`OVC_FINAL_INTEGRATION_WINDOW_ADMITTED: ${windowCheckName} already passed for ${sha}.`);
+                  return;
+                }
+                core.setFailed(`OVC_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED: ${windowCheckName} completed ${windowRun.conclusion} for ${sha}; expensive required checks will not start.`);
+                return;
+              }
+              await sleep(5000);
+            }
+
+            core.setFailed(`OVC_FINAL_INTEGRATION_WINDOW_ADMISSION_TIMEOUT: ${windowCheckName} did not acquire the serialized lane for ${sha}.`);
+      - uses: actions/checkout@v4
+        if: github.event_name == 'pull_request'
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Prove required-check candidate contains admitted current main
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! git merge-base --is-ancestor "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"; then
+            echo "::error title=Required-check candidate not reconciled::OVC_REQUIRED_CHECK_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${{ github.event.pull_request.head.sha }} does not contain admitted main ${{ github.event.pull_request.base.sha }}."
+            exit 1
+          fi
+      - name: Non-PR admission
+        if: github.event_name != 'pull_request'
+        run: echo "Final-integration admission is not required for ${{ github.event_name }}; canonical tests proceed normally."
+
   legacy-unittest:
     name: tests
+    needs: final-integration-window-admitted
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +105,7 @@ jobs:
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
+    needs: final-integration-window-admitted
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,6 +135,7 @@ jobs:
 
   runner-parity:
     name: runner-parity
+    needs: final-integration-window-admitted
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

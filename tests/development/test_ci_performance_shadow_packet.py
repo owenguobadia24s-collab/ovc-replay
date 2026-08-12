@@ -55,7 +55,7 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         self.assertIn("unittest_shard_shadow.py run", self.workflow)
         self.assertNotIn("xdist", self.workflow)
 
-    def test_existing_required_checks_and_final_readiness_are_unchanged(self):
+    def test_existing_required_checks_are_preserved_under_final_integration_window(self):
         full_suite = "PYTHONPATH=src python3 -m unittest discover -s tests -v"
         self.assertEqual(self.tests_workflow.count(full_suite), 1)
         for name in ("pytest-unittest-parity", "runner-parity"):
@@ -63,6 +63,9 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         for name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
             self.assertIn(name, self.tiered_workflow)
         self.assertIn("ovc-main-integration-lane-v1", self.tiered_workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED", self.tiered_workflow)
+        self.assertIn("OVC_BASE_MOVED_BEFORE_READINESS", self.tiered_workflow)
+        self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.tiered_workflow)
 
     def test_packet_state_preserves_non_activation_boundary(self):
         self.assertIn(self.state["status"], {"RUNNING", "APPROVED"})

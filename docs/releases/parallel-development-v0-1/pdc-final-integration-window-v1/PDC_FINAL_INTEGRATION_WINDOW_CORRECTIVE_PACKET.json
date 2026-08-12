@@ -1,0 +1,91 @@
+{
+  "schema": "ovc-pdc-final-integration-window-corrective-packet/v1",
+  "programme_id": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "plan_id": "OVC-PDC-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "PDC-FIW-CORR-WP1",
+  "baseline_main_sha": "10a0acac129df1039feafd9200612e7512a6c551",
+  "branch": "fix/pdc-serialized-final-integration-window-v1",
+  "status": "APPROVED",
+  "operator_instruction": "Create and execute a serialized final-integration window",
+  "trigger": {
+    "class": "MAIN_HEAD_CHURN_WASTED_FINAL_ASSURANCE",
+    "observed_pr": 675,
+    "reported_candidate_sha_prefix": "8a331c8f",
+    "reported_assurance_base_sha_prefix": "5c8c0c7",
+    "reported_current_main_sha_prefix": "54c1af1",
+    "preserved_guard": "OVC_BASE_MOVED_BEFORE_READINESS"
+  },
+  "problem_statement": "The existing global integration lane was acquired only after expensive required Python checks completed, so otherwise-green assurance could be invalidated by a main-head advance discovered at final readiness.",
+  "correction": {
+    "window_concurrency_group": "ovc-main-integration-lane-v1",
+    "lane_identity_reused_for_backward_compatibility": true,
+    "acquire_before_final_assurance": true,
+    "profile_admission_handshake": "OVC profile assurance waits for the exact-head OVC merge readiness holder, independently rechecks current main, then proves PR-head ancestry before checkout/test selection proceeds.",
+    "required_check_admission_handshake": "tests workflow waits for the exact-head OVC merge readiness holder, independently rechecks current main, then proves PR-head ancestry before canonical Python jobs proceed.",
+    "candidate_must_contain_acquired_main": true,
+    "main_polled_while_window_held": true,
+    "fail_closed_guard_preserved": true,
+    "new_pull_request_workflow": false,
+    "workflow_count_delta": 0
+  },
+  "adversarial_correction_evidence": {
+    "candidate_commit": "893a9ff15313c2f63363e93d2686ab74dcdb9ebd",
+    "tiered_workflow_run_id": 31643668165,
+    "event_base_sha": "10a0acac129df1039feafd9200612e7512a6c551",
+    "advanced_main_sha": "bd5218b47c1ebc028f1455a4f4f3ef86bded34a7",
+    "readiness_acquisition_ms": 250,
+    "readiness_result": "FAIL_OVC_BASE_MOVED_BEFORE_READINESS",
+    "finding": "Status-only admission allowed profile assurance to start despite the readiness acquisition step failing on stale main.",
+    "repair": "Both profile and canonical-required admission paths now independently recheck current main and candidate ancestry before expensive assurance.",
+    "final_disposition": "RESOLVED"
+  },
+  "acceptance_conditions": [
+    "Only the existing tests.yml and ovc-tiered-tests.yml pull-request workflows remain.",
+    "Only one PR can hold the repository-wide final-integration window at a time and queued windows are not cancelled.",
+    "The existing global integration-lane identity is reused so in-flight older readiness jobs and the corrective window cannot execute concurrently.",
+    "OVC profile assurance and the canonical required Python jobs independently verify current-main freshness and candidate ancestry before expensive assurance begins.",
+    "A stale event base or a candidate that does not contain the admitted current-main commit fails before final assurance starts.",
+    "Any main movement while the final-integration window is held fails closed with the existing readiness movement guard class.",
+    "The complete repository suite remains present exactly once and no required-check semantics are weakened."
+  ],
+  "authority": {
+    "delta": "NONE_OUTSIDE_DEVELOPMENT_ORCHESTRATION_ASSURANCE",
+    "reserved_authority_changes": [],
+    "selector_scientific_validation_publication_exposure_authority": "UNCHANGED"
+  },
+  "rollback": "Revert only the final-integration admission handshakes and expanded hold semantics, restoring the prior PDC v1 readiness-lane timing while preserving the lane identity, all historical evidence and the fail-closed stable-main guard.",
+  "qa": {
+    "required": [
+      "targeted tests/development/test_parallel_integration_lane.py",
+      "complete repository tests workflow",
+      "OVC profile assurance",
+      "pytest-unittest-parity",
+      "runner-parity",
+      "OVC merge readiness on the same exact head"
+    ],
+    "preliminary_evaluated_candidate_commit": "219eb6b9db691a1b7ffb138cf98430e9843794ea",
+    "preliminary_tiered_workflow_run_id": 31643275045,
+    "preliminary_tests_workflow_run_id": 31643275215,
+    "preliminary_decision": "SUPERSEDED_BY_ADVERSARIAL_CORRECTION",
+    "final_evaluated_candidate_commit": "8b53af4f44f222c7c88c2712485bce0ce206ab08",
+    "final_assurance_base_commit": "1d1ef48ee99ec1abf0dd72f5c8b0b97a9a2fd7d0",
+    "final_tiered_workflow_run_id": 31644133217,
+    "final_tests_workflow_run_id": 31644133220,
+    "development_tests": 151,
+    "authority_tests": 30,
+    "canonical_tests": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "profile_assurance": "PASS",
+    "merge_readiness": "PASS",
+    "workflow_census_total": 130,
+    "pull_request_workflow_count": 2,
+    "complete_repository_suite_count": 1,
+    "final_integration_window_acquisition_ms": 904,
+    "final_integration_window_hold_ms": 184529,
+    "blocking_review_threads": 0,
+    "decision": "PASS",
+    "recommendation": "PASS"
+  },
+  "decision_record": "docs/releases/parallel-development-v0-1/pdc-final-integration-window-v1/PDC_FIW_G1_DELEGATED_DECISION.json"
+}
