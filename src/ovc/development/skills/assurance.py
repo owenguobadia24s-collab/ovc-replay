@@ -39,6 +39,12 @@ def test_execution_plan(*, test_plan: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+# Public helper name is contract-bearing, but it is not a pytest test function.
+# Mark it explicitly non-collectable so importing it into test modules cannot
+# create fixture-injection collection errors under pytest-native execution.
+test_execution_plan.__test__ = False
+
+
 def evaluate_qa(assertions: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     rows = [dict(row) for row in assertions]
     if not rows:
