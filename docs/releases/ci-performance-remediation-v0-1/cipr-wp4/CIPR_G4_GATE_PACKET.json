@@ -1,0 +1,135 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "CIPR-G4-SUITE-TOPOLOGY",
+  "gate_title": "Canonical suite topology and heavyweight-assurance remediation",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "PREPARING_GATE_READY",
+  "baseline_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "gate_evidence_commit": "PENDING_INITIAL_GATE_COMMIT",
+  "candidate_commit": "NOT_CREATED_OPERATOR_APPROVAL_REQUIRED",
+  "completed_packets": [
+    {
+      "packet_id": "CIPR-WP0-WP2-GROUPED",
+      "status": "COMPLETED",
+      "merge_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3"
+    },
+    {
+      "packet_id": "CIPR-WP3",
+      "status": "COMPLETED",
+      "merge_commit": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd"
+    }
+  ],
+  "current_authority": {
+    "canonical_assurance": [
+      "standalone legacy unittest complete repository suite",
+      "pytest execution of exact legacy unittest population",
+      "pytest/unittest collection parity proof",
+      "tiered FINAL_HEAD profile assurance",
+      "non-serial required-check observer",
+      "globally serialized stable-main final merge readiness"
+    ],
+    "python_runner_state": "PYT-WP1/PYT-G1 COMPLETED_DUAL_RUN_PARITY",
+    "standalone_unittest": "PRESERVE_UNTIL_PYT_G2",
+    "pytest_native_surface": "NOT_YET_ADMITTED_BY_PYT_G1",
+    "suite_topology_change": "NOT_AUTHORISED",
+    "scientific_market_authority": "NONE"
+  },
+  "proposed_authority_delta": {
+    "decision_scope": "Authorize a bounded runner-neutral deterministic required-shard candidate and shadow benchmark programme for the current legacy unittest population.",
+    "authorised_after_pass": [
+      "create a versioned deterministic shard manifest/registry derived from the exact legacy unittest-discovered population",
+      "partition that population across bounded parallel shadow jobs with exact-one membership and deterministic ordering",
+      "add union-completeness, no-duplication, no-omission and deterministic-repeatability proofs",
+      "run the shard candidate in shadow beside all existing required checks",
+      "measure exact-head shard critical path, runner overhead and repeatability",
+      "prepare a coordinated cutover packet compatible with PYT-G2 or an explicit superseding operator decision"
+    ],
+    "not_authorised_by_this_pass": [
+      "remove, skip, demote or replace standalone unittest",
+      "remove, skip, demote or replace pytest-unittest-parity or runner-parity",
+      "admit pytest-native tests into the canonical surface",
+      "enable pytest-xdist or any unordered process-parallel runner",
+      "change benchmark freshness, scientific evidence semantics or heavy-test assertions",
+      "activate the shard candidate as a substitute for any existing required check",
+      "change merge authority or stable-main readiness semantics",
+      "grant scientific, semantic, Validation, selector, publication, probability, risk, exposure or execution authority"
+    ]
+  },
+  "alternatives": [
+    {
+      "option": "A_PYTEST_NATIVE_XDIST",
+      "assessment": "DEFER",
+      "reason": "Potential speedup but changes process topology/order and overlaps PYT-G2 runner/surface admission. Current plain pytest parity execution is slower than unittest on main."
+    },
+    {
+      "option": "B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
+      "assessment": "RECOMMENDED_PASS",
+      "reason": "Preserves every current test and runner contract while proving whether parallel shard topology can reduce the eventual critical path before any cutover."
+    },
+    {
+      "option": "C_CORRECTNESS_VS_EVIDENCE_BENCHMARK_SEPARATION",
+      "assessment": "DEFER",
+      "reason": "Highest governance risk because it changes when heavyweight scientific/evidence workloads are required and what complete assurance means."
+    }
+  ],
+  "acceptance_conditions_after_operator_pass": [
+    "all currently required tests/checks remain required throughout shadow evaluation",
+    "shard manifest is deterministic from a pinned exact-head legacy unittest population",
+    "every legacy unittest case belongs to exactly one shard",
+    "union cardinality and identities equal the legacy unittest loader population with zero omissions and zero duplicates",
+    "repeated manifest generation is byte-identical on the same head",
+    "each shard is independently reproducible and fails closed",
+    "shadow aggregate result equals canonical required-check outcome on the same head",
+    "no heavy-test assertion, benchmark population, capacity N set, GOLDEN2 output contract or topology determinism assertion is weakened",
+    "performance evidence reports actual critical path and runner overhead without treating estimates as measurements",
+    "rollback leaves existing required CI fully intact",
+    "any later required-check substitution/removal waits for PYT-G2 or an explicit superseding operator decision"
+  ],
+  "tests_and_evidence": {
+    "current_main_tests_run": 31626433864,
+    "legacy_unittest_step_seconds": 140,
+    "pytest_exact_legacy_step_seconds": 153,
+    "runner_parity_collection_seconds": 4,
+    "current_main_result": "PASS_ALL_THREE_PYTHON_CHECKS",
+    "heavy_inventory": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_HEAVY_TEST_INVENTORY.json",
+    "pyt_compatibility": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_PYT_COMPATIBILITY_ASSESSMENT.json",
+    "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_QA_PACKET.json"
+  },
+  "qa": {
+    "recommendation": "PENDING_EXACT_HEAD_GATE_EVIDENCE_CI",
+    "operator_decision_required": true
+  },
+  "warnings": [
+    "Current aggregate suite has increased to 140 seconds; audit-baseline per-heavy timings are historical and not fresh individual benchmarks.",
+    "Shadow sharding will not itself reduce merge latency while the existing full legacy/parity checks remain required; it supplies the proof needed for a later coordinated cutover.",
+    "PYT-G2 remains the governing standalone-unittest cutover boundary unless explicitly superseded by the operator."
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_TERMINAL_RECEIPT.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_HEAVY_TEST_INVENTORY.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_PYT_COMPATIBILITY_ASSESSMENT.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_QA_PACKET.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_GATE_PACKET.json",
+    "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_1.json",
+    "tests/development/test_ci_performance_g4_gate.py"
+  ],
+  "external_artifact_hashes": [],
+  "rollback": "If DEFER/BLOCK, keep current main CI unchanged and retain this evidence. If PASS and the later shadow candidate fails, remove/supersede only shard manifests, shadow jobs and candidate tooling; preserve existing tests, required checks, PYT policy, stable-main readiness and all historical evidence. Never force-push or rewrite history.",
+  "recommended_decision": "PASS",
+  "recommended_option": "B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
+  "decision_options": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_work_after_approval": [
+    "create a fresh bounded implementation branch from then-current lawful main",
+    "reconcile any main movement using the PDC policy before modification",
+    "materialise a versioned legacy-test identity census and deterministic shard registry",
+    "implement shadow parallel shard execution without changing current required checks",
+    "add completeness/uniqueness/determinism/rollback tests and QA",
+    "run targeted, full canonical, PYT parity and shadow shard checks on exact heads",
+    "benchmark at least three repeat runs on stable comparable heads where practicable and report critical-path/runner-overhead distributions",
+    "correct defects inside scope without weakening tests",
+    "if acceptance passes, prepare the coordinated PYT-G2/cutover evidence; do not activate substitution/removal without the authority required by PYT-G2 or an explicit superseding operator decision"
+  ]
+}
