@@ -162,3 +162,43 @@ jobs:
           PY
           fi
           exit "$status"
+
+  pytest-unified:
+    name: pytest-unified
+    needs: final-integration-window-admitted
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pytest test extra
+        run: python3 -m pip install -e ".[test]"
+      - name: Execute complete unified pytest surface
+        shell: bash
+        run: |
+          set +e
+          python3 -m pytest -q --continue-on-collection-errors --tb=short --junitxml=pytest-unified-results.xml > /tmp/pytest-unified.log 2>&1
+          status=$?
+          cat /tmp/pytest-unified.log
+          if [ "$status" -ne 0 ]; then
+            python3 - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/pytest-unified.log').read_text(encoding='utf-8', errors='replace')
+          tail = text[-12000:]
+          chunks = [tail[i:i+3800] for i in range(0, len(tail), 3800)]
+          for index, chunk in enumerate(chunks, 1):
+              escaped = chunk.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+              print(f'::error title=Unified pytest failure tail {index}-{len(chunks)}::{escaped}')
+          PY
+          fi
+          exit "$status"
+      - name: Upload unified pytest result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-unified-results
+          path: pytest-unified-results.xml
+          if-no-files-found: warn
