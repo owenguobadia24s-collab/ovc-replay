@@ -21,6 +21,35 @@ def _flatten(suite: unittest.TestSuite) -> Iterable[unittest.TestCase]:
             yield item
 
 
+def _source_path(case: unittest.TestCase) -> Path:
+    """Resolve the discovered testcase source without relying on sys.modules retention.
+
+    unittest discovery may evict or replace top-level modules while recursing through
+    the tree. The testcase retains its defining module name, which is sufficient to
+    resolve the repository source deterministically.
+    """
+
+    module_name = case.__class__.__module__
+    direct = TEST_ROOT / (module_name.replace(".", "/") + ".py")
+    if direct.is_file():
+        return direct.resolve()
+
+    basename = module_name.rsplit(".", 1)[-1] + ".py"
+    matches = sorted(TEST_ROOT.rglob(basename))
+    if len(matches) == 1:
+        return matches[0].resolve()
+
+    module = sys.modules.get(module_name)
+    source = getattr(module, "__file__", None)
+    if source is not None:
+        return Path(source).resolve()
+
+    raise RuntimeError(
+        f"cannot resolve unique source file for {case.id()}: "
+        f"module={module_name!r} matches={[p.as_posix() for p in matches]}"
+    )
+
+
 def _discover() -> tuple[list[unittest.TestCase], list[str]]:
     loader = unittest.TestLoader()
     suite = loader.discover(str(TEST_ROOT))
@@ -29,23 +58,18 @@ def _discover() -> tuple[list[unittest.TestCase], list[str]]:
             print(error, file=sys.stderr)
         raise RuntimeError("legacy unittest discovery reported loader errors")
     cases = list(_flatten(suite))
-    files: set[str] = set()
-    for case in cases:
-        module = sys.modules.get(case.__class__.__module__)
-        source = getattr(module, "__file__", None)
-        if source is None:
-            raise RuntimeError(f"cannot resolve source file for {case.id()}")
-        files.add(Path(source).resolve().relative_to(ROOT).as_posix())
+    files = {
+        _source_path(case).relative_to(ROOT).as_posix()
+        for case in cases
+    }
     return cases, sorted(files)
 
 
 def _expected_keys(cases: list[unittest.TestCase]) -> set[str]:
-    keys: set[str] = set()
-    for case in cases:
-        module = sys.modules[case.__class__.__module__]
-        path = Path(module.__file__).resolve().relative_to(ROOT).as_posix()
-        keys.add(f"{path}::{case.__class__.__name__}::{case._testMethodName}")
-    return keys
+    return {
+        f"{_source_path(case).relative_to(ROOT).as_posix()}::{case.__class__.__name__}::{case._testMethodName}"
+        for case in cases
+    }
 
 
 def _pytest_env() -> dict[str, str]:
