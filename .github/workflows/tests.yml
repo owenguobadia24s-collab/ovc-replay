@@ -51,7 +51,9 @@ jobs:
             python3 - <<'PY'
           from pathlib import Path
           text = Path('/tmp/pytest-unified.log').read_text(encoding='utf-8', errors='replace')
-          tail = text[-7000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          # Keep the annotation compact enough for repository tooling to retain the
+          # pytest short-summary lines instead of truncating inside a large diff.
+          tail = text[-1800:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
           print(f'::error title=Unified pytest admission failure::{tail}')
           PY
           fi
