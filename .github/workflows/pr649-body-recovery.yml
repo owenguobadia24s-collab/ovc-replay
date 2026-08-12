@@ -1,0 +1,48 @@
+name: PR649 body recovery
+
+on:
+  push:
+    branches:
+      - repair/pr649-body-recovery
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query authoritative GitHub user-content edit history
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cat > /tmp/query.graphql <<'EOF'
+          query {
+            repository(owner: "owenguobadia24s-collab", name: "ovc-replay") {
+              pullRequest(number: 649) {
+                id
+                number
+                title
+                body
+                includesCreatedEdit
+                lastEditedAt
+                userContentEdits(first: 20) {
+                  totalCount
+                  nodes {
+                    id
+                    createdAt
+                    editedAt
+                    updatedAt
+                    diff
+                    editor { login }
+                  }
+                }
+              }
+            }
+          }
+          EOF
+          gh api graphql -f query="$(cat /tmp/query.graphql)" > /tmp/pr649_edit_history.json
+          echo "PR649_EDIT_HISTORY_BASE64=$(base64 -w0 /tmp/pr649_edit_history.json)"
