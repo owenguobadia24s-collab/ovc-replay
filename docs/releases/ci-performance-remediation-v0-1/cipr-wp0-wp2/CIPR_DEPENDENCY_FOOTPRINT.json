@@ -3,7 +3,7 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "packet_id": "CIPR-WP0-WP2-GROUPED",
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
-  "baseline_main_sha": "e4794f1b500a53726232215dd7c7bf6cb21c58cc",
+  "baseline_main_sha": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
   "dependency_paths": [
     ".github/workflows/tests.yml",
     ".github/workflows/ovc-tiered-tests.yml",
@@ -12,6 +12,7 @@
     "registries/development/OVC_PARALLEL_DEVELOPMENT_HEAD_MOVEMENT_POLICY_v0_1.json",
     "docs/testing/PYTHON_TEST_RUNNER_POLICY_v0_1.md",
     "registries/implementation/python_test_runner/CURRENT_STATE_POINTER.json",
+    "registries/implementation/python_test_runner/PYT_STATE_v0_1_DUAL_RUN_PARITY.json",
     "tests/development/test_parallel_integration_lane.py"
   ],
   "semantic_authority_paths": [
@@ -27,14 +28,17 @@
     "scripts/development/**",
     "src/ovc/development/**",
     "tests/development/**",
-    "registries/development/**"
+    "registries/development/**",
+    "registries/implementation/python_test_runner/**"
   ],
   "candidate_owned_paths": [
     ".github/workflows/ovc-tiered-tests.yml",
     "docs/plans/development/OVC_CI_PERFORMANCE_REMEDIATION_PROTOCOL_v0_1.md",
     "docs/releases/ci-performance-remediation-v0-1/**",
     "registries/implementation/ci_performance/**",
-    "tests/development/test_ci_performance_remediation.py"
+    "scripts/development/v0_2/validate_da2_g1.py",
+    "tests/development/test_ci_performance_remediation.py",
+    "tests/development/test_parallel_integration_lane.py"
   ],
   "identity_bindings": [
     {
@@ -60,8 +64,12 @@
     {
       "path": "registries/implementation/python_test_runner/CURRENT_STATE_POINTER.json",
       "identity": "git-blob:edaa0dad9bc655442cd81552aa81f558ef82bb0a"
+    },
+    {
+      "path": "registries/implementation/python_test_runner/PYT_STATE_v0_1_DUAL_RUN_PARITY.json",
+      "identity": "git-blob:0d41caebf13fb12e7ed855602d4fa4b10b95ce75"
     }
   ],
   "external_identity_bindings": [],
-  "notes": "Re-preflighted after PYT-WP1 merged at e4794f1b. Original programme baseline was 3057d42e. The canonical unittest command is preserved, and the new dual-run parity checks are now consumed required Python assurance until PYT-G2 changes that policy. No market/replay/scientific artifact is consumed."
+  "notes": "Reconciled through the PYT-G1 merged-main completion receipt at c92d9f77. The canonical unittest command and the dual-run parity checks remain required. No market/replay/scientific artifact is consumed."
 }
