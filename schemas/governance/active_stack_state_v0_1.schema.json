@@ -5,27 +5,33 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema",
-    "programme_id",
-    "plan_id",
-    "plan_version",
-    "status",
-    "baseline_main",
-    "operator_decision",
-    "market_envelope",
-    "active_spine",
-    "classifications",
-    "authority_overlays",
-    "retained_denials"
+    "schema", "programme_id", "plan_id", "plan_version", "packet_id", "status",
+    "prerequisites", "authority_required", "authority_delta", "baseline_main", "baseline_commit",
+    "branch", "candidate_commit", "tests", "qa_packet", "decision_record", "merge_commit",
+    "blockers", "next_packet", "effective_on_main_merge", "operator_decision", "precedence",
+    "market_envelope", "active_spine", "classifications", "authority_overlays", "retained_denials",
+    "gate", "rollback"
   ],
   "properties": {
     "schema": {"const": "ovc-active-stack-state/v0_1"},
     "programme_id": {"const": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1"},
     "plan_id": {"const": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1"},
     "plan_version": {"const": "0.1"},
-    "status": {"enum": ["QA_REVIEW", "COMPLETED", "BLOCKED", "QUARANTINED", "SUPERSEDED"]},
+    "packet_id": {"const": "ASR-WP1"},
+    "status": {"enum": ["QA_REVIEW", "APPROVED", "COMPLETED", "BLOCKED", "QUARANTINED", "SUPERSEDED"]},
+    "prerequisites": {"type": "array", "items": {"type": "string"}},
+    "authority_required": {"type": "string"},
+    "authority_delta": {"type": "string"},
     "baseline_main": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "baseline_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "branch": {"type": "string"},
+    "candidate_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "tests": {"type": "array", "items": {"type": ["string", "object"]}},
+    "qa_packet": {"type": "string"},
+    "decision_record": {"type": ["string", "null"]},
+    "merge_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "blockers": {"type": "array", "items": {"type": ["string", "object"]}},
+    "next_packet": {"type": ["string", "null"]},
     "effective_on_main_merge": {"type": "boolean"},
     "operator_decision": {
       "type": "object",
@@ -45,16 +51,13 @@
       "required": ["instrument", "sides", "clocks", "research_roles", "validation"],
       "properties": {
         "instrument": {"const": "GBPUSD"},
-        "sides": {"type": "array", "const": ["BID", "ASK"]},
-        "clocks": {"type": "array", "const": ["15M", "2H_A_L"]},
-        "research_roles": {"type": "array", "const": ["DISCOVERY", "DEVELOPMENT"]},
+        "sides": {"const": ["BID", "ASK"]},
+        "clocks": {"const": ["15M", "2H_A_L"]},
+        "research_roles": {"const": ["DISCOVERY", "DEVELOPMENT"]},
         "validation": {"const": "LOCKED_UNCONSUMED"}
       }
     },
-    "active_spine": {
-      "type": "array",
-      "const": ["OPT-A", "OPT-B.C1.v2", "OPT-B.C2.vNext", "OPT-B.C2E.v0.2"]
-    },
+    "active_spine": {"const": ["OPT-A", "OPT-B.C1.v2", "OPT-B.C2.vNext", "OPT-B.C2E.v0.2"]},
     "classifications": {
       "type": "object",
       "additionalProperties": false,
@@ -69,6 +72,20 @@
       }
     },
     "authority_overlays": {"type": "object"},
-    "retained_denials": {"type": "array", "items": {"type": "string"}}
+    "retained_denials": {"type": "array", "items": {"type": "string"}},
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate_id", "owner", "status", "auto_ratifiable", "decision", "condition"],
+      "properties": {
+        "gate_id": {"const": "ASR-G1"},
+        "owner": {"const": "DELEGATED"},
+        "status": {"enum": ["QA_REVIEW", "APPROVED", "COMPLETED", "BLOCKED", "QUARANTINED"]},
+        "auto_ratifiable": {"const": true},
+        "decision": {"type": ["string", "null"]},
+        "condition": {"type": "string"}
+      }
+    },
+    "rollback": {"type": "string"}
   }
 }

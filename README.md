@@ -1,49 +1,52 @@
 # OVC Replay
 
-OVC Replay is being reset into an evidence-first v2 research foundation.
-
-The active repository now contains only:
-
-- immutable repository history and historical release records;
-- the tested `ovc_evidence_store` infrastructure;
-- clean namespaces for OPT-A v2, OPT-B.C1 v2 and OPT-B.C2 v2;
-- repository authority and implementation registries;
-- synthetic-fixture and contract locations that will be populated in later bounded work packets.
+OVC Replay is an evidence-first, human-governed market-translation research system. Repository state is the court record; historical releases and decisions remain preserved even when their current runtime authority is superseded.
 
 ## Current authority
 
-| Component | State | Active market authority |
-|---|---|---:|
-| Evidence store | `ACTIVE_INFRASTRUCTURE` | No |
-| OPT-A v1 | `HISTORICAL_SUPERSEDED` | No |
-| OPT-A v2 | `DESIGN_AND_FIXTURES_ONLY` | No |
-| OPT-B.C1 v2 | `DESIGN_AND_FIXTURES_ONLY` | No |
-| OPT-B.C2 v2 | `DESIGN_AND_FIXTURES_ONLY` | No |
-| C2E, C2.5 and C3 | `DEFERRED` | No |
-| OPT-C and OPT-D | `HISTORICAL_QUARANTINED` | No |
+The governing current-stack pointer is:
 
-No selector is active. No provider intake, market replay, probability, exposure or execution authority is granted by this foundation.
+`registries/governance/active_stack/CURRENT_ACTIVE_STACK_POINTER.json`
+
+The active structural evidence spine is:
+
+```text
+OPT-A -> OPT-B.C1 v2 -> OPT-B.C2 vNext core -> OPT-B.C2E v0.2
+```
+
+| Component | Current classification | Scope |
+|---|---|---|
+| Evidence store | `ACTIVE_INFRASTRUCTURE` | Evidence infrastructure; no market authority |
+| OPT-A v2 | `ACTIVE` | Existing governed GBPUSD Discovery/Development source; Validation locked |
+| OPT-B.C1 v2 | `ACTIVE` | Discovery + Development atomic facts |
+| pre-redesign OPT-B.C2 v2 | `LEGACY_INACTIVE` | Historical lineage/exact replay only; denied as new-evidence parent |
+| OPT-B.C2 vNext core | `ACTIVE` | Exact frozen nine-component structural-description core |
+| OPT-B.C2E v0.2 | `ACTIVE` | Current operator-selected boundary pack over governed active-C2-vNext inputs inside the market envelope |
+| OccurrenceContext v0.1 | `ACTIVE_FOUNDATION` | Non-structural enrichment; representation input denied by default |
+| Research Operations | `ACTIVE_FOUNDATION` | Existing read-only and bounded append-only research evidence authority |
+| SRI/SFC, FDI/C2G, SRFD, MCARB, experimental Market Grammar | `SHADOW` | Deterministic research evidence only; no canonical scientific promotion |
+| C2P v0.2, revised C2.5, revised C3, new OPT-C, new OPT-D | `NON_EVALUABLE` | Forward implementation/evidence surface not yet operational |
+| Validation 2025 for the current stack | `LOCKED` | `LOCKED_UNCONSUMED` |
+
+C2 vNext activation covers only Observation, Horizon, Level, Container, Relation, Formula, Transition, Parent Context and Computability. Functional Discovery and Candidate Dispositions remain shadow research.
+
+C2E is no longer activated by one exact June population/run/date identity. It remains bound to the current operator-selected boundary pack and to the existing market envelope: GBPUSD, BID/ASK, `15M` and `2H_A_L`, Discovery/Development. Pack replacement, semantic/threshold changes, new instrument/side/clock, Validation access and provider intake requiring approval remain operator-reserved.
+
+No probability, risk, exposure, trading, execution or agent-write authority is granted. No new canonical/R2 publication or immutable release identity is implied by active-stack classification.
+
+## Historical authority records
+
+Earlier records such as `registries/authority/ACTIVE_AUTHORITY.yaml`, the old C2 selector transaction and the C2E AG3 terminal state are preserved as historical court-record snapshots. They are not deleted or rewritten to erase prior authority. Where they conflict with current classification, the current-stack pointer and its explicit supersession overlays govern new evidence.
+
+The historical ABCD implementation is retained under `legacy/quarantine/abcd-engine-v1-c0ad7ba/` and is not eligible as a current runtime import, release parent, selector fallback or discovery seed.
 
 ## Repository boundaries
 
-- Git stores code, contracts, schemas, registries, compact manifests, fixtures, tests and decisions.
-- Full market data, generated streams and large evidence remain outside Git.
-- Immutable canonical evidence is published only through the separately governed R2 evidence-store workflow.
-- The historical ABCD implementation is retained under `legacy/quarantine/abcd-engine-v1-c0ad7ba/` and is prohibited as a runtime import, release parent, selector fallback, rollback target, parameter source or discovery seed.
-
-## Active package layout
-
-```text
-src/
-├── ovc/
-│   ├── opt_a/
-│   └── opt_b/
-│       ├── c1/
-│       └── c2/
-└── ovc_evidence_store/
-```
-
-The `ovc` namespaces are foundation-only. Their contracts, fixtures and engines are built through the ratified OPT-A, C1 and C2 implementation plans after completion of R0.
+- Git stores code, contracts, schemas, registries, compact manifests, fixtures, tests, QA and decisions.
+- Full market data, generated streams and large external evidence remain outside Git.
+- Immutable canonical evidence is published only through separately governed publication authority.
+- Missing market records are not manufactured or silently bridged.
+- Shadow outputs do not become active/canonical truth without the required operator decision.
 
 ## Development
 

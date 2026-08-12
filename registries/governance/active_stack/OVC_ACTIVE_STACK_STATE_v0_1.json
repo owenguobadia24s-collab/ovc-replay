@@ -3,9 +3,28 @@
   "programme_id": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1",
   "plan_id": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1",
   "plan_version": "0.1",
+  "packet_id": "ASR-WP1",
   "status": "QA_REVIEW",
+  "prerequisites": [
+    "ASR-00_OPERATOR_PASS",
+    "BASELINE_MAIN_FA23BAF4D57364AACEF0B28635C54B43FD7DC9A9",
+    "C2AR_INTEGRATED_PACKAGE_EXACT_SHA_150DE1997BE8801BAA59DB6D0FE98B11CB21A6B70525B908537AEB31BFD00CC3",
+    "C2E_AG3_ACTIVE_CURRENT_PACK",
+    "OCCURRENCE_CONTEXT_G6_PASS",
+    "C1_V2_ACTIVE_DISCOVERY_DEVELOPMENT"
+  ],
+  "authority_required": "OPERATOR_REQUIRED_SATISFIED_BY_ASR_00",
+  "authority_delta": "EXACT_OPERATOR_APPROVED_ACTIVE_STACK_RECLASSIFICATION_ONLY",
   "baseline_main": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
+  "baseline_commit": "fa23baf4d57364aacef0b28635c54b43fd7dc9a9",
   "branch": "governance/active-stack-reclassification-v0-1-preflight",
+  "candidate_commit": null,
+  "tests": [],
+  "qa_packet": "docs/releases/active-stack-reclassification-v0-1/asr-wp1/ASR_WP1_QA_PACKET.json",
+  "decision_record": "docs/releases/active-stack-reclassification-v0-1/asr-00/ASR_00_OPERATOR_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "ASR-G1",
   "effective_on_main_merge": true,
   "operator_decision": {
     "command": "OVC APPROVE OVC ACTIVE STACK RECLASSIFICATION v0.1",
@@ -23,6 +42,8 @@
   },
   "precedence": {
     "current_authority_source": "registries/governance/active_stack/CURRENT_ACTIVE_STACK_POINTER.json",
+    "historical_repository_authority_snapshot": "registries/authority/ACTIVE_AUTHORITY.yaml",
+    "historical_repository_authority_effect": "SUPERSEDED_SNAPSHOT_FOR_CURRENT_STACK_CLASSIFICATION",
     "historical_c2_selector_registry": "registries/opt_b/c2/C2_ACTIVE_SELECTORS.yaml",
     "historical_c2_authority_registry": "registries/authority/C2_ACTIVE_DISCOVERY_AUTHORITY.yaml",
     "historical_c2_current_effect": "SUPERSEDED_FOR_NEW_EVIDENCE_PRESERVED_FOR_EXACT_LINEAGE_AND_HISTORICAL_REPLAY",
@@ -103,5 +124,14 @@
     "CANONICAL_OR_R2_PUBLICATION",
     "NEW_IMMUTABLE_RELEASE_IDENTITY",
     "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
-  ]
+  ],
+  "gate": {
+    "gate_id": "ASR-G1",
+    "owner": "DELEGATED",
+    "status": "QA_REVIEW",
+    "auto_ratifiable": true,
+    "decision": null,
+    "condition": "ALL_TESTS_PASS_QA_PASS_NO_AUTHORITY_EXPANSION_NO_CONFLICT"
+  },
+  "rollback": "Forward-only supersession; preserve historical authority records and evidence; no deletion or history rewrite"
 }

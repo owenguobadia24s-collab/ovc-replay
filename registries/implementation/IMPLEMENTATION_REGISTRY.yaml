@@ -1,4 +1,6 @@
-schema: ovc-implementation-registry/v1
+schema: ovc-implementation-registry/v2
+current_authority_pointer: registries/governance/active_stack/CURRENT_ACTIVE_STACK_POINTER.json
+classification_contract: contracts/governance/OVC_ACTIVE_STACK_CLASSIFICATION_CONTRACT_v0_1.md
 entries:
   - id: INFRA-EVIDENCE-STORE-V1
     namespace: ovc_evidence_store
@@ -7,41 +9,94 @@ entries:
     market_authority: NONE
   - id: OPT-A-V2
     namespace: ovc.opt_a
-    state: DESIGN_AND_FIXTURES_ONLY
-    build_authority: DEFERRED_TO_OPT_A_PLAN
-    market_authority: NONE
+    state: ACTIVE
+    authority: EXISTING_GOVERNED_DISCOVERY_DEVELOPMENT_SOURCE
+    validation: LOCKED_UNCONSUMED
+    market_authority: SEALED_OBSERVATION_INPUT_ONLY
   - id: OPT-B-C1-V2
     namespace: ovc.opt_b.c1
-    state: DESIGN_AND_FIXTURES_ONLY
-    build_authority: DEFERRED_TO_C1_PLAN
-    market_authority: NONE
+    state: ACTIVE
+    authority: ACTIVE_DISCOVERY_AND_DEVELOPMENT
+    selector_source: registries/opt_b/c1/C1_ACTIVE_SELECTORS.yaml
+    validation: LOCKED_UNCONSUMED
   - id: OPT-B-C2-V2
     namespace: ovc.opt_b.c2
-    state: DESIGN_AND_FIXTURES_ONLY
-    build_authority: DEFERRED_TO_C2_PLAN
-    market_authority: NONE
-  - id: OPT-B-C2E
-    namespace: unallocated
-    state: DEFERRED
+    state: LEGACY_INACTIVE
+    authority: HISTORICAL_LINEAGE_AND_EXACT_REPLAY_ONLY
+    current_new_evidence_parent_eligibility: DENIED
+    supersession: registries/opt_b/c2/C2_V2_LEGACY_SUPERSESSION_v0_1.json
+  - id: OPT-B-C2-VNEXT
+    namespace: ovc.opt_b.c2_vnext
+    state: ACTIVE
+    authority: ACTIVE_EXACT_NINE_COMPONENT_CORE_DISCOVERY_DEVELOPMENT
+    authority_record: registries/opt_b/c2/vnext/C2_VNEXT_ACTIVE_RUNTIME_AUTHORITY_v0_1.json
+    research_components: SHADOW
+    validation: LOCKED_UNCONSUMED
+  - id: OPT-B-C2E-V0-2
+    namespace: ovc.opt_b.c2e_v2
+    state: ACTIVE
+    authority: ACTIVE_ENGINE_CURRENT_OPERATOR_SELECTED_PACK_MARKET_ENVELOPE_BOUND
+    authority_record: registries/authority/C2E_ACTIVE_ENGINE_AUTHORITY_v0_1.json
+    downstream_authority: NONE_AUTOMATIC
+    validation: LOCKED_UNCONSUMED
+  - id: OCCURRENCE-CONTEXT-V0-1
+    namespace: ovc.context.occurrence_context
+    state: ACTIVE_FOUNDATION
+    authority: NONSTRUCTURAL_ENRICHMENT
+    representation_input: DENIED_BY_DEFAULT
+    authority_record: registries/implementation/occurrence_context/OCCURRENCE_CONTEXT_ACTIVE_FOUNDATION_AUTHORITY_v0_1.json
+  - id: RESEARCH-OPERATIONS
+    namespace: ovc.research_operations
+    state: ACTIVE_FOUNDATION
+    authority: EXISTING_READ_ONLY_AND_BOUNDED_APPEND_ONLY
+    authority_record: registries/research_operations/ACTIVE_FOUNDATION_AUTHORITY_v0_1.json
+  - id: SFC-SRI-FDI-C2G
+    namespace: ovc.opt_b.sfc
+    state: SHADOW
+    authority: RESEARCH_EVIDENCE_ONLY
+    canonical_representation_or_family: NONE
+  - id: SRFD
+    namespace: ovc.opt_b.srfd
+    state: SHADOW
+    authority: BENCHMARK_EVIDENCE_ONLY
+    scientific_promotion: NONE
+  - id: MCARB
+    namespace: ovc.research_operations.mcarb
+    state: SHADOW
+    authority: AUXILIARY_RESEARCH_ONLY
+  - id: MARKET-GRAMMAR-EXPERIMENTAL
+    namespace: ovc.opt_b.market_grammar
+    state: SHADOW
+    authority: HISTORICAL_EXPERIMENTAL_RESEARCH_ONLY
+  - id: OPT-B-C2P-V0-2
+    namespace: unallocated_forward
+    state: NON_EVALUABLE
     build_authority: NONE
-    market_authority: NONE
-  - id: OPT-B-C2-5
-    namespace: unallocated
-    state: DEFERRED
+  - id: OPT-B-C2-5-REVISED
+    namespace: unallocated_forward
+    state: NON_EVALUABLE
     build_authority: NONE
-    market_authority: NONE
-  - id: OPT-B-C3
-    namespace: unallocated
-    state: DEFERRED
+  - id: OPT-B-C3-REVISED
+    namespace: unallocated_forward
+    state: NON_EVALUABLE
     build_authority: NONE
-    market_authority: NONE
-  - id: OPT-C
+  - id: OPT-C-NEXT
+    namespace: unallocated_forward
+    state: NON_EVALUABLE
+    build_authority: NONE
+  - id: OPT-D-NEXT
+    namespace: unallocated_forward
+    state: NON_EVALUABLE
+    build_authority: NONE
+  - id: OPT-C-LEGACY
     namespace: legacy.quarantine
-    state: HISTORICAL_QUARANTINED
+    state: LEGACY_INACTIVE
     build_authority: NONE
-    market_authority: NONE
-  - id: OPT-D
+  - id: OPT-D-LEGACY
     namespace: legacy.quarantine
-    state: HISTORICAL_QUARANTINED
+    state: LEGACY_INACTIVE
     build_authority: NONE
-    market_authority: NONE
+retained_prohibitions:
+  validation_consumption: LOCKED_UNCONSUMED
+  canonical_or_r2_publication: NONE
+  probability_risk_exposure_trading_execution_agent_write: NONE
