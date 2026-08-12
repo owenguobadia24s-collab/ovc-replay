@@ -4,6 +4,8 @@ import json
 import unittest
 from pathlib import Path
 
+from ovc.development.skills.orch345 import resolve_orch345_authority
+
 
 ROOT = Path(__file__).resolve().parents[2]
 RELEASE = ROOT / "docs/releases/development-skills-architecture-v0-2"
@@ -72,26 +74,36 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
         self.assertEqual(qa["recommendation"], "PASS_OPERATOR_REQUIRED_DSAI2_G3")
         self.assertFalse(qa["activation_performed"])
 
-    def test_live_pointer_resolves_verified_g3_state_and_no_effective_authority_record_exists(self) -> None:
+    def test_historical_g3_gate_state_remains_immutable_while_live_pointer_may_advance_after_operator_pass(self) -> None:
+        historical = self._load(STATE_ROOT / "OVC_DSAI_V0_2_STATE_v0_3.json")
+        self.assertEqual(historical["status"], "GATE_READY")
+        self.assertEqual(historical["packet_id"], "DSAI2-G3")
+        self.assertEqual(historical["candidate_commit"], "5feb6bfd0430a7d9aab2afa483088ac2a4cbec19")
+        self.assertEqual(historical["qa"], "PASS_GATE_READY")
+        self.assertTrue(historical["mandatory_stop"])
+        self.assertFalse(historical["activation_performed"])
+        self.assertEqual(historical["current_authority"]["ORCH-2"], "ACTIVE_BOUNDED_SINGLE_PACKET_SERIAL_REQUIRED")
+        self.assertEqual(historical["current_authority"]["ORCH-3"], "INACTIVE_SHADOW_ONLY")
+        self.assertEqual(historical["current_authority"]["ORCH-4"], "INACTIVE_SHADOW_ONLY")
+        self.assertEqual(historical["current_authority"]["ORCH-5"], "INACTIVE_SHADOW_ONLY")
+
         pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
-        self.assertEqual(pointer["current_state"], "OVC_DSAI_V0_2_STATE_v0_3.json")
-        self.assertEqual(pointer["status"], "GATE_READY")
-        self.assertEqual(pointer["next_packet"], "DSAI2-G3")
+        self.assertIn(pointer["current_state"], {"OVC_DSAI_V0_2_STATE_v0_3.json", "OVC_DSAI_V0_2_STATE_v0_4.json"})
+        if pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_3.json":
+            self.assertEqual(pointer["status"], "GATE_READY")
+            self.assertEqual(pointer["next_packet"], "DSAI2-G3")
+        else:
+            self.assertEqual(pointer["status"], "APPROVED")
+            self.assertEqual(pointer["next_packet"], "DSAI2-WP4")
+            approved = self._load(STATE_ROOT / pointer["current_state"])
+            self.assertEqual(approved["packet_id"], "DSAI2-WP3")
+            self.assertFalse(approved["authority_effective_on_main"])
+            self.assertEqual(approved["decision_record"], "docs/releases/development-skills-architecture-v0-2/dsai2-g3/DSAI2_G3_OPERATOR_PASS.json")
 
-        state = self._load(STATE_ROOT / pointer["current_state"])
-        self.assertEqual(state["status"], "GATE_READY")
-        self.assertEqual(state["packet_id"], "DSAI2-G3")
-        self.assertEqual(state["candidate_commit"], "5feb6bfd0430a7d9aab2afa483088ac2a4cbec19")
-        self.assertEqual(state["qa"], "PASS_GATE_READY")
-        self.assertTrue(state["mandatory_stop"])
-        self.assertFalse(state["activation_performed"])
-        self.assertEqual(state["current_authority"]["ORCH-2"], "ACTIVE_BOUNDED_SINGLE_PACKET_SERIAL_REQUIRED")
-        self.assertEqual(state["current_authority"]["ORCH-3"], "INACTIVE_SHADOW_ONLY")
-        self.assertEqual(state["current_authority"]["ORCH-4"], "INACTIVE_SHADOW_ONLY")
-        self.assertEqual(state["current_authority"]["ORCH-5"], "INACTIVE_SHADOW_ONLY")
-
-        effective_record = ROOT / "registries/development/skills/orch345_bounded_authority_v0_1.json"
-        self.assertFalse(effective_record.exists(), "G3 gate preparation must not self-materialise effective ORCH-3/4/5 authority")
+            authority = self._load(ROOT / "registries/development/skills/orch345_bounded_authority_v0_1.json")
+            premerge_resolution = resolve_orch345_authority(authority=authority, record_present_on_main=False)
+            self.assertEqual(premerge_resolution["status"], "BLOCK")
+            self.assertIn("AUTHORITY_RECORD_NOT_PRESENT_ON_MAIN", premerge_resolution["reason_codes"])
 
 
 if __name__ == "__main__":
