@@ -41,7 +41,7 @@ class PvsV02Phase2Conformance(unittest.TestCase):
         for component, node in {
             "ObjectBadge":"22:45", "TypedObjectLink":"21:29", "StatusBadge":"20:77", "AuthorityTriadView":"23:85",
             "DegradedState":"91:221", "IconButton":"24:125", "SearchField":"29:165", "SelectField":"30:175",
-            "FilterChip":"31:219", "SegmentedControl":"34:197", "DensityControl":"34:197",
+            "FilterChip":"31:219", "SegmentedControl":"34:197", "DensityControl":"37:202",
         }.items():
             self.assertIn(f"function {component}", primitives)
             self.assertIn(node, primitives)
