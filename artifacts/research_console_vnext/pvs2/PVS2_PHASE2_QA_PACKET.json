@@ -1,0 +1,92 @@
+{
+  "schema": "ovc-rcn-pvs2-qa-packet/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "phase_id": "PVS2",
+  "gate_id": "PVS2-G1",
+  "gate_title": "PVS v0.2 React Conformance Acceptance",
+  "plan_id": "RCN-PVS-V0.2-PHASE2-REACT-CONFORMANCE-v0.1",
+  "plan_version": "0.1 OPERATOR_DIRECTED",
+  "parent_plan": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "baseline_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
+  "main_snapshot": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "implementation_candidate_commit": "e9c4daec8b4ab7db9e562ffdd1a34adcb71d4e76",
+  "branch": "build/rc-vnext-pvs-v0-2-phase2-react-conformance",
+  "pull_request": 656,
+  "completed_packets": ["PVS2-WP0", "PVS2-WP1", "PVS2-WP2", "PVS2-WP3", "PVS2-WP4"],
+  "figma": {
+    "file_key": "NUHzyFiLHRuDWOC0hBVYzc",
+    "release": "RCN vNext / OPT-B ESL Production Visual System v0.2",
+    "canonical_manifest": "269:2",
+    "react_handoff": "269:705",
+    "component_sets": 93,
+    "production_masters": 35,
+    "route_masters": {"/structure":"106:2","/research":"111:2","/evidence":"113:2","/control":"115:2"}
+  },
+  "authority": {
+    "current": "FIXTURE_ONLY_LOCAL_READ_ONLY",
+    "authority_delta": "NONE",
+    "transport": "GET_ONLY",
+    "mutations": "DENIED",
+    "real_source": "DENIED_UNTIL_RCN_RN_G4",
+    "reserved_actions_exercised": [],
+    "wp4d_pr_611": "SEPARATE_PACKET_UNCHANGED"
+  },
+  "tests": {
+    "research_console_vnext_run": 31628052705,
+    "research_console_vnext_head": "e9c4daec8b4ab7db9e562ffdd1a34adcb71d4e76",
+    "api_contract": "PASS",
+    "research_console_python_unittest_discovery": "PASS",
+    "openapi_generation": "PASS",
+    "typescript_typecheck": "PASS",
+    "vitest": "PASS",
+    "vite_build": "PASS",
+    "chromium_playwright": "PASS",
+    "production_route_geometry_1920": "PASS_ALL_4_DOMAINS",
+    "responsive_1440": "PASS",
+    "responsive_1280": "PASS_CONTROLLED_INSPECTOR_DRAWER",
+    "tests_workflow_run": 31628058147,
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "tiered_assurance_run": 31628058169,
+    "profile_assurance": "PASS",
+    "canonical_tests_observed": "PASS",
+    "merge_readiness": "PASS_STABLE_MAIN"
+  },
+  "visual_qa": {
+    "result": "PASS",
+    "screenshot_artifact_id": 9153958768,
+    "screenshot_artifact_digest": "sha256:8f8e2aaf3aae7deeb48da9585d497e3272af7fd4d59faeed6b576cb110a30bf7",
+    "reviewed_scenes": [
+      "structure-1920x1080",
+      "research-1920x1080",
+      "evidence-1920x1080",
+      "control-1920x1080",
+      "structure-1440x810",
+      "structure-1280x720"
+    ],
+    "trust_spine": "PASS",
+    "domain_hierarchy": "PASS",
+    "evidence_access": "PASS",
+    "responsive_semantic_preservation": "PASS",
+    "no_write_surface": "PASS"
+  },
+  "discrepancy_ledger": [
+    {
+      "id": "PVS2-D01",
+      "title": "Responsive cutoff denominator label conflated source population with visible projection",
+      "detected_by": "FINAL_VISUAL_QA",
+      "severity": "BLOCKING_UNTIL_CORRECTED",
+      "observed": "1440/1280 intentionally render anchored cutoff columns while the prior footer said 6/6 cutoffs visible",
+      "resolution": "Changed footer to state 6/6 source cutoffs retained and explicitly permit responsive suppression of intermediate columns; added deterministic regression assertion",
+      "resolution_commit": "e9c4daec8b4ab7db9e562ffdd1a34adcb71d4e76",
+      "status": "CLOSED"
+    }
+  ],
+  "warnings": [],
+  "unresolved_issues": [],
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "acceptance": "ALL_PVS2_G1_CONDITIONS_SATISFIED_AT_IMPLEMENTATION_HEAD",
+  "rollback": "Revert the bounded PVS2 presentation integration and restore the prior production console wiring. Preserve PVS v0.2 Figma manifest, QA evidence and repository scientific/authority contracts. No source/scientific authority changes under rollback."
+}
