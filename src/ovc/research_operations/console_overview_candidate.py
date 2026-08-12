@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Any
 
 from .console_overview import (
@@ -9,7 +11,35 @@ from .console_overview import (
     STATUS_PRIORITY,
     normalize_health_status,
 )
-from .read_model import ReadModelNode
+from .read_model import ReadModelNode, ResearchReadModel
+
+
+def load_read_model(path: Path) -> ResearchReadModel:
+    """Load the frozen research read-model fixture used by the overview candidate.
+
+    The function lives with the candidate implementation so tests and callers do
+    not need to import executable script modules merely to construct a read model.
+    """
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    nodes = tuple(
+        ReadModelNode(
+            object_id=str(node["object_id"]),
+            object_type=str(node["object_type"]),
+            authority=str(node["authority"]),
+            status=str(node["status"]),
+            source_refs=tuple(str(value) for value in node.get("source_refs", [])),
+            payload=dict(node.get("payload", {})),
+        )
+        for node in raw.get("nodes", [])
+    )
+    return ResearchReadModel(
+        schema=str(raw["schema"]),
+        source_commit=str(raw["source_commit"]),
+        catalogue_sha256=raw.get("catalogue_sha256"),
+        nodes=nodes,
+        health=tuple(dict(item) for item in raw.get("health", [])),
+        logical_sha256=str(raw["logical_sha256"]),
+    )
 
 
 class CandidateOverviewProjectionBuilder(OverviewProjectionBuilder):
