@@ -5,7 +5,7 @@
   "plan_version": "0.1",
   "status": "APPROVED",
   "baseline_commit": "3057d42e8a228a862dc37bddfa0e462d64bfe72f",
-  "integration_baseline_commit": "fdf64e0df76c5f75b21de357bac05ec965b9f0f7",
+  "integration_baseline_commit": "ce320c64d07682a0eba2fa6228da07e1d1879270",
   "branch": "build/ci-performance-remediation-v0-1",
   "packet_id": "CIPR-WP0-WP2-GROUPED",
   "prerequisites": [
@@ -15,15 +15,15 @@
   ],
   "authority_required": "NONE_FOR_WP0_WP2",
   "authority_delta": "DEVELOPMENT_CI_ORCHESTRATION_ONLY",
-  "candidate_commit": "10c6704b212fd91bb1d5e86f6eed97a673cc93c2",
+  "candidate_commit": "14cb9f507b7f8ef9ed78105728b8194efca088ba",
   "tests": [
-    "Gate-approval head 10c6704b: tests workflow #3659 all three Python checks PASS; tiered profile/observer PASS; final readiness correctly failed closed after main moved",
-    "PENDING fresh integration assurance on synchronization head against fdf64e0d"
+    "G1/G2 current PASS evidence remains valid at the semantic contract level",
+    "PENDING fresh exact-head tests + pytest-unittest-parity + runner-parity after ce320c64 merge reconciliation",
+    "PENDING fresh tiered FINAL_HEAD/profile observer and stable-main readiness after ce320c64 merge reconciliation"
   ],
   "metrics": {
     "approved_implementation_observer_wait_ms": 167480,
-    "approved_implementation_lane_evaluation_ms": 583,
-    "post_approval_moved_base_failure_ms": 311
+    "approved_implementation_lane_evaluation_ms": 583
   },
   "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_QA_PACKET.json",
   "decision_record": [
@@ -36,19 +36,20 @@
     "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_3057_TO_2EFF.json",
     "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_2EFF_TO_E479.json",
     "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_E479_TO_C92.json",
-    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_C92_TO_FDF.json"
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_C92_TO_FDF.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_HEAD_MOVEMENT_FDF_TO_CE32.json"
   ],
   "merge_commit": null,
   "blockers": [],
   "nonblocking_warnings": [
-    "First pre-approval merge-readiness attempt was cancelled while pending behind pre-remediation global-lane activity; same-head retry PASS.",
+    "Pre-remediation in-flight workflows can still transiently contend for the legacy global lane until they terminate.",
     "Generic checkout/setup-python Node-target warnings remain upstream-action hygiene for WP3; CIPR-owned github-script uses v9."
   ],
   "next_packet": "CIPR-WP3",
   "operator_stop_gate": "CIPR-G4-SUITE-TOPOLOGY",
   "notes": [
-    "CIPR-G1 and CIPR-G2 remain delegated PASS; fdf64e0d changes only unrelated C2P WP0 court records plus one unrelated test entering the canonical suite.",
-    "The 10c6704b readiness failure is expected fail-closed evidence: event base c92d9f77 differed from current main fdf64e0d.",
-    "A synchronization court-record commit is required solely to trigger fresh PR integration assurance against fdf64e0d; no semantic re-preflight is required."
+    "fdf64e0d -> ce320c64 is INTEGRATION_RELEVANT only: DSAI post-pilot records/tests changed, no bound CIPR/PYT/PDC contract changed.",
+    "Branch must now contain current main as an actual merge parent so the PR event base refreshes; head-only synchronization commits were insufficient.",
+    "No semantic re-preflight is required; exact-head integration assurance must rerun after reconciliation."
   ]
 }
