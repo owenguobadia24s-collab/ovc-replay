@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "status": "GATE_READY",
+  "baseline_commit": "28ef05024d3bd12d9917eecc17e3b5dece4a2613",
+  "branch": "gate/dsai-v0-2-orch345-activation",
+  "packet_id": "DSAI2-G3",
+  "prerequisites": [
+    "DSAI2-WP0-WP2 COMPLETED",
+    "DSAI2-G2 PASS delegated auto-ratification",
+    "PR #688 squash merge 28ef05024d3bd12d9917eecc17e3b5dece4a2613",
+    "PDC terminal PARALLEL_BUILD_SERIALIZED_FINAL_INTEGRATION_WINDOW_ACTIVE"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "PROPOSED_ORCH345_BOUNDED_ACTIVATION_NOT_EFFECTIVE",
+  "candidate_commit": null,
+  "tests": [
+    "conformance final tests run 31649971549 / #3908 PASS",
+    "conformance final tiered run 31649971565 / #2255 PASS including merge readiness",
+    "G3 evidence branch exact-head assurance pending"
+  ],
+  "qa_packet": "docs/releases/development-skills-architecture-v0-2/dsai2-g3/DSAI2_G3_ACTIVATION_READINESS.json",
+  "decision_record": "docs/releases/development-skills-architecture-v0-2/dsai2-g3/DSAI2_G3_DECISION_PENDING.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": null,
+  "completed_packets": ["DSAI2-WP0", "DSAI2-WP1", "DSAI2-WP2"],
+  "current_authority": {
+    "ORCH-2": "ACTIVE_BOUNDED_SINGLE_PACKET_SERIAL_REQUIRED",
+    "ORCH-3": "INACTIVE_SHADOW_ONLY",
+    "ORCH-4": "INACTIVE_SHADOW_ONLY",
+    "ORCH-5": "INACTIVE_SHADOW_ONLY"
+  },
+  "proposed_authority": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
+  },
+  "mandatory_stop": true,
+  "stop_reason": "DSAI2-G3 changes deferred orchestration capability authority and requires explicit operator decision.",
+  "activation_performed": false,
+  "target_terminal_state": "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH"
+}
