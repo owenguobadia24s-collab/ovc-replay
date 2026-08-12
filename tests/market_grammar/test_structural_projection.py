@@ -2,10 +2,10 @@ from __future__ import annotations
 import copy,json,unittest
 from pathlib import Path
 from ovc.opt_b.market_grammar.family_hierarchy import StructuralRecord
-from ovc.opt_b.market_grammar.revised_c2_adapter import EmpiricalBinding
+from ovc.opt_b.market_grammar.revised_c2_adapter import BINDING_SHA256, EmpiricalBinding
 from ovc.opt_b.market_grammar.structural_projection import FEATURE_KEYS,PROJECTION_ID,project_revised_c2_state,project_revised_c2_states
 ROOT=Path(__file__).resolve().parents[2]
-FIXTURE=ROOT/'fixtures/market_grammar/ei_wp2/structural_projection_cases.json'
+FIXTURE=ROOT/'fixtures/market_grammar/ei_wp2/structural_projection_cases_v0_2.json'
 STATE=ROOT/'registries/opt_b/market_grammar/OVC_MG_EI_JUNE_PROGRAMME_STATE_v0_1.jsonc'
 REG=ROOT/'registries/opt_b/market_grammar/MG_EI_WP2_IMPLEMENTATION_REGISTRY_v0_1.json'
 QA=ROOT/'docs/releases/market-grammar-empirical-integration-june-v0-1/ei-wp2/EI_WP2_QA_PACKET.json'
@@ -15,6 +15,7 @@ def load(path): return json.loads(path.read_text(encoding='utf-8'))
 class StructuralProjectionTests(unittest.TestCase):
  @classmethod
  def setUpClass(cls): cls.fixture=load(FIXTURE); cls.binding=EmpiricalBinding.from_mapping(cls.fixture['binding']); cls.rows=cls.fixture['rows']
+ def test_forward_fixture_uses_authoritative_binding(self): self.assertEqual(BINDING_SHA256,self.fixture['binding']['binding_sha256']); self.assertEqual(64,len(BINDING_SHA256))
  def test_evaluable_projection(self):
   item=project_revised_c2_state(self.rows[0],binding=self.binding); StructuralRecord.from_mapping(item); self.assertEqual('EVALUABLE',item['computability_status']); self.assertEqual(tuple(item['structural_features']),FEATURE_KEYS); self.assertEqual({'location':'0.200000000000','motion':'0.650000000000','organisation':'0.550000000000','interaction':'0.300000000000','quality':'1.000000000000'},item['structural_features'])
  def test_not_evaluable_projection_is_empty(self):
