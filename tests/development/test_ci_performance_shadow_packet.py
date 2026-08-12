@@ -64,8 +64,8 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
             self.assertIn(name, self.tiered_workflow)
         self.assertIn("ovc-main-integration-lane-v1", self.tiered_workflow)
 
-    def test_running_state_preserves_non_activation_boundary(self):
-        self.assertEqual(self.state["status"], "RUNNING")
+    def test_packet_state_preserves_non_activation_boundary(self):
+        self.assertIn(self.state["status"], {"RUNNING", "APPROVED"})
         self.assertEqual(
             self.state["authority_delta"],
             "BOUNDED_RUNNER_NEUTRAL_DETERMINISTIC_REQUIRED_SHARD_SHADOW_EVALUATION",
@@ -73,6 +73,15 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         self.assertFalse(self.state["required_check_substitution_active"])
         self.assertFalse(self.state["runner_cutover_active"])
         self.assertFalse(self.state["scientific_authority_delta"])
+        if self.state["status"] == "APPROVED":
+            self.assertEqual(
+                self.state["decision_record"],
+                "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHADOW_DECISION.json",
+            )
+            self.assertEqual(
+                self.state["operator_stop_gate"],
+                "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER",
+            )
 
 
 if __name__ == "__main__":
