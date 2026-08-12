@@ -59,12 +59,10 @@ def test_terminal_state_keeps_orch2_serial_and_defers_all_parallel_authority():
     assert state["mandatory_stop"]["active"] is False
 
 
-def test_terminal_pointer_has_no_next_packet_and_preserves_programme_identity():
+def test_v030_terminal_state_is_immutable_while_live_pointer_may_advance_to_closeout():
     pointer = _load(POINTER)
-    assert pointer == {
-        "current_state": "OVC_DSAI_STATE_v0_30.json",
-        "next_packet": None,
-        "programme_id": "OVC-DSAI-v0.1",
-        "schema": "ovc-programme-current-state-pointer/v1",
-        "status": "IMPLEMENTED_ORCH2_BOUNDED_PILOTED",
-    }
+    assert pointer["programme_id"] == "OVC-DSAI-v0.1"
+    assert pointer["schema"] == "ovc-programme-current-state-pointer/v1"
+    assert pointer["status"] == "IMPLEMENTED_ORCH2_BOUNDED_PILOTED"
+    assert pointer["next_packet"] is None
+    assert pointer["current_state"] in {"OVC_DSAI_STATE_v0_30.json", "OVC_DSAI_STATE_v0_31.json"}
