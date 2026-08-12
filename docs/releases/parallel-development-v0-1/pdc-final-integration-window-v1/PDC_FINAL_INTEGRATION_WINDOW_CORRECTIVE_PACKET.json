@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-pdc-final-integration-window-corrective-packet/v1",
+  "programme_id": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "plan_id": "OVC-PDC-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "PDC-FIW-CORR-WP1",
+  "baseline_main_sha": "10a0acac129df1039feafd9200612e7512a6c551",
+  "branch": "fix/pdc-serialized-final-integration-window-v1",
+  "status": "QA_REVIEW",
+  "operator_instruction": "Create and execute a serialized final-integration window",
+  "trigger": {
+    "class": "MAIN_HEAD_CHURN_WASTED_FINAL_ASSURANCE",
+    "observed_pr": 675,
+    "reported_candidate_sha_prefix": "8a331c8f",
+    "reported_assurance_base_sha_prefix": "5c8c0c7",
+    "reported_current_main_sha_prefix": "54c1af1",
+    "preserved_guard": "OVC_BASE_MOVED_BEFORE_READINESS"
+  },
+  "problem_statement": "The existing global integration lane was acquired only after expensive required Python checks completed, so otherwise-green assurance could be invalidated by a main-head advance discovered at final readiness.",
+  "correction": {
+    "window_concurrency_group": "ovc-main-final-integration-window-v2",
+    "acquire_before_required_assurance": true,
+    "required_check_admission_handshake": "tests workflow waits until OVC merge readiness is in_progress on the exact PR head",
+    "candidate_must_contain_acquired_main": true,
+    "main_polled_while_window_held": true,
+    "fail_closed_guard_preserved": true,
+    "new_pull_request_workflow": false,
+    "workflow_count_delta": 0
+  },
+  "acceptance_conditions": [
+    "Only the existing tests.yml and ovc-tiered-tests.yml pull-request workflows remain.",
+    "Only one PR can hold the repository-wide final-integration window at a time and queued windows are not cancelled.",
+    "The canonical required Python jobs do not start until the exact-head OVC merge-readiness check has acquired the serialized window.",
+    "A stale event base or a candidate that does not contain the acquired current-main commit fails before expensive required checks start.",
+    "Any main movement while the final-integration window is held fails closed with the existing readiness movement guard class.",
+    "The complete repository suite remains present exactly once and no required-check semantics are weakened."
+  ],
+  "authority": {
+    "delta": "NONE_OUTSIDE_DEVELOPMENT_ORCHESTRATION_ASSURANCE",
+    "reserved_authority_changes": [],
+    "selector_scientific_validation_publication_exposure_authority": "UNCHANGED"
+  },
+  "rollback": "Revert only the final-integration admission handshake and v2 concurrency-window changes, restoring the prior PDC v1 readiness lane while preserving all historical evidence and the fail-closed stable-main guard.",
+  "qa": {
+    "required": [
+      "targeted tests/development/test_parallel_integration_lane.py",
+      "complete repository tests workflow",
+      "OVC profile assurance",
+      "pytest-unittest-parity",
+      "runner-parity",
+      "OVC merge readiness on the same exact head"
+    ],
+    "decision": "PENDING"
+  }
+}
