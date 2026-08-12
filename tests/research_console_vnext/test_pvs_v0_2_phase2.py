@@ -87,6 +87,14 @@ class PvsV02Phase2Conformance(unittest.TestCase):
         ]:
             self.assertIn(marker, source)
 
+    def test_responsive_projection_never_misstates_source_denominator(self):
+        console = (PROD / "ProductionConsole.tsx").read_text()
+        self.assertIn("6/6 source cutoffs retained", console)
+        self.assertIn("responsive projection may suppress intermediate columns", console)
+        self.assertNotIn("6/6 cutoffs visible", console)
+        for node in ["106:2", "111:2", "113:2", "115:2"]:
+            self.assertIn(node, console)
+
     def test_phase2_does_not_create_write_or_real_source_surface(self):
         text = "\n".join(path.read_text() for path in PROD.glob("Pvs*.tsx"))
         for forbidden in ["fetch(", "axios", "useMutation", "localStorage", "sessionStorage"]:
