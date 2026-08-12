@@ -105,8 +105,7 @@ class DSAIG8COperatorAssistedWriteTests(unittest.TestCase):
         self.assertEqual(packet_executor[0]["merge_authority"], "NONE")
 
     def test_programme_advances_to_orch1_pilot_but_wp9_remains_blocked(self):
-        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_20.json")
-        self.assertEqual(self.pointer["status"], "G8C_PASS_ORCH1_PILOT_READY")
+        # v0_20 remains immutable evidence of the exact post-G8C, pre-pilot boundary.
         self.assertEqual(self.state["programme_status"], "G8C_PASS_ORCH1_ASSISTED_WRITE_ACTIVE_PILOT_PENDING")
         self.assertEqual(self.state["packet_updates"]["DSAI-WP8"]["g8c_decision"], "PASS_OPERATOR_ASSISTED_WRITE")
         authority = self.state["authority"]
@@ -118,6 +117,14 @@ class DSAIG8COperatorAssistedWriteTests(unittest.TestCase):
         self.assertIn("ORCH1_PILOT_EVIDENCE_REQUIRED", blockers)
         self.assertIn("GIT_MERGE_CAPABILITY_G9A_NOT_YET_TRUSTED", blockers)
         self.assertIn("DSAI_G9B_NOT_REACHED", blockers)
+
+        # CURRENT_STATE_POINTER is forward-moving. A clean pilot may lawfully advance it beyond v0_20 while
+        # the historical v0_20 record remains unchanged and continues to prove the G8C boundary.
+        self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
+        self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
+        self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
+        self.assertTrue(str(self.pointer["status"]).strip())
+        self.assertTrue(str(self.pointer["next_packet"]).startswith("DSAI-WP"))
 
 
 if __name__ == "__main__":
