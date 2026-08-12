@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import os
 import subprocess
 import sys
 import unittest
+from functools import lru_cache
 from pathlib import Path
 from typing import Iterable
 
@@ -21,12 +23,32 @@ def _flatten(suite: unittest.TestSuite) -> Iterable[unittest.TestCase]:
             yield item
 
 
-def _source_path(case: unittest.TestCase) -> Path:
-    """Resolve the discovered testcase source without relying on sys.modules retention.
+@lru_cache(maxsize=1)
+def _case_source_index() -> dict[tuple[str, str], tuple[Path, ...]]:
+    """Index test class/method definitions for load_tests bridge resolution."""
 
-    unittest discovery may evict or replace top-level modules while recursing through
-    the tree. The testcase retains its defining module name, which is sufficient to
-    resolve the repository source deterministically.
+    index: dict[tuple[str, str], list[Path]] = {}
+    for path in sorted(TEST_ROOT.rglob("test*.py")):
+        try:
+            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        except (OSError, SyntaxError, UnicodeDecodeError):
+            continue
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.ClassDef):
+                continue
+            for child in node.body:
+                if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)) and child.name.startswith("test"):
+                    index.setdefault((node.name, child.name), []).append(path.resolve())
+    return {key: tuple(paths) for key, paths in index.items()}
+
+
+def _source_path(case: unittest.TestCase) -> Path:
+    """Resolve each unittest-discovered case to its repository source file.
+
+    Normal discovery is resolved by module name. Historical OVC ``load_tests``
+    bridges sometimes load a target file under a synthetic module name and do
+    not retain that module in ``sys.modules``; those cases are resolved by the
+    unique class/method definition in the repository test tree.
     """
 
     module_name = case.__class__.__module__
@@ -35,18 +57,26 @@ def _source_path(case: unittest.TestCase) -> Path:
         return direct.resolve()
 
     basename = module_name.rsplit(".", 1)[-1] + ".py"
-    matches = sorted(TEST_ROOT.rglob(basename))
-    if len(matches) == 1:
-        return matches[0].resolve()
+    basename_matches = sorted(TEST_ROOT.rglob(basename))
+    if len(basename_matches) == 1:
+        return basename_matches[0].resolve()
 
     module = sys.modules.get(module_name)
     source = getattr(module, "__file__", None)
     if source is not None:
         return Path(source).resolve()
 
+    structural_matches = _case_source_index().get(
+        (case.__class__.__name__, case._testMethodName), ()
+    )
+    if len(structural_matches) == 1:
+        return structural_matches[0]
+
     raise RuntimeError(
         f"cannot resolve unique source file for {case.id()}: "
-        f"module={module_name!r} matches={[p.as_posix() for p in matches]}"
+        f"module={module_name!r} basename_matches="
+        f"{[p.as_posix() for p in basename_matches]} structural_matches="
+        f"{[p.as_posix() for p in structural_matches]}"
     )
 
 
