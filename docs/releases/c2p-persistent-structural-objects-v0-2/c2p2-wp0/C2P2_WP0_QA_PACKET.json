@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-c2p2-wp0-qa-packet/v1",
+  "packet_id": "C2P2-WP0",
+  "gate_id": "C2P2-G0",
+  "baseline_commit": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
+  "tested_head": "496c4c7f9408eece8e02807faee4d403475cb3d9",
+  "qa_recommendation": "PASS",
+  "checks": {
+    "ratified_plan_identity": "PASS",
+    "frozen_design_identity": "PASS",
+    "active_stack_reconciliation": "PASS",
+    "upstream_authority_non_mutation": "PASS",
+    "c2p_runtime_remains_inactive": "PASS",
+    "empirical_pack_selection": "NONE",
+    "validation_consumption": "NONE",
+    "concurrent_overlap": "PASS_NONBLOCKING",
+    "programme_state_schema_static_test": "PASS",
+    "complete_repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "profile_assurance": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "workflow_evidence": {
+    "tests_run_id": 31621648112,
+    "tests_conclusion": "success",
+    "tiered_assurance_run_id": 31621648104,
+    "tiered_assurance_conclusion": "success",
+    "merge_readiness_job_id": 94197746053,
+    "merge_readiness_conclusion": "success"
+  },
+  "warnings": [
+    "Ratified plan self-SHA is not embedded in the supplied ratified source; exact plan ID/version/ratification/source reference are pinned instead.",
+    "This QA decision commit changes only governance/evidence state and therefore requires exact-head rerun before merge."
+  ],
+  "blockers": [],
+  "authority_delta": "COURT_RECORD_MATERIALISATION_ONLY",
+  "rollback": "Close packet branch before merge or forward-supersede after merge; preserve operator decision and governing source identities."
+}
