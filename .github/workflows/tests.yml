@@ -15,8 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  unit-tests:
-    name: tests
+  pytest-unified:
+    name: pytest-unified
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install test runner and project
+      - name: Install pytest and project
         run: python3 -m pip install -e ".[test]"
       - name: Pytest unified suite — candidate primary runner
         shell: bash
@@ -43,9 +43,31 @@ jobs:
           PY
           fi
           exit "$status"
-      - name: Legacy unittest suite — retained parity baseline
-        if: always()
+
+  unittest-legacy:
+    name: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Complete repository suite
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+
+  runner-parity:
+    name: runner-parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pytest and project
+        run: python3 -m pip install -e ".[test]"
       - name: Prove unittest collection parity under pytest
-        if: always()
         run: PYTHONPATH=src python3 scripts/qa/check_python_test_runner_parity.py
