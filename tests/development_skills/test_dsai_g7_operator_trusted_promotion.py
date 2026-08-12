@@ -92,6 +92,7 @@ class DSAIG7OperatorTrustedPromotionTests(unittest.TestCase):
         })
 
     def test_state_advances_only_to_wp8_and_preserves_later_reserved_gates(self):
+        # v0_17 remains immutable evidence of the exact post-G7 transition.
         self.assertEqual(self.state["programme_status"], "APPROVED_G7_READY_WP8")
         self.assertEqual(self.state["supersedes_state"], "OVC_DSAI_STATE_v0_16.json")
         self.assertEqual(self.state["trusted_promotion"]["status"], "EFFECTIVE")
@@ -102,13 +103,13 @@ class DSAIG7OperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["orch_1"], "INACTIVE")
         self.assertEqual(self.state["authority"]["orch_2"], "INACTIVE")
         self.assertEqual(self.state["authority"]["validation"], "DENIED")
-        self.assertEqual(self.pointer, {
-            "current_state": "OVC_DSAI_STATE_v0_17.json",
-            "next_packet": "DSAI-WP8",
-            "programme_id": "OVC-DSAI-v0.1",
-            "schema": "ovc-programme-current-state-pointer/v1",
-            "status": "READY_WP8",
-        })
+
+        # CURRENT_STATE_POINTER is a moving programme projection and may advance after G7.
+        # Historical G7 assurance must validate its namespace, not pin it to v0_17 forever.
+        self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
+        self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
+        self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
+        self.assertTrue(str(self.pointer["status"]).strip())
 
 
 if __name__ == "__main__":
