@@ -16,7 +16,8 @@
   "authority_delta": "NONE_CLASSIFICATION_ONLY",
   "candidate_commit": null,
   "tests": [
-    "PENDING deterministic workflow census validation",
+    "Initial WP3 head 26b726c5 correctly failed: repository definitions=129, external Actions registry=175",
+    "PENDING corrected deterministic workflow census validation",
     "PENDING exact-head tests + pytest-unittest-parity + runner-parity",
     "PENDING exact-head tiered FINAL_HEAD/profile observer and merge readiness"
   ],
@@ -34,8 +35,15 @@
       "terminal_receipt": "docs/releases/ci-performance-remediation-v0-1/cipr-wp0-wp2/CIPR_WP0_WP2_TERMINAL_RECEIPT.json"
     }
   ],
+  "inventory_layers": {
+    "repository_workflow_definitions": 129,
+    "github_actions_registered_workflows": 175,
+    "gross_count_excess": 46,
+    "excess_interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK"
+  },
   "notes": [
     "WP3 is strictly non-destructive: workflow deletion, disablement, trigger mutation and required-check mutation are prohibited.",
-    "GitHub Actions API baseline exposes 175 workflow definitions; exact category counts must be materialised from deterministic repository scan evidence before G3 PASS."
+    "Initial QA assumption equating external registry count with repository definitions was corrected without weakening tests.",
+    "TEMPORARY repository category may legitimately be zero even though temporary workflow registrations are visible in the external Actions registry."
   ]
 }

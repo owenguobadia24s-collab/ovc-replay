@@ -6,10 +6,12 @@
   "baseline_commit": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
   "authority_delta": "NONE_CLASSIFICATION_ONLY",
   "acceptance_conditions": [
-    "deterministic repository scan covers exactly the 175 workflow definitions observed by the GitHub Actions API baseline",
+    "deterministic repository scan covers exactly 129 workflow definitions present on the exact candidate head",
+    "GitHub Actions external registry observation remains separately recorded at 175 registered workflows",
+    "gross count difference 46 is documented only as a drift indicator pending path-level crosswalk",
     "exactly tests.yml and ovc-tiered-tests.yml are pull_request listeners",
-    "every workflow receives exactly one governance category",
-    "temporary, historical/manual-verification and active-manual-operation categories are all represented",
+    "all 129 repository workflow definitions receive exactly one governance category",
+    "historical/manual-verification and active-manual-operation repository categories are represented; TEMPORARY may be zero if absent from exact-head repository tree",
     "no workflow file is deleted, disabled or trigger-mutated",
     "historical evidence preservation remains REQUIRED",
     "canonical required Python checks PASS on exact candidate head",
@@ -28,6 +30,6 @@
     "OVC canonical tests observed",
     "OVC merge readiness"
   ],
-  "rollback": "Revert/supersede only the workflow-governance policy, classifier, census and WP3 QA/decision records. Do not delete or mutate workflow definitions.",
-  "qa_recommendation": "PENDING_EXECUTION"
+  "rollback": "Revert/supersede only the workflow-governance policy, classifier, census and WP3 QA/decision records. Do not delete or mutate workflow definitions or registered workflow records.",
+  "qa_recommendation": "PENDING_CORRECTED_EXECUTION"
 }

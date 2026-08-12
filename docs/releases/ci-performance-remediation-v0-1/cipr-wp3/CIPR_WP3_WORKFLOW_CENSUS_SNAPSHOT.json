@@ -3,13 +3,14 @@
   "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
   "packet_id": "CIPR-WP3",
   "baseline_main_sha": "0f6cffd8e1c1fac50a958152fe5edc5a070467f3",
-  "github_actions_api": {
-    "total_workflows": 175,
-    "active_state_observed": true
+  "github_actions_registry": {
+    "registered_workflow_total": 175,
+    "source": "GitHub Actions workflows API",
+    "status": "OBSERVED_EXTERNAL_REGISTRY"
   },
   "repository_scan": {
-    "status": "PENDING_EXACT_HEAD_CI",
-    "expected_total_workflow_definitions": 175,
+    "status": "PENDING_CORRECTED_EXACT_HEAD_CI",
+    "expected_total_workflow_definitions": 129,
     "expected_pull_request_listener_count": 2,
     "approved_pull_request_paths": [
       ".github/workflows/tests.yml",
@@ -18,12 +19,18 @@
     "category_counts": null,
     "trigger_counts": null
   },
+  "registry_repository_relation": {
+    "gross_count_excess": 46,
+    "interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK",
+    "not_authorized_inference": "Do not infer that all 46 excess registrations are unique orphaned paths without an explicit path-level crosswalk."
+  },
   "classification_policy": "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_1.json",
   "classifier": "scripts/development/ci_workflow_inventory.py",
+  "correction_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp3/CIPR_WP3_INVENTORY_LAYER_CORRECTION.json",
   "destructive_actions_performed": false,
   "authority_delta": "NONE",
   "notes": [
-    "The static API count is a drift sentinel, not authority to delete or disable workflows.",
-    "Exact category and trigger counts will be copied from deterministic exact-head CI output into the PASS QA packet before delegated CIPR-G3 ratification."
+    "The first WP3 candidate correctly exposed that the GitHub Actions registry and current-main workflow definitions are distinct inventory layers.",
+    "Exact repository category and trigger counts will be copied from corrected exact-head CI output before delegated CIPR-G3 ratification."
   ]
 }
