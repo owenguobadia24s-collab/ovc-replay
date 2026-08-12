@@ -45,8 +45,9 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
         self.assertIsNone(pending["decision"])
         self.assertFalse(pending["activation_performed"])
 
-    def test_activation_readiness_is_bounded_and_empirically_supported(self) -> None:
+    def test_activation_readiness_and_gate_qa_are_bounded_and_empirically_supported(self) -> None:
         readiness = self._load(RELEASE / "dsai2-g3/DSAI2_G3_ACTIVATION_READINESS.json")
+        qa = self._load(RELEASE / "dsai2-g3/DSAI2_G3_QA_PACKET.json")
         self.assertEqual(readiness["status"], "GATE_READY_OPERATOR_REQUIRED")
         self.assertEqual(readiness["recommendation"], "PASS")
         self.assertEqual(readiness["empirical_corpus"]["event_count"], 28)
@@ -64,21 +65,30 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
         self.assertTrue(readiness["self_grant_prohibited"])
         self.assertEqual(readiness["blocking_warnings"], [])
 
-    def test_live_state_stops_at_g3_and_no_effective_authority_record_exists(self) -> None:
-        state = self._load(STATE_ROOT / "OVC_DSAI_V0_2_STATE_v0_2.json")
-        pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
+        self.assertEqual(qa["status"], "PASS_GATE_READY")
+        self.assertEqual(qa["tested_gate_evidence_head"], "5feb6bfd0430a7d9aab2afa483088ac2a4cbec19")
+        self.assertEqual(qa["workflow_evidence"]["tests"]["run_number"], 3910)
+        self.assertEqual(qa["workflow_evidence"]["tiered"]["run_number"], 2256)
+        self.assertEqual(qa["recommendation"], "PASS_OPERATOR_REQUIRED_DSAI2_G3")
+        self.assertFalse(qa["activation_performed"])
 
+    def test_live_pointer_resolves_verified_g3_state_and_no_effective_authority_record_exists(self) -> None:
+        pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
+        self.assertEqual(pointer["current_state"], "OVC_DSAI_V0_2_STATE_v0_3.json")
+        self.assertEqual(pointer["status"], "GATE_READY")
+        self.assertEqual(pointer["next_packet"], "DSAI2-G3")
+
+        state = self._load(STATE_ROOT / pointer["current_state"])
         self.assertEqual(state["status"], "GATE_READY")
         self.assertEqual(state["packet_id"], "DSAI2-G3")
+        self.assertEqual(state["candidate_commit"], "5feb6bfd0430a7d9aab2afa483088ac2a4cbec19")
+        self.assertEqual(state["qa"], "PASS_GATE_READY")
         self.assertTrue(state["mandatory_stop"])
         self.assertFalse(state["activation_performed"])
         self.assertEqual(state["current_authority"]["ORCH-2"], "ACTIVE_BOUNDED_SINGLE_PACKET_SERIAL_REQUIRED")
         self.assertEqual(state["current_authority"]["ORCH-3"], "INACTIVE_SHADOW_ONLY")
         self.assertEqual(state["current_authority"]["ORCH-4"], "INACTIVE_SHADOW_ONLY")
         self.assertEqual(state["current_authority"]["ORCH-5"], "INACTIVE_SHADOW_ONLY")
-        self.assertEqual(pointer["current_state"], "OVC_DSAI_V0_2_STATE_v0_2.json")
-        self.assertEqual(pointer["status"], "GATE_READY")
-        self.assertEqual(pointer["next_packet"], "DSAI2-G3")
 
         effective_record = ROOT / "registries/development/skills/orch345_bounded_authority_v0_1.json"
         self.assertFalse(effective_record.exists(), "G3 gate preparation must not self-materialise effective ORCH-3/4/5 authority")
