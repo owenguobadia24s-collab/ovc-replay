@@ -77,9 +77,8 @@ class DSAIG8BOperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(self.candidate["write_permission"], "DENY")
         self.assertEqual(self.candidate["merge_permission"], "DENY")
 
-    def test_state_advances_to_g8c_preparation_without_g8c_authority(self):
-        self.assertEqual(self.pointer["current_state"], "OVC_DSAI_STATE_v0_19.json")
-        self.assertEqual(self.pointer["status"], "G8B_PASS_READY_G8C_PREPARATION")
+    def test_v019_preserves_exact_post_g8b_state_while_pointer_may_advance_lawfully(self):
+        # v0_19 is immutable evidence of the exact post-G8B boundary before G8C.
         self.assertEqual(self.state["programme_status"], "G8B_PASS_READY_G8C_PREPARATION")
         self.assertTrue(self.state["packet_executor"]["trusted"])
         self.assertEqual(self.state["packet_executor"]["maturity"], "TRUSTED")
@@ -90,6 +89,14 @@ class DSAIG8BOperatorTrustedPromotionTests(unittest.TestCase):
         self.assertEqual(self.state["authority"]["write_authority"], "NONE")
         self.assertEqual(self.state["authority"]["merge_authority"], "NONE")
         self.assertEqual(self.state["authority"]["validation"], "DENIED")
+
+        # CURRENT_STATE_POINTER is a moving programme projection. Later lawful gates may advance it;
+        # G8B assurance therefore validates the pointer namespace rather than pinning it to v0_19 forever.
+        self.assertEqual(self.pointer["programme_id"], "OVC-DSAI-v0.1")
+        self.assertEqual(self.pointer["schema"], "ovc-programme-current-state-pointer/v1")
+        self.assertTrue(str(self.pointer["current_state"]).startswith("OVC_DSAI_STATE_v0_"))
+        self.assertTrue(str(self.pointer["status"]).strip())
+        self.assertEqual(self.pointer["next_packet"], "DSAI-WP8")
 
 
 if __name__ == "__main__":
