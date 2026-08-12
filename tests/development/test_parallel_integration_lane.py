@@ -45,6 +45,16 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ADMITTED", self.tests_workflow)
         self.assertEqual(self.tests_workflow.count("needs: final-integration-window-admitted"), 3)
 
+    def test_profile_admission_rechecks_main_before_assurance(self):
+        self.assertIn("OVC_PROFILE_BASE_MOVED_BEFORE_ASSURANCE", self.workflow)
+        self.assertIn("OVC_PROFILE_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.workflow)
+        self.assertGreaterEqual(self.workflow.count("git merge-base --is-ancestor"), 2)
+
+    def test_required_check_admission_rechecks_main_before_assurance(self):
+        self.assertIn("OVC_REQUIRED_CHECK_BASE_MOVED_BEFORE_ASSURANCE", self.tests_workflow)
+        self.assertIn("OVC_REQUIRED_CHECK_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.tests_workflow)
+        self.assertIn("git merge-base --is-ancestor", self.tests_workflow)
+
     def test_candidate_must_contain_acquired_current_main(self):
         self.assertIn("git merge-base --is-ancestor", self.workflow)
         self.assertIn("OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.workflow)
