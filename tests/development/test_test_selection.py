@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 from ovc.development.test_selection import (
-    TestSelectionError,
+    TestSelectionError as SelectionError,
     load_test_profile_registry,
     parse_test_profile_registry,
     select_test_manifest,
@@ -108,15 +108,15 @@ class TestSelectionTests(unittest.TestCase):
         raw = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
         weakened = copy.deepcopy(raw)
         weakened["final_assurance"]["complete_repository_suite"] = False
-        with self.assertRaises(TestSelectionError):
+        with self.assertRaises(SelectionError):
             parse_test_profile_registry(weakened)
-        with self.assertRaises(TestSelectionError):
+        with self.assertRaises(SelectionError):
             select_test_manifest([], self.registry)
-        with self.assertRaises(TestSelectionError):
+        with self.assertRaises(SelectionError):
             select_test_manifest(["../unsafe"], self.registry)
-        with self.assertRaises(TestSelectionError):
+        with self.assertRaises(SelectionError):
             select_test_manifest(["docs/x.md"], self.registry, stage="GATE_REPLAY")
-        with self.assertRaises(TestSelectionError):
+        with self.assertRaises(SelectionError):
             select_test_manifest(["docs/x.md"], self.registry, gate_id="DA-G3")
 
     def test_workflow_changes_force_final_head(self) -> None:
