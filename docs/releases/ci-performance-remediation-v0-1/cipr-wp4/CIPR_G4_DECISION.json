@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "CIPR-G4-SUITE-TOPOLOGY",
+  "gate_title": "Canonical suite topology and heavyweight-assurance remediation",
+  "decision": "PASS",
+  "selected_option": "B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
+  "decision_authority": "OPERATOR",
+  "operator_instruction": "OVC PASS B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW",
+  "decision_time_local": "2026-08-12T21:02:00+01:00",
+  "baseline_main": "22c5ede9c6e7ccdeba26ea53e7a83890170b10dd",
+  "gate_ready_commit": "87b76db7fea547ea676a83524b60dbd3b484932d",
+  "tested_gate_evidence_head": "ea2705b81538a216e802d3e156500c086a46b779",
+  "pr": 655,
+  "evidence": {
+    "gate_evidence_tests_run": 31627457452,
+    "gate_evidence_tiered_run": 31627457418,
+    "gate_ready_tests_run": 31628195721,
+    "gate_ready_tiered_run": 31628195628,
+    "tests": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "profile_assurance": "PASS_FINAL_HEAD",
+    "canonical_observer": "PASS",
+    "merge_readiness": "PASS",
+    "review_threads": 0,
+    "main_unchanged_at_decision": true
+  },
+  "authority_granted": [
+    "create a versioned deterministic shard manifest/registry derived from the exact legacy unittest-discovered population",
+    "partition that population across bounded parallel shadow jobs with exact-one membership and deterministic ordering",
+    "add union-completeness, no-duplication, no-omission and deterministic-repeatability proofs",
+    "run the shard candidate in shadow beside all existing required checks",
+    "measure exact-head shard critical path, runner overhead and repeatability",
+    "prepare coordinated cutover evidence compatible with PYT-G2 or a later explicit superseding operator decision"
+  ],
+  "authority_not_granted": [
+    "remove, skip, demote or replace standalone unittest",
+    "remove, skip, demote or replace pytest-unittest-parity or runner-parity",
+    "admit pytest-native tests into the canonical surface",
+    "enable pytest-xdist or any unordered process-parallel runner",
+    "change benchmark freshness, scientific evidence semantics or heavy-test assertions",
+    "activate shard output as a substitute for any existing required check",
+    "change stable-main or merge-authority semantics",
+    "grant scientific, semantic, Validation, selector, publication, probability, risk, exposure or execution authority"
+  ],
+  "rollback": "If the shadow candidate fails, remove or supersede only candidate shard manifests, shadow jobs and candidate tooling. Preserve all current required checks, PYT policy, stable-main readiness and historical evidence. Never force-push or rewrite history.",
+  "next_packet": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+  "continuation": "AUTO_CONTINUE_WITHIN_GRANTED_BOUNDARY"
+}
