@@ -50,10 +50,22 @@ jobs:
           if [ "$status" -ne 0 ]; then
             python3 - <<'PY'
           from pathlib import Path
+
+          def esc(value: str) -> str:
+              return value.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+
           text = Path('/tmp/pytest-unified.log').read_text(encoding='utf-8', errors='replace')
-          # Keep the annotation compact enough for repository tooling to retain the
-          # pytest short-summary lines instead of truncating inside a large diff.
-          tail = text[-1800:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
+          summary_lines = [
+              line for line in text.splitlines()
+              if line.startswith('FAILED ') or line.startswith('ERROR ')
+          ]
+          for offset in range(0, len(summary_lines), 10):
+              chunk = '\n'.join(summary_lines[offset:offset + 10])
+              print(
+                  f'::error title=Unified pytest failures {offset + 1}-'
+                  f'{min(offset + 10, len(summary_lines))}::{esc(chunk)}'
+              )
+          tail = esc(text[-1800:])
           print(f'::error title=Unified pytest admission failure::{tail}')
           PY
           fi
