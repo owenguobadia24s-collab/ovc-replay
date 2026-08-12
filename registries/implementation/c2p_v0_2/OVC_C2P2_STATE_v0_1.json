@@ -7,18 +7,19 @@
   "ratification": {
     "decision": "PASS",
     "instruction_time": "2026-08-12T17:25:00+01:00",
-    "repository_materialized": false
+    "repository_materialized": true,
+    "main_integration": "PENDING_EXACT_HEAD_CI"
   },
   "governing_design_sha256": "ed656705f13162cb5b9ac231d73a32870f7127f4fb464fe3e3a6ebd48a5608cd",
   "packet_id": "C2P2-WP0",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "prerequisites": ["OPERATOR_RATIFICATION_INSTRUCTION"],
-  "authority_required": "RATIFICATION_SATISFIED_CHAT_INSTRUCTION_REPOSITORY_MATERIALISATION_PENDING",
-  "authority_delta": "CORE_MECHANICAL_CONFORMANCE_SYNTHETIC_READ_ONLY_ONLY",
+  "authority_required": "SATISFIED_PENDING_MAIN_INTEGRATION",
+  "authority_delta": "CORE_MECHANICAL_CONFORMANCE_SYNTHETIC_READ_ONLY_ONLY_AFTER_MAIN_INTEGRATION",
   "baseline_commit": "c92d9f77d11f2cf0510a408221f84a6ab8fee463",
   "branch": "build/c2p2-wp0-preflight-materialisation-v2",
-  "candidate_commit": null,
-  "tests": [],
+  "candidate_commit": "496c4c7f9408eece8e02807faee4d403475cb3d9",
+  "tests": ["tests@31621648112:PASS", "OVC-tiered-test-selection-shadow@31621648104:PASS"],
   "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_WP0_QA_PACKET.json",
   "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_G0_DECISION.json",
   "merge_commit": null,
@@ -34,7 +35,7 @@
     "publication_probability_risk_exposure_execution_agent_write": "NONE"
   },
   "packet_register": [
-    {"packet_id":"C2P2-WP0","status":"QA_REVIEW","prerequisites":["OPERATOR_RATIFICATION_INSTRUCTION"],"authority_required":"OPERATOR_PASS_RECORDED_MATERIALISATION_PENDING","authority_delta":"COURT_RECORD_MATERIALISATION_ONLY","baseline_commit":"c92d9f77d11f2cf0510a408221f84a6ab8fee463","branch":"build/c2p2-wp0-preflight-materialisation-v2","candidate_commit":null,"tests":[],"qa_packet":"docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_WP0_QA_PACKET.json","decision_record":"docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_G0_DECISION.json","merge_commit":null,"blockers":[],"next_packet":"C2P2-WP1"},
+    {"packet_id":"C2P2-WP0","status":"APPROVED","prerequisites":["OPERATOR_RATIFICATION_INSTRUCTION"],"authority_required":"SATISFIED_PENDING_MAIN_INTEGRATION","authority_delta":"COURT_RECORD_MATERIALISATION_ONLY","baseline_commit":"c92d9f77d11f2cf0510a408221f84a6ab8fee463","branch":"build/c2p2-wp0-preflight-materialisation-v2","candidate_commit":"496c4c7f9408eece8e02807faee4d403475cb3d9","tests":["tests@31621648112:PASS","tiered@31621648104:PASS"],"qa_packet":"docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_WP0_QA_PACKET.json","decision_record":"docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0/C2P2_G0_DECISION.json","merge_commit":null,"blockers":[],"next_packet":"C2P2-WP1"},
     {"packet_id":"C2P2-WP1","status":"READY","prerequisites":["C2P2-G0-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"TYPED_INACTIVE_CONFORMANCE_ARTIFACTS_ONLY","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2P2-WP2"},
     {"packet_id":"C2P2-WP2","status":"PLANNED","prerequisites":["C2P2-G1-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"SYNTHETIC_FIXTURE_COMPUTATION_ONLY","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2P2-WP3"},
     {"packet_id":"C2P2-WP3","status":"PLANNED","prerequisites":["C2P2-G2-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"INACTIVE_IDENTITY_MACHINERY","baseline_commit":null,"branch":null,"candidate_commit":null,"tests":[],"qa_packet":null,"decision_record":null,"merge_commit":null,"blockers":[],"next_packet":"C2P2-WP4"},
