@@ -1,0 +1,73 @@
+{
+  "schema": "ovc-development-latency-diagnostic-observability-policy/v1",
+  "policy_id": "OVC.DEVOBS.LATENCY.20260813.v1",
+  "status": "TEMPORARY_ACTIVE_CALIBRATION",
+  "effective": true,
+  "purpose": "Measure development wall-clock decomposition around existing OVC development and DSAI primitives without changing their behavior or authority.",
+  "receipt_class": "TEMPORARY_DIAGNOSTIC_OBSERVABILITY",
+  "authority_effect": "NONE",
+  "observability_only": true,
+  "temporary": true,
+  "governance_expansion": false,
+  "new_operator_gate": false,
+  "merge_authority": "NONE",
+  "parallel_merge": false,
+  "activation_mode": "PASSIVE_COMPANION_INSTRUMENTATION",
+  "execution_identity_policy": "DIAGNOSTIC_TIMESTAMPS_AND_RECEIPTS_MUST_NOT_CHANGE_UNDERLYING_RECORD_IDENTITY",
+  "scope": [
+    "OVC_DEVELOPMENT_PRIMITIVES",
+    "DSAI_ORCH0_ORCH1_ORCH2",
+    "DSAI_ORCH3_ORCH4_ORCH5_WHERE_AVAILABLE",
+    "LOCAL_SUBPROCESS_AND_TEST_ASSURANCE",
+    "GITHUB_ACTIONS_QUEUE_AND_EXECUTION",
+    "CONNECTOR_TOOL_CALLS_WITH_EXPLICIT_TIMESTAMPS",
+    "POLLING_AND_SERIALIZED_INTEGRATION_WAITS",
+    "EVIDENCE_COLLECTION_AND_FINAL_STATE_VERIFICATION"
+  ],
+  "latency_categories": [
+    "MODEL_REASONING",
+    "REPOSITORY_INSPECTION",
+    "CONNECTOR_TOOL_LATENCY",
+    "LOCAL_EXECUTION",
+    "LOCAL_TEST_ASSURANCE",
+    "REMOTE_CI_QUEUE",
+    "REMOTE_CI_EXECUTION",
+    "POLLING_WAIT",
+    "REMEDIATION_RETRY",
+    "EVIDENCE_COLLECTION",
+    "OPERATOR_GATE_WAIT",
+    "FINAL_SYNTHESIS",
+    "OTHER"
+  ],
+  "measurement_contract": {
+    "evidence_classes": ["MEASURED", "DERIVED", "INFERRED", "UNAVAILABLE"],
+    "activity_classes": ["ACTIVE", "WAIT", "OVERLAP"],
+    "wall_clock_accounting": "INTERVAL_UNION_NO_DOUBLE_COUNT",
+    "unobserved_wall_time": "TOTAL_WALL_MINUS_UNION_OF_MEASURED_OBSERVABLE_INTERVALS",
+    "model_reasoning": "UNAVAILABLE_UNLESS_EXPLICIT_MEASURED_PLATFORM_TELEMETRY",
+    "concurrency": "CONTEXT_ONLY_UNLESS_AN_OBSERVABLE_CONTENTION_EFFECT_EXISTS",
+    "no_invented_timing": true
+  },
+  "raw_trace_storage": {
+    "preferred": "EXTERNAL_DIAGNOSTIC_ARTIFACT_STORE",
+    "git_policy": "DO_NOT_COMMIT_ONE_RAW_TRACE_PER_DEVELOPMENT_RUN",
+    "canonical_ledger_role": "COMPACT_RECEIPT_AND_RUN_INDEX_ONLY"
+  },
+  "collection_behavior": {
+    "subprocess_wrapper_grants_authority": false,
+    "github_ingestion_performs_network_calls": false,
+    "diagnostic_receipt_changes_execution_identity": false,
+    "trace_events_change_gate_or_merge_outcome": false
+  },
+  "calibration": {
+    "target_receipt_count": 20,
+    "review_after_target": true,
+    "success_metric": "MAXIMIZE_OBSERVED_UNION_COVERAGE_WITHOUT_RECLASSIFYING_UNOBSERVED_WALL_AS_MODEL_REASONING"
+  },
+  "retirement_policy": {
+    "temporary_by_default": true,
+    "raw_trace_detail_may_be_reduced_after_evidence_sufficiency": true,
+    "exception_and_bottleneck_receipts_may_be_retained": true,
+    "retirement_authority_effect": "NONE"
+  }
+}

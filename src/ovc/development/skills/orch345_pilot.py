@@ -15,6 +15,10 @@ PROGRAMME_ID = "OVC-DSAI-v0.2"
 SERIAL_POLICY = "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
 
 
+def _without_diagnostic(record: Mapping[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in record.items() if key != "diagnostic_receipt"}
+
+
 def build_wp4_live_pilot(authority: Mapping[str, Any]) -> dict[str, Any]:
     resolution = resolve_orch345_authority(authority=authority, record_present_on_main=True)
     if resolution.get("status") != "ACTIVE_AUTHORIZED":
@@ -124,13 +128,13 @@ def build_wp4_live_pilot(authority: Mapping[str, Any]) -> dict[str, Any]:
         "authority_resolution": resolution,
         "orch3": {
             "descriptor_ids": [orch3_a["record_id"], orch3_b["record_id"]],
-            "result": orch3,
+            "result": _without_diagnostic(orch3),
         },
         "orch4": {
             "parallel_candidate_descriptor_ids": [orch4_a["record_id"], orch4_b["record_id"]],
-            "parallel_admission": orch4_parallel,
+            "parallel_admission": _without_diagnostic(orch4_parallel),
             "adversarial_descriptor_id": orch4_overlap["record_id"],
-            "serial_fallback": orch4_fallback,
+            "serial_fallback": _without_diagnostic(orch4_fallback),
         },
         "orch5": {
             "descriptor_ids": [
@@ -141,7 +145,7 @@ def build_wp4_live_pilot(authority: Mapping[str, Any]) -> dict[str, Any]:
             ],
             "cross_programme_dependency": "C2P2-WP0",
             "operator_wait_source": "RCN-RN-G4 / PR #678",
-            "result": orch5,
+            "result": _without_diagnostic(orch5),
         },
         "acceptance_metrics": {
             "false_parallel_allows": false_parallel_allows,
@@ -158,8 +162,15 @@ def build_wp4_live_pilot(authority: Mapping[str, Any]) -> dict[str, Any]:
         "authority_delta": "NONE",
         "parallel_merge": False,
     }
-    return {
+    result = {
         "schema": "ovc-dsai2-wp4-live-pilot-pack/v1",
         **logical,
         "record_id": canonical_sha256(logical, role="DSAI2_WP4_LIVE_PILOT_PACK"),
     }
+    result["diagnostic_receipts"] = [
+        orch3["diagnostic_receipt"],
+        orch4_parallel["diagnostic_receipt"],
+        orch4_fallback["diagnostic_receipt"],
+        orch5["diagnostic_receipt"],
+    ]
+    return result
