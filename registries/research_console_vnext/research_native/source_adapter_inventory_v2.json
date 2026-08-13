@@ -1,12 +1,12 @@
 {
   "schema": "ovc-rcn-rn-source-census/v2",
-  "baseline_commit": "8f35ff9ee76eeb122eb1af66e9c166b0c45437cf",
-  "route_authority": "RCN_RN_G4_PASS; MARKET_C1_C2_C2E_READ_ONLY_BINDING_AUTHORIZED_NOT_YET_MATERIALIZED; ALL_OTHER_REAL_SOURCE_DENIED",
+  "baseline_commit": "1d963d5fe963ccf323caf013f9dade208a31345b",
+  "route_authority": "RCN_RN_G4_PASS; MARKET_C1_C2_C2E_BOUND_READ_ONLY_EXPLICIT_REAL_MODE; ALL_OTHER_REAL_SOURCE_DENIED",
   "sources": [
-    {"capability_id":"opt_a","owner":"OPT-A","source_path":"src/ovc/opt_a","repository_materialized":true,"console_binding":"EXISTING_OR_REQUIRES_CHARACTERISATION","real_route":"AUTHORIZED_PENDING_BINDING"},
-    {"capability_id":"c1","owner":"OPT-B.C1","source_path":"src/ovc/opt_b/c1","repository_materialized":true,"console_binding":"EXISTING_OR_REQUIRES_CHARACTERISATION","real_route":"AUTHORIZED_PENDING_BINDING"},
-    {"capability_id":"c2","owner":"OPT-B.C2","source_path":"src/ovc/opt_b/c2_vnext","repository_materialized":true,"console_binding":"EXISTING_OR_REQUIRES_CHARACTERISATION","real_route":"AUTHORIZED_PENDING_BINDING"},
-    {"capability_id":"c2e","owner":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2","source_path":"src/ovc/opt_b/c2e_v2","repository_materialized":true,"console_binding":"OWNER_PRESENT_ACTIVE_STATUS_SOURCE_OWNED","real_route":"AUTHORIZED_PENDING_BINDING"},
+    {"capability_id":"opt_a","owner":"OPT-A","source_path":"src/ovc/opt_a","repository_materialized":true,"console_binding":"BOUND_READ_ONLY_FAIL_CLOSED","real_route":"BOUND_G4_EXPLICIT_REAL_MODE"},
+    {"capability_id":"c1","owner":"OPT-B.C1","source_path":"src/ovc/opt_b/c1","repository_materialized":true,"console_binding":"BOUND_READ_ONLY_FAIL_CLOSED","real_route":"BOUND_G4_EXPLICIT_REAL_MODE"},
+    {"capability_id":"c2","owner":"OPT-B.C2","source_path":"src/ovc/opt_b/c2_vnext","repository_materialized":true,"console_binding":"BOUND_READ_ONLY_FAIL_CLOSED","real_route":"BOUND_G4_EXPLICIT_REAL_MODE"},
+    {"capability_id":"c2e","owner":"OVC-C2E-CAUSAL-EPISODE-CONFORMANCE-v0.2","source_path":"src/ovc/opt_b/c2e_v2","repository_materialized":true,"console_binding":"BOUND_READ_ONLY_FAIL_CLOSED","real_route":"BOUND_G4_EXPLICIT_REAL_MODE"},
     {"capability_id":"c2p","owner":"OPT-B.C2P","source_path":"src/ovc/opt_b/c2p_v0_2","repository_materialized":true,"runtime_owner_materialized":false,"synthetic_fixture_subsystem_materialized":true,"latest_packet":"C2P2-WP2","active_source_authority":"NONE","console_binding":"TYPED_DEGRADED_STATE","reason_code":"SYNTHETIC_CANDIDATE_TRACKLET_SUBSYSTEM_PRESENT_RUNTIME_AND_REAL_SOURCE_AUTHORITY_NONE","authority_source":"registries/implementation/c2p_v0_2/OVC_C2P2_STATE_v0_1.json","real_route":"DENIED"},
     {"capability_id":"c2_5","owner":"OPT-B.C2.5","source_path":null,"repository_materialized":false,"console_binding":"TYPED_DEGRADED_STATE","reason_code":"UPSTREAM_OWNER_NOT_MATERIALIZED_AS_RUNTIME_NAMESPACE","real_route":"DENIED"},
     {"capability_id":"c3","owner":"OPT-B.C3","source_path":"src/ovc/opt_b/esl/c3_reference.py","repository_materialized":true,"runtime_owner_materialized":false,"active_source_authority":"NONE","maturity":"INACTIVE_REFERENCE","console_binding":"TYPED_DEGRADED_STATE","reason_code":"ESLI_INACTIVE_REFERENCE_PRESENT_REVISED_C3_RUNTIME_OWNER_NOT_MATERIALIZED","authority_source":"registries/opt_b/esl/C3_BRIDGE_MATURITY_v0_1.json","vocabulary_activation_source":"registries/opt_b/esl/C3_VOCABULARY_ACTIVATION_v0_1.json","real_route":"DENIED"},
@@ -24,6 +24,7 @@
     "INACTIVE_REFERENCE_DOES_NOT_IMPLY_REVISED_C3_RUNTIME_OR_SOURCE_AUTHORITY",
     "NO_FRONTEND_SCIENTIFIC_GOLDEN",
     "NO_LEGACY_FALLBACK_SUBSTITUTION",
+    "REAL_MODE_FIXTURE_FALLBACK_PROHIBITED",
     "UNAVAILABLE_OWNER_RETURNS_TYPED_DEGRADED_STATE",
     "VALIDATION_DENIED_BEFORE_PATH_OBJECT_COUNT_OR_TIMESTAMP_RESOLUTION"
   ]

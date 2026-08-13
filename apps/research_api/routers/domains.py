@@ -1,30 +1,48 @@
 from __future__ import annotations
 from fastapi import APIRouter, Query
-from ovc.console_vnext.application.errors import AuthorityDenied, ContractError
+from ovc.console_vnext.application.errors import AuthorityDenied, ContractError, SourceGap
 from ovc.console_vnext.application.investigate_preparation import build_fixture_investigate_snapshot
 from ..fixture_store import FixtureStore
+from ..real_source_store import RealSourceStore
 from ..query import bounded_time_window, stable_page
 
 def _deny_validation(role: str | None) -> None:
     if role is not None and role.upper() == "VALIDATION": raise AuthorityDenied("VALIDATION_DENIED_BEFORE_OBJECT_RESOLUTION")
 
-def build_domain_router(store: FixtureStore) -> APIRouter:
+def build_domain_router(store: FixtureStore, *, real_store: RealSourceStore | None = None, source_mode: str = "FIXTURE") -> APIRouter:
     router=APIRouter()
+    def real_projection(capability_id:str,resource:str,schema_id:str):
+        if source_mode != "REAL" or real_store is None: raise SourceGap("REAL_SOURCE_STORE_NOT_ACTIVE")
+        return real_store.envelope(resource,real_store.projection(capability_id),schema_id=schema_id)
     @router.get('/market/window',tags=['market'])
     def market_window(start:str|None=Query(default=None),end:str|None=Query(default=None),limit:int=Query(default=500,ge=1,le=5000),role:str|None=Query(default=None)):
         _deny_validation(role)
+        if source_mode == "REAL":
+            envelope=real_projection('MARKET','market','ovc-rcn-market-window/v1')
+            if not envelope['capability']['available']: return envelope
+            bars=envelope['payload'].get('bars')
+            if not isinstance(bars,list): raise ContractError('MARKET_OWNER_PROJECTION_BARS_LIST_REQUIRED')
+            try: envelope['payload']=bounded_time_window(bars,start=start,end=end,limit=limit)
+            except ValueError as exc: raise ContractError(str(exc)) from exc
+            return envelope
         try: payload=bounded_time_window(store.resource('market').get('bars',[]),start=start,end=end,limit=limit)
         except ValueError as exc: raise ContractError(str(exc)) from exc
         return store.envelope('market',payload,schema_id='ovc-rcn-market-window/v1',capability_id='MARKET')
     @router.get('/c1/state',tags=['structure'])
     def c1_state(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c1',store.resource('structure').get('c1',{}),schema_id='ovc-rcn-c1-view/v1',capability_id='C1')
+        _deny_validation(role)
+        if source_mode == 'REAL': return real_projection('C1','c1','ovc-rcn-c1-view/v1')
+        return store.envelope('c1',store.resource('structure').get('c1',{}),schema_id='ovc-rcn-c1-view/v1',capability_id='C1')
     @router.get('/c2/state',tags=['structure'])
     def c2_state(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c2',store.resource('structure').get('c2',{}),schema_id='ovc-rcn-c2-view/v1',capability_id='C2')
+        _deny_validation(role)
+        if source_mode == 'REAL': return real_projection('C2','c2','ovc-rcn-c2-view/v1')
+        return store.envelope('c2',store.resource('structure').get('c2',{}),schema_id='ovc-rcn-c2-view/v1',capability_id='C2')
     @router.get('/c2e/episodes',tags=['structure'])
     def c2e_episodes(role:str|None=Query(default=None)):
-        _deny_validation(role); return store.envelope('c2e',store.resource('structure').get('c2e',{}),schema_id='ovc-rcn-c2e-view/v1',capability_id='C2E')
+        _deny_validation(role)
+        if source_mode == 'REAL': return real_projection('C2E','c2e','ovc-rcn-c2e-view/v1')
+        return store.envelope('c2e',store.resource('structure').get('c2e',{}),schema_id='ovc-rcn-c2e-view/v1',capability_id='C2E')
     @router.get('/c2p/objects',tags=['structure','preparation'])
     def c2p_objects(role:str|None=Query(default=None)):
         _deny_validation(role); return store.envelope('c2p_preparation',dict(store.resource('c2p_preparation')),schema_id='ovc-rcn-c2p-preparation/v1',capability_id='C2P')
@@ -36,7 +54,11 @@ def build_domain_router(store: FixtureStore) -> APIRouter:
         _deny_validation(role); return store.envelope('c3_preparation',dict(store.resource('c3_preparation')),schema_id='ovc-rcn-c3-preparation/v1',capability_id='C3')
     @router.get('/investigate/snapshot',tags=['structure','preparation'])
     def investigate_snapshot(role:str|None=Query(default=None)):
-        _deny_validation(role); p=build_fixture_investigate_snapshot(market=store.resource('market'),structure=store.resource('structure'),preparation=store.resource('investigate_preparation')); return store.envelope('investigate_snapshot',p,schema_id='ovc-rcn-investigate-snapshot/v1',capability_id='C2')
+        _deny_validation(role)
+        if source_mode == 'REAL':
+            if real_store is None: raise SourceGap('REAL_SOURCE_STORE_NOT_ACTIVE')
+            return real_store.investigate_snapshot()
+        p=build_fixture_investigate_snapshot(market=store.resource('market'),structure=store.resource('structure'),preparation=store.resource('investigate_preparation')); return store.envelope('investigate_snapshot',p,schema_id='ovc-rcn-investigate-snapshot/v1',capability_id='C2')
     @router.get('/occurrences/{occurrence_id}/context',tags=['context'])
     def occurrence_context(occurrence_id:str,role:str|None=Query(default=None)):
         _deny_validation(role); p=dict(store.resource('context'))
