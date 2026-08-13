@@ -100,8 +100,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: GRT2 WP0 exact B0 and fresh-baseline reconciliation
+        if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'build/grt2-wp0-')
+        run: |
+          PYTHONPATH=src python3 scripts/governance/grt_v0_2/reconcile_wp0.py \
+            --baseline-commit a720f4fb3b41c267a6ed40dc9498e8f48004fbf7 \
+            --output-dir /tmp/grt2-wp0-reconciliation
       - name: Complete repository suite
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+      - name: Upload GRT2 WP0 reconciliation evidence
+        if: always() && github.event_name == 'pull_request' && startsWith(github.head_ref, 'build/grt2-wp0-')
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-wp0-reconciliation-${{ github.sha }}
+          path: /tmp/grt2-wp0-reconciliation/*.json
+          if-no-files-found: error
+          retention-days: 7
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
