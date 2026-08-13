@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-serialized-integration-queue-state/v1",
+  "title": "OVC Serialized Integration Queue State v1",
+  "type": "object",
+  "required": ["schema", "queue_id", "generation", "final_integration_lease_count", "parallel_development", "parallel_merge", "authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-serialized-integration-queue-state/v1"},
+    "queue_id": {"const": "OVC.SIQ.v0.1"},
+    "generation": {"type": "integer", "minimum": 0},
+    "final_integration_lease_count": {"type": "integer", "minimum": 0, "maximum": 1},
+    "parallel_development": {"const": true},
+    "parallel_merge": {"const": false},
+    "authority_effect": {"const": "NONE"}
+  }
+}
