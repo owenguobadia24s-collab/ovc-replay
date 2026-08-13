@@ -1,0 +1,23 @@
+name: GRT2 WP1 postmerge diagnostic temp
+
+on:
+  push:
+    branches:
+      - diagnose/grt2-wp1-postmerge-49873c6e
+
+permissions:
+  contents: read
+
+jobs:
+  targeted:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run exact WP1 targeted surface on postmerge main tree
+        run: |
+          PYTHONPATH=src python -m unittest discover -s tests/governance/grt_v0_2 -p 'test_grt2_wp1*.py' -v
