@@ -6,8 +6,6 @@ import time
 import unittest
 from pathlib import Path
 
-import pytest
-
 ROOT = Path(__file__).resolve().parents[1]
 C2P_TEST_ROOT = ROOT / "tests/opt_b/c2p/v0_2"
 WP4_BRANCH = "build/c2p2-wp4-event-ledger-projections"
@@ -59,6 +57,11 @@ class C2P2WP4AssuranceBridgeTests(unittest.TestCase):
             return
         if os.environ.get("GITHUB_HEAD_REF") != WP4_BRANCH:
             return
+
+        # Pytest is deliberately imported only inside the parity-only execution
+        # path.  The canonical legacy unittest job does not install pytest, and
+        # must still be able to import this bridge before the CI guards return.
+        import pytest
 
         expected_head = os.environ.get("OVC_LEASE_HEAD_SHA")
         self.assertTrue(expected_head)

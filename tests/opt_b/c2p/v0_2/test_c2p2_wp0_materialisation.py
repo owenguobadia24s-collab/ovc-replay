@@ -19,7 +19,8 @@ class C2P2WP0MaterialisationTest(unittest.TestCase):
         self.assertEqual(state["plan_id"], "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED")
         self.assertEqual(state["plan_version"], "0.2")
         self.assertEqual(state["ratification"]["decision"], "PASS")
-        self.assertFalse(state["ratification"]["repository_materialized"])
+        self.assertTrue(state["ratification"]["repository_materialized"])
+        self.assertEqual(state["ratification"]["main_integration"], "fdf64e0df76c5f75b21de357bac05ec965b9f0f7")
         self.assertEqual(state["governing_design_sha256"], "ed656705f13162cb5b9ac231d73a32870f7127f4fb464fe3e3a6ebd48a5608cd")
         self.assertEqual(state["authority"]["c2p_runtime"], "NONE")
         self.assertEqual(state["authority"]["empirical_object_pack_selection"], "NONE")
@@ -41,9 +42,11 @@ class C2P2WP0MaterialisationTest(unittest.TestCase):
     def test_wp1_is_first_implementation_packet(self) -> None:
         state = json.loads(STATE.read_text(encoding="utf-8"))
         by_id = {packet["packet_id"]: packet for packet in state["packet_register"]}
-        self.assertEqual(state["next_packet"], "C2P2-WP1")
-        self.assertEqual(by_id["C2P2-WP1"]["status"], "READY")
+        self.assertEqual(by_id["C2P2-WP0"]["next_packet"], "C2P2-WP1")
+        self.assertEqual(by_id["C2P2-WP0"]["status"], "COMPLETED")
+        self.assertEqual(by_id["C2P2-WP1"]["status"], "COMPLETED")
         self.assertEqual(by_id["C2P2-WP1"]["authority_required"], "AUTO_EXECUTABLE")
+        self.assertEqual(state["next_packet"], by_id[state["packet_id"]]["next_packet"])
         self.assertEqual(state["deferred_follow_ons"], ["C2P2-PS0", "C2P2-RS0", "C2P2-RR0", "C2P2-AG0"])
 
 
