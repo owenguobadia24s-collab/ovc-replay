@@ -32,6 +32,7 @@ SCHEMA = ROOT / "schemas" / "research_console_vnext" / "wp5a_representation_snap
 ROUTES = ROOT / "registries" / "research_console_vnext" / "research_native" / "route_registry_v2.json"
 STATE = ROOT / "registries" / "implementation" / "research_console_vnext" / "OVC_RCN_RN_STATE_v0_2.json"
 PREFLIGHT = ROOT / "artifacts" / "research_console_vnext" / "pvs3" / "RCN_RN_WP5A_SOURCE_AUTHORITY_PREFLIGHT.json"
+MERGE_RECEIPT = ROOT / "artifacts" / "research_console_vnext" / "pvs3" / "RCN_RN_WP5A_MERGE_RECEIPT.json"
 COMPONENT = ROOT / "apps" / "research_console_vnext" / "src" / "production" / "RepresentationWorkbench.tsx"
 ROUTER = ROOT / "apps" / "research_console_vnext" / "src" / "app" / "router.tsx"
 CLIENT = ROOT / "apps" / "research_console_vnext" / "src" / "api" / "client.ts"
@@ -150,16 +151,25 @@ class WP5ARepositoryContractTests(unittest.TestCase):
         routes = load(ROUTES)
         state = load(STATE)
         preflight = load(PREFLIGHT)
+        receipt = load(MERGE_RECEIPT)
         self.assertEqual("ovc-rcn-rn-wp5a-representation-snapshot/v1", schema["$id"])
         self.assertFalse(schema["additionalProperties"])
         self.assertIn("/research/representations/snapshot", routes["domains"]["RESEARCH"])
-        self.assertEqual("IMPLEMENTED_QA_PENDING", routes["wp5a_representations"]["binding_state"])
+        self.assertEqual("COMPLETED", routes["wp5a_representations"]["binding_state"])
         self.assertEqual("PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE", preflight["status"])
         self.assertFalse(preflight["gate_classification"]["operator_escalation_triggered"])
-        self.assertEqual("RCN-RN-WP5A", state["packet_id"])
-        self.assertEqual("QA_REVIEW", state["status"])
+        self.assertEqual("RCN-RN-WP5A", receipt["packet_id"])
+        self.assertEqual("COMPLETED", receipt["status"])
+        self.assertEqual("PASS_DELEGATED_AUTO_RATIFICATION", receipt["decision"])
+        self.assertEqual("NONE", receipt["authority_delta"])
+        self.assertFalse(receipt["source_authority"]["first_new_real_research_source"])
+        self.assertEqual("RCN-RN-WP5B", receipt["next_packet_named"])
+        self.assertEqual("READY", receipt["next_packet_status"])
+        self.assertEqual("RCN-RN-WP5B", state["packet_id"])
+        self.assertEqual("READY", state["status"])
         self.assertEqual("NONE", state["authority_delta"])
-        self.assertEqual("PENDING_QA", state["decision"])
+        self.assertEqual("WP5A_COMPLETED_WP5B_READY", state["decision"])
+        self.assertEqual("COMPLETED", state["wp5a"]["status"])
         self.assertFalse(state["wp5a"]["first_new_real_research_source"])
 
     def test_react_surface_inherits_workbenchframe_and_has_no_scientific_write_surface(self) -> None:
