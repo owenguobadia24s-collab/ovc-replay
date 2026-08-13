@@ -5,7 +5,7 @@ from pathlib import Path
 import unittest
 
 from ovc.development.head_churn import classify_main_head_movement
-from ovc.development.skills import BaseFreshnessPolicy, audit_evidence, build_contract_proposal, build_skill_release_bundle, evaluate_gate, evaluate_qa, git_packet_dry_run, plan_tests, test_execution_plan
+from ovc.development.skills import BaseFreshnessPolicy, audit_evidence, build_contract_proposal, build_skill_release_bundle, evaluate_gate, evaluate_qa, git_packet_dry_run, plan_tests, test_execution_plan as execute_test_plan
 from ovc.development.skills.engineering import classify_head_churn
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -69,7 +69,7 @@ class DSAIWP4EngineeringAssuranceTests(unittest.TestCase):
         plan = plan_tests(changed_paths=["src/ovc/x.py"],direct_tests=["test_x"],impact_known=False)
         self.assertTrue(plan["widened"])
         self.assertIn("REPOSITORY_WIDE_SUITE", plan["selected_tests"])
-        execution = test_execution_plan(test_plan=plan)
+        execution = execute_test_plan(test_plan=plan)
         self.assertEqual(execution["execution_mode"], "LOCAL_TEST_ONLY")
         self.assertEqual(execution["writes_performed"], [])
 
