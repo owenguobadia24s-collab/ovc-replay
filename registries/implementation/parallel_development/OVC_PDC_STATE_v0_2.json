@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "plan_id": "OVC-PDC-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1+FIW1",
+  "status": "COMPLETED",
+  "baseline_commit": "10a0acac129df1039feafd9200612e7512a6c551",
+  "branch": "chore/pdc-final-integration-window-terminal-receipt",
+  "packet_id": "PDC-FIW-CORR-WP1",
+  "prerequisites": [
+    "PDC-WP0-WP2 grouped programme COMPLETED",
+    "operator instruction: Create and execute a serialized final-integration window",
+    "PDC-FIW-G1 delegated PASS",
+    "PR #679 squash-merged to main"
+  ],
+  "authority_required": "NONE_REMAINING_WITHIN_OPERATOR_DIRECTED_DEVELOPMENT_ORCHESTRATION_CORRECTION",
+  "authority_delta": "NONE_OUTSIDE_DEVELOPMENT_ORCHESTRATION_ASSURANCE",
+  "candidate_commit": "15c6a420e9a12d4b4921c08437b338dc1c5efed7",
+  "tests": [
+    "preliminary exact-head 219eb6b9db691a1b7ffb138cf98430e9843794ea: profile/tests/parity/readiness PASS; superseded by adversarial race finding",
+    "adversarial head 893a9ff15313c2f63363e93d2686ab74dcdb9ebd: readiness rejected stale event base after main advanced; status-only admission race reproduced and corrected",
+    "corrected implementation head 8b53af4f44f222c7c88c2712485bce0ce206ab08: tiered 31644133217 PASS; tests 31644133220 PASS",
+    "final record head 15c6a420e9a12d4b4921c08437b338dc1c5efed7: tiered 31644571358 PASS; tests 31644570841 PASS",
+    "final record head: OVC profile assurance PASS; OVC final integration window admission PASS; tests PASS; pytest-unittest-parity PASS; runner-parity PASS; OVC merge readiness PASS",
+    "workflow census remains 130 total definitions / 2 pull-request workflows / one complete repository suite",
+    "PR #679 review threads: 0"
+  ],
+  "qa_packet": "docs/releases/parallel-development-v0-1/pdc-final-integration-window-v1/PDC_FINAL_INTEGRATION_WINDOW_CORRECTIVE_PACKET.json",
+  "decision_record": "docs/releases/parallel-development-v0-1/pdc-final-integration-window-v1/PDC_FIW_G1_DELEGATED_DECISION.json",
+  "merge_commit": "1c4b44fa327d1b07cb58fa84b76f6f711a434162",
+  "blockers": [],
+  "next_packet": null,
+  "target_terminal_state": "COMPLETED / PARALLEL_BUILD_SERIALIZED_FINAL_INTEGRATION_WINDOW_ACTIVE"
+}

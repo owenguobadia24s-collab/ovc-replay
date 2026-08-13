@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-dsai2-wp3-g3-squash-merge-receipt/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "packet_id": "DSAI2-WP3",
+  "gate_id": "DSAI2-G3",
+  "operator_decision": "PASS",
+  "operator_decision_record": "docs/releases/development-skills-architecture-v0-2/dsai2-g3/DSAI2_G3_OPERATOR_PASS.json",
+  "pull_request": 689,
+  "merge_method": "squash",
+  "baseline_main": "28ef05024d3bd12d9917eecc17e3b5dece4a2613",
+  "approved_head": "f2578de987b1e27b866f61bbc564a185dcdac26d",
+  "result_main_sha": "1db66a2ca48be27930395073e842638ad8f7f216",
+  "final_assurance": {
+    "tests": {"run_id": 31652369720, "run_number": 3921, "conclusion": "success"},
+    "tiered": {"run_id": 31652369724, "run_number": 2267, "conclusion": "success", "merge_readiness": "success"},
+    "submitted_reviews": 0,
+    "review_threads": 0
+  },
+  "authority_after_merge": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED",
+    "validation": "DENIED",
+    "reserved_scientific_execution_authority": "NONE"
+  },
+  "authority_registry_on_main": "registries/development/skills/orch345_bounded_authority_v0_1.json",
+  "authority_effective_on_main": true,
+  "rollback": "Forward-disable ORCH-3/4/5 to bounded ORCH-2 SERIAL_REQUIRED while preserving PDC serialized final integration and historical evidence.",
+  "next_packet": "DSAI2-WP4"
+}

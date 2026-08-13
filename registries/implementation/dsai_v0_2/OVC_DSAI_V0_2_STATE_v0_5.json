@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "status": "COMPLETED",
+  "baseline_commit": "1db66a2ca48be27930395073e842638ad8f7f216",
+  "branch": "feature/dsai2-wp3-post-merge-receipt",
+  "packet_id": "DSAI2-WP3",
+  "prerequisites": [
+    "DSAI2-G3 operator PASS 2026-08-13T00:35:00+01:00",
+    "PR #689 final head f2578de987b1e27b866f61bbc564a185dcdac26d exact-head assurance PASS",
+    "PR #689 squash merge 1db66a2ca48be27930395073e842638ad8f7f216"
+  ],
+  "authority_required": "DSAI2-G3_OPERATOR_PASS_SATISFIED",
+  "authority_delta": "ORCH345_BOUNDED_ACTIVATION_EFFECTIVE_ON_MAIN",
+  "candidate_commit": "1db66a2ca48be27930395073e842638ad8f7f216",
+  "tests": [
+    "PR #689 tests #3921 / run 31652369720 PASS",
+    "PR #689 tiered #2267 / run 31652369724 PASS including merge readiness"
+  ],
+  "qa_packet": "docs/releases/development-skills-architecture-v0-2/dsai2-g3/DSAI2_G3_QA_PACKET.json",
+  "decision_record": "docs/releases/development-skills-architecture-v0-2/dsai2-g3/DSAI2_G3_OPERATOR_PASS.json",
+  "merge_commit": "1db66a2ca48be27930395073e842638ad8f7f216",
+  "blockers": [],
+  "next_packet": "DSAI2-WP4",
+  "completed_packets": ["DSAI2-WP0", "DSAI2-WP1", "DSAI2-WP2", "DSAI2-WP3"],
+  "merge_receipt": "docs/releases/development-skills-architecture-v0-2/dsai2-wp3/DSAI2_WP3_G3_SQUASH_MERGE_RECEIPT.json",
+  "authority_registry": "registries/development/skills/orch345_bounded_authority_v0_1.json",
+  "authority_effective_on_main": true,
+  "authority_resolution": "ACTIVE_AUTHORIZED",
+  "active_authority": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
+  },
+  "reserved_boundaries": {
+    "operator_required_gate_behavior": "STOP",
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "validation": "DENIED",
+    "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "mandatory_stop": false,
+  "rollback": "Forward-disable ORCH-3/4/5 to bounded ORCH-2 SERIAL_REQUIRED while preserving PDC serialized final integration and historical evidence.",
+  "target_terminal_state": "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH"
+}
