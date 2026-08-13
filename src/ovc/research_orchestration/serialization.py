@@ -38,6 +38,11 @@ def canonical_json_bytes(value: Any) -> bytes:
     return json.dumps(canonical_value(value), sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
 
 
+def canonical_json(value: Any) -> str:
+    """Return canonical UTF-8 JSON text with the same identity as canonical_json_bytes."""
+    return canonical_json_bytes(value).decode("utf-8")
+
+
 def logical_sha256(value: Any) -> str:
     return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
 
