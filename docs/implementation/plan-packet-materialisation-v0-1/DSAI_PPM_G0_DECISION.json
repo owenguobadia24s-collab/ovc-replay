@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-dsai-ppm-g0-decision/v1",
+  "decision_id": "DSAI-PPM-G0.OPERATOR.PASS.20260813",
+  "programme_id": "OVC-DSAI-PPM-v0.1",
+  "plan_id": "OVC-DSAI-PPM-APPROVED-SCOPE-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DSAI-PPM-WP0",
+  "gate_id": "DSAI-PPM-G0",
+  "gate_class": "OPERATOR_REQUIRED",
+  "decision": "PASS",
+  "status": "APPROVED",
+  "approval_time": "2026-08-13T07:36:00+01:00",
+  "approval_instruction": "OVC APPROVE DSAI-PPM-G0",
+  "authority_required": "OPERATOR",
+  "authority_delta": "AUTHORISE_BOUNDED_PLAN_PACKET_MATERIALISATION_IMPLEMENTATION",
+  "authority_effect": "BOUNDED_IMPLEMENTATION_AUTHORITY_ONLY",
+  "approval_observed_main": "8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30",
+  "implementation_baseline_main": "bdcf2d96b646b6f5c1e958029bfaf4c782c22d9c",
+  "baseline_reconciliation": {
+    "status": "PASS",
+    "movement": "8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30 -> bdcf2d96b646b6f5c1e958029bfaf4c782c22d9c",
+    "relationship": "LINEAR_DESCENDANT",
+    "reason": "DSAI2 terminal closeout landed after approval and before PPM mutation.",
+    "scope_change": false,
+    "authority_change": false,
+    "branch_fast_forwarded_without_force": true
+  },
+  "branch": "feat/dsai-ppm-wp1-materialisation",
+  "approved_scope": [
+    "reviewed plan-source binding",
+    "ProgrammeManifest/PacketManifest/CapabilityRequirement/PacketGateManifest materialisation",
+    "existing DSAI PacketGraphSnapshot integration",
+    "source-drift, graph, capability and authority fail-closed validation",
+    "schemas, representative fixtures, tests, QA and decision/programme-state evidence"
+  ],
+  "explicit_exclusions": [
+    "DOCX autonomous interpretation or missing-semantics inference",
+    "Skill TRUSTED promotion",
+    "Tool Broker or new ORCH activation",
+    "selector/model/family/semantic activation or promotion",
+    "ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION",
+    "canonical/R2/new immutable release publication",
+    "new provider intake",
+    "probability/risk/exposure/E-H/execution/agent-write authority",
+    "destructive action, force-push or history rewrite"
+  ],
+  "source_record": "docs/implementation/plan-packet-materialisation-v0-1/GOVERNING_SCOPE.md",
+  "source_sha256": "e78eebe5c852a87c432431afeee103a224a01191668fe5ebc26741848c98a331",
+  "rollback": "Forward-revert or supersede PPM implementation while preserving this decision and historical evidence; existing DSAI orchestration/resolution remains fallback.",
+  "blockers": [],
+  "next_packet": "DSAI-PPM-WP1"
+}
