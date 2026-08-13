@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import unittest
+from pathlib import Path
 
 from ovc.development.skills.orch345 import build_packet_descriptor
 from ovc.development.skills.orch345_active import (
@@ -12,6 +14,11 @@ from ovc.development.skills.orch345_diagnostics import (
     DIAGNOSTIC_AUTHORITY_EFFECT,
     DIAGNOSTIC_RECEIPT_CLASS,
 )
+from ovc.development.skills.orch345_pilot import build_wp4_live_pilot
+
+
+ROOT = Path(__file__).resolve().parents[2]
+AUTHORITY_PATH = ROOT / "registries/development/skills/orch345_bounded_authority_v0_1.json"
 
 
 def active_authority() -> dict:
@@ -184,6 +191,20 @@ class ORCH345DiagnosticObservabilityTests(unittest.TestCase):
         )
         self.assertEqual(first["record_id"], second["record_id"])
         self.assertEqual(first["source_classification_id"], second["source_classification_id"])
+
+    def test_legacy_pilot_identity_remains_deterministic_and_receipts_are_out_of_hash(self) -> None:
+        authority = json.loads(AUTHORITY_PATH.read_text(encoding="utf-8"))
+        first = build_wp4_live_pilot(authority)
+        second = build_wp4_live_pilot(authority)
+        self.assertEqual(first["record_id"], second["record_id"])
+        self.assertEqual(len(first["diagnostic_receipts"]), 4)
+        self.assertEqual(
+            [receipt["orchestrator"] for receipt in first["diagnostic_receipts"]],
+            ["ORCH-3", "ORCH-4", "ORCH-4", "ORCH-5"],
+        )
+        for receipt in first["diagnostic_receipts"]:
+            self.assertEqual(receipt["authority_effect"], "NONE")
+            self.assertFalse(receipt["governance_expansion"])
 
 
 if __name__ == "__main__":
