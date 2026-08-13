@@ -32,6 +32,13 @@ export const ROUTES: Record<string, RouteConfig> = {
     source:"RCN-P4-RES-REP", generation:"SRFD-SHADOW", population:"1,240", instrument:"GBP/USD", clock:"15M / 2H", fvt:"2026-08-11 16:55Z",
     nav:[["Representations","12"],["Comparability","PAIR"],["Families","37"],["Sensitivity","6"],["Research Ops","3"],["Evaluation","A–D"]],
   },
+  "/research/representations": {
+    domain:"Research", kicker:"RESEARCH / WP5A SOURCE-BOUND REPRESENTATIONS", title:"SRI, FDI, SRFD and MCARB representation evidence",
+    subtitle:"synthetic fixture · non-evidentiary · exact source blobs verified · no first-new real Research source",
+    navigatorTitle:"WP5A / METHOD-FIRST", selectedObject:"RCN-RN-WP5A", objectType:"RepresentationReadSurface",
+    source:"WP5A-FIXTURE-BINDINGS-v1", generation:"RCN-RN-v0.3", population:"7 fixture methods", instrument:"GBP/USD", clock:"15M / 2H", fvt:"FIXTURE / NO MARKET FVT",
+    nav:[["Methods","7"],["Comparability","5"],["Outcomes","3"],["Sensitivity","3"],["MCARB","3"],["Authority","NONE"]],
+  },
   "/evidence": {
     domain:"Evidence", kicker:"EVIDENCE / LINEAGE", title:"Bounded lineage, dependency and QA projection",
     subtitle:"selected object C2E:EP:00421 · source receipt pinned · no silent stale redirect",

@@ -1,1 +1,71 @@
-{"authority_delta":"NONE","authority_required":"DELEGATED_AUTO_RATIFICATION_IF_NO_FIRST_NEW_REAL_RESEARCH_SOURCE_EXPOSURE; OPERATOR_G5_OTHERWISE","baseline_commit":"4691cc683c0adfa473a1197c1d0c4c2dc6036605","blockers":[],"branch":"PENDING_FRESH_WP5A_BRANCH_FROM_MAIN","candidate_commit":"50d1b8992c473e92f6375d8afda37ea082c52d4b","current_authority":"G4_APPROVED_READ_ONLY_REAL_SOURCE_INVESTIGATE_PRESENTATION_MARKET_C1_C2_C2E","decision":"GOVERNING_ARTIFACT_MATERIALISATION_COMPLETED_AUTHORITY_UNCHANGED","decision_record":"artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_GOVERNING_ARTIFACT_BLOCKER_RESOLUTION.json","governing_materialisation":{"materialisation_merge_receipt":"artifacts/research_console_vnext/pvs3/RCN_RN_WP5_GOVERNING_MATERIALISATION_MERGE_RECEIPT.json","materialisation_receipt":"docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/MATERIALISATION_RECEIPT.json","packet_graph":"docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/PACKET_GRAPH_SNAPSHOT.json","plan_source_ref":"docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/PLAN_SOURCE_REF.json","programme_manifest":"docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/PROGRAMME_MANIFEST.json","source_sha256":"fd12580607ff748892046547005cced62fba3db8530473ca9206f0836dcee40c"},"implementation_generation":"v0.3","merge_commit":"4691cc683c0adfa473a1197c1d0c4c2dc6036605","next_packet":"RCN-RN-WP5A","operator_decision_record":"artifacts/research_console_vnext/pvs3/RCN_RN_G4_OPERATOR_DECISION.json","packet_id":"RCN-RN-WP5A","phase_id":"PVS3","plan_id":"OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED","plan_version":"0.3 RATIFIED + SOURCE-FAITHFUL WP5 PPM MATERIALISATION","prerequisites":["RCN-RN-G4 PASS@1d963d5fe963ccf323caf013f9dade208a31345b","RCN-RN-POST-G4-SOURCE-BINDING COMPLETED@62fd983ea1f4736b244e27ce80df283e60f9c93d","WP5 PPM MATERIALISATION COMPLETED@4691cc683c0adfa473a1197c1d0c4c2dc6036605"],"programme_id":"OVC-RC-VNEXT-GREENFIELD-v0.1","qa_packet":"docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/MATERIALISATION_QA.json","real_source_routes":"BOUND_EXPLICIT_REAL_MODE_MARKET_C1_C2_C2E__NO_FIXTURE_FALLBACK__OTHERS_DENIED","reconciled_main":"4691cc683c0adfa473a1197c1d0c4c2dc6036605","rollback":"Forward-revert only the WP5 governing-materialisation projection and restore the recorded blocker if the transcription is proven invalid; preserve completed G4/post-G4 source-binding authority and Git history.","schema":"ovc-rcn-rn-programme-state/v2","status":"READY","stop_boundary":"G5_FIRST_NEW_REAL_RESEARCH_SOURCE_EXPOSURE_OR_OTHER_RESERVED_AUTHORITY_CHANGE","tests":{"final_integration_admission":"PASS","materialisation_qa":"PASS","profile_assurance":"PASS","pytest_unittest_parity":"PASS","repository_suite":"PASS","runner_parity":"PASS","serialized_merge_readiness":"PASS","tests_run":31690868057,"tiered_run":31690868055},"warnings":["Each WP5 packet must preflight source ownership/read-presentation authority independently.","Any first-new real Research-source exposure makes the auto G5 branch ineligible and requires explicit operator G5 escalation before exposure.","C2P/C2.5/C3 real-source presentation remains denied unless separately granted; Validation remains locked."]}
+{
+  "schema": "ovc-rcn-rn-programme-state/v2",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "implementation_generation": "v0.3",
+  "phase_id": "PVS3",
+  "packet_id": "RCN-RN-WP5A",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_version": "0.3 RATIFIED + SOURCE-FAITHFUL WP5 PPM MATERIALISATION",
+  "status": "QA_REVIEW",
+  "prerequisites": [
+    "RCN-RN-G4 PASS@1d963d5fe963ccf323caf013f9dade208a31345b",
+    "RCN-RN-POST-G4-SOURCE-BINDING COMPLETED@62fd983ea1f4736b244e27ce80df283e60f9c93d",
+    "WP5 PPM MATERIALISATION COMPLETED@4691cc683c0adfa473a1197c1d0c4c2dc6036605",
+    "WP5A SOURCE AUTHORITY PREFLIGHT PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE"
+  ],
+  "authority_required": "DELEGATED_AUTO_RATIFICATION_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+  "authority_delta": "NONE",
+  "baseline_commit": "d392c4572e539a399e461212b4991db55ae46477",
+  "reconciled_main": "d392c4572e539a399e461212b4991db55ae46477",
+  "branch": "build/rc-vnext-wp5a-representations",
+  "candidate_commit": null,
+  "tests": {
+    "source_authority_preflight": "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+    "targeted": "PENDING_EXACT_HEAD_CI",
+    "research_console": "PENDING_EXACT_HEAD_CI",
+    "repository_suite": "PENDING_EXACT_HEAD_CI",
+    "runner_parity": "PENDING_EXACT_HEAD_CI",
+    "pytest_unittest_parity": "PENDING_EXACT_HEAD_CI",
+    "profile_assurance": "PENDING_EXACT_HEAD_CI",
+    "serialized_merge_readiness": "PENDING_EXACT_HEAD_CI"
+  },
+  "qa_packet": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_QA_PACKET.json",
+  "decision_record": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_CLOSEOUT_DECISION.json",
+  "decision": "PENDING_QA",
+  "merge_commit": null,
+  "blockers": [],
+  "warnings": [
+    "The WP5A route is synthetic fixture-only and non-evidentiary.",
+    "Any first-new real Research-source exposure makes RCN-RN-WP5A-CLOSEOUT ineligible and requires explicit operator G5 before exposure.",
+    "C2P/C2.5/C3 real-source presentation remains denied unless separately granted; Validation remains locked."
+  ],
+  "next_packet": "RCN-RN-WP5A",
+  "current_authority": "G4_APPROVED_READ_ONLY_REAL_SOURCE_INVESTIGATE_PRESENTATION_MARKET_C1_C2_C2E",
+  "real_source_routes": "BOUND_EXPLICIT_REAL_MODE_MARKET_C1_C2_C2E__NO_FIXTURE_FALLBACK__OTHERS_DENIED",
+  "stop_boundary": "G5_FIRST_NEW_REAL_RESEARCH_SOURCE_EXPOSURE_OR_OTHER_RESERVED_AUTHORITY_CHANGE",
+  "operator_decision_record": "artifacts/research_console_vnext/pvs3/RCN_RN_G4_OPERATOR_DECISION.json",
+  "governing_materialisation": {
+    "programme_manifest": "docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/PROGRAMME_MANIFEST.json",
+    "plan_source_ref": "docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/PLAN_SOURCE_REF.json",
+    "packet_graph": "docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/PACKET_GRAPH_SNAPSHOT.json",
+    "materialisation_receipt": "docs/implementation/research-console-vnext/rcn-rn-v0-3-wp5-materialisation/MATERIALISATION_RECEIPT.json",
+    "materialisation_merge_receipt": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5_GOVERNING_MATERIALISATION_MERGE_RECEIPT.json",
+    "source_sha256": "fd12580607ff748892046547005cced62fba3db8530473ca9206f0836dcee40c",
+    "merge_commit": "4691cc683c0adfa473a1197c1d0c4c2dc6036605"
+  },
+  "wp5a": {
+    "source_authority_preflight": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_SOURCE_AUTHORITY_PREFLIGHT.json",
+    "implementation_record": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_IMPLEMENTATION_RECORD.json",
+    "contract": "contracts/research_console_vnext/RCN_RN_WP5A_REPRESENTATION_READ_SURFACE_CONTRACT_v1.md",
+    "schema": "schemas/research_console_vnext/wp5a_representation_snapshot_v1.schema.json",
+    "bindings": "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json",
+    "api_route": "/api/v1/research/representations/snapshot",
+    "frontend_route": "/research/representations",
+    "presentation_mode": "FIXTURE_ONLY",
+    "evidence_status": "NON_EVIDENTIARY",
+    "first_new_real_research_source": false,
+    "gate_branch": "RCN-RN-WP5A-CLOSEOUT",
+    "operator_escalation_gate": "RCN-RN-G5-FIRST-NEW-SOURCE"
+  },
+  "rollback": "Disable/revert the WP5A route, fixture projection, bindings, client/component and packet evidence; return to RCN-RN-WP5A READY while preserving G4, governing PPM, source fixtures and Git history."
+}
