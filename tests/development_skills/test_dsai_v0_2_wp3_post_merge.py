@@ -39,8 +39,13 @@ class DSAI2WP3PostMergeTests(unittest.TestCase):
             resolution["reason_codes"],
             ["EXACT_DSAI2_G3_BOUNDED_ORCH345_AUTHORITY_ACTIVE"],
         )
-        self.assertFalse(resolution["parallel_merge"])
-        self.assertEqual(resolution["integration_policy"], "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED")
+        self.assertFalse(authority["integration_policy"]["parallel_merge"])
+        self.assertTrue(authority["integration_policy"]["serialized_final_integration_window"])
+        self.assertEqual(authority["integration_policy"]["target_branch"], "main")
+        self.assertEqual(authority["integration_policy"]["merge_method"], "squash")
+        self.assertFalse(authority["integration_policy"]["direct_main_mutation"])
+        self.assertFalse(authority["integration_policy"]["force_push"])
+        self.assertFalse(authority["integration_policy"]["history_rewrite"])
 
     def test_current_pointer_advances_to_wp4_without_expanding_reserved_authority(self) -> None:
         pointer = self._load("registries/implementation/dsai_v0_2/CURRENT_STATE_POINTER.json")
