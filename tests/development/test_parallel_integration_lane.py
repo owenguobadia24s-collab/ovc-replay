@@ -76,6 +76,29 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn("final_integration_window_hold_ms", self.workflow)
         self.assertNotIn("canonical-tests-observed:", self.workflow)
 
+    def test_green_predecessor_holds_next_admission_until_terminal_disposition(self):
+        self.assertIn("final_integration_predecessor_lease_wait_ms", self.workflow)
+        self.assertIn("leaseRun?.status === 'completed' && leaseRun.conclusion === 'success'", self.workflow)
+        self.assertIn("github.rest.repos.compareCommits", self.workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD", self.workflow)
+        self.assertIn("terminal.data.merged_at", self.workflow)
+        self.assertIn("terminal.data.state === 'closed'", self.workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_PREDECESSOR_MERGED", self.workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_PREDECESSOR_RELEASED", self.workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_PREDECESSOR_INVALIDATED", self.workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_PREDECESSOR_TERMINAL_TIMEOUT", self.workflow)
+        self.assertLess(
+            self.workflow.index("OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD"),
+            self.workflow.index("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED"),
+        )
+
+    def test_terminal_disposition_lease_does_not_expand_merge_authority(self):
+        self.assertIn("permissions:\n  contents: read\n  checks: read\n  pull-requests: read", self.workflow)
+        self.assertNotIn("contents: write", self.workflow)
+        self.assertNotIn("pull-requests: write", self.workflow)
+        self.assertNotIn("github.rest.pulls.merge", self.workflow)
+        self.assertNotIn("enablePullRequestAutoMerge", self.workflow)
+
     def test_no_duplicate_complete_repository_suite(self):
         full_suite = "python3 -m unittest discover -s tests -v"
         self.assertEqual(self.tests_workflow.count(full_suite), 1)
