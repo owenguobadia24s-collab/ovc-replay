@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-dsai2-orch345-auto-receipt-integration-qa/v1",
+  "packet_id": "DSAI2-ORCH345-AUTO-RECEIPT-INTEGRATION-20260813",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "scope": "ORCH-3/4/5 automatic diagnostic receipt provenance and persistence only",
+  "baseline_main": "49873c6e4efdb91d839b10b89ceb5f8fe76ee78d",
+  "implementation_candidate_commit": "1cd140750d0eda57f1c2bcea6554538ca53caf94",
+  "branch": "fix/orch345-auto-receipt-provenance-r2",
+  "pull_request": 751,
+  "authority_required": "EXISTING_DSAI2_G3_BOUNDED_AUTHORITY_ONLY",
+  "authority_delta": "NONE",
+  "receipt_semantics_changed_by_qa": false,
+  "orchestration_execution_identities_changed": false,
+  "targeted_integration_proof": {
+    "test": "tests/development_skills/test_orch345_auto_integration.py::test_real_automatic_path_persists_reloadable_orch345_receipts_without_identity_drift",
+    "command": "PYTHONPATH=src python -m pytest -q tests/development_skills/test_orch345_auto_integration.py",
+    "result": "PASS",
+    "count": "1 passed",
+    "duration_seconds": 0.07,
+    "method": "exact-head dependency reconstruction from GitHub blobs with local git-blob identity verification",
+    "verified_blob_ids": {
+      "src/ovc/development/identity.py": "3e97edbdafd6263fbcc06cafa82556d57006f1e3",
+      "src/ovc/development/skills/orch345.py": "e48c98459e432e7c69d6e45047e95c928a7aacaf",
+      "src/ovc/development/skills/orch345_active.py": "f132ddb33f842c8ddbd721cc09295203b62b7589",
+      "src/ovc/development/skills/orch345_diagnostics.py": "a56f4e8f9c81e6c560283d318f8644ce044f3e45",
+      "src/ovc/development/skills/orch345_auto.py": "de8fef61a12182a6624c71b39d67ff0276b4a743",
+      "src/ovc/development/skills/orch345_auto_receipt_core.py": "02294e3060f947e1f0b17817d849856e7ea788ee",
+      "src/ovc/development/skills/orch345_auto_receipts.py": "7a8edc530ef4322ef805925b602fa51d296ec9c0",
+      "tests/development_skills/test_orch345_auto_integration.py": "2dc8b7595b114014c28eb5a24666adee09449674",
+      "registries/development/skills/orch345_bounded_authority_v0_1.json": "3b58d0039261b96cd832400befd5de3d8aadf099"
+    },
+    "assertions": [
+      "all three AUTO receipt classes persist and reload",
+      "run, invocation, trigger, programme-state and packet-state provenance is preserved",
+      "receipt phase is DECISION_SELECTED without inferring execution start or completion",
+      "ORCH-5 AUTO receipt uses scheduling terminology and records actual_occupancy_observed=false",
+      "existing ORCH-3/4/5 execution record identities remain unchanged"
+    ]
+  },
+  "exact_head_assurance": {
+    "head": "1cd140750d0eda57f1c2bcea6554538ca53caf94",
+    "tests_run_id": 31735956881,
+    "tests": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "tiered_run_id": 31735956863,
+    "profile_assurance": "PASS",
+    "merge_readiness": "PASS",
+    "serialized_final_integration_window": "ACQUIRED",
+    "orchestration_contract_validation": "PASS"
+  },
+  "review_state": {
+    "submitted_reviews": 0,
+    "review_threads": 0,
+    "blocking_review": false
+  },
+  "warnings": [],
+  "unresolved_issues": [],
+  "rollback": "Revert PR #751 as one bounded observability-only change; preserve existing DSAI2-G3 authority and all pre-existing ORCH execution identities.",
+  "qa_recommendation": "PASS",
+  "final_head_revalidation_required_after_qa_materialisation": true
+}
