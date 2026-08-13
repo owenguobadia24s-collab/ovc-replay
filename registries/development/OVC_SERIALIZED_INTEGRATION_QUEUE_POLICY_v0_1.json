@@ -1,0 +1,78 @@
+{
+  "schema": "ovc-serialized-integration-queue-policy/v1",
+  "policy_id": "OVC.SIQ.v0.1",
+  "status": "RATIFIED_CONSTITUTIONAL_POLICY",
+  "authority_source": "OVC.OPERATOR.2026-08-13.SIQ.ADD",
+  "parent_programme": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "parent_contract": "contracts/development/v0_3/OVC_PARALLEL_DEVELOPMENT_HEAD_CHURN_CONTRACT_v0_1.md",
+  "constitutional_contract": "contracts/development/v0_4/OVC_SERIALIZED_INTEGRATION_QUEUE_CONSTITUTION_v0_1.md",
+  "target_branch": "main",
+  "parallel_build": true,
+  "parallel_merge": false,
+  "queue_order": {
+    "kind": "FIFO_READY_SEQUENCE",
+    "tie_breakers": ["packet_id", "candidate_head_sha"]
+  },
+  "admission_conditions": [
+    "IMPLEMENTATION_COMPLETE",
+    "QA_PASS",
+    "AUTHORITY_CLASSIFIED",
+    "NO_BLOCKING_REVIEW_OR_ISSUE",
+    "PRELIMINARY_ASSURANCE_PASS",
+    "ROLLBACK_DEFINED",
+    "CANDIDATE_AND_DEPENDENCY_FOOTPRINT_PINNED"
+  ],
+  "assurance_classes": {
+    "BASE_INDEPENDENT": [
+      "PACKET_LOCAL_TESTS",
+      "SCHEMA_FIXTURE_VALIDATION",
+      "BOUND_IMMUTABLE_EVIDENCE",
+      "CANDIDATE_CORRECTNESS_ASSURANCE",
+      "QA_EVIDENCE_GENERATION"
+    ],
+    "BASE_SENSITIVE": [
+      "CURRENT_MAIN_RECONCILIATION",
+      "PDC_HEAD_MOVEMENT_CLASSIFICATION",
+      "AFFECTED_DEPENDENCY_CLOSURE",
+      "EXACT_TREE_MERGE_READINESS",
+      "MANDATORY_FINAL_HEAD_ASSURANCE",
+      "IMMEDIATE_PREMERGE_HEAD_AND_BASE_PIN"
+    ]
+  },
+  "lease": {
+    "single_holder": true,
+    "target_seconds": 300,
+    "warning_seconds": 600,
+    "release_and_requeue_seconds": 900,
+    "timeout_exception": "DECLARED_BASE_SENSITIVE_CHECK_ACTIVELY_EXECUTING",
+    "blocks_unrelated_main_merges": true,
+    "allows_unrelated_branch_build_and_nonintegration_ci": true
+  },
+  "main_movement": {
+    "IRRELEVANT": "REPIN_AND_RUN_MANDATORY_EXACT_FINAL_ASSURANCE",
+    "INTEGRATION_RELEVANT": "RECONCILE_RERUN_IMPACTED_AND_EXACT_FINAL_ASSURANCE",
+    "SEMANTIC_AUTHORITY_RELEVANT": "FULL_REPREFLIGHT_REGENERATE_OR_BLOCK",
+    "UNRESOLVED_REQUIRES_FOOTPRINT": "FAIL_CLOSED_PENDING_FOOTPRINT"
+  },
+  "automatic_requeue": {
+    "enabled": true,
+    "preserve_packet_scope_identity": true,
+    "preserve_write_set_identity": true,
+    "preserve_semantic_owner_identity": true,
+    "force_push": false,
+    "history_rewrite": false,
+    "test_weakening": false,
+    "authority_broadening": false
+  },
+  "merge": {
+    "method": "squash",
+    "eligibility_source": "EXISTING_PACKET_AND_GATE_AUTHORITY",
+    "readiness_is_authority": false,
+    "verify_head_and_main_immediately_before_merge": true,
+    "release_lease_immediately_after_terminal_decision": true
+  },
+  "operator_required_gate_behavior": "STOP",
+  "reserved_authority_behavior": "STOP",
+  "validation": "DENIED_UNLESS_SEPARATELY_AUTHORIZED",
+  "scientific_authority_effect": "NONE"
+}
