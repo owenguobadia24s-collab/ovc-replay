@@ -21,13 +21,15 @@ def load(path: Path):
 
 
 class WP4DC3Preparation(unittest.TestCase):
-    def test_census_and_fixture_preserve_typed_owner_absence(self):
+    def test_census_distinguishes_inactive_reference_from_revised_runtime_owner_absence(self):
         fixture = load(FIX)
         census = next(item for item in load(INV)["sources"] if item["capability_id"] == "c3")
-        self.assertFalse(census["repository_materialized"])
-        self.assertIsNone(census["source_path"])
-        self.assertEqual("TYPED_DEGRADED_STATE", census["console_binding"])
-        self.assertEqual(census["reason_code"], fixture["reason_code"])
+        self.assertTrue(census["repository_materialized"])
+        self.assertEqual("src/ovc/opt_b/esl/c3_reference.py", census["source_path"])
+        self.assertFalse(census["runtime_owner_materialized"])
+        self.assertEqual("NONE", census["active_source_authority"])
+        self.assertEqual("INACTIVE_REFERENCE", census["maturity"])
+        self.assertEqual("DENIED", census["real_route"])
         self.assertEqual("NOT_MATERIALIZED", fixture["availability"])
         self.assertFalse(fixture["runtime_owner_materialized"])
         self.assertEqual("PREPARED_NOT_BOUND", fixture["binding_state"])
@@ -38,12 +40,11 @@ class WP4DC3Preparation(unittest.TestCase):
         self.assertEqual("NONE", fixture["authority_effect"])
         self.assertEqual("RCN-RN-G4", fixture["gate_required"])
 
-    def test_schema_manifest_route_and_openapi_are_exactly_fixture_only(self):
+    def test_schema_manifest_route_and_openapi_remain_fixture_only_for_c3(self):
         schema = load(SCHEMA)
         manifest = load(MANIFEST)
         routes = load(ROUTES)
         openapi = load(OPENAPI)
-
         self.assertFalse(schema["additionalProperties"])
         self.assertEqual(False, schema["properties"]["runtime_owner_materialized"]["const"])
         self.assertEqual(0, schema["properties"]["nodes"]["maxItems"])
@@ -51,29 +52,25 @@ class WP4DC3Preparation(unittest.TestCase):
         self.assertEqual("PROHIBITED", schema["properties"]["semantic_synthesis"]["const"])
         self.assertEqual("NONE", schema["properties"]["authority_effect"]["const"])
         self.assertEqual("RCN-RN-G4", schema["properties"]["gate_required"]["const"])
-
         self.assertIn("RCN_RN_WP4D_C3_PREPARATION_CONTRACT_v1", manifest["source_identity"]["contract_ids"])
         self.assertIn("c3_preparation_v1", manifest["source_identity"]["schema_ids"])
         self.assertEqual("c3_preparation.json", manifest["resources"]["c3_preparation"])
         self.assertEqual("FIXTURE_ONLY", manifest["mode"])
         self.assertEqual("NONE", manifest["authority_effect"])
-
         self.assertEqual("GET_ONLY", routes["transport"])
         self.assertEqual("DENIED", routes["mutation_disposition"])
-        self.assertEqual(["POST", "PUT", "PATCH", "DELETE"], routes["mutation_methods"])
-        self.assertEqual("DENIED_UNTIL_RCN_RN_G4", routes["real_source_exposure"])
+        self.assertEqual("APPROVED_PENDING_BINDING_MARKET_C1_C2_C2E", routes["real_source_exposure"])
         self.assertIn("/c3/graph", routes["domains"]["INVESTIGATE"])
         self.assertFalse(routes["wp4d_preparation"]["runtime_owner_materialized"])
+        self.assertEqual("INACTIVE_REFERENCE", routes["wp4d_preparation"]["reference_maturity"])
         self.assertEqual("PREPARED_NOT_BOUND", routes["wp4d_preparation"]["binding_state"])
         self.assertEqual("PROHIBITED", routes["wp4d_preparation"]["semantic_synthesis"])
-
         self.assertEqual(["get"], openapi["paths"]["/api/v1/c3/graph"]["methods"])
         self.assertEqual("FIXTURE_ONLY", openapi["mode"])
         self.assertEqual("NONE", openapi["authority_effect"])
-        for path, definition in openapi["paths"].items():
-            self.assertEqual(["get"], definition["methods"], path)
+        for path, definition in openapi["paths"].items(): self.assertEqual(["get"], definition["methods"], path)
 
-    def test_phase3_admission_does_not_imply_g4_authority(self):
+    def test_phase3_admission_is_historical_and_g4_is_now_explicitly_approved(self):
         admission = load(ADMISSION)
         state = load(STATE)
         self.assertEqual("Begin Phase 3", admission["operator_instruction"])
@@ -81,13 +78,13 @@ class WP4DC3Preparation(unittest.TestCase):
         self.assertEqual("NONE", admission["authority_delta_before_g4"])
         self.assertEqual("DENIED_UNTIL_RCN_RN_G4", admission["real_source_presentation"])
         self.assertEqual(611, admission["historical_wp4d_pr"])
-        self.assertEqual("FIXTURE_ONLY_LOCAL_READ_ONLY", state["current_authority"])
-        self.assertEqual("DENIED_UNTIL_RCN_RN_G4", state["real_source_routes"])
         if state["packet_id"] == "RCN-RN-G4":
-            self.assertEqual("GATE_READY", state["status"])
-            self.assertEqual("OPERATOR_REQUIRED", state["authority_required"])
-            self.assertEqual("PROPOSED_FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION", state["authority_delta"])
-            self.assertIsNone(state["decision_record"])
+            self.assertEqual("APPROVED", state["status"])
+            self.assertEqual("SATISFIED_OPERATOR_PASS", state["authority_required"])
+            self.assertEqual("FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION_APPROVED", state["authority_delta"])
+            self.assertEqual("artifacts/research_console_vnext/pvs3/RCN_RN_G4_OPERATOR_DECISION.json", state["decision_record"])
+            self.assertIn("MARKET_C1_C2_C2E", state["current_authority"])
+            self.assertIn("OTHERS_DENIED", state["real_source_routes"])
         else:
             self.assertEqual("RCN-RN-WP4D", state["packet_id"])
             self.assertIn(state["status"], {"RUNNING", "QA_REVIEW", "APPROVED", "COMPLETED"})
@@ -97,27 +94,11 @@ class WP4DC3Preparation(unittest.TestCase):
     def test_runtime_is_empty_typed_absence_and_validation_is_denied_before_read(self):
         from fastapi.testclient import TestClient
         from apps.research_api.app import create_app
-
-        app = create_app()
-        client = TestClient(app)
-        before = app.state.fixture_store.resource_reads
-        denied = client.get("/api/v1/c3/graph?role=VALIDATION")
-        self.assertEqual(403, denied.status_code)
-        self.assertEqual(before, app.state.fixture_store.resource_reads)
-
-        response = client.get("/api/v1/c3/graph")
-        self.assertEqual(200, response.status_code)
-        envelope = response.json()
-        self.assertEqual("C3", envelope["capability"]["capability_id"])
-        self.assertEqual("NONE", envelope["capability"]["authority_effect"])
-        payload = envelope["payload"]
-        self.assertEqual("NOT_MATERIALIZED", payload["availability"])
-        self.assertFalse(payload["runtime_owner_materialized"])
-        self.assertEqual([], payload["nodes"])
-        self.assertEqual([], payload["edges"])
-        self.assertEqual("PROHIBITED", payload["semantic_synthesis"])
-        self.assertEqual("DENIED_PENDING_RCN_RN_G4", payload["real_source_presentation"])
+        app = create_app(); client = TestClient(app); before = app.state.fixture_store.resource_reads
+        denied = client.get("/api/v1/c3/graph?role=VALIDATION"); self.assertEqual(403, denied.status_code); self.assertEqual(before, app.state.fixture_store.resource_reads)
+        response = client.get("/api/v1/c3/graph"); self.assertEqual(200, response.status_code)
+        envelope = response.json(); self.assertEqual("C3", envelope["capability"]["capability_id"]); self.assertEqual("NONE", envelope["capability"]["authority_effect"])
+        payload = envelope["payload"]; self.assertEqual("NOT_MATERIALIZED", payload["availability"]); self.assertFalse(payload["runtime_owner_materialized"]); self.assertEqual([], payload["nodes"]); self.assertEqual([], payload["edges"]); self.assertEqual("PROHIBITED", payload["semantic_synthesis"]); self.assertEqual("DENIED_PENDING_RCN_RN_G4", payload["real_source_presentation"])
 
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__": unittest.main()

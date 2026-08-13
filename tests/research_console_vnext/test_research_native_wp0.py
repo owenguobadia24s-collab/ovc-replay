@@ -2,7 +2,7 @@ from __future__ import annotations
 import json, unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-ART=ROOT/'artifacts/research_console_vnext/research_native'; STATE=ROOT/'registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json'; G4=ROOT/'artifacts/research_console_vnext/pvs3/RCN_RN_G4_GATE_PACKET.json'
+ART=ROOT/'artifacts/research_console_vnext/research_native'; STATE=ROOT/'registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json'; G4=ROOT/'artifacts/research_console_vnext/pvs3/RCN_RN_G4_GATE_PACKET.json'; G4_DECISION=ROOT/'artifacts/research_console_vnext/pvs3/RCN_RN_G4_OPERATOR_DECISION.json'
 def load(name): return json.loads((ART/name).read_text(encoding='utf-8'))
 class ResearchNativeWP0Tests(unittest.TestCase):
  def test_ratification_identity_and_authority(self):
@@ -13,12 +13,12 @@ class ResearchNativeWP0Tests(unittest.TestCase):
   s=load('RCN_RN_SUPERSESSION_LEDGER.json'); self.assertTrue(s['pr_545']['merge_prohibited']); self.assertIn('PRESERV',s['forward_rule'].upper())
  def test_chart_census_performs_no_removal(self):
   c=load('RCN_RN_CHART_DEPENDENCY_CENSUS.json'); self.assertFalse(c['removal_performed']); self.assertEqual(c['acceptance'],'PASS_NO_REMOVAL')
- def test_programme_state_keeps_real_sources_denied(self):
-  s=json.loads(STATE.read_text(encoding='utf-8')); self.assertEqual(s['schema'],'ovc-rcn-rn-programme-state/v2'); self.assertEqual(s['real_source_routes'],'DENIED_UNTIL_RCN_RN_G4'); self.assertEqual(s['current_authority'],'FIXTURE_ONLY_LOCAL_READ_ONLY'); self.assertEqual(s['blockers'],[])
+ def test_programme_state_preserves_bounded_g4_authority(self):
+  s=json.loads(STATE.read_text(encoding='utf-8')); self.assertEqual(s['schema'],'ovc-rcn-rn-programme-state/v2'); self.assertEqual(s['blockers'],[])
   if s['packet_id']=='RCN-RN-G4':
-   self.assertEqual(s['status'],'GATE_READY'); self.assertEqual(s['authority_required'],'OPERATOR_REQUIRED'); self.assertEqual(s['authority_delta'],'PROPOSED_FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION'); self.assertEqual(s['decision_record'],None); self.assertIn('DENIED_PENDING_G4',s['wp4_g4']); self.assertTrue(G4.exists()); g=json.loads(G4.read_text(encoding='utf-8')); self.assertEqual(g['gate_id'],'RCN-RN-G4'); self.assertEqual(g['gate_class'],'OPERATOR_REQUIRED'); self.assertEqual(g['decision_record'],'PENDING_OPERATOR_DECISION'); self.assertEqual(g['recommended_decision'],'PASS'); self.assertEqual(g['blockers'],[]); return
+   self.assertEqual(s['status'],'APPROVED'); self.assertEqual(s['authority_required'],'SATISFIED_OPERATOR_PASS'); self.assertEqual(s['authority_delta'],'FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION_APPROVED'); self.assertEqual(s['decision_record'],'artifacts/research_console_vnext/pvs3/RCN_RN_G4_OPERATOR_DECISION.json'); self.assertEqual(s['current_authority'],'G4_APPROVED_READ_ONLY_REAL_SOURCE_INVESTIGATE_PRESENTATION_MARKET_C1_C2_C2E'); self.assertEqual(s['real_source_routes'],'AUTHORIZED_NOT_YET_BOUND_MARKET_C1_C2_C2E__OTHERS_DENIED'); self.assertTrue(G4.exists()); self.assertTrue(G4_DECISION.exists()); g=json.loads(G4.read_text(encoding='utf-8')); d=json.loads(G4_DECISION.read_text(encoding='utf-8')); self.assertEqual(g['gate_id'],'RCN-RN-G4'); self.assertEqual(g['decision_record'],'PENDING_OPERATOR_DECISION'); self.assertEqual(d['decision'],'PASS'); return
   if s['packet_id'].startswith('RCN-RN-WP4'):
-   self.assertIn(s['status'],{'RUNNING','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual(s['g3v'],'PASS'); self.assertIn(s['preparation_authority'],{'RCN-RN-WP4A_D_PREPARATION_PERMITTED','RCN-RN-WP4A_D_PREPARATION_COMPLETED'}); self.assertIn('RCN-RN-G4',s['stop_boundary']); self.assertEqual(s['authority_required'],'AUTO_EXECUTABLE_PREPARATION_ONLY'); self.assertEqual(s['authority_delta'],'NONE'); self.assertIn('REAL_SOURCE_PRESENTATION_DENIED_PENDING_G4',s['wp4_g4']); d=load('RCN_RN_G3V_OPERATOR_PASS_DECISION.json'); self.assertEqual(d['decision'],'PASS'); return
+   self.assertIn(s['status'],{'RUNNING','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual(s['g3v'],'PASS'); self.assertIn(s['preparation_authority'],{'RCN-RN-WP4A_D_PREPARATION_PERMITTED','RCN-RN-WP4A_D_PREPARATION_COMPLETED'}); self.assertIn('RCN-RN-G4',s['stop_boundary']); self.assertEqual(s['authority_required'],'AUTO_EXECUTABLE_PREPARATION_ONLY'); self.assertEqual(s['authority_delta'],'NONE'); d=load('RCN_RN_G3V_OPERATOR_PASS_DECISION.json'); self.assertEqual(d['decision'],'PASS'); return
   if s['packet_id']=='RCN-RN-WP3E': self.assertEqual(s['g3v'],'DEFERRED'); return
   self.assertEqual(s['packet_id'],'RCN-RN-G3V'); self.assertIn(s['status'],{'GATE_READY','APPROVED'})
 if __name__=='__main__': unittest.main()

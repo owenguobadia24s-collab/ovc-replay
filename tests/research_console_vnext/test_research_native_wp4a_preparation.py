@@ -30,16 +30,16 @@ class ResearchNativeWP4APreparationTests(unittest.TestCase):
         for candidate in registry["candidates"]:
             self.assertEqual("PREPARED_NOT_BOUND",candidate["activation_state"]); self.assertFalse(candidate["real_source_presented"]); self.assertEqual("NONE",candidate["authority_effect"]); self.assertEqual("RCN-RN-G4",candidate["gate_required"])
 
-    def test_route_and_programme_state_preserve_g4_boundary(self):
-        routes=load(ROUTES); self.assertEqual("GET_ONLY",routes["transport"]); self.assertIn("/investigate/snapshot",routes["domains"]["INVESTIGATE"]); self.assertEqual("DENIED_UNTIL_RCN_RN_G4",routes["real_source_exposure"]); self.assertEqual("PREPARED_NOT_BOUND",routes["wp4a_preparation"]["binding_state"])
-        state=load(STATE); self.assertTrue(state["packet_id"].startswith("RCN-RN-WP4") or state["packet_id"]=="RCN-RN-G4"); self.assertEqual("FIXTURE_ONLY_LOCAL_READ_ONLY",state["current_authority"]); self.assertEqual("DENIED_UNTIL_RCN_RN_G4",state["real_source_routes"])
+    def test_route_and_programme_state_record_approved_pending_binding(self):
+        routes=load(ROUTES); self.assertEqual("GET_ONLY",routes["transport"]); self.assertIn("/investigate/snapshot",routes["domains"]["INVESTIGATE"]); self.assertEqual("APPROVED_PENDING_BINDING_MARKET_C1_C2_C2E",routes["real_source_exposure"]); self.assertEqual("PREPARED_NOT_BOUND",routes["wp4a_preparation"]["binding_state"])
+        state=load(STATE); self.assertTrue(state["packet_id"].startswith("RCN-RN-WP4") or state["packet_id"]=="RCN-RN-G4")
         if state["packet_id"]=="RCN-RN-G4":
-            self.assertEqual("GATE_READY",state["status"]); self.assertEqual("OPERATOR_REQUIRED",state["authority_required"]); self.assertEqual("PROPOSED_FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION",state["authority_delta"]); self.assertIn("OPERATOR_DECISION_REQUIRED_BEFORE_FIRST_REAL_SOURCE_PRESENTATION",state["stop_boundary"]); self.assertIsNone(state["decision_record"])
+            self.assertEqual("APPROVED",state["status"]); self.assertEqual("SATISFIED_OPERATOR_PASS",state["authority_required"]); self.assertEqual("FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION_APPROVED",state["authority_delta"]); self.assertEqual("AUTHORIZED_NOT_YET_BOUND_MARKET_C1_C2_C2E__OTHERS_DENIED",state["real_source_routes"]); self.assertEqual("artifacts/research_console_vnext/pvs3/RCN_RN_G4_OPERATOR_DECISION.json",state["decision_record"])
         else:
-            self.assertEqual("RCN-RN-G4_BEFORE_FIRST_REAL_SOURCE_PRESENTATION",state["stop_boundary"]); self.assertEqual("NONE",state["authority_delta"])
+            self.assertEqual("NONE",state["authority_delta"])
 
     @unittest.skipIf(importlib.util.find_spec("fastapi") is None,"FastAPI dependency not installed")
-    def test_runtime_route_is_fixture_only_and_validation_denies_before_resource_reads(self):
+    def test_runtime_route_remains_fixture_until_post_g4_binding_and_validation_denies_before_resource_reads(self):
         from fastapi.testclient import TestClient
         from apps.research_api.app import create_app
         app=create_app(); client=TestClient(app); store=app.state.fixture_store; before=store.resource_reads
