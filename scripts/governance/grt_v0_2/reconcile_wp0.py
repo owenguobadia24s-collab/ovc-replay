@@ -4,7 +4,10 @@ import argparse
 import json
 from pathlib import Path
 
-from ovc.programme_genesis.grt_v0_2.wp0 import reconcile, write_reconciliation_outputs
+from ovc.programme_genesis.grt_v0_2.wp0_evidence import (
+    reconcile,
+    write_reconciliation_outputs,
+)
 
 
 def main() -> int:
@@ -14,7 +17,11 @@ def main() -> int:
     parser.add_argument("--repository-root", default=".")
     parser.add_argument("--baseline-commit", required=True)
     parser.add_argument("--output-dir", default="docs/programmes/grt-v0-2/wp0")
-    parser.add_argument("--single-b0-run", action="store_true", help="Diagnostic only; G1 evidence requires determinism proof.")
+    parser.add_argument(
+        "--single-b0-run",
+        action="store_true",
+        help="Diagnostic only; G1 evidence requires determinism proof.",
+    )
     args = parser.parse_args()
     root = Path(args.repository_root).resolve()
     output = Path(args.output_dir)
@@ -26,6 +33,7 @@ def main() -> int:
         verify_b0_determinism=not args.single_b0_run,
     )
     write_reconciliation_outputs(result, output)
+    lineage = result["current_census"]["lineage_classification"]
     print(
         json.dumps(
             {
@@ -34,16 +42,11 @@ def main() -> int:
                 "b0_warning_count": result["b0"]["raw_warning_count"],
                 "b0_topology_sha256": result["b0"]["topology_sha256"],
                 "current_warning_count": result["current_census"]["raw_warning_count"],
-                "b0_mapped": len(result["current_census"]["classification"]["B0_MAPPED"]),
-                "late_discovered_pre_existing": len(
-                    result["current_census"]["classification"]["LATE_DISCOVERED_PRE_EXISTING"]
-                ),
-                "resolved_before_grt2": len(
-                    result["current_census"]["classification"]["RESOLVED_BEFORE_GRT2"]
-                ),
-                "transition_or_new_debt": len(
-                    result["current_census"]["classification"]["TRANSITION_OR_NEW_DEBT"]
-                ),
+                "lineage_classification_status": lineage["status"],
+                "direct_anomaly_id_match_count": lineage["direct_anomaly_id_match_count"],
+                "current_only_anomaly_id_count": lineage["current_only_anomaly_id_count"],
+                "b0_only_anomaly_id_count": lineage["b0_only_anomaly_id_count"],
+                "transition_debt_status": result["current_census"]["transition_debt_status"],
                 "authority_effect": result["authority_effect"],
             },
             sort_keys=True,

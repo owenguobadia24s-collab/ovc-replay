@@ -5,6 +5,7 @@ import os
 import unittest
 from pathlib import Path
 
+from ovc.programme_genesis.grt_v0_2 import reconcile as public_reconcile
 from ovc.programme_genesis.grt_v0_2.wp0 import (
     B0_ANOMALY_COUNT,
     B0_COMPONENT_COUNT,
@@ -31,6 +32,9 @@ class GRT2WP0ContractTests(unittest.TestCase):
             (569, 1364, 53, 4615, 11861),
         )
 
+    def test_public_wp0_reconcile_uses_non_inferential_evidence_adapter(self) -> None:
+        self.assertEqual(public_reconcile.__module__, "ovc.programme_genesis.grt_v0_2.wp0_evidence")
+
     def test_materialised_source_identity_is_exact_and_non_enforcing(self) -> None:
         identity = json.loads((WP0_ROOT / "GRT2_SOURCE_IDENTITY.json").read_text(encoding="utf-8"))
         self.assertEqual(identity["plan"]["plan_id"], "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED")
@@ -54,10 +58,13 @@ class GRT2WP0ContractTests(unittest.TestCase):
         self.assertTrue(census["ruleset"]["non_fast_forward_prohibited"])
         self.assertEqual(census["ruleset"]["current_user_can_bypass"], "never")
 
-    def test_wp0_reproduction_plan_never_redefines_b0_from_current_census(self) -> None:
+    def test_wp0_reproduction_plan_never_redefines_or_maps_b0_by_raw_id(self) -> None:
         plan = json.loads((WP0_ROOT / "GRT2_B0_RECONCILIATION_PLAN.json").read_text(encoding="utf-8"))
         self.assertEqual(plan["immutable_b0"]["expected_raw_warning_count"], 569)
-        self.assertIn("never redefine B0", " ".join(plan["fresh_census_method"]))
+        method = " ".join(plan["fresh_census_method"])
+        self.assertIn("never redefine B0", method)
+        self.assertIn("diagnostic only", method)
+        self.assertIn("WP2", method)
         self.assertIn("B0_SOURCE_NOT_REPRODUCIBLE", plan["gate_rule"])
 
     def test_exact_ci_evidence_when_supplied_or_gate_contract_when_not(self) -> None:
@@ -83,7 +90,11 @@ class GRT2WP0ContractTests(unittest.TestCase):
         self.assertEqual(sum(b0["warning_category_counts"].values()), 569)
         self.assertEqual(current["baseline"]["commit"], identity["materialisation_baseline"]["commit"])
         self.assertEqual(current["baseline"]["tree"], identity["materialisation_baseline"]["tree"])
-        self.assertEqual(current["classification"]["TRANSITION_OR_NEW_DEBT"], [])
+        self.assertNotIn("classification", current)
+        lineage = current["lineage_classification"]
+        self.assertEqual(lineage["status"], "DEFERRED_TO_GRT2_WP2")
+        self.assertEqual(lineage["authority_effect"], "NONE_DIAGNOSTIC_ONLY")
+        self.assertEqual(current["transition_debt_status"], "NOT_EVALUATED_AT_WP0")
 
 
 if __name__ == "__main__":
