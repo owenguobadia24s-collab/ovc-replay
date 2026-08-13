@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-dsai2-orch345-diagnostic-observability-policy/v2",
+  "policy_id": "DSAI2.ORCH345.DIAGNOSTIC_OBSERVABILITY.20260813.v2",
+  "supersedes_policy_id": "DSAI2.ORCH345.DIAGNOSTIC_OBSERVABILITY.20260813.v1",
+  "status": "TEMPORARY_ACTIVE",
+  "effective": true,
+  "scope": [
+    "ORCH-3",
+    "ORCH-4",
+    "ORCH-5"
+  ],
+  "receipt_class": "TEMPORARY_DIAGNOSTIC_OBSERVABILITY",
+  "authority_effect": "NONE",
+  "governance_expansion": false,
+  "new_operator_gate": false,
+  "merge_authority": "NONE",
+  "parallel_merge": false,
+  "activation_mode": "AUTOMATIC_ENTRYPOINT_PERSISTED_COMPANION_RECEIPT",
+  "automatic_entrypoint": "ovc.development.skills.orch345_auto.run_automatic_orchestration",
+  "evidence_output": "records/development/skills",
+  "required_provenance": [
+    "orchestration_run_id",
+    "invocation_id",
+    "invocation_mode",
+    "trigger_source",
+    "source_programme_id",
+    "source_programme_state_id",
+    "source_packet_state_ids",
+    "source_execution_record_id"
+  ],
+  "required_invocation_mode": "AUTO",
+  "decision_phase": "DECISION_SELECTED",
+  "execution_started_inferred": false,
+  "execution_completed_inferred": false,
+  "orch5_scheduling_fields": [
+    "scheduled_slot_count",
+    "remaining_schedule_capacity",
+    "schedule_selection_at_capcity",
+    "actual_occupancy_observed"
+  ],
+  "actual_occupancy_observed": false,
+  "capacity_profile_unchanged": {
+    "max_parallel_builds": 4,
+    "max_train_packets": 8,
+    "max_auto_requeue_attempts": 2
+  },
+  "validation": "DENIED"
+}
