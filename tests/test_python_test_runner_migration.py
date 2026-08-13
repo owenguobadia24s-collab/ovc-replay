@@ -14,7 +14,10 @@ POLICY = ROOT / "docs" / "testing" / "PYTHON_TEST_RUNNER_POLICY_v0_1.md"
 class PythonTestRunnerMigrationContractTests(unittest.TestCase):
     def test_legacy_unittest_command_is_preserved_exactly(self) -> None:
         workflow = WORKFLOW.read_text(encoding="utf-8")
-        self.assertIn("PYTHONPATH=src python3 -m unittest discover -s tests -v", workflow)
+        full_suite = "python3 -m unittest discover -s tests -v"
+        self.assertEqual(workflow.count(full_suite), 1)
+        self.assertIn("Complete repository suite under shared main lease", workflow)
+        self.assertIn("tools/ci/ovc_run_with_main_lease.py", workflow)
         self.assertIn("name: tests", workflow)
 
     def test_pytest_is_pinned_and_parity_jobs_are_explicit(self) -> None:

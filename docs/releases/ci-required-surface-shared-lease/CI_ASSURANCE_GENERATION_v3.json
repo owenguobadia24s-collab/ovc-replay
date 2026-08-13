@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-ci-assurance-generation/v1",
+  "record_id": "OVC-CI-REQUIRED-SURFACE-SHARED-LEASE-GEN-3",
+  "candidate_branch": "reconcile/ci-required-surface-shared-lease-requeue1",
+  "candidate_base_sha": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+  "superseded_assurance_head_sha": "cced23cf4d5b91cc89d6dffd79e3e5eb8479153c",
+  "generation_reason": "The GEN-2 workflows were invalidated by a same-PR rerun of the superseded GEN-1 SHA after GEN-2 started. The workflow concurrency group correctly cancelled the newer tiered run, so required admission could not observe a successful current-head lease. Issue one fresh immutable generation and do not rerun superseded heads.",
+  "failure_class": "SUPERSEDED_HEAD_RERUN_CANCELLED_CURRENT_HEAD_ASSURANCE",
+  "code_delta_from_superseded_head": "NONE",
+  "scope_change": false,
+  "write_set_change": false,
+  "semantic_owner_change": false,
+  "authority_surface_change": false,
+  "frozen_surface_change": false,
+  "test_weakening": false,
+  "guard_weakening": false,
+  "force_push": false,
+  "history_rewrite": false,
+  "authority_delta": "NONE",
+  "required_assurance": [
+    "tests",
+    "Research Console vNext exact maintained API surface",
+    "pytest-unittest-parity",
+    "runner-parity",
+    "OVC profile assurance",
+    "OVC merge readiness"
+  ],
+  "superseded_head_policy": "DO_NOT_RERUN"
+}

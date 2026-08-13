@@ -1,0 +1,78 @@
+{
+  "schema": "ovc-esli-wp6-execution-record/v1",
+  "programme_id": "OVC-OPTB-ESL-CONFORMANCE-v0.1",
+  "plan_id": "OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+  "plan_version": "0.1-REVISED-2",
+  "packet_id": "ESLI-WP6",
+  "gate_id": "ESLI-G6",
+  "operator_instruction": "OVC CONTINUE ESLI-WP6",
+  "instruction_effect": "EXECUTE_FIRST_INCOMPLETE_READY_AUTO_EXECUTABLE_PACKET_NO_NEW_RESERVED_AUTHORITY",
+  "initial_baseline_commit": "d392c4572e539a399e461212b4991db55ae46477",
+  "prior_reconciled_baseline_commit": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+  "baseline_commit": "45146c31641d719dbfb73dbcd51a75ec2a9d7e19",
+  "branch": "build/esli-wp6-soi-compatibility-20260813-requeue2",
+  "implementation_candidate": "1023e0508686ca90b37384493fbea1bf9c0a2c3e",
+  "reconciliation_history": [
+    {
+      "superseded_pr": 728,
+      "superseded_candidate": "25f4453b67435761ede4d1011119ad7aff33e148",
+      "reason": "OVC_BASE_MOVED_DURING_FINAL_INTEGRATION_PREDECESSOR_WINDOW",
+      "advancing_pr": 726,
+      "advancing_commit": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+      "authority_effect": "NONE"
+    },
+    {
+      "superseded_pr": 734,
+      "superseded_candidate": "ae3475cf1d4cf9d8ee17f1f3dcbefa7e62f6e6d2",
+      "reason": "SERIALIZED_LANE_RELEASED_FOR_SYSTEMIC_REQUIRED_CHECK_REPAIR",
+      "advancing_pr": 732,
+      "advancing_commit": "45146c31641d719dbfb73dbcd51a75ec2a9d7e19",
+      "advancing_change": "complete required test surface and shared final-integration lease",
+      "authority_effect": "NONE"
+    }
+  ],
+  "status": "APPROVED_PENDING_FINAL_EVIDENCE_HEAD_ASSURANCE_AND_MERGE",
+  "objective": "Materialise the generic SOI topology/method/result boundary and an exact inactive FAMILY compatibility adapter over the preserved SFC FamilyCatalog surface; keep all other topologies interface-only and fail closed.",
+  "source_court_record": {
+    "sfc_pointer": "registries/implementation/sfc/CURRENT_STATE_POINTER.json",
+    "sfc_terminal_state": "registries/implementation/sfc/OVC_SFC_STATE_v0_11_TERMINAL.json",
+    "observed_sfc_status": "COMPLETED_PRESERVED",
+    "canonical_family_method": "NONE",
+    "selector": "NONE"
+  },
+  "implemented_maturity": {
+    "FAMILY": "EXECUTABLE_INACTIVE",
+    "HIERARCHY": "INTERFACE_ONLY",
+    "OVERLAP": "INTERFACE_ONLY",
+    "GRAPH": "INTERFACE_ONLY",
+    "CONTINUUM": "INTERFACE_ONLY",
+    "COMPOSITION": "INTERFACE_ONLY"
+  },
+  "assurance": {
+    "tests_run": 31703015310,
+    "tests_job": 94456646791,
+    "runner_parity_job": 94456646675,
+    "pytest_unittest_parity_job": 94456646729,
+    "final_integration_admission_job": 94456529282,
+    "tiered_run": 31703015336,
+    "profile_assurance_job": 94456529026,
+    "merge_readiness_job": 94456529081,
+    "result": "PASS"
+  },
+  "qa_packet": "docs/releases/optb-esl-conformance-v0-1/esli-wp6/ESLI_WP6_QA_PACKET.json",
+  "decision_record": "docs/releases/optb-esl-conformance-v0-1/esli-wp6/ESLI_G6_DECISION.json",
+  "authority_delta": "NONE",
+  "reserved_authority_delta": "NONE",
+  "deferred": [
+    "topology activation or selection",
+    "family method or catalogue promotion",
+    "hierarchy/overlap/graph/continuum/composition algorithms",
+    "OrganisationEvidence scientific support decisions and thresholds",
+    "semantic admission",
+    "Validation consumption",
+    "publication",
+    "probability/risk/exposure/execution"
+  ],
+  "rollback": "Forward-supersede or remove WP6 SOI-only artifacts while preserving ESLI-WP0-WP5 and all SFC, FDI and SRFD identities and evidence; no force-push or history rewrite.",
+  "next_if_pass": "ESLI-WP7"
+}

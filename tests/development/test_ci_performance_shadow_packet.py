@@ -56,8 +56,16 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         self.assertNotIn("xdist", self.workflow)
 
     def test_existing_required_checks_are_preserved_under_final_integration_window(self):
-        full_suite = "PYTHONPATH=src python3 -m unittest discover -s tests -v"
-        self.assertEqual(self.tests_workflow.count(full_suite), 1)
+        child_suite = "python3 -m unittest discover -s tests -v"
+        self.assertEqual(self.tests_workflow.count(child_suite), 1)
+        self.assertIn(
+            "tools/ci/ovc_run_with_main_lease.py",
+            self.tests_workflow,
+        )
+        self.assertIn(
+            "Complete repository suite under shared main lease",
+            self.tests_workflow,
+        )
         for name in ("pytest-unittest-parity", "runner-parity"):
             self.assertIn(name, self.tests_workflow)
         for name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
