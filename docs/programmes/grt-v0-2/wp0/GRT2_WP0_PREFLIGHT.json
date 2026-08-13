@@ -1,0 +1,49 @@
+{
+  "schema": "ovc-grt2-wp0-preflight/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "packet_id": "GRT2-WP0",
+  "gate_id": "GRT2-G1",
+  "status": "RUNNING_AWAITING_EXACT_B0_REPRODUCTION",
+  "baseline": {
+    "commit": "d392c4572e539a399e461212b4991db55ae46477",
+    "tree": "dc0fe43b365ae669544759a6a2227ca059736395",
+    "main_move_observed_and_restarted": true,
+    "prior_generations": [
+      "a720f4fb3b41c267a6ed40dc9498e8f48004fbf7",
+      "32531afdacb7435aef2b45b71f503e0dfde502c8",
+      "4d7d725c0960eb24e1ac137fe912ad8c7cc6f82b",
+      "b0c87045ce2fe3aad3666dde3a608fe8d6bfcdea"
+    ]
+  },
+  "source_identity": {
+    "plan_sha256": "c81e1368f4e25c77906d378772379b04910b5c8f93fc9b21f988749602a9bedb",
+    "design_sha256": "bee3b1d9095a5f45f141abae550af35acb1a2aceca1bee555e59ddd2a19de9d7"
+  },
+  "superseded_prs": [
+    {"pr": 718, "reason": "MAIN_HEAD_ADVANCE"},
+    {"pr": 722, "reason": "MAIN_HEAD_ADVANCE_PLUS_SHALLOW_CHECKOUT_BASE_ABSENT"}
+  ],
+  "stale_branch_rule": "Earlier branches are preserved source-bound evidence; no force-push/history rewrite and no permanent continuation from them.",
+  "repository_directory_roots": [".agents", ".github", "apps", "artifacts", "benchmarks", "contracts", "data", "design", "docs", "fixtures", "legacy", "plans", "qa", "records", "registries", "schemas", "scripts", "src", "tests", "tools"],
+  "github_assurance": "DIRECT_RULESET_VISIBILITY_RESOLVED",
+  "pgn_critical_path": "PGN-G3 DEFER_ALL / native_records_created=0; future G5 may require operator/upstream authority",
+  "b0_source": {
+    "commit": "100b3fa342c5dee7c96a7a4e5af9e80dac3ddfe4",
+    "tree": "91374c54bde0e0b61ac51705f6434d4f2b0d8417",
+    "expected_warning_count": 569,
+    "expected_topology_sha256": "4120468ecb1c1f484ab073c851287706f4fb45ad0e99fc355b4624094bb795f2",
+    "reproduction_status": "PENDING_EXACT_PACKET_HEAD_CI"
+  },
+  "corrective_note": "PR #722 failed before historical observation because actions/checkout supplied only the PR merge tip. WP0 now unshallows the exact main lineage and calls ensure_commit before baseline resolution; the prior failure is not classified as a B0 mismatch.",
+  "authority": {
+    "implementation": "BOUNDED_WP0_WP3",
+    "enforcement": "NONE",
+    "g2_5": "OPERATOR_REQUIRED",
+    "g3": "OPERATOR_REQUIRED",
+    "pgn_write": "DENIED",
+    "destructive_cleanup": "DENIED"
+  },
+  "next": "Execute exact historical B0 reproduction and separate fresh current-baseline census; finalize WP0 evidence and G1 disposition.",
+  "authority_effect": "NONE_READ_ONLY_PREFLIGHT"
+}

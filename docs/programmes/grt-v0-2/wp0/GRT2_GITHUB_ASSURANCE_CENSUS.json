@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-grt2-github-assurance-census/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "observed_at_baseline_commit": "d392c4572e539a399e461212b4991db55ae46477",
+  "legacy_branch_protection_endpoint": {"result": "RESOURCE_NOT_ACCESSIBLE_BY_INTEGRATION", "http_status": 403},
+  "repository_ruleset_visibility": "DIRECT",
+  "ruleset": {
+    "id": 20229411,
+    "name": "OVC main protection",
+    "target": "branch",
+    "enforcement": "active",
+    "included_refs": ["refs/heads/refs", "refs/heads/heads", "refs/heads/main"],
+    "deletion_prohibited": true,
+    "non_fast_forward_prohibited": true,
+    "pull_request_required": true,
+    "required_review_thread_resolution": true,
+    "allowed_merge_methods": ["squash"],
+    "strict_required_status_checks_policy": true,
+    "required_status_checks": [{"context": "OVC merge readiness", "integration_id": 15368}],
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "updated_at": "2026-08-03T12:00:10.081+01:00"
+  },
+  "workflow_observations": {
+    "tests_workflow": ".github/workflows/tests.yml",
+    "required_check_admission": "OVC final integration window admitted",
+    "repository_suite": "tests",
+    "pytest_unittest_parity": "pytest-unittest-parity",
+    "runner_parity": "runner-parity",
+    "serialized_lane_check": "OVC merge readiness"
+  },
+  "visibility_gap": false,
+  "g3_precondition_note": "Direct active ruleset visibility resolves the ratification-time GITHUB_ASSURANCE_VISIBILITY_GAP. G3 must still re-read the exact ruleset and workflow surface immediately before enforcement activation.",
+  "authority_effect": "NONE_OBSERVATION_ONLY"
+}
