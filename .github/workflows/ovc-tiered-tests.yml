@@ -21,7 +21,8 @@ jobs:
     outputs:
       selected_profile: ${{ steps.select.outputs.profile }}
     steps:
-      - name: Wait for serialized final-integration window acquisition
+      - name: Wait for successful shared final-integration lease acquisition
+        id: lease
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v9
         with:
@@ -31,11 +32,18 @@ jobs:
             const pr = context.payload.pull_request;
             const sha = pr.head.sha;
             const windowCheckName = 'OVC merge readiness';
+            const acquireStepName = 'Acquire serialized final-integration window on current main';
             const deadline = Date.now() + 23 * 60 * 1000;
             const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
             const latestNamedRun = runs => {
-              const matches = runs.filter(run => run.name === windowCheckName).sort((a, b) => b.id - a.id);
+              const matches = runs
+                .filter(run => run.name === windowCheckName)
+                .sort((a, b) => b.id - a.id);
               return matches[0];
+            };
+            const jobIdFromDetailsUrl = detailsUrl => {
+              const match = String(detailsUrl || '').match(/\/actions\/runs\/\d+\/job\/(\d+)/);
+              return match ? Number(match[1]) : null;
             };
 
             while (Date.now() < deadline) {
@@ -47,41 +55,112 @@ jobs:
                 filter: 'latest'
               });
               const windowRun = latestNamedRun(response.data.check_runs);
-              if (windowRun?.status === 'in_progress') {
-                const mainNow = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
-                const currentMain = mainNow.data.commit.sha;
-                if (currentMain !== pr.base.sha) {
-                  core.setFailed(`OVC_PROFILE_BASE_MOVED_BEFORE_ASSURANCE: event base ${pr.base.sha}, current ${pr.base.ref} ${currentMain}; profile assurance will not start.`);
+
+              if (!windowRun) {
+                await sleep(2000);
+                continue;
+              }
+
+              const jobId = jobIdFromDetailsUrl(windowRun.details_url);
+              if (jobId) {
+                const job = await github.rest.actions.getJobForWorkflowRun({
+                  owner,
+                  repo,
+                  job_id: jobId
+                });
+                const acquireStep = (job.data.steps || [])
+                  .find(step => step.name === acquireStepName);
+
+                if (
+                  acquireStep?.status === 'completed' &&
+                  acquireStep.conclusion === 'success'
+                ) {
+                  const mainNow = await github.rest.repos.getBranch({
+                    owner,
+                    repo,
+                    branch: pr.base.ref
+                  });
+                  const currentMain = mainNow.data.commit.sha;
+                  if (currentMain !== pr.base.sha) {
+                    core.setFailed(
+                      `OVC_PROFILE_BASE_MOVED_BEFORE_ASSURANCE: event base ` +
+                      `${pr.base.sha}, current ${pr.base.ref} ${currentMain}; ` +
+                      `profile assurance will not start.`
+                    );
+                    return;
+                  }
+                  core.setOutput('base_sha', currentMain);
+                  core.setOutput('head_sha', sha);
+                  core.info(
+                    `OVC_PROFILE_SHARED_FINAL_INTEGRATION_LEASE_ADMITTED: ` +
+                    `${sha} is bound to ${pr.base.ref}@${currentMain} after ` +
+                    `the acquisition step completed successfully.`
+                  );
                   return;
                 }
-                core.info(`OVC_PROFILE_FINAL_INTEGRATION_WINDOW_ADMITTED: ${windowCheckName} is in progress for ${sha} and ${pr.base.ref} remains ${currentMain}.`);
+
+                if (
+                  acquireStep?.status === 'completed' &&
+                  acquireStep.conclusion !== 'success'
+                ) {
+                  core.setFailed(
+                    `OVC_PROFILE_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED: ` +
+                    `${acquireStepName} completed ${acquireStep.conclusion} ` +
+                    `for ${sha}; profile assurance will not start.`
+                  );
+                  return;
+                }
+              }
+
+              if (
+                windowRun.status === 'completed' &&
+                windowRun.conclusion !== 'success'
+              ) {
+                core.setFailed(
+                  `OVC_PROFILE_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED: ` +
+                  `${windowCheckName} completed ${windowRun.conclusion} ` +
+                  `before profile assurance was admitted for ${sha}.`
+                );
                 return;
               }
-              if (windowRun?.status === 'completed') {
-                core.setFailed(`OVC_PROFILE_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED: ${windowCheckName} completed ${windowRun.conclusion} before profile assurance was admitted for ${sha}.`);
-                return;
-              }
-              await sleep(5000);
+
+              await sleep(2000);
             }
 
-            core.setFailed(`OVC_PROFILE_FINAL_INTEGRATION_WINDOW_ADMISSION_TIMEOUT: ${windowCheckName} did not acquire the serialized lane for ${sha}.`);
+            core.setFailed(
+              `OVC_PROFILE_FINAL_INTEGRATION_WINDOW_ADMISSION_TIMEOUT: ` +
+              `${windowCheckName} did not complete a successful acquisition ` +
+              `step for ${sha}.`
+            );
+
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
+
       - name: Prove profile candidate contains admitted current main
         if: github.event_name == 'pull_request'
         shell: bash
+        env:
+          OVC_WINDOW_BASE_SHA: ${{ steps.lease.outputs.base_sha }}
+          OVC_WINDOW_HEAD_SHA: ${{ steps.lease.outputs.head_sha }}
         run: |
           set -euo pipefail
-          if ! git merge-base --is-ancestor "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}"; then
-            echo "::error title=Profile candidate not reconciled::OVC_PROFILE_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${{ github.event.pull_request.head.sha }} does not contain admitted main ${{ github.event.pull_request.base.sha }}."
+          test -n "${OVC_WINDOW_BASE_SHA}"
+          test -n "${OVC_WINDOW_HEAD_SHA}"
+          test "${OVC_WINDOW_HEAD_SHA}" = "${{ github.event.pull_request.head.sha }}"
+          git cat-file -e "${OVC_WINDOW_BASE_SHA}^{commit}"
+          git cat-file -e "${OVC_WINDOW_HEAD_SHA}^{commit}"
+          if ! git merge-base --is-ancestor "${OVC_WINDOW_BASE_SHA}" "${OVC_WINDOW_HEAD_SHA}"; then
+            echo "::error title=Profile candidate not reconciled::OVC_PROFILE_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_WINDOW_HEAD_SHA} does not contain admitted main ${OVC_WINDOW_BASE_SHA}."
             exit 1
           fi
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
       - name: Build changed-file inventory
         shell: bash
         run: |
@@ -92,6 +171,7 @@ jobs:
             git show --pretty='' --name-only HEAD > "$RUNNER_TEMP/changed-paths.txt"
           fi
           test -s "$RUNNER_TEMP/changed-paths.txt"
+
       - name: Select deterministic profile
         id: select
         shell: bash
@@ -115,25 +195,54 @@ jobs:
           )
           echo "profile=$profile" >> "$GITHUB_OUTPUT"
           echo "OVC_SELECTED_PROFILE=$profile" >> "$GITHUB_ENV"
+
       - name: FAST profile
         if: steps.select.outputs.profile == 'FAST'
+        env:
+          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
+          OVC_LEASE_BASE_SHA: ${{ steps.lease.outputs.base_sha }}
+          OVC_LEASE_HEAD_SHA: ${{ steps.lease.outputs.head_sha }}
+          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python -m compileall -q src scripts
-          PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_*.py' -v
+          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
+            bash -lc "python -m compileall -q src scripts && PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_*.py' -v"
+
       - name: PACKET profile
         if: steps.select.outputs.profile == 'PACKET'
+        env:
+          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
+          OVC_LEASE_BASE_SHA: ${{ steps.lease.outputs.base_sha }}
+          OVC_LEASE_HEAD_SHA: ${{ steps.lease.outputs.head_sha }}
+          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          PYTHONPATH=src python -m unittest discover -s tests/development -v
-          PYTHONPATH=src python -m unittest discover -s tests/authority -v
+          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
+            bash -lc "PYTHONPATH=src python -m unittest discover -s tests/development -v && PYTHONPATH=src python -m unittest discover -s tests/authority -v"
+
       - name: FINAL_HEAD profile without duplicate complete suite
         if: steps.select.outputs.profile == 'FINAL_HEAD'
+        env:
+          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
+          OVC_LEASE_BASE_SHA: ${{ steps.lease.outputs.base_sha }}
+          OVC_LEASE_HEAD_SHA: ${{ steps.lease.outputs.head_sha }}
+          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          PYTHONPATH=src python -m unittest discover -s tests/development -v
-          PYTHONPATH=src python -m unittest discover -s tests/authority -v
+          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
+            bash -lc "PYTHONPATH=src python -m unittest discover -s tests/development -v && PYTHONPATH=src python -m unittest discover -s tests/authority -v"
+
       - name: Validate orchestration contract
+        env:
+          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
+          OVC_LEASE_BASE_SHA: ${{ steps.lease.outputs.base_sha }}
+          OVC_LEASE_HEAD_SHA: ${{ steps.lease.outputs.head_sha }}
+          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          PYTHONPATH=src python -u scripts/development/v0_2/validate_da2_g1.py
-          PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da2_g1_orchestration.py' -v
+          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
+            bash -lc "PYTHONPATH=src python -u scripts/development/v0_2/validate_da2_g1.py && PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da2_g1_orchestration.py' -v"
+
       - name: Retain final assurance boundary
         shell: bash
         run: |
@@ -163,6 +272,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           show-progress: false
+
       - name: Acquire serialized final-integration window on current main
         id: acquire
         uses: actions/github-script@v9
@@ -177,19 +287,23 @@ jobs:
             const predecessorDeadline = startedAt + 4 * 60 * 1000;
             const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
             const latestNamedRun = runs => {
-              const matches = runs.filter(run => run.name === windowCheckName).sort((a, b) => b.id - a.id);
+              const matches = runs
+                .filter(run => run.name === windowCheckName)
+                .sort((a, b) => b.id - a.id);
               return matches[0];
             };
-            const emitPredecessorMetric = (result, leaseOwner = null) => core.info(`OVC_CI_METRIC ${JSON.stringify({
-              schema: 'ovc-ci-metric/v1',
-              metric: 'final_integration_predecessor_lease_wait_ms',
-              value_ms: Date.now() - startedAt,
-              head_sha: sha,
-              predecessor_pr: leaseOwner?.number || null,
-              predecessor_head_sha: leaseOwner?.headSha || null,
-              predecessor_base_sha: leaseOwner?.baseSha || null,
-              result
-            })}`);
+            const emitPredecessorMetric = (result, leaseOwner = null) => core.info(
+              `OVC_CI_METRIC ${JSON.stringify({
+                schema: 'ovc-ci-metric/v1',
+                metric: 'final_integration_predecessor_lease_wait_ms',
+                value_ms: Date.now() - startedAt,
+                head_sha: sha,
+                predecessor_pr: leaseOwner?.number || null,
+                predecessor_head_sha: leaseOwner?.headSha || null,
+                predecessor_base_sha: leaseOwner?.baseSha || null,
+                result
+              })}`
+            );
             const findPassedPredecessor = async mainSha => {
               const pulls = await github.paginate(github.rest.pulls.list, {
                 owner,
@@ -210,7 +324,12 @@ jobs:
                   filter: 'latest'
                 });
                 const leaseRun = latestNamedRun(checks.data.check_runs);
-                if (!(leaseRun?.status === 'completed' && leaseRun.conclusion === 'success')) {
+                if (
+                  !(
+                    leaseRun?.status === 'completed' &&
+                    leaseRun.conclusion === 'success'
+                  )
+                ) {
                   continue;
                 }
                 const ancestry = await github.rest.repos.compareCommits({
@@ -233,7 +352,11 @@ jobs:
 
             let leaseOwner = null;
             while (Date.now() < predecessorDeadline) {
-              const mainNow = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+              const mainNow = await github.rest.repos.getBranch({
+                owner,
+                repo,
+                branch: pr.base.ref
+              });
               const currentMain = mainNow.data.commit.sha;
               if (!leaseOwner) {
                 leaseOwner = await findPassedPredecessor(currentMain);
@@ -241,35 +364,71 @@ jobs:
                   emitPredecessorMetric('NO_HELD_PREDECESSOR');
                   break;
                 }
-                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD: PR #${leaseOwner.number} head ${leaseOwner.headSha} passed final readiness on ${pr.base.ref}@${leaseOwner.baseSha}; admission for ${sha} is withheld until MERGED, RELEASED, or INVALIDATED.`);
+                core.info(
+                  `OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD: PR ` +
+                  `#${leaseOwner.number} head ${leaseOwner.headSha} passed ` +
+                  `final readiness on ${pr.base.ref}@${leaseOwner.baseSha}; ` +
+                  `admission for ${sha} is withheld until MERGED, RELEASED, ` +
+                  `or INVALIDATED.`
+                );
               }
 
-              const terminal = await github.rest.pulls.get({ owner, repo, pull_number: leaseOwner.number });
-              const mainAfterDispositionCheck = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+              const terminal = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: leaseOwner.number
+              });
+              const mainAfterDispositionCheck =
+                await github.rest.repos.getBranch({
+                  owner,
+                  repo,
+                  branch: pr.base.ref
+                });
               const newMain = mainAfterDispositionCheck.data.commit.sha;
 
               if (terminal.data.merged_at) {
                 if (newMain === leaseOwner.baseSha) {
-                  core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_MERGE_PROPAGATING: PR #${leaseOwner.number} is merged but ${pr.base.ref} still reports ${newMain}; retaining the lease until the new main SHA is observed.`);
+                  core.info(
+                    `OVC_FINAL_INTEGRATION_PREDECESSOR_MERGE_PROPAGATING: ` +
+                    `PR #${leaseOwner.number} is merged but ${pr.base.ref} ` +
+                    `still reports ${newMain}; retaining the lease until ` +
+                    `the new main SHA is observed.`
+                  );
                   await sleep(5000);
                   continue;
                 }
                 emitPredecessorMetric('MERGED', leaseOwner);
-                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_MERGED: PR #${leaseOwner.number} head ${leaseOwner.headSha} reached MERGED and ${pr.base.ref} advanced from ${leaseOwner.baseSha} to ${newMain}.`);
+                core.info(
+                  `OVC_FINAL_INTEGRATION_PREDECESSOR_MERGED: PR ` +
+                  `#${leaseOwner.number} head ${leaseOwner.headSha} reached ` +
+                  `MERGED and ${pr.base.ref} advanced from ` +
+                  `${leaseOwner.baseSha} to ${newMain}.`
+                );
                 leaseOwner = null;
                 continue;
               }
 
               if (terminal.data.state === 'closed') {
                 emitPredecessorMetric('RELEASED', leaseOwner);
-                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_RELEASED: PR #${leaseOwner.number} head ${leaseOwner.headSha} was explicitly closed without merge; its final-integration lease is released.`);
+                core.info(
+                  `OVC_FINAL_INTEGRATION_PREDECESSOR_RELEASED: PR ` +
+                  `#${leaseOwner.number} head ${leaseOwner.headSha} was ` +
+                  `explicitly closed without merge; its final-integration ` +
+                  `lease is released.`
+                );
                 leaseOwner = null;
                 continue;
               }
 
               if (newMain !== leaseOwner.baseSha) {
                 emitPredecessorMetric('INVALIDATED', leaseOwner);
-                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_INVALIDATED: PR #${leaseOwner.number} remains open but ${pr.base.ref} moved from ${leaseOwner.baseSha} to ${newMain}; the predecessor lease is invalidated and the current candidate will be revalidated against the new main.`);
+                core.info(
+                  `OVC_FINAL_INTEGRATION_PREDECESSOR_INVALIDATED: PR ` +
+                  `#${leaseOwner.number} remains open but ${pr.base.ref} ` +
+                  `moved from ${leaseOwner.baseSha} to ${newMain}; the ` +
+                  `predecessor lease is invalidated and the current ` +
+                  `candidate will be revalidated against the new main.`
+                );
                 leaseOwner = null;
                 continue;
               }
@@ -279,31 +438,53 @@ jobs:
 
             if (leaseOwner) {
               emitPredecessorMetric('TIMEOUT', leaseOwner);
-              core.setFailed(`OVC_FINAL_INTEGRATION_PREDECESSOR_TERMINAL_TIMEOUT: PR #${leaseOwner.number} head ${leaseOwner.headSha} still owns the final-PASS lease on ${pr.base.ref}@${leaseOwner.baseSha}. Merge it or explicitly close/abandon it before another candidate can enter final assurance.`);
+              core.setFailed(
+                `OVC_FINAL_INTEGRATION_PREDECESSOR_TERMINAL_TIMEOUT: PR ` +
+                `#${leaseOwner.number} head ${leaseOwner.headSha} still ` +
+                `owns the final-PASS lease on ${pr.base.ref}@` +
+                `${leaseOwner.baseSha}. Merge it or explicitly ` +
+                `close/abandon it before another candidate can enter final ` +
+                `assurance.`
+              );
               return;
             }
 
-            const mainAtStart = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+            const mainAtStart = await github.rest.repos.getBranch({
+              owner,
+              repo,
+              branch: pr.base.ref
+            });
             const mainSnapshot = mainAtStart.data.commit.sha;
-            const emitMetric = result => core.info(`OVC_CI_METRIC ${JSON.stringify({
-              schema: 'ovc-ci-metric/v1',
-              metric: 'final_integration_window_acquisition_ms',
-              value_ms: Date.now() - startedAt,
-              head_sha: sha,
-              base_sha: mainSnapshot,
-              result
-            })}`);
+            const emitMetric = result => core.info(
+              `OVC_CI_METRIC ${JSON.stringify({
+                schema: 'ovc-ci-metric/v1',
+                metric: 'final_integration_window_acquisition_ms',
+                value_ms: Date.now() - startedAt,
+                head_sha: sha,
+                base_sha: mainSnapshot,
+                result
+              })}`
+            );
 
             if (mainSnapshot !== pr.base.sha) {
               emitMetric('FAIL_BASE_MOVED_BEFORE');
-              core.setFailed(`OVC_BASE_MOVED_BEFORE_READINESS: event base ${pr.base.sha}, current ${pr.base.ref} ${mainSnapshot}. Reconcile the candidate to current main before final required-check assurance.`);
+              core.setFailed(
+                `OVC_BASE_MOVED_BEFORE_READINESS: event base ` +
+                `${pr.base.sha}, current ${pr.base.ref} ${mainSnapshot}. ` +
+                `Reconcile the candidate to current main before final ` +
+                `required-check assurance.`
+              );
               return;
             }
 
             core.setOutput('base_sha', mainSnapshot);
             core.setOutput('head_sha', sha);
             emitMetric('ACQUIRED');
-            core.info(`OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED: ${pr.base.ref}@${mainSnapshot} for ${sha}. Final assurance may now start.`);
+            core.info(
+              `OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED: ${pr.base.ref}@` +
+              `${mainSnapshot} for ${sha}. Final assurance may now start.`
+            );
+
       - name: Prove candidate contains the acquired main base
         shell: bash
         env:
@@ -321,6 +502,7 @@ jobs:
             echo "::error title=Candidate not reconciled to current main::OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_WINDOW_HEAD_SHA} does not contain acquired main ${OVC_WINDOW_BASE_SHA}. Reconcile before final assurance."
             exit 1
           fi
+
       - name: Hold window through final required-check assurance and stable-main readiness
         uses: actions/github-script@v9
         env:
@@ -333,30 +515,48 @@ jobs:
             const pr = context.payload.pull_request;
             const sha = process.env.OVC_WINDOW_HEAD_SHA;
             const mainSnapshot = process.env.OVC_WINDOW_BASE_SHA;
-            const requiredNames = ['tests', 'pytest-unittest-parity', 'runner-parity', 'OVC profile assurance'];
+            const requiredNames = [
+              'tests',
+              'pytest-unittest-parity',
+              'runner-parity',
+              'OVC profile assurance'
+            ];
             const startedAt = Date.now();
             const deadline = startedAt + 20 * 60 * 1000;
             const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-            const emitMetric = result => core.info(`OVC_CI_METRIC ${JSON.stringify({
-              schema: 'ovc-ci-metric/v1',
-              metric: 'final_integration_window_hold_ms',
-              value_ms: Date.now() - startedAt,
-              head_sha: sha,
-              base_sha: mainSnapshot,
-              required_checks: requiredNames,
-              result
-            })}`);
+            const emitMetric = result => core.info(
+              `OVC_CI_METRIC ${JSON.stringify({
+                schema: 'ovc-ci-metric/v1',
+                metric: 'final_integration_window_hold_ms',
+                value_ms: Date.now() - startedAt,
+                head_sha: sha,
+                base_sha: mainSnapshot,
+                required_checks: requiredNames,
+                result
+              })}`
+            );
             const latestNamedRun = (runs, name) => {
-              const matches = runs.filter(run => run.name === name).sort((a, b) => b.id - a.id);
+              const matches = runs
+                .filter(run => run.name === name)
+                .sort((a, b) => b.id - a.id);
               return matches[0];
             };
 
             while (Date.now() < deadline) {
-              const mainNow = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+              const mainNow = await github.rest.repos.getBranch({
+                owner,
+                repo,
+                branch: pr.base.ref
+              });
               const currentMain = mainNow.data.commit.sha;
               if (currentMain !== mainSnapshot) {
                 emitMetric('FAIL_BASE_MOVED_DURING');
-                core.setFailed(`OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved from ${mainSnapshot} to ${currentMain} while the serialized final-integration window was active. Fresh reconciliation and assurance are required.`);
+                core.setFailed(
+                  `OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved ` +
+                  `from ${mainSnapshot} to ${currentMain} while the ` +
+                  `serialized final-integration window was active. Fresh ` +
+                  `reconciliation and assurance are required.`
+                );
                 return;
               }
 
@@ -367,28 +567,61 @@ jobs:
                 per_page: 100,
                 filter: 'latest'
               });
-              const required = requiredNames.map(name => latestNamedRun(response.data.check_runs, name));
-              const failed = required.find(run => run && run.status === 'completed' && !['success', 'neutral', 'skipped'].includes(run.conclusion));
+              const required = requiredNames.map(
+                name => latestNamedRun(response.data.check_runs, name)
+              );
+              const failed = required.find(
+                run =>
+                  run &&
+                  run.status === 'completed' &&
+                  !['success', 'neutral', 'skipped'].includes(run.conclusion)
+              );
               if (failed) {
-                emitMetric(`FAIL_REQUIRED_${failed.name}_${failed.conclusion}`);
-                core.setFailed(`Required final-assurance check ${failed.name} concluded ${failed.conclusion} while the serialized window was held.`);
+                emitMetric(
+                  `FAIL_REQUIRED_${failed.name}_${failed.conclusion}`
+                );
+                core.setFailed(
+                  `Required final-assurance check ${failed.name} concluded ` +
+                  `${failed.conclusion} while the serialized window was held.`
+                );
                 return;
               }
-              const allSuccessful = required.every(run => run && run.status === 'completed' && run.conclusion === 'success');
+
+              const allSuccessful = required.every(
+                run =>
+                  run &&
+                  run.status === 'completed' &&
+                  run.conclusion === 'success'
+              );
               if (allSuccessful) {
-                const mainAtEnd = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+                const mainAtEnd = await github.rest.repos.getBranch({
+                  owner,
+                  repo,
+                  branch: pr.base.ref
+                });
                 const finalMain = mainAtEnd.data.commit.sha;
                 if (finalMain !== mainSnapshot) {
                   emitMetric('FAIL_BASE_MOVED_DURING');
-                  core.setFailed(`OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved from ${mainSnapshot} to ${finalMain}. Fresh integration assurance is required.`);
+                  core.setFailed(
+                    `OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved ` +
+                    `from ${mainSnapshot} to ${finalMain}. Fresh integration ` +
+                    `assurance is required.`
+                  );
                   return;
                 }
                 emitMetric('PASS');
-                core.info(`OVC_FINAL_INTEGRATION_WINDOW_PASS: required checks passed on ${sha} while ${pr.base.ref} remained ${mainSnapshot}.`);
+                core.info(
+                  `OVC_FINAL_INTEGRATION_WINDOW_PASS: required checks passed ` +
+                  `on ${sha} while ${pr.base.ref} remained ${mainSnapshot}.`
+                );
                 return;
               }
+
               await sleep(10000);
             }
 
             emitMetric('TIMEOUT');
-            core.setFailed(`Required final-assurance checks did not all complete successfully within the serialized window for ${sha}.`);
+            core.setFailed(
+              `Required final-assurance checks did not all complete ` +
+              `successfully within the serialized window for ${sha}.`
+            );
