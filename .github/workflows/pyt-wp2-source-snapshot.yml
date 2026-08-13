@@ -1,0 +1,30 @@
+name: PYT-WP2 exact-head source snapshot
+
+on:
+  push:
+    branches:
+      - build/python-test-runner-class1-4-remediation-20260813
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    name: exact-head source snapshot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Archive exact repository tree
+        run: git archive --format=tar.gz --output=pyt-wp2-source-${{ github.sha }}.tar.gz HEAD
+      - name: Upload exact-head source snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyt-wp2-source-${{ github.sha }}
+          path: pyt-wp2-source-${{ github.sha }}.tar.gz
+          if-no-files-found: error
+          retention-days: 1
