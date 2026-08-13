@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-grt2-reuse-register/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "baseline_commit": "d392c4572e539a399e461212b4991db55ae46477",
+  "entries": [
+    {"path": "src/ovc/programme_genesis/_topology_engine.py", "role": "GRT v0.1 physical scanner/observer", "disposition": "REUSE_BEHIND_V0_2_ADAPTER"},
+    {"path": "src/ovc/programme_genesis/topology.py", "role": "GRT v0.1 compatibility surface", "disposition": "PRESERVE"},
+    {"path": "src/ovc/programme_genesis/grt_diff_v0_1.py", "role": "historical topology diff machinery", "disposition": "REUSE_AS_REFERENCE_ONLY"},
+    {"path": "src/ovc/programme_genesis/grt_conformance_v0_1.py", "role": "historical conformance observer", "disposition": "PRESERVE_REFERENCE"},
+    {"path": "scripts/governance/build_genesis_repository_topology.py", "role": "exact historical observer entry point", "disposition": "REPLAY_EXACT_SOURCE_FOR_B0"},
+    {"path": "scripts/governance/build_grt_conformance_audit.py", "role": "historical audit builder", "disposition": "PRESERVE_REFERENCE"},
+    {"path": "registries/governance/genesis_repository_topology/GRT_TOPOLOGY_RULE_PACK_v0_1.json", "role": "historical observer rule pack", "disposition": "PIN_AT_SOURCE_COMMIT_FOR_B0"},
+    {"path": "tests/governance/test_genesis_repository_topology.py", "role": "historical scanner assurance", "disposition": "PRESERVE"},
+    {"path": "src/ovc/development/identity.py", "role": "identity/hash primitives", "disposition": "REUSE"},
+    {"path": "src/ovc/development/preflight.py", "role": "repository/programme preflight", "disposition": "REUSE"},
+    {"path": "src/ovc/development/gates.py", "role": "gate mechanics", "disposition": "REUSE_NO_NEW_GATE_DOCTRINE"},
+    {"path": "src/ovc/development/head_churn.py", "role": "main-head reconciliation", "disposition": "REUSE"},
+    {"path": "src/ovc/development/qa.py", "role": "QA helpers", "disposition": "REUSE"},
+    {"path": "src/ovc/development/closure.py", "role": "packet closure", "disposition": "REUSE"},
+    {"path": "src/ovc/development/evidence_export.py", "role": "compact evidence export", "disposition": "REUSE"},
+    {"path": "src/ovc/development/receipt_bot.py", "role": "receipt mechanics", "disposition": "CONFORM_WRAP_NO_AUTHORITY_INHERITANCE"}
+  ],
+  "namespace_boundary": "src/ovc/programme_genesis/grt_v0_2 is a read/compute consumer of Programme Genesis evidence and grants no PGN write/adoption authority",
+  "authority_effect": "NONE"
+}
