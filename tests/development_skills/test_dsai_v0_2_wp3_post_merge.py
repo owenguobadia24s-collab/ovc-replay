@@ -47,19 +47,47 @@ class DSAI2WP3PostMergeTests(unittest.TestCase):
         self.assertFalse(authority["integration_policy"]["force_push"])
         self.assertFalse(authority["integration_policy"]["history_rewrite"])
 
-    def test_current_pointer_advances_to_wp4_without_expanding_reserved_authority(self) -> None:
-        pointer = self._load("registries/implementation/dsai_v0_2/CURRENT_STATE_POINTER.json")
-        self.assertEqual(pointer["current_state"], "OVC_DSAI_V0_2_STATE_v0_5.json")
-        self.assertEqual(pointer["status"], "COMPLETED")
-        self.assertEqual(pointer["next_packet"], "DSAI2-WP4")
-
-        state = self._load("registries/implementation/dsai_v0_2/OVC_DSAI_V0_2_STATE_v0_5.json")
-        self.assertEqual(state["reserved_boundaries"]["operator_required_gate_behavior"], "STOP")
-        self.assertEqual(state["reserved_boundaries"]["validation"], "DENIED")
+    def test_historical_wp3_state_remains_immutable_while_live_pointer_may_advance(self) -> None:
+        historical = self._load("registries/implementation/dsai_v0_2/OVC_DSAI_V0_2_STATE_v0_5.json")
+        self.assertEqual(historical["status"], "COMPLETED")
+        self.assertEqual(historical["packet_id"], "DSAI2-WP3")
+        self.assertEqual(historical["merge_commit"], "1db66a2ca48be27930395073e842638ad8f7f216")
+        self.assertEqual(historical["reserved_boundaries"]["operator_required_gate_behavior"], "STOP")
+        self.assertEqual(historical["reserved_boundaries"]["validation"], "DENIED")
         self.assertEqual(
-            state["reserved_boundaries"]["scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution"],
+            historical["reserved_boundaries"]["scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution"],
             "NONE",
         )
+
+        pointer = self._load("registries/implementation/dsai_v0_2/CURRENT_STATE_POINTER.json")
+        self.assertIn(
+            pointer["current_state"],
+            {
+                "OVC_DSAI_V0_2_STATE_v0_5.json",
+                "OVC_DSAI_V0_2_STATE_v0_6.json",
+                "OVC_DSAI_V0_2_STATE_v0_7.json",
+            },
+        )
+        if pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_5.json":
+            self.assertEqual(pointer["status"], "COMPLETED")
+            self.assertEqual(pointer["next_packet"], "DSAI2-WP4")
+        elif pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_6.json":
+            self.assertEqual(pointer["status"], "APPROVED")
+            self.assertIsNone(pointer["next_packet"])
+            current = self._load("registries/implementation/dsai_v0_2/OVC_DSAI_V0_2_STATE_v0_6.json")
+            self.assertEqual(current["packet_id"], "DSAI2-WP4")
+            self.assertEqual(current["gate_id"], "DSAI2-G4")
+            self.assertEqual(current["decision"], "PASS_DELEGATED_AUTO_RATIFIED")
+            self.assertIsNone(current["merge_commit"])
+        else:
+            self.assertIsNone(pointer["next_packet"])
+            current = self._load("registries/implementation/dsai_v0_2/OVC_DSAI_V0_2_STATE_v0_7.json")
+            self.assertEqual(
+                current["status"],
+                "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
+            )
+            self.assertEqual(current["packet_id"], "DSAI2-WP4")
+            self.assertTrue(current["terminal"]["programme_complete"])
 
 
 if __name__ == "__main__":

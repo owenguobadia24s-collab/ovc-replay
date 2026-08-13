@@ -94,6 +94,8 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
                 "OVC_DSAI_V0_2_STATE_v0_3.json",
                 "OVC_DSAI_V0_2_STATE_v0_4.json",
                 "OVC_DSAI_V0_2_STATE_v0_5.json",
+                "OVC_DSAI_V0_2_STATE_v0_6.json",
+                "OVC_DSAI_V0_2_STATE_v0_7.json",
             },
         )
         if pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_3.json":
@@ -111,7 +113,7 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
             premerge_resolution = resolve_orch345_authority(authority=authority, record_present_on_main=False)
             self.assertEqual(premerge_resolution["status"], "BLOCK")
             self.assertIn("AUTHORITY_RECORD_NOT_PRESENT_ON_MAIN", premerge_resolution["reason_codes"])
-        else:
+        elif pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_5.json":
             self.assertEqual(pointer["status"], "COMPLETED")
             self.assertEqual(pointer["next_packet"], "DSAI2-WP4")
             completed = self._load(STATE_ROOT / pointer["current_state"])
@@ -119,7 +121,28 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
             self.assertTrue(completed["authority_effective_on_main"])
             self.assertEqual(completed["merge_commit"], "1db66a2ca48be27930395073e842638ad8f7f216")
             self.assertEqual(completed["authority_resolution"], "ACTIVE_AUTHORIZED")
+        elif pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_6.json":
+            self.assertEqual(pointer["status"], "APPROVED")
+            self.assertIsNone(pointer["next_packet"])
+            approved = self._load(STATE_ROOT / pointer["current_state"])
+            self.assertEqual(approved["packet_id"], "DSAI2-WP4")
+            self.assertEqual(approved["gate_id"], "DSAI2-G4")
+            self.assertEqual(approved["decision"], "PASS_DELEGATED_AUTO_RATIFIED")
+            self.assertEqual(approved["authority_delta"], "NONE")
+        else:
+            self.assertIsNone(pointer["next_packet"])
+            terminal = self._load(STATE_ROOT / pointer["current_state"])
+            self.assertEqual(
+                terminal["status"],
+                "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
+            )
+            self.assertTrue(terminal["terminal"]["programme_complete"])
 
+        if pointer["current_state"] in {
+            "OVC_DSAI_V0_2_STATE_v0_5.json",
+            "OVC_DSAI_V0_2_STATE_v0_6.json",
+            "OVC_DSAI_V0_2_STATE_v0_7.json",
+        }:
             authority = self._load(ROOT / "registries/development/skills/orch345_bounded_authority_v0_1.json")
             active_resolution = resolve_orch345_authority(authority=authority, record_present_on_main=True)
             self.assertEqual(active_resolution["status"], "ACTIVE_AUTHORIZED")

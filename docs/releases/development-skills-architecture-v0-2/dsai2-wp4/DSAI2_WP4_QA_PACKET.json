@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-dsai2-wp4-qa-packet/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "DSAI2-WP4",
+  "gate_id": "DSAI2-G4",
+  "gate_class": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE",
+  "status": "PASS",
+  "baseline_main": "7ec8b8d8614822494deced0bb364208d039e91f5",
+  "tested_pilot_head": "57125ac12127889248e80301234dd7d6126d3779",
+  "checks": {
+    "g3_exact_authority_active_on_main": "PASS",
+    "orch3_same_programme_packet_train": "PASS",
+    "orch4_disjoint_parallel_build_admission": "PASS",
+    "orch4_serial_integration_only": "PASS",
+    "orch4_adversarial_overlap_fails_closed": "PASS",
+    "orch5_cross_programme_dependency": "PASS",
+    "orch5_operator_wait": "PASS",
+    "orch5_missing_prerequisite_block": "PASS",
+    "false_parallel_allows": 0,
+    "unresolved_conflict_classifications": 0,
+    "parallel_merges": 0,
+    "recorded_unresolved_s3": 0,
+    "recorded_unresolved_s4": 0,
+    "reserved_authority_crossed": false,
+    "serialized_final_integration_policy": "PASS"
+  },
+  "workflow_evidence": {
+    "tests": {"run_id": 31654920847, "run_number": 3932, "conclusion": "success", "repository_suite": "success", "pytest_unittest_parity": "success", "runner_parity": "success"},
+    "tiered": {"run_id": 31654920869, "run_number": 2276, "conclusion": "success", "profile_assurance": "success", "compatibility": "success", "merge_readiness": "success"},
+    "stable_main": "7ec8b8d8614822494deced0bb364208d039e91f5"
+  },
+  "pilot_evidence": {
+    "receipt": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_WP4_LIVE_PILOT_RECEIPT.json",
+    "incident_sweep": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_WP4_INCIDENT_AND_CONTAINMENT_SWEEP.json",
+    "orch3_commits": ["5e85085f230975248ef30a159bcdaaf43336184e", "b9ebcbc33ac06f441212bfdcff1a2824cd5a1e68"],
+    "orch4_isolated_heads": ["c6cc1c1598ba13440731a4e2dd8ca037cd364b3b", "bfcd37d1d1f596cd70afb6e942e2e2d8f1536050"],
+    "orch4_serial_receipt_commits": ["a5b4b1034f8993a7c882cfd04728d28ba3c01f44", "9a9eae915b1da90f36930b73fadbc2cb9197a25f"],
+    "cross_programme_dependency": "C2P2-WP0",
+    "operator_wait": "RCN-RN-G4 / PR #678"
+  },
+  "current_authority": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
+  },
+  "warnings": ["Incident evidence is repository-scoped and does not claim absence of unrecorded external incidents."],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_AUTO_RATIFY_DSAI2_G4",
+  "rollback": "Forward-remove/supersede WP4 pilot-only artifacts while preserving G3 bounded authority and PDC serialized integration."
+}

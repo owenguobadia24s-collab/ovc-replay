@@ -1,0 +1,68 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "status": "APPROVED",
+  "baseline_commit": "7ec8b8d8614822494deced0bb364208d039e91f5",
+  "branch": "feature/dsai2-wp4-live-pilot",
+  "packet_id": "DSAI2-WP4",
+  "gate_id": "DSAI2-G4",
+  "prerequisites": [
+    "DSAI2-WP3 COMPLETED",
+    "DSAI2-G3 operator PASS effective on main",
+    "bounded ORCH-3/4/5 authority ACTIVE_AUTHORIZED",
+    "DSAI2-WP4 initial exact-head assurance PASS"
+  ],
+  "authority_required": "DELEGATED_AUTO_RATIFICATION_SATISFIED",
+  "authority_delta": "NONE",
+  "candidate_commit": null,
+  "tests": [
+    "tests #3932 / run 31654920847 PASS: admission, repository suite, pytest-unittest-parity, runner-parity",
+    "tiered #2276 / run 31654920869 PASS: FINAL_HEAD/profile, compatibility, serialized merge readiness"
+  ],
+  "qa_packet": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_WP4_QA_PACKET.json",
+  "decision_record": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_G4_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": null,
+  "completed_packets": ["DSAI2-WP0", "DSAI2-WP1", "DSAI2-WP2", "DSAI2-WP3"],
+  "current_packet": "DSAI2-WP4",
+  "current_gate": "DSAI2-G4",
+  "pilot_receipt": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_WP4_LIVE_PILOT_RECEIPT.json",
+  "incident_sweep": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_WP4_INCIDENT_AND_CONTAINMENT_SWEEP.json",
+  "qa": "PASS",
+  "decision": "PASS_DELEGATED_AUTO_RATIFIED",
+  "g4_acceptance": {
+    "false_parallel_allows": 0,
+    "unresolved_conflict_classifications": 0,
+    "parallel_merges": 0,
+    "operator_wait_respected": true,
+    "cross_programme_dependency_respected": true,
+    "missing_prerequisite_blocked": true,
+    "serialized_final_integration": true,
+    "recorded_unresolved_s3": 0,
+    "recorded_unresolved_s4": 0,
+    "reserved_authority_crossed": false
+  },
+  "active_authority": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
+  },
+  "reserved_boundaries": {
+    "operator_required_gate_behavior": "STOP",
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "validation": "DENIED",
+    "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "mandatory_stop": false,
+  "integration_status": "G4_APPROVED_PENDING_FINAL_EXACT_HEAD_ASSURANCE_AND_SQUASH_MERGE",
+  "rollback": "Forward-remove/supersede WP4 pilot-only artifacts while preserving G3 bounded authority, PDC serialized final integration and historical evidence.",
+  "target_terminal_state": "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH"
+}
