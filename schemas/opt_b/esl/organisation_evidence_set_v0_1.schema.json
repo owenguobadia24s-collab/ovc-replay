@@ -1,0 +1,491 @@
+{
+  "$defs": {
+    "authority": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_effect": {
+          "const": "NONE"
+        },
+        "authority_state": {
+          "const": "INACTIVE_CONFORMANCE_ONLY"
+        },
+        "family_promotion": {
+          "const": "NONE"
+        },
+        "method_selection": {
+          "const": "NONE"
+        },
+        "probability_risk_exposure_execution": {
+          "const": "NONE"
+        },
+        "publication": {
+          "const": "NONE"
+        },
+        "scientific_support_disposition": {
+          "const": "NONE"
+        },
+        "semantic_promotion": {
+          "const": "NONE"
+        },
+        "topology_activation": {
+          "const": "NONE"
+        },
+        "validation_consumption": {
+          "const": "LOCKED_UNCONSUMED"
+        }
+      },
+      "required": [
+        "authority_state",
+        "authority_effect",
+        "topology_activation",
+        "method_selection",
+        "scientific_support_disposition",
+        "family_promotion",
+        "semantic_promotion",
+        "validation_consumption",
+        "publication",
+        "probability_risk_exposure_execution"
+      ],
+      "type": "object"
+    },
+    "correspondence": {
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/authority"
+        },
+        "correspondence_edge_id": {
+          "type": "string"
+        },
+        "directionality": {
+          "enum": [
+            "DIRECTIONAL",
+            "SYMMETRIC"
+          ]
+        },
+        "evaluation_cutoff": {
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "first_valid_time": {
+          "type": "string"
+        },
+        "identity_merge": {
+          "const": "FORBIDDEN"
+        },
+        "logical_hash": {
+          "type": "string"
+        },
+        "object_view_result_id": {
+          "type": "string"
+        },
+        "relation": {
+          "enum": [
+            "CORRESPONDS",
+            "CONTAINS",
+            "SPLITS_INTO",
+            "REFINES",
+            "OVERLAPS",
+            "SHARES_CORE",
+            "ADJACENT_TO",
+            "CONTRADICTS",
+            "INCOMPATIBLE",
+            "NO_CORRESPONDENCE",
+            "NOT_COMPARABLE",
+            "NOT_EVALUABLE"
+          ]
+        },
+        "schema": {
+          "const": "ovc-esl-organisation-correspondence-edge/v1"
+        },
+        "subject_view_result_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "subject_view_result_id",
+        "object_view_result_id",
+        "relation",
+        "directionality",
+        "evidence_refs",
+        "identity_merge",
+        "first_valid_time",
+        "evaluation_cutoff",
+        "authority",
+        "correspondence_edge_id",
+        "logical_hash"
+      ],
+      "type": "object"
+    },
+    "disagreement": {
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/authority"
+        },
+        "axis": {
+          "enum": [
+            "REPRESENTATION",
+            "COMPARISON",
+            "METHOD",
+            "SENSITIVITY",
+            "TOPOLOGY",
+            "POPULATION",
+            "CHRONOLOGY",
+            "BOUNDARY"
+          ]
+        },
+        "disagreement_record_id": {
+          "type": "string"
+        },
+        "evaluation_cutoff": {
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "first_valid_time": {
+          "type": "string"
+        },
+        "logical_hash": {
+          "type": "string"
+        },
+        "scalar_collapse": {
+          "const": "FORBIDDEN"
+        },
+        "schema": {
+          "const": "ovc-esl-organisation-disagreement-record/v1"
+        },
+        "status": {
+          "enum": [
+            "OBSERVED",
+            "NOT_OBSERVED",
+            "NOT_EVALUABLE",
+            "QUARANTINED"
+          ]
+        },
+        "view_result_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema",
+        "view_result_ids",
+        "axis",
+        "status",
+        "evidence_refs",
+        "scalar_collapse",
+        "first_valid_time",
+        "evaluation_cutoff",
+        "authority",
+        "disagreement_record_id",
+        "logical_hash"
+      ],
+      "type": "object"
+    },
+    "invariant": {
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/authority"
+        },
+        "content_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "evaluation_cutoff": {
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "first_valid_time": {
+          "type": "string"
+        },
+        "identity_merge": {
+          "const": "FORBIDDEN"
+        },
+        "invariant_evidence_id": {
+          "type": "string"
+        },
+        "invariant_kind": {
+          "enum": [
+            "MEMBERSHIP",
+            "RELATION",
+            "COMPONENT",
+            "NEIGHBOURHOOD",
+            "ORDERING",
+            "CORE",
+            "OTHER_REGISTERED"
+          ]
+        },
+        "logical_hash": {
+          "type": "string"
+        },
+        "schema": {
+          "const": "ovc-esl-invariant-evidence-record/v1"
+        },
+        "view_result_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema",
+        "view_result_ids",
+        "invariant_kind",
+        "content_refs",
+        "evidence_refs",
+        "identity_merge",
+        "first_valid_time",
+        "evaluation_cutoff",
+        "authority",
+        "invariant_evidence_id",
+        "logical_hash"
+      ],
+      "type": "object"
+    },
+    "metric": {
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/authority"
+        },
+        "denominator": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "eligible_universe_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "evaluation_cutoff": {
+          "type": "string"
+        },
+        "exclusions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "first_valid_time": {
+          "type": "string"
+        },
+        "logical_hash": {
+          "type": "string"
+        },
+        "metric_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "metric_record_id": {
+          "type": "string"
+        },
+        "missingness": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "numerator": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "schema": {
+          "const": "ovc-esl-organisation-metric-record/v1"
+        },
+        "status": {
+          "enum": [
+            "EVALUATED",
+            "NOT_EVALUABLE",
+            "NOT_COMPARABLE",
+            "QUARANTINED"
+          ]
+        },
+        "topology_id": {
+          "enum": [
+            "FAMILY",
+            "HIERARCHY",
+            "OVERLAP",
+            "GRAPH",
+            "CONTINUUM",
+            "COMPOSITION"
+          ]
+        },
+        "value_decimal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "view_result_id": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "metric_id",
+        "view_result_id",
+        "topology_id",
+        "eligible_universe_id",
+        "numerator",
+        "denominator",
+        "value_decimal",
+        "status",
+        "exclusions",
+        "missingness",
+        "first_valid_time",
+        "evaluation_cutoff",
+        "authority",
+        "metric_record_id",
+        "logical_hash"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://ovc.local/schemas/opt_b/esl/organisation_evidence_set_v0_1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority": {
+      "$ref": "#/$defs/authority"
+    },
+    "correspondence_edges": {
+      "items": {
+        "$ref": "#/$defs/correspondence"
+      },
+      "type": "array"
+    },
+    "decision_rule_pack_id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "disagreement_records": {
+      "items": {
+        "$ref": "#/$defs/disagreement"
+      },
+      "type": "array"
+    },
+    "evaluation_cutoff": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "first_valid_time": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "invariant_records": {
+      "items": {
+        "$ref": "#/$defs/invariant"
+      },
+      "type": "array"
+    },
+    "logical_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "metric_records": {
+      "items": {
+        "$ref": "#/$defs/metric"
+      },
+      "type": "array"
+    },
+    "organisation_absence_claim": {
+      "const": "NOT_MADE"
+    },
+    "organisation_evidence_set_id": {
+      "pattern": "^orges1:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schema": {
+      "const": "ovc-esl-organisation-evidence-set/v1"
+    },
+    "scientific_disposition": {
+      "const": "NOT_EVALUATED_RULE_PACK_REQUIRED"
+    },
+    "tested_envelope": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "type": "boolean"
+        },
+        "declared_topology_ids": {
+          "items": {
+            "enum": [
+              "FAMILY",
+              "HIERARCHY",
+              "OVERLAP",
+              "GRAPH",
+              "CONTINUUM",
+              "COMPOSITION"
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "declared_topology_ids",
+        "complete"
+      ],
+      "type": "object"
+    },
+    "view_results": {
+      "items": {
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "view_scoped_nulls": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema",
+    "view_results",
+    "metric_records",
+    "correspondence_edges",
+    "disagreement_records",
+    "invariant_records",
+    "tested_envelope",
+    "decision_rule_pack_id",
+    "scientific_disposition",
+    "view_scoped_nulls",
+    "organisation_absence_claim",
+    "first_valid_time",
+    "evaluation_cutoff",
+    "authority",
+    "organisation_evidence_set_id",
+    "logical_hash"
+  ],
+  "title": "OVC ESL OrganisationEvidenceSet v0.1",
+  "type": "object"
+}
