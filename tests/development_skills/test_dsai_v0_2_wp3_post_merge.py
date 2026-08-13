@@ -35,7 +35,10 @@ class DSAI2WP3PostMergeTests(unittest.TestCase):
         authority = self._load("registries/development/skills/orch345_bounded_authority_v0_1.json")
         resolution = resolve_orch345_authority(authority=authority, record_present_on_main=True)
         self.assertEqual(resolution["status"], "ACTIVE_AUTHORIZED")
-        self.assertEqual(resolution["reason_codes"], [])
+        self.assertEqual(
+            resolution["reason_codes"],
+            ["EXACT_DSAI2_G3_BOUNDED_ORCH345_AUTHORITY_ACTIVE"],
+        )
         self.assertFalse(resolution["parallel_merge"])
         self.assertEqual(resolution["integration_policy"], "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED")
 
