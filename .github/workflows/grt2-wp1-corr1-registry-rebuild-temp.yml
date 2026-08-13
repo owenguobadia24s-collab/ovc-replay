@@ -1,0 +1,33 @@
+name: GRT2 WP1 CORR1 registry rebuild temp
+
+on:
+  push:
+    branches:
+      - corrective/grt2-wp1-postmerge-integrity-93d66c42
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Rebuild exact inactive WP1 registry bundle
+        run: PYTHONPATH=src python scripts/governance/grt_v0_2/build_wp1_constitution.py --repository-root .
+      - name: Commit only corrected WP1 registry bundle and remove writer
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/grt2-wp1-corr1-registry-rebuild-temp.yml
+          git config user.name "ovc-grt2-corr1"
+          git config user.email "actions@users.noreply.github.com"
+          git add .github/workflows/grt2-wp1-corr1-registry-rebuild-temp.yml registries/governance/grt_v0_2/*.json
+          git diff --cached --name-only | grep -Ev '^(.github/workflows/grt2-wp1-corr1-registry-rebuild-temp.yml|registries/governance/grt_v0_2/[^/]+\.json)$' && exit 1 || true
+          git commit -m "GRT2-WP1-CORR1: rebuild deterministic inactive registry identities"
+          git push origin HEAD:corrective/grt2-wp1-postmerge-integrity-93d66c42
