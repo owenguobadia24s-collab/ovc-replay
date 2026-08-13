@@ -97,7 +97,7 @@ jobs:
           if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
             git fetch --no-tags --unshallow origin "+refs/heads/main:refs/remotes/origin/main"
           fi
-          git fetch --no-tags origin "+refs/heads/build/genesis-repository-topology-v0.1:refs/remotes/origin/build/genesis-repository-topology-v0.1"
+          git fetch --no-tags origin "100b3fa342c5dee7c96a7a4e5af9e80dac3ddfe4"
           git cat-file -e "${{ github.event.pull_request.base.sha }}^{commit}"
           git cat-file -e "100b3fa342c5dee7c96a7a4e5af9e80dac3ddfe4^{commit}"
       - uses: actions/setup-python@v5
