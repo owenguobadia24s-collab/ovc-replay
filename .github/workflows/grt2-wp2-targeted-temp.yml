@@ -5,12 +5,38 @@ on:
 permissions:
   contents: read
 jobs:
-  targeted:
+  b0:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: {fetch-depth: 0}
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
-      - name: Run GRT2 WP2 targeted tests
-        run: PYTHONPATH=src python -m unittest discover -s tests/governance/grt_v0_2 -p 'test_grt2_wp2*.py' -v
+      - run: PYTHONPATH=src python -m unittest tests.governance.grt_v0_2.test_grt2_wp2.GRT2WP2Tests.test_b0_exact -v
+  finding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: PYTHONPATH=src python -m unittest tests.governance.grt_v0_2.test_grt2_wp2.GRT2WP2Tests.test_finding_identity_and_extent -v
+  admission:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: PYTHONPATH=src python -m unittest tests.governance.grt_v0_2.test_grt2_wp2.GRT2WP2Tests.test_admission_and_lineage -v
+  floor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: PYTHONPATH=src python -m unittest tests.governance.grt_v0_2.test_grt2_wp2.GRT2WP2Tests.test_floor_mechanics_without_gen0_activation -v
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: PYTHONPATH=src python -m unittest tests.governance.grt_v0_2.test_grt2_wp2.GRT2WP2Tests.test_current_classification_does_not_overclaim -v
