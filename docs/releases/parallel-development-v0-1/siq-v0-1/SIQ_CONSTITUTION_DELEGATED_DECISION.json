@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-siq-constitution-delegated-decision/v1",
+  "constitutional_object": "OVC-SERIALIZED-INTEGRATION-QUEUE-v0.1",
+  "parent_programme": "OVC-PARALLEL-DEVELOPMENT-HEAD-CHURN-v0.1",
+  "packet_id": "SIQ-CONSTITUTION-WP1",
+  "gate_id": "SIQ-CONSTITUTION-G1",
+  "gate_class": "AUTO_RATIFIABLE_WITHIN_PRIOR_OPERATOR_APPROVAL",
+  "decision": "PASS",
+  "status": "APPROVED_FOR_EXACT_HEAD_REVALIDATION_AND_SQUASH_INTEGRATION",
+  "authority_basis": "Explicit operator instruction on 13 August 2026 to add OVC-SERIALIZED-INTEGRATION-QUEUE-v0.1 to the development constitution, followed by OVC RUN SIQ FINALISATION.",
+  "authority_delta": "DEVELOPMENT_ORCHESTRATION_CONSTITUTION_ONLY",
+  "runtime_activation_effect": "NONE",
+  "baseline_main_sha": "2ba0d059de36dc6e60cc66a2d78923c92505ec88",
+  "evaluated_candidate_head_sha": "3a1bce5e56af6f1f2e7f7095c3db0b559acb483b",
+  "reconciliation": {
+    "method": "NON_FORCE_MERGE_RECONCILIATION",
+    "current_main_parent": "2ba0d059de36dc6e60cc66a2d78923c92505ec88",
+    "prior_pr_head_parent": "781279a4fb784903e6599e32397e0f5614eb6b04",
+    "reconciled_head": "3a1bce5e56af6f1f2e7f7095c3db0b559acb483b",
+    "force_push": false,
+    "history_rewrite": false
+  },
+  "assurance": {
+    "tests_workflow": {
+      "run_id": 31753559008,
+      "conclusion": "success",
+      "jobs": {
+        "OVC final integration window admitted": "success",
+        "tests": "success",
+        "pytest-unittest-parity": "success",
+        "runner-parity": "success"
+      }
+    },
+    "tiered_workflow": {
+      "run_id": 31753559089,
+      "conclusion": "success",
+      "jobs": {
+        "OVC profile assurance": "success",
+        "OVC merge readiness": "success",
+        "OVC tiered test selection shadow": "success"
+      }
+    },
+    "submitted_reviews": 0,
+    "review_threads": 0,
+    "qa_recommendation": "PASS"
+  },
+  "constitutional_invariants": {
+    "deterministic_fifo_ready_queue": true,
+    "single_final_integration_lease": true,
+    "base_independent_vs_base_sensitive_assurance": true,
+    "base_independent_work_must_not_hold_lease": true,
+    "pdc_movement_classification": true,
+    "selective_assurance_reuse": true,
+    "automatic_lawful_requeue": true,
+    "immediate_successor_advancement": true,
+    "parallel_merge": false,
+    "permanent_integration_method": "squash",
+    "reserved_authority_unchanged": true
+  },
+  "warnings": [],
+  "unresolved_reviews": [],
+  "rollback": "Forward-supersede or revert only the SIQ constitutional policy and decision materialisation while preserving PDC, DSAI, readiness, queue and merge evidence; never rewrite history.",
+  "next_action": "Run exact-head assurance on the decision-materialised candidate; if green and main remains stable, squash-merge PR #762. Runtime implementation and runtime activation remain separate subsequent steps."
+}
