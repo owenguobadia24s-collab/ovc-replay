@@ -33,7 +33,7 @@ jobs:
         run: |
           set -euo pipefail
           rm .github/workflows/grt2-wp2-materialise-records-temp.yml
-          unexpected=$(git status --porcelain | awk '{print $2}' | grep -Ev '^(.github/workflows/grt2-wp2-materialise-records-temp.yml|docs/programmes/grt-v0-2/wp2/GRT2_WP1_MERGE_RECEIPT.json|docs/programmes/grt-v0-2/wp2/GRT2_WP2_CURRENT_CLASSIFICATION_STATUS.json|docs/programmes/grt-v0-2/wp2/GRT2_WP2_SOURCE_EVIDENCE_RECEIPT.json|registries/governance/grt_v0_2/baseline/GRT_B0_BASELINE_MEMBERS_v0_1.jsonl|registries/governance/grt_v0_2/baseline/GRT_B0_TO_V0_2_MIGRATION_v0_1.json|registries/governance/grt_v0_2/baseline/GRT_DEBT_BASELINE_B0.json|registries/governance/grt_v0_2/baseline/GRT_LATE_PREEXISTING_FINDINGS.jsonl|registries/governance/grt_v0_2/baseline/GRT_PRE_G3_TRANSITION_DEBT.jsonl)$' || true)
+          unexpected=$(git status --porcelain -uall | awk '{print $2}' | grep -Ev '^(.github/workflows/grt2-wp2-materialise-records-temp.yml|docs/programmes/grt-v0-2/wp2/GRT2_WP1_MERGE_RECEIPT.json|docs/programmes/grt-v0-2/wp2/GRT2_WP2_CURRENT_CLASSIFICATION_STATUS.json|docs/programmes/grt-v0-2/wp2/GRT2_WP2_SOURCE_EVIDENCE_RECEIPT.json|registries/governance/grt_v0_2/baseline/GRT_B0_BASELINE_MEMBERS_v0_1.jsonl|registries/governance/grt_v0_2/baseline/GRT_B0_TO_V0_2_MIGRATION_v0_1.json|registries/governance/grt_v0_2/baseline/GRT_DEBT_BASELINE_B0.json|registries/governance/grt_v0_2/baseline/GRT_LATE_PREEXISTING_FINDINGS.jsonl|registries/governance/grt_v0_2/baseline/GRT_PRE_G3_TRANSITION_DEBT.jsonl)$' || true)
           test -z "$unexpected"
           git config user.name "ovc-grt2-materialiser"
           git config user.email "actions@users.noreply.github.com"
