@@ -1,0 +1,28 @@
+name: GRT2 WP1 CORR1 rebuild output temp
+
+on:
+  push:
+    branches:
+      - diagnose/grt2-wp1-postmerge-49873c6e
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Rebuild inactive registry bundle in worktree
+        run: PYTHONPATH=src python scripts/governance/grt_v0_2/build_wp1_constitution.py --repository-root .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: grt2-wp1-corr1-rebuilt-bundle
+          path: registries/governance/grt_v0_2/*.json
+          retention-days: 1
+          if-no-files-found: error
