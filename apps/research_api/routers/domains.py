@@ -23,7 +23,7 @@ def build_domain_router(store: FixtureStore, *, real_store: RealSourceStore | No
             bars=envelope['payload'].get('bars')
             if not isinstance(bars,list): raise ContractError('MARKET_OWNER_PROJECTION_BARS_LIST_REQUIRED')
             try: envelope['payload']=bounded_time_window(bars,start=start,end=end,limit=limit)
-            except ValueError as exc: raise ContractError(str(exc)) from exc
+            except (ValueError, KeyError, TypeError) as exc: raise ContractError(f'MARKET_OWNER_PROJECTION_BAR_CONTRACT:{exc}') from exc
             return envelope
         try: payload=bounded_time_window(store.resource('market').get('bars',[]),start=start,end=end,limit=limit)
         except ValueError as exc: raise ContractError(str(exc)) from exc
