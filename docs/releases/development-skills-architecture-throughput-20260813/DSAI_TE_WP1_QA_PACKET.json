@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-dsai-throughput-wp1-qa/v1",
+  "programme_id": "OVC-DSAI-THROUGHPUT-20260813",
+  "plan_id": "OVC-DSAI-THROUGHPUT-EXPANSION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DSAI-TE-WP1",
+  "gate_id": "DSAI-TE-G1",
+  "gate_class": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE",
+  "status": "PASS",
+  "tested_head": "9f2a2b587045270fadbe84290276ff4e441e2990",
+  "checks": {
+    "max_parallel_builds_4": "PASS",
+    "max_train_packets_8": "PASS",
+    "max_auto_requeue_attempts_2": "PASS",
+    "stale_main_requeue_scope_fail_closed": "PASS",
+    "operator_gate_stop": "PASS",
+    "non_none_authority_delta_stop": "PASS",
+    "semantic_owner_drift_stop": "PASS",
+    "parallel_merge_false": "PASS",
+    "serialized_final_integration_required": "PASS",
+    "governance_broadening": false
+  },
+  "workflow_evidence": {
+    "tests": {
+      "run_id": 31677302588,
+      "run_number": 3941,
+      "conclusion": "success",
+      "repository_suite": "success",
+      "pytest_unittest_parity": "success",
+      "runner_parity": "success"
+    },
+    "tiered": {
+      "run_id": 31677302562,
+      "run_number": 2283,
+      "conclusion": "success",
+      "profile_assurance": "success",
+      "compatibility": "success",
+      "merge_readiness": "success"
+    }
+  },
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_AUTO_RATIFY_DSAI_TE_G1",
+  "rollback": "Forward-disable throughput profile and restore prior active defaults; preserve DSAI2-G3 authority, PDC serialized final integration and evidence."
+}
