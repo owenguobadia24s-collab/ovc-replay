@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/esl/soi_view_result_v0_1",
+  "title": "ESL Structural Organisation Interface view result v0.1",
+  "type": "object",
+  "required": [
+    "schema",
+    "topology",
+    "method",
+    "source_binding",
+    "topology_result",
+    "chronology",
+    "epistemic_boundary",
+    "authority",
+    "soi_view_result_id",
+    "logical_hash"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ovc-esl-soi-view-result/v1"
+    },
+    "topology": {
+      "type": "object",
+      "required": [
+        "topology_id",
+        "maturity",
+        "adapter_id"
+      ],
+      "properties": {
+        "topology_id": {
+          "enum": [
+            "FAMILY",
+            "HIERARCHY",
+            "OVERLAP",
+            "GRAPH",
+            "CONTINUUM",
+            "COMPOSITION"
+          ]
+        },
+        "maturity": {
+          "enum": [
+            "INTERFACE_ONLY",
+            "EXECUTABLE_INACTIVE"
+          ]
+        },
+        "adapter_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "method": {
+      "type": "object",
+      "required": [
+        "adapter_method_id",
+        "source_family_method_id",
+        "source_configuration_id",
+        "source_comparison_spec_id",
+        "topology_id",
+        "method_topology_separation",
+        "scientific_selection"
+      ],
+      "properties": {
+        "adapter_method_id": {
+          "const": "ESLI.SOI.FAMILY.FDI_COMPAT.v0.1"
+        },
+        "source_family_method_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_configuration_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_comparison_spec_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "topology_id": {
+          "const": "FAMILY"
+        },
+        "method_topology_separation": {
+          "const": "EXPLICIT"
+        },
+        "scientific_selection": {
+          "const": "NONE"
+        }
+      },
+      "additionalProperties": false
+    },
+    "source_binding": {
+      "type": "object",
+      "required": [
+        "source_programme_id",
+        "source_programme_disposition",
+        "source_result_type",
+        "source_result_id",
+        "source_logical_hash",
+        "source_population_id",
+        "representation_pack_id",
+        "comparison_spec_id"
+      ],
+      "properties": {
+        "source_programme_id": {
+          "const": "OVC-SFC-v0.1"
+        },
+        "source_programme_disposition": {
+          "const": "COMPLETED_PRESERVED"
+        },
+        "source_result_type": {
+          "const": "SFC.FamilyCatalog.v0.1"
+        },
+        "source_result_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_logical_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_population_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "representation_pack_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_spec_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "topology_result": {
+      "type": "object",
+      "required": [
+        "evidence_status",
+        "families",
+        "assignments",
+        "residual_ids",
+        "noise_ids",
+        "singleton_ids",
+        "denominators"
+      ],
+      "properties": {
+        "evidence_status": {
+          "enum": [
+            "FAMILY_EVIDENCE_PRESENT",
+            "METHOD_DEPENDENT_STRUCTURE_ONLY",
+            "NO_STABLE_FAMILY",
+            "NOT_EVALUABLE",
+            "UNRESOLVED",
+            "QUARANTINED"
+          ]
+        },
+        "families": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "residual_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "noise_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "singleton_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "denominators": {
+          "type": "object",
+          "required": [
+            "eligible",
+            "assigned",
+            "residual_noise_singleton"
+          ],
+          "properties": {
+            "eligible": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "assigned": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "residual_noise_singleton": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "chronology": {
+      "type": "object",
+      "required": [
+        "first_valid_time",
+        "evaluation_cutoff"
+      ],
+      "properties": {
+        "first_valid_time": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluation_cutoff": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "epistemic_boundary": {
+      "type": "object",
+      "required": [
+        "result_class",
+        "scientific_support_disposition",
+        "organisation_evidence_set",
+        "no_stable_family_scope",
+        "organisation_absence_inference",
+        "family_assignment_is_ontology"
+      ],
+      "properties": {
+        "result_class": {
+          "const": "RAW_ORGANISATION_VIEW_RESULT"
+        },
+        "scientific_support_disposition": {
+          "const": "NOT_PERFORMED_WP7_OWNED"
+        },
+        "organisation_evidence_set": {
+          "const": "NOT_MATERIALIZED_WP7_OWNED"
+        },
+        "no_stable_family_scope": {
+          "enum": [
+            "FAMILY_TOPOLOGY_ONLY",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "organisation_absence_inference": {
+          "const": "FORBIDDEN"
+        },
+        "family_assignment_is_ontology": {
+          "const": "FORBIDDEN"
+        }
+      },
+      "additionalProperties": false
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "authority_state",
+        "authority_effect",
+        "topology_activation",
+        "family_promotion",
+        "method_selection",
+        "scientific_support_disposition",
+        "semantic_promotion",
+        "validation_consumption",
+        "publication",
+        "probability_risk_exposure_execution"
+      ],
+      "properties": {
+        "authority_state": {
+          "const": "INACTIVE_CONFORMANCE_ONLY"
+        },
+        "authority_effect": {
+          "const": "NONE"
+        },
+        "topology_activation": {
+          "const": "NONE"
+        },
+        "family_promotion": {
+          "const": "NONE"
+        },
+        "method_selection": {
+          "const": "NONE"
+        },
+        "scientific_support_disposition": {
+          "const": "NONE"
+        },
+        "semantic_promotion": {
+          "const": "NONE"
+        },
+        "validation_consumption": {
+          "const": "LOCKED_UNCONSUMED"
+        },
+        "publication": {
+          "const": "NONE"
+        },
+        "probability_risk_exposure_execution": {
+          "const": "NONE"
+        }
+      },
+      "additionalProperties": false
+    },
+    "soi_view_result_id": {
+      "type": "string",
+      "pattern": "^soi1:[0-9a-f]{64}$"
+    },
+    "logical_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "organisation_evidence_set_id"
+        ]
+      },
+      {
+        "required": [
+          "decision_rule_pack_id"
+        ]
+      },
+      {
+        "required": [
+          "support_status"
+        ]
+      },
+      {
+        "required": [
+          "canonical_topology"
+        ]
+      },
+      {
+        "required": [
+          "production_selector"
+        ]
+      },
+      {
+        "required": [
+          "probability"
+        ]
+      },
+      {
+        "required": [
+          "risk"
+        ]
+      },
+      {
+        "required": [
+          "exposure"
+        ]
+      },
+      {
+        "required": [
+          "execution"
+        ]
+      }
+    ]
+  },
+  "additionalProperties": false
+}

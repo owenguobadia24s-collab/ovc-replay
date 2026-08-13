@@ -20,6 +20,16 @@ from .model import (
     StructuralFacet,
     StructuralOccurrenceRecord,
 )
+from .soi_compat import (
+    SOICompatibilityError,
+    SOIFamilyAdapterBinding,
+    SOITopologyEntry,
+    TOPOLOGY_IDS,
+    adapt_family_catalog,
+    family_binding_from_mapping,
+    invoke_soi_topology,
+    topology_registry_from_mapping,
+)
 from .validators import ESLValidationError, validate_occurrence
 
 __all__ = [
@@ -35,6 +45,14 @@ __all__ = [
     "StructuralDimension",
     "StructuralFacet",
     "StructuralOccurrenceRecord",
+    "SOICompatibilityError",
+    "SOIFamilyAdapterBinding",
+    "SOITopologyEntry",
+    "TOPOLOGY_IDS",
+    "adapt_family_catalog",
+    "family_binding_from_mapping",
+    "invoke_soi_topology",
+    "topology_registry_from_mapping",
     "ESLValidationError",
     "validate_occurrence",
 ]
