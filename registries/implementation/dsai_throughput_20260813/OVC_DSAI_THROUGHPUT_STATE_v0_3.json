@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-THROUGHPUT-20260813",
+  "plan_id": "OVC-DSAI-THROUGHPUT-EXPANSION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "COMPLETED",
+  "baseline_commit": "80c940e764c90b285d0043030e218fc18532776e",
+  "branch": "chore/dsai-throughput-20260813-closeout",
+  "packet_id": "DSAI-TE-WP1",
+  "gate_id": "DSAI-TE-G1",
+  "prerequisites": [
+    "DSAI-TE-G1 PASS delegated auto-ratification",
+    "PR #697 exact-head assurance PASS",
+    "PR #697 squash merge 80c940e764c90b285d0043030e218fc18532776e"
+  ],
+  "authority_required": "NONE_REMAINING_WITHIN_BOUNDED_THROUGHPUT_EXPANSION",
+  "authority_delta": "NONE",
+  "candidate_commit": "80c940e764c90b285d0043030e218fc18532776e",
+  "tests": [
+    "PR #697 tests #3944 / run 31677696247 PASS",
+    "PR #697 tiered #2286 / run 31677696097 PASS including serialized merge readiness"
+  ],
+  "qa_packet": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_WP1_QA_PACKET.json",
+  "decision_record": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_G1_DECISION.json",
+  "merge_commit": "80c940e764c90b285d0043030e218fc18532776e",
+  "blockers": [],
+  "next_packet": null,
+  "merge_receipt": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_G1_SQUASH_MERGE_RECEIPT.json",
+  "capacity_profile": "registries/development/skills/orch345_operational_capacity_v0_2.json",
+  "active_capacity": {
+    "max_parallel_builds": 4,
+    "max_train_packets": 8,
+    "max_auto_requeue_attempts": 2,
+    "portfolio_dispatch": "FILL_PAIRWISE_COMPATIBLE_SLOTS_UP_TO_4"
+  },
+  "preserved_boundaries": {
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "operator_required_gate_behavior": "STOP",
+    "non_none_authority_delta_behavior": "STOP",
+    "ambiguity_policy": "SERIAL_REQUIRED",
+    "parallel_merge": false,
+    "serialized_final_integration_window": true,
+    "validation": "DENIED",
+    "reserved_scientific_execution_authority": "NONE"
+  },
+  "eod_evidence_window": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_EOD_EVIDENCE_WINDOW.json",
+  "governance_broadening": "DEFERRED_TO_END_OF_DAY_OPERATOR_ASSESSMENT",
+  "mandatory_stop": false,
+  "terminal": {
+    "programme_complete": true,
+    "throughput_profile_active_on_main": true,
+    "eod_assessment_pending": true,
+    "future_governance_broadening_requires_operator": true
+  },
+  "rollback": "Forward-disable throughput profile and restore prior active defaults while preserving DSAI2-G3 authority, PDC serialized final integration and all evidence."
+}
