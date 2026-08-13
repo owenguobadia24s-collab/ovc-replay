@@ -1,0 +1,18 @@
+{
+  "schema": "ovc-dsai2-orch345-shadow-policy/v1",
+  "policy_id": "DSAI2.ORCH345.SHADOW.POLICY.v0.1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "activation_state": {
+    "ORCH-3": "INACTIVE_SHADOW_ONLY",
+    "ORCH-4": "INACTIVE_SHADOW_ONLY",
+    "ORCH-5": "INACTIVE_SHADOW_ONLY"
+  },
+  "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+  "parallelism": {
+    "build": "SHADOW_CLASSIFICATION_ONLY",
+    "merge": "DENIED",
+    "ambiguity": "SERIAL_REQUIRED"
+  },
+  "integration": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED",
+  "authority_effect": "NONE"
+}

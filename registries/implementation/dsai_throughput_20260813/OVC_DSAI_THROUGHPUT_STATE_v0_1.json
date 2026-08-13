@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-THROUGHPUT-20260813",
+  "plan_id": "OVC-DSAI-THROUGHPUT-EXPANSION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "IMPLEMENTED",
+  "baseline_commit": "bdcf2d96b646b6f5c1e958029bfaf4c782c22d9c",
+  "branch": "feature/dsai-throughput-expansion-20260813",
+  "packet_id": "DSAI-TE-WP1",
+  "gate_id": "DSAI-TE-G1",
+  "prerequisites": [
+    "DSAI2-G3 bounded ORCH-3/4/5 authority active on main",
+    "DSAI v0.2 terminal programme complete"
+  ],
+  "authority_required": "OPERATOR_SCOPE_ADMISSION_ALREADY_RECORDED_AT_DSAI-TE-G0",
+  "authority_delta": "NONE",
+  "candidate_commit": null,
+  "tests": [
+    "targeted throughput regressions pending GitHub exact-head CI",
+    "repository-wide assurance pending"
+  ],
+  "qa_packet": null,
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "DSAI-TE-G1",
+  "capacity_profile": "registries/development/skills/orch345_operational_capacity_v0_2.json",
+  "eod_evidence_window": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_EOD_EVIDENCE_WINDOW.json",
+  "governance_broadening": "DEFERRED_TO_END_OF_DAY_OPERATOR_ASSESSMENT",
+  "mandatory_stop": false,
+  "rollback": "Forward-disable throughput profile and restore prior active defaults; preserve DSAI2-G3 authority, PDC serialized integration and evidence."
+}

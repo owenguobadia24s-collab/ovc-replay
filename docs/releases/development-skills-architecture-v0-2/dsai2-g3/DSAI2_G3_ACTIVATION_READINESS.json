@@ -1,0 +1,74 @@
+{
+  "schema": "ovc-dsai2-g3-activation-readiness/v1",
+  "assessment_id": "DSAI2-G3.ACTIVATION.READINESS.20260812",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "gate_id": "DSAI2-G3",
+  "gate_class": "OPERATOR_REQUIRED",
+  "conformance_main": "28ef05024d3bd12d9917eecc17e3b5dece4a2613",
+  "current_authority": {
+    "ORCH-2": "ACTIVE_BOUNDED_SINGLE_PACKET_SERIAL_REQUIRED",
+    "ORCH-3": "INACTIVE_SHADOW_ONLY",
+    "ORCH-4": "INACTIVE_SHADOW_ONLY",
+    "ORCH-5": "INACTIVE_SHADOW_ONLY"
+  },
+  "empirical_corpus": {
+    "event_count": 28,
+    "distinct_pr_count": 26,
+    "distinct_programme_count": 8,
+    "main_head_churn_pressure_events": 18,
+    "packet_train_progress_observed": true,
+    "parallel_build_observed": true,
+    "cross_programme_dependency_observed": true,
+    "serialized_final_integration_observed": true
+  },
+  "qualification": {
+    "orch3_packet_train_conformance": "PASS",
+    "orch4_conflict_detector_conformance": "PASS",
+    "orch5_portfolio_scheduler_conformance": "PASS",
+    "ambiguity_serial_fallback": "PASS",
+    "parallel_merge_denial": "PASS",
+    "future_authority_fail_closed_until_main_record": "PASS",
+    "pdc_terminal_state": "COMPLETED / PARALLEL_BUILD_SERIALIZED_FINAL_INTEGRATION_WINDOW_ACTIVE",
+    "recorded_unresolved_s3": 0,
+    "recorded_unresolved_s4": 0,
+    "incident_evidence_scope": "The inspected DSAI v0.1 programme record contains no recorded unresolved S3/S4 incident. This is not converted into a claim about unrecorded external events."
+  },
+  "tests": {
+    "tests_run_id": 31649971549,
+    "tests_run_number": 3908,
+    "tests_conclusion": "success",
+    "tiered_run_id": 31649971565,
+    "tiered_run_number": 2255,
+    "tiered_conclusion": "success",
+    "merge_readiness": "success"
+  },
+  "proposed_authority_delta": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "auto_gate_allowlist": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+    "required_authority_delta_for_automatic_handling": "NONE",
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED",
+    "target_branch": "main",
+    "merge_method": "squash",
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "operator_required_gate_behavior": "STOP",
+    "validation": "DENIED",
+    "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "activation_performed": false,
+  "self_grant_prohibited": true,
+  "status": "GATE_READY_OPERATOR_REQUIRED",
+  "recommendation": "PASS",
+  "warnings": [
+    "The live ORCH-3/4/5 pilot is intentionally post-activation and is not evidence for pre-authorising an authority expansion beyond the bounded delta above.",
+    "Recorded incident evidence is repository-scoped; absence of an authoritative incident record is not evidence about unrecorded external events."
+  ],
+  "blocking_warnings": [],
+  "rollback": "Forward-disable ORCH-3/4/5 and return orchestration to bounded ORCH-2 SERIAL_REQUIRED while preserving the PDC serialized final-integration window, all branches, receipts and historical decisions."
+}
