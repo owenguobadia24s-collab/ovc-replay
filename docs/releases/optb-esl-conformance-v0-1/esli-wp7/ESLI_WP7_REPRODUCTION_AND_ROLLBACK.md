@@ -1,10 +1,10 @@
 # ESLI-WP7 reproduction and rollback
 
 Baseline: `e03823decfdc9984cdc2fdc25a030437e7337ef5`  
-Branch: `build/esli-wp7-organisation-evidence-requeue3-20260813`  
+Branch: `build/esli-wp7-organisation-evidence-requeue4-20260813`  
 Authority delta: `NONE`.
 
-Reconstructed from the already-bounded WP7 implementation onto the latest lawful main. Prior PR #738 / head `19840eca2268d8a882aff810042e45fbe370a547` and PR #758 / head `0a041712426bcda09bbbe003b77f14b1eedc4384`, including their branches, CI and review evidence, remain preserved.
+Reconstructed from the already-bounded WP7 implementation onto the latest lawful main. Prior PR #738 / head `19840eca2268d8a882aff810042e45fbe370a547` and PR #758 / head `0a041712426bcda09bbbe003b77f14b1eedc4384`, including their branches, CI and review evidence, remain preserved. Unmutated abandoned requeue branches are also retained without history rewrite.
 
 ## Targeted reproduction
 
