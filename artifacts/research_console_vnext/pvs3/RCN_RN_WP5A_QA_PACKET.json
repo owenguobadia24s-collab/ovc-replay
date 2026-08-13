@@ -1,0 +1,141 @@
+{
+  "schema": "ovc-rcn-rn-wp5a-qa-packet/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_source_sha256": "fd12580607ff748892046547005cced62fba3db8530473ca9206f0836dcee40c",
+  "packet_id": "RCN-RN-WP5A",
+  "gate_id": "RCN-RN-WP5A-CLOSEOUT",
+  "baseline_main": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+  "implementation_evidence_head": "8b940e48ff999e857066d54efcd39c2117fa5af6",
+  "branch": "build/rc-vnext-wp5a-representations",
+  "status": "PASS",
+  "recommendation": "PASS",
+  "authority_delta": "NONE",
+  "authority_effect": "NONE",
+  "source_preflight": {
+    "status": "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+    "record": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_SOURCE_AUTHORITY_PREFLIGHT.json",
+    "source_binding_registry": "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json",
+    "presentation_mode": "FIXTURE_ONLY",
+    "evidence_status": "NON_EVIDENTIARY",
+    "first_new_real_research_source": false,
+    "auto_gate_branch": "RCN-RN-WP5A-CLOSEOUT",
+    "operator_escalation_gate": "RCN-RN-G5-FIRST-NEW-SOURCE"
+  },
+  "acceptance_conditions": [
+    {
+      "condition": "SRI, FDI, SRFD and MCARB representations are rendered through stable API and React contracts using exact repository-addressable fixture identities.",
+      "result": "PASS",
+      "evidence": [
+        "contracts/research_console_vnext/RCN_RN_WP5A_REPRESENTATION_READ_SURFACE_CONTRACT_v1.md",
+        "schemas/research_console_vnext/wp5a_representation_snapshot_v1.schema.json",
+        "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json",
+        "src/ovc/console_vnext/application/research_wp5a.py",
+        "apps/research_console_vnext/src/production/RepresentationWorkbench.tsx"
+      ]
+    },
+    {
+      "condition": "Population, coverage, comparability, missingness, denominators and truncation are explicit and deterministic.",
+      "result": "PASS",
+      "evidence": [
+        "fixtures/research_console_vnext/console_pack_v0_1/research_wp5a.json",
+        "tests/research_console_vnext/test_research_native_wp5a_representations.py"
+      ]
+    },
+    {
+      "condition": "The UI presents source-owned method evidence without inventing a default winner, hidden score, ranking or selector authority.",
+      "result": "PASS",
+      "evidence": [
+        "apps/research_console_vnext/src/production/RepresentationWorkbench.tsx",
+        "apps/research_console_vnext/src/api/types.ts",
+        "apps/research_console_vnext/src/api/wp5a-client.test.ts"
+      ]
+    },
+    {
+      "condition": "RESIDUAL, AMBIGUOUS and NO_STABLE_FAMILY are retained as equal-status lawful terminal outcomes with no forced family assignment.",
+      "result": "PASS",
+      "evidence": [
+        "schemas/research_console_vnext/wp5a_representation_snapshot_v1.schema.json",
+        "fixtures/research_console_vnext/console_pack_v0_1/research_wp5a.json",
+        "tests/research_console_vnext/test_research_native_wp5a_representations.py"
+      ]
+    },
+    {
+      "condition": "Validation is denied before source reads; provider fetch, real Research reads, frontend scientific calculation and mutation methods remain prohibited.",
+      "result": "PASS",
+      "evidence": [
+        "contracts/research_console_vnext/RCN_RN_WP5A_REPRESENTATION_READ_SURFACE_CONTRACT_v1.md",
+        "src/ovc/console_vnext/application/research_wp5a.py",
+        "apps/research_api/routers/domains.py",
+        "registries/research_console_vnext/research_native/route_registry_v2.json"
+      ]
+    },
+    {
+      "condition": "No first-new real Research source is exposed; any future such exposure remains operator-reserved at RCN-RN-G5-FIRST-NEW-SOURCE.",
+      "result": "PASS",
+      "evidence": [
+        "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_SOURCE_AUTHORITY_PREFLIGHT.json",
+        "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json"
+      ]
+    },
+    {
+      "condition": "Targeted, Research Console, repository-wide, parity, FINAL_HEAD/profile and serialized stable-main assurance pass.",
+      "result": "PASS",
+      "evidence": [
+        "GitHub Actions tests run 31700035587",
+        "GitHub Actions tiered run 31700035668",
+        "GitHub Actions Research Console run 31698584678"
+      ]
+    }
+  ],
+  "tests": {
+    "research_console_implementation_head": {
+      "head": "d8bea52c3f36021683dc4c8f68c7af47bab91adc",
+      "run_id": 31698584678,
+      "frontend_foundation_job": 94441955637,
+      "frontend_typecheck": "PASS",
+      "frontend_unit_tests": "PASS",
+      "frontend_build": "PASS",
+      "frontend_e2e": "PASS",
+      "api_contract_job": 94441955645,
+      "api_contract": "PASS"
+    },
+    "exact_implementation_evidence_head": {
+      "head": "8b940e48ff999e857066d54efcd39c2117fa5af6",
+      "tests_run_id": 31700035587,
+      "final_integration_admission_job": 94446701633,
+      "repository_suite_and_exact_research_console_job": 94446738625,
+      "repository_suite": "PASS",
+      "exact_research_console_surface": "PASS",
+      "pytest_unittest_parity_job": 94446738480,
+      "pytest_unittest_parity": "PASS",
+      "runner_parity_job": 94446738521,
+      "runner_parity": "PASS",
+      "tiered_run_id": 31700035668,
+      "profile_assurance_job": 94446701601,
+      "profile_assurance": "PASS",
+      "final_head_profile": "PASS",
+      "merge_readiness_job": 94446701784,
+      "serialized_stable_main_readiness": "PASS"
+    },
+    "final_record_exact_head": "REQUIRED_AFTER_QA_DECISION_MATERIALISATION"
+  },
+  "changed_surface": [
+    "WP5A representation contract and schema",
+    "exact fixture-source binding registry and source-authority preflight",
+    "fixture-only non-evidentiary projection service and GET API route",
+    "typed React Query client and WorkbenchFrame representation surface",
+    "method-first, null-winner and equal-status outcome tests",
+    "historical conformance tests rebound to immutable post-G4 evidence",
+    "programme state, QA and delegated closeout records"
+  ],
+  "warnings": [
+    "Final record exact-head CI must pass after this QA and decision are committed.",
+    "The dedicated frontend PASS is pinned to the implementation-equivalent head d8bea52; no frontend runtime source changed between that head and 8b940e48, and the final record head will rerun the dedicated Research Console workflow."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "qa_rationale": "Every WP5A source is an exact repository-addressable synthetic fixture with non-evidentiary authority. The implementation is method-first, null-winner, GET-only and Validation-locked. The no-first-new-real-source preflight keeps the proposed authority delta at NONE, so the closeout gate is eligible for delegated auto-ratification after final record assurance.",
+  "rollback": "Forward-revert the WP5A route, projection, source bindings, client/component, tests and packet records; restore RCN-RN-WP5A READY while preserving G4, the governing PPM, source fixtures and Git history. No force-push or history rewrite.",
+  "next_action": "Materialise delegated RCN-RN-WP5A-CLOSEOUT PASS, remove the temporary branch-only CI hook, rerun exact-head assurance, squash-merge PR #730, then record the merge receipt and set RCN-RN-WP5B READY without starting WP5B."
+}

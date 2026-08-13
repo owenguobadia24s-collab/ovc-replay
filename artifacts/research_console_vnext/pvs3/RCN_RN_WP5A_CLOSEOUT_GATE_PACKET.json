@@ -1,0 +1,110 @@
+{
+  "schema": "ovc-rcn-rn-wp5a-closeout-gate-packet/v1",
+  "gate_id": "RCN-RN-WP5A-CLOSEOUT",
+  "title": "WP5A Representation Read Surface Closeout",
+  "gate_class": "AUTO_RATIFIABLE",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_source_sha256": "fd12580607ff748892046547005cced62fba3db8530473ca9206f0836dcee40c",
+  "baseline_main": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+  "candidate_commit": "8b940e48ff999e857066d54efcd39c2117fa5af6",
+  "completed_packets": [
+    "RCN-RN-WP5A"
+  ],
+  "current_authority": "G4_APPROVED_READ_ONLY_REAL_SOURCE_INVESTIGATE_PRESENTATION_MARKET_C1_C2_C2E",
+  "proposed_authority_delta": "NONE",
+  "source_preflight": {
+    "status": "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+    "presentation_mode": "FIXTURE_ONLY",
+    "evidence_status": "NON_EVIDENTIARY",
+    "first_new_real_research_source": false,
+    "operator_escalation_gate": "RCN-RN-G5-FIRST-NEW-SOURCE",
+    "operator_escalation_triggered": false
+  },
+  "acceptance_conditions": [
+    {
+      "condition": "Stable API and React presentation contracts exist for the bounded SRI, FDI, SRFD and MCARB fixture sources.",
+      "result": "PASS"
+    },
+    {
+      "condition": "Population, denominator, missingness, comparability and truncation remain explicit.",
+      "result": "PASS"
+    },
+    {
+      "condition": "Method-first presentation preserves null winners and introduces no selector or scientific calculation.",
+      "result": "PASS"
+    },
+    {
+      "condition": "RESIDUAL, AMBIGUOUS and NO_STABLE_FAMILY remain equal-status lawful outcomes.",
+      "result": "PASS"
+    },
+    {
+      "condition": "No provider, Validation, real Research or first-new real Research source is consumed or exposed.",
+      "result": "PASS"
+    },
+    {
+      "condition": "Targeted, Research Console, repository, parity, FINAL_HEAD/profile and serialized stable-main assurance pass and QA recommends PASS.",
+      "result": "PASS"
+    }
+  ],
+  "tests": {
+    "research_console_run": 31698584678,
+    "frontend_foundation_job": 94441955637,
+    "api_contract_job": 94441955645,
+    "exact_tests_run": 31700035587,
+    "exact_repository_and_research_console_job": 94446738625,
+    "pytest_unittest_parity_job": 94446738480,
+    "runner_parity_job": 94446738521,
+    "tiered_run": 31700035668,
+    "profile_assurance_job": 94446701601,
+    "merge_readiness_job": 94446701784,
+    "result": "PASS",
+    "final_record_exact_head": "REQUIRED_AFTER_GATE_RECORD_COMMIT"
+  },
+  "qa": {
+    "qa_packet": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_QA_PACKET.json",
+    "recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_issues": []
+  },
+  "changed_files": [
+    "contracts/research_console_vnext/RCN_RN_WP5A_REPRESENTATION_READ_SURFACE_CONTRACT_v1.md",
+    "schemas/research_console_vnext/wp5a_representation_snapshot_v1.schema.json",
+    "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json",
+    "fixtures/research_console_vnext/console_pack_v0_1/research_wp5a.json",
+    "src/ovc/console_vnext/application/research_wp5a.py",
+    "apps/research_api/routers/domains.py",
+    "apps/research_console_vnext/src/production/RepresentationWorkbench.tsx",
+    "apps/research_console_vnext/src/production/representationWorkbench.css",
+    "apps/research_console_vnext/src/api/client.ts",
+    "apps/research_console_vnext/src/api/types.ts",
+    "apps/research_console_vnext/src/api/wp5a-client.test.ts",
+    "tests/research_console_vnext/test_research_native_wp5a_representations.py",
+    "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_SOURCE_AUTHORITY_PREFLIGHT.json",
+    "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_IMPLEMENTATION_RECORD.json",
+    "registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json"
+  ],
+  "external_artifacts": [],
+  "warnings": [
+    "Any future first-new real Research source makes this auto gate ineligible and must stop at RCN-RN-G5-FIRST-NEW-SOURCE.",
+    "Final record exact-head assurance is mandatory before merge."
+  ],
+  "unresolved_issues": [],
+  "rollback": "Forward-revert the bounded WP5A route, fixture projection, exact source bindings, client/component, tests and packet records; restore RCN-RN-WP5A READY. Preserve G4 authority, governing PPM evidence, source fixtures and Git history.",
+  "recommended_decision": "PASS",
+  "authority_classification": "NON_RESERVED_NONE",
+  "auto_ratification_eligible": true,
+  "pass_permits": [
+    "Fixture-only non-evidentiary GET presentation of the exact bound SRI, FDI, SRFD and MCARB source fixtures",
+    "Administrative completion of WP5A and readiness transition to WP5B after merge"
+  ],
+  "pass_does_not_permit": [
+    "First-new real Research-source exposure",
+    "Provider or Validation intake",
+    "Representation, method, topology, family, candidate, theory, semantic or selector promotion",
+    "Scientific ranking, hidden scoring or winner selection",
+    "Publication, probability, risk, exposure, execution or write authority",
+    "Starting WP5B before WP5A merge closeout"
+  ],
+  "exact_work_after_pass": "Commit delegated PASS and QA, restore the canonical tests workflow, rerun exact-head checks, squash-merge PR #730, record the merge receipt and advance RCN-RN-WP5B to READY without starting it."
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "ovc-rcn-rn-wp5a-closeout-decision/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_source_sha256": "fd12580607ff748892046547005cced62fba3db8530473ca9206f0836dcee40c",
+  "packet_id": "RCN-RN-WP5A",
+  "gate_id": "RCN-RN-WP5A-CLOSEOUT",
+  "gate_class": "AUTO_RATIFIABLE",
+  "baseline_main": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+  "candidate_commit": "8b940e48ff999e857066d54efcd39c2117fa5af6",
+  "decision": "PASS",
+  "decision_class": "DELEGATED_AUTO_RATIFICATION",
+  "delegated_authority_basis": "The ratified v0.3 plan and repository-bound WP5 PPM delegate auto-ratification when all WP5A acceptance conditions pass, QA recommends PASS, no first-new real Research source is exposed and the proposed authority delta remains wholly NONE.",
+  "authority_before": "G4_APPROVED_READ_ONLY_REAL_SOURCE_INVESTIGATE_PRESENTATION_MARKET_C1_C2_C2E",
+  "authority_delta": "NONE",
+  "authority_after": "G4_APPROVED_READ_ONLY_REAL_SOURCE_INVESTIGATE_PRESENTATION_MARKET_C1_C2_C2E",
+  "source_preflight": {
+    "status": "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+    "record": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_SOURCE_AUTHORITY_PREFLIGHT.json",
+    "first_new_real_research_source": false,
+    "operator_escalation_gate": "RCN-RN-G5-FIRST-NEW-SOURCE",
+    "operator_escalation_triggered": false
+  },
+  "tests": {
+    "research_console_run": 31698584678,
+    "frontend_foundation_job": 94441955637,
+    "api_contract_job": 94441955645,
+    "exact_tests_run": 31700035587,
+    "final_integration_admission_job": 94446701633,
+    "repository_and_exact_research_console_job": 94446738625,
+    "pytest_unittest_parity_job": 94446738480,
+    "runner_parity_job": 94446738521,
+    "tiered_run": 31700035668,
+    "profile_assurance_job": 94446701601,
+    "merge_readiness_job": 94446701784,
+    "result": "PASS",
+    "final_record_exact_head": "REQUIRED_BEFORE_MERGE"
+  },
+  "qa": {
+    "packet": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_QA_PACKET.json",
+    "recommendation": "PASS",
+    "blocking_warnings": [],
+    "unresolved_issues": []
+  },
+  "gate_packet": "artifacts/research_console_vnext/pvs3/RCN_RN_WP5A_CLOSEOUT_GATE_PACKET.json",
+  "rationale": [
+    "All presentation sources are exact repository-addressable synthetic fixtures and are explicitly non-evidentiary.",
+    "The service and UI are GET-only, method-first, null-winner and Validation-locked.",
+    "Population, denominator, missingness, comparability and equal-status residual outcomes remain explicit.",
+    "No provider, real Research source, first-new real Research source, scientific selector, publication or execution authority is introduced.",
+    "All required implementation-head checks pass and QA recommends PASS."
+  ],
+  "explicit_exclusions": [
+    "NO_FIRST_NEW_REAL_RESEARCH_SOURCE_EXPOSURE",
+    "NO_PROVIDER_OR_VALIDATION_INTAKE",
+    "NO_REPRESENTATION_METHOD_TOPOLOGY_FAMILY_CANDIDATE_THEORY_SEMANTIC_OR_SELECTOR_PROMOTION",
+    "NO_SCIENTIFIC_RANKING_HIDDEN_SCORE_OR_WINNER_SELECTION",
+    "NO_PUBLICATION_PROBABILITY_RISK_EXPOSURE_EXECUTION_OR_WRITE_AUTHORITY",
+    "NO_WP5B_START_BEFORE_WP5A_MERGE_CLOSEOUT"
+  ],
+  "rollback": "Forward-revert the WP5A route, projection, source bindings, client/component, tests and packet records; restore RCN-RN-WP5A READY while preserving G4, the governing PPM, source fixtures and Git history. No force-push or history rewrite.",
+  "merge_state": "PENDING_FINAL_RECORD_EXACT_HEAD_ASSURANCE_AND_SQUASH_MERGE",
+  "next_packet_after_merge_closeout": "RCN-RN-WP5B",
+  "next_packet_start_authorised": false,
+  "authority_effect": "NONE"
+}
