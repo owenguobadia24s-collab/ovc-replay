@@ -127,7 +127,10 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
                 active_resolution["reason_codes"],
                 ["EXACT_DSAI2_G3_BOUNDED_ORCH345_AUTHORITY_ACTIVE"],
             )
-            self.assertFalse(active_resolution["parallel_merge"])
+            self.assertFalse(authority["integration_policy"]["parallel_merge"])
+            self.assertTrue(authority["integration_policy"]["serialized_final_integration_window"])
+            self.assertEqual(authority["integration_policy"]["target_branch"], "main")
+            self.assertEqual(authority["integration_policy"]["merge_method"], "squash")
 
 
 if __name__ == "__main__":
