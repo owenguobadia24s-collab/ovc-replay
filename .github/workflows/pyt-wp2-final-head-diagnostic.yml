@@ -19,9 +19,9 @@ jobs:
         shell: bash
         run: |
           set +e
-          PYTHONPATH=src python -m unittest discover -s tests/development -v > /tmp/final-head.log 2>&1
+          PYTHONPATH=src python -m unittest discover -s tests/development -q > /tmp/final-head.log 2>&1
           s1=$?
-          PYTHONPATH=src python -m unittest discover -s tests/authority -v >> /tmp/final-head.log 2>&1
+          PYTHONPATH=src python -m unittest discover -s tests/authority -q >> /tmp/final-head.log 2>&1
           s2=$?
           cat /tmp/final-head.log
           if [ "$s1" -ne 0 ] || [ "$s2" -ne 0 ]; then
