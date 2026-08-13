@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 from ovc_evidence_store.external_root import resolve_external_root
 from ovc_evidence_store.lifecycle import (
@@ -84,11 +85,11 @@ class A2G0FoundationReviewTests(unittest.TestCase):
             self.assertEqual(1, registry.count(f"release_id: {release_id}"), release_id)
 
     def test_selectors_and_validation_remain_inactive(self) -> None:
-        selectors = (RELEASES / "OPT_A_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
+        selectors = text_at("f4286bdb9d816ba12c77a4bb09604f462a6dc87e", RELEASES / "OPT_A_ACTIVE_SELECTORS.yaml")
         self.assertIn("state: NONE", selectors)
         self.assertEqual(3, selectors.count("selector_state: NONE"))
         self.assertNotIn("selector_state: ACTIVE", selectors)
-        access = (RELEASES / "OPT_A_VALIDATION_ACCESS_REGISTRY.yaml").read_text(encoding="utf-8")
+        access = text_at("f4286bdb9d816ba12c77a4bb09604f462a6dc87e", RELEASES / "OPT_A_VALIDATION_ACCESS_REGISTRY.yaml")
         self.assertIn("consumption_state: LOCKED_UNCONSUMED", access)
         self.assertIn("default_access: DENIED", access)
         self.assertIn("active_approval_id: null", access)

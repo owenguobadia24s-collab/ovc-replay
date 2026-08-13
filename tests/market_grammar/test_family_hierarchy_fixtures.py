@@ -1,6 +1,7 @@
 from __future__ import annotations
 import importlib.util,json,unittest
 from pathlib import Path
+from tests.historical_court_record import names_at
 ROOT=Path(__file__).resolve().parents[2]; FIXTURE=ROOT/'fixtures/market_grammar/wp3/c2g_sensitivity_cases.json'; RUNNER=ROOT/'scripts/market_grammar/run_mg_wp3_fixture.py'; PACKS=ROOT/'registries/opt_b/market_grammar/MG_C2G_SENSITIVITY_PACK_REGISTRY_v0_1.json'; HIERARCHY=ROOT/'registries/opt_b/market_grammar/MG_C2G_HIERARCHY_POLICY_v0_1.json'; SCHEMAS=ROOT/'schemas/opt_b/market_grammar'
 def load(path):
  value=json.loads(path.read_text(encoding='utf-8')); assert isinstance(value,dict); return value
@@ -24,6 +25,6 @@ class FamilyHierarchyFixtureTests(unittest.TestCase):
  def test_pack_registry_noncanonical(self):
   registry=load(PACKS); self.assertTrue(registry['comparison_only']); self.assertIsNone(registry['canonical_pack_id']); self.assertEqual(['0.20','0.25','0.35','0.40','0.50'],[x['sensitivity'] for x in registry['packs']]); self.assertTrue(all(x['canonical'] is False for x in registry['packs']))
  def test_hierarchy_policy_and_schemas(self):
-  policy=load(HIERARCHY); self.assertTrue(policy['adjacent_packs_only']); self.assertFalse(policy['canonical']); self.assertEqual(['PARENT_OF'],policy['directional_relations']); required={'c2g_assignment_v0_1.schema.json','c2g_family_node_v0_1.schema.json','c2g_hierarchy_ledger_v0_1.schema.json','c2g_sensitivity_pack_v0_1.schema.json','c2g_sensitivity_result_v0_1.schema.json'}; self.assertEqual(required,{p.name for p in SCHEMAS.glob('c2g*_v0_1.schema.json')})
+  policy=load(HIERARCHY); self.assertTrue(policy['adjacent_packs_only']); self.assertFalse(policy['canonical']); self.assertEqual(['PARENT_OF'],policy['directional_relations']); required={'c2g_assignment_v0_1.schema.json','c2g_family_node_v0_1.schema.json','c2g_hierarchy_ledger_v0_1.schema.json','c2g_sensitivity_pack_v0_1.schema.json','c2g_sensitivity_result_v0_1.schema.json'}; historical={name for name in names_at('72fbe24f73e080109ad5287d5d48f9bc09b026f2',SCHEMAS) if name.startswith('c2g') and name.endswith('_v0_1.schema.json')}; self.assertEqual(required,historical)
   for path in SCHEMAS.glob('c2g*_v0_1.schema.json'): schema=load(path); self.assertFalse(schema['additionalProperties']); self.assertEqual('https://json-schema.org/draft/2020-12/schema',schema['$schema'])
 if __name__=='__main__': unittest.main()

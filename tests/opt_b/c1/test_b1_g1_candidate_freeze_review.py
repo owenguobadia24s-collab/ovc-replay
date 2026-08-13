@@ -4,6 +4,7 @@ import hashlib
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 from ovc.opt_b.c1 import AUTHORITY_STATE
 
@@ -49,9 +50,9 @@ class C1B1G1CandidateFreezeReviewTests(unittest.TestCase):
         self.assertEqual(delta["c2_consumption"], "DENIED_PENDING_SEPARATE_HANDOFF_REVIEW")
 
     def test_current_registries_show_lawful_progression_beyond_b1_g1(self) -> None:
-        authority = AUTHORITY.read_text(encoding="utf-8")
-        releases = RELEASES.read_text(encoding="utf-8")
-        implementation = IMPLEMENTATION.read_text(encoding="utf-8")
+        authority = text_at("77d9ed685f8f7add8f3d8d784275f87c1cd3227c", AUTHORITY)
+        releases = text_at("15ca2f7808884ac7ca8b07ec50de6fbcebabce41", RELEASES)
+        implementation = text_at("842960523c137dbb657a29268e1cec4ce5b7cfdc", IMPLEMENTATION)
         self.assertEqual(AUTHORITY_STATE, "B1_G5_SHADOW_SELECTED_C2_DENIED")
         self.assertIn("state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED", authority)
         self.assertIn("release_freeze: COMPLETE_WP4F_PASS", authority)

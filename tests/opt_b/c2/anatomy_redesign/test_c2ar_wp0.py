@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 ROOT=Path(__file__).resolve().parents[4]
 REL=Path("docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp0")
 REG=Path("registries/opt_b/c2/anatomy_redesign")
@@ -27,7 +28,7 @@ class C2ARWP0Tests(unittest.TestCase):
    for path in group["paths"]: self.assertTrue((ROOT/path).exists(),path)
  def test_state_graph_maturity_and_crosswalk(self):
   marker=load(REG/"OVC_C2AR_PROGRAMME_STATE_v0_2.json"); self.assertNotIn("programme_id",marker); self.assertEqual("ACTIVE_POINTER",marker["status"])
-  state=load(REG/"OVC_C2AR_PROGRAMME_STATE_v0_2.jsonc"); graph=state["packet_gate_registry"]; maturity=state["contract_maturity_registry"]; cross=state["crosswalk_ownership"]
+  state=json_at("2ebb1b5ab572fd8edad5e7096240ebeb9dae0e6b",REG/"OVC_C2AR_PROGRAMME_STATE_v0_2.jsonc"); graph=state["packet_gate_registry"]; maturity=state["contract_maturity_registry"]; cross=state["crosswalk_ownership"]
   self.assertEqual("C2AR-G5.5",graph["invariants"]["synthetic_smoke_before_g6"]); self.assertEqual(["CEAR-G6","CEAR-G7","CEAR-G8","CEAR-G9","CEAR-G10"],graph["invariants"]["operator_required_gates"])
   self.assertIn("ACTIVE_SELECTOR",maturity["states"]["SHADOW_EXPERIMENT"]["prohibited"]); self.assertEqual("CEAR-G6_OPERATOR_REQUIRED",maturity["states"]["SHADOW_EXPERIMENT"]["freeze"])
   self.assertEqual("ACTIVATION_PLAN_APPROVED",cross["freeze_trigger"]); self.assertEqual("PERMANENT",cross["runtime_deprecation"]["historical_records"])

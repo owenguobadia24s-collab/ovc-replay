@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import unittest
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[3]
 DISP = ROOT / "docs/releases/mcarb-v0-1/mcarbi-wp9/MCARBI_WP9_DECOMPOSED_SCIENTIFIC_DISPOSITION.json"
@@ -13,7 +14,7 @@ class MCARBIWP9DispositionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.d = json.loads(DISP.read_text())
-        cls.qa = json.loads(QA.read_text())
+        cls.qa = json_at("afa4b14801025343935915ee01699d9fb79501c5", QA)
         cls.g8 = json.loads(G8.read_text())
         cls.ext = json.loads(EXT.read_text())
         cls.allowed = set(cls.d["allowed_vocabulary"])

@@ -4,15 +4,17 @@ import copy
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[4]
 BASE = ROOT / "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-g0"
-SOURCE = json.loads((BASE / "C2AR_G0_SOURCE_PLAN_HASH.json").read_text(encoding="utf-8"))
-BASELINE = json.loads((BASE / "C2AR_G0_BASELINE_MANIFEST.json").read_text(encoding="utf-8"))
-AUTHORITY = json.loads((BASE / "C2AR_G0_AUTHORITY_AND_CAPACITY_ENVELOPE.json").read_text(encoding="utf-8"))
-QA = json.loads((BASE / "C2AR_G0_QA_PACKET.json").read_text(encoding="utf-8"))
-GATE = json.loads((BASE / "C2AR_G0_OPERATOR_GATE_PACKET.json").read_text(encoding="utf-8"))
-STATE = json.loads((ROOT / "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_PROGRAMME_PREPARATION_STATE_v0_2.json").read_text(encoding="utf-8"))
+HISTORICAL_GATE_COMMIT = "36e5b55ceac3eb7473552a3fe7a2f99f4a60fb7a"
+SOURCE = json_at(HISTORICAL_GATE_COMMIT, BASE / "C2AR_G0_SOURCE_PLAN_HASH.json")
+BASELINE = json_at(HISTORICAL_GATE_COMMIT, BASE / "C2AR_G0_BASELINE_MANIFEST.json")
+AUTHORITY = json_at(HISTORICAL_GATE_COMMIT, BASE / "C2AR_G0_AUTHORITY_AND_CAPACITY_ENVELOPE.json")
+QA = json_at(HISTORICAL_GATE_COMMIT, BASE / "C2AR_G0_QA_PACKET.json")
+GATE = json_at(HISTORICAL_GATE_COMMIT, BASE / "C2AR_G0_OPERATOR_GATE_PACKET.json")
+STATE = json_at(HISTORICAL_GATE_COMMIT, ROOT / "registries/opt_b/c2/anatomy_redesign/OVC_C2AR_PROGRAMME_PREPARATION_STATE_v0_2.json")
 
 EXPECTED_PROGRAMME = "OVC-C2-ANATOMY-REDESIGN-v0.2"
 EXPECTED_PLAN = "OVC-C2-ANATOMY-REDESIGN-IMPLEMENTATION"

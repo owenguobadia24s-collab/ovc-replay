@@ -1,11 +1,13 @@
 from __future__ import annotations
-import copy,json,unittest
+import copy,hashlib,json,unittest
 from pathlib import Path
 from ovc.opt_b.market_grammar.review_surfaces import build_review_model
 ROOT=Path(__file__).resolve().parents[2]
 FIXTURE=ROOT/'fixtures/market_grammar/wp8/topology_smoke_cases.json'; PACKS=ROOT/'registries/opt_b/market_grammar/MG_C2G_SENSITIVITY_PACK_REGISTRY_v0_1.json'; LEDGER=ROOT/'registries/opt_b/market_grammar/MG_CEAR_G10_MIGRATION_LEDGER_v0_1.json'
 def load(path): return json.loads(path.read_text(encoding='utf-8'))
 def canonical(value): return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf-8')
+def rebind_ledger(fixture,ledger):
+ fixture=copy.deepcopy(fixture); ledger=copy.deepcopy(ledger); ledger.pop('ledger_sha256',None); ledger['ledger_sha256']=hashlib.sha256(canonical(ledger)).hexdigest(); fixture['candidate_migration_ledger_sha256']=ledger['ledger_sha256']; return fixture,ledger
 class ReviewSurfaceTests(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
@@ -32,5 +34,6 @@ class ReviewSurfaceTests(unittest.TestCase):
  def test_invalid_candidate_inventory_and_promoted_source_fail_closed(self):
   with self.assertRaisesRegex(ValueError,'fourteen'): build_review_model(self.fixture,self.packs,self.ledger,self.records[:-1])
   promoted=copy.deepcopy(self.ledger); promoted['promotion_authority']='PROMOTED'
-  with self.assertRaisesRegex(ValueError,'promotion'): build_review_model(self.fixture,self.packs,promoted,self.records)
+  fixture,promoted=rebind_ledger(self.fixture,promoted)
+  with self.assertRaisesRegex(ValueError,'promotion'): build_review_model(fixture,self.packs,promoted,self.records)
 if __name__=='__main__': unittest.main()

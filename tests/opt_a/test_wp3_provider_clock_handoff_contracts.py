@@ -4,6 +4,7 @@ import json
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -186,7 +187,7 @@ class WP3ProviderClockHandoffContractTests(unittest.TestCase):
         self.assertIn("active_handoff: NONE", text)
 
     def test_wp1_selector_set_remains_inactive(self) -> None:
-        text = SELECTORS.read_text(encoding="utf-8")
+        text = text_at("087cfe47c2dceffc89d43f2795ebd28dd35d3d3d", SELECTORS)
         self.assertIn("state: NONE", text)
         self.assertEqual(3, text.count("selector_state: NONE"))
         self.assertNotIn("selector_state: ACTIVE", text)

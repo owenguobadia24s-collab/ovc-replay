@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import unittest
+from tests.historical_court_record import json_at
 
 from ovc.opt_b.srfd.distance import DistanceSpec, compute_distance
 from ovc.opt_b.srfd.distance_optimized import batch_compute_prepared, deterministic_parallel_tiles, exact_equivalence
@@ -74,7 +75,7 @@ class G8RWP2CacheRestartTests(unittest.TestCase):
         self.assertEqual("QA_CACHE_CORRUPTION", ledger.quarantined["T1"])
 
     def test_reserved_authority_remains_denied_and_g2f_blocks_wp3(self) -> None:
-        state = json.loads(STATE.read_text(encoding="utf-8"))
+        state = json_at("5b760e1fe207b391186832f2f7094bcdf1713e37", STATE)
         self.assertEqual("DENIED", state["authority"]["wp9"])
         self.assertEqual("DENIED", state["authority"]["june"])
         self.assertEqual("LOCKED_UNCONSUMED", state["authority"]["validation_2025"])

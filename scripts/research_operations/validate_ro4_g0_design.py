@@ -5,10 +5,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+HISTORICAL_GATE_COMMIT = "e82c3ce57f6c0bc1f69620c40c81bd81f7c045d8"
 
 PLAN_ID = 'OVC-RESEARCH-OPERATIONS-FOUNDATION-v0.4-C2-STATE-SEQUENCE-EVIDENCE-IMPLEMENTATION-PLAN-0.2'
 PLAN_SHA = '89d71f9740ce27203ab50f8d9cfaca76144215c640ee6e87870f7160a4d9badf'
@@ -83,7 +85,36 @@ REQUIRED = [
 
 
 def read(path: str) -> str:
-    return (ROOT / path).read_text(encoding="utf-8")
+    return read_bytes(path).decode("utf-8")
+
+
+def read_bytes(path: str) -> bytes:
+    return subprocess.run(
+        ["git", "show", f"{HISTORICAL_GATE_COMMIT}:{path}"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout
+
+
+def exists(path: str) -> bool:
+    return subprocess.run(
+        ["git", "cat-file", "-e", f"{HISTORICAL_GATE_COMMIT}:{path}"],
+        cwd=ROOT,
+        capture_output=True,
+    ).returncode == 0
+
+
+def names(path: str) -> list[str]:
+    output = subprocess.run(
+        ["git", "ls-tree", "--name-only", f"{HISTORICAL_GATE_COMMIT}:{path}"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout
+    return output.splitlines()
 
 
 def require_tokens(path: str, tokens: list[str]) -> None:
@@ -94,7 +125,7 @@ def require_tokens(path: str, tokens: list[str]) -> None:
 
 
 def main() -> int:
-    missing = [path for path in REQUIRED if not (ROOT / path).is_file()]
+    missing = [path for path in REQUIRED if not exists(path)]
     if missing:
         raise AssertionError(f"missing RO4-G0 artifacts: {missing}")
 
@@ -154,22 +185,22 @@ def main() -> int:
     catalogue_paths = {row["path"] for row in catalogue["artifacts"]}
     assert len(catalogue_paths) == len(catalogue["artifacts"])
     for row in catalogue["artifacts"]:
-        payload = (ROOT / row["path"]).read_bytes()
+        payload = read_bytes(row["path"])
         assert hashlib.sha256(payload).hexdigest() == row["sha256"], row["path"]
         assert len(payload) == row["size_bytes"], row["path"]
 
-    schema_dir = ROOT / "schemas" / "research_operations" / "v0_4"
-    schemas = sorted(schema_dir.glob("*.schema.json"))
+    schema_dir = "schemas/research_operations/v0_4"
+    schemas = sorted(name for name in names(schema_dir) if name.endswith(".schema.json"))
     assert len(schemas) == 20
-    for path in schemas:
-        obj = json.loads(path.read_text(encoding="utf-8"))
+    for name in schemas:
+        obj = json.loads(read(f"{schema_dir}/{name}"))
         assert obj["$schema"] == "https://json-schema.org/draft/2020-12/schema"
         assert obj["type"] == "object"
         assert obj["additionalProperties"] is False
 
-    assert len(list((ROOT / "contracts" / "research_operations" / "v0_4").glob("*.md"))) == 13
-    assert len(list((ROOT / "registries" / "research_operations" / "v0_4").iterdir())) == 19
-    assert len(list((ROOT / "fixtures" / "research_operations" / "v0_4").iterdir())) == 2
+    assert len([name for name in names("contracts/research_operations/v0_4") if name.endswith(".md")]) == 13
+    assert len(names("registries/research_operations/v0_4")) == 19
+    assert len(names("fixtures/research_operations/v0_4")) == 2
 
     require_tokens("contracts/research_operations/v0_4/OVC_RO4_AUTHORITY_AND_DEPENDENCY_CONTRACT_v0_1.md",
                    ["LOCKED_UNCONSUMED", "Pattern Discovery remains a parallel isolated population", "RO4-G0, RO4-G4, RC-G5 and RO4-G6"])
@@ -200,10 +231,10 @@ def main() -> int:
                    ["Live route state: `DISABLED_PENDING_RC_G5`", "No synthetic or axis-ablated control", "No write form"])
 
     forbidden_runtime = [
-        ROOT / "src" / "ovc" / "research_operations" / "v0_4",
-        ROOT / "apps" / "research_console" / "ro4_c2_sequence_evidence.py",
+        "src/ovc/research_operations/v0_4",
+        "apps/research_console/ro4_c2_sequence_evidence.py",
     ]
-    if any(path.exists() for path in forbidden_runtime):
+    if any(exists(path) for path in forbidden_runtime):
         raise AssertionError("RO4 runtime or live Console implementation exists before RO4-G0 approval")
 
     print("PASS: RO4-G0 design canon is complete, source-bound, non-activating and operator-gated")

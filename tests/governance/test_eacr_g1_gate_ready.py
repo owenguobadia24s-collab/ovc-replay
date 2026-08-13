@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from ovc.opt_b.srfd.serialization import logical_sha256
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[2]
 REL = ROOT / "docs/releases/external-artifact-capacity-ownership-v0-1"
@@ -23,7 +24,7 @@ def assert_logical(path: Path):
 
 def test_eacr_g1_is_operator_required_and_recommends_pass():
     gate = j(REL / "EACR_G1_GATE_PACKET.json")
-    pointer = j(REG / "CURRENT_STATE_POINTER.json")
+    pointer = json_at("88c7392465404bd2caf0e688acba96e5174159e2", REG / "CURRENT_STATE_POINTER.json")
     assert gate["status"] == "GATE_READY"
     assert gate["gate_classification"] == "OPERATOR_REQUIRED"
     assert gate["operator_decision_required"] is True

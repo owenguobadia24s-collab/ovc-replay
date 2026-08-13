@@ -95,7 +95,7 @@ def preflight_real_population(*, main_sha: str, c2e_state: Mapping[str, Any], pl
         "cache_preflight": "IROF_SEMANTIC_CACHE_INFRASTRUCTURE_AVAILABLE_NO_REAL_LOOKUP_PERFORMED",
         "workload_preflight": "PAIR_AND_CONFIGURATION_ESTIMATE_DEFERRED_UNTIL_EXACT_OWNER_POPULATION_FREEZE",
         "space_preflight": "RESOURCE_ENVELOPE_NOT_MATERIALIZED_BY_C2E_OWNER",
-        "protected_data_accessed": false,
+        "protected_data_accessed": False,
         "owner_gate": "C2E2-G6-RUN-AUTH",
         "authority_effect": "NONE",
     }

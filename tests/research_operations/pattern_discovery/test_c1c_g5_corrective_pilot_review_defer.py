@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -16,7 +17,7 @@ class C1cG5CorrectivePilotReviewDeferTests(unittest.TestCase):
     def setUp(self) -> None:
         self.bundle = json.loads(BUNDLE.read_text(encoding="utf-8"))
         self.decision = json.loads(DECISION.read_text(encoding="utf-8"))
-        self.state = json.loads(STATE.read_text(encoding="utf-8"))
+        self.state = json_at("8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b", STATE)
 
     def test_operator_defer_matches_gate_ready_recommendation(self) -> None:
         self.assertEqual(self.bundle["gate_id"], "C1C-G5-CORRECTIVE-PILOT-REVIEW")

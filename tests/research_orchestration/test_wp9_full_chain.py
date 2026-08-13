@@ -163,4 +163,4 @@ def test_research_operations_evidence_rebuild_is_logically_identical() -> None:
     assert first.logical_sha256 == second.logical_sha256
     run_node = next(node for node in first.nodes if node.object_type == "IROF_INTEGRATED_RUN_RECEIPT")
     assert run_node.payload["lineage"]["stage_statuses"] == {stage_id: "COMPLETE" for stage_id in plan.ordered_stage_ids}
-    assert run_node.payload["authority_state"] == "DERIVED_EXECUTION_EVIDENCE_ONLY"
+    assert run_node.authority == "DERIVED_EXECUTION_EVIDENCE_ONLY"

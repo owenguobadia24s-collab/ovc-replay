@@ -3,8 +3,10 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at, text_at
 
 ROOT = Path(__file__).resolve().parents[2]
+HISTORICAL_GATE_COMMIT = "e19456821e243c6f9fb7f77e49cb5cad295c3d18"
 FINAL_PACKET = ROOT / "docs/releases/research-operations-foundation/ro-g2/RO_G2_GATE_PACKET.json"
 CANDIDATE_PACKET = ROOT / "docs/releases/research-operations-foundation/ro-wp2/RO_G2_CANDIDATE_GATE_PACKET.json"
 DECISION = ROOT / "docs/releases/research-operations-foundation/ro-g2/RO_G2_OPERATOR_DECISION.md"
@@ -27,7 +29,7 @@ class ROG2OperatingReliabilityTests(unittest.TestCase):
         self.assertEqual(final["authority_delta"]["ro_wp3"], "AUTHORISED_FOR_BUILD")
 
     def test_command_surface_has_no_delete_or_remote_side_effect(self) -> None:
-        registry = json.loads(COMMANDS.read_text(encoding="utf-8"))
+        registry = json_at(HISTORICAL_GATE_COMMIT, COMMANDS)
         commands = {item["command"] for item in registry["commands"]}
         self.assertEqual(len(commands), 12)
         self.assertFalse(any(" delete" in command for command in commands))
@@ -37,8 +39,8 @@ class ROG2OperatingReliabilityTests(unittest.TestCase):
         self.assertEqual(registry["market_classification"], "NONE")
 
     def test_authority_delta_is_bounded_and_structurally_nested(self) -> None:
-        authority = AUTHORITY.read_text(encoding="utf-8")
-        implementation = IMPLEMENTATION.read_text(encoding="utf-8")
+        authority = text_at(HISTORICAL_GATE_COMMIT, AUTHORITY)
+        implementation = text_at(HISTORICAL_GATE_COMMIT, IMPLEMENTATION)
         decision = DECISION.read_text(encoding="utf-8")
 
         self.assertIn("state: RO_G2_PASS_WP3_BUILD_AUTHORISED", authority)

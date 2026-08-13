@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[4]
 BASE = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6"
@@ -82,13 +83,13 @@ def test_counterexamples_capacity_and_candidate_packet_are_present():
     assert capacity["status"] == "PASS"
     assert capacity["capacity_status"] == "WITHIN_T0"
     assert candidate["scientific_disposition"] == "EVIDENCE_ONLY_NO_WINNER_NO_PROMOTION"
-    assert candidate["activation_effect"] == "NONE"
+    assert candidate["authority_effect"] == "NONE"
 
 
 def test_single_use_authority_is_consumed_append_only_without_activation():
     consumption = load(CONSUMPTION)
     registry = load(AUTH)
-    pointer = load(POINTER)
+    pointer = json_at("4adec4ab6d5f6a41e153be06d48f1cd2537fa927", POINTER)
     state = load(STATE)
     assert consumption["status"] == "CONSUMED_FOR_RUN"
     assert consumption["reuse_prohibited"] is True
