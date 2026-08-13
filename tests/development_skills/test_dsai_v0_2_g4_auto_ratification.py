@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RELEASE = ROOT / "docs/releases/development-skills-architecture-v0-2/dsai2-wp4"
 STATE_ROOT = ROOT / "registries/implementation/dsai_v0_2"
+TERMINAL_TARGET = "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH"
 
 
 class DSAI2G4AutoRatificationTests(unittest.TestCase):
@@ -52,7 +53,7 @@ class DSAI2G4AutoRatificationTests(unittest.TestCase):
         self.assertEqual(decision["authority_after_decision"]["validation"], "DENIED")
         self.assertEqual(decision["authority_after_decision"]["reserved_scientific_execution_authority"], "NONE")
 
-    def test_programme_state_is_approved_pending_integration_without_next_packet(self) -> None:
+    def test_historical_g4_state_remains_immutable_while_live_pointer_may_advance(self) -> None:
         state = self._load(STATE_ROOT / "OVC_DSAI_V0_2_STATE_v0_6.json")
         self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["packet_id"], "DSAI2-WP4")
@@ -64,15 +65,22 @@ class DSAI2G4AutoRatificationTests(unittest.TestCase):
         self.assertEqual(state["g4_acceptance"]["parallel_merges"], 0)
         self.assertIsNone(state["next_packet"])
         self.assertFalse(state["mandatory_stop"])
-        self.assertEqual(
-            state["target_terminal_state"],
-            "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
-        )
+        self.assertEqual(state["target_terminal_state"], TERMINAL_TARGET)
 
         pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
-        self.assertEqual(pointer["current_state"], "OVC_DSAI_V0_2_STATE_v0_6.json")
-        self.assertEqual(pointer["status"], "APPROVED")
+        self.assertIn(
+            pointer["current_state"],
+            {"OVC_DSAI_V0_2_STATE_v0_6.json", "OVC_DSAI_V0_2_STATE_v0_7.json"},
+        )
         self.assertIsNone(pointer["next_packet"])
+        if pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_6.json":
+            self.assertEqual(pointer["status"], "APPROVED")
+        else:
+            self.assertEqual(pointer["status"], "COMPLETED")
+            terminal = self._load(STATE_ROOT / pointer["current_state"])
+            self.assertEqual(terminal["status"], "COMPLETED")
+            self.assertEqual(terminal["terminal"]["target_terminal_state"], TERMINAL_TARGET)
+            self.assertTrue(terminal["terminal"]["programme_complete"])
 
 
 if __name__ == "__main__":

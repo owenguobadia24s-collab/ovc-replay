@@ -10,6 +10,7 @@ from ovc.development.skills.orch345 import resolve_orch345_authority
 ROOT = Path(__file__).resolve().parents[2]
 RELEASE = ROOT / "docs/releases/development-skills-architecture-v0-2"
 STATE_ROOT = ROOT / "registries/implementation/dsai_v0_2"
+TERMINAL_TARGET = "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH"
 
 
 class DsaiV02G3GateReadyTests(unittest.TestCase):
@@ -130,12 +131,11 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
             self.assertEqual(approved["decision"], "PASS_DELEGATED_AUTO_RATIFIED")
             self.assertEqual(approved["authority_delta"], "NONE")
         else:
+            self.assertEqual(pointer["status"], "COMPLETED")
             self.assertIsNone(pointer["next_packet"])
             terminal = self._load(STATE_ROOT / pointer["current_state"])
-            self.assertEqual(
-                terminal["status"],
-                "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
-            )
+            self.assertEqual(terminal["status"], "COMPLETED")
+            self.assertEqual(terminal["terminal"]["target_terminal_state"], TERMINAL_TARGET)
             self.assertTrue(terminal["terminal"]["programme_complete"])
 
         if pointer["current_state"] in {
