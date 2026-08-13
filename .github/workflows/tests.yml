@@ -38,15 +38,8 @@ jobs:
               const matches = runs.filter(run => run.name === windowCheckName).sort((a, b) => b.id - a.id);
               return matches[0];
             };
-
             while (Date.now() < deadline) {
-              const response = await github.rest.checks.listForRef({
-                owner,
-                repo,
-                ref: sha,
-                per_page: 100,
-                filter: 'latest'
-              });
+              const response = await github.rest.checks.listForRef({ owner, repo, ref: sha, per_page: 100, filter: 'latest' });
               const windowRun = latestNamedRun(response.data.check_runs);
               if (windowRun?.status === 'in_progress') {
                 const mainNow = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
@@ -68,7 +61,6 @@ jobs:
               }
               await sleep(5000);
             }
-
             core.setFailed(`OVC_FINAL_INTEGRATION_WINDOW_ADMISSION_TIMEOUT: ${windowCheckName} did not acquire the serialized lane for ${sha}.`);
       - uses: actions/checkout@v4
         if: github.event_name == 'pull_request'
@@ -97,11 +89,41 @@ jobs:
       - uses: actions/checkout@v4
         with:
           show-progress: false
+      - name: Fetch exact history required by GRT2 WP0
+        if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'build/grt2-wp0-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+            git fetch --no-tags --unshallow origin "+refs/heads/main:refs/remotes/origin/main"
+          fi
+          git cat-file -e "${{ github.event.pull_request.base.sha }}^{commit}"
+          git cat-file -e "100b3fa342c5dee7c96a7a4e5af9e80dac3ddfe4^{commit}"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: GRT2 WP0 exact B0 and fresh-baseline reconciliation
+        if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'build/grt2-wp0-')
+        run: |
+          PYTHONPATH=src python3 scripts/governance/grt_v0_2/reconcile_wp0.py \
+            --baseline-commit "${{ github.event.pull_request.base.sha }}" \
+            --output-dir /tmp/grt2-wp0-reconciliation
       - name: Complete repository suite
-        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" && "${GITHUB_HEAD_REF}" == build/grt2-wp0-* ]]; then
+            export GRT2_WP0_EVIDENCE_DIR=/tmp/grt2-wp0-reconciliation
+          fi
+          PYTHONPATH=src python3 -m unittest discover -s tests -v
+      - name: Upload GRT2 WP0 reconciliation evidence
+        if: always() && github.event_name == 'pull_request' && startsWith(github.head_ref, 'build/grt2-wp0-')
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-wp0-reconciliation-${{ github.sha }}
+          path: /tmp/grt2-wp0-reconciliation/*.json
+          if-no-files-found: warn
+          retention-days: 7
 
   pytest-unittest-parity:
     name: pytest-unittest-parity

@@ -27,6 +27,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.opt_b.sfc",
     "ovc.opt_b.srfd",
     "ovc.programme_genesis",
+    "ovc.programme_genesis.grt_v0_2",
     "ovc.research_operations",
     "ovc.research_operations.v0_2",
     "ovc.research_operations.v0_3",
@@ -181,6 +182,13 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("no market", init_text)
         self.assertIn("selector", init_text)
         self.assertIn("execution authority", init_text)
+
+    def test_grt_v0_2_namespace_is_read_only_and_non_enforcing(self) -> None:
+        init_text = (SRC / "ovc" / "programme_genesis" / "grt_v0_2" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("repository-conformance", init_text)
+        self.assertIn("non-enforcing", init_text)
+        self.assertIn("operator decisions", init_text)
+        self.assertIn("read-only exact-source reconciliation only", init_text)
 
 
 if __name__ == "__main__":

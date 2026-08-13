@@ -1,0 +1,32 @@
+{
+  "schema":"ovc-grt2-b0-reconciliation-plan/v1",
+  "programme_id":"OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "immutable_b0":{
+    "source_commit":"100b3fa342c5dee7c96a7a4e5af9e80dac3ddfe4",
+    "source_tree":"91374c54bde0e0b61ac51705f6434d4f2b0d8417",
+    "expected_topology_sha256":"4120468ecb1c1f484ab073c851287706f4fb45ad0e99fc355b4624094bb795f2",
+    "expected_raw_warning_count":569,
+    "expected_anomaly_count":1364,
+    "observer_entry_point":"scripts/governance/build_genesis_repository_topology.py",
+    "rule_pack":"registries/governance/genesis_repository_topology/GRT_TOPOLOGY_RULE_PACK_v0_1.json"
+  },
+  "reproduction_method":[
+    "fetch exact source commit if absent from shallow checkout",
+    "create detached isolated worktree at exact source commit",
+    "execute the observer and source-bound rule pack from that exact worktree",
+    "run two clean observer builds and require identical topology SHA-256",
+    "require exact historical topology SHA-256 and exact 569 WARNING members",
+    "sort members by anomaly_id and hash each complete canonical anomaly payload",
+    "derive one membership SHA-256 from the ordered payload-hash vector"
+  ],
+  "fresh_census_method":[
+    "execute the same exact observer independently at the pre-GRT2 materialisation baseline",
+    "never redefine B0 from the fresh census",
+    "classify matching anomaly IDs as B0_MAPPED",
+    "classify non-B0 warnings already present on the pre-GRT2 baseline as LATE_DISCOVERED_PRE_EXISTING",
+    "classify absent B0 IDs as RESOLVED_BEFORE_GRT2",
+    "reserve TRANSITION_OR_NEW_DEBT for findings first observed after the pre-GRT2 baseline"
+  ],
+  "gate_rule":"GRT2-G1 BLOCK with B0_SOURCE_NOT_REPRODUCIBLE if source commit/tree/topology hash, 569 raw WARNING count, member uniqueness, or deterministic rebuild proof does not match exactly.",
+  "authority_effect":"NONE"
+}
