@@ -2,7 +2,7 @@
   "schema": "ovc-programme-owned-discrepancy/v1",
   "record_type": "PROGRAMME_OWNED_DISCREPANCY",
   "discrepancy_id": "PYT-WP2-EACR-QA-LOGICAL-HASH-001",
-  "status": "OPEN",
+  "status": "RESOLVED_BY_PROGRAMME_ADJUDICATION",
   "authority_effect": "NONE",
   "discovered_by": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1/PYT-WP2",
   "exact_tested_head": "06f00ec71bb5a4cd21bcfacc19ecf1418119c220",
@@ -28,5 +28,17 @@
   "finding": "The identity-bearing QA record and its conformance test were introduced together, but the recorded logical hash does not equal the repository serialization result with logical_sha256 excluded. No later artifact or serialization change explains the mismatch.",
   "programme_owner": "OVC-EXTERNAL-ARTIFACT-CAPACITY-OWNERSHIP-SEPARATION-v0.1",
   "pyt_wp2_action": "DO_NOT_CHANGE_ARTIFACT_IMPLEMENTATION_CONTRACT_OR_ASSERTION; CONTINUE_INDEPENDENT_CLASS_1_TO_4_REMEDIATION",
-  "pyt_g2_effect": "BLOCKED_PENDING_PROGRAMME_OWNED_ADJUDICATION"
+  "pyt_g2_effect": "UNBLOCKED_SUBJECT_TO_FRESH_EXACT_HEAD_PYT_G2_ASSURANCE",
+  "resolution": {
+    "adjudicated_by_programme": "OVC-EXTERNAL-ARTIFACT-CAPACITY-OWNERSHIP-SEPARATION-v0.1",
+    "adjudication_main": "e271bf6f9fe1ae2bb7d4ecdcf72d94ff23e14f32",
+    "adjudication_record": "docs/releases/external-artifact-capacity-ownership-v0-1/EACR_QA_LOGICAL_HASH_INTEGRITY_ADJUDICATION.json",
+    "successor_artifact": "docs/releases/external-artifact-capacity-ownership-v0-1/EACR_WP4_WP5_CONFORMANCE_QA_IDENTITY_SUCCESSOR.json",
+    "corrected_logical_sha256": "827ff0afb6e9344ead9b57eda4c6a4db7b9e29710ac2b311127779541282a024",
+    "historical_qa_artifact_unchanged": true,
+    "historical_qa_git_blob_sha1": "fa4a86937ec989c441a166c3b61b055c2fd36133",
+    "authority_effect": "NONE",
+    "semantic_effect": "NONE",
+    "resolved_classification": "EVIDENCE_INTEGRITY_ONLY"
+  }
 }
