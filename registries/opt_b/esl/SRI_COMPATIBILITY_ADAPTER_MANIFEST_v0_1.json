@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-esli-sri-adapter-manifest/v1",
+  "programme_id": "OVC-OPTB-ESL-CONFORMANCE-v0.1",
+  "plan_id": "OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+  "packet_id": "ESLI-WP5",
+  "gate_id": "ESLI-G5",
+  "adapter_id": "ESLI.SRI.STRUCTURAL_OCCURRENCE.COMPAT.v0.1",
+  "source_type": "StructuralOccurrenceRecord",
+  "source_contract": "contracts/opt_b/esl/ESL_COMMON_CONTRACT_v0_1.md",
+  "adapter_contract": "contracts/opt_b/esl/SRI_COMPATIBILITY_ADAPTER_v0_1.md",
+  "record_schema": "schemas/opt_b/esl/sri_compatibility_record_v0_1.schema.json",
+  "implementation": "src/ovc/opt_b/esl/sri_compat.py",
+  "historical_crosswalk": "registries/opt_b/esl/SRI_HISTORICAL_CROSSWALK_v0_1.json",
+  "method_id": "METHOD_NEUTRAL_IDENTITY_PROJECTION_v0_1",
+  "source_fields": [
+    "occurrence_record_id", "occurrence_pack_id", "facets", "evidence_frontier",
+    "source_generation_ids", "comparability_domain_id", "first_valid_time", "evaluation_cutoff", "authority_state"
+  ],
+  "output_namespaces": ["structural_raw", "structural_derived", "structural_normalized", "comparison_only"],
+  "wp5_population_policy": "CALLER_SUPPLIED_EXACT_POPULATION_ID_ONLY_NO_SELECTION",
+  "wp5_transform_policy": "IDENTITY_PRESERVE_DECLARED_FACETS_ONLY",
+  "context_policy": "EXACT_DECLARED_REPRESENTATION_INPUT_ONLY",
+  "comparability_policy": "EXACT_SOURCE_DOMAIN_PLUS_EXPLICIT_GENERATION",
+  "historical_policy": "ADDRESSABLE_BY_CROSSWALK_NO_REWRITE_NO_IDENTITY_EQUIVALENCE",
+  "authority": {
+    "authority_effect": "NONE",
+    "state": "INACTIVE_CONFORMANCE_ONLY",
+    "representation_activation": "NONE",
+    "normalization_selection": "NONE",
+    "method_selection": "NONE",
+    "topology_activation": "NONE",
+    "family_promotion": "NONE",
+    "semantic_promotion": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED"
+  },
+  "next_packet_after_pass": "ESLI-WP6"
+}
