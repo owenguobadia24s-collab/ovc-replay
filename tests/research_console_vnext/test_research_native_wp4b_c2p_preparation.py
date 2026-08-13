@@ -1,11 +1,12 @@
 from __future__ import annotations
 import importlib.util,json,unittest
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[2]; FIX=ROOT/'fixtures/research_console_vnext/console_pack_v0_1/c2p_preparation.json'; INV=ROOT/'registries/research_console_vnext/research_native/source_adapter_inventory_v2.json'; STATE=ROOT/'registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json'; ROUTES=ROOT/'registries/research_console_vnext/research_native/route_registry_v2.json'
+ROOT=Path(__file__).resolve().parents[2]; FIX=ROOT/'fixtures/research_console_vnext/console_pack_v0_1/c2p_preparation.json'; INV=ROOT/'registries/research_console_vnext/research_native/source_adapter_inventory_v2.json'; STATE=ROOT/'registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json'; ROUTES=ROOT/'registries/research_console_vnext/research_native/route_registry_v2.json'; C2P_STATE=ROOT/'registries/implementation/c2p_v0_2/OVC_C2P2_STATE_v0_1.json'
 def load(p): return json.loads(p.read_text(encoding='utf-8'))
 class WP4BC2PPreparation(unittest.TestCase):
- def test_census_and_fixture_agree_on_typed_owner_absence(self):
-  f=load(FIX); c=next(x for x in load(INV)['sources'] if x['capability_id']=='c2p'); self.assertFalse(c['repository_materialized']); self.assertIsNone(c['source_path']); self.assertEqual(c['reason_code'],f['reason_code']); self.assertEqual([],f['objects']); self.assertFalse(f['runtime_owner_materialized']); self.assertEqual('RCN-RN-G4',f['gate_required'])
+ def test_census_and_fixture_distinguish_namespace_from_runtime_owner(self):
+  f=load(FIX); c=next(x for x in load(INV)['sources'] if x['capability_id']=='c2p'); upstream=load(C2P_STATE)
+  self.assertTrue(c['repository_materialized']); self.assertEqual('src/ovc/opt_b/c2p_v0_2',c['source_path']); self.assertFalse(c['runtime_owner_materialized']); self.assertEqual('NONE',c['active_source_authority']); self.assertEqual('CONFORMANCE_NAMESPACE_PRESENT_RUNTIME_INCOMPLETE_AUTHORITY_NONE',c['reason_code']); self.assertEqual('NONE',upstream['authority']['c2p_runtime']); self.assertEqual('DENIED_FUTURE_C2P2_RS0',upstream['authority']['real_source_replay']); self.assertEqual([],f['objects']); self.assertFalse(f['runtime_owner_materialized']); self.assertEqual('RCN-RN-G4',f['gate_required'])
  def test_route_and_state_keep_g4_boundary(self):
   r=load(ROUTES); s=load(STATE); self.assertEqual('GET_ONLY',r['transport']); self.assertIn('/c2p/objects',r['domains']['INVESTIGATE']); self.assertFalse(r['wp4b_preparation']['runtime_owner_materialized']); self.assertTrue(s['packet_id'].startswith('RCN-RN-WP4') or s['packet_id']=='RCN-RN-G4'); self.assertEqual('DENIED_UNTIL_RCN_RN_G4',s['real_source_routes']); self.assertEqual('FIXTURE_ONLY_LOCAL_READ_ONLY',s['current_authority'])
   if s['packet_id']=='RCN-RN-G4': self.assertEqual('GATE_READY',s['status']); self.assertEqual('OPERATOR_REQUIRED',s['authority_required']); self.assertEqual('PROPOSED_FIRST_LAWFUL_REAL_SOURCE_INVESTIGATE_PRESENTATION',s['authority_delta']); self.assertIsNone(s['decision_record'])
