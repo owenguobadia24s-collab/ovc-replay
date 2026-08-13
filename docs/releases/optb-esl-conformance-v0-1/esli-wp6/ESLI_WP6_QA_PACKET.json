@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-esli-qa-packet/v1",
+  "programme_id": "OVC-OPTB-ESL-CONFORMANCE-v0.1",
+  "plan_id": "OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+  "plan_version": "0.1-REVISED-2",
+  "packet_id": "ESLI-WP6",
+  "gate_id": "ESLI-G6",
+  "qa_mode": "EXACT_HEAD_IMPLEMENTATION_AND_BOUNDARY_ASSURANCE",
+  "baseline_commit": "45146c31641d719dbfb73dbcd51a75ec2a9d7e19",
+  "implementation_candidate": "1023e0508686ca90b37384493fbea1bf9c0a2c3e",
+  "scope": {
+    "objective": "Generic inactive SOI topology/method/result boundary with exact preserved-SFC FAMILY compatibility, explicit topology maturity and fail-closed interface-only topologies.",
+    "implementation_write_set": "16 additive WP6 files",
+    "authority": "INACTIVE_CONFORMANCE_ONLY"
+  },
+  "assurance": {
+    "tests": {
+      "run_id": 31703015310,
+      "job_id": 94456646791,
+      "conclusion": "PASS"
+    },
+    "runner_parity": {
+      "job_id": 94456646675,
+      "conclusion": "PASS"
+    },
+    "pytest_unittest_parity": {
+      "job_id": 94456646729,
+      "conclusion": "PASS"
+    },
+    "final_integration_admission": {
+      "job_id": 94456529282,
+      "conclusion": "PASS"
+    },
+    "profile_assurance": {
+      "run_id": 31703015336,
+      "job_id": 94456529026,
+      "conclusion": "PASS"
+    },
+    "merge_readiness": {
+      "job_id": 94456529081,
+      "conclusion": "PASS"
+    },
+    "tiered_compatibility_context": {
+      "job_id": 94456677614,
+      "conclusion": "PASS"
+    }
+  },
+  "reviews": {
+    "submissions": 0,
+    "threads": 0,
+    "blocking": false
+  },
+  "acceptance": {
+    "generic_topology_method_result_boundary": "PASS",
+    "family_exact_preserved_adapter": "PASS",
+    "family_source_hash_integrity": "PASS",
+    "topology_method_separation": "PASS",
+    "interface_only_fail_closed_no_placeholder": "PASS",
+    "no_stable_family_scope": "PASS",
+    "residual_ambiguity_null_denominator_preservation": "PASS",
+    "topology_maturity_schema_registry": "PASS",
+    "iav03_maturity_fail_closed": "PASS",
+    "scientific_support_or_activation": "NONE"
+  },
+  "warnings": [
+    "PR #728 was superseded after GRT2-WP0 advanced main; PR #734 was closed unmerged to release the serialized lane for systemic required-check repair; final implementation candidate 1023e050 is rebuilt on repaired main 45146c31."
+  ],
+  "unresolved_issues": [],
+  "blocking_issues": [],
+  "recommendation": "PASS",
+  "authority_delta": "NONE",
+  "reserved_authority_delta": "NONE",
+  "rollback": "Forward-supersede WP6 SOI-only artifacts while preserving ESLI-WP0-WP5 and all SFC/FDI/SRFD identities and evidence; no force-push or history rewrite.",
+  "next_packet": "ESLI-WP7"
+}

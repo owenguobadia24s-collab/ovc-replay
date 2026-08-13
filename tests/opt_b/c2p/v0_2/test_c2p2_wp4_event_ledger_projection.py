@@ -192,14 +192,31 @@ class C2P2WP4EventLedgerProjectionTests(unittest.TestCase):
 
     def test_late_source_correction_requires_new_ledger_generation(self):
         _, original = genesis()
-        corrected = dict(original)
-        corrected["source_hashes"] = [digest("corrected-source")]
+        corrected = build_event(
+            stream_id=original["stream_id"],
+            sequence_no=original["sequence_no"],
+            event_type=original["event_type"],
+            object_pack=PACK,
+            market_effective_start=original["market_effective_start"],
+            market_effective_end=original["market_effective_end"],
+            first_valid_time=original["first_valid_time"],
+            evaluation_cutoff=original["evaluation_cutoff"],
+            decision_id=original["decision_id"],
+            parent_event_ids=original["parent_event_ids"],
+            source_hashes=[digest("corrected-source-2"), digest("corrected-source-1")],
+            payload=original["payload"],
+            prior_event_hash=original["prior_event_hash"],
+            expected_event_id=original["event_id"],
+        )
+        self.assertEqual(corrected["source_hashes"], sorted(corrected["source_hashes"]))
+        self.assertEqual(canonical_event_bytes(corrected), canonical_bytes(corrected))
         # ASSERTION_GENESIS retains the exact WP3 logical genesis reference,
         # while the full canonical event record/frontier changes.
         original_ledger = CanonicalEventLedger.from_events([original])
         original_bytes = original_ledger.canonical_export_bytes()
         with self.assertRaisesRegex(LedgerQuarantinedError, "C2P_EVENT_ID_CONFLICT"):
             original_ledger.append(corrected)
+        self.assertEqual(original_ledger.quarantine_record["reason"], "C2P_EVENT_ID_CONFLICT")
         self.assertEqual(original_ledger.canonical_export_bytes(), original_bytes)
 
         corrected_ledger = CanonicalEventLedger.from_events([corrected])
@@ -359,6 +376,10 @@ class C2P2WP4EventLedgerProjectionTests(unittest.TestCase):
                 "C2P2-F46",
             },
         )
+        late_source = next(item for item in FIXTURES["fixtures"] if item["fixture_id"] == "C2P2-F36")
+        self.assertTrue(late_source["canonical_event_required"])
+        self.assertEqual(late_source["source_hash_order"], "LEXICOGRAPHIC")
+        self.assertEqual(late_source["expected_quarantine_reason"], "C2P_EVENT_ID_CONFLICT")
         self.assertEqual(FIXTURES["object_pack_id"], PACK["object_pack_id"])
         self.assertEqual(FIXTURES["authority"]["activation"], "NONE")
         self.assertEqual(FIXTURES["authority"]["real_source"], "FORBIDDEN")

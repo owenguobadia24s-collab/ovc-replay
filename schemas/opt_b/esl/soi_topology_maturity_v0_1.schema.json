@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/esl/soi_topology_maturity_v0_1",
+  "title": "ESL SOI topology maturity registry v0.1",
+  "type": "object",
+  "required": [
+    "schema",
+    "registry_id",
+    "programme_id",
+    "plan_id",
+    "packet_id",
+    "gate_id",
+    "entries",
+    "default_invocation_policy",
+    "canonical_topology",
+    "topology_activation",
+    "scientific_selection",
+    "authority_effect"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ovc-esl-soi-topology-maturity-registry/v1"
+    },
+    "registry_id": {
+      "const": "ESLI.SOI.TOPOLOGY.MATURITY.v0.1"
+    },
+    "programme_id": {
+      "const": "OVC-OPTB-ESL-CONFORMANCE-v0.1"
+    },
+    "plan_id": {
+      "const": "OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2"
+    },
+    "packet_id": {
+      "const": "ESLI-WP6"
+    },
+    "gate_id": {
+      "const": "ESLI-G6"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": [
+          "topology_id",
+          "maturity",
+          "adapter_id",
+          "source_programme_id",
+          "source_result_type",
+          "reason_code",
+          "authority_state"
+        ],
+        "properties": {
+          "topology_id": {
+            "enum": [
+              "FAMILY",
+              "HIERARCHY",
+              "OVERLAP",
+              "GRAPH",
+              "CONTINUUM",
+              "COMPOSITION"
+            ]
+          },
+          "maturity": {
+            "enum": [
+              "INTERFACE_ONLY",
+              "EXECUTABLE_INACTIVE"
+            ]
+          },
+          "adapter_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_programme_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_result_type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reason_code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "authority_state": {
+            "const": "INACTIVE_CONFORMANCE_ONLY"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "default_invocation_policy": {
+      "const": "FAIL_CLOSED"
+    },
+    "canonical_topology": {
+      "const": "NONE"
+    },
+    "topology_activation": {
+      "const": "NONE"
+    },
+    "scientific_selection": {
+      "const": "NONE"
+    },
+    "authority_effect": {
+      "const": "NONE"
+    }
+  },
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "active_topology"
+        ]
+      },
+      {
+        "required": [
+          "selected_topology"
+        ]
+      },
+      {
+        "required": [
+          "production_selector"
+        ]
+      },
+      {
+        "required": [
+          "support_threshold"
+        ]
+      },
+      {
+        "required": [
+          "family_promotion"
+        ]
+      }
+    ]
+  },
+  "additionalProperties": false
+}
