@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-dsai2-g3-qa-packet/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "gate_id": "DSAI2-G3",
+  "gate_class": "OPERATOR_REQUIRED",
+  "authority_delta": "NONE_FOR_GATE_EVIDENCE_ONLY",
+  "status": "PASS_GATE_READY",
+  "tested_gate_evidence_head": "5feb6bfd0430a7d9aab2afa483088ac2a4cbec19",
+  "baseline_main": "28ef05024d3bd12d9917eecc17e3b5dece4a2613",
+  "checks": {
+    "gate_packet_non_authorising": "PASS",
+    "g2_merge_receipt_exact": "PASS",
+    "activation_readiness_bounded": "PASS",
+    "effective_authority_record_absent": "PASS",
+    "current_orch345_inactive": "PASS",
+    "tests": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "final_head_profile": "PASS",
+    "serialized_merge_readiness": "PASS",
+    "submitted_reviews": 0,
+    "review_threads": 0
+  },
+  "workflow_evidence": {
+    "tests": {"run_id": 31650702901, "run_number": 3910, "conclusion": "success"},
+    "tiered": {"run_id": 31650702907, "run_number": 2256, "conclusion": "success", "merge_readiness": "success"},
+    "stable_main": "28ef05024d3bd12d9917eecc17e3b5dece4a2613"
+  },
+  "warnings": [
+    "The live ORCH-3/4/5 pilot remains post-activation work and is not used to self-grant this authority.",
+    "Incident evidence is repository-scoped and does not claim knowledge of unrecorded external events."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_OPERATOR_REQUIRED_DSAI2_G3",
+  "activation_performed": false,
+  "rollback": "Leave ORCH-3/4/5 inactive and preserve bounded ORCH-2 plus the PDC serialized final-integration window if the operator does not approve G3."
+}

@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "status": "COMPLETED",
+  "baseline_commit": "8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30",
+  "branch": "chore/dsai2-wp4-terminal-closeout",
+  "packet_id": "DSAI2-WP4",
+  "gate_id": "DSAI2-G4",
+  "prerequisites": [
+    "DSAI2-WP3 COMPLETED with operator-approved G3 authority effective on main",
+    "DSAI2-WP4 bounded live pilot completed",
+    "DSAI2-G4 PASS delegated auto-ratification",
+    "PR #693 final head 7578829b2910e1d683e7b712db4dccd01751204e exact-head assurance PASS",
+    "PR #693 squash merge 8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30"
+  ],
+  "authority_required": "NONE_REMAINING_WITHIN_APPROVED_DSAI_V0_2_PROGRAMME",
+  "authority_delta": "NONE",
+  "candidate_commit": "8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30",
+  "tests": [
+    "PR #693 tests #3934 / run 31655715720 PASS: final-integration admission, repository suite, pytest-unittest-parity, runner-parity",
+    "PR #693 tiered #2278 / run 31655715767 PASS: FINAL_HEAD/profile, compatibility, serialized merge readiness",
+    "initial terminal-closeout head 823c214affc1efe3f201dc0d3dcab94fefb536f9 tests #3937 / run 31674804421 exposed exactly 3 stale live-pointer assertions; closeout test itself passed",
+    "initial terminal-closeout tiered #2280 / run 31674804425 failed downstream because required tests failed; profile/compatibility were not authority defects"
+  ],
+  "qa_packet": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_WP4_QA_PACKET.json",
+  "decision_record": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_G4_DECISION.json",
+  "merge_commit": "8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30",
+  "blockers": [],
+  "next_packet": null,
+  "completed_packets": ["DSAI2-WP0", "DSAI2-WP1", "DSAI2-WP2", "DSAI2-WP3", "DSAI2-WP4"],
+  "merge_receipt": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/DSAI2_WP4_G4_TERMINAL_SQUASH_MERGE_RECEIPT.json",
+  "g4_acceptance": {
+    "false_parallel_allows": 0,
+    "unresolved_conflict_classifications": 0,
+    "parallel_merges": 0,
+    "operator_wait_respected": true,
+    "cross_programme_dependency_respected": true,
+    "missing_prerequisite_blocked": true,
+    "serialized_final_integration": true,
+    "recorded_unresolved_s3": 0,
+    "recorded_unresolved_s4": 0,
+    "reserved_authority_crossed": false
+  },
+  "active_authority": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
+  },
+  "reserved_boundaries": {
+    "operator_required_gate_behavior": "STOP",
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "validation": "DENIED",
+    "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "terminal_assurance_remediation": {
+    "failure_class": "STALE_LIVE_POINTER_EXPECTATIONS_AFTER_LAWFUL_TERMINAL_PROGRESSION",
+    "historical_immutable_assertions_preserved": true,
+    "lifecycle_status": "COMPLETED",
+    "target_terminal_state": "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
+    "test_weakening": false,
+    "authority_delta": "NONE",
+    "corrective_scope": [
+      "tests/development_skills/test_dsai_v0_2_g3_gate_ready.py",
+      "tests/development_skills/test_dsai_v0_2_g4_auto_ratification.py",
+      "tests/development_skills/test_dsai_v0_2_wp3_post_merge.py"
+    ]
+  },
+  "administrative_events": [
+    "PR #694 closed unmerged immediately as an accidental no-op comparison; no content or authority integrated"
+  ],
+  "mandatory_stop": false,
+  "terminal": {
+    "programme_complete": true,
+    "target_terminal_state": "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
+    "final_merge_receipt_pending": false,
+    "result_main_sha": "8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30",
+    "future_authority_expansion_requires_operator": true
+  },
+  "rollback": "Forward-disable ORCH-3/4/5 to bounded ORCH-2 SERIAL_REQUIRED while preserving PDC serialized final integration, historical evidence and immutable decisions."
+}

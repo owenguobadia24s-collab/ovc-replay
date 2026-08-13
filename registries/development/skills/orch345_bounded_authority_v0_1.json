@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-dsai-orch345-authority/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "gate_id": "DSAI2-G3",
+  "approved": true,
+  "effective": true,
+  "enabled_orchestrators": ["ORCH-3", "ORCH-4", "ORCH-5"],
+  "enabled_packet_classes": ["LOW_RISK_IMPLEMENTATION"],
+  "modes": {
+    "ORCH-3": "SERIAL_PACKET_TRAIN",
+    "ORCH-4": "PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "PORTFOLIO_DISPATCH_ONLY"
+  },
+  "integration_policy": {
+    "serialized_final_integration_window": true,
+    "parallel_merge": false,
+    "target_branch": "main",
+    "merge_method": "squash",
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false
+  },
+  "validation": "DENIED",
+  "reserved_scientific_execution_authority": "NONE"
+}

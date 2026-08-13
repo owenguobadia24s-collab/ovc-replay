@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-dsai2-g3-operator-decision/v1",
+  "decision_id": "DSAI2-G3.OPERATOR.PASS.20260813T003500+0100",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "gate_id": "DSAI2-G3",
+  "gate_class": "OPERATOR_REQUIRED",
+  "decision": "PASS",
+  "status": "APPROVED",
+  "operator_instruction": "OVC APPROVE DSAI2-G3 PASS",
+  "operator_decision_time": "2026-08-13T00:35:00+01:00",
+  "baseline_main": "28ef05024d3bd12d9917eecc17e3b5dece4a2613",
+  "gate_ready_head": "28ef63125101f4a6eaa5399cd2d92e93dc6e4bc5",
+  "gate_ready_assurance": {
+    "tests": {"run_id": 31651071054, "run_number": 3911, "conclusion": "success"},
+    "tiered": {"run_id": 31651071052, "run_number": 2257, "conclusion": "success", "merge_readiness": "success"},
+    "submitted_reviews": 0,
+    "review_threads": 0
+  },
+  "approved_authority_delta": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "enabled_packet_classes": ["LOW_RISK_IMPLEMENTATION"],
+    "automatic_gate_handling": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+    "required_authority_delta_for_automatic_handling": "NONE",
+    "ambiguity_policy": "SERIAL_REQUIRED",
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
+  },
+  "reserved_non_effects": {
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "operator_required_gate_behavior": "STOP",
+    "validation": "DENIED",
+    "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "activation_effective_condition": "The exact bounded authority record must be present on main and resolve ACTIVE_AUTHORIZED; branch presence alone is non-effective.",
+  "rollback": "Forward-disable ORCH-3/4/5 to bounded ORCH-2 SERIAL_REQUIRED while preserving PDC serialized final integration and historical evidence.",
+  "next_packet": "DSAI2-WP4"
+}
