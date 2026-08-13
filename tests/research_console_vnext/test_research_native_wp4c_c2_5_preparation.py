@@ -6,8 +6,8 @@ def load(p): return json.loads(p.read_text(encoding='utf-8'))
 class WP4CC25Preparation(unittest.TestCase):
  def test_census_fixture_typed_absence(self):
   f=load(FIX); c=next(x for x in load(INV)['sources'] if x['capability_id']=='c2_5'); self.assertFalse(c['repository_materialized']); self.assertIsNone(c['source_path']); self.assertEqual(c['reason_code'],f['reason_code']); self.assertEqual([],f['events']); self.assertEqual('PROHIBITED',f['event_synthesis']); self.assertFalse(f['runtime_owner_materialized'])
- def test_route_state_keeps_c2_5_excluded_after_g4_binding(self):
-  r=load(ROUTES); s=load(STATE); self.assertEqual('GET_ONLY',r['transport']); self.assertIn('/c2-5/events',r['domains']['INVESTIGATE']); self.assertFalse(r['wp4c_preparation']['runtime_owner_materialized']); self.assertEqual('PROHIBITED',r['wp4c_preparation']['event_synthesis']); self.assertNotIn('C2_5',r['post_g4_binding']['capabilities']); self.assertEqual('RCN-RN-POST-G4-SOURCE-BINDING',s['packet_id']); self.assertEqual('IMPLEMENTED',s['status']); self.assertEqual('NONE',s['authority_delta']); self.assertIn('OTHERS_DENIED',s['real_source_routes'])
+ def test_route_state_keeps_c2_5_excluded_after_delegated_post_g4_pass(self):
+  r=load(ROUTES); s=load(STATE); self.assertEqual('GET_ONLY',r['transport']); self.assertIn('/c2-5/events',r['domains']['INVESTIGATE']); self.assertFalse(r['wp4c_preparation']['runtime_owner_materialized']); self.assertEqual('PROHIBITED',r['wp4c_preparation']['event_synthesis']); self.assertNotIn('C2_5',r['post_g4_binding']['capabilities']); self.assertEqual('RCN-RN-POST-G4-SOURCE-BINDING',s['packet_id']); self.assertIn(s['status'],{'APPROVED','COMPLETED'}); self.assertEqual('NONE',s['authority_delta']); self.assertEqual('PASS_DELEGATED_AUTO_RATIFICATION',s['decision']); self.assertIn('OTHERS_DENIED',s['real_source_routes'])
  @unittest.skipIf(importlib.util.find_spec('fastapi') is None,'FastAPI dependency not installed')
  def test_runtime_empty_and_validation_denied_before_read(self):
   from fastapi.testclient import TestClient
