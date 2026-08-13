@@ -30,6 +30,17 @@ from .soi_compat import (
     invoke_soi_topology,
     topology_registry_from_mapping,
 )
+from .organisation_evidence import (
+    OrganisationEvidenceError,
+    apply_organisation_decision_rule_pack,
+    assemble_organisation_evidence_set,
+    assert_no_stable_organisation_claim_lawful,
+    build_correspondence_edge,
+    build_disagreement_record,
+    build_invariant_evidence_record,
+    build_metric_record,
+    validate_decision_rule_pack_interface,
+)
 from .validators import ESLValidationError, validate_occurrence
 
 __all__ = [
@@ -53,6 +64,15 @@ __all__ = [
     "family_binding_from_mapping",
     "invoke_soi_topology",
     "topology_registry_from_mapping",
+    "OrganisationEvidenceError",
+    "apply_organisation_decision_rule_pack",
+    "assemble_organisation_evidence_set",
+    "assert_no_stable_organisation_claim_lawful",
+    "build_correspondence_edge",
+    "build_disagreement_record",
+    "build_invariant_evidence_record",
+    "build_metric_record",
+    "validate_decision_rule_pack_interface",
     "ESLValidationError",
     "validate_occurrence",
 ]
