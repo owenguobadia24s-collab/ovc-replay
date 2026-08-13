@@ -1,0 +1,79 @@
+{
+  "schema": "ovc-esli-wp6-execution-record/v1",
+  "programme_id": "OVC-OPTB-ESL-CONFORMANCE-v0.1",
+  "plan_id": "OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+  "plan_version": "0.1-REVISED-2",
+  "packet_id": "ESLI-WP6",
+  "gate_id": "ESLI-G6",
+  "operator_instruction": "OVC CONTINUE ESLI-WP6",
+  "instruction_effect": "EXECUTE_FIRST_INCOMPLETE_READY_AUTO_EXECUTABLE_PACKET_NO_NEW_RESERVED_AUTHORITY",
+  "initial_baseline_commit": "d392c4572e539a399e461212b4991db55ae46477",
+  "baseline_commit": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+  "branch": "build/esli-wp6-soi-compatibility-20260813-requeue1",
+  "stale_main_reconciliation": {
+    "superseded_pr": 728,
+    "superseded_candidate": "25f4453b67435761ede4d1011119ad7aff33e148",
+    "reason": "OVC_BASE_MOVED_DURING_FINAL_INTEGRATION_PREDECESSOR_WINDOW",
+    "advancing_pr": 726,
+    "advancing_commit": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+    "advancing_change": "GRT2-WP0 exact B0 reproduction and delegated G1 PASS",
+    "authority_effect": "NONE"
+  },
+  "status": "IMPLEMENTED_PENDING_EXACT_HEAD_QA",
+  "objective": "Materialise the generic SOI topology/method/result boundary and an exact inactive FAMILY compatibility adapter over the preserved SFC FamilyCatalog surface; keep all other topologies interface-only and fail closed.",
+  "source_court_record": {
+    "sfc_pointer": "registries/implementation/sfc/CURRENT_STATE_POINTER.json",
+    "sfc_terminal_state": "registries/implementation/sfc/OVC_SFC_STATE_v0_11_TERMINAL.json",
+    "observed_sfc_status": "COMPLETED_PRESERVED",
+    "canonical_family_method": "NONE",
+    "selector": "NONE"
+  },
+  "required_outputs": [
+    "SOI generic topology/method/result contract",
+    "SOI view result schema",
+    "topology maturity registry",
+    "topology maturity registry schema",
+    "exact preserved-SFC FAMILY adapter manifest",
+    "deterministic compatibility implementation",
+    "family-present and no-stable-family fixtures",
+    "fail-closed and authority-boundary tests",
+    "permanent IAV-03 SOI maturity fail-closed regression",
+    "issue ledger",
+    "reproduction and rollback evidence",
+    "QA packet and G6 decision after exact-head assurance"
+  ],
+  "test_plan": [
+    "PYTHONPATH=src python3 -m unittest discover -s tests/opt_b/esl -p 'test_esli_wp6_soi_compat.py' -v",
+    "PYTHONPATH=src python3 -m unittest discover -s tests/opt_b/esl -p 'test_esli_wp6_fixture_identity.py' -v",
+    "PYTHONPATH=src python3 -m unittest discover -s tests/opt_b/esl -p 'test_soi_maturity_fail_closed.py' -v",
+    "PYTHONPATH=src python3 -m unittest discover -s tests/opt_b/esl -p 'test_esli_wp5_sri_compat.py' -v",
+    "PYTHONPATH=src python3 -m unittest discover -s tests/opt_b/sfc -p 'test_sfc_wp4_fdi.py' -v",
+    "repository complete suite",
+    "runner parity",
+    "pytest/unittest parity",
+    "FINAL_HEAD profile assurance",
+    "serialized stable-main merge readiness"
+  ],
+  "authority_delta": "NONE",
+  "reserved_authority_delta": "NONE",
+  "implemented_maturity": {
+    "FAMILY": "EXECUTABLE_INACTIVE",
+    "HIERARCHY": "INTERFACE_ONLY",
+    "OVERLAP": "INTERFACE_ONLY",
+    "GRAPH": "INTERFACE_ONLY",
+    "CONTINUUM": "INTERFACE_ONLY",
+    "COMPOSITION": "INTERFACE_ONLY"
+  },
+  "deferred": [
+    "topology activation or selection",
+    "family method or catalogue promotion",
+    "hierarchy/overlap/graph/continuum/composition algorithms",
+    "OrganisationEvidence scientific support decisions and thresholds",
+    "semantic admission",
+    "Validation consumption",
+    "publication",
+    "probability/risk/exposure/execution"
+  ],
+  "rollback": "Forward-supersede/remove WP6 SOI-only artifacts while preserving ESLI-WP0-WP5 and all SFC/FDI/SRFD identities and evidence; no force-push or history rewrite.",
+  "next_if_pass": "ESLI-WP7"
+}
