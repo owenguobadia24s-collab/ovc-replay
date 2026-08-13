@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from tests.historical_court_record import json_at
+from historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[2]
