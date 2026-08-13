@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -60,7 +61,70 @@ def test_closeout_qa_preserves_authority_firewalls():
     assert delta["selector_family_semantic_publication"] == "NONE"
     assert delta["validation"] == "LOCKED_UNCONSUMED"
     assert delta["probability_risk_exposure_execution"] == "NONE"
-    assert_logical(REL / "EACR_WP4_WP5_CONFORMANCE_QA.json")
+
+
+def test_closeout_qa_logical_identity_is_append_only_superseded():
+    original_path = REL / "EACR_WP4_WP5_CONFORMANCE_QA.json"
+    successor_path = REL / "EACR_WP4_WP5_CONFORMANCE_QA_IDENTITY_SUCCESSOR.json"
+    adjudication_path = REL / "EACR_QA_LOGICAL_HASH_INTEGRITY_ADJUDICATION.json"
+
+    original_bytes = original_path.read_bytes()
+    original = json.loads(original_bytes)
+    successor = j(successor_path)
+    adjudication = j(adjudication_path)
+
+    recorded_bad_hash = original.pop("logical_sha256")
+    corrected_hash = successor.pop("logical_sha256")
+    assert recorded_bad_hash == "76368f31dc8e446377d552536956595d7ea76ab340feb739fc98534f50705c82"
+    assert corrected_hash == "827ff0afb6e9344ead9b57eda4c6a4db7b9e29710ac2b311127779541282a024"
+    assert logical_sha256(original) == corrected_hash
+    assert original == successor
+
+    stale_pre_final = json.loads(json.dumps(original))
+    assert stale_pre_final["checks"].pop("old_checkpoint_relabel_forbidden") == "PASS"
+    assert logical_sha256(stale_pre_final) == recorded_bad_hash
+
+    git_blob = b"blob " + str(len(original_bytes)).encode("ascii") + b"\0" + original_bytes
+    assert hashlib.sha1(git_blob).hexdigest() == "fa4a86937ec989c441a166c3b61b055c2fd36133"
+    assert hashlib.sha256(original_bytes).hexdigest() == "fa4d58558ad54166a9c2c582b158ae94ccd14d4c2f5f835f632505c49add6db4"
+
+    assert adjudication["discrepancy_id"] == "PYT-WP2-EACR-QA-LOGICAL-HASH-001"
+    assert adjudication["classification"] == "EVIDENCE_INTEGRITY_ONLY"
+    assert adjudication["authority_effect"] == "NONE"
+    assert adjudication["deterministic_cause"]["category"] == "STALE_PRE_FINAL_PAYLOAD"
+    assert adjudication["semantic_adjudication"]["qa_payload_correct"] is True
+    assert adjudication["semantic_adjudication"]["operator_decision"] == "UNCHANGED"
+    assert adjudication["resolution"]["status"] == "RESOLVED"
+    assert adjudication["resolution"]["historical_artifact_modified"] is False
+    assert adjudication["successor_artifact"]["corrected_logical_sha256"] == corrected_hash
+    assert_logical(successor_path)
+    assert_logical(adjudication_path)
+
+
+def test_identity_correction_leaves_terminal_eacr_chain_unchanged():
+    qa_path = "docs/releases/external-artifact-capacity-ownership-v0-1/EACR_WP4_WP5_CONFORMANCE_QA.json"
+    bad_hash = "76368f31dc8e446377d552536956595d7ea76ab340feb739fc98534f50705c82"
+    gate_path = REL / "EACR_G1_GATE_PACKET.json"
+    decision_path = REL / "EACR_G1_OPERATOR_DECISION_PASS.json"
+    receipt_path = REL / "EACR_COMPLETION_RECEIPT.json"
+    state_path = REG / "OVC_EACR_STATE_v0_4.json"
+
+    gate = j(gate_path)
+    decision = j(decision_path)
+    receipt = j(receipt_path)
+    state = j(state_path)
+    assert gate["qa_packet"] == qa_path
+    assert decision["reviewed_qa_packet"] == qa_path
+    assert decision["reviewed_gate_packet_logical_sha256"] == gate["logical_sha256"]
+    assert receipt["operator_decision"].endswith("EACR_G1_OPERATOR_DECISION_PASS.json")
+    assert state["completion_receipt"].endswith("EACR_COMPLETION_RECEIPT.json")
+    assert state["status"] == "COMPLETED"
+    assert decision["decision"] == receipt["terminal_decision"] == "PASS"
+    assert decision["authority_effect"]["probability_risk_exposure_execution"] == "NONE"
+    assert decision["authority_effect"]["selector_family_semantic_publication"] == "NONE"
+    for path in (gate_path, decision_path, receipt_path, state_path):
+        assert bad_hash not in path.read_text()
+        assert_logical(path)
 
 
 def test_srfd_rebound_token_is_still_unconsumed_at_gate():

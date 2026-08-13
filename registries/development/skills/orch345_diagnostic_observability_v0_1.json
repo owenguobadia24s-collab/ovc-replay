@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-dsai2-orch345-diagnostic-observability-policy/v1",
+  "policy_id": "DSAI2.ORCH345.DIAGNOSTIC_OBSERVABILITY.20260813.v1",
+  "status": "TEMPORARY_ACTIVE",
+  "effective": true,
+  "scope": [
+    "ORCH-3",
+    "ORCH-4",
+    "ORCH-5"
+  ],
+  "purpose": "Directly observe automatic ORCH-3/4/5 decisions during the active throughput evidence window without changing orchestration authority or development-flow gating.",
+  "receipt_class": "TEMPORARY_DIAGNOSTIC_OBSERVABILITY",
+  "authority_effect": "NONE",
+  "governance_expansion": false,
+  "new_operator_gate": false,
+  "merge_authority": "NONE",
+  "parallel_merge": false,
+  "activation_mode": "PASSIVE_COMPANION_RECEIPT_ON_EXISTING_ACTIVE_HELPER_INVOCATION",
+  "execution_identity_policy": "DIAGNOSTIC_RECEIPT_MUST_NOT_CHANGE_UNDERLYING_AUTHORIZED_EXECUTION_RECORD_ID",
+  "timestamp_policy": "UTC_EVENT_TIME_ON_DIAGNOSTIC_RECEIPT_ONLY",
+  "collection_contract": {
+    "orch3": [
+      "candidate_packet_count",
+      "selected_packet_ids",
+      "selected_train_depth",
+      "waiting",
+      "operator_boundaries",
+      "max_train_packets"
+    ],
+    "orch4": [
+      "decision",
+      "left_packet_id",
+      "right_packet_id",
+      "classification",
+      "reason_codes",
+      "overlaps",
+      "admission"
+    ],
+    "orch5": [
+      "candidate_packet_count",
+      "selected_packet_ids",
+      "selected_programme_ids",
+      "occupied_slots",
+      "available_slots",
+      "capacity_saturated",
+      "waiting",
+      "waiting_reason_counts",
+      "serial_fallback_count",
+      "slot_limit_wait_count",
+      "blocked",
+      "operator_wait",
+      "cross_programme_dependency_wakeups",
+      "dependency_wakeup_count"
+    ]
+  },
+  "dependency_wakeup_policy": "COUNT_ONLY_WHEN_NEWLY_COMPLETED_PACKET_IDS_ARE_EXPLICITLY_SUPPLIED_AND_SATISFY_A_SELECTED_PACKET_CROSS_PROGRAMME_DEPENDENCY",
+  "prohibited_inference": [
+    "DO_NOT_INFER_DEPENDENCY_WAKEUP_FROM_BRANCH_MOVEMENT",
+    "DO_NOT_INFER_PARALLEL_ALLOW_WITHOUT_ORCH4_CLASSIFICATION",
+    "DO_NOT_INFER_SLOT_OCCUPANCY_FROM_PR_TIMING_ALONE"
+  ],
+  "capacity_profile_unchanged": {
+    "max_parallel_builds": 4,
+    "max_train_packets": 8,
+    "max_auto_requeue_attempts": 2
+  },
+  "retirement_policy": {
+    "temporary_by_default": true,
+    "normal_decision_receipts_may_be_reduced_to_metrics_after_evidence_sufficiency": true,
+    "exception_receipts_may_be_retained": true,
+    "retirement_authority_effect": "NONE"
+  },
+  "validation": "DENIED",
+  "reserved_scientific_execution_authority": "NONE"
+}
