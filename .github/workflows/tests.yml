@@ -102,6 +102,9 @@ jobs:
           python-version: "3.11"
       - name: Complete repository suite
         run: PYTHONPATH=src python3 -m unittest discover -s tests -v
+      - name: RCN-RN-WP5A exact Research Console surface
+        if: github.event_name == 'pull_request' && github.head_ref == 'build/rc-vnext-wp5a-representations'
+        run: PYTHONPATH=src python3 -m unittest discover -s tests/research_console_vnext -v
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
