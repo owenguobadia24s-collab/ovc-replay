@@ -1,0 +1,307 @@
+{
+  "schema": "ovc-rcn-rn-wp5a-representation-snapshot/v1",
+  "packet_id": "RCN-RN-WP5A",
+  "mode": "FIXTURE_ONLY",
+  "data_classification": "SYNTHETIC_FIXTURE",
+  "evidence_status": "NON_EVIDENTIARY",
+  "authority_effect": "NONE",
+  "source_preflight": {
+    "status": "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+    "gate_branch": "RCN-RN-WP5A-CLOSEOUT",
+    "operator_escalation_gate": "RCN-RN-G5-FIRST-NEW-SOURCE",
+    "first_new_real_research_source": false,
+    "source_binding_registry": "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json",
+    "source_ids": [
+      "SRI_REPRESENTATION_FIXTURES",
+      "FDI_DISTANCE_FIXTURES",
+      "SRFD_FAMILY_FIXTURES",
+      "SRFD_SENSITIVITY_FIXTURES",
+      "MCARB_ADVERSARIAL_FIXTURES"
+    ]
+  },
+  "population": {
+    "population_id": "WP5A.SYNTHETIC.REPRESENTATION.v1",
+    "evaluable_count": 7,
+    "missing_count": 0,
+    "denominator": 7,
+    "truncated": false
+  },
+  "source_fixture_refs": [
+    {
+      "source_id": "SRI_REPRESENTATION_FIXTURES",
+      "fixture_id": "FX-011",
+      "expected": "REP_REQUIRED_DIMENSION_MISSING"
+    },
+    {
+      "source_id": "SRI_REPRESENTATION_FIXTURES",
+      "fixture_id": "FX-012",
+      "expected": "NOT_COMPARABLE"
+    },
+    {
+      "source_id": "FDI_DISTANCE_FIXTURES",
+      "fixture_id": "FX-013",
+      "expected": "DISTANCE_ENGINE_NOT_CALLED"
+    },
+    {
+      "source_id": "FDI_DISTANCE_FIXTURES",
+      "fixture_id": "FX-014",
+      "expected": "STABLE_LEXICOGRAPHIC_TIE"
+    },
+    {
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "fixture_id": "FX-018",
+      "expected": "LAWFUL_ALL_RESIDUAL_CATALOG"
+    },
+    {
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "fixture_id": "FX-019",
+      "expected": "NO_STABLE_FAMILY_NO_MASQUERADE"
+    },
+    {
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "fixture_id": "FX-029",
+      "expected": "COMPLETE_NO_STABLE_FAMILY_RESULT"
+    },
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "fixture_id": "FX-016",
+      "expected": "FAMILY_CONTEXT_UNSTABLE_OR_METHOD_SENSITIVE"
+    },
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "fixture_id": "FX-017",
+      "expected": "SRFDMethodDisagreement_EMITTED"
+    },
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "fixture_id": "FX-018",
+      "expected": "DENOMINATORS_PRESERVED"
+    },
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "fixture_id": "FX-029",
+      "expected": "NO_INVARIANT_CORE_MASQUERADE"
+    },
+    {
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "fixture_id": "MCARB-FX-03",
+      "expected": "NOT_COMPARABLE"
+    },
+    {
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "fixture_id": "MCARB-FX-11",
+      "expected": "DEPENDENCE_VISIBLE_NO_DOUBLE_CREDIT"
+    },
+    {
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "fixture_id": "MCARB-FX-14",
+      "expected": "NO_ADDITIONAL_INFORMATION"
+    }
+  ],
+  "methods": [
+    {
+      "method_id": "SRI.MISSING_DIMENSION",
+      "basis": "SRI",
+      "source_id": "SRI_REPRESENTATION_FIXTURES",
+      "source_fixture_id": "FX-011",
+      "status": "NOT_EVALUABLE",
+      "disposition": "PRESERVE_MISSING_DIMENSION",
+      "winner": null,
+      "selection_authority": "NONE"
+    },
+    {
+      "method_id": "SRI.INCOMPATIBLE_REPRESENTATION",
+      "basis": "SRI",
+      "source_id": "SRI_REPRESENTATION_FIXTURES",
+      "source_fixture_id": "FX-012",
+      "status": "NOT_COMPARABLE",
+      "disposition": "PRESERVE_NON_COMPARABILITY",
+      "winner": null,
+      "selection_authority": "NONE"
+    },
+    {
+      "method_id": "FDI.NOT_COMPARABLE_PAIR",
+      "basis": "FDI",
+      "source_id": "FDI_DISTANCE_FIXTURES",
+      "source_fixture_id": "FX-013",
+      "status": "NOT_COMPARABLE",
+      "disposition": "DISTANCE_ENGINE_NOT_CALLED",
+      "winner": null,
+      "selection_authority": "NONE"
+    },
+    {
+      "method_id": "FDI.DISTANCE_TIE",
+      "basis": "FDI",
+      "source_id": "FDI_DISTANCE_FIXTURES",
+      "source_fixture_id": "FX-014",
+      "status": "TIE_RETAINED",
+      "disposition": "STABLE_LEXICOGRAPHIC_TIE_VISIBLE",
+      "winner": null,
+      "selection_authority": "NONE"
+    },
+    {
+      "method_id": "SRFD.ALL_RESIDUAL",
+      "basis": "SRFD",
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "source_fixture_id": "FX-018",
+      "status": "RESIDUAL",
+      "disposition": "LAWFUL_ALL_RESIDUAL",
+      "winner": null,
+      "selection_authority": "NONE"
+    },
+    {
+      "method_id": "SRFD.NO_STABLE_FAMILY",
+      "basis": "SRFD",
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "source_fixture_id": "FX-029",
+      "status": "NO_STABLE_FAMILY",
+      "disposition": "COMPLETE_TERMINAL_RESULT",
+      "winner": null,
+      "selection_authority": "NONE"
+    },
+    {
+      "method_id": "MCARB.AUXILIARY_NULL",
+      "basis": "MCARB",
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "source_fixture_id": "MCARB-FX-14",
+      "status": "NO_ADDITIONAL_INFORMATION",
+      "disposition": "AUXILIARY_NULL_VISIBLE",
+      "winner": null,
+      "selection_authority": "NONE"
+    }
+  ],
+  "comparability": [
+    {
+      "comparison_id": "CMP.SRI.INCOMPATIBLE",
+      "source_id": "SRI_REPRESENTATION_FIXTURES",
+      "source_fixture_id": "FX-012",
+      "status": "NOT_COMPARABLE",
+      "distance_engine_called": false,
+      "winner": null
+    },
+    {
+      "comparison_id": "CMP.FDI.GATED",
+      "source_id": "FDI_DISTANCE_FIXTURES",
+      "source_fixture_id": "FX-013",
+      "status": "NOT_COMPARABLE",
+      "distance_engine_called": false,
+      "winner": null
+    },
+    {
+      "comparison_id": "CMP.FDI.TIE",
+      "source_id": "FDI_DISTANCE_FIXTURES",
+      "source_fixture_id": "FX-014",
+      "status": "TIE_RETAINED",
+      "distance_engine_called": true,
+      "winner": null
+    },
+    {
+      "comparison_id": "CMP.SRFD.METHOD_DISAGREEMENT",
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "source_fixture_id": "FX-017",
+      "status": "AMBIGUOUS",
+      "distance_engine_called": false,
+      "winner": null
+    },
+    {
+      "comparison_id": "CMP.MCARB.BID_ASK",
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "source_fixture_id": "MCARB-FX-03",
+      "status": "NOT_COMPARABLE",
+      "distance_engine_called": false,
+      "winner": null
+    }
+  ],
+  "family_outcomes": [
+    {
+      "outcome": "RESIDUAL",
+      "status": "LAWFUL_EQUAL_STATUS",
+      "count": 1,
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "source_fixture_id": "FX-018",
+      "authority_effect": "NONE"
+    },
+    {
+      "outcome": "AMBIGUOUS",
+      "status": "LAWFUL_EQUAL_STATUS",
+      "count": 1,
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "source_fixture_id": "FX-017",
+      "authority_effect": "NONE"
+    },
+    {
+      "outcome": "NO_STABLE_FAMILY",
+      "status": "LAWFUL_EQUAL_STATUS",
+      "count": 1,
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "source_fixture_id": "FX-029",
+      "authority_effect": "NONE"
+    }
+  ],
+  "outcome_denominator": {
+    "residual_count": 1,
+    "ambiguous_count": 1,
+    "no_stable_family_count": 1,
+    "denominator": 3
+  },
+  "sensitivity": [
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "source_fixture_id": "FX-016",
+      "status": "METHOD_SENSITIVE",
+      "expected": "FAMILY_CONTEXT_UNSTABLE_OR_METHOD_SENSITIVE",
+      "winner": null
+    },
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "source_fixture_id": "FX-018",
+      "status": "DENOMINATOR_PRESERVED",
+      "expected": "DENOMINATORS_PRESERVED",
+      "winner": null
+    },
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "source_fixture_id": "FX-029",
+      "status": "NO_INVARIANT_CORE",
+      "expected": "NO_INVARIANT_CORE_MASQUERADE",
+      "winner": null
+    }
+  ],
+  "mcarb": [
+    {
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "source_fixture_id": "MCARB-FX-03",
+      "status": "NOT_COMPARABLE",
+      "expected": "NOT_COMPARABLE"
+    },
+    {
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "source_fixture_id": "MCARB-FX-11",
+      "status": "DEPENDENCE_VISIBLE",
+      "expected": "DEPENDENCE_VISIBLE_NO_DOUBLE_CREDIT"
+    },
+    {
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "source_fixture_id": "MCARB-FX-14",
+      "status": "NO_ADDITIONAL_INFORMATION",
+      "expected": "NO_ADDITIONAL_INFORMATION"
+    }
+  ],
+  "presentation_guardrails": {
+    "method_first": true,
+    "family_first": false,
+    "default_winner": null,
+    "scientific_strength_score": null,
+    "frontend_scientific_calculation": "PROHIBITED",
+    "selector_authority": "NONE",
+    "writes": "NONE",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "equal_status_outcomes": [
+      "RESIDUAL",
+      "AMBIGUOUS",
+      "NO_STABLE_FAMILY"
+    ],
+    "no_forced_assignment": true,
+    "correspondence_is_independence": false
+  }
+}
