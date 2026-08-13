@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-dsai-throughput-g1-decision/v1",
+  "programme_id": "OVC-DSAI-THROUGHPUT-20260813",
+  "plan_id": "OVC-DSAI-THROUGHPUT-EXPANSION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "DSAI-TE-G1",
+  "decision": "PASS",
+  "status": "APPROVED",
+  "authority_required": "DELEGATED_AUTO_RATIFICATION",
+  "authority_delta": "NONE",
+  "authority_effect": "NONE",
+  "basis_head": "9f2a2b587045270fadbe84290276ff4e441e2990",
+  "qa": "PASS",
+  "operational_capacity_after_merge": {
+    "max_parallel_builds": 4,
+    "max_train_packets": 8,
+    "max_auto_requeue_attempts": 2,
+    "portfolio_dispatch": "FILL_PAIRWISE_COMPATIBLE_SLOTS_UP_TO_4"
+  },
+  "boundaries": {
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "serialized_final_integration_window": true,
+    "operator_required_gate_behavior": "STOP",
+    "non_none_authority_delta_behavior": "STOP",
+    "validation": "DENIED",
+    "reserved_scientific_execution_authority": "NONE"
+  },
+  "governance_broadening": "DEFERRED_TO_END_OF_DAY_OPERATOR_ASSESSMENT",
+  "next_packet": null,
+  "rollback": "Forward-disable throughput profile and restore prior active defaults."
+}
