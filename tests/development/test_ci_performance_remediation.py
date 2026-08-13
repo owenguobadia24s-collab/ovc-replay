@@ -23,9 +23,13 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.admission = after_admission.split("\n  legacy-unittest:\n", 1)[0]
 
     def test_canonical_suite_contract_is_preserved_after_pyt_wp1(self):
-        full_suite = "PYTHONPATH=src python3 -m unittest discover -s tests -v"
-        self.assertEqual(self.tests_workflow.count(full_suite), 1)
-        self.assertNotIn(full_suite, self.workflow)
+        child_suite = "python3 -m unittest discover -s tests -v"
+        self.assertEqual(self.tests_workflow.count(child_suite), 1)
+        self.assertNotIn(child_suite, self.workflow)
+        self.assertIn(
+            "tools/ci/ovc_run_with_main_lease.py",
+            self.tests_workflow,
+        )
         self.assertIn("name: pytest-unittest-parity", self.tests_workflow)
         self.assertIn("name: runner-parity", self.tests_workflow)
 
@@ -34,11 +38,33 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("cancel-in-progress: false", self.readiness)
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ACQUIRED", self.readiness)
         self.assertIn("windowCheckName = 'OVC merge readiness'", self.profile)
-        self.assertIn("OVC_PROFILE_FINAL_INTEGRATION_WINDOW_ADMITTED", self.profile)
+        self.assertIn(
+            "OVC_PROFILE_SHARED_FINAL_INTEGRATION_LEASE_ADMITTED",
+            self.profile,
+        )
         self.assertIn("windowCheckName = 'OVC merge readiness'", self.admission)
-        self.assertIn("windowRun?.status === 'in_progress'", self.admission)
-        self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_ADMITTED", self.admission)
-        self.assertEqual(self.tests_workflow.count("needs: final-integration-window-admitted"), 3)
+        self.assertIn(
+            "github.rest.actions.getJobForWorkflowRun",
+            self.profile,
+        )
+        self.assertIn(
+            "github.rest.actions.getJobForWorkflowRun",
+            self.admission,
+        )
+        self.assertIn("acquireStep?.status === 'completed'", self.profile)
+        self.assertIn("acquireStep.conclusion === 'success'", self.profile)
+        self.assertIn("acquireStep?.status === 'completed'", self.admission)
+        self.assertIn("acquireStep.conclusion === 'success'", self.admission)
+        self.assertNotIn("windowRun?.status === 'in_progress'", self.profile)
+        self.assertNotIn("windowRun?.status === 'in_progress'", self.admission)
+        self.assertIn(
+            "OVC_SHARED_FINAL_INTEGRATION_LEASE_ADMITTED",
+            self.admission,
+        )
+        self.assertEqual(
+            self.tests_workflow.count("needs: final-integration-window-admitted"),
+            3,
+        )
 
     def test_pre_assurance_admission_rechecks_current_main_and_ancestry(self):
         self.assertIn("OVC_PROFILE_BASE_MOVED_BEFORE_ASSURANCE", self.profile)
