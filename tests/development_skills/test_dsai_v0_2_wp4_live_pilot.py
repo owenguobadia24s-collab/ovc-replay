@@ -141,13 +141,24 @@ class DSAI2WP4LivePilotTests(unittest.TestCase):
         self.assertEqual(sweep["blocking_warnings"], [])
         self.assertEqual(sweep["unresolved_issues"], [])
 
-    def test_pilot_receipt_is_non_promotional_and_pending_assurance_only(self) -> None:
+    def test_pilot_receipt_is_non_promotional_and_assured_without_authority_delta(self) -> None:
         receipt = self._load(RELEASE / "DSAI2_WP4_LIVE_PILOT_RECEIPT.json")
         self.assertEqual(receipt["authority_delta"], "NONE")
-        self.assertEqual(receipt["status"], "IMPLEMENTED_PENDING_ASSURANCE")
-        self.assertEqual(receipt["g4_acceptance_observations"]["parallel_merges_observed"], 0)
-        self.assertTrue(receipt["g4_acceptance_observations"]["serialized_integration_observed"])
-        self.assertFalse(receipt["g4_acceptance_observations"]["reserved_authority_crossed"])
+        self.assertEqual(receipt["status"], "ASSURED_G4_PASS_CANDIDATE")
+        observations = receipt["g4_acceptance_observations"]
+        self.assertEqual(observations["false_parallel_allows"], 0)
+        self.assertEqual(observations["unresolved_conflict_classifications"], 0)
+        self.assertEqual(observations["parallel_merges_observed"], 0)
+        self.assertTrue(observations["serialized_integration_observed"])
+        self.assertTrue(observations["operator_wait_respected"])
+        self.assertTrue(observations["cross_programme_dependency_respected"])
+        self.assertTrue(observations["missing_prerequisite_blocked"])
+        self.assertFalse(observations["reserved_authority_crossed"])
+        assurance = receipt["initial_exact_head_assurance"]
+        self.assertEqual(assurance["tests"]["run_number"], 3932)
+        self.assertEqual(assurance["tiered"]["run_number"], 2276)
+        self.assertEqual(assurance["tests"]["conclusion"], "success")
+        self.assertEqual(assurance["tiered"]["conclusion"], "success")
         self.assertEqual(receipt["performance_claims"], "NONE; this pilot evaluates conformance and containment, not causal speed improvement.")
         self.assertFalse(self.pack["parallel_merge"])
         self.assertEqual(self.pack["authority_delta"], "NONE")
