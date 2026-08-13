@@ -1,0 +1,75 @@
+{
+  "schema": "ovc-dsai2-g4-terminal-squash-merge-receipt/v1",
+  "receipt_id": "DSAI2-WP4.G4.TERMINAL.SQUASH_MERGE.20260813",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "DSAI2-WP4",
+  "gate_id": "DSAI2-G4",
+  "gate_decision": "PASS_DELEGATED_AUTO_RATIFIED",
+  "authority_delta": "NONE",
+  "pull_request": 693,
+  "merge_method": "squash",
+  "target_branch": "main",
+  "base_main": "7ec8b8d8614822494deced0bb364208d039e91f5",
+  "approved_head": "7578829b2910e1d683e7b712db4dccd01751204e",
+  "result_main": "8ce1eb5bb3749074b1d5c40f7ce11f974b6c2d30",
+  "result_parent": "7ec8b8d8614822494deced0bb364208d039e91f5",
+  "final_assurance": {
+    "tests": {
+      "run_id": 31655715720,
+      "run_number": 3934,
+      "conclusion": "success",
+      "final_integration_admission": "success",
+      "repository_suite": "success",
+      "pytest_unittest_parity": "success",
+      "runner_parity": "success"
+    },
+    "tiered": {
+      "run_id": 31655715767,
+      "run_number": 2278,
+      "conclusion": "success",
+      "profile_assurance": "success",
+      "compatibility": "success",
+      "merge_readiness": "success"
+    },
+    "stable_main": "7ec8b8d8614822494deced0bb364208d039e91f5",
+    "submitted_reviews": 0,
+    "review_threads": 0
+  },
+  "pilot_acceptance": {
+    "orch3_same_programme_train": "PASS",
+    "orch4_parallel_build_serial_integration": "PASS",
+    "orch4_adversarial_overlap_serial_fallback": "PASS",
+    "orch5_cross_programme_dependency": "PASS",
+    "orch5_operator_wait": "PASS",
+    "orch5_missing_prerequisite_block": "PASS",
+    "false_parallel_allows": 0,
+    "unresolved_conflict_classifications": 0,
+    "parallel_merges": 0,
+    "recorded_unresolved_s3": 0,
+    "recorded_unresolved_s4": 0,
+    "reserved_authority_crossed": false
+  },
+  "authority_after_merge": {
+    "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "packet_class_allowlist": ["LOW_RISK_IMPLEMENTATION"],
+    "parallel_merge": false,
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED",
+    "operator_required_gate_behavior": "STOP",
+    "validation": "DENIED",
+    "reserved_scientific_execution_authority": "NONE"
+  },
+  "administrative_events": [
+    {
+      "pull_request": 694,
+      "disposition": "CLOSED_UNMERGED_IMMEDIATELY",
+      "reason": "Accidental no-op comparison against the already-merged WP4 source branch; no new content or authority was integrated."
+    }
+  ],
+  "rollback": "Forward-disable ORCH-3/4/5 to bounded ORCH-2 SERIAL_REQUIRED while preserving PDC serialized final integration and all historical evidence.",
+  "terminal_programme_status": "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
+  "next_packet": null
+}
