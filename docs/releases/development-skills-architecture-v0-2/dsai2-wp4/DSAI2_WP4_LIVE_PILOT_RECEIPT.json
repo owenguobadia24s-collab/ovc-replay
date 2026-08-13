@@ -1,0 +1,102 @@
+{
+  "schema": "ovc-dsai2-wp4-live-pilot-receipt/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "plan_version": "0.2",
+  "packet_id": "DSAI2-WP4",
+  "gate_id": "DSAI2-G4",
+  "baseline_main": "7ec8b8d8614822494deced0bb364208d039e91f5",
+  "branch": "feature/dsai2-wp4-live-pilot",
+  "authority_record": "registries/development/skills/orch345_bounded_authority_v0_1.json",
+  "authority_required": "DSAI2-G3_OPERATOR_PASS_ACTIVE_ON_MAIN",
+  "authority_delta": "NONE",
+  "status": "IMPLEMENTED_PENDING_ASSURANCE",
+  "orch3_live_train": {
+    "programme_id": "OVC-DSAI-v0.2",
+    "packet_class": "LOW_RISK_IMPLEMENTATION",
+    "packet_a": {
+      "packet_id": "DSAI2-WP4-ORCH3-A",
+      "commit": "5e85085f230975248ef30a159bcdaaf43336184e",
+      "path": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/pilot/orch3-a.json"
+    },
+    "packet_b": {
+      "packet_id": "DSAI2-WP4-ORCH3-B",
+      "commit": "b9ebcbc33ac06f441212bfdcff1a2824cd5a1e68",
+      "prerequisite": "DSAI2-WP4-ORCH3-A",
+      "observed_predecessor_commit": "5e85085f230975248ef30a159bcdaaf43336184e",
+      "path": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/pilot/orch3-b.json"
+    },
+    "execution_order": ["DSAI2-WP4-ORCH3-A", "DSAI2-WP4-ORCH3-B"],
+    "parallel_merge": false
+  },
+  "orch4_live_parallel_build_serial_integration": {
+    "construction_base": "7ec8b8d8614822494deced0bb364208d039e91f5",
+    "candidate_a": {
+      "branch": "pilot/dsai2-wp4-orch4-a",
+      "commit": "c6cc1c1598ba13440731a4e2dd8ca037cd364b3b",
+      "write_path": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/pilot/orch4-a-build.json"
+    },
+    "candidate_b": {
+      "branch": "pilot/dsai2-wp4-orch4-b",
+      "commit": "bfcd37d1d1f596cd70afb6e942e2e2d8f1536050",
+      "write_path": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/pilot/orch4-b-build.json"
+    },
+    "construction_write_sets_disjoint": true,
+    "isolated_branches_merged_to_main": false,
+    "serialized_integration_receipts": [
+      {
+        "path": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/pilot/orch4-a-integrated.json",
+        "commit": "a5b4b1034f8993a7c882cfd04728d28ba3c01f44",
+        "sequence": 1
+      },
+      {
+        "path": "docs/releases/development-skills-architecture-v0-2/dsai2-wp4/pilot/orch4-b-integrated.json",
+        "commit": "9a9eae915b1da90f36930b73fadbc2cb9197a25f",
+        "sequence": 2
+      }
+    ],
+    "deterministic_classifier_expectations": {
+      "disjoint_pair": "PARALLEL_BUILD_ALLOWED_SERIAL_INTEGRATION",
+      "adversarial_overlapping_pair": "SERIAL_REQUIRED",
+      "adversarial_reason": "WRITE_SET_OVERLAP"
+    },
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED",
+    "parallel_merge": false
+  },
+  "orch5_live_portfolio": {
+    "max_parallel_build_slots": 2,
+    "eligible_ready_packet": "DSAI2-WP4-PORTFOLIO-READY",
+    "cross_programme_packet": "DSAI2-WP4-PORTFOLIO-CROSS-PROGRAMME",
+    "cross_programme_dependency": {
+      "programme_id": "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-v0.2",
+      "packet_id": "C2P2-WP0",
+      "source_state": "registries/implementation/c2p_v0_2/OVC_C2P2_STATE_v0_1.json",
+      "recorded_status": "COMPLETED",
+      "recorded_merge_commit": "fdf64e0df76c5f75b21de357bac05ec965b9f0f7"
+    },
+    "missing_prerequisite_packet": "DSAI2-WP4-PORTFOLIO-BLOCKED",
+    "operator_wait": {
+      "packet_id": "RCN-RN-G4",
+      "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+      "source_pull_request": 678,
+      "source_state_at_pilot": "OPEN_OPERATOR_REQUIRED"
+    },
+    "parallel_merge": false
+  },
+  "deterministic_harness": {
+    "path": "src/ovc/development/skills/orch345_pilot.py",
+    "implementation_commit": "9f85721fb0bcc5c1f34ab8cd69173a59d566ca7c",
+    "assurance": "PENDING_CANONICAL_TEST_AND_REPOSITORY_SUITE"
+  },
+  "g4_acceptance_observations": {
+    "false_parallel_allows": "PENDING_DETERMINISTIC_ASSURANCE",
+    "unresolved_conflict_classifications": "PENDING_DETERMINISTIC_ASSURANCE",
+    "parallel_merges_observed": 0,
+    "serialized_integration_observed": true,
+    "operator_wait_constructed": true,
+    "cross_programme_dependency_constructed": true,
+    "reserved_authority_crossed": false
+  },
+  "performance_claims": "NONE; this pilot evaluates conformance and containment, not causal speed improvement.",
+  "rollback": "Forward-remove/supersede WP4 pilot-only receipts and harness while preserving the operator-approved G3 bounded authority, PDC serialized final-integration policy and historical evidence."
+}
