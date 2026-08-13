@@ -153,7 +153,7 @@ jobs:
     name: OVC merge readiness
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 22
+    timeout-minutes: 27
     concurrency:
       group: ovc-main-integration-lane-v1
       cancel-in-progress: false
@@ -172,7 +172,117 @@ jobs:
             const repo = context.repo.repo;
             const pr = context.payload.pull_request;
             const sha = pr.head.sha;
+            const windowCheckName = 'OVC merge readiness';
             const startedAt = Date.now();
+            const predecessorDeadline = startedAt + 4 * 60 * 1000;
+            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+            const latestNamedRun = runs => {
+              const matches = runs.filter(run => run.name === windowCheckName).sort((a, b) => b.id - a.id);
+              return matches[0];
+            };
+            const emitPredecessorMetric = (result, leaseOwner = null) => core.info(`OVC_CI_METRIC ${JSON.stringify({
+              schema: 'ovc-ci-metric/v1',
+              metric: 'final_integration_predecessor_lease_wait_ms',
+              value_ms: Date.now() - startedAt,
+              head_sha: sha,
+              predecessor_pr: leaseOwner?.number || null,
+              predecessor_head_sha: leaseOwner?.headSha || null,
+              predecessor_base_sha: leaseOwner?.baseSha || null,
+              result
+            })}`);
+            const findPassedPredecessor = async mainSha => {
+              const pulls = await github.paginate(github.rest.pulls.list, {
+                owner,
+                repo,
+                state: 'open',
+                base: pr.base.ref,
+                per_page: 100
+              });
+              for (const candidate of pulls) {
+                if (candidate.number === pr.number) {
+                  continue;
+                }
+                const checks = await github.rest.checks.listForRef({
+                  owner,
+                  repo,
+                  ref: candidate.head.sha,
+                  per_page: 100,
+                  filter: 'latest'
+                });
+                const leaseRun = latestNamedRun(checks.data.check_runs);
+                if (!(leaseRun?.status === 'completed' && leaseRun.conclusion === 'success')) {
+                  continue;
+                }
+                const ancestry = await github.rest.repos.compareCommits({
+                  owner,
+                  repo,
+                  base: mainSha,
+                  head: candidate.head.sha
+                });
+                if (!['ahead', 'identical'].includes(ancestry.data.status)) {
+                  continue;
+                }
+                return {
+                  number: candidate.number,
+                  headSha: candidate.head.sha,
+                  baseSha: mainSha
+                };
+              }
+              return null;
+            };
+
+            let leaseOwner = null;
+            while (Date.now() < predecessorDeadline) {
+              const mainNow = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+              const currentMain = mainNow.data.commit.sha;
+              if (!leaseOwner) {
+                leaseOwner = await findPassedPredecessor(currentMain);
+                if (!leaseOwner) {
+                  emitPredecessorMetric('NO_HELD_PREDECESSOR');
+                  break;
+                }
+                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD: PR #${leaseOwner.number} head ${leaseOwner.headSha} passed final readiness on ${pr.base.ref}@${leaseOwner.baseSha}; admission for ${sha} is withheld until MERGED, RELEASED, or INVALIDATED.`);
+              }
+
+              const terminal = await github.rest.pulls.get({ owner, repo, pull_number: leaseOwner.number });
+              const mainAfterDispositionCheck = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
+              const newMain = mainAfterDispositionCheck.data.commit.sha;
+
+              if (terminal.data.merged_at) {
+                if (newMain === leaseOwner.baseSha) {
+                  core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_MERGE_PROPAGATING: PR #${leaseOwner.number} is merged but ${pr.base.ref} still reports ${newMain}; retaining the lease until the new main SHA is observed.`);
+                  await sleep(5000);
+                  continue;
+                }
+                emitPredecessorMetric('MERGED', leaseOwner);
+                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_MERGED: PR #${leaseOwner.number} head ${leaseOwner.headSha} reached MERGED and ${pr.base.ref} advanced from ${leaseOwner.baseSha} to ${newMain}.`);
+                leaseOwner = null;
+                continue;
+              }
+
+              if (terminal.data.state === 'closed') {
+                emitPredecessorMetric('RELEASED', leaseOwner);
+                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_RELEASED: PR #${leaseOwner.number} head ${leaseOwner.headSha} was explicitly closed without merge; its final-integration lease is released.`);
+                leaseOwner = null;
+                continue;
+              }
+
+              if (newMain !== leaseOwner.baseSha) {
+                emitPredecessorMetric('INVALIDATED', leaseOwner);
+                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_INVALIDATED: PR #${leaseOwner.number} remains open but ${pr.base.ref} moved from ${leaseOwner.baseSha} to ${newMain}; the predecessor lease is invalidated and the current candidate will be revalidated against the new main.`);
+                leaseOwner = null;
+                continue;
+              }
+
+              await sleep(5000);
+            }
+
+            if (leaseOwner) {
+              emitPredecessorMetric('TIMEOUT', leaseOwner);
+              core.setFailed(`OVC_FINAL_INTEGRATION_PREDECESSOR_TERMINAL_TIMEOUT: PR #${leaseOwner.number} head ${leaseOwner.headSha} still owns the final-PASS lease on ${pr.base.ref}@${leaseOwner.baseSha}. Merge it or explicitly close/abandon it before another candidate can enter final assurance.`);
+              return;
+            }
+
             const mainAtStart = await github.rest.repos.getBranch({ owner, repo, branch: pr.base.ref });
             const mainSnapshot = mainAtStart.data.commit.sha;
             const emitMetric = result => core.info(`OVC_CI_METRIC ${JSON.stringify({

@@ -1,0 +1,190 @@
+{
+  "schema": "ovc-dsai-plan-packet-materialisation-fixture/v1",
+  "source_basis": [
+    {
+      "style": "DSAI",
+      "source_ref": "OVC_Development_Skills_Architecture_v0_1_Conformance_Implementation_Plan_v0_2_REVISED_RATIFIED.docx",
+      "source_sha256": "34dec97202a510ff2f1bd7498b33d63c8a2aed6df2eaf0b2f4af7c6ca6411e99",
+      "plan_id": "OVC-DSAI-IMPLEMENTATION-PLAN-0.2",
+      "plan_version": "0.2"
+    },
+    {
+      "style": "C2P",
+      "source_ref": "OVC_C2P_Persistent_Structural_Objects_v0_2_REVISED_Conformance_Implementation_Plan_v0_2_REVISED_RATIFIED.docx",
+      "source_sha256": "c805b6f86d510ffcfbe04a150ce115bc14b59c8218db06eceb6592a839fc0267",
+      "plan_id": "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED",
+      "plan_version": "0.2"
+    },
+    {
+      "style": "ESLI",
+      "source_ref": "OVC_OPT-B_Empirical_Structural_Language_Conformance_Implementation_Plan_v0_1_REVISED_2.docx",
+      "source_sha256": "73b05b73ce3f3e73a85bd1b4ce828b2135294e4a5936c9e06cbc4a935ba1a12b",
+      "plan_id": "OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+      "plan_version": "0.1"
+    }
+  ],
+  "programmes": [
+    {
+      "style": "DSAI",
+      "plan_index": 0,
+      "programme_id": "FIXTURE-DSAI",
+      "packets": [
+        {
+          "packet_id": "DSAI-WP1",
+          "title": "contracts, schemas, enums and registries",
+          "status": "COMPLETED",
+          "objective": "Build the minimum normative object layer required by later Skills.",
+          "packet_class": "IMPLEMENTATION",
+          "prerequisites": [],
+          "external_prerequisites": ["DSAI-G0 PASS"],
+          "state_transition": "READY -> COMPLETED",
+          "inputs": ["ratified design", "repository census"],
+          "required_artifacts": ["contracts", "schemas", "registries"],
+          "implementation_actions": ["reuse existing development contracts", "freeze enums"],
+          "capability_requirements": [
+            {"capability_id":"CONTRACT_BUILD","version_range":">=0.1,<1.0","required_tier":"QUALIFIED","mandatory":true,"reason":"Materialise declared contracts."},
+            {"capability_id":"SCHEMA_BUILD","version_range":">=0.1,<1.0","required_tier":"QUALIFIED","mandatory":true,"reason":"Create typed schemas."}
+          ],
+          "tests": ["schema validation", "registry validation"],
+          "acceptance_conditions": ["Unknown mandatory capability fails closed.", "No authority is created."],
+          "outputs": ["normative object layer"],
+          "qa_requirements": ["E1-E3"],
+          "rollback": "Revert candidate registries and contracts.",
+          "authority_required": "DELEGATED_AUTO_RATIFICATION",
+          "authority_delta": "NONE",
+          "gate_ids": ["DSAI-G1"],
+          "next_packet": "DSAI-WP2"
+        },
+        {
+          "packet_id": "DSAI-WP2",
+          "title": "release identity and knowledge",
+          "status": "READY",
+          "objective": "Build release and knowledge binding.",
+          "packet_class": "IMPLEMENTATION",
+          "prerequisites": ["DSAI-WP1"],
+          "external_prerequisites": [],
+          "state_transition": "READY -> QA_REVIEW",
+          "inputs": ["WP1 contracts"],
+          "required_artifacts": ["release bundle", "knowledge dependency graph"],
+          "implementation_actions": ["compile deterministic read model"],
+          "capability_requirements": [
+            {"capability_id":"DETERMINISTIC_IMPLEMENTATION","version_range":">=0.1,<1.0","required_tier":"QUALIFIED","mandatory":true,"reason":"Implement frozen deterministic behavior."}
+          ],
+          "tests": ["release identity stability"],
+          "acceptance_conditions": ["Two builds from same logical input are identical."],
+          "outputs": ["release/knowledge records"],
+          "qa_requirements": ["determinism"],
+          "rollback": "Revert candidate release/knowledge records.",
+          "authority_required": "DELEGATED_AUTO_RATIFICATION",
+          "authority_delta": "NONE",
+          "gate_ids": ["DSAI-G2"],
+          "next_packet": null
+        }
+      ],
+      "gates": [
+        {"gate_id":"DSAI-G1","title":"normative foundation","gate_class":"AUTO_RATIFIABLE","acceptance_conditions":["WP1 tests pass"],"authority_delta":"NONE","rollback":"Revert WP1."},
+        {"gate_id":"DSAI-G2","title":"release knowledge","gate_class":"AUTO_RATIFIABLE","acceptance_conditions":["WP2 tests pass"],"authority_delta":"NONE","rollback":"Revert WP2."}
+      ]
+    },
+    {
+      "style": "C2P",
+      "plan_index": 1,
+      "programme_id": "FIXTURE-C2P",
+      "packets": [
+        {
+          "packet_id": "C2P2-WP0",
+          "title": "ratification materialisation",
+          "status": "COMPLETED",
+          "objective": "Record operator decision and mechanical-core authority.",
+          "allowed": "OPERATOR_REQUIRED",
+          "packet_class": "GOVERNANCE",
+          "prerequisites": [],
+          "external_prerequisites": ["OPERATOR_RATIFICATION_INSTRUCTION"],
+          "state_transition": "READY -> COMPLETED",
+          "inputs": ["ratification instruction"],
+          "required_artifacts": ["programme state", "decision record"],
+          "implementation_actions": ["pin exact plan identity"],
+          "capability_requirements": [
+            {"capability_id":"PACKET_PREFLIGHT","version_range":">=0.1,<1.0","required_tier":"TRUSTED","mandatory":true,"reason":"Resolve current lawful repository baseline."}
+          ],
+          "tests": ["source identity verification"],
+          "acceptance_conditions": ["Exact operator decision is materialised."],
+          "outputs": ["repository-effective G0"],
+          "qa_requirements": ["authority crosswalk"],
+          "rollback": "Forward supersede materialisation without rewriting history.",
+          "authority_required": "OPERATOR",
+          "authority_delta": "CORE_MECHANICAL_CONFORMANCE_SYNTHETIC_READ_ONLY_ONLY",
+          "gate_ids": ["C2P2-G0"],
+          "next_packet": "C2P2-WP1"
+        },
+        {
+          "packet_id": "C2P2-WP1",
+          "title": "identity core contracts",
+          "status": "READY",
+          "objective": "Freeze deterministic pack-scoped persistent identity contracts.",
+          "allowed": "AUTO_EXECUTABLE",
+          "packet_class": "IMPLEMENTATION",
+          "prerequisites": ["C2P2-WP0"],
+          "external_prerequisites": [],
+          "state_transition": "READY -> QA_REVIEW",
+          "inputs": ["G0 materialised core boundary"],
+          "required_artifacts": ["identity schema", "synthetic fixture"],
+          "implementation_actions": ["build canonical serializer fixtures"],
+          "capability_requirements": [
+            {"capability_id":"SCHEMA_BUILD","version_range":">=0.1,<1.0","required_tier":"QUALIFIED","mandatory":true,"reason":"Build typed identity schema."},
+            {"capability_id":"FIXTURE_BUILD","version_range":">=0.1,<1.0","required_tier":"QUALIFIED","mandatory":true,"reason":"Build synthetic-only fixtures."}
+          ],
+          "tests": ["identity determinism", "synthetic authority firewall"],
+          "acceptance_conditions": ["No real-source or activation authority is introduced."],
+          "outputs": ["mechanical identity core"],
+          "qa_requirements": ["synthetic-only firewall"],
+          "rollback": "Revert inactive core candidate artifacts.",
+          "authority_required": "DELEGATED_AUTO_RATIFICATION",
+          "authority_delta": "NONE",
+          "gate_ids": ["C2P2-G1"],
+          "next_packet": null
+        }
+      ],
+      "gates": [
+        {"gate_id":"C2P2-G0","title":"core admission","gate_class":"OPERATOR_REQUIRED","acceptance_conditions":["Operator mechanical-core authority recorded"],"authority_delta":"CORE_MECHANICAL_CONFORMANCE_SYNTHETIC_READ_ONLY_ONLY","rollback":"Forward supersede G0 authority record."},
+        {"gate_id":"C2P2-G1","title":"identity core conformance","gate_class":"AUTO_RATIFIABLE","acceptance_conditions":["Synthetic deterministic tests pass"],"authority_delta":"NONE","rollback":"Revert inactive WP1."}
+      ]
+    },
+    {
+      "style": "ESLI",
+      "plan_index": 2,
+      "programme_id": "FIXTURE-ESLI",
+      "packets": [
+        {
+          "packet_id": "ESLI-WP1",
+          "title": "mechanical conformance foundation",
+          "status": "READY",
+          "objective": "Build inactive empirical structural language contracts without semantic activation.",
+          "packet_class": "IMPLEMENTATION",
+          "prerequisites": [],
+          "external_prerequisites": ["ESLI-G0 PASS"],
+          "state_transition": "READY -> QA_REVIEW",
+          "inputs": ["ratified OPT-B ESL design"],
+          "required_artifacts": ["typed contracts", "normative worked fixtures"],
+          "implementation_actions": ["materialise deterministic inactive structures"],
+          "capability_requirements": [
+            {"capability_id":"CONTRACT_BUILD","version_range":">=0.1,<1.0","required_tier":"QUALIFIED","mandatory":true,"reason":"Build frozen contracts without inventing semantics."},
+            {"capability_id":"FIXTURE_BUILD","version_range":">=0.1,<1.0","required_tier":"QUALIFIED","mandatory":true,"reason":"Materialise normative non-empirical examples."}
+          ],
+          "tests": ["targeted conformance", "semantic activation guard"],
+          "acceptance_conditions": ["No selector/scientific/semantic authority transition occurs."],
+          "outputs": ["inactive ESL conformance layer"],
+          "qa_requirements": ["authority delta NONE"],
+          "rollback": "Revert inactive deterministic artifacts.",
+          "authority_required": "DELEGATED_AUTO_RATIFICATION",
+          "authority_delta": "NONE",
+          "gate_ids": ["ESLI-G1"],
+          "next_packet": null
+        }
+      ],
+      "gates": [
+        {"gate_id":"ESLI-G1","title":"inactive mechanical conformance","gate_class":"AUTO_RATIFIABLE","acceptance_conditions":["Targeted and dependent regressions pass", "QA PASS"],"authority_delta":"NONE","rollback":"Revert inactive ESL candidate artifacts.","pass_permits":["inactive deterministic implementation"],"pass_does_not_permit":["semantic admission", "selector activation", "Validation"]}
+      ]
+    }
+  ]
+}

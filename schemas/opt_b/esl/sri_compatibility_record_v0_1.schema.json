@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/esl/sri_compatibility_record_v0_1",
+  "title": "ESL SRI Compatibility Record v0.1",
+  "type": "object",
+  "required": [
+    "schema", "representation_pack_id", "representation_pack_version", "representation_class",
+    "representation_method", "source_population_id", "source_occurrence", "structural_raw",
+    "structural_derived", "structural_normalized", "comparison_only", "missingness", "omissions",
+    "information_loss", "context", "comparability", "historical_crosswalk_aliases", "authority",
+    "representation_id", "logical_hash"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-esl-sri-compatibility-record/v1"},
+    "representation_pack_id": {"type": "string", "minLength": 1},
+    "representation_pack_version": {"type": "string", "minLength": 1},
+    "representation_class": {"enum": ["SRI-R1", "SRI-R2", "SRI-R3", "SRI-R4", "SRI-R5", "SRI-R6", "SRI-R7", "SRI-R8", "SRI-R9"]},
+    "representation_method": {
+      "type": "object",
+      "required": ["method_id", "method_neutral", "scientific_selection"],
+      "properties": {
+        "method_id": {"const": "METHOD_NEUTRAL_IDENTITY_PROJECTION_v0_1"},
+        "method_neutral": {"const": true},
+        "scientific_selection": {"const": "NONE"}
+      },
+      "additionalProperties": false
+    },
+    "source_population_id": {"type": "string", "minLength": 1},
+    "source_occurrence": {
+      "type": "object",
+      "required": ["occurrence_record_id", "occurrence_pack_id", "source_generation_ids", "evidence_frontier_logical_hash", "first_valid_time", "evaluation_cutoff"],
+      "additionalProperties": false
+    },
+    "structural_raw": {"type": "object"},
+    "structural_derived": {"type": "object", "maxProperties": 0},
+    "structural_normalized": {"type": "object", "maxProperties": 0},
+    "comparison_only": {"type": "object", "maxProperties": 0},
+    "missingness": {"type": "object"},
+    "omissions": {"type": "array"},
+    "information_loss": {
+      "type": "object",
+      "required": ["declared", "omitted_dimensions", "implicit_imputation"],
+      "properties": {"implicit_imputation": {"const": "PROHIBITED"}},
+      "additionalProperties": true
+    },
+    "context": {
+      "type": "object",
+      "required": ["role", "declared_fields", "values"],
+      "additionalProperties": false
+    },
+    "comparability": {
+      "type": "object",
+      "required": ["comparability_domain_id", "generation"],
+      "additionalProperties": false
+    },
+    "historical_crosswalk_aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "authority": {
+      "type": "object",
+      "required": ["authority_state", "representation_activation", "method_selection", "family_promotion", "semantic_promotion", "validation_consumption"],
+      "properties": {
+        "authority_state": {"const": "INACTIVE_CONFORMANCE_ONLY"},
+        "representation_activation": {"const": "NONE"},
+        "method_selection": {"const": "NONE"},
+        "family_promotion": {"const": "NONE"},
+        "semantic_promotion": {"const": "NONE"},
+        "validation_consumption": {"const": "LOCKED_UNCONSUMED"}
+      },
+      "additionalProperties": false
+    },
+    "representation_id": {"type": "string", "pattern": "^sri1:[0-9a-f]{64}$"},
+    "logical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "not": {
+    "anyOf": [
+      {"required": ["family_id"]}, {"required": ["prototype_id"]}, {"required": ["distance_result"]},
+      {"required": ["outcome"]}, {"required": ["validation_label"]}, {"required": ["probability"]},
+      {"required": ["risk"]}, {"required": ["exposure"]}, {"required": ["execution"]}
+    ]
+  },
+  "additionalProperties": false
+}
