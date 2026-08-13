@@ -1,0 +1,21 @@
+name: GRT2 WP2 targeted assurance temp
+
+on:
+  push:
+    branches:
+      - build/grt2-wp2-finding-baseline-debtfloor-49873c6e
+
+permissions:
+  contents: read
+
+jobs:
+  targeted:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run GRT2 WP1 and WP2 targeted tests
+        run: |
+          PYTHONPATH=src python -m unittest discover -s tests/governance/grt_v0_2 -p 'test_grt2_wp*.py' -v
