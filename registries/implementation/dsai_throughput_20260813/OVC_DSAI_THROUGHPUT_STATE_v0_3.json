@@ -18,7 +18,9 @@
   "candidate_commit": "80c940e764c90b285d0043030e218fc18532776e",
   "tests": [
     "PR #697 tests #3944 / run 31677696247 PASS",
-    "PR #697 tiered #2286 / run 31677696097 PASS including serialized merge readiness"
+    "PR #697 tiered #2286 / run 31677696097 PASS including serialized merge readiness",
+    "initial closeout head 9cf93d00af8276d948b9706ca691a8092b83e8ce tests #3946 / run 31678317502 exposed one stale live-pointer assertion",
+    "initial closeout tiered #2287 / run 31678317474 failed downstream of required tests"
   ],
   "qa_packet": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_WP1_QA_PACKET.json",
   "decision_record": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_G1_DECISION.json",
@@ -42,6 +44,17 @@
     "serialized_final_integration_window": true,
     "validation": "DENIED",
     "reserved_scientific_execution_authority": "NONE"
+  },
+  "terminal_assurance_remediation": {
+    "failure_class": "STALE_LIVE_POINTER_EXPECTATION_AFTER_LAWFUL_CLOSEOUT_PROGRESSION",
+    "initial_closeout_head": "9cf93d00af8276d948b9706ca691a8092b83e8ce",
+    "tests": {"run_id": 31678317502, "run_number": 3946, "conclusion": "failure"},
+    "tiered": {"run_id": 31678317474, "run_number": 2287, "conclusion": "failure_downstream_of_required_tests"},
+    "failed_assertions": 1,
+    "historical_immutable_assertions_preserved": true,
+    "test_weakening": false,
+    "authority_change": false,
+    "correction": "Historical G1 assertions bind immutable v0_2 while the live pointer may lawfully advance to terminal v0_3; terminal progression is asserted explicitly."
   },
   "eod_evidence_window": "docs/releases/development-skills-architecture-throughput-20260813/DSAI_TE_EOD_EVIDENCE_WINDOW.json",
   "governance_broadening": "DEFERRED_TO_END_OF_DAY_OPERATOR_ASSESSMENT",

@@ -39,17 +39,39 @@ class DSAIThroughputG1Tests(unittest.TestCase):
         self.assertFalse(decision["boundaries"]["parallel_merge"])
         self.assertEqual(decision["governance_broadening"], "DEFERRED_TO_END_OF_DAY_OPERATOR_ASSESSMENT")
 
-    def test_programme_state_waits_only_for_integration(self) -> None:
-        state = self._load(STATE / "OVC_DSAI_THROUGHPUT_STATE_v0_2.json")
+    def test_historical_g1_state_remains_immutable_while_live_pointer_may_closeout(self) -> None:
+        historical = self._load(STATE / "OVC_DSAI_THROUGHPUT_STATE_v0_2.json")
         pointer = self._load(STATE / "CURRENT_STATE_POINTER.json")
-        self.assertEqual(state["status"], "APPROVED")
-        self.assertEqual(state["authority_delta"], "NONE")
-        self.assertIsNone(state["merge_commit"])
-        self.assertIsNone(state["next_packet"])
-        self.assertFalse(state["mandatory_stop"])
-        self.assertEqual(pointer["current_state"], "OVC_DSAI_THROUGHPUT_STATE_v0_2.json")
-        self.assertEqual(pointer["status"], "APPROVED")
+
+        self.assertEqual(historical["status"], "APPROVED")
+        self.assertEqual(historical["authority_delta"], "NONE")
+        self.assertIsNone(historical["merge_commit"])
+        self.assertIsNone(historical["next_packet"])
+        self.assertFalse(historical["mandatory_stop"])
+
+        self.assertIn(
+            pointer["current_state"],
+            {
+                "OVC_DSAI_THROUGHPUT_STATE_v0_2.json",
+                "OVC_DSAI_THROUGHPUT_STATE_v0_3.json",
+            },
+        )
         self.assertIsNone(pointer["next_packet"])
+
+        if pointer["current_state"] == "OVC_DSAI_THROUGHPUT_STATE_v0_2.json":
+            self.assertEqual(pointer["status"], "APPROVED")
+        else:
+            self.assertEqual(pointer["status"], "COMPLETED")
+            terminal = self._load(STATE / "OVC_DSAI_THROUGHPUT_STATE_v0_3.json")
+            self.assertEqual(terminal["status"], "COMPLETED")
+            self.assertEqual(terminal["packet_id"], "DSAI-TE-WP1")
+            self.assertEqual(terminal["gate_id"], "DSAI-TE-G1")
+            self.assertEqual(terminal["authority_delta"], "NONE")
+            self.assertEqual(terminal["merge_commit"], "80c940e764c90b285d0043030e218fc18532776e")
+            self.assertTrue(terminal["terminal"]["programme_complete"])
+            self.assertTrue(terminal["terminal"]["throughput_profile_active_on_main"])
+            self.assertTrue(terminal["terminal"]["eod_assessment_pending"])
+            self.assertTrue(terminal["terminal"]["future_governance_broadening_requires_operator"])
 
 
 if __name__ == "__main__":
