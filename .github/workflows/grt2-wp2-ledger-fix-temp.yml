@@ -1,0 +1,43 @@
+name: GRT2 WP2 immutable ledger fix temp
+on:
+  push:
+    branches: [build/grt2-wp2-finding-baseline-debtfloor-605d2ce1]
+permissions:
+  contents: write
+jobs:
+  materialise:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Regenerate exact ignored JSONL evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python - <<'PY'
+          from pathlib import Path
+          from ovc.programme_genesis.grt_v0_2.debt import *
+          from ovc.programme_genesis.grt_v0_2.serialization import canonical_json_v1_text
+          from ovc.programme_genesis.grt_v0_2.wp0 import build_exact_topology, canonical_sha256 as wp0_sha
+          root=Path('.').resolve(); out=root/'registries/governance/grt_v0_2/baseline'; out.mkdir(parents=True,exist_ok=True)
+          build=build_exact_topology(root,B0_SOURCE_COMMIT,verify_determinism=True)
+          topology=str(build['manifest'].get('topology_sha256') or build['read_model'].get('topology_sha256') or '')
+          assert build['tree']==B0_SOURCE_TREE and topology==B0_TOPOLOGY_SHA256
+          warnings=sorted([(dict(a),wp0_sha(a)) for a in build['read_model'].get('anomalies',[]) if a.get('severity')=='WARNING'],key=lambda x:x[0]['anomaly_id'])
+          assert len(warnings)==B0_MEMBER_COUNT
+          rows=[]
+          for ordinal,(a,h) in enumerate(warnings,1):
+              rows.append({'schema':'grt-baseline-member-record/v0.2','baseline_member_id':baseline_member_id(a['anomaly_id'],h),'ordinal':ordinal,'original_GRT_anomaly':a['anomaly_id'],'original_anomaly_code':a['anomaly_code'],'original_subject_locator':subject_locator_from_anomaly(a),'payload_hash':h,'original_scanner_identity':SCANNER_IDENTITY,'mapped_finding_id':None,'mapping_status':'PENDING_WP3_ARTIFACT_GRAPH','disposition':None,'lineage_refs':[]})
+          validate_baseline_members(rows); assert baseline_membership_sha256(rows)==B0_MEMBERSHIP_SHA256
+          (out/'GRT_B0_BASELINE_MEMBERS_v0_1.jsonl').write_text(''.join(canonical_json_v1_text(r)+'\n' for r in rows),encoding='utf-8')
+          (out/'GRT_LATE_PREEXISTING_FINDINGS.jsonl').write_text('',encoding='utf-8')
+          (out/'GRT_PRE_G3_TRANSITION_DEBT.jsonl').write_text('',encoding='utf-8')
+          PY
+          rm .github/workflows/grt2-wp2-ledger-fix-temp.yml
+          git config user.name "ovc-grt2-wp2"; git config user.email "actions@users.noreply.github.com"
+          git add .github/workflows/grt2-wp2-ledger-fix-temp.yml
+          git add -f registries/governance/grt_v0_2/baseline/GRT_B0_BASELINE_MEMBERS_v0_1.jsonl registries/governance/grt_v0_2/baseline/GRT_LATE_PREEXISTING_FINDINGS.jsonl registries/governance/grt_v0_2/baseline/GRT_PRE_G3_TRANSITION_DEBT.jsonl
+          git commit -m "GRT2-WP2: commit immutable B0 member ledger and empty pre-G3 ledgers"
+          git push origin HEAD:build/grt2-wp2-finding-baseline-debtfloor-605d2ce1
