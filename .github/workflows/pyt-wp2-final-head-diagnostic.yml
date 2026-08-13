@@ -1,0 +1,35 @@
+name: PYT-WP2 final-head diagnostic
+
+on:
+  push:
+    branches: [build/python-test-runner-step5-current-main-20260813]
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run FINAL_HEAD development and authority surface
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src python -m unittest discover -s tests/development -v > /tmp/final-head.log 2>&1
+          s1=$?
+          PYTHONPATH=src python -m unittest discover -s tests/authority -v >> /tmp/final-head.log 2>&1
+          s2=$?
+          cat /tmp/final-head.log
+          if [ "$s1" -ne 0 ] || [ "$s2" -ne 0 ]; then
+            python - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/final-head.log').read_text(encoding='utf-8', errors='replace')
+          tail = text[-12000:].replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+          print(f'::error title=PYT WP2 FINAL_HEAD diagnostic::{tail}')
+          PY
+            exit 1
+          fi
