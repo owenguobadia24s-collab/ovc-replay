@@ -1,0 +1,41 @@
+{
+  "authority_effect": "NONE",
+  "baseline_main": "bdcf2d96b646b6f5c1e958029bfaf4c782c22d9c",
+  "graph_hash": "6b4a52e7f854ace2941419a1f4f1cf37862775572509ed18c8d45bac6a501143",
+  "nodes": [
+    {
+      "authority_delta": "AUTHORISE_BOUNDED_PLAN_PACKET_MATERIALISATION_IMPLEMENTATION",
+      "gate_class": "OPERATOR_REQUIRED",
+      "packet_class": "GOVERNANCE",
+      "packet_id": "DSAI-PPM-WP0",
+      "prerequisites": [],
+      "required_capabilities": [
+        "AUTHORITY_RESOLUTION",
+        "PACKET_PREFLIGHT",
+        "PREREQUISITE_RESOLUTION"
+      ]
+    },
+    {
+      "authority_delta": "NONE",
+      "gate_class": "AUTO_EXECUTABLE",
+      "packet_class": "LOW_RISK_IMPLEMENTATION",
+      "packet_id": "DSAI-PPM-WP1",
+      "prerequisites": [
+        "DSAI-PPM-WP0"
+      ],
+      "required_capabilities": [
+        "CONTRACT_BUILD",
+        "DETERMINISTIC_IMPLEMENTATION",
+        "FIXTURE_BUILD",
+        "GATE_EVALUATION",
+        "QA_EVALUATION",
+        "SCHEMA_BUILD",
+        "TEST_EXECUTION",
+        "TEST_PLAN"
+      ]
+    }
+  ],
+  "programme_id": "OVC-DSAI-PPM-v0.1",
+  "record_id": "349b63ca78682ba021e57ca0ba534f520ab54ed86c2be109d7a22ada5ef6902c",
+  "schema": "ovc-dsai-packet-graph-snapshot/v1"
+}

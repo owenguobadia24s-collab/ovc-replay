@@ -1,0 +1,305 @@
+{
+  "authority_effect": "NONE",
+  "gates": [
+    {
+      "acceptance_conditions": [
+        "Operator explicitly approves the bounded materialisation implementation.",
+        "No reserved downstream authority is granted."
+      ],
+      "authority_delta": "AUTHORISE_BOUNDED_PLAN_PACKET_MATERIALISATION_IMPLEMENTATION",
+      "authority_effect": "NONE",
+      "gate_class": "OPERATOR_REQUIRED",
+      "gate_id": "DSAI-PPM-G0",
+      "pass_does_not_permit": [
+        "TRUSTED promotion or ORCH activation",
+        "Scientific/semantic/selector/Validation/publication/provider/execution authority"
+      ],
+      "pass_permits": [
+        "Bounded mechanical PPM implementation"
+      ],
+      "reserved_authority_tokens": [],
+      "rollback": "Preserve decision evidence and forward-supersede the PPM programme if withdrawn.",
+      "schema": "ovc-dsai-packet-gate-manifest/v1",
+      "title": "Plan/Packet Materialisation Layer Admission"
+    },
+    {
+      "acceptance_conditions": [
+        "All targeted/dependent/repository tests pass.",
+        "QA recommends PASS.",
+        "No blocking warnings or unresolved review issues remain.",
+        "Authority delta remains NONE.",
+        "Rollback is defined."
+      ],
+      "authority_delta": "NONE",
+      "authority_effect": "NONE",
+      "gate_class": "AUTO_RATIFIABLE",
+      "gate_id": "DSAI-PPM-G1",
+      "pass_does_not_permit": [
+        "Any operator-reserved authority transition"
+      ],
+      "pass_permits": [
+        "Mechanical PPM library use inside existing DSAI authority"
+      ],
+      "reserved_authority_tokens": [],
+      "rollback": "Forward-revert/supersede PPM implementation without altering existing DSAI authority.",
+      "schema": "ovc-dsai-packet-gate-manifest/v1",
+      "title": "Plan/Packet Materialisation Conformance"
+    }
+  ],
+  "packets": [
+    {
+      "acceptance_conditions": [
+        "Operator PASS is exact and fresh.",
+        "Baseline main is current and branch-safe.",
+        "Authority exclusions and rollback are explicit."
+      ],
+      "allowed": "OPERATOR_REQUIRED",
+      "authority_delta": "AUTHORISE_BOUNDED_PLAN_PACKET_MATERIALISATION_IMPLEMENTATION",
+      "authority_effect": "NONE",
+      "authority_required": "OPERATOR",
+      "capability_requirements": [
+        {
+          "authority_effect": "NONE",
+          "capability_id": "AUTHORITY_RESOLUTION",
+          "mandatory": true,
+          "reason": "Resolve operator-reserved boundaries without granting them.",
+          "required_tier": "TRUSTED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "PACKET_PREFLIGHT",
+          "mandatory": true,
+          "reason": "Reconcile exact repository baseline.",
+          "required_tier": "TRUSTED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "PREREQUISITE_RESOLUTION",
+          "mandatory": true,
+          "reason": "Verify G0 sources and prerequisites.",
+          "required_tier": "TRUSTED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        }
+      ],
+      "external_prerequisites": [
+        "OVC APPROVE DSAI-PPM-G0"
+      ],
+      "gate_ids": [
+        "DSAI-PPM-G0"
+      ],
+      "implementation_actions": [
+        "Record exact G0 PASS.",
+        "Pin baseline main and rollback.",
+        "Preserve reserved-authority exclusions."
+      ],
+      "inputs": [
+        "Operator approval instruction",
+        "Latest lawful main",
+        "Existing DSAI resolver/orchestrator contracts"
+      ],
+      "next_packet": "DSAI-PPM-WP1",
+      "objective": "Materialise the operator-approved PPM admission and exact bounded authority envelope.",
+      "outputs": [
+        "Repository-effective G0 decision",
+        "Approved scope source"
+      ],
+      "packet_class": "GOVERNANCE",
+      "packet_id": "DSAI-PPM-WP0",
+      "prerequisites": [],
+      "qa_requirements": [
+        "No source or authority conflict"
+      ],
+      "required_artifacts": [
+        "DSAI_PPM_G0_DECISION.json",
+        "GOVERNING_SCOPE.md",
+        "PROGRAMME_STATE.json"
+      ],
+      "reserved_authority_tokens": [],
+      "rollback": "Preserve G0 evidence and forward-supersede if the bounded PPM scope must be withdrawn.",
+      "schema": "ovc-dsai-packet-manifest/v1",
+      "state_transition": "GATE_READY -> APPROVED -> COMPLETED",
+      "status": "COMPLETED",
+      "tests": [
+        "Baseline lineage and source-hash checks"
+      ],
+      "title": "admission, source binding and authority boundary"
+    },
+    {
+      "acceptance_conditions": [
+        "Two equivalent inputs produce identical manifest/graph/receipt identities.",
+        "All required PPM schemas and representative fixtures validate.",
+        "All fail-closed negative cases reject.",
+        "Existing DSAI packet eligibility consumes the emitted graph directly.",
+        "No Skill release resolution or authority grant is introduced.",
+        "Targeted and repository-wide tests pass and QA recommends PASS."
+      ],
+      "allowed": "AUTO_EXECUTABLE",
+      "authority_delta": "NONE",
+      "authority_effect": "NONE",
+      "authority_required": "DELEGATED_AUTO_RATIFICATION",
+      "capability_requirements": [
+        {
+          "authority_effect": "NONE",
+          "capability_id": "CONTRACT_BUILD",
+          "mandatory": true,
+          "reason": "Materialise the bounded PPM contract.",
+          "required_tier": "QUALIFIED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "DETERMINISTIC_IMPLEMENTATION",
+          "mandatory": true,
+          "reason": "Implement deterministic source and packet materialisation.",
+          "required_tier": "QUALIFIED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "FIXTURE_BUILD",
+          "mandatory": true,
+          "reason": "Build representative and adversarial plan-style fixtures.",
+          "required_tier": "QUALIFIED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "GATE_EVALUATION",
+          "mandatory": true,
+          "reason": "Classify G1 only after authority delta is proven NONE.",
+          "required_tier": "TRUSTED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "QA_EVALUATION",
+          "mandatory": true,
+          "reason": "Evaluate PPM conformance evidence.",
+          "required_tier": "TRUSTED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "SCHEMA_BUILD",
+          "mandatory": true,
+          "reason": "Create deterministic typed materialisation schemas.",
+          "required_tier": "QUALIFIED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "TEST_EXECUTION",
+          "mandatory": true,
+          "reason": "Execute the frozen assurance plan.",
+          "required_tier": "QUALIFIED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        },
+        {
+          "authority_effect": "NONE",
+          "capability_id": "TEST_PLAN",
+          "mandatory": true,
+          "reason": "Bind targeted/dependent/repository assurance.",
+          "required_tier": "TRUSTED",
+          "schema": "ovc-dsai-capability-requirement/v1",
+          "version_range": ">=0.1,<1.0"
+        }
+      ],
+      "external_prerequisites": [],
+      "gate_ids": [
+        "DSAI-PPM-G1"
+      ],
+      "implementation_actions": [
+        "Validate reviewed plan transcription without prose inference.",
+        "Build deterministic source/manifest/receipt identities.",
+        "Reject graph, capability, authority and source-drift defects fail-closed.",
+        "Reuse existing DSAI PacketGraphSnapshot and eligibility machinery.",
+        "Run targeted and repository-wide assurance and record QA."
+      ],
+      "inputs": [
+        "Approved PPM scope transcription",
+        "Existing DSAI capability registry",
+        "Existing DSAI PacketGraphSnapshot builder",
+        "Representative DSAI/C2P/ESLI plan styles"
+      ],
+      "next_packet": null,
+      "objective": "Implement the fail-closed plan/packet materialisation layer and prove deterministic compatibility with existing DSAI packet eligibility.",
+      "outputs": [
+        "Deterministic PPM library",
+        "Schemas and fixtures",
+        "Repository court-record materialisation",
+        "QA and delegated G1 decision"
+      ],
+      "packet_class": "LOW_RISK_IMPLEMENTATION",
+      "packet_id": "DSAI-PPM-WP1",
+      "prerequisites": [
+        "DSAI-PPM-WP0"
+      ],
+      "qa_requirements": [
+        "No unresolved blocking warning",
+        "No reserved authority delta",
+        "Rollback reproducible"
+      ],
+      "required_artifacts": [
+        "OVC_PLAN_PACKET_MATERIALISATION_CONTRACT_v0_1.md",
+        "PlanSourceRef schema",
+        "CapabilityRequirement schema",
+        "PacketManifest schema",
+        "PacketGateManifest schema",
+        "ProgrammeManifest schema",
+        "MaterialisationReceipt schema",
+        "Representative fixture pack",
+        "materialisation.py",
+        "targeted tests",
+        "QA packet",
+        "DSAI-PPM-G1 decision",
+        "programme-state update"
+      ],
+      "reserved_authority_tokens": [],
+      "rollback": "Forward-revert/supersede PPM code, schemas, fixtures and bindings; existing DSAI resolver/orchestrator remains fallback.",
+      "schema": "ovc-dsai-packet-manifest/v1",
+      "state_transition": "READY -> RUNNING -> IMPLEMENTED -> QA_REVIEW -> APPROVED -> COMPLETED",
+      "status": "READY",
+      "tests": [
+        "Schema validation and deterministic round-trip",
+        "Source hash mismatch and drift",
+        "Missing fields, duplicate IDs and unknown references",
+        "Prerequisite cycles and inconsistent successor edges",
+        "Unknown mandatory capability",
+        "Reserved authority hidden under AUTO",
+        "Existing DSAI packet-eligibility compatibility",
+        "Repository-wide suite"
+      ],
+      "title": "contracts, schemas, deterministic compiler, fixtures and DSAI integration"
+    }
+  ],
+  "plan_id": "OVC-DSAI-PPM-APPROVED-SCOPE-0.1",
+  "plan_source_ref": {
+    "authority_effect": "NONE",
+    "plan_id": "OVC-DSAI-PPM-APPROVED-SCOPE-0.1",
+    "plan_version": "0.1",
+    "schema": "ovc-dsai-plan-source-ref/v1",
+    "source_ref": "docs/implementation/plan-packet-materialisation-v0-1/GOVERNING_SCOPE.md",
+    "source_ref_id": "183ecad6eba4de025f617c94e8112bf6291e833a5c44b5c556bae2c637a6c4de",
+    "source_sha256": "e78eebe5c852a87c432431afeee103a224a01191668fe5ebc26741848c98a331"
+  },
+  "plan_version": "0.1",
+  "programme_id": "OVC-DSAI-PPM-v0.1",
+  "programme_manifest_id": "e649b1f8934c22b44e45a9f04fc4f5b360edd9442a1fc438011f33a44b0dec50",
+  "schema": "ovc-dsai-programme-manifest/v1",
+  "topological_order": [
+    "DSAI-PPM-WP0",
+    "DSAI-PPM-WP1"
+  ]
+}
