@@ -8,6 +8,7 @@ from ovc.development.skills.orch345 import resolve_orch345_authority
 
 
 ROOT = Path(__file__).resolve().parents[2]
+TERMINAL_TARGET = "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH"
 
 
 class DSAI2WP3PostMergeTests(unittest.TestCase):
@@ -80,12 +81,11 @@ class DSAI2WP3PostMergeTests(unittest.TestCase):
             self.assertEqual(current["decision"], "PASS_DELEGATED_AUTO_RATIFIED")
             self.assertIsNone(current["merge_commit"])
         else:
+            self.assertEqual(pointer["status"], "COMPLETED")
             self.assertIsNone(pointer["next_packet"])
             current = self._load("registries/implementation/dsai_v0_2/OVC_DSAI_V0_2_STATE_v0_7.json")
-            self.assertEqual(
-                current["status"],
-                "IMPLEMENTED_ORCH345_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION_PORTFOLIO_DISPATCH",
-            )
+            self.assertEqual(current["status"], "COMPLETED")
+            self.assertEqual(current["terminal"]["target_terminal_state"], TERMINAL_TARGET)
             self.assertEqual(current["packet_id"], "DSAI2-WP4")
             self.assertTrue(current["terminal"]["programme_complete"])
 
