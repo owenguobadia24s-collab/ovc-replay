@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-rcn-rn-wp5a-source-authority-preflight/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_source_sha256": "fd12580607ff748892046547005cced62fba3db8530473ca9206f0836dcee40c",
+  "packet_id": "RCN-RN-WP5A",
+  "baseline_main": "a0bb73cf6026e7f67d73f431636c3568e42e7040",
+  "reconciled_from_main": "a0bb73cf6026e7f67d73f431636c3568e42e7040",
+  "preserved_implementation_source": "d8bea52c3f36021683dc4c8f68c7af47bab91adc",
+  "reconciliation_commit": null,
+  "branch": "reconcile/rcn-rn-wp5a-current-main-a0bb73cf",
+  "status": "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+  "source_binding_registry": "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json",
+  "source_binding_registry_blob_sha": "7d42c24c0e79a7e8ef2fd93591afaf8f44851cf6",
+  "source_count": 5,
+  "assessment": {
+    "all_sources_repository_addressable": true,
+    "all_sources_fixture_only": true,
+    "all_sources_non_evidentiary": true,
+    "first_new_real_research_source": false,
+    "provider_fetch": "NOT_PERFORMED_DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "scientific_outputs_generated": false,
+    "frontend_scientific_calculation": "PROHIBITED",
+    "selector_authority": "NONE",
+    "writes": "NONE"
+  },
+  "gate_classification": {
+    "eligible_gate": "RCN-RN-WP5A-CLOSEOUT",
+    "eligible_gate_class": "AUTO_RATIFIABLE",
+    "authority_delta": "NONE",
+    "operator_escalation_gate": "RCN-RN-G5-FIRST-NEW-SOURCE",
+    "operator_escalation_triggered": false
+  },
+  "authority_effect": "NONE",
+  "blockers": [],
+  "warnings": [
+    "The exact five-source census is bound by the referenced registry and its Git blob identity.",
+    "The WP5A surface is synthetic fixture-only and non-evidentiary.",
+    "Any future first-new real Research source must stop at RCN-RN-G5-FIRST-NEW-SOURCE before exposure.",
+    "Existing G4 MARKET/C1/C2/C2E Investigate authority is unchanged and non-transitive."
+  ],
+  "rollback": "Do not bind the WP5A route if any source identity or authority marker fails. Preserve the governing PPM, G4 authority and source fixtures."
+}
