@@ -25,31 +25,36 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(preflight["activation"], "INACTIVE")
         self.assertEqual(preflight["authority_effect"], "NONE_PRE_ENFORCEMENT")
 
-    def test_programme_state_advances_to_running_wp1_without_enforcement(self) -> None:
-        state = json.loads((STATE_ROOT / "OVC_GRT2_STATE_v0_2.json").read_text(encoding="utf-8"))
+    def test_programme_state_records_wp1_closeout_without_enforcement(self) -> None:
         pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
+        state = json.loads((ROOT / pointer["current_state"]).read_text(encoding="utf-8"))
         constitution = json.loads(
             (REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(
                 encoding="utf-8"
             )
         )
-        self.assertEqual(state["status"], "RUNNING")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_3.json")
+        self.assertEqual(pointer["status"], "RUNNING")
+        self.assertEqual(pointer["next_packet"], "GRT2-WP2")
+        self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["packet_id"], "GRT2-WP1")
-        self.assertEqual(state["gate_id"], "GRT2-G2_READINESS_AFTER_WP1_WP2_WP3")
+        self.assertEqual(state["gate_id"], "GRT2-G1")
         self.assertEqual(state["active_enforcement"], "NONE")
         self.assertIsNone(state["debt_floor_generation"])
         self.assertIsNone(state["debt_floor_hash"])
         self.assertEqual(state["constitution_hash"], constitution["canonical_hash"])
         self.assertEqual(state["constitution_status"], "PROPOSED_UNADMITTED")
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_2.json")
-        self.assertEqual(pointer["status"], "RUNNING")
-        self.assertEqual(pointer["next_packet"], "GRT2-WP1")
+        self.assertEqual(state["blockers"], [])
+        self.assertEqual(state["qa_packet"], "docs/programmes/grt-v0-2/wp1/GRT2_WP1_QA_PACKET.json")
+        self.assertEqual(state["decision_record"], "docs/programmes/grt-v0-2/wp1/GRT2_G1_DECISION.json")
 
-    def test_wp1_does_not_claim_g2_g2_5_or_g3_completion(self) -> None:
-        state = json.loads((STATE_ROOT / "OVC_GRT2_STATE_v0_2.json").read_text(encoding="utf-8"))
-        self.assertNotEqual(state["status"], "APPROVED")
+    def test_wp1_closeout_does_not_claim_g2_g2_5_or_g3_completion(self) -> None:
+        pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
+        state = json.loads((ROOT / pointer["current_state"]).read_text(encoding="utf-8"))
+        self.assertEqual(state["status"], "APPROVED")
         self.assertNotIn("GRT2-G2 PASS", state["prerequisites"])
-        self.assertIn("GRT2-G2.5 and GRT2-G3 remain operator-required.", state["warnings"])
+        self.assertEqual(state["active_enforcement"], "NONE")
+        self.assertIn("GRT2-G2.5 and GRT2-G3 remain reserved.", state["warnings"])
 
 
 if __name__ == "__main__":
