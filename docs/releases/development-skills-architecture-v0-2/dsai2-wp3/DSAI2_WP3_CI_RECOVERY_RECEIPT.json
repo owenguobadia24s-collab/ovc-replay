@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-dsai2-wp3-ci-recovery-receipt/v1",
+  "programme_id": "OVC-DSAI-v0.2",
+  "plan_id": "OVC-DSAI-ORCH345-IMPLEMENTATION-PLAN-0.2",
+  "packet_id": "DSAI2-WP3",
+  "authority_delta": "NONE",
+  "incident_class": "SUPERSEDED_WORKFLOW_CANCELLATION_SERIALIZED_WINDOW_STALL",
+  "stale_runs": {
+    "tests": {"run_id": 31653614151, "run_number": 3927},
+    "tiered": {"run_id": 31653614147, "run_number": 2272}
+  },
+  "recovery": {
+    "pr_691_temporarily_closed": true,
+    "replacement_pr_692_opened_with_identical_content_head": "6d52a9184168d7f5fb440e2203f1a1675346020a",
+    "replacement_did_not_clear_existing_pr_specific_window": true,
+    "pr_691_reopened": true,
+    "fresh_head_commit_strategy": "ADD_IMMUTABLE_RECOVERY_RECEIPT_TO_TRIGGER_PR_SPECIFIC_CONCURRENCY_CANCELLATION",
+    "force_push": false,
+    "history_rewrite": false,
+    "direct_main_mutation": false,
+    "test_weakening": false
+  },
+  "content_preservation": "All WP3 closeout records and substantive authority assertions are unchanged; this receipt is additive evidence only.",
+  "authority_effect": "NONE",
+  "rollback": "No authority rollback required; if recovery remains non-reproducible, preserve branches and mark WP3 closeout BLOCKED without weakening serialized integration assurance."
+}
