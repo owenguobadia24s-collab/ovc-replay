@@ -1,9 +1,9 @@
 """GRT v0.2 repository-conformance implementation package.
 
 The package remains non-enforcing until separately reserved GRT2-G2.5/G3
-operator decisions. WP0 exposes read-only exact-source reconciliation; WP1
-materializes the inactive Repository Constitution candidate and finite
-bootstrap validation surface.
+operator decisions. WP0 exposes read-only exact-source reconciliation only;
+WP1 materializes the inactive Repository Constitution candidate and finite
+bootstrap validation surface. No active enforcement authority is created.
 """
 
 from .wp0 import (
