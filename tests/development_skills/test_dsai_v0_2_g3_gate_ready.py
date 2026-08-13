@@ -88,11 +88,18 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
         self.assertEqual(historical["current_authority"]["ORCH-5"], "INACTIVE_SHADOW_ONLY")
 
         pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
-        self.assertIn(pointer["current_state"], {"OVC_DSAI_V0_2_STATE_v0_3.json", "OVC_DSAI_V0_2_STATE_v0_4.json"})
+        self.assertIn(
+            pointer["current_state"],
+            {
+                "OVC_DSAI_V0_2_STATE_v0_3.json",
+                "OVC_DSAI_V0_2_STATE_v0_4.json",
+                "OVC_DSAI_V0_2_STATE_v0_5.json",
+            },
+        )
         if pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_3.json":
             self.assertEqual(pointer["status"], "GATE_READY")
             self.assertEqual(pointer["next_packet"], "DSAI2-G3")
-        else:
+        elif pointer["current_state"] == "OVC_DSAI_V0_2_STATE_v0_4.json":
             self.assertEqual(pointer["status"], "APPROVED")
             self.assertEqual(pointer["next_packet"], "DSAI2-WP4")
             approved = self._load(STATE_ROOT / pointer["current_state"])
@@ -104,6 +111,23 @@ class DsaiV02G3GateReadyTests(unittest.TestCase):
             premerge_resolution = resolve_orch345_authority(authority=authority, record_present_on_main=False)
             self.assertEqual(premerge_resolution["status"], "BLOCK")
             self.assertIn("AUTHORITY_RECORD_NOT_PRESENT_ON_MAIN", premerge_resolution["reason_codes"])
+        else:
+            self.assertEqual(pointer["status"], "COMPLETED")
+            self.assertEqual(pointer["next_packet"], "DSAI2-WP4")
+            completed = self._load(STATE_ROOT / pointer["current_state"])
+            self.assertEqual(completed["packet_id"], "DSAI2-WP3")
+            self.assertTrue(completed["authority_effective_on_main"])
+            self.assertEqual(completed["merge_commit"], "1db66a2ca48be27930395073e842638ad8f7f216")
+            self.assertEqual(completed["authority_resolution"], "ACTIVE_AUTHORIZED")
+
+            authority = self._load(ROOT / "registries/development/skills/orch345_bounded_authority_v0_1.json")
+            active_resolution = resolve_orch345_authority(authority=authority, record_present_on_main=True)
+            self.assertEqual(active_resolution["status"], "ACTIVE_AUTHORIZED")
+            self.assertEqual(
+                active_resolution["reason_codes"],
+                ["EXACT_DSAI2_G3_BOUNDED_ORCH345_AUTHORITY_ACTIVE"],
+            )
+            self.assertFalse(active_resolution["parallel_merge"])
 
 
 if __name__ == "__main__":
