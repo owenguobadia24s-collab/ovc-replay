@@ -11,6 +11,7 @@
   "prior_reconciled_baseline_commit": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
   "baseline_commit": "45146c31641d719dbfb73dbcd51a75ec2a9d7e19",
   "branch": "build/esli-wp6-soi-compatibility-20260813-requeue2",
+  "implementation_candidate": "1023e0508686ca90b37384493fbea1bf9c0a2c3e",
   "reconciliation_history": [
     {
       "superseded_pr": 728,
@@ -30,7 +31,7 @@
       "authority_effect": "NONE"
     }
   ],
-  "status": "IMPLEMENTED_PENDING_EXACT_HEAD_QA",
+  "status": "APPROVED_PENDING_FINAL_EVIDENCE_HEAD_ASSURANCE_AND_MERGE",
   "objective": "Materialise the generic SOI topology/method/result boundary and an exact inactive FAMILY compatibility adapter over the preserved SFC FamilyCatalog surface; keep all other topologies interface-only and fail closed.",
   "source_court_record": {
     "sfc_pointer": "registries/implementation/sfc/CURRENT_STATE_POINTER.json",
@@ -39,19 +40,6 @@
     "canonical_family_method": "NONE",
     "selector": "NONE"
   },
-  "required_outputs": [
-    "SOI generic topology/method/result contract",
-    "SOI view result schema",
-    "topology maturity registry and strict schema",
-    "exact preserved-SFC FAMILY adapter manifest",
-    "deterministic compatibility implementation",
-    "family-present and no-stable-family fixtures",
-    "fail-closed and authority-boundary tests",
-    "permanent IAV-03 SOI maturity fail-closed regression",
-    "issue ledger",
-    "reproduction and rollback evidence",
-    "QA packet and delegated G6 decision after exact-head assurance"
-  ],
   "implemented_maturity": {
     "FAMILY": "EXECUTABLE_INACTIVE",
     "HIERARCHY": "INTERFACE_ONLY",
@@ -60,14 +48,19 @@
     "CONTINUUM": "INTERFACE_ONLY",
     "COMPOSITION": "INTERFACE_ONLY"
   },
-  "test_plan": [
-    "targeted WP6, WP5 and SFC-WP4 suites",
-    "repository complete tests including exact Research Console surface",
-    "runner parity",
-    "pytest/unittest parity",
-    "FINAL_HEAD profile assurance",
-    "serialized stable-main merge readiness"
-  ],
+  "assurance": {
+    "tests_run": 31703015310,
+    "tests_job": 94456646791,
+    "runner_parity_job": 94456646675,
+    "pytest_unittest_parity_job": 94456646729,
+    "final_integration_admission_job": 94456529282,
+    "tiered_run": 31703015336,
+    "profile_assurance_job": 94456529026,
+    "merge_readiness_job": 94456529081,
+    "result": "PASS"
+  },
+  "qa_packet": "docs/releases/optb-esl-conformance-v0-1/esli-wp6/ESLI_WP6_QA_PACKET.json",
+  "decision_record": "docs/releases/optb-esl-conformance-v0-1/esli-wp6/ESLI_G6_DECISION.json",
   "authority_delta": "NONE",
   "reserved_authority_delta": "NONE",
   "deferred": [
@@ -80,6 +73,6 @@
     "publication",
     "probability/risk/exposure/execution"
   ],
-  "rollback": "Forward-supersede/remove WP6 SOI-only artifacts while preserving ESLI-WP0-WP5 and all SFC/FDI/SRFD identities and evidence; no force-push or history rewrite.",
+  "rollback": "Forward-supersede or remove WP6 SOI-only artifacts while preserving ESLI-WP0-WP5 and all SFC, FDI and SRFD identities and evidence; no force-push or history rewrite.",
   "next_if_pass": "ESLI-WP7"
 }
