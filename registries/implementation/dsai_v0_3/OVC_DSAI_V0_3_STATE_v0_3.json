@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-v0.3",
+  "plan_id": "OVC-DSAI-CONTINUOUS-EXECUTION-LANDING-TRAIN-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "APPROVED",
+  "baseline_commit": "25cf7ca6f85d088dd7686d6e7b107516cb00465b",
+  "branch": "programme/dsai-v0-3-wp1-main-reconcile",
+  "packet_id": "DSAI3-WP1",
+  "gate_id": "DSAI3-G1",
+  "prerequisites": [
+    "DSAI3-WP0 squash-integrated at 25cf7ca6f85d088dd7686d6e7b107516cb00465b",
+    "DSAI3-WP1 implementation-head QA PASS",
+    "DSAI3-G1 delegated PASS"
+  ],
+  "authority_required": "NONE_UNTIL_DSAI3-G7_OPERATOR_REQUIRED_ACTIVATION",
+  "authority_delta": "NONE",
+  "candidate_commit": "39b7b6f173d8bbcb65504281de57ab6db42f6aa4",
+  "tests": [
+    "tests run 31794672091 / #4254 PASS",
+    "tiered run 31794672102 / #2543 PASS including SIQ READY and merge readiness"
+  ],
+  "qa_packet": "docs/releases/development-skills-architecture-v0-3/dsai3-wp1/DSAI3_WP1_QA_PACKET.json",
+  "decision_record": "docs/releases/development-skills-architecture-v0-3/dsai3-wp1/DSAI3_G1_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "DSAI3-WP2",
+  "completed_packets": ["DSAI3-WP0", "DSAI3-WP1"],
+  "merge_receipts": {
+    "DSAI3-WP0": "docs/releases/development-skills-architecture-v0-3/dsai3-wp0/DSAI3_WP0_G0_SQUASH_MERGE_RECEIPT.json"
+  },
+  "current_authority": {
+    "parent_orch345": "UNCHANGED_ACTIVE_BOUNDED",
+    "siq_runtime": "ACTIVE_EXISTING_SERIALIZED_MINIMAL_CRITICAL_SECTION",
+    "dsai3_continuous_executor": "INACTIVE_SHADOW_SANDBOX_ONLY",
+    "dsai3_siq_actuation_binding": "INACTIVE_SHADOW_SANDBOX_ONLY",
+    "dsai3_write_requeue_executor": "INACTIVE_SHADOW_SANDBOX_ONLY"
+  },
+  "next_operator_gate": "DSAI3-G7",
+  "target_terminal_state": "IMPLEMENTED_CONTINUOUS_PACKET_EXECUTION_ORDERED_LANDING_TRAIN"
+}

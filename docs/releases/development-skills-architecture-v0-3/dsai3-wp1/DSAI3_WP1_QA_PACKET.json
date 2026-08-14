@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-dsai3-wp1-qa-packet/v1",
+  "programme_id": "OVC-DSAI-v0.3",
+  "plan_id": "OVC-DSAI-CONTINUOUS-EXECUTION-LANDING-TRAIN-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DSAI3-WP1",
+  "gate_id": "DSAI3-G1",
+  "gate_class": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE",
+  "status": "PASS",
+  "baseline_main": "25cf7ca6f85d088dd7686d6e7b107516cb00465b",
+  "tested_implementation_head": "39b7b6f173d8bbcb65504281de57ab6db42f6aa4",
+  "checks": {
+    "continuation_mandate_schema_closed": "PASS",
+    "execution_lifecycle_receipt_schema_closed": "PASS",
+    "requeue_execution_intent_schema_closed": "PASS",
+    "integration_capability_profile_schema_closed": "PASS",
+    "siq_binding_record_schema_closed": "PASS",
+    "ovc_continue_persists_beyond_chat": "PASS",
+    "only_and_until_boundaries_explicit": "PASS",
+    "existing_siq_is_sole_queue_owner": "PASS",
+    "creates_second_queue": false,
+    "production_actuation_active": false,
+    "dsai3_g7_operator_gate_preserved": true,
+    "parallel_merge": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "reserved_authority_crossed": false
+  },
+  "workflow_evidence": {
+    "tests": {
+      "run_id": 31794672091,
+      "run_number": 4254,
+      "conclusion": "success",
+      "repository_suite": "success",
+      "pytest_unittest_parity": "success",
+      "runner_parity": "success"
+    },
+    "tiered": {
+      "run_id": 31794672102,
+      "run_number": 2543,
+      "conclusion": "success",
+      "profile_assurance": "success",
+      "compatibility": "success",
+      "siq_ready_admission": "success",
+      "merge_readiness": "success"
+    },
+    "stable_main": "25cf7ca6f85d088dd7686d6e7b107516cb00465b"
+  },
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_AUTO_RATIFY_DSAI3_G1",
+  "rollback": "Forward-remove or supersede inactive DSAI3 WP1 contracts/schemas/fixtures while preserving v0.2 ORCH authority and the active SIQ runtime."
+}

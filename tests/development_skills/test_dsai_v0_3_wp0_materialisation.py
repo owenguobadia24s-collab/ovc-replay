@@ -47,16 +47,19 @@ class DsaiV03Wp0MaterialisationTests(unittest.TestCase):
         self.assertEqual(recon["authority_delta"], "NONE")
         self.assertEqual(recon["next_packet"], "DSAI3-WP1")
 
-    def test_live_programme_state_stops_before_activation_gate_and_reuses_active_siq(self) -> None:
+    def test_live_programme_state_preserves_g7_stop_and_active_siq_as_programme_advances(self) -> None:
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
         state_path = STATE_ROOT / pointer["current_state"]
         state = json.loads(state_path.read_text(encoding="utf-8"))
-        self.assertIn(state["status"], {"RUNNING", "APPROVED"})
-        self.assertEqual(state["next_packet"], "DSAI3-WP1")
-        self.assertEqual(
-            state["gate_disposition"]["DSAI3-G7"],
-            "FUTURE_OPERATOR_REQUIRED_NOT_EFFECTIVE",
-        )
+        self.assertIn(state["status"], {"RUNNING", "APPROVED", "QA_REVIEW", "GATE_READY", "COMPLETED"})
+        gate_disposition = state.get("gate_disposition", {})
+        if gate_disposition:
+            self.assertEqual(
+                gate_disposition.get("DSAI3-G7"),
+                "FUTURE_OPERATOR_REQUIRED_NOT_EFFECTIVE",
+            )
+        else:
+            self.assertEqual(state.get("next_operator_gate"), "DSAI3-G7")
         self.assertEqual(
             state["current_authority"]["dsai3_continuous_executor"],
             "INACTIVE_SHADOW_SANDBOX_ONLY",
@@ -65,7 +68,7 @@ class DsaiV03Wp0MaterialisationTests(unittest.TestCase):
             state["current_authority"]["siq_runtime"],
             "ACTIVE_EXISTING_SERIALIZED_MINIMAL_CRITICAL_SECTION",
         )
-        self.assertEqual(pointer["next_packet"], "DSAI3-WP1")
+        self.assertTrue(pointer["next_packet"] is None or str(pointer["next_packet"]).startswith("DSAI3-WP"))
 
     def test_plan_contains_continuous_command_and_siq_reuse_invariants(self) -> None:
         text = PLAN.read_text(encoding="utf-8")
