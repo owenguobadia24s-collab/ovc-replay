@@ -4,12 +4,15 @@
   "plan_id":"OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
   "packet_id":"ESLI-WP13",
   "gate_id":"ESLI-G13",
-  "decision_status":"GATE_READY",
+  "decision_status":"PASS",
   "classification":"OPERATOR_REQUIRED",
+  "decision_authority":"OPERATOR",
+  "operator_command":"OVC APPROVE ESLI-G13 PASS",
+  "approved_at":"2026-08-14T19:02:00+01:00",
   "classification_reason":"AUTHORITY_RECORD_ABSENT_FOR_REQUIRED_ESLI_REAL_SOURCE_READ",
   "baseline_main":"32123c08c74c28dd44ad058b6126afc05f1c6fdb",
   "source_read_performed":false,
-  "proposed_source":{
+  "approved_source":{
     "source_class":"ALREADY_ACCEPTED_JUNE_C2_EXTERNAL_ARTIFACT",
     "artifact_key":"C2_15M_BID_LOCAL",
     "drive_file_id":"1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk",
@@ -30,7 +33,7 @@
     "srfd_g11_disposition":"APPROVED_RECORD_ONLY_NO_ACTIVATION_OR_PROMOTION",
     "reusable_esli_read_authority_found":false
   },
-  "proposed_authority_delta":{
+  "approved_authority_delta":{
     "read_only_recovery":"ONE_EXACT_ACCEPTED_C2_ARTIFACT_FOR_ESLI_WP13_ONLY",
     "provider_intake":"NONE",
     "new_provider_object":"NONE",
@@ -45,6 +48,6 @@
     "publication":"NONE",
     "probability_risk_exposure_execution":"NONE"
   },
-  "after_operator_pass":"Freeze JuneProfileComparisonManifest.v1 before result inspection, verify exact artifact SHA-256, execute only admitted P0-P3 routes against the frozen common source/cutoff/environment, preserve fail-honest non-executable profile states, and terminal-close ESL with no active-authority change.",
-  "rollback":"Do not read the source if PASS is not recorded. Preserve this classifier and all prior accepted June evidence append-only."
+  "continuation":"Verify exact artifact SHA-256, freeze JuneProfileComparisonManifest.v1 and every executable profile/comparator binding before result inspection, execute only admitted P0-P3 routes against the frozen common source/cutoff/environment, preserve fail-honest non-executable profile states, and terminal-close ESL with no active-authority change.",
+  "rollback":"Before source read, revoke this bounded WP13 read authority by forward supersession. After source read, preserve source verification and all generated evidence append-only; no rollback may relabel or promote scientific results."
 }
