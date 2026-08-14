@@ -1,0 +1,17 @@
+{
+  "schema":"ovc-dsai3v-q2-historical-replay-manifest/v1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "packet_id":"DSAI3V-WP7",
+  "qualification_stage":"Q2",
+  "authority_effect":"DIAGNOSTIC_ONLY_HISTORY_IMMUTABLE",
+  "required_classes":["STALE_MAIN_REQUEUE","STACKED_PR_RECONCILIATION","CLOSEOUT_FRONTIER_MOVEMENT","MULTI_LANE_PERIOD"],
+  "sources":[
+    {"class":"STALE_MAIN_REQUEUE","ref":"docs/releases/optb-esl-conformance-v0-1/esli-wp7/ESLI_WP7_REQUEUE_RECORD.json"},
+    {"class":"STACKED_PR_RECONCILIATION","ref":"docs/releases/development-skills-architecture-v0-3/dsai3-wp0/DSAI3_WP0_BASELINE_RECONCILIATION.json"},
+    {"class":"CLOSEOUT_FRONTIER_MOVEMENT","ref":"docs/releases/ec1-dmrp-conformance-v0-1/dmrpi-wp0/DMRPI_WP0_RECONCILIATION_PACKET.json"},
+    {"class":"MULTI_LANE_PERIOD","ref":"docs/plans/development/OVC_DSAI_THROUGHPUT_EXPANSION_20260813_PLAN_v0_1.md"},
+    {"class":"SERIAL_INTEGRATION_CONTROL","ref":"docs/releases/parallel-development-v0-1/siq-v0-1/runtime/SIQ_RUNTIME_G1_ACTIVATION_READINESS_PACKET.md"}
+  ],
+  "rules":{"no_historical_rewrite":true,"no_authority_inference":true,"expected_vit_tree_projection_reproducible":true},
+  "next_packet":"DSAI3V-WP8A"
+}
