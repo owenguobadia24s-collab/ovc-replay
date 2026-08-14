@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-v0.3",
+  "plan_id": "OVC-DSAI-CONTINUOUS-EXECUTION-LANDING-TRAIN-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "RUNNING",
+  "baseline_commit": "7e5db8b99464b7afebdbce703cf3377d9b65ff82",
+  "branch": "programme/dsai-v0-3-wp0",
+  "packet_id": "DSAI3-WP0",
+  "gate_id": "DSAI3-G0",
+  "prerequisites": [
+    "OVC-DSAI-v0.2 terminal COMPLETED",
+    "OVC.SIQ.RUNTIME.v0.1 terminal SIQ_ACTIVE_SERIALIZED_MINIMAL_CRITICAL_SECTION",
+    "DSAI3-G0 operator admission",
+    "current-main/open-PR preflight"
+  ],
+  "authority_required": "NONE_UNTIL_DSAI3-G7_OPERATOR_REQUIRED_ACTIVATION",
+  "authority_delta": "NONE",
+  "candidate_commit": null,
+  "tests": [],
+  "qa_packet": null,
+  "decision_record": "docs/releases/development-skills-architecture-v0-3/dsai3-wp0/DSAI3_G0_OPERATOR_ADMISSION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "DSAI3-WP1",
+  "completed_packets": [],
+  "gate_disposition": {
+    "DSAI3-G0": "PASS_OPERATOR_ADMISSION_RECORDED",
+    "DSAI3-G7": "FUTURE_OPERATOR_REQUIRED_NOT_EFFECTIVE"
+  },
+  "current_authority": {
+    "parent_orch345": "UNCHANGED_ACTIVE_BOUNDED",
+    "siq_runtime": "ACTIVE_EXISTING_SERIALIZED_MINIMAL_CRITICAL_SECTION",
+    "dsai3_continuous_executor": "INACTIVE_SHADOW_SANDBOX_ONLY",
+    "dsai3_siq_actuation_binding": "INACTIVE_SHADOW_SANDBOX_ONLY",
+    "dsai3_write_requeue_executor": "INACTIVE_SHADOW_SANDBOX_ONLY"
+  },
+  "target_terminal_state": "IMPLEMENTED_CONTINUOUS_PACKET_EXECUTION_ORDERED_LANDING_TRAIN"
+}
