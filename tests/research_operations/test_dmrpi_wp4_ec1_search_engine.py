@@ -1,11 +1,11 @@
 from __future__ import annotations
-import hashlib, json, unittest
+import json, subprocess, unittest
 from pathlib import Path
 from ovc.research_operations.ec1_path1 import DependenceEdge, EC1IdentityFieldManifest, EC1Path1InvariantError, EvidenceDependenceGraph, FieldDescriptor, PopulationReconciliation, PopulationUnit, canonical_predicates, exact_recurring_pattern_lattice, predicate_roundtrip, require_p1c_incidence_denominator
 ROOT=Path(__file__).resolve().parents[2]
 
-def git_blob_sha(data: bytes) -> str:
-    return hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
+def git_blob_sha(path: str) -> str:
+    return subprocess.run(["git","rev-parse",f"HEAD:{path}"],cwd=ROOT,check=True,capture_output=True,text=True).stdout.strip()
 
 class DMRPIWP4Tests(unittest.TestCase):
     def manifest(self):
@@ -22,7 +22,7 @@ class DMRPIWP4Tests(unittest.TestCase):
         reach=json.loads((ROOT/'registries/research_operations/EC1_SOURCE_REACHABILITY_CONTRACT_v1.json').read_text())
         self.assertGreaterEqual(len(reach['c2_schema_bindings']),7)
         for binding in reach['c2_schema_bindings']:
-            data=(ROOT/binding['path']).read_bytes(); self.assertEqual(git_blob_sha(data),binding['git_blob_sha'],binding['path'])
+            self.assertEqual(git_blob_sha(binding['path']),binding['git_blob_sha'],binding['path'])
         self.assertEqual(reach['c2e_binding']['boundary_pack_sha256'],'043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313')
     def test_av26_each_identity_field_reaches_predicate_compiler(self):
         _,m=self.manifest(); rec={d.field_path:f'VALUE:{i}' for i,d in enumerate(m.fields) if d.role in {'IDENTITY','RELATIONAL_IDENTITY'}}
