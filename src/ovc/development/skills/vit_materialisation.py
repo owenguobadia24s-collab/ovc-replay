@@ -1,0 +1,134 @@
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+import json
+from pathlib import Path
+from typing import Mapping
+
+from ovc.development.identity import canonical_sha256
+from ovc.development.skills.vit_core import VitContractError, assert_tree_equivalent
+
+
+@dataclass(frozen=True)
+class PhysicalMaterialisationTransaction:
+    vit_generation_id: str
+    ticket_id: str
+    train_generation_id: str
+    expected_predecessor_commit: str
+    expected_predecessor_tree: str
+    expected_result_tree: str
+    authority_frontier_id: str
+    assurance_frontier_id: str
+    materialisation_profile: str
+    attempt: int = 1
+
+    def __post_init__(self) -> None:
+        if self.materialisation_profile not in {"ISOLATED_REHEARSAL", "LIVE_PHYSICAL_MAIN"}:
+            raise VitContractError("unknown materialisation profile")
+        if self.attempt < 1:
+            raise VitContractError("invalid attempt")
+
+    @property
+    def transaction_id(self) -> str:
+        return canonical_sha256(asdict(self))
+
+
+@dataclass(frozen=True)
+class PhysicalIntegrationLease:
+    lease_id: str
+    expected_predecessor_commit: str
+    expected_predecessor_tree: str
+    holder: str
+    active: bool = True
+
+
+@dataclass(frozen=True)
+class PhysicalMaterialisationReceipt:
+    transaction_id: str
+    observed_commit: str
+    observed_tree: str
+    expected_result_tree: str
+    equality: bool
+    outcome: str
+
+    @property
+    def receipt_id(self) -> str:
+        return canonical_sha256(asdict(self))
+
+
+@dataclass(frozen=True)
+class PacketCompletionReceipt:
+    programme_id: str
+    packet_id: str
+    implementation_ref: str
+    qa_ref: str
+    gate_decision_ref: str
+    payload_id: str
+    vit_generation_id: str
+    materialisation_receipt_id: str
+    next_packet: str | None
+
+    @property
+    def receipt_id(self) -> str:
+        return canonical_sha256(asdict(self))
+
+
+class ReceiptStore:
+    def __init__(self, root: str | Path) -> None:
+        self.root = Path(root)
+        self.root.mkdir(parents=True, exist_ok=True)
+
+    def put(self, receipt: object, receipt_id: str) -> Path:
+        path = self.root / f"{receipt_id}.json"
+        payload = json.dumps(asdict(receipt), sort_keys=True, separators=(",", ":"))
+        if path.exists():
+            if path.read_text(encoding="utf-8") != payload:
+                raise VitContractError("VIT_LEDGER_INTEGRITY_FAIL")
+            return path
+        path.write_text(payload, encoding="utf-8")
+        return path
+
+    def rebuild_index(self) -> Mapping[str, str]:
+        index: dict[str, str] = {}
+        for path in sorted(self.root.glob("*.json")):
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            for field in ("transaction_id", "packet_id"):
+                value = raw.get(field)
+                if value:
+                    key = f"{field}:{value}"
+                    if key in index and index[key] != path.name:
+                        raise VitContractError("VIT_LEDGER_INTEGRITY_FAIL")
+                    index[key] = path.name
+        return index
+
+
+def authorize_materialisation(transaction: PhysicalMaterialisationTransaction, *, pilot_authority_active: bool) -> str:
+    if transaction.materialisation_profile == "LIVE_PHYSICAL_MAIN" and not pilot_authority_active:
+        return "WAITING_OPERATOR_AUTHORITY"
+    if transaction.materialisation_profile == "ISOLATED_REHEARSAL":
+        return "ALLOW_ISOLATED_REHEARSAL"
+    return "ALLOW_LIVE_SERIALIZED_GATEWAY"
+
+
+def validate_lease(lease: PhysicalIntegrationLease, actual_commit: str, actual_tree: str) -> str:
+    if not lease.active:
+        return "LEASE_UNAVAILABLE"
+    if lease.expected_predecessor_commit != actual_commit or lease.expected_predecessor_tree != actual_tree:
+        return "PREDECESSOR_MOVED"
+    return "LEASE_VALID"
+
+
+def materialisation_receipt(transaction: PhysicalMaterialisationTransaction, observed_commit: str, observed_tree: str) -> PhysicalMaterialisationReceipt:
+    try:
+        assert_tree_equivalent(transaction.expected_result_tree, observed_tree)
+    except VitContractError:
+        return PhysicalMaterialisationReceipt(transaction.transaction_id, observed_commit, observed_tree, transaction.expected_result_tree, False, "POST_WRITE_TREE_MISMATCH")
+    return PhysicalMaterialisationReceipt(transaction.transaction_id, observed_commit, observed_tree, transaction.expected_result_tree, True, "MATERIALISED_EQUIVALENT")
+
+
+def recover_unknown_write(transaction: PhysicalMaterialisationTransaction, observed_commit: str, observed_tree: str) -> str:
+    if observed_tree == transaction.expected_predecessor_tree and observed_commit == transaction.expected_predecessor_commit:
+        return "WRITE_NOT_EFFECTIVE_RETRYABLE"
+    if observed_tree == transaction.expected_result_tree:
+        return "WRITE_EFFECTIVE_RECEIPT_RECOVERY_REQUIRED"
+    return "POST_WRITE_STATE_UNKNOWN"
