@@ -64,6 +64,16 @@ def synthetic_false_commutativity_fixture() -> str:
     return classify_payload_conflict(a, b)
 
 
+def synthetic_path_disjoint_semantic_conflict_fixture() -> str:
+    left_dep = DependencyFrontier((), "NONE", ("governed-owner:registry",))
+    right_dep = DependencyFrontier((), "NONE", ("governed-owner:registry",))
+    a_auth = IntegrationAuthorityManifest("PLAN", "A2", "G", "AUTO_EXECUTABLE", "NONE", ("source",))
+    b_auth = IntegrationAuthorityManifest("PLAN", "B2", "G", "AUTO_EXECUTABLE", "NONE", ("source",))
+    a = PacketIntegrationPayload("P", "A2", ({"op":"MODIFY","path":"registry/a.json","blob_sha":"a"*40,"mode":"100644"},), a_auth, left_dep, {})
+    b = PacketIntegrationPayload("P", "B2", ({"op":"MODIFY","path":"registry/b.json","blob_sha":"b"*40,"mode":"100644"},), b_auth, right_dep, {})
+    return classify_payload_conflict(a, b)
+
+
 def synthetic_authority_laundering_fixture() -> str:
     tx = PhysicalMaterialisationTransaction("vit", "ticket", "train", "a"*40, "b"*40, "c"*40, "auth", "assure", "LIVE_PHYSICAL_MAIN")
     return authorize_materialisation(tx, pilot_authority_active=False)
@@ -85,9 +95,10 @@ def run_q0_q1_reference_qualification() -> Q0Q1QualificationReport:
     rebuilt = rebuild_ledger(manifest)
     ledger_ok = rebuilt.placements == ledger.placements
     conflict_ok = synthetic_false_commutativity_fixture() != "COMMUTATIVE"
+    semantic_conflict_ok = synthetic_path_disjoint_semantic_conflict_fixture() == "SERIAL_REQUIRED"
     authority_ok = synthetic_authority_laundering_fixture() == "WAITING_OPERATOR_AUTHORITY"
     lease_ok = synthetic_split_brain_fixture() == ("LEASE_VALID", "LEASE_UNAVAILABLE")
-    all_ok = ledger_ok and conflict_ok and authority_ok and lease_ok
+    all_ok = ledger_ok and conflict_ok and semantic_conflict_ok and authority_ok and lease_ok
     return Q0Q1QualificationReport(
         q0_mechanical_pass=ledger_ok,
         q1_adversarial_pass=all_ok,
@@ -95,5 +106,5 @@ def run_q0_q1_reference_qualification() -> Q0Q1QualificationReport:
         zero_reference_disagreements=True,
         zero_false_operator_allows=authority_ok,
         zero_duplicate_effective_materialisations=True,
-        scenarios=("AV-LEDGER-01","AV-LEDGER-02","AV-LEDGER-03","AV-PAR-02","AV-AUTH-01","AV-SPLIT-01","AV-CLOSE-01"),
+        scenarios=("AV-LEDGER-01","AV-LEDGER-02","AV-LEDGER-03","AV-PAR-02","AV-PAR-PATH-DISJOINT-SEMANTIC","AV-AUTH-01","AV-SPLIT-01","AV-CLOSE-01"),
     )
