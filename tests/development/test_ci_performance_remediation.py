@@ -15,17 +15,31 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.tests_workflow = TESTS_WORKFLOW.read_text(encoding="utf-8")
         readiness_marker = "\n  merge-readiness:\n"
         admission_marker = "\n  final-integration-window-admitted:\n"
+        cutover_marker = "\n  pytest-unified:\n"
         self.assertIn(readiness_marker, self.workflow)
         self.assertIn(admission_marker, self.tests_workflow)
+        self.assertIn(cutover_marker, self.tests_workflow)
         self.profile = self.workflow.split("\n  profile:\n", 1)[1].split("\n  legacy-required-context:\n", 1)[0]
         self.readiness = self.workflow.split(readiness_marker, 1)[1]
         after_admission = self.tests_workflow.split(admission_marker, 1)[1]
-        self.admission = after_admission.split("\n  legacy-unittest:\n", 1)[0]
+        self.admission = after_admission.split(cutover_marker, 1)[0]
 
-    def test_canonical_suite_contract_is_preserved_after_pyt_wp1(self):
-        child_suite = "python3 -m unittest discover -s tests -v"
-        self.assertEqual(self.tests_workflow.count(child_suite), 1)
-        self.assertNotIn(child_suite, self.workflow)
+    def test_canonical_suite_contract_is_native_pytest_after_pyt_g2_cutover(self):
+        legacy_suite = "python3 -m unittest discover -s tests -v"
+        native_suite = "python3 -m pytest tests -q --tb=short"
+        rollback_annotation = (
+            "# Historical rollback command (not executed): " + legacy_suite
+        )
+        self.assertEqual(self.tests_workflow.count(legacy_suite), 1)
+        self.assertIn(rollback_annotation, self.tests_workflow)
+        self.assertIn(native_suite, self.tests_workflow)
+        self.assertIn(
+            "Complete repository suite under shared main lease (native pytest)",
+            self.tests_workflow,
+        )
+        self.assertNotIn("\n  legacy-unittest:\n", self.tests_workflow)
+        self.assertIn("\n  pytest-unified:\n", self.tests_workflow)
+        self.assertNotIn(legacy_suite, self.workflow)
         self.assertIn(
             "tools/ci/ovc_run_with_main_lease.py",
             self.tests_workflow,
@@ -74,7 +88,7 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("git merge-base --is-ancestor", self.profile)
         self.assertIn("git merge-base --is-ancestor", self.admission)
 
-    def test_dual_run_required_checks_are_fail_closed(self):
+    def test_terminal_required_checks_are_fail_closed(self):
         for check_name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
             self.assertIn(check_name, self.readiness)
         self.assertIn("required.every", self.readiness)
