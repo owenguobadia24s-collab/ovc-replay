@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-python-test-runner-gate-qa/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "packet_id": "PYT-WP2-CUTOVER",
+  "gate_id": "PYT-G2-CUTOVER",
+  "authority_effect": "CI_RUNNER_CUTOVER_ONLY",
+  "qa_status": "PASS_READY_FOR_DELEGATED_AUTO_RATIFICATION",
+  "recommendation": "PASS",
+  "baseline_main": "71b5f5502e0b3b66912ded453593375f2d931859",
+  "candidate_head_before_qa_materialisation": "5fa00658a4c8203b4241b5f3f73803a243431567",
+  "pull_request": 772,
+  "checks": {
+    "native_pytest_complete_repository": "PASS",
+    "research_console_exact_surface_under_pytest": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "final_head_profile": "PASS",
+    "stable_main_readiness": "PASS",
+    "unittest_sources_preserved": "PASS",
+    "standalone_unittest_discover_execution_retired": "PASS",
+    "no_skip_xfail_delete_or_test_weakening": "PASS",
+    "blocking_reviews_or_threads": "NONE"
+  },
+  "exact_head_assurance": {
+    "tests": {"workflow_run": 31758308961, "job": 94639237363, "conclusion": "success"},
+    "pytest_unittest_parity": {"workflow_run": 31758308961, "job": 94639237250, "conclusion": "success"},
+    "runner_parity": {"workflow_run": 31758308961, "job": 94639237265, "conclusion": "success"},
+    "final_head_profile": {"workflow_run": 31758308907, "job": 94638919514, "conclusion": "success"},
+    "stable_main_readiness": {"workflow_run": 31758308907, "job": 94638919761, "conclusion": "success"}
+  },
+  "blockers": [],
+  "warnings": [],
+  "superseded_diagnostic_prs": [771, 773],
+  "gate_classification": "AUTO_RATIFIABLE",
+  "reserved_authority_actions": [],
+  "non_reserved_rationale": "The cutover changes only the canonical CI runner from standalone unittest discovery to already-admitted native pytest execution. It preserves all unittest test sources and pytest parity coverage and creates no scientific, semantic, selector, Validation, publication, probability, risk, exposure, execution or agent-write authority.",
+  "rollback": "Restore .github/workflows/tests.yml from main@71b5f5502e0b3b66912ded453593375f2d931859 while preserving all test sources and PYT-G2 evidence.",
+  "post_materialisation_exact_head_assurance": "REQUIRED_BEFORE_MERGE"
+}
