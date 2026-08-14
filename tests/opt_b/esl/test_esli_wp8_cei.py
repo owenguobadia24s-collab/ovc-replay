@@ -30,7 +30,7 @@ def _condition(name: str, role: str = "PRE_EXISTING", value: str = "LONDON") -> 
 
 
 def test_closed_ast_rejects_causal_predicate() -> None:
-    with pytest.raises(CEIError, match="CEI_AST_NODE_TYPE_NOT_REGISTERED"):
+    with pytest.raises(CEIError, match="CEI_FORBIDDEN_CAUSAL_OR_OUTCOME"):
         validate_constraint_ast({"type": "CAUSES", "children": [_field(), {"type": "CONST", "value": "X"}]})
 
 
