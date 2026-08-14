@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  legacy-unittest:
+  pytest-unified:
     name: tests
     runs-on: ubuntu-latest
     steps:
@@ -28,12 +28,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install Research Console exact-surface dependencies
-        run: python3 -m pip install --disable-pip-version-check -r requirements-console-vnext.txt
-      - name: Complete repository suite as BASE_INDEPENDENT assurance
-        run: python3 -m unittest discover -s tests -v
-      - name: Research Console vNext exact maintained API surface
-        run: PYTHONPATH=src:. python3 -m unittest discover -s tests/research_console_vnext -v
+      - name: Install pytest and Research Console test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Complete repository suite as BASE_INDEPENDENT assurance (native pytest)
+        run: |
+          # Historical rollback command (not executed): python3 -m unittest discover -s tests -v
+          PYTHONPATH=src:. python3 -m pytest tests -q --tb=short
+      - name: Research Console vNext exact maintained API surface as BASE_INDEPENDENT assurance
+        run: PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
@@ -53,7 +55,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          PYTHONPATH=src python3 tools/ci/pytest_unittest_parity.py run > /tmp/pytest-legacy.log 2>&1
+          PYTHONPATH=src:. python3 tools/ci/pytest_unittest_parity.py run > /tmp/pytest-legacy.log 2>&1
           status=$?
           cat /tmp/pytest-legacy.log
           if [ "$status" -ne 0 ]; then
@@ -84,7 +86,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          PYTHONPATH=src python3 tools/ci/pytest_unittest_parity.py collect > /tmp/pytest-parity.log 2>&1
+          PYTHONPATH=src:. python3 tools/ci/pytest_unittest_parity.py collect > /tmp/pytest-parity.log 2>&1
           status=$?
           cat /tmp/pytest-parity.log
           if [ "$status" -ne 0 ]; then

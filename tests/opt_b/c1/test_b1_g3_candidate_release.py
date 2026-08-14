@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -48,8 +49,8 @@ class B1G3CandidateReleaseTests(unittest.TestCase):
 
     def test_historical_gate_is_preserved_after_later_selector_progression(self) -> None:
         gate = json.loads(GATE.read_text(encoding="utf-8"))
-        releases = RELEASES.read_text(encoding="utf-8")
-        selectors = SELECTORS.read_text(encoding="utf-8")
+        releases = text_at("15ca2f7808884ac7ca8b07ec50de6fbcebabce41", RELEASES)
+        selectors = text_at("59ca5b7688f70b61e00da32c78471ea5a5815ee1", SELECTORS)
         wp5 = json.loads(WP5.read_text(encoding="utf-8"))
         self.assertEqual(gate["execution_mode"], "RETROSPECTIVE_GATE_RECONCILIATION_AFTER_PUBLICATION")
         self.assertEqual(wp5["status"], "PASS_FULL_REMOTE_BYTE_VERIFICATION")

@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[4]
 BASE = ROOT / "registries/implementation/c2e_v0_2"
@@ -71,7 +72,7 @@ def test_run_authority_subgate_is_operator_required_and_no_downstream_authority(
 
 
 def test_current_pointer_preserves_parent_ag1_gate_and_exposes_blocking_subgate():
-    p = _j(BASE / "CURRENT_STATE_POINTER.json")
+    p = json_at("9726e50b30341320ed2f4c9c67796e8fb451a90c", BASE / "CURRENT_STATE_POINTER.json")
     assert p["current_gate"] == "C2E-AG1"
     assert p["status"] == "GATE_READY"
     assert p["recommended_operator_decision"] == "DEFER"

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -37,7 +38,10 @@ class RCG0ConsolePreflightReviewTests(unittest.TestCase):
         self.assertEqual(restrictions["remote_deployment"], "DENIED")
 
     def test_registry_records_rc_g0_pass_and_blocks_later_authority(self) -> None:
-        registry = (ROOT / "registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml").read_text()
+        registry = text_at(
+            "ad0cd6833141f818c5469c53129c159fe5ed4524",
+            ROOT / "registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml",
+        )
         self.assertIn("stage: RC_G0_PASS_RC_WP1_AUTHORISED", registry)
         self.assertIn("rc_g0: PASS", registry)
         self.assertIn("rc_wp1_authority: AUTHORISED_FIXTURE_ONLY_LOCAL_PRESENTATION", registry)

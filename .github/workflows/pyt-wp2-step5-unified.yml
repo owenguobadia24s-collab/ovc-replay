@@ -1,0 +1,32 @@
+name: PYT-WP2 Step 5 unified pytest diagnostic
+
+on:
+  push:
+    branches:
+      - build/python-test-runner-wp2-final-clean-20260814
+
+permissions:
+  contents: read
+
+jobs:
+  pytest-unified:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install maintained test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Run unified pytest surface
+        run: PYTHONPATH=src:. python3 -m pytest -q --continue-on-collection-errors --tb=short --junitxml=pytest-unified-results.xml
+      - name: Upload unified pytest result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyt-wp2-step5-pytest-unified-results
+          path: pytest-unified-results.xml
+          if-no-files-found: warn
+          retention-days: 1

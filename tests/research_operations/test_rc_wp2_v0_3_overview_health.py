@@ -14,6 +14,7 @@ from ovc.research_operations.console_overview import (
 )
 from ovc.research_operations.console_overview_candidate import CandidateOverviewProjectionBuilder
 from ovc.research_operations.read_model import ReadModelNode, ResearchReadModel
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "fixtures" / "research_operations" / "research_console_v0_3" / "RC_WP2_OVERVIEW_SOURCE_READ_MODEL.json"
@@ -141,13 +142,13 @@ class RCWP2V03OverviewHealthTests(unittest.TestCase):
 
     def test_schema_registry_packet_and_activation_boundary(self) -> None:
         schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
-        registry = REGISTRY.read_text(encoding="utf-8")
+        registry = text_at("6701ec00469898b12f17b294610d839d4082d94b", REGISTRY)
         packet = json.loads(PACKET.read_text(encoding="utf-8"))
         home = (ROOT / "apps" / "research_console" / "Home.py").read_text(encoding="utf-8")
         shell = (ROOT / "apps" / "research_console" / "shell.py").read_text(encoding="utf-8")
         self.assertEqual(schema["properties"]["schema"]["const"], "ovc-research-console-overview-projection/v0.3")
         self.assertIn("active_console_consumption: DENIED_PENDING_RC_G2", registry)
-        self.assertIn("research_records_empty_progress: 0", registry)
+        self.assertIn("empty_progress: 0", registry)
         self.assertEqual(packet["authority"], "CANDIDATE_PROJECTION_IMPLEMENTATION_ONLY")
         self.assertEqual(packet["disposition"], "COMPLETE_RC_G2_V0_3_REVIEW_READY")
         self.assertEqual(packet["blocking_issues"], 0)

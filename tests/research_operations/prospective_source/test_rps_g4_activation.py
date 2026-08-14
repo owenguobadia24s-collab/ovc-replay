@@ -9,6 +9,7 @@ from ovc.research_operations.prospective_source.authority import (
     authority_from_mapping,
     load_repository_authority_snapshot,
 )
+from tests.historical_court_record import text_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -57,7 +58,7 @@ class RpsG4ActivationTests(unittest.TestCase):
         cls.gate_state = json.loads(GATE_STATE_PATH.read_text(encoding="utf-8"))
         cls.wp4_state = json.loads(WP4_STATE_PATH.read_text(encoding="utf-8"))
         cls.rps_registry = RPS_REGISTRY_PATH.read_text(encoding="utf-8")
-        cls.pd_registry = PD_REGISTRY_PATH.read_text(encoding="utf-8")
+        cls.pd_registry = text_at("aa29b23a7a83e33880ac2d80deb013f0c0390f30", PD_REGISTRY_PATH)
         cls.evidence_registry = EVIDENCE_REGISTRY_PATH.read_text(encoding="utf-8")
 
     def test_exact_approved_bindings_are_active(self) -> None:

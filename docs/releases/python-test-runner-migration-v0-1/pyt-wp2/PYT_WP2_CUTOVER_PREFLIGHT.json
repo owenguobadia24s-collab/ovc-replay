@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-python-test-runner-cutover-preflight/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "packet_id": "PYT-WP2-CUTOVER",
+  "baseline_main": "71b5f5502e0b3b66912ded453593375f2d931859",
+  "branch": "build/python-test-runner-wp2-cutover-71b5f550-20260814",
+  "prerequisites": [
+    "PYT-G1:PASS",
+    "PYT-G2:PASS",
+    "PYT-WP2 merged via PR #770 at 71b5f5502e0b3b66912ded453593375f2d931859",
+    "pytest native complete surface admitted",
+    "legacy unittest execution and collection parity passed"
+  ],
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "RETIRE_STANDALONE_UNITTEST_DISCOVER_CI_EXECUTION_ONLY",
+  "reserved_authority_actions": [],
+  "implementation": {
+    "canonical_tests_context": "pytest native complete repository suite",
+    "standalone_unittest_discover_execution": "RETIRED",
+    "unittest_test_sources": "PRESERVE",
+    "pytest_unittest_parity": "PRESERVE_FOR_TERMINAL_ASSURANCE",
+    "runner_parity": "PRESERVE_FOR_TERMINAL_ASSURANCE",
+    "historical_unittest_command": "PRESERVE_AS_NON_EXECUTED_ROLLBACK_ANNOTATION"
+  },
+  "required_assurance": [
+    "tests",
+    "pytest-unittest-parity",
+    "runner-parity",
+    "FINAL_HEAD profile",
+    "stable-main merge readiness"
+  ],
+  "blockers": [],
+  "rollback": "Restore tests.yml from main@71b5f5502e0b3b66912ded453593375f2d931859 while preserving all test sources and G2 evidence."
+}

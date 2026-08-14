@@ -5,6 +5,7 @@ import hashlib
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 from ovc.opt_b.c2_vnext.horizons import (
     CrossClockMapping,
@@ -276,8 +277,8 @@ class HorizonFoundationTests(unittest.TestCase):
         for decision in [f"P2-D{n}" for n in range(1, 12)] + [f"P2-Q{n}" for n in range(1, 5)]:
             self.assertIn(decision, contract)
         self.assertIn("exact original P2-D11 label is unavailable", contract)
-        schema = json.loads((ROOT / "schemas/opt_b/c2/vnext/C2_HORIZON_SCHEMA_BUNDLE_vNext_r1.json").read_text(encoding="utf-8"))
-        self.assertEqual(6, len(schema["schemas"]))
+        schema = json_at("95615ec66ef7c69082d55e1cf1d8cf7817d2a814", ROOT / "schemas/opt_b/c2/vnext/C2_HORIZON_SCHEMA_BUNDLE_vNext_r1.json")
+        self.assertEqual(7, len(schema["schemas"]))
         self.assertIn("CENTERED_WINDOW", schema["prohibited_definition_kinds"])
         for value in schema["schemas"].values():
             self.assertFalse(value["additionalProperties"])

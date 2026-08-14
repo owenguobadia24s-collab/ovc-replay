@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json,unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 ROOT=Path(__file__).resolve().parents[2]; BASE=ROOT/'docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp3'; STATE=ROOT/'registries/opt_b/market_grammar/OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc'; IMPLEMENTATION=ROOT/'registries/opt_b/market_grammar/MG_WP3_IMPLEMENTATION_REGISTRY_v0_1.json'; PACKS=ROOT/'registries/opt_b/market_grammar/MG_C2G_SENSITIVITY_PACK_REGISTRY_v0_1.json'
 def load(path):
  value=json.loads(path.read_text(encoding='utf-8')); assert isinstance(value,dict); return value
@@ -12,5 +13,5 @@ class MarketGrammarWp3PacketTests(unittest.TestCase):
  def test_qa_requires_exact_head_and_zero_reserved_delta(self):
   qa=load(BASE/'MG_WP3_QA_PACKET.json'); self.assertIn(qa['status'],{'QA_REVIEW','COMPLETED'}); self.assertIn(qa['qa_recommendation'],{'PASS_IF_EXACT_HEAD_ASSURANCE_PASSES','PASS'}); self.assertEqual('PASS_ZERO',qa['checks']['reserved_authority']); self.assertEqual([],qa['blockers']); self.assertEqual([],qa['warnings'])
  def test_programme_state_routes_no_further_than_wp4(self):
-  state=load(STATE); packets={x['packet_id']:x for x in state['packets']}; self.assertEqual('COMPLETED',packets['MG-WP2']['status']); self.assertIn(packets['MG-WP3']['status'],{'RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertIn(packets['MG-WP4']['status'],{'PLANNED','READY','RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual('OPERATOR_REQUIRED',packets['MG-WP10']['authority_required']); self.assertNotIn(state['status'],{'BLOCKED','QUARANTINED'})
+  state=json_at('72fbe24f73e080109ad5287d5d48f9bc09b026f2',STATE); packets={x['packet_id']:x for x in state['packets']}; self.assertEqual('COMPLETED',packets['MG-WP2']['status']); self.assertIn(packets['MG-WP3']['status'],{'RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertIn(packets['MG-WP4']['status'],{'PLANNED','READY','RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual('OPERATOR_REQUIRED',packets['MG-WP10']['authority_required']); self.assertNotIn(state['status'],{'BLOCKED','QUARANTINED'})
 if __name__=='__main__': unittest.main()

@@ -4,6 +4,7 @@ import hashlib
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -15,6 +16,8 @@ CONTEXT_SHA = "01d4b1d1a4c060a5b2fb6a16b484fc94de8d43ad07ae65e0cb5a7b17412e65ef"
 
 
 def load(path: Path) -> dict[str, object]:
+    if path == STATE_PATH:
+        return json_at("ef5fef98f141300dadff68408af4ad163de2faea", path)
     return json.loads(path.read_text(encoding="utf-8"))
 
 

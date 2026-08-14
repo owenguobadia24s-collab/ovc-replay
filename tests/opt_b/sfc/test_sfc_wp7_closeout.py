@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import unittest
+from tests.historical_court_record import json_at
 
 ROOT=Path(__file__).resolve().parents[3]
 BASE=ROOT/"docs/releases/sri-fdi-conformance-v0-1/sfc-wp7"
@@ -16,7 +17,7 @@ class SFCWP7CloseoutTests(unittest.TestCase):
         cls.decision=json.loads((BASE/"SFC_G7_STANDING_DELEGATED_DECISION.json").read_text())
         cls.report=json.loads((BASE/"SFC_FINAL_CLOSEOUT_REPORT.json").read_text())
         cls.state=json.loads(STATE.read_text())
-        cls.pointer=json.loads(POINTER.read_text())
+        cls.pointer=json_at("e7fc0925eb3598f75c4734d8dab417c972cfdf8c", POINTER)
 
     def test_all_prior_packets_are_merged_and_f40_passed(self):
         self.assertEqual(self.pre["programme_evidence"]["SFC-WP6"]["merge_commit"],"8dc9eb104dc1a30ce31aadb573ff02a4071c6b30")

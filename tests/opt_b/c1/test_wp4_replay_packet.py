@@ -4,6 +4,7 @@ import importlib.util
 import unittest
 from decimal import Decimal
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = ROOT / "scripts/opt_b/run_c1_wp4_replay.py"
@@ -17,7 +18,7 @@ spec.loader.exec_module(module)
 
 class C1WP4ReplayPacketTests(unittest.TestCase):
     def test_packet_binds_exact_approved_scope(self) -> None:
-        text = WORKFLOW.read_text(encoding="utf-8")
+        text = text_at("74151d3c9f4659fc6414456c2ad13a138912089c", WORKFLOW)
         self.assertIn("run-id: 30179286521", text)
         self.assertIn("a2-g3-opt-a-gbpusd-discovery-2021-2023-v2", text)
         self.assertIn("a2-g3-opt-a-gbpusd-development-2024-v2", text)

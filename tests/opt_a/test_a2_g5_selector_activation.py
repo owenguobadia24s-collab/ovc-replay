@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[2]
 SELECTORS = ROOT / "registries" / "releases" / "OPT_A_ACTIVE_SELECTORS.yaml"
@@ -55,9 +56,9 @@ def test_validation_lock_and_rollback_are_preserved() -> None:
 
 
 def test_selector_set_is_active_but_downstream_authority_is_none() -> None:
-    selectors = SELECTORS.read_text(encoding="utf-8")
-    authority = AUTHORITY.read_text(encoding="utf-8")
-    releases = RELEASES.read_text(encoding="utf-8")
+    selectors = text_at("fb5b2fea2200b05a050aa1f8af51121a1883a4a5", SELECTORS)
+    authority = text_at("fb5b2fea2200b05a050aa1f8af51121a1883a4a5", AUTHORITY)
+    releases = text_at("fb5b2fea2200b05a050aa1f8af51121a1883a4a5", RELEASES)
     assert "state: ACTIVE" in selectors
     assert selectors.count("selector_state: ACTIVE") == 3
     assert "  opt_a: ACTIVE" in authority

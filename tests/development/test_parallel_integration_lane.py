@@ -70,13 +70,22 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         ]:
             self.assertIn(marker, self.workflow)
 
-    def test_research_console_surface_is_in_canonical_suite(self):
+    def test_terminal_disposition_does_not_expand_merge_authority(self):
+        self.assertIn("permissions:\n  contents: read\n  checks: read\n  pull-requests: read", self.workflow)
+        self.assertNotIn("contents: write", self.workflow)
+        self.assertNotIn("pull-requests: write", self.workflow)
+        self.assertNotIn("github.rest.pulls.merge", self.workflow)
+        self.assertNotIn("enablePullRequestAutoMerge", self.workflow)
+
+    def test_research_console_surface_is_in_current_pytest_suite(self):
         self.assertTrue(CONSOLE_PACKAGE.exists())
-        exact = "python3 -m unittest discover -s tests/research_console_vnext -v"
+        self.assertIn('python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt', self.tests_workflow)
+        exact = "python3 -m pytest tests/research_console_vnext -q --tb=short"
         self.assertEqual(self.tests_workflow.count(exact), 1)
-        full_suite = "python3 -m unittest discover -s tests -v"
+        full_suite = "python3 -m pytest tests -q --tb=short"
         self.assertEqual(self.tests_workflow.count(full_suite), 1)
         self.assertNotIn(full_suite, self.workflow)
+        self.assertEqual(self.tests_workflow.count("tools/ci/ovc_run_with_main_lease.py"), 0)
 
 if __name__ == "__main__":
     unittest.main()

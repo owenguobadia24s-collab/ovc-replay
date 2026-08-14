@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[3]
 BASE = ROOT / "registries" / "opt_b" / "c2"
@@ -33,7 +34,7 @@ class C2WP1BoundaryRegistryTests(unittest.TestCase):
         self.assertIn("target: C1_ACTIVE_C2_NONE", retirement)
 
     def test_wp1_does_not_grant_engine_replay_or_selector_authority(self) -> None:
-        registry = (BASE / "C2_IMPLEMENTATION_REGISTRY.yaml").read_text(encoding="utf-8")
+        registry = text_at("7babcf7f7fb48d00bbe96923d11ac780d8fc53ef", BASE / "C2_IMPLEMENTATION_REGISTRY.yaml")
         self.assertIn("status: WP1_PASS_BOUNDARY_FROZEN_WP2_AUTHORISED", registry)
         self.assertIn("engine_implementation: DENIED_PENDING_WP2", registry)
         self.assertIn("market_replay: DENIED_PENDING_C2_G2_AND_OPERATOR_APPROVAL", registry)

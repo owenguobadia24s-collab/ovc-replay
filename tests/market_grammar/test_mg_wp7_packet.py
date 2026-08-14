@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json,unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 ROOT=Path(__file__).resolve().parents[2]
 BASE=ROOT/"docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp7"
 STATE=ROOT/"registries/opt_b/market_grammar/OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc"
@@ -17,5 +18,5 @@ class MarketGrammarWp7PacketTests(unittest.TestCase):
   for name in ("c2_candidate_migration_v0_1.schema.json","c2_candidate_migration_ledger_v0_1.schema.json","c2_candidate_feature_migration_registry_v0_1.schema.json"):
    schema=load(SCHEMAS/name); self.assertFalse(schema["additionalProperties"]); self.assertEqual("https://json-schema.org/draft/2020-12/schema",schema["$schema"])
  def test_state_preserves_completed_wp7_while_wp8_progresses(self):
-  state=load(STATE); packets={x["packet_id"]:x for x in state["packets"]}; self.assertEqual("COMPLETED",packets["MG-WP7"]["status"]); self.assertEqual("SATISFIED_DELEGATED_DECISION",packets["MG-WP7"]["authority_required"]); self.assertIn(packets["MG-WP8"]["status"],{"READY","RUNNING","IMPLEMENTED","QA_REVIEW","APPROVED","COMPLETED"}); self.assertEqual("OPERATOR_REQUIRED",packets["MG-WP10"]["authority_required"]); self.assertNotIn(state["status"],{"BLOCKED","QUARANTINED"})
+  state=json_at('8f149391aba1c2132968b6167f487620b4f95e5b',STATE); packets={x["packet_id"]:x for x in state["packets"]}; self.assertEqual("COMPLETED",packets["MG-WP7"]["status"]); self.assertEqual("SATISFIED_DELEGATED_DECISION",packets["MG-WP7"]["authority_required"]); self.assertIn(packets["MG-WP8"]["status"],{"READY","RUNNING","IMPLEMENTED","QA_REVIEW","APPROVED","COMPLETED"}); self.assertEqual("OPERATOR_REQUIRED",packets["MG-WP10"]["authority_required"]); self.assertNotIn(state["status"],{"BLOCKED","QUARANTINED"})
 if __name__=="__main__": unittest.main()

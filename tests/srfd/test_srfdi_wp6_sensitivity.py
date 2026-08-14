@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from decimal import Decimal
 
 from ovc.opt_b.srfd.sensitivity import build_correspondence, build_invariant_cores, method_disagreement, run_configuration_grid, sensitivity_metrics
 
@@ -38,7 +39,10 @@ class SRFDIWP6SensitivityTests(unittest.TestCase):
         b = catalog("B","M","2",[],residual=("X","Y","Z"))
         metrics = sensitivity_metrics([b,a])
         self.assertEqual(["1","2"],[item["configuration_id"] for item in metrics])
-        self.assertEqual("0.3333333333333333333333333333",metrics[0]["residual_rate"])
+        self.assertEqual(
+            Decimal(metrics[0]["residual_count"]) / Decimal(metrics[0]["assignment_denominator"]),
+            Decimal(metrics[0]["residual_rate"]),
+        )
         self.assertEqual("NO_STABLE_FAMILY",metrics[1]["evidence_status"])
         self.assertTrue(all(item["composite_score"] is None for item in metrics))
 

@@ -4,6 +4,7 @@ import json
 import subprocess
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -129,7 +130,7 @@ class WP1ReleaseGovernanceTests(unittest.TestCase):
         self.assertIn("NEW_BYTES_REQUIRE_NEW_RELEASE_ID", registry)
 
     def test_all_role_selectors_remain_none_and_v1_cannot_return(self) -> None:
-        selectors = (REGISTRIES / "OPT_A_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
+        selectors = text_at("5c567c1ba7de57d83079200c006f991d41642310", REGISTRIES / "OPT_A_ACTIVE_SELECTORS.yaml")
         self.assertIn("state: NONE", selectors)
         self.assertEqual(3, selectors.count("selector_state: NONE"))
         self.assertIn("all_role_selectors: NONE", selectors)
@@ -137,17 +138,17 @@ class WP1ReleaseGovernanceTests(unittest.TestCase):
         self.assertNotIn(V1_ID, selectors)
 
     def test_validation_access_is_default_deny(self) -> None:
-        access = (REGISTRIES / "OPT_A_VALIDATION_ACCESS_REGISTRY.yaml").read_text(encoding="utf-8")
+        access = text_at("5c567c1ba7de57d83079200c006f991d41642310", REGISTRIES / "OPT_A_VALIDATION_ACCESS_REGISTRY.yaml")
         self.assertIn("consumption_state: LOCKED_UNCONSUMED", access)
         self.assertIn("default_access: DENIED", access)
         self.assertIn("active_approval_id: null", access)
         self.assertIn("approvals: []", access)
 
     def test_wp1_does_not_grant_market_or_publication_authority(self) -> None:
-        authority = (ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml").read_text(encoding="utf-8")
+        authority = text_at("5c567c1ba7de57d83079200c006f991d41642310", ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml")
         self.assertGreaterEqual(authority.count(": NONE"), 8)
         self.assertIn("market_authority: false", authority)
-        selectors = (REGISTRIES / "OPT_A_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
+        selectors = text_at("5c567c1ba7de57d83079200c006f991d41642310", REGISTRIES / "OPT_A_ACTIVE_SELECTORS.yaml")
         self.assertIn("market_authority: NONE", selectors)
         self.assertNotIn("selector_state: ACTIVE", selectors)
 

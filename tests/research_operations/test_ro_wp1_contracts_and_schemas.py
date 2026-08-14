@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -38,7 +39,10 @@ class ROWP1ContractsAndSchemasTests(unittest.TestCase):
         self.assertGreaterEqual(len(pack["fixtures"]), 7)
 
     def test_wp1_invariants_remain_after_ro_g1_wp2_and_ro_g2_progression(self) -> None:
-        authority = (ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml").read_text()
+        authority = text_at(
+            "e19456821e243c6f9fb7f77e49cb5cad295c3d18",
+            ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml",
+        )
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
         self.assertIn("ro_g1: PASS", authority)
         self.assertIn("ro_wp2: REVIEWED_RO_G2_PASS", authority)

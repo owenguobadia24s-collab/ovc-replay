@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json,unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 ROOT=Path(__file__).resolve().parents[2]; BASE=ROOT/'docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp6'; STATE=ROOT/'registries/opt_b/market_grammar/OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc'; REG=ROOT/'registries/opt_b/market_grammar/MG_WP6_IMPLEMENTATION_REGISTRY_v0_1.json'; OPS=ROOT/'registries/opt_b/market_grammar/MG_C2P_OPERATOR_REGISTRY_v0_1.json'; SCHEMAS=ROOT/'schemas/opt_b/market_grammar'
 def load(path): return json.loads(path.read_text(encoding='utf-8'))
 class MarketGrammarWp6PacketTests(unittest.TestCase):
@@ -10,5 +11,5 @@ class MarketGrammarWp6PacketTests(unittest.TestCase):
   for name in ('c2p_ast_node_v0_1.schema.json','c2p_grammar_release_v0_1.schema.json','c2p_parse_result_v0_1.schema.json'):
    schema=load(SCHEMAS/name); self.assertFalse(schema['additionalProperties']); self.assertEqual('https://json-schema.org/draft/2020-12/schema',schema['$schema'])
  def test_state_preserves_upstream_and_allows_only_lawful_progression_after_wp6(self):
-  state=load(STATE); p={x['packet_id']:x for x in state['packets']}; self.assertEqual('COMPLETED',p['MG-WP5']['status']); self.assertEqual('COMPLETED',p['MG-WP6']['status']); self.assertIn(p['MG-WP7']['status'],{'READY','RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual('OPERATOR_REQUIRED',p['MG-WP10']['authority_required']); self.assertNotIn(state['status'],{'BLOCKED','QUARANTINED'})
+  state=json_at('9dbd2615cdb1b87c60a1fdb4920ae75877ff6736',STATE); p={x['packet_id']:x for x in state['packets']}; self.assertEqual('COMPLETED',p['MG-WP5']['status']); self.assertEqual('COMPLETED',p['MG-WP6']['status']); self.assertIn(p['MG-WP7']['status'],{'READY','RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertEqual('OPERATOR_REQUIRED',p['MG-WP10']['authority_required']); self.assertNotIn(state['status'],{'BLOCKED','QUARANTINED'})
 if __name__=='__main__': unittest.main()

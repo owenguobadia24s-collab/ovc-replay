@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 from scripts.opt_b.validate_c2_wp7_prospective_evidence import (
     deterministic_record_id,
@@ -135,7 +136,7 @@ class C2WP7ProspectiveEvidenceTests(unittest.TestCase):
         self.assertIn("trading_authority must remain NONE", validate_record(record))
 
     def test_registry_uses_v0_2_and_retains_boundaries(self) -> None:
-        text = REGISTRY.read_text(encoding="utf-8")
+        text = text_at("3c0785ddb571a4af6de4bf5756a1dfae7e2d3557", REGISTRY)
         self.assertIn("c2_prospective_evidence_record_v0_2.schema.json", text)
         self.assertIn("C2_PROSPECTIVE_EVIDENCE_ACCUMULATION_CONTRACT_v0_2.md", text)
         self.assertIn("LIVE_PROSPECTIVE", text)

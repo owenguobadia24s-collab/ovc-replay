@@ -26,7 +26,7 @@ class SFCWP4FDITests(unittest.TestCase):
         f2=family_id(population_id="POP",representation_pack_id="PACK",comparison_spec_id="SPEC",method=self.method,member_ids=["A","C"])
         row=assignment("A",cid,"AMBIGUOUS",[f2,f1],reason_codes=["EXACT_TIE"])
         self.assertEqual(row["status"],"AMBIGUOUS")
-        self.assertEqual(row["family_ids"],[f1,f2])
+        self.assertEqual(row["family_ids"],sorted([f1,f2]))
 
     def test_f18_residual_noise_singleton_are_preserved(self):
         cid=catalog_id(population_id="POP",representation_pack_id="PACK",comparison_spec_id="SPEC",method=self.method)

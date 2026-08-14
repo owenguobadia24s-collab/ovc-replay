@@ -1,0 +1,101 @@
+{
+  "schema": "ovc-pyt-wp2-remediation-evidence/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "packet_id": "PYT-WP2",
+  "authority_effect": "NONE",
+  "baseline_main": "69368a5e3eac1c7c79455d6abeb4786cceb51d74",
+  "tested_candidate": "89552202792643ae3797e0920a35dacd78ddd9de",
+  "historical_starting_population": {
+    "source_head": "06f00ec71bb5a4cd21bcfacc19ecf1418119c220",
+    "total": 99,
+    "CLASS_1": 4,
+    "CLASS_2": 75,
+    "CLASS_3": 8,
+    "CLASS_4": 11,
+    "CLASS_5": 1,
+    "use": "DIAGNOSTIC_LINEAGE_ONLY_NOT_CURRENT_RESIDUAL_INVENTORY"
+  },
+  "remediation": {
+    "CLASS_1": {
+      "status": "RESOLVED",
+      "root_causes": [
+        "pytest collection and workflow inventory compatibility",
+        "full-history checkout for immutable historical Git evidence",
+        "malformed Python test literal",
+        "imported non-test helper and exception names collected or warned as tests"
+      ]
+    },
+    "CLASS_2": {
+      "status": "RESOLVED",
+      "root_causes": [
+        "historical work-packet and gate tests bound to mutable current state",
+        "historical directory cardinality bound to successor-bearing directories",
+        "historical validators invoked against later lawful programme state"
+      ],
+      "repair_rule": "Bind historical assertions to immutable artifacts or exact historical Git generations while separately preserving current lawful state."
+    },
+    "CLASS_3": {
+      "status": "RESOLVED",
+      "root_causes": [
+        "stale current fixtures and frozen schema field-shape drift",
+        "test expectations bound to obsolete output field names"
+      ],
+      "repair_rule": "Upgrade current fixtures or bind historical fixtures to their historical generation; no runtime schema weakening."
+    },
+    "CLASS_4": {
+      "status": "RESOLVED",
+      "root_causes": [
+        "non-identity prose, ordering, numeric presentation and guard-precedence brittleness"
+      ],
+      "repair_rule": "Normalize only where governing contracts prove representation is non-identity-bearing."
+    },
+    "CLASS_5": {
+      "status": "RESOLVED_BY_PROGRAMME_ADJUDICATION",
+      "unresolved_count": 0,
+      "discrepancy_id": "PYT-WP2-EACR-QA-LOGICAL-HASH-001",
+      "adjudication_main": "e271bf6f9fe1ae2bb7d4ecdcf72d94ff23e14f32",
+      "adjudication_record": "docs/releases/external-artifact-capacity-ownership-v0-1/EACR_QA_LOGICAL_HASH_INTEGRITY_ADJUDICATION.json",
+      "successor_artifact": "docs/releases/external-artifact-capacity-ownership-v0-1/EACR_WP4_WP5_CONFORMANCE_QA_IDENTITY_SUCCESSOR.json",
+      "corrected_logical_sha256": "827ff0afb6e9344ead9b57eda4c6a4db7b9e29710ac2b311127779541282a024",
+      "historical_qa_artifact_unchanged": true,
+      "historical_qa_git_blob_sha1": "fa4a86937ec989c441a166c3b61b055c2fd36133",
+      "authority_effect": "NONE"
+    }
+  },
+  "fresh_pytest_unified": {
+    "workflow_run_id": 31732742187,
+    "job_id": 94556895963,
+    "artifact_id": 9194009210,
+    "artifact_name": "pyt-wp2-step5-pytest-unified-results",
+    "artifact_zip_digest": "sha256:fdb801418b8e14652ac73806acc62fe0d24f5c166d11628aebea2dc72da215be",
+    "junit_sha256": "a60d1b02292e48a2b8c6997a983f2ff0daa2f0e2cf22280c39ea154e401eab3b",
+    "environment": {
+      "runner": "ubuntu-latest",
+      "python": "3.11.15",
+      "pytest": "9.1.1",
+      "dependencies": "python3 -m pip install -e .[test] -r requirements-console-vnext.txt"
+    },
+    "results": {
+      "junit_tests": 3925,
+      "ordinary_passed": 3237,
+      "subtests_passed": 687,
+      "failed": 0,
+      "errors": 0,
+      "collection_errors": 0,
+      "skipped": 1,
+      "skip_justification": "Windows-specific host metric probe skipped on the Linux runner"
+    },
+    "collection_warning_count": 0,
+    "status": "PASS"
+  },
+  "semantic_preservation": {
+    "status": "PASS",
+    "scientific_semantics_changed": false,
+    "governance_or_authority_changed": false,
+    "historical_records_rewritten": false,
+    "identity_rules_weakened": false,
+    "tests_silently_skipped_or_xfailed": false,
+    "standalone_unittest_removed": false
+  },
+  "rollback": "Revert the PYT-WP2 remediation commits while preserving the EACR append-only adjudication and every historical court-record artifact."
+}

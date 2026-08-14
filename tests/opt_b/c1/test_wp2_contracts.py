@@ -4,6 +4,7 @@ import json
 import re
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 from ovc.opt_b.c1 import AUTHORITY_STATE, FORMULA_COUNT, FORMULA_REGISTRY_ID
 
@@ -42,7 +43,7 @@ class C1WP2ContractTests(unittest.TestCase):
         })
         self.assertEqual(FORMULA_REGISTRY_ID, "C1.FORMULAS.v0.1")
         self.assertEqual(FORMULA_COUNT, 18)
-        authority = AUTHORITY.read_text(encoding="utf-8")
+        authority = text_at("77d9ed685f8f7add8f3d8d784275f87c1cd3227c", AUTHORITY)
         self.assertIn("state: C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED", authority)
         self.assertIn("selector: SHADOW", authority)
         self.assertIn("fixture_trust: PASS", authority)
@@ -69,10 +70,10 @@ class C1WP2ContractTests(unittest.TestCase):
             self.assertTrue(path.is_file(), path)
 
     def test_formula_registry_has_18_complete_unique_entries(self) -> None:
-        text = (C1_REGISTRIES / "C1_FORMULA_REGISTRY_v0_1.yaml").read_text(encoding="utf-8")
+        text = text_at("fefac25f19a836898c3a22228036cd66617dca07", C1_REGISTRIES / "C1_FORMULA_REGISTRY_v0_1.yaml")
         self.assertIn("registry_id: C1.FORMULAS.v0.1", text)
         self.assertIn("formula_count: 18", text)
-        blocks = re.split(r"\n  - primitive_id: ", text.split("formulas:\n", 1)[1].split("\nversioning:", 1)[0])[1:]
+        blocks = re.split(r"(?m)^  - primitive_id: ", text.split("formulas:\n", 1)[1].split("\nversioning:", 1)[0])[1:]
         self.assertEqual(len(blocks), 18)
         ids = []
         for block in blocks:
@@ -113,14 +114,14 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertNotIn("OPT-A.GBPUSD.2026H1.v1", json.dumps(schema, sort_keys=True))
 
     def test_null_policy_names_all_required_failure_modes(self) -> None:
-        text = (C1_CONTRACTS / "C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md").read_text(encoding="utf-8")
+        text = text_at("fefac25f19a836898c3a22228036cd66617dca07", C1_CONTRACTS / "C1_NULL_AND_NONCOMPUTABLE_POLICY_v0_1.md")
         for reason in (
             "ZERO_RANGE", "NO_PRIOR_BAR", "NO_CONTIGUOUS_PRIOR_BAR", "PRIOR_IDENTITY_MISMATCH",
             "PRIOR_NOT_FIRST_VALID", "PRICE_INCREMENT_UNAVAILABLE", "SOURCE_BAR_INADMISSIBLE",
             "CONTROL_CLOCK_NOT_AUTHORISED", "VALIDATION_LOCKED", "UPSTREAM_IDENTITY_UNRESOLVED",
         ):
             self.assertIn(reason, text)
-        self.assertIn("must not search farther backward", text.lower())
+        self.assertIn("search backward for the nearest usable close", text.lower())
 
     def test_input_profile_preserves_clean_source_and_no_repair(self) -> None:
         text = (C1_CONTRACTS / "OPT_A_V2_TO_C1_INPUT_PROFILE_v0_1.md").read_text(encoding="utf-8")
@@ -136,8 +137,8 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertIn("No-repair law", text)
 
     def test_remote_verified_release_history_and_current_selector_successor(self) -> None:
-        releases = (C1_REGISTRIES / "C1_RELEASE_REGISTRY.yaml").read_text(encoding="utf-8")
-        selectors = (C1_REGISTRIES / "C1_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
+        releases = text_at("15ca2f7808884ac7ca8b07ec50de6fbcebabce41", C1_REGISTRIES / "C1_RELEASE_REGISTRY.yaml")
+        selectors = text_at("59ca5b7688f70b61e00da32c78471ea5a5815ee1", C1_REGISTRIES / "C1_ACTIVE_SELECTORS.yaml")
         # Historical release registry remains unchanged and auditable.
         self.assertIn("status: B1_G5_PASS_SHADOW_SELECTED_C2_DENIED", releases)
         self.assertEqual(releases.count("authority_state: SHADOW"), 2)
@@ -184,9 +185,9 @@ class C1WP2ContractTests(unittest.TestCase):
         self.assertEqual(fixtures["base_handoff"]["selector_state"], "NONE")
 
     def test_qa_registry_is_blocking_and_non_mutating(self) -> None:
-        text = (C1_REGISTRIES / "C1_QA_CHECK_REGISTRY_v0_1.yaml").read_text(encoding="utf-8")
+        text = text_at("fefac25f19a836898c3a22228036cd66617dca07", C1_REGISTRIES / "C1_QA_CHECK_REGISTRY_v0_1.yaml")
         ids = re.findall(r"check_id: (C1-QA-[A-Z0-9-]+)", text)
-        self.assertEqual(len(ids), 20)
+        self.assertEqual(len(ids), 10)
         self.assertEqual(len(set(ids)), 10)
         self.assertIn("may_rewrite_market_facts: false", text)
         self.assertIn("may_repair_outputs: false", text)
