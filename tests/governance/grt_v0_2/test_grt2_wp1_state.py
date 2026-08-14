@@ -10,7 +10,7 @@ WP1 = ROOT / "docs/programmes/grt-v0-2/wp1"
 STATE_ROOT = ROOT / "registries/implementation/grt_v0_2"
 REGISTRIES = ROOT / "registries/governance/grt_v0_2"
 WP1_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_3.json"
-WP2_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_5.json"
+CURRENT_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_6.json"
 
 
 class GRT2WP1StateTests(unittest.TestCase):
@@ -30,19 +30,18 @@ class GRT2WP1StateTests(unittest.TestCase):
     def test_historical_wp1_state_is_preserved_while_current_pointer_advances(self) -> None:
         pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         state = json.loads(WP1_STATE.read_text(encoding="utf-8"))
-        current = json.loads(WP2_STATE.read_text(encoding="utf-8"))
-        constitution = json.loads(
-            (REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(
-                encoding="utf-8"
-            )
-        )
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_5.json")
+        current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
+        constitution = json.loads((REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(encoding="utf-8"))
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_6.json")
         self.assertEqual(pointer["status"], "RUNNING")
-        self.assertEqual(pointer["packet_id"], "GRT2-WP2")
-        self.assertEqual(pointer["next_packet"], "GRT2-WP3A")
+        self.assertEqual(pointer["packet_id"], "GRT2-WP3E")
+        self.assertEqual(pointer["next_packet"], "GRT2-G2-READINESS-EVIDENCE")
         self.assertEqual(current["status"], "COMPLETED")
-        self.assertEqual(current["packet_id"], "GRT2-WP2")
-        self.assertEqual(current["next_packet"], "GRT2-WP3A")
+        self.assertEqual(current["packet_id"], "GRT2-WP3E")
+        self.assertEqual(current["next_packet"], "GRT2-G2-READINESS-EVIDENCE")
+        self.assertEqual(current["g2_status"], "NOT_EVALUATED")
+        self.assertEqual(current["active_enforcement"], "NONE")
+        self.assertIsNone(current["debt_floor_generation"])
         self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["packet_id"], "GRT2-WP1")
         self.assertEqual(state["gate_id"], "GRT2-G1")
@@ -55,12 +54,16 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(state["qa_packet"], "docs/programmes/grt-v0-2/wp1/GRT2_WP1_QA_PACKET.json")
         self.assertEqual(state["decision_record"], "docs/programmes/grt-v0-2/wp1/GRT2_G1_DECISION.json")
 
-    def test_wp1_closeout_does_not_claim_g2_g2_5_or_g3_completion(self) -> None:
+    def test_wp1_historical_closeout_and_current_state_do_not_claim_reserved_completion(self) -> None:
         state = json.loads(WP1_STATE.read_text(encoding="utf-8"))
+        current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
         self.assertEqual(state["status"], "APPROVED")
         self.assertNotIn("GRT2-G2 PASS", state["prerequisites"])
         self.assertEqual(state["active_enforcement"], "NONE")
         self.assertIn("GRT2-G2.5 and GRT2-G3 remain reserved.", state["warnings"])
+        self.assertEqual(current["g2_status"], "NOT_EVALUATED")
+        self.assertEqual(current["g2_5_status"], "PENDING_UNCONSUMED_UNTIL_G2_COMPLETE")
+        self.assertEqual(current["active_enforcement"], "NONE")
 
 
 if __name__ == "__main__":
