@@ -236,7 +236,12 @@ jobs:
             const findPassedPredecessor = async mainSha => {
               const pulls = await github.paginate(github.rest.pulls.list, {owner, repo, state:'open', base:pr.base.ref, per_page:100});
               for (const candidate of pulls) {
-                if (candidate.number === pr.number) continue;
+                if (candidate.number >= pr.number) {
+                  if (candidate.number > pr.number) {
+                    core.info(`OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED: PR #${candidate.number} was created after current PR #${pr.number}; it cannot own the current candidate's predecessor lease.`);
+                  }
+                  continue;
+                }
                 const checks = await github.rest.checks.listForRef({owner, repo, ref:candidate.head.sha, per_page:100, filter:'latest'});
                 const leaseRun = latestNamedRun(checks.data.check_runs);
                 if (!(leaseRun?.status === 'completed' && leaseRun.conclusion === 'success')) continue;
