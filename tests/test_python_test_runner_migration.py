@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "tests.yml"
+TIERED_WORKFLOW = ROOT / ".github" / "workflows" / "ovc-tiered-tests.yml"
 PYPROJECT = ROOT / "pyproject.toml"
 STATE = ROOT / "registries" / "implementation" / "python_test_runner" / "PYT_STATE_v0_1_DUAL_RUN_PARITY.json"
 POLICY = ROOT / "docs" / "testing" / "PYTHON_TEST_RUNNER_POLICY_v0_1.md"
@@ -14,10 +15,13 @@ POLICY = ROOT / "docs" / "testing" / "PYTHON_TEST_RUNNER_POLICY_v0_1.md"
 class PythonTestRunnerMigrationContractTests(unittest.TestCase):
     def test_legacy_unittest_command_is_preserved_exactly(self) -> None:
         workflow = WORKFLOW.read_text(encoding="utf-8")
+        tiered = TIERED_WORKFLOW.read_text(encoding="utf-8")
         full_suite = "python3 -m unittest discover -s tests -v"
         self.assertEqual(workflow.count(full_suite), 1)
-        self.assertIn("Complete repository suite under shared main lease", workflow)
-        self.assertIn("tools/ci/ovc_run_with_main_lease.py", workflow)
+        self.assertIn("Complete repository suite as BASE_INDEPENDENT assurance", workflow)
+        self.assertNotIn("tools/ci/ovc_run_with_main_lease.py", workflow)
+        self.assertIn("tools/ci/ovc_run_with_main_lease.py", tiered)
+        self.assertIn("Run mandatory SIQ/PDC exact-final assurance inside lease", tiered)
         self.assertIn("name: tests", workflow)
 
     def test_pytest_is_pinned_and_parity_jobs_are_explicit(self) -> None:
