@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/dmrp_candidate_core_v0_1.schema.json",
+  "title":"OVC DMRP shared candidate/change/exposure core v0.1",
+  "authority_effect":"NONE",
+  "$defs":{
+    "MembershipState":{"enum":["MATCH","NON_MATCH","AMBIGUOUS","NOT_EVALUABLE","NOT_COMPARABLE","CENSORED","QUARANTINED","OUT_OF_SCOPE","PROCESS_INVALID"]},
+    "ResearchCandidateSeries":{"type":"object","required":["series_id","origin_mode","title","authority_effect"],"properties":{"series_id":{"type":"string"},"origin_mode":{"enum":["PATH_1_EMPIRICAL","PATH_2_THEORY_FORMALISATION"]},"title":{"type":"string"},"authority_effect":{"const":"NONE"}},"additionalProperties":false},
+    "ResearchCandidateGeneration":{"type":"object","required":["series_id","generation","definition","population_binding","dependency_manifest","first_valid_rule","frozen","authority_effect"],"properties":{"series_id":{"type":"string"},"generation":{"type":"integer","minimum":1},"definition":{"type":"object"},"population_binding":{"type":"object"},"dependency_manifest":{"type":"object"},"first_valid_rule":{"type":"object"},"frozen":{"const":true},"authority_effect":{"const":"NONE"}},"additionalProperties":false},
+    "CandidateOccurrence":{"type":"object","required":["candidate_generation_id","population_unit_id"],"properties":{"candidate_generation_id":{"type":"string"},"population_unit_id":{"type":"string"}},"additionalProperties":false},
+    "MembershipEntry":{"type":"object","required":["population_unit_id","state"],"properties":{"population_unit_id":{"type":"string"},"state":{"$ref":"#/$defs/MembershipState"},"first_valid_time":{"type":["string","null"]},"reason_codes":{"type":"array","items":{"type":"string"}}},"additionalProperties":false},
+    "CandidateChangeAssessment":{"type":"object","required":["changed_surfaces","classification","rationale","successor_generation_required","authority_effect"],"properties":{"changed_surfaces":{"type":"array","items":{"type":"string"}},"classification":{"enum":["SEMANTIC_CHANGE","EXECUTION_CORRECTION","BLOCK_UNRESOLVED"]},"rationale":{"type":"string"},"successor_generation_required":{"type":"boolean"},"authority_effect":{"const":"NONE"}},"additionalProperties":false},
+    "ResearchInfluenceEdge":{"type":"object","required":["source_mode","target_mode","influence_kind","source_ref","target_ref","observed_at","authority_effect"],"properties":{"source_mode":{"type":"string"},"target_mode":{"type":"string"},"influence_kind":{"enum":["ORIGIN","SEARCH","DEFINITION","EXAMPLE","VOCABULARY","PARAMETER"]},"source_ref":{"type":"string"},"target_ref":{"type":"string"},"observed_at":{"type":"string"},"authority_effect":{"const":"NONE"}},"additionalProperties":false}
+  }
+}
