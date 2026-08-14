@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-development-latency-diagnostic-observability-policy/v2",
+  "policy_id": "OVC.DEVOBS.LATENCY.20260813.v2",
+  "supersedes_policy_id": "OVC.DEVOBS.LATENCY.20260813.v1",
+  "status": "TEMPORARY_ACTIVE_CALIBRATION",
+  "effective": true,
+  "purpose": "Add task-difficulty and assistant-configuration context to development latency receipts so Medium/High/Extra-High/Pro comparisons can be stratified without changing execution behavior or authority.",
+  "receipt_class": "TEMPORARY_DIAGNOSTIC_OBSERVABILITY",
+  "receipt_schema": "ovc-development-latency-diagnostic-companion/v2",
+  "authority_effect": "NONE",
+  "observability_only": true,
+  "temporary": true,
+  "governance_expansion": false,
+  "new_operator_gate": false,
+  "merge_authority": "NONE",
+  "parallel_merge": false,
+  "legacy_v1_policy": "PRESERVE_AS_VALID_HISTORICAL_DIAGNOSTIC_EVIDENCE_NO_REWRITE",
+  "comparison_context_only": true,
+  "required_task_profile_fields": [
+    "implementation_difficulty",
+    "difficulty_label",
+    "work_phase",
+    "specification_maturity"
+  ],
+  "difficulty_taxonomy": {
+    "D1": "MECHANICAL",
+    "D2": "BOUNDED_IMPLEMENTATION",
+    "D3": "CROSS_COMPONENT",
+    "D4": "ARCHITECTURAL",
+    "D5": "NOVEL_BLOCKING"
+  },
+  "work_phases": [
+    "DESIGN",
+    "IMPLEMENTATION",
+    "TEST_QA",
+    "RECONCILIATION",
+    "INTEGRATION",
+    "OTHER"
+  ],
+  "specification_maturity": [
+    "UNSPECIFIED",
+    "DESIGN_ONLY",
+    "IMPLEMENTATION_PLAN",
+    "RATIFIED_IMPLEMENTATION_PLAN",
+    "WORK_PACKET_EXACT"
+  ],
+  "assistant_configuration": {
+    "fields": [
+      "assistant_model",
+      "reasoning_profile",
+      "subscription_plan",
+      "evidence_class"
+    ],
+    "reasoning_profiles": ["MEDIUM", "HIGH", "EXTRA_HIGH", "PRO", "UNKNOWN"],
+    "evidence_classes": ["DECLARED", "PLATFORM_REPORTED", "UNAVAILABLE"],
+    "rule": "KNOWN_CONFIGURATION_MUST_BE_DECLARED_OR_PLATFORM_REPORTED_NEVER_INFERRED_FROM_LATENCY"
+  },
+  "optional_scope_metrics": [
+    "changed_files_count",
+    "components_touched_count",
+    "tests_run_count",
+    "pr_count",
+    "workflow_run_count",
+    "remediation_attempt_count"
+  ],
+  "comparison_doctrine": {
+    "primary_strata": [
+      "implementation_difficulty",
+      "work_phase",
+      "specification_maturity"
+    ],
+    "rule": "COMPARE_ASSISTANT_CONFIGURATIONS_WITHIN_MATCHED_PRIMARY_STRATA_AND_REPORT_MIXED_STRATA_SEPARATELY",
+    "difficulty_assignment_is_context_not_authority": true,
+    "assistant_configuration_is_context_not_model_reasoning_telemetry": true,
+    "model_reasoning_duration_policy_unchanged": "UNAVAILABLE_UNLESS_EXPLICIT_MEASURED_PLATFORM_TELEMETRY"
+  },
+  "identity_invariants": {
+    "source_execution_record_identity_unchanged": true,
+    "trace_summary_identity_unchanged": true,
+    "v2_receipt_has_own_logical_identity": true
+  },
+  "calibration": {
+    "target_receipt_count": 20,
+    "review_after_target": true,
+    "recommended_analysis": "MATCHED_DIFFICULTY_AND_WORK_PHASE_LATENCY_COMPARISON"
+  }
+}
