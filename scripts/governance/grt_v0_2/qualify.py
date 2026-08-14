@@ -145,7 +145,7 @@ def mutation_probes() -> dict[str, Any]:
     def expanded_debt_fails() -> bool:
         result = reconcile_finding(
             predecessor_state="GRANDFATHERED",
-            candidate_state="GRANDFATHERED",
+            candidate_state="ACTIONABLE",
             predecessor_extent={"violations": 1},
             candidate_extent={"violations": 2},
         )
