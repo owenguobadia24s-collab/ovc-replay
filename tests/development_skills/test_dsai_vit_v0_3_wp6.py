@@ -11,6 +11,7 @@ from ovc.development.skills.vit_qualification import (
     run_q0_q1_reference_qualification,
     synthetic_authority_laundering_fixture,
     synthetic_false_commutativity_fixture,
+    synthetic_path_disjoint_semantic_conflict_fixture,
     synthetic_split_brain_fixture,
 )
 
@@ -42,6 +43,7 @@ class DsaiVitV03Wp6Tests(unittest.TestCase):
 
     def test_adversarial_authority_conflict_and_split_brain_are_denied(self) -> None:
         self.assertNotEqual(synthetic_false_commutativity_fixture(),"COMMUTATIVE")
+        self.assertEqual(synthetic_path_disjoint_semantic_conflict_fixture(),"SERIAL_REQUIRED")
         self.assertEqual(synthetic_authority_laundering_fixture(),"WAITING_OPERATOR_AUTHORITY")
         self.assertEqual(synthetic_split_brain_fixture(),("LEASE_VALID","LEASE_UNAVAILABLE"))
 
