@@ -28,12 +28,11 @@ class DMRPIWP4Tests(unittest.TestCase):
         result=exact_recurring_pattern_lattice(units,min_support=2)
         cls=[c for c in result.classes if c.occurrence_unit_ids==('u1','u2','u3')]
         self.assertTrue(cls); self.assertEqual(cls[0].closed_pattern,('A=1','B=1'))
-        self.assertIn(('B=1',),cls[0].minimal_generators) if False else None
-    def test_all_minimal_generators_preserved(self):
-        units=[PopulationUnit('u1','ADMITTED',frozenset({'A','B'}),{}),PopulationUnit('u2','ADMITTED',frozenset({'A','B'}),{}),PopulationUnit('u3','ADMITTED',frozenset({'A'}),{}),PopulationUnit('u4','ADMITTED',frozenset({'B'}),{})]
+    def test_all_minimal_generators_preserved_when_multiple_generators_have_same_closure(self):
+        units=[PopulationUnit('u1','ADMITTED',frozenset({'A','B'}),{}),PopulationUnit('u2','ADMITTED',frozenset({'A','B'}),{})]
         result=exact_recurring_pattern_lattice(units,min_support=2)
         target=[c for c in result.classes if c.occurrence_unit_ids==('u1','u2')][0]
-        self.assertEqual(target.closed_pattern,('A','B')); self.assertEqual(target.minimal_generators,(('A','B'),))
+        self.assertEqual(target.closed_pattern,('A','B')); self.assertEqual(target.minimal_generators,(('A',),('B',)))
     def test_denominator_accounting_and_nonadmitted_search_exclusion(self):
         PopulationReconciliation(4,{'ADMITTED':2,'NOT_EVALUABLE':1,'CENSORED':1}).validate()
         with self.assertRaises(EC1Path1InvariantError): PopulationReconciliation(4,{'ADMITTED':2}).validate()
