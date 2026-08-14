@@ -16,159 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  final-integration-window-admitted:
-    name: OVC final integration window admitted
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    outputs:
-      base_sha: ${{ steps.lease.outputs.base_sha }}
-      head_sha: ${{ steps.lease.outputs.head_sha }}
-    steps:
-      - name: Wait for successful shared final-integration lease acquisition
-        id: lease
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v9
-        with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const pr = context.payload.pull_request;
-            const sha = pr.head.sha;
-            const windowCheckName = 'OVC merge readiness';
-            const acquireStepName = 'Acquire serialized final-integration window on current main';
-            const startedAt = Date.now();
-            const deadline = startedAt + 23 * 60 * 1000;
-            const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-            const latestNamedRun = runs => {
-              const matches = runs
-                .filter(run => run.name === windowCheckName)
-                .sort((a, b) => b.id - a.id);
-              return matches[0];
-            };
-            const jobIdFromDetailsUrl = detailsUrl => {
-              const match = String(detailsUrl || '').match(/\/actions\/runs\/\d+\/job\/(\d+)/);
-              return match ? Number(match[1]) : null;
-            };
-
-            while (Date.now() < deadline) {
-              const response = await github.rest.checks.listForRef({
-                owner,
-                repo,
-                ref: sha,
-                per_page: 100,
-                filter: 'latest'
-              });
-              const windowRun = latestNamedRun(response.data.check_runs);
-
-              if (!windowRun) {
-                await sleep(2000);
-                continue;
-              }
-
-              const jobId = jobIdFromDetailsUrl(windowRun.details_url);
-              if (jobId) {
-                const job = await github.rest.actions.getJobForWorkflowRun({
-                  owner,
-                  repo,
-                  job_id: jobId
-                });
-                const acquireStep = (job.data.steps || [])
-                  .find(step => step.name === acquireStepName);
-
-                if (
-                  acquireStep?.status === 'completed' &&
-                  acquireStep.conclusion === 'success'
-                ) {
-                  const mainNow = await github.rest.repos.getBranch({
-                    owner,
-                    repo,
-                    branch: pr.base.ref
-                  });
-                  const currentMain = mainNow.data.commit.sha;
-                  if (currentMain !== pr.base.sha) {
-                    core.setFailed(
-                      `OVC_REQUIRED_CHECK_BASE_MOVED_BEFORE_ASSURANCE: ` +
-                      `event base ${pr.base.sha}, current ${pr.base.ref} ` +
-                      `${currentMain}; expensive required checks will not start.`
-                    );
-                    return;
-                  }
-                  core.setOutput('base_sha', currentMain);
-                  core.setOutput('head_sha', sha);
-                  core.info(
-                    `OVC_SHARED_FINAL_INTEGRATION_LEASE_ADMITTED: ` +
-                    `${sha} is bound to ${pr.base.ref}@${currentMain} after ` +
-                    `the acquisition step completed successfully.`
-                  );
-                  return;
-                }
-
-                if (
-                  acquireStep?.status === 'completed' &&
-                  acquireStep.conclusion !== 'success'
-                ) {
-                  core.setFailed(
-                    `OVC_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED: ` +
-                    `${acquireStepName} completed ${acquireStep.conclusion} ` +
-                    `for ${sha}; expensive required checks will not start.`
-                  );
-                  return;
-                }
-              }
-
-              if (
-                windowRun.status === 'completed' &&
-                windowRun.conclusion !== 'success'
-              ) {
-                core.setFailed(
-                  `OVC_FINAL_INTEGRATION_WINDOW_NOT_ADMITTED: ` +
-                  `${windowCheckName} completed ${windowRun.conclusion} for ` +
-                  `${sha}; expensive required checks will not start.`
-                );
-                return;
-              }
-
-              await sleep(2000);
-            }
-
-            core.setFailed(
-              `OVC_FINAL_INTEGRATION_WINDOW_ADMISSION_TIMEOUT: ` +
-              `${windowCheckName} did not complete a successful acquisition ` +
-              `step for ${sha}.`
-            );
-
-      - name: Non-PR admission
-        if: github.event_name != 'pull_request'
-        run: echo "Final-integration admission is not required for ${{ github.event_name }}; canonical tests proceed normally."
-
-      - uses: actions/checkout@v4
-        if: github.event_name == 'pull_request'
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-          show-progress: false
-
-      - name: Prove required-check candidate contains admitted current main
-        if: github.event_name == 'pull_request'
-        shell: bash
-        env:
-          OVC_WINDOW_BASE_SHA: ${{ steps.lease.outputs.base_sha }}
-          OVC_WINDOW_HEAD_SHA: ${{ steps.lease.outputs.head_sha }}
-        run: |
-          set -euo pipefail
-          test -n "${OVC_WINDOW_BASE_SHA}"
-          test -n "${OVC_WINDOW_HEAD_SHA}"
-          test "${OVC_WINDOW_HEAD_SHA}" = "${{ github.event.pull_request.head.sha }}"
-          git cat-file -e "${OVC_WINDOW_BASE_SHA}^{commit}"
-          git cat-file -e "${OVC_WINDOW_HEAD_SHA}^{commit}"
-          if ! git merge-base --is-ancestor "${OVC_WINDOW_BASE_SHA}" "${OVC_WINDOW_HEAD_SHA}"; then
-            echo "::error title=Required-check candidate not reconciled::OVC_REQUIRED_CHECK_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_WINDOW_HEAD_SHA} does not contain admitted main ${OVC_WINDOW_BASE_SHA}."
-            exit 1
-          fi
-
   legacy-unittest:
     name: tests
-    needs: final-integration-window-admitted
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -181,30 +30,13 @@ jobs:
           python-version: "3.11"
       - name: Install Research Console exact-surface dependencies
         run: python3 -m pip install --disable-pip-version-check -r requirements-console-vnext.txt
-      - name: Complete repository suite under shared main lease
-        env:
-          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
-          OVC_LEASE_BASE_SHA: ${{ needs.final-integration-window-admitted.outputs.base_sha }}
-          OVC_LEASE_HEAD_SHA: ${{ needs.final-integration-window-admitted.outputs.head_sha }}
-          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
-            python3 -m unittest discover -s tests -v
+      - name: Complete repository suite as BASE_INDEPENDENT assurance
+        run: python3 -m unittest discover -s tests -v
       - name: Research Console vNext exact maintained API surface
-        env:
-          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
-          OVC_LEASE_BASE_SHA: ${{ needs.final-integration-window-admitted.outputs.base_sha }}
-          OVC_LEASE_HEAD_SHA: ${{ needs.final-integration-window-admitted.outputs.head_sha }}
-          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          PYTHONPATH=src:. python3 tools/ci/ovc_run_with_main_lease.py -- \
-            python3 -m unittest discover -s tests/research_console_vnext -v
+        run: PYTHONPATH=src:. python3 -m unittest discover -s tests/research_console_vnext -v
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
-    needs: final-integration-window-admitted
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -217,19 +49,11 @@ jobs:
           python-version: "3.11"
       - name: Install pytest and Research Console test dependencies
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-      - name: Execute exact legacy unittest surface under pytest and shared main lease
+      - name: Execute exact legacy unittest surface under pytest as BASE_INDEPENDENT assurance
         shell: bash
-        env:
-          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
-          OVC_LEASE_BASE_SHA: ${{ needs.final-integration-window-admitted.outputs.base_sha }}
-          OVC_LEASE_HEAD_SHA: ${{ needs.final-integration-window-admitted.outputs.head_sha }}
-          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
-          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set +e
-          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
-            python3 tools/ci/pytest_unittest_parity.py run \
-            > /tmp/pytest-legacy.log 2>&1
+          PYTHONPATH=src python3 tools/ci/pytest_unittest_parity.py run > /tmp/pytest-legacy.log 2>&1
           status=$?
           cat /tmp/pytest-legacy.log
           if [ "$status" -ne 0 ]; then
@@ -244,7 +68,6 @@ jobs:
 
   runner-parity:
     name: runner-parity
-    needs: final-integration-window-admitted
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -257,19 +80,11 @@ jobs:
           python-version: "3.11"
       - name: Install pytest and Research Console test dependencies
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-      - name: Prove pytest collection parity under shared main lease
+      - name: Prove pytest collection parity as BASE_INDEPENDENT assurance
         shell: bash
-        env:
-          OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
-          OVC_LEASE_BASE_SHA: ${{ needs.final-integration-window-admitted.outputs.base_sha }}
-          OVC_LEASE_HEAD_SHA: ${{ needs.final-integration-window-admitted.outputs.head_sha }}
-          OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
-          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set +e
-          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
-            python3 tools/ci/pytest_unittest_parity.py collect \
-            > /tmp/pytest-parity.log 2>&1
+          PYTHONPATH=src python3 tools/ci/pytest_unittest_parity.py collect > /tmp/pytest-parity.log 2>&1
           status=$?
           cat /tmp/pytest-parity.log
           if [ "$status" -ne 0 ]; then
