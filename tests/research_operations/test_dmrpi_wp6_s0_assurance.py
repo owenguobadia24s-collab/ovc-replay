@@ -15,7 +15,7 @@ from ovc.research_operations.dmrp_s0 import (
     revalidate_authority, shard_semantic_hash, s0_feasibility_assessment,
 )
 from ovc.research_operations.ec1_path1 import DependenceEdge, EC1CapacityError, EC1Path1InvariantError, EvidenceDependenceGraph, FieldDescriptor, EC1IdentityFieldManifest, PopulationReconciliation, PopulationUnit, canonical_predicates, exact_recurring_pattern_lattice, predicate_roundtrip, require_p1c_incidence_denominator
-from ovc.research_operations.dmrp_candidate import CandidateOccurrence, ResearchCandidateGeneration, assess_candidate_change
+from ovc.research_operations.dmrp_candidate import assess_candidate_change
 from ovc.research_operations.dmrp_execution import F0BlindedProjection
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -36,9 +36,9 @@ class S0AVTests(unittest.TestCase):
         units=[PopulationUnit('u1','ADMITTED',frozenset({'A','B','X'}),{}),PopulationUnit('u2','ADMITTED',frozenset({'A','B','Y'}),{}),PopulationUnit('u3','ADMITTED',frozenset({'A','B','Z'}),{})]
         r=exact_recurring_pattern_lattice(units); self.assertTrue(any(c.closed_pattern==('A','B') for c in r.classes))
     def test_av05_multiple_minimal_generator_visibility(self):
-        units=[PopulationUnit('1','ADMITTED',frozenset({'A','B'}),{}),PopulationUnit('2','ADMITTED',frozenset({'A','B'}),{}),PopulationUnit('3','ADMITTED',frozenset({'A'}),{}),PopulationUnit('4','ADMITTED',frozenset({'B'}),{})]
+        units=[PopulationUnit('1','ADMITTED',frozenset({'A','B'}),{}),PopulationUnit('2','ADMITTED',frozenset({'A','B'}),{})]
         r=exact_recurring_pattern_lattice(units); c=[x for x in r.classes if x.occurrence_unit_ids==('1','2')][0]
-        self.assertEqual(c.minimal_generators,(('A','B'),))
+        self.assertEqual(c.closed_pattern,('A','B')); self.assertEqual(c.minimal_generators,(('A',),('B',)))
     def test_av06_hidden_identity_field_requires_new_generation(self): self.assertTrue(assess_candidate_change({'definition'}).successor_generation_required)
     def test_av07_no_normalization_bucketing_weighting(self):
         assert_no_illegal_representation({'normalization':'NONE','distance':'NONE','learned_similarity':'NONE'})
@@ -71,7 +71,7 @@ class S0AVTests(unittest.TestCase):
     def test_av19_source_unavailable_no_fallback(self):
         with self.assertRaises(S0AuthorityBlock): assert_source_policy(exact_source_available=False,fallback_requested=True)
     def test_av20_no_hidden_topn(self):
-        assert_no_hidden_top_n({'top_n':'NONE'}); 
+        assert_no_hidden_top_n({'top_n':'NONE'})
         with self.assertRaises(S0ProtocolBlock): assert_no_hidden_top_n({'top_n':10})
     def test_av21_capacity_truncation(self):
         with self.assertRaises(EC1CapacityError): capacity_complete(enumerated=9,expected_complete=10)
