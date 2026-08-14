@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-python-test-runner-closeout-merge-receipt/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "packet_id": "PYT-WP2-CUTOVER-CLOSEOUT",
+  "gate_id": "PYT-G2-CUTOVER-CLOSEOUT",
+  "pull_request": 774,
+  "baseline_main": "e6aa97e642aa2a2516f7fe464922d3f6d48f5fb3",
+  "admitted_head": "b17f7b7b5ba94bef313464c8a7b9b2d30d495234",
+  "squash_merge_commit": "c31674f0029257cfa31c30a0513bbbe13b45f2b8",
+  "merge_method": "squash",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION_UNDER_OPERATOR_APPROVED_CONTINUOUS_DEVELOPMENT",
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "post_materialisation_exact_head_assurance": {
+    "tests": {"run": 31759467129, "job": 94642578277, "conclusion": "success"},
+    "pytest_unittest_parity": {"run": 31759467129, "job": 94642578268, "conclusion": "success"},
+    "runner_parity": {"run": 31759467129, "job": 94642578270, "conclusion": "success"},
+    "final_head_profile": {"run": 31759467052, "job": 94642514143, "conclusion": "success"},
+    "stable_main_readiness": {"run": 31759467052, "job": 94642514289, "conclusion": "success"}
+  },
+  "qa_packet": "docs/releases/python-test-runner-migration-v0-1/closeout/PYT_CLOSEOUT_QA_PACKET.json",
+  "decision_record": "docs/releases/python-test-runner-migration-v0-1/closeout/PYT_CLOSEOUT_DECISION.json",
+  "terminal_invariants": {
+    "canonical_ci_runner": "pytest",
+    "pytest_version": "9.1.1",
+    "standalone_unittest_discover_execution": "RETIRED",
+    "unittest_test_sources": "PRESERVED",
+    "exact_legacy_surface_under_pytest": "PRESERVED",
+    "pytest_unittest_parity": "PRESERVED",
+    "runner_parity": "PRESERVED"
+  },
+  "blockers": [],
+  "warnings": [],
+  "reserved_authority_actions": [],
+  "next_packet": null,
+  "next_gate": null,
+  "rollback": "Forward-restore the PYT-G1 dual-run workflow if necessary while preserving every test source, append-only PYT evidence and Git history."
+}

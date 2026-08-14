@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-python-test-runner-programme-completion/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "status": "COMPLETED",
+  "terminal_packet": "PYT-WP2-CUTOVER-CLOSEOUT",
+  "terminal_gate": "PYT-G2-CUTOVER-CLOSEOUT",
+  "terminal_closeout_merge": "c31674f0029257cfa31c30a0513bbbe13b45f2b8",
+  "completed_sequence": [
+    {"gate": "PYT-G1", "status": "PASS"},
+    {"gate": "PYT-G2", "status": "PASS", "merge_commit": "71b5f5502e0b3b66912ded453593375f2d931859"},
+    {"gate": "PYT-G2-CUTOVER", "status": "PASS", "merge_commit": "e6aa97e642aa2a2516f7fe464922d3f6d48f5fb3"},
+    {"gate": "PYT-G2-CUTOVER-CLOSEOUT", "status": "PASS", "merge_commit": "c31674f0029257cfa31c30a0513bbbe13b45f2b8"}
+  ],
+  "final_assurance": {
+    "tests": "PASS:31759467129/94642578277",
+    "pytest_unittest_parity": "PASS:31759467129/94642578268",
+    "runner_parity": "PASS:31759467129/94642578270",
+    "final_head_profile": "PASS:31759467052/94642514143",
+    "stable_main_readiness": "PASS:31759467052/94642514289"
+  },
+  "canonical_ci_runner": "pytest",
+  "pytest_version": "9.1.1",
+  "standalone_unittest_discover_execution": "RETIRED",
+  "unittest_test_sources": "PRESERVED",
+  "legacy_surface_pytest_execution": "PRESERVED",
+  "test_weakening": "NONE",
+  "blockers": [],
+  "reserved_authority_actions": [],
+  "authority_effect": "NONE",
+  "next_packet": null,
+  "next_gate": null,
+  "next_action": "NONE_PROGRAMME_COMPLETE",
+  "closeout_merge_receipt": "docs/releases/python-test-runner-migration-v0-1/closeout/PYT_CLOSEOUT_MERGE_RECEIPT.json",
+  "rollback": "Forward-restore the PYT-G1 dual-run workflow if necessary while preserving every test source, append-only evidence and Git history."
+}
