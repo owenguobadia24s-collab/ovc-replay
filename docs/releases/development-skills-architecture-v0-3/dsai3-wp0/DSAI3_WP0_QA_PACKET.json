@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-dsai3-wp0-qa-packet/v1",
+  "programme_id": "OVC-DSAI-v0.3",
+  "plan_id": "OVC-DSAI-CONTINUOUS-EXECUTION-LANDING-TRAIN-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "DSAI3-WP0",
+  "gate_id": "DSAI3-G0",
+  "gate_class": "OPERATOR_ADMISSION_SATISFIED",
+  "authority_delta": "NONE",
+  "status": "PASS",
+  "baseline_main": "7e5db8b99464b7afebdbce703cf3377d9b65ff82",
+  "tested_implementation_head": "d10a03e791ac4a94cb6a25873565e9e04f9eef68",
+  "checks": {
+    "operator_admission_materialised": "PASS",
+    "parent_dsai_v0_2_terminal_verified": "PASS",
+    "existing_siq_runtime_reused": "PASS",
+    "second_landing_queue_created": false,
+    "dsai3_production_actuation_active": false,
+    "dsai3_g7_operator_gate_preserved": true,
+    "parallel_merge": false,
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "reserved_authority_crossed": false
+  },
+  "workflow_evidence": {
+    "tests": {
+      "run_id": 31793765119,
+      "run_number": 4248,
+      "conclusion": "success",
+      "repository_suite": "success",
+      "pytest_unittest_parity": "success",
+      "runner_parity": "success"
+    },
+    "tiered": {
+      "run_id": 31793765213,
+      "run_number": 2538,
+      "conclusion": "success",
+      "profile_assurance": "success",
+      "compatibility": "success",
+      "siq_ready_admission": "success",
+      "merge_readiness": "success"
+    },
+    "stable_main": "7e5db8b99464b7afebdbce703cf3377d9b65ff82"
+  },
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_COMPLETE_DSAI3_WP0_AND_CONTINUE_WP1",
+  "rollback": "Before DSAI3-G7, forward-remove or supersede DSAI v0.3 inactive programme materialisation while preserving DSAI v0.2 ORCH-3/4/5 authority, active SIQ runtime and historical evidence."
+}
