@@ -4,11 +4,12 @@
   "packet_id": "PYT-WP2",
   "gate_id": "PYT-G2",
   "authority_effect": "NONE",
-  "qa_status": "PASS_READY_FOR_FINAL_EXACT_HEAD_ASSURANCE",
+  "qa_status": "PASS",
   "recommendation": "PASS",
-  "candidate_head_before_qa_evidence": "89552202792643ae3797e0920a35dacd78ddd9de",
-  "baseline_main": "69368a5e3eac1c7c79455d6abeb4786cceb51d74",
-  "evidence": "docs/releases/python-test-runner-migration-v0-1/pyt-wp2/PYT_WP2_REMEDIATION_EVIDENCE.json",
+  "lawful_main": "a11d6acdb671eaef9e3cf58369d4aae0269f09bb",
+  "admission_candidate": "221cca6992124a3a30cdfdbf0fa11b2d78c299b4",
+  "gate_evidence": "docs/releases/python-test-runner-migration-v0-1/pyt-wp2/PYT_G2_ADMISSION_EVIDENCE.json",
+  "remediation_evidence": "docs/releases/python-test-runner-migration-v0-1/pyt-wp2/PYT_WP2_REMEDIATION_EVIDENCE.json",
   "checks": {
     "complete_native_pytest_collection": "PASS",
     "complete_native_pytest_execution": "PASS",
@@ -17,11 +18,19 @@
     "collection_errors_zero": "PASS",
     "intended_surface_not_reduced": "PASS",
     "unacceptable_exclusions_none": "PASS",
-    "standalone_unittest_preserved": "PASS",
+    "standalone_unittest_preserved_during_admission": "PASS",
+    "unittest_sources_preserved": "PASS",
     "historical_state_bound_to_immutable_evidence": "PASS",
     "semantic_preservation_review": "PASS",
     "eacr_class5_programme_adjudication": "PASS",
-    "authority_firewalls_unchanged": "PASS"
+    "authority_firewalls_unchanged": "PASS",
+    "tests_same_sha": "PASS",
+    "runner_parity_same_sha": "PASS",
+    "pytest_unittest_parity_same_sha": "PASS",
+    "pytest_unified_same_sha": "PASS",
+    "final_head_profile_same_sha": "PASS",
+    "stable_main_readiness_same_sha": "PASS",
+    "blocking_reviews_none": "PASS"
   },
   "fresh_population": {
     "junit_tests": 3925,
@@ -32,16 +41,22 @@
     "collection_errors": 0,
     "skipped": 1
   },
+  "exact_head_assurance": {
+    "tests_run": 31755286934,
+    "tests_job": 94632889445,
+    "runner_parity_job": 94632889457,
+    "pytest_unittest_parity_job": 94632889575,
+    "pytest_unified_run": 31755284720,
+    "pytest_unified_job": 94629620541,
+    "tiered_run": 31755286891,
+    "profile_job": 94632667388,
+    "merge_readiness_job": 94632667410
+  },
   "blockers": [],
   "unresolved_class5": [],
-  "final_required_same_sha_assurances": {
-    "tests": "PENDING_ON_QA_EVIDENCE_HEAD",
-    "runner-parity": "PENDING_ON_QA_EVIDENCE_HEAD",
-    "pytest-unittest-parity": "PENDING_ON_QA_EVIDENCE_HEAD",
-    "pytest-unified": "PENDING_ON_QA_EVIDENCE_HEAD"
-  },
-  "gate_classification": "AUTO_RATIFIABLE_IF_FINAL_ASSURANCES_PASS_ON_ONE_STABLE_MAIN_CONTAINING_SHA",
+  "gate_classification": "AUTO_RATIFIABLE",
   "reserved_authority_actions": [],
-  "non_reserved_rationale": "PYT-WP2 changes development-assurance runner, test evidence binding and non-semantic compatibility surfaces only. It grants no scientific, selector, publication, Validation, probability, risk, exposure, trading or execution authority.",
-  "next_action": "CREATE_BOUNDED_PYT_PR_AND_RUN_ALL_FOUR_FINAL_ASSURANCES_ON_ONE_EXACT_HEAD"
+  "non_reserved_rationale": "PYT-WP2 admits a development-assurance runner surface only. It grants no scientific, selector, publication, Validation, probability, risk, exposure, trading, execution or agent-write authority.",
+  "post_materialisation_requirement": "Because this QA/decision materialisation changes the candidate SHA, rerun the exact-head required assurances on the materialised head before squash merge.",
+  "next_action": "MATERIALISE_DELEGATED_PYT_G2_PASS_RERUN_EXACT_HEAD_THEN_SQUASH_MERGE_AND_BEGIN_PYT_WP2_CUTOVER"
 }
