@@ -166,7 +166,7 @@ jobs:
             exit 1
           fi
 
-  legacy-unittest:
+  pytest-unified:
     name: tests
     needs: final-integration-window-admitted
     runs-on: ubuntu-latest
@@ -179,9 +179,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install Research Console exact-surface dependencies
-        run: python3 -m pip install --disable-pip-version-check -r requirements-console-vnext.txt
-      - name: Complete repository suite under shared main lease
+      - name: Install pytest and Research Console test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Complete repository suite under shared main lease (native pytest)
         env:
           OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
           OVC_LEASE_BASE_SHA: ${{ needs.final-integration-window-admitted.outputs.base_sha }}
@@ -189,9 +189,10 @@ jobs:
           OVC_LEASE_BRANCH: ${{ github.event.pull_request.base.ref || 'main' }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
-            python3 -m unittest discover -s tests -v
-      - name: Research Console vNext exact maintained API surface
+          # Historical rollback command (not executed): python3 -m unittest discover -s tests -v
+          PYTHONPATH=src:. python3 tools/ci/ovc_run_with_main_lease.py -- \
+            python3 -m pytest tests -q --tb=short
+      - name: Research Console vNext exact maintained API surface under pytest
         env:
           OVC_LEASE_REQUIRED: ${{ github.event_name == 'pull_request' }}
           OVC_LEASE_BASE_SHA: ${{ needs.final-integration-window-admitted.outputs.base_sha }}
@@ -200,7 +201,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           PYTHONPATH=src:. python3 tools/ci/ovc_run_with_main_lease.py -- \
-            python3 -m unittest discover -s tests/research_console_vnext -v
+            python3 -m pytest tests/research_console_vnext -q --tb=short
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
