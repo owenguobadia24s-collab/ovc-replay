@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-grt2-g2-5-pilot-monitoring-plan/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "gate_id": "GRT2-G2.5",
+  "pilot_authority": "LIMITED_NEW_ARTIFACT_ENFORCEMENT_ONLY_AFTER_OPERATOR_PASS",
+  "blocking_scope": [
+    "ADDED_GOVERNED_ARTIFACT_CONSTITUTION_VIOLATION",
+    "NEW_PERMANENT_ROOT_AFTER_PILOT_BASELINE",
+    "NEW_WORKFLOW_AFTER_PILOT_BASELINE",
+    "NEW_WRITE_TO_FORBIDDEN_ROOT",
+    "NEW_WRITE_TO_DEPRECATED_NO_NEW_WRITES_ROOT"
+  ],
+  "shadow_only_scope": [
+    "FINDING_CAUSED_SOLELY_BY_MODIFICATION_OF_PRE_EXISTING_ARTIFACT_UNLESS_INDEPENDENT_PRE_EXISTING_ASSURANCE_ALREADY_BLOCKS"
+  ],
+  "candidate_ledger_fields": [
+    "candidate_id",
+    "candidate_class",
+    "pr_number",
+    "predecessor_main_sha",
+    "candidate_head_sha",
+    "candidate_tree_sha",
+    "evaluation_started_at",
+    "evaluation_completed_at",
+    "pilot_scope_classification",
+    "pilot_decision",
+    "pilot_findings",
+    "full_g3_shadow_findings",
+    "escape_review",
+    "false_positive_review",
+    "false_negative_probes",
+    "scope_leakage_review",
+    "performance_receipt",
+    "override_record",
+    "qa_disposition"
+  ],
+  "threshold": {
+    "minimum_elapsed_hours": 24,
+    "minimum_eligible_candidate_evaluations": 8,
+    "ordinary_candidate_target": 4,
+    "qualification_injection_allowed_after_days": 14,
+    "ordinary_and_injection_counts_separate": true
+  },
+  "g3_zero_tolerance": {
+    "unresolved_pilot_escapes": 0,
+    "unresolved_blocking_false_positives": 0,
+    "unresolved_false_negatives": 0,
+    "scope_leakage_blocks": 0
+  },
+  "historical_dry_run": {
+    "required_before_g3": true,
+    "ordinary_historical_candidate_target": 10,
+    "if_fewer_reconstructible": "USE_ALL_AND_RECORD_HISTORICAL_INTEGRATION_REPLAY_GAP",
+    "invented_history_forbidden": true
+  },
+  "performance": {
+    "budget_hash": "88fadf691be87f0c55d98c994d29f54f6112e6c6e43f8d4bbbb328dc7fdb0b58",
+    "policy": "WITHIN_FROZEN_G2_BUDGET_OR_INCIDENT_REQUALIFICATION",
+    "capacity_behavior": "FAIL_CLOSED"
+  },
+  "override_policy": "EXACT_CONTEXT_SINGLE_USE_OPERATOR_ISSUED_ONLY_NO_BROAD_WAIVER",
+  "pilot_start": null,
+  "pilot_baseline_commit": null,
+  "status": "PREPARED_AWAITING_OPERATOR_G2_5_PASS"
+}
