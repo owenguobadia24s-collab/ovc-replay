@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-siq-runtime-g1-operator-decision/v1",
+  "programme_id": "OVC-SERIALIZED-INTEGRATION-QUEUE-RUNTIME-v0.1",
+  "plan_id": "OVC-SIQ-FINALISATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "SIQ-RUNTIME-G1",
+  "gate_class": "OPERATOR_REQUIRED",
+  "decision": "PASS",
+  "status": "APPROVED",
+  "operator_instruction": "OVC APPROVE SIQ-RUNTIME-G1 PASS",
+  "operator_decision_time": "2026-08-14T01:06:00+01:00",
+  "baseline_main": "a11d6acdb671eaef9e3cf58369d4aae0269f09bb",
+  "gate_ready_head": "6a877dfa01a91b5aa79ac34f2ca8a263e6dfafdd",
+  "approved_authority_delta": "ACTIVATE_SIQ_MINIMAL_CRITICAL_SECTION_AS_FINAL_INTEGRATION_RUNTIME",
+  "terminal_invariants": {
+    "PARALLEL_DEVELOPMENT": true,
+    "PARALLEL_MERGE": false,
+    "BASE_INDEPENDENT_CONCURRENT": true,
+    "FINAL_INTEGRATION_LEASE_COUNT": 1,
+    "SELECTIVE_ASSURANCE_REUSE": true,
+    "AUTOMATIC_LAWFUL_REQUEUE": true,
+    "IMMEDIATE_SUCCESSOR_ADVANCEMENT": true,
+    "RESERVED_AUTHORITY_UNCHANGED": true
+  },
+  "reserved_non_effects": {
+    "merge_authority": "UNCHANGED",
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "operator_required_gate_behavior": "STOP",
+    "scientific_semantic_validation_publication_probability_risk_exposure_execution_authority": "NONE"
+  },
+  "rollback": "Forward-disable the SIQ active binding and restore prior PDC workflow timing while preserving the existing global integration-lane identity, PDC classifier, ORCH authority, receipts and Git history.",
+  "next_action": "Activate the bounded SIQ minimal-critical-section workflow binding, rerun exact-head assurance, squash-integrate PR #769 if green, and verify the active path from main."
+}
