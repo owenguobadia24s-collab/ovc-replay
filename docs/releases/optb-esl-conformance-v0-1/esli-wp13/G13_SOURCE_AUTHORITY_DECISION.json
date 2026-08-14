@@ -1,0 +1,53 @@
+{
+  "schema":"ovc-esli-g13-source-authority-decision/v1",
+  "programme_id":"OVC-OPTB-ESL-CONFORMANCE-v0.1",
+  "plan_id":"OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+  "packet_id":"ESLI-WP13",
+  "gate_id":"ESLI-G13",
+  "decision_status":"PASS",
+  "classification":"OPERATOR_REQUIRED",
+  "decision_authority":"OPERATOR",
+  "operator_command":"OVC APPROVE ESLI-G13 PASS",
+  "approved_at":"2026-08-14T19:02:00+01:00",
+  "classification_reason":"AUTHORITY_RECORD_ABSENT_FOR_REQUIRED_ESLI_REAL_SOURCE_READ",
+  "baseline_main":"32123c08c74c28dd44ad058b6126afc05f1c6fdb",
+  "source_read_performed":false,
+  "approved_source":{
+    "source_class":"ALREADY_ACCEPTED_JUNE_C2_EXTERNAL_ARTIFACT",
+    "artifact_key":"C2_15M_BID_LOCAL",
+    "drive_file_id":"1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk",
+    "drive_name":"GBPUSD-15M-LOCAL-v0_1.jsonl",
+    "byte_size":4709059,
+    "sha256":"63a1d24836d3cd0aaad9e5a11e9b9ec51724bfd335fab47f538ed23f36e8c58b",
+    "authority_manifest":"docs/releases/srfd-benchmark-v0-1/srfdi-june-auth-v1-1-r3/SRFD_JUNE_AUTHORITY_MANIFEST_R3.json",
+    "source_population_lineage":"SRFD.POP.6efa7dd55636d036c12e580e0793abacf8c805bcf6d77bb6e2edf7cffbc113bd",
+    "instrument":"GBPUSD",
+    "side":"BID",
+    "clock":"15M",
+    "provider_fetch":"DENIED"
+  },
+  "authority_evidence":{
+    "prior_srfd_token":"SRFD.JUNE.AUTH.7c464be44edb1f295efcf55481443a012176429ce6cc9689ce3f1e113b61c1e5",
+    "prior_srfd_token_state":"CONSUMED_FOR_RUN_NOT_REUSABLE_FOR_NEW_RUN",
+    "prior_srfd_run":"SRFD.RUN.55601cfe14d85173c767315be04c8b6c333dc8c07103a8064733086c26606dbf",
+    "srfd_g11_disposition":"APPROVED_RECORD_ONLY_NO_ACTIVATION_OR_PROMOTION",
+    "reusable_esli_read_authority_found":false
+  },
+  "approved_authority_delta":{
+    "read_only_recovery":"ONE_EXACT_ACCEPTED_C2_ARTIFACT_FOR_ESLI_WP13_ONLY",
+    "provider_intake":"NONE",
+    "new_provider_object":"NONE",
+    "instrument_scope_change":"NONE",
+    "side_scope_change":"NONE",
+    "clock_scope_change":"NONE",
+    "selector_change":"NONE",
+    "scientific_method_or_family_promotion":"NONE",
+    "semantic_admission":"NONE",
+    "c3_activation":"NONE",
+    "validation":"LOCKED_UNCONSUMED",
+    "publication":"NONE",
+    "probability_risk_exposure_execution":"NONE"
+  },
+  "continuation":"Verify exact artifact SHA-256, freeze JuneProfileComparisonManifest.v1 and every executable profile/comparator binding before result inspection, execute only admitted P0-P3 routes against the frozen common source/cutoff/environment, preserve fail-honest non-executable profile states, and terminal-close ESL with no active-authority change.",
+  "rollback":"Before source read, revoke this bounded WP13 read authority by forward supersession. After source read, preserve source verification and all generated evidence append-only; no rollback may relabel or promote scientific results."
+}
