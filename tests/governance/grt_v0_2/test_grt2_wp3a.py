@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import json
 import random
+import subprocess
 import unittest
 from pathlib import Path
 
 from ovc.programme_genesis.grt_v0_2.bootstrap import validate_instance
-from ovc.programme_genesis.grt_v0_2.reference import ReferenceRuntimeError, build_reference_graph, classify_observation, observe_component, replay_b0_baseline
+from ovc.programme_genesis.grt_v0_2.reference import ReferenceRuntimeError, build_reference_graph, classify_observation, observe_component, replay_b0_baseline, scan_repository_tree
 
 ROOT = Path(__file__).resolve().parents[3]
 FIXTURE = ROOT / "fixtures/governance/grt_v0_2/wp3a/reference_graph_fixture.json"
@@ -32,6 +33,17 @@ class GRT2WP3AReferenceTests(unittest.TestCase):
         validate_instance(graph_a, json.loads(SCHEMA.read_text(encoding="utf-8")))
         self.assertEqual(graph_a["resolution_status"], "PARTIAL")
         self.assertEqual(graph_a["active_enforcement"], "NONE")
+
+    def test_exact_git_tree_adapter_scans_current_head_without_working_tree_identity(self) -> None:
+        head = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
+        first = scan_repository_tree(ROOT, commit=head)
+        second = scan_repository_tree(ROOT, commit=head)
+        expected_tree = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD^{tree}"], check=True, capture_output=True, text=True).stdout.strip()
+        self.assertEqual(first, second)
+        self.assertEqual(first["source_commit"], head)
+        self.assertEqual(first["tree_hash"], expected_tree)
+        self.assertGreater(len(first["observed_components"]), 0)
+        self.assertEqual(first["active_enforcement"], "NONE")
 
     def test_path_is_not_artifact_authority_and_filename_is_not_lifecycle(self) -> None:
         first = observe_component(tree_hash="1" * 40, path="docs/a/FINAL_RATIFIED.md", content_hash="a" * 40)
