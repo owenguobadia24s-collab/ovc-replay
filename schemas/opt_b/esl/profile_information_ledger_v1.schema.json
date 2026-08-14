@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-esl-profile-information-ledger/v1",
+  "type":"object",
+  "required":["schema","manifest_id","entries","winner_synthesis","authority_effect","logical_hash"],
+  "properties":{
+    "schema":{"const":"ovc-esl-profile-information-ledger/v1"},
+    "manifest_id":{"type":"string"},
+    "entries":{"type":"array","minItems":4,"maxItems":4},
+    "winner_synthesis":{"const":"FORBIDDEN"},
+    "authority_effect":{"const":"NONE"},
+    "logical_hash":{"type":"string","pattern":"^[0-9a-f]{64}$"}
+  },
+  "additionalProperties":true
+}
