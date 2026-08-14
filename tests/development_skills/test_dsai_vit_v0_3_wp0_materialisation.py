@@ -9,6 +9,8 @@ PLAN = ROOT / "docs/plans/development/OVC_DSAI_V0_3_VIT_CONFORMANCE_IMPLEMENTATI
 RELEASE = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp0"
 STATE_ROOT = ROOT / "registries/implementation/dsai_vit_v0_3"
 LEGACY_ROOT = ROOT / "registries/implementation/dsai_v0_3"
+PILOT_DECISION = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/dsai3v-g-vit-pilot/DSAI3V_G_VIT_PILOT_OPERATOR_PASS.json"
+PILOT_AUTHORITY = ROOT / "registries/authority/DSAI3V_VIT_PILOT_AUTHORITY_v0_1.json"
 
 class DsaiVitV03Wp0MaterialisationTests(unittest.TestCase):
     def test_plan_hashes_and_reserved_gates_are_exact(self) -> None:
@@ -30,7 +32,16 @@ class DsaiVitV03Wp0MaterialisationTests(unittest.TestCase):
         initial_state = json.loads((STATE_ROOT / "OVC_DSAI_VIT_V0_3_STATE_v0_1.json").read_text(encoding="utf-8"))
         self.assertEqual(state["programme_id"], "OVC-DSAI-VIT-v0.3")
         self.assertEqual(initial_state["next_packet"], "DSAI3V-WP1")
-        self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "DENIED")
+        if PILOT_DECISION.exists():
+            decision = json.loads(PILOT_DECISION.read_text(encoding="utf-8"))
+            authority = json.loads(PILOT_AUTHORITY.read_text(encoding="utf-8"))
+            self.assertEqual(decision["decision"], "PASS")
+            self.assertEqual(authority["authority_status"], "ACTIVE")
+            self.assertEqual(authority["allowed_packet_classes"], ["LOW_RISK_IMPLEMENTATION"])
+            self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "ACTIVE_PILOT_LOW_RISK_IMPLEMENTATION_ONLY")
+            self.assertFalse(state["current_authority"]["parallel_physical_merge"])
+        else:
+            self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "DENIED")
         self.assertEqual(state["current_authority"]["grt_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         legacy_pointer = json.loads((LEGACY_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         legacy_state = json.loads((LEGACY_ROOT / legacy_pointer["current_state"]).read_text(encoding="utf-8"))
