@@ -70,6 +70,16 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         ]:
             self.assertIn(marker, self.workflow)
 
+    def test_only_earlier_pr_can_own_predecessor_lease(self):
+        guard = "if (candidate.number >= pr.number)"
+        ignored = "OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED"
+        checks = "github.rest.checks.listForRef"
+        readiness = self.workflow.split("\n  merge-readiness:\n", 1)[1]
+        self.assertIn(guard, readiness)
+        self.assertIn(ignored, readiness)
+        self.assertLess(readiness.index(guard), readiness.index(checks))
+        self.assertIn("candidate.number > pr.number", readiness)
+
     def test_terminal_disposition_does_not_expand_merge_authority(self):
         self.assertIn("permissions:\n  contents: read\n  checks: read\n  pull-requests: read", self.workflow)
         self.assertNotIn("contents: write", self.workflow)
