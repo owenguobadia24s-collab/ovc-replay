@@ -30,6 +30,7 @@ class DsaiVitV03Wp0MaterialisationTests(unittest.TestCase):
         self.assertEqual(state["programme_id"], "OVC-DSAI-VIT-v0.3")
         self.assertEqual(state["next_packet"], "DSAI3V-WP1")
         self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "DENIED")
+        self.assertEqual(state["current_authority"]["grt_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         legacy_pointer = json.loads((LEGACY_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         legacy_state = json.loads((LEGACY_ROOT / legacy_pointer["current_state"]).read_text(encoding="utf-8"))
         self.assertEqual(legacy_state["status"], "SUPERSEDED")
@@ -37,10 +38,12 @@ class DsaiVitV03Wp0MaterialisationTests(unittest.TestCase):
 
     def test_baseline_preserves_parent_authority_and_siq(self) -> None:
         recon = json.loads((RELEASE / "DSAI3V_WP0_BASELINE_RECONCILIATION.json").read_text(encoding="utf-8"))
-        self.assertEqual(recon["baseline_main"], "c4aff0fa34aa1123031244d9e003bd32b2115706")
+        self.assertEqual(recon["baseline_main"], "aa0eebf564955545e72f414597b8a3eb7996249e")
+        self.assertEqual(recon["baseline_tree"], "ff2cd938d9aac5576aaf66becf50f9ea53197e8e")
         self.assertEqual(recon["parent_authority"]["ORCH-4"], "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION")
         self.assertFalse(recon["parent_authority"]["parallel_merge"])
         self.assertEqual(recon["parent_authority"]["siq_runtime"], "ACTIVE_SERIALIZED_MINIMAL_CRITICAL_SECTION")
+        self.assertEqual(recon["grt"]["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
 
 if __name__ == "__main__":
     unittest.main()
