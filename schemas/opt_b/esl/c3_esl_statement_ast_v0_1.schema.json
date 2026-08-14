@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-esl-c3-statement-ast-v1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","anchor_ref","selected_proposition_refs","clause_decisions","template_id","dependency_manifest_id","predecessor_statement_id","generation_policy","canonicality","bridge_maturity","authority_effect","statement_id"],
+  "properties":{
+    "schema":{"const":"ovc-esl-c3-statement-ast/v1"},
+    "anchor_ref":{"type":"string","minLength":1},
+    "selected_proposition_refs":{"type":"array","items":{"type":"string","minLength":1}},
+    "clause_decisions":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["clause_type","decision","source_refs","reason_code"],"properties":{"clause_type":{"type":"string"},"decision":{"enum":["INCLUDE","OMIT","UNRESOLVED"]},"source_refs":{"type":"array","items":{"type":"string"}},"reason_code":{"type":["string","null"]}}}},
+    "template_id":{"type":"string","minLength":1},
+    "dependency_manifest_id":{"type":"string","minLength":1},
+    "predecessor_statement_id":{"type":["string","null"]},
+    "generation_policy":{"enum":["GENESIS","APPEND_ONLY_NEW_GENERATION"]},
+    "canonicality":{"const":"REFERENCE_DETERMINISTIC"},
+    "bridge_maturity":{"const":"INACTIVE_REFERENCE"},
+    "authority_effect":{"const":"NONE"},
+    "statement_id":{"type":"string","pattern":"^c3eslast1:"}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-esl-c3-dependency-manifest-v1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","manifest_id","template_id","dependencies","bridge_maturity","authority_effect","logical_hash"],
+  "properties":{
+    "schema":{"const":"ovc-esl-c3-dependency-manifest/v1"},
+    "manifest_id":{"type":"string","minLength":1},
+    "template_id":{"type":"string","minLength":1},
+    "dependencies":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["clause_type","role","source_owner","source_type"],"properties":{"clause_type":{"type":"string"},"role":{"enum":["REQUIRED","OPTIONAL","CONDITIONAL_REQUIRED","STRATIFIER","FILTER","DISPLAY_ONLY","PROVENANCE_ONLY","FORBIDDEN"]},"source_owner":{"type":"string","minLength":1},"source_type":{"type":"string","minLength":1}}}},
+    "bridge_maturity":{"const":"INACTIVE_REFERENCE"},
+    "authority_effect":{"const":"NONE"},
+    "logical_hash":{"type":"string","pattern":"^[0-9a-f]{64}$"}
+  }
+}
