@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-esl-structural-term-candidate/v1",
+  "type":"object",
+  "required":["schema","machine_symbol","term_class","formal_definition","observation_unit","temporal_semantics","inclusion_predicates","exclusion_predicates","boundary_cases","ambiguity_policy","missingness_policy","falsifiers","prohibited_interpretations","scope","provenance_refs","qualification_stage","semantic_admission_state","authority","structural_term_candidate_id","term_generation_id","logical_hash"],
+  "properties":{
+    "schema":{"const":"ovc-esl-structural-term-candidate/v1"},
+    "term_class":{"enum":["OBSERVABLE_PROPERTY","STRUCTURAL_RELATION","PERSISTENCE_CONCEPT","DEVELOPMENT_CONCEPT","ORGANISATION_CONCEPT","INVARIANT_CONCEPT","CONSTRAINT_CONCEPT","STRUCTURAL_EVENT_CONCEPT","EPISTEMIC_CONCEPT"]},
+    "qualification_stage":{"const":"PROPOSED"},
+    "semantic_admission_state":{"const":"NOT_ADMITTED"}
+  },
+  "additionalProperties":true
+}
