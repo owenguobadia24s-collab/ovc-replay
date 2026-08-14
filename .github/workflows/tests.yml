@@ -166,6 +166,17 @@ jobs:
             exit 1
           fi
 
+  legacy-unittest:
+    name: legacy unittest retired compatibility marker
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preserve rollback-only command identities without execution
+        run: |
+          echo "Standalone unittest CI execution retired by PYT-G2 cutover."
+          # Historical rollback command (not executed): python3 -m pip install --disable-pip-version-check -r requirements-console-vnext.txt
+          # Historical rollback command (not executed): python3 -m unittest discover -s tests/research_console_vnext -v
+
   pytest-unified:
     name: tests
     needs: final-integration-window-admitted
