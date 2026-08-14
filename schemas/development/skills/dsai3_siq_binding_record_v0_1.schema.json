@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai3-siq-binding-record/v1",
+  "title": "OVC DSAI v0.3 SIQBindingRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "binding_id", "packet_id", "source_orch_execution_record_id",
+    "queue_owner", "queue_id", "ready_sequence", "candidate_head_sha",
+    "baseline_main_sha", "queue_state", "queue_head_eligible",
+    "creates_new_queue", "authority_effect", "parallel_merge"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-dsai3-siq-binding-record/v1"},
+    "binding_id": {"type": "string", "minLength": 1},
+    "packet_id": {"type": "string", "minLength": 1},
+    "source_orch_execution_record_id": {"type": "string", "minLength": 1},
+    "queue_owner": {"const": "OVC.SIQ.RUNTIME.v0.1"},
+    "queue_id": {"const": "OVC.SIQ.v0.1"},
+    "ready_sequence": {"type": "integer", "minimum": 1},
+    "candidate_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "baseline_main_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "queue_state": {"enum": ["BUILD", "WAIT", "READY", "OPERATOR_REQUIRED", "BLOCKED", "QUARANTINED", "REQUEUE", "INTEGRATED"]},
+    "queue_head_eligible": {"type": "boolean"},
+    "creates_new_queue": {"const": false},
+    "authority_effect": {"const": "NONE_BINDING_ONLY"},
+    "parallel_merge": {"const": false}
+  }
+}

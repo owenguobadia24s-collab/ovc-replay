@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai3-requeue-execution-intent/v1",
+  "title": "OVC DSAI v0.3 RequeueExecutionIntent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "intent_id", "packet_id", "source_requeue_decision_id",
+    "failure_reason", "attempt", "previous_base", "current_main", "action",
+    "fresh_branch_required", "fresh_exact_head_assurance_required",
+    "preserve_packet_scope_identity", "preserve_write_set_identity",
+    "preserve_semantic_owner_identity", "side_effect_performed",
+    "authority_effect", "parallel_merge", "force_push", "history_rewrite"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-dsai3-requeue-execution-intent/v1"},
+    "intent_id": {"type": "string", "minLength": 1},
+    "packet_id": {"type": "string", "minLength": 1},
+    "source_requeue_decision_id": {"type": "string", "minLength": 1},
+    "failure_reason": {
+      "enum": [
+        "OVC_BASE_MOVED_BEFORE_READINESS",
+        "OVC_BASE_MOVED_DURING_READINESS",
+        "MAIN_ADVANCED_AFTER_ASSURANCE"
+      ]
+    },
+    "attempt": {"type": "integer", "minimum": 1, "maximum": 2},
+    "previous_base": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "current_main": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "action": {"enum": ["FRESH_BRANCH_FROM_CURRENT_MAIN", "STOP_SERIAL_REQUIRED"]},
+    "fresh_branch_required": {"type": "boolean"},
+    "fresh_exact_head_assurance_required": {"type": "boolean"},
+    "preserve_packet_scope_identity": {"const": true},
+    "preserve_write_set_identity": {"const": true},
+    "preserve_semantic_owner_identity": {"const": true},
+    "side_effect_performed": {"const": false},
+    "authority_effect": {"const": "NONE_PLANNING_ONLY"},
+    "parallel_merge": {"const": false},
+    "force_push": {"const": false},
+    "history_rewrite": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"action": {"const": "FRESH_BRANCH_FROM_CURRENT_MAIN"}}},
+      "then": {
+        "properties": {
+          "fresh_branch_required": {"const": true},
+          "fresh_exact_head_assurance_required": {"const": true}
+        }
+      }
+    }
+  ]
+}

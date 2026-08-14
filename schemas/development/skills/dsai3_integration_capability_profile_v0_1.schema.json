@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai3-integration-capability-profile/v1",
+  "title": "OVC DSAI v0.3 IntegrationCapabilityProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "profile_id", "environment_id", "native_stack_merge",
+    "immediate_squash_merge", "update_branch", "auto_merge",
+    "fresh_branch_reconciliation", "single_main_target", "target_branch",
+    "parallel_merge", "authority_effect"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-dsai3-integration-capability-profile/v1"},
+    "profile_id": {"type": "string", "minLength": 1},
+    "environment_id": {"type": "string", "minLength": 1},
+    "native_stack_merge": {"type": "boolean"},
+    "immediate_squash_merge": {"type": "boolean"},
+    "update_branch": {"type": "boolean"},
+    "auto_merge": {"type": "boolean"},
+    "fresh_branch_reconciliation": {"type": "boolean"},
+    "single_main_target": {"const": true},
+    "target_branch": {"const": "main"},
+    "parallel_merge": {"const": false},
+    "authority_effect": {"const": "NONE_OBSERVABILITY_ONLY"}
+  }
+}

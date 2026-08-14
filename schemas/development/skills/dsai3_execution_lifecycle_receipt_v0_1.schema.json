@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai3-execution-lifecycle-receipt/v1",
+  "title": "OVC DSAI v0.3 ExecutionLifecycleReceipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "record_id", "orchestration_run_id", "invocation_id",
+    "source_programme_id", "packet_id", "phase", "phase_status",
+    "execution_observed", "execution_simulated", "branch", "pull_request",
+    "workflow_run_ids", "merge_sha", "authority_effect", "parallel_merge",
+    "force_push", "history_rewrite"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-dsai3-execution-lifecycle-receipt/v1"},
+    "record_id": {"type": "string", "minLength": 1},
+    "orchestration_run_id": {"type": "string", "minLength": 1},
+    "invocation_id": {"type": "string", "minLength": 1},
+    "source_programme_id": {"type": "string", "minLength": 1},
+    "packet_id": {"type": "string", "minLength": 1},
+    "phase": {
+      "enum": [
+        "DECISION_SELECTED",
+        "EXECUTION_STARTED",
+        "TESTS_COMPLETED",
+        "QA_COMPLETED",
+        "GATE_DECIDED",
+        "SIQ_QUEUED",
+        "FINAL_ASSURANCE_STARTED",
+        "FINAL_ASSURANCE_COMPLETED",
+        "MERGED",
+        "REQUEUED",
+        "BLOCKED",
+        "CLOSEOUT_COMPLETED",
+        "SUCCESSOR_RELEASED"
+      ]
+    },
+    "phase_status": {"enum": ["STARTED", "COMPLETED", "FAILED", "BLOCKED"]},
+    "execution_observed": {"type": "boolean"},
+    "execution_simulated": {"type": "boolean"},
+    "branch": {"type": ["string", "null"]},
+    "pull_request": {"type": ["integer", "null"], "minimum": 1},
+    "workflow_run_ids": {"type": "array", "items": {"type": "integer", "minimum": 1}, "uniqueItems": true},
+    "merge_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "authority_effect": {"const": "NONE_OBSERVABILITY_ONLY"},
+    "parallel_merge": {"const": false},
+    "force_push": {"const": false},
+    "history_rewrite": {"const": false}
+  },
+  "not": {
+    "properties": {
+      "execution_observed": {"const": true},
+      "execution_simulated": {"const": true}
+    },
+    "required": ["execution_observed", "execution_simulated"]
+  }
+}
