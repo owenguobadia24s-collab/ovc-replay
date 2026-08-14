@@ -1,0 +1,22 @@
+name: DSAI3V Q4 live shadow measurement
+
+on:
+  pull_request:
+    paths:
+      - 'src/ovc/development/skills/vit_budget.py'
+      - 'scripts/development/run_dsai3v_q4_shadow.py'
+      - 'docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp8b/**'
+      - '.github/workflows/dsai3v-q4-shadow.yml'
+
+jobs:
+  q4-live-shadow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run source-bound three-lane Q4 shadow measurement
+        env:
+          PYTHONPATH: src
+        run: python scripts/development/run_dsai3v_q4_shadow.py
