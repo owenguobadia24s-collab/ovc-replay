@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[2]
 PLAN = ROOT / "docs/plans/development/OVC_DSAI_V0_3_CONTINUOUS_EXECUTION_LANDING_TRAIN_PLAN_v0_1.md"
 ADMISSION = ROOT / "docs/releases/development-skills-architecture-v0-3/dsai3-wp0/DSAI3_G0_OPERATOR_ADMISSION.json"
 RECON = ROOT / "docs/releases/development-skills-architecture-v0-3/dsai3-wp0/DSAI3_WP0_BASELINE_RECONCILIATION.json"
-STATE = ROOT / "registries/implementation/dsai_v0_3/OVC_DSAI_V0_3_STATE_v0_1.json"
-POINTER = ROOT / "registries/implementation/dsai_v0_3/CURRENT_STATE_POINTER.json"
+STATE_ROOT = ROOT / "registries/implementation/dsai_v0_3"
+POINTER = STATE_ROOT / "CURRENT_STATE_POINTER.json"
 
 
 class DsaiV03Wp0MaterialisationTests(unittest.TestCase):
@@ -47,10 +47,11 @@ class DsaiV03Wp0MaterialisationTests(unittest.TestCase):
         self.assertEqual(recon["authority_delta"], "NONE")
         self.assertEqual(recon["next_packet"], "DSAI3-WP1")
 
-    def test_programme_state_stops_before_activation_gate_and_reuses_active_siq(self) -> None:
-        state = json.loads(STATE.read_text(encoding="utf-8"))
+    def test_live_programme_state_stops_before_activation_gate_and_reuses_active_siq(self) -> None:
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
-        self.assertEqual(state["status"], "RUNNING")
+        state_path = STATE_ROOT / pointer["current_state"]
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+        self.assertIn(state["status"], {"RUNNING", "APPROVED"})
         self.assertEqual(state["next_packet"], "DSAI3-WP1")
         self.assertEqual(
             state["gate_disposition"]["DSAI3-G7"],
@@ -64,7 +65,6 @@ class DsaiV03Wp0MaterialisationTests(unittest.TestCase):
             state["current_authority"]["siq_runtime"],
             "ACTIVE_EXISTING_SERIALIZED_MINIMAL_CRITICAL_SECTION",
         )
-        self.assertEqual(pointer["current_state"], STATE.name)
         self.assertEqual(pointer["next_packet"], "DSAI3-WP1")
 
     def test_plan_contains_continuous_command_and_siq_reuse_invariants(self) -> None:
