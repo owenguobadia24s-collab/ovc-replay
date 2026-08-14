@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai3-continuation-mandate/v1",
+  "title": "OVC DSAI v0.3 ContinuationMandate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "mandate_id", "programme_id", "start_packet_id", "mode",
+    "explicit_boundary", "issued_by", "persisted", "chat_history_required",
+    "packet_authority_source", "operator_gate_behavior", "authority_effect"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-dsai3-continuation-mandate/v1"},
+    "mandate_id": {"type": "string", "minLength": 1},
+    "programme_id": {"type": "string", "minLength": 1},
+    "start_packet_id": {"type": "string", "minLength": 1},
+    "mode": {
+      "enum": [
+        "CONTINUE_UNTIL_MANDATORY_STOP",
+        "ONLY_PACKET",
+        "UNTIL_EXPLICIT_BOUNDARY"
+      ]
+    },
+    "explicit_boundary": {"type": ["string", "null"]},
+    "issued_by": {"const": "OPERATOR"},
+    "persisted": {"const": true},
+    "chat_history_required": {"const": false},
+    "packet_authority_source": {"const": "EXISTING_PROGRAMME_AND_PACKET_AUTHORITY_ONLY"},
+    "operator_gate_behavior": {"const": "STOP"},
+    "authority_effect": {"const": "CONTINUATION_SCOPE_ONLY"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"mode": {"const": "UNTIL_EXPLICIT_BOUNDARY"}}},
+      "then": {"properties": {"explicit_boundary": {"type": "string", "minLength": 1}}}
+    },
+    {
+      "if": {"properties": {"mode": {"enum": ["CONTINUE_UNTIL_MANDATORY_STOP", "ONLY_PACKET"]}}},
+      "then": {"properties": {"explicit_boundary": {"type": "null"}}}
+    }
+  ]
+}

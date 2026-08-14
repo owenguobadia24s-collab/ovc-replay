@@ -1,0 +1,81 @@
+{
+  "schema": "ovc-dsai3-continuous-execution-contract/v1",
+  "contract_id": "DSAI3.CONTINUOUS.EXECUTION.v0.1",
+  "programme_id": "OVC-DSAI-v0.3",
+  "plan_id": "OVC-DSAI-CONTINUOUS-EXECUTION-LANDING-TRAIN-IMPLEMENTATION-PLAN-0.1",
+  "authority_effect": "NONE",
+  "execution_mode": "SHADOW_SANDBOX_ONLY_PRE_DSAI3_G7",
+  "parent_authority": {
+    "orch3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
+    "orch4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
+    "orch5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
+    "siq_runtime": "OVC.SIQ.RUNTIME.v0.1",
+    "siq_policy": "OVC.SIQ.v0.1"
+  },
+  "operator_command_semantics": {
+    "OVC_RUN": "START_AT_NAMED_SCOPE_CONTINUE_UNTIL_MANDATORY_STOP",
+    "OVC_CONTINUE": "RESUME_AT_NAMED_OR_FIRST_INCOMPLETE_ELIGIBLE_PACKET_CONTINUE_UNTIL_MANDATORY_STOP",
+    "OVC_RUN_ONLY": "EXECUTE_EXACT_PACKET_PLUS_REQUIRED_INTEGRATION_CLOSEOUT_THEN_STOP",
+    "OVC_CONTINUE_ONLY": "EXECUTE_EXACT_PACKET_PLUS_REQUIRED_INTEGRATION_CLOSEOUT_THEN_STOP",
+    "OVC_RUN_UNTIL": "CONTINUE_WITH_EXPLICIT_ADDITIONAL_STOP_BOUNDARY"
+  },
+  "continuation": {
+    "repository_state_is_source_of_truth": true,
+    "chat_history_is_source_of_truth": false,
+    "packet_authority_source": "EXISTING_PROGRAMME_AND_PACKET_AUTHORITY_ONLY",
+    "successor_release_requires_existing_authority": true,
+    "operator_gate_behavior": "STOP",
+    "non_none_authority_delta_behavior": "STOP",
+    "completed_packet_is_stop": false,
+    "qa_pass_is_stop": false,
+    "eligible_merge_is_stop": false,
+    "successful_merge_is_stop": false,
+    "successor_ready_is_stop": false
+  },
+  "landing": {
+    "queue_owner": "OVC.SIQ.RUNTIME.v0.1",
+    "creates_second_queue": false,
+    "queue_order_owner": "OVC.SIQ.RUNTIME.v0.1",
+    "base_sensitive_assurance_owner": "SIQ_QUEUE_HEAD_ONLY",
+    "parallel_build": true,
+    "parallel_merge": false,
+    "target_branch": "main",
+    "merge_method": "squash"
+  },
+  "required_objects": [
+    "ContinuationMandate",
+    "ExecutionLifecycleReceipt",
+    "RequeueExecutionIntent",
+    "IntegrationCapabilityProfile",
+    "SIQBindingRecord"
+  ],
+  "mandatory_stop_conditions": [
+    "OPERATOR_REQUIRED_GATE",
+    "NON_NONE_AUTHORITY_DELTA",
+    "EXPLICIT_OPERATOR_BOUNDARY",
+    "UNCORRECTABLE_BLOCKER",
+    "GOVERNING_DOCUMENT_CONFLICT",
+    "MISSING_UPSTREAM_AUTHORITY",
+    "REQUIRED_ARTIFACT_UNAVAILABLE_OR_NON_REPRODUCIBLE",
+    "UNSAFE_OR_AMBIGUOUS_REPOSITORY_STATE",
+    "REQUEUE_ATTEMPTS_EXHAUSTED",
+    "FROZEN_SURFACE_DRIFT",
+    "WRITE_SET_OR_SEMANTIC_OWNER_DRIFT"
+  ],
+  "hard_boundaries": {
+    "packet_class_expansion": false,
+    "parallel_merge": false,
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "operator_gate_auto_cross": false,
+    "validation": "DENIED_UNLESS_SEPARATELY_AUTHORIZED",
+    "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE"
+  },
+  "activation": {
+    "gate_id": "DSAI3-G7",
+    "gate_class": "OPERATOR_REQUIRED",
+    "production_actuation_pre_gate": "DENIED",
+    "self_grant_prohibited": true
+  }
+}
