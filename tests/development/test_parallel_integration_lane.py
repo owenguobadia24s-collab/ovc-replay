@@ -82,7 +82,7 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn(
             "head_sha: ${{ steps.lease.outputs.head_sha }}",
             self.tests_workflow,
-        )
+       )
         self.assertEqual(
             self.tests_workflow.count(
                 "OVC_LEASE_BASE_SHA: ${{ needs.final-integration-window-admitted.outputs.base_sha }}"
@@ -111,11 +111,11 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertEqual(
             self.tests_workflow.count("tools/ci/ovc_run_with_main_lease.py"),
             4,
-        )
+       )
         self.assertGreaterEqual(
             self.workflow.count("tools/ci/ovc_run_with_main_lease.py"),
             4,
-        )
+       )
 
     def test_profile_admission_rechecks_main_before_assurance(self):
         self.assertIn("OVC_PROFILE_BASE_MOVED_BEFORE_ASSURANCE", self.workflow)
@@ -183,21 +183,21 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn(
             "OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD",
             self.workflow,
-        )
+       )
         self.assertIn("terminal.data.merged_at", self.workflow)
         self.assertIn("terminal.data.state === 'closed'", self.workflow)
         self.assertIn(
             "OVC_FINAL_INTEGRATION_PREDECESSOR_MERGED",
             self.workflow,
-        )
+       )
         self.assertIn(
             "OVC_FINAL_INTEGRATION_PREDECESSOR_RELEASED",
             self.workflow,
-        )
+       )
         self.assertIn(
             "OVC_FINAL_INTEGRATION_PREDECESSOR_INVALIDATED",
             self.workflow,
-        )
+       )
         self.assertIn(
             "OVC_FINAL_INTEGRATION_PREDECESSOR_TERMINAL_TIMEOUT",
             self.workflow,
@@ -211,23 +211,27 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn(
             "permissions:\n  contents: read\n  checks: read\n  pull-requests: read",
             self.workflow,
-        )
+       )
         self.assertNotIn("contents: write", self.workflow)
         self.assertNotIn("pull-requests: write", self.workflow)
         self.assertNotIn("github.rest.pulls.merge", self.workflow)
-        self.assertNotIn("enablePullRequestAutoMerge", self.workflow)
+        self.assertNotIn("nablePullRequestAutoMerge", self.workflow)
 
     def test_research_console_surface_is_in_canonical_discovery_and_exact_required_check(self):
         self.assertTrue(CONSOLE_PACKAGE.exists())
         self.assertIn(
-            "python3 -m pip install --disable-pip-version-check -r requirements-console-vnext.txt",
+            'python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt',
             self.tests_workflow,
         )
-        exact = "python3 -m unittest discover -s tests/research_console_vnext -v"
+        exact = "python3 -m pytest tests/research_console_vnext -q --tb=short"
         self.assertEqual(self.tests_workflow.count(exact), 1)
-        full_suite = "python3 -m unittest discover -s tests -v"
+        full_suite = "python3 -m pytest tests -q --tb=short"
         self.assertEqual(self.tests_workflow.count(full_suite), 1)
         self.assertNotIn(full_suite, self.workflow)
+        self.assertEqual(
+            self.tests_workflow.count("tools/ci/ovc_run_with_main_lease.py"),
+            4,
+        )
 
 
 if __name__ == "__main__":
