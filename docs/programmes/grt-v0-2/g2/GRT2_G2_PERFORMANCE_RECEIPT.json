@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-grt2-g2-performance-receipt/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "gate_id": "GRT2-G2",
+  "packet_id": "GRT2-G2-QUALIFICATION-EVIDENCE",
+  "workflow_run_id": 31793213073,
+  "workflow_artifact_id": 9216391444,
+  "workflow_artifact_digest": "sha256:b30f8304fc1eeb6d4b3e1d21c080bbafacad7a3e9770722b7a62a0fa0443fea6",
+  "source_commit": "4e54cec4be7847cb5bbb47d50772e6dfa58c9248",
+  "source_tree": "0eaee202d0a445f92a44ccdd295e064226972353",
+  "environment_hash": "0c61911980cffe4e2b9df35e85142a291b6cfb7ec6d3a5188e32ae192371c3ba",
+  "environment": {
+    "image_os": "ubuntu24",
+    "image_version": "20260810.271.1",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.11.15",
+    "runner_arch": "X64",
+    "runner_os": "Linux"
+  },
+  "measurement": {
+    "status": "PASS",
+    "samples_per_surface": 20,
+    "sample_count": 100,
+    "safety_margin_multiplier": 1.25,
+    "measured_peak_memory_bytes": 18522805,
+    "forced_capacity_exceedance_detected": true,
+    "scale_sweep": [
+      {"scale": 5131, "duration_ms": 474, "status": "PASS_EXACT"},
+      {"scale": 5645, "duration_ms": 530, "status": "PASS_EXACT"},
+      {"scale": 6414, "duration_ms": 594, "status": "PASS_EXACT"}
+    ]
+  },
+  "performance_budget": {
+    "schema": "grt-performance-budget/v0.2",
+    "status": "FROZEN_FROM_MEASURED_EVIDENCE",
+    "budget_hash": "88fadf691be87f0c55d98c994d29f54f6112e6c6e43f8d4bbbb328dc7fdb0b58",
+    "environment_hash": "0c61911980cffe4e2b9df35e85142a291b6cfb7ec6d3a5188e32ae192371c3ba",
+    "runtime_budgets": {
+      "GRT_FAST": {"sample_count": 20, "p50_ms": 3592, "p95_ms": 3655, "max_ms": 3686},
+      "GRT_EXACT": {"sample_count": 20, "p50_ms": 3582, "p95_ms": 3715, "max_ms": 3720},
+      "GRT_REFERENCE": {"sample_count": 20, "p50_ms": 2166, "p95_ms": 2248, "max_ms": 2252},
+      "PROOF_RENEWAL": {"sample_count": 20, "p50_ms": 1, "p95_ms": 1, "max_ms": 1},
+      "READINESS": {"sample_count": 20, "p50_ms": 1, "p95_ms": 1, "max_ms": 1}
+    },
+    "peak_memory_ceiling_bytes": 23153507,
+    "cache_storage_ceiling_bytes": 5542522,
+    "proof_evidence_size_ceiling_bytes": 552,
+    "max_supported_repository_scale": 6414,
+    "capacity_failure_threshold": 6415,
+    "authority_effect": "NONE_OPERATIONAL_BUDGET_ONLY"
+  },
+  "later_candidate_delta_rule": "The measured budget is bound to the runtime/scanner/environment source candidate. Later documentation, test, state or workflow-trigger inventory changes do not rewrite the measurement; any runtime/scanner semantic change requires remeasurement or explicit requalification.",
+  "authority_effect": "NONE_OPERATIONAL_BUDGET_ONLY",
+  "active_enforcement": "NONE"
+}

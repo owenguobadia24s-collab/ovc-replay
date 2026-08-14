@@ -51,8 +51,9 @@ class GRT2Stack797CloseoutTests(unittest.TestCase):
         self.assertEqual(state["active_enforcement"], "NONE")
         self.assertIsNone(state["debt_floor_generation"])
         self.assertEqual(state["next_packet"], "GRT2-G2-READINESS-EVIDENCE")
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_6.json")
-        self.assertEqual(pointer["next_packet"], "GRT2-G2-READINESS-EVIDENCE")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_7.json")
+        self.assertEqual(pointer["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
+        self.assertEqual(pointer["next_packet"], "GRT2-G2-QUALIFICATION-EVIDENCE")
 
 
 if __name__ == "__main__":

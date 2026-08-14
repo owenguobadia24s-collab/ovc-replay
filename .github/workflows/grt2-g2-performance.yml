@@ -1,0 +1,36 @@
+name: GRT2 G2 performance budget
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: grt2-g2-performance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  performance:
+    name: GRT2 G2 measured performance budget
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Measure exact qualification environment and freeze budget
+        run: PYTHONPATH=src:. python3 scripts/governance/grt_v0_2/measure_performance.py
+      - name: Upload measured budget evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g2-performance-evidence
+          path: artifacts/grt2-g2-performance-evidence.json
+          if-no-files-found: error
+          retention-days: 30

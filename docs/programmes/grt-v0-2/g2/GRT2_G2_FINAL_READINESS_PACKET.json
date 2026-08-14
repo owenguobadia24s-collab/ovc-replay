@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-grt2-g2-final-readiness/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "plan_version": "0.2_REVISED_RATIFIED",
+  "gate_id": "GRT2-G2",
+  "title": "Candidate implementation exactness / qualification freeze",
+  "baseline_commit": "7e5db8b99464b7afebdbce703cf3377d9b65ff82",
+  "evidence_record_commit": "6f7e9034abcd01fe8a86937dea5366e95dfdfcb1",
+  "completed_packets": [
+    "GRT2-WP1",
+    "GRT2-WP2",
+    "GRT2-WP3A",
+    "GRT2-WP3B",
+    "GRT2-WP3C",
+    "GRT2-WP3D",
+    "GRT2-WP3E",
+    "GRT2-G2-QUALIFICATION-EVIDENCE"
+  ],
+  "acceptance": {
+    "wp1_wp3_complete": "PASS",
+    "a1_a8_qualification": "PASS",
+    "mandatory_mutation_survivors": 0,
+    "reference_incremental_semantic_differences": 0,
+    "unresolved_enforcement_false_negatives": 0,
+    "blocking_false_positives": 0,
+    "deterministic_fail_closed_assurance": "PASS",
+    "post_wp3_artifact_classification_census": "PASS_RESOLVED",
+    "numeric_performance_budget_frozen": "PASS",
+    "performance_budget_hash": "88fadf691be87f0c55d98c994d29f54f6112e6c6e43f8d4bbbb328dc7fdb0b58",
+    "capacity_forced_exceedance": "PASS_CAPACITY_EXCEEDED",
+    "workflow_required_check_topology": "UNCHANGED_TWO_APPROVED_PR_LISTENERS",
+    "pre_enforcement_transition_debt": "TRACKED_NOT_YET_RECONCILED_G3_PREREQUISITE"
+  },
+  "source_evidence": {
+    "qualification_receipt": "docs/programmes/grt-v0-2/g2/GRT2_G2_QUALIFICATION_RECEIPT.json",
+    "qualification_run_id": 31792935397,
+    "qualification_artifact_digest": "sha256:debc184059274c03cc1466970a55f1d1548da05e9bb2532987f66add92bb3a68",
+    "qualification_hash": "131b08a5748acd3bf68fa1e4a69cb5019441bc42a2379259b9af4b42247015a5",
+    "performance_receipt": "docs/programmes/grt-v0-2/g2/GRT2_G2_PERFORMANCE_RECEIPT.json",
+    "performance_run_id": 31793213073,
+    "performance_artifact_digest": "sha256:b30f8304fc1eeb6d4b3e1d21c080bbafacad7a3e9770722b7a62a0fa0443fea6",
+    "transition_debt_tracking": "docs/programmes/grt-v0-2/g2/GRT2_G2_TRANSITION_DEBT_TRACKING.json",
+    "ci_inventory_policy": "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_3.json"
+  },
+  "source_binding_assurance": {
+    "qualification_source_commit": "0f153dace509122103611f569bad2e392446fd3b",
+    "performance_source_commit": "4e54cec4be7847cb5bbb47d50772e6dfa58c9248",
+    "runtime_semantic_delta_after_performance_source": "NONE",
+    "post_performance_changes": "workflow trigger correction, CI inventory census, tests, and evidence records only",
+    "qualification_to_performance_delta": "A7 strengthened by explicit capacity guard and measured forced-exceedance evidence; no permissive semantic relaxation",
+    "final_record_exact_head_assurance_required": true
+  },
+  "warnings": [
+    "Pre-enforcement transition debt is tracked but no numeric zero is claimed; the ratified plan requires zero transition debt and baseline expansion before G3.",
+    "G2 PASS, if final exact-head QA remains green, grants no G2.5 or G3 enforcement authority.",
+    "Repository Constitution remains PROPOSED_UNADMITTED and DebtFloor generation 0 remains absent."
+  ],
+  "blockers": [],
+  "proposed_authority_delta": "NONE_G2_QUALIFICATION_FREEZE_ONLY",
+  "recommended_decision": "PASS_PENDING_FINAL_RECORD_EXACT_HEAD_ASSURANCE",
+  "rollback": "No enforcement activation occurs at G2. Preserve qualification/performance evidence and correct forward; do not rewrite B0 or Git history."
+}
