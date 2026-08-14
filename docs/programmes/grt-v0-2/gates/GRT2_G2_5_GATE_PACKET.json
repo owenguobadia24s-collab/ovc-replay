@@ -8,7 +8,7 @@
   "baseline_commit": "c4aff0fa34aa1123031244d9e003bd32b2115706",
   "baseline_source": "main after delegated GRT2-G2 PASS squash merge PR #811",
   "completed_packets": ["GRT2-WP1","GRT2-WP2","GRT2-WP3A","GRT2-WP3B","GRT2-WP3C","GRT2-WP3D","GRT2-WP3E","GRT2-G2-QUALIFICATION-EVIDENCE"],
-  "current_authority": {
+  "current_authority_before_decision": {
     "constitution_status": "PROPOSED_UNADMITTED",
     "active_enforcement": "NONE",
     "debt_floor_generation": null,
@@ -16,7 +16,7 @@
     "g2_5_status": "GATE_READY_OPERATOR_REQUIRED",
     "g3_status": "PENDING_OPERATOR_REQUIRED_AFTER_G2_5_PILOT"
   },
-  "proposed_authority_delta": {
+  "approved_authority_delta": {
     "type": "LIMITED_NEW_ARTIFACT_ENFORCEMENT",
     "operator_required": true,
     "blocking_scope": [
@@ -83,23 +83,12 @@
     "qa_requirement": "PASS",
     "historical_dry_run": "Before G3 presentation, replay full G3 semantics in shadow over every G2.5 candidate and the last 10 reconstructible real ordinary integration candidates; if fewer than 10 are reconstructible, use all and record HISTORICAL_INTEGRATION_REPLAY_GAP."
   },
-  "warnings": [
-    "GRT2-G2.5 is operator-reserved and this packet does not activate it.",
-    "GRT2-G3 remains separately operator-required.",
-    "The ratified plan's GitHub assurance-visibility interlock remains a G3 concern unless direct ruleset verification or an exact repository-materialised DSAI attestation exists.",
-    "Transition debt is tracked; no zero claim and no DebtFloor exists at G2.5 gate preparation."
-  ],
-  "rollback": "Before approval, close the unmerged gate PR. After a G2.5 PASS, disable LIMITED_NEW_ARTIFACT_ENFORCEMENT through an explicit operator-governed rollback/incident decision, preserve the pilot ledger and all failures, and return to enforcement NONE; do not rewrite history or create a DebtFloor.",
+  "rollback": "Disable LIMITED_NEW_ARTIFACT_ENFORCEMENT through an explicit operator-governed rollback/incident decision, preserve the pilot ledger and all failures, and return to enforcement NONE; do not rewrite history or create a DebtFloor.",
   "recommended_decision": "PASS",
   "allowed_operator_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
-  "exact_work_after_pass": [
-    "Materialise the operator GRT2-G2.5 PASS decision and exact pilot baseline on the gate branch.",
-    "Activate LIMITED_NEW_ARTIFACT_ENFORCEMENT only; keep full Constitution/GRT-EXACT/DebtFloor G3 activation inactive.",
-    "Start the append-only G2.5 pilot ledger and full-G3 shadow comparison for every eligible integration candidate.",
-    "Accumulate at least 24 elapsed hours and at least 8 eligible candidate evaluations, preserving real ordinary and qualification-injection counts separately.",
-    "Run the required first-enforcement historical dry run and evaluate escapes, false positives, false negatives, scope leakage, performance, overrides and QA.",
-    "Prepare one consolidated GRT2-G3 operator packet only when all G3 readiness conditions are satisfied."
-  ],
-  "operator_decision": null,
-  "authority_consumed_by_preparation": "NONE"
+  "operator_decision": "PASS",
+  "operator_decision_record": "docs/programmes/grt-v0-2/gates/GRT2_G2_5_OPERATOR_DECISION.json",
+  "operator_decided_at": "2026-08-14T13:53:00+01:00",
+  "authority_consumed": "LIMITED_NEW_ARTIFACT_ENFORCEMENT_ONLY",
+  "post_decision_status": "APPROVED_PILOT_ACTIVE"
 }
