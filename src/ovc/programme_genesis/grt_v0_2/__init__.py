@@ -1,10 +1,12 @@
 """GRT v0.2 repository-conformance implementation package.
 
 The package remains non-enforcing until separately reserved GRT2-G2.5/G3
-operator decisions. WP0 exposes read-only exact-source reconciliation; WP1
-materializes the inactive Repository Constitution candidate and bootstrap
-validation surface; WP2 materializes immutable B0/debt mechanics; WP3A adds
-the non-enforcing deterministic reference scanner/artifact graph.
+operator decisions. Its namespace remains read-only exact-source reconciliation only
+for authority purposes. WP0 exposes exact-source reconciliation; WP1 materializes
+the inactive Repository Constitution candidate and bootstrap validation surface;
+WP2 materializes immutable B0/debt mechanics; WP3A adds the non-enforcing
+deterministic reference scanner/artifact graph; WP3B adds non-authoritative
+governance-binding projection.
 """
 
 from .wp0 import B0_SOURCE_COMMIT, B0_SOURCE_TREE, B0_TOPOLOGY_SHA256, B0_WARNING_COUNT, WP0ReconciliationError
