@@ -10,6 +10,7 @@
   "gate_id": "DSAI3-G0",
   "prerequisites": [
     "OVC-DSAI-v0.2 terminal COMPLETED",
+    "OVC.SIQ.RUNTIME.v0.1 terminal SIQ_ACTIVE_SERIALIZED_MINIMAL_CRITICAL_SECTION",
     "DSAI3-G0 operator admission",
     "current-main/open-PR preflight"
   ],
@@ -29,8 +30,9 @@
   },
   "current_authority": {
     "parent_orch345": "UNCHANGED_ACTIVE_BOUNDED",
+    "siq_runtime": "ACTIVE_EXISTING_SERIALIZED_MINIMAL_CRITICAL_SECTION",
     "dsai3_continuous_executor": "INACTIVE_SHADOW_SANDBOX_ONLY",
-    "dsai3_landing_train": "INACTIVE_SHADOW_SANDBOX_ONLY",
+    "dsai3_siq_actuation_binding": "INACTIVE_SHADOW_SANDBOX_ONLY",
     "dsai3_write_requeue_executor": "INACTIVE_SHADOW_SANDBOX_ONLY"
   },
   "target_terminal_state": "IMPLEMENTED_CONTINUOUS_PACKET_EXECUTION_ORDERED_LANDING_TRAIN"

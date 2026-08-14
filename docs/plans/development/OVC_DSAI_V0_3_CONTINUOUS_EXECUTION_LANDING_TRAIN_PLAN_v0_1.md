@@ -9,7 +9,7 @@
 
 ## 1. Purpose
 
-DSAI v0.3 closes the execution gap exposed by live ORCH-3/4/5 operation. DSAI v0.2 can select packet trains, classify parallel-safe construction, schedule a portfolio and decide whether stale-main requeue is lawful, but the automatic entrypoint currently terminates at `DECISION_SELECTED`. DSAI v0.3 adds the bounded execution and integration substrate required to turn those decisions into continuous repository-backed packet progression.
+DSAI v0.3 closes the execution gap exposed by live ORCH-3/4/5 operation. DSAI v0.2 can select packet trains, classify parallel-safe construction, schedule a portfolio and decide whether stale-main requeue is lawful, but the automatic entrypoint currently terminates at `DECISION_SELECTED`. The repository already has an operator-activated Serialized Integration Queue (`OVC.SIQ.RUNTIME.v0.1`) with FIFO READY ordering, one late BASE_SENSITIVE lease, automatic lawful requeue policy and immediate successor advancement. DSAI v0.3 therefore does **not** create or replace the merge queue. It adds the missing persistent packet actuator and binds ORCH-3/4/5 execution to the existing SIQ runtime.
 
 The target operating model is:
 
@@ -36,11 +36,13 @@ This section is implementation target semantics only until `DSAI3-G7` operator a
 
 ORCH-3/4/5 retain their active v0.2 bounded authority for already-authorized `LOW_RISK_IMPLEMENTATION` work. DSAI v0.3 does not broaden packet classes, write domains, scientific authority or merge concurrency.
 
-### 3.2 Ordered landing train
+### 3.2 Existing SIQ is the ordered landing train
 
-Completed integration candidates enter a persistent deterministic landing train. Only the train-front candidate may perform base-sensitive final merge assurance against current `main`. Waiting candidates preserve immutable payload/scope identities and queue position but do not repeatedly consume final-main assurance that is guaranteed to become stale behind predecessors.
+The active `OVC.SIQ.RUNTIME.v0.1` constitution/runtime remains the sole landing-queue owner. DSAI v0.3 MUST reuse its existing `QueueCandidate`, `QueueState`, FIFO `ready_sequence`, single BASE_SENSITIVE lease, PDC movement classification, selective assurance reuse and immediate-successor rules rather than duplicating or superseding them.
 
-After the train-front packet integrates, the next candidate is reconciled from the new lawful main without force-push/history rewrite, then receives fresh exact-head assurance before squash merge.
+Only the SIQ queue-head candidate may perform base-sensitive final merge assurance against current `main`. Waiting candidates preserve immutable payload/scope identities and queue position but do not repeatedly consume final-main assurance that is guaranteed to become stale behind predecessors.
+
+After the queue-head packet integrates, the next candidate is reconciled from the new lawful main without force-push/history rewrite, then receives fresh exact-head assurance before squash merge.
 
 ### 3.3 Build scheduling is separate from merge scheduling
 
@@ -64,17 +66,18 @@ Materialise this plan, the operator admission, current-main reconciliation, prog
 ### DSAI3-WP1 — normative contracts and state model
 Implement contracts/schemas/fixtures for:
 - `ContinuationMandate`;
-- `LandingQueueEntry`;
-- `LandingTrainState`;
 - `ExecutionLifecycleReceipt`;
 - `RequeueExecutionIntent`;
 - `IntegrationCapabilityProfile`;
+- `SIQBindingRecord`;
 - explicit command boundary semantics.
+
+`LandingQueueEntry` / `LandingTrainState` are **not** new DSAI3-owned objects; the existing SIQ `QueueCandidate` / `QueueState` remain authoritative for queue mechanics.
 
 **Gate `DSAI3-G1`: AUTO_RATIFIABLE**, authority delta `NONE`.
 
-### DSAI3-WP2 — deterministic ordered landing planner
-Implement side-effect-free landing admission, ordering, train-front selection, predecessor dependency handling, final-assurance eligibility and deterministic restart from repository evidence.
+### DSAI3-WP2 — deterministic ORCH-to-SIQ binding planner
+Implement side-effect-free binding from authorized ORCH packet selection into the existing SIQ READY admission/order/queue-head/final-assurance model, plus deterministic restart from repository evidence. No second landing queue may be created.
 
 Required invariants:
 - exactly one train-front integration candidate;
@@ -126,14 +129,14 @@ Acceptance:
 
 **Gate `DSAI3-G6`: AUTO_RATIFIABLE**, authority delta `NONE`.
 
-### DSAI3-G7 — activate continuous packet executor and landing train
+### DSAI3-G7 — activate continuous packet executor and SIQ actuation binding
 **OPERATOR_REQUIRED.**
 
 Proposed future activation delta, if explicitly approved:
 - persistent continuation mandates for existing authorized low-risk packet classes;
 - automatic successor execution until a mandatory stop;
 - write-capable stale-main requeue/reconciliation within existing attempt caps;
-- persistent ordered landing queue;
+- write-capable binding to the already-active SIQ ordered landing queue;
 - automatic eligible squash integration remains serialized and exact-head revalidated;
 - automatic closeout/successor release;
 - execution lifecycle receipts.
@@ -180,7 +183,7 @@ Target terminal state:
 
 Any authority ambiguity, frozen-surface drift, packet-class expansion, changed write-set/semantic owner, exhausted requeue cap, unresolved blocking review, non-reproducible artifact or S3/S4 incident stops the affected lane fail-closed.
 
-Before G7, rollback is removal/disablement of v0.3 shadow/sandbox surfaces while preserving v0.2 ORCH-3/4/5 authority unchanged. After G7, rollback is forward-disable of the v0.3 actuator/landing runtime back to the v0.2 bounded ORCH-3/4/5 decision/dispatch model, preserving all historical receipts and merged packets.
+Before G7, rollback is removal/disablement of v0.3 shadow/sandbox surfaces while preserving v0.2 ORCH-3/4/5 authority and the already-active SIQ runtime unchanged. After G7, rollback is forward-disable of the v0.3 actuator/SIQ-binding runtime back to the v0.2 bounded ORCH-3/4/5 decision/dispatch model plus existing SIQ runtime, preserving all historical receipts and merged packets.
 
 ## 7. Acceptance benchmark
 

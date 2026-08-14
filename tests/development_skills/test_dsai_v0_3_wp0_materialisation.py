@@ -47,7 +47,7 @@ class DsaiV03Wp0MaterialisationTests(unittest.TestCase):
         self.assertEqual(recon["authority_delta"], "NONE")
         self.assertEqual(recon["next_packet"], "DSAI3-WP1")
 
-    def test_programme_state_stops_before_activation_gate(self) -> None:
+    def test_programme_state_stops_before_activation_gate_and_reuses_active_siq(self) -> None:
         state = json.loads(STATE.read_text(encoding="utf-8"))
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
         self.assertEqual(state["status"], "RUNNING")
@@ -60,16 +60,21 @@ class DsaiV03Wp0MaterialisationTests(unittest.TestCase):
             state["current_authority"]["dsai3_continuous_executor"],
             "INACTIVE_SHADOW_SANDBOX_ONLY",
         )
+        self.assertEqual(
+            state["current_authority"]["siq_runtime"],
+            "ACTIVE_EXISTING_SERIALIZED_MINIMAL_CRITICAL_SECTION",
+        )
         self.assertEqual(pointer["current_state"], STATE.name)
         self.assertEqual(pointer["next_packet"], "DSAI3-WP1")
 
-    def test_plan_contains_continuous_command_and_ordered_landing_invariants(self) -> None:
+    def test_plan_contains_continuous_command_and_siq_reuse_invariants(self) -> None:
         text = PLAN.read_text(encoding="utf-8")
         self.assertIn("parallel construction lanes -> persistent ordered landing train -> one serialized squash integration point", text)
         self.assertIn("OVC CONTINUE [packet]", text)
         self.assertIn("OVC CONTINUE ONLY <packet>", text)
-        self.assertIn("Only the train-front candidate may perform base-sensitive final merge assurance", text)
-        self.assertIn("DSAI3-G7 — activate continuous packet executor and landing train", text)
+        self.assertIn("The active `OVC.SIQ.RUNTIME.v0.1` constitution/runtime remains the sole landing-queue owner", text)
+        self.assertIn("Only the SIQ queue-head candidate may perform base-sensitive final merge assurance", text)
+        self.assertIn("DSAI3-G7 — activate continuous packet executor and SIQ actuation binding", text)
         self.assertIn("OPERATOR_REQUIRED", text)
 
 

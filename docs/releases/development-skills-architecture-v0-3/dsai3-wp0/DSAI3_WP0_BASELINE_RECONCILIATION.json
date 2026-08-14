@@ -5,12 +5,14 @@
   "baseline_main": "7e5db8b99464b7afebdbce703cf3377d9b65ff82",
   "baseline_main_message": "GRT2: close out reconciled Stack #797",
   "parent_dsai_state": "OVC-DSAI-v0.2 COMPLETED",
+  "siq_runtime_terminal": "SIQ_ACTIVE_SERIALIZED_MINIMAL_CRITICAL_SECTION",
   "active_parent_authority": {
     "ORCH-3": "ACTIVE_BOUNDED_LOW_RISK_PACKET_TRAINS",
     "ORCH-4": "ACTIVE_BOUNDED_PARALLEL_BUILD_SERIAL_INTEGRATION",
     "ORCH-5": "ACTIVE_BOUNDED_PORTFOLIO_DISPATCH_ONLY",
     "parallel_merge": false,
-    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED"
+    "integration_policy": "PDC_SERIAL_FINAL_INTEGRATION_WINDOW_REQUIRED",
+    "siq_policy": "OVC.SIQ.v0.1"
   },
   "live_coordination_observations": [
     "DMRPI closeout PR 794 remains open after stale-main detection",
@@ -20,6 +22,6 @@
   "open_prs_inspected": [803, 794, 727, 655, 620, 604, 507, 479, 433, 418, 422, 413, 211, 202],
   "conflicting_active_dsai_v0_3_programme_found": false,
   "authority_delta": "NONE",
-  "result": "PASS_ADMISSION_BASELINE_RECONCILED",
+  "result": "PASS_ADMISSION_BASELINE_RECONCILED_REUSE_ACTIVE_SIQ",
   "next_packet": "DSAI3-WP1"
 }
