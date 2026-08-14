@@ -57,6 +57,23 @@ from .cei import (
     render_condition,
     validate_constraint_ast,
 )
+from .term_qualification import (
+    ADMISSION_PROPOSAL_STATES,
+    CHALLENGE_RECOMMENDATIONS,
+    CHALLENGE_TARGETS,
+    QUALIFICATION_DISPOSITIONS,
+    QUALIFICATION_STAGES,
+    TERM_CLASSES,
+    TRANSPORT_STATUSES,
+    TermQualificationError,
+    build_language_candidate_binding,
+    build_semantic_admission_proposal,
+    build_structural_term_candidate,
+    build_term_challenge,
+    build_term_qualification_record,
+    build_term_qualification_rule_pack,
+    build_transport_candidate,
+)
 from .validators import ESLValidationError, validate_occurrence
 
 __all__ = [
@@ -103,6 +120,21 @@ __all__ = [
     "build_population_manifest",
     "render_condition",
     "validate_constraint_ast",
+    "ADMISSION_PROPOSAL_STATES",
+    "CHALLENGE_RECOMMENDATIONS",
+    "CHALLENGE_TARGETS",
+    "QUALIFICATION_DISPOSITIONS",
+    "QUALIFICATION_STAGES",
+    "TERM_CLASSES",
+    "TRANSPORT_STATUSES",
+    "TermQualificationError",
+    "build_language_candidate_binding",
+    "build_semantic_admission_proposal",
+    "build_structural_term_candidate",
+    "build_term_challenge",
+    "build_term_qualification_record",
+    "build_term_qualification_rule_pack",
+    "build_transport_candidate",
     "ESLValidationError",
     "validate_occurrence",
 ]
