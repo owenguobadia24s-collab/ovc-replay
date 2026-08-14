@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-grt2-g2-5-operator-decision/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "plan_version": "0.2_REVISED_RATIFIED",
+  "gate_id": "GRT2-G2.5",
+  "decision": "PASS",
+  "decision_class": "OPERATOR_REQUIRED_AUTHORITY_CHANGE",
+  "operator_instruction": "OVC APPROVE GRT2-G2.5 PASS",
+  "decided_at": "2026-08-14T13:53:00+01:00",
+  "baseline_commit": "c4aff0fa34aa1123031244d9e003bd32b2115706",
+  "gate_packet": "docs/programmes/grt-v0-2/gates/GRT2_G2_5_GATE_PACKET.json",
+  "qa_packet": "docs/programmes/grt-v0-2/gates/GRT2_G2_5_QA_PACKET.json",
+  "approved_authority_delta": "LIMITED_NEW_ARTIFACT_ENFORCEMENT_ONLY",
+  "active_enforcement_after_decision": "LIMITED_NEW_ARTIFACT_ENFORCEMENT",
+  "constitution_status_after_decision": "PROPOSED_UNADMITTED",
+  "debt_floor_generation_after_decision": null,
+  "g3_authority_effect": "NONE",
+  "blocking_scope": [
+    "newly ADDED governed artifacts violating applicable constitutional rules",
+    "new permanent repository roots introduced after the pilot baseline",
+    "new workflows introduced after the pilot baseline",
+    "new writes into constitutionally forbidden roots",
+    "new writes into roots classified DEPRECATED_NO_NEW_WRITES"
+  ],
+  "shadow_only_scope": "Findings caused solely by modification of pre-existing artifacts remain shadow-but-tracked unless an independent pre-existing assurance already blocks them.",
+  "pilot_threshold": {
+    "minimum_elapsed_hours": 24,
+    "minimum_eligible_candidate_evaluations": 8,
+    "normal_real_ordinary_candidate_target": 4,
+    "qualification_injection_earliest_after_days": 14
+  },
+  "reserved_boundaries_preserved": [
+    "GRT2-G3 full constitutional enforcement",
+    "DebtFloor generation",
+    "ownership reassignment",
+    "deferred PGN adoption",
+    "constitutional semantic change",
+    "destructive cleanup or history rewrite",
+    "market/scientific/Validation/publication/probability/risk/exposure/execution/agent-write authority"
+  ],
+  "rollback": "Disable LIMITED_NEW_ARTIFACT_ENFORCEMENT only through an explicit operator-governed rollback/incident decision; preserve pilot ledger and failures; do not create a DebtFloor or rewrite history.",
+  "next_packet": "GRT2-G2.5-PILOT",
+  "next_gate": "GRT2-G3",
+  "authority_effect": "ACTIVATE_LIMITED_NEW_ARTIFACT_ENFORCEMENT"
+}

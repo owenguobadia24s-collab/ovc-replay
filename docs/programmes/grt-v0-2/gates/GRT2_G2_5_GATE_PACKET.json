@@ -1,0 +1,94 @@
+{
+  "schema": "ovc-grt2-g2-5-gate-packet/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "plan_version": "0.2_REVISED_RATIFIED",
+  "gate_id": "GRT2-G2.5",
+  "title": "Limited new-artifact enforcement pilot",
+  "baseline_commit": "c4aff0fa34aa1123031244d9e003bd32b2115706",
+  "baseline_source": "main after delegated GRT2-G2 PASS squash merge PR #811",
+  "completed_packets": ["GRT2-WP1","GRT2-WP2","GRT2-WP3A","GRT2-WP3B","GRT2-WP3C","GRT2-WP3D","GRT2-WP3E","GRT2-G2-QUALIFICATION-EVIDENCE"],
+  "current_authority_before_decision": {
+    "constitution_status": "PROPOSED_UNADMITTED",
+    "active_enforcement": "NONE",
+    "debt_floor_generation": null,
+    "g2_status": "APPROVED_DELEGATED_PASS",
+    "g2_5_status": "GATE_READY_OPERATOR_REQUIRED",
+    "g3_status": "PENDING_OPERATOR_REQUIRED_AFTER_G2_5_PILOT"
+  },
+  "approved_authority_delta": {
+    "type": "LIMITED_NEW_ARTIFACT_ENFORCEMENT",
+    "operator_required": true,
+    "blocking_scope": [
+      "newly ADDED governed artifacts violating applicable constitutional rules",
+      "new permanent repository roots introduced after the pilot baseline",
+      "new workflows introduced after the pilot baseline",
+      "new writes into constitutionally forbidden roots",
+      "new writes into roots classified DEPRECATED_NO_NEW_WRITES"
+    ],
+    "explicitly_not_activated": [
+      "full GRT2-G3 constitutional enforcement",
+      "DebtFloor generation",
+      "grandfathering of any new debt",
+      "blocking findings caused solely by modification of pre-existing artifacts unless an independent pre-existing assurance already blocks them",
+      "ownership reassignment or deferred PGN adoption",
+      "market/scientific/Validation/publication/probability/risk/exposure/execution/agent-write authority"
+    ]
+  },
+  "acceptance_conditions": {
+    "g2_pass": "PASS",
+    "exact_pilot_scope_frozen": "PASS",
+    "rollback_defined": "PASS",
+    "evidence_threshold_defined": "PASS",
+    "monitoring_plan_prepared": "PASS",
+    "qualification_a1_a8": "PASS",
+    "mandatory_mutation_survivors": 0,
+    "reference_incremental_semantic_differences": 0,
+    "unresolved_enforcement_false_negatives": 0,
+    "blocking_false_positives": 0,
+    "numeric_performance_budget_frozen": "PASS",
+    "capacity_fail_closed": "PASS"
+  },
+  "evidence": {
+    "g2_merge_commit": "c4aff0fa34aa1123031244d9e003bd32b2115706",
+    "g2_final_decision": "docs/programmes/grt-v0-2/g2/GRT2_G2_FINAL_DECISION.json",
+    "g2_final_qa": "docs/programmes/grt-v0-2/g2/GRT2_G2_FINAL_QA_PACKET.json",
+    "g2_current_main_renewal": "docs/programmes/grt-v0-2/g2/GRT2_G2_CURRENT_MAIN_RENEWAL.json",
+    "qualification_run_id": 31792935397,
+    "qualification_hash": "131b08a5748acd3bf68fa1e4a69cb5019441bc42a2379259b9af4b42247015a5",
+    "performance_run_id": 31793213073,
+    "performance_budget_hash": "88fadf691be87f0c55d98c994d29f54f6112e6c6e43f8d4bbbb328dc7fdb0b58",
+    "final_tests_run_id": 31799424610,
+    "final_tiered_run_id": 31799424534,
+    "final_suite": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "pilot_evidence_threshold": {
+    "minimum_elapsed_hours": 24,
+    "minimum_eligible_candidate_evaluations": 8,
+    "normal_real_ordinary_candidate_target": 4,
+    "qualification_injection_earliest_after_calendar_days": 14,
+    "qualification_injection_rule": "May supplement missing ordinary-count slots only; must be real PR-shaped prospective integration trees, use no special waiver, exercise declared scope classes, and be labeled QUALIFICATION_INJECTION.",
+    "synthetic_as_ordinary_evidence": false
+  },
+  "g3_readiness_monitoring": {
+    "full_g3_shadow_on_every_g2_5_candidate": true,
+    "pilot_escapes_required": 0,
+    "blocking_false_positives_required": 0,
+    "unresolved_false_negatives_required": 0,
+    "scope_leakage_required": 0,
+    "performance_requirement": "within frozen G2 budget or incident/requalification",
+    "override_requirement": "exact and operator-issued only; no broad waiver",
+    "qa_requirement": "PASS",
+    "historical_dry_run": "Before G3 presentation, replay full G3 semantics in shadow over every G2.5 candidate and the last 10 reconstructible real ordinary integration candidates; if fewer than 10 are reconstructible, use all and record HISTORICAL_INTEGRATION_REPLAY_GAP."
+  },
+  "rollback": "Disable LIMITED_NEW_ARTIFACT_ENFORCEMENT through an explicit operator-governed rollback/incident decision, preserve the pilot ledger and all failures, and return to enforcement NONE; do not rewrite history or create a DebtFloor.",
+  "recommended_decision": "PASS",
+  "allowed_operator_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "operator_decision": "PASS",
+  "operator_decision_record": "docs/programmes/grt-v0-2/gates/GRT2_G2_5_OPERATOR_DECISION.json",
+  "operator_decided_at": "2026-08-14T13:53:00+01:00",
+  "authority_consumed": "LIMITED_NEW_ARTIFACT_ENFORCEMENT_ONLY",
+  "post_decision_status": "APPROVED_PILOT_ACTIVE"
+}

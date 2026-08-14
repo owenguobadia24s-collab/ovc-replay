@@ -1,0 +1,50 @@
+from __future__ import annotations
+
+import json
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+GATES = ROOT / "docs/programmes/grt-v0-2/gates"
+STATE = ROOT / "registries/implementation/grt_v0_2"
+AUTH = ROOT / "registries/authority"
+
+
+class GRT2G25OperatorPassTests(unittest.TestCase):
+    def test_operator_pass_activates_only_limited_new_artifact_enforcement(self) -> None:
+        decision = json.loads((GATES / "GRT2_G2_5_OPERATOR_DECISION.json").read_text(encoding="utf-8"))
+        authority = json.loads((AUTH / "GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json").read_text(encoding="utf-8"))
+        self.assertEqual(decision["decision"], "PASS")
+        self.assertEqual(decision["approved_authority_delta"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT_ONLY")
+        self.assertEqual(decision["active_enforcement_after_decision"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
+        self.assertIsNone(decision["debt_floor_generation_after_decision"])
+        self.assertEqual(decision["g3_authority_effect"], "NONE")
+        self.assertEqual(authority["authority_status"], "ACTIVE")
+        self.assertEqual(authority["enforcement_mode"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
+        self.assertEqual(authority["constitution_status"], "PROPOSED_UNADMITTED")
+        self.assertIsNone(authority["debt_floor_generation"])
+        self.assertEqual(authority["g3_status"], "NOT_AUTHORISED")
+
+    def test_programme_state_enters_evidence_gated_pilot(self) -> None:
+        state = json.loads((STATE / "OVC_GRT2_STATE_v0_10.json").read_text(encoding="utf-8"))
+        pointer = json.loads((STATE / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
+        monitoring = json.loads((GATES / "GRT2_G2_5_PILOT_MONITORING_PLAN.json").read_text(encoding="utf-8"))
+        ledger = json.loads((GATES / "GRT2_G2_5_PILOT_LEDGER.json").read_text(encoding="utf-8"))
+        self.assertEqual(state["status"], "RUNNING")
+        self.assertEqual(state["g2_5_status"], "APPROVED_OPERATOR_PASS_PILOT_ACTIVE")
+        self.assertEqual(state["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
+        self.assertEqual(state["constitution_status"], "PROPOSED_UNADMITTED")
+        self.assertIsNone(state["debt_floor_generation"])
+        self.assertEqual(state["g3_status"], "PENDING_PILOT_EVIDENCE_AND_OPERATOR_REQUIRED")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_10.json")
+        self.assertEqual(pointer["status"], "RUNNING")
+        self.assertEqual(pointer["gate_id"], "GRT2-G3")
+        self.assertEqual(monitoring["status"], "ACTIVE_COLLECTING_EVIDENCE")
+        self.assertEqual(monitoring["threshold"]["minimum_elapsed_hours"], 24)
+        self.assertEqual(monitoring["threshold"]["minimum_eligible_candidate_evaluations"], 8)
+        self.assertEqual(ledger["eligible_candidate_count"], 0)
+        self.assertFalse(ledger["g3_ready"])
+
+
+if __name__ == "__main__":
+    unittest.main()
