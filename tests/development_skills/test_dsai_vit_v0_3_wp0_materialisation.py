@@ -27,8 +27,9 @@ class DsaiVitV03Wp0MaterialisationTests(unittest.TestCase):
     def test_new_programme_is_running_and_legacy_route_is_superseded(self) -> None:
         pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         state = json.loads((STATE_ROOT / pointer["current_state"]).read_text(encoding="utf-8"))
+        initial_state = json.loads((STATE_ROOT / "OVC_DSAI_VIT_V0_3_STATE_v0_1.json").read_text(encoding="utf-8"))
         self.assertEqual(state["programme_id"], "OVC-DSAI-VIT-v0.3")
-        self.assertEqual(state["next_packet"], "DSAI3V-WP1")
+        self.assertEqual(initial_state["next_packet"], "DSAI3V-WP1")
         self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "DENIED")
         self.assertEqual(state["current_authority"]["grt_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         legacy_pointer = json.loads((LEGACY_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
