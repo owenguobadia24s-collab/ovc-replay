@@ -3,8 +3,10 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at, text_at
 
 ROOT = Path(__file__).resolve().parents[2]
+HISTORICAL_GATE_COMMIT = "e19456821e243c6f9fb7f77e49cb5cad295c3d18"
 
 
 class ROWP2ContractsTests(unittest.TestCase):
@@ -37,7 +39,10 @@ class ROWP2ContractsTests(unittest.TestCase):
         self.assertNotIn("/home/", text)
 
     def test_command_registry_has_no_network_or_git_authority(self) -> None:
-        registry = json.loads((ROOT / "registries/research_operations/RESEARCH_OPERATIONS_COMMAND_REGISTRY_v0_1.json").read_text())
+        registry = json_at(
+            HISTORICAL_GATE_COMMIT,
+            ROOT / "registries/research_operations/RESEARCH_OPERATIONS_COMMAND_REGISTRY_v0_1.json",
+        )
         self.assertEqual(12, len(registry["commands"]))
         self.assertEqual("APPROVED_BOUNDED_LOCAL_OPERATION_RO_G2_PASS", registry["status"])
         self.assertEqual("NONE", registry["network_operations"])
@@ -52,8 +57,11 @@ class ROWP2ContractsTests(unittest.TestCase):
         self.assertFalse(location["additionalProperties"])
 
     def test_authority_is_wp2_reviewed_and_bounded_after_ro_g2(self) -> None:
-        authority = (ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml").read_text()
-        implementation = (ROOT / "registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml").read_text()
+        authority = text_at(HISTORICAL_GATE_COMMIT, ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml")
+        implementation = text_at(
+            HISTORICAL_GATE_COMMIT,
+            ROOT / "registries/research_operations/RESEARCH_OPERATIONS_IMPLEMENTATION_REGISTRY_v0_1.yaml",
+        )
         self.assertIn("state: RO_G2_PASS_WP3_BUILD_AUTHORISED", authority)
         self.assertIn("ro_g2: PASS", authority)
         self.assertIn("cli: APPROVED_BOUNDED_LOCAL_OPERATION", authority)

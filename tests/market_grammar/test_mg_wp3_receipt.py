@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json,unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 ROOT=Path(__file__).resolve().parents[2]; BASE=ROOT/'docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp3'; STATE=ROOT/'registries/opt_b/market_grammar/OVC_MARKET_GRAMMAR_PROGRAMME_STATE_v0_1.jsonc'
 def load(path): return json.loads(path.read_text(encoding='utf-8'))
 class MarketGrammarWp3ReceiptTests(unittest.TestCase):
@@ -9,5 +10,5 @@ class MarketGrammarWp3ReceiptTests(unittest.TestCase):
  def test_decision_is_delegated_nonreserved_pass(self):
   d=load(BASE/'MG_WP3_DELEGATED_DECISION.json'); self.assertEqual('PASS',d['decision']); self.assertTrue(d['delegated_authority']); self.assertFalse(d['operator_required']); self.assertEqual('INACTIVE_NONCANONICAL_SHADOW_EXPERIMENT_IMPLEMENTATION_ONLY',d['authority_delta'])
  def test_state_preserves_completion_and_unlocks_wp4(self):
-  s=load(STATE); p={x['packet_id']:x for x in s['packets']}; self.assertEqual('COMPLETED',p['MG-WP3']['status']); self.assertIn(p['MG-WP4']['status'],{'READY','RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertNotEqual('MG-WP3',s['next_packet']); self.assertEqual('OPERATOR_REQUIRED',p['MG-WP10']['authority_required'])
+  s=json_at('218339fcc496e8dc42863552e2a170a30a06c024',STATE); p={x['packet_id']:x for x in s['packets']}; self.assertEqual('COMPLETED',p['MG-WP3']['status']); self.assertIn(p['MG-WP4']['status'],{'READY','RUNNING','IMPLEMENTED','QA_REVIEW','APPROVED','COMPLETED'}); self.assertNotEqual('MG-WP3',s['next_packet']); self.assertEqual('OPERATOR_REQUIRED',p['MG-WP10']['authority_required'])
 if __name__=='__main__': unittest.main()

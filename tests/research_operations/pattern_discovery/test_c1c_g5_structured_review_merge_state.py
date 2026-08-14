@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import unittest
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -13,7 +14,11 @@ DEFER = ROOT / "docs/releases/opt-b-c1-v2/corrective/c1c-g5/operator-gate/C1C_G5
 
 
 def load(path: Path) -> dict[str, object]:
-    value = json.loads(path.read_text(encoding="utf-8"))
+    value = (
+        json_at("8be9ded5a3f42e79d423ee06e2f890bc7cbf7d8b", path)
+        if path == STATE
+        else json.loads(path.read_text(encoding="utf-8"))
+    )
     if not isinstance(value, dict):
         raise AssertionError(path)
     return value

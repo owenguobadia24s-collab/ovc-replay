@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[4]
@@ -13,7 +14,7 @@ RELEASE = ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-wp0"
 
 class C2P2WP0MaterialisationTest(unittest.TestCase):
     def test_exact_ratified_plan_and_authority_boundary(self) -> None:
-        state = json.loads(STATE.read_text(encoding="utf-8"))
+        state = json_at("496c4c7f9408eece8e02807faee4d403475cb3d9", STATE)
         self.assertEqual(state["schema"], "ovc-c2p2-programme-state/v2")
         self.assertEqual(state["programme_id"], "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-v0.2")
         self.assertEqual(state["plan_id"], "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED")
@@ -39,7 +40,7 @@ class C2P2WP0MaterialisationTest(unittest.TestCase):
             self.assertTrue((RELEASE / name).is_file(), name)
 
     def test_wp1_is_first_implementation_packet(self) -> None:
-        state = json.loads(STATE.read_text(encoding="utf-8"))
+        state = json_at("496c4c7f9408eece8e02807faee4d403475cb3d9", STATE)
         by_id = {packet["packet_id"]: packet for packet in state["packet_register"]}
         self.assertEqual(state["next_packet"], "C2P2-WP1")
         self.assertEqual(by_id["C2P2-WP1"]["status"], "READY")

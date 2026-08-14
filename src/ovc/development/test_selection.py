@@ -14,6 +14,8 @@ from .identity import canonical_sha256, normalize_relative_path
 class TestSelectionError(ValueError):
     """Raised when a test registry or selection request is unsafe or ambiguous."""
 
+    __test__ = False
+
 
 _PROFILE_ORDER = {"FAST": 1, "PACKET": 2, "FINAL_HEAD": 3}
 _STAGES = {"CHANGE", "FINAL_HEAD", "GATE_REPLAY"}

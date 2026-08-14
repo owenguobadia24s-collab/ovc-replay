@@ -10,8 +10,8 @@
     "github_actions_registered_total_count": 177,
     "github_actions_captured_at": "2026-08-12T21:03:00+01:00",
     "github_actions_source": "GitHub Actions workflows API",
-    "expected_repository_workflow_definition_count": 130,
-    "registration_count_excess": 47,
+    "expected_repository_workflow_definition_count": 131,
+    "registration_count_excess": 46,
     "registration_count_excess_interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK"
   },
   "inventory_layers": {
@@ -70,6 +70,15 @@
     "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
     "admission_basis": "CIPR-G4 operator PASS B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW"
   },
+  "additional_non_pr_diagnostic_workflows": [
+    {
+      "path": ".github/workflows/pyt-wp2-step5-unified.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "DIAGNOSTIC_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "PYT-WP2 native pytest conformance diagnostic"
+    }
+  ],
   "governance": {
     "classification_only": true,
     "workflow_deletion": "PROHIBITED",

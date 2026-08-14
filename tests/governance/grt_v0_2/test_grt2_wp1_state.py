@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 WP1 = ROOT / "docs/programmes/grt-v0-2/wp1"
 STATE_ROOT = ROOT / "registries/implementation/grt_v0_2"
 REGISTRIES = ROOT / "registries/governance/grt_v0_2"
+WP1_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_3.json"
 
 
 class GRT2WP1StateTests(unittest.TestCase):
@@ -27,13 +28,13 @@ class GRT2WP1StateTests(unittest.TestCase):
 
     def test_programme_state_records_wp1_closeout_without_enforcement(self) -> None:
         pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-        state = json.loads((ROOT / pointer["current_state"]).read_text(encoding="utf-8"))
+        state = json.loads(WP1_STATE.read_text(encoding="utf-8"))
         constitution = json.loads(
             (REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(
                 encoding="utf-8"
             )
         )
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_3.json")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_4.json")
         self.assertEqual(pointer["status"], "RUNNING")
         self.assertEqual(pointer["next_packet"], "GRT2-WP2")
         self.assertEqual(state["status"], "APPROVED")
@@ -49,8 +50,7 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(state["decision_record"], "docs/programmes/grt-v0-2/wp1/GRT2_G1_DECISION.json")
 
     def test_wp1_closeout_does_not_claim_g2_g2_5_or_g3_completion(self) -> None:
-        pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-        state = json.loads((ROOT / pointer["current_state"]).read_text(encoding="utf-8"))
+        state = json.loads(WP1_STATE.read_text(encoding="utf-8"))
         self.assertEqual(state["status"], "APPROVED")
         self.assertNotIn("GRT2-G2 PASS", state["prerequisites"])
         self.assertEqual(state["active_enforcement"], "NONE")

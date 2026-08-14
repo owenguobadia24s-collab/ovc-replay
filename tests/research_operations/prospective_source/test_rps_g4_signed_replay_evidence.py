@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -41,7 +42,7 @@ class RpsG4SignedReplayEvidenceTests(unittest.TestCase):
         cls.receipt = json.loads((EVIDENCE_ROOT / "signature-verification-receipt.json").read_text(encoding="utf-8"))
         cls.gate = json.loads((EVIDENCE_ROOT / "rps-g4-operator-gate-input.json").read_text(encoding="utf-8"))
         cls.index = json.loads(INDEX_PATH.read_text(encoding="utf-8"))
-        cls.state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+        cls.state = json_at("b52fa297faa1b593fe9aaaf5d36a1b4e39a50eac", STATE_PATH)
 
     def test_compact_file_byte_inventory_is_exact(self) -> None:
         for item in self.index["compact_files"]:

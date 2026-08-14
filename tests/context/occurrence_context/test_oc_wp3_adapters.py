@@ -29,7 +29,7 @@ def c2e_records(status="OPEN"):
         "boundary_pack_id":"C2E.BOUNDARY.FIXTURE","source_release_id":"R1","instrument_id":"GBPUSD","side":"BID","scope_id":"GBPUSD-15M-LOCAL-v0.1","scale_id":"15M","birth_frame_id":"F1","birth_boundary_rule_id":"BIRTH","birth_effective_time":"2026-01-01T00:00:00Z","first_valid_time":"2026-01-01T00:15:00Z","authority":"INACTIVE_NONCANONICAL_SHADOW"
     })
     phase = build_record("phase_segment", {
-        "episode_id":genesis["episode_id"],"phase_type":"PERSISTENCE","start_time":"2026-01-01T00:00:00Z","end_time":None,"first_valid_time":"2026-01-01T00:30:00Z","source_record_ids":["F1","F2"],"authority":"INACTIVE_NONCANONICAL_SHADOW"
+        "episode_id":genesis["episode_id"],"phase_type":"PERSISTENCE","start_time":"2026-01-01T00:00:00Z","end_time":"2026-01-01T00:30:00Z","first_valid_time":"2026-01-01T00:30:00Z","source_record_ids":["F1","F2"],"authority":"INACTIVE_NONCANONICAL_SHADOW"
     })
     snapshot = build_record("episode_snapshot", {
         "episode_id":genesis["episode_id"],"as_of_time":"2026-01-01T00:30:00Z","first_valid_time":"2026-01-01T00:30:00Z","status":status,"member_ids":["F1","F2"],"phase_segment_ids":[phase["phase_segment_id"]],"boundary_event_ids":[],"authority":"INACTIVE_NONCANONICAL_SHADOW"

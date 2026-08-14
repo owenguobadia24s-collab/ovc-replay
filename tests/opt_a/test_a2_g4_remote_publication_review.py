@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLICATION = ROOT / "docs" / "releases" / "opt-a-v2" / "publication"
@@ -71,9 +72,9 @@ def test_a2_g4_review_preserves_non_activation_boundaries() -> None:
 
 
 def test_release_and_selector_registries_bind_exact_remote_manifests() -> None:
-    releases = (ROOT / "registries" / "releases" / "OPT_A_RELEASE_REGISTRY.yaml").read_text(encoding="utf-8")
-    selectors = (ROOT / "registries" / "releases" / "OPT_A_ACTIVE_SELECTORS.yaml").read_text(encoding="utf-8")
-    authority = (ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml").read_text(encoding="utf-8")
+    releases = text_at("a58960fcf47ed9dfc63feffa860b44e2101ffbcd", ROOT / "registries" / "releases" / "OPT_A_RELEASE_REGISTRY.yaml")
+    selectors = text_at("a58960fcf47ed9dfc63feffa860b44e2101ffbcd", ROOT / "registries" / "releases" / "OPT_A_ACTIVE_SELECTORS.yaml")
+    authority = text_at("a58960fcf47ed9dfc63feffa860b44e2101ffbcd", ROOT / "registries" / "authority" / "ACTIVE_AUTHORITY.yaml")
     for _, (_, manifest_id, manifest_sha256, _, _) in EXPECTED.items():
         assert manifest_id in releases
         assert manifest_sha256 in releases

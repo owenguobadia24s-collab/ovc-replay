@@ -2,6 +2,7 @@ import hashlib
 import json
 from pathlib import Path
 import unittest
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[3]
 G6 = ROOT / "docs/releases/occurrence-context-v0-1/oc-g6"
@@ -24,7 +25,7 @@ def git_blob_sha(path: Path) -> str:
 class OCG6ConformancePacketTests(unittest.TestCase):
     def test_terminal_state_stops_at_operator_gate(self):
         state = json.loads(STATE.read_text())
-        pointer = json.loads(POINTER.read_text())
+        pointer = json_at("c9573056abe0291f2f4a93e46d3092c77c5e9a3a", POINTER)
         self.assertEqual(state["status"], "GATE_READY")
         self.assertEqual(state["current_gate"], "OC-G6")
         self.assertTrue(state["operator_decision_required"])

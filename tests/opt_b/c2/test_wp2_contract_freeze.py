@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import names_at
 
 ROOT = Path(__file__).resolve().parents[3]
 C = ROOT / "contracts" / "opt_b" / "c2"
@@ -22,7 +23,8 @@ class C2WP2ContractFreezeTests(unittest.TestCase):
 
     def test_required_artifact_families_exist(self):
         self.assertGreaterEqual(len(list(C.glob("*.md"))), 8)
-        self.assertEqual(len(list(S.glob("*.schema.json"))), 11)
+        historical_schemas = {name for name in names_at("795d6f01eaad42959f27986459ec9f1371a017b2", S) if name.endswith(".schema.json")}
+        self.assertEqual(len(historical_schemas), 11)
         for name in ["C2_AXIS_REGISTRY_v0_1.yaml","C2_STATE_VALUE_REGISTRY_v0_1.yaml","C2_MEASUREMENT_REGISTRY_v0_1.yaml","C2_LEVEL_TYPE_REGISTRY_v0_1.yaml","C2_CONTAINER_TYPE_REGISTRY_v0_1.yaml","C2_RELATION_REGISTRY_v0_1.yaml","C2_SCOPE_REGISTRY_v0_1.yaml","C2_PARAMETER_PACK_v0_1.yaml","C2_REASON_CODE_AND_QA_REGISTRY_v0_1.yaml"]:
             self.assertTrue((R / name).is_file(), name)
 

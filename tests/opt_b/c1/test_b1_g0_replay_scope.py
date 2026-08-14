@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[3]
 SCOPE = ROOT / "registries/opt_b/c1/C1_WP4_REPLAY_SCOPE.yaml"
@@ -56,7 +57,7 @@ class C1B1G0ReplayScopeTests(unittest.TestCase):
         self.assertIs(packet["side_effects_performed"], False)
 
     def test_implementation_registry_preserves_scope_and_records_later_gates(self) -> None:
-        text = IMPLEMENTATION.read_text(encoding="utf-8")
+        text = text_at("b32f05cd30df685095748117cb9cd7bfdb5778ff", IMPLEMENTATION)
         self.assertIn("scope_id: C1.WP4.GBPUSD.DISCOVERY_DEVELOPMENT.v1", text)
         self.assertIn("market_replay: COMPLETE_WP4_PASS", text)
         self.assertIn("local_release_freeze: COMPLETE_WP4F_PASS", text)

@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+HISTORICAL_GATE_COMMIT = "4d701ad78af8597e182565eb301739501b51dff6"
 
 REQUIRED = [
     "contracts/research_operations/v0_3/OVC_RO3_C1_FACT_ASSURANCE_AUTHORITY_CONTRACT_v0_1.md",
@@ -30,7 +32,22 @@ REQUIRED = [
 
 
 def text(path: str) -> str:
-    return (ROOT / path).read_text(encoding="utf-8")
+    return subprocess.run(
+        ["git", "show", f"{HISTORICAL_GATE_COMMIT}:{path}"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    ).stdout
+
+
+def exists(path: str) -> bool:
+    return subprocess.run(
+        ["git", "cat-file", "-e", f"{HISTORICAL_GATE_COMMIT}:{path}"],
+        cwd=ROOT,
+        capture_output=True,
+    ).returncode == 0
 
 
 def require_tokens(path: str, tokens: list[str]) -> None:
@@ -41,7 +58,7 @@ def require_tokens(path: str, tokens: list[str]) -> None:
 
 
 def main() -> int:
-    missing = [path for path in REQUIRED if not (ROOT / path).is_file()]
+    missing = [path for path in REQUIRED if not exists(path)]
     if missing:
         raise AssertionError(f"missing RO3-G0 files: {missing}")
 

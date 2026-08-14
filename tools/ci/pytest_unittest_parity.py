@@ -14,6 +14,12 @@ from typing import Iterable
 ROOT = Path(__file__).resolve().parents[2]
 TEST_ROOT = ROOT / "tests"
 
+# This harness is executed by file path from tools/ci, whereas the canonical
+# unittest command is executed with the repository root importable. Preserve
+# that exact discovery import surface before invoking unittest discovery.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 
 def _flatten(suite: unittest.TestSuite) -> Iterable[unittest.TestCase]:
     for item in suite:

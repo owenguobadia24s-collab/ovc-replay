@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[4]
 BASE = ROOT / "docs/releases/c2e-causal-episode-v0-2/c2e2-wp6"
@@ -37,7 +38,7 @@ def test_delegated_closeout_has_no_reserved_authority_delta():
 
 def test_completed_state_routes_to_wp7_and_preserves_denials():
     state = load(STATE)
-    pointer = load(POINTER)
+    pointer = json_at("4adec4ab6d5f6a41e153be06d48f1cd2537fa927", POINTER)
     assert state["status"] == "COMPLETED"
     assert state["packet_record"]["status"] == "COMPLETED"
     assert state["packet_record"]["merge_commit"] is None

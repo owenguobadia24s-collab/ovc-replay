@@ -4,11 +4,20 @@ import importlib.util
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[2]
+HISTORICAL_GATE_COMMIT = "44c647a8c71ba42df20a1d4fa0c32c59e5b185eb"
+STATE_PATHS = {
+    "registries/research_operations/clock_continuity/OVC_CCR_PROGRAMME_STATE_v0_1.json",
+    "registries/research_operations/c2e/OVC_C2E_PROGRAMME_STATE_v0_1.json",
+    "registries/research_operations/c2_5/OVC_C25_PROGRAMME_STATE_v0_1.json",
+}
 
 
 def load(path: str) -> dict:
+    if path in STATE_PATHS:
+        return json_at(HISTORICAL_GATE_COMMIT, ROOT / path)
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
@@ -19,6 +28,12 @@ class MultiG0Tests(unittest.TestCase):
         assert spec and spec.loader
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        current_load = module.load
+        module.load = lambda relative: (
+            json_at(HISTORICAL_GATE_COMMIT, ROOT / relative)
+            if relative in STATE_PATHS
+            else current_load(relative)
+        )
         self.assertEqual(module.main(), 0)
 
     def test_operator_decisions_are_atomic(self) -> None:

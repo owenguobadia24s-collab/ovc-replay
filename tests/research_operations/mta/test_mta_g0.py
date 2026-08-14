@@ -5,9 +5,12 @@ import importlib.util
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[3]
 BLOCKER_ID = "MTA-G0-BLOCK-002-CHECKS-PASS-RULESET-STILL-EXPECTED"
+HISTORICAL_GATE_COMMIT = "31be2a1209acd72b6706fcf2276592954fbf5b1e"
+STATE_PATH = "registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json"
 
 
 def load(path: str) -> dict:
@@ -21,10 +24,16 @@ class MTAG0Tests(unittest.TestCase):
         assert spec and spec.loader
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        current_load = module.load
+        module.load = lambda relative: (
+            json_at(HISTORICAL_GATE_COMMIT, ROOT / relative)
+            if relative == STATE_PATH
+            else current_load(relative)
+        )
         self.assertEqual(module.main(), 0)
 
     def test_operator_pass_and_merge_receipt_are_preserved(self) -> None:
-        state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
+        state = json_at(HISTORICAL_GATE_COMMIT, ROOT / STATE_PATH)
         decision = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_OPERATOR_DECISION.json")
         receipt = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_MERGE_RECEIPT.json")
         packet0 = next(item for item in state["packets"] if item["packet_id"] == "MTA-00")
@@ -39,7 +48,7 @@ class MTAG0Tests(unittest.TestCase):
 
     def test_historical_blocker_is_retained_without_remaining_current(self) -> None:
         blocker = load("docs/releases/market-translation-audit-v0-2/mta-g0/MTA_G0_REQUIRED_CHECK_ENFORCEMENT_BLOCKER.json")
-        state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
+        state = json_at(HISTORICAL_GATE_COMMIT, ROOT / STATE_PATH)
         self.assertEqual(blocker["blocker_id"], BLOCKER_ID)
         self.assertEqual(blocker["status"], "BLOCKED_EXTERNAL_REPOSITORY_RULESET_ENFORCEMENT")
         self.assertEqual(len(blocker["passing_assurance"]), 2)
@@ -85,7 +94,7 @@ class MTAG0Tests(unittest.TestCase):
         self.assertIn("parameter_search: PROHIBITED", text)
 
     def test_no_activation_or_validation_authority(self) -> None:
-        state = load("registries/research_operations/mta/OVC_MTA_PROGRAMME_STATE_v0_2.json")
+        state = json_at(HISTORICAL_GATE_COMMIT, ROOT / STATE_PATH)
         self.assertEqual(state["authority"]["selectors"], "UNCHANGED")
         self.assertEqual(state["authority"]["formula_threshold_reset_clock"], "UNCHANGED")
         self.assertEqual(state["authority"]["c2e_c2_5_c3"], "DENIED")

@@ -245,7 +245,8 @@ class ComputabilityTests(unittest.TestCase):
     def test_censored_record_never_becomes_zero_or_neutral(self) -> None:
         value = component("CENSORED", censored=True)
         self.assertEqual("CENSORED", value["computability_status"])
-        self.assertNotIn(0, value.values())
+        numeric_values = [item for item in value.values() if type(item) in {int, float}]
+        self.assertNotIn(0, numeric_values)
         self.assertNotIn("NEUTRAL", value.values())
 
     def test_mixed_or_duplicate_population_units_fail_closed(self) -> None:

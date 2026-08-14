@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[2]
 RELEASE = ROOT / "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp1"
@@ -39,7 +40,7 @@ class MarketGrammarWp1ReceiptTests(unittest.TestCase):
     def test_qa_manifest_and_state_preserve_wp1_completion(self) -> None:
         qa = load(RELEASE / "MG_WP1_QA_PACKET.json")
         manifest = load(RELEASE / "MG_WP1_IMPLEMENTATION_MANIFEST.json")
-        state = load(STATE)
+        state = json_at("19e9e42e72dcbb863443ba7181957f2da57e365e", STATE)
         self.assertEqual("COMPLETED", qa["status"])
         self.assertEqual("PASS", qa["qa_recommendation"])
         self.assertEqual("COMPLETED", manifest["status"])

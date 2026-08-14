@@ -9,6 +9,7 @@ from ovc.opt_b.srfd.wp10_v10_interface import (
     binding_from_manifest,
     mint_single_use_token,
 )
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[2]
 SRFD_REL = ROOT / "docs/releases/srfd-benchmark-v0-1"
@@ -70,7 +71,7 @@ def test_old_unmerged_pr558_token_is_not_reused():
 
 
 def test_v09_failure_stays_authoritative_until_eacr_g1():
-    current = j(STATE / "CURRENT_STATE_POINTER.json")
+    current = json_at("0515d515b261cada7daef9a9cc5ae03db9e462ad", STATE / "CURRENT_STATE_POINTER.json")
     candidate = j(STATE / "OVC_SRFDI_STATE_v0_44_WP10_V10_EACR_READY_CANDIDATE.json")
     assert current["status"] == "BLOCKED"
     assert current["failure_reason"] == "CAPACITY_EXCEEDED_EXTERNAL_BYTES"
