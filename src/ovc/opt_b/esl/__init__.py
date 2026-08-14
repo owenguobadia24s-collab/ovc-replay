@@ -41,6 +41,22 @@ from .organisation_evidence import (
     build_metric_record,
     validate_decision_rule_pack_interface,
 )
+from .cei import (
+    AST_NODE_TYPES,
+    COMPARISON_DESIGNS,
+    CONDITION_TYPES,
+    CONSTRAINT_TARGETS,
+    EVIDENCE_STATUSES,
+    POPULATION_STATES,
+    TEMPORAL_ROLES,
+    CEIError,
+    build_condition,
+    build_constraint_evidence,
+    build_contrast_spec,
+    build_population_manifest,
+    render_condition,
+    validate_constraint_ast,
+)
 from .validators import ESLValidationError, validate_occurrence
 
 __all__ = [
@@ -73,6 +89,20 @@ __all__ = [
     "build_invariant_evidence_record",
     "build_metric_record",
     "validate_decision_rule_pack_interface",
+    "AST_NODE_TYPES",
+    "COMPARISON_DESIGNS",
+    "CONDITION_TYPES",
+    "CONSTRAINT_TARGETS",
+    "EVIDENCE_STATUSES",
+    "POPULATION_STATES",
+    "TEMPORAL_ROLES",
+    "CEIError",
+    "build_condition",
+    "build_constraint_evidence",
+    "build_contrast_spec",
+    "build_population_manifest",
+    "render_condition",
+    "validate_constraint_ast",
     "ESLValidationError",
     "validate_occurrence",
 ]

@@ -1,0 +1,7 @@
+{
+  "schema": "ovc-esli-wp8-fixture/v1",
+  "condition_a": {"name":"London session","condition_type":"TEMPORAL","temporal_role":"PRE_EXISTING","source_ref":"ctx:fixture:v1","first_valid_time":"2026-06-10T07:00:00Z","target_anchor_time":"2026-06-10T08:00:00Z","constraint_ast":{"type":"ENUM_MATCH","children":[{"type":"FIELD_REF","source_namespace":"OccurrenceContext","field_path":"session","source_authority":"LAWFUL_UPSTREAM"},{"type":"CONST","value":"LONDON"}]}},
+  "comparator_b": {"name":"New York session","condition_type":"TEMPORAL","temporal_role":"PRE_EXISTING","source_ref":"ctx:fixture:v1","first_valid_time":"2026-06-10T07:00:00Z","target_anchor_time":"2026-06-10T08:00:00Z","constraint_ast":{"type":"ENUM_MATCH","children":[{"type":"FIELD_REF","source_namespace":"OccurrenceContext","field_path":"session","source_authority":"LAWFUL_UPSTREAM"},{"type":"CONST","value":"NEW_YORK"}]}},
+  "population":{"eligible_occurrence_ids":["occ-1","occ-2","occ-3"],"states":{"occ-1":"CONDITION_A","occ-2":"COMPARATOR_B","occ-3":"NOT_EVALUABLE"}},
+  "expected":{"interpretation_class":"DESCRIPTIVE_CONDITIONAL_ASSOCIATION_ONLY","authority_effect":"NONE"}
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-esl-cei-constraint-ast-v1",
+  "title": "CEIConstraintAST",
+  "type": "object",
+  "required": ["type"],
+  "properties": {
+    "type": {"enum": ["ALL_OF", "ANY_OF", "NOT", "FIELD_REF", "CONST", "COMPARE", "ENUM_MATCH", "EXISTS", "RELATION_MATCH", "STATE_MATCH", "SCOPE_MATCH"]},
+    "children": {"type": "array", "items": {"$ref": "#"}},
+    "source_namespace": {"type": "string", "minLength": 1},
+    "source_authority": {"const": "LAWFUL_UPSTREAM"},
+    "field_path": {"type": "string", "minLength": 1},
+    "value": {}
+  },
+  "additionalProperties": true
+}
