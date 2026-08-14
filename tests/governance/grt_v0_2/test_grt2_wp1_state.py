@@ -10,7 +10,8 @@ WP1 = ROOT / "docs/programmes/grt-v0-2/wp1"
 STATE_ROOT = ROOT / "registries/implementation/grt_v0_2"
 REGISTRIES = ROOT / "registries/governance/grt_v0_2"
 WP1_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_3.json"
-CURRENT_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_7.json"
+READINESS_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_7.json"
+CURRENT_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_8.json"
 
 
 class GRT2WP1StateTests(unittest.TestCase):
@@ -30,16 +31,19 @@ class GRT2WP1StateTests(unittest.TestCase):
     def test_historical_wp1_state_is_preserved_while_current_pointer_advances(self) -> None:
         pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         state = json.loads(WP1_STATE.read_text(encoding="utf-8"))
+        readiness = json.loads(READINESS_STATE.read_text(encoding="utf-8"))
         current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
         constitution = json.loads((REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(encoding="utf-8"))
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_7.json")
-        self.assertEqual(pointer["status"], "BLOCKED")
-        self.assertEqual(pointer["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
-        self.assertEqual(pointer["next_packet"], "GRT2-G2-QUALIFICATION-EVIDENCE")
-        self.assertEqual(current["status"], "BLOCKED")
-        self.assertEqual(current["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
-        self.assertEqual(current["next_packet"], "GRT2-G2-QUALIFICATION-EVIDENCE")
-        self.assertEqual(current["g2_status"], "BLOCKED_MISSING_REQUIRED_EVIDENCE")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_8.json")
+        self.assertEqual(pointer["status"], "APPROVED")
+        self.assertEqual(pointer["packet_id"], "GRT2-G2-QUALIFICATION-EVIDENCE")
+        self.assertEqual(pointer["next_packet"], "GRT2-G2.5-GATE-PREPARATION")
+        self.assertEqual(readiness["status"], "BLOCKED")
+        self.assertEqual(readiness["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
+        self.assertEqual(readiness["next_packet"], "GRT2-G2-QUALIFICATION-EVIDENCE")
+        self.assertEqual(readiness["g2_status"], "BLOCKED_MISSING_REQUIRED_EVIDENCE")
+        self.assertEqual(current["status"], "APPROVED")
+        self.assertEqual(current["g2_status"], "APPROVED_DELEGATED_PASS")
         self.assertEqual(current["active_enforcement"], "NONE")
         self.assertIsNone(current["debt_floor_generation"])
         self.assertEqual(state["status"], "APPROVED")
@@ -61,9 +65,10 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertNotIn("GRT2-G2 PASS", state["prerequisites"])
         self.assertEqual(state["active_enforcement"], "NONE")
         self.assertIn("GRT2-G2.5 and GRT2-G3 remain reserved.", state["warnings"])
-        self.assertEqual(current["g2_status"], "BLOCKED_MISSING_REQUIRED_EVIDENCE")
-        self.assertEqual(current["g2_5_status"], "PENDING_UNCONSUMED_UNTIL_G2_COMPLETE")
+        self.assertEqual(current["g2_status"], "APPROVED_DELEGATED_PASS")
+        self.assertEqual(current["g2_5_status"], "PENDING_OPERATOR_REQUIRED_GATE_PREPARATION")
         self.assertEqual(current["active_enforcement"], "NONE")
+        self.assertIsNone(current["debt_floor_generation"])
 
 
 if __name__ == "__main__":
