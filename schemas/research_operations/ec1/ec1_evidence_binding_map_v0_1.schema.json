@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ovc:ec1:EC1EvidenceBindingMap:v0.1",
+  "title": "EC1EvidenceBindingMap",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "EC1EvidenceBindingMap.v0.1"
+    },
+    "cycle_id": {
+      "const": "OVC-EC1-DISCOVERY-2021_2023-G1"
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "binding_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "object_type": {
+            "type": "string",
+            "enum": [
+              "P1CandidateReviewCard",
+              "QuestionDecisionRecord"
+            ]
+          },
+          "field_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "field_group": {
+            "type": "string",
+            "minLength": 1
+          },
+          "producer_stage": {
+            "type": "string",
+            "minLength": 1
+          },
+          "producer_object_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_population": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_field_or_derivation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requiredness": {
+            "type": "string",
+            "enum": [
+              "REQUIRED",
+              "CONDITIONAL",
+              "OPTIONAL"
+            ]
+          },
+          "derivation_authority": {
+            "type": "string",
+            "enum": [
+              "OWNER_DIRECT",
+              "EC1_DERIVED",
+              "HUMAN_REVIEW"
+            ]
+          },
+          "allowed_transform": {
+            "type": "string",
+            "minLength": 1
+          },
+          "missingness_rule": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reproduction_requirement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "blocking_condition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision_nodes_consuming_field": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_refs_required": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "binding_id",
+          "object_type",
+          "field_path",
+          "field_group",
+          "producer_stage",
+          "producer_object_type",
+          "source_population",
+          "source_field_or_derivation",
+          "requiredness",
+          "derivation_authority",
+          "allowed_transform",
+          "missingness_rule",
+          "reproduction_requirement",
+          "blocking_condition",
+          "decision_nodes_consuming_field",
+          "evidence_refs_required"
+        ]
+      }
+    },
+    "authority_effect": {
+      "const": "NONE"
+    }
+  },
+  "required": [
+    "schema_version",
+    "cycle_id",
+    "bindings",
+    "authority_effect"
+  ]
+}
