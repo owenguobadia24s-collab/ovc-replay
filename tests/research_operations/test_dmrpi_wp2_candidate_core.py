@@ -44,7 +44,7 @@ class DMRPIWP2CandidateCoreTests(unittest.TestCase):
     def test_candidate_occurrence_identity_contains_no_outcome(self) -> None:
         generation = self.generation()
         occurrence = CandidateOccurrence(generation.candidate_generation_id, "SYNTH.UNIT.1")
-        self.assertIn(generation.candidate_generation_id[:8], occurrence.candidate_generation_id)
+        self.assertTrue(occurrence.occurrence_id.startswith("rco:"))
         self.assertNotIn("outcome", occurrence.__dict__)
         with self.assertRaises(TypeError):
             CandidateOccurrence(generation.candidate_generation_id, "u1", outcome=1)  # type: ignore[call-arg]
@@ -83,10 +83,14 @@ class DMRPIWP2CandidateCoreTests(unittest.TestCase):
         with self.assertRaises(CandidateInvariantError):
             ResearchInfluenceEdge("P2", "P1", "ORIGIN", "a", "b", "t", authority_effect="FREEZE")
 
-    def test_frozen_generation_mutation_fails(self) -> None:
+    def test_frozen_generation_rejects_attribute_and_nested_payload_mutation(self) -> None:
         generation = self.generation()
         with self.assertRaises(FrozenInstanceError):
             generation.generation = 2  # type: ignore[misc]
+        with self.assertRaises(TypeError):
+            generation.definition["predicates"] = ("X",)  # type: ignore[index]
+        with self.assertRaises(AttributeError):
+            generation.definition["predicates"].append("X")  # type: ignore[union-attr]
 
 
 if __name__ == "__main__":

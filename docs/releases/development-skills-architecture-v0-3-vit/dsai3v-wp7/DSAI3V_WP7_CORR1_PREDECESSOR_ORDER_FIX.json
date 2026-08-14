@@ -1,0 +1,21 @@
+{
+  "schema":"ovc-dsai3v-wp7-corrective/v1",
+  "corrective_id":"DSAI3V-WP7-CORR1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "plan_id":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "packet_id":"DSAI3V-WP7",
+  "authority_required":"AUTO_EXECUTABLE",
+  "authority_delta":"NONE",
+  "defect":"The final-integration predecessor scan treated later-created open PRs with a successful merge-readiness check as predecessors of an earlier candidate. This caused PR #859 to wait on later PR #860 and previously caused PR #856 to wait on later PR #857.",
+  "root_cause":"findPassedPredecessor scanned every open PR targeting main except self, without enforcing predecessor nomination order.",
+  "bounded_fix":"Only an earlier PR number may be considered a predecessor lease owner. A later PR is explicitly ignored as NON_PREDECESSOR before check or ancestry evaluation. Stable-main guards, exact-final assurance, four-minute bounded wait for genuine earlier predecessors, read-only permissions and no-parallel-merge remain unchanged.",
+  "observed_incidents":[
+    {"blocked_pr":859,"misclassified_later_pr":860,"blocked_head":"3b825b517ec49f99b1e13e4662d675af885d85ea"},
+    {"blocked_pr":856,"misclassified_later_pr":857,"blocked_head":"e1f1c9c60c3741328dc60b3918f5d6fcbf310b53"}
+  ],
+  "acceptance":["regression proves later PR cannot own predecessor lease","genuine earlier green predecessor path remains present","stable-main guards unchanged","exact-final SIQ/PDC assurance unchanged","workflow permissions remain read-only","repository and exact-head CI PASS"],
+  "rollback":"Revert only the predecessor-order guard and its regression test; preserve all failure evidence and existing serialized/stable-main guards.",
+  "physical_main_authority":"UNCHANGED_DENIED_TO_VIT",
+  "force_push":false,
+  "history_rewrite":false
+}
