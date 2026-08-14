@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from ovc.development.skills.vit_core import ContinuousExecutionMandate, DevelopmentLane
-from ovc.development.skills.vit_runtime import DurableExecutionStore, PersistentExecutionState, RecoveryState, drain_state, recovery_transition
+from ovc.development.skills.vit_runtime import DurableExecutionStore, PersistentExecutionState, RecoveryState, drain_state, recovery_transition, resolve_continuation
 
 class DsaiVitV03Wp4Tests(unittest.TestCase):
     def test_state_drainage_reconstructs_without_chat_or_process_memory(self) -> None:
@@ -47,6 +47,20 @@ class DsaiVitV03Wp4Tests(unittest.TestCase):
         waiting = recovery_transition(state,"AUTHORITY_REQUIRED")
         self.assertEqual(waiting.state,"WAITING_OPERATOR_AUTHORITY")
         self.assertEqual(recovery_transition(waiting,"SUCCESS"),waiting)
+
+    def test_continuation_command_semantics_stop_only_hold_until_and_reserved_successor(self) -> None:
+        run = ContinuousExecutionMandate("P","WP4","RUN","CONTINUE_UNTIL_MANDATORY_STOP","plan")
+        self.assertEqual(resolve_continuation(run,current_packet="WP4",next_packet="WP5",prerequisites_pass=True).action,"START_SUCCESSOR")
+        only = ContinuousExecutionMandate("P","WP4","RUN_ONLY","ONE_PACKET","plan")
+        self.assertEqual(resolve_continuation(only,current_packet="WP4",next_packet="WP5",prerequisites_pass=True).reason,"ONLY_BOUNDARY_COMPLETE")
+        hold = ContinuousExecutionMandate("P","WP4","HOLD","HOLD","plan")
+        self.assertEqual(resolve_continuation(hold,current_packet="WP4",next_packet="WP5",prerequisites_pass=True).action,"HOLD")
+        until = ContinuousExecutionMandate("P","WP4","CONTINUE","CONTINUE_UNTIL_BOUNDARY","plan","WP5")
+        self.assertEqual(resolve_continuation(until,current_packet="WP4",next_packet="WP5",prerequisites_pass=True).reason,"EXPLICIT_UNTIL_BOUNDARY")
+        reserved = resolve_continuation(run,current_packet="WP4",next_packet="G-VIT-PILOT",prerequisites_pass=True,next_authority_class="OPERATOR_REQUIRED")
+        self.assertEqual(reserved.action,"WAITING_OPERATOR_AUTHORITY")
+        prereq = resolve_continuation(run,current_packet="WP4",next_packet="WP5",prerequisites_pass=False)
+        self.assertEqual(prereq.action,"WAITING_PREREQUISITE")
 
 if __name__ == "__main__":
     unittest.main()
