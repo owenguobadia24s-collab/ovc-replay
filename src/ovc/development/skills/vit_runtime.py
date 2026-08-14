@@ -68,6 +68,14 @@ class StateDrainageManifest:
         return canonical_sha256(asdict(self))
 
 
+@dataclass(frozen=True)
+class ContinuationDecision:
+    action: str
+    current_packet: str
+    next_packet: str | None
+    reason: str
+
+
 class DurableExecutionStore:
     def __init__(self, root: str | Path) -> None:
         self.root = Path(root)
@@ -138,3 +146,29 @@ def recovery_transition(state: RecoveryState, result: str) -> RecoveryState:
     if attempts >= state.recovery_budget:
         return RecoveryState("BLOCKED", state.blocker_codes + ("RECOVERY_BUDGET_EXHAUSTED",), None, attempts, state.recovery_budget, state.wake_subscriptions, state.open_materialisation_transaction, state.next_packet)
     return RecoveryState("RECOVERING", state.blocker_codes, state.open_action, attempts, state.recovery_budget, state.wake_subscriptions, state.open_materialisation_transaction, state.next_packet)
+
+
+def resolve_continuation(
+    mandate: ContinuousExecutionMandate,
+    *,
+    current_packet: str,
+    next_packet: str | None,
+    prerequisites_pass: bool,
+    next_authority_class: str = "AUTO_EXECUTABLE",
+) -> ContinuationDecision:
+    """Resolve the next lawful action without inventing packet or authority state."""
+    if mandate.command == "HOLD":
+        return ContinuationDecision("HOLD", current_packet, next_packet, "EXPLICIT_HOLD")
+    if mandate.command in {"RUN_ONLY", "CONTINUE_ONLY"}:
+        return ContinuationDecision("STOP", current_packet, next_packet, "ONLY_BOUNDARY_COMPLETE")
+    if mandate.stop_boundary is not None and (
+        current_packet == mandate.stop_boundary or next_packet == mandate.stop_boundary
+    ):
+        return ContinuationDecision("STOP", current_packet, next_packet, "EXPLICIT_UNTIL_BOUNDARY")
+    if next_packet is None:
+        return ContinuationDecision("STOP", current_packet, None, "PROGRAMME_TERMINAL")
+    if next_authority_class != "AUTO_EXECUTABLE":
+        return ContinuationDecision("WAITING_OPERATOR_AUTHORITY", current_packet, next_packet, "RESERVED_SUCCESSOR")
+    if not prerequisites_pass:
+        return ContinuationDecision("WAITING_PREREQUISITE", current_packet, next_packet, "PREREQUISITE_UNSATISFIED")
+    return ContinuationDecision("START_SUCCESSOR", current_packet, next_packet, "CONTINUE_UNTIL_MANDATORY_STOP")
