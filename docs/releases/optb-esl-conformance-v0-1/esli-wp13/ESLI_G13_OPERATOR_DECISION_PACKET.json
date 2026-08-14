@@ -1,0 +1,40 @@
+{
+  "schema":"ovc-esli-g13-operator-decision-packet/v1",
+  "gate_id":"ESLI-G13",
+  "gate_title":"Four-profile June comparative shadow source-read authority",
+  "programme_id":"OVC-OPTB-ESL-CONFORMANCE-v0.1",
+  "plan_id":"OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+  "plan_version":"0.1-REVISED-2",
+  "baseline_commit":"32123c08c74c28dd44ad058b6126afc05f1c6fdb",
+  "candidate_commit":"MATERIALISE_ON_GATE_BRANCH",
+  "completed_packets":["ESLI-WP0","ESLI-WP1","ESLI-WP2","ESLI-WP3","ESLI-WP4","ESLI-WP5","ESLI-WP6","ESLI-WP7","ESLI-WP8","ESLI-WP9","ESLI-WP10","ESLI-WP11","ESLI-WP12"],
+  "current_authority":{
+    "esl":"INACTIVE_DETERMINISTIC_CONFORMANCE_ONLY",
+    "c3_bridge_maturity":"INACTIVE_REFERENCE",
+    "semantic_admission":"NONE",
+    "validation":"LOCKED_UNCONSUMED",
+    "provider_fetch":"DENIED"
+  },
+  "proposed_delta":"Authorize read-only recovery of exactly the accepted C2_15M_BID_LOCAL June artifact (Drive 1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk; SHA-256 63a1d24836d3cd0aaad9e5a11e9b9ec51724bfd335fab47f538ed23f36e8c58b; 4709059 bytes) for ESLI-WP13 only. No provider fetch or new source object.",
+  "acceptance_conditions":[
+    {"condition":"WP0-WP12 repository-effective completion","result":"PASS"},
+    {"condition":"G13 classifier materialised before source read","result":"PASS_OPERATOR_REQUIRED"},
+    {"condition":"Accepted June artifact exact identity is reproducible from court-record metadata","result":"PASS_METADATA_ONLY_NO_SOURCE_READ"},
+    {"condition":"Prior SRFD one-run token is not reused","result":"PASS_CONSUMED_NOT_REUSABLE"},
+    {"condition":"No provider/instrument/side/clock/Validation/publication/scientific/semantic/exposure delta","result":"PASS"},
+    {"condition":"Gate-branch repository assurance","result":"PENDING_PR_CI"}
+  ],
+  "tests":{"status":"PENDING_PR_CI","required":"repository suite + parity + FINAL_HEAD + SIQ READY + exact-final merge readiness"},
+  "qa":{"recommendation":"PASS_CONDITIONAL_ON_GATE_BRANCH_CI","rationale":"The requested delta is narrow read-only recovery of already-accepted evidence; the governing classifier nevertheless requires operator authority because no current reusable ESL read-authority record exists."},
+  "warnings":[
+    "The prior SRFD source token was single-use and is consumed; it is evidence of accepted source identity, not reusable ESL authority.",
+    "P1/P2/P3 remain independently fail-honest: absent executable family catalog/comparator/DMRP runtime must be recorded as typed non-executable/handoff states rather than fabricated."
+  ],
+  "unresolved_issues":[],
+  "changed_files":["docs/releases/optb-esl-conformance-v0-1/esli-wp13/G13_SOURCE_AUTHORITY_DECISION.json","docs/releases/optb-esl-conformance-v0-1/esli-wp13/ESLI_G13_OPERATOR_DECISION_PACKET.json","docs/releases/optb-esl-conformance-v0-1/esli-wp13/ESLI_WP13_ISSUE_LEDGER.json","docs/releases/optb-esl-conformance-v0-1/esli-wp13/ESLI_WP13_REPRODUCTION_AND_ROLLBACK.md","registries/implementation/esli/ESLI_WP13_PACKET_STATE.json","registries/implementation/esli/OVC_ESLI_STATE_v0_14_G13_GATE_READY.json","registries/implementation/esli/CURRENT_STATE_POINTER.json"],
+  "external_artifacts":[{"name":"GBPUSD-15M-LOCAL-v0_1.jsonl","drive_file_id":"1ZWPZGGXZC_okzkeb5Sr0urgJlZb9Dipk","sha256":"63a1d24836d3cd0aaad9e5a11e9b9ec51724bfd335fab47f538ed23f36e8c58b","size":4709059,"read_status":"NOT_READ_BY_ESLI_WP13"}],
+  "rollback":"If DEFER/BLOCK, leave source unread and preserve G13 packet as evidence. If PASS then later execution fails, preserve source and run evidence and forward-supersede only WP13 derived artifacts; never rewrite accepted June evidence.",
+  "recommended_decision":"PASS",
+  "exact_work_after_approval":"Verify exact source bytes against the recorded SHA-256; freeze JuneProfileComparisonManifest.v1 and all executable comparator/profile bindings before result inspection; run P0-P3 under one common accepted population/cutoff/environment with cold/warm capacity separated; produce ProfileInformationLedger, ProfileCapacityLedger, MarginalProfileDeltaLedger and ProfileAbsenceDisagreementLedger; QA, delegated terminal G13 closeout, and programme completion if no further reserved delta appears.",
+  "exact_operator_command":"OVC APPROVE ESLI-G13 PASS"
+}
