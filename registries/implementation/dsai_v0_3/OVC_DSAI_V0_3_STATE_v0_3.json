@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI-v0.3",
+  "plan_id": "OVC-DSAI-CONTINUOUS-EXECUTION-LANDING-TRAIN-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "SUPERSEDED",
+  "baseline_commit": "25cf7ca6f85d088dd7686d6e7b107516cb00465b",
+  "branch": "programme/dsai-v0-3-cancelled-vit-supersession",
+  "packet_id": "DSAI3-CANCEL-VIT",
+  "gate_id": "DSAI3-OPERATOR-CANCELLATION",
+  "prerequisites": [
+    "DSAI3-WP0 merged as historical court record",
+    "explicit operator instruction to cancel current DSAI v0.3 implementation",
+    "PR #807 closed unmerged",
+    "PR #808 closed unmerged"
+  ],
+  "authority_required": "OPERATOR_SATISFIED_BY_EXPLICIT_CANCELLATION_INSTRUCTION",
+  "authority_delta": "SUPERSEDE_DSAI3_FORWARD_IMPLEMENTATION",
+  "candidate_commit": null,
+  "tests": [
+    "Administrative supersession only; no DSAI3 WP1/WP2 implementation payload integrated by this cancellation state."
+  ],
+  "qa_packet": null,
+  "decision_record": "docs/releases/development-skills-architecture-v0-3/DSAI3_OPERATOR_CANCELLATION_VIT_SUPERSESSION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": null,
+  "completed_packets": ["DSAI3-WP0"],
+  "superseded_packets": [
+    "DSAI3-WP1",
+    "DSAI3-WP2",
+    "DSAI3-WP3",
+    "DSAI3-WP4",
+    "DSAI3-WP5",
+    "DSAI3-WP6",
+    "DSAI3-G7",
+    "DSAI3-WP7",
+    "DSAI3-G8"
+  ],
+  "pull_request_disposition": {
+    "804": "MERGED_HISTORICAL_PRESERVED",
+    "806": "CLOSED_SUPERSEDED",
+    "807": "CLOSED_OPERATOR_CANCELLED",
+    "808": "CLOSED_OPERATOR_CANCELLED"
+  },
+  "current_authority": {
+    "parent_orch345": "UNCHANGED_ACTIVE_BOUNDED",
+    "siq_runtime": "UNCHANGED_ACTIVE_SERIALIZED_MINIMAL_CRITICAL_SECTION",
+    "dsai3_continuous_executor": "CANCELLED_NOT_ACTIVE",
+    "dsai3_siq_actuation_binding": "CANCELLED_NOT_ACTIVE",
+    "dsai3_write_requeue_executor": "CANCELLED_NOT_ACTIVE",
+    "virtual_integration_tree": "NOT_YET_ADMITTED_OR_AUTHORISED"
+  },
+  "supersession_reason": "Operator selected a different integration architecture based on a Virtual Integration Tree.",
+  "historical_preservation": "All merged/unmerged DSAI3 evidence remains addressable; no force-push, deletion or history rewrite.",
+  "target_terminal_state": "SUPERSEDED_BY_FUTURE_VIRTUAL_INTEGRATION_TREE_PROGRAMME"
+}
