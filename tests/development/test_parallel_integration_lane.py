@@ -215,7 +215,7 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertNotIn("contents: write", self.workflow)
         self.assertNotIn("pull-requests: write", self.workflow)
         self.assertNotIn("github.rest.pulls.merge", self.workflow)
-        self.assertNotIn("nablePullRequestAutoMerge", self.workflow)
+        self.assertNotIn("enablePullRequestAutoMerge", self.workflow)
 
     def test_research_console_surface_is_in_canonical_discovery_and_exact_required_check(self):
         self.assertTrue(CONSOLE_PACKAGE.exists())
