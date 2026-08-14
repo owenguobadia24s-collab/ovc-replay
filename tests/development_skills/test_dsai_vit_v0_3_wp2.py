@@ -57,7 +57,8 @@ class DsaiVitV03Wp2Tests(unittest.TestCase):
         self.assertNotEqual(del_receipt.result_tree, self.base_tree)
 
     def test_noop_is_exact_and_explicit(self) -> None:
-        receipt = apply_payload_reference(self.repo, self.base_tree, self._pip(()))
+        existing_blob = subprocess.check_output(["git","-C",str(self.repo),"rev-parse","HEAD:a.txt"], text=True).strip()
+        receipt = apply_payload_reference(self.repo, self.base_tree, self._pip(({"op":"MODIFY","path":"a.txt","blob_sha":existing_blob,"mode":"100644"},)))
         self.assertFalse(receipt.failures)
         self.assertEqual(receipt.result_tree, self.base_tree)
         self.assertEqual(receipt.disposition, "NO_REPOSITORY_DELTA")
