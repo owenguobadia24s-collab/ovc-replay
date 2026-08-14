@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-esl-marginal-profile-delta-ledger/v1",
+  "type":"object",
+  "required":["schema","manifest_id","baseline_profile","entries","winner_synthesis","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-esl-marginal-profile-delta-ledger/v1"},
+    "manifest_id":{"type":"string"},
+    "baseline_profile":{"const":"BASE_STRUCTURAL"},
+    "entries":{"type":"array","minItems":3,"maxItems":3},
+    "winner_synthesis":{"const":"FORBIDDEN"},
+    "authority_effect":{"const":"NONE"}
+  },
+  "additionalProperties":true
+}

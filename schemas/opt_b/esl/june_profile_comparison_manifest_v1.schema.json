@@ -1,0 +1,22 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-esl-june-profile-comparison-manifest/v1",
+  "type":"object",
+  "required":["schema","manifest_id","freeze_state","source","population","cutoff_schedule","profiles","profile_bindings","execution_environment","cache_policy","checkpoint_policy","winner_synthesis","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-esl-june-profile-comparison-manifest/v1"},
+    "manifest_id":{"type":"string","minLength":1},
+    "freeze_state":{"const":"FROZEN_BEFORE_PROFILE_RESULT_INSPECTION"},
+    "source":{"type":"object"},
+    "population":{"type":"object"},
+    "cutoff_schedule":{"type":"object"},
+    "profiles":{"const":["BASE_STRUCTURAL","ORGANISATION_ENRICHED","CONSTRAINT_ENRICHED","FULL_RESEARCH"]},
+    "profile_bindings":{"type":"object"},
+    "execution_environment":{"type":"object"},
+    "cache_policy":{"type":"object"},
+    "checkpoint_policy":{"type":"object"},
+    "winner_synthesis":{"const":"FORBIDDEN"},
+    "authority_effect":{"const":"NONE"}
+  },
+  "additionalProperties":true
+}
