@@ -1,0 +1,23 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-esl-c3-semantic-proposition-v1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","proposition_type","source_ref","source_owner","resolution_state","first_valid_time","evaluation_cutoff","generation_refs","dependency_manifest_id","term_admission_state","bridge_maturity","authority_effect","proposition_id"],
+  "properties":{
+    "schema":{"const":"ovc-esl-c3-semantic-proposition/v1"},
+    "proposition_type":{"enum":["STRUCTURAL_OCCURRENCE","ORGANISATION_EVIDENCE","CONSTRAINT_EVIDENCE","EVENT_OCCURRENCE","PERSISTENT_OBJECT_REFERENCE","EPISTEMIC_STATUS"]},
+    "source_ref":{"type":"string","minLength":1},
+    "source_owner":{"type":"string","minLength":1},
+    "resolution_state":{"enum":["RESOLVED","PARTIAL","AMBIGUOUS","UNRESOLVED","NOT_AVAILABLE","NOT_EVALUABLE","CONFLICT","QUARANTINED"]},
+    "first_valid_time":{"type":"string","minLength":1},
+    "evaluation_cutoff":{"type":"string","minLength":1},
+    "generation_refs":{"type":"array","minItems":1,"items":{"type":"string","minLength":1}},
+    "dependency_manifest_id":{"type":"string","minLength":1},
+    "term_generation_id":{"type":["string","null"]},
+    "term_admission_state":{"enum":["NOT_ADMITTED","ADMISSION_CANDIDATE","ADMITTED_SHADOW"]},
+    "bridge_maturity":{"const":"INACTIVE_REFERENCE"},
+    "authority_effect":{"const":"NONE"},
+    "proposition_id":{"type":"string","pattern":"^c3eslp1:"}
+  }
+}
