@@ -2,8 +2,12 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from collections import defaultdict
+from pathlib import Path
 from typing import Any, Mapping, Sequence
+
+from ovc.programme_genesis._topology_engine import tracked_inventory
 
 from .constitution import ARTIFACT_CLASSES, LIFECYCLE_CLASSES, RELATIONSHIP_TYPES
 from .debt import B0_MEMBER_COUNT, B0_MEMBERSHIP_SHA256, baseline_membership_sha256, validate_baseline_members
@@ -134,6 +138,39 @@ def build_reference_graph(*, tree_hash: str, components: Sequence[Mapping[str, A
         "authority_effect": "NONE_REFERENCE_OBSERVATION_ONLY", "active_enforcement": "NONE",
     }
     return {**body, "canonical_hash": canonical_sha256(body)}
+
+
+def scan_repository_tree(
+    repository_root: Path | str,
+    *,
+    commit: str,
+    bindings_by_path: Mapping[str, Mapping[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Adapter over the existing v0.1 exact `git ls-tree` inventory substrate."""
+    root = Path(repository_root)
+    if not _HEX40.fullmatch(commit):
+        raise ReferenceRuntimeError("GRT_REFERENCE_COMMIT_INVALID")
+    completed = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", f"{commit}^{{tree}}"],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if completed.returncode != 0:
+        raise ReferenceRuntimeError("GRT_REFERENCE_TREE_RESOLUTION_FAILED")
+    tree_hash = completed.stdout.strip()
+    if not _HEX40.fullmatch(tree_hash):
+        raise ReferenceRuntimeError("GRT_REFERENCE_TREE_INVALID")
+    inventory = tracked_inventory(root, commit=commit)
+    components = [
+        {"path": row["path"], "content_hash": row["blob_hash"], "component_type": "file"}
+        for row in inventory
+    ]
+    graph = build_reference_graph(tree_hash=tree_hash, components=components, bindings_by_path=bindings_by_path)
+    return {**graph, "source_commit": commit}
 
 
 def replay_b0_baseline(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
