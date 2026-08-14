@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc://development/skills/vit/external-main-advance/v0.1",
+  "title":"AuthorizedExternalMainAdvanceReceipt v0.1",
+  "type":"object","additionalProperties":false,
+  "required":["writer_identity","authority_source","predecessor_commit","predecessor_tree","result_commit","result_tree","operation_class","issued_at","integrity"],
+  "properties":{
+    "writer_identity":{"type":"string","minLength":1},
+    "authority_source":{"type":"string","minLength":1},
+    "predecessor_commit":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "predecessor_tree":{"type":"string","pattern":"^[0-9a-f]{40,64}$"},
+    "result_commit":{"type":"string","pattern":"^[0-9a-f]{40}$"},
+    "result_tree":{"type":"string","pattern":"^[0-9a-f]{40,64}$"},
+    "operation_class":{"enum":["VIT_MATERIALISATION","OPERATOR_EMERGENCY","GOVERNED_EXTERNAL_INTEGRATION","OTHER_REGISTERED"]},
+    "related_refs":{"type":"array","items":{"type":"string"}},
+    "issued_at":{"type":"string","minLength":1},
+    "integrity":{"type":"string","minLength":1}
+  }
+}
