@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-serialized-integration-queue-policy/v1",
+  "title": "OVC Serialized Integration Queue Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "policy_id",
+    "status",
+    "authority_source",
+    "parent_programme",
+    "parent_contract",
+    "constitutional_contract",
+    "target_branch",
+    "parallel_build",
+    "parallel_merge",
+    "queue_order",
+    "admission_conditions",
+    "assurance_classes",
+    "lease",
+    "main_movement",
+    "automatic_requeue",
+    "merge",
+    "operator_required_gate_behavior",
+    "reserved_authority_behavior",
+    "validation",
+    "scientific_authority_effect"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-serialized-integration-queue-policy/v1"},
+    "policy_id": {"const": "OVC.SIQ.v0.1"},
+    "status": {"const": "RATIFIED_CONSTITUTIONAL_POLICY"},
+    "authority_source": {"type": "string", "minLength": 1},
+    "parent_programme": {"type": "string", "minLength": 1},
+    "parent_contract": {"type": "string", "minLength": 1},
+    "constitutional_contract": {"type": "string", "minLength": 1},
+    "target_branch": {"const": "main"},
+    "parallel_build": {"const": true},
+    "parallel_merge": {"const": false},
+    "queue_order": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "tie_breakers"],
+      "properties": {
+        "kind": {"const": "FIFO_READY_SEQUENCE"},
+        "tie_breakers": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "packet_id"},
+            {"const": "candidate_head_sha"}
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "admission_conditions": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "assurance_classes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["BASE_INDEPENDENT", "BASE_SENSITIVE"],
+      "properties": {
+        "BASE_INDEPENDENT": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "BASE_SENSITIVE": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["single_holder", "target_seconds", "warning_seconds", "release_and_requeue_seconds", "timeout_exception", "blocks_unrelated_main_merges", "allows_unrelated_branch_build_and_nonintegration_ci"],
+      "properties": {
+        "single_holder": {"const": true},
+        "target_seconds": {"type": "integer", "minimum": 1},
+        "warning_seconds": {"type": "integer", "minimum": 1},
+        "release_and_requeue_seconds": {"type": "integer", "minimum": 1},
+        "timeout_exception": {"const": "DECLARED_BASE_SENSITIVE_CHECK_ACTIVELY_EXECUTING"},
+        "blocks_unrelated_main_merges": {"const": true},
+        "allows_unrelated_branch_build_and_nonintegration_ci": {"const": true}
+      }
+    },
+    "main_movement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["IRRELEVANT", "INTEGRATION_RELEVANT", "SEMANTIC_AUTHORITY_RELEVANT", "UNRESOLVED_REQUIRES_FOOTPRINT"],
+      "properties": {
+        "IRRELEVANT": {"type": "string"},
+        "INTEGRATION_RELEVANT": {"type": "string"},
+        "SEMANTIC_AUTHORITY_RELEVANT": {"type": "string"},
+        "UNRESOLVED_REQUIRES_FOOTPRINT": {"type": "string"}
+      }
+    },
+    "automatic_requeue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "preserve_packet_scope_identity", "preserve_write_set_identity", "preserve_semantic_owner_identity", "force_push", "history_rewrite", "test_weakening", "authority_broadening"],
+      "properties": {
+        "enabled": {"const": true},
+        "preserve_packet_scope_identity": {"const": true},
+        "preserve_write_set_identity": {"const": true},
+        "preserve_semantic_owner_identity": {"const": true},
+        "force_push": {"const": false},
+        "history_rewrite": {"const": false},
+        "test_weakening": {"const": false},
+        "authority_broadening": {"const": false}
+      }
+    },
+    "merge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "eligibility_source", "readiness_is_authority", "verify_head_and_main_immediately_before_merge", "release_lease_immediately_after_terminal_decision"],
+      "properties": {
+        "method": {"const": "squash"},
+        "eligibility_source": {"const": "EXISTING_PACKET_AND_GATE_AUTHORITY"},
+        "readiness_is_authority": {"const": false},
+        "verify_head_and_main_immediately_before_merge": {"const": true},
+        "release_lease_immediately_after_terminal_decision": {"const": true}
+      }
+    },
+    "operator_required_gate_behavior": {"const": "STOP"},
+    "reserved_authority_behavior": {"const": "STOP"},
+    "validation": {"type": "string", "minLength": 1},
+    "scientific_authority_effect": {"const": "NONE"}
+  }
+}

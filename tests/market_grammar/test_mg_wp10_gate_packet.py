@@ -16,7 +16,7 @@ class MarketGrammarWp10GatePacketTests(unittest.TestCase):
   self.assertEqual('MG-WP10',packet['gate_id']); self.assertEqual('APPROVED',packet['status']); self.assertEqual('PASS',packet['decision']); self.assertEqual('PASS',decision['decision']); self.assertEqual('OPERATOR_EXPLICIT',decision['decision_authority']); self.assertEqual('OVC APPROVE MG-WP10 PASS',decision['operator_command']); self.assertEqual('COMPLETED',receipt['status']); self.assertEqual('COMPLETED',state['status']); self.assertEqual('SATISFIED_OPERATOR_DECISION',state['authority_required']); self.assertEqual('COMPLETED',packets['MG-WP10']['status']); self.assertEqual('SATISFIED_OPERATOR_DECISION',packets['MG-WP10']['authority_required']); self.assertEqual('COMPLETED',packets['MG-WP9']['status'])
  def test_approved_delta_explicitly_excludes_reserved_activation(self):
   packet=load(PACKET); limits=' '.join(packet['approved_delta_limits']).lower()
-  for phrase in ('no selector','no canonical','no family','no c3','no publication','no active discovery','no probability'):
+  for phrase in ('no selector or canonical selection','no family, variant, rule, candidate, grammar or semantic promotion','no c3 handoff or publication','no active discovery, active development or active validation authority','no probability, risk, exposure or execution authority'):
    self.assertIn(phrase,limits)
  def test_predecision_exact_head_assurance_matches_operator_approved_head(self):
   decision=load(DECISION); assurance=load(PREDECISION); self.assertEqual(decision['approved_gate_head'],assurance['tested_head']); self.assertEqual('PASS_EXACT_HEAD',assurance['result']); self.assertEqual(0,assurance['checks']['unresolved_review_threads'])

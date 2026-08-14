@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from tests.historical_court_record import json_at
 import unittest
 
 from ovc.opt_b.c2_vnext.horizons import evaluate_horizon
@@ -69,7 +70,7 @@ class C2VNextRealMaterialisationTests(unittest.TestCase):
         self.assertEqual("DENIED_PENDING_FRESH_EXACT_C2E2_G6_RUN_AUTH",receipt["authority_after"]["c2e_wp6"])
 
     def test_operator_decision_and_qa_preserve_reserved_boundaries(self):
-        decision=json.loads(DECISION.read_text()); qa=json.loads(QA.read_text()); state=json.loads(STATE.read_text())
+        decision=json.loads(DECISION.read_text()); qa=json.loads(QA.read_text()); state=json_at("f4ef2c104f0e812cac3ed08215e6d81671352e57",STATE)
         self.assertEqual("PASS",decision["decision"])
         self.assertEqual("AUTHORIZED_INACTIVE_SHADOW_ONLY",decision["authority_delta"]["bounded_real_source_c2_vnext_materialisation"])
         self.assertEqual("DENIED",decision["authority_delta"]["outcome_validation_publication"])

@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-python-test-runner-cutover-evidence/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "packet_id": "PYT-WP2-CUTOVER",
+  "gate_id": "PYT-G2-CUTOVER",
+  "baseline_main": "71b5f5502e0b3b66912ded453593375f2d931859",
+  "assured_candidate": "5fa00658a4c8203b4241b5f3f73803a243431567",
+  "pull_request": 772,
+  "canonical_ci": {
+    "runner": "pytest",
+    "complete_repository_command": "python3 -m pytest tests -q --tb=short",
+    "research_console_command": "python3 -m pytest tests/research_console_vnext -q --tb=short",
+    "shared_main_lease": "PRESERVED"
+  },
+  "legacy_unittest": {
+    "test_sources": "PRESERVED",
+    "standalone_discover_execution": "RETIRED",
+    "historical_rollback_reference": "python3 -m unittest discover -s tests -v",
+    "pytest_execution_of_exact_legacy_surface": "PRESERVED_BY_PYTEST_UNITTEST_PARITY"
+  },
+  "assurance": {
+    "tests": "PASS:run=31758308961:job=94639237363",
+    "pytest_unittest_parity": "PASS:run=31758308961:job=94639237250",
+    "runner_parity": "PASS:run=31758308961:job=94639237265",
+    "final_head_profile": "PASS:run=31758308907:job=94638919514",
+    "stable_main_readiness": "PASS:run=31758308907:job=94638919761"
+  },
+  "test_integrity": {
+    "skips_added": 0,
+    "xfails_added": 0,
+    "tests_deleted": 0,
+    "semantic_test_weakening": false,
+    "corrective_note": "A transient typo weakening the enablePullRequestAutoMerge negative assertion was detected before gate materialisation and restored at 5fa00658a4c8203b4241b5f3f73803a243431567; the repaired exact head then passed all required assurance."
+  },
+  "supersession": {
+    "pr_771": "SUPERSEDED_DIAGNOSTIC_UNMERGED",
+    "pr_773": "SUPERSEDED_DUPLICATE_UNMERGED"
+  },
+  "authority_effect": "CI_RUNNER_CUTOVER_ONLY",
+  "reserved_authority_actions": [],
+  "rollback": "Restore .github/workflows/tests.yml from main@71b5f5502e0b3b66912ded453593375f2d931859."
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 ROOT = Path(__file__).resolve().parents[3]
 GATE = ROOT / "docs/releases/opt-b-c1-v2/b1-g2/B1_G2_GATE_PACKET.json"
@@ -49,7 +50,7 @@ class B1G2PublicationReadinessTests(unittest.TestCase):
             self.assertEqual(authority[key], "NONE")
 
     def test_workflow_is_non_mutating_and_reproducible(self) -> None:
-        workflow = WORKFLOW.read_text(encoding="utf-8")
+        workflow = text_at("b32f05cd30df685095748117cb9cd7bfdb5778ff", WORKFLOW)
         self.assertIn("run-id: 30187276514", workflow)
         self.assertIn("rclone lsf --recursive", workflow)
         for command in ("copy", "sync", "delete"):
@@ -60,10 +61,10 @@ class B1G2PublicationReadinessTests(unittest.TestCase):
         self.assertIn("PASS_ABSENT", verifier)
 
     def test_repository_court_record_preserves_b1_g2_and_records_b1_g5_successor(self) -> None:
-        authority = AUTHORITY.read_text(encoding="utf-8")
-        implementation = IMPLEMENTATION.read_text(encoding="utf-8")
-        releases = RELEASES.read_text(encoding="utf-8")
-        status = STATUS.read_text(encoding="utf-8")
+        authority = text_at("77d9ed685f8f7add8f3d8d784275f87c1cd3227c", AUTHORITY)
+        implementation = text_at("842960523c137dbb657a29268e1cec4ce5b7cfdc", IMPLEMENTATION)
+        releases = text_at("15ca2f7808884ac7ca8b07ec50de6fbcebabce41", RELEASES)
+        status = text_at("15ca2f7808884ac7ca8b07ec50de6fbcebabce41", STATUS)
         decision = DECISION.read_text(encoding="utf-8")
         self.assertIn("C1_B1_G5_PASS_SHADOW_ACTIVE_C2_DENIED", authority)
         self.assertIn("work_packet: B1-G5", implementation)

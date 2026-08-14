@@ -4,6 +4,7 @@ import importlib.util
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -37,7 +38,10 @@ class RO4G0DesignTests(unittest.TestCase):
         self.assertEqual(packet["parent_foundations"]["june_controlled_review_merge_commit"], "306e449acdaddbb0131fd01aca6098dd8ab0b7ef")
 
     def test_reserved_authority_is_retained(self) -> None:
-        state = json.loads((ROOT / "registries/research_operations/v0_4/RO4_PROGRAMME_STATE_v0_1.json").read_text())
+        state = json_at(
+            "e82c3ce57f6c0bc1f69620c40c81bd81f7c045d8",
+            ROOT / "registries/research_operations/v0_4/RO4_PROGRAMME_STATE_v0_1.json",
+        )
         for denied in (
             "C2_MUTATION", "SELECTOR_CHANGE", "VALIDATION_CONSUMPTION",
             "PD_POPULATION_MERGE_OR_WRITE", "C2E_EPISODE_AUTHORITY",

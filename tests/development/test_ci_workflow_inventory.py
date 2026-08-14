@@ -44,8 +44,8 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def test_actions_registry_and_repository_definition_layers_are_distinct(self):
         snapshot = self.policy["snapshot"]
         self.assertEqual(snapshot["github_actions_registered_total_count"], 177)
-        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 130)
-        self.assertEqual(snapshot["registration_count_excess"], 47)
+        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 131)
+        self.assertEqual(snapshot["registration_count_excess"], 46)
         self.assertEqual(
             snapshot["registration_count_excess_interpretation"],
             "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK",

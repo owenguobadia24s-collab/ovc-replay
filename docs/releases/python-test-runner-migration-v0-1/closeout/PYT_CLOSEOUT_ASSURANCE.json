@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-python-test-runner-closeout-assurance/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "packet_id": "PYT-WP2-CUTOVER-CLOSEOUT",
+  "gate_id": "PYT-G2-CUTOVER-CLOSEOUT",
+  "authority_effect": "NONE",
+  "lawful_main": "e6aa97e642aa2a2516f7fe464922d3f6d48f5fb3",
+  "candidate_sha": "646495080ea42d7d06f011bf89cd6bc1ac1b9d27",
+  "candidate_contains_lawful_main": true,
+  "exact_head_assurance": {
+    "tests": {"run": 31759103197, "job": 94641483555, "conclusion": "success", "passed": 3266, "subtests_passed": 687, "skipped": 1, "failed": 0, "errors": 0, "runtime_seconds": 248.51},
+    "research_console": {"passed": 94, "failed": 0, "errors": 0, "runtime_seconds": 0.75},
+    "pytest-unittest-parity": {"run": 31759103197, "job": 94641483627, "conclusion": "success"},
+    "runner-parity": {"run": 31759103197, "job": 94641483566, "conclusion": "success"},
+    "final_head_profile": {"run": 31759103156, "job": 94641121629, "conclusion": "success"},
+    "stable_main_merge_readiness": {"run": 31759103156, "job": 94641121683, "conclusion": "success"},
+    "compatibility_context": {"run": 31759103156, "job": 94641478160, "conclusion": "success"}
+  },
+  "terminal_invariants": {
+    "canonical_ci_runner": "pytest",
+    "pytest_version": "9.1.1",
+    "standalone_unittest_discover_execution": "RETIRED",
+    "legacy_unittest_sources": "PRESERVED",
+    "legacy_unittest_execution_via_pytest": "PRESERVED",
+    "pytest_unittest_parity": "PRESERVED",
+    "runner_parity": "PRESERVED",
+    "test_weakening": "NONE",
+    "scientific_or_market_authority_delta": "NONE"
+  },
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "gate_classification": "AUTO_RATIFIABLE",
+  "post_materialisation_requirement": "Rerun exact-head assurance after terminal QA/decision/state materialisation before squash merge.",
+  "rollback": "Forward-restore the PYT-G1 dual-run workflow if necessary while preserving every test source and all append-only PYT evidence."
+}

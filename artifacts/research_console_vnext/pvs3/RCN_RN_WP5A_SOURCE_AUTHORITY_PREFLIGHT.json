@@ -1,0 +1,101 @@
+{
+  "schema": "ovc-rcn-rn-wp5a-source-authority-preflight/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "plan_source_sha256": "fd12580607ff748892046547005cced62fba3db8530473ca9206f0836dcee40c",
+  "packet_id": "RCN-RN-WP5A",
+  "baseline_main": "e271bf6f9fe1ae2bb7d4ecdcf72d94ff23e14f32",
+  "reconciled_from_main": "e271bf6f9fe1ae2bb7d4ecdcf72d94ff23e14f32",
+  "reconciliation_commit": null,
+  "branch": "build/rc-vnext-wp5a-representations-fresh-e271",
+  "systemic_prerequisite": {
+    "pull_request": 732,
+    "merge_commit": "27a472643f2827336e8156360e3bceb7d6793440",
+    "disposition": "COMPLETED_PRESERVED"
+  },
+  "reconstruction_source": {
+    "pull_request": 730,
+    "head_commit": "8b940e48ff999e857066d54efcd39c2117fa5af6",
+    "reuse_mode": "FILE_LEVEL_ONLY",
+    "excluded_paths": [
+      ".github/workflows/tests.yml"
+    ]
+  },
+  "status": "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE",
+  "source_binding_registry": "registries/research_console_vnext/research_native/wp5a_representation_source_bindings_v1.json",
+  "sources": [
+    {
+      "source_id": "SRI_REPRESENTATION_FIXTURES",
+      "owner_programme": "OVC-SRFD-BENCHMARK-v0.1",
+      "path": "fixtures/opt_b/srfd/wp2_representation_fixtures.json",
+      "git_blob_sha": "34d2953553587195ada6bef9f009e6bd20a4857f",
+      "source_class": "SYNTHETIC_FIXTURE",
+      "authority_value": "FIXTURE_ONLY",
+      "first_new_real_research_source": false
+    },
+    {
+      "source_id": "FDI_DISTANCE_FIXTURES",
+      "owner_programme": "OVC-SRFD-BENCHMARK-v0.1",
+      "path": "fixtures/opt_b/srfd/wp4_distance_fixtures.json",
+      "git_blob_sha": "c1c87e1999c6b80532076f04722098601feed38b",
+      "source_class": "SYNTHETIC_FIXTURE",
+      "authority_value": "FIXTURE_ONLY",
+      "first_new_real_research_source": false
+    },
+    {
+      "source_id": "SRFD_FAMILY_FIXTURES",
+      "owner_programme": "OVC-SRFD-BENCHMARK-v0.1",
+      "path": "fixtures/opt_b/srfd/wp5_family_fixtures.json",
+      "git_blob_sha": "57bb48aece6c2e0f54f078cb91b63abc2822633a",
+      "source_class": "SYNTHETIC_FIXTURE",
+      "authority_value": "FIXTURE_ONLY",
+      "first_new_real_research_source": false
+    },
+    {
+      "source_id": "SRFD_SENSITIVITY_FIXTURES",
+      "owner_programme": "OVC-SRFD-BENCHMARK-v0.1",
+      "path": "fixtures/opt_b/srfd/wp6_sensitivity_fixtures.json",
+      "git_blob_sha": "23d3913eb7d04db0f520b7566fcb8f933c8d7bed",
+      "source_class": "SYNTHETIC_FIXTURE",
+      "authority_value": "FIXTURE_ONLY",
+      "first_new_real_research_source": false
+    },
+    {
+      "source_id": "MCARB_ADVERSARIAL_FIXTURES",
+      "owner_programme": "OVC-MCARB-v0.1",
+      "path": "fixtures/research_operations/mcarb/MCARB_ADVERSARIAL_FIXTURE_CATALOG_v0_1.json",
+      "git_blob_sha": "a5c8da9e9f31d4273dcee17e4aa0da2601a6e899",
+      "source_class": "SYNTHETIC_FIXTURE",
+      "authority_value": "SYNTHETIC_FIXTURE_ONLY",
+      "first_new_real_research_source": false
+    }
+  ],
+  "assessment": {
+    "all_sources_repository_addressable": true,
+    "all_source_blob_hashes_verified_on_current_baseline": true,
+    "all_sources_fixture_only": true,
+    "all_sources_non_evidentiary": true,
+    "first_new_real_research_source": false,
+    "provider_fetch": "NOT_PERFORMED_DENIED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "scientific_outputs_generated": false,
+    "frontend_scientific_calculation": "PROHIBITED",
+    "selector_authority": "NONE",
+    "writes": "NONE"
+  },
+  "gate_classification": {
+    "eligible_gate": "RCN-RN-WP5A-CLOSEOUT",
+    "eligible_gate_class": "AUTO_RATIFIABLE",
+    "authority_delta": "NONE",
+    "operator_escalation_gate": "RCN-RN-G5-FIRST-NEW-SOURCE",
+    "operator_escalation_triggered": false
+  },
+  "authority_effect": "NONE",
+  "blockers": [],
+  "warnings": [
+    "The WP5A surface is synthetic fixture-only and non-evidentiary.",
+    "Any future first-new real Research source must stop at RCN-RN-G5-FIRST-NEW-SOURCE before exposure.",
+    "Existing G4 MARKET/C1/C2/C2E Investigate authority is unchanged and non-transitive."
+  ],
+  "rollback": "Do not bind the WP5A route if any source identity or authority marker fails. Preserve the governing PPM, G4 authority, PR #732 systemic CI mechanics and source fixtures."
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "ovc-python-test-runner-g2-admission-evidence/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "packet_id": "PYT-WP2",
+  "gate_id": "PYT-G2",
+  "phase": "UNIFIED_SURFACE_ADMISSION_PROOF",
+  "authority_effect": "NONE",
+  "lawful_main": "a11d6acdb671eaef9e3cf58369d4aae0269f09bb",
+  "candidate_sha": "221cca6992124a3a30cdfdbf0fa11b2d78c299b4",
+  "candidate_contains_lawful_main": true,
+  "same_sha_assurance": {
+    "tests": {
+      "workflow_run_id": 31755286934,
+      "job_id": 94632889445,
+      "conclusion": "success"
+    },
+    "runner-parity": {
+      "workflow_run_id": 31755286934,
+      "job_id": 94632889457,
+      "conclusion": "success"
+    },
+    "pytest-unittest-parity": {
+      "workflow_run_id": 31755286934,
+      "job_id": 94632889575,
+      "conclusion": "success"
+    },
+    "pytest-unified": {
+      "workflow_run_id": 31755284720,
+      "job_id": 94629620541,
+      "conclusion": "success",
+      "artifact_id": 9202556029,
+      "artifact_digest": "sha256:a6214bd3b5b84896b640ae17a49074d62770a8e5579e45535e141996d98b01e8"
+    },
+    "final_head_profile": {
+      "workflow_run_id": 31755286891,
+      "job_id": 94632667388,
+      "conclusion": "success"
+    },
+    "stable_main_merge_readiness": {
+      "workflow_run_id": 31755286891,
+      "job_id": 94632667410,
+      "conclusion": "success"
+    }
+  },
+  "native_pytest_population": {
+    "status": "PASS",
+    "junit_tests": 3925,
+    "ordinary_passed": 3237,
+    "subtests_passed": 687,
+    "failed": 0,
+    "errors": 0,
+    "collection_errors": 0,
+    "skipped": 1,
+    "skip_justification": "Windows-specific host metric probe is inapplicable on the Linux CI runner."
+  },
+  "admission_integrity": {
+    "unittest_test_sources_preserved": true,
+    "standalone_unittest_ci_preserved_during_admission": true,
+    "test_sources_deleted_for_migration": 0,
+    "tests_weakened": false,
+    "tests_xfailed_for_migration": false,
+    "tests_skipped_for_migration": false,
+    "historical_records_rewritten": false,
+    "scientific_or_market_semantics_changed": false,
+    "reserved_authority_actions": []
+  },
+  "reviews": {
+    "blocking_reviews": 0,
+    "unresolved_review_threads": 0,
+    "open_pyt_issues": 0
+  },
+  "blockers": [],
+  "qa_recommendation": "PASS",
+  "gate_classification": "AUTO_RATIFIABLE",
+  "next_packet": "PYT-WP2-CUTOVER",
+  "cutover_rule": "Remove only the standalone unittest-discover CI execution after this admission proof is integrated; preserve all unittest test sources and execute them through pytest.",
+  "rollback": "Restore the merged PYT-G1 dual-run workflow while preserving every test source and all append-only PYT evidence."
+}

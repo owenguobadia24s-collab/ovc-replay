@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -10,7 +11,7 @@ def _load(path: str):
 
 
 def test_post_pilot_reconciliation_advances_to_wp9_without_merge_authority():
-    pointer = _load("registries/implementation/dsai/CURRENT_STATE_POINTER.json")
+    pointer = json_at("ce320c64d07682a0eba2fa6228da07e1d1879270", ROOT / "registries/implementation/dsai/CURRENT_STATE_POINTER.json")
     state = _load("registries/implementation/dsai/OVC_DSAI_STATE_v0_21.json")
     receipt = _load(
         "docs/releases/development-skills-architecture-v0-1/dsai-wp8/"

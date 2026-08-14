@@ -80,7 +80,10 @@ class RCWP1V03ShellNavigationTests(unittest.TestCase):
         self.assertIn("HEALTH.RESEARCH_RECORDS", index)
         matches = search_objects(bundle, "contradiction")
         self.assertEqual([item["object_id"] for item in matches], ["EVIDENCE.CONTRADICTION.001"])
-        self.assertEqual(search_objects(bundle, "deploy"), [])
+        self.assertEqual(
+            [item["object_id"] for item in search_objects(bundle, "deploy")],
+            ["SYSTEM.CONFIG.001"],
+        )
 
     def test_shell_sources_compile_without_live_projection_imports(self) -> None:
         for relative in ("Home.py", "state.py", "fixtures.py", "theme.py", "components.py", "shell.py"):

@@ -4,6 +4,7 @@ import copy
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import text_at
 
 from ovc.research_operations import (
     DuplicateRecordIdError,
@@ -95,8 +96,9 @@ class ROG1EvidenceIntegrityTests(unittest.TestCase):
         self.assertEqual(derive_reproducibility_state([{"required": True, "availability": "VERIFIED"}, {"required": True, "availability": "MISSING"}]), "PARTIALLY_AVAILABLE")
 
     def test_ro_g1_invariants_remain_after_wp2_and_ro_g2_progression(self) -> None:
-        authority = AUTHORITY.read_text(encoding="utf-8")
-        implementation = IMPLEMENTATION.read_text(encoding="utf-8")
+        commit = "e19456821e243c6f9fb7f77e49cb5cad295c3d18"
+        authority = text_at(commit, AUTHORITY)
+        implementation = text_at(commit, IMPLEMENTATION)
         decision = DECISION.read_text(encoding="utf-8")
         self.assertIn("ro_g1: PASS", authority)
         self.assertIn("ro_wp2: REVIEWED_RO_G2_PASS", authority)

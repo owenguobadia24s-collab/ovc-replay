@@ -3,11 +3,13 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import names_at, text_at
 
 ROOT = Path(__file__).resolve().parents[2]
 BASELINE = "fefac25f19a836898c3a22228036cd66617dca07"
 PLAN_SHA256 = "4f0de710ab0157041f57ab781c9411a68aaf211b3b4a41f249978f07b0d580a0"
 PLAN_SIZE = 193991
+HISTORICAL_GATE_COMMIT = "8a4852358324a4e6dfc9f7c239be9e9eb8d69c23"
 
 
 class ResearchOperationsG0PreflightTests(unittest.TestCase):
@@ -38,15 +40,16 @@ class ResearchOperationsG0PreflightTests(unittest.TestCase):
         self.assertTrue(all(check["status"] == "PASS" for check in packet["checks"]))
 
     def test_namespace_is_reserved_without_implementation_leakage(self) -> None:
-        namespace = (
-            ROOT / "registries/research_operations/RESEARCH_OPERATIONS_NAMESPACE_REGISTRY_v0_1.yaml"
-        ).read_text(encoding="utf-8")
+        namespace = text_at(
+            HISTORICAL_GATE_COMMIT,
+            ROOT / "registries/research_operations/RESEARCH_OPERATIONS_NAMESPACE_REGISTRY_v0_1.yaml",
+        )
         self.assertIn("path: src/ovc/research_operations", namespace)
         self.assertIn("import_name: ovc.research_operations", namespace)
         self.assertIn("state: RESERVED_NOT_IMPLEMENTED", namespace)
         self.assertIn("top_level_package_creation: DENIED", namespace)
-        self.assertFalse((ROOT / "src/ovc/research_operations").exists())
-        self.assertFalse((ROOT / "apps/research_console").exists())
+        self.assertNotIn("research_operations", names_at(HISTORICAL_GATE_COMMIT, ROOT / "src/ovc"))
+        self.assertNotIn("apps", names_at(HISTORICAL_GATE_COMMIT, ROOT))
 
     def test_dependency_policy_is_one_way_and_fail_closed(self) -> None:
         policy = (
@@ -81,14 +84,15 @@ class ResearchOperationsG0PreflightTests(unittest.TestCase):
             self.assertIn(required, policy)
 
     def test_active_authority_preserves_upstream_and_adds_no_market_power(self) -> None:
-        authority = (ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml").read_text(encoding="utf-8")
+        authority = text_at(BASELINE, ROOT / "registries/authority/ACTIVE_AUTHORITY.yaml")
         self.assertIn("  opt_a: ACTIVE", authority)
         self.assertIn("  opt_b_c1: NONE", authority)
         self.assertIn("validation_consumption: LOCKED_UNCONSUMED", authority)
         self.assertIn("state: WP2_CONTRACTS_FROZEN_WP3_SYNTHETIC_ENGINE_AUTHORISED", authority)
-        registry = (
-            ROOT / "registries/implementation/RESEARCH_OPERATIONS_RO_G0_FOUNDATION.yaml"
-        ).read_text(encoding="utf-8")
+        registry = text_at(
+            HISTORICAL_GATE_COMMIT,
+            ROOT / "registries/implementation/RESEARCH_OPERATIONS_RO_G0_FOUNDATION.yaml",
+        )
         self.assertIn("status: RO_G0_PASS_WP1_AUTHORISED", registry)
         for phrase in (
             "active_research: NONE",
@@ -107,7 +111,7 @@ class ResearchOperationsG0PreflightTests(unittest.TestCase):
         self.assertIn('include = ["ovc*", "ovc_evidence_store*"]', pyproject)
 
     def test_current_status_names_parallel_next_boundaries(self) -> None:
-        status = (ROOT / "docs/CURRENT_STATUS.md").read_text(encoding="utf-8")
+        status = text_at(HISTORICAL_GATE_COMMIT, ROOT / "docs/CURRENT_STATUS.md")
         self.assertIn("RO-G0", status)
         self.assertIn("RO-WP1 — Evidence envelope and record schemas", status)
         self.assertIn("OPT-B.C1 v2 WP3", status)

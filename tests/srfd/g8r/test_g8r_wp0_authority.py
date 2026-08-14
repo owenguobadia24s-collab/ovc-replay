@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import unittest
+from tests.historical_court_record import json_at
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -18,8 +19,9 @@ class SRFDIG8RWP0AuthorityTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.decision = json.loads(DECISION.read_text(encoding="utf-8"))
         cls.freeze = json.loads(FREEZE.read_text(encoding="utf-8"))
-        cls.state = json.loads(STATE.read_text(encoding="utf-8"))
-        cls.parent = json.loads(PARENT.read_text(encoding="utf-8"))
+        commit = "feac57eec78363008bd713a4f73c5053691ca648"
+        cls.state = json_at(commit, STATE)
+        cls.parent = json_at(commit, PARENT)
 
     def test_operator_pass_is_exact_and_plan_bound(self) -> None:
         self.assertEqual("SRFDI-G8R-G0", self.decision["gate_id"])

@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import unittest
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[3]
 STATE = ROOT / "registries/implementation/sfc/OVC_SFC_STATE_v0_3.json"
@@ -18,7 +19,7 @@ class SFCResumeWP0G0Tests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.state = json.loads(STATE.read_text())
-        cls.pointer = json.loads(POINTER.read_text())
+        cls.pointer = json_at("5ec4c5fe380bb79edb4ad606f6559dc38653b264", POINTER)
         cls.old = json.loads(OLD_STATE.read_text())
         cls.preflight = json.loads(PREFLIGHT.read_text())
         cls.survey = json.loads(SURVEY.read_text())

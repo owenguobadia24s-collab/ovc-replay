@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-ci-assurance-generation/v1",
+  "record_id": "OVC-CI-REQUIRED-SURFACE-SHARED-LEASE-GEN-5",
+  "candidate_branch": "reconcile/ci-required-surface-shared-lease-requeue1",
+  "candidate_base_sha": "d41a29f9895482de0d1515efc2ca0aebf8016b45",
+  "superseded_assurance_head_sha": "badd23a235534683615cb339207acd6d436b3b0f",
+  "generation_reason": "The superseded head proved repository-root visibility and collection parity, then the pytest execution surface exposed one remaining historical PYT-G1 assertion that required the pre-wrapper literal to appear contiguously. Rebind that invariant to the exact unchanged unittest command executed once inside the shared-main lease wrapper.",
+  "failure_class": "HISTORICAL_PYT_COMMAND_ASSERTION_DRIFT_AFTER_SHARED_LEASE_WRAPPER",
+  "failed_test": "tests/test_python_test_runner_migration.py::PythonTestRunnerMigrationContractTests::test_legacy_unittest_command_is_preserved_exactly",
+  "correction": {
+    "suite_semantics": "ASSERT_EXACT_CANONICAL_UNITTEST_COMMAND_ONCE_INSIDE_LEASE_WRAPPER",
+    "workflow_code_change": "NONE",
+    "test_deletion": false,
+    "test_skip": false,
+    "test_xfail": false,
+    "assertion_weakening": false
+  },
+  "scope_change": false,
+  "semantic_owner_change": false,
+  "authority_surface_change": false,
+  "frozen_surface_change": false,
+  "guard_weakening": false,
+  "force_push": false,
+  "history_rewrite": false,
+  "authority_delta": "NONE",
+  "required_assurance": [
+    "tests",
+    "Research Console vNext exact maintained API surface",
+    "pytest-unittest-parity",
+    "runner-parity",
+    "OVC profile assurance",
+    "OVC merge readiness"
+  ],
+  "superseded_head_policy": "DO_NOT_RERUN"
+}

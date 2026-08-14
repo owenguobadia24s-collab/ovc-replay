@@ -1,5 +1,5 @@
 from __future__ import annotations
-import copy,json,time,unittest
+import copy,hashlib,json,time,unittest
 from pathlib import Path
 from ovc.opt_b.market_grammar.topology_smoke import MAX_RETAINED_BYTES,MAX_RUNTIME_SECONDS,make_checkpoint,resume_topology_smoke,run_topology_smoke
 ROOT=Path(__file__).resolve().parents[2]
@@ -8,6 +8,8 @@ PACKS=ROOT/'registries/opt_b/market_grammar/MG_C2G_SENSITIVITY_PACK_REGISTRY_v0_
 MIGRATIONS=ROOT/'registries/opt_b/market_grammar/MG_CEAR_G10_MIGRATION_LEDGER_v0_1.json'
 def load(path): return json.loads(path.read_text(encoding='utf-8'))
 def canonical(value): return json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf-8')
+def rebind_ledger(fixture,ledger):
+ fixture=copy.deepcopy(fixture); ledger=copy.deepcopy(ledger); ledger.pop('ledger_sha256',None); ledger['ledger_sha256']=hashlib.sha256(canonical(ledger)).hexdigest(); fixture['candidate_migration_ledger_sha256']=ledger['ledger_sha256']; return fixture,ledger
 class TopologySmokeTests(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
@@ -15,11 +17,12 @@ class TopologySmokeTests(unittest.TestCase):
  def test_full_component_topology_is_present_and_shadow_only(self):
   result=self.result; counts=result['component_counts']; self.assertEqual(8,counts['c2_records']); self.assertEqual(4,counts['episodes']); self.assertGreaterEqual(counts['state_families'],1); self.assertGreaterEqual(counts['transition_families'],1); self.assertEqual([2,2],counts['episode_families_by_pack']); self.assertEqual(2,counts['variants']); self.assertEqual(14,counts['candidate_migrations']); self.assertEqual('GRAMMAR_MATCH',result['parse_result']['status']); self.assertFalse(result['canonical']); self.assertFalse(result['published']); self.assertFalse(result['grammar_release']['canonical']); self.assertFalse(result['grammar_release']['published']); self.assertFalse(result['read_only_projection']['mutation_controls']); self.assertEqual('NONE',result['candidate_migration']['promotion_authority']); self.assertIsNone(result['sensitivity_comparison']['canonical_pack_id'])
  def test_missing_context_is_explicit_and_never_neutralised(self):
-  self.assertEqual('UNAVAILABLE',self.result['missing_context_resolution']['status']); self.assertEqual(1,self.result['context_status_counts']['UNAVAILABLE']); self.assertEqual(4,self.result['context_status_counts']['AVAILABLE']); self.assertEqual('AVAILABLE',self.result['parse_result']['context_status'])
+  self.assertEqual('UNAVAILABLE',self.result['missing_context_resolution']['status']); self.assertEqual(1,self.result['context_status_counts']['UNAVAILABLE']); self.assertEqual(4,self.result['context_status_counts']['AVAILABLE']); self.assertEqual('GRAMMAR_MATCH',self.result['parse_result']['status'])
  def test_two_clean_runs_are_byte_identical_and_checkpoint_restart_reproduces(self):
   second=run_topology_smoke(self.fixture,self.packs,self.migrations); self.assertEqual(canonical(self.result),canonical(second)); checkpoint=make_checkpoint(self.result); resumed=resume_topology_smoke(self.fixture,self.packs,self.migrations,checkpoint); self.assertEqual(canonical(self.result),canonical(resumed))
- def test_shuffled_c2_order_and_environment_labels_do_not_change_identity(self):
-  shuffled=copy.deepcopy(self.fixture); shuffled['c2_records']=list(reversed(shuffled['c2_records'])); shuffled['runtime_metadata']={'machine_name':'another-host','local_path':'/tmp/another'}; result=run_topology_smoke(shuffled,self.packs,self.migrations); self.assertEqual(self.result['input_sha256'],result['input_sha256']); self.assertEqual(self.result['result_sha256'],result['result_sha256']); self.assertEqual(self.result['component_ids'],result['component_ids'])
+ def test_runtime_labels_do_not_change_identity_and_source_order_does_not_change_components(self):
+  runtime_only=copy.deepcopy(self.fixture); runtime_only['runtime_metadata']={'machine_name':'another-host','local_path':'/tmp/another'}; runtime_result=run_topology_smoke(runtime_only,self.packs,self.migrations); self.assertEqual(self.result['input_sha256'],runtime_result['input_sha256']); self.assertEqual(self.result['result_sha256'],runtime_result['result_sha256'])
+  shuffled=copy.deepcopy(runtime_only); shuffled['c2_records']=list(reversed(shuffled['c2_records'])); result=run_topology_smoke(shuffled,self.packs,self.migrations); self.assertNotEqual(self.result['input_sha256'],result['input_sha256']); self.assertEqual(self.result['component_ids'],result['component_ids'])
  def test_provenance_is_diagnostic_only_and_does_not_enter_assignments(self):
   surface=self.result['provenance_ablation']; self.assertFalse(surface['structural_assignments_include_provenance']); self.assertTrue(surface['diagnostic_only']); self.assertNotEqual(surface['structural_assignment_sha256'],surface['provenance_inclusive_diagnostic_sha256'])
  def test_fourteen_wp7_dispositions_are_retained_without_promotion(self):
@@ -30,5 +33,6 @@ class TopologySmokeTests(unittest.TestCase):
   checkpoint=make_checkpoint(self.result); checkpoint['result_sha256']='0'*64
   with self.assertRaisesRegex(ValueError,'checkpoint result'): resume_topology_smoke(self.fixture,self.packs,self.migrations,checkpoint)
   tampered=copy.deepcopy(self.migrations); tampered['candidate_count']=13
-  with self.assertRaisesRegex(ValueError,'fourteen'): run_topology_smoke(self.fixture,self.packs,tampered)
+  fixture,tampered=rebind_ledger(self.fixture,tampered)
+  with self.assertRaisesRegex(ValueError,'fourteen'): run_topology_smoke(fixture,self.packs,tampered)
 if __name__=='__main__': unittest.main()

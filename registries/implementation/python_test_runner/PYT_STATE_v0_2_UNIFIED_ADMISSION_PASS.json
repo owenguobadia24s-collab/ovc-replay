@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-python-test-runner-migration-state/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "packet_id": "PYT-WP2",
+  "gate_id": "PYT-G2",
+  "status": "APPROVED",
+  "phase": "UNIFIED_SURFACE_ADMISSION_PROVED",
+  "prerequisites": [
+    "PYT-WP1:COMPLETED",
+    "PYT-G1:PASS",
+    "main:a11d6acdb671eaef9e3cf58369d4aae0269f09bb"
+  ],
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "baseline_commit": "a11d6acdb671eaef9e3cf58369d4aae0269f09bb",
+  "branch": "build/python-test-runner-wp2-final-clean-20260814",
+  "candidate_commit": "221cca6992124a3a30cdfdbf0fa11b2d78c299b4",
+  "tests": [
+    "tests:31755286934/94632889445:PASS",
+    "runner-parity:31755286934/94632889457:PASS",
+    "pytest-unittest-parity:31755286934/94632889575:PASS",
+    "pytest-unified:31755284720/94629620541:PASS",
+    "FINAL_HEAD:31755286891/94632667388:PASS",
+    "stable-main-readiness:31755286891/94632667410:PASS"
+  ],
+  "qa_packet": "docs/releases/python-test-runner-migration-v0-1/pyt-wp2/PYT_G2_QA_PACKET.json",
+  "decision_record": "docs/releases/python-test-runner-migration-v0-1/pyt-wp2/PYT_G2_DECISION.json",
+  "gate_evidence": "docs/releases/python-test-runner-migration-v0-1/pyt-wp2/PYT_G2_ADMISSION_EVIDENCE.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "PYT-WP2-CUTOVER",
+  "target_runner": "pytest",
+  "pytest_version": "9.1.1",
+  "legacy_unittest_tests": "PRESERVE",
+  "legacy_unittest_ci_command": "PRESERVE_UNTIL_PYT_WP2_CUTOVER",
+  "pytest_native_tests": "ADMITTED_BY_PYT_G2",
+  "unified_surface": "python3 -m pytest tests",
+  "cutover_authority": "AUTO_EXECUTABLE_AFTER_THIS_ADMISSION_PR_IS_MERGED_AND_CURRENT_MAIN_IS_REPINNED",
+  "cutover_rule": "Remove only standalone unittest discover CI execution; preserve unittest sources and their pytest coverage; rerun repository-wide native pytest, parity, FINAL_HEAD and stable-main assurance.",
+  "rollback": "Restore the merged PYT-G1 dual-run workflow and preserve every test source."
+}

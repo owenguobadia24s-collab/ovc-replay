@@ -1,1 +1,610 @@
-{"openapi":"3.1.0","info":{"title":"OVC Research Console vNext API","version":"0.1.0-fixture"},"paths":{"/api/v1/identity":{"get":{"operationId":"getIdentity","responses":{"200":{"description":"Fixture identity","content":{"application/json":{"schema":{"$ref":"#/components/schemas/IdentityEnvelope"}}}}}}},"/api/v1/capabilities":{"get":{"operationId":"getCapabilities","responses":{"200":{"description":"Fixture capabilities","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CapabilitiesEnvelope"}}}}}}},"/api/v1/fixture/investigations":{"get":{"operationId":"getFixtureInvestigations","responses":{"200":{"description":"Fixture investigations","content":{"application/json":{"schema":{"$ref":"#/components/schemas/InvestigationsEnvelope"}}}}}}}},"components":{"schemas":{"FixtureBanner":{"type":"object","required":["mode","data_classification","evidence_status","authority_effect"],"properties":{"mode":{"const":"FIXTURE_ONLY"},"data_classification":{"const":"SYNTHETIC_FIXTURE"},"evidence_status":{"const":"NON_EVIDENTIARY"},"authority_effect":{"const":"NONE"}},"additionalProperties":false},"SourceIdentity":{"type":"object","required":["commit","release_id","contract_ids","schema_ids","logical_hashes"],"properties":{"commit":{"type":"string"},"release_id":{"type":["string","null"]},"contract_ids":{"type":"array","items":{"type":"string"}},"schema_ids":{"type":"array","items":{"type":"string"}},"logical_hashes":{"type":"array","items":{"type":"string"}}},"additionalProperties":false},"CapabilitySummary":{"type":"object","required":["capability_id","available","authorised","active","authority_effect"],"properties":{"capability_id":{"type":"string"},"available":{"type":"boolean"},"authorised":{"type":"boolean"},"active":{"type":"boolean"},"authority_effect":{"const":"NONE"}},"additionalProperties":false},"Blocker":{"type":"object","required":["reason_code"],"properties":{"reason_code":{"type":"string"},"owner_programme":{"type":"string"},"decision_ref":{"type":"string"},"evidence_ref":{"type":"string"}},"additionalProperties":false},"Dependency":{"type":"object","required":["capability_id","relation","evidence_class"],"properties":{"capability_id":{"type":"string"},"relation":{"type":"string"},"evidence_class":{"type":"string"}},"additionalProperties":false},"CapabilityDependencyStatus":{"type":"object","required":["capability_id","display_name","implementation_state","source_materialization","source_compatibility","available","authorised","active","authority_effect","source_identity","blockers","dependencies","last_verified_commit"],"properties":{"capability_id":{"type":"string"},"display_name":{"type":"string"},"implementation_state":{"type":"string"},"source_materialization":{"type":"string"},"source_compatibility":{"type":"string"},"available":{"type":"boolean"},"authorised":{"type":"boolean"},"active":{"type":"boolean"},"authority_effect":{"const":"NONE"},"source_identity":{"$ref":"#/components/schemas/SourceIdentity"},"blockers":{"type":"array","items":{"$ref":"#/components/schemas/Blocker"}},"dependencies":{"type":"array","items":{"$ref":"#/components/schemas/Dependency"}},"last_verified_commit":{"type":"string"}},"additionalProperties":false},"Investigation":{"type":"object","required":["investigation_id","title","state","fixture"],"properties":{"investigation_id":{"type":"string"},"title":{"type":"string"},"state":{"type":"string"},"reason_code":{"type":"string"},"fixture":{"const":true}},"additionalProperties":false},"IdentityPayload":{"$ref":"#/components/schemas/SourceIdentity"},"InvestigationsPayload":{"type":"object","required":["items"],"properties":{"items":{"type":"array","items":{"$ref":"#/components/schemas/Investigation"}}},"additionalProperties":false},"IdentityEnvelope":{"allOf":[{"$ref":"#/components/schemas/BaseEnvelope"},{"type":"object","required":["payload"],"properties":{"payload":{"$ref":"#/components/schemas/IdentityPayload"}}}]},"CapabilitiesEnvelope":{"allOf":[{"$ref":"#/components/schemas/BaseEnvelope"},{"type":"object","required":["payload"],"properties":{"payload":{"type":"array","items":{"$ref":"#/components/schemas/CapabilityDependencyStatus"}}}}]},"InvestigationsEnvelope":{"allOf":[{"$ref":"#/components/schemas/BaseEnvelope"},{"type":"object","required":["payload"],"properties":{"payload":{"$ref":"#/components/schemas/InvestigationsPayload"}}}]},"BaseEnvelope":{"type":"object","required":["fixture_banner","schema_id","resource","source_identity","capability"],"properties":{"fixture_banner":{"$ref":"#/components/schemas/FixtureBanner"},"schema_id":{"type":"string"},"resource":{"type":"string"},"source_identity":{"$ref":"#/components/schemas/SourceIdentity"},"capability":{"$ref":"#/components/schemas/CapabilitySummary"}},"additionalProperties":true}}}}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OVC Research Console vNext API",
+    "version": "0.1.0-wp5a"
+  },
+  "paths": {
+    "/api/v1/identity": {
+      "get": {
+        "operationId": "getIdentity",
+        "responses": {
+          "200": {
+            "description": "Fixture identity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentityEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/capabilities": {
+      "get": {
+        "operationId": "getCapabilities",
+        "responses": {
+          "200": {
+            "description": "Fixture capabilities",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapabilitiesEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/fixture/investigations": {
+      "get": {
+        "operationId": "getFixtureInvestigations",
+        "responses": {
+          "200": {
+            "description": "Fixture investigations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationsEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/research/representations/snapshot": {
+      "get": {
+        "operationId": "getWP5ARepresentationSnapshot",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Source-bound fixture-only WP5A representation snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WP5ARepresentationEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Validation or authority boundary denied"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FixtureBanner": {
+        "type": "object",
+        "required": [
+          "mode",
+          "data_classification",
+          "evidence_status",
+          "authority_effect"
+        ],
+        "properties": {
+          "mode": {
+            "const": "FIXTURE_ONLY"
+          },
+          "data_classification": {
+            "const": "SYNTHETIC_FIXTURE"
+          },
+          "evidence_status": {
+            "const": "NON_EVIDENTIARY"
+          },
+          "authority_effect": {
+            "const": "NONE"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SourceIdentity": {
+        "type": "object",
+        "required": [
+          "commit",
+          "release_id",
+          "contract_ids",
+          "schema_ids",
+          "logical_hashes"
+        ],
+        "properties": {
+          "commit": {
+            "type": "string"
+          },
+          "release_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "contract_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "schema_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "logical_hashes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CapabilitySummary": {
+        "type": "object",
+        "required": [
+          "capability_id",
+          "available",
+          "authorised",
+          "active",
+          "authority_effect"
+        ],
+        "properties": {
+          "capability_id": {
+            "type": "string"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "authorised": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "authority_effect": {
+            "const": "NONE"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Blocker": {
+        "type": "object",
+        "required": [
+          "reason_code"
+        ],
+        "properties": {
+          "reason_code": {
+            "type": "string"
+          },
+          "owner_programme": {
+            "type": "string"
+          },
+          "decision_ref": {
+            "type": "string"
+          },
+          "evidence_ref": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Dependency": {
+        "type": "object",
+        "required": [
+          "capability_id",
+          "relation",
+          "evidence_class"
+        ],
+        "properties": {
+          "capability_id": {
+            "type": "string"
+          },
+          "relation": {
+            "type": "string"
+          },
+          "evidence_class": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CapabilityDependencyStatus": {
+        "type": "object",
+        "required": [
+          "capability_id",
+          "display_name",
+          "implementation_state",
+          "source_materialization",
+          "source_compatibility",
+          "available",
+          "authorised",
+          "active",
+          "authority_effect",
+          "source_identity",
+          "blockers",
+          "dependencies",
+          "last_verified_commit"
+        ],
+        "properties": {
+          "capability_id": {
+            "type": "string"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "implementation_state": {
+            "type": "string"
+          },
+          "source_materialization": {
+            "type": "string"
+          },
+          "source_compatibility": {
+            "type": "string"
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "authorised": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "authority_effect": {
+            "const": "NONE"
+          },
+          "source_identity": {
+            "$ref": "#/components/schemas/SourceIdentity"
+          },
+          "blockers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Blocker"
+            }
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Dependency"
+            }
+          },
+          "last_verified_commit": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Investigation": {
+        "type": "object",
+        "required": [
+          "investigation_id",
+          "title",
+          "state",
+          "fixture"
+        ],
+        "properties": {
+          "investigation_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "reason_code": {
+            "type": "string"
+          },
+          "fixture": {
+            "const": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WP5AMethod": {
+        "type": "object",
+        "required": [
+          "method_id",
+          "basis",
+          "source_id",
+          "source_fixture_id",
+          "status",
+          "disposition",
+          "winner",
+          "selection_authority"
+        ],
+        "properties": {
+          "method_id": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": "string"
+          },
+          "source_fixture_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "disposition": {
+            "type": "string"
+          },
+          "winner": {
+            "type": "null"
+          },
+          "selection_authority": {
+            "const": "NONE"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WP5AOutcome": {
+        "type": "object",
+        "required": [
+          "outcome",
+          "status",
+          "count",
+          "source_id",
+          "source_fixture_id",
+          "authority_effect"
+        ],
+        "properties": {
+          "outcome": {
+            "enum": [
+              "RESIDUAL",
+              "AMBIGUOUS",
+              "NO_STABLE_FAMILY"
+            ]
+          },
+          "status": {
+            "const": "LAWFUL_EQUAL_STATUS"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "source_id": {
+            "type": "string"
+          },
+          "source_fixture_id": {
+            "type": "string"
+          },
+          "authority_effect": {
+            "const": "NONE"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WP5ARepresentationSnapshot": {
+        "type": "object",
+        "required": [
+          "schema",
+          "packet_id",
+          "mode",
+          "data_classification",
+          "evidence_status",
+          "authority_effect",
+          "source_preflight",
+          "population",
+          "methods",
+          "comparability",
+          "family_outcomes",
+          "outcome_denominator",
+          "sensitivity",
+          "mcarb",
+          "presentation_guardrails"
+        ],
+        "properties": {
+          "schema": {
+            "const": "ovc-rcn-rn-wp5a-representation-snapshot/v1"
+          },
+          "packet_id": {
+            "const": "RCN-RN-WP5A"
+          },
+          "mode": {
+            "const": "FIXTURE_ONLY"
+          },
+          "data_classification": {
+            "const": "SYNTHETIC_FIXTURE"
+          },
+          "evidence_status": {
+            "const": "NON_EVIDENTIARY"
+          },
+          "authority_effect": {
+            "const": "NONE"
+          },
+          "source_preflight": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "population": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "methods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WP5AMethod"
+            }
+          },
+          "comparability": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "family_outcomes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WP5AOutcome"
+            }
+          },
+          "outcome_denominator": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "sensitivity": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "mcarb": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "presentation_guardrails": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "IdentityPayload": {
+        "$ref": "#/components/schemas/SourceIdentity"
+      },
+      "InvestigationsPayload": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Investigation"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "BaseEnvelope": {
+        "type": "object",
+        "required": [
+          "fixture_banner",
+          "schema_id",
+          "resource",
+          "source_identity",
+          "capability"
+        ],
+        "properties": {
+          "fixture_banner": {
+            "$ref": "#/components/schemas/FixtureBanner"
+          },
+          "schema_id": {
+            "type": "string"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "source_identity": {
+            "$ref": "#/components/schemas/SourceIdentity"
+          },
+          "capability": {
+            "$ref": "#/components/schemas/CapabilitySummary"
+          }
+        },
+        "additionalProperties": true
+      },
+      "IdentityEnvelope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEnvelope"
+          },
+          {
+            "type": "object",
+            "required": [
+              "payload"
+            ],
+            "properties": {
+              "payload": {
+                "$ref": "#/components/schemas/IdentityPayload"
+              }
+            }
+          }
+        ]
+      },
+      "CapabilitiesEnvelope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEnvelope"
+          },
+          {
+            "type": "object",
+            "required": [
+              "payload"
+            ],
+            "properties": {
+              "payload": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CapabilityDependencyStatus"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "InvestigationsEnvelope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEnvelope"
+          },
+          {
+            "type": "object",
+            "required": [
+              "payload"
+            ],
+            "properties": {
+              "payload": {
+                "$ref": "#/components/schemas/InvestigationsPayload"
+              }
+            }
+          }
+        ]
+      },
+      "WP5ARepresentationEnvelope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEnvelope"
+          },
+          {
+            "type": "object",
+            "required": [
+              "payload"
+            ],
+            "properties": {
+              "payload": {
+                "$ref": "#/components/schemas/WP5ARepresentationSnapshot"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-python-test-runner-closeout-preflight/v1",
+  "programme_id": "OVC-PYTHON-TEST-RUNNER-MIGRATION-v0.1",
+  "plan_id": "OPERATOR-DIRECTED-PYTEST-ADOPTION-2026-08-12",
+  "plan_version": "0.1",
+  "packet_id": "PYT-WP2-CUTOVER-CLOSEOUT",
+  "gate_id": "PYT-G2-CUTOVER-CLOSEOUT",
+  "baseline_main": "e6aa97e642aa2a2516f7fe464922d3f6d48f5fb3",
+  "branch": "closeout/python-test-runner-terminal-e6aa97e6-20260814",
+  "prerequisites": [
+    "PYT-G1:PASS",
+    "PYT-G2:PASS",
+    "PYT-WP2:MERGED@71b5f5502e0b3b66912ded453593375f2d931859",
+    "PYT-G2-CUTOVER:PASS",
+    "PYT-WP2-CUTOVER:MERGED@e6aa97e642aa2a2516f7fe464922d3f6d48f5fb3"
+  ],
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "required_assurance": ["tests", "pytest-unittest-parity", "runner-parity", "FINAL_HEAD/profile", "stable-main readiness"],
+  "terminal_target": "COMPLETED",
+  "canonical_ci_runner": "pytest",
+  "pytest_version": "9.1.1",
+  "legacy_unittest_tests": "PRESERVE",
+  "legacy_unittest_ci_command": "RETIRED",
+  "pytest_native_tests": "ADMITTED_BY_PYT_G2",
+  "blockers": [],
+  "rollback": "Forward-restore the PYT-G1 dual-run workflow if necessary while preserving all test sources, G2/cutover evidence and Git history."
+}

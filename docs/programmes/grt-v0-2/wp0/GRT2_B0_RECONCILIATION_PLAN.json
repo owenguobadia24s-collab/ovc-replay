@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-grt2-b0-reconciliation-plan/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "immutable_b0": {
+    "source_commit": "100b3fa342c5dee7c96a7a4e5af9e80dac3ddfe4",
+    "source_tree": "91374c54bde0e0b61ac51705f6434d4f2b0d8417",
+    "expected_topology_sha256": "4120468ecb1c1f484ab073c851287706f4fb45ad0e99fc355b4624094bb795f2",
+    "expected_raw_warning_count": 569,
+    "expected_anomaly_count": 1364,
+    "observer_entry_point": "scripts/governance/build_genesis_repository_topology.py",
+    "rule_pack": "registries/governance/genesis_repository_topology/GRT_TOPOLOGY_RULE_PACK_v0_1.json"
+  },
+  "reproduction_method": [
+    "fetch the exact historical source commit object by SHA when it is not reachable from the current main lineage",
+    "create a detached isolated worktree at the exact source commit",
+    "execute the observer and source-bound rule pack from that exact worktree",
+    "run two clean observer builds and require identical topology SHA-256",
+    "require exact historical topology SHA-256 and exactly 569 WARNING members",
+    "sort members by anomaly_id and hash each complete canonical anomaly payload",
+    "derive one membership SHA-256 from the ordered payload-hash vector"
+  ],
+  "fresh_census_method": [
+    "execute the same exact historical observer independently at the pre-GRT2 materialisation baseline",
+    "never redefine B0 from the fresh census",
+    "retain raw current WARNING members and source-bound hashes as observation evidence",
+    "treat cross-tree anomaly_id intersection as diagnostic only because historical anomaly IDs are not v0.2 logical finding identities",
+    "defer B0 member mapping, late-discovered-pre-existing classification, resolved lineage and transition/new-debt classification to WP2 after BaselineMemberRecord, GRTFindingRecord and DebtLineageRecord contracts exist"
+  ],
+  "wp0_mapping_boundary": {
+    "status": "DEFERRED_TO_GRT2_WP2",
+    "forbidden_claims": [
+      "raw anomaly-id equality proves logical finding continuity",
+      "raw anomaly-id difference proves resolution or new debt",
+      "WP0 current census proves transition debt is zero"
+    ]
+  },
+  "gate_rule": "GRT2-G1 BLOCK with B0_SOURCE_NOT_REPRODUCIBLE if source commit/tree/topology hash, 569 raw WARNING count, member uniqueness, or deterministic rebuild proof does not match exactly. Current-census lineage is not a G1 PASS condition and may not be inferred before WP2.",
+  "authority_effect": "NONE"
+}

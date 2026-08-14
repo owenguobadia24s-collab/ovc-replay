@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from tests.historical_court_record import json_at
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/releases/c2e-c2g-c2p-market-grammar-v0-1/mg-wp2"
@@ -37,7 +38,7 @@ class MarketGrammarWp2PacketTests(unittest.TestCase):
         self.assertEqual([], qa["warnings"])
 
     def test_programme_state_preserves_wp1_and_routes_no_further_than_wp3(self) -> None:
-        state = load(STATE)
+        state = json_at("bd2d6e01c1c0b228ad40e457170e14effed0c409", STATE)
         packets = {item["packet_id"]: item for item in state["packets"]}
         self.assertEqual("COMPLETED", packets["MG-WP1"]["status"])
         self.assertIn(packets["MG-WP2"]["status"], {"RUNNING", "IMPLEMENTED", "QA_REVIEW", "APPROVED", "COMPLETED"})

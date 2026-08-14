@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-esli-gate-packet/v1",
+  "programme_id": "OVC-OPTB-ESL-CONFORMANCE-v0.1",
+  "plan_id": "OVC-OPTB-ESL-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-REVISED-2",
+  "plan_version": "0.1-REVISED-2",
+  "gate_id": "ESLI-G6",
+  "title": "SOI compatibility and topology maturity",
+  "gate_class": "AUTO_RATIFIABLE",
+  "packet_id": "ESLI-WP6",
+  "baseline_commit": "45146c31641d719dbfb73dbcd51a75ec2a9d7e19",
+  "implementation_candidate": "1023e0508686ca90b37384493fbea1bf9c0a2c3e",
+  "completed_prerequisites": [
+    "ESLI-G5-COMPLETED"
+  ],
+  "current_authority": "INACTIVE_CONFORMANCE_ONLY",
+  "proposed_authority_delta": "NONE",
+  "acceptance_conditions": [
+    "SOI exposes distinct generic topology, method and result identities without choosing a topology or method.",
+    "The preserved SFC FamilyCatalog surface is consumed only through one exact inactive FAMILY compatibility adapter.",
+    "Source catalog, family and assignment identities and hashes are verified and preserved without recomputation or identity rewrite.",
+    "FAMILY is EXECUTABLE_INACTIVE while HIERARCHY, OVERLAP, GRAPH, CONTINUUM and COMPOSITION remain INTERFACE_ONLY.",
+    "Every interface-only invocation fails closed with SOI_ADAPTER_NOT_MATERIALIZED and emits no empty or placeholder scientific result.",
+    "NO_STABLE_FAMILY remains scoped to FAMILY and cannot imply NO_STABLE_ORGANISATION.",
+    "Residual, noise, singleton, ambiguous, not-comparable and not-evaluable states and exact denominators remain explicit.",
+    "The permanent IAV-03 regression rejects executable relabelling of an interface-only topology.",
+    "No topology, method, family, scientific, semantic, Validation, publication, probability, risk, exposure or execution authority is created.",
+    "Exact-head repository, Research Console, parity, FINAL_HEAD and stable-main assurance passes with no blocking reviews or issues."
+  ],
+  "tests": {
+    "tests_run_31703015310": "PASS",
+    "tests_job_94456646791": "PASS",
+    "runner_parity_job_94456646675": "PASS",
+    "pytest_unittest_parity_job_94456646729": "PASS",
+    "final_integration_admission_job_94456529282": "PASS",
+    "tiered_run_31703015336": "PASS",
+    "profile_assurance_job_94456529026": "PASS",
+    "merge_readiness_job_94456529081": "PASS",
+    "tiered_compatibility_job_94456677614": "PASS"
+  },
+  "qa_packet": "docs/releases/optb-esl-conformance-v0-1/esli-wp6/ESLI_WP6_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "warnings": [
+    "Closed PRs #728 and #734 remain preserved reconciliation evidence; current candidate is rebuilt directly from repaired lawful main 45146c31."
+  ],
+  "unresolved_issues": [],
+  "blocking_issues": [],
+  "implementation_changed_files": 16,
+  "external_artifact_hashes": [],
+  "rollback": "Forward-supersede or remove WP6 SOI-only artifacts; preserve all prior ESL and historical SFC, FDI and SRFD evidence. No data migration, force-push or history rewrite.",
+  "recommended_decision": "PASS",
+  "non_reserved_rationale": "The packet adds deterministic inactive contracts, schemas, registries, compatibility projection, fixtures, tests and evidence only. It neither runs organisation discovery nor selects, activates or promotes a topology, method, family catalogue, scientific disposition, semantic interpretation, Validation consumer, publication, provider, risk or execution authority.",
+  "next_after_pass": "Squash-merge bounded WP6, materialise its merge receipt and G6-completed programme state, then leave ESLI-WP7 READY without starting it."
+}

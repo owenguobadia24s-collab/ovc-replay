@@ -56,8 +56,16 @@ class CiPerformanceG4GateTests(unittest.TestCase):
         )
 
     def test_current_required_python_assurance_is_preserved(self):
-        full_suite = "PYTHONPATH=src python3 -m unittest discover -s tests -v"
-        self.assertEqual(self.tests_workflow.count(full_suite), 1)
+        child_suite = "python3 -m unittest discover -s tests -v"
+        self.assertEqual(self.tests_workflow.count(child_suite), 1)
+        self.assertIn(
+            "tools/ci/ovc_run_with_main_lease.py",
+            self.tests_workflow,
+        )
+        self.assertIn(
+            "Complete repository suite under shared main lease",
+            self.tests_workflow,
+        )
         for required in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
             self.assertIn(required, self.tiered_workflow)
         self.assertEqual(

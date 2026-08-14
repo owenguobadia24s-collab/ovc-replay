@@ -13,6 +13,11 @@ from ovc.development.skills.orch345 import (
     build_portfolio_schedule,
     classify_packet_pair,
 )
+from ovc.development.skills.orch345_diagnostics import (
+    build_orch3_decision_receipt,
+    build_orch4_decision_receipt,
+    build_orch5_decision_receipt,
+)
 
 DEFAULT_MAX_PARALLEL_BUILDS = 4
 DEFAULT_MAX_TRAIN_PACKETS = 8
@@ -64,7 +69,7 @@ def build_authorized_packet_train(
     )
     if plan.get("status") == "STOP_OPERATOR":
         raise PermissionError("ORCH-3 packet train reached an operator-required boundary")
-    return _active_record(
+    active = _active_record(
         "ovc-dsai2-orch3-authorized-packet-train/v2",
         "DSAI2_ORCH3_AUTHORIZED_PACKET_TRAIN",
         {
@@ -79,6 +84,12 @@ def build_authorized_packet_train(
             "source_plan_id": plan.get("record_id"),
         },
     )
+    active["diagnostic_receipt"] = build_orch3_decision_receipt(
+        source_execution_record=active,
+        source_plan=plan,
+        candidate_packet_count=len(packets),
+    )
+    return active
 
 
 def authorize_parallel_build_pair(
@@ -90,7 +101,7 @@ def authorize_parallel_build_pair(
     _require_active(authority_resolution)
     pair = classify_packet_pair(left, right)
     admitted = pair.get("classification") == PARALLEL_BUILD_CLASS
-    return _active_record(
+    active = _active_record(
         "ovc-dsai2-orch4-parallel-build-admission/v1",
         "DSAI2_ORCH4_PARALLEL_BUILD_ADMISSION",
         {
@@ -104,6 +115,11 @@ def authorize_parallel_build_pair(
             "source_classification_id": pair.get("record_id"),
         },
     )
+    active["diagnostic_receipt"] = build_orch4_decision_receipt(
+        source_execution_record=active,
+        source_classification=pair,
+    )
+    return active
 
 
 def build_authorized_portfolio_schedule(
@@ -111,6 +127,7 @@ def build_authorized_portfolio_schedule(
     authority_resolution: Mapping[str, Any],
     packets: Sequence[Mapping[str, Any]],
     completed_packet_ids: Sequence[str] = (),
+    newly_completed_packet_ids: Sequence[str] = (),
     max_parallel: int = DEFAULT_MAX_PARALLEL_BUILDS,
 ) -> dict[str, Any]:
     _require_active(authority_resolution)
@@ -123,7 +140,7 @@ def build_authorized_portfolio_schedule(
         completed_packet_ids=completed_packet_ids,
         max_parallel=max_parallel,
     )
-    return _active_record(
+    active = _active_record(
         "ovc-dsai2-orch5-authorized-portfolio-schedule/v2",
         "DSAI2_ORCH5_AUTHORIZED_PORTFOLIO_SCHEDULE",
         {
@@ -140,6 +157,14 @@ def build_authorized_portfolio_schedule(
             "source_schedule_id": schedule.get("record_id"),
         },
     )
+    active["diagnostic_receipt"] = build_orch5_decision_receipt(
+        source_execution_record=active,
+        source_schedule=schedule,
+        packets=packets,
+        completed_packet_ids=completed_packet_ids,
+        newly_completed_packet_ids=newly_completed_packet_ids,
+    )
+    return active
 
 
 def build_authorized_requeue_reconciliation(
