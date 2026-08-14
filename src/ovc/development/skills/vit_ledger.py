@@ -102,6 +102,15 @@ def classify_payload_conflict(left: PacketIntegrationPayload, right: PacketInteg
     rpaths = _paths(right)
     overlap = set(lpaths).intersection(rpaths)
     if not overlap:
+        # Path disjointness is not sufficient to prove semantic independence. Shared
+        # owner bindings mean both payloads can mutate one governed logical surface
+        # through different files, so the reference engine serializes them unless a
+        # later explicit commutativity contract exists.
+        shared_owner_bindings = set(left.dependency_frontier.owner_bindings).intersection(
+            right.dependency_frontier.owner_bindings
+        )
+        if shared_owner_bindings:
+            return "SERIAL_REQUIRED"
         return "COMMUTATIVE"
     for path in overlap:
         if lpaths[path] != rpaths[path]:

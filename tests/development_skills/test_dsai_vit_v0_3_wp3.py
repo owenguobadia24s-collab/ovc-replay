@@ -18,9 +18,9 @@ class DsaiVitV03Wp3Tests(unittest.TestCase):
         self.auth = IntegrationAuthorityManifest("PLAN","WP","G","AUTO_EXECUTABLE","NONE",("source",))
         self.dep = DependencyFrontier((), "NONE")
 
-    def _pip(self, packet: str, path: str, content: str = "a") -> PacketIntegrationPayload:
+    def _pip(self, packet: str, path: str, content: str = "a", dep: DependencyFrontier | None = None) -> PacketIntegrationPayload:
         auth = IntegrationAuthorityManifest("PLAN",packet,"G","AUTO_EXECUTABLE","NONE",("source",))
-        return PacketIntegrationPayload("P",packet,({"op":"MODIFY","path":path,"blob_sha":content*40,"mode":"100644"},),auth,self.dep,{})
+        return PacketIntegrationPayload("P",packet,({"op":"MODIFY","path":path,"blob_sha":content*40,"mode":"100644"},),auth,dep or self.dep,{})
 
     def test_ledger_exact_resubmission_is_idempotent_and_mutation_conflict_fails(self) -> None:
         ledger = VirtualIntegrationLedger()
@@ -40,6 +40,15 @@ class DsaiVitV03Wp3Tests(unittest.TestCase):
         self.assertEqual(classify_payload_conflict(a,b), "COMMUTATIVE")
         self.assertEqual(classify_payload_conflict(a,c), "ORDER_SENSITIVE")
         self.assertEqual(classify_payload_conflict(a,d), "MUTUALLY_EXCLUSIVE")
+
+    def test_path_disjoint_shared_owner_semantic_conflict_serializes(self) -> None:
+        shared = DependencyFrontier((), "NONE", ("REGISTRY:ACTIVE_STACK",))
+        a = self._pip("A","registry/a.json","a",shared)
+        b = self._pip("B","registry/b.json","b",shared)
+        self.assertEqual(classify_payload_conflict(a,b), "SERIAL_REQUIRED")
+        blocked = IntegrationTicket("P","A",a.payload_id,0,(),True)
+        candidate = IntegrationTicket("P","B",b.payload_id,1,(),False)
+        self.assertFalse(safe_bypass(blocked,candidate,{a.payload_id:a,b.payload_id:b}))
 
     def test_safe_bypass_is_dependency_and_conflict_guarded(self) -> None:
         pa = self._pip("A","one.txt","a")
