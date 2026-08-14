@@ -67,6 +67,17 @@ def _dt(value: str) -> datetime:
 
 
 def validate_record(record: dict[str, Any]) -> None:
+    # DMRP v0.2 is an additive Research Operations family. Dispatch explicitly
+    # before applying the frozen v0.1 envelope so legacy validation remains byte/
+    # behavior compatible while v0.2 uses its separate identity contract.
+    if record.get("schema_version") == "0.2":
+        from .dmrp import DMRPRecordValidationError, verify_dmrp_record
+        try:
+            verify_dmrp_record(record)
+        except DMRPRecordValidationError as exc:
+            raise RecordValidationError("DMRP_V02_INVALID", str(exc)) from exc
+        return
+
     missing = COMMON_REQUIRED - set(record)
     if missing:
         raise RecordValidationError("MISSING_ENVELOPE_FIELD", ",".join(sorted(missing)))
