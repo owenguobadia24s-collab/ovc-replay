@@ -2,6 +2,19 @@
   "$schema":"https://json-schema.org/draft/2020-12/schema",
   "$id":"ovc://development/skills/vit/core-objects/v0.1",
   "title":"OVC DSAI v0.3 VIT Core Objects v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "properties":{
+    "plan_id":{},"packet_id":{},"gate_id":{},"authority_class":{},"authority_delta":{},"authority_sources":{},"reserved_boundaries":{},"security_envelope_id":{},
+    "dependencies":{},"predecessor_requirement":{},"owner_bindings":{},
+    "schema_version":{},"programme_id":{},"logical_changes":{},"authority_manifest_id":{},"dependency_frontier_id":{},"completion_transition":{},"payload_id":{},
+    "tree_sha":{},"profile":{},"state_id":{},
+    "train_generation_id":{},"ordinal":{},"predecessor_tree":{},"result_tree":{},"generation_id":{},
+    "entry_packet":{},"command":{},"continuation_policy":{},"authority_source":{},"stop_boundary":{},
+    "lane_id":{},"current_packet":{},"build_frontier":{},"payload_frontier":{},"vit_frontier":{},"materialisation_frontier":{},
+    "commit_sha":{},"authority_frontier":{},"policy_frontier":{},
+    "record_id":{},"record_type":{}
+  },
   "$defs":{
     "IntegrationAuthorityManifest":{"type":"object","additionalProperties":false,"required":["plan_id","packet_id","gate_id","authority_class","authority_delta","authority_sources"],"properties":{"plan_id":{"type":"string","minLength":1},"packet_id":{"type":"string","minLength":1},"gate_id":{"type":"string","minLength":1},"authority_class":{"enum":["AUTO_EXECUTABLE","OPERATOR_REQUIRED","HARD_DENY"]},"authority_delta":{"type":"string","minLength":1},"authority_sources":{"type":"array","minItems":1,"items":{"type":"string","minLength":1}},"reserved_boundaries":{"type":"array","items":{"type":"string"}},"security_envelope_id":{"type":["string","null"]}}},
     "DependencyFrontier":{"type":"object","additionalProperties":false,"required":["dependencies","predecessor_requirement"],"properties":{"dependencies":{"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true},"predecessor_requirement":{"enum":["PHYSICAL_MATERIALISATION_REQUIRED","QUALIFIED_VIT_GENERATION_REQUIRED","PAYLOAD_OUTPUT_REQUIRED","EXECUTION_COMPLETION_REQUIRED","ORDER_ONLY","NONE"]},"owner_bindings":{"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true}}},
