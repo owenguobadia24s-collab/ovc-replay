@@ -1,0 +1,17 @@
+{
+  "schema":"ovc-dsai3v-wp8b-implementation-packet/v1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "plan_id":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "packet_id":"DSAI3V-WP8B",
+  "gate_id":"DSAI3V-G-BUDGET",
+  "qualification_stage":"Q4",
+  "authority_required":"AUTO_EXECUTABLE",
+  "authority_delta":"NONE",
+  "scope":["three-plus live lane stress accounting","two-plus packets per lane","recoverable blocked-packet safe bypass","selective invalidation","controller restart","lawful external-main re-anchor","VITOperationalBudget measurement","false-parallelism accounting"],
+  "acceptance":{"no_lane_starvation":true,"work_conservation":true,"zero_false_authority_allows":true,"reference_optimized_equivalence":true,"measured_budget_required":true},
+  "physical_main_authority":"DENIED",
+  "numeric_budget_policy":"MEASURE_BEFORE_FREEZE_NO_INVENTED_VALUES",
+  "measurement_runner":"scripts/development/run_dsai3v_q4_shadow.py",
+  "rollback":"Disable Q4 shadow stress/budget runtime; preserve measured evidence. No physical-main VIT control is active.",
+  "next_packet":"DSAI3V-WP9"
+}
