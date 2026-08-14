@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/research_records_v0_2.schema.json",
+  "title": "OVC Research Operations additive DMRP records v0.2",
+  "description": "Additive DMRP record family. Historical v0.1 schema/records remain unchanged and authoritative for their own identities.",
+  "oneOf": [
+    {"$ref":"#/$defs/DMRPStudy"},
+    {"$ref":"#/$defs/EvidenceCycleGeneration"},
+    {"$ref":"#/$defs/ResearchQuestionRecord"},
+    {"$ref":"#/$defs/PriorResearchExposureDisclosure"},
+    {"$ref":"#/$defs/UpstreamDesignExposureRecord"}
+  ],
+  "$defs": {
+    "Lineage": {"type":"object","required":["parent","derived_from","supersedes","adjudicates"],"properties":{"parent":{"type":"array","items":{"type":"string"}},"derived_from":{"type":"array","items":{"type":"string"}},"supersedes":{"type":["string","null"]},"adjudicates":{"type":"array","items":{"type":"string"}}},"additionalProperties":false},
+    "Envelope": {"type":"object","required":["record_id","schema_version","record_type","lifecycle_state","created_at","frozen_at","operator_id","admissible_cutoff","source_release_refs","artifact_refs","missingness","lineage","authority_state","authority_effect","reproducibility_state","scientific_payload","semantic_sha256","record_sha256"],"properties":{"record_id":{"type":"string","pattern":"^ro:[a-z0-9_]+:[0-9a-f]{64}$"},"schema_version":{"const":"0.2"},"record_type":{"enum":["DMRP_STUDY","EVIDENCE_CYCLE_GENERATION","RESEARCH_QUESTION_RECORD","PRIOR_RESEARCH_EXPOSURE_DISCLOSURE","UPSTREAM_DESIGN_EXPOSURE_RECORD"]},"lifecycle_state":{"enum":["DRAFT","FROZEN","ADJUDICATED","SUPERSEDED","WITHDRAWN"]},"created_at":{"type":"string"},"frozen_at":{"type":["string","null"]},"operator_id":{"type":"string","minLength":1},"admissible_cutoff":{"type":"string"},"source_release_refs":{"type":"array","items":{"type":"object"}},"artifact_refs":{"type":"array","items":{"type":"object"}},"missingness":{"type":"array","items":{"type":"object"}},"lineage":{"$ref":"#/$defs/Lineage"},"authority_state":{"const":"NONE"},"authority_effect":{"const":"NONE"},"reproducibility_state":{"enum":["REPRODUCIBLE","PARTIALLY_AVAILABLE","NOT_REPRODUCIBLE","NOT_EVALUATED"]},"scientific_payload":{"type":"object"},"semantic_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},"record_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},"physical_attempt_id":{"type":["string","null"]},"irof_semantic_run_id":{"type":["string","null"]}},"additionalProperties":false},
+    "DMRPStudy":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"DMRP_STUDY"},"scientific_payload":{"required":["study_id","protocol_version","research_mode","research_role","instrument","sides","clocks","interval","validation_access_state"]}}}]},
+    "EvidenceCycleGeneration":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"EVIDENCE_CYCLE_GENERATION"},"scientific_payload":{"required":["cycle_id","study_id","generation","population_bindings","question_registry_version"]}}}]},
+    "ResearchQuestionRecord":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"RESEARCH_QUESTION_RECORD"},"scientific_payload":{"required":["question_id","canonical_question_text","purpose","population_ids"]}}}]},
+    "PriorResearchExposureDisclosure":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"PRIOR_RESEARCH_EXPOSURE_DISCLOSURE"},"scientific_payload":{"required":["study_id","known_exposures","algorithmic_use_policy"]}}}]},
+    "UpstreamDesignExposureRecord":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"UPSTREAM_DESIGN_EXPOSURE_RECORD"},"scientific_payload":{"required":["study_id","source_layers","conditionality_statement"]}}}]}
+  }
+}
