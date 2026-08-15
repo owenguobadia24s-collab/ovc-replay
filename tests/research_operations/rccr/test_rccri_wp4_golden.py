@@ -18,21 +18,21 @@ FRONTIER = {"capability_frontier_id": "rccr:ResearchCapabilityFrontier:golden"}
 
 
 @pytest.mark.parametrize(
-    "case_id,result_state,flags,protocol_state,expected_gap,expected_coverage",
+    "case_id,result_state,flags,protocol_state,expected_gap,expected_coverage,expected_logical_class",
     [
-        ("G01", "SATISFIED", [], "VALID", "NONE", "FULL"),
-        ("G02", "UNSATISFIED", ["METHOD_GAP"], "VALID", "METHOD_GAP", "NONE"),
-        ("G03", "UNSATISFIED", ["DENOMINATOR_GAP"], "VALID", "DENOMINATOR_GAP", "NONE"),
-        ("G04", "UNSATISFIED", ["OWNER_SEMANTICS_GAP"], "VALID", "OWNER_SEMANTICS_GAP", "NONE"),
-        ("G05", "UNSATISFIED", ["IMPLEMENTATION_GAP"], "VALID", "IMPLEMENTATION_GAP", "NONE"),
-        ("G06", "UNSATISFIED", ["AUTHORITY_GAP"], "VALID", "AUTHORITY_GAP", "NONE"),
-        ("G07", "UNSATISFIED", ["DATA_GAP"], "VALID", "DATA_GAP", "NONE"),
-        ("G08", "UNSATISFIED", ["INFORMATION_GAP", "COUNTERFACTUAL_EXHAUSTED"], "VALID", "INFORMATION_GAP", "NONE"),
-        ("G09", "NOT_EVALUABLE", ["METHOD_INFORMATION_ENTANGLED"], "VALID", "UNRESOLVED_GAP", "UNRESOLVED"),
-        ("G10", "SATISFIED", [], "EXCLUDED", "PROTOCOL_EXCLUSION", "NONE"),
+        ("G01", "SATISFIED", [], "VALID", "NONE", "FULL", "CURRENT_STACK_SUFFICIENT"),
+        ("G02", "UNSATISFIED", ["METHOD_GAP"], "VALID", "METHOD_GAP", "NONE", "METHOD_GAP"),
+        ("G03", "UNSATISFIED", ["DENOMINATOR_GAP"], "VALID", "DENOMINATOR_GAP", "NONE", "DENOMINATOR_GAP"),
+        ("G04", "UNSATISFIED", ["DATA_GAP"], "VALID", "DATA_GAP", "NONE", "DATA_GAP"),
+        ("G05", "UNSATISFIED", ["OWNER_SEMANTICS_GAP"], "VALID", "OWNER_SEMANTICS_GAP", "NONE", "OWNER_SEMANTICS_GAP"),
+        ("G06", "UNSATISFIED", ["IMPLEMENTATION_GAP"], "VALID", "IMPLEMENTATION_GAP", "NONE", "IMPLEMENTATION_GAP"),
+        ("G07", "UNSATISFIED", ["AUTHORITY_GAP"], "VALID", "AUTHORITY_GAP", "NONE", "AUTHORITY_GAP"),
+        ("G08", "SATISFIED", [], "EXCLUDED", "PROTOCOL_EXCLUSION", "NONE", "PROTOCOL_EXCLUSION"),
+        ("G09", "UNSATISFIED", ["INFORMATION_GAP", "COUNTERFACTUAL_EXHAUSTED"], "VALID", "INFORMATION_GAP", "NONE", "GENUINE_INFORMATION_GAP"),
+        ("G10", "NOT_EVALUABLE", ["METHOD_INFORMATION_ENTANGLED"], "VALID", "UNRESOLVED_GAP", "UNRESOLVED", "UNRESOLVED_GAP"),
     ],
 )
-def test_golden_reference_cases(case_id, result_state, flags, protocol_state, expected_gap, expected_coverage):
+def test_golden_reference_cases(case_id, result_state, flags, protocol_state, expected_gap, expected_coverage, expected_logical_class):
     assessment = RCCRReferenceEngine().assess(
         coverage_item_generation_id=f"coverage:{case_id}",
         requirement_profile=PROFILE,
@@ -46,3 +46,9 @@ def test_golden_reference_cases(case_id, result_state, flags, protocol_state, ex
     assert row["gap_class"] == expected_gap
     assert assessment["coverage_status"] == expected_coverage
     assert assessment["authority_effect"] == "NONE"
+    if expected_logical_class == "CURRENT_STACK_SUFFICIENT":
+        assert row["result"] == "SATISFIED"
+    elif expected_logical_class == "GENUINE_INFORMATION_GAP":
+        assert row["gap_class"] == "INFORMATION_GAP"
+    else:
+        assert expected_logical_class in {row["gap_class"], "PROTOCOL_EXCLUSION", "UNRESOLVED_GAP"}
