@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-dsai3v-programme-state-pointer-preflight-packet/v1",
+  "packet_id": "DSAI3V-POST-G12-STATE-POINTER-PREFLIGHT",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "baseline_commit": "402c5aa97e03a4f85f04fce56a58b5a13b646da6",
+  "authority_source": "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "objective": "Add a cheap read-only consistency check between canonical programme CURRENT_STATE_POINTER projections and their referenced programme-state records before expensive exact-head assurance.",
+  "checks": [
+    "referenced state exists and is valid JSON",
+    "programme_id agrees",
+    "status agrees when both surfaces declare it",
+    "current_packet agrees with packet_id",
+    "current_gate agrees with gate_id",
+    "next_packet agrees",
+    "completed current packet is represented in completed_packets when that list exists",
+    "next_packet is not already completed"
+  ],
+  "execution": "scripts/development/ovc_programme_state_preflight.py",
+  "scope": "canonical ovc-programme-current-state-pointer/v1 records under registries by default",
+  "failure_policy": "BLOCK before expensive assurance; never mutate or repair programme state automatically",
+  "authority_effect": "NONE",
+  "rollback": "Remove the new preflight module/script/tests and required-assurance binding; preserve all programme-state history."
+}
