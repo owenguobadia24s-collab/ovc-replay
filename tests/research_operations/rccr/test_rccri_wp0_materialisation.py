@@ -49,11 +49,21 @@ def test_wp0_programme_state_is_not_prematurely_completed():
     assert pointer["status"] == "QA_REVIEW"
     assert state["merge_commit"] is None
     assert state["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
+    assert state["blockers"] == []
+    assert "RCCRI-WP0-BLOCK-001" in state["resolved_blockers"]
 
 
-def test_wp0_open_pr_929_is_preserved_not_consumed_as_authority():
+def test_wp0_pr_929_provenance_is_integrated_without_authority_expansion():
     census = load("docs/releases/rccr-v0-1/rccri-wp0/RCCRI_WP0_OWNER_SOURCE_CENSUS.json")
-    pr = census["concurrent_relevant_prs"][0]
+    pr = census["reconciled_relevant_prs"][0]
     assert pr["pr"] == 929
-    assert pr["merge_policy"] == "DO_NOT_MERGE_PER_PR_BODY"
+    assert pr["state"] == "MERGED"
+    assert pr["merge_commit"] == "89d0628efbda9588f4ae1c5d7d632424e8c10be3"
     assert pr["authority_effect"] == "NONE"
+
+
+def test_wp0_prior_blocker_is_resolved_not_erased():
+    blocker = load("docs/releases/rccr-v0-1/rccri-wp0/RCCRI_WP0_BLOCKER.json")
+    assert blocker["status"] == "RESOLVED_UPSTREAM"
+    assert blocker["resolution"]["pr"] == 929
+    assert blocker["resolution"]["merge_commit"] == "89d0628efbda9588f4ae1c5d7d632424e8c10be3"
