@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-default-execution-substrate/v1",
+  "status": "ACTIVE",
+  "substrate_id": "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1",
+  "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "operator_instruction": "OVC ACTIVATE DSAI3V AS DEFAULT EXECUTION SUBSTRATE",
+  "effective_at": "2026-08-15T08:04:00+01:00",
+  "routing_scope": {
+    "eligible_gate_classes": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+    "required_authority_delta": "NONE",
+    "required_owner_authority": "ALREADY_AUTHORISED_BY_GOVERNING_PROGRAMME",
+    "currently_and_subsequently_eligible": true
+  },
+  "execution_policy": {
+    "continuous_execution": true,
+    "reconcile_stale_main": true,
+    "run_tests_and_qa": true,
+    "auto_ratify_non_reserved_pass_gates": true,
+    "squash_merge_when_eligible": true,
+    "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "parallel_physical_merge": false,
+    "stop_at_programme_owned_operator_required_boundary": true,
+    "infer_or_expand_authority": false
+  },
+  "required_assurance": [
+    "OWNER_AUTHORITY_CURRENT",
+    "PREREQUISITES_PASS",
+    "QA_PASS",
+    "NO_UNRESOLVED_WARNING_OR_REVIEW",
+    "CURRENT_GRT_INTEGRATION_ASSURANCE",
+    "CURRENT_SIQ_EXACT_FINAL_ASSURANCE",
+    "EXACT_PHYSICAL_VIT_TREE_EQUALITY",
+    "COMPLETE_END_TO_END_RECEIPTS"
+  ],
+  "explicit_non_authority": [
+    "no new programme authority",
+    "no scope expansion",
+    "no selector/model/family/candidate/theory promotion",
+    "no ACTIVE_DISCOVERY/ACTIVE_DEVELOPMENT/ACTIVE_VALIDATION grant",
+    "no publication authority",
+    "no probability/risk/exposure/execution authority",
+    "no GRT2-G3 activation",
+    "no parallel physical merge",
+    "no force-push or history rewrite"
+  ],
+  "source_authority": "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+  "rollback": "Set this default substrate record to INACTIVE for new routing and return affected packets to the exact previously-authorised ORCH/SIQ serialized path; preserve all evidence and Git history."
+}
