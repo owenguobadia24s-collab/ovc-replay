@@ -91,7 +91,7 @@ class S0AVTests(unittest.TestCase):
         rec={field_path:f'v{i}' for i,field_path in enumerate(expected)}
         tokens=canonical_predicates(rec,m)
         self.assertEqual(len(tokens),len(expected))
-        self.assertEqual({token.field_path for token in tokens},set(expected))
+        self.assertEqual({predicate_roundtrip(token)[0] for token in tokens},set(expected))
     def test_av27_predicate_roundtrip(self):
         path,value=predicate_roundtrip('x={"a":1}'); self.assertEqual((path,value),('x',{'a':1}))
     def test_av28_dependence_direct_only(self):
