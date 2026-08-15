@@ -1,0 +1,38 @@
+{
+  "schema":"ovc-dsai3v-wp10-q6-metrics-incidents/v1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "packet_id":"DSAI3V-WP10",
+  "qualification_stage":"Q6",
+  "lane_count":2,
+  "false_authority_allows":0,
+  "parallel_merges":0,
+  "tree_mismatches":0,
+  "unexplained_main_divergence":0,
+  "complete_end_to_end_receipts":true,
+  "operator_interventions":0,
+  "operator_intervention_rate_per_lane":"0/2",
+  "reference_reconciliation":"PASS",
+  "pilot_packet_class":"LOW_RISK_IMPLEMENTATION",
+  "pilot_packet_class_policy":"EXACT_ALLOWLIST_ONLY",
+  "budget_binding":"docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp8b/VIT_OPERATIONAL_BUDGET.json",
+  "budget_id":"25cc568d9c863d614007f268ce989cc3f9c2432bc9ce130bf40872365cb749a7",
+  "incidents":[
+    {
+      "incident_id":"DSAI3V-Q6-OBS-001",
+      "lane":"Q6-A",
+      "class":"NON_REPRODUCIBLE_PERFORMANCE_PROBE_JITTER",
+      "severity":"S0_NON_SAFETY",
+      "surface":"ESL_BOOTSTRAP_PERFORMANCE_REGRESSION:c3_reference_compile_render",
+      "first_observation":"p95_ms=0.753617 > measured_ceiling_ms=0.726221",
+      "resolution":"Exact-head rerun passed with no packet content change; all repository and tiered assurance then PASS.",
+      "unresolved":false,
+      "authority_effect":"NONE"
+    }
+  ],
+  "unresolved_high_severity_incidents":0,
+  "unresolved_s3_s4_incidents":0,
+  "historical_q2_diagnostic_reference":{"historical_operator_interventions":4,"projected_operator_interventions":1,"source":"docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp7/DSAI3V_WP7_Q2_REPLAY_REPORT.json"},
+  "operator_intervention_interpretation":"Observed Q6 intervention count is zero across two bounded live lanes. Historical Q2 values are diagnostic context only; no causal latency or universal intervention-reduction claim is inferred.",
+  "q6_pass":true,
+  "authority_delta":"NONE"
+}

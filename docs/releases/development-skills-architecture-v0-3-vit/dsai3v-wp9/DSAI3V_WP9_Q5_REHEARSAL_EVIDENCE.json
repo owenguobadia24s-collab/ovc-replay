@@ -1,0 +1,23 @@
+{
+  "schema":"ovc-dsai3v-q5-isolated-rehearsal-evidence/v1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "packet_id":"DSAI3V-WP9",
+  "gate_id":"DSAI3V-G9",
+  "qualification_stage":"Q5",
+  "baseline_commit":"86b603e2f43df1420767f39afa0308d384df8e11",
+  "candidate_head":"cd4d181162a8ca75c8abf10330a68bafbea3dffe",
+  "implementation_commit":"5b81603a834fd7258488ee2cfece6609b0d66dc1",
+  "implementation_pr":880,
+  "environment":"NON_AUTHORITATIVE_ISOLATED_GIT_REPOSITORY_AND_REF",
+  "isolated_ref":"refs/heads/vit-q5-isolated",
+  "physical_main_touched":false,
+  "flow":["PacketIntegrationPayload","reference composition","VirtualIntegrationGeneration","GRT readiness","serialized SIQ-gateway isolated lease","PhysicalMaterialisationTransaction","deterministic isolated commit-tree write","exact tree equality","PhysicalMaterialisationReceipt","PacketCompletionReceipt","successor DSAI3V-G-VIT-PILOT"],
+  "required_assurance":{"exact_tree_equality":"PASS","no_duplicate_effective_write":"PASS","no_lost_or_phantom_completion":"PASS","deterministic_recovery":"PASS","receipt_store_loss_fails_closed":"PASS","zero_closeout_churn_regression":"PASS"},
+  "crash_recovery":{"before_write":"WRITE_NOT_EFFECTIVE_RETRYABLE","post_write_pre_receipt":"WRITE_EFFECTIVE_RECEIPT_RECOVERY_REQUIRED","post_receipt_pre_successor":"RECEIPT_RECOVERABLE"},
+  "idempotence":{"deterministic_commit_tree":true,"retry_same_observed_commit":true,"retry_same_materialisation_receipt":true,"retry_same_completion_receipt":true},
+  "closeout":{"completion_via_content_addressed_receipt":true,"second_closeout_branch_or_ref_created":false},
+  "ci":{"repository_run":31847623119,"tests_job":94917208498,"pytest_unittest_parity_job":94917208332,"runner_parity_job":94917208399,"tiered_run":31847623115,"profile_assurance_job":94917169279,"siq_ready_job":94917212496,"merge_readiness_job":94917870977},
+  "ci_result":"PASS",
+  "authority_effect":"NONE",
+  "physical_main_vit_control":"DENIED"
+}

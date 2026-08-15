@@ -1,0 +1,34 @@
+{
+  "schema":"ovc-dsai3v-g-vit-pilot-operator-decision/v1",
+  "decision_id":"DSAI3V-G-VIT-PILOT.OPERATOR.PASS.20260815T002100+0100",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "plan_id":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "gate_id":"DSAI3V-G-VIT-PILOT",
+  "decision":"PASS",
+  "decision_authority":"OPERATOR",
+  "operator_instruction":"OVC APPROVE DSAI3V-G-VIT-PILOT PASS",
+  "baseline_main_commit":"81a9d57d3f8d139a6c8a25fc9ea72d4abb2bd946",
+  "gate_packet":"docs/releases/development-skills-architecture-v0-3-vit/dsai3v-g-vit-pilot/DSAI3V_G_VIT_PILOT_GATE_READY.json",
+  "approved_authority_delta":{
+    "authority_kind":"LIVE_PHYSICAL_MAIN_VIT_MATERIALISATION_PILOT",
+    "controller":"DSAI_VIT_PHYSICAL_CONTROLLER",
+    "packet_classes":["LOW_RISK_IMPLEMENTATION"],
+    "packet_class_policy":"EXACT_ALLOWLIST_ONLY",
+    "physical_gateway":"DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "parallel_physical_merge":false,
+    "force_push":false,
+    "history_rewrite":false
+  },
+  "conditions":[
+    "Only already-lawful LOW_RISK_IMPLEMENTATION packets may enter the pilot.",
+    "Each packet must remain AUTO_EXECUTABLE or AUTO_RATIFIABLE with authority_delta NONE, prerequisites PASS, QA PASS and no unresolved warning/review.",
+    "VIT owns prospective ordering; only the current qualified VIT head may enter the existing SIQ serialized physical gateway.",
+    "Exact physical/VIT tree equality and complete end-to-end receipts are required for every materialisation.",
+    "GRT2-G3 remains NOT_AUTHORISED and no DebtFloor is inferred.",
+    "All programme-owned reserved gates remain binding."
+  ],
+  "not_granted":["new packet class authority","parallel physical merge","programme-specific reserved authority","selector/model/family/candidate/theory promotion","ACTIVE_DISCOVERY","ACTIVE_DEVELOPMENT","ACTIVE_VALIDATION","publication","probability/risk/exposure/trading/execution authority"],
+  "rollback":"Forward-disable DSAI_VIT_PHYSICAL_CONTROLLER pilot routing and return LOW_RISK_IMPLEMENTATION packets to the already-authorised ORCH/SIQ serialized integration path; preserve all evidence and Git history; never force-push or rewrite history.",
+  "next_packet":"DSAI3V-WP10",
+  "next_gate":"DSAI3V-G10"
+}
