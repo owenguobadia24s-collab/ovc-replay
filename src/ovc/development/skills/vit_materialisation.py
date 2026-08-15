@@ -89,6 +89,8 @@ class ReceiptStore:
         return path
 
     def put(self, receipt: object, receipt_id: str) -> Path:
+        if isinstance(receipt, PacketCompletionReceipt) and receipt.programme_id == "OVC-DSAI-VIT-v0.3":
+            raise VitContractError("DEVOBS_COMPLETION_ATTACHMENT_REQUIRED")
         return self._put_payload(asdict(receipt), receipt_id)
 
     def put_record(self, receipt: Mapping[str, object], receipt_id: str) -> Path:
@@ -100,7 +102,7 @@ class ReceiptStore:
         completion: PacketCompletionReceipt,
         development_latency_receipt: Mapping[str, object],
     ) -> Mapping[str, str]:
-        """Atomically require and persist the DEVOBS attachment for a DSAI3V completion."""
+        """Persist completion + canonical DEVOBS receipt + binding as one required bundle."""
         from ovc.development.dsai3v_completion_observability import validate_completion_attachment
 
         attachment = validate_completion_attachment(
@@ -110,7 +112,7 @@ class ReceiptStore:
             development_latency_receipt=development_latency_receipt,
         )
         devobs_id = str(development_latency_receipt["record_id"])
-        self.put(completion, completion.receipt_id)
+        self._put_payload(asdict(completion), completion.receipt_id)
         self.put_record(development_latency_receipt, devobs_id)
         attachment_record = attachment.to_record()
         self.put_record(attachment_record, attachment.attachment_id)
@@ -124,13 +126,20 @@ class ReceiptStore:
         index: dict[str, str] = {}
         for path in sorted(self.root.glob("*.json")):
             raw = json.loads(path.read_text(encoding="utf-8"))
-            for field in ("transaction_id", "packet_id", "completion_receipt_id", "development_latency_receipt_id"):
-                value = raw.get(field)
-                if value:
-                    key = f"{field}:{value}"
-                    if key in index and index[key] != path.name:
-                        raise VitContractError("VIT_LEDGER_INTEGRITY_FAIL")
-                    index[key] = path.name
+            fields: list[str] = []
+            if raw.get("transaction_id"):
+                fields.append("transaction_id")
+            if raw.get("gate_decision_ref") and raw.get("payload_id") and raw.get("packet_id"):
+                fields.append("packet_id")
+            for field in ("completion_receipt_id", "development_latency_receipt_id"):
+                if raw.get(field):
+                    fields.append(field)
+            for field in fields:
+                value = raw[field]
+                key = f"{field}:{value}"
+                if key in index and index[key] != path.name:
+                    raise VitContractError("VIT_LEDGER_INTEGRITY_FAIL")
+                index[key] = path.name
         return index
 
 
