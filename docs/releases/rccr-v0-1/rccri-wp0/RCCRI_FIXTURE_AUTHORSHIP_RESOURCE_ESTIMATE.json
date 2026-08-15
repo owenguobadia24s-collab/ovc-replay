@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-rccri-fixture-authorship-resource-estimate/v1",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "packet_id": "RCCRI-WP0",
+  "status": "BOUND_FROM_RATIFIED_PLAN",
+  "planning_total_person_days": {"min": 12, "max": 24, "not_a_schedule_slo": true, "authority_effect": "NONE"},
+  "roles": [
+    {"role": "RCCR_FIXTURE_AUTHOR_ASSURANCE_ENGINEER", "accountable_identity": "OPENAI_GPT-5.6-SOL_RCCR_EXECUTOR", "person_days": {"min": 6, "max": 12}, "scope": ["AV01-AV24", "deterministic_harnesses", "negative_controls"]},
+    {"role": "RESEARCH_SOURCE_DOMAIN_REVIEWER", "accountable_identity": "OVC_HUMAN_OPERATOR", "person_days": {"min": 3, "max": 6}, "scope": ["G01-G12", "historical_counterfactual_source_time_review"], "decision_status": "NOT_PREAPPROVED"},
+    {"role": "INDEPENDENT_ALGORITHMIC_ADVERSARIAL_REVIEWER", "accountable_identity": "OVC_HUMAN_OPERATOR", "person_days": {"min": 2, "max": 4}, "scope": ["RCCRI-G4-ALG", "RCCRI-G-ADVERSARIAL-REVIEW"], "independence_basis": "Human operator is not the RCCR implementation author; no review decision is inferred from this binding.", "decision_status": "NOT_PREAPPROVED"},
+    {"role": "FIXTURE_CURRENTNESS_MAINTAINER", "accountable_identity": "OPENAI_GPT-5.6-SOL_RCCR_EXECUTOR", "person_days": {"min": 1, "max": 2}, "scope": ["fixture_dependency_manifests", "stale_fixture_detection", "successor_generation_procedure"]}
+  ],
+  "capacity_binding_basis": "Operator ratification of REVISED 1 accepted the planning resource envelope; exact review decisions remain future evidence at their required gates.",
+  "human_review_threshold_rule": "HUMAN_REVIEW_REQUIRED share >30% is a pilot review trigger only and defaults scale-out recommendation to DEFER absent an explicit bounded operator exception."
+}
