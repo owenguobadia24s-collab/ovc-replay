@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ovc:ec1:EvidenceCycleReviewPacket:v0.1",
+  "title": "EvidenceCycleReviewPacket",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "EvidenceCycleReviewPacket.v0.1"
+    },
+    "packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cycle_id": {
+      "const": "OVC-EC1-DISCOVERY-2021_2023-G1"
+    },
+    "evidence_frontier_semantic_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "population_integrity_review_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "active_stack_capability_review_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "structural_discovery_review_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "question_decision_records": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "$ref": "question_decision_record_v0_1.schema.json"
+      }
+    },
+    "candidate_review_cards": {
+      "type": "array",
+      "items": {
+        "$ref": "p1_candidate_review_card_v0_1.schema.json"
+      }
+    },
+    "negative_evidence_review_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "stack_sufficiency_review_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "need_cause_classification_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "upper_layer_need_record_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "upper_layer_readiness_assessment_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "ec1_reproducibility_package_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "review_capacity_receipt_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "evidence_cycle_disposition": {
+      "type": "string",
+      "enum": [
+        "CANDIDATE_FREEZE_REVIEW_REQUIRED",
+        "UPPER_LAYER_OWNER_REVIEW_PROPOSED",
+        "NULL_OR_DESCRIPTIVE_CLOSEOUT",
+        "REFINE_OR_REPLICATE",
+        "CAPACITY_INCOMPLETE",
+        "QUARANTINED",
+        "BLOCKED"
+      ]
+    },
+    "reserved_action_requests": {
+      "type": "array",
+      "items": {
+        "$ref": "conditional_reserved_action_packet_v0_1.schema.json"
+      }
+    },
+    "zero_candidate_complete": {
+      "type": "boolean"
+    },
+    "qa_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "WARN",
+        "BLOCK",
+        "QUARANTINE"
+      ]
+    },
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "semantic_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "packet_id",
+    "cycle_id",
+    "evidence_frontier_semantic_sha256",
+    "population_integrity_review_ref",
+    "active_stack_capability_review_ref",
+    "structural_discovery_review_ref",
+    "question_decision_records",
+    "candidate_review_cards",
+    "negative_evidence_review_ref",
+    "stack_sufficiency_review_ref",
+    "need_cause_classification_refs",
+    "upper_layer_need_record_refs",
+    "upper_layer_readiness_assessment_refs",
+    "ec1_reproducibility_package_ref",
+    "review_capacity_receipt_ref",
+    "evidence_cycle_disposition",
+    "reserved_action_requests",
+    "zero_candidate_complete",
+    "qa_status",
+    "authority_effect",
+    "semantic_sha256"
+  ],
+  "$defs": {
+    "object_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "logical_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "semantic_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_type",
+        "logical_id",
+        "semantic_sha256"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q01"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q02"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q03"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q04"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q05"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q06"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q07"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q08"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q09"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "properties": {
+        "question_decision_records": {
+          "contains": {
+            "properties": {
+              "question_id": {
+                "const": "EC1-Q10"
+              }
+            },
+            "required": [
+              "question_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "zero_candidate_complete": {
+            "const": true
+          }
+        },
+        "required": [
+          "zero_candidate_complete"
+        ]
+      },
+      "then": {
+        "properties": {
+          "candidate_review_cards": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evidence_cycle_disposition": {
+            "const": "CANDIDATE_FREEZE_REVIEW_REQUIRED"
+          }
+        },
+        "required": [
+          "evidence_cycle_disposition"
+        ]
+      },
+      "then": {
+        "properties": {
+          "candidate_review_cards": {
+            "minItems": 1
+          },
+          "reserved_action_requests": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}
