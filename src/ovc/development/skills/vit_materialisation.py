@@ -89,7 +89,7 @@ class ReceiptStore:
         return path
 
     def put(self, receipt: object, receipt_id: str) -> Path:
-        if isinstance(receipt, PacketCompletionReceipt) and receipt.programme_id == "OVC-DSAI-VIT-v0.3":
+        if isinstance(receipt, PacketCompletionReceipt):
             raise VitContractError("DEVOBS_COMPLETION_ATTACHMENT_REQUIRED")
         return self._put_payload(asdict(receipt), receipt_id)
 
