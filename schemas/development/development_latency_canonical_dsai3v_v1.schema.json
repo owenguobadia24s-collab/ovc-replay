@@ -10,6 +10,25 @@
     "completion_receipt_id": {"type": "string", "minLength": 1},
     "devobs_context": {"type": "object"},
     "latency": {"type": "object"},
+    "async_assurance": {
+      "type": "object",
+      "required": ["status","foreground_ci_wait_ms","background_ci_elapsed_ms","ci_development_overlap_ms","speculative_successor_ms","workflow_green_to_materialisation_ms","materialisation_ready_idle_ms","assurance_rerun_count","assurance_reuse_count","descendant_invalidation_count","speculative_work_salvaged_ms","speculative_work_discarded_ms"],
+      "properties": {
+        "status": {"enum":["OBSERVED","UNAVAILABLE"]},
+        "foreground_ci_wait_ms": {"type":["number","null"],"minimum":0},
+        "background_ci_elapsed_ms": {"type":["number","null"],"minimum":0},
+        "ci_development_overlap_ms": {"type":["number","null"],"minimum":0},
+        "speculative_successor_ms": {"type":["number","null"],"minimum":0},
+        "workflow_green_to_materialisation_ms": {"type":["number","null"],"minimum":0},
+        "materialisation_ready_idle_ms": {"type":["number","null"],"minimum":0},
+        "assurance_rerun_count": {"type":["number","null"],"minimum":0},
+        "assurance_reuse_count": {"type":["number","null"],"minimum":0},
+        "descendant_invalidation_count": {"type":["number","null"],"minimum":0},
+        "speculative_work_salvaged_ms": {"type":["number","null"],"minimum":0},
+        "speculative_work_discarded_ms": {"type":["number","null"],"minimum":0}
+      },
+      "additionalProperties": false
+    },
     "orch": {"type": "object"},
     "vit": {"type": "object"},
     "siq": {"type": "object"},
