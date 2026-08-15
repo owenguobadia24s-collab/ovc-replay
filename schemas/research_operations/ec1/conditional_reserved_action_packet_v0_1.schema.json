@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ovc:ec1:ConditionalReservedActionPacket:v0.1",
+  "title": "ConditionalReservedActionPacket",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "ConditionalReservedActionPacket.v0.1"
+    },
+    "packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "packet_type": {
+      "type": "string",
+      "enum": [
+        "EC1_GSCI_CANDIDATE_FREEZE",
+        "UPPER_LAYER_OWNER_REVIEW"
+      ]
+    },
+    "gate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "plan_ref": {
+      "$ref": "#/$defs/object_ref"
+    },
+    "baseline_commit": {
+      "type": "string",
+      "minLength": 7
+    },
+    "candidate_commit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "completed_packet_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "current_authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "proposed_authority_delta": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acceptance_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "test_and_qa_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_issues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recommended_decision": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "DEFER",
+        "BLOCK",
+        "QUARANTINE",
+        "SUPERSEDE"
+      ]
+    },
+    "work_after_pass": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "research_candidate_generation_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "candidate_review_card_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "upper_layer_need_record_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "upper_layer_readiness_assessment_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      }
+    },
+    "owner_route": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "C2P",
+        "SRI_SFC",
+        "SOI_ORGANISATION_EVIDENCE",
+        "CEI",
+        "C2_5",
+        "C3",
+        "OPT_C",
+        "OPT_D"
+      ]
+    },
+    "authority_effect_before_operator_decision": {
+      "const": "NONE"
+    }
+  },
+  "required": [
+    "schema_version",
+    "packet_id",
+    "packet_type",
+    "gate_id",
+    "plan_ref",
+    "baseline_commit",
+    "candidate_commit",
+    "completed_packet_refs",
+    "current_authority",
+    "proposed_authority_delta",
+    "acceptance_conditions",
+    "test_and_qa_refs",
+    "warnings",
+    "unresolved_issues",
+    "rollback",
+    "recommended_decision",
+    "work_after_pass",
+    "research_candidate_generation_refs",
+    "candidate_review_card_refs",
+    "upper_layer_need_record_refs",
+    "upper_layer_readiness_assessment_refs",
+    "owner_route",
+    "authority_effect_before_operator_decision"
+  ],
+  "$defs": {
+    "object_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "logical_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "semantic_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_type",
+        "logical_id",
+        "semantic_sha256"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "EC1_GSCI_CANDIDATE_FREEZE"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_route": {
+            "const": "NONE"
+          },
+          "research_candidate_generation_refs": {
+            "minItems": 1
+          },
+          "candidate_review_card_refs": {
+            "minItems": 1
+          },
+          "upper_layer_need_record_refs": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "packet_type": {
+            "const": "UPPER_LAYER_OWNER_REVIEW"
+          }
+        },
+        "required": [
+          "packet_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "owner_route": {
+            "not": {
+              "const": "NONE"
+            }
+          },
+          "upper_layer_need_record_refs": {
+            "minItems": 1
+          },
+          "upper_layer_readiness_assessment_refs": {
+            "minItems": 1
+          },
+          "research_candidate_generation_refs": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ]
+}

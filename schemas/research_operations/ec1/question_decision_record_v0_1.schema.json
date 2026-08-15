@@ -1,0 +1,1204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ovc:ec1:QuestionDecisionRecord:v0.1",
+  "title": "QuestionDecisionRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "QuestionDecisionRecord.v0.1",
+      "description": "Const: \"QuestionDecisionRecord.v0.1\"."
+    },
+    "question_decision_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Deterministic ID = HASH(schema_version, cycle_id, question_id, question_registry_version, decision_tree_version, evidence_frontier_semantic_sha256)."
+    },
+    "cycle_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact EC1 scientific cycle."
+    },
+    "cycle_generation_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact EvidenceCycleGeneration."
+    },
+    "dmrp_study_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact DMRPStudy."
+    },
+    "question_id": {
+      "type": "string",
+      "enum": [
+        "EC1-Q01",
+        "EC1-Q02",
+        "EC1-Q03",
+        "EC1-Q04",
+        "EC1-Q05",
+        "EC1-Q06",
+        "EC1-Q07",
+        "EC1-Q08",
+        "EC1-Q09",
+        "EC1-Q10"
+      ],
+      "description": "EC1-Q01 | EC1-Q02 | EC1-Q03 | EC1-Q04 | EC1-Q05 | EC1-Q06 | EC1-Q07 | EC1-Q08 | EC1-Q09 | EC1-Q10."
+    },
+    "research_question_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact ResearchQuestionRecord from the frozen question registry."
+    },
+    "canonical_question_text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Verbatim canonical question text from the frozen EC1 registry; not editable in RV."
+    },
+    "canonical_question_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Hash of canonical question identity/meaning."
+    },
+    "question_registry_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact frozen EC1 Q01-Q10 registry/version."
+    },
+    "purpose": {
+      "type": "string",
+      "enum": [
+        "POPULATION_INTEGRITY",
+        "STRUCTURAL_RECURRENCE",
+        "TRANSITION_RECURRENCE",
+        "EPISODE_MORPHOLOGY",
+        "CHRONOLOGICAL_DISTRIBUTION",
+        "DEPENDENCE_CORRESPONDENCE",
+        "CONTEXT_STRATIFICATION",
+        "ADVERSARIAL_SURVIVAL",
+        "STACK_SUFFICIENCY",
+        "PROPOSAL_ELIGIBILITY"
+      ],
+      "description": "POPULATION_INTEGRITY | STRUCTURAL_RECURRENCE | TRANSITION_RECURRENCE | EPISODE_MORPHOLOGY | CHRONOLOGICAL_DISTRIBUTION | DEPENDENCE_CORRESPONDENCE | CONTEXT_STRATIFICATION | ADVERSARIAL_SURVIVAL | STACK_SUFFICIENCY | PROPOSAL_ELIGIBILITY."
+    },
+    "population_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Subset of P1A | P1B | P1C, or all three as required by the canonical question."
+    },
+    "review_phase": {
+      "const": "EC1_RV",
+      "description": "Const EC1_RV."
+    },
+    "evidence_frontier_semantic_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Exact complete decision-bearing evidence frontier for the question."
+    },
+    "authority_effect": {
+      "const": "NONE",
+      "description": "Const NONE."
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/question_evidence_requirement"
+      },
+      "description": "Frozen list of evidence object families required/qualifying/out-of-scope for the canonical question. Each entry declares requirement_id, evidence_type, question_dependency_role, information_dimension, owner, and evidence refs."
+    },
+    "information_dimension_requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/information_dimension_requirement"
+      },
+      "description": "One entry for each of the ten StackSufficiency information dimensions, each marked REQUIRED_TO_ANSWER, QUALIFYING_ONLY or OUT_OF_SCOPE."
+    },
+    "required_population_manifest_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact population manifests required for the question."
+    },
+    "required_search_surface_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact search/accounting artifacts required; may be empty for questions whose answer does not require a search surface, but emptiness must be explicit."
+    },
+    "required_candidate_review_card_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Required mainly for Q08/Q10 and any question whose answer depends on proposal-level review. Empty is explicit."
+    },
+    "required_active_stack_capability_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact owner/capability records relevant to what the stack could lawfully supply."
+    },
+    "population_complete": {
+      "type": "boolean",
+      "description": "TRUE only when all REQUIRED population surfaces are complete and reconciled."
+    },
+    "population_reconciliation_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact reconciliation evidence for REQUIRED populations."
+    },
+    "search_complete": {
+      "type": "boolean",
+      "description": "TRUE only when every REQUIRED search surface is complete. For Q01 this may be TRUE when the population-integrity computation is complete even if no pattern-lattice result is needed."
+    },
+    "search_accounting_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact P1SearchAccountingLedger refs where applicable."
+    },
+    "qa_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "WARN",
+        "BLOCK",
+        "QUARANTINE"
+      ],
+      "description": "PASS | WARN | BLOCK | QUARANTINE."
+    },
+    "qa_packet_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact QA packets required for this question."
+    },
+    "reproduction_status": {
+      "type": "string",
+      "enum": [
+        "REPRODUCED",
+        "METAMORPHICALLY_EQUIVALENT",
+        "REPRODUCTION_MISMATCH",
+        "NOT_RUN"
+      ],
+      "description": "REPRODUCED | METAMORPHICALLY_EQUIVALENT | REPRODUCTION_MISMATCH | NOT_RUN."
+    },
+    "reproduction_receipt_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact R1 evidence for decision-bearing surfaces."
+    },
+    "capacity_state": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "EXECUTION_CAPACITY_INCOMPLETE",
+        "PATTERN_LATTICE_CAPACITY_INCOMPLETE",
+        "REVIEW_CAPACITY_EXCEEDED"
+      ],
+      "description": "COMPLETE | EXECUTION_CAPACITY_INCOMPLETE | PATTERN_LATTICE_CAPACITY_INCOMPLETE | REVIEW_CAPACITY_EXCEEDED."
+    },
+    "review_capacity_receipt_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact ReviewCapacityReceipt."
+    },
+    "partial_run_interpretation_firewall_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. BLOCK if scientific interpretation began before complete required population/search reconciliation."
+    },
+    "f0_leak_scan_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. Confirms F0 blinded calibration outputs were not promoted as E1/RV science."
+    },
+    "decision_tree_version": {
+      "const": "EC1-DT-v0.1",
+      "description": "Const EC1-DT-v0.1."
+    },
+    "decision_tree_id": {
+      "type": "string",
+      "enum": [
+        "DT-Q01",
+        "DT-Q02",
+        "DT-Q03",
+        "DT-Q04",
+        "DT-Q05",
+        "DT-Q06",
+        "DT-Q07",
+        "DT-Q08",
+        "DT-Q09",
+        "DT-Q10"
+      ],
+      "description": "DT-Q01 | DT-Q02 | DT-Q03 | DT-Q04 | DT-Q05 | DT-Q06 | DT-Q07 | DT-Q08 | DT-Q09 | DT-Q10."
+    },
+    "tree_root_node": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact root node identifier."
+    },
+    "traversed_nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decision_node_trace"
+      },
+      "description": "Ordered node trace from root to terminal branch. Each node carries node_id, question/predicate, result, evidence_refs, branch_taken and any human-review flag."
+    },
+    "terminal_node": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact terminal node."
+    },
+    "terminal_reason": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Short explanation tied to the exact terminal branch and evidence."
+    },
+    "tree_conformance_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. BLOCK if required nodes were skipped, results are unsupported, or a post-hoc branch/threshold was introduced."
+    },
+    "human_judgment_node_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Exact decision-tree nodes where the canon intentionally preserves scientific judgment rather than a universal threshold."
+    },
+    "human_judgment_notes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Evidence-grounded notes for each human judgment node; may not introduce new scientific parameters."
+    },
+    "answerability": {
+      "type": "string",
+      "enum": [
+        "ANSWERED",
+        "PARTIALLY_ANSWERED",
+        "NOT_ANSWERABLE_CURRENT_STACK",
+        "INVALID_QUESTION_CURRENT_PROTOCOL"
+      ],
+      "description": "ANSWERED | PARTIALLY_ANSWERED | NOT_ANSWERABLE_CURRENT_STACK | INVALID_QUESTION_CURRENT_PROTOCOL."
+    },
+    "answer_summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Question-specific scientific answer at the exact evidence frontier, including explicit null/negative outcomes."
+    },
+    "answer_scope": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact population/period/side/clock/boundary-pack/context scope to which the answer applies."
+    },
+    "answer_basis_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Decision-bearing evidence directly supporting the answer."
+    },
+    "positive_evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Positive/support evidence. Empty is valid for null answers."
+    },
+    "negative_evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Null/negative evidence; required parity surface."
+    },
+    "counterexample_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Question-relevant counterexamples; empty is explicit."
+    },
+    "near_neighbour_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Question-relevant near-neighbour evidence; empty if not applicable."
+    },
+    "residual_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Residual/singleton/unassigned evidence."
+    },
+    "missingness_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Not-evaluable/not-comparable/censored/quarantined evidence relevant to answerability."
+    },
+    "dependence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Dependence/correspondence evidence relevant to the question."
+    },
+    "chronology_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Year/quarter/FVT/clock-position evidence relevant to the question."
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Explicit unresolved methodological, information, authority, implementation, capacity or review limitations."
+    },
+    "information_dimension_assessments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/information_dimension_assessment"
+      },
+      "description": "Exactly 10 entries, one for each frozen information dimension. Each contains dimension, dependency_role, evidence_refs, missing_evidence_refs, need_cause_ref | null, candidate_owner_route, and resolution_notes."
+    },
+    "need_cause_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact NeedCauseClassification records. Empty only when no information/owner/authority/implementation/protocol/method/capacity/review gap is identified."
+    },
+    "counterfactual_sufficiency_review": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/counterfactual_sufficiency_review"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Required for every apparent upper-layer need or every NOT_ANSWERABLE_CURRENT_STACK result caused by missing/owner/authority/implementation information."
+    },
+    "counterfactual_review_complete": {
+      "type": "boolean",
+      "description": "TRUE iff all seven canonical counterfactual questions are answered or explicitly UNRESOLVED with bounded follow-up."
+    },
+    "architecture_need_supported": {
+      "type": "boolean",
+      "description": "TRUE only after counterfactual review supports a genuine owner-information need. FALSE for EC1_FIELD_EXCLUSION, EC1_METHOD_LIMITATION, EC1_CAPACITY_LIMITATION and EC1_REVIEW_LIMITATION."
+    },
+    "owner_route": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "C2P",
+        "SRI_SFC",
+        "SOI_ORGANISATION_EVIDENCE",
+        "CEI",
+        "C2_5",
+        "C3",
+        "OPT_C",
+        "OPT_D"
+      ],
+      "description": "NONE or exact candidate owner route. Naming an owner has zero authority effect."
+    },
+    "upper_layer_need_record_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Populated only when architecture_need_supported=TRUE."
+    },
+    "upper_layer_readiness_assessment_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Populated when an owner route is proposed or when need vs implementation/authority/scientific readiness must be distinguished."
+    },
+    "shadow_qualification_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Optional bounded shadow evidence testing whether an owner could close the frozen gap; cannot rewrite the original question result."
+    },
+    "permissible_dispositions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Question-specific subset of frozen P1Disposition values that remain lawful given the decision tree. May be empty for purely population-integrity questions."
+    },
+    "recommended_disposition": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "FREEZE_CANDIDATE",
+            "REFINE_WITHIN_DISCOVERY",
+            "REPLICATE_DISCOVERY",
+            "DESCRIPTIVE_INVENTORY_ONLY",
+            "METHOD_DEPENDENT",
+            "REPRESENTATION_DEPENDENT",
+            "CONTEXT_DEPENDENT",
+            "INSUFFICIENT_RECURRENCE",
+            "INSUFFICIENT_SEPARATION",
+            "NO_STABLE_STRUCTURE",
+            "CAPACITY_INCOMPLETE",
+            "QUARANTINED",
+            "REJECT"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Optional Path-1 disposition when the question itself supports one. Null is valid for Q01/Q09 where the answer may be purely descriptive/architectural."
+    },
+    "disposition_rationale": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Required when recommended_disposition is not null."
+    },
+    "reserved_action_requested": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "PREPARE_EC1_GSCI_CANDIDATE_FREEZE",
+        "ROUTE_UPPER_LAYER_OWNER_REVIEW"
+      ],
+      "description": "NONE | PREPARE_EC1_GSCI_CANDIDATE_FREEZE | ROUTE_UPPER_LAYER_OWNER_REVIEW."
+    },
+    "next_route": {
+      "type": "string",
+      "enum": [
+        "CLOSEOUT",
+        "REFINE_DISCOVERY",
+        "REPLICATE_DISCOVERY",
+        "PREPARE_EC1_GSCI",
+        "ROUTE_OWNER_REVIEW",
+        "QUARANTINE",
+        "BLOCKED_NO_ACTION"
+      ],
+      "description": "CLOSEOUT | REFINE_DISCOVERY | REPLICATE_DISCOVERY | PREPARE_EC1_GSCI | ROUTE_OWNER_REVIEW | QUARANTINE | BLOCKED_NO_ACTION."
+    },
+    "reserved_action_basis_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Evidence supporting any requested reserved action; empty when reserved_action_requested=NONE."
+    },
+    "candidate_review_card_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact candidate cards material to the question decision, especially Q08/Q10."
+    },
+    "evidence_cycle_review_packet_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "May be null before final packet assembly; once issued, links the question decision into the complete EvidenceCycleReviewPacket."
+    },
+    "semantic_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Hash over canonical question binding, evidence frontier, decision-tree version/path, answerability, information-dimension/need-cause assessment, answer and routing."
+    },
+    "record_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Hash of the full persisted Research Operations envelope."
+    },
+    "supersedes_question_decision_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Forward correction/supersession only. Historical decision records are never rewritten."
+    },
+    "record_status": {
+      "type": "string",
+      "enum": [
+        "CURRENT",
+        "SUPERSEDED",
+        "QUARANTINED"
+      ],
+      "description": "CURRENT | SUPERSEDED | QUARANTINED."
+    }
+  },
+  "required": [
+    "schema_version",
+    "question_decision_id",
+    "cycle_id",
+    "cycle_generation_ref",
+    "dmrp_study_ref",
+    "question_id",
+    "research_question_ref",
+    "canonical_question_text",
+    "canonical_question_sha256",
+    "question_registry_version",
+    "purpose",
+    "population_ids",
+    "review_phase",
+    "evidence_frontier_semantic_sha256",
+    "authority_effect",
+    "evidence_requirements",
+    "information_dimension_requirements",
+    "required_population_manifest_refs",
+    "required_search_surface_refs",
+    "required_candidate_review_card_refs",
+    "required_active_stack_capability_refs",
+    "population_complete",
+    "population_reconciliation_refs",
+    "search_complete",
+    "search_accounting_refs",
+    "qa_status",
+    "qa_packet_refs",
+    "reproduction_status",
+    "reproduction_receipt_refs",
+    "capacity_state",
+    "review_capacity_receipt_ref",
+    "partial_run_interpretation_firewall_status",
+    "f0_leak_scan_status",
+    "decision_tree_version",
+    "decision_tree_id",
+    "tree_root_node",
+    "traversed_nodes",
+    "terminal_node",
+    "terminal_reason",
+    "tree_conformance_status",
+    "human_judgment_node_refs",
+    "human_judgment_notes",
+    "answerability",
+    "answer_summary",
+    "answer_scope",
+    "answer_basis_refs",
+    "positive_evidence_refs",
+    "negative_evidence_refs",
+    "counterexample_refs",
+    "near_neighbour_refs",
+    "residual_refs",
+    "missingness_refs",
+    "dependence_refs",
+    "chronology_refs",
+    "limitations",
+    "information_dimension_assessments",
+    "need_cause_refs",
+    "counterfactual_review_complete",
+    "architecture_need_supported",
+    "owner_route",
+    "upper_layer_need_record_ref",
+    "upper_layer_readiness_assessment_ref",
+    "shadow_qualification_ref",
+    "permissible_dispositions",
+    "recommended_disposition",
+    "disposition_rationale",
+    "reserved_action_requested",
+    "next_route",
+    "reserved_action_basis_refs",
+    "candidate_review_card_refs",
+    "evidence_cycle_review_packet_ref",
+    "authority_effect",
+    "semantic_sha256",
+    "record_sha256",
+    "supersedes_question_decision_ref",
+    "record_status"
+  ],
+  "$defs": {
+    "object_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "logical_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "semantic_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_type",
+        "logical_id",
+        "semantic_sha256"
+      ]
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "logical_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantic_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "record_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_type",
+        "logical_id",
+        "semantic_sha256"
+      ]
+    },
+    "question_evidence_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requirement_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question_dependency_role": {
+          "type": "string",
+          "enum": [
+            "REQUIRED_TO_ANSWER",
+            "QUALIFYING_ONLY",
+            "OUT_OF_SCOPE"
+          ]
+        },
+        "information_dimension": {
+          "type": "string",
+          "enum": [
+            "market_truth",
+            "atomic_facts",
+            "structural_description",
+            "persistent_identity",
+            "organisation",
+            "conditional_constraint",
+            "event_proposition",
+            "semantic_composition",
+            "consequence_measurement",
+            "comparative_proof"
+          ]
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "missing_evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      },
+      "required": [
+        "requirement_id",
+        "evidence_type",
+        "question_dependency_role",
+        "information_dimension",
+        "owner",
+        "evidence_refs",
+        "missing_evidence_refs"
+      ]
+    },
+    "information_dimension_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "enum": [
+            "market_truth",
+            "atomic_facts",
+            "structural_description",
+            "persistent_identity",
+            "organisation",
+            "conditional_constraint",
+            "event_proposition",
+            "semantic_composition",
+            "consequence_measurement",
+            "comparative_proof"
+          ]
+        },
+        "dependency_role": {
+          "type": "string",
+          "enum": [
+            "REQUIRED_TO_ANSWER",
+            "QUALIFYING_ONLY",
+            "OUT_OF_SCOPE"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "missing_evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "need_cause_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/object_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "candidate_owner_route": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "C2P",
+            "SRI_SFC",
+            "SOI_ORGANISATION_EVIDENCE",
+            "CEI",
+            "C2_5",
+            "C3",
+            "OPT_C",
+            "OPT_D"
+          ]
+        },
+        "resolution_notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "dimension",
+        "dependency_role",
+        "evidence_refs",
+        "missing_evidence_refs",
+        "need_cause_ref",
+        "candidate_owner_route",
+        "resolution_notes"
+      ]
+    },
+    "counterfactual_sufficiency_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "missing_information_class": {
+          "type": "string"
+        },
+        "current_stack_can_supply_lawfully": {
+          "type": "string"
+        },
+        "ec1_deliberately_excluded": {
+          "type": "string"
+        },
+        "methodological_not_informational": {
+          "type": "string"
+        },
+        "shadow_capability_can_test": {
+          "type": "string"
+        },
+        "proposed_owner_actually_owns": {
+          "type": "string"
+        },
+        "dependency_proportionality": {
+          "type": "string",
+          "enum": [
+            "PROPORTIONATE",
+            "DISPROPORTIONATE",
+            "UNRESOLVED"
+          ]
+        },
+        "review_summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      },
+      "required": [
+        "missing_information_class",
+        "current_stack_can_supply_lawfully",
+        "ec1_deliberately_excluded",
+        "methodological_not_informational",
+        "shadow_capability_can_test",
+        "proposed_owner_actually_owns",
+        "dependency_proportionality",
+        "review_summary",
+        "evidence_refs"
+      ]
+    },
+    "adversarial_check_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "WARN",
+            "BLOCK",
+            "QUARANTINE",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "blocking_effect": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "check_id",
+        "status",
+        "evidence_refs",
+        "blocking_effect",
+        "notes"
+      ]
+    },
+    "decision_node_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "node_predicate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "TRUE",
+            "FALSE",
+            "NOT_APPLICABLE",
+            "UNRESOLVED"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "branch_taken": {
+          "type": "string",
+          "minLength": 1
+        },
+        "human_scientific_review": {
+          "type": "boolean"
+        },
+        "human_review_note": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "node_id",
+        "node_predicate",
+        "result",
+        "evidence_refs",
+        "branch_taken",
+        "human_scientific_review",
+        "human_review_note"
+      ]
+    },
+    "information_dimension_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "enum": [
+            "market_truth",
+            "atomic_facts",
+            "structural_description",
+            "persistent_identity",
+            "organisation",
+            "conditional_constraint",
+            "event_proposition",
+            "semantic_composition",
+            "consequence_measurement",
+            "comparative_proof"
+          ]
+        },
+        "dependency_role": {
+          "type": "string",
+          "enum": [
+            "REQUIRED_TO_ANSWER",
+            "QUALIFYING_ONLY",
+            "OUT_OF_SCOPE"
+          ]
+        }
+      },
+      "required": [
+        "dimension",
+        "dependency_role"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "answerability": {
+            "const": "ANSWERED"
+          }
+        },
+        "required": [
+          "answerability"
+        ]
+      },
+      "then": {
+        "properties": {
+          "population_complete": {
+            "const": true
+          },
+          "search_complete": {
+            "const": true
+          },
+          "qa_status": {
+            "enum": [
+              "PASS",
+              "WARN"
+            ]
+          },
+          "reproduction_status": {
+            "enum": [
+              "REPRODUCED",
+              "METAMORPHICALLY_EQUIVALENT"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "architecture_need_supported": {
+            "const": true
+          }
+        },
+        "required": [
+          "architecture_need_supported"
+        ]
+      },
+      "then": {
+        "required": [
+          "counterfactual_sufficiency_review",
+          "upper_layer_need_record_ref"
+        ],
+        "properties": {
+          "counterfactual_review_complete": {
+            "const": true
+          },
+          "owner_route": {
+            "not": {
+              "const": "NONE"
+            }
+          },
+          "upper_layer_need_record_ref": {
+            "$ref": "#/$defs/object_ref"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "reserved_action_requested": {
+            "const": "ROUTE_UPPER_LAYER_OWNER_REVIEW"
+          }
+        },
+        "required": [
+          "reserved_action_requested"
+        ]
+      },
+      "then": {
+        "properties": {
+          "architecture_need_supported": {
+            "const": true
+          },
+          "next_route": {
+            "const": "ROUTE_OWNER_REVIEW"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "reserved_action_requested": {
+            "const": "PREPARE_EC1_GSCI_CANDIDATE_FREEZE"
+          }
+        },
+        "required": [
+          "reserved_action_requested"
+        ]
+      },
+      "then": {
+        "properties": {
+          "candidate_review_card_refs": {
+            "minItems": 1
+          },
+          "next_route": {
+            "const": "PREPARE_EC1_GSCI"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "qa_status": {
+                "enum": [
+                  "BLOCK",
+                  "QUARANTINE"
+                ]
+              }
+            },
+            "required": [
+              "qa_status"
+            ]
+          },
+          {
+            "properties": {
+              "reproduction_status": {
+                "const": "REPRODUCTION_MISMATCH"
+              }
+            },
+            "required": [
+              "reproduction_status"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "reserved_action_requested": {
+            "const": "NONE"
+          }
+        }
+      }
+    }
+  ]
+}
