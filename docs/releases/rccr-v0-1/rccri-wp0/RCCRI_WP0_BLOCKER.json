@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-rccri-blocker/v1",
+  "blocker_id": "RCCRI-WP0-BLOCK-001",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "packet_id": "RCCRI-WP0",
+  "classification": "UPSTREAM_INTEGRATION_BLOCKER",
+  "status": "BLOCKING",
+  "observed_at": "2026-08-15T17:53:55Z",
+  "candidate_head": "67c7d27dce313ab72e09406a406b97eb69ed23de",
+  "tests_workflow": {"run_id": 31899194233, "conclusion": "success"},
+  "tiered_workflow": {"run_id": 31899194235, "profile_assurance": "success", "siq_ready": "success", "merge_readiness": "failure"},
+  "blocking_job": {"job_id": 95047716259, "error": "OVC_FINAL_INTEGRATION_PREDECESSOR_TERMINAL_TIMEOUT", "predecessor_pr": 929, "predecessor_head": "1a8d31e614e291aed43376f0c33e9d9b9e682f28", "wait_ms": 242269},
+  "root_cause": "The serialized integration workflow treats every older open main-targeting PR with a successful OVC merge-readiness check as a predecessor lease owner. PR #929 is intentionally open under an explicit operator instruction to leave it as a bounded review/assurance packet and DO NOT MERGE, so it cannot lawfully reach the merged/closed terminal state required by the current lease algorithm.",
+  "rccr_defect": false,
+  "authority_effect": "NONE",
+  "actions_not_taken": ["DO_NOT_MERGE_PR_929", "DO_NOT_CLOSE_OR_RETARGET_PR_929_WITHOUT_SEPARATE_AUTHORITY", "DO_NOT_BYPASS_REQUIRED_OVC_MERGE_READINESS", "DO_NOT_DIRECT_COMMIT_TO_MAIN"],
+  "smallest_lawful_resolutions": [
+    "Operator releases PR #929 from its explicit leave-open boundary by authorising close/retarget or lawful integration disposition.",
+    "Separately authorised CI/DSAI correction teaches predecessor selection to ignore explicitly non-integrating review-only PRs while preserving queue safety."
+  ],
+  "resume_condition": "PR #930 obtains successful OVC merge readiness on an exact current-main-compatible head without bypassing required assurance.",
+  "rollback": "Preserve WP0 branch/PR and all evidence. No main mutation has occurred."
+}
