@@ -9,11 +9,20 @@
   "design_sha256": "16f3b52a790bd6fa4d144d29065087b733a6fd4cb2162963a623090f030e9ee3",
   "baseline_commit": "0ad662693c50bef36329bfbe8bce4d5e142cb081",
   "baseline_tree": "d923b075d45ccfc72b2a5c079a940874e3c13a4b",
-  "decision": "PASS_EXTERNAL_RECORDED_MATERIALISING",
-  "acceptance_conditions": {"source_precedence_conflict": "NONE_OBSERVED", "duplicate_rccr_ownership": "NONE_OBSERVED", "design_hash_matches": true, "new_durable_record_family_scope": "EXPLICIT_RCCR_ONLY", "rollback": "FORWARD_ONLY", "ec1_path2_validation_boundaries": "PRESERVED"},
-  "tests": "PENDING_EXACT_BRANCH_CI",
-  "qa": "PENDING_EXACT_BRANCH_CI",
-  "authority_delta": "BOUNDED_IMPLEMENTATION_ONLY",
-  "next_packet_after_pass": "RCCRI-WP1",
+  "external_operator_decision": "PASS",
+  "repository_materialisation_status": "BLOCKED_UPSTREAM_INTEGRATION",
+  "acceptance_conditions": {
+    "source_precedence_conflict": "NONE_OBSERVED",
+    "duplicate_rccr_ownership": "NONE_OBSERVED",
+    "design_hash_matches": true,
+    "new_durable_record_family_scope": "EXPLICIT_RCCR_ONLY",
+    "rollback": "FORWARD_ONLY",
+    "ec1_path2_validation_boundaries": "PRESERVED"
+  },
+  "tests": "PASS_ON_TESTED_HEAD_67c7d27dce313ab72e09406a406b97eb69ed23de",
+  "qa": "BLOCK_UPSTREAM_INTEGRATION",
+  "blockers": ["RCCRI-WP0-BLOCK-001"],
+  "authority_delta": "BOUNDED_IMPLEMENTATION_ONLY_NOT_YET_EFFECTIVE_ON_MAIN",
+  "next_packet_after_resolution": "RCCRI-WP1",
   "next_operator_gate": "RCCRI-G-PILOT-EXIT"
 }
