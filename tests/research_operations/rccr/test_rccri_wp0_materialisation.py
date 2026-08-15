@@ -96,7 +96,13 @@ def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully
         current_ordinal = packet_ordinal(pointer["current_packet"])
         completed_ordinal = packet_ordinal(pointer["last_completed_packet"])
         assert current_ordinal > 0
-        assert completed_ordinal == current_ordinal - 1
+        if completed_ordinal == current_ordinal:
+            assert pointer["status"] == "GATE_READY"
+            assert pointer["operator_pending"]
+            assert pointer["current_gate"] in pointer["operator_pending"]
+            assert packet_ordinal(pointer["next_packet"]) == current_ordinal + 1
+        else:
+            assert completed_ordinal == current_ordinal - 1
         assert pointer["last_merge_commit"]
         assert pointer["next_packet"] != "RCCRI-WP0"
         assert "RCCRI-WP0-BLOCK-001" in pointer["resolved_blockers"]
