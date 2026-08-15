@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-dsai3v-required-assurance-profile/v1",
+  "profile_id": "DSAI3V-AA-REQUIRED-ASSURANCE-PROFILE-v0.1",
+  "status": "IMPLEMENTED_INACTIVE_SHADOW",
+  "provider_adapter_id": "GITHUB_ACTIONS_READ_ONLY_v1",
+  "classification_rule": "EXPLICIT_ONLY_NEVER_INFER_FROM_WORKFLOW_NAME",
+  "unknown_classification": {"assurance_class":"AA2_MATERIALISATION_EDGE","reuse_class":"NO_REUSE"},
+  "members": [
+    {
+      "workflow_path": ".github/workflows/tests.yml",
+      "workflow_name": "tests",
+      "check_name": "tests",
+      "assurance_class": "AA0_BACKGROUND_REUSABLE",
+      "reuse_class": "REUSE_IF_DEPENDENCIES_UNCHANGED",
+      "dependency_scope": ["candidate_content","repository_test_surface","research_console_maintained_surface"]
+    },
+    {
+      "workflow_path": ".github/workflows/tests.yml",
+      "workflow_name": "tests",
+      "check_name": "pytest-unittest-parity",
+      "assurance_class": "AA0_BACKGROUND_REUSABLE",
+      "reuse_class": "REUSE_IF_DEPENDENCIES_UNCHANGED",
+      "dependency_scope": ["candidate_content","legacy_unittest_surface"]
+    },
+    {
+      "workflow_path": ".github/workflows/tests.yml",
+      "workflow_name": "tests",
+      "check_name": "runner-parity",
+      "assurance_class": "AA0_BACKGROUND_REUSABLE",
+      "reuse_class": "REUSE_IF_DEPENDENCIES_UNCHANGED",
+      "dependency_scope": ["candidate_content","test_collection_surface"]
+    },
+    {
+      "workflow_path": ".github/workflows/ovc-tiered-tests.yml",
+      "workflow_name": "OVC tiered test selection shadow",
+      "check_name": "OVC profile assurance",
+      "assurance_class": "AA0_BACKGROUND_REUSABLE",
+      "reuse_class": "REUSE_IF_DEPENDENCIES_UNCHANGED",
+      "dependency_scope": ["candidate_content","test_profile_registry","orchestration_contract"]
+    },
+    {
+      "workflow_path": ".github/workflows/ovc-tiered-tests.yml",
+      "workflow_name": "OVC tiered test selection shadow",
+      "check_name": "SIQ READY admission",
+      "assurance_class": "AA2_MATERIALISATION_EDGE",
+      "reuse_class": "NO_REUSE",
+      "dependency_scope": ["current_main","pull_request_base","required_base_independent_assurance"]
+    },
+    {
+      "workflow_path": ".github/workflows/ovc-tiered-tests.yml",
+      "workflow_name": "OVC tiered test selection shadow",
+      "check_name": "OVC merge readiness",
+      "assurance_class": "AA2_MATERIALISATION_EDGE",
+      "reuse_class": "NO_REUSE",
+      "dependency_scope": ["current_main","siq_exclusive_lease","exact_final_assurance"]
+    }
+  ],
+  "existing_required_workflow_removal_or_demotion": "PROHIBITED",
+  "provider_write_or_merge_capability": false,
+  "controller_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "parallel_physical_merge": false,
+  "authority_effect": "NONE",
+  "activation": "DENIED_PENDING_DSAI3V-AA-G-ACTIVATE"
+}
