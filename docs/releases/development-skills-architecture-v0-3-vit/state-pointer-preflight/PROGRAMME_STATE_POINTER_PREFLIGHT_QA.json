@@ -1,0 +1,17 @@
+{
+  "schema": "ovc-dsai3v-programme-state-pointer-preflight-qa/v1",
+  "packet_id": "DSAI3V-POST-G12-STATE-POINTER-PREFLIGHT",
+  "status": "QA_REVIEW",
+  "authority_delta": "NONE",
+  "targeted_tests": ["tests/development/test_programme_state_preflight.py"],
+  "repository_assurance": "PENDING_CI",
+  "acceptance": {
+    "consistent_pointer_passes": true,
+    "stale_pointer_blocks": true,
+    "missing_state_blocks": true,
+    "completed_successor_contradiction_blocks": true,
+    "legacy_noncanonical_pointer_is_not_reinterpreted": true,
+    "read_only": true
+  },
+  "qa_recommendation": "PASS_IF_TARGETED_AND_REPOSITORY_ASSURANCE_GREEN"
+}
