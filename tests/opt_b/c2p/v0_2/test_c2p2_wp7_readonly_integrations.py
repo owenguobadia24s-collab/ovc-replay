@@ -51,8 +51,9 @@ def snapshot() -> dict:
 
 
 class C2P2WP7ReadonlyIntegrationTests(unittest.TestCase):
-    def test_fixture_catalogue_and_synthetic_firewall(self):
-        self.assertEqual([item["id"] for item in FIXTURES["fixtures"]], [f"F{number}" for number in range(30, 37)])
+    def test_fixture_catalogue_is_local_and_does_not_consume_global_f_numbers(self):
+        self.assertEqual([item["id"] for item in FIXTURES["fixtures"]], [f"WP7-I{number:02d}" for number in range(1, 8)])
+        self.assertEqual(FIXTURES["catalogue_scope"], "WP7_IMPLEMENTATION_LOCAL_INTEROP_NOT_GLOBAL_C2P2_F_NUMBERING")
         self.assertEqual(PACK["status"], "SYNTHETIC_ONLY_NONEMPIRICAL")
         self.assertFalse(PACK["activation_eligible"])
 
