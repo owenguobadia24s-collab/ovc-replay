@@ -2,35 +2,43 @@
   "schema": "ovc-rccri-qa-packet/v1",
   "packet_id": "RCCRI-WP0",
   "gate_id": "RCCRI-G0",
-  "candidate_status": "PENDING_RECONCILED_CI",
+  "candidate_status": "PASS_RECONCILED_IMPLEMENTATION",
+  "qa_recommendation": "PASS",
   "reconciled_main": "89d0628efbda9588f4ae1c5d7d632424e8c10be3",
   "reconciliation_branch": "rccr/rccri-wp0-reconcile-89d0628",
-  "prior_tested_head": "67c7d27dce313ab72e09406a406b97eb69ed23de",
-  "prior_assurance": {
+  "tested_head": "0a4d21a7493f28ef767e2b993a3a544ef6b87805",
+  "checks": {
+    "plan_hash_verification": "PASS",
+    "design_hash_verification": "PASS",
+    "repository_path_census": "PASS",
+    "duplicate_namespace_pr_check": "PASS",
+    "programme_state_schema": "PASS",
+    "authority_negative_fixtures": "PASS",
+    "source_precedence_reconciliation": "PASS",
+    "reviewer_resource_binding": "PASS_NO_REVIEW_DECISION_INFERRED",
+    "current_main_contains_pr_929_provenance": "PASS",
     "repository_tests": "PASS",
     "runner_parity": "PASS",
     "pytest_unittest_parity": "PASS",
     "final_head_profile": "PASS",
     "siq_ready": "PASS",
-    "merge_readiness": "BLOCKED_ONLY_BY_PR_929_PREDECESSOR_TIMEOUT"
+    "ovc_merge_readiness": "PASS"
+  },
+  "workflow_evidence": {
+    "tests_run_id": 31903427145,
+    "tests_job_id": 95057554765,
+    "runner_parity_job_id": 95057554809,
+    "pytest_unittest_parity_job_id": 95057554825,
+    "tiered_run_id": 31903427223,
+    "profile_assurance_job_id": 95057554805,
+    "siq_ready_job_id": 95057598156,
+    "merge_readiness_job_id": 95058072060
   },
   "resolved_blocker": "RCCRI-WP0-BLOCK-001",
-  "checks": [
-    "plan_hash_verification",
-    "design_hash_verification",
-    "repository_path_census",
-    "duplicate_namespace_pr_check",
-    "programme_state_schema",
-    "authority_negative_fixtures",
-    "source_precedence_reconciliation",
-    "reviewer_resource_binding",
-    "current_main_contains_pr_929_provenance",
-    "exact_reconciled_head_required_ci",
-    "ovc_merge_readiness"
-  ],
-  "expected_result": "PASS_IF_EXACT_RECONCILED_HEAD_REQUIRED_CHECKS_PASS",
   "warnings": [],
   "blockers": [],
   "authority_effect": "NONE",
-  "rollback": "Preserve original blocked branch/PR and blocker evidence; integrate only after exact reconciled-head assurance passes."
+  "reserved_authority_delta": "NONE",
+  "final_evidence_only_head_assurance": "REQUIRED_BEFORE_MERGE",
+  "rollback": "Before integration close/supersede the reconciliation PR if final-head assurance, source reconciliation or authority conditions become false. After integration correct forward only; preserve all RCCR WP0 evidence and blocker history."
 }
