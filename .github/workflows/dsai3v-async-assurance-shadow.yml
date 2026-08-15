@@ -1,20 +1,6 @@
 name: DSAI3V Async Assurance shadow
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'src/ovc/development/skills/async_assurance.py'
-      - 'src/ovc/development/skills/async_assurance_github.py'
-      - 'src/ovc/development/dsai3v_completion_observability.py'
-      - 'schemas/development/async_assurance/**'
-      - 'schemas/development/development_latency_canonical_dsai3v_v1.schema.json'
-      - 'registries/development/skills/async_assurance/**'
-      - 'registries/development/skills/development_latency_completion_receipt_v0_1.json'
-      - 'fixtures/development_skills/async_assurance/**'
-      - 'tests/development_skills/test_dsai3v_async_assurance*.py'
-      - 'tests/development_skills/test_dsai3v_completion_observability.py'
-      - '.github/workflows/dsai3v-async-assurance-shadow.yml'
   workflow_dispatch:
 
 permissions:
@@ -30,7 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
