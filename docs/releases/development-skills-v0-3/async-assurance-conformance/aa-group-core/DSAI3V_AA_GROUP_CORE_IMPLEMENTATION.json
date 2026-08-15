@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-dsai3v-aa-group-core-implementation/v1",
+  "programme_id": "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-RATIFIED",
+  "governing_design": "OVC-DSAI3V-ASYNC-ASSURANCE-DESIGN-SPEC-0.1-R1-RATIFIED",
+  "group_id": "DSAI3V-AA-GROUP-CORE",
+  "logical_packets": ["DSAI3V-AA-WP1","DSAI3V-AA-WP2","DSAI3V-AA-WP3","DSAI3V-AA-WP4","DSAI3V-AA-WP5"],
+  "baseline_commit": "7eb690e3b267e443e4a1f4f853dda2321e9a7f09",
+  "branch": "build/dsai3v-aa-group-core",
+  "status": "IMPLEMENTED_PENDING_QA",
+  "implementation": {
+    "runtime": [
+      "src/ovc/development/skills/async_assurance.py",
+      "src/ovc/development/skills/async_assurance_github.py"
+    ],
+    "devobs": [
+      "src/ovc/development/dsai3v_completion_observability.py",
+      "schemas/development/development_latency_canonical_dsai3v_v1.schema.json",
+      "registries/development/skills/development_latency_completion_receipt_v0_1.json"
+    ],
+    "schemas": [
+      "schemas/development/async_assurance/assurance_future_v1.schema.json",
+      "schemas/development/async_assurance/assurance_completion_signal_v1.schema.json",
+      "schemas/development/async_assurance/required_assurance_set_v1.schema.json",
+      "schemas/development/async_assurance/conditional_materialisation_intent_v1.schema.json",
+      "schemas/development/async_assurance/assurance_wake_subscription_v1.schema.json"
+    ],
+    "registries": [
+      "registries/development/skills/async_assurance/REQUIRED_ASSURANCE_PROFILE_v0_1.json"
+    ],
+    "fixtures": [
+      "fixtures/development_skills/async_assurance/DSAI3V_AA_QUALIFICATION_FIXTURES_v1.json"
+    ],
+    "tests": [
+      "tests/development_skills/test_dsai3v_async_assurance.py",
+      "tests/development_skills/test_dsai3v_async_assurance_fixture_catalogue.py",
+      "tests/development_skills/test_dsai3v_completion_observability.py"
+    ],
+    "shadow_workflow": ".github/workflows/dsai3v-async-assurance-shadow.yml"
+  },
+  "provider_adapter": {
+    "id": "GITHUB_ACTIONS_READ_ONLY_v1",
+    "read_only": true,
+    "repository_write": false,
+    "merge": false,
+    "force_push": false,
+    "authority_effect": "NONE"
+  },
+  "controller_binding": {
+    "controller_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "automatic_side_effect_from_async_runtime": "WAKE_REQUEST_ONLY",
+    "physical_merge_performed_by_this_group": false,
+    "parallel_physical_merge": false
+  },
+  "runtime_authority": "IMPLEMENTED_INACTIVE_SHADOW",
+  "live_activation": "DENIED_PENDING_DSAI3V-AA-G-ACTIVATE",
+  "new_writer_identity": "NONE",
+  "authority_delta": "QUALIFIED_INACTIVE_ASYNC_ASSURANCE_CAPABILITY_MAXIMUM",
+  "reserved_authority_delta": "NONE_BEFORE_ACTIVATION_GATE",
+  "rollback": "Forward-disable/supersede Async Assurance inactive/shadow routing and DEVOBS extension while preserving all futures, signals, intents, receipts and Git history."
+}
