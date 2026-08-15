@@ -3,17 +3,13 @@
   "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
   "packet_id": "RCCRI-WP0",
   "baseline_commit": "0ad662693c50bef36329bfbe8bce4d5e142cb081",
-  "baseline_tree": "d923b075d45ccfc72b2a5c079a940874e3c13a4b",
+  "reconciled_main": "89d0628efbda9588f4ae1c5d7d632424e8c10be3",
   "sources": [
-    {"source": "RCCR Design v0.1 R1 RATIFIED", "path": "EXTERNAL_DOCX", "sha256": "16f3b52a790bd6fa4d144d29065087b733a6fd4cb2162963a623090f030e9ee3", "disposition": "BIND_EXACT", "use": "NORMATIVE_SEMANTICS"},
-    {"source": "RCCR Implementation Plan v0.1 R1 RATIFIED", "path": "EXTERNAL_DOCX", "sha256": "13d065d09eb012980a076e84667d674452659c79d92d0ab2a3b53a66477e1a6e", "disposition": "BIND_EXACT", "use": "EXECUTION_CONSTITUTION"},
-    {"source": "Research Operations foundation", "path": "src/ovc/research_operations", "disposition": "REUSE", "use": "canonicalisation,persistence,qa,read_model,paths,audit"},
-    {"source": "DMRP/EC1", "path": "registries/implementation/ec1_dmrp_v0_1/CURRENT_STATE_POINTER.json", "blob_sha": "7fd4b69da917b632660657dd3cec0fe02fa404a5", "disposition": "READ_ONLY_SOURCE", "use": "Q01-Q10 definitions/current authority"},
-    {"source": "C2P2", "path": "registries/implementation/c2p_v0_2/CURRENT_STATE_POINTER.json", "blob_sha": "bdb014f66e39a312388fe136da116e90862eed48", "disposition": "READ_OWNER_STATE", "use": "orthogonal maturity-plane fixture"},
-    {"source": "Active stack", "path": "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json", "blob_sha": "790ea43e777c0fa9060179a4516477a7ecc2bb70", "disposition": "READ_CURRENT_CLASSIFICATION", "use": "active/shadow/non-evaluable projection only"},
-    {"source": "Research Operations authority", "path": "registries/research_operations/ACTIVE_FOUNDATION_AUTHORITY_v0_1.json", "blob_sha": "ecc6c4fd90001a275d659de3d0aa921be2278226", "disposition": "BIND_AUTHORITY", "use": "existing read-only/bounded append; G0 adds only exact RCCR record families"},
-    {"source": "DSAI VIT general authority", "path": "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json", "blob_sha": "077ec283df6d97f9cc99af9704e7a34b8bb83c7b", "disposition": "REUSE_INTEGRATION", "use": "normal already-authorised auto-executable packet route"},
-    {"source": "Open PR #929", "path": "research/p2-inhouse-p0-provenance-addendum-v0-1", "head_sha": "1a8d31e614e291aed43376f0c33e9d9b9e682f28", "disposition": "CONCURRENT_REVIEW_ONLY_DO_NOT_MERGE", "use": "possible future provenance input after lawful main integration; authority_effect NONE"}
+    {"source": "Research Operations active foundation authority", "path": "registries/research_operations/ACTIVE_FOUNDATION_AUTHORITY_v0_1.json", "disposition": "REUSE_AUTHORITY_BOUNDARY"},
+    {"source": "Active-stack classification", "path": "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json", "disposition": "REUSE_CLASSIFICATION"},
+    {"source": "C2P current state pointer", "path": "registries/implementation/c2p_v0_2/CURRENT_STATE_POINTER.json", "disposition": "REUSE_IMPLEMENTATION_FACT"},
+    {"source": "DSAI VIT general authority", "path": "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json", "disposition": "REUSE_INTEGRATION", "use": "normal already-authorised auto-executable packet route"},
+    {"source": "PR #929 Path-2 in-house P0 provenance", "merge_commit": "89d0628efbda9588f4ae1c5d7d632424e8c10be3", "disposition": "REUSE_PROVENANCE_ONLY", "authority_effect": "NONE"}
   ],
   "supersedes": "OVC-RCCR-CONFORMANCE-IMPLEMENTATION-PLAN-0.1 for forward execution planning only",
   "historical_preservation": true
