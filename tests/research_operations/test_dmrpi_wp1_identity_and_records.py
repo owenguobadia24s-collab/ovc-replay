@@ -15,6 +15,7 @@ from ovc.research_operations.dmrp import (
     superseding_record,
     verify_dmrp_record,
 )
+from ovc.research_operations.validation import validate_record
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -60,9 +61,11 @@ class DMRPIWP1Tests(unittest.TestCase):
         self.assertEqual(planes["physical_attempt_or_artifact_identity"], "attempt-1")
         self.assertEqual(len(set(planes.values())), 4)
 
-    def test_record_round_trip_and_authority_firewall(self) -> None:
+    def test_record_round_trip_authority_firewall_and_service_dispatch(self) -> None:
         record = self.record()
-        verify_dmrp_record(json.loads(json.dumps(record)))
+        decoded = json.loads(json.dumps(record))
+        verify_dmrp_record(decoded)
+        validate_record(decoded)
         self.assertEqual(record["authority_state"], "NONE")
         self.assertEqual(record["authority_effect"], "NONE")
         with self.assertRaises(DMRPRecordValidationError):

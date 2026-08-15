@@ -1,0 +1,19 @@
+{
+  "schema":"ovc-dsai3v-wp9-implementation-packet/v1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "plan_id":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "packet_id":"DSAI3V-WP9",
+  "gate_id":"DSAI3V-G9",
+  "qualification_stage":"Q5",
+  "authority_required":"AUTO_EXECUTABLE",
+  "authority_delta":"NONE",
+  "baseline_commit":"86b603e2f43df1420767f39afa0308d384df8e11",
+  "entry_prerequisite":{"gate":"DSAI3V-G-BUDGET","decision":"PASS","merge_commit":"86b603e2f43df1420767f39afa0308d384df8e11","vit_operational_budget_id":"25cc568d9c863d614007f268ce989cc3f9c2432bc9ce130bf40872365cb749a7"},
+  "scope":["isolated non-authoritative physical rehearsal","PIP-to-exact-prospective-tree composition","explicit VIT generation","GRT readiness gate","serialized SIQ-gateway lease readiness","PMT and exact physical-tree equality","crash-before-write recovery","post-write-pre-receipt recovery","post-receipt-pre-successor recovery","receipt-store-loss fail-closed","idempotent duplicate-write prevention","completion/successor receipt chain","zero closeout branch churn"],
+  "acceptance":{"exact_tree_equality":true,"no_duplicate_effective_write":true,"no_lost_or_phantom_completion":true,"deterministic_recovery":true,"receipt_store_loss_fails_closed":true,"zero_closeout_churn_regression":true,"physical_main_untouched":true},
+  "physical_main_authority":"DENIED",
+  "isolated_ref":"refs/heads/vit-q5-isolated",
+  "rollback":"Disable/supersede the isolated rehearsal runtime and preserve Q5 evidence. No OVC physical-main VIT authority changes and no history rewrite is required.",
+  "next_gate":"DSAI3V-G-VIT-PILOT",
+  "next_gate_authority":"OPERATOR_REQUIRED"
+}
