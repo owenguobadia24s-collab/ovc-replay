@@ -5,6 +5,18 @@ selector, capability activation, scientific promotion, Validation, publication, 
 or agent-write authority. Missing owner evidence or authority must fail closed.
 """
 
+from .capability_frontier import (
+    ACTIVATION_STATES,
+    AUTHORITY_STATES,
+    AVAILABILITY_STATES,
+    DESIGN_STATES,
+    IMPLEMENTATION_STATES,
+    QUALIFICATION_STATES,
+    CapabilityBinding,
+    CapabilityBindingResolver,
+    CapabilityFrontierCompiler,
+    binding_state_digest,
+)
 from .core import (
     RCCRAppendOnlyStore,
     RCCRValidationError,
@@ -22,13 +34,23 @@ from .source_resolution import (
 )
 
 __all__ = [
+    "ACTIVATION_STATES",
+    "AUTHORITY_STATES",
+    "AVAILABILITY_STATES",
+    "DESIGN_STATES",
     "DERIVATION_MODES",
+    "IMPLEMENTATION_STATES",
+    "QUALIFICATION_STATES",
+    "CapabilityBinding",
+    "CapabilityBindingResolver",
+    "CapabilityFrontierCompiler",
     "RCCRAppendOnlyStore",
     "RCCRValidationError",
     "RequirementDependencyIndex",
     "RequirementProfileCompiler",
     "ResolvedSource",
     "SourceResolverService",
+    "binding_state_digest",
     "canonical_json_bytes",
     "logical_identity",
     "project_currentness",
