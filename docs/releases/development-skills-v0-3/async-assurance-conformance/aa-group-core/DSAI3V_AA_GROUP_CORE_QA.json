@@ -1,0 +1,92 @@
+{
+  "schema": "ovc-dsai3v-aa-group-core-qa/v1",
+  "programme_id": "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-RATIFIED",
+  "group_id": "DSAI3V-AA-GROUP-CORE",
+  "packets": ["DSAI3V-AA-WP1","DSAI3V-AA-WP2","DSAI3V-AA-WP3","DSAI3V-AA-WP4","DSAI3V-AA-WP5"],
+  "tested_head": "aabccaeac3cf0c216d5440e6dd3c4f11e11ae2cc",
+  "tested_base_main": "f098eb91620af15222d6d70c921c0c4a7a0eba14",
+  "qa_recommendation": "PASS",
+  "checks": {
+    "assurance_future_content_addressed_and_durable": "PASS",
+    "completion_signal_exact_binding_and_idempotency": "PASS",
+    "required_assurance_set_versioned_complete_membership": "PASS",
+    "conditional_materialisation_intent_fail_closed": "PASS",
+    "provider_adapter_read_only": "PASS",
+    "provider_adapter_merge_write_force_push_reachability": "DENIED_PASS",
+    "existing_controller_only_wake_request": "PASS",
+    "unknown_assurance_classification_aa2_no_reuse": "PASS",
+    "aa0_dependency_scoped_reuse": "PASS",
+    "stale_green_rejected": "PASS",
+    "operator_required_gate_parks": "PASS",
+    "speculative_irreversible_side_effect_barrier": "PASS",
+    "selective_descendant_invalidation": "PASS",
+    "unrelated_lane_continuation": "PASS",
+    "exact_predecessor_promotes_without_rebuild": "PASS",
+    "restart_without_chat_state": "PASS",
+    "event_reconciliation_equivalence": "PASS",
+    "existing_pmt_recovery_preserved": "PASS",
+    "devobs_async_metrics_observed_only_no_inference": "PASS",
+    "current_ci_workflow_inventory_v0_4": "PASS",
+    "exactly_two_pull_request_ci_listeners": "PASS",
+    "async_shadow_workflow_non_pr_read_only": "PASS",
+    "aa_av01_aa_av18_catalogue": "PASS",
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head_profile": "PASS",
+    "programme_state_pointer_preflight": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS",
+    "review_threads_zero": "PASS",
+    "live_async_activation": "DENIED",
+    "new_writer_identity": "NONE",
+    "parallel_physical_merge": false,
+    "reserved_authority_delta": "NONE"
+  },
+  "workflow_evidence": {
+    "tests_run_id": 31877349742,
+    "tests_job_id": 94994935360,
+    "runner_parity_job_id": 94994935352,
+    "pytest_unittest_parity_job_id": 94994935399,
+    "tiered_run_id": 31877349731,
+    "profile_assurance_job_id": 94994935446,
+    "siq_ready_job_id": 94994955915,
+    "merge_readiness_job_id": 94995393390
+  },
+  "corrected_defects": [
+    {
+      "id": "DSAI3V-AA-CORR1-THIRD-PR-LISTENER",
+      "classification": "IN_SCOPE_CI_GOVERNANCE_DEFECT",
+      "symptom": "Initial Async Assurance shadow workflow added an unauthorized third executable pull_request listener; FINAL_HEAD correctly failed closed.",
+      "resolution": "Changed the new shadow workflow to workflow_dispatch-only read-only qualification; existing required PR workflows remain unchanged."
+    },
+    {
+      "id": "DSAI3V-AA-CORR2-CI-WORKFLOW-CENSUS",
+      "classification": "IN_SCOPE_CURRENT_INVENTORY_DRIFT",
+      "symptom": "Adding the lawful non-PR shadow workflow advanced repository workflow-definition count from 133 to 134.",
+      "resolution": "Created current-inventory governance policy v0.4 with count 134 and explicit non-PR read-only classification while preserving v0.1-v0.3 historical snapshots unchanged."
+    }
+  ],
+  "integration_reconciliation_events": [
+    {
+      "reason": "LAWFUL_DMRPI_WP6_MAIN_ADVANCE",
+      "result": "RECONCILED_WITHOUT_PAYLOAD_CHANGE",
+      "feature_branch_merge_commit": "09ab49a9cedce4da64edfe0cfeac18817f398518"
+    },
+    {
+      "reason": "LAWFUL_DMRPI_WP6_CLOSEOUT_GREAL_GATE_MAIN_ADVANCE",
+      "result": "RECONCILED_WITHOUT_PAYLOAD_CHANGE",
+      "feature_branch_merge_commit": "aabccaeac3cf0c216d5440e6dd3c4f11e11ae2cc"
+    }
+  ],
+  "devobs_shadow_measurements": {
+    "status": "UNAVAILABLE_PRE_ACTIVATION",
+    "rule": "DO_NOT_INFER_LIVE_LATENCY_SAVINGS_FROM_IMPLEMENTATION_OR_CI_QUALIFICATION"
+  },
+  "warnings": [],
+  "blockers": [],
+  "maximum_authority_delta": "QUALIFIED_INACTIVE_ASYNC_ASSURANCE_CAPABILITY",
+  "runtime_state": "IMPLEMENTED_QUALIFIED_INACTIVE_SHADOW",
+  "rollback": "Forward-disable the inactive/shadow Async Assurance runtime, provider normalization, wake-request surface and DEVOBS metric extension while preserving all generated evidence and Git history."
+}
