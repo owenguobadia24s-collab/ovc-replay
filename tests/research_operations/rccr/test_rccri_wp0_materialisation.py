@@ -42,12 +42,14 @@ def test_wp0_reviewer_binding_does_not_fake_independent_pass():
     assert reviewers["implementation_author"] != reviewers["bindings"][0]["reviewer_identity"]
 
 
-def test_wp0_programme_state_is_not_prematurely_completed():
+def test_wp0_programme_state_is_approved_but_not_prematurely_completed():
     state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_1.json")
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
-    assert state["status"] == "QA_REVIEW"
-    assert pointer["status"] == "QA_REVIEW"
+    assert state["status"] == "APPROVED"
+    assert pointer["status"] == "APPROVED"
+    assert pointer["gate_status"] == "PASS_DELEGATED_PENDING_FINAL_HEAD_INTEGRATION"
     assert state["merge_commit"] is None
+    assert state["integration_condition"] == "FINAL_EVIDENCE_ONLY_HEAD_REQUIRED_CHECKS_PASS"
     assert state["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
     assert state["blockers"] == []
     assert "RCCRI-WP0-BLOCK-001" in state["resolved_blockers"]
