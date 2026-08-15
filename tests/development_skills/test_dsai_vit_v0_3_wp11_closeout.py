@@ -40,12 +40,28 @@ class DsaiVitV03Wp11CloseoutTests(unittest.TestCase):
         self.assertEqual(authority["grt_binding"]["grt_g3"], "NOT_AUTHORISED")
         self.assertEqual(authority["reserved_boundaries"], "PROGRAMME_OWNED_AND_UNCHANGED")
 
-    def test_programme_frontier_is_wp11_closeout_or_completed(self) -> None:
+    def test_wp11_closeout_remains_historical_after_successor_advances(self) -> None:
+        historical = self._load(STATE_ROOT / "OVC_DSAI_VIT_V0_3_STATE_v0_17.json")
+        self.assertEqual(historical["status"], "COMPLETED")
+        self.assertEqual(historical["packet_id"], "DSAI3V-WP11")
+        self.assertEqual(historical["gate_id"], "DSAI3V-G11")
+        self.assertEqual(historical["next_packet"], "DSAI3V-WP12")
+        self.assertEqual(historical["authority_delta"], "NONE")
+        self.assertEqual(historical["current_authority"]["vit_live_physical_main_control"], "ACTIVE_GENERAL_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION")
+        self.assertFalse(historical["current_authority"]["parallel_physical_merge"])
+
         pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
-        self.assertIn(pointer["status"], {"QA_REVIEW", "COMPLETED"})
-        self.assertEqual(pointer["current_packet"], "DSAI3V-WP11")
-        self.assertEqual(pointer["current_gate"], "DSAI3V-G11")
-        self.assertEqual(pointer["next_packet"], "DSAI3V-WP12")
+        state = self._load(STATE_ROOT / pointer["current_state"])
+        self.assertIn(pointer["current_packet"], {"DSAI3V-WP11", "DSAI3V-WP12"})
+        if pointer["current_packet"] == "DSAI3V-WP11":
+            self.assertEqual(pointer["current_gate"], "DSAI3V-G11")
+            self.assertEqual(pointer["next_packet"], "DSAI3V-WP12")
+        else:
+            self.assertEqual(pointer["current_gate"], "DSAI3V-G12")
+            self.assertIsNone(pointer["next_packet"])
+            self.assertIn("DSAI3V-WP11", state["completed_packets"])
+            self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "ACTIVE_GENERAL_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION")
+            self.assertFalse(state["current_authority"]["parallel_physical_merge"])
 
 
 if __name__ == "__main__":
