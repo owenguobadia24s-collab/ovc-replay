@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-dsai3v-assurance-completion-signal/v1",
+  "type":"object",
+  "required":["schema","future_id","provider_adapter_id","repository","candidate_commit","workflow_name","run_id","check_name","conclusion","observed_at","signal_id","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-dsai3v-assurance-completion-signal/v1"},
+    "future_id":{"type":"string","minLength":1},
+    "provider_adapter_id":{"type":"string","minLength":1},
+    "repository":{"type":"string","minLength":1},
+    "candidate_commit":{"type":"string","minLength":1},
+    "workflow_name":{"type":"string","minLength":1},
+    "run_id":{"type":"string","minLength":1},
+    "check_name":{"type":"string","minLength":1},
+    "conclusion":{"type":"string","minLength":1},
+    "observed_at":{"type":"string","minLength":1},
+    "signal_id":{"type":"string","minLength":1},
+    "authority_effect":{"const":"NONE"}
+  },
+  "additionalProperties":false
+}

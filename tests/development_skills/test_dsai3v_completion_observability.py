@@ -58,7 +58,48 @@ class Dsai3vCompletionObservabilityTests(unittest.TestCase):
         self.assertEqual(receipt["vit"]["exact_tree_equal_count"], 1)
         self.assertEqual(receipt["siq"]["ready_pass_count"], 1)
         self.assertEqual(receipt["latency"]["total_wall_ms"], 1000)
+        self.assertEqual(receipt["async_assurance"]["status"], "UNAVAILABLE")
+        self.assertIsNone(receipt["async_assurance"]["ci_development_overlap_ms"])
         self.assertEqual(receipt["authority_effect"], "NONE")
+
+    def test_async_assurance_observed_metrics_are_preserved_without_inference(self) -> None:
+        completion = self._completion()
+        receipt = build_canonical_completion_latency_receipt(
+            programme_id=completion.programme_id,
+            packet_id=completion.packet_id,
+            completion_receipt_id=completion.receipt_id,
+            async_assurance_metrics={
+                "background_ci_elapsed_ms": 4200,
+                "ci_development_overlap_ms": 3100,
+                "assurance_reuse_count": 2,
+                "descendant_invalidation_count": 0,
+            },
+        )
+        async_metrics = receipt["async_assurance"]
+        self.assertEqual(async_metrics["status"], "OBSERVED")
+        self.assertEqual(async_metrics["background_ci_elapsed_ms"], 4200)
+        self.assertEqual(async_metrics["ci_development_overlap_ms"], 3100)
+        self.assertEqual(async_metrics["assurance_reuse_count"], 2)
+        self.assertEqual(async_metrics["descendant_invalidation_count"], 0)
+        self.assertIsNone(async_metrics["foreground_ci_wait_ms"])
+        self.assertEqual(receipt["authority_effect"], "NONE")
+
+    def test_async_assurance_metrics_reject_unknown_or_negative_values(self) -> None:
+        completion = self._completion()
+        with self.assertRaises(ValueError):
+            build_canonical_completion_latency_receipt(
+                programme_id=completion.programme_id,
+                packet_id=completion.packet_id,
+                completion_receipt_id=completion.receipt_id,
+                async_assurance_metrics={"invented_metric": 1},
+            )
+        with self.assertRaises(ValueError):
+            build_canonical_completion_latency_receipt(
+                programme_id=completion.programme_id,
+                packet_id=completion.packet_id,
+                completion_receipt_id=completion.receipt_id,
+                async_assurance_metrics={"foreground_ci_wait_ms": -1},
+            )
 
     def test_completion_store_persists_completion_devobs_and_attachment(self) -> None:
         completion = self._completion()

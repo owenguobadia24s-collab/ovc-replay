@@ -1,7 +1,7 @@
 {
   "schema": "ovc-development-latency-completion-policy/v1",
   "policy_id": "OVC.DEVOBS.DSAI3V.COMPLETION.20260815.v1",
-  "status": "ACTIVE_CANDIDATE_PENDING_INTEGRATION",
+  "status": "ACTIVE",
   "authority_effect": "NONE",
   "scope": "EVERY_DSAI3V_PACKET_COMPLETION",
   "canonical_receipt_schema": "ovc-development-latency-canonical-dsai3v/v1",
@@ -11,7 +11,21 @@
     "DEVOBS_trace_summary",
     "ORCH_diagnostic_receipts",
     "VIT_materialisation_and_completion_receipts",
-    "SIQ_readiness_lease_and_requeue_receipts"
+    "SIQ_readiness_lease_and_requeue_receipts",
+    "DSAI3V_Async_Assurance_futures_intents_and_overlap_metrics"
+  ],
+  "async_assurance_metric_fields": [
+    "foreground_ci_wait_ms",
+    "background_ci_elapsed_ms",
+    "ci_development_overlap_ms",
+    "speculative_successor_ms",
+    "workflow_green_to_materialisation_ms",
+    "materialisation_ready_idle_ms",
+    "assurance_rerun_count",
+    "assurance_reuse_count",
+    "descendant_invalidation_count",
+    "speculative_work_salvaged_ms",
+    "speculative_work_discarded_ms"
   ],
   "required_on_completion": true,
   "missing_source_policy": "PRESERVE_UNAVAILABLE_NEVER_INFER",
@@ -20,5 +34,5 @@
   "completion_rule": "DSAI3V_PACKET_COMPLETION_MUST_NOT_PERSIST_WITHOUT_CANONICAL_DEVOBS_ATTACHMENT",
   "comparison_context": "REUSE_DEVOBS_V0_2_D1_D5_WORK_PHASE_SPECIFICATION_MATURITY_AND_ASSISTANT_CONFIGURATION",
   "authority_rule": "OBSERVABILITY_ONLY_NO_EXECUTION_OR_MERGE_AUTHORITY",
-  "rollback": "Forward-disable the completion requirement and retain all emitted receipts/history; never rewrite historical packet or DEVOBS records."
+  "rollback": "Forward-disable the Async Assurance metric source while retaining all emitted receipts/history; never rewrite historical packet or DEVOBS records."
 }

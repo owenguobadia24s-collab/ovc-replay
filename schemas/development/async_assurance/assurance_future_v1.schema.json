@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai3v-assurance-future/v1",
+  "type": "object",
+  "required": ["schema","programme_id","packet_id","payload_id","assurance_profile_id","candidate_commit","provider_adapter_id","workflow_name","run_id","check_name","assurance_class","reuse_class","dependency_scope","state","assurance_future_id"],
+  "properties": {
+    "schema": {"const":"ovc-dsai3v-assurance-future/v1"},
+    "programme_id": {"type":"string","minLength":1},
+    "packet_id": {"type":"string","minLength":1},
+    "payload_id": {"type":"string","minLength":1},
+    "assurance_profile_id": {"type":"string","minLength":1},
+    "candidate_commit": {"type":"string","minLength":1},
+    "provider_adapter_id": {"type":"string","minLength":1},
+    "workflow_name": {"type":"string","minLength":1},
+    "run_id": {"type":"string","minLength":1},
+    "check_name": {"type":"string","minLength":1},
+    "assurance_class": {"enum":["AA0_BACKGROUND_REUSABLE","AA1_PROSPECTIVE_TREE_BOUND","AA2_MATERIALISATION_EDGE","AA3_POST_WRITE_EQUIVALENCE"]},
+    "reuse_class": {"enum":["REUSE_IF_DEPENDENCIES_UNCHANGED","NO_REUSE"]},
+    "dependency_scope": {"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "vit_generation_id": {"type":["string","null"]},
+    "tree_id": {"type":["string","null"]},
+    "state": {"enum":["CREATED","RUNNING","PASS","FAIL_CORRECTABLE","FAIL_BLOCKING","STALE","CANCELLED","SUPERSEDED","NOT_EVALUABLE"]},
+    "conclusion": {"type":["string","null"]},
+    "evidence_refs": {"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "superseded_by": {"type":["string","null"]},
+    "assurance_future_id": {"type":"string","minLength":1}
+  },
+  "additionalProperties": false
+}
