@@ -12,11 +12,25 @@ from .core import (
     logical_identity,
     validate_canonical_object,
 )
+from .source_resolution import (
+    DERIVATION_MODES,
+    RequirementDependencyIndex,
+    RequirementProfileCompiler,
+    ResolvedSource,
+    SourceResolverService,
+    project_currentness,
+)
 
 __all__ = [
+    "DERIVATION_MODES",
     "RCCRAppendOnlyStore",
     "RCCRValidationError",
+    "RequirementDependencyIndex",
+    "RequirementProfileCompiler",
+    "ResolvedSource",
+    "SourceResolverService",
     "canonical_json_bytes",
     "logical_identity",
+    "project_currentness",
     "validate_canonical_object",
 ]
