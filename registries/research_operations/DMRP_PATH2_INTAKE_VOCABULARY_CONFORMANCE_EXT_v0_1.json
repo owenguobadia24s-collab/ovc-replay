@@ -1,0 +1,93 @@
+{
+  "schema": "ovc-dmrp-path2-intake-vocabulary-conformance/v1",
+  "registry_id": "DMRP-PATH2-INTAKE-VOCAB-CONFORMANCE-EXT-v0.1",
+  "status": "PARTIAL_EXPLICIT_MAPPING_CURRENT_SEVEN_ONLY",
+  "design_vocabulary": [
+    "FORMALISE_NOW",
+    "DEFER",
+    "DESCRIPTIVE_LANGUAGE_ONLY",
+    "DUPLICATE_OR_NEAR_DUPLICATE",
+    "DEPENDENCY_UNAVAILABLE",
+    "OUT_OF_SCOPE"
+  ],
+  "implementation_vocabulary": [
+    "READY_FOR_GUIDED_FORMALISATION",
+    "TRAINING_REQUIRED",
+    "UNFORMALISABLE",
+    "DESCRIPTIVE_LANGUAGE_ONLY",
+    "ABANDONED",
+    "DEFERRED"
+  ],
+  "mappings": [
+    {
+      "design": "FORMALISE_NOW",
+      "implementation": "READY_FOR_GUIDED_FORMALISATION",
+      "scope": "PRE_EVIDENCE_GUIDED_FORMALISATION_READINESS_ONLY",
+      "semantic_equivalence": "BOUNDED",
+      "authority_effect": "NONE",
+      "note": "Allows the seven externally sourced FORMALISE_NOW theory drafts to enter the existing synthetic guided-formalisation/readiness workflow. It does not freeze the theory, preregister an experiment, or grant real-source authority."
+    },
+    {
+      "design": "DEFER",
+      "implementation": "DEFERRED",
+      "scope": "INTAKE_DISPOSITION",
+      "semantic_equivalence": "DIRECT_FOR_PRE_EVIDENCE_TRIAGE",
+      "authority_effect": "NONE"
+    },
+    {
+      "design": "DESCRIPTIVE_LANGUAGE_ONLY",
+      "implementation": "DESCRIPTIVE_LANGUAGE_ONLY",
+      "scope": "INTAKE_DISPOSITION",
+      "semantic_equivalence": "DIRECT",
+      "authority_effect": "NONE"
+    },
+    {
+      "design": "DUPLICATE_OR_NEAR_DUPLICATE",
+      "implementation": null,
+      "scope": "INTAKE_DISPOSITION",
+      "semantic_equivalence": "UNMAPPED",
+      "required_action": "LINEAGE_REVIEW"
+    },
+    {
+      "design": "DEPENDENCY_UNAVAILABLE",
+      "implementation": null,
+      "scope": "INTAKE_DISPOSITION",
+      "semantic_equivalence": "UNMAPPED",
+      "required_action": "DEPENDENCY_REVIEW"
+    },
+    {
+      "design": "OUT_OF_SCOPE",
+      "implementation": null,
+      "scope": "INTAKE_DISPOSITION",
+      "semantic_equivalence": "UNMAPPED",
+      "required_action": "SCOPE_REVIEW"
+    }
+  ],
+  "implementation_only_statuses": [
+    {
+      "value": "TRAINING_REQUIRED",
+      "classification": "READINESS_OR_TRAINING_STATUS_NOT_A_RATIFIED_THEORY_INTAKE_DISPOSITION"
+    },
+    {
+      "value": "UNFORMALISABLE",
+      "classification": "FORMALISATION_RESULT_OR_NEGATIVE_DISPOSITION_NOT_DIRECT_RATIFIED_INTAKE_EQUIVALENT"
+    },
+    {
+      "value": "ABANDONED",
+      "classification": "OPERATIONAL_HEALTH_OUTCOME_NOT_A_RATIFIED_THEORY_INTAKE_DISPOSITION"
+    }
+  ],
+  "current_seven_resolution": {
+    "source_design_disposition": "FORMALISE_NOW",
+    "implementation_readiness_disposition": "READY_FOR_GUIDED_FORMALISATION",
+    "count": 7,
+    "state": "MAPPED_FOR_PRE_EVIDENCE_CONFORMANCE"
+  },
+  "forbidden": "No unmapped value may be silently coerced, and no mapping may create scientific, semantic, candidate, real-source or exposure authority.",
+  "governing_design": "OVC-DMRP-DESIGN-SPEC-0.1-REVISED-2-RATIFIED",
+  "research_mode": "PATH_2_THEORY_FORMALISATION",
+  "authority_effect": "NONE",
+  "path1_influence": "FORBIDDEN_AS_SEED_FILTER_REPAIR_OR_PROMOTION_CRITERION",
+  "validation": "LOCKED_UNCONSUMED",
+  "p2_6_candidate_formation": "NOT_EXECUTED"
+}
