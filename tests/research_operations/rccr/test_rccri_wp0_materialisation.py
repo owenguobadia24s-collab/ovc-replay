@@ -8,6 +8,11 @@ def load(path):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
+def packet_ordinal(packet_id):
+    assert packet_id.startswith("RCCRI-WP")
+    return int(packet_id.removeprefix("RCCRI-WP"))
+
+
 def test_wp0_exact_plan_and_design_bindings():
     binding = load("docs/plans/rccr-v0-1/RCCRI_WP0_PLAN_BINDING.json")
     assert binding["implementation_plan"]["sha256"] == "13d065d09eb012980a076e84667d674452659c79d92d0ab2a3b53a66477e1a6e"
@@ -55,10 +60,13 @@ def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully
         assert pointer["status"] == "APPROVED"
         assert pointer["gate_status"] == "PASS_DELEGATED_PENDING_FINAL_HEAD_INTEGRATION"
     else:
-        assert pointer["last_completed_packet"] == "RCCRI-WP0"
-        assert pointer["last_merge_commit"] == "1f9fddcc5cd6ea701ed5cf3c130cc60c6498227c"
-        assert pointer["current_packet"].startswith("RCCRI-WP")
+        current_ordinal = packet_ordinal(pointer["current_packet"])
+        completed_ordinal = packet_ordinal(pointer["last_completed_packet"])
+        assert current_ordinal > 0
+        assert completed_ordinal == current_ordinal - 1
+        assert pointer["last_merge_commit"]
         assert pointer["next_packet"] != "RCCRI-WP0"
+        assert "RCCRI-WP0-BLOCK-001" in pointer["resolved_blockers"]
 
 
 def test_wp0_pr_929_provenance_is_integrated_without_authority_expansion():
