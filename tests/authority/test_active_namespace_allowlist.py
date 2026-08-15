@@ -29,6 +29,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.programme_genesis",
     "ovc.programme_genesis.grt_v0_2",
     "ovc.research_operations",
+    "ovc.research_operations.rccr",
     "ovc.research_operations.v0_2",
     "ovc.research_operations.v0_3",
     "ovc.research_operations.v0_4",
@@ -175,6 +176,19 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("validation", init_text)
         self.assertIn("semantic-promotion", init_text)
         self.assertIn("execution authority", init_text)
+
+    def test_rccr_namespace_is_research_only_non_authoritative_synthesis(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "rccr" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("research-only", init_text)
+        self.assertIn("non-authoritative synthesis", init_text)
+        self.assertIn("no market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("activation", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("publication", init_text)
+        self.assertIn("execution authority", init_text)
+        self.assertIn("agent-write authority", init_text)
+        self.assertIn("fail closed", init_text)
 
     def test_programme_genesis_namespace_is_governance_only(self) -> None:
         init_text = (SRC / "ovc" / "programme_genesis" / "__init__.py").read_text(encoding="utf-8").lower()
