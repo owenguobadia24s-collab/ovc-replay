@@ -4,22 +4,26 @@
   "plan_id": "OVC-RCCR-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
   "plan_version": "0.1-REVISED-1-RATIFIED",
   "packet_id": "RCCRI-WP0",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "prerequisites": ["RCCR-DESIGN-R1-RATIFIED", "RCCRI-G0-EXTERNAL-PASS"],
   "authority_required": "OPERATOR_REQUIRED_SATISFIED_BY_EXTERNAL_RCCRI-G0",
   "authority_delta": "BOUNDED_IMPLEMENTATION_ONLY",
   "baseline_commit": "0ad662693c50bef36329bfbe8bce4d5e142cb081",
   "reconciled_main": "89d0628efbda9588f4ae1c5d7d632424e8c10be3",
   "branch": "rccr/rccri-wp0-reconcile-89d0628",
-  "candidate_commit": null,
-  "tests": [],
+  "candidate_commit": "PENDING_FINAL_EVIDENCE_HEAD",
+  "tests": [
+    {"workflow_run": 31903427145, "result": "PASS", "scope": "repository suite plus runner/pytest parity"},
+    {"workflow_run": 31903427223, "result": "PASS", "scope": "FINAL_HEAD profile, SIQ READY and merge readiness on tested implementation head"}
+  ],
   "qa_packet": "docs/releases/rccr-v0-1/rccri-wp0/RCCRI_WP0_QA_PACKET.json",
-  "decision_record": "docs/releases/rccr-v0-1/rccri-wp0/RCCRI_G0_OPERATOR_DECISION.json",
+  "decision_record": "docs/releases/rccr-v0-1/rccri-wp0/RCCRI_G0_DELEGATED_MATERIALISATION_DECISION.json",
   "merge_commit": null,
   "resolved_blockers": ["RCCRI-WP0-BLOCK-001"],
   "blockers": [],
   "next_packet": "RCCRI-WP1",
   "next_operator_gate": "RCCRI-G-PILOT-EXIT",
   "real_source_ec1_authority": "NONE",
-  "validation": "LOCKED_UNCONSUMED"
+  "validation": "LOCKED_UNCONSUMED",
+  "integration_condition": "FINAL_EVIDENCE_ONLY_HEAD_REQUIRED_CHECKS_PASS"
 }
