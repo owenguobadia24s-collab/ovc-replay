@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 import os
 import subprocess
 from typing import Literal
 
+from ovc.development.dsai3v_completion_observability import build_canonical_completion_latency_receipt
 from ovc.development.skills.vit_apply import apply_payload_reference
 from ovc.development.skills.vit_core import (
     PacketIntegrationPayload,
@@ -43,6 +44,8 @@ class IsolatedRehearsalResult:
     vit_generation_id: str | None = None
     gateway_disposition: str | None = None
     closeout_churn_detected: bool = False
+    development_latency_receipt_id: str | None = None
+    completion_observability_attachment_id: str | None = None
 
 
 def _git(repo: Path, *args: str, env: dict[str, str] | None = None) -> str:
@@ -68,15 +71,7 @@ def run_isolated_rehearsal(
     receipt_store_available: bool = True,
     crash_point: CrashPoint = "NONE",
 ) -> IsolatedRehearsalResult:
-    """Exercise the Q5 physical-materialisation transaction on an isolated Git ref.
-
-    This deliberately uses an isolated, non-authoritative repository/ref.  It composes
-    the PIP into an exact prospective Git tree, materialises a VIT generation, applies
-    GRT and serialized-gateway readiness, creates a PMT/lease, writes one deterministic
-    commit-tree to ``refs/heads/vit-q5-isolated``, verifies exact tree equality and
-    writes content-addressed materialisation/completion receipts.  It never advances
-    the checked-out branch or physical OVC main.
-    """
+    """Exercise the Q5 physical-materialisation transaction on an isolated Git ref."""
     repo = Path(repo)
     predecessor_tree = git_tree_sha(repo, predecessor_commit)
     composition = apply_payload_reference(repo, predecessor_tree, payload)
@@ -94,7 +89,6 @@ def run_isolated_rehearsal(
         authority_manifest_id=payload.authority_manifest.logical_id,
         dependency_frontier_id=payload.dependency_frontier.logical_id,
     )
-
     if not siq_ready:
         raise VitContractError("LEASE_UNAVAILABLE")
 
@@ -111,32 +105,14 @@ def run_isolated_rehearsal(
     )
     if authorize_materialisation(tx, pilot_authority_active=False) != "ALLOW_ISOLATED_REHEARSAL":
         raise VitContractError("WAITING_OPERATOR_AUTHORITY")
-
-    lease = PhysicalIntegrationLease(
-        "q5-isolated-lease",
-        predecessor_commit,
-        predecessor_tree,
-        "DSAI_VIT_Q5_ISOLATED",
-    )
+    lease = PhysicalIntegrationLease("q5-isolated-lease", predecessor_commit, predecessor_tree, "DSAI_VIT_Q5_ISOLATED")
     if validate_lease(lease, predecessor_commit, predecessor_tree) != "LEASE_VALID":
         raise VitContractError("PREDECESSOR_MOVED")
     gateway_disposition = "SIQ_GATEWAY_ISOLATED_LEASE_VALID"
 
     if crash_point == "BEFORE_WRITE":
         recovery = recover_unknown_write(tx, predecessor_commit, predecessor_tree)
-        return IsolatedRehearsalResult(
-            "CRASH_BEFORE_WRITE",
-            predecessor_commit,
-            predecessor_tree,
-            composition.result_tree,
-            None,
-            None,
-            None,
-            None,
-            recovery,
-            vit_generation_id=vit_generation.generation_id,
-            gateway_disposition=gateway_disposition,
-        )
+        return IsolatedRehearsalResult("CRASH_BEFORE_WRITE", predecessor_commit, predecessor_tree, composition.result_tree, None, None, None, None, recovery, vit_generation_id=vit_generation.generation_id, gateway_disposition=gateway_disposition)
 
     commit_env = {
         "GIT_AUTHOR_NAME": "OVC VIT Isolated Rehearsal",
@@ -146,68 +122,23 @@ def run_isolated_rehearsal(
         "GIT_AUTHOR_DATE": "2000-01-01T00:00:00+00:00",
         "GIT_COMMITTER_DATE": "2000-01-01T00:00:00+00:00",
     }
-    observed_commit = _git(
-        repo,
-        "commit-tree",
-        composition.result_tree,
-        "-p",
-        predecessor_commit,
-        "-m",
-        "Q5 isolated VIT materialisation",
-        env=commit_env,
-    )
+    observed_commit = _git(repo, "commit-tree", composition.result_tree, "-p", predecessor_commit, "-m", "Q5 isolated VIT materialisation", env=commit_env)
     _git(repo, "update-ref", "refs/heads/vit-q5-isolated", observed_commit)
     observed_tree = git_tree_sha(repo, observed_commit)
 
     if crash_point == "POST_WRITE_PRE_RECEIPT":
         recovery = recover_unknown_write(tx, observed_commit, observed_tree)
-        return IsolatedRehearsalResult(
-            "CRASH_POST_WRITE_PRE_RECEIPT",
-            predecessor_commit,
-            predecessor_tree,
-            composition.result_tree,
-            observed_commit,
-            observed_tree,
-            None,
-            None,
-            recovery,
-            vit_generation_id=vit_generation.generation_id,
-            gateway_disposition=gateway_disposition,
-        )
+        return IsolatedRehearsalResult("CRASH_POST_WRITE_PRE_RECEIPT", predecessor_commit, predecessor_tree, composition.result_tree, observed_commit, observed_tree, None, None, recovery, vit_generation_id=vit_generation.generation_id, gateway_disposition=gateway_disposition)
 
     receipt = materialisation_receipt(tx, observed_commit, observed_tree)
     if not receipt.equality:
         raise VitContractError("POST_WRITE_TREE_MISMATCH")
     if not receipt_store_available:
-        return IsolatedRehearsalResult(
-            "RECEIPT_STORE_UNAVAILABLE_STOP",
-            predecessor_commit,
-            predecessor_tree,
-            composition.result_tree,
-            observed_commit,
-            observed_tree,
-            None,
-            None,
-            "STOP_BEFORE_NEXT_TRANSACTION",
-            vit_generation_id=vit_generation.generation_id,
-            gateway_disposition=gateway_disposition,
-        )
+        return IsolatedRehearsalResult("RECEIPT_STORE_UNAVAILABLE_STOP", predecessor_commit, predecessor_tree, composition.result_tree, observed_commit, observed_tree, None, None, "STOP_BEFORE_NEXT_TRANSACTION", vit_generation_id=vit_generation.generation_id, gateway_disposition=gateway_disposition)
     receipt_store.put(receipt, receipt.receipt_id)
 
     if crash_point == "POST_RECEIPT_PRE_SUCCESSOR":
-        return IsolatedRehearsalResult(
-            "CRASH_POST_RECEIPT_PRE_SUCCESSOR",
-            predecessor_commit,
-            predecessor_tree,
-            composition.result_tree,
-            observed_commit,
-            observed_tree,
-            receipt.receipt_id,
-            None,
-            "RECEIPT_RECOVERABLE",
-            vit_generation_id=vit_generation.generation_id,
-            gateway_disposition=gateway_disposition,
-        )
+        return IsolatedRehearsalResult("CRASH_POST_RECEIPT_PRE_SUCCESSOR", predecessor_commit, predecessor_tree, composition.result_tree, observed_commit, observed_tree, receipt.receipt_id, None, "RECEIPT_RECOVERABLE", vit_generation_id=vit_generation.generation_id, gateway_disposition=gateway_disposition)
 
     completion = PacketCompletionReceipt(
         payload.programme_id,
@@ -220,18 +151,23 @@ def run_isolated_rehearsal(
         receipt.receipt_id,
         str(payload.completion_transition.get("next_packet")) if payload.completion_transition.get("next_packet") else None,
     )
-    receipt_store.put(completion, completion.receipt_id)
+    devobs = build_canonical_completion_latency_receipt(
+        programme_id=completion.programme_id,
+        packet_id=completion.packet_id,
+        completion_receipt_id=completion.receipt_id,
+        vit_receipts=(
+            {"schema": "ovc-vital-materialisation-observation/v1", "receipt_id": receipt.receipt_id, "packet_id": completion.packet_id, "equality": receipt.equality, "outcome": receipt.outcome},
+        ),
+        siq_receipts=(
+            {"schema": "ovc-siq-gateway-observation/v1", "receipt_id": lease.lease_id, "packet_id": completion.packet_id, "status": "SIQ_READY", "reason": gateway_disposition},
+        ),
+    )
+    attached = receipt_store.put_completion_with_devobs(completion, devobs)
     return IsolatedRehearsalResult(
-        "MATERIALISED_EQUIVALENT",
-        predecessor_commit,
-        predecessor_tree,
-        composition.result_tree,
-        observed_commit,
-        observed_tree,
-        receipt.receipt_id,
-        completion.receipt_id,
-        None,
-        vit_generation_id=vit_generation.generation_id,
-        gateway_disposition=gateway_disposition,
+        "MATERIALISED_EQUIVALENT", predecessor_commit, predecessor_tree, composition.result_tree,
+        observed_commit, observed_tree, receipt.receipt_id, completion.receipt_id, None,
+        vit_generation_id=vit_generation.generation_id, gateway_disposition=gateway_disposition,
         closeout_churn_detected=False,
+        development_latency_receipt_id=attached["development_latency_receipt_id"],
+        completion_observability_attachment_id=attached["attachment_id"],
     )
