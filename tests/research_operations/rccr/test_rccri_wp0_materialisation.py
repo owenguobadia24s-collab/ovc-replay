@@ -42,17 +42,23 @@ def test_wp0_reviewer_binding_does_not_fake_independent_pass():
     assert reviewers["implementation_author"] != reviewers["bindings"][0]["reviewer_identity"]
 
 
-def test_wp0_programme_state_is_approved_but_not_prematurely_completed():
+def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully():
     state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_1.json")
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
     assert state["status"] == "APPROVED"
-    assert pointer["status"] == "APPROVED"
-    assert pointer["gate_status"] == "PASS_DELEGATED_PENDING_FINAL_HEAD_INTEGRATION"
     assert state["merge_commit"] is None
     assert state["integration_condition"] == "FINAL_EVIDENCE_ONLY_HEAD_REQUIRED_CHECKS_PASS"
     assert state["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
     assert state["blockers"] == []
     assert "RCCRI-WP0-BLOCK-001" in state["resolved_blockers"]
+    if pointer["current_packet"] == "RCCRI-WP0":
+        assert pointer["status"] == "APPROVED"
+        assert pointer["gate_status"] == "PASS_DELEGATED_PENDING_FINAL_HEAD_INTEGRATION"
+    else:
+        assert pointer["last_completed_packet"] == "RCCRI-WP0"
+        assert pointer["last_merge_commit"] == "1f9fddcc5cd6ea701ed5cf3c130cc60c6498227c"
+        assert pointer["current_packet"].startswith("RCCRI-WP")
+        assert pointer["next_packet"] != "RCCRI-WP0"
 
 
 def test_wp0_pr_929_provenance_is_integrated_without_authority_expansion():
