@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-devobs-dsai3v-completion-implementation-packet/v1",
+  "packet_id": "DEVOBS-DSAI3V-COMPLETION-RECEIPT",
+  "programme": "OVC-DEVELOPMENT-OBSERVABILITY",
+  "baseline_commit": "f2a4fa455b9bcac60657795d93e12c50774d6e42",
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "objective": "Automatically attach one canonical Development Latency Receipt to every VIT/DSAI3V PacketCompletionReceipt and join observed DEVOBS v0.2, ORCH, VIT and SIQ evidence.",
+  "implementation": [
+    "content-addressed canonical completion latency receipt",
+    "content-addressed completion-to-DEVOBS attachment",
+    "ReceiptStore completion bundle persistence",
+    "fail closed on direct PacketCompletionReceipt persistence without DEVOBS attachment",
+    "DEVOBS v0.2 task/configuration context reuse",
+    "observed-only ORCH decision/execution counters",
+    "observed-only VIT equality/rebuild counters",
+    "observed-only SIQ readiness/base-movement/lease-retry counters",
+    "explicit UNAVAILABLE state where source telemetry is missing"
+  ],
+  "required_assurance": [
+    "focused completion-observability tests",
+    "existing VIT WP9 receipt/recovery regression",
+    "repository suite",
+    "runner parity",
+    "pytest/unittest parity",
+    "FINAL_HEAD",
+    "SIQ READY",
+    "merge readiness"
+  ],
+  "explicit_non_authority": [
+    "no execution scheduling change",
+    "no merge concurrency change",
+    "no model reasoning inference",
+    "no programme authority change",
+    "no scientific/Validation/publication/probability/risk/exposure/execution authority"
+  ],
+  "rollback": "Forward-disable CANONICAL_DEVOBS_COMPLETION_RECEIPT_ATTACHED assurance and completion bundle requirement while preserving emitted receipts and Git history."
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-development-latency-canonical-dsai3v/v1",
+  "type": "object",
+  "required": ["schema", "programme_id", "packet_id", "completion_receipt_id", "devobs_context", "latency", "orch", "vit", "siq", "evidence_rule", "authority_effect", "record_id"],
+  "properties": {
+    "schema": {"const": "ovc-development-latency-canonical-dsai3v/v1"},
+    "programme_id": {"type": "string", "minLength": 1},
+    "packet_id": {"type": "string", "minLength": 1},
+    "completion_receipt_id": {"type": "string", "minLength": 1},
+    "devobs_context": {"type": "object"},
+    "latency": {"type": "object"},
+    "orch": {"type": "object"},
+    "vit": {"type": "object"},
+    "siq": {"type": "object"},
+    "evidence_rule": {"const": "OBSERVED_FIELDS_ONLY_NO_UNOBSERVED_LATENCY_OR_EXECUTION_INFERENCE"},
+    "authority_effect": {"const": "NONE"},
+    "record_id": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}
