@@ -1,0 +1,61 @@
+name: DSAI3V Async Assurance shadow
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ovc/development/skills/async_assurance.py'
+      - 'src/ovc/development/skills/async_assurance_github.py'
+      - 'src/ovc/development/dsai3v_completion_observability.py'
+      - 'schemas/development/async_assurance/**'
+      - 'schemas/development/development_latency_canonical_dsai3v_v1.schema.json'
+      - 'registries/development/skills/async_assurance/**'
+      - 'registries/development/skills/development_latency_completion_receipt_v0_1.json'
+      - 'fixtures/development_skills/async_assurance/**'
+      - 'tests/development_skills/test_dsai3v_async_assurance*.py'
+      - 'tests/development_skills/test_dsai3v_completion_observability.py'
+      - '.github/workflows/dsai3v-async-assurance-shadow.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: read
+  actions: read
+  pull-requests: read
+
+jobs:
+  async-assurance-shadow:
+    name: DSAI3V Async Assurance shadow qualification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python3 -m pip install -e '.[test]' -r requirements-console-vnext.txt
+      - name: Prove Async Assurance reference semantics in non-authoritative shadow
+        run: |
+          PYTHONPATH=src:. python3 -m unittest \
+            tests.development_skills.test_dsai3v_async_assurance \
+            tests.development_skills.test_dsai3v_async_assurance_fixture_catalogue \
+            tests.development_skills.test_dsai3v_completion_observability -v
+      - name: Prove provider adapter remains read-only
+        run: |
+          PYTHONPATH=src:. python3 - <<'PY'
+          from ovc.development.skills.async_assurance_github import provider_capabilities
+          caps = provider_capabilities()
+          assert caps['read_only'] is True
+          assert caps['repository_write'] is False
+          assert caps['merge'] is False
+          assert caps['force_push'] is False
+          assert caps['authority_effect'] == 'NONE'
+          PY
+      - name: Retain activation boundary
+        run: |
+          grep -q 'DENIED_PENDING_DSAI3V-AA-G-ACTIVATE' registries/development/skills/async_assurance/REQUIRED_ASSURANCE_PROFILE_v0_1.json
+          grep -q '"parallel_physical_merge": false' registries/development/skills/async_assurance/REQUIRED_ASSURANCE_PROFILE_v0_1.json
