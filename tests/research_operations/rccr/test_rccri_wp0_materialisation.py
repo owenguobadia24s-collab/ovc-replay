@@ -2,6 +2,19 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
+PACKET_SEQUENCE = (
+    "RCCRI-WP0",
+    "RCCRI-WP1",
+    "RCCRI-WP2",
+    "RCCRI-WP3",
+    "RCCRI-WP4",
+    "RCCRI-WP5",
+    "RCCRI-WP6A",
+    "RCCRI-WP7A",
+    "RCCRI-WP6B",
+    "RCCRI-WP7B",
+    "RCCRI-WP8",
+)
 
 
 def load(path):
@@ -9,8 +22,8 @@ def load(path):
 
 
 def packet_ordinal(packet_id):
-    assert packet_id.startswith("RCCRI-WP")
-    return int(packet_id.removeprefix("RCCRI-WP"))
+    assert packet_id in PACKET_SEQUENCE
+    return PACKET_SEQUENCE.index(packet_id)
 
 
 def test_wp0_exact_plan_and_design_bindings():
