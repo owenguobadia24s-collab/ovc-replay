@@ -1,0 +1,14 @@
+{
+  "schema": "ovc-dsai3v-programme-state-pointer-preflight-rollback/v1",
+  "packet_id": "DSAI3V-POST-G12-STATE-POINTER-PREFLIGHT",
+  "rollback_class": "FORWARD_DISABLE_NON_DESTRUCTIVE",
+  "steps": [
+    "remove PROGRAMME_STATE_POINTER_CONSISTENT from default-substrate required assurance",
+    "disable invocation of scripts/development/ovc_programme_state_preflight.py",
+    "retain programme-state and current-pointer records unchanged",
+    "preserve this implementation/QA evidence and Git history"
+  ],
+  "force_push": false,
+  "history_rewrite": false,
+  "authority_effect": "NONE"
+}
