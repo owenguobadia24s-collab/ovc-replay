@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-dsai3v-assurance-wake-subscription/v1",
+  "type":"object",
+  "required":["provider_adapter_id","future_ids","intent_ids","controller_identity","authority_effect","subscription_id"],
+  "properties":{
+    "provider_adapter_id":{"type":"string","minLength":1},
+    "future_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "intent_ids":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "controller_identity":{"const":"DSAI_VIT_PHYSICAL_CONTROLLER"},
+    "authority_effect":{"const":"NONE"},
+    "subscription_id":{"type":"string","minLength":1}
+  },
+  "additionalProperties":false
+}
