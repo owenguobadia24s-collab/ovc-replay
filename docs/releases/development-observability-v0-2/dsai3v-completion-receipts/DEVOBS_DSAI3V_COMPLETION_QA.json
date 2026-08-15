@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-devobs-dsai3v-completion-qa/v1",
+  "packet_id": "DEVOBS-DSAI3V-COMPLETION-RECEIPT",
+  "candidate_head": "aac290d3a9909bb9f86d418b590973a6474d0dfa",
+  "reconciled_main": "71b12c285743bcd5e6af9d25d0ff7f37e2da971b",
+  "tests": {
+    "repository_run": 31872844570,
+    "tiered_run": 31872844550,
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "correctives": [
+    {
+      "id": "DEVOBS-DSAI3V-CORR1-LEGACY-COMPLETION-SCOPE",
+      "status": "RESOLVED",
+      "detail": "Direct completion-write denial is scoped to the DSAI3V programme so historical/generic VIT fixture receipts remain compatible."
+    },
+    {
+      "id": "DEVOBS-DSAI3V-CORR2-RECEIPT-INDEX-COLLISION",
+      "status": "RESOLVED",
+      "detail": "Completion-to-DEVOBS join keys are indexed from the unique attachment record rather than duplicated across canonical receipt and attachment."
+    }
+  ],
+  "acceptance": {
+    "canonical_completion_receipt": "PASS",
+    "devobs_v0_2_context_binding": "PASS",
+    "orch_join": "PASS",
+    "vit_join": "PASS",
+    "siq_join": "PASS",
+    "missing_telemetry_preserved_unavailable": "PASS",
+    "content_addressed_attachment": "PASS",
+    "direct_dsai3v_completion_without_devobs_fails_closed": "PASS",
+    "legacy_vit_receipt_compatibility": "PASS",
+    "authority_effect": "NONE"
+  },
+  "warnings": [],
+  "blockers": [],
+  "qa_status": "PASS",
+  "qa_recommendation": "PASS_AND_AUTO_RATIFY_AFTER_FINAL_EVIDENCE_HEAD_ASSURANCE"
+}
