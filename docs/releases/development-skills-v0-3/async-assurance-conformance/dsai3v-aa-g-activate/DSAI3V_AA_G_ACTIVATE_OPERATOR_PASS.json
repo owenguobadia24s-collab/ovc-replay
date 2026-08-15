@@ -1,0 +1,25 @@
+{
+  "schema":"ovc-dsai3v-aa-operator-decision/v1",
+  "gate_id":"DSAI3V-AA-G-ACTIVATE",
+  "programme_id":"OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1",
+  "plan_id":"OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-RATIFIED",
+  "decision":"PASS",
+  "decision_authority":"OPERATOR",
+  "operator_instruction":"OVC APPROVE DSAI3V-AA-G-ACTIVATE PASS",
+  "baseline_main":"47b76df2245602c8ef90e8a99b6ebe092e401d55",
+  "gate_ready_packet":"docs/releases/development-skills-v0-3/async-assurance-conformance/dsai3v-aa-g-activate/DSAI3V_AA_G_ACTIVATE_GATE_READY.json",
+  "approved_delta":{
+    "async_assurance_live_activation":true,
+    "background_required_assurance":true,
+    "conditional_materialisation_wake":true,
+    "controller_identity":"DSAI_VIT_PHYSICAL_CONTROLLER",
+    "physical_gateway":"DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "new_writer_identity":"NONE",
+    "parallel_physical_merge":false,
+    "eligible_packet_classes":"UNCHANGED_FROM_EXISTING_DSAI3V_DEFAULT_SUBSTRATE",
+    "scientific_validation_publication_probability_risk_exposure_execution_authority":"NONE"
+  },
+  "mandatory_materialisation_edge_checks":["REQUIRED_ASSURANCE_SET_PASS","OWNER_AUTHORITY_CURRENT","PROGRAMME_STATE_POINTER_CONSISTENT","QA_PASS","NO_BLOCKING_REVIEW_OR_WARNING","CURRENT_GRT_CURRENTNESS","EXACT_PREDECESSOR_AND_TRAIN_POSITION","SECURITY_PASS","SIQ_READY","EXCLUSIVE_SERIALIZED_LEASE","POST_WRITE_EXACT_TREE_EQUALITY","CANONICAL_COMPLETION_AND_DEVOBS_RECEIPTS"],
+  "rollback":"Forward-disable Async Assurance live routing and return affected packets to the foreground-wait/currentness path while preserving all futures, signals, assurance sets, intents, receipts, DEVOBS evidence and Git history.",
+  "next_action":"Materialise live activation registry, update programme state, pass exact-head assurance, squash-merge activation PR, then begin DEVOBS effectiveness evidence collection."
+}
