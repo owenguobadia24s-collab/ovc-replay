@@ -1,0 +1,28 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ovc-dsai3v-conditional-materialisation-intent/v1",
+  "type":"object",
+  "required":["schema","programme_id","packet_id","payload_id","vit_generation_id","train_generation_id","expected_predecessor_commit","expected_predecessor_tree","expected_result_tree","authority_manifest_id","required_assurance_set_id","materialisation_profile","gate_class","operator_required","state","materialisation_intent_id","action"],
+  "properties":{
+    "schema":{"const":"ovc-dsai3v-conditional-materialisation-intent/v1"},
+    "programme_id":{"type":"string","minLength":1},
+    "packet_id":{"type":"string","minLength":1},
+    "payload_id":{"type":"string","minLength":1},
+    "vit_generation_id":{"type":"string","minLength":1},
+    "train_generation_id":{"type":"string","minLength":1},
+    "expected_predecessor_commit":{"type":"string","minLength":1},
+    "expected_predecessor_tree":{"type":"string","minLength":1},
+    "expected_result_tree":{"type":"string","minLength":1},
+    "authority_manifest_id":{"type":"string","minLength":1},
+    "required_assurance_set_id":{"type":"string","minLength":1},
+    "materialisation_profile":{"type":"string","minLength":1},
+    "gate_class":{"type":"string","minLength":1},
+    "operator_required":{"type":"boolean"},
+    "state":{"enum":["PREPARED","WAITING_ASSURANCE","WAITING_PREDECESSOR","WAITING_CURRENTNESS","WAITING_OPERATOR","WAITING_LEASE","MATERIALISATION_READY","CONSUMED","BLOCKED","CANCELLED","SUPERSEDED"]},
+    "supersedes":{"type":["string","null"]},
+    "superseded_by":{"type":["string","null"]},
+    "materialisation_intent_id":{"type":"string","minLength":1},
+    "action":{"const":"REQUEST_SERIALIZED_SQUASH_MATERIALISATION"}
+  },
+  "additionalProperties":false
+}
