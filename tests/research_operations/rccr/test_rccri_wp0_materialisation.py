@@ -40,11 +40,31 @@ def test_wp0_preserves_orthogonal_c2p_state_and_ec1_gate():
     assert census["authority_discrepancy"] == "NONE_OBSERVED"
 
 
-def test_wp0_reviewer_binding_does_not_fake_independent_pass():
+def test_wp0_reviewer_binding_requires_real_independent_decision_evidence():
     reviewers = load("docs/releases/rccr-v0-1/rccri-wp0/RCCRI_REVIEWER_BINDINGS.json")
     assert reviewers["no_self_review"] is True
-    assert all(item["decision"] == "PENDING" for item in reviewers["bindings"])
-    assert reviewers["implementation_author"] != reviewers["bindings"][0]["reviewer_identity"]
+    by_gate = {item["gate"]: item for item in reviewers["bindings"]}
+    assert set(by_gate) == {"RCCRI-G4-ALG", "RCCRI-G-ADVERSARIAL-REVIEW"}
+    for item in by_gate.values():
+        assert reviewers["implementation_author"] != item["reviewer_identity"]
+
+    g4_alg = by_gate["RCCRI-G4-ALG"]
+    assert g4_alg["reviewer_identity"] == "OVC_HUMAN_OPERATOR"
+    assert g4_alg["reviewer_class"] == "INDEPENDENT_REVIEWER"
+    assert g4_alg["decision"] in {"PENDING", "PASS"}
+    if g4_alg["decision"] == "PASS":
+        assert g4_alg["decision_ref"] == "docs/releases/rccr-v0-1/rccri-wp4/RCCRI_G4_ALG_OPERATOR_DECISION.json"
+        decision = load(g4_alg["decision_ref"])
+        assert decision["decision"] == "PASS"
+        assert decision["decided_by"] == g4_alg["reviewer_identity"]
+        assert decision["reviewer_class"] == g4_alg["reviewer_class"]
+        assert decision["decision_instruction"] == "OVC APPROVE RCCRI-G4-ALG"
+        assert decision["authority_effect"] == "NONE"
+
+    adversarial = by_gate["RCCRI-G-ADVERSARIAL-REVIEW"]
+    assert adversarial["decision"] == "PENDING"
+    assert adversarial["reviewer_identity"] == "OVC_HUMAN_OPERATOR"
+    assert adversarial["reviewer_class"] == "INDEPENDENT_OUTSIDE_RCCR_IMPLEMENTATION"
 
 
 def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully():

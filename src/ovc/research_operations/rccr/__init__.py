@@ -24,6 +24,12 @@ from .core import (
     logical_identity,
     validate_canonical_object,
 )
+from .reference import (
+    DIAGNOSTIC_PRECEDENCE,
+    REFERENCE_RULE_PACK_ID,
+    RCCRReferenceEngine,
+    reference_replay_digest,
+)
 from .source_resolution import (
     DERIVATION_MODES,
     RequirementDependencyIndex,
@@ -39,12 +45,15 @@ __all__ = [
     "AVAILABILITY_STATES",
     "DESIGN_STATES",
     "DERIVATION_MODES",
+    "DIAGNOSTIC_PRECEDENCE",
     "IMPLEMENTATION_STATES",
     "QUALIFICATION_STATES",
+    "REFERENCE_RULE_PACK_ID",
     "CapabilityBinding",
     "CapabilityBindingResolver",
     "CapabilityFrontierCompiler",
     "RCCRAppendOnlyStore",
+    "RCCRReferenceEngine",
     "RCCRValidationError",
     "RequirementDependencyIndex",
     "RequirementProfileCompiler",
@@ -54,5 +63,6 @@ __all__ = [
     "canonical_json_bytes",
     "logical_identity",
     "project_currentness",
+    "reference_replay_digest",
     "validate_canonical_object",
 ]
