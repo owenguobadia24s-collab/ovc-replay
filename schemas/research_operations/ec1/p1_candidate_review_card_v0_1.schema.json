@@ -1,0 +1,1599 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ovc:ec1:P1CandidateReviewCard:v0.1",
+  "title": "P1CandidateReviewCard",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "P1CandidateReviewCard.v0.1",
+      "description": "Const: \"P1CandidateReviewCard.v0.1\"."
+    },
+    "review_card_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Deterministic logical ID = HASH(schema_version, cycle_id, proposal_id, proposal_semantic_sha256, decision_tree_version, evidence_frontier_semantic_sha256)."
+    },
+    "cycle_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact EC1 cycle; for EC1-G1: OVC-EC1-DISCOVERY-2021_2023-G1."
+    },
+    "cycle_generation_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact EvidenceCycleGeneration."
+    },
+    "dmrp_study_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact DMRPStudy / admitted study semantics."
+    },
+    "research_mode": {
+      "const": "PATH_1_EMPIRICAL",
+      "description": "Const PATH_1_EMPIRICAL."
+    },
+    "research_role": {
+      "const": "DISCOVERY",
+      "description": "Const DISCOVERY."
+    },
+    "proposal_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact Path1CandidateProposal version/generation being reviewed."
+    },
+    "proposal_semantic_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Meaning-bearing proposal hash. If definition changes, a new review card is required."
+    },
+    "population_family": {
+      "type": "string",
+      "enum": [
+        "P1A",
+        "P1B",
+        "P1C"
+      ],
+      "description": "P1A | P1B | P1C. If a proposal spans more than one lawful population family, the proposal must explicitly bind a declared composite population; EC1-G1 does not infer one."
+    },
+    "source_generation_manifest_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact source-generation binding for the scientific evidence."
+    },
+    "active_stack_binding_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact active-stack/owner-authority binding used by E1/R1."
+    },
+    "evidence_frontier_semantic_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Hash of the complete decision-bearing evidence frontier consumed by this card."
+    },
+    "review_phase": {
+      "const": "EC1_RV",
+      "description": "Const EC1_RV."
+    },
+    "authority_effect": {
+      "const": "NONE",
+      "description": "Const NONE."
+    },
+    "population_manifest_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact P1PopulationManifest used for candidate membership and denominator accounting."
+    },
+    "search_universe_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact frozen P1SearchUniverseManifest."
+    },
+    "identity_field_manifest_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact EC1IdentityFieldManifest frozen before evidentiary execution."
+    },
+    "search_parameter_pack_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact EC1 search parameter pack; must not be selected from E1 results."
+    },
+    "pattern_closure_class_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Recurring closure class whose exact occurrence membership underlies the proposal."
+    },
+    "closed_pattern_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact closed structural conjunction for the closure class."
+    },
+    "minimal_generator_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "All inclusion-minimal generators for the closure membership. Cardinality >=1 for proposal eligibility."
+    },
+    "minimal_generator_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Must equal len(minimal_generator_refs)."
+    },
+    "multiple_plausible_cores": {
+      "type": "boolean",
+      "description": "TRUE iff minimal_generator_count > 1. No hidden preferred generator is permitted."
+    },
+    "structural_predicate_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/object_ref"
+      },
+      "description": "Exact typed structural predicates defining the proposal/core evidence."
+    },
+    "candidate_definition_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact candidate-definition/proposal semantic object; prose is not authoritative."
+    },
+    "dependency_manifest_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Complete required/optional/forbidden dependency manifest."
+    },
+    "first_valid_rule_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact FVT rule used to determine when membership is lawfully knowable."
+    },
+    "negative_space_rule_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact negative-space construction rule."
+    },
+    "unresolved_missingness_policy_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact policy for AMBIGUOUS / NOT_EVALUABLE / NOT_COMPARABLE / CENSORED / QUARANTINED states."
+    },
+    "applicability_scope_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact declared applicability. Post-hoc time/context concentration may not silently alter it."
+    },
+    "context_role": {
+      "const": "STRATIFIER_ONLY",
+      "description": "Const STRATIFIER_ONLY for EC1-G1 base identity unless a successor generation explicitly changes the scientific contract."
+    },
+    "c2e_boundary_pack_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Required for P1C episode-morphology proposals; null for non-P1C unless the exact proposal lawfully depends on C2E owner evidence."
+    },
+    "upstream_design_exposure_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact UpstreamDesignExposureRecord documenting C1/C2/C2E design ancestry."
+    },
+    "prior_research_exposure_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact PriorResearchExposureDisclosure; legacy ideas may not seed/filter/promote Path-1 membership."
+    },
+    "population_complete": {
+      "type": "boolean",
+      "description": "TRUE only when the exact frozen population is complete and reconciled. FALSE forbids proposal eligibility."
+    },
+    "population_reconciliation_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Evidence proving eligible = admitted + not_evaluable + not_comparable + censored + quarantined + excluded_by_frozen_rule and unreconciled = 0."
+    },
+    "search_complete": {
+      "type": "boolean",
+      "description": "TRUE only when the declared search surface is complete for this proposal."
+    },
+    "search_accounting_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact P1SearchAccountingLedger."
+    },
+    "pattern_lattice_exhaustion": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "PATTERN_LATTICE_CAPACITY_INCOMPLETE"
+      ],
+      "description": "COMPLETE | PATTERN_LATTICE_CAPACITY_INCOMPLETE."
+    },
+    "outcome_validation_firewall_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. BLOCK => proposal_review_status cannot be PROPOSAL_ELIGIBLE."
+    },
+    "identity_field_freeze_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. Covers hidden/unregistered identity-field change."
+    },
+    "required_search_execution_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. Must be PASS for proposal eligibility."
+    },
+    "proposal_review_status": {
+      "type": "string",
+      "enum": [
+        "PROPOSAL_ELIGIBLE",
+        "DESCRIPTIVE_ONLY",
+        "REJECTED",
+        "REVIEW_PENDING"
+      ],
+      "description": "PROPOSAL_ELIGIBLE | DESCRIPTIVE_ONLY | REJECTED | REVIEW_PENDING."
+    },
+    "eligibility_failed_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Names zero or more failed conditions from the frozen 11-condition proposal-eligibility checklist. Empty only when proposal_review_status=PROPOSAL_ELIGIBLE."
+    },
+    "recurrence_status": {
+      "type": "string",
+      "enum": [
+        "RECURRENCE_PRESENT",
+        "INSUFFICIENT_RECURRENCE"
+      ],
+      "description": "RECURRENCE_PRESENT | INSUFFICIENT_RECURRENCE. RECURRENCE_PRESENT means only support > 1 under the frozen population."
+    },
+    "eligible_population_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total eligible units for the relevant candidate population binding."
+    },
+    "raw_occurrence_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Addressable MATCH occurrences. For proposal eligibility must be >1."
+    },
+    "distinct_anchor_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Distinct declared structural anchors among MATCH occurrences."
+    },
+    "dependence_cluster_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Deterministically derived clusters sharing material ancestry/overlap."
+    },
+    "match_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger MATCH count; must equal raw_occurrence_count."
+    },
+    "non_match_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger NON_MATCH count."
+    },
+    "ambiguous_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger AMBIGUOUS count."
+    },
+    "not_evaluable_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger NOT_EVALUABLE count."
+    },
+    "not_comparable_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger NOT_COMPARABLE count."
+    },
+    "censored_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger CENSORED count."
+    },
+    "quarantined_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger QUARANTINED count."
+    },
+    "out_of_scope_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger OUT_OF_SCOPE count."
+    },
+    "process_invalid_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "MembershipLedger PROCESS_INVALID count."
+    },
+    "membership_ledger_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact complete membership accounting for the proposal."
+    },
+    "coverage_numerator": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Explicit numerator used for any descriptive coverage ratio; normally MATCH unless the declared statistic states otherwise."
+    },
+    "coverage_denominator": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Explicit denominator; cannot be inferred from raw row count."
+    },
+    "coverage_ratio": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "coverage_numerator / coverage_denominator if denominator > 0; descriptive only and never a success/promotion threshold."
+    },
+    "residual_inventory_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Residual/singleton/unassigned evidence remains first-class."
+    },
+    "residual_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Count under the exact residual definition bound by residual_inventory_ref."
+    },
+    "singleton_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Count of singleton full signatures / declared singleton residuals relevant to the proposal."
+    },
+    "negative_space_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact negative-space population / classification artifact."
+    },
+    "counterexample_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Counterexamples directly linked to the positive support surface. May be empty only when the declared population contains none; absence must be explicit."
+    },
+    "near_neighbour_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Direct structural near neighbours under the frozen EC1 rule."
+    },
+    "near_neighbour_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Must equal len(near_neighbour_refs)."
+    },
+    "near_neighbour_method": {
+      "const": "EXACTLY_ONE_IDENTITY_FIELD_DIFF_v1",
+      "description": "Const EXACTLY_ONE_IDENTITY_FIELD_DIFF_v1 for EC1-G1."
+    },
+    "near_neighbour_limitation_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Any evidence that the one-field diagnostic is uninformative; such a result supports EC1_METHOD_LIMITATION, not hidden distance invention."
+    },
+    "contradiction_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Known conflicting structural evidence / contradiction cases."
+    },
+    "boundary_case_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Threshold/semantic/boundary cases where the proposal is challenged without silent relabelling."
+    },
+    "unresolved_case_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Unresolved/ambiguous cases linked to the proposal."
+    },
+    "non_evaluable_case_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Representative or complete index to not-evaluable cases; review parity requires visibility."
+    },
+    "untested_method_representation_dimensions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Explicitly names untested lawful method/representation dimensions. METHOD_DEPENDENT or REPRESENTATION_DEPENDENT is forbidden unless the relevant alternatives were actually tested."
+    },
+    "negative_evidence_complete": {
+      "type": "boolean",
+      "description": "TRUE only when positive support is parity-linked to counterexamples, nearest alternatives, contradictions, boundary/non-evaluable/unresolved cases, temporal concentration and untested dimensions."
+    },
+    "dependence_graph_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact EvidenceDependenceGraph storing direct registered edges only."
+    },
+    "dependence_edge_registry_version": {
+      "const": "EC1_DEPENDENCE_EDGE_TYPE_REGISTRY_v1",
+      "description": "Const EC1_DEPENDENCE_EDGE_TYPE_REGISTRY_v1 for EC1-G1."
+    },
+    "dependence_graph_depth": {
+      "const": 1,
+      "description": "Const 1 stored direct edge. Recursive lineage expansion is forbidden."
+    },
+    "dependence_edge_count_by_type": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "Counts for SAME_SOURCE_ANCHOR, BID_ASK_CORRESPONDENCE, PARENT_CHILD_CLOCK, TRANSITION_SEQUENCE_OVERLAP, COMMON_C2E_EPISODE, COMMON_POPULATION_UNIT_ANCESTRY."
+    },
+    "cross_side_correspondence_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "BID/ASK agreement/divergence evidence where applicable; does not imply independent replication."
+    },
+    "cross_clock_correspondence_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "15M/2H relationship evidence where applicable; clocks are relational, not interchangeable."
+    },
+    "pseudo_independence_qa_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. BLOCK if BID/ASK or 15M/2H/overlap are counted as independent replication contrary to ancestry."
+    },
+    "independence_claim": {
+      "const": "NONE_BY_DEFAULT",
+      "description": "Const NONE_BY_DEFAULT. Any stronger independence statement requires separate affirmative evidence outside simple raw recurrence counts."
+    },
+    "full_period_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Full 2021-2023 occurrence count for this recurrent closure."
+    },
+    "year_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "Must include 2021, 2022 and 2023 explicitly, including zeros."
+    },
+    "calendar_quarter_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "Full diagnostic quarter distribution across the frozen Discovery interval."
+    },
+    "first_occurrence_effective_time": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Earliest effective-time occurrence. Null only when recurrence_status=INSUFFICIENT_RECURRENCE/no occurrence."
+    },
+    "last_occurrence_effective_time": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Latest effective-time occurrence."
+    },
+    "first_valid_time_min": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Minimum candidate/occurrence FVT in the MATCH set."
+    },
+    "first_valid_time_max": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Maximum candidate/occurrence FVT in the MATCH set."
+    },
+    "clock_lattice_distribution": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "Declared clock-lattice position distribution."
+    },
+    "temporal_concentration_summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Descriptive summary only unless an exact scientific decision rule was preregistered. Must not create a post-hoc threshold."
+    },
+    "context_stratification_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "OccurrenceContext stratification evidence when relevant."
+    },
+    "context_membership_invariance_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. BLOCK if context changes base candidate membership in EC1-G1."
+    },
+    "posthoc_applicability_mutation_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. BLOCK if observed time/context concentration is used to rewrite applicability within the same EC1 generation."
+    },
+    "adversarial_review_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact P1AdversarialReview."
+    },
+    "adversarial_protocol_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact EC1 adversarial catalogue version consumed by the review."
+    },
+    "adversarial_check_results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/adversarial_check_result"
+      },
+      "description": "One result per required attack/challenge applicable to this proposal; each binds check_id, result, evidence_refs and blocking_effect."
+    },
+    "adversarial_review_complete": {
+      "type": "boolean",
+      "description": "TRUE only when every required challenge is represented as PASS/WARN/BLOCK/QUARANTINE/NOT_APPLICABLE under declared rules."
+    },
+    "blocking_adversarial_failures": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Exact failed check IDs whose effect blocks or quarantines progression."
+    },
+    "nonblocking_adversarial_warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Exact warnings retained in the review record."
+    },
+    "denominator_challenge_status": {
+      "type": "string",
+      "description": "PASS | WARN | BLOCK | QUARANTINE."
+    },
+    "chronology_fvt_challenge_status": {
+      "type": "string",
+      "description": "PASS | WARN | BLOCK | QUARANTINE."
+    },
+    "near_neighbour_separation_status": {
+      "type": "string",
+      "description": "PASS | WARN | BLOCK | QUARANTINE. PASS means the declared EC1 diagnostic does not itself defeat lawful separation; it is not a universal distance score."
+    },
+    "overlap_dependence_challenge_status": {
+      "type": "string",
+      "description": "PASS | WARN | BLOCK | QUARANTINE."
+    },
+    "context_nonidentity_challenge_status": {
+      "type": "string",
+      "description": "PASS | WARN | BLOCK | QUARANTINE."
+    },
+    "outcome_validation_firewall_challenge_status": {
+      "type": "string",
+      "description": "PASS | BLOCK | QUARANTINE."
+    },
+    "hidden_topn_bestpattern_challenge_status": {
+      "type": "string",
+      "description": "PASS | BLOCK. Any undeclared ranking/selection blocks."
+    },
+    "qa_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "WARN",
+        "BLOCK",
+        "QUARANTINE"
+      ],
+      "description": "PASS | WARN | BLOCK | QUARANTINE."
+    },
+    "qa_packet_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact QA evidence packet consumed by RV."
+    },
+    "reproduction_status": {
+      "type": "string",
+      "enum": [
+        "REPRODUCED",
+        "METAMORPHICALLY_EQUIVALENT",
+        "REPRODUCTION_MISMATCH",
+        "NOT_RUN"
+      ],
+      "description": "REPRODUCED | METAMORPHICALLY_EQUIVALENT | REPRODUCTION_MISMATCH | NOT_RUN."
+    },
+    "reproduction_receipt_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact EC1ReproductionReceipt / metamorphic proof. Required before decision-bearing reserved recommendation."
+    },
+    "denominator_reproduced": {
+      "type": "boolean",
+      "description": "R1 denominator equality result."
+    },
+    "predicate_compilation_reproduced": {
+      "type": "boolean",
+      "description": "R1 identity-field/predicate compilation result."
+    },
+    "closure_membership_reproduced": {
+      "type": "boolean",
+      "description": "R1 occurrence-closure membership result."
+    },
+    "minimal_generators_reproduced": {
+      "type": "boolean",
+      "description": "R1 minimal-generator result."
+    },
+    "negative_space_reproduced": {
+      "type": "boolean",
+      "description": "R1 negative-space result."
+    },
+    "dependence_graph_reproduced": {
+      "type": "boolean",
+      "description": "R1 direct-edge/cluster equality result."
+    },
+    "fresh_repeat_resume_cache_shard_worker_invariance_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Evidence proving non-semantic execution variations preserve decision-bearing meaning where applicable."
+    },
+    "f0_contamination_check_status": {
+      "type": "string",
+      "enum": [
+        "PASS",
+        "BLOCK"
+      ],
+      "description": "PASS | BLOCK. Confirms no F0-A/F0-B structural/candidate artifact became E1 evidence."
+    },
+    "capacity_state": {
+      "type": "string",
+      "enum": [
+        "COMPLETE",
+        "EXECUTION_CAPACITY_INCOMPLETE",
+        "PATTERN_LATTICE_CAPACITY_INCOMPLETE",
+        "REVIEW_CAPACITY_EXCEEDED"
+      ],
+      "description": "COMPLETE | EXECUTION_CAPACITY_INCOMPLETE | PATTERN_LATTICE_CAPACITY_INCOMPLETE | REVIEW_CAPACITY_EXCEEDED."
+    },
+    "review_capacity_receipt_ref": {
+      "$ref": "#/$defs/object_ref",
+      "description": "Exact ReviewCapacityReceipt."
+    },
+    "incident_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "All integrity/QA/authority incidents material to the card; empty is explicit."
+    },
+    "warning_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "All nonblocking warnings material to the decision."
+    },
+    "decision_tree_version": {
+      "const": "EC1-DT-v0.1",
+      "description": "Const EC1-DT-v0.1 for this field specification."
+    },
+    "decision_tree_root": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Const DT-Q08 for adversarial-survival decision, followed by DT-Q10 eligibility/final routing as applicable."
+    },
+    "traversed_nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decision_node_trace"
+      },
+      "description": "Ordered exact node trace. Must contain all evaluated branches necessary to reproduce the disposition."
+    },
+    "terminal_node": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact terminal node in the decision tree."
+    },
+    "human_scientific_review_required": {
+      "type": "boolean",
+      "description": "TRUE where the decision tree deliberately preserves scientific judgment because EC1 refuses a universal threshold."
+    },
+    "human_scientific_review_notes": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Required when human_scientific_review_required=TRUE. Must cite evidence and may not introduce new post-hoc scientific parameters."
+    },
+    "p1_disposition": {
+      "type": "string",
+      "enum": [
+        "FREEZE_CANDIDATE",
+        "REFINE_WITHIN_DISCOVERY",
+        "REPLICATE_DISCOVERY",
+        "DESCRIPTIVE_INVENTORY_ONLY",
+        "METHOD_DEPENDENT",
+        "REPRESENTATION_DEPENDENT",
+        "CONTEXT_DEPENDENT",
+        "INSUFFICIENT_RECURRENCE",
+        "INSUFFICIENT_SEPARATION",
+        "NO_STABLE_STRUCTURE",
+        "CAPACITY_INCOMPLETE",
+        "QUARANTINED",
+        "REJECT"
+      ],
+      "description": "One frozen Path-1 disposition."
+    },
+    "disposition_rationale": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Evidence-grounded explanation of why the traversed tree terminates in p1_disposition."
+    },
+    "disposition_basis_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "description": "Decision-bearing support and counterevidence refs."
+    },
+    "reserved_action_requested": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "PREPARE_EC1_GSCI_CANDIDATE_FREEZE",
+        "ROUTE_UPPER_LAYER_OWNER_REVIEW"
+      ],
+      "description": "NONE or PREPARE_EC1_GSCI_CANDIDATE_FREEZE. Upper-layer owner routing belongs primarily to QuestionDecisionRecord/Q09."
+    },
+    "next_route": {
+      "type": "string",
+      "enum": [
+        "CLOSEOUT",
+        "REFINE_DISCOVERY",
+        "REPLICATE_DISCOVERY",
+        "PREPARE_EC1_GSCI",
+        "ROUTE_OWNER_REVIEW",
+        "QUARANTINE",
+        "BLOCKED_NO_ACTION"
+      ],
+      "description": "CLOSEOUT | REFINE_DISCOVERY | REPLICATE_DISCOVERY | PREPARE_EC1_GSCI | QUARANTINE | BLOCKED_NO_ACTION."
+    },
+    "candidate_freeze_packet_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "May be populated only after a separate CandidateFreezePacket is created; the review card itself cannot freeze a candidate."
+    },
+    "opt_c_admission_effect": {
+      "const": "NONE",
+      "description": "Const NONE."
+    },
+    "upper_layer_authority_effect": {
+      "const": "NONE",
+      "description": "Const NONE."
+    },
+    "publication_effect": {
+      "const": "NONE",
+      "description": "Const NONE."
+    },
+    "semantic_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Hash of the card meaning-bearing projection: exact proposal, evidence frontier, decision-tree version, evidence summaries, disposition and authority routing. Administrative envelope metadata is excluded."
+    },
+    "record_sha256": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Hash of the full persisted Research Operations record/envelope. May change for new append-only metadata without creating new scientific meaning."
+    },
+    "supersedes_review_card_ref": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/object_ref"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Null on first issuance. Corrections/reviews are forward-only; a later card may supersede but never rewrite the prior card."
+    },
+    "record_status": {
+      "type": "string",
+      "enum": [
+        "CURRENT",
+        "SUPERSEDED",
+        "QUARANTINED"
+      ],
+      "description": "CURRENT | SUPERSEDED | QUARANTINED. Review-record lifecycle only; does not alter candidate scientific identity."
+    }
+  },
+  "required": [
+    "schema_version",
+    "review_card_id",
+    "cycle_id",
+    "cycle_generation_ref",
+    "dmrp_study_ref",
+    "research_mode",
+    "research_role",
+    "proposal_ref",
+    "proposal_semantic_sha256",
+    "population_family",
+    "source_generation_manifest_ref",
+    "active_stack_binding_ref",
+    "evidence_frontier_semantic_sha256",
+    "review_phase",
+    "authority_effect",
+    "population_manifest_ref",
+    "search_universe_ref",
+    "identity_field_manifest_ref",
+    "search_parameter_pack_ref",
+    "pattern_closure_class_ref",
+    "closed_pattern_ref",
+    "minimal_generator_refs",
+    "minimal_generator_count",
+    "multiple_plausible_cores",
+    "structural_predicate_refs",
+    "candidate_definition_ref",
+    "dependency_manifest_ref",
+    "first_valid_rule_ref",
+    "negative_space_rule_ref",
+    "unresolved_missingness_policy_ref",
+    "applicability_scope_ref",
+    "context_role",
+    "upstream_design_exposure_ref",
+    "prior_research_exposure_ref",
+    "population_complete",
+    "population_reconciliation_ref",
+    "search_complete",
+    "search_accounting_ref",
+    "pattern_lattice_exhaustion",
+    "outcome_validation_firewall_status",
+    "identity_field_freeze_status",
+    "required_search_execution_status",
+    "proposal_review_status",
+    "eligibility_failed_conditions",
+    "recurrence_status",
+    "eligible_population_count",
+    "raw_occurrence_count",
+    "distinct_anchor_count",
+    "dependence_cluster_count",
+    "match_count",
+    "non_match_count",
+    "ambiguous_count",
+    "not_evaluable_count",
+    "not_comparable_count",
+    "censored_count",
+    "quarantined_count",
+    "out_of_scope_count",
+    "process_invalid_count",
+    "membership_ledger_ref",
+    "coverage_numerator",
+    "coverage_denominator",
+    "residual_inventory_ref",
+    "residual_count",
+    "singleton_count",
+    "negative_space_ref",
+    "counterexample_refs",
+    "near_neighbour_refs",
+    "near_neighbour_count",
+    "near_neighbour_method",
+    "near_neighbour_limitation_refs",
+    "contradiction_refs",
+    "boundary_case_refs",
+    "unresolved_case_refs",
+    "non_evaluable_case_refs",
+    "untested_method_representation_dimensions",
+    "negative_evidence_complete",
+    "dependence_graph_ref",
+    "dependence_edge_registry_version",
+    "dependence_graph_depth",
+    "dependence_edge_count_by_type",
+    "pseudo_independence_qa_status",
+    "independence_claim",
+    "full_period_count",
+    "year_counts",
+    "calendar_quarter_counts",
+    "clock_lattice_distribution",
+    "temporal_concentration_summary",
+    "context_membership_invariance_status",
+    "posthoc_applicability_mutation_status",
+    "adversarial_review_ref",
+    "adversarial_protocol_version",
+    "adversarial_check_results",
+    "adversarial_review_complete",
+    "blocking_adversarial_failures",
+    "nonblocking_adversarial_warnings",
+    "denominator_challenge_status",
+    "chronology_fvt_challenge_status",
+    "near_neighbour_separation_status",
+    "overlap_dependence_challenge_status",
+    "context_nonidentity_challenge_status",
+    "outcome_validation_firewall_challenge_status",
+    "hidden_topn_bestpattern_challenge_status",
+    "qa_status",
+    "qa_packet_ref",
+    "reproduction_status",
+    "reproduction_receipt_ref",
+    "denominator_reproduced",
+    "predicate_compilation_reproduced",
+    "closure_membership_reproduced",
+    "minimal_generators_reproduced",
+    "negative_space_reproduced",
+    "dependence_graph_reproduced",
+    "fresh_repeat_resume_cache_shard_worker_invariance_ref",
+    "f0_contamination_check_status",
+    "capacity_state",
+    "review_capacity_receipt_ref",
+    "incident_refs",
+    "warning_refs",
+    "decision_tree_version",
+    "decision_tree_root",
+    "traversed_nodes",
+    "terminal_node",
+    "human_scientific_review_required",
+    "p1_disposition",
+    "disposition_rationale",
+    "disposition_basis_refs",
+    "reserved_action_requested",
+    "next_route",
+    "opt_c_admission_effect",
+    "upper_layer_authority_effect",
+    "publication_effect",
+    "semantic_sha256",
+    "record_sha256",
+    "supersedes_review_card_ref",
+    "record_status"
+  ],
+  "$defs": {
+    "object_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "logical_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "semantic_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_type",
+        "logical_id",
+        "semantic_sha256"
+      ]
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "object_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "logical_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantic_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "record_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "object_type",
+        "logical_id",
+        "semantic_sha256"
+      ]
+    },
+    "question_evidence_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requirement_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question_dependency_role": {
+          "type": "string",
+          "enum": [
+            "REQUIRED_TO_ANSWER",
+            "QUALIFYING_ONLY",
+            "OUT_OF_SCOPE"
+          ]
+        },
+        "information_dimension": {
+          "type": "string",
+          "enum": [
+            "market_truth",
+            "atomic_facts",
+            "structural_description",
+            "persistent_identity",
+            "organisation",
+            "conditional_constraint",
+            "event_proposition",
+            "semantic_composition",
+            "consequence_measurement",
+            "comparative_proof"
+          ]
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "missing_evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      },
+      "required": [
+        "requirement_id",
+        "evidence_type",
+        "question_dependency_role",
+        "information_dimension",
+        "owner",
+        "evidence_refs",
+        "missing_evidence_refs"
+      ]
+    },
+    "information_dimension_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "enum": [
+            "market_truth",
+            "atomic_facts",
+            "structural_description",
+            "persistent_identity",
+            "organisation",
+            "conditional_constraint",
+            "event_proposition",
+            "semantic_composition",
+            "consequence_measurement",
+            "comparative_proof"
+          ]
+        },
+        "dependency_role": {
+          "type": "string",
+          "enum": [
+            "REQUIRED_TO_ANSWER",
+            "QUALIFYING_ONLY",
+            "OUT_OF_SCOPE"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "missing_evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "need_cause_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/object_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "candidate_owner_route": {
+          "type": "string",
+          "enum": [
+            "NONE",
+            "C2P",
+            "SRI_SFC",
+            "SOI_ORGANISATION_EVIDENCE",
+            "CEI",
+            "C2_5",
+            "C3",
+            "OPT_C",
+            "OPT_D"
+          ]
+        },
+        "resolution_notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "dimension",
+        "dependency_role",
+        "evidence_refs",
+        "missing_evidence_refs",
+        "need_cause_ref",
+        "candidate_owner_route",
+        "resolution_notes"
+      ]
+    },
+    "counterfactual_sufficiency_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "missing_information_class": {
+          "type": "string"
+        },
+        "current_stack_can_supply_lawfully": {
+          "type": "string"
+        },
+        "ec1_deliberately_excluded": {
+          "type": "string"
+        },
+        "methodological_not_informational": {
+          "type": "string"
+        },
+        "shadow_capability_can_test": {
+          "type": "string"
+        },
+        "proposed_owner_actually_owns": {
+          "type": "string"
+        },
+        "dependency_proportionality": {
+          "type": "string",
+          "enum": [
+            "PROPORTIONATE",
+            "DISPROPORTIONATE",
+            "UNRESOLVED"
+          ]
+        },
+        "review_summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        }
+      },
+      "required": [
+        "missing_information_class",
+        "current_stack_can_supply_lawfully",
+        "ec1_deliberately_excluded",
+        "methodological_not_informational",
+        "shadow_capability_can_test",
+        "proposed_owner_actually_owns",
+        "dependency_proportionality",
+        "review_summary",
+        "evidence_refs"
+      ]
+    },
+    "adversarial_check_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "PASS",
+            "WARN",
+            "BLOCK",
+            "QUARANTINE",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "blocking_effect": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "check_id",
+        "status",
+        "evidence_refs",
+        "blocking_effect",
+        "notes"
+      ]
+    },
+    "decision_node_trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "node_predicate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "TRUE",
+            "FALSE",
+            "NOT_APPLICABLE",
+            "UNRESOLVED"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          }
+        },
+        "branch_taken": {
+          "type": "string",
+          "minLength": 1
+        },
+        "human_scientific_review": {
+          "type": "boolean"
+        },
+        "human_review_note": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "node_id",
+        "node_predicate",
+        "result",
+        "evidence_refs",
+        "branch_taken",
+        "human_scientific_review",
+        "human_review_note"
+      ]
+    },
+    "information_dimension_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "type": "string",
+          "enum": [
+            "market_truth",
+            "atomic_facts",
+            "structural_description",
+            "persistent_identity",
+            "organisation",
+            "conditional_constraint",
+            "event_proposition",
+            "semantic_composition",
+            "consequence_measurement",
+            "comparative_proof"
+          ]
+        },
+        "dependency_role": {
+          "type": "string",
+          "enum": [
+            "REQUIRED_TO_ANSWER",
+            "QUALIFYING_ONLY",
+            "OUT_OF_SCOPE"
+          ]
+        }
+      },
+      "required": [
+        "dimension",
+        "dependency_role"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "proposal_review_status": {
+            "const": "PROPOSAL_ELIGIBLE"
+          }
+        },
+        "required": [
+          "proposal_review_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "population_complete": {
+            "const": true
+          },
+          "search_complete": {
+            "const": true
+          },
+          "outcome_validation_firewall_status": {
+            "const": "PASS"
+          },
+          "identity_field_freeze_status": {
+            "const": "PASS"
+          },
+          "required_search_execution_status": {
+            "const": "PASS"
+          },
+          "eligibility_failed_conditions": {
+            "maxItems": 0
+          },
+          "recurrence_status": {
+            "const": "RECURRENCE_PRESENT"
+          },
+          "raw_occurrence_count": {
+            "minimum": 2
+          },
+          "minimal_generator_refs": {
+            "minItems": 1
+          },
+          "negative_evidence_complete": {
+            "const": true
+          },
+          "capacity_state": {
+            "const": "COMPLETE"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "p1_disposition": {
+            "const": "FREEZE_CANDIDATE"
+          }
+        },
+        "required": [
+          "p1_disposition"
+        ]
+      },
+      "then": {
+        "properties": {
+          "proposal_review_status": {
+            "const": "PROPOSAL_ELIGIBLE"
+          },
+          "qa_status": {
+            "enum": [
+              "PASS",
+              "WARN"
+            ]
+          },
+          "reproduction_status": {
+            "enum": [
+              "REPRODUCED",
+              "METAMORPHICALLY_EQUIVALENT"
+            ]
+          },
+          "capacity_state": {
+            "const": "COMPLETE"
+          },
+          "adversarial_review_complete": {
+            "const": true
+          },
+          "blocking_adversarial_failures": {
+            "maxItems": 0
+          },
+          "reserved_action_requested": {
+            "const": "PREPARE_EC1_GSCI_CANDIDATE_FREEZE"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "population_family": {
+            "const": "P1C"
+          }
+        },
+        "required": [
+          "population_family"
+        ]
+      },
+      "then": {
+        "required": [
+          "c2e_boundary_pack_ref"
+        ],
+        "properties": {
+          "c2e_boundary_pack_ref": {
+            "$ref": "#/$defs/object_ref"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "reproduction_status": {
+            "const": "REPRODUCTION_MISMATCH"
+          }
+        },
+        "required": [
+          "reproduction_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "reserved_action_requested": {
+            "const": "NONE"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "context_membership_invariance_status": {
+            "const": "BLOCK"
+          }
+        },
+        "required": [
+          "context_membership_invariance_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "reserved_action_requested": {
+            "const": "NONE"
+          },
+          "proposal_review_status": {
+            "not": {
+              "const": "PROPOSAL_ELIGIBLE"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "pseudo_independence_qa_status": {
+            "const": "BLOCK"
+          }
+        },
+        "required": [
+          "pseudo_independence_qa_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "reserved_action_requested": {
+            "const": "NONE"
+          },
+          "p1_disposition": {
+            "not": {
+              "const": "FREEZE_CANDIDATE"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

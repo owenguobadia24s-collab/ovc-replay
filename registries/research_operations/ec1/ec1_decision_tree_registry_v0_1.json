@@ -1,0 +1,572 @@
+{
+  "schema_version": "EC1DecisionTreeRegistry.v0.1",
+  "cycle_id": "OVC-EC1-DISCOVERY-2021_2023-G1",
+  "common_nodes": [
+    {
+      "node_id": "RV-00.1",
+      "predicate": "Is the attempted interpretation inside EC1-G1?",
+      "true_branch": "RV-00.2",
+      "false_branch": "T-INVALID_PROTOCOL",
+      "evidence": "Question registry; authority boundary"
+    },
+    {
+      "node_id": "RV-00.2",
+      "predicate": "Is complete E1 accounting available for every REQUIRED surface?",
+      "true_branch": "RV-00.3",
+      "false_branch": "T-PARTIAL_CAPACITY",
+      "evidence": "Population/search accounting"
+    },
+    {
+      "node_id": "RV-00.3",
+      "predicate": "For Q02-Q10, is required denominator reconciliation exact with unreconciled=0? (Q01 evaluates this inside its tree.)",
+      "true_branch": "RV-00.4",
+      "false_branch": "T-BLOCK_DENOMINATOR",
+      "evidence": "Population reconciliation"
+    },
+    {
+      "node_id": "RV-00.4",
+      "predicate": "Is decision-bearing evidence R1 reproduced or preregistered-metamorphically equivalent?",
+      "true_branch": "RV-00.5",
+      "false_branch": "T-BLOCK_REPRODUCTION",
+      "evidence": "R1 reproduction package"
+    },
+    {
+      "node_id": "RV-00.5",
+      "predicate": "Is QA free of BLOCK/QUARANTINE for the requested conclusion?",
+      "true_branch": "RV-00.6",
+      "false_branch": "T-BLOCK_QA",
+      "evidence": "Question-specific QA packets"
+    },
+    {
+      "node_id": "RV-00.6",
+      "predicate": "Can the complete required scientific review be performed without hidden sampling/top-N?",
+      "true_branch": "QUESTION_ROOT",
+      "false_branch": "T-PARTIAL_REVIEW_CAPACITY",
+      "evidence": "ReviewCapacityReceipt"
+    }
+  ],
+  "question_trees": {
+    "EC1-Q01": [
+      {
+        "node_id": "Q01.1",
+        "predicate": "Do exact P1A, P1B and P1C P1PopulationManifests exist?",
+        "true_branch": "Q01.2",
+        "false_branch": "T-Q01-MISSING_MANIFEST",
+        "evidence": "P1PopulationManifest[*]"
+      },
+      {
+        "node_id": "Q01.2",
+        "predicate": "For each family, does eligible equal the sum of all six terminal population states?",
+        "true_branch": "Q01.3",
+        "false_branch": "T-BLOCK_DENOMINATOR",
+        "evidence": "PopulationIntegrityReview"
+      },
+      {
+        "node_id": "Q01.3",
+        "predicate": "Were missing, ambiguous and conflict states preserved rather than collapsed?",
+        "true_branch": "Q01.4",
+        "false_branch": "T-BLOCK_MISSINGNESS",
+        "evidence": "Population ledgers; QA"
+      },
+      {
+        "node_id": "Q01.4",
+        "predicate": "Are effective time and FVT lawful for all REQUIRED evidence?",
+        "true_branch": "Q01.5",
+        "false_branch": "T-BLOCK_CHRONOLOGY",
+        "evidence": "FVT/chronology assurance"
+      },
+      {
+        "node_id": "Q01.5",
+        "predicate": "Did R1 reproduce denominator counts and state assignments?",
+        "true_branch": "T-Q01-ANSWERED",
+        "false_branch": "T-BLOCK_REPRODUCTION",
+        "evidence": "R1 denominator receipt"
+      }
+    ],
+    "EC1-Q02": [
+      {
+        "node_id": "Q02.1",
+        "predicate": "Was the complete P1A direct-structural predicate lattice searched?",
+        "true_branch": "Q02.2",
+        "false_branch": "T-CAPACITY_INCOMPLETE",
+        "evidence": "P1SearchAccountingLedger"
+      },
+      {
+        "node_id": "Q02.2",
+        "predicate": "Are complete full signatures retained as inventory?",
+        "true_branch": "Q02.3",
+        "false_branch": "T-BLOCK_INVENTORY",
+        "evidence": "ExactSignatureInventory"
+      },
+      {
+        "node_id": "Q02.3",
+        "predicate": "Does any closure have support > 1?",
+        "true_branch": "Q02.4",
+        "false_branch": "T-Q02-NULL_ANSWERED",
+        "evidence": "PatternClosureClass[*]"
+      },
+      {
+        "node_id": "Q02.4",
+        "predicate": "For every recurrent closure, are exact membership and all minimal generators complete?",
+        "true_branch": "T-Q02-RECURRENCE_ANSWERED",
+        "false_branch": "T-BLOCK_CLOSURE_CORE",
+        "evidence": "MembershipLedger; P1StructuralCore[*]"
+      }
+    ],
+    "EC1-Q03": [
+      {
+        "node_id": "Q03.1",
+        "predicate": "Is the P1B transition-opportunity denominator complete?",
+        "true_branch": "Q03.2",
+        "false_branch": "T-BLOCK_DENOMINATOR",
+        "evidence": "P1PopulationManifest.P1B"
+      },
+      {
+        "node_id": "Q03.2",
+        "predicate": "Were motif lengths exactly 1, 2, 3 and 4 all evaluated?",
+        "true_branch": "Q03.3",
+        "false_branch": "T-CAPACITY_INCOMPLETE",
+        "evidence": "Search configuration/accounting"
+      },
+      {
+        "node_id": "Q03.3",
+        "predicate": "For each length, are recurrence/null, closure, membership, cores and overlap evidence complete?",
+        "true_branch": "Q03.4",
+        "false_branch": "T-BLOCK_SEARCH",
+        "evidence": "Length-specific discovery results"
+      },
+      {
+        "node_id": "Q03.4",
+        "predicate": "Is a post-result expansion beyond length 4 being requested?",
+        "true_branch": "T-Q03-METHOD_LIMIT_SUCCESSOR",
+        "false_branch": "T-Q03-ANSWERED",
+        "evidence": "Question review"
+      }
+    ],
+    "EC1-Q04": [
+      {
+        "node_id": "Q04.1",
+        "predicate": "Is the exact selected C2E boundary pack and logical hash bound?",
+        "true_branch": "Q04.2",
+        "false_branch": "T-BLOCK_OWNER_BINDING",
+        "evidence": "C2E boundary-pack authority"
+      },
+      {
+        "node_id": "Q04.2",
+        "predicate": "Is the complete emitted-episode P1C population reconciled?",
+        "true_branch": "Q04.3",
+        "false_branch": "T-BLOCK_OR_CAPACITY",
+        "evidence": "P1PopulationManifest.P1C"
+      },
+      {
+        "node_id": "Q04.3",
+        "predicate": "Was the complete declared morphology search executed?",
+        "true_branch": "Q04.4",
+        "false_branch": "T-CAPACITY_INCOMPLETE",
+        "evidence": "P1SearchAccountingLedger.P1C"
+      },
+      {
+        "node_id": "Q04.4",
+        "predicate": "Does any morphology closure have support > 1?",
+        "true_branch": "Q04.5",
+        "false_branch": "T-Q04-NULL_ANSWERED",
+        "evidence": "Morphology closures"
+      },
+      {
+        "node_id": "Q04.5",
+        "predicate": "Is every result explicitly boundary-pack-relative and free of an unowned incidence/prevalence claim?",
+        "true_branch": "T-Q04-ANSWERED",
+        "false_branch": "T-Q04-BLOCK_SUBCLAIM",
+        "evidence": "Question answer; owner denominator evidence"
+      }
+    ],
+    "EC1-Q05": [
+      {
+        "node_id": "Q05.1",
+        "predicate": "Do recurrent distinctions exist?",
+        "true_branch": "Q05.2",
+        "false_branch": "T-Q05-NOTHING_TO_DISTRIBUTE",
+        "evidence": "Q02-Q04 results"
+      },
+      {
+        "node_id": "Q05.2",
+        "predicate": "Are full-period, year, quarter, first/last, FVT and clock-lattice diagnostics complete for every distinction?",
+        "true_branch": "Q05.3",
+        "false_branch": "T-Q05-PARTIAL",
+        "evidence": "Chronology diagnostics"
+      },
+      {
+        "node_id": "Q05.3",
+        "predicate": "Is a categorical stability claim requested beyond frozen descriptive diagnostics?",
+        "true_branch": "Q05.4",
+        "false_branch": "T-Q05-DESCRIPTIVE_ANSWERED",
+        "evidence": "Review request"
+      },
+      {
+        "node_id": "Q05.4",
+        "predicate": "Was its exact rule preregistered before evidentiary read?",
+        "true_branch": "Q05.5",
+        "false_branch": "T-Q05-METHOD_LIMIT",
+        "evidence": "ScientificParameterJustificationRecord"
+      },
+      {
+        "node_id": "Q05.5",
+        "predicate": "Would the result rewrite applicability or membership inside EC1-G1?",
+        "true_branch": "T-BLOCK_POSTHOC_SCOPE",
+        "false_branch": "T-Q05-CATEGORICAL_ANSWERED",
+        "evidence": "Candidate change/applicability review"
+      }
+    ],
+    "EC1-Q06": [
+      {
+        "node_id": "Q06.1",
+        "predicate": "Do recurrent distinctions exist?",
+        "true_branch": "Q06.2",
+        "false_branch": "T-Q06-NOTHING_TO_COMPARE",
+        "evidence": "Q02-Q04 results"
+      },
+      {
+        "node_id": "Q06.2",
+        "predicate": "Does the dependence graph contain only registered direct edge types at stored depth 1?",
+        "true_branch": "Q06.3",
+        "false_branch": "T-BLOCK_DEPENDENCE_GRAPH",
+        "evidence": "EvidenceDependenceGraph"
+      },
+      {
+        "node_id": "Q06.3",
+        "predicate": "Are all relevant direct edges, clusters and side/clock diagnostics complete?",
+        "true_branch": "Q06.4",
+        "false_branch": "T-Q06-PARTIAL",
+        "evidence": "Dependence/correspondence evidence"
+      },
+      {
+        "node_id": "Q06.4",
+        "predicate": "Are BID/ASK, 15M/2H or overlaps treated as independent confirmation?",
+        "true_branch": "T-BLOCK_PSEUDOREPLICATION",
+        "false_branch": "T-Q06-DESCRIPTIVE_ANSWERED",
+        "evidence": "Pseudo-independence QA"
+      }
+    ],
+    "EC1-Q07": [
+      {
+        "node_id": "Q07.1",
+        "predicate": "Do recurrent distinctions exist?",
+        "true_branch": "Q07.2",
+        "false_branch": "T-Q07-NOTHING_TO_STRATIFY",
+        "evidence": "Q02-Q04 results"
+      },
+      {
+        "node_id": "Q07.2",
+        "predicate": "Is OccurrenceContext lawfully available with typed missingness?",
+        "true_branch": "Q07.3",
+        "false_branch": "T-Q07-PARTIAL_OR_Q09",
+        "evidence": "OccurrenceContext evidence"
+      },
+      {
+        "node_id": "Q07.3",
+        "predicate": "Does context removal/change preserve base membership?",
+        "true_branch": "Q07.4",
+        "false_branch": "T-BLOCK_CONTEXT_CONTAMINATION",
+        "evidence": "AV08 membership invariance"
+      },
+      {
+        "node_id": "Q07.4",
+        "predicate": "Are unchanged-membership stratum counts and missingness complete?",
+        "true_branch": "Q07.5",
+        "false_branch": "T-Q07-PARTIAL",
+        "evidence": "Context stratification"
+      },
+      {
+        "node_id": "Q07.5",
+        "predicate": "Does evidence-grounded human review support CONTEXT_DEPENDENT without identity rewrite?",
+        "true_branch": "T-Q07-CONTEXT_DEPENDENT",
+        "false_branch": "T-Q07-ANSWERED",
+        "evidence": "Candidate review card; human review"
+      }
+    ],
+    "EC1-Q08": [
+      {
+        "node_id": "Q08.1",
+        "predicate": "Is the complete proposal evidence dossier available?",
+        "true_branch": "Q08.2",
+        "false_branch": "T-CAPACITY_INCOMPLETE",
+        "evidence": "P1CandidateEvidenceDossier"
+      },
+      {
+        "node_id": "Q08.2",
+        "predicate": "Did any constitutional firewall or scientific-identity check fail?",
+        "true_branch": "T-Q08-REJECT_OR_QUARANTINE",
+        "false_branch": "Q08.3",
+        "evidence": "AV00/06/07/17/18/20/25"
+      },
+      {
+        "node_id": "Q08.3",
+        "predicate": "Did denominator, chronology, FVT, QA and R1 assurance pass?",
+        "true_branch": "Q08.4",
+        "false_branch": "T-Q08-QUARANTINE",
+        "evidence": "QA/R1"
+      },
+      {
+        "node_id": "Q08.4",
+        "predicate": "Does the proposition retain support > 1 and at least one lawful core?",
+        "true_branch": "Q08.5",
+        "false_branch": "T-Q08-INSUFFICIENT_OR_DESCRIPTIVE",
+        "evidence": "Closure/core evidence"
+      },
+      {
+        "node_id": "Q08.5",
+        "predicate": "Are negative space and all parity surfaces explicit and complete?",
+        "true_branch": "Q08.6",
+        "false_branch": "T-Q08-REFINE_OR_PENDING",
+        "evidence": "NegativeEvidenceReview"
+      },
+      {
+        "node_id": "Q08.6",
+        "predicate": "Is declared separation from NON_MATCH/near neighbours adequate under evidence-grounded review?",
+        "true_branch": "Q08.7",
+        "false_branch": "T-Q08-INSUFFICIENT_SEPARATION",
+        "evidence": "Near-neighbour evidence; human review"
+      },
+      {
+        "node_id": "Q08.7",
+        "predicate": "Does the one-field diagnostic itself remain methodologically informative?",
+        "true_branch": "Q08.8",
+        "false_branch": "T-Q08-METHOD_LIMIT_QUALIFICATION",
+        "evidence": "Near-neighbour limitation evidence"
+      },
+      {
+        "node_id": "Q08.8",
+        "predicate": "Does shared ancestry imply additional prospectively frozen Discovery evidence is required?",
+        "true_branch": "T-Q08-REPLICATE",
+        "false_branch": "Q08.9",
+        "evidence": "Dependence review; human review"
+      },
+      {
+        "node_id": "Q08.9",
+        "predicate": "Is support lawfully scoped to context without identity mutation?",
+        "true_branch": "T-Q08-CONTEXT_DEPENDENT",
+        "false_branch": "Q08.10",
+        "evidence": "Context review; human review"
+      },
+      {
+        "node_id": "Q08.10",
+        "predicate": "Were multiple lawful methods/representations actually tested and dependence demonstrated?",
+        "true_branch": "T-Q08-METHOD_OR_REP_DEPENDENT",
+        "false_branch": "Q08.11",
+        "evidence": "Alternative-method/representation evidence"
+      },
+      {
+        "node_id": "Q08.11",
+        "predicate": "Final evidence-grounded review: can it be refined, does it require replication, is it descriptive only, or does it survive?",
+        "true_branch": "T-Q08-TYPED_DISPOSITION",
+        "false_branch": "T-Q08-TYPED_DISPOSITION",
+        "evidence": "Complete candidate review card"
+      }
+    ],
+    "EC1-Q09": [
+      {
+        "node_id": "Q09.1",
+        "predicate": "Is the requested information outside EC1 protocol?",
+        "true_branch": "T-INVALID_PROTOCOL",
+        "false_branch": "Q09.2",
+        "evidence": "Question registry/authority"
+      },
+      {
+        "node_id": "Q09.2",
+        "predicate": "Is the information already supplied lawfully by the current active stack?",
+        "true_branch": "Q09.3",
+        "false_branch": "Q09.7",
+        "evidence": "ActiveStackCapabilityReview"
+      },
+      {
+        "node_id": "Q09.3",
+        "predicate": "Did EC1 deliberately exclude it?",
+        "true_branch": "T-Q09-EC1_FIELD_EXCLUSION",
+        "false_branch": "Q09.4",
+        "evidence": "Field-role/search-universe manifest"
+      },
+      {
+        "node_id": "Q09.4",
+        "predicate": "Does the information exist but the current EC1 method fail to answer?",
+        "true_branch": "T-Q09-METHOD_LIMITATION",
+        "false_branch": "Q09.5",
+        "evidence": "Method review"
+      },
+      {
+        "node_id": "Q09.5",
+        "predicate": "Is the blocker computation or review capacity?",
+        "true_branch": "T-Q09-CAPACITY_OR_REVIEW",
+        "false_branch": "Q09.6",
+        "evidence": "Capacity receipts"
+      },
+      {
+        "node_id": "Q09.6",
+        "predicate": "Is the current-stack evidence sufficient for the declared dependency role?",
+        "true_branch": "T-Q09-SUFFICIENT",
+        "false_branch": "T-Q09-AMBIGUOUS_CAUSE",
+        "evidence": "Information-dimension assessment"
+      },
+      {
+        "node_id": "Q09.7",
+        "predicate": "Classify the absence: owner semantics, active authority, current implementation, information construct, or ambiguous.",
+        "true_branch": "Q09.8",
+        "false_branch": "Q09.8",
+        "evidence": "NeedCauseClassification"
+      },
+      {
+        "node_id": "Q09.8",
+        "predicate": "Is the seven-part CounterfactualSufficiencyReview complete?",
+        "true_branch": "Q09.9",
+        "false_branch": "T-Q09-NO_OWNER_ROUTE",
+        "evidence": "Counterfactual review"
+      },
+      {
+        "node_id": "Q09.9",
+        "predicate": "Does the proposed owner actually own a proportionate missing information class?",
+        "true_branch": "T-Q09-UPPER_LAYER_NEED",
+        "false_branch": "T-Q09-NO_ARCHITECTURE_NEED",
+        "evidence": "Owner/readiness evidence; human review"
+      }
+    ],
+    "EC1-Q10": [
+      {
+        "node_id": "Q10.1",
+        "predicate": "Frozen complete population and search universe, including required search execution.",
+        "true_branch": "Q10.2",
+        "false_branch": "T-Q10-FAIL-01",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.2",
+        "predicate": "Outcome and Validation firewall PASS.",
+        "true_branch": "Q10.3",
+        "false_branch": "T-Q10-FAIL-02",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.3",
+        "predicate": "Deterministic membership and complete accounting.",
+        "true_branch": "Q10.4",
+        "false_branch": "T-Q10-FAIL-03",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.4",
+        "predicate": "At least one lawful minimal structural core; all minimal generators preserved.",
+        "true_branch": "Q10.5",
+        "false_branch": "T-Q10-FAIL-04",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.5",
+        "predicate": "Recurrence present under SUPPORT_GT_1.",
+        "true_branch": "Q10.6",
+        "false_branch": "T-Q10-FAIL-05",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.6",
+        "predicate": "Negative-space construction rule defined.",
+        "true_branch": "Q10.7",
+        "false_branch": "T-Q10-FAIL-06",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.7",
+        "predicate": "Unresolved and missingness policy defined.",
+        "true_branch": "Q10.8",
+        "false_branch": "T-Q10-FAIL-07",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.8",
+        "predicate": "First-valid-time rule defined.",
+        "true_branch": "Q10.9",
+        "false_branch": "T-Q10-FAIL-08",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.9",
+        "predicate": "Dependency manifest complete.",
+        "true_branch": "Q10.10",
+        "false_branch": "T-Q10-FAIL-09",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.10",
+        "predicate": "Counterexamples and near neighbours attached with negative-evidence parity.",
+        "true_branch": "Q10.11",
+        "false_branch": "T-Q10-FAIL-10",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.11",
+        "predicate": "No blocking QA, reproduction or capacity defect.",
+        "true_branch": "Q10.12",
+        "false_branch": "T-Q10-FAIL-11",
+        "evidence": "Eligibility evidence"
+      },
+      {
+        "node_id": "Q10.12",
+        "predicate": "Does the resulting proposal have a complete Q08 P1CandidateReviewCard and typed disposition?",
+        "true_branch": "Q10.13",
+        "false_branch": "T-Q10-REVIEW_PENDING",
+        "evidence": "P1CandidateReviewCard"
+      },
+      {
+        "node_id": "Q10.13",
+        "predicate": "Does any card recommend FREEZE_CANDIDATE without a blocking defect?",
+        "true_branch": "T-Q10-PREPARE_GSCI",
+        "false_branch": "T-Q10-NO_RESERVED_ACTION",
+        "evidence": "Q08 disposition; reserved-action checks"
+      }
+    ]
+  },
+  "eligibility_conditions": [
+    {
+      "condition_id": "EC1-ELIG-01",
+      "condition": "Frozen complete population and search universe, including required search execution."
+    },
+    {
+      "condition_id": "EC1-ELIG-02",
+      "condition": "Outcome and Validation firewall PASS."
+    },
+    {
+      "condition_id": "EC1-ELIG-03",
+      "condition": "Deterministic membership and complete accounting."
+    },
+    {
+      "condition_id": "EC1-ELIG-04",
+      "condition": "At least one lawful minimal structural core; all minimal generators preserved."
+    },
+    {
+      "condition_id": "EC1-ELIG-05",
+      "condition": "Recurrence present under SUPPORT_GT_1."
+    },
+    {
+      "condition_id": "EC1-ELIG-06",
+      "condition": "Negative-space construction rule defined."
+    },
+    {
+      "condition_id": "EC1-ELIG-07",
+      "condition": "Unresolved and missingness policy defined."
+    },
+    {
+      "condition_id": "EC1-ELIG-08",
+      "condition": "First-valid-time rule defined."
+    },
+    {
+      "condition_id": "EC1-ELIG-09",
+      "condition": "Dependency manifest complete."
+    },
+    {
+      "condition_id": "EC1-ELIG-10",
+      "condition": "Counterexamples and near neighbours attached with negative-evidence parity."
+    },
+    {
+      "condition_id": "EC1-ELIG-11",
+      "condition": "No blocking QA, reproduction or capacity defect."
+    }
+  ],
+  "authority_effect": "NONE"
+}
