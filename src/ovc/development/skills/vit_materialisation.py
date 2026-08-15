@@ -78,21 +78,53 @@ class ReceiptStore:
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
 
-    def put(self, receipt: object, receipt_id: str) -> Path:
+    def _put_payload(self, payload: Mapping[str, object], receipt_id: str) -> Path:
         path = self.root / f"{receipt_id}.json"
-        payload = json.dumps(asdict(receipt), sort_keys=True, separators=(",", ":"))
+        encoded = json.dumps(dict(payload), sort_keys=True, separators=(",", ":"))
         if path.exists():
-            if path.read_text(encoding="utf-8") != payload:
+            if path.read_text(encoding="utf-8") != encoded:
                 raise VitContractError("VIT_LEDGER_INTEGRITY_FAIL")
             return path
-        path.write_text(payload, encoding="utf-8")
+        path.write_text(encoded, encoding="utf-8")
         return path
+
+    def put(self, receipt: object, receipt_id: str) -> Path:
+        return self._put_payload(asdict(receipt), receipt_id)
+
+    def put_record(self, receipt: Mapping[str, object], receipt_id: str) -> Path:
+        """Persist an already-canonical mapping without changing its logical identity."""
+        return self._put_payload(receipt, receipt_id)
+
+    def put_completion_with_devobs(
+        self,
+        completion: PacketCompletionReceipt,
+        development_latency_receipt: Mapping[str, object],
+    ) -> Mapping[str, str]:
+        """Atomically require and persist the DEVOBS attachment for a DSAI3V completion."""
+        from ovc.development.dsai3v_completion_observability import validate_completion_attachment
+
+        attachment = validate_completion_attachment(
+            programme_id=completion.programme_id,
+            packet_id=completion.packet_id,
+            completion_receipt_id=completion.receipt_id,
+            development_latency_receipt=development_latency_receipt,
+        )
+        devobs_id = str(development_latency_receipt["record_id"])
+        self.put(completion, completion.receipt_id)
+        self.put_record(development_latency_receipt, devobs_id)
+        attachment_record = attachment.to_record()
+        self.put_record(attachment_record, attachment.attachment_id)
+        return {
+            "completion_receipt_id": completion.receipt_id,
+            "development_latency_receipt_id": devobs_id,
+            "attachment_id": attachment.attachment_id,
+        }
 
     def rebuild_index(self) -> Mapping[str, str]:
         index: dict[str, str] = {}
         for path in sorted(self.root.glob("*.json")):
             raw = json.loads(path.read_text(encoding="utf-8"))
-            for field in ("transaction_id", "packet_id"):
+            for field in ("transaction_id", "packet_id", "completion_receipt_id", "development_latency_receipt_id"):
                 value = raw.get(field)
                 if value:
                     key = f"{field}:{value}"
