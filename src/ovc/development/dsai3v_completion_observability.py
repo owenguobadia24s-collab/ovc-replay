@@ -1,7 +1,8 @@
 """Canonical DEVOBS receipt attached to DSAI3V packet completion.
 
 The receipt is diagnostic-only. It joins already-observed DEVOBS latency context with
-ORCH, VIT and SIQ provenance without granting authority or inferring unobserved time.
+ORCH, VIT, SIQ and optional Async Assurance provenance without granting authority
+or inferring unobserved time.
 """
 from __future__ import annotations
 
@@ -12,6 +13,19 @@ from ovc.development.identity import canonical_sha256
 
 CANONICAL_COMPLETION_SCHEMA = "ovc-development-latency-canonical-dsai3v/v1"
 ATTACHMENT_SCHEMA = "ovc-dsai3v-completion-observability-attachment/v1"
+ASYNC_ASSURANCE_METRIC_FIELDS = (
+    "foreground_ci_wait_ms",
+    "background_ci_elapsed_ms",
+    "ci_development_overlap_ms",
+    "speculative_successor_ms",
+    "workflow_green_to_materialisation_ms",
+    "materialisation_ready_idle_ms",
+    "assurance_rerun_count",
+    "assurance_reuse_count",
+    "descendant_invalidation_count",
+    "speculative_work_salvaged_ms",
+    "speculative_work_discarded_ms",
+)
 
 
 def _record_ref(value: Mapping[str, Any]) -> dict[str, Any]:
@@ -32,6 +46,24 @@ def _count_value(records: Sequence[Mapping[str, Any]], key: str, values: set[str
     return sum(1 for row in records if str(row.get(key, "")).upper() in values)
 
 
+def _async_assurance_metrics(value: Mapping[str, Any] | None) -> dict[str, Any]:
+    result: dict[str, Any] = {"status": "UNAVAILABLE"}
+    result.update({field: None for field in ASYNC_ASSURANCE_METRIC_FIELDS})
+    if value is None:
+        return result
+    unknown = sorted(set(value) - set(ASYNC_ASSURANCE_METRIC_FIELDS))
+    if unknown:
+        raise ValueError(f"unknown Async Assurance metric fields: {unknown}")
+    for field in ASYNC_ASSURANCE_METRIC_FIELDS:
+        observed = value.get(field)
+        if observed is not None:
+            if isinstance(observed, bool) or not isinstance(observed, (int, float)) or observed < 0:
+                raise ValueError(f"Async Assurance metric {field} must be a non-negative observed number or null")
+            result[field] = observed
+    result["status"] = "OBSERVED" if any(result[field] is not None for field in ASYNC_ASSURANCE_METRIC_FIELDS) else "UNAVAILABLE"
+    return result
+
+
 def build_canonical_completion_latency_receipt(
     *,
     programme_id: str,
@@ -42,6 +74,7 @@ def build_canonical_completion_latency_receipt(
     orch_receipts: Sequence[Mapping[str, Any]] = (),
     vit_receipts: Sequence[Mapping[str, Any]] = (),
     siq_receipts: Sequence[Mapping[str, Any]] = (),
+    async_assurance_metrics: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build one content-addressed completion receipt from observed source receipts."""
     if not programme_id or not packet_id or not completion_receipt_id:
@@ -91,6 +124,7 @@ def build_canonical_completion_latency_receipt(
         "completion_receipt_id": str(completion_receipt_id),
         "devobs_context": context,
         "latency": latency,
+        "async_assurance": _async_assurance_metrics(async_assurance_metrics),
         "orch": {
             "receipt_count": len(orch),
             "decision_selected_count": _count_value(orch, "decision_state", {"DECISION_SELECTED"}),
