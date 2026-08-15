@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-delegated-decision/v1",
+  "decision_id": "DEVOBS.DSAI3V.COMPLETION.RECEIPT.DELEGATED.PASS.20260815",
+  "packet_id": "DEVOBS-DSAI3V-COMPLETION-RECEIPT",
+  "decision": "PASS",
+  "status": "COMPLETED",
+  "authority_source": "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
+  "gate_class": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "tested_candidate_head": "aac290d3a9909bb9f86d418b590973a6474d0dfa",
+  "final_decision_head": "ddb29d2c5d0e2e306e49e0fc841059bd3572c4e3",
+  "tests": [31873098138, 31873098135],
+  "qa_packet": "docs/releases/development-observability-v0-2/dsai3v-completion-receipts/DEVOBS_DSAI3V_COMPLETION_QA.json",
+  "acceptance": {
+    "canonical_devobs_receipt_attached_to_dsai3v_completion": true,
+    "devobs_v0_2_context_join": true,
+    "orch_vit_siq_join": true,
+    "missing_evidence_not_inferred": true,
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS",
+    "unresolved_reviews_or_blockers": 0
+  },
+  "non_reserved_rationale": "Diagnostic observability hardening only. The change requires a content-addressed DEVOBS receipt at DSAI3V packet completion and joins already-observed ORCH/VIT/SIQ evidence. It grants no programme, merge, scientific, Validation, publication, probability, risk, exposure or execution authority.",
+  "rollback": "Forward-disable CANONICAL_DEVOBS_COMPLETION_RECEIPT_ATTACHED and the DSAI3V completion bundle requirement while preserving every emitted receipt and Git history; never rewrite historical evidence.",
+  "merge_method": "SQUASH",
+  "merge_commit": "3af91355eaec8ebc2868e9dbc4eb8d1cfcb79245",
+  "next_packet": null
+}
