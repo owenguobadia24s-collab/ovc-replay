@@ -1,0 +1,16 @@
+{
+  "schema":"ovc-dsai3v-wp12-corrective-record/v1",
+  "corrective_id":"DSAI3V-WP12-CORR1-SUCCESSOR-POINTER-REGRESSION",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "packet_id":"DSAI3V-WP12",
+  "failure_run":31855283076,
+  "failure_job":94938767951,
+  "classification":"STALE_HISTORICAL_TEST_FRONTIER_ASSUMPTION",
+  "observed_failures":["WP10 historical closeout test assumed CURRENT_STATE_POINTER must remain DSAI3V-WP11 after general activation","WP11 historical closeout test assumed CURRENT_STATE_POINTER must remain DSAI3V-WP11 after lawful successor WP12 starts"],
+  "root_cause":"The tests coupled historical proof to the mutable current programme pointer. WP11 was lawfully completed and the pointer advanced to WP12, so the historical records remained correct while the assertions became stale.",
+  "repair":"Preserve exact historical state assertions on immutable v0_14 and v0_17 records; make current-pointer assertions successor-aware while continuing to require active general authority, zero parallel physical merge, and WP11 presence in completed_packets after advancement.",
+  "test_weakening":false,
+  "authority_delta":"NONE",
+  "safety_boundary_unchanged":true,
+  "rollback":"Revert this bounded test correction if it fails to preserve historical-state or authority invariants; no production/runtime semantic change is made by CORR1."
+}
