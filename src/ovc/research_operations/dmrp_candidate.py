@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from types import MappingProxyType
 from typing import Any, Mapping
 
 from .canonical import canonical_sha256
@@ -15,6 +16,28 @@ INFLUENCE_KINDS = frozenset({"ORIGIN", "SEARCH", "DEFINITION", "EXAMPLE", "VOCAB
 
 class CandidateInvariantError(ValueError):
     pass
+
+
+def _freeze(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return MappingProxyType({str(k): _freeze(v) for k, v in value.items()})
+    if isinstance(value, list):
+        return tuple(_freeze(v) for v in value)
+    if isinstance(value, tuple):
+        return tuple(_freeze(v) for v in value)
+    if isinstance(value, set):
+        return frozenset(_freeze(v) for v in value)
+    return value
+
+
+def _thaw(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {str(k): _thaw(v) for k, v in value.items()}
+    if isinstance(value, tuple):
+        return [_thaw(v) for v in value]
+    if isinstance(value, frozenset):
+        return sorted((_thaw(v) for v in value), key=repr)
+    return value
 
 
 @dataclass(frozen=True)
@@ -47,17 +70,23 @@ class ResearchCandidateGeneration:
     def __post_init__(self) -> None:
         if not self.series_id or self.generation < 1:
             raise CandidateInvariantError("valid series_id/generation required")
+        if not self.frozen:
+            raise CandidateInvariantError("ResearchCandidateGeneration is immutable by construction")
         if self.authority_effect != "NONE":
             raise CandidateInvariantError("generation construction grants no authority")
+        object.__setattr__(self, "definition", _freeze(self.definition))
+        object.__setattr__(self, "population_binding", _freeze(self.population_binding))
+        object.__setattr__(self, "dependency_manifest", _freeze(self.dependency_manifest))
+        object.__setattr__(self, "first_valid_rule", _freeze(self.first_valid_rule))
 
     def semantic_dict(self) -> dict[str, Any]:
         return {
             "series_id": self.series_id,
             "generation": self.generation,
-            "definition": dict(self.definition),
-            "population_binding": dict(self.population_binding),
-            "dependency_manifest": dict(self.dependency_manifest),
-            "first_valid_rule": dict(self.first_valid_rule),
+            "definition": _thaw(self.definition),
+            "population_binding": _thaw(self.population_binding),
+            "dependency_manifest": _thaw(self.dependency_manifest),
+            "first_valid_rule": _thaw(self.first_valid_rule),
         }
 
     @property

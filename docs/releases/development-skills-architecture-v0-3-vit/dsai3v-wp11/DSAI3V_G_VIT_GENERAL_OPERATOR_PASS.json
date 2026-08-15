@@ -1,0 +1,34 @@
+{
+  "schema":"ovc-dsai3v-g-vit-general-operator-decision/v1",
+  "decision_id":"DSAI3V-G-VIT-GENERAL.OPERATOR.PASS.20260815T011200+0100",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "plan_id":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "gate_id":"DSAI3V-G-VIT-GENERAL",
+  "decision":"PASS",
+  "decision_authority":"OPERATOR",
+  "operator_instruction":"OVC APPROVE DSAI3V-G-VIT-GENERAL PASS",
+  "baseline_main_commit":"2d5e8398cea5737a420206fe5288cab44849bff6",
+  "gate_packet":"docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp10/DSAI3V_G_VIT_GENERAL_GATE_READY.json",
+  "approved_authority_delta":{
+    "authority_kind":"VIT_GENERAL_BOUNDED_ACTIVE",
+    "scope":"normal already-authorised AUTO_EXECUTABLE/AUTO_RATIFIABLE packet population",
+    "controller":"DSAI_VIT_PHYSICAL_CONTROLLER",
+    "physical_gateway":"DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "parallel_physical_merge":false,
+    "programme_specific_authority_change":false,
+    "scientific_authority_change":false,
+    "grt_g3_change":false
+  },
+  "conditions":[
+    "Every routed packet must already be authorised by its governing programme and remain AUTO_EXECUTABLE or AUTO_RATIFIABLE with authority_delta NONE.",
+    "Every programme-owned operator-required gate and stop boundary remains binding.",
+    "VIT owns prospective ordering while the existing SIQ gateway remains the sole serialized physical writer.",
+    "Exactly one active materialisation path is permitted and parallel physical merge remains false.",
+    "Exact physical/VIT tree equality, current GRT/SIQ assurance and complete end-to-end receipts remain mandatory.",
+    "GRT2-G3 remains NOT_AUTHORISED and no DebtFloor is inferred."
+  ],
+  "not_granted":["programme-specific reserved authority","parallel physical merge","force-push/history rewrite","selector/model/family/candidate/theory promotion","ACTIVE_DISCOVERY","ACTIVE_DEVELOPMENT","ACTIVE_VALIDATION","publication","probability/risk/exposure/trading/execution authority"],
+  "rollback":"Forward-disable general VIT routing and return affected packets to the exact previously-authorised ORCH/SIQ serialized path; preserve all evidence and Git history; never force-push or rewrite history.",
+  "next_packet":"DSAI3V-WP11",
+  "next_gate":"DSAI3V-G11"
+}

@@ -1,0 +1,22 @@
+{
+  "schema":"ovc-dsai3v-g11-decision/v1",
+  "decision_id":"DSAI3V-G11.DELEGATED.PASS.20260815",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "plan_id":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "gate_id":"DSAI3V-G11",
+  "gate_class":"AUTO_RATIFIABLE",
+  "delegated_authority_source":"DSAI3V-G-VIT-GENERAL.OPERATOR.PASS.20260815T011200+0100",
+  "decision":"PASS",
+  "status":"APPROVED",
+  "candidate_head_before_decision":"c37d2924f230ac58dc3ab64135384df1a1091cc5",
+  "tests":[31853686794,31853686802,31853960554,31853960591,31854601085,31854600984],
+  "qa_packet":"docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp11/DSAI3V_WP11_QA.json",
+  "smoke_receipts":"docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp11/DSAI3V_WP11_GENERAL_SMOKE_RECEIPTS.json",
+  "acceptance":{"authority_record_exact":true,"independent_lane_smoke_pass":true,"grt_siq_binding_current":true,"all_exact_tree_equal":true,"false_authority_allows":0,"parallel_physical_merges":0,"tree_mismatches":0,"duplicate_effective_writes":0,"lost_mandatory_receipts":0,"safety_class_incidents":0},
+  "authority_delta":"NONE",
+  "non_reserved_rationale":"G11 only materialises and verifies the operator-approved general VIT activation. It adds no packet class beyond the approved normal already-authorised AUTO_EXECUTABLE/AUTO_RATIFIABLE population, changes no programme-owned reserved boundary, preserves the existing serialized SIQ physical gateway and keeps parallel physical merge false.",
+  "rollback":"Forward-disable general VIT routing and return affected packets to the exact previously-authorised ORCH/SIQ serialized path; preserve all evidence and Git history; never force-push or rewrite history.",
+  "merge_commit":null,
+  "next_packet":"DSAI3V-WP12",
+  "next_gate":"DSAI3V-G12"
+}

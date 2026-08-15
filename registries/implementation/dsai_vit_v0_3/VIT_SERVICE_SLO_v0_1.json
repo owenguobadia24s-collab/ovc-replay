@@ -1,0 +1,16 @@
+{
+  "schema":"ovc-dsai3v-vit-service-slo/v1",
+  "slo_id":"DSAI3V-VIT-SERVICE-SLO-v0.1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "plan_id":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "status":"ACTIVE_FROZEN_BY_DSAI3V_G12",
+  "authority_effect":"NONE_OPERATIONAL_POLICY_ONLY",
+  "source_evidence":["docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp8b/VIT_OPERATIONAL_BUDGET.json","docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp10/DSAI3V_WP10_Q6_LIVE_PILOT_RECEIPTS.json","docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp10/DSAI3V_WP10_Q6_METRICS_AND_INCIDENTS.json","docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp11/DSAI3V_WP11_GENERAL_SMOKE_RECEIPTS.json","docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp12/DSAI3V_WP12_STABILIZATION_EVIDENCE.json"],
+  "hard_correctness_slos":{"exact_physical_vit_tree_equality_rate":1.0,"mandatory_receipt_completeness_rate":1.0,"false_authority_allows":0,"parallel_physical_merges":0,"unexplained_main_divergences":0,"duplicate_effective_writes":0,"lost_mandatory_receipts":0,"accepted_tree_mismatches":0,"safety_class_incidents":0},
+  "currentness_policy":{"owner_authority":"REVALIDATE_AT_ADMISSION_QUALIFICATION_AND_PREWRITE","programme_reserved_boundaries":"REVALIDATE_PREWRITE_AND_STOP_IF_PENDING","prerequisites_and_qa":"PASS_REQUIRED_PREWRITE","grt_integration_assurance":"CURRENT_REQUIRED","siq_exact_final_assurance":"CURRENT_REQUIRED","physical_predecessor":"EXACT_MATCH_REQUIRED_IMMEDIATELY_PREWRITE","post_write_tree":"EXACT_MATCH_REQUIRED_BEFORE_COMPLETION","grt_g3":"NOT_AUTHORISED","parallel_physical_merge":false},
+  "reference_policy":{"reference_optimized_parity":"BLOCKING_ON_VIT_ALGORITHM_OR_APPLY_PROFILE_CHANGE","reference_sample":"REQUIRED_AT_STABILIZATION_CLOSEOUT_AND_AFTER_ANY_INTEGRITY_OR_SAFETY_INCIDENT","post_materialisation_equality":"EVERY_MATERIALISATION","receipt_audit":"EVERY_MATERIALISATION_CAUSAL_CHAIN"},
+  "capacity_policy":{"budget_binding":"25cc568d9c863d614007f268ce989cc3f9c2432bc9ce130bf40872365cb749a7","semantic_degradation_on_capacity_pressure":"FORBIDDEN","capacity_exceeded_behavior":"FAIL_CLOSED_OR_REQUEUE_WITH_SAME_SEMANTICS","q4_observed_reference":{"parallel_build_slots":3,"build_ahead_packets":6,"mean_rebuild_seconds":0.00001760333333204282,"peak_memory_bytes":2576,"peak_storage_bytes":560}},
+  "latency_policy":{"metric":"tiered exact-final assurance elapsed wall time","observed_seconds":{"min":260,"median":274,"max":306,"sample_count":3},"advisory_target_seconds":306,"breach_effect":"OPERATIONAL_REVIEW_ONLY_NO_AUTHORITY_EFFECT","correctness_checks_may_be_skipped_for_latency":false},
+  "incident_policy":{"unexplained_main_movement":"STOP_PHYSICAL_MATERIALISATION_AND_OPEN_INTEGRITY_INCIDENT","post_write_tree_mismatch":"QUARANTINE_MATERIALISATION_FRONTIER","unknown_write_state":"OBSERVATION_FIRST_NO_BLIND_RETRY","safety_invariant_breach":"AUTO_DISABLE_AFFECTED_VIT_CAPABILITY_AND_FALL_BACK_ONLY_TO_PREVIOUSLY_AUTHORISED_ROUTE"},
+  "rollback":"Forward-disable general VIT routing and return affected packets to the exact previously-authorised ORCH/SIQ serialized path; preserve evidence and history; never force-push or rewrite history."
+}

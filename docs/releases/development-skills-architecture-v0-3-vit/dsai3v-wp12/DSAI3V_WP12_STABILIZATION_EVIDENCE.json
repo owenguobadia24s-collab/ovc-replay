@@ -1,0 +1,22 @@
+{
+  "schema":"ovc-dsai3v-wp12-stabilization-evidence/v1",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "packet_id":"DSAI3V-WP12",
+  "gate_id":"DSAI3V-G12",
+  "baseline_main":"43d80baebd6cdc4074da6b0c04ef26fd6723e981",
+  "general_authority":"registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+  "operational_budget":"docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp8b/VIT_OPERATIONAL_BUDGET.json",
+  "operational_budget_id":"25cc568d9c863d614007f268ce989cc3f9c2432bc9ce130bf40872365cb749a7",
+  "live_materialisation_sample":{"count":4,"sources":["DSAI3V-WP10 Q6-A","DSAI3V-WP10 Q6-B","DSAI3V-WP11 GENERAL-A","DSAI3V-WP11 GENERAL-B"],"exact_tree_equal_count":4,"receipt_complete_count":4,"parallel_merge_count":0,"tree_mismatch_count":0,"false_authority_allow_count":0,"unexplained_main_divergence_count":0,"duplicate_effective_write_count":0,"lost_mandatory_receipt_count":0,"safety_class_incident_count":0},
+  "pilot_metrics":{"lane_count":2,"operator_interventions":0,"unresolved_high_severity_incidents":0,"unresolved_s3_s4_incidents":0,"reference_reconciliation":"PASS","resolved_non_safety_observations":["DSAI3V-Q6-OBS-001 NON_REPRODUCIBLE_PERFORMANCE_PROBE_JITTER resolved on exact-head rerun with no content change"]},
+  "general_smoke_metrics":{"lane_count":2,"all_exact_tree_equal":true,"chain_complete":true,"false_authority_allows":0,"parallel_merges":0,"tree_mismatches":0,"duplicate_effective_writes":0,"lost_mandatory_receipts":0,"safety_class_incidents":0},
+  "q4_reference_metrics":{"lane_count":3,"parallel_build_slots_observed":3,"build_ahead_packets_observed":6,"false_parallel_value_rate":0.0,"mean_vit_lag_seconds":0.00005352866666541445,"peak_vit_lag_seconds":0.00008930300000287161,"peak_memory_bytes":2576,"peak_storage_bytes":560,"mean_checkpoint_seconds":0.00001760333333204282,"mean_rebuild_seconds":0.00001760333333204282,"unexpected_operator_interventions":0,"placement_recompute_count":3,"assurance_renewal_count":3,"payload_rebuild_count":0,"authority_review_count":0},
+  "exact_final_assurance_latency_seconds":{"samples":[{"surface":"WP11 GENERAL-A tiered exact-final workflow","run_id":31853686802,"elapsed_seconds":274},{"surface":"WP11 GENERAL-B tiered exact-final workflow","run_id":31853960591,"elapsed_seconds":306},{"surface":"WP11 G11 closeout tiered exact-final workflow","run_id":31854906312,"elapsed_seconds":260}],"minimum":260,"median":274,"maximum":306,"interpretation":"Operational observation only. Latency creates no authority and may not weaken correctness checks."},
+  "receipt_audit":{"q6_live_receipts":"PASS_2_OF_2","wp11_general_smoke_receipts":"PASS_2_OF_2","aggregate":"PASS_4_OF_4"},
+  "incident_review":{"unresolved_safety_class_incidents":0,"unresolved_high_severity_incidents":0,"known_resolved_non_safety_observations":1},
+  "reference_sampling":{"physical_vs_prospective_exact_tree":"PASS_4_OF_4","existing_reference_optimized_equivalence_suite":"PASS","final_repository_reference_assurance":"PASS","repository_run":31857089577,"tiered_run":31857089582},
+  "corrective_events":[{"id":"DSAI3V-WP12-CORR1-SUCCESSOR-POINTER-REGRESSION","classification":"STALE_HISTORICAL_TEST_FRONTIER_ASSUMPTION","resolved":true,"authority_delta":"NONE"},{"id":"DSAI3V-WP12-CI-OBS-001","classification":"FINAL_INTEGRATION_PREDECESSOR_LEASE_TIMEOUT","predecessor_pr":870,"resolved_by":"BOUNDED_FAILED_JOB_RETRY","safety_class":false,"content_change_required":false,"authority_delta":"NONE"},{"id":"DSAI3V-WP12-REQUEUE-001","classification":"LAWFUL_EXTERNAL_MAIN_ADVANCE","new_main":"537da55e12ec2c742909a2686a5ff2b2b4d273cf","source":"DMRPI-WP4 PR #870","action":"RECONSTRUCTED_ON_LATEST_LAWFUL_MAIN","authority_delta":"NONE"},{"id":"DSAI3V-WP12-REQUEUE-002","classification":"LAWFUL_EXTERNAL_MAIN_ADVANCE","new_main":"43d80baebd6cdc4074da6b0c04ef26fd6723e981","source":"DMRPI-WP5 PR #871","action":"RECONSTRUCTED_ON_LATEST_LAWFUL_MAIN","authority_delta":"NONE"}],
+  "exact_head_candidate":"2ade988f1a0f2ff708af08a3fb2976a2511f58cc",
+  "authority_delta":"NONE",
+  "stabilization_status":"PASS"
+}
