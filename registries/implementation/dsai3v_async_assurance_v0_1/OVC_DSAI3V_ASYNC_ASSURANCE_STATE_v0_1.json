@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-dsai3v-async-assurance-programme-state/v1",
+  "programme_id": "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-RATIFIED",
+  "plan_version": "0.1",
+  "status": "APPROVED",
+  "packet_id": "DSAI3V-AA-WP0",
+  "next_packet": "DSAI3V-AA-WP1",
+  "baseline_commit": "7f57b99a39d313dca7ff3e3aab19cc80529a323b",
+  "branch": "plan/dsai3v-async-assurance-conformance-v0-1",
+  "candidate_commit": "e186134a5f46c051a55d0e1ec8d35d7ea8138532",
+  "tests": ["tests@31875939564:PASS", "tiered@31875939635:PASS", "merge-readiness@94992050845:PASS"],
+  "qa_packet": "docs/releases/development-skills-v0-3/async-assurance-conformance/aa-wp0/DSAI3V_AA_WP0_QA.json",
+  "decision_record": "docs/releases/development-skills-v0-3/async-assurance-conformance/aa-wp0/DSAI3V_AA_G0_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "authority_required": "AUTO_EXECUTABLE_AFTER_OPERATOR_PLAN_RATIFICATION",
+  "authority_delta": "PLAN_AND_PROGRAMME_MATERIALISATION_ONLY",
+  "runtime_authority": "INACTIVE_IMPLEMENTATION_ONLY",
+  "live_async_activation": "DENIED_PENDING_DSAI3V-AA-G-ACTIVATE",
+  "packet_register": [
+    {"packet_id":"DSAI3V-AA-WP0","status":"APPROVED","prerequisites":["ASYNC_ASSURANCE_DESIGN_REPOSITORY_EFFECTIVE"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"PLAN_AND_PROGRAMME_MATERIALISATION_ONLY","baseline_commit":"7f57b99a39d313dca7ff3e3aab19cc80529a323b","candidate_commit":"e186134a5f46c051a55d0e1ec8d35d7ea8138532","tests":["31875939564:PASS","31875939635:PASS","94992050845:PASS"],"qa_packet":"docs/releases/development-skills-v0-3/async-assurance-conformance/aa-wp0/DSAI3V_AA_WP0_QA.json","decision_record":"docs/releases/development-skills-v0-3/async-assurance-conformance/aa-wp0/DSAI3V_AA_G0_DECISION.json","merge_commit":null,"blockers":[],"next_packet":"DSAI3V-AA-WP1"},
+    {"packet_id":"DSAI3V-AA-WP1","status":"READY","prerequisites":["DSAI3V-AA-G0-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"INACTIVE_ASYNC_ASSURANCE_CONTRACTS","next_packet":"DSAI3V-AA-WP2"},
+    {"packet_id":"DSAI3V-AA-WP2","status":"PLANNED","prerequisites":["DSAI3V-AA-G1-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"READ_ONLY_ASSURANCE_PROVIDER_ADAPTER","next_packet":"DSAI3V-AA-WP3"},
+    {"packet_id":"DSAI3V-AA-WP3","status":"PLANNED","prerequisites":["DSAI3V-AA-G2-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"INACTIVE_CONTROLLER_WAKE_CAPABILITY","next_packet":"DSAI3V-AA-WP4"},
+    {"packet_id":"DSAI3V-AA-WP4","status":"PLANNED","prerequisites":["DSAI3V-AA-G3-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"INACTIVE_ASYNC_CONTINUATION_CAPABILITY","next_packet":"DSAI3V-AA-WP5"},
+    {"packet_id":"DSAI3V-AA-WP5","status":"PLANNED","prerequisites":["DSAI3V-AA-G4-COMPLETED"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"QUALIFIED_INACTIVE_ASYNC_ASSURANCE_CAPABILITY","next_packet":"DSAI3V-AA-G-ACTIVATE"},
+    {"packet_id":"DSAI3V-AA-G-ACTIVATE","status":"PLANNED","prerequisites":["DSAI3V-AA-G5-COMPLETED"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"LIVE_ASYNC_ASSURANCE_ACTIVATION_TO_BE_RESOLVED","next_packet":null}
+  ]
+}
