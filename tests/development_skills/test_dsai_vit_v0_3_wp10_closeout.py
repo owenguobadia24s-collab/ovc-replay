@@ -7,6 +7,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RELEASE = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp10"
 STATE_ROOT = ROOT / "registries/implementation/dsai_vit_v0_3"
+GENERAL_DECISION = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/dsai3v-wp11/DSAI3V_G_VIT_GENERAL_OPERATOR_PASS.json"
+GENERAL_AUTHORITY = ROOT / "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json"
 
 
 class DsaiVitV03Wp10CloseoutTests(unittest.TestCase):
@@ -51,15 +53,28 @@ class DsaiVitV03Wp10CloseoutTests(unittest.TestCase):
         self.assertFalse(gate["proposed_delta"]["parallel_physical_merge"])
         self.assertFalse(gate["proposed_delta"]["programme_specific_authority_change"])
 
-    def test_programme_state_preserves_pilot_authority_until_operator_decision(self) -> None:
+    def test_programme_state_preserved_pilot_until_operator_general_decision(self) -> None:
+        historical = self._load(STATE_ROOT / "OVC_DSAI_VIT_V0_3_STATE_v0_14.json")
+        self.assertEqual(historical["status"], "GATE_READY")
+        self.assertEqual(historical["gate_id"], "DSAI3V-G-VIT-GENERAL")
+        self.assertEqual(historical["current_authority"]["vit_live_physical_main_control"], "ACTIVE_PILOT_LOW_RISK_IMPLEMENTATION_ONLY")
+        self.assertFalse(historical["current_authority"]["parallel_physical_merge"])
+        self.assertEqual(historical["reserved_gates"]["DSAI3V-G-VIT-GENERAL"], "OPERATOR_REQUIRED")
+
         pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
         state = self._load(STATE_ROOT / pointer["current_state"])
-        self.assertEqual(pointer["status"], "GATE_READY")
-        self.assertEqual(pointer["current_gate"], "DSAI3V-G-VIT-GENERAL")
-        self.assertEqual(state["status"], "GATE_READY")
-        self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "ACTIVE_PILOT_LOW_RISK_IMPLEMENTATION_ONLY")
-        self.assertFalse(state["current_authority"]["parallel_physical_merge"])
-        self.assertEqual(state["reserved_gates"]["DSAI3V-G-VIT-GENERAL"], "OPERATOR_REQUIRED")
+        if GENERAL_DECISION.exists():
+            decision = self._load(GENERAL_DECISION)
+            authority = self._load(GENERAL_AUTHORITY)
+            self.assertEqual(decision["decision"], "PASS")
+            self.assertEqual(authority["authority_status"], "ACTIVE")
+            self.assertEqual(pointer["current_packet"], "DSAI3V-WP11")
+            self.assertEqual(pointer["current_gate"], "DSAI3V-G11")
+            self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "ACTIVE_GENERAL_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION")
+            self.assertFalse(state["current_authority"]["parallel_physical_merge"])
+        else:
+            self.assertEqual(pointer["status"], "GATE_READY")
+            self.assertEqual(pointer["current_gate"], "DSAI3V-G-VIT-GENERAL")
 
 
 if __name__ == "__main__":
