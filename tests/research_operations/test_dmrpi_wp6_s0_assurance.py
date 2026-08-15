@@ -84,7 +84,14 @@ class S0AVTests(unittest.TestCase):
     def test_av25_f0_not_e1_evidence(self):
         with self.assertRaises(S0ProtocolBlock): assert_f0_not_e1_evidence('F0A.OPERATIONAL','E1_SCIENTIFIC_EVIDENCE')
     def test_av26_identity_field_coverage(self):
-        raw=json.loads((ROOT/'registries/research_operations/EC1_IDENTITY_FIELD_MANIFEST_v1.json').read_text()); fields=tuple(FieldDescriptor(f['field_path'],f['role'],f['owner'],f['source_path'],f['comparability_basis'],f['missingness_semantics'],f['rationale']) for f in raw['fields']); m=EC1IdentityFieldManifest(raw['generation_id'],raw['source_bindings'],fields); rec={d.field_path:f'v{i}' for i,d in enumerate(m.fields) if d.role in {'IDENTITY','RELATIONAL_IDENTITY'}}; tokens=canonical_predicates(rec,m); self.assertEqual(len(tokens),11)
+        raw=json.loads((ROOT/'registries/research_operations/EC1_IDENTITY_FIELD_MANIFEST_v1.json').read_text())
+        fields=tuple(FieldDescriptor(f['field_path'],f['role'],f['owner'],f['source_path'],f['comparability_basis'],f['missingness_semantics'],f['rationale']) for f in raw['fields'])
+        m=EC1IdentityFieldManifest(raw['generation_id'],raw['source_bindings'],fields)
+        expected=tuple(d.field_path for d in m.fields if d.role in {'IDENTITY','RELATIONAL_IDENTITY'})
+        rec={field_path:f'v{i}' for i,field_path in enumerate(expected)}
+        tokens=canonical_predicates(rec,m)
+        self.assertEqual(len(tokens),len(expected))
+        self.assertEqual({token.field_path for token in tokens},set(expected))
     def test_av27_predicate_roundtrip(self):
         path,value=predicate_roundtrip('x={"a":1}'); self.assertEqual((path,value),('x',{'a':1}))
     def test_av28_dependence_direct_only(self):
