@@ -4,29 +4,36 @@
   "parent_programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
   "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
   "plan_version": "0.1",
-  "status": "BLOCKED",
-  "packet_id": "C2P2-RS0-GRUN-READINESS",
+  "status": "APPROVED",
+  "packet_id": "C2P2-RS0-GRUN",
   "prerequisites": [
     "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
     "C2P2_PS0_GSELECT_PASS_COMPARATIVE_SET_ONLY",
     "C2P2_RS0_PREPARATION_MERGED",
     "EC1_C2P_PARALLEL_ROUTE_AMENDMENT_MATERIALISED",
-    "DMRPI_GREAL_EC1_PASS_MERGED"
+    "DMRPI_GREAL_EC1_PASS_MERGED",
+    "C2P2_RS0_CAPACITY_DRY_RUN_AND_ARTIFACT_BINDING_MERGED",
+    "C2P2_RS0_GRUN_READINESS_V0_3"
   ],
-  "authority_required": "OPERATOR_REQUIRED_AT_C2P2_RS0_GRUN_AFTER_READINESS_BLOCKERS_CLEAR",
-  "authority_delta": "NONE_READINESS_AND_BLOCKER_MATERIALISATION_ONLY",
-  "baseline_commit": "9a4da9bc1d8bc6cb7de48f0866f09a10683f5055",
-  "branch": "gate/c2p2-rs0-grun-readiness-blocked",
-  "candidate_commit": "NON_IDENTITY_POST_COMMIT_BINDING",
-  "tests": ["TARGETED_AND_REPOSITORY_CI_REQUIRED_ON_BRANCH_HEAD"],
-  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_READINESS_v0_2.json",
-  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_AUTHORITY_PACKET_v0_1.json",
+  "authority_required": "OPERATOR_REQUIRED_SATISFIED",
+  "authority_delta": "EXACTLY_ONE_BOUNDED_PREREGISTERED_COMPARATIVE_REAL_SOURCE_SHADOW_RUN_ONLY",
+  "baseline_commit": "83ea0a3e8fa755b817f56fc6bd81c7fc20ef451c",
+  "branch": "gate/c2p2-rs0-grun-pass-20260816",
+  "candidate_commit": "RESOLVE_FINAL_APPROVAL_HEAD",
+  "tests": [
+    "TARGETED_GRUN_APPROVAL_TEST",
+    "REPOSITORY_WIDE_CI",
+    "VIT_ROUTING",
+    "FINAL_HEAD_ASSURANCE",
+    "SIQ_READY",
+    "MERGE_READINESS"
+  ],
+  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_QA_PACKET_v0_2.json",
+  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_OPERATOR_DECISION_v0_1.json",
+  "authority_record": "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json",
   "merge_commit": null,
-  "blockers": [
-    "RS0_NUMERIC_RESOURCE_BUDGET_NOT_REPRODUCIBLY_MEASURED",
-    "RS0_EXTERNAL_ARTIFACT_ROOT_NOT_BOUND"
-  ],
-  "next_packet": "C2P2-RS0-CAPACITY-DRY-RUN-AND-ARTIFACT-BINDING",
+  "blockers": [],
+  "next_packet": "C2P2-RS0-EXECUTION",
   "candidate_set": [
     "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
     "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
@@ -41,14 +48,16 @@
     "occurrence_context_authority_blob_sha": "c6714b42fa378f0f533fdf2caf89c3ed4bec4942"
   },
   "authority": {
-    "c2p_runtime": "SHADOW_SIDECAR_ONLY_PREPARATION",
+    "c2p_runtime": "SHADOW_SIDECAR_ONLY",
     "active_object_pack": null,
-    "rs0_real_source_run": "DENIED_UNTIL_OPERATOR_GRUN_PASS",
-    "grun_operator_pass": "NOT_YET_ELIGIBLE",
+    "objectpack_selection": "NONE",
+    "rs0_real_source_run": "AUTHORISED_ONE_RUN_NOT_STARTED",
+    "grun_operator_pass": "PASS",
     "ec1_scientific_authority": "UNCHANGED",
     "ec1_candidate_defining_use": "FORBIDDEN",
     "validation": "LOCKED_UNCONSUMED",
     "publication_probability_risk_exposure_execution_agent_write": "NONE"
   },
-  "mandatory_stop": "BLOCKED_BEFORE_C2P2-RS0-GRUN_OPERATOR_DECISION"
+  "f0_a": "HOLD_NO_JOINT_LAUNCH",
+  "mandatory_stop": null
 }

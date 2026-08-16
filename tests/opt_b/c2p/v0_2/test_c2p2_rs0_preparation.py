@@ -48,20 +48,29 @@ def test_rs0_is_sidecar_only_and_cannot_change_ec1_science():
     assert firewall["may_become_active_ec1_candidate_defining_source"] is False
 
 
-def test_rs0_real_source_and_activation_remain_denied():
+def test_historical_preparation_denial_is_preserved_but_grun_pass_grants_one_run_only():
     binding = load(RS0 / "C2P2_RS0_SOURCE_POPULATION_BINDING_v0_1.json")
     state = load(STATE)
-    gate = load(RS0 / "C2P2_RS0_RUN_AUTHORITY_PACKET_v0_1.json")
+    historical_gate = load(RS0 / "C2P2_RS0_RUN_AUTHORITY_PACKET_v0_1.json")
+    approved_gate = load(RS0 / "C2P2_RS0_RUN_AUTHORITY_PACKET_v0_3.json")
+    authority = load(ROOT / "registries" / "authority" / "C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json")
 
     assert binding["real_source_run_authority"] == "DENIED_UNTIL_C2P2_RS0_GRUN_OPERATOR_PASS"
     assert binding["c2p_activation_authority"] == "NONE"
     assert binding["active_object_pack"] is None
-    assert state["authority"]["rs0_real_source_run"] == "DENIED_UNTIL_OPERATOR_GRUN_PASS"
+    assert historical_gate["decision"] == "PENDING_OPERATOR"
+    assert historical_gate["decision_authority"] == "OPERATOR_REQUIRED"
+
+    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED"
     assert state["authority"]["active_object_pack"] is None
-    assert gate["decision"] == "PENDING_OPERATOR"
-    assert gate["decision_authority"] == "OPERATOR_REQUIRED"
-    assert gate["proposed_delta_if_pass"]["c2p_activation_authority"] == "NONE"
-    assert gate["proposed_delta_if_pass"]["ec1_scientific_authority_effect"] == "NONE"
+    assert state["authority"]["objectpack_selection"] == "NONE"
+    assert authority["execution_count_limit"] == 1
+    assert authority["execution_count_consumed"] == 0
+    assert authority["non_transitive_denials"]["c2p_activation"] == "NONE"
+    assert approved_gate["decision"] == "PASS"
+    assert approved_gate["approved_authority"]["real_source_run"] == "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN"
+    assert approved_gate["approved_authority"]["objectpack_selection"] == "NONE"
+    assert approved_gate["approved_authority"]["ec1_scientific_authority_effect"] == "NONE"
 
 
 def test_rs0_dependency_and_capacity_firewalls_fail_closed():
