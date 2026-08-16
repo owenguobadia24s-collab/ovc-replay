@@ -56,25 +56,25 @@ def _fetch_commit_if_needed(root: Path, sha: str) -> None:
         raise RuntimeError("VIT_LIVE_BASE_FETCH_FAILED") from exc
 
 
-def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> Mapping[str, Any]:
+def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> tuple[Mapping[str, Any], bool]:
     """Resolve live PR metadata only for the actual Actions workspace.
 
     Synthetic/unit repositories must remain hermetic even when their tests are executed
-    inside GitHub Actions, so a temporary test root intentionally consumes its supplied
-    event fixture instead of reaching the live repository API.
+    inside GitHub Actions. Those temporary roots consume the supplied event fixture but
+    are explicitly marked as non-live so base resolution still consults their own remote.
     """
     event_pr = event.get("pull_request")
     if not isinstance(event_pr, Mapping):
         raise RuntimeError("pull_request event payload is missing")
     workspace = os.environ.get("GITHUB_WORKSPACE", "").strip()
     if not workspace or Path(workspace).resolve() != root.resolve():
-        return event_pr
+        return event_pr, False
     repo = os.environ.get("GITHUB_REPOSITORY", "").strip()
     pr_number = int(event.get("number", event_pr.get("number", -1)))
     if not repo or pr_number < 1:
         if os.environ.get("GITHUB_ACTIONS", "").lower() == "true":
             raise RuntimeError("VIT_LIVE_PR_CONTEXT_MISSING")
-        return event_pr
+        return event_pr, False
 
     headers = {
         "Accept": "application/vnd.github+json",
@@ -95,10 +95,10 @@ def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> Mapping[str, Any]:
     except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError) as exc:
         if os.environ.get("GITHUB_ACTIONS", "").lower() == "true":
             raise RuntimeError(f"VIT_LIVE_PR_RESOLUTION_FAILED:{exc}") from exc
-        return event_pr
+        return event_pr, False
     if not isinstance(value, Mapping):
         raise RuntimeError("VIT_LIVE_PR_PAYLOAD_INVALID")
-    return value
+    return value, True
 
 
 def _live_base_sha(root: Path, *, base_ref: str, event_base_sha: str, live_base_sha: str | None = None) -> str:
@@ -202,7 +202,7 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
     event_head_sha = str(event_head.get("sha", "")).strip()
     event_base_sha = str(event_base.get("sha", "")).strip()
 
-    live_pr = _live_pr_payload(root, event)
+    live_pr, live_pr_resolved = _live_pr_payload(root, event)
     head = live_pr.get("head")
     base = live_pr.get("base")
     if not isinstance(head, Mapping) or not isinstance(base, Mapping):
@@ -210,7 +210,7 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
     head_sha = str(head.get("sha", "")).strip()
     head_branch = str(head.get("ref", "")).strip()
     base_ref = str(base.get("ref", "")).strip()
-    live_base_hint = str(base.get("sha", "")).strip()
+    live_base_hint = str(base.get("sha", "")).strip() if live_pr_resolved else None
     body = str(live_pr.get("body") or "")
 
     if head_sha != event_head_sha:
