@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from ovc.development.identity import canonical_sha256, normalize_relative_path, resolve_under
-from ovc.development.skills.vit_core import VitContractError
+from ovc.development.skills.vit_core import TREE_IDENTITY_PROFILE, VitContractError
 
 VIT_MANDATORY = "VIT_MANDATORY"
 REGISTERED_EXCEPTION = "REGISTERED_EXCEPTION"
@@ -33,6 +33,13 @@ def _required_mapping(value: object, name: str) -> Mapping[str, Any]:
     return value
 
 
+def _tree_sha(tree: Mapping[str, Any], name: str) -> str:
+    tree_sha = str(tree.get("tree_sha", ""))
+    if not _is_hex(tree_sha, 40) or tree.get("profile") != TREE_IDENTITY_PROFILE:
+        raise VitContractError(f"VIT_LINEAGE_{name}_TREE_INVALID")
+    return tree_sha
+
+
 @dataclass(frozen=True)
 class ValidatedVitLineage:
     programme_id: str
@@ -45,6 +52,7 @@ class ValidatedVitLineage:
 
 
 def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str | None = None) -> ValidatedVitLineage:
+    """Validate lineage using the repository's canonical PIP/generation/placement identity shapes."""
     if record.get("schema") != LINEAGE_SCHEMA:
         raise VitContractError("VIT_LINEAGE_SCHEMA_INVALID")
     if record.get("status") != "ADMITTED":
@@ -58,20 +66,30 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
     if route_class not in {VIT_MANDATORY, REGISTERED_EXCEPTION}:
         raise VitContractError("VIT_LINEAGE_ROUTE_CLASS_INVALID")
 
+    # `pip` is exactly PacketIntegrationPayload.identity_payload(), the surface hashed by payload_id.
     pip = _required_mapping(record.get("pip"), "pip")
     if str(pip.get("programme_id", "")) != programme_id or str(pip.get("packet_id", "")) != packet_id:
         raise VitContractError("VIT_LINEAGE_PIP_PACKET_MISMATCH")
+    authority_manifest_id = str(pip.get("authority_manifest_id", ""))
+    dependency_frontier_id = str(pip.get("dependency_frontier_id", ""))
+    if not _is_hex(authority_manifest_id, 64) or not _is_hex(dependency_frontier_id, 64):
+        raise VitContractError("VIT_LINEAGE_PIP_FRONTIER_INVALID")
     pip_id = str(record.get("pip_id", ""))
     if not _is_hex(pip_id, 64) or pip_id != canonical_sha256(dict(pip)):
         raise VitContractError("VIT_LINEAGE_PIP_ID_INVALID")
 
+    # `generation` is exactly the asdict() identity surface of VirtualIntegrationGeneration.
     generation = _required_mapping(record.get("generation"), "generation")
-    if str(generation.get("pip_id", "")) != pip_id:
+    if str(generation.get("payload_id", "")) != pip_id:
         raise VitContractError("VIT_LINEAGE_GENERATION_PIP_MISMATCH")
-    if not _is_hex(str(generation.get("predecessor_tree_sha", "")), 40):
-        raise VitContractError("VIT_LINEAGE_PREDECESSOR_TREE_INVALID")
-    if not _is_hex(str(generation.get("result_tree_sha", "")), 40):
-        raise VitContractError("VIT_LINEAGE_RESULT_TREE_INVALID")
+    if str(generation.get("authority_manifest_id", "")) != authority_manifest_id:
+        raise VitContractError("VIT_LINEAGE_GENERATION_AUTHORITY_MISMATCH")
+    if str(generation.get("dependency_frontier_id", "")) != dependency_frontier_id:
+        raise VitContractError("VIT_LINEAGE_GENERATION_DEPENDENCY_MISMATCH")
+    predecessor = _required_mapping(generation.get("predecessor_tree"), "generation.predecessor_tree")
+    result = _required_mapping(generation.get("result_tree"), "generation.result_tree")
+    predecessor_sha = _tree_sha(predecessor, "PREDECESSOR")
+    result_sha = _tree_sha(result, "RESULT")
     if not str(generation.get("train_generation_id", "")).strip():
         raise VitContractError("VIT_LINEAGE_TRAIN_GENERATION_MISSING")
     try:
@@ -84,16 +102,27 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
     if not _is_hex(generation_id, 64) or generation_id != canonical_sha256(dict(generation)):
         raise VitContractError("VIT_LINEAGE_GENERATION_ID_INVALID")
 
+    # `placement` is exactly the asdict() identity surface of LedgerPlacement.
     placement = _required_mapping(record.get("placement"), "placement")
-    if str(placement.get("generation_id", "")) != generation_id:
-        raise VitContractError("VIT_LINEAGE_PLACEMENT_GENERATION_MISMATCH")
-    if placement.get("controller") != VIT_CONTROLLER or placement.get("physical_gateway") != SIQ_GATEWAY:
-        raise VitContractError("VIT_LINEAGE_ROUTING_OWNER_INVALID")
-    if str(placement.get("route_class", "")) != route_class:
-        raise VitContractError("VIT_LINEAGE_PLACEMENT_ROUTE_MISMATCH")
+    if str(placement.get("payload_id", "")) != pip_id:
+        raise VitContractError("VIT_LINEAGE_PLACEMENT_PIP_MISMATCH")
+    if str(placement.get("predecessor_tree", "")) != predecessor_sha or str(placement.get("result_tree", "")) != result_sha:
+        raise VitContractError("VIT_LINEAGE_PLACEMENT_TREE_MISMATCH")
+    if str(placement.get("dependency_frontier_id", "")) != dependency_frontier_id:
+        raise VitContractError("VIT_LINEAGE_PLACEMENT_DEPENDENCY_MISMATCH")
+    if str(placement.get("authority_manifest_id", "")) != authority_manifest_id:
+        raise VitContractError("VIT_LINEAGE_PLACEMENT_AUTHORITY_MISMATCH")
+    if int(placement.get("ordinal", -1)) != ordinal or not str(placement.get("apply_profile", "")).strip():
+        raise VitContractError("VIT_LINEAGE_PLACEMENT_IDENTITY_MISMATCH")
     placement_id = str(record.get("placement_id", ""))
     if not _is_hex(placement_id, 64) or placement_id != canonical_sha256(dict(placement)):
         raise VitContractError("VIT_LINEAGE_PLACEMENT_ID_INVALID")
+
+    routing = _required_mapping(record.get("routing"), "routing")
+    if routing.get("controller") != VIT_CONTROLLER or routing.get("physical_gateway") != SIQ_GATEWAY:
+        raise VitContractError("VIT_LINEAGE_ROUTING_OWNER_INVALID")
+    if str(routing.get("route_class", "")) != route_class:
+        raise VitContractError("VIT_LINEAGE_ROUTING_CLASS_MISMATCH")
 
     return ValidatedVitLineage(
         programme_id=programme_id,
@@ -127,12 +156,7 @@ def classify_main_movement(
     authority_changed: bool,
     packet_local_defect_changed_payload: bool,
 ) -> Mapping[str, Any]:
-    """Classify a lawful main advance without treating placement as payload identity.
-
-    An unrelated base movement with the exact same PIP, dependency frontier and authority
-    is placement-only and must not trigger a payload rebuild. Any identity-bearing packet,
-    dependency or authority change requires a new payload/review path.
-    """
+    """Classify physical-main movement without conflating placement with payload identity."""
     if not _is_hex(previous_pip_id, 64) or not _is_hex(current_pip_id, 64):
         raise VitContractError("VIT_PIP_ID_INVALID")
     payload_changed = previous_pip_id != current_pip_id or packet_local_defect_changed_payload
