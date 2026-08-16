@@ -1,22 +1,29 @@
 {
   "schema": "ovc-atlas-dependency-admission/v1",
   "packet_id": "ATLAS-WP1V",
-  "baseline": {
-    "os": "Windows",
-    "node": "20.19.6",
-    "npm": "10.8.2",
+  "repository_toolchain_baseline": {
+    "lock": "artifacts/research_console_vnext/RCN_TOOLCHAIN_LOCK_v0_1.json",
+    "node": "22.17.0",
+    "npm": "10.9.2",
     "react": "19.1.0",
     "react_dom": "19.1.0",
     "typescript": "5.7.3",
-    "vite_observed": "6.1.0",
+    "vite": "6.1.0",
     "package_manager_policy": "NPM_EXACT_VERSION_PACKAGE_LOCK_V3"
   },
+  "windows_execution_environment": {
+    "os": "Windows",
+    "node": "20.19.6",
+    "npm": "10.8.2"
+  },
+  "admitted_toolchain_lock": "artifacts/research_console_vnext/RCN_TOOLCHAIN_LOCK_v0_2_ATLAS_WP1V.json",
+  "admitted_toolchain_selection_sha256": "11b55159283e1fdd7531fd2d919d86d0b1b60876abd738724a9ceabf7d91ca6a",
   "admitted_runtime_dependencies": [
     {
       "name": "cytoscape",
-      "version": "3.34.1",
+      "version": "3.31.2",
       "license": "MIT",
-      "integrity": "sha512-Lr0RvH9H75y9ar8h9Toy6u4lxRSCcxUq+hHcQ26sVWo6BnaQp1gwEZOYqwuYTZhyW7npyKnNLP8oJ2p1/3OZ7g==",
+      "integrity": "sha512-/eOXg2uGdMdpGlEes5Sf6zE+jUG+05f3htFNQIxLxduOH/SsaUZiPBfAwP1btVIVzsnhiNOdi+hvDRLYfMZjGw==",
       "declared_runtime_dependencies": [],
       "admission": "PASS"
     },
@@ -39,7 +46,7 @@
   "lockfile": {
     "path": "apps/research_console_vnext/package-lock.json",
     "lockfile_version": 3,
-    "sha256": "d735eacf1a034e0d4b018fb5d9c56e3baef89925f4966318eccb0ea19ce53846"
+    "sha256": "6381aa0e8da5c80a2c486152a737f8e740bb64a89816580add2861ace2ed3521"
   },
   "security": {
     "initial_audit": "FAIL_8_PRE_EXISTING_HOST_VULNERABILITIES_1_MODERATE_6_HIGH_1_CRITICAL",

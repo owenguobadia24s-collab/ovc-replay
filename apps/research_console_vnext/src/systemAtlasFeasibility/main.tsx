@@ -25,7 +25,7 @@ function FeasibilityPage() {
           <h1>System Atlas visual feasibility</h1>
         </div>
         <dl>
-          <div><dt>Renderer</dt><dd>Cytoscape 3.34.1</dd></div>
+          <div><dt>Renderer</dt><dd>Cytoscape 3.31.2</dd></div>
           <div><dt>Layout</dt><dd>ELK 0.12.0</dd></div>
           <div><dt>Authority</dt><dd>None</dd></div>
         </dl>

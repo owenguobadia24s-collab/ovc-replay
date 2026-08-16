@@ -22,7 +22,7 @@ def test_exact_graph_dependencies_are_locked_with_no_transitive_runtime_dependen
     lock = load(APP / "package-lock.json")
     assert hashlib.sha256((APP / "package-lock.json").read_bytes()).hexdigest() == admission["lockfile"]["sha256"]
     assert lock["lockfileVersion"] == 3
-    expected = {"cytoscape": "3.34.1", "elkjs": "0.12.0"}
+    expected = {"cytoscape": "3.31.2", "elkjs": "0.12.0"}
     assert {item["name"]: item["version"] for item in admission["admitted_runtime_dependencies"]} == expected
     for name, version in expected.items():
         package = lock["packages"][f"node_modules/{name}"]
