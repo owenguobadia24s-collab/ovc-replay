@@ -32,6 +32,93 @@ class AtlasViewRequest(BaseModel):
 PermissionResolver = Callable[[Request], Iterable[str]]
 
 
+def build_openapi_document() -> dict[str, Any]:
+    """Return the version-independent public API contract.
+
+    FastAPI's generated component details vary across Pydantic releases. The Atlas
+    contract is frozen independently so runtime dependency upgrades cannot change
+    the committed OpenAPI bytes.
+    """
+    nullable_string = {"anyOf": [{"type": "string"}, {"type": "null"}]}
+    nullable_strings = {"anyOf": [{"type": "array", "items": {"type": "string"}}, {"type": "null"}]}
+    envelope = {"$ref": "#/components/schemas/AtlasEnvelope"}
+    query_properties = {
+        "family": {"type": "string"},
+        "term": deepcopy(nullable_string),
+        "start_id": deepcopy(nullable_string),
+        "entity_id": deepcopy(nullable_string),
+        "object_id": deepcopy(nullable_string),
+        "changed_entity_ids": deepcopy(nullable_strings),
+        "max_depth": {"anyOf": [{"type": "integer"}, {"type": "null"}]},
+        "direction": deepcopy(nullable_string),
+        "predicates": deepcopy(nullable_strings),
+        "relationship_families": deepcopy(nullable_strings),
+    }
+
+    def operation(operation_id: str, *, request_schema: str | None = None) -> dict[str, Any]:
+        value: dict[str, Any] = {
+            "operationId": operation_id,
+            "responses": {
+                "200": {"description": "Successful Response", "content": {"application/json": {"schema": envelope}}},
+                "422": {"description": "Query Rejected", "content": {"application/json": {"schema": envelope}}},
+            },
+        }
+        if request_schema is not None:
+            value["requestBody"] = {
+                "required": True,
+                "content": {"application/json": {"schema": {"$ref": f"#/components/schemas/{request_schema}"}}},
+            }
+        return value
+
+    return {
+        "openapi": "3.1.0",
+        "info": {
+            "title": "OVC System Atlas Read-Only API",
+            "version": "0.1.0",
+            "description": "Generation-bound read-only Atlas API. POST routes are query semantics with write_effect=NONE.",
+        },
+        "paths": {
+            "/api/v1/atlas/meta": {"get": operation("atlasMeta")},
+            "/api/v1/atlas/query": {"post": operation("atlasQuery", request_schema="AtlasQueryRequest")},
+            "/api/v1/atlas/view": {"post": operation("atlasView", request_schema="AtlasViewRequest")},
+        },
+        "components": {
+            "schemas": {
+                "AtlasEnvelope": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["schema", "graph_generation", "repository_tree", "query_policy_version", "completeness_profile", "security_visibility", "warnings", "write_effect", "data"],
+                    "properties": {
+                        "schema": {"const": "ovc-atlas-api-envelope/v1"},
+                        "graph_generation": {"type": "string"},
+                        "repository_tree": {"type": "string"},
+                        "query_policy_version": {"type": "string"},
+                        "completeness_profile": {"type": "string"},
+                        "security_visibility": {"type": "array", "items": {"type": "string"}},
+                        "warnings": {"type": "array", "items": {"type": "string"}},
+                        "write_effect": {"const": "NONE"},
+                        "data": {},
+                    },
+                },
+                "AtlasQueryRequest": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["family"],
+                    "properties": query_properties,
+                },
+                "AtlasViewRequest": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "entity_ids": deepcopy(nullable_strings),
+                        "maximum_entities": {"type": "integer", "default": 200, "minimum": 1, "maximum": 500},
+                    },
+                },
+            }
+        },
+    }
+
+
 def _model_dict(model: BaseModel) -> dict[str, Any]:
     if hasattr(model, "model_dump"):
         return model.model_dump(exclude_none=True)
@@ -220,6 +307,7 @@ def create_atlas_app(
         warnings = ("INCOMPLETE_CAPACITY",) if projection["status"] != "PASS" else ()
         return _envelope(bundle, allowed, projection, warnings=warnings)
 
+    app.openapi = build_openapi_document
     return app
 
 
