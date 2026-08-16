@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-dsai3v-vit-universal-routing-live-smoke/v1",
+  "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-C",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "status": "IMPLEMENTED",
+  "authority": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "authority_manifest": {
+    "programme_id": "OVC-DSAI-VIT-v0.3",
+    "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-C",
+    "authority": "AUTO_EXECUTABLE",
+    "authority_delta": "NONE",
+    "basis": "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1"
+  },
+  "authority_manifest_id": "065991b38cc9dfbe8b4b0db3cbc8a08d5bf3eeacaf605b30b12069064dceab9e",
+  "dependency_frontier": {
+    "main": "0b159bd853b712ac8a575d6d573c4c84470c7407",
+    "dependencies": ["DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-A COMPLETED"],
+    "semantic_dependency_change": false
+  },
+  "dependency_frontier_id": "d692057c167642f718ff333312ada81a88205c0bc9ba83f633cf44dd39f0162d",
+  "purpose": "Live eligible VIT routing smoke C: parallel sibling to smoke B, retained on one permanent PR so a later unrelated main advance can exercise placement-only re-anchoring without payload reconstruction.",
+  "expected_route": "PIP -> VIT_GENERATION -> PLACEMENT -> PERMANENT_PR -> ASSURANCE -> SIQ -> SQUASH_MERGE -> DEVOBS",
+  "payload_rebuild_expected": 0,
+  "rollback": "Forward-remove or supersede this smoke evidence record only; preserve routing evidence and Git history."
+}
