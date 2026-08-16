@@ -29,9 +29,10 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertLess(self.workflow.index("OVC_SIQ_READY_ADMITTED"), self.workflow.index("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED"))
 
     def test_ready_admission_rechecks_current_main_and_ancestry(self):
-        self.assertIn("OVC_BASE_MOVED_BEFORE_READINESS", self.ready)
+        self.assertIn("OVC_RECONCILE_REQUIRED", self.ready)
         self.assertIn("git merge-base --is-ancestor", self.ready)
-        self.assertIn("OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.ready)
+        self.assertIn("event base", self.ready)
+        self.assertIn("provenance only", self.ready)
 
     def test_required_checks_are_fail_closed_before_ready(self):
         for check_name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'", "'OVC profile assurance'"):
@@ -48,10 +49,11 @@ class CiPerformanceRemediationTests(unittest.TestCase):
     def test_candidate_is_reconciled_before_exact_final_assurance(self):
         self.assertIn("git merge-base --is-ancestor", self.readiness)
         self.assertIn("OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.readiness)
-        self.assertIn("OVC_BASE_MOVED_BEFORE_READINESS", self.readiness)
+        self.assertIn("OVC_RECONCILE_REQUIRED", self.readiness)
+        self.assertIn("OVC_READY_BASE_REFRESHED_BEFORE_FINAL_LEASE", self.readiness)
 
     def test_stable_main_fail_closed_checks_are_retained(self):
-        self.assertIn("OVC_BASE_MOVED_BEFORE_READINESS", self.readiness)
+        self.assertIn("OVC_RECONCILE_REQUIRED", self.ready)
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.readiness)
         self.assertIn("finalMain !== mainSnapshot", self.readiness)
 
