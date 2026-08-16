@@ -1,0 +1,49 @@
+name: Temporary GRT2 PR 998 lineage helper
+
+on:
+  push:
+    branches:
+      - tmp/grt2-pr998-lineage-helper
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  update-lineage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch exact PR base and head
+        run: |
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          git fetch --no-tags origin grt2/g3-full-enforcement-replay-correction-v3-20260816:refs/remotes/origin/grt2/g3-full-enforcement-replay-correction-v3-20260816
+      - name: Build canonical lineage
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python3 tools/ci/build_vit_pr_lineage.py \
+            --repo . \
+            --base refs/remotes/origin/main \
+            --head refs/remotes/origin/grt2/g3-full-enforcement-replay-correction-v3-20260816 \
+            --programme-id OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE \
+            --packet-id GRT2-G3-FULL-ENFORCEMENT-REPLAY-SURFACE-CORRECTION \
+            --authority-manifest-id 921fc3b7e6e9f163eca660a3cc27f980e24b239c35700fc09372efde932f4080 \
+            --dependency-frontier-id 0b166f148335bbd4356e65555340bd700cc8c8b745b645bc83566dd9c2dc73b0 \
+            --train-generation-id GRT2-G3-FULL-ENFORCEMENT-REPLAY-CORRECTION-GEN-5 \
+            --ordinal 0 \
+            --completion-transition-json '{"status":"COMPLETED"}' > /tmp/grt2-lineage.txt
+          cat /tmp/grt2-lineage.txt
+      - name: Update PR metadata from canonical producer
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const fs = require('fs');
+            const lines = fs.readFileSync('/tmp/grt2-lineage.txt','utf8').trim().split(/\r?\n/);
+            const rec = JSON.parse(lines[0]);
+            const token = lines.find(x => x.startsWith('VIT-Lineage-B64: ')).slice('VIT-Lineage-B64: '.length);
+            const pr = await github.rest.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: 998});
+            const body = `## GRT2 corrective integration\n- Plan: \`OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED\`\n- Packet: \`GRT2-G3-FULL-ENFORCEMENT-REPLAY-SURFACE-CORRECTION\`\n- Gate: \`GRT2-G2-SUPERSEDING-QUALIFICATION\`\n- Authority: \`AUTO_EXECUTABLE\`; delta: \`NONE\`\n- Base: \`main@${pr.data.base.sha}\`\n- Head: \`${pr.data.head.sha}\`\n- PIP: \`${rec.pip_id}\`\n- VIT generation: \`${rec.generation_id}\`\n- Placement: \`${rec.placement_id}\`\n- Predecessor tree: \`${rec.generation.predecessor_tree.tree_sha}\`\n- Result tree: \`${rec.generation.result_tree.tree_sha}\`\n\nCorrects only the missing full-G3 replay surface. Prior G2/G2.5 evidence remains immutable; GRT2-G3 remains operator-required. No Constitution activation, DebtFloor activation, GRT-EXACT activation, semantic amendment, force-push or history rewrite. Rollback: do not merge / revert the bounded squash. Next: resume \`GRT2-G3-READINESS-EVIDENCE\` after corrective PASS and merge.\n\nVIT-Lineage-B64: ${token}`;
+            await github.rest.pulls.update({owner: context.repo.owner, repo: context.repo.repo, pull_number: 998, body});
