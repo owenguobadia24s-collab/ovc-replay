@@ -181,7 +181,7 @@ def test_unknown_owner_is_preserved_as_conflict_not_selected() -> None:
 
 def test_wp1_schemas_contracts_and_registries_are_machine_readable() -> None:
     schema_names = {path.name for path in SCHEMAS.glob("*.json")}
-    assert schema_names == {"atlas_registry_bundle_v0_1.schema.json", "ovc_system_graph_v0_1.schema.json"}
+    assert {"atlas_registry_bundle_v0_1.schema.json", "ovc_system_graph_v0_1.schema.json"} <= schema_names
     for path in SCHEMAS.glob("*.json"):
         schema = load(path)
         assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"

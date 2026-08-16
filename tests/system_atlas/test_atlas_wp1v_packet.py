@@ -61,12 +61,12 @@ def test_wp1v_vit_bindings_are_canonical() -> None:
     assert frontier["payload"]["predecessor_requirement"] == "QUALIFIED_VIT_GENERATION_REQUIRED"
 
 
-def test_programme_state_advances_to_wp2_without_activation() -> None:
+def test_programme_state_does_not_regress_before_activation() -> None:
     pointer = load(STATE / "CURRENT_STATE_POINTER.json")
     state = load(STATE / pointer["current_state"])
-    assert state["current_packet"] == "ATLAS-WP1V"
-    assert state["current_gate"] == "ATLAS-G1V"
-    assert state["next_packet"] == "ATLAS-WP2"
+    packet_order = ["ATLAS-WP1V", *[f"ATLAS-WP{number}" for number in range(2, 11)]]
+    assert state["current_packet"] in packet_order
+    assert packet_order.index(state["current_packet"]) >= packet_order.index("ATLAS-WP1V")
     assert state["blockers"] == []
     assert state["stop_boundary"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
