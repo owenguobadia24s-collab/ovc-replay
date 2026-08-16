@@ -1,0 +1,70 @@
+{
+  "schema": "ovc-execution-preflight-blocker/v1",
+  "packet_id": "P2-EXT-REAL-SOURCE-EVIDENTIARY-EXECUTION-0.1",
+  "status": "BLOCKED",
+  "blocker_id": "P2-EXT-RS-EXEC-UPSTREAM-GREAL-001",
+  "blocker_class": "UPSTREAM_AUTHORITY_MISSING",
+  "baseline_main": "04b379adee8b584e841b24e83883aed33e090c61",
+  "approved_path2_gate": {
+    "gate_id": "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+    "decision": "PASS",
+    "merge_commit": "04b379adee8b584e841b24e83883aed33e090c61",
+    "scope": "Exact dependency binding, effective preregistration after valid binding, bounded real-source Path-2 evidentiary formalisation, and bound Research Operations evidence append only."
+  },
+  "upstream_ec1_state": {
+    "current_pointer": "registries/implementation/ec1_dmrp_v0_1/CURRENT_STATE_POINTER.json",
+    "current_packet": "DMRPI-GREAL-EC1",
+    "gate_status": "GATE_READY",
+    "real_source_authority": "NONE",
+    "research_operations_real_append": "NONE",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "governing_greal": {
+    "gate_packet": "docs/releases/ec1-dmrp-conformance-v0-1/dmrpi-wp6/DMRPI_GREAL_EC1_GATE_PACKET.json",
+    "title": "EC1 real-source execution and bounded Research Operations append authority",
+    "current_authority": {
+      "dmrp_real_ec1_execution": "NONE",
+      "research_operations_dmrp_ec1_bounded_append": "NONE"
+    },
+    "proposed_authority": [
+      "DMRP_REAL_EC1_EXECUTION",
+      "RESEARCH_OPERATIONS_DMRP_EC1_BOUNDED_APPEND"
+    ]
+  },
+  "native_preregistration_state": {
+    "registry": "registries/research_operations/P2_EXT_NATIVE_PREREGISTRATION_REGISTRY_v0_1.json",
+    "effective_preregistration_count": 0,
+    "real_source_result_count": 0,
+    "protocol_partition": {
+      "RP-EC1-EXT-0001-v0.1": "SOURCE_BINDING_INCOMPLETE",
+      "RP-EC1-EXT-0002-v0.1": "SOURCE_BINDING_INCOMPLETE",
+      "RP-EC1-EXT-0003-v0.1": "LAWFUL_HORIZON_OUTPUT_BINDING_PENDING",
+      "RP-EC1-EXT-0004-v0.1": "SOURCE_BINDING_INCOMPLETE",
+      "RP-EC1-EXT-0005-v0.1": "SOURCE_BINDING_INCOMPLETE",
+      "RP-EC1-EXT-0006-v0.1": "DEPENDENCY_UNAVAILABLE",
+      "RP-EC1-EXT-0007-v0.1": "POPULATION_PENDING"
+    }
+  },
+  "preflight_decision": "BLOCK",
+  "reason": "The Path-2-specific authority gate cannot create or substitute the upstream EC1 real-source execution/source-population authority that remains operator-reserved at DMRPI-GREAL-EC1. Exact binding and observation must therefore fail closed.",
+  "work_preserved": [
+    "Operator PASS for P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1 remains valid within its bounded scope.",
+    "Seven frozen TheoryRecord/ResearchProtocol/ExperimentRecord shells and method-parameter identities remain unchanged.",
+    "No real-source observation has begun and no result has been appended."
+  ],
+  "rollback": "No rollback required because no real-source Path-2 observation or append began. Retain the approved Path-2 authority record but keep execution blocked until upstream EC1 authority exists.",
+  "smallest_lawful_resolution": "Present and disposition the already-prepared operator gate DMRPI-GREAL-EC1. A PASS would grant the missing EC1 real-source execution and bounded Research Operations append authority; then resume this packet and bind each ExperimentRecord exactly before observation.",
+  "reserved_non_grants_preserved": [
+    "P2_6_CANDIDATE_FORMATION",
+    "RESEARCH_CANDIDATE_GENERATION_FREEZE",
+    "OPT_C_ADMISSION",
+    "C2P_ACTIVATION_OR_OBJECTPACK_SELECTION",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION"
+  ]
+}
