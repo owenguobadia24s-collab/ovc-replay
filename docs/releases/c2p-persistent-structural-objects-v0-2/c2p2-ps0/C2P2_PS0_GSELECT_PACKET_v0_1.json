@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-c2p2-ps0-gselect-packet/v1",
+  "gate_id": "C2P2-PS0-GSELECT",
+  "gate_title": "C2P ObjectPack Science candidate-to-RS0 selection boundary",
+  "programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
+  "parent_plan": "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED",
+  "baseline_commit": "fff6bf2f8ed13060dba5030db3b62da992d5fb94",
+  "candidate_commit": "947f615dd482edcd3ae197739143699add3eed80",
+  "completed_packets": ["C2P2-PS0-WP0", "C2P2-PS0-WP1", "C2P2-PS0-WP2", "C2P2-PS0-WP3", "C2P2-PS0-WP4"],
+  "current_authority": {
+    "c2p_core": "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
+    "c2p_operating_role": "SHADOW_SIDECAR_ONLY",
+    "active_object_pack": null,
+    "real_source_c2p_replay": "DENIED",
+    "ec1_scientific_authority": "UNCHANGED",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "approved_delta": {
+    "rs0_preparation_candidates": [
+      "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+      "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+      "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
+    ],
+    "selection_mode": "COMPARATIVE_SET_ONLY",
+    "active_object_pack": null,
+    "real_source_run_authority": "NONE",
+    "c2p_activation_authority": "NONE",
+    "semantic_or_threshold_activation": "NONE",
+    "ec1_scientific_authority_effect": "NONE"
+  },
+  "acceptance_conditions": [
+    "parent C2P2 core terminal state remains complete",
+    "three exact immutable activation-ineligible candidates exist",
+    "candidate hashes verify",
+    "common synthetic/adversarial discrimination corpus exists",
+    "parent frozen C2P core registry cardinality remains unchanged",
+    "no candidate is preferred or selected in repository state",
+    "no real-source C2P or Validation evidence is consumed",
+    "C2E remains optional-by-default and never sufficient alone for C2P identity",
+    "RS0 is preregistered before any real-source execution",
+    "exact-head repository tests/profile/SIQ assurance pass",
+    "QA recommends PASS and no blocking review/issue remains"
+  ],
+  "tests": {
+    "tests_workflow_run": 31934226840,
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "research_console_maintained_api": "PASS",
+    "tiered_profile_run": 31934226829,
+    "final_head_profile": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_QA_PACKET_v0_1.json",
+  "qa_recommendation": "PASS",
+  "warnings": [
+    "Confirmation count=3 and other exact candidate semantics remain research hypotheses only; synthetic discrimination cannot make them empirical thresholds.",
+    "This PASS authorises RS0 preparation only. It is not C2P activation and not RS0 real-source run authority.",
+    "EC1 scientific authority is unchanged. C2P remains a shadow sidecar only and does not become an EC1 candidate-defining source by this decision."
+  ],
+  "unresolved_issues": [],
+  "rollback": "Forward-supersede PS0 candidate research records only; preserve parent C2P history and all PS0 evidence.",
+  "recommended_decision": "PASS",
+  "operator_decision": "PASS_COMPARATIVE_SET_TO_RS0_PREPARATION_ONLY",
+  "operator_constraints": ["EC1_SCIENTIFIC_AUTHORITY_UNCHANGED", "C2P_SHADOW_SIDECAR_ONLY"],
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "decision_time": "2026-08-16T09:14:00+01:00",
+  "exact_work_after_approval": "Integrate the bounded PS0 packet after renewed exact-head assurance; create C2P2-RS0 preparation from latest lawful main; bind the comparative A/B/C set and exact source/population/resource envelope; preserve EC1 authority unchanged and C2P as shadow sidecar; stop before any real-source C2P execution for a separate operator run-authority decision."
+}
