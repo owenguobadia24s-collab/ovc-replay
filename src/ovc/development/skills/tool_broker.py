@@ -61,11 +61,14 @@ class LocalToolBroker:
             "side_effect_authorized":side_effect_authorized,
             "side_effect_performed":False,
             "merge_authority":"NONE",
-            "required_execution_substrate":VIT_SUBSTRATE if action == "PUSH_BRANCH" else None,
-            "branch_ref_authoritative":False if action == "PUSH_BRANCH" else None,
-            "permanent_pr_requires_vit_lineage":True if action == "PUSH_BRANCH" else None,
-            "direct_physical_main_candidate":False,
         }
+        if action == "PUSH_BRANCH":
+            logical.update({
+                "required_execution_substrate":VIT_SUBSTRATE,
+                "branch_ref_authoritative":False,
+                "permanent_pr_requires_vit_lineage":True,
+                "direct_physical_main_candidate":False,
+            })
         return {
             "schema":"ovc-dsai-tool-broker-receipt/v1", **logical,
             "authority_effect":"NONE", "receipt_id":canonical_sha256(logical, role="DSAI_TOOL_BROKER_RECEIPT"),
