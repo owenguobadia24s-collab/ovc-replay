@@ -92,7 +92,10 @@ def test_programme_state_preserves_wp0_completion_and_activation_boundary() -> N
     assert pointer["programme_id"] == "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
     assert state["tests"]["wp0_materialisation"] in {"PENDING_EXACT_PACKET_HEAD", "PASS_INTEGRATED_PR_970"}
-    assert state["blockers"] == []
+    if state["current_gate"] == "ATLAS-G4-ALG":
+        assert state["blockers"] == ["ATLAS_G4_ALG_ELIGIBLE_INDEPENDENT_REVIEWER_UNBOUND"]
+    else:
+        assert state["blockers"] == []
     assert state["terminal_pre_activation_target"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"
 
 

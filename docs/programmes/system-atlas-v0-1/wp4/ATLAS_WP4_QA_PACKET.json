@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "qa_id": "ATLAS-WP4-QA-v0.1",
+  "packet_id": "ATLAS-WP4",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "candidate_commit": "78eb42944bf4c6a6e92f09e0a56c34f03d5dfda9",
+  "baseline_commit": "2dc98b95cdc4bda156a78de7738d3c2001f7fe87",
+  "baseline_tree": "b452b15876163f10b46539a292b435cfec3f86af",
+  "checks": {
+    "atlas_full_suite": "PASS_71_TESTS",
+    "relationship_state_matrix": "PASS_EXACT_SIX_STATE_MAPPING",
+    "identity_normalization": "PASS_EXPLICIT_ONLY_POSSIBLE_MATCH_REJECTED",
+    "scope_behavior": "PASS_EXACT_NON_WIDENING",
+    "predicate_source_admissibility": "PASS_HIGH_RISK_SOURCE_OR_LINEAGE_EXPLICIT_ONLY",
+    "owner_cardinality": "PASS_CONFLICT_PRESERVED_NO_SILENT_SELECTION",
+    "authority_intersection": "PASS_SIX_FACTORS_ALL_EXPLICIT_ALLOW_REQUIRED",
+    "authority_failure_bias": "PASS_DENY_THEN_RESERVED_THEN_FAIL_CLOSED",
+    "grt_evidence_mapping": "PASS_SOURCE_EXPLICIT_OBSERVATIONS_ONLY",
+    "vit_current_projection": "PASS_CURRENT_RESOLVER_NO_HISTORICAL_FALLBACK",
+    "canonical_assertions": "PASS_ZERO_PENDING_ATLAS_G4_ALG",
+    "deterministic_review_hashes": "PASS"
+  },
+  "external_algorithm_review_evidence": {
+    "root_relative_path": "generations/wp4/ATLAS_WP4_ALGORITHM_REVIEW_EVIDENCE.json",
+    "sha256": "2cf3879276cb8676890b631880222ad2c704760e3455b80ab482cd4647b0a1e6"
+  },
+  "warnings": [
+    "IndependentAtlasReviewerBinding is UNBOUND and no-self-review is mandatory.",
+    "The implementation and tests do not constitute ATLAS-G4-ALG acceptance.",
+    "No resolver output is canonically eligible until an eligible independent PASS is present."
+  ],
+  "blockers": [
+    "ATLAS_G4_ALG_ELIGIBLE_INDEPENDENT_REVIEWER_UNBOUND"
+  ],
+  "qa_recommendation": "IMPLEMENTATION_PASS_PARK_PENDING_INDEPENDENT_REVIEW",
+  "authority_effect": "NONE"
+}
