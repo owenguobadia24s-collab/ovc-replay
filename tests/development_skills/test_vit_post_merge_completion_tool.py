@@ -4,6 +4,7 @@ import importlib.util
 from pathlib import Path
 import unittest
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 
 TOOL_PATH = Path(__file__).resolve().parents[2] / "tools" / "ci" / "vit_post_merge_completion.py"
@@ -46,7 +47,42 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
         self.assertTrue(str(captured["url"]).endswith("/actions/jobs/123/logs"))
         self.assertIn(b"OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64", body)
 
-    def test_freeze_lookup_does_not_override_job_log_accept_header(self) -> None:
+    def test_job_log_request_retries_401_without_authorization_when_explicitly_allowed(self) -> None:
+        requests = []
+
+        def fake_urlopen(request, timeout=30):
+            requests.append(request)
+            if len(requests) == 1:
+                raise HTTPError(request.full_url, 401, "Unauthorized", {}, None)
+            return _Response(b"public-job-log")
+
+        with patch.object(TOOL, "urlopen", side_effect=fake_urlopen):
+            body = TOOL._request(
+                "https://api.github.com/repos/o/r/actions/jobs/123/logs",
+                "token",
+                allow_public_unauthenticated_retry=True,
+            )
+
+        self.assertEqual(body, b"public-job-log")
+        self.assertEqual(len(requests), 2)
+        self.assertEqual(requests[0].get_header("Authorization"), "Bearer token")
+        self.assertIsNone(requests[1].get_header("Authorization"))
+        self.assertEqual(requests[1].get_header("Accept"), "application/vnd.github+json")
+
+    def test_non_log_request_does_not_retry_401_by_default(self) -> None:
+        calls = []
+
+        def fake_urlopen(request, timeout=30):
+            calls.append(request)
+            raise HTTPError(request.full_url, 401, "Unauthorized", {}, None)
+
+        with patch.object(TOOL, "urlopen", side_effect=fake_urlopen):
+            with self.assertRaises(TOOL.PostMergeCompletionError):
+                TOOL._request("https://api.github.com/repos/o/r", "token")
+
+        self.assertEqual(len(calls), 1)
+
+    def test_freeze_lookup_scopes_public_retry_to_job_log_request(self) -> None:
         freeze = {
             "pr_number": 42,
             "head_sha": "f" * 40,
@@ -91,7 +127,7 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
 
         self.assertEqual(observed, freeze)
         self.assertEqual(len(calls), 1)
-        self.assertEqual(calls[0][1], {})
+        self.assertEqual(calls[0][1], {"allow_public_unauthenticated_retry": True})
 
 
 if __name__ == "__main__":
