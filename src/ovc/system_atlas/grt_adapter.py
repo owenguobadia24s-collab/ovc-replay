@@ -157,7 +157,7 @@ def adapt_grt_topology(*, read_model: Mapping[str, Any], repository_tree: str) -
         _require(isinstance(component, Mapping), "ATLAS_GRT_COMPONENT_INVALID")
         component_id = str(component.get("component_id", ""))
         path = _path(component.get("path"))
-        blob = str(component.get("blob_hash", ""))
+        blob = str(component.get("blob_hash_or_tree_hash", ""))
         _require(bool(component_id) and _SHA40.fullmatch(blob) is not None, "ATLAS_GRT_COMPONENT_IDENTITY_INVALID")
         _require(component_id not in by_id and path not in by_path, "ATLAS_GRT_COMPONENT_DUPLICATE")
         by_id[component_id] = component
@@ -181,7 +181,7 @@ def adapt_grt_topology(*, read_model: Mapping[str, Any], repository_tree: str) -
             {
                 "component_id": component_id,
                 "path": path,
-                "blob_hash": blob,
+                "blob_hash_or_tree_hash": blob,
                 "component_type": str(component.get("component_type", "UNRESOLVED")),
                 "observation_id": observation["observation_id"],
                 "resolution_status": "OBSERVED_ONLY",
@@ -206,7 +206,7 @@ def adapt_grt_topology(*, read_model: Mapping[str, Any], repository_tree: str) -
             repository_commit=commit,
             repository_tree=repository_tree,
             source_path=source_ref,
-            source_blob_sha=str(source["blob_hash"]),
+            source_blob_sha=str(source["blob_hash_or_tree_hash"]),
             locator=f"grt-edge:{edge.get('edge_id', '')}",
             observation_type="COMPONENT_RELATIONSHIP",
             raw_subject=subject,
