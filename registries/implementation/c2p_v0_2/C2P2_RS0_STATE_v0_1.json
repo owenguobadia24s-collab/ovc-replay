@@ -4,40 +4,51 @@
   "parent_programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
   "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
   "plan_version": "0.1",
-  "status": "RUNNING",
-  "packet_id": "C2P2-RS0-PREP",
+  "status": "BLOCKED",
+  "packet_id": "C2P2-RS0-GRUN-READINESS",
   "prerequisites": [
     "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
     "C2P2_PS0_GSELECT_PASS_COMPARATIVE_SET_ONLY",
-    "EC1_SCIENTIFIC_AUTHORITY_UNCHANGED",
-    "C2P_SHADOW_SIDECAR_ONLY"
+    "C2P2_RS0_PREPARATION_MERGED",
+    "EC1_C2P_PARALLEL_ROUTE_AMENDMENT_MATERIALISED",
+    "DMRPI_GREAL_EC1_PASS_MERGED"
   ],
-  "authority_required": "OPERATOR_REQUIRED_AT_C2P2_RS0_GRUN",
-  "authority_delta": "PREPARATION_ONLY",
-  "baseline_commit": "1a3d1f399f9463166f1550416dd299f6002b0115",
-  "branch": "programme/c2p2-rs0-preparation",
-  "candidate_commit": "RESOLVE_FINAL_HEAD",
-  "tests": ["PENDING"],
-  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_QA_PACKET_v0_1.json",
+  "authority_required": "OPERATOR_REQUIRED_AT_C2P2_RS0_GRUN_AFTER_READINESS_BLOCKERS_CLEAR",
+  "authority_delta": "NONE_READINESS_AND_BLOCKER_MATERIALISATION_ONLY",
+  "baseline_commit": "9a4da9bc1d8bc6cb7de48f0866f09a10683f5055",
+  "branch": "gate/c2p2-rs0-grun-readiness-blocked",
+  "candidate_commit": "NON_IDENTITY_POST_COMMIT_BINDING",
+  "tests": ["TARGETED_AND_REPOSITORY_CI_REQUIRED_ON_BRANCH_HEAD"],
+  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_READINESS_v0_2.json",
   "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_AUTHORITY_PACKET_v0_1.json",
   "merge_commit": null,
-  "blockers": ["EXACT_UPSTREAM_RELEASE_HASHES_RESOLVE_AT_GRUN", "NUMERIC_RESOURCE_BUDGET_PENDING", "REAL_SOURCE_RUN_AUTHORITY_DENIED"],
-  "next_packet": null,
+  "blockers": [
+    "RS0_NUMERIC_RESOURCE_BUDGET_NOT_REPRODUCIBLY_MEASURED",
+    "RS0_EXTERNAL_ARTIFACT_ROOT_NOT_BOUND"
+  ],
+  "next_packet": "C2P2-RS0-CAPACITY-DRY-RUN-AND-ARTIFACT-BINDING",
   "candidate_set": [
     "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
     "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
     "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
   ],
   "selection_state": "COMPARATIVE_SET_ONLY_NO_WINNER",
+  "resolved_bindings": {
+    "opt_a_manifest_sha256": "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c",
+    "c1_manifest_sha256": "c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf",
+    "c2_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+    "c2e_boundary_pack_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
+    "occurrence_context_authority_blob_sha": "c6714b42fa378f0f533fdf2caf89c3ed4bec4942"
+  },
   "authority": {
-    "c2p_runtime": "SHADOW_SIDECAR_ONLY",
+    "c2p_runtime": "SHADOW_SIDECAR_ONLY_PREPARATION",
     "active_object_pack": null,
-    "rs0_preparation": "AUTHORISED",
-    "rs0_real_source_run": "DENIED_UNTIL_OPERATOR_GRUN_PASS",
+    "rs0_real_source_run": "DENIED",
+    "grun_operator_pass": "NOT_YET_ELIGIBLE",
     "ec1_scientific_authority": "UNCHANGED",
     "ec1_candidate_defining_use": "FORBIDDEN",
     "validation": "LOCKED_UNCONSUMED",
     "publication_probability_risk_exposure_execution_agent_write": "NONE"
   },
-  "mandatory_stop": "C2P2-RS0-GRUN"
+  "mandatory_stop": "BLOCKED_BEFORE_C2P2-RS0-GRUN_OPERATOR_DECISION"
 }
