@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-c2p2-rs0-qa-packet/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-PREP",
+  "baseline_main": "1a3d1f399f9463166f1550416dd299f6002b0115",
+  "candidate_head": "RESOLVE_FINAL_HEAD",
+  "status": "QA_REVIEW",
+  "checks": {
+    "operator_scope_exact": "PASS",
+    "comparative_set_preserved": "PASS",
+    "no_candidate_winner_or_default": "PASS",
+    "ec1_scientific_authority_unchanged": "PASS",
+    "c2p_shadow_sidecar_only": "PASS",
+    "source_population_envelope_declared": "PASS",
+    "c2e_optional_candidate_c_only": "PASS",
+    "c2e_episode_identity_not_sufficient": "PASS",
+    "validation_locked": "PASS",
+    "opt_c_opt_d_outcomes_forbidden": "PASS",
+    "identity_sampling_reduced_precision_forbidden": "PASS",
+    "real_source_run_denied": "PASS",
+    "c2p_activation_denied": "PASS",
+    "run_authority_packet_prepared": "PASS",
+    "targeted_test": "CI_REQUIRED_AT_FINAL_HEAD",
+    "complete_repository_suite": "CI_REQUIRED_AT_FINAL_HEAD",
+    "profile_siq_merge_readiness": "CI_REQUIRED_AT_FINAL_HEAD"
+  },
+  "warnings": [
+    "Exact immutable upstream run release hashes are intentionally re-resolved at GRUN because a preparation-time pin cannot substitute for run-time court-record currentness.",
+    "Numeric real-source resource budget remains a pre-GRUN condition; no real-source C2P calibration or execution is authorised by this packet."
+  ],
+  "blockers_to_preparation": [],
+  "blockers_to_real_source_run": ["EXACT_RUN_RELEASE_HASHES_PENDING", "NUMERIC_RESOURCE_BUDGET_PENDING", "C2P2_RS0_GRUN_OPERATOR_PASS_REQUIRED"],
+  "qa_recommendation": "PASS_PREPARATION_ONLY",
+  "authority_delta": "NONE_BEYOND_APPROVED_RS0_PREPARATION",
+  "rollback": "Forward-supersede RS0 preparation records only; preserve PS0 and C2P history."
+}

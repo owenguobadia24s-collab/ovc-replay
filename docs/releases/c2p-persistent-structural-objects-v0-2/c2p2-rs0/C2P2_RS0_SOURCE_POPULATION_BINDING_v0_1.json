@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-c2p2-rs0-source-population-binding/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "baseline_main": "1a3d1f399f9463166f1550416dd299f6002b0115",
+  "binding_status": "PREPARED_NOT_EXECUTABLE",
+  "scientific_effect": "NONE",
+  "operating_role": "C2P_SHADOW_SIDECAR_ONLY",
+  "ec1_scientific_authority": "UNCHANGED",
+  "population": {
+    "research_role": "DISCOVERY_SHADOW_ONLY",
+    "instrument": "GBPUSD",
+    "sides": ["BID", "ASK"],
+    "clocks": ["15M", "2H_A_L"],
+    "interval": "[2021-01-01T00:00:00Z,2024-01-01T00:00:00Z)",
+    "population_relationship": "READ_ONLY_SIDECAR_BINDING_TO_EC1_DISCOVERY_ENVELOPE",
+    "no_population_mutation": true,
+    "no_sampling": true
+  },
+  "candidate_set": [
+    "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+    "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+    "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
+  ],
+  "common_comparison_requirements": {
+    "same_population": true,
+    "same_cutoff_schedule": true,
+    "same_environment": true,
+    "same_missingness_policy": true,
+    "same_checkpoint_policy": true,
+    "same_resource_envelope": true,
+    "scalar_winner_forbidden": true
+  },
+  "upstream_releases": {
+    "opt_a": "RESOLVE_EXACT_CURRENT_EC1_DISCOVERY_RELEASE_AT_GRUN",
+    "c1": "RESOLVE_EXACT_CURRENT_EC1_DISCOVERY_RELEASE_AT_GRUN",
+    "c2": "RESOLVE_EXACT_CURRENT_C2_VNEXT_RELEASE_AT_GRUN",
+    "c2e": "RESOLVE_EXACT_CURRENT_C2E_V0_2_RELEASE_AND_BOUNDARY_PACK_AT_GRUN",
+    "occurrence_context": "RESOLVE_EXACT_CURRENT_CONTEXT_RELEASE_AT_GRUN"
+  },
+  "dependency_rules": {
+    "c2": "REQUIRED",
+    "c2e_candidate_a": "FORBIDDEN_AS_IDENTITY_SOURCE",
+    "c2e_candidate_b": "NOT_REQUIRED",
+    "c2e_candidate_c": "OPTIONAL_DECLARED_ENRICHMENT_ONLY",
+    "c2e_episode_identity_sufficient_for_c2p_identity": false,
+    "family_or_c3_semantics_identity_authority": "FORBIDDEN",
+    "future_information": "FORBIDDEN",
+    "opt_c_opt_d_outcomes": "FORBIDDEN",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "ec1_firewall": {
+    "may_change_q01_q10": false,
+    "may_change_population_or_denominator": false,
+    "may_seed_or_filter_path1_search": false,
+    "may_rank_or_freeze_ec1_candidates": false,
+    "may_become_active_ec1_candidate_defining_source": false,
+    "future_handoff_requires_owner_authority": true
+  },
+  "resource_envelope": {
+    "identity_precision": "EXACT_ONLY",
+    "sampling": "FORBIDDEN",
+    "reduced_precision": "FORBIDDEN",
+    "capacity_exhaustion": "FAIL_CLOSED_CAPACITY_EXCEEDED",
+    "checkpoint_restart": "LOGICAL_EQUIVALENCE_REQUIRED",
+    "numeric_budget": "PENDING_MEASURED_FREEZE_BEFORE_REAL_SOURCE_RUN"
+  },
+  "real_source_run_authority": "DENIED_UNTIL_C2P2_RS0_GRUN_OPERATOR_PASS",
+  "c2p_activation_authority": "NONE",
+  "active_object_pack": null,
+  "validation": "LOCKED_UNCONSUMED"
+}
