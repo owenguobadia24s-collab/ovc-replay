@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-atlas-wp6-query-cases/v1",
+  "cases": [
+    {"case_id": "SEARCH_ALIAS", "query": {"family": "SEARCH", "term": "Atlas"}},
+    {"case_id": "TRACE_BOUNDED", "query": {"family": "TRACE", "start_id": "ovc:capability:system-atlas.operational-reliance", "max_depth": 4, "direction": "BOTH"}},
+    {"case_id": "DEPENDENCY_REQUIRED", "query": {"family": "DEPENDENCY", "entity_id": "ovc:capability:system-atlas.operational-reliance"}},
+    {"case_id": "IMPACT_CHANGE_SURFACE", "query": {"family": "IMPACT", "changed_entity_ids": ["ovc:gate:atlas-g-observability-activate"], "max_depth": 3}},
+    {"case_id": "EXPLAIN_RELATIONSHIP", "query": {"family": "EXPLAIN", "object_id": "atlas:relationship:operational-reliance-blocked-by-activation"}},
+    {"case_id": "AUTHORITY_PROJECTION", "query": {"family": "AUTHORITY"}},
+    {"case_id": "OWNERSHIP_PROJECTION", "query": {"family": "OWNERSHIP"}},
+    {"case_id": "WHY_BLOCKED_FRONTIER", "query": {"family": "WHY_BLOCKED", "entity_id": "ovc:capability:system-atlas.operational-reliance"}},
+    {"case_id": "HISTORY_ROOT", "query": {"family": "HISTORY"}},
+    {"case_id": "DIFF_GENERATIONS", "query": {"family": "DIFF"}}
+  ],
+  "adversarial": [
+    {"case_id": "TRACE_UNBOUNDED", "expected_error": "ATLAS_TRACE_DEPTH_INVALID"},
+    {"case_id": "VISIBILITY_EMPTY", "expected_error": "ATLAS_QUERY_VISIBILITY_REQUIRED"},
+    {"case_id": "DIFF_VISIBILITY_MISMATCH", "expected_error": "ATLAS_DIFF_VISIBILITY_MISMATCH"},
+    {"case_id": "CAPACITY_NO_SAMPLE", "expected_status": "INCOMPLETE_CAPACITY"},
+    {"case_id": "EQUIVALENCE_DIVERGENCE", "expected": "FAIL_OPTIMIZED_QUARANTINED"}
+  ],
+  "authority_effect": "NONE_SYNTHETIC_QUERY_FIXTURES"
+}
