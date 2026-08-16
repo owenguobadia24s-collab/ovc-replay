@@ -23,29 +23,38 @@ AUDIT = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/universal
 
 
 def lineage_record(programme: str = "PROGRAMME", packet: str = "PACKET") -> dict:
+    authority_manifest_id = "2" * 64
+    dependency_frontier_id = "3" * 64
     pip = {
         "schema_version": "packet-integration-payload/v0.1",
         "programme_id": programme,
         "packet_id": packet,
         "logical_changes": [{"path": "records/example.json", "operation": "ADD", "content_sha256": "1" * 64}],
-        "authority_manifest_id": "2" * 64,
-        "dependency_frontier_id": "3" * 64,
+        "authority_manifest_id": authority_manifest_id,
+        "dependency_frontier_id": dependency_frontier_id,
         "completion_transition": {"status": "COMPLETED"},
     }
     pip_id = canonical_sha256(pip)
+    predecessor = {"tree_sha": "a" * 40, "profile": "git-tree-v1"}
+    result = {"tree_sha": "b" * 40, "profile": "git-tree-v1"}
     generation = {
         "train_generation_id": "TRAIN-1",
         "ordinal": 1,
-        "pip_id": pip_id,
-        "predecessor_tree_sha": "a" * 40,
-        "result_tree_sha": "b" * 40,
+        "predecessor_tree": predecessor,
+        "payload_id": pip_id,
+        "result_tree": result,
+        "authority_manifest_id": authority_manifest_id,
+        "dependency_frontier_id": dependency_frontier_id,
     }
     generation_id = canonical_sha256(generation)
     placement = {
-        "generation_id": generation_id,
-        "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
-        "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
-        "route_class": "VIT_MANDATORY",
+        "payload_id": pip_id,
+        "predecessor_tree": predecessor["tree_sha"],
+        "result_tree": result["tree_sha"],
+        "apply_profile": "REFERENCE_APPLY",
+        "ordinal": 1,
+        "dependency_frontier_id": dependency_frontier_id,
+        "authority_manifest_id": authority_manifest_id,
     }
     placement_id = canonical_sha256(placement)
     return {
@@ -60,6 +69,11 @@ def lineage_record(programme: str = "PROGRAMME", packet: str = "PACKET") -> dict
         "generation_id": generation_id,
         "placement": placement,
         "placement_id": placement_id,
+        "routing": {
+            "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+            "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+            "route_class": "VIT_MANDATORY",
+        },
     }
 
 
