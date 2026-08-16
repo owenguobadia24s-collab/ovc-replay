@@ -1,0 +1,84 @@
+{
+  "schema": "ovc-c2p2-rs0-capacity-measurement-receipt/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-CAPACITY-DRY-RUN-AND-ARTIFACT-BINDING",
+  "authority_effect": "NONE_NON_EVIDENTIARY_MECHANICAL_ONLY",
+  "measurement_source": {
+    "workflow": "tests",
+    "workflow_run_id": 31965538212,
+    "workflow_run_number": 5059,
+    "job_id": 95210050005,
+    "head_branch": "build/c2p2-rs0-capacity-artifact-binding",
+    "head_sha": "0ad1eef4fca2986bc459c652e2c176c55038a563",
+    "head_tree": "85d68538596b4af0f0c617c0f2da82b2bec536cf",
+    "event": "pull_request",
+    "runner_label": "ubuntu-latest",
+    "runner_name": "GitHub Actions 1000069809",
+    "runner_id": 1000069809,
+    "run_started_at": "2026-08-16T18:45:30Z",
+    "job_completed_at": "2026-08-16T18:50:18Z",
+    "measurement_capture_method": "ONE_SHOT_ASSERTION_SENTINEL_IN_REPOSITORY_SUITE"
+  },
+  "suite_context": {
+    "repository_suite_passed_before_deliberate_sentinel": true,
+    "passed": 3875,
+    "skipped": 1,
+    "subtests_passed": 687,
+    "deliberate_measurement_sentinel_failures": 1,
+    "sentinel_removed_after_receipt_materialisation": true
+  },
+  "measurement_output": {
+    "schema": "ovc-c2p2-rs0-capacity-dry-run/v1",
+    "authority_effect": "NONE_NON_EVIDENTIARY_MECHANICAL_ONLY",
+    "source_mode": "SYNTHETIC_ONLY_NONEMPIRICAL",
+    "real_source_consumed": false,
+    "sample": {
+      "assertions": 256,
+      "events": 256,
+      "checkpoint_cadence_assertions": 256
+    },
+    "measured": {
+      "artifact_bytes": 782707,
+      "available_memory_bytes": 13104963584,
+      "free_temp_disk_bytes": 93076656128,
+      "peak_rss_bytes": 290148352,
+      "python_tracemalloc_peak_bytes": 4906486,
+      "wall_clock_seconds": 1.977437
+    },
+    "recommended_execution_envelope": {
+      "capacity_exceeded_disposition": "FAIL_CLOSED_RETURN_TO_OPERATOR",
+      "checkpoint_cadence_assertions": 256,
+      "concurrency_limit": 1,
+      "external_storage_limit_bytes": 6411935744,
+      "peak_memory_limit_bytes": 1160593408
+    },
+    "semantic_firewall": {
+      "activation": "FORBIDDEN",
+      "candidate_selection": "FORBIDDEN",
+      "objectpack_change": "FORBIDDEN",
+      "population_change": "FORBIDDEN",
+      "reduced_precision": "FORBIDDEN",
+      "sampling": "FORBIDDEN"
+    }
+  },
+  "frozen_execution_envelope": {
+    "basis": "MEASURED_GITHUB_HOSTED_RUNNER_SYNTHETIC_DRY_RUN_CONSERVATIVE_CEILING",
+    "peak_memory_limit_bytes": 1160593408,
+    "external_storage_limit_bytes": 6411935744,
+    "concurrency_limit": 1,
+    "checkpoint_cadence_assertions": 256,
+    "capacity_exceeded_disposition": "FAIL_CLOSED_RETURN_TO_OPERATOR",
+    "sampling": "FORBIDDEN",
+    "reduced_precision": "FORBIDDEN",
+    "population_change": "FORBIDDEN",
+    "objectpack_change": "FORBIDDEN"
+  },
+  "external_artifact_binding": {
+    "registry_path": "registries/implementation/c2p_v0_2/C2P2_RS0_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json",
+    "rs0_run_root_folder_id": "1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv",
+    "rs0_run_root_title": "c2p2-rs0-shadow-evidence-v0-1",
+    "binding_status": "EXACT_BOUND"
+  },
+  "interpretation": "The frozen numbers are fail-closed physical execution ceilings for the later operator-governed RS0 shadow run, not a scientific estimate, throughput promise, population permission, or authority grant. Reaching a ceiling requires preserved partial evidence and return to the operator; it never permits sampling, reduced precision, population change, ObjectPack change, candidate selection or activation.",
+  "rollback": "Forward-supersede this receipt only if a new separately measured execution generation is approved; preserve this exact measured receipt and source workflow/job identity."
+}
