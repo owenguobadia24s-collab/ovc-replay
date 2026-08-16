@@ -3,10 +3,9 @@ from __future__ import annotations
 
 from . import full_enforcement_bounded_v3 as _impl
 
-# Forward declared-path references may form longer source chains. This bound
-# permits deterministic fixed-point convergence while the 256-path capacity
-# circuit breaker remains the controlling fail-closed limit.
-_impl._MAX_FORWARD_ROUNDS = 16
+# Forward declared-path references may form long source chains. The semantic
+# bound is the 256-path capacity circuit breaker, not a shallow hop count.
+_impl._MAX_FORWARD_ROUNDS = 64
 
 FullG3ReplayError = _impl.FullG3ReplayError
 REQUIRED_FULL_G3_RULE_FAMILIES = _impl.REQUIRED_FULL_G3_RULE_FAMILIES
