@@ -12,6 +12,8 @@ PLAN_IDENTITY = ROOT / "docs/plans/system-atlas/ATLAS_PLAN_IDENTITY_v0_1_R1.json
 WP0 = ROOT / "docs/programmes/system-atlas-v0-1/wp0"
 REGISTRY = ROOT / "registries/system_atlas"
 STATE_ROOT = ROOT / "registries/implementation/system_atlas_v0_1"
+PG_MIGRATION_REGISTRY = ROOT / "registries/governance/programme_genesis/MIGRATION_SOURCE_REGISTRY_v0_1.json"
+PGN_CENSUS_BUILDER = ROOT / "scripts/governance/build_pgn_wp2_census.py"
 
 
 def load(path: Path) -> dict:
@@ -92,6 +94,15 @@ def test_programme_state_advances_to_wp1_without_activation() -> None:
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
     assert state["blockers"] == []
     assert state["terminal_pre_activation_target"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"
+
+
+def test_atlas_state_is_not_a_programme_genesis_legacy_migration_target() -> None:
+    atlas_state_path = "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json"
+    migration_registry = load(PG_MIGRATION_REGISTRY)
+    assert atlas_state_path in migration_registry["discovery"]["exclude_paths"]
+    assert "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1" in migration_registry["discovery"]["native_programmes_excluded"]
+    builder_source = PGN_CENSUS_BUILDER.read_text(encoding="utf-8")
+    assert atlas_state_path in builder_source
 
 
 def test_vit_authority_and_dependency_identities_are_canonical() -> None:
