@@ -1,0 +1,81 @@
+{
+  "schema": "ovc-c2p2-rs0-source-locator-recovery/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-SOURCE-LOCATOR-RECOVERY",
+  "authority_delta": "NONE_READ_ONLY_RECOVERY_AND_DIAGNOSIS_ONLY",
+  "baseline_prerequisite": "C2P2-RS0-EXECUTION-ADAPTER-CLOSEOUT",
+  "population": {
+    "research_role": "DISCOVERY_SHADOW_ONLY",
+    "instrument": "GBPUSD",
+    "sides": ["BID", "ASK"],
+    "clocks": ["15M", "2H_A_L"],
+    "interval": "[2021-01-01T00:00:00Z,2024-01-01T00:00:00Z)"
+  },
+  "bound_current_authority": {
+    "c2_package_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+    "c2_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+    "c2e_boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "c2e_boundary_pack_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313"
+  },
+  "recovery_evidence": {
+    "rs0_drive_root": {
+      "folder_id": "1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv",
+      "title": "c2p2-rs0-shadow-evidence-v0-1",
+      "root_resolved": true,
+      "children_found": 0,
+      "exact_current_c2_c2e_2021_2023_locator_found": false
+    },
+    "c1_discovery_parent": {
+      "release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2",
+      "manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+      "manifest_sha256": "c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf",
+      "physical_object_keys_and_sha256": "RECOVERED_FROM_C1C_G3_REMOTE_VERIFICATION_RECEIPT",
+      "disposition": "LAWFUL_UPSTREAM_PARENT_ONLY_NOT_DIRECT_RS0_C2_SOURCE"
+    },
+    "legacy_c2_discovery": {
+      "release_id": "OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2",
+      "manifest_id": "MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+      "manifest_sha256": "c60b48ac18653eaf253c48f63645dbaa11bd94cee9a28a83ed7ae7bad5cac180",
+      "remote_prefix": "ovc-evidence/canonical/releases/OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2/MANIFEST.C2.OPT-B.C2.GBPUSD.DISCOVERY.2021_2023.v2.r1/",
+      "remote_verified": true,
+      "disposition": "REJECT_AS_NEW_EVIDENCE_PARENT_UNDER_CURRENT_C2_VNEXT_AUTHORITY"
+    },
+    "c2_vnext_materialisation": {
+      "current_runtime_authority": "ACTIVE_STRUCTURAL_DESCRIPTION_DISCOVERY_DEVELOPMENT",
+      "historical_external_replay_scope": "JUNE_2026_ONLY",
+      "current_2021_2023_materialised_locator": "NOT_FOUND"
+    },
+    "c2e_materialisation": {
+      "current_runtime_authority": "ACTIVE_ENGINE_CURRENT_OPERATOR_SELECTED_PACK_MARKET_ENVELOPE_BOUND",
+      "new_date_interval_execution": "AUTO_EXECUTABLE_FOR_ALREADY_GOVERNED_ACTIVE_C2_VNEXT_INPUTS",
+      "current_2021_2023_materialised_locator": "NOT_FOUND"
+    }
+  },
+  "diagnosis": {
+    "original_blocker": "EXACT_2021_2023_C2_C2E_SOURCE_LOCATOR_NOT_FOUND_IN_REPOSITORY_OR_BOUND_RS0_DRIVE_ROOT",
+    "refined_blocker": "CURRENT_C2_VNEXT_C2E_2021_2023_MATERIALISATION_NOT_PRESENT",
+    "not_a_locator_loss_for_legacy_c2": true,
+    "legacy_c2_substitution_lawful": false,
+    "provider_fallback_lawful": false,
+    "sampling_or_interval_reduction_lawful": false,
+    "run_token_consumed": false
+  },
+  "smallest_lawful_resolution": {
+    "required": "MATERIALISE_EXACT_CURRENT_C2_VNEXT_AND_CURRENT_C2E_2021_2023_READ_ONLY_SOURCE_FROM_ALREADY_GOVERNED_C1_DISCOVERY_PARENT_OR_IDENTIFY_AN_EXISTING_OWNER_AUTHORISED_EQUIVALENT",
+    "constraints": [
+      "NO_NEW_PROVIDER_INTAKE",
+      "NO_LEGACY_C2_V2_AS_NEW_EVIDENCE_PARENT",
+      "NO_NEW_CANONICAL_OR_R2_RELEASE_IDENTITY",
+      "NO_BOUNDARY_PACK_CHANGE",
+      "NO_SAMPLING_OR_REDUCED_PRECISION",
+      "NO_VALIDATION_OR_OUTCOME_INPUTS",
+      "PRESERVE_ONE_RUN_GRUN_TOKEN_UNCONSUMED_UNTIL_C2P_COMPARATIVE_RUN_LAUNCH"
+    ],
+    "authority_assessment": "CURRENT_C2E_AUTHORITY_PERMITS_NEW_DISCOVERY_DATE_INTERVALS_ON_GOVERNED_ACTIVE_C2_VNEXT_INPUTS; HOWEVER NO EXISTING RS0/OWNER PACKET CONTRACTS THE REQUIRED 2021_2023 CURRENT_C2_VNEXT_SOURCE_MATERIALISATION, SO CREATING THAT NEW PERMANENT EXECUTION SURFACE WOULD EXPAND PACKET SCOPE AND MUST NOT BE INFERRED FROM THIS RECOVERY PACKET"
+  },
+  "status": "BLOCKED",
+  "mandatory_stop": "REQUIRED_ARTIFACT_UNAVAILABLE_NON_REPRODUCIBLE_AND_NEXT_PERMANENT_MATERIALISATION_SURFACE_NOT_AUTHORISED_BY_CURRENT_PACKET",
+  "qa_recommendation": "PASS_DIAGNOSIS_BLOCK_EXECUTION",
+  "rollback": "Forward-supersede this diagnostic only; preserve all source receipts, GRUN authority, one-run token, EC1 firewall, F0-A HOLD and historical evidence.",
+  "validation": "LOCKED_UNCONSUMED"
+}
