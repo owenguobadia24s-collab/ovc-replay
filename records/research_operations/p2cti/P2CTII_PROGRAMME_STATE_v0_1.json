@@ -4,24 +4,26 @@
   "packet_id": "P2CTII-WP0",
   "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
   "plan_version": "0.1_REVISED_1",
-  "status": "QA_REVIEW",
-  "prerequisites": [
-    "P2CTII-G0_APPROVED_ON_MAIN"
-  ],
+  "status": "APPROVED",
+  "prerequisites": ["P2CTII-G0_APPROVED_ON_MAIN"],
   "authority_required": "DELEGATED_WITHIN_APPROVED_G0",
   "authority_delta": "NONE",
-  "baseline_commit": "25203b7f4df5b72aefde31842b09020320386a4f",
-  "baseline_tree": "a58bbb34b53410a727febad909d04ec7e157dad1",
-  "branch": "build/p2ctii-wp0-preflight-r4",
-  "candidate_commit": "PENDING_FINAL_PR_HEAD",
+  "baseline_commit": "7879c5b40c252590d4baccdf00794072782769d0",
+  "baseline_tree": "1ba79ad839986b7294a00a82b348c210c9c107ce",
+  "branch": "build/p2ctii-wp0-preflight-r5",
+  "candidate_commit": "PENDING_FINAL_HEAD",
   "tests": [
-    "tests/research_operations/p2cti/test_p2ctii_wp0_preflight.py",
-    "REPOSITORY_REQUIRED_CI",
-    "VIT_ROUTING_PREFLIGHT",
-    "FINAL_HEAD_ASSURANCE"
+    "tests@31963637415:PASS",
+    "pytest-unittest-parity@31963637415:PASS",
+    "runner-parity@31963637415:PASS",
+    "VIT-routing-preflight@31963637415:PASS",
+    "OVC-profile-assurance@31963637420:PASS",
+    "SIQ-READY@31963637420:PASS",
+    "merge-readiness@31963637420:PASS",
+    "FINAL_CLOSEOUT_HEAD_REQUIRED"
   ],
-  "qa_packet": null,
-  "decision_record": null,
+  "qa_packet": "docs/programmes/p2cti-v0-1/wp0/P2CTII_WP0_QA_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/p2cti-v0-1/wp0/P2CTII_WP0_DELEGATED_DECISION_v0_1.json",
   "gate_packet": "docs/programmes/p2cti-v0-1/implementation/P2CTII_G0_GATE_PACKET_v0_1.json",
   "merge_commit": null,
   "blockers": [],
@@ -29,10 +31,7 @@
   "external_artifact_root_binding": "registries/research_operations/p2cti/P2CTII_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json",
   "authority_frontier": "registries/research_operations/p2cti/P2CTII_AUTHORITY_FRONTIER_v0_1.json",
   "next_packet": "P2CTII-WP1",
-  "reserved_later_gates": [
-    "P2CTII-G-OBSERVABILITY-ACTIVATE",
-    "P2CTII-G-CONTINUOUS-INTAKE"
-  ],
+  "reserved_later_gates": ["P2CTII-G-OBSERVABILITY-ACTIVATE","P2CTII-G-CONTINUOUS-INTAKE"],
   "explicit_non_grants": [
     "THEORY_SEMANTIC_FREEZE",
     "P2_6_CANDIDATE_FORMATION",

@@ -10,8 +10,8 @@
   "independent_pressure_test_sha256": "f431133bdfea0b2380a2abec0a84b26e4f744be2c54ed3e55da206c963e5d1b6",
   "execution_baseline_main": "25203b7f4df5b72aefde31842b09020320386a4f",
   "execution_baseline_tree": "a58bbb34b53410a727febad909d04ec7e157dad1",
-  "branch": "build/p2ctii-wp0-preflight-r4",
-  "status": "QA_REVIEW",
+  "branch": "build/p2ctii-wp0-preflight-r5",
+  "status": "APPROVED",
   "scope": [
     "CURRENT_MAIN_TREE_RECONCILIATION",
     "EXACT_30_SUBJECT_SOURCE_CENSUS",
@@ -23,6 +23,8 @@
     "source_census": "registries/research_operations/p2cti/P2CTII_BOOTSTRAP_SOURCE_CENSUS_v0_1.json",
     "authority_frontier": "registries/research_operations/p2cti/P2CTII_AUTHORITY_FRONTIER_v0_1.json",
     "external_root": "registries/research_operations/p2cti/P2CTII_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json",
+    "qa_packet": "docs/programmes/p2cti-v0-1/wp0/P2CTII_WP0_QA_PACKET_v0_1.json",
+    "delegated_decision": "docs/programmes/p2cti-v0-1/wp0/P2CTII_WP0_DELEGATED_DECISION_v0_1.json",
     "programme_state": "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json"
   },
   "acceptance": {
@@ -48,6 +50,14 @@
     "shared_systems_operator_binding": "3509eda120728361a2564ab574b1493646048117",
     "external_artifact_roots": "ba8bfc2d862f0bb51f56c7acc95b15f3517e53b1"
   },
+  "qualified_candidate": {
+    "head": "98cef440fa5f4a8fda7cb911052ef003f216387d",
+    "physical_predecessor": "7879c5b40c252590d4baccdf00794072782769d0",
+    "prospective_tree": "570bbae4df956a2ca3e062bf5bf0bb5b3b44a497",
+    "tests_workflow": 31963637415,
+    "tiered_workflow": 31963637420,
+    "all_required_checks": "PASS"
+  },
   "routing": {
     "route_class": "VIT_MANDATORY",
     "pip_identity_basis": "LOGICAL_PACKET_MUTATION_NOT_BRANCH_OR_PR_OR_PHYSICAL_MAIN_PLACEMENT",
@@ -57,7 +67,7 @@
   "blockers": [],
   "warnings": [
     "P2CTII-WP3_MUST_INDEPENDENTLY_REPRODUCE_ALL_30_BOUND_EXTERNAL_SUBJECTS_BEFORE_G3_PASS",
-    "FINAL_HEAD_CI_GRT_VIT_ASSURANCE_REQUIRED_BEFORE_DELEGATED_PASS_AND_MERGE"
+    "FINAL_CLOSEOUT_HEAD_MUST_RERUN_REQUIRED_CI_GRT_VIT_ASSURANCE_BEFORE_MERGE"
   ],
   "rollback": "Forward supersession only; preserve source census, authority frontier, external-root binding and G0 decision.",
   "next_packet": "P2CTII-WP1"
