@@ -1,0 +1,45 @@
+name: Temporary GRT2 superseding G2 qualification
+
+on:
+  push:
+    branches:
+      - tmp/grt2-g2-qualification-helper
+
+permissions:
+  contents: read
+  checks: read
+
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: c31b70dd822e329dc76e4bdf43b84d7116fd3dc1
+          fetch-depth: 0
+          show-progress: false
+      - name: Fetch current main for exact history
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: python3 -m pip install -e '.[test]' -r requirements-console-vnext.txt
+      - name: Run superseding G2 implementation qualification
+        env:
+          PYTHONPATH: src:.
+        run: python3 scripts/governance/grt_v0_2/qualify_full_g3_replay_correction.py
+      - name: Emit qualification evidence
+        if: always()
+        run: |
+          test -f artifacts/grt2-g2-full-g3-replay-correction-qualification.json
+          cat artifacts/grt2-g2-full-g3-replay-correction-qualification.json
+      - name: Upload immutable qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g2-full-g3-replay-correction-qualification
+          path: artifacts/grt2-g2-full-g3-replay-correction-qualification.json
+          if-no-files-found: error
+          retention-days: 30
