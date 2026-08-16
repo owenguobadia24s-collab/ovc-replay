@@ -5,24 +5,28 @@
   "programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
   "parent_plan": "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED",
   "baseline_commit": "fff6bf2f8ed13060dba5030db3b62da992d5fb94",
-  "candidate_commit": "caad57653902d63891beceaaa8f76e5cee56eb40",
+  "candidate_commit": "947f615dd482edcd3ae197739143699add3eed80",
   "completed_packets": ["C2P2-PS0-WP0", "C2P2-PS0-WP1", "C2P2-PS0-WP2", "C2P2-PS0-WP3", "C2P2-PS0-WP4"],
   "current_authority": {
     "c2p_core": "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
+    "c2p_operating_role": "SHADOW_SIDECAR_ONLY",
     "active_object_pack": null,
     "real_source_c2p_replay": "DENIED",
+    "ec1_scientific_authority": "UNCHANGED",
     "validation": "LOCKED_UNCONSUMED"
   },
-  "proposed_delta_if_pass": {
+  "approved_delta": {
     "rs0_preparation_candidates": [
       "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
       "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
       "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
     ],
+    "selection_mode": "COMPARATIVE_SET_ONLY",
     "active_object_pack": null,
     "real_source_run_authority": "NONE",
-    "activation_authority": "NONE",
-    "semantic_or_threshold_activation": "NONE"
+    "c2p_activation_authority": "NONE",
+    "semantic_or_threshold_activation": "NONE",
+    "ec1_scientific_authority_effect": "NONE"
   },
   "acceptance_conditions": [
     "parent C2P2 core terminal state remains complete",
@@ -38,12 +42,12 @@
     "QA recommends PASS and no blocking review/issue remains"
   ],
   "tests": {
-    "tests_workflow_run": 31920165715,
+    "tests_workflow_run": 31934226840,
     "repository_suite": "PASS",
     "runner_parity": "PASS",
     "pytest_unittest_parity": "PASS",
     "research_console_maintained_api": "PASS",
-    "tiered_profile_run": 31920165879,
+    "tiered_profile_run": 31934226829,
     "final_head_profile": "PASS",
     "siq_ready": "PASS",
     "merge_readiness": "PASS"
@@ -51,26 +55,17 @@
   "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_QA_PACKET_v0_1.json",
   "qa_recommendation": "PASS",
   "warnings": [
-    "Confirmation count=3 and other exact candidate semantics are research hypotheses only; synthetic discrimination cannot make them empirical thresholds.",
-    "A GSELECT PASS is not C2P activation and not RS0 run authority."
+    "Confirmation count=3 and other exact candidate semantics remain research hypotheses only; synthetic discrimination cannot make them empirical thresholds.",
+    "This PASS authorises RS0 preparation only. It is not C2P activation and not RS0 real-source run authority.",
+    "EC1 scientific authority is unchanged. C2P remains a shadow sidecar only and does not become an EC1 candidate-defining source by this decision."
   ],
   "unresolved_issues": [],
-  "changed_files": [
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_DISCRIMINATION_REPORT_v0_1.md",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_GSELECT_PACKET_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_PROGRAMME_PLAN_v0_1.md",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_QA_PACKET_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_RS0_PREREGISTRATION_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/research/C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json",
-    "fixtures/opt_b/c2p/v0_2/research/C2P2_PS0_OBJECTPACK_DISCRIMINATION_FIXTURES_v0_1.json",
-    "registries/implementation/c2p_v0_2/C2P2_PS0_STATE_v0_1.json",
-    "tests/opt_b/c2p/v0_2/test_c2p2_ps0_objectpack_science.py"
-  ],
-  "external_artifacts": [],
   "rollback": "Forward-supersede PS0 candidate research records only; preserve parent C2P history and all PS0 evidence.",
   "recommended_decision": "PASS",
-  "recommended_decision_detail": "Advance all three exact candidates as one preregistered comparative set to separately governed C2P2-RS0 preparation. Select no active/default winner. Preserve A as strict control, B as C2-only relational hypothesis, and C as optional-C2E enrichment challenger.",
-  "exact_work_after_approval": "Materialise operator GSELECT decision; integrate the bounded PS0 packet if exact-head assurance remains valid; create C2P2-RS0 preparation programme from latest lawful main; bind exact source/population/resource envelope; stop again for separate RS0 real-source run authority before executing C2P on real market data.",
-  "decision": "PENDING_OPERATOR",
-  "decision_authority": "OPERATOR_REQUIRED"
+  "operator_decision": "PASS_COMPARATIVE_SET_TO_RS0_PREPARATION_ONLY",
+  "operator_constraints": ["EC1_SCIENTIFIC_AUTHORITY_UNCHANGED", "C2P_SHADOW_SIDECAR_ONLY"],
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "decision_time": "2026-08-16T09:14:00+01:00",
+  "exact_work_after_approval": "Integrate the bounded PS0 packet after renewed exact-head assurance; create C2P2-RS0 preparation from latest lawful main; bind the comparative A/B/C set and exact source/population/resource envelope; preserve EC1 authority unchanged and C2P as shadow sidecar; stop before any real-source C2P execution for a separate operator run-authority decision."
 }
