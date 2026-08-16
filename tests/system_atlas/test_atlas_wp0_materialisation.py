@@ -86,12 +86,12 @@ def test_source_census_has_no_required_missing_source() -> None:
         int(source["blob"], 16)
 
 
-def test_programme_state_advances_to_wp1_without_activation() -> None:
+def test_programme_state_preserves_wp0_completion_and_activation_boundary() -> None:
     pointer = load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
     state = load(STATE_ROOT / pointer["current_state"])
-    assert pointer["current_gate"] == "ATLAS-G0"
-    assert pointer["next_packet"] == "ATLAS-WP1"
+    assert pointer["programme_id"] == "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
+    assert state["tests"]["wp0_materialisation"] in {"PENDING_EXACT_PACKET_HEAD", "PASS_INTEGRATED_PR_970"}
     assert state["blockers"] == []
     assert state["terminal_pre_activation_target"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"
 
