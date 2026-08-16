@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_pre_publish_currentness_receipt_v0_1.schema.json",
+  "title": "Atlas Pre-Publish Currentness Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "root_hash", "pre_publish_main", "rechecked_main", "result", "candidate_disposition", "authority_effect", "receipt_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-pre-publish-currentness-receipt/v1"},
+    "root_hash": {"$ref": "#/$defs/sha256"},
+    "pre_publish_main": {"$ref": "#/$defs/git"},
+    "rechecked_main": {"$ref": "#/$defs/git"},
+    "result": {"enum": ["PASS_CURRENT_POINTER_SWITCHED", "STALE_MAIN_MOVED_POINTER_NOT_SWITCHED"]},
+    "candidate_disposition": {"enum": ["CURRENT", "HISTORICAL_RETAINED"]},
+    "authority_effect": {"const": "NONE_EXTERNAL_POINTER_MAINTENANCE_ONLY"},
+    "receipt_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha40": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "tree"],
+      "properties": {"commit": {"$ref": "#/$defs/sha40"}, "tree": {"$ref": "#/$defs/sha40"}}
+    }
+  }
+}

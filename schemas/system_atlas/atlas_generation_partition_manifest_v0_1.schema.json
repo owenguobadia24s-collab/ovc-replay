@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_generation_partition_manifest_v0_1.schema.json",
+  "title": "Atlas Generation Partition Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "partition", "graph_logical_hash", "files", "counts", "authority_effect", "partition_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-generation-partition-manifest/v1"},
+    "partition": {"enum": ["ATLAS_PUBLIC_METADATA", "ATLAS_INTERNAL", "ATLAS_RESTRICTED"]},
+    "graph_logical_hash": {"$ref": "#/$defs/sha256"},
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entities.jsonl", "relationships.jsonl", "assertions.jsonl", "evidence_references.jsonl", "conflicts.jsonl"],
+      "properties": {
+        "entities.jsonl": {"$ref": "#/$defs/file"},
+        "relationships.jsonl": {"$ref": "#/$defs/file"},
+        "assertions.jsonl": {"$ref": "#/$defs/file"},
+        "evidence_references.jsonl": {"$ref": "#/$defs/file"},
+        "conflicts.jsonl": {"$ref": "#/$defs/file"}
+      }
+    },
+    "counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "authority_effect": {"const": "NONE_PARTITIONED_READ_ONLY_GRAPH"},
+    "partition_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "record_count"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "record_count": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

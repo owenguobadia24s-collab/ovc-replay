@@ -1,0 +1,14 @@
+{
+  "schema": "ovc-atlas-wp5-generation-cases/v1",
+  "cases": [
+    {"case_id": "REFERENCE_INCREMENTAL_BYTE_EQUIVALENCE", "expected": "PASS"},
+    {"case_id": "RESTRICTED_EVIDENCE_VISIBILITY_DOWNGRADE", "expected_error": "ATLAS_VISIBILITY_DOWNGRADE_ENTITY"},
+    {"case_id": "PARTITION_FILE_TAMPER", "expected_error": "ATLAS_PARTITION_FILE_HASH_MISMATCH"},
+    {"case_id": "PRE_PUBLISH_MAIN_RECHECK_RACE", "expected": "STALE_MAIN_MOVED_POINTER_NOT_SWITCHED"},
+    {"case_id": "MISSING_OWNER_ROLE", "expected_error": "ATLAS_OWNER_ROLE_REQUIRED"},
+    {"case_id": "CALLER_AUTHORED_CURRENTNESS", "expected_error": "ATLAS_SOURCE_CURRENTNESS_NOT_DERIVED"},
+    {"case_id": "ATLAS_CORE_CAPACITY", "expected_error": "CAPACITY_EXCEEDED"}
+  ],
+  "retention": "PROVISIONAL_RETAIN_ALL",
+  "authority_effect": "NONE_SYNTHETIC_FIXTURES"
+}

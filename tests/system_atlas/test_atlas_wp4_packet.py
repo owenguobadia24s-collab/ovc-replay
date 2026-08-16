@@ -74,16 +74,14 @@ def test_wp4_external_review_is_exact_and_scope_valid() -> None:
     assert {row["result"] for row in review["criteria"]} == {"PASS"}
 
 
-def test_wp4_programme_state_is_qualified_and_wp5_follows_integration() -> None:
+def test_wp4_remains_qualified_history_after_integration() -> None:
     pointer = load(STATE / "CURRENT_STATE_POINTER.json")
     state = load(STATE / pointer["current_state"])
     for field in ("status", "current_packet", "current_gate", "next_packet"):
         assert pointer[field] == state[field]
-    assert state["current_gate"] == "ATLAS-G4-ALG"
-    assert state["next_packet"] == "ATLAS-WP5"
-    assert state["gate_status"] == "PASS_ELIGIBLE_INDEPENDENT_REVIEW"
+    assert state["tests"]["wp4_independent_algorithm_review"] == "PASS_ELIGIBLE_INDEPENDENT_REVIEW"
+    assert state["tests"]["wp4_integration"] == "PASS_INTEGRATED_PR_987"
     assert state["blockers"] == []
-    assert state["next_packet_eligibility"] == "ELIGIBLE_AFTER_WP4_INTEGRATION"
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
 
 
