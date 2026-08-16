@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-p2-ext-parallel-route-prereg-partition/v1",
+  "packet_id": "P2-EXT-PREREG-IMPLEMENTATION-0.1",
+  "par_prerequisite": "PAR-WP0_COMPLETED",
+  "status_after_par_wp0": "MAY_PROCEED_PARTITIONED",
+  "protocols": {
+    "RP-EC1-EXT-0001-v0.1": "IMPLEMENT_WHEN_EXACT_DEPENDENCIES_BIND",
+    "RP-EC1-EXT-0002-v0.1": "IMPLEMENT_WHEN_EXACT_DEPENDENCIES_BIND",
+    "RP-EC1-EXT-0003-v0.1": "IMPLEMENT_WHEN_EXACT_DEPENDENCIES_BIND",
+    "RP-EC1-EXT-0004-v0.1": "IMPLEMENT_WHEN_EXACT_DEPENDENCIES_BIND",
+    "RP-EC1-EXT-0005-v0.1": "IMPLEMENT_WHEN_EXACT_DEPENDENCIES_BIND",
+    "RP-EC1-EXT-0006-v0.1": "DEPENDENCY_UNAVAILABLE_SECOND_C2E_BOUNDARY_VARIANT_REQUIRED",
+    "RP-EC1-EXT-0007-v0.1": "STAGE_A_POPULATION_PENDING_EC1_RV_Q09;_STAGE_B_REQUIRES_VERSIONED_MATERIAL_CHANGE"
+  },
+  "common_rules": {
+    "theory_state": "UNTESTED",
+    "method_parameter_freeze": "PRESERVE_EXISTING_FROZEN_GENERATIONS",
+    "path1_influence": "FORBIDDEN",
+    "real_source_execution": "DENIED",
+    "durable_real_source_append": "DENIED",
+    "candidate_formation": "NOT_EXECUTED",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "authority_effect": "NONE_MECHANICAL_PARTITION_ONLY"
+}

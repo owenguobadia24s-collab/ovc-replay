@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-par-wp0-semantic-snapshot/v1",
+  "packet_id": "PAR-WP0",
+  "amendment_id": "OVC-EC1-C2P-PARALLEL-ROUTE-INTEGRATION-AMENDMENT-0.1",
+  "baseline_main": "cd55c55cdf8e77d82940d0a1ce7191025f8b8514",
+  "scientific_generation": "OVC-EC1-DISCOVERY-2021_2023-G1",
+  "generation_effect": "UNCHANGED",
+  "architecture": {
+    "common_upstream": "OPT-B.C2.vNext",
+    "continuity_domains": ["OPT-B.C2E.v0.2", "OPT-B.C2P.v0.2"],
+    "relationship": "PARALLEL",
+    "c2e_owns": "EPISODE_IDENTITY_AND_TEMPORAL_DEVELOPMENT",
+    "c2p_owns": "PERSISTENT_OBJECT_IDENTITY_AND_LIFECYCLE",
+    "episode_identity_implies_object_identity": false,
+    "c2p_optional_c2e_consumption_requires_objectpack_declaration": true
+  },
+  "canonical_path1": {
+    "populations": ["P1A", "P1B", "P1C"],
+    "questions": "EC1-Q01-Q10",
+    "search_lattice": "UNCHANGED",
+    "candidate_defining_sources": ["C2", "C2E"],
+    "c2p_candidate_influence": "FORBIDDEN"
+  },
+  "c2p_sidecar": {
+    "mode": "C2P2_RS0_SHADOW_SIDECAR_ONLY",
+    "candidate_set": ["C2P2-PS0-OP-A-STRICT-CONTINUITY-v1", "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1", "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"],
+    "active_object_pack": null,
+    "candidate_defining_use": "FORBIDDEN",
+    "real_source_run": "DENIED_UNTIL_C2P2-RS0-GRUN_PASS"
+  },
+  "validation": "LOCKED_UNCONSUMED",
+  "authority_effect": "NONE"
+}
