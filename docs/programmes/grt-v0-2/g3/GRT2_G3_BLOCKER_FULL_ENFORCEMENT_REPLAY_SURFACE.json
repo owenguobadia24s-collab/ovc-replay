@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-grt2-g3-blocker/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "plan_version": "0.2_REVISED_RATIFIED",
+  "packet_id": "GRT2-G3-READINESS-EVIDENCE",
+  "gate_id": "GRT2-G3",
+  "status": "BLOCKED",
+  "blocker_code": "GRT2_G3_FULL_ENFORCEMENT_REPLAY_SURFACE_NOT_MATERIALIZED",
+  "authority_effect": "NONE_PRE_ACTIVATION_EVIDENCE_ONLY",
+  "constitution_status": "PROPOSED_UNADMITTED",
+  "active_enforcement": "LIMITED_NEW_ARTIFACT_ENFORCEMENT",
+  "debt_floor_generation": null,
+  "finding": {
+    "summary": "The exact candidate full-G3 enforcement replay surface required before GRT2-G3 is not materialized. The current G2.5 evaluator intentionally covers limited new-artifact enforcement and marks the six additional full-G3 rule families NOT_EVALUABLE. The lower-level rule evaluator requires caller-supplied exact semantic facts, while the reference graph requires source-bound bindings to resolve lifecycle/ownership/Genesis/relationship semantics; no full-G3 Git-tree-to-fact replay adapter is present in the qualified candidate surface.",
+    "missing_rule_families": [
+      "CURRENT_STATE_AND_LIFECYCLE",
+      "OWNERSHIP",
+      "GENESIS_BINDINGS",
+      "DEPENDENCIES",
+      "COMPANIONS_AND_ORPHANS",
+      "SUPERSESSION"
+    ],
+    "g2_5_candidate_count": 8,
+    "g2_5_full_g3_pass_count": 0,
+    "g2_5_full_g3_not_evaluable_count": 8,
+    "performance_status": "NOT_EVALUATED_FOR_FULL_G3",
+    "historical_dry_run_status": "NOT_EXECUTABLE_WITHOUT_FULL_G3_REPLAY_SURFACE",
+    "candidate_debt_floor_gen0_status": "NOT_REPRODUCIBLE_WITHOUT_CURRENT_FULL_G3_FINDING_SURFACE"
+  },
+  "source_evidence": [
+    "docs/programmes/grt-v0-2/gates/GRT2_G2_5_PILOT_LEDGER.json",
+    "docs/programmes/grt-v0-2/g2/GRT2_G2_QUALIFICATION_RECEIPT.json",
+    "src/ovc/programme_genesis/grt_v0_2/pilot.py",
+    "src/ovc/programme_genesis/grt_v0_2/rules.py",
+    "src/ovc/programme_genesis/grt_v0_2/reference.py",
+    "src/ovc/programme_genesis/grt_v0_2/bindings.py",
+    "registries/governance/grt_v0_2/GRT_CURRENT_STATE_OBLIGATION_REGISTRY_v0_1.json",
+    "docs/programmes/grt-v0-2/g3/GRT2_G3_HISTORICAL_CANDIDATE_MANIFEST.json",
+    "github-actions:run:31792935397:artifact:9216210753:sha256:debc184059274c03cc1466970a55f1d1548da05e9bb2532987f66add92bb3a68",
+    "github-actions:run:31936492361:artifact:9260796734"
+  ],
+  "why_gate_ready_is_forbidden": [
+    "The ratified plan requires full G3 semantics in shadow for every G2.5 candidate before G3 presentation.",
+    "The ratified plan requires the exact candidate QUALIFIED_ENFORCEMENT runtime to replay full G3 semantics over the last 10 reconstructible ordinary integrations.",
+    "The current pilot evidence explicitly reports FULL_G3_RULE_FAMILY_NOT_MATERIALIZED_FOR_REPLAY for the six additional full-G3 families.",
+    "A missing full-G3 fact/replay implementation cannot be converted into PASS, zero transition debt, or a candidate DebtFloor generation-0 proposal by inference.",
+    "GRT2-G3 remains operator-reserved and no activation state may be materialized while readiness evidence is incomplete."
+  ],
+  "smallest_lawful_resolution": {
+    "packet_class": "CORRECTIVE_IMPLEMENTATION_GENERATION",
+    "scope": "Repair the already-ratified GRT2-WP3B/WP3C/WP3E candidate implementation without changing GRT2-D1..D433 semantics.",
+    "required_work": [
+      "Materialize an exact source-bound Git-tree-to-full-G3-fact adapter covering current-state/lifecycle, ownership, native Genesis bindings, required dependencies, companion/orphan obligations, and supersession without promoting inferred relations to current authority.",
+      "Materialize a non-enforcing full-G3 shadow replay runner that consumes exact predecessor/candidate commits and emits rule evaluations/findings/debt transitions plus per-candidate performance evidence.",
+      "Add synthetic/adversarial fixtures proving missing source bindings remain NOT_EVALUABLE, source conflicts fail closed, grandfathered unchanged debt does not block, new/expanded debt blocks, and no family is silently skipped.",
+      "Run a superseding G2 implementation qualification generation over the corrected candidate surface; preserve prior G2 evidence immutably and record the correction forward.",
+      "Resume GRT2-G3-READINESS-EVIDENCE and execute the 8 G2.5 plus 10 historical full-G3 replays, transition reconciliation, candidate DebtFloor generation-0 proposal, performance comparison and independent QA."
+    ],
+    "semantic_delta_allowed": false,
+    "operator_authority_delta": "NONE_FOR_CORRECTIVE_IMPLEMENTATION; GRT2-G3_ACTIVATION_REMAINS_OPERATOR_REQUIRED"
+  },
+  "rollback": "Preserve PR #965, its branch history, historical G2/G2.5 evidence and this blocker record. Correct forward only; do not rewrite B0, prior decisions or Git history; do not activate the Constitution or create DebtFloor generation 0.",
+  "recommended_disposition": "BLOCK"
+}
