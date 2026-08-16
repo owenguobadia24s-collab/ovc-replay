@@ -8,6 +8,8 @@ import re
 import subprocess
 import tempfile
 from typing import Any, Mapping, Sequence
+import urllib.error
+import urllib.request
 
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
 from ovc.development.skills.vit_core import TREE_IDENTITY_PROFILE, VitContractError
@@ -15,6 +17,7 @@ from ovc.development.skills.vit_routing import validate_vit_lineage_record
 
 REGISTER_PATH = Path("registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json")
 LINEAGE_B64_MARKER = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
+SAFE_REF = re.compile(r"[A-Za-z0-9._/-]+")
 
 
 def _load_json(path: Path) -> Mapping[str, Any]:
@@ -32,12 +35,94 @@ def _git(root: Path, args: Sequence[str], *, env: Mapping[str, str] | None = Non
         stderr=subprocess.PIPE,
         text=True,
         env=dict(os.environ, **dict(env or {})),
+        timeout=30,
     )
     return proc.stdout.strip()
 
 
 def _tree(root: Path, commitish: str) -> str:
     return _git(root, ["rev-parse", f"{commitish}^{{tree}}"])
+
+
+def _fetch_commit_if_needed(root: Path, sha: str) -> None:
+    try:
+        _git(root, ["cat-file", "-e", f"{sha}^{{commit}}"])
+        return
+    except subprocess.CalledProcessError:
+        pass
+    try:
+        _git(root, ["fetch", "--no-tags", "--depth=1", "origin", sha])
+    except subprocess.CalledProcessError as exc:
+        raise RuntimeError("VIT_LIVE_BASE_FETCH_FAILED") from exc
+
+
+def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> tuple[Mapping[str, Any], bool]:
+    """Resolve live PR metadata only for the actual Actions workspace.
+
+    Synthetic/unit repositories must remain hermetic even when their tests are executed
+    inside GitHub Actions. Those temporary roots consume the supplied event fixture but
+    are explicitly marked as non-live so base resolution still consults their own remote.
+    """
+    event_pr = event.get("pull_request")
+    if not isinstance(event_pr, Mapping):
+        raise RuntimeError("pull_request event payload is missing")
+    workspace = os.environ.get("GITHUB_WORKSPACE", "").strip()
+    if not workspace or Path(workspace).resolve() != root.resolve():
+        return event_pr, False
+    repo = os.environ.get("GITHUB_REPOSITORY", "").strip()
+    pr_number = int(event.get("number", event_pr.get("number", -1)))
+    if not repo or pr_number < 1:
+        if os.environ.get("GITHUB_ACTIONS", "").lower() == "true":
+            raise RuntimeError("VIT_LIVE_PR_CONTEXT_MISSING")
+        return event_pr, False
+
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "ovc-vit-routing-preflight/1",
+    }
+    token = os.environ.get("GITHUB_TOKEN", "").strip()
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{repo}/pulls/{pr_number}",
+        headers=headers,
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:
+            value = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError) as exc:
+        if os.environ.get("GITHUB_ACTIONS", "").lower() == "true":
+            raise RuntimeError(f"VIT_LIVE_PR_RESOLUTION_FAILED:{exc}") from exc
+        return event_pr, False
+    if not isinstance(value, Mapping):
+        raise RuntimeError("VIT_LIVE_PR_PAYLOAD_INVALID")
+    return value, True
+
+
+def _live_base_sha(root: Path, *, base_ref: str, event_base_sha: str, live_base_sha: str | None = None) -> str:
+    """Resolve current base head; event-time base remains provenance/fallback only."""
+    if not base_ref or not SAFE_REF.fullmatch(base_ref) or base_ref.startswith("/") or ".." in Path(base_ref).parts:
+        raise RuntimeError(f"VIT_LIVE_BASE_REF_INVALID:{base_ref!r}")
+    candidate = str(live_base_sha or "").strip()
+    if candidate:
+        if not re.fullmatch(r"[0-9a-f]{40}", candidate):
+            raise RuntimeError("VIT_LIVE_BASE_SHA_INVALID")
+        _fetch_commit_if_needed(root, candidate)
+        return candidate
+    try:
+        output = _git(root, ["ls-remote", "--heads", "origin", f"refs/heads/{base_ref}"])
+    except subprocess.CalledProcessError:
+        return event_base_sha
+    rows = [row for row in output.splitlines() if row.strip()]
+    if not rows:
+        return event_base_sha
+    candidate = rows[0].split()[0].strip()
+    if not re.fullmatch(r"[0-9a-f]{40}", candidate):
+        raise RuntimeError("VIT_LIVE_BASE_SHA_INVALID")
+    _fetch_commit_if_needed(root, candidate)
+    return candidate
 
 
 def _safe_path(raw: object) -> str:
@@ -106,18 +191,32 @@ def _exception_matches(exception: Mapping[str, Any], *, pr_number: int, head_sha
 
 
 def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
-    pr = event.get("pull_request")
-    if not isinstance(pr, Mapping):
+    event_pr = event.get("pull_request")
+    if not isinstance(event_pr, Mapping):
         raise RuntimeError("pull_request event payload is missing")
-    pr_number = int(event.get("number", pr.get("number", -1)))
-    head = pr.get("head")
-    base = pr.get("base")
-    if not isinstance(head, Mapping) or not isinstance(base, Mapping):
+    pr_number = int(event.get("number", event_pr.get("number", -1)))
+    event_head = event_pr.get("head")
+    event_base = event_pr.get("base")
+    if not isinstance(event_head, Mapping) or not isinstance(event_base, Mapping):
         raise RuntimeError("pull_request head/base is missing")
+    event_head_sha = str(event_head.get("sha", "")).strip()
+    event_base_sha = str(event_base.get("sha", "")).strip()
+
+    live_pr, live_pr_resolved = _live_pr_payload(root, event)
+    head = live_pr.get("head")
+    base = live_pr.get("base")
+    if not isinstance(head, Mapping) or not isinstance(base, Mapping):
+        raise RuntimeError("live pull_request head/base is missing")
     head_sha = str(head.get("sha", "")).strip()
     head_branch = str(head.get("ref", "")).strip()
-    base_sha = str(base.get("sha", "")).strip()
-    body = str(pr.get("body") or "")
+    base_ref = str(base.get("ref", "")).strip()
+    live_base_hint = str(base.get("sha", "")).strip() if live_pr_resolved else None
+    body = str(live_pr.get("body") or "")
+
+    if head_sha != event_head_sha:
+        raise RuntimeError(
+            f"VIT_SUPERSEDED_EVENT_HEAD: event {event_head_sha}, live {head_sha}; obsolete generation may not acquire assurance"
+        )
 
     register = _load_json(root / REGISTER_PATH)
     if register.get("unregistered_bypass_policy") != "FAIL_CLOSED":
@@ -151,10 +250,16 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
     result = generation["result_tree"]
     if predecessor.get("profile") != TREE_IDENTITY_PROFILE or result.get("profile") != TREE_IDENTITY_PROFILE:
         raise RuntimeError("VIT_LINEAGE_TREE_PROFILE_INVALID")
-    base_tree = _tree(root, base_sha)
+    live_base_sha = _live_base_sha(
+        root,
+        base_ref=base_ref,
+        event_base_sha=event_base_sha,
+        live_base_sha=live_base_hint,
+    )
+    base_tree = _tree(root, live_base_sha)
     head_tree = _tree(root, head_sha)
     if predecessor.get("tree_sha") != base_tree:
-        raise RuntimeError("VIT_LINEAGE_PREDECESSOR_NOT_PR_BASE_TREE")
+        raise RuntimeError("VIT_REANCHOR_REQUIRED:VIT_LINEAGE_PREDECESSOR_NOT_LIVE_PR_BASE_TREE")
     if result.get("tree_sha") != head_tree:
         raise RuntimeError("VIT_LINEAGE_RESULT_NOT_PR_HEAD_TREE")
     if placement.get("predecessor_tree") != base_tree or placement.get("result_tree") != head_tree:
@@ -170,7 +275,11 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
     if composed_tree != head_tree:
         raise RuntimeError("VIT_LINEAGE_PIP_DOES_NOT_REPRODUCE_PR_HEAD_TREE")
 
-    return f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:{lineage.generation_id}:{lineage.placement_id}"
+    base_note = "LIVE_BASE" if live_base_sha != event_base_sha else "EVENT_BASE_CURRENT"
+    return (
+        f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:{lineage.generation_id}:"
+        f"{lineage.placement_id}:{base_note}:LIVE_PR_BODY"
+    )
 
 
 def main() -> int:
