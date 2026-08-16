@@ -14,8 +14,8 @@ EXTERNAL_EVIDENCE = ROOT.parent.parent / "ovc-replay-external-artifacts/system_a
 
 def test_wp9_projection_is_exact_current_tree_and_source_bound() -> None:
     projection = load_and_validate_workbench_projection(FIXTURE, ROOT)
-    assert projection["source_commit"] == "2362e3522d68aebd97cfbb33287d0ff4167fa842"
-    assert projection["source_tree"] == "4d9682a883bb44950dde48e3a35f59bfc0e08760"
+    assert projection["source_commit"] == "1c7006a48368d9f5bddaba750f98591a947d24d0"
+    assert projection["source_tree"] == "8596aec3e4c7d0db9346801c1c98ea0bf8e1181d"
     assert projection["logical_hash"]
 
 
