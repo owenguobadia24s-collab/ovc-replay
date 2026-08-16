@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 from copy import deepcopy
 from pathlib import Path
@@ -117,7 +118,7 @@ def test_operational_budget_passes_complete_observations_and_fails_typed_without
         evaluate_operational_budget(budget, {"environment": "windows", "measurements": {}})
 
 
-def test_windows_operational_measurement_covers_every_frozen_dimension(tmp_path: Path) -> None:
+def test_host_operational_measurement_covers_every_frozen_dimension(tmp_path: Path) -> None:
     graph, registries = current_shadow_graph()
     predecessor = build_reference_generation(load(GRAPH), registries)
     cases = load(CASES)
@@ -132,7 +133,7 @@ def test_windows_operational_measurement_covers_every_frozen_dimension(tmp_path:
         browser_bundle_growth_bytes=0,
         repository_root=ROOT,
     )
-    assert observations["environment"] == "windows"
+    assert observations["environment"] == ("windows" if os.name == "nt" else os.name)
     assert observations["reference_root_hash"] == observations["incremental_root_hash"] == current.root_hash
     receipt = evaluate_operational_budget(load(OPERATIONAL), observations)
     assert receipt["result"] == "PASS"
