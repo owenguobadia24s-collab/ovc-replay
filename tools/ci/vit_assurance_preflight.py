@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 import re
 from typing import Any, Mapping
+import urllib.error
+import urllib.request
 
 from ovc.development.skills.vit_assurance_decoupling import validate_aa0_reuse_authorization
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
@@ -37,6 +39,42 @@ def _write_output(name: str, value: str) -> None:
     print(f"OVC_VIT_ASSURANCE_{name.upper()}={value}")
 
 
+def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Resolve the current PR generation/body in Actions; event data is provenance only."""
+    event_pr = event.get("pull_request")
+    if not isinstance(event_pr, Mapping):
+        raise RuntimeError("pull_request event payload is missing")
+    if os.environ.get("GITHUB_ACTIONS", "").lower() != "true":
+        return event_pr
+
+    repo = os.environ.get("GITHUB_REPOSITORY", "").strip()
+    pr_number = int(event.get("number", event_pr.get("number", -1)))
+    if not repo or pr_number < 1:
+        raise RuntimeError("VIT_ASSURANCE_LIVE_PR_CONTEXT_MISSING")
+
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "ovc-vit-assurance-preflight/1",
+    }
+    token = os.environ.get("GITHUB_TOKEN", "").strip()
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{repo}/pulls/{pr_number}",
+        headers=headers,
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:
+            value = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"VIT_ASSURANCE_LIVE_PR_RESOLUTION_FAILED:{exc}") from exc
+    if not isinstance(value, Mapping):
+        raise RuntimeError("VIT_ASSURANCE_LIVE_PR_PAYLOAD_INVALID")
+    return value
+
+
 def main() -> int:
     event_name = os.environ.get("GITHUB_EVENT_NAME", "")
     if event_name != "pull_request":
@@ -49,9 +87,16 @@ def main() -> int:
         return 0
 
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
-    pr = event.get("pull_request") or {}
+    event_pr = event.get("pull_request") or {}
+    event_head_sha = str((event_pr.get("head") or {}).get("sha") or "")
+    pr = _live_pr_payload(event)
     body = str(pr.get("body") or "")
     head_sha = str((pr.get("head") or {}).get("sha") or "")
+    if head_sha != event_head_sha:
+        raise RuntimeError(
+            f"VIT_ASSURANCE_SUPERSEDED_EVENT_HEAD:event {event_head_sha}, live {head_sha}; "
+            "obsolete generation may not acquire assurance identity"
+        )
 
     lineage_record = _decode(LINEAGE, body, "VIT_LINEAGE")
     reuse_record = _decode(REUSE, body, "VIT_AA0_REUSE")
