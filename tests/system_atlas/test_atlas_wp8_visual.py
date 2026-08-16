@@ -10,7 +10,7 @@ FIXTURE = ROOT / "fixtures/system_atlas/wp8/ATLAS_VS0_ACTUAL_REPOSITORY_PROJECTI
 
 def test_actual_projection_is_exact_tree_bound_and_read_only() -> None:
     projection = load_and_validate_projection(FIXTURE, ROOT)
-    assert projection["source_tree"] == "fd19d3a062ff05b54f35da90a96841663f248c5a"
+    assert projection["source_tree"] == "a58bbb34b53410a727febad909d04ec7e157dad1"
     assert len(projection["nodes"]) == 34
     assert projection["logical_hash"]
 
