@@ -1,0 +1,69 @@
+{
+  "schema": "ovc-vit-live-completion-receipt-runtime/v1",
+  "runtime_id": "DSAI3V-VIT-LIVE-COMPLETION-RECEIPTS-v0.1",
+  "status": "ACTIVE_CANDIDATE_PENDING_ASSURANCE",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "issue": 986,
+  "authority_class": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "authority_sources": [
+    "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
+    "registries/development/skills/development_latency_completion_receipt_v0_1.json",
+    "contracts/development/skills/OVC_DSAI_VIT_MATERIALISATION_RECEIPT_CONTRACT_v0_1.md",
+    "contracts/opt_a/OVC_EXTERNAL_ARTIFACT_ROOT_CONTRACT_v0_1.md"
+  ],
+  "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "runtime": "ovc.development.skills.vit_live_completion.record_live_completion",
+  "cli": "tools/ci/record_vit_live_completion.py",
+  "receipt_store": {
+    "type": "EXISTING_OPERATOR_LOCAL_RECEIPTS_PLANE",
+    "binding": "OVC_EXTERNAL_ARTIFACT_ROOT/receipts/development/dsai3v",
+    "content_addressed": true,
+    "append_only": true,
+    "arbitrary_path_override": false,
+    "inside_repository": false,
+    "network_write": false,
+    "r2_write": false,
+    "publication_authority": "NONE"
+  },
+  "required_flow": [
+    "PIP",
+    "INTEGRATION_TICKET",
+    "VIT_GENERATION",
+    "VIT_PLACEMENT",
+    "ASSURANCE",
+    "SIQ",
+    "PHYSICAL_MAIN",
+    "PHYSICAL_MATERIALISATION_RECEIPT",
+    "PACKET_COMPLETION_RECEIPT",
+    "CANONICAL_DEVOBS_COMPLETION_RECEIPT",
+    "COMPLETION_OBSERVABILITY_ATTACHMENT",
+    "DURABLE_RECEIPT_STORE"
+  ],
+  "identity_rules": {
+    "ticket": "MUST_BE_PERSISTED_IN_VIT_LINEAGE_BEFORE_PHYSICAL_MATERIALISATION",
+    "historical_missing_ticket": "FAIL_CLOSED_DO_NOT_INFER",
+    "physical_tree": "DERIVE_FROM_OBSERVED_GIT_COMMIT_AND_REQUIRE_EXACT_VIT_RESULT_TREE_EQUALITY",
+    "missing_telemetry": "UNAVAILABLE_NEVER_INFER"
+  },
+  "recovery": {
+    "mode": "CONTENT_ADDRESSED_IDEMPOTENT_RETRY",
+    "materialisation_receipt_first": true,
+    "completion_devobs_bundle": "RECOVERABLE_IDEMPOTENT",
+    "post_write_tree_mismatch": "FAIL_CLOSED_NO_COMPLETION"
+  },
+  "explicit_non_authority": [
+    "no new physical-main writer",
+    "no new merge API",
+    "no merge or approval authority",
+    "no arbitrary receipt sink",
+    "no Git receipt-bot scope expansion",
+    "no R2 or canonical release publication",
+    "no force-push or history rewrite",
+    "no scientific, Validation, probability, risk, exposure or execution authority"
+  ],
+  "activation_condition": "TARGETED_AND_REPOSITORY_ASSURANCE_PASS_AND_LIVE_ELIGIBLE_PACKET_END_TO_END_RECEIPT_PROOF",
+  "rollback": "Forward-disable this runtime binding while preserving emitted local receipts and Git history; retain the existing VIT controller, SIQ gateway and default authority unchanged."
+}
