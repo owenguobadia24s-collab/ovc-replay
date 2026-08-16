@@ -1,4 +1,4 @@
-name: GRT2 PR998 live-main lineage refresh
+name: GRT2 PR998 live-main placement repair
 
 on:
   pull_request:
@@ -6,11 +6,11 @@ on:
       - grt2/g3-full-enforcement-replay-correction-v3-20260816
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
-  refresh-lineage:
+  repair-placement:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,9 +18,14 @@ jobs:
           ref: grt2/g3-full-enforcement-replay-correction-v3-20260816
           fetch-depth: 0
           show-progress: false
-      - name: Fetch current physical main
-        run: git fetch --no-tags origin main:refs/remotes/origin/main
-      - name: Regenerate exact VIT lineage and update PR998
+      - name: Merge current main normally
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          git merge --no-ff --no-edit origin/main
+          git push origin HEAD:grt2/g3-full-enforcement-replay-correction-v3-20260816
+      - name: Generate exact VIT lineage and update PR998
         env:
           PYTHONPATH: src:.
           GH_TOKEN: ${{ github.token }}
@@ -38,7 +43,7 @@ jobs:
               return cp.stdout.strip(),cp.returncode
           head,_=git('rev-parse','HEAD'); main_commit,_=git('rev-parse','origin/main'); main_tree,_=git('rev-parse','origin/main^{tree}')
           merge_base,_=git('merge-base','HEAD','origin/main')
-          if merge_base != main_commit: raise SystemExit(f'VIT_LINEAGE_MAIN_NOT_ANCESTOR:{merge_base}:{main_commit}')
+          if merge_base != main_commit: raise SystemExit(f'VIT_PLACEMENT_MAIN_NOT_ANCESTOR:{merge_base}:{main_commit}')
           raw,_=git('diff','--name-status','--find-renames','origin/main','HEAD')
           logical=[]; apply=[]
           for line in raw.splitlines():
@@ -72,7 +77,9 @@ jobs:
           record=build_vit_lineage_record(programme_id=pip['programme_id'],packet_id=pip['packet_id'],pip_identity_payload=pip,train_generation_id='GRT2-G3-FULL-ENFORCEMENT-REPLAY-CORRECTION-LIVE-20260816',ordinal=0,predecessor_tree_sha=main_tree,result_tree_sha=head_tree,apply_profile='INTEGRATION_APPLY_PROFILE_REFERENCE_v0_1')
           token=base64.urlsafe_b64encode(json.dumps(record,sort_keys=True,separators=(',',':')).encode()).decode('ascii')
           body=('GRT2 corrective integration. AUTO_EXECUTABLE corrective implementation only; authority delta NONE. Superseding G2 qualification PASS. GRT2-G3 remains NOT_AUTHORISED. No Constitution, DebtFloor, GRT-EXACT required-check, PGN adoption, owner reassignment, semantic, publication, scientific, Validation, risk, exposure, execution, agent-write, force-push or history-rewrite authority.\n\n'+f"Current main: {main_commit}\nCorrection head: {head}\nPIP: {record['pip_id']}\nVIT generation: {record['generation_id']}\nPlacement: {record['placement_id']}\nPredecessor tree: {main_tree}\nResult tree: {head_tree}\nChanged paths: {len(logical)}\n\nVIT-Lineage-B64: {token}")
-          owner,repo=os.environ['GH_REPOSITORY'].split('/',1); data=json.dumps({'body':body}).encode(); req=urllib.request.Request(f'https://api.github.com/repos/{owner}/{repo}/pulls/998',data=data,method='PATCH',headers={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json','User-Agent':'ovc-grt2-lineage-refresh'})
+          owner,repo=os.environ['GH_REPOSITORY'].split('/',1)
+          data=json.dumps({'body':body}).encode()
+          req=urllib.request.Request(f'https://api.github.com/repos/{owner}/{repo}/pulls/998',data=data,method='PATCH',headers={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json','User-Agent':'ovc-grt2-placement-repair'})
           with urllib.request.urlopen(req,timeout=20) as resp: updated=json.loads(resp.read().decode())
           print(json.dumps({'updated_pr':updated['number'],'head':head,'main_commit':main_commit,'head_tree':head_tree,'pip_id':record['pip_id'],'generation_id':record['generation_id'],'placement_id':record['placement_id'],'token_length':len(token)},sort_keys=True))
           PY
