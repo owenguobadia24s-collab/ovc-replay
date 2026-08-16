@@ -1,0 +1,118 @@
+{
+  "$defs": {
+    "CapabilityRow": {
+      "additionalProperties": false,
+      "properties": {
+        "activation_authority": {"const": "NONE"},
+        "active_stack_classification": {"type": ["string", "null"]},
+        "authority_effect": {"const": "NONE"},
+        "capability_id": {"minLength": 1, "type": "string"},
+        "interpretation": {"const": "DESCRIPTIVE_OPPORTUNITY_COST_SIGNAL_ONLY"},
+        "maturity": {"$ref": "#/$defs/Maturity"},
+        "need_assessment_refs": {"items": {"type": "string"}, "type": "array"},
+        "need_counts": {"$ref": "#/$defs/NeedCounts"},
+        "owner_programme": {"type": ["string", "null"]},
+        "responsibility": {"type": ["string", "null"]},
+        "retirement_authority": {"const": "NONE"},
+        "zero_supported_demand": {"const": true}
+      },
+      "required": ["capability_id", "owner_programme", "responsibility", "maturity", "need_counts", "need_assessment_refs", "zero_supported_demand", "interpretation", "retirement_authority", "activation_authority", "authority_effect"],
+      "type": "object"
+    },
+    "CapabilityWithoutDemand": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_effect": {"const": "NONE"},
+        "eligible_capability_denominator": {"minimum": 0, "type": "integer"},
+        "evaluation_cutoff": {"minLength": 1, "type": "string"},
+        "model_type": {"const": "CAPABILITY_WITHOUT_DEMAND"},
+        "read_model_id": {"minLength": 1, "type": "string"},
+        "rows": {"items": {"$ref": "#/$defs/CapabilityRow"}, "type": "array"},
+        "schema": {"const": "ovc-rccr-read-model/v1"},
+        "source_frontier_id": {"type": ["string", "null"]},
+        "source_refs": {"items": {"type": "string"}, "type": "array"},
+        "zero_demand_is_priority_score": {"const": false},
+        "zero_demand_is_retirement_authority": {"const": false},
+        "zero_supported_demand_count": {"minimum": 0, "type": "integer"}
+      },
+      "required": ["schema", "model_type", "read_model_id", "evaluation_cutoff", "source_frontier_id", "eligible_capability_denominator", "zero_supported_demand_count", "rows", "source_refs", "zero_demand_is_retirement_authority", "zero_demand_is_priority_score", "authority_effect"],
+      "type": "object"
+    },
+    "Excluded": {
+      "additionalProperties": false,
+      "properties": {
+        "exclusion_reason": {"minLength": 1, "type": "string"},
+        "item_id": {"minLength": 1, "type": "string"}
+      },
+      "required": ["item_id", "exclusion_reason"],
+      "type": "object"
+    },
+    "Maturity": {
+      "additionalProperties": false,
+      "properties": {
+        "activation": {"minLength": 1, "type": "string"},
+        "authority": {"minLength": 1, "type": "string"},
+        "availability": {"minLength": 1, "type": "string"},
+        "design": {"minLength": 1, "type": "string"},
+        "implementation": {"minLength": 1, "type": "string"},
+        "qualification": {"minLength": 1, "type": "string"}
+      },
+      "required": ["design", "implementation", "availability", "qualification", "authority", "activation"],
+      "type": "object"
+    },
+    "NeedCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "EVIDENCE_REQUIRED": {"minimum": 0, "type": "integer"},
+        "NEED_CONTRADICTED": {"minimum": 0, "type": "integer"},
+        "NEED_SUPPORTED": {"minimum": 0, "type": "integer"},
+        "NOT_REQUIRED": {"minimum": 0, "type": "integer"},
+        "POSSIBLY_REQUIRED": {"minimum": 0, "type": "integer"},
+        "UNRESOLVED": {"minimum": 0, "type": "integer"}
+      },
+      "required": ["EVIDENCE_REQUIRED", "NEED_CONTRADICTED", "NEED_SUPPORTED", "NOT_REQUIRED", "POSSIBLY_REQUIRED", "UNRESOLVED"],
+      "type": "object"
+    },
+    "PortfolioPosture": {
+      "additionalProperties": false,
+      "properties": {
+        "answerability": {"items": {"$ref": "#/$defs/RateRow"}, "type": "array"},
+        "authority_effect": {"const": "NONE"},
+        "eligible_item_denominator": {"minimum": 0, "type": "integer"},
+        "evaluation_cutoff": {"minLength": 1, "type": "string"},
+        "excluded_items": {"items": {"$ref": "#/$defs/Excluded"}, "type": "array"},
+        "included_item_ids": {"items": {"type": "string"}, "type": "array"},
+        "model_type": {"const": "PORTFOLIO_POSTURE"},
+        "need_status": {"items": {"$ref": "#/$defs/RateRow"}, "type": "array"},
+        "primary_gap": {"items": {"$ref": "#/$defs/RateRow"}, "type": "array"},
+        "rate_comparison_policy": {"const": "NO_CROSS_PERIOD_PROGRAMME_POPULATION_OR_FRONTIER_RANKING_WITHOUT_PROTOCOL"},
+        "read_model_id": {"minLength": 1, "type": "string"},
+        "schema": {"const": "ovc-rccr-read-model/v1"},
+        "source_refs": {"items": {"type": "string"}, "type": "array"},
+        "source_universe_id": {"minLength": 1, "type": "string"},
+        "synthetic_completeness_score": {"const": "FORBIDDEN"}
+      },
+      "required": ["schema", "model_type", "read_model_id", "evaluation_cutoff", "source_universe_id", "eligible_item_denominator", "included_item_ids", "excluded_items", "answerability", "primary_gap", "need_status", "source_refs", "rate_comparison_policy", "synthetic_completeness_score", "authority_effect"],
+      "type": "object"
+    },
+    "RateRow": {
+      "additionalProperties": false,
+      "properties": {
+        "class": {"minLength": 1, "type": "string"},
+        "count": {"minimum": 0, "type": "integer"},
+        "denominator": {"minimum": 0, "type": "integer"},
+        "rate": {"maximum": 1, "minimum": 0, "type": ["number", "null"]},
+        "rate_scope": {"const": "WITHIN_SNAPSHOT_ONLY"}
+      },
+      "required": ["class", "count", "denominator", "rate", "rate_scope"],
+      "type": "object"
+    }
+  },
+  "$id": "ovc://schemas/research_operations/rccr/v0_1/RCCRReadModel.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {"$ref": "#/$defs/CapabilityWithoutDemand"},
+    {"$ref": "#/$defs/PortfolioPosture"}
+  ],
+  "title": "RCCRReadModel"
+}
