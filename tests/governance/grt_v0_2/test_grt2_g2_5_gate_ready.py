@@ -19,7 +19,8 @@ def test_g2_5_gate_preparation_remains_historical_after_operator_pass() -> None:
     qa = _load(GATES / "GRT2_G2_5_QA_PACKET.json")
     historical_state = _load(STATE / "OVC_GRT2_STATE_v0_9.json")
     pilot_state = _load(STATE / "OVC_GRT2_STATE_v0_10.json")
-    current_state = _load(STATE / "OVC_GRT2_STATE_v0_11.json")
+    threshold_state = _load(STATE / "OVC_GRT2_STATE_v0_11.json")
+    readiness_state = _load(STATE / "OVC_GRT2_STATE_v0_12.json")
     pointer = _load(STATE / "CURRENT_STATE_POINTER.json")
     decision = _load(GATES / "GRT2_G2_5_OPERATOR_DECISION.json")
     authority = _load(AUTHORITY / "GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json")
@@ -55,17 +56,20 @@ def test_g2_5_gate_preparation_remains_historical_after_operator_pass() -> None:
     assert pilot_state["constitution_status"] == "PROPOSED_UNADMITTED"
     assert pilot_state["debt_floor_generation"] is None
 
-    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_11.json")
-    assert pointer["status"] == "QA_REVIEW"
-    assert pointer["packet_id"] == "GRT2-G2.5-PILOT-EVIDENCE-COLLECTION"
-    assert pointer["gate_id"] == "GRT2-G2.5"
+    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_12.json")
+    assert pointer["status"] == "RUNNING"
+    assert pointer["packet_id"] == "GRT2-G3-READINESS-EVIDENCE"
+    assert pointer["gate_id"] == "GRT2-G3"
     assert pointer["next_packet"] == "GRT2-G3-READINESS-EVIDENCE"
-    assert current_state["pilot_observation_threshold_met"] is True
-    assert current_state["pilot_eligible_candidate_count"] == 8
-    assert current_state["g3_status"] == "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE"
-    assert current_state["active_enforcement"] == "LIMITED_NEW_ARTIFACT_ENFORCEMENT"
-    assert current_state["constitution_status"] == "PROPOSED_UNADMITTED"
-    assert current_state["debt_floor_generation"] is None
+    assert threshold_state["pilot_observation_threshold_met"] is True
+    assert threshold_state["pilot_eligible_candidate_count"] == 8
+    assert threshold_state["g3_status"] == "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE"
+    assert threshold_state["active_enforcement"] == "LIMITED_NEW_ARTIFACT_ENFORCEMENT"
+    assert threshold_state["constitution_status"] == "PROPOSED_UNADMITTED"
+    assert threshold_state["debt_floor_generation"] is None
+    assert readiness_state["status"] == "RUNNING"
+    assert readiness_state["g3_status"] == "NOT_AUTHORISED_READINESS_EVIDENCE_RUNNING"
+    assert readiness_state["debt_floor_generation"] is None
 
 
 def test_g2_5_monitoring_preserves_limited_scope_and_g3_separation() -> None:
