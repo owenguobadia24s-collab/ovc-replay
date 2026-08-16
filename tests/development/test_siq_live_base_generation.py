@@ -5,12 +5,14 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "ovc-tiered-tests.yml"
+ASSURANCE_PREFLIGHT = ROOT / "tools" / "ci" / "vit_assurance_preflight.py"
 
 
 class SIQLiveBaseGenerationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.text = WORKFLOW.read_text(encoding="utf-8")
+        cls.assurance_text = ASSURANCE_PREFLIGHT.read_text(encoding="utf-8")
 
     def test_same_pr_concurrency_is_scoped_to_exact_head_generation(self) -> None:
         self.assertIn(
@@ -35,6 +37,13 @@ class SIQLiveBaseGenerationTests(unittest.TestCase):
         self.assertIn("terminal.data.head.sha !== leaseOwner.headSha", self.text)
         self.assertIn("OVC_FINAL_INTEGRATION_PREDECESSOR_SUPERSEDED", self.text)
         self.assertIn("emitPredecessorMetric('SUPERSEDED', leaseOwner)", self.text)
+
+    def test_assurance_identity_reads_live_pr_body_and_rejects_superseded_head(self) -> None:
+        self.assertIn("def _live_pr_payload", self.assurance_text)
+        self.assertIn("https://api.github.com/repos/{repo}/pulls/{pr_number}", self.assurance_text)
+        self.assertIn("VIT_ASSURANCE_SUPERSEDED_EVENT_HEAD", self.assurance_text)
+        self.assertIn("event_head_sha", self.assurance_text)
+        self.assertIn("pr = _live_pr_payload(event)", self.assurance_text)
 
     def test_stable_main_fail_closed_guard_remains(self) -> None:
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.text)
