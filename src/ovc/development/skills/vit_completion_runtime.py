@@ -18,6 +18,8 @@ from ovc.development.skills.vit_materialisation import (
 VIT_PHYSICAL_CONTROLLER = "DSAI_VIT_PHYSICAL_CONTROLLER"
 SIQ_PHYSICAL_GATEWAY = "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
 RECEIPT_STORE_ROOT_ENV = "OVC_DSAI3V_RECEIPT_STORE_ROOT"
+EXTERNAL_ARTIFACT_ROOT_ENV = "OVC_EXTERNAL_ARTIFACT_ROOT"
+EXTERNAL_RECEIPTS_RELATIVE_ROOT = "receipts"
 
 
 def resolve_receipt_store(
@@ -27,16 +29,28 @@ def resolve_receipt_store(
 ) -> ReceiptStore:
     """Resolve the already-authorised durable ReceiptStore without inventing a sink.
 
-    Production callers must supply an explicit root or bind the existing runtime mount
-    through OVC_DSAI3V_RECEIPT_STORE_ROOT. Absence fails closed instead of silently
-    falling back to a repository path or ephemeral working directory.
+    Resolution order is deliberately narrow:
+    1. an explicitly injected ReceiptStore root (test/runtime dependency injection);
+    2. the existing DSAI3V-specific runtime binding, if already configured;
+    3. the already-governed OVC external-artifact root's canonical ``receipts/``
+       directory.
+
+    The third route reuses the existing development external-artifact binding and the
+    root contract's declared receipts namespace. It does not select a new repository,
+    cloud service, or publication destination. If neither existing runtime binding is
+    present, resolution fails closed instead of falling back to the Git worktree or an
+    ephemeral directory.
     """
     if root is None:
         source = os.environ if env is None else env
-        configured = str(source.get(RECEIPT_STORE_ROOT_ENV, "")).strip()
-        if not configured:
-            raise VitContractError("DSAI3V_RECEIPT_STORE_ROOT_UNBOUND")
-        root = configured
+        dedicated = str(source.get(RECEIPT_STORE_ROOT_ENV, "")).strip()
+        if dedicated:
+            root = dedicated
+        else:
+            external_root = str(source.get(EXTERNAL_ARTIFACT_ROOT_ENV, "")).strip()
+            if not external_root:
+                raise VitContractError("DSAI3V_RECEIPT_STORE_ROOT_UNBOUND")
+            root = Path(external_root).expanduser() / EXTERNAL_RECEIPTS_RELATIVE_ROOT
     path = Path(root).expanduser()
     if not str(path).strip():
         raise VitContractError("DSAI3V_RECEIPT_STORE_ROOT_UNBOUND")
