@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-gate-authority-assessment/v1",
+  "assessment_id": "P2-EXT-SEMANTIC-FREEZE-AUTH-0.1",
+  "gate_id": "P2-EXT-SEMANTIC-FREEZE-0.1",
+  "classifier": "OVC-OPERATOR-RESERVED-AUTHORITY-GATE-DOCTRINE-v0.1",
+  "current_envelope_baseline": "main@1dc2aa50f6952c72881725970787c02ad9d5dc8b",
+  "gate_function": "AUTHORITY_DECISION",
+  "legacy_execution_class": "OPERATOR_REQUIRED",
+  "authority_delta": [
+    {
+      "code": "OPR.SCIENTIFIC_PROMOTION",
+      "object": "TH-EC1-EXT-0001-v0.1..0007-v0.1 + RP-EC1-EXT-0001-v0.1..0007-v0.1 semantic generations",
+      "effect": "freeze exact propositions and protocol semantic definitions before preregistration work",
+      "already_granted_before_decision": false
+    }
+  ],
+  "reserved_predicate_hits": ["OPR.SCIENTIFIC_PROMOTION"],
+  "execution_class_before_operator_decision": "OPERATOR_REQUIRED",
+  "operator_decision": "PASS",
+  "execution_class_after_decision_for_materialisation": "AUTO_RATIFIABLE",
+  "post_pass_envelope": {
+    "allowed": [
+      "persist exact semantic-freeze decision and receipt",
+      "construct non-evidentiary method/parameter candidate packs",
+      "add machine schemas/bindings and run synthetic/adversarial conformance where values are source-fixed or no new scientific choice is made"
+    ],
+    "reserved_successor_boundaries": [
+      "selection/freeze of unresolved scientific method or parameter values",
+      "real-source Path-2 evidentiary transition",
+      "effective ExperimentRecord preregistration if it creates evidentiary authority",
+      "P2-6 candidate formation/freeze",
+      "Validation, publication and exposure"
+    ]
+  },
+  "hard_denies_preserved": [
+    "DENY.PROTECTED_VALIDATION",
+    "DENY.UNAUTHORISED_EXPOSURE",
+    "DENY.FORCE_PUSH",
+    "DENY.HISTORY_REWRITE"
+  ],
+  "authority_effect_after_materialisation": "EXACT_SEMANTIC_FREEZE_ONLY"
+}
