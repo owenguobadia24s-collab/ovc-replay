@@ -12,6 +12,7 @@ from .orch345_auto_receipt_core import persist_receipt
 from .orch345_auto_receipts import orch3_receipt, orch4_receipt, orch5_receipt
 
 DEFAULT_EVIDENCE_OUTPUT=Path("records/development/skills")
+DEFAULT_EXECUTION_SUBSTRATE="DSAI3V-VIT-GENERAL-AUTHORITY-v0.1"
 
 def _state_id(value:Mapping[str,Any],role:str)->str:
     return str(value.get("record_id","")).strip() or canonical_sha256(dict(value),role=role)
@@ -55,4 +56,27 @@ def run_automatic_orchestration(*,authority:Mapping[str,Any],programme_state:Map
     receipts.extend(orch4_receipt(row,classification,ctx,observed) for row,classification in zip(orch4,classifications))
     receipts.append(orch5_receipt(orch5,packet_states,completed_packet_ids,newly_completed_packet_ids,ctx,observed))
     paths=[persist_receipt(receipt,evidence_output) for receipt in receipts]
-    return {"schema":"ovc-dsai2-orch345-automatic-orchestration-invocation/v1","orchestration_run_id":run_id,"invocation_id":invocation,"invocation_mode":"AUTO","trigger_source":str(trigger_source),"source_programme_id":programme_id,"source_programme_state_id":programme_state_id,"source_packet_state_ids":dict(sorted(packet_state_ids.items())),"orch3_execution_record":_clean(orch3),"orch4_execution_records":[_clean(row) for row in orch4],"orch5_execution_record":_clean(orch5),"diagnostic_receipts":receipts,"diagnostic_receipt_ids":[r["record_id"] for r in receipts],"persisted_receipt_paths":[str(path) for path in paths],"receipt_phase":"DECISION_SELECTED","execution_started_observed":False,"execution_completed_observed":False,"authority_delta":"NONE","parallel_merge":False}
+    return {
+        "schema":"ovc-dsai2-orch345-automatic-orchestration-invocation/v1",
+        "orchestration_run_id":run_id,
+        "invocation_id":invocation,
+        "invocation_mode":"AUTO",
+        "trigger_source":str(trigger_source),
+        "source_programme_id":programme_id,
+        "source_programme_state_id":programme_state_id,
+        "source_packet_state_ids":dict(sorted(packet_state_ids.items())),
+        "orch3_execution_record":_clean(orch3),
+        "orch4_execution_records":[_clean(row) for row in orch4],
+        "orch5_execution_record":_clean(orch5),
+        "diagnostic_receipts":receipts,
+        "diagnostic_receipt_ids":[r["record_id"] for r in receipts],
+        "persisted_receipt_paths":[str(path) for path in paths],
+        "receipt_phase":"DECISION_SELECTED",
+        "execution_started_observed":False,
+        "execution_completed_observed":False,
+        "required_execution_substrate":DEFAULT_EXECUTION_SUBSTRATE,
+        "vit_pip_required_before_execution":True,
+        "direct_physical_main_candidate":False,
+        "authority_delta":"NONE",
+        "parallel_merge":False,
+    }
