@@ -2,9 +2,26 @@
   "schema": "ovc-dsai3v-vit-current-state-resolution-packet/v1",
   "packet_id": "DSAI3V-VIT-CURRENT-STATE-RESOLUTION-CONFORMANCE",
   "programme_id": "OVC-DSAI-VIT-v0.3",
-  "status": "IMPLEMENTED_PENDING_FINAL_ASSURANCE_AND_MATERIALISATION",
+  "status": "COMPLETION_EFFECTIVE_ON_SUCCESSFUL_MATERIALISATION",
   "authority": "AUTO_RATIFIABLE",
   "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "authority_manifest": {
+    "programme_id": "OVC-DSAI-VIT-v0.3",
+    "packet_id": "DSAI3V-VIT-CURRENT-STATE-RESOLUTION-CONFORMANCE",
+    "authority": "AUTO_RATIFIABLE",
+    "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+    "basis": "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1 + explicit operator OVC RESOLVE instruction"
+  },
+  "authority_manifest_id": "6c9a5c2ff6c8e53dac1ee4f12ab944a3f2b0d71a70ef987d28431b48d0a5bad3",
+  "dependency_frontier": {
+    "main": "e4084161c2656d9d61144feb9ad979a44e4671f4",
+    "dependencies": [
+      "DSAI3V-VIT-UNIVERSAL-ROUTING-CLOSEOUT MERGED c73eb4c76958d35d614fe6b162ba630b1f632068",
+      "ATLAS-WP1 MERGED e4084161c2656d9d61144feb9ad979a44e4671f4"
+    ],
+    "semantic_dependency_change": false
+  },
+  "dependency_frontier_id": "a537ecce14a872ba49234827415329b17f68b3386e862abb23451173a5b6dad4",
   "problem": "Historically valid VIT plan/gate records could be selected as if current, despite later ACTIVE general authority and default-substrate records.",
   "correction": {
     "canonical_resolver": "ovc.development.skills.vit_current_state.resolve_current_vit_query",
@@ -32,8 +49,10 @@
     "Historical DSAI3V-G-VIT-PILOT GATE_READY/DENIED evidence is classified historical and cannot control current status.",
     "Missing current pointer fails closed even when a complete historical gate packet exists.",
     "Authority/substrate identity mismatch fails closed.",
-    "Default execution substrate binds the current-state resolver and historical non-fallback policy."
+    "Default execution substrate binds the current-state resolver and historical non-fallback policy.",
+    "System Atlas VIT CURRENT/ACTIVE/AUTHORISED projection is source-bound to the DSAI current-state resolver."
   ],
+  "completion_condition": "THIS_PACKET_TREE_MERGED_TO_PHYSICAL_MAIN_AFTER_VIT_ROUTING_PREFLIGHT_AND_REQUIRED_QA_PASS",
   "reserved_boundaries_unchanged": true,
   "parallel_physical_merge": false,
   "force_push": false,
