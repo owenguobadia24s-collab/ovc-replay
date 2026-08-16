@@ -1,0 +1,92 @@
+{
+  "$id": "ovc-vit-local-post-merge-completion-proof/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "controller": {
+      "const": "DSAI_VIT_PHYSICAL_CONTROLLER"
+    },
+    "exact_tree_equal": {
+      "const": true
+    },
+    "expected_result_tree": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "four_content_addressed_receipts_present": {
+      "const": true
+    },
+    "observed_commit": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "observed_tree": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "physical_gateway": {
+      "const": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
+    },
+    "proof_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "receipt_ids": {
+      "additionalProperties": false,
+      "properties": {
+        "attachment_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "completion_receipt_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "development_latency_receipt_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "materialisation_receipt_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "materialisation_receipt_id",
+        "completion_receipt_id",
+        "development_latency_receipt_id",
+        "attachment_id"
+      ],
+      "type": "object"
+    },
+    "schema": {
+      "const": "ovc-vit-local-post-merge-completion-proof/v1"
+    },
+    "telemetry_rule": {
+      "const": "OBSERVED_ONLY_UNAVAILABLE_WHERE_ABSENT"
+    },
+    "transaction_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "transaction_id",
+    "observed_commit",
+    "observed_tree",
+    "expected_result_tree",
+    "exact_tree_equal",
+    "four_content_addressed_receipts_present",
+    "receipt_ids",
+    "controller",
+    "physical_gateway",
+    "telemetry_rule",
+    "authority_effect",
+    "proof_id"
+  ],
+  "type": "object"
+}

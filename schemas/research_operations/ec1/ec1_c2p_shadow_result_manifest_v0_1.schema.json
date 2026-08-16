@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/ec1/ec1_c2p_shadow_result_manifest_v0_1.schema.json",
+  "title": "EC1 C2P Shadow Result Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "run_generation_id",
+    "object_pack_candidate_id",
+    "object_pack_candidate_logical_hash",
+    "source_population",
+    "cutoff_schedule_id",
+    "dependency_bindings",
+    "output_hashes",
+    "denominators",
+    "capacity",
+    "missingness",
+    "failure_state",
+    "sealed_state",
+    "ec1_scientific_effect"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-ec1-c2p-shadow-result-manifest/v0_1"},
+    "run_generation_id": {"type": "string", "minLength": 1},
+    "object_pack_candidate_id": {"type": "string", "minLength": 1},
+    "object_pack_candidate_logical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instrument", "side", "clock", "interval", "research_role"],
+      "properties": {
+        "instrument": {"const": "GBPUSD"},
+        "side": {"enum": ["BID", "ASK"]},
+        "clock": {"enum": ["15M", "2H_A_L"]},
+        "interval": {"type": "string", "minLength": 1},
+        "research_role": {"const": "DISCOVERY_SHADOW_ONLY"}
+      }
+    },
+    "cutoff_schedule_id": {"type": "string", "minLength": 1},
+    "dependency_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opt_a", "c1", "c2", "c2e", "occurrence_context"],
+      "properties": {
+        "opt_a": {"$ref": "#/$defs/sourceRef"},
+        "c1": {"$ref": "#/$defs/sourceRef"},
+        "c2": {"$ref": "#/$defs/sourceRef"},
+        "c2e": {"oneOf": [{"$ref": "#/$defs/sourceRef"}, {"type": "null"}]},
+        "occurrence_context": {"$ref": "#/$defs/sourceRef"}
+      }
+    },
+    "output_hashes": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "uniqueItems": true},
+    "denominators": {"type": "object"},
+    "capacity": {
+      "type": "object",
+      "required": ["wall_time_seconds", "peak_memory_bytes", "storage_bytes", "checkpoint_count", "capacity_status"],
+      "properties": {
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "peak_memory_bytes": {"type": "integer", "minimum": 0},
+        "storage_bytes": {"type": "integer", "minimum": 0},
+        "checkpoint_count": {"type": "integer", "minimum": 0},
+        "capacity_status": {"enum": ["PASS", "CAPACITY_EXCEEDED"]}
+      }
+    },
+    "missingness": {"type": "object"},
+    "failure_state": {"enum": ["NONE", "CAPACITY_EXCEEDED", "SOURCE_UNAVAILABLE", "DEPENDENCY_NOT_EVALUABLE", "QUARANTINED"]},
+    "sealed_state": {"enum": ["SEALED_PENDING_PAR_GDISCLOSE", "DISCLOSED_AFTER_PAR_GDISCLOSE"]},
+    "ec1_scientific_effect": {"const": "NONE"}
+  },
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "hash"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "hash": {"type": "string", "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ export default defineConfig({
       input: {
         main: fileURLToPath(new URL("./index.html", import.meta.url)),
         atlasFeasibility: fileURLToPath(new URL("./atlas-feasibility.html", import.meta.url)),
+        atlasWorkbench: fileURLToPath(new URL("./atlas-workbench.html", import.meta.url)),
       },
     },
   },

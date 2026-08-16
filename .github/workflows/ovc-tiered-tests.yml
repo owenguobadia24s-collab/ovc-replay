@@ -11,7 +11,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: ovc-pr-${{ github.event.pull_request.number || github.ref }}
+  group: ovc-pr-${{ github.event.pull_request.number || github.ref }}-${{ github.event.pull_request.head.sha || github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -120,15 +120,16 @@ jobs:
           fetch-depth: 0
           show-progress: false
 
-      - name: Wait for BASE_INDEPENDENT required assurance and pin current main
+      - name: Wait for BASE_INDEPENDENT required assurance and pin live current main
         id: ready
         uses: actions/github-script@v9
         with:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const pr = context.payload.pull_request;
-            const sha = pr.head.sha;
+            const eventPr = context.payload.pull_request;
+            const prNumber = eventPr.number;
+            const sha = eventPr.head.sha;
             const requiredNames = [
               'tests',
               'pytest-unittest-parity',
@@ -143,6 +144,19 @@ jobs:
             };
 
             while (Date.now() < deadline) {
+              const livePr = await github.rest.pulls.get({owner, repo, pull_number: prNumber});
+              if (livePr.data.head.sha !== sha) {
+                core.setFailed(
+                  `OVC_SIQ_SUPERSEDED_EVENT_HEAD: event ${sha}, live ${livePr.data.head.sha}; ` +
+                  `obsolete generation may not enter SIQ READY admission.`
+                );
+                return;
+              }
+              if (livePr.data.state !== 'open') {
+                core.setFailed(`OVC_SIQ_PR_NOT_OPEN: PR #${prNumber} state=${livePr.data.state}.`);
+                return;
+              }
+
               const checks = await github.rest.checks.listForRef({
                 owner,
                 repo,
@@ -162,19 +176,27 @@ jobs:
                 continue;
               }
 
-              const mainNow = await github.rest.repos.getBranch({owner, repo, branch: pr.base.ref});
+              const baseRef = livePr.data.base.ref;
+              const mainNow = await github.rest.repos.getBranch({owner, repo, branch: baseRef});
               const currentMain = mainNow.data.commit.sha;
-              if (currentMain !== pr.base.sha) {
+              const ancestry = await github.rest.repos.compareCommits({
+                owner,
+                repo,
+                base: currentMain,
+                head: sha
+              });
+              if (!['ahead', 'identical'].includes(ancestry.data.status)) {
                 core.setFailed(
-                  `OVC_BASE_MOVED_BEFORE_READINESS: event base ${pr.base.sha}, current ${pr.base.ref} ${currentMain}; ` +
-                  `automatic lawful reconcile/requeue is required before SIQ READY admission.`
+                  `OVC_RECONCILE_REQUIRED: candidate ${sha} does not contain live ${baseRef}@${currentMain}; ` +
+                  `event base ${eventPr.base.sha} is provenance only. Bounded lawful reconcile/requeue is required.`
                 );
                 return;
               }
               core.setOutput('base_sha', currentMain);
               core.setOutput('head_sha', sha);
               core.info(
-                `OVC_SIQ_READY_ADMITTED: ${sha} completed BASE_INDEPENDENT assurance and is pinned to ${pr.base.ref}@${currentMain}.`
+                `OVC_SIQ_READY_ADMITTED: ${sha} completed BASE_INDEPENDENT assurance and contains live ` +
+                `${baseRef}@${currentMain}; event base ${eventPr.base.sha} retained as provenance only.`
               );
               return;
             }
@@ -222,9 +244,19 @@ jobs:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const pr = context.payload.pull_request;
+            const eventPr = context.payload.pull_request;
+            const prNumber = eventPr.number;
             const sha = process.env.OVC_READY_HEAD_SHA;
             const readyBase = process.env.OVC_READY_BASE_SHA;
+            const initialLivePr = await github.rest.pulls.get({owner, repo, pull_number: prNumber});
+            if (initialLivePr.data.head.sha !== sha) {
+              core.setFailed(
+                `OVC_SIQ_SUPERSEDED_EVENT_HEAD: READY ${sha}, live ${initialLivePr.data.head.sha}; ` +
+                `obsolete generation may not acquire BASE_SENSITIVE assurance.`
+              );
+              return;
+            }
+            const baseRef = initialLivePr.data.base.ref;
             const windowCheckName = 'OVC merge readiness';
             const startedAt = Date.now();
             const predecessorDeadline = startedAt + 4 * 60 * 1000;
@@ -234,11 +266,11 @@ jobs:
               `OVC_CI_METRIC ${JSON.stringify({schema:'ovc-ci-metric/v1',metric:'final_integration_predecessor_lease_wait_ms',value_ms:Date.now()-startedAt,head_sha:sha,predecessor_pr:leaseOwner?.number||null,result})}`
             );
             const findPassedPredecessor = async mainSha => {
-              const pulls = await github.paginate(github.rest.pulls.list, {owner, repo, state:'open', base:pr.base.ref, per_page:100});
+              const pulls = await github.paginate(github.rest.pulls.list, {owner, repo, state:'open', base:baseRef, per_page:100});
               for (const candidate of pulls) {
-                if (candidate.number >= pr.number) {
-                  if (candidate.number > pr.number) {
-                    core.info(`OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED: PR #${candidate.number} was created after current PR #${pr.number}; it cannot own the current candidate's predecessor lease.`);
+                if (candidate.number >= prNumber) {
+                  if (candidate.number > prNumber) {
+                    core.info(`OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED: PR #${candidate.number} was created after current PR #${prNumber}; it cannot own the current candidate's predecessor lease.`);
                   }
                   continue;
                 }
@@ -254,7 +286,16 @@ jobs:
 
             let leaseOwner = null;
             while (Date.now() < predecessorDeadline) {
-              const mainNow = await github.rest.repos.getBranch({owner, repo, branch:pr.base.ref});
+              const liveCurrent = await github.rest.pulls.get({owner, repo, pull_number: prNumber});
+              if (liveCurrent.data.head.sha !== sha) {
+                emitPredecessorMetric('CURRENT_GENERATION_SUPERSEDED', leaseOwner);
+                core.setFailed(
+                  `OVC_SIQ_SUPERSEDED_EVENT_HEAD: READY ${sha}, live ${liveCurrent.data.head.sha}; ` +
+                  `current generation may not continue holding/acquiring the final-integration lane.`
+                );
+                return;
+              }
+              const mainNow = await github.rest.repos.getBranch({owner, repo, branch:baseRef});
               const currentMain = mainNow.data.commit.sha;
               if (!leaseOwner) {
                 leaseOwner = await findPassedPredecessor(currentMain);
@@ -265,8 +306,17 @@ jobs:
                 core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD: PR #${leaseOwner.number} head ${leaseOwner.headSha}.`);
               }
               const terminal = await github.rest.pulls.get({owner, repo, pull_number:leaseOwner.number});
-              const mainAfter = await github.rest.repos.getBranch({owner, repo, branch:pr.base.ref});
+              const mainAfter = await github.rest.repos.getBranch({owner, repo, branch:baseRef});
               const newMain = mainAfter.data.commit.sha;
+              if (terminal.data.head.sha !== leaseOwner.headSha) {
+                emitPredecessorMetric('SUPERSEDED', leaseOwner);
+                core.info(
+                  `OVC_FINAL_INTEGRATION_PREDECESSOR_SUPERSEDED: PR #${leaseOwner.number} ` +
+                  `lease head ${leaseOwner.headSha}, live head ${terminal.data.head.sha}; lease released.`
+                );
+                leaseOwner = null;
+                continue;
+              }
               if (terminal.data.merged_at && newMain !== leaseOwner.baseSha) {
                 emitPredecessorMetric('MERGED', leaseOwner);
                 core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_MERGED: PR #${leaseOwner.number}; successor advances.`);
@@ -293,18 +343,38 @@ jobs:
               return;
             }
 
-            const mainAtStart = await github.rest.repos.getBranch({owner, repo, branch:pr.base.ref});
-            const mainSnapshot = mainAtStart.data.commit.sha;
-            if (mainSnapshot !== readyBase || mainSnapshot !== pr.base.sha) {
+            const liveAtStart = await github.rest.pulls.get({owner, repo, pull_number: prNumber});
+            if (liveAtStart.data.head.sha !== sha) {
               core.setFailed(
-                `OVC_BASE_MOVED_BEFORE_READINESS: READY base ${readyBase}, event base ${pr.base.sha}, current ${mainSnapshot}; ` +
-                `release and automatic lawful reconcile/requeue are required.`
+                `OVC_SIQ_SUPERSEDED_EVENT_HEAD: READY ${sha}, live ${liveAtStart.data.head.sha}; ` +
+                `obsolete generation may not acquire final readiness.`
               );
               return;
             }
+            const mainAtStart = await github.rest.repos.getBranch({owner, repo, branch:baseRef});
+            const mainSnapshot = mainAtStart.data.commit.sha;
+            const ancestry = await github.rest.repos.compareCommits({
+              owner,
+              repo,
+              base: mainSnapshot,
+              head: sha
+            });
+            if (!['ahead', 'identical'].includes(ancestry.data.status)) {
+              core.setFailed(
+                `OVC_RECONCILE_REQUIRED: candidate ${sha} does not contain acquired ${baseRef}@${mainSnapshot}; ` +
+                `READY base was ${readyBase}. Release and bounded lawful reconcile/requeue are required.`
+              );
+              return;
+            }
+            if (mainSnapshot !== readyBase) {
+              core.info(
+                `OVC_READY_BASE_REFRESHED_BEFORE_FINAL_LEASE: READY ${readyBase} -> live ${mainSnapshot}; ` +
+                `candidate ${sha} already contains the newer base, so no payload rebuild is required.`
+              );
+            }
             core.setOutput('base_sha', mainSnapshot);
             core.setOutput('head_sha', sha);
-            core.info(`OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED: ${pr.base.ref}@${mainSnapshot} for ${sha}.`);
+            core.info(`OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED: ${baseRef}@${mainSnapshot} for ${sha}.`);
             core.info(`OVC_CI_METRIC ${JSON.stringify({schema:'ovc-ci-metric/v1',metric:'final_integration_window_acquisition_ms',value_ms:Date.now()-startedAt,head_sha:sha,base_sha:mainSnapshot,result:'ACQUIRED_BASE_SENSITIVE_ONLY'})}`);
 
       - name: Prove candidate contains acquired current main
@@ -344,19 +414,28 @@ jobs:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const pr = context.payload.pull_request;
+            const eventPr = context.payload.pull_request;
             const mainSnapshot = process.env.OVC_WINDOW_BASE_SHA;
             const sha = process.env.OVC_WINDOW_HEAD_SHA;
             const startedAt = Date.now();
-            const mainNow = await github.rest.repos.getBranch({owner, repo, branch:pr.base.ref});
+            const livePr = await github.rest.pulls.get({owner, repo, pull_number:eventPr.number});
+            if (livePr.data.head.sha !== sha) {
+              core.setFailed(
+                `OVC_SIQ_SUPERSEDED_EVENT_HEAD: lease head ${sha}, live ${livePr.data.head.sha}; ` +
+                `obsolete generation cannot record final PASS.`
+              );
+              return;
+            }
+            const baseRef = livePr.data.base.ref;
+            const mainNow = await github.rest.repos.getBranch({owner, repo, branch:baseRef});
             const finalMain = mainNow.data.commit.sha;
             if (finalMain !== mainSnapshot) {
               core.setFailed(
-                `OVC_BASE_MOVED_DURING_READINESS: ${pr.base.ref} moved from ${mainSnapshot} to ${finalMain}; ` +
+                `OVC_BASE_MOVED_DURING_READINESS: ${baseRef} moved from ${mainSnapshot} to ${finalMain}; ` +
                 `lease releases and automatic lawful reconcile/requeue are required.`
               );
               return;
             }
-            core.info(`OVC_FINAL_INTEGRATION_WINDOW_PASS: mandatory exact-final assurance passed on ${sha} while ${pr.base.ref} remained ${mainSnapshot}.`);
+            core.info(`OVC_FINAL_INTEGRATION_WINDOW_PASS: mandatory exact-final assurance passed on ${sha} while ${baseRef} remained ${mainSnapshot}.`);
             core.info(`OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED: ${sha}; immediate successor advancement is eligible.`);
             core.info(`OVC_CI_METRIC ${JSON.stringify({schema:'ovc-ci-metric/v1',metric:'final_integration_window_hold_ms',value_ms:Date.now()-startedAt,head_sha:sha,base_sha:mainSnapshot,required_checks:['SIQ/PDC exact-final assurance'],result:'PASS_RELEASED'})}`);

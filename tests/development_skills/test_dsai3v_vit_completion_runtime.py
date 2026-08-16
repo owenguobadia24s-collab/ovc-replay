@@ -6,6 +6,8 @@ import unittest
 from pathlib import Path
 
 from ovc.development.skills.vit_completion_runtime import (
+    EXTERNAL_ARTIFACT_ROOT_ENV,
+    EXTERNAL_RECEIPTS_RELATIVE_ROOT,
     RECEIPT_STORE_ROOT_ENV,
     persist_physical_completion,
     recover_effective_write_completion,
@@ -138,12 +140,23 @@ class Dsai3vVitCompletionRuntimeTests(unittest.TestCase):
                     **self._kwargs(store),
                 )
 
-    def test_store_root_requires_explicit_existing_runtime_binding(self) -> None:
+    def test_store_root_reuses_existing_external_receipts_namespace(self) -> None:
         with self.assertRaisesRegex(VitContractError, "DSAI3V_RECEIPT_STORE_ROOT_UNBOUND"):
             resolve_receipt_store(env={})
         with tempfile.TemporaryDirectory() as tmp:
-            store = resolve_receipt_store(env={RECEIPT_STORE_ROOT_ENV: tmp})
-            self.assertEqual(store.root, Path(tmp))
+            store = resolve_receipt_store(env={EXTERNAL_ARTIFACT_ROOT_ENV: tmp})
+            self.assertEqual(store.root, Path(tmp) / EXTERNAL_RECEIPTS_RELATIVE_ROOT)
+            self.assertTrue(store.root.is_dir())
+
+    def test_dedicated_existing_runtime_binding_has_precedence(self) -> None:
+        with tempfile.TemporaryDirectory() as external_tmp, tempfile.TemporaryDirectory() as dedicated_tmp:
+            store = resolve_receipt_store(
+                env={
+                    EXTERNAL_ARTIFACT_ROOT_ENV: external_tmp,
+                    RECEIPT_STORE_ROOT_ENV: dedicated_tmp,
+                }
+            )
+            self.assertEqual(store.root, Path(dedicated_tmp))
 
 
 if __name__ == "__main__":

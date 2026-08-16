@@ -112,14 +112,18 @@ jobs:
           fetch-depth: 0
           show-progress: false
 
+      - name: Compute AA0 assurance harness identity
+        id: aa0-harness
+        run: python3 tools/ci/aa0_harness_identity.py
+
       - name: Restore AA0 PIP-bound repository assurance
         id: cache
         uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/ovc-aa0-tests
-          key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
           restore-keys: |
-            ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-
+            ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-
 
       - name: Decide AA0 PIP-bound repository assurance
         id: aa0
@@ -165,7 +169,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ${{ runner.temp }}/ovc-aa0-tests
-          key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
@@ -178,14 +182,18 @@ jobs:
           fetch-depth: 0
           show-progress: false
 
+      - name: Compute AA0 assurance harness identity
+        id: aa0-harness
+        run: python3 tools/ci/aa0_harness_identity.py
+
       - name: Restore AA0 PIP-bound unittest parity
         id: cache
         uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/ovc-aa0-unittest
-          key: ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          key: ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
           restore-keys: |
-            ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-
+            ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-
 
       - name: Decide AA0 PIP-bound unittest parity
         id: aa0
@@ -244,7 +252,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ${{ runner.temp }}/ovc-aa0-unittest
-          key: ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          key: ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
 
   runner-parity:
     name: runner-parity
@@ -257,14 +265,18 @@ jobs:
           fetch-depth: 0
           show-progress: false
 
+      - name: Compute AA0 assurance harness identity
+        id: aa0-harness
+        run: python3 tools/ci/aa0_harness_identity.py
+
       - name: Restore AA0 PIP-bound runner parity
         id: cache
         uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/ovc-aa0-runner
-          key: ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          key: ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
           restore-keys: |
-            ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-
+            ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-
 
       - name: Decide AA0 PIP-bound runner parity
         id: aa0
@@ -323,4 +335,4 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: ${{ runner.temp }}/ovc-aa0-runner
-          key: ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          key: ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
