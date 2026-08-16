@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-c2p2-ps0-rs0-preregistration/v1",
+  "programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
+  "status": "PREPARED_NOT_AUTHORISED",
+  "candidate_registry": "registries/opt_b/c2p/v0_2/C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json",
+  "candidate_ids": [
+    "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+    "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+    "C2P2-PS0-OP-C-EPISODE-AWARE-CONTINUITY-v1"
+  ],
+  "intended_research_role": "DISCOVERY_SHADOW_ONLY",
+  "source_population": {
+    "instrument": "GBPUSD",
+    "sides": ["BID", "ASK"],
+    "clocks": ["15M", "2H_A_L"],
+    "date_interval": "DEFER_TO_EXACT_RS0_OPERATOR_TOKEN_AND_CURRENT_EC1_AUTHORITY",
+    "source_releases": "RESOLVE_AT_RS0_PREFLIGHT",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "comparison_design": {
+    "common_population_required": true,
+    "common_cutoff_schedule_required": true,
+    "same_environment_required": true,
+    "no_winner_metric": true,
+    "report": [
+      "candidate_count",
+      "tracklet_count",
+      "assertion_count",
+      "ambiguity_count_and_denominator",
+      "not_evaluable_count_and_denominator",
+      "censor_count_and_denominator",
+      "dormancy_reappearance_count",
+      "retirement_recurrence_count",
+      "split_merge_count",
+      "cross_candidate_correspondence",
+      "candidate_disagreement_cases",
+      "C2E_dependency_delta_for_candidate_C",
+      "runtime_memory_storage_checkpoint_capacity"
+    ]
+  },
+  "falsification_challenges": [
+    "identity collapses under small lawful chronology perturbation",
+    "candidate fabricates continuity across gaps or censoring",
+    "candidate converts recurrence after retirement into same identity",
+    "candidate resolves equally lawful competitors without evidence",
+    "candidate changes identity solely because family or C3 semantic labels change",
+    "candidate C treats C2E episode identity as sufficient C2P identity",
+    "candidate requires information unavailable by the evaluation cutoff",
+    "candidate cannot reproduce exact assertions under clean replay/restart"
+  ],
+  "selection_after_rs0": "OPERATOR_REQUIRED; no automatic preferred pack or threshold promotion",
+  "resource_envelope": "MEASURE_AND_FREEZE_BEFORE_RS0_RUN_AUTHORITY",
+  "restart_policy": "CHECKPOINT_RESTART_MUST_BE_LOGICALLY_EQUIVALENT",
+  "capacity_policy": "IDENTITY_BEARING_CAPACITY_EXHAUSTION_FAILS_CLOSED; no sampling or reduced precision",
+  "external_artifact_root": "RESOLVE_AT_RS0_PREFLIGHT",
+  "real_source_run_authority": "DENIED_UNTIL_SEPARATE_C2P2_RS0_OPERATOR_TOKEN",
+  "rollback": "preserve all run evidence; deactivate none because C2P remains inactive"
+}
