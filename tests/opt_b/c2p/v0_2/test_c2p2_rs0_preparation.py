@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 RS0 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-rs0"
 STATE = ROOT / "registries" / "implementation" / "c2p_v0_2" / "C2P2_RS0_STATE_v0_1.json"
-PS0_CANDIDATES = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "research" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json"
+PS0_CANDIDATES = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json"
 
 
 def load(path: Path):
