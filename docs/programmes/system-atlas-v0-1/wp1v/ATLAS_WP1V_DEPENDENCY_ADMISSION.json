@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-atlas-dependency-admission/v1",
+  "packet_id": "ATLAS-WP1V",
+  "repository_toolchain_baseline": {
+    "lock": "artifacts/research_console_vnext/RCN_TOOLCHAIN_LOCK_v0_1.json",
+    "node": "22.17.0",
+    "npm": "10.9.2",
+    "react": "19.1.0",
+    "react_dom": "19.1.0",
+    "typescript": "5.7.3",
+    "vite": "6.1.0",
+    "package_manager_policy": "NPM_EXACT_VERSION_PACKAGE_LOCK_V3"
+  },
+  "windows_execution_environment": {
+    "os": "Windows",
+    "node": "20.19.6",
+    "npm": "10.8.2"
+  },
+  "admitted_toolchain_lock": "artifacts/research_console_vnext/RCN_TOOLCHAIN_LOCK_v0_2_ATLAS_WP1V.json",
+  "admitted_toolchain_selection_sha256": "11b55159283e1fdd7531fd2d919d86d0b1b60876abd738724a9ceabf7d91ca6a",
+  "admitted_runtime_dependencies": [
+    {
+      "name": "cytoscape",
+      "version": "3.31.2",
+      "license": "MIT",
+      "integrity": "sha512-/eOXg2uGdMdpGlEes5Sf6zE+jUG+05f3htFNQIxLxduOH/SsaUZiPBfAwP1btVIVzsnhiNOdi+hvDRLYfMZjGw==",
+      "declared_runtime_dependencies": [],
+      "admission": "PASS"
+    },
+    {
+      "name": "elkjs",
+      "version": "0.12.0",
+      "license": "EPL-2.0 OR GPL-3.0-or-later",
+      "adopted_license_option": "EPL-2.0",
+      "integrity": "sha512-YZcKynxVxYoKIOEpywEPwCFdg+BTbxQRNf3pbwdDCvc8O3kQD8bmIwSxKU1eOTVc4Xo+VG9Te+575mlfvOrhEQ==",
+      "declared_runtime_dependencies": [],
+      "admission": "PASS"
+    }
+  ],
+  "bounded_host_security_updates": [
+    {"name": "react-router-dom", "from": "7.1.5", "to": "7.18.2", "reason": "npm audit same-major remediation"},
+    {"name": "vite", "from": "6.1.0", "to": "6.4.3", "reason": "npm audit same-major remediation"},
+    {"name": "vitest", "from": "3.0.5", "to": "3.2.7", "reason": "npm audit same-major remediation"},
+    {"name": "@playwright/test", "from": "1.51.1", "to": "1.62.1", "reason": "npm audit same-major remediation"}
+  ],
+  "lockfile": {
+    "path": "apps/research_console_vnext/package-lock.json",
+    "lockfile_version": 3,
+    "sha256": "6381aa0e8da5c80a2c486152a737f8e740bb64a89816580add2861ace2ed3521"
+  },
+  "security": {
+    "initial_audit": "FAIL_8_PRE_EXISTING_HOST_VULNERABILITIES_1_MODERATE_6_HIGH_1_CRITICAL",
+    "full_audit_after_bounded_updates": "PASS_ZERO_VULNERABILITIES",
+    "production_audit_after_bounded_updates": "PASS_ZERO_VULNERABILITIES",
+    "force_or_major_update_used": false
+  },
+  "undeclared_transitive_runtime_requirement": false,
+  "authority_effect": "NONE"
+}
