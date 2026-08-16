@@ -10,13 +10,14 @@
 ## Development execution — binding VIT route
 
 - `DSAI3V-VIT-GENERAL-AUTHORITY-v0.1` is the active prospective-ordering substrate for every already-authorised `AUTO_EXECUTABLE` / `AUTO_RATIFIABLE` packet with `authority_delta=NONE`.
-- Before a permanent integration branch/PR can become an integration candidate, freeze the canonical `PacketIntegrationPayload` and bind a valid `PIP -> VIT generation -> placement` lineage. Git branch/PR refs are projections, never packet identity or authority.
-- `DSAI_VIT_PHYSICAL_CONTROLLER` owns prospective placement. `DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY` remains only the one-head physical materialisation gateway; it must fail closed without VIT lineage.
-- An unrelated lawful `main` advance with unchanged PIP, dependency frontier and authority is `PLACEMENT_RECOMPUTE_ONLY` plus assurance renewal. Do not create a new logical payload or a replacement PR solely because the base SHA moved.
+- A local/remote branch may exist as a non-authoritative construction transport, but before it becomes a permanent PR/integration candidate freeze the canonical `PacketIntegrationPayload` and bind a valid `PIP -> VIT generation -> placement` lineage. Git branch/PR refs are provenance, never packet identity or authority.
+- Use `tools/ci/build_vit_pr_lineage.py` after the bounded payload head is complete and before opening the permanent PR. Put its `VIT-Lineage-B64: ...` output in the PR body. The required preflight proves the PIP reference-apply reproduces the exact PR head tree and that the VIT predecessor/result trees equal the exact PR base/head trees.
+- `DSAI_VIT_PHYSICAL_CONTROLLER` owns prospective placement. `DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY` remains only the one-head physical materialisation gateway; it must fail closed without the fully validated VIT lineage record and matching IDs.
+- An unrelated lawful `main` advance with unchanged PIP, dependency frontier and authority is `PLACEMENT_RECOMPUTE_ONLY` plus assurance renewal. Keep the same logical packet/PR lineage and update its VIT placement; do not create a replacement PR solely because the base SHA moved.
 - `PAYLOAD_REBUILD_REQUIRED` is lawful only for an identity-bearing packet/dependency change or a real packet-local defect. Preserve the prior PIP and failed evidence.
 - Operator-required packets are still represented in VIT and park at their authority boundary. Operator status is not a VIT bypass exception.
 - `LEGACY_FRESH_MAIN_RECONCILE` solely for placement movement is prohibited. Only an exact registered bootstrap/recovery exception in `registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json` may bypass the PR-lineage preflight, and no exception grants SIQ or merge authority.
-- Every new permanent PR to `main` must carry `VIT-Lineage-Ref: <repository-relative-json-path>` unless it is an exact registered finite exception.
+- Every new permanent PR to `main` must carry `VIT-Lineage-B64: <urlsafe-base64-canonical-lineage-json>` unless it is an exact registered finite exception. A registered PR exception can bypass only the early PR preflight; SIQ still requires ordinary `VIT_MANDATORY` lineage.
 
 ## Research Console vNext visual convergence — binding
 
