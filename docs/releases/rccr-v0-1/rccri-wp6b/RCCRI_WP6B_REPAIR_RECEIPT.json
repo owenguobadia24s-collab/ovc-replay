@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-rccri-wp6b-repair-receipt/v1",
+  "packet_id": "RCCRI-WP6B",
+  "repairs": [
+    {
+      "defect_id": "RCCRI-WP6B-DEFECT-001",
+      "classification": "PACKET_LOCAL_IMPORT_DEFECT",
+      "failed_run_id": 31945907756,
+      "failed_job_id": 95161708569,
+      "failure": "scaleout.py imported canonical_sha256 from rccr.core where that symbol is not exported",
+      "repair": "Use the existing RCCR canonical_json_bytes serializer and hashlib.sha256 directly for bounded scale-out manifest identity."
+    },
+    {
+      "defect_id": "RCCRI-WP6B-DEFECT-002",
+      "classification": "VIT_LINEAGE_IDENTITY_DEFECT",
+      "failed_run_id": 31946634094,
+      "failed_job_id": 95163570894,
+      "failure": "VIT routing rejected the PR metadata with VIT_LINEAGE_PIP_ID_INVALID.",
+      "repair": "Recompute PIP, dependency frontier, VIT generation and placement from repository-contract canonical bytes after current-main reconciliation."
+    },
+    {
+      "defect_id": "RCCRI-WP6B-CURRENTNESS-003",
+      "classification": "OWNER_AUTHORITY_FRONTIER_ADVANCED",
+      "failure": "The original packet projected EC1 and Path-2 real-source owner authority as absent after both owner programmes received bounded operator authority.",
+      "repair": "Resolve the later owner decisions explicitly while preserving RCCR real-source consumption denial and authority_effect=NONE."
+    },
+    {
+      "defect_id": "RCCRI-WP6B-ASSURANCE-004",
+      "classification": "SUCCESSOR_STATE_ASSURANCE_EXPECTATION_STALE",
+      "failed_run_id": 31974498220,
+      "failed_job_id": 95231842897,
+      "failure": "Three historical RCCR assurance tests read the mutable CURRENT_STATE_POINTER as though it were still the WP6A/WP7A/pilot-exit generation and expected legacy scalar real-source fields after WP6B lawfully advanced current state.",
+      "repair": "Keep immutable historical-generation assertions exact, make current-pointer assertions successor-aware, and require the orthogonal owner_authority_frontier plus rccr_consumption_boundary so later owner grants cannot be mistaken for RCCR consumption or activation authority."
+    }
+  ],
+  "test_weakening": false,
+  "historical_assertions_preserved": true,
+  "current_pointer_firewall_assertions_strengthened": true,
+  "authority_change": false,
+  "payload_semantics_change": "ASSURANCE_COMPATIBILITY_AND_CURRENTNESS_ONLY_NO_RCCR_AUTHORITY_EXPANSION",
+  "requires_full_assurance_renewal": true,
+  "authority_effect": "NONE"
+}

@@ -90,18 +90,37 @@ def test_operator_pass_materialises_only_bounded_scaleout_and_budget():
     assert budget["authority_effect"] == "NONE"
 
 
-def test_programme_pointer_advances_after_operator_pass_without_owner_authority():
+def test_programme_pointer_preserves_pilot_exit_history_while_successor_advances():
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
-    state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_11.json")
-    assert pointer["status"] == state["status"] == "APPROVED"
-    assert pointer["current_gate"] == state["current_gate"] == "RCCRI-G-PILOT-EXIT"
-    assert pointer["operator_pending"] == state["operator_pending"] == []
-    assert pointer["scaleout_authority"] == state["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
-    assert pointer["authorized_follow_on_packets"] == state["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
-    assert pointer["real_source_ec1_authority"] == state["real_source_ec1_authority"] == "NONE"
-    assert pointer["path2_real_source_authority"] == state["path2_real_source_authority"] == "NOT_GRANTED"
-    assert pointer["owner_capability_activation"] == state["owner_capability_activation"] == "DENIED"
-    assert pointer["validation"] == state["validation"] == "LOCKED_UNCONSUMED"
-    assert pointer["last_completed_packet"] == state["last_completed_packet"] == "RCCRI-WP7A"
-    assert pointer["last_merge_commit"] == state["last_merge_commit"] == "bd2a5af60d2f26320e873e7cd72875397b85a9d7"
-    assert pointer["next_packet"] == state["next_packet"] == "RCCRI-WP6B"
+    historical = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_11.json")
+
+    # The immutable pilot-exit generation remains exactly approved and non-authoritative.
+    assert historical["status"] == "APPROVED"
+    assert historical["current_gate"] == "RCCRI-G-PILOT-EXIT"
+    assert historical["operator_pending"] == []
+    assert historical["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+    assert historical["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
+    assert historical["real_source_ec1_authority"] == "NONE"
+    assert historical["path2_real_source_authority"] == "NOT_GRANTED"
+    assert historical["owner_capability_activation"] == "DENIED"
+    assert historical["validation"] == "LOCKED_UNCONSUMED"
+    assert historical["last_completed_packet"] == "RCCRI-WP7A"
+    assert historical["last_merge_commit"] == "bd2a5af60d2f26320e873e7cd72875397b85a9d7"
+    assert historical["next_packet"] == "RCCRI-WP6B"
+
+    # CURRENT_STATE_POINTER is successor-aware. Later owner authority is descriptive input only;
+    # RCCR's consumption and activation firewalls remain closed.
+    assert pointer["status"] == "QA_REVIEW"
+    assert pointer["current_packet"] == "RCCRI-WP6B"
+    assert pointer["current_gate"] == "RCCRI-G6B"
+    assert pointer["operator_pending"] == []
+    assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+    assert pointer["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
+    assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
+    assert pointer["owner_authority_frontier"]["path2_external"]["state"] == "AUTHORISED_BOUNDED"
+    assert pointer["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
+    assert pointer["rccr_consumption_boundary"]["real_source_ec1_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
+    assert pointer["rccr_consumption_boundary"]["path2_real_source_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
+    assert pointer["rccr_consumption_boundary"]["owner_capability_activation"] == "DENIED"
+    assert pointer["rccr_consumption_boundary"]["validation_consumption"] == "DENIED"
+    assert pointer["authority_effect"] == "NONE"
