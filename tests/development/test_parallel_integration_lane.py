@@ -55,7 +55,7 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
 
     def test_stable_main_guards_remain_effective(self):
         self.assertIn("OVC_REQUIRED_ASSURANCE_LEASE_INVALIDATED", self.lease_runner)
-        self.assertIn("OVC_BASE_MOVED_BEFORE_READINESS", self.workflow)
+        self.assertIn("OVC_RECONCILE_REQUIRED", self.workflow)
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.workflow)
         self.assertIn("git merge-base --is-ancestor", self.workflow)
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_PASS", self.workflow)
@@ -71,14 +71,14 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
             self.assertIn(marker, self.workflow)
 
     def test_only_earlier_pr_can_own_predecessor_lease(self):
-        guard = "if (candidate.number >= pr.number)"
+        guard = "if (candidate.number >= prNumber)"
         ignored = "OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED"
         checks = "github.rest.checks.listForRef"
         readiness = self.workflow.split("\n  merge-readiness:\n", 1)[1]
         self.assertIn(guard, readiness)
         self.assertIn(ignored, readiness)
         self.assertLess(readiness.index(guard), readiness.index(checks))
-        self.assertIn("candidate.number > pr.number", readiness)
+        self.assertIn("candidate.number > prNumber", readiness)
 
     def test_terminal_disposition_does_not_expand_merge_authority(self):
         self.assertIn("permissions:\n  contents: read\n  checks: read\n  pull-requests: read", self.workflow)

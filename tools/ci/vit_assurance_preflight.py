@@ -5,14 +5,11 @@ import json
 import os
 from pathlib import Path
 import re
-import subprocess
 from typing import Any, Mapping
+import urllib.error
+import urllib.request
 
 from ovc.development.skills.vit_assurance_decoupling import validate_aa0_reuse_authorization
-from ovc.development.skills.vit_local_completion_executor import (
-    build_live_transaction_freeze,
-    encode_freeze_marker,
-)
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
 
 LINEAGE = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
@@ -34,18 +31,6 @@ def _decode(marker: re.Pattern[str], body: str, label: str) -> Mapping[str, Any]
     return value
 
 
-def _git(*args: str) -> str:
-    proc = subprocess.run(
-        ["git", *args],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    if proc.returncode != 0:
-        raise RuntimeError(proc.stderr.strip() or "git command failed")
-    return proc.stdout.strip()
-
-
 def _write_output(name: str, value: str) -> None:
     path = os.environ.get("GITHUB_OUTPUT")
     if path:
@@ -54,27 +39,40 @@ def _write_output(name: str, value: str) -> None:
     print(f"OVC_VIT_ASSURANCE_{name.upper()}={value}")
 
 
-def _emit_live_transaction_freeze(
-    *,
-    event: Mapping[str, Any],
-    lineage_record: Mapping[str, Any],
-    head_sha: str,
-) -> None:
-    pr = event.get("pull_request") or {}
-    base_sha = str((pr.get("base") or {}).get("sha") or "")
-    base_tree = _git("rev-parse", f"{base_sha}^{{tree}}")
-    head_tree = _git("rev-parse", f"{head_sha}^{{tree}}")
-    freeze = build_live_transaction_freeze(
-        lineage_record=lineage_record,
-        pr_number=int(pr.get("number") or 0),
-        base_sha=base_sha,
-        head_sha=head_sha,
-        base_tree=base_tree,
-        head_tree=head_tree,
-        workflow_run_id=os.environ.get("GITHUB_RUN_ID", "UNAVAILABLE"),
-        run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT", "1"),
+def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Resolve the current PR generation/body in Actions; event data is provenance only."""
+    event_pr = event.get("pull_request")
+    if not isinstance(event_pr, Mapping):
+        raise RuntimeError("pull_request event payload is missing")
+    if os.environ.get("GITHUB_ACTIONS", "").lower() != "true":
+        return event_pr
+
+    repo = os.environ.get("GITHUB_REPOSITORY", "").strip()
+    pr_number = int(event.get("number", event_pr.get("number", -1)))
+    if not repo or pr_number < 1:
+        raise RuntimeError("VIT_ASSURANCE_LIVE_PR_CONTEXT_MISSING")
+
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "User-Agent": "ovc-vit-assurance-preflight/1",
+    }
+    token = os.environ.get("GITHUB_TOKEN", "").strip()
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{repo}/pulls/{pr_number}",
+        headers=headers,
+        method="GET",
     )
-    print(encode_freeze_marker(freeze), flush=True)
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:
+            value = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"VIT_ASSURANCE_LIVE_PR_RESOLUTION_FAILED:{exc}") from exc
+    if not isinstance(value, Mapping):
+        raise RuntimeError("VIT_ASSURANCE_LIVE_PR_PAYLOAD_INVALID")
+    return value
 
 
 def main() -> int:
@@ -89,9 +87,16 @@ def main() -> int:
         return 0
 
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
-    pr = event.get("pull_request") or {}
+    event_pr = event.get("pull_request") or {}
+    event_head_sha = str((event_pr.get("head") or {}).get("sha") or "")
+    pr = _live_pr_payload(event)
     body = str(pr.get("body") or "")
     head_sha = str((pr.get("head") or {}).get("sha") or "")
+    if head_sha != event_head_sha:
+        raise RuntimeError(
+            f"VIT_ASSURANCE_SUPERSEDED_EVENT_HEAD:event {event_head_sha}, live {head_sha}; "
+            "obsolete generation may not acquire assurance identity"
+        )
 
     lineage_record = _decode(LINEAGE, body, "VIT_LINEAGE")
     reuse_record = _decode(REUSE, body, "VIT_AA0_REUSE")
@@ -112,11 +117,6 @@ def main() -> int:
     _write_output("aa0_identity", lineage.pip_id)
     _write_output("generation_id", lineage.generation_id)
     _write_output("pip_id", lineage.pip_id)
-    _emit_live_transaction_freeze(
-        event=event,
-        lineage_record=lineage_record,
-        head_sha=head_sha,
-    )
 
     if reuse_record is None:
         _write_output("aa0_reuse_authorized", "false")
