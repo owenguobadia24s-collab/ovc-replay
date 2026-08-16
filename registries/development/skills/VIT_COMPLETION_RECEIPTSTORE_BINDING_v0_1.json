@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-vit-completion-receiptstore-binding/v1",
+  "binding_id": "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1",
+  "status": "BOUND_TO_EXISTING_DEVELOPMENT_EXTERNAL_ARTIFACT_AUTHORITY",
+  "authority_effect": "NONE",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "receipt_store": {
+    "implementation": "ovc.development.skills.vit_materialisation.ReceiptStore",
+    "primary_root_environment_variable": "OVC_EXTERNAL_ARTIFACT_ROOT",
+    "relative_root": "receipts",
+    "existing_runtime_override_environment_variable": "OVC_DSAI3V_RECEIPT_STORE_ROOT",
+    "missing_binding_policy": "FAIL_CLOSED_DSAI3V_RECEIPT_STORE_ROOT_UNBOUND",
+    "repository_fallback": false,
+    "ephemeral_fallback": false,
+    "content_addressed": true,
+    "append_only_identity_semantics": true
+  },
+  "completion_binding": "ovc.development.skills.vit_completion_runtime.persist_physical_completion",
+  "recovery_binding": "ovc.development.skills.vit_completion_runtime.recover_effective_write_completion",
+  "required_bundle": [
+    "PhysicalMaterialisationReceipt",
+    "PacketCompletionReceipt",
+    "ovc-development-latency-canonical-dsai3v/v1",
+    "ovc-dsai3v-completion-observability-attachment/v1"
+  ],
+  "source_authority": [
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_BASELINE_PROFILE_v0_1.yaml",
+    "contracts/opt_a/OVC_EXTERNAL_ARTIFACT_ROOT_CONTRACT_v0_1.md",
+    "registries/development/skills/development_latency_completion_receipt_v0_1.json",
+    "contracts/development/skills/OVC_DSAI_VIT_MATERIALISATION_RECEIPT_CONTRACT_v0_1.md",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json"
+  ],
+  "explicit_non_authority": [
+    "no new physical-main writer",
+    "no new merge authority",
+    "no new physical gateway",
+    "no new storage service or cloud sink",
+    "no canonical/R2 publication authority",
+    "no force-push or history rewrite",
+    "no scientific, Validation, probability, risk, exposure or execution authority"
+  ],
+  "rollback": "Remove this derived runtime binding and fail closed on DSAI3V completion receipt persistence while preserving all emitted ReceiptStore records and Git history."
+}
