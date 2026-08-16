@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-c2p2-rs0-grun-packet/v1",
+  "gate_id": "C2P2-RS0-GRUN",
+  "gate_title": "C2P RS0 real-source shadow run authority",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "parent_decision": "PASS_COMPARATIVE_SET_TO_RS0_PREPARATION_ONLY",
+  "baseline_commit": "1a3d1f399f9463166f1550416dd299f6002b0115",
+  "candidate_commit": "RESOLVE_FINAL_HEAD",
+  "completed_packets": ["C2P2-RS0-PREP"],
+  "current_authority": {
+    "c2p_core": "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
+    "c2p_operating_role": "SHADOW_SIDECAR_ONLY",
+    "active_object_pack": null,
+    "rs0_real_source_run": "DENIED",
+    "ec1_scientific_authority": "UNCHANGED",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "proposed_delta_if_pass": {
+    "real_source_run": "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN",
+    "candidate_set": [
+      "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+      "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+      "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
+    ],
+    "selection_mode": "COMPARATIVE_SET_ONLY",
+    "active_object_pack": null,
+    "c2p_activation_authority": "NONE",
+    "ec1_scientific_authority_effect": "NONE",
+    "validation_authority": "NONE"
+  },
+  "acceptance_conditions_before_operator_pass": [
+    "PS0 comparative-set PASS is present on lawful main",
+    "source/population binding is schema-valid and EC1 firewall is explicit",
+    "all three candidates remain activation-ineligible and no winner/default is selected",
+    "exact OPT-A/C1/C2/C2E/context release identities and hashes are resolved and immutable for the run generation",
+    "numeric RS0 resource/capacity/checkpoint budget is measured and frozen",
+    "same population, cutoff schedule, environment and missingness policy are bound for all candidates",
+    "Validation remains locked and OPT-C/OPT-D/outcome reads are technically denied",
+    "C2P outputs cannot write to or alter EC1 candidate-defining records",
+    "targeted and repository-wide preparation tests PASS",
+    "QA recommends PASS with no blocking discrepancy"
+  ],
+  "tests": "PENDING_PREPARATION_FINAL_HEAD",
+  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_QA_PACKET_v0_1.json",
+  "warnings": [
+    "A future GRUN PASS would authorize only one bounded shadow evidence run, not C2P activation or ObjectPack selection.",
+    "RS0 results must not alter EC1 scientific authority, Q01-Q10, population, search lattice, denominators, candidate ranking or freeze.",
+    "C2P remains a shadow sidecar unless a later explicit activation decision says otherwise."
+  ],
+  "unresolved_issues": ["EXACT_RUN_RELEASE_HASHES_PENDING", "NUMERIC_RESOURCE_BUDGET_PENDING"],
+  "rollback": "Preserve all preparation and run evidence; forward-supersede RS0 generation if bindings change; no C2P activation exists to roll back.",
+  "recommended_decision": "DEFER_UNTIL_BINDINGS_AND_BUDGET_COMPLETE",
+  "exact_work_after_future_pass": "Execute exactly one preregistered comparative A/B/C RS0 shadow run over the frozen source population; preserve all denominators, disagreement and negative evidence; stop afterward at a separate scientific review/selection boundary with no automatic ObjectPack promotion.",
+  "decision": "PENDING_OPERATOR",
+  "decision_authority": "OPERATOR_REQUIRED"
+}
