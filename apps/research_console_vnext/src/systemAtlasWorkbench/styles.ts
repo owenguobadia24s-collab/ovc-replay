@@ -14,8 +14,7 @@ export const atlasWorkbenchStyles: StylesheetJson = [
   { selector: "node[state = 'reserved']", style: { "background-color": "#241d12", "border-color": "#d79a42", "border-style": "double", "border-width": 4 } },
   { selector: "node[state = 'historical']", style: { opacity: 0.42, "border-style": "dashed" } },
   { selector: "node[state = 'forbidden']", style: { "background-color": "#271516", "border-color": "#e06465", "border-style": "dashed", "border-width": 3 } },
-  { selector: "node.trace-muted", style: { opacity: 0.09 } },
-  { selector: "node.search-hit", style: { "border-color": "#f0d46b", "border-width": 5, "background-color": "#282313" } },
+  { selector: ".query-hidden", style: { display: "none" } },
   { selector: "node:selected", style: { "border-color": "#ffffff", "border-width": 3, "background-color": "#1c3040" } },
   { selector: "edge", style: { width: 1.5, "line-color": "#36515e", "target-arrow-color": "#36515e", "target-arrow-shape": "triangle", "curve-style": "taxi", "taxi-direction": "rightward", "arrow-scale": 0.75, opacity: 0.72 } },
   { selector: "edge[family = 'authority']", style: { "line-color": "#ae83c9", "target-arrow-color": "#ae83c9", "line-style": "dotted", width: 3 } },
@@ -24,6 +23,5 @@ export const atlasWorkbenchStyles: StylesheetJson = [
   { selector: "edge[state = 'reserved']", style: { "line-color": "#b07b35", "target-arrow-color": "#b07b35", "line-style": "dashed" } },
   { selector: "edge[state = 'historical']", style: { opacity: 0.18, "line-style": "dotted" } },
   { selector: "edge[family = 'prohibition']", style: { "line-color": "#e06465", "target-arrow-color": "#e06465", "target-arrow-shape": "tee", "line-style": "dashed", width: 4 } },
-  { selector: "edge.trace-muted", style: { opacity: 0.05 } },
   { selector: ".authority-hidden", style: { display: "none" } }
 ];

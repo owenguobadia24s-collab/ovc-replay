@@ -1,14 +1,20 @@
 from __future__ import annotations
 
+import ctypes
 import hashlib
 import json
 import os
-import resource
 import shutil
 import tempfile
 import time
 import tracemalloc
+from ctypes import wintypes
 from typing import Any, Mapping
+
+try:
+    import resource
+except ImportError:  # pragma: no cover - exercised on Windows
+    resource = None
 
 from .assertion import create_object_assertion
 from .checkpoint import build_checkpoint
@@ -36,12 +42,40 @@ def _available_memory_bytes() -> int:
 
 
 def _peak_rss_bytes() -> int:
-    value = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
-    # Linux reports KiB; macOS reports bytes. GitHub assurance uses Linux, but keep
-    # the helper portable enough for local dry-runs.
-    if value < 10_000_000:
-        return value * 1024
-    return value
+    if resource is not None:
+        value = int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+        # Linux reports KiB; macOS reports bytes.
+        return value * 1024 if value < 10_000_000 else value
+    if os.name == "nt":
+        class ProcessMemoryCounters(ctypes.Structure):
+            _fields_ = [
+                ("cb", wintypes.DWORD),
+                ("PageFaultCount", wintypes.DWORD),
+                ("PeakWorkingSetSize", ctypes.c_size_t),
+                ("WorkingSetSize", ctypes.c_size_t),
+                ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+                ("PagefileUsage", ctypes.c_size_t),
+                ("PeakPagefileUsage", ctypes.c_size_t),
+            ]
+
+        counters = ProcessMemoryCounters()
+        counters.cb = ctypes.sizeof(counters)
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        psapi = ctypes.WinDLL("psapi", use_last_error=True)
+        kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+        psapi.GetProcessMemoryInfo.argtypes = [
+            wintypes.HANDLE,
+            ctypes.POINTER(ProcessMemoryCounters),
+            wintypes.DWORD,
+        ]
+        psapi.GetProcessMemoryInfo.restype = wintypes.BOOL
+        process = kernel32.GetCurrentProcess()
+        if psapi.GetProcessMemoryInfo(process, ctypes.byref(counters), counters.cb):
+            return int(counters.PeakWorkingSetSize)
+    return 0
 
 
 def _synthetic_pack() -> dict[str, Any]:

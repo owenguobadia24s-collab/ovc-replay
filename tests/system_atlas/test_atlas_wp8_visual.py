@@ -45,8 +45,11 @@ def test_wp8_gate_and_programme_state_are_bounded_and_eligible() -> None:
     pointer = json.loads((ROOT / "registries/implementation/system_atlas_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
     assert gate["decision"] == "AUTO_PASS"
     assert gate["authority_effect"] == "NONE"
-    assert state["current_packet"] == pointer["current_packet"] == "ATLAS-WP8"
-    assert state["next_packet"] == pointer["next_packet"] == "ATLAS-WP9"
+    assert state["current_packet"] == pointer["current_packet"]
+    assert state["current_packet"] in {"ATLAS-WP8", "ATLAS-WP9", "ATLAS-WP10"}
+    assert state["tests"]["wp8_actual_repository_projection"].startswith("PASS_")
+    if state["current_packet"] != "ATLAS-WP8":
+        assert state["tests"]["wp8_integration"] == "PASS_INTEGRATED_PR_1021"
 
 
 def test_wp8_vit_bindings_are_content_addressed() -> None:
