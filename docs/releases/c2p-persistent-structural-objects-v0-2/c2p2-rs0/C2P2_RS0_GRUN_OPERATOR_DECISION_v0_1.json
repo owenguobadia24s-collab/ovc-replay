@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "gate_id": "C2P2-RS0-GRUN",
+  "decision": "PASS",
+  "authority": "OPERATOR",
+  "operator_instruction": "OVC APPROVE C2P2-RS0-GRUN PASS",
+  "operator_instruction_time": "2026-08-16T20:33:00+01:00",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
+  "plan_version": "0.1",
+  "gate_ready_commit": "696b4cae6b8d8c583c50b6b878691b59bc66a486",
+  "approval_baseline_main": "513a95e518f75867dde3a920deb0a49c1dfca88d",
+  "approval_baseline_tree": "bad40e20d71cc5129cb942391fc2f1204f9ba239",
+  "currentness_review": {
+    "gate_ready_baseline": "29359b8f4f7297f36af05496217992983558d09e",
+    "approval_main": "513a95e518f75867dde3a920deb0a49c1dfca88d",
+    "materialisation_main": "83ea0a3e8fa755b817f56fc6bd81c7fc20ef451c",
+    "materialisation_tree": "b3d3a07cff1a4aba457ea1b722a83a2267f55f8b",
+    "intervening_changes": [
+      "P1CDI_DG8_DESIGN_RATIFICATION_ONLY",
+      "ATLAS_WP9_WORKBENCH_AND_G9",
+      "C2P_RS0_CAPACITY_WINDOWS_PORTABILITY_ONLY"
+    ],
+    "capacity_portability_review": {
+      "changed_blob": "src/ovc/opt_b/c2p_v0_2/rs0_capacity.py",
+      "effect_on_frozen_linux_measurement_semantics": "NONE",
+      "effect_on_frozen_constants_and_receipt": "NONE",
+      "effect": "WINDOWS_HOST_PORTABILITY_ONLY"
+    },
+    "grun_bound_source_authority_candidate_population_cutoff_environment_frozen_capacity_or_artifact_root_changed": false,
+    "result": "PASS_REUSE_GATE_READY_BINDINGS_AND_REANCHOR_PLACEMENT"
+  },
+  "approved_delta": {
+    "c2p_rs0_real_source_shadow_run": "AUTHORISED_EXACTLY_ONE_BOUNDED_PREREGISTERED_COMPARATIVE_RUN",
+    "candidate_set": [
+      "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+      "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+      "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
+    ],
+    "selection_mode": "COMPARATIVE_SET_ONLY_NO_WINNER",
+    "objectpack_selection": "NONE",
+    "c2p_activation": "NONE",
+    "ec1_scientific_authority_effect": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "publication_probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "scope": {
+    "instrument": "GBPUSD",
+    "sides": [
+      "BID",
+      "ASK"
+    ],
+    "clocks": [
+      "15M",
+      "2H_A_L"
+    ],
+    "interval": "[2021-01-01T00:00:00Z,2024-01-01T00:00:00Z)",
+    "research_role": "DISCOVERY_SHADOW_ONLY",
+    "external_artifact_root_id": "1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv"
+  },
+  "conditions": [
+    "Re-resolve every frozen source and authority binding at launch; any mismatch invalidates this run generation and requires return to the operator.",
+    "Use the same population, cutoff schedule, environment, missingness and checkpoint policy for all three candidates.",
+    "Use exact precision only; sampling, reduced precision, population mutation, predicate weakening and ObjectPack change are forbidden.",
+    "Enforce peak-memory ceiling 1160593408 bytes, external-storage ceiling 6411935744 bytes, concurrency 1 and checkpoint cadence 256 assertions; capacity exhaustion fails closed and returns to the operator.",
+    "C2P outputs remain sealed from Path-1 candidate-defining review and may not seed, filter, rank, freeze, repair or otherwise alter EC1 scientific records.",
+    "Validation remains locked and OPT-C/OPT-D/outcome/future-information reads remain forbidden.",
+    "F0-A remains HOLD; this decision does not authorize joint launch or resume DMRP F0-A.",
+    "No ObjectPack winner, selection, selector replacement, C2P activation or downstream authority is created by the run result."
+  ],
+  "rollback": "Before launch, forward-supersede this one-run authority. After launch, stop on currentness or capacity failure, preserve and hash partial evidence, quarantine the incomplete generation and return to the operator. Never sample, reduce precision, mutate population/ObjectPack, delete evidence or rewrite history.",
+  "next_work": [
+    "C2P2-RS0-EXECUTION",
+    "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION-BOUNDARY"
+  ],
+  "decision_effective_after_repository_materialisation": true
+}
