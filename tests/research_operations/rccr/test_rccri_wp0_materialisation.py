@@ -75,9 +75,21 @@ def test_wp0_reviewer_binding_requires_real_independent_decision_evidence():
         assert decision["authority_effect"] == "NONE"
 
     adversarial = by_gate["RCCRI-G-ADVERSARIAL-REVIEW"]
-    assert adversarial["decision"] == "PENDING"
+    assert adversarial["decision"] in {"PENDING", "PASS"}
     assert adversarial["reviewer_identity"] == "OVC_HUMAN_OPERATOR"
     assert adversarial["reviewer_class"] == "INDEPENDENT_OUTSIDE_RCCR_IMPLEMENTATION"
+    if adversarial["decision"] == "PASS":
+        expected_ref = "docs/releases/rccr-v0-1/rccri-g-adversarial-review/RCCRI_G_ADVERSARIAL_REVIEW_OPERATOR_DECISION.json"
+        assert adversarial["decision_ref"] == expected_ref
+        decision = load(expected_ref)
+        assert decision["decision"] == "PASS"
+        assert decision["decided_by"] == adversarial["reviewer_identity"]
+        assert decision["reviewer_class"] == adversarial["reviewer_class"]
+        assert decision["decision_instruction"] == "OVC APPROVE RCCRI-G-ADVERSARIAL-REVIEW"
+        assert decision["authority_effect"] == "NONE"
+        assert decision["scaleout_authority"] == "DENIED"
+        assert decision["real_source_ec1_authority"] == "NONE"
+        assert decision["validation"] == "LOCKED_UNCONSUMED"
 
 
 def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully():
@@ -97,10 +109,16 @@ def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully
         completed_ordinal = packet_ordinal(pointer["last_completed_packet"])
         assert current_ordinal > 0
         if completed_ordinal == current_ordinal:
-            assert pointer["status"] == "GATE_READY"
-            assert pointer["operator_pending"]
-            assert pointer["current_gate"] in pointer["operator_pending"]
             assert packet_ordinal(pointer["next_packet"]) == current_ordinal + 1
+            if pointer["status"] == "GATE_READY":
+                assert pointer["operator_pending"]
+                assert pointer["current_gate"] in pointer["operator_pending"]
+            else:
+                assert pointer["status"] == "APPROVED"
+                assert pointer["operator_pending"] == []
+                assert pointer["gate_status"].startswith("PASS_")
+                assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
+                assert pointer["scaleout_authority"] == "DENIED"
         else:
             assert completed_ordinal == current_ordinal - 1
         assert pointer["last_merge_commit"]
