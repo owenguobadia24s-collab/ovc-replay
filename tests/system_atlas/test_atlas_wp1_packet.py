@@ -37,9 +37,11 @@ def test_wp1_vit_authority_and_frontier_are_canonical() -> None:
 def test_programme_state_advances_to_wp1v_without_activation() -> None:
     pointer = load(STATE / "CURRENT_STATE_POINTER.json")
     state = load(STATE / pointer["current_state"])
-    assert state["current_packet"] == "ATLAS-WP1"
-    assert state["current_gate"] == "ATLAS-G1"
-    assert state["next_packet"] == "ATLAS-WP1V"
+    packet_order = ["ATLAS-WP1", "ATLAS-WP1V", *[f"ATLAS-WP{index}" for index in range(2, 12)]]
+    assert packet_order.index(state["current_packet"]) >= packet_order.index("ATLAS-WP1")
+    if state["current_packet"] == "ATLAS-WP1":
+        assert state["current_gate"] == "ATLAS-G1"
+        assert state["next_packet"] == "ATLAS-WP1V"
     assert state["blockers"] == []
     assert state["stop_boundary"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"

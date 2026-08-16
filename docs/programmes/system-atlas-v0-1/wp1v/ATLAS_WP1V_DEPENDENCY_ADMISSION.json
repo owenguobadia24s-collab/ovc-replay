@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-atlas-dependency-admission/v1",
+  "packet_id": "ATLAS-WP1V",
+  "baseline": {
+    "os": "Windows",
+    "node": "20.19.6",
+    "npm": "10.8.2",
+    "react": "19.1.0",
+    "react_dom": "19.1.0",
+    "typescript": "5.7.3",
+    "vite_observed": "6.1.0",
+    "package_manager_policy": "NPM_EXACT_VERSION_PACKAGE_LOCK_V3"
+  },
+  "admitted_runtime_dependencies": [
+    {
+      "name": "cytoscape",
+      "version": "3.34.1",
+      "license": "MIT",
+      "integrity": "sha512-Lr0RvH9H75y9ar8h9Toy6u4lxRSCcxUq+hHcQ26sVWo6BnaQp1gwEZOYqwuYTZhyW7npyKnNLP8oJ2p1/3OZ7g==",
+      "declared_runtime_dependencies": [],
+      "admission": "PASS"
+    },
+    {
+      "name": "elkjs",
+      "version": "0.12.0",
+      "license": "EPL-2.0 OR GPL-3.0-or-later",
+      "adopted_license_option": "EPL-2.0",
+      "integrity": "sha512-YZcKynxVxYoKIOEpywEPwCFdg+BTbxQRNf3pbwdDCvc8O3kQD8bmIwSxKU1eOTVc4Xo+VG9Te+575mlfvOrhEQ==",
+      "declared_runtime_dependencies": [],
+      "admission": "PASS"
+    }
+  ],
+  "bounded_host_security_updates": [
+    {"name": "react-router-dom", "from": "7.1.5", "to": "7.18.2", "reason": "npm audit same-major remediation"},
+    {"name": "vite", "from": "6.1.0", "to": "6.4.3", "reason": "npm audit same-major remediation"},
+    {"name": "vitest", "from": "3.0.5", "to": "3.2.7", "reason": "npm audit same-major remediation"},
+    {"name": "@playwright/test", "from": "1.51.1", "to": "1.62.1", "reason": "npm audit same-major remediation"}
+  ],
+  "lockfile": {
+    "path": "apps/research_console_vnext/package-lock.json",
+    "lockfile_version": 3,
+    "sha256": "d735eacf1a034e0d4b018fb5d9c56e3baef89925f4966318eccb0ea19ce53846"
+  },
+  "security": {
+    "initial_audit": "FAIL_8_PRE_EXISTING_HOST_VULNERABILITIES_1_MODERATE_6_HIGH_1_CRITICAL",
+    "full_audit_after_bounded_updates": "PASS_ZERO_VULNERABILITIES",
+    "production_audit_after_bounded_updates": "PASS_ZERO_VULNERABILITIES",
+    "force_or_major_update_used": false
+  },
+  "undeclared_transitive_runtime_requirement": false,
+  "authority_effect": "NONE"
+}
