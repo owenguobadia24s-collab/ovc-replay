@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "gate_id": "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+  "decision": "PASS",
+  "authority": "OPERATOR",
+  "operator_instruction": "OVC APPROVE P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+  "operator_instruction_time": "2026-08-16T15:07:00+01:00",
+  "plan_id": "OVC-EC1-DMRP-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "plan_version": "0.1_REVISED_1_RATIFIED",
+  "baseline_main": "841ee214d2fe659208309d6a3c457d3191ec61bf",
+  "approved_delta": {
+    "real_source_path2_evidentiary_formalisation": "AUTHORISED_BOUNDED",
+    "exact_dependency_binding_for_seven_frozen_experiment_records": "AUTHORISED",
+    "effective_preregistration_activation_after_exact_binding": "AUTHORISED",
+    "durable_real_source_research_operations_append": "AUTHORISED_FOR_BOUND_EVIDENCE_ONLY"
+  },
+  "non_grants": [
+    "P2_6_CANDIDATE_FORMATION",
+    "RESEARCH_CANDIDATE_GENERATION_FREEZE",
+    "OPT_C_ADMISSION",
+    "C2P_ACTIVATION_OR_OBJECTPACK_SELECTION",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION"
+  ],
+  "conditions": [
+    "No real-source observation before the corresponding ExperimentRecord is effectively preregistered with exact source/data/clock/window/dependency and frozen method bindings.",
+    "Only exact-binding-valid ExperimentRecords may execute.",
+    "Positive, negative, null, contradictory and non-evaluable outcomes must be durably appended with Research Operations provenance.",
+    "Path 1 remains prohibited as a seed, filter, repair or promotion criterion for Path 2."
+  ],
+  "rollback": "Stop new Path-2 observations and further bound evidence append; return unresolved ExperimentRecords to non-effective. Immutable evidence already appended remains historical evidence.",
+  "next_packet": "P2-EXT-REAL-SOURCE-EVIDENTIARY-EXECUTION-0.1"
+}

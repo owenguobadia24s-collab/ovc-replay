@@ -67,6 +67,16 @@ def _dt(value: str) -> datetime:
 
 
 def validate_record(record: dict[str, Any]) -> None:
+    # Path-2 preregistration is an additive Research Operations family. Dispatch
+    # before both frozen legacy envelopes; it may not modify v0.1 or DMRP v0.2.
+    if record.get("schema_family") == "DMRP_PATH2_PREREG":
+        from .dmrp_path2_prereg import Path2PreregValidationError, verify_path2_prereg_record
+        try:
+            verify_path2_prereg_record(record)
+        except Path2PreregValidationError as exc:
+            raise RecordValidationError("DMRP_PATH2_PREREG_INVALID", str(exc)) from exc
+        return
+
     # DMRP v0.2 is an additive Research Operations family. Dispatch explicitly
     # before applying the frozen v0.1 envelope so legacy validation remains byte/
     # behavior compatible while v0.2 uses its separate identity contract.
