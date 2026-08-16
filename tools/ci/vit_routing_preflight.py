@@ -56,14 +56,24 @@ def _fetch_commit_if_needed(root: Path, sha: str) -> None:
         raise RuntimeError("VIT_LIVE_BASE_FETCH_FAILED") from exc
 
 
-def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
-    """Resolve live PR metadata in Actions; event payload remains provenance only."""
+def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Resolve live PR metadata only for the actual Actions workspace.
+
+    Synthetic/unit repositories must remain hermetic even when their tests are executed
+    inside GitHub Actions, so a temporary test root intentionally consumes its supplied
+    event fixture instead of reaching the live repository API.
+    """
     event_pr = event.get("pull_request")
     if not isinstance(event_pr, Mapping):
         raise RuntimeError("pull_request event payload is missing")
+    workspace = os.environ.get("GITHUB_WORKSPACE", "").strip()
+    if not workspace or Path(workspace).resolve() != root.resolve():
+        return event_pr
     repo = os.environ.get("GITHUB_REPOSITORY", "").strip()
     pr_number = int(event.get("number", event_pr.get("number", -1)))
     if not repo or pr_number < 1:
+        if os.environ.get("GITHUB_ACTIONS", "").lower() == "true":
+            raise RuntimeError("VIT_LIVE_PR_CONTEXT_MISSING")
         return event_pr
 
     headers = {
@@ -192,7 +202,7 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
     event_head_sha = str(event_head.get("sha", "")).strip()
     event_base_sha = str(event_base.get("sha", "")).strip()
 
-    live_pr = _live_pr_payload(event)
+    live_pr = _live_pr_payload(root, event)
     head = live_pr.get("head")
     base = live_pr.get("base")
     if not isinstance(head, Mapping) or not isinstance(base, Mapping):
@@ -266,10 +276,9 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
         raise RuntimeError("VIT_LINEAGE_PIP_DOES_NOT_REPRODUCE_PR_HEAD_TREE")
 
     base_note = "LIVE_BASE" if live_base_sha != event_base_sha else "EVENT_BASE_CURRENT"
-    body_note = "LIVE_PR_BODY"
     return (
         f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:{lineage.generation_id}:"
-        f"{lineage.placement_id}:{base_note}:{body_note}"
+        f"{lineage.placement_id}:{base_note}:LIVE_PR_BODY"
     )
 
 
