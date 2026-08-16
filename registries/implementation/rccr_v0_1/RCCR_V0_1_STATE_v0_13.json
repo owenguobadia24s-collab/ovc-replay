@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-rccri-programme-state/v1",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "plan_id": "OVC-RCCR-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "plan_version": "0.1-REVISED-1-RATIFIED",
+  "packet_id": "RCCRI-WP7B",
+  "status": "QA_REVIEW",
+  "prerequisites": [
+    "RCCRI-G6B_PASS",
+    "RCCRI-WP6B_MERGED_34d08c26061f8548346bdec101e2af6f3138f9bc",
+    "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+  ],
+  "baseline_commit": "b19ff4ff7e4a99981c211ccbde249f49609e77a8",
+  "branch": "rccr/rccri-wp7b-read-models-r4",
+  "candidate_commit": "RESOLVE_AFTER_IMPLEMENTATION",
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "materialised": [
+    "post_pilot_source_native_read_model_runtime",
+    "coverage_matrix_builder",
+    "gap_queue_builder",
+    "path_correspondence_builder",
+    "next_research_route_builder",
+    "ec1_rv_projection_firewall",
+    "g6b_operator_pass_record"
+  ],
+  "tests": [
+    "TARGETED_WP7B_PENDING",
+    "REPOSITORY_WIDE_PENDING",
+    "VIT_SIQ_PENDING"
+  ],
+  "qa_packet": "PENDING",
+  "gate_packet": "PENDING_RCCRI_G7B",
+  "decision_record": "docs/releases/rccr-v0-1/rccri-wp6b/RCCRI_G6B_OPERATOR_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "warnings": [
+    "CONSOLE_GET_ADAPTER_DEFERRED_OPTIONAL_NOT_CORRECTNESS_PREREQUISITE",
+    "FIXTURE_HUMAN_PERSON_DAY_ACTUALS_UNAVAILABLE_NOT_INSTRUMENTED"
+  ],
+  "scaleout_authority": "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8",
+  "owner_authority_frontier": {
+    "ec1": {
+      "owner_gate": "DMRPI-GREAL-EC1",
+      "state": "AUTHORISED_BOUNDED",
+      "merge_commit": "a26bc19d76ed3ebd3def43a23468404e976f84eb"
+    },
+    "path2_external": {
+      "owner_gate": "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+      "state": "AUTHORISED_BOUNDED",
+      "merge_commit": "04b379adee8b584e841b24e83883aed33e090c61"
+    },
+    "validation": {
+      "state": "LOCKED_UNCONSUMED"
+    }
+  },
+  "rccr_consumption_boundary": {
+    "real_source_ec1_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "path2_real_source_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "owner_capability_activation": "DENIED",
+    "validation_consumption": "DENIED"
+  },
+  "next_packet": "RCCRI-WP8_AFTER_G7B_PASS_AND_INTEGRATION",
+  "authority_effect": "NONE"
+}
