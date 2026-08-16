@@ -2,7 +2,7 @@
 
 Plan: `OVC-SHARED-SYSTEMS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-R1`  
 Gate: `SHSI-G0B`  
-Baseline: `e4084161c2656d9d61144feb9ad979a44e4671f4` / tree `ec93154116685e3930f23141e5d9c702bd0045e7`  
+Baseline: `59bd7dc1f08635e03fda9bcdb537e60ddcd5e216` / tree `2e91b7aa246649023fa7e20baaeb9fda6cce2916`  
 Authority: `AUTO_EXECUTABLE_WITHIN_SHSI-AE-v0.2-R1`; delta `NONE`.
 
 ## Materialised
@@ -16,6 +16,10 @@ Authority: `AUTO_EXECUTABLE_WITHIN_SHSI-AE-v0.2-R1`; delta `NONE`.
 - reuse register and programme-owned state;
 - native Programme Genesis exclusion to prevent legacy migration inference;
 - PIP/VIT/SIQ integration lineage.
+
+## Current-main reconciliation
+
+Initial packet construction began from `e4084161c2656d9d61144feb9ad979a44e4671f4`. Unrelated PAR-WP0 closeout advanced lawful main to `59bd7dc1f08635e03fda9bcdb537e60ddcd5e216`. The same permanent packet/PR is retained and is re-anchored non-destructively with current main as merge ancestry; logical Stage-0 semantics and authority remain unchanged while baseline-bound proof identities are recomputed.
 
 WP0 creates no steady-state Shared Systems service, registry resolver, consumer binding, domain write, scientific authority, source role, Validation access, publication, exposure or execution authority.
 
