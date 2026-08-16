@@ -14,6 +14,7 @@ from ovc.system_atlas import (
     build_incremental_generation,
     build_reference_generation,
     build_system_graph,
+    canonical_sha256,
     generation_equivalence_receipt,
     graph_logical_hash,
     load_generation_bundle,
@@ -256,3 +257,19 @@ def test_atlas_core_capacity_fails_typed_without_sampling() -> None:
     cases = load(CASES)
     assert len(cases["cases"]) == 7
     assert cases["retention"] == "PROVISIONAL_RETAIN_ALL"
+
+
+def test_wp5_gate_and_vit_bindings_are_durable_qualified_history() -> None:
+    packet_root = ROOT / "docs/programmes/system-atlas-v0-1/wp5"
+    gate = load(packet_root / "ATLAS_G5_GATE_PACKET.json")
+    qa = load(packet_root / "ATLAS_WP5_QA_PACKET.json")
+    authority = load(packet_root / "ATLAS_WP5_VIT_AUTHORITY_MANIFEST.json")
+    dependency = load(packet_root / "ATLAS_WP5_VIT_DEPENDENCY_FRONTIER.json")
+    state = load(ROOT / "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json")
+    assert gate["decision"] == "AUTO_PASS"
+    assert gate["qualification_generation_current"] is False
+    assert qa["checks"]["reference_incremental_equivalence"] == "PASS_EXACT_ROOT_AND_ALL_19_FILES"
+    assert qa["external_generation_evidence"]["generation_root_hash"] == gate["qualification_generation_root"]
+    assert authority["logical_id"] == canonical_sha256(authority["payload"])
+    assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
+    assert state["tests"]["wp5_g4_followups"] == "PASS_OWNER_ROLE_AND_GIT_DERIVED_CURRENTNESS"
