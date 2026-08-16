@@ -11,7 +11,9 @@ APP = ROOT / "apps" / "research_console_vnext"
 class RCNWP3AFoundationTests(unittest.TestCase):
     def test_toolchain_is_exactly_pinned_and_matches_lock(self) -> None:
         package = json.loads((APP / "package.json").read_text(encoding="utf-8"))
-        lock = json.loads((ROOT / "artifacts" / "research_console_vnext" / "RCN_TOOLCHAIN_LOCK_v0_1.json").read_text(encoding="utf-8"))["tools"]
+        lock_root = ROOT / "artifacts" / "research_console_vnext"
+        pointer = json.loads((lock_root / "RCN_TOOLCHAIN_CURRENT.json").read_text(encoding="utf-8"))
+        lock = json.loads((lock_root / pointer["current"]).read_text(encoding="utf-8"))["tools"]
         direct = {**package["dependencies"], **package["devDependencies"]}
         for name, version in direct.items():
             self.assertFalse(version.startswith(("^", "~", ">", "<", "*")), (name, version))
