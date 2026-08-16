@@ -276,7 +276,7 @@ def summarize_pilot(
         "real_candidate_count": real_count,
         "qualification_injection_count": injection_count,
         "pilot_escape_count": pilot_escapes,
-        "blocking_false_positive_count": false_posititives if False else false_positives,
+        "blocking_false_positive_count": false_positives,
         "unresolved_false_negative_count": false_negatives,
         "scope_leakage_count": scope_leakage,
         "full_g3_shadow_complete": full_g3_complete,
