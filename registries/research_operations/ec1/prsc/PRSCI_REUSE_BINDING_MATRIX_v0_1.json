@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-prsci-reuse-binding-matrix/v0.1",
+  "matrix_id": "PRSCI-WP0-REUSE-BINDING-MATRIX-v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP0",
+  "baseline_main": "1c7006a48368d9f5bddaba750f98591a947d24d0",
+  "baseline_tree": "8596aec3e4c7d0db9346801c1c98ea0bf8e1181d",
+  "bindings": [
+    {"path":"schemas/research_operations/ec1/p1_candidate_review_card_v0_1.schema.json","classification":"EXTEND_ADDITIVE","owner":"EC1_REVIEW","rule":"NO_PARALLEL_CANDIDATE_REVIEW_STORE"},
+    {"path":"schemas/research_operations/ec1/question_decision_record_v0_1.schema.json","classification":"EXTEND_ADDITIVE","owner":"EC1_REVIEW","rule":"Q08_Q09_Q10_OWNER_SEMANTICS_UNCHANGED"},
+    {"path":"schemas/research_operations/ec1/evidence_cycle_review_packet_v0_1.schema.json","classification":"EXTEND_ADDITIVE","owner":"EC1_REVIEW","rule":"PRSC_REFERENCES_ONLY"},
+    {"path":"schemas/research_operations/ec1/conditional_reserved_action_packet_v0_1.schema.json","classification":"REUSE","owner":"EC1_REVIEW","rule":"RESERVED_ACTION_REMAINS_EXTERNAL_TO_PRSC"},
+    {"path":"schemas/research_operations/dmrp_candidate_core_v0_1.schema.json","classification":"REUSE","owner":"DMRP","rule":"CANDIDATE_IDENTITY_NOT_REDEFINED"},
+    {"path":"schemas/research_operations/dmrp_execution_binding_v0_1.schema.json","classification":"REUSE_EXTEND_THIN_ADAPTER","owner":"DMRP","rule":"NO_SECOND_EXECUTION_IDENTITY"},
+    {"path":"contracts/research_operations/DMRP_RECORD_IDENTITY_CONTRACT_v0_1.md","classification":"REUSE","owner":"RESEARCH_OPERATIONS"},
+    {"path":"contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md","classification":"REUSE","owner":"RESEARCH_OPERATIONS"},
+    {"path":"contracts/research_operations/ADMISSIBLE_CUTOFF_AND_VALIDATION_ISOLATION_POLICY_v0_1.md","classification":"REUSE_BLOCKING","owner":"RESEARCH_OPERATIONS"},
+    {"path":"src/ovc/research_operations/canonical.py","classification":"REUSE","owner":"RESEARCH_OPERATIONS"},
+    {"path":"src/ovc/research_operations/dmrp.py","classification":"REUSE","owner":"RESEARCH_OPERATIONS"},
+    {"path":"src/ovc/research_operations/dmrp_candidate.py","classification":"REUSE","owner":"RESEARCH_OPERATIONS"}
+  ],
+  "new_namespace": "src/ovc/research_operations/prsc/",
+  "parallel_store": "PROHIBITED",
+  "status": "PASS"
+}

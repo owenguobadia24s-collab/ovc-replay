@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-prsci-qa-packet/v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP0",
+  "baseline_main": "1c7006a48368d9f5bddaba750f98591a947d24d0",
+  "baseline_tree": "8596aec3e4c7d0db9346801c1c98ea0bf8e1181d",
+  "qa_result": "BLOCK",
+  "checks": {
+    "g0_materialised_on_main": "PASS",
+    "plan_design_evaluation_hash_binding": "PASS",
+    "current_main_tree_reconciled": "PASS",
+    "ec1_greal_owner_authority_resolved": "PASS",
+    "f0_a_hold_preserved": "PASS",
+    "validation_lock_preserved": "PASS",
+    "candidate_freeze_none_preserved": "PASS",
+    "existing_ec1_dmrp_ro_surface_census": "PASS",
+    "external_artifact_root_bound": "PASS",
+    "real_source_prsc_authority_non_inheritance": "PASS",
+    "independent_reviewer_binding": "DEFERRED_UNBOUND_BLOCKS_G8_ALG_ONLY",
+    "vit_grt_siq_route_resolved": "PASS",
+    "force_ref_update_integrity": "BLOCK"
+  },
+  "blocking_incident_ref": "records/research_operations/ec1/prsc/PRSCI_EXECUTION_INTEGRITY_INCIDENT_v0_1.json",
+  "blocker_reason": "A feature-branch ref was force-updated during G0 placement reconciliation, contrary to the hard no-force-push/history-rewrite boundary. Main history was not rewritten and scientific evidence was unaffected, but the process integrity violation requires operator disposition before automatic PRSCI continuation.",
+  "recommendation": "BLOCK_PENDING_OPERATOR_DISPOSITION",
+  "authority_delta": "NONE",
+  "safe_state": {
+    "main_g0_materialisation": "PRESERVED",
+    "f0_a": "HOLD",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "real_source_prsc": "DENIED"
+  }
+}
