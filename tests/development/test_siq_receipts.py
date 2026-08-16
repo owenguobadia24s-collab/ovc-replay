@@ -5,7 +5,7 @@ import unittest
 from ovc.development.skills.siq_core import build_queue_state
 from ovc.development.skills.siq_receipts import build_siq_receipt, load_siq_receipt, persist_siq_receipt
 A="a"*40; B="b"*40
-ITEM={"packet_id":"WP","plan_id":"PLAN","candidate_head_sha":A,"baseline_main_sha":B,"ready_sequence":1,"implementation_complete":True,"qa_status":"PASS","authority_delta":"NONE","gate_class":"AUTO_EXECUTABLE","preliminary_assurance_pass":True,"rollback_defined":True,"dependency_footprint_pinned":True}
+ITEM={"packet_id":"WP","plan_id":"PLAN","candidate_head_sha":A,"baseline_main_sha":B,"ready_sequence":1,"implementation_complete":True,"qa_status":"PASS","authority_delta":"NONE","gate_class":"AUTO_EXECUTABLE","preliminary_assurance_pass":True,"rollback_defined":True,"dependency_footprint_pinned":True,"vit_pip_id":"d"*64,"vit_generation_id":"e"*64,"vit_placement_id":"f"*64,"vit_lineage_ref":"records/test/vit-lineage.json"}
 class SIQReceiptTests(unittest.TestCase):
     def test_receipt_is_observability_only_and_round_trips(self):
         state=build_queue_state([ITEM])
