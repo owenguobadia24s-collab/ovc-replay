@@ -13,6 +13,7 @@ from ovc.system_atlas import (
     QUERY_FAMILIES,
     build_reference_generation,
     build_system_graph,
+    canonical_sha256,
     execute_optimized_query,
     execute_reference_query,
     query_equivalence_receipt,
@@ -257,3 +258,19 @@ def test_invalid_visibility_and_equivalence_divergence_fail_closed() -> None:
     )
     assert receipt["result"] == "FAIL_OPTIMIZED_QUARANTINED"
     assert receipt["optimized_conformance"] == "DENIED"
+
+
+def test_wp6_gate_and_vit_bindings_are_durable_qualified_history() -> None:
+    packet_root = ROOT / "docs/programmes/system-atlas-v0-1/wp6"
+    gate = load(packet_root / "ATLAS_G6_GATE_PACKET.json")
+    qa = load(packet_root / "ATLAS_WP6_QA_PACKET.json")
+    authority = load(packet_root / "ATLAS_WP6_VIT_AUTHORITY_MANIFEST.json")
+    dependency = load(packet_root / "ATLAS_WP6_VIT_DEPENDENCY_FRONTIER.json")
+    state = load(ROOT / "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json")
+    assert gate["decision"] == "AUTO_PASS"
+    assert gate["query_equivalence"] == "PASS_10_OF_10_FAMILIES"
+    assert gate["qualification_generation_current"] is False
+    assert qa["external_query_evidence"]["receipt_count"] == len(QUERY_FAMILIES)
+    assert authority["logical_id"] == canonical_sha256(authority["payload"])
+    assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
+    assert state["tests"]["wp6_query_equivalence"] == "PASS_10_OF_10_RECEIPTS"
