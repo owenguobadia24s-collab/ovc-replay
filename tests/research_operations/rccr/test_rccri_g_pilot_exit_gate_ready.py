@@ -74,14 +74,33 @@ def test_gate_packet_is_complete_and_non_scientific():
     assert set(gate["allowed_decisions"]) == {"PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"}
 
 
-def test_programme_pointer_stops_at_operator_gate():
+def test_operator_pass_materialises_only_bounded_scaleout_and_budget():
+    decision = load("docs/releases/rccr-v0-1/rccri-g-pilot-exit/RCCRI_G_PILOT_EXIT_OPERATOR_DECISION.json")
+    budget = load("registries/research_operations/rccr/v0_1/RCCR_HUMAN_REVIEW_BUDGET_v0_1.json")
+    assert decision["decision"] == "PASS"
+    assert decision["decision_instruction"] == "OVC APPROVE RCCRI-G-PILOT-EXIT"
+    assert decision["reserved_delta"] == ["OPR.SCOPE_EXPANSION"]
+    assert decision["approved_effect"]["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
+    assert decision["approved_effect"]["owner_capability_activation"] == "DENIED"
+    assert decision["approved_effect"]["real_source_ec1_authority"] == "NONE"
+    assert decision["approved_effect"]["validation"] == "LOCKED_UNCONSUMED"
+    assert budget["budget_id"] == "RCCR-HUMAN-REVIEW-BUDGET-v0.1-BOOTSTRAP"
+    assert budget["operational_triggers"]["human_review_required_share_gt"] == 0.30
+    assert budget["trigger_semantics"]["human_review_share"] == "OPERATIONAL_REVIEW_TRIGGER_ONLY_NOT_SCIENTIFIC_THRESHOLD"
+    assert budget["authority_effect"] == "NONE"
+
+
+def test_programme_pointer_advances_after_operator_pass_without_owner_authority():
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
-    state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_10.json")
-    assert pointer["status"] == state["status"] == "GATE_READY"
+    state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_11.json")
+    assert pointer["status"] == state["status"] == "APPROVED"
     assert pointer["current_gate"] == state["current_gate"] == "RCCRI-G-PILOT-EXIT"
-    assert pointer["operator_pending"] == state["operator_pending"] == ["RCCRI-G-PILOT-EXIT"]
-    assert pointer["scaleout_authority"] == state["scaleout_authority"] == "DENIED"
+    assert pointer["operator_pending"] == state["operator_pending"] == []
+    assert pointer["scaleout_authority"] == state["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+    assert pointer["authorized_follow_on_packets"] == state["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
     assert pointer["real_source_ec1_authority"] == state["real_source_ec1_authority"] == "NONE"
+    assert pointer["path2_real_source_authority"] == state["path2_real_source_authority"] == "NOT_GRANTED"
+    assert pointer["owner_capability_activation"] == state["owner_capability_activation"] == "DENIED"
     assert pointer["validation"] == state["validation"] == "LOCKED_UNCONSUMED"
     assert pointer["last_completed_packet"] == state["last_completed_packet"] == "RCCRI-WP7A"
     assert pointer["last_merge_commit"] == state["last_merge_commit"] == "bd2a5af60d2f26320e873e7cd72875397b85a9d7"
