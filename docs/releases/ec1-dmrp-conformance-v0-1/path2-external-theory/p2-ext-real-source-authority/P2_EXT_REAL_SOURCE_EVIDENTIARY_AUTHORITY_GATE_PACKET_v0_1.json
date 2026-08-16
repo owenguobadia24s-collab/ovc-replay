@@ -4,25 +4,18 @@
   "title": "Path-2 External Theory Real-Source Evidentiary Authority",
   "plan_id": "OVC-EC1-DMRP-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
   "plan_version": "0.1_REVISED_1_RATIFIED",
-  "status": "GATE_READY",
-  "decision": null,
-  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "status": "APPROVED",
+  "decision": "PASS",
+  "operator_instruction": "OVC APPROVE P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+  "operator_instruction_time": "2026-08-16T15:07:00+01:00",
   "baseline_commit": "2dc98b95cdc4bda156a78de7738d3c2001f7fe87",
   "candidate_commit": "841ee214d2fe659208309d6a3c457d3191ec61bf",
   "completed_packets": ["P2-EXT-READINESS-ACCEPT-0.1","P2-EXT-SEMANTIC-FREEZE-0.1","P2-EXT-METHOD-PARAMETER-FREEZE-0.1","P2-EXT-PREREG-CONFORMANCE-0.1","P2-EXT-PREREG-IMPLEMENTATION-0.1"],
-  "current_authority": {
-    "real_source_path2_evidentiary_formalisation": "DENIED",
-    "durable_real_source_research_operations_append": "DENIED",
-    "effective_preregistration_count": 0,
-    "p2_6_candidate_formation": "NOT_EXECUTED",
-    "research_candidate_generation_freeze": "NONE",
-    "validation": "LOCKED_UNCONSUMED"
-  },
-  "proposed_authority_delta": {
-    "real_source_path2_evidentiary_formalisation": "AUTHORISE_BOUNDED",
-    "exact_dependency_binding_for_seven_frozen_experiment_records": "AUTHORISE",
-    "effective_preregistration_activation_after_exact_binding": "AUTHORISE",
-    "durable_real_source_research_operations_append": "AUTHORISE_FOR_BOUND_EVIDENCE_ONLY"
+  "approved_authority": {
+    "real_source_path2_evidentiary_formalisation": "AUTHORISED_BOUNDED",
+    "exact_dependency_binding_for_seven_frozen_experiment_records": "AUTHORISED",
+    "effective_preregistration_activation_after_exact_binding": "AUTHORISED",
+    "durable_real_source_research_operations_append": "AUTHORISED_FOR_BOUND_EVIDENCE_ONLY"
   },
   "acceptance_conditions": [
     "The seven frozen method/parameter packs remain unchanged and deterministically identified.",
@@ -48,27 +41,10 @@
   },
   "warnings": [
     "Effective preregistration count is currently zero; approval permits exact dependency binding and subsequent effectiveness, but does not waive preregistration-before-observation.",
-    "This gate changes research authority from fixture/mechanical preparation to bounded real-source evidentiary work and therefore is operator-reserved."
+    "This approval authorises bounded real-source Path-2 evidentiary work only after exact preregistration binding."
   ],
   "unresolved_issues": [],
-  "changed_files": [
-    "contracts/research_operations/dmrp_path2_prereg_v0_1.md",
-    "schemas/research_operations/dmrp_path2_prereg_v0_1.schema.json",
-    "src/ovc/research_operations/dmrp_path2_prereg.py",
-    "src/ovc/research_operations/validation.py",
-    "registries/research_operations/P2_EXT_NATIVE_PREREGISTRATION_REGISTRY_v0_1.json",
-    "fixtures/research_operations/p2_ext_prereg/SYNTHETIC_NATIVE_PREREG.json",
-    "tests/research_operations/test_p2_ext_prereg_implementation.py"
-  ],
-  "external_artifact_hashes": [],
-  "rollback": "Do not grant the proposed authority; retain all seven records NATIVE_BOUND_NOT_EFFECTIVE, keep real-source Path-2 work and durable real-source append denied, and leave P2-6/RCG/validation/publication authorities unchanged.",
-  "recommended_decision": "PASS",
-  "exact_work_after_approval": [
-    "Record the operator PASS decision and authority effect without altering the frozen semantic or method parameter packs.",
-    "Resolve and validate exact source/data/clock/window/dependency identities for each of the seven frozen ExperimentRecords.",
-    "Activate only ExperimentRecords whose exact dependency bindings pass the native preregistration validator; retain all others non-effective.",
-    "Execute the bounded real-source Path-2 evidentiary protocols only for effective preregistrations and append complete Research Operations evidence including negative/null/contradictory outcomes.",
-    "Stop before P2-6 candidate formation or any scientific promotion/freeze gate unless separately authorised."
-  ],
-  "recommended_operator_command": "OVC APPROVE P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1"
+  "rollback": "Revoke the bounded authority before any new observation begins; retain or return all unresolved ExperimentRecords to NATIVE_BOUND_NOT_EFFECTIVE and deny further real-source Path-2 append. Previously appended evidence remains immutable historical evidence.",
+  "decision_record": "docs/releases/ec1-dmrp-conformance-v0-1/path2-external-theory/p2-ext-real-source-authority/P2_EXT_REAL_SOURCE_EVIDENTIARY_AUTHORITY_OPERATOR_DECISION_v0_1.json",
+  "next_packet": "P2-EXT-REAL-SOURCE-EVIDENTIARY-EXECUTION-0.1"
 }
