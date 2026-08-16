@@ -151,7 +151,7 @@ jobs:
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
 
-      - name: Complete repository suite as AA0 PIP-bound BASE_INDEPENDENT assurance
+      - name: Complete repository suite as BASE_INDEPENDENT assurance
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: |
           # Historical rollback command (not executed): python3 -m unittest discover -s tests -v
