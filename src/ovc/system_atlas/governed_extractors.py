@@ -64,6 +64,37 @@ def _git(root: Path, *args: str, binary: bool = False) -> bytes | str:
     return completed.stdout
 
 
+def _git_blob_batch(root: Path, commit: str, paths: Sequence[str]) -> dict[str, tuple[str, bytes]]:
+    _require(all("\n" not in path and "\r" not in path for path in paths), "ATLAS_GOVERNED_SOURCE_PATH_INVALID")
+    queries = "".join(f"{commit}:{path}\n" for path in paths).encode("utf-8")
+    completed = subprocess.run(
+        ["git", "-C", str(root), "cat-file", "--batch"],
+        input=queries,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    _require(completed.returncode == 0, "ATLAS_GOVERNED_GIT_BATCH_READ_FAILED")
+    output = completed.stdout
+    cursor = 0
+    blobs: dict[str, tuple[str, bytes]] = {}
+    for path in paths:
+        line_end = output.find(b"\n", cursor)
+        _require(line_end >= 0, "ATLAS_GOVERNED_GIT_BATCH_HEADER_MISSING")
+        header = output[cursor:line_end].decode("ascii", errors="strict").split()
+        _require(len(header) == 3 and header[1] == "blob", "ATLAS_GOVERNED_GIT_BATCH_OBJECT_INVALID")
+        blob_sha, _, size_text = header
+        _require(_SHA40.fullmatch(blob_sha) is not None and size_text.isdigit(), "ATLAS_GOVERNED_GIT_BATCH_HEADER_INVALID")
+        size = int(size_text)
+        start = line_end + 1
+        end = start + size
+        _require(end < len(output) and output[end : end + 1] == b"\n", "ATLAS_GOVERNED_GIT_BATCH_BODY_INVALID")
+        blobs[path] = (blob_sha, output[start:end])
+        cursor = end + 1
+    _require(cursor == len(output), "ATLAS_GOVERNED_GIT_BATCH_TRAILING_DATA")
+    return blobs
+
+
 def _source_class(component: Mapping[str, Any]) -> str | None:
     path = str(component.get("path", "")).lower()
     component_type = str(component.get("component_type", ""))
@@ -228,20 +259,24 @@ def extract_governed_sources(repository_root: Path | str, *, grt_observation_set
     components = grt_observation_set.get("physical_components")
     _require(isinstance(components, Sequence) and not isinstance(components, (str, bytes)), "ATLAS_GOVERNED_COMPONENTS_INVALID")
 
-    observations: list[dict[str, Any]] = []
-    sources: list[dict[str, Any]] = []
+    selected: list[tuple[Mapping[str, Any], str]] = []
     for component in sorted(components, key=lambda row: str(row.get("path", ""))):
         _require(isinstance(component, Mapping), "ATLAS_GOVERNED_COMPONENT_INVALID")
         source_class = _source_class(component)
         if source_class is None:
             continue
+        selected.append((component, source_class))
+
+    blob_batch = _git_blob_batch(root, commit, [str(component.get("path", "")) for component, _ in selected])
+    observations: list[dict[str, Any]] = []
+    sources: list[dict[str, Any]] = []
+    for component, source_class in selected:
         path = str(component.get("path", ""))
         blob = str(component.get("blob_hash_or_tree_hash", ""))
         _require(_SHA40.fullmatch(blob) is not None, "ATLAS_GOVERNED_BLOB_INVALID")
-        exact_blob = str(_git(root, "rev-parse", f"{commit}:{path}")).strip()
+        exact_blob, raw = blob_batch[path]
         _require(exact_blob == blob, "ATLAS_GOVERNED_BLOB_MISMATCH")
-        raw = _git(root, "show", f"{commit}:{path}", binary=True)
-        _require(isinstance(raw, bytes) and b"\x00" not in raw, "ATLAS_GOVERNED_SOURCE_NOT_TEXT")
+        _require(b"\x00" not in raw, "ATLAS_GOVERNED_SOURCE_NOT_TEXT")
         text = raw.decode("utf-8", errors="replace")
         value: Any = None
         parsed_json = False
