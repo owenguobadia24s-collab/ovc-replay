@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-operator-reserved-gate-doctrine-ratification/v1",
+  "decision_id": "OVC_OPERATOR_RESERVED_GATE_DOCTRINE_v0_1_RATIFICATION",
+  "doctrine_id": "OVC_OPERATOR_RESERVED_GATE_DOCTRINE_v0_1",
+  "decision": "PASS",
+  "decision_authority": "HUMAN_OPERATOR",
+  "operator_instruction": "OVC APPROVE",
+  "operator_decision_time": "2026-08-16T00:58:00+01:00",
+  "baseline_main": "be742a47dc342d28f8395f869b3bd769b9c93352",
+  "authority_delta": [
+    "OPR.GOVERNANCE_CHANGE"
+  ],
+  "approved_effects": [
+    "RATIFY_FORWARD_OPERATOR_RESERVED_GATE_DOCTRINE",
+    "MATERIALISE_MACHINE_GATE_CLASSIFIER",
+    "DETERMINISTIC_FORWARD_MIGRATION_OF_INCOMPLETE_GATES",
+    "PRESERVE_HISTORICAL_GATE_DECISIONS",
+    "AUTO_CONTINUE_RECLASSIFIED_GATES_WHERE_LIVE_MANDATE_AND_PREREQUISITES_PERMIT"
+  ],
+  "non_effects": {
+    "scientific_promotion_authority": "NONE",
+    "active_discovery_authority": "UNCHANGED",
+    "active_development_authority": "UNCHANGED",
+    "active_validation_authority": "UNCHANGED",
+    "publication_authority": "UNCHANGED",
+    "probability_authority": "NONE",
+    "risk_authority": "NONE",
+    "exposure_authority": "NONE",
+    "execution_authority": "NONE",
+    "destructive_authority": "NONE",
+    "force_push_authority": "HARD_DENY_UNCHANGED",
+    "history_rewrite_authority": "HARD_DENY_UNCHANGED"
+  },
+  "migration_rule": "FORWARD_ONLY_EXACT_AUTHORITY_DELTA_CLASSIFICATION",
+  "rollback": "Forward-supersede this doctrine and classifier by a later operator-ratified governance generation; never rewrite historical gate decisions or this ratification record.",
+  "next_action": "RUN_CLASSIFIER_ASSURANCE_THEN_MERGE_AND_MIGRATE_INCOMPLETE_GATES"
+}
