@@ -8,11 +8,7 @@
     "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
     "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json"
   ],
-  "route_classes": [
-    "VIT_MANDATORY",
-    "REGISTERED_EXCEPTION",
-    "UNLAWFUL"
-  ],
+  "route_classes": ["VIT_MANDATORY", "REGISTERED_EXCEPTION", "UNLAWFUL"],
   "invariants": {
     "eligible_packet_must_have_pip_before_permanent_candidate": true,
     "permanent_integration_candidate_requires_vit_lineage": true,
@@ -25,94 +21,23 @@
     "history_rewrite": false
   },
   "actuators": [
-    {
-      "actuator_id": "DEFAULT_EXECUTION_SUBSTRATE_ROUTER",
-      "surface": "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Resolve eligible AUTO_EXECUTABLE/AUTO_RATIFIABLE authority_delta=NONE work into the VIT route."
-    },
-    {
-      "actuator_id": "VIT_GENERAL_PACKET_ADMISSION",
-      "surface": "src/ovc/development/skills/vit_general.py",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Require canonical PIP, VIT generation and placement identities before general admission."
-    },
-    {
-      "actuator_id": "PIP_CONSTRUCTION",
-      "surface": "src/ovc/development/skills/vit_core.py::PacketIntegrationPayload",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Freeze identity-bearing packet payload before placement-sensitive materialisation."
-    },
-    {
-      "actuator_id": "VIT_LEDGER_PLACEMENT",
-      "surface": "src/ovc/development/skills/vit_ledger.py",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Own prospective train placement and preserve payload identity across placement-only movement."
-    },
-    {
-      "actuator_id": "VIT_PHYSICAL_MATERIALISATION_CONTROLLER",
-      "surface": "src/ovc/development/skills/vit_materialisation.py",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Submit only the current qualified VIT materialisation head to the physical gateway."
-    },
-    {
-      "actuator_id": "SIQ_QUEUE_CANDIDATE_ADMISSION",
-      "surface": "src/ovc/development/skills/siq_core.py",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Fail closed unless PIP, VIT generation, placement and lineage-ref provenance are present."
-    },
-    {
-      "actuator_id": "ASYNC_ASSURANCE_WAKE",
-      "surface": "src/ovc/development/skills/async_assurance.py",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Wake DSAI_VIT_PHYSICAL_CONTROLLER only; no independent writer or merge authority."
-    },
-    {
-      "actuator_id": "EXTERNAL_DEVELOPMENT_ACTUATOR_BRANCH_CREATE",
-      "surface": "external Git branch creation surface",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Branch refs are non-authoritative; no branch may become a permanent integration candidate without prior canonical VIT lineage."
-    },
-    {
-      "actuator_id": "EXTERNAL_DEVELOPMENT_ACTUATOR_PR_CREATE",
-      "surface": "GitHub pull request to main",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Required PR assurance must validate a repository-bound VIT-Lineage-Ref before expensive assurance."
-    },
-    {
-      "actuator_id": "LEGACY_FRESH_MAIN_RECONCILE",
-      "surface": "fresh-main branch/PR reconstruction solely because physical main moved",
-      "route_class": "UNLAWFUL",
-      "required_behavior": "Use placement recomputation and assurance renewal while retaining the exact PIP."
-    },
-    {
-      "actuator_id": "OPERATOR_REQUIRED_GATE_PACKET",
-      "surface": "operator-required packet/gate preparation",
-      "route_class": "VIT_MANDATORY",
-      "required_behavior": "Construct/admit the packet to VIT and park it at WAITING_OPERATOR_AUTHORITY; operator status does not exempt VIT lineage."
-    },
-    {
-      "actuator_id": "VIT_BOOTSTRAP_RECOVERY",
-      "surface": "recovery when VIT lineage machinery itself is unavailable or being repaired",
-      "route_class": "REGISTERED_EXCEPTION",
-      "required_behavior": "Exact finite exception record only; never grants direct SIQ bypass or new authority."
-    }
+    {"actuator_id":"DEFAULT_EXECUTION_SUBSTRATE_ROUTER","surface":"registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json","route_class":"VIT_MANDATORY","required_behavior":"Resolve eligible AUTO_EXECUTABLE/AUTO_RATIFIABLE authority_delta=NONE work into the VIT route."},
+    {"actuator_id":"VIT_GENERAL_PACKET_ADMISSION","surface":"src/ovc/development/skills/vit_general.py","route_class":"VIT_MANDATORY","required_behavior":"Require canonical PIP, VIT generation and placement identities before general admission."},
+    {"actuator_id":"PIP_CONSTRUCTION","surface":"src/ovc/development/skills/vit_core.py::PacketIntegrationPayload","route_class":"VIT_MANDATORY","required_behavior":"Freeze identity-bearing packet payload before placement-sensitive materialisation."},
+    {"actuator_id":"VIT_LEDGER_PLACEMENT","surface":"src/ovc/development/skills/vit_ledger.py","route_class":"VIT_MANDATORY","required_behavior":"Own prospective train placement and preserve payload identity across placement-only movement."},
+    {"actuator_id":"VIT_PHYSICAL_MATERIALISATION_CONTROLLER","surface":"src/ovc/development/skills/vit_materialisation.py","route_class":"VIT_MANDATORY","required_behavior":"Submit only the current qualified VIT materialisation head to the physical gateway."},
+    {"actuator_id":"SIQ_QUEUE_CANDIDATE_ADMISSION","surface":"src/ovc/development/skills/siq_core.py","route_class":"VIT_MANDATORY","required_behavior":"Fail closed unless PIP, VIT generation, placement and lineage-ref provenance are present."},
+    {"actuator_id":"ASYNC_ASSURANCE_WAKE","surface":"src/ovc/development/skills/async_assurance.py","route_class":"VIT_MANDATORY","required_behavior":"Wake DSAI_VIT_PHYSICAL_CONTROLLER only; no independent writer or merge authority."},
+    {"actuator_id":"EXTERNAL_DEVELOPMENT_ACTUATOR_BRANCH_CREATE","surface":"external Git branch creation surface","route_class":"VIT_MANDATORY","required_behavior":"Branch refs are non-authoritative; no branch may become a permanent integration candidate without prior canonical VIT lineage."},
+    {"actuator_id":"EXTERNAL_DEVELOPMENT_ACTUATOR_PR_CREATE","surface":"GitHub pull request to main","route_class":"VIT_MANDATORY","required_behavior":"Required PR assurance must validate a repository-bound VIT-Lineage-Ref before expensive assurance."},
+    {"actuator_id":"LEGACY_FRESH_MAIN_RECONCILE","surface":"fresh-main branch/PR reconstruction solely because physical main moved","route_class":"UNLAWFUL","required_behavior":"Use placement recomputation and assurance renewal while retaining the exact PIP."},
+    {"actuator_id":"OPERATOR_REQUIRED_GATE_PACKET","surface":"operator-required packet/gate preparation","route_class":"VIT_MANDATORY","required_behavior":"Construct/admit the packet to VIT and park it at WAITING_OPERATOR_AUTHORITY; operator status does not exempt VIT lineage."},
+    {"actuator_id":"VIT_BOOTSTRAP_RECOVERY","surface":"recovery when VIT lineage machinery itself is unavailable or being repaired","route_class":"REGISTERED_EXCEPTION","required_behavior":"Exact finite exception record only; never grants direct SIQ bypass or new authority."}
   ],
   "registered_pr_exceptions": [
-    {
-      "pr_number": 950,
-      "head_sha": "d7b9e99a0a26c03d21bdfc568769c29137c254ee",
-      "exception_class": "PRE_ENFORCEMENT_OPEN_OPERATOR_GATE",
-      "expires": "ON_CLOSE_OR_HEAD_CHANGE",
-      "siq_bypass_authority": false
-    },
-    {
-      "pr_number": 953,
-      "head_sha": "f929c9537e236d7a3124f080f9616304e8888268",
-      "exception_class": "PRE_ENFORCEMENT_OPEN_GRT_CORRECTIVE",
-      "expires": "ON_CLOSE_OR_HEAD_CHANGE",
-      "siq_bypass_authority": false
-    }
+    {"pr_number":950,"head_sha":"d7b9e99a0a26c03d21bdfc568769c29137c254ee","exception_class":"PRE_ENFORCEMENT_OPEN_OPERATOR_GATE","expires":"ON_CLOSE_OR_HEAD_CHANGE","siq_bypass_authority":false},
+    {"pr_number":953,"head_sha":"f929c9537e236d7a3124f080f9616304e8888268","exception_class":"PRE_ENFORCEMENT_OPEN_GRT_CORRECTIVE","expires":"ON_CLOSE_OR_HEAD_CHANGE","siq_bypass_authority":false},
+    {"pr_number":956,"head_branch":"corrective/dsai3v-vit-universal-routing-conformance-20260816","self_bootstrap":true,"exception_class":"VIT_ROUTING_BOOTSTRAP_CORRECTION","expires":"ON_PR_CLOSE","siq_bypass_authority":false}
   ],
   "unregistered_bypass_policy": "FAIL_CLOSED",
   "rollback": "Forward-disable this conformance correction and return to the already-active VIT/SIQ authority while preserving all audit and failure evidence; never force-push or rewrite history."
