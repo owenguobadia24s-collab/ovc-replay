@@ -29,7 +29,8 @@ class GRT2G2FinalStateTests(unittest.TestCase):
     def test_programme_state_preserves_g2_pass_while_pointer_advances_through_g2_5_evidence(self) -> None:
         state = json.loads((STATE / "OVC_GRT2_STATE_v0_8.json").read_text(encoding="utf-8"))
         pilot_state = json.loads((STATE / "OVC_GRT2_STATE_v0_10.json").read_text(encoding="utf-8"))
-        current_state = json.loads((STATE / "OVC_GRT2_STATE_v0_11.json").read_text(encoding="utf-8"))
+        threshold_state = json.loads((STATE / "OVC_GRT2_STATE_v0_11.json").read_text(encoding="utf-8"))
+        readiness_state = json.loads((STATE / "OVC_GRT2_STATE_v0_12.json").read_text(encoding="utf-8"))
         pointer = json.loads((STATE / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["g2_status"], "APPROVED_DELEGATED_PASS")
@@ -42,16 +43,19 @@ class GRT2G2FinalStateTests(unittest.TestCase):
         self.assertEqual(pilot_state["constitution_status"], "PROPOSED_UNADMITTED")
         self.assertIsNone(pilot_state["debt_floor_generation"])
 
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_11.json")
-        self.assertEqual(pointer["status"], "QA_REVIEW")
-        self.assertEqual(pointer["packet_id"], "GRT2-G2.5-PILOT-EVIDENCE-COLLECTION")
-        self.assertEqual(pointer["gate_id"], "GRT2-G2.5")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_12.json")
+        self.assertEqual(pointer["status"], "RUNNING")
+        self.assertEqual(pointer["packet_id"], "GRT2-G3-READINESS-EVIDENCE")
+        self.assertEqual(pointer["gate_id"], "GRT2-G3")
         self.assertEqual(pointer["next_packet"], "GRT2-G3-READINESS-EVIDENCE")
-        self.assertTrue(current_state["pilot_observation_threshold_met"])
-        self.assertEqual(current_state["pilot_eligible_candidate_count"], 8)
-        self.assertEqual(current_state["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
-        self.assertEqual(current_state["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
-        self.assertIsNone(current_state["debt_floor_generation"])
+        self.assertTrue(threshold_state["pilot_observation_threshold_met"])
+        self.assertEqual(threshold_state["pilot_eligible_candidate_count"], 8)
+        self.assertEqual(threshold_state["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
+        self.assertEqual(threshold_state["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
+        self.assertIsNone(threshold_state["debt_floor_generation"])
+        self.assertEqual(readiness_state["status"], "RUNNING")
+        self.assertEqual(readiness_state["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_RUNNING")
+        self.assertIsNone(readiness_state["debt_floor_generation"])
 
 
 if __name__ == "__main__":
