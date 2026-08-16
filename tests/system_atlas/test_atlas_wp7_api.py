@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import runpy
 from pathlib import Path
 
@@ -8,6 +9,7 @@ from fastapi.testclient import TestClient
 
 from ovc.development.skills.registry import validate_against_schema
 from ovc.system_atlas.api import create_atlas_app, generate_typescript_client
+from ovc.system_atlas.canonical import canonical_sha256
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,6 +17,8 @@ WP6_TEST = ROOT / "tests/system_atlas/test_atlas_wp6_query.py"
 OPENAPI = ROOT / "generated/system_atlas/atlas_openapi_v0_1.json"
 CLIENT = ROOT / "generated/system_atlas/atlas_client_v0_1.ts"
 ENVELOPE_SCHEMA = ROOT / "schemas/system_atlas/atlas_api_envelope_v0_1.schema.json"
+WP7 = ROOT / "docs/programmes/system-atlas-v0-1/wp7"
+EXTERNAL_WP7 = ROOT.parents[1] / "ovc-replay-external-artifacts/system_atlas/generations/wp7/ATLAS_WP7_API_EVIDENCE.json"
 
 
 def setup_api(*, permission_resolver=None, missing_family: str | None = None):
@@ -125,3 +129,21 @@ def test_openapi_and_generated_typescript_are_exact_read_only_outputs() -> None:
     assert methods == {"GET", "POST"}
     assert generate_typescript_client(observed) == CLIENT.read_text(encoding="utf-8")
     assert "write_effect: \"NONE\"" in CLIENT.read_text(encoding="utf-8")
+
+
+def test_wp7_packet_is_canonical_auto_pass_without_console_or_write_authority() -> None:
+    implementation = json.loads((WP7 / "ATLAS_WP7_IMPLEMENTATION_PACKET.json").read_text(encoding="utf-8"))
+    qa = json.loads((WP7 / "ATLAS_WP7_QA_PACKET.json").read_text(encoding="utf-8"))
+    gate = json.loads((WP7 / "ATLAS_G7_GATE_PACKET.json").read_text(encoding="utf-8"))
+    authority = json.loads((WP7 / "ATLAS_WP7_VIT_AUTHORITY_MANIFEST.json").read_text(encoding="utf-8"))
+    dependency = json.loads((WP7 / "ATLAS_WP7_VIT_DEPENDENCY_FRONTIER.json").read_text(encoding="utf-8"))
+
+    assert gate["gate_class"] == "AUTO_NON_RESERVED"
+    assert gate["decision"] == "AUTO_PASS"
+    assert implementation["write_routes"] == 0
+    assert implementation["research_console_binding_created"] is False
+    assert implementation["canonical_assertions_published"] == 0
+    assert authority["logical_id"] == canonical_sha256(authority["payload"])
+    assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
+    assert "NO_RESEARCH_CONSOLE_SOURCE_OR_BINDING" in authority["payload"]["reserved_boundaries"]
+    assert hashlib.sha256(EXTERNAL_WP7.read_bytes()).hexdigest() == qa["external_api_evidence"]["sha256"]
