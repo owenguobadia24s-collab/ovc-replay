@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-genesis-repository-topology-read-model/v1",
+  "programme_id": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
+  "authority_effect": "NONE_DERIVED_REPLACEABLE_READ_MODEL",
+  "portfolio": {
+    "repository": "synthetic/atlas-wp2",
+    "source_commit": "1111111111111111111111111111111111111111"
+  },
+  "programmes": [
+    {"programme_id": "OVC-SYNTHETIC-v0.1"}
+  ],
+  "components": [
+    {"component_id": "GRT.COMP.A", "path": "src/a.py", "blob_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "component_type": "PYTHON_MODULE"},
+    {"component_id": "GRT.COMP.B", "path": "contracts/b.md", "blob_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "component_type": "CONTRACT"},
+    {"component_id": "GRT.COMP.C", "path": "tests/test_c.py", "blob_hash": "cccccccccccccccccccccccccccccccccccccccc", "component_type": "TEST"}
+  ],
+  "component_dependencies": [
+    {"edge_id": "GRT.EDGE.01", "from_id": "GRT.COMP.A", "to_id": "programme:OVC-SYNTHETIC-v0.1", "edge_type": "OWNED_BY", "evidence_class": "SOURCE_EXPLICIT", "source_ref": "src/a.py"},
+    {"edge_id": "GRT.EDGE.02", "from_id": "GRT.COMP.A", "to_id": "GRT.COMP.B", "edge_type": "GOVERNED_BY", "evidence_class": "LINEAGE_EXPLICIT", "source_ref": "src/a.py"},
+    {"edge_id": "GRT.EDGE.03", "from_id": "GRT.COMP.A", "to_id": "GRT.COMP.B", "edge_type": "DEFINED_BY", "evidence_class": "PATH_AND_CONTENT_CORROBORATED", "source_ref": "src/a.py"},
+    {"edge_id": "GRT.EDGE.04", "from_id": "GRT.COMP.C", "to_id": "GRT.COMP.A", "edge_type": "TESTED_BY", "evidence_class": "TEST_CORROBORATED", "source_ref": "tests/test_c.py"},
+    {"edge_id": "GRT.EDGE.05", "from_id": "GRT.COMP.A", "to_id": "GRT.COMP.B", "edge_type": "DEPENDS_ON", "evidence_class": "IMPORT_CORROBORATED", "source_ref": "src/a.py"},
+    {"edge_id": "GRT.EDGE.06", "from_id": "GRT.COMP.A", "to_id": "GRT.COMP.B", "edge_type": "OWNED_BY", "evidence_class": "CANDIDATE_RELATION", "source_ref": "src/a.py"},
+    {"edge_id": "GRT.EDGE.07", "from_id": "GRT.COMP.A", "to_id": "GRT.COMP.B", "edge_type": "GOVERNED_BY", "evidence_class": "INFERRED", "source_ref": "src/a.py"},
+    {"edge_id": "GRT.EDGE.08", "from_id": "GRT.COMP.A", "to_id": "GRT.COMP.B", "edge_type": "REFERENCES", "evidence_class": "UNRESOLVED", "source_ref": "src/a.py"}
+  ],
+  "build_metadata": {
+    "repository": "synthetic/atlas-wp2",
+    "source_commit": "1111111111111111111111111111111111111111",
+    "rebuildable": true
+  },
+  "topology_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}
