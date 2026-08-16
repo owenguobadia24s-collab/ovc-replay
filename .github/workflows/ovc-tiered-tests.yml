@@ -274,6 +274,10 @@ jobs:
                   }
                   continue;
                 }
+                if (candidate.draft) {
+                  core.info(`OVC_FINAL_INTEGRATION_DRAFT_PREDECESSOR_IGNORED: PR #${candidate.number} is draft and cannot own the final-PASS lease.`);
+                  continue;
+                }
                 const checks = await github.rest.checks.listForRef({owner, repo, ref:candidate.head.sha, per_page:100, filter:'latest'});
                 const leaseRun = latestNamedRun(checks.data.check_runs);
                 if (!(leaseRun?.status === 'completed' && leaseRun.conclusion === 'success')) continue;
@@ -314,6 +318,12 @@ jobs:
                   `OVC_FINAL_INTEGRATION_PREDECESSOR_SUPERSEDED: PR #${leaseOwner.number} ` +
                   `lease head ${leaseOwner.headSha}, live head ${terminal.data.head.sha}; lease released.`
                 );
+                leaseOwner = null;
+                continue;
+              }
+              if (terminal.data.draft) {
+                emitPredecessorMetric('DRAFT_RELEASED', leaseOwner);
+                core.info(`OVC_FINAL_INTEGRATION_PREDECESSOR_DRAFT_RELEASED: PR #${leaseOwner.number} is draft; final-PASS lease released.`);
                 leaseOwner = null;
                 continue;
               }
@@ -428,14 +438,12 @@ jobs:
             }
             const baseRef = livePr.data.base.ref;
             const mainNow = await github.rest.repos.getBranch({owner, repo, branch:baseRef});
-            const finalMain = mainNow.data.commit.sha;
-            if (finalMain !== mainSnapshot) {
+            if (mainNow.data.commit.sha !== mainSnapshot) {
               core.setFailed(
-                `OVC_BASE_MOVED_DURING_READINESS: ${baseRef} moved from ${mainSnapshot} to ${finalMain}; ` +
-                `lease releases and automatic lawful reconcile/requeue are required.`
+                `OVC_MAIN_MOVED_DURING_WINDOW: expected ${mainSnapshot}, observed ${mainNow.data.commit.sha}; ` +
+                `this BASE_SENSITIVE result is disposable and must be requeued.`
               );
               return;
             }
-            core.info(`OVC_FINAL_INTEGRATION_WINDOW_PASS: mandatory exact-final assurance passed on ${sha} while ${baseRef} remained ${mainSnapshot}.`);
-            core.info(`OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED: ${sha}; immediate successor advancement is eligible.`);
-            core.info(`OVC_CI_METRIC ${JSON.stringify({schema:'ovc-ci-metric/v1',metric:'final_integration_window_hold_ms',value_ms:Date.now()-startedAt,head_sha:sha,base_sha:mainSnapshot,required_checks:['SIQ/PDC exact-final assurance'],result:'PASS_RELEASED'})}`);
+            core.info(`OVC_SIQ_WINDOW_PASS: ${sha} against stable ${baseRef}@${mainSnapshot}.`);
+            core.info(`OVC_CI_METRIC ${JSON.stringify({schema:'ovc-ci-metric/v1',metric:'final_integration_window_hold_ms',value_ms:Date.now()-startedAt,head_sha:sha,base_sha:mainSnapshot,result:'PASS_BASE_SENSITIVE'})}`);
