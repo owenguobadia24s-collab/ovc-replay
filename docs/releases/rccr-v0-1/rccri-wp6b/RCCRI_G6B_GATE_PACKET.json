@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-rccri-auto-gate-packet/v1",
+  "gate_id": "RCCRI-G6B",
+  "packet_id": "RCCRI-WP6B",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "execution_class": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE",
+  "prerequisites": [
+    "RCCRI-G-PILOT-EXIT_PASS",
+    "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8",
+    "RCCRI-WP6B_SOURCE_ADMISSION_MANIFEST_PRESENT"
+  ],
+  "acceptance_conditions": {
+    "only_currently_governed_sources": true,
+    "explicit_exclusions": true,
+    "pre_post_freeze_visibility_enforced": true,
+    "no_arbitrary_interesting_file_ingestion": true,
+    "negative_controls_preserved": true,
+    "source_fidelity_preserved": true,
+    "owner_authority_preserved": true,
+    "real_source_ec1_authority": "NONE",
+    "path2_real_source_authority": "NOT_GRANTED",
+    "owner_capability_activation": "DENIED",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "tests": "PENDING_CI",
+  "qa": "docs/releases/rccr-v0-1/rccri-wp6b/RCCRI_WP6B_QA_PACKET.json",
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "rollback_defined": true,
+  "recommended_decision": "PASS_IF_REQUIRED_ASSURANCE_GREEN",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "authority_effect": "NONE"
+}
