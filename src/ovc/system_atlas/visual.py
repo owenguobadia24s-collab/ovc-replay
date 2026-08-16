@@ -56,3 +56,38 @@ def load_and_validate_projection(path: Path, repo_root: Path) -> dict[str, Any]:
 
     projection["logical_hash"] = canonical_projection_hash(projection)
     return projection
+
+
+def load_and_validate_workbench_projection(path: Path, repo_root: Path) -> dict[str, Any]:
+    projection = load_and_validate_projection(path, repo_root)
+    if projection.get("schema") != "ovc-system-atlas-workbench-projection/v1":
+        raise ValueError("workbench projection schema mismatch")
+    if projection.get("reality_class") != "CURRENT":
+        raise ValueError("workbench reality class is not CURRENT")
+
+    node_ids = {node["id"] for node in projection["nodes"]}
+    surface_ids = {surface["id"] for surface in projection.get("surface_definitions", [])}
+    if surface_ids != {"architecture", "research", "execution", "authority", "repository", "history"}:
+        raise ValueError("principal workbench surfaces are incomplete")
+    for surface in projection["surface_definitions"]:
+        if not set(surface["node_ids"]).issubset(node_ids):
+            raise ValueError(f'invalid surface membership: {surface["id"]}')
+
+    query_ids = {query["id"] for query in projection.get("query_definitions", [])}
+    expected_queries = {"SEARCH", "TRACE", "DEPENDENCY", "IMPACT", "EXPLAIN", "AUTHORITY", "OWNERSHIP", "WHY_BLOCKED", "HISTORY", "DIFF"}
+    if query_ids != expected_queries:
+        raise ValueError("workbench query catalogue is incomplete")
+    if any(query.get("representations") != ["GRAPH", "TABLE"] for query in projection["query_definitions"]):
+        raise ValueError("query graph/table alternative is incomplete")
+    if projection.get("inspector_tabs") != ["Overview", "Relations", "Implementation", "Authority", "Evidence", "History"]:
+        raise ValueError("Inspector contract is incomplete")
+    if not any(node.get("depth") == 4 for node in projection["nodes"]):
+        raise ValueError("L4 drill-down is absent")
+
+    deep_link = projection.get("deep_link_contract", {})
+    if deep_link.get("source_mutation_effect") != "NONE" or not deep_link.get("typed_context_only"):
+        raise ValueError("deep-link contract attempts a source mutation")
+    presentation = projection.get("presentation_state", {})
+    if presentation.get("authority_effect") != "NONE" or presentation.get("storage") != "BROWSER_LOCAL_ONLY":
+        raise ValueError("presentation state crosses the authority boundary")
+    return projection

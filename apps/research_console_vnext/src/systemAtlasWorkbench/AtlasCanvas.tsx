@@ -1,18 +1,18 @@
 import cytoscape, { type Core, type ElementDefinition } from "cytoscape";
 import { useEffect, useMemo, useRef } from "react";
 import { stableAtlasPosition } from "./layout";
-import { atlasProjection, nodesForTrace } from "./model";
+import { atlasProjection } from "./model";
 import { atlasWorkbenchStyles } from "./styles";
 
 type Props = {
-  traceId: string;
-  search: string;
+  visibleNodeIds: Set<string>;
+  visibleEdgeIds: Set<string>;
   authorityVisible: boolean;
   selectedId: string;
   onSelect: (id: string) => void;
 };
 
-export function AtlasCanvas({ traceId, search, authorityVisible, selectedId, onSelect }: Props) {
+export function AtlasCanvas({ visibleNodeIds, visibleEdgeIds, authorityVisible, selectedId, onSelect }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<Core | null>(null);
   const elements = useMemo<ElementDefinition[]>(() => [
@@ -61,19 +61,16 @@ export function AtlasCanvas({ traceId, search, authorityVisible, selectedId, onS
   useEffect(() => {
     const instance = instanceRef.current;
     if (!instance) return;
-    const traceNodes = nodesForTrace(traceId);
-    const needle = search.trim().toLowerCase();
     instance.batch(() => {
-      instance.elements().removeClass("trace-muted search-hit authority-hidden");
-      if (traceNodes) {
-        instance.nodes().forEach((node) => { if (!traceNodes.has(node.id())) node.addClass("trace-muted"); });
-        instance.edges().forEach((edge) => { if (!traceNodes.has(edge.source().id()) || !traceNodes.has(edge.target().id())) edge.addClass("trace-muted"); });
-      }
-      if (needle) instance.nodes().filter((node) => `${node.data("label")} ${node.data("sourcePath")}`.toLowerCase().includes(needle)).addClass("search-hit");
+      instance.elements().removeClass("query-hidden authority-hidden");
+      instance.nodes().forEach((node) => { if (!visibleNodeIds.has(node.id())) node.addClass("query-hidden"); });
+      instance.edges().forEach((edge) => { if (!visibleEdgeIds.has(edge.id())) edge.addClass("query-hidden"); });
       if (!authorityVisible) instance.elements("[family = 'authority']").addClass("authority-hidden");
       instance.$id(selectedId).select();
     });
-  }, [authorityVisible, search, selectedId, traceId]);
+    const visible = instance.elements().not(".query-hidden").not(".authority-hidden");
+    if (visible.length) instance.fit(visible, 34);
+  }, [authorityVisible, selectedId, visibleEdgeIds, visibleNodeIds]);
 
-  return <div className="atlas-canvas" ref={containerRef} data-testid="atlas-canvas" aria-label="Actual repository System Atlas graph" />;
+  return <div className="atlas-canvas" ref={containerRef} data-testid="atlas-canvas" role="img" aria-label={`Actual repository System Atlas graph with ${visibleNodeIds.size} results`} />;
 }
