@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from ovc.programme_genesis.grt_v0_2.full_enforcement_bounded import replay_full_g3_candidate
+from ovc.programme_genesis.grt_v0_2.full_enforcement_bounded_v2 import replay_full_g3_candidate
 
 
 def main() -> int:
