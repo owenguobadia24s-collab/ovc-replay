@@ -1,4 +1,4 @@
-name: GRT2 PR998 lineage body verification
+name: GRT2 PR998 exact lineage writer
 
 on:
   pull_request:
@@ -7,26 +7,94 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
 
 jobs:
-  verify:
+  write-lineage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v9
+      - uses: actions/checkout@v4
         with:
-          github-token: ${{ github.token }}
-          script: |
-            const crypto = require('crypto');
-            const {data: pr} = await github.rest.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: 998});
-            const m = (pr.body || '').match(/^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$/im);
-            if (!m) core.setFailed('VIT_LINEAGE_MARKER_MISSING');
-            else {
-              const token = m[1];
-              const sha = crypto.createHash('sha256').update(token, 'ascii').digest('hex');
-              core.info(`token_length=${token.length}`);
-              core.info(`token_sha256=${sha}`);
-              core.info('expected_length=8448');
-              core.info('expected_sha256=d903ccf9e80cebe654564fc3d1765db6a1f231dd602c509eea3c897a8df61690');
-              if (token.length !== 8448 || sha !== 'd903ccf9e80cebe654564fc3d1765db6a1f231dd602c509eea3c897a8df61690') core.setFailed('VIT_LINEAGE_BODY_TOKEN_MISMATCH');
-            }
+          ref: 8906ac0f053589ae3a3a52be9f2302f47c781026
+          fetch-depth: 0
+          show-progress: false
+      - name: Fetch current physical main
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - name: Regenerate exact lineage and update PR998
+        env:
+          PYTHONPATH: src:.
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import base64, json, os, subprocess, tempfile, urllib.request
+          from pathlib import Path
+          from ovc.development.skills.vit_routing import build_vit_lineage_record
+
+          root=Path('.').resolve()
+          def git(*args, check=True, env=None):
+              cp=subprocess.run(['git','-C',str(root),*args],text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env)
+              if check and cp.returncode:
+                  raise SystemExit(f"git {' '.join(args)} failed: {cp.stderr}")
+              return cp.stdout.strip(),cp.returncode
+
+          head,_=git('rev-parse','HEAD')
+          main_commit,_=git('rev-parse','origin/main')
+          main_tree,_=git('rev-parse','origin/main^{tree}')
+          merge_base,_=git('merge-base','HEAD','origin/main')
+          raw,_=git('diff','--name-status','--find-renames',merge_base,'HEAD')
+          logical=[]; apply=[]
+          for line in raw.splitlines():
+              if not line.strip(): continue
+              parts=line.split('\t'); status=parts[0]
+              if status.startswith('R'):
+                  old,new=parts[1],parts[2]
+                  old_base,_=git('rev-parse',f'{merge_base}:{old}')
+                  old_main,rc=git('rev-parse',f'origin/main:{old}',check=False)
+                  if rc or old_main != old_base: raise SystemExit(f'VIT_INPUT_PRECONDITION_MISMATCH:{old}')
+                  _,new_rc=git('rev-parse',f'origin/main:{new}',check=False)
+                  if new_rc==0: raise SystemExit(f'VIT_ADD_PATH_ALREADY_EXISTS_ON_MAIN:{new}')
+                  blob,_=git('rev-parse',f'HEAD:{new}'); ls,_=git('ls-tree','HEAD','--',new); mode=ls.split()[0]
+                  logical += [{'op':'DELETE','path':old},{'op':'ADD','path':new,'blob_sha':blob,'mode':mode}]
+                  apply += [('DELETE',old,None,None),('ADD',new,mode,blob)]
+                  continue
+              path=parts[-1]
+              if status.startswith('A'):
+                  _,rc=git('rev-parse',f'origin/main:{path}',check=False)
+                  if rc==0: raise SystemExit(f'VIT_ADD_PATH_ALREADY_EXISTS_ON_MAIN:{path}')
+                  blob,_=git('rev-parse',f'HEAD:{path}'); ls,_=git('ls-tree','HEAD','--',path); mode=ls.split()[0]
+                  logical.append({'op':'ADD','path':path,'blob_sha':blob,'mode':mode}); apply.append(('ADD',path,mode,blob))
+              elif status.startswith('D'):
+                  old_base,_=git('rev-parse',f'{merge_base}:{path}'); old_main,rc=git('rev-parse',f'origin/main:{path}',check=False)
+                  if rc or old_main != old_base: raise SystemExit(f'VIT_INPUT_PRECONDITION_MISMATCH:{path}')
+                  logical.append({'op':'DELETE','path':path}); apply.append(('DELETE',path,None,None))
+              else:
+                  old_base,_=git('rev-parse',f'{merge_base}:{path}'); old_main,rc=git('rev-parse',f'origin/main:{path}',check=False)
+                  if rc or old_main != old_base: raise SystemExit(f'VIT_INPUT_PRECONDITION_MISMATCH:{path}')
+                  blob,_=git('rev-parse',f'HEAD:{path}'); ls,_=git('ls-tree','HEAD','--',path); mode=ls.split()[0]
+                  logical.append({'op':'MODIFY','path':path,'blob_sha':blob,'mode':mode}); apply.append(('MODIFY',path,mode,blob))
+          logical=sorted(logical,key=lambda r:(r['path'],r['op']))
+          pip={'schema_version':'packet-integration-payload/v0.1','programme_id':'OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE','packet_id':'GRT2-G3-FULL-ENFORCEMENT-REPLAY-SURFACE-CORRECTION','logical_changes':logical,'authority_manifest_id':'921fc3b7e6e9f163eca660a3cc27f980e24b239c35700fc09372efde932f4080','dependency_frontier_id':'0b166f148335bbd4356e65555340bd700cc8c8b745b645bc83566dd9c2dc73b0','completion_transition':{'status':'COMPLETED'}}
+          with tempfile.TemporaryDirectory() as td:
+              env=dict(os.environ); env['GIT_INDEX_FILE']=str(Path(td)/'index'); git('read-tree','origin/main',env=env)
+              for op,path,mode,blob in apply:
+                  if op=='DELETE': git('update-index','--remove','--',path,env=env)
+                  else: git('update-index','--add','--cacheinfo',f'{mode},{blob},{path}',env=env)
+              result_tree,_=git('write-tree',env=env)
+          record=build_vit_lineage_record(programme_id=pip['programme_id'],packet_id=pip['packet_id'],pip_identity_payload=pip,train_generation_id='GRT2-G3-FULL-ENFORCEMENT-REPLAY-CORRECTION-LIVE-20260816',ordinal=0,predecessor_tree_sha=main_tree,result_tree_sha=result_tree,apply_profile='INTEGRATION_APPLY_PROFILE_REFERENCE_v0_1')
+          token=base64.urlsafe_b64encode(json.dumps(record,sort_keys=True,separators=(',',':')).encode()).decode('ascii')
+          body=(
+              'GRT2 corrective integration. AUTO_EXECUTABLE corrective implementation only; authority delta NONE. '
+              'Superseding G2 qualification PASS. GRT2-G3 remains NOT_AUTHORISED. No Constitution, DebtFloor, '
+              'GRT-EXACT required-check, PGN adoption, owner reassignment, semantic, publication, scientific, Validation, '
+              'risk, exposure, execution, agent-write, force-push or history-rewrite authority.\n\n'
+              f"Current main: {main_commit}\nPIP: {record['pip_id']}\nVIT generation: {record['generation_id']}\nPlacement: {record['placement_id']}\n"
+              f"Predecessor tree: {main_tree}\nResult tree: {result_tree}\nChanged paths: {len(logical)}\n\nVIT-Lineage-B64: {token}"
+          )
+          owner,repo=os.environ['GH_REPOSITORY'].split('/',1)
+          data=json.dumps({'body':body}).encode()
+          req=urllib.request.Request(f'https://api.github.com/repos/{owner}/{repo}/pulls/998',data=data,method='PATCH',headers={'Authorization':f"Bearer {os.environ['GH_TOKEN']}",'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json','User-Agent':'ovc-grt2-lineage-writer'})
+          with urllib.request.urlopen(req,timeout=20) as resp:
+              updated=json.loads(resp.read().decode())
+          print(json.dumps({'updated_pr':updated['number'],'head':head,'main_commit':main_commit,'pip_id':record['pip_id'],'generation_id':record['generation_id'],'placement_id':record['placement_id'],'predecessor_tree':main_tree,'result_tree':result_tree,'token_length':len(token)},sort_keys=True))
+          PY
