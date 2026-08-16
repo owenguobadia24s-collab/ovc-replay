@@ -1,0 +1,192 @@
+{
+  "$defs": {
+    "transaction": {
+      "additionalProperties": false,
+      "properties": {
+        "assurance_frontier_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "attempt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_frontier_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "expected_predecessor_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "expected_predecessor_tree": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "expected_result_tree": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "materialisation_profile": {
+          "const": "LIVE_PHYSICAL_MAIN"
+        },
+        "ticket_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "train_generation_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "vit_generation_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "vit_generation_id",
+        "ticket_id",
+        "train_generation_id",
+        "expected_predecessor_commit",
+        "expected_predecessor_tree",
+        "expected_result_tree",
+        "authority_frontier_id",
+        "assurance_frontier_id",
+        "materialisation_profile",
+        "attempt"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "ovc-vit-live-physical-transaction-freeze/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "completion_context": {
+      "additionalProperties": false,
+      "properties": {
+        "gate_decision_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "implementation_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "next_packet": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "packet_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "payload_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "programme_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "qa_ref": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "programme_id",
+        "packet_id",
+        "implementation_ref",
+        "qa_ref",
+        "gate_decision_ref",
+        "payload_id",
+        "next_packet"
+      ],
+      "type": "object"
+    },
+    "controller": {
+      "const": "DSAI_VIT_PHYSICAL_CONTROLLER"
+    },
+    "freeze_provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_rule": {
+          "const": "OBSERVED_IDENTITIES_ONLY_NO_UNOBSERVED_TELEMETRY"
+        },
+        "run_attempt": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source": {
+          "const": "VIT_ROUTING_PREFLIGHT_BEFORE_PHYSICAL_WRITE"
+        },
+        "workflow_run_id": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "workflow_run_id",
+        "run_attempt",
+        "source",
+        "evidence_rule"
+      ],
+      "type": "object"
+    },
+    "generation_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "head_sha": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "physical_gateway": {
+      "const": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
+    },
+    "pip_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "placement_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "pr_number": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "schema": {
+      "const": "ovc-vit-live-physical-transaction-freeze/v1"
+    },
+    "transaction": {
+      "$ref": "#/$defs/transaction"
+    },
+    "transaction_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "controller",
+    "physical_gateway",
+    "pr_number",
+    "head_sha",
+    "pip_id",
+    "generation_id",
+    "placement_id",
+    "transaction",
+    "transaction_id",
+    "completion_context",
+    "freeze_provenance",
+    "authority_effect"
+  ],
+  "type": "object"
+}
