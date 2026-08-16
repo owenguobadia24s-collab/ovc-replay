@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-vit-aa0-placement-reuse-actuation-policy/v1",
+  "policy_id": "DSAI3V.VIT.AA0.PLACEMENT.REUSE.ACTUATION.v0.1",
+  "status": "ACTIVE_CONFORMANCE_POLICY",
+  "authority_effect": "NONE",
+  "applies_to": "VIT_MANDATORY_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION",
+  "aa0_identity": "PIP_PLUS_ASSURANCE_HARNESS",
+  "placement_refresh_rule": {
+    "unchanged_payload": "RETAIN_PIP_ID",
+    "unchanged_dependency_frontier": "REQUIRED_FOR_REUSE",
+    "unchanged_authority_frontier": "REQUIRED_FOR_REUSE",
+    "approved_head_movement_receipt": "REQUIRED_FOR_REUSE",
+    "reuse_authorization_builder": "tools/ci/build_vit_aa0_reuse.py",
+    "pr_marker": "VIT-AA0-Reuse-B64",
+    "valid_marker_disposition": "PLACEMENT_ONLY_PIP_REUSE",
+    "missing_or_invalid_marker_disposition": "RUN_AA0_AND_RECORD_REUSE_ACTUATION_MISS",
+    "aa1": "RENEW",
+    "aa2": "RENEW",
+    "aa3": "REQUIRE_POST_WRITE_EQUIVALENCE"
+  },
+  "harness_identity": {
+    "builder": "tools/ci/aa0_harness_identity.py",
+    "compute_phase": "AFTER_EXACT_HEAD_CHECKOUT_BEFORE_CACHE_RESTORE",
+    "single_value_per_job": true,
+    "restore_and_save_must_share_value": true,
+    "includes_git_commit_or_main_identity": false,
+    "missing_required_input": "FAIL_CLOSED"
+  },
+  "prohibited_shortcuts": [
+    "reuse AA0 solely because PIP text looks unchanged",
+    "include physical main SHA or VIT placement in AA0 harness identity",
+    "silently treat a missing reuse marker as authorized",
+    "skip AA1 or AA2 on placement refresh",
+    "rebuild payload solely because physical main advanced"
+  ],
+  "source_policy": "registries/development/skills/VIT_ASSURANCE_DECOUPLING_POLICY_v0_1.json",
+  "rollback": "Disable this actuation correction and revert to fresh AA0 on every generation while preserving VIT payload identity and all evidence."
+}
