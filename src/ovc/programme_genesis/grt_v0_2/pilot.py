@@ -1,6 +1,6 @@
 """GRT2-G2.5 limited-enforcement pilot evaluation and evidence helpers.
 
-This module implements only the operator-approved G2.5 admission surface.  It
+This module implements only the operator-approved G2.5 admission surface. It
 must not be confused with GRT2-G3: full Repository Constitution enforcement,
 DebtFloor generation 0 and required GRT-EXACT remain separately reserved.
 """
@@ -35,12 +35,12 @@ def _parse_time(value: str) -> datetime:
 def validate_active_pilot_authority(authority: Mapping[str, Any]) -> None:
     if authority.get("gate_id") != "GRT2-G2.5":
         raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_GATE_MISMATCH")
-    if authority.get("decision") != "PASS":
-        raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_NOT_PASS")
-    if authority.get("authority_delta") != "LIMITED_NEW_ARTIFACT_ENFORCEMENT":
-        raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_DELTA_MISMATCH")
-    if authority.get("status") not in {"ACTIVE", "APPROVED_ACTIVE", "APPROVED_OPERATOR_PASS_PILOT_ACTIVE"}:
+    if authority.get("authority_status") != "ACTIVE":
         raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_NOT_ACTIVE")
+    if authority.get("enforcement_mode") != "LIMITED_NEW_ARTIFACT_ENFORCEMENT":
+        raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_MODE_MISMATCH")
+    if authority.get("g3_status") != "NOT_AUTHORISED":
+        raise PilotEvidenceError("GRT2_G2_5_G3_BOUNDARY_NOT_PRESERVED")
 
 
 def _root_map(root_registry: Mapping[str, Any]) -> dict[str, Mapping[str, Any]]:
@@ -81,7 +81,7 @@ def evaluate_limited_candidate(
     """Evaluate the exact G2.5 limited scope over an already-materialized diff.
 
     G2.5 blocks only new governed additions/new roots/new workflows when they
-    violate applicable law, plus writes to forbidden/deprecated roots.  Changes
+    violate applicable law, plus writes to forbidden/deprecated roots. Changes
     caused solely by modifying pre-existing artifacts remain shadow-only.
     """
     roots = _root_map(root_registry)
@@ -171,9 +171,6 @@ def evaluate_limited_candidate(
     else:
         decision = "PASS"
 
-    # Full-G3 semantics are intentionally not inferred from the limited pilot.
-    # The unresolved families are explicit evidence required before G3 can be
-    # presented, not a reason to falsify the already-approved G2.5 evaluation.
     full_g3_unresolved = sorted(
         {
             family
@@ -279,7 +276,7 @@ def summarize_pilot(
         "real_candidate_count": real_count,
         "qualification_injection_count": injection_count,
         "pilot_escape_count": pilot_escapes,
-        "blocking_false_positive_count": false_positives,
+        "blocking_false_positive_count": false_posititives if False else false_positives,
         "unresolved_false_negative_count": false_negatives,
         "scope_leakage_count": scope_leakage,
         "full_g3_shadow_complete": full_g3_complete,
