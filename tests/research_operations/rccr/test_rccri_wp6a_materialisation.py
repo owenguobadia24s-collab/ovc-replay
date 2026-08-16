@@ -63,12 +63,22 @@ def test_wp6a_review_workaround_and_resource_evidence_are_non_authoritative():
     assert review["authority_effect"] == workaround["authority_effect"] == actuals["authority_effect"] == "NONE"
 
 
-def test_wp6a_programme_state_denies_scaleout_and_routes_to_independent_review():
+def test_wp6a_programme_state_denies_scaleout_and_routes_to_lawful_next_operator_gate():
     state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_7.json")
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
+    reviewers = load("docs/releases/rccr-v0-1/rccri-wp0/RCCRI_REVIEWER_BINDINGS.json")
+    adversarial = {item["gate"]: item for item in reviewers["bindings"]}["RCCRI-G-ADVERSARIAL-REVIEW"]
     assert state["scaleout_authority"] == "DENIED"
     assert state["real_source_ec1_authority"] == "NONE"
     assert state["validation"] == "LOCKED_UNCONSUMED"
     assert state["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
-    assert pointer["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
+    if adversarial["decision"] == "PENDING":
+        assert pointer["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
+    else:
+        assert adversarial["decision"] == "PASS"
+        decision = load(adversarial["decision_ref"])
+        assert decision["decision_instruction"] == "OVC APPROVE RCCRI-G-ADVERSARIAL-REVIEW"
+        assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
     assert pointer["scaleout_authority"] == "DENIED"
+    assert pointer["real_source_ec1_authority"] == "NONE"
+    assert pointer["validation"] == "LOCKED_UNCONSUMED"
