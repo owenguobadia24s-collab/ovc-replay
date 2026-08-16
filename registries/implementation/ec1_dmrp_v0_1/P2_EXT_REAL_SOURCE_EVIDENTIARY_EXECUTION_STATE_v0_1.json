@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "packet_id": "P2-EXT-REAL-SOURCE-EVIDENTIARY-EXECUTION-0.1",
+  "programme_id": "OVC-EC1-DMRP-CONFORMANCE-v0.1",
+  "plan_id": "OVC-EC1-DMRP-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "plan_version": "0.1_REVISED_1_RATIFIED",
+  "status": "BLOCKED",
+  "prerequisites": [
+    "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1_PASS@04b379adee8b584e841b24e83883aed33e090c61",
+    "DMRPI-GREAL-EC1_PASS_REQUIRED_FOR_EC1_REAL_SOURCE_EXECUTION"
+  ],
+  "authority_required": "BOUNDED_REAL_SOURCE_PATH2_AUTHORITY_APPROVED_BUT_UPSTREAM_EC1_SOURCE_AUTHORITY_REQUIRED",
+  "authority_delta": "NONE_BLOCKER_RECORD_ONLY",
+  "baseline_commit": "04b379adee8b584e841b24e83883aed33e090c61",
+  "branch": "research/p2-ext-real-source-evidentiary-execution-v0-1",
+  "candidate_commit": "PENDING_BLOCKER_RECORD_HEAD",
+  "tests": [],
+  "qa_packet": "docs/releases/ec1-dmrp-conformance-v0-1/path2-external-theory/p2-ext-real-source-execution/P2_EXT_REAL_SOURCE_EXECUTION_PREFLIGHT_BLOCKER_v0_1.json",
+  "decision_record": null,
+  "blockers": [
+    {
+      "blocker_id": "P2-EXT-RS-EXEC-UPSTREAM-GREAL-001",
+      "class": "UPSTREAM_AUTHORITY_MISSING",
+      "required_gate": "DMRPI-GREAL-EC1",
+      "required_authority": [
+        "DMRP_REAL_EC1_EXECUTION",
+        "RESEARCH_OPERATIONS_DMRP_EC1_BOUNDED_APPEND"
+      ],
+      "current_state": {
+        "dmrpi_gate_status": "GATE_READY",
+        "dmrp_real_ec1_execution": "NONE",
+        "research_operations_dmrp_ec1_bounded_append": "NONE"
+      },
+      "effect": "No exact EC1 real-source ExperimentRecord may become effective and no real-source Path-2 observation or durable append may begin."
+    }
+  ],
+  "effective_preregistration_count": 0,
+  "real_source_result_count": 0,
+  "p2_6_candidate_formation": "NOT_AUTHORISED",
+  "research_candidate_generation_freeze": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
+  "next_packet": "DMRPI-GREAL-EC1",
+  "smallest_lawful_resolution": "Operator disposition of DMRPI-GREAL-EC1. If PASS, resume P2-EXT-REAL-SOURCE-EVIDENTIARY-EXECUTION-0.1 and perform exact binding before observation."
+}
