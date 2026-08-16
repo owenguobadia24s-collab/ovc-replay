@@ -265,6 +265,7 @@ def test_wp5_gate_and_vit_bindings_are_durable_qualified_history() -> None:
     qa = load(packet_root / "ATLAS_WP5_QA_PACKET.json")
     authority = load(packet_root / "ATLAS_WP5_VIT_AUTHORITY_MANIFEST.json")
     dependency = load(packet_root / "ATLAS_WP5_VIT_DEPENDENCY_FRONTIER.json")
+    reanchor = load(packet_root / "ATLAS_WP5_REANCHOR_RECORD.json")
     state = load(ROOT / "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json")
     assert gate["decision"] == "AUTO_PASS"
     assert gate["qualification_generation_current"] is False
@@ -272,4 +273,6 @@ def test_wp5_gate_and_vit_bindings_are_durable_qualified_history() -> None:
     assert qa["external_generation_evidence"]["generation_root_hash"] == gate["qualification_generation_root"]
     assert authority["logical_id"] == canonical_sha256(authority["payload"])
     assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
+    assert reanchor["material_change"] is True
+    assert reanchor["atlas_generation_semantics_changed"] is False
     assert state["tests"]["wp5_g4_followups"] == "PASS_OWNER_ROLE_AND_GIT_DERIVED_CURRENTNESS"
