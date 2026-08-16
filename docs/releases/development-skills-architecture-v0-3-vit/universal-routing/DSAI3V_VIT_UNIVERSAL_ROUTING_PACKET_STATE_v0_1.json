@@ -4,7 +4,7 @@
   "programme_id": "OVC-DSAI-VIT-v0.3",
   "plan_id": "OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
   "plan_version": "0.1-R1-RATIFIED",
-  "status": "APPROVED",
+  "status": "COMPLETED",
   "prerequisites": [
     "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1 ACTIVE",
     "DEFAULT_EXECUTION_SUBSTRATE ACTIVE",
@@ -28,12 +28,35 @@
   },
   "qa_packet": "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_UNIVERSAL_ROUTING_QA_v0_1.json",
   "decision_record": "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_UNIVERSAL_ROUTING_DELEGATED_PASS_v0_1.json",
-  "merge_commit": null,
+  "merge_commit": "1afae5de5134003b756ae3e077ff628018896491",
   "blockers": [],
   "live_reanchor_events": [
     "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-REANCHOR-001",
     "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-REANCHOR-002",
-    "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-REANCHOR-003"
+    "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-REANCHOR-003",
+    "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-C-PLACEMENT-REANCHOR"
   ],
-  "next_packet": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-A"
+  "live_smokes": [
+    {
+      "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-A",
+      "pr": 967,
+      "merge_commit": "0b159bd853b712ac8a575d6d573c4c84470c7407",
+      "result": "PASS"
+    },
+    {
+      "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-B",
+      "pr": 968,
+      "merge_commit": "2f6042458d580122d8b6014c38ffd621cee80676",
+      "result": "PASS"
+    },
+    {
+      "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-C",
+      "pr": 969,
+      "merge_commit": "b29af1be79903c9c07dae6b842a03eb5267593fc",
+      "result": "PASS_PLACEMENT_RECOMPUTE_ONLY_ZERO_PAYLOAD_REBUILD"
+    }
+  ],
+  "closeout": "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_UNIVERSAL_ROUTING_CLOSEOUT_v0_1.json",
+  "final_main_after_live_smokes": "b29af1be79903c9c07dae6b842a03eb5267593fc",
+  "next_packet": null
 }
