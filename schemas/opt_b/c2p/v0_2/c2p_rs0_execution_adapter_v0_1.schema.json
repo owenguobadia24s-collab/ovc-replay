@@ -1,0 +1,89 @@
+{
+  "$defs": {
+    "c2Binding": {
+      "additionalProperties": true,
+      "properties": {
+        "authority_blob_sha": {"const": "bae84dc11b4036b275982cb4b1d43b1eb9864d1c"},
+        "authority_id": {"const": "AUTH.OPT-B.C2.vNext.ACTIVE.RUNTIME.v0.1"},
+        "package_id": {"const": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1"},
+        "package_sha256": {"const": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"}
+      },
+      "required": ["authority_id","package_id","package_sha256","authority_blob_sha"],
+      "type": "object"
+    },
+    "fact": {
+      "additionalProperties": false,
+      "properties": {
+        "c2e": {"additionalProperties":false,"properties":{"available":{"type":"boolean"},"compatible":{"type":["boolean","null"]},"declared_dependency":{"type":"boolean"},"lineage_id":{"type":["string","null"]}},"required":["declared_dependency","available","compatible","lineage_id"],"type":"object"},
+        "clock": {"enum":["15M","2H_A_L"]},
+        "continuity_segment_id":{"type":["string","null"]},
+        "continuity_status":{"enum":["SEGMENT_START","CONTIGUOUS","GAP_RESET","CLOSURE_BOUNDARY","PARTITION_BOUNDARY","UNKNOWN_BREAK"]},
+        "cutoff_index":{"minimum":0,"type":"integer"},
+        "evaluation_cutoff":{"minLength":1,"type":"string"},
+        "fact_id":{"minLength":1,"type":"string"},
+        "first_valid_time":{"minLength":1,"type":"string"},
+        "geometry_compatibility_key":{"minLength":1,"type":"string"},
+        "geometry_kind_id":{"minLength":1,"type":"string"},
+        "geometry_signature":{"minLength":1,"type":"string"},
+        "instrument":{"const":"GBPUSD"},
+        "lineage_event":{"additionalProperties":false,"properties":{"kind":{"enum":["NONE","SPLIT","MERGE"]},"parent_source_object_keys":{"items":{"minLength":1,"type":"string"},"type":"array","uniqueItems":true}},"required":["kind","parent_source_object_keys"],"type":"object"},
+        "relation_topology_signature":{"minLength":1,"type":"string"},
+        "schema":{"const":"ovc-c2p2-rs0-source-fact/v1"},
+        "side":{"enum":["BID","ASK"]},
+        "source_object_key":{"minLength":1,"type":"string"},
+        "source_refs":{"items":{"minLength":1,"type":"string"},"minItems":1,"type":"array","uniqueItems":true},
+        "structural_role_id":{"minLength":1,"type":"string"},
+        "upstream_invalidated":{"type":"boolean"}
+      },
+      "required":["schema","fact_id","instrument","side","clock","cutoff_index","first_valid_time","evaluation_cutoff","source_object_key","structural_role_id","geometry_kind_id","geometry_signature","relation_topology_signature","geometry_compatibility_key","continuity_status","continuity_segment_id","source_refs","c2e","lineage_event"],
+      "type":"object"
+    },
+    "locator": {
+      "additionalProperties":false,
+      "properties":{
+        "c2":{"additionalProperties":true,"type":"object"},
+        "c2e":{"type":["object","null"]},
+        "external_root_env":{"const":"OVC_EXTERNAL_ARTIFACT_ROOT"},
+        "gate_id":{"const":"C2P2-RS0-GRUN"},
+        "legacy_c2_fallback":{"const":false},
+        "locator_id":{"pattern":"^[0-9a-f]{64}$","type":"string"},
+        "materialisation_status":{"const":"COMPLETE"},
+        "population":{"$ref":"#/$defs/population"},
+        "programme_id":{"const":"OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1"},
+        "provider_fetch":{"const":false},
+        "provider_intake":{"const":false},
+        "reconstruction":{"const":false},
+        "schema":{"const":"ovc-c2p2-rs0-source-locator/v1"}
+      },
+      "required":["schema","programme_id","gate_id","external_root_env","provider_fetch","provider_intake","legacy_c2_fallback","reconstruction","materialisation_status","population","c2","c2e"],
+      "type":"object"
+    },
+    "manifest": {
+      "additionalProperties":false,
+      "properties":{
+        "c2_binding":{"$ref":"#/$defs/c2Binding"},
+        "fact_count":{"minimum":0,"type":"integer"},
+        "fact_shards":{"items":{"additionalProperties":false,"properties":{"record_count":{"minimum":0,"type":"integer"},"relative_path":{"minLength":1,"type":"string"},"sha256":{"pattern":"^[0-9a-f]{64}$","type":"string"}},"required":["relative_path","sha256","record_count"],"type":"object"},"minItems":1,"type":"array"},
+        "facts_sha256":{"pattern":"^[0-9a-f]{64}$","type":"string"},
+        "legacy_c2_fallback":{"const":false},
+        "population":{"$ref":"#/$defs/population"},
+        "programme_id":{"const":"OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1"},
+        "provider_intake":{"const":false},
+        "reconstruction":{"const":false},
+        "schema":{"const":"ovc-c2p2-rs0-source-materialisation-manifest/v1"}
+      },
+      "required":["schema","programme_id","population","c2_binding","legacy_c2_fallback","reconstruction","provider_intake","fact_shards","fact_count","facts_sha256"],
+      "type":"object"
+    },
+    "population": {
+      "additionalProperties":true,
+      "properties":{"clocks":{"const":["15M","2H_A_L"]},"instrument":{"const":"GBPUSD"},"interval":{"const":"[2021-01-01T00:00:00Z,2024-01-01T00:00:00Z)"},"research_role":{"const":"DISCOVERY_SHADOW_ONLY"},"sides":{"const":["BID","ASK"]}},
+      "required":["research_role","instrument","sides","clocks","interval"],
+      "type":"object"
+    }
+  },
+  "$id":"c2p-rs0-execution-adapter-v0.1",
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "oneOf":[{"$ref":"#/$defs/fact"},{"$ref":"#/$defs/locator"},{"$ref":"#/$defs/manifest"}],
+  "title":"C2P2 RS0 execution adapter records v0.1"
+}
