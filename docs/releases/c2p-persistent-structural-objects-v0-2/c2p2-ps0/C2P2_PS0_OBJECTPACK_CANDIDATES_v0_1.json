@@ -1,0 +1,68 @@
+{
+  "schema": "ovc-c2p2-ps0-objectpack-candidates/v1",
+  "programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
+  "research_question_id": "C2P2-PS0-RQ1",
+  "selection_state": "NONE_SELECTED",
+  "active_object_pack_id": null,
+  "real_source_evaluated": false,
+  "validation_consumed": false,
+  "candidate_hash_profile": "sha256(canonical-json-sort-keys-no-whitespace over candidate object excluding candidate_logical_hash)",
+  "candidates": [
+    {
+      "candidate_id": "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+      "status": "UNSELECTED_RESEARCH_CANDIDATE",
+      "activation_eligible": false,
+      "scientific_intent": "Minimise false identity continuity by requiring exact structural-role and geometry-signature continuity plus uninterrupted admissible chronology.",
+      "hard_scope": ["instrument", "side", "clock", "structural_role_id", "geometry_kind_id"],
+      "candidate_extraction": {"source": "C2_OR_DECLARED_C2E_FACTS_ONLY", "requires_first_valid": true},
+      "tracklet": {"open": "first admissible candidate", "update": "same hard scope and exact geometry signature", "ambiguity": "preserve", "confirm": {"eligible_observation_count": 3}},
+      "identity_predicates": ["same_hard_scope", "same_geometry_signature", "no_terminal_break", "chronology_contiguous", "no_equally_lawful_competitor"],
+      "continuity": {"gap_policy": "CENSOR", "dormancy": "NOT_ALLOWED_BEFORE_CONFIRMATION", "reappearance": "SAME_ID_ONLY_IF_PREVIOUS_STATE_DORMANT_AND_ALL_IDENTITY_PREDICATES_PASS"},
+      "retirement": {"terminal_on": ["explicit_upstream_invalidation", "declared_role_or_geometry_kind_change", "split_or_merge_parent_disposition"]},
+      "c2e_role": "OPTIONAL_EVIDENCE_NOT_IDENTITY_AUTHORITY",
+      "forbidden": ["family", "C3_semantics", "OPT_C", "OPT_D", "Validation", "outcomes", "future_information", "scalar_similarity_score"],
+      "rollback": "forward_supersede_candidate_only",
+      "candidate_logical_hash": "a96205038974f4280092afd2a464bfdc7ff7095a9b196617b9eaaf1c6ccd0ffd"
+    },
+    {
+      "candidate_id": "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+      "status": "UNSELECTED_RESEARCH_CANDIDATE",
+      "activation_eligible": false,
+      "scientific_intent": "Permit bounded geometry evolution while preserving exact role, relation topology, chronology and unambiguous continuity.",
+      "hard_scope": ["instrument", "side", "clock", "structural_role_id", "geometry_kind_id"],
+      "candidate_extraction": {"source": "C2_OR_DECLARED_C2E_FACTS_ONLY", "requires_first_valid": true},
+      "tracklet": {"open": "first admissible candidate", "update": "same hard scope, same registered relation topology, geometry may evolve within exact owner-declared compatible state", "ambiguity": "preserve", "confirm": {"eligible_observation_count": 3}},
+      "identity_predicates": ["same_hard_scope", "same_relation_topology", "owner_declared_geometry_compatible", "no_terminal_break", "chronology_contiguous", "no_equally_lawful_competitor"],
+      "continuity": {"gap_policy": "CENSOR", "dormancy": "ALLOWED_AFTER_CONFIRMATION", "reappearance": "SAME_ID_ONLY_IF_DORMANT_AND_PREDICATES_REESTABLISHED"},
+      "retirement": {"terminal_on": ["explicit_upstream_invalidation", "declared_role_change", "geometry_kind_incompatibility", "split_or_merge_parent_disposition"]},
+      "c2e_role": "OPTIONAL_PHASE_AND_BOUNDARY_EVIDENCE_NOT_IDENTITY_AUTHORITY",
+      "forbidden": ["family", "C3_semantics", "OPT_C", "OPT_D", "Validation", "outcomes", "future_information", "scalar_similarity_score"],
+      "rollback": "forward_supersede_candidate_only",
+      "candidate_logical_hash": "eb6cc46d9f22ef3c6257f30eb61a16030b7cf493acf07c436b8ba904a8adb770"
+    },
+    {
+      "candidate_id": "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1",
+      "status": "UNSELECTED_RESEARCH_CANDIDATE",
+      "activation_eligible": false,
+      "scientific_intent": "Test whether declared optional C2E lifecycle evidence improves persistent-object continuity decisions while preserving a lawful C2-only base route and never allowing episode identity to substitute for object identity.",
+      "hard_scope": ["instrument", "side", "clock", "structural_role_id", "geometry_kind_id"],
+      "candidate_extraction": {"source": "C2_WITH_OPTIONAL_DECLARED_C2E_FACTS", "requires_first_valid": true},
+      "tracklet": {"open": "first admissible candidate", "update": "same hard scope with owner-declared compatible geometry; if an explicit episode-relative role declares C2E dependency, compatible C2E lineage/boundary evidence is additionally required", "ambiguity": "preserve", "confirm": {"eligible_observation_count": 3}},
+      "identity_predicates": ["same_hard_scope", "owner_declared_geometry_compatible", "c2e_lineage_compatible_if_declared", "no_terminal_break", "chronology_contiguous", "no_equally_lawful_competitor"],
+      "continuity": {"gap_policy": "CENSOR", "dormancy": "ALLOWED_AFTER_CONFIRMATION", "reappearance": "SAME_ID_ONLY_IF_DORMANT_AND_ALL_DECLARED_PREDICATES_REESTABLISHED"},
+      "retirement": {"terminal_on": ["explicit_upstream_invalidation", "declared_role_change", "geometry_kind_incompatibility", "declared_c2e_dependency_incompatibility", "split_or_merge_parent_disposition"]},
+      "c2e_role": "OPTIONAL_BY_DEFAULT_REQUIRED_ONLY_FOR_EXPLICIT_EPISODE_RELATIVE_OBJECT_ROLE_NEVER_SUFFICIENT_ALONE",
+      "forbidden": ["family", "C3_semantics", "OPT_C", "OPT_D", "Validation", "outcomes", "future_information", "scalar_similarity_score"],
+      "rollback": "forward_supersede_candidate_only",
+      "candidate_logical_hash": "1341b42b39638f9fc10bb84b841597c9254353270240ff683be264c061a24c17"
+    }
+  ],
+  "non_authority": {
+    "preferred_candidate": null,
+    "winner": null,
+    "selector": null,
+    "threshold_promotion": "DENIED",
+    "semantic_promotion": "DENIED",
+    "real_source_run": "DENIED"
+  }
+}
