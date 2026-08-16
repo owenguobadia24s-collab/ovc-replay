@@ -108,14 +108,15 @@ def test_programme_pointer_preserves_pilot_exit_history_while_successor_advances
     assert historical["last_merge_commit"] == "bd2a5af60d2f26320e873e7cd72875397b85a9d7"
     assert historical["next_packet"] == "RCCRI-WP6B"
 
-    # CURRENT_STATE_POINTER is successor-aware. Later owner authority is descriptive input only;
-    # RCCR's consumption and activation firewalls remain closed.
+    # The successor pointer advances to WP7B only after G6B PASS/integration and preserves all owner firewalls.
     assert pointer["status"] == "QA_REVIEW"
-    assert pointer["current_packet"] == "RCCRI-WP6B"
-    assert pointer["current_gate"] == "RCCRI-G6B"
+    assert pointer["current_packet"] == "RCCRI-WP7B"
+    assert pointer["current_gate"] == "RCCRI-G7B"
+    assert pointer["last_completed_packet"] == "RCCRI-WP6B"
+    assert pointer["last_merge_commit"] == "34d08c26061f8548346bdec101e2af6f3138f9bc"
     assert pointer["operator_pending"] == []
     assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
-    assert pointer["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
+    assert pointer["authorized_follow_on_packets"] == ["RCCRI-WP7B", "RCCRI-WP8"]
     assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["owner_authority_frontier"]["path2_external"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
