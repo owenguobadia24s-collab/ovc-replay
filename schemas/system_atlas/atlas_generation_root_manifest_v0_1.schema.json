@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_generation_root_manifest_v0_1.schema.json",
+  "title": "Atlas Generation Root Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "programme_id", "graph_id", "graph_logical_hash", "generation_id", "repository_commit", "repository_tree", "completeness_profile", "court_record_status", "partitions", "counts", "source_currentness_proof_hash", "predecessor_root_hash", "retention_status", "authority_effect", "root_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-generation-root-manifest/v1"},
+    "programme_id": {"const": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"},
+    "graph_id": {"type": "string", "minLength": 1},
+    "graph_logical_hash": {"$ref": "#/$defs/sha256"},
+    "generation_id": {"type": "string", "minLength": 1},
+    "repository_commit": {"$ref": "#/$defs/sha40"},
+    "repository_tree": {"$ref": "#/$defs/sha40"},
+    "completeness_profile": {"type": "string", "minLength": 1},
+    "court_record_status": {"enum": ["SYNTHETIC_NOT_COURT_RECORD", "EXACT_GIT_TREE"]},
+    "partitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ATLAS_PUBLIC_METADATA", "ATLAS_INTERNAL", "ATLAS_RESTRICTED"],
+      "properties": {
+        "ATLAS_PUBLIC_METADATA": {"$ref": "#/$defs/partition"},
+        "ATLAS_INTERNAL": {"$ref": "#/$defs/partition"},
+        "ATLAS_RESTRICTED": {"$ref": "#/$defs/partition"}
+      }
+    },
+    "counts": {"$ref": "#/$defs/counts"},
+    "source_currentness_proof_hash": {"$ref": "#/$defs/sha256"},
+    "predecessor_root_hash": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "retention_status": {"const": "PROVISIONAL_RETAIN_ALL_NO_DESTRUCTIVE_COMPACTION"},
+    "authority_effect": {"const": "NONE_CONTENT_ADDRESSED_READ_ONLY_GENERATION"},
+    "root_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha40": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entities", "relationships", "assertions", "evidence_references", "conflicts"],
+      "properties": {
+        "entities": {"type": "integer", "minimum": 0},
+        "relationships": {"type": "integer", "minimum": 0},
+        "assertions": {"type": "integer", "minimum": 0},
+        "evidence_references": {"type": "integer", "minimum": 0},
+        "conflicts": {"type": "integer", "minimum": 0}
+      }
+    },
+    "partition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["partition_hash", "manifest_sha256", "counts"],
+      "properties": {
+        "partition_hash": {"$ref": "#/$defs/sha256"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "counts": {"$ref": "#/$defs/counts"}
+      }
+    }
+  }
+}
