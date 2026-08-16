@@ -59,13 +59,12 @@ def _stable_source_ref(value: Any) -> str:
 
 
 def anomaly_subject_projection(anomaly: Mapping[str, Any], topology: Mapping[str, Any]) -> dict[str, Any]:
-    """Project a v0.1 observer anomaly onto stable source subjects.
+    """Project an observer anomaly onto a stable source subject.
 
-    The observer anomaly ID is intentionally *not* used as lineage identity: it
-    includes descriptive payload that may change as repository denominators move.
-    Component paths, source locators and source-explicit programme IDs are kept so
-    historical B0 members remain comparable after scanner evolution without
-    replaying the historical source through today's scanner.
+    The observer anomaly ID and content blob are intentionally excluded: both may
+    change under ordinary lawful repository evolution. Source evidence is the
+    preferred subject locator because the frozen B0 members retain it exactly;
+    component paths are used only when no source evidence is available.
     """
     paths = _component_path_map(topology)
     component_paths = sorted(
@@ -74,10 +73,10 @@ def anomaly_subject_projection(anomaly: Mapping[str, Any], topology: Mapping[str
         if str(component_id) in paths
     )
     source_refs = sorted({_stable_source_ref(x) for x in anomaly.get("source_evidence", [])})
+    stable_subjects = source_refs if source_refs else component_paths
     return {
         "anomaly_code": str(anomaly.get("anomaly_code", "")),
-        "component_paths": component_paths,
-        "source_refs": source_refs,
+        "source_subjects": stable_subjects,
         "programme_ids": sorted(str(x) for x in anomaly.get("affected_programme_ids", [])),
     }
 
@@ -132,11 +131,10 @@ def baseline_topology_from_member_records(rows: Sequence[Mapping[str, Any]]) -> 
 def anomaly_extent(anomaly: Mapping[str, Any]) -> dict[str, int]:
     """Return conservative measurable extent from observer evidence.
 
-    This is measurement evidence, not constitutional debt authority. Binary
-    findings receive extent 1. Where the live observer explicitly reports a
-    count in its detail, that count is retained so expansion cannot be hidden.
-    Historical B0 member records intentionally carry only source identity and
-    therefore remain one immutable observer condition each.
+    Live observer evidence may expose a measurable within-condition extent. Frozen
+    B0 member records preserve exact warning identity but not the old scanner's
+    mutable detail payload, so they are binary conditions and are never assigned a
+    fabricated historical count.
     """
     code = str(anomaly.get("anomaly_code", ""))
     if code == "UNRESOLVED_DEPENDENCY" and anomaly.get("detail") is not None:
@@ -163,16 +161,30 @@ def _extent_relation(previous: Mapping[str, int], current: Mapping[str, int]) ->
     return "MATERIAL_CHANGED"
 
 
+def _condition_extent_relation(previous: Mapping[str, Any], current: Mapping[str, Any]) -> str:
+    """Compare extent only where the historical source actually preserved it.
+
+    A frozen B0 member proves one historical observer condition existed. It does
+    not preserve enough information to reconstruct a numeric sub-extent under the
+    evolved scanner. Stable B0/current subjects are therefore compared as binary
+    condition continuity. Novel subjects remain fully fail-closed transition-debt
+    candidates.
+    """
+    if previous.get("baseline_member_id") is not None:
+        return "UNCHANGED"
+    return _extent_relation(anomaly_extent(previous), anomaly_extent(current))
+
+
 def reconcile_observer_transition_candidates(
     *, baseline_topology: Mapping[str, Any], current_topology: Mapping[str, Any]
 ) -> dict[str, Any]:
     """Reconcile observer conditions without pretending they are v0.2 findings.
 
-    Exact stable-subject matches prove observer continuity/reduction/expansion.
-    Novel conditions are transition-debt *candidates* and still require a
-    source-backed v0.2 constitutional rule mapping before they can be declared
-    actionable debt or lawful non-debt. This fail-closed distinction prevents an
-    empty ledger from becoming a fabricated zero-debt claim.
+    Exact stable-subject matches prove observer continuity. Novel conditions are
+    transition-debt *candidates* and still require a source-backed v0.2
+    constitutional rule mapping before they can be declared actionable debt or
+    lawful non-debt. This fail-closed distinction prevents an empty ledger from
+    becoming a fabricated zero-debt claim.
     """
     baseline_rows = list(baseline_topology.get("anomalies", []))
     current_rows = list(current_topology.get("anomalies", []))
@@ -184,7 +196,7 @@ def reconcile_observer_transition_candidates(
     expanded: list[str] = []
     material_changed: list[str] = []
     for key in sorted(set(baseline_by_key) & set(current_by_key)):
-        relation = _extent_relation(anomaly_extent(baseline_by_key[key]), anomaly_extent(current_by_key[key]))
+        relation = _condition_extent_relation(baseline_by_key[key], current_by_key[key])
         {"UNCHANGED": unchanged, "REDUCED": reduced, "EXPANDED": expanded, "MATERIAL_CHANGED": material_changed}[relation].append(key)
 
     resolved = sorted(set(baseline_by_key) - set(current_by_key))
