@@ -4,11 +4,10 @@ import json
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[3]
 WP3 = ROOT / "docs/programmes/grt-v0-2/wp3"
 STATE = ROOT / "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_6.json"
-CURRENT_STATE = ROOT / "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_11.json"
+CURRENT_STATE = ROOT / "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_13.json"
 POINTER = ROOT / "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json"
 
 
@@ -43,7 +42,7 @@ class GRT2Stack797CloseoutTests(unittest.TestCase):
         self.assertEqual(decision["g2_status"], "NOT_EVALUATED")
         self.assertEqual(decision["reserved_authority_effect"], "NONE")
 
-    def test_stack_closeout_state_remains_historical_after_g2_5_evidence_advances(self) -> None:
+    def test_stack_closeout_state_remains_historical_while_correction_is_current(self) -> None:
         state = json.loads(STATE.read_text(encoding="utf-8"))
         current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
@@ -53,13 +52,14 @@ class GRT2Stack797CloseoutTests(unittest.TestCase):
         self.assertEqual(state["active_enforcement"], "NONE")
         self.assertIsNone(state["debt_floor_generation"])
         self.assertEqual(state["next_packet"], "GRT2-G2-READINESS-EVIDENCE")
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_11.json")
-        self.assertEqual(pointer["packet_id"], "GRT2-G2.5-PILOT-EVIDENCE-COLLECTION")
-        self.assertEqual(pointer["gate_id"], "GRT2-G2.5")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_13.json")
+        self.assertEqual(pointer["packet_id"], "GRT2-G3-FULL-ENFORCEMENT-REPLAY-SURFACE-CORRECTION")
+        self.assertEqual(pointer["gate_id"], "GRT2-G2-SUPERSEDING-QUALIFICATION")
         self.assertEqual(pointer["next_packet"], "GRT2-G3-READINESS-EVIDENCE")
-        self.assertEqual(pointer["status"], "QA_REVIEW")
-        self.assertTrue(current["pilot_observation_threshold_met"])
-        self.assertEqual(current["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
+        self.assertEqual(pointer["status"], "RUNNING")
+        self.assertEqual(current["g3_status"], "NOT_AUTHORISED_CORRECTIVE_IMPLEMENTATION_RUNNING")
+        self.assertEqual(current["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
+        self.assertIsNone(current["debt_floor_generation"])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-grt2-g3-blocker/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "plan_version": "0.2_REVISED_RATIFIED",
+  "packet_id": "GRT2-G3-READINESS-EVIDENCE",
+  "gate_id": "GRT2-G3",
+  "status": "BLOCKED",
+  "blocker_code": "GRT2_G3_FULL_ENFORCEMENT_REPLAY_SURFACE_NOT_MATERIALIZED",
+  "authority_effect": "NONE_PRE_ACTIVATION_EVIDENCE_ONLY",
+  "constitution_status": "PROPOSED_UNADMITTED",
+  "active_enforcement": "LIMITED_NEW_ARTIFACT_ENFORCEMENT",
+  "debt_floor_generation": null,
+  "finding": {
+    "summary": "The exact full-G3 Git-tree-to-fact/replay surface required before GRT2-G3 was missing from the qualified candidate implementation. The G2.5 evaluator intentionally covered limited new-artifact enforcement and reported the additional full-G3 families NOT_EVALUABLE.",
+    "missing_rule_families": ["CURRENT_STATE_AND_LIFECYCLE", "OWNERSHIP", "GENESIS_BINDINGS", "DEPENDENCIES", "COMPANIONS_AND_ORPHANS", "SUPERSESSION"],
+    "g2_5_candidate_count": 8,
+    "g2_5_full_g3_pass_count": 0,
+    "g2_5_full_g3_not_evaluable_count": 8,
+    "performance_status": "NOT_EVALUATED_FOR_FULL_G3",
+    "historical_dry_run_status": "NOT_EXECUTABLE_WITHOUT_FULL_G3_REPLAY_SURFACE",
+    "candidate_debt_floor_gen0_status": "NOT_REPRODUCIBLE_WITHOUT_CURRENT_FULL_G3_FINDING_SURFACE"
+  },
+  "source_evidence": [
+    "docs/programmes/grt-v0-2/gates/GRT2_G2_5_PILOT_LEDGER.json",
+    "docs/programmes/grt-v0-2/g2/GRT2_G2_QUALIFICATION_RECEIPT.json",
+    "src/ovc/programme_genesis/grt_v0_2/pilot.py",
+    "src/ovc/programme_genesis/grt_v0_2/rules.py",
+    "src/ovc/programme_genesis/grt_v0_2/reference.py",
+    "src/ovc/programme_genesis/grt_v0_2/bindings.py"
+  ],
+  "smallest_lawful_resolution": {
+    "packet_class": "CORRECTIVE_IMPLEMENTATION_GENERATION",
+    "scope": "Repair already-ratified GRT2-WP3B/WP3C/WP3E implementation without changing GRT2-D1..D433 semantics.",
+    "semantic_delta_allowed": false,
+    "operator_authority_delta": "NONE_FOR_CORRECTIVE_IMPLEMENTATION; GRT2-G3_ACTIVATION_REMAINS_OPERATOR_REQUIRED"
+  },
+  "rollback": "Correct forward only; preserve prior G2/G2.5 evidence and Git history; do not activate the Constitution or DebtFloor generation 0.",
+  "recommended_disposition": "BLOCK"
+}
