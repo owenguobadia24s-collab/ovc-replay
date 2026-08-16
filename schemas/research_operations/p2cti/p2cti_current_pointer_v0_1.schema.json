@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/p2cti/p2cti_current_pointer_v0_1.schema.json",
+  "title": "OVC P2CTI current pointer v0.1",
+  "type": "object",
+  "required": ["schema_family", "schema_version", "pointer_id", "series_id", "generation_id", "source_frontier_id", "currentness_state", "completeness_state", "decision_bearing", "authority_effect", "content_sha256"],
+  "properties": {
+    "schema_family": {"const": "P2CTI_CURRENT_POINTER"},
+    "schema_version": {"const": "0.1"},
+    "pointer_id": {"type": "string", "pattern": "^p2cti:pointer:[0-9a-f]{64}$"},
+    "series_id": {"type": "string", "pattern": "^p2cti:series:[0-9a-f]{64}$"},
+    "generation_id": {"type": "string", "pattern": "^p2cti:generation:[0-9a-f]{64}$"},
+    "source_frontier_id": {"type": "string", "pattern": "^p2cti:frontier:[0-9a-f]{64}$"},
+    "currentness_state": {"enum": ["CURRENT", "CURRENT_WITH_LIMITATION", "REASSESSMENT_REQUIRED", "SOURCE_GENERATION_ADVANCED", "AUTHORITY_FRONTIER_CHANGED", "HISTORICAL", "UNRESOLVED"]},
+    "completeness_state": {"enum": ["COMPLETE", "INCOMPLETE", "UNRESOLVED"]},
+    "decision_bearing": {"type": "boolean"},
+    "review_gate": {"type": ["string", "null"]},
+    "authority_effect": {"const": "NONE"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
