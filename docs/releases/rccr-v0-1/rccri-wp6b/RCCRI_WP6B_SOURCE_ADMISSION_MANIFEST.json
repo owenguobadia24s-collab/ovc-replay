@@ -1,0 +1,141 @@
+{
+  "schema": "ovc-rccr-wp6b-source-admission/v1",
+  "packet_id": "RCCRI-WP6B",
+  "baseline_main": "11aefbbba5dbd2e50181d2e4793e673675f2949d",
+  "pilot_exit_decision": "PASS",
+  "admission_mode": "EXACT_ID_ALLOWLIST_ONLY",
+  "interesting_file_ingestion": "FORBIDDEN",
+  "source_binding_manifest": "registries/research_operations/EC1_DMRP_PRE_EVIDENCE_EXTERNAL_ARTIFACT_BINDINGS_v0_1.json",
+  "source_binding_receipt": "docs/releases/ec1-dmrp-conformance-v0-1/pre-evidence-bindings/EC1_DMRP_PRE_EVIDENCE_BINDING_RECEIPT_v0_1.json",
+  "admitted_sources": [
+    {
+      "source_id": "P2-EXT-THEORYRECORD-DRAFT-REGISTER-v0.1",
+      "stratum": "PATH2_EXTERNAL",
+      "object_type": "TheoryRecordDraftRegister",
+      "owner": "OVC Research Operations / DMRP Path 2",
+      "source_ref": "external:OVC_Research_Operations_External_TheoryRecord_Drafts_EC1_Pressure_Test_v0_1.docx",
+      "source_hash": "ed3cdd0642013f91c3b7760b6ce23a38eef782b952b3b2b42fc6f14e6ad8c37f",
+      "state": "UNTESTED",
+      "visibility": "PRE_FREEZE_VISIBLE",
+      "research_mode": "PATH_2_THEORY_FORMALISATION",
+      "authority_effect": "NONE"
+    },
+    {
+      "source_id": "P2-EXT-PREREG-STATUS-REGISTER-v0.1",
+      "stratum": "PATH2_EXTERNAL",
+      "object_type": "Path2PreregistrationStatusRegister",
+      "owner": "OVC Research Operations / DMRP Path 2",
+      "source_ref": "external:OVC_DMRP_Path2_Preregistration_Status_Register_v0_1.json",
+      "source_hash": "a442eea754bea20bbb96fca94304a545fbca295f38ec153dbc39743d8f1f303f",
+      "state": "PRE_REGISTRATION_PREPARATION_ONLY",
+      "visibility": "PRE_FREEZE_VISIBLE",
+      "research_mode": "PATH_2_THEORY_FORMALISATION",
+      "authority_effect": "NONE"
+    },
+    {
+      "source_id": "P2-INHOUSE-THEORY-BACKLOG-v0.1",
+      "stratum": "PATH2_IN_HOUSE",
+      "object_type": "InHouseTheoryBacklog",
+      "owner": "OVC Research Operations / DMRP Path 2",
+      "source_ref": "external:OVC_In_House_Path2_Theory_Backlog_v0_1.docx",
+      "source_hash": "3c078a0a599b22fb0a1e01443764c000cbc164c4a4fb113cdd603c57d3f5a195",
+      "state": "UNTESTED_AUTHORITY_NONE",
+      "visibility": "PRE_FREEZE_VISIBLE",
+      "research_mode": "PATH_2_THEORY_FORMALISATION",
+      "authority_effect": "NONE"
+    },
+    {
+      "source_id": "P2-INHOUSE-P0-FORMALISATION-PREREG-v0.1",
+      "stratum": "PATH2_IN_HOUSE",
+      "object_type": "InHousePath2FormalisationPreregistrationPack",
+      "owner": "OVC Research Operations / DMRP Path 2",
+      "source_ref": "external:OVC-RO-INH-P2-P0-FORMALISATION-PREREG-0.1",
+      "source_hash": "f39ba2d12e4ee18f81fb1a2d08ffc3e3be5b3031d4693f8c0f500c2e61716b1a",
+      "state": "PRE_EVIDENTIARY_FORMALISATION_P2_5_COMPLETE_NOT_RATIFIED",
+      "visibility": "MODE_RESTRICTED",
+      "research_mode": "PATH_2_THEORY_FORMALISATION",
+      "authority_effect": "NONE"
+    },
+    {
+      "source_id": "SCIENTIFIC-PRESSURE-TEST-OVC-EVIDENCE-PROGRAMME",
+      "stratum": "EXTERNAL_FINDING",
+      "object_type": "ExternalMethodologicalPressureTest",
+      "owner": "External research evidence / Research Operations binding",
+      "source_ref": "external:Scientific Pressure-Test of the OVC Evidence Programme",
+      "source_hash": "8790e5715519db9d8a97af349a0505e43e833fec44e3d6ae210bb2e9e449fdf2",
+      "state": "FORMALLY_BOUND_EXTERNAL_FINDING",
+      "visibility": "PRE_FREEZE_VISIBLE",
+      "research_mode": "CROSS_MODE_METHOD_PRESSURE",
+      "authority_effect": "NONE"
+    },
+    {
+      "source_id": "P2-EXT-METHOD-PARAMETER-FREEZE-STATE-v0.1",
+      "stratum": "ARCHITECTURE_CONTROL",
+      "object_type": "Path2MethodParameterFreezeState",
+      "owner": "OVC EC1 DMRP Path 2",
+      "source_ref": "docs/releases/ec1-dmrp-conformance-v0-1/path2-external-theory/method-freeze/P2_EXT_METHOD_PARAMETER_FREEZE_STATE_v0_1.json",
+      "source_hash": "e7cdd740c328b317fbe571af128f92509e678d97",
+      "state": "METHOD_PARAMETER_FREEZE_OPERATOR_PASS_PENDING_FINAL_INTEGRATION",
+      "visibility": "POST_FREEZE_VISIBLE",
+      "research_mode": "PATH_2_THEORY_FORMALISATION",
+      "authority_effect": "NONE"
+    }
+  ],
+  "explicit_exclusions": [
+    {
+      "source_id": "P2-EXT-EXPERIMENTRECORD-SHELLS-v0.1",
+      "reason": "PREREGISTRATION_SHELL_NOT_EFFECTIVE_IN_BOUND_WAVE"
+    },
+    {
+      "source_id": "P2-EXT-RESEARCHPROTOCOL-PREP-v0.1",
+      "reason": "PREPARATION_PACK_NOT_STANDALONE_NATIVE_RECORD"
+    },
+    {
+      "source_id": "VALIDATION_PROTECTED_CONTENT",
+      "reason": "PROTECTED_SOURCE_DENIED"
+    },
+    {
+      "source_id": "REAL_SOURCE_EC1_RESULTS",
+      "reason": "OWNER_AUTHORISED_BUT_RCCRI_WP6B_CONSUMPTION_NOT_ADMITTED"
+    },
+    {
+      "source_id": "PATH2_REAL_SOURCE_RESULTS",
+      "reason": "OWNER_AUTHORISED_BUT_RCCRI_WP6B_CONSUMPTION_NOT_ADMITTED"
+    },
+    {
+      "source_id": "ARBITRARY_INTERESTING_FILES",
+      "reason": "NO_EXACT_GOVERNED_ADMISSION"
+    }
+  ],
+  "visibility_firewall": {
+    "path1_to_path2_seed_filter_repair_or_promotion": "FORBIDDEN",
+    "pre_freeze_objects_preserve_pre_freeze_state": true,
+    "post_freeze_control_state_does_not_rewrite_pre_freeze_objects": true,
+    "external_finding_authority_effect": "NONE"
+  },
+  "owner_authority_frontier": {
+    "ec1": {
+      "owner_gate": "DMRPI-GREAL-EC1",
+      "state": "AUTHORISED_BOUNDED",
+      "decision_ref": "docs/releases/ec1-dmrp-conformance-v0-1/dmrpi-wp6/DMRPI_GREAL_EC1_GATE_PACKET.json",
+      "merge_commit": "a26bc19d76ed3ebd3def43a23468404e976f84eb"
+    },
+    "path2_external": {
+      "owner_gate": "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+      "state": "AUTHORISED_BOUNDED",
+      "decision_ref": "docs/releases/ec1-dmrp-conformance-v0-1/path2-external-theory/p2-ext-real-source-authority/P2_EXT_REAL_SOURCE_EVIDENTIARY_AUTHORITY_OPERATOR_DECISION_v0_1.json",
+      "merge_commit": "04b379adee8b584e841b24e83883aed33e090c61"
+    },
+    "validation": {
+      "state": "LOCKED_UNCONSUMED"
+    }
+  },
+  "rccr_consumption_boundary": {
+    "real_source_ec1_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "path2_real_source_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "owner_capability_activation": "DENIED",
+    "validation_consumption": "DENIED"
+  },
+  "owner_authority_preserved": true,
+  "authority_effect": "NONE"
+}

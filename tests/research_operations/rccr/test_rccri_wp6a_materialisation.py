@@ -88,5 +88,12 @@ def test_wp6a_programme_state_denies_scaleout_and_routes_to_lawful_next_operator
             pilot_exit = load("docs/releases/rccr-v0-1/rccri-g-pilot-exit/RCCRI_G_PILOT_EXIT_OPERATOR_DECISION.json")
             assert pilot_exit["decision"] == "PASS"
             assert pilot_exit["decision_instruction"] == "OVC APPROVE RCCRI-G-PILOT-EXIT"
-    assert pointer["real_source_ec1_authority"] == "NONE"
-    assert pointer["validation"] == "LOCKED_UNCONSUMED"
+
+    # WP6A's immutable generation remains pre-evidentiary. Later owner authority may advance
+    # independently, but the current RCCR pointer must preserve its own no-consumption boundary.
+    assert state["real_source_ec1_authority"] == "NONE"
+    assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
+    assert pointer["rccr_consumption_boundary"]["real_source_ec1_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
+    assert pointer["rccr_consumption_boundary"]["owner_capability_activation"] == "DENIED"
+    assert pointer["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
+    assert pointer["authority_effect"] == "NONE"
