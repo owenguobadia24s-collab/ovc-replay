@@ -89,8 +89,10 @@ def test_wp10_budget_registries_and_live_shadow_binding_are_schema_valid() -> No
     receipt = validate_live_shadow_binding(binding, ROOT)
     assert receipt["result"] == "PASS_EXACT_GIT_TREE_LIVE_SHADOW"
     assert receipt["source_binding_count"] == 34
-    assert binding["source_commit"] == git("rev-parse", "83ea0a3e8fa755b817f56fc6bd81c7fc20ef451c")
-    assert binding["source_tree"] == git("rev-parse", "83ea0a3e8fa755b817f56fc6bd81c7fc20ef451c^{tree}")
+    assert binding["source_commit"] == git("rev-parse", "b80d109ef05a51b9031fb6140535bcef5222841c")
+    assert binding["source_tree"] == git("rev-parse", "b80d109ef05a51b9031fb6140535bcef5222841c^{tree}")
+    c2p = next(row for row in binding["source_bindings"] if row["node_id"] == "c2p")
+    assert c2p["path"] == "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json"
 
 
 def test_operational_budget_passes_complete_observations_and_fails_typed_without_sampling() -> None:

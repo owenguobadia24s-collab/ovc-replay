@@ -17,6 +17,7 @@ from ovc.system_atlas import (
     evaluate_operational_budget,
     evaluate_retention_budget,
     materialize_generation,
+    load_generation_bundle,
     measure_operational_profile,
     prove_exact_current_publication_shadow,
     scan_retention_inventory,
@@ -70,7 +71,13 @@ def main() -> int:
         generation_id=f"atlas:generation:wp10-live-shadow:{binding['source_commit']}",
         completeness_profile="ATLAS_WP10_EXACT_CURRENT_PUBLICATION_MECHANISM_SHADOW",
     )
-    predecessor = build_reference_generation(source_graph, registries)
+    output = external / "generations/wp10/ATLAS_WP10_Q0_Q6_EVIDENCE.json"
+    if output.is_file():
+        previous_evidence = load(output)
+        previous_root_hash = previous_evidence["retention_inventory"]["current_recovery_root_hash"]
+        predecessor = load_generation_bundle(external / "generations" / previous_root_hash)
+    else:
+        predecessor = build_reference_generation(source_graph, registries)
     materialize_generation(predecessor, external)
     with tempfile.TemporaryDirectory(prefix="atlas-wp10-") as temporary:
         temporary_root = Path(temporary)
@@ -149,7 +156,6 @@ def main() -> int:
         "authority_effect": "NONE_QUALIFICATION_EVIDENCE_ONLY",
     }
     evidence = {**body, "evidence_hash": canonical_sha256(body)}
-    output = external / "generations/wp10/ATLAS_WP10_Q0_Q6_EVIDENCE.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     pending = output.with_suffix(".json.pending")
     pending.write_bytes(canonical_json_bytes(evidence, trailing_newline=True))
