@@ -1,25 +1,24 @@
 {
-  "schema": "ovc-c2p2-rs0-execution-state/v1",
-  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
-  "packet_id": "C2P2-RS0-EXECUTION",
-  "status": "BLOCKED",
+  "authority_delta": "NONE_IMPLEMENTATION_AND_RECOVERY_ONLY",
   "authority_required": "GRUN_PASS_PRESENT_ONE_RUN_TOKEN_UNCONSUMED",
-  "authority_delta": "NONE_BLOCKER_RECORD_ONLY",
-  "baseline_commit": "c8273e8d15f5f77d86ec842b3eb7067fe0b67b8e",
-  "baseline_tree": "8328dabe411edf939a26aa6922267f2d4c3a62d9",
-  "branch": "block/c2p2-rs0-execution-preflight-20260816-r2",
-  "candidate_commit": "NON_IDENTITY_POST_COMMIT_BINDING",
-  "tests": ["COURT_RECORD_PREFLIGHT_ONLY_NO_REAL_SOURCE_EXECUTION"],
-  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_EXECUTION_PREFLIGHT_BLOCKER_v0_1.json",
-  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_OPERATOR_DECISION_v0_1.json",
-  "merge_commit": null,
+  "baseline_commit": "11aefbbba5dbd2e50181d2e4793e673675f2949d",
   "blockers": [
-    "RS0_REAL_SOURCE_ADAPTER_NOT_MATERIALISED",
-    "RS0_EXECUTION_HARNESS_NOT_MATERIALISED",
-    "RS0_SOURCE_BYTES_NOT_REPRODUCIBLE_IN_CURRENT_EXECUTION_SURFACE"
+    "EXACT_2021_2023_C2_C2E_SOURCE_LOCATOR_NOT_FOUND_IN_REPOSITORY_OR_BOUND_RS0_DRIVE_ROOT"
   ],
+  "branch": "build/c2p2-rs0-execution-adapter-closeout",
+  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_OPERATOR_DECISION_v0_1.json",
+  "mandatory_stop": "REQUIRED_ARTIFACT_UNAVAILABLE_NON_REPRODUCIBLE",
+  "merge_commit": null,
+  "next_packet": "C2P2-RS0-SOURCE-LOCATOR-RECOVERY",
+  "packet_id": "C2P2-RS0-EXECUTION-ADAPTER-CLOSEOUT",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_EXECUTION_ADAPTER_CLOSEOUT_v0_1.json",
   "run_authority_consumed": false,
   "run_count_remaining": 1,
-  "next_packet": "C2P2-RS0-EXECUTION-ADAPTER-CLOSEOUT",
-  "mandatory_stop": "BLOCKED_BEFORE_REAL_SOURCE_LAUNCH"
+  "schema": "ovc-c2p2-rs0-execution-state/v1",
+  "status": "BLOCKED",
+  "tests": [
+    "tests/opt_b/c2p/v0_2/test_c2p2_rs0_execution_adapter_closeout.py",
+    "REPOSITORY_SUITE_REQUIRED_BY_CI"
+  ]
 }
