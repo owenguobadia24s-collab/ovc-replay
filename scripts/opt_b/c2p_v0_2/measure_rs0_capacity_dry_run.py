@@ -23,7 +23,7 @@ from ovc.opt_b.c2p_v0_2.checkpoint import build_checkpoint, checkpoint_bytes, re
 from ovc.opt_b.c2p_v0_2.events import build_assertion_genesis_event
 from ovc.opt_b.c2p_v0_2.ledger import CanonicalEventLedger
 
-ROOT = Path(__file__).resolve().parents[4]
+ROOT = Path(__file__).resolve().parents[3]
 PACK_PATH = ROOT / "fixtures/opt_b/c2p/v0_2/packs/C2P_SYNTH_OBJECTPACK_MINIMAL_A_v1.json"
 CANDIDATE_PACKS = (
     "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
