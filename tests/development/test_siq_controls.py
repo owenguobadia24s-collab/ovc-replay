@@ -2,8 +2,10 @@ from __future__ import annotations
 import unittest
 from ovc.development.skills.siq_core import BASE_SENSITIVE, BLOCKED, OPERATOR_REQUIRED, PARALLEL_MERGE, FORCE_PUSH, HISTORY_REWRITE, acquire_final_integration_lease, build_queue_state, handle_lease_elapsed, queue_head, terminate_lease
 A="a"*40; B="b"*40; C="c"*40
+PIP="d"*64; GEN="e"*64; PLACEMENT="f"*64
+
 def item(packet,seq,head=A,gate="AUTO_EXECUTABLE",delta="NONE",state="BUILD"):
-    return {"packet_id":packet,"plan_id":"PLAN","candidate_head_sha":head,"baseline_main_sha":B,"ready_sequence":seq,"queue_state":state,"implementation_complete":True,"qa_status":"PASS","authority_delta":delta,"gate_class":gate,"preliminary_assurance_pass":True,"rollback_defined":True,"dependency_footprint_pinned":True}
+    return {"packet_id":packet,"plan_id":"PLAN","candidate_head_sha":head,"baseline_main_sha":B,"ready_sequence":seq,"queue_state":state,"implementation_complete":True,"qa_status":"PASS","authority_delta":delta,"gate_class":gate,"preliminary_assurance_pass":True,"rollback_defined":True,"dependency_footprint_pinned":True,"vit_pip_id":PIP,"vit_generation_id":GEN,"vit_placement_id":PLACEMENT,"vit_lineage_ref":"records/test/vit-lineage.json"}
 class SIQControlTests(unittest.TestCase):
     def test_timeout_releases_and_requeues(self):
         state=build_queue_state([item("A",1)])
