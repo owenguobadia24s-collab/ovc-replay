@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-vit-routing-lineage/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","status","programme_id","packet_id","route_class","pip","pip_id","generation","generation_id","placement","placement_id"],
+  "properties": {
+    "schema": {"const": "ovc-vit-routing-lineage/v1"},
+    "status": {"const": "ADMITTED"},
+    "programme_id": {"type": "string", "minLength": 1},
+    "packet_id": {"type": "string", "minLength": 1},
+    "route_class": {"enum": ["VIT_MANDATORY", "REGISTERED_EXCEPTION"]},
+    "pip": {"type": "object", "minProperties": 1},
+    "pip_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["train_generation_id","ordinal","pip_id","predecessor_tree_sha","result_tree_sha"],
+      "properties": {
+        "train_generation_id": {"type": "string", "minLength": 1},
+        "ordinal": {"type": "integer", "minimum": 0},
+        "pip_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "predecessor_tree_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "result_tree_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
+    },
+    "generation_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "placement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generation_id","controller","physical_gateway","route_class"],
+      "properties": {
+        "generation_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "controller": {"const": "DSAI_VIT_PHYSICAL_CONTROLLER"},
+        "physical_gateway": {"const": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"},
+        "route_class": {"enum": ["VIT_MANDATORY", "REGISTERED_EXCEPTION"]}
+      }
+    },
+    "placement_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
