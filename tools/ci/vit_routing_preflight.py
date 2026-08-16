@@ -1,16 +1,20 @@
 from __future__ import annotations
 
+import base64
 import json
 import os
 from pathlib import Path
 import re
-from typing import Any, Mapping
+import subprocess
+import tempfile
+from typing import Any, Mapping, Sequence
 
-from ovc.development.skills.vit_core import VitContractError
-from ovc.development.skills.vit_routing import load_vit_lineage
+from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
+from ovc.development.skills.vit_core import TREE_IDENTITY_PROFILE, VitContractError
+from ovc.development.skills.vit_routing import validate_vit_lineage_record
 
 REGISTER_PATH = Path("registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json")
-LINEAGE_MARKER = re.compile(r"(?im)^VIT-Lineage-Ref:\s*(\S+)\s*$")
+LINEAGE_B64_MARKER = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
 
 
 def _load_json(path: Path) -> Mapping[str, Any]:
@@ -18,6 +22,75 @@ def _load_json(path: Path) -> Mapping[str, Any]:
     if not isinstance(raw, Mapping):
         raise RuntimeError(f"expected JSON object: {path}")
     return raw
+
+
+def _git(root: Path, args: Sequence[str], *, env: Mapping[str, str] | None = None) -> str:
+    proc = subprocess.run(
+        ["git", "-C", str(root), *args],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=dict(os.environ, **dict(env or {})),
+    )
+    return proc.stdout.strip()
+
+
+def _tree(root: Path, commitish: str) -> str:
+    return _git(root, ["rev-parse", f"{commitish}^{{tree}}"])
+
+
+def _safe_path(raw: object) -> str:
+    value = str(raw or "")
+    path = Path(value)
+    if not value or path.is_absolute() or ".." in path.parts or value == ".git" or value.startswith(".git/"):
+        raise RuntimeError(f"unsafe PIP path {value!r}")
+    return value.replace("\\", "/")
+
+
+def _compose_pip_tree(root: Path, predecessor_tree: str, logical_changes: Sequence[Mapping[str, Any]]) -> str:
+    """Reference-apply the identity-bearing PIP changes and return the exact Git tree."""
+    with tempfile.TemporaryDirectory() as td:
+        env = {"GIT_INDEX_FILE": str(Path(td) / "index")}
+        _git(root, ["read-tree", predecessor_tree], env=env)
+        seen: set[str] = set()
+        for change in logical_changes:
+            path = _safe_path(change.get("path"))
+            if path in seen:
+                raise RuntimeError(f"duplicate PIP path mutation: {path}")
+            seen.add(path)
+            op = str(change.get("op", ""))
+            if op == "DELETE":
+                _git(root, ["update-index", "--force-remove", "--", path], env=env)
+                continue
+            if op not in {"ADD", "MODIFY"}:
+                raise RuntimeError(f"unsupported PIP op {op!r} for {path}")
+            blob_sha = str(change.get("blob_sha", ""))
+            mode = str(change.get("mode", "100644"))
+            if not re.fullmatch(r"[0-9a-f]{40}", blob_sha):
+                raise RuntimeError(f"invalid PIP blob SHA for {path}")
+            if mode not in {"100644", "100755", "120000", "160000"}:
+                raise RuntimeError(f"invalid PIP mode for {path}: {mode}")
+            object_type = "commit" if mode == "160000" else "blob"
+            _git(root, ["cat-file", "-e", f"{blob_sha}^{{{object_type}}}"])
+            _git(root, ["update-index", "--add", "--cacheinfo", mode, blob_sha, path], env=env)
+        return _git(root, ["write-tree"], env=env)
+
+
+def _decode_lineage(body: str) -> Mapping[str, Any]:
+    match = LINEAGE_B64_MARKER.search(body)
+    if not match:
+        raise RuntimeError("VIT_LINEAGE_REQUIRED: add `VIT-Lineage-B64: <urlsafe-base64-canonical-lineage-json>` to the PR body")
+    token = match.group(1)
+    try:
+        token += "=" * ((4 - len(token) % 4) % 4)
+        raw = base64.urlsafe_b64decode(token.encode("ascii"))
+        record = json.loads(raw.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"VIT_LINEAGE_INVALID_ENCODING: {exc}") from exc
+    if not isinstance(record, Mapping):
+        raise RuntimeError("VIT_LINEAGE_INVALID: decoded lineage must be a JSON object")
+    return record
 
 
 def _exception_matches(exception: Mapping[str, Any], *, pr_number: int, head_sha: str, head_branch: str) -> bool:
@@ -38,10 +111,12 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
         raise RuntimeError("pull_request event payload is missing")
     pr_number = int(event.get("number", pr.get("number", -1)))
     head = pr.get("head")
-    if not isinstance(head, Mapping):
-        raise RuntimeError("pull_request head is missing")
+    base = pr.get("base")
+    if not isinstance(head, Mapping) or not isinstance(base, Mapping):
+        raise RuntimeError("pull_request head/base is missing")
     head_sha = str(head.get("sha", "")).strip()
     head_branch = str(head.get("ref", "")).strip()
+    base_sha = str(base.get("sha", "")).strip()
     body = str(pr.get("body") or "")
 
     register = _load_json(root / REGISTER_PATH)
@@ -62,17 +137,40 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
                 raise RuntimeError("registered VIT exception cannot grant SIQ bypass authority")
             return f"REGISTERED_EXCEPTION:{exception.get('exception_class', 'UNKNOWN')}"
 
-    match = LINEAGE_MARKER.search(body)
-    if not match:
-        raise RuntimeError("VIT_LINEAGE_REQUIRED: add `VIT-Lineage-Ref: <repository-relative-json-path>` to the PR body")
-    lineage_ref = match.group(1)
+    record = _decode_lineage(body)
     try:
-        lineage = load_vit_lineage(root, lineage_ref)
-    except (VitContractError, ValueError, OSError, json.JSONDecodeError) as exc:
+        lineage = validate_vit_lineage_record(record)
+    except (VitContractError, ValueError, TypeError) as exc:
         raise RuntimeError(f"VIT_LINEAGE_INVALID: {exc}") from exc
     if lineage.route_class != "VIT_MANDATORY":
         raise RuntimeError("permanent integration PR lineage must be VIT_MANDATORY")
-    return f"VIT_MANDATORY:{lineage.packet_id}:{lineage.placement_id}"
+
+    generation = record["generation"]
+    placement = record["placement"]
+    predecessor = generation["predecessor_tree"]
+    result = generation["result_tree"]
+    if predecessor.get("profile") != TREE_IDENTITY_PROFILE or result.get("profile") != TREE_IDENTITY_PROFILE:
+        raise RuntimeError("VIT_LINEAGE_TREE_PROFILE_INVALID")
+    base_tree = _tree(root, base_sha)
+    head_tree = _tree(root, head_sha)
+    if predecessor.get("tree_sha") != base_tree:
+        raise RuntimeError("VIT_LINEAGE_PREDECESSOR_NOT_PR_BASE_TREE")
+    if result.get("tree_sha") != head_tree:
+        raise RuntimeError("VIT_LINEAGE_RESULT_NOT_PR_HEAD_TREE")
+    if placement.get("predecessor_tree") != base_tree or placement.get("result_tree") != head_tree:
+        raise RuntimeError("VIT_LINEAGE_PLACEMENT_TREE_NOT_PR_TREE")
+    if placement.get("apply_profile") != REFERENCE_APPLY_PROFILE:
+        raise RuntimeError("VIT_LINEAGE_APPLY_PROFILE_NOT_REFERENCE")
+
+    pip = record["pip"]
+    logical_changes = pip.get("logical_changes")
+    if not isinstance(logical_changes, list) or not logical_changes:
+        raise RuntimeError("VIT_LINEAGE_PIP_CHANGES_INVALID")
+    composed_tree = _compose_pip_tree(root, base_tree, logical_changes)
+    if composed_tree != head_tree:
+        raise RuntimeError("VIT_LINEAGE_PIP_DOES_NOT_REPRODUCE_PR_HEAD_TREE")
+
+    return f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:{lineage.generation_id}:{lineage.placement_id}"
 
 
 def main() -> int:
