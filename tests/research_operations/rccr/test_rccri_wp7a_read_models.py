@@ -208,7 +208,17 @@ def test_pilot_exit_evidence_requires_complete_refs_and_preserves_denials():
     assert packet["evidence_packet_hash"]
 
 
-def test_wp7a_plan_binding_stays_non_authoritative():
+def test_wp7a_plan_binding_stays_non_authoritative_after_owner_frontier_advances():
     pointer = json.loads((ROOT / "registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json").read_text())
-    assert pointer["real_source_ec1_authority"] == "NONE"
-    assert pointer["validation"] == "LOCKED_UNCONSUMED"
+    historical = json.loads((ROOT / "registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_10.json").read_text())
+
+    # WP7A's immutable generation remains pre-evidentiary and non-authoritative.
+    assert historical["real_source_ec1_authority"] == "NONE"
+    assert historical["validation"] == "LOCKED_UNCONSUMED"
+
+    # A later owner grant is descriptive currentness, not an RCCR grant.
+    assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
+    assert pointer["rccr_consumption_boundary"]["real_source_ec1_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
+    assert pointer["rccr_consumption_boundary"]["owner_capability_activation"] == "DENIED"
+    assert pointer["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
+    assert pointer["authority_effect"] == "NONE"
