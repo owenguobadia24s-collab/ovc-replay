@@ -48,6 +48,7 @@ class ValidatedVitLineage:
     generation_id: str
     placement_id: str
     route_class: str
+    ticket_id: str | None = None
     lineage_ref: str | None = None
 
 
@@ -63,7 +64,7 @@ def build_vit_lineage_record(
     apply_profile: str,
     route_class: str = VIT_MANDATORY,
 ) -> dict[str, Any]:
-    """Build one canonical PIP -> VirtualIntegrationGeneration -> LedgerPlacement lineage."""
+    """Build one canonical PIP -> ticket -> VirtualIntegrationGeneration -> LedgerPlacement lineage."""
     pip = dict(pip_identity_payload)
     if str(pip.get("programme_id", "")) != programme_id or str(pip.get("packet_id", "")) != packet_id:
         raise VitContractError("VIT_LINEAGE_PIP_PACKET_MISMATCH")
@@ -79,6 +80,15 @@ def build_vit_lineage_record(
         raise VitContractError("VIT_LINEAGE_BUILD_TREE_INVALID")
 
     pip_id = canonical_sha256(pip)
+    integration_ticket = {
+        "programme_id": str(programme_id),
+        "packet_id": str(packet_id),
+        "payload_id": pip_id,
+        "admitted_sequence": int(ordinal),
+        "dependencies": [],
+        "blocked": False,
+    }
+    ticket_id = canonical_sha256(integration_ticket)
     generation = {
         "train_generation_id": str(train_generation_id),
         "ordinal": int(ordinal),
@@ -107,6 +117,8 @@ def build_vit_lineage_record(
         "route_class": route_class,
         "pip": pip,
         "pip_id": pip_id,
+        "integration_ticket": integration_ticket,
+        "ticket_id": ticket_id,
         "generation": generation,
         "generation_id": generation_id,
         "placement": placement,
@@ -122,7 +134,11 @@ def build_vit_lineage_record(
 
 
 def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str | None = None) -> ValidatedVitLineage:
-    """Validate lineage using the repository's canonical PIP/generation/placement identity shapes."""
+    """Validate lineage using the repository's canonical PIP/ticket/generation/placement identity shapes.
+
+    Historical v1 lineage that predates ticket persistence remains readable. New builders emit
+    the ticket and live completion requires it; validation never invents a missing historical ID.
+    """
     if record.get("schema") != LINEAGE_SCHEMA:
         raise VitContractError("VIT_LINEAGE_SCHEMA_INVALID")
     if record.get("status") != "ADMITTED":
@@ -170,6 +186,28 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
     if not _is_hex(generation_id, 64) or generation_id != canonical_sha256(dict(generation)):
         raise VitContractError("VIT_LINEAGE_GENERATION_ID_INVALID")
 
+    ticket_id: str | None = None
+    ticket_value = record.get("integration_ticket")
+    ticket_id_value = record.get("ticket_id")
+    if ticket_value is not None or ticket_id_value is not None:
+        ticket = _required_mapping(ticket_value, "integration_ticket")
+        if str(ticket.get("programme_id", "")) != programme_id or str(ticket.get("packet_id", "")) != packet_id:
+            raise VitContractError("VIT_LINEAGE_TICKET_PACKET_MISMATCH")
+        if str(ticket.get("payload_id", "")) != pip_id:
+            raise VitContractError("VIT_LINEAGE_TICKET_PIP_MISMATCH")
+        try:
+            admitted_sequence = int(ticket.get("admitted_sequence", -1))
+        except (TypeError, ValueError) as exc:
+            raise VitContractError("VIT_LINEAGE_TICKET_SEQUENCE_INVALID") from exc
+        if admitted_sequence != ordinal or ticket.get("blocked") is not False:
+            raise VitContractError("VIT_LINEAGE_TICKET_SEQUENCE_INVALID")
+        dependencies = ticket.get("dependencies")
+        if not isinstance(dependencies, (list, tuple)) or any(not isinstance(value, str) or not value for value in dependencies):
+            raise VitContractError("VIT_LINEAGE_TICKET_DEPENDENCIES_INVALID")
+        ticket_id = str(ticket_id_value or "")
+        if not _is_hex(ticket_id, 64) or ticket_id != canonical_sha256(dict(ticket)):
+            raise VitContractError("VIT_LINEAGE_TICKET_ID_INVALID")
+
     placement = _required_mapping(record.get("placement"), "placement")
     if str(placement.get("payload_id", "")) != pip_id:
         raise VitContractError("VIT_LINEAGE_PLACEMENT_PIP_MISMATCH")
@@ -198,6 +236,7 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
         generation_id=generation_id,
         placement_id=placement_id,
         route_class=route_class,
+        ticket_id=ticket_id,
         lineage_ref=lineage_ref,
     )
 
