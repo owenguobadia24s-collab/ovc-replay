@@ -1,160 +1,32 @@
-name: GRT2 correction VIT lineage
+name: GRT2 PR998 lineage body verification
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - grt2/g3-full-enforcement-replay-correction-v3-20260816
 
 permissions:
   contents: read
-
-concurrency:
-  group: grt2-correction-lineage-${{ github.ref }}
-  cancel-in-progress: true
+  pull-requests: read
 
 jobs:
-  lineage:
-    name: Generate exact GRT2 correction VIT lineage
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/github-script@v9
         with:
-          ref: 8906ac0f053589ae3a3a52be9f2302f47c781026
-          fetch-depth: 0
-          show-progress: false
-      - name: Fetch current physical main
-        run: git fetch --no-tags origin main:refs/remotes/origin/main
-      - name: Generate exact PIP, prospective tree and admitted lineage
-        env:
-          PYTHONPATH: src:.
-        run: |
-          python3 - <<'PY'
-          import base64, json, os, subprocess, tempfile
-          from pathlib import Path
-          from ovc.development.identity import canonical_sha256
-          from ovc.development.skills.vit_routing import build_vit_lineage_record
-
-          root = Path('.').resolve()
-          def git(*args, check=True, env=None):
-              cp = subprocess.run(['git','-C',str(root),*args], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
-              if check and cp.returncode:
-                  raise SystemExit(f"git {' '.join(args)} failed: {cp.stderr}")
-              return cp.stdout.strip(), cp.returncode
-
-          correction_head,_ = git('rev-parse','HEAD')
-          main_commit,_ = git('rev-parse','origin/main')
-          main_tree,_ = git('rev-parse','origin/main^{tree}')
-          merge_base,_ = git('merge-base','HEAD','origin/main')
-          raw,_ = git('diff','--name-status','--find-renames',merge_base,'HEAD')
-          logical=[]
-          apply=[]
-          for line in raw.splitlines():
-              if not line.strip():
-                  continue
-              parts=line.split('\t')
-              status=parts[0]
-              if status.startswith('R'):
-                  old,new=parts[1],parts[2]
-                  # Treat a rename as exact delete + add; both preconditions are checked.
-                  old_base,_=git('rev-parse',f'{merge_base}:{old}')
-                  old_main,rc=git('rev-parse',f'origin/main:{old}',check=False)
-                  if rc or old_main != old_base:
-                      raise SystemExit(f'VIT_INPUT_PRECONDITION_MISMATCH:{old}')
-                  _,new_main_rc=git('rev-parse',f'origin/main:{new}',check=False)
-                  if new_main_rc == 0:
-                      raise SystemExit(f'VIT_ADD_PATH_ALREADY_EXISTS_ON_MAIN:{new}')
-                  blob,_=git('rev-parse',f'HEAD:{new}')
-                  ls,_=git('ls-tree','HEAD','--',new)
-                  mode=ls.split()[0]
-                  logical.append({'op':'DELETE','path':old})
-                  logical.append({'op':'ADD','path':new,'blob_sha':blob,'mode':mode})
-                  apply += [('DELETE',old,None,None),('ADD',new,mode,blob)]
-                  continue
-              path=parts[-1]
-              if status.startswith('A'):
-                  _,rc=git('rev-parse',f'origin/main:{path}',check=False)
-                  if rc == 0:
-                      raise SystemExit(f'VIT_ADD_PATH_ALREADY_EXISTS_ON_MAIN:{path}')
-                  blob,_=git('rev-parse',f'HEAD:{path}')
-                  ls,_=git('ls-tree','HEAD','--',path)
-                  mode=ls.split()[0]
-                  logical.append({'op':'ADD','path':path,'blob_sha':blob,'mode':mode})
-                  apply.append(('ADD',path,mode,blob))
-              elif status.startswith('D'):
-                  old_base,_=git('rev-parse',f'{merge_base}:{path}')
-                  old_main,rc=git('rev-parse',f'origin/main:{path}',check=False)
-                  if rc or old_main != old_base:
-                      raise SystemExit(f'VIT_INPUT_PRECONDITION_MISMATCH:{path}')
-                  logical.append({'op':'DELETE','path':path})
-                  apply.append(('DELETE',path,None,None))
-              else:
-                  old_base,_=git('rev-parse',f'{merge_base}:{path}')
-                  old_main,rc=git('rev-parse',f'origin/main:{path}',check=False)
-                  if rc or old_main != old_base:
-                      raise SystemExit(f'VIT_INPUT_PRECONDITION_MISMATCH:{path}')
-                  blob,_=git('rev-parse',f'HEAD:{path}')
-                  ls,_=git('ls-tree','HEAD','--',path)
-                  mode=ls.split()[0]
-                  logical.append({'op':'MODIFY','path':path,'blob_sha':blob,'mode':mode})
-                  apply.append(('MODIFY',path,mode,blob))
-
-          logical=sorted(logical,key=lambda r:(r['path'],r['op']))
-          pip={
-            'schema_version':'packet-integration-payload/v0.1',
-            'programme_id':'OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE',
-            'packet_id':'GRT2-G3-FULL-ENFORCEMENT-REPLAY-SURFACE-CORRECTION',
-            'logical_changes':logical,
-            'authority_manifest_id':'921fc3b7e6e9f163eca660a3cc27f980e24b239c35700fc09372efde932f4080',
-            'dependency_frontier_id':'0b166f148335bbd4356e65555340bd700cc8c8b745b645bc83566dd9c2dc73b0',
-            'completion_transition':{'status':'COMPLETED'},
-          }
-          with tempfile.TemporaryDirectory() as td:
-              idx=str(Path(td)/'index')
-              env=dict(os.environ); env['GIT_INDEX_FILE']=idx
-              git('read-tree','origin/main',env=env)
-              for op,path,mode,blob in apply:
-                  if op == 'DELETE':
-                      git('update-index','--remove','--',path,env=env)
-                  else:
-                      git('update-index','--add','--cacheinfo',f'{mode},{blob},{path}',env=env)
-              result_tree,_=git('write-tree',env=env)
-
-          record=build_vit_lineage_record(
-              programme_id=pip['programme_id'],
-              packet_id=pip['packet_id'],
-              pip_identity_payload=pip,
-              train_generation_id='GRT2-G3-FULL-ENFORCEMENT-REPLAY-CORRECTION-GEN-6-20260816',
-              ordinal=0,
-              predecessor_tree_sha=main_tree,
-              result_tree_sha=result_tree,
-              apply_profile='INTEGRATION_APPLY_PROFILE_REFERENCE_v0_1',
-          )
-          raw_record=json.dumps(record,sort_keys=True,separators=(',',':')).encode()
-          out={
-            'schema':'ovc-grt2-correction-vit-lineage-generation/v1',
-            'main_commit':main_commit,
-            'main_tree':main_tree,
-            'merge_base':merge_base,
-            'correction_head':correction_head,
-            'changed_path_count':len(logical),
-            'pip_id':record['pip_id'],
-            'generation_id':record['generation_id'],
-            'placement_id':record['placement_id'],
-            'predecessor_tree':main_tree,
-            'result_tree':result_tree,
-            'lineage_b64':base64.b64encode(raw_record).decode('ascii'),
-            'logical_changes':logical,
-            'record':record,
-          }
-          Path('artifacts').mkdir(exist_ok=True)
-          Path('artifacts/grt2-correction-vit-lineage.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
-          print(json.dumps({k:out[k] for k in ('main_commit','correction_head','changed_path_count','pip_id','generation_id','placement_id','predecessor_tree','result_tree')},sort_keys=True))
-          PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: grt2-correction-vit-lineage
-          path: artifacts/grt2-correction-vit-lineage.json
-          if-no-files-found: error
-          retention-days: 7
+          github-token: ${{ github.token }}
+          script: |
+            const crypto = require('crypto');
+            const {data: pr} = await github.rest.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: 998});
+            const m = (pr.body || '').match(/^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$/im);
+            if (!m) core.setFailed('VIT_LINEAGE_MARKER_MISSING');
+            else {
+              const token = m[1];
+              const sha = crypto.createHash('sha256').update(token, 'ascii').digest('hex');
+              core.info(`token_length=${token.length}`);
+              core.info(`token_sha256=${sha}`);
+              core.info('expected_length=8448');
+              core.info('expected_sha256=d903ccf9e80cebe654564fc3d1765db6a1f231dd602c509eea3c897a8df61690');
+              if (token.length !== 8448 || sha !== 'd903ccf9e80cebe654564fc3d1765db6a1f231dd602c509eea3c897a8df61690') core.setFailed('VIT_LINEAGE_BODY_TOKEN_MISMATCH');
+            }
