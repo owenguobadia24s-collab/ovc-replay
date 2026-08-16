@@ -102,6 +102,7 @@ def main() -> int:
     parser.add_argument("--authority-delta", default="NONE")
     parser.add_argument("--authority-sources-json", required=True)
     parser.add_argument("--reserved-boundaries-json", default="[]")
+    parser.add_argument("--security-envelope-id", default="")
     parser.add_argument("--dependencies-json", default="[]")
     parser.add_argument("--owner-bindings-json", default="[]")
     parser.add_argument("--predecessor-requirement", default="PHYSICAL_MATERIALISATION_REQUIRED")
@@ -134,6 +135,7 @@ def main() -> int:
         authority_delta=args.authority_delta,
         authority_sources=authority_sources,
         reserved_boundaries=reserved_boundaries,
+        security_envelope_id=args.security_envelope_id or None,
     )
     frontier = DependencyFrontier(
         dependencies=dependencies,
