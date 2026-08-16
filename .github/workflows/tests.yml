@@ -10,6 +10,7 @@ on:
 permissions:
   contents: read
   checks: read
+  pull-requests: read
 
 concurrency:
   group: ovc-tests-${{ github.event.pull_request.number || github.ref }}
@@ -19,16 +20,86 @@ jobs:
   vit-routing-preflight:
     name: VIT routing preflight
     runs-on: ubuntu-latest
+    outputs:
+      aa0_identity: ${{ steps.assurance.outputs.aa0_identity }}
+      generation_id: ${{ steps.assurance.outputs.generation_id }}
+      pip_id: ${{ steps.assurance.outputs.pip_id }}
+      aa0_reuse_authorized: ${{ steps.assurance.outputs.aa0_reuse_authorized }}
+      aa0_reuse_reason: ${{ steps.assurance.outputs.aa0_reuse_reason }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
+
+      - name: Verify VIT-owned physical-main protection
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branch = context.payload.pull_request.base.ref;
+            if (branch !== 'main') {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_TARGET_INVALID:${branch}`);
+              return;
+            }
+            const effective = await github.request('GET /repos/{owner}/{repo}/rules/branches/{branch}', {
+              owner, repo, branch,
+              headers: {'X-GitHub-Api-Version':'2022-11-28'}
+            });
+            const rules = effective.data;
+            const byType = type => rules.filter(rule => rule.type === type);
+            if (!byType('pull_request').length || !byType('non_fast_forward').length || !byType('deletion').length) {
+              core.setFailed('PHYSICAL_MAIN_EXCLUSIVITY_GUARDS_MISSING');
+              return;
+            }
+            const prRule = byType('pull_request')[0];
+            const methods = prRule.parameters?.allowed_merge_methods || [];
+            if (methods.length !== 1 || methods[0] !== 'squash') {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_MERGE_METHOD_INVALID:${methods.join(',')}`);
+              return;
+            }
+            const statusRules = byType('required_status_checks');
+            const contexts = statusRules.flatMap(rule => rule.parameters?.required_status_checks || []).map(row => row.context);
+            if (!contexts.includes('OVC merge readiness')) {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_REQUIRED_CHECK_MISSING:${contexts.join(',')}`);
+              return;
+            }
+            const rulesetIds = [...new Set(rules.map(rule => rule.ruleset_id).filter(Boolean))];
+            if (rulesetIds.length !== 1) {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_RULESET_AMBIGUOUS:${rulesetIds.join(',')}`);
+              return;
+            }
+            const ruleset = await github.request('GET /repos/{owner}/{repo}/rulesets/{ruleset_id}', {
+              owner, repo, ruleset_id: rulesetIds[0],
+              headers: {'X-GitHub-Api-Version':'2022-11-28'}
+            });
+            if (ruleset.data.enforcement !== 'active') {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_RULESET_INACTIVE:${ruleset.data.enforcement}`);
+              return;
+            }
+            const bypass = ruleset.data.bypass_actors || [];
+            if (bypass.length !== 0) {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_BYPASS_ACTORS_PRESENT:${bypass.length}`);
+              return;
+            }
+            core.info(
+              `OVC_PHYSICAL_MAIN_EXCLUSIVITY=PASS ruleset=${rulesetIds[0]} ` +
+              `writer=DSAI_VIT_PHYSICAL_CONTROLLER gateway=DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY`
+            );
+
       - name: Require canonical VIT lineage before permanent PR assurance
         env:
           PYTHONPATH: src:.
         run: python3 tools/ci/vit_routing_preflight.py
+
+      - name: Resolve PIP-bound assurance identity and reuse authority
+        id: assurance
+        env:
+          PYTHONPATH: src:.
+        run: python3 tools/ci/vit_assurance_preflight.py
 
   pytest-unified:
     name: tests
@@ -40,17 +111,61 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
+
+      - name: Restore AA0 PIP-bound repository assurance
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/ovc-aa0-tests
+          key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          restore-keys: |
+            ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-
+
+      - name: Decide AA0 PIP-bound repository assurance
+        id: aa0
+        shell: bash
+        env:
+          EXACT_HIT: ${{ steps.cache.outputs.cache-hit }}
+          MATCHED_KEY: ${{ steps.cache.outputs.cache-matched-key }}
+          REUSE_AUTHORIZED: ${{ needs.vit-routing-preflight.outputs.aa0_reuse_authorized }}
+        run: |
+          set -euo pipefail
+          disposition=RUN_AA0
+          if [[ "${EXACT_HIT}" == "true" ]]; then
+            disposition=EXACT_GENERATION_REUSE
+          elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then
+            disposition=PLACEMENT_ONLY_PIP_REUSE
+          fi
+          if [[ "${disposition}" != "RUN_AA0" ]]; then
+            test -f "${RUNNER_TEMP}/ovc-aa0-tests/PASS"
+          fi
+          echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
+          echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_repository\",\"disposition\":\"${disposition}\"}"
+
       - uses: actions/setup-python@v5
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         with:
           python-version: "3.11"
+
       - name: Install pytest and Research Console test dependencies
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-      - name: Complete repository suite as BASE_INDEPENDENT assurance (native pytest)
+
+      - name: Complete repository suite as BASE_INDEPENDENT assurance
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: |
           # Historical rollback command (not executed): python3 -m unittest discover -s tests -v
           PYTHONPATH=src:. python3 -m pytest tests -q --tb=short
-      - name: Research Console vNext exact maintained API surface as BASE_INDEPENDENT assurance
-        run: PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short
+          PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short
+          mkdir -p "${RUNNER_TEMP}/ovc-aa0-tests"
+          printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-tests/PASS"
+
+      - name: Save AA0 PIP-bound repository assurance
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/ovc-aa0-tests
+          key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
@@ -62,12 +177,48 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
+
+      - name: Restore AA0 PIP-bound unittest parity
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/ovc-aa0-unittest
+          key: ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          restore-keys: |
+            ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-
+
+      - name: Decide AA0 PIP-bound unittest parity
+        id: aa0
+        shell: bash
+        env:
+          EXACT_HIT: ${{ steps.cache.outputs.cache-hit }}
+          MATCHED_KEY: ${{ steps.cache.outputs.cache-matched-key }}
+          REUSE_AUTHORIZED: ${{ needs.vit-routing-preflight.outputs.aa0_reuse_authorized }}
+        run: |
+          set -euo pipefail
+          disposition=RUN_AA0
+          if [[ "${EXACT_HIT}" == "true" ]]; then
+            disposition=EXACT_GENERATION_REUSE
+          elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then
+            disposition=PLACEMENT_ONLY_PIP_REUSE
+          fi
+          if [[ "${disposition}" != "RUN_AA0" ]]; then
+            test -f "${RUNNER_TEMP}/ovc-aa0-unittest/PASS"
+          fi
+          echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
+          echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_unittest_parity\",\"disposition\":\"${disposition}\"}"
+
       - uses: actions/setup-python@v5
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         with:
           python-version: "3.11"
+
       - name: Install pytest and Research Console test dependencies
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-      - name: Execute exact legacy unittest surface under pytest as BASE_INDEPENDENT assurance
+
+      - name: Execute exact legacy unittest surface under pytest as AA0 PIP-bound BASE_INDEPENDENT assurance
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         shell: bash
         run: |
           set +e
@@ -82,7 +233,18 @@ jobs:
           print(f'::error title=Pytest legacy-surface failure::{tail}')
           PY
           fi
+          if [ "$status" -eq 0 ]; then
+            mkdir -p "${RUNNER_TEMP}/ovc-aa0-unittest"
+            printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-unittest/PASS"
+          fi
           exit "$status"
+
+      - name: Save AA0 PIP-bound unittest parity
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/ovc-aa0-unittest
+          key: ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
 
   runner-parity:
     name: runner-parity
@@ -94,12 +256,48 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
+
+      - name: Restore AA0 PIP-bound runner parity
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/ovc-aa0-runner
+          key: ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          restore-keys: |
+            ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-
+
+      - name: Decide AA0 PIP-bound runner parity
+        id: aa0
+        shell: bash
+        env:
+          EXACT_HIT: ${{ steps.cache.outputs.cache-hit }}
+          MATCHED_KEY: ${{ steps.cache.outputs.cache-matched-key }}
+          REUSE_AUTHORIZED: ${{ needs.vit-routing-preflight.outputs.aa0_reuse_authorized }}
+        run: |
+          set -euo pipefail
+          disposition=RUN_AA0
+          if [[ "${EXACT_HIT}" == "true" ]]; then
+            disposition=EXACT_GENERATION_REUSE
+          elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then
+            disposition=PLACEMENT_ONLY_PIP_REUSE
+          fi
+          if [[ "${disposition}" != "RUN_AA0" ]]; then
+            test -f "${RUNNER_TEMP}/ovc-aa0-runner/PASS"
+          fi
+          echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
+          echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_runner_parity\",\"disposition\":\"${disposition}\"}"
+
       - uses: actions/setup-python@v5
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         with:
           python-version: "3.11"
+
       - name: Install pytest and Research Console test dependencies
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-      - name: Prove pytest collection parity as BASE_INDEPENDENT assurance
+
+      - name: Prove pytest collection parity as AA0 PIP-bound BASE_INDEPENDENT assurance
+        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         shell: bash
         run: |
           set +e
@@ -114,4 +312,15 @@ jobs:
           print(f'::error title=Pytest collection-parity failure::{tail}')
           PY
           fi
+          if [ "$status" -eq 0 ]; then
+            mkdir -p "${RUNNER_TEMP}/ovc-aa0-runner"
+            printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-runner/PASS"
+          fi
           exit "$status"
+
+      - name: Save AA0 PIP-bound runner parity
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/ovc-aa0-runner
+          key: ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ hashFiles('.github/workflows/tests.yml', 'pyproject.toml', 'requirements-console-vnext.txt', 'tools/ci/pytest_unittest_parity.py', 'tests/**') }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}

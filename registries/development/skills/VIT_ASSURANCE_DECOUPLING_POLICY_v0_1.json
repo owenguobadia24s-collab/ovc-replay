@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-vit-assurance-decoupling-policy/v1",
+  "policy_id": "DSAI3V-VIT-ASSURANCE-DECOUPLING-v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "packet_id": "DSAI3V-VIT-ASSURANCE-DECOUPLING-MAIN-EXCLUSIVITY",
+  "status": "ACTIVE_ON_MATERIALISATION",
+  "authority_sources": [
+    "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+    "registries/authority/DSAI3V_ASYNC_ASSURANCE_LIVE_AUTHORITY_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json"
+  ],
+  "authority_effect": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "assurance_classes": {
+    "AA0_BACKGROUND_REUSABLE": {
+      "identity": "PIP_PLUS_ASSURANCE_HARNESS",
+      "scope": "EXPENSIVE_REPOSITORY_AND_RUNNER_ASSURANCE",
+      "reuse": "EXACT_GENERATION_OR_VALID_PLACEMENT_ONLY_PIP_REUSE",
+      "cross_generation_reuse_marker": "VIT-AA0-Reuse-B64",
+      "payload_rebuild_or_dependency_or_authority_change": "FRESH_AA0_REQUIRED"
+    },
+    "AA1_PROSPECTIVE_TREE_BOUND": {
+      "identity": "CURRENT_VIT_GENERATION_ID_PLUS_RESULT_TREE",
+      "scope": "SHORT_PROFILE_AND_ORCHESTRATION_ASSURANCE",
+      "placement_refresh": "RENEW"
+    },
+    "AA2_MATERIALISATION_EDGE": {
+      "identity": "CURRENT_PHYSICAL_PREDECESSOR_PLUS_CURRENT_VIT_GENERATION",
+      "scope": "SIQ_PDC_EXACT_FINAL",
+      "reuse": "NONE"
+    },
+    "AA3_POST_WRITE_EQUIVALENCE": {
+      "identity": "MATERIALISATION_TRANSACTION_PLUS_RESULT_TREE",
+      "scope": "EXACT_PHYSICAL_VIT_TREE_EQUALITY",
+      "reuse": "NONE"
+    }
+  },
+  "placement_refresh": {
+    "unchanged_pip_dependency_frontier_authority": "PRESERVE_AA0_IF_VALID_REUSE_AUTHORIZATION",
+    "renew": [
+      "AA1_PROSPECTIVE_TREE_BOUND",
+      "AA2_MATERIALISATION_EDGE",
+      "AA3_POST_WRITE_EQUIVALENCE"
+    ],
+    "payload_rebuild_required": false
+  },
+  "reference_builder": "tools/ci/build_vit_aa0_reuse.py",
+  "reference_preflight": "tools/ci/vit_assurance_preflight.py",
+  "failure_policy": "FAIL_CLOSED_TO_FRESH_AA0_OR_SEMANTIC_REPREFLIGHT",
+  "devobs_metrics": [
+    "aa0_pip_assurance_repository",
+    "aa0_pip_assurance_unittest_parity",
+    "aa0_pip_assurance_runner_parity"
+  ],
+  "rollback": "Forward-disable cross-generation AA0 reuse and return to fresh assurance on every placement refresh; preserve VIT routing, SIQ, evidence and Git history."
+}
