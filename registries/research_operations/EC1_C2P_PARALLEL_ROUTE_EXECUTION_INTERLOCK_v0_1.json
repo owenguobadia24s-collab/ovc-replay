@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-c2p-parallel-route-execution-interlock/v1",
+  "packet_id": "PAR-WP0",
+  "status": "ACTIVE_RESTRICTIVE_INTERLOCK",
+  "canonical_dmrp_gate": "DMRPI-GREAL-EC1",
+  "c2p_shadow_gate": "C2P2-RS0-GRUN",
+  "joint_execution": {
+    "requires_both_pass": true,
+    "authority_transitive": false,
+    "dmrp_pass_grants_c2p": false,
+    "c2p_pass_grants_dmrp": false
+  },
+  "path1_firewall": {
+    "c2p_as_seed": "DENIED",
+    "c2p_as_filter": "DENIED",
+    "c2p_as_repair_input": "DENIED",
+    "c2p_as_promotion_criterion": "DENIED",
+    "post_disclosure_g1_repair": "DENIED"
+  },
+  "disclosure_firewall": {
+    "scientific_c2p_outputs": "SEALED_FROM_PATH1_REVIEWERS_UNTIL_E1_CONTENT_ADDRESSED_AND_R1_PASS",
+    "scientific_result_free_capacity_telemetry": "PERMITTED",
+    "scientific_result_bearing_capacity_labels": "DENIED_BEFORE_DISCLOSURE"
+  },
+  "real_source_authority": {
+    "dmrp": "NONE_UNTIL_DMRPI-GREAL-EC1_PASS",
+    "c2p": "NONE_UNTIL_C2P2-RS0-GRUN_PASS",
+    "path2": "NONE_SEPARATELY_GOVERNED"
+  },
+  "validation": "LOCKED_UNCONSUMED",
+  "authority_effect": "NONE_RESTRICTIVE_ONLY"
+}
