@@ -37,6 +37,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.mta",
     "ovc.research_operations.mcarb",
     "ovc.research_orchestration",
+    "ovc.system_atlas",
 }
 
 
@@ -48,6 +49,18 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
             if path.is_dir() and (path / "__init__.py").is_file()
         }
         self.assertEqual(EXPECTED_TOP_LEVEL, actual)
+
+    def test_system_atlas_namespace_is_inactive_read_only_observability_only(self) -> None:
+        init_text = (SRC / "ovc" / "system_atlas" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("inactive read-only observability", init_text)
+        self.assertIn("no active observability reliance", init_text)
+        self.assertIn("source admission", init_text)
+        self.assertIn("write", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("scientific semantics", init_text)
+        self.assertIn("publication", init_text)
+        self.assertIn("execution authority", init_text)
+        self.assertIn("fails closed", init_text)
 
     def test_ovc_package_names_match_foundation_allowlist(self) -> None:
         package_root = SRC / "ovc"
