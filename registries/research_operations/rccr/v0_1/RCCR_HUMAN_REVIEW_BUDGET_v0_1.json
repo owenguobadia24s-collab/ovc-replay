@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-rccr-human-review-budget/v1",
+  "budget_id": "RCCR-HUMAN-REVIEW-BUDGET-v0.1-BOOTSTRAP",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "frozen_by_gate": "RCCRI-G-PILOT-EXIT",
+  "operator_decision_ref": "docs/releases/rccr-v0-1/rccri-g-pilot-exit/RCCRI_G_PILOT_EXIT_OPERATOR_DECISION.json",
+  "effective_scope": ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"],
+  "pilot_observation": {
+    "admitted_assessment_denominator": 10,
+    "human_review_required_count": 0,
+    "human_review_required_share": 0.0,
+    "observed_workaround_count": 0,
+    "workaround_attempt_denominator": 10
+  },
+  "operational_triggers": {
+    "human_review_required_share_gt": 0.30,
+    "max_unresolved_review_count_per_scaleout_wave": 0,
+    "max_reviewer_conflict_count_per_scaleout_wave": 0,
+    "max_unprovenanced_decision_bearing_workaround_count_per_scaleout_wave": 0,
+    "queue_age_latency_reopen_policy": "MEASURE_CONTINUOUSLY_AND_TRIGGER_FORMALISM_LOAD_REVIEW_ON_FIRST_NONZERO_DENOMINATOR_BEFORE_ANY_FURTHER_EXPANSION_WAVE"
+  },
+  "trigger_semantics": {
+    "human_review_share": "OPERATIONAL_REVIEW_TRIGGER_ONLY_NOT_SCIENTIFIC_THRESHOLD",
+    "formalism_load_review": "WORKFLOW_FORMALISM_AND_REVIEW_BURDEN_REVIEW_ONLY_NO_SCIENTIFIC_EFFECT",
+    "throughput_slo": "NOT_ESTIMABLE_FROM_ZERO_PILOT_HUMAN_REVIEW_OBSERVATIONS_NO_VALUE_INVENTED"
+  },
+  "measurement_required": [
+    "human_review_required_count_and_denominator",
+    "completed_and_pending_review_counts",
+    "review_queue_age_denominators",
+    "review_latency_denominators",
+    "reopen_count_and_denominator",
+    "reviewer_conflict_count",
+    "unresolved_review_count",
+    "off_register_workaround_attempts_and_denominator",
+    "unprovenanced_decision_bearing_workaround_count"
+  ],
+  "later_numeric_slo_rule": "Any numeric throughput or latency SLO requires measured post-scaleout evidence and a versioned budget update; it cannot alter scientific gap, coverage or capability-need state.",
+  "authority_effect": "NONE"
+}
