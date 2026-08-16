@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/ovc_system_graph_v0_1.schema.json",
+  "title": "OVC System Graph v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "graph_id", "generation", "registry_versions", "completeness_profile", "court_record_status", "entities", "relationships", "assertions", "evidence_references", "conflicts", "authority_effect", "graph_logical_hash"],
+  "properties": {
+    "schema": {"const": "ovc-system-atlas-graph/v1"},
+    "graph_id": {"$ref": "#/$defs/typed_id"},
+    "generation": {"$ref": "#/$defs/generation"},
+    "registry_versions": {"type": "object", "additionalProperties": {"type": "string"}},
+    "completeness_profile": {"type": "string", "minLength": 1},
+    "court_record_status": {"enum": ["SYNTHETIC_NOT_COURT_RECORD", "EXACT_GIT_TREE"]},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+    "relationships": {"type": "array", "items": {"$ref": "#/$defs/relationship"}},
+    "assertions": {"type": "array", "items": {"$ref": "#/$defs/assertion"}},
+    "evidence_references": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
+    "conflicts": {"type": "array", "items": {"$ref": "#/$defs/conflict"}},
+    "authority_effect": {"const": "NONE_READ_ONLY_DERIVED_GRAPH"},
+    "graph_logical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "typed_id": {"type": "string", "pattern": "^(ovc|repo|git|atlas|synthetic):[A-Za-z0-9._:/@+\\-]+$"},
+    "sha40": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_id", "dimensions"],
+      "properties": {
+        "scope_id": {"type": "string", "minLength": 1},
+        "dimensions": {"type": "object"}
+      }
+    },
+    "state_planes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lifecycle", "implementation", "availability", "assurance", "authority", "activation", "canonicality", "currentness", "health"],
+      "properties": {
+        "lifecycle": {"enum": ["PLANNED", "CURRENT_GENERATION", "SUPERSEDED", "HISTORICAL"]},
+        "implementation": {"enum": ["NOT_IMPLEMENTED", "IMPLEMENTED"]},
+        "availability": {"enum": ["AVAILABLE", "UNAVAILABLE", "UNKNOWN"]},
+        "assurance": {"enum": ["UNQUALIFIED", "CONFORMANT", "DEGRADED"]},
+        "authority": {"enum": ["GRANTED", "DENIED", "RESERVED", "UNKNOWN"]},
+        "activation": {"enum": ["INACTIVE", "SHADOW", "ACTIVE"]},
+        "canonicality": {"enum": ["NONCANONICAL", "CANONICAL", "PUBLISHED"]},
+        "currentness": {"enum": ["CURRENT", "STALE", "HISTORICAL", "UNKNOWN"]},
+        "health": {"enum": ["HEALTHY", "DEGRADED", "FAILED"]}
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generation_id", "repository_commit", "repository_tree", "generation_class", "authority_effect"],
+      "properties": {
+        "generation_id": {"$ref": "#/$defs/typed_id"},
+        "repository_commit": {"$ref": "#/$defs/sha40"},
+        "repository_tree": {"$ref": "#/$defs/sha40"},
+        "generation_class": {"enum": ["SYNTHETIC", "REFERENCE", "INCREMENTAL", "HISTORICAL"]},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "entity_type", "label", "aliases", "scope", "state_planes", "visibility_partition", "evidence_refs"],
+      "properties": {
+        "entity_id": {"$ref": "#/$defs/typed_id"},
+        "entity_type": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "aliases": {"type": "array", "items": {"type": "string"}},
+        "scope": {"$ref": "#/$defs/scope"},
+        "state_planes": {"$ref": "#/$defs/state_planes"},
+        "visibility_partition": {"type": "string", "pattern": "^ATLAS_"},
+        "evidence_refs": {"type": "array", "items": {"$ref": "#/$defs/typed_id"}}
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relationship_id", "subject_id", "predicate", "object_id", "family", "scope", "resolution_status", "evidence_refs", "authority_effect"],
+      "properties": {
+        "relationship_id": {"$ref": "#/$defs/typed_id"},
+        "subject_id": {"$ref": "#/$defs/typed_id"},
+        "predicate": {"type": "string", "pattern": "^[A-Z_]+$"},
+        "object_id": {"$ref": "#/$defs/typed_id"},
+        "family": {"type": "string", "pattern": "^[A-Z_]+$"},
+        "scope": {"$ref": "#/$defs/scope"},
+        "resolution_status": {"enum": ["RECONCILED", "DECLARED_ONLY", "OBSERVED_ONLY", "FORBIDDEN_OBSERVED", "CONFLICTING", "UNRESOLVED"]},
+        "evidence_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/typed_id"}},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assertion_id", "subject_id", "predicate", "value", "scope", "status", "evidence_refs", "authority_effect"],
+      "properties": {
+        "assertion_id": {"$ref": "#/$defs/typed_id"},
+        "subject_id": {"$ref": "#/$defs/typed_id"},
+        "predicate": {"type": "string", "pattern": "^[A-Z_]+$"},
+        "value": {},
+        "scope": {"$ref": "#/$defs/scope"},
+        "status": {"enum": ["CANONICAL", "CANDIDATE", "DENIED", "RESERVED", "UNRESOLVED", "HISTORICAL"]},
+        "evidence_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/typed_id"}},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "evidence_class", "source_class", "source_identity", "source_path", "source_blob_sha", "locator", "repository_commit", "repository_tree", "visibility_partition"],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/typed_id"},
+        "evidence_class": {"type": "string", "minLength": 1},
+        "source_class": {"type": "string", "minLength": 1},
+        "source_identity": {"type": "string", "minLength": 1},
+        "source_path": {"type": ["string", "null"]},
+        "source_blob_sha": {"oneOf": [{"$ref": "#/$defs/sha40"}, {"type": "null"}]},
+        "locator": {"type": "string", "minLength": 1},
+        "repository_commit": {"$ref": "#/$defs/sha40"},
+        "repository_tree": {"$ref": "#/$defs/sha40"},
+        "visibility_partition": {"type": "string", "pattern": "^ATLAS_"}
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conflict_id", "conflict_class", "subject_id", "predicate", "competing_assertion_ids", "status", "evidence_refs", "authority_effect"],
+      "properties": {
+        "conflict_id": {"$ref": "#/$defs/typed_id"},
+        "conflict_class": {"type": "string", "pattern": "^[A-Z_]+$"},
+        "subject_id": {"$ref": "#/$defs/typed_id"},
+        "predicate": {"type": "string", "pattern": "^[A-Z_]+$"},
+        "competing_assertion_ids": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/typed_id"}},
+        "status": {"enum": ["OPEN", "RESOLVED", "HISTORICAL"]},
+        "evidence_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/typed_id"}},
+        "authority_effect": {"const": "NONE"}
+      }
+    }
+  }
+}

@@ -7,6 +7,9 @@ from ovc.development.identity import canonical_sha256
 from .security import WRITE_ACTIONS, decide_tool_request
 
 
+VIT_SUBSTRATE = "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1"
+
+
 class LocalToolBroker:
     """Narrow deny-by-default broker with separately gated ORCH-1 assisted-write authorization."""
 
@@ -59,6 +62,13 @@ class LocalToolBroker:
             "side_effect_performed":False,
             "merge_authority":"NONE",
         }
+        if action == "PUSH_BRANCH":
+            logical.update({
+                "required_execution_substrate":VIT_SUBSTRATE,
+                "branch_ref_authoritative":False,
+                "permanent_pr_requires_vit_lineage":True,
+                "direct_physical_main_candidate":False,
+            })
         return {
             "schema":"ovc-dsai-tool-broker-receipt/v1", **logical,
             "authority_effect":"NONE", "receipt_id":canonical_sha256(logical, role="DSAI_TOOL_BROKER_RECEIPT"),

@@ -20,6 +20,9 @@ def test_real_automatic_path_persists_reloadable_orch345_receipts_without_identi
     assert result["orch3_execution_record"]["record_id"]=="ad35c5d1931f2323b331f990f3a7369064252001fac57feb94743fda0d2a7898"
     assert [row["record_id"] for row in result["orch4_execution_records"]]==["260c628d27fb1f50d5bf73cb67c5a206514cc6af9612b0e1a5ff6e5c823864d7"]
     assert result["orch5_execution_record"]["record_id"]=="5e7617f3e6feb97d584f68993094b7e3cfa45b98a75db8c5a692b4efa615138d"
+    assert result["required_execution_substrate"]=="DSAI3V-VIT-GENERAL-AUTHORITY-v0.1"
+    assert result["vit_pip_required_before_execution"] is True
+    assert result["direct_physical_main_candidate"] is False
 
     paths=[Path(value) for value in result["persisted_receipt_paths"]]
     assert len(paths)==3 and all(path.is_file() for path in paths)

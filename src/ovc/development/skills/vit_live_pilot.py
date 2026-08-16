@@ -12,6 +12,16 @@ PILOT_CONTROLLER = "DSAI_VIT_PHYSICAL_CONTROLLER"
 PILOT_GATEWAY = "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
 
 
+def _is_sha256(value: str) -> bool:
+    if not isinstance(value, str) or len(value) != 64:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return value.lower() == value
+
+
 @dataclass(frozen=True)
 class LivePilotAuthority:
     authority_status: str
@@ -70,6 +80,9 @@ class LivePilotPacketAdmission:
     qa_pass: bool
     unresolved_warning_count: int = 0
     unresolved_review_count: int = 0
+    pip_id: str = ""
+    vit_generation_id: str = ""
+    vit_placement_id: str = ""
 
 
 def admit_live_pilot_packet(authority: LivePilotAuthority, packet: LivePilotPacketAdmission) -> str:
@@ -86,6 +99,8 @@ def admit_live_pilot_packet(authority: LivePilotAuthority, packet: LivePilotPack
         return "DENY_QA"
     if packet.unresolved_warning_count or packet.unresolved_review_count:
         return "DENY_UNRESOLVED_FINDING"
+    if not (_is_sha256(packet.pip_id) and _is_sha256(packet.vit_generation_id) and _is_sha256(packet.vit_placement_id)):
+        return "DENY_VIT_LINEAGE"
     return "ALLOW_LIVE_SERIALIZED_GATEWAY"
 
 

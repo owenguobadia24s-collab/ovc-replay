@@ -1,0 +1,18 @@
+{
+  "schema": "ovc-system-atlas-query-policy-registry/v1",
+  "registry_id": "ATLAS-QUERY-POLICY-v0.1",
+  "version": "0.1",
+  "status": "SKELETON_ATLAS_G1",
+  "query_families": ["SEARCH", "TRACE", "DEPENDENCY", "IMPACT", "EXPLAIN", "AUTHORITY", "OWNERSHIP", "WHY_BLOCKED", "HISTORY", "DIFF"],
+  "reference_first": true,
+  "path_ranking": ["CURRENT", "GOVERNED", "EXPLICIT", "SEMANTICALLY_SHORT", "TECHNICAL_ONLY"],
+  "trace_policy": {
+    "bounded_depth_required": true,
+    "cycles_explicit": true,
+    "all_paths_default": false
+  },
+  "result_bindings": ["GRAPH_GENERATION", "QUERY_POLICY_VERSION", "COMPLETENESS_PROFILE", "VISIBILITY_PROJECTION"],
+  "partial_coverage_policy": "NEVER_PRESENT_AS_EXHAUSTIVE",
+  "natural_language_policy": "MAY_COMPILE_TO_DETERMINISTIC_ATLAS_QUERY_BUT_MUST_NOT_INVENT_GRAPH_ANSWERS",
+  "authority_effect": "NONE"
+}

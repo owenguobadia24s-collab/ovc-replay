@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-dsai3v-vit-universal-routing-live-smoke/v1",
+  "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-B",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "status": "IMPLEMENTED",
+  "authority": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "authority_manifest": {
+    "programme_id": "OVC-DSAI-VIT-v0.3",
+    "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-B",
+    "authority": "AUTO_EXECUTABLE",
+    "authority_delta": "NONE",
+    "basis": "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1"
+  },
+  "authority_manifest_id": "ec0b651f479a0dfe05c6475935e4aa3bf610c8e85d2b86a90bbb8c352900eef7",
+  "dependency_frontier": {
+    "main": "0b159bd853b712ac8a575d6d573c4c84470c7407",
+    "dependencies": ["DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-A COMPLETED"],
+    "semantic_dependency_change": false
+  },
+  "dependency_frontier_id": "d692057c167642f718ff333312ada81a88205c0bc9ba83f633cf44dd39f0162d",
+  "purpose": "Live eligible VIT routing smoke B: independently repeat canonical permanent-PR lineage and SIQ admission after smoke A has materialised.",
+  "expected_route": "PIP -> VIT_GENERATION -> PLACEMENT -> PERMANENT_PR -> ASSURANCE -> SIQ -> SQUASH_MERGE -> DEVOBS",
+  "payload_rebuild_expected": 0,
+  "rollback": "Forward-remove or supersede this smoke evidence record only; preserve routing evidence and Git history."
+}

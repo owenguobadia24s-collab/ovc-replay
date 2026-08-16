@@ -4,6 +4,9 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from typing import Any, Mapping, Sequence
 
+from ovc.development.skills.vit_core import VitContractError
+from ovc.development.skills.vit_routing import VIT_MANDATORY, validate_vit_lineage_record
+
 BASE_INDEPENDENT = "BASE_INDEPENDENT"
 BASE_SENSITIVE = "BASE_SENSITIVE"
 READY = "READY"
@@ -42,6 +45,16 @@ BASE_SENSITIVE_CHECKS = frozenset({
 OPERATOR_GATE_CLASSES = frozenset({"OPERATOR_REQUIRED", "OPERATOR_GATE", "RESERVED"})
 
 
+def _is_sha256(value: str) -> bool:
+    if not isinstance(value, str) or len(value) != 64:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return value.lower() == value
+
+
 @dataclass(frozen=True)
 class QueueCandidate:
     packet_id: str
@@ -63,9 +76,16 @@ class QueueCandidate:
     blocking_issues: tuple[str, ...] = ()
     blocking_warnings: tuple[str, ...] = ()
     reason_codes: tuple[str, ...] = ()
+    vit_pip_id: str = ""
+    vit_generation_id: str = ""
+    vit_placement_id: str = ""
+    vit_lineage_ref: str = ""
+    vit_lineage_record: Mapping[str, Any] | None = None
 
     @classmethod
     def from_mapping(cls, value: Mapping[str, Any]) -> "QueueCandidate":
+        raw_lineage = value.get("vit_lineage_record")
+        lineage = dict(raw_lineage) if isinstance(raw_lineage, Mapping) else None
         return cls(
             packet_id=str(value.get("packet_id", "")).strip(),
             plan_id=str(value.get("plan_id", "")).strip(),
@@ -86,6 +106,11 @@ class QueueCandidate:
             blocking_issues=tuple(sorted(map(str, value.get("blocking_issues", ())))),
             blocking_warnings=tuple(sorted(map(str, value.get("blocking_warnings", ())))),
             reason_codes=tuple(sorted(map(str, value.get("reason_codes", ())))),
+            vit_pip_id=str(value.get("vit_pip_id", "")).strip(),
+            vit_generation_id=str(value.get("vit_generation_id", "")).strip(),
+            vit_placement_id=str(value.get("vit_placement_id", "")).strip(),
+            vit_lineage_ref=str(value.get("vit_lineage_ref", "")).strip(),
+            vit_lineage_record=lineage,
         )
 
     def as_dict(self) -> dict[str, Any]:
@@ -109,6 +134,11 @@ class QueueCandidate:
             "blocking_issues": list(self.blocking_issues),
             "blocking_warnings": list(self.blocking_warnings),
             "reason_codes": list(self.reason_codes),
+            "vit_pip_id": self.vit_pip_id,
+            "vit_generation_id": self.vit_generation_id,
+            "vit_placement_id": self.vit_placement_id,
+            "vit_lineage_ref": self.vit_lineage_ref,
+            "vit_lineage_record": dict(self.vit_lineage_record) if self.vit_lineage_record is not None else None,
         }
 
 
@@ -149,6 +179,32 @@ def classify_assurance(check_name: str) -> str:
     raise ValueError(f"unknown SIQ assurance check: {check_name!r}")
 
 
+def _lineage_blockers(candidate: QueueCandidate) -> list[str]:
+    if not (
+        _is_sha256(candidate.vit_pip_id)
+        and _is_sha256(candidate.vit_generation_id)
+        and _is_sha256(candidate.vit_placement_id)
+        and bool(candidate.vit_lineage_ref)
+        and candidate.vit_lineage_record is not None
+    ):
+        return ["VIT_LINEAGE_REQUIRED"]
+    try:
+        validated = validate_vit_lineage_record(candidate.vit_lineage_record, lineage_ref=candidate.vit_lineage_ref)
+    except (VitContractError, TypeError, ValueError):
+        return ["VIT_LINEAGE_INVALID"]
+    if validated.route_class != VIT_MANDATORY:
+        return ["VIT_LINEAGE_ROUTE_NOT_MANDATORY"]
+    if validated.packet_id != candidate.packet_id:
+        return ["VIT_LINEAGE_PACKET_MISMATCH"]
+    if (
+        validated.pip_id != candidate.vit_pip_id
+        or validated.generation_id != candidate.vit_generation_id
+        or validated.placement_id != candidate.vit_placement_id
+    ):
+        return ["VIT_LINEAGE_ID_MISMATCH"]
+    return []
+
+
 def evaluate_ready_admission(value: Mapping[str, Any] | QueueCandidate) -> QueueCandidate:
     candidate = value if isinstance(value, QueueCandidate) else QueueCandidate.from_mapping(value)
     blockers = list(candidate.reason_codes)
@@ -169,8 +225,12 @@ def evaluate_ready_admission(value: Mapping[str, Any] | QueueCandidate) -> Queue
     if not candidate.preliminary_assurance_pass: blockers.append("PRELIMINARY_ASSURANCE_NOT_PASS")
     if not candidate.rollback_defined: blockers.append("ROLLBACK_NOT_DEFINED")
     if not candidate.dependency_footprint_pinned: blockers.append("DEPENDENCY_FOOTPRINT_NOT_PINNED")
+    blockers.extend(_lineage_blockers(candidate))
     operator_boundary = candidate.gate_class in OPERATOR_GATE_CLASSES or candidate.authority_delta != "NONE"
-    if operator_boundary and not (candidate.operator_authority_satisfied and candidate.merge_authority_resolved):
+    lineage_blocked = any(code.startswith("VIT_LINEAGE_") for code in blockers)
+    if lineage_blocked:
+        state = WAIT
+    elif operator_boundary and not (candidate.operator_authority_satisfied and candidate.merge_authority_resolved):
         blockers.append("OPERATOR_AUTHORITY_REQUIRED")
         state = OPERATOR_REQUIRED
     elif blockers:

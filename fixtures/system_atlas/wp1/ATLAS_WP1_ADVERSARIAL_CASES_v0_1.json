@@ -1,0 +1,16 @@
+{
+  "schema": "ovc-system-atlas-adversarial-cases/v1",
+  "fixture_id": "ATLAS-WP1-ADVERSARIAL-v0.1",
+  "base_fixture": "fixtures/system_atlas/wp1/ATLAS_WP1_SYNTHETIC_GRAPH_v0_1.json",
+  "cases": [
+    {"case_id": "FALSE_AUTHORITY_ALLOW", "mutation": "graph.authority_effect=GRANTED", "expected_error": "ATLAS_GRAPH_AUTHORITY_EFFECT_INVALID"},
+    {"case_id": "FALSE_ACTIVE_STATE", "mutation": "remove entity.state_planes.activation", "expected_error": "ATLAS_STATE_PLANES_INCOMPLETE"},
+    {"case_id": "GRAPH_HASH_MISMATCH", "mutation": "replace graph_logical_hash", "expected_error": "ATLAS_GRAPH_LOGICAL_HASH_MISMATCH"},
+    {"case_id": "UNKNOWN_RELATIONSHIP", "mutation": "relationship.predicate=IMPLIES_AUTHORITY", "expected_error": "ATLAS_RELATIONSHIP_PREDICATE_INVALID"},
+    {"case_id": "MISSING_EVIDENCE", "mutation": "relationship.evidence_refs=[]", "expected_error": "ATLAS_RELATIONSHIP_EVIDENCE_INVALID"},
+    {"case_id": "UNCLASSIFIED_VISIBILITY", "mutation": "entity.visibility_partition=UNCLASSIFIED", "expected_error": "ATLAS_VISIBILITY_PARTITION_INVALID"},
+    {"case_id": "PROSPECTIVE_AS_COURT_RECORD", "mutation": "generation.repository_tree=not-a-sha", "expected_error": "ATLAS_GENERATION_TREE_INVALID"},
+    {"case_id": "FLOAT_IDENTITY_INPUT", "mutation": "assertion.value=0.5", "expected_error": "floating-point values are outside the Atlas canonical identity domain"}
+  ],
+  "authority_effect": "NONE"
+}

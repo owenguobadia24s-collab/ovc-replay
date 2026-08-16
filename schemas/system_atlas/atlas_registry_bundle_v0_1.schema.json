@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_registry_bundle_v0_1.schema.json",
+  "title": "Atlas Core registry bundle v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ontology", "predicate_authority", "visibility", "extractor", "resolver", "query_policy", "visual_grammar"],
+  "properties": {
+    "ontology": {"$ref": "#/$defs/registry"},
+    "predicate_authority": {"$ref": "#/$defs/registry"},
+    "visibility": {"$ref": "#/$defs/registry"},
+    "extractor": {"$ref": "#/$defs/registry"},
+    "resolver": {"$ref": "#/$defs/registry"},
+    "query_policy": {"$ref": "#/$defs/registry"},
+    "visual_grammar": {"$ref": "#/$defs/registry"}
+  },
+  "$defs": {
+    "registry": {
+      "type": "object",
+      "required": ["schema", "registry_id", "version", "status", "authority_effect"],
+      "properties": {
+        "schema": {"type": "string", "pattern": "^ovc-system-atlas-"},
+        "registry_id": {"type": "string", "pattern": "^ATLAS-"},
+        "version": {"const": "0.1"},
+        "status": {"enum": ["FROZEN_ATLAS_G1", "SKELETON_ATLAS_G1"]},
+        "authority_effect": {"const": "NONE"}
+      }
+    }
+  }
+}

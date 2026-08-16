@@ -1,0 +1,190 @@
+from __future__ import annotations
+
+import base64
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import tempfile
+from typing import Any, Mapping, Sequence
+
+from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
+from ovc.development.skills.vit_core import TREE_IDENTITY_PROFILE, VitContractError
+from ovc.development.skills.vit_routing import validate_vit_lineage_record
+
+REGISTER_PATH = Path("registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json")
+LINEAGE_B64_MARKER = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
+
+
+def _load_json(path: Path) -> Mapping[str, Any]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(raw, Mapping):
+        raise RuntimeError(f"expected JSON object: {path}")
+    return raw
+
+
+def _git(root: Path, args: Sequence[str], *, env: Mapping[str, str] | None = None) -> str:
+    proc = subprocess.run(
+        ["git", "-C", str(root), *args],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        env=dict(os.environ, **dict(env or {})),
+    )
+    return proc.stdout.strip()
+
+
+def _tree(root: Path, commitish: str) -> str:
+    return _git(root, ["rev-parse", f"{commitish}^{{tree}}"])
+
+
+def _safe_path(raw: object) -> str:
+    value = str(raw or "")
+    path = Path(value)
+    if not value or path.is_absolute() or ".." in path.parts or value == ".git" or value.startswith(".git/"):
+        raise RuntimeError(f"unsafe PIP path {value!r}")
+    return value.replace("\\", "/")
+
+
+def _compose_pip_tree(root: Path, predecessor_tree: str, logical_changes: Sequence[Mapping[str, Any]]) -> str:
+    """Reference-apply the identity-bearing PIP changes and return the exact Git tree."""
+    with tempfile.TemporaryDirectory() as td:
+        env = {"GIT_INDEX_FILE": str(Path(td) / "index")}
+        _git(root, ["read-tree", predecessor_tree], env=env)
+        seen: set[str] = set()
+        for change in logical_changes:
+            path = _safe_path(change.get("path"))
+            if path in seen:
+                raise RuntimeError(f"duplicate PIP path mutation: {path}")
+            seen.add(path)
+            op = str(change.get("op", ""))
+            if op == "DELETE":
+                _git(root, ["update-index", "--force-remove", "--", path], env=env)
+                continue
+            if op not in {"ADD", "MODIFY"}:
+                raise RuntimeError(f"unsupported PIP op {op!r} for {path}")
+            blob_sha = str(change.get("blob_sha", ""))
+            mode = str(change.get("mode", "100644"))
+            if not re.fullmatch(r"[0-9a-f]{40}", blob_sha):
+                raise RuntimeError(f"invalid PIP blob SHA for {path}")
+            if mode not in {"100644", "100755", "120000", "160000"}:
+                raise RuntimeError(f"invalid PIP mode for {path}: {mode}")
+            object_type = "commit" if mode == "160000" else "blob"
+            _git(root, ["cat-file", "-e", f"{blob_sha}^{{{object_type}}}"])
+            _git(root, ["update-index", "--add", "--cacheinfo", mode, blob_sha, path], env=env)
+        return _git(root, ["write-tree"], env=env)
+
+
+def _decode_lineage(body: str) -> Mapping[str, Any]:
+    match = LINEAGE_B64_MARKER.search(body)
+    if not match:
+        raise RuntimeError("VIT_LINEAGE_REQUIRED: add `VIT-Lineage-B64: <urlsafe-base64-canonical-lineage-json>` to the PR body")
+    token = match.group(1)
+    try:
+        token += "=" * ((4 - len(token) % 4) % 4)
+        raw = base64.urlsafe_b64decode(token.encode("ascii"))
+        record = json.loads(raw.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"VIT_LINEAGE_INVALID_ENCODING: {exc}") from exc
+    if not isinstance(record, Mapping):
+        raise RuntimeError("VIT_LINEAGE_INVALID: decoded lineage must be a JSON object")
+    return record
+
+
+def _exception_matches(exception: Mapping[str, Any], *, pr_number: int, head_sha: str, head_branch: str) -> bool:
+    if int(exception.get("pr_number", -1)) != pr_number:
+        return False
+    pinned_sha = str(exception.get("head_sha", "")).strip()
+    pinned_branch = str(exception.get("head_branch", "")).strip()
+    if pinned_sha:
+        return pinned_sha == head_sha
+    if pinned_branch:
+        return pinned_branch == head_branch and bool(exception.get("self_bootstrap", False))
+    return False
+
+
+def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
+    pr = event.get("pull_request")
+    if not isinstance(pr, Mapping):
+        raise RuntimeError("pull_request event payload is missing")
+    pr_number = int(event.get("number", pr.get("number", -1)))
+    head = pr.get("head")
+    base = pr.get("base")
+    if not isinstance(head, Mapping) or not isinstance(base, Mapping):
+        raise RuntimeError("pull_request head/base is missing")
+    head_sha = str(head.get("sha", "")).strip()
+    head_branch = str(head.get("ref", "")).strip()
+    base_sha = str(base.get("sha", "")).strip()
+    body = str(pr.get("body") or "")
+
+    register = _load_json(root / REGISTER_PATH)
+    if register.get("unregistered_bypass_policy") != "FAIL_CLOSED":
+        raise RuntimeError("VIT routing register is not fail-closed")
+
+    exceptions = register.get("registered_pr_exceptions", [])
+    if not isinstance(exceptions, list):
+        raise RuntimeError("registered_pr_exceptions must be a list")
+    for exception in exceptions:
+        if isinstance(exception, Mapping) and _exception_matches(
+            exception,
+            pr_number=pr_number,
+            head_sha=head_sha,
+            head_branch=head_branch,
+        ):
+            if bool(exception.get("siq_bypass_authority", True)):
+                raise RuntimeError("registered VIT exception cannot grant SIQ bypass authority")
+            return f"REGISTERED_EXCEPTION:{exception.get('exception_class', 'UNKNOWN')}"
+
+    record = _decode_lineage(body)
+    try:
+        lineage = validate_vit_lineage_record(record)
+    except (VitContractError, ValueError, TypeError) as exc:
+        raise RuntimeError(f"VIT_LINEAGE_INVALID: {exc}") from exc
+    if lineage.route_class != "VIT_MANDATORY":
+        raise RuntimeError("permanent integration PR lineage must be VIT_MANDATORY")
+
+    generation = record["generation"]
+    placement = record["placement"]
+    predecessor = generation["predecessor_tree"]
+    result = generation["result_tree"]
+    if predecessor.get("profile") != TREE_IDENTITY_PROFILE or result.get("profile") != TREE_IDENTITY_PROFILE:
+        raise RuntimeError("VIT_LINEAGE_TREE_PROFILE_INVALID")
+    base_tree = _tree(root, base_sha)
+    head_tree = _tree(root, head_sha)
+    if predecessor.get("tree_sha") != base_tree:
+        raise RuntimeError("VIT_LINEAGE_PREDECESSOR_NOT_PR_BASE_TREE")
+    if result.get("tree_sha") != head_tree:
+        raise RuntimeError("VIT_LINEAGE_RESULT_NOT_PR_HEAD_TREE")
+    if placement.get("predecessor_tree") != base_tree or placement.get("result_tree") != head_tree:
+        raise RuntimeError("VIT_LINEAGE_PLACEMENT_TREE_NOT_PR_TREE")
+    if placement.get("apply_profile") != REFERENCE_APPLY_PROFILE:
+        raise RuntimeError("VIT_LINEAGE_APPLY_PROFILE_NOT_REFERENCE")
+
+    pip = record["pip"]
+    logical_changes = pip.get("logical_changes")
+    if not isinstance(logical_changes, list) or not logical_changes:
+        raise RuntimeError("VIT_LINEAGE_PIP_CHANGES_INVALID")
+    composed_tree = _compose_pip_tree(root, base_tree, logical_changes)
+    if composed_tree != head_tree:
+        raise RuntimeError("VIT_LINEAGE_PIP_DOES_NOT_REPRODUCE_PR_HEAD_TREE")
+
+    return f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:{lineage.generation_id}:{lineage.placement_id}"
+
+
+def main() -> int:
+    event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
+    if event_name != "pull_request":
+        print("OVC_VIT_ROUTING_PREFLIGHT=PASS NON_PULL_REQUEST")
+        return 0
+    event_path = Path(os.environ["GITHUB_EVENT_PATH"])
+    root = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
+    event = _load_json(event_path)
+    result = check_pull_request_event(root=root, event=event)
+    print(f"OVC_VIT_ROUTING_PREFLIGHT=PASS {result}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

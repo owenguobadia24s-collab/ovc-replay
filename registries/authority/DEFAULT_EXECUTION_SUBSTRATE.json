@@ -19,6 +19,11 @@
     "attach_devobs_latency_receipt_on_packet_completion": true,
     "auto_ratify_non_reserved_pass_gates": true,
     "squash_merge_when_eligible": true,
+    "require_pip_before_permanent_candidate": true,
+    "require_vit_lineage_for_permanent_pr": true,
+    "require_vit_lineage_for_siq_admission": true,
+    "operator_required_packets_park_in_vit": true,
+    "placement_only_main_movement_payload_rebuild": false,
     "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
     "parallel_physical_merge": false,
     "stop_at_programme_owned_operator_required_boundary": true,
@@ -28,6 +33,7 @@
     "OWNER_AUTHORITY_CURRENT",
     "PREREQUISITES_PASS",
     "PROGRAMME_STATE_POINTER_CONSISTENT",
+    "VIT_ROUTING_LINEAGE_PRESENT",
     "QA_PASS",
     "NO_UNRESOLVED_WARNING_OR_REVIEW",
     "CURRENT_GRT_INTEGRATION_ASSURANCE",
@@ -48,5 +54,6 @@
     "no force-push or history rewrite"
   ],
   "source_authority": "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+  "routing_coverage_register": "registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json",
   "rollback": "Set this default substrate record to INACTIVE for new routing and return affected packets to the exact previously-authorised ORCH/SIQ serialized path; preserve all evidence and Git history."
 }

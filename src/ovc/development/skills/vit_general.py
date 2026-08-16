@@ -10,6 +10,16 @@ GENERAL_GATEWAY = "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
 GENERAL_SCOPE = "NORMAL_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION"
 
 
+def _is_sha256(value: str) -> bool:
+    if not isinstance(value, str) or len(value) != 64:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return value.lower() == value
+
+
 @dataclass(frozen=True)
 class GeneralVitAuthority:
     authority_status: str
@@ -81,6 +91,9 @@ class GeneralVitPacketAdmission:
     reserved_boundary_pending: bool = False
     unresolved_warning_count: int = 0
     unresolved_review_count: int = 0
+    pip_id: str = ""
+    vit_generation_id: str = ""
+    vit_placement_id: str = ""
 
 
 def admit_general_packet(authority: GeneralVitAuthority, packet: GeneralVitPacketAdmission) -> str:
@@ -93,6 +106,8 @@ def admit_general_packet(authority: GeneralVitAuthority, packet: GeneralVitPacke
         return "DENY_OWNER_AUTHORITY"
     if packet.reserved_boundary_pending:
         return "DENY_RESERVED_BOUNDARY"
+    if not (_is_sha256(packet.pip_id) and _is_sha256(packet.vit_generation_id) and _is_sha256(packet.vit_placement_id)):
+        return "DENY_VIT_LINEAGE"
     if not packet.prerequisites_pass:
         return "DENY_PREREQUISITE"
     if not packet.qa_pass:
