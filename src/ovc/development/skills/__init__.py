@@ -27,5 +27,6 @@ from .release import ReleaseBuildError, build_skill_release_bundle, resolve_fiel
 from .resolution import SkillResolutionError, build_resolution_records, build_skill_read_model
 from .security import HARD_DENY_ACTIONS, build_tool_request, decide_tool_request, issue_credential_handle, negative_reachability_probe, redact_sensitive, resolve_security_envelope, sandbox_leakage_probe, security_containment
 from .tool_broker import LocalToolBroker
+from .vit_completion_runtime import RECEIPT_STORE_ROOT_ENV, SIQ_PHYSICAL_GATEWAY, VIT_PHYSICAL_CONTROLLER, persist_physical_completion, recover_effective_write_completion, resolve_receipt_store
 
 __all__ = [name for name in globals() if not name.startswith("_")]
