@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      merge_sha:
+        description: Exact already-effective main merge SHA to recover; defaults to the dispatch ref SHA
+        required: false
+        type: string
 
 permissions:
   actions: read
@@ -20,11 +25,13 @@ jobs:
     name: DSAI3V local post-merge completion
     runs-on: [self-hosted, Windows]
     timeout-minutes: 15
+    env:
+      OVC_VIT_RECOVERY_MERGE_SHA: ${{ inputs.merge_sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-          fetch-depth: 2
+          fetch-depth: 0
           show-progress: false
 
       - name: Verify existing local external-artifact binding
@@ -32,6 +39,9 @@ jobs:
         run: |
           if (-not $env:OVC_EXTERNAL_ARTIFACT_ROOT) {
             throw "OVC_EXTERNAL_ARTIFACT_ROOT is not configured on the existing self-hosted runner."
+          }
+          if (-not $env:OVC_VIT_RECOVERY_MERGE_SHA) {
+            throw "OVC_VIT_RECOVERY_MERGE_SHA did not resolve."
           }
           python --version
 
@@ -41,4 +51,4 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src;.
         run: |
-          python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha "${{ github.sha }}"
+          python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha "$env:OVC_VIT_RECOVERY_MERGE_SHA"
