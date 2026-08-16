@@ -1,0 +1,51 @@
+name: GRT2 G2.5 limited enforcement
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  grt2-g2-5-limited-enforcement:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact candidate with history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test dependency
+        run: python -m pip install pytest
+
+      - name: GRT2-G2.5 deterministic runtime regressions
+        run: python -m pytest tests/governance/grt_v0_2/test_grt2_g2_5_pilot_runtime.py -q
+
+      - name: Evaluate current PR under operator-approved limited enforcement
+        env:
+          GRT2_BASE: ${{ github.event.pull_request.base.sha }}
+          GRT2_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: >-
+          python scripts/governance/grt_v0_2/reconcile_g2_5_pilot.py
+          --candidate --base "$GRT2_BASE" --head "$GRT2_HEAD"
+          --out artifacts/grt2-g2-5-current-candidate.json
+
+      - name: Replay eight exact historical G2.5 candidates
+        run: >-
+          python scripts/governance/grt_v0_2/reconcile_g2_5_pilot.py
+          --manifest docs/programmes/grt-v0-2/gates/GRT2_G2_5_RETROSPECTIVE_CANDIDATE_MANIFEST.json
+          --out artifacts/grt2-g2-5-retrospective-reconciliation.json
+
+      - name: Upload G2.5 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g2-5-pilot-evidence
+          path: artifacts/grt2-g2-5-*.json
+          if-no-files-found: error
