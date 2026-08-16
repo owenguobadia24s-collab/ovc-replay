@@ -1,0 +1,111 @@
+{
+  "schema": "ovc-dsai3v-vit-universal-routing-closeout/v1",
+  "closeout_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-CLOSEOUT-0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-CLOSEOUT",
+  "status": "IMPLEMENTED_PENDING_FINAL_ASSURANCE_AND_MATERIALISATION",
+  "authority": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE",
+  "authority_manifest": {
+    "programme_id": "OVC-DSAI-VIT-v0.3",
+    "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-CLOSEOUT",
+    "authority": "AUTO_RATIFIABLE",
+    "authority_delta": "NONE",
+    "basis": "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1 + DSAI3V-VIT-UNIVERSAL-ROUTING delegated corrective PASS"
+  },
+  "authority_manifest_id": "24d3bdce3162bc809b7f901f5a3ba4221f3b57d35b46d2653d5a4452554bece1",
+  "dependency_frontier": {
+    "main": "b29af1be79903c9c07dae6b842a03eb5267593fc",
+    "dependencies": [
+      "DSAI3V-VIT-UNIVERSAL-ROUTING-CONFORMANCE MERGED 1afae5de5134003b756ae3e077ff628018896491",
+      "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-A MERGED 0b159bd853b712ac8a575d6d573c4c84470c7407",
+      "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-B MERGED 2f6042458d580122d8b6014c38ffd621cee80676",
+      "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-C MERGED b29af1be79903c9c07dae6b842a03eb5267593fc"
+    ],
+    "semantic_dependency_change": false
+  },
+  "dependency_frontier_id": "2a70546bf88752e3bd8084fd32b846edd5593a0ca4d23f9e6d3479f29bee7057",
+  "corrective_materialisation": {
+    "pr": 956,
+    "merge_commit": "1afae5de5134003b756ae3e077ff628018896491",
+    "decision": "DELEGATED_PASS",
+    "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION"
+  },
+  "live_smokes": [
+    {
+      "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-A",
+      "pr": 967,
+      "merge_commit": "0b159bd853b712ac8a575d6d573c4c84470c7407",
+      "routing_preflight": "PASS",
+      "repository_assurance": "PASS",
+      "final_head": "PASS",
+      "siq_ready": "PASS",
+      "merge_readiness": "PASS",
+      "workflow_runs": [31941027271, 31941027272]
+    },
+    {
+      "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-B",
+      "pr": 968,
+      "merge_commit": "2f6042458d580122d8b6014c38ffd621cee80676",
+      "routing_preflight": "PASS",
+      "repository_assurance": "PASS",
+      "final_head": "PASS",
+      "siq_ready": "PASS",
+      "merge_readiness": "PASS",
+      "workflow_runs": [31941294235, 31941294232]
+    },
+    {
+      "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-C",
+      "pr": 969,
+      "merge_commit": "b29af1be79903c9c07dae6b842a03eb5267593fc",
+      "original_pip_id": "cdbfab55f04e777ba07d0d830e4c4d600ea6c3cc4f2be99324d41bd486720c93",
+      "reanchored_generation_id": "bbab2b90cfab640246665231cd807366672399aeb8bd9714724afd275dda7e8d",
+      "reanchored_placement_id": "bc171c5b76eab38a599d9086c2bf6616a3368323b49b227251e2fce18479437f",
+      "main_advance": "0b159bd853b712ac8a575d6d573c4c84470c7407 -> 2f6042458d580122d8b6014c38ffd621cee80676",
+      "movement_disposition": "PLACEMENT_RECOMPUTE_ONLY",
+      "payload_rebuild_required": false,
+      "replacement_permanent_pr_created": false,
+      "assurance_renewal_required": true,
+      "initial_reanchor_preflight_failure": "VIT_LINEAGE_PREDECESSOR_NOT_PR_BASE_TREE_FROM_STALE_PULL_REQUEST_EVENT_BASE",
+      "bounded_recovery": "EMPTY_TREE_PRESERVING_ASSURANCE_RENEWAL_COMMIT_AFTER_PR_BASE_PROPAGATION",
+      "routing_preflight_after_recovery": "PASS",
+      "repository_assurance": "PASS",
+      "final_head": "PASS",
+      "siq_ready": "PASS",
+      "merge_readiness": "PASS",
+      "workflow_runs": [31941650366, 31941650384]
+    }
+  ],
+  "placement_only_evidence": {
+    "correction_time_reanchors": 3,
+    "post_correction_sibling_reanchor": 1,
+    "total_live_placement_recompute_events": 4,
+    "payload_rebuilds_caused_by_unrelated_main_movement": 0,
+    "replacement_permanent_prs_for_smoke_c_main_movement": 0,
+    "legitimate_payload_rebuilds_remain_distinct": ["C2P2-948-951"]
+  },
+  "devobs_inspection": {
+    "canonical_completion_receipt_framework": "ACTIVE",
+    "evidence_rule": "OBSERVED_FIELDS_ONLY_NO_UNOBSERVED_LATENCY_OR_EXECUTION_INFERENCE",
+    "packet_latency": "UNAVAILABLE_NO_TRACE_SUMMARY_BOUND_TO_THESE_SMOKE_PACKETS",
+    "payload_rebuild_observation": 0,
+    "placement_recompute_observation": 1,
+    "assurance_renewal_observation": 1,
+    "interpretation": "Mechanical routing benefit is evidenced; no end-to-end latency value is inferred where canonical source telemetry is absent."
+  },
+  "acceptance": {
+    "all_current_executable_packet_entrypoints_route_through_default_vit_substrate": "PASS_BY_COVERAGE_REGISTER_AND_FAIL_CLOSED_PRECHECKS",
+    "permanent_candidate_requires_canonical_pip_vit_generation_placement_lineage": "PASS",
+    "siq_requires_full_vit_mandatory_lineage": "PASS",
+    "placement_only_main_movement_preserves_pip_identity": "PASS_LIVE",
+    "placement_only_main_movement_payload_rebuild_count": 0,
+    "operator_required_packets_remain_parked_not_bypass": "PASS_BY_CONTRACT",
+    "legacy_direct_main_routes_fail_closed": "PASS",
+    "parallel_physical_merge": false,
+    "force_push_or_history_rewrite": false
+  },
+  "qa_recommendation": "PASS_IF_FINAL_CLOSEOUT_ASSURANCE_GREEN",
+  "operator_required": false,
+  "rollback": "Forward-disable only the stricter universal-routing conformance correction while preserving active VIT/SIQ authority, audit and live-smoke evidence, immutable history and existing serialized physical-main safety.",
+  "next_packet": null
+}
