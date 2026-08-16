@@ -9,7 +9,10 @@ from ovc.programme_genesis.migration import build_migration_record, discover_pro
 
 
 ROOT = Path(__file__).resolve().parents[2]
-EXCLUDED = {"registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json"}
+EXCLUDED = {
+    "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json",
+    "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json",
+}
 EXPECTED_TARGETS = {
     "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1": "MARKET_TRANSLATION",
     "OVC-C2E-NEUTRAL-EPISODE-v0.1": "MARKET_TRANSLATION",

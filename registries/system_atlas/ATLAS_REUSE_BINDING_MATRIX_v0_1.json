@@ -1,0 +1,58 @@
+{
+  "schema": "ovc-atlas-reuse-binding-matrix/v1",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "baseline_tree": "4c1c6892a4c930b1e252270564c893162e242d9d",
+  "entries": [
+    {
+      "dependency": "GRT_TOPOLOGY_ENGINE",
+      "classification": "REQUIRED_REUSE",
+      "status": "AVAILABLE_BOUND",
+      "bindings": [
+        {"path": "src/ovc/programme_genesis/_topology_engine.py", "blob": "dc43bf62d88a40b3a5a84fd2956d6f80b76be6f7"},
+        {"path": "src/ovc/programme_genesis/topology.py", "blob": "55dbc03b0197d6a4cc9046fdebf4a0b92e553548"}
+      ],
+      "rule": "Reuse exact-tree inventory and preserve GRT evidence classes; do not create a competing scanner."
+    },
+    {
+      "dependency": "GRT_V0_2_ENFORCEMENT",
+      "classification": "OPTIONAL_REUSE",
+      "status": "LIMITED_NEW_ARTIFACT_ENFORCEMENT_ACTIVE_G3_NOT_AUTHORISED",
+      "binding": "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json",
+      "rule": "Observe and conform to G2.5 limited enforcement; no Atlas proof may assume GRT2-G3."
+    },
+    {
+      "dependency": "RESEARCH_CONSOLE_PRODUCT_HOST",
+      "classification": "REQUIRED_REUSE",
+      "status": "AVAILABLE_READ_ONLY_HOST",
+      "binding": "registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json",
+      "rule": "Reuse product infrastructure for fixture/shadow work; do not add a real Atlas source without owner admission."
+    },
+    {
+      "dependency": "SHARED_SYSTEMS",
+      "classification": "OPTIONAL_REUSE",
+      "status": "EXACT_BINDING_RESOLVED_SERVICE_INACTIVE_NOT_IMPLEMENTED",
+      "binding": "registries/governance/grt_v0_2/shared_service_bindings/OVC_SHARED_SYSTEMS_V0_1_BINDING_REGISTRY.json",
+      "fallback": "LOCAL_BOUNDED",
+      "rule": "Do not claim shared-service ownership or activation; use bounded Atlas-local mechanisms where the design permits."
+    },
+    {
+      "dependency": "DSAI_VIT_SIQ",
+      "classification": "REQUIRED_REUSE",
+      "status": "ACTIVE_UNIVERSAL_VIT_ROUTING_AND_SERIALIZED_GATEWAY",
+      "bindings": [
+        "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
+        "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+        "docs/programmes/siq-runtime-v0-1/SIQ_RUNTIME_PROGRAMME_STATE.json"
+      ],
+      "rule": "Every permanent Atlas candidate requires PIP/VIT lineage and serialized SIQ materialisation."
+    },
+    {
+      "dependency": "EXTERNAL_ATLAS_ARTIFACT_ROOT",
+      "classification": "BLOCKING_REQUIRED",
+      "status": "SATISFIED_BOUND_READ_WRITE_VERIFIED",
+      "binding": "OVC_EXTERNAL_ARTIFACT_ROOT/system_atlas",
+      "binding_sha256": "e727bc9de75545189fe39ba2d526f3e67d39c0e81612845d8270d5b108e41e5c"
+    }
+  ],
+  "authority_effect": "NONE_DEPENDENCY_CLASSIFICATION_ONLY"
+}
