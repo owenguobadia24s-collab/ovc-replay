@@ -12,7 +12,7 @@ WP8 = ROOT / "docs/programmes/system-atlas-v0-1/wp8"
 
 def test_actual_projection_is_exact_tree_bound_and_read_only() -> None:
     projection = load_and_validate_projection(FIXTURE, ROOT)
-    assert projection["source_tree"] == "a58bbb34b53410a727febad909d04ec7e157dad1"
+    assert projection["source_tree"] == "1ba79ad839986b7294a00a82b348c210c9c107ce"
     assert len(projection["nodes"]) == 34
     assert projection["logical_hash"]
 
