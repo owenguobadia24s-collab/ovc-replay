@@ -40,6 +40,19 @@ def test_authority_envelopes_are_exact_and_owner_authority_remains_denied():
     assert canonical_sha256({"current": current, "proposed": proposed}) == stored["proposed_pass_effect_hash"]
 
 
+def test_pre_pilot_exit_fixture_currentness_is_rechecked_against_exact_main():
+    recheck = load("docs/releases/rccr-v0-1/rccri-g-pilot-exit/RCCRI_PILOT_EXIT_FIXTURE_CURRENTNESS_RECHECK.json")
+    assert recheck["recheck_main"] == "fff6bf2f8ed13060dba5030db3b62da992d5fb94"
+    assert recheck["population_total"] == 36
+    assert recheck["silent_sampling_forbidden"] is True
+    assert recheck["stale_fixture_count"] == 0
+    assert recheck["currentness"] == "PASS"
+    assert recheck["recheck_result"] == "PASS_NO_SEMANTIC_TRIGGER"
+    assert recheck["triggered_semantic_changes"] == []
+    assert all(item["status"] == "UNCHANGED" for item in recheck["dependency_recheck"].values())
+    assert recheck["authority_effect"] == "NONE"
+
+
 def test_gate_packet_is_complete_and_non_scientific():
     gate = load("docs/releases/rccr-v0-1/rccri-g-pilot-exit/RCCRI_G_PILOT_EXIT_GATE_PACKET.json")
     assert gate["execution_class"] == "OPERATOR_REQUIRED"
@@ -48,8 +61,13 @@ def test_gate_packet_is_complete_and_non_scientific():
     assert gate["proposed_pass_delta"]["real_source_ec1_authority"] == "NONE"
     assert gate["proposed_pass_delta"]["validation"] == "LOCKED_UNCONSUMED"
     assert gate["acceptance_conditions"]["review_trigger_over_30_percent"] is False
+    assert gate["acceptance_conditions"]["fixture_semantic_trigger_count"] == 0
     assert gate["acceptance_conditions"]["observed_workaround_count"] == 0
     assert gate["acceptance_conditions"]["unsupported_information_gap_promotions"] == 0
+    budget = gate["human_review_budget_recommendation"]
+    assert budget["max_human_review_required_share"] == 0.30
+    assert budget["scientific_threshold"] is False
+    assert budget["numeric_throughput_slo"].startswith("NOT_ESTIMABLE")
     assert gate["recommended_decision"] == "PASS"
     assert set(gate["allowed_decisions"]) == {"PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"}
 
