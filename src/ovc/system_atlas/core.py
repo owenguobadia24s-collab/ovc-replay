@@ -73,7 +73,7 @@ def _validate_registry_bundle(registries: Mapping[str, Any]) -> None:
     for registry_name, registry in registries.items():
         _require(isinstance(registry, Mapping), f"ATLAS_REGISTRY_INVALID:{registry_name}")
         _require(registry.get("authority_effect") == "NONE", f"ATLAS_REGISTRY_AUTHORITY_EFFECT:{registry_name}")
-        _require(registry.get("status") in {"FROZEN_ATLAS_G1", "SKELETON_ATLAS_G1"}, f"ATLAS_REGISTRY_STATUS:{registry_name}")
+        _require(registry.get("status") in {"FROZEN_ATLAS_G1", "SKELETON_ATLAS_G1", "FROZEN_ATLAS_G3"}, f"ATLAS_REGISTRY_STATUS:{registry_name}")
     predicates = registries["predicate_authority"].get("predicates", [])
     registered = {row.get("predicate") for row in predicates if isinstance(row, Mapping)}
     _require(MANDATORY_HIGH_RISK_PREDICATES <= registered, "ATLAS_HIGH_RISK_PREDICATE_POLICY_MISSING")
