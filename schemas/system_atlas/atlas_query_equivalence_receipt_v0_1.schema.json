@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_query_equivalence_receipt_v0_1.schema.json",
+  "title": "Atlas Query Equivalence Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "family", "case_comparisons", "result", "optimized_conformance", "reference_semantics", "authority_effect", "receipt_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-query-equivalence-receipt/v1"},
+    "family": {"enum": ["SEARCH", "TRACE", "DEPENDENCY", "IMPACT", "EXPLAIN", "AUTHORITY", "OWNERSHIP", "WHY_BLOCKED", "HISTORY", "DIFF"]},
+    "case_comparisons": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["case_id", "reference_result_hash", "optimized_result_hash", "equal"], "properties": {"case_id": {"type": "string", "minLength": 1}, "reference_result_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "optimized_result_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "equal": {"type": "boolean"}}}},
+    "result": {"enum": ["PASS", "FAIL_OPTIMIZED_QUARANTINED"]},
+    "optimized_conformance": {"enum": ["ADMITTED", "DENIED"]},
+    "reference_semantics": {"const": "CONTROLLING"},
+    "authority_effect": {"const": "NONE_QUERY_EQUIVALENCE_ONLY"},
+    "receipt_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

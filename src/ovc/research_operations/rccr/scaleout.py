@@ -31,12 +31,13 @@ def compile_bounded_scaleout(
     candidates: Iterable[Mapping[str, Any]],
     *,
     admitted_ids: Iterable[str],
+    owner_authority_frontier: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Compile one explicit post-pilot source wave.
 
-    Admission is exact-id allowlist only. The compiler never scans for interesting files,
-    upgrades owner state, opens Validation, or turns draft/preregistration preparation into
-    effective scientific authority.
+    Admission is exact-id allowlist only. Owner authority is descriptive input and
+    never transfers to RCCR: this compiler does not consume real-source evidence,
+    open Validation, activate a capability, or promote science.
     """
     allowed = set(str(v) for v in admitted_ids)
     by_id: dict[str, Mapping[str, Any]] = {}
@@ -91,10 +92,13 @@ def compile_bounded_scaleout(
         "admitted": admitted,
         "excluded": excluded,
         "pre_post_freeze_visibility_enforced": True,
-        "real_source_ec1_authority": "NONE",
-        "path2_real_source_authority": "NOT_GRANTED",
-        "owner_capability_activation": "DENIED",
-        "validation": "LOCKED_UNCONSUMED",
+        "owner_authority_frontier": dict(owner_authority_frontier or {}),
+        "rccr_consumption_boundary": {
+            "real_source_ec1_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+            "path2_real_source_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+            "owner_capability_activation": "DENIED",
+            "validation_consumption": "DENIED",
+        },
         "authority_effect": "NONE",
     }
     payload["manifest_id"] = hashlib.sha256(canonical_json_bytes(payload)).hexdigest()

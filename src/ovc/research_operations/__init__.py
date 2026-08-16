@@ -17,6 +17,12 @@ from .catalogue import (
 )
 from .config import ConfigurationError, ResearchOperationsConfig
 from .console import ConsoleWriteDenied, ResearchConsole
+from .dmrp_path2_prereg import (
+    Path2PreregValidationError,
+    make_path2_prereg_record,
+    preregistration_effective,
+    verify_path2_prereg_record,
+)
 from .identity import DuplicateRecordIdError, RecordIdRegistry, deterministic_record_id
 from .lifecycle import FrozenRecordMutationError, freeze_record, supersede_record, verify_frozen_record
 from .operations import ResearchOperationsService
@@ -39,5 +45,6 @@ __all__ = [
     "write_catalogue", "read_catalogue", "catalogue_report", "ResearchQueueService",
     "QAAssertion", "QARun", "QARunner", "required_fields_check",
     "ReadModelNode", "ResearchReadModel", "ReadModelBuilder", "query_nodes",
-    "ConsoleWriteDenied", "ResearchConsole",
+    "ConsoleWriteDenied", "ResearchConsole", "Path2PreregValidationError",
+    "make_path2_prereg_record", "verify_path2_prereg_record", "preregistration_effective",
 ]

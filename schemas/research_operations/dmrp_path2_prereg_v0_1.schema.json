@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/dmrp_path2_prereg_v0_1.schema.json",
+  "title": "OVC DMRP Path-2 additive preregistration records v0.1",
+  "description": "Additive native TheoryRecord, ResearchProtocol and ExperimentRecord preregistration family. Existing Research Operations v0.1 and DMRP v0.2 schemas remain unchanged.",
+  "oneOf": [
+    {"$ref":"#/$defs/TheoryRecord"},
+    {"$ref":"#/$defs/ResearchProtocol"},
+    {"$ref":"#/$defs/ExperimentRecord"}
+  ],
+  "$defs": {
+    "Envelope": {
+      "type":"object",
+      "required":["schema_family","schema_version","record_type","record_id","scientific_payload","semantic_sha256","record_sha256","authority_effect"],
+      "properties":{
+        "schema_family":{"const":"DMRP_PATH2_PREREG"},
+        "schema_version":{"const":"0.1"},
+        "record_type":{"enum":["THEORY_RECORD","RESEARCH_PROTOCOL","EXPERIMENT_RECORD"]},
+        "record_id":{"type":"string","pattern":"^ro:p2:(theory|protocol|experiment):[0-9a-f]{64}$"},
+        "scientific_payload":{"type":"object"},
+        "semantic_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+        "record_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+        "authority_effect":{"const":"NONE"},
+        "physical_attempt_id":{"type":["string","null"]},
+        "artifact_refs":{"type":"array","items":{"type":"object"}}
+      },
+      "additionalProperties":false
+    },
+    "TheoryRecord":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"THEORY_RECORD"},"scientific_payload":{"type":"object","required":["theory_id","title","origin_class","evidence_state","proposition","scope","observable_implications","falsifiers","measurement_consequences","research_conduct_consequences","path1_influence"]}}}]},
+    "ResearchProtocol":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"RESEARCH_PROTOCOL"},"scientific_payload":{"type":"object","required":["protocol_id","theory_id","title","question","lawful_unit","population","inputs","metrics","baselines","decision_rule","leakage_controls","qa_checks","method_parameter_pack_id","method_parameter_sha256","protocol_state"]}}}]},
+    "ExperimentRecord":{"allOf":[{"$ref":"#/$defs/Envelope"},{"properties":{"record_type":{"const":"EXPERIMENT_RECORD"},"scientific_payload":{"type":"object","required":["experiment_id","protocol_id","theory_id","preregistration_state","preregistered_at","data_release_ids","code_commit","config_hash","sample_binding","exclusions","qa_plan","method_parameter_pack_id","method_parameter_sha256","dependency_state","result_artifacts","candidate_formation","validation"]}}}]}
+  }
+}

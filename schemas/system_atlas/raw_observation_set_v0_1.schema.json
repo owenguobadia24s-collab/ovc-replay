@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/raw_observation_set_v0_1.schema.json",
+  "title": "Atlas Raw Observation Set v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "extractor_id", "extractor_version", "repository_commit", "repository_tree", "grt_programme_id", "grt_topology_sha256", "raw_observations", "physical_components", "component_edges", "canonical_assertions", "completeness", "court_record_status", "authority_effect", "raw_observation_set_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-raw-observation-set/v1"},
+    "extractor_id": {"const": "atlas.extractor.grt-exact-tree.v0.1"},
+    "extractor_version": {"const": "0.1"},
+    "repository_commit": {"$ref": "#/$defs/sha40"},
+    "repository_tree": {"$ref": "#/$defs/sha40"},
+    "grt_programme_id": {"type": "string", "minLength": 1},
+    "grt_topology_sha256": {"type": "string"},
+    "raw_observations": {"type": "array", "items": {"$ref": "#/$defs/observation"}},
+    "physical_components": {"type": "array", "items": {"type": "object"}},
+    "component_edges": {"type": "array", "items": {"type": "object"}},
+    "canonical_assertions": {"const": []},
+    "completeness": {"type": "object"},
+    "court_record_status": {"const": "EXACT_GIT_TREE"},
+    "authority_effect": {"const": "NONE_RAW_OBSERVATION_SET_ONLY"},
+    "raw_observation_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "sha40": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observation_id", "extractor_id", "extractor_version", "repository_commit", "repository_tree", "source_path", "source_blob_sha", "locator", "normalized_content_hash", "observation_type", "raw_subject", "raw_predicate", "raw_object", "scope_hints", "parse_status", "evidence_class", "canonical_promotion", "authority_effect"],
+      "properties": {
+        "observation_id": {"type": "string", "pattern": "^atlas:observation:[0-9a-f]{64}$"},
+        "extractor_id": {"const": "atlas.extractor.grt-exact-tree.v0.1"},
+        "extractor_version": {"const": "0.1"},
+        "repository_commit": {"$ref": "#/$defs/sha40"},
+        "repository_tree": {"$ref": "#/$defs/sha40"},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_blob_sha": {"$ref": "#/$defs/sha40"},
+        "locator": {"type": "string", "minLength": 1},
+        "normalized_content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "observation_type": {"enum": ["PHYSICAL_COMPONENT", "COMPONENT_RELATIONSHIP"]},
+        "raw_subject": {"type": "string", "minLength": 1},
+        "raw_predicate": {"type": "string", "minLength": 1},
+        "raw_object": {},
+        "scope_hints": {"type": "object"},
+        "parse_status": {"enum": ["PARSED", "PARTIAL", "UNRESOLVED"]},
+        "evidence_class": {"enum": ["SOURCE_EXPLICIT", "LINEAGE_EXPLICIT", "PATH_AND_CONTENT_CORROBORATED", "TEST_CORROBORATED", "IMPORT_CORROBORATED", "CANDIDATE_RELATION", "INFERRED", "UNRESOLVED"]},
+        "canonical_promotion": {"const": "DENIED_PENDING_PREDICATE_AUTHORITY_RESOLUTION"},
+        "authority_effect": {"const": "NONE_RAW_OBSERVATION_ONLY"}
+      }
+    }
+  }
+}

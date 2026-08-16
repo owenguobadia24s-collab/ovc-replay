@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/manifest_currentness_record_v0_1.schema.json",
+  "title": "Atlas Manifest Currentness Record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "record_id", "manifest_id", "repository_commit", "repository_tree", "status", "source_comparisons", "current_declarative_eligibility", "history_visibility", "canonical_promotion", "authority_effect", "record_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-manifest-currentness-record/v1"},
+    "record_id": {"type": "string", "pattern": "^atlas:manifest-currentness:[0-9a-f]{64}$"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "repository_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "status": {"enum": ["CURRENT", "STALE_SOURCE_HASH", "SUPERSEDED_SOURCE", "UNRESOLVED"]},
+    "source_comparisons": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "current_declarative_eligibility": {"type": "boolean"},
+    "history_visibility": {"const": "PRESERVED"},
+    "canonical_promotion": {"const": "DENIED_PENDING_WP4_RESOLUTION"},
+    "authority_effect": {"const": "NONE_CURRENTNESS_OBSERVATION_ONLY"},
+    "record_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

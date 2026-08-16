@@ -1,7 +1,7 @@
 {
   "schema": "ovc-rccr-wp6b-source-admission/v1",
   "packet_id": "RCCRI-WP6B",
-  "baseline_main": "1d8ef27a53b662d9babd2932412f46a866d092aa",
+  "baseline_main": "11aefbbba5dbd2e50181d2e4793e673675f2949d",
   "pilot_exit_decision": "PASS",
   "admission_mode": "EXACT_ID_ALLOWLIST_ONLY",
   "interesting_file_ingestion": "FORBIDDEN",
@@ -82,11 +82,30 @@
     }
   ],
   "explicit_exclusions": [
-    {"source_id": "P2-EXT-EXPERIMENTRECORD-SHELLS-v0.1", "reason": "PREREGISTRATION_SHELL_NOT_EFFECTIVE"},
-    {"source_id": "P2-EXT-RESEARCHPROTOCOL-PREP-v0.1", "reason": "PREPARATION_PACK_NOT_STANDALONE_NATIVE_RECORD"},
-    {"source_id": "VALIDATION_PROTECTED_CONTENT", "reason": "PROTECTED_SOURCE_DENIED"},
-    {"source_id": "REAL_SOURCE_EC1_RESULTS", "reason": "REAL_SOURCE_EC1_AUTHORITY_NONE"},
-    {"source_id": "ARBITRARY_INTERESTING_FILES", "reason": "NO_EXACT_GOVERNED_ADMISSION"}
+    {
+      "source_id": "P2-EXT-EXPERIMENTRECORD-SHELLS-v0.1",
+      "reason": "PREREGISTRATION_SHELL_NOT_EFFECTIVE_IN_BOUND_WAVE"
+    },
+    {
+      "source_id": "P2-EXT-RESEARCHPROTOCOL-PREP-v0.1",
+      "reason": "PREPARATION_PACK_NOT_STANDALONE_NATIVE_RECORD"
+    },
+    {
+      "source_id": "VALIDATION_PROTECTED_CONTENT",
+      "reason": "PROTECTED_SOURCE_DENIED"
+    },
+    {
+      "source_id": "REAL_SOURCE_EC1_RESULTS",
+      "reason": "OWNER_AUTHORISED_BUT_RCCRI_WP6B_CONSUMPTION_NOT_ADMITTED"
+    },
+    {
+      "source_id": "PATH2_REAL_SOURCE_RESULTS",
+      "reason": "OWNER_AUTHORISED_BUT_RCCRI_WP6B_CONSUMPTION_NOT_ADMITTED"
+    },
+    {
+      "source_id": "ARBITRARY_INTERESTING_FILES",
+      "reason": "NO_EXACT_GOVERNED_ADMISSION"
+    }
   ],
   "visibility_firewall": {
     "path1_to_path2_seed_filter_repair_or_promotion": "FORBIDDEN",
@@ -94,10 +113,29 @@
     "post_freeze_control_state_does_not_rewrite_pre_freeze_objects": true,
     "external_finding_authority_effect": "NONE"
   },
+  "owner_authority_frontier": {
+    "ec1": {
+      "owner_gate": "DMRPI-GREAL-EC1",
+      "state": "AUTHORISED_BOUNDED",
+      "decision_ref": "docs/releases/ec1-dmrp-conformance-v0-1/dmrpi-wp6/DMRPI_GREAL_EC1_GATE_PACKET.json",
+      "merge_commit": "a26bc19d76ed3ebd3def43a23468404e976f84eb"
+    },
+    "path2_external": {
+      "owner_gate": "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+      "state": "AUTHORISED_BOUNDED",
+      "decision_ref": "docs/releases/ec1-dmrp-conformance-v0-1/path2-external-theory/p2-ext-real-source-authority/P2_EXT_REAL_SOURCE_EVIDENTIARY_AUTHORITY_OPERATOR_DECISION_v0_1.json",
+      "merge_commit": "04b379adee8b584e841b24e83883aed33e090c61"
+    },
+    "validation": {
+      "state": "LOCKED_UNCONSUMED"
+    }
+  },
+  "rccr_consumption_boundary": {
+    "real_source_ec1_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "path2_real_source_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "owner_capability_activation": "DENIED",
+    "validation_consumption": "DENIED"
+  },
   "owner_authority_preserved": true,
-  "real_source_ec1_authority": "NONE",
-  "path2_real_source_authority": "NOT_GRANTED",
-  "owner_capability_activation": "DENIED",
-  "validation": "LOCKED_UNCONSUMED",
   "authority_effect": "NONE"
 }

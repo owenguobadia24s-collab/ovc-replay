@@ -80,7 +80,7 @@ def test_all_nine_state_planes_remain_independent() -> None:
 def test_high_risk_predicate_registry_is_fail_closed() -> None:
     registries = load_registry_bundle(ROOT)
     rows = {row["predicate"]: row for row in registries["predicate_authority"]["predicates"]}
-    assert set(rows) == {"OWNS", "ACTIVE", "AUTHORISED", "CURRENT", "CANONICAL", "PUBLISHED"}
+    assert {"OWNS", "ACTIVE", "AUTHORISED", "CURRENT", "CANONICAL", "PUBLISHED"} <= set(rows)
     assert rows["OWNS"]["deterministic_derivation_allowed"] is False
     assert rows["OWNS"]["conflict_class"] == "OWNER_CONFLICT"
     assert rows["AUTHORISED"]["derivation_rule"] == "INTERSECTION_ONLY_NO_ADJACENCY_GRANT"
@@ -181,7 +181,7 @@ def test_unknown_owner_is_preserved_as_conflict_not_selected() -> None:
 
 def test_wp1_schemas_contracts_and_registries_are_machine_readable() -> None:
     schema_names = {path.name for path in SCHEMAS.glob("*.json")}
-    assert schema_names == {"atlas_registry_bundle_v0_1.schema.json", "ovc_system_graph_v0_1.schema.json"}
+    assert {"atlas_registry_bundle_v0_1.schema.json", "ovc_system_graph_v0_1.schema.json"} <= schema_names
     for path in SCHEMAS.glob("*.json"):
         schema = load(path)
         assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"

@@ -2,7 +2,7 @@
   "schema": "ovc-system-atlas-extractor-registry/v1",
   "registry_id": "ATLAS-EXTRACTOR-v0.1",
   "version": "0.1",
-  "status": "SKELETON_ATLAS_G1",
+  "status": "FROZEN_ATLAS_G3",
   "registered_extractors": [
     {
       "extractor_id": "atlas.extractor.synthetic-fixture.v0.1",
@@ -12,9 +12,83 @@
       "determinism": "EXACT_INPUT_BYTES_AND_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
       "court_record_eligible": false,
       "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.grt-exact-tree.v0.1",
+      "version": "0.1",
+      "source_class": "GRT_EXACT_TREE_READ_MODEL",
+      "output_class": "ATLAS_RAW_OBSERVATION_SET",
+      "determinism": "EXACT_GIT_COMMIT_TREE_GRT_TOPOLOGY_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "evidence_class_policy": "PRESERVE_EXACT_GRT_CLASS_NO_PROMOTION",
+      "high_risk_predicate_policy": "OWNED_BY_AND_GOVERNED_BY_REMAIN_RAW_PENDING_PREDICATE_AUTHORITY_RESOLUTION",
+      "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.programme-record.v0.1",
+      "version": "0.1",
+      "source_class": "PROGRAMME_RECORD",
+      "output_class": "ATLAS_GOVERNED_RAW_OBSERVATION_SET",
+      "determinism": "EXACT_GRT_COMPONENT_GIT_BLOB_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.authority-record.v0.1",
+      "version": "0.1",
+      "source_class": "AUTHORITY_RECORD",
+      "output_class": "ATLAS_GOVERNED_RAW_OBSERVATION_SET",
+      "determinism": "EXACT_GRT_COMPONENT_GIT_BLOB_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.contract.v0.1",
+      "version": "0.1",
+      "source_class": "CONTRACT",
+      "output_class": "ATLAS_GOVERNED_RAW_OBSERVATION_SET",
+      "determinism": "EXACT_GRT_COMPONENT_GIT_BLOB_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.schema.v0.1",
+      "version": "0.1",
+      "source_class": "SCHEMA",
+      "output_class": "ATLAS_GOVERNED_RAW_OBSERVATION_SET",
+      "determinism": "EXACT_GRT_COMPONENT_GIT_BLOB_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.registry.v0.1",
+      "version": "0.1",
+      "source_class": "REGISTRY",
+      "output_class": "ATLAS_GOVERNED_RAW_OBSERVATION_SET",
+      "determinism": "EXACT_GRT_COMPONENT_GIT_BLOB_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.research-record.v0.1",
+      "version": "0.1",
+      "source_class": "RESEARCH_RECORD",
+      "output_class": "ATLAS_GOVERNED_RAW_OBSERVATION_SET",
+      "determinism": "EXACT_GRT_COMPONENT_GIT_BLOB_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "authority_effect": "NONE"
+    },
+    {
+      "extractor_id": "atlas.extractor.architecture-manifest.v0.1",
+      "version": "0.1",
+      "source_class": "SOURCE_BOUND_ARCHITECTURE_MANIFEST",
+      "output_class": "ATLAS_ARCHITECTURE_OBSERVATION_SET",
+      "determinism": "EXACT_MANIFEST_SOURCE_HASH_SET_CURRENTNESS_AND_EXTRACTOR_VERSION_REPRODUCE_EXACT_LOGICAL_HASH",
+      "court_record_eligible": true,
+      "authority_effect": "NONE"
     }
   ],
-  "reserved_future_extractors": ["GRT_EXACT_TREE_ADAPTER", "GOVERNED_STRUCTURED_EXTRACTORS", "CODE_AST_EXTRACTOR", "ASSURANCE_EXTRACTOR", "ARCHITECTURE_MANIFEST_EXTRACTOR"],
+  "reserved_future_extractors": ["CODE_AST_EXTRACTOR", "ASSURANCE_EXTRACTOR"],
   "scanner_resolver_boundary": "EXTRACTORS_OBSERVE_ONLY_RESOLVERS_INTERPRET_GOVERNING_RECORDS_AUTHORIZE",
   "authority_effect": "NONE"
 }

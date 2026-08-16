@@ -25,18 +25,21 @@ def test_wp6b_wave_is_exact_allowlist_and_non_authoritative():
         "PATH2_IN_HOUSE", "PATH2_EXTERNAL", "EXTERNAL_FINDING", "ARCHITECTURE_CONTROL"
     }
     assert all(x["authority_effect"] == "NONE" for x in m["admitted_sources"])
-    assert m["real_source_ec1_authority"] == "NONE"
-    assert m["path2_real_source_authority"] == "NOT_GRANTED"
-    assert m["owner_capability_activation"] == "DENIED"
-    assert m["validation"] == "LOCKED_UNCONSUMED"
+    assert m["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
+    assert m["owner_authority_frontier"]["path2_external"]["state"] == "AUTHORISED_BOUNDED"
+    assert m["rccr_consumption_boundary"]["real_source_ec1_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
+    assert m["rccr_consumption_boundary"]["path2_real_source_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
+    assert m["rccr_consumption_boundary"]["owner_capability_activation"] == "DENIED"
+    assert m["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
 
 
-def test_wp6b_excludes_not_effective_and_protected_sources():
+def test_wp6b_excludes_unadmitted_real_source_and_protected_sources():
     m = load(MANIFEST)
     excluded = {x["source_id"]: x["reason"] for x in m["explicit_exclusions"]}
-    assert excluded["P2-EXT-EXPERIMENTRECORD-SHELLS-v0.1"] == "PREREGISTRATION_SHELL_NOT_EFFECTIVE"
+    assert excluded["P2-EXT-EXPERIMENTRECORD-SHELLS-v0.1"] == "PREREGISTRATION_SHELL_NOT_EFFECTIVE_IN_BOUND_WAVE"
     assert excluded["VALIDATION_PROTECTED_CONTENT"] == "PROTECTED_SOURCE_DENIED"
-    assert excluded["REAL_SOURCE_EC1_RESULTS"] == "REAL_SOURCE_EC1_AUTHORITY_NONE"
+    assert excluded["REAL_SOURCE_EC1_RESULTS"] == "OWNER_AUTHORISED_BUT_RCCRI_WP6B_CONSUMPTION_NOT_ADMITTED"
+    assert excluded["PATH2_REAL_SOURCE_RESULTS"] == "OWNER_AUTHORISED_BUT_RCCRI_WP6B_CONSUMPTION_NOT_ADMITTED"
     assert excluded["ARBITRARY_INTERESTING_FILES"] == "NO_EXACT_GOVERNED_ADMISSION"
 
 
@@ -51,16 +54,23 @@ def test_wp6b_pre_post_freeze_visibility_does_not_rewrite_state():
     assert freeze["visibility"] == "POST_FREEZE_VISIBLE"
 
 
-def test_scaleout_compiler_rejects_protected_or_unlisted_source():
+def test_scaleout_compiler_rejects_protected_or_unlisted_source_and_preserves_owner_frontier():
     base = {
         "source_id": "A", "stratum": "PATH2_EXTERNAL", "object_type": "TheoryRecord",
         "owner": "owner", "source_ref": "ref", "source_hash": "abc", "state": "UNTESTED",
         "visibility": "PRE_FREEZE_VISIBLE", "research_mode": "PATH_2_THEORY_FORMALISATION",
         "authority_effect": "NONE",
     }
-    out = compile_bounded_scaleout([base, {**base, "source_id": "B"}], admitted_ids=["A"])
+    owner_frontier = {"ec1": {"state": "AUTHORISED_BOUNDED"}}
+    out = compile_bounded_scaleout(
+        [base, {**base, "source_id": "B"}],
+        admitted_ids=["A"],
+        owner_authority_frontier=owner_frontier,
+    )
     assert [x["source_id"] for x in out["admitted"]] == ["A"]
     assert out["excluded"] == [{"source_id": "B", "reason": "NOT_EXACTLY_ADMITTED"}]
+    assert out["owner_authority_frontier"] == owner_frontier
+    assert out["rccr_consumption_boundary"]["real_source_ec1_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
     with pytest.raises(RCCRValidationError):
         compile_bounded_scaleout([{**base, "protected": True}], admitted_ids=["A"])
 
@@ -69,7 +79,9 @@ def test_bootstrap_wave_counts_and_boundaries_match_manifest():
     m = load(MANIFEST)
     b = load(BOOTSTRAP)
     assert b["admitted_source_count"] == len(m["admitted_sources"]) == 6
-    assert b["excluded_source_count"] == len(m["explicit_exclusions"]) == 5
+    assert b["excluded_source_count"] == len(m["explicit_exclusions"]) == 6
     assert b["mode_visibility_preserved"] is True
     assert b["negative_controls_preserved"] is True
+    assert b["owner_authority_frontier"] == m["owner_authority_frontier"]
+    assert b["rccr_consumption_boundary"] == m["rccr_consumption_boundary"]
     assert b["authority_effect"] == "NONE"

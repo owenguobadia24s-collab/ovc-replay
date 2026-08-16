@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-gate-packet/v1",
+  "gate_id": "ATLAS-G4-ALG",
+  "packet_id": "ATLAS-WP4",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "gate_class": "INDEPENDENT_REVIEW_BLOCKING_NON_OPERATOR",
+  "authority_before": "RATIFIED_BOUNDED_READ_ONLY_IMPLEMENTATION",
+  "proposed_delta": "NONE",
+  "acceptance_conditions": [
+    "ELIGIBLE_REVIEWER_BOUND_WITH_NO_IMPLEMENTATION_AUTHOR_CONFLICT",
+    "PREDICATE_SOURCE_ADMISSIBILITY_INDEPENDENTLY_ACCEPTED",
+    "PRECEDENCE_AND_OWNER_CARDINALITY_INDEPENDENTLY_ACCEPTED",
+    "CONSERVATIVE_AUTHORITY_FAILURE_BIAS_INDEPENDENTLY_ACCEPTED",
+    "SCOPE_NON_WIDENING_INDEPENDENTLY_ACCEPTED",
+    "GRT_EVIDENCE_MAPPING_INDEPENDENTLY_ACCEPTED",
+    "CONFLICT_PRESERVATION_INDEPENDENTLY_ACCEPTED",
+    "DETERMINISTIC_REFERENCE_RESULTS_REPRODUCED",
+    "CANONICAL_ASSERTION_SET_REMAINS_EMPTY_BEFORE_GATE_PASS"
+  ],
+  "source_currentness": {
+    "baseline_commit": "2dc98b95cdc4bda156a78de7738d3c2001f7fe87",
+    "baseline_tree": "b452b15876163f10b46539a292b435cfec3f86af",
+    "code_candidate_commit": "78eb42944bf4c6a6e92f09e0a56c34f03d5dfda9",
+    "code_candidate_tree": "71ad6973c126aaa9829a32dc4aa4b9fec512a064",
+    "ratified_plan_sha256": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30",
+    "ratified_design_sha256": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e",
+    "pre_review_binding_blob": "067395d4c92802fa179f635e3559fbc557d10df4",
+    "admitted_reviewer_binding_blob": "b0bfef4e2a62bc11a5c7bbba7756ef7e0630b945",
+    "independent_review_record_blob": "0392c0e2f813276abfeaf3f979fdae0b9fd850ef",
+    "atlas_vit_current_state_binding_blob": "7b6bb4270d8deff97ccd46ebe89625e70c6586c1",
+    "reference_resolver_blob": "cde41d15b1c6466d29a73355f8671421d2c10cd9",
+    "predicate_authority_registry_blob": "5d2c87c3662d592472a117c3b2e274a4ce53352c",
+    "adversarial_fixture_blob": "a909bb8097059d5ef3968a0cf538568f622281a5",
+    "external_review_evidence_sha256": "2cf3879276cb8676890b631880222ad2c704760e3455b80ab482cd4647b0a1e6",
+    "placement_main_commit": "a26bc19d76ed3ebd3def43a23468404e976f84eb",
+    "placement_main_tree": "92dd22644c68ac11067b447af46ddf6c4bbc268f"
+  },
+  "implementation_assurance": "PASS_73_ATLAS_TESTS_INCLUDING_REVIEW_ADMISSION",
+  "independent_review_status": "PASS_ELIGIBLE_IMPLEMENTATION_INDEPENDENT",
+  "independent_review_record": "docs/programmes/system-atlas-v0-1/wp4/ATLAS_G4_ALG_INDEPENDENT_REVIEW_RECORD.json",
+  "non_blocking_follow_ups": [
+    "G4-NB-01_BEFORE_FIRST_CANONICAL_OWNS_OR_GOVERNS_ASSERTION",
+    "G4-NB-02_BEFORE_FIRST_CANONICAL_HIGH_RISK_ASSERTION"
+  ],
+  "warnings": [
+    "Q6-IND was not reviewed by this reviewer and remains required before activation.",
+    "Reference resolver acceptance does not itself create canonical assertions or publication authority.",
+    "No Research Console, GRT, Shared Systems, scientific, validation, write, publication, or activation authority is granted."
+  ],
+  "blockers": [],
+  "recommended_decision": "PASS",
+  "authority_effect": "NONE",
+  "next_packet": "ATLAS-WP5",
+  "next_packet_eligibility": "ELIGIBLE_AFTER_WP4_INTEGRATION",
+  "rollback": "Forward-remove or supersede only WP4 resolver contracts, implementation, schemas, registries, fixtures, tests and derived review evidence; preserve WP0-WP3 and all source observations."
+}

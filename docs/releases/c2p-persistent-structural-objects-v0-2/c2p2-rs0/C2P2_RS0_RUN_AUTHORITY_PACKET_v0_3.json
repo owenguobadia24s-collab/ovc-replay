@@ -1,0 +1,97 @@
+{
+  "schema": "ovc-c2p2-rs0-grun-packet/v1",
+  "gate_id": "C2P2-RS0-GRUN",
+  "gate_title": "Authorize one exact preregistered C2P2 RS0 comparative real-source shadow run",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
+  "plan_version": "0.1",
+  "status": "APPROVED",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE C2P2-RS0-GRUN PASS",
+  "operator_decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_OPERATOR_DECISION_v0_1.json",
+  "baseline_commit": "83ea0a3e8fa755b817f56fc6bd81c7fc20ef451c",
+  "gate_ready_commit": "696b4cae6b8d8c583c50b6b878691b59bc66a486",
+  "completed_packets": [
+    "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
+    "C2P2_PS0_COMPARATIVE_SET_FREEZE",
+    "C2P2_RS0_PREPARATION",
+    "C2P2_RS0_GRUN_READINESS_V0_2_BLOCKED",
+    "C2P2_RS0_CAPACITY_DRY_RUN_AND_ARTIFACT_BINDING_PR_1024",
+    "C2P2_RS0_GRUN_READINESS_V0_3"
+  ],
+  "approved_authority": {
+    "real_source_run": "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN",
+    "selection_mode": "COMPARATIVE_SET_ONLY_NO_WINNER",
+    "active_object_pack": null,
+    "objectpack_selection": "NONE",
+    "c2p_activation": "NONE",
+    "ec1_scientific_authority_effect": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "publication_probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "source_population": {
+    "instrument": "GBPUSD",
+    "sides": [
+      "BID",
+      "ASK"
+    ],
+    "clocks": [
+      "15M",
+      "2H_A_L"
+    ],
+    "interval": "[2021-01-01T00:00:00Z,2024-01-01T00:00:00Z)",
+    "research_role": "DISCOVERY_SHADOW_ONLY",
+    "same_population_all_candidates": true,
+    "no_sampling": true
+  },
+  "candidate_set": [
+    {
+      "candidate_id": "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+      "logical_hash": "a96205038974f4280092afd2a464bfdc7ff7095a9b196617b9eaaf1c6ccd0ffd"
+    },
+    {
+      "candidate_id": "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+      "logical_hash": "eb6cc46d9f22ef3c6257f30eb61a16030b7cf493acf07c436b8ba904a8adb770"
+    },
+    {
+      "candidate_id": "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1",
+      "logical_hash": "1341b42b39638f9fc10bb84b841597c9254353270240ff683be264c061a24c17"
+    }
+  ],
+  "acceptance_conditions": {
+    "gate_ready_evidence": "PASS",
+    "currentness_through_atlas_wp9_main_advance": "PASS_NON_MATERIAL_TO_GRUN_BINDINGS",
+    "measured_capacity_budget": "PASS",
+    "external_artifact_root": "PASS",
+    "exact_upstream_bindings": "PASS",
+    "ec1_firewall": "PASS",
+    "validation_lock": "PASS",
+    "no_objectpack_selection_or_activation": "PASS"
+  },
+  "tests": {
+    "capacity_packet_tests_run_31967111114": "PASS",
+    "capacity_packet_tiered_run_31967111066": "PASS",
+    "approval_materialisation_final_head": "REQUIRED_BEFORE_MERGE"
+  },
+  "qa": {
+    "packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_QA_PACKET_v0_2.json",
+    "recommendation": "PASS",
+    "blocking_issues": []
+  },
+  "warnings": [
+    "Capacity ceiling is a measured fail-closed physical limit, not a scientific threshold or full-run demand prediction.",
+    "F0-A remains HOLD and joint launch remains denied.",
+    "This PASS grants no ObjectPack winner, selector, C2P activation, EC1 scientific effect, Validation access or downstream publication/probability/risk/exposure/execution authority."
+  ],
+  "unresolved_issues": [],
+  "rollback": "Forward-supersede before launch; after launch stop, preserve/hash partial evidence, quarantine incomplete generation and return to operator on any currentness or capacity failure. No sampling, reduced precision, population/ObjectPack mutation or history rewrite.",
+  "exact_work_after_pass": [
+    "Materialise this operator decision and authority on main through VIT/SIQ.",
+    "Re-resolve launch bindings.",
+    "Execute exactly one comparative A/B/C RS0 shadow run.",
+    "Preserve complete negative, null, ambiguity, censoring, disagreement and capacity evidence.",
+    "Stop at separate C2P scientific review/selection boundary with no automatic promotion."
+  ],
+  "next_packet": "C2P2-RS0-EXECUTION"
+}

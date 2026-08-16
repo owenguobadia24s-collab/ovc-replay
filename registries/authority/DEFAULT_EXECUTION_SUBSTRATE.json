@@ -6,7 +6,10 @@
   "operator_instruction": "OVC ACTIVATE DSAI3V AS DEFAULT EXECUTION SUBSTRATE",
   "effective_at": "2026-08-15T08:04:00+01:00",
   "routing_scope": {
-    "eligible_gate_classes": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+    "eligible_gate_classes": [
+      "AUTO_EXECUTABLE",
+      "AUTO_RATIFIABLE"
+    ],
     "required_authority_delta": "NONE",
     "required_owner_authority": "ALREADY_AUTHORISED_BY_GOVERNING_PROGRAMME",
     "currently_and_subsequently_eligible": true
@@ -35,12 +38,35 @@
     "historical_fallback_allowed": false,
     "failure_policy": "FAIL_CLOSED_CURRENT_STATUS_UNRESOLVED"
   },
+  "assurance_decoupling": {
+    "policy": "registries/development/skills/VIT_ASSURANCE_DECOUPLING_POLICY_v0_1.json",
+    "aa0_identity": "PIP_PLUS_ASSURANCE_HARNESS",
+    "cross_generation_reuse": "VALID_VIT_AA0_REUSE_AUTHORIZATION_ONLY",
+    "aa1_identity": "CURRENT_VIT_GENERATION_RESULT_TREE",
+    "aa1_placement_refresh": "RENEW",
+    "aa2_current_main_sensitive": true,
+    "aa3_post_write_equivalence_required": true,
+    "placement_only_main_movement_full_aa0_rerun": false
+  },
+  "physical_main_exclusivity": {
+    "policy": "registries/development/skills/VIT_PHYSICAL_MAIN_EXCLUSIVITY_v0_1.json",
+    "exclusive_writer_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "required_ruleset_id": 20229411,
+    "required_ruleset_name": "OVC main protection",
+    "required_check": "OVC merge readiness",
+    "bypass_actor_count": 0,
+    "allowed_merge_method": "squash"
+  },
   "required_assurance": [
     "OWNER_AUTHORITY_CURRENT",
     "PREREQUISITES_PASS",
     "PROGRAMME_STATE_POINTER_CONSISTENT",
     "CURRENT_VIT_STATE_RESOLUTION_CONSISTENT",
     "VIT_ROUTING_LINEAGE_PRESENT",
+    "PIP_BOUND_AA0_ASSURANCE_PASS_OR_VALID_REUSE",
+    "CURRENT_VIT_GENERATION_AA1_ASSURANCE",
+    "PHYSICAL_MAIN_EXCLUSIVITY_CURRENT",
     "QA_PASS",
     "NO_UNRESOLVED_WARNING_OR_REVIEW",
     "CURRENT_GRT_INTEGRATION_ASSURANCE",

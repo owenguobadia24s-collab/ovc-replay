@@ -2,9 +2,33 @@
   "schema": "ovc-system-atlas-resolver-registry/v1",
   "registry_id": "ATLAS-RESOLVER-v0.1",
   "version": "0.1",
-  "status": "SKELETON_ATLAS_G1",
+  "status": "ACCEPTED_ATLAS_G4_ALG",
   "reference_pipeline": ["NORMALIZE_IDENTITY", "RESOLVE_SCOPE", "NORMALIZE_RELATIONSHIPS", "APPLY_PREDICATE_AUTHORITY", "ENFORCE_OWNER_CARDINALITY", "INTERSECT_AUTHORITY", "RESOLVE_CURRENTNESS", "EMIT_CONFLICT_OR_CANONICAL_RESULT"],
-  "registered_resolvers": [],
+  "registered_resolvers": [
+    {
+      "resolver_id": "atlas.resolver.relationship-reconciliation.reference.v0.1",
+      "implementation": "ovc.system_atlas.resolver.relationship_resolution_state",
+      "version": "0.1",
+      "acceptance_status": "ACCEPTED_ATLAS_G4_ALG",
+      "authority_effect": "NONE"
+    },
+    {
+      "resolver_id": "atlas.resolver.predicate-owner-authority.reference.v0.1",
+      "implementation": "ovc.system_atlas.resolver.resolve_reference_candidates",
+      "version": "0.1",
+      "acceptance_status": "ACCEPTED_ATLAS_G4_ALG",
+      "authority_effect": "NONE"
+    },
+    {
+      "resolver_id": "atlas.resolver.vit-current-state.projection.v0.1",
+      "implementation": "ovc.system_atlas.resolver.resolve_current_vit_projection",
+      "source_resolver": "ovc.development.skills.vit_current_state.resolve_current_vit_query",
+      "version": "0.1",
+      "historical_fallback_allowed": false,
+      "acceptance_status": "ACCEPTED_ATLAS_G4_ALG",
+      "authority_effect": "NONE"
+    }
+  ],
   "default_failure_bias": "PRESERVE_EVIDENCE_EMIT_UNRESOLVED_OR_CONFLICT_NEVER_GUESS",
   "optimized_result_authority": "DENIED_UNTIL_REFERENCE_EQUIVALENCE_RECEIPT",
   "authority_effect": "NONE"

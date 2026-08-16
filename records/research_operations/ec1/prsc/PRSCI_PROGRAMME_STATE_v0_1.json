@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP0",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "COMPLETED",
+  "prerequisites": ["PRSCI-G0_COMPLETED_ON_MAIN@1c7006a48368d9f5bddaba750f98591a947d24d0"],
+  "authority_required": "NONE_WITHIN_CURRENT_AUTO_ENVELOPE",
+  "authority_delta": "NONE",
+  "baseline_commit": "83ea0a3e8fa755b817f56fc6bd81c7fc20ef451c",
+  "baseline_tree": "b3d3a07cff1a4aba457ea1b722a83a2267f55f8b",
+  "branch": "closeout/prsci-wp0-incident-disposition",
+  "candidate_commit": "PENDING_FINAL_HEAD",
+  "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp0/PRSCI_WP0_QA_PACKET_v0_1.json",
+  "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp0/PRSCI_WP0_IMPLEMENTATION_PACKET_v0_1.json",
+  "incident_ref": "records/research_operations/ec1/prsc/PRSCI_EXECUTION_INTEGRITY_INCIDENT_v0_1.json",
+  "incident_disposition_ref": "records/research_operations/ec1/prsc/PRSCI_WP0_OPERATOR_INCIDENT_DISPOSITION_v0_1.json",
+  "incident_disposition": "ACKNOWLEDGE_CONTINUE",
+  "no_further_force_ref_updates": true,
+  "blockers": [],
+  "preserved_constraints": {
+    "f0_a": "HOLD",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE"
+  },
+  "continuation_policy": "CONTINUE_UNTIL_NEXT_OPERATOR_REQUIRED",
+  "next_packet": "PRSCI-WP1",
+  "next_action": "EXECUTE_PRSCI-WP1_UNDER_EXISTING_BOUNDED_AUTHORITY",
+  "reserved_later_gates": ["PRSCI-G-PREREG","PRSCI-G-EC1-CHALLENGE"],
+  "rollback": "Forward-only; preserve incident, operator disposition and reconciliation evidence."
+}
