@@ -13,12 +13,12 @@
     {
       "case_id": "PS0-F02-BOUNDED-GEOMETRY-EVOLUTION",
       "description": "Role/topology stable and owner-declared geometry compatible, but exact geometry signature changes.",
-      "expected": {"A": "NEW_OR_UNRESOLVED", "B": "SAME_OBJECT_SUPPORTED", "C": "SAME_OBJECT_SUPPORTED_IF_C2E_COMPATIBLE"}
+      "expected": {"A": "NEW_OR_UNRESOLVED", "B": "SAME_OBJECT_SUPPORTED", "C": "SAME_OBJECT_SUPPORTED_WITH_C2_ONLY_BASE_ROUTE_UNLESS_C2E_DEPENDENCY_DECLARED"}
     },
     {
       "case_id": "PS0-F03-C2E-LINEAGE-CONFLICT",
       "description": "C2 continuity is plausible but declared C2E lineage becomes incompatible.",
-      "expected": {"A": "EVALUATE_WITHOUT_C2E_AUTHORITY", "B": "EVALUATE_WITHOUT_C2E_AUTHORITY", "C": "SAME_OBJECT_REJECTED"}
+      "expected": {"A": "EVALUATE_WITHOUT_C2E_AUTHORITY", "B": "EVALUATE_WITHOUT_C2E_AUTHORITY", "C": "REJECT_ONLY_FOR_EXPLICIT_EPISODE_RELATIVE_ROLE_OTHERWISE_EVALUATE_C2_ONLY"}
     },
     {
       "case_id": "PS0-F04-GAP-CENSOR",
@@ -28,7 +28,7 @@
     {
       "case_id": "PS0-F05-DORMANT-REAPPEARANCE",
       "description": "Confirmed object disappears, later returns with compatible evidence.",
-      "expected": {"A": "SAME_ONLY_IF_DORMANT_AND_EXACT_SIGNATURE", "B": "SAME_IF_DORMANT_AND_PREDICATES_PASS", "C": "SAME_IF_DORMANT_AND_C2_C2E_PREDICATES_PASS"}
+      "expected": {"A": "SAME_ONLY_IF_DORMANT_AND_EXACT_SIGNATURE", "B": "SAME_IF_DORMANT_AND_PREDICATES_PASS", "C": "SAME_IF_DORMANT_AND_ALL_DECLARED_PREDICATES_PASS"}
     },
     {
       "case_id": "PS0-F06-RETIRED-RECURRENCE",
@@ -47,7 +47,7 @@
     },
     {
       "case_id": "PS0-F09-MERGE",
-      "description": "Two prior objects converge into one new structural referent candidate under the same pack.",
+      "description": "Two prior objects converge into one new pack-scoped ObjectAssertion with explicit genealogy; no StructuralReferent is created.",
       "expected": {"A": "MERGE_NEW_ASSERTION", "B": "MERGE_NEW_ASSERTION", "C": "MERGE_NEW_ASSERTION"}
     },
     {
