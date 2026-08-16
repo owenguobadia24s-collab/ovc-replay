@@ -7,8 +7,9 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_4.json"
-HISTORICAL_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_3.json"
+POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_5.json"
+HISTORICAL_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_4.json"
+V03_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_3.json"
 OLDER_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_2.json"
 WP3_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_1.json"
 SCRIPT_PATH = ROOT / "scripts/development/ci_workflow_inventory.py"
@@ -23,6 +24,7 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def setUp(self):
         self.policy = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
         self.historical_policy = json.loads(HISTORICAL_POLICY_PATH.read_text(encoding="utf-8"))
+        self.v03_policy = json.loads(V03_POLICY_PATH.read_text(encoding="utf-8"))
         self.older_policy = json.loads(OLDER_POLICY_PATH.read_text(encoding="utf-8"))
         self.wp3_policy = json.loads(WP3_POLICY_PATH.read_text(encoding="utf-8"))
         self.inventory = inventory_module.build_inventory(ROOT, self.policy)
@@ -48,21 +50,29 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def test_actions_registry_and_repository_definition_layers_are_distinct(self):
         snapshot = self.policy["snapshot"]
         self.assertEqual(snapshot["github_actions_registered_total_count"], 191)
-        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 134)
-        self.assertEqual(snapshot["registration_count_excess"], 57)
+        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 135)
+        self.assertEqual(snapshot["registration_count_excess"], 56)
         self.assertEqual(
             snapshot["registration_count_excess_interpretation"],
             "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK_NOT_AUTHORITY",
         )
         self.assertIn("NOT_REMEASURED", snapshot["github_actions_source"])
 
-    def test_v0_3_snapshot_remains_historical_and_unchanged(self):
+    def test_v0_4_snapshot_remains_historical_and_unchanged(self):
         historical = self.historical_policy["snapshot"]
-        self.assertEqual(self.historical_policy["policy_id"], "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.3")
+        self.assertEqual(self.historical_policy["policy_id"], "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.4")
+        self.assertEqual(historical["github_actions_registered_total_count"], 191)
+        self.assertEqual(historical["expected_repository_workflow_definition_count"], 134)
+        self.assertEqual(historical["registration_count_excess"], 57)
+        self.assertEqual(self.policy["supersedes_for_current_inventory"], self.historical_policy["policy_id"])
+
+    def test_v0_3_snapshot_remains_historical_and_unchanged(self):
+        historical = self.v03_policy["snapshot"]
+        self.assertEqual(self.v03_policy["policy_id"], "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.3")
         self.assertEqual(historical["github_actions_registered_total_count"], 191)
         self.assertEqual(historical["expected_repository_workflow_definition_count"], 133)
         self.assertEqual(historical["registration_count_excess"], 58)
-        self.assertEqual(self.policy["supersedes_for_current_inventory"], self.historical_policy["policy_id"])
+        self.assertEqual(self.historical_policy["supersedes_for_current_inventory"], self.v03_policy["policy_id"])
 
     def test_v0_2_snapshot_remains_historical_and_unchanged(self):
         historical = self.older_policy["snapshot"]
@@ -71,7 +81,7 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertEqual(historical["expected_repository_workflow_definition_count"], 131)
         self.assertEqual(historical["registration_count_excess"], 46)
         self.assertEqual(
-            self.historical_policy["supersedes_for_current_inventory"],
+            self.v03_policy["supersedes_for_current_inventory"],
             self.older_policy["policy_id"],
         )
 
@@ -91,8 +101,9 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertEqual(pr_paths, sorted(self.policy["approved_pull_request_workflows"]))
         self.assertEqual(self.inventory["category_counts"]["CURRENT_PR_CI"], 2)
 
-    def test_g4_shadow_workflow_is_classified_non_pr_and_shadow_only(self):
+    def test_local_post_merge_completion_is_non_pr_and_authority_neutral(self):
         admission = self.policy["admitted_new_workflow"]
+        self.assertEqual(admission["path"], ".github/workflows/vit-post-merge-completion.yml")
         record = next(
             record for record in self.inventory["records"] if record["path"] == admission["path"]
         )
@@ -101,10 +112,19 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertIn("push", record["triggers"])
         self.assertIn("workflow_dispatch", record["triggers"])
         self.assertFalse(admission["pull_request_listener"])
-        self.assertEqual(
-            admission["authority_mode"],
-            "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+        self.assertIn("POST_WRITE_COMPLETION_OBSERVABILITY_ONLY", admission["authority_mode"])
+        self.assertIn("NO_MERGE_AUTHORITY", admission["authority_mode"])
+
+    def test_prior_g4_shadow_workflow_remains_classified_non_pr(self):
+        path = ".github/workflows/ci-unittest-shard-shadow.yml"
+        admission = next(
+            item for item in self.policy["additional_non_pr_diagnostic_workflows"] if item["path"] == path
         )
+        record = next(record for record in self.inventory["records"] if record["path"] == path)
+        self.assertEqual(record["category"], "ACTIVE_MANUAL_OPERATION")
+        self.assertNotIn("pull_request", record["triggers"])
+        self.assertFalse(admission["pull_request_listener"])
+        self.assertEqual(admission["authority_mode"], "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION")
 
     def test_async_assurance_shadow_is_non_pr_read_only_and_non_substituting(self):
         path = ".github/workflows/dsai3v-async-assurance-shadow.yml"
