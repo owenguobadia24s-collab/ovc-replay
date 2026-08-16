@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-system-atlas-visibility-policy-registry/v1",
+  "registry_id": "ATLAS-VISIBILITY-v0.1",
+  "version": "0.1",
+  "status": "FROZEN_ATLAS_G1",
+  "default_unclassified_policy": "DENY_AND_RECORD_UNRESOLVED_VISIBILITY",
+  "partitions": {
+    "ATLAS_PUBLIC_METADATA": {
+      "admission": "EXPLICIT_CLASSIFICATION_REQUIRED",
+      "projection": "READ_ONLY",
+      "secret_values": "FORBIDDEN"
+    },
+    "ATLAS_INTERNAL": {
+      "admission": "EXPLICIT_SOURCE_POLICY_REQUIRED",
+      "projection": "CALLER_PERMISSION_FILTERED_READ_ONLY",
+      "secret_values": "FORBIDDEN"
+    },
+    "ATLAS_RESTRICTED": {
+      "admission": "EXPLICIT_OWNER_AND_SECURITY_POLICY_REQUIRED",
+      "projection": "DEFAULT_DENY_FILTERED_READ_ONLY",
+      "secret_values": "REFERENCE_ONLY_VALUE_EXTRACTION_FORBIDDEN"
+    }
+  },
+  "partition_rules": [
+    "RESTRICTED_PARTITIONS_MUST_NOT_BE_COPIED_INTO_BROADER_BUNDLES",
+    "CALLER_PROJECTIONS_ARE_NONCANONICAL_FILTERED_VIEWS",
+    "ABSENCE_FROM_A_CALLER_PROJECTION_DOES_NOT_ASSERT_GLOBAL_ABSENCE",
+    "PATH_OR_GRAPH_ADJACENCY_DOES_NOT_GRANT_READ_ACCESS"
+  ],
+  "authority_effect": "NONE"
+}

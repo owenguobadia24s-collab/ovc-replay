@@ -1,0 +1,226 @@
+{
+  "schema": "ovc-system-atlas-graph/v1",
+  "graph_id": "synthetic:graph:atlas-wp1-constitution.v0.1",
+  "generation": {
+    "generation_id": "synthetic:generation:atlas-wp1-constitution.v0.1",
+    "repository_commit": "9b8afd458e5337ff1869b3f3305eff5184a4fccb",
+    "repository_tree": "41a5d5b1ee79a13893124c4a24bec51152dfc8cd",
+    "generation_class": "SYNTHETIC",
+    "authority_effect": "NONE"
+  },
+  "registry_versions": {
+    "extractor": "0.1",
+    "ontology": "0.1",
+    "predicate_authority": "0.1",
+    "query_policy": "0.1",
+    "resolver": "0.1",
+    "visibility": "0.1",
+    "visual_grammar": "0.1"
+  },
+  "completeness_profile": "ATLAS_WP1_SYNTHETIC_CONSTITUTION",
+  "court_record_status": "SYNTHETIC_NOT_COURT_RECORD",
+  "entities": [
+    {
+      "entity_id": "ovc:capability:system-atlas.operational-reliance",
+      "entity_type": "CAPABILITY",
+      "label": "System Atlas operational reliance",
+      "aliases": ["Atlas activation"],
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "environment": "SYNTHETIC",
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "state_planes": {
+        "lifecycle": "PLANNED",
+        "implementation": "NOT_IMPLEMENTED",
+        "availability": "UNAVAILABLE",
+        "assurance": "UNQUALIFIED",
+        "authority": "RESERVED",
+        "activation": "INACTIVE",
+        "canonicality": "NONCANONICAL",
+        "currentness": "UNKNOWN",
+        "health": "HEALTHY"
+      },
+      "visibility_partition": "ATLAS_PUBLIC_METADATA",
+      "evidence_refs": ["atlas:evidence:ratified-plan"]
+    },
+    {
+      "entity_id": "ovc:gate:atlas-g-observability-activate",
+      "entity_type": "GATE",
+      "label": "ATLAS-G-OBSERVABILITY-ACTIVATE",
+      "aliases": [],
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "state_planes": {
+        "lifecycle": "PLANNED",
+        "implementation": "NOT_IMPLEMENTED",
+        "availability": "AVAILABLE",
+        "assurance": "UNQUALIFIED",
+        "authority": "RESERVED",
+        "activation": "INACTIVE",
+        "canonicality": "CANONICAL",
+        "currentness": "CURRENT",
+        "health": "HEALTHY"
+      },
+      "visibility_partition": "ATLAS_PUBLIC_METADATA",
+      "evidence_refs": ["atlas:evidence:ratified-plan"]
+    },
+    {
+      "entity_id": "ovc:packet:atlas-wp0",
+      "entity_type": "PACKET",
+      "label": "ATLAS-WP0",
+      "aliases": [],
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "git_tree": "41a5d5b1ee79a13893124c4a24bec51152dfc8cd",
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "state_planes": {
+        "lifecycle": "HISTORICAL",
+        "implementation": "IMPLEMENTED",
+        "availability": "AVAILABLE",
+        "assurance": "CONFORMANT",
+        "authority": "GRANTED",
+        "activation": "INACTIVE",
+        "canonicality": "CANONICAL",
+        "currentness": "HISTORICAL",
+        "health": "HEALTHY"
+      },
+      "visibility_partition": "ATLAS_PUBLIC_METADATA",
+      "evidence_refs": ["atlas:evidence:g0-decision"]
+    },
+    {
+      "entity_id": "ovc:programme:system-atlas-conformance.v0.1",
+      "entity_type": "PROGRAMME",
+      "label": "OVC System Atlas Conformance v0.1",
+      "aliases": ["Atlas", "System Atlas"],
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "state_planes": {
+        "lifecycle": "CURRENT_GENERATION",
+        "implementation": "IMPLEMENTED",
+        "availability": "AVAILABLE",
+        "assurance": "UNQUALIFIED",
+        "authority": "GRANTED",
+        "activation": "INACTIVE",
+        "canonicality": "CANONICAL",
+        "currentness": "CURRENT",
+        "health": "HEALTHY"
+      },
+      "visibility_partition": "ATLAS_PUBLIC_METADATA",
+      "evidence_refs": ["atlas:evidence:g0-decision", "atlas:evidence:ratified-plan"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationship_id": "atlas:relationship:operational-reliance-blocked-by-activation",
+      "subject_id": "ovc:capability:system-atlas.operational-reliance",
+      "predicate": "BLOCKED_BY",
+      "object_id": "ovc:gate:atlas-g-observability-activate",
+      "family": "DEPENDENCY",
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "resolution_status": "DECLARED_ONLY",
+      "evidence_refs": ["atlas:evidence:ratified-plan"],
+      "authority_effect": "NONE"
+    },
+    {
+      "relationship_id": "atlas:relationship:wp0-part-of-atlas-programme",
+      "subject_id": "ovc:packet:atlas-wp0",
+      "predicate": "PART_OF",
+      "object_id": "ovc:programme:system-atlas-conformance.v0.1",
+      "family": "STRUCTURAL",
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "resolution_status": "RECONCILED",
+      "evidence_refs": ["atlas:evidence:g0-decision", "atlas:evidence:ratified-plan"],
+      "authority_effect": "NONE"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion_id": "atlas:assertion:activation-reserved-to-operator",
+      "subject_id": "ovc:gate:atlas-g-observability-activate",
+      "predicate": "AUTHORISED",
+      "value": {
+        "capability": "ACTIVATE",
+        "decision_class": "OPERATOR_REQUIRED",
+        "state": "RESERVED"
+      },
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "status": "RESERVED",
+      "evidence_refs": ["atlas:evidence:ratified-plan"],
+      "authority_effect": "NONE"
+    },
+    {
+      "assertion_id": "atlas:assertion:operational-reliance-not-active",
+      "subject_id": "ovc:capability:system-atlas.operational-reliance",
+      "predicate": "ACTIVE",
+      "value": false,
+      "scope": {
+        "scope_id": "atlas-synthetic-global",
+        "dimensions": {
+          "environment": "SYNTHETIC",
+          "programme": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"
+        }
+      },
+      "status": "DENIED",
+      "evidence_refs": ["atlas:evidence:g0-decision"],
+      "authority_effect": "NONE"
+    }
+  ],
+  "evidence_references": [
+    {
+      "evidence_id": "atlas:evidence:g0-decision",
+      "evidence_class": "SOURCE_EXPLICIT",
+      "source_class": "ACCEPTED_OPERATOR_DECISION",
+      "source_identity": "ATLAS-G0-PASS",
+      "source_path": "docs/programmes/system-atlas-v0-1/wp0/ATLAS_G0_OPERATOR_DECISION.json",
+      "source_blob_sha": "c239e300c77723fed174fb497fa8482bd0dba8d8",
+      "locator": "/decision",
+      "repository_commit": "9b8afd458e5337ff1869b3f3305eff5184a4fccb",
+      "repository_tree": "41a5d5b1ee79a13893124c4a24bec51152dfc8cd",
+      "visibility_partition": "ATLAS_PUBLIC_METADATA"
+    },
+    {
+      "evidence_id": "atlas:evidence:ratified-plan",
+      "evidence_class": "SOURCE_EXPLICIT",
+      "source_class": "ACCEPTED_OPERATOR_DECISION",
+      "source_identity": "sha256:a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30",
+      "source_path": "docs/plans/system-atlas/ATLAS_PLAN_IDENTITY_v0_1_R1.json",
+      "source_blob_sha": "34d5739468bbc1d5b8f9b0615db242045dedc63c",
+      "locator": "/plan_id",
+      "repository_commit": "9b8afd458e5337ff1869b3f3305eff5184a4fccb",
+      "repository_tree": "41a5d5b1ee79a13893124c4a24bec51152dfc8cd",
+      "visibility_partition": "ATLAS_PUBLIC_METADATA"
+    }
+  ],
+  "conflicts": [],
+  "authority_effect": "NONE_READ_ONLY_DERIVED_GRAPH",
+  "graph_logical_hash": "cd7ed95274300f431b74917cecfeca32f5c45eb101c3180306b3331bf66ac9f6"
+}

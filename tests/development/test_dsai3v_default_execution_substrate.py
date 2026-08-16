@@ -23,6 +23,18 @@ def test_default_substrate_uses_existing_general_authority_without_broadening() 
     assert set(default["routing_scope"]["eligible_gate_classes"]) == set(general["allowed_gate_classes"])
 
 
+def test_default_substrate_requires_universal_vit_lineage() -> None:
+    default = json.loads(DEFAULT.read_text(encoding="utf-8"))
+    policy = default["execution_policy"]
+    assert policy["require_pip_before_permanent_candidate"] is True
+    assert policy["require_vit_lineage_for_permanent_pr"] is True
+    assert policy["require_vit_lineage_for_siq_admission"] is True
+    assert policy["operator_required_packets_park_in_vit"] is True
+    assert policy["placement_only_main_movement_payload_rebuild"] is False
+    assert "VIT_ROUTING_LINEAGE_PRESENT" in default["required_assurance"]
+    assert default["routing_coverage_register"] == "registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json"
+
+
 def test_default_substrate_preserves_hard_non_authority_boundaries() -> None:
     default = json.loads(DEFAULT.read_text(encoding="utf-8"))
     joined = "\n".join(default["explicit_non_authority"])

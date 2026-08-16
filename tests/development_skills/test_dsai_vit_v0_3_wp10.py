@@ -15,6 +15,23 @@ from ovc.development.skills.vit_live_pilot import (
 
 ROOT = Path(__file__).resolve().parents[2]
 AUTHORITY = ROOT / "registries/authority/DSAI3V_VIT_PILOT_AUTHORITY_v0_1.json"
+PIP = "d" * 64
+GEN = "e" * 64
+PLACEMENT = "f" * 64
+
+
+def admitted_packet(packet_id: str = "Q6-LANE-A") -> LivePilotPacketAdmission:
+    return LivePilotPacketAdmission(
+        packet_id,
+        "LOW_RISK_IMPLEMENTATION",
+        "AUTO_EXECUTABLE",
+        "NONE",
+        True,
+        True,
+        pip_id=PIP,
+        vit_generation_id=GEN,
+        vit_placement_id=PLACEMENT,
+    )
 
 
 class DsaiVitV03Wp10Tests(unittest.TestCase):
@@ -32,8 +49,11 @@ class DsaiVitV03Wp10Tests(unittest.TestCase):
         self.assertFalse(self.authority.history_rewrite)
 
     def test_lawful_low_risk_packet_is_admitted(self) -> None:
-        packet = LivePilotPacketAdmission("Q6-LANE-A", "LOW_RISK_IMPLEMENTATION", "AUTO_EXECUTABLE", "NONE", True, True)
-        self.assertEqual(admit_live_pilot_packet(self.authority, packet), "ALLOW_LIVE_SERIALIZED_GATEWAY")
+        self.assertEqual(admit_live_pilot_packet(self.authority, admitted_packet()), "ALLOW_LIVE_SERIALIZED_GATEWAY")
+
+    def test_active_pilot_path_also_denies_missing_vit_lineage(self) -> None:
+        packet = LivePilotPacketAdmission("missing", "LOW_RISK_IMPLEMENTATION", "AUTO_EXECUTABLE", "NONE", True, True)
+        self.assertEqual(admit_live_pilot_packet(self.authority, packet), "DENY_VIT_LINEAGE")
 
     def test_packet_class_and_authority_laundering_fail_closed(self) -> None:
         wrong_class = LivePilotPacketAdmission("x", "SCIENTIFIC_PROMOTION", "AUTO_EXECUTABLE", "NONE", True, True)

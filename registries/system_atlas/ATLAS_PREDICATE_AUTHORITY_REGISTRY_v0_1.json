@@ -1,0 +1,79 @@
+{
+  "schema": "ovc-system-atlas-predicate-authority-registry/v1",
+  "registry_id": "ATLAS-PREDICATE-AUTHORITY-v0.1",
+  "version": "0.1",
+  "status": "FROZEN_ATLAS_G1",
+  "default_policy": "DENY_CANONICAL_PROMOTION_PRESERVE_OBSERVATION_AS_UNRESOLVED",
+  "predicates": [
+    {
+      "predicate": "OWNS",
+      "permitted_source_classes": ["ACCEPTED_OPERATOR_DECISION", "ACCEPTED_NATIVE_GENESIS", "AUTHORITY_REGISTRY", "PROGRAMME_OWNED_STATE"],
+      "precedence": ["ACCEPTED_OPERATOR_DECISION", "ACCEPTED_NATIVE_GENESIS", "AUTHORITY_REGISTRY", "PROGRAMME_OWNED_STATE"],
+      "cardinality": "EXACTLY_ONE_PER_OWNER_ROLE_AND_SCOPE",
+      "default_failure_bias": "UNRESOLVED_OR_OWNER_CONFLICT",
+      "required_dimensions": ["programme", "authority_generation"],
+      "currentness_rule": "SOURCE_AND_BOUND_POINTER_MUST_BOTH_BE_CURRENT",
+      "deterministic_derivation_allowed": false,
+      "conflict_class": "OWNER_CONFLICT"
+    },
+    {
+      "predicate": "ACTIVE",
+      "permitted_source_classes": ["ACCEPTED_OPERATOR_DECISION", "PROGRAMME_OWNED_STATE", "SERVICE_STATE"],
+      "precedence": ["ACCEPTED_OPERATOR_DECISION", "PROGRAMME_OWNED_STATE", "SERVICE_STATE"],
+      "cardinality": "AT_MOST_ONE_CURRENT_VALUE_PER_CAPABILITY_AND_SCOPE",
+      "default_failure_bias": "INACTIVE_OR_UNKNOWN_NEVER_ACTIVE",
+      "required_dimensions": ["programme", "environment"],
+      "currentness_rule": "EXACT_CURRENT_STATE_AND_PREREQUISITES_REQUIRED",
+      "deterministic_derivation_allowed": false,
+      "conflict_class": "ACTIVATION_CONFLICT"
+    },
+    {
+      "predicate": "AUTHORISED",
+      "permitted_source_classes": ["ACCEPTED_OPERATOR_DECISION", "AUTHORITY_REGISTRY", "DELEGATED_AUTHORITY_RECORD", "PROGRAMME_OWNED_STATE"],
+      "precedence": ["EXPLICIT_DENIAL_OR_RESERVATION", "ACCEPTED_OPERATOR_DECISION", "AUTHORITY_REGISTRY", "DELEGATED_AUTHORITY_RECORD", "PROGRAMME_OWNED_STATE"],
+      "cardinality": "CAPABILITY_AND_SCOPE_SPECIFIC",
+      "default_failure_bias": "DENIED_OR_UNKNOWN_NEVER_GRANTED",
+      "required_dimensions": ["programme", "environment", "authority_generation"],
+      "currentness_rule": "GRANT_DENIAL_RESERVATION_AND_PREREQUISITES_MUST_BE_CURRENT",
+      "deterministic_derivation_allowed": true,
+      "derivation_rule": "INTERSECTION_ONLY_NO_ADJACENCY_GRANT",
+      "conflict_class": "AUTHORITY_CONFLICT"
+    },
+    {
+      "predicate": "CURRENT",
+      "permitted_source_classes": ["PHYSICAL_GIT_MAIN", "PROGRAMME_CURRENT_STATE_POINTER", "CURRENTNESS_RECORD"],
+      "precedence": ["PHYSICAL_GIT_MAIN", "PROGRAMME_CURRENT_STATE_POINTER", "CURRENTNESS_RECORD"],
+      "cardinality": "AT_MOST_ONE_CURRENT_GENERATION_PER_SCOPE",
+      "default_failure_bias": "UNKNOWN_OR_STALE_NEVER_CURRENT",
+      "required_dimensions": ["git_tree"],
+      "currentness_rule": "TWO_POINT_SOURCE_RECHECK_REQUIRED_FOR_PUBLICATION",
+      "deterministic_derivation_allowed": true,
+      "derivation_rule": "EXACT_IDENTITY_EQUALITY_ONLY",
+      "conflict_class": "CURRENTNESS_CONFLICT"
+    },
+    {
+      "predicate": "CANONICAL",
+      "permitted_source_classes": ["ACCEPTED_OPERATOR_DECISION", "PHYSICAL_GIT_MAIN", "CANONICAL_ADOPTION_RECEIPT"],
+      "precedence": ["ACCEPTED_OPERATOR_DECISION", "CANONICAL_ADOPTION_RECEIPT", "PHYSICAL_GIT_MAIN"],
+      "cardinality": "AT_MOST_ONE_CANONICAL_IDENTITY_PER_OBJECT_SCOPE",
+      "default_failure_bias": "NONCANONICAL",
+      "required_dimensions": ["git_tree", "authority_generation"],
+      "currentness_rule": "PROSPECTIVE_OR_STALE_TREE_CANNOT_BE_CANONICAL",
+      "deterministic_derivation_allowed": false,
+      "conflict_class": "CANONICALITY_CONFLICT"
+    },
+    {
+      "predicate": "PUBLISHED",
+      "permitted_source_classes": ["ACCEPTED_PUBLICATION_RECEIPT", "PROGRAMME_OWNED_STATE"],
+      "precedence": ["ACCEPTED_PUBLICATION_RECEIPT", "PROGRAMME_OWNED_STATE"],
+      "cardinality": "AT_MOST_ONE_CURRENT_PUBLICATION_STATUS_PER_SCOPE",
+      "default_failure_bias": "NOT_PUBLISHED",
+      "required_dimensions": ["programme", "source_release"],
+      "currentness_rule": "EXACT_PUBLICATION_RECEIPT_AND_CURRENT_SOURCE_REQUIRED",
+      "deterministic_derivation_allowed": false,
+      "conflict_class": "PUBLICATION_CONFLICT"
+    }
+  ],
+  "non_transitivity": "OBSERVATION_RELATIONSHIP_STORAGE_OR_PROJECTION_NEVER_CREATES_OWNER_OR_AUTHORITY",
+  "authority_effect": "NONE"
+}
