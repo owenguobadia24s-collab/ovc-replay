@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-dsai3v-vit-current-state-resolution-packet/v1",
+  "packet_id": "DSAI3V-VIT-CURRENT-STATE-RESOLUTION-CONFORMANCE",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "status": "IMPLEMENTED_PENDING_FINAL_ASSURANCE_AND_MATERIALISATION",
+  "authority": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "problem": "Historically valid VIT plan/gate records could be selected as if current, despite later ACTIVE general authority and default-substrate records.",
+  "correction": {
+    "canonical_resolver": "ovc.development.skills.vit_current_state.resolve_current_vit_query",
+    "policy": "registries/development/skills/VIT_CURRENT_STATE_RESOLUTION_POLICY_v0_1.json",
+    "contract": "contracts/development/v0_5/OVC_VIT_CURRENT_STATE_RESOLUTION_CONTRACT_v0_1.md",
+    "current_source_chain": [
+      "registries/implementation/dsai_vit_v0_3/CURRENT_STATE_POINTER.json",
+      "POINTED_CURRENT_PROGRAMME_STATE",
+      "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+      "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json"
+    ],
+    "historical_fallback_allowed": false,
+    "failure_mode": "CURRENT_STATUS_UNRESOLVED"
+  },
+  "universal_routing_dependency": {
+    "status": "COMPLETED",
+    "corrective_pr": 956,
+    "corrective_merge": "1afae5de5134003b756ae3e077ff628018896491",
+    "closeout_pr": 971,
+    "closeout_merge": "c73eb4c76958d35d614fe6b162ba630b1f632068",
+    "invariant": "ELIGIBLE_PERMANENT_PACKET_REQUIRES_PIP_VIT_GENERATION_PLACEMENT_BEFORE_PR_AND_SIQ_ADMISSION"
+  },
+  "acceptance": [
+    "Real current repository resolves VIT programme COMPLETED plus ACTIVE general authority plus ACTIVE default substrate.",
+    "Historical DSAI3V-G-VIT-PILOT GATE_READY/DENIED evidence is classified historical and cannot control current status.",
+    "Missing current pointer fails closed even when a complete historical gate packet exists.",
+    "Authority/substrate identity mismatch fails closed.",
+    "Default execution substrate binds the current-state resolver and historical non-fallback policy."
+  ],
+  "reserved_boundaries_unchanged": true,
+  "parallel_physical_merge": false,
+  "force_push": false,
+  "history_rewrite": false,
+  "rollback": "Forward-disable/supersede the stricter current-state resolver only; preserve all current authority records, historical gate evidence and Git history."
+}
