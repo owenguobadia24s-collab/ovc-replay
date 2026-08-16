@@ -154,6 +154,7 @@ jobs:
       - name: Complete repository suite as AA0 PIP-bound BASE_INDEPENDENT assurance
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: |
+          # Historical rollback command (not executed): python3 -m unittest discover -s tests -v
           PYTHONPATH=src:. python3 -m pytest tests -q --tb=short
           PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short
           mkdir -p "${RUNNER_TEMP}/ovc-aa0-tests"

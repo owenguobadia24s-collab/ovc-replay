@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import json
+import unittest
 from pathlib import Path
-
-import pytest
 
 from ovc.development.head_churn import classify_main_head_movement
 from ovc.development.skills.vit_assurance_decoupling import (
@@ -85,7 +84,7 @@ def test_semantic_head_movement_cannot_reuse_aa0() -> None:
     old = lineage(base="3" * 40, result="5" * 40, generation="G1")
     new = lineage(base="4" * 40, result="6" * 40, generation="G2")
     receipt = movement(["contracts/example/contract.md"])
-    with pytest.raises(AssuranceDecouplingError, match="NOT_REUSABLE"):
+    with unittest.TestCase().assertRaisesRegex(AssuranceDecouplingError, "NOT_REUSABLE"):
         build_aa0_reuse_authorization(
             previous_lineage=old,
             current_lineage=new,
@@ -96,7 +95,7 @@ def test_semantic_head_movement_cannot_reuse_aa0() -> None:
 def test_payload_change_cannot_reuse_aa0() -> None:
     old = lineage(base="3" * 40, result="5" * 40, blob="a" * 40, generation="G1")
     new = lineage(base="4" * 40, result="6" * 40, blob="b" * 40, generation="G2")
-    with pytest.raises(AssuranceDecouplingError, match="PIP_CHANGED"):
+    with unittest.TestCase().assertRaisesRegex(AssuranceDecouplingError, "PIP_CHANGED"):
         build_aa0_reuse_authorization(
             previous_lineage=old,
             current_lineage=new,
@@ -124,7 +123,7 @@ def test_physical_main_protection_requires_no_bypass_and_vit_readiness() -> None
         non_fast_forward_prohibited=True,
         deletion_prohibited=True,
     )
-    with pytest.raises(AssuranceDecouplingError, match="BYPASS"):
+    with unittest.TestCase().assertRaisesRegex(AssuranceDecouplingError, "BYPASS"):
         bad.validate()
 
 
