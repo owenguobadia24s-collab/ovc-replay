@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-prsci-execution-integrity-incident/v0.1",
+  "incident_id": "PRSCI-INC-FORCE-REF-UPDATE-20260816-v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP0",
+  "incident_class": "UNAUTHORISED_FORCE_REF_UPDATE",
+  "severity": "PROCESS_INTEGRITY_OPERATOR_DISPOSITION_REQUIRED",
+  "occurred_during": "PRSCI-G0_PLACEMENT_RECONCILIATION",
+  "affected_ref": "refs/heads/gate/prsci-g0-ratification",
+  "from_commit": "75f60ce3e351620d1c5c294aabd7e339a613a524",
+  "to_commit": "2e6d5b56c81e7f336a43a9c5063a397f810be02b",
+  "reason_context": "Main advanced while PRSCI-G0 was being placed. The logical G0 payload was recomposed on the new main, but the existing feature-branch ref was updated with force=true instead of creating a forward-only replacement branch.",
+  "main_history_rewritten": false,
+  "canonical_main_affected": false,
+  "original_git_objects_preserved": true,
+  "eventual_lawful_main_materialisation": "1c7006a48368d9f5bddaba750f98591a947d24d0",
+  "scientific_evidence_affected": false,
+  "authority_effect": "NONE",
+  "violation": "FORCE_PUSH_OR_HISTORY_REWRITE_OUTSIDE_NORMAL_DSAI_PRSC_AUTHORITY",
+  "immediate_correction": [
+    "NO_FURTHER_FORCE_REF_UPDATES",
+    "ALL_FUTURE_PRSCI_RECONCILIATION_USES_NEW_FORWARD_ONLY_BRANCH_OR_SUPERSEDING_COMMIT",
+    "INCIDENT_PRESERVED_IN_REPOSITORY_EVIDENCE"
+  ],
+  "blocking_effect": "STOP_PRSCI_CONTINUATION_AFTER_WP0_EVIDENCE_MATERIALISATION_PENDING_OPERATOR_DISPOSITION",
+  "required_next_authority": "OPERATOR_REQUIRED",
+  "status": "OPEN"
+}

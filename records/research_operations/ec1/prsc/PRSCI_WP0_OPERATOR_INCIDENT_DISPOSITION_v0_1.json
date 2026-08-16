@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-operator-incident-disposition/v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP0",
+  "incident_id": "PRSCI-INC-FORCE-REF-UPDATE-20260816-v0.1",
+  "operator_instruction": "OVC APPROVE PRSCI-WP0 INCIDENT=PRSCI-INC-FORCE-REF-UPDATE-20260816-v0.1 DISPOSITION=ACKNOWLEDGE_CONTINUE NO_FURTHER_FORCE_REF_UPDATES=YES CONTINUE_THROUGH_AUTO_GATES=YES STOP_AT=NEXT_OPERATOR_REQUIRED",
+  "disposition": "ACKNOWLEDGE_CONTINUE",
+  "no_further_force_ref_updates": true,
+  "continuation": "CONTINUE_THROUGH_AUTO_GATES",
+  "stop_at": "NEXT_OPERATOR_REQUIRED",
+  "authority_effect": "PROCESS_INCIDENT_CLEARED_FOR_CONTINUATION_ONLY",
+  "scientific_authority_delta": "NONE",
+  "repository_authority_delta": "NONE",
+  "reserved_boundaries_preserved": [
+    "PRSCI-G-PREREG",
+    "PRSCI-G-EC1-CHALLENGE",
+    "CandidateFreeze",
+    "Validation",
+    "publication",
+    "probability_risk_exposure_execution"
+  ],
+  "integrity_conditions": [
+    "No further force ref updates, force-push or history rewrite are permitted under this mandate.",
+    "Any future need for force ref update/history rewrite is a fresh operator-required stop.",
+    "The incident record remains immutable historical process evidence and is not deleted or rewritten.",
+    "Continuation may consume only already-delegated AUTO authority and must stop at the next true operator-required boundary."
+  ],
+  "operator_decision_time": "2026-08-16T20:57:00+01:00",
+  "status": "ACCEPTED"
+}
