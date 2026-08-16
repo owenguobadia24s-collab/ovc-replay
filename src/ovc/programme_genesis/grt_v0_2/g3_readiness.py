@@ -1,15 +1,23 @@
 """GRT2-G3 pre-activation readiness evidence helpers.
 
-This module is intentionally non-enforcing.  It materialises source-backed
+This module is intentionally non-enforcing. It materialises source-backed
 comparisons needed to decide whether a GRT2-G3 gate packet may be presented.
 It cannot activate the Repository Constitution, create DebtFloor generation 0,
 or convert unresolved evidence into a zero claim.
 """
 from __future__ import annotations
 
+import json
 import re
 from typing import Any, Mapping, Sequence
 
+from .debt import (
+    B0_MEMBER_COUNT,
+    B0_MEMBERSHIP_SHA256,
+    B0_SOURCE_COMMIT,
+    baseline_membership_sha256,
+    validate_baseline_members,
+)
 from .serialization import canonical_sha256
 
 
@@ -33,22 +41,43 @@ def _component_path_map(topology: Mapping[str, Any]) -> dict[str, str]:
     }
 
 
+def _stable_source_ref(value: Any) -> str:
+    """Project source evidence onto a content-independent source locator.
+
+    GRT v0.1 commonly records component evidence as ``git:path@blob``. The
+    blob is exact provenance but not stable subject identity: ordinary lawful
+    edits must not manufacture a novel repository subject. Plain repository
+    paths and non-Git evidence references are retained exactly.
+    """
+    text = str(value)
+    if text.startswith("git:"):
+        body = text[4:]
+        if "@" in body:
+            body = body.rsplit("@", 1)[0]
+        return f"git:{body}"
+    return text
+
+
 def anomaly_subject_projection(anomaly: Mapping[str, Any], topology: Mapping[str, Any]) -> dict[str, Any]:
     """Project a v0.1 observer anomaly onto stable source subjects.
 
     The observer anomaly ID is intentionally *not* used as lineage identity: it
     includes descriptive payload that may change as repository denominators move.
-    Paths and source-explicit programme IDs are retained so a later v0.2 rule
-    mapping can adjudicate legality without manufacturing authority.
+    Component paths, source locators and source-explicit programme IDs are kept so
+    historical B0 members remain comparable after scanner evolution without
+    replaying the historical source through today's scanner.
     """
     paths = _component_path_map(topology)
     component_paths = sorted(
-        paths.get(str(component_id), f"UNRESOLVED_COMPONENT:{component_id}")
+        paths[str(component_id)]
         for component_id in anomaly.get("affected_component_ids", [])
+        if str(component_id) in paths
     )
+    source_refs = sorted({_stable_source_ref(x) for x in anomaly.get("source_evidence", [])})
     return {
         "anomaly_code": str(anomaly.get("anomaly_code", "")),
         "component_paths": component_paths,
+        "source_refs": source_refs,
         "programme_ids": sorted(str(x) for x in anomaly.get("affected_programme_ids", [])),
     }
 
@@ -57,21 +86,67 @@ def anomaly_subject_key(anomaly: Mapping[str, Any], topology: Mapping[str, Any])
     return canonical_sha256(anomaly_subject_projection(anomaly, topology))
 
 
-def anomaly_extent(anomaly: Mapping[str, Any]) -> dict[str, int]:
-    """Return conservative measurable extent from v0.1 observer evidence.
+def baseline_topology_from_member_records(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Reconstruct the immutable B0 observer surface from its frozen members.
 
-    This is measurement evidence, not constitutional debt authority.  Binary
-    findings receive extent 1.  Where the observer explicitly reports a count in
-    its detail, that count is retained so expansion cannot be hidden by a stable
-    subject key.
+    This deliberately does *not* rerun the current topology scanner over the B0
+    commit. Scanner semantics are allowed to evolve; B0 is the immutable 569-row
+    source evidence frozen by WP2. Every row is validated against its original
+    scanner identity and membership hash before it may participate in G3
+    transition reconciliation.
+    """
+    validate_baseline_members(rows)
+    membership = baseline_membership_sha256(rows)
+    if membership != B0_MEMBERSHIP_SHA256:
+        raise G3ReadinessError("GRT2_G3_B0_MEMBERSHIP_HASH_MISMATCH")
+    if len(rows) != B0_MEMBER_COUNT:
+        raise G3ReadinessError("GRT2_G3_B0_MEMBER_COUNT_MISMATCH")
+
+    anomalies: list[dict[str, Any]] = []
+    for row in sorted(rows, key=lambda item: int(item["ordinal"])):
+        try:
+            locator = json.loads(str(row["original_subject_locator"]))
+        except (KeyError, json.JSONDecodeError, TypeError) as exc:
+            raise G3ReadinessError("GRT2_G3_B0_SUBJECT_LOCATOR_INVALID") from exc
+        anomalies.append(
+            {
+                "anomaly_id": row["original_GRT_anomaly"],
+                "anomaly_code": row["original_anomaly_code"],
+                "affected_component_ids": [],
+                "affected_programme_ids": list(locator.get("affected_programme_ids", [])),
+                "source_evidence": list(locator.get("source_evidence", [])),
+                "baseline_member_id": row["baseline_member_id"],
+                "payload_hash": row["payload_hash"],
+            }
+        )
+    return {
+        "portfolio": {"source_commit": B0_SOURCE_COMMIT},
+        "components": [],
+        "anomalies": anomalies,
+        "baseline_member_count": B0_MEMBER_COUNT,
+        "baseline_membership_sha256": membership,
+        "authority_effect": "NONE_IMMUTABLE_B0_PROJECTION_ONLY",
+    }
+
+
+def anomaly_extent(anomaly: Mapping[str, Any]) -> dict[str, int]:
+    """Return conservative measurable extent from observer evidence.
+
+    This is measurement evidence, not constitutional debt authority. Binary
+    findings receive extent 1. Where the live observer explicitly reports a
+    count in its detail, that count is retained so expansion cannot be hidden.
+    Historical B0 member records intentionally carry only source identity and
+    therefore remain one immutable observer condition each.
     """
     code = str(anomaly.get("anomaly_code", ""))
-    if code == "UNRESOLVED_DEPENDENCY":
+    if code == "UNRESOLVED_DEPENDENCY" and anomaly.get("detail") is not None:
         match = re.match(r"^(\d+) repository-like path reference", str(anomaly.get("detail", "")))
         if match:
             return {"unresolved_reference_count": int(match.group(1))}
     if code in {"DUPLICATE_COMPONENT_OWNERSHIP", "CONFLICTING_PROGRAMME_OWNERSHIP"}:
-        return {"owner_count": max(1, len(anomaly.get("affected_programme_ids", [])))}
+        owners = len(anomaly.get("affected_programme_ids", []))
+        if owners > 1:
+            return {"owner_count": owners}
     return {"observer_condition_count": 1}
 
 
@@ -96,8 +171,8 @@ def reconcile_observer_transition_candidates(
     Exact stable-subject matches prove observer continuity/reduction/expansion.
     Novel conditions are transition-debt *candidates* and still require a
     source-backed v0.2 constitutional rule mapping before they can be declared
-    actionable debt or lawful non-debt.  This fail-closed distinction is what
-    prevents an empty ledger from becoming a fabricated zero-debt claim.
+    actionable debt or lawful non-debt. This fail-closed distinction prevents an
+    empty ledger from becoming a fabricated zero-debt claim.
     """
     baseline_rows = list(baseline_topology.get("anomalies", []))
     current_rows = list(current_topology.get("anomalies", []))
