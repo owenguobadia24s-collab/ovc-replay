@@ -164,7 +164,8 @@ def test_visibility_downgrade_and_partition_tamper_fail_closed() -> None:
 def test_graph_store_rebuild_restart_and_partition_intersection(tmp_path: Path) -> None:
     graph, registries = partitioned_graph()
     bundle = build_reference_generation(graph, registries)
-    store = GraphStore(tmp_path / "atlas.sqlite3")
+    database_path = tmp_path / "atlas.sqlite3"
+    store = GraphStore(database_path)
     result = store.rebuild(bundle)
     assert result["root_hash"] == bundle.root_hash
     restarted = GraphStore(tmp_path / "atlas.sqlite3")
@@ -175,6 +176,8 @@ def test_graph_store_rebuild_restart_and_partition_intersection(tmp_path: Path) 
     public_id = graph["entities"][0]["entity_id"]
     assert restarted.adjacent(public_id, allowed_partitions=["ATLAS_PUBLIC_METADATA"])
     assert any(row["relationship_id"] == "atlas:relationship:wp5-public-to-internal" for row in restarted.adjacent(public_id, allowed_partitions=["ATLAS_INTERNAL"]))
+    database_path.unlink()
+    assert not database_path.exists()
 
 
 def test_two_point_publication_retains_stale_and_switches_only_exact_main(tmp_path: Path) -> None:
