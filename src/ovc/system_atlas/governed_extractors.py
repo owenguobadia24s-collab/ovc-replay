@@ -159,7 +159,8 @@ def _json_observations(*, value: Any, subject: str, context: Mapping[str, Any]) 
         return rows
     for key in sorted(value):
         raw = value[key]
-        if isinstance(raw, (str, int, float, bool)) or raw is None:
+        tagged_number = isinstance(raw, Mapping) and set(raw) in ({"json_number"}, {"json_constant"})
+        if isinstance(raw, (str, int, bool)) or raw is None or tagged_number:
             rows.append(
                 _observation(
                     **context,
@@ -246,7 +247,11 @@ def extract_governed_sources(repository_root: Path | str, *, grt_observation_set
         parsed_json = False
         if path.lower().endswith(".json"):
             try:
-                value = json.loads(text)
+                value = json.loads(
+                    text,
+                    parse_float=lambda token: {"json_number": token},
+                    parse_constant=lambda token: {"json_constant": token},
+                )
                 parsed_json = True
             except json.JSONDecodeError:
                 value = None

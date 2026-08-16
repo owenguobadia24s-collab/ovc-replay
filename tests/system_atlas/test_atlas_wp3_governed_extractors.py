@@ -53,7 +53,7 @@ def governed_fixture(root: Path) -> dict:
         "registries/authority/EXAMPLE_AUTHORITY.json": '{"authority_id":"AUTH-1","status":"DENIED"}\n',
         "contracts/example/EXAMPLE.md": "# Example Contract\nStatus: FROZEN\n",
         "schemas/example/example.schema.json": '{"$id":"https://example.invalid/schema","type":"object"}\n',
-        "registries/example/EXAMPLE_REGISTRY.json": '{"registry_id":"REG-1","status":"CURRENT"}\n',
+        "registries/example/EXAMPLE_REGISTRY.json": '{"registry_id":"REG-1","ratio":1.50,"status":"CURRENT"}\n',
         "docs/releases/research-example/EVIDENCE.json": '{"research_id":"RESEARCH-1","status":"OBSERVED"}\n',
     }
     for path, content in records.items():
@@ -107,6 +107,8 @@ def test_governed_extractors_cover_six_classes_without_canonical_assertions(tmp_
     assert result["canonical_assertions"] == []
     assert {row["evidence_class"] for row in result["raw_observations"]} == {"SOURCE_EXPLICIT"}
     assert all(row["canonical_promotion"].startswith("DENIED_") for row in result["raw_observations"])
+    ratio = next(row for row in result["raw_observations"] if row["raw_predicate"] == "ratio")
+    assert ratio["raw_object"] == {"json_number": "1.50"}
 
 
 def test_governed_extraction_is_order_independent_and_schema_valid(tmp_path: Path) -> None:
