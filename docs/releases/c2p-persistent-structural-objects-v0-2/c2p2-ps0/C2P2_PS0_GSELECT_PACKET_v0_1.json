@@ -5,7 +5,7 @@
   "programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
   "parent_plan": "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED",
   "baseline_commit": "fff6bf2f8ed13060dba5030db3b62da992d5fb94",
-  "candidate_commit": "RESOLVE_FINAL_HEAD",
+  "candidate_commit": "caad57653902d63891beceaaa8f76e5cee56eb40",
   "completed_packets": ["C2P2-PS0-WP0", "C2P2-PS0-WP1", "C2P2-PS0-WP2", "C2P2-PS0-WP3", "C2P2-PS0-WP4"],
   "current_authority": {
     "c2p_core": "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
@@ -37,14 +37,35 @@
     "exact-head repository tests/profile/SIQ assurance pass",
     "QA recommends PASS and no blocking review/issue remains"
   ],
-  "tests": "PENDING_FINAL_HEAD",
+  "tests": {
+    "tests_workflow_run": 31920165715,
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "research_console_maintained_api": "PASS",
+    "tiered_profile_run": 31920165879,
+    "final_head_profile": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
   "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_QA_PACKET_v0_1.json",
+  "qa_recommendation": "PASS",
   "warnings": [
     "Confirmation count=3 and other exact candidate semantics are research hypotheses only; synthetic discrimination cannot make them empirical thresholds.",
     "A GSELECT PASS is not C2P activation and not RS0 run authority."
   ],
-  "unresolved_issues": ["FINAL_HEAD_ASSURANCE_PENDING"],
-  "changed_files": "Resolve from final PR at decision time.",
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_DISCRIMINATION_REPORT_v0_1.md",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_GSELECT_PACKET_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_PROGRAMME_PLAN_v0_1.md",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_QA_PACKET_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_RS0_PREREGISTRATION_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/research/C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json",
+    "fixtures/opt_b/c2p/v0_2/research/C2P2_PS0_OBJECTPACK_DISCRIMINATION_FIXTURES_v0_1.json",
+    "registries/implementation/c2p_v0_2/C2P2_PS0_STATE_v0_1.json",
+    "tests/opt_b/c2p/v0_2/test_c2p2_ps0_objectpack_science.py"
+  ],
   "external_artifacts": [],
   "rollback": "Forward-supersede PS0 candidate research records only; preserve parent C2P history and all PS0 evidence.",
   "recommended_decision": "PASS",
