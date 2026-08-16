@@ -3,12 +3,12 @@
   "audit_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-AUDIT-0.1",
   "baseline_main": "49bab8c7ad5a6a5d4aaa6c7e8a753dd6e9b604bb",
   "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
-  "audit_verdict": "FAIL_CORRECTABLE_UNIVERSAL_ROUTING_ENFORCEMENT_GAP_CORRECTION_IN_PROGRESS",
+  "audit_verdict": "PASS_CORRECTED_PENDING_FINAL_EVIDENCE_HEAD_ASSURANCE",
   "activation_state": {
     "vit_general_authority": "ACTIVE",
     "default_execution_substrate": "ACTIVE",
     "vit_programme": "COMPLETED",
-    "finding": "The defect is not VIT activation. It is incomplete mechanical enforcement of VIT lineage at downstream packet/branch/PR/SIQ candidate-admission surfaces."
+    "finding": "The defect was not VIT activation. It was incomplete mechanical enforcement of VIT lineage at downstream packet/branch/PR/SIQ candidate-admission surfaces."
   },
   "entrypoint_census": {
     "searches": ["PacketIntegrationPayload", "QueueCandidate", "create_branch(", "open_pull_request(", "git/refs", "CREATE_BRANCH", "OPEN_PR", "PUSH_BRANCH", "DSAI_VIT_PHYSICAL_CONTROLLER"],
@@ -84,7 +84,7 @@
       "surface": "external Git branch / GitHub PR actuator",
       "pre_correction": "Repository code cannot prevent an external actor from creating a Git ref before VIT admission.",
       "classification": "NON_AUTHORITATIVE_EXTERNAL_SURFACE",
-      "correction": "Construction branches are explicitly non-authoritative; AGENTS.md binds repository agents to VIT before permanent PR admission, PR CI fails closed on missing lineage, and SIQ independently fails closed."
+      "correction": "Construction branches remain explicitly non-authoritative under the conformance contract; permanent PR CI fails closed on missing lineage and SIQ independently fails closed. No unsupported root-level guidance file is required for enforcement."
     }
   ],
   "stale_main_case_reproduction": [
@@ -146,13 +146,33 @@
       "classification": "PLACEMENT_RECOMPUTE_ONLY",
       "payload_rebuild_required": false,
       "replacement_permanent_pr_created": false,
-      "assurance_renewal_required": true
+      "assurance_renewal_required": true,
+      "receipt_ref": "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_ROUTING_LIVE_REANCHOR_RECEIPT_v0_2.json"
+    },
+    {
+      "permanent_pr": 956,
+      "old_main": "9ce6997fd14c98345614e7b876edc85f65d4ec4b",
+      "new_main": "7bdb658be6978d6e179b44decdb38af3401ffa07",
+      "internal_reanchor_pr": 966,
+      "classification": "PLACEMENT_RECOMPUTE_ONLY",
+      "payload_rebuild_required": false,
+      "replacement_permanent_pr_created": false,
+      "assurance_renewal_required": true,
+      "receipt_ref": "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_ROUTING_LIVE_REANCHOR_RECEIPT_v0_3.json"
+    }
+  ],
+  "integration_defect_corrections": [
+    {
+      "defect": "Root AGENTS.md guidance addition caused GRT A8 shadow NOT_EVALUABLE because the root file is outside the canonical artefact-type mapping.",
+      "resolution": "Restore AGENTS.md byte-for-byte to current main and retain enforcement in typed contracts, registries, runtime and required CI surfaces.",
+      "tests_after_resolution": "PASS_3726_PASSED_1_SKIPPED_687_SUBTESTS",
+      "test_weakening": false
     }
   ],
   "historical_support": {
     "q2_discarded_assurance_cycles": 4,
     "q2_placement_only_salvage_candidates": 3,
-    "interpretation": "The defect reproduces the stale-main waste class VIT was designed to eliminate; two live correction-time main advances have now been handled on the same permanent PR lineage with zero payload rebuilds."
+    "interpretation": "The defect reproduces the stale-main waste class VIT was designed to eliminate; three live correction-time main advances were handled on the same permanent PR lineage with zero payload rebuilds."
   },
   "required_invariants": [
     "Every permanent eligible packet has canonical PIP identity before it becomes a permanent integration candidate.",
