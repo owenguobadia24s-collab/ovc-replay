@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pathlib import Path
 import unittest
 from ovc.development.skills.siq_core import BASE_SENSITIVE, BLOCKED, OPERATOR_REQUIRED, PARALLEL_MERGE, FORCE_PUSH, HISTORY_REWRITE, acquire_final_integration_lease, build_queue_state, handle_lease_elapsed, queue_head, terminate_lease
 from ovc.development.skills.vit_routing import build_vit_lineage_record
@@ -42,4 +43,10 @@ class SIQControlTests(unittest.TestCase):
         self.assertFalse(PARALLEL_MERGE)
         self.assertFalse(FORCE_PUSH)
         self.assertFalse(HISTORY_REWRITE)
+    def test_live_siq_predecessor_scan_excludes_draft_prs_and_releases_stale_draft_lease(self):
+        workflow=(Path(__file__).resolve().parents[2]/".github/workflows/ovc-tiered-tests.yml").read_text(encoding="utf-8")
+        self.assertIn("if (candidate.draft)",workflow)
+        self.assertIn("OVC_FINAL_INTEGRATION_DRAFT_PREDECESSOR_IGNORED",workflow)
+        self.assertIn("if (terminal.data.draft)",workflow)
+        self.assertIn("DRAFT_RELEASED",workflow)
 if __name__=="__main__": unittest.main()
