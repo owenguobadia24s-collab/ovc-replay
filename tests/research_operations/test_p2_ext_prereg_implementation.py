@@ -11,6 +11,7 @@ from ovc.research_operations.dmrp_path2_prereg import (
     preregistration_effective,
     verify_path2_prereg_record,
 )
+from ovc.research_operations.validation import validate_record
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -23,6 +24,7 @@ def test_three_native_record_families_round_trip_and_authority_firewall() -> Non
     for kind, record_type in (("theory", "THEORY_RECORD"), ("protocol", "RESEARCH_PROTOCOL"), ("experiment", "EXPERIMENT_RECORD")):
         record = make_path2_prereg_record(record_type, _fixture()["records"][kind])
         verify_path2_prereg_record(json.loads(json.dumps(record)))
+        validate_record(json.loads(json.dumps(record)))
         assert record["authority_effect"] == "NONE"
         assert record["schema_family"] == "DMRP_PATH2_PREREG"
         assert record["record_id"].startswith(f"ro:p2:{kind}:")
