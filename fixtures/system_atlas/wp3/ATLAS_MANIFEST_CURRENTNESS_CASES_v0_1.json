@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-atlas-manifest-currentness-cases/v1",
+  "manifest_id": "ATLAS-ARCHITECTURE-MANIFEST-v0.1-R1",
+  "cases": [
+    {
+      "case_id": "CURRENT",
+      "observed_source_hashes": {
+        "design": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e",
+        "plan": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30"
+      },
+      "superseded_manifest_ids": [],
+      "expected_status": "CURRENT"
+    },
+    {
+      "case_id": "STALE_SOURCE_HASH",
+      "observed_source_hashes": {
+        "design": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "plan": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30"
+      },
+      "superseded_manifest_ids": [],
+      "expected_status": "STALE_SOURCE_HASH"
+    },
+    {
+      "case_id": "SUPERSEDED_SOURCE",
+      "observed_source_hashes": {
+        "design": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e",
+        "plan": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30"
+      },
+      "superseded_manifest_ids": ["ATLAS-ARCHITECTURE-MANIFEST-v0.1-R1"],
+      "expected_status": "SUPERSEDED_SOURCE"
+    },
+    {
+      "case_id": "UNRESOLVED",
+      "observed_source_hashes": {
+        "design": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e"
+      },
+      "superseded_manifest_ids": [],
+      "expected_status": "UNRESOLVED"
+    }
+  ],
+  "authority_effect": "NONE_SYNTHETIC_ASSURANCE_ONLY"
+}

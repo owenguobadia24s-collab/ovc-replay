@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/governed_raw_observation_set_v0_1.schema.json",
+  "title": "Atlas Governed Raw Observation Set v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "extractor_version", "repository_commit", "repository_tree", "grt_raw_observation_set_hash", "sources", "raw_observations", "source_class_counts", "canonical_assertions", "court_record_status", "authority_effect", "governed_observation_set_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-governed-raw-observation-set/v1"},
+    "extractor_version": {"const": "0.1"},
+    "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "repository_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "grt_raw_observation_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sources": {"type": "array", "items": {"type": "object"}},
+    "raw_observations": {"type": "array", "items": {"$ref": "#/$defs/observation"}},
+    "source_class_counts": {"type": "object"},
+    "canonical_assertions": {"const": []},
+    "court_record_status": {"const": "EXACT_GIT_TREE"},
+    "authority_effect": {"const": "NONE_GOVERNED_RAW_OBSERVATIONS_ONLY"},
+    "governed_observation_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observation_id", "extractor_id", "extractor_version", "repository_commit", "repository_tree", "source_path", "source_blob_sha", "locator", "normalized_content_hash", "observation_type", "raw_subject", "raw_predicate", "raw_object", "scope_hints", "parse_status", "evidence_class", "source_class", "canonical_promotion", "authority_effect"],
+      "properties": {
+        "observation_id": {"type": "string", "pattern": "^atlas:observation:[0-9a-f]{64}$"},
+        "extractor_id": {"type": "string", "pattern": "^atlas\\.extractor\\.[a-z-]+\\.v0\\.1$"},
+        "extractor_version": {"const": "0.1"},
+        "repository_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "repository_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "locator": {"type": "string", "minLength": 1},
+        "normalized_content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "observation_type": {"type": "string", "minLength": 1},
+        "raw_subject": {"type": "string", "minLength": 1},
+        "raw_predicate": {"type": "string", "minLength": 1},
+        "raw_object": {},
+        "scope_hints": {"type": "object"},
+        "parse_status": {"enum": ["PARSED", "PARTIAL", "UNRESOLVED"]},
+        "evidence_class": {"const": "SOURCE_EXPLICIT"},
+        "source_class": {"enum": ["PROGRAMME_RECORD", "AUTHORITY_RECORD", "CONTRACT", "SCHEMA", "REGISTRY", "RESEARCH_RECORD"]},
+        "canonical_promotion": {"const": "DENIED_PENDING_RESOLVER_AND_PREDICATE_AUTHORITY"},
+        "authority_effect": {"const": "NONE_RAW_OBSERVATION_ONLY"}
+      }
+    }
+  }
+}

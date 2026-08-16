@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-atlas-architecture-manifest/v1",
+  "manifest_id": "ATLAS-ARCHITECTURE-MANIFEST-v0.1-R1",
+  "version": "0.1-R1",
+  "source_bindings": [
+    {
+      "locator": "external:system_atlas/governing/OVC_System_Atlas_Design_Specification_v0_1_REVISED_1_RATIFIED.docx",
+      "hash_algorithm": "sha256",
+      "expected_hash": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e",
+      "role": "NORMATIVE_ATLAS_SEMANTICS"
+    },
+    {
+      "locator": "external:system_atlas/governing/OVC_System_Atlas_Conformance_Implementation_Plan_v0_1_REVISED_1_RATIFIED.docx",
+      "hash_algorithm": "sha256",
+      "expected_hash": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30",
+      "role": "GOVERNING_IMPLEMENTATION_CONSTITUTION"
+    }
+  ],
+  "declarations": [
+    {
+      "subject": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+      "predicate": "ADAPTS",
+      "object": "OVC-GENESIS-REPOSITORY-TOPOLOGY-v0.1",
+      "scope_hints": {"plane": "REPOSITORY", "authority": "NONE"}
+    },
+    {
+      "subject": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+      "predicate": "PROJECTS",
+      "object": "OVCSystemGraph",
+      "scope_hints": {"plane": "ARCHITECTURE", "authority": "NONE"}
+    },
+    {
+      "subject": "OVCSystemGraph",
+      "predicate": "EXPOSES_READ_ONLY",
+      "object": "Research Console Control / System Atlas",
+      "scope_hints": {"activation": "INACTIVE", "source_admission": "DENIED"}
+    }
+  ],
+  "authority_effect": "NONE_SOURCE_BOUND_DESIGN_INDEX_ONLY"
+}

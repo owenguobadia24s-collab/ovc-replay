@@ -9,6 +9,13 @@ those boundaries.
 from .canonical import canonical_json_bytes, canonical_sha256, graph_logical_hash, logical_id
 from .core import AtlasContractError, build_system_graph, validate_system_graph
 from .grt_adapter import AtlasGRTAdapterError, adapt_grt_topology, scan_grt_exact_tree
+from .governed_extractors import AtlasGovernedExtractorError, extract_governed_sources
+from .architecture import (
+    AtlasArchitectureManifestError,
+    architecture_manifest_observations,
+    manifest_currentness_record,
+    validate_architecture_manifest,
+)
 
 __all__ = [
     "AtlasContractError",
@@ -20,5 +27,11 @@ __all__ = [
     "graph_logical_hash",
     "logical_id",
     "scan_grt_exact_tree",
+    "AtlasGovernedExtractorError",
+    "extract_governed_sources",
+    "AtlasArchitectureManifestError",
+    "architecture_manifest_observations",
+    "manifest_currentness_record",
+    "validate_architecture_manifest",
     "validate_system_graph",
 ]
