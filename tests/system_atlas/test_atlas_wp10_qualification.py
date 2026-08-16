@@ -136,7 +136,13 @@ def test_host_operational_measurement_covers_every_frozen_dimension(tmp_path: Pa
     assert observations["environment"] == ("windows" if os.name == "nt" else os.name)
     assert observations["reference_root_hash"] == observations["incremental_root_hash"] == current.root_hash
     receipt = evaluate_operational_budget(load(OPERATIONAL), observations)
-    assert receipt["result"] == "PASS"
+    expected = "PASS" if os.name == "nt" else "CAPACITY_EXCEEDED"
+    assert receipt["environment_result"] == expected
+    assert receipt["result"] == expected
+    if expected == "CAPACITY_EXCEEDED":
+        assert receipt["completeness"] == "INCOMPLETE_DEGRADED"
+        assert receipt["sampling"] == "FORBIDDEN_NOT_USED"
+        assert receipt["protected_security_evidence"] == "PRESERVED_NOT_DROPPED"
     assert set(observations["measurements"]) == set(load(OPERATIONAL)["required_dimensions"])
 
 
