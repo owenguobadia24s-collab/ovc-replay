@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
+import hashlib
 from typing import Iterable, Mapping, Any
 
-from .core import RCCRValidationError, canonical_sha256
+from .core import RCCRValidationError, canonical_json_bytes
 
 ALLOWED_STRATA = {"PATH2_IN_HOUSE", "PATH2_EXTERNAL", "EXTERNAL_FINDING", "ARCHITECTURE_CONTROL"}
 ALLOWED_VISIBILITY = {"PRE_FREEZE_VISIBLE", "POST_FREEZE_VISIBLE", "MODE_RESTRICTED"}
@@ -96,5 +97,5 @@ def compile_bounded_scaleout(
         "validation": "LOCKED_UNCONSUMED",
         "authority_effect": "NONE",
     }
-    payload["manifest_id"] = canonical_sha256(payload)
+    payload["manifest_id"] = hashlib.sha256(canonical_json_bytes(payload)).hexdigest()
     return payload
