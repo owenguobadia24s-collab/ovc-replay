@@ -124,7 +124,6 @@ def _freeze_from_prewrite_logs(
                 text = _request(
                     f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/jobs/{int(job['id'])}/logs",
                     token,
-                    accept="text/plain",
                 ).decode("utf-8", errors="replace")
                 if FREEZE_MARKER_PREFIX in text:
                     markers.append(decode_freeze_marker(text))
