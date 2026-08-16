@@ -1,0 +1,19 @@
+{
+  "schema": "ovc-atlas-external-generation-root/v1",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "root_alias": "OVC_EXTERNAL_ARTIFACT_ROOT/system_atlas",
+  "environment_variable": "OVC_EXTERNAL_ARTIFACT_ROOT",
+  "status": "BOUND_READ_WRITE_VERIFIED",
+  "repository_disjoint": true,
+  "root_binding_file": "OVC_EXTERNAL_ARTIFACT_ROOT/system_atlas/ATLAS_EXTERNAL_ROOT_BINDING.json",
+  "root_binding_sha256": "e727bc9de75545189fe39ba2d526f3e67d39c0e81612845d8270d5b108e41e5c",
+  "directories": ["governing", "generations", "incidents", "milestones"],
+  "verification": {
+    "non_overwriting_governing_copy": "PASS",
+    "plan_full_byte_readback": "PASS",
+    "design_full_byte_readback": "PASS"
+  },
+  "allowed_writes": ["ATLAS_OWNED_GENERATIONS", "ATLAS_INCIDENTS", "ATLAS_MILESTONES", "ATLAS_GOVERNING_SOURCE_COPIES"],
+  "denied_writes": ["SOURCE_PROGRAMMES", "REPOSITORY_MAIN", "R2_CANONICAL", "VALIDATION", "OWNER_AUTHORITY_RECORDS"],
+  "destructive_retention": "DENIED_PENDING_MEASURED_ATLAS_RETENTION_BUDGET_AND_GOVERNING_POLICY"
+}
