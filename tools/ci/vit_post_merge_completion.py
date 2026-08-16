@@ -39,7 +39,13 @@ def _git(repo: Path, *args: str) -> str:
     return proc.stdout.strip()
 
 
-def _request(url: str, token: str, *, accept: str = "application/vnd.github+json") -> bytes:
+def _request(
+    url: str,
+    token: str,
+    *,
+    accept: str = "application/vnd.github+json",
+    allow_public_unauthenticated_retry: bool = False,
+) -> bytes:
     headers = {
         "Accept": accept,
         "Authorization": f"Bearer {token}",
@@ -49,7 +55,22 @@ def _request(url: str, token: str, *, accept: str = "application/vnd.github+json
     try:
         with urlopen(Request(url, headers=headers), timeout=30) as response:
             return response.read()
-    except (HTTPError, URLError, TimeoutError) as exc:
+    except HTTPError as exc:
+        if exc.code == 401 and allow_public_unauthenticated_retry:
+            public_headers = {
+                "Accept": accept,
+                "User-Agent": "ovc-vit-local-post-merge-completion/v1",
+                "X-GitHub-Api-Version": "2022-11-28",
+            }
+            try:
+                with urlopen(Request(url, headers=public_headers), timeout=30) as response:
+                    return response.read()
+            except (HTTPError, URLError, TimeoutError) as retry_exc:
+                raise PostMergeCompletionError(
+                    f"GitHub request failed after public unauthenticated retry: {url}: {retry_exc}"
+                ) from retry_exc
+        raise PostMergeCompletionError(f"GitHub request failed: {url}: {exc}") from exc
+    except (URLError, TimeoutError) as exc:
         raise PostMergeCompletionError(f"GitHub request failed: {url}: {exc}") from exc
 
 
@@ -124,6 +145,7 @@ def _freeze_from_prewrite_logs(
                 text = _request(
                     f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/jobs/{int(job['id'])}/logs",
                     token,
+                    allow_public_unauthenticated_retry=True,
                 ).decode("utf-8", errors="replace")
                 if FREEZE_MARKER_PREFIX in text:
                     markers.append(decode_freeze_marker(text))
