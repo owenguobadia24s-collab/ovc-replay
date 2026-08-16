@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-corrective-implementation-packet/v1",
+  "packet_id": "DSAI3V-VIT-LIVE-COMPLETION-RECEIPTS",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "issue": 986,
+  "status": "IMPLEMENTED_PENDING_ASSURANCE_AND_LIVE_PROOF",
+  "baseline_commit": "04b379adee8b584e841b24e83883aed33e090c61",
+  "authority_required": "AUTO_RATIFIABLE_WITHIN_EXISTING_GENERAL_VIT_AND_LOCAL_RECEIPT_STORAGE_AUTHORITY",
+  "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "writer_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "receipt_store_binding": "OVC_EXTERNAL_ARTIFACT_ROOT/receipts/development/dsai3v",
+  "objectives": [
+    "PERSIST_EXACT_POST_MERGE_PHYSICAL_MATERIALISATION_RECEIPT",
+    "PERSIST_EXACTLY_ONE_PACKET_COMPLETION_RECEIPT_WITH_CANONICAL_DEVOBS_ATTACHMENT",
+    "PRESERVE_UNAVAILABLE_FOR_UNOBSERVED_TELEMETRY",
+    "RECOVER_CONTENT_ADDRESSED_RECEIPT_WRITES_IDEMPOTENTLY",
+    "PERSIST_INTEGRATION_TICKET_IDENTITY_IN_NEW_VIT_LINEAGE",
+    "NO_NEW_MAIN_WRITER_OR_MERGE_API"
+  ],
+  "implementation": [
+    "src/ovc/development/skills/vit_live_completion.py",
+    "tools/ci/record_vit_live_completion.py",
+    "src/ovc/development/skills/vit_routing.py additive IntegrationTicket lineage",
+    "registries/development/skills/VIT_LIVE_COMPLETION_RECEIPT_RUNTIME_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json completion runtime binding",
+    "contracts/development/v0_5/OVC_VIT_LIVE_COMPLETION_RECEIPT_RUNTIME_CONTRACT_v0_1.md",
+    "tests/development_skills/test_dsai3v_vit_live_completion.py"
+  ],
+  "historical_backfill": {
+    "target": "PR#984 DSAI3V-VIT-ASSURANCE-DECOUPLING-MAIN-EXCLUSIVITY",
+    "status": "NOT_CANONICALLY_BACKFILLED",
+    "reason": "HISTORICAL_VIT_LINEAGE_HAS_NO_PERSISTED_INTEGRATION_TICKET_ID",
+    "rule": "DO_NOT_INFER_OR_SYNTHESIZE_HISTORICAL_TICKET_ID",
+    "disposition": "PRESERVE_OBSERVED_TREE_AND_ASSURANCE_EVIDENCE; CANONICAL_PMT_COMPLETION_BACKFILL_REMAINS_UNAVAILABLE_UNLESS_EXACT_HISTORICAL_TICKET_EVIDENCE_IS_FOUND"
+  },
+  "required_assurance": [
+    "targeted live completion runtime tests",
+    "existing VIT routing and planned-lineage regression",
+    "existing completion-observability regression",
+    "repository suite",
+    "runner parity",
+    "pytest/unittest parity",
+    "FINAL_HEAD",
+    "SIQ READY",
+    "merge readiness",
+    "one post-merge live eligible packet completion bundle proof"
+  ],
+  "explicit_non_authority": [
+    "no new physical-main writer",
+    "no new GitHub merge or approval API",
+    "no DA receipt-bot scope expansion",
+    "no arbitrary storage sink",
+    "no R2/canonical release publication",
+    "no force-push/history rewrite",
+    "no scientific/Validation/probability/risk/exposure/execution authority"
+  ],
+  "rollback": "Forward-disable VIT_LIVE_COMPLETION_RECEIPT_RUNTIME_v0_1 and the DEFAULT_EXECUTION_SUBSTRATE runtime pointer while preserving emitted local receipts, VIT/SIQ authority and immutable Git history.",
+  "next_state": "QA_THEN_DELEGATED_PASS_IF_ALL_STATIC_ASSURANCE_GREEN; KEEP_ISSUE_986_OPEN_UNTIL_LIVE_POST_MERGE_RECEIPT_PROOF"
+}
