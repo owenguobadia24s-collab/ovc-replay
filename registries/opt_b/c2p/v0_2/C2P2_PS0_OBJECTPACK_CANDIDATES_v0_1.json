@@ -41,20 +41,20 @@
       "candidate_logical_hash": "eb6cc46d9f22ef3c6257f30eb61a16030b7cf493acf07c436b8ba904a8adb770"
     },
     {
-      "candidate_id": "C2P2-PS0-OP-C-EPISODE-AWARE-CONTINUITY-v1",
+      "candidate_id": "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1",
       "status": "UNSELECTED_RESEARCH_CANDIDATE",
       "activation_eligible": false,
-      "scientific_intent": "Test whether declared C2E lifecycle evidence improves persistent-object continuity decisions without allowing episode identity to substitute for object identity.",
+      "scientific_intent": "Test whether declared optional C2E lifecycle evidence improves persistent-object continuity decisions while preserving a lawful C2-only base route and never allowing episode identity to substitute for object identity.",
       "hard_scope": ["instrument", "side", "clock", "structural_role_id", "geometry_kind_id"],
-      "candidate_extraction": {"source": "C2_PLUS_DECLARED_C2E_FACTS", "requires_first_valid": true},
-      "tracklet": {"open": "first admissible candidate", "update": "same hard scope with owner-declared compatible geometry and compatible C2E lineage/boundary evidence", "ambiguity": "preserve", "confirm": {"eligible_observation_count": 3}},
-      "identity_predicates": ["same_hard_scope", "owner_declared_geometry_compatible", "c2e_lineage_compatible", "no_terminal_break", "chronology_contiguous", "no_equally_lawful_competitor"],
-      "continuity": {"gap_policy": "CENSOR", "dormancy": "ALLOWED_AFTER_CONFIRMATION", "reappearance": "SAME_ID_ONLY_IF_DORMANT_AND_C2_PLUS_C2E_PREDICATES_REESTABLISHED"},
-      "retirement": {"terminal_on": ["explicit_upstream_invalidation", "declared_role_change", "geometry_kind_incompatibility", "incompatible_c2e_lineage", "split_or_merge_parent_disposition"]},
-      "c2e_role": "REQUIRED_FOR_THIS_CANDIDATE_BUT_NEVER_SUFFICIENT_ALONE",
+      "candidate_extraction": {"source": "C2_WITH_OPTIONAL_DECLARED_C2E_FACTS", "requires_first_valid": true},
+      "tracklet": {"open": "first admissible candidate", "update": "same hard scope with owner-declared compatible geometry; if an explicit episode-relative role declares C2E dependency, compatible C2E lineage/boundary evidence is additionally required", "ambiguity": "preserve", "confirm": {"eligible_observation_count": 3}},
+      "identity_predicates": ["same_hard_scope", "owner_declared_geometry_compatible", "c2e_lineage_compatible_if_declared", "no_terminal_break", "chronology_contiguous", "no_equally_lawful_competitor"],
+      "continuity": {"gap_policy": "CENSOR", "dormancy": "ALLOWED_AFTER_CONFIRMATION", "reappearance": "SAME_ID_ONLY_IF_DORMANT_AND_ALL_DECLARED_PREDICATES_REESTABLISHED"},
+      "retirement": {"terminal_on": ["explicit_upstream_invalidation", "declared_role_change", "geometry_kind_incompatibility", "declared_c2e_dependency_incompatibility", "split_or_merge_parent_disposition"]},
+      "c2e_role": "OPTIONAL_BY_DEFAULT_REQUIRED_ONLY_FOR_EXPLICIT_EPISODE_RELATIVE_OBJECT_ROLE_NEVER_SUFFICIENT_ALONE",
       "forbidden": ["family", "C3_semantics", "OPT_C", "OPT_D", "Validation", "outcomes", "future_information", "scalar_similarity_score"],
       "rollback": "forward_supersede_candidate_only",
-      "candidate_logical_hash": "c069f191ea23ee8f5d0301b260b46691f4cdaf9131569f4a7fe964a98a42300b"
+      "candidate_logical_hash": "1341b42b39638f9fc10bb84b841597c9254353270240ff683be264c061a24c17"
     }
   ],
   "non_authority": {
