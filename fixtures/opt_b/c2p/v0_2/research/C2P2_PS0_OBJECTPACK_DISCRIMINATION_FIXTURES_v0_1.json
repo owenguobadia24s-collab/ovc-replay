@@ -1,0 +1,22 @@
+{
+  "schema": "ovc-c2p2-ps0-objectpack-discrimination-fixtures/v1",
+  "programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
+  "evidence_class": "SYNTHETIC_ADVERSARIAL_NON_EVIDENTIARY",
+  "real_source": false,
+  "outcomes_present": false,
+  "cases": [
+    {"case_id":"PS0-F01-EXACT-CONTINUITY","description":"Same hard scope, exact geometry signature, contiguous chronology, no competitor.","expected":{"A":"SAME_OBJECT_SUPPORTED","B":"SAME_OBJECT_SUPPORTED","C":"SAME_OBJECT_SUPPORTED"}},
+    {"case_id":"PS0-F02-BOUNDED-GEOMETRY-EVOLUTION","description":"Role/topology stable and owner-declared geometry compatible, but exact geometry signature changes.","expected":{"A":"NEW_OR_UNRESOLVED","B":"SAME_OBJECT_SUPPORTED","C":"SAME_OBJECT_SUPPORTED_WITH_C2_ONLY_BASE_ROUTE_UNLESS_C2E_DEPENDENCY_DECLARED"}},
+    {"case_id":"PS0-F03-C2E-LINEAGE-CONFLICT","description":"C2 continuity is plausible but declared C2E lineage becomes incompatible.","expected":{"A":"EVALUATE_WITHOUT_C2E_AUTHORITY","B":"EVALUATE_WITHOUT_C2E_AUTHORITY","C":"REJECT_ONLY_FOR_EXPLICIT_EPISODE_RELATIVE_ROLE_OTHERWISE_EVALUATE_C2_ONLY"}},
+    {"case_id":"PS0-F04-GAP-CENSOR","description":"Source continuity gap interrupts evaluability.","expected":{"A":"CENSORED","B":"CENSORED","C":"CENSORED"}},
+    {"case_id":"PS0-F05-DORMANT-REAPPEARANCE","description":"Confirmed object disappears, later returns with compatible evidence.","expected":{"A":"SAME_ONLY_IF_DORMANT_AND_EXACT_SIGNATURE","B":"SAME_IF_DORMANT_AND_PREDICATES_PASS","C":"SAME_IF_DORMANT_AND_ALL_DECLARED_PREDICATES_PASS"}},
+    {"case_id":"PS0-F06-RETIRED-RECURRENCE","description":"A retired assertion is followed by a structurally similar observation.","expected":{"A":"NEW_ASSERTION_RECURRENCE_ONLY","B":"NEW_ASSERTION_RECURRENCE_ONLY","C":"NEW_ASSERTION_RECURRENCE_ONLY"}},
+    {"case_id":"PS0-F07-EQUAL-COMPETITORS","description":"Two existing assertions remain equally lawful identity candidates.","expected":{"A":"AMBIGUOUS","B":"AMBIGUOUS","C":"AMBIGUOUS"}},
+    {"case_id":"PS0-F08-SPLIT","description":"One prior object branches into two simultaneously supported descendants.","expected":{"A":"SPLIT_NEW_CHILD_ASSERTIONS","B":"SPLIT_NEW_CHILD_ASSERTIONS","C":"SPLIT_NEW_CHILD_ASSERTIONS"}},
+    {"case_id":"PS0-F09-MERGE","description":"Two prior objects converge into one new pack-scoped ObjectAssertion with explicit genealogy; no StructuralReferent is created.","expected":{"A":"MERGE_NEW_ASSERTION","B":"MERGE_NEW_ASSERTION","C":"MERGE_NEW_ASSERTION"}},
+    {"case_id":"PS0-F10-CROSS-SCALE-SIMILARITY","description":"15M and 2H structures are geometrically similar.","expected":{"A":"DISTINCT_ASSERTIONS","B":"DISTINCT_ASSERTIONS","C":"DISTINCT_ASSERTIONS"}},
+    {"case_id":"PS0-F11-FAMILY-LABEL-MATCH","description":"Family label matches while identity predicates fail.","expected":{"A":"FORBIDDEN_EVIDENCE_IGNORED","B":"FORBIDDEN_EVIDENCE_IGNORED","C":"FORBIDDEN_EVIDENCE_IGNORED"}},
+    {"case_id":"PS0-F12-DOWNSTREAM-SEMANTIC-MATCH","description":"C3 semantic label/prose matches while upstream identity evidence is insufficient.","expected":{"A":"NOT_EVALUABLE_OR_NEW_BY_UPSTREAM_ONLY","B":"NOT_EVALUABLE_OR_NEW_BY_UPSTREAM_ONLY","C":"NOT_EVALUABLE_OR_NEW_BY_UPSTREAM_ONLY"}}
+  ],
+  "selection_rule": "NO_SCALAR_RANKING_NO_WINNER; disagreements identify RS0 evidence needs only"
+}
