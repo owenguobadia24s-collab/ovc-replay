@@ -51,6 +51,76 @@ class ValidatedVitLineage:
     lineage_ref: str | None = None
 
 
+def build_vit_lineage_record(
+    *,
+    programme_id: str,
+    packet_id: str,
+    pip_identity_payload: Mapping[str, Any],
+    train_generation_id: str,
+    ordinal: int,
+    predecessor_tree_sha: str,
+    result_tree_sha: str,
+    apply_profile: str,
+    route_class: str = VIT_MANDATORY,
+) -> dict[str, Any]:
+    """Build one canonical PIP -> VirtualIntegrationGeneration -> LedgerPlacement lineage."""
+    pip = dict(pip_identity_payload)
+    if str(pip.get("programme_id", "")) != programme_id or str(pip.get("packet_id", "")) != packet_id:
+        raise VitContractError("VIT_LINEAGE_PIP_PACKET_MISMATCH")
+    authority_manifest_id = str(pip.get("authority_manifest_id", ""))
+    dependency_frontier_id = str(pip.get("dependency_frontier_id", ""))
+    if not _is_hex(authority_manifest_id, 64) or not _is_hex(dependency_frontier_id, 64):
+        raise VitContractError("VIT_LINEAGE_PIP_FRONTIER_INVALID")
+    if route_class not in {VIT_MANDATORY, REGISTERED_EXCEPTION}:
+        raise VitContractError("VIT_LINEAGE_ROUTE_CLASS_INVALID")
+    if ordinal < 0 or not str(train_generation_id).strip() or not str(apply_profile).strip():
+        raise VitContractError("VIT_LINEAGE_BUILD_INPUT_INVALID")
+    if not _is_hex(predecessor_tree_sha, 40) or not _is_hex(result_tree_sha, 40):
+        raise VitContractError("VIT_LINEAGE_BUILD_TREE_INVALID")
+
+    pip_id = canonical_sha256(pip)
+    generation = {
+        "train_generation_id": str(train_generation_id),
+        "ordinal": int(ordinal),
+        "predecessor_tree": {"tree_sha": predecessor_tree_sha, "profile": TREE_IDENTITY_PROFILE},
+        "payload_id": pip_id,
+        "result_tree": {"tree_sha": result_tree_sha, "profile": TREE_IDENTITY_PROFILE},
+        "authority_manifest_id": authority_manifest_id,
+        "dependency_frontier_id": dependency_frontier_id,
+    }
+    generation_id = canonical_sha256(generation)
+    placement = {
+        "payload_id": pip_id,
+        "predecessor_tree": predecessor_tree_sha,
+        "result_tree": result_tree_sha,
+        "apply_profile": str(apply_profile),
+        "ordinal": int(ordinal),
+        "dependency_frontier_id": dependency_frontier_id,
+        "authority_manifest_id": authority_manifest_id,
+    }
+    placement_id = canonical_sha256(placement)
+    record = {
+        "schema": LINEAGE_SCHEMA,
+        "status": "ADMITTED",
+        "programme_id": str(programme_id),
+        "packet_id": str(packet_id),
+        "route_class": route_class,
+        "pip": pip,
+        "pip_id": pip_id,
+        "generation": generation,
+        "generation_id": generation_id,
+        "placement": placement,
+        "placement_id": placement_id,
+        "routing": {
+            "controller": VIT_CONTROLLER,
+            "physical_gateway": SIQ_GATEWAY,
+            "route_class": route_class,
+        },
+    }
+    validate_vit_lineage_record(record)
+    return record
+
+
 def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str | None = None) -> ValidatedVitLineage:
     """Validate lineage using the repository's canonical PIP/generation/placement identity shapes."""
     if record.get("schema") != LINEAGE_SCHEMA:
@@ -66,7 +136,6 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
     if route_class not in {VIT_MANDATORY, REGISTERED_EXCEPTION}:
         raise VitContractError("VIT_LINEAGE_ROUTE_CLASS_INVALID")
 
-    # `pip` is exactly PacketIntegrationPayload.identity_payload(), the surface hashed by payload_id.
     pip = _required_mapping(record.get("pip"), "pip")
     if str(pip.get("programme_id", "")) != programme_id or str(pip.get("packet_id", "")) != packet_id:
         raise VitContractError("VIT_LINEAGE_PIP_PACKET_MISMATCH")
@@ -78,7 +147,6 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
     if not _is_hex(pip_id, 64) or pip_id != canonical_sha256(dict(pip)):
         raise VitContractError("VIT_LINEAGE_PIP_ID_INVALID")
 
-    # `generation` is exactly the asdict() identity surface of VirtualIntegrationGeneration.
     generation = _required_mapping(record.get("generation"), "generation")
     if str(generation.get("payload_id", "")) != pip_id:
         raise VitContractError("VIT_LINEAGE_GENERATION_PIP_MISMATCH")
@@ -102,7 +170,6 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
     if not _is_hex(generation_id, 64) or generation_id != canonical_sha256(dict(generation)):
         raise VitContractError("VIT_LINEAGE_GENERATION_ID_INVALID")
 
-    # `placement` is exactly the asdict() identity surface of LedgerPlacement.
     placement = _required_mapping(record.get("placement"), "placement")
     if str(placement.get("payload_id", "")) != pip_id:
         raise VitContractError("VIT_LINEAGE_PLACEMENT_PIP_MISMATCH")
