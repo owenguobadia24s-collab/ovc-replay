@@ -1,17 +1,20 @@
 from __future__ import annotations
 
+import base64
 import json
 from pathlib import Path
+import subprocess
 from tempfile import TemporaryDirectory
 import unittest
 
-from ovc.development.identity import canonical_sha256
 from ovc.development.skills.siq_core import WAIT, build_queue_state, queue_head
+from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
 from ovc.development.skills.vit_core import VitContractError
 from ovc.development.skills.vit_routing import (
     REGISTERED_EXCEPTION,
     UNLAWFUL,
     VIT_MANDATORY,
+    build_vit_lineage_record,
     classify_main_movement,
     validate_vit_lineage_record,
 )
@@ -22,59 +25,35 @@ REGISTER = ROOT / "registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v
 AUDIT = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_ROUTING_AUDIT_v0_1.json"
 
 
-def lineage_record(programme: str = "PROGRAMME", packet: str = "PACKET") -> dict:
-    authority_manifest_id = "2" * 64
-    dependency_frontier_id = "3" * 64
+def lineage_record(programme: str = "PROGRAMME", packet: str = "PACKET", *, predecessor: str = "a" * 40, result: str = "b" * 40, changes: list[dict] | None = None) -> dict:
     pip = {
         "schema_version": "packet-integration-payload/v0.1",
         "programme_id": programme,
         "packet_id": packet,
-        "logical_changes": [{"path": "records/example.json", "operation": "ADD", "content_sha256": "1" * 64}],
-        "authority_manifest_id": authority_manifest_id,
-        "dependency_frontier_id": dependency_frontier_id,
+        "logical_changes": changes or [{"op":"ADD","path":"records/example.json","blob_sha":"1" * 40,"mode":"100644"}],
+        "authority_manifest_id": "2" * 64,
+        "dependency_frontier_id": "3" * 64,
         "completion_transition": {"status": "COMPLETED"},
     }
-    pip_id = canonical_sha256(pip)
-    predecessor = {"tree_sha": "a" * 40, "profile": "git-tree-v1"}
-    result = {"tree_sha": "b" * 40, "profile": "git-tree-v1"}
-    generation = {
-        "train_generation_id": "TRAIN-1",
-        "ordinal": 1,
-        "predecessor_tree": predecessor,
-        "payload_id": pip_id,
-        "result_tree": result,
-        "authority_manifest_id": authority_manifest_id,
-        "dependency_frontier_id": dependency_frontier_id,
-    }
-    generation_id = canonical_sha256(generation)
-    placement = {
-        "payload_id": pip_id,
-        "predecessor_tree": predecessor["tree_sha"],
-        "result_tree": result["tree_sha"],
-        "apply_profile": "REFERENCE_APPLY",
-        "ordinal": 1,
-        "dependency_frontier_id": dependency_frontier_id,
-        "authority_manifest_id": authority_manifest_id,
-    }
-    placement_id = canonical_sha256(placement)
-    return {
-        "schema": "ovc-vit-routing-lineage/v1",
-        "status": "ADMITTED",
-        "programme_id": programme,
-        "packet_id": packet,
-        "route_class": "VIT_MANDATORY",
-        "pip": pip,
-        "pip_id": pip_id,
-        "generation": generation,
-        "generation_id": generation_id,
-        "placement": placement,
-        "placement_id": placement_id,
-        "routing": {
-            "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
-            "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
-            "route_class": "VIT_MANDATORY",
-        },
-    }
+    return build_vit_lineage_record(
+        programme_id=programme,
+        packet_id=packet,
+        pip_identity_payload=pip,
+        train_generation_id="TRAIN-1",
+        ordinal=1,
+        predecessor_tree_sha=predecessor,
+        result_tree_sha=result,
+        apply_profile=REFERENCE_APPLY_PROFILE,
+    )
+
+
+def git(repo: Path, *args: str) -> str:
+    return subprocess.run(["git","-C",str(repo),*args],check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True).stdout.strip()
+
+
+def b64_lineage(record: dict) -> str:
+    raw=json.dumps(record,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
+    return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
 
 
 class Dsai3vUniversalRoutingTests(unittest.TestCase):
@@ -103,25 +82,13 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
 
     def test_unrelated_main_advance_is_zero_payload_rebuild(self) -> None:
         pip = "d" * 64
-        result = classify_main_movement(
-            previous_pip_id=pip,
-            current_pip_id=pip,
-            dependency_frontier_changed=False,
-            authority_changed=False,
-            packet_local_defect_changed_payload=False,
-        )
+        result = classify_main_movement(previous_pip_id=pip,current_pip_id=pip,dependency_frontier_changed=False,authority_changed=False,packet_local_defect_changed_payload=False)
         self.assertEqual(result["disposition"], "PLACEMENT_RECOMPUTE_ONLY")
         self.assertFalse(result["payload_rebuild_required"])
         self.assertTrue(result["assurance_renewal_required"])
 
     def test_identity_bearing_packet_defect_requires_payload_rebuild(self) -> None:
-        result = classify_main_movement(
-            previous_pip_id="d" * 64,
-            current_pip_id="e" * 64,
-            dependency_frontier_changed=False,
-            authority_changed=False,
-            packet_local_defect_changed_payload=True,
-        )
+        result = classify_main_movement(previous_pip_id="d"*64,current_pip_id="e"*64,dependency_frontier_changed=False,authority_changed=False,packet_local_defect_changed_payload=True)
         self.assertEqual(result["disposition"], "PAYLOAD_REBUILD_REQUIRED")
         self.assertTrue(result["payload_rebuild_required"])
 
@@ -137,40 +104,40 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
         self.assertFalse(cases["RCCR-949-950"]["operator_required_is_exception"])
 
     def test_siq_candidate_without_lineage_fails_closed(self) -> None:
-        candidate = {
-            "packet_id": "DIRECT",
-            "plan_id": "PLAN",
-            "candidate_head_sha": "a" * 40,
-            "baseline_main_sha": "b" * 40,
-            "ready_sequence": 1,
-            "implementation_complete": True,
-            "qa_status": "PASS",
-            "authority_delta": "NONE",
-            "gate_class": "AUTO_EXECUTABLE",
-            "preliminary_assurance_pass": True,
-            "rollback_defined": True,
-            "dependency_footprint_pinned": True,
-        }
-        state = build_queue_state([candidate])
-        self.assertEqual(state.candidates[0].queue_state, WAIT)
-        self.assertIn("VIT_LINEAGE_REQUIRED", state.candidates[0].reason_codes)
+        candidate={"packet_id":"DIRECT","plan_id":"PLAN","candidate_head_sha":"a"*40,"baseline_main_sha":"b"*40,"ready_sequence":1,"implementation_complete":True,"qa_status":"PASS","authority_delta":"NONE","gate_class":"AUTO_EXECUTABLE","preliminary_assurance_pass":True,"rollback_defined":True,"dependency_footprint_pinned":True}
+        state=build_queue_state([candidate])
+        self.assertEqual(state.candidates[0].queue_state,WAIT)
+        self.assertIn("VIT_LINEAGE_REQUIRED",state.candidates[0].reason_codes)
         self.assertIsNone(queue_head(state))
 
-    def test_pr_preflight_accepts_valid_lineage_and_rejects_missing(self) -> None:
+    def test_pr_preflight_requires_inline_lineage_that_reproduces_exact_head_tree(self) -> None:
         with TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            register_path = root / "registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json"
+            root=Path(tmp)
+            git(root,"init","-q")
+            git(root,"config","user.email","vit@example.invalid")
+            git(root,"config","user.name","VIT Test")
+            (root/"base.txt").write_text("base\n",encoding="utf-8")
+            git(root,"add","base.txt"); git(root,"commit","-qm","base")
+            base_sha=git(root,"rev-parse","HEAD"); base_tree=git(root,"rev-parse","HEAD^{tree}")
+            (root/"payload.txt").write_text("payload\n",encoding="utf-8")
+            git(root,"add","payload.txt"); git(root,"commit","-qm","payload")
+            head_sha=git(root,"rev-parse","HEAD"); head_tree=git(root,"rev-parse","HEAD^{tree}")
+            blob=git(root,"rev-parse","HEAD:payload.txt")
+
+            register_path=root/"registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json"
             register_path.parent.mkdir(parents=True)
-            register_path.write_text(json.dumps({"unregistered_bypass_policy":"FAIL_CLOSED","registered_pr_exceptions":[]}), encoding="utf-8")
-            lineage_path = root / "records/vit/lineage.json"
-            lineage_path.parent.mkdir(parents=True)
-            lineage_path.write_text(json.dumps(lineage_record()), encoding="utf-8")
-            event = {"number":1,"pull_request":{"body":"VIT-Lineage-Ref: records/vit/lineage.json","head":{"sha":"a"*40,"ref":"feature"}}}
-            result = check_pull_request_event(root=root, event=event)
+            register_path.write_text(json.dumps({"unregistered_bypass_policy":"FAIL_CLOSED","registered_pr_exceptions":[]}),encoding="utf-8")
+            record=lineage_record(predecessor=base_tree,result=head_tree,changes=[{"op":"ADD","path":"payload.txt","blob_sha":blob,"mode":"100644"}])
+            body=f"VIT-Lineage-B64: {b64_lineage(record)}"
+            event={"number":1,"pull_request":{"body":body,"head":{"sha":head_sha,"ref":"feature"},"base":{"sha":base_sha,"ref":"main"}}}
+            result=check_pull_request_event(root=root,event=event)
             self.assertTrue(result.startswith("VIT_MANDATORY:PACKET:"))
-            missing = {"number":2,"pull_request":{"body":"","head":{"sha":"b"*40,"ref":"feature2"}}}
-            with self.assertRaises(RuntimeError):
-                check_pull_request_event(root=root, event=missing)
+
+            wrong=json.loads(json.dumps(record)); wrong["generation"]["result_tree"]["tree_sha"]="c"*40
+            missing={"number":2,"pull_request":{"body":"","head":{"sha":head_sha,"ref":"feature2"},"base":{"sha":base_sha,"ref":"main"}}}
+            with self.assertRaises(RuntimeError): check_pull_request_event(root=root,event=missing)
+            invalid={"number":3,"pull_request":{"body":f"VIT-Lineage-B64: {b64_lineage(wrong)}","head":{"sha":head_sha,"ref":"feature3"},"base":{"sha":base_sha,"ref":"main"}}}
+            with self.assertRaises(RuntimeError): check_pull_request_event(root=root,event=invalid)
 
 
 if __name__ == "__main__":
