@@ -54,6 +54,9 @@ class DsaiVitV03Wp10LaneBTests(unittest.TestCase):
             authority_delta=self.packet["authority_delta"],
             prerequisites_pass=True,
             qa_pass=True,
+            pip_id="d" * 64,
+            vit_generation_id="e" * 64,
+            vit_placement_id="f" * 64,
         )
         self.assertEqual(
             admit_live_pilot_packet(self.authority, packet),

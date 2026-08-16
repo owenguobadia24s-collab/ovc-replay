@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-decision-record/v1",
+  "decision_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-DELEGATED-PASS-v0.1",
+  "gate_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-CONFORMANCE-AUTO",
+  "packet_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-CONFORMANCE",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "plan_id": "OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "plan_version": "0.1-R1-RATIFIED",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_AUTO_RATIFICATION",
+  "candidate_implementation_commit": "fe5a980b52e88c19194edad0f949dcefc3778db2",
+  "base_commit": "7bdb658be6978d6e179b44decdb38af3401ffa07",
+  "qa_packet": "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_UNIVERSAL_ROUTING_QA_v0_1.json",
+  "tests": {
+    "vit_routing_preflight": "PASS",
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS",
+    "workflow_runs": [31940326012, 31940326017]
+  },
+  "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "reserved_authority_change": false,
+  "rationale": "The correction only makes the already-active DSAI3V VIT execution substrate mechanically fail-closed across permanent PR and SIQ admission. It creates no new writer, packet eligibility, merge authority, scientific authority, publication authority, ACTIVE_* authority, probability/risk/exposure/execution authority, force-push, history rewrite or parallel physical merge. QA recommends PASS and required assurance is green.",
+  "rollback": "Forward-disable or supersede only the stricter universal-routing conformance layer while preserving active VIT/SIQ authority, audit evidence, prior PIPs, placement generations, failure evidence and Git history.",
+  "merge_commit": null,
+  "next_packet": "DSAI3V-VIT-UNIVERSAL-ROUTING-LIVE-SMOKE-A",
+  "status": "APPROVED_PENDING_SQUASH_MERGE"
+}

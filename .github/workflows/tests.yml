@@ -16,8 +16,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  vit-routing-preflight:
+    name: VIT routing preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Require canonical VIT lineage before permanent PR assurance
+        env:
+          PYTHONPATH: src:.
+        run: python3 tools/ci/vit_routing_preflight.py
+
   pytest-unified:
     name: tests
+    needs: vit-routing-preflight
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +54,7 @@ jobs:
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
+    needs: vit-routing-preflight
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -70,6 +86,7 @@ jobs:
 
   runner-parity:
     name: runner-parity
+    needs: vit-routing-preflight
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

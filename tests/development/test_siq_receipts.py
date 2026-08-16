@@ -4,8 +4,11 @@ from pathlib import Path
 import unittest
 from ovc.development.skills.siq_core import build_queue_state
 from ovc.development.skills.siq_receipts import build_siq_receipt, load_siq_receipt, persist_siq_receipt
+from ovc.development.skills.vit_routing import build_vit_lineage_record
 A="a"*40; B="b"*40
-ITEM={"packet_id":"WP","plan_id":"PLAN","candidate_head_sha":A,"baseline_main_sha":B,"ready_sequence":1,"implementation_complete":True,"qa_status":"PASS","authority_delta":"NONE","gate_class":"AUTO_EXECUTABLE","preliminary_assurance_pass":True,"rollback_defined":True,"dependency_footprint_pinned":True}
+PIP={"schema_version":"packet-integration-payload/v0.1","programme_id":"PROGRAMME","packet_id":"WP","logical_changes":[{"op":"ADD","path":"records/WP.json","blob_sha":"1"*40,"mode":"100644"}],"authority_manifest_id":"2"*64,"dependency_frontier_id":"3"*64,"completion_transition":{"status":"COMPLETED"}}
+LINEAGE=build_vit_lineage_record(programme_id="PROGRAMME",packet_id="WP",pip_identity_payload=PIP,train_generation_id="TRAIN-1",ordinal=1,predecessor_tree_sha="a"*40,result_tree_sha="b"*40,apply_profile="REFERENCE_APPLY")
+ITEM={"packet_id":"WP","plan_id":"PLAN","candidate_head_sha":A,"baseline_main_sha":B,"ready_sequence":1,"implementation_complete":True,"qa_status":"PASS","authority_delta":"NONE","gate_class":"AUTO_EXECUTABLE","preliminary_assurance_pass":True,"rollback_defined":True,"dependency_footprint_pinned":True,"vit_pip_id":LINEAGE["pip_id"],"vit_generation_id":LINEAGE["generation_id"],"vit_placement_id":LINEAGE["placement_id"],"vit_lineage_ref":"records/test/WP.json","vit_lineage_record":LINEAGE}
 class SIQReceiptTests(unittest.TestCase):
     def test_receipt_is_observability_only_and_round_trips(self):
         state=build_queue_state([ITEM])

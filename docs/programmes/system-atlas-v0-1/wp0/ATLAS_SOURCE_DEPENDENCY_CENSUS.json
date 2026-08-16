@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-atlas-source-dependency-census/v1",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "baseline_commit": "1afae5de5134003b756ae3e077ff628018896491",
+  "baseline_tree": "4c1c6892a4c930b1e252270564c893162e242d9d",
+  "governing_external_sources": [
+    {"id": "ATLAS_PLAN", "sha256": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30", "byte_size": 59244},
+    {"id": "ATLAS_DESIGN", "sha256": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e", "byte_size": 64158}
+  ],
+  "repository_sources": [
+    {"path": "src/ovc/programme_genesis/_topology_engine.py", "blob": "dc43bf62d88a40b3a5a84fd2956d6f80b76be6f7", "use": "REQUIRED_EXACT_TREE_CENSUS"},
+    {"path": "src/ovc/programme_genesis/topology.py", "blob": "55dbc03b0197d6a4cc9046fdebf4a0b92e553548", "use": "REQUIRED_TOPOLOGY_COMPATIBILITY"},
+    {"path": "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json", "blob": "74e4ece8490bd6ac386d2c6590d6d8736504c8c9", "use": "GRT_CURRENT_STATE"},
+    {"path": "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_11.json", "blob": "bbedef576091bc40970ea5aa20e9b3e03be529ab", "use": "GRT_G2_5_AND_G3_STATUS"},
+    {"path": "registries/governance/programme_genesis/OVC_PGN_PORTFOLIO_LEDGER_v0_2.json", "blob": "0bd47d523369228a0cc52d5a41cd7f35970a7a06", "use": "PROGRAMME_GENESIS_AUTHORITY"},
+    {"path": "registries/implementation/research_console_vnext/OVC_RCN_RN_STATE_v0_2.json", "blob": "8c274084b39a4faf8f917128d178d3b43455dbac", "use": "CONSOLE_CURRENT_STATE"},
+    {"path": "registries/research_console_vnext/RCN_SOURCE_BINDING_REGISTER_v0_1.yaml", "blob": "d843e49aa40544dcf27465190327b60e9f51a51b", "use": "CONSOLE_EXISTING_SOURCE_ADMISSION"},
+    {"path": "registries/governance/grt_v0_2/shared_service_bindings/OVC_SHARED_SYSTEMS_V0_1_BINDING_REGISTRY.json", "blob": "c761b1ef5b2409cad04353bd9e966d1c81030f27", "use": "SHARED_SYSTEMS_EXACT_BINDING"},
+    {"path": "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json", "blob": "b017993b14da36f0a2d39229ed5d95e33b05e20e", "use": "VIT_DEFAULT_ROUTE"},
+    {"path": "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json", "blob": "077ec283df6d97f9cc99af9704e7a34b8bb83c7b", "use": "VIT_PACKET_ELIGIBILITY"},
+    {"path": "contracts/development/v0_5/OVC_VIT_UNIVERSAL_ROUTING_CONFORMANCE_CONTRACT_v0_1.md", "blob": "eb9cc15e9076607916ea9692c93d047cfa680833", "use": "PIP_VIT_SIQ_ROUTE"},
+    {"path": "docs/programmes/siq-runtime-v0-1/SIQ_RUNTIME_PROGRAMME_STATE.json", "blob": "ae1c373606b7b8bf8fe89f10314229f0fe5b3a76", "use": "SERIALIZED_PHYSICAL_GATEWAY"},
+    {"path": "src/ovc_evidence_store/external_root.py", "blob": "2bcfdb3058077888adf5bf687283795fccb8d47d", "use": "EXTERNAL_ROOT_SAFETY_BOUNDARY"}
+  ],
+  "source_classes": ["MACHINE_READABLE_GOVERNANCE", "FORMAL_CONTRACT", "TECHNICAL_EXACT_TREE", "TEST_ASSURANCE", "DESIGN_CANON_MANIFEST_ONLY"],
+  "mandatory_missing_sources": [],
+  "optional_unavailable_sources": ["ACTIVE_SHARED_SYSTEMS_SERVICE_IMPLEMENTATION", "GRT2_G3_FULL_ENFORCEMENT"],
+  "pre_existing_currentness_findings": [
+    {
+      "pointer": "registries/implementation/dsai3v_async_assurance_v0_1/CURRENT_STATE_POINTER.json",
+      "finding": "CURRENT_STATE_NOT_FOUND",
+      "atlas_effect": "NON_BLOCKING_NOT_REQUIRED_BY_ATLAS_CORE_ENTRY"
+    },
+    {
+      "pointer": "registries/implementation/ec1_dmrp_v0_1/CURRENT_STATE_POINTER.json",
+      "finding": "POINTER_STATUS_AND_PACKET_FIELDS_DO_NOT_MATCH_REFERENCED_STATE",
+      "atlas_effect": "PRESERVE_AS_UNRESOLVED_CURRENTNESS_INPUT_NO_INFERENCE"
+    }
+  ],
+  "authority_discrepancy": "NONE_MATERIAL_TO_ATLAS_ENTRY_PRE_EXISTING_CURRENTNESS_FINDINGS_RECORDED"
+}
