@@ -146,4 +146,5 @@ def test_wp7_packet_is_canonical_auto_pass_without_console_or_write_authority() 
     assert authority["logical_id"] == canonical_sha256(authority["payload"])
     assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
     assert "NO_RESEARCH_CONSOLE_SOURCE_OR_BINDING" in authority["payload"]["reserved_boundaries"]
+    assert "NO_AA0_REUSE_WITHOUT_VALID_ACTUATION_MARKER" in authority["payload"]["reserved_boundaries"]
     assert hashlib.sha256(EXTERNAL_WP7.read_bytes()).hexdigest() == qa["external_api_evidence"]["sha256"]
