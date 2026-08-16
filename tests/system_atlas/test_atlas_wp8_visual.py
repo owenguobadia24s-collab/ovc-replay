@@ -1,4 +1,5 @@
 import json
+import hashlib
 from pathlib import Path
 
 from ovc.system_atlas.visual import canonical_projection_hash, load_and_validate_projection
@@ -6,6 +7,7 @@ from ovc.system_atlas.visual import canonical_projection_hash, load_and_validate
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "fixtures/system_atlas/wp8/ATLAS_VS0_ACTUAL_REPOSITORY_PROJECTION_v0_1.json"
+WP8 = ROOT / "docs/programmes/system-atlas-v0-1/wp8"
 
 
 def test_actual_projection_is_exact_tree_bound_and_read_only() -> None:
@@ -35,3 +37,31 @@ def test_authority_and_prohibition_are_exposed() -> None:
     assert any(node["state"] == "forbidden" for node in projection["nodes"])
     assert any(edge["family"] == "prohibition" for edge in projection["edges"])
     assert projection["research_console_binding_created"] is False
+
+
+def test_wp8_gate_and_programme_state_are_bounded_and_eligible() -> None:
+    gate = json.loads((WP8 / "ATLAS_G8_GATE_PACKET.json").read_text(encoding="utf-8"))
+    state = json.loads((ROOT / "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json").read_text(encoding="utf-8"))
+    pointer = json.loads((ROOT / "registries/implementation/system_atlas_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
+    assert gate["decision"] == "AUTO_PASS"
+    assert gate["authority_effect"] == "NONE"
+    assert state["current_packet"] == pointer["current_packet"] == "ATLAS-WP8"
+    assert state["next_packet"] == pointer["next_packet"] == "ATLAS-WP9"
+
+
+def test_wp8_vit_bindings_are_content_addressed() -> None:
+    for name in ("ATLAS_WP8_VIT_AUTHORITY_MANIFEST.json", "ATLAS_WP8_VIT_DEPENDENCY_FRONTIER.json"):
+        document = json.loads((WP8 / name).read_text(encoding="utf-8"))
+        encoded = json.dumps(document["payload"], sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("ascii")
+        assert document["logical_id"] == hashlib.sha256(encoded).hexdigest()
+
+
+def test_workbench_does_not_bind_the_primary_console_source() -> None:
+    source_root = ROOT / "apps/research_console_vnext/src"
+    references = []
+    for path in source_root.rglob("*"):
+        if not path.is_file() or "systemAtlasWorkbench" in path.parts:
+            continue
+        if path.suffix in {".ts", ".tsx", ".js", ".jsx"} and "systemAtlasWorkbench" in path.read_text(encoding="utf-8"):
+            references.append(path.relative_to(ROOT).as_posix())
+    assert references == []
