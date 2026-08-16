@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_effect": {"const": "NONE"},
+    "eligible_candidate_refs": {"items": {"type": "string"}, "type": "array", "uniqueItems": true},
+    "excluded": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {"candidate_ref": {"type": "string"}, "reason_code": {"type": "string"}},
+        "required": ["candidate_ref", "reason_code"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "population_rule": {"const": "ALL_MECHANICALLY_ELIGIBLE_PATH1_CANDIDATE_PROPOSALS"},
+    "reconciliation": {
+      "additionalProperties": false,
+      "properties": {"accounted": {"minimum": 0, "type": "integer"}, "expected": {"minimum": 0, "type": "integer"}},
+      "required": ["expected", "accounted"],
+      "type": "object"
+    },
+    "scientific_generation": {"type": "string"}
+  },
+  "required": ["scientific_generation", "population_rule", "eligible_candidate_refs", "excluded", "reconciliation", "authority_effect"],
+  "title": "OVC PRSC ReviewPopulationManifest v0.1",
+  "type": "object"
+}

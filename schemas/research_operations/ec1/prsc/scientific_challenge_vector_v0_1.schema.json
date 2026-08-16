@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_effect": {"const": "NONE"},
+    "candidate_ref": {"minLength": 1, "type": "string"},
+    "dimensions": {
+      "additionalProperties": {
+        "additionalProperties": true,
+        "properties": {
+          "evidence_refs": {"items": {"type": "string"}, "type": "array"},
+          "reason_codes": {"items": {"type": "string"}, "type": "array"},
+          "state": {"type": "string"}
+        },
+        "required": ["state"],
+        "type": "object"
+      },
+      "propertyNames": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]},
+      "type": "object"
+    },
+    "protocol_generation_ref": {"type": "string"}
+  },
+  "required": ["candidate_ref", "dimensions", "authority_effect"],
+  "title": "OVC PRSC ScientificChallengeVector v0.1",
+  "type": "object"
+}

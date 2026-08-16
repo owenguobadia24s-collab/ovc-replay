@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_effect": {"const": "NONE"},
+    "claim_template_refs": {"items": {"type": "string"}, "type": "array"},
+    "generation": {"minimum": 1, "type": "integer"},
+    "hypothesis_family_registry_ref": {"type": "string"},
+    "method_pack_refs": {"items": {"type": "string"}, "type": "array"},
+    "outcome_blind": {"const": true},
+    "preregistration_state": {"enum": ["DRAFT", "READY_FOR_OPERATOR_FREEZE", "FROZEN"]},
+    "protocol_generation_id": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "protocol_series_id": {"minLength": 1, "type": "string"},
+    "research_role": {"const": "DISCOVERY_POST_RECURRENCE_CHALLENGE"},
+    "reviewer_constitution_ref": {"type": "string"},
+    "schema": {"const": "ovc-prsc-protocol-generation/v0.1"},
+    "scientific_generation": {"minLength": 1, "type": "string"},
+    "source_namespaces": {"items": {"type": "string"}, "type": "array"}
+  },
+  "required": ["schema", "protocol_series_id", "generation", "scientific_generation", "outcome_blind", "method_pack_refs", "preregistration_state", "authority_effect"],
+  "title": "OVC PRSC ProtocolGeneration v0.1",
+  "type": "object"
+}
