@@ -117,8 +117,14 @@ def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully
                 assert pointer["status"] == "APPROVED"
                 assert pointer["operator_pending"] == []
                 assert pointer["gate_status"].startswith("PASS_")
-                assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
-                assert pointer["scaleout_authority"] == "DENIED"
+                if pointer["current_gate"] == "RCCRI-G-PILOT-EXIT":
+                    assert pointer["next_operator_gate"] is None
+                    assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+                    assert pointer["real_source_ec1_authority"] == "NONE"
+                    assert pointer["owner_capability_activation"] == "DENIED"
+                else:
+                    assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
+                    assert pointer["scaleout_authority"] == "DENIED"
         else:
             assert completed_ordinal == current_ordinal - 1
         assert pointer["last_merge_commit"]

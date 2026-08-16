@@ -74,11 +74,19 @@ def test_wp6a_programme_state_denies_scaleout_and_routes_to_lawful_next_operator
     assert state["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
     if adversarial["decision"] == "PENDING":
         assert pointer["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
+        assert pointer["scaleout_authority"] == "DENIED"
     else:
         assert adversarial["decision"] == "PASS"
         decision = load(adversarial["decision_ref"])
         assert decision["decision_instruction"] == "OVC APPROVE RCCRI-G-ADVERSARIAL-REVIEW"
-        assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
-    assert pointer["scaleout_authority"] == "DENIED"
+        if pointer["scaleout_authority"] == "DENIED":
+            assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
+        else:
+            assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+            assert pointer["next_operator_gate"] is None
+            assert pointer["operator_pending"] == []
+            pilot_exit = load("docs/releases/rccr-v0-1/rccri-g-pilot-exit/RCCRI_G_PILOT_EXIT_OPERATOR_DECISION.json")
+            assert pilot_exit["decision"] == "PASS"
+            assert pilot_exit["decision_instruction"] == "OVC APPROVE RCCRI-G-PILOT-EXIT"
     assert pointer["real_source_ec1_authority"] == "NONE"
     assert pointer["validation"] == "LOCKED_UNCONSUMED"
