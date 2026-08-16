@@ -1,0 +1,53 @@
+{
+  "approved_delta": {
+    "prsc_historical_non_evidentiary_read_only_replay": "AUTHORISED_BOUNDED",
+    "prsc_read_only_projection_implementation": "AUTHORISED_BOUNDED",
+    "prsc_repository_implementation": "AUTHORISED_BOUNDED",
+    "prsc_synthetic_adversarial_execution": "AUTHORISED_BOUNDED"
+  },
+  "authority": "OPERATOR",
+  "baseline_design_sha256": "f967a2280091bef92f3711e3240c6e2b11f545af1a3d5d5fadec6383b2742dca",
+  "baseline_main": "9bd1da036eee96e2e66c6acdb7a4ddfef44f7c7a",
+  "baseline_tree": "a06565acaf031616cf592ff1818313cfd34f7395",
+  "conditions": [
+    "PRSCI-WP0 must re-resolve current main/tree, current EC1 GREAL state, F0-A HOLD, Validation lock, current EC1/DMRP/Research Operations surfaces and current VIT/GRT/SIQ integration route.",
+    "No decision-bearing real E1/R1 PRSC challenge or durable real-source PRSC append is authorized by PRSCI-G0.",
+    "The current F0-A HOLD is preserved and is not lifted by this decision.",
+    "PRSCI-G-PREREG and PRSCI-G-EC1-CHALLENGE remain separately operator-required.",
+    "CandidateFreeze remains owned by the existing EC1-GSCI route and Validation remains locked/unconsumed."
+  ],
+  "continuation_policy": "CONTINUE_UNTIL_MANDATORY_STOP",
+  "decision": "PASS",
+  "explicit_non_grants": [
+    "PRSC_REAL_EC1_CHALLENGE_READ",
+    "RESEARCH_OPERATIONS_PRSC_EC1_BOUNDED_APPEND",
+    "CANDIDATE_FREEZE",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "VALIDATION_READ",
+    "C2P_ACTIVATION",
+    "C2_5_EVENT_ACTIVATION",
+    "C3_SEMANTIC_ACTIVATION",
+    "SRI_FDI_METHOD_PROMOTION",
+    "CANONICAL_PUBLICATION",
+    "R2_PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "gate_id": "PRSCI-G0",
+  "governing_design_id": "OVC-EC1-PRSC-DESIGN-SPEC-0.1-R1-RATIFIED",
+  "governing_design_sha256": "e64d6409888676d90f4e5e9d5eb4e3f81f03b7e3120a55204d02dc445d19265a",
+  "independent_evaluation_sha256": "514ae220a6b9bd783ce43e9cbb60b3e319e5ec46ed97be5565df9e59a0ca1210",
+  "next_packet": "PRSCI-WP0",
+  "operator_instruction": "OVC CONTINUE PRSCI-G0",
+  "operator_instruction_time": "2026-08-16T19:53:00+01:00",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_sha256": "24ed2465ce3908c461bb1494f9bb86118bfe3c38d48a156c2ec68ef1560a89da",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "rollback": "Forward-supersede this decision by later operator authority; preserve design, evaluation, plan identity, decision and all implementation evidence. Do not rewrite history.",
+  "schema": "ovc-operator-decision/v1"
+}
