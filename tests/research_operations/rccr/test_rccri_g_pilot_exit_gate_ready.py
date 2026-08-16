@@ -26,8 +26,10 @@ def test_pilot_exit_is_operator_required_by_exact_scope_expansion_delta():
         gate_function_hint=GateFunction.AUTHORITY_DECISION, evidence_refs=tuple(stored["evidence_refs"]),
     )
     actual = classify_gate(inp).to_dict()
-    for key in ("execution_class", "gate_function", "reserved_predicate_hits", "reason_codes", "assessment_id"):
+    for key in ("execution_class", "gate_function", "assessment_id"):
         assert actual[key] == stored[key]
+    for key in ("reserved_predicate_hits", "reason_codes"):
+        assert tuple(actual[key]) == tuple(stored[key])
     assert actual["execution_class"] == ExecutionClass.OPERATOR_REQUIRED.value
 
 
@@ -78,8 +80,9 @@ def test_programme_pointer_stops_at_operator_gate():
     assert pointer["status"] == state["status"] == "GATE_READY"
     assert pointer["current_gate"] == state["current_gate"] == "RCCRI-G-PILOT-EXIT"
     assert pointer["operator_pending"] == state["operator_pending"] == ["RCCRI-G-PILOT-EXIT"]
-    assert pointer["scaleout_authority"] == state["scaleout_authority"] == "DENIED_PENDING_OPERATOR_DECISION"
+    assert pointer["scaleout_authority"] == state["scaleout_authority"] == "DENIED"
     assert pointer["real_source_ec1_authority"] == state["real_source_ec1_authority"] == "NONE"
     assert pointer["validation"] == state["validation"] == "LOCKED_UNCONSUMED"
     assert pointer["last_completed_packet"] == state["last_completed_packet"] == "RCCRI-WP7A"
     assert pointer["last_merge_commit"] == state["last_merge_commit"] == "bd2a5af60d2f26320e873e7cd72875397b85a9d7"
+    assert pointer["next_packet"] == state["next_packet"] == "RCCRI-WP6B"
