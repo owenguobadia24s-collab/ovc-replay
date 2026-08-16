@@ -15,6 +15,8 @@ from ovc.programme_genesis.grt_v0_2.debt import B0_SOURCE_COMMIT
 from ovc.programme_genesis.grt_v0_2.g3_readiness import reconcile_observer_transition_candidates
 from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
 
+# Packet-local materialisation marker for canonical VIT assurance.
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
