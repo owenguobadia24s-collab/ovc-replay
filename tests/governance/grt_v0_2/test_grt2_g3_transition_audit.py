@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 
 from ovc.programme_genesis._topology_engine import build_repository_topology
@@ -11,7 +12,32 @@ from ovc.programme_genesis.grt_v0_2.g3_readiness import reconcile_observer_trans
 ROOT = Path(__file__).resolve().parents[3]
 
 
+def _ensure_b0_source_is_locally_reachable() -> None:
+    probe = subprocess.run(
+        ["git", "-C", str(ROOT), "cat-file", "-e", f"{B0_SOURCE_COMMIT}^{{commit}}"],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if probe.returncode == 0:
+        return
+    fetched = subprocess.run(
+        ["git", "-C", str(ROOT), "fetch", "--no-tags", "origin", B0_SOURCE_COMMIT],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    assert fetched.returncode == 0, fetched.stderr
+
+
 def test_current_repository_transition_audit_proves_g3_zero_prerequisite() -> None:
+    # The B0 merge object is source-addressable through GitHub but is no longer
+    # reachable from a named branch after later squash integration.  Fetch the
+    # exact immutable object by SHA when a normal all-branch checkout omits it;
+    # this is evidence retrieval, not history mutation.
+    _ensure_b0_source_is_locally_reachable()
     baseline = build_repository_topology(ROOT, ref=B0_SOURCE_COMMIT)
     current = build_repository_topology(ROOT, ref="HEAD")
     assert baseline["topology_sha256"] == B0_TOPOLOGY_SHA256
