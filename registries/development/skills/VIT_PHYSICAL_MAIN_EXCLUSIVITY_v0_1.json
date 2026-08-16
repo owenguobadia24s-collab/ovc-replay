@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-vit-physical-main-exclusivity/v1",
+  "policy_id": "DSAI3V-VIT-PHYSICAL-MAIN-EXCLUSIVITY-v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "packet_id": "DSAI3V-VIT-ASSURANCE-DECOUPLING-MAIN-EXCLUSIVITY",
+  "status": "ACTIVE_ON_MATERIALISATION",
+  "exclusive_writer_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "direct_packet_writer": "DENIED",
+  "direct_orch_writer": "DENIED",
+  "parallel_physical_merge": false,
+  "required_vit_lineage": true,
+  "required_main_check": "OVC merge readiness",
+  "github_ruleset": {
+    "ruleset_id": 20229411,
+    "name": "OVC main protection",
+    "target_branch": "main",
+    "enforcement": "active",
+    "bypass_actor_count": 0,
+    "pull_request_required": true,
+    "allowed_merge_methods": [
+      "squash"
+    ],
+    "non_fast_forward_prohibited": true,
+    "deletion_prohibited": true,
+    "strict_required_status_checks": true,
+    "required_status_checks": [
+      "OVC merge readiness"
+    ]
+  },
+  "live_preflight": "DYNAMIC_GITHUB_RULESET_RECHECK_ON_EVERY_PERMANENT_PR",
+  "observed_at": "2026-08-16T13:15:00+01:00",
+  "authority_effect": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "rollback": "Forward-disable only the added live exclusivity preflight while preserving the existing active GitHub ruleset, VIT/SIQ authority, universal routing enforcement and Git history."
+}
