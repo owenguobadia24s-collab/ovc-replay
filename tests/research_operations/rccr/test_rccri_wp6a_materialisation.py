@@ -64,11 +64,34 @@ def test_wp6a_review_workaround_and_resource_evidence_are_non_authoritative():
 
 
 def test_wp6a_programme_state_denies_scaleout_and_routes_to_independent_review():
-    state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_7.json")
+    historical_state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_7.json")
+    current_state = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_8.json")
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
-    assert state["scaleout_authority"] == "DENIED"
-    assert state["real_source_ec1_authority"] == "NONE"
-    assert state["validation"] == "LOCKED_UNCONSUMED"
-    assert state["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
-    assert pointer["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
+    migration = load("records/governance/gate_migrations/RCCRI_G_ADVERSARIAL_REVIEW_MIGRATION_v0_1.json")
+    assessment = load("docs/releases/rccr-v0-1/rccri-g-adversarial-review/RCCRI_G_ADVERSARIAL_REVIEW_GATE_AUTHORITY_ASSESSMENT.json")
+
+    # Historical evidence remains untouched: WP6A originally routed to the named review gate.
+    assert historical_state["next_operator_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
+
+    # Forward classification separates independent review from operator authority.
+    assert migration["legacy_classification"] == "OPERATOR_REQUIRED_INDEPENDENT_REVIEW"
+    assert migration["new_classification"] == "REVIEW_PREREQUISITE"
+    assert migration["authority_delta"] == []
+    assert assessment["gate_function"] == "REVIEW"
+    assert assessment["execution_class"] == "REVIEW_PREREQUISITE"
+    assert assessment["reserved_predicate_hits"] == []
+    assert assessment["required_reviews"] == ["REVIEW.INDEPENDENT_ASSURANCE"]
+
+    assert current_state["scaleout_authority"] == "DENIED"
+    assert current_state["real_source_ec1_authority"] == "NONE"
+    assert current_state["validation"] == "LOCKED_UNCONSUMED"
+    assert current_state["review_status"] == "PENDING_QUALIFIED_REVIEW"
+    assert current_state["operator_pending"] == []
+    assert current_state["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
+
+    assert pointer["current_gate"] == "RCCRI-G-ADVERSARIAL-REVIEW"
+    assert pointer["gate_status"] == "REVIEW_PREREQUISITE_PENDING"
+    assert pointer["review_pending"] == ["RCCRI-G-ADVERSARIAL-REVIEW"]
+    assert pointer["operator_pending"] == []
+    assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
     assert pointer["scaleout_authority"] == "DENIED"
