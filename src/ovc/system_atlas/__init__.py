@@ -36,6 +36,14 @@ from .generation import (
     verify_generation_bundle,
 )
 from .store import AtlasGraphStoreError, GraphStore
+from .query import (
+    AtlasQueryError,
+    AtlasQueryIndex,
+    QUERY_FAMILIES,
+    execute_optimized_query,
+    execute_reference_query,
+    query_equivalence_receipt,
+)
 
 __all__ = [
     "AtlasContractError",
@@ -71,4 +79,10 @@ __all__ = [
     "verify_generation_bundle",
     "AtlasGraphStoreError",
     "GraphStore",
+    "AtlasQueryError",
+    "AtlasQueryIndex",
+    "QUERY_FAMILIES",
+    "execute_optimized_query",
+    "execute_reference_query",
+    "query_equivalence_receipt",
 ]
