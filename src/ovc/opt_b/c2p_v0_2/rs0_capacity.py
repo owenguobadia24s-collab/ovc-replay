@@ -8,7 +8,6 @@ import shutil
 import tempfile
 import time
 import tracemalloc
-from pathlib import Path
 from typing import Any, Mapping
 
 from .assertion import create_object_assertion
@@ -49,6 +48,7 @@ def _synthetic_pack() -> dict[str, Any]:
     return {
         "object_pack_id": "C2P2-RS0-CAPACITY-SYNTH-PACK-v1",
         "status": "SYNTHETIC_ONLY_NONEMPIRICAL",
+        "real_source_forbidden": True,
         "activation_eligible": False,
         "confirmation": {"minimum_tracklet_members": 3},
     }
