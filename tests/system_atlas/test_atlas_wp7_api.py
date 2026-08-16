@@ -14,8 +14,8 @@ from ovc.system_atlas.canonical import canonical_sha256
 
 ROOT = Path(__file__).resolve().parents[2]
 WP6_TEST = ROOT / "tests/system_atlas/test_atlas_wp6_query.py"
-OPENAPI = ROOT / "generated/system_atlas/atlas_openapi_v0_1.json"
-CLIENT = ROOT / "generated/system_atlas/atlas_client_v0_1.ts"
+OPENAPI = ROOT / "src/ovc/system_atlas/generated/atlas_openapi_v0_1.json"
+CLIENT = ROOT / "src/ovc/system_atlas/generated/atlas_client_v0_1.ts"
 ENVELOPE_SCHEMA = ROOT / "schemas/system_atlas/atlas_api_envelope_v0_1.schema.json"
 WP7 = ROOT / "docs/programmes/system-atlas-v0-1/wp7"
 EXTERNAL_WP7 = ROOT.parents[1] / "ovc-replay-external-artifacts/system_atlas/generations/wp7/ATLAS_WP7_API_EVIDENCE.json"

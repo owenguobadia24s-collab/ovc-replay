@@ -10,4 +10,4 @@ Caller permissions are resolved by trusted server configuration. Request headers
 
 View projection is server-side, deterministic, and bounded. It returns only selected visible entity display/state fields and visible relationships whose endpoints are both selected. It never includes source evidence locators. A capacity breach returns a typed empty incomplete projection rather than a truncated sample.
 
-The committed OpenAPI document and generated TypeScript client under `generated/system_atlas` are deterministic outputs of the qualified API surface. They expose no mutation operation, credential-derived visibility, Research Console binding, canonical publication, or activation path.
+The committed OpenAPI document and generated TypeScript client under `src/ovc/system_atlas/generated` are deterministic outputs of the qualified API surface. They expose no mutation operation, credential-derived visibility, Research Console binding, canonical publication, or activation path.

@@ -233,7 +233,7 @@ def generate_typescript_client(openapi: Mapping[str, Any]) -> str:
     required = {"atlasMeta", "atlasQuery", "atlasView"}
     if set(operations) != required:
         raise AtlasQueryError("ATLAS_TYPESCRIPT_OPERATION_SET_MISMATCH")
-    return """// Generated from generated/system_atlas/atlas_openapi_v0_1.json. Do not edit manually.
+    return """// Generated from src/ovc/system_atlas/generated/atlas_openapi_v0_1.json. Do not edit manually.
 export type AtlasVisibility = "ATLAS_PUBLIC_METADATA" | "ATLAS_INTERNAL" | "ATLAS_RESTRICTED";
 export type AtlasQueryFamily = "SEARCH" | "TRACE" | "DEPENDENCY" | "IMPACT" | "EXPLAIN" | "AUTHORITY" | "OWNERSHIP" | "WHY_BLOCKED" | "HISTORY" | "DIFF";
 export interface AtlasEnvelope<T> { schema: "ovc-atlas-api-envelope/v1"; graph_generation: string; repository_tree: string; query_policy_version: string; completeness_profile: string; security_visibility: AtlasVisibility[]; warnings: string[]; write_effect: "NONE"; data: T; }
