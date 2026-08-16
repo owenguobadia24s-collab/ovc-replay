@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-c2p2-ps0-qa-packet/v1",
+  "programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
+  "packet_range": ["C2P2-PS0-WP0", "C2P2-PS0-WP4"],
+  "status": "QA_REVIEW",
+  "baseline_main": "fff6bf2f8ed13060dba5030db3b62da992d5fb94",
+  "candidate_head": "RESOLVE_FINAL_HEAD",
+  "targeted_test": "tests/opt_b/c2p/v0_2/test_c2p2_ps0_objectpack_science.py",
+  "repository_assurance": {
+    "tests_workflow": "PENDING_FINAL_HEAD",
+    "runner_parity": "PENDING_FINAL_HEAD",
+    "pytest_unittest_parity": "PENDING_FINAL_HEAD",
+    "final_head_profile": "PENDING_FINAL_HEAD",
+    "siq_ready": "PENDING_FINAL_HEAD"
+  },
+  "scientific_qa": {
+    "research_question_stated": "PASS",
+    "minimum_three_candidates": "PASS",
+    "candidate_hashes_content_addressed": "PASS_BY_TEST_REQUIRED",
+    "all_candidates_activation_ineligible": "PASS_BY_TEST_REQUIRED",
+    "active_pack_remains_null": "PASS_BY_TEST_REQUIRED",
+    "no_real_source_c2p": "PASS",
+    "no_validation": "PASS",
+    "no_scalar_winner": "PASS",
+    "ambiguity_null_conflict_preserved": "PASS",
+    "family_and_c3_identity_firewall": "PASS",
+    "c2e_parallel_optional_boundary": "PASS",
+    "rs0_preregistered_before_real_source": "PASS",
+    "parent_core_registry_cardinality_preserved": "PASS_BY_REPOSITORY_SUITE_REQUIRED"
+  },
+  "warnings": [
+    "All three ObjectPack candidates contain research-hypothesis semantics, including confirmation count=3. These values are activation-ineligible and must not be treated as empirical thresholds until operator selection and later RS0 evidence.",
+    "PS0 synthetic/adversarial discrimination is not evidence of market usefulness or candidate superiority."
+  ],
+  "blockers": ["FINAL_HEAD_ASSURANCE_PENDING"],
+  "qa_recommendation": "PENDING",
+  "authority_delta": "NONE",
+  "reserved_authority_delta": "C2P2_PS0_GSELECT_PENDING_OPERATOR",
+  "rollback": "Forward-supersede PS0 research artifacts only; preserve all parent C2P and PS0 evidence."
+}
