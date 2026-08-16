@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-gate-packet/v1",
+  "gate_id": "ATLAS-G2",
+  "packet_id": "ATLAS-WP2",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "gate_class": "AUTO",
+  "authority_before": "RATIFIED_BOUNDED_READ_ONLY_IMPLEMENTATION",
+  "proposed_delta": "NONE",
+  "acceptance_conditions": [
+    "EXISTING_GRT_EXACT_TREE_SCANNER_REUSED",
+    "RAW_OBSERVATION_IDENTITY_BINDS_EXTRACTOR_COMMIT_TREE_SOURCE_AND_CONTENT",
+    "GRT_EVIDENCE_CLASSES_PRESERVED_WITHOUT_RANK_PROMOTION",
+    "DIRTY_HEAD_EXACT_TREE_SCAN_FAILS_CLOSED",
+    "REAL_REPOSITORY_SCAN_REPRODUCES_COMPLETE_COMPONENT_AND_EDGE_COUNTS",
+    "HIGH_RISK_OWNER_AND_GOVERNANCE_RELATIONSHIPS_NOT_PROMOTED",
+    "CANONICAL_ASSERTION_SET_REMAINS_EMPTY",
+    "CURRENT_VIT_STATE_RESOLVES_FROM_CURRENT_AUTHORITY_CHAIN"
+  ],
+  "source_currentness": {
+    "baseline_commit": "5af8900fdbb1d5c8ce1f83376d612766693c70c8",
+    "baseline_tree": "09057b065e25633717b9ef670e44902e85e84601",
+    "ratified_plan_sha256": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30",
+    "ratified_design_sha256": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e",
+    "grt_topology_engine_blob": "dc43bf62d88a40b3a5a84fd2956d6f80b76be6f7",
+    "grt_current_pointer_blob": "74e4ece8490bd6ac386d2c6590d6d8736504c8c9",
+    "grt_current_state_blob": "bbedef576091bc40970ea5aa20e9b3e03be529ab",
+    "atlas_vit_current_state_binding_blob": "7b6bb4270d8deff97ccd46ebe89625e70c6586c1"
+  },
+  "warnings": [
+    "IndependentAtlasReviewerBinding remains UNBOUND; activation remains ineligible.",
+    "No GRT2-G3, Shared Systems, owner, scientific, validation, write, or publication authority is granted.",
+    "Candidate and inferred ownership or governance observations remain non-canonical."
+  ],
+  "blockers": [],
+  "recommended_decision": "AUTO_PASS",
+  "authority_effect": "NONE",
+  "next_packet": "ATLAS-WP3",
+  "rollback": "Forward-remove or supersede only the WP2 adapter, contract, schema, fixtures and derived evidence; preserve upstream GRT and prior Atlas records."
+}

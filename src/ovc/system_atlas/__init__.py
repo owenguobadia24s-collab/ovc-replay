@@ -8,13 +8,17 @@ those boundaries.
 
 from .canonical import canonical_json_bytes, canonical_sha256, graph_logical_hash, logical_id
 from .core import AtlasContractError, build_system_graph, validate_system_graph
+from .grt_adapter import AtlasGRTAdapterError, adapt_grt_topology, scan_grt_exact_tree
 
 __all__ = [
     "AtlasContractError",
+    "AtlasGRTAdapterError",
+    "adapt_grt_topology",
     "build_system_graph",
     "canonical_json_bytes",
     "canonical_sha256",
     "graph_logical_hash",
     "logical_id",
+    "scan_grt_exact_tree",
     "validate_system_graph",
 ]

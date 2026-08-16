@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-vit-current-state-resolution-policy/v1",
+  "policy_id": "DSAI3V-VIT-CURRENT-STATE-RESOLUTION-v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "status": "ACTIVE_ON_MATERIALISATION",
+  "query_class": "CURRENT_VIT_STATE",
+  "required_precedence": [
+    "registries/implementation/dsai_vit_v0_3/CURRENT_STATE_POINTER.json",
+    "POINTED_CURRENT_PROGRAMME_STATE",
+    "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json"
+  ],
+  "required_consistency": [
+    "POINTER_PROGRAMME_ID_EQUALS_OVC_DSAI_VIT_V0_3",
+    "POINTED_STATE_PROGRAMME_ID_EQUALS_OVC_DSAI_VIT_V0_3",
+    "STATE_GENERAL_AUTHORITY_REF_EQUALS_CURRENT_GENERAL_AUTHORITY",
+    "DEFAULT_SUBSTRATE_SOURCE_AUTHORITY_EQUALS_CURRENT_GENERAL_AUTHORITY",
+    "DEFAULT_SUBSTRATE_ID_EQUALS_CURRENT_GENERAL_AUTHORITY_ID",
+    "CURRENT_STATE_AND_GENERAL_AUTHORITY_ROUTING_SCOPE_AGREE_WHEN_BOTH_DECLARED",
+    "ACTIVE_DEFAULT_SUBSTRATE_REQUIRES_ACTIVE_GENERAL_AUTHORITY",
+    "ACTIVE_GENERAL_AUTHORITY_REQUIRES_ACTIVE_CURRENT_LIVE_CONTROL_STATE"
+  ],
+  "historical_sources": {
+    "docs/releases/development-skills-architecture-v0-3-vit/**": "HISTORICAL_EVIDENCE_ONLY",
+    "docs/plans/development-skills-v0-3/**": "HISTORICAL_OR_PLANNING_EVIDENCE_ONLY",
+    "docs/design/development-skills-v0-3/**": "DESIGN_EVIDENCE_ONLY"
+  },
+  "historical_fallback_for_current_status": false,
+  "failure_policy": "FAIL_CLOSED_CURRENT_STATUS_UNRESOLVED_NEVER_SELECT_OLDER_GATE_OR_PLAN",
+  "canonical_resolver": "ovc.development.skills.vit_current_state.resolve_current_vit_query",
+  "atlas_consumer_rule": "SYSTEM_ATLAS_CURRENT_ACTIVE_AUTHORISED_PREDICATES_MUST_CONSUME_THIS_RESOLVER_OR_AN_EXACT_REFERENCE_EQUIVALENT_BEFORE_PROJECTING_CURRENT_VIT_STATUS",
+  "authority_effect": "NONE_SAFETY_CONFORMANCE_CORRECTION"
+}

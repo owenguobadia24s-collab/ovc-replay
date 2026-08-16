@@ -29,10 +29,17 @@
     "stop_at_programme_owned_operator_required_boundary": true,
     "infer_or_expand_authority": false
   },
+  "current_state_resolution": {
+    "policy": "registries/development/skills/VIT_CURRENT_STATE_RESOLUTION_POLICY_v0_1.json",
+    "resolver": "ovc.development.skills.vit_current_state.resolve_current_vit_query",
+    "historical_fallback_allowed": false,
+    "failure_policy": "FAIL_CLOSED_CURRENT_STATUS_UNRESOLVED"
+  },
   "required_assurance": [
     "OWNER_AUTHORITY_CURRENT",
     "PREREQUISITES_PASS",
     "PROGRAMME_STATE_POINTER_CONSISTENT",
+    "CURRENT_VIT_STATE_RESOLUTION_CONSISTENT",
     "VIT_ROUTING_LINEAGE_PRESENT",
     "QA_PASS",
     "NO_UNRESOLVED_WARNING_OR_REVIEW",
