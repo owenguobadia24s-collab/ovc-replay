@@ -5,19 +5,22 @@
   "plan_version": "0.2_REVISED_RATIFIED",
   "packet_id": "GRT2-G3-READINESS-EVIDENCE",
   "gate_id": "GRT2-G3",
-  "status": "RUNNING",
+  "status": "BLOCKED",
   "pr": 965,
   "baseline_commit": "9ce6997fd14c98345614e7b876edc85f65d4ec4b",
   "branch": "grt2/g3-readiness-evidence-20260816",
-  "candidate_commit": null,
+  "candidate_commit": "e5e459831514fc217b1ba22e1300b3e208658ad8",
   "tests": [
     "G3 readiness fail-closed primitives and transition audit under repository CI",
-    "full-G3 pilot/historical replay, performance, candidate floor and final exact-head assurance pending"
+    "historical candidate set frozen at 10 reconstructible ordinary integrations",
+    "full-G3 replay execution blocked before evidence generation because exact full-enforcement fact/replay surface is not materialized"
   ],
   "qa_packet": null,
-  "decision_record": null,
+  "decision_record": "docs/programmes/grt-v0-2/g3/GRT2_G3_BLOCKER_FULL_ENFORCEMENT_REPLAY_SURFACE.json",
   "merge_commit": null,
-  "blockers": [],
+  "blockers": [
+    "GRT2_G3_FULL_ENFORCEMENT_REPLAY_SURFACE_NOT_MATERIALIZED"
+  ],
   "authority_required": "GRT2-G3_OPERATOR_REQUIRED_ONLY_AFTER_GATE_READY",
   "authority_delta": "NONE_PRE_ACTIVATION_EVIDENCE_ONLY",
   "constitution_status": "PROPOSED_UNADMITTED",
@@ -41,7 +44,7 @@
   ],
   "g2_status": "APPROVED_DELEGATED_PASS_MERGED_C4AFF0FA34AA1123031244D9E003BD32B2115706",
   "g2_5_status": "APPROVED_OPERATOR_PASS_PILOT_ACTIVE_THRESHOLD_MET_MERGED_AAA299C523D5CA38A0074EA9C92CAF3703350A6A",
-  "g3_status": "NOT_AUTHORISED_READINESS_EVIDENCE_RUNNING",
+  "g3_status": "NOT_AUTHORISED_BLOCKED_READINESS_EVIDENCE_INCOMPLETE",
   "pilot_eligible_candidate_count": 8,
   "pilot_real_candidate_count": 8,
   "pilot_escape_count": 0,
@@ -58,9 +61,10 @@
   "warnings": [
     "GRT2-G3 is operator-reserved and remains NOT_AUTHORISED.",
     "No DebtFloor exists before operator GRT2-G3 PASS.",
-    "Empty legacy transition ledgers do not prove zero debt; exact B0/current reconciliation is required.",
-    "Full G3 shadow semantics, ten-candidate historical dry run, performance evidence, candidate DebtFloor generation 0 proposal and QA PASS remain mandatory before GATE_READY."
+    "Eight G2.5 candidates satisfy the limited-pilot threshold but all eight report full-G3 shadow NOT_EVALUABLE because six required full-G3 rule families are not materialized for replay.",
+    "The G2 qualification runtime evaluates registered predicates only when exact semantic facts are supplied; missing source-bound fact extraction cannot be inferred or treated as PASS.",
+    "Full G3 historical replay, per-candidate performance, transition-debt zero proof, candidate DebtFloor generation-0 proposal and final QA cannot lawfully complete until the corrective implementation generation is materialized and requalified."
   ],
-  "next_packet": "GRT2-G3-READINESS-EVIDENCE",
-  "next_gate": "GRT2-G3"
+  "next_packet": "GRT2-WP3-FULL-G3-REPLAY-CORRECTIVE-GENERATION",
+  "next_gate": "GRT2-G2-CORRECTIVE-REQUALIFICATION_THEN_GRT2-G3"
 }
