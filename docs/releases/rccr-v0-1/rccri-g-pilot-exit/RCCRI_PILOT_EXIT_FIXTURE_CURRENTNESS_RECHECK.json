@@ -1,0 +1,82 @@
+{
+  "schema": "ovc-rccri-pilot-exit-fixture-currentness-recheck/v1",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "gate_id": "RCCRI-G-PILOT-EXIT",
+  "recheck_main": "fff6bf2f8ed13060dba5030db3b62da992d5fb94",
+  "source_manifest_ref": "docs/releases/rccr-v0-1/rccri-wp6a/RCCRI_FIXTURE_CURRENTNESS_MANIFEST.json",
+  "source_manifest_checked_against_main": "af91f3ec901af673e6304d2be10ce38ce0c1edee",
+  "dependency_recheck": {
+    "GOVERNING_PLAN_SHA256": {
+      "expected": "13d065d09eb012980a076e84667d674452659c79d92d0ab2a3b53a66477e1a6e",
+      "observed": "13d065d09eb012980a076e84667d674452659c79d92d0ab2a3b53a66477e1a6e",
+      "status": "UNCHANGED"
+    },
+    "GOVERNING_DESIGN_SHA256": {
+      "expected": "16f3b52a790bd6fa4d144d29065087b733a6fd4cb2162963a623090f030e9ee3",
+      "observed": "16f3b52a790bd6fa4d144d29065087b733a6fd4cb2162963a623090f030e9ee3",
+      "status": "UNCHANGED"
+    },
+    "RCCR_REFERENCE_BLOB": {
+      "path": "src/ovc/research_operations/rccr/reference.py",
+      "expected": "80ac86c31d9cd688a515119f17781ef640933d9a",
+      "observed": "80ac86c31d9cd688a515119f17781ef640933d9a",
+      "status": "UNCHANGED"
+    },
+    "RCCR_NEED_REVIEW_BLOB": {
+      "path": "src/ovc/research_operations/rccr/need_review.py",
+      "expected": "b8c2cb5fd947498558f34b6aded23a8cd10e050b",
+      "observed": "b8c2cb5fd947498558f34b6aded23a8cd10e050b",
+      "status": "UNCHANGED"
+    },
+    "EC1_QUESTION_REGISTRY_BLOB": {
+      "path": "registries/research_operations/EC1_RESEARCH_QUESTION_REGISTRY_v0_1.json",
+      "expected": "3f8c8125e8d5513e719613fc17e8033836154396",
+      "observed": "3f8c8125e8d5513e719613fc17e8033836154396",
+      "status": "UNCHANGED"
+    },
+    "EC1_REQUIREMENT_REGISTRY_BLOB": {
+      "path": "registries/research_operations/ec1/ec1_question_evidence_requirements_v0_1.json",
+      "expected": "c97e70f0ea3801c7373f941c11a746d3c52c5bcc",
+      "observed": "c97e70f0ea3801c7373f941c11a746d3c52c5bcc",
+      "status": "UNCHANGED"
+    },
+    "DMRP_PRE_EVIDENCE_BINDING_BLOB": {
+      "path": "registries/research_operations/EC1_DMRP_PRE_EVIDENCE_EXTERNAL_ARTIFACT_BINDINGS_v0_1.json",
+      "expected": "d08935928ba6ad515c1d66fd6cadb4533dfd0433",
+      "observed": "d08935928ba6ad515c1d66fd6cadb4533dfd0433",
+      "status": "UNCHANGED"
+    },
+    "OWNER_STATE_FIXTURE_BLOB": {
+      "path": "fixtures/research_operations/rccr/v0_1/RCCRI_WP3_CAPABILITY_FIXTURES.json",
+      "expected": "d25c8cae55bc82fa04b99fa2b08dba8c5ffcd0af",
+      "observed": "d25c8cae55bc82fa04b99fa2b08dba8c5ffcd0af",
+      "status": "UNCHANGED"
+    }
+  },
+  "semantic_trigger_classes_checked": [
+    "OWNER_SEMANTIC_CHANGE",
+    "RCCR_RULE_PACK_CHANGE",
+    "DMRP_INTERFACE_CHANGE",
+    "EC1_INTERFACE_CHANGE",
+    "CAPABILITY_OWNER_STATE_MODEL_CHANGE"
+  ],
+  "triggered_semantic_changes": [],
+  "additive_post_pilot_source_frontier_changes": [
+    {
+      "class": "GOVERNANCE_CLASSIFIER_ADDITION",
+      "effect_on_pilot_fixtures": "NONE",
+      "note": "Operator-reserved authority-delta doctrine is additive governance machinery and does not alter RCCR-REFERENCE, EC1 question/requirement semantics, DMRP pre-evidence binding, or the owner-state fixture."
+    },
+    {
+      "class": "PATH2_EXTERNAL_METHOD_FREEZE_ADDITION",
+      "effect_on_pilot_fixtures": "NONE",
+      "note": "The separately governed Path-2 method freeze is a post-pilot additive source-frontier fact relevant only to any later WP6B admission/currentness work; it does not rewrite the completed pre-evidentiary EC1 pilot."
+    }
+  ],
+  "population_total": 36,
+  "silent_sampling_forbidden": true,
+  "stale_fixture_count": 0,
+  "currentness": "PASS",
+  "recheck_result": "PASS_NO_SEMANTIC_TRIGGER",
+  "authority_effect": "NONE"
+}
