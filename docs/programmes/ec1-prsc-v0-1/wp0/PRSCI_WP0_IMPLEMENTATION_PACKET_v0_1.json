@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-prsci-implementation-packet/v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP0",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_sha256": "24ed2465ce3908c461bb1494f9bb86118bfe3c38d48a156c2ec68ef1560a89da",
+  "design_sha256": "e64d6409888676d90f4e5e9d5eb4e3f81f03b7e3120a55204d02dc445d19265a",
+  "baseline_main": "1c7006a48368d9f5bddaba750f98591a947d24d0",
+  "baseline_tree": "8596aec3e4c7d0db9346801c1c98ea0bf8e1181d",
+  "branch": "build/prsci-wp0-preflight-r2",
+  "status": "BLOCKED_OPERATOR_REQUIRED",
+  "scope_completed": [
+    "CURRENT_MAIN_TREE_RECONCILIATION",
+    "EC1_GREAL_AUTHORITY_RECONCILIATION",
+    "F0_A_HOLD_RECONCILIATION",
+    "VALIDATION_AND_CANDIDATE_FREEZE_RECONCILIATION",
+    "EC1_DMRP_RESEARCH_OPERATIONS_REUSE_CENSUS",
+    "EXTERNAL_ARTIFACT_ROOT_BINDING",
+    "PRSC_REAL_SOURCE_AUTHORITY_GAP_CLASSIFICATION",
+    "INDEPENDENT_REVIEWER_BINDING_CHECK",
+    "CURRENT_VIT_GRT_SIQ_ROUTE_CONFIRMATION",
+    "EXECUTION_INTEGRITY_INCIDENT_RECORDING"
+  ],
+  "artifacts": {
+    "external_artifact_root_binding": "registries/research_operations/ec1/prsc/PRSCI_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json",
+    "reuse_binding_matrix": "registries/research_operations/ec1/prsc/PRSCI_REUSE_BINDING_MATRIX_v0_1.json",
+    "reviewer_binding": "registries/research_operations/ec1/prsc/PRSCI_INDEPENDENT_REVIEWER_BINDING_v0_1.json",
+    "real_source_authority_gap": "records/research_operations/ec1/prsc/PRSCI_REAL_SOURCE_AUTHORITY_GAP_v0_1.json",
+    "execution_incident": "records/research_operations/ec1/prsc/PRSCI_EXECUTION_INTEGRITY_INCIDENT_v0_1.json",
+    "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp0/PRSCI_WP0_QA_PACKET_v0_1.json"
+  },
+  "court_record_findings": {
+    "ec1_greal": "PASS_BOUNDED_OWNER_AUTHORITY_NO_PRSC_INHERITANCE",
+    "ec1_f0_a": "HOLD_PRESERVED",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "prsc_real_challenge_read": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE",
+    "prsc_real_append": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE",
+    "independent_reviewer": "UNBOUND_BLOCKS_PRSCI-G8-ALG_ONLY",
+    "integration_route": "VIT_MANDATORY_GRT_ASSURED_SIQ_SERIALIZED"
+  },
+  "blockers": [
+    "PRSCI-INC-FORCE-REF-UPDATE-20260816-v0.1_REQUIRES_OPERATOR_DISPOSITION"
+  ],
+  "non_blocking_deferred_items": [
+    "INDEPENDENT_REVIEWER_BINDING_REQUIRED_BEFORE_PRSCI-G8-ALG",
+    "REAL_SOURCE_PRSC_AUTHORITY_REQUIRED_BEFORE_PRSCI-G-EC1-CHALLENGE"
+  ],
+  "next_packet_if_incident_cleared": "PRSCI-WP1",
+  "next_action": "OPERATOR_DISPOSITION_PRSCI_EXECUTION_INTEGRITY_INCIDENT",
+  "authority_delta": "NONE_BEYOND_PRSCI_G0",
+  "rollback": "Forward-only. Preserve G0, WP0 reconciliation and incident evidence. No force ref updates."
+}
