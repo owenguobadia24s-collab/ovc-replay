@@ -15,7 +15,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "src"))
 
-from ovc.programme_genesis.grt_v0_2.full_enforcement_bounded import REQUIRED_FULL_G3_RULE_FAMILIES, replay_full_g3_candidate
+from ovc.programme_genesis.grt_v0_2.full_enforcement_bounded_v2 import REQUIRED_FULL_G3_RULE_FAMILIES, replay_full_g3_candidate
 from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
 
 OUT = Path(os.environ.get("GRT2_G2_CORRECTION_QUALIFICATION_OUT", "artifacts/grt2-g2-full-g3-replay-correction-qualification.json"))
