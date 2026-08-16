@@ -137,14 +137,15 @@ def test_reference_resolution_set_validates_against_schema() -> None:
     validate_against_schema(result, inline_local_refs(schema, schema))
 
 
-def test_resolver_registry_and_independent_gate_remain_pending() -> None:
+def test_resolver_registry_and_independent_gate_are_accepted() -> None:
     registry = load(RESOLVERS)
     reviewer = load(REVIEWER)
-    assert registry["status"] == "IMPLEMENTED_PENDING_ATLAS_G4_ALG"
+    assert registry["status"] == "ACCEPTED_ATLAS_G4_ALG"
     assert len(registry["registered_resolvers"]) == 3
-    assert {row["acceptance_status"] for row in registry["registered_resolvers"]} == {"PENDING_ATLAS_G4_ALG"}
-    assert reviewer["status"] == "UNBOUND"
+    assert {row["acceptance_status"] for row in registry["registered_resolvers"]} == {"ACCEPTED_ATLAS_G4_ALG"}
+    assert reviewer["status"] == "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION"
     assert reviewer["no_self_review"] is True
+    assert reviewer["operator_substitution"] is False
     assert "ATLAS-G4-ALG_PREDICATE_OWNER_AUTHORITY_ALGORITHMS" in reviewer["required_scopes"]
 
 

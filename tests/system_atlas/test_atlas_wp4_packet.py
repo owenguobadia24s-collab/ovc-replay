@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -15,13 +16,14 @@ def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_wp4_gate_is_independent_non_operator_and_not_passed() -> None:
+def test_wp4_gate_is_independent_non_operator_pass() -> None:
     gate = load(WP4 / "ATLAS_G4_ALG_GATE_PACKET.json")
     request = load(WP4 / "ATLAS_G4_ALG_REVIEW_REQUEST.json")
     assert gate["gate_class"] == "INDEPENDENT_REVIEW_BLOCKING_NON_OPERATOR"
-    assert gate["recommended_decision"] == "PARK_PENDING_INDEPENDENT_REVIEW"
-    assert gate["independent_review_status"] == "UNBOUND_NOT_PERFORMED"
-    assert gate["blockers"] == ["ATLAS_G4_ALG_ELIGIBLE_INDEPENDENT_REVIEWER_UNBOUND"]
+    assert gate["recommended_decision"] == "PASS"
+    assert gate["independent_review_status"] == "PASS_ELIGIBLE_IMPLEMENTATION_INDEPENDENT"
+    assert gate["blockers"] == []
+    assert request["status"] == "COMPLETED_PASS"
     assert request["operator_substitution_permitted"] is False
     assert request["self_attestation_permitted"] is False
     assert request["required_verdict"] == "ELIGIBLE_INDEPENDENT_PASS"
@@ -53,15 +55,41 @@ def test_wp4_review_evidence_identity_is_bound() -> None:
     expected = "2cf3879276cb8676890b631880222ad2c704760e3455b80ab482cd4647b0a1e6"
     assert qa["external_algorithm_review_evidence"]["sha256"] == expected
     assert request["review_evidence"]["sha256"] == expected
-    assert qa["checks"]["canonical_assertions"] == "PASS_ZERO_PENDING_ATLAS_G4_ALG"
+    assert qa["checks"]["canonical_assertions"] == "PASS_ZERO_AT_ATLAS_G4_ALG_CLOSEOUT"
 
 
-def test_wp4_programme_state_is_parked_and_wp5_is_ineligible() -> None:
+def test_wp4_external_review_is_exact_and_scope_valid() -> None:
+    binding_path = ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_v0_1.json"
+    review_path = WP4 / "ATLAS_G4_ALG_INDEPENDENT_REVIEW_RECORD.json"
+    binding = load(binding_path)
+    review = load(review_path)
+    assert hashlib.sha256(binding_path.read_bytes()).hexdigest() == "9a77b3910d1d4ac5e50215f147687012da5e7e1464124f0c036ae9d48924163b"
+    assert hashlib.sha256(review_path.read_bytes()).hexdigest() == "023ee896732d37b6c5228056fa7e81f4a1e46ca44420dc5b37f66e5ad43d92df"
+    assert binding["implementation_author_conflict_status"] == "NO_RESOLVER_IMPLEMENTATION_AUTHOR_CONFLICT"
+    assert binding["scope_status"]["ATLAS-G4-ALG_PREDICATE_OWNER_AUTHORITY_ALGORITHMS"] == "BOUND_ELIGIBLE_REVIEW_COMPLETED"
+    assert binding["scope_status"]["Q6-IND_GOVERNANCE_SECURITY_VISUAL_OPERATIONAL_REVIEW"] == "NOT_REVIEWED_NOT_SATISFIED_BY_THIS_BINDING"
+    assert review["verdict"] == "PASS"
+    assert review["blocking_findings"] == []
+    assert review["independent_reproduction"]["all_cases_match"] is True
+    assert {row["result"] for row in review["criteria"]} == {"PASS"}
+
+
+def test_wp4_programme_state_is_qualified_and_wp5_follows_integration() -> None:
     pointer = load(STATE / "CURRENT_STATE_POINTER.json")
     state = load(STATE / pointer["current_state"])
     for field in ("status", "current_packet", "current_gate", "next_packet"):
         assert pointer[field] == state[field]
     assert state["current_gate"] == "ATLAS-G4-ALG"
     assert state["next_packet"] == "ATLAS-WP5"
-    assert state["next_packet_eligibility"] == "DENIED_UNTIL_ATLAS_G4_ALG_PASS"
+    assert state["gate_status"] == "PASS_ELIGIBLE_INDEPENDENT_REVIEW"
+    assert state["blockers"] == []
+    assert state["next_packet_eligibility"] == "ELIGIBLE_AFTER_WP4_INTEGRATION"
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
+
+
+def test_wp4_main_advance_is_non_material_to_reviewed_algorithm() -> None:
+    record = load(WP4 / "ATLAS_WP4_PLACEMENT_CURRENTNESS_RECORD.json")
+    assert record["material_invalidation"] is False
+    assert record["algorithm_review_reopened"] is False
+    assert record["dependency_assessment"]["wp4_reviewed_algorithm_blobs"] == "UNCHANGED"
+    assert record["action"] == "NORMAL_MERGE_CURRENT_MAIN_RENEW_EXACT_PIP_PLACEMENT_AND_ASSURANCE"

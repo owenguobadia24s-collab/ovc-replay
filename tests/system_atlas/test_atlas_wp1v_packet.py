@@ -67,7 +67,7 @@ def test_programme_state_does_not_regress_before_activation() -> None:
     packet_order = ["ATLAS-WP1V", *[f"ATLAS-WP{number}" for number in range(2, 11)]]
     assert state["current_packet"] in packet_order
     assert packet_order.index(state["current_packet"]) >= packet_order.index("ATLAS-WP1V")
-    if state["current_gate"] == "ATLAS-G4-ALG":
+    if state["current_gate"] == "ATLAS-G4-ALG" and state["gate_status"].startswith("BLOCKED"):
         assert state["blockers"] == ["ATLAS_G4_ALG_ELIGIBLE_INDEPENDENT_REVIEWER_UNBOUND"]
     else:
         assert state["blockers"] == []
