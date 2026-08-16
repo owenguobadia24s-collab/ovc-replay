@@ -1,0 +1,96 @@
+{
+  "schema": "ovc-dsai3v-vit-routing-audit/v1",
+  "audit_id": "DSAI3V-VIT-UNIVERSAL-ROUTING-AUDIT-0.1",
+  "baseline_main": "49bab8c7ad5a6a5d4aaa6c7e8a753dd6e9b604bb",
+  "authority_delta": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "audit_verdict": "FAIL_CORRECTABLE_UNIVERSAL_ROUTING_ENFORCEMENT_GAP",
+  "activation_state": {
+    "vit_general_authority": "ACTIVE",
+    "default_execution_substrate": "ACTIVE",
+    "vit_programme": "COMPLETED",
+    "finding": "The defect is not VIT activation. It is incomplete mechanical enforcement of VIT lineage at downstream candidate-admission surfaces."
+  },
+  "entrypoint_findings": [
+    {
+      "surface": "src/ovc/development/skills/vit_general.py::admit_general_packet",
+      "pre_correction": "Eligible packets can receive ALLOW_VIT_GENERAL_SERIALIZED_GATEWAY using authority/prerequisite/QA fields without proving a PacketIntegrationPayload, VirtualIntegrationGeneration or placement lineage.",
+      "classification": "UNLAWFUL_BYPASS_SURFACE",
+      "required_correction": "Require valid PIP, VIT generation and placement identities before ALLOW."
+    },
+    {
+      "surface": "src/ovc/development/skills/siq_core.py::evaluate_ready_admission",
+      "pre_correction": "QueueCandidate can become READY using candidate head/base/QA/authority fields without any VIT provenance.",
+      "classification": "UNLAWFUL_BYPASS_SURFACE",
+      "required_correction": "SIQ must fail closed without canonical PIP -> generation -> placement lineage."
+    },
+    {
+      "surface": ".github/workflows/tests.yml",
+      "pre_correction": "Pull-request assurance runs repository/parity tests but does not validate that a permanent PR has a repository-bound VIT lineage record before expensive assurance.",
+      "classification": "UNLAWFUL_BYPASS_SURFACE",
+      "required_correction": "Add a required early VIT routing preflight to the existing workflow; do not create a third PR listener."
+    },
+    {
+      "surface": "external Git branch creation",
+      "pre_correction": "Repository code cannot prevent an external actor from creating a Git ref before VIT admission.",
+      "classification": "NON_AUTHORITATIVE_EXTERNAL_SURFACE",
+      "required_correction": "Treat branch refs as non-authoritative and prevent them from becoming permanent integration candidates unless PR/SIQ VIT-lineage checks pass."
+    }
+  ],
+  "stale_main_case_reproduction": [
+    {
+      "case_id": "PATH2-944-945",
+      "source_pr": 944,
+      "successor_pr": 945,
+      "observed": "Main advanced through unrelated RCCRI-WP7A while required assurance was running; the method-design bytes/hashes were preserved unchanged and no semantic conflict was observed.",
+      "classification": "VIT_BYPASS",
+      "correct_disposition": "PLACEMENT_RECOMPUTE_ONLY",
+      "payload_rebuild_required": false
+    },
+    {
+      "case_id": "C2P2-946-948",
+      "source_pr": 946,
+      "successor_pr": 948,
+      "observed": "Physical main advanced during exact-head assurance and the bounded PS0 payload was reconstructed onto a fresh current-main branch.",
+      "classification": "VIT_BYPASS",
+      "correct_disposition": "PLACEMENT_RECOMPUTE_ONLY",
+      "payload_rebuild_required": false
+    },
+    {
+      "case_id": "C2P2-948-951",
+      "source_pr": 948,
+      "successor_pr": 951,
+      "observed": "Exact-head QA found a real packet-local conformance defect: a research-only candidate registry changed the frozen C2P core registry count from 12 to 13. The successor moved the candidate research record outside the core registry namespace.",
+      "classification": "LEGITIMATE_PAYLOAD_REBUILD",
+      "correct_disposition": "PAYLOAD_REBUILD_REQUIRED",
+      "payload_rebuild_required": true
+    },
+    {
+      "case_id": "RCCR-949-950",
+      "source_pr": 949,
+      "successor_pr": 950,
+      "observed": "The RCCR gate evidence and authority classification were unchanged, but an unrelated Path-2 method-freeze main advance caused a fresh current-main gate candidate to be created.",
+      "classification": "VIT_BYPASS",
+      "correct_disposition": "PLACEMENT_RECOMPUTE_ONLY_AND_PARK_AT_OPERATOR_BOUNDARY",
+      "payload_rebuild_required": false,
+      "operator_required_is_exception": false
+    }
+  ],
+  "historical_support": {
+    "q2_discarded_assurance_cycles": 4,
+    "q2_placement_only_salvage_candidates": 3,
+    "interpretation": "The current defect reproduces the exact stale-main waste class VIT was designed to eliminate."
+  },
+  "required_invariants": [
+    "Every permanent eligible packet has canonical PIP identity before placement-sensitive candidate construction.",
+    "Every permanent integration candidate is bound to one PIP, VIT generation and VIT placement.",
+    "SIQ cannot READY-admit a candidate without VIT lineage.",
+    "Operator-required packets are represented in VIT and parked; they are not direct-main exceptions.",
+    "Unrelated physical-main movement with unchanged PIP/dependency/authority yields PLACEMENT_RECOMPUTE_ONLY and zero payload rebuilds.",
+    "Only an identity-bearing payload/dependency defect/change may produce PAYLOAD_REBUILD_REQUIRED.",
+    "Existing VIT/SIQ authority and one-head physical serialization remain unchanged."
+  ],
+  "registered_exception_policy": "Only exact, finite bootstrap/recovery exceptions may bypass the PR-lineage preflight. No exception grants direct SIQ admission or new authority.",
+  "recommended_decision": "PASS_CORRECTIVE_IMPLEMENTATION_IF_ALL_ASSURANCE_GREEN",
+  "operator_required": false,
+  "rollback": "Forward-disable the correction only; preserve VIT active authority, SIQ serialization, all audit records, historical stale-main evidence and Git history."
+}
