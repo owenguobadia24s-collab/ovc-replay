@@ -16,6 +16,12 @@ from .architecture import (
     manifest_currentness_record,
     validate_architecture_manifest,
 )
+from .resolver import (
+    AtlasResolverError,
+    relationship_resolution_state,
+    resolve_current_vit_projection,
+    resolve_reference_candidates,
+)
 
 __all__ = [
     "AtlasContractError",
@@ -33,5 +39,9 @@ __all__ = [
     "architecture_manifest_observations",
     "manifest_currentness_record",
     "validate_architecture_manifest",
+    "AtlasResolverError",
+    "relationship_resolution_state",
+    "resolve_current_vit_projection",
+    "resolve_reference_candidates",
     "validate_system_graph",
 ]
