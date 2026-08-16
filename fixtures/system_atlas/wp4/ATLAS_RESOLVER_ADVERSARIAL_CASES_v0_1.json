@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-atlas-resolver-adversarial-cases/v1",
+  "cases": [
+    {
+      "case_id": "OWNER_CONFLICT_NO_SILENT_PRECEDENCE",
+      "candidates": [
+        {"subject_id": "ovc:fact:alpha", "predicate": "OWNS", "value": "ovc:programme:one", "source_class": "ACCEPTED_OPERATOR_DECISION", "evidence_class": "SOURCE_EXPLICIT", "source_currentness": "CURRENT", "scope": {"scope_id": "owner", "dimensions": {"programme": "alpha", "authority_generation": "g1"}}},
+        {"subject_id": "ovc:fact:alpha", "predicate": "OWNS", "value": "ovc:programme:two", "source_class": "PROGRAMME_OWNED_STATE", "evidence_class": "SOURCE_EXPLICIT", "source_currentness": "CURRENT", "scope": {"scope_id": "owner", "dimensions": {"programme": "alpha", "authority_generation": "g1"}}}
+      ],
+      "expected_status": "CONFLICTING"
+    },
+    {
+      "case_id": "INFERRED_OWNER_REJECTED",
+      "candidates": [
+        {"subject_id": "ovc:fact:alpha", "predicate": "OWNED_BY", "value": "ovc:programme:one", "source_class": "PROGRAMME_OWNED_STATE", "evidence_class": "INFERRED", "source_currentness": "CURRENT", "scope": {"scope_id": "owner", "dimensions": {"programme": "alpha", "authority_generation": "g1"}}}
+      ],
+      "expected_status": "UNRESOLVED"
+    },
+    {
+      "case_id": "AUTHORITY_EXACT_INTERSECTION",
+      "candidates": [
+        {"subject_id": "ovc:capability:read", "predicate": "AUTHORISED", "value": {"capability": "READ", "effect": "GRANTED"}, "source_class": "AUTHORITY_REGISTRY", "evidence_class": "SOURCE_EXPLICIT", "source_currentness": "CURRENT", "scope": {"scope_id": "authority", "dimensions": {"programme": "alpha", "environment": "production", "authority_generation": "g1"}}, "authority_factors": {"programme_scope": "ALLOW", "domain_scope": "ALLOW", "runtime_permission": "ALLOW", "security_policy": "ALLOW", "prerequisite_state": "ALLOW", "currentness": "ALLOW"}}
+      ],
+      "expected_status": "RECONCILED"
+    },
+    {
+      "case_id": "AUTHORITY_UNKNOWN_FACTOR_FAILS_CLOSED",
+      "candidates": [
+        {"subject_id": "ovc:capability:read", "predicate": "AUTHORISED", "value": {"capability": "READ", "effect": "GRANTED"}, "source_class": "AUTHORITY_REGISTRY", "evidence_class": "SOURCE_EXPLICIT", "source_currentness": "CURRENT", "scope": {"scope_id": "authority", "dimensions": {"programme": "alpha", "environment": "production", "authority_generation": "g1"}}, "authority_factors": {"programme_scope": "ALLOW", "domain_scope": "ALLOW", "runtime_permission": "ALLOW", "security_policy": "ALLOW", "prerequisite_state": "ALLOW", "currentness": "UNKNOWN"}}
+      ],
+      "expected_status": "UNRESOLVED"
+    },
+    {
+      "case_id": "EXPLICIT_DENIAL_CONTROLS_GRANT",
+      "candidates": [
+        {"subject_id": "ovc:capability:write", "predicate": "AUTHORISED", "value": {"capability": "WRITE", "effect": "GRANTED"}, "source_class": "AUTHORITY_REGISTRY", "evidence_class": "SOURCE_EXPLICIT", "source_currentness": "CURRENT", "scope": {"scope_id": "authority", "dimensions": {"programme": "alpha", "environment": "production", "authority_generation": "g1"}}, "authority_factors": {"programme_scope": "ALLOW", "domain_scope": "ALLOW", "runtime_permission": "ALLOW", "security_policy": "ALLOW", "prerequisite_state": "ALLOW", "currentness": "ALLOW"}},
+        {"subject_id": "ovc:capability:write", "predicate": "AUTHORISED", "value": {"capability": "WRITE", "effect": "DENIED"}, "source_class": "AUTHORITY_REGISTRY", "evidence_class": "SOURCE_EXPLICIT", "source_currentness": "CURRENT", "scope": {"scope_id": "authority", "dimensions": {"programme": "alpha", "environment": "production", "authority_generation": "g1"}}}
+      ],
+      "expected_status": "DENIED"
+    }
+  ],
+  "authority_effect": "NONE_SYNTHETIC_ASSURANCE_ONLY"
+}

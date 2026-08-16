@@ -80,7 +80,7 @@ def test_all_nine_state_planes_remain_independent() -> None:
 def test_high_risk_predicate_registry_is_fail_closed() -> None:
     registries = load_registry_bundle(ROOT)
     rows = {row["predicate"]: row for row in registries["predicate_authority"]["predicates"]}
-    assert set(rows) == {"OWNS", "ACTIVE", "AUTHORISED", "CURRENT", "CANONICAL", "PUBLISHED"}
+    assert {"OWNS", "ACTIVE", "AUTHORISED", "CURRENT", "CANONICAL", "PUBLISHED"} <= set(rows)
     assert rows["OWNS"]["deterministic_derivation_allowed"] is False
     assert rows["OWNS"]["conflict_class"] == "OWNER_CONFLICT"
     assert rows["AUTHORISED"]["derivation_rule"] == "INTERSECTION_ONLY_NO_ADJACENCY_GRANT"

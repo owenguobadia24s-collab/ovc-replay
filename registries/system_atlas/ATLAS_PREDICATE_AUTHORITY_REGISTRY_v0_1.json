@@ -17,6 +17,17 @@
       "conflict_class": "OWNER_CONFLICT"
     },
     {
+      "predicate": "GOVERNS",
+      "permitted_source_classes": ["ACCEPTED_OPERATOR_DECISION", "ACCEPTED_NATIVE_GENESIS", "AUTHORITY_REGISTRY", "PROGRAMME_OWNED_STATE"],
+      "precedence": ["ACCEPTED_OPERATOR_DECISION", "ACCEPTED_NATIVE_GENESIS", "AUTHORITY_REGISTRY", "PROGRAMME_OWNED_STATE"],
+      "cardinality": "EXACTLY_ONE_PER_OWNER_ROLE_AND_SCOPE",
+      "default_failure_bias": "UNRESOLVED_OR_OWNER_CONFLICT",
+      "required_dimensions": ["programme", "authority_generation"],
+      "currentness_rule": "SOURCE_AND_BOUND_POINTER_MUST_BOTH_BE_CURRENT",
+      "deterministic_derivation_allowed": false,
+      "conflict_class": "OWNER_CONFLICT"
+    },
+    {
       "predicate": "ACTIVE",
       "permitted_source_classes": ["ACCEPTED_OPERATOR_DECISION", "PROGRAMME_OWNED_STATE", "SERVICE_STATE"],
       "precedence": ["ACCEPTED_OPERATOR_DECISION", "PROGRAMME_OWNED_STATE", "SERVICE_STATE"],

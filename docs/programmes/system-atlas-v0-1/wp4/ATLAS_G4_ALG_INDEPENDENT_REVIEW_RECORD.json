@@ -1,0 +1,165 @@
+{
+  "authority_delta": "NONE",
+  "authority_effect": "NONE_INDEPENDENT_REVIEW_EVIDENCE_ONLY",
+  "blocking_findings": [],
+  "criteria": [
+    {
+      "basis": "High-risk candidates are admitted only when source class is permitted by ATLAS_PREDICATE_AUTHORITY_REGISTRY, evidence class is SOURCE_EXPLICIT or LINEAGE_EXPLICIT, source currentness is CURRENT, and required scope dimensions are present.",
+      "criterion": "PREDICATE_SOURCE_ADMISSIBILITY_INDEPENDENTLY_ACCEPTED",
+      "result": "PASS"
+    },
+    {
+      "basis": "OWNS/GOVERNS do not silently use source precedence to select among competing admissible owners; distinct current admissible values emit CONFLICTING/OWNER_CONFLICT. Other high-risk predicates use registry-defined precedence and preserve equal-rank disagreement as conflict.",
+      "criterion": "PRECEDENCE_AND_OWNER_CARDINALITY_INDEPENDENTLY_ACCEPTED",
+      "result": "PASS"
+    },
+    {
+      "basis": "Explicit DENIED controls grants; RESERVED controls absent denial; grants require all six authority intersection factors to be explicitly ALLOW; missing/unknown factors resolve UNRESOLVED rather than GRANTED.",
+      "criterion": "CONSERVATIVE_AUTHORITY_FAILURE_BIAS_INDEPENDENTLY_ACCEPTED",
+      "result": "PASS"
+    },
+    {
+      "basis": "Resolver requires a scope dimensions object, rejects missing predicate-required dimensions, groups by exact scope hash, and preserves the supplied scope rather than inventing absent dimensions.",
+      "criterion": "SCOPE_NON_WIDENING_INDEPENDENTLY_ACCEPTED",
+      "result": "PASS"
+    },
+    {
+      "basis": "GRT adapter preserves exact evidence classes. CANDIDATE_RELATION/INFERRED and corroborating technical classes cannot satisfy the high-risk resolver evidence admission; GRT OWNED_BY/GOVERNED_BY candidate observations are explicitly denied high-risk semantic promotion.",
+      "criterion": "GRT_EVIDENCE_MAPPING_INDEPENDENTLY_ACCEPTED",
+      "result": "PASS"
+    },
+    {
+      "basis": "Owner and equal-precedence predicate conflicts retain all competing candidate IDs in an explicit open conflict record; no winner is selected.",
+      "criterion": "CONFLICT_PRESERVATION_INDEPENDENTLY_ACCEPTED",
+      "result": "PASS"
+    },
+    {
+      "basis": "An independently written review evaluator, not importing ovc.system_atlas.resolver, reproduced all five pinned adversarial expected results exactly. Repository tests also prove permutation invariance/content addressing.",
+      "criterion": "DETERMINISTIC_REFERENCE_RESULTS_REPRODUCED",
+      "result": "PASS"
+    },
+    {
+      "basis": "Atlas VIT projection consumes ovc.development.skills.vit_current_state.resolve_current_vit_query, requires RESOLVED_CURRENT, and rejects historical fallback. Current/active/authorised projections remain noncanonical pending this gate.",
+      "criterion": "VIT_CURRENT_STATE_REFERENCE_CONSUMPTION",
+      "result": "PASS"
+    },
+    {
+      "basis": "Pinned resolver schema and implementation keep canonical_assertions empty; even algorithm_gate_status=PASS changes resolution eligibility only, leaving canonical assertion materialisation to later bounded stages.",
+      "criterion": "CANONICAL_ASSERTION_SET_REMAINS_EMPTY_BEFORE_GATE_PASS",
+      "result": "PASS"
+    }
+  ],
+  "external_evidence_note": "The external algorithm-review evidence was available to this review only by its pinned SHA-256/path reference, not by direct byte retrieval. The PASS is based on direct inspection of the pinned repository implementation/contracts/registries/fixtures/tests plus an independent reproduction of the adversarial policy outcomes.",
+  "gate_id": "ATLAS-G4-ALG",
+  "gate_result": "ATLAS-G4-ALG_PASS",
+  "independent_reproduction": {
+    "all_cases_match": true,
+    "cases": [
+      {
+        "case_id": "OWNER_CONFLICT_NO_SILENT_PRECEDENCE",
+        "expected": "CONFLICTING",
+        "observed": "CONFLICTING"
+      },
+      {
+        "case_id": "INFERRED_OWNER_REJECTED",
+        "expected": "UNRESOLVED",
+        "observed": "UNRESOLVED"
+      },
+      {
+        "case_id": "AUTHORITY_EXACT_INTERSECTION",
+        "expected": "RECONCILED",
+        "observed": "RECONCILED"
+      },
+      {
+        "case_id": "AUTHORITY_UNKNOWN_FACTOR_FAILS_CLOSED",
+        "expected": "UNRESOLVED",
+        "observed": "UNRESOLVED"
+      },
+      {
+        "case_id": "EXPLICIT_DENIAL_CONTROLS_GRANT",
+        "expected": "DENIED",
+        "observed": "DENIED"
+      }
+    ],
+    "method": "CLEAN_REIMPLEMENTATION_OF_PINNED_POLICY_RULES_NO_IMPORT_OF_ATLAS_RESOLVER"
+  },
+  "non_blocking_follow_ups": [
+    {
+      "finding": "Owner-role semantics are listed in the ontology while the current reference-candidate envelope is fact/scope oriented rather than carrying a dedicated owner_role field. Before WP5 first materialises canonical OWNS/GOVERNS, the candidate assembler must prove owner role is unambiguously encoded in the canonical subject/predicate/scope identity or add an explicit owner-role dimension. This does not block G4 because WP4 emits zero canonical assertions.",
+      "gate_effect": "NON_BLOCKING_ATLAS_G4_ALG",
+      "id": "G4-NB-01",
+      "required_before": "FIRST_CANONICAL_OWNS_OR_GOVERNS_ASSERTION"
+    },
+    {
+      "finding": "source_currentness is an input to the reference resolver. The WP5 candidate-assembly path must derive it from exact source/pointer currentness evidence rather than accept caller-authored CURRENT.",
+      "gate_effect": "NON_BLOCKING_ATLAS_G4_ALG",
+      "id": "G4-NB-02",
+      "required_before": "FIRST_CANONICAL_HIGH_RISK_ASSERTION"
+    },
+    {
+      "finding": "Gate packet implementation_assurance still states PASS_66_ATLAS_TESTS while the bound WP4 QA packet records PASS_71_TESTS. Closeout should update the stale summary without changing the reviewed algorithm.",
+      "gate_effect": "NON_BLOCKING_RECORD_RECONCILIATION",
+      "id": "G4-NB-03",
+      "required_before": "ATLAS_G4_GATE_CLOSEOUT"
+    }
+  ],
+  "operator_effect": "NONE_NON_OPERATOR_GATE",
+  "packet_id": "ATLAS-WP4",
+  "pinned_scope": {
+    "adversarial_fixture_blob": "a909bb8097059d5ef3968a0cf538568f622281a5",
+    "algorithm_candidate_commit": "78eb42944bf4c6a6e92f09e0a56c34f03d5dfda9",
+    "algorithm_candidate_tree": "71ad6973c126aaa9829a32dc4aa4b9fec512a064",
+    "external_algorithm_review_evidence_sha256": "2cf3879276cb8676890b631880222ad2c704760e3455b80ab482cd4647b0a1e6",
+    "gate_packet_blob": "bab62ea639ee603fe4ac0730b79834e411161070",
+    "governed_extractors_blob": "ddd9256141caf8ad4bb2da8e250c6fe2cd4dedc4",
+    "grt_adapter_blob": "686d39050422637c6007322acc011f3869927a86",
+    "ontology_registry_blob": "2bdfac518f335c9f15e315ac01e96ed9583a80a0",
+    "physical_main_commit": "2dc98b95cdc4bda156a78de7738d3c2001f7fe87",
+    "physical_main_tree": "b452b15876163f10b46539a292b435cfec3f86af",
+    "pr_number": 987,
+    "predicate_authority_registry_blob": "5d2c87c3662d592472a117c3b2e274a4ce53352c",
+    "ratified_design_sha256": "7ff61e5a4e488aa6b1a405a43ca49947db4e26175e9c7e3b4bb1aa20b2614e1e",
+    "ratified_plan_sha256": "a2b2ed19e1836059c02ccb00aae554194ddb1ea6259279a5a0914c808f467c30",
+    "reference_resolution_schema_blob": "7dc1abe0e6e16462dba46a45af989f37c76ec220",
+    "reference_resolver_blob": "cde41d15b1c6466d29a73355f8671421d2c10cd9",
+    "reference_resolver_contract_blob": "cf053e011297a658d51e2d713fe2d9c74418872b",
+    "repository": "owenguobadia24s-collab/ovc-replay",
+    "resolver_registry_blob": "ebc928d4563314993a356c971f3ee813cfaf19cb",
+    "review_packaging_commit": "aefc9ea0de787f2e84347b3342c1d81cc64ba358",
+    "review_packaging_tree": "09ef0107f2e04b5cf8ec1d6a1a2c297db69ceb17",
+    "review_request_blob": "8995724b6b7aeb6931ad131db85328b0d5d9880c",
+    "vit_current_state_binding_blob": "7b6bb4270d8deff97ccd46ebe89625e70c6586c1",
+    "vit_current_state_resolver_blob": "818bdd09e458c47d93203e3f83ddb6512fa0b39c",
+    "wp4_qa_packet_blob": "88fccd2f220557d0eb82821eb830c6f42bca4e38",
+    "wp4_test_blob": "9d12038f0ee30164d3f1352155ad5909c58ba561"
+  },
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "q6_ind_effect": "NONE_NOT_REVIEWED",
+  "recommended_next_action": "Materialise this binding and review record on the WP4 branch, update the reviewer registry/resolver acceptance/gate packet/programme state and stale test-count summary, rerun exact-head assurance, close ATLAS-G4-ALG as PASS, integrate WP4 via the current lawful VIT/SIQ path, then continue ATLAS-WP5.",
+  "repository_assurance_observed": {
+    "canonical_assertions_pre_gate": 0,
+    "github_workflow_runs": [
+      {
+        "conclusion": "success",
+        "name": "tests",
+        "run_id": 31950810314
+      },
+      {
+        "conclusion": "success",
+        "name": "OVC tiered test selection shadow",
+        "run_id": 31950810422
+      }
+    ],
+    "pr987_algorithm_delta_after_78eb": "Review packaging commit aefc9ea0 is one commit ahead of algorithm candidate 78eb4294 and adds gate/QA/programme-state/test packaging; the pinned resolver blob remains cde41d15.",
+    "wp4_qa": "PASS_71_TESTS"
+  },
+  "required_verdict": "ELIGIBLE_INDEPENDENT_PASS",
+  "review_class": "IMPLEMENTATION_INDEPENDENT_ALGORITHMIC_REVIEW",
+  "review_id": "ATLAS-G4-ALG-INDEPENDENT-REVIEW-20260816-v1",
+  "review_scope_manifest_sha256": "8576901c862f6d6bb78cc48b6bc9ae4b2acb965e4d28878a4119aaeab4c18612",
+  "reviewed_at": "2026-08-16T15:55:00+01:00",
+  "reviewer_binding_id": "ATLAS-INDEPENDENT-REVIEWER-BINDING-G4-ALG-20260816-v1",
+  "reviewer_id": "OPENAI-GPT-5.6-SOL-ATLAS-G4-ALG-20260816",
+  "schema": "ovc-atlas-independent-review-record/v1",
+  "verdict": "PASS"
+}

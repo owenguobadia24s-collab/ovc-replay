@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/reference_resolution_set_v0_1.schema.json",
+  "title": "Atlas Reference Resolution Set v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "resolver_version", "algorithm_gate_status", "normalized_candidates", "resolutions", "conflicts", "canonical_assertions", "authority_effect", "resolution_set_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-reference-resolution-set/v1"},
+    "resolver_version": {"const": "0.1"},
+    "algorithm_gate_status": {"enum": ["PENDING", "PASS"]},
+    "normalized_candidates": {"type": "array", "items": {"type": "object"}},
+    "resolutions": {"type": "array", "items": {"$ref": "#/$defs/resolution"}},
+    "conflicts": {"type": "array", "items": {"type": "object"}},
+    "canonical_assertions": {"const": []},
+    "authority_effect": {"const": "NONE_REFERENCE_RESOLVER_NOT_AUTHORITY"},
+    "resolution_set_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resolution_id", "subject_id", "predicate", "scope", "scope_hash", "resolution_status", "value", "candidate_ids", "admitted_candidate_ids", "candidate_reasons", "reasons", "conflict_id", "canonical_eligibility", "authority_effect"],
+      "properties": {
+        "resolution_id": {"type": "string", "pattern": "^atlas:predicate-resolution:[0-9a-f]{64}$"},
+        "subject_id": {"type": "string", "minLength": 1},
+        "predicate": {"type": "string", "minLength": 1},
+        "scope": {"type": "object"},
+        "scope_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "resolution_status": {"enum": ["RECONCILED", "DENIED", "RESERVED", "CONFLICTING", "UNRESOLVED"]},
+        "value": {},
+        "candidate_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "admitted_candidate_ids": {"type": "array", "items": {"type": "string"}},
+        "candidate_reasons": {"type": "object"},
+        "reasons": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "conflict_id": {"type": ["string", "null"]},
+        "canonical_eligibility": {"enum": ["ELIGIBLE", "DENIED_PENDING_ATLAS_G4_ALG", "INELIGIBLE"]},
+        "authority_effect": {"const": "NONE_REFERENCE_RESOLUTION_ONLY"}
+      }
+    }
+  }
+}
