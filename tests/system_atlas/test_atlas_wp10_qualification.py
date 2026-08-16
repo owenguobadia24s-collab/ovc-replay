@@ -32,6 +32,8 @@ CASES = ROOT / "fixtures/system_atlas/wp10/ATLAS_WP10_QUALIFICATION_CASES_v0_1.j
 SHADOW = ROOT / "fixtures/system_atlas/wp10/ATLAS_WP10_LIVE_CURRENT_SHADOW_BINDING_v0_1.json"
 OPERATIONAL = ROOT / "registries/system_atlas/ATLAS_OPERATIONAL_BUDGET_v0_1.json"
 RETENTION = ROOT / "registries/system_atlas/ATLAS_RETENTION_BUDGET_v0_1.json"
+WP10 = ROOT / "docs/programmes/system-atlas-v0-1/wp10"
+EXTERNAL_EVIDENCE = ROOT.parent.parent / "ovc-replay-external-artifacts/system_atlas/generations/wp10/ATLAS_WP10_Q0_Q6_EVIDENCE.json"
 
 
 def load(path: Path) -> dict:
@@ -228,3 +230,41 @@ def test_wp10_fixture_families_cover_ratified_zero_tolerance_and_historical_case
     assert cases["capacity_adversarial"]["required_failure"] == "CAPACITY_EXCEEDED"
     assert cases["capacity_adversarial"]["sampling"] == "FORBIDDEN"
     assert canonical_sha256(cases)
+
+
+def test_wp10_gate_state_and_review_request_preserve_blocking_boundaries() -> None:
+    gate = load(WP10 / "ATLAS_G10_GATE_PACKET.json")
+    qa = load(WP10 / "ATLAS_WP10_QA_PACKET.json")
+    request = load(WP10 / "ATLAS_WP10_INDEPENDENT_REVIEW_REQUEST.json")
+    activation = load(WP10 / "ATLAS_G_OBSERVABILITY_ACTIVATE_PACKET.json")
+    authority = load(WP10 / "ATLAS_WP10_VIT_AUTHORITY_MANIFEST.json")
+    dependency = load(WP10 / "ATLAS_WP10_VIT_DEPENDENCY_FRONTIER.json")
+    state = load(ROOT / "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json")
+    pointer = load(ROOT / "registries/implementation/system_atlas_v0_1/CURRENT_STATE_POINTER.json")
+    policy = load(ROOT / "registries/system_atlas/ATLAS_GENERATION_POLICY_REGISTRY_v0_1.json")
+    assert gate["decision"] == "NOT_YET_ELIGIBLE_FOR_AUTO_PASS"
+    assert gate["acceptance_results"]["Q6_IND"] == "PENDING"
+    assert gate["terminal_state_claimed"] is False
+    assert qa["qa_recommendation"] == "PASS_Q0_Q6_REQUEST_Q6_IND_DO_NOT_RATIFY_G10"
+    assert qa["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_IMPLEMENTATION_GOVERNANCE_SECURITY_VISUAL_OPERATIONAL_REVIEW_PASS_REQUIRED"]
+    assert request["status"] == "OPEN_BLOCKING"
+    assert request["reviewer_eligibility"]["self_review"] == "FORBIDDEN"
+    assert activation["status"] == "INELIGIBLE_NOT_PRESENTED_FOR_DECISION"
+    assert activation["operator_decision"] is None
+    assert activation["operational_reliance"] == "DENIED"
+    assert authority["logical_id"] == canonical_sha256(authority["payload"])
+    assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
+    assert state["status"] == pointer["status"] == "ATLAS_WP10_Q0_Q6_PASS_Q6_IND_PENDING"
+    assert state["next_packet"] == pointer["next_packet"] == "ATLAS-WP10-Q6-IND"
+    assert state["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_PASS_REQUIRED"]
+    assert policy["status"] == "FROZEN_ATLAS_G10"
+    assert policy["retention"] == "FROZEN_ATLAS_RETENTION_BUDGET_REPORT_ONLY_NO_DELETE"
+    assert not (ROOT.parent.parent / "ovc-replay-external-artifacts/system_atlas/generations/CURRENT.json").exists()
+
+
+def test_wp10_external_evidence_matches_bound_hash_when_available() -> None:
+    if EXTERNAL_EVIDENCE.is_file():
+        import hashlib
+
+        qa = load(WP10 / "ATLAS_WP10_QA_PACKET.json")
+        assert hashlib.sha256(EXTERNAL_EVIDENCE.read_bytes()).hexdigest() == qa["external_evidence"]["sha256"]

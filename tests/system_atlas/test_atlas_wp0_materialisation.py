@@ -99,6 +99,8 @@ def test_programme_state_preserves_wp0_completion_and_activation_boundary() -> N
     assert state["tests"]["wp0_materialisation"] in {"PENDING_EXACT_PACKET_HEAD", "PASS_INTEGRATED_PR_970"}
     if state["current_gate"] == "ATLAS-G4-ALG" and state["gate_status"].startswith("BLOCKED"):
         assert state["blockers"] == ["ATLAS_G4_ALG_ELIGIBLE_INDEPENDENT_REVIEWER_UNBOUND"]
+    elif state["current_gate"] == "ATLAS-G10" and state["gate_status"] == "NOT_YET_ELIGIBLE_Q6_IND_PENDING":
+        assert state["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_PASS_REQUIRED"]
     else:
         assert state["blockers"] == []
     assert state["terminal_pre_activation_target"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"

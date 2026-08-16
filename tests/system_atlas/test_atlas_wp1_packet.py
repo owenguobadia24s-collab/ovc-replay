@@ -44,6 +44,8 @@ def test_programme_state_advances_to_wp1v_without_activation() -> None:
         assert state["next_packet"] == "ATLAS-WP1V"
     if state["current_gate"] == "ATLAS-G4-ALG" and state["gate_status"].startswith("BLOCKED"):
         assert state["blockers"] == ["ATLAS_G4_ALG_ELIGIBLE_INDEPENDENT_REVIEWER_UNBOUND"]
+    elif state["current_gate"] == "ATLAS-G10" and state["gate_status"] == "NOT_YET_ELIGIBLE_Q6_IND_PENDING":
+        assert state["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_PASS_REQUIRED"]
     else:
         assert state["blockers"] == []
     assert state["stop_boundary"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
