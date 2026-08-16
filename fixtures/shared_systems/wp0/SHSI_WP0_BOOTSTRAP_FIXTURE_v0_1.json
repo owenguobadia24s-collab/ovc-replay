@@ -1,0 +1,17 @@
+{
+  "schema": "ovc-shared-systems-wp0-fixture/v1",
+  "fixture_id": "SHSI-WP0-BOOTSTRAP-NEGATIVE-v0.1",
+  "valid": {
+    "binding_registry_hash": "46e4d03f56c1dd27fbdc0828c30b1910fc4b7510ec56bdb7b089edc1e2780945",
+    "owner_programme_id": "OVC-SHARED-SYSTEMS-v0.1",
+    "edges": [["B0_IMMUTABLE_PRIMITIVES","B1_BOOTSTRAP_VALIDATION_MANIFEST"],["B1_BOOTSTRAP_VALIDATION_MANIFEST","B2_DESIGN_CONTRACT_BUNDLE_VALIDATION"],["B2_DESIGN_CONTRACT_BUNDLE_VALIDATION","B3_GRT_REPOSITORY_CLASSIFICATION_BINDING"],["B3_GRT_REPOSITORY_CLASSIFICATION_BINDING","B4_EXACT_SHARED_SERVICE_BINDING"],["B4_EXACT_SHARED_SERVICE_BINDING","B5_SHARED_REGISTRY_RESOLUTION_RUNTIME"],["B5_SHARED_REGISTRY_RESOLUTION_RUNTIME","B6_CONSUMER_MIGRATION_RUNTIME_ADOPTION"]]
+  },
+  "adversarial_cases": [
+    {"id":"OWNER_CONFLICT","mutation":"registry.conflicts non-empty","expected":"OWNER_BINDING_CONFLICT"},
+    {"id":"BINDING_HASH_TAMPER","mutation":"registry payload changed without expected generation","expected":"BINDING_HASH_GENERATION_MISMATCH"},
+    {"id":"BOOTSTRAP_FORBIDDEN_BACK_EDGE","mutation":"B6->B0","expected":"BOOTSTRAP_FORBIDDEN_OR_UNDECLARED_EDGE"},
+    {"id":"STEADY_STATE_SHORTCUT","mutation":"B1->B5","expected":"BOOTSTRAP_FORBIDDEN_OR_UNDECLARED_EDGE"},
+    {"id":"G0A_NOT_PASS","mutation":"decision=DEFER","expected":"G0A_NOT_PASS"}
+  ],
+  "authority_effect": "NONE"
+}
