@@ -18,8 +18,9 @@ def test_g2_5_gate_preparation_remains_historical_after_operator_pass() -> None:
     gate = _load(GATES / "GRT2_G2_5_GATE_PACKET.json")
     qa = _load(GATES / "GRT2_G2_5_QA_PACKET.json")
     historical_state = _load(STATE / "OVC_GRT2_STATE_v0_9.json")
+    pilot_state = _load(STATE / "OVC_GRT2_STATE_v0_10.json")
+    current_state = _load(STATE / "OVC_GRT2_STATE_v0_11.json")
     pointer = _load(STATE / "CURRENT_STATE_POINTER.json")
-    current_state = _load(STATE / "OVC_GRT2_STATE_v0_10.json")
     decision = _load(GATES / "GRT2_G2_5_OPERATOR_DECISION.json")
     authority = _load(AUTHORITY / "GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json")
 
@@ -49,10 +50,19 @@ def test_g2_5_gate_preparation_remains_historical_after_operator_pass() -> None:
     assert authority["g3_status"] == "NOT_AUTHORISED"
     assert authority["debt_floor_generation"] is None
 
-    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_10.json")
-    assert pointer["status"] == "RUNNING"
-    assert pointer["gate_id"] == "GRT2-G3"
-    assert current_state["g2_5_status"] == "APPROVED_OPERATOR_PASS_PILOT_ACTIVE"
+    assert pilot_state["g2_5_status"] == "APPROVED_OPERATOR_PASS_PILOT_ACTIVE"
+    assert pilot_state["active_enforcement"] == "LIMITED_NEW_ARTIFACT_ENFORCEMENT"
+    assert pilot_state["constitution_status"] == "PROPOSED_UNADMITTED"
+    assert pilot_state["debt_floor_generation"] is None
+
+    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_11.json")
+    assert pointer["status"] == "QA_REVIEW"
+    assert pointer["packet_id"] == "GRT2-G2.5-PILOT-EVIDENCE-COLLECTION"
+    assert pointer["gate_id"] == "GRT2-G2.5"
+    assert pointer["next_packet"] == "GRT2-G3-READINESS-EVIDENCE"
+    assert current_state["pilot_observation_threshold_met"] is True
+    assert current_state["pilot_eligible_candidate_count"] == 8
+    assert current_state["g3_status"] == "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE"
     assert current_state["active_enforcement"] == "LIMITED_NEW_ARTIFACT_ENFORCEMENT"
     assert current_state["constitution_status"] == "PROPOSED_UNADMITTED"
     assert current_state["debt_floor_generation"] is None
@@ -61,12 +71,19 @@ def test_g2_5_gate_preparation_remains_historical_after_operator_pass() -> None:
 def test_g2_5_monitoring_preserves_limited_scope_and_g3_separation() -> None:
     monitor = _load(GATES / "GRT2_G2_5_PILOT_MONITORING_PLAN.json")
     ledger = _load(GATES / "GRT2_G2_5_PILOT_LEDGER.json")
+    receipt = _load(GATES / "GRT2_G2_5_THRESHOLD_RECEIPT.json")
     assert monitor["pilot_authority"] == "LIMITED_NEW_ARTIFACT_ENFORCEMENT_ACTIVE"
     assert "FINDING_CAUSED_SOLELY_BY_MODIFICATION_OF_PRE_EXISTING_ARTIFACT_UNLESS_INDEPENDENT_PRE_EXISTING_ASSURANCE_ALREADY_BLOCKS" in monitor["shadow_only_scope"]
     assert monitor["historical_dry_run"]["required_before_g3"] is True
     assert monitor["historical_dry_run"]["ordinary_historical_candidate_target"] == 10
     assert monitor["threshold"]["ordinary_and_injection_counts_separate"] is True
     assert monitor["status"] == "ACTIVE_COLLECTING_EVIDENCE"
-    assert monitor["eligible_candidate_evaluations"] == 0
-    assert ledger["eligible_candidate_count"] == 0
+    assert monitor["eligible_candidate_evaluations"] == 0  # historical plan snapshot, not mutable evidence
+    assert ledger["eligible_candidate_count"] == 8
+    assert ledger["real_candidate_count"] == 8
+    assert ledger["threshold_met"] is True
     assert ledger["g3_ready"] is False
+    assert ledger["full_g3_shadow_complete"] is False
+    assert receipt["disposition"] == "PASS_G2_5_OBSERVATION_THRESHOLD_ONLY"
+    assert receipt["g3_status"] == "NOT_AUTHORISED"
+    assert receipt["authority_delta"] == "NONE"
