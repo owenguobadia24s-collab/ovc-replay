@@ -39,6 +39,6 @@ jobs:
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          PYTHONPATH: src:.
+          PYTHONPATH: src;.
         run: |
           python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha "${{ github.sha }}"
