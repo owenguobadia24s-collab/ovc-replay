@@ -4,10 +4,11 @@ import json
 import subprocess
 from copy import deepcopy
 from pathlib import Path
+from typing import Any
 
-import jsonschema
 import pytest
 
+from ovc.development.skills.registry import validate_against_schema
 from ovc.system_atlas.canonical import canonical_sha256
 from ovc.system_atlas.grt_adapter import (
     AtlasGRTAdapterError,
@@ -25,6 +26,19 @@ TREE = "2222222222222222222222222222222222222222"
 
 def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def inline_local_refs(node: Any, root: dict) -> Any:
+    if isinstance(node, list):
+        return [inline_local_refs(item, root) for item in node]
+    if not isinstance(node, dict):
+        return node
+    if "$ref" in node:
+        target: Any = root
+        for part in node["$ref"].removeprefix("#/").split("/"):
+            target = target[part]
+        return inline_local_refs(target, root)
+    return {key: inline_local_refs(value, root) for key, value in node.items()}
 
 
 def test_grt_adapter_preserves_every_evidence_class_and_emits_no_assertions() -> None:
@@ -63,9 +77,12 @@ def test_adapter_is_input_order_independent_and_content_addressed() -> None:
 
 
 def test_raw_observation_set_validates_against_draft_2020_12_schema() -> None:
-    validator = jsonschema.Draft202012Validator(load(SCHEMA))
-    errors = sorted(validator.iter_errors(adapt_grt_topology(read_model=load(FIXTURE), repository_tree=TREE)), key=lambda error: list(error.path))
-    assert errors == []
+    schema = load(SCHEMA)
+    assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+    validate_against_schema(
+        adapt_grt_topology(read_model=load(FIXTURE), repository_tree=TREE),
+        inline_local_refs(schema, schema),
+    )
 
 
 def test_unknown_evidence_class_fails_closed() -> None:
