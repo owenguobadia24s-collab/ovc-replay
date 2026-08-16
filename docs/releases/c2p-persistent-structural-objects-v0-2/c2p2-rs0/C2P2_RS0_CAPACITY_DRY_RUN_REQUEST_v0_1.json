@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-c2p2-rs0-capacity-dry-run-request/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-CAPACITY-DRY-RUN-AND-ARTIFACT-BINDING",
+  "baseline_main": "25203b7f4df5b72aefde31842b09020320386a4f",
+  "status": "MEASUREMENT_REQUESTED_NON_EVIDENTIARY",
+  "scientific_effect": "NONE",
+  "real_source_execution": "FORBIDDEN",
+  "validation": "LOCKED_UNCONSUMED",
+  "candidate_set": [
+    "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
+    "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+    "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
+  ],
+  "measurement_requirements": [
+    "RS0_PEAK_MEMORY_BYTES",
+    "RS0_EXTERNAL_STORAGE_BUDGET_BYTES",
+    "RS0_CONCURRENCY_LIMIT_FROM_MEASURED_RUNNER",
+    "RS0_CHECKPOINT_CADENCE_FROM_MEASURED_DRY_RUN",
+    "CHECKPOINT_RESTART_EQUIVALENCE",
+    "CAPACITY_EXCEEDED_FAIL_CLOSED"
+  ],
+  "reference_envelope": {
+    "eligible_candidates_max": 2048,
+    "identity_predicates_max": 16,
+    "pair_adjudications_max": 4194304
+  },
+  "measurement_firewall": {
+    "synthetic_only": true,
+    "provider_or_ec1_rows": "FORBIDDEN",
+    "sampling": "FORBIDDEN",
+    "reduced_precision": "FORBIDDEN",
+    "population_change": "FORBIDDEN",
+    "predicate_weakening": "FORBIDDEN",
+    "object_pack_change": "FORBIDDEN"
+  },
+  "runner_measurement_workflow": ".github/workflows/c2p2-rs0-capacity-dry-run.yml",
+  "runner_measurement_script": "scripts/opt_b/c2p_v0_2/measure_rs0_capacity_dry_run.py",
+  "external_artifact_root_binding": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json",
+  "authority": "AUTO_EXECUTABLE_PREPARATION_ONLY"
+}

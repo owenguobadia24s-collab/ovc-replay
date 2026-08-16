@@ -1,0 +1,39 @@
+name: C2P2 RS0 capacity dry run
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/c2p2-rs0-capacity-dry-run.yml'
+      - 'scripts/opt_b/c2p_v0_2/measure_rs0_capacity_dry_run.py'
+      - 'tests/opt_b/c2p/v0_2/test_c2p2_rs0_capacity_dry_run.py'
+      - 'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CAPACITY_DRY_RUN_REQUEST_v0_1.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  measured-synthetic-capacity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run non-evidentiary RS0 capacity measurement
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python scripts/opt_b/c2p_v0_2/measure_rs0_capacity_dry_run.py --output /tmp/c2p2-rs0-capacity.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          row = json.loads(Path('/tmp/c2p2-rs0-capacity.json').read_text(encoding='utf-8'))
+          assert row['measurement_class'] == 'MEASURED_SYNTHETIC_RUNNER_NON_EVIDENTIARY'
+          assert row['real_source_consumed'] is False
+          assert row['validation_consumed'] is False
+          assert row['checkpoint_restart']['status'] == 'PASS_LOGICAL_AND_BYTE_EQUIVALENCE'
+          print('C2P2_RS0_CAPACITY_RECEIPT=' + json.dumps(row, sort_keys=True, separators=(',', ':')))
+          PY
