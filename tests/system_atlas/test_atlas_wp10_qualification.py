@@ -90,10 +90,10 @@ def test_wp10_budget_registries_and_live_shadow_binding_are_schema_valid() -> No
     receipt = validate_live_shadow_binding(binding, ROOT)
     assert receipt["result"] == "PASS_EXACT_GIT_TREE_LIVE_SHADOW"
     assert receipt["source_binding_count"] == 34
-    assert binding["source_commit"] == git("rev-parse", "c8273e8d15f5f77d86ec842b3eb7067fe0b67b8e")
-    assert binding["source_tree"] == git("rev-parse", "c8273e8d15f5f77d86ec842b3eb7067fe0b67b8e^{tree}")
+    assert binding["source_commit"] == git("rev-parse", "11aefbbba5dbd2e50181d2e4793e673675f2949d")
+    assert binding["source_tree"] == git("rev-parse", "11aefbbba5dbd2e50181d2e4793e673675f2949d^{tree}")
     c2p = next(row for row in binding["source_bindings"] if row["node_id"] == "c2p")
-    assert c2p["path"] == "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json"
+    assert c2p["path"] == "registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_1.json"
     research = next(row for row in binding["source_bindings"] if row["node_id"] == "research")
     assert research["path"] == "records/research_operations/ec1/prsc/PRSCI_PROGRAMME_STATE_v0_1.json"
 
