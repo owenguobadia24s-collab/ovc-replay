@@ -42,7 +42,10 @@ def _deny_scalar_scores(value: Any, path: str = "$") -> None:
     if isinstance(value, Mapping):
         for key, child in value.items():
             key_text = str(key).lower()
-            if key_text in FORBIDDEN_SCALAR_KEYS or key_text.endswith("_score"):
+            if key_text in FORBIDDEN_SCALAR_KEYS or (
+                key_text.endswith("_score")
+                and not (key_text == "zero_demand_is_priority_score" and child is False)
+            ):
                 raise RCCRReadModelError(f"synthetic scalar score forbidden at {path}.{key}")
             _deny_scalar_scores(child, f"{path}.{key}")
     elif isinstance(value, (list, tuple)):
