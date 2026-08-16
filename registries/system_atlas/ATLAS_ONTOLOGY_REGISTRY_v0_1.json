@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-system-atlas-ontology-registry/v1",
+  "registry_id": "ATLAS-ONTOLOGY-v0.1",
+  "version": "0.1",
+  "status": "FROZEN_ATLAS_G1",
+  "object_families": [
+    "ENTITY",
+    "RELATIONSHIP",
+    "ASSERTION",
+    "EVIDENCE_REFERENCE",
+    "CONFLICT",
+    "SCOPE",
+    "ATLAS_GRAPH_GENERATION"
+  ],
+  "entity_families": {
+    "CONCEPTUAL": ["DOMAIN", "LAYER", "SUBSYSTEM", "CAPABILITY", "SURFACE"],
+    "GOVERNED": ["PROGRAMME", "DESIGN", "PLAN", "PACKET", "GATE", "DECISION", "AUTHORITY_RECORD", "PROGRAMME_STATE", "RESEARCH_OBJECT", "RECORD_TYPE"],
+    "IMPLEMENTATION": ["CONTRACT", "SCHEMA", "REGISTRY", "PACKAGE", "MODULE", "CLASS", "FUNCTION", "SERVICE", "API_ROUTE", "CLI_COMMAND", "WORKFLOW", "ADAPTER", "READ_MODEL", "FIXTURE", "TEST"],
+    "PHYSICAL": ["REPOSITORY", "DIRECTORY", "FILE", "BRANCH", "COMMIT", "GIT_TREE", "PULL_REQUEST", "CI_RUN", "STORE", "EXTERNAL_SYSTEM", "ARTIFACT", "QUEUE", "RUNTIME_PROCESS"]
+  },
+  "entity_types": [
+    "DOMAIN", "LAYER", "SUBSYSTEM", "CAPABILITY", "SURFACE",
+    "PROGRAMME", "DESIGN", "PLAN", "PACKET", "GATE", "DECISION", "AUTHORITY_RECORD", "PROGRAMME_STATE", "RESEARCH_OBJECT", "RECORD_TYPE",
+    "CONTRACT", "SCHEMA", "REGISTRY", "PACKAGE", "MODULE", "CLASS", "FUNCTION", "SERVICE", "API_ROUTE", "CLI_COMMAND", "WORKFLOW", "ADAPTER", "READ_MODEL", "FIXTURE", "TEST",
+    "REPOSITORY", "DIRECTORY", "FILE", "BRANCH", "COMMIT", "GIT_TREE", "PULL_REQUEST", "CI_RUN", "STORE", "EXTERNAL_SYSTEM", "ARTIFACT", "QUEUE", "RUNTIME_PROCESS"
+  ],
+  "relationship_families": {
+    "STRUCTURAL": ["CONTAINS", "PART_OF", "INSTANCE_OF", "GROUPS"],
+    "DATA": ["PRODUCES", "CONSUMES", "READS", "WRITES", "DERIVES_FROM", "REFERENCES", "BINDS", "EMITS"],
+    "DEPENDENCY": ["REQUIRES", "OPTIONALLY_USES", "PREREQUISITE_OF", "SUCCESSOR_OF", "BLOCKED_BY"],
+    "OWNERSHIP": ["OWNS", "GOVERNS", "DEFINED_BY", "SOURCE_OF_TRUTH_FOR", "CUSTODIAN_OF"],
+    "IMPLEMENTATION": ["IMPLEMENTS", "CONFORMS_TO", "SERIALIZES_AS", "MATERIALIZES", "PERSISTS_AS", "ADAPTS"],
+    "ASSURANCE": ["TESTED_BY", "ASSURED_BY", "QA_REVIEWED_BY", "QUALIFIED_BY", "PROVEN_EQUIVALENT_BY", "CHALLENGED_BY"],
+    "AUTHORITY": ["AUTHORISED_BY", "DENIED_BY", "RESERVED_TO", "ACTIVATED_BY", "LOCKED_BY", "GRANTS"],
+    "LIFECYCLE": ["SUPERSEDES", "REPLACES_FORWARD", "HISTORICAL_VERSION_OF", "GENERATION_OF", "PREDECESSOR_OF", "MERGED_AS", "CORRECTED_BY"],
+    "PROJECTION": ["PROJECTS", "RENDERS", "INDEXES", "EXPOSES_READ_ONLY", "VISUALIZES"],
+    "PROHIBITION": ["MUST_NOT_READ", "MUST_NOT_WRITE", "MUST_NOT_DEPEND_ON", "MUST_NOT_ACTIVATE"]
+  },
+  "relationship_resolution_states": ["RECONCILED", "DECLARED_ONLY", "OBSERVED_ONLY", "FORBIDDEN_OBSERVED", "CONFLICTING", "UNRESOLVED"],
+  "owner_roles": ["SEMANTIC_OWNER", "IDENTITY_OWNER", "LIFECYCLE_OWNER", "AUTHORITY_OWNER", "PERSISTENCE_CUSTODIAN", "PROJECTION_OWNER"],
+  "authority_capabilities": ["READ", "WRITE", "APPEND", "IMPLEMENT", "RUN_SYNTHETIC", "RUN_REAL_SOURCE", "ACTIVATE", "PROMOTE", "PUBLISH", "MERGE", "MATERIALIZE_MAIN", "CONSUME_VALIDATION", "FREEZE_CANDIDATE", "SELECT_METHOD"],
+  "state_planes": {
+    "lifecycle": ["PLANNED", "CURRENT_GENERATION", "SUPERSEDED", "HISTORICAL"],
+    "implementation": ["NOT_IMPLEMENTED", "IMPLEMENTED"],
+    "availability": ["AVAILABLE", "UNAVAILABLE", "UNKNOWN"],
+    "assurance": ["UNQUALIFIED", "CONFORMANT", "DEGRADED"],
+    "authority": ["GRANTED", "DENIED", "RESERVED", "UNKNOWN"],
+    "activation": ["INACTIVE", "SHADOW", "ACTIVE"],
+    "canonicality": ["NONCANONICAL", "CANONICAL", "PUBLISHED"],
+    "currentness": ["CURRENT", "STALE", "HISTORICAL", "UNKNOWN"],
+    "health": ["HEALTHY", "DEGRADED", "FAILED"]
+  },
+  "evidence_classes": ["SOURCE_EXPLICIT", "LINEAGE_EXPLICIT", "PATH_AND_CONTENT_CORROBORATED", "TEST_CORROBORATED", "IMPORT_CORROBORATED", "CANDIDATE_RELATION", "INFERRED", "UNRESOLVED"],
+  "identity_rules": {
+    "typed_namespace_required": true,
+    "aliases_define_identity": false,
+    "possible_match_merges_entities": false,
+    "path_is_logical_identity": false,
+    "display_position_affects_identity": false
+  },
+  "scope_dimensions": ["programme", "generation", "instrument", "market", "side", "clock", "source_release", "environment", "branch", "git_tree", "authority_generation", "valid_time"],
+  "negative_states_are_first_class": ["DENIED", "ABSENT", "UNRESOLVED", "AMBIGUOUS", "CONFLICT", "STALE", "HISTORICAL", "DESIGN_ONLY"],
+  "authority_effect": "NONE"
+}
