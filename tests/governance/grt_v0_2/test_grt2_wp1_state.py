@@ -13,7 +13,8 @@ WP1_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_3.json"
 READINESS_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_7.json"
 G2_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_8.json"
 PILOT_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_10.json"
-CURRENT_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_11.json"
+THRESHOLD_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_11.json"
+G3_READINESS_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_12.json"
 
 
 class GRT2WP1StateTests(unittest.TestCase):
@@ -36,11 +37,13 @@ class GRT2WP1StateTests(unittest.TestCase):
         readiness = json.loads(READINESS_STATE.read_text(encoding="utf-8"))
         g2 = json.loads(G2_STATE.read_text(encoding="utf-8"))
         pilot = json.loads(PILOT_STATE.read_text(encoding="utf-8"))
-        current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
+        threshold = json.loads(THRESHOLD_STATE.read_text(encoding="utf-8"))
+        g3_readiness = json.loads(G3_READINESS_STATE.read_text(encoding="utf-8"))
         constitution = json.loads((REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(encoding="utf-8"))
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_11.json")
-        self.assertEqual(pointer["status"], "QA_REVIEW")
-        self.assertEqual(pointer["packet_id"], "GRT2-G2.5-PILOT-EVIDENCE-COLLECTION")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_12.json")
+        self.assertEqual(pointer["status"], "RUNNING")
+        self.assertEqual(pointer["packet_id"], "GRT2-G3-READINESS-EVIDENCE")
+        self.assertEqual(pointer["gate_id"], "GRT2-G3")
         self.assertEqual(pointer["next_packet"], "GRT2-G3-READINESS-EVIDENCE")
         self.assertEqual(readiness["status"], "BLOCKED")
         self.assertEqual(readiness["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
@@ -54,11 +57,14 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(pilot["g2_5_status"], "APPROVED_OPERATOR_PASS_PILOT_ACTIVE")
         self.assertEqual(pilot["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         self.assertIsNone(pilot["debt_floor_generation"])
-        self.assertEqual(current["status"], "QA_REVIEW")
-        self.assertTrue(current["pilot_observation_threshold_met"])
-        self.assertEqual(current["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
-        self.assertEqual(current["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
-        self.assertIsNone(current["debt_floor_generation"])
+        self.assertEqual(threshold["status"], "QA_REVIEW")
+        self.assertTrue(threshold["pilot_observation_threshold_met"])
+        self.assertEqual(threshold["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
+        self.assertEqual(threshold["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
+        self.assertIsNone(threshold["debt_floor_generation"])
+        self.assertEqual(g3_readiness["status"], "RUNNING")
+        self.assertEqual(g3_readiness["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_RUNNING")
+        self.assertIsNone(g3_readiness["debt_floor_generation"])
         self.assertEqual(state["status"], "APPROVED")
         self.assertEqual(state["packet_id"], "GRT2-WP1")
         self.assertEqual(state["gate_id"], "GRT2-G1")
@@ -75,7 +81,8 @@ class GRT2WP1StateTests(unittest.TestCase):
         state = json.loads(WP1_STATE.read_text(encoding="utf-8"))
         g2 = json.loads(G2_STATE.read_text(encoding="utf-8"))
         pilot = json.loads(PILOT_STATE.read_text(encoding="utf-8"))
-        current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
+        threshold = json.loads(THRESHOLD_STATE.read_text(encoding="utf-8"))
+        g3_readiness = json.loads(G3_READINESS_STATE.read_text(encoding="utf-8"))
         self.assertEqual(state["status"], "APPROVED")
         self.assertNotIn("GRT2-G2 PASS", state["prerequisites"])
         self.assertEqual(state["active_enforcement"], "NONE")
@@ -84,9 +91,12 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(g2["g2_5_status"], "PENDING_OPERATOR_REQUIRED_GATE_PREPARATION")
         self.assertEqual(pilot["g2_5_status"], "APPROVED_OPERATOR_PASS_PILOT_ACTIVE")
         self.assertEqual(pilot["g3_status"], "PENDING_PILOT_EVIDENCE_AND_OPERATOR_REQUIRED")
-        self.assertEqual(current["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
-        self.assertEqual(current["constitution_status"], "PROPOSED_UNADMITTED")
-        self.assertIsNone(current["debt_floor_generation"])
+        self.assertEqual(threshold["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
+        self.assertEqual(threshold["constitution_status"], "PROPOSED_UNADMITTED")
+        self.assertIsNone(threshold["debt_floor_generation"])
+        self.assertEqual(g3_readiness["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_RUNNING")
+        self.assertEqual(g3_readiness["constitution_status"], "PROPOSED_UNADMITTED")
+        self.assertIsNone(g3_readiness["debt_floor_generation"])
 
 
 if __name__ == "__main__":
