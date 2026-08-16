@@ -1,8 +1,15 @@
 {
   "schema": "ovc-c2p-parallel-route-integration-amendment-authority/v0_1",
   "amendment_id": "OVC-EC1-C2P-PARALLEL-ROUTE-INTEGRATION-AMENDMENT-0.1",
-  "status": "RATIFIED_PENDING_PAR_WP0_MATERIALISATION",
+  "status": "PAR_WP0_MATERIALISED_PENDING_FINAL_INTEGRATION",
   "decision_ref": "docs/releases/ec1-dmrp-conformance-v0-1/c2p-parallel-route/EC1_C2P_PARALLEL_ROUTE_AMENDMENT_OPERATOR_DECISION_v0_1.json",
+  "par_wp0": {
+    "state_ref": "registries/implementation/ec1_dmrp_v0_1/PAR_WP0_STATE_v0_1.json",
+    "semantic_snapshot_ref": "docs/releases/ec1-dmrp-conformance-v0-1/c2p-parallel-route/par-wp0/PAR_WP0_SEMANTIC_SNAPSHOT_v0_1.json",
+    "execution_interlock_ref": "registries/research_operations/EC1_C2P_PARALLEL_ROUTE_EXECUTION_INTERLOCK_v0_1.json",
+    "path2_partition_ref": "registries/research_operations/P2_EXT_PARALLEL_ROUTE_PREREG_PARTITION_v0_1.json",
+    "current_binding_manifest_ref": "registries/research_operations/EC1_DMRP_PRE_EVIDENCE_EXTERNAL_ARTIFACT_BINDINGS_v0_2.json"
+  },
   "scientific_generation": {
     "canonical": "OVC-EC1-DISCOVERY-2021_2023-G1",
     "candidate_defining_effect": "UNCHANGED",
@@ -38,7 +45,7 @@
   },
   "path2_interlock": {
     "packet": "P2-EXT-PREREG-IMPLEMENTATION-0.1",
-    "before_par_wp0": "HOLD",
+    "par_wp0_requirement": "SATISFIED_PENDING_PHYSICAL_INTEGRATION",
     "after_par_wp0": "MAY_PROCEED_PARTITIONED",
     "rp_0001_to_0005": "EFFECTIVE_ONLY_WHEN_EXACT_DEPENDENCIES_BIND",
     "rp_0006": "DEPENDENCY_UNAVAILABLE",
@@ -49,12 +56,12 @@
     "operational_capacity_telemetry": "MAY_BE_VISIBLE_IF_SCIENTIFIC_RESULT_FREE",
     "post_disclosure_g1_repair": "FORBIDDEN"
   },
-  "current_holds_effective_after_this_ratification_record_merges": [
-    "DO_NOT_APPROVE_OR_EXECUTE_DMRPI_GREAL_EC1_BEFORE_PAR_WP0_RECONCILIATION",
-    "DO_NOT_BEGIN_P2_EXT_PREREG_IMPLEMENTATION_BEFORE_PAR_WP0_RECONCILIATION",
-    "DO_NOT_EXECUTE_C2P2_RS0_GRUN_WITHOUT_ITS_OWN_OPERATOR_PASS"
+  "remaining_holds": [
+    "DMRPI_GREAL_EC1_REMAINS_UNAPPROVED",
+    "C2P2_RS0_GRUN_REQUIRES_OWN_OPERATOR_PASS",
+    "P2_EXT_REAL_SOURCE_EVIDENTIARY_AUTHORITY_REMAINS_NONE"
   ],
-  "next_packet": "PAR-WP0",
+  "next_packet_after_par_wp0": "P2-EXT-PREREG-IMPLEMENTATION-0.1",
   "authority_effect": "INTEGRATION_CONSTITUTION_AND_RESTRICTIVE_INTERLOCK_ONLY; NO_REAL_SOURCE_OR_ACTIVATION_AUTHORITY",
   "validation": "LOCKED_UNCONSUMED"
 }
