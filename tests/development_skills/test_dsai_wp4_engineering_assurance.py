@@ -36,11 +36,16 @@ class DSAIWP4EngineeringAssuranceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "forbidden authority fields"):
             build_contract_proposal(logical_path="contracts/example.md", payload={"nested":{"authority_decision":"PASS"}})
 
-    def test_golden_git_dry_run_blocks_merge_force_push_and_history_rewrite(self) -> None:
+    def test_golden_git_dry_run_blocks_merge_force_push_and_binds_pr_to_vit(self) -> None:
         fresh = BaseFreshnessPolicy().assess(baseline_main_sha=A,current_main_sha=A,commit_distance=0,elapsed_minutes=1,dependency_or_write_overlap=False,mutating=True,merge_candidate=False)
         good = git_packet_dry_run(actions=["CREATE_BRANCH","COMMIT","PUSH","OPEN_PR"],paths=["src/ovc/x.py"],freshness=fresh)
         self.assertEqual(good["status"], "PASS")
         self.assertEqual(good["writes_performed"], [])
+        self.assertEqual(good["required_execution_substrate"], "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1")
+        self.assertFalse(good["branch_ref_authoritative"])
+        self.assertTrue(good["permanent_pr_planned"])
+        self.assertTrue(good["permanent_pr_requires_vit_lineage"])
+        self.assertFalse(good["direct_physical_main_candidate"])
         for action in ("MERGE","FORCE_PUSH","REWRITE_HISTORY"):
             blocked = git_packet_dry_run(actions=[action],paths=["src/ovc/x.py"],freshness=fresh)
             self.assertEqual(blocked["status"], "BLOCK")

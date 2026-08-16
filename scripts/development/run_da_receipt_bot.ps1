@@ -97,6 +97,7 @@ $contentRootFull = (Resolve-Path $ContentRoot).Path
 $activeProfilePath = Join-Path $repoRoot "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json"
 $decisionPath = Join-Path $repoRoot "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json"
 $evaluationPath = Join-Path $repoRoot "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_ACTIVATION_EVALUATION.json"
+$vitBuilderPath = Join-Path $repoRoot "tools/ci/build_vit_planned_lineage.py"
 
 if (-not $OutputDirectory) {
     if (-not $env:OVC_EXTERNAL_ARTIFACT_ROOT) { throw "Set OVC_EXTERNAL_ARTIFACT_ROOT or provide -OutputDirectory." }
@@ -165,6 +166,47 @@ foreach ($target in $targets) {
     $prepared += [pscustomobject]@{ path = $target.path; local_path = $localPath; sha256 = $digest }
 }
 
+$pythonCommand = Get-Command python -ErrorAction SilentlyContinue
+if ($null -eq $pythonCommand) { $pythonCommand = Get-Command python3 -ErrorAction SilentlyContinue }
+if ($null -eq $pythonCommand) { throw "Python is required for canonical VIT lineage construction." }
+if (-not (Test-Path -LiteralPath $vitBuilderPath -PathType Leaf)) { throw "Canonical VIT planned-lineage builder is missing." }
+$targetRows = [array]@($targets | ForEach-Object { @{ path = $_.path; content_sha256 = $_.content_sha256 } })
+$targetsJson = ConvertTo-Json -InputObject $targetRows -Compress -Depth 10
+$authoritySources = [array]@(
+    "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json",
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json"
+)
+$dependencies = [array]@(
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_RECEIPT_BOT_ACTIVE_PROFILE_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json"
+)
+$ownerBindings = [array]@("OVC-DEV-ACCEL-v0.1")
+$lineageArgs = @(
+    $vitBuilderPath,
+    "--repo", $repoRoot,
+    "--base", $packet.source_main_sha,
+    "--content-root", $contentRootFull,
+    "--targets-json", $targetsJson,
+    "--programme-id", "OVC-DEV-ACCEL-v0.1",
+    "--packet-id", $packet.packet_id,
+    "--plan-id", "OVC-DEV-ACCEL-IMPLEMENTATION-PLAN-0.1",
+    "--gate-id", "DA-G4B",
+    "--authority-class", "AUTO_EXECUTABLE",
+    "--authority-delta", "NONE",
+    "--authority-sources-json", (ConvertTo-Json -InputObject $authoritySources -Compress),
+    "--dependencies-json", (ConvertTo-Json -InputObject $dependencies -Compress),
+    "--owner-bindings-json", (ConvertTo-Json -InputObject $ownerBindings -Compress),
+    "--predecessor-requirement", "PHYSICAL_MATERIALISATION_REQUIRED",
+    "--completion-transition-json", '{"status":"PROPOSAL_CANDIDATE_READY"}'
+)
+$lineageRaw = @(& $pythonCommand.Source @lineageArgs 2>&1)
+if ($LASTEXITCODE -ne 0) { throw "VIT_LINEAGE_BUILD_FAILED: $($lineageRaw -join ' ')" }
+$lineagePlan = ($lineageRaw -join "`n") | ConvertFrom-Json -Depth 50
+if (-not $lineagePlan.vit_lineage_b64 -or -not $lineagePlan.expected_result_tree) { throw "VIT_LINEAGE_BUILD_FAILED: incomplete output." }
+$vitLineageB64 = [string]$lineagePlan.vit_lineage_b64
+$expectedResultTree = [string]$lineagePlan.expected_result_tree
+
 $appId = [int64]$env:OVC_RECEIPT_BOT_APP_ID
 $installationId = [int64]$env:OVC_RECEIPT_BOT_INSTALLATION_ID
 $appSlug = $env:OVC_RECEIPT_BOT_APP_SLUG
@@ -213,15 +255,22 @@ try {
         $written += @{ path = $target.path; content_sha256 = $target.sha256; commit_sha = $response.commit.sha; result = "WRITTEN" }
     }
 
+    $branchRef = Invoke-GitHubApi -Method GET -Uri "$api/repos/$Repository/git/ref/heads/$($packet.branch)" -Headers $headers -Body $null
+    $branchCommit = Invoke-GitHubApi -Method GET -Uri "$api/repos/$Repository/git/commits/$($branchRef.object.sha)" -Headers $headers -Body $null
+    if ($branchCommit.tree.sha -ne $expectedResultTree) {
+        throw "VIT_RESULT_TREE_MISMATCH: receipt-bot branch does not equal the canonical PIP prospective result tree."
+    }
+
     $owner = $Repository.Split('/')[0]
     $headQuery = [Uri]::EscapeDataString("$owner`:$($packet.branch)")
     $prs = @(Invoke-GitHubApi -Method GET -Uri "$api/repos/$Repository/pulls?state=open&head=$headQuery&base=main" -Headers $headers -Body $null)
     if ($prs.Count -gt 1) { throw "More than one open PR exists for the bounded bot branch." }
+    $prBody = "Bounded Development Acceleration receipt proposal. Bot merge and approval authority are permanently denied.`n`nVIT-Lineage-B64: $vitLineageB64"
     if ($prs.Count -eq 0) {
-        $pr = Invoke-GitHubApi -Method POST -Uri "$api/repos/$Repository/pulls" -Headers $headers -Body @{ title = $packet.pull_request_title; head = $packet.branch; base = "main"; body = "Bounded Development Acceleration receipt proposal. Bot merge and approval authority are permanently denied."; draft = $false }
+        $pr = Invoke-GitHubApi -Method POST -Uri "$api/repos/$Repository/pulls" -Headers $headers -Body @{ title = $packet.pull_request_title; head = $packet.branch; base = "main"; body = $prBody; draft = $false }
     }
     else {
-        $pr = Invoke-GitHubApi -Method PATCH -Uri "$api/repos/$Repository/pulls/$($prs[0].number)" -Headers $headers -Body @{ title = $packet.pull_request_title; body = "Bounded Development Acceleration receipt proposal. Bot merge and approval authority are permanently denied." }
+        $pr = Invoke-GitHubApi -Method PATCH -Uri "$api/repos/$Repository/pulls/$($prs[0].number)" -Headers $headers -Body @{ title = $packet.pull_request_title; body = $prBody }
     }
 
     $audit = [ordered]@{
@@ -232,6 +281,7 @@ try {
         work_packet_sha256 = $packetHash
         source_main_sha = $packet.source_main_sha
         branch = $packet.branch
+        branch_head_sha = $branchRef.object.sha
         pull_request_number = $pr.number
         pull_request_url = $pr.html_url
         app_slug = $appSlug
@@ -240,6 +290,13 @@ try {
         credential_kind = "GITHUB_APP_INSTALLATION_TOKEN"
         credential_persisted = $false
         files = $written
+        vit_route = "VIT_MANDATORY"
+        vit_pip_id = $lineagePlan.lineage.pip_id
+        vit_generation_id = $lineagePlan.lineage.generation_id
+        vit_placement_id = $lineagePlan.lineage.placement_id
+        vit_expected_result_tree = $expectedResultTree
+        vit_observed_result_tree = $branchCommit.tree.sha
+        vit_lineage_attached_to_pr = $true
         authority_active = $true
         merge_performed = $false
         approval_performed = $false

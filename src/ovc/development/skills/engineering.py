@@ -14,6 +14,7 @@ _FORBIDDEN_KEYS = {
 }
 _FORBIDDEN_GIT_ACTIONS = {"MERGE", "FORCE_PUSH", "REBASE_HISTORY", "REWRITE_HISTORY", "DELETE_HISTORY"}
 _ALLOWED_GIT_ACTIONS = {"CREATE_BRANCH", "STAGE_FILES", "COMMIT", "PUSH", "OPEN_PR", "UPDATE_PR"}
+_VIT_SUBSTRATE = "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1"
 
 
 def _walk_keys(value: Any) -> set[str]:
@@ -64,8 +65,20 @@ def classify_head_churn(**kwargs: Any) -> dict[str, Any]:
     return classify_main_head_movement(**kwargs)
 
 
+def _routing_fields(actions: Sequence[str]) -> dict[str, Any]:
+    permanent_pr_planned = any(action in {"OPEN_PR", "UPDATE_PR"} for action in actions)
+    return {
+        "required_execution_substrate": _VIT_SUBSTRATE,
+        "branch_ref_authoritative": False,
+        "permanent_pr_planned": permanent_pr_planned,
+        "permanent_pr_requires_vit_lineage": permanent_pr_planned,
+        "direct_physical_main_candidate": False,
+    }
+
+
 def git_packet_dry_run(*, actions: Sequence[str], paths: Sequence[str], freshness: Mapping[str, Any]) -> dict[str, Any]:
     normalized_actions = tuple(str(value).upper() for value in actions)
+    routing = _routing_fields(normalized_actions)
     forbidden = sorted(set(normalized_actions) & _FORBIDDEN_GIT_ACTIONS)
     unknown = sorted(set(normalized_actions) - _ALLOWED_GIT_ACTIONS - _FORBIDDEN_GIT_ACTIONS)
     if forbidden or unknown:
@@ -74,20 +87,20 @@ def git_packet_dry_run(*, actions: Sequence[str], paths: Sequence[str], freshnes
             "reason_codes":(["FORBIDDEN_GIT_ACTION"] if forbidden else []) + (["UNKNOWN_GIT_ACTION"] if unknown else []),
             "forbidden_actions":forbidden, "unknown_actions":unknown, "planned_actions":[],
             "merge_capability":"DISABLED_UNTRUSTED", "force_push":False, "history_rewrite":False,
-            "authority_effect":"NONE", "writes_performed":[],
+            "authority_effect":"NONE", "writes_performed":[], **routing,
         }
     if freshness.get("status") != "FRESH":
         return {
             "schema":"ovc-dsai-git-packet-dry-run/v1", "status":"BLOCK", "reason_codes":["REPREFLIGHT_REQUIRED"],
             "forbidden_actions":[], "unknown_actions":[], "planned_actions":[], "merge_capability":"DISABLED_UNTRUSTED",
-            "force_push":False, "history_rewrite":False, "authority_effect":"NONE", "writes_performed":[],
+            "force_push":False, "history_rewrite":False, "authority_effect":"NONE", "writes_performed":[], **routing,
         }
     normalized_paths = sorted({normalize_relative_path(value) for value in paths})
     return {
         "schema":"ovc-dsai-git-packet-dry-run/v1", "status":"PASS", "reason_codes":["DRY_RUN_ONLY"],
         "forbidden_actions":[], "unknown_actions":[], "planned_actions":list(normalized_actions), "paths":normalized_paths,
         "merge_capability":"DISABLED_UNTRUSTED", "force_push":False, "history_rewrite":False,
-        "authority_effect":"NONE", "writes_performed":[],
+        "authority_effect":"NONE", "writes_performed":[], **routing,
     }
 
 

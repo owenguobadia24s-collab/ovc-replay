@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-vit-routing-coverage-register/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","register_id","status","effective_scope","authority_effect","source_authority","route_classes","invariants","actuators","registered_pr_exceptions","unregistered_bypass_policy","rollback"],
+  "properties": {
+    "schema": {"const": "ovc-vit-routing-coverage-register/v1"},
+    "register_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["CORRECTIVE_IN_PROGRESS", "ACTIVE"]},
+    "effective_scope": {"const": "ALL_PERMANENT_DEVELOPMENT_INTEGRATION_CANDIDATES"},
+    "authority_effect": {"const": "NONE_SAFETY_CONFORMANCE_CORRECTION"},
+    "source_authority": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "route_classes": {"type": "array", "uniqueItems": true, "items": {"enum": ["VIT_MANDATORY","REGISTERED_EXCEPTION","UNLAWFUL"]}},
+    "invariants": {"type": "object", "minProperties": 1},
+    "actuators": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["actuator_id","surface","route_class","required_behavior"],
+        "properties": {
+          "actuator_id": {"type": "string", "minLength": 1},
+          "surface": {"type": "string", "minLength": 1},
+          "route_class": {"enum": ["VIT_MANDATORY","REGISTERED_EXCEPTION","UNLAWFUL"]},
+          "required_behavior": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "registered_pr_exceptions": {"type": "array", "items": {"type": "object"}},
+    "unregistered_bypass_policy": {"const": "FAIL_CLOSED"},
+    "rollback": {"type": "string", "minLength": 1}
+  }
+}
