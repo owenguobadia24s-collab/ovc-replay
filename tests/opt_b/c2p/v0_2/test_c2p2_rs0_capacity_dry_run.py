@@ -23,7 +23,10 @@ class C2P2RS0CapacityDryRunTests(unittest.TestCase):
         self.assertEqual(envelope["checkpoint_cadence_assertions"], 256)
         self.assertEqual(envelope["capacity_exceeded_disposition"], "FAIL_CLOSED_RETURN_TO_OPERATOR")
         self.assertTrue(all(value == "FORBIDDEN" for value in record["semantic_firewall"].values()))
-        print("C2P2_RS0_CAPACITY_DRY_RUN=" + json.dumps(record, sort_keys=True, separators=(",", ":")))
+        # Measurement phase only: fail once so the exact hosted-runner receipt is
+        # retained in CI logs. The packet replaces this sentinel with a normal PASS
+        # after materialising the measured receipt in repository evidence.
+        self.fail("C2P2_RS0_CAPACITY_MEASUREMENT_SENTINEL=" + json.dumps(record, sort_keys=True, separators=(",", ":")))
 
 
 if __name__ == "__main__":
