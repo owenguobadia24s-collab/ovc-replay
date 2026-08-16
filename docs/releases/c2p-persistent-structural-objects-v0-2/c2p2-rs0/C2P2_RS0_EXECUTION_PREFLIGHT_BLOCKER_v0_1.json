@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-c2p2-rs0-execution-preflight/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-EXECUTION",
+  "gate_authority": "C2P2-RS0-GRUN",
+  "gate_decision": "PASS",
+  "preflight_main": "c8273e8d15f5f77d86ec842b3eb7067fe0b67b8e",
+  "preflight_tree": "8328dabe411edf939a26aa6922267f2d4c3a62d9",
+  "intervening_main_review": {
+    "from": "296fef6a25406a0f638d69079e630e71db8beb7f",
+    "to": "c8273e8d15f5f77d86ec842b3eb7067fe0b67b8e",
+    "change": "DSAI3V_HISTORICAL_POST_MERGE_RECOVERY_DISPATCH_ONLY",
+    "effect_on_grun_bound_sources_candidates_population_capacity_artifact_root": "NONE_PATH_DISJOINT"
+  },
+  "status": "BLOCKED_PRE_LAUNCH",
+  "run_authority_consumed": false,
+  "run_count_remaining": 1,
+  "f0_a": "HOLD_UNCHANGED",
+  "validation": "LOCKED_UNCONSUMED",
+  "currentness": {
+    "grun_operator_decision_present": true,
+    "grun_scope": "ONE_BOUNDED_PREREGISTERED_COMPARATIVE_RUN",
+    "candidate_set": "A_B_C_COMPARATIVE_SET_ONLY_NO_WINNER",
+    "capacity_receipt_present": true,
+    "external_artifact_root_bound": true
+  },
+  "blocking_findings": [
+    {
+      "code": "RS0_REAL_SOURCE_ADAPTER_NOT_MATERIALISED",
+      "evidence": "src/ovc/opt_b/c2p_v0_2/adapters.py exposes read_synthetic_source only; no exact real-source C2/C2E RS0 adapter is materialised in the C2P v0.2 runtime namespace.",
+      "effect": "The approved real-source run cannot lawfully bind source records to C2P candidate extraction without inventing an implementation surface after the gate."
+    },
+    {
+      "code": "RS0_EXECUTION_HARNESS_NOT_MATERIALISED",
+      "evidence": "The C2P v0.2 runtime contains rs0_capacity.py and preparation/readiness tests, but no RS0 real-source execution runner/workflow or execution test surface is materialised.",
+      "effect": "There is no reproducible court-record mechanism to launch, checkpoint, seal, hash and complete the one-run token."
+    },
+    {
+      "code": "RS0_SOURCE_BYTES_NOT_REPRODUCIBLE_IN_CURRENT_EXECUTION_SURFACE",
+      "evidence": "The court record binds immutable upstream release identities and hashes, but this execution surface has no materialised source locator/read path capable of reproducing the exact 2021-2023 C2/C2E input population.",
+      "effect": "Launching by reconstruction, fallback, sampling or alternate source would violate the GRUN conditions."
+    }
+  ],
+  "authority_firewall": {
+    "objectpack_selection": "NONE",
+    "c2p_activation": "NONE",
+    "ec1_scientific_effect": "NONE",
+    "sampling": "FORBIDDEN",
+    "reduced_precision": "FORBIDDEN",
+    "population_change": "FORBIDDEN",
+    "publication_probability_risk_exposure_execution_agent_write": "NONE"
+  },
+  "smallest_lawful_resolution": [
+    "Materialise a bounded pre-launch RS0 execution-adapter packet that implements an exact read-only adapter for the frozen C2/C2E source contracts and an exact one-run harness with currentness, checkpoint, seal, hash, capacity and one-token consumption semantics.",
+    "Bind a reproducible execution-time locator for the exact already-authorised 2021-2023 source artifacts; no provider fallback or new intake.",
+    "Prove the adapter/harness with synthetic/adversarial fixtures and repository/VIT/GRT assurance without consuming the one-run real-source token.",
+    "Re-evaluate GRUN currentness after that prerequisite is on lawful main; if unchanged, launch the already-approved one-run generation."
+  ],
+  "rollback": "No real-source launch occurred and the one-run authority remains unconsumed. Forward-supersede this blocker only after the missing adapter, harness and reproducible source locator are materialised and assured. Preserve all GRUN, capacity and preparation evidence."
+}
