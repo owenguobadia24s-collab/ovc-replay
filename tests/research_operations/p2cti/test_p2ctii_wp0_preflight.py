@@ -77,5 +77,7 @@ def test_wp0_packet_is_vit_routed_and_has_no_authority_expansion():
     assert packet["acceptance"]["material_semantic_contradiction_found"] is False
     assert packet["acceptance"]["authority_inheritance_to_p2cti"] is False
     assert packet["blockers"] == []
+    assert packet["next_packet"] == "P2CTII-WP1"
     assert state["authority_delta"] == "NONE"
-    assert state["next_packet"] == "P2CTII-WP1"
+    completed = {item["packet_id"] for item in state.get("completed_packets", [])}
+    assert state["packet_id"] == "P2CTII-WP0" or "P2CTII-WP0" in completed

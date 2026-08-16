@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/p2cti/p2cti_inventory_v0_1.schema.json",
+  "title": "OVC P2CTI canonical inventory objects v0.1",
+  "oneOf": [
+    {"$ref": "#/$defs/Series"},
+    {"$ref": "#/$defs/Generation"},
+    {"$ref": "#/$defs/Entry"},
+    {"$ref": "#/$defs/GenerationManifest"}
+  ],
+  "$defs": {
+    "Hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "SourceLocator": {
+      "type": "object",
+      "required": ["provider", "locator"],
+      "properties": {
+        "provider": {"enum": ["REPOSITORY", "GOOGLE_DRIVE", "EXTERNAL_ARTIFACT"]},
+        "locator": {"type": "string", "minLength": 1},
+        "portable_parent_locator": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "OwnerRef": {
+      "type": "object",
+      "required": ["owner_programme", "object_type", "object_id", "semantic_generation", "source_path", "content_sha256", "authority_refs", "scientific_payload_copied"],
+      "properties": {
+        "owner_programme": {"type": "string", "minLength": 1},
+        "object_type": {"type": "string", "minLength": 1},
+        "object_id": {"type": "string", "minLength": 1},
+        "semantic_generation": {"type": "string", "minLength": 1},
+        "source_path": {"type": "string", "minLength": 1},
+        "content_sha256": {"$ref": "#/$defs/Hash"},
+        "authority_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "scientific_payload_copied": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "Series": {
+      "type": "object",
+      "required": ["schema_family", "schema_version", "object_type", "series_id", "lifecycle", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema_family": {"const": "P2CTI_INVENTORY"},
+        "schema_version": {"const": "0.1"},
+        "object_type": {"const": "PATH2_THEORY_INVENTORY_SERIES"},
+        "series_id": {"type": "string", "pattern": "^p2cti:series:[0-9a-f]{64}$"},
+        "lifecycle": {"enum": ["OPEN", "DORMANT", "TERMINATED"]},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"$ref": "#/$defs/Hash"}
+      },
+      "additionalProperties": false
+    },
+    "Generation": {
+      "type": "object",
+      "required": ["schema_family", "schema_version", "object_type", "generation_id", "series_id", "generation_ordinal", "member_entry_ids", "source_frontier_id", "completeness_state", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema_family": {"const": "P2CTI_INVENTORY"},
+        "schema_version": {"const": "0.1"},
+        "object_type": {"const": "PATH2_THEORY_INVENTORY_GENERATION"},
+        "generation_id": {"type": "string", "pattern": "^p2cti:generation:[0-9a-f]{64}$"},
+        "series_id": {"type": "string", "pattern": "^p2cti:series:[0-9a-f]{64}$"},
+        "generation_ordinal": {"type": "integer", "minimum": 0},
+        "member_entry_ids": {"type": "array", "items": {"type": "string", "pattern": "^p2cti:entry:[0-9a-f]{64}$"}, "uniqueItems": true},
+        "source_frontier_id": {"type": "string", "pattern": "^p2cti:frontier:[0-9a-f]{64}$"},
+        "completeness_state": {"enum": ["COMPLETE", "INCOMPLETE_BLOCKING", "UNRESOLVED"]},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"$ref": "#/$defs/Hash"}
+      },
+      "additionalProperties": false
+    },
+    "Entry": {
+      "type": "object",
+      "required": ["schema_family", "schema_version", "object_type", "entry_id", "series_id", "subject_id", "subject_class", "source_object_ref", "source_locator", "capture_state", "currentness_state", "authority_refs", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema_family": {"const": "P2CTI_INVENTORY"},
+        "schema_version": {"const": "0.1"},
+        "object_type": {"const": "PATH2_THEORY_INVENTORY_ENTRY"},
+        "entry_id": {"type": "string", "pattern": "^p2cti:entry:[0-9a-f]{64}$"},
+        "series_id": {"type": "string", "pattern": "^p2cti:series:[0-9a-f]{64}$"},
+        "subject_id": {"type": "string", "minLength": 1},
+        "subject_class": {"enum": ["EXTERNAL_THEORY_RECORD", "IN_HOUSE_THEORY_RECORD", "ARCHITECTURE_NEED_SEED"]},
+        "source_object_ref": {"$ref": "#/$defs/OwnerRef"},
+        "source_locator": {"$ref": "#/$defs/SourceLocator"},
+        "capture_state": {"enum": ["SOURCE_BOUND", "SOURCE_BOUND_WITH_LIMITATION", "SOURCE_MISSING"]},
+        "currentness_state": {"enum": ["CURRENT", "CURRENT_WITH_LIMITATION", "REASSESSMENT_REQUIRED", "SOURCE_GENERATION_ADVANCED", "AUTHORITY_FRONTIER_CHANGED", "HISTORICAL", "UNRESOLVED"]},
+        "authority_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"$ref": "#/$defs/Hash"}
+      },
+      "additionalProperties": false
+    },
+    "GenerationManifest": {
+      "type": "object",
+      "required": ["schema_family", "schema_version", "object_type", "manifest_id", "generation_id", "entry_content_sha256", "source_frontier_id", "generation_root_sha256", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema_family": {"const": "P2CTI_INVENTORY"},
+        "schema_version": {"const": "0.1"},
+        "object_type": {"const": "P2CTI_GENERATION_MANIFEST"},
+        "manifest_id": {"type": "string", "pattern": "^p2cti:generation_manifest:[0-9a-f]{64}$"},
+        "generation_id": {"type": "string", "pattern": "^p2cti:generation:[0-9a-f]{64}$"},
+        "entry_content_sha256": {"type": "array", "items": {"$ref": "#/$defs/Hash"}, "uniqueItems": true},
+        "source_frontier_id": {"type": "string", "pattern": "^p2cti:frontier:[0-9a-f]{64}$"},
+        "generation_root_sha256": {"$ref": "#/$defs/Hash"},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"$ref": "#/$defs/Hash"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

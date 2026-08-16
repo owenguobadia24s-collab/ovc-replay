@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/p2cti/p2cti_source_frontier_v0_1.schema.json",
+  "title": "OVC P2CTI source-frontier and bootstrap manifests v0.1",
+  "oneOf": [
+    {"$ref": "#/$defs/SourceFrontierManifest"},
+    {"$ref": "#/$defs/BootstrapMigrationManifest"}
+  ],
+  "$defs": {
+    "Hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "SourceBinding": {
+      "type": "object",
+      "required": ["owner_programme", "source_ref", "source_sha256", "semantic_generation", "authority_refs", "required"],
+      "properties": {
+        "owner_programme": {"type": "string", "minLength": 1},
+        "source_ref": {"type": "string", "minLength": 1},
+        "source_sha256": {"$ref": "#/$defs/Hash"},
+        "semantic_generation": {"type": "string", "minLength": 1},
+        "authority_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "required": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "SourceFrontierManifest": {
+      "type": "object",
+      "required": ["schema_family", "schema_version", "object_type", "frontier_id", "source_bindings", "completeness_state", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema_family": {"const": "P2CTI_SOURCE_FRONTIER"},
+        "schema_version": {"const": "0.1"},
+        "object_type": {"const": "P2CTI_SOURCE_FRONTIER_MANIFEST"},
+        "frontier_id": {"type": "string", "pattern": "^p2cti:frontier:[0-9a-f]{64}$"},
+        "source_bindings": {"type": "array", "items": {"$ref": "#/$defs/SourceBinding"}, "minItems": 1},
+        "completeness_state": {"enum": ["COMPLETE", "INCOMPLETE_BLOCKING", "UNRESOLVED"]},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"$ref": "#/$defs/Hash"}
+      },
+      "additionalProperties": false
+    },
+    "BootstrapMigrationManifest": {
+      "type": "object",
+      "required": ["schema_family", "schema_version", "object_type", "manifest_id", "source_census_ref", "source_census_sha256", "expected_total", "expected_class_counts", "entry_ids", "no_scientific_payload_rewrite", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema_family": {"const": "P2CTI_SOURCE_FRONTIER"},
+        "schema_version": {"const": "0.1"},
+        "object_type": {"const": "P2CTI_BOOTSTRAP_MIGRATION_MANIFEST"},
+        "manifest_id": {"type": "string", "pattern": "^p2cti:bootstrap_manifest:[0-9a-f]{64}$"},
+        "source_census_ref": {"type": "string", "minLength": 1},
+        "source_census_sha256": {"$ref": "#/$defs/Hash"},
+        "expected_total": {"const": 30},
+        "expected_class_counts": {
+          "type": "object",
+          "required": ["EXTERNAL_THEORY_RECORD", "IN_HOUSE_THEORY_RECORD", "ARCHITECTURE_NEED_SEED"],
+          "properties": {
+            "EXTERNAL_THEORY_RECORD": {"const": 7},
+            "IN_HOUSE_THEORY_RECORD": {"const": 19},
+            "ARCHITECTURE_NEED_SEED": {"const": 4}
+          },
+          "additionalProperties": false
+        },
+        "entry_ids": {"type": "array", "items": {"type": "string", "pattern": "^p2cti:entry:[0-9a-f]{64}$"}, "minItems": 30, "maxItems": 30, "uniqueItems": true},
+        "no_scientific_payload_rewrite": {"const": true},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"$ref": "#/$defs/Hash"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
