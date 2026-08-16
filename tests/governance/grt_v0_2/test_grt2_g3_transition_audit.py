@@ -11,7 +11,7 @@ from ovc.programme_genesis.grt_v0_2.g3_readiness import reconcile_observer_trans
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def test_current_repository_transition_audit_is_reproducible(capsys) -> None:
+def test_current_repository_transition_audit_proves_g3_zero_prerequisite() -> None:
     baseline = build_repository_topology(ROOT, ref=B0_SOURCE_COMMIT)
     current = build_repository_topology(ROOT, ref="HEAD")
     assert baseline["topology_sha256"] == B0_TOPOLOGY_SHA256
@@ -20,6 +20,11 @@ def test_current_repository_transition_audit_is_reproducible(capsys) -> None:
         baseline_topology=baseline,
         current_topology=current,
     )
-    print("GRT2_G3_TRANSITION_AUDIT=" + json.dumps(result, sort_keys=True))
     assert result["baseline_observer_condition_count"] == 569
     assert result["current_commit"] == current["portfolio"]["source_commit"]
+    # G3 may not be presented while either zero claim remains unproved.  The
+    # complete source-backed diagnostic is attached to a failure so the packet
+    # can repair/classify the exact conditions rather than weakening the gate.
+    diagnostic = json.dumps(result, sort_keys=True)
+    assert result["transition_debt_zero_proven"] is True, diagnostic
+    assert result["baseline_expansion_zero_proven"] is True, diagnostic
