@@ -108,7 +108,7 @@ def build_research_coverage_matrix(
             "eligible_item_denominator": len(rows),
             "rows": _stable(rows),
             "source_native": True,
-            "synthetic_completeness_score_forbidden": True,
+            "synthetic_scalar_summary_forbidden": True,
         }
     )
     return _finish(model)
