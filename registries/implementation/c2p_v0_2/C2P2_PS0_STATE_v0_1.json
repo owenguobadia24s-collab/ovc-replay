@@ -4,7 +4,7 @@
   "parent_programme_id": "OVC-C2P-PERSISTENT-STRUCTURAL-OBJECTS-CONFORMANCE-v0.2",
   "plan_id": "C2P2-PS0-OBJECTPACK-SCIENCE-PROGRAMME-v0.1",
   "plan_version": "0.1",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "packet_id": "C2P2-PS0-GSELECT",
   "prerequisites": [
     "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
@@ -15,39 +15,47 @@
     "C2P2-PS0-WP3_COMPLETED",
     "C2P2-PS0-WP4_COMPLETED",
     "FINAL_HEAD_ASSURANCE_PASS",
-    "QA_PASS"
+    "QA_PASS",
+    "C2P2-PS0-GSELECT_OPERATOR_PASS"
   ],
-  "authority_required": "OPERATOR_REQUIRED_AT_C2P2_PS0_GSELECT",
-  "authority_delta": "RS0_PREPARATION_CANDIDATE_SET_ONLY",
+  "authority_required": "SATISFIED_BY_OPERATOR_GSELECT_PASS",
+  "authority_delta": "RS0_PREPARATION_COMPARATIVE_SET_ONLY",
   "baseline_commit": "fff6bf2f8ed13060dba5030db3b62da992d5fb94",
   "branch": "programme/c2p2-ps0-objectpack-science-r3",
-  "candidate_commit": "939ecd891a866e86c7b7da49a27aaacf9a5b8c23",
+  "candidate_commit": "57832d012f97bf1ac72eb57928d82913f0dafc5b",
   "tests": [
-    "tests workflow 31920165715 PASS",
-    "tiered/profile/SIQ/merge-readiness workflow 31920165879 PASS"
+    "tests workflow 31934226840 PASS",
+    "tiered/profile/SIQ/merge-readiness workflow 31934226829 PASS",
+    "RENEW_AFTER_DECISION_COMMIT_REQUIRED"
   ],
   "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_QA_PACKET_v0_1.json",
   "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_GSELECT_PACKET_v0_1.json",
   "merge_commit": null,
   "blockers": [],
-  "next_packet": "C2P2-RS0-PREPARATION_AFTER_OPERATOR_GSELECT_PASS",
+  "next_packet": "C2P2-RS0-PREPARATION",
   "research_question_id": "C2P2-PS0-RQ1",
-  "research_question": "Under the current GBPUSD descriptive research envelope, what first-valid, observable and deterministic conditions are sufficient to assert that separated or evolving C2/C2E structural observations concern the same persistent structural object, rather than a distinct object, recurrence, split/merge descendant, or unresolved ambiguity, without using outcomes, family labels, downstream semantics, future information, or Validation?",
   "candidate_object_packs": [
     "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
     "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
     "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
   ],
-  "selection_state": "NONE_SELECTED",
+  "selection_state": "COMPARATIVE_SET_APPROVED_FOR_RS0_PREPARATION_ONLY",
   "authority": {
-    "c2p_runtime": "NONE",
+    "c2p_runtime": "SHADOW_SIDECAR_ONLY",
     "active_object_pack": null,
     "candidate_object_pack_design": "ALLOWED_ACTIVATION_INELIGIBLE",
-    "real_source_c2p_replay": "DENIED_UNTIL_C2P2_RS0_OPERATOR_RUN_AUTHORITY",
-    "selector_threshold_semantic_promotion": "DENIED_UNTIL_C2P2_PS0_GSELECT_OPERATOR_DECISION",
+    "rs0_preparation": "AUTHORISED_COMPARATIVE_SET_ONLY",
+    "real_source_c2p_replay": "DENIED_UNTIL_SEPARATE_C2P2_RS0_OPERATOR_RUN_AUTHORITY",
+    "selector_threshold_semantic_promotion": "DENIED",
+    "ec1_scientific_authority": "UNCHANGED",
     "reconciliation_referent_runtime": "DEFERRED_FUTURE_C2P2_RR0",
     "validation": "LOCKED_UNCONSUMED",
     "publication_probability_risk_exposure_execution_agent_write": "NONE"
   },
-  "mandatory_stop": "C2P2-PS0-GSELECT"
+  "operator_decision": {
+    "decision": "PASS_COMPARATIVE_SET_TO_RS0_PREPARATION_ONLY",
+    "constraints": ["EC1_SCIENTIFIC_AUTHORITY_UNCHANGED", "C2P_SHADOW_SIDECAR_ONLY"],
+    "time": "2026-08-16T09:14:00+01:00"
+  },
+  "mandatory_stop": "C2P2-RS0-REAL-SOURCE-RUN-AUTHORITY"
 }
