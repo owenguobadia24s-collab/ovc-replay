@@ -243,31 +243,44 @@ def test_wp10_fixture_families_cover_ratified_zero_tolerance_and_historical_case
     assert canonical_sha256(cases)
 
 
-def test_wp10_gate_state_and_review_request_preserve_blocking_boundaries() -> None:
+def test_wp10_gate_state_and_independent_review_closeout_preserve_activation_boundary() -> None:
     gate = load(WP10 / "ATLAS_G10_GATE_PACKET.json")
     qa = load(WP10 / "ATLAS_WP10_QA_PACKET.json")
     request = load(WP10 / "ATLAS_WP10_INDEPENDENT_REVIEW_REQUEST.json")
+    review = load(WP10 / "ATLAS_WP10_INDEPENDENT_REVIEW_RECORD.json")
+    binding = load(ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_v0_1.json")
     activation = load(WP10 / "ATLAS_G_OBSERVABILITY_ACTIVATE_PACKET.json")
     authority = load(WP10 / "ATLAS_WP10_VIT_AUTHORITY_MANIFEST.json")
     dependency = load(WP10 / "ATLAS_WP10_VIT_DEPENDENCY_FRONTIER.json")
     state = load(ROOT / "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json")
     pointer = load(ROOT / "registries/implementation/system_atlas_v0_1/CURRENT_STATE_POINTER.json")
     policy = load(ROOT / "registries/system_atlas/ATLAS_GENERATION_POLICY_REGISTRY_v0_1.json")
-    assert gate["decision"] == "NOT_YET_ELIGIBLE_FOR_AUTO_PASS"
-    assert gate["acceptance_results"]["Q6_IND"] == "PENDING"
-    assert gate["terminal_state_claimed"] is False
-    assert qa["qa_recommendation"] == "PASS_Q0_Q6_REQUEST_Q6_IND_DO_NOT_RATIFY_G10"
-    assert qa["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_IMPLEMENTATION_GOVERNANCE_SECURITY_VISUAL_OPERATIONAL_REVIEW_PASS_REQUIRED"]
-    assert request["status"] == "OPEN_BLOCKING"
-    assert request["reviewer_eligibility"]["self_review"] == "FORBIDDEN"
-    assert activation["status"] == "INELIGIBLE_NOT_PRESENTED_FOR_DECISION"
+    final_report = load(WP10 / "ATLAS_WP10_FINAL_QUALIFICATION_REPORT.json")
+    assert gate["decision"] == "PASS"
+    assert gate["ratification_class"] == "DELEGATED_AUTO_RATIFICATION"
+    assert gate["acceptance_results"]["Q6_IND"] == "PASS_ELIGIBLE_INDEPENDENT_REVIEW"
+    assert gate["terminal_state_claimed"] is True
+    assert qa["qa_recommendation"] == "PASS_Q6_IND_AUTO_RATIFY_G10_INTEGRATE_THEN_STOP_AT_OPERATOR_ACTIVATION_GATE"
+    assert qa["blockers"] == []
+    assert request["status"] == "COMPLETED_PASS"
+    assert request["review_output"]["decision"] == "PASS_ELIGIBLE_INDEPENDENT_REVIEW"
+    assert review["verdict"] == "PASS"
+    assert review["blocking_findings"] == []
+    assert all(row["result"] == "PASS" for row in review["scope_results"])
+    assert binding["reviewer_role"] == "ELIGIBLE_INDEPENDENT_IMPLEMENTATION_STAGE_REVIEWER"
+    assert binding["no_self_review"] is True
+    assert binding["operator_substitution"] is False
+    validate(final_report, "atlas_qualification_report_v0_1.schema.json")
+    assert final_report["report_hash"] == canonical_sha256({key: value for key, value in final_report.items() if key != "report_hash"})
+    assert final_report["status"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"
+    assert activation["status"] == "GATE_READY_OPERATOR_REQUIRED_AFTER_G10_INTEGRATION"
     assert activation["operator_decision"] is None
-    assert activation["operational_reliance"] == "DENIED"
+    assert activation["operational_reliance"] == "DENIED_PENDING_OPERATOR_DECISION"
     assert authority["logical_id"] == canonical_sha256(authority["payload"])
     assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
-    assert state["status"] == pointer["status"] == "ATLAS_WP10_Q0_Q6_PASS_Q6_IND_PENDING"
-    assert state["next_packet"] == pointer["next_packet"] == "ATLAS-WP10-Q6-IND"
-    assert state["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_PASS_REQUIRED"]
+    assert state["status"] == pointer["status"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"
+    assert state["next_packet"] == pointer["next_packet"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
+    assert state["blockers"] == []
     assert policy["status"] == "FROZEN_ATLAS_G10"
     assert policy["retention"] == "FROZEN_ATLAS_RETENTION_BUDGET_REPORT_ONLY_NO_DELETE"
     assert not (ROOT.parent.parent / "ovc-replay-external-artifacts/system_atlas/generations/CURRENT.json").exists()
