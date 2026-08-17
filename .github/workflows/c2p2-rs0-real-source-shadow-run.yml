@@ -3,7 +3,7 @@ name: C2P2 RS0 real-source shadow run
 on:
   push:
     branches:
-      - run/c2p2-rs0-real-source-shadow-20260817
+      - run/c2p2-rs0-real-source-shadow-novit-20260817
     paths:
       - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_TRIGGER_v0_1.json
 
@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 350
     env:
       PYTHONPATH: src
-      C2P2_RS0_BASELINE_COMMIT: 566903dcdde4fcc0aa6ab43a95bc36b947fafa15
+      C2P2_RS0_BASELINE_COMMIT: 18799275f25d11392343bf93e35c7b916fc02c92
       RESULT_DIR: /tmp/c2p2-rs0-real-source-shadow-result
       SOURCE_DIR: /tmp/c2p2-rs0-current-source
     steps:
@@ -33,10 +33,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install repository
-        run: python -m pip install -e .
+      - name: Install repository and targeted test dependency
+        run: python -m pip install -e ".[test]"
 
-      - name: Verify exact trigger and fresh single-use authority
+      - name: Verify exact trigger, no-VIT operator override and fresh single-use authority
         run: |
           set -euo pipefail
           python - <<'PY'
@@ -51,6 +51,11 @@ jobs:
           assert trigger['run_count'] == 1
           assert trigger['selection_state'] == 'NONE_SELECTED'
           assert trigger['activation_state'] == 'NONE'
+          assert trigger['operator_override_ref'] == 'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_NOVIT_OPERATOR_OVERRIDE_v0_1.json'
+          override = json.loads(Path(trigger['operator_override_ref']).read_text())
+          assert override['decision'] == 'PASS'
+          assert override['vit']['required_for_this_execution_branch'] is False
+          assert override['vit']['permanent_main_integration_authority'] == 'NOT_GRANTED_BY_THIS_OVERRIDE'
           PY
           python scripts/c2p2_rs0_real_source_shadow.py validate-repo-bindings --repo-root .
 
