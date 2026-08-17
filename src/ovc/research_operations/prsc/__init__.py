@@ -42,6 +42,16 @@ from .temporal import (
     leave_one_block_out_support,
     within_discovery_forward_support,
 )
+from .boundary import (
+    build_boundary_challenge_pack,
+    build_boundary_preserving_control,
+    build_c2e_internal_variant_correspondence,
+    build_episode_partition_correspondence,
+    build_morphology_invariant_core,
+    build_tolerance_contract,
+    fit_blind_independent_segmentation,
+    match_boundaries_one_to_one,
+)
 
 __all__ = [
     "CHALLENGE_DIMENSIONS", "PRSCContractError", "adapt_ec1_record",
@@ -56,4 +66,9 @@ __all__ = [
     "build_context_challenge_pack", "build_temporal_challenge_pack",
     "build_temporal_context_stability_matrix", "build_temporal_support_profile",
     "leave_one_block_out_support", "within_discovery_forward_support",
+    "build_boundary_challenge_pack", "build_boundary_preserving_control",
+    "build_c2e_internal_variant_correspondence",
+    "build_episode_partition_correspondence", "build_morphology_invariant_core",
+    "build_tolerance_contract", "fit_blind_independent_segmentation",
+    "match_boundaries_one_to_one",
 ]
