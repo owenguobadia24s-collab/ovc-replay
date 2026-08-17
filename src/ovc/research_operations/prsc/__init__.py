@@ -52,6 +52,15 @@ from .boundary import (
     fit_blind_independent_segmentation,
     match_boundaries_one_to_one,
 )
+from .multiplicity import (
+    build_hypothesis_family_registry,
+    build_multiplicity_method_pack,
+    build_shared_family_reference_draws,
+    build_specification_opportunity_ledger,
+    collapse_exact_semantic_duplicates,
+    enforce_review_capacity,
+    step_down_max_statistic_adjustment,
+)
 
 __all__ = [
     "CHALLENGE_DIMENSIONS", "PRSCContractError", "adapt_ec1_record",
@@ -70,5 +79,8 @@ __all__ = [
     "build_c2e_internal_variant_correspondence",
     "build_episode_partition_correspondence", "build_morphology_invariant_core",
     "build_tolerance_contract", "fit_blind_independent_segmentation",
-    "match_boundaries_one_to_one",
+    "match_boundaries_one_to_one", "build_hypothesis_family_registry",
+    "build_multiplicity_method_pack", "build_shared_family_reference_draws",
+    "build_specification_opportunity_ledger", "collapse_exact_semantic_duplicates",
+    "enforce_review_capacity", "step_down_max_statistic_adjustment",
 ]
