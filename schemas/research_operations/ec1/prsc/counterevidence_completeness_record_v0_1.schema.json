@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC CounterevidenceCompletenessRecord v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "ovc-prsc-counterevidence-completeness-record/v0.1"},
+    "counterevidence_completeness_id": {"type": "string", "minLength": 1},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "required_categories": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "evidence_by_category": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}},
+    "missing_categories": {"type": "array", "items": {"type": "string"}},
+    "complete": {"type": "boolean"},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": ["schema", "counterevidence_completeness_id", "candidate_ref", "required_categories", "evidence_by_category", "missing_categories", "complete", "authority_effect"]
+}
