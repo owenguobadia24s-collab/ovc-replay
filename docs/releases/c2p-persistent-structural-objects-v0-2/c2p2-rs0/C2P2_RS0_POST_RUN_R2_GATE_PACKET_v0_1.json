@@ -1,62 +1,145 @@
 {
-  "active_object_pack_id": null,
-  "c2p_activation": "NONE",
-  "candidate_results": [
-    {
-      "activation_state": "NONE",
-      "candidate_id": "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3",
-      "candidate_logical_hash": "a8cb003521c62129044a4d62cb9a4d5a967cd3ef9d933fb1090ac4dad0843102",
-      "completed_at": "2026-08-17T21:26:11Z",
-      "detail": "RS0_SPOOLED_SOURCE_STREAM_NONMONOTONIC:0",
-      "memory_limit_bytes": 1160593408,
-      "partial_spool_database_bytes": 65536,
-      "partial_spool_disposition": "DELETED_AFTER_FAILURE_RECEIPT_TO_RESPECT_STORAGE_ENVELOPE",
-      "peak_rss_bytes": 23281664,
-      "reason": "RS0SpooledRuntimeError",
-      "schema": "ovc-c2p2-rs0-real-source-candidate-r2-summary/v1",
-      "selection_state": "NONE_SELECTED",
-      "started_at": "2026-08-17T21:26:11Z",
-      "status": "EXECUTION_FAILURE_FAIL_CLOSED",
-      "storage_limit_bytes": 6411935744,
-      "wall_seconds": 0.015337434999999289
-    },
-    {
-      "activation_state": "NONE",
-      "candidate_id": "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3",
-      "candidate_logical_hash": "a91f50c12438c4d5263d36b48e40acc0a5e146b474307721a4108ac2398a752e",
-      "schema": "ovc-c2p2-rs0-real-source-candidate-r2-summary/v1",
-      "selection_state": "NONE_SELECTED",
-      "status": "NOT_RUN_FAIL_CLOSED_AFTER_PRIOR_CANDIDATE_FAILURE"
-    },
-    {
-      "activation_state": "NONE",
-      "candidate_id": "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3",
-      "candidate_logical_hash": "29f8ac9a5844b425901fda90299f911a48a85422a390771753ffd5b894b1c52c",
-      "schema": "ovc-c2p2-rs0-real-source-candidate-r2-summary/v1",
-      "selection_state": "NONE_SELECTED",
-      "status": "NOT_RUN_FAIL_CLOSED_AFTER_PRIOR_CANDIDATE_FAILURE"
-    }
+  "schema": "ovc-c2p2-rs0-post-run-r2-gate-packet/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2",
+  "gate_id": "C2P2-RS0-RUN-RECOVERY-R2",
+  "gate_classification": "OPERATOR_REQUIRED",
+  "status": "GATE_READY",
+  "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
+  "plan_version": "0.1",
+  "baseline_main_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
+  "approval_lineage_commit": "2b532a8a1843f7ea52b614a546a5c921c7f1c56c",
+  "trigger_commit": "4146441ee35ac4310ad0a6a20ca9d0d6a676f52d",
+  "run_evidence_commit": "1b6c3d1045ffcdcfe7ddd6af27a1b5857929f180",
+  "diagnosis_commit": "3175b8e609d3112bc03c54871010b44e4de6a056",
+  "candidate_evidence_pre_gate_tip": "e663d01d6a8d392a0bcc40572ba0e9d49337f741",
+  "completed_packets": [
+    "C2P2-RS0-REAL-SOURCE-SHADOW-RUN",
+    "C2P2-RS0-RUN-RECOVERY",
+    "C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION",
+    "C2P2-RS0-FRESH-GRUN-R2",
+    "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2"
   ],
   "current_authority": "R2_SINGLE_USE_CONSUMED_NO_SELECTION_NO_ACTIVATION",
-  "exact_work_after_approval": "Authorise a separately bounded recovery generation before any further real-source execution.",
-  "f0_a": "HOLD",
-  "gate_classification": "OPERATOR_REQUIRED",
-  "gate_id": "C2P2-RS0-RUN-RECOVERY-R2",
-  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2",
-  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
-  "publication_probability_risk_exposure_trading_execution_agent_write": "NONE",
-  "recommended_decision": "BLOCK",
-  "rollback": "FORWARD_ONLY_PRESERVE_R2_AUTHORITY_CONSUMPTION_AND_ALL_COMPACT_RUN_EVIDENCE",
-  "run_result_sha256": "df938a4e1d01da0f3d1b92fa44e726fea1239ddd301088ff9c96734cca8ccc0f",
-  "run_status": "BLOCKED_EXECUTION_FAILURE_SINGLE_USE_CONSUMED",
-  "schema": "ovc-c2p2-rs0-post-run-r2-gate-packet/v1",
-  "selection_state": "NONE_SELECTED_INCOMPLETE_RUN",
-  "status": "GATE_READY",
-  "unresolved_issues": [
-    "R2 comparative run did not complete; no scientific selection is permitted."
+  "run_evaluation": "BLOCKED_EXECUTION_FAILURE_SINGLE_USE_CONSUMED",
+  "proposed_authority_delta": {
+    "decision_scope": "EXECUTION_ADAPTER_SOURCE_SEQUENCING_ONLY",
+    "effect_if_pass": "AUTHORISE_BOUNDED_DETERMINISTIC_SOURCE_ORDER_ADAPTER_RECOVERY_ONLY",
+    "real_source_execution_during_recovery": "FORBIDDEN",
+    "fresh_real_source_run_authority": "NONE",
+    "post_recovery_requirement": "C2P2-RS0-FRESH-GRUN-R3_OPERATOR_REQUIRED_BEFORE_ANY_REAL_SOURCE_RERUN",
+    "source_population": "EXACT_UNCHANGED",
+    "source_artifact": "EXACT_UNCHANGED",
+    "candidate_generation": "EXACT_UNCHANGED_V3",
+    "core_runtime_semantics": "EXACT_UNCHANGED",
+    "predicates_and_thresholds": "EXACT_UNCHANGED",
+    "capacity_limits": "EXACT_UNCHANGED",
+    "selection": "NONE",
+    "activation": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "f0_a": "HOLD",
+    "publication_probability_risk_exposure_trading_execution_agent_write": "NONE"
+  },
+  "acceptance_conditions": [
+    "Preserve the exact authorised source population, source artifact identity and all prior run evidence.",
+    "Preserve Candidate Generation v3 and Candidate A/B/C identities without promotion, selection or mutation.",
+    "Preserve frozen core runtime semantics, predicates and thresholds.",
+    "Do not mutate source rows, sample, reduce precision, change population, or change ObjectPack/candidate semantics.",
+    "Canonicalise only bounded equal-first_valid_time groups deterministically by source_record_id before k-way source merge.",
+    "Prove no row loss, duplication or identity mutation across source-order canonicalisation.",
+    "Prove exact A/B/C core-runtime equivalence on adversarial fixtures containing unsorted equal-time source_record_id ties.",
+    "Continue to fail closed on duplicate source IDs and genuinely decreasing first_valid_time streams.",
+    "Re-prove full-cardinality synthetic capacity inside the unchanged 1160593408-byte memory and 6411935744-byte storage limits.",
+    "Perform exact current-source ordering-only preflight without scientific semantic execution or real-source token consumption.",
+    "Keep ObjectPack selection NONE, C2P activation NONE, Validation LOCKED_UNCONSUMED and F0-A HOLD."
   ],
-  "validation": "LOCKED_UNCONSUMED",
+  "tests_and_qa": {
+    "r2_pre_source_targeted_assurance": "PASS",
+    "r2_live_main_and_frozen_scientific_currentness": "PASS",
+    "r2_exact_authorised_source_prefight": "PASS",
+    "r2_semantic_execution": "FAIL_CLOSED_ON_CANDIDATE_A_RS0_SPOOLED_SOURCE_STREAM_NONMONOTONIC_0",
+    "r2_candidate_a_peak_rss_bytes": 23281664,
+    "r2_capacity_classification": "NOT_CAPACITY_FAILURE",
+    "r2_source_artifact_read_only_diagnosis": "PASS_ROOT_CAUSE_IDENTIFIED_ON_BOTH_ASK_AND_BID_AT_EQUAL_FIRST_VALID_TIME_TIES",
+    "prior_recovery_reference_semantics": "PASS_EXACT_FIXTURE_EQUIVALENCE_A_B_C",
+    "prior_recovery_repository_regression": "PASS_4075_PASSED_2_SKIPPED_687_SUBTESTS",
+    "prior_recovery_full_cardinality_synthetic_capacity": "PASS"
+  },
+  "diagnosis": {
+    "ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R2_DIAGNOSIS_v0_1.json",
+    "classification": "SOURCE_ORDER_ADAPTER_CONTRACT_MISMATCH",
+    "root_cause": "The qualified spooled adapter requires each input C2 stream to be strictly canonical by (first_valid_time, source_record_id), but the exact authorised ASK and BID files contain equal-first_valid_time groups whose source_record_id order is not lexicographically increasing.",
+    "qualification_gap": "Canonical multi-source merge qualification covered individually canonical fixture streams and did not include adversarial equal-time unsorted source_record_id ties.",
+    "scientific_objectpack_failure": false,
+    "capacity_failure": false,
+    "candidate_or_predicate_failure_inferred": false
+  },
+  "candidate_results": [
+    {
+      "candidate_id": "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3",
+      "status": "EXECUTION_FAILURE_FAIL_CLOSED",
+      "reason": "RS0SpooledRuntimeError",
+      "detail": "RS0_SPOOLED_SOURCE_STREAM_NONMONOTONIC:0",
+      "peak_rss_bytes": 23281664,
+      "partial_spool_database_bytes": 65536,
+      "selection_state": "NONE_SELECTED",
+      "activation_state": "NONE"
+    },
+    {
+      "candidate_id": "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3",
+      "status": "NOT_RUN_FAIL_CLOSED_AFTER_PRIOR_CANDIDATE_FAILURE",
+      "selection_state": "NONE_SELECTED",
+      "activation_state": "NONE"
+    },
+    {
+      "candidate_id": "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3",
+      "status": "NOT_RUN_FAIL_CLOSED_AFTER_PRIOR_CANDIDATE_FAILURE",
+      "selection_state": "NONE_SELECTED",
+      "activation_state": "NONE"
+    }
+  ],
   "warnings": [
-    "Whole-population candidate streams were hashed and reduced to deterministic scientific-review aggregates; ephemeral SQLite spools were deleted after each completed candidate to remain inside the frozen external-storage envelope."
-  ]
+    "The R2 semantic execution launch consumed AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.3; run_count_remaining is zero.",
+    "Candidate A failed immediately on the adapter source-order guard; Candidates B and C were not run.",
+    "No valid A/B/C comparative scientific result exists, so no winner, selection, promotion or activation may be inferred.",
+    "The prior synthetic recovery qualification did not reproduce the authorised source files' equal-time tie ordering and therefore missed this integration defect."
+  ],
+  "unresolved_issues": [
+    "The pre-canonical source-stream assumption in the qualified spooled adapter is incompatible with the exact authorised source ordering within equal timestamps."
+  ],
+  "changed_court_record_paths": [
+    ".github/workflows/c2p2-rs0-real-source-shadow-run-r2.yml",
+    "scripts/c2p2_rs0_real_source_shadow_r2.py",
+    "src/ovc/opt_b/c2p_v0_2/rs0_empirical_runtime_streaming.py",
+    "registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1.json",
+    "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_3.json",
+    "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_2.json",
+    "registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_R2_OPERATOR_DECISION_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_PACKET_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_TRIGGER_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_RESULT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_ARTIFACT_BINDING_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R2_DIAGNOSIS_v0_1.json"
+  ],
+  "external_artifacts": {
+    "r2_github_actions_run_id": 32071039793,
+    "r2_github_actions_artifact_id": 9301726866,
+    "r2_artifact_sha256": "2701239580ad8d5ad5787dbb3368ef56692b0bc55933023f5c85db957bd61003",
+    "r2_durable_drive_folder_id": "1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv",
+    "r2_durable_drive_file_id": "1qcT_fYMqUlZhkUjOfahQTooiKER3QZux",
+    "r2_run_result_sha256": "df938a4e1d01da0f3d1b92fa44e726fea1239ddd301088ff9c96734cca8ccc0f",
+    "source_artifact_sha256": "482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e"
+  },
+  "selection_state": "NONE_SELECTED_INCOMPLETE_RUN",
+  "active_object_pack_id": null,
+  "c2p_activation": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
+  "f0_a": "HOLD",
+  "publication_probability_risk_exposure_trading_execution_agent_write": "NONE",
+  "rollback": "FORWARD_ONLY_PRESERVE_BOTH_FAILED_RUN_AUTHORITY_CONSUMPTIONS_ALL_RUN_AND_PARTIAL_EVIDENCE_DURABLE_ARTIFACTS_RECOVERY_QUALIFICATION_AND_R2_DIAGNOSIS",
+  "recommended_decision": "PASS",
+  "recommended_decision_effect": "PASS_AUTHORIZES_BOUNDED_ADAPTER_SOURCE_ORDER_RECOVERY_ONLY_NOT_REAL_SOURCE_RERUN",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_work_after_pass": "Implement deterministic bounded equal-first_valid_time source_record_id ordering in the execution adapter source-sequencing layer only; add adversarial A/B/C exact-equivalence, row-preservation, duplicate-ID and decreasing-time fail-closed tests; re-run repository and full-cardinality synthetic capacity QA under unchanged limits; perform an exact current-source ordering-only preflight with no semantic execution; then materialise C2P2-RS0-FRESH-GRUN-R3 as a new OPERATOR_REQUIRED gate. Do not grant or execute a real-source rerun, select/promote an ObjectPack, or activate C2P as part of recovery."
 }
