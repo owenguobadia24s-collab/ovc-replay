@@ -1,0 +1,114 @@
+{
+  "schema": "ovc-dsai3v-physical-completion-remediation-qa/v1",
+  "packet_id": "DSAI3V-PHYSICAL-COMPLETION-RECEIPT-REMEDIATION",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "governing_design": "OVC-DSAI-v0.3",
+  "governing_plan": "OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "status": "QA_REVIEW",
+  "recommended_decision": "PASS_PENDING_EXACT_HEAD_ASSURANCE",
+  "baseline": {
+    "main_commit": "c90f53033f2a21ff35e4fb5a71a84415f4116dea",
+    "main_tree": "9c5d6beb99513b4aeb0c9827b5f5b412807ee601",
+    "main_message": "Recover Atlas WP10 historical completion receipt (#1070)"
+  },
+  "root_cause": {
+    "classification": "POST_MERGE_COMPLETION_DEMAND_LOSS_UNDER_FIXED_WORKFLOW_CONCURRENCY",
+    "finding": "The canonical transaction-freeze, exact-tree, ReceiptStore, idempotent persistence and crash-recovery machinery already existed. The local self-hosted post-merge completion workflow used one fixed GitHub Actions concurrency group. The RCCRI-WP8 completion run remained pending with no self-hosted job, and a later main push replaced the older pending demand. The physical merge therefore remained effective while the required external completion bundle was never persisted, leading to receipt-only Git closeout attempts.",
+    "evidence": [
+      {
+        "merge_commit": "43c053822e4a3cd0e7c04fc4a0760879ef84290a",
+        "packet": "RCCRI-WP8",
+        "workflow_run": 32020891726,
+        "observed_state": "PENDING_WITH_ZERO_JOBS_THEN_CANCELLED_WHEN_NEWER_MAIN_PUSH_QUEUED"
+      },
+      {
+        "merge_commit": "c90f53033f2a21ff35e4fb5a71a84415f4116dea",
+        "packet": "ATLAS-WP10-HISTORICAL-COMPLETION-RECOVERY",
+        "workflow_run": 32022390244,
+        "observed_state": "PENDING_WITH_ZERO_JOBS_AT_DIAGNOSIS_TIME"
+      }
+    ],
+    "not_root_cause": [
+      "PhysicalMaterialisationTransaction identity semantics",
+      "exact physical tree equality contract",
+      "ReceiptStore content-addressed idempotency",
+      "recover_effective_write_completion crash-recovery semantics",
+      "SIQ one-head physical gateway"
+    ]
+  },
+  "pr_reconciliation": {
+    "1070": {
+      "disposition": "PRESERVE_MERGED_HISTORICAL_RECOVERY",
+      "merge_commit": "c90f53033f2a21ff35e4fb5a71a84415f4116dea",
+      "rule": "Historical recovery remains separately typed and may record ABSENT_NOT_EMITTED pre-write provenance without fabricating an original PhysicalMaterialisationTransaction identity."
+    },
+    "1071": {
+      "disposition": "SUPERSEDED_CLOSED_DO_NOT_MERGE",
+      "reason": "It attempted a new RCCR v0.17 canonical programme-state generation and pointer advance for a post-materialisation fact. The immutable-history invariant requires the operational pointer to remain at the already-integrated v0.16 state. Unique valid merge/tree facts remain preserved as evidence."
+    },
+    "1072": {
+      "disposition": "PRESERVE_AS_REMEDIATION_EVIDENCE_THEN_SUPERSEDE_WITH_AUTOMATIC_PATH",
+      "reason": "Its corrected two-file form established the lawful append-only physical-completion facts and proved the pointer/history invariant, but merging another receipt-only PR would preserve the exact churn pattern this remediation removes.",
+      "preserved_facts": {
+        "substantive_pr": 1065,
+        "packet_head": "78518c97f6fbb8dbbae7b229e03ee8d767e40544",
+        "pip_id": "9a5bb56acb859dfb16f5ed958b477677f2c034ec3a9cda3daa6a1a8d034f7170",
+        "qualified_tree": "6ef70fb8095c3a8074587b5900e791ae98043db9",
+        "squash_merge": "43c053822e4a3cd0e7c04fc4a0760879ef84290a",
+        "physical_tree": "6ef70fb8095c3a8074587b5900e791ae98043db9",
+        "tree_equivalence": "PASS"
+      }
+    }
+  },
+  "remediation": {
+    "normal_path": [
+      "freeze exact PhysicalMaterialisationTransaction before physical write",
+      "perform already-authorised serialized physical materialisation through DSAI_VIT_PHYSICAL_CONTROLLER and existing SIQ gateway",
+      "verify physical_post_merge_tree equals qualified VIT generation tree",
+      "persist canonical four-object content-addressed completion bundle in the governed external ReceiptStore",
+      "persist append-only effective COMPLETED state outside Git",
+      "bind the programme/packet to exactly one effective completion transaction",
+      "emit at most one successor-release signal to the existing authority resolver",
+      "never infer successor execution authority and never require an ordinary closeout PR"
+    ],
+    "queue_fix": "Post-merge completion workflow concurrency is keyed by exact merge SHA, so newer main pushes cannot cancel older pending completion demands. Each eventual invocation also drains a bounded recent first-parent window oldest-first so prior missed demands are recovered idempotently.",
+    "duplicate_policy": "A second physical transaction attempting to establish effective completion for the same programme/packet fails closed with VIT_DUPLICATE_EFFECTIVE_PACKET_COMPLETION.",
+    "crash_recovery": "The existing recover_effective_write_completion path remains the physical-write recovery authority. If the merge already exists and the exact qualified tree is physical, completion persistence resumes without repeating the repository mutation.",
+    "historical_boundary": "A historical merge with no lawful pre-write transaction freeze is reported as historical debt and is never assigned a fabricated transaction identity. The separately governed Atlas recovery remains distinct from normal completion.",
+    "receipt_location": "OVC_EXTERNAL_ARTIFACT_ROOT/receipts; repository and ephemeral fallback remain prohibited."
+  },
+  "required_regressions": [
+    "successful merge -> automatic receipt persistence -> effective COMPLETED",
+    "exact tree mismatch fails closed",
+    "repeated completion is idempotent",
+    "already-effective merge recovery does not repeat physical write",
+    "duplicate completion attempts cannot create competing effective terminal states",
+    "successor release occurs exactly once and does not infer execution authority",
+    "normal completion requires no ordinary closeout PR",
+    "historical recovery remains distinguishable from normal completion",
+    "newer main push cannot cancel an older pending completion demand"
+  ],
+  "assurance": {
+    "targeted": "PENDING_EXACT_HEAD_CI",
+    "repository_wide": "PENDING_EXACT_HEAD_CI",
+    "vit_siq_grt": "PENDING_EXACT_HEAD_CI",
+    "final_head_required_before_merge": true
+  },
+  "warnings": [
+    "The local self-hosted Windows completion runner was unavailable/pending during diagnosis. The remediation prevents queue loss and deterministically recovers missed demands, but live external ReceiptStore debt is discharged only when that already-bound runner executes the retained completion demand."
+  ],
+  "rollback": "Forward-supersede only the remediation workflow/runtime/binding records. Preserve every already-emitted ReceiptStore object, historical recovery record, PR discussion, physical Git history and substantive packet evidence. No force-push or history rewrite.",
+  "reserved_authority_unchanged": [
+    "VIT physical-main activation/broadening",
+    "ORCH packet-class broadening",
+    "scientific or selector authority",
+    "ACTIVE_DISCOVERY / ACTIVE_DEVELOPMENT / ACTIVE_VALIDATION",
+    "publication",
+    "probability",
+    "risk",
+    "exposure",
+    "execution"
+  ]
+}
