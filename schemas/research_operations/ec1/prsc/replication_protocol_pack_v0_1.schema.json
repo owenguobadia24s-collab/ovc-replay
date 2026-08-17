@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC ReplicationProtocolPack v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "prsc.replication_protocol_pack.v0.1"},
+    "replication_protocol_id": {"type": "string", "minLength": 1},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "protocol_generation_ref": {"type": "string", "minLength": 1},
+    "source_role": {"enum": ["SYNTHETIC", "DISCOVERY", "DEVELOPMENT", "VALIDATION"]},
+    "identity_unit": {"type": "string", "minLength": 1},
+    "disjointness_manifest_ref": {"type": "string", "minLength": 1},
+    "method_transport_manifest_ref": {"type": "string", "minLength": 1},
+    "population_exposure_ledger_ref": {"type": "string", "minLength": 1},
+    "real_execution_allowed": {"const": false},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": ["schema_version", "replication_protocol_id", "candidate_ref", "protocol_generation_ref", "source_role", "identity_unit", "disjointness_manifest_ref", "method_transport_manifest_ref", "population_exposure_ledger_ref", "real_execution_allowed", "authority_effect"]
+}

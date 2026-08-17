@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC MethodTransportManifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "prsc.method_transport_manifest.v0.1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "method_generation_ref": {"type": "string", "minLength": 1},
+    "source_population_ref": {"type": "string", "minLength": 1},
+    "target_population_ref": {"type": "string", "minLength": 1},
+    "transport_state": {"enum": ["TRANSPORTED_UNCHANGED", "TRANSPORTED_WITH_DECLARED_RESTRICTION", "REFIT_REQUIRED", "NOT_TRANSPORTABLE", "NOT_EVALUABLE"]},
+    "refit_allowed": {"type": "boolean"},
+    "restriction_reason_codes": {"type": "array", "items": {"type": "string"}},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": ["schema_version", "manifest_id", "method_generation_ref", "source_population_ref", "target_population_ref", "transport_state", "refit_allowed", "restriction_reason_codes", "authority_effect"]
+}

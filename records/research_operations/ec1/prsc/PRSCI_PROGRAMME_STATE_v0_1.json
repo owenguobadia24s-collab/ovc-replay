@@ -1,29 +1,28 @@
 {
   "schema": "ovc-programme-state/v1",
   "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
-  "packet_id": "PRSCI-WP6",
+  "packet_id": "PRSCI-WP7",
   "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "status": "APPROVED",
   "prerequisites": [
-    "PRSCI-WP5_COMPLETED_ON_MAIN@08777f28699be7ff1f837d9b9db3207f6e5194a0",
-    "CURRENT_LAWFUL_MAIN@566903dcdde4fcc0aa6ab43a95bc36b947fafa15"
+    "PRSCI-WP6_COMPLETED_ON_MAIN@b7a610ed0e291f20980cc6c5fe4d02c54a9e4c5a"
   ],
   "authority_required": "NONE_WITHIN_CURRENT_AUTO_ENVELOPE",
   "authority_delta": "NONE",
-  "baseline_commit": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
-  "baseline_tree": "ac7e76b9100e5720d4fb0e07bbd1b775dffc0bbc",
-  "branch": "build/prsci-wp6-synthesis-20260817",
-  "candidate_commit": "880296af42cbb2d228b7d43eb41eee5c847eec77",
-  "candidate_tree": "3ffc6a0e4b9ceaecc590593394a59047c79d18da",
+  "baseline_commit": "b7a610ed0e291f20980cc6c5fe4d02c54a9e4c5a",
+  "baseline_tree": "7412f724151bae0ce0697ec19d597a7888af8edd",
+  "branch": "build/prsci-wp7-permanent-20260817-r3",
+  "candidate_commit": "536898889b1113f70dd37ed9a3afd6d0cc908d42",
+  "candidate_tree": "1310a79311284241626859123262a4be317b3b3e",
   "tests": {
-    "tests_workflow": 32053668482,
-    "tiered_workflow": 32053668563,
+    "tests_workflow": 32063857107,
+    "tiered_workflow": 32063857143,
     "status": "PASS"
   },
-  "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp6/PRSCI_WP6_QA_PACKET_v0_1.json",
-  "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp6/PRSCI_WP6_IMPLEMENTATION_PACKET_v0_1.json",
-  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp6/PRSCI_G7_DELEGATED_DECISION_v0_1.json",
+  "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp7/PRSCI_WP7_QA_PACKET_v0_1.json",
+  "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp7/PRSCI_WP7_IMPLEMENTATION_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp7/PRSCI_G8_DELEGATED_DECISION_v0_1.json",
   "merge_commit": null,
   "blockers": [],
   "completed_gates": [
@@ -34,7 +33,8 @@
     "PRSCI-G4",
     "PRSCI-G5",
     "PRSCI-G6",
-    "PRSCI-G7"
+    "PRSCI-G7",
+    "PRSCI-G8"
   ],
   "preserved_constraints": {
     "f0_a": "HOLD",
@@ -43,14 +43,14 @@
     "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE",
     "no_force_push_or_history_rewrite": true
   },
-  "continuation_policy": "RUN_ONLY_PRSCI-WP6",
-  "next_gate": "PRSCI-G8",
-  "next_packet": "PRSCI-WP7",
-  "next_action": "STOP_AFTER_PRSCI-WP6_CLOSEOUT_AND_INTEGRATION",
+  "continuation_policy": "OVC_RUN_PRSCI-G8-ALG",
+  "next_gate": "PRSCI-G8-ALG",
+  "next_packet": "PRSCI-WP8",
+  "next_action": "CONTINUE_TO_PRSCI-WP8_THEN_PRSCI-G8-ALG",
   "reserved_later_gates": [
     "PRSCI-G8-ALG",
     "PRSCI-G-PREREG",
     "PRSCI-G-EC1-CHALLENGE"
   ],
-  "rollback": "Forward-only; preserve merged PRSCI G0-G6 evidence and frozen scientific-accounting semantics."
+  "rollback": "Forward-only; preserve PRSCI G0-G8 evidence and exposure history."
 }
