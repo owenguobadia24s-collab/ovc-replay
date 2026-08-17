@@ -4,8 +4,8 @@
   "parent_programme_id": "OVC-C2P2-OBJECTPACK-SCIENCE-v0.1",
   "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
   "plan_version": "0.1",
-  "status": "APPROVED",
-  "packet_id": "C2P2-RS0-GRUN",
+  "status": "GATE_READY",
+  "packet_id": "C2P2-RS0-EXECUTION",
   "prerequisites": [
     "C2P2_CORE_IMPLEMENTED_SHADOW_CONFORMANT",
     "C2P2_PS0_GSELECT_PASS_COMPARATIVE_SET_ONLY",
@@ -13,27 +13,33 @@
     "EC1_C2P_PARALLEL_ROUTE_AMENDMENT_MATERIALISED",
     "DMRPI_GREAL_EC1_PASS_MERGED",
     "C2P2_RS0_CAPACITY_DRY_RUN_AND_ARTIFACT_BINDING_MERGED",
-    "C2P2_RS0_GRUN_READINESS_V0_3"
+    "C2P2_RS0_GRUN_PASS_MERGED",
+    "C2P2_RS0_EXECUTION_ADAPTER_CLOSEOUT_MERGED",
+    "C2P2_RS0_SOURCE_LOCATOR_RECOVERY_RESOLVED",
+    "C2P2_RS0_CURRENT_SOURCE_MATERIALISATION_COMPLETED"
   ],
-  "authority_required": "OPERATOR_REQUIRED_SATISFIED",
-  "authority_delta": "EXACTLY_ONE_BOUNDED_PREREGISTERED_COMPARATIVE_REAL_SOURCE_SHADOW_RUN_ONLY",
-  "baseline_commit": "83ea0a3e8fa755b817f56fc6bd81c7fc20ef451c",
-  "branch": "gate/c2p2-rs0-grun-pass-20260816",
-  "candidate_commit": "RESOLVE_FINAL_APPROVAL_HEAD",
+  "authority_required": "OPERATOR_REQUIRED_OBJECTPACK_IDENTITY_SEMANTICS_UNBLOCK",
+  "authority_delta": "NONE_DIAGNOSIS_ONLY",
+  "baseline_commit": "43c053822e4a3cd0e7c04fc4a0760879ef84290a",
+  "branch": "block-c2p2-rs0-execution-objectpack-semantics-r2-20260817",
+  "candidate_commit": null,
   "tests": [
-    "TARGETED_GRUN_APPROVAL_TEST",
-    "REPOSITORY_WIDE_CI",
-    "VIT_ROUTING",
-    "FINAL_HEAD_ASSURANCE",
-    "SIQ_READY",
-    "MERGE_READINESS"
+    "CURRENT_SOURCE_MATERIALISATION_PASS",
+    "LOCATOR_AND_ALL_PROJECTED_ROWS_VERIFIED",
+    "CAPACITY_WITHIN_FROZEN_ENVELOPE",
+    "OBJECTPACK_EXECUTION_SEMANTIC_PREFLIGHT_BLOCK",
+    "REPOSITORY_WIDE_CI_PENDING_BLOCKER_MATERIALISATION"
   ],
-  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_QA_PACKET_v0_2.json",
-  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_OPERATOR_DECISION_v0_1.json",
+  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_EXECUTION_OBJECTPACK_SEMANTICS_BLOCKER_v0_1.json",
+  "decision_record": "PENDING_OPERATOR_C2P2_RS0_GSEM_UNBLOCK",
   "authority_record": "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json",
   "merge_commit": null,
-  "blockers": [],
-  "next_packet": "C2P2-RS0-EXECUTION",
+  "blockers": [
+    "RS0_OBJECTPACK_IDENTITY_SEMANTICS_NOT_MECHANICALLY_FROZEN",
+    "RS0_EMPIRICAL_OBJECTPACK_RUNTIME_NOT_MATERIALISED",
+    "RS0_COMPARATIVE_RUN_CANNOT_LAWFULLY_DEGRADE_TO_A_ONLY"
+  ],
+  "next_packet": null,
   "candidate_set": [
     "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
     "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
@@ -45,19 +51,24 @@
     "c1_manifest_sha256": "c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf",
     "c2_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
     "c2e_boundary_pack_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313",
-    "occurrence_context_authority_blob_sha": "c6714b42fa378f0f533fdf2caf89c3ed4bec4942"
+    "occurrence_context_authority_blob_sha": "c6714b42fa378f0f533fdf2caf89c3ed4bec4942",
+    "rs0_source_materialisation_logical_sha256": "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b",
+    "rs0_source_locator_logical_sha256": "c56c756f706da9554878232487bb8887f7b52bcf1d57890fb09d51acf9486977",
+    "rs0_source_drive_file_id": "1BZIRSiRMXTT5d5LORVG1tknQh7_Zgtmt"
   },
   "authority": {
     "c2p_runtime": "SHADOW_SIDECAR_ONLY",
     "active_object_pack": null,
     "objectpack_selection": "NONE",
-    "rs0_real_source_run": "AUTHORISED_ONE_RUN_NOT_STARTED",
+    "rs0_real_source_run": "AUTHORISED_ONE_RUN_NOT_STARTED_BLOCKED_BEFORE_TOKEN_CONSUMPTION",
     "grun_operator_pass": "PASS",
+    "run_count_remaining": 1,
+    "run_authority_consumed": false,
     "ec1_scientific_authority": "UNCHANGED",
     "ec1_candidate_defining_use": "FORBIDDEN",
     "validation": "LOCKED_UNCONSUMED",
     "publication_probability_risk_exposure_execution_agent_write": "NONE"
   },
   "f0_a": "HOLD_NO_JOINT_LAUNCH",
-  "mandatory_stop": null
+  "mandatory_stop": "OPERATOR_AUTHORITY_REQUIRED_FOR_IDENTITY_DEFINING_OBJECTPACK_SEMANTICS"
 }
