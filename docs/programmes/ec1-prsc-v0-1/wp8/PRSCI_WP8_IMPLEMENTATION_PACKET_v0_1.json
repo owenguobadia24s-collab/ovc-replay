@@ -13,7 +13,7 @@
     "FINAL_WP1_WP7_ADVERSARIAL_HANDLERS",
     "REFERENCE_OPTIMIZED_EQUIVALENCE_HARNESS",
     "PRODUCTION_OPTIMIZED_PATH_CENSUS",
-    "DETERMINISTIC_SYNTHETIC_CAPACITY_MEASUREMENT",
+    "PINNED_ACTUAL_PROCESS_PEAK_RSS_SYNTHETIC_CAPACITY_MEASUREMENT",
     "MEASURED_OPERATIONAL_BUDGET_FREEZE_CANDIDATE",
     "MEASURED_REVIEW_BUDGET_FREEZE_CANDIDATE",
     "PROTECTED_SOURCE_REACHABILITY_ZERO_SURVIVOR_BINDING",
@@ -33,7 +33,12 @@
     "candidate_status": "PASS_CANDIDATE"
   },
   "capacity_contract": {
-    "measurement_method": "CANONICAL_LOGICAL_SYNTHETIC_WORKLOAD_BYTES",
+    "measurement_method": "LINUX_RUSAGE_RU_MAXRSS_FRESH_SUBPROCESS",
+    "peak_memory_quantity": "PROCESS_PEAK_RESIDENT_SET_SIZE_BYTES",
+    "measurement_scope": "FRESH_PYTHON_PROCESS_FROM_INTERPRETER_START_THROUGH_SYNTHETIC_WORKLOAD_COMPLETION",
+    "pinned_environment": "GITHUB_ACTIONS_UBUNTU_24_04_PYTHON_3_11_15",
+    "source_workflow_run_id": 32075002575,
+    "source_commit": "3b4c8a1fb4be98d1b13819a1a7c9f2b1389cfcb7",
     "tiers": ["TINY", "SMALL", "MEDIUM"],
     "scope_reduction_permitted": false,
     "sampling_permitted": false,
@@ -55,6 +60,6 @@
     "publication": "NONE",
     "probability_risk_exposure_execution": "NONE"
   },
-  "next_required_evidence": ["EXACT_HEAD_REPOSITORY_QA", "FINAL_PIP_VIT_GRT_LINEAGE", "INDEPENDENT_REVIEWER_BINDING", "PRSCI-G8-ALG_GATE_PACKET"],
-  "rollback": "Forward-only quarantine/supersession of WP8 assurance/capacity surfaces; preserve WP1-WP7 and G0-G8 evidence."
+  "next_required_evidence": ["EXACT_HEAD_REPOSITORY_QA", "FINAL_PIP_VIT_GRT_LINEAGE", "PRSCI-G8-ALG_RERUN"],
+  "rollback": "Forward-only correction/quarantine/supersession of WP8 assurance/capacity surfaces; preserve WP1-WP7, PRSCI G0-G8 and the original PRSCI-G8-ALG BLOCK evidence."
 }
