@@ -42,9 +42,17 @@ def test_operator_pass_grants_exactly_one_shadow_run_and_no_activation() -> None
     assert packet["decision"] == "PASS"
     assert packet["approved_authority"]["real_source_run"] == "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN"
     assert packet["approved_authority"]["active_object_pack"] is None
-    assert state["status"] == "APPROVED"
-    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED"
-    assert state["next_packet"] == "C2P2-RS0-EXECUTION"
+
+    # GRUN authority remains intact even though the successor execution preflight is now
+    # correctly stopped at an identity-semantics gate before token consumption.
+    assert state["status"] == "GATE_READY"
+    assert state["packet_id"] == "C2P2-RS0-EXECUTION"
+    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED_BLOCKED_BEFORE_TOKEN_CONSUMPTION"
+    assert state["authority"]["run_authority_consumed"] is False
+    assert state["authority"]["run_count_remaining"] == 1
+    assert state["mandatory_stop"] == "OPERATOR_AUTHORITY_REQUIRED_FOR_IDENTITY_DEFINING_OBJECTPACK_SEMANTICS"
+    assert state["authority"]["active_object_pack"] is None
+    assert state["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
 
 
 def test_approval_currentness_review_accepts_only_non_material_main_advances() -> None:
