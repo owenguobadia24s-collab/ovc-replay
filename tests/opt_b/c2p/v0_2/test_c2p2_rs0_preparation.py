@@ -61,7 +61,10 @@ def test_historical_preparation_denial_is_preserved_but_grun_pass_grants_one_run
     assert historical_gate["decision"] == "PENDING_OPERATOR"
     assert historical_gate["decision_authority"] == "OPERATOR_REQUIRED"
 
-    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED"
+    # Later execution preflight may block launch without revoking the already-approved one-run token.
+    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED_BLOCKED_BEFORE_TOKEN_CONSUMPTION"
+    assert state["authority"]["run_authority_consumed"] is False
+    assert state["authority"]["run_count_remaining"] == 1
     assert state["authority"]["active_object_pack"] is None
     assert state["authority"]["objectpack_selection"] == "NONE"
     assert authority["execution_count_limit"] == 1
