@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-PRVIT-PIPELINE-CONFORMANCE-CORRECTIVE-AUDIT-v0.1",
+  "plan_id": "OVC-PRVIT-PCCA-v0.1-PROPOSED",
+  "plan_version": "0.1",
+  "packet_id": "PRVIT-WP0",
+  "status": "GATE_READY",
+  "prerequisites": [
+    "DSAI_V0_3_VIT_DESIGN",
+    "DSAI_V0_3_VIT_CONFORMANCE_PLAN_R1_RATIFIED",
+    "GRT_V0_2_REPOSITORY_CONSTITUTION_R1_RATIFIED",
+    "GRT_V0_2_CONFORMANCE_PLAN_RATIFIED"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "AUTHORISE_READ_ONLY_SHADOW_AUDIT_ONLY_IF_PRVIT_G0_PASS",
+  "baseline_commit": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
+  "baseline_tree": "ac7e76b9100e5720d4fb0e07bbd1b775dffc0bbc",
+  "branch": "audit/prvit-wp0-g0-20260817",
+  "candidate_commit": "62ded72a36de3b75b0959764398553607f0cbe15",
+  "candidate_tree": "03d3dca9f841e4a098e08e8632b39e412fc7aaa4",
+  "tests": {
+    "scope": "WP0_METADATA_AND_BOUNDARY_VALIDATION",
+    "result": "PASS",
+    "checks": 10,
+    "repository_wide": "NOT_REQUIRED_METADATA_ONLY"
+  },
+  "qa_packet": "docs/programmes/prvit-v0-1/wp0/PRVIT_WP0_QA_PACKET_v0_1.json",
+  "gate_packet": "docs/programmes/prvit-v0-1/wp0/PRVIT_G0_GATE_READY_v0_1.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": ["PRVIT-G0_OPERATOR_DECISION_PENDING"],
+  "next_packet": "PRVIT-WP1_IF_G0_PASS",
+  "execution_mode_if_approved": "READ_ONLY_SHADOW",
+  "live_path_mutation_allowed": false,
+  "primary_replay_population_id": "PRVIT-LAST20-FROZEN-20260817-v0.1",
+  "hard_stop": "PRVIT-G-CUTOVER-READINESS",
+  "live_system_effect": "NONE",
+  "pr1106_effect": "NONE",
+  "rollback": "Forward preserve/supersede or abandon unmerged audit branch; no live restoration required."
+}
