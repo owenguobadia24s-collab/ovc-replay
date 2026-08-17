@@ -3,7 +3,7 @@
   "title": "OVC PRSCMechanicalConformanceBundle v0.1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "bundle_id", "fixture_results", "equivalence_results", "capacity_results", "protected_source_reachability", "status", "authority_effect"],
+  "required": ["schema_version", "bundle_id", "fixture_results", "equivalence_results", "capacity_results", "protected_source_reachability", "status", "operational_budget", "review_budget", "authority_effect"],
   "properties": {
     "schema_version": {"const": "prsc_mechanical_conformance_bundle/v0.1"},
     "bundle_id": {"type": "string", "minLength": 1},
@@ -12,6 +12,8 @@
     "capacity_results": {"type": "array", "items": {"type": "object"}},
     "protected_source_reachability": {"enum": ["ZERO_SURVIVORS", "BLOCKING_SURVIVORS"]},
     "status": {"enum": ["PASS_CANDIDATE", "BLOCKED", "QUARANTINED", "CAPACITY_INCOMPLETE"]},
+    "operational_budget": {"type": "object"},
+    "review_budget": {"type": "object"},
     "authority_effect": {"const": "NONE"}
   }
 }
