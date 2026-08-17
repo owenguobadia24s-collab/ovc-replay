@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CASES = ROOT / "fixtures/system_atlas/wp4/ATLAS_RESOLVER_ADVERSARIAL_CASES_v0_1.json"
 PREDICATES = ROOT / "registries/system_atlas/ATLAS_PREDICATE_AUTHORITY_REGISTRY_v0_1.json"
 RESOLVERS = ROOT / "registries/system_atlas/ATLAS_RESOLVER_REGISTRY_v0_1.json"
-REVIEWER = ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_v0_1.json"
+REVIEWER = ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_G4_ALG_20260816.json"
 SCHEMA = ROOT / "schemas/system_atlas/reference_resolution_set_v0_1.schema.json"
 
 

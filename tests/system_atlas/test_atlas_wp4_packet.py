@@ -59,7 +59,7 @@ def test_wp4_review_evidence_identity_is_bound() -> None:
 
 
 def test_wp4_external_review_is_exact_and_scope_valid() -> None:
-    binding_path = ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_v0_1.json"
+    binding_path = ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_G4_ALG_20260816.json"
     review_path = WP4 / "ATLAS_G4_ALG_INDEPENDENT_REVIEW_RECORD.json"
     binding = load(binding_path)
     review = load(review_path)

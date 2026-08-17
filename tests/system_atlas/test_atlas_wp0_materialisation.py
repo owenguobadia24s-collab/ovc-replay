@@ -69,14 +69,25 @@ def test_external_root_and_reviewer_binding_fail_closed() -> None:
     assert external["status"] == "BOUND_READ_WRITE_VERIFIED"
     assert external["repository_disjoint"] is True
     assert external["destructive_retention"].startswith("DENIED")
-    assert reviewer["status"] in {"UNBOUND", "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION"}
+    assert reviewer["status"] in {
+        "UNBOUND",
+        "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION",
+        "RENEWAL_REQUIRED_EXACT_CURRENT_SUBJECT",
+        "ACCEPTED_Q6_IND_BINDING_REVIEW_COMPLETED_PASS",
+    }
     if reviewer["status"] == "UNBOUND":
         assert reviewer["implementation_effect"] == "NONE_WP0_THROUGH_Q6_MAY_PROCEED"
         assert "INELIGIBLE" in reviewer["activation_effect"]
-    else:
+    elif reviewer["status"] == "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION":
         assert reviewer["implementation_effect"] == "ATLAS_G4_ALG_REVIEWER_REQUIREMENT_SATISFIED_ON_MATERIALISATION"
         assert "Q6_IND" in reviewer["activation_effect"]
         assert reviewer["scope_status"]["Q6-IND_GOVERNANCE_SECURITY_VISUAL_OPERATIONAL_REVIEW"].startswith("NOT_REVIEWED")
+    elif reviewer["status"] == "RENEWAL_REQUIRED_EXACT_CURRENT_SUBJECT":
+        assert reviewer["implementation_effect"] == "NONE_PRIOR_SUBJECT_REVIEW_ARCHIVED_CURRENT_Q6_IND_PENDING"
+        assert all("RENEWAL_PENDING" in value for value in reviewer["scope_status"].values())
+    else:
+        assert reviewer["implementation_effect"] == "SATISFIES_ATLAS_WP10_Q6_IND_REVIEWER_REQUIREMENT_ON_MATERIALISATION"
+        assert all(value == "BOUND_ELIGIBLE_REVIEW_COMPLETED_PASS" for value in reviewer["scope_status"].values())
 
 
 def test_source_census_has_no_required_missing_source() -> None:

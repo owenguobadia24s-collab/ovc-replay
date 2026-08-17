@@ -90,8 +90,8 @@ def test_wp10_budget_registries_and_live_shadow_binding_are_schema_valid() -> No
     receipt = validate_live_shadow_binding(binding, ROOT)
     assert receipt["result"] == "PASS_EXACT_GIT_TREE_LIVE_SHADOW"
     assert receipt["source_binding_count"] == 34
-    assert binding["source_commit"] == git("rev-parse", "11aefbbba5dbd2e50181d2e4793e673675f2949d")
-    assert binding["source_tree"] == git("rev-parse", "11aefbbba5dbd2e50181d2e4793e673675f2949d^{tree}")
+    assert binding["source_commit"] == git("rev-parse", "f8711a2fa0d643c87abb45a0985bf526c0f9915a")
+    assert binding["source_tree"] == git("rev-parse", "f8711a2fa0d643c87abb45a0985bf526c0f9915a^{tree}")
     c2p = next(row for row in binding["source_bindings"] if row["node_id"] == "c2p")
     assert c2p["path"] == "registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_1.json"
     research = next(row for row in binding["source_bindings"] if row["node_id"] == "research")
@@ -256,6 +256,22 @@ def test_wp10_gate_state_and_independent_review_closeout_preserve_activation_bou
     pointer = load(ROOT / "registries/implementation/system_atlas_v0_1/CURRENT_STATE_POINTER.json")
     policy = load(ROOT / "registries/system_atlas/ATLAS_GENERATION_POLICY_REGISTRY_v0_1.json")
     final_report = load(WP10 / "ATLAS_WP10_FINAL_QUALIFICATION_REPORT.json")
+    if gate["decision"] == "NOT_YET_ELIGIBLE":
+        assert gate["acceptance_results"]["Q6_IND"] == "PENDING_RENEWED_EXACT_CURRENT_SUBJECT_REVIEW"
+        assert gate["terminal_state_claimed"] is False
+        assert qa["qa_recommendation"] == "PASS_Q0_Q6_REQUEST_RENEWED_Q6_IND_DO_NOT_RATIFY_G10"
+        assert request["status"] == "PENDING_RENEWED_EXACT_CURRENT_SUBJECT_REVIEW"
+        assert request["review_output"]["decision"] == "PENDING"
+        assert binding["status"] == "RENEWAL_REQUIRED_EXACT_CURRENT_SUBJECT"
+        validate(final_report, "atlas_qualification_report_v0_1.schema.json")
+        assert final_report["report_hash"] == canonical_sha256({key: value for key, value in final_report.items() if key != "report_hash"})
+        assert final_report["status"] == "ATLAS_Q0_Q6_PASS_Q6_IND_PENDING"
+        assert activation["status"] == "INELIGIBLE_PENDING_RENEWED_Q6_IND_AND_G10_INTEGRATION"
+        assert state["status"] == pointer["status"] == "ATLAS_WP10_Q0_Q6_PASS_Q6_IND_PENDING"
+        assert state["next_packet"] == pointer["next_packet"] == "ATLAS-WP10-Q6-IND"
+        assert state["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_PASS_REQUIRED"]
+        assert not (ROOT.parent.parent / "ovc-replay-external-artifacts/system_atlas/generations/CURRENT.json").exists()
+        return
     assert gate["decision"] == "PASS"
     assert gate["ratification_class"] == "DELEGATED_AUTO_RATIFICATION"
     assert gate["acceptance_results"]["Q6_IND"] == "PASS_ELIGIBLE_INDEPENDENT_REVIEW"
