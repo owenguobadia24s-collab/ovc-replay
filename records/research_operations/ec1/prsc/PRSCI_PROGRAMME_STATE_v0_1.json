@@ -1,32 +1,33 @@
 {
   "schema": "ovc-programme-state/v1",
   "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
-  "packet_id": "PRSCI-WP3",
+  "packet_id": "PRSCI-WP4",
   "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "status": "APPROVED",
   "prerequisites": [
-    "PRSCI-WP2_COMPLETED_ON_MAIN@ef01e00d1b074de40cd3e63df6b864cf942fa6ae",
-    "CURRENT_LAWFUL_MAIN@39515a76b300fb7ba5f8010d1d8694c6f2ce5465"
+    "PRSCI-WP3_COMPLETED_ON_MAIN@e13d06ae69228ac92b39fc0afc653e99c064015e",
+    "DSAI_SIQ_COMPARE_404_RECOVERY_ON_MAIN@5501c17a50c50ff816e615314b10b771f66dec4d",
+    "CURRENT_LAWFUL_MAIN@5501c17a50c50ff816e615314b10b771f66dec4d"
   ],
   "authority_required": "NONE_WITHIN_CURRENT_AUTO_ENVELOPE",
   "authority_delta": "NONE",
-  "baseline_commit": "39515a76b300fb7ba5f8010d1d8694c6f2ce5465",
-  "baseline_tree": "f7a07d9d3cd7dca5e1671c73d75533f5f6a50bae",
-  "branch": "build/prsci-wp3-representation-time-context-r2",
-  "candidate_commit": "8e87076e216584a1b2eefd8b7a2d4cda196f8d9f",
-  "candidate_tree": "b696f1de7d73872f096e0bb70de024f9b43f836d",
+  "baseline_commit": "5501c17a50c50ff816e615314b10b771f66dec4d",
+  "baseline_tree": "9b82deae91159e2f5dbb711b5c2153eb6738954f",
+  "branch": "build/prsci-wp4-boundary-segmentation-r2-20260817",
+  "candidate_commit": "2945e0618ac70582d0eea3f746d4a9f04860464f",
+  "candidate_tree": "42a77031f54f673f946b989778fa3c78c65670bf",
   "tests": {
-    "tests_workflow": 32032224944,
-    "tiered_workflow": 32032224819,
+    "tests_workflow": 32045792093,
+    "tiered_workflow": 32045792190,
     "status": "PASS"
   },
-  "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp3/PRSCI_WP3_QA_PACKET_v0_1.json",
-  "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp3/PRSCI_WP3_IMPLEMENTATION_PACKET_v0_1.json",
-  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp3/PRSCI_G4_DELEGATED_DECISION_v0_1.json",
+  "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp4/PRSCI_WP4_QA_PACKET_v0_1.json",
+  "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp4/PRSCI_WP4_IMPLEMENTATION_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp4/PRSCI_G5_DELEGATED_DECISION_v0_1.json",
   "merge_commit": null,
   "blockers": [],
-  "completed_gates": ["PRSCI-G0", "PRSCI-G1", "PRSCI-G2", "PRSCI-G3", "PRSCI-G4"],
+  "completed_gates": ["PRSCI-G0", "PRSCI-G1", "PRSCI-G2", "PRSCI-G3", "PRSCI-G4", "PRSCI-G5"],
   "preserved_constraints": {
     "f0_a": "HOLD",
     "validation": "LOCKED_UNCONSUMED",
@@ -35,9 +36,9 @@
     "no_force_push_or_history_rewrite": true
   },
   "continuation_policy": "CONTINUE_UNTIL_PRSCI-G8-ALG",
-  "next_gate": "PRSCI-G5",
-  "next_packet": "PRSCI-WP4",
-  "next_action": "SQUASH_MERGE_PRSCI-WP3_THEN_START_PRSCI-WP4_FROM_LATEST_LAWFUL_MAIN",
+  "next_gate": "PRSCI-G6",
+  "next_packet": "PRSCI-WP5",
+  "next_action": "SQUASH_MERGE_PRSCI-WP4_THEN_START_PRSCI-WP5_FROM_LATEST_LAWFUL_MAIN",
   "reserved_later_gates": ["PRSCI-G8-ALG", "PRSCI-G-PREREG", "PRSCI-G-EC1-CHALLENGE"],
-  "rollback": "Forward-only; preserve merged WP1/WP2, G0-G3 evidence and owner source records."
+  "rollback": "Forward-only; preserve merged PRSCI G0-G4 evidence, canonical C2E owner identity and source records."
 }
