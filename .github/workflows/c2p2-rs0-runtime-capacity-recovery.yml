@@ -50,19 +50,21 @@ jobs:
           execution = json.loads(Path(
             'registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json'
           ).read_text())
+          workflow_text = Path(
+            '.github/workflows/c2p2-rs0-runtime-capacity-recovery.yml'
+          ).read_text()
 
           assert decision['decision'] == 'PASS'
           assert decision['approved_authority']['real_source_semantic_rerun'] == 'NOT_AUTHORISED'
           assert trigger['real_source_consumption'] == 'FORBIDDEN'
           assert trigger['scientific_effect'] == 'NONE'
-          assert execution['run_authority_consumed'] is True
+          assert execution['failed_run_authority_consumed'] is True
           assert execution['run_count_remaining'] == 0
+          assert execution['real_source_rerun'] == 'NOT_AUTHORISED'
           assert execution['next_packet'] == 'C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION'
+          forbidden_action = 'actions/' + 'download-artifact'
+          assert forbidden_action not in workflow_text
           PY
-          if grep -q "actions/download-artifact" .github/workflows/c2p2-rs0-runtime-capacity-recovery.yml; then
-            echo "RECOVERY_WORKFLOW_REAL_SOURCE_DOWNLOAD_FORBIDDEN" >&2
-            exit 31
-          fi
 
       - name: Run exact reference-semantic adapter qualification
         run: |
