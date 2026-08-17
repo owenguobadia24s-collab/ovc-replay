@@ -2,18 +2,20 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
 import resource
 import sqlite3
-from typing import Any, Iterable, Mapping
+from typing import Any
 
 from ovc.opt_b.c2p_v0_2.rs0_execution import iter_verified_rows, validate_locator
 from ovc.opt_b.c2p_v0_2.rs0_empirical_runtime_source_order import (
+    C2_SOURCE_KIND_ORDER,
     SOURCE_ORDER_ADAPTER_ID,
-    canonicalize_equal_time_groups,
-    merge_source_streams_with_tie_canonicalization,
+    inspect_source_kind_segments,
+    merge_source_factories_with_kind_segmentation,
 )
 from ovc.opt_b.c2p_v0_2.rs0_empirical_semantics import normalize_candidate_source_row
 
@@ -26,7 +28,6 @@ SOURCE_ARTIFACT_DIGEST = "sha256:482781f5b7921d64219650ff4711027337dbfe677b22415
 EXPECTED_C2_ROWS = 1_505_072
 MEMORY_LIMIT = 1_160_593_408
 STORAGE_LIMIT = 6_411_935_744
-MODULUS = 1 << 256
 
 
 def sha256_file(path: Path) -> str:
@@ -35,71 +36,6 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
-
-
-def canonical_row_bytes(row: Mapping[str, Any]) -> bytes:
-    return json.dumps(
-        dict(row),
-        ensure_ascii=False,
-        allow_nan=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-
-
-class MultisetSignature:
-    def __init__(self) -> None:
-        self.count = 0
-        self.xor = 0
-        self.sum = 0
-
-    def update(self, row: Mapping[str, Any]) -> None:
-        value = int.from_bytes(hashlib.sha256(canonical_row_bytes(row)).digest(), "big")
-        self.count += 1
-        self.xor ^= value
-        self.sum = (self.sum + value) % MODULUS
-
-    def value(self) -> dict[str, Any]:
-        return {
-            "count": self.count,
-            "xor_sha256_int": f"{self.xor:064x}",
-            "sum_sha256_int_mod_2_256": f"{self.sum:064x}",
-        }
-
-
-class InputObserver:
-    def __init__(self, rows: Iterable[Mapping[str, Any]]) -> None:
-        self.rows = rows
-        self.signature = MultisetSignature()
-        self.tie_inversions = 0
-        self.max_equal_time_group = 0
-        self._current_time: str | None = None
-        self._current_group = 0
-        self._previous_time: str | None = None
-        self._previous_source_id: str | None = None
-
-    def __iter__(self):
-        for row in self.rows:
-            material = normalize_candidate_source_row(row)
-            first_valid_time = str(material["first_valid_time"])
-            source_record_id = str(material["source_record_id"])
-            if self._previous_time is not None and first_valid_time < self._previous_time:
-                raise RuntimeError("RS0_SOURCE_ORDER_PREFLIGHT_DECREASING_FIRST_VALID_TIME")
-            if first_valid_time != self._current_time:
-                self._current_time = first_valid_time
-                self._current_group = 0
-            self._current_group += 1
-            self.max_equal_time_group = max(self.max_equal_time_group, self._current_group)
-            if (
-                self._previous_time == first_valid_time
-                and self._previous_source_id is not None
-                and source_record_id <= self._previous_source_id
-            ):
-                self.tie_inversions += 1
-            self._previous_time = first_valid_time
-            self._previous_source_id = source_record_id
-            self.signature.update(row)
-            yield row
 
 
 def peak_rss_bytes() -> int:
@@ -122,51 +58,55 @@ def locate_source_root(source_root: Path) -> tuple[Path, Path, dict[str, Any]]:
     return source_root, locator_path, locator
 
 
-def verify_stream(
-    source_root: Path,
-    source: Any,
-) -> dict[str, Any]:
-    observer = InputObserver(
+def stream_factory(source_root: Path, source):
+    path = source_root / source.relative_path
+
+    def factory():
+        return iter_verified_rows(path, expected_role="C2_VNEXT")
+
+    return factory
+
+
+def inspect_exact_source_envelope(source_root: Path, source) -> dict[str, Any]:
+    inspection = inspect_source_kind_segments(
         iter_verified_rows(
             source_root / source.relative_path,
             expected_role="C2_VNEXT",
         )
     )
-    output_signature = MultisetSignature()
-    output_count = 0
-    previous_key: tuple[str, str] | None = None
-    order_sha = hashlib.sha256()
-
-    for row in canonicalize_equal_time_groups(observer):
-        material = normalize_candidate_source_row(row)
-        key = (str(material["first_valid_time"]), str(material["source_record_id"]))
-        if previous_key is not None and key <= previous_key:
-            raise RuntimeError("RS0_SOURCE_ORDER_RECOVERED_STREAM_NOT_STRICTLY_CANONICAL")
-        previous_key = key
-        output_signature.update(row)
-        output_count += 1
-        order_sha.update(f"{key[0]}\x1f{key[1]}\n".encode("utf-8"))
-
-    if observer.signature.value() != output_signature.value():
-        raise RuntimeError("RS0_SOURCE_ORDER_ROW_IDENTITY_MUTATION_OR_LOSS")
-    if output_count != source.row_count:
+    if inspection["raw_rows"] != source.row_count:
         raise RuntimeError("RS0_SOURCE_ORDER_STREAM_ROW_COUNT_DRIFT")
-
+    if inspection["observed_kinds"] != list(C2_SOURCE_KIND_ORDER):
+        raise RuntimeError(
+            "RS0_SOURCE_ORDER_EXACT_SOURCE_KIND_ENVELOPE_DRIFT:"
+            + ",".join(inspection["observed_kinds"])
+        )
+    expected_transitions = [
+        {"from": "C2_LEVEL", "to": "C2_CONTAINER"},
+        {"from": "C2_CONTAINER", "to": "C2_PARENT_OBSERVATION"},
+    ]
+    if inspection["segment_transitions"] != expected_transitions:
+        raise RuntimeError("RS0_SOURCE_ORDER_EXACT_SOURCE_SEGMENT_TRANSITION_DRIFT")
+    if inspection["within_kind_time_decreases"] != 0:
+        raise RuntimeError("RS0_SOURCE_ORDER_WITHIN_KIND_TIME_DECREASE")
+    if len(inspection["rows_by_side"]) != 1:
+        raise RuntimeError("RS0_SOURCE_ORDER_SOURCE_FILE_SIDE_CARDINALITY_DRIFT")
+    if inspection["boundary_time_decreases"] <= 0:
+        raise RuntimeError("RS0_SOURCE_ORDER_EXPECTED_SEGMENT_BOUNDARY_RESET_NOT_OBSERVED")
     return {
         "relative_path": source.relative_path,
+        "source_sha256": source.sha256,
         "expected_rows": source.row_count,
-        "input_rows": observer.signature.count,
-        "output_rows": output_count,
-        "tie_inversions_detected": observer.tie_inversions,
-        "max_equal_time_group_rows": observer.max_equal_time_group,
-        "row_multiset_signature": observer.signature.value(),
-        "recovered_order_sha256": order_sha.hexdigest(),
-        "row_identity_preserved": True,
-        "strict_canonical_output": True,
+        **inspection,
     }
 
 
-def global_merge_receipt(source_root: Path, sources: list[Any], work_dir: Path) -> dict[str, Any]:
+def global_merge_receipt(
+    source_root: Path,
+    sources: list[Any],
+    source_inspections: list[dict[str, Any]],
+    work_dir: Path,
+) -> dict[str, Any]:
     work_dir.mkdir(parents=True, exist_ok=True)
     db_path = work_dir / "source-order-preflight.sqlite3"
     if db_path.exists():
@@ -176,16 +116,17 @@ def global_merge_receipt(source_root: Path, sources: list[Any], work_dir: Path) 
     connection.execute("PRAGMA synchronous=NORMAL")
     connection.execute("CREATE TABLE source_ids(source_record_id TEXT PRIMARY KEY)")
 
-    streams = [
-        iter_verified_rows(
-            source_root / source.relative_path,
-            expected_role="C2_VNEXT",
-        )
-        for source in sources
-    ]
-    merged = merge_source_streams_with_tie_canonicalization(streams)
+    expected_counts: Counter[tuple[str, str]] = Counter()
+    for inspection in source_inspections:
+        side = next(iter(inspection["rows_by_side"]))
+        for source_kind, count in inspection["rows_by_kind"].items():
+            expected_counts[(side, source_kind)] += int(count)
+
+    factories = [stream_factory(source_root, source) for source in sources]
+    merged = merge_source_factories_with_kind_segmentation(factories)
     previous_key: tuple[str, str] | None = None
     order_sha = hashlib.sha256()
+    observed_counts: Counter[tuple[str, str]] = Counter()
     rows = 0
     try:
         for row in merged:
@@ -203,6 +144,9 @@ def global_merge_receipt(source_root: Path, sources: list[Any], work_dir: Path) 
                 raise RuntimeError(
                     f"RS0_SOURCE_ORDER_DUPLICATE_SOURCE_RECORD:{source_id}"
                 ) from exc
+            source_kind = str(row.get("source_record_kind") or "")
+            side = str(row.get("side") or "")
+            observed_counts[(side, source_kind)] += 1
             previous_key = key
             order_sha.update(f"{key[0]}\x1f{key[1]}\n".encode("utf-8"))
             rows += 1
@@ -217,6 +161,11 @@ def global_merge_receipt(source_root: Path, sources: list[Any], work_dir: Path) 
         raise RuntimeError("RS0_SOURCE_ORDER_PREFLIGHT_STORAGE_LIMIT_EXCEEDED")
     if rows != EXPECTED_C2_ROWS:
         raise RuntimeError(f"RS0_SOURCE_ORDER_GLOBAL_ROW_COUNT_DRIFT:{rows}")
+    if observed_counts != expected_counts:
+        raise RuntimeError(
+            "RS0_SOURCE_ORDER_ROW_PARTITION_PRESERVATION_FAIL:"
+            f"expected={dict(expected_counts)}:observed={dict(observed_counts)}"
+        )
 
     return {
         "rows": rows,
@@ -224,6 +173,15 @@ def global_merge_receipt(source_root: Path, sources: list[Any], work_dir: Path) 
         "strict_global_order": True,
         "global_order_sha256": order_sha.hexdigest(),
         "identity_index_bytes": database_bytes,
+        "expected_side_kind_counts": {
+            f"{side}|{kind}": count
+            for (side, kind), count in sorted(expected_counts.items())
+        },
+        "observed_side_kind_counts": {
+            f"{side}|{kind}": count
+            for (side, kind), count in sorted(observed_counts.items())
+        },
+        "row_partition_preserved": True,
     }
 
 
@@ -235,6 +193,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
+    resource.setrlimit(resource.RLIMIT_AS, (MEMORY_LIMIT, MEMORY_LIMIT))
     repo_root = args.repo_root.resolve()
     source_root, locator_path, locator = locate_source_root(args.source_root.resolve())
     sources = validate_locator(locator, source_root)
@@ -278,20 +237,23 @@ def main() -> int:
     if decision["approved_authority_delta"]["real_source_execution"] != "FORBIDDEN":
         raise SystemExit("RS0_SOURCE_ORDER_REAL_SOURCE_EXECUTION_AUTHORITY_DRIFT")
 
-    stream_receipts = [
-        verify_stream(source_root, source)
+    source_inspections = [
+        inspect_exact_source_envelope(source_root, source)
         for source in sorted(c2_sources, key=lambda item: item.relative_path)
     ]
-    if sum(item["tie_inversions_detected"] for item in stream_receipts) <= 0:
-        raise SystemExit("RS0_SOURCE_ORDER_EXPECTED_EQUAL_TIME_INVERSION_NOT_OBSERVED")
+    global_receipt = global_merge_receipt(
+        source_root,
+        c2_sources,
+        source_inspections,
+        args.work_dir,
+    )
 
-    global_receipt = global_merge_receipt(source_root, c2_sources, args.work_dir)
     peak = peak_rss_bytes()
     if peak > MEMORY_LIMIT:
         raise SystemExit("RS0_SOURCE_ORDER_PREFLIGHT_MEMORY_LIMIT_EXCEEDED")
 
     receipt = {
-        "schema": "ovc-c2p2-rs0-source-order-recovery-current-source-preflight/v1",
+        "schema": "ovc-c2p2-rs0-source-order-recovery-current-source-preflight/v2",
         "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
         "packet_id": "C2P2-RS0-SOURCE-ORDER-RECOVERY",
         "status": "PASS",
@@ -302,7 +264,18 @@ def main() -> int:
         "source_locator_path": str(locator_path),
         "source_locator_file_sha256": SOURCE_LOCATOR_FILE_SHA,
         "source_locator_logical_sha256": SOURCE_LOCATOR_LOGICAL_SHA,
-        "stream_receipts": stream_receipts,
+        "source_envelope": {
+            "producer_ref": "src/ovc/opt_b/c2p_v0_2/rs0_source_materialisation.py::_write_streaming_c2_source",
+            "documented_physical_layout": [
+                "C2_LEVEL segment",
+                "C2_CONTAINER segment",
+                "C2_PARENT_OBSERVATION segment",
+            ],
+            "interpretation": "PHYSICAL_FILE_ENVELOPE_CONTAINS_THREE_LOGICAL_MONOTONE_SOURCE_KIND_STREAMS",
+            "source_inspections": source_inspections,
+            "boundary_time_decreases_are_segment_resets_only": True,
+            "within_logical_stream_time_decreases": 0,
+        },
         "global_merge": global_receipt,
         "memory": {
             "peak_rss_bytes": peak,
@@ -318,7 +291,7 @@ def main() -> int:
         "activation_state": "NONE",
         "validation": "LOCKED_UNCONSUMED",
         "f0_a": "HOLD",
-        "scientific_effect": "NONE_ORDERING_ONLY",
+        "scientific_effect": "NONE_SOURCE_ENVELOPE_SEQUENCING_ONLY",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
