@@ -1,0 +1,68 @@
+{
+  "acceptance_conditions": [
+    "Only equal-first_valid_time groups are reordered and only by source_record_id.",
+    "No source row is lost, duplicated or mutated.",
+    "A/B/C recovered execution is exact-reference equivalent on adversarial equal-time unsorted fixtures.",
+    "Genuinely decreasing first_valid_time and duplicate source IDs fail closed.",
+    "Repository-wide tests pass.",
+    "Full-cardinality synthetic recovered execution remains inside 1160593408-byte memory and 6411935744-byte storage limits.",
+    "Exact current-source ordering-only preflight passes without semantic runtime invocation.",
+    "No fresh real-source authority is granted.",
+    "Fresh GRUN R3 is materialised as OPERATOR_REQUIRED before any rerun."
+  ],
+  "authority_delta": "NONE_SCIENTIFIC_SOURCE_SEQUENCING_IMPLEMENTATION_ONLY",
+  "authority_required": "NONE_INSIDE_OPERATOR_APPROVED_BOUNDED_RECOVERY",
+  "baseline_main_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
+  "branch": "recover/c2p2-rs0-source-order-r2-20260817",
+  "implementation": {
+    "binding_ref": "registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2.json",
+    "capacity_script": "scripts/c2p2_rs0_source_order_recovery_capacity.py",
+    "current_source_preflight_script": "scripts/c2p2_rs0_source_order_recovery_preflight.py",
+    "qualification_workflow": ".github/workflows/c2p2-rs0-runtime-capacity-recovery.yml",
+    "source_order_module": "src/ovc/opt_b/c2p_v0_2/rs0_empirical_runtime_source_order.py"
+  },
+  "next_gate": "C2P2-RS0-FRESH-GRUN-R3",
+  "packet_id": "C2P2-RS0-SOURCE-ORDER-RECOVERY",
+  "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
+  "plan_version": "0.1",
+  "prerequisite_branch_tip": "de91919f3e7a2aa4fcd086a0ab0e0b5013da65d3",
+  "prerequisites": [
+    "C2P2-RS0-RUN-RECOVERY-R2=PASS",
+    "R2 single-use authority remains consumed with run_count_remaining=0",
+    "R2 source-order root cause diagnosis preserved",
+    "Candidate Generation v3 unchanged",
+    "core runtime semantics unchanged",
+    "source materialisation identity unchanged"
+  ],
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "rollback": "REMOVE_V0_2_SOURCE_ORDER_BINDING_FROM_FUTURE_EXECUTION_ONLY; PRESERVE ALL FAILED-RUN, AUTHORITY-CONSUMPTION, DIAGNOSIS AND RECOVERY EVIDENCE",
+  "schema": "ovc-c2p2-rs0-source-order-recovery-packet/v1",
+  "scope": {
+    "allowed": [
+      "deterministic equal-first_valid_time source_record_id ordering in execution adapter source sequencing",
+      "adversarial A/B/C exact reference-equivalence tests",
+      "row-preservation tests",
+      "duplicate/decreasing-time fail-closed tests",
+      "repository regression",
+      "full-cardinality synthetic capacity proof",
+      "exact current-source ordering-only preflight",
+      "QA and Fresh GRUN R3 decision packet"
+    ],
+    "forbidden": [
+      "real-source semantic execution",
+      "new run token",
+      "ObjectPack selection or promotion",
+      "C2P activation",
+      "source population change",
+      "source artifact change",
+      "candidate generation change",
+      "core runtime semantic change",
+      "predicate or threshold change",
+      "sampling or reduced precision",
+      "Validation consumption",
+      "F0-A release",
+      "publication, probability, risk, exposure, trading, execution or agent-write authority"
+    ]
+  },
+  "status": "RUNNING"
+}
