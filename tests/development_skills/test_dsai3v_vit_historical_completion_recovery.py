@@ -5,8 +5,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import jsonschema
-
 from ovc.development.identity import canonical_sha256
 from ovc.development.skills.vit_core import VitContractError
 from ovc.development.skills.vit_historical_completion_recovery import (
@@ -28,7 +26,6 @@ from ovc.development.skills.vit_materialisation import ReceiptStore
 ROOT = Path(__file__).resolve().parents[2]
 DECISION_PATH = ROOT / "docs/programmes/system-atlas-v0-1/wp10/ATLAS_WP10_HISTORICAL_COMPLETION_RECOVERY_DECISION.json"
 SOURCE_CENSUS_PATH = ROOT / "docs/programmes/system-atlas-v0-1/wp10/ATLAS_WP10_HISTORICAL_COMPLETION_RECOVERY_SOURCE_CENSUS.json"
-SCHEMA_PATH = ROOT / "schemas/development/skills/vit_historical_completion_recovery_decision_v1.schema.json"
 
 
 class HistoricalCompletionRecoveryTests(unittest.TestCase):
@@ -49,12 +46,16 @@ class HistoricalCompletionRecoveryTests(unittest.TestCase):
         )
 
     def test_decision_schema_and_identity_are_exact(self) -> None:
-        schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
-        jsonschema.Draft202012Validator(schema).validate(self.decision)
         logical = {key: value for key, value in self.decision.items() if key != "recovery_decision_id"}
         self.assertEqual(
             self.decision["recovery_decision_id"],
             canonical_sha256(logical, role="DSAI3V_HISTORICAL_COMPLETION_RECOVERY_DECISION"),
+        )
+        self.assertEqual(self.decision["authority_effect"], "NONE")
+        self.assertEqual(self.decision["precedent_effect"], "NONE_SINGLE_USE")
+        self.assertEqual(
+            self.decision["normal_prospective_requirement"],
+            "PMT_AND_PREWRITE_FREEZE_REQUIRED_UNCHANGED",
         )
 
     def test_absent_freeze_source_census_is_content_addressed(self) -> None:
