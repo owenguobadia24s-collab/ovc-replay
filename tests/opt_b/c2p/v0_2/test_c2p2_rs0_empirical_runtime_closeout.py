@@ -85,22 +85,23 @@ def test_currentness_and_fresh_grun_packet_stop_before_real_source_launch() -> N
     assert gate["immutable_prior_grun"]["execution_count_consumed"] == 0
 
 
-def test_local_qa_closeout_is_exact_and_awaits_only_pr_head_assurance_and_fresh_grun() -> None:
+def test_qa_closeout_is_exact_and_stops_at_fresh_grun() -> None:
     qa = _read(QA)
     closeout = _read(CLOSEOUT)
-    assert qa["status"] == "LOCAL_PASS_INTEGRATION_ASSURANCE_PENDING"
+    assert qa["status"] == "PASS"
     assert qa["tests"] == [
         "LOCAL_RUNTIME_AND_CLOSEOUT_TARGETED_20_PASSED",
         "LOCAL_C2P_SURFACE_129_PASSED",
         "LOCAL_REPOSITORY_SUITE_4024_PASSED_2_SKIPPED_687_SUBTESTS_PASSED",
     ]
-    assert qa["integration_assurance"]["github_tests_run"] is None
+    assert qa["integration_assurance"]["github_tests_run"] == 32034956759
+    assert qa["integration_assurance"]["github_tiered_run"] == 32034956762
+    assert qa["integration_assurance"]["vit_siq_profile_merge_readiness"] == "PASS"
     assert qa["unresolved_issues"] == [
-        "EXACT_PR_HEAD_GITHUB_INTEGRATION_ASSURANCE_PENDING",
         "FRESH_GRUN_OPERATOR_DECISION_REQUIRED_BEFORE_REAL_SOURCE_LAUNCH",
     ]
-    assert closeout["implementation_commit"] is None
-    assert closeout["pull_request"] is None
+    assert closeout["implementation_commit"] == "632893451279dd52beddbd5915edca81ea45badb"
+    assert closeout["pull_request"] == 1090
     assert closeout["old_grun_token_consumed"] is False
     assert closeout["final_v3_real_source_execution_eligible"] is False
     assert closeout["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
