@@ -42,7 +42,8 @@ def test_execution_fails_closed_before_grun_token_consumption() -> None:
     programme = _load(PROGRAMME_STATE)
 
     assert blocker["gate_id"] == "C2P2-RS0-GSEM-UNBLOCK"
-    assert blocker["recommended_decision"] == "BLOCK"
+    assert blocker["recommended_decision"] == "PASS"
+    assert "CURRENT_REAL_SOURCE_EXECUTION_REMAINS_BLOCKED" in blocker["recommended_decision_scope"]
     assert blocker["tests"]["run_launched"] is False
     assert blocker["qa"]["recommendation"] == "BLOCK_EXECUTION_RETURN_TO_OPERATOR"
 
