@@ -26,13 +26,19 @@ def test_grun_gate_ready_evidence_is_preserved_after_operator_pass() -> None:
     assert readiness["authority_firewall"]["validation"] == "LOCKED_UNCONSUMED"
 
 
-def test_operator_pass_grants_exactly_one_shadow_run_and_no_activation() -> None:
+def test_operator_pass_grants_exactly_one_shadow_run_and_gsem_pass_does_not_consume_it() -> None:
     decision = _read("docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_OPERATOR_DECISION_v0_1.json")
+    gsem = _read("docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GSEM_OPERATOR_DECISION_v0_1.json")
+    remediation = _read("registries/authority/C2P2_RS0_GSEM_REMEDIATION_AUTHORITY_v0_1.json")
     authority = _read("registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json")
     packet = _read("docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_AUTHORITY_PACKET_v0_3.json")
     state = _read("registries/implementation/c2p_v0_2/C2P2_RS0_STATE_v0_1.json")
     assert decision["decision"] == "PASS"
     assert decision["operator_instruction"] == "OVC APPROVE C2P2-RS0-GRUN PASS"
+    assert gsem["decision"] == "PASS"
+    assert gsem["operator_instruction"] == "OVC APPROVE C2P2-RS0-GSEM-UNBLOCK PASS"
+    assert remediation["state"] == "AUTHORISED"
+    assert remediation["grun_token"]["may_consume_during_remediation"] is False
     assert authority["execution_count_limit"] == 1
     assert authority["execution_count_consumed"] == 0
     assert authority["state"] == "AUTHORISED_NOT_STARTED"
@@ -43,8 +49,14 @@ def test_operator_pass_grants_exactly_one_shadow_run_and_no_activation() -> None
     assert packet["approved_authority"]["real_source_run"] == "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN"
     assert packet["approved_authority"]["active_object_pack"] is None
     assert state["status"] == "APPROVED"
-    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED"
-    assert state["next_packet"] == "C2P2-RS0-EXECUTION"
+    assert state["packet_id"] == "C2P2-RS0-GSEM-UNBLOCK"
+    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED_BLOCKED_PENDING_SEMANTIC_CLOSEOUT"
+    assert state["authority"]["run_authority_consumed"] is False
+    assert state["authority"]["run_count_remaining"] == 1
+    assert state["mandatory_stop"] is None
+    assert state["next_packet"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
+    assert state["authority"]["active_object_pack"] is None
+    assert state["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
 
 
 def test_approval_currentness_review_accepts_only_non_material_main_advances() -> None:
