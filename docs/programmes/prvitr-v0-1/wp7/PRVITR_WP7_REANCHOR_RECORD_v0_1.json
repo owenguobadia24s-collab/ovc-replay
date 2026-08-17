@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-prvitr-gate-reanchor/v0.1",
+  "programme_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
+  "plan_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-IMPLEMENTATION-PLAN-v0.1",
+  "packet_id": "PRVITR-WP7",
+  "gate_id": "PRVITR-G-LIVE-SWITCH",
+  "status": "APPROVED_REANCHORED",
+  "prior_gate_pr": 1120,
+  "prior_gate_branch": "gate/prvitr-live-switch-ready-r2-20260817",
+  "prior_gate_head": "65386baa1a40505ccdec5c9479ab8f9f09529eeb",
+  "current_gate_branch": "gate/prvitr-live-switch-approved-r3-20260818",
+  "current_anchor_commit": "e2366307cc104978a19cf2038e3092095db97996",
+  "current_anchor_tree": "eae35dde781813d1c55daab23df307b4baef35f3",
+  "main_advance": {
+    "commit": "e2366307cc104978a19cf2038e3092095db97996",
+    "programme": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+    "packet": "PRSCI-WP8",
+    "classification": "UNRELATED_TO_PRVITR_GATE_PAYLOAD_OR_AUTHORITY",
+    "authority_effect_on_prvitr": "NONE"
+  },
+  "payload_treatment": "Recreate the already-approved PRVITR gate-record payload from the latest lawful main rather than rewriting the stale branch. Operator PASS remains unchanged; only placement/baseline provenance is renewed.",
+  "evidence_preserved": {
+    "shadow_packet_pr": 1116,
+    "shadow_merge_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
+    "historical_last20": "20/20 safety equivalent, 0 false authority allows",
+    "perturbation_replay": "10/10 deterministic PASS, 0 unsafe divergence, 0 lost causal receipts"
+  },
+  "warnings": [
+    "The corrected admission is authorised for bounded implementation but remains non-authoritative until that implementation exact-head qualifies and merges.",
+    "PR #1120 is superseded by this current-main gate record and must not be merged.",
+    "No required-status context, ruleset, physical VIT control, scientific authority, Validation, publication, probability, risk, exposure or execution authority changes in this reanchor."
+  ],
+  "rollback": "Close/supersede this gate-record branch before merge if current main advances again; the existing live route remains authoritative.",
+  "authority_effect": "NONE_BEYOND_ALREADY_RECORDED_OPERATOR_PASS"
+}
