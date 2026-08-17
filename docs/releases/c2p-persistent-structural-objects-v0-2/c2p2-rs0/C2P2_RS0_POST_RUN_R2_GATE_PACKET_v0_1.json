@@ -4,7 +4,10 @@
   "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2",
   "gate_id": "C2P2-RS0-RUN-RECOVERY-R2",
   "gate_classification": "OPERATOR_REQUIRED",
-  "status": "GATE_READY",
+  "status": "APPROVED",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R2_OPERATOR_DECISION_v0_1.json",
   "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
   "plan_version": "0.1",
   "baseline_main_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
@@ -22,9 +25,9 @@
   ],
   "current_authority": "R2_SINGLE_USE_CONSUMED_NO_SELECTION_NO_ACTIVATION",
   "run_evaluation": "BLOCKED_EXECUTION_FAILURE_SINGLE_USE_CONSUMED",
-  "proposed_authority_delta": {
+  "approved_authority_delta": {
     "decision_scope": "EXECUTION_ADAPTER_SOURCE_SEQUENCING_ONLY",
-    "effect_if_pass": "AUTHORISE_BOUNDED_DETERMINISTIC_SOURCE_ORDER_ADAPTER_RECOVERY_ONLY",
+    "effect": "AUTHORISE_BOUNDED_DETERMINISTIC_SOURCE_ORDER_ADAPTER_RECOVERY_ONLY",
     "real_source_execution_during_recovery": "FORBIDDEN",
     "fresh_real_source_run_authority": "NONE",
     "post_recovery_requirement": "C2P2-RS0-FRESH-GRUN-R3_OPERATOR_REQUIRED_BEFORE_ANY_REAL_SOURCE_RERUN",
@@ -104,24 +107,7 @@
     "No valid A/B/C comparative scientific result exists, so no winner, selection, promotion or activation may be inferred.",
     "The prior synthetic recovery qualification did not reproduce the authorised source files' equal-time tie ordering and therefore missed this integration defect."
   ],
-  "unresolved_issues": [
-    "The pre-canonical source-stream assumption in the qualified spooled adapter is incompatible with the exact authorised source ordering within equal timestamps."
-  ],
-  "changed_court_record_paths": [
-    ".github/workflows/c2p2-rs0-real-source-shadow-run-r2.yml",
-    "scripts/c2p2_rs0_real_source_shadow_r2.py",
-    "src/ovc/opt_b/c2p_v0_2/rs0_empirical_runtime_streaming.py",
-    "registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1.json",
-    "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_3.json",
-    "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_2.json",
-    "registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_R2_OPERATOR_DECISION_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_PACKET_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_TRIGGER_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_RESULT_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_ARTIFACT_BINDING_v0_1.json",
-    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R2_DIAGNOSIS_v0_1.json"
-  ],
+  "unresolved_issues": [],
   "external_artifacts": {
     "r2_github_actions_run_id": 32071039793,
     "r2_github_actions_artifact_id": 9301726866,
@@ -138,8 +124,6 @@
   "f0_a": "HOLD",
   "publication_probability_risk_exposure_trading_execution_agent_write": "NONE",
   "rollback": "FORWARD_ONLY_PRESERVE_BOTH_FAILED_RUN_AUTHORITY_CONSUMPTIONS_ALL_RUN_AND_PARTIAL_EVIDENCE_DURABLE_ARTIFACTS_RECOVERY_QUALIFICATION_AND_R2_DIAGNOSIS",
-  "recommended_decision": "PASS",
-  "recommended_decision_effect": "PASS_AUTHORIZES_BOUNDED_ADAPTER_SOURCE_ORDER_RECOVERY_ONLY_NOT_REAL_SOURCE_RERUN",
-  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
-  "exact_work_after_pass": "Implement deterministic bounded equal-first_valid_time source_record_id ordering in the execution adapter source-sequencing layer only; add adversarial A/B/C exact-equivalence, row-preservation, duplicate-ID and decreasing-time fail-closed tests; re-run repository and full-cardinality synthetic capacity QA under unchanged limits; perform an exact current-source ordering-only preflight with no semantic execution; then materialise C2P2-RS0-FRESH-GRUN-R3 as a new OPERATOR_REQUIRED gate. Do not grant or execute a real-source rerun, select/promote an ObjectPack, or activate C2P as part of recovery."
+  "next_packet": "C2P2-RS0-SOURCE-ORDER-RECOVERY",
+  "next_operator_gate": "C2P2-RS0-FRESH-GRUN-R3"
 }
