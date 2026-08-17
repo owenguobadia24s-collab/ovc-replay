@@ -9,6 +9,8 @@ import sys
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = REPO_ROOT / "scripts/c2p2_rs0_real_source_shadow.py"
 AUTHORITY = REPO_ROOT / "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_2.json"
+WORKFLOW = REPO_ROOT / ".github/workflows/c2p2-rs0-real-source-shadow-run.yml"
+TRIGGER_REL = "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_TRIGGER_v0_1.json"
 
 
 def test_real_source_harness_accepts_exact_fresh_grun_bindings() -> None:
@@ -40,6 +42,11 @@ def test_fresh_grun_authority_remains_single_use_and_non_selecting() -> None:
     assert authority["non_transitive_denials"]["validation"] == "LOCKED_UNCONSUMED"
 
 
-def test_execution_harness_has_no_trigger_marker_by_default() -> None:
-    trigger = REPO_ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_TRIGGER_v0_1.json"
-    assert not trigger.exists(), "real-source execution must not launch merely by merging harness code"
+def test_execution_workflow_is_exact_trigger_marker_gated() -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    assert "run/c2p2-rs0-real-source-shadow-20260817" in workflow
+    assert TRIGGER_REL in workflow
+    assert "cancel-in-progress: false" in workflow
+    assert "contents: write" in workflow
+    assert "run-id: '32010902424'" in workflow
+    assert "Fail workflow closed when the authorised comparative run did not complete" in workflow
