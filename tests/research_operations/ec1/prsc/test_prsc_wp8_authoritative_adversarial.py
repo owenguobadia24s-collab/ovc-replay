@@ -138,6 +138,10 @@ def test_materialised_wp8_evidence_is_pinned_actual_rss_and_current_run_fits_bud
         (evidence_root / "PRSCI_WP8_REVIEW_BUDGET_v0_1.json").read_text(encoding="utf-8")
     )
 
+    print(
+        "PRSC_WP8_CAPACITY_RUNTIME_EVIDENCE="
+        + json.dumps(list(evidence), sort_keys=True, separators=(",", ":"))
+    )
     assert materialised_capacity["measurement_method"] == MEASUREMENT_SOURCE
     assert materialised_capacity["peak_memory_quantity"] == PEAK_MEMORY_QUANTITY
     assert materialised_capacity["environment_binding"]["python_version"].startswith("3.11.")
