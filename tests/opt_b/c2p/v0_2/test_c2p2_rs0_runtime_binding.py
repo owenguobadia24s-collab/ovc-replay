@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import math
+
 import pytest
 
 from ovc.opt_b.c2e_v2 import source_replay as base
 from ovc.opt_b.c2e_v2 import source_replay_runtime as runtime
 from ovc.opt_b.c2e_v2.handoff import C2EHandoffError, build_input_frame
+from ovc.opt_b.c2p_v0_2 import rs0_source_materialisation as materialisation
 from ovc.opt_b.c2p_v0_2 import rs0_source_materialisation_runtime as adapter
 
 
@@ -44,3 +47,46 @@ def test_firewall_remains_fail_closed_for_actual_forbidden_dependency_value() ->
     }
     with pytest.raises(C2EHandoffError, match="DEP_FORBIDDEN_VALUE_CONSUMED"):
         build_input_frame(payload)
+
+
+def test_persisted_c2_boundary_converts_finite_float_tokens_without_precision_policy_change() -> None:
+    source = {
+        "container": {"lower": 1.23456789012345, "upper": 1.23466789012345},
+        "count": 7,
+        "already_decimal": "1.25000",
+    }
+    normalized = adapter._persisted_c2_value(source)
+    assert normalized["container"]["lower"] == repr(source["container"]["lower"])
+    assert normalized["container"]["upper"] == repr(source["container"]["upper"])
+    assert normalized["count"] == 7
+    assert normalized["already_decimal"] == "1.25000"
+
+
+@pytest.mark.parametrize("value", [math.nan, math.inf, -math.inf])
+def test_persisted_c2_boundary_rejects_nonfinite_values(value: float) -> None:
+    with pytest.raises(ValueError):
+        adapter._persisted_c2_value({"value": value})
+
+
+def test_event_map_boundary_normalizes_event_local_numeric_surfaces_once(monkeypatch: pytest.MonkeyPatch) -> None:
+    parent_observations = {"PARENT": {"first_valid_time": "2021-01-01T00:00:00Z"}}
+
+    def fake_event_maps(_event, _prepared):
+        return {
+            "observations": {"OBS": {"value": 1.25}},
+            "parent_observations": parent_observations,
+            "profiles": {"PROFILE": {"facts": {"price_delta": 0.125}}},
+            "memberships": {},
+            "contexts": {},
+            "levels": {},
+            "containers": {"CONTAINER": {"centre": 1.5}},
+            "relation_sets": {},
+        }
+
+    monkeypatch.setattr(materialisation, "_event_maps", fake_event_maps)
+    adapter._bind_current_c2_persistence_boundary()
+    mapped = materialisation._event_maps({}, {})
+    assert mapped["observations"]["OBS"]["value"] == "1.25"
+    assert mapped["profiles"]["PROFILE"]["facts"]["price_delta"] == "0.125"
+    assert mapped["containers"]["CONTAINER"]["centre"] == "1.5"
+    assert mapped["parent_observations"] is parent_observations
