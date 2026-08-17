@@ -4,7 +4,7 @@
   "plan_id": "OVC-PRVIT-PCCA-v0.1-PROPOSED",
   "plan_version": "0.1",
   "packet_id": "PRVIT-WP0",
-  "status": "GATE_READY",
+  "status": "COMPLETED",
   "prerequisites": [
     "DSAI_V0_3_VIT_DESIGN",
     "DSAI_V0_3_VIT_CONFORMANCE_PLAN_R1_RATIFIED",
@@ -12,7 +12,7 @@
     "GRT_V0_2_CONFORMANCE_PLAN_RATIFIED"
   ],
   "authority_required": "OPERATOR_REQUIRED",
-  "authority_delta": "AUTHORISE_READ_ONLY_SHADOW_AUDIT_ONLY_IF_PRVIT_G0_PASS",
+  "authority_delta": "READ_ONLY_SHADOW_AUDIT_AUTHORISED; LIVE_PIPELINE_DELTA_NONE",
   "baseline_commit": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
   "baseline_tree": "ac7e76b9100e5720d4fb0e07bbd1b775dffc0bbc",
   "branch": "audit/prvit-wp0-g0-20260817",
@@ -26,15 +26,21 @@
   },
   "qa_packet": "docs/programmes/prvit-v0-1/wp0/PRVIT_WP0_QA_PACKET_v0_1.json",
   "gate_packet": "docs/programmes/prvit-v0-1/wp0/PRVIT_G0_GATE_READY_v0_1.json",
-  "decision_record": null,
+  "decision_record": "docs/programmes/prvit-v0-1/wp0/PRVIT_G0_OPERATOR_DECISION_v0_1.json",
   "merge_commit": null,
-  "blockers": ["PRVIT-G0_OPERATOR_DECISION_PENDING"],
-  "next_packet": "PRVIT-WP1_IF_G0_PASS",
-  "execution_mode_if_approved": "READ_ONLY_SHADOW",
+  "blockers": [],
+  "next_packet": "PRVIT-WP1",
+  "execution_mode": "READ_ONLY_SHADOW",
   "live_path_mutation_allowed": false,
   "primary_replay_population_id": "PRVIT-LAST20-FROZEN-20260817-v0.1",
   "hard_stop": "PRVIT-G-CUTOVER-READINESS",
   "live_system_effect": "NONE",
   "pr1106_effect": "NONE",
-  "rollback": "Forward preserve/supersede or abandon unmerged audit branch; no live restoration required."
+  "operator_decision": {
+    "gate_id": "PRVIT-G0",
+    "decision": "PASS",
+    "recorded_at_local": "2026-08-17T20:48:00+01:00",
+    "command": "OVC APPROVE PRVIT-G0 CONTINUE UNTIL NEXT BOUNDARY"
+  },
+  "rollback": "Forward preserve/supersede shadow audit artifacts; live integration path remains unchanged."
 }
