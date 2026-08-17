@@ -2,9 +2,10 @@
   "schema": "ovc-c2p2-rs0-real-source-shadow-run-packet/v1",
   "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
   "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN",
-  "status": "IMPLEMENTED_READY_TO_LAUNCH_AFTER_ASSURANCE",
-  "baseline_commit": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
-  "branch": "run/c2p2-rs0-real-source-shadow-20260817",
+  "status": "READY_TO_LAUNCH_NO_VIT_OPERATOR_OVERRIDE",
+  "baseline_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
+  "branch": "run/c2p2-rs0-real-source-shadow-novit-20260817",
+  "operator_override_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_NOVIT_OPERATOR_OVERRIDE_v0_1.json",
   "authority": {
     "authority_id": "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.2",
     "gate_id": "C2P2-RS0-FRESH-GRUN",
@@ -45,10 +46,14 @@
   "workflow": ".github/workflows/c2p2-rs0-real-source-shadow-run.yml",
   "trigger": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_TRIGGER_v0_1.json",
   "assurance_required_before_trigger": [
-    "TARGETED_HARNESS_TESTS_PASS",
-    "REPOSITORY_PR_ASSURANCE_PASS",
-    "LIVE_MAIN_BOUND_CURRENTNESS_RECHECK_PASS"
+    "EXACT_REPOSITORY_BINDING_VALIDATION_PASS",
+    "TARGETED_EXECUTION_HARNESS_TESTS_PASS",
+    "LIVE_MAIN_BOUND_CURRENTNESS_RECHECK_PASS",
+    "EXACT_AUTHORISED_SOURCE_ARTIFACT_PREFLIGHT_PASS",
+    "FROZEN_CAPACITY_ENVELOPE_PASS"
   ],
+  "vit_route": "BYPASSED_BY_OPERATOR_FOR_THIS_EXECUTION_PACKET_ONLY",
+  "permanent_main_integration": "NOT_AUTHORISED_BY_NO_VIT_OVERRIDE",
   "non_authority": {
     "objectpack_selection": "NONE",
     "c2p_activation": "NONE",
@@ -57,6 +62,6 @@
     "canonical_publication": "NONE",
     "probability_risk_exposure_trading_execution_agent_write": "NONE"
   },
-  "rollback": "Before launch, discard or supersede harness changes without consuming authority. After launch, preserve all run/partial evidence and never reinstate the single-use token without new operator authority.",
-  "mandatory_stop_after_run": "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION_OR_EARLIER_FAILURE_GATE"
+  "rollback": "Before semantic launch, supersede harness/route without consuming authority. After semantic launch, preserve all run/partial evidence and never reinstate the single-use token without new operator authority.",
+  "mandatory_stop_after_run": "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION_OR_C2P2-RS0-RUN-RECOVERY"
 }
