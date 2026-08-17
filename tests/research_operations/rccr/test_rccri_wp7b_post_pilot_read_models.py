@@ -172,10 +172,16 @@ def test_wp7b_follows_integrated_wp6b_without_consuming_owner_authority():
     assert merge_receipt["squash_merge_commit"] == "f8711a2fa0d643c87abb45a0985bf526c0f9915a"
     assert merge_receipt["tree_equivalence"] == "PASS"
 
+    # The live pointer has advanced through terminal WP8; immutable WP7B state/receipt above remain the court record for G7B.
+    assert pointer["status"] == "COMPLETED"
+    assert pointer["current_state"] == "RCCR_V0_1_STATE_v0_17.json"
     assert pointer["current_packet"] == "RCCRI-WP8"
     assert pointer["current_gate"] == "RCCRI-G8"
-    assert pointer["last_completed_packet"] == "RCCRI-WP7B"
-    assert pointer["last_merge_commit"] == "f8711a2fa0d643c87abb45a0985bf526c0f9915a"
+    assert pointer["gate_status"] == "PASS_DELEGATED_COMPLETED"
+    assert pointer["last_completed_packet"] == "RCCRI-WP8"
+    assert pointer["last_merge_commit"] == "43c053822e4a3cd0e7c04fc4a0760879ef84290a"
+    assert pointer["next_packet"] is None
+    assert pointer["next_operator_gate"] is None
     assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["rccr_consumption_boundary"]["real_source_ec1_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
     assert pointer["rccr_consumption_boundary"]["path2_real_source_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"

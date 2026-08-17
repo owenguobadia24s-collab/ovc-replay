@@ -109,22 +109,30 @@ def test_wp0_programme_state_is_approved_and_successor_pointer_advances_lawfully
         completed_ordinal = packet_ordinal(pointer["last_completed_packet"])
         assert current_ordinal > 0
         if completed_ordinal == current_ordinal:
-            assert packet_ordinal(pointer["next_packet"]) == current_ordinal + 1
-            if pointer["status"] == "GATE_READY":
-                assert pointer["operator_pending"]
-                assert pointer["current_gate"] in pointer["operator_pending"]
-            else:
-                assert pointer["status"] == "APPROVED"
+            if pointer["next_packet"] is None:
+                assert pointer["status"] == "COMPLETED"
+                assert pointer["current_packet"] == PACKET_SEQUENCE[-1]
+                assert pointer["current_gate"] == "RCCRI-G8"
+                assert pointer["gate_status"] == "PASS_DELEGATED_COMPLETED"
                 assert pointer["operator_pending"] == []
-                assert pointer["gate_status"].startswith("PASS_")
-                if pointer["current_gate"] == "RCCRI-G-PILOT-EXIT":
-                    assert pointer["next_operator_gate"] is None
-                    assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
-                    assert pointer["real_source_ec1_authority"] == "NONE"
-                    assert pointer["owner_capability_activation"] == "DENIED"
+                assert pointer["next_operator_gate"] is None
+            else:
+                assert packet_ordinal(pointer["next_packet"]) == current_ordinal + 1
+                if pointer["status"] == "GATE_READY":
+                    assert pointer["operator_pending"]
+                    assert pointer["current_gate"] in pointer["operator_pending"]
                 else:
-                    assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
-                    assert pointer["scaleout_authority"] == "DENIED"
+                    assert pointer["status"] == "APPROVED"
+                    assert pointer["operator_pending"] == []
+                    assert pointer["gate_status"].startswith("PASS_")
+                    if pointer["current_gate"] == "RCCRI-G-PILOT-EXIT":
+                        assert pointer["next_operator_gate"] is None
+                        assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+                        assert pointer["real_source_ec1_authority"] == "NONE"
+                        assert pointer["owner_capability_activation"] == "DENIED"
+                    else:
+                        assert pointer["next_operator_gate"] == "RCCRI-G-PILOT-EXIT"
+                        assert pointer["scaleout_authority"] == "DENIED"
         else:
             assert completed_ordinal == current_ordinal - 1
         assert pointer["last_merge_commit"]

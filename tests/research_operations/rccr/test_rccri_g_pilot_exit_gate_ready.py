@@ -129,7 +129,7 @@ def test_programme_pointer_preserves_pilot_and_g7b_history_while_wp8_advances():
     assert wp8_qa["next_packet"] is None
     assert wp8_qa["authority_effect"] == "NONE"
 
-    # Delegated G8 may advance current state to APPROVED, but not falsely to terminal completion before merge.
+    # Delegated G8 predecessor remains pre-materialisation truth even after terminal completion.
     assert g8["status"] == "APPROVED"
     assert g8["packet_id"] == "RCCRI-WP8"
     assert g8["authority_delta"] == "NONE"
@@ -142,18 +142,19 @@ def test_programme_pointer_preserves_pilot_and_g7b_history_while_wp8_advances():
     assert decision["merge_commit"] == "PENDING_PHYSICAL_MATERIALISATION"
     assert decision["next_packet"] is None
 
-    # Current pointer advances through G8 approval while preserving all owner firewalls and pre-merge truth.
-    assert pointer["current_state"] == "RCCR_V0_1_STATE_v0_16.json"
-    assert pointer["status"] == "APPROVED"
+    # Current pointer advances to terminal completion after physical materialisation while preserving all owner firewalls.
+    assert pointer["current_state"] == "RCCR_V0_1_STATE_v0_17.json"
+    assert pointer["status"] == "COMPLETED"
     assert pointer["current_packet"] == "RCCRI-WP8"
     assert pointer["current_gate"] == "RCCRI-G8"
-    assert pointer["gate_status"] == "PASS_DELEGATED_PENDING_FINAL_HEAD_AND_INTEGRATION"
-    assert pointer["last_completed_packet"] == "RCCRI-WP7B"
-    assert pointer["last_merge_commit"] == "f8711a2fa0d643c87abb45a0985bf526c0f9915a"
+    assert pointer["gate_status"] == "PASS_DELEGATED_COMPLETED"
+    assert pointer["last_completed_packet"] == "RCCRI-WP8"
+    assert pointer["last_merge_commit"] == "43c053822e4a3cd0e7c04fc4a0760879ef84290a"
     assert pointer["operator_pending"] == []
     assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
     assert pointer["authorized_follow_on_packets"] == []
     assert pointer["next_packet"] is None
+    assert pointer["next_operator_gate"] is None
     assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["owner_authority_frontier"]["path2_external"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
