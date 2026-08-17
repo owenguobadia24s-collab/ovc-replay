@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_operational_budget_v0_1.schema.json",
+  "title": "Atlas Operational Budget v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "budget_id", "version", "status", "required_environment", "required_dimensions", "limits", "capacity_failure", "core_source_sampling", "protected_security_evidence_dropping", "deep_optional_profile_degradation", "authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-operational-budget/v1"},
+    "budget_id": {"const": "ATLAS-OPERATIONAL-BUDGET-v0.1"},
+    "version": {"const": "0.1"},
+    "status": {"const": "FROZEN_ATLAS_G10"},
+    "required_environment": {"const": "windows"},
+    "required_dimensions": {"type": "array", "minItems": 9, "uniqueItems": true, "items": {"type": "string"}},
+    "limits": {"type": "object", "minProperties": 9, "additionalProperties": {"$ref": "#/$defs/limit"}},
+    "capacity_failure": {"const": "CAPACITY_EXCEEDED_TYPED_INCOMPLETE_DEGRADED"},
+    "core_source_sampling": {"const": "FORBIDDEN"},
+    "protected_security_evidence_dropping": {"const": "FORBIDDEN"},
+    "deep_optional_profile_degradation": {"const": "PERMITTED_ONLY_WITH_EXPLICIT_COMPLETENESS"},
+    "authority_effect": {"const": "NONE_QUALIFICATION_BUDGET_ONLY"}
+  },
+  "$defs": {"limit": {"type": "object", "additionalProperties": false, "required": ["unit", "maximum"], "properties": {"unit": {"enum": ["milliseconds", "bytes"]}, "maximum": {"type": "integer", "minimum": 0}}}}
+}

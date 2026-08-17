@@ -59,7 +59,7 @@ def test_wp4_review_evidence_identity_is_bound() -> None:
 
 
 def test_wp4_external_review_is_exact_and_scope_valid() -> None:
-    binding_path = ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_v0_1.json"
+    binding_path = ROOT / "registries/system_atlas/ATLAS_INDEPENDENT_REVIEWER_BINDING_G4_ALG_20260816.json"
     review_path = WP4 / "ATLAS_G4_ALG_INDEPENDENT_REVIEW_RECORD.json"
     binding = load(binding_path)
     review = load(review_path)
@@ -81,7 +81,10 @@ def test_wp4_remains_qualified_history_after_integration() -> None:
         assert pointer[field] == state[field]
     assert state["tests"]["wp4_independent_algorithm_review"] == "PASS_ELIGIBLE_INDEPENDENT_REVIEW"
     assert state["tests"]["wp4_integration"] == "PASS_INTEGRATED_PR_987"
-    assert state["blockers"] == []
+    if state["current_gate"] == "ATLAS-G10" and state["gate_status"] == "NOT_YET_ELIGIBLE_Q6_IND_PENDING":
+        assert state["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_PASS_REQUIRED"]
+    else:
+        assert state["blockers"] == []
     assert pointer["next_operator_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
 
 

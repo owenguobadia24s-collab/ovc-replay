@@ -1,38 +1,73 @@
 {
-  "activation_effect": "NONE_Q6_IND_AND_ATLAS_G_OBSERVABILITY_ACTIVATE_REMAIN_PENDING",
-  "authority_effect": "NONE_REVIEW_BINDING_ONLY",
-  "binding_id": "ATLAS-INDEPENDENT-REVIEWER-BINDING-G4-ALG-20260816-v1",
-  "court_record_effect": "NONE_UNTIL_REPOSITORY_MATERIALISATION",
-  "gate_id": "ATLAS-G4-ALG",
-  "implementation_author_conflict_status": "NO_RESOLVER_IMPLEMENTATION_AUTHOR_CONFLICT",
-  "implementation_effect": "ATLAS_G4_ALG_REVIEWER_REQUIREMENT_SATISFIED_ON_MATERIALISATION",
+  "schema": "ovc-atlas-independent-reviewer-binding/v1",
+  "binding_id": "ATLAS-INDEPENDENT-REVIEWER-BINDING-Q6-IND-20260817-v2",
+  "request_id": "ATLAS-WP10-Q6-IND-REQUEST-20260817-v2",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "packet_id": "ATLAS-WP10",
+  "gate_id": "ATLAS-G10",
+  "review_stage": "Q6-IND",
+  "reviewer_identity": {
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "reviewer_id": "OPENAI-GPT-5.6-SOL-ATLAS-Q6-IND-20260817-RENEWAL",
+    "reviewer_type": "AI_IMPLEMENTATION_INDEPENDENT_REVIEWER"
+  },
+  "reviewer_role": "ELIGIBLE_INDEPENDENT_IMPLEMENTATION_STAGE_REVIEWER",
+  "implementation_author_conflict_status": "NO_WP10_IMPLEMENTATION_CANDIDATE_OR_QUALIFICATION_RUNTIME_AUTHOR_CONFLICT",
   "independence_disclosure": {
-    "authored_or_modified_pinned_wp4_resolver": false,
-    "authored_or_modified_pr987_algorithm_candidate": false,
-    "eligibility_basis": "ATLAS-G4-ALG requires a reviewer not responsible for the resolver implementation. This reviewer did not author or modify the pinned WP4 resolver. Prior design/plan drafting is disclosed and does not satisfy the later Q6-IND review.",
+    "authored_or_modified_pinned_wp10_implementation_candidate": false,
+    "authored_or_modified_pinned_wp10_qualification_runtime": false,
+    "performed_prior_atlas_g4_alg_independent_review": true,
+    "performed_prior_q6_ind_review_of_superseded_subject": true,
+    "participated_in_prior_atlas_design_or_plan_drafting": true,
+    "project_external": false,
+    "operator_substitution": false,
     "independence_class": "IMPLEMENTATION_INDEPENDENT_NOT_PROJECT_EXTERNAL",
-    "participated_in_prior_atlas_design_or_plan_drafting": true
+    "eligibility_basis": "Q6-IND requires independence from the pinned WP10 implementation candidate and qualification runtime. The reviewer did not author or modify either. Prior design/plan participation, the earlier G4-ALG review and the superseded-subject Q6-IND review are disclosed; none substitutes for this renewed exact-current implementation-stage review."
   },
   "no_self_review": true,
   "operator_substitution": false,
-  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "review_subject": {
+    "baseline_commit": "f8711a2fa0d643c87abb45a0985bf526c0f9915a",
+    "baseline_tree": "7b367c4a9a900cf8ec75154d03bf0e99f7868624",
+    "implementation_candidate_commit": "b9fe86a80dae9e9d7abb5075a7979a5e9d5a8b6b",
+    "implementation_candidate_tree": "89b1c3e4b7ed76ec78943d9574935a35c4643d38",
+    "review_packaging_head": "00c0e4651d231b3c771d4a308949032d46a65e16",
+    "review_packaging_tree": "78531795bee16ae444cba3f95f4769b8febab4f4"
+  },
+  "evidence_binding": {
+    "external_q0_q6_evidence_sha256": "65c455ea6760721dc8b3f1987ff2a9a1e3f238ded89a0a5e3b9bbbc0e801efc0",
+    "browser_evidence_sha256": "c806c261563b59c13aa84bd659922f3d9d8fbcb27ece4857850272e0d9a497ee",
+    "operational_budget_sha256": "7119abb648c244a558c78e7ec2e05f8d7b4b32c029dac18d00254b5e6198e245",
+    "retention_budget_sha256": "945ac98a9540ec8c0390c3f2577dc119f32a48e9798ef303e252142056a32198",
+    "qualification_report_hash": "8d45b7670331e86e5f13264d06fd8bbc56074fc3e0e812aa5dba43e8740c1bd4",
+    "external_bytes_read_directly": true,
+    "all_pins_confirmed": true
+  },
   "required_scopes": [
-    "ATLAS-G4-ALG_PREDICATE_OWNER_AUTHORITY_ALGORITHMS",
-    "Q6-IND_GOVERNANCE_SECURITY_VISUAL_OPERATIONAL_REVIEW"
+    "IMPLEMENTATION_ALGORITHMS",
+    "GOVERNANCE_AND_AUTHORITY_CONTAINMENT",
+    "SECURITY_AND_VISIBILITY_FAIL_CLOSED",
+    "VISUAL_AND_ACCESSIBILITY_ASSURANCE",
+    "OPERATIONAL_CAPACITY_AND_WINDOWS",
+    "RETENTION_RECOVERY_AND_NON_DESTRUCTIVE_MAINTENANCE",
+    "EXACT_CURRENT_PUBLICATION_SHADOW",
+    "Q0_Q6_EVIDENCE_INTEGRITY"
   ],
-  "review_scope_manifest_sha256": "8576901c862f6d6bb78cc48b6bc9ae4b2acb965e4d28878a4119aaeab4c18612",
-  "reviewed_at": "2026-08-16T15:55:00+01:00",
-  "reviewer_identity": {
-    "model": "GPT-5.6 Sol",
-    "provider": "OpenAI",
-    "reviewer_id": "OPENAI-GPT-5.6-SOL-ATLAS-G4-ALG-20260816",
-    "reviewer_type": "AI_IMPLEMENTATION_INDEPENDENT_ALGORITHMIC_REVIEWER"
-  },
-  "reviewer_role": "INDEPENDENT_ALGORITHMIC_REVIEWER",
-  "schema": "ovc-atlas-independent-reviewer-binding/v1",
   "scope_status": {
-    "ATLAS-G4-ALG_PREDICATE_OWNER_AUTHORITY_ALGORITHMS": "BOUND_ELIGIBLE_REVIEW_COMPLETED",
-    "Q6-IND_GOVERNANCE_SECURITY_VISUAL_OPERATIONAL_REVIEW": "NOT_REVIEWED_NOT_SATISFIED_BY_THIS_BINDING"
+    "IMPLEMENTATION_ALGORITHMS": "PASS_EXACT_CURRENT_SUBJECT",
+    "GOVERNANCE_AND_AUTHORITY_CONTAINMENT": "PASS_EXACT_CURRENT_SUBJECT",
+    "SECURITY_AND_VISIBILITY_FAIL_CLOSED": "PASS_EXACT_CURRENT_SUBJECT",
+    "VISUAL_AND_ACCESSIBILITY_ASSURANCE": "PASS_EXACT_CURRENT_SUBJECT",
+    "OPERATIONAL_CAPACITY_AND_WINDOWS": "PASS_EXACT_CURRENT_SUBJECT",
+    "RETENTION_RECOVERY_AND_NON_DESTRUCTIVE_MAINTENANCE": "PASS_EXACT_CURRENT_SUBJECT",
+    "EXACT_CURRENT_PUBLICATION_SHADOW": "PASS_EXACT_CURRENT_SUBJECT",
+    "Q0_Q6_EVIDENCE_INTEGRITY": "PASS_EXACT_CURRENT_SUBJECT"
   },
-  "status": "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION"
+  "blocking_findings": [],
+  "reviewed_at": "2026-08-17T09:55:18+01:00",
+  "status": "BOUND_PASS_EXACT_CURRENT_SUBJECT",
+  "implementation_effect": "NONE_REVIEW_EVIDENCE_ONLY",
+  "activation_effect": "NONE_ATLAS_G_OBSERVABILITY_ACTIVATE_REMAINS_OPERATOR_REQUIRED",
+  "authority_effect": "NONE"
 }
