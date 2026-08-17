@@ -7,34 +7,45 @@
   "candidate_generation_logical_sha256": "c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a",
   "source_materialisation_logical_sha256": "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b",
   "run_count": 1,
-  "launch_attempt": 2,
+  "launch_attempt": 3,
   "selection_state": "NONE_SELECTED",
   "activation_state": "NONE",
-  "prior_launch_attempt": {
-    "commit": "2d5a87a85a37f0cc6517ee03e9ad9e7a4b8aa599",
-    "github_actions_run_id": 32061162642,
-    "status": "WORKFLOW_VALIDATION_FAILURE_ZERO_JOBS",
-    "source_accessed": false,
-    "semantic_execution_started": false,
-    "single_use_authority_consumed": false,
-    "correction_commit": "41cb0d578d5ac9a490f86dfa39d718436b5c1829"
-  },
+  "operator_override_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_NOVIT_OPERATOR_OVERRIDE_v0_1.json",
+  "prior_launch_attempts": [
+    {
+      "attempt": 1,
+      "commit": "2d5a87a85a37f0cc6517ee03e9ad9e7a4b8aa599",
+      "github_actions_run_id": 32061162642,
+      "status": "WORKFLOW_VALIDATION_FAILURE_ZERO_JOBS",
+      "source_accessed": false,
+      "semantic_execution_started": false,
+      "single_use_authority_consumed": false
+    },
+    {
+      "attempt": 2,
+      "commit": "7780cc74136ab3650458836002daca8caabc4c08",
+      "github_actions_run_id": 32062397118,
+      "status": "TARGETED_HARNESS_ASSURANCE_ENVIRONMENT_FAILURE_NO_PYTEST",
+      "source_accessed": false,
+      "semantic_execution_started": false,
+      "single_use_authority_consumed": false
+    }
+  ],
   "prelaunch_assurance": {
-    "tests_workflow_run_id": 32061707772,
-    "tiered_workflow_run_id": 32061707844,
-    "vit_routing": "PASS",
-    "runner_parity": "PASS",
-    "repository_suite": "PASS",
-    "pytest_unittest_parity": "PASS",
-    "profile_assurance": "PASS",
-    "siq_ready_admission": "PASS",
-    "merge_readiness": "PASS"
+    "route": "NO_VIT_OPERATOR_OVERRIDE",
+    "repository_binding_validation": "REQUIRED_IN_WORKFLOW_BEFORE_SOURCE_ACCESS",
+    "targeted_harness_tests": "REQUIRED_IN_WORKFLOW_BEFORE_SOURCE_ACCESS",
+    "live_main_bound_currentness": "REQUIRED_IN_WORKFLOW_BEFORE_SOURCE_ACCESS",
+    "exact_source_artifact_preflight": "REQUIRED_BEFORE_SEMANTIC_LAUNCH",
+    "frozen_capacity_envelope": "REQUIRED_BEFORE_SEMANTIC_LAUNCH",
+    "vit": "NOT_USED_FOR_THIS_EXECUTION_BRANCH"
   },
   "live_main_recheck": {
-    "main_sha": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
-    "unchanged_from_authority_baseline": true
+    "main_sha_at_branch_creation": "18799275f25d11392343bf93e35c7b916fc02c92",
+    "workflow_must_re_resolve_live_main": true,
+    "bound_path_drift": "FAIL_CLOSED_BEFORE_SOURCE_ACCESS"
   },
-  "authority_effect": "CONSUME_EXACTLY_ONE_ALREADY_APPROVED_RS0_REAL_SOURCE_SHADOW_RUN_ONLY",
+  "authority_effect": "CONSUME_EXACTLY_ONE_ALREADY_APPROVED_RS0_REAL_SOURCE_SHADOW_RUN_ONLY_ON_SEMANTIC_LAUNCH",
   "non_authority": {
     "objectpack_selection": "NONE",
     "c2p_activation": "NONE",
