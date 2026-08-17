@@ -18,7 +18,7 @@ def _load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_ps0_b_and_c_require_unbound_identity_semantics() -> None:
+def test_ps0_b_and_c_historical_generation_preserves_original_unbound_identity_semantics() -> None:
     candidates = {row["candidate_id"]: row for row in _load(CANDIDATES)["candidates"]}
     b = candidates["C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1"]
     c = candidates["C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"]
@@ -38,7 +38,7 @@ def test_core_registry_does_not_smuggle_empirical_objectpack_activation() -> Non
     assert all(entry["real_source_forbidden"] is True for entry in registry["entries"])
 
 
-def test_execution_remains_blocked_but_remediation_is_operator_authorised() -> None:
+def test_historical_execution_blocker_is_preserved_while_current_state_advances_under_gsem_pass() -> None:
     blocker = _load(BLOCKER)
     decision = _load(DECISION)
     remediation = _load(REMEDIATION_AUTHORITY)
@@ -49,29 +49,36 @@ def test_execution_remains_blocked_but_remediation_is_operator_authorised() -> N
     assert blocker["recommended_decision"] == "PASS"
     assert blocker["tests"]["run_launched"] is False
     assert blocker["qa"]["recommendation"] == "BLOCK_EXECUTION_RETURN_TO_OPERATOR"
+    historical_expected = {
+        "RS0_OBJECTPACK_IDENTITY_SEMANTICS_NOT_MECHANICALLY_FROZEN",
+        "RS0_EMPIRICAL_OBJECTPACK_RUNTIME_NOT_MATERIALISED",
+        "RS0_COMPARATIVE_RUN_CANNOT_LAWFULLY_DEGRADE_TO_A_ONLY",
+    }
+    assert {row["code"] for row in blocker["blocking_findings"]} == historical_expected
+
     assert decision["decision"] == "PASS"
     assert decision["operator_instruction"] == "OVC APPROVE C2P2-RS0-GSEM-UNBLOCK PASS"
     assert remediation["state"] == "AUTHORISED"
     assert remediation["grun_token"]["may_consume_during_remediation"] is False
 
-    expected = {
-        "RS0_OBJECTPACK_IDENTITY_SEMANTICS_NOT_MECHANICALLY_FROZEN",
+    current_execution_blockers = {
         "RS0_EMPIRICAL_OBJECTPACK_RUNTIME_NOT_MATERIALISED",
-        "RS0_COMPARATIVE_RUN_CANNOT_LAWFULLY_DEGRADE_TO_A_ONLY",
+        "FINAL_SUCCESSOR_GENERATION_AND_FRESH_GRUN_REQUIRED_BEFORE_REAL_SOURCE_LAUNCH",
     }
-    assert set(state["blockers"]) == expected
-    assert state["status"] == "BLOCKED"
+    assert set(state["blockers"]) == current_execution_blockers
+    assert state["status"] == "IMPLEMENTED"
+    assert state["packet_id"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
     assert state["run_authority_consumed"] is False
     assert state["run_count_remaining"] == 1
-    assert state["next_packet"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
+    assert state["next_packet"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
     assert state["mandatory_stop"] is None
 
-    assert programme["status"] == "APPROVED"
-    assert programme["packet_id"] == "C2P2-RS0-GSEM-UNBLOCK"
-    assert set(programme["blockers"]) == expected
+    assert programme["status"] == "IMPLEMENTED"
+    assert programme["packet_id"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
+    assert set(programme["blockers"]) == {"RS0_EMPIRICAL_OBJECTPACK_RUNTIME_NOT_MATERIALISED"}
     assert programme["authority"]["gsem_operator_pass"] == "PASS"
-    assert programme["authority"]["run_authority_consumed"] is False
-    assert programme["authority"]["run_count_remaining"] == 1
+    assert programme["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_SUCCESSOR_V2"
+    assert programme["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_RUNTIME_CLOSEOUT_FINAL_GENERATION_AND_FRESH_GRUN_PASS"
     assert programme["authority"]["active_object_pack"] is None
     assert programme["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
-    assert programme["next_packet"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
+    assert programme["next_packet"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
