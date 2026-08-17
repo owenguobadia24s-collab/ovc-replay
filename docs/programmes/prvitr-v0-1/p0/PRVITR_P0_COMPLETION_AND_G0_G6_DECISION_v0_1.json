@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-prvitr-packet-completion-decision/v0.1",
+  "programme_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
+  "plan_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-IMPLEMENTATION-PLAN-v0.1",
+  "packet_id": "PRVITR-P0-GROUPED-WP0-WP6",
+  "authority_source": "PRVIT-G-CUTOVER-READINESS=PASS",
+  "authority_delta": "NONE_TO_CURRENT_LIVE_ADMISSION_PATH",
+  "candidate_head": "0e849940a28ad0a7538aa9fdbefdefc5fff72a09",
+  "candidate_tree": "909dace2314ffc5dba9d3e9a7e273cead7ec2fee",
+  "pip_id": "3460f26cc89b15110ecaa092e49f2f0ffbf2e451bd51372838661b740977f773",
+  "vit_generation_id": "a3c6d5ddace3bb27ae2b06d9f2334841215bdf2e6705cc54ecb48d48ff54b8b7",
+  "vit_placement_id": "201e9c99957ee07f819a9b28215403b7e8ab680398bccc258881ff9c3bb016ac",
+  "ci": {
+    "tests_run_id": 32067966187,
+    "tiered_run_id": 32067966178,
+    "vit_routing_preflight": "PASS",
+    "repository_tests": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head_profile_assurance": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "qa": {
+    "recommendation": "PASS",
+    "regressions": "PRVIT-R01..R10 PASS",
+    "unsafe_shadow_allows": 0,
+    "live_authoritative_path": "UNCHANGED"
+  },
+  "delegated_gate_decisions": [
+    {"gate": "PRVITR-G0", "decision": "PASS", "authority": "DELEGATED_AUTO_RATIFICATION"},
+    {"gate": "PRVITR-G1", "decision": "PASS", "authority": "DELEGATED_AUTO_RATIFICATION"},
+    {"gate": "PRVITR-G2", "decision": "PASS", "authority": "DELEGATED_AUTO_RATIFICATION"},
+    {"gate": "PRVITR-G3", "decision": "PASS", "authority": "DELEGATED_AUTO_RATIFICATION"},
+    {"gate": "PRVITR-G4", "decision": "PASS", "authority": "DELEGATED_AUTO_RATIFICATION"},
+    {"gate": "PRVITR-G5", "decision": "PASS", "authority": "DELEGATED_AUTO_RATIFICATION"},
+    {"gate": "PRVITR-G6", "decision": "PASS", "authority": "DELEGATED_AUTO_RATIFICATION"}
+  ],
+  "integration": {
+    "pr": 1116,
+    "method": "SQUASH",
+    "merge_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
+    "physical_main_effect": "SHADOW_REMEDIATION_SURFACES_ONLY"
+  },
+  "rollback": "Forward-revert or supersede the additive PRVITR shadow surfaces; the pre-existing live admission route remains authoritative and therefore requires no restoration cutover.",
+  "next_packet": "PRVITR-WP7",
+  "next_gate": "PRVITR-G-LIVE-SWITCH"
+}
