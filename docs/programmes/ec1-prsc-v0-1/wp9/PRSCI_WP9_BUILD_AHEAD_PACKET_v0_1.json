@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-prsci-build-ahead-packet/v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "PRSCI-WP9",
+  "status": "BUILD_AHEAD_IMPLEMENTED_UNQUALIFIED",
+  "base_packet": "PRSCI-WP8",
+  "branch": "build/prsci-wp9-ahead-20260817",
+  "scope": [
+    "exact EC1-G1 PRSCProtocolGeneration construction machinery",
+    "method/family/claim/fatality/reviewer freeze bindings",
+    "pre-E1 information firewall",
+    "synthetic CandidateProposal-to-PRSC-to-P1CandidateReviewCard/Q08 vertical slice",
+    "PRSCPreregistrationBundle schema/runtime",
+    "PRSCPreregistrationReadinessReceipt schema/runtime"
+  ],
+  "deferred_until_prerequisites_complete": [
+    "PRSCI-G8-ALG independent PASS",
+    "bind final exact WP1-WP8 mechanical conformance evidence",
+    "bind final method-pack and registry generations from landed main",
+    "final WP9 QA and PIP/VIT/GRT lineage",
+    "operator PRSCI-G-PREREG decision"
+  ],
+  "operator_gate": "PRSCI-G-PREREG",
+  "e1_interlock": "SAME_GENERATION_CONFIRMATORY_STATUS_DENIED_IF_E1_DECISION_BEARING_RESULTS_INSPECTED_BEFORE_OPERATOR_PASS",
+  "authority_delta": "NONE",
+  "preserved_constraints": {
+    "f0_a": "HOLD",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE"
+  },
+  "permanent_integration": "DENIED_UNTIL_G8_ALG_PASS_AND_RECONCILED"
+}
