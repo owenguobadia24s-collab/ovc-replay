@@ -7,7 +7,7 @@ from ovc.opt_b.c2p_v0_2 import rs0_source_materialisation as source
 from ovc.opt_b.c2p_v0_2.rs0_execution import iter_verified_rows, validate_locator
 from ovc.opt_b.c2_vnext import real_source_materialisation as c2rm
 
-ROOT = Path(__file__).resolve().parents[5]
+ROOT = Path(__file__).resolve().parents[4]
 
 
 def test_operator_pass_is_narrow_and_grun_token_remains_unconsumed() -> None:
@@ -16,7 +16,7 @@ def test_operator_pass_is_narrow_and_grun_token_remains_unconsumed() -> None:
     assert decision["decision"] == "PASS"
     assert decision["approved_delta"]["authority_class"] == "BOUNDED_READ_ONLY_CURRENT_SOURCE_MATERIALISATION"
     assert decision["approved_delta"]["output"] == "INACTIVE_NONCANONICAL_READ_ONLY_RS0_SOURCE"
-    assert "NO_LEGACY_C2_V2_AS_NEW_EVIDENCE_PARENT" in decision["conditions"] or any("Legacy OPT-B.C2" in row for row in decision["conditions"])
+    assert any("Legacy OPT-B.C2" in row for row in decision["conditions"])
     assert state["packet_id"] == "C2P2-RS0-CURRENT-SOURCE-MATERIALISATION"
     assert state["status"] == "READY"
     assert state["run_authority_consumed"] is False
