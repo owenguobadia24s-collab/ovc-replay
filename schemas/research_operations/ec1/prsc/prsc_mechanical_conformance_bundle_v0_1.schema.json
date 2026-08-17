@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSCMechanicalConformanceBundle v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "fixture_results", "equivalence_results", "capacity_results", "protected_source_reachability", "status", "authority_effect"],
+  "properties": {
+    "schema_version": {"const": "prsc_mechanical_conformance_bundle/v0.1"},
+    "bundle_id": {"type": "string", "minLength": 1},
+    "fixture_results": {"type": "array", "items": {"type": "object"}},
+    "equivalence_results": {"type": "array", "items": {"type": "object"}},
+    "capacity_results": {"type": "array", "items": {"type": "object"}},
+    "protected_source_reachability": {"enum": ["ZERO_SURVIVORS", "BLOCKING_SURVIVORS"]},
+    "status": {"enum": ["PASS_CANDIDATE", "BLOCKED", "QUARANTINED", "CAPACITY_INCOMPLETE"]},
+    "authority_effect": {"const": "NONE"}
+  }
+}
