@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"OVC PRSCCompletionReceipt v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","execution_manifest_ref","execution_refs","population_reconciled","qa_pass","status","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-prsc-completion-receipt/v0.1"},
+    "execution_manifest_ref":{"type":"string","minLength":1},
+    "execution_refs":{"type":"array","items":{"type":"string"}},
+    "population_reconciled":{"type":"boolean"},
+    "qa_pass":{"type":"boolean"},
+    "status":{"enum":["PASS_CANDIDATE","BLOCKED"]},
+    "authority_effect":{"const":"NONE"}
+  }
+}

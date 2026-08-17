@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC CandidatePRSCExecutionRecord v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_ref", "protocol_generation_ref", "execution_mode", "dimension_results", "partial_review_permitted", "authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-prsc-candidate-execution-record/v0.1"},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "protocol_generation_ref": {"type": "string", "minLength": 1},
+    "execution_mode": {"enum": ["SYNTHETIC_BUILD_AHEAD", "REAL_POST_R1_AUTHORIZED"]},
+    "dimension_results": {"type": "array", "items": {"type": "object"}},
+    "partial_review_permitted": {"const": false},
+    "authority_effect": {"const": "NONE"}
+  }
+}

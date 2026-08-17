@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"OVC PRSCExecutionManifest v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","protocol_generation_ref","review_population_manifest_ref","candidate_execution_refs","population_reconciled","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-prsc-execution-manifest/v0.1"},
+    "protocol_generation_ref":{"type":"string","minLength":1},
+    "review_population_manifest_ref":{"type":"string","minLength":1},
+    "candidate_execution_refs":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+    "population_reconciled":{"type":"boolean"},
+    "authority_effect":{"const":"NONE"}
+  }
+}
