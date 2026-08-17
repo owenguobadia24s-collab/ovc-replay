@@ -172,6 +172,7 @@ def test_ci_uses_pip_bound_aa0_cache_and_live_ruleset_preflight() -> None:
     assert text.count("actions/cache/save@v4") == 3
     assert "VIT-AA0-Reuse-B64" not in text  # marker parsing belongs to the Python preflight
     assert "vit_assurance_preflight.py" in text
+    assert text.count("GITHUB_TOKEN: ${{ github.token }}") >= 2
     assert "PLACEMENT_ONLY_PIP_REUSE" in text
     assert "EXACT_GENERATION_REUSE" in text
     assert "OVC_PHYSICAL_MAIN_EXCLUSIVITY=PASS" in text
