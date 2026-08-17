@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-prsci-work-packet/v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "PRSCI-WP9",
+  "gate": "PRSCI-G-PREREG",
+  "gate_class": "OPERATOR_REQUIRED",
+  "baseline_commit": "e2366307cc104978a19cf2038e3092095db97996",
+  "scope": "EC1-G1 PRSC preregistration construction, pre-E1 firewall, synthetic vertical slice and operator-readiness evidence",
+  "authority_effect": "NONE_BEFORE_OPERATOR_GATE",
+  "acceptance": [
+    "exact PRSCProtocolGeneration is constructed in READY_FOR_OPERATOR_FREEZE, never FROZEN",
+    "method-pack, hypothesis-family, candidate-claim, disposition and reviewer constitution bindings are complete",
+    "reviewer constitution resolves to landed PRSC_CORE_REGISTRY_v0_1 rather than a non-existent inferred registry",
+    "pre-E1 information firewall is explicit and same-generation confirmatory status fails closed after E1 decision-bearing exposure",
+    "synthetic CandidateProposal -> PRSC -> P1CandidateReviewCard/Q08 vertical slice passes without real-source reads or CandidateFreeze effect",
+    "PRSCPreregistrationBundle is content-addressed and binds WP8 mechanical conformance plus corrective PRSCI-G8-ALG PASS",
+    "PRSCPreregistrationReadinessReceipt is READY_FOR_OPERATOR_DECISION with authority_effect NONE",
+    "F0-A HOLD, Validation LOCKED_UNCONSUMED, CandidateFreeze NONE and real-source PRSC denial remain preserved"
+  ],
+  "outputs": {
+    "protocol_generation_id": "5036d66c8817f1f3b22b5cdb196a6964c979641b11824a3f3cdef58553e38736",
+    "preregistration_bundle_id": "e3a3e19497f0b1ccaad349787eef2a363f35470ccc1c867aec3f235d8b70fb23",
+    "readiness_receipt_id": "9b2fe886bc18e61adfed4bf0bc827a02fe7a43e83e7db4b83df7134f9ab32051",
+    "protocol_state": "READY_FOR_OPERATOR_FREEZE"
+  },
+  "source_binding_evidence": {
+    "prsc_core_registry": "registries/research_operations/ec1/prsc/PRSC_CORE_REGISTRY_v0_1.json@7e0a01e36bbcbedc77cf84cb5d77fa2cf1ff4d97",
+    "dependence_reference_registry": "registries/research_operations/ec1/prsc/PRSC_DEPENDENCE_REFERENCE_REGISTRY_v0_1.json@bd97e7f8724dfd3aa87dc61749b3123cdc6156de",
+    "multiplicity_registry": "registries/research_operations/ec1/prsc/PRSC_MULTIPLICITY_REGISTRY_v0_1.json@1fb8b02266971729c5ff5d7bd2495cd00b9f85eb",
+    "disposition_algebra_registry": "registries/research_operations/ec1/prsc/PRSC_DISPOSITION_ALGEBRA_REGISTRY_v0_1.json@d102ec8442205b39c5600e41c8910b5b654dd9c3",
+    "representation_temporal_context_registry": "registries/research_operations/ec1/prsc/PRSC_REPRESENTATION_TEMPORAL_CONTEXT_REGISTRY_v0_1.json@62a99324f231e590f0df354bed85bab392d497de"
+  },
+  "operator_decision_required": "PRSCI-G-PREREG",
+  "proposed_operator_delta": "Freeze exact protocol generation 5036d66c8817f1f3b22b5cdb196a6964c979641b11824a3f3cdef58553e38736 as the EC1-G1 PRSC method constitution only",
+  "explicit_non_grants": [
+    "real-source PRSC read or append",
+    "F0-A or E1 authority change",
+    "CandidateFreeze",
+    "Development or Validation access",
+    "publication, probability, risk, exposure, E-H or execution authority"
+  ],
+  "rollback": "Forward-only quarantine/supersession of WP9 preregistration-readiness artifacts; preserve WP1-WP8 and G0-G8-ALG evidence. Protocol remains unfrozen unless operator PASS is recorded.",
+  "next_packet_if_pass": "PRSCI-WP10_CONDITIONED_ON_E1_R1_AND_PRSCI-G-EC1-CHALLENGE",
+  "reserved_boundary": "PRSCI-G-PREREG"
+}
