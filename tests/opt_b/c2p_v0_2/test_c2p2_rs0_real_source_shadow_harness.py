@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -14,11 +15,21 @@ TRIGGER_REL = "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P
 
 
 def test_real_source_harness_accepts_exact_fresh_grun_bindings() -> None:
+    env = dict(os.environ)
+    src = str(REPO_ROOT / "src")
+    env["PYTHONPATH"] = src if not env.get("PYTHONPATH") else os.pathsep.join([src, env["PYTHONPATH"]])
     completed = subprocess.run(
         [sys.executable, str(SCRIPT), "validate-repo-bindings", "--repo-root", str(REPO_ROOT)],
-        check=True,
+        check=False,
         capture_output=True,
         text=True,
+        cwd=REPO_ROOT,
+        env=env,
+    )
+    assert completed.returncode == 0, (
+        "fresh-GRUN binding validation failed in isolated subprocess\n"
+        f"stdout:\n{completed.stdout}\n"
+        f"stderr:\n{completed.stderr}"
     )
     payload = json.loads(completed.stdout)
     assert payload["authority_id"] == "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.2"
