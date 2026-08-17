@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-operator-gate-packet/v0.1",
+  "gate_id": "PRSCI-G-PREREG",
+  "gate_title": "Freeze exact EC1-G1 PRSCProtocolGeneration",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP9",
+  "baseline_commit": "e2366307cc104978a19cf2038e3092095db97996",
+  "completed_packets": ["PRSCI-WP0", "PRSCI-WP1", "PRSCI-WP2", "PRSCI-WP3", "PRSCI-WP4", "PRSCI-WP5", "PRSCI-WP6", "PRSCI-WP7", "PRSCI-WP8", "PRSCI-WP9_CONSTRUCTED"],
+  "completed_gates": ["PRSCI-G0", "PRSCI-G1", "PRSCI-G2", "PRSCI-G3", "PRSCI-G4", "PRSCI-G5", "PRSCI-G6", "PRSCI-G7", "PRSCI-G8", "PRSCI-G8-ALG"],
+  "current_authority": {
+    "prsc_mechanical_state": "PRSC_MECHANICALLY_CONFORMANT",
+    "f0_a": "HOLD",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "preregistration": "NOT_FROZEN",
+    "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE"
+  },
+  "proposed_delta": {
+    "authority": "SCIENTIFIC_PROTOCOL_FREEZE_ONLY",
+    "protocol_generation_id": "5036d66c8817f1f3b22b5cdb196a6964c979641b11824a3f3cdef58553e38736",
+    "target_state_if_pass": "FROZEN",
+    "scope": "Exact EC1-G1 PRSC method constitution only"
+  },
+  "acceptance_conditions": [
+    "PRSCI-G8-ALG corrective independent review is PASS",
+    "WP8 is merged on main as e2366307cc104978a19cf2038e3092095db97996",
+    "EC1 current execution frontier remains F0-A HOLD with no E1 decision-bearing inspection",
+    "protocol generation is currently READY_FOR_OPERATOR_FREEZE and not FROZEN",
+    "all method/family/claim/disposition/reviewer bindings are complete and resolve to landed PRSC surfaces",
+    "synthetic CandidateProposal -> PRSC -> P1CandidateReviewCard/Q08 path passes without real-source or CandidateFreeze effect",
+    "preregistration bundle and readiness receipt are content-addressed and internally consistent",
+    "exact-head repository/VIT assurance passes before operator decision presentation"
+  ],
+  "evidence": {
+    "preregistration_bundle": "records/research_operations/ec1/prsc/PRSCI_WP9_PREREGISTRATION_BUNDLE_v0_1.json",
+    "bundle_id": "e3a3e19497f0b1ccaad349787eef2a363f35470ccc1c867aec3f235d8b70fb23",
+    "readiness_receipt": "records/research_operations/ec1/prsc/PRSCI_WP9_PREREGISTRATION_READINESS_RECEIPT_v0_1.json",
+    "readiness_receipt_id": "9b2fe886bc18e61adfed4bf0bc827a02fe7a43e83e7db4b83df7134f9ab32051",
+    "wp9_qa": "docs/programmes/ec1-prsc-v0-1/wp9/PRSCI_WP9_QA_PACKET_v0_1.json",
+    "g8_alg_pass": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_2.json",
+    "ec1_current_state": "registries/implementation/ec1_dmrp_v0_1/CURRENT_STATE_POINTER.json"
+  },
+  "warnings": [],
+  "unresolved_issues": ["FINAL_EXACT_HEAD_CI_TO_BE_BOUND_BEFORE_PRESENTATION"],
+  "changed_files": "BOUNDED_WP9_PREREGISTRATION_SCOPE_ONLY",
+  "external_artifact_hashes": [],
+  "rollback": "Before PASS, no freeze exists. After PASS, any later correction is forward-only through a successor/superseding protocol generation; historical freeze evidence remains immutable.",
+  "recommended_decision": "PASS_IF_FINAL_EXACT_HEAD_CI_GREEN_AND_E1_FRONTIER_UNCHANGED",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_work_after_approval": "Materialise operator PASS and freeze only protocol generation 5036d66c8817f1f3b22b5cdb196a6964c979641b11824a3f3cdef58553e38736. Do not begin real PRSC challenge until E1/R1 complete and PRSCI-G-EC1-CHALLENGE separately passes."
+}
