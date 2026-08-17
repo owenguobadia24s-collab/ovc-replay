@@ -3,18 +3,21 @@
   "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
   "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "packet_id": "PRSCI-WP8",
-  "candidate_commit": "1d01c9dba1abf9f923e5961ac505d95cd1efda86",
-  "candidate_tree": "84e200af717644ba77ae15d6613c997b29a14e74",
-  "qa_scope": "FINAL_WP8_MECHANICAL_ASSURANCE_BEFORE_INDEPENDENT_PRSCI-G8-ALG",
+  "candidate_commit": "2ebea7da6874d45e7141ffa6af62343eefed7f8b",
+  "candidate_tree": "ae33f08f6b6fb38a1bd5c9f599c29921a11c5d88",
+  "qa_scope": "WP8_PEAK_RSS_CORRECTIVE_MECHANICAL_ASSURANCE_BEFORE_EXACT_HEAD_QUALIFICATION_AND_PRSCI-G8-ALG_RERUN",
   "checks": {
     "av_prsc_01_to_15_catalogue_complete": "PASS",
     "av_prsc_01_to_15_all_status_pass": "PASS",
-    "materialised_evidence_reproduces_runtime_outputs": "PASS",
+    "materialised_evidence_reproduces_runtime_outputs": "PASS_CANDIDATE_PENDING_EXACT_HEAD_TEST",
     "protected_development_validation_reachability": "ZERO_SURVIVORS_PASS",
     "production_optimized_decision_bearing_path_census": "ZERO_DETECTED_EQUIVALENCE_NOT_APPLICABLE",
     "optimized_reference_mismatch_quarantine_guard_av_prsc_15": "PASS",
-    "deterministic_synthetic_capacity_measurement": "PASS",
-    "operational_budget_from_measured_non_scientific_evidence": "PASS",
+    "actual_isolated_process_peak_rss_measurement": "PASS",
+    "peak_memory_quantity": "PROCESS_PEAK_RESIDENT_SET_SIZE_BYTES",
+    "measurement_source": "LINUX_RUSAGE_RU_MAXRSS_FRESH_SUBPROCESS",
+    "pinned_measurement_environment": "UBUNTU_24_04_PYTHON_3_11_15_CPTHON_X86_64",
+    "operational_budget_from_measured_non_scientific_evidence": "PASS_CANDIDATE",
     "review_budget_from_measured_non_scientific_evidence": "PASS",
     "scope_reduction_permitted": false,
     "sampling_permitted": false,
@@ -27,15 +30,18 @@
     "authority_delta": "NONE"
   },
   "workflow_runs": {
-    "tests": 32066040819,
-    "tiered_test_selection_shadow": 32066040957,
-    "vit_routing_preflight": "PASS",
-    "repository_suite": "PASS",
-    "runner_parity": "PASS",
-    "pytest_unittest_parity": "PASS",
-    "final_head_profile": "PASS",
-    "siq_ready_admission": "PASS",
-    "merge_readiness": "PASS"
+    "measurement_capture_tests": 32075002575,
+    "measurement_capture_job": 95527461979,
+    "measurement_capture_vit_routing_preflight": "PASS",
+    "measurement_capture_runner_parity": "PASS",
+    "measurement_capture_pytest_unittest_parity": "PASS",
+    "measurement_capture_repository_suite": "4075_PASS_1_SKIPPED_1_EXPECTED_STALE_MATERIALISATION_FAILURE",
+    "measurement_capture_peak_rss_status": "PASS",
+    "final_exact_head_tests": "PENDING",
+    "final_exact_head_tiered_test_selection_shadow": "PENDING",
+    "final_head_profile": "PENDING",
+    "siq_ready_admission": "PENDING",
+    "merge_readiness": "PENDING"
   },
   "evidence": {
     "adversarial_results": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json",
@@ -43,16 +49,19 @@
     "reference_equivalence_evidence": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_REFERENCE_EQUIVALENCE_EVIDENCE_v0_1.json",
     "mechanical_conformance_bundle": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_MECHANICAL_CONFORMANCE_BUNDLE_v0_1.json",
     "operational_budget": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_OPERATIONAL_BUDGET_v0_1.json",
-    "review_budget": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_REVIEW_BUDGET_v0_1.json"
+    "review_budget": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_REVIEW_BUDGET_v0_1.json",
+    "historical_g8_alg_block": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_1.json"
   },
-  "capacity_measurement_note": "peak_memory_bytes is the deterministic maximum canonical logical working-set component size used for reproducible non-scientific capacity evidence; it is not an operating-system RSS measurement and is not represented as one.",
+  "capacity_measurement_note": "peak_memory_bytes is measured as Linux process peak resident set size using resource.getrusage(RUSAGE_SELF).ru_maxrss in one fresh CPython 3.11.15 subprocess per synthetic tier, with Linux KiB converted to bytes. The pinned measurement workflow recorded 298921984 bytes for each TINY, SMALL and MEDIUM tier; the operational budget freezes a 1.25 envelope of 373652480 bytes without sampling, top-N selection or scientific scope reduction.",
   "warnings": [
-    "INDEPENDENT_REVIEWER_BINDING_REMAINS_UNBOUND_AND_BLOCKS_PRSCI-G8-ALG_PASS"
+    "FINAL_EXACT_HEAD_ASSURANCE_PENDING",
+    "PRSCI_G8_ALG_RERUN_PENDING"
   ],
   "unresolved": [
-    "PRSCI_INDEPENDENT_REVIEWER_BINDING_REQUIRED"
+    "FINAL_EXACT_HEAD_ASSURANCE_REQUIRED",
+    "PRSCI_G8_ALG_RERUN_REQUIRED"
   ],
-  "recommended_disposition": "PASS_MECHANICAL_CANDIDATE_PENDING_INDEPENDENT_GATE",
+  "recommended_disposition": "PASS_MECHANICAL_CANDIDATE_PENDING_EXACT_HEAD_ASSURANCE_AND_INDEPENDENT_RERUN",
   "authority_effect": "NONE",
-  "rollback": "Forward-only quarantine/supersession of WP8 assurance/capacity surfaces; preserve WP1-WP7 and PRSCI G0-G8 evidence."
+  "rollback": "Forward-only correction/quarantine/supersession of WP8 assurance/capacity surfaces; preserve WP1-WP7, PRSCI G0-G8 and the original PRSCI-G8-ALG BLOCK evidence."
 }
