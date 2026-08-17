@@ -4,34 +4,41 @@
   "packet_id": "PRSCI-WP8",
   "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "BLOCKED",
+  "status": "APPROVED",
   "prerequisites": [
     "PRSCI-WP6_COMPLETED_ON_MAIN@b7a610ed0e291f20980cc6c5fe4d02c54a9e4c5a",
     "PRSCI-WP7_AND_G8_COMPLETED_ON_MAIN@18799275f25d11392343bf93e35c7b916fc02c92",
-    "PRSCI_G8_ALG_REVIEWER_BOUND_BY_OPERATOR_2026-08-17T21:56:00+01:00"
+    "PRSCI_G8_ALG_REVIEWER_BOUND_BY_OPERATOR_2026-08-17T21:56:00+01:00",
+    "PRSCI_WP8_PEAK_RSS_CORRECTION_EXACT_HEAD_ASSURANCE_PASS@e2a18e0ce7f5761bce396c6d2a20b864d4e58809"
   ],
-  "authority_required": "NONE_FOR_WP8_CORRECTIVE_REPAIR; PRSCI-G8-ALG_REVIEW_REQUIRED_AFTER_REPAIR",
+  "authority_required": "NONE_FOR_WP8_INTEGRATION_AFTER_FINAL_EXACT_HEAD_ASSURANCE; PRSCI-WP9_NOT_ENTERED_BY_OPERATOR_BOUNDARY",
   "authority_delta": "NONE",
-  "baseline_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
-  "baseline_tree": "3d2cfbf1573b5401b695da8b48cc90291d96e8bf",
+  "baseline_commit": "b0726f9d251b1110983fc6a657f31b8f087449bd",
+  "baseline_tree": "be74f720a74a32c21480b8b7b7f8093a47b08425",
   "branch": "build/prsci-wp8-permanent-20260817-r3",
-  "candidate_commit": "1d01c9dba1abf9f923e5961ac505d95cd1efda86",
-  "candidate_tree": "84e200af717644ba77ae15d6613c997b29a14e74",
+  "candidate_commit": "e2a18e0ce7f5761bce396c6d2a20b864d4e58809",
+  "candidate_tree": "9183809ca69daedd118e1ca4e498a98b78f501ba",
   "tests": {
-    "pinned_candidate_tests_workflow": 32066040819,
-    "pinned_candidate_tiered_workflow": 32066040957,
-    "evidence_head_tests_workflow": 32066797483,
-    "evidence_head_tiered_workflow": 32066797401,
-    "status": "PASS_PRE_REVIEW_DEFECT"
+    "measurement_capture_tests_workflow": 32075002575,
+    "measurement_capture_job": 95527461979,
+    "repaired_candidate_tests_workflow": 32077177460,
+    "repaired_candidate_tiered_workflow": 32077177435,
+    "repository_suite": "4076_PASS_1_SKIPPED_687_SUBTESTS_PASS",
+    "vit_routing_preflight": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head_profile": "PASS",
+    "siq_ready_admission": "PASS",
+    "merge_readiness": "PASS",
+    "status": "PASS"
   },
   "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_QA_PACKET_v0_1.json",
   "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_IMPLEMENTATION_PACKET_v0_1.json",
-  "gate_packet": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_REVIEW_PACKET_v0_1.json",
-  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_1.json",
+  "gate_packet": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_REVIEW_PACKET_v0_2.json",
+  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_2.json",
+  "historical_decision_record": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_1.json",
   "merge_commit": null,
-  "blockers": [
-    "PRSCI_G8_ALG_PEAK_MEMORY_MEASUREMENT_NONCONFORMANT"
-  ],
+  "blockers": [],
   "completed_gates": [
     "PRSCI-G0",
     "PRSCI-G1",
@@ -41,10 +48,16 @@
     "PRSCI-G5",
     "PRSCI-G6",
     "PRSCI-G7",
-    "PRSCI-G8"
+    "PRSCI-G8",
+    "PRSCI-G8-ALG"
   ],
-  "g8_alg_decision": "BLOCK",
-  "wp8_mechanical_status": "CORRECTIVE_REPAIR_REQUIRED_BEFORE_G8_ALG_PASS",
+  "g8_alg_decision": "PASS",
+  "g8_alg_historical_decision": "BLOCK_PRESERVED_AS_V0_1",
+  "resolved_findings": [
+    "PRSCI_G8_ALG_PEAK_MEMORY_MEASUREMENT_NONCONFORMANT"
+  ],
+  "wp8_mechanical_status": "PASS",
+  "final_integration_status": "PENDING_FINAL_GATE_HEAD_EXACT_ASSURANCE",
   "preserved_constraints": {
     "f0_a": "HOLD",
     "validation": "LOCKED_UNCONSUMED",
@@ -55,14 +68,13 @@
     "probability_risk_exposure_execution": "NONE",
     "no_force_push_or_history_rewrite": true
   },
-  "continuation_policy": "REPAIR_WP8_WITHIN_EXISTING_AUTHORITY_THEN_RERUN_PRSCI-G8-ALG",
-  "next_gate": "PRSCI-G8-ALG_AFTER_WP8_CAPACITY_REPAIR",
-  "next_packet": "PRSCI-WP9_AFTER_PRSCI-G8-ALG_PASS_ONLY",
-  "next_action": "REPAIR_PEAK_MEMORY_MEASUREMENT_REGENERATE_EVIDENCE_RERUN_TESTS_AND_INDEPENDENT_REVIEW",
+  "continuation_policy": "RENEW_FINAL_VIT_GRT_SIQ_AND_REPOSITORY_ASSURANCE; INTEGRATE_WP8_ONLY_IF_GREEN; STOP_BEFORE_WP9",
+  "next_gate": "PRSCI-G-PREREG_AFTER_WP9_CONSTRUCTION_AND_OPERATOR_DECISION; NOT_ENTERED_IN_THIS_COMMAND",
+  "next_packet": "PRSCI-WP9_NOT_ENTERED_BY_OPERATOR_BOUNDARY",
+  "next_action": "FINAL_GATE_HEAD_ASSURANCE_THEN_ELIGIBLE_WP8_INTEGRATION_IF_GREEN_THEN_STOP",
   "reserved_later_gates": [
-    "PRSCI-G8-ALG",
     "PRSCI-G-PREREG",
     "PRSCI-G-EC1-CHALLENGE"
   ],
-  "rollback": "Forward-only; preserve WP1-WP7 and PRSCI G0-G8 plus this independent BLOCK review. Correct WP8 capacity measurement without semantic or authority expansion."
+  "rollback": "Forward-only; preserve WP1-WP7, PRSCI G0-G8, the original PRSCI-G8-ALG BLOCK evidence and the corrective PASS review. Quarantine/supersede WP8 if final gate-head assurance fails."
 }
