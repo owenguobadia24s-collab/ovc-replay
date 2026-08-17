@@ -1,0 +1,38 @@
+{
+  "$id": "ovc-vit-historical-completion-recovery-decision/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "ovc-vit-historical-completion-recovery-decision/v1"},
+    "recovery_decision_id": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "operator_decision": {"const": "PASS_SINGLE_USE_FORWARD_ONLY_EXCEPTION"},
+    "programme_id": {"const": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"},
+    "packet_id": {"const": "ATLAS-WP10"},
+    "pr_number": {"const": 1047},
+    "head_sha": {"const": "3e86c67eb6d8891acda2b2de8f930542fcd750ab"},
+    "physical_merge_sha": {"const": "911cac359aa0d23b981be15edae473b7d2b7d55b"},
+    "pip_id": {"const": "f88dd554f12639e2cc0b3a5d4296663fc8161654ca1c6b9ff0eec1d2c46852cf"},
+    "vit_generation_id": {"const": "ef7fb341f6b442ddf638a65e688a7c69d535fc866bf186d035a147e560655a7f"},
+    "predecessor_tree": {"const": "0c631bcb656f0e82a926a371b8307e82b74b0298"},
+    "admitted_result_tree": {"const": "ce04f93eedf5f9c8c55914cb00ba66a6f8b17ee3"},
+    "observed_physical_tree": {"const": "ce04f93eedf5f9c8c55914cb00ba66a6f8b17ee3"},
+    "prewrite_freeze_status": {"const": "ABSENT_NOT_EMITTED"},
+    "source_census_id": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "observed_assurance": {"type": "object"},
+    "non_inference": {"items": {"type": "string"}, "minItems": 7, "type": "array", "uniqueItems": true},
+    "recovery_class": {"const": "HISTORICAL_EFFECTIVE_WRITE_COMPLETION_WITH_MISSING_PREWRITE_FREEZE"},
+    "authority_delta": {"const": "NONE_COMPLETION_RECOVERY_ONLY"},
+    "precedent_effect": {"const": "NONE_SINGLE_USE"},
+    "normal_prospective_requirement": {"const": "PMT_AND_PREWRITE_FREEZE_REQUIRED_UNCHANGED"},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": [
+    "schema", "recovery_decision_id", "operator_decision", "programme_id", "packet_id",
+    "pr_number", "head_sha", "physical_merge_sha", "pip_id", "vit_generation_id",
+    "predecessor_tree", "admitted_result_tree", "observed_physical_tree",
+    "prewrite_freeze_status", "source_census_id", "observed_assurance", "non_inference",
+    "recovery_class", "authority_delta", "precedent_effect", "normal_prospective_requirement",
+    "authority_effect"
+  ],
+  "type": "object"
+}

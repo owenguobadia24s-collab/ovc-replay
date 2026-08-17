@@ -292,6 +292,14 @@ def test_wp10_gate_state_and_independent_review_closeout_preserve_activation_bou
     assert activation["status"] == "GATE_READY_OPERATOR_REQUIRED_AFTER_G10_INTEGRATION"
     assert activation["operator_decision"] is None
     assert activation["operational_reliance"] == "DENIED_PENDING_OPERATOR_DECISION"
+    if state.get("administrative_completion"):
+        completion = load(ROOT / state["administrative_completion"])
+        assert completion["physical_integration"]["merge_sha"] == "911cac359aa0d23b981be15edae473b7d2b7d55b"
+        assert completion["physical_integration"]["exact_tree_equal"] is True
+        assert completion["receipt_store_bundle"]["completion_receipt_id"] == activation["completion_receipt_id"]
+        assert completion["proofs"]["git_main_write_performed"] is False
+        assert completion["activation_status"] == "NOT_ACTIVATED"
+        assert state["current_gate"] == pointer["current_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE"
     assert authority["logical_id"] == canonical_sha256(authority["payload"])
     assert dependency["logical_id"] == canonical_sha256(dependency["payload"])
     assert state["status"] == pointer["status"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"
