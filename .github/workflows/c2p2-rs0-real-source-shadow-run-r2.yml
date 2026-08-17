@@ -1,14 +1,14 @@
-name: C2P2 RS0 real-source shadow run R2
+name: C2P2 RS0 real-source shadow run R3
 
 on:
   push:
     branches:
-      - run/c2p2-rs0-real-source-shadow-r2-20260817
+      - run/c2p2-rs0-real-source-shadow-r3-20260817
     paths:
-      - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_TRIGGER_v0_1.json
+      - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_TRIGGER_v0_1.json
 
 concurrency:
-  group: c2p2-rs0-real-source-shadow-run-r2-single-use
+  group: c2p2-rs0-real-source-shadow-run-r3-single-use
   cancel-in-progress: false
 
 permissions:
@@ -16,13 +16,13 @@ permissions:
   actions: read
 
 jobs:
-  real_source_shadow_r2:
+  real_source_shadow_r3:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     env:
       PYTHONPATH: src:.
-      RESULT_DIR: /tmp/c2p2-rs0-real-source-shadow-r2-result
-      SOURCE_DIR: /tmp/c2p2-rs0-current-source-r2
+      RESULT_DIR: /tmp/c2p2-rs0-real-source-shadow-r3-result
+      SOURCE_DIR: /tmp/c2p2-rs0-current-source-r3
       BASELINE_MAIN: 18799275f25d11392343bf93e35c7b916fc02c92
     steps:
       - uses: actions/checkout@v4
@@ -36,25 +36,41 @@ jobs:
       - name: Install repository and test dependencies
         run: python -m pip install -e ".[test]" -r requirements-console-vnext.txt
 
-      - name: Verify exact R2 trigger and fresh single-use authority
+      - name: Verify live R3 branch is exact trigger head and still unconsumed
+        run: |
+          set -euo pipefail
+          git fetch origin "+refs/heads/${GITHUB_REF_NAME}:refs/remotes/origin/${GITHUB_REF_NAME}"
+          live_branch="$(git rev-parse "origin/${GITHUB_REF_NAME}")"
+          if [ "$live_branch" != "$GITHUB_SHA" ]; then
+            echo "LIVE_R3_BRANCH_ADVANCED_OR_STALE_TRIGGER:$live_branch:$GITHUB_SHA" >&2
+            exit 42
+          fi
+          if git cat-file -e "origin/${GITHUB_REF_NAME}:registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_3.json" 2>/dev/null; then
+            echo 'R3_SINGLE_USE_AUTHORITY_ALREADY_CONSUMED_ON_LIVE_BRANCH' >&2
+            exit 43
+          fi
+
+      - name: Verify exact R3 trigger and fresh single-use authority
         run: |
           set -euo pipefail
           python - <<'PY'
           import json
           from pathlib import Path
           trigger = json.loads(Path(
-            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_TRIGGER_v0_1.json'
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_TRIGGER_v0_1.json'
           ).read_text())
-          assert trigger['packet_id'] == 'C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2'
-          assert trigger['authority_id'] == 'AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.3'
+          assert trigger['packet_id'] == 'C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R3'
+          assert trigger['authority_id'] == 'AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4'
           assert trigger['candidate_generation_id'] == 'C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3'
           assert trigger['source_materialisation_id'] == 'C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1'
-          assert trigger['adapter_binding_id'] == 'C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1'
+          assert trigger['adapter_binding_id'] == 'C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2'
+          assert trigger['adapter_binding_logical_sha256'] == '01c3e85d5c4b47fbb2a102a1d4dff3774e49fcd15110157aaac3ea538a51201c'
+          assert trigger['source_order_adapter_id'] == 'C2P2_RS0_SOURCE_ORDER_RECOVERY_ADAPTER_v0_2'
           assert trigger['run_count'] == 1
           assert trigger['selection_state'] == 'NONE_SELECTED'
           assert trigger['activation_state'] == 'NONE'
           PY
-          python scripts/c2p2_rs0_real_source_shadow_r2.py validate-repo-bindings --repo-root .
+          python scripts/c2p2_rs0_real_source_shadow_r3.py validate-repo-bindings --repo-root .
 
       - name: Re-resolve live main and frozen scientific currentness
         run: |
@@ -73,19 +89,24 @@ jobs:
             registries/implementation/c2p_v0_2/C2P2_RS0_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json
           )
           if ! git diff --quiet "$BASELINE_MAIN"..origin/main -- "${frozen_paths[@]}"; then
-            echo 'R2_BOUND_SCIENTIFIC_CURRENTNESS_DRIFT_DETECTED' >&2
+            echo 'R3_BOUND_SCIENTIFIC_CURRENTNESS_DRIFT_DETECTED' >&2
             git diff --name-only "$BASELINE_MAIN"..origin/main -- "${frozen_paths[@]}" >&2
             exit 41
           fi
 
-      - name: Run targeted R2 assurance before source access
+      - name: Run targeted R3 recovered-adapter assurance before source access
         run: |
+          python -m py_compile scripts/c2p2_rs0_real_source_shadow_r3.py
           python -m pytest -q \
             tests/opt_b/c2p/v0_2/test_c2p2_rs0_empirical_runtime.py \
             tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_capacity_recovery.py \
-            tests/opt_b/c2p_v0_2/test_c2p2_rs0_real_source_shadow_r2_harness.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_order_recovery.py \
+            tests/opt_b/c2p_v0_2/test_c2p2_rs0_real_source_shadow_r3_harness.py \
             tests/development/test_ci_workflow_inventory.py \
             --tb=short
+
+      - name: Run repository-wide regression before source access
+        run: python -m pytest tests -q --tb=short
 
       - name: Download exact authorised current-source artifact
         uses: actions/download-artifact@v4
@@ -96,42 +117,42 @@ jobs:
           repository: ${{ github.repository }}
           run-id: '32010902424'
 
-      - name: Preflight exact source and R2 bindings without consuming authority
+      - name: Preflight exact source and R3 bindings without consuming authority
         run: |
           set -euo pipefail
           rm -rf "$RESULT_DIR"
           mkdir -p "$RESULT_DIR"
-          python scripts/c2p2_rs0_real_source_shadow_r2.py preflight \
+          python scripts/c2p2_rs0_real_source_shadow_r3.py preflight \
             --repo-root . \
             --source-root "$SOURCE_DIR" \
             --output-dir "$RESULT_DIR"
 
-      - name: Launch exactly one authorised R2 A/B/C real-source shadow execution
+      - name: Launch exactly one authorised R3 A/B/C real-source shadow execution
         id: execute
         continue-on-error: true
         run: |
           set +e
-          python scripts/c2p2_rs0_real_source_shadow_r2.py execute \
+          python scripts/c2p2_rs0_real_source_shadow_r3.py execute \
             --repo-root . \
-            --source-plan "$RESULT_DIR/source-plan-r2.json" \
+            --source-plan "$RESULT_DIR/source-plan-r3.json" \
             --output-dir "$RESULT_DIR" \
             --github-run-id "$GITHUB_RUN_ID"
           code=$?
           echo "exit_code=$code" >> "$GITHUB_OUTPUT"
           exit $code
 
-      - name: Upload immutable R2 run and partial-run evidence
+      - name: Upload immutable R3 run and partial-run evidence
         id: upload
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: c2p2-rs0-real-source-shadow-run-r2-${{ github.run_id }}
+          name: c2p2-rs0-real-source-shadow-run-r3-${{ github.run_id }}
           path: ${{ env.RESULT_DIR }}
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
           compression-level: 6
 
-      - name: Bind R2 artifact and materialise court record on packet branch
+      - name: Bind R3 artifact and materialise court record on packet branch
         if: always()
         env:
           ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
@@ -139,27 +160,30 @@ jobs:
           ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
         run: |
           set -euo pipefail
-          test -f "$RESULT_DIR/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_RESULT_v0_1.json"
+          if [ ! -f "$RESULT_DIR/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_RESULT_v0_1.json" ]; then
+            echo 'No R3 semantic result record exists; prelaunch failure leaves the single-use authority unconsumed.'
+            exit 0
+          fi
           python - <<'PY'
           import hashlib
           import json
           import os
           from pathlib import Path
 
-          result_path = Path(
-            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/'
-            'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_RESULT_v0_1.json'
-          )
+          release = Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0')
+          result_path = release / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_RESULT_v0_1.json'
           result = json.loads(result_path.read_text())
           result_sha = hashlib.sha256(result_path.read_bytes()).hexdigest()
           binding = {
-            'schema': 'ovc-c2p2-rs0-real-source-shadow-run-r2-artifact-binding/v1',
+            'schema': 'ovc-c2p2-rs0-real-source-shadow-run-r3-artifact-binding/v1',
             'programme_id': 'OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1',
-            'packet_id': 'C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2',
-            'authority_id': 'AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.3',
+            'packet_id': 'C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R3',
+            'authority_id': 'AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4',
+            'execution_adapter_binding_id': 'C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2',
+            'execution_adapter_binding_logical_sha256': '01c3e85d5c4b47fbb2a102a1d4dff3774e49fcd15110157aaac3ea538a51201c',
             'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
             'github_actions_artifact_id': int(os.environ['ARTIFACT_ID']) if os.environ.get('ARTIFACT_ID') else None,
-            'github_actions_artifact_name': f"c2p2-rs0-real-source-shadow-run-r2-{os.environ['GITHUB_RUN_ID']}",
+            'github_actions_artifact_name': f"c2p2-rs0-real-source-shadow-run-r3-{os.environ['GITHUB_RUN_ID']}",
             'github_actions_artifact_digest': os.environ.get('ARTIFACT_DIGEST'),
             'github_actions_artifact_url': os.environ.get('ARTIFACT_URL'),
             'run_result_sha256': result_sha,
@@ -170,35 +194,45 @@ jobs:
             'retention': 'PRESERVE_FORWARD_SUPERSEDE_ONLY',
             'authority_effect': 'NONE_STORAGE_PROVENANCE_ONLY',
           }
-          Path(
-            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/'
-            'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_ARTIFACT_BINDING_v0_1.json'
-          ).write_text(json.dumps(binding, indent=2, sort_keys=True) + '\n')
+          (release / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_ARTIFACT_BINDING_v0_1.json').write_text(
+            json.dumps(binding, indent=2, sort_keys=True) + '\n'
+          )
+
+          packet_path = release / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_PACKET_v0_1.json'
+          packet = json.loads(packet_path.read_text())
+          packet['status'] = 'GATE_READY' if result['status'] == 'COMPLETED_COMPARATIVE_SET_NO_WINNER' else 'BLOCKED'
+          packet['github_actions_run_id'] = int(os.environ['GITHUB_RUN_ID'])
+          packet['run_result_ref'] = str(result_path)
+          packet['run_result_sha256'] = result_sha
+          packet['next_gate'] = result['next_operator_gate']
+          packet_path.write_text(json.dumps(packet, indent=2, sort_keys=True) + '\n')
           PY
           git config user.name 'ovc-continuous-execution'
           git config user.email 'actions@users.noreply.github.com'
           git add \
-            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_RESULT_v0_1.json \
-            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_POST_RUN_R2_GATE_PACKET_v0_1.json \
-            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_ARTIFACT_BINDING_v0_1.json \
-            registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_2.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_RESULT_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_POST_RUN_R3_GATE_PACKET_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_ARTIFACT_BINDING_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_PACKET_v0_1.json \
+            registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_3.json \
             registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json
-          git commit -m 'C2P2-RS0: materialise R2 real-source shadow evidence'
+          git commit -m 'C2P2-RS0: materialise R3 real-source shadow evidence'
           git push origin HEAD:${GITHUB_REF_NAME}
 
-      - name: Summarise R2 boundary
+      - name: Summarise R3 boundary
         if: always()
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
           import os
           from pathlib import Path
-          path = Path(os.environ['RESULT_DIR']) / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_RESULT_v0_1.json'
+          path = Path(os.environ['RESULT_DIR']) / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_RESULT_v0_1.json'
           if not path.exists():
-              print('## C2P2-RS0 R2 run did not produce a result record')
+              print('## C2P2-RS0 R3 stopped before semantic result materialisation')
+              print('- Single-use R3 authority remains unconsumed by this attempt.')
               raise SystemExit(0)
           result = json.loads(path.read_text())
-          print('## C2P2-RS0 real-source shadow run R2')
+          print('## C2P2-RS0 real-source shadow run R3')
           print(f"- Status: `{result['status']}`")
           print(f"- Single-use authority consumed: `{result['authority']['execution_count_consumed']}`")
           print(f"- Remaining run count: `{result['authority']['run_count_remaining']}`")
@@ -209,19 +243,19 @@ jobs:
               print(f"- {row['candidate_id']}: `{row['status']}`")
           PY
 
-      - name: Fail closed if the authorised R2 comparative run did not complete
+      - name: Fail closed if the authorised R3 comparative run did not complete
         if: always()
         run: |
           python - <<'PY'
           import json
           import os
           from pathlib import Path
-          path = Path(os.environ['RESULT_DIR']) / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_RESULT_v0_1.json'
+          path = Path(os.environ['RESULT_DIR']) / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_RESULT_v0_1.json'
           if not path.exists():
-              raise SystemExit('RS0_R2_RESULT_RECORD_MISSING')
+              raise SystemExit('RS0_R3_PRELAUNCH_OR_PREFLIGHT_FAILURE_AUTHORITY_UNCONSUMED')
           result = json.loads(path.read_text())
           if result['status'] != 'COMPLETED_COMPARATIVE_SET_NO_WINNER':
-              raise SystemExit(f"RS0_R2_RUN_BLOCKED:{result['status']}")
+              raise SystemExit(f"RS0_R3_RUN_BLOCKED:{result['status']}")
           if result['next_operator_gate'] != 'C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION':
-              raise SystemExit('RS0_R2_COMPLETION_BOUNDARY_DRIFT')
+              raise SystemExit('RS0_R3_COMPLETION_BOUNDARY_DRIFT')
           PY
