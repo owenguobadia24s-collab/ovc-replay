@@ -8,17 +8,19 @@ STATE = ROOT / "registries" / "implementation" / "c2p_v0_2" / "C2P2_RS0_STATE_v0
 EXECUTION_STATE = ROOT / "registries" / "implementation" / "c2p_v0_2" / "C2P2_RS0_EXECUTION_STATE_v0_1.json"
 PS0_CANDIDATES_V1 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json"
 PS0_CANDIDATES_V2 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_2.json"
+PS0_CANDIDATES_V3 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_3.json"
 
 
 def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_rs0_preparation_preserves_historical_v1_comparative_set_and_current_successor_v2_no_winner():
+def test_rs0_preparation_preserves_v1_v2_and_current_final_v3_without_winner():
     binding = load(RS0 / "C2P2_RS0_SOURCE_POPULATION_BINDING_v0_1.json")
     state = load(STATE)
     ps0_v1 = load(PS0_CANDIDATES_V1)
     ps0_v2 = load(PS0_CANDIDATES_V2)
+    ps0_v3 = load(PS0_CANDIDATES_V3)
 
     historical = {
         "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
@@ -30,16 +32,25 @@ def test_rs0_preparation_preserves_historical_v1_comparative_set_and_current_suc
         "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v2",
         "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v2",
     }
+    final = {
+        "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3",
+        "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3",
+        "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3",
+    }
     assert set(binding["candidate_set"]) == historical
     v1_rows = ps0_v1.get("candidates", ps0_v1.get("candidate_object_packs", []))
     v1_ids = {row.get("object_pack_id", row.get("candidate_id")) for row in v1_rows if isinstance(row, dict)}
     assert historical <= v1_ids
 
-    assert set(state["candidate_set"]) == successor
+    assert set(state["candidate_set"]) == final
     assert {row["candidate_id"] for row in ps0_v2["candidates"]} == successor
     assert set(ps0_v2["supersedes_generation"]["candidate_ids"]) == historical
+    assert {row["candidate_id"] for row in ps0_v3["candidates"]} == final
+    assert set(ps0_v3["supersedes_generation"]["candidate_ids"]) == successor
     assert ps0_v2["selection_state"] == "NONE_SELECTED"
     assert ps0_v2["active_object_pack_id"] is None
+    assert ps0_v3["selection_state"] == "NONE_SELECTED"
+    assert ps0_v3["active_object_pack_id"] is None
     assert state["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
     assert binding["common_comparison_requirements"]["scalar_winner_forbidden"] is True
 
@@ -83,8 +94,10 @@ def test_historical_preparation_and_grun_are_preserved_but_not_retargeted_to_suc
     assert approved_gate["approved_authority"]["objectpack_selection"] == "NONE"
     assert approved_gate["approved_authority"]["ec1_scientific_authority_effect"] == "NONE"
 
-    assert state["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_SUCCESSOR_V2"
-    assert state["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_RUNTIME_CLOSEOUT_FINAL_GENERATION_AND_FRESH_GRUN_PASS"
+    assert state["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_FINAL_V3"
+    assert state["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_FRESH_GRUN_PASS"
+    assert state["authority"]["runtime_remediation"] == "COMPLETED"
+    assert state["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
     assert state["authority"]["active_object_pack"] is None
     assert state["authority"]["objectpack_selection"] == "NONE"
     assert execution["prior_grun"]["run_authority_consumed"] is False

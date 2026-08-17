@@ -61,24 +61,21 @@ def test_historical_execution_blocker_is_preserved_while_current_state_advances_
     assert remediation["state"] == "AUTHORISED"
     assert remediation["grun_token"]["may_consume_during_remediation"] is False
 
-    current_execution_blockers = {
-        "RS0_EMPIRICAL_OBJECTPACK_RUNTIME_NOT_MATERIALISED",
-        "FINAL_SUCCESSOR_GENERATION_AND_FRESH_GRUN_REQUIRED_BEFORE_REAL_SOURCE_LAUNCH",
-    }
+    current_execution_blockers = {"FRESH_GRUN_PASS_REQUIRED_BEFORE_REAL_SOURCE_LAUNCH"}
     assert set(state["blockers"]) == current_execution_blockers
-    assert state["status"] == "IMPLEMENTED"
-    assert state["packet_id"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
+    assert state["status"] == "GATE_READY_AWAITING_OPERATOR"
+    assert state["packet_id"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
     assert state["run_authority_consumed"] is False
     assert state["run_count_remaining"] == 1
-    assert state["next_packet"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
-    assert state["mandatory_stop"] is None
+    assert state["next_packet"] == "C2P2-RS0-REAL-SOURCE-SHADOW-RUN_AFTER_FRESH_GRUN_PASS"
+    assert state["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
 
-    assert programme["status"] == "IMPLEMENTED"
-    assert programme["packet_id"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
-    assert set(programme["blockers"]) == {"RS0_EMPIRICAL_OBJECTPACK_RUNTIME_NOT_MATERIALISED"}
+    assert programme["status"] == "GATE_READY_AWAITING_OPERATOR"
+    assert programme["packet_id"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert set(programme["blockers"]) == {"FRESH_GRUN_PASS_REQUIRED_BEFORE_REAL_SOURCE_LAUNCH"}
     assert programme["authority"]["gsem_operator_pass"] == "PASS"
-    assert programme["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_SUCCESSOR_V2"
-    assert programme["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_RUNTIME_CLOSEOUT_FINAL_GENERATION_AND_FRESH_GRUN_PASS"
+    assert programme["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_FINAL_V3"
+    assert programme["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_FRESH_GRUN_PASS"
     assert programme["authority"]["active_object_pack"] is None
     assert programme["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
-    assert programme["next_packet"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert programme["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"

@@ -213,15 +213,15 @@ def test_forbidden_future_outcome_or_authority_inputs_fail_closed_recursively(fi
         normalize_candidate_source_row(row)
 
 
-def test_programme_state_preserves_no_winner_unconsumed_old_grun_and_runtime_continuation_only() -> None:
+def test_programme_state_preserves_no_winner_unconsumed_old_grun_and_stops_at_fresh_gate() -> None:
     execution = _read(ROOT / "registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_1.json")
     programme = _read(ROOT / "registries/implementation/c2p_v0_2/C2P2_RS0_STATE_v0_1.json")
-    assert execution["packet_id"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
+    assert execution["packet_id"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
     assert execution["run_authority_consumed"] is False
     assert execution["run_count_remaining"] == 1
     assert execution["fresh_grun_required_before_real_source_launch"] is True
-    assert execution["next_packet"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert execution["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
     assert programme["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
     assert programme["authority"]["active_object_pack"] is None
     assert programme["authority"]["validation"] == "LOCKED_UNCONSUMED"
-    assert programme["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_RUNTIME_CLOSEOUT_FINAL_GENERATION_AND_FRESH_GRUN_PASS"
+    assert programme["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_FRESH_GRUN_PASS"

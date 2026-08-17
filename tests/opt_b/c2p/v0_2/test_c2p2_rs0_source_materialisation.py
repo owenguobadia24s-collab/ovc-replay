@@ -27,14 +27,14 @@ def test_operator_pass_is_narrow_and_materialisation_remains_frozen_after_succes
     assert closeout["workflow"]["run_id"] == 32010902424
     assert closeout["materialisation"]["logical_sha256"] == "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b"
 
-    assert state["packet_id"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
-    assert state["status"] == "IMPLEMENTED"
+    assert state["packet_id"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert state["status"] == "GATE_READY_AWAITING_OPERATOR"
     assert state["current_source_materialisation"]["workflow_run_id"] == 32010902424
     assert state["current_source_materialisation"]["logical_sha256"] == closeout["materialisation"]["logical_sha256"]
     assert state["run_authority_consumed"] is False
     assert state["run_count_remaining"] == 1
     assert state["fresh_grun_required_before_real_source_launch"] is True
-    assert state["next_packet"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert state["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
     assert state["f0_a"] == "HOLD_UNCHANGED"
     assert state["validation"] == "LOCKED_UNCONSUMED"
 
