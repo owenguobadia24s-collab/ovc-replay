@@ -1,0 +1,94 @@
+{
+  "schema": "ovc-operator-gate-packet/v0.1",
+  "gate_id": "PRVITR-G-LIVE-SWITCH",
+  "title": "PR/VIT corrected live-admission switch",
+  "programme_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
+  "plan_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-IMPLEMENTATION-PLAN-v0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "baseline_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
+  "shadow_merge_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
+  "completed_packets": ["PRVITR-WP0","PRVITR-WP1","PRVITR-WP2","PRVITR-WP3","PRVITR-WP4","PRVITR-WP5","PRVITR-WP6"],
+  "current_authority": {
+    "live_admission_path": "EXISTING_PR_VIT_SIQ_GRT_ROUTE_AUTHORITATIVE",
+    "required_status_context": "OVC merge readiness",
+    "physical_vit_control": "UNCHANGED",
+    "pr1106_effect": "NONE"
+  },
+  "proposed_authority_delta": {
+    "class": "OPERATOR_RESERVED_LIVE_ADMISSION_SWITCH",
+    "delta": "AUTHORISE_A_BOUNDED_LIVE_SWITCH_PACKET_TO_MAKE_THE_QUALIFIED_PRVITR_ADMISSION_MODEL_DECISION_BEARING_INSIDE_THE_EXISTING_PR_CI_AND_SERIALIZED_PHYSICAL_GATEWAY",
+    "retained_limits": [
+      "NO_REQUIRED_STATUS_CONTEXT_RENAME",
+      "NO_REPOSITORY_RULESET_BROADENING",
+      "NO_PARALLEL_PHYSICAL_MERGES",
+      "NO_PHYSICAL_VIT_CONTROL_BROADENING",
+      "NO_FORCE_PUSH_OR_HISTORY_REWRITE",
+      "NO_DESTRUCTIVE_CLEANUP",
+      "NO_SCIENTIFIC_MODEL_SELECTOR_SEMANTIC_AUTHORITY",
+      "NO_VALIDATION_PUBLICATION_PROBABILITY_RISK_EXPOSURE_EXECUTION_AGENT_WRITE",
+      "NO_PR1106_AUTHORITY_CONSUMPTION"
+    ]
+  },
+  "acceptance_conditions": [
+    "PRVIT-R01..R10 remain green on the exact live-switch candidate",
+    "A0/PIP assurance executes independently of placement-specific VIT routing and is reusable when payload, dependency frontier and authority frontier are unchanged",
+    "placement/VIT/GRT failures are represented as typed BLOCKED_UPSTREAM/STALE/SUPERSEDED rather than false test FAIL",
+    "decision-bearing lineage and assurance generations are immutable/content-addressed; mutable PR prose is display/provenance only",
+    "main movement classified PLACEMENT_RECOMPUTE_ONLY actuates selective renewal instead of whole-candidate replacement when lawful",
+    "semantic dispatch is idempotent by programme_id + packet_id + pip_id",
+    "normative ancestry is proven from the local Git object graph; GitHub compare API is diagnostic only",
+    "closeout binds physical materialisation in a narrow receipt and does not create a second full base-sensitive contestant",
+    "GRT exact-tree proof and existing serialized physical gateway remain fail-closed",
+    "zero unsafe shadow allow and zero authority broadening outside this gate"
+  ],
+  "qualified_shadow_evidence": {
+    "pr": 1116,
+    "candidate_head": "0e849940a28ad0a7538aa9fdbefdefc5fff72a09",
+    "candidate_tree": "909dace2314ffc5dba9d3e9a7e273cead7ec2fee",
+    "tests_run_id": 32067966187,
+    "tiered_run_id": 32067966178,
+    "vit_routing_preflight": "PASS",
+    "repository_tests": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head_profile_assurance": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS",
+    "merge_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
+    "unsafe_shadow_allows": 0
+  },
+  "qa": {
+    "recommendation": "PASS",
+    "warnings": [
+      "The live workflow wiring itself is intentionally not part of the already-merged shadow packet and must be exact-head qualified after operator approval.",
+      "The switch must preserve the current required status context and existing serialized physical integration gateway until separately authorised otherwise."
+    ],
+    "unresolved_blocking_issues": []
+  },
+  "changed_files_in_shadow_packet": [
+    "contracts/development/PRVITR_SHADOW_REMEDIATION_CONTRACT_v0_1.md",
+    "docs/programmes/prvitr-v0-1/*",
+    "records/development/prvitr/PRVITR_PROGRAMME_STATE_v0_1.json",
+    "schemas/development/prvitr/*",
+    "src/ovc/development/prvit_remediation.py",
+    "tests/development/test_prvitr_shadow_remediation.py"
+  ],
+  "external_artifacts": [],
+  "rollback": "Fail closed to the currently authoritative admission route until the live-switch candidate is fully qualified. If a later live switch causes a reproducible safety or integrity regression, forward-revert the bounded switch wiring to the prior route; preserve all decision/evidence generations.",
+  "recommended_decision": "PASS",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "exact_work_after_pass": [
+    "Create a bounded live-switch implementation branch from latest lawful main.",
+    "Wire the existing PR CI so PIP/A0 assurance precedes placement-specific VIT validation.",
+    "Replace latest-named-check decision scraping with exact immutable IntegrationAssuranceGeneration / IntegrationAdmissionReceipt bindings where the current pipeline makes admission decisions.",
+    "Move decision-bearing VIT lineage out of mutable PR prose into an immutable content-addressed record/pointer while retaining PR prose only as provenance/display.",
+    "Actuate PLACEMENT_RECOMPUTE_ONLY selective renewal and semantic dispatch idempotency.",
+    "Use local Git ancestry as normative and keep GitHub compare API diagnostic.",
+    "Use the narrow physical-materialisation receipt for closeout without a second full contestant.",
+    "Run targeted, repository-wide, exact-head, GRT, SIQ and merge-readiness assurance on the live-switch candidate.",
+    "If every acceptance condition passes, integrate the bounded switch packet through the existing required context and serialized gateway; otherwise fail closed and preserve the current route."
+  ],
+  "decision_effect_if_pass": "AUTHORISE_THE_BOUNDED_LIVE_SWITCH_IMPLEMENTATION_AND_QUALIFICATION_DESCRIBED_ABOVE; NO_OTHER_AUTHORITY",
+  "decision_effect_if_defer_or_block": "KEEP_EXISTING_LIVE_ADMISSION_ROUTE_AUTHORITATIVE; PRESERVE_SHADOW_REMEDIATION_AND_EVIDENCE"
+}

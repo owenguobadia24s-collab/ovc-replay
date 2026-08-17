@@ -1,0 +1,49 @@
+{
+  "schema": "ovc-prvitr-gate-reanchor/v0.1",
+  "programme_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
+  "plan_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-IMPLEMENTATION-PLAN-v0.1",
+  "packet_id": "PRVITR-WP7",
+  "gate_id": "PRVITR-G-LIVE-SWITCH",
+  "status": "GATE_READY_REANCHORED",
+  "prior_gate_branch": "gate/prvitr-live-switch-ready-20260817",
+  "prior_anchor_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
+  "prior_anchor_tree": "909dace2314ffc5dba9d3e9a7e273cead7ec2fee",
+  "current_gate_branch": "gate/prvitr-live-switch-ready-r2-20260817",
+  "current_anchor_commit": "b0726f9d251b1110983fc6a657f31b8f087449bd",
+  "current_anchor_tree": "be74f720a74a32c21480b8b7b7f8093a47b08425",
+  "main_advance": {
+    "commit": "b0726f9d251b1110983fc6a657f31b8f087449bd",
+    "programme": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+    "packet": "SFFI-WP0",
+    "classification": "UNRELATED_TO_PRVITR_GATE_PAYLOAD_OR_AUTHORITY",
+    "authority_effect_on_prvitr": "NONE",
+    "evidence": "Merged PR #1119 states the SFFI reanchor does not consume PRVITR-G-LIVE-SWITCH authority."
+  },
+  "payload_treatment": "Carry the already-prepared PRVITR P0 completion record and PRVITR-G-LIVE-SWITCH decision packet unchanged; only the programme-state branch locator is renewed to the latest lawful main lineage.",
+  "evidence_preserved": {
+    "shadow_packet_pr": 1116,
+    "shadow_packet_head": "0e849940a28ad0a7538aa9fdbefdefc5fff72a09",
+    "shadow_packet_tree": "909dace2314ffc5dba9d3e9a7e273cead7ec2fee",
+    "tests_run_id": 32067966187,
+    "tiered_run_id": 32067966178,
+    "merge_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
+    "historical_last20": "20/20 safety equivalent, 0 false authority allows",
+    "perturbation_replay": "10/10 deterministic PASS, 0 unsafe divergence, 0 lost causal receipts"
+  },
+  "current_post_remediation_compatibility": {
+    "pr": 1119,
+    "tests_run_id": 32073545615,
+    "tiered_run_id": 32073545700,
+    "vit_routing_preflight": "PASS",
+    "pip_bound_aa0": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "warnings": [
+    "PRVITR corrected admission is still non-authoritative until the operator decides PRVITR-G-LIVE-SWITCH.",
+    "No ruleset, required-status context, live verifier, physical VIT control, PR #1106 authority, scientific authority, Validation, publication, probability, risk, exposure or execution authority is changed by this reanchor.",
+    "Open PR #1117 is preserved stale audit-lineage residue and is not made a prerequisite by this record."
+  ],
+  "rollback": "Abandon or supersede this gate branch; physical main and the existing live admission route are unchanged.",
+  "authority_effect": "NONE"
+}
