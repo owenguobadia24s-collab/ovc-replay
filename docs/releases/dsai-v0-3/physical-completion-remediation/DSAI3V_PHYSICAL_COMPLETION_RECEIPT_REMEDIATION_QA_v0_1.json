@@ -1,0 +1,22 @@
+{
+  "schema":"ovc-dsai3v-physical-completion-remediation-qa/v1",
+  "packet_id":"DSAI3V-PHYSICAL-COMPLETION-RECEIPT-REMEDIATION",
+  "programme_id":"OVC-DSAI-VIT-v0.3",
+  "governing_plan":"OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "authority_required":"AUTO_EXECUTABLE",
+  "authority_delta":"NONE",
+  "status":"QA_REVIEW",
+  "recommended_decision":"PASS_PENDING_EXACT_HEAD_ASSURANCE",
+  "baseline":{"main_commit":"6365a6a552d511bb96a091b01f2b7921f52bcf2e","main_tree":"8deeba92c2c669ddfafa7c2310085b3ce3a51a01","main_message":"Parse timestamped VIT freeze markers (#1076)"},
+  "authority_manifest":{"authority_manifest_id":"ce016bc38c09e3381eb73cb9dee2026808acbcc80bb3ad1732e7de5daf864ffa","identity_role":"DSAI3V_REMEDIATION_AUTHORITY_MANIFEST","authority_delta":"NONE"},
+  "dependency_frontier":{"dependency_frontier_id":"96fe6a0e59a8cdb6c5194ac11c3d8dac6cbad256dfb3ec6a25cb4079510eac7f","identity_role":"DSAI3V_REMEDIATION_DEPENDENCY_FRONTIER","baseline_commit":"6365a6a552d511bb96a091b01f2b7921f52bcf2e","baseline_tree":"8deeba92c2c669ddfafa7c2310085b3ce3a51a01","dependencies":["vit_completion_runtime","vit_local_completion_executor","vit_materialisation","vit_assurance_preflight","vit_post_merge_completion timestamped-freeze parser","DSAI_VIT_PHYSICAL_CONTROLLER","DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY","OVC_EXTERNAL_ARTIFACT_ROOT/receipts"]},
+  "root_cause":{"classification":"POST_MERGE_COMPLETION_DEMAND_LOSS_UNDER_FIXED_WORKFLOW_CONCURRENCY","finding":"The PMT freeze, exact-tree proof, ReceiptStore persistence and crash recovery existed, but one fixed Actions concurrency group allowed a newer queued main push to replace an older pending self-hosted completion demand.","evidence":[{"merge_commit":"43c053822e4a3cd0e7c04fc4a0760879ef84290a","workflow_run":32020891726,"state":"PENDING_ZERO_JOBS_THEN_CANCELLED"},{"merge_commit":"c90f53033f2a21ff35e4fb5a71a84415f4116dea","workflow_run":32022390244,"state":"PENDING_ZERO_JOBS_AT_DIAGNOSIS"}]},
+  "pr_reconciliation":{"1070":"PRESERVE_MERGED_HISTORICAL_RECOVERY_NO_FABRICATED_PMT","1071":"SUPERSEDED_CLOSED_DO_NOT_MERGE","1072":"PRESERVE_SINGLE_HISTORICAL_RCCRI_WP8_RECEIPT_LINEAGE_MERGED_05c6c6878d10fd4b498ecefe4456db92fdabee93"},
+  "remediation":{"normal_path":"qualified PIP/VIT -> serialized physical write -> exact-tree proof -> canonical external completion bundle -> external COMPLETED binding -> at-most-once successor release; no ordinary closeout PR","queue":"PER_MERGE_SHA_NON_CANCELLING plus bounded oldest-first recovery drain","duplicate":"different transaction for same programme/packet fails closed","crash_recovery":"recover_effective_write_completion; physical write never repeated","historical":"missing pre-write freeze remains typed historical debt; never fabricate transaction identity","receipt_root":"OVC_EXTERNAL_ARTIFACT_ROOT/receipts"},
+  "regressions":["success->COMPLETED","tree mismatch fail closed","retry idempotent","different transaction duplicate fail closed","successor release once/no inferred authority","no normal closeout PR","historical recovery distinct","newer push cannot cancel prior merge demand"],
+  "assurance":{"targeted":"PENDING_EXACT_HEAD_CI","repository_wide":"PENDING_EXACT_HEAD_CI","vit_siq_grt":"PENDING_EXACT_HEAD_CI","final_head_required_before_merge":true},
+  "warnings":["Bound self-hosted Windows runner was unavailable/pending during diagnosis; live external receipt debt is discharged only when a retained completion demand executes."],
+  "repository_ref_hygiene":{"status":"NON_BLOCKING_UNRELATED_REF_NOISE_PRESERVED","accidental_noop_refs":["noop-dont-use","test-dont","please-ignore-branch-tool-mistake","ignore-4","ignore-5","ignore-6","ignore-7"],"reason":"Deletion is destructive/operator-reserved; refs contain no remediation mutation."},
+  "rollback":"Forward-supersede remediation only; preserve receipts, historical PR evidence and Git history.",
+  "reserved_authority_unchanged":["VIT/ORCH activation broadening","scientific/selector","Discovery/Development/Validation","publication","probability/risk/exposure/execution"]
+}
