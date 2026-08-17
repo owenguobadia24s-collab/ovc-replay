@@ -4,20 +4,24 @@ from __future__ import annotations
 
 The exact RS0 C2 source files are envelopes created by the frozen source
 materialiser as contiguous source-kind segments (levels, then containers, then
-parent observations).  The frozen reference runtime globally sorts the complete
-population by ``(first_valid_time, source_record_id)`` before applying any
-scientific semantics.  This adapter recovers that ordering without changing
-rows or core runtime semantics:
+parent observations). The frozen runtime contract accepts only C2_LEVEL and
+C2_CONTAINER rows as base candidates and globally orders those candidate rows by
+``(first_valid_time, source_record_id)`` before scientific semantics.
 
-1. validate the documented source-kind segment envelope;
-2. treat each contiguous source-kind segment as a logical input stream;
-3. buffer only one equal-first_valid_time group inside each logical stream and
-   order that group by source_record_id;
-4. k-way merge those canonical logical streams.
+This adapter recovers that frozen contract without changing source bytes,
+scientific predicates, thresholds or candidate generation:
 
-A genuinely decreasing first_valid_time *within one logical source-kind stream*
-still fails closed. Population materialisation, row mutation, sampling and
-precision changes remain forbidden.
+1. validate the documented physical source-kind envelope;
+2. project only the already-authorised base-candidate kinds (LEVEL/CONTAINER)
+   into logical streams; parent observations remain preserved context and are
+   never silently promoted to base candidates;
+3. buffer one equal-first_valid_time group per logical stream and order that
+   group by source_record_id;
+4. k-way merge those logical candidate streams.
+
+A genuinely decreasing first_valid_time within one logical base-candidate stream
+fails closed. Population materialisation, sampling, reduced precision and row
+mutation remain forbidden.
 """
 
 from collections.abc import Callable
@@ -30,11 +34,18 @@ from .rs0_empirical_runtime_streaming import (
 from .rs0_empirical_semantics import normalize_candidate_source_row
 
 
-SOURCE_ORDER_ADAPTER_SCHEMA = "ovc-c2p2-rs0-source-order-recovery-adapter/v2"
+SOURCE_ORDER_ADAPTER_SCHEMA = "ovc-c2p2-rs0-source-order-recovery-adapter/v3"
 SOURCE_ORDER_ADAPTER_ID = "C2P2_RS0_SOURCE_ORDER_RECOVERY_ADAPTER_v0_2"
 C2_SOURCE_KIND_ORDER = (
     "C2_LEVEL",
     "C2_CONTAINER",
+    "C2_PARENT_OBSERVATION",
+)
+BASE_CANDIDATE_SOURCE_KINDS = (
+    "C2_LEVEL",
+    "C2_CONTAINER",
+)
+CONTEXT_ONLY_SOURCE_KINDS = (
     "C2_PARENT_OBSERVATION",
 )
 
@@ -55,12 +66,7 @@ def _flush_equal_time_group(
 def canonicalize_equal_time_groups(
     stream: Iterable[Mapping[str, Any]],
 ) -> Iterator[Mapping[str, Any]]:
-    """Canonicalize equal-time ties inside one logical source stream.
-
-    ``first_valid_time`` must be monotonically nondecreasing. Equal-time rows
-    may arrive in arbitrary source_record_id order and are buffered one time
-    group at a time. A genuine time decrease fails closed.
-    """
+    """Canonicalize equal-time ties inside one logical base-candidate stream."""
 
     current_time: str | None = None
     previous_time: str | None = None
@@ -97,9 +103,10 @@ def inspect_source_kind_segments(
 ) -> dict[str, Any]:
     """Validate the frozen materialiser's contiguous source-kind envelope.
 
-    Time decreases are permitted only at a transition to a later documented
-    source-kind segment. Within any one kind, first_valid_time must remain
-    monotonically nondecreasing. Re-entry into an earlier kind fails closed.
+    This inspection deliberately does not call candidate normalization because
+    C2_PARENT_OBSERVATION is authorised context but forbidden as a base C2P
+    candidate. Time decreases are permitted only at transitions to later
+    documented physical segments. Re-entry or a within-kind decrease fails.
     """
 
     kind_positions = {kind: index for index, kind in enumerate(kind_order)}
@@ -107,7 +114,9 @@ def inspect_source_kind_segments(
     previous_kind: str | None = None
     previous_raw_time: str | None = None
     previous_time_by_kind: dict[str, str] = {}
+    previous_source_id_by_kind: dict[str, str] = {}
     rows_by_kind = {kind: 0 for kind in kind_order}
+    tie_inversions_by_kind = {kind: 0 for kind in kind_order}
     rows_by_side: dict[str, int] = {}
     rows_by_clock: dict[str, int] = {}
     transitions: list[dict[str, str]] = []
@@ -115,7 +124,10 @@ def inspect_source_kind_segments(
     raw_rows = 0
 
     for row in stream:
-        material = normalize_candidate_source_row(row)
+        if row.get("schema") != "ovc-c2p2-rs0-source-row/v1":
+            raise RS0SpooledRuntimeError("RS0_SOURCE_ORDER_SOURCE_SCHEMA_DRIFT")
+        if row.get("source_role") != "C2_VNEXT":
+            raise RS0SpooledRuntimeError("RS0_SOURCE_ORDER_SOURCE_ROLE_DRIFT")
         source_kind = str(row.get("source_record_kind") or "")
         if source_kind not in kind_positions:
             raise RS0SpooledRuntimeError(
@@ -131,12 +143,22 @@ def inspect_source_kind_segments(
                 transitions.append({"from": previous_kind, "to": source_kind})
             current_kind_position = position
 
-        first_valid_time = str(material["first_valid_time"])
+        first_valid_time = str(row.get("first_valid_time") or "")
+        source_record_id = str(row.get("source_record_id") or "")
+        if not first_valid_time or not source_record_id:
+            raise RS0SpooledRuntimeError("RS0_SOURCE_ORDER_REQUIRED_IDENTITY_FIELD_MISSING")
         previous_kind_time = previous_time_by_kind.get(source_kind)
+        previous_kind_source_id = previous_source_id_by_kind.get(source_kind)
         if previous_kind_time is not None and first_valid_time < previous_kind_time:
             raise RS0SpooledRuntimeError(
                 f"RS0_SOURCE_ORDER_FIRST_VALID_TIME_DECREASING_WITHIN_KIND:{source_kind}"
             )
+        if (
+            previous_kind_time == first_valid_time
+            and previous_kind_source_id is not None
+            and source_record_id <= previous_kind_source_id
+        ):
+            tie_inversions_by_kind[source_kind] += 1
         if previous_raw_time is not None and first_valid_time < previous_raw_time:
             if source_kind == previous_kind:
                 raise RS0SpooledRuntimeError(
@@ -145,6 +167,7 @@ def inspect_source_kind_segments(
             boundary_time_decreases += 1
 
         previous_time_by_kind[source_kind] = first_valid_time
+        previous_source_id_by_kind[source_kind] = source_record_id
         previous_raw_time = first_valid_time
         previous_kind = source_kind
         rows_by_kind[source_kind] += 1
@@ -159,9 +182,13 @@ def inspect_source_kind_segments(
 
     observed_kinds = [kind for kind in kind_order if rows_by_kind[kind] > 0]
     return {
-        "schema": "ovc-c2p2-rs0-source-kind-segment-inspection/v1",
+        "schema": "ovc-c2p2-rs0-source-kind-segment-inspection/v2",
         "raw_rows": raw_rows,
         "kind_order": list(kind_order),
+        "base_candidate_kinds": list(BASE_CANDIDATE_SOURCE_KINDS),
+        "context_only_kinds": list(CONTEXT_ONLY_SOURCE_KINDS),
+        "base_candidate_rows": sum(rows_by_kind[kind] for kind in BASE_CANDIDATE_SOURCE_KINDS),
+        "context_only_rows": sum(rows_by_kind[kind] for kind in CONTEXT_ONLY_SOURCE_KINDS),
         "observed_kinds": observed_kinds,
         "rows_by_kind": rows_by_kind,
         "rows_by_side": dict(sorted(rows_by_side.items())),
@@ -169,6 +196,8 @@ def inspect_source_kind_segments(
         "segment_transitions": transitions,
         "boundary_time_decreases": boundary_time_decreases,
         "within_kind_time_decreases": 0,
+        "equal_time_source_id_inversions_by_kind": tie_inversions_by_kind,
+        "equal_time_source_id_inversions": sum(tie_inversions_by_kind.values()),
         "status": "PASS",
     }
 
@@ -179,7 +208,7 @@ def filter_source_kind(
     *,
     allowed_kinds: Sequence[str] = C2_SOURCE_KIND_ORDER,
 ) -> Iterator[Mapping[str, Any]]:
-    """Project one documented logical source-kind stream without row mutation."""
+    """Project one documented source-kind stream without mutating rows."""
 
     allowed = set(allowed_kinds)
     if expected_kind not in allowed:
@@ -196,19 +225,17 @@ def filter_source_kind(
             yield row
 
 
-def logical_streams_from_factories(
+def logical_candidate_streams_from_factories(
     stream_factories: Sequence[Callable[[], Iterable[Mapping[str, Any]]]],
-    *,
-    kind_order: Sequence[str] = C2_SOURCE_KIND_ORDER,
 ) -> list[Iterable[Mapping[str, Any]]]:
-    """Create canonical logical streams from immutable re-readable envelopes."""
+    """Create only the base-candidate logical streams frozen by runtime v0.1."""
 
     logical_streams: list[Iterable[Mapping[str, Any]]] = []
     for factory in stream_factories:
-        for source_kind in kind_order:
+        for source_kind in BASE_CANDIDATE_SOURCE_KINDS:
             logical_streams.append(
                 canonicalize_equal_time_groups(
-                    filter_source_kind(factory(), source_kind, allowed_kinds=kind_order)
+                    filter_source_kind(factory(), source_kind)
                 )
             )
     return logical_streams
@@ -216,20 +243,18 @@ def logical_streams_from_factories(
 
 def merge_source_factories_with_kind_segmentation(
     stream_factories: Sequence[Callable[[], Iterable[Mapping[str, Any]]]],
-    *,
-    kind_order: Sequence[str] = C2_SOURCE_KIND_ORDER,
 ) -> Iterator[Mapping[str, Any]]:
-    """Recover exact frozen-runtime canonical order from source envelopes."""
+    """Recover exact runtime-v0.1 order for base candidate rows only."""
 
     yield from merge_canonical_source_streams(
-        logical_streams_from_factories(stream_factories, kind_order=kind_order)
+        logical_candidate_streams_from_factories(stream_factories)
     )
 
 
 def merge_source_streams_with_tie_canonicalization(
     streams: Sequence[Iterable[Mapping[str, Any]]],
 ) -> Iterator[Mapping[str, Any]]:
-    """Legacy helper for already-logical monotone streams used by qualification."""
+    """Helper for already-logical base-candidate streams used by qualification."""
 
     canonical_streams = [canonicalize_equal_time_groups(stream) for stream in streams]
     yield from merge_canonical_source_streams(canonical_streams)

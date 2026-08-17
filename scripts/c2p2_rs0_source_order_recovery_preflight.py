@@ -12,7 +12,9 @@ from typing import Any
 
 from ovc.opt_b.c2p_v0_2.rs0_execution import iter_verified_rows, validate_locator
 from ovc.opt_b.c2p_v0_2.rs0_empirical_runtime_source_order import (
+    BASE_CANDIDATE_SOURCE_KINDS,
     C2_SOURCE_KIND_ORDER,
+    CONTEXT_ONLY_SOURCE_KINDS,
     SOURCE_ORDER_ADAPTER_ID,
     inspect_source_kind_segments,
     merge_source_factories_with_kind_segmentation,
@@ -93,6 +95,8 @@ def inspect_exact_source_envelope(source_root: Path, source) -> dict[str, Any]:
         raise RuntimeError("RS0_SOURCE_ORDER_SOURCE_FILE_SIDE_CARDINALITY_DRIFT")
     if inspection["boundary_time_decreases"] <= 0:
         raise RuntimeError("RS0_SOURCE_ORDER_EXPECTED_SEGMENT_BOUNDARY_RESET_NOT_OBSERVED")
+    if inspection["base_candidate_rows"] <= 0 or inspection["context_only_rows"] <= 0:
+        raise RuntimeError("RS0_SOURCE_ORDER_EXPECTED_BASE_AND_CONTEXT_PARTITIONS_MISSING")
     return {
         "relative_path": source.relative_path,
         "source_sha256": source.sha256,
@@ -101,7 +105,7 @@ def inspect_exact_source_envelope(source_root: Path, source) -> dict[str, Any]:
     }
 
 
-def global_merge_receipt(
+def global_base_candidate_merge_receipt(
     source_root: Path,
     sources: list[Any],
     source_inspections: list[dict[str, Any]],
@@ -116,17 +120,29 @@ def global_merge_receipt(
     connection.execute("PRAGMA synchronous=NORMAL")
     connection.execute("CREATE TABLE source_ids(source_record_id TEXT PRIMARY KEY)")
 
-    expected_counts: Counter[tuple[str, str]] = Counter()
+    expected_base_counts: Counter[tuple[str, str]] = Counter()
+    total_raw_rows = 0
+    total_context_rows = 0
     for inspection in source_inspections:
         side = next(iter(inspection["rows_by_side"]))
-        for source_kind, count in inspection["rows_by_kind"].items():
-            expected_counts[(side, source_kind)] += int(count)
+        total_raw_rows += int(inspection["raw_rows"])
+        total_context_rows += int(inspection["context_only_rows"])
+        for source_kind in BASE_CANDIDATE_SOURCE_KINDS:
+            expected_base_counts[(side, source_kind)] += int(
+                inspection["rows_by_kind"][source_kind]
+            )
+
+    expected_base_rows = sum(expected_base_counts.values())
+    if total_raw_rows != EXPECTED_C2_ROWS:
+        raise RuntimeError(f"RS0_SOURCE_ORDER_RAW_POPULATION_DRIFT:{total_raw_rows}")
+    if expected_base_rows + total_context_rows != total_raw_rows:
+        raise RuntimeError("RS0_SOURCE_ORDER_BASE_CONTEXT_PARTITION_NOT_EXHAUSTIVE")
 
     factories = [stream_factory(source_root, source) for source in sources]
     merged = merge_source_factories_with_kind_segmentation(factories)
     previous_key: tuple[str, str] | None = None
     order_sha = hashlib.sha256()
-    observed_counts: Counter[tuple[str, str]] = Counter()
+    observed_base_counts: Counter[tuple[str, str]] = Counter()
     rows = 0
     try:
         for row in merged:
@@ -145,8 +161,12 @@ def global_merge_receipt(
                     f"RS0_SOURCE_ORDER_DUPLICATE_SOURCE_RECORD:{source_id}"
                 ) from exc
             source_kind = str(row.get("source_record_kind") or "")
+            if source_kind not in BASE_CANDIDATE_SOURCE_KINDS:
+                raise RuntimeError(
+                    f"RS0_SOURCE_ORDER_CONTEXT_PROMOTED_TO_BASE_CANDIDATE:{source_kind}"
+                )
             side = str(row.get("side") or "")
-            observed_counts[(side, source_kind)] += 1
+            observed_base_counts[(side, source_kind)] += 1
             previous_key = key
             order_sha.update(f"{key[0]}\x1f{key[1]}\n".encode("utf-8"))
             rows += 1
@@ -159,29 +179,36 @@ def global_merge_receipt(
     database_bytes = db_path.stat().st_size
     if database_bytes > STORAGE_LIMIT:
         raise RuntimeError("RS0_SOURCE_ORDER_PREFLIGHT_STORAGE_LIMIT_EXCEEDED")
-    if rows != EXPECTED_C2_ROWS:
-        raise RuntimeError(f"RS0_SOURCE_ORDER_GLOBAL_ROW_COUNT_DRIFT:{rows}")
-    if observed_counts != expected_counts:
+    if rows != expected_base_rows:
         raise RuntimeError(
-            "RS0_SOURCE_ORDER_ROW_PARTITION_PRESERVATION_FAIL:"
-            f"expected={dict(expected_counts)}:observed={dict(observed_counts)}"
+            f"RS0_SOURCE_ORDER_BASE_CANDIDATE_ROW_COUNT_DRIFT:{rows}!={expected_base_rows}"
+        )
+    if observed_base_counts != expected_base_counts:
+        raise RuntimeError(
+            "RS0_SOURCE_ORDER_BASE_PARTITION_PRESERVATION_FAIL:"
+            f"expected={dict(expected_base_counts)}:observed={dict(observed_base_counts)}"
         )
 
     return {
         "rows": rows,
-        "unique_source_record_ids": rows,
-        "strict_global_order": True,
-        "global_order_sha256": order_sha.hexdigest(),
+        "raw_source_rows": total_raw_rows,
+        "base_candidate_rows": rows,
+        "context_only_rows_preserved_outside_base_runtime": total_context_rows,
+        "base_plus_context_equals_raw_source_rows": rows + total_context_rows == total_raw_rows,
+        "unique_base_source_record_ids": rows,
+        "strict_global_base_candidate_order": True,
+        "global_base_candidate_order_sha256": order_sha.hexdigest(),
         "identity_index_bytes": database_bytes,
         "expected_side_kind_counts": {
             f"{side}|{kind}": count
-            for (side, kind), count in sorted(expected_counts.items())
+            for (side, kind), count in sorted(expected_base_counts.items())
         },
         "observed_side_kind_counts": {
             f"{side}|{kind}": count
-            for (side, kind), count in sorted(observed_counts.items())
+            for (side, kind), count in sorted(observed_base_counts.items())
         },
-        "row_partition_preserved": True,
+        "base_candidate_partition_preserved": True,
+        "context_promotion_count": 0,
     }
 
 
@@ -217,6 +244,20 @@ def main() -> int:
     if closeout["artifact"]["github_actions_artifact_digest"] != SOURCE_ARTIFACT_DIGEST:
         raise SystemExit("RS0_SOURCE_ORDER_ARTIFACT_DIGEST_DRIFT")
 
+    runtime_binding = json.loads(
+        (
+            repo_root
+            / "registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_RUNTIME_BINDING_v0_1.json"
+        ).read_text(encoding="utf-8")
+    )
+    if runtime_binding["runtime_contract"]["source_rows"] != "C2_VNEXT_LEVEL_OR_CONTAINER_ONLY":
+        raise SystemExit("RS0_SOURCE_ORDER_RUNTIME_BASE_SOURCE_CONTRACT_DRIFT")
+    if runtime_binding["runtime_contract"]["stream_order"] != [
+        "first_valid_time",
+        "source_record_id",
+    ]:
+        raise SystemExit("RS0_SOURCE_ORDER_RUNTIME_STREAM_ORDER_CONTRACT_DRIFT")
+
     consumption = json.loads(
         (
             repo_root
@@ -241,7 +282,7 @@ def main() -> int:
         inspect_exact_source_envelope(source_root, source)
         for source in sorted(c2_sources, key=lambda item: item.relative_path)
     ]
-    global_receipt = global_merge_receipt(
+    global_receipt = global_base_candidate_merge_receipt(
         source_root,
         c2_sources,
         source_inspections,
@@ -252,8 +293,23 @@ def main() -> int:
     if peak > MEMORY_LIMIT:
         raise SystemExit("RS0_SOURCE_ORDER_PREFLIGHT_MEMORY_LIMIT_EXCEEDED")
 
+    stream_receipts = [
+        {
+            "relative_path": row["relative_path"],
+            "expected_rows": row["expected_rows"],
+            "base_candidate_rows": row["base_candidate_rows"],
+            "context_only_rows": row["context_only_rows"],
+            "tie_inversions_detected": sum(
+                int(row["equal_time_source_id_inversions_by_kind"][kind])
+                for kind in BASE_CANDIDATE_SOURCE_KINDS
+            ),
+            "source_kind_envelope_status": row["status"],
+        }
+        for row in source_inspections
+    ]
+
     receipt = {
-        "schema": "ovc-c2p2-rs0-source-order-recovery-current-source-preflight/v2",
+        "schema": "ovc-c2p2-rs0-source-order-recovery-current-source-preflight/v3",
         "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
         "packet_id": "C2P2-RS0-SOURCE-ORDER-RECOVERY",
         "status": "PASS",
@@ -264,6 +320,9 @@ def main() -> int:
         "source_locator_path": str(locator_path),
         "source_locator_file_sha256": SOURCE_LOCATOR_FILE_SHA,
         "source_locator_logical_sha256": SOURCE_LOCATOR_LOGICAL_SHA,
+        "runtime_source_contract": "C2_VNEXT_LEVEL_OR_CONTAINER_ONLY",
+        "base_candidate_kinds": list(BASE_CANDIDATE_SOURCE_KINDS),
+        "context_only_kinds": list(CONTEXT_ONLY_SOURCE_KINDS),
         "source_envelope": {
             "producer_ref": "src/ovc/opt_b/c2p_v0_2/rs0_source_materialisation.py::_write_streaming_c2_source",
             "documented_physical_layout": [
@@ -271,11 +330,12 @@ def main() -> int:
                 "C2_CONTAINER segment",
                 "C2_PARENT_OBSERVATION segment",
             ],
-            "interpretation": "PHYSICAL_FILE_ENVELOPE_CONTAINS_THREE_LOGICAL_MONOTONE_SOURCE_KIND_STREAMS",
+            "interpretation": "PHYSICAL_FILE_ENVELOPE_CONTAINS_BASE_CANDIDATE_AND_CONTEXT_ONLY_LOGICAL_SEGMENTS",
             "source_inspections": source_inspections,
             "boundary_time_decreases_are_segment_resets_only": True,
             "within_logical_stream_time_decreases": 0,
         },
+        "stream_receipts": stream_receipts,
         "global_merge": global_receipt,
         "memory": {
             "peak_rss_bytes": peak,
@@ -291,7 +351,7 @@ def main() -> int:
         "activation_state": "NONE",
         "validation": "LOCKED_UNCONSUMED",
         "f0_a": "HOLD",
-        "scientific_effect": "NONE_SOURCE_ENVELOPE_SEQUENCING_ONLY",
+        "scientific_effect": "NONE_EXECUTION_ADAPTER_CONFORMANCE_TO_FROZEN_BASE_SOURCE_CONTRACT",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
