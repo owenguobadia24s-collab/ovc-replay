@@ -4,7 +4,7 @@
   "packet_id": "PRSCI-WP3",
   "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "IMPLEMENTED",
+  "status": "APPROVED",
   "prerequisites": [
     "PRSCI-WP2_COMPLETED_ON_MAIN@ef01e00d1b074de40cd3e63df6b864cf942fa6ae",
     "CURRENT_LAWFUL_MAIN@39515a76b300fb7ba5f8010d1d8694c6f2ce5465"
@@ -14,15 +14,19 @@
   "baseline_commit": "39515a76b300fb7ba5f8010d1d8694c6f2ce5465",
   "baseline_tree": "f7a07d9d3cd7dca5e1671c73d75533f5f6a50bae",
   "branch": "build/prsci-wp3-representation-time-context-r2",
-  "candidate_commit": "PENDING_FINAL_HEAD",
-  "candidate_tree": "PENDING_FINAL_HEAD",
-  "tests": "PENDING_CI",
-  "qa_packet": "PENDING_CI",
+  "candidate_commit": "8e87076e216584a1b2eefd8b7a2d4cda196f8d9f",
+  "candidate_tree": "b696f1de7d73872f096e0bb70de024f9b43f836d",
+  "tests": {
+    "tests_workflow": 32032224944,
+    "tiered_workflow": 32032224819,
+    "status": "PASS"
+  },
+  "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp3/PRSCI_WP3_QA_PACKET_v0_1.json",
   "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp3/PRSCI_WP3_IMPLEMENTATION_PACKET_v0_1.json",
-  "decision_record": "PENDING_PRSCI-G4",
+  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp3/PRSCI_G4_DELEGATED_DECISION_v0_1.json",
   "merge_commit": null,
   "blockers": [],
-  "completed_gates": ["PRSCI-G0", "PRSCI-G1", "PRSCI-G2", "PRSCI-G3"],
+  "completed_gates": ["PRSCI-G0", "PRSCI-G1", "PRSCI-G2", "PRSCI-G3", "PRSCI-G4"],
   "preserved_constraints": {
     "f0_a": "HOLD",
     "validation": "LOCKED_UNCONSUMED",
@@ -31,9 +35,9 @@
     "no_force_push_or_history_rewrite": true
   },
   "continuation_policy": "CONTINUE_UNTIL_PRSCI-G8-ALG",
-  "next_gate": "PRSCI-G4",
+  "next_gate": "PRSCI-G5",
   "next_packet": "PRSCI-WP4",
-  "next_action": "RUN_CI_AND_QA_THEN_AUTO_RATIFY_PRSCI-G4_IF_GREEN",
+  "next_action": "SQUASH_MERGE_PRSCI-WP3_THEN_START_PRSCI-WP4_FROM_LATEST_LAWFUL_MAIN",
   "reserved_later_gates": ["PRSCI-G8-ALG", "PRSCI-G-PREREG", "PRSCI-G-EC1-CHALLENGE"],
   "rollback": "Forward-only; preserve merged WP1/WP2, G0-G3 evidence and owner source records."
 }
