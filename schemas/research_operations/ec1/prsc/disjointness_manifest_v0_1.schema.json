@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC DisjointnessManifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "prsc.disjointness_manifest.v0.1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "identity_unit": {"type": "string", "minLength": 1},
+    "reference_population_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "replication_population_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "overlap_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "state": {"enum": ["DISJOINT", "OVERLAP_BLOCKED", "NOT_EVALUABLE"]},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": ["schema_version", "manifest_id", "identity_unit", "reference_population_refs", "replication_population_refs", "overlap_refs", "state", "authority_effect"]
+}
