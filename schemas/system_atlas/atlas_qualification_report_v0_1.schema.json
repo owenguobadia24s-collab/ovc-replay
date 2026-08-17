@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_qualification_report_v0_1.schema.json",
+  "title": "Atlas Qualification Report v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "programme_id", "stage_results", "live_shadow_receipt_hash", "exact_current_publication_shadow_receipt_hash", "operational_budget_receipt_hash", "retention_budget_receipt_hash", "q6_ind_status", "status", "activation_eligibility", "activation_status", "research_console_source_binding", "canonical_publication", "write_authority", "validation", "authority_effect", "report_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-qualification-report/v1"},
+    "programme_id": {"const": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1"},
+    "stage_results": {"type": "object", "additionalProperties": false, "required": ["Q0", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6"], "properties": {"Q0": {"const": "PASS"}, "Q1": {"const": "PASS"}, "Q2": {"const": "PASS"}, "Q3": {"const": "PASS"}, "Q4": {"const": "PASS"}, "Q5": {"const": "PASS"}, "Q6": {"const": "PASS"}}},
+    "live_shadow_receipt_hash": {"$ref": "#/$defs/sha256"},
+    "exact_current_publication_shadow_receipt_hash": {"$ref": "#/$defs/sha256"},
+    "operational_budget_receipt_hash": {"$ref": "#/$defs/sha256"},
+    "retention_budget_receipt_hash": {"$ref": "#/$defs/sha256"},
+    "q6_ind_status": {"enum": ["PENDING_ELIGIBLE_INDEPENDENT_REVIEW", "PASS_ELIGIBLE_INDEPENDENT_REVIEW"]},
+    "status": {"enum": ["ATLAS_Q0_Q6_PASS_Q6_IND_PENDING", "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW", "ATLAS_QUALIFICATION_BLOCKED"]},
+    "activation_eligibility": {"enum": ["INELIGIBLE_PENDING_Q6_IND", "ELIGIBLE_FOR_OPERATOR_DECISION_NOT_ACTIVATED", "INELIGIBLE_QUALIFICATION_INCOMPLETE"]},
+    "activation_status": {"const": "NOT_ACTIVATED_OPERATOR_GATE_REQUIRED"},
+    "research_console_source_binding": {"const": "ABSENT"},
+    "canonical_publication": {"const": false},
+    "write_authority": {"const": "ABSENT"},
+    "validation": {"const": "LOCKED_UNCONSUMED"},
+    "authority_effect": {"const": "NONE_QUALIFICATION_ONLY"},
+    "report_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

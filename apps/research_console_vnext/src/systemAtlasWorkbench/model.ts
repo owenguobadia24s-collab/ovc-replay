@@ -1,4 +1,5 @@
 import fixture from "../../../../fixtures/system_atlas/wp9/ATLAS_WORKBENCH_ACTUAL_REPOSITORY_PROJECTION_v0_1.json";
+import liveBinding from "../../../../fixtures/system_atlas/wp10/ATLAS_WP10_LIVE_CURRENT_SHADOW_BINDING_v0_1.json";
 
 export type AtlasState = "current" | "historical" | "forbidden" | "reserved";
 export type AtlasNode = {
@@ -40,7 +41,21 @@ export type AtlasProjection = {
   traces: AtlasTrace[];
 };
 
-export const atlasProjection = fixture as unknown as AtlasProjection;
+const sourceByNode = new Map(liveBinding.source_bindings.map((source) => [source.node_id, source]));
+if (sourceByNode.size !== fixture.nodes.length || fixture.nodes.some((node) => !sourceByNode.has(node.id))) {
+  throw new Error("ATLAS_LIVE_SHADOW_SOURCE_BINDINGS_INCOMPLETE");
+}
+
+export const atlasProjection = {
+  ...fixture,
+  projection_id: "ATLAS-WP10-LIVE-CURRENT-SHADOW-v0.1",
+  source_commit: liveBinding.source_commit,
+  source_tree: liveBinding.source_tree,
+  nodes: fixture.nodes.map((node) => {
+    const source = sourceByNode.get(node.id)!;
+    return { ...node, source: { path: source.path, blob: source.blob } };
+  }),
+} as unknown as AtlasProjection;
 
 export type AtlasQueryProjection = {
   nodeIds: Set<string>;

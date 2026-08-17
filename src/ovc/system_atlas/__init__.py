@@ -44,6 +44,17 @@ from .query import (
     execute_reference_query,
     query_equivalence_receipt,
 )
+from .qualification import (
+    AtlasQualificationError,
+    build_exact_git_shadow_graph,
+    build_qualification_report,
+    evaluate_operational_budget,
+    evaluate_retention_budget,
+    measure_operational_profile,
+    prove_exact_current_publication_shadow,
+    scan_retention_inventory,
+    validate_live_shadow_binding,
+)
 
 __all__ = [
     "AtlasContractError",
@@ -85,4 +96,13 @@ __all__ = [
     "execute_optimized_query",
     "execute_reference_query",
     "query_equivalence_receipt",
+    "AtlasQualificationError",
+    "build_exact_git_shadow_graph",
+    "build_qualification_report",
+    "evaluate_operational_budget",
+    "evaluate_retention_budget",
+    "measure_operational_profile",
+    "prove_exact_current_publication_shadow",
+    "scan_retention_inventory",
+    "validate_live_shadow_binding",
 ]
