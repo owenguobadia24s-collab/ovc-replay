@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-sff-source-reuse-matrix/v0.1",
+  "programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "SFFI-WP0",
+  "baseline_main": "18799275f25d11392343bf93e35c7b916fc02c92",
+  "baseline_tree": "3d2cfbf1573b5401b695da8b48cc90291d96e8bf",
+  "resolved_at": "2026-08-17T22:38:00+01:00",
+  "sources": [
+    {
+      "path": "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json",
+      "blob_sha": "790ea43e777c0fa9060179a4516477a7ecc2bb70",
+      "role": "CURRENT_ACTIVE_STACK_CLASSIFICATION",
+      "binding": "READ_ONLY_OWNER_AUTHORITY_SOURCE",
+      "observed": "OPT-A -> OPT-B.C1.v2 -> OPT-B.C2.vNext -> OPT-B.C2E.v0.2; Research Operations active foundation; Validation locked"
+    },
+    {
+      "path": "registries/research_operations/ACTIVE_FOUNDATION_AUTHORITY_v0_1.json",
+      "blob_sha": "ecc6c4fd90001a275d659de3d0aa921be2278226",
+      "role": "RESEARCH_OPERATIONS_AUTHORITY",
+      "binding": "REUSE_WITHIN_EXISTING_READ_ONLY_AND_BOUNDED_APPEND_AUTHORITY",
+      "observed": "No new research write, Validation, probability, risk, exposure or execution authority"
+    },
+    {
+      "path": "registries/research_operations/external_artifact_roots_v0_1.json",
+      "blob_sha": "ba8bfc2d862f0bb51f56c7acc95b15f3517e53b1",
+      "role": "EXTERNAL_ARTIFACT_ROOT",
+      "binding": "REUSE"
+    },
+    {
+      "source": "OVC-SFF-DESIGN-SPEC-0.1-R2-RATIFIED",
+      "sha256": "1e9ff016667829e8851214314ca2931d693f7f8b98a569b28a13512054a261dc",
+      "role": "NORMATIVE_SFF_DESIGN",
+      "binding": "EXACT"
+    },
+    {
+      "source": "OVC-SFF-CONFORMANCE-SCIENTIFIC-PREREGISTRATION-IMPLEMENTATION-PLAN-0.1-R1",
+      "sha256": "6a928f6364c5b63e0c88e1d127da5be004b870f7fb76c75c07c35c5c2a12da53",
+      "role": "RATIFIED_IMPLEMENTATION_PLAN",
+      "binding": "EXACT"
+    },
+    {
+      "source": "Independent implementation-plan adversarial evaluation",
+      "sha256": "182d55808c56d0bdef246872079137355c8aca34f65bfdf966ccf21b72ad5b46",
+      "role": "REVIEW_EVIDENCE",
+      "binding": "ALL_IAE_01_IAE_11_INCORPORATED"
+    },
+    {
+      "source": "PRSC_CURRENT_STATE",
+      "role": "OPTIONAL_CHALLENGE_INPUT",
+      "binding": "OPTIONAL_READ_ONLY_WHEN_CURRENT_AND_LAWFULLY_AVAILABLE",
+      "observed": "PRSCI-WP7 merged on current main; later PRSCI work remains separate and cannot block SFF core mechanics solely by absence"
+    },
+    {
+      "source": "BAIU_RCCR_CURRENT_RECORDS",
+      "role": "OPTIONAL_METHOD_ALIGNMENT_AND_GAP_INPUT",
+      "binding": "READ_ONLY_WHEN_CURRENT_AND_LAWFULLY_AVAILABLE"
+    },
+    {
+      "source": "DSAI_VIT_SIQ_GRT",
+      "role": "PERMANENT_INTEGRATION_ROUTE",
+      "binding": "MUST_RE_RESOLVE_AT_EACH_PERMANENT_INTEGRATION"
+    }
+  ],
+  "forbidden_inference": [
+    "NO_INACTIVE_C2P_C2_5_C3_RECONSTRUCTION",
+    "NO_OPTIONAL_PRSC_BAIU_RCCR_ABSENCE_AS_SFF_BLOCKER",
+    "NO_STORAGE_AUTHORITY",
+    "NO_GREAL_AUTHORITY_FROM_G0"
+  ],
+  "blockers": []
+}
