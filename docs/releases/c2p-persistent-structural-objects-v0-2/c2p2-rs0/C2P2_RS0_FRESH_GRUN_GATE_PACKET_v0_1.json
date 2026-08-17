@@ -4,13 +4,16 @@
   "packet_id": "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT",
   "gate_id": "C2P2-RS0-FRESH-GRUN",
   "gate_classification": "OPERATOR_REQUIRED",
-  "status": "AWAITING_OPERATOR_DECISION",
-  "recommended_decision": "PASS",
-  "decision_instruction_if_approved": "OVC APPROVE C2P2-RS0-FRESH-GRUN PASS",
+  "status": "APPROVED",
+  "decision": "PASS",
+  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_OPERATOR_DECISION_v0_1.json",
+  "authority_record": "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_2.json",
+  "operator_instruction": "OVC APPROVE C2P2-RS0-FRESH-GRUN PASS",
   "authority_basis": {
     "gsem_remediation_authority": "registries/authority/C2P2_RS0_GSEM_REMEDIATION_AUTHORITY_v0_1.json",
     "runtime_closeout_authorised": true,
-    "real_source_launch_under_remediation_authority": false
+    "real_source_launch_under_remediation_authority": false,
+    "fresh_grun_operator_pass": true
   },
   "final_candidate_generation": {
     "path": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_OBJECTPACK_CANDIDATES_v0_3.json",
@@ -32,23 +35,15 @@
     "run_count_remaining": 1,
     "disposition": "PRESERVED_UNCONSUMED_NOT_APPLICABLE_TO_FINAL_V3"
   },
-  "requested_authority": {
+  "approved_authority": {
     "real_source_run": "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN_OVER_FINAL_V3_COMPARATIVE_SET",
+    "execution_count_limit": 1,
     "objectpack_selection": "NONE",
     "c2p_activation": "NONE",
     "ec1_scientific_effect": "NONE",
     "validation": "LOCKED_UNCONSUMED",
     "publication_probability_risk_exposure_trading_execution_agent_write": "NONE"
   },
-  "current_denials": {
-    "real_source_launch": "DENIED",
-    "grun_consumption": "DENIED",
-    "objectpack_selection": "DENIED",
-    "c2p_activation": "DENIED"
-  },
-  "operator_questions": [
-    "Approve exactly one bounded real-source RS0 shadow run over immutable final generation v3?",
-    "Confirm no ObjectPack selection or C2P activation authority is granted?"
-  ],
-  "rollback": "remain stopped at fresh GRUN; preserve final generation, runtime closeout, source materialisation and all historical authority evidence"
+  "next_packet": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN",
+  "rollback": "forward-supersede fresh one-run authority; preserve final generation, runtime closeout, source materialisation and all historical authority evidence"
 }
