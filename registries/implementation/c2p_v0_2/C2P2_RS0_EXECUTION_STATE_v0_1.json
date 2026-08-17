@@ -1,27 +1,33 @@
 {
   "schema": "ovc-c2p2-rs0-execution-state/v1",
   "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
-  "packet_id": "C2P2-RS0-CURRENT-SOURCE-MATERIALISATION",
-  "status": "COMPLETED",
-  "authority_required": "OPERATOR_PASS_C2P2_RS0_SOURCE_MATERIALISATION_AUTH_PRESENT",
-  "authority_delta": "BOUNDED_READ_ONLY_CURRENT_SOURCE_MATERIALISATION",
-  "baseline_commit": "b19ff4ff7e4a99981c211ccbde249f49609e77a8",
-  "branch": "build/c2p2-rs0-current-source-materialisation-20260817",
-  "candidate_commit": "f47bc5702b8d8a06df0aabda76acf250e21b27dd",
-  "pr": 1063,
+  "packet_id": "C2P2-RS0-EXECUTION",
+  "status": "BLOCKED",
+  "authority_required": "OPERATOR_REQUIRED_OBJECTPACK_IDENTITY_SEMANTICS_UNBLOCK_SATISFIED",
+  "authority_delta": "BOUNDED_OBJECTPACK_SEMANTIC_BINDING_AND_EMPIRICAL_RUNTIME_CLOSEOUT_ONLY",
+  "baseline_commit": "c90f53033f2a21ff35e4fb5a71a84415f4116dea",
+  "branch": "approve/c2p2-rs0-gsem-pass-20260817",
+  "candidate_commit": null,
+  "pr": null,
   "tests": [
-    "PR_CI_PASS",
-    "WORKFLOW_32010902424_PASS",
+    "CURRENT_SOURCE_MATERIALISATION_PASS",
     "LOCATOR_VERIFIED",
     "ALL_PROJECTED_SOURCE_ROWS_VERIFIED",
-    "CAPACITY_WITHIN_FROZEN_ENVELOPE"
+    "CAPACITY_WITHIN_FROZEN_ENVELOPE",
+    "OBJECTPACK_EXECUTION_SEMANTIC_PREFLIGHT_BLOCK_PRESERVED",
+    "GSEM_OPERATOR_PASS_BOUND"
   ],
-  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CURRENT_SOURCE_MATERIALISATION_CLOSEOUT_v0_1.json",
-  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_MATERIALISATION_OPERATOR_DECISION_v0_1.json",
-  "merge_commit": "ea6318d0a3a4e36a0af0d8df111f1b24e8d77621",
-  "blockers": [],
+  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_EXECUTION_OBJECTPACK_SEMANTICS_BLOCKER_v0_1.json",
+  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GSEM_OPERATOR_DECISION_v0_1.json",
+  "authority_record": "registries/authority/C2P2_RS0_GSEM_REMEDIATION_AUTHORITY_v0_1.json",
+  "merge_commit": null,
+  "blockers": [
+    "RS0_OBJECTPACK_IDENTITY_SEMANTICS_NOT_MECHANICALLY_FROZEN",
+    "RS0_EMPIRICAL_OBJECTPACK_RUNTIME_NOT_MATERIALISED",
+    "RS0_COMPARATIVE_RUN_CANNOT_LAWFULLY_DEGRADE_TO_A_ONLY"
+  ],
   "mandatory_stop": null,
-  "next_packet": "C2P2-RS0-EXECUTION",
+  "next_packet": "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING",
   "source_parent": {
     "c1_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2",
     "c1_manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1",
@@ -50,6 +56,18 @@
     "c2e_rows": 584520,
     "peak_rss_bytes": 867270656,
     "artifact_bytes": 1681887913
+  },
+  "objectpack_semantics_preflight": {
+    "status": "BLOCK_PRESERVED_REMEDIATION_AUTHORISED",
+    "affected_candidates": [
+      "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
+      "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1"
+    ],
+    "missing_exact_bindings": [
+      "owner_declared_geometry_compatible",
+      "c2e_lineage_compatible_if_declared"
+    ],
+    "current_empirical_runtime": "NOT_MATERIALISED"
   },
   "run_authority_consumed": false,
   "run_count_remaining": 1,
