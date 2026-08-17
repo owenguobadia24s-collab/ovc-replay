@@ -45,6 +45,13 @@ class SIQLiveBaseGenerationTests(unittest.TestCase):
         self.assertIn("event_head_sha", self.assurance_text)
         self.assertIn("pr = _live_pr_payload(event)", self.assurance_text)
 
+    def test_assurance_preflight_emits_the_normal_prewrite_pmt_freeze(self) -> None:
+        self.assertIn("build_live_transaction_freeze", self.assurance_text)
+        self.assertIn("encode_freeze_marker", self.assurance_text)
+        self.assertIn("_emit_prewrite_freeze(event=event, pr=pr, lineage_record=lineage_record)", self.assurance_text)
+        self.assertIn("GITHUB_RUN_ID", self.assurance_text)
+        self.assertIn("GITHUB_RUN_ATTEMPT", self.assurance_text)
+
     def test_stable_main_fail_closed_guard_remains(self) -> None:
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.text)
         self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_PASS", self.text)

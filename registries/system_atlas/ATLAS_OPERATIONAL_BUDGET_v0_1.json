@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-atlas-operational-budget/v1",
+  "budget_id": "ATLAS-OPERATIONAL-BUDGET-v0.1",
+  "version": "0.1",
+  "status": "FROZEN_ATLAS_G10",
+  "required_environment": "windows",
+  "required_dimensions": [
+    "FULL_BUILD_MS",
+    "INCREMENTAL_BUILD_MS",
+    "INDEX_LOAD_MS",
+    "SEARCH_INSPECT_ORDINARY_TRACE_MS",
+    "IMPACT_DEEP_TRAVERSAL_MS",
+    "PEAK_MEMORY_BYTES",
+    "BROWSER_RENDER_LAYOUT_MS",
+    "BROWSER_BUNDLE_GROWTH_BYTES",
+    "MANIFEST_MAINTENANCE_MS"
+  ],
+  "limits": {
+    "FULL_BUILD_MS": {"unit": "milliseconds", "maximum": 5000},
+    "INCREMENTAL_BUILD_MS": {"unit": "milliseconds", "maximum": 5000},
+    "INDEX_LOAD_MS": {"unit": "milliseconds", "maximum": 5000},
+    "SEARCH_INSPECT_ORDINARY_TRACE_MS": {"unit": "milliseconds", "maximum": 5000},
+    "IMPACT_DEEP_TRAVERSAL_MS": {"unit": "milliseconds", "maximum": 5000},
+    "PEAK_MEMORY_BYTES": {"unit": "bytes", "maximum": 536870912},
+    "BROWSER_RENDER_LAYOUT_MS": {"unit": "milliseconds", "maximum": 5000},
+    "BROWSER_BUNDLE_GROWTH_BYTES": {"unit": "bytes", "maximum": 1048576},
+    "MANIFEST_MAINTENANCE_MS": {"unit": "milliseconds", "maximum": 1000}
+  },
+  "capacity_failure": "CAPACITY_EXCEEDED_TYPED_INCOMPLETE_DEGRADED",
+  "core_source_sampling": "FORBIDDEN",
+  "protected_security_evidence_dropping": "FORBIDDEN",
+  "deep_optional_profile_degradation": "PERMITTED_ONLY_WITH_EXPLICIT_COMPLETENESS",
+  "authority_effect": "NONE_QUALIFICATION_BUDGET_ONLY"
+}

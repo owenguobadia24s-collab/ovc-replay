@@ -5,28 +5,52 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 RS0 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-rs0"
 STATE = ROOT / "registries" / "implementation" / "c2p_v0_2" / "C2P2_RS0_STATE_v0_1.json"
-PS0_CANDIDATES = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json"
+EXECUTION_STATE = ROOT / "registries" / "implementation" / "c2p_v0_2" / "C2P2_RS0_EXECUTION_STATE_v0_1.json"
+PS0_CANDIDATES_V1 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_1.json"
+PS0_CANDIDATES_V2 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_2.json"
+PS0_CANDIDATES_V3 = ROOT / "docs" / "releases" / "c2p-persistent-structural-objects-v0-2" / "c2p2-ps0" / "C2P2_PS0_OBJECTPACK_CANDIDATES_v0_3.json"
 
 
 def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_rs0_preparation_preserves_exact_comparative_set_and_no_winner():
+def test_rs0_preparation_preserves_v1_v2_and_current_final_v3_without_winner():
     binding = load(RS0 / "C2P2_RS0_SOURCE_POPULATION_BINDING_v0_1.json")
     state = load(STATE)
-    ps0 = load(PS0_CANDIDATES)
+    ps0_v1 = load(PS0_CANDIDATES_V1)
+    ps0_v2 = load(PS0_CANDIDATES_V2)
+    ps0_v3 = load(PS0_CANDIDATES_V3)
 
-    expected = {
+    historical = {
         "C2P2-PS0-OP-A-STRICT-CONTINUITY-v1",
         "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v1",
         "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v1",
     }
-    assert set(binding["candidate_set"]) == expected
-    assert set(state["candidate_set"]) == expected
-    candidate_rows = ps0.get("candidates", ps0.get("candidate_object_packs", []))
-    ids = {row.get("object_pack_id", row.get("candidate_id")) for row in candidate_rows if isinstance(row, dict)}
-    assert expected <= ids
+    successor = {
+        "C2P2-PS0-OP-A-STRICT-CONTINUITY-v2",
+        "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v2",
+        "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v2",
+    }
+    final = {
+        "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3",
+        "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3",
+        "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3",
+    }
+    assert set(binding["candidate_set"]) == historical
+    v1_rows = ps0_v1.get("candidates", ps0_v1.get("candidate_object_packs", []))
+    v1_ids = {row.get("object_pack_id", row.get("candidate_id")) for row in v1_rows if isinstance(row, dict)}
+    assert historical <= v1_ids
+
+    assert set(state["candidate_set"]) == final
+    assert {row["candidate_id"] for row in ps0_v2["candidates"]} == successor
+    assert set(ps0_v2["supersedes_generation"]["candidate_ids"]) == historical
+    assert {row["candidate_id"] for row in ps0_v3["candidates"]} == final
+    assert set(ps0_v3["supersedes_generation"]["candidate_ids"]) == successor
+    assert ps0_v2["selection_state"] == "NONE_SELECTED"
+    assert ps0_v2["active_object_pack_id"] is None
+    assert ps0_v3["selection_state"] == "NONE_SELECTED"
+    assert ps0_v3["active_object_pack_id"] is None
     assert state["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
     assert binding["common_comparison_requirements"]["scalar_winner_forbidden"] is True
 
@@ -48,9 +72,10 @@ def test_rs0_is_sidecar_only_and_cannot_change_ec1_science():
     assert firewall["may_become_active_ec1_candidate_defining_source"] is False
 
 
-def test_historical_preparation_denial_is_preserved_but_grun_pass_grants_one_run_only():
+def test_historical_preparation_and_grun_are_preserved_but_not_retargeted_to_successor_generation():
     binding = load(RS0 / "C2P2_RS0_SOURCE_POPULATION_BINDING_v0_1.json")
     state = load(STATE)
+    execution = load(EXECUTION_STATE)
     historical_gate = load(RS0 / "C2P2_RS0_RUN_AUTHORITY_PACKET_v0_1.json")
     approved_gate = load(RS0 / "C2P2_RS0_RUN_AUTHORITY_PACKET_v0_3.json")
     authority = load(ROOT / "registries" / "authority" / "C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json")
@@ -61,9 +86,6 @@ def test_historical_preparation_denial_is_preserved_but_grun_pass_grants_one_run
     assert historical_gate["decision"] == "PENDING_OPERATOR"
     assert historical_gate["decision_authority"] == "OPERATOR_REQUIRED"
 
-    assert state["authority"]["rs0_real_source_run"] == "AUTHORISED_ONE_RUN_NOT_STARTED"
-    assert state["authority"]["active_object_pack"] is None
-    assert state["authority"]["objectpack_selection"] == "NONE"
     assert authority["execution_count_limit"] == 1
     assert authority["execution_count_consumed"] == 0
     assert authority["non_transitive_denials"]["c2p_activation"] == "NONE"
@@ -71,6 +93,16 @@ def test_historical_preparation_denial_is_preserved_but_grun_pass_grants_one_run
     assert approved_gate["approved_authority"]["real_source_run"] == "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN"
     assert approved_gate["approved_authority"]["objectpack_selection"] == "NONE"
     assert approved_gate["approved_authority"]["ec1_scientific_authority_effect"] == "NONE"
+
+    assert state["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_FINAL_V3"
+    assert state["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_FRESH_GRUN_PASS"
+    assert state["authority"]["runtime_remediation"] == "COMPLETED"
+    assert state["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
+    assert state["authority"]["active_object_pack"] is None
+    assert state["authority"]["objectpack_selection"] == "NONE"
+    assert execution["prior_grun"]["run_authority_consumed"] is False
+    assert execution["prior_grun"]["run_count_remaining"] == 1
+    assert execution["fresh_grun_required_before_real_source_launch"] is True
 
 
 def test_rs0_dependency_and_capacity_firewalls_fail_closed():

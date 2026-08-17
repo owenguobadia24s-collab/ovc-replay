@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_retention_budget_receipt_v0_1.schema.json",
+  "title": "Atlas Retention Budget Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "budget_id", "inventory_hash", "dimensions", "result", "protected_root_hashes", "report_only_compaction_candidates", "destructive_action_count", "authority_effect", "receipt_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-retention-budget-receipt/v1"},
+    "budget_id": {"type": "string"},
+    "inventory_hash": {"$ref": "#/$defs/sha256"},
+    "dimensions": {"type": "object", "minProperties": 6, "additionalProperties": {"type": "string"}},
+    "result": {"enum": ["PASS", "CAPACITY_EXCEEDED_REPORT_ONLY"]},
+    "protected_root_hashes": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/sha256"}},
+    "report_only_compaction_candidates": {"type": "array", "items": {"$ref": "#/$defs/sha256"}},
+    "destructive_action_count": {"const": 0},
+    "authority_effect": {"const": "NONE_RETENTION_QUALIFICATION_ONLY"},
+    "receipt_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

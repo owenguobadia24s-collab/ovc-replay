@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 from typing import Any, Mapping
 from urllib.error import HTTPError, URLError
@@ -149,8 +150,14 @@ def _freeze_from_prewrite_logs(
                     f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/jobs/{int(job['id'])}/logs",
                     token,
                 ).decode("utf-8", errors="replace")
-                if FREEZE_MARKER_PREFIX in text:
-                    markers.append(decode_freeze_marker(text))
+                tokens = re.findall(
+                    re.escape(FREEZE_MARKER_PREFIX) + r"([A-Za-z0-9_\-=]+)",
+                    text,
+                )
+                for marker_token in tokens:
+                    markers.append(
+                        decode_freeze_marker(FREEZE_MARKER_PREFIX + marker_token)
+                    )
         if markers:
             break
     if len(markers) != 1:

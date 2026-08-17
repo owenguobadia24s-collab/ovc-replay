@@ -66,10 +66,19 @@ def test_wp9_gate_and_vit_bindings_are_auto_pass_and_content_addressed() -> None
 def test_wp9_programme_state_advances_only_to_wp10() -> None:
     state = json.loads((ROOT / "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json").read_text(encoding="utf-8"))
     pointer = json.loads((ROOT / "registries/implementation/system_atlas_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-    assert state["current_packet"] == pointer["current_packet"] == "ATLAS-WP9"
-    assert state["current_gate"] == pointer["current_gate"] == "ATLAS-G9"
-    assert state["next_packet"] == pointer["next_packet"] == "ATLAS-WP10"
-    assert state["gate_status"] == "AUTO_PASS"
+    assert state["current_packet"] == pointer["current_packet"]
+    assert state["current_gate"] == pointer["current_gate"]
+    assert state["next_packet"] == pointer["next_packet"]
+    if state["current_packet"] == "ATLAS-WP9":
+        assert state["current_gate"] == "ATLAS-G9"
+        assert state["next_packet"] == "ATLAS-WP10"
+        assert state["gate_status"] == "AUTO_PASS"
+    else:
+        assert state["current_packet"] == "ATLAS-WP10"
+        assert state["current_gate"] in {"ATLAS-G10", "ATLAS-G-OBSERVABILITY-ACTIVATE"}
+        if state["current_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE":
+            assert state["merge_commit"] == "911cac359aa0d23b981be15edae473b7d2b7d55b"
+        assert state["tests"]["wp9_integration"] == "PASS_INTEGRATED_PR_1028"
 
 
 def test_wp9_external_evidence_matches_bound_hash_when_available() -> None:

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_live_shadow_binding_v0_1.schema.json",
+  "title": "Atlas Live Shadow Binding v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "binding_id", "qualification_class", "reality_class", "source_commit", "source_tree", "projection_contract", "source_bindings", "current_pointer_published", "research_console_binding_created", "write_routes", "validation_consumed", "authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-live-shadow-binding/v1"},
+    "binding_id": {"type": "string", "minLength": 1},
+    "qualification_class": {"const": "ACTUAL_REPOSITORY_LIVE_SHADOW"},
+    "reality_class": {"const": "CURRENT"},
+    "source_commit": {"$ref": "#/$defs/sha40"},
+    "source_tree": {"$ref": "#/$defs/sha40"},
+    "projection_contract": {"$ref": "#/$defs/source"},
+    "source_bindings": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["node_id", "path", "blob"], "properties": {"node_id": {"type": "string", "minLength": 1}, "path": {"type": "string", "minLength": 1}, "blob": {"$ref": "#/$defs/sha40"}}}},
+    "current_pointer_published": {"const": false},
+    "research_console_binding_created": {"const": false},
+    "write_routes": {"const": 0},
+    "validation_consumed": {"const": false},
+    "authority_effect": {"const": "NONE_PRESENTATION_ONLY"}
+  },
+  "$defs": {"sha40": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "source": {"type": "object", "additionalProperties": false, "required": ["path", "blob"], "properties": {"path": {"type": "string", "minLength": 1}, "blob": {"$ref": "#/$defs/sha40"}}}}
+}

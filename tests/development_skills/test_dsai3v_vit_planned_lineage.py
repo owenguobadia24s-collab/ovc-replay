@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from pathlib import Path
 import subprocess
+import sys
 from tempfile import TemporaryDirectory
 
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
@@ -44,6 +46,32 @@ def test_planned_target_bytes_freeze_pip_before_remote_pr_and_reproduce_tree() -
         digest = hashlib.sha256(target.read_bytes()).hexdigest()
         changes = _planned_changes(repo, base, content, [{"path": target_path, "content_sha256": digest}])
         planned_tree = _compose_tree(repo, base_tree, changes)
+
+        source_root = Path(__file__).resolve().parents[2]
+        planned = subprocess.run(
+            [
+                sys.executable,
+                str(source_root / "tools" / "ci" / "build_vit_planned_lineage.py"),
+                "--repo", str(repo),
+                "--base", base,
+                "--content-root", str(content),
+                "--targets-json", json.dumps([{"path": target_path, "content_sha256": digest}]),
+                "--programme-id", "PROGRAMME",
+                "--packet-id", "PACKET",
+                "--plan-id", "PLAN",
+                "--gate-id", "GATE",
+                "--authority-sources-json", '["authority/source.json"]',
+                "--security-envelope-id", "SECURITY-ENVELOPE",
+            ],
+            check=True,
+            cwd=source_root,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        planned_output = json.loads(planned.stdout)
+        assert planned_output["authority_manifest"]["security_envelope_id"] == "SECURITY-ENVELOPE"
+        assert planned_output["expected_result_tree"] == planned_tree
 
         destination = repo / target_path
         destination.parent.mkdir(parents=True)

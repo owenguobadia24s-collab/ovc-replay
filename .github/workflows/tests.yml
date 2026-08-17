@@ -92,12 +92,14 @@ jobs:
 
       - name: Require canonical VIT lineage before permanent PR assurance
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
         run: python3 tools/ci/vit_routing_preflight.py
 
       - name: Resolve PIP-bound assurance identity and reuse authority
         id: assurance
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
         run: python3 tools/ci/vit_assurance_preflight.py
 

@@ -12,17 +12,29 @@ from ovc.opt_b.c2e_v2.projection import project_episode
 ROOT = Path(__file__).resolve().parents[4]
 
 
-def test_operator_pass_is_narrow_and_grun_token_remains_unconsumed() -> None:
+def test_operator_pass_is_narrow_and_materialisation_remains_frozen_after_successor_semantic_binding() -> None:
     decision = json.loads((ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_MATERIALISATION_OPERATOR_DECISION_v0_1.json").read_text())
+    closeout = json.loads((ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CURRENT_SOURCE_MATERIALISATION_CLOSEOUT_v0_1.json").read_text())
     state = json.loads((ROOT / "registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_1.json").read_text())
     assert decision["decision"] == "PASS"
     assert decision["approved_delta"]["authority_class"] == "BOUNDED_READ_ONLY_CURRENT_SOURCE_MATERIALISATION"
     assert decision["approved_delta"]["output"] == "INACTIVE_NONCANONICAL_READ_ONLY_RS0_SOURCE"
     assert any("Legacy OPT-B.C2" in row for row in decision["conditions"])
-    assert state["packet_id"] == "C2P2-RS0-CURRENT-SOURCE-MATERIALISATION"
-    assert state["status"] == "READY"
+
+    assert closeout["packet_id"] == "C2P2-RS0-CURRENT-SOURCE-MATERIALISATION"
+    assert closeout["status"] == "COMPLETED"
+    assert closeout["next_packet"] == "C2P2-RS0-EXECUTION"
+    assert closeout["workflow"]["run_id"] == 32010902424
+    assert closeout["materialisation"]["logical_sha256"] == "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b"
+
+    assert state["packet_id"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert state["status"] == "GATE_READY_AWAITING_OPERATOR"
+    assert state["current_source_materialisation"]["workflow_run_id"] == 32010902424
+    assert state["current_source_materialisation"]["logical_sha256"] == closeout["materialisation"]["logical_sha256"]
     assert state["run_authority_consumed"] is False
     assert state["run_count_remaining"] == 1
+    assert state["fresh_grun_required_before_real_source_launch"] is True
+    assert state["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
     assert state["f0_a"] == "HOLD_UNCHANGED"
     assert state["validation"] == "LOCKED_UNCONSUMED"
 

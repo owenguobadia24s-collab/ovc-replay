@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-vit-historical-completion-recovery-qa/v1",
+  "qa_id": "ATLAS-WP10-HISTORICAL-COMPLETION-RECOVERY-QA-20260817-v1",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "packet_id": "ATLAS-WP10",
+  "recovery_decision_id": "03dea842ce3de46ad46411ecdfa92df9dc19244f9550c554ee4c46f44b3c24f7",
+  "recovery_attempt_id": "a72d50674e99b2edf289d52fb159f1f36083d223c5a8f6dbe07b0656000a41e0",
+  "focused_completion_assurance": "PASS_26_TESTS",
+  "vit_assurance": "PASS_406_TESTS_598_SUBTESTS",
+  "siq_assurance": "PASS_24_TESTS",
+  "grt_assurance": "PASS_102_TESTS_1_SKIPPED_WITH_ONE_INHERITED_WINDOWS_PATH_SEPARATOR_BUNDLE_REBUILD_FINDING",
+  "repository_windows_assurance": "INHERITED_PLATFORM_LIMITATION_FOUR_POSIX_RESOURCE_IMPORT_COLLECTION_ERRORS",
+  "required_integration_assurance": "EXACT_HEAD_UBUNTU_REPOSITORY_VIT_SIQ_GRT_CI_REQUIRED_BEFORE_MERGE",
+  "recovery_properties": {
+    "exact_physical_tree": "PASS_CE04F93EEDF5F9C8C55914CB00BA66A6F8B17EE3",
+    "packet_completion_result_count": 1,
+    "linked_devobs": "PASS_TELEMETRY_UNAVAILABLE_EXPLICIT",
+    "clean_reconstruction": "PASS_REPOSITORY_DECISION_PLUS_RECEIPTSTORE",
+    "repeated_recovery": "PASS_IDEMPOTENT_INVENTORY_SHA256_F0DC37E240E5EBF283FDD638616DB60F7475687C871D072AA2E3DD1090C8BDDD",
+    "git_main_write": "NONE_ORIGIN_MAIN_REMAINED_ED0DA627034F7E19BFAABDAE027C37F579BD6FDC",
+    "normal_pmt_requirement": "PASS_UNCHANGED_EXISTING_BLOBS_AND_ABSENT_FREEZE_REMAINS_REJECTED"
+  },
+  "normal_path_unchanged_blobs": {
+    "vit_local_completion_executor": "5b0941492b776617e0ec57bb9081293d568fb297",
+    "vit_completion_runtime": "c6571e52ef22e092ac0ef5ea0b4d0a29fe8ab28b",
+    "vit_post_merge_completion": "8d1682b7722ed43ac0637fe58bad6b4ee6bf3ca9",
+    "vit_local_completion_registry": "d57f21e4bdb349f98a87e8d21b2df380b977812e"
+  },
+  "defects": [
+    {
+      "id": "ATLAS-WP10-HCR-D01",
+      "classification": "PROSPECTIVE_PREWRITE_FREEZE_PRODUCER_BINDING_DEFECT",
+      "resolution": "Bound the registry-declared assurance preflight producer to the existing deterministic PMT freeze builder and marker encoder; the normal PMT schema, validator and completion path are unchanged.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "ATLAS-WP10-HCR-D02",
+      "classification": "UNDECLARED_TEST_ONLY_DEPENDENCY",
+      "resolution": "Removed the jsonschema test import and retained strict standard-library identity and constant validation under the repository's existing CI dependency envelope.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "ATLAS-WP10-HCR-D03",
+      "classification": "LIVE_CURRENT_PREFLIGHT_AUTHENTICATION_BINDING_DEFECT",
+      "resolution": "Passed the workflow's existing read-only github.token to the routing and assurance preflight steps; declared permissions and authority are unchanged.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "ATLAS-WP10-HCR-D04",
+      "classification": "GITHUB_JOB_LOG_TIMESTAMP_PREFIX_PARSER_DEFECT",
+      "resolution": "Extracted the unique freeze token from timestamp-prefixed GitHub raw job-log lines before invoking the unchanged strict freeze decoder; zero and multiple markers remain fail-closed.",
+      "status": "CLOSED"
+    }
+  ],
+  "out_of_scope_platform_findings": [
+    "GRT WP1 committed bundle rebuild uses platform-native path serialization on Windows while the committed historical bundle uses POSIX separators.",
+    "Four repository modules import the POSIX-only resource module during Windows collection; Ubuntu exact-head CI is controlling."
+  ],
+  "qa_result": "PASS_RECOVERY_PROPERTIES_EXACT_HEAD_INTEGRATION_ASSURANCE_REQUIRED",
+  "authority_effect": "NONE"
+}

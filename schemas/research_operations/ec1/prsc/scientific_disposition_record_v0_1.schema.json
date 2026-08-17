@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_effect": {"const": "NONE"},
+    "candidate_freeze_effect": {"const": "NONE"},
+    "candidate_ref": {"type": "string"},
+    "claim_dependency_ref": {"type": "string"},
+    "decision_effects": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "dimension": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]},
+          "effect": {"enum": ["REQUIRE", "RESTRICT", "ANNOTATE"]},
+          "state": {"type": "string"}
+        },
+        "required": ["dimension", "effect", "state"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "disposition": {"enum": ["RETAIN", "RESTRICT", "REVISE", "REJECT", "REPLICATE", "UNRESOLVED", "METHOD_LIMITATION", "INFORMATION_LIMITATION", "DATA_GAP", "AUTHORITY_LIMITATION"]}
+  },
+  "required": ["candidate_ref", "claim_dependency_ref", "decision_effects", "disposition", "candidate_freeze_effect", "authority_effect"],
+  "title": "OVC PRSC ScientificDispositionRecord v0.1",
+  "type": "object"
+}
