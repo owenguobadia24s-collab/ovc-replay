@@ -1,27 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC ScientificDispositionRecord v0.1",
+  "type": "object",
   "additionalProperties": false,
   "properties": {
-    "authority_effect": {"const": "NONE"},
+    "scientific_disposition_id": {"type": "string", "minLength": 1},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "claim_dependency_ref": {"type": ["string", "null"]},
+    "decision_effects": {"type": "array", "items": {"type": "object", "additionalProperties": false, "properties": {"dimension": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}, "effect": {"enum": ["REQUIRE", "RESTRICT", "ANNOTATE"]}, "state": {"enum": ["NON_FATAL_SUPPORT", "SCOPE_RESTRICTION", "REVISION_REQUIRED", "FATAL_TO_CURRENT_CLAIM", "UNRESOLVED", "NOT_APPLICABLE"]}}, "required": ["dimension", "effect", "state"]}},
+    "disposition": {"enum": ["FREEZE_CANDIDATE_RECOMMENDED", "FREEZE_WITH_SCOPE_RESTRICTION", "REFINE_WITHIN_DISCOVERY", "REPLICATE_DISCOVERY", "DESCRIPTIVE_INVENTORY_ONLY", "METHOD_LIMITATION", "INFORMATION_LIMITATION", "NOT_EVALUABLE", "REJECT_CURRENT_CLAIM", "QUARANTINE_INTEGRITY"]},
+    "precedence_hit": {"enum": ["INTEGRITY_INVALID", "REQUIRED_FATAL", "REQUIRED_UNRESOLVED", "REVISION_REQUIRED", "SCOPE_RESTRICTION", "DISCOVERY_FREEZE_ELIGIBLE", "DESCRIPTIVE_ONLY"]},
+    "precedence": {"type": "array", "items": {"type": "string"}},
     "candidate_freeze_effect": {"const": "NONE"},
-    "candidate_ref": {"type": "string"},
-    "claim_dependency_ref": {"type": "string"},
-    "decision_effects": {
-      "items": {
-        "additionalProperties": false,
-        "properties": {
-          "dimension": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]},
-          "effect": {"enum": ["REQUIRE", "RESTRICT", "ANNOTATE"]},
-          "state": {"type": "string"}
-        },
-        "required": ["dimension", "effect", "state"],
-        "type": "object"
-      },
-      "type": "array"
-    },
-    "disposition": {"enum": ["RETAIN", "RESTRICT", "REVISE", "REJECT", "REPLICATE", "UNRESOLVED", "METHOD_LIMITATION", "INFORMATION_LIMITATION", "DATA_GAP", "AUTHORITY_LIMITATION"]}
+    "authority_effect": {"const": "NONE"},
+    "aggregation": {"const": "NON_COMPENSATORY"},
+    "score": {"type": "null"},
+    "majority_vote": {"type": "null"}
   },
-  "required": ["candidate_ref", "claim_dependency_ref", "decision_effects", "disposition", "candidate_freeze_effect", "authority_effect"],
-  "title": "OVC PRSC ScientificDispositionRecord v0.1",
-  "type": "object"
+  "required": ["scientific_disposition_id", "candidate_ref", "claim_dependency_ref", "decision_effects", "disposition", "precedence_hit", "precedence", "candidate_freeze_effect", "authority_effect", "aggregation", "score", "majority_vote"]
 }

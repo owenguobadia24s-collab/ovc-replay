@@ -1,17 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC ClaimDependencyManifest v0.1",
+  "type": "object",
   "additionalProperties": false,
   "properties": {
+    "schema": {"const": "ovc-prsc-claim-dependency-manifest/v0.1"},
+    "claim_dependency_id": {"type": "string", "minLength": 1},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "claim_class": {"type": "string", "minLength": 1},
+    "population_family": {"enum": ["P1A", "P1B", "P1C"]},
+    "required_dimensions": {"type": "array", "uniqueItems": true, "items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}},
+    "scope_condition_dimensions": {"type": "array", "uniqueItems": true, "items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}},
+    "advisory_dimensions": {"type": "array", "uniqueItems": true, "items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}},
+    "non_applicable_dimensions": {"type": "array", "uniqueItems": true, "items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}},
+    "fatal_failure_states": {"type": "array", "items": {"enum": ["FATAL_TO_CURRENT_CLAIM"]}},
+    "restriction_states": {"type": "array", "items": {"enum": ["SCOPE_RESTRICTION"]}},
+    "revision_states": {"type": "array", "items": {"enum": ["REVISION_REQUIRED"]}},
+    "unresolved_states": {"type": "array", "items": {"enum": ["UNRESOLVED"]}},
     "aggregation": {"const": "NON_COMPENSATORY"},
-    "allowed_effects": {"items": {"enum": ["REQUIRE", "RESTRICT", "ANNOTATE"]}, "type": "array", "uniqueItems": true},
-    "authority_effect": {"const": "NONE"},
-    "claim_class": {"minLength": 1, "type": "string"},
-    "fatal_states": {"items": {"type": "string"}, "type": "array"},
-    "optional_dimensions": {"items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}, "type": "array", "uniqueItems": true},
-    "population_family": {"enum": ["P1A", "P1B", "P1C", "CROSS_POPULATION"]},
-    "required_dimensions": {"items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}, "type": "array", "uniqueItems": true}
+    "allowed_effects": {"type": "array", "uniqueItems": true, "items": {"enum": ["REQUIRE", "RESTRICT", "ANNOTATE"]}},
+    "authority_effect": {"const": "NONE"}
   },
-  "required": ["claim_class", "required_dimensions", "optional_dimensions", "allowed_effects", "aggregation", "authority_effect"],
-  "title": "OVC PRSC ClaimDependencyManifest v0.1",
-  "type": "object"
+  "required": ["schema", "claim_dependency_id", "candidate_ref", "claim_class", "population_family", "required_dimensions", "scope_condition_dimensions", "advisory_dimensions", "non_applicable_dimensions", "fatal_failure_states", "restriction_states", "revision_states", "unresolved_states", "aggregation", "allowed_effects", "authority_effect"]
 }

@@ -1,26 +1,14 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
-  "properties": {
-    "authority_effect": {"const": "NONE"},
-    "candidate_ref": {"minLength": 1, "type": "string"},
-    "dimensions": {
-      "additionalProperties": {
-        "additionalProperties": true,
-        "properties": {
-          "evidence_refs": {"items": {"type": "string"}, "type": "array"},
-          "reason_codes": {"items": {"type": "string"}, "type": "array"},
-          "state": {"type": "string"}
-        },
-        "required": ["state"],
-        "type": "object"
-      },
-      "propertyNames": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]},
-      "type": "object"
-    },
-    "protocol_generation_ref": {"type": "string"}
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"OVC PRSC ScientificChallengeVector v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "properties":{
+    "scientific_challenge_vector_id":{"type":"string","minLength":1},
+    "candidate_ref":{"type":"string","minLength":1},
+    "protocol_generation_ref":{"type":["string","null"]},
+    "dimensions":{"type":"object","propertyNames":{"enum":["dependence","reference","representation","temporal","context","boundary","multiplicity","replication"]},"additionalProperties":{"type":"object","required":["state"],"properties":{"state":{"enum":["NON_FATAL_SUPPORT","SCOPE_RESTRICTION","REVISION_REQUIRED","FATAL_TO_CURRENT_CLAIM","UNRESOLVED","NOT_APPLICABLE"]},"evidence_refs":{"type":"array"},"reason_codes":{"type":"array"}}}},
+    "authority_effect":{"const":"NONE"}
   },
-  "required": ["candidate_ref", "dimensions", "authority_effect"],
-  "title": "OVC PRSC ScientificChallengeVector v0.1",
-  "type": "object"
+  "required":["scientific_challenge_vector_id","candidate_ref","protocol_generation_ref","dimensions","authority_effect"]
 }
