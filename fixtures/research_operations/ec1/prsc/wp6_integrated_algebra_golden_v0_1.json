@@ -1,0 +1,11 @@
+{
+  "schema": "ovc-prsc-wp6-golden/v0.1",
+  "cases": [
+    {"id": "STRONG_BUT_FATAL", "family": "P1A", "states": {"dependence": "NON_FATAL_SUPPORT", "reference": "FATAL_TO_CURRENT_CLAIM", "representation": "NON_FATAL_SUPPORT", "temporal": "NON_FATAL_SUPPORT", "context": "NON_FATAL_SUPPORT", "multiplicity": "NON_FATAL_SUPPORT", "boundary": "NOT_APPLICABLE", "replication": "NOT_APPLICABLE"}, "expected": "REJECT_CURRENT_CLAIM"},
+    {"id": "REQUIRED_UNRESOLVED", "family": "P1B", "states": {"dependence": "NON_FATAL_SUPPORT", "reference": "UNRESOLVED", "representation": "REVISION_REQUIRED", "temporal": "NON_FATAL_SUPPORT", "context": "SCOPE_RESTRICTION", "multiplicity": "NON_FATAL_SUPPORT", "boundary": "NOT_APPLICABLE", "replication": "NOT_APPLICABLE"}, "expected": "NOT_EVALUABLE"},
+    {"id": "REVISION_BEFORE_RESTRICTION", "family": "P1C", "states": {"dependence": "NON_FATAL_SUPPORT", "reference": "NON_FATAL_SUPPORT", "representation": "REVISION_REQUIRED", "temporal": "NON_FATAL_SUPPORT", "context": "SCOPE_RESTRICTION", "boundary": "NON_FATAL_SUPPORT", "multiplicity": "NON_FATAL_SUPPORT", "replication": "NOT_APPLICABLE"}, "expected": "REFINE_WITHIN_DISCOVERY"},
+    {"id": "SCOPE_RESTRICTION", "family": "P1A", "states": {"dependence": "NON_FATAL_SUPPORT", "reference": "NON_FATAL_SUPPORT", "representation": "NON_FATAL_SUPPORT", "temporal": "NON_FATAL_SUPPORT", "context": "SCOPE_RESTRICTION", "multiplicity": "NON_FATAL_SUPPORT", "boundary": "NOT_APPLICABLE", "replication": "NOT_APPLICABLE"}, "expected": "FREEZE_WITH_SCOPE_RESTRICTION"},
+    {"id": "DISCOVERY_FREEZE_ELIGIBLE", "family": "P1A", "states": {"dependence": "NON_FATAL_SUPPORT", "reference": "NON_FATAL_SUPPORT", "representation": "NON_FATAL_SUPPORT", "temporal": "NON_FATAL_SUPPORT", "context": "NON_FATAL_SUPPORT", "multiplicity": "NON_FATAL_SUPPORT", "boundary": "NOT_APPLICABLE", "replication": "NOT_APPLICABLE"}, "expected": "FREEZE_CANDIDATE_RECOMMENDED"}
+  ],
+  "authority_effect": "NONE"
+}

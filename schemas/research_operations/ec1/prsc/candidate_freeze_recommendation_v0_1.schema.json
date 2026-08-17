@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC CandidateFreezeRecommendation v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {"const": "ovc-prsc-candidate-freeze-recommendation/v0.1"},
+    "candidate_freeze_recommendation_id": {"type": "string", "minLength": 1},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "scientific_disposition_ref": {"type": "string", "minLength": 1},
+    "rationale_refs": {"type": "array", "items": {"type": "string"}},
+    "recommendation": {"const": "PREPARE_EC1_GSCI_CANDIDATE_FREEZE_REVIEW"},
+    "owner_gate": {"const": "EC1-GSCI"},
+    "candidate_freeze_effect": {"const": "NONE"},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": ["schema", "candidate_freeze_recommendation_id", "candidate_ref", "scientific_disposition_ref", "rationale_refs", "recommendation", "owner_gate", "candidate_freeze_effect", "authority_effect"]
+}
