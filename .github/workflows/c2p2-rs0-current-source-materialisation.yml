@@ -5,6 +5,10 @@ on:
     branches:
       - build/c2p2-rs0-current-source-materialisation-20260817
 
+concurrency:
+  group: c2p2-rs0-current-source-materialisation
+  cancel-in-progress: true
+
 permissions:
   contents: read
   actions: read
@@ -45,7 +49,8 @@ jobs:
         env:
           PYTHONPATH: src
         run: |
-          python -m ovc.opt_b.c2p_v0_2.rs0_source_materialisation \
+          set -euo pipefail
+          python -m ovc.opt_b.c2p_v0_2.rs0_source_materialisation_runtime \
             --c1-root '${{ runner.temp }}/c1-discovery-v2' \
             --opt-a-root '${{ runner.temp }}/opt-a-discovery-v2' \
             --pack 'registries/opt_b/c2e/v0_2/C2E_EMPIRICAL_BOUNDARY_PACK_JUNE_STABLE_v0_2.json' \
