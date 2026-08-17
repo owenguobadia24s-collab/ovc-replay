@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSCPreregistrationReadinessReceipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "bundle_id", "protocol_generation_id", "g8_alg_status", "e1_exposure_status", "binding_status", "synthetic_vertical_slice_status", "operator_gate", "status", "authority_effect"],
+  "properties": {
+    "schema_version": {"const": "prsc_preregistration_readiness_receipt/v0.1"},
+    "receipt_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "bundle_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "protocol_generation_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "g8_alg_status": {"enum": ["PASS", "NOT_YET_PASSED", "BLOCK", "QUARANTINE"]},
+    "e1_exposure_status": {"enum": ["PRE_E1_CLEAN", "E1_DECISION_BEARING_EXPOSED", "UNKNOWN"]},
+    "binding_status": {"enum": ["COMPLETE", "INCOMPLETE"]},
+    "synthetic_vertical_slice_status": {"enum": ["PASS", "FAIL", "NOT_RUN"]},
+    "operator_gate": {"const": "PRSCI-G-PREREG"},
+    "status": {"enum": ["BUILD_AHEAD_READY", "READY_FOR_OPERATOR_DECISION", "BLOCKED", "QUARANTINED"]},
+    "authority_effect": {"const": "NONE"}
+  }
+}
