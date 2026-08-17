@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"OVC ReviewDisagreementRecord v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","candidate_ref","review_refs","dispositions","resolution","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-prsc-review-disagreement-record/v0.1"},
+    "candidate_ref":{"type":"string","minLength":1},
+    "review_refs":{"type":"array","minItems":2,"items":{"type":"string"}},
+    "dispositions":{"type":"array","minItems":2,"items":{"type":"string"}},
+    "resolution":{"const":"PRESERVE_DISAGREEMENT_NO_MAJORITY"},
+    "authority_effect":{"const":"NONE"}
+  }
+}
