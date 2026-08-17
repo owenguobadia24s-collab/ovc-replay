@@ -85,8 +85,40 @@ def test_event_map_boundary_normalizes_event_local_numeric_surfaces_once(monkeyp
 
     monkeypatch.setattr(materialisation, "_event_maps", fake_event_maps)
     adapter._bind_current_c2_persistence_boundary()
-    mapped = materialisation._event_maps({}, {})
+    mapped = materialisation._event_maps({}, {"side": "BID"})
     assert mapped["observations"]["OBS"]["value"] == "1.25"
     assert mapped["profiles"]["PROFILE"]["facts"]["price_delta"] == "0.125"
     assert mapped["containers"]["CONTAINER"]["centre"] == "1.5"
     assert mapped["parent_observations"] is parent_observations
+
+
+def test_event_map_boundary_carries_only_immediate_prior_roles_for_reference_changes(monkeypatch: pytest.MonkeyPatch) -> None:
+    def fake_event_maps(event, _prepared):
+        token = str(event["token"])
+        return {
+            "observations": {f"OBS.{token}": {"value": 1.25}},
+            "parent_observations": {},
+            "profiles": {},
+            "memberships": {},
+            "contexts": {},
+            "levels": {f"L.{token}": {"level_id": f"L.{token}", "value": 1.25}},
+            "containers": {f"C.{token}": {"container_id": f"C.{token}", "centre": 1.25}},
+            "relation_sets": {},
+        }
+
+    monkeypatch.setattr(materialisation, "_event_maps", fake_event_maps)
+    adapter._bind_current_c2_persistence_boundary()
+
+    first = materialisation._event_maps({"token": "A"}, {"side": "BID"})
+    second = materialisation._event_maps({"token": "B"}, {"side": "BID"})
+    third = materialisation._event_maps({"token": "C"}, {"side": "BID"})
+
+    assert set(first["levels"]) == {"L.A"}
+    assert set(second["levels"]) == {"L.A", "L.B"}
+    assert set(second["containers"]) == {"C.A", "C.B"}
+    assert set(third["levels"]) == {"L.B", "L.C"}
+    assert "L.A" not in third["levels"]
+
+    ask = materialisation._event_maps({"token": "D"}, {"side": "ASK"})
+    assert set(ask["levels"]) == {"L.D"}
+    assert set(ask["containers"]) == {"C.D"}

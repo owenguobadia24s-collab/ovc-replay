@@ -44,8 +44,34 @@ def _bind_current_c2_persistence_boundary() -> None:
     if getattr(current, "_c2p2_persisted_boundary", False):
         return
 
+    prior_side: str | None = None
+    prior_levels: dict[str, Any] = {}
+    prior_containers: dict[str, Any] = {}
+
     def persisted_event_maps(event: Mapping[str, Any], prepared: Mapping[str, Any]) -> dict[str, Any]:
+        nonlocal prior_side, prior_levels, prior_containers
+        side = str(prepared.get("side", ""))
+        if prior_side != side:
+            prior_levels = {}
+            prior_containers = {}
+            prior_side = side
+
         maps = dict(current(event, prepared))
+        current_levels = dict(maps["levels"])
+        current_containers = dict(maps["containers"])
+
+        # Canonical C2E source replay indexes the persisted materialisation, so a
+        # reference-change record can resolve the immediately preceding snapshot
+        # object even though that object is not a member of the current bundle.
+        # The streaming RS0 adapter keeps only that causal one-event role frontier:
+        # current + immediately prior objects, never future objects or a growing
+        # historical cache.  This is sufficient because C2 reference changes are
+        # constructed only against the immediately preceding complete observation.
+        maps["levels"] = {**prior_levels, **current_levels}
+        maps["containers"] = {**prior_containers, **current_containers}
+        prior_levels = current_levels
+        prior_containers = current_containers
+
         # parent_observations is a side-wide immutable index repeatedly reused by
         # every frame. C2E reads only identity/FVT/hash fields from those rows, so
         # avoid an O(population^2) normalization. Event-local C2 surfaces contain
