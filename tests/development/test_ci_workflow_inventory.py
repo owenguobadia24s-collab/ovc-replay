@@ -7,7 +7,8 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_6.json"
+POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_7.json"
+V06_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_6.json"
 V05_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_5.json"
 HISTORICAL_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_4.json"
 V03_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_3.json"
@@ -24,6 +25,7 @@ spec.loader.exec_module(inventory_module)
 class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def setUp(self):
         self.policy = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
+        self.v06_policy = json.loads(V06_POLICY_PATH.read_text(encoding="utf-8"))
         self.v05_policy = json.loads(V05_POLICY_PATH.read_text(encoding="utf-8"))
         self.historical_policy = json.loads(HISTORICAL_POLICY_PATH.read_text(encoding="utf-8"))
         self.v03_policy = json.loads(V03_POLICY_PATH.read_text(encoding="utf-8"))
@@ -52,13 +54,21 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def test_actions_registry_and_repository_definition_layers_are_distinct(self):
         snapshot = self.policy["snapshot"]
         self.assertEqual(snapshot["github_actions_registered_total_count"], 191)
-        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 136)
-        self.assertEqual(snapshot["registration_count_excess"], 55)
+        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 137)
+        self.assertEqual(snapshot["registration_count_excess"], 54)
         self.assertEqual(
             snapshot["registration_count_excess_interpretation"],
             "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK_NOT_AUTHORITY",
         )
         self.assertIn("NOT_REMEASURED", snapshot["github_actions_source"])
+
+    def test_v0_6_snapshot_remains_historical_and_unchanged(self):
+        historical = self.v06_policy["snapshot"]
+        self.assertEqual(self.v06_policy["policy_id"], "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.6")
+        self.assertEqual(historical["github_actions_registered_total_count"], 191)
+        self.assertEqual(historical["expected_repository_workflow_definition_count"], 136)
+        self.assertEqual(historical["registration_count_excess"], 55)
+        self.assertEqual(self.policy["supersedes_for_current_inventory"], self.v06_policy["policy_id"])
 
     def test_v0_5_snapshot_remains_historical_and_unchanged(self):
         historical = self.v05_policy["snapshot"]
@@ -66,7 +76,7 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertEqual(historical["github_actions_registered_total_count"], 191)
         self.assertEqual(historical["expected_repository_workflow_definition_count"], 135)
         self.assertEqual(historical["registration_count_excess"], 56)
-        self.assertEqual(self.policy["supersedes_for_current_inventory"], self.v05_policy["policy_id"])
+        self.assertEqual(self.v06_policy["supersedes_for_current_inventory"], self.v05_policy["policy_id"])
 
     def test_v0_4_snapshot_remains_historical_and_unchanged(self):
         historical = self.historical_policy["snapshot"]
@@ -111,9 +121,27 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertEqual(pr_paths, sorted(self.policy["approved_pull_request_workflows"]))
         self.assertEqual(self.inventory["category_counts"]["CURRENT_PR_CI"], 2)
 
-    def test_c2p2_rs0_source_materialisation_is_non_pr_and_authority_bounded(self):
+    def test_c2p2_rs0_real_source_run_is_non_pr_single_use_and_non_substituting(self):
         admission = self.policy["admitted_new_workflow"]
-        self.assertEqual(admission["path"], ".github/workflows/c2p2-rs0-current-source-materialisation.yml")
+        self.assertEqual(admission["path"], ".github/workflows/c2p2-rs0-real-source-shadow-run.yml")
+        record = next(
+            record for record in self.inventory["records"] if record["path"] == admission["path"]
+        )
+        self.assertEqual(record["category"], "ACTIVE_MANUAL_OPERATION")
+        self.assertEqual(record["triggers"], ["push"])
+        self.assertNotIn("pull_request", record["triggers"])
+        self.assertFalse(admission["pull_request_listener"])
+        self.assertIn("SINGLE_USE_REAL_SOURCE_SHADOW_A_B_C", admission["authority_mode"])
+        self.assertIn("NO_SELECTION", admission["authority_mode"])
+        self.assertIn("NO_ACTIVATION", admission["authority_mode"])
+        self.assertIn("NO_REQUIRED_CHECK_SUBSTITUTION", admission["authority_mode"])
+
+    def test_c2p2_rs0_source_materialisation_remains_non_pr_and_authority_bounded(self):
+        admission = next(
+            item
+            for item in self.policy["previously_admitted_non_pr_workflows"]
+            if item["path"] == ".github/workflows/c2p2-rs0-current-source-materialisation.yml"
+        )
         record = next(
             record for record in self.inventory["records"] if record["path"] == admission["path"]
         )
