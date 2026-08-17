@@ -17,6 +17,12 @@ from .capability_frontier import (
     CapabilityFrontierCompiler,
     binding_state_digest,
 )
+from .closeout import (
+    RCCRCloseoutError,
+    build_rebuild_restart_receipt,
+    reconcile_source_frontier,
+    validate_terminal_authority,
+)
 from .core import (
     RCCRAppendOnlyStore,
     RCCRValidationError,
@@ -112,6 +118,7 @@ __all__ = [
     "OffRegisterWorkaroundDetector",
     "PilotAssuranceRunner",
     "RCCRAppendOnlyStore",
+    "RCCRCloseoutError",
     "RCCRNeedReviewError",
     "RCCRPilotError",
     "RCCRReadModelError",
@@ -132,6 +139,7 @@ __all__ = [
     "build_pilot_exit_evidence_packet",
     "build_portfolio_posture",
     "build_post_pilot_read_models",
+    "build_rebuild_restart_receipt",
     "build_research_coverage_matrix",
     "canonical_json_bytes",
     "fixture_authorship_actuals",
@@ -139,8 +147,10 @@ __all__ = [
     "pilot_review_load_summary",
     "project_currentness",
     "query_read_model",
+    "reconcile_source_frontier",
     "reference_replay_digest",
     "validate_canonical_object",
     "validate_fixture_currentness",
     "validate_historical_counterfactual",
+    "validate_terminal_authority",
 ]

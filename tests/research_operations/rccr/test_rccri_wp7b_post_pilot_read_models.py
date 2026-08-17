@@ -160,10 +160,22 @@ def test_bundle_is_rebuild_equivalent_and_console_writes_remain_denied():
 
 def test_wp7b_follows_integrated_wp6b_without_consuming_owner_authority():
     pointer = json.loads((ROOT / "registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json").read_text())
-    assert pointer["current_packet"] == "RCCRI-WP7B"
-    assert pointer["current_gate"] == "RCCRI-G7B"
-    assert pointer["last_completed_packet"] == "RCCRI-WP6B"
-    assert pointer["last_merge_commit"] == "34d08c26061f8548346bdec101e2af6f3138f9bc"
+    wp7b_state = json.loads((ROOT / "registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_14.json").read_text())
+    merge_receipt = json.loads((ROOT / "docs/releases/rccr-v0-1/rccri-wp7b/RCCRI_WP7B_MERGE_RECEIPT.json").read_text())
+
+    assert wp7b_state["packet_id"] == "RCCRI-WP7B"
+    assert "RCCRI-G6B_PASS" in wp7b_state["prerequisites"]
+    assert "RCCRI-WP6B_MERGED_34d08c26061f8548346bdec101e2af6f3138f9bc" in wp7b_state["prerequisites"]
+    assert merge_receipt["packet_id"] == "RCCRI-WP7B"
+    assert merge_receipt["gate_id"] == "RCCRI-G7B"
+    assert merge_receipt["decision"] == "PASS"
+    assert merge_receipt["squash_merge_commit"] == "f8711a2fa0d643c87abb45a0985bf526c0f9915a"
+    assert merge_receipt["tree_equivalence"] == "PASS"
+
+    assert pointer["current_packet"] == "RCCRI-WP8"
+    assert pointer["current_gate"] == "RCCRI-G8"
+    assert pointer["last_completed_packet"] == "RCCRI-WP7B"
+    assert pointer["last_merge_commit"] == "f8711a2fa0d643c87abb45a0985bf526c0f9915a"
     assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["rccr_consumption_boundary"]["real_source_ec1_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
     assert pointer["rccr_consumption_boundary"]["path2_real_source_consumption"] == "DENIED_BY_RCCRI_WP6B_SCOPE"
