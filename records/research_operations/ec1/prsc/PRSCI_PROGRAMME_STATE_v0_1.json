@@ -7,9 +7,10 @@
   "status": "BLOCKED",
   "prerequisites": [
     "PRSCI-WP6_COMPLETED_ON_MAIN@b7a610ed0e291f20980cc6c5fe4d02c54a9e4c5a",
-    "PRSCI-WP7_AND_G8_COMPLETED_ON_MAIN@18799275f25d11392343bf93e35c7b916fc02c92"
+    "PRSCI-WP7_AND_G8_COMPLETED_ON_MAIN@18799275f25d11392343bf93e35c7b916fc02c92",
+    "PRSCI_G8_ALG_REVIEWER_BOUND_BY_OPERATOR_2026-08-17T21:56:00+01:00"
   ],
-  "authority_required": "INDEPENDENT_REVIEWER_BINDING_OPERATOR_OR_EXPLICIT_GOVERNING_DELEGATION",
+  "authority_required": "NONE_FOR_WP8_CORRECTIVE_REPAIR; PRSCI-G8-ALG_REVIEW_REQUIRED_AFTER_REPAIR",
   "authority_delta": "NONE",
   "baseline_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
   "baseline_tree": "3d2cfbf1573b5401b695da8b48cc90291d96e8bf",
@@ -17,17 +18,19 @@
   "candidate_commit": "1d01c9dba1abf9f923e5961ac505d95cd1efda86",
   "candidate_tree": "84e200af717644ba77ae15d6613c997b29a14e74",
   "tests": {
-    "tests_workflow": 32066040819,
-    "tiered_workflow": 32066040957,
-    "status": "PASS"
+    "pinned_candidate_tests_workflow": 32066040819,
+    "pinned_candidate_tiered_workflow": 32066040957,
+    "evidence_head_tests_workflow": 32066797483,
+    "evidence_head_tiered_workflow": 32066797401,
+    "status": "PASS_PRE_REVIEW_DEFECT"
   },
   "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_QA_PACKET_v0_1.json",
   "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_IMPLEMENTATION_PACKET_v0_1.json",
   "gate_packet": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_REVIEW_PACKET_v0_1.json",
-  "decision_record": null,
+  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_1.json",
   "merge_commit": null,
   "blockers": [
-    "PRSCI_INDEPENDENT_REVIEWER_BINDING_STATUS_UNBOUND"
+    "PRSCI_G8_ALG_PEAK_MEMORY_MEASUREMENT_NONCONFORMANT"
   ],
   "completed_gates": [
     "PRSCI-G0",
@@ -40,7 +43,8 @@
     "PRSCI-G7",
     "PRSCI-G8"
   ],
-  "wp8_mechanical_status": "PASS_CANDIDATE_PENDING_PRSCI-G8-ALG",
+  "g8_alg_decision": "BLOCK",
+  "wp8_mechanical_status": "CORRECTIVE_REPAIR_REQUIRED_BEFORE_G8_ALG_PASS",
   "preserved_constraints": {
     "f0_a": "HOLD",
     "validation": "LOCKED_UNCONSUMED",
@@ -51,14 +55,14 @@
     "probability_risk_exposure_execution": "NONE",
     "no_force_push_or_history_rewrite": true
   },
-  "continuation_policy": "OVC_RUN_PRSCI-G8-ALG",
-  "next_gate": "PRSCI-G8-ALG",
+  "continuation_policy": "REPAIR_WP8_WITHIN_EXISTING_AUTHORITY_THEN_RERUN_PRSCI-G8-ALG",
+  "next_gate": "PRSCI-G8-ALG_AFTER_WP8_CAPACITY_REPAIR",
   "next_packet": "PRSCI-WP9_AFTER_PRSCI-G8-ALG_PASS_ONLY",
-  "next_action": "OPERATOR_BIND_INDEPENDENT_REVIEWER_THEN_RERUN_PRSCI-G8-ALG",
+  "next_action": "REPAIR_PEAK_MEMORY_MEASUREMENT_REGENERATE_EVIDENCE_RERUN_TESTS_AND_INDEPENDENT_REVIEW",
   "reserved_later_gates": [
     "PRSCI-G8-ALG",
     "PRSCI-G-PREREG",
     "PRSCI-G-EC1-CHALLENGE"
   ],
-  "rollback": "Forward-only; preserve WP1-WP7 and PRSCI G0-G8 evidence, quarantine or supersede WP8 assurance/capacity surfaces if required."
+  "rollback": "Forward-only; preserve WP1-WP7 and PRSCI G0-G8 plus this independent BLOCK review. Correct WP8 capacity measurement without semantic or authority expansion."
 }
