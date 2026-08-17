@@ -23,7 +23,7 @@
   "normal_path_unchanged_blobs": {
     "vit_local_completion_executor": "5b0941492b776617e0ec57bb9081293d568fb297",
     "vit_completion_runtime": "c6571e52ef22e092ac0ef5ea0b4d0a29fe8ab28b",
-    "vit_post_merge_completion": "d573183b13860e5fd4ff17660bb4e7bb4cbcee8b",
+    "vit_post_merge_completion": "8d1682b7722ed43ac0637fe58bad6b4ee6bf3ca9",
     "vit_local_completion_registry": "d57f21e4bdb349f98a87e8d21b2df380b977812e"
   },
   "defects": [
@@ -43,6 +43,12 @@
       "id": "ATLAS-WP10-HCR-D03",
       "classification": "LIVE_CURRENT_PREFLIGHT_AUTHENTICATION_BINDING_DEFECT",
       "resolution": "Passed the workflow's existing read-only github.token to the routing and assurance preflight steps; declared permissions and authority are unchanged.",
+      "status": "CLOSED"
+    },
+    {
+      "id": "ATLAS-WP10-HCR-D04",
+      "classification": "GITHUB_JOB_LOG_TIMESTAMP_PREFIX_PARSER_DEFECT",
+      "resolution": "Extracted the unique freeze token from timestamp-prefixed GitHub raw job-log lines before invoking the unchanged strict freeze decoder; zero and multiple markers remain fail-closed.",
       "status": "CLOSED"
     }
   ],

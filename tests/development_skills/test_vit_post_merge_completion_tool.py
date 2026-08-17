@@ -163,6 +163,27 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
         self.assertEqual(len(calls), 1)
         self.assertTrue(calls[0].endswith("/actions/jobs/8001/logs"))
 
+    def test_freeze_lookup_accepts_github_timestamp_prefix_without_weakening_uniqueness(self) -> None:
+        freeze = {"pr_number": 42, "head_sha": "f" * 40, "transaction": {}}
+
+        def fake_json(url, token):
+            if "/actions/runs?" in url:
+                return {"workflow_runs": [{"id": 9001, "name": "tests", "conclusion": "success"}]}
+            return {"jobs": [{"id": 8001, "name": "VIT routing preflight", "conclusion": "success"}]}
+
+        log = b"2026-08-17T10:48:28Z OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=payload\n"
+        with (
+            patch.object(TOOL, "_json", side_effect=fake_json),
+            patch.object(TOOL, "_request_job_log", return_value=log),
+            patch.object(TOOL, "decode_freeze_marker", return_value=freeze) as decode,
+        ):
+            observed = TOOL._freeze_from_prewrite_logs(
+                repository="o/r", head_sha="f" * 40, pr_number=42, token="token"
+            )
+
+        self.assertEqual(observed, freeze)
+        decode.assert_called_once_with("OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=payload")
+
 
 if __name__ == "__main__":
     unittest.main()
