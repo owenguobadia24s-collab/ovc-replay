@@ -20,7 +20,10 @@ def test_operator_pass_is_narrow_and_grun_token_remains_unconsumed() -> None:
     assert decision["approved_delta"]["output"] == "INACTIVE_NONCANONICAL_READ_ONLY_RS0_SOURCE"
     assert any("Legacy OPT-B.C2" in row for row in decision["conditions"])
     assert state["packet_id"] == "C2P2-RS0-CURRENT-SOURCE-MATERIALISATION"
-    assert state["status"] == "READY"
+    assert state["status"] == "COMPLETED"
+    assert state["next_packet"] == "C2P2-RS0-EXECUTION"
+    assert state["current_source_materialisation"]["workflow_run_id"] == 32010902424
+    assert state["current_source_materialisation"]["logical_sha256"] == "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b"
     assert state["run_authority_consumed"] is False
     assert state["run_count_remaining"] == 1
     assert state["f0_a"] == "HOLD_UNCHANGED"
