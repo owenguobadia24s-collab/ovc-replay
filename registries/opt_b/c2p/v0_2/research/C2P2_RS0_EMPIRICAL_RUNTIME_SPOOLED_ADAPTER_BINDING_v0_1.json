@@ -3,7 +3,7 @@
   "binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1",
   "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
   "packet_id": "C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION",
-  "status": "CANDIDATE_PENDING_REFERENCE_AND_CAPACITY_QA",
+  "status": "QUALIFIED_NONACTIVE_PENDING_FRESH_GRUN_R2",
   "operator_authority_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_OPERATOR_DECISION_v0_1.json",
   "frozen_runtime": {
     "binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_BINDING_v0_1",
@@ -25,22 +25,37 @@
     "generation_logical_sha256": "c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a",
     "change": "NONE"
   },
-  "qualification_requirements": [
-    "EXACT_REFERENCE_RESULT_EQUALITY_A_B_C",
-    "CANONICAL_MULTI_SOURCE_MERGE_EQUIVALENCE",
-    "DISCONTINUITY_EQUIVALENCE",
-    "DUPLICATE_AND_NONMONOTONIC_FAIL_CLOSED",
-    "FULL_CARDINALITY_1505072_SYNTHETIC_CAPACITY_PASS_WITHIN_FROZEN_MEMORY_AND_STORAGE"
-  ],
+  "qualification": {
+    "workflow_run_id": 32068330862,
+    "evidence_commit": "4aca4aebbe35f500dcb23dce8361497dfb6396c2",
+    "measurement_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_MEASUREMENT_v0_1.json",
+    "measurement_sha256": "98e8d0f227b92a39b9bb45fbb14684c5653dff1f1839dd500585a24055ba6258",
+    "qa_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_QA_v0_1.json",
+    "reference_semantics": "PASS_EXACT_FIXTURE_EQUIVALENCE_A_B_C",
+    "canonical_multi_source_merge": "PASS",
+    "discontinuity_equivalence": "PASS",
+    "duplicate_nonmonotonic_fail_closed": "PASS",
+    "repository_regression": "PASS_4075_PASSED_2_SKIPPED_687_SUBTESTS",
+    "full_cardinality_synthetic_capacity": "PASS"
+  },
   "capacity_envelope": {
     "peak_memory_limit_bytes": 1160593408,
+    "measured_peak_rss_bytes": 22319104,
+    "measured_memory_headroom_bytes": 1138274304,
     "external_storage_limit_bytes": 6411935744,
+    "measured_spool_database_bytes": 3576918016,
+    "measured_storage_headroom_bytes": 2835017728,
     "concurrency_limit": 1,
     "checkpoint_cadence_assertions": 256,
     "memory_ceiling_change": "NONE"
   },
+  "residual_risk": {
+    "classification": "FAIL_CLOSED_RUNTIME_CAPACITY_RESIDUAL",
+    "statement": "Full-cardinality synthetic Candidate-A qualification removes the known population-list materialisation failure mode and demonstrates large memory headroom, but does not prove every real-source competitor-cardinality or mutable-state shape.",
+    "next_run_rule": "ANY_POST_SEMANTIC_LAUNCH_FAILURE_CONSUMES_FRESH_SINGLE_USE_AUTHORITY_AND_FAILS_CLOSED"
+  },
   "scientific_non_authority": {
-    "real_source_rerun": "NOT_AUTHORISED",
+    "real_source_rerun": "NOT_AUTHORISED_UNTIL_FRESH_GRUN_R2_PASS",
     "selection": "NONE",
     "activation": "NONE",
     "sampling": "FORBIDDEN",
@@ -51,5 +66,5 @@
     "validation": "LOCKED_UNCONSUMED"
   },
   "rollback": "REMOVE_ADAPTER_FROM_FUTURE_BINDING_ONLY_PRESERVE_FAILED_RUN_AND_RECOVERY_EVIDENCE",
-  "logical_sha256": "d438e2856ee6d3647d724f5160daa999c594b8b4bbe1618ac75cfabd11d1772a"
+  "logical_sha256": "43d29861b3a05c5c84676493f94aceb942b7bb530c51dcf6c2687ee11ddbef01"
 }

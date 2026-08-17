@@ -2,9 +2,13 @@
   "schema": "ovc-c2p2-rs0-runtime-capacity-remediation-packet/v1",
   "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
   "packet_id": "C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION",
-  "status": "RUNNING",
+  "status": "COMPLETED",
+  "decision": "PASS",
   "baseline_main_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
   "recovery_authority_commit": "f5c29c4e0855f57b8ed0df939876b5b6dac5c171",
+  "implementation_commit": "41547b7fc7efefc347509e08de983434ecde1e54",
+  "qualification_trigger_commit": "caea1d4f7624f2b609e5bdda3e049f53b1154500",
+  "qualification_evidence_commit": "4aca4aebbe35f500dcb23dce8361497dfb6396c2",
   "branch": "recover/c2p2-rs0-runtime-capacity-20260817",
   "operator_decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_OPERATOR_DECISION_v0_1.json",
   "failed_run": {
@@ -20,18 +24,48 @@
     "frozen_core_runtime_change": "NONE",
     "core_runtime_binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_BINDING_v0_1",
     "adapter_binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1",
+    "adapter_binding_logical_sha256": "43d29861b3a05c5c84676493f94aceb942b7bb530c51dcf6c2687ee11ddbef01",
     "candidate_generation_change": "NONE",
     "capacity_ceiling_change": "NONE",
     "real_source_semantic_execution": "FORBIDDEN"
   },
-  "acceptance_conditions": [
-    "Exact materialised reference result equality against frozen v0.1 runtime for A/B/C fixtures.",
-    "Canonical multi-source merge produces the same sorted reference result.",
-    "Discontinuity and fail-closed duplicate/nonmonotonic semantics remain exact.",
-    "Repository-wide regression suite passes on the isolated recovery branch.",
-    "A full-cardinality 1,505,072-row synthetic non-evidentiary Candidate-A workload completes within the original 1,160,593,408-byte memory and 6,411,935,744-byte storage ceilings.",
-    "No real-source artifact is read or executed and no fresh run token is minted."
+  "acceptance_conditions": {
+    "exact_reference_result_equality_a_b_c": "PASS",
+    "canonical_multi_source_merge_equivalence": "PASS",
+    "discontinuity_and_fail_closed_semantics": "PASS",
+    "repository_wide_regression": "PASS",
+    "full_cardinality_synthetic_capacity_within_original_limits": "PASS",
+    "no_real_source_and_no_fresh_token": "PASS"
+  },
+  "tests": {
+    "targeted": "16 passed in 0.35s",
+    "repository": "4075 passed, 2 skipped, 687 subtests passed in 280.11s",
+    "qualification_workflow_run_id": 32068330862
+  },
+  "qa": {
+    "status": "PASS",
+    "ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_QA_v0_1.json",
+    "measurement_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_MEASUREMENT_v0_1.json",
+    "measurement_sha256": "98e8d0f227b92a39b9bb45fbb14684c5653dff1f1839dd500585a24055ba6258"
+  },
+  "capacity_result": {
+    "synthetic_rows": 1505072,
+    "peak_rss_bytes": 22319104,
+    "memory_limit_bytes": 1160593408,
+    "memory_headroom_bytes": 1138274304,
+    "spool_database_bytes": 3576918016,
+    "storage_limit_bytes": 6411935744,
+    "storage_headroom_bytes": 2835017728,
+    "wall_seconds": 469.71175984599995
+  },
+  "warnings": [
+    "FULL_CARDINALITY_SYNTHETIC_CAPACITY_PASS_DOES_NOT_PROVE_EVERY_REAL_SOURCE_COMPETITOR_CARDINALITY_OR_MUTABLE_STATE_SHAPE",
+    "ANY_FUTURE_POST_SEMANTIC_LAUNCH_FAILURE_MUST_REMAIN_FAIL_CLOSED_AND_CONSUME_ITS_SINGLE_USE_TOKEN"
   ],
+  "authority_delta": "NONE; RECOVERY IMPLEMENTATION AND QUALIFICATION ONLY",
+  "selection_state": "NONE_SELECTED_INCOMPLETE_RUN",
+  "activation_state": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
   "rollback": "ABANDON_ADAPTER_GENERATION_ONLY_PRESERVE_FAILED_RUN_AND_RECOVERY_EVIDENCE",
   "next_gate": "C2P2-RS0-FRESH-GRUN-R2"
 }
