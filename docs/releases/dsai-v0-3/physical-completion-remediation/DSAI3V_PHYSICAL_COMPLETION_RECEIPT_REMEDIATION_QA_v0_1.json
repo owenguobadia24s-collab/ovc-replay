@@ -1,0 +1,178 @@
+{
+  "schema": "ovc-dsai3v-physical-completion-remediation-qa/v1",
+  "packet_id": "DSAI3V-PHYSICAL-COMPLETION-RECEIPT-REMEDIATION",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "governing_design": "OVC-DSAI-v0.3",
+  "governing_plan": "OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "status": "QA_REVIEW",
+  "recommended_decision": "PASS_PENDING_EXACT_HEAD_ASSURANCE",
+  "baseline": {
+    "main_commit": "9a3e0d8b1b9d7d8408207e03d28e5b849dbc46cf",
+    "main_tree": "d8eddce58093703ab25cecee091fb3da7378594d",
+    "main_message": "C2P2-RS0: record GSEM operator PASS"
+  },
+  "authority_manifest": {
+    "authority_manifest_id": "ce016bc38c09e3381eb73cb9dee2026808acbcc80bb3ad1732e7de5daf864ffa",
+    "identity_role": "DSAI3V_REMEDIATION_AUTHORITY_MANIFEST",
+    "logical_content": {
+      "schema": "ovc-dsai3v-remediation-authority-manifest/v1",
+      "programme_id": "OVC-DSAI-VIT-v0.3",
+      "packet_id": "DSAI3V-PHYSICAL-COMPLETION-RECEIPT-REMEDIATION",
+      "authority_delta": "NONE",
+      "scope": [
+        "post_merge_completion_queue_preservation",
+        "external_effective_completion_state",
+        "idempotent_successor_release_to_authority_resolver",
+        "receipt_only_pr_churn_removal"
+      ],
+      "reserved": [
+        "VIT physical-main activation/broadening",
+        "ORCH packet-class broadening",
+        "scientific or selector authority",
+        "ACTIVE_DISCOVERY / ACTIVE_DEVELOPMENT / ACTIVE_VALIDATION",
+        "publication",
+        "probability",
+        "risk",
+        "exposure",
+        "execution"
+      ]
+    }
+  },
+  "dependency_frontier": {
+    "dependency_frontier_id": "f515cc9dd8f4cea820227f470013424319b013266ae65a6ea1c11d7a9335a2b0",
+    "identity_role": "DSAI3V_REMEDIATION_DEPENDENCY_FRONTIER",
+    "logical_content": {
+      "schema": "ovc-dsai3v-remediation-dependency-frontier/v1",
+      "programme_id": "OVC-DSAI-VIT-v0.3",
+      "packet_id": "DSAI3V-PHYSICAL-COMPLETION-RECEIPT-REMEDIATION",
+      "baseline_commit": "9a3e0d8b1b9d7d8408207e03d28e5b849dbc46cf",
+      "baseline_tree": "d8eddce58093703ab25cecee091fb3da7378594d",
+      "governing_plan": "OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+      "dependencies": [
+        "src/ovc/development/skills/vit_completion_runtime.py",
+        "src/ovc/development/skills/vit_local_completion_executor.py",
+        "src/ovc/development/skills/vit_materialisation.py",
+        "tools/ci/vit_assurance_preflight.py",
+        "tools/ci/vit_post_merge_completion.py",
+        ".github/workflows/vit-post-merge-completion.yml",
+        "DSAI_VIT_PHYSICAL_CONTROLLER",
+        "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+        "OVC_EXTERNAL_ARTIFACT_ROOT/receipts"
+      ]
+    }
+  },
+  "root_cause": {
+    "classification": "POST_MERGE_COMPLETION_DEMAND_LOSS_UNDER_FIXED_WORKFLOW_CONCURRENCY",
+    "finding": "The canonical transaction-freeze, exact-tree, ReceiptStore, idempotent persistence and crash-recovery machinery already existed. The local self-hosted post-merge completion workflow used one fixed GitHub Actions concurrency group. The RCCRI-WP8 completion run remained pending with no self-hosted job and a later main push replaced the older pending demand. The physical merge therefore became effective while the required external completion bundle remained unpersisted, causing receipt-only Git closeout work.",
+    "evidence": [
+      {
+        "merge_commit": "43c053822e4a3cd0e7c04fc4a0760879ef84290a",
+        "packet": "RCCRI-WP8",
+        "workflow_run": 32020891726,
+        "observed_state": "PENDING_WITH_ZERO_JOBS_THEN_CANCELLED_WHEN_NEWER_MAIN_PUSH_QUEUED"
+      },
+      {
+        "merge_commit": "c90f53033f2a21ff35e4fb5a71a84415f4116dea",
+        "packet": "ATLAS-WP10-HISTORICAL-COMPLETION-RECOVERY",
+        "workflow_run": 32022390244,
+        "observed_state": "PENDING_WITH_ZERO_JOBS_AT_DIAGNOSIS_TIME"
+      }
+    ],
+    "not_root_cause": [
+      "PhysicalMaterialisationTransaction identity semantics",
+      "exact physical tree equality contract",
+      "ReceiptStore content-addressed idempotency",
+      "recover_effective_write_completion crash-recovery semantics",
+      "SIQ one-head physical gateway"
+    ]
+  },
+  "pr_reconciliation": {
+    "1070": {
+      "disposition": "PRESERVE_MERGED_HISTORICAL_RECOVERY",
+      "merge_commit": "c90f53033f2a21ff35e4fb5a71a84415f4116dea",
+      "rule": "Historical recovery remains separately typed and may record ABSENT_NOT_EMITTED pre-write provenance without fabricating an original PhysicalMaterialisationTransaction identity."
+    },
+    "1071": {
+      "disposition": "SUPERSEDED_CLOSED_DO_NOT_MERGE",
+      "reason": "It attempted a new RCCR v0.17 canonical programme-state generation and pointer advance for a post-materialisation fact. The immutable-history invariant requires the operational pointer to remain at already-integrated v0.16. Unique valid merge/tree evidence remains preserved."
+    },
+    "1072": {
+      "disposition": "PRESERVE_AS_SINGLE_LAWFUL_HISTORICAL_RCCRI_WP8_RECEIPT_LINEAGE",
+      "merge_commit": "05c6c6878d10fd4b498ecefe4456db92fdabee93",
+      "reason": "Its corrected two-file append-only form preserved the v0.16 pointer/history and became the one lawful historical RCCRI-WP8 receipt reconciliation before the automatic-path remediation landed. It is preserved, not repeated. Future normal completion must use the external automatic path rather than another receipt-only PR.",
+      "preserved_facts": {
+        "substantive_pr": 1065,
+        "packet_head": "78518c97f6fbb8dbbae7b229e03ee8d767e40544",
+        "pip_id": "9a5bb56acb859dfb16f5ed958b477677f2c034ec3a9cda3daa6a1a8d034f7170",
+        "qualified_tree": "6ef70fb8095c3a8074587b5900e791ae98043db9",
+        "substantive_squash_merge": "43c053822e4a3cd0e7c04fc4a0760879ef84290a",
+        "physical_tree": "6ef70fb8095c3a8074587b5900e791ae98043db9",
+        "tree_equivalence": "PASS"
+      }
+    }
+  },
+  "remediation": {
+    "normal_path": [
+      "freeze exact PhysicalMaterialisationTransaction before physical write",
+      "perform already-authorised serialized physical materialisation through DSAI_VIT_PHYSICAL_CONTROLLER and existing SIQ gateway",
+      "verify physical_post_merge_tree equals qualified VIT generation tree",
+      "persist canonical four-object content-addressed completion bundle in the governed external ReceiptStore",
+      "persist append-only effective COMPLETED state outside Git",
+      "bind the programme/packet to exactly one effective completion transaction",
+      "emit at most one successor-release signal to the existing authority resolver",
+      "never infer successor execution authority and never require an ordinary closeout PR"
+    ],
+    "queue_fix": "Post-merge completion workflow concurrency is keyed by exact merge SHA so newer main pushes cannot cancel older pending completion demands. Each eventual invocation also drains a bounded recent first-parent window oldest-first so prior missed demands are recovered idempotently.",
+    "duplicate_policy": "A second physical transaction attempting to establish effective completion for the same programme/packet fails closed with VIT_DUPLICATE_EFFECTIVE_PACKET_COMPLETION.",
+    "crash_recovery": "The existing recover_effective_write_completion path remains the physical-write recovery authority. If the merge already exists and the exact qualified tree is physical, completion persistence resumes without repeating the repository mutation.",
+    "historical_boundary": "A historical merge with no lawful pre-write transaction freeze is reported as historical debt and is never assigned a fabricated transaction identity. The separately governed Atlas recovery remains distinct from normal completion.",
+    "receipt_location": "OVC_EXTERNAL_ARTIFACT_ROOT/receipts; repository and ephemeral fallback remain prohibited."
+  },
+  "required_regressions": [
+    "successful merge -> automatic receipt persistence -> effective COMPLETED",
+    "exact tree mismatch fails closed",
+    "repeated completion is idempotent",
+    "already-effective merge recovery does not repeat physical write",
+    "duplicate completion attempts cannot create competing effective terminal states",
+    "successor release occurs exactly once and does not infer execution authority",
+    "normal completion requires no ordinary closeout PR",
+    "historical recovery remains distinguishable from normal completion",
+    "newer main push cannot cancel an older pending completion demand"
+  ],
+  "repository_ref_hygiene": {
+    "status": "NON_BLOCKING_UNRELATED_REF_NOISE_PRESERVED",
+    "accidental_noop_refs_created_during_tool_discovery": [
+      "noop-dont-use",
+      "test-dont",
+      "please-ignore-branch-tool-mistake",
+      "ignore-4",
+      "ignore-5",
+      "ignore-6",
+      "ignore-7"
+    ],
+    "treatment": "No deletion performed because branch deletion is destructive/operator-reserved. These refs contain no remediation mutation and are not part of the packet lineage."
+  },
+  "assurance": {
+    "targeted": "PENDING_EXACT_HEAD_CI",
+    "repository_wide": "PENDING_EXACT_HEAD_CI",
+    "vit_siq_grt": "PENDING_EXACT_HEAD_CI",
+    "final_head_required_before_merge": true
+  },
+  "warnings": [
+    "The local self-hosted Windows completion runner was unavailable/pending during diagnosis. The remediation prevents queue loss and deterministically recovers missed demands, but live external ReceiptStore debt is discharged only when that already-bound runner executes a retained completion demand."
+  ],
+  "rollback": "Forward-supersede only the remediation workflow/runtime/binding records. Preserve every already-emitted ReceiptStore object, historical recovery record, PR discussion, physical Git history and substantive packet evidence. No force-push or history rewrite.",
+  "reserved_authority_unchanged": [
+    "VIT physical-main activation/broadening",
+    "ORCH packet-class broadening",
+    "scientific or selector authority",
+    "ACTIVE_DISCOVERY / ACTIVE_DEVELOPMENT / ACTIVE_VALIDATION",
+    "publication",
+    "probability",
+    "risk",
+    "exposure",
+    "execution"
+  ]
+}
