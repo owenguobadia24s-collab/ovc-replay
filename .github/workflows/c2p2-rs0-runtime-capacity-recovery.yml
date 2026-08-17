@@ -1,27 +1,32 @@
-name: C2P2 RS0 runtime capacity recovery
+name: C2P2 RS0 source-order recovery qualification
 
 on:
   push:
     branches:
-      - recover/c2p2-rs0-runtime-capacity-20260817
+      - recover/c2p2-rs0-source-order-r2-20260817
     paths:
-      - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_TRIGGER_v0_1.json
+      - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_ORDER_RECOVERY_TRIGGER_v0_1.json
 
 concurrency:
-  group: c2p2-rs0-runtime-capacity-recovery
+  group: c2p2-rs0-source-order-recovery
   cancel-in-progress: false
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   recovery_qualification:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 300
     env:
       PYTHONPATH: src:.
-      CAPACITY_WORK_DIR: /tmp/c2p2-rs0-capacity-recovery
-      CAPACITY_RECEIPT: /tmp/c2p2-rs0-capacity-recovery-receipt.json
+      BASELINE_MAIN: 18799275f25d11392343bf93e35c7b916fc02c92
+      CAPACITY_WORK_DIR: /tmp/c2p2-rs0-source-order-capacity
+      CAPACITY_RECEIPT: /tmp/c2p2-rs0-source-order-capacity.json
+      SOURCE_DIR: /tmp/c2p2-rs0-source-order-current-source
+      PREFLIGHT_WORK_DIR: /tmp/c2p2-rs0-source-order-preflight
+      PREFLIGHT_RECEIPT: /tmp/c2p2-rs0-source-order-preflight.json
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,7 +39,7 @@ jobs:
       - name: Install repository and test dependencies
         run: python -m pip install -e ".[test]" -r requirements-console-vnext.txt
 
-      - name: Verify bounded recovery authority and absence of rerun token
+      - name: Verify R2 recovery PASS authority and absence of rerun token
         run: |
           set -euo pipefail
           python - <<'PY'
@@ -42,52 +47,92 @@ jobs:
           from pathlib import Path
 
           decision = json.loads(Path(
-            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_OPERATOR_DECISION_v0_1.json'
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R2_OPERATOR_DECISION_v0_1.json'
           ).read_text())
           trigger = json.loads(Path(
-            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_TRIGGER_v0_1.json'
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_ORDER_RECOVERY_TRIGGER_v0_1.json'
           ).read_text())
           execution = json.loads(Path(
             'registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json'
           ).read_text())
-          workflow_text = Path(
-            '.github/workflows/c2p2-rs0-runtime-capacity-recovery.yml'
-          ).read_text()
+          consumption = json.loads(Path(
+            'registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_2.json'
+          ).read_text())
+          binding = json.loads(Path(
+            'registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2.json'
+          ).read_text())
 
           assert decision['decision'] == 'PASS'
-          assert decision['approved_authority']['real_source_semantic_rerun'] == 'NOT_AUTHORISED'
-          assert trigger['real_source_consumption'] == 'FORBIDDEN'
+          assert decision['gate_id'] == 'C2P2-RS0-RUN-RECOVERY-R2'
+          assert decision['approved_authority_delta']['real_source_execution'] == 'FORBIDDEN'
+          assert decision['approved_authority_delta']['fresh_real_source_run_authority'] == 'NONE'
+          assert trigger['packet_id'] == 'C2P2-RS0-SOURCE-ORDER-RECOVERY'
+          assert trigger['real_source_semantic_execution'] == 'FORBIDDEN'
           assert trigger['scientific_effect'] == 'NONE'
-          assert execution['failed_run_authority_consumed'] is True
+          assert execution['run_authority_consumed'] is True
           assert execution['run_count_remaining'] == 0
-          assert execution['real_source_rerun'] == 'NOT_AUTHORISED'
-          assert execution['next_packet'] == 'C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION'
-          forbidden_action = 'actions/' + 'download-artifact'
-          assert forbidden_action not in workflow_text
+          assert execution['next_packet'] == 'C2P2-RS0-SOURCE-ORDER-RECOVERY'
+          assert consumption['execution_count_consumed'] == 1
+          assert consumption['run_count_remaining'] == 0
+          assert binding['status'] == 'IMPLEMENTED_PENDING_QUALIFICATION'
+          assert binding['scientific_non_authority']['real_source_rerun'] == 'NOT_AUTHORISED_UNTIL_FRESH_GRUN_R3_PASS'
+          assert not Path(
+            'registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_4.json'
+          ).exists()
           PY
 
-      - name: Run exact reference-semantic adapter qualification
+      - name: Verify frozen scientific currentness against live main
         run: |
-          python -m pytest -q \
-            tests/opt_b/c2p/v0_2/test_c2p2_rs0_empirical_runtime.py \
-            tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_capacity_recovery.py \
-            --tb=short
+          set -euo pipefail
+          git fetch origin main
+          live_main="$(git rev-parse origin/main)"
+          echo "LIVE_MAIN_SHA=$live_main" >> "$GITHUB_ENV"
+          frozen_paths=(
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-ps0/C2P2_PS0_OBJECTPACK_CANDIDATES_v0_3.json
+            registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_RUNTIME_BINDING_v0_1.json
+            registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_SEMANTICS_BINDING_v0_1.json
+            registries/opt_b/c2p/v0_2/research/C2P2_RS0_C2E_DEPENDENCY_ROLE_REGISTRY_v0_1.json
+            src/ovc/opt_b/c2p_v0_2/rs0_empirical_runtime.py
+            src/ovc/opt_b/c2p_v0_2/rs0_empirical_semantics.py
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CURRENT_SOURCE_MATERIALISATION_CLOSEOUT_v0_1.json
+            registries/implementation/c2p_v0_2/C2P2_RS0_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json
+          )
+          if ! git diff --quiet "$BASELINE_MAIN"..origin/main -- "${frozen_paths[@]}"; then
+            echo 'RS0_SOURCE_ORDER_BOUND_SCIENTIFIC_CURRENTNESS_DRIFT' >&2
+            git diff --name-only "$BASELINE_MAIN"..origin/main -- "${frozen_paths[@]}" >&2
+            exit 41
+          fi
 
-      - name: Run repository-wide regression suite without VIT routing
+      - name: Run targeted source-order recovery and frozen-runtime assurance
+        run: |
+          python -m pytest -q tests/opt_b/c2p/v0_2/test_c2p2_rs0_empirical_runtime.py tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_capacity_recovery.py tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_order_recovery.py tests/opt_b/c2p_v0_2/test_c2p2_rs0_real_source_shadow_r2_harness.py tests/development/test_ci_workflow_inventory.py --tb=short
+
+      - name: Run repository-wide regression suite
         run: python -m pytest tests -q --tb=short
 
-      - name: Run full-cardinality synthetic capacity proof
+      - name: Run full-cardinality synthetic recovered-adapter capacity proof
         run: |
+          set -euo pipefail
           rm -rf "$CAPACITY_WORK_DIR"
-          mkdir -p "$CAPACITY_WORK_DIR"
-          python scripts/c2p2_rs0_runtime_capacity_recovery.py \
-            --rows 1505072 \
-            --memory-limit 1160593408 \
-            --storage-limit 6411935744 \
-            --work-dir "$CAPACITY_WORK_DIR" \
-            --output "$CAPACITY_RECEIPT"
+          python scripts/c2p2_rs0_source_order_recovery_capacity.py --rows 1505072 --memory-limit 1160593408 --storage-limit 6411935744 --work-dir "$CAPACITY_WORK_DIR" --output "$CAPACITY_RECEIPT"
 
-      - name: Materialise recovery QA receipt
+      - name: Download exact authorised source artifact for ordering-only preflight
+        uses: actions/download-artifact@v4
+        with:
+          name: c2p2-rs0-current-c2-vnext-c2e-2021-2023
+          path: ${{ env.SOURCE_DIR }}
+          github-token: ${{ github.token }}
+          repository: owenguobadia24s-collab/ovc-replay
+          run-id: 32010902424
+
+      - name: Run exact current-source ordering-only preflight
+        run: |
+          set -euo pipefail
+          rm -rf "$PREFLIGHT_WORK_DIR"
+          mkdir -p "$PREFLIGHT_WORK_DIR"
+          python scripts/c2p2_rs0_source_order_recovery_preflight.py --repo-root . --source-root "$SOURCE_DIR" --work-dir "$PREFLIGHT_WORK_DIR" --output "$PREFLIGHT_RECEIPT"
+
+      - name: Materialise qualified inactive binding, QA and Fresh GRUN R3 gate
         run: |
           set -euo pipefail
           python - <<'PY'
@@ -96,45 +141,265 @@ jobs:
           import os
           from pathlib import Path
 
-          receipt_path = Path(os.environ['CAPACITY_RECEIPT'])
-          receipt = json.loads(receipt_path.read_text())
-          assert receipt['status'] == 'PASS'
-          assert receipt['real_source_consumed'] is False
-          assert receipt['selection_state'] == 'UNSELECTED_RESEARCH_CANDIDATE'
-          assert receipt['activation_state'] == 'NONE'
-          target = Path(
-            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/'
-            'C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_MEASUREMENT_v0_1.json'
+          release_root = Path(
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0'
           )
-          target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
-          sha = hashlib.sha256(target.read_bytes()).hexdigest()
-          qa = {
-            'schema': 'ovc-c2p2-rs0-runtime-capacity-recovery-qa/v1',
-            'programme_id': 'OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1',
-            'packet_id': 'C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION',
-            'status': 'PASS',
-            'reference_semantics': 'PASS_EXACT_FIXTURE_EQUIVALENCE',
+          binding_path = Path(
+            'registries/opt_b/c2p/v0_2/research/'
+            'C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2.json'
+          )
+          execution_path = Path(
+            'registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json'
+          )
+          packet_path = release_root / 'C2P2_RS0_SOURCE_ORDER_RECOVERY_PACKET_v0_1.json'
+
+          capacity_src = Path(os.environ['CAPACITY_RECEIPT'])
+          preflight_src = Path(os.environ['PREFLIGHT_RECEIPT'])
+          capacity = json.loads(capacity_src.read_text())
+          preflight = json.loads(preflight_src.read_text())
+          assert capacity['status'] == 'PASS'
+          assert preflight['status'] == 'PASS'
+          assert capacity['real_source_semantic_execution'] is False
+          assert preflight['semantic_runtime_invoked'] is False
+          assert preflight['run_token_consumed_by_preflight'] is False
+
+          capacity_target = release_root / 'C2P2_RS0_SOURCE_ORDER_RECOVERY_CAPACITY_MEASUREMENT_v0_1.json'
+          preflight_target = release_root / 'C2P2_RS0_SOURCE_ORDER_RECOVERY_CURRENT_SOURCE_PREFLIGHT_v0_1.json'
+          capacity_target.write_text(json.dumps(capacity, indent=2, sort_keys=True) + '\n')
+          preflight_target.write_text(json.dumps(preflight, indent=2, sort_keys=True) + '\n')
+          capacity_sha = hashlib.sha256(capacity_target.read_bytes()).hexdigest()
+          preflight_sha = hashlib.sha256(preflight_target.read_bytes()).hexdigest()
+
+          binding = json.loads(binding_path.read_text())
+          binding['status'] = 'QUALIFIED_INACTIVE_PENDING_FRESH_GRUN_R3'
+          binding['qualification'] = {
+            'workflow_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'workflow_head_sha': os.environ['GITHUB_SHA'],
+            'adversarial_equal_time_a_b_c_reference_equivalence': 'PASS_EXACT',
+            'row_identity_preservation': 'PASS',
+            'decreasing_time_fail_closed': 'PASS',
+            'duplicate_id_fail_closed': 'PASS',
             'repository_regression': 'PASS',
-            'capacity': 'PASS_FULL_CARDINALITY_SYNTHETIC',
-            'real_source_consumed': False,
-            'scientific_effect': 'NONE',
-            'measurement_sha256': sha,
-            'next_gate': 'C2P2-RS0-FRESH-GRUN-R2',
-            'authority_effect': 'NONE_NO_RERUN_TOKEN',
+            'full_cardinality_synthetic_capacity': 'PASS',
+            'capacity_measurement_ref': str(capacity_target),
+            'capacity_measurement_sha256': capacity_sha,
+            'exact_current_source_ordering_only_preflight': 'PASS',
+            'current_source_preflight_ref': str(preflight_target),
+            'current_source_preflight_sha256': preflight_sha,
+            'real_source_semantic_execution': 'NONE',
+            'run_token_consumed': False,
           }
-          Path(
-            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/'
-            'C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_QA_v0_1.json'
-          ).write_text(json.dumps(qa, indent=2, sort_keys=True) + '\n')
+          binding.pop('logical_sha256', None)
+          logical = hashlib.sha256(json.dumps(
+            binding,
+            ensure_ascii=False,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(',', ':'),
+          ).encode()).hexdigest()
+          binding['logical_sha256'] = logical
+          binding_path.write_text(json.dumps(binding, indent=2, sort_keys=True) + '\n')
+
+          qa = {
+            'schema': 'ovc-c2p2-rs0-source-order-recovery-qa/v1',
+            'programme_id': 'OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1',
+            'packet_id': 'C2P2-RS0-SOURCE-ORDER-RECOVERY',
+            'status': 'PASS',
+            'recommendation': 'PASS',
+            'workflow_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'workflow_head_sha': os.environ['GITHUB_SHA'],
+            'live_main_sha': os.environ['LIVE_MAIN_SHA'],
+            'binding_id': binding['binding_id'],
+            'binding_logical_sha256': logical,
+            'tests': {
+              'targeted': 'PASS',
+              'repository_wide': 'PASS',
+              'a_b_c_exact_reference_equivalence': 'PASS',
+              'row_identity_preservation': 'PASS',
+              'duplicate_and_decreasing_time_fail_closed': 'PASS',
+            },
+            'capacity': {
+              'status': capacity['status'],
+              'synthetic_rows': capacity['synthetic_rows'],
+              'peak_rss_bytes': capacity['memory']['peak_rss_bytes'],
+              'memory_limit_bytes': capacity['memory']['limit_bytes'],
+              'spool_database_bytes': capacity['storage']['runtime_spool_database_bytes'],
+              'storage_limit_bytes': capacity['storage']['limit_bytes'],
+              'measurement_sha256': capacity_sha,
+            },
+            'current_source_preflight': {
+              'status': preflight['status'],
+              'rows': preflight['global_merge']['rows'],
+              'tie_inversions_detected': sum(
+                row['tie_inversions_detected'] for row in preflight['stream_receipts']
+              ),
+              'semantic_runtime_invoked': False,
+              'run_token_consumed': False,
+              'receipt_sha256': preflight_sha,
+            },
+            'authority_delta': 'NONE_RECOVERY_QUALIFICATION_ONLY',
+            'selection': 'NONE',
+            'activation': 'NONE',
+            'validation': 'LOCKED_UNCONSUMED',
+            'f0_a': 'HOLD',
+            'warnings': [],
+            'unresolved_issues': [],
+            'rollback': 'REMOVE_V0_2_SOURCE_ORDER_BINDING_FROM_FUTURE_EXECUTION_ONLY_PRESERVE_ALL_RECOVERY_EVIDENCE',
+            'next_gate': 'C2P2-RS0-FRESH-GRUN-R3',
+          }
+          qa_path = release_root / 'C2P2_RS0_SOURCE_ORDER_RECOVERY_QA_v0_1.json'
+          qa_path.write_text(json.dumps(qa, indent=2, sort_keys=True) + '\n')
+          qa_sha = hashlib.sha256(qa_path.read_bytes()).hexdigest()
+
+          packet = json.loads(packet_path.read_text())
+          packet['status'] = 'GATE_READY'
+          packet['tests'] = {
+            'targeted': 'PASS',
+            'repository_wide': 'PASS',
+            'full_cardinality_capacity': 'PASS',
+            'exact_current_source_ordering_preflight': 'PASS',
+          }
+          packet['qa_packet'] = str(qa_path)
+          packet['qa_packet_sha256'] = qa_sha
+          packet['candidate_binding_id'] = binding['binding_id']
+          packet['candidate_binding_logical_sha256'] = logical
+          packet['blockers'] = []
+          packet['next_gate'] = 'C2P2-RS0-FRESH-GRUN-R3'
+          packet_path.write_text(json.dumps(packet, indent=2, sort_keys=True) + '\n')
+
+          gate = {
+            'schema': 'ovc-c2p2-rs0-fresh-grun-r3-gate-packet/v1',
+            'programme_id': 'OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1',
+            'gate_id': 'C2P2-RS0-FRESH-GRUN-R3',
+            'gate_classification': 'OPERATOR_REQUIRED',
+            'status': 'GATE_READY',
+            'plan_id': 'C2P2-RS0-PREPARATION-PLAN-v0.1',
+            'plan_version': '0.1',
+            'baseline_main_commit': '18799275f25d11392343bf93e35c7b916fc02c92',
+            'completed_packets': [
+              'C2P2-RS0-REAL-SOURCE-SHADOW-RUN',
+              'C2P2-RS0-RUN-RECOVERY',
+              'C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION',
+              'C2P2-RS0-FRESH-GRUN-R2',
+              'C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2',
+              'C2P2-RS0-SOURCE-ORDER-RECOVERY',
+            ],
+            'current_authority': 'NO_REAL_SOURCE_RUN_TOKEN_R2_CONSUMED',
+            'proposed_authority_delta': {
+              'effect_if_pass': 'AUTHORISE_EXACTLY_ONE_R3_REAL_SOURCE_A_B_C_COMPARATIVE_SHADOW_RUN',
+              'execution_count_limit': 1,
+              'execution_adapter_binding_id': binding['binding_id'],
+              'execution_adapter_binding_logical_sha256': logical,
+              'source_materialisation_id': 'C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1',
+              'source_artifact_digest': 'sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e',
+              'candidate_generation_id': 'C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3',
+              'candidate_generation_change': 'NONE',
+              'core_runtime_semantics_change': 'NONE',
+              'predicate_or_threshold_change': 'NONE',
+              'population_change': 'NONE',
+              'sampling': 'FORBIDDEN',
+              'reduced_precision': 'FORBIDDEN',
+              'selection': 'NONE',
+              'activation': 'NONE',
+              'validation': 'LOCKED_UNCONSUMED',
+              'f0_a': 'HOLD',
+              'publication_probability_risk_exposure_trading_execution_agent_write': 'NONE',
+            },
+            'acceptance_conditions': [
+              'Source-order recovery QA remains PASS at the exact candidate head.',
+              'Recovered adapter binding v0.2 remains byte/logical bound and inactive.',
+              'Exact authorised source materialisation and artifact identity remain unchanged.',
+              'Candidate Generation v3 A/B/C identities remain unchanged.',
+              'Core runtime semantics, predicates and thresholds remain unchanged.',
+              'R3 authority is single-use and comparative-shadow-only.',
+              'Any post-semantic-launch failure consumes R3 and fails closed with no automatic rerun.',
+              'A completed R3 run grants no winner, selection, promotion or activation.',
+            ],
+            'tests_and_qa': {
+              'source_order_recovery_qa_ref': str(qa_path),
+              'source_order_recovery_qa_sha256': qa_sha,
+              'binding_id': binding['binding_id'],
+              'binding_logical_sha256': logical,
+              'targeted_tests': 'PASS',
+              'repository_regression': 'PASS',
+              'full_cardinality_synthetic_capacity': 'PASS',
+              'exact_current_source_ordering_only_preflight': 'PASS',
+              'real_source_semantic_execution_during_recovery': 'NONE',
+            },
+            'warnings': [
+              'R2 authority remains consumed and is not reinstated.',
+              'Fresh R3 authority, if approved, would be a new single-use authority identity.',
+            ],
+            'unresolved_issues': [],
+            'selection_state': 'NONE_SELECTED',
+            'active_object_pack_id': None,
+            'c2p_activation': 'NONE',
+            'validation': 'LOCKED_UNCONSUMED',
+            'f0_a': 'HOLD',
+            'rollback': 'DO_NOT_CREATE_R3_AUTHORITY_RECORD_IF_DEFER_BLOCK_OR_QUARANTINE; PRESERVE_QUALIFIED_INACTIVE_RECOVERY_BINDING',
+            'recommended_decision': 'PASS',
+            'allowed_decisions': ['PASS', 'DEFER', 'BLOCK', 'QUARANTINE', 'SUPERSEDE'],
+            'exact_work_after_pass': 'Materialise a new single-use R3 authority bound exactly to recovered adapter binding v0.2, unchanged source materialisation and Candidate Generation v3; execute one A/B/C comparative real-source shadow run; consume authority on semantic launch; fail closed on post-launch failure; stop after completed run at scientific review selection or after failure at run recovery. No selection or activation is implied by R3 PASS.',
+          }
+          gate_path = release_root / 'C2P2_RS0_FRESH_GRUN_R3_GATE_PACKET_v0_1.json'
+          gate_path.write_text(json.dumps(gate, indent=2, sort_keys=True) + '\n')
+
+          execution = json.loads(execution_path.read_text())
+          execution.update({
+            'adapter_binding_ref': str(binding_path),
+            'adapter_binding_logical_sha256': logical,
+            'authority_required': 'OPERATOR_REQUIRED_AT_NEXT_GATE',
+            'blockers': [],
+            'branch': os.environ['GITHUB_REF_NAME'],
+            'mandatory_stop': 'C2P2-RS0-FRESH-GRUN-R3',
+            'next_packet': None,
+            'packet_id': 'C2P2-RS0-SOURCE-ORDER-RECOVERY',
+            'real_source_recovery_execution': 'FORBIDDEN_UNTIL_FRESH_GRUN_R3_PASS',
+            'status': 'GATE_READY',
+          })
+          execution_path.write_text(json.dumps(execution, indent=2, sort_keys=True) + '\n')
           PY
 
-      - name: Commit deterministic recovery evidence to isolated branch
+      - name: Verify recovery remains non-authoritative scientifically
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0')
+          qa = json.loads((root / 'C2P2_RS0_SOURCE_ORDER_RECOVERY_QA_v0_1.json').read_text())
+          gate = json.loads((root / 'C2P2_RS0_FRESH_GRUN_R3_GATE_PACKET_v0_1.json').read_text())
+          execution = json.loads(Path(
+            'registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json'
+          ).read_text())
+          assert qa['recommendation'] == 'PASS'
+          assert gate['status'] == 'GATE_READY'
+          assert gate['gate_classification'] == 'OPERATOR_REQUIRED'
+          assert gate['proposed_authority_delta']['selection'] == 'NONE'
+          assert gate['proposed_authority_delta']['activation'] == 'NONE'
+          assert execution['run_count_remaining'] == 0
+          assert execution['mandatory_stop'] == 'C2P2-RS0-FRESH-GRUN-R3'
+          assert not Path(
+            'registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_4.json'
+          ).exists()
+          PY
+
+      - name: Upload compact recovery qualification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: c2p2-rs0-source-order-recovery-${{ github.run_id }}
+          path: |
+            ${{ env.CAPACITY_RECEIPT }}
+            ${{ env.PREFLIGHT_RECEIPT }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Commit recovery qualification and Fresh GRUN R3 gate
         run: |
           set -euo pipefail
           git config user.name 'ovc-continuous-execution'
           git config user.email 'actions@users.noreply.github.com'
-          git add \
-            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_MEASUREMENT_v0_1.json \
-            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_QA_v0_1.json
-          git commit -m 'C2P2-RS0: record runtime capacity recovery qualification'
+          git add docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_ORDER_RECOVERY_CAPACITY_MEASUREMENT_v0_1.json docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_ORDER_RECOVERY_CURRENT_SOURCE_PREFLIGHT_v0_1.json docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_ORDER_RECOVERY_QA_v0_1.json docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_ORDER_RECOVERY_PACKET_v0_1.json docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_R3_GATE_PACKET_v0_1.json registries/opt_b/c2p/v0_2/research/C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2.json registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json
+          git commit -m 'C2P2-RS0: qualify source-order recovery and prepare Fresh GRUN R3'
           git push origin HEAD:${GITHUB_REF_NAME}
