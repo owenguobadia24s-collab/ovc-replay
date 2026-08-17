@@ -1,25 +1,39 @@
 {
   "schema": "ovc-c2p2-rs0-execution-state/v1",
   "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
-  "packet_id": "C2P2-RS0-EXECUTION",
-  "status": "BLOCKED",
-  "authority_required": "GRUN_PASS_PRESENT_ONE_RUN_TOKEN_UNCONSUMED",
-  "authority_delta": "NONE_BLOCKER_RECORD_ONLY",
-  "baseline_commit": "c8273e8d15f5f77d86ec842b3eb7067fe0b67b8e",
-  "baseline_tree": "8328dabe411edf939a26aa6922267f2d4c3a62d9",
-  "branch": "block/c2p2-rs0-execution-preflight-20260816-r2",
-  "candidate_commit": "NON_IDENTITY_POST_COMMIT_BINDING",
-  "tests": ["COURT_RECORD_PREFLIGHT_ONLY_NO_REAL_SOURCE_EXECUTION"],
-  "qa_packet": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_EXECUTION_PREFLIGHT_BLOCKER_v0_1.json",
-  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_OPERATOR_DECISION_v0_1.json",
+  "packet_id": "C2P2-RS0-CURRENT-SOURCE-MATERIALISATION",
+  "status": "READY",
+  "authority_required": "OPERATOR_PASS_C2P2_RS0_SOURCE_MATERIALISATION_AUTH_PRESENT",
+  "authority_delta": "BOUNDED_READ_ONLY_CURRENT_SOURCE_MATERIALISATION",
+  "baseline_commit": "b19ff4ff7e4a99981c211ccbde249f49609e77a8",
+  "branch": "gate/c2p2-rs0-source-materialisation-pass-20260817",
+  "candidate_commit": null,
+  "pr": 1062,
+  "tests": ["REPOSITORY_SUITE_REQUIRED_BY_CI"],
+  "qa_packet": null,
+  "decision_record": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SOURCE_MATERIALISATION_OPERATOR_DECISION_v0_1.json",
   "merge_commit": null,
-  "blockers": [
-    "RS0_REAL_SOURCE_ADAPTER_NOT_MATERIALISED",
-    "RS0_EXECUTION_HARNESS_NOT_MATERIALISED",
-    "RS0_SOURCE_BYTES_NOT_REPRODUCIBLE_IN_CURRENT_EXECUTION_SURFACE"
-  ],
+  "blockers": [],
+  "mandatory_stop": null,
+  "next_packet": null,
+  "source_parent": {
+    "c1_release_id": "OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2",
+    "c1_manifest_id": "MANIFEST.C1.OPT-B.C1.GBPUSD.DISCOVERY.2021_2023.v2.r1",
+    "c1_manifest_sha256": "c9b2eaa826419a510504c016d99072c6015c337a5c2ef435252d5f6ff1db93bf",
+    "opt_a_release_id": "OPT-A.GBPUSD.DISCOVERY.2021_2023.v2",
+    "opt_a_manifest_id": "MANIFEST.OPT-A.GBPUSD.DISCOVERY.2021_2023.v2.r2",
+    "opt_a_manifest_sha256": "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c"
+  },
+  "c2_vnext": {
+    "package_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+    "package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"
+  },
+  "c2e": {
+    "boundary_pack_id": "C2E.BOUNDARY.PACK.043c628a3a29372ae478026db307d0d8",
+    "boundary_pack_sha256": "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313"
+  },
   "run_authority_consumed": false,
   "run_count_remaining": 1,
-  "next_packet": "C2P2-RS0-EXECUTION-ADAPTER-CLOSEOUT",
-  "mandatory_stop": "BLOCKED_BEFORE_REAL_SOURCE_LAUNCH"
+  "f0_a": "HOLD_UNCHANGED",
+  "validation": "LOCKED_UNCONSUMED"
 }
