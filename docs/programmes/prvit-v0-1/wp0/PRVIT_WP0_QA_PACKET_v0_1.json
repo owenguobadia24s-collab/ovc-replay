@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-prvit-wp0-qa/v0.1",
+  "programme_id": "OVC-PRVIT-PIPELINE-CONFORMANCE-CORRECTIVE-AUDIT-v0.1",
+  "packet_id": "PRVIT-WP0",
+  "gate_id": "PRVIT-G0",
+  "qa_scope": "G0_GATE_READINESS_AND_SOURCE_FREEZE_ONLY",
+  "result": "PASS",
+  "recommendation": "READY_FOR_OPERATOR_DECISION",
+  "authority_effect": "NONE",
+  "checks": [
+    {"id":"WP0-Q01","assertion":"live main re-resolved exactly","result":"PASS","evidence":"main=566903dcdde4fcc0aa6ab43a95bc36b947fafa15 tree=ac7e76b9100e5720d4fb0e07bbd1b775dffc0bbc"},
+    {"id":"WP0-Q02","assertion":"active physical-main ruleset re-resolved","result":"PASS","evidence":"ruleset 20229411 active; squash-only; zero bypass; required OVC merge readiness"},
+    {"id":"WP0-Q03","assertion":"proposal and governing source identities are hash-bound","result":"PASS","evidence":"6 SHA-256 identities frozen"},
+    {"id":"WP0-Q04","assertion":"primary historical replay cohort is exactly 20 unique PR identities","result":"PASS","evidence":"20 unique PR numbers frozen"},
+    {"id":"WP0-Q05","assertion":"ten canonical incident-derived regressions are enumerated","result":"PASS","evidence":"PRVIT-R01..PRVIT-R10"},
+    {"id":"WP0-Q06","assertion":"live-path deny list is explicit","result":"PASS","evidence":"workflow/check/ruleset/admission/main mutation denied"},
+    {"id":"WP0-Q07","assertion":"PR #1106 real-source authority is protected from audit consumption","result":"PASS","evidence":"replay-only; launch/consume/renew/broaden=false"},
+    {"id":"WP0-Q08","assertion":"no pre-existing PRVIT repository branch/programme was found before packet branch creation","result":"PASS","evidence":"PRVIT code search empty; prvit branch search empty"},
+    {"id":"WP0-Q09","assertion":"new PRs after proposal do not silently alter frozen cohort","result":"PASS","evidence":"#1110-#1112 recorded as additive-supplement-only"},
+    {"id":"WP0-Q10","assertion":"G0 RUN has not been interpreted as operator PASS","result":"PASS","evidence":"gate remains GATE_READY; explicit OVC APPROVE PRVIT-G0 required"}
+  ],
+  "warnings": [
+    "Repository activity continued after the proposal snapshot; primary cohort remains frozen by design.",
+    "No live CI/VIT/SIQ/GRT correction is authorised by this QA PASS."
+  ],
+  "blockers": ["PRVIT-G0_OPERATOR_DECISION_PENDING"],
+  "rollback": "Delete or abandon the unmerged audit branch if G0 is not approved; no live path or main restoration is required. Preserve audit evidence if superseded."
+}
