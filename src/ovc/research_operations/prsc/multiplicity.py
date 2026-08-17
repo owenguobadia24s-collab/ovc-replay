@@ -50,10 +50,11 @@ def build_hypothesis_family_registry(
     }
     if unknown_parents:
         raise PRSCContractError("PRSC_MULTIPLICITY_PARENT_UNKNOWN")
+    parent = None if parent_family_id is None else (_text(parent_family_id) or None)
     payload = {
         "schema": "ovc-prsc-scientific-hypothesis-family-registry/v0.1",
         "family_id": fid,
-        "parent_family_id": _text(parent_family_id) or None,
+        "parent_family_id": parent,
         "hypotheses": normalized,
         "declared_hypothesis_count": len(normalized),
         "family_shrink_after_results": False,

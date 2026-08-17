@@ -28,6 +28,7 @@ class PRSCMultiplicityTests(unittest.TestCase):
     def test_family_identity_and_exact_duplicate_collapse_preserve_provenance(self):
         family = self._family()
         self.assertEqual(family["declared_hypothesis_count"], 3)
+        self.assertIsNone(family["parent_family_id"])
         collapsed = collapse_exact_semantic_duplicates(family)
         self.assertEqual(collapsed["inference_count"], 2)
         b = next(row for row in collapsed["groups"] if row["semantic_key"] == "B")
