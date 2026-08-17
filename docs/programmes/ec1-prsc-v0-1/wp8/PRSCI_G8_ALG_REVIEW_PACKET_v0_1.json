@@ -1,0 +1,96 @@
+{
+  "schema": "ovc-prsci-independent-review-packet/v0.1",
+  "gate_id": "PRSCI-G8-ALG",
+  "gate_title": "Independent PRSC mechanical/scientific algebra conformance review",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP8",
+  "status": "BLOCKED_PREREQUISITE_REVIEWER_UNBOUND",
+  "baseline_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
+  "baseline_tree": "3d2cfbf1573b5401b695da8b48cc90291d96e8bf",
+  "candidate_commit": "1d01c9dba1abf9f923e5961ac505d95cd1efda86",
+  "candidate_tree": "84e200af717644ba77ae15d6613c997b29a14e74",
+  "completed_packets": ["PRSCI-WP6", "PRSCI-WP7", "PRSCI-WP8"],
+  "completed_auto_gates": ["PRSCI-G7", "PRSCI-G8"],
+  "current_authority": {
+    "f0_a": "HOLD",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "preregistration": "NOT_FROZEN",
+    "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "proposed_authority_delta": "NONE",
+  "review_scope": [
+    "method_pack_resolution",
+    "family_accounting",
+    "shared_resampling_dependence",
+    "representation_blind_fit_enforcement",
+    "boundary_blind_fit_enforcement",
+    "non_compensatory_algebra",
+    "candidate_review_adapters",
+    "protected_source_negative_reachability",
+    "reference_optimized_equivalence",
+    "capacity_and_review_budget_integrity"
+  ],
+  "acceptance_evidence": {
+    "av_prsc_fixture_catalogue": "15_OF_15_PASS_CANDIDATE",
+    "mechanical_conformance_bundle_status": "PASS_CANDIDATE",
+    "protected_source_reachability": "ZERO_SURVIVORS",
+    "production_optimized_decision_bearing_prsc_paths": 0,
+    "reference_equivalence_obligation": "NOT_APPLICABLE_NO_PRODUCTION_OPTIMIZED_DECISION_BEARING_PATH",
+    "mismatch_quarantine_guard": "AV-PRSC-15_PASS",
+    "capacity_measurement": "PASS_DETERMINISTIC_NON_SCIENTIFIC_SYNTHETIC",
+    "operational_budget": "MEASURED_CANDIDATE_FROZEN_NO_SCOPE_REDUCTION_OR_SAMPLING",
+    "review_budget": "MEASURED_CANDIDATE_FROZEN_NO_TOP_N",
+    "wp8_qa": "PASS_MECHANICAL_CANDIDATE_PENDING_INDEPENDENT_GATE",
+    "tests_workflow_32066040819": "PASS",
+    "tiered_workflow_32066040957": "PASS",
+    "vit_routing": "PASS",
+    "siq": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "required_inputs": {
+    "mechanical_conformance_bundle": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_MECHANICAL_CONFORMANCE_BUNDLE_v0_1.json",
+    "operational_budget": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_OPERATIONAL_BUDGET_v0_1.json",
+    "review_budget": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_REVIEW_BUDGET_v0_1.json",
+    "wp1_wp8_qa_evidence": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_QA_PACKET_v0_1.json",
+    "exact_final_candidate_commit_and_tree": "1d01c9dba1abf9f923e5961ac505d95cd1efda86@84e200af717644ba77ae15d6613c997b29a14e74",
+    "pip_vit_grt_lineage": "PR_1114_EXACT_FINAL_SUPPORT_HEAD_LINEAGE_TO_BE_RENEWED_AFTER_THIS_PACKET_COMMIT",
+    "independent_reviewer_binding": "registries/research_operations/ec1/prsc/PRSCI_INDEPENDENT_REVIEWER_BINDING_v0_1.json"
+  },
+  "reviewer_binding_observation": {
+    "binding_id": "PRSCI-INDEPENDENT-REVIEWER-BINDING-v0.1",
+    "status": "UNBOUND",
+    "required_independence": [
+      "REVIEWER_NOT_SOLE_PRSC_IMPLEMENTATION_AUTHOR",
+      "CONFLICT_DISCLOSURE_REQUIRED",
+      "NO_SCIENTIFIC_OR_OPERATOR_AUTHORITY_INHERITED_FROM_REVIEW_ROLE"
+    ],
+    "blocking_effect": "PRSCI-G8-ALG_CANNOT_PASS_WHILE_UNBOUND",
+    "binding_authority": "OPERATOR_OR_EXPLICIT_GOVERNING_DELEGATION_ONLY"
+  },
+  "warnings": [
+    "peak_memory_bytes in the WP8 capacity evidence is a deterministic canonical logical working-set proxy, not operating-system RSS; the independent reviewer must assess its adequacy as the non-scientific capacity metric."
+  ],
+  "unresolved_issues": [
+    "INDEPENDENT_REVIEWER_IDENTITY_AND_ROLE_NOT_LAWFULLY_BOUND"
+  ],
+  "changed_file_scope": "PRSCI-WP8 assurance/capacity implementation, adversarial handlers, deterministic capacity measurement, materialised evidence, tests, QA and gate packet only",
+  "external_artifact_hashes": [],
+  "rollback": "Forward-only quarantine/supersession of WP8 assurance/capacity surfaces; preserve WP1-WP7 and PRSCI G0-G8 evidence. No authority activation is required to roll back.",
+  "allowed_decisions_after_reviewer_binding_and_review": ["PASS", "BLOCK", "QUARANTINE"],
+  "decision": null,
+  "recommended_decision": null,
+  "blocking_reason": "Repository court record explicitly leaves the PRSCI-G8-ALG independent reviewer UNBOUND. The reviewer identity may not be invented from chat, prior design review or assistant inference, so independent review cannot lawfully execute or PASS until the operator or an explicit governing delegation binds an eligible reviewer.",
+  "smallest_lawful_resolution": "Bind an eligible independent implementation-stage reviewer identity and role in PRSCI_INDEPENDENT_REVIEWER_BINDING_v0_1 under operator or explicit governing delegation, including conflict disclosure. Then execute the independent review against the pinned WP8 candidate and this evidence packet.",
+  "exact_work_after_resolution": [
+    "renew the gate packet with the bound reviewer identity and conflict disclosure",
+    "independent reviewer examines all ten review-scope dimensions against the pinned candidate/evidence",
+    "reviewer records PASS, BLOCK or QUARANTINE with findings and unresolved issues",
+    "if PASS, materialise the gate decision and programme-state transition before any downstream preregistration step"
+  ],
+  "authority_effect": "NONE"
+}
