@@ -90,34 +90,70 @@ def test_operator_pass_materialises_only_bounded_scaleout_and_budget():
     assert budget["authority_effect"] == "NONE"
 
 
-def test_programme_pointer_preserves_pilot_exit_history_while_successor_advances():
+def test_programme_pointer_preserves_pilot_and_g7b_history_while_wp8_advances():
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
-    historical = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_11.json")
+    pilot_exit = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_11.json")
+    g7b = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_14.json")
+    wp8_qa = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_15.json")
+    g8 = load("registries/implementation/rccr_v0_1/RCCR_V0_1_STATE_v0_16.json")
+    decision = load("docs/releases/rccr-v0-1/rccri-wp8/RCCRI_G8_DELEGATED_DECISION.json")
 
-    # The immutable pilot-exit generation remains exactly approved and non-authoritative.
-    assert historical["status"] == "APPROVED"
-    assert historical["current_gate"] == "RCCRI-G-PILOT-EXIT"
-    assert historical["operator_pending"] == []
-    assert historical["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
-    assert historical["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
-    assert historical["real_source_ec1_authority"] == "NONE"
-    assert historical["path2_real_source_authority"] == "NOT_GRANTED"
-    assert historical["owner_capability_activation"] == "DENIED"
-    assert historical["validation"] == "LOCKED_UNCONSUMED"
-    assert historical["last_completed_packet"] == "RCCRI-WP7A"
-    assert historical["last_merge_commit"] == "bd2a5af60d2f26320e873e7cd72875397b85a9d7"
-    assert historical["next_packet"] == "RCCRI-WP6B"
+    # Immutable pilot-exit generation remains exactly approved and non-authoritative.
+    assert pilot_exit["status"] == "APPROVED"
+    assert pilot_exit["current_gate"] == "RCCRI-G-PILOT-EXIT"
+    assert pilot_exit["operator_pending"] == []
+    assert pilot_exit["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+    assert pilot_exit["authorized_follow_on_packets"] == ["RCCRI-WP6B", "RCCRI-WP7B", "RCCRI-WP8"]
+    assert pilot_exit["real_source_ec1_authority"] == "NONE"
+    assert pilot_exit["path2_real_source_authority"] == "NOT_GRANTED"
+    assert pilot_exit["owner_capability_activation"] == "DENIED"
+    assert pilot_exit["validation"] == "LOCKED_UNCONSUMED"
+    assert pilot_exit["last_completed_packet"] == "RCCRI-WP7A"
+    assert pilot_exit["last_merge_commit"] == "bd2a5af60d2f26320e873e7cd72875397b85a9d7"
+    assert pilot_exit["next_packet"] == "RCCRI-WP6B"
 
-    # The successor pointer advances through delegated G7B PASS while preserving all owner firewalls.
+    # G7B delegated PASS remains an immutable predecessor record after physical materialisation.
+    assert g7b["status"] == "APPROVED"
+    assert g7b["packet_id"] == "RCCRI-WP7B"
+    assert g7b["authority_delta"] == "NONE"
+    assert g7b["next_packet"] == "RCCRI-WP8_AFTER_G7B_INTEGRATION"
+    assert g7b["authority_effect"] == "NONE"
+
+    # WP8 QA remains an immutable predecessor generation even after delegated G8 approval.
+    assert wp8_qa["status"] == "QA_REVIEW"
+    assert wp8_qa["packet_id"] == "RCCRI-WP8"
+    assert wp8_qa["current_gate"] == "RCCRI-G8"
+    assert wp8_qa["gate_packet"] == "PENDING_RCCRI_G8"
+    assert wp8_qa["decision_record"] == "PENDING_RCCRI_G8"
+    assert wp8_qa["merge_commit"] is None
+    assert wp8_qa["next_packet"] is None
+    assert wp8_qa["authority_effect"] == "NONE"
+
+    # Delegated G8 may advance current state to APPROVED, but not falsely to terminal completion before merge.
+    assert g8["status"] == "APPROVED"
+    assert g8["packet_id"] == "RCCRI-WP8"
+    assert g8["authority_delta"] == "NONE"
+    assert g8["merge_commit"] is None
+    assert g8["next_packet"] is None
+    assert g8["authority_effect"] == "NONE"
+    assert decision["decision"] == "PASS"
+    assert decision["decision_source"] == "DELEGATED_PLAN_AUTHORITY"
+    assert decision["authority_delta"] == "NONE"
+    assert decision["merge_commit"] == "PENDING_PHYSICAL_MATERIALISATION"
+    assert decision["next_packet"] is None
+
+    # Current pointer advances through G8 approval while preserving all owner firewalls and pre-merge truth.
+    assert pointer["current_state"] == "RCCR_V0_1_STATE_v0_16.json"
     assert pointer["status"] == "APPROVED"
-    assert pointer["current_packet"] == "RCCRI-WP7B"
-    assert pointer["current_gate"] == "RCCRI-G7B"
+    assert pointer["current_packet"] == "RCCRI-WP8"
+    assert pointer["current_gate"] == "RCCRI-G8"
     assert pointer["gate_status"] == "PASS_DELEGATED_PENDING_FINAL_HEAD_AND_INTEGRATION"
-    assert pointer["last_completed_packet"] == "RCCRI-WP6B"
-    assert pointer["last_merge_commit"] == "34d08c26061f8548346bdec101e2af6f3138f9bc"
+    assert pointer["last_completed_packet"] == "RCCRI-WP7B"
+    assert pointer["last_merge_commit"] == "f8711a2fa0d643c87abb45a0985bf526c0f9915a"
     assert pointer["operator_pending"] == []
     assert pointer["scaleout_authority"] == "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
-    assert pointer["authorized_follow_on_packets"] == ["RCCRI-WP8"]
+    assert pointer["authorized_follow_on_packets"] == []
+    assert pointer["next_packet"] is None
     assert pointer["owner_authority_frontier"]["ec1"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["owner_authority_frontier"]["path2_external"]["state"] == "AUTHORISED_BOUNDED"
     assert pointer["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
