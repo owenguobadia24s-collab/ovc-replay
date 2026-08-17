@@ -1,0 +1,55 @@
+{
+  "schema": "ovc-c2p2-rs0-empirical-runtime-spooled-adapter-binding/v1",
+  "binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION",
+  "status": "CANDIDATE_PENDING_REFERENCE_AND_CAPACITY_QA",
+  "operator_authority_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_OPERATOR_DECISION_v0_1.json",
+  "frozen_runtime": {
+    "binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_BINDING_v0_1",
+    "logical_sha256": "cc25a6fbe2e9bff7ad58d992bb9e267d0afd4b92bd3c8c32c97fcd5c5a8fd84c",
+    "implementation_path": "src/ovc/opt_b/c2p_v0_2/rs0_empirical_runtime.py",
+    "implementation_sha256": "5e096f8693fae0f36f76d344388628dab7a450745a40dad08c71cc24cf656121",
+    "semantic_change": "NONE"
+  },
+  "adapter": {
+    "adapter_id": "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_v0_1",
+    "implementation_path": "src/ovc/opt_b/c2p_v0_2/rs0_empirical_runtime_streaming.py",
+    "implementation_sha256": "8d3de43abb1b6c80817ca24b6ef301a2bd39dbc3024cc31e92f382b4dfd6b648",
+    "materialisation_strategy": "SQLITE_DISK_SPOOLED_POPULATION_HISTORY_AND_MUTABLE_STATE",
+    "canonical_source_order": "MERGE_PRECANONICAL_SOURCE_STREAMS_BY_FIRST_VALID_TIME_THEN_SOURCE_RECORD_ID",
+    "checkpoint_cadence": 256
+  },
+  "candidate_generation": {
+    "generation_id": "C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3",
+    "generation_logical_sha256": "c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a",
+    "change": "NONE"
+  },
+  "qualification_requirements": [
+    "EXACT_REFERENCE_RESULT_EQUALITY_A_B_C",
+    "CANONICAL_MULTI_SOURCE_MERGE_EQUIVALENCE",
+    "DISCONTINUITY_EQUIVALENCE",
+    "DUPLICATE_AND_NONMONOTONIC_FAIL_CLOSED",
+    "FULL_CARDINALITY_1505072_SYNTHETIC_CAPACITY_PASS_WITHIN_FROZEN_MEMORY_AND_STORAGE"
+  ],
+  "capacity_envelope": {
+    "peak_memory_limit_bytes": 1160593408,
+    "external_storage_limit_bytes": 6411935744,
+    "concurrency_limit": 1,
+    "checkpoint_cadence_assertions": 256,
+    "memory_ceiling_change": "NONE"
+  },
+  "scientific_non_authority": {
+    "real_source_rerun": "NOT_AUTHORISED",
+    "selection": "NONE",
+    "activation": "NONE",
+    "sampling": "FORBIDDEN",
+    "reduced_precision": "FORBIDDEN",
+    "population_change": "FORBIDDEN",
+    "objectpack_change": "FORBIDDEN",
+    "predicate_or_threshold_change": "FORBIDDEN",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "rollback": "REMOVE_ADAPTER_FROM_FUTURE_BINDING_ONLY_PRESERVE_FAILED_RUN_AND_RECOVERY_EVIDENCE",
+  "logical_sha256": "d438e2856ee6d3647d724f5160daa999c594b8b4bbe1618ac75cfabd11d1772a"
+}

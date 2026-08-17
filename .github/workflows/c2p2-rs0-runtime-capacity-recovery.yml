@@ -1,0 +1,138 @@
+name: C2P2 RS0 runtime capacity recovery
+
+on:
+  push:
+    branches:
+      - recover/c2p2-rs0-runtime-capacity-20260817
+    paths:
+      - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_TRIGGER_v0_1.json
+
+concurrency:
+  group: c2p2-rs0-runtime-capacity-recovery
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  recovery_qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      PYTHONPATH: src:.
+      CAPACITY_WORK_DIR: /tmp/c2p2-rs0-capacity-recovery
+      CAPACITY_RECEIPT: /tmp/c2p2-rs0-capacity-recovery-receipt.json
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install repository and test dependencies
+        run: python -m pip install -e ".[test]" -r requirements-console-vnext.txt
+
+      - name: Verify bounded recovery authority and absence of rerun token
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          decision = json.loads(Path(
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_OPERATOR_DECISION_v0_1.json'
+          ).read_text())
+          trigger = json.loads(Path(
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_TRIGGER_v0_1.json'
+          ).read_text())
+          execution = json.loads(Path(
+            'registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_2.json'
+          ).read_text())
+
+          assert decision['decision'] == 'PASS'
+          assert decision['approved_authority']['real_source_semantic_rerun'] == 'NOT_AUTHORISED'
+          assert trigger['real_source_consumption'] == 'FORBIDDEN'
+          assert trigger['scientific_effect'] == 'NONE'
+          assert execution['run_authority_consumed'] is True
+          assert execution['run_count_remaining'] == 0
+          assert execution['next_packet'] == 'C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION'
+          PY
+          if grep -q "actions/download-artifact" .github/workflows/c2p2-rs0-runtime-capacity-recovery.yml; then
+            echo "RECOVERY_WORKFLOW_REAL_SOURCE_DOWNLOAD_FORBIDDEN" >&2
+            exit 31
+          fi
+
+      - name: Run exact reference-semantic adapter qualification
+        run: |
+          python -m pytest -q \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_empirical_runtime.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_capacity_recovery.py \
+            --tb=short
+
+      - name: Run repository-wide regression suite without VIT routing
+        run: python -m pytest tests -q --tb=short
+
+      - name: Run full-cardinality synthetic capacity proof
+        run: |
+          rm -rf "$CAPACITY_WORK_DIR"
+          mkdir -p "$CAPACITY_WORK_DIR"
+          python scripts/c2p2_rs0_runtime_capacity_recovery.py \
+            --rows 1505072 \
+            --memory-limit 1160593408 \
+            --storage-limit 6411935744 \
+            --work-dir "$CAPACITY_WORK_DIR" \
+            --output "$CAPACITY_RECEIPT"
+
+      - name: Materialise recovery QA receipt
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          receipt_path = Path(os.environ['CAPACITY_RECEIPT'])
+          receipt = json.loads(receipt_path.read_text())
+          assert receipt['status'] == 'PASS'
+          assert receipt['real_source_consumed'] is False
+          assert receipt['selection_state'] == 'UNSELECTED_RESEARCH_CANDIDATE'
+          assert receipt['activation_state'] == 'NONE'
+          target = Path(
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/'
+            'C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_MEASUREMENT_v0_1.json'
+          )
+          target.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+          sha = hashlib.sha256(target.read_bytes()).hexdigest()
+          qa = {
+            'schema': 'ovc-c2p2-rs0-runtime-capacity-recovery-qa/v1',
+            'programme_id': 'OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1',
+            'packet_id': 'C2P2-RS0-RUNTIME-CAPACITY-REMEDIATION',
+            'status': 'PASS',
+            'reference_semantics': 'PASS_EXACT_FIXTURE_EQUIVALENCE',
+            'repository_regression': 'PASS',
+            'capacity': 'PASS_FULL_CARDINALITY_SYNTHETIC',
+            'real_source_consumed': False,
+            'scientific_effect': 'NONE',
+            'measurement_sha256': sha,
+            'next_gate': 'C2P2-RS0-FRESH-GRUN-R2',
+            'authority_effect': 'NONE_NO_RERUN_TOKEN',
+          }
+          Path(
+            'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/'
+            'C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_QA_v0_1.json'
+          ).write_text(json.dumps(qa, indent=2, sort_keys=True) + '\n')
+          PY
+
+      - name: Commit deterministic recovery evidence to isolated branch
+        run: |
+          set -euo pipefail
+          git config user.name 'ovc-continuous-execution'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_MEASUREMENT_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUNTIME_CAPACITY_RECOVERY_QA_v0_1.json
+          git commit -m 'C2P2-RS0: record runtime capacity recovery qualification'
+          git push origin HEAD:${GITHUB_REF_NAME}
