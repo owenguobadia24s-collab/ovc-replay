@@ -30,6 +30,11 @@ SOURCE_ARTIFACT_DIGEST = "sha256:482781f5b7921d64219650ff4711027337dbfe677b22415
 EXPECTED_C2_ROWS = 1_505_072
 MEMORY_LIMIT = 1_160_593_408
 STORAGE_LIMIT = 6_411_935_744
+BINDING_PATH = Path(
+    "registries/opt_b/c2p/v0_2/research/"
+    "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2.json"
+)
+MODULE_PATH = Path("src/ovc/opt_b/c2p_v0_2/rs0_empirical_runtime_source_order.py")
 
 
 def sha256_file(path: Path) -> str:
@@ -38,6 +43,51 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def canonical_hash(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(
+            value,
+            ensure_ascii=False,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+def bind_current_adapter_bytes(repo_root: Path) -> dict[str, str]:
+    """Bind the pending recovery record to exact head bytes before qualification.
+
+    This is repository bookkeeping only. The qualified logical identity is still
+    created later by the workflow after tests/capacity/current-source preflight.
+    """
+
+    binding_path = repo_root / BINDING_PATH
+    module_path = repo_root / MODULE_PATH
+    binding = json.loads(binding_path.read_text(encoding="utf-8"))
+    if binding.get("status") != "IMPLEMENTED_PENDING_QUALIFICATION":
+        raise RuntimeError("RS0_SOURCE_ORDER_BINDING_NOT_PENDING_QUALIFICATION")
+    recovery = binding.get("source_order_recovery")
+    if not isinstance(recovery, dict):
+        raise RuntimeError("RS0_SOURCE_ORDER_RECOVERY_BINDING_MISSING")
+    if recovery.get("implementation_path") != str(MODULE_PATH):
+        raise RuntimeError("RS0_SOURCE_ORDER_IMPLEMENTATION_PATH_DRIFT")
+    implementation_sha = sha256_file(module_path)
+    recovery["implementation_sha256"] = implementation_sha
+    binding["source_order_recovery"] = recovery
+    binding.pop("logical_sha256", None)
+    prequalification_logical = canonical_hash(binding)
+    binding["logical_sha256"] = prequalification_logical
+    binding_path.write_text(
+        json.dumps(binding, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "implementation_sha256": implementation_sha,
+        "prequalification_binding_logical_sha256": prequalification_logical,
+    }
 
 
 def peak_rss_bytes() -> int:
@@ -222,6 +272,7 @@ def main() -> int:
 
     resource.setrlimit(resource.RLIMIT_AS, (MEMORY_LIMIT, MEMORY_LIMIT))
     repo_root = args.repo_root.resolve()
+    byte_binding = bind_current_adapter_bytes(repo_root)
     source_root, locator_path, locator = locate_source_root(args.source_root.resolve())
     sources = validate_locator(locator, source_root)
     c2_sources = [source for source in sources if source.role == "C2_VNEXT"]
@@ -314,6 +365,8 @@ def main() -> int:
         "packet_id": "C2P2-RS0-SOURCE-ORDER-RECOVERY",
         "status": "PASS",
         "source_order_adapter_id": SOURCE_ORDER_ADAPTER_ID,
+        "source_order_adapter_implementation_sha256": byte_binding["implementation_sha256"],
+        "source_order_binding_prequalification_logical_sha256": byte_binding["prequalification_binding_logical_sha256"],
         "source_materialisation_id": SOURCE_MATERIALISATION_ID,
         "source_materialisation_logical_sha256": SOURCE_MATERIALISATION_SHA,
         "source_artifact_digest": SOURCE_ARTIFACT_DIGEST,
