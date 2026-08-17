@@ -1,11 +1,15 @@
 {
-  "acceptance_conditions": [
-    "Preserve immutable final candidate generation v3 and all run/partial evidence.",
-    "Do not select or activate an ObjectPack from technical execution alone.",
-    "Keep Validation locked and EC1/F0-A unchanged."
-  ],
+  "schema": "ovc-c2p2-rs0-post-run-gate-packet/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN",
+  "gate_id": "C2P2-RS0-RUN-RECOVERY",
+  "gate_classification": "OPERATOR_REQUIRED",
+  "status": "GATE_READY",
+  "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
   "baseline_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
   "candidate_commit": "b199ed50806b139fded0c1929868525dc60b06dd",
+  "evidence_commit": "193fb6741fd4d33280cc5d78ca7a79a78bc2cd86",
+  "operator_override_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_NOVIT_OPERATOR_OVERRIDE_v0_1.json",
   "completed_packets": [
     "C2P2-RS0-CURRENT-SOURCE-MATERIALISATION",
     "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT",
@@ -13,36 +17,45 @@
     "C2P2-RS0-REAL-SOURCE-SHADOW-RUN"
   ],
   "current_authority": "ONE_RUN_CONSUMED_NO_SELECTION_NO_ACTIVATION",
-  "exact_work_after_approval": "Authorise a bounded capacity/runtime remediation generation, re-prove reference semantics and capacity, then require a fresh one-run GRUN before any rerun.",
-  "external_artifacts": {
-    "bound_drive_folder_id": "1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv",
-    "github_actions_run_id": "32066194453",
-    "run_result_sha256": "21882e0094daddf520fc735b3589cefa2f36a1e1d7cb217b6f021347e581fa76"
-  },
-  "gate_classification": "OPERATOR_REQUIRED",
-  "gate_id": "C2P2-RS0-RUN-RECOVERY",
-  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN",
-  "plan_id": "C2P2-RS0-PREPARATION-PLAN-v0.1",
-  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
   "proposed_delta": "NEW_RECOVERY_OR_RERUN_AUTHORITY_REQUIRED; CURRENT_SINGLE_USE_TOKEN_CONSUMED",
+  "acceptance_conditions": [
+    "Preserve immutable final candidate generation v3 and all run/partial evidence.",
+    "Do not select or activate an ObjectPack from technical execution alone.",
+    "Keep Validation locked and EC1/F0-A unchanged."
+  ],
+  "tests": [
+    "EXACT_REPOSITORY_BINDING_VALIDATION_PASS",
+    "TARGETED_EXECUTION_HARNESS_TESTS_PASS",
+    "LIVE_MAIN_BOUND_CURRENTNESS_RECHECK_PASS",
+    "EXACT_AUTHORISED_SOURCE_ARTIFACT_PREFLIGHT_PASS",
+    "FROZEN_CAPACITY_ENVELOPE_FAIL_CLOSED_ON_CANDIDATE_A"
+  ],
   "qa": {
     "recommendation": "BLOCK_AT_RUN_RECOVERY_GATE",
     "run_status": "BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED",
-    "single_use_consumed": true
+    "single_use_consumed": true,
+    "vit_used": false,
+    "operator_no_vit_override_applied": true
   },
-  "recommended_decision": "BLOCK",
-  "rollback": "FORWARD_ONLY; preserve authority consumption and all run/partial evidence",
-  "schema": "ovc-c2p2-rs0-post-run-gate-packet/v1",
-  "status": "GATE_READY",
-  "tests": [
-    "TARGETED_EXECUTION_HARNESS_TESTS_REQUIRED",
-    "REPOSITORY_PR_ASSURANCE_REQUIRED"
+  "warnings": [
+    "BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED",
+    "CANDIDATE_A_PEAK_RSS_1141080064_OF_1160593408_BYTES_BEFORE_MEMORYERROR"
   ],
   "unresolved_issues": [
     "The frozen runtime/capacity envelope did not complete the authorised comparative run.",
+    "Candidate A reached the frozen memory boundary and failed closed with MemoryError before producing a candidate result.",
+    "Candidates B and C were not run after the first candidate failure.",
     "A rerun is forbidden until a new operator-approved authority generation exists."
   ],
-  "warnings": [
-    "BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED"
-  ]
+  "external_artifacts": {
+    "bound_drive_folder_id": "1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv",
+    "durable_drive_file_id": "1i-KOSpNramKXNYHqp2gp6THYBzgC9bzi",
+    "github_actions_run_id": "32066194453",
+    "github_actions_artifact_id": 9299993178,
+    "artifact_sha256": "a5e2ef613c75445981b20ce0f4735c791c62d98e368d502e3da2bf698104801b",
+    "run_result_sha256": "21882e0094daddf520fc735b3589cefa2f36a1e1d7cb217b6f021347e581fa76"
+  },
+  "rollback": "FORWARD_ONLY; preserve authority consumption and all run/partial evidence",
+  "recommended_decision": "BLOCK",
+  "exact_work_after_approval": "Authorise a bounded capacity/runtime remediation generation, re-prove reference semantics and capacity, then require a fresh one-run GRUN before any rerun."
 }
