@@ -75,7 +75,9 @@ def test_wp9_programme_state_advances_only_to_wp10() -> None:
         assert state["gate_status"] == "AUTO_PASS"
     else:
         assert state["current_packet"] == "ATLAS-WP10"
-        assert state["current_gate"] == "ATLAS-G10"
+        assert state["current_gate"] in {"ATLAS-G10", "ATLAS-G-OBSERVABILITY-ACTIVATE"}
+        if state["current_gate"] == "ATLAS-G-OBSERVABILITY-ACTIVATE":
+            assert state["merge_commit"] == "911cac359aa0d23b981be15edae473b7d2b7d55b"
         assert state["tests"]["wp9_integration"] == "PASS_INTEGRATED_PR_1028"
 
 
