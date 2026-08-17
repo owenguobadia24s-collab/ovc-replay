@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-c2p2-rs0-real-source-shadow-run-authority/v2",
+  "authority_id": "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.2",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "gate_id": "C2P2-RS0-FRESH-GRUN",
+  "operator_decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_OPERATOR_DECISION_v0_1.json",
+  "supersedes_for_execution": "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_1.json",
+  "state": "AUTHORISED_NOT_STARTED",
+  "execution_count_limit": 1,
+  "execution_count_consumed": 0,
+  "run_count_remaining": 1,
+  "run_mode": "PREREGISTERED_COMPARATIVE_A_B_C_SHADOW_ONLY",
+  "population": {
+    "instrument": "GBPUSD",
+    "sides": ["BID", "ASK"],
+    "clocks": ["15M", "2H_A_L"],
+    "interval": "[2021-01-01T00:00:00Z,2024-01-01T00:00:00Z)",
+    "research_role": "DISCOVERY_SHADOW_ONLY",
+    "sampling": "FORBIDDEN"
+  },
+  "candidate_generation": {
+    "generation_id": "C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3",
+    "generation_logical_sha256": "c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a",
+    "candidate_logical_hashes": {
+      "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3": "a8cb003521c62129044a4d62cb9a4d5a967cd3ef9d933fb1090ac4dad0843102",
+      "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3": "a91f50c12438c4d5263d36b48e40acc0a5e146b474307721a4108ac2398a752e",
+      "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3": "29f8ac9a5844b425901fda90299f911a48a85422a390771753ffd5b894b1c52c"
+    },
+    "selection_state": "COMPARATIVE_SET_ONLY_NO_WINNER",
+    "active_object_pack_id": null
+  },
+  "runtime_binding": {
+    "binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_BINDING_v0_1",
+    "logical_sha256": "cc25a6fbe2e9bff7ad58d992bb9e267d0afd4b92bd3c8c32c97fcd5c5a8fd84c",
+    "implementation_sha256": "5e096f8693fae0f36f76d344388628dab7a450745a40dad08c71cc24cf656121"
+  },
+  "source_authority_snapshot": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_GRUN_SOURCE_AUTHORITY_SNAPSHOT_v0_1.json",
+  "source_materialisation": {
+    "materialisation_id": "C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1",
+    "logical_sha256": "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b",
+    "locator_logical_sha256": "c56c756f706da9554878232487bb8887f7b52bcf1d57890fb09d51acf9486977",
+    "artifact_digest": "sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e"
+  },
+  "capacity": {
+    "peak_memory_limit_bytes": 1160593408,
+    "external_storage_limit_bytes": 6411935744,
+    "concurrency_limit": 1,
+    "checkpoint_cadence_assertions": 256,
+    "capacity_exceeded": "FAIL_CLOSED_RETURN_TO_OPERATOR",
+    "reduced_precision": "FORBIDDEN",
+    "population_change": "FORBIDDEN",
+    "objectpack_change": "FORBIDDEN"
+  },
+  "external_artifact_root": {
+    "folder_id": "1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv",
+    "title": "c2p2-rs0-shadow-evidence-v0-1",
+    "binding_ref": "registries/implementation/c2p_v0_2/C2P2_RS0_EXTERNAL_ARTIFACT_ROOT_BINDING_v0_1.json"
+  },
+  "non_transitive_denials": {
+    "objectpack_selection": "NONE",
+    "c2p_activation": "NONE",
+    "ec1_candidate_defining_use": "FORBIDDEN",
+    "validation": "LOCKED_UNCONSUMED",
+    "canonical_publication": "NONE",
+    "probability_risk_exposure_trading_execution_agent_write": "NONE"
+  },
+  "f0_a": "HOLD_NO_JOINT_LAUNCH",
+  "launch_currentness_rule": "ANY_BOUND_SOURCE_AUTHORITY_CANDIDATE_POPULATION_CUTOFF_ENVIRONMENT_CAPACITY_OR_ARTIFACT_ROOT_CHANGE_INVALIDATES_THIS_GENERATION_BEFORE_EXECUTION",
+  "completion_boundary": "STOP_AT_C2P2_RS0_SCIENTIFIC_REVIEW_SELECTION_BOUNDARY_NO_AUTOMATIC_PROMOTION",
+  "rollback": "FORWARD_SUPERSESSION_ONLY_PRESERVE_DECISION_AND_ALL_RUN_OR_PARTIAL_EVIDENCE"
+}
