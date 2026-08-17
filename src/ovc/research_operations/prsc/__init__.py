@@ -27,6 +27,21 @@ from .reference import (
     hac_ordered_secondary,
     validate_reference_preservation,
 )
+from .representation import (
+    build_candidate_invariant_core,
+    build_invariance_contract,
+    build_population_crosswalk,
+    build_representation_challenge_pack,
+    directional_correspondence,
+)
+from .temporal import (
+    build_context_challenge_pack,
+    build_temporal_challenge_pack,
+    build_temporal_context_stability_matrix,
+    build_temporal_support_profile,
+    leave_one_block_out_support,
+    within_discovery_forward_support,
+)
 
 __all__ = [
     "CHALLENGE_DIMENSIONS", "PRSCContractError", "adapt_ec1_record",
@@ -35,5 +50,10 @@ __all__ = [
     "build_inference_block_manifest", "leave_one_component_out",
     "build_negative_space_controls", "build_reference_method_pack",
     "dependency_preserving_block_resample", "hac_ordered_secondary",
-    "validate_reference_preservation",
+    "validate_reference_preservation", "build_candidate_invariant_core",
+    "build_invariance_contract", "build_population_crosswalk",
+    "build_representation_challenge_pack", "directional_correspondence",
+    "build_context_challenge_pack", "build_temporal_challenge_pack",
+    "build_temporal_context_stability_matrix", "build_temporal_support_profile",
+    "leave_one_block_out_support", "within_discovery_forward_support",
 ]
