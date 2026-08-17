@@ -5,17 +5,23 @@
   "programme_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
   "plan_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-IMPLEMENTATION-PLAN-v0.1",
   "plan_version": "0.1",
-  "status": "GATE_READY",
+  "status": "APPROVED",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "decision_time": "2026-08-18T00:28:00+01:00",
+  "decision_record": "docs/programmes/prvitr-v0-1/wp7/PRVITR_G_LIVE_SWITCH_OPERATOR_DECISION_v0_1.json",
+  "authority_manifest": "docs/programmes/prvitr-v0-1/wp7/PRVITR_G_LIVE_SWITCH_AUTHORITY_MANIFEST_v0_1.json",
+  "authority_manifest_id": "498dd9d0869e8bd66a672eace1525ea78d870a8ef8439ea876fa7e71cbdb8b40",
   "baseline_commit": "18799275f25d11392343bf93e35c7b916fc02c92",
   "shadow_merge_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
-  "completed_packets": ["PRVITR-WP0","PRVITR-WP1","PRVITR-WP2","PRVITR-WP3","PRVITR-WP4","PRVITR-WP5","PRVITR-WP6"],
+  "completed_packets": ["PRVITR-WP0","PRVITR-WP1","PRVITR-WP2","PRVITR-WP3","PRVITR-WP4","PRVITR-WP5","PRVITR-WP6","PRVITR-WP7"],
   "current_authority": {
-    "live_admission_path": "EXISTING_PR_VIT_SIQ_GRT_ROUTE_AUTHORITATIVE",
+    "live_admission_path": "EXISTING_PR_VIT_SIQ_GRT_ROUTE_AUTHORITATIVE_UNTIL_QUALIFIED_SWITCH_MERGE",
     "required_status_context": "OVC merge readiness",
     "physical_vit_control": "UNCHANGED",
     "pr1106_effect": "NONE"
   },
-  "proposed_authority_delta": {
+  "approved_authority_delta": {
     "class": "OPERATOR_RESERVED_LIVE_ADMISSION_SWITCH",
     "delta": "AUTHORISE_A_BOUNDED_LIVE_SWITCH_PACKET_TO_MAKE_THE_QUALIFIED_PRVITR_ADMISSION_MODEL_DECISION_BEARING_INSIDE_THE_EXISTING_PR_CI_AND_SERIALIZED_PHYSICAL_GATEWAY",
     "retained_limits": [
@@ -58,26 +64,22 @@
     "merge_commit": "4cc3be16e2298be4c01d8b44c5839aae6361cfc2",
     "unsafe_shadow_allows": 0
   },
+  "gate_record_requalification": {
+    "pr": 1120,
+    "pre_decision_head": "d6d4a3fa8948ae1b1c0890b584dd30659843214e",
+    "tests_run_id": 32079683124,
+    "tiered_run_id": 32079683101,
+    "result": "PASS"
+  },
   "qa": {
     "recommendation": "PASS",
     "warnings": [
-      "The live workflow wiring itself is intentionally not part of the already-merged shadow packet and must be exact-head qualified after operator approval.",
+      "Live workflow wiring is authorised only as the bounded implementation described here and remains subject to exact-head qualification before merge.",
       "The switch must preserve the current required status context and existing serialized physical integration gateway until separately authorised otherwise."
     ],
     "unresolved_blocking_issues": []
   },
-  "changed_files_in_shadow_packet": [
-    "contracts/development/PRVITR_SHADOW_REMEDIATION_CONTRACT_v0_1.md",
-    "docs/programmes/prvitr-v0-1/*",
-    "records/development/prvitr/PRVITR_PROGRAMME_STATE_v0_1.json",
-    "schemas/development/prvitr/*",
-    "src/ovc/development/prvit_remediation.py",
-    "tests/development/test_prvitr_shadow_remediation.py"
-  ],
-  "external_artifacts": [],
-  "rollback": "Fail closed to the currently authoritative admission route until the live-switch candidate is fully qualified. If a later live switch causes a reproducible safety or integrity regression, forward-revert the bounded switch wiring to the prior route; preserve all decision/evidence generations.",
-  "recommended_decision": "PASS",
-  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "rollback": "Fail closed to the currently authoritative admission route until the live-switch candidate is fully qualified. If the qualified live switch later causes a reproducible safety or integrity regression, forward-revert the bounded switch wiring to the prior route; preserve all decision/evidence generations.",
   "exact_work_after_pass": [
     "Create a bounded live-switch implementation branch from latest lawful main.",
     "Wire the existing PR CI so PIP/A0 assurance precedes placement-specific VIT validation.",
@@ -89,6 +91,6 @@
     "Run targeted, repository-wide, exact-head, GRT, SIQ and merge-readiness assurance on the live-switch candidate.",
     "If every acceptance condition passes, integrate the bounded switch packet through the existing required context and serialized gateway; otherwise fail closed and preserve the current route."
   ],
-  "decision_effect_if_pass": "AUTHORISE_THE_BOUNDED_LIVE_SWITCH_IMPLEMENTATION_AND_QUALIFICATION_DESCRIBED_ABOVE; NO_OTHER_AUTHORITY",
-  "decision_effect_if_defer_or_block": "KEEP_EXISTING_LIVE_ADMISSION_ROUTE_AUTHORITATIVE; PRESERVE_SHADOW_REMEDIATION_AND_EVIDENCE"
+  "decision_effect": "AUTHORISE_THE_BOUNDED_LIVE_SWITCH_IMPLEMENTATION_AND_QUALIFICATION_DESCRIBED_ABOVE; NO_OTHER_AUTHORITY",
+  "next_packet": "PRVITR-LIVE-SWITCH-IMPLEMENTATION"
 }
