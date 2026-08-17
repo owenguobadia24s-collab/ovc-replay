@@ -1,0 +1,22 @@
+{
+  "schema":"ovc-prvitr-implementation-plan/v0.1",
+  "plan_id":"OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-IMPLEMENTATION-PLAN-v0.1",
+  "programme_id":"OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
+  "status":"OPERATOR_AUTHORISED_BY_PRVIT_G_CUTOVER_READINESS_PASS",
+  "authority_source":{"gate":"PRVIT-G-CUTOVER-READINESS","decision":"PASS","decision_branch":"audit/prvit-wp8-cutover-readiness-20260817","decision_record":"docs/programmes/prvit-v0-1/wp8/PRVIT_G_CUTOVER_READINESS_OPERATOR_DECISION_v0_1.json"},
+  "baseline":{"commit":"18799275f25d11392343bf93e35c7b916fc02c92","tree":"3d2cfbf1573b5401b695da8b48cc90291d96e8bf"},
+  "execution_mode":"DUAL_READ_SHADOW_REMEDIATION",
+  "live_authoritative_path":"UNCHANGED_UNTIL_PRVITR_G_LIVE_SWITCH",
+  "packets":[
+    {"id":"PRVITR-WP0","gate":"PRVITR-G0","class":"AUTO_RATIFIABLE","scope":"materialise authority, plan, current source bindings and hard denies"},
+    {"id":"PRVITR-WP1","gate":"PRVITR-G1","class":"AUTO_RATIFIABLE","scope":"typed immutable assurance generation and admission receipt core"},
+    {"id":"PRVITR-WP2","gate":"PRVITR-G2","class":"AUTO_RATIFIABLE","scope":"immutable VIT lineage pointer/store adapter"},
+    {"id":"PRVITR-WP3","gate":"PRVITR-G3","class":"AUTO_RATIFIABLE","scope":"placement recompute/selective renewal and dispatch idempotency"},
+    {"id":"PRVITR-WP4","gate":"PRVITR-G4","class":"AUTO_RATIFIABLE","scope":"Git-native ancestry and non-churning post-materialisation receipt"},
+    {"id":"PRVITR-WP5","gate":"PRVITR-G5","class":"AUTO_RATIFIABLE","scope":"dual-read shadow comparator and current-PR replay"},
+    {"id":"PRVITR-WP6","gate":"PRVITR-G6","class":"AUTO_RATIFIABLE","scope":"ten regressions, frozen 20-PR replay, live-shadow equivalence and QA"},
+    {"id":"PRVITR-WP7","gate":"PRVITR-G-LIVE-SWITCH","class":"OPERATOR_REQUIRED","scope":"switch-readiness consolidated decision packet"}
+  ],
+  "hard_denies":["NO_REQUIRED_CHECK_OR_RULESET_CHANGE","NO_FIRST_SWITCH_OF_LIVE_ADMISSION_VERIFIER","NO_PHYSICAL_VIT_CONTROL_BROADENING","NO_FORCE_PUSH_OR_HISTORY_REWRITE","NO_DESTRUCTIVE_CLEANUP","NO_SCIENTIFIC_MODEL_SELECTOR_SEMANTIC_AUTHORITY","NO_VALIDATION_PUBLICATION_PROBABILITY_RISK_EXPOSURE_EXECUTION_AGENT_WRITE","NO_PR1106_AUTHORITY_CONSUMPTION"],
+  "next_boundary":"PRVITR-G-LIVE-SWITCH"
+}
