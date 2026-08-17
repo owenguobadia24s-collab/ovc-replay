@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSCReviewBudget v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "budget_id", "source", "review_limits", "top_n_permitted", "authority_effect"],
+  "properties": {
+    "schema_version": {"const": "prsc_review_budget/v0.1"},
+    "budget_id": {"type": "string", "minLength": 1},
+    "source": {"const": "MEASURED_NON_SCIENTIFIC_SYNTHETIC_EVIDENCE"},
+    "review_limits": {"type": "object", "additionalProperties": {"type": ["integer", "number", "string"]}},
+    "top_n_permitted": {"const": false},
+    "deterministic_batching_required": {"const": true},
+    "authority_effect": {"const": "NONE"}
+  }
+}

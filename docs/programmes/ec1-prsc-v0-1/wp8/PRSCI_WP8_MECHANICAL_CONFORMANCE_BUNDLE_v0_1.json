@@ -1,0 +1,49 @@
+{
+  "schema_version": "prsc_mechanical_conformance_bundle/v0.1",
+  "bundle_id": "PRSCI-WP8-MECHANICAL-CONFORMANCE-CANDIDATE-v0.1",
+  "fixture_results": [
+    {"fixture_id":"AV-PRSC-01","status":"PASS","expected_behavior":"NO_200_INDEPENDENT_EVIDENCE_CLAIM","observed":{"owner_component_count":2,"independence_claim":"NOT_ESTABLISHED"},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-02","status":"PASS","expected_behavior":"NO_INDEPENDENCE_INFERENCE_FROM_GRAPH_ABSENCE","observed":{"no_edge_semantics":"INDEPENDENCE_UNKNOWN","independence_claim":"NOT_ESTABLISHED"},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-03","status":"PASS","expected_behavior":"WEAK_NULL_NOT_SOLE_FREEZE_FACING_REFERENCE","observed":{"primary_method":"DEPENDENCY_PRESERVING_BLOCK_RESAMPLE","weak_null_rejected_as_primary":true},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-04","status":"PASS","expected_behavior":"NO_POST_HOC_CHALLENGER_PROMOTION","observed":{"primary_method":"DEPENDENCY_PRESERVING_BLOCK_RESAMPLE","post_hoc_challenger_promotion_rejected":true},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-05","status":"PASS","expected_behavior":"INTERPRET_THROUGH_INVARIANCE_CONTRACT","observed":{"invariant_core":["shape"],"shell":["magnitude"],"contract_non_invariant":["magnitude"]},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-06","status":"PASS","expected_behavior":"CONDITIONAL_STABILITY_WITHOUT_CAUSAL_CLAIM","observed":{"context_role":"STRATIFIER_ONLY","causal_claim":false,"structural_drift_inferred":false},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-07","status":"PASS","expected_behavior":"BLOCK_BLIND_FIT_INTEGRITY","observed":{"owner_label_read_attempt_blocked":true},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-08","status":"PASS","expected_behavior":"NO_TRIPLE_CONFIRMATION","observed":{"matched_count":1,"unmatched_canonical_count":2,"multiple_confirmation_claim":false},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-09","status":"PASS","expected_behavior":"BLOCK_POST_HOC_FAMILY_REDEFINITION","observed":{"declared_count":300,"attempted_count":12,"redefinition_blocked":true},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-10","status":"PASS","expected_behavior":"REVIEW_CAPACITY_EXCEEDED_HIDDEN_TOP_N_BLOCK","observed":{"declared_count":400,"reviewed_count":50,"review_status":"REVIEW_CAPACITY_EXCEEDED","hidden_top_n_allowed":false},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-11","status":"PASS","expected_behavior":"EXPOSURE_MARKED_IRREVERSIBLE","observed":{"contaminated":true,"rollback_blocked":true},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-12","status":"PASS","expected_behavior":"FATAL_CONTRADICTION_WINS_NO_COMPENSATION","observed":{"disposition":"REJECT_CURRENT_CLAIM","precedence":"REQUIRED_FATAL","score":null,"majority_vote":null},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-13","status":"PASS","expected_behavior":"CONFIRMATORY_STATUS_DENIED","observed":{"e1_decision_bearing_inspected":true,"preregistration_frozen":false,"confirmatory_status":"DENIED"},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-14","status":"PASS","expected_behavior":"AUTHORITY_RESOLUTION_BLOCK","observed":{"greal_present":true,"explicit_prsc_append_authority":false,"authority_resolution":"BLOCK"},"authority_effect":"NONE"},
+    {"fixture_id":"AV-PRSC-15","status":"PASS","expected_behavior":"OPTIMIZED_PATH_QUARANTINED_REFERENCE_REMAINS_ORACLE","observed":{"mismatch_detected":true,"optimized_path":"QUARANTINED","reference_path":"ORACLE"},"authority_effect":"NONE"}
+  ],
+  "equivalence_results": [],
+  "capacity_results": [
+    {"tier_id":"TINY","candidate_count":8,"surrogate_count":16,"representation_count":2,"time_partition_count":2,"context_partition_count":2,"boundary_count":8,"artifact_bytes":2989,"peak_memory_bytes":298921984,"review_units":64,"status":"PASS"},
+    {"tier_id":"SMALL","candidate_count":32,"surrogate_count":64,"representation_count":4,"time_partition_count":4,"context_partition_count":4,"boundary_count":32,"artifact_bytes":44069,"peak_memory_bytes":298921984,"review_units":704,"status":"PASS"},
+    {"tier_id":"MEDIUM","candidate_count":128,"surrogate_count":256,"representation_count":8,"time_partition_count":8,"context_partition_count":8,"boundary_count":128,"artifact_bytes":713349,"peak_memory_bytes":298921984,"review_units":9472,"status":"PASS"}
+  ],
+  "protected_source_reachability": "ZERO_SURVIVORS",
+  "status": "PASS_CANDIDATE",
+  "authority_effect": "NONE",
+  "operational_budget": {
+    "schema_version": "prsc_operational_budget/v0.1",
+    "budget_id": "PRSCI-WP8-MEASURED-OPERATIONAL-BUDGET-v0.1",
+    "source": "MEASURED_NON_SCIENTIFIC_SYNTHETIC_EVIDENCE",
+    "synthetic_tiers": ["TINY","SMALL","MEDIUM"],
+    "limits": {"candidate_count":160,"surrogate_count":320,"artifact_bytes":891686,"peak_memory_bytes":373652480,"review_units":11840},
+    "scope_reduction_permitted": false,
+    "sampling_permitted": false,
+    "authority_effect": "NONE"
+  },
+  "review_budget": {
+    "schema_version": "prsc_review_budget/v0.1",
+    "budget_id": "PRSCI-WP8-MEASURED-REVIEW-BUDGET-v0.1",
+    "source": "MEASURED_NON_SCIENTIFIC_SYNTHETIC_EVIDENCE",
+    "review_limits": {"review_units":11840,"candidate_count":160},
+    "top_n_permitted": false,
+    "deterministic_batching_required": true,
+    "authority_effect": "NONE"
+  }
+}

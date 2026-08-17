@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-prsci-implementation-packet/v0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP8",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_sha256": "24ed2465ce3908c461bb1494f9bb86118bfe3c38d48a156c2ec68ef1560a89da",
+  "baseline_main": "18799275f25d11392343bf93e35c7b916fc02c92",
+  "baseline_tree": "3d2cfbf1573b5401b695da8b48cc90291d96e8bf",
+  "status": "IMPLEMENTED",
+  "scope_completed": [
+    "ASSURANCE_CAPACITY_CONTRACT_AND_SCHEMAS",
+    "EXACT_AV_PRSC_01_TO_15_EXECUTION_SURFACE",
+    "FINAL_WP1_WP7_ADVERSARIAL_HANDLERS",
+    "REFERENCE_OPTIMIZED_EQUIVALENCE_HARNESS",
+    "PRODUCTION_OPTIMIZED_PATH_CENSUS",
+    "PINNED_ACTUAL_PROCESS_PEAK_RSS_SYNTHETIC_CAPACITY_MEASUREMENT",
+    "MEASURED_OPERATIONAL_BUDGET_FREEZE_CANDIDATE",
+    "MEASURED_REVIEW_BUDGET_FREEZE_CANDIDATE",
+    "PROTECTED_SOURCE_REACHABILITY_ZERO_SURVIVOR_BINDING",
+    "MECHANICAL_CONFORMANCE_BUNDLE_CANDIDATE"
+  ],
+  "evidence": {
+    "adversarial_results": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json",
+    "capacity_evidence": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_CAPACITY_EVIDENCE_v0_1.json",
+    "reference_equivalence_evidence": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_REFERENCE_EQUIVALENCE_EVIDENCE_v0_1.json",
+    "mechanical_conformance_bundle": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_MECHANICAL_CONFORMANCE_BUNDLE_v0_1.json",
+    "operational_budget": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_OPERATIONAL_BUDGET_v0_1.json",
+    "review_budget": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_REVIEW_BUDGET_v0_1.json"
+  },
+  "fixture_contract": {
+    "registered": ["AV-PRSC-01", "AV-PRSC-02", "AV-PRSC-03", "AV-PRSC-04", "AV-PRSC-05", "AV-PRSC-06", "AV-PRSC-07", "AV-PRSC-08", "AV-PRSC-09", "AV-PRSC-10", "AV-PRSC-11", "AV-PRSC-12", "AV-PRSC-13", "AV-PRSC-14", "AV-PRSC-15"],
+    "silent_omission_forbidden": true,
+    "candidate_status": "PASS_CANDIDATE"
+  },
+  "capacity_contract": {
+    "measurement_method": "LINUX_RUSAGE_RU_MAXRSS_FRESH_SUBPROCESS",
+    "peak_memory_quantity": "PROCESS_PEAK_RESIDENT_SET_SIZE_BYTES",
+    "measurement_scope": "FRESH_PYTHON_PROCESS_FROM_INTERPRETER_START_THROUGH_SYNTHETIC_WORKLOAD_COMPLETION",
+    "pinned_environment": "GITHUB_ACTIONS_UBUNTU_24_04_PYTHON_3_11_15",
+    "source_workflow_run_id": 32075002575,
+    "source_commit": "3b4c8a1fb4be98d1b13819a1a7c9f2b1389cfcb7",
+    "tiers": ["TINY", "SMALL", "MEDIUM"],
+    "scope_reduction_permitted": false,
+    "sampling_permitted": false,
+    "top_n_permitted": false
+  },
+  "equivalence_contract": {
+    "production_optimized_decision_bearing_families_detected": [],
+    "obligation": "NOT_APPLICABLE_NO_PRODUCTION_OPTIMIZED_DECISION_BEARING_PATH",
+    "mismatch_quarantine_guard": "AV-PRSC-15"
+  },
+  "protected_source_reachability": "ZERO_SURVIVORS",
+  "authority_delta": "NONE",
+  "preserved_constraints": {
+    "f0_a": "HOLD",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE",
+    "preregistration": "NOT_FROZEN",
+    "publication": "NONE",
+    "probability_risk_exposure_execution": "NONE"
+  },
+  "next_required_evidence": ["EXACT_HEAD_REPOSITORY_QA", "FINAL_PIP_VIT_GRT_LINEAGE", "PRSCI-G8-ALG_RERUN"],
+  "rollback": "Forward-only correction/quarantine/supersession of WP8 assurance/capacity surfaces; preserve WP1-WP7, PRSCI G0-G8 and the original PRSCI-G8-ALG BLOCK evidence."
+}

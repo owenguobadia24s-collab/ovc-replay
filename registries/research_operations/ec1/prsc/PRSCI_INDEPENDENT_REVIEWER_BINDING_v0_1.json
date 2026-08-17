@@ -2,17 +2,39 @@
   "schema": "ovc-prsci-independent-reviewer-binding/v0.1",
   "binding_id": "PRSCI-INDEPENDENT-REVIEWER-BINDING-v0.1",
   "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
-  "packet_id": "PRSCI-WP0",
+  "packet_id": "PRSCI-WP8",
   "review_gate": "PRSCI-G8-ALG",
-  "status": "UNBOUND",
+  "status": "BOUND",
+  "reviewer_identity": "OPENAI-GPT-5.6-SOL-OPERATOR-DESIGNATED-PRSCI-G8-ALG-REVIEWER-20260817",
+  "reviewer_role": "INDEPENDENT_ALGORITHMIC_REVIEWER",
+  "binding_authority": "OPERATOR_INSTRUCTION_2026-08-17T21:56:00+01:00_ACT_AS_REVIEWER",
+  "binding_time": "2026-08-17T21:56:00+01:00",
   "required_independence": [
     "REVIEWER_NOT_SOLE_PRSC_IMPLEMENTATION_AUTHOR",
     "CONFLICT_DISCLOSURE_REQUIRED",
     "NO_SCIENTIFIC_OR_OPERATOR_AUTHORITY_INHERITED_FROM_REVIEW_ROLE"
   ],
-  "blocking_effect": "PRSCI-G8-ALG_CANNOT_PASS_WHILE_UNBOUND",
-  "early_implementation_effect": "NONE_WP1_THROUGH_WP8_MAY_PROCEED_WITHIN_G0_AUTHORITY",
+  "independence_assessment": {
+    "reviewer_not_sole_prsc_implementation_author": true,
+    "external_human_reviewer_claimed": false,
+    "separate_implementation_organization_claimed": false,
+    "fresh_de_novo_evidence_review": true,
+    "conflict_status": "DISCLOSED_PRIOR_OVC_ASSISTANCE_NON_SOLE_AUTHOR",
+    "conflict_disclosure": "The operator explicitly designated ChatGPT GPT-5.6 Sol to perform PRSCI-G8-ALG. The reviewer is not represented as an external human or separate implementation organization and has participated in prior OVC planning/implementation assistance. It is not the sole PRSC implementation author. This review is a fresh evidence pass over the pinned candidate and repository records; the disclosed relationship grants no scientific or operator authority."
+  },
+  "review_scope": [
+    "method_pack_resolution",
+    "family_accounting",
+    "shared_resampling_dependence",
+    "representation_blind_fit_enforcement",
+    "boundary_blind_fit_enforcement",
+    "non_compensatory_algebra",
+    "candidate_review_adapters",
+    "protected_source_negative_reachability",
+    "reference_optimized_equivalence",
+    "capacity_and_review_budget_integrity"
+  ],
+  "blocking_effect": "NONE_REVIEWER_NOW_BOUND_GATE_MAY_EXECUTE",
   "authority_effect": "NONE",
-  "reason": "No eligible independent implementation-stage reviewer identity has yet been lawfully bound in repository state; identity is not invented from chat or prior design review.",
-  "next_resolution_point": "BEFORE_PRSCI-G8-ALG"
+  "next_resolution_point": "PRSCI-G8-ALG_REVIEW"
 }

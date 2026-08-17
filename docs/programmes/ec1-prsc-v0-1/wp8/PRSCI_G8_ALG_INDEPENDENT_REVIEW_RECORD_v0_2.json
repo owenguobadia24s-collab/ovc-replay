@@ -1,0 +1,207 @@
+{
+  "schema": "ovc-prsci-independent-review-record/v0.1",
+  "review_id": "PRSCI-G8-ALG-REVIEW-R2-20260817T225500+0100",
+  "gate_id": "PRSCI-G8-ALG",
+  "gate_title": "Independent PRSC mechanical/scientific algebra conformance review",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "packet_id": "PRSCI-WP8",
+  "review_time": "2026-08-17T22:55:00+01:00",
+  "reviewer_binding_ref": "registries/research_operations/ec1/prsc/PRSCI_INDEPENDENT_REVIEWER_BINDING_v0_1.json",
+  "reviewer_identity": "OPENAI-GPT-5.6-SOL-OPERATOR-DESIGNATED-PRSCI-G8-ALG-REVIEWER-20260817",
+  "reviewer_role": "INDEPENDENT_ALGORITHMIC_REVIEWER",
+  "conflict_disclosure": "The operator explicitly designated ChatGPT GPT-5.6 Sol to perform PRSCI-G8-ALG. The reviewer is not represented as an external human or separate implementation organization and has participated in prior OVC planning/implementation assistance. It is not the sole PRSC implementation author. This rerun is a fresh evidence pass over the repaired pinned candidate and repository records; the disclosed relationship grants no scientific or operator authority.",
+  "baseline_commit": "b0726f9d251b1110983fc6a657f31b8f087449bd",
+  "baseline_tree": "be74f720a74a32c21480b8b7b7f8093a47b08425",
+  "pinned_candidate_commit": "e2a18e0ce7f5761bce396c6d2a20b864d4e58809",
+  "pinned_candidate_tree": "9183809ca69daedd118e1ca4e498a98b78f501ba",
+  "qa_support_head_reviewed": "2f6e2d41244db1a0ecf8e82a1aa3927b3d297f4a",
+  "qa_support_tree_reviewed": "431204745cca68e933f0bc92eab8442be1ca2ab4",
+  "historical_predecessor_review_ref": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_1.json",
+  "historical_predecessor_decision": "BLOCK",
+  "historical_predecessor_finding": "PRSCI_G8_ALG_PEAK_MEMORY_MEASUREMENT_NONCONFORMANT",
+  "workflow_evidence": {
+    "measurement_capture_tests": 32075002575,
+    "measurement_capture_job": 95527461979,
+    "repaired_exact_head_tests": 32077177460,
+    "repaired_exact_head_tiered": 32077177435,
+    "vit_routing_preflight": "PASS",
+    "repository_suite": "4076_PASS_1_SKIPPED_687_SUBTESTS_PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head_profile": "PASS",
+    "siq_ready_admission": "PASS",
+    "merge_readiness": "PASS",
+    "status": "PASS"
+  },
+  "scope_results": [
+    {
+      "scope": "method_pack_resolution",
+      "decision": "PASS",
+      "basis": [
+        "ReferenceMethodPack remains reference-first; alternate weak-null/HAC routes cannot silently become the primary freeze-facing method.",
+        "Forbidden outcome, Validation, probability, risk, exposure and execution inputs remain outside the challenge method pack.",
+        "AV-PRSC-03 and AV-PRSC-04 pass on the repaired exact head."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/reference.py",
+        "registries/research_operations/ec1/prsc/PRSC_DEPENDENCE_REFERENCE_REGISTRY_v0_1.json",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "family_accounting",
+      "decision": "PASS",
+      "basis": [
+        "Hypothesis-family membership remains explicit and content-addressed; post-result family shrink is rejected.",
+        "Exact semantic duplicate collapse preserves provenance and review accounting.",
+        "Review capacity remains fail-closed with hidden top-N denied; AV-PRSC-09 and AV-PRSC-10 pass."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/multiplicity.py",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "shared_resampling_dependence",
+      "decision": "PASS",
+      "basis": [
+        "The owner EvidenceDependenceGraph is reused read-only and absent edges remain INDEPENDENCE_UNKNOWN.",
+        "Inference blocks preserve candidate-unit accounting and owner dependence edges; shared reference draws remain aligned across family hypotheses.",
+        "AV-PRSC-01 and AV-PRSC-02 pass."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/dependence.py",
+        "src/ovc/research_operations/prsc/reference.py",
+        "src/ovc/research_operations/prsc/multiplicity.py",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "representation_blind_fit_enforcement",
+      "decision": "PASS",
+      "basis": [
+        "The frozen EC1 base representation remains immutable and challenger views remain NO_WINNER evidence views.",
+        "Selection/ranking keys remain rejected and crosswalks account the full base population.",
+        "AV-PRSC-05 and AV-PRSC-06 pass."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/representation.py",
+        "contracts/research_operations/ec1/prsc/PRSC_REPRESENTATION_TEMPORAL_CONTEXT_CONTRACT_v0_1.md",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "boundary_blind_fit_enforcement",
+      "decision": "PASS",
+      "basis": [
+        "Blind segmentation still rejects canonical C2E boundary/episode labels during fitting.",
+        "Fitting remains separated from correspondence and canonical owner identity cannot be replaced by challenger output.",
+        "AV-PRSC-07 and AV-PRSC-08 pass."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/boundary.py",
+        "contracts/research_operations/ec1/prsc/PRSC_BOUNDARY_AND_SEGMENTATION_CONTRACT_v0_1.md",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "non_compensatory_algebra",
+      "decision": "PASS",
+      "basis": [
+        "P1A/P1B/P1C dependencies retain REQUIRE/RESTRICT/ANNOTATE roles and fatal required failures dominate supportive dimensions.",
+        "No score or majority-vote decision path is introduced; CandidateFreeze output remains recommendation-only.",
+        "AV-PRSC-12 passes."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/algebra.py",
+        "contracts/research_operations/ec1/prsc/PRSC_PROTOCOL_AND_REVIEW_CONTRACT_v0_1.md",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "candidate_review_adapters",
+      "decision": "PASS",
+      "basis": [
+        "P1CandidateReviewCard adaptation remains additive and preserves proposal_review_status.",
+        "QuestionDecisionRecord adaptation remains limited to DT-Q08/DT-Q10 and preserves reserved-action owner semantics.",
+        "No owner semantic mutation was introduced by the capacity repair."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/adapters.py"
+      ]
+    },
+    {
+      "scope": "protected_source_negative_reachability",
+      "decision": "PASS",
+      "basis": [
+        "WP7/G8 protected Development/Validation negative reachability remains intact.",
+        "The repaired mechanical bundle and final QA continue to report ZERO_SURVIVORS.",
+        "AV-PRSC-11 continues to prove irreversible exposure semantics."
+      ],
+      "evidence_refs": [
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_MECHANICAL_CONFORMANCE_BUNDLE_v0_1.json",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_QA_PACKET_v0_1.json",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "reference_optimized_equivalence",
+      "decision": "PASS",
+      "basis": [
+        "The assurance harness continues to quarantine optimized/reference logical mismatch while retaining the reference oracle.",
+        "The repository census still identifies no production optimized decision-bearing PRSC family, so the current production equivalence obligation remains not applicable.",
+        "AV-PRSC-15 passes on the repaired exact head."
+      ],
+      "evidence_refs": [
+        "src/ovc/research_operations/prsc/assurance.py",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_REFERENCE_EQUIVALENCE_EVIDENCE_v0_1.json",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_ADVERSARIAL_RESULTS_v0_1.json"
+      ]
+    },
+    {
+      "scope": "capacity_and_review_budget_integrity",
+      "decision": "PASS",
+      "basis": [
+        "The prior serialized-component-size proxy has been replaced by the declared actual process peak resident-set-size quantity.",
+        "TINY, SMALL and MEDIUM each run in a fresh CPython 3.11.15 subprocess under the pinned Ubuntu 24.04 environment and measure Linux resource.getrusage(RUSAGE_SELF).ru_maxrss with KiB converted to bytes.",
+        "Pinned workflow 32075002575/job 95527461979 measured 298921984 bytes for each tier; the operational budget freezes a 1.25 envelope of 373652480 bytes.",
+        "Exact-head workflow 32077177460 reproduces the materialised evidence contract and remains within the frozen peak-RSS envelope.",
+        "Review limits remain 11840 review units and 160 candidates with no sampling, hidden top-N or scientific-scope reduction."
+      ],
+      "evidence_refs": [
+        "contracts/research_operations/ec1/prsc/PRSC_ASSURANCE_CAPACITY_CONTRACT_v0_1.md",
+        "src/ovc/research_operations/prsc/capacity.py",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_CAPACITY_EVIDENCE_v0_1.json",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_OPERATIONAL_BUDGET_v0_1.json",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_MECHANICAL_CONFORMANCE_BUNDLE_v0_1.json",
+        "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_WP8_QA_PACKET_v0_1.json"
+      ],
+      "resolved_reason_code": "PRSCI_G8_ALG_PEAK_MEMORY_MEASUREMENT_NONCONFORMANT"
+    }
+  ],
+  "overall_decision": "PASS",
+  "decision_class": "CONFORMANCE_PASS_AFTER_CORRECTIVE_REPAIR",
+  "blocking_findings": [],
+  "resolved_findings": [
+    {
+      "finding_id": "G8ALG-F1",
+      "reason_code": "PRSCI_G8_ALG_PEAK_MEMORY_MEASUREMENT_NONCONFORMANT",
+      "historical_decision_ref": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_1.json",
+      "resolution": "Actual isolated-process peak-RSS measurement is now materialised, budgeted and exact-head qualified without scientific-scope reduction or authority expansion."
+    }
+  ],
+  "nonblocking_observations": [
+    "The original BLOCK record remains preserved as historical evidence and is not rewritten.",
+    "No protected-source survivor, authority escalation, semantic mutation, hidden top-N, family shrink or optimized-path false allow was found.",
+    "The capacity correction changes measurement conformance only and grants no scientific, preregistration, source, probability, risk, exposure or execution authority."
+  ],
+  "unresolved_issues": [],
+  "authority_delta": "NONE",
+  "preregistration_effect": "NONE_PREREGISTRATION_REMAINS_NOT_FROZEN",
+  "candidate_freeze_effect": "NONE",
+  "real_source_effect": "NONE",
+  "rollback": "Forward-only; preserve WP1-WP7, PRSCI G0-G8, the original PRSCI-G8-ALG BLOCK evidence and this corrective PASS review. Quarantine/supersede the repaired WP8 assurance surfaces if later exact-head evidence fails.",
+  "next_action": "FINAL_GATE_HEAD_VIT_GRT_SIQ_ASSURANCE_THEN_WP8_INTEGRATION_ONLY_IF_GREEN; DO_NOT_ENTER_WP9_IN_THIS_COMMAND"
+}
