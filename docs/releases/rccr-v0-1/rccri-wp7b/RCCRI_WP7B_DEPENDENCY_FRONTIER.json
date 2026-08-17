@@ -1,0 +1,43 @@
+{
+  "frontier_id": "6e1262c879e289edcc1e1f067f9a994c1e1167201f483f423cc02c20a6b514d9",
+  "hash_profile": "canonical-json-sha256-v1",
+  "hash_basis": {
+    "schema": "ovc-rccri-wp7b-dependency-frontier/v1",
+    "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+    "packet_id": "RCCRI-WP7B",
+    "logical_predecessor": {
+      "packet_id": "RCCRI-WP6B",
+      "gate_id": "RCCRI-G6B",
+      "decision": "PASS",
+      "merge_commit": "34d08c26061f8548346bdec101e2af6f3138f9bc"
+    },
+    "governing_design": "OVC-RCCR-DESIGN-SPEC-0.1-R1-RATIFIED",
+    "governing_plan": "OVC-RCCR-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+    "required_owner_frontiers": [
+      {
+        "owner": "EC1",
+        "gate": "DMRPI-GREAL-EC1",
+        "state": "AUTHORISED_BOUNDED",
+        "rccr_use": "NO_REAL_SOURCE_CONSUMPTION"
+      },
+      {
+        "owner": "PATH2_EXTERNAL",
+        "gate": "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+        "state": "AUTHORISED_BOUNDED",
+        "rccr_use": "SOURCE_METADATA_ONLY_NO_EFFECTUATION"
+      },
+      {
+        "owner": "VALIDATION",
+        "state": "LOCKED_UNCONSUMED",
+        "rccr_use": "DENIED"
+      }
+    ],
+    "required_runtime_contracts": [
+      "RCCR_SOURCE_NATIVE_READ_MODEL",
+      "RCCR_GAP_DIAGNOSIS_NON_SCALAR",
+      "RCCR_DMRP_VISIBILITY_FIREWALL",
+      "RCCR_EC1_RV_FAIL_CLOSED_UNTIL_E1_R1_ASSURED"
+    ],
+    "next_packet": "RCCRI-WP8"
+  }
+}

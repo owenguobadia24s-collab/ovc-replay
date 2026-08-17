@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-rccri-auto-gate-packet/v1",
+  "gate_id": "RCCRI-G7B",
+  "packet_id": "RCCRI-WP7B",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "plan_id": "OVC-RCCR-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "execution_class": "AUTO_RATIFIABLE",
+  "authority_delta": "NONE",
+  "prerequisites": [
+    "RCCRI-G6B_PASS",
+    "RCCRI-WP6B_MERGED_34d08c26061f8548346bdec101e2af6f3138f9bc",
+    "AUTHORIZED_BOUNDED_WP6B_WP7B_WP8"
+  ],
+  "acceptance_conditions": {
+    "source_native_full_read_models": true,
+    "explicit_denominators": true,
+    "no_scalar_completeness_score": true,
+    "method_first_gap_routing": true,
+    "strict_architecture_pressure": true,
+    "path_independence_and_exposure_preserved": true,
+    "cross_path_ranking_forbidden": true,
+    "next_route_non_effectuating": true,
+    "ec1_rv_fail_closed_until_e1_r1_assured": true,
+    "deterministic_rebuild": true,
+    "console_get_optional": true,
+    "write_routes_denied": true,
+    "owner_capability_activation": "DENIED",
+    "validation": "LOCKED_UNCONSUMED",
+    "authority_effect": "NONE"
+  },
+  "tests": {
+    "implementation_head": "4fb9112e3dff020d606b175eb71c013228ad9ae8",
+    "repository_suite": "3928_PASS_1_SKIP_687_SUBTESTS",
+    "console_vnext": "94_PASS",
+    "vit_routing_preflight": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "tiered_selection_shadow": "PASS",
+    "siq_ready_admission": "PASS",
+    "merge_readiness": "PASS",
+    "final_gate_head_assurance": "PENDING_AFTER_GATE_MATERIALISATION"
+  },
+  "qa": "docs/releases/rccr-v0-1/rccri-wp7b/RCCRI_WP7B_QA_PACKET.json",
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "rollback_defined": true,
+  "recommended_decision": "PASS_SUBJECT_TO_FINAL_GATE_HEAD_ASSURANCE",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "authority_effect": "NONE"
+}
