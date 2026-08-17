@@ -6,6 +6,8 @@ from pathlib import Path
 from ovc.opt_b.c2p_v0_2 import rs0_source_materialisation as source
 from ovc.opt_b.c2p_v0_2.rs0_execution import iter_verified_rows, validate_locator
 from ovc.opt_b.c2_vnext import real_source_materialisation as c2rm
+from ovc.opt_b.c2e_v2.models import build_record
+from ovc.opt_b.c2e_v2.projection import project_episode
 
 ROOT = Path(__file__).resolve().parents[4]
 
@@ -90,3 +92,61 @@ def test_capacity_and_identity_bindings_are_exact() -> None:
     assert source.C2_PACKAGE_SHA256 == "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"
     assert source.C2E_BOUNDARY_PACK_SHA256 == "043c628a3a29372ae478026db307d0d8b2347fcbbc7b06dbb1a3cc345c86e313"
     assert source.OPT_A_MANIFEST_SHA256 == "0cbcafa9421449574b61bfeec24f634de99cbbbc6e7a53d09ace8f702182ab8c"
+
+
+def test_dedicated_materialisation_workflow_is_non_pr_and_branch_bounded() -> None:
+    text = (ROOT / ".github/workflows/c2p2-rs0-current-source-materialisation.yml").read_text(encoding="utf-8")
+    assert "pull_request:" not in text
+    assert "push:" in text
+    assert "build/c2p2-rs0-current-source-materialisation-20260817" in text
+
+
+def test_streaming_episode_projection_matches_reference_projection() -> None:
+    projected_rows: list[dict] = []
+    stream = source._StreamingSemanticStream(side="BID", write_source_row=projected_rows.append)
+    genesis = build_record("episode_genesis", {
+        "boundary_pack_id": source.C2E_BOUNDARY_PACK_ID,
+        "source_release_id": source.MATERIALISATION_ID,
+        "instrument_id": "GBPUSD",
+        "side": "BID",
+        "scope_id": "LOCAL_15M",
+        "scale_id": "15M",
+        "birth_frame_id": "FRAME.1",
+        "birth_boundary_rule_id": "RULE.BIRTH",
+        "birth_effective_time": "2021-01-01T00:15:00Z",
+        "first_valid_time": "2021-01-01T00:15:00Z",
+        "authority": "INACTIVE_NONCANONICAL_SHADOW",
+    })
+    episode_id = genesis["episode_id"]
+    birth_event = build_record("boundary_event", {
+        "episode_ids": [episode_id], "candidate_ids": ["CAND.1"], "lifecycle_action": "BIRTH", "priority_class": 8,
+        "compatibility_disposition": "ORDERED_BY_PRIORITY", "effective_time": "2021-01-01T00:15:00Z",
+        "confirmation_time": "2021-01-01T00:15:00Z", "first_valid_time": "2021-01-01T00:15:00Z",
+        "collision_disposition": "NONE", "reason_codes": [], "authority": "INACTIVE_NONCANONICAL_SHADOW",
+    })
+    membership = build_record("membership_delta", {
+        "episode_id": episode_id, "frame_id": "FRAME.1", "operation": "ADD", "boundary_event_id": birth_event["boundary_event_id"],
+        "effective_time": "2021-01-01T00:15:00Z", "first_valid_time": "2021-01-01T00:15:00Z",
+        "authority": "INACTIVE_NONCANONICAL_SHADOW",
+    })
+    phase = build_record("phase_segment", {
+        "episode_id": episode_id, "phase_type": "STRUCTURAL_SIGNATURE_INTERVAL", "start_time": "2021-01-01T00:15:00Z",
+        "end_time": "2021-01-01T00:30:00Z", "first_valid_time": "2021-01-01T00:30:00Z", "source_record_ids": ["R1"],
+        "authority": "INACTIVE_NONCANONICAL_SHADOW",
+    })
+    censor = build_record("boundary_event", {
+        "episode_ids": [episode_id], "candidate_ids": ["CAND.2"], "lifecycle_action": "CENSOR_RELEASE_END", "priority_class": 2,
+        "compatibility_disposition": "ORDERED_BY_PRIORITY", "effective_time": "2021-01-01T00:30:00Z",
+        "confirmation_time": "2021-01-01T00:30:00Z", "first_valid_time": "2021-01-01T00:30:00Z",
+        "collision_disposition": "NONE", "reason_codes": ["C2E_RELEASE_END_CENSORED"], "authority": "INACTIVE_NONCANONICAL_SHADOW",
+    })
+    records = [genesis, birth_event, membership, phase, censor]
+    for record in records:
+        stream.append(record)
+    expected = project_episode(episode_id, records, as_of_time="2021-01-01T00:30:00Z", first_valid_time="2021-01-01T00:30:00Z")
+    actual = stream.snapshot_record(episode_id, as_of_time="2021-01-01T00:30:00Z", first_valid_time="2021-01-01T00:30:00Z")
+    assert actual == expected
+    stream.append(actual)
+    assert stream.membership_count == 1
+    assert stream.record_count == 6
+    assert len(projected_rows) == 6
