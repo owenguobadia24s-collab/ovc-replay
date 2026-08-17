@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC ValidationReservationRecord v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "prsc.validation_reservation_record.v0.1"},
+    "reservation_id": {"type": "string", "minLength": 1},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "validation_role": {"const": "VALIDATION"},
+    "reservation_state": {"const": "RESERVED_UNCONSUMED"},
+    "read_path_present": {"const": false},
+    "source_locator_present": {"const": false},
+    "credential_present": {"const": false},
+    "query_present": {"const": false},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": ["schema_version", "reservation_id", "candidate_ref", "validation_role", "reservation_state", "read_path_present", "source_locator_present", "credential_present", "query_present", "authority_effect"]
+}

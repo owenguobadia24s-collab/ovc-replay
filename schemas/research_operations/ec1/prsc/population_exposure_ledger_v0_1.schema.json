@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSC PopulationExposureLedger v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "prsc.population_exposure_ledger.v0.1"},
+    "ledger_id": {"type": "string", "minLength": 1},
+    "candidate_ref": {"type": "string", "minLength": 1},
+    "human_exposed": {"type": "boolean"},
+    "algorithm_exposed": {"type": "boolean"},
+    "summary_exposed": {"type": "boolean"},
+    "contaminated": {"type": "boolean"},
+    "events": {"type": "array", "items": {"type": "object", "additionalProperties": false, "properties": {"channel": {"enum": ["HUMAN", "ALGORITHM", "SUMMARY"]}, "source_ref": {"type": "string", "minLength": 1}, "observed_at": {"type": "string", "minLength": 1}}, "required": ["channel", "source_ref", "observed_at"]}},
+    "authority_effect": {"const": "NONE"}
+  },
+  "required": ["schema_version", "ledger_id", "candidate_ref", "human_exposed", "algorithm_exposed", "summary_exposed", "contaminated", "events", "authority_effect"]
+}
