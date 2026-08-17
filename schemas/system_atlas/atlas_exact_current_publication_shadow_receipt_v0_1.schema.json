@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_exact_current_publication_shadow_receipt_v0_1.schema.json",
+  "title": "Atlas Exact-Current Publication Shadow Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source_commit", "source_tree", "root_hash", "publication_receipt_hash", "result", "canonical_pointer_before_sha256", "canonical_pointer_after_sha256", "canonical_pointer_unchanged", "canonical_publication", "authority_effect", "receipt_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-exact-current-publication-shadow-receipt/v1"},
+    "source_commit": {"$ref": "#/$defs/sha40"},
+    "source_tree": {"$ref": "#/$defs/sha40"},
+    "root_hash": {"$ref": "#/$defs/sha256"},
+    "publication_receipt_hash": {"$ref": "#/$defs/sha256"},
+    "result": {"const": "PASS_EXACT_CURRENT_SHADOW_ONLY"},
+    "canonical_pointer_before_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "canonical_pointer_after_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "canonical_pointer_unchanged": {"const": true},
+    "canonical_publication": {"const": false},
+    "authority_effect": {"const": "NONE_QUALIFICATION_ONLY"},
+    "receipt_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha40": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

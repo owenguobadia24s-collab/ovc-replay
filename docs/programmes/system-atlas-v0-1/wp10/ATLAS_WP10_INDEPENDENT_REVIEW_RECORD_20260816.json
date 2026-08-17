@@ -1,0 +1,121 @@
+{
+  "schema": "ovc-atlas-independent-review-record/v1",
+  "review_id": "ATLAS-WP10-Q6-IND-INDEPENDENT-REVIEW-20260816-v1",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "packet_id": "ATLAS-WP10",
+  "gate_id": "ATLAS-G10",
+  "review_stage": "Q6-IND",
+  "review_class": "IMPLEMENTATION_INDEPENDENT_Q6_REVIEW",
+  "reviewer_binding_id": "ATLAS-INDEPENDENT-REVIEWER-BINDING-Q6-IND-20260816-v1",
+  "reviewer_id": "OPENAI-GPT-5.6-SOL-ATLAS-Q6-IND-20260816",
+  "reviewed_at": "2026-08-16T23:35:00+01:00",
+  "pinned_subject": {
+    "baseline_commit": "11aefbbba5dbd2e50181d2e4793e673675f2949d",
+    "baseline_tree": "7c2f5b39301564deede55d7f830517a8703a87f1",
+    "implementation_candidate_commit": "b9fe86a80dae9e9d7abb5075a7979a5e9d5a8b6b",
+    "implementation_candidate_tree": "89b1c3e4b7ed76ec78943d9574935a35c4643d38",
+    "review_packaging_head": "37b9b8d8c172a68d1e4a04dba7e42be3aaff5e13",
+    "review_packaging_tree": "cb2119d86cbaed59eabf671f604f9d0559177d09",
+    "packaging_delta_assessment": "The review-packaging head is twelve commits ahead of the pinned implementation candidate. The later delta is re-anchor, exact-current evidence, VIT recovery/CI and source-state packaging; the pinned WP10 qualification runtime is not rewritten by that later delta."
+  },
+  "evidence_hash_confirmation": {
+    "external_q0_q6_evidence_sha256": {
+      "expected": "ff0c972379968ccd98dd447c9ecf96440c6b705c1582c1832e25a81d29cc547c",
+      "result": "PASS_EXACT_PIN_CONSISTENCY",
+      "basis": "Exact value agrees across the Q6-IND request, WP10 QA packet and PR qualification record; repository assurance contains a direct-byte hash assertion when the bound external artifact is mounted. The external artifact bytes were not directly retrievable through the reviewer GitHub transport."
+    },
+    "browser_evidence_sha256": {
+      "expected": "9ae3059669a3ecba9ed2b0fea643e1d1fca2c462a30301106593ae61948189fa",
+      "result": "PASS_EXACT_PIN_CONSISTENCY",
+      "basis": "Exact value agrees between the Q6-IND request, WP10 QA packet and PR qualification record; browser assurance is independently represented by the WP9/WP10 QA checks. External browser-evidence bytes were not directly retrievable through the reviewer GitHub transport."
+    },
+    "operational_budget_sha256": {
+      "expected": "7119abb648c244a558c78e7ec2e05f8d7b4b32c029dac18d00254b5e6198e245",
+      "observed": "7119abb648c244a558c78e7ec2e05f8d7b4b32c029dac18d00254b5e6198e245",
+      "result": "PASS_EXACT_BYTES_RECOMPUTED"
+    },
+    "retention_budget_sha256": {
+      "expected": "945ac98a9540ec8c0390c3f2577dc119f32a48e9798ef303e252142056a32198",
+      "observed": "945ac98a9540ec8c0390c3f2577dc119f32a48e9798ef303e252142056a32198",
+      "result": "PASS_EXACT_BYTES_RECOMPUTED"
+    },
+    "qualification_report_hash": {
+      "expected": "f0c260f2393a736b0ef8d3202408010914a973c73e34327d478b5a6bd0c6c8c8",
+      "result": "PASS_EXACT_PIN_CONSISTENCY",
+      "basis": "Exact aggregate hash is bound by the Q6-IND request, Q0-Q6 qualification record and PR qualification summary."
+    },
+    "atlas_test_result": {
+      "expected": "PASS_117_TESTS",
+      "observed": "PASS_117_TESTS",
+      "result": "PASS"
+    }
+  },
+  "scope_results": [
+    {
+      "scope": "IMPLEMENTATION_ALGORITHMS",
+      "result": "PASS",
+      "basis": "WP10 qualification helpers enforce exact Git-tree/source binding, deterministic reference/incremental byte equivalence, typed capacity failure, isolated publication-shadow mechanics and report-only retention. No later packaging commit rewrites the pinned qualification runtime."
+    },
+    {
+      "scope": "GOVERNANCE_AND_AUTHORITY_CONTAINMENT",
+      "result": "PASS",
+      "basis": "The live shadow requires authority_effect=NONE_PRESENTATION_ONLY, forbids current-pointer publication and Research Console binding, and preserves the separate operator-reserved observability activation gate. Q0-Q6 alone cannot claim terminal qualification before Q6-IND."
+    },
+    {
+      "scope": "SECURITY_AND_VISIBILITY_FAIL_CLOSED",
+      "result": "PASS",
+      "basis": "Q2 and Q5 are PASS; the runtime preserves protected security evidence under capacity failure, requires exact source bindings, and the WP10 QA record confirms no source binding, write authority or Validation consumption. Failures are typed rather than silently degraded."
+    },
+    {
+      "scope": "VISUAL_AND_ACCESSIBILITY_ASSURANCE",
+      "result": "PASS",
+      "basis": "WP9 independently records semantic-table keyboard controls, reality and non-colour state, graph/table result identity, typed deep links, three viewport classes, zero document overflow and zero browser-console findings. WP10 rechecks 390px and 1440px browser operation with zero overflow/errors/warnings."
+    },
+    {
+      "scope": "OPERATIONAL_CAPACITY_AND_WINDOWS",
+      "result": "PASS",
+      "basis": "The frozen Windows budget has nine required dimensions and fail-closed CAPACITY_EXCEEDED semantics with no sampling. Q6 measurements are 9ms full build, 12ms incremental, 58ms index load, 3ms ordinary trace, 1ms deep traversal, 75059-byte peak memory, 61ms browser layout, 0-byte bundle growth and 2ms manifest maintenance, all inside frozen limits."
+    },
+    {
+      "scope": "RETENTION_RECOVERY_AND_NON_DESTRUCTIVE_MAINTENANCE",
+      "result": "PASS",
+      "basis": "The frozen retention policy requires current/predecessor recovery, immutable milestones/incidents, a 24 ordinary-generation bound and 2GiB total budget with REPORT_ONLY_NO_DELETE. The Q6 inventory reports 109957 generation bytes, zero destructive actions and PASS recovery/milestone/incident retention."
+    },
+    {
+      "scope": "EXACT_CURRENT_PUBLICATION_SHADOW",
+      "result": "PASS",
+      "basis": "The publication proof is isolated from the canonical external root, asserts canonical_publication=false, preserves the canonical pointer byte-for-byte and explicitly rejects use of the canonical root as the shadow target. CURRENT.json remains absent in the governed external Atlas generation root."
+    },
+    {
+      "scope": "Q0_Q6_EVIDENCE_INTEGRITY",
+      "result": "PASS",
+      "basis": "The Q0-Q6 qualification record binds current main 11aefbbb/tree 7c2f5b39 and records PASS for all seven stages. The exact candidate commit/tree in the review request resolves in Git, the five material re-anchors are explicit and authority-neutral, the C2P one-run token remains unconsumed, and the current PR head has successful tests and tiered-test-selection workflow runs."
+    }
+  ],
+  "repository_assurance_observed": {
+    "q0_q6": "PASS_ALL_SEVEN_STAGES",
+    "latest_focused_suite": "PASS_129_TESTS",
+    "atlas_suite": "PASS_117_TESTS",
+    "research_console_suite": "PASS_23_TESTS_STRICT_COMPILE_BUILD",
+    "canonical_current_pointer": "ABSENT",
+    "canonical_publication": false,
+    "research_console_source_binding": "ABSENT",
+    "write_authority": "ABSENT",
+    "validation": "LOCKED_UNCONSUMED",
+    "c2p_one_run_authority_consumed": false,
+    "workflow_runs": [
+      {"name": "tests", "run_id": 31972887581, "conclusion": "success"},
+      {"name": "OVC tiered test selection shadow", "run_id": 31972887578, "conclusion": "success"}
+    ]
+  },
+  "blocking_findings": [],
+  "findings_and_resolution_requirements": [],
+  "review_transport_disclosure": "The two external JSON evidence objects were not directly downloadable through the linked GitHub reviewer transport. Their exact SHA-256 pins are internally consistent across the request/QA/qualification surfaces, and repository tests enforce direct byte equality when the governed external root is mounted. This is disclosed as transport scope, not a security/design/authority finding, consistent with the earlier accepted G4 independent-review evidence handling.",
+  "required_verdict": "ELIGIBLE_INDEPENDENT_PASS",
+  "final_q6_ind_decision": "PASS_ELIGIBLE_INDEPENDENT_REVIEW",
+  "verdict": "PASS",
+  "gate_effect": "Q6_IND_SATISFIED_ATLAS_G10_BECOMES_AUTO_RATIFIABLE_IF_EXACT_HEAD_ASSURANCE_REMAINS_GREEN",
+  "activation_effect": "NONE_OPERATOR_GATE_REMAINS_REQUIRED",
+  "authority_delta": "NONE",
+  "authority_effect": "NONE_INDEPENDENT_REVIEW_EVIDENCE_ONLY"
+}

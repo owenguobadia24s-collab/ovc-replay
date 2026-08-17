@@ -69,14 +69,29 @@ def test_external_root_and_reviewer_binding_fail_closed() -> None:
     assert external["status"] == "BOUND_READ_WRITE_VERIFIED"
     assert external["repository_disjoint"] is True
     assert external["destructive_retention"].startswith("DENIED")
-    assert reviewer["status"] in {"UNBOUND", "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION"}
+    assert reviewer["status"] in {
+        "UNBOUND",
+        "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION",
+        "RENEWAL_REQUIRED_EXACT_CURRENT_SUBJECT",
+        "ACCEPTED_Q6_IND_BINDING_REVIEW_COMPLETED_PASS",
+        "BOUND_PASS_EXACT_CURRENT_SUBJECT",
+    }
     if reviewer["status"] == "UNBOUND":
         assert reviewer["implementation_effect"] == "NONE_WP0_THROUGH_Q6_MAY_PROCEED"
         assert "INELIGIBLE" in reviewer["activation_effect"]
-    else:
+    elif reviewer["status"] == "ACCEPTED_EXTERNAL_BINDING_PENDING_REPOSITORY_MATERIALISATION":
         assert reviewer["implementation_effect"] == "ATLAS_G4_ALG_REVIEWER_REQUIREMENT_SATISFIED_ON_MATERIALISATION"
         assert "Q6_IND" in reviewer["activation_effect"]
         assert reviewer["scope_status"]["Q6-IND_GOVERNANCE_SECURITY_VISUAL_OPERATIONAL_REVIEW"].startswith("NOT_REVIEWED")
+    elif reviewer["status"] == "RENEWAL_REQUIRED_EXACT_CURRENT_SUBJECT":
+        assert reviewer["implementation_effect"] == "NONE_PRIOR_SUBJECT_REVIEW_ARCHIVED_CURRENT_Q6_IND_PENDING"
+        assert all("RENEWAL_PENDING" in value for value in reviewer["scope_status"].values())
+    elif reviewer["status"] == "ACCEPTED_Q6_IND_BINDING_REVIEW_COMPLETED_PASS":
+        assert reviewer["implementation_effect"] == "SATISFIES_ATLAS_WP10_Q6_IND_REVIEWER_REQUIREMENT_ON_MATERIALISATION"
+        assert all(value == "BOUND_ELIGIBLE_REVIEW_COMPLETED_PASS" for value in reviewer["scope_status"].values())
+    else:
+        assert reviewer["implementation_effect"] == "NONE_REVIEW_EVIDENCE_ONLY"
+        assert all(value == "PASS_EXACT_CURRENT_SUBJECT" for value in reviewer["scope_status"].values())
 
 
 def test_source_census_has_no_required_missing_source() -> None:
@@ -99,6 +114,8 @@ def test_programme_state_preserves_wp0_completion_and_activation_boundary() -> N
     assert state["tests"]["wp0_materialisation"] in {"PENDING_EXACT_PACKET_HEAD", "PASS_INTEGRATED_PR_970"}
     if state["current_gate"] == "ATLAS-G4-ALG" and state["gate_status"].startswith("BLOCKED"):
         assert state["blockers"] == ["ATLAS_G4_ALG_ELIGIBLE_INDEPENDENT_REVIEWER_UNBOUND"]
+    elif state["current_gate"] == "ATLAS-G10" and state["gate_status"] == "NOT_YET_ELIGIBLE_Q6_IND_PENDING":
+        assert state["blockers"] == ["Q6_IND_ELIGIBLE_INDEPENDENT_PASS_REQUIRED"]
     else:
         assert state["blockers"] == []
     assert state["terminal_pre_activation_target"] == "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW"

@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-gate-packet/v1",
+  "gate_id": "ATLAS-G10",
+  "packet_id": "ATLAS-WP10",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "gate_class": "AUTO_WHEN_EXACT_ACCEPTANCE_PASS",
+  "acceptance_conditions": ["Q0_Q6_PASS","LIVE_CURRENT_MAIN_SHADOW_PASS","WINDOWS_SECURITY_PASS","ATLAS_OPERATIONAL_BUDGET_FROZEN_PASS","ATLAS_RETENTION_BUDGET_FROZEN_PASS","Q6_IND_ELIGIBLE_INDEPENDENT_PASS"],
+  "acceptance_results": {"Q0_Q6":"PASS","LIVE_CURRENT_MAIN_SHADOW":"PASS","WINDOWS_SECURITY":"PASS","ATLAS_OPERATIONAL_BUDGET":"PASS","ATLAS_RETENTION_BUDGET":"PASS","Q6_IND":"PASS_ELIGIBLE_INDEPENDENT_REVIEW"},
+  "acceptance_result": "PASS_ALL_EXACT_ACCEPTANCE_CONDITIONS",
+  "decision": "PASS",
+  "ratification_class": "DELEGATED_AUTO_RATIFICATION",
+  "decision_basis": {
+    "delegated_authority": "RATIFIED_ATLAS_IMPLEMENTATION_PLAN_AUTO_GATE_AUTHORITY",
+    "q6_ind_review": "docs/programmes/system-atlas-v0-1/wp10/ATLAS_WP10_INDEPENDENT_REVIEW_RECORD.json",
+    "qa": "PASS_Q6_IND_EXACT_CURRENT_SUBJECT",
+    "exact_head_assurance": {"tests_and_vit":"PASS_RUN_32014500248","siq_final_head_and_merge_readiness":"PASS_RUN_32014500013"},
+    "authority_delta": "NONE",
+    "rollback": "Do not activate observability; retain current main until bounded WP10 integration. If exact-head assurance changes before merge, renew qualification/review currentness as required."
+  },
+  "blockers": [],
+  "authority_effect": "NONE",
+  "terminal_state_claimed": true,
+  "terminal_state": "ATLAS_IMPLEMENTED_QUALIFIED_LIVE_SHADOW",
+  "activation_eligibility": "ELIGIBLE_FOR_OPERATOR_DECISION_NOT_ACTIVATED",
+  "next_action": "INTEGRATE_EXACT_HEAD_THEN_STOP_AT_ATLAS_G_OBSERVABILITY_ACTIVATE"
+}

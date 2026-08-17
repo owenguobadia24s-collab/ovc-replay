@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_operational_budget_receipt_v0_1.schema.json",
+  "title": "Atlas Operational Budget Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "budget_id", "environment", "environment_result", "dimensions", "result", "completeness", "sampling", "protected_security_evidence", "authority_effect", "receipt_hash"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-operational-budget-receipt/v1"},
+    "budget_id": {"type": "string"},
+    "environment": {"type": "string"},
+    "environment_result": {"enum": ["PASS", "CAPACITY_EXCEEDED"]},
+    "dimensions": {"type": "array", "minItems": 9, "items": {"type": "object", "additionalProperties": false, "required": ["dimension", "unit", "observed", "maximum", "result"], "properties": {"dimension": {"type": "string"}, "unit": {"enum": ["milliseconds", "bytes"]}, "observed": {"type": "integer", "minimum": 0}, "maximum": {"type": "integer", "minimum": 0}, "result": {"enum": ["PASS", "CAPACITY_EXCEEDED"]}}}},
+    "result": {"enum": ["PASS", "CAPACITY_EXCEEDED"]},
+    "completeness": {"enum": ["COMPLETE", "INCOMPLETE_DEGRADED"]},
+    "sampling": {"const": "FORBIDDEN_NOT_USED"},
+    "protected_security_evidence": {"const": "PRESERVED_NOT_DROPPED"},
+    "authority_effect": {"const": "NONE_QUALIFICATION_ONLY"},
+    "receipt_hash": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

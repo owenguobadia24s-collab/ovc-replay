@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/system_atlas/atlas_retention_budget_v0_1.schema.json",
+  "title": "Atlas Retention Budget v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "budget_id", "version", "status", "minimum_current_recovery_generations", "minimum_predecessor_recovery_generations", "milestone_retention", "incident_quarantine_retention", "maximum_ordinary_generation_count", "maximum_total_generation_bytes", "compaction_mode", "external_maintenance_scope", "git_refresh_policy", "authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-atlas-retention-budget/v1"},
+    "budget_id": {"const": "ATLAS-RETENTION-BUDGET-v0.1"},
+    "version": {"const": "0.1"},
+    "status": {"const": "FROZEN_ATLAS_G10"},
+    "minimum_current_recovery_generations": {"const": 1},
+    "minimum_predecessor_recovery_generations": {"const": 1},
+    "milestone_retention": {"const": "RETAIN_ALL_IMMUTABLE"},
+    "incident_quarantine_retention": {"const": "RETAIN_ALL_IMMUTABLE"},
+    "maximum_ordinary_generation_count": {"type": "integer", "minimum": 2},
+    "maximum_total_generation_bytes": {"type": "integer", "minimum": 1},
+    "compaction_mode": {"const": "REPORT_ONLY_NO_DELETE"},
+    "external_maintenance_scope": {"const": "ATLAS_OWNED_GENERATION_EVIDENCE_ONLY"},
+    "git_refresh_policy": {"const": "ROUTINE_GENERATION_REFRESH_NEVER_CREATES_PR"},
+    "authority_effect": {"const": "NONE_QUALIFICATION_BUDGET_ONLY"}
+  }
+}
