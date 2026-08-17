@@ -6,52 +6,12 @@
   "programme_id": "OVC-DSAI-VIT-v0.3",
   "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
   "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
-  "pre_write_transaction_freeze": {
-    "producer": "tools/ci/vit_assurance_preflight.py",
-    "source_job": "tests / VIT routing preflight",
-    "marker": "OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=",
-    "timing": "BEFORE_PHYSICAL_WRITE",
-    "identity": "PhysicalMaterialisationTransaction.transaction_id",
-    "observed_only": true
-  },
-  "post_merge_executor": {
-    "workflow": ".github/workflows/vit-post-merge-completion.yml",
-    "implementation": "tools/ci/vit_post_merge_completion.py",
-    "runtime": "EXISTING_LOCAL_SELF_HOSTED_WINDOWS_RUNNER",
-    "runner_labels": ["self-hosted", "Windows"],
-    "github_permissions": ["actions:read", "checks:read", "contents:read", "pull-requests:read"],
-    "main_write_capability": false,
-    "merge_capability": false
-  },
-  "receipt_store": {
-    "root_environment_variable": "OVC_EXTERNAL_ARTIFACT_ROOT",
-    "relative_root": "receipts",
-    "repository_fallback": false,
-    "ephemeral_fallback": false,
-    "cloud_fallback": false,
-    "content_addressed": true
-  },
-  "required_live_proof": [
-    "PhysicalMaterialisationReceipt",
-    "PacketCompletionReceipt",
-    "ovc-development-latency-canonical-dsai3v/v1",
-    "ovc-dsai3v-completion-observability-attachment/v1"
-  ],
-  "recovery": {
-    "already_effective_write": "recover_effective_write_completion",
-    "physical_write_repeated": false,
-    "idempotent_receipt_retry": true,
-    "workflow_dispatch_allowed": true
-  },
-  "explicit_non_authority": [
-    "no new physical-main writer",
-    "no new merge authority",
-    "no new physical gateway",
-    "no new receipt sink",
-    "no repository or temp fallback",
-    "no Drive/R2/cloud publication authority",
-    "no force-push or history rewrite",
-    "no scientific, Validation, probability, risk, exposure or execution authority"
-  ],
+  "pre_write_transaction_freeze": {"producer": "tools/ci/vit_assurance_preflight.py", "source_job": "tests / VIT routing preflight", "marker": "OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=", "timing": "BEFORE_PHYSICAL_WRITE", "identity": "PhysicalMaterialisationTransaction.transaction_id", "observed_only": true},
+  "post_merge_executor": {"workflow": ".github/workflows/vit-post-merge-completion.yml", "implementation": "tools/ci/vit_post_merge_completion_drain.py", "single_completion_implementation": "tools/ci/vit_post_merge_completion.py", "runtime": "EXISTING_LOCAL_SELF_HOSTED_WINDOWS_RUNNER", "runner_labels": ["self-hosted", "Windows"], "github_permissions": ["actions:read", "checks:read", "contents:read", "pull-requests:read"], "main_write_capability": false, "merge_capability": false, "queue_policy": "PER_MERGE_SHA_NON_CANCELLING", "recovery_drain": "BOUNDED_FIRST_PARENT_OLDEST_FIRST", "recovery_drain_limit": 16, "ordinary_closeout_pr_required": false},
+  "receipt_store": {"root_environment_variable": "OVC_EXTERNAL_ARTIFACT_ROOT", "relative_root": "receipts", "repository_fallback": false, "ephemeral_fallback": false, "cloud_fallback": false, "content_addressed": true, "effective_completion_state_relative_root": "completion-state", "successor_release_relative_root": "successor-releases"},
+  "required_live_proof": ["PhysicalMaterialisationReceipt", "PacketCompletionReceipt", "ovc-development-latency-canonical-dsai3v/v1", "ovc-dsai3v-completion-observability-attachment/v1", "ovc-vit-physical-completion-state/v1"],
+  "effective_completion": {"status": "COMPLETED", "canonical_git_state_mutated": false, "ordinary_closeout_pr_required": false, "duplicate_packet_completion_policy": "FAIL_CLOSED", "successor_release": "EXACTLY_ONCE_TO_AUTHORITY_RESOLVER_WHEN_NEXT_PACKET_EXISTS", "successor_execution_authority_inferred": false},
+  "recovery": {"already_effective_write": "recover_effective_write_completion", "physical_write_repeated": false, "idempotent_receipt_retry": true, "workflow_dispatch_allowed": true, "missing_historical_prewrite_freeze": "REPORT_DO_NOT_FABRICATE", "newer_main_push_may_cancel_older_pending_completion": false},
+  "explicit_non_authority": ["no new physical-main writer", "no new merge authority", "no new physical gateway", "no new receipt sink", "no repository or temp fallback", "no Drive/R2/cloud publication authority", "no successor execution authority inferred from release signal", "no force-push or history rewrite", "no scientific, Validation, probability, risk, exposure or execution authority"],
   "rollback": "Disable/remove only this post-merge executor binding; preserve emitted ReceiptStore records, transaction freezes and Git history."
 }
