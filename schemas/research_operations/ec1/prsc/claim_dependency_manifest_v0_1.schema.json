@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "aggregation": {"const": "NON_COMPENSATORY"},
+    "allowed_effects": {"items": {"enum": ["REQUIRE", "RESTRICT", "ANNOTATE"]}, "type": "array", "uniqueItems": true},
+    "authority_effect": {"const": "NONE"},
+    "claim_class": {"minLength": 1, "type": "string"},
+    "fatal_states": {"items": {"type": "string"}, "type": "array"},
+    "optional_dimensions": {"items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}, "type": "array", "uniqueItems": true},
+    "population_family": {"enum": ["P1A", "P1B", "P1C", "CROSS_POPULATION"]},
+    "required_dimensions": {"items": {"enum": ["dependence", "reference", "representation", "temporal", "context", "boundary", "multiplicity", "replication"]}, "type": "array", "uniqueItems": true}
+  },
+  "required": ["claim_class", "required_dimensions", "optional_dimensions", "allowed_effects", "aggregation", "authority_effect"],
+  "title": "OVC PRSC ClaimDependencyManifest v0.1",
+  "type": "object"
+}
