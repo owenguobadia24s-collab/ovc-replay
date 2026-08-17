@@ -4,7 +4,11 @@ import json
 from pathlib import Path
 
 from ovc.research_operations.prsc.adversarial import build_wp1_wp7_adversarial_handlers
-from ovc.research_operations.prsc.capacity import measure_synthetic_capacity_tiers
+from ovc.research_operations.prsc.capacity import (
+    MEASUREMENT_SOURCE,
+    PEAK_MEMORY_QUANTITY,
+    measure_synthetic_capacity_tiers,
+)
 from ovc.research_operations.prsc.wp8_runner import (
     EXPECTED_AV_FIXTURES,
     execute_registered_fixtures,
@@ -13,6 +17,19 @@ from ovc.research_operations.prsc.wp8_runner import (
 
 
 ROOT = Path(__file__).resolve().parents[4]
+DETERMINISTIC_CAPACITY_KEYS = (
+    "tier_id",
+    "candidate_count",
+    "surrogate_count",
+    "representation_count",
+    "time_partition_count",
+    "context_partition_count",
+    "boundary_count",
+    "artifact_bytes",
+    "review_units",
+    "work_units",
+    "component_bytes",
+)
 
 
 def _fixture() -> dict:
@@ -22,6 +39,10 @@ def _fixture() -> dict:
             / "fixtures/research_operations/ec1/prsc/prsc_wp8_assurance_fixture_v0_1.json"
         ).read_text(encoding="utf-8")
     )
+
+
+def _deterministic_capacity_projection(row: dict) -> dict:
+    return {key: row[key] for key in DETERMINISTIC_CAPACITY_KEYS}
 
 
 def test_authoritative_av_prsc_01_to_15_execute_against_wp1_wp7_surfaces():
@@ -41,15 +62,24 @@ def test_authoritative_av_prsc_01_to_15_execute_against_wp1_wp7_surfaces():
     assert by_id["AV-PRSC-15"]["observed"]["optimized_path"] == "QUARANTINED"
 
 
-def test_bounded_synthetic_tiers_materialise_deterministic_non_scientific_measurements():
+def test_bounded_synthetic_tiers_materialise_actual_peak_rss_measurements():
     measurements, evidence = measure_synthetic_capacity_tiers(_fixture()["synthetic_tiers"])
     assert [row.tier_id for row in measurements] == ["TINY", "SMALL", "MEDIUM"]
     assert [row.artifact_bytes for row in measurements] == [2989, 44069, 713349]
-    assert [row.peak_memory_bytes for row in measurements] == [1585, 26305, 444673]
+    assert all(row.peak_memory_bytes > 0 for row in measurements)
+    assert all(row.peak_memory_bytes % 1024 == 0 for row in measurements)
     assert [row.review_units for row in measurements] == [64, 704, 9472]
     assert [row["work_units"] for row in evidence] == [248, 3744, 58496]
-    assert all(row["measurement_source"] == "CANONICAL_LOGICAL_SYNTHETIC_WORKLOAD_BYTES" for row in evidence)
+    assert all(row["measurement_source"] == MEASUREMENT_SOURCE for row in evidence)
+    assert all(row["peak_memory_measurement"]["peak_memory_quantity"] == PEAK_MEMORY_QUANTITY for row in evidence)
+    assert all(row["peak_memory_measurement"]["isolated_fresh_process"] is True for row in evidence)
+    assert all(row["peak_memory_measurement"]["os_rss"] is True for row in evidence)
+    assert all(row["peak_memory_measurement"]["platform_system"] == "Linux" for row in evidence)
     assert all(row["scientific_effect"] == "NONE" for row in evidence)
+    print(
+        "PRSC_WP8_CAPACITY_RUNTIME_EVIDENCE="
+        + json.dumps(list(evidence), sort_keys=True, separators=(",", ":"))
+    )
 
 
 def test_final_wp8_candidate_bundle_freezes_budgets_without_scope_reduction():
@@ -64,13 +94,13 @@ def test_final_wp8_candidate_bundle_freezes_budgets_without_scope_reduction():
     assert bundle["status"] == "PASS_CANDIDATE"
     assert bundle["protected_source_reachability"] == "ZERO_SURVIVORS"
     assert bundle["equivalence_results"] == []
-    assert bundle["operational_budget"]["limits"] == {
-        "candidate_count": 160,
-        "surrogate_count": 320,
-        "artifact_bytes": 891686,
-        "peak_memory_bytes": 555841,
-        "review_units": 11840,
-    }
+    assert bundle["operational_budget"]["limits"]["candidate_count"] == 160
+    assert bundle["operational_budget"]["limits"]["surrogate_count"] == 320
+    assert bundle["operational_budget"]["limits"]["artifact_bytes"] == 891686
+    assert bundle["operational_budget"]["limits"]["peak_memory_bytes"] == int(
+        max(row.peak_memory_bytes for row in measurements) * 1.25
+    )
+    assert bundle["operational_budget"]["limits"]["review_units"] == 11840
     assert bundle["operational_budget"]["scope_reduction_permitted"] is False
     assert bundle["operational_budget"]["sampling_permitted"] is False
     assert bundle["review_budget"]["review_limits"] == {
@@ -81,7 +111,7 @@ def test_final_wp8_candidate_bundle_freezes_budgets_without_scope_reduction():
     assert bundle["review_budget"]["deterministic_batching_required"] is True
 
 
-def test_materialised_wp8_evidence_reproduces_exact_candidate_outputs():
+def test_materialised_wp8_evidence_is_pinned_actual_rss_and_current_run_fits_budget():
     fixture = _fixture()
     measurements, evidence = measure_synthetic_capacity_tiers(fixture["synthetic_tiers"])
     generated_bundle = execute_wp8_assurance(
@@ -107,18 +137,55 @@ def test_materialised_wp8_evidence_reproduces_exact_candidate_outputs():
     materialised_review = json.loads(
         (evidence_root / "PRSCI_WP8_REVIEW_BUDGET_v0_1.json").read_text(encoding="utf-8")
     )
-    assert materialised_bundle == generated_bundle
-    assert materialised_operational == generated_bundle["operational_budget"]
+
+    assert materialised_capacity["measurement_method"] == MEASUREMENT_SOURCE
+    assert materialised_capacity["peak_memory_quantity"] == PEAK_MEMORY_QUANTITY
+    assert materialised_capacity["environment_binding"]["python_version"].startswith("3.11.")
+    assert materialised_capacity["environment_binding"]["platform_system"] == "Linux"
+    assert materialised_capacity["environment_binding"]["source_workflow_run_id"]
+    assert materialised_capacity["environment_binding"]["source_commit"]
+    assert len(materialised_capacity["tiers"]) == len(evidence)
+    for materialised, current in zip(materialised_capacity["tiers"], evidence):
+        assert _deterministic_capacity_projection(materialised) == _deterministic_capacity_projection(current)
+        assert materialised["measurement_source"] == MEASUREMENT_SOURCE
+        assert materialised["peak_memory_bytes"] > 0
+        assert materialised["peak_memory_measurement"]["peak_memory_quantity"] == PEAK_MEMORY_QUANTITY
+        assert materialised["peak_memory_measurement"]["os_rss"] is True
+        assert materialised["peak_memory_measurement"]["isolated_fresh_process"] is True
+
+    expected_peak_budget = int(
+        max(row["peak_memory_bytes"] for row in materialised_capacity["tiers"]) * 1.25
+    )
+    assert materialised_operational["limits"] == {
+        "candidate_count": 160,
+        "surrogate_count": 320,
+        "artifact_bytes": 891686,
+        "peak_memory_bytes": expected_peak_budget,
+        "review_units": 11840,
+    }
+    assert all(
+        measurement.peak_memory_bytes <= materialised_operational["limits"]["peak_memory_bytes"]
+        for measurement in measurements
+    )
+    assert materialised_operational["scope_reduction_permitted"] is False
+    assert materialised_operational["sampling_permitted"] is False
     assert materialised_review == generated_bundle["review_budget"]
+
+    materialised_capacity_by_tier = {
+        row["tier_id"]: row for row in materialised_capacity["tiers"]
+    }
+    for row in materialised_bundle["capacity_results"]:
+        source = materialised_capacity_by_tier[row["tier_id"]]
+        assert row["peak_memory_bytes"] == source["peak_memory_bytes"]
+        assert row["artifact_bytes"] == source["artifact_bytes"]
+        assert row["review_units"] == source["review_units"]
+        assert row["status"] == "PASS"
+    assert materialised_bundle["operational_budget"] == materialised_operational
+    assert materialised_bundle["review_budget"] == materialised_review
+    assert materialised_bundle["status"] == "PASS_CANDIDATE"
+    assert materialised_bundle["protected_source_reachability"] == "ZERO_SURVIVORS"
     assert materialised_av["results"] == generated_bundle["fixture_results"]
     assert materialised_av["all_registered_fixtures_executed"] is True
     assert materialised_av["all_status_pass"] is True
-    comparable_capacity = []
-    for row in evidence:
-        comparable_capacity.append({
-            key: value for key, value in row.items()
-            if key not in {"scientific_effect", "authority_effect"}
-        })
-    assert materialised_capacity["tiers"] == comparable_capacity
     assert materialised_capacity["scientific_effect"] == "NONE"
     assert materialised_capacity["authority_effect"] == "NONE"
