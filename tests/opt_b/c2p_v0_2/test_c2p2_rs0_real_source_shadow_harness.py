@@ -12,6 +12,7 @@ SCRIPT = REPO_ROOT / "scripts/c2p2_rs0_real_source_shadow.py"
 AUTHORITY = REPO_ROOT / "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_2.json"
 WORKFLOW = REPO_ROOT / ".github/workflows/c2p2-rs0-real-source-shadow-run.yml"
 TRIGGER_REL = "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_TRIGGER_v0_1.json"
+OVERRIDE = REPO_ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_NOVIT_OPERATOR_OVERRIDE_v0_1.json"
 
 
 def test_real_source_harness_accepts_exact_fresh_grun_bindings() -> None:
@@ -53,9 +54,20 @@ def test_fresh_grun_authority_remains_single_use_and_non_selecting() -> None:
     assert authority["non_transitive_denials"]["validation"] == "LOCKED_UNCONSUMED"
 
 
+def test_no_vit_operator_override_is_bounded_to_this_execution_packet() -> None:
+    override = json.loads(OVERRIDE.read_text(encoding="utf-8"))
+    assert override["packet_id"] == "C2P2-RS0-REAL-SOURCE-SHADOW-RUN"
+    assert override["decision"] == "PASS"
+    assert override["vit"]["required_for_this_execution_branch"] is False
+    assert override["vit"]["permanent_main_integration_authority"] == "NOT_GRANTED_BY_THIS_OVERRIDE"
+    assert override["preserved_semantic_scope"]["run_count"] == 1
+    assert override["preserved_semantic_scope"]["selection"] == "NONE"
+    assert override["preserved_semantic_scope"]["activation"] == "NONE"
+
+
 def test_execution_workflow_is_exact_trigger_marker_gated() -> None:
     workflow = WORKFLOW.read_text(encoding="utf-8")
-    assert "run/c2p2-rs0-real-source-shadow-20260817" in workflow
+    assert "run/c2p2-rs0-real-source-shadow-novit-20260817" in workflow
     assert TRIGGER_REL in workflow
     assert "cancel-in-progress: false" in workflow
     assert "contents: write" in workflow
