@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc/c2p2/rs0/empirical-runtime/v0_1",
+  "title": "C2P2 RS0 deterministic empirical runtime binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "binding_id",
+    "status",
+    "authority_record",
+    "semantic_binding",
+    "implementation",
+    "runtime_contract",
+    "assurance_contract",
+    "selection_state",
+    "active_object_pack_id",
+    "real_source_launch",
+    "grun_consumed",
+    "rollback",
+    "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2p2-rs0-empirical-runtime-binding/v1"},
+    "programme_id": {"const": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1"},
+    "packet_id": {"const": "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"},
+    "binding_id": {"const": "C2P2_RS0_EMPIRICAL_RUNTIME_BINDING_v0_1"},
+    "status": {"const": "CLOSED_RESEARCH_NONACTIVE"},
+    "authority_record": {"type": "string", "minLength": 1},
+    "semantic_binding": {"type": "object"},
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "runtime_contract": {"type": "object"},
+    "assurance_contract": {"type": "object"},
+    "selection_state": {"const": "COMPARATIVE_SET_ONLY_NO_WINNER"},
+    "active_object_pack_id": {"type": "null"},
+    "real_source_launch": {"const": "DENIED_UNTIL_FRESH_GRUN_PASS"},
+    "grun_consumed": {"const": false},
+    "rollback": {"type": "string", "minLength": 1},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

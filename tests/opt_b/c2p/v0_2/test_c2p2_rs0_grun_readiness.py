@@ -51,19 +51,19 @@ def test_operator_pass_grants_one_historical_shadow_run_and_semantic_successor_d
     assert packet["approved_authority"]["real_source_run"] == "ONE_BOUNDED_PREREGISTERED_RS0_SHADOW_RUN"
     assert packet["approved_authority"]["active_object_pack"] is None
 
-    assert state["status"] == "IMPLEMENTED"
-    assert state["packet_id"] == "C2P2-RS0-OBJECTPACK-SEMANTIC-BINDING"
-    assert state["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_SUCCESSOR_V2"
-    assert state["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_RUNTIME_CLOSEOUT_FINAL_GENERATION_AND_FRESH_GRUN_PASS"
+    assert state["status"] == "GATE_READY_AWAITING_OPERATOR"
+    assert state["packet_id"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert state["authority"]["prior_grun_v1"] == "PASS_TOKEN_UNCONSUMED_NOT_APPLICABLE_TO_FINAL_V3"
+    assert state["authority"]["successor_candidate_real_source_launch"] == "DENIED_UNTIL_FRESH_GRUN_PASS"
     assert state["authority"]["active_object_pack"] is None
     assert state["selection_state"] == "COMPARATIVE_SET_ONLY_NO_WINNER"
-    assert state["mandatory_stop"] is None
-    assert state["next_packet"] == "C2P2-RS0-EMPIRICAL-RUNTIME-CLOSEOUT"
+    assert state["mandatory_stop"] == "C2P2-RS0-FRESH-GRUN"
+    assert state["next_packet"] == "C2P2-RS0-REAL-SOURCE-SHADOW-RUN_AFTER_FRESH_GRUN_PASS"
 
     assert execution["prior_grun"]["candidate_generation"] == "v1"
     assert execution["prior_grun"]["run_authority_consumed"] is False
     assert execution["prior_grun"]["run_count_remaining"] == 1
-    assert execution["prior_grun"]["disposition"] == "PRESERVED_UNCONSUMED_NOT_APPLICABLE_TO_SUCCESSOR_V2"
+    assert execution["prior_grun"]["disposition"] == "PRESERVED_UNCONSUMED_NOT_APPLICABLE_TO_FINAL_V3"
     assert execution["fresh_grun_required_before_real_source_launch"] is True
 
 

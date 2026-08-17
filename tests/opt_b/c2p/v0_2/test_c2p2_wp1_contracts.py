@@ -22,7 +22,7 @@ class WP1ContractsTest(unittest.TestCase):
         schemas=list(SCHEMA_DIR.glob("*.json"))
         registries=[p for p in REG_DIR.glob("*.json") if p.name not in {"C2P_CANONICAL_SERIALIZATION_PROFILE_v0_2.json","DEFERRED_RECONCILIATION_NAMESPACE_RESERVATION.json"}]
         self.assertEqual(len(contracts),15)
-        self.assertEqual(len(schemas),14)
+        self.assertEqual(len(schemas),15)
         self.assertEqual(len(registries),12)
         for p in schemas:
             data=json.loads(p.read_text(encoding="utf-8"))
