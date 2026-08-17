@@ -36,6 +36,19 @@ def test_wp7b_merge_receipt_proves_exact_tree_materialisation():
     assert receipt["next_packet"] == "RCCRI-WP8"
 
 
+def test_wp8_merge_receipt_proves_terminal_physical_materialisation():
+    receipt = load("docs/releases/rccr-v0-1/rccri-wp8/RCCRI_WP8_MERGE_RECEIPT.json")
+    assert receipt["decision"] == "PASS"
+    assert receipt["candidate_head"] == "78518c97f6fbb8dbbae7b229e03ee8d767e40544"
+    assert receipt["squash_merge_commit"] == "43c053822e4a3cd0e7c04fc4a0760879ef84290a"
+    assert receipt["qualified_result_tree"] == receipt["physical_post_merge_tree"] == "6ef70fb8095c3a8074587b5900e791ae98043db9"
+    assert receipt["tree_equivalence"] == "PASS"
+    assert receipt["authority_delta"] == "NONE"
+    assert receipt["terminal_state"] == "RCCR_V0_1_IMPLEMENTED_NON_AUTHORITATIVE_SYNTHESIS"
+    assert receipt["next_packet"] is None
+    assert receipt["next_operator_gate"] is None
+
+
 def test_source_frontier_reconciliation_is_exact_allowlist_and_authority_preserving():
     admission, wave, pointer = source_inputs()
     rebuilt = reconcile_source_frontier(admission_manifest=admission, bootstrap_wave=wave, current_pointer=pointer)
@@ -72,13 +85,18 @@ def test_rebuild_restart_receipt_is_order_invariant_and_fail_closed():
 def test_terminal_authority_validation_preserves_owner_and_validation_denials():
     pointer = load("registries/implementation/rccr_v0_1/CURRENT_STATE_POINTER.json")
     validate_terminal_authority(pointer)
+    assert pointer["status"] == "COMPLETED"
+    assert pointer["current_state"] == "RCCR_V0_1_STATE_v0_17.json"
     assert pointer["current_packet"] == "RCCRI-WP8"
     assert pointer["current_gate"] == "RCCRI-G8"
-    assert pointer["last_completed_packet"] == "RCCRI-WP7B"
-    assert pointer["last_merge_commit"] == "f8711a2fa0d643c87abb45a0985bf526c0f9915a"
+    assert pointer["gate_status"] == "PASS_DELEGATED_COMPLETED"
+    assert pointer["last_completed_packet"] == "RCCRI-WP8"
+    assert pointer["last_merge_commit"] == "43c053822e4a3cd0e7c04fc4a0760879ef84290a"
     assert pointer["owner_authority_frontier"]["validation"]["state"] == "LOCKED_UNCONSUMED"
     assert pointer["rccr_consumption_boundary"]["owner_capability_activation"] == "DENIED"
     assert pointer["rccr_consumption_boundary"]["validation_consumption"] == "DENIED"
+    assert pointer["next_packet"] is None
+    assert pointer["next_operator_gate"] is None
     assert pointer["authority_effect"] == "NONE"
 
 
