@@ -16,15 +16,20 @@ permissions:
   contents: read
   pull-requests: read
 
+# A fixed concurrency group cancels an older pending run when a newer main push
+# arrives, even when cancel-in-progress is false. Key by merge SHA instead so
+# each physical write retains a completion demand while the existing local
+# runner is offline/busy. The bounded first-parent drain below also recovers
+# recent completion debt idempotently when the runner resumes.
 concurrency:
-  group: ovc-vit-local-post-merge-completion-v1
+  group: ovc-vit-local-post-merge-completion-v2-${{ inputs.merge_sha || github.sha }}
   cancel-in-progress: false
 
 jobs:
   complete:
     name: DSAI3V local post-merge completion
     runs-on: [self-hosted, Windows]
-    timeout-minutes: 15
+    timeout-minutes: 30
     env:
       OVC_VIT_RECOVERY_MERGE_SHA: ${{ inputs.merge_sha || github.sha }}
     steps:
@@ -45,10 +50,10 @@ jobs:
           }
           python --version
 
-      - name: Persist canonical VIT completion bundle
+      - name: Persist canonical VIT completion bundle and drain recent completion debt
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src;.
         run: |
-          python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha "$env:OVC_VIT_RECOVERY_MERGE_SHA"
+          python tools/ci/vit_post_merge_completion_drain.py --repo-root . --head "$env:OVC_VIT_RECOVERY_MERGE_SHA" --limit 16
