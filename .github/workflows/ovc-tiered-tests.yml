@@ -125,6 +125,7 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
+            const {execFileSync} = require('node:child_process');
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const eventPr = context.payload.pull_request;
@@ -141,6 +142,34 @@ jobs:
             const latestNamedRun = (runs, name) => {
               const matches = runs.filter(run => run.name === name).sort((a, b) => b.id - a.id);
               return matches[0];
+            };
+            const ensureCommit = ref => {
+              try {
+                execFileSync('git', ['cat-file', '-e', `${ref}^{commit}`], {stdio: 'ignore'});
+              } catch (_) {
+                execFileSync('git', ['fetch', '--no-tags', 'origin', ref], {stdio: 'ignore'});
+              }
+            };
+            const localContains = (base, head) => {
+              ensureCommit(base);
+              ensureCommit(head);
+              try {
+                execFileSync('git', ['merge-base', '--is-ancestor', base, head], {stdio: 'ignore'});
+                return true;
+              } catch (error) {
+                if (error?.status === 1) return false;
+                throw error;
+              }
+            };
+            const containsCommit = async (base, head) => {
+              try {
+                const ancestry = await github.rest.repos.compareCommits({owner, repo, base, head});
+                return ['ahead', 'identical'].includes(ancestry.data.status);
+              } catch (error) {
+                if (error?.status !== 404) throw error;
+                core.warning(`OVC_COMPARE_API_404_FALLBACK_GIT: ${base}...${head}`);
+                return localContains(base, head);
+              }
             };
 
             while (Date.now() < deadline) {
@@ -179,13 +208,7 @@ jobs:
               const baseRef = livePr.data.base.ref;
               const mainNow = await github.rest.repos.getBranch({owner, repo, branch: baseRef});
               const currentMain = mainNow.data.commit.sha;
-              const ancestry = await github.rest.repos.compareCommits({
-                owner,
-                repo,
-                base: currentMain,
-                head: sha
-              });
-              if (!['ahead', 'identical'].includes(ancestry.data.status)) {
+              if (!(await containsCommit(currentMain, sha))) {
                 core.setFailed(
                   `OVC_RECONCILE_REQUIRED: candidate ${sha} does not contain live ${baseRef}@${currentMain}; ` +
                   `event base ${eventPr.base.sha} is provenance only. Bounded lawful reconcile/requeue is required.`
@@ -242,6 +265,7 @@ jobs:
           OVC_READY_HEAD_SHA: ${{ needs.siq-ready-admission.outputs.head_sha }}
         with:
           script: |
+            const {execFileSync} = require('node:child_process');
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const eventPr = context.payload.pull_request;
@@ -265,6 +289,34 @@ jobs:
             const emitPredecessorMetric = (result, leaseOwner = null) => core.info(
               `OVC_CI_METRIC ${JSON.stringify({schema:'ovc-ci-metric/v1',metric:'final_integration_predecessor_lease_wait_ms',value_ms:Date.now()-startedAt,head_sha:sha,predecessor_pr:leaseOwner?.number||null,result})}`
             );
+            const ensureCommit = ref => {
+              try {
+                execFileSync('git', ['cat-file', '-e', `${ref}^{commit}`], {stdio: 'ignore'});
+              } catch (_) {
+                execFileSync('git', ['fetch', '--no-tags', 'origin', ref], {stdio: 'ignore'});
+              }
+            };
+            const localContains = (base, head) => {
+              ensureCommit(base);
+              ensureCommit(head);
+              try {
+                execFileSync('git', ['merge-base', '--is-ancestor', base, head], {stdio: 'ignore'});
+                return true;
+              } catch (error) {
+                if (error?.status === 1) return false;
+                throw error;
+              }
+            };
+            const containsCommit = async (base, head) => {
+              try {
+                const ancestry = await github.rest.repos.compareCommits({owner, repo, base, head});
+                return ['ahead', 'identical'].includes(ancestry.data.status);
+              } catch (error) {
+                if (error?.status !== 404) throw error;
+                core.warning(`OVC_COMPARE_API_404_FALLBACK_GIT: ${base}...${head}`);
+                return localContains(base, head);
+              }
+            };
             const findPassedPredecessor = async mainSha => {
               const pulls = await github.paginate(github.rest.pulls.list, {owner, repo, state:'open', base:baseRef, per_page:100});
               for (const candidate of pulls) {
@@ -277,8 +329,7 @@ jobs:
                 const checks = await github.rest.checks.listForRef({owner, repo, ref:candidate.head.sha, per_page:100, filter:'latest'});
                 const leaseRun = latestNamedRun(checks.data.check_runs);
                 if (!(leaseRun?.status === 'completed' && leaseRun.conclusion === 'success')) continue;
-                const ancestry = await github.rest.repos.compareCommits({owner, repo, base:mainSha, head:candidate.head.sha});
-                if (!['ahead','identical'].includes(ancestry.data.status)) continue;
+                if (!(await containsCommit(mainSha, candidate.head.sha))) continue;
                 return {number:candidate.number, headSha:candidate.head.sha, baseSha:mainSha};
               }
               return null;
@@ -353,13 +404,7 @@ jobs:
             }
             const mainAtStart = await github.rest.repos.getBranch({owner, repo, branch:baseRef});
             const mainSnapshot = mainAtStart.data.commit.sha;
-            const ancestry = await github.rest.repos.compareCommits({
-              owner,
-              repo,
-              base: mainSnapshot,
-              head: sha
-            });
-            if (!['ahead', 'identical'].includes(ancestry.data.status)) {
+            if (!(await containsCommit(mainSnapshot, sha))) {
               core.setFailed(
                 `OVC_RECONCILE_REQUIRED: candidate ${sha} does not contain acquired ${baseRef}@${mainSnapshot}; ` +
                 `READY base was ${readyBase}. Release and bounded lawful reconcile/requeue are required.`
