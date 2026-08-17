@@ -5,9 +5,9 @@
   "packet_id": "ATLAS-WP10",
   "recovery_decision_id": "03dea842ce3de46ad46411ecdfa92df9dc19244f9550c554ee4c46f44b3c24f7",
   "recovery_attempt_id": "a72d50674e99b2edf289d52fb159f1f36083d223c5a8f6dbe07b0656000a41e0",
-  "focused_completion_assurance": "PASS_25_TESTS",
-  "vit_assurance": "PASS_405_TESTS_598_SUBTESTS",
-  "siq_assurance": "PASS_23_TESTS",
+  "focused_completion_assurance": "PASS_26_TESTS",
+  "vit_assurance": "PASS_406_TESTS_598_SUBTESTS",
+  "siq_assurance": "PASS_24_TESTS",
   "grt_assurance": "PASS_102_TESTS_1_SKIPPED_WITH_ONE_INHERITED_WINDOWS_PATH_SEPARATOR_BUNDLE_REBUILD_FINDING",
   "repository_windows_assurance": "INHERITED_PLATFORM_LIMITATION_FOUR_POSIX_RESOURCE_IMPORT_COLLECTION_ERRORS",
   "required_integration_assurance": "EXACT_HEAD_UBUNTU_REPOSITORY_VIT_SIQ_GRT_CI_REQUIRED_BEFORE_MERGE",
@@ -26,7 +26,14 @@
     "vit_post_merge_completion": "d573183b13860e5fd4ff17660bb4e7bb4cbcee8b",
     "vit_local_completion_registry": "d57f21e4bdb349f98a87e8d21b2df380b977812e"
   },
-  "defects": [],
+  "defects": [
+    {
+      "id": "ATLAS-WP10-HCR-D01",
+      "classification": "PROSPECTIVE_PREWRITE_FREEZE_PRODUCER_BINDING_DEFECT",
+      "resolution": "Bound the registry-declared assurance preflight producer to the existing deterministic PMT freeze builder and marker encoder; the normal PMT schema, validator and completion path are unchanged.",
+      "status": "CLOSED"
+    }
+  ],
   "out_of_scope_platform_findings": [
     "GRT WP1 committed bundle rebuild uses platform-native path serialization on Windows while the committed historical bundle uses POSIX separators.",
     "Four repository modules import the POSIX-only resource module during Windows collection; Ubuntu exact-head CI is controlling."

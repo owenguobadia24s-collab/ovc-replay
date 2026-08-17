@@ -5,11 +5,16 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 from typing import Any, Mapping
 import urllib.error
 import urllib.request
 
 from ovc.development.skills.vit_assurance_decoupling import validate_aa0_reuse_authorization
+from ovc.development.skills.vit_local_completion_executor import (
+    build_live_transaction_freeze,
+    encode_freeze_marker,
+)
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
 
 LINEAGE = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
@@ -37,6 +42,40 @@ def _write_output(name: str, value: str) -> None:
         with open(path, "a", encoding="utf-8") as handle:
             handle.write(f"{name}={value}\n")
     print(f"OVC_VIT_ASSURANCE_{name.upper()}={value}")
+
+
+def _git_tree(root: Path, commit: str) -> str:
+    proc = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", f"{commit}^{{tree}}"],
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or "VIT_ASSURANCE_GIT_TREE_RESOLUTION_FAILED")
+    return proc.stdout.strip()
+
+
+def _emit_prewrite_freeze(
+    *, event: Mapping[str, Any], pr: Mapping[str, Any], lineage_record: Mapping[str, Any]
+) -> None:
+    head = pr.get("head")
+    base = pr.get("base")
+    if not isinstance(head, Mapping) or not isinstance(base, Mapping):
+        raise RuntimeError("VIT_ASSURANCE_LIVE_PR_HEAD_BASE_MISSING")
+    root = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
+    freeze = build_live_transaction_freeze(
+        lineage_record=lineage_record,
+        pr_number=int(event.get("number", pr.get("number", -1))),
+        base_sha=str(base.get("sha", "")),
+        head_sha=str(head.get("sha", "")),
+        base_tree=_git_tree(root, str(base.get("sha", ""))),
+        head_tree=_git_tree(root, str(head.get("sha", ""))),
+        workflow_run_id=os.environ.get("GITHUB_RUN_ID", ""),
+        run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+    )
+    print(encode_freeze_marker(freeze))
 
 
 def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
@@ -117,6 +156,7 @@ def main() -> int:
     _write_output("aa0_identity", lineage.pip_id)
     _write_output("generation_id", lineage.generation_id)
     _write_output("pip_id", lineage.pip_id)
+    _emit_prewrite_freeze(event=event, pr=pr, lineage_record=lineage_record)
 
     if reuse_record is None:
         _write_output("aa0_reuse_authorized", "false")
