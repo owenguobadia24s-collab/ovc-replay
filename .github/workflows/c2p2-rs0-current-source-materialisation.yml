@@ -1,0 +1,92 @@
+name: C2P2 RS0 current source materialisation
+
+on:
+  push:
+    branches:
+      - build/c2p2-rs0-current-source-materialisation-20260817
+
+concurrency:
+  group: c2p2-rs0-current-source-materialisation
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  materialise:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install repository
+        run: python -m pip install -e .
+
+      - name: Download exact C1 Discovery 2021-2023 v2 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: c1c-discovery-2021-2023-v2-local-candidate
+          path: ${{ runner.temp }}/c1-discovery-v2
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '30370847916'
+
+      - name: Download exact OPT-A Discovery 2021-2023 v2 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: a2-g3-opt-a-gbpusd-discovery-2021-2023-v2
+          path: ${{ runner.temp }}/opt-a-discovery-v2
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '30179286521'
+
+      - name: Materialise current C2 vNext and current C2E RS0 source
+        env:
+          PYTHONPATH: src
+        run: |
+          set -euo pipefail
+          python -m ovc.opt_b.c2p_v0_2.rs0_source_materialisation_runtime \
+            --c1-root '${{ runner.temp }}/c1-discovery-v2' \
+            --opt-a-root '${{ runner.temp }}/opt-a-discovery-v2' \
+            --pack 'registries/opt_b/c2e/v0_2/C2E_EMPIRICAL_BOUNDARY_PACK_JUNE_STABLE_v0_2.json' \
+            --out '${{ runner.temp }}/c2p2-rs0-current-source' \
+            --source-build-commit '${{ github.sha }}' \
+            | tee '${{ runner.temp }}/c2p2-rs0-current-source-run.json'
+
+      - name: Verify locator and every projected source row
+        if: success()
+        env:
+          PYTHONPATH: src
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from ovc.opt_b.c2p_v0_2.rs0_execution import validate_locator, iter_verified_rows
+          root = Path(r'${{ runner.temp }}/c2p2-rs0-current-source')
+          locator = json.loads((root / 'rs0-source-locator.json').read_text(encoding='utf-8'))
+          sources = validate_locator(locator, root)
+          counts = {}
+          for source in sources:
+              count = sum(1 for _ in iter_verified_rows(root / source.relative_path, expected_role=source.role))
+              if count != source.row_count:
+                  raise SystemExit(f'ROW_COUNT_DRIFT:{source.relative_path}:{count}:{source.row_count}')
+              counts[source.relative_path] = count
+          print(json.dumps({'verified': True, 'counts': counts}, sort_keys=True))
+          PY
+
+      - name: Upload exact inactive RS0 source artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c2p2-rs0-current-c2-vnext-c2e-2021-2023
+          path: |
+            ${{ runner.temp }}/c2p2-rs0-current-source
+            ${{ runner.temp }}/c2p2-rs0-current-source-run.json
+          if-no-files-found: warn
+          retention-days: 30
+          compression-level: 6

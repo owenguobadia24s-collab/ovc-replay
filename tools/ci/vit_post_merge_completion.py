@@ -9,7 +9,7 @@ import subprocess
 from typing import Any, Mapping
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
 
 from ovc.development.identity import canonical_sha256
 from ovc.development.skills.vit_core import VitContractError
@@ -26,6 +26,16 @@ class PostMergeCompletionError(RuntimeError):
     pass
 
 
+class _StripAuthorizationOnRedirect(HTTPRedirectHandler):
+    """Follow GitHub's signed log redirect without forwarding GitHub auth."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        redirected = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if redirected is not None:
+            redirected.remove_header("Authorization")
+        return redirected
+
+
 def _git(repo: Path, *args: str) -> str:
     proc = subprocess.run(
         ["git", "-C", str(repo), *args],
@@ -39,18 +49,32 @@ def _git(repo: Path, *args: str) -> str:
     return proc.stdout.strip()
 
 
-def _request(url: str, token: str, *, accept: str = "application/vnd.github+json") -> bytes:
-    headers = {
+def _headers(token: str, *, accept: str = "application/vnd.github+json") -> dict[str, str]:
+    return {
         "Accept": accept,
         "Authorization": f"Bearer {token}",
         "User-Agent": "ovc-vit-local-post-merge-completion/v1",
         "X-GitHub-Api-Version": "2022-11-28",
     }
+
+
+def _request(url: str, token: str, *, accept: str = "application/vnd.github+json") -> bytes:
     try:
-        with urlopen(Request(url, headers=headers), timeout=30) as response:
+        with urlopen(Request(url, headers=_headers(token, accept=accept)), timeout=30) as response:
             return response.read()
     except (HTTPError, URLError, TimeoutError) as exc:
         raise PostMergeCompletionError(f"GitHub request failed: {url}: {exc}") from exc
+
+
+def _request_job_log(url: str, token: str) -> bytes:
+    """Download one Actions job log through GitHub's authenticated signed redirect."""
+    opener = build_opener(_StripAuthorizationOnRedirect())
+    request = Request(url, headers=_headers(token))
+    try:
+        with opener.open(request, timeout=30) as response:
+            return response.read()
+    except (HTTPError, URLError, TimeoutError) as exc:
+        raise PostMergeCompletionError(f"GitHub job-log request failed: {url}: {exc}") from exc
 
 
 def _json(url: str, token: str) -> Any:
@@ -121,10 +145,9 @@ def _freeze_from_prewrite_logs(
                 and job.get("name") == "VIT routing preflight"
                 and job.get("conclusion") == "success"
             ):
-                text = _request(
+                text = _request_job_log(
                     f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/jobs/{int(job['id'])}/logs",
                     token,
-                    accept="text/plain",
                 ).decode("utf-8", errors="replace")
                 if FREEZE_MARKER_PREFIX in text:
                     markers.append(decode_freeze_marker(text))

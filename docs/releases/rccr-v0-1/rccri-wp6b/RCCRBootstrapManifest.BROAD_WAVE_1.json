@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-rccr-bootstrap-wave/v1",
+  "manifest_id": "RCCRBootstrapManifest.BROAD_WAVE_1",
+  "programme_id": "OVC-RCCR-CONFORMANCE-v0.1",
+  "packet_id": "RCCRI-WP6B",
+  "pilot_exit_gate": "RCCRI-G-PILOT-EXIT",
+  "pilot_exit_decision": "PASS",
+  "admission_manifest": "docs/releases/rccr-v0-1/rccri-wp6b/RCCRI_WP6B_SOURCE_ADMISSION_MANIFEST.json",
+  "strata": [
+    "PATH2_IN_HOUSE",
+    "PATH2_EXTERNAL",
+    "EXTERNAL_FINDING",
+    "ARCHITECTURE_CONTROL"
+  ],
+  "admitted_source_count": 6,
+  "excluded_source_count": 6,
+  "wave_semantics": "NON_AUTHORITATIVE_SYNTHESIS_INPUT_ONLY",
+  "negative_controls_preserved": true,
+  "mode_visibility_preserved": true,
+  "source_fidelity_preserved": true,
+  "arbitrary_repository_scan": false,
+  "owner_authority_frontier": {
+    "ec1": {
+      "owner_gate": "DMRPI-GREAL-EC1",
+      "state": "AUTHORISED_BOUNDED",
+      "decision_ref": "docs/releases/ec1-dmrp-conformance-v0-1/dmrpi-wp6/DMRPI_GREAL_EC1_GATE_PACKET.json",
+      "merge_commit": "a26bc19d76ed3ebd3def43a23468404e976f84eb"
+    },
+    "path2_external": {
+      "owner_gate": "P2-EXT-REAL-SOURCE-EVIDENTIARY-AUTHORITY-0.1",
+      "state": "AUTHORISED_BOUNDED",
+      "decision_ref": "docs/releases/ec1-dmrp-conformance-v0-1/path2-external-theory/p2-ext-real-source-authority/P2_EXT_REAL_SOURCE_EVIDENTIARY_AUTHORITY_OPERATOR_DECISION_v0_1.json",
+      "merge_commit": "04b379adee8b584e841b24e83883aed33e090c61"
+    },
+    "validation": {
+      "state": "LOCKED_UNCONSUMED"
+    }
+  },
+  "rccr_consumption_boundary": {
+    "real_source_ec1_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "path2_real_source_consumption": "DENIED_BY_RCCRI_WP6B_SCOPE",
+    "owner_capability_activation": "DENIED",
+    "validation_consumption": "DENIED"
+  },
+  "authority_effect": "NONE"
+}
