@@ -1,0 +1,17 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"OVC IndependentScientificReviewRecord v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","candidate_ref","reviewer_role","reviewer_ref","challenge_vector_ref","disposition","conflict_disclosure","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-prsc-independent-scientific-review-record/v0.1"},
+    "candidate_ref":{"type":"string","minLength":1},
+    "reviewer_role":{"enum":["METHOD_REVIEWER","DOMAIN_REVIEWER","INDEPENDENT_ADVERSARIAL_REVIEWER"]},
+    "reviewer_ref":{"type":"string","minLength":1},
+    "challenge_vector_ref":{"type":"string","minLength":1},
+    "disposition":{"type":"string","minLength":1},
+    "conflict_disclosure":{"type":"string"},
+    "authority_effect":{"const":"NONE"}
+  }
+}

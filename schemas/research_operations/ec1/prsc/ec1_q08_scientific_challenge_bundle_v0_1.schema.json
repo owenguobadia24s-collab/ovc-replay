@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"OVC EC1Q08ScientificChallengeBundle v0.1",
+  "type":"object",
+  "additionalProperties":false,
+  "required":["schema","candidate_ref","challenge_vector_ref","independent_review_refs","scientific_disposition_ref","candidate_freeze_effect","authority_effect"],
+  "properties":{
+    "schema":{"const":"ovc-prsc-ec1-q08-scientific-challenge-bundle/v0.1"},
+    "candidate_ref":{"type":"string","minLength":1},
+    "challenge_vector_ref":{"type":"string","minLength":1},
+    "independent_review_refs":{"type":"array","items":{"type":"string"}},
+    "review_disagreement_ref":{"type":["string","null"]},
+    "scientific_disposition_ref":{"type":"string","minLength":1},
+    "candidate_freeze_recommendation_ref":{"type":["string","null"]},
+    "candidate_freeze_effect":{"const":"NONE"},
+    "candidate_freeze_gate":{"type":["string","null"]},
+    "authority_effect":{"const":"NONE"}
+  }
+}
