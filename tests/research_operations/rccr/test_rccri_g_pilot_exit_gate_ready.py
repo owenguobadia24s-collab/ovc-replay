@@ -122,6 +122,7 @@ def test_programme_pointer_preserves_pilot_and_g7b_history_while_wp8_advances():
     # WP8 QA remains an immutable predecessor generation even after delegated G8 approval.
     assert wp8_qa["status"] == "QA_REVIEW"
     assert wp8_qa["packet_id"] == "RCCRI-WP8"
+    assert wp8_qa["current_gate"] == "RCCRI-G8"
     assert wp8_qa["gate_packet"] == "PENDING_RCCRI_G8"
     assert wp8_qa["decision_record"] == "PENDING_RCCRI_G8"
     assert wp8_qa["merge_commit"] is None
