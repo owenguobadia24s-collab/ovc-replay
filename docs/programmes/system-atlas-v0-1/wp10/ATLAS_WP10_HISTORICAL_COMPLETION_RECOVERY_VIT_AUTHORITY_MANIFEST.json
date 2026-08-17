@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-vit-authority-manifest-binding/v1",
+  "logical_id": "15c215777c5208b9c531e96977f8bd21a54aec594a78fd2bc1e88754e43bb9ad",
+  "payload": {
+    "plan_id": "DSAI3V-VIT-HISTORICAL-COMPLETION-RECOVERY-PR1047",
+    "packet_id": "ATLAS-WP10-HISTORICAL-COMPLETION-RECOVERY",
+    "gate_id": "OPERATOR_RECOVERY_DECISION_PASS_SINGLE_USE",
+    "authority_class": "OPERATOR_AUTHORISED_SINGLE_USE_FORWARD_ONLY_EXCEPTION",
+    "authority_delta": "NONE_COMPLETION_RECOVERY_ONLY",
+    "authority_sources": [
+      "docs/programmes/system-atlas-v0-1/wp10/ATLAS_WP10_HISTORICAL_COMPLETION_RECOVERY_DECISION.json",
+      "docs/programmes/system-atlas-v0-1/wp10/ATLAS_WP10_HISTORICAL_COMPLETION_RECOVERY_SOURCE_CENSUS.json",
+      "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+      "registries/development/skills/VIT_COMPLETION_RECEIPTSTORE_BINDING_v0_1.json",
+      "registries/development/skills/VIT_LOCAL_POST_MERGE_COMPLETION_EXECUTOR_v0_1.json",
+      "docs/programmes/system-atlas-v0-1/wp10/ATLAS_G10_GATE_PACKET.json",
+      "docs/programmes/system-atlas-v0-1/wp10/ATLAS_WP10_INDEPENDENT_REVIEW_RECORD.json"
+    ],
+    "permitted_effects": [
+      "persist one typed historical completion bundle for PR 1047 through the existing ReceiptStore",
+      "record Atlas WP10 administrative completion against physical merge 911cac359aa0d23b981be15edae473b7d2b7d55b",
+      "integrate recovery-only implementation and evidence through the existing VIT/SIQ route"
+    ],
+    "reserved_boundaries": [
+      "ATLAS-G-OBSERVABILITY-ACTIVATE",
+      "NO_RESEARCH_CONSOLE_SOURCE_OR_BINDING",
+      "NO_C2P_ONE_RUN_CONSUMPTION",
+      "NO_VALIDATION_UNLOCK",
+      "NO_CANONICAL_PUBLICATION",
+      "NO_SCIENTIFIC_WRITE_OR_EXPOSURE_AUTHORITY",
+      "NO_ORIGINAL_PMT_RECONSTRUCTION_OR_INFERENCE"
+    ],
+    "security_envelope_id": "ATLAS-AE-v0.1-R1",
+    "precedent_effect": "NONE_SINGLE_USE"
+  }
+}

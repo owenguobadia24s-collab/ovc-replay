@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-vit-historical-completion-recovery-qa/v1",
+  "qa_id": "ATLAS-WP10-HISTORICAL-COMPLETION-RECOVERY-QA-20260817-v1",
+  "programme_id": "OVC-SYSTEM-ATLAS-CONFORMANCE-v0.1",
+  "packet_id": "ATLAS-WP10",
+  "recovery_decision_id": "03dea842ce3de46ad46411ecdfa92df9dc19244f9550c554ee4c46f44b3c24f7",
+  "recovery_attempt_id": "a72d50674e99b2edf289d52fb159f1f36083d223c5a8f6dbe07b0656000a41e0",
+  "focused_completion_assurance": "PASS_25_TESTS",
+  "vit_assurance": "PASS_405_TESTS_598_SUBTESTS",
+  "siq_assurance": "PASS_23_TESTS",
+  "grt_assurance": "PASS_102_TESTS_1_SKIPPED_WITH_ONE_INHERITED_WINDOWS_PATH_SEPARATOR_BUNDLE_REBUILD_FINDING",
+  "repository_windows_assurance": "INHERITED_PLATFORM_LIMITATION_FOUR_POSIX_RESOURCE_IMPORT_COLLECTION_ERRORS",
+  "required_integration_assurance": "EXACT_HEAD_UBUNTU_REPOSITORY_VIT_SIQ_GRT_CI_REQUIRED_BEFORE_MERGE",
+  "recovery_properties": {
+    "exact_physical_tree": "PASS_CE04F93EEDF5F9C8C55914CB00BA66A6F8B17EE3",
+    "packet_completion_result_count": 1,
+    "linked_devobs": "PASS_TELEMETRY_UNAVAILABLE_EXPLICIT",
+    "clean_reconstruction": "PASS_REPOSITORY_DECISION_PLUS_RECEIPTSTORE",
+    "repeated_recovery": "PASS_IDEMPOTENT_INVENTORY_SHA256_F0DC37E240E5EBF283FDD638616DB60F7475687C871D072AA2E3DD1090C8BDDD",
+    "git_main_write": "NONE_ORIGIN_MAIN_REMAINED_ED0DA627034F7E19BFAABDAE027C37F579BD6FDC",
+    "normal_pmt_requirement": "PASS_UNCHANGED_EXISTING_BLOBS_AND_ABSENT_FREEZE_REMAINS_REJECTED"
+  },
+  "normal_path_unchanged_blobs": {
+    "vit_local_completion_executor": "5b0941492b776617e0ec57bb9081293d568fb297",
+    "vit_completion_runtime": "c6571e52ef22e092ac0ef5ea0b4d0a29fe8ab28b",
+    "vit_post_merge_completion": "d573183b13860e5fd4ff17660bb4e7bb4cbcee8b",
+    "vit_local_completion_registry": "d57f21e4bdb349f98a87e8d21b2df380b977812e"
+  },
+  "defects": [],
+  "out_of_scope_platform_findings": [
+    "GRT WP1 committed bundle rebuild uses platform-native path serialization on Windows while the committed historical bundle uses POSIX separators.",
+    "Four repository modules import the POSIX-only resource module during Windows collection; Ubuntu exact-head CI is controlling."
+  ],
+  "qa_result": "PASS_RECOVERY_PROPERTIES_EXACT_HEAD_INTEGRATION_ASSURANCE_REQUIRED",
+  "authority_effect": "NONE"
+}
