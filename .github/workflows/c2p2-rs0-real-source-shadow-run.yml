@@ -22,8 +22,8 @@ jobs:
     env:
       PYTHONPATH: src
       C2P2_RS0_BASELINE_COMMIT: 566903dcdde4fcc0aa6ab43a95bc36b947fafa15
-      RESULT_DIR: ${{ runner.temp }}/c2p2-rs0-real-source-shadow-result
-      SOURCE_DIR: ${{ runner.temp }}/c2p2-rs0-current-source
+      RESULT_DIR: /tmp/c2p2-rs0-real-source-shadow-result
+      SOURCE_DIR: /tmp/c2p2-rs0-current-source
     steps:
       - uses: actions/checkout@v4
         with:
