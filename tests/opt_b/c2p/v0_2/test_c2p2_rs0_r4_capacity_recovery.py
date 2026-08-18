@@ -40,6 +40,23 @@ def test_recovery_fixture_is_semantically_valid_but_adversarial_by_candidate_key
     assert len(first["relation_topology"]) == 4
 
 
+def test_recovery_fixture_stream_order_is_strictly_monotonic_across_scope_boundaries() -> None:
+    samples = [
+        recovery._level_row(0, "ASK"),
+        recovery._level_row(558_428, "ASK"),
+        recovery._container_row(558_429, "ASK"),
+        recovery._container_row(744_571, "ASK"),
+        recovery._level_row(744_572, "BID"),
+        recovery._level_row(1_303_000, "BID"),
+        recovery._container_row(1_303_001, "BID"),
+        recovery._container_row(1_489_143, "BID"),
+    ]
+    keys = [(row["first_valid_time"], row["source_record_id"]) for row in samples]
+    assert all(left < right for left, right in zip(keys, keys[1:]))
+    assert samples[0]["source_record_id"].startswith("R4REC-0000000000-")
+    assert samples[-1]["source_record_id"].startswith("R4REC-0001489143-")
+
+
 def test_recovery_proposed_ceiling_is_measurement_only_and_has_25pct_margin() -> None:
     assert recovery.FROZEN_EXECUTION_STORAGE_LIMIT == 6_411_935_744
     assert recovery.R4_PARTIAL_DATABASE_BYTES == 6_415_310_848

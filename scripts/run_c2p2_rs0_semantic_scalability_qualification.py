@@ -64,11 +64,16 @@ RELATION_TOPOLOGY = [
 TIMESTAMP = "2024-01-01T00:00:00Z"
 
 
+def _source_record_id(ordinal: int, source_kind: str, side: str) -> str:
+    kind_tag = "L" if source_kind == "C2_LEVEL" else "C"
+    return f"R4REC-{ordinal:010d}-{kind_tag}-{side}"
+
+
 def _level_row(ordinal: int, side: str) -> dict[str, Any]:
     return {
         "schema": "ovc-c2p2-rs0-source-row/v1",
         "source_role": "C2_VNEXT",
-        "source_record_id": f"R4REC-L-{side}-{ordinal:010d}",
+        "source_record_id": _source_record_id(ordinal, "C2_LEVEL", side),
         "source_record_kind": "C2_LEVEL",
         "instrument": "GBPUSD",
         "side": side,
@@ -90,7 +95,7 @@ def _container_row(ordinal: int, side: str) -> dict[str, Any]:
     return {
         "schema": "ovc-c2p2-rs0-source-row/v1",
         "source_role": "C2_VNEXT",
-        "source_record_id": f"R4REC-C-{side}-{ordinal:010d}",
+        "source_record_id": _source_record_id(ordinal, "C2_CONTAINER", side),
         "source_record_kind": "C2_CONTAINER",
         "instrument": "GBPUSD",
         "side": side,
@@ -298,6 +303,8 @@ def main() -> int:
             f"{side}|{source_kind}": count for side, source_kind, count in SCOPE_COUNTS
         },
         "fixture": {
+            "stream_order_contract": "STRICTLY_INCREASING_FIRST_VALID_TIME_SOURCE_RECORD_ID",
+            "source_record_id_ordering": "ZERO_PADDED_GLOBAL_ORDINAL_FIRST",
             "wide_origin_padding_characters": 512,
             "relation_topology_width": len(RELATION_TOPOLOGY),
             "candidate_a": "UNIQUE_EXACT_GEOMETRY_WITH_WIDE_PAYLOAD",

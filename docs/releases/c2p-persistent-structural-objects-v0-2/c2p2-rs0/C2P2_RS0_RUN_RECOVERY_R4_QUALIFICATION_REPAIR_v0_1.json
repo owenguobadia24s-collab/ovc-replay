@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-c2p2-rs0-run-recovery-r4-qualification-repair/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-RUN-RECOVERY-R4",
+  "status": "CORRECTED_RELAUNCH_PENDING",
+  "authority_effect": "NONE_PACKET_SCOPED_SYNTHETIC_FIX_ONLY",
+  "failed_run": {
+    "github_actions_run_id": 32135682287,
+    "github_actions_job_id": 95706334432,
+    "head_sha": "88fd3fb7bfa9244f6c570b74fc0253e3a33e06e2",
+    "targeted_tests": "26_PASSED",
+    "repository_regression": "4179_PASSED_2_SKIPPED_687_SUBTESTS_PASSED",
+    "failure_stage": "ADVERSARIAL_FULL_CARDINALITY_A_B_C_SYNTHETIC_CAPACITY_MEASUREMENT",
+    "failure": "RS0_RUNTIME_NONMONOTONIC_RESTART_STREAM",
+    "capacity_artifact_uploaded": false,
+    "r5_gate_materialised": false
+  },
+  "diagnosis": {
+    "root_cause": "SYNTHETIC_FIXTURE_SOURCE_RECORD_ID_ORDERING_BUG",
+    "detail": "All synthetic rows shared one first_valid_time while source_record_id encoded kind before the global ordinal. The frozen indexed runtime orders by (first_valid_time, source_record_id), so the C2_LEVEL to C2_CONTAINER boundary decreased lexicographically even though the generator ordinal increased.",
+    "scientific_semantics_implicated": false,
+    "real_source_read": false,
+    "real_source_execution": false,
+    "r4_token_effect": "NONE_ALREADY_CONSUMED_PRESERVED",
+    "storage_ceiling_effect": "NONE_NOT_ENACTED"
+  },
+  "correction": {
+    "source_record_id_format": "R4REC-{zero_padded_global_ordinal}-{kind_tag}-{side}",
+    "stream_order_contract": "STRICTLY_INCREASING_FIRST_VALID_TIME_SOURCE_RECORD_ID",
+    "added_boundary_test": true,
+    "population_change": "NONE",
+    "candidate_generation_change": "NONE",
+    "runtime_change": "NONE",
+    "evidence_contract_change": "NONE",
+    "predicate_or_threshold_change": "NONE",
+    "sampling": "FORBIDDEN_UNCHANGED",
+    "reduced_precision": "FORBIDDEN_UNCHANGED",
+    "frozen_execution_storage_limit_change": "NONE",
+    "diagnostic_measurement_ceiling_change": "NONE"
+  },
+  "reserved_authority": {
+    "real_source_execution": "NONE",
+    "fresh_run_token": "NONE",
+    "selection": "NONE",
+    "activation": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "publication_probability_risk_exposure_trading_execution_agent_write": "NONE"
+  },
+  "rollback": "FORWARD_ONLY_PRESERVE_FAILED_RUN_32135682287_AND_REPLACE_ONLY_THE_SYNTHETIC_FIXTURE_ORDERING_DEFECT"
+}
