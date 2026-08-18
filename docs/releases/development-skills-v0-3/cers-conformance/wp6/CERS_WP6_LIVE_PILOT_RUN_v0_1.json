@@ -5,11 +5,13 @@
   "packet_id": "CERS-WP6",
   "gate_id": "CERS-G-LIVE-DISPATCH",
   "gate_decision_id": "CERS-G-LIVE-DISPATCH.OPERATOR.PASS.20260818T151800+0100",
-  "status": "START_ACKNOWLEDGED_LIVE_BRANCH_WRITE_OBSERVED",
+  "status": "COMPLETED_BRANCH_PILOT_BACKGROUND_ASSURANCE_STILL_RUNNING",
   "start_time_local": "2026-08-18T16:00:52+01:00",
+  "completion_time_local": "2026-08-18T16:02:49+01:00",
   "freeze_revision": 5,
   "branch": "pilot/cers-wp6-live-20260818",
   "branch_head_before_start": "a246598623e5f814c86975aad42a9d3cc79770a9",
+  "live_start_commit": "83a41eb613cca273960cc912316ce4555ca786ae",
   "approval_main": "35d3dc736d5b16b3113a89cc1733a9c75bafd139",
   "observed_physical_main_at_start": "46e75f6524a98c73e4998744caab2296768f145c",
   "main_movement_since_approval": {
@@ -32,7 +34,10 @@
   "fencing_generation": 1,
   "transaction_timeline": [
     {"phase": "INTENT_PERSISTED", "fencing_generation": 1},
-    {"phase": "START_ACKNOWLEDGED", "fencing_generation": 1, "worker_run_id": "cers-live-32428a25c76de4710974"}
+    {"phase": "START_ACKNOWLEDGED", "fencing_generation": 1, "worker_run_id": "cers-live-32428a25c76de4710974"},
+    {"phase": "HEARTBEAT", "fencing_generation": 1, "worker_run_id": "cers-live-32428a25c76de4710974", "heartbeat_sequence": 2},
+    {"phase": "COMPLETED", "fencing_generation": 1, "worker_run_id": "cers-live-32428a25c76de4710974"},
+    {"phase": "POST_PILOT_QUIESCENCE", "mode": "DISABLE_NEW_DISPATCH", "source": "CERS_WP6_POST_PILOT_BOUND"}
   ],
   "background_assurance": {
     "source": "CONTROLLED_RERUN_OF_CERS_PRE_REMEDIATION_FULL_REPOSITORY_ASSURANCE",
@@ -45,15 +50,15 @@
     "job_name": "tests",
     "job_id_at_start": 95759357026,
     "status_at_start": "IN_PROGRESS",
-    "observed_step_at_start": "Install pytest and Research Console test dependencies",
-    "full_repository_suite_step": "PENDING",
+    "status_at_branch_pilot_completion": "IN_PROGRESS",
+    "full_repository_suite_step_at_completion": "IN_PROGRESS",
     "original_run_conclusion": "failure",
     "original_failure_scope": "TWO_STALE_CERS_MOVING_POINTER_ASSERTIONS_LATER_REMEDIATED",
-    "rerun_final_outcome_not_used_for_start_authority": true
+    "rerun_final_outcome_not_used_for_start_or_completion_authority": true
   },
   "caller_absent_at_start": true,
   "semantic_actions": ["WRITE_FILE", "GIT_COMMIT", "PUSH_BRANCH"],
-  "write_paths_started": [
+  "write_paths": [
     "registries/development/skills/cers/CERS_ACTION_SIDE_EFFECT_REGISTRY_v0_2.json",
     "src/ovc/development/skills/cers/live.py",
     "tests/development_skills/cers/test_cers_wp6_live_pilot.py",
@@ -62,14 +67,17 @@
   "worker_concurrency": 1,
   "max_speculative_depth": 1,
   "visible_train_cap": 8,
-  "heartbeat_sequence": 1,
+  "heartbeat_sequence": 2,
   "chat_dependency_count": 0,
+  "post_pilot_quiescence": "DISABLE_NEW_DISPATCH",
   "direct_main_mutation": false,
   "merge_attempted": false,
   "parallel_physical_merge": false,
   "force_push": false,
   "history_rewrite": false,
   "irreversible_external_side_effects": false,
+  "incidents": [],
+  "stop_conditions_observed": [],
   "authority_effect": "NONE_BEYOND_OPERATOR_APPROVED_CERS_WP6_PILOT",
-  "next": "Persist branch start commit, heartbeat, run targeted/adversarial/repository assurance, deterministic restart/reconciliation, rollback rehearsal, VIT/SIQ exact placement, G6 QA and delegated disposition."
+  "next": "Exact-head targeted/adversarial/repository assurance, deterministic restart/reconciliation and rollback tests, VIT/SIQ placement, G6 QA/delegated disposition and eligible squash integration."
 }

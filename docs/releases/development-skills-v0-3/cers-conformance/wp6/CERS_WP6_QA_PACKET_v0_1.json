@@ -1,0 +1,73 @@
+{
+  "schema": "ovc-cers-wp6-qa-packet/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "packet_id": "CERS-WP6",
+  "gate_id": "CERS-G6",
+  "status": "PASS_STATIC_CONDITIONAL_ON_EXACT_HEAD_ASSURANCE",
+  "qa_recommendation": "PASS_IF_EXACT_HEAD_REQUIRED_ASSURANCE_PASS",
+  "authority_delta": "NONE",
+  "live_effectiveness": {
+    "real_unattended_successor_start": "PASS",
+    "start_phase": "START_ACKNOWLEDGED",
+    "live_start_commit": "83a41eb613cca273960cc912316ce4555ca786ae",
+    "dispatch_id": "32428a25c76de47109743578c71048931715cc521778846339be9c78efa71adb",
+    "worker_run_id": "cers-live-32428a25c76de4710974",
+    "fencing_generation": 1,
+    "heartbeat_sequence": 2,
+    "background_assurance": {
+      "run_id": 32148477944,
+      "run_number": 5470,
+      "job_id_at_start": 95759357026,
+      "status_at_start": "IN_PROGRESS",
+      "full_repository_suite_at_branch_pilot_completion": "IN_PROGRESS"
+    },
+    "caller_absent_at_start": true,
+    "worker_concurrency": 1,
+    "max_speculative_depth": 1,
+    "chat_dependency_count": 0
+  },
+  "devobs": {
+    "liveness": "PASS_REAL_BACKGROUND_ASSURANCE_OVERLAP",
+    "duplicate_authoritative_starts_observed": 0,
+    "stale_fence_accepts_observed": 0,
+    "operator_boundary_false_allows_observed": 0,
+    "direct_main_reachability_observed": 0,
+    "parallel_physical_merge_observed": 0,
+    "force_push_history_rewrite_observed": 0,
+    "irreversible_external_side_effects_observed": 0,
+    "s3_s4_integration_incidents_observed": 0,
+    "restart_chat_dependency_count": 0,
+    "evidence_sources": [
+      "docs/releases/development-skills-v0-3/cers-conformance/wp6/CERS_WP6_LIVE_PILOT_RUN_v0_1.json",
+      "tests/development_skills/cers/test_cers_wp6_live_pilot.py",
+      "repository-wide exact-head workflows",
+      "post-merge PhysicalMaterialisationReceipt/PacketCompletionReceipt bundle"
+    ]
+  },
+  "acceptance_matrix": {
+    "real_unattended_start_while_background_assurance_runs": "PASS",
+    "caller_absent_at_start": "PASS",
+    "deterministic_restart_reconciliation": "PASS_BY_PERMANENT_TEST_PENDING_EXACT_HEAD_EXECUTION",
+    "duplicate_start_hard_quarantine": "PASS_BY_PERMANENT_TEST_PENDING_EXACT_HEAD_EXECUTION",
+    "stale_fence_fail_closed": "PASS_BY_PERMANENT_TEST_PENDING_EXACT_HEAD_EXECUTION",
+    "unknown_start_reconcile_before_redispatch": "PASS_BY_PERMANENT_TEST_PENDING_EXACT_HEAD_EXECUTION",
+    "rollback_quiescence": "PASS_BY_PERMANENT_TEST_PENDING_EXACT_HEAD_EXECUTION",
+    "action_write_domain_fail_closed": "PASS_BY_PERMANENT_TEST_PENDING_EXACT_HEAD_EXECUTION",
+    "VIT_SIQ_serialized_integration": "PENDING_EXACT_HEAD_AND_PHYSICAL_COMPLETION_RECEIPT",
+    "repository_suite": "PENDING_EXACT_HEAD",
+    "pytest_unittest_parity": "PENDING_EXACT_HEAD",
+    "runner_parity": "PENDING_EXACT_HEAD",
+    "FINAL_HEAD": "PENDING_EXACT_HEAD",
+    "SIQ_READY": "PENDING_EXACT_HEAD",
+    "merge_readiness": "PENDING_EXACT_HEAD"
+  },
+  "warnings": [
+    "The background assurance witness is a controlled rerun of the pre-remediation CERS approval repository suite. Its final outcome is deliberately not used as authority for the live start; only contemporaneous RUNNING status is the liveness condition.",
+    "Physical-main completion evidence is owned by the existing post-merge ReceiptStore path and is not materialised by a second ordinary closeout PR."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "fatal_conditions_observed": [],
+  "rollback": "Set durable DISABLE_NEW_DISPATCH, prevent new starts immediately, drain/cancel CERS-owned work only, return to explicit foreground/ORCH1-assisted invocation, preserve all evidence and Git history."
+}
