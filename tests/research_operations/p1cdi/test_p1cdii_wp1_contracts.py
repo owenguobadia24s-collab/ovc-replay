@@ -99,14 +99,24 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
 
     def test_packet_and_programme_state_bind_exact_authority_without_expansion(self) -> None:
         packet = load_json("docs/programmes/p1cdi-v0-1/wp1/P1CDII_WP1_IMPLEMENTATION_PACKET_v0_1.json")
+        qa = load_json("docs/programmes/p1cdi-v0-1/wp1/P1CDII_WP1_QA_PACKET_v0_1.json")
+        decision = load_json("docs/programmes/p1cdi-v0-1/wp1/P1CDII_WP1_DELEGATED_DECISION_v0_1.json")
         state = load_json("records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json")
         self.assertEqual(packet["plan_sha256"], "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a")
         self.assertEqual(packet["design_sha256"], "5eaee768bc18ce9fa40c79fe1c3a91c57cbadf21ce15ba39438a0b34a55bbea3")
         self.assertEqual(packet["authority_delta"], "NONE")
+        self.assertEqual(packet["status"], "APPROVED")
         self.assertEqual(packet["next_packet"], "P1CDII-WP2")
+        self.assertEqual(qa["qa_result"], "PASS")
+        self.assertTrue(all(result == "PASS" or result.startswith("PASS_") for result in qa["checks"].values()))
+        self.assertEqual(decision["decision"], "PASS")
+        self.assertEqual(decision["authority"], "DELEGATED_BY_OPERATOR_APPROVED_P1CDII_G0")
+        self.assertEqual(decision["authority_delta"], "NONE")
+        self.assertEqual(decision["next_packet"], "P1CDII-WP2")
         self.assertEqual(state["authority"]["P1CDII-G0"], "OPERATOR_PASS_MATERIALISED")
         self.assertEqual(state["authority"]["operational_read_only"], "DENIED")
         self.assertEqual(state["authority"]["continuous_intake"], "DENIED")
+        self.assertEqual(state["packets"]["P1CDII-WP1"]["status"], "APPROVED")
         self.assertEqual(state["next_packet"], "P1CDII-WP2")
 
 
