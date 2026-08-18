@@ -1,0 +1,55 @@
+{
+  "allowed_decisions": [
+    "PASS_SELECT_NAMED_CANDIDATE",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE"
+  ],
+  "completed_packets": [
+    "C2P2-SD-WP0",
+    "C2P2-SD-WP1",
+    "C2P2-SD-WP2",
+    "C2P2-SD-WP3",
+    "C2P2-SD-WP4",
+    "C2P2-SD-WP5",
+    "C2P2-SD-WP6"
+  ],
+  "current_authority": "GADJ_LABELS_FROZEN_AND_WP6_COMPLETED_NO_SELECTION_AUTHORITY",
+  "decision_basis": [
+    "72_OF_72_FROZEN_HUMAN_LABELS_NOT_EVALUABLE",
+    "ZERO_HUMAN_SAME_DIFFERENT_DENOMINATOR_FOR_FALSE_SPLIT_FALSE_JOIN",
+    "ZERO_CONFIRMED_D1_HARD_BREAKS_DOES_NOT_ESTABLISH_SAME",
+    "C_EPISODE_ENRICHMENT_NOT_EVALUATED"
+  ],
+  "exact_work_after_approval": "If DEFER/BLOCK/QUARANTINE, record disposition and stop or enter separately authorised successor discrimination work. If PASS_SELECT_NAMED_CANDIDATE, record only the named ObjectPack scientific selection; activation remains a separate operator-reserved gate.",
+  "gate_classification": "OPERATOR_REQUIRED",
+  "gate_id": "C2P2-SD-GSEL",
+  "non_transitive_denials": {
+    "c2p_activation": "NONE_SEPARATE_OPERATOR_GATE_REQUIRED",
+    "canonical_publication": "NONE",
+    "ec1_candidate_defining_use": "FORBIDDEN",
+    "probability_risk_exposure_trading_execution_agent_write": "NONE",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "plan_id": "OVC-C2P2-SCIENTIFIC-DISCRIMINATION-PLAN-v0.1",
+  "plan_version": "v0.1",
+  "programme_id": "OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1",
+  "proposed_authority_delta": "OBJECTPACK_SELECTION_IF_OPERATOR_EXPLICITLY_SELECTS_NAMED_CANDIDATE_OTHERWISE_NONE",
+  "recommended_candidate": null,
+  "recommended_decision": "DEFER",
+  "rollback": "DEFER/BLOCK/QUARANTINE preserves all GREAL, GADJ and WP6 evidence with no ObjectPack selected or activated.",
+  "schema": "ovc-c2p2-sd-gsel-gate-packet/v1",
+  "status": "GATE_READY",
+  "tests": {
+    "qa": "PASS",
+    "repository": "4201 passed, 2 skipped, 687 subtests passed in 281.57s (0:04:41)",
+    "targeted": "17 passed in 0.38s"
+  },
+  "title": "Final ObjectPack scientific selection review",
+  "unresolved_issues": [],
+  "warnings": [
+    "All 72 human labels are NOT_EVALUABLE; false-split/false-join rates therefore have zero lawful SAME/DIFFERENT denominator.",
+    "Candidate C episode enrichment remains untested because the frozen episode-relative role registry is empty.",
+    "2H_A_L remains context-only under the frozen base-candidate runtime."
+  ]
+}
