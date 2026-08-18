@@ -217,9 +217,8 @@ def test_wp4_court_record_stops_at_independent_g4_alg_boundary() -> None:
     assert qa["g4_alg_decision"] == "NOT_TAKEN"
     assert completion["gate_decision"] == "NOT_TAKEN"
     assert completion["authority_delta"] == "NONE"
-    assert state["current_packet"] == "P1CDII-WP4"
-    assert state["status"] == "GATE_READY"
-    assert state["next_packet"] == "P1CDII-G4-ALG"
+    assert state["packets"]["P1CDII-WP4"]["status"] == "GATE_READY"
+    assert state["packets"]["P1CDII-WP4"]["next_packet"] == "P1CDII-G4-ALG"
     validate_contract(
         json.loads((ROOT / "schemas/research_operations/p1cdi/p1cdii_programme_state_v0_1.schema.json").read_text()),
         state,

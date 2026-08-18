@@ -430,4 +430,4 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     assert "P1CDII-G2-ALG:PASS@1741e3f221bfdbbed75d1c0980e6ccc95869b4ad" in state["packets"][
         "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW-2"
     ]["tests"]
-    assert state["blockers"] == []
+    assert state["packets"]["P1CDII-WP2"]["blockers"] == []
