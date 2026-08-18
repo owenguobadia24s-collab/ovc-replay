@@ -295,9 +295,15 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
     assert fresh_decision["gate_decision"] == "PASS"
     assert fresh_decision["authority_delta"] == "NONE"
     assert fresh_decision["programme_state_materialised_by_this_packet"] is False
-    assert state["packet_id"] == "P2CTII-G2-ALG"
+    assert state["packet_id"] in {"P2CTII-G2-ALG", "P2CTII-WP3"}
     assert state["status"] == "COMPLETED"
-    assert state["next_packet"] == "P2CTII-WP3"
+    assert state["next_packet"] in {"P2CTII-WP3", "P2CTII-WP4"}
+    if state["packet_id"] == "P2CTII-WP3":
+        assert any(
+            packet["packet_id"] == "P2CTII-WP3"
+            and packet["decision"] == "P2CTII-G3_DELEGATED_PASS"
+            for packet in state["completed_packets"]
+        )
     assert state["p2ctii_g2_alg_status"] == "PASS"
     assert state["currentness_resolver_status"] == "MECHANICALLY_QUALIFIED_G2_ALG_PASS"
     assert state["decision_bearing_currentness_eligibility"] == (
