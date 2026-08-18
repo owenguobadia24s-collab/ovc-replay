@@ -9,6 +9,7 @@ import subprocess
 from typing import Any, Mapping, Sequence
 
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
+from ovc.development.skills.vit_completion_policy import validate_non_churning_completion_transition
 from ovc.development.skills.vit_routing import build_vit_lineage_record
 
 SHA64 = re.compile(r"^[0-9a-f]{64}$")
@@ -79,6 +80,10 @@ def build_record(
 ) -> dict[str, Any]:
     if not SHA64.fullmatch(authority_manifest_id) or not SHA64.fullmatch(dependency_frontier_id):
         raise RuntimeError("authority/dependency identities must be lowercase SHA-256 values")
+    validate_non_churning_completion_transition(
+        packet_id=packet_id,
+        completion_transition=completion_transition,
+    )
     base_tree = _git(repo, ["rev-parse", f"{base}^{{tree}}"])
     head_tree = _git(repo, ["rev-parse", f"{head}^{{tree}}"])
     pip = {
