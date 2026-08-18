@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1",
+  "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "gate_id": "PRSCI-G-PREREG",
+  "decision": "PASS",
+  "authority": "OPERATOR",
+  "operator_instruction": "OVC APPROVE PRSCI-G-PREREG",
+  "operator_instruction_time": "2026-08-18T01:08:00+01:00",
+  "decision_basis": {
+    "candidate_head": "e406b7e02e59102848051cd1ff8ee0076b2bd6bf",
+    "candidate_tree": "0ed8824d64da92af1b4f0a6e05be48d4cfb19d59",
+    "main": "1ed0a1a1a6386ffd8b080c9275742a01243b1cde",
+    "main_tree": "fdf3d607b42441eb3cdd23fa6c9c45993a0acb4c",
+    "tests_run_id": 32082360955,
+    "tiered_run_id": 32082360973,
+    "final_head_profile": "PASS",
+    "siq_ready_admission": "PASS",
+    "merge_readiness": "PASS",
+    "review_threads": "NONE"
+  },
+  "approved_delta": {
+    "authority": "SCIENTIFIC_PROTOCOL_FREEZE_ONLY",
+    "protocol_generation_id": "5036d66c8817f1f3b22b5cdb196a6964c979641b11824a3f3cdef58553e38736",
+    "target_state": "FROZEN",
+    "scope": "Exact EC1-G1 PRSC method constitution only"
+  },
+  "freeze_basis": {
+    "preregistration_bundle_id": "e3a3e19497f0b1ccaad349787eef2a363f35470ccc1c867aec3f235d8b70fb23",
+    "readiness_receipt_id": "9b2fe886bc18e61adfed4bf0bc827a02fe7a43e83e7db4b83df7134f9ab32051",
+    "g8_alg": "PASS",
+    "e1_exposure_status": "PRE_E1_CLEAN",
+    "binding_status": "COMPLETE",
+    "synthetic_vertical_slice": "PASS",
+    "ec1_current_state_pointer_sha": "e7b71010d2463ed2c8d610ab55397d65c8eeb916",
+    "f0_a": "HOLD"
+  },
+  "explicit_non_grants": [
+    "REAL_SOURCE_PRSC_READ",
+    "REAL_SOURCE_PRSC_APPEND",
+    "F0_A_RESUME",
+    "E1_EXECUTION_AUTHORITY",
+    "CANDIDATE_FREEZE",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "VALIDATION_READ",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "E_H",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "preserved_constraints": {
+    "f0_a": "HOLD",
+    "validation": "LOCKED_UNCONSUMED",
+    "candidate_freeze": "NONE",
+    "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE"
+  },
+  "next_action": "Materialise this PASS and freeze receipt, rerun exact-head VIT/GRT/SIQ/repository assurance, squash-merge PRSCI-WP9 if green, then do not execute real PRSC challenge until E1 and R1 are complete and PRSCI-G-EC1-CHALLENGE separately passes.",
+  "rollback": "The freeze decision is historical scientific provenance and is not rewritten. Any correction uses a successor/superseding protocol generation and forward-only operator decision; preserve this decision and all pre-freeze evidence."
+}

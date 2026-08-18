@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC PRSCPreregistrationBundle v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "protocol_generation", "method_pack_refs", "hypothesis_family_registry_ref", "claim_template_refs", "fatality_disposition_rule_refs", "reviewer_constitution_ref", "pre_e1_information_only", "e1_decision_bearing_inspected", "synthetic_vertical_slice", "authority_effect"],
+  "properties": {
+    "schema_version": {"const": "prsc_preregistration_bundle/v0.1"},
+    "bundle_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "protocol_generation": {"type": "object"},
+    "method_pack_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "hypothesis_family_registry_ref": {"type": "string", "minLength": 1},
+    "claim_template_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "fatality_disposition_rule_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "reviewer_constitution_ref": {"type": "string", "minLength": 1},
+    "pre_e1_information_only": {"const": true},
+    "e1_decision_bearing_inspected": {"type": "boolean"},
+    "synthetic_vertical_slice": {"type": "object"},
+    "mechanical_conformance_ref": {"type": ["string", "null"]},
+    "g8_alg_decision_ref": {"type": ["string", "null"]},
+    "authority_effect": {"const": "NONE"}
+  }
+}
