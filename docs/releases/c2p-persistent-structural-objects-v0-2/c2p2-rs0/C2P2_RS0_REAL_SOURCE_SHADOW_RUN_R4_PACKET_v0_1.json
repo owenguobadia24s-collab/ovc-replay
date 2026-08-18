@@ -1,79 +1,29 @@
 {
-  "schema": "ovc-c2p2-rs0-real-source-shadow-run-r4-packet/v1",
-  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
-  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R4",
-  "status": "PREPARED_PENDING_SINGLE_USE_AUTHORITY",
-  "gate_id": "C2P2-RS0-FRESH-GRUN-R4",
-  "operator_decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_R4_OPERATOR_DECISION_v0_1.json",
-  "prelaunch_currentness_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_R4_PRELAUNCH_CURRENTNESS_v0_1.json",
-  "branch": "run/c2p2-rs0-real-source-shadow-r4-20260818",
-  "runner": {
-    "path": "scripts/c2p2_rs0_real_source_shadow_r4.py",
-    "git_blob_sha": "4332194a02663985ab60ad4c4ad494d475ff884d"
-  },
-  "workflow": {
-    "path": ".github/workflows/c2p2-rs0-real-source-shadow-run-r4.yml",
-    "git_blob_sha": "e77519be45feccf342b1432f94523e10a361649c",
-    "trigger": "PUSH_AUTHORITY_V0_5_PATH_ONLY",
-    "required_check_substitution": false
-  },
+  "activation_state": "NONE",
   "authority_id": "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.5",
+  "branch": "run/c2p2-rs0-real-source-shadow-r4-20260818",
   "candidate_generation": {
-    "generation_id": "C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3",
-    "generation_logical_sha256": "c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a",
     "candidate_logical_hashes": {
       "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3": "a8cb003521c62129044a4d62cb9a4d5a967cd3ef9d933fb1090ac4dad0843102",
       "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3": "a91f50c12438c4d5263d36b48e40acc0a5e146b474307721a4108ac2398a752e",
       "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3": "29f8ac9a5844b425901fda90299f911a48a85422a390771753ffd5b894b1c52c"
-    }
+    },
+    "generation_id": "C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3",
+    "generation_logical_sha256": "c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a"
   },
-  "runtime_binding": {
-    "binding_id": "C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_BINDING_v0_3",
-    "binding_logical_sha256": "4819ccfa0fb01d6e5645e09cff3c1995b9d56c865e52fb4b7bcbfa3836740cae",
-    "runtime_generation_id": "C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_v0_2",
-    "implementation_git_blob_sha": "3a0a65b9577a5f9c6c9628ededa252c692b1aa2f"
+  "capacity": {
+    "checkpoint_cadence_source_records": 4096,
+    "concurrency_limit": 1,
+    "external_storage_limit_bytes": 6411935744,
+    "peak_memory_limit_bytes": 1160593408,
+    "reduced_precision": "FORBIDDEN",
+    "storage_ceiling_change": "NONE"
   },
   "evidence_contract": {
     "contract_id": "C2P2_RS0_NEGATIVE_COVERAGE_CERTIFICATE_v0_2",
     "equivalence_target": "TERMINAL_AND_LIFECYCLE_EQUIVALENCE_WITH_VERSIONED_NEGATIVE_EVIDENCE_CONTRACT",
     "operator_accepted": true
   },
-  "source_order_route": {
-    "binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2",
-    "binding_logical_sha256": "01c3e85d5c4b47fbb2a102a1d4dff3774e49fcd15110157aaac3ea538a51201c",
-    "adapter_id": "C2P2_RS0_SOURCE_ORDER_RECOVERY_ADAPTER_v0_2",
-    "implementation_sha256": "eaf19ce7cb3ffa9f1839d5a63586a6ead8ab73fc3dde57cf0011290022eee5ed"
-  },
-  "source_materialisation": {
-    "materialisation_id": "C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1",
-    "logical_sha256": "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b",
-    "artifact_digest": "sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e",
-    "github_actions_source_run_id": 32010902424,
-    "github_actions_source_artifact_id": 9283576949,
-    "sampling": "FORBIDDEN"
-  },
-  "capacity": {
-    "peak_memory_limit_bytes": 1160593408,
-    "external_storage_limit_bytes": 6411935744,
-    "concurrency_limit": 1,
-    "checkpoint_cadence_source_records": 4096,
-    "storage_ceiling_change": "NONE",
-    "reduced_precision": "FORBIDDEN"
-  },
-  "single_use": {
-    "execution_count_limit": 1,
-    "token_state_before_authority_commit": "NOT_MATERIALISED",
-    "consumption_boundary": "WRITE_RUN_R4_START_RECEIPT_AT_SEMANTIC_EXECUTION_START",
-    "pre_semantic_failure": "CORRECT_AND_RELAUNCH_ONLY_IF_TOKEN_PROVABLY_UNCONSUMED",
-    "post_semantic_failure": "NO_RERUN_STOP_AT_C2P2_RS0_RUN_RECOVERY_R4"
-  },
-  "selection_state": "NONE",
-  "activation_state": "NONE",
-  "validation": "LOCKED_UNCONSUMED",
-  "f0_a": "HOLD_NO_JOINT_LAUNCH",
-  "no_vit": true,
-  "next_gate_on_completion": "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION",
-  "next_gate_on_post_semantic_failure": "C2P2-RS0-RUN-RECOVERY-R4",
   "explicit_non_grants": [
     "ObjectPack selection or activation",
     "C2P activation",
@@ -84,5 +34,59 @@
     "main merge",
     "VIT insertion"
   ],
-  "rollback": "FORWARD_ONLY_PRESERVE_R3_CONSUMPTION_R4_GATE_AND_SCALABILITY_EVIDENCE"
+  "f0_a": "HOLD_NO_JOINT_LAUNCH",
+  "gate_id": "C2P2-RS0-FRESH-GRUN-R4",
+  "github_actions_run_id": 32129361980,
+  "next_gate": "C2P2-RS0-RUN-RECOVERY-R4",
+  "next_gate_on_completion": "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION",
+  "next_gate_on_post_semantic_failure": "C2P2-RS0-RUN-RECOVERY-R4",
+  "no_vit": true,
+  "operator_decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_R4_OPERATOR_DECISION_v0_1.json",
+  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R4",
+  "prelaunch_currentness_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_R4_PRELAUNCH_CURRENTNESS_v0_1.json",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "rollback": "FORWARD_ONLY_PRESERVE_R3_CONSUMPTION_R4_GATE_AND_SCALABILITY_EVIDENCE",
+  "run_result_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_RESULT_v0_1.json",
+  "run_result_sha256": "3230ad081343e89f1bc955a36db0f904ac793f25a60b22f65702e508e5f1eabf",
+  "runner": {
+    "git_blob_sha": "4332194a02663985ab60ad4c4ad494d475ff884d",
+    "path": "scripts/c2p2_rs0_real_source_shadow_r4.py"
+  },
+  "runtime_binding": {
+    "binding_id": "C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_BINDING_v0_3",
+    "binding_logical_sha256": "4819ccfa0fb01d6e5645e09cff3c1995b9d56c865e52fb4b7bcbfa3836740cae",
+    "implementation_git_blob_sha": "3a0a65b9577a5f9c6c9628ededa252c692b1aa2f",
+    "runtime_generation_id": "C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_v0_2"
+  },
+  "schema": "ovc-c2p2-rs0-real-source-shadow-run-r4-packet/v1",
+  "selection_state": "NONE",
+  "single_use": {
+    "consumption_boundary": "WRITE_RUN_R4_START_RECEIPT_AT_SEMANTIC_EXECUTION_START",
+    "execution_count_limit": 1,
+    "post_semantic_failure": "NO_RERUN_STOP_AT_C2P2_RS0_RUN_RECOVERY_R4",
+    "pre_semantic_failure": "CORRECT_AND_RELAUNCH_ONLY_IF_TOKEN_PROVABLY_UNCONSUMED",
+    "token_state_before_authority_commit": "NOT_MATERIALISED"
+  },
+  "source_materialisation": {
+    "artifact_digest": "sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e",
+    "github_actions_source_artifact_id": 9283576949,
+    "github_actions_source_run_id": 32010902424,
+    "logical_sha256": "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b",
+    "materialisation_id": "C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1",
+    "sampling": "FORBIDDEN"
+  },
+  "source_order_route": {
+    "adapter_id": "C2P2_RS0_SOURCE_ORDER_RECOVERY_ADAPTER_v0_2",
+    "binding_id": "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2",
+    "binding_logical_sha256": "01c3e85d5c4b47fbb2a102a1d4dff3774e49fcd15110157aaac3ea538a51201c",
+    "implementation_sha256": "eaf19ce7cb3ffa9f1839d5a63586a6ead8ab73fc3dde57cf0011290022eee5ed"
+  },
+  "status": "BLOCKED",
+  "validation": "LOCKED_UNCONSUMED",
+  "workflow": {
+    "git_blob_sha": "e77519be45feccf342b1432f94523e10a361649c",
+    "path": ".github/workflows/c2p2-rs0-real-source-shadow-run-r4.yml",
+    "required_check_substitution": false,
+    "trigger": "PUSH_AUTHORITY_V0_5_PATH_ONLY"
+  }
 }
