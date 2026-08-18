@@ -2,7 +2,10 @@
   "schema": "ovc-c2p2-rs0-fresh-grun-r4-terminal-currentness/v1",
   "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
   "gate_id": "C2P2-RS0-FRESH-GRUN-R4",
-  "authority_effect": "NONE_GATE_PREPARATION_CURRENTNESS_ONLY",
+  "authority_effect": "OPERATOR_PASS_MATERIALISED_SINGLE_USE_NOT_STARTED",
+  "operator_decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_FRESH_GRUN_R4_OPERATOR_DECISION_v0_1.json",
+  "authority_ref": "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_5.json",
+  "approved_at": "2026-08-18T11:10:00+01:00",
   "observed_live_main_sha": "a11d29569321e4fe608f09dd51c04349c3f1c13f",
   "candidate_currentness": {
     "path": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CANDIDATE_CURRENTNESS_v0_2.json",
@@ -30,18 +33,21 @@
     "binding_id": "C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_BINDING_v0_3",
     "binding_logical_sha256": "4819ccfa0fb01d6e5645e09cff3c1995b9d56c865e52fb4b7bcbfa3836740cae",
     "qualified_head_sha": "ce22a962eca1b09d2f3e46fbf58aa357193f9e3e",
-    "status": "QUALIFIED_INACTIVE"
+    "status": "QUALIFIED_INACTIVE_R4_AUTHORISED"
   },
   "authority": {
     "r3_consumed": true,
     "r3_run_count_remaining": 0,
-    "r4_authority": "NONE",
-    "fresh_run_token": "NONE",
+    "r4_authority": "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.5",
+    "r4_execution_count_consumed": 0,
+    "r4_run_count_remaining": 1,
+    "fresh_run_token": "MATERIALISED_NOT_STARTED",
     "selection": "NONE",
     "activation": "NONE",
     "validation": "LOCKED_UNCONSUMED"
   },
-  "status": "PASS_AT_TERMINAL_GATE_AUDIT",
+  "status": "R4_FRESH_GRUN_APPROVED_SINGLE_USE",
   "mandatory_launch_rule": "RE_RESOLVE_LIVE_MAIN_AND_ALL_BOUND_IDENTITIES_AGAIN_IMMEDIATELY_BEFORE_ANY_R4_SOURCE_ACCESS; ANY_CHANGE_FAILS_CLOSED_BEFORE_SEMANTIC_LAUNCH",
-  "rollback": "FORWARD_ONLY_GATE_PREPARATION_RECEIPT_NO_AUTHORITY"
+  "next_action": "PREPARE_EXACT_R4_RUNNER_BINDING_THEN_LAUNCH_EXACTLY_ONE_R4_A_B_C_REAL_SOURCE_SHADOW_RUN",
+  "rollback": "FORWARD_ONLY_PRESERVE_R3_CONSUMPTION_R4_OPERATOR_DECISION_AND_ALL_GATE_SCALABILITY_EVIDENCE"
 }
