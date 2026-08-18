@@ -1,0 +1,474 @@
+{
+  "$defs": {
+    "a0": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "const": "IMMUTABLE_PIP"
+        },
+        "renewed_on_placement_change": {
+          "const": false
+        },
+        "reusable_across_unrelated_main_movement": {
+          "const": true
+        },
+        "stage": {
+          "const": "A0"
+        }
+      },
+      "required": [
+        "stage",
+        "binding",
+        "reusable_across_unrelated_main_movement",
+        "renewed_on_placement_change"
+      ],
+      "type": "object"
+    },
+    "a1": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "const": "PREDECESSOR_TREE_PLUS_PIP_TO_PROSPECTIVE_RESULT_TREE"
+        },
+        "renewed_on_placement_change": {
+          "const": true
+        },
+        "reusable_across_unrelated_main_movement": {
+          "const": false
+        },
+        "stage": {
+          "const": "A1"
+        }
+      },
+      "required": [
+        "stage",
+        "binding",
+        "reusable_across_unrelated_main_movement",
+        "renewed_on_placement_change"
+      ],
+      "type": "object"
+    },
+    "a2": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "const": "EXACT_VIT_GENERATION_AND_PROSPECTIVE_RESULT_TREE"
+        },
+        "renewed_on_placement_change": {
+          "const": true
+        },
+        "reusable_across_unrelated_main_movement": {
+          "const": false
+        },
+        "stage": {
+          "const": "A2"
+        }
+      },
+      "required": [
+        "stage",
+        "binding",
+        "reusable_across_unrelated_main_movement",
+        "renewed_on_placement_change"
+      ],
+      "type": "object"
+    },
+    "a3": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "const": "POST_WRITE_PHYSICAL_MAIN_TREE_EQUALS_PROSPECTIVE_RESULT_TREE"
+        },
+        "renewed_on_placement_change": {
+          "const": true
+        },
+        "reusable_across_unrelated_main_movement": {
+          "const": false
+        },
+        "stage": {
+          "const": "A3"
+        }
+      },
+      "required": [
+        "stage",
+        "binding",
+        "reusable_across_unrelated_main_movement",
+        "renewed_on_placement_change"
+      ],
+      "type": "object"
+    },
+    "assurancePartition": {
+      "additionalProperties": false,
+      "properties": {
+        "a0": {
+          "$ref": "#/$defs/a0"
+        },
+        "a1": {
+          "$ref": "#/$defs/a1"
+        },
+        "a2": {
+          "$ref": "#/$defs/a2"
+        },
+        "a3": {
+          "$ref": "#/$defs/a3"
+        }
+      },
+      "required": [
+        "a0",
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "type": "object"
+    },
+    "frontierLedgerEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "a2_proof_b64": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "type": "string"
+        },
+        "a2_proof_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "assurance_generation_b64": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "type": "string"
+        },
+        "assurance_generation_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "authority_effect": {
+          "const": "NONE"
+        },
+        "frontier_lineage_b64": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "type": "string"
+        },
+        "frontier_lineage_record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "pip_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "placement_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "schema": {
+          "const": "ovc-vit-frontier-ledger-envelope/v1"
+        },
+        "source_head_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "vit_generation_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "source_head_id",
+        "pip_id",
+        "vit_generation_id",
+        "placement_id",
+        "frontier_lineage_record_id",
+        "frontier_lineage_b64",
+        "assurance_generation_id",
+        "assurance_generation_b64",
+        "a2_proof_id",
+        "a2_proof_b64",
+        "authority_effect",
+        "record_id"
+      ],
+      "type": "object"
+    },
+    "physicalMaterialisationTransaction": {
+      "additionalProperties": false,
+      "properties": {
+        "assurance_frontier_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "authority_frontier_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "expected_predecessor_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "expected_predecessor_tree": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "expected_result_tree": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "lease_timing": {
+          "const": "AFTER_A0_A1_BEFORE_A2"
+        },
+        "materialisation_profile": {
+          "const": "LIVE_PHYSICAL_MAIN"
+        },
+        "predecessor_movement_result": {
+          "const": "PREDECESSOR_MOVED"
+        },
+        "transaction_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "vit_generation_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "transaction_id",
+        "vit_generation_id",
+        "expected_predecessor_commit",
+        "expected_predecessor_tree",
+        "expected_result_tree",
+        "authority_frontier_id",
+        "assurance_frontier_id",
+        "materialisation_profile",
+        "lease_timing",
+        "predecessor_movement_result"
+      ],
+      "type": "object"
+    },
+    "pipIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_manifest_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "dependency_frontier_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "immutable": {
+          "const": true
+        },
+        "packet_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "pip_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "pr_metadata_excluded_from_identity": {
+          "const": true
+        },
+        "programme_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_head_excluded_from_identity": {
+          "const": true
+        }
+      },
+      "required": [
+        "pip_id",
+        "programme_id",
+        "packet_id",
+        "authority_manifest_id",
+        "dependency_frontier_id",
+        "source_head_excluded_from_identity",
+        "pr_metadata_excluded_from_identity",
+        "immutable"
+      ],
+      "type": "object"
+    },
+    "sourceHead": {
+      "additionalProperties": false,
+      "properties": {
+        "commit_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "development_base_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "development_base_tree": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "head_ref": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "pr_number": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "role": {
+          "const": "TRANSPORT_AND_SOURCE_PROVENANCE_ONLY"
+        },
+        "schema": {
+          "const": "ovc-vit-source-head/v1"
+        },
+        "source_head_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "tree_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "commit_sha",
+        "tree_sha",
+        "pr_number",
+        "head_ref",
+        "source_head_id",
+        "role"
+      ],
+      "type": "object"
+    },
+    "treeIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "profile": {
+          "const": "git-tree-v1"
+        },
+        "tree_sha": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tree_sha",
+        "profile"
+      ],
+      "type": "object"
+    },
+    "vitPlacement": {
+      "additionalProperties": false,
+      "properties": {
+        "apply_profile": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "movement_disposition": {
+          "enum": [
+            "NO_MOVEMENT",
+            "PLACEMENT_RECOMPUTE_ONLY",
+            "ASSURANCE_RENEWAL_REQUIRED"
+          ]
+        },
+        "ordinal": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "placement_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "predecessor_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "predecessor_tree": {
+          "$ref": "#/$defs/treeIdentity"
+        },
+        "same_pip": {
+          "const": true
+        },
+        "same_pr": {
+          "const": true
+        },
+        "train_generation_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "vit_generation_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "vit_generation_id",
+        "placement_id",
+        "train_generation_id",
+        "ordinal",
+        "predecessor_commit",
+        "predecessor_tree",
+        "apply_profile",
+        "movement_disposition",
+        "same_pip",
+        "same_pr"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "ovc-prvitr-vit-frontier-decoupling/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assurance_partition": {
+      "$ref": "#/$defs/assurancePartition"
+    },
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "frontier_ledger_envelope": {
+      "$ref": "#/$defs/frontierLedgerEnvelope"
+    },
+    "one_semantic_packet_one_pr_norm": {
+      "const": true
+    },
+    "parallel_physical_merge": {
+      "const": false
+    },
+    "physical_materialisation_transaction": {
+      "$ref": "#/$defs/physicalMaterialisationTransaction"
+    },
+    "pip": {
+      "$ref": "#/$defs/pipIdentity"
+    },
+    "prospective_result_tree": {
+      "$ref": "#/$defs/treeIdentity"
+    },
+    "schema": {
+      "const": "ovc-prvitr-vit-frontier-decoupling/v1"
+    },
+    "source_head": {
+      "$ref": "#/$defs/sourceHead"
+    },
+    "vit_placement": {
+      "$ref": "#/$defs/vitPlacement"
+    }
+  },
+  "required": [
+    "schema",
+    "source_head",
+    "pip",
+    "vit_placement",
+    "prospective_result_tree",
+    "physical_materialisation_transaction",
+    "assurance_partition",
+    "frontier_ledger_envelope",
+    "one_semantic_packet_one_pr_norm",
+    "parallel_physical_merge",
+    "authority_effect"
+  ],
+  "type": "object"
+}
