@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-rcn-rn-wp5-reconciled-packet-graph/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "packet_id": "RCN-RN-WP5-ARCHITECTURE-RECONCILIATION",
+  "authority_effect": "NONE",
+  "source_plan_semantics_changed": false,
+  "legacy_lineage": {
+    "RCN-RN-WP5A": "COMPLETED",
+    "RCN-RN-WP5B": ["RCN-RN-WP5B1", "RCN-RN-WP5B2"],
+    "RCN-RN-WP5C": ["RCN-RN-WP5C1", "RCN-RN-WP5C2"]
+  },
+  "nodes": [
+    {
+      "packet_id": "RCN-RN-WP5B1",
+      "title": "DMRP Research Operations",
+      "owner": "DMRP",
+      "scope": ["PATH_1", "PATH_2", "RESEARCH_CANDIDATE_GENERATION", "GENERATION_LINEAGE"],
+      "console_role": "FEDERATED_READ_ONLY_PRESENTATION",
+      "authority_delta": "NONE",
+      "next": "RCN-RN-WP5B2"
+    },
+    {
+      "packet_id": "RCN-RN-WP5B2",
+      "title": "RCCR Research Coverage",
+      "owner": "RCCR",
+      "scope": ["COVERAGE_MATRIX", "GAP_QUEUES", "PATH_CORRESPONDENCE", "NEXT_RESEARCH_ROUTE"],
+      "console_role": "PROJECT_OWNER_READ_MODELS_DO_NOT_REIMPLEMENT",
+      "authority_delta": "NONE",
+      "next": "RCN-RN-WP5C1"
+    },
+    {
+      "packet_id": "RCN-RN-WP5C1",
+      "title": "EC1 / PRSC Scientific Challenge",
+      "owner": "PRSC_EC1",
+      "scope": ["FROZEN_PROTOCOL", "CHALLENGE_READINESS", "REPRESENTATION_TEMPORAL_CONTEXT", "MULTIPLICITY", "SCIENTIFIC_REVIEW"],
+      "console_role": "READ_ONLY_OWNER_EVIDENCE_PRESENTATION",
+      "authority_delta": "NONE",
+      "decision_bearing_real_results": "DENIED_UNTIL_OWNER_PREREQUISITES_AND_CONSOLE_SOURCE_ADMISSION",
+      "next": "RCN-RN-WP5C2"
+    },
+    {
+      "packet_id": "RCN-RN-WP5C2",
+      "title": "OPT-C / OPT-D Downstream Evaluation",
+      "owner": "OPT_C_OPT_D",
+      "scope": ["NEUTRAL_CONSEQUENCES", "COMPARATIVE_EVIDENCE", "FROZEN_CANDIDATE_EVALUATION"],
+      "console_role": "READ_ONLY_DOWNSTREAM_PRESENTATION",
+      "authority_delta": "NONE",
+      "next": "RCN-RN-WP6"
+    }
+  ],
+  "conditional_gate": {
+    "gate_id": "RCN-RN-G5-FIRST-NEW-SOURCE",
+    "operator_required": true,
+    "application": "PER_SOURCE_NOT_TRANSITIVE",
+    "sources": ["DMRP", "RCCR", "PRSC_EC1", "OPT_C", "OPT_D"],
+    "rule": "STOP_BEFORE_FIRST_NEW_REAL_PRESENTATION_FOR_EACH_SOURCE_UNLESS_EXACT_PREAUTHORISED_CONSOLE_READ_AUTHORITY_EXISTS"
+  },
+  "atlas_integration": {
+    "role": "OPTIONAL_DEEP_LINK_OR_PROJECTION",
+    "duplicate_lineage_authority_history_engines": "FORBIDDEN",
+    "correctness_dependency": false
+  },
+  "validation": "LOCKED_SEPARATE_DENY_BEFORE_PROTECTED_RESOLUTION",
+  "rollback": "FORWARD_SUPERSEDE_OVERLAY_AND_RESTORE_RCN-RN-WP5B_READY"
+}
