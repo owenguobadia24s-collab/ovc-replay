@@ -1,0 +1,69 @@
+{
+  "schema": "ovc-c2p2-rs0-run-recovery-r4-implementation-packet/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-RUN-RECOVERY-R4",
+  "status": "RUNNING",
+  "baseline_commit": "6d641a121b839686b521da38b8523b895f904811",
+  "branch": "recover/c2p2-rs0-run-recovery-r4-20260818",
+  "authority_id": "AUTH.C2P2.RS0.RUN_RECOVERY.R4.v0.1",
+  "authority_delta": "BOUNDED_NON_EVIDENTIARY_STORAGE_DIAGNOSTIC_AND_CAPACITY_ENVELOPE_QUALIFICATION_ONLY",
+  "goal": "Replace the underrepresentative all-unique/zero-pair storage qualification with a full-cardinality adversarial synthetic A/B/C measurement that bounds frozen hard-scope concentration, payload width and necessary-key competitor density without executing the real source or changing science.",
+  "fixture_contract": {
+    "source_mode": "SYNTHETIC_ONLY_NONEMPIRICAL",
+    "real_source_read": false,
+    "base_candidate_cardinality": 1489144,
+    "scope_counts": {
+      "ASK|C2_LEVEL": 558429,
+      "ASK|C2_CONTAINER": 186143,
+      "BID|C2_LEVEL": 558429,
+      "BID|C2_CONTAINER": 186143
+    },
+    "wide_origin_padding_characters": 512,
+    "relation_topology_width": 4,
+    "candidate_a_shape": "UNIQUE_EXACT_GEOMETRY_WITH_WIDE_PAYLOAD",
+    "candidate_b_shape": "CONCENTRATED_OWNER_CLASS_AND_TOPOLOGY_WITH_UNIQUE_NUMERIC_GEOMETRY",
+    "candidate_c_shape": "CONCENTRATED_OWNER_CLASS_WITH_UNIQUE_NUMERIC_GEOMETRY"
+  },
+  "measurement_contract": {
+    "diagnostic_storage_limit_bytes": 21474836480,
+    "diagnostic_limit_is_execution_authority": false,
+    "frozen_execution_storage_limit_bytes": 6411935744,
+    "r4_observed_partial_database_bytes": 6415310848,
+    "frozen_peak_memory_limit_bytes": 1160593408,
+    "checkpoint_cadence_source_records": 4096,
+    "concurrency_limit": 1,
+    "required_telemetry": [
+      "database_bytes",
+      "bytes_per_source_record",
+      "processed_source_ids",
+      "candidates",
+      "tracklets",
+      "assertions",
+      "decisions",
+      "evaluated_pair_vectors",
+      "negative_coverage",
+      "sqlite_page_size",
+      "sqlite_page_count",
+      "sqlite_freelist_count",
+      "dbstat allocation when available",
+      "peak_rss_bytes",
+      "wall_seconds"
+    ],
+    "proposed_execution_storage_ceiling_formula": "ROUND_UP_TO_1_GIB(1.25 * MAX(MAX_MEASURED_A_B_C_DATABASE_BYTES, R4_OBSERVED_PARTIAL_DATABASE_BYTES))",
+    "proposed_ceiling_effect": "PROPOSAL_ONLY_OPERATOR_REQUIRED_NOT_ENACTED"
+  },
+  "acceptance_conditions": [
+    "All three frozen A/B/C candidate synthetic cases complete at exact frozen base-candidate cardinality.",
+    "The measured synthetic high-water database size is at least the R4 observed partial database high-water mark.",
+    "All cases remain inside the diagnostic measurement ceiling and the frozen memory ceiling.",
+    "Targeted assurance passes.",
+    "Repository-wide regression passes.",
+    "No real source is read or executed.",
+    "No execution storage ceiling is changed.",
+    "No source candidate semantic predicate threshold population sampling precision selection activation Validation publication probability risk exposure trading execution or agent-write authority changes occur."
+  ],
+  "qa_required": true,
+  "next_gate_on_pass": "C2P2-RS0-FRESH-GRUN-R5",
+  "next_state_on_failure": "BLOCKED_OR_QUARANTINED_INSIDE_C2P2_RS0_RUN_RECOVERY_R4",
+  "rollback": "FORWARD_ONLY_PRESERVE_R4_CONSUMPTION_AND_ALL_RECOVERY_MEASUREMENT_EVIDENCE"
+}
