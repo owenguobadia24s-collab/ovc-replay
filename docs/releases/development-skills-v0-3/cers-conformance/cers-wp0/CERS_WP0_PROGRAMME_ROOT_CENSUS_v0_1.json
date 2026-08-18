@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-dsai3v-cers-wp0-programme-root-census/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "packet_id": "CERS-WP0",
+  "baseline_commit": "c6b5c8ee6ccf89753d7f990584ca4569ba830bf2",
+  "discovery_policy": {
+    "mode": "REGISTERED_EXACT_ROOTS_ONLY",
+    "branch_heuristics": false,
+    "pr_title_or_body_heuristics": false,
+    "workflow_name_heuristics": false,
+    "chat_state_discovery": false,
+    "historical_fallback_for_current_state": false,
+    "unknown_or_unregistered_root": "NON_DISPATCHABLE_DENY"
+  },
+  "registered_roots": [
+    {"root_id":"CERS","path":"registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json","owner":"OVC-DSAI3V-CERS-CONFORMANCE-v0.1","current_packet":"CERS-WP0","current_status":"READY","live_dispatch":"DENIED_PENDING_CERS-G-LIVE-DISPATCH","current_state":"registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_1.json"},
+    {"root_id":"DSAI3V_VIT","path":"registries/implementation/dsai_vit_v0_3/CURRENT_STATE_POINTER.json","owner":"OVC-DSAI-VIT-v0.3","current_status":"COMPLETED","live_mode":"GENERAL_ACTIVE"},
+    {"root_id":"DSAI3V_ASYNC_ASSURANCE","path":"registries/implementation/dsai3v_async_assurance_v0_1/CURRENT_STATE_POINTER.json","owner":"OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1","current_status":"COMPLETED","live_status":"ACTIVE"},
+    {"root_id":"DSAI2_ORCH345","path":"registries/implementation/dsai_v0_2/CURRENT_STATE_POINTER.json","owner":"OVC-DSAI-v0.2","current_status":"COMPLETED"},
+    {"root_id":"GRT_V0_2","path":"registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json","owner":"OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE","current_status":"QA_REVIEW","gate_id":"GRT2-G2.5"},
+    {"root_id":"PRVITR","path":"records/development/prvitr/PRVITR_PROGRAMME_STATE_v0_1.json","owner":"OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1","current_status":"COMPLETED","root_class":"EXACT_TERMINAL_STATE_RECORD"}
+  ],
+  "dispatch_eligibility": {
+    "registered_root_is_sufficient": false,
+    "required_additional_proofs": ["current programme authority","prerequisites","mandate scope","action class","security intersection","worker capability binding","CERS live-dispatch authority where write-capable"],
+    "unknown_root": "DENY"
+  },
+  "completeness_scope": "CERS_WP0_CONTROL_PLANE_ROOTS_ONLY_NOT_GLOBAL_PROGRAMME_INVENTORY",
+  "conclusion": "NO_HEURISTIC_DISCOVERY_SURFACE_ADMITTED"
+}
