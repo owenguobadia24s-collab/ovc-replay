@@ -24,6 +24,8 @@ jobs:
       aa0_identity: ${{ steps.assurance.outputs.aa0_identity }}
       generation_id: ${{ steps.assurance.outputs.generation_id }}
       pip_id: ${{ steps.assurance.outputs.pip_id }}
+      lineage_source: ${{ steps.assurance.outputs.lineage_source }}
+      lineage_ref: ${{ steps.assurance.outputs.lineage_ref }}
       aa0_reuse_authorized: ${{ steps.assurance.outputs.aa0_reuse_authorized }}
       aa0_reuse_reason: ${{ steps.assurance.outputs.aa0_reuse_reason }}
     steps:
@@ -90,18 +92,18 @@ jobs:
               `writer=DSAI_VIT_PHYSICAL_CONTROLLER gateway=DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY`
             );
 
-      - name: Require canonical VIT lineage before permanent PR assurance
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          PYTHONPATH: src:.
-        run: python3 tools/ci/vit_routing_preflight.py
-
-      - name: Resolve PIP-bound assurance identity and reuse authority
+      - name: Resolve PIP-bound assurance identity before placement-sensitive routing
         id: assurance
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
         run: python3 tools/ci/vit_assurance_preflight.py
+
+      - name: Require canonical VIT placement before permanent PR admission
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 tools/ci/vit_routing_preflight.py
 
   pytest-unified:
     name: tests
@@ -113,11 +115,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
-
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
         run: python3 tools/ci/aa0_harness_identity.py
-
       - name: Restore AA0 PIP-bound repository assurance
         id: cache
         uses: actions/cache/restore@v4
@@ -126,7 +126,6 @@ jobs:
           key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
           restore-keys: |
             ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-
-
       - name: Decide AA0 PIP-bound repository assurance
         id: aa0
         shell: bash
@@ -137,26 +136,17 @@ jobs:
         run: |
           set -euo pipefail
           disposition=RUN_AA0
-          if [[ "${EXACT_HIT}" == "true" ]]; then
-            disposition=EXACT_GENERATION_REUSE
-          elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then
-            disposition=PLACEMENT_ONLY_PIP_REUSE
-          fi
-          if [[ "${disposition}" != "RUN_AA0" ]]; then
-            test -f "${RUNNER_TEMP}/ovc-aa0-tests/PASS"
-          fi
+          if [[ "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
+          if [[ "${disposition}" != "RUN_AA0" ]]; then test -f "${RUNNER_TEMP}/ovc-aa0-tests/PASS"; fi
           echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
           echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_repository\",\"disposition\":\"${disposition}\"}"
-
       - uses: actions/setup-python@v5
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         with:
           python-version: "3.11"
-
       - name: Install pytest and Research Console test dependencies
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-
       - name: Complete repository suite as BASE_INDEPENDENT assurance
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: |
@@ -165,7 +155,6 @@ jobs:
           PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short
           mkdir -p "${RUNNER_TEMP}/ovc-aa0-tests"
           printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-tests/PASS"
-
       - name: Save AA0 PIP-bound repository assurance
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
@@ -183,11 +172,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
-
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
         run: python3 tools/ci/aa0_harness_identity.py
-
       - name: Restore AA0 PIP-bound unittest parity
         id: cache
         uses: actions/cache/restore@v4
@@ -196,7 +183,6 @@ jobs:
           key: ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
           restore-keys: |
             ovc-aa0-unittest-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-
-
       - name: Decide AA0 PIP-bound unittest parity
         id: aa0
         shell: bash
@@ -207,26 +193,17 @@ jobs:
         run: |
           set -euo pipefail
           disposition=RUN_AA0
-          if [[ "${EXACT_HIT}" == "true" ]]; then
-            disposition=EXACT_GENERATION_REUSE
-          elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then
-            disposition=PLACEMENT_ONLY_PIP_REUSE
-          fi
-          if [[ "${disposition}" != "RUN_AA0" ]]; then
-            test -f "${RUNNER_TEMP}/ovc-aa0-unittest/PASS"
-          fi
+          if [[ "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
+          if [[ "${disposition}" != "RUN_AA0" ]]; then test -f "${RUNNER_TEMP}/ovc-aa0-unittest/PASS"; fi
           echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
           echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_unittest_parity\",\"disposition\":\"${disposition}\"}"
-
       - uses: actions/setup-python@v5
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         with:
           python-version: "3.11"
-
       - name: Install pytest and Research Console test dependencies
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-
       - name: Execute exact legacy unittest surface under pytest as AA0 PIP-bound BASE_INDEPENDENT assurance
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         shell: bash
@@ -235,20 +212,15 @@ jobs:
           PYTHONPATH=src:. python3 tools/ci/pytest_unittest_parity.py run > /tmp/pytest-legacy.log 2>&1
           status=$?
           cat /tmp/pytest-legacy.log
-          if [ "$status" -ne 0 ]; then
-            python3 - <<'PY'
+          if [ "$status" -ne 0 ]; then python3 - <<'PY'
           from pathlib import Path
           text = Path('/tmp/pytest-legacy.log').read_text(encoding='utf-8', errors='replace')
           tail = text[-5000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
           print(f'::error title=Pytest legacy-surface failure::{tail}')
           PY
           fi
-          if [ "$status" -eq 0 ]; then
-            mkdir -p "${RUNNER_TEMP}/ovc-aa0-unittest"
-            printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-unittest/PASS"
-          fi
+          if [ "$status" -eq 0 ]; then mkdir -p "${RUNNER_TEMP}/ovc-aa0-unittest"; printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-unittest/PASS"; fi
           exit "$status"
-
       - name: Save AA0 PIP-bound unittest parity
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
@@ -266,11 +238,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           show-progress: false
-
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
         run: python3 tools/ci/aa0_harness_identity.py
-
       - name: Restore AA0 PIP-bound runner parity
         id: cache
         uses: actions/cache/restore@v4
@@ -279,7 +249,6 @@ jobs:
           key: ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
           restore-keys: |
             ovc-aa0-runner-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-
-
       - name: Decide AA0 PIP-bound runner parity
         id: aa0
         shell: bash
@@ -290,26 +259,17 @@ jobs:
         run: |
           set -euo pipefail
           disposition=RUN_AA0
-          if [[ "${EXACT_HIT}" == "true" ]]; then
-            disposition=EXACT_GENERATION_REUSE
-          elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then
-            disposition=PLACEMENT_ONLY_PIP_REUSE
-          fi
-          if [[ "${disposition}" != "RUN_AA0" ]]; then
-            test -f "${RUNNER_TEMP}/ovc-aa0-runner/PASS"
-          fi
+          if [[ "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
+          if [[ "${disposition}" != "RUN_AA0" ]]; then test -f "${RUNNER_TEMP}/ovc-aa0-runner/PASS"; fi
           echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
           echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_runner_parity\",\"disposition\":\"${disposition}\"}"
-
       - uses: actions/setup-python@v5
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         with:
           python-version: "3.11"
-
       - name: Install pytest and Research Console test dependencies
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-
       - name: Prove pytest collection parity as AA0 PIP-bound BASE_INDEPENDENT assurance
         if: steps.aa0.outputs.disposition == 'RUN_AA0'
         shell: bash
@@ -318,20 +278,15 @@ jobs:
           PYTHONPATH=src:. python3 tools/ci/pytest_unittest_parity.py collect > /tmp/pytest-parity.log 2>&1
           status=$?
           cat /tmp/pytest-parity.log
-          if [ "$status" -ne 0 ]; then
-            python3 - <<'PY'
+          if [ "$status" -ne 0 ]; then python3 - <<'PY'
           from pathlib import Path
           text = Path('/tmp/pytest-parity.log').read_text(encoding='utf-8', errors='replace')
           tail = text[-5000:].replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A')
           print(f'::error title=Pytest collection-parity failure::{tail}')
           PY
           fi
-          if [ "$status" -eq 0 ]; then
-            mkdir -p "${RUNNER_TEMP}/ovc-aa0-runner"
-            printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-runner/PASS"
-          fi
+          if [ "$status" -eq 0 ]; then mkdir -p "${RUNNER_TEMP}/ovc-aa0-runner"; printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-runner/PASS"; fi
           exit "$status"
-
       - name: Save AA0 PIP-bound runner parity
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4

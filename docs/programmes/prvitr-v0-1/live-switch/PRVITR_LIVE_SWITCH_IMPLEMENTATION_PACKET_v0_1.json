@@ -1,0 +1,52 @@
+{
+  "acceptance_conditions": [
+    "PRVIT-R01..R10 PASS",
+    "full repository suite PASS",
+    "pytest/unittest parity PASS",
+    "runner parity PASS",
+    "FINAL_HEAD profile PASS",
+    "VIT routing preflight PASS using immutable blob lineage for this packet",
+    "SIQ READY PASS bound to exact workflow run identities",
+    "OVC merge readiness PASS with exact IntegrationAdmissionReceipt",
+    "local Git ancestry is normative and provider compare is not decision-bearing",
+    "existing ruleset/required context/serialized gateway unchanged",
+    "no authority broadening outside approved live-switch delta"
+  ],
+  "authority_source": {
+    "authority_manifest_id": "498dd9d0869e8bd66a672eace1525ea78d870a8ef8439ea876fa7e71cbdb8b40",
+    "decision": "PASS",
+    "decision_record": "docs/programmes/prvitr-v0-1/wp7/PRVITR_G_LIVE_SWITCH_OPERATOR_DECISION_v0_1.json",
+    "gate": "PRVITR-G-LIVE-SWITCH"
+  },
+  "baseline": {
+    "commit": "1ed0a1a1a6386ffd8b080c9275742a01243b1cde",
+    "tree": "fdf3d607b42441eb3cdd23fa6c9c45993a0acb4c"
+  },
+  "files": [
+    "tools/ci/vit_lineage_source.py",
+    "tools/ci/vit_routing_preflight.py",
+    "tools/ci/vit_assurance_preflight.py",
+    "tools/ci/prvitr_live_admission.py",
+    ".github/workflows/tests.yml",
+    ".github/workflows/ovc-tiered-tests.yml",
+    "tests/development/test_parallel_integration_lane.py",
+    "tests/development_skills/test_dsai3v_vit_universal_routing.py"
+  ],
+  "next_state": "QA_REVIEW",
+  "packet_id": "PRVITR-LIVE-SWITCH-IMPLEMENTATION",
+  "plan_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-IMPLEMENTATION-PLAN-v0.1",
+  "programme_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
+  "qa_status": "PENDING_EXACT_HEAD_REMOTE_ASSURANCE",
+  "rollback": "Forward-revert the bounded live-switch workflow/tooling changes to the immediately prior admission route while preserving all operator decision, assurance-generation and admission-receipt evidence.",
+  "schema": "ovc-prvitr-live-switch-implementation-packet/v0.1",
+  "scope": [
+    "Resolve PIP/A0 assurance identity before placement-sensitive VIT routing.",
+    "Admit immutable Git-blob VIT lineage as decision-bearing lineage source while retaining legacy inline lineage only for compatibility.",
+    "Bind SIQ READY admission to one exact tests workflow run and one exact profile workflow run for the exact PR head.",
+    "Materialise IntegrationAssuranceGeneration and IntegrationAdmissionReceipt identities from exact run/job/tree/frontier evidence.",
+    "Use local Git object ancestry as normative.",
+    "Preserve the existing serialized physical integration lane and required OVC merge readiness context.",
+    "Emit placement-only selective-renewal and semantic dispatch identities without rebuilding PIP/A0.",
+    "Preserve narrow post-materialisation receipt path and existing post-merge completion machinery."
+  ]
+}

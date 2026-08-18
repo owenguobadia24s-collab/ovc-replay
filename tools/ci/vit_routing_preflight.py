@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import base64
 import json
 import os
 from pathlib import Path
@@ -14,9 +13,9 @@ import urllib.request
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
 from ovc.development.skills.vit_core import TREE_IDENTITY_PROFILE, VitContractError
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
+from tools.ci.vit_lineage_source import resolve_lineage_source
 
 REGISTER_PATH = Path("registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json")
-LINEAGE_B64_MARKER = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
 SAFE_REF = re.compile(r"[A-Za-z0-9._/-]+")
 
 
@@ -57,12 +56,7 @@ def _fetch_commit_if_needed(root: Path, sha: str) -> None:
 
 
 def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> tuple[Mapping[str, Any], bool]:
-    """Resolve live PR metadata only for the actual Actions workspace.
-
-    Synthetic/unit repositories must remain hermetic even when their tests are executed
-    inside GitHub Actions. Those temporary roots consume the supplied event fixture but
-    are explicitly marked as non-live so base resolution still consults their own remote.
-    """
+    """Resolve live PR metadata only for the actual Actions workspace."""
     event_pr = event.get("pull_request")
     if not isinstance(event_pr, Mapping):
         raise RuntimeError("pull_request event payload is missing")
@@ -162,22 +156,6 @@ def _compose_pip_tree(root: Path, predecessor_tree: str, logical_changes: Sequen
         return _git(root, ["write-tree"], env=env)
 
 
-def _decode_lineage(body: str) -> Mapping[str, Any]:
-    match = LINEAGE_B64_MARKER.search(body)
-    if not match:
-        raise RuntimeError("VIT_LINEAGE_REQUIRED: add `VIT-Lineage-B64: <urlsafe-base64-canonical-lineage-json>` to the PR body")
-    token = match.group(1)
-    try:
-        token += "=" * ((4 - len(token) % 4) % 4)
-        raw = base64.urlsafe_b64decode(token.encode("ascii"))
-        record = json.loads(raw.decode("utf-8"))
-    except (ValueError, UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise RuntimeError(f"VIT_LINEAGE_INVALID_ENCODING: {exc}") from exc
-    if not isinstance(record, Mapping):
-        raise RuntimeError("VIT_LINEAGE_INVALID: decoded lineage must be a JSON object")
-    return record
-
-
 def _exception_matches(exception: Mapping[str, Any], *, pr_number: int, head_sha: str, head_branch: str) -> bool:
     if int(exception.get("pr_number", -1)) != pr_number:
         return False
@@ -236,7 +214,9 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
                 raise RuntimeError("registered VIT exception cannot grant SIQ bypass authority")
             return f"REGISTERED_EXCEPTION:{exception.get('exception_class', 'UNKNOWN')}"
 
-    record = _decode_lineage(body)
+    source = resolve_lineage_source(body, require=True)
+    assert source is not None
+    record = source.record
     try:
         lineage = validate_vit_lineage_record(record)
     except (VitContractError, ValueError, TypeError) as exc:
@@ -278,7 +258,7 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
     base_note = "LIVE_BASE" if live_base_sha != event_base_sha else "EVENT_BASE_CURRENT"
     return (
         f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:{lineage.generation_id}:"
-        f"{lineage.placement_id}:{base_note}:LIVE_PR_BODY"
+        f"{lineage.placement_id}:{base_note}:{source.source}:{source.immutable_ref}"
     )
 
 

@@ -6,13 +6,16 @@ ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github/workflows/ovc-tiered-tests.yml"
 TESTS_WORKFLOW = ROOT / ".github/workflows/tests.yml"
 LEASE_RUNNER = ROOT / "tools/ci/ovc_run_with_main_lease.py"
+ADMISSION_TOOL = ROOT / "tools/ci/prvitr_live_admission.py"
 CONSOLE_PACKAGE = ROOT / "tests/research_console_vnext/__init__.py"
+
 
 class ParallelIntegrationLaneTests(unittest.TestCase):
     def setUp(self):
         self.workflow = WORKFLOW.read_text(encoding="utf-8")
         self.tests_workflow = TESTS_WORKFLOW.read_text(encoding="utf-8")
         self.lease_runner = LEASE_RUNNER.read_text(encoding="utf-8")
+        self.admission = ADMISSION_TOOL.read_text(encoding="utf-8")
 
     def test_only_existing_da2_pr_workflows_are_used(self):
         workflow_dir = ROOT / ".github/workflows"
@@ -40,25 +43,36 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn("BASE_INDEPENDENT assurance", self.tests_workflow)
         self.assertIn("BASE_INDEPENDENT assurance", self.workflow)
 
-    def test_ready_admission_precedes_base_sensitive_lease(self):
+    def test_pip_assurance_identity_precedes_placement_routing(self):
+        assurance = "python3 tools/ci/vit_assurance_preflight.py"
+        placement = "python3 tools/ci/vit_routing_preflight.py"
+        self.assertIn(assurance, self.tests_workflow)
+        self.assertIn(placement, self.tests_workflow)
+        self.assertLess(self.tests_workflow.index(assurance), self.tests_workflow.index(placement))
+
+    def test_ready_admission_binds_exact_assurance_generation(self):
         self.assertIn("SIQ READY admission", self.workflow)
-        self.assertIn("OVC_SIQ_READY_ADMITTED", self.workflow)
-        self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.workflow)
-        self.assertLess(self.workflow.index("OVC_SIQ_READY_ADMITTED"), self.workflow.index("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED"))
+        self.assertIn("prvitr_live_admission.py ready", self.workflow)
+        self.assertIn("assurance_generation_id", self.workflow)
+        self.assertIn("OVC_SIQ_READY_ADMITTED", self.admission)
+        self.assertIn("IntegrationAssuranceGeneration", self.admission)
 
     def test_base_sensitive_lease_is_late_and_single(self):
         readiness = self.workflow.split("\n  merge-readiness:\n", 1)[1]
         self.assertIn("needs: [profile, siq-ready-admission]", readiness)
         self.assertIn("group: ovc-main-integration-lane-v1", readiness)
-        self.assertIn("Acquire SIQ BASE_SENSITIVE final-integration lease on current main", readiness)
-        self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED", readiness)
+        self.assertIn("prvitr_live_admission.py acquire", readiness)
+        self.assertIn("prvitr_live_admission.py finalize", readiness)
+        self.assertIn("IntegrationAdmissionReceipt", self.admission)
 
-    def test_stable_main_guards_remain_effective(self):
+    def test_stable_main_guards_remain_effective_and_local_git_is_normative(self):
         self.assertIn("OVC_REQUIRED_ASSURANCE_LEASE_INVALIDATED", self.lease_runner)
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.workflow)
-        self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.workflow)
+        self.assertIn("OVC_RECONCILE_REQUIRED", self.admission)
+        self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.admission)
         self.assertIn("git merge-base --is-ancestor", self.workflow)
-        self.assertIn("OVC_FINAL_INTEGRATION_WINDOW_PASS", self.workflow)
+        self.assertIn('["git", "merge-base", "--is-ancestor"', self.admission)
+        self.assertNotIn("compareCommits", self.workflow)
+        self.assertNotIn("compareCommits", self.admission)
 
     def test_predecessor_disposition_advances_successor(self):
         for marker in [
@@ -68,17 +82,15 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
             "OVC_FINAL_INTEGRATION_PREDECESSOR_RELEASED",
             "OVC_FINAL_INTEGRATION_PREDECESSOR_INVALIDATED",
         ]:
-            self.assertIn(marker, self.workflow)
+            self.assertIn(marker, self.admission)
 
-    def test_only_earlier_pr_can_own_predecessor_lease(self):
-        guard = "if (candidate.number >= prNumber)"
-        ignored = "OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED"
-        checks = "github.rest.checks.listForRef"
-        readiness = self.workflow.split("\n  merge-readiness:\n", 1)[1]
-        self.assertIn(guard, readiness)
-        self.assertIn(ignored, readiness)
-        self.assertLess(readiness.index(guard), readiness.index(checks))
-        self.assertIn("candidate.number > prNumber", readiness)
+    def test_only_earlier_pr_can_own_predecessor_lease_and_exact_workflow_evidence_is_used(self):
+        self.assertIn("if number>=pr_number", self.admission)
+        self.assertIn("OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED", self.admission)
+        self.assertIn("_exact_run(TIERED_WORKFLOW", self.admission)
+        self.assertIn("_exact_merge_job_pass", self.admission)
+        self.assertNotIn("checks.listForRef", self.workflow)
+        self.assertNotIn("latestNamedRun", self.workflow)
 
     def test_terminal_disposition_does_not_expand_merge_authority(self):
         self.assertIn("permissions:\n  contents: read\n  checks: read\n  pull-requests: read", self.workflow)
@@ -90,12 +102,13 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
     def test_research_console_surface_is_in_current_pytest_suite(self):
         self.assertTrue(CONSOLE_PACKAGE.exists())
         self.assertIn('python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt', self.tests_workflow)
-        exact = "python3 -m pytest tests/research_console_vnext -q --tb=short"
+        exact = "PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short"
         self.assertEqual(self.tests_workflow.count(exact), 1)
-        full_suite = "python3 -m pytest tests -q --tb=short"
+        full_suite = "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short"
         self.assertEqual(self.tests_workflow.count(full_suite), 1)
         self.assertNotIn(full_suite, self.workflow)
         self.assertEqual(self.tests_workflow.count("tools/ci/ovc_run_with_main_lease.py"), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
