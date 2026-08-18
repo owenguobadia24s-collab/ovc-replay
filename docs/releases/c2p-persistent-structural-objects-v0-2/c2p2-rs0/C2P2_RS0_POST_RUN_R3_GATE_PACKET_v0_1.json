@@ -1,0 +1,63 @@
+{
+  "active_object_pack_id": null,
+  "c2p_activation": "NONE",
+  "candidate_results": [
+    {
+      "activation_state": "NONE",
+      "candidate_id": "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3",
+      "candidate_logical_hash": "a8cb003521c62129044a4d62cb9a4d5a967cd3ef9d933fb1090ac4dad0843102",
+      "completed_at": "2026-08-18T07:53:55Z",
+      "detail": "RS0_SPOOLED_STORAGE_LIMIT_EXCEEDED:6535348224>6411935744",
+      "memory_limit_bytes": 1160593408,
+      "partial_spool_database_bytes": 6535348224,
+      "partial_spool_disposition": "DELETED_AFTER_FAILURE_RECEIPT_TO_RESPECT_STORAGE_ENVELOPE",
+      "peak_rss_bytes": 27013120,
+      "reason": "RS0SpooledRuntimeError",
+      "run_generation": "R3",
+      "schema": "ovc-c2p2-rs0-real-source-candidate-r3-summary/v1",
+      "selection_state": "NONE_SELECTED",
+      "started_at": "2026-08-18T07:47:53Z",
+      "status": "EXECUTION_FAILURE_FAIL_CLOSED",
+      "storage_limit_bytes": 6411935744,
+      "wall_seconds": 361.96010068400005
+    },
+    {
+      "activation_state": "NONE",
+      "candidate_id": "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3",
+      "candidate_logical_hash": "a91f50c12438c4d5263d36b48e40acc0a5e146b474307721a4108ac2398a752e",
+      "schema": "ovc-c2p2-rs0-real-source-candidate-r3-summary/v1",
+      "selection_state": "NONE_SELECTED",
+      "status": "NOT_RUN_FAIL_CLOSED_AFTER_PRIOR_CANDIDATE_FAILURE"
+    },
+    {
+      "activation_state": "NONE",
+      "candidate_id": "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3",
+      "candidate_logical_hash": "29f8ac9a5844b425901fda90299f911a48a85422a390771753ffd5b894b1c52c",
+      "schema": "ovc-c2p2-rs0-real-source-candidate-r3-summary/v1",
+      "selection_state": "NONE_SELECTED",
+      "status": "NOT_RUN_FAIL_CLOSED_AFTER_PRIOR_CANDIDATE_FAILURE"
+    }
+  ],
+  "current_authority": "R3_SINGLE_USE_CONSUMED_NO_SELECTION_NO_ACTIVATION",
+  "exact_work_after_approval": "Authorise a separately bounded recovery generation before any further real-source execution.",
+  "f0_a": "HOLD",
+  "gate_classification": "OPERATOR_REQUIRED",
+  "gate_id": "C2P2-RS0-RUN-RECOVERY-R3",
+  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R3",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "publication_probability_risk_exposure_trading_execution_agent_write": "NONE",
+  "recommended_decision": "BLOCK",
+  "rollback": "FORWARD_ONLY_PRESERVE_R3_AUTHORITY_CONSUMPTION_AND_ALL_COMPACT_RUN_EVIDENCE",
+  "run_result_sha256": "9ee13d78db33c6a37cdf197de4690b8558a3a66fd756c95c3ac1dfc5700ecf30",
+  "run_status": "BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED",
+  "schema": "ovc-c2p2-rs0-post-run-r3-gate-packet/v1",
+  "selection_state": "NONE_SELECTED_INCOMPLETE_RUN",
+  "status": "GATE_READY",
+  "unresolved_issues": [
+    "R3 comparative run did not complete; no scientific selection is permitted."
+  ],
+  "validation": "LOCKED_UNCONSUMED",
+  "warnings": [
+    "Whole-population candidate streams were source-order recovered under the qualified v0.2 adapter, hashed and reduced to deterministic scientific-review aggregates; ephemeral SQLite spools were deleted after each completed candidate to remain inside the frozen external-storage envelope."
+  ]
+}
