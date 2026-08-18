@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from ovc.research_operations.canonical import canonical_sha256
 from ovc.research_operations.p1cdi.currentness import (
     evaluate_two_point_currentness,
     require_g2_alg_for_pointer,
@@ -115,6 +116,81 @@ def test_incomplete_required_owner_frontier_reproduces_review_and_fails_closed()
     assert result["frontiers_equal"] is True
     assert result["currentness"] == "UNRESOLVED"
     assert result["reason_codes"] == ["UNRESOLVED_CURRENTNESS"]
+
+
+@pytest.mark.parametrize(
+    "case", FIXTURE["schema_invalid_resolved_source_identity_review_reproductions"]
+)
+def test_schema_invalid_resolved_source_identity_review_cases_are_rejected(case: dict) -> None:
+    rows = copy.deepcopy(FIXTURE["frontier_before"])
+    rows[0][case["field"]] = case["invalid_value"]
+    with pytest.raises(ValueError, match=case["expected_error"]):
+        frontier(f"p1:frontier:invalid-{case['field']}", rows)
+
+    evidence = copy.deepcopy(FIXTURE["owner_evidence"][0])
+    evidence[case["field"]] = case["invalid_value"]
+    with pytest.raises(ValueError, match=case["expected_error"]):
+        resolve_owner_predicate("SOURCE_SCIENCE", [evidence])
+
+
+@pytest.mark.parametrize("case", FIXTURE["source_identity_invalid_type_neighbors"])
+def test_neighboring_source_identity_types_are_rejected_without_coercion(case: dict) -> None:
+    if "frontier" in case["targets"]:
+        rows = copy.deepcopy(FIXTURE["frontier_before"])
+        rows[0][case["field"]] = case["invalid_value"]
+        with pytest.raises(ValueError, match=case["expected_error"]):
+            frontier(f"p1:frontier:neighbor-{case['field']}", rows)
+    if "resolver" in case["targets"]:
+        evidence = copy.deepcopy(FIXTURE["owner_evidence"][0])
+        evidence[case["field"]] = case["invalid_value"]
+        with pytest.raises(ValueError, match=case["expected_error"]):
+            resolve_owner_predicate("SOURCE_SCIENCE", [evidence])
+
+
+@pytest.mark.parametrize("case", FIXTURE["source_identity_valid_typed_neighbors"])
+def test_contract_valid_string_and_null_identity_neighbors_remain_admissible(case: dict) -> None:
+    rows = copy.deepcopy(FIXTURE["frontier_before"])
+    rows[0][case["field"]] = case["value"]
+    valid = frontier(f"p1:frontier:valid-{case['field']}", rows)
+    schema = json.loads(
+        (ROOT / "schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json").read_text()
+    )
+    validate_contract(schema, valid)
+    result = evaluate_two_point_currentness(
+        generation_id="p1:gen:001",
+        prebuild_frontier=valid,
+        prepublish_frontier=copy.deepcopy(valid),
+    )
+    assert result["currentness"] == "CURRENT"
+
+    evidence = copy.deepcopy(FIXTURE["owner_evidence"][0])
+    evidence[case["field"]] = case["value"]
+    resolved = resolve_owner_predicate("SOURCE_SCIENCE", [evidence])
+    assert resolved["resolution_state"] == "RESOLVED"
+    assert resolved["resolved_source"][case["field"]] == case["value"]
+
+
+@pytest.mark.parametrize(
+    "case", FIXTURE["schema_invalid_resolved_source_identity_review_reproductions"]
+)
+def test_currentness_rejects_hash_bound_schema_invalid_owner_identity(case: dict) -> None:
+    malformed = frontier("p1:frontier:valid-before-tamper", FIXTURE["frontier_before"])
+    malformed["owner_entries"][0][case["field"]] = case["invalid_value"]
+    identity = {
+        "required_owners": malformed["required_owners"],
+        "owner_entries": malformed["owner_entries"],
+        "missing_required_owners": malformed["missing_required_owners"],
+        "duplicate_required_owners": malformed["duplicate_required_owners"],
+        "completeness_state": malformed["completeness_state"],
+        "reason_codes": malformed["reason_codes"],
+    }
+    malformed["frontier_sha256"] = canonical_sha256(identity)
+    with pytest.raises(ValueError, match=case["expected_error"]):
+        evaluate_two_point_currentness(
+            generation_id="p1:gen:001",
+            prebuild_frontier=malformed,
+            prepublish_frontier=copy.deepcopy(malformed),
+        )
 
 
 @pytest.mark.parametrize(
@@ -245,6 +321,12 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     remediation_decision = json.loads(
         (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_REMEDIATION_DECISION_v0_1.json").read_text()
     )
+    remediation_2 = json.loads(
+        (
+            ROOT
+            / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_REMEDIATION_2_IMPLEMENTATION_PACKET_v0_1.json"
+        ).read_text()
+    )
     assert packet["authority_delta"] == "NONE"
     assert packet["status"] == "GATE_READY"
     assert packet["next_packet"] == "P1CDII-G2-ALG"
@@ -284,6 +366,14 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     assert remediation_decision["p1cdii_g2_alg"]["status"] == "UNRESOLVED"
     assert remediation_decision["p1cdii_g2_alg"]["remediation_author_eligible_to_issue_pass"] is False
     assert remediation_decision["wp3_authorised"] is False
+    assert remediation_2["status"] == "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE"
+    assert remediation_2["authority_delta"] == "NONE"
+    assert remediation_2["remediated_blockers"] == [
+        "P1CDII_G2_ALG_BLOCK_003_SCHEMA_INVALID_RESOLVED_SOURCE_IDENTITY_FALSE_CURRENT"
+    ]
+    assert remediation_2["p1cdii_g2_alg_status"] == "UNRESOLVED_REQUIRES_ANOTHER_FRESH_INDEPENDENT_REVIEW"
+    assert remediation_2["remediation_author_may_issue_g2_alg_pass"] is False
+    assert remediation_2["wp3_authorised"] is False
     assert state["current_packet"] == "P1CDII-WP2"
     assert state["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP2"]["status"] == "BLOCKED"

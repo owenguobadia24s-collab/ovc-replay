@@ -58,11 +58,38 @@ def _normalized_evidence(evidence: Mapping[str, Any]) -> dict[str, Any]:
     required = {"predicate", "owner", "source_ref", "generation_ref", "source_sha256", "resolution_state"}
     if set(evidence) != required:
         raise ValueError("source evidence must use the exact closed field set")
-    if evidence["resolution_state"] not in _STATES:
-        raise ValueError(f"invalid resolution_state: {evidence['resolution_state']}")
-    if not _SHA256.fullmatch(str(evidence["source_sha256"])):
-        raise ValueError("source_sha256 must be lowercase SHA-256")
+    _require_nonempty_string(evidence["predicate"], "predicate")
+    _validate_source_identity(evidence)
     return {name: evidence[name] for name in sorted(required)}
+
+
+def _require_nonempty_string(value: Any, field: str) -> None:
+    if type(value) is not str or not value:
+        raise ValueError(f"{field} must be a non-empty string")
+
+
+def _validate_source_identity(source: Mapping[str, Any]) -> None:
+    _require_nonempty_string(source["owner"], "owner")
+    _require_nonempty_string(source["source_ref"], "source_ref")
+    generation_ref = source["generation_ref"]
+    if generation_ref is not None:
+        _require_nonempty_string(generation_ref, "generation_ref")
+    source_sha256 = source["source_sha256"]
+    if type(source_sha256) is not str or not _SHA256.fullmatch(source_sha256):
+        raise ValueError("source_sha256 must be a lowercase SHA-256 string")
+    resolution_state = source["resolution_state"]
+    if type(resolution_state) is not str or resolution_state not in _STATES:
+        raise ValueError(f"invalid resolution_state: {resolution_state}")
+
+
+def normalize_source_frontier_entry(raw: Mapping[str, Any]) -> dict[str, Any]:
+    """Return one exact schema-compatible frontier entry without coercion."""
+
+    required = {"owner", "source_ref", "generation_ref", "source_sha256", "resolution_state"}
+    if set(raw) != required:
+        raise ValueError("source frontier entries must use the exact closed field set")
+    _validate_source_identity(raw)
+    return {key: raw[key] for key in sorted(required)}
 
 
 def resolve_owner_predicate(
@@ -73,7 +100,8 @@ def resolve_owner_predicate(
     if predicate not in _SOURCE_POLICY:
         raise ValueError(f"unknown owner predicate: {predicate}")
     expected_owner, missing_reason = _SOURCE_POLICY[predicate]
-    rows = [_normalized_evidence(item) for item in evidence if item.get("predicate") == predicate]
+    normalized_evidence = [_normalized_evidence(item) for item in evidence]
+    rows = [item for item in normalized_evidence if item["predicate"] == predicate]
     wrong_owner = [item for item in rows if item["owner"] != expected_owner]
     if wrong_owner:
         return _resolution(predicate, expected_owner, "CONFLICT", None, ["OWNER_SEMANTIC_CONFLICT"])
@@ -85,7 +113,7 @@ def resolve_owner_predicate(
     if not resolved:
         return _resolution(predicate, expected_owner, "UNRESOLVED", None, [missing_reason])
     identities = {
-        (str(item["source_ref"]), str(item["generation_ref"]), str(item["source_sha256"]))
+        (item["source_ref"], item["generation_ref"], item["source_sha256"])
         for item in resolved
     }
     if len(identities) != 1 or len(resolved) != len(rows):
@@ -119,14 +147,7 @@ def build_source_frontier(
         raise ValueError("frontier_id, resolved_at, and owner_entries are required")
     normalized: list[dict[str, Any]] = []
     for raw in owner_entries:
-        required = {"owner", "source_ref", "generation_ref", "source_sha256", "resolution_state"}
-        if set(raw) != required:
-            raise ValueError("source frontier entries must use the exact closed field set")
-        if raw["resolution_state"] not in _STATES:
-            raise ValueError(f"invalid resolution_state: {raw['resolution_state']}")
-        if not _SHA256.fullmatch(str(raw["source_sha256"])):
-            raise ValueError("source_sha256 must be lowercase SHA-256")
-        normalized.append({key: raw[key] for key in sorted(required)})
+        normalized.append(normalize_source_frontier_entry(raw))
     normalized.sort(
         key=lambda item: (
             str(item["owner"]),
@@ -136,7 +157,7 @@ def build_source_frontier(
             str(item["resolution_state"]),
         )
     )
-    owners = [str(item["owner"]) for item in normalized]
+    owners = [item["owner"] for item in normalized]
     duplicate_required_owners = sorted(
         owner for owner in REQUIRED_CURRENTNESS_OWNERS if owners.count(owner) > 1
     )
