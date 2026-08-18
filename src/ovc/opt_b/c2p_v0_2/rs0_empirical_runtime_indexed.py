@@ -9,7 +9,6 @@ It is synthetic-qualification only and grants no real-source, selection, activat
 Validation, publication, probability, risk, exposure, trading, execution or agent-write authority.
 """
 
-from hashlib import sha256
 import json
 from pathlib import Path
 import sqlite3
@@ -34,6 +33,7 @@ from .rs0_empirical_semantics import evaluate_pair, normalize_candidate_source_r
 RUNTIME_GENERATION_ID = "C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_v0_2"
 EVIDENCE_CONTRACT_ID = "C2P2_RS0_NEGATIVE_COVERAGE_CERTIFICATE_v0_2"
 ADAPTER_SCHEMA = "ovc-c2p2-rs0-indexed-outcome-equivalent-runtime/v2"
+NEGATIVE_COVERAGE_STORAGE_SCHEMA = "COMPACT_TYPED_V1"
 DEFAULT_CHECKPOINT_CADENCE = 1024
 
 THEOREM_BY_SEMANTIC_ID = {
@@ -111,7 +111,15 @@ def _connect(path: Path, *, create: bool) -> sqlite3.Connection:
             CREATE INDEX assertions_scope_match_id ON assertions(scope_key, match_key, assertion_id);
             CREATE TABLE decisions (ordinal INTEGER PRIMARY KEY, value_json TEXT NOT NULL);
             CREATE TABLE evaluated_pair_vectors (ordinal INTEGER PRIMARY KEY, value_json TEXT NOT NULL);
-            CREATE TABLE negative_coverage (ordinal INTEGER PRIMARY KEY, value_json TEXT NOT NULL);
+            CREATE TABLE negative_coverage (
+                ordinal INTEGER PRIMARY KEY,
+                match_key TEXT NOT NULL,
+                assertion_total INTEGER NOT NULL,
+                assertion_examined INTEGER NOT NULL,
+                tracklet_total INTEGER,
+                tracklet_examined INTEGER,
+                global_blocker TEXT
+            );
             """
         )
     return connection
@@ -134,6 +142,36 @@ def _next_ordinal(connection: sqlite3.Connection, table: str) -> int:
 
 def _insert_ordered(connection: sqlite3.Connection, table: str, ordinal: int, value: Mapping[str, Any]) -> None:
     connection.execute(f"INSERT INTO {table}(ordinal, value_json) VALUES (?, ?)", (ordinal, _canonical_json(dict(value))))
+
+
+def _insert_coverage(
+    connection: sqlite3.Connection,
+    ordinal: int,
+    *,
+    match_key: str,
+    assertion_total: int,
+    assertion_examined: int,
+    tracklet_total: int | None,
+    tracklet_examined: int | None,
+    global_blocker: str | None,
+) -> None:
+    connection.execute(
+        """
+        INSERT INTO negative_coverage(
+            ordinal, match_key, assertion_total, assertion_examined,
+            tracklet_total, tracklet_examined, global_blocker
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            ordinal,
+            match_key,
+            assertion_total,
+            assertion_examined,
+            tracklet_total,
+            tracklet_examined,
+            global_blocker,
+        ),
+    )
 
 
 def _scope_counts(connection: sqlite3.Connection) -> tuple[dict[str, int], dict[str, int]]:
@@ -228,6 +266,43 @@ def _coverage_certificate(candidate: Mapping[str, Any], *, semantic_id: str, sco
     return {**payload, "coverage_certificate_sha256": _hash(payload)}
 
 
+def _coverage_values(connection: sqlite3.Connection, semantic_id: str) -> Iterator[dict[str, Any]]:
+    query = """
+        SELECT
+            c.value_json,
+            n.match_key,
+            n.assertion_total,
+            n.assertion_examined,
+            n.tracklet_total,
+            n.tracklet_examined,
+            n.global_blocker
+        FROM negative_coverage AS n
+        JOIN candidates AS c ON c.ordinal = n.ordinal
+        ORDER BY n.ordinal
+    """
+    for (
+        candidate_json,
+        match_key,
+        assertion_total,
+        assertion_examined,
+        tracklet_total,
+        tracklet_examined,
+        global_blocker,
+    ) in connection.execute(query):
+        candidate = json.loads(candidate_json)
+        yield _coverage_certificate(
+            candidate,
+            semantic_id=semantic_id,
+            scope=_scope_key(candidate["hard_scope"]),
+            match_key=str(match_key),
+            assertion_total=int(assertion_total),
+            assertion_examined=int(assertion_examined),
+            tracklet_total=(int(tracklet_total) if tracklet_total is not None else None),
+            tracklet_examined=(int(tracklet_examined) if tracklet_examined is not None else None),
+            global_blocker=(str(global_blocker) if global_blocker is not None else None),
+        )
+
+
 def _final_indexes(connection: sqlite3.Connection) -> dict[str, dict[str, list[str]]]:
     assertion_index: dict[str, list[str]] = {}
     for scope_key, assertion_id in connection.execute("SELECT scope_key, assertion_id FROM assertions ORDER BY scope_key, assertion_id"):
@@ -270,6 +345,7 @@ def run_indexed_empirical_runtime(
         _put_metadata(connection, "runtime_binding_id", RUNTIME_BINDING_ID)
         _put_metadata(connection, "runtime_generation_id", RUNTIME_GENERATION_ID)
         _put_metadata(connection, "evidence_contract_id", EVIDENCE_CONTRACT_ID)
+        _put_metadata(connection, "negative_coverage_storage_schema", NEGATIVE_COVERAGE_STORAGE_SCHEMA)
         _put_metadata(connection, "selection_state", "UNSELECTED_RESEARCH_CANDIDATE")
         _put_metadata(connection, "activation_state", "NONE")
         _put_metadata(connection, "real_source_launch", "FORBIDDEN_BY_AUTHORITY")
@@ -283,6 +359,8 @@ def run_indexed_empirical_runtime(
             raise RS0IndexedRuntimeError("RS0_INDEXED_RESUME_GENERATION_MISMATCH")
         if _get_metadata(connection, "evidence_contract_id") != EVIDENCE_CONTRACT_ID:
             raise RS0IndexedRuntimeError("RS0_INDEXED_RESUME_EVIDENCE_CONTRACT_MISMATCH")
+        if _get_metadata(connection, "negative_coverage_storage_schema") != NEGATIVE_COVERAGE_STORAGE_SCHEMA:
+            raise RS0IndexedRuntimeError("RS0_INDEXED_RESUME_COVERAGE_STORAGE_SCHEMA_MISMATCH")
 
     next_candidate = _next_ordinal(connection, "candidates")
     next_tracklet = _next_ordinal(connection, "tracklets")
@@ -430,10 +508,9 @@ def run_indexed_empirical_runtime(
                     )
                     decision = _decision(candidate, "NEW_TRACKLET", evidence_vector_ids=all_vector_ids, resulting_subject_id=tracklet["tracklet_id"])
 
-            certificate = _coverage_certificate(
-                candidate,
-                semantic_id=semantic_id,
-                scope=scope,
+            _insert_coverage(
+                connection,
+                next_coverage,
                 match_key=match_key,
                 assertion_total=assertion_total,
                 assertion_examined=len(assertion_rows),
@@ -441,7 +518,6 @@ def run_indexed_empirical_runtime(
                 tracklet_examined=tracklet_examined,
                 global_blocker=global_blocker,
             )
-            _insert_ordered(connection, "negative_coverage", next_coverage, certificate)
             next_coverage += 1
             _insert_ordered(connection, "decisions", next_decision, decision)
             next_decision += 1
@@ -475,6 +551,7 @@ def run_indexed_empirical_runtime(
             "schema": ADAPTER_SCHEMA,
             "runtime_generation_id": RUNTIME_GENERATION_ID,
             "evidence_contract_id": EVIDENCE_CONTRACT_ID,
+            "negative_coverage_storage_schema": NEGATIVE_COVERAGE_STORAGE_SCHEMA,
             "legacy_runtime_binding_id": RUNTIME_BINDING_ID,
             "object_pack_candidate_id": candidate_spec["candidate_id"],
             "semantic_candidate_id": candidate_spec["semantic_candidate_id"],
@@ -504,13 +581,16 @@ def materialize_outcome_result(work_dir: str | Path) -> dict[str, Any]:
     connection = sqlite3.connect(root / "runtime-indexed.sqlite3")
     try:
         candidate_spec = _get_metadata(connection, "candidate_spec")
+        semantic_id = str(candidate_spec["semantic_candidate_id"])
+        if _get_metadata(connection, "negative_coverage_storage_schema") != NEGATIVE_COVERAGE_STORAGE_SCHEMA:
+            raise RS0IndexedRuntimeError("RS0_INDEXED_COVERAGE_STORAGE_SCHEMA_MISMATCH")
         return {
             "schema": ADAPTER_SCHEMA,
             "runtime_generation_id": RUNTIME_GENERATION_ID,
             "evidence_contract_id": EVIDENCE_CONTRACT_ID,
             "legacy_runtime_binding_id": RUNTIME_BINDING_ID,
             "object_pack_candidate_id": candidate_spec["candidate_id"],
-            "semantic_candidate_id": candidate_spec["semantic_candidate_id"],
+            "semantic_candidate_id": semantic_id,
             "processed_source_record_ids": [row[0] for row in connection.execute("SELECT source_id FROM processed_source_ids ORDER BY ordinal")],
             "last_stream_order_key": _get_metadata(connection, "last_stream_order_key"),
             "candidates": list(_ordered_values(connection, "candidates")),
@@ -518,7 +598,7 @@ def materialize_outcome_result(work_dir: str | Path) -> dict[str, Any]:
             "object_assertions": list(_ordered_values(connection, "assertions")),
             "match_decisions": list(_ordered_values(connection, "decisions")),
             "evaluated_pair_vectors": list(_ordered_values(connection, "evaluated_pair_vectors")),
-            "negative_coverage_certificates": list(_ordered_values(connection, "negative_coverage")),
+            "negative_coverage_certificates": list(_coverage_values(connection, semantic_id)),
             "indexes": _final_indexes(connection),
             "selection_state": "UNSELECTED_RESEARCH_CANDIDATE",
             "activation_state": "NONE",
