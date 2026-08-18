@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-p2ctii-implementation-packet/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-WP4",
+  "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
+  "plan_sha256": "abc0ae753c20b557508eb35a00326fc62b3f3bb5ab229550852439d25ea07eef",
+  "design_sha256": "868c496c5c1bfc825fa739bd4e2ee2d5eda9bcd3bbfdded2d117546c9b3824e4",
+  "baseline_main": "46e75f6524a98c73e4998744caab2296768f145c",
+  "baseline_tree": "0e49d2e32222930e077a68fd2cdd0664d5b222fc",
+  "branch": "agent/p2ctii-wp4-20260818",
+  "status": "IMPLEMENTED_AWAITING_P2CTII-G4-ALG",
+  "prerequisites": [
+    "P2CTII-WP3_COMPLETED@46e75f6524a98c73e4998744caab2296768f145c",
+    "P2CTII-WP3_POST_MERGE_COMPLETION@32150813837",
+    "P2CTII-G3_DELEGATED_PASS"
+  ],
+  "scope": [
+    "CLOSED_TYPED_RELATION_FAMILIES",
+    "EXACT_SEMANTIC_GENERATION_BINDINGS",
+    "SAFE_DUPLICATE_BOUNDARY",
+    "AMBIGUITY_AND_CONFLICT_PRESERVATION",
+    "RESEARCH_DEMAND_SOURCE_QUESTION_BINDING",
+    "ADVISORY_NEXT_THEORY_WORK",
+    "REFERENCE_QUERY_ENGINE_ALL_FAMILIES"
+  ],
+  "implementation": {
+    "relations": "src/ovc/research_operations/p2cti/relations.py",
+    "demand": "src/ovc/research_operations/p2cti/demand.py",
+    "query": "src/ovc/research_operations/p2cti/query.py",
+    "relation_registry": "registries/research_operations/p2cti/P2CTI_RELATION_TYPE_REGISTRY_v0_1.json",
+    "reference_fixture": "fixtures/research_operations/p2cti/P2CTII_WP4_REFERENCE_FIXTURE_v0_1.json",
+    "reference_runner": "scripts/research_operations/run_p2ctii_wp4_reference.py",
+    "tests": "tests/research_operations/p2cti/test_p2ctii_wp4_relations_demand_query.py"
+  },
+  "acceptance": {
+    "closed_relation_families": 10,
+    "closed_relation_types": 12,
+    "exact_semantic_generation_binding_required": true,
+    "source_explicit_deterministic_auto_admission_only": true,
+    "semantic_duplicate_special_case_generalisation_independent_or_human_review": true,
+    "machine_llm_similarity": "PROPOSED_MACHINE_ASSISTED_ADVISORY_ONLY",
+    "near_duplicate_identity_collapse": false,
+    "ambiguity_conflict_preserved": true,
+    "research_demand_source_question_required": true,
+    "scalar_truth_value_alpha_scores": "FORBIDDEN",
+    "eligibility_before_preference": true,
+    "method_gap_before_architecture_pressure": true,
+    "gap_capability_owner": "RCCR",
+    "query_families_implemented": 14,
+    "silent_truncation": "FORBIDDEN",
+    "theory_semantic_promotion": false
+  },
+  "authority_delta": "NONE",
+  "blockers": [],
+  "rollback": "Forward supersession only; preserve exact relation/demand records and all ambiguity/conflict evidence.",
+  "next_packet": "P2CTII-G4-ALG"
+}
