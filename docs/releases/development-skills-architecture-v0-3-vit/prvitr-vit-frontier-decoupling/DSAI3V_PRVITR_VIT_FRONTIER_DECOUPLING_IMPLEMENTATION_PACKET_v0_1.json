@@ -1,0 +1,91 @@
+{
+  "acceptance_conditions": [
+    "unrelated main movement preserves source PR, source head, PIP and A0",
+    "unrelated main movement creates a new VIT generation/placement without source-branch ancestry",
+    "integration-harness movement renews A1/A2 while preserving unchanged A0",
+    "payload/dependency/authority movement remains fail-closed",
+    "physical predecessor is frozen only after readiness and movement returns PREDECESSOR_MOVED",
+    "A3 proves physical main tree equals qualified prospective result tree",
+    "frontier lineage, A2-qualified assurance and A2 proof are persisted through the receipt path",
+    "no replacement PR, force-push, history rewrite or parallel merge path exists"
+  ],
+  "architecture_delta": {
+    "assurance_partition": [
+      "A0_PIP",
+      "A1_COMPOSITION",
+      "A2_PROSPECTIVE_TREE",
+      "A3_POST_WRITE_EQUALITY"
+    ],
+    "physical_materialisation_transaction": "LATE_EXCLUSIVE_PREDECESSOR_AND_RESULT_FREEZE",
+    "pip": "IMMUTABLE_SEMANTIC_PACKET_IDENTITY",
+    "prospective_result_tree": "DECISION_BEARING_A2_TREE",
+    "source_head": "PR_TRANSPORT_AND_PROVENANCE_ONLY",
+    "vit_placement": "CURRENT_FRONTIER_COMPOSITION_IDENTITY"
+  },
+  "authority_delta": "NONE",
+  "authority_effect": "NONE",
+  "authority_required": "EXPLICIT_OPERATOR_DIRECTIVE_ALREADY_RECORDED",
+  "baseline_commit": "d7a7f12d99f9c101c3203cb4189f0c9f1d60d77d",
+  "blockers": [
+    "EXACT_REQUIRED_CI_PENDING",
+    "PHYSICAL_MATERIALISATION_PENDING"
+  ],
+  "branch": "fix/prvitr-vit-frontier-decoupling-20260818",
+  "candidate_commit": null,
+  "changed_files": [
+    ".github/workflows/ovc-tiered-tests.yml",
+    "contracts/development/skills/OVC_PRVITR_VIT_FRONTIER_DECOUPLING_CONTRACT_v0_1.md",
+    "registries/development/skills/orch345_operational_capacity_v0_2.json",
+    "schemas/development/skills/prvitr_vit_frontier_decoupling_v0_1.schema.json",
+    "schemas/development/skills/vit_live_physical_transaction_freeze_v1.schema.json",
+    "scripts/development/v0_2/validate_da2_g1.py",
+    "src/ovc/development/skills/orch345_active.py",
+    "src/ovc/development/skills/siq_reconciliation.py",
+    "src/ovc/development/skills/vit_frontier_decoupling.py",
+    "src/ovc/development/skills/vit_routing.py",
+    "tools/ci/build_vit_pr_lineage.py",
+    "tools/ci/ovc_run_with_main_lease.py",
+    "tools/ci/prvitr_live_admission.py",
+    "tools/ci/vit_assurance_preflight.py",
+    "tools/ci/vit_post_merge_completion.py",
+    "tools/ci/vit_routing_preflight.py",
+    "tests/development/test_ci_performance_remediation.py",
+    "tests/development/test_ci_performance_shadow_packet.py",
+    "tests/development/test_parallel_integration_lane.py",
+    "tests/development/test_prvitr_vit_frontier_decoupling.py",
+    "tests/development/test_siq_compare_api_fallback.py",
+    "tests/development/test_siq_live_base_generation.py",
+    "tests/development/test_siq_pdc_contract.py",
+    "tests/development/test_siq_reconciliation.py",
+    "tests/development_skills/test_dsai3v_vit_live_base_preflight.py",
+    "tests/development_skills/test_dsai_throughput_expansion_20260813.py",
+    "tests/development_skills/test_vit_assurance_preflight_tool.py",
+    "tests/development_skills/test_vit_post_merge_completion_tool.py",
+    "docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_OPERATOR_DIRECTIVE_v0_1.json",
+    "docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_IMPLEMENTATION_PACKET_v0_1.json",
+    "docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_QA_PACKET_v0_1.json",
+    "registries/implementation/dsai_vit_v0_3/OVC_DSAI_VIT_V0_3_STATE_v0_19.json"
+  ],
+  "decision_record": null,
+  "force_push": false,
+  "history_rewrite": false,
+  "next_packet": null,
+  "operator_directive_ref": "docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_OPERATOR_DIRECTIVE_v0_1.json",
+  "packet_id": "DSAI3V-PRVITR-VIT-FRONTIER-DECOUPLING",
+  "parallel_physical_merge": false,
+  "plan_id": "OVC-DSAI-V0.3-VIT-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "plan_version": "0.1-R1-RATIFIED",
+  "prerequisites": [
+    {
+      "disposition": "COMPLETED_BOUNDED_PREDECESSOR_AND_RECEIPT_CLOSEOUT_PRECURSOR",
+      "merge_commit": "17c2aac536893005fc07f4ec1717d04b6b2f9177",
+      "pr_number": 1148
+    }
+  ],
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "qa_packet": "docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_QA_PACKET_v0_1.json",
+  "record_id": "dd6bd35cee935efe8f35c48c384d345ffc38f9fb7000b04bdd0c34c5f8870299",
+  "rollback": "Revert the bounded squash merge and rerun exact required assurance. Do not rewrite history or delete evidence.",
+  "schema": "ovc-dsai3v-prvitr-vit-frontier-decoupling-implementation-packet/v0.1",
+  "status": "IMPLEMENTED_AWAITING_EXACT_CI_AND_A3"
+}
