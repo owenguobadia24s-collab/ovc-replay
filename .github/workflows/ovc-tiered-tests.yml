@@ -104,95 +104,120 @@ jobs:
     timeout-minutes: 24
     outputs:
       base_sha: ${{ steps.ready.outputs.base_sha }}
-      head_sha: ${{ steps.ready.outputs.head_sha }}
+      source_head_sha: ${{ steps.ready.outputs.source_head_sha }}
+      frontier_generation_id: ${{ steps.ready.outputs.frontier_generation_id }}
+      placement_id: ${{ steps.ready.outputs.placement_id }}
+      predecessor_commit_sha: ${{ steps.ready.outputs.predecessor_commit_sha }}
+      predecessor_tree: ${{ steps.ready.outputs.predecessor_tree }}
+      prospective_result_tree: ${{ steps.ready.outputs.prospective_result_tree }}
+      frontier_lineage_b64: ${{ steps.ready.outputs.frontier_lineage_b64 }}
       assurance_generation_id: ${{ steps.ready.outputs.assurance_generation_id }}
+      assurance_generation_b64: ${{ steps.ready.outputs.assurance_generation_b64 }}
       tests_run_id: ${{ steps.ready.outputs.tests_run_id }}
       profile_run_id: ${{ steps.ready.outputs.profile_run_id }}
+      movement_disposition: ${{ steps.ready.outputs.movement_disposition }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           show-progress: false
-      - name: Bind exact immutable assurance generation and pin live current main
+      - name: Bind PIP-bound A0 and current VIT frontier generation
         id: ready
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
         run: python3 tools/ci/prvitr_live_admission.py ready
-      - name: Prove READY candidate contains pinned main with local Git
+      - name: Prove READY binds source, PIP placement and prospective tree without PR-head ancestry
         shell: bash
         env:
-          OVC_READY_BASE_SHA: ${{ steps.ready.outputs.base_sha }}
-          OVC_READY_HEAD_SHA: ${{ steps.ready.outputs.head_sha }}
+          OVC_SOURCE_HEAD_SHA: ${{ steps.ready.outputs.source_head_sha }}
+          OVC_FRONTIER_GENERATION_ID: ${{ steps.ready.outputs.frontier_generation_id }}
+          OVC_PLACEMENT_ID: ${{ steps.ready.outputs.placement_id }}
+          OVC_PREDECESSOR_TREE: ${{ steps.ready.outputs.predecessor_tree }}
+          OVC_PROSPECTIVE_RESULT_TREE: ${{ steps.ready.outputs.prospective_result_tree }}
         run: |
           set -euo pipefail
-          test -n "${OVC_READY_BASE_SHA}"
-          test -n "${OVC_READY_HEAD_SHA}"
-          git cat-file -e "${OVC_READY_BASE_SHA}^{commit}"
-          git cat-file -e "${OVC_READY_HEAD_SHA}^{commit}"
-          if ! git merge-base --is-ancestor "${OVC_READY_BASE_SHA}" "${OVC_READY_HEAD_SHA}"; then
-            echo "::error title=SIQ READY candidate not reconciled::OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_READY_HEAD_SHA} does not contain pinned main ${OVC_READY_BASE_SHA}."
-            exit 1
-          fi
+          [[ "${#OVC_SOURCE_HEAD_SHA}" -eq 40 ]]
+          [[ "${#OVC_FRONTIER_GENERATION_ID}" -eq 64 ]]
+          [[ "${#OVC_PLACEMENT_ID}" -eq 64 ]]
+          [[ "${#OVC_PREDECESSOR_TREE}" -eq 40 ]]
+          [[ "${#OVC_PROSPECTIVE_RESULT_TREE}" -eq 40 ]]
+          git cat-file -e "${OVC_SOURCE_HEAD_SHA}^{commit}"
+          test "$(git cat-file -t "${OVC_PREDECESSOR_TREE}")" = "tree"
+          test "$(git cat-file -t "${OVC_PROSPECTIVE_RESULT_TREE}")" = "tree"
+          echo "OVC_READY_FRONTIER_PROOF=PASS source_head_is_provenance_only"
 
   merge-readiness:
     name: OVC merge readiness
     if: github.event_name == 'pull_request'
     needs: [profile, siq-ready-admission]
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     concurrency:
       group: ovc-main-integration-lane-v1
       cancel-in-progress: false
     outputs:
       admission_receipt_id: ${{ steps.finalize.outputs.admission_receipt_id }}
+      assurance_generation_id: ${{ steps.finalize.outputs.assurance_generation_id }}
+      a2_proof_id: ${{ steps.finalize.outputs.a2_proof_id }}
+      transaction_id: ${{ steps.finalize.outputs.transaction_id }}
+      frontier_ledger_envelope_id: ${{ steps.finalize.outputs.frontier_ledger_envelope_id }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           show-progress: false
-      - name: Acquire SIQ BASE_SENSITIVE final-integration lease from exact workflow evidence
+      - name: Acquire late physical-main lease and re-resolve exact VIT generation
         id: acquire
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
-          OVC_READY_BASE_SHA: ${{ needs.siq-ready-admission.outputs.base_sha }}
-          OVC_READY_HEAD_SHA: ${{ needs.siq-ready-admission.outputs.head_sha }}
+          OVC_READY_SOURCE_HEAD_SHA: ${{ needs.siq-ready-admission.outputs.source_head_sha }}
+          OVC_READY_ASSURANCE_GENERATION_ID: ${{ needs.siq-ready-admission.outputs.assurance_generation_id }}
         run: python3 tools/ci/prvitr_live_admission.py acquire
-      - name: Prove candidate contains acquired current main
+      - name: Checkout exact qualified prospective materialisation tree
         shell: bash
         env:
-          OVC_WINDOW_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_WINDOW_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
+          OVC_PROSPECTIVE_COMMIT_SHA: ${{ steps.acquire.outputs.prospective_commit_sha }}
+          OVC_PROSPECTIVE_RESULT_TREE: ${{ steps.acquire.outputs.prospective_result_tree }}
+          OVC_SOURCE_HEAD_SHA: ${{ steps.acquire.outputs.source_head_sha }}
         run: |
           set -euo pipefail
-          test -n "${OVC_WINDOW_BASE_SHA}"
-          test -n "${OVC_WINDOW_HEAD_SHA}"
-          git cat-file -e "${OVC_WINDOW_BASE_SHA}^{commit}"
-          git cat-file -e "${OVC_WINDOW_HEAD_SHA}^{commit}"
-          if ! git merge-base --is-ancestor "${OVC_WINDOW_BASE_SHA}" "${OVC_WINDOW_HEAD_SHA}"; then
-            echo "::error title=Candidate not reconciled::OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_WINDOW_HEAD_SHA} does not contain acquired main ${OVC_WINDOW_BASE_SHA}."
-            exit 1
-          fi
-      - name: Run mandatory SIQ/PDC exact-final assurance inside lease
+          [[ "${#OVC_PROSPECTIVE_COMMIT_SHA}" -eq 40 ]]
+          [[ "${#OVC_PROSPECTIVE_RESULT_TREE}" -eq 40 ]]
+          [[ "${#OVC_SOURCE_HEAD_SHA}" -eq 40 ]]
+          git cat-file -e "${OVC_PROSPECTIVE_COMMIT_SHA}^{commit}"
+          test "$(git rev-parse "${OVC_PROSPECTIVE_COMMIT_SHA}^{tree}")" = "${OVC_PROSPECTIVE_RESULT_TREE}"
+          git checkout --detach "${OVC_PROSPECTIVE_COMMIT_SHA}"
+          test "$(git rev-parse HEAD^{tree})" = "${OVC_PROSPECTIVE_RESULT_TREE}"
+          echo "OVC_A2_PROSPECTIVE_CHECKOUT=PASS source=${OVC_SOURCE_HEAD_SHA} tree=${OVC_PROSPECTIVE_RESULT_TREE}"
+      - name: Run mandatory SIQ/PDC A2 exact-final assurance inside lease
         shell: bash
         env:
           OVC_LEASE_REQUIRED: true
           OVC_LEASE_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_LEASE_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
+          OVC_LEASE_BASE_TREE: ${{ steps.acquire.outputs.base_tree }}
+          OVC_LEASE_SOURCE_HEAD_SHA: ${{ steps.acquire.outputs.source_head_sha }}
+          OVC_LEASE_PROSPECTIVE_COMMIT_SHA: ${{ steps.acquire.outputs.prospective_commit_sha }}
+          OVC_LEASE_RESULT_TREE: ${{ steps.acquire.outputs.prospective_result_tree }}
           OVC_LEASE_BRANCH: main
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
-            bash -lc "PYTHONPATH=src python -m unittest tests.development.test_siq_queue tests.development.test_siq_controls tests.development.test_siq_reconciliation tests.development.test_siq_receipts tests.development.test_siq_pdc_contract -v"
-      - name: Bind exact IntegrationAdmissionReceipt and release stable-main lease
+            bash -lc "PYTHONPATH=src python -m unittest tests.development.test_siq_queue tests.development.test_siq_controls tests.development.test_siq_reconciliation tests.development.test_siq_receipts tests.development.test_siq_pdc_contract tests.development.test_prvitr_vit_frontier_decoupling -v"
+      - name: Bind frontier admission receipt and emit one late physical transaction freeze
         id: finalize
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
+          OVC_WINDOW_SOURCE_HEAD_SHA: ${{ steps.acquire.outputs.source_head_sha }}
           OVC_WINDOW_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_WINDOW_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
-          OVC_ASSURANCE_GENERATION_ID: ${{ needs.siq-ready-admission.outputs.assurance_generation_id }}
+          OVC_WINDOW_BASE_TREE: ${{ steps.acquire.outputs.base_tree }}
+          OVC_WINDOW_PROSPECTIVE_COMMIT_SHA: ${{ steps.acquire.outputs.prospective_commit_sha }}
+          OVC_WINDOW_PROSPECTIVE_RESULT_TREE: ${{ steps.acquire.outputs.prospective_result_tree }}
+          OVC_ASSURANCE_GENERATION_ID: ${{ steps.acquire.outputs.assurance_generation_id }}
+          OVC_ASSURANCE_GENERATION_B64: ${{ steps.acquire.outputs.assurance_generation_b64 }}
+          OVC_FRONTIER_LINEAGE_B64: ${{ steps.acquire.outputs.frontier_lineage_b64 }}
         run: python3 tools/ci/prvitr_live_admission.py finalize
