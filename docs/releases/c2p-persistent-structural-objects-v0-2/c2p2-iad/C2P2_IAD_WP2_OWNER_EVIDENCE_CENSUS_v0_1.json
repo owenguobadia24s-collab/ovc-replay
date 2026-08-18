@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-c2p2-iad-owner-evidence-census/v1",
+  "programme_id": "OVC-C2P2-IDENTITY-ANCHOR-DISCRIMINATION-v0.1",
+  "packet_id": "C2P2-IAD-WP2",
+  "status": "IMPLEMENTED_PREBUILD_PENDING_PREREQUISITE_AND_QA",
+  "census_basis": "REPOSITORY_CONTRACTS_AND_ALREADY_PRESERVED_IMMUTABLE_C2P2_SD_EVIDENCE_ONLY",
+  "live_main_contract_snapshot": "cc24d44d427c73e874043b2eccf82d754de5ca39",
+  "fresh_real_source_execution": false,
+  "candidate_outputs_used_to_define_anchors": false,
+  "contracts": [
+    {"path":"contracts/opt_b/c2/C2_OBSERVATION_CONTRACT_vNext.md","blob_sha":"23ef7d8067069dd7c269750016e3750beb4073d1","finding":"Observation identity is one fixed-clock interval/side slot. Continuity is segment bookkeeping, not persistent structural-object identity."},
+    {"path":"contracts/opt_b/c2/C2_PERSISTENCE_AND_GAP_POLICY_v0_1.md","blob_sha":"029fa5bb3ba4fb4cb95f7c7d89b4d9f10080ed7c","finding":"Persistence counters require contiguous scope and reset on gaps/axis changes; the policy does not grant a persistent referent identity across changing C2 structural definitions."},
+    {"path":"contracts/opt_b/c2/C2_LEVEL_CONTRACT_vNext.md","blob_sha":"10013f4d2039100ec5c2d7f6b6b6c8df9619e1d8","finding":"Level definitions are immutable. Level identity includes value, first-valid time, source IDs and other provenance; a changed anchor or source population creates a new level identity. The contract contains a working disposition that trailing-range lineage persists while the same anchor persists, but this is lineage/snapshot semantics rather than an explicit IAD persistent-referent identity."},
+    {"path":"contracts/opt_b/c2/C2_CONTAINER_CONTRACT_vNext.md","blob_sha":"c0d378bd9ae1d6f411f56b8f84223ef5ce7de5b5","finding":"TRAILING_RANGE_SNAPSHOT is bound to one exact causal population. Container identity changes with boundary IDs, first-valid time, horizon or other constitutive fields; no persistent referent across snapshot refresh is declared."},
+    {"path":"contracts/opt_b/c2/C2_RELATION_CONTRACT_vNext.md","blob_sha":"f9375e3496554a10f7d27ccb8d7dab4f3ca54e58","finding":"Temporal relation delta/crossing requires one unchanged immutable object identity. Reference identity change is explicitly not same-object crossing; the relation layer does not infer a persistent identity across changed object IDs."},
+    {"path":"contracts/opt_b/c2e/v0_2/C2_TO_C2E_HANDOFF_CONTRACT_v0_2.md","blob_sha":"28b1688a36e5adbdad702b8ff04eac9e3cd16e79","finding":"C2E frame identity is observation/C2-record scoped. Episode/context lineage is not a persistent-object ground truth for IAD."},
+    {"path":"contracts/opt_b/c2p/v0_2/C2P_C2_C2E_PRODUCER_CONSUMER_CONTRACT_v0_2.md","blob_sha":"6d695bcb4c43e73378c5e1d6c24d5eb07543f502","finding":"C2P may read exact upstream facts but may not reconstruct absent upstream structure; upstream identity is immutable to C2P."},
+    {"path":"contracts/opt_b/c2p/v0_2/C2P_IDENTITY_HIERARCHY_CONTRACT_v0_2.md","blob_sha":"0d14bf5a3bd98b6cb4b8589b1391d08ab4eaa137","finding":"Only C2PObjectAssertion is durable identity in the current C2P core; StructuralReferent is deferred. ObjectAssertion cannot serve as candidate-independent owner ground truth for A/B/C."}
+  ],
+  "implementation_observations": [
+    {"path":"src/ovc/opt_b/c2_vnext/levels.py","blob_sha":"77445b0a18c353b3f253b7f92ca8422c7655aa38","finding":"Trailing HIGH/LOW lineage_id is deterministically based on horizon/type/anchor observation/side/clock; midpoint lineage is derived from high+low lineages. Each snapshot level still receives a new immutable level_id because first-valid time and source population participate in definition identity."},
+    {"path":"src/ovc/opt_b/c2_vnext/real_source_materialisation.py","blob_sha":"d567b0ddbd1b42c38b48e57723dcf35af2b6a824","finding":"Full C2 level records preserve lineage_id and source_ids before downstream projection."},
+    {"path":"src/ovc/opt_b/c2p_v0_2/rs0_source_materialisation.py","blob_sha":"e69acdb088562ac225b194043e7f536925ddd7c6","finding":"Frozen RS0 C2 source rows project level_id/container_id plus geometry/topology but omit level lineage_id, source_ids, anchor observation identity and boundary-lineage identity. The omitted owner evidence cannot be reconstructed by C2P under the producer-consumer contract."}
+  ],
+  "preserved_sd_review_evidence": {
+    "source": "C2P2-SD GREAL frozen blind-review manifest",
+    "manifest_sha256": "4e6abf3afda0ce762737b02e2b5b54bdc96a3f6bc4427951eaa8feeccc70b8ae",
+    "case_count": 72,
+    "prior_current_source_record_id_equal_count": 0,
+    "source_kind_pairs": {"C2_LEVEL_to_C2_LEVEL":54,"C2_CONTAINER_to_C2_CONTAINER":18},
+    "role_counts": {"TRAILING_RANGE_HIGH":18,"TRAILING_RANGE_LOW":18,"TRAILING_RANGE_MIDPOINT":18,"MEASUREMENT":18},
+    "side_counts": {"BID":36,"ASK":36},
+    "year_counts": {"2021":24,"2022":24,"2023":24},
+    "owner_geometry_class_equal_count": 72,
+    "exact_geometry_signature_equal_count": 24,
+    "interpretation": "The preserved review surface contains no repeated projected owner object ID across its disagreement edges. Equal owner geometry class or shared lineage class is not sufficient for POSITIVE_SAME under the ratified IAD plan."
+  },
+  "computability_matrix": [
+    {"owner_surface":"C2_FIXED_OBSERVATION","clock":"15M/2H_A_L","sides":"BID/ASK","years":"2021/2022/2023","positive_same":"NO_FOR_PERSISTENT_STRUCTURAL_OBJECT","positive_different":"NO_FOR_PERSISTENT_STRUCTURAL_OBJECT","reason":"Identity is fixed interval observation identity, not persistent structural referent."},
+    {"owner_surface":"C2_TRAILING_LEVEL_SNAPSHOT","clock":"15M","sides":"BID/ASK","years":"2021/2022/2023","positive_same":"NOT_COMPUTABLE_UNDER_CURRENT_CONTRACT_PROJECTION","positive_different":"NOT_COMPUTABLE_FOR_REFERENT_IDENTITY","reason":"Owner lineage exists upstream but shared lineage is explicitly insufficient under IAD and the frozen RS0 projection omits the underlying anchor/lineage evidence. Snapshot level-id change cannot by itself decide persistent referent identity."},
+    {"owner_surface":"C2_TRAILING_MEASUREMENT_CONTAINER_SNAPSHOT","clock":"15M","sides":"BID/ASK","years":"2021/2022/2023","positive_same":"NOT_COMPUTABLE_UNDER_CURRENT_CONTRACT_PROJECTION","positive_different":"NOT_COMPUTABLE_FOR_REFERENT_IDENTITY","reason":"Container is exact-population snapshot. Boundary lineage/anchor evidence is not exposed by frozen RS0 projection; snapshot refresh is not an independently governed persistent-referent break."},
+    {"owner_surface":"C2_RELATION_AND_REFERENCE_CHANGE","clock":"15M","sides":"BID/ASK","years":"2021/2022/2023","positive_same":"ONLY_WHEN_EXACT_IMMUTABLE_OBJECT_ID_UNCHANGED_NOT_PRESENT_ON_DISAGREEMENT_EDGES","positive_different":"INSUFFICIENT_FOR_REFERENT_IDENTITY","reason":"Relation contract compares the same exact owner object only. Reference identity change identifies snapshot replacement but does not define the higher persistent referent sought by C2P."},
+    {"owner_surface":"C2E","clock":"15M","sides":"BID/ASK","years":"2021/2022/2023","positive_same":"NO","positive_different":"NO","reason":"Episode/context membership or lineage is insufficient for persistent object identity; C-specific episode role remains ungoverned/empty."},
+    {"owner_surface":"C2P_OBJECT_ASSERTION","clock":"15M","sides":"BID/ASK","years":"2021/2022/2023","positive_same":"FORBIDDEN_AS_GROUND_TRUTH","positive_different":"FORBIDDEN_AS_GROUND_TRUTH","reason":"This is the candidate-dependent durable identity being tested."}
+  ],
+  "positive_same_denominator_possible_without_owner_change": false,
+  "positive_different_denominator_for_persistent_referent_possible_without_owner_change": false,
+  "owner_contract_extension_required": true,
+  "required_gate": "C2P2-IAD-GOWNER",
+  "wp3_authorised_before_gate": false,
+  "wp4_authorised_before_gate": false,
+  "selection": "NONE",
+  "activation": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
+  "authority_effect": "NONE_CENSUS_ONLY"
+}
