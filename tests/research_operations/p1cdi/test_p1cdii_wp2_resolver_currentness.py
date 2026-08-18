@@ -11,6 +11,7 @@ from ovc.research_operations.p1cdi.currentness import (
     require_g2_alg_for_pointer,
 )
 from ovc.research_operations.p1cdi.source_resolution import (
+    REQUIRED_CURRENTNESS_OWNERS,
     build_source_frontier,
     resolve_owner_predicate,
 )
@@ -81,10 +82,89 @@ def test_frontier_identity_is_order_independent() -> None:
     before = frontier("p1:frontier:before", FIXTURE["frontier_before"])
     reverse = frontier("p1:frontier:reverse", list(reversed(FIXTURE["frontier_before"])))
     assert before["frontier_sha256"] == reverse["frontier_sha256"]
+    assert before["required_owners"] == FIXTURE["required_currentness_owners"]
+    assert tuple(before["required_owners"]) == REQUIRED_CURRENTNESS_OWNERS
+    assert before["completeness_state"] == "COMPLETE"
+    assert before["missing_required_owners"] == []
     schema = json.loads(
         (ROOT / "schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json").read_text()
     )
     validate_contract(schema, before)
+
+
+def test_incomplete_required_owner_frontier_reproduces_review_and_fails_closed() -> None:
+    incomplete = frontier(
+        "p1:frontier:independent-review-reproduction",
+        FIXTURE["frontier_incomplete_review_reproduction"],
+    )
+    schema = json.loads(
+        (ROOT / "schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json").read_text()
+    )
+    validate_contract(schema, incomplete)
+    assert incomplete["completeness_state"] == "UNRESOLVED"
+    assert incomplete["missing_required_owners"] == [
+        owner
+        for owner in REQUIRED_CURRENTNESS_OWNERS
+        if owner != "ECX_DMRP_RESEARCH_OPERATIONS"
+    ]
+    result = evaluate_two_point_currentness(
+        generation_id="p1:gen:001",
+        prebuild_frontier=incomplete,
+        prepublish_frontier=copy.deepcopy(incomplete),
+    )
+    assert result["frontiers_equal"] is True
+    assert result["currentness"] == "UNRESOLVED"
+    assert result["reason_codes"] == ["UNRESOLVED_CURRENTNESS"]
+
+
+@pytest.mark.parametrize(
+    ("state", "expected_currentness", "expected_reason"),
+    [
+        (
+            case["resolution_state"],
+            case["expected_currentness"],
+            case["expected_reason"],
+        )
+        for case in FIXTURE["frontier_state_neighbors"]
+    ],
+)
+def test_required_owner_non_current_states_fail_closed(
+    state: str, expected_currentness: str, expected_reason: str
+) -> None:
+    rows = copy.deepcopy(FIXTURE["frontier_before"])
+    rows[0]["resolution_state"] = state
+    non_current = frontier(f"p1:frontier:{state.lower()}", rows)
+    result = evaluate_two_point_currentness(
+        generation_id="p1:gen:001",
+        prebuild_frontier=non_current,
+        prepublish_frontier=copy.deepcopy(non_current),
+    )
+    assert result["currentness"] == expected_currentness
+    assert result["reason_codes"] == [expected_reason]
+
+
+def test_duplicate_required_owner_conflicts_and_resolved_optional_owner_is_safe() -> None:
+    duplicated_rows = copy.deepcopy(FIXTURE["frontier_before"])
+    duplicated_rows.append(copy.deepcopy(duplicated_rows[0]))
+    duplicated = frontier("p1:frontier:duplicate-owner", duplicated_rows)
+    conflict = evaluate_two_point_currentness(
+        generation_id="p1:gen:001",
+        prebuild_frontier=duplicated,
+        prepublish_frontier=copy.deepcopy(duplicated),
+    )
+    assert conflict["currentness"] == "CONFLICT"
+    assert duplicated["duplicate_required_owners"] == ["ECX_DMRP_RESEARCH_OPERATIONS"]
+
+    optional_rows = copy.deepcopy(FIXTURE["frontier_before"])
+    optional_rows.append(copy.deepcopy(FIXTURE["frontier_resolved_optional_owner_neighbor"]))
+    optional = frontier("p1:frontier:optional-owner", optional_rows)
+    current = evaluate_two_point_currentness(
+        generation_id="p1:gen:001",
+        prebuild_frontier=optional,
+        prepublish_frontier=copy.deepcopy(optional),
+    )
+    assert optional["completeness_state"] == "COMPLETE"
+    assert current["currentness"] == "CURRENT"
 
 
 def test_two_point_currentness_accepts_unchanged_and_stales_moved_frontier() -> None:
