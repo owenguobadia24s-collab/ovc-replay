@@ -16,8 +16,9 @@ from ovc.development.skills.vit_local_completion_executor import (
     encode_freeze_marker,
 )
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
+from ovc.development.skills.vit_core import VitContractError
+from tools.ci.vit_lineage_source import resolve_lineage_source
 
-LINEAGE = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
 REUSE = re.compile(r"(?im)^VIT-AA0-Reuse-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
 
 
@@ -121,6 +122,8 @@ def main() -> int:
         _write_output("aa0_identity", sha)
         _write_output("generation_id", sha)
         _write_output("pip_id", sha)
+        _write_output("lineage_source", "NON_PR")
+        _write_output("lineage_ref", sha)
         _write_output("aa0_reuse_authorized", "false")
         _write_output("aa0_reuse_reason", "NON_PULL_REQUEST")
         return 0
@@ -137,26 +140,37 @@ def main() -> int:
             "obsolete generation may not acquire assurance identity"
         )
 
-    lineage_record = _decode(LINEAGE, body, "VIT_LINEAGE")
+    lineage_source = resolve_lineage_source(body, require=False)
     reuse_record = _decode(REUSE, body, "VIT_AA0_REUSE")
 
-    # Registered routing exceptions are handled by the preceding canonical routing
-    # preflight. They never receive cross-generation AA0 reuse here.
-    if lineage_record is None:
+    if lineage_source is None:
         if reuse_record is not None:
             raise RuntimeError("AA0_REUSE_WITHOUT_VIT_LINEAGE")
         _write_output("aa0_identity", head_sha)
         _write_output("generation_id", head_sha)
         _write_output("pip_id", head_sha)
+        _write_output("lineage_source", "REGISTERED_EXCEPTION_OR_NO_LINEAGE")
+        _write_output("lineage_ref", head_sha)
         _write_output("aa0_reuse_authorized", "false")
         _write_output("aa0_reuse_reason", "REGISTERED_EXCEPTION_OR_NO_LINEAGE")
         return 0
 
+    lineage_record = lineage_source.record
     lineage = validate_vit_lineage_record(lineage_record)
     _write_output("aa0_identity", lineage.pip_id)
     _write_output("generation_id", lineage.generation_id)
     _write_output("pip_id", lineage.pip_id)
-    _emit_prewrite_freeze(event=event, pr=pr, lineage_record=lineage_record)
+    _write_output("lineage_source", lineage_source.source)
+    _write_output("lineage_ref", lineage_source.immutable_ref)
+    try:
+        _emit_prewrite_freeze(event=event, pr=pr, lineage_record=lineage_record)
+    except VitContractError as exc:
+        # A0/PIP identity is placement-independent. A stale placement may not
+        # prevent base-independent assurance from acquiring/reusing its exact
+        # PIP identity; the subsequent routing preflight remains fail-closed.
+        if "PREDECESSOR_TREE_MISMATCH" not in str(exc) and "RESULT_TREE_MISMATCH" not in str(exc):
+            raise
+        print(f"OVC_VIT_PREWRITE_FREEZE_DEFERRED=PLACEMENT_SENSITIVE:{exc}")
 
     if reuse_record is None:
         _write_output("aa0_reuse_authorized", "false")

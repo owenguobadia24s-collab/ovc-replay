@@ -9,13 +9,16 @@ POLICY = ROOT / "registries/implementation/ci_performance/CIPR_UNITTEST_SHARD_PO
 WORKFLOW = ROOT / ".github/workflows/ci-unittest-shard-shadow.yml"
 TESTS_WORKFLOW = ROOT / ".github/workflows/tests.yml"
 TIERED_WORKFLOW = ROOT / ".github/workflows/ovc-tiered-tests.yml"
+RESOLVER = ROOT / "tools/ci/prvitr_live_admission.py"
 DECISION = ROOT / "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_G4_DECISION.json"
 STATE = ROOT / "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_2_SHADOW_RUNNING.json"
+
 
 class CiPerformanceShadowPacketTests(unittest.TestCase):
     def setUp(self):
         self.policy = json.loads(POLICY.read_text(encoding="utf-8")); self.workflow = WORKFLOW.read_text(encoding="utf-8")
         self.tests_workflow = TESTS_WORKFLOW.read_text(encoding="utf-8"); self.tiered_workflow = TIERED_WORKFLOW.read_text(encoding="utf-8")
+        self.resolver = RESOLVER.read_text(encoding="utf-8")
         self.decision = json.loads(DECISION.read_text(encoding="utf-8")); self.state = json.loads(STATE.read_text(encoding="utf-8"))
 
     def test_operator_pass_exactly_authorizes_shadow_option_b(self):
@@ -39,12 +42,13 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         self.assertIn("Complete repository suite as BASE_INDEPENDENT assurance", self.tests_workflow)
         self.assertNotIn("tools/ci/ovc_run_with_main_lease.py", self.tests_workflow)
         for name in ("pytest-unittest-parity", "runner-parity"): self.assertIn(name, self.tests_workflow)
-        for name in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"): self.assertIn(name, self.tiered_workflow)
+        for name in ("tests", "pytest-unittest-parity", "runner-parity"): self.assertIn(name, self.resolver)
+        self.assertIn('PROFILE_JOB_NAME = "OVC profile assurance"', self.resolver)
         self.assertIn("ovc-main-integration-lane-v1", self.tiered_workflow)
-        self.assertIn("OVC_SIQ_READY_ADMITTED", self.tiered_workflow)
-        self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.tiered_workflow)
+        self.assertIn("OVC_SIQ_READY_ADMITTED", self.resolver)
+        self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.resolver)
         self.assertIn("tools/ci/ovc_run_with_main_lease.py", self.tiered_workflow)
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.tiered_workflow); self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.tiered_workflow)
+        self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver); self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.resolver)
 
     def test_packet_state_preserves_non_activation_boundary(self):
         self.assertIn(self.state["status"], {"RUNNING", "APPROVED"})
@@ -53,5 +57,6 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         if self.state["status"] == "APPROVED":
             self.assertEqual(self.state["decision_record"], "docs/releases/ci-performance-remediation-v0-1/cipr-wp4-shadow/CIPR_WP4_SHADOW_DECISION.json")
             self.assertEqual(self.state["operator_stop_gate"], "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER")
+
 
 if __name__ == "__main__": unittest.main()

@@ -18,6 +18,7 @@ from ovc.development.skills.vit_routing import (
     classify_main_movement,
     validate_vit_lineage_record,
 )
+from tools.ci.vit_lineage_source import resolve_lineage_source
 from tools.ci.vit_routing_preflight import check_pull_request_event
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -54,6 +55,10 @@ def git(repo: Path, *args: str) -> str:
 def b64_lineage(record: dict) -> str:
     raw=json.dumps(record,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
     return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
+
+
+def canonical_bytes(record: dict) -> bytes:
+    return json.dumps(record,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
 
 
 class Dsai3vUniversalRoutingTests(unittest.TestCase):
@@ -110,34 +115,36 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
         self.assertIn("VIT_LINEAGE_REQUIRED",state.candidates[0].reason_codes)
         self.assertIsNone(queue_head(state))
 
-    def test_pr_preflight_requires_inline_lineage_that_reproduces_exact_head_tree(self) -> None:
+    def test_immutable_git_blob_lineage_is_canonical_and_content_addressed(self) -> None:
+        record = lineage_record(); raw = canonical_bytes(record); blob_sha = "a" * 40
+        source = resolve_lineage_source(f"VIT-Lineage-Blob: {blob_sha}",fetch_blob=lambda observed: raw if observed == blob_sha else b"")
+        assert source is not None
+        self.assertEqual(source.record, record)
+        self.assertEqual(source.source, "IMMUTABLE_GIT_BLOB")
+        self.assertEqual(source.immutable_ref, blob_sha)
+        self.assertEqual(len(source.content_sha256), 64)
+
+    def test_immutable_git_blob_rejects_noncanonical_json_and_dual_source(self) -> None:
+        record = lineage_record(); noncanonical = json.dumps(record, indent=2).encode("utf-8")
+        with self.assertRaisesRegex(RuntimeError, "NOT_CANONICAL_JSON"):
+            resolve_lineage_source("VIT-Lineage-Blob: " + "b" * 40,fetch_blob=lambda _: noncanonical)
+        body = "VIT-Lineage-Blob: " + "c" * 40 + "\nVIT-Lineage-B64: " + b64_lineage(record)
+        with self.assertRaisesRegex(RuntimeError, "MULTIPLE_SOURCES"):
+            resolve_lineage_source(body, fetch_blob=lambda _: canonical_bytes(record))
+
+    def test_pr_preflight_requires_lineage_that_reproduces_exact_head_tree(self) -> None:
         with TemporaryDirectory() as tmp:
-            root=Path(tmp)
-            git(root,"init","-q")
-            git(root,"config","user.email","vit@example.invalid")
-            git(root,"config","user.name","VIT Test")
-            (root/"base.txt").write_text("base\n",encoding="utf-8")
-            git(root,"add","base.txt"); git(root,"commit","-qm","base")
+            root=Path(tmp); git(root,"init","-q"); git(root,"config","user.email","vit@example.invalid"); git(root,"config","user.name","VIT Test")
+            (root/"base.txt").write_text("base\n",encoding="utf-8"); git(root,"add","base.txt"); git(root,"commit","-qm","base")
             base_sha=git(root,"rev-parse","HEAD"); base_tree=git(root,"rev-parse","HEAD^{tree}")
-            (root/"payload.txt").write_text("payload\n",encoding="utf-8")
-            git(root,"add","payload.txt"); git(root,"commit","-qm","payload")
-            head_sha=git(root,"rev-parse","HEAD"); head_tree=git(root,"rev-parse","HEAD^{tree}")
-            blob=git(root,"rev-parse","HEAD:payload.txt")
-
-            register_path=root/"registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json"
-            register_path.parent.mkdir(parents=True)
-            register_path.write_text(json.dumps({"unregistered_bypass_policy":"FAIL_CLOSED","registered_pr_exceptions":[]}),encoding="utf-8")
-            record=lineage_record(predecessor=base_tree,result=head_tree,changes=[{"op":"ADD","path":"payload.txt","blob_sha":blob,"mode":"100644"}])
-            body=f"VIT-Lineage-B64: {b64_lineage(record)}"
+            (root/"payload.txt").write_text("payload\n",encoding="utf-8"); git(root,"add","payload.txt"); git(root,"commit","-qm","payload")
+            head_sha=git(root,"rev-parse","HEAD"); head_tree=git(root,"rev-parse","HEAD^{tree}"); blob=git(root,"rev-parse","HEAD:payload.txt")
+            register_path=root/"registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json"; register_path.parent.mkdir(parents=True); register_path.write_text(json.dumps({"unregistered_bypass_policy":"FAIL_CLOSED","registered_pr_exceptions":[]}),encoding="utf-8")
+            record=lineage_record(predecessor=base_tree,result=head_tree,changes=[{"op":"ADD","path":"payload.txt","blob_sha":blob,"mode":"100644"}]); body=f"VIT-Lineage-B64: {b64_lineage(record)}"
             event={"number":1,"pull_request":{"body":body,"head":{"sha":head_sha,"ref":"feature"},"base":{"sha":base_sha,"ref":"main"}}}
-            result=check_pull_request_event(root=root,event=event)
-            self.assertTrue(result.startswith("VIT_MANDATORY:PACKET:"))
-
-            wrong=json.loads(json.dumps(record)); wrong["generation"]["result_tree"]["tree_sha"]="c"*40
+            result=check_pull_request_event(root=root,event=event); self.assertTrue(result.startswith("VIT_MANDATORY:PACKET:"))
             missing={"number":2,"pull_request":{"body":"","head":{"sha":head_sha,"ref":"feature2"},"base":{"sha":base_sha,"ref":"main"}}}
             with self.assertRaises(RuntimeError): check_pull_request_event(root=root,event=missing)
-            invalid={"number":3,"pull_request":{"body":f"VIT-Lineage-B64: {b64_lineage(wrong)}","head":{"sha":head_sha,"ref":"feature3"},"base":{"sha":base_sha,"ref":"main"}}}
-            with self.assertRaises(RuntimeError): check_pull_request_event(root=root,event=invalid)
 
 
 if __name__ == "__main__":
