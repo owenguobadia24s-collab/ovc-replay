@@ -6,14 +6,15 @@ on:
       - recover/c2p2-rs0-storage-capacity-r3-20260818
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: c2p2-rs0-r3-storage-recovery-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   qualify:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     name: Bounded non-evidentiary storage recovery qualification
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -54,20 +55,26 @@ jobs:
           print('C2P2_RS0_R3_BOUNDED_RECOVERY_AUTHORITY=PASS')
           PY
 
+      - name: Prepare compact qualification workspace
+        run: |
+          rm -rf /tmp/c2p2-rs0-r3-storage-recovery
+          mkdir -p /tmp/c2p2-rs0-r3-storage-recovery
+
       - name: Run targeted R3 recovery assurance
         run: |
           PYTHONPATH=src:. python3 -m pytest -q --tb=short \
+            --junitxml=/tmp/c2p2-rs0-r3-storage-recovery/targeted.xml \
             tests/opt_b/c2p/v0_2/test_c2p2_rs0_r3_storage_recovery_scaling.py \
             tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_capacity_recovery.py \
             tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_order_recovery.py
 
       - name: Run complete repository regression
-        run: PYTHONPATH=src:. python3 -m pytest tests -q --tb=short
+        run: |
+          PYTHONPATH=src:. python3 -m pytest tests -q --tb=short \
+            --junitxml=/tmp/c2p2-rs0-r3-storage-recovery/repository.xml
 
       - name: Measure frozen Candidate A synthetic competitor scaling
         run: |
-          rm -rf /tmp/c2p2-rs0-r3-storage-recovery
-          mkdir -p /tmp/c2p2-rs0-r3-storage-recovery
           PYTHONPATH=src:. python3 scripts/run_c2p2_rs0_r3_storage_scaling.py \
             --output /tmp/c2p2-rs0-r3-storage-recovery/measurement.json \
             --work-root /tmp/c2p2-rs0-r3-storage-recovery/work \
@@ -97,6 +104,46 @@ jobs:
           print('C2P2_RS0_R3_SYNTHETIC_SCALING=PASS')
           PY
 
+      - name: Bind exact-head test summaries to compact measurement
+        env:
+          OVC_GITHUB_RUN_ID: ${{ github.run_id }}
+          OVC_GITHUB_JOB: ${{ github.job }}
+          OVC_HEAD_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          root = Path('/tmp/c2p2-rs0-r3-storage-recovery')
+          data = json.loads((root / 'measurement.json').read_text())
+
+          def summary(path: Path):
+              xml = ET.parse(path).getroot()
+              suites = [xml] if xml.tag == 'testsuite' else list(xml.findall('testsuite'))
+              keys = ('tests', 'failures', 'errors', 'skipped')
+              totals = {key: 0 for key in keys}
+              for suite in suites:
+                  for key in keys:
+                      totals[key] += int(suite.attrib.get(key, 0))
+              totals['passed'] = totals['tests'] - totals['failures'] - totals['errors'] - totals['skipped']
+              return totals
+
+          data['qualification'] = {
+              'github_run_id': int(os.environ['OVC_GITHUB_RUN_ID']),
+              'github_job': os.environ['OVC_GITHUB_JOB'],
+              'head_sha': os.environ['OVC_HEAD_SHA'],
+              'targeted_assurance': summary(root / 'targeted.xml'),
+              'repository_regression': summary(root / 'repository.xml'),
+              'source_download': 'FORBIDDEN_NOT_PERFORMED',
+              'real_source_semantic_execution': False,
+              'fresh_run_token': 'NONE',
+              'status': 'PASS',
+          }
+          (root / 'measurement.json').write_text(json.dumps(data, indent=2, sort_keys=True) + '\n')
+          PY
+
       - name: Upload compact synthetic scaling receipt
         uses: actions/upload-artifact@v4
         with:
@@ -104,3 +151,15 @@ jobs:
           path: /tmp/c2p2-rs0-r3-storage-recovery/measurement.json
           if-no-files-found: error
           retention-days: 30
+
+      - name: Persist compact qualification evidence on recovery branch only
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_CAPACITY_SCALING_MEASUREMENT_v0_1.json'
+          cp /tmp/c2p2-rs0-r3-storage-recovery/measurement.json "$target"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$target"
+          git commit -m 'C2P2-RS0: materialise R3 synthetic storage scaling qualification [skip ci]'
+          git push origin HEAD:refs/heads/recover/c2p2-rs0-storage-capacity-r3-20260818
