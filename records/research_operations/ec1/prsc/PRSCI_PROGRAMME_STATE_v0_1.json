@@ -4,27 +4,32 @@
   "packet_id": "PRSCI-WP9",
   "plan_id": "OVC-EC1-PRSC-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "prerequisites": [
     "PRSCI-WP8_AND_G8_ALG_COMPLETED_ON_MAIN@e2366307cc104978a19cf2038e3092095db97996",
-    "EC1_CURRENT_EXECUTION_FRONTIER_F0-A_HOLD@e7b71010d2463ed2c8d610ab55397d65c8eeb916"
+    "EC1_CURRENT_EXECUTION_FRONTIER_F0-A_HOLD@e7b71010d2463ed2c8d610ab55397d65c8eeb916",
+    "PRSCI-G-PREREG_OPERATOR_PASS@2026-08-18T01:08:00+01:00"
   ],
-  "authority_required": "OPERATOR_REQUIRED_PRSCI-G-PREREG",
-  "authority_delta": "NONE_BEFORE_GATE; PROPOSED_EXACT_PROTOCOL_FREEZE_ONLY_IF_OPERATOR_PASS",
-  "baseline_commit": "e2366307cc104978a19cf2038e3092095db97996",
+  "authority_required": "SATISFIED_PRSCI-G-PREREG_OPERATOR_PASS",
+  "authority_delta": "SCIENTIFIC_PROTOCOL_FREEZE_ONLY",
+  "baseline_commit": "1ed0a1a1a6386ffd8b080c9275742a01243b1cde",
   "branch": "build/prsci-wp9-permanent-20260818-r1",
-  "candidate_commit": "71941745edb4e1b2c344fd1fa95daf88ba18c7b8",
-  "candidate_tree": "b8516133dcf61ea4d8f9b0eb14d3fd1dce9748dd",
+  "decision_basis_candidate_commit": "e406b7e02e59102848051cd1ff8ee0076b2bd6bf",
+  "decision_basis_candidate_tree": "0ed8824d64da92af1b4f0a6e05be48d4cfb19d59",
   "tests": {
-    "wp9_focused_tests": "PENDING_EXACT_HEAD_CI",
-    "repository_suite": "PENDING_EXACT_HEAD_CI",
-    "vit_routing_preflight": "PENDING_EXACT_HEAD_CI",
-    "final_head_profile": "PENDING_EXACT_HEAD_CI"
+    "pre_decision_tests_run_id": "32082360955_PASS",
+    "pre_decision_tiered_run_id": "32082360973_PASS",
+    "pre_decision_vit_routing": "PASS",
+    "pre_decision_final_head_profile": "PASS",
+    "pre_decision_siq_ready": "PASS",
+    "pre_decision_merge_readiness": "PASS",
+    "final_decision_head": "PENDING_ASSURANCE_BEFORE_MERGE"
   },
   "qa_packet": "docs/programmes/ec1-prsc-v0-1/wp9/PRSCI_WP9_QA_PACKET_v0_1.json",
   "implementation_packet": "docs/programmes/ec1-prsc-v0-1/wp9/PRSCI_WP9_IMPLEMENTATION_PACKET_v0_1.json",
   "gate_packet": "docs/programmes/ec1-prsc-v0-1/wp9/PRSCI_G_PREREG_GATE_PACKET_v0_1.json",
-  "decision_record": null,
+  "decision_record": "docs/programmes/ec1-prsc-v0-1/wp9/PRSCI_G_PREREG_OPERATOR_DECISION_v0_1.json",
+  "freeze_receipt": "records/research_operations/ec1/prsc/PRSCI_G_PREREG_FREEZE_RECEIPT_v0_1.json",
   "merge_commit": null,
   "blockers": [],
   "completed_gates": [
@@ -37,31 +42,31 @@
     "PRSCI-G6",
     "PRSCI-G7",
     "PRSCI-G8",
-    "PRSCI-G8-ALG"
+    "PRSCI-G8-ALG",
+    "PRSCI-G-PREREG"
   ],
   "wp8_merge_commit": "e2366307cc104978a19cf2038e3092095db97996",
   "protocol_generation_id": "5036d66c8817f1f3b22b5cdb196a6964c979641b11824a3f3cdef58553e38736",
-  "protocol_state": "READY_FOR_OPERATOR_FREEZE",
+  "protocol_state": "FROZEN",
   "preregistration_bundle_id": "e3a3e19497f0b1ccaad349787eef2a363f35470ccc1c867aec3f235d8b70fb23",
   "readiness_receipt_id": "9b2fe886bc18e61adfed4bf0bc827a02fe7a43e83e7db4b83df7134f9ab32051",
-  "e1_interlock": "PRE_E1_CLEAN_BY_CURRENT_FRONTIER_F0-A_HOLD; RECHECK_AT_OPERATOR_DECISION",
+  "freeze_receipt_id": "21baf1df02110f5880baa94ec344b445330de852b39b2adccd0138c022b2c6d8",
+  "e1_interlock": "PRE_E1_CLEAN_AT_FREEZE; REAL_CHALLENGE_REQUIRES_E1_R1_AND_PRSCI-G-EC1-CHALLENGE",
   "preserved_constraints": {
     "f0_a": "HOLD",
     "validation": "LOCKED_UNCONSUMED",
     "candidate_freeze": "NONE",
-    "preregistration": "NOT_FROZEN",
     "real_source_prsc": "DENIED_UNTIL_PRSCI-G-EC1-CHALLENGE",
     "publication": "NONE",
     "probability_risk_exposure_execution": "NONE",
     "no_force_push_or_history_rewrite": true
   },
-  "continuation_policy": "STOP_AT_OPERATOR_REQUIRED_PRSCI-G-PREREG_AFTER_EXACT_HEAD_CI",
-  "next_gate": "PRSCI-G-PREREG",
-  "next_packet": "PRSCI-WP10_ONLY_AFTER_PRSCI-G-PREREG_PASS_AND_LATER_E1_R1_PLUS_PRSCI-G-EC1-CHALLENGE_PREREQUISITES",
-  "next_action": "RUN_EXACT_HEAD_CI_AND_VIT_ASSURANCE_THEN_PRESENT_CONSOLIDATED_PRSCI-G-PREREG_DECISION_PACKET",
+  "continuation_policy": "MERGE_WP9_IF_FINAL_HEAD_GREEN_THEN_STOP_AT_UPSTREAM_E1_R1_AND_PRSCI-G-EC1-CHALLENGE_BOUNDARY",
+  "next_gate": "PRSCI-G-EC1-CHALLENGE_AFTER_E1_R1",
+  "next_packet": "PRSCI-WP10_ONLY_AFTER_E1_R1_AND_PRSCI-G-EC1-CHALLENGE_PASS",
+  "next_action": "RUN_FINAL_DECISION_HEAD_CI_AND_VIT_ASSURANCE; IF_GREEN_SQUASH_MERGE_WP9; THEN_RECHECK_E1_R1_AND_PRSCI-G-EC1-CHALLENGE_PREREQUISITES",
   "reserved_later_gates": [
-    "PRSCI-G-PREREG",
     "PRSCI-G-EC1-CHALLENGE"
   ],
-  "rollback": "Forward-only; preserve WP1-WP8 and G0-G8-ALG evidence. Before operator PASS, no protocol freeze exists; quarantine/supersede WP9 readiness evidence on defect."
+  "rollback": "The operator-approved freeze is immutable provenance. Preserve WP1-WP9 and G0-G-PREREG evidence; any protocol correction is a forward successor/superseding generation."
 }

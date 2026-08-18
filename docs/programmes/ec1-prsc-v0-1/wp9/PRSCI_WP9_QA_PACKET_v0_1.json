@@ -4,13 +4,15 @@
   "packet_id": "PRSCI-WP9",
   "gate": "PRSCI-G-PREREG",
   "gate_class": "OPERATOR_REQUIRED",
+  "decision": "PASS",
   "baseline_commit": "e2366307cc104978a19cf2038e3092095db97996",
+  "decision_candidate_head": "e406b7e02e59102848051cd1ff8ee0076b2bd6bf",
   "checks": {
     "g8_alg_corrective_pass_bound": "PASS",
     "wp8_mechanical_conformance_bound": "PASS",
     "ec1_current_pointer_next_packet_f0_a_hold": "PASS",
     "e1_decision_bearing_exposure_absent_by_current_execution_frontier": "PASS",
-    "protocol_generation_not_frozen": "PASS",
+    "protocol_generation_ready_before_decision": "PASS",
     "pre_e1_information_firewall": "PASS",
     "method_pack_bindings_nonempty": "PASS",
     "hypothesis_family_registry_binding": "PASS",
@@ -20,28 +22,35 @@
     "synthetic_candidate_to_q08_no_real_source_read": "PASS",
     "synthetic_candidate_freeze_effect_none": "PASS",
     "readiness_receipt_ready_for_operator_decision": "PASS",
-    "authority_effect_none_before_operator_gate": "PASS",
+    "pre_decision_exact_head_vit_routing": "PASS",
+    "pre_decision_repository_assurance": "PASS",
+    "pre_decision_final_head_profile": "PASS",
+    "pre_decision_siq_ready_admission": "PASS",
+    "pre_decision_merge_readiness": "PASS",
+    "operator_prereg_decision": "PASS",
+    "protocol_freeze_receipt_materialised": "PASS",
     "validation_locked_unconsumed": "PASS",
     "candidate_freeze_none": "PASS",
     "real_source_prsc_denied": "PASS",
-    "exact_head_vit_routing": "PENDING",
-    "repository_assurance": "PENDING",
-    "final_head_profile": "PENDING",
-    "siq_ready_admission": "NOT_REQUIRED_BEFORE_OPERATOR_GATE",
-    "merge_readiness": "NOT_REQUIRED_BEFORE_OPERATOR_GATE"
+    "final_decision_head_assurance": "REQUIRED_BEFORE_MERGE"
   },
   "source_evidence": {
     "ec1_current_state_pointer": "registries/implementation/ec1_dmrp_v0_1/CURRENT_STATE_POINTER.json@e7b71010d2463ed2c8d610ab55397d65c8eeb916",
     "wp8_merge_commit": "e2366307cc104978a19cf2038e3092095db97996",
-    "g8_alg_pass": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_2.json"
+    "g8_alg_pass": "docs/programmes/ec1-prsc-v0-1/wp8/PRSCI_G8_ALG_INDEPENDENT_REVIEW_RECORD_v0_2.json",
+    "operator_decision": "docs/programmes/ec1-prsc-v0-1/wp9/PRSCI_G_PREREG_OPERATOR_DECISION_v0_1.json",
+    "freeze_receipt": "records/research_operations/ec1/prsc/PRSCI_G_PREREG_FREEZE_RECEIPT_v0_1.json"
   },
   "workflow_runs": {
-    "tests": "PENDING_PR_OPEN",
-    "tiered_test_selection_shadow": "PENDING_PR_OPEN"
+    "tests": 32082360955,
+    "tiered_tests": 32082360973,
+    "pre_decision_status": "PASS"
   },
-  "authority_effect": "NONE",
-  "warnings": ["FINAL_EXACT_HEAD_CI_REQUIRED_BEFORE_GATE_PRESENTATION"],
-  "unresolved": ["FINAL_EXACT_HEAD_CI"],
-  "recommended_disposition": "GATE_READY_CANDIDATE_PENDING_EXACT_HEAD_CI",
-  "reserved_boundary": "PRSCI-G-PREREG"
+  "authority_effect": "SCIENTIFIC_PROTOCOL_FREEZE_ONLY",
+  "warnings": [
+    "FINAL_DECISION_MATERIALISATION_HEAD_MUST_RERUN_VIT_GRT_SIQ_REPOSITORY_ASSURANCE_BEFORE_MERGE"
+  ],
+  "unresolved": [],
+  "recommended_disposition": "APPROVED_PENDING_FINAL_DECISION_HEAD_ASSURANCE",
+  "reserved_later_boundary": "PRSCI-G-EC1-CHALLENGE"
 }
