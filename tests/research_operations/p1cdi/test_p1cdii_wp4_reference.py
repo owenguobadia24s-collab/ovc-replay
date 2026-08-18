@@ -205,3 +205,22 @@ def test_clean_process_reproduction_is_byte_identical() -> None:
     two = subprocess.check_output(command, cwd=ROOT)
     assert one == two
     assert json.loads(one)["authority_effect"] == "NONE"
+
+
+def test_wp4_court_record_stops_at_independent_g4_alg_boundary() -> None:
+    implementation = json.loads((ROOT / "docs/programmes/p1cdi-v0-1/wp4/P1CDII_WP4_IMPLEMENTATION_PACKET_v0_1.json").read_text())
+    qa = json.loads((ROOT / "docs/programmes/p1cdi-v0-1/wp4/P1CDII_WP4_QA_PACKET_v0_1.json").read_text())
+    completion = json.loads((ROOT / "docs/programmes/p1cdi-v0-1/wp4/P1CDII_WP4_COMPLETION_RECORD_v0_1.json").read_text())
+    state = json.loads((ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json").read_text())
+    assert implementation["implementation_result"] == "PASS"
+    assert implementation["semantic_acceptance"] == "NOT_TAKEN_INDEPENDENT_REVIEW_REQUIRED"
+    assert qa["g4_alg_decision"] == "NOT_TAKEN"
+    assert completion["gate_decision"] == "NOT_TAKEN"
+    assert completion["authority_delta"] == "NONE"
+    assert state["current_packet"] == "P1CDII-WP4"
+    assert state["status"] == "GATE_READY"
+    assert state["next_packet"] == "P1CDII-G4-ALG"
+    validate_contract(
+        json.loads((ROOT / "schemas/research_operations/p1cdi/p1cdii_programme_state_v0_1.schema.json").read_text()),
+        state,
+    )

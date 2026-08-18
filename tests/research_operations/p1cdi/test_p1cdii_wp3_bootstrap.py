@@ -283,10 +283,8 @@ def test_wp3_delegated_pass_is_conditioned_on_exact_final_integration() -> None:
         "EXACT_FINAL_REQUIRED_CI_PRVITR_VIT_GRT_SIQ_READY_PASS"
     )
     assert decision["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
-    assert state["current_packet"] == "P1CDII-WP3"
-    assert state["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-WP3"]["status"] == "COMPLETED"
-    assert state["next_packet"] == "P1CDII-WP4"
+    assert state["packets"]["P1CDII-WP3"]["next_packet"] == "P1CDII-WP4"
     validate_contract(
         load_json("schemas/research_operations/p1cdi/p1cdii_programme_state_v0_1.schema.json"),
         state,
