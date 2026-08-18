@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/p2cti/p2cti_control_records_v0_1.schema.json",
+  "title": "OVC P2CTI canonical control records v0.1",
+  "type": "object",
+  "required": ["schema_family", "schema_version", "object_type", "record_id", "source_frontier_id", "payload", "authority_effect", "content_sha256"],
+  "properties": {
+    "schema_family": {"const": "P2CTI_CONTROL"},
+    "schema_version": {"const": "0.1"},
+    "object_type": {
+      "enum": [
+        "THEORY_SEED", "INTAKE_TRIAGE", "THEORY_RELATION", "RELATION_AMBIGUITY", "RELATION_CONFLICT",
+        "DUPLICATE_SCREEN", "RESEARCH_DEMAND", "DEMAND_RESOLUTION", "WORK_TICKET", "DEFERRAL",
+        "ABANDONMENT", "REENTRY", "VISIBILITY_DECISION"
+      ]
+    },
+    "record_id": {"type": "string", "pattern": "^p2cti:control:[0-9a-f]{64}$"},
+    "source_frontier_id": {"type": "string", "pattern": "^p2cti:frontier:[0-9a-f]{64}$"},
+    "payload": {"type": "object"},
+    "authority_effect": {"const": "NONE"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {"if": {"properties": {"object_type": {"const": "THEORY_SEED"}}}, "then": {"properties": {"payload": {"required": ["seed_id", "title", "source_ref", "visibility_state", "capture_state"]}}}},
+    {"if": {"properties": {"object_type": {"const": "INTAKE_TRIAGE"}}}, "then": {"properties": {"payload": {"required": ["triage_id", "seed_or_theory_ref", "disposition", "reason_codes"]}}}},
+    {"if": {"properties": {"object_type": {"const": "THEORY_RELATION"}}}, "then": {"properties": {"payload": {"required": ["relation_id", "relation_type", "left_generation_ref", "right_generation_ref", "qualification", "evidence_refs"]}}}},
+    {"if": {"properties": {"object_type": {"const": "RELATION_AMBIGUITY"}}}, "then": {"properties": {"payload": {"required": ["ambiguity_id", "subject_refs", "competing_relation_refs", "review_state"]}}}},
+    {"if": {"properties": {"object_type": {"const": "RELATION_CONFLICT"}}}, "then": {"properties": {"payload": {"required": ["conflict_id", "subject_refs", "accepted_relation_refs", "blocking_effect"]}}}},
+    {"if": {"properties": {"object_type": {"const": "DUPLICATE_SCREEN"}}}, "then": {"properties": {"payload": {"required": ["screen_id", "subject_refs", "screen_result", "method_class", "authority_class"]}}}},
+    {"if": {"properties": {"object_type": {"const": "RESEARCH_DEMAND"}}}, "then": {"properties": {"payload": {"required": ["demand_id", "source_ref", "research_question_ref", "demand_class", "status"]}}}},
+    {"if": {"properties": {"object_type": {"const": "DEMAND_RESOLUTION"}}}, "then": {"properties": {"payload": {"required": ["resolution_id", "demand_id", "disposition", "evidence_refs"]}}}},
+    {"if": {"properties": {"object_type": {"const": "WORK_TICKET"}}}, "then": {"properties": {"payload": {"required": ["ticket_id", "subject_ref", "work_class", "work_state", "authority_refs"]}}}},
+    {"if": {"properties": {"object_type": {"const": "DEFERRAL"}}}, "then": {"properties": {"payload": {"required": ["deferral_id", "subject_ref", "reason_codes", "wake_triggers"]}}}},
+    {"if": {"properties": {"object_type": {"const": "ABANDONMENT"}}}, "then": {"properties": {"payload": {"required": ["abandonment_id", "subject_ref", "reason_codes", "preserve_evidence"]}}}},
+    {"if": {"properties": {"object_type": {"const": "REENTRY"}}}, "then": {"properties": {"payload": {"required": ["reentry_id", "subject_ref", "prior_disposition_ref", "trigger_refs"]}}}},
+    {"if": {"properties": {"object_type": {"const": "VISIBILITY_DECISION"}}}, "then": {"properties": {"payload": {"required": ["decision_id", "subject_ref", "consumer_class", "visibility_state", "source_authority_refs"]}}}}
+  ]
+}
