@@ -144,14 +144,30 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     review = json.loads(
         (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_G2_ALG_REVIEW_PACKET_v0_1.json").read_text()
     )
+    qa = json.loads(
+        (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_QA_PACKET_v0_1.json").read_text()
+    )
+    completion = json.loads(
+        (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_COMPLETION_RECORD_v0_1.json").read_text()
+    )
     state = json.loads(
         (ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json").read_text()
     )
     assert packet["authority_delta"] == "NONE"
+    assert packet["status"] == "GATE_READY"
     assert packet["next_packet"] == "P1CDII-G2-ALG"
+    assert qa["qa_result"] == "PASS"
+    assert all(result == "PASS" or result.startswith("PASS_") for result in qa["checks"].values())
     assert review["gate_class"] == "INDEPENDENT_BLOCKING"
+    assert review["status"] == "READY_AWAITING_INDEPENDENT_REVIEW"
     assert review["reviewer_binding"] == "UNBOUND"
     assert review["gate_decision"] == "NOT_TAKEN"
     assert review["decision_bearing_before_pass"] is False
+    assert completion["implementation_result"] == "PASS"
+    assert completion["gate_decision"] == "NOT_TAKEN"
+    assert completion["decision_bearing_outputs"] == "DENIED"
     assert state["current_packet"] == "P1CDII-WP2"
+    assert state["status"] == "GATE_READY"
+    assert state["packets"]["P1CDII-WP2"]["status"] == "GATE_READY"
+    assert state["blockers"] == ["P1CDII_G2_ALG_INDEPENDENT_REVIEWER_UNBOUND"]
     assert state["next_packet"] == "P1CDII-G2-ALG"
