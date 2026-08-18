@@ -1,0 +1,109 @@
+{
+  "approved_scope": {
+    "action_classes": [
+      "WRITE_FILE",
+      "GIT_COMMIT",
+      "PUSH_BRANCH"
+    ],
+    "branch_write_domain": "PACKET_BRANCH_ONLY",
+    "direct_main_mutation": false,
+    "irreversible_external_side_effects": "NONE_ALLOWED",
+    "max_speculative_depth": 1,
+    "packet_allowlist": [
+      "CERS-WP6"
+    ],
+    "packet_class_allowlist": [
+      "LOW_RISK_IMPLEMENTATION"
+    ],
+    "packet_executor_merge_capability": "NONE",
+    "programme_allowlist": [
+      "OVC-DSAI3V-CERS-CONFORMANCE-v0.1"
+    ],
+    "repository_write_domains": "EXACT_PACKET_DECLARED_PREFIXES_AND_SEMANTIC_OWNER_ONLY",
+    "visible_train_cap": 8,
+    "worker_concurrency": 1,
+    "force_push": false,
+    "history_rewrite": false
+  },
+  "authority_effect": "CERS_WP6_BOUNDED_UNATTENDED_DISPATCH_ONLY",
+  "completed_packets": [
+    "CERS-WP0",
+    "CERS-WP1",
+    "CERS-WP2",
+    "CERS-WP3",
+    "CERS-WP4",
+    "CERS-WP5"
+  ],
+  "completion_evidence": {
+    "completion_observability_attachment_id": "30037a2e8418c30259b22c4e204ff9417a3cd631cc621582f57721d7628225b6",
+    "completion_receipt_id": "3f986979f0f8bea9a3c1c55d4cd1b5f380f2cba72a2f2378d328a185a521cee8",
+    "development_latency_receipt_id": "b9958b44ed5ad5fded36ac4157dbe0abc010fc87147b39b03bb535ba9fccf302",
+    "external_receipt_store": "OVC_EXTERNAL_ARTIFACT_ROOT/receipts",
+    "materialisation_receipt_id": "f12c5c6d278e47c3c0270d0948dd135350ee0f633830f7a668f7263f0666e174",
+    "physical_tree_equality": "PASS"
+  },
+  "decision": "PASS",
+  "decision_baseline_main": "3551cd354b6181eafb31c4dd165f7a0b5ec7e8bc",
+  "decision_effect": "AUTHORISE_EXACT_BOUNDED_WP6_LIVE_PILOT",
+  "decision_id": "CERS-G-LIVE-DISPATCH.OPERATOR.PASS.20260818T151800+0100",
+  "decision_time_local": "2026-08-18T15:18:00+01:00",
+  "executor": {
+    "capability_id": "PACKET_EXECUTION",
+    "classification": "EXISTING_QUALIFIED_EXECUTOR_IDENTITY",
+    "environment_id": "windows-local-python311",
+    "executor_identity": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311",
+    "existing_write_authority": "DSAI-G8C ASSISTED_AGENT_WRITE",
+    "maturity": "TRUSTED",
+    "new_writer_identity_required": false,
+    "release_id": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130"
+  },
+  "fencing_start_worker_semantics": {
+    "dispatch_identity": "EXACT_CONTENT_ADDRESSED_IDENTITY",
+    "duplicate_start": "HARD_STOP_QUARANTINE",
+    "heartbeat": "DURABLE_WORKER_OWNERSHIP_HEARTBEAT_REQUIRED",
+    "start": "START_ACKNOWLEDGED_REQUIRED_BEFORE_AUTHORITATIVE_RUNNING",
+    "supervisor_fencing": "MONOTONIC_GENERATION; STALE_FENCE_REJECTED",
+    "unknown_start": "RECONCILE_BEFORE_REDISPATCH"
+  },
+  "gate_decisions": [
+    "CERS-G0 PASS",
+    "CERS-G1 PASS",
+    "CERS-G2 PASS",
+    "CERS-G3 PASS",
+    "CERS-G4 PASS",
+    "CERS-G5 PASS"
+  ],
+  "gate_id": "CERS-G-LIVE-DISPATCH",
+  "gate_packet": "docs/releases/development-skills-v0-3/cers-conformance/wp1-wp5/CERS_G_LIVE_DISPATCH_GATE_PACKET_v0_1.json",
+  "gate_ready_merge_commit": "bf9ac465de323c2b0f3c76e79b4af89ca0b624c0",
+  "gate_ready_tree": "ef7a70d5db079d3bc9ff1fe11311bd500ea84384",
+  "next_packet": "CERS-WP6",
+  "operator_command": "OVC APPROVE CERS-G-LIVE-DISPATCH PASS",
+  "plan_id": "OVC-DSAI3V-CERS-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "plan_version": "0.1 REVISED 1",
+  "preserved_boundaries": [
+    "VIT_SIQ_ONLY_PHYSICAL_MAIN_INTEGRATION",
+    "NO_PARALLEL_PHYSICAL_MERGE",
+    "NO_FORCE_PUSH_OR_HISTORY_REWRITE",
+    "NO_PROGRAMME_AUTHORITY_INFERENCE",
+    "NO_RESERVED_GATE_CROSSING",
+    "NO_SCIENTIFIC_MODEL_SELECTOR_FAMILY_CANDIDATE_THEORY_SEMANTIC_PROMOTION",
+    "NO_ACTIVE_DISCOVERY_DEVELOPMENT_VALIDATION_GRANT",
+    "NO_PUBLICATION_PROBABILITY_RISK_EXPOSURE_EXECUTION_AUTHORITY"
+  ],
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "qualification": {
+    "blocking_warnings": [],
+    "final_head": "PASS",
+    "merge_readiness": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "repository_tests": "PASS",
+    "runner_parity": "PASS",
+    "siq_ready": "PASS",
+    "unresolved_issues": [],
+    "vit_routing": "PASS"
+  },
+  "rollback": "Set durable DISABLE_NEW_DISPATCH; prevent new starts; drain/cancel CERS-owned work only; return new work to explicit foreground/ORCH1-assisted invocation; preserve all evidence and Git history.",
+  "schema": "ovc-cers-live-dispatch-operator-decision-packet/v1",
+  "source_gate_packet_status": "GATE_READY"
+}

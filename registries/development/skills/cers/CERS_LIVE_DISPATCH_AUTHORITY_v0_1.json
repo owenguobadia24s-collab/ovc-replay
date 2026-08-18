@@ -1,0 +1,72 @@
+{
+  "approved": true,
+  "authority_effect": "CERS_WP6_BOUNDED_UNATTENDED_DISPATCH_ONLY",
+  "authority_kind": "UNATTENDED_CERS_DISPATCH_EXISTING_TRUSTED_EXECUTOR_BOUNDED_PILOT",
+  "effective": true,
+  "executor": {
+    "capability_id": "PACKET_EXECUTION",
+    "environment_id": "windows-local-python311",
+    "executor_identity": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311",
+    "maturity": "TRUSTED",
+    "new_writer_identity": false,
+    "release_id": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130"
+  },
+  "fencing": {
+    "duplicate_authoritative_start": "HARD_STOP_QUARANTINE",
+    "heartbeat_required": true,
+    "monotonic_generation_required": true,
+    "stale_fence": "DENY",
+    "start_ack_required": true,
+    "unknown_start": "RECONCILE_BEFORE_REDISPATCH"
+  },
+  "gate_id": "CERS-G-LIVE-DISPATCH",
+  "integration": {
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "direct_main_mutation": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "merge_executor": "OVC-SKILL-014 GIT_PACKET_MANAGEMENT under active bounded ORCH-2",
+    "packet_executor_merge_capability": "NONE",
+    "parallel_physical_merge": false,
+    "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
+  },
+  "plan_id": "OVC-DSAI3V-CERS-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "registry_id": "OVC-DSAI3V-CERS-LIVE-DISPATCH-AUTHORITY-v0.1",
+  "repository_effectivity_condition": "AUTHORITY_RECORD_AND_OPERATOR_DECISION_PRESENT_ON_MAIN",
+  "rollback": "Set durable DISABLE_NEW_DISPATCH; prevent new starts; drain/cancel CERS-owned work only; return new work to explicit foreground/ORCH1-assisted invocation; preserve all evidence and Git history.",
+  "schema": "ovc-cers-live-dispatch-authority/v1",
+  "scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution": "NONE",
+  "scope": {
+    "action_classes": [
+      "WRITE_FILE",
+      "GIT_COMMIT",
+      "PUSH_BRANCH"
+    ],
+    "branch_scope": "PACKET_BRANCH_ONLY",
+    "max_speculative_depth": 1,
+    "packet_allowlist": [
+      "CERS-WP6"
+    ],
+    "packet_class_allowlist": [
+      "LOW_RISK_IMPLEMENTATION"
+    ],
+    "programme_allowlist": [
+      "OVC-DSAI3V-CERS-CONFORMANCE-v0.1"
+    ],
+    "visible_train_cap": 8,
+    "worker_concurrency": 1,
+    "write_domain_rule": "Exact packet-declared write prefixes plus semantic owner; absent path/owner fails closed."
+  },
+  "side_effect_policy": {
+    "allowed_classes": [
+      "BRANCH_ONLY",
+      "REVERSIBLE_LOCAL",
+      "READ_ONLY"
+    ],
+    "irreversible_external_side_effects": false,
+    "unknown_side_effect": "DENY"
+  },
+  "source_decision_id": "CERS-G-LIVE-DISPATCH.OPERATOR.PASS.20260818T151800+0100",
+  "validation": "DENIED"
+}

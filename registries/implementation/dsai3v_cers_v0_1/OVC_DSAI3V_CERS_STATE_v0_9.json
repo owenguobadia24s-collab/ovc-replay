@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-dsai3v-cers-programme-state/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "plan_version": "0.1 RATIFIED",
+  "governing_design": "OVC-DSAI3V-CERS-DESIGN-SPEC-0.1-R1-RATIFIED",
+  "supersedes_state": "OVC_DSAI3V_CERS_STATE_v0_8.json",
+  "status": "READY",
+  "packet_id": "CERS-PS-WP0",
+  "current_gate": "CERS-PS-G0",
+  "next_packet": "CERS-PS-WP0",
+  "authority_required": "OPERATOR_RATIFIED_PLAN",
+  "authority_delta": "BOUNDED_PERSISTENT_SUPERVISOR_PREACTIVATION_IMPLEMENTATION_WP0_WP5",
+  "runtime_authority": "CERS_WP6_LIVE_PILOT_COMPLETE_PERSISTENT_SUPERVISOR_NOT_ACTIVATED",
+  "live_unattended_dispatch": "CERS_WP6_PILOT_AUTHORITY_RETAINED_NOT_GENERAL",
+  "persistent_general_dispatch": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "post_pilot_dispatch_state": "DISABLE_NEW_DISPATCH",
+  "controller_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "parallel_physical_merge": false,
+  "worker_binding": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311",
+  "predecessor_effectivity": {
+    "status": "CERS_IMPLEMENTED_QUALIFIED_LIVE_PILOT_PASS",
+    "merge_commit": "81faa31be2e59e47bc9784174f971c93a5a3a41c",
+    "physical_tree": "5faa522134abfae1749a13bb9b53ae51e8054ee7",
+    "transaction_id": "8e306f0506d1a2199777e267c5321425e97ff3b72a07ca9605a9ef04c47516f9",
+    "completion_proof": "112fcfcec02c73b1b19d56d90c5965e45da9d2a7cc26d19706f8cd0816fde860"
+  },
+  "decision_record": "docs/releases/development-skills-v0-3/cers-persistent-supervisor/CERS_PS_PLAN_RATIFICATION_OPERATOR_DECISION_v0_1.json",
+  "qa_packet": "docs/releases/development-skills-v0-3/cers-persistent-supervisor/CERS_PS_PLAN_RATIFICATION_QA_v0_1.json",
+  "tests": [
+    "PLANNING_QA_PASS",
+    "OPERATOR_SCOPE_RATIFICATION_PASS",
+    "PERMANENT_PR_REQUIRED_ASSURANCE_PENDING_INTEGRATION"
+  ],
+  "blockers": [],
+  "blocking_warnings": [],
+  "packet_register": [
+    {"packet_id": "CERS-PS-WP0", "status": "READY", "authority_required": "AUTO_EXECUTABLE", "authority_delta": "NONE", "next_packet": "CERS-PS-WP1"},
+    {"packet_id": "CERS-PS-WP1", "status": "PLANNED", "authority_required": "AUTO_EXECUTABLE", "authority_delta": "INACTIVE_CONTRACTS_SCHEMAS_ADMISSION_REGISTRY", "next_packet": "CERS-PS-WP2"},
+    {"packet_id": "CERS-PS-WP2", "status": "PLANNED", "authority_required": "AUTO_EXECUTABLE", "authority_delta": "INACTIVE_REGISTRY_DRIVEN_LIVE_RECONCILER_COORDINATOR", "next_packet": "CERS-PS-WP3"},
+    {"packet_id": "CERS-PS-WP3", "status": "PLANNED", "authority_required": "AUTO_EXECUTABLE", "authority_delta": "INACTIVE_SHADOW_ZERO_CHAT_PERSISTENT_SERVICE", "next_packet": "CERS-PS-WP4"},
+    {"packet_id": "CERS-PS-WP4", "status": "PLANNED", "authority_required": "AUTO_EXECUTABLE", "authority_delta": "INACTIVE_EXPLICIT_PROGRAMME_ADMISSION_REGISTRY", "next_packet": "CERS-PS-WP5"},
+    {"packet_id": "CERS-PS-WP5", "status": "PLANNED", "authority_required": "AUTO_EXECUTABLE", "authority_delta": "SHADOW_ADVERSARIAL_QUALIFICATION_CAPACITY_FREEZE_GATE_PREP", "next_packet": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"},
+    {"packet_id": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION", "status": "PLANNED", "authority_required": "OPERATOR_REQUIRED", "authority_delta": "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY", "next_packet": null}
+  ],
+  "rollback": "Keep persistent quiescence DISABLE_NEW_DISPATCH; forward-disable preactivation persistent surfaces; preserve all WP6/G6 and ReceiptStore evidence."
+}

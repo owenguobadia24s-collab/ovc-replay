@@ -1,0 +1,66 @@
+{
+  "schema": "ovc-p2ctii-implementation-packet/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-WP3",
+  "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
+  "plan_sha256": "abc0ae753c20b557508eb35a00326fc62b3f3bb5ab229550852439d25ea07eef",
+  "design_sha256": "868c496c5c1bfc825fa739bd4e2ee2d5eda9bcd3bbfdded2d117546c9b3824e4",
+  "baseline_main": "1fbd5909571de411a25bb554ad91bb97599cb591",
+  "baseline_tree": "eacbb92db0df96cfcdcd04f2ea758123004fef78",
+  "branch": "agent/p2ctii-wp3-20260818",
+  "status": "PASS_PENDING_EXACT_FINAL_INTEGRATION",
+  "prerequisites": [
+    "P2CTII-WP0_COMPLETED@49fc565541fe33ec5cdc42296528fc449ea86fff",
+    "P2CTII-WP1_COMPLETED@05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
+    "P2CTII-WP2-REMEDIATION-1_COMPLETED@12e302f40af55ed485058d80e77bdc07c9148d8a",
+    "P2CTII-G2-ALG_PASS@3551cd354b6181eafb31c4dd165f7a0b5ec7e8bc",
+    "UNRELATED_MAIN_PLACEMENT_RENEWED@1fbd5909571de411a25bb554ad91bb97599cb591"
+  ],
+  "scope": [
+    "EXACT_30_ENTRY_GENERATION_ZERO_BOOTSTRAP",
+    "EXACT_SOURCE_BYTES_AND_LOCATOR_REPRODUCTION",
+    "LOSSLESS_HETEROGENEOUS_CLASSIFICATION",
+    "SOURCE_EXPLICIT_REFERENCE_ONLY_MIGRATION",
+    "EXACT_DUPLICATE_SCREEN",
+    "DETERMINISTIC_CLEAN_REBUILD",
+    "CURRENT_AND_HISTORICAL_DUAL_PROOF"
+  ],
+  "artifacts": {
+    "source_reproduction": "fixtures/research_operations/p2cti/P2CTII_WP3_SOURCE_REPRODUCTION_v0_1.json",
+    "canonical_generation_zero": "records/research_operations/p2cti/P2CTII_GENERATION_0_v0_1.json",
+    "builder": "src/ovc/research_operations/p2cti/bootstrap.py",
+    "runner": "scripts/research_operations/run_p2ctii_wp3_bootstrap.py",
+    "tests": "tests/research_operations/p2cti/test_p2ctii_wp3_bootstrap.py"
+  },
+  "identities": {
+    "source_reproduction_semantic_sha256": "8a31598b3069a1a70c2ba1bac54768a4111fe51cea1374b339bbad7e56fd8c58",
+    "source_reproduction_file_sha256": "c276679e16eb12687548ec21607861e09c4146761b37d738063b2ed1c0c5fd5f",
+    "generation_zero_bundle_sha256": "6308846462c30dba643fed449472f6317d884cd278cea48d8ab04547df7871e3",
+    "generation_zero_file_sha256": "4784b46238ebedac98b7e1ad532f3a49cc78e5d5753ecb6747d0f047687581b7",
+    "series_id": "p2cti:series:188d9ad97f1f4eb9cee1e33763e95bd8b1acb4cd0c77650a483a6c87132ca290",
+    "generation_id": "p2cti:generation:4517d24b230da9e29af072ca9ed680943bbf598cf2382f18ccf3f9ba8b9099e9",
+    "source_frontier_id": "p2cti:frontier:77787699affb040f469551a59eea5e2ee841d51f6a69287dae06055c74d5a659",
+    "generation_manifest_id": "p2cti:generation_manifest:b83846f2411ae2f56be72b131cac04bb2037b805efdfc2814103cbd2288b8294",
+    "generation_root_sha256": "2b93eb27470b88ecac5fba889409eb3307acaab5bd24677a9047422860227eb6"
+  },
+  "acceptance": {
+    "external_theory_records": 7,
+    "in_house_theory_records": 19,
+    "architecture_need_seeds": 4,
+    "total_entries": 30,
+    "source_bytes_and_locators_exactly_reproduced": true,
+    "no_fabricated_omitted_or_duplicate_member": true,
+    "seeds_preserved_as_seeds": true,
+    "scientific_payload_copied": false,
+    "source_explicit_relation_migration_only": true,
+    "duplicate_screen_semantic_inference": false,
+    "clean_rebuild_byte_exact": true,
+    "historical_generation_retained_addressable": true,
+    "historical_fallback": "FORBIDDEN",
+    "operational_current_pointer_published": false
+  },
+  "authority_delta": "NONE",
+  "blockers": [],
+  "rollback": "Forward supersession only; retain exact source census, reproduction receipt and historical Generation-0 addressability.",
+  "next_packet": "P2CTII-WP4"
+}

@@ -259,7 +259,7 @@ def test_g2_alg_is_a_hard_decision_bearing_pointer_boundary() -> None:
         require_g2_alg_for_decision_bearing_pointer(g2_alg_status="NOT_TAKEN")
 
 
-def test_consolidated_review_packet_stops_at_independent_boundary() -> None:
+def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> None:
     review = json.loads(
         (ROOT / "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_CONSOLIDATED_REVIEW_PACKET_v0_1.json").read_text()
     )
@@ -275,6 +275,12 @@ def test_consolidated_review_packet_stops_at_independent_boundary() -> None:
     fresh_review = json.loads(
         (ROOT / "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_FRESH_REVIEW_COMMISSION_v0_1.json").read_text()
     )
+    fresh_decision = json.loads(
+        (
+            ROOT
+            / "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json"
+        ).read_text()
+    )
     assert review["gate_class"] == "INDEPENDENT_NON_OPERATOR_BLOCKING"
     assert review["reviewer_binding"]["status"] == "BOUND"
     assert review["gate_decision"] == "BLOCK"
@@ -286,11 +292,69 @@ def test_consolidated_review_packet_stops_at_independent_boundary() -> None:
     assert remediation_decision["p2ctii_g2_alg"]["status"] == "UNRESOLVED"
     assert fresh_review["status"] == "COMMISSIONED_AWAITING_CONFLICT_FREE_REVIEWER_BINDING"
     assert fresh_review["reviewer_binding"]["reviewer_identity"] is None
-    assert state["packet_id"] == "P2CTII-WP2"
-    assert state["next_packet"] == "P2CTII-G2-ALG-FRESH-INDEPENDENT-REVIEW"
-    assert state["p2ctii_g2_alg_status"] == "UNRESOLVED_PRIOR_BLOCK_PRESERVED_FRESH_REVIEW_COMMISSIONED"
+    assert fresh_decision["gate_decision"] == "PASS"
+    assert fresh_decision["authority_delta"] == "NONE"
+    assert fresh_decision["programme_state_materialised_by_this_packet"] is False
+    assert state["packet_id"] in {
+        "P2CTII-G2-ALG",
+        "P2CTII-WP3",
+        "P2CTII-G4-ALG",
+        "P2CTII-WP4-REMEDIATION-1",
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
+    }
+    assert state["status"] in {
+        "COMPLETED",
+        "AWAITING_CONFLICT_FREE_INDEPENDENT_REVIEW",
+        "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-1",
+        "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+        "PASS_REMEDIATION_AWAITING_MATERIALISATION",
+        "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-2",
+    }
+    assert state["next_packet"] in {
+        "P2CTII-WP3",
+        "P2CTII-WP4",
+        "P2CTII-G4-ALG",
+        "P2CTII-WP4-REMEDIATION-1",
+        "P2CTII-WP4-REMEDIATION-1-QA-DECISION",
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
+        "P2CTII-WP4-REMEDIATION-2",
+    }
+    if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG"}:
+        assert any(
+            packet["packet_id"] == "P2CTII-WP3"
+            and packet["decision"] == "P2CTII-G3_DELEGATED_PASS"
+            for packet in state["completed_packets"]
+        )
+    assert state["p2ctii_g2_alg_status"] == "PASS"
+    assert state["currentness_resolver_status"] == "MECHANICALLY_QUALIFIED_G2_ALG_PASS"
+    assert state["decision_bearing_currentness_eligibility"] == (
+        "MECHANICALLY_QUALIFIED_NOT_OPERATIONALLY_PUBLISHED"
+    )
+    assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
     assert state["remediation_author_may_grant_g2_alg_pass"] is False
-    assert state["wp3_authorised"] is False
-    assert state["blockers"] == [
-        "P2CTII_G2_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED",
-    ]
+    assert state["wp3_authorised"] is True
+    if state["packet_id"] == (
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1"
+    ):
+        assert state["p2ctii_g4_alg_status"] == "BLOCK"
+        assert state["blockers"] == [
+            "P2CTII_G4_ALG_FRESH_BLOCK_001_OWNER_PROVENANCE_AND_CANONICAL_EVIDENCE_ORDER",
+            "P2CTII_G4_ALG_FRESH_BLOCK_002_RESEARCH_QUESTION_AND_FRONTIER_CURRENTNESS_NOT_AUTHORITATIVELY_BOUND",
+            "P2CTII_G4_ALG_FRESH_BLOCK_003_QUERY_CONSTITUENT_COHERENCE_AND_WARNING_PROPAGATION",
+            "P2CTII_G4_ALG_FRESH_BLOCK_004_CROSS_MODE_CURRENT_EXPOSURE_AND_FORMAL_CORRESPONDENCE_NOT_BOUND",
+            "P2CTII_G4_ALG_FRESH_BLOCK_005_QUERY_COLLECTION_ORDER_NOT_CANONICAL",
+        ]
+    elif state.get("p2ctii_g4_alg_status") == "BLOCK":
+        assert state["blockers"] == [
+            "P2CTII_G4_ALG_BLOCK_001_OWNER_GENERATION_AND_SOURCE_EVIDENCE_NOT_RESOLVED",
+            "P2CTII_G4_ALG_BLOCK_002_RESEARCH_QUESTION_CURRENTNESS_NOT_BOUND",
+            "P2CTII_G4_ALG_BLOCK_003_QUERY_STATE_COHERENCE_AND_CONFLICT_PRESERVATION_GAP",
+            "P2CTII_G4_ALG_BLOCK_004_QUERY_VISIBILITY_AND_EXPOSURE_ENFORCEMENT_GAP",
+            "P2CTII_G4_ALG_BLOCK_005_QUERY_RETURN_ALIAS_MUTATES_HELD_STATE",
+        ]
+    elif state["packet_id"] == "P2CTII-WP4-REMEDIATION-1":
+        assert state["blockers"] == [
+            "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED",
+        ]
+    else:
+        assert state["blockers"] == []
