@@ -4,16 +4,16 @@
   "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
   "current_packet": "P1CDII-WP2",
-  "status": "QA_REVIEW",
-  "baseline_commit": "a11d29569321e4fe608f09dd51c04349c3f1c13f",
-  "baseline_tree": "9e5cc15ef1e43b51eade229cd262eea1471bce6d",
+  "status": "GATE_READY",
+  "baseline_commit": "c8e2e610eddf59014644ac61e648ce27ae000f38",
+  "baseline_tree": "4e9d5fe9211976ab606de3f190391f6c4166639b",
   "authority": {"P1CDII-G0":"OPERATOR_PASS_MATERIALISED","operational_read_only":"DENIED","continuous_intake":"DENIED"},
   "completed_packets": [{"packet_id":"P1CDII-WP0","status":"COMPLETED","merge_commit":"cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded","decision":"OPERATOR_PASS"},{"packet_id":"P1CDII-WP1","status":"COMPLETED","merge_commit":"a11d29569321e4fe608f09dd51c04349c3f1c13f","decision":"PASS"}],
   "packets": {
     "P1CDII-WP0":{"status":"COMPLETED","prerequisites":["P1CDI-DG8:PRESENT_ON_MAIN"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"BOUNDED_MECHANICAL_IMPLEMENTATION","tests":["PR1130_REQUIRED_CI_PASS","PR1130_VIT_GRT_SIQ_PASS"],"blockers":[],"next_packet":"P1CDII-WP1"},
     "P1CDII-WP1":{"status":"COMPLETED","prerequisites":["P1CDII-WP0_COMPLETED@cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["tests/research_operations/p1cdi/test_p1cdii_wp1_contracts.py:PASS","tests/research_operations/p1cdi/test_p1cdii_wp1_schemas.py:PASS","REPOSITORY_REQUIRED_CI@32122534305:PASS","VIT_GRT_SIQ@32122533974:PASS"],"blockers":[],"next_packet":"P1CDII-WP2"},
-    "P1CDII-WP2":{"status":"QA_REVIEW","prerequisites":["P1CDII-WP1_DELEGATED_PASS@a11d29569321e4fe608f09dd51c04349c3f1c13f"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["tests/research_operations/p1cdi/test_p1cdii_wp2_identity_intake.py","tests/research_operations/p1cdi/test_p1cdii_wp2_resolver_currentness.py","REPOSITORY_REQUIRED_CI_PENDING"],"blockers":[],"next_packet":"P1CDII-G2-ALG"}
+    "P1CDII-WP2":{"status":"GATE_READY","prerequisites":["P1CDII-WP1_DELEGATED_PASS@a11d29569321e4fe608f09dd51c04349c3f1c13f"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["tests/research_operations/p1cdi/test_p1cdii_wp2_identity_intake.py:PASS","tests/research_operations/p1cdi/test_p1cdii_wp2_resolver_currentness.py:PASS","REPOSITORY_REQUIRED_CI@32125761101:PASS","VIT_GRT_SIQ@32125761088:PASS"],"blockers":[],"next_packet":"P1CDII-G2-ALG"}
   },
-  "blockers": [],
+  "blockers": ["P1CDII_G2_ALG_INDEPENDENT_REVIEWER_UNBOUND"],
   "next_packet": "P1CDII-G2-ALG"
 }
