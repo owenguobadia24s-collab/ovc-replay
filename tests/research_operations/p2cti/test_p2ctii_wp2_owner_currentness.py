@@ -295,17 +295,23 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
     assert fresh_decision["gate_decision"] == "PASS"
     assert fresh_decision["authority_delta"] == "NONE"
     assert fresh_decision["programme_state_materialised_by_this_packet"] is False
-    assert state["packet_id"] in {"P2CTII-G2-ALG", "P2CTII-WP3", "P2CTII-G4-ALG"}
+    assert state["packet_id"] in {
+        "P2CTII-G2-ALG", "P2CTII-WP3", "P2CTII-G4-ALG", "P2CTII-WP4-REMEDIATION-1"
+    }
     assert state["status"] in {
         "COMPLETED",
         "AWAITING_CONFLICT_FREE_INDEPENDENT_REVIEW",
         "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-1",
+        "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+        "PASS_REMEDIATION_AWAITING_MATERIALISATION",
     }
     assert state["next_packet"] in {
         "P2CTII-WP3",
         "P2CTII-WP4",
         "P2CTII-G4-ALG",
         "P2CTII-WP4-REMEDIATION-1",
+        "P2CTII-WP4-REMEDIATION-1-QA-DECISION",
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
     }
     if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG"}:
         assert any(
@@ -328,6 +334,10 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
             "P2CTII_G4_ALG_BLOCK_003_QUERY_STATE_COHERENCE_AND_CONFLICT_PRESERVATION_GAP",
             "P2CTII_G4_ALG_BLOCK_004_QUERY_VISIBILITY_AND_EXPOSURE_ENFORCEMENT_GAP",
             "P2CTII_G4_ALG_BLOCK_005_QUERY_RETURN_ALIAS_MUTATES_HELD_STATE",
+        ]
+    elif state["packet_id"] == "P2CTII-WP4-REMEDIATION-1":
+        assert state["blockers"] == [
+            "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED",
         ]
     else:
         assert state["blockers"] == []
