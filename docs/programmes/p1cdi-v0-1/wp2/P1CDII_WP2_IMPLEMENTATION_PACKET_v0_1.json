@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-p1cdii-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-WP2",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_sha256": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "design_sha256": "5eaee768bc18ce9fa40c79fe1c3a91c57cbadf21ce15ba39438a0b34a55bbea3",
+  "baseline_main": "a11d29569321e4fe608f09dd51c04349c3f1c13f",
+  "baseline_tree": "9e5cc15ef1e43b51eade229cd262eea1471bce6d",
+  "branch": "build/p1cdii-wp2-20260818",
+  "status": "QA_REVIEW",
+  "prerequisites": ["P1CDII-WP1_DELEGATED_PASS@a11d29569321e4fe608f09dd51c04349c3f1c13f"],
+  "scope": ["OWNER_SOURCE_RESOLVER","EXACT_SEMANTIC_PROJECTION_MATCHING","EXACT_INTAKE_AND_DEDUP","SOURCE_FRONTIER_MANIFESTS","TWO_POINT_CURRENTNESS","G2_ALG_REVIEW_PACKET","TARGETED_ASSURANCE"],
+  "authority_delta": "NONE",
+  "acceptance": {
+    "owner_source_precedence_exact": true,
+    "recency_path_title_and_convenience_fallback_forbidden": true,
+    "missing_or_conflicting_predicates_fail_closed": true,
+    "absence_of_exposure_is_independence_unknown": true,
+    "same_distinction_auto_only_for_exact_compatible_projection": true,
+    "exact_source_duplicate_idempotent": true,
+    "non_exact_similarity_review_only": true,
+    "moved_frontier_never_current": true,
+    "all_outputs_non_decision_bearing_until_g2_alg": true,
+    "generation_zero_pointer_write": "DENIED_UNTIL_P1CDII-G2-ALG",
+    "canonical_intake_write": "DENIED_UNTIL_P1CDII-G-CONTINUOUS-INTAKE"
+  },
+  "tests": ["tests/research_operations/p1cdi/test_p1cdii_wp2_identity_intake.py","tests/research_operations/p1cdi/test_p1cdii_wp2_resolver_currentness.py","REPOSITORY_REQUIRED_CI","VIT_ROUTING_PREFLIGHT","FINAL_HEAD_ASSURANCE"],
+  "blockers": [],
+  "rollback": "Forward supersession only. WP2 produces advisory fixture evidence and no current pointer or canonical intake write.",
+  "next_packet": "P1CDII-G2-ALG"
+}
