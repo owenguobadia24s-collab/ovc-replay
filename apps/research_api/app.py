@@ -10,6 +10,7 @@ from ovc.console_vnext.application.errors import AuthorityDenied, ConsoleBoundar
 
 from .fixture_store import FixtureStore
 from .real_source_store import RealSourceStore
+from .routers.dmrp import build_dmrp_router
 from .routers.domains import build_domain_router
 from .routers.system import build_system_router
 
@@ -28,8 +29,8 @@ def create_app(*, fixture_root: Path | None = None, source_mode: str | None = No
     real_store = RealSourceStore(real_source_root or DEFAULT_REAL_SOURCE_ROOT, real_source_bindings or DEFAULT_REAL_SOURCE_BINDINGS) if resolved_mode == "REAL" else None
     app = FastAPI(
         title="OVC Research Console vNext API",
-        version="0.1.0-g4",
-        description="Loopback-only GET/read-only API. Fixture mode is explicit; G4-approved real mode is owner-projection-only and fails closed without fixture fallback.",
+        version="0.1.0-g5-dmrp",
+        description="Loopback-only GET/read-only API. Fixture mode is explicit; G4 market/structure and independently admitted G5 DMRP real-source routes are owner-source-bound and fail closed without fixture fallback.",
     )
     app.state.fixture_store = store
     app.state.real_source_store = real_store
@@ -60,4 +61,5 @@ def create_app(*, fixture_root: Path | None = None, source_mode: str | None = No
 
     app.include_router(build_system_router(store), prefix="/api/v1")
     app.include_router(build_domain_router(store, real_store=real_store, source_mode=resolved_mode), prefix="/api/v1")
+    app.include_router(build_dmrp_router(store, source_mode=resolved_mode), prefix="/api/v1")
     return app

@@ -146,3 +146,77 @@ export type WP5ARepresentationSnapshot = {
     correspondence_is_independence: false;
   };
 };
+
+export type WP5B1DMRPSnapshot = {
+  schema: "ovc-rcn-rn-wp5b1-dmrp-snapshot/v1";
+  packet_id: "RCN-RN-WP5B1";
+  mode: "FIXTURE_ONLY";
+  data_classification: "SYNTHETIC_FIXTURE";
+  evidence_status: "NON_EVIDENTIARY";
+  authority_effect: "NONE";
+  source_preflight: {
+    status: "PASS_NO_FIRST_NEW_REAL_RESEARCH_SOURCE";
+    gate_branch: "RCN-RN-WP5B1-CLOSEOUT";
+    operator_escalation_gate: "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]";
+    first_new_real_research_source: false;
+    source_binding_registry: string;
+    source_ids: string[];
+  };
+  path1: {
+    research_mode: "PATH_1_EMPIRICAL";
+    research_role: string;
+    study_id: string;
+    cycle_id: string;
+    question_id: string;
+    validation_access_state: "LOCKED_UNCONSUMED";
+    source_id: string;
+  };
+  path2: {
+    training_id: string;
+    guided_formalisation_id: string;
+    ready_intake_id: string;
+    divergent_intake_id: string;
+    divergent_disposition: string;
+    real_source_authority: "NONE";
+    source_id: string;
+  };
+  candidate_generation: {
+    series_id: string;
+    origin_mode: "PATH_1_EMPIRICAL";
+    generation: number;
+    population_id: string;
+    required_dependencies: string[];
+    membership: Record<string, number>;
+    source_id: string;
+  };
+  cross_mode: Array<{
+    relation_id: string;
+    path1_candidate_series_id: string;
+    path2_theory_id: string;
+    correspondence: string;
+    independence: string;
+    identity_merge: false;
+    winner: null;
+    ranking: null;
+  }>;
+  negative_divergent_evidence: Array<{
+    evidence_id: string;
+    mode: string;
+    status: string;
+    count: number;
+  }>;
+  presentation_guardrails: {
+    candidate_construction: "PROHIBITED";
+    candidate_repair: "PROHIBITED";
+    candidate_identity_merge: "PROHIBITED";
+    candidate_promotion: "NONE";
+    path_winner: null;
+    ranking: "NONE";
+    correspondence_is_independence: false;
+    missing_exposure_implies_independence: false;
+    frontend_scientific_calculation: "PROHIBITED";
+    writes: "NONE";
+    validation_consumption: "LOCKED_UNCONSUMED";
+    first_new_real_research_source: false;
+  };
+};
