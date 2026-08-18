@@ -1,0 +1,106 @@
+name: C2P2 RS0 R3 bounded storage recovery qualification
+
+on:
+  push:
+    branches:
+      - recover/c2p2-rs0-storage-capacity-r3-20260818
+
+permissions:
+  contents: read
+
+concurrency:
+  group: c2p2-rs0-r3-storage-recovery-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    name: Bounded non-evidentiary storage recovery qualification
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          show-progress: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install repository test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+
+      - name: Verify bounded recovery authority contract
+        shell: bash
+        run: |
+          PYTHONPATH=src:. python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0')
+          decision = json.loads((root / 'C2P2_RS0_RUN_RECOVERY_R3_OPERATOR_DECISION_v0_1.json').read_text())
+          lower = json.loads((root / 'C2P2_RS0_RUN_RECOVERY_R3_SOURCE_SHAPE_LOWER_BOUND_v0_1.json').read_text())
+          assert decision['decision'] == 'PASS'
+          assert decision['real_source_execution_authority'] == 'NONE'
+          assert decision['fresh_run_token'] == 'NONE'
+          assert decision['storage_limit_change'] == 'NOT_AUTHORISED'
+          assert decision['scientific_semantics_change'] == 'NONE'
+          assert decision['selection'] == 'NONE'
+          assert decision['activation'] == 'NONE'
+          assert lower['real_source_semantic_execution'] is False
+          assert lower['fresh_run_token'] == 'NONE'
+          assert lower['strict_lower_bound']['evidence_vector_comparison_lower_bound'] == 26629672948
+          print('C2P2_RS0_R3_BOUNDED_RECOVERY_AUTHORITY=PASS')
+          PY
+
+      - name: Run targeted R3 recovery assurance
+        run: |
+          PYTHONPATH=src:. python3 -m pytest -q --tb=short \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_r3_storage_recovery_scaling.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_capacity_recovery.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_order_recovery.py
+
+      - name: Run complete repository regression
+        run: PYTHONPATH=src:. python3 -m pytest tests -q --tb=short
+
+      - name: Measure frozen Candidate A synthetic competitor scaling
+        run: |
+          rm -rf /tmp/c2p2-rs0-r3-storage-recovery
+          mkdir -p /tmp/c2p2-rs0-r3-storage-recovery
+          PYTHONPATH=src:. python3 scripts/run_c2p2_rs0_r3_storage_scaling.py \
+            --output /tmp/c2p2-rs0-r3-storage-recovery/measurement.json \
+            --work-root /tmp/c2p2-rs0-r3-storage-recovery/work \
+            --points 32 64 128 256
+
+      - name: Verify measurement is authority-neutral and exact
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('/tmp/c2p2-rs0-r3-storage-recovery/measurement.json')
+          data = json.loads(path.read_text())
+          assert data['authority_effect'] == 'NONE_SYNTHETIC_NON_EVIDENTIARY_MECHANICAL_ONLY'
+          assert data['real_source_read'] is False
+          assert data['fresh_run_token'] == 'NONE'
+          assert data['real_source_execution_authority'] == 'NONE'
+          assert data['selection'] == 'NONE'
+          assert data['activation'] == 'NONE'
+          for row in data['measurements']:
+              n = row['rows']
+              expected = n * (n - 1) // 2
+              assert row['expected_evidence_vectors'] == expected
+              assert row['observed_evidence_vectors'] == expected
+              assert row['evidence_vector_formula_status'] == 'PASS'
+          print('C2P2_RS0_R3_SYNTHETIC_SCALING=PASS')
+          PY
+
+      - name: Upload compact synthetic scaling receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: c2p2-rs0-r3-storage-scaling-${{ github.run_id }}
+          path: /tmp/c2p2-rs0-r3-storage-recovery/measurement.json
+          if-no-files-found: error
+          retention-days: 30
