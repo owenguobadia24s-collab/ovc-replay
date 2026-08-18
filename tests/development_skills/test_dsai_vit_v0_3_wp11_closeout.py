@@ -52,14 +52,11 @@ class DsaiVitV03Wp11CloseoutTests(unittest.TestCase):
 
         pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
         state = self._load(STATE_ROOT / pointer["current_state"])
-        self.assertIn(pointer["current_packet"], {"DSAI3V-WP11", "DSAI3V-WP12"})
+        self.assertIn("DSAI3V-WP11", state["completed_packets"])
         if pointer["current_packet"] == "DSAI3V-WP11":
             self.assertEqual(pointer["current_gate"], "DSAI3V-G11")
             self.assertEqual(pointer["next_packet"], "DSAI3V-WP12")
         else:
-            self.assertEqual(pointer["current_gate"], "DSAI3V-G12")
-            self.assertIsNone(pointer["next_packet"])
-            self.assertIn("DSAI3V-WP11", state["completed_packets"])
             self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "ACTIVE_GENERAL_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION")
             self.assertFalse(state["current_authority"]["parallel_physical_merge"])
 

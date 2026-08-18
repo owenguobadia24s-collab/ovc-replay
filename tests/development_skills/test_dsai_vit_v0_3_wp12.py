@@ -48,11 +48,17 @@ class DsaiVitV03Wp12Tests(unittest.TestCase):
         self.assertEqual(assurance["physical_reference_sample"]["status"], "PASS")
         self.assertEqual(assurance["receipt_completeness"]["status"], "PASS")
         self.assertEqual(assurance["safety"]["status"], "PASS")
+
+        historical = self._load(STATE_ROOT / "OVC_DSAI_VIT_V0_3_STATE_v0_19.json")
+        self.assertEqual(historical["status"], "COMPLETED")
+        self.assertEqual(historical["packet_id"], "DSAI3V-WP12")
+        self.assertEqual(historical["gate_id"], "DSAI3V-G12")
+        self.assertIsNone(historical["next_packet"])
+
         pointer = self._load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
+        state = self._load(STATE_ROOT / pointer["current_state"])
         self.assertIn(pointer["status"], {"QA_REVIEW", "COMPLETED"})
-        self.assertEqual(pointer["current_packet"], "DSAI3V-WP12")
-        self.assertEqual(pointer["current_gate"], "DSAI3V-G12")
-        self.assertIsNone(pointer["next_packet"])
+        self.assertIn("DSAI3V-WP12", state["completed_packets"])
 
 
 if __name__ == "__main__":

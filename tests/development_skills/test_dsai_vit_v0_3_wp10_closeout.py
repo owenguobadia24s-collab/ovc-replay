@@ -68,12 +68,10 @@ class DsaiVitV03Wp10CloseoutTests(unittest.TestCase):
             authority = self._load(GENERAL_AUTHORITY)
             self.assertEqual(decision["decision"], "PASS")
             self.assertEqual(authority["authority_status"], "ACTIVE")
-            self.assertIn(pointer["current_packet"], {"DSAI3V-WP11", "DSAI3V-WP12"})
-            self.assertIn(pointer["current_gate"], {"DSAI3V-G11", "DSAI3V-G12"})
+            self.assertIn("DSAI3V-WP11", state["completed_packets"])
+            self.assertIn("DSAI3V-WP12", state["completed_packets"])
             self.assertEqual(state["current_authority"]["vit_live_physical_main_control"], "ACTIVE_GENERAL_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION")
             self.assertFalse(state["current_authority"]["parallel_physical_merge"])
-            if pointer["current_packet"] == "DSAI3V-WP12":
-                self.assertIn("DSAI3V-WP11", state["completed_packets"])
         else:
             self.assertEqual(pointer["status"], "GATE_READY")
             self.assertEqual(pointer["current_gate"], "DSAI3V-G-VIT-GENERAL")

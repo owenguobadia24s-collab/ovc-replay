@@ -24,7 +24,7 @@ class PythonTestRunnerMigrationContractTests(unittest.TestCase):
         self.assertIn("Complete repository suite as BASE_INDEPENDENT assurance", workflow)
         self.assertNotIn("tools/ci/ovc_run_with_main_lease.py", workflow)
         self.assertIn("tools/ci/ovc_run_with_main_lease.py", tiered)
-        self.assertIn("Run mandatory SIQ/PDC exact-final assurance inside lease", tiered)
+        self.assertIn("Run mandatory SIQ/PDC A2 exact-final assurance inside lease", tiered)
         self.assertIn("name: tests", workflow)
 
     def test_pytest_is_pinned_and_parity_jobs_are_explicit(self) -> None:

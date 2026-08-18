@@ -85,7 +85,7 @@ class Dsai3vVitCurrentStateResolutionTests(unittest.TestCase):
     def test_real_repository_resolves_current_general_active_state(self) -> None:
         result = resolve_current_vit_query(ROOT)
         self.assertEqual(result["resolution_status"], "RESOLVED_CURRENT")
-        self.assertEqual(result["programme_status"], "COMPLETED")
+        self.assertIn(result["programme_status"], {"QA_REVIEW", "COMPLETED"})
         self.assertEqual(result["general_authority_status"], "ACTIVE")
         self.assertEqual(result["default_execution_substrate_status"], "ACTIVE")
         self.assertTrue(result["vit_live_physical_main_control"].startswith("ACTIVE_"))
