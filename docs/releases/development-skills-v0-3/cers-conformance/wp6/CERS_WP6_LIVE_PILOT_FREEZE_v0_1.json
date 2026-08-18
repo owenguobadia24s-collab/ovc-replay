@@ -9,7 +9,10 @@
   "authority_registry": "registries/development/skills/cers/CERS_LIVE_DISPATCH_AUTHORITY_v0_1.json",
   "authority_effect": "BOUNDED_LIVE_PILOT_ONLY",
   "status": "FROZEN_PRE_EXECUTION",
-  "freeze_time_local": "2026-08-18T15:44:08+01:00",
+  "freeze_revision": 2,
+  "freeze_time_local": "2026-08-18T15:50:16+01:00",
+  "supersedes_preexecution_freeze_commit": "e2f7d9928ed7d88071f35dc5904f44fdc8dfe6f9",
+  "supersession_reason": "The initial pre-execution background-assurance observation completed before any live dispatch. No live executor start occurred under revision 1. Revision 2 renews only the liveness witness before execution; all authority, executor, packet, action, write-domain, concurrency, fencing, integration and rollback bounds are unchanged.",
   "baseline_main": "35d3dc736d5b16b3113a89cc1733a9c75bafd139",
   "baseline_tree": "03e3bdcd98e988ac9b5c4429e54f4bdaf72a3469",
   "executor": {
@@ -57,11 +60,11 @@
   "background_assurance_liveness_witness": {
     "repository": "owenguobadia24s-collab/ovc-replay",
     "pr": 1178,
-    "head_sha": "5d3f10994b2f4b2b72b82a3bd07e0127799adb71",
+    "head_sha": "f18fcf3eab335526a59c4493e5f5dab317a7916b",
     "required_at_dispatch": "AT_LEAST_ONE_REQUIRED_ASSURANCE_WORKFLOW_IN_PROGRESS",
-    "observed_pre_freeze": [
-      {"workflow": "tests", "run_id": 32149523337, "run_number": 5481, "status": "in_progress"},
-      {"workflow": "OVC tiered test selection shadow", "run_id": 32149523250, "run_number": 3588, "status": "in_progress"}
+    "observed_pre_dispatch": [
+      {"workflow": "tests", "run_id": 32150227290, "run_number": 5486, "status": "completed", "conclusion": "success"},
+      {"workflow": "OVC tiered test selection shadow", "run_id": 32150227297, "run_number": 3592, "status": "in_progress", "conclusion": null}
     ]
   },
   "immediate_stop_conditions": [
