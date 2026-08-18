@@ -1,0 +1,9 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/p1cdi/p1cdi_visibility_v0_1.schema.json",
+  "title":"P1CDI visibility decision v0.1",
+  "type":"object",
+  "required":["record_type","schema_version","decision_id","source_ref","classification","classified_before_indexing","permission_refs","redacted_fields","denied_surfaces","validation_access","authority_effect"],
+  "properties":{"record_type":{"const":"P1CDIVisibilityDecision"},"schema_version":{"const":"0.1"},"decision_id":{"type":"string","minLength":1},"source_ref":{"type":"string","minLength":1},"classification":{"enum":["PATH1_FULL","PATH1_SAFE","CROSS_MODE_POST_FREEZE","OPERATOR_RESTRICTED","PROTECTED"]},"classified_before_indexing":{"const":true},"permission_refs":{"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true},"redacted_fields":{"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true},"denied_surfaces":{"type":"array","items":{"enum":["FIELDS","TITLES","IDS","COUNTS","AGGREGATES","GRAPH_NEIGHBOURS","DEMAND_TEXT","CANDIDATE_COUNTS","SEARCH_SUGGESTIONS","CACHE_METADATA","ERRORS","PATHS"]},"uniqueItems":true},"validation_access":{"const":"DENIED"},"authority_effect":{"const":"NONE"}},
+  "additionalProperties":false
+}

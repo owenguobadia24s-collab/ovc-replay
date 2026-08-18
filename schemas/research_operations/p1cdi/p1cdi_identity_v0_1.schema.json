@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/p1cdi/p1cdi_identity_v0_1.schema.json",
+  "title": "P1CDI identity records v0.1",
+  "oneOf": [
+    {"$ref":"#/$defs/InventoryItem"}, {"$ref":"#/$defs/Series"}, {"$ref":"#/$defs/Generation"},
+    {"$ref":"#/$defs/SemanticProjection"}, {"$ref":"#/$defs/EvidenceBinding"}
+  ],
+  "$defs": {
+    "Sha256": {"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "Ref": {"type":"string","minLength":1},
+    "Base": {
+      "type":"object",
+      "required":["record_type","schema_version","authority_effect"],
+      "properties":{"record_type":{"type":"string"},"schema_version":{"const":"0.1"},"authority_effect":{"const":"NONE"}}
+    },
+    "InventoryItem": {
+      "allOf":[{"$ref":"#/$defs/Base"},{"type":"object","required":["record_type","schema_version","authority_effect","item_id","source_ref","source_sha256","owner","visibility_class","intake_class","first_valid_time"],"properties":{"record_type":{"const":"P1DiscoveryInventoryItem"},"schema_version":{"const":"0.1"},"authority_effect":{"const":"NONE"},"item_id":{"$ref":"#/$defs/Ref"},"source_ref":{"$ref":"#/$defs/Ref"},"source_sha256":{"$ref":"#/$defs/Sha256"},"owner":{"$ref":"#/$defs/Ref"},"visibility_class":{"$ref":"#/$defs/Ref"},"intake_class":{"$ref":"#/$defs/Ref"},"first_valid_time":{"type":"string","format":"date-time"}},"additionalProperties":false}]
+    },
+    "Series": {
+      "allOf":[{"$ref":"#/$defs/Base"},{"type":"object","required":["record_type","schema_version","authority_effect","series_id","first_generation_id","predecessor_series_refs"],"properties":{"record_type":{"const":"P1EmpiricalDistinctionSeries"},"schema_version":{"const":"0.1"},"authority_effect":{"const":"NONE"},"series_id":{"$ref":"#/$defs/Ref"},"first_generation_id":{"$ref":"#/$defs/Ref"},"predecessor_series_refs":{"type":"array","items":{"$ref":"#/$defs/Ref"},"uniqueItems":true}},"additionalProperties":false}]
+    },
+    "Generation": {
+      "allOf":[{"$ref":"#/$defs/Base"},{"type":"object","required":["record_type","schema_version","authority_effect","generation_id","series_id","profile_id","projection_sha256","source_first_valid_time","immutable"],"properties":{"record_type":{"const":"P1EmpiricalDistinctionGeneration"},"schema_version":{"const":"0.1"},"authority_effect":{"const":"NONE"},"generation_id":{"$ref":"#/$defs/Ref"},"series_id":{"$ref":"#/$defs/Ref"},"profile_id":{"const":"P1CDI-SEMANTIC-PROJECTION-v1"},"projection_sha256":{"$ref":"#/$defs/Sha256"},"source_first_valid_time":{"type":"string","format":"date-time"},"immutable":{"const":true}},"additionalProperties":false}]
+    },
+    "SemanticProjection": {
+      "allOf":[{"$ref":"#/$defs/Base"},{"type":"object","required":["record_type","schema_version","authority_effect","generation_id","profile_id","owner_semantic_binding","identity_fields","projection_sha256"],"properties":{"record_type":{"const":"P1DistinctionSemanticProjection"},"schema_version":{"const":"0.1"},"authority_effect":{"const":"NONE"},"generation_id":{"$ref":"#/$defs/Ref"},"profile_id":{"const":"P1CDI-SEMANTIC-PROJECTION-v1"},"owner_semantic_binding":{"$ref":"#/$defs/Ref"},"identity_fields":{"type":"object","required":["unit_type","structural_predicates","structural_relations","complete_minimal_core_set","applicability_scope","identity_defining_dependencies","first_valid_semantics","missingness_semantics","representation_dependency","method_dependency","boundary_dependency"],"properties":{"unit_type":{},"structural_predicates":{"type":"array"},"structural_relations":{"type":"array"},"complete_minimal_core_set":{"type":"array"},"applicability_scope":{},"identity_defining_dependencies":{"type":"array"},"first_valid_semantics":{},"missingness_semantics":{},"representation_dependency":{},"method_dependency":{},"boundary_dependency":{}},"additionalProperties":false},"projection_sha256":{"$ref":"#/$defs/Sha256"}},"additionalProperties":false}]
+    },
+    "EvidenceBinding": {
+      "allOf":[{"$ref":"#/$defs/Base"},{"type":"object","required":["record_type","schema_version","authority_effect","binding_id","generation_id","source_ref","cycle_ref","population_ref","representation_ref","method_ref","evidence_first_valid_time","visibility_class"],"properties":{"record_type":{"const":"P1DistinctionEvidenceBinding"},"schema_version":{"const":"0.1"},"authority_effect":{"const":"NONE"},"binding_id":{"$ref":"#/$defs/Ref"},"generation_id":{"$ref":"#/$defs/Ref"},"source_ref":{"$ref":"#/$defs/Ref"},"cycle_ref":{"$ref":"#/$defs/Ref"},"population_ref":{"$ref":"#/$defs/Ref"},"representation_ref":{"$ref":"#/$defs/Ref"},"method_ref":{"$ref":"#/$defs/Ref"},"evidence_first_valid_time":{"type":"string","format":"date-time"},"visibility_class":{"$ref":"#/$defs/Ref"}},"additionalProperties":false}]
+    }
+  }
+}
