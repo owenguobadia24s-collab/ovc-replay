@@ -306,6 +306,12 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
             / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_2.json"
         ).read_text()
     )
+    fresh_review_3 = json.loads(
+        (
+            ROOT
+            / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_3.json"
+        ).read_text()
+    )
     qa = json.loads(
         (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_QA_PACKET_v0_1.json").read_text()
     )
@@ -374,6 +380,20 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
         "P1CDII_G2_ALG_BLOCK_003_SCHEMA_INVALID_RESOLVED_SOURCE_IDENTITY_FALSE_CURRENT"
     ]
     assert fresh_review["wp3_authorised"] is False
+    assert fresh_review_3["status"] == "FRESH_REVIEW_COMPLETE_PASS"
+    assert fresh_review_3["reviewer_binding"]["status"] == "BOUND"
+    assert fresh_review_3["reviewer_independence"]["status"] == "DECLARED"
+    assert fresh_review_3["reviewer_independence"]["independence_conflicts"] == []
+    assert fresh_review_3["former_blocker_disposition"] == {
+        "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION": "REMEDIATED_AND_INDEPENDENTLY_REPRODUCED_PASS",
+        "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT": "REMEDIATED_AND_INDEPENDENTLY_REPRODUCED_PASS",
+        "P1CDII_G2_ALG_BLOCK_003_SCHEMA_INVALID_RESOLVED_SOURCE_IDENTITY_FALSE_CURRENT": "REMEDIATED_AND_INDEPENDENTLY_REPRODUCED_PASS",
+    }
+    assert fresh_review_3["gate_decision"] == "PASS"
+    assert fresh_review_3["authority_delta"] == "NONE"
+    assert fresh_review_3["unresolved_conflicts"] == []
+    assert fresh_review_3["blockers"] == []
+    assert fresh_review_3["exact_next_packet_if_pass"] == "P1CDII-WP3"
     assert completion["implementation_result"] == "PASS"
     assert completion["gate_decision"] == "NOT_TAKEN"
     assert completion["decision_bearing_outputs"] == "DENIED"
@@ -404,9 +424,12 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     assert review_2_commission["authority_delta"] == "NONE"
     assert review_2_commission["wp3_authorised_before_material_pass"] is False
     assert state["current_packet"] == "P1CDII-WP2"
-    assert state["status"] == "GATE_READY"
-    assert state["packets"]["P1CDII-WP2"]["status"] == "GATE_READY"
+    assert state["status"] == "COMPLETED"
+    assert state["packets"]["P1CDII-WP2"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-WP2-REMEDIATION"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-WP2-REMEDIATION-2"]["status"] == "COMPLETED"
-    assert state["blockers"] == ["P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEW_2_REQUIRED"]
-    assert state["next_packet"] == "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW-2"
+    assert "P1CDII-G2-ALG:PASS@1741e3f221bfdbbed75d1c0980e6ccc95869b4ad" in state["packets"][
+        "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW-2"
+    ]["tests"]
+    assert state["blockers"] == []
+    assert state["next_packet"] == "P1CDII-WP3"
