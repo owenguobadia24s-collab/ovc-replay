@@ -1,0 +1,71 @@
+{
+  "action_dependency_hygiene": {
+    "automatic_version_bump": false,
+    "classification": "NON_BLOCKING_REVIEW_ITEM",
+    "known_runner_warning_families": [
+      "actions/checkout@v4 Node target warning",
+      "actions/setup-python@v5 Node target warning",
+      "actions/download-artifact@v4 Node target warning",
+      "actions/upload-artifact@v4 Node target warning"
+    ]
+  },
+  "additional_non_pr_diagnostic_workflows": [
+    {"admission_basis":"Preserved v0.7 recovery workflow admission","authority_mode":"PRESERVED_COMPLETED_R4_CAPACITY_RECOVERY_SYNTHETIC_ONLY_NO_REAL_SOURCE_NO_FRESH_GRUN_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION_NO_REQUIRED_CHECK_SUBSTITUTION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-rs0-r4-capacity-recovery.yml","pull_request_listener":false},
+    {"admission_basis":"Preserved v0.6 source-materialisation admission","authority_mode":"BOUNDED_READ_ONLY_CURRENT_SOURCE_MATERIALISATION_INACTIVE_NONCANONICAL_NO_REQUIRED_CHECK_SUBSTITUTION_NO_GRUN_CONSUMPTION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-rs0-current-source-materialisation.yml","pull_request_listener":false},
+    {"admission_basis":"DSAI3V bounded completion-observability conformance","authority_mode":"POST_WRITE_COMPLETION_OBSERVABILITY_ONLY_READ_GITHUB_WRITE_EXISTING_LOCAL_RECEIPTSTORE_NO_MERGE_AUTHORITY","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/vit-post-merge-completion.yml","pull_request_listener":false},
+    {"admission_basis":"CIPR-G4 shadow","authority_mode":"SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/ci-unittest-shard-shadow.yml","pull_request_listener":false},
+    {"admission_basis":"PYT-WP2 diagnostic","authority_mode":"DIAGNOSTIC_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/pyt-wp2-step5-unified.yml","pull_request_listener":false},
+    {"admission_basis":"GRT2-G2 qualification","authority_mode":"QUALIFICATION_EVIDENCE_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/grt2-g2-qualification.yml","pull_request_listener":false},
+    {"admission_basis":"GRT2-G2 performance","authority_mode":"MEASUREMENT_EVIDENCE_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/grt2-g2-performance.yml","pull_request_listener":false},
+    {"admission_basis":"DSAI3V-AA-WP5 shadow","authority_mode":"ASYNC_ASSURANCE_QUALIFICATION_SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION_NO_WRITE","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/dsai3v-async-assurance-shadow.yml","pull_request_listener":false}
+  ],
+  "admitted_new_workflow": {
+    "admission_basis": "C2P2-RS0-FRESH-GRUN-R5 operator PASS after qualified R4 capacity recovery run 32137035782",
+    "authority_mode": "OPERATOR_APPROVED_R5_SINGLE_USE_REAL_SOURCE_COMPARATIVE_SHADOW_ONLY_11GIB_EXECUTION_STORAGE_CEILING_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION_NO_REQUIRED_CHECK_SUBSTITUTION",
+    "classification": "ACTIVE_MANUAL_OPERATION",
+    "path": ".github/workflows/c2p2-rs0-real-source-shadow-run-r5.yml",
+    "pull_request_listener": false,
+    "triggers": ["push"]
+  },
+  "approved_pull_request_workflows": [".github/workflows/tests.yml", ".github/workflows/ovc-tiered-tests.yml"],
+  "authority_delta": "BOUNDED_OPERATOR_APPROVED_R5_WORKFLOW_ADMISSION_AND_EXECUTION_CAPACITY_ONLY",
+  "baseline_main_sha": "12e302f40af55ed485058d80e77bdc07c9148d8a",
+  "categories": ["CURRENT_PR_CI", "TEMPORARY", "HISTORICAL_MANUAL_VERIFICATION", "ACTIVE_MANUAL_OPERATION"],
+  "classification_precedence": ["CURRENT_PR_CI", "TEMPORARY", "HISTORICAL_MANUAL_VERIFICATION", "ACTIVE_MANUAL_OPERATION"],
+  "governance": {
+    "classification_only": true,
+    "historical_evidence_preservation": "REQUIRED",
+    "registry_repository_count_mismatch": "OBSERVE_AND_RECORD_ONLY",
+    "required_check_mutation": "PROHIBITED_BY_THIS_PACKET",
+    "temporary_workflow_retirement": "REQUIRES_SEPARATE_AUTHORITY",
+    "trigger_mutation": "PROHIBITED_EXCEPT_REMOVAL_OF_UNAUTHORISED_NEW_PR_LISTENERS_FROM_CURRENT_CANDIDATE",
+    "workflow_deletion": "PROHIBITED",
+    "workflow_disablement": "PROHIBITED_BY_THIS_PACKET"
+  },
+  "historical_policy_preserved": "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_7.json",
+  "inventory_layers": {
+    "GITHUB_ACTIONS_REGISTRY": "Prior external Actions workflow-registration snapshot retained as diagnostic provenance; this packet does not infer a refreshed external registration count.",
+    "REPOSITORY_DEFINITIONS": "Authoritative exact-head scan of .github/workflows definitions present in the repository tree."
+  },
+  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R5",
+  "policy_id": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.8",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "required_trigger_inventory": ["pull_request", "push", "workflow_dispatch", "schedule", "workflow_call", "workflow_run"],
+  "rollback": "Supersede v0.8 current-inventory snapshot only. Preserve v0.1-v0.7 historical policies and all workflow history; do not delete workflows or mutate required checks.",
+  "rules": {
+    "ACTIVE_MANUAL_OPERATION": {"condition":"all remaining workflow definitions after higher-precedence rules"},
+    "CURRENT_PR_CI": {"condition":"workflow has pull_request trigger and path is in approved_pull_request_workflows","unexpected_pull_request_listener":"FAIL_CLOSED"},
+    "HISTORICAL_MANUAL_VERIFICATION": {"content_markers_case_insensitive":["historical manual verification","historical packet verification"]},
+    "TEMPORARY": {"path_basename_prefixes":["_temp_"],"repository_presence_required_for_local_count":true,"workflow_name_prefixes_case_insensitive":["temp ","temp-"]}
+  },
+  "schema": "ovc-ci-workflow-governance-policy/v1",
+  "snapshot": {
+    "expected_repository_workflow_definition_count": 138,
+    "github_actions_captured_at": "2026-08-14T11:45:00+01:00",
+    "github_actions_registered_total_count": 191,
+    "github_actions_source": "PRIOR_V0_7_GITHUB_ACTIONS_WORKFLOWS_API_SNAPSHOT_NOT_REMEASURED_BY_THIS_PACKET",
+    "registration_count_excess": 53,
+    "registration_count_excess_interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK_NOT_AUTHORITY"
+  },
+  "supersedes_for_current_inventory": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.7"
+}
