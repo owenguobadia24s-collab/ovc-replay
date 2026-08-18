@@ -136,6 +136,7 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
                 "P1CDII-G2-ALG",
                 "P1CDII-WP2-REMEDIATION",
                 "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW",
+                "P1CDII-WP2-REMEDIATION-2",
             },
         )
 

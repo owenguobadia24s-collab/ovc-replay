@@ -224,6 +224,12 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     review = json.loads(
         (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_G2_ALG_REVIEW_PACKET_v0_1.json").read_text()
     )
+    fresh_review = json.loads(
+        (
+            ROOT
+            / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_2.json"
+        ).read_text()
+    )
     qa = json.loads(
         (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_QA_PACKET_v0_1.json").read_text()
     )
@@ -255,6 +261,19 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
         "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION",
         "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT",
     ]
+    assert fresh_review["status"] == "FRESH_REVIEW_COMPLETE_BLOCKED"
+    assert fresh_review["reviewer_binding"]["status"] == "BOUND"
+    assert fresh_review["reviewer_independence"]["status"] == "DECLARED"
+    assert fresh_review["former_blocker_disposition"] == {
+        "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION": "REMEDIATED_AND_INDEPENDENTLY_REPRODUCED_PASS",
+        "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT": "REMEDIATED_AND_INDEPENDENTLY_REPRODUCED_PASS",
+    }
+    assert fresh_review["gate_decision"] == "BLOCK"
+    assert fresh_review["authority_delta"] == "NONE"
+    assert fresh_review["blockers"] == [
+        "P1CDII_G2_ALG_BLOCK_003_SCHEMA_INVALID_RESOLVED_SOURCE_IDENTITY_FALSE_CURRENT"
+    ]
+    assert fresh_review["wp3_authorised"] is False
     assert completion["implementation_result"] == "PASS"
     assert completion["gate_decision"] == "NOT_TAKEN"
     assert completion["decision_bearing_outputs"] == "DENIED"
@@ -266,8 +285,10 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     assert remediation_decision["p1cdii_g2_alg"]["remediation_author_eligible_to_issue_pass"] is False
     assert remediation_decision["wp3_authorised"] is False
     assert state["current_packet"] == "P1CDII-WP2"
-    assert state["status"] == "GATE_READY"
-    assert state["packets"]["P1CDII-WP2"]["status"] == "GATE_READY"
+    assert state["status"] == "BLOCKED"
+    assert state["packets"]["P1CDII-WP2"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP2-REMEDIATION"]["status"] == "COMPLETED"
-    assert state["blockers"] == ["P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED"]
-    assert state["next_packet"] == "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW"
+    assert state["blockers"] == [
+        "P1CDII_G2_ALG_BLOCK_003_SCHEMA_INVALID_RESOLVED_SOURCE_IDENTITY_FALSE_CURRENT"
+    ]
+    assert state["next_packet"] == "P1CDII-WP2-REMEDIATION-2"
