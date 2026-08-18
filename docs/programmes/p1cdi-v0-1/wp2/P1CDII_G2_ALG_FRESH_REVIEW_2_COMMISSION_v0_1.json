@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-p1cdii-g2-alg-fresh-review-2-commission/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW-2",
+  "status": "COMMISSIONED_AWAITING_CONFLICT_FREE_REVIEWER_BINDING",
+  "gate_class": "INDEPENDENT_NON_OPERATOR_BLOCKING",
+  "authority_delta": "NONE",
+  "reviewer_binding": {
+    "reviewer_identity": null,
+    "required_role": "EXCLUSIVE_P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEWER_2",
+    "must_be_conflict_free_from": [
+      "P1CDII-WP2_IMPLEMENTATION_AUTHOR",
+      "P1CDII-WP2-REMEDIATION_AUTHOR",
+      "P1CDII-WP2-REMEDIATION-QA-DECISION_AUTHOR",
+      "P1CDII-WP2-REMEDIATION-2_AUTHOR",
+      "P1CDII-WP2-REMEDIATION-2-QA-DECISION_AUTHOR"
+    ],
+    "must_start_from_latest_lawful_main": true,
+    "must_import_no_mutable_author_workspace_state": true,
+    "must_inherit_no_review_conclusions": true
+  },
+  "immutable_prior_reviews": [
+    {
+      "decision": "BLOCK",
+      "packet_sha256": "3ccb7c1fa33eae7ec44bbc737105fbdd1496465fadf53fc7ee6ded14170e71b2",
+      "treatment": "IMMUTABLE_EVIDENCE"
+    },
+    {
+      "decision": "BLOCK",
+      "reviewer_commit": "f24fba3e5cd39a6a4e9ad3b4f1364da221e32143",
+      "packet_sha256": "8f68fe58d93394ebaa17f914958e263a9b3713f79106f5bc6ff042db912f4794",
+      "treatment": "IMMUTABLE_EVIDENCE"
+    }
+  ],
+  "remediation_subject_main": {
+    "commit": "fceb68163603573928cce2da94d046e0dbfaf905",
+    "tree": "69dbcccf12566fb15c483a30c0e15d2e5b04c663",
+    "pull_request": 1168,
+    "tests_workflow": 32142836866,
+    "tiered_assurance_workflow": 32142836874
+  },
+  "exact_review_subjects": [
+    {"path":"src/ovc/research_operations/p1cdi/identity.py","git_blob":"ffb2e581a3874fc75d24628205036d9d5251302d","sha256":"7cd6e6e70c3e0df228839d7ce71cb5300258beb4c0f0f0a8bc10bb5341378706"},
+    {"path":"src/ovc/research_operations/p1cdi/intake.py","git_blob":"e1a6bf427e0730a969bb85b3bc4b978a0fb698a7","sha256":"8d8823265f221b6527201eb5781b485d37473748b3940a53ffd356544618cbdd"},
+    {"path":"src/ovc/research_operations/p1cdi/source_resolution.py","git_blob":"6179da478e438a686cc79c2adce3ca5fe552da12","sha256":"d0335b47382c4a1b7be74f4daa09ca28a3a3113d168346fa7f921c89c1417432"},
+    {"path":"src/ovc/research_operations/p1cdi/currentness.py","git_blob":"67e25ef5a5c8ce1160c33f316310aca98bfdfa6e","sha256":"5b6425006f0d8ffe1b9381c987c2bbd6ec94e4b82e9cddebe184ff841db5ec86"},
+    {"path":"registries/research_operations/p1cdi/semantic_projection_profiles/P1CDI_SEMANTIC_PROJECTION_PROFILE_v1.json","git_blob":"de09c949acf45a5f418a9a65aebd23c5df1dd1f8","sha256":"3c678a9fad3821375a6d643ffe9fc092e6921ec27b5153a2acf620398af9adc1"},
+    {"path":"registries/research_operations/p1cdi/source_owner_registry.json","git_blob":"997db54bd27e9ca4efe9abd8aa696cba0fea0876","sha256":"d36ec23400d79ab184fe0f7ef4f465b9940e01f45ebefe20ce43c12a7a1c9188"},
+    {"path":"schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json","git_blob":"08333129334fce423b3572cf28ba3646a1a500cd","sha256":"524a9b72e4c90e0c93a2d653f13e6863a0df1ef0d04a7753c6d46759985843a0"},
+    {"path":"fixtures/research_operations/p1cdi/P1CDII_WP2_RESOLVER_FIXTURES_v0_1.json","git_blob":"e3b3ebe1912c6262731586177a3c7d4ad716310e","sha256":"40c48b924bfc7934da2b49490aa6695d9da09f46e518bb5c91a4db30dcb6267b"},
+    {"path":"tests/research_operations/p1cdi/test_p1cdii_wp2_identity_intake.py","git_blob":"231edc264c707e8eaba59908cb67f7d06be9c5c4","sha256":"fe895e6152a052c4a10b94692f7ccb380875ae7e12dc486ec53c1b672928fde8"},
+    {"path":"tests/research_operations/p1cdi/test_p1cdii_wp2_resolver_currentness.py","git_blob":"12793030e41bc9bb4f20c72f158804d6fd39947f","sha256":"680098c32ed5c8d1df3b18115b0572804f1bf090cf3804c8b9365090001465a1"},
+    {"path":"docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_REMEDIATION_2_IMPLEMENTATION_PACKET_v0_1.json","git_blob":"50414725282f40012aacf105104b986d534d9b78","sha256":"ced64fff477212e53665be042f290c3146646e6ea2cc2ffedfedca4e79cc6e0e"}
+  ],
+  "required_reproduction": {
+    "original_ten_dimensions": [
+      "EXACT_SEMANTIC_PROJECTION_PROFILE_BYTES_AND_HASH",
+      "EXACT_SEMANTIC_EQUALITY_AND_IDEMPOTENT_DUPLICATE",
+      "NON_EXACT_AUTOMATIC_SAME_DISTINCTION_REJECTION",
+      "OWNER_SOURCE_PRECEDENCE_AND_FAIL_CLOSED_CONFLICT",
+      "TWO_POINT_CURRENTNESS_AND_MOVED_FRONTIER_RACE",
+      "STALE_HISTORICAL_PRESERVATION_WITHOUT_FALSE_CURRENT_PUBLICATION",
+      "MISSING_AMBIGUOUS_HIGH_RISK_PREDICATE_BEHAVIOR",
+      "DMRP_ABSENCE_AS_INDEPENDENCE_UNKNOWN",
+      "CANDIDATE_VALIDATION_RCCR_AUTHORITY_NON_TRANSITIVITY",
+      "DETERMINISTIC_CLEAN_PROCESS_REPRODUCTION"
+    ],
+    "mandatory_adversarial_scope": [
+      "P1CDII_G2_ALG_BLOCK_001_REGRESSION",
+      "P1CDII_G2_ALG_BLOCK_002_REGRESSION",
+      "P1CDII_G2_ALG_BLOCK_003_REGRESSION",
+      "SCHEMA_INVALID_SOURCE_IDENTITY_TYPES_AT_RESOLVER_FRONTIER_AND_CURRENTNESS",
+      "VALID_STRING_AND_NULL_IDENTITY_NEIGHBORS",
+      "MISSING_DUPLICATE_UNRESOLVED_UNAVAILABLE_CONFLICT_REQUIRED_OWNERS",
+      "MOVED_FRONTIER_AND_HASH_BOUND_TAMPER",
+      "NON_EXACT_TYPED_SEMANTIC_VALUES",
+      "TWO_CLEAN_PROCESS_DETERMINISM"
+    ]
+  },
+  "allowed_recommendations": ["PASS", "BLOCK", "QUARANTINE", "DEFER", "SUPERSEDE"],
+  "pass_effect": "P1CDII-G2-ALG_MAY_MATERIALLY_PASS_THEN_P1CDII-WP3_BECOMES_AUTO_EXECUTABLE",
+  "block_effect": "PRESERVE_REVIEW_AND_ROUTE_SEPARATE_BOUNDED_REMEDIATION",
+  "operational_current_pointer_publication": "SEPARATELY_GOVERNED_NOT_GRANTED",
+  "continuous_intake_writes": "DENIED",
+  "wp3_authorised_before_material_pass": false,
+  "exact_next_route": "BIND_FRESH_CONFLICT_FREE_REVIEWER_ON_LATEST_LAWFUL_MAIN"
+}
