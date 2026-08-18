@@ -41,6 +41,8 @@ def test_r3_operator_pass_materialises_exact_single_use_authority() -> None:
     assert gate["recommended_decision"] == "PASS"
     assert gate["proposed_authority_delta"]["effect_if_pass"] == "AUTHORISE_EXACTLY_ONE_R3_REAL_SOURCE_A_B_C_COMPARATIVE_SHADOW_RUN"
 
+    # The authority packet is the immutable prelaunch grant. Terminal consumption
+    # is recorded separately in C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_3.
     assert authority["authority_id"] == "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4"
     assert authority["state"] == "AUTHORISED_NOT_STARTED"
     assert authority["execution_count_limit"] == 1
@@ -62,17 +64,16 @@ def test_r3_operator_pass_materialises_exact_single_use_authority() -> None:
     assert binding["qualification"]["exact_current_source_ordering_only_preflight"] == "PASS"
 
 
-def test_r3_trigger_preserves_prior_consumption_and_has_no_prelaunch_r3_consumption() -> None:
+def test_r3_trigger_preserves_prior_consumption_and_prelaunch_contract() -> None:
     prior = load(PRIOR_CONSUMPTION)
     trigger = load(RELEASE / "C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_TRIGGER_v0_1.json")
-    packet = load(RELEASE / "C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_PACKET_v0_1.json")
-    execution = load(EXECUTION)
 
     assert prior["authority_id"] == "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.3"
     assert prior["execution_count_consumed"] == 1
     assert prior["run_count_remaining"] == 0
-    assert not R3_CONSUMPTION.exists()
 
+    # Historical prelaunch state must be proven from the immutable trigger and
+    # authority grant, not by asserting that the later terminal receipt is absent.
     assert trigger["packet_id"] == "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R3"
     assert trigger["authority_id"] == "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4"
     assert trigger["run_count"] == 1
@@ -81,15 +82,41 @@ def test_r3_trigger_preserves_prior_consumption_and_has_no_prelaunch_r3_consumpt
     assert trigger["activation_state"] == "NONE"
     assert trigger["automatic_rerun_after_semantic_launch_failure"] == "FORBIDDEN"
 
-    assert packet["status"] == "AUTHORISED_TRIGGERED_PRE_SEMANTIC_LAUNCH"
-    assert packet["selection"] == "NONE"
-    assert packet["activation"] == "NONE"
-    assert packet["validation"] == "LOCKED_UNCONSUMED"
 
-    assert execution["status"] == "RUNNING"
-    assert execution["run_authority_consumed"] is False
-    assert execution["run_count_remaining"] == 1
-    assert execution["real_source_execution"] == "TRIGGERED_PRE_SEMANTIC_LAUNCH"
+def test_r3_terminal_consumption_is_preserved_after_semantic_launch() -> None:
+    assert R3_CONSUMPTION.exists()
+    consumption = load(R3_CONSUMPTION)
+    execution = load(EXECUTION)
+    result = load(RELEASE / "C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R3_RESULT_v0_1.json")
+
+    assert consumption["authority_id"] == "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4"
+    assert consumption["consumption_status"] == "CONSUMED_BY_LAUNCHED_REAL_SOURCE_EXECUTION_R3"
+    assert consumption["execution_count_limit"] == 1
+    assert consumption["execution_count_consumed"] == 1
+    assert consumption["run_count_remaining"] == 0
+    assert consumption["github_run_id"] == "32112742273"
+    assert consumption["run_result_status"] == "BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED"
+    assert consumption["selection_state"] == "NONE_SELECTED_INCOMPLETE_RUN"
+    assert consumption["active_object_pack_id"] is None
+
+    assert execution["authority_id"] == consumption["authority_id"]
+    assert execution["run_authority_consumed"] is True
+    assert execution["run_count_remaining"] == 0
+    assert execution["status"] == "BLOCKED"
+    assert execution["selection_state"] == "NONE_SELECTED_INCOMPLETE_RUN"
+    assert execution["active_object_pack_id"] is None
+    assert execution["c2p_activation"] == "NONE"
+    assert execution["validation"] == "LOCKED_UNCONSUMED"
+    assert execution["mandatory_stop"] == "C2P2-RS0-RUN-RECOVERY-R3"
+
+    assert result["github_run_id"] == "32112742273"
+    assert result["authority"]["execution_count_consumed"] == 1
+    assert result["authority"]["run_count_remaining"] == 0
+    assert result["status"] == "BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED"
+    assert result["selection_state"] == "NONE_SELECTED_INCOMPLETE_RUN"
+    assert result["active_object_pack_id"] is None
+    assert result["c2p_activation"] == "NONE"
+    assert result["validation"] == "LOCKED_UNCONSUMED"
 
 
 def test_r3_runner_and_branch_workflow_are_bound_to_recovered_source_order_adapter() -> None:
