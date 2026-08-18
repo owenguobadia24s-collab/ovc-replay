@@ -28,6 +28,7 @@ jobs:
     env:
       TARGET_BRANCH: fix/prvitr-vit-frontier-decoupling-20260818
       TRANSPORT_BRANCH: transport/prvitr-vit-frontier-decoupling-20260818
+      CONNECTOR_HANDOFF_PATH: .github/workflows/ovc-tiered-tests.yml
       EXPECTED_SHA256: 3a421f593035d452f5778e2d02e68ca0c595283c64e08bb4a67b69d787d6032f
       EXPECTED_BYTES: "62248"
       EXPECTED_FILE_COUNT: "32"
@@ -92,6 +93,8 @@ jobs:
               raise SystemExit(
                   f"archive file population mismatch: observed={len(files)} expected={expected_count}"
               )
+          if os.environ["CONNECTOR_HANDOFF_PATH"] not in files:
+              raise SystemExit("connector handoff path missing from authoritative archive")
           expected_paths.write_text("\n".join(files) + "\n", encoding="utf-8")
           print(f"OVC_FRONTIER_ARCHIVE_VERIFIED files={len(files)}")
           PY
@@ -134,7 +137,8 @@ jobs:
           PY
 
           git add -A
-          EXPECTED_PATHS="$expected_paths" python3 - <<'PY'
+          git reset -- "$CONNECTOR_HANDOFF_PATH"
+          EXPECTED_PATHS="$expected_paths" CONNECTOR_HANDOFF_PATH="$CONNECTOR_HANDOFF_PATH" python3 - <<'PY'
           import os
           import pathlib
           import subprocess
@@ -144,6 +148,10 @@ jobs:
               .read_text(encoding="utf-8")
               .splitlines()
           )
+          handoff = os.environ["CONNECTOR_HANDOFF_PATH"]
+          if handoff not in expected:
+              raise SystemExit("connector handoff path outside authoritative archive")
+          expected.remove(handoff)
           raw = subprocess.check_output(
               ["git", "diff", "--cached", "--name-only", "-z"]
           )
@@ -153,9 +161,11 @@ jobs:
               raise SystemExit(
                   "transport attempted out-of-bundle mutation: " + ",".join(unexpected)
               )
+          missing = sorted(expected - changed)
           print(
               "OVC_FRONTIER_STAGED_SUBSET_VERIFIED "
-              f"changed={len(changed)} archive_files={len(expected)}"
+              f"changed={len(changed)} archive_non_handoff_files={len(expected)} "
+              f"unchanged_non_handoff={len(missing)} handoff={handoff}"
           )
           PY
 
@@ -166,13 +176,14 @@ jobs:
           git config user.name "OVC PRVITR Frontier Bootstrap"
           git config user.email "ovc-prvitr-frontier-bootstrap@localhost"
           if git diff --cached --quiet; then
-            echo "OVC_FRONTIER_PATCH_ALREADY_MATERIALISED=true"
+            echo "OVC_FRONTIER_PATCH_NON_WORKFLOW_ALREADY_MATERIALISED=true"
             exit 0
           fi
-          git commit -m "DSAI3V: materialise exact PRVITR frontier-decoupling patch"
+          git commit -m "DSAI3V: materialise exact PRVITR frontier-decoupling patch except protected workflow"
           git fetch --no-tags origin \
             "${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}"
           observed_remote="$(git rev-parse "refs/remotes/origin/${TARGET_BRANCH}")"
           test "$observed_remote" = "$OVC_BOOTSTRAP_SOURCE_HEAD"
           git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
-          echo "OVC_FRONTIER_PATCH_PUSHED=$(git rev-parse HEAD)"
+          echo "OVC_FRONTIER_PATCH_NON_WORKFLOW_PUSHED=$(git rev-parse HEAD)"
+          echo "OVC_FRONTIER_CONNECTOR_HANDOFF=$CONNECTOR_HANDOFF_PATH"
