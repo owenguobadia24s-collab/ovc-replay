@@ -18,6 +18,7 @@ from .reference import (
     assemble_evidence_reference,
     assign_series_generation,
     replay_as_of,
+    resolve_dmrp_independence,
     stage_correspondence,
 )
 from .source_resolution import build_source_frontier, resolve_owner_predicate
@@ -36,6 +37,7 @@ __all__ = [
     "freeze_source_census",
     "reconcile_source_census",
     "replay_as_of",
+    "resolve_dmrp_independence",
     "require_g2_alg_for_pointer",
     "resolve_owner_predicate",
     "scan_repository_source_subjects",

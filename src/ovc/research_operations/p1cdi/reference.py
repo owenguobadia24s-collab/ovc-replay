@@ -2,13 +2,19 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from datetime import datetime
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
 
 from ovc.research_operations.canonical import canonical_sha256
 
-from .identity import PROFILE_ID, build_semantic_projection, exact_semantic_equal
+from .identity import (
+    PROFILE_ID,
+    build_semantic_projection,
+    exact_semantic_equal,
+    projection_bytes,
+)
 
 
 _RULE_PROFILE_PATH = (
@@ -18,6 +24,10 @@ _RULE_PROFILE_PATH = (
 _RELATION_REGISTRY_PATH = (
     Path(__file__).resolve().parents[4]
     / "registries/research_operations/p1cdi/relation_registry.json"
+)
+_EVIDENCE_PLANE_REGISTRY_PATH = (
+    Path(__file__).resolve().parents[4]
+    / "registries/research_operations/p1cdi/reference_evidence_plane_registry_v1.json"
 )
 _VECTOR_FIELDS = frozenset(
     {
@@ -48,6 +58,44 @@ _CORRESPONDENCE_PLANES = frozenset(
 _HISTORY_FIELDS = frozenset(
     {"record_id", "logical_id", "first_valid_time", "correction_of", "payload", "source_refs"}
 )
+_SERIES_FIELDS = frozenset(
+    {"record_type", "schema_version", "authority_effect", "series_id", "first_generation_id", "predecessor_series_refs"}
+)
+_GENERATION_FIELDS = frozenset(
+    {"record_type", "schema_version", "authority_effect", "generation_id", "series_id", "profile_id", "projection_sha256", "source_first_valid_time", "immutable"}
+)
+_PROJECTION_FIELDS = frozenset(
+    {"record_type", "schema_version", "authority_effect", "generation_id", "profile_id", "owner_semantic_binding", "identity_fields", "projection_sha256"}
+)
+_DMRP_INDEPENDENCE_FIELDS = frozenset(
+    {
+        "record_id",
+        "owner",
+        "left_generation_id",
+        "right_generation_id",
+        "source_ref",
+        "source_generation",
+        "source_sha256",
+        "current_source_ref",
+        "current_source_generation",
+        "current_source_sha256",
+        "evidence_first_valid_time",
+        "currentness_state",
+        "independence_state",
+        "authority_effect",
+    }
+)
+_PRESERVED_RECORD_FIELDS = {
+    "replications": frozenset(
+        {"record_type", "schema_version", "record_id", "generation_id", "source_refs", "replication_kind", "outcome", "authority_effect"}
+    ),
+    "null_bindings": frozenset(
+        {"record_type", "schema_version", "record_id", "generation_id", "source_refs", "null_class", "authority_effect"}
+    ),
+    "contradictions": frozenset(
+        {"record_type", "schema_version", "record_id", "generation_id", "source_refs", "contradiction_type", "authority_effect"}
+    ),
+}
 
 
 class ReferenceEngineError(ValueError):
@@ -72,6 +120,14 @@ RULE_PROFILE_ID = RULE_PROFILE["profile_id"]
 RELATION_REGISTRY = json.loads(_RELATION_REGISTRY_PATH.read_text(encoding="utf-8"))
 if RELATION_REGISTRY.get("status") != "CLOSED":
     raise RuntimeError("P1CDI relation registry must be closed")
+EVIDENCE_PLANE_REGISTRY = json.loads(
+    _EVIDENCE_PLANE_REGISTRY_PATH.read_text(encoding="utf-8")
+)
+if (
+    EVIDENCE_PLANE_REGISTRY.get("status") != "CLOSED"
+    or EVIDENCE_PLANE_REGISTRY.get("authority_effect") != "NONE"
+):
+    raise RuntimeError("P1CDI evidence-plane registry must be closed and non-authorising")
 
 
 def _require_string(value: object, field: str) -> str:
@@ -99,12 +155,30 @@ def _identity_bundle(entry: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
     projection = entry["projection"]
     if not all(isinstance(value, Mapping) for value in (series, generation, projection)):
         raise ReferenceEngineError("identity bundle records must be objects")
+    if set(series) != _SERIES_FIELDS or set(generation) != _GENERATION_FIELDS or set(projection) != _PROJECTION_FIELDS:
+        raise ReferenceEngineError("identity bundle records must use their exact closed schema fields")
     if series.get("record_type") != "P1EmpiricalDistinctionSeries":
         raise ReferenceEngineError("identity bundle series type is invalid")
     if generation.get("record_type") != "P1EmpiricalDistinctionGeneration":
         raise ReferenceEngineError("identity bundle generation type is invalid")
     if projection.get("record_type") != "P1DistinctionSemanticProjection":
         raise ReferenceEngineError("identity bundle projection type is invalid")
+    if any(record.get("schema_version") != "0.1" for record in (series, generation, projection)):
+        raise ReferenceEngineError("identity bundle schema version is invalid")
+    if any(record.get("authority_effect") != "NONE" for record in (series, generation, projection)):
+        raise ReferenceEngineError("identity bundle authority must remain NONE")
+    if generation.get("profile_id") != PROFILE_ID or projection.get("profile_id") != PROFILE_ID:
+        raise ReferenceEngineError("identity bundle semantic profile is invalid")
+    series_id = _require_string(series.get("series_id"), "series_id")
+    generation_id = _require_string(generation.get("generation_id"), "generation_id")
+    _require_string(series.get("first_generation_id"), "first_generation_id")
+    predecessor_refs = series.get("predecessor_series_refs")
+    if (
+        not isinstance(predecessor_refs, list)
+        or any(type(ref) is not str or not ref for ref in predecessor_refs)
+        or len(predecessor_refs) != len(set(predecessor_refs))
+    ):
+        raise ReferenceEngineError("predecessor series refs must be exact unique strings")
     if generation.get("series_id") != series.get("series_id"):
         raise ReferenceEngineError("generation is not bound to its series")
     if projection.get("generation_id") != generation.get("generation_id"):
@@ -113,6 +187,23 @@ def _identity_bundle(entry: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
         raise ReferenceEngineError("generation does not bind exact projection hash")
     if generation.get("immutable") is not True:
         raise ReferenceEngineError("P1CDI generations must be immutable")
+    try:
+        actual_projection_sha = hashlib.sha256(projection_bytes(projection)).hexdigest()
+    except ValueError as exc:
+        raise ReferenceEngineError("historical projection is not canonical") from exc
+    if projection.get("projection_sha256") != actual_projection_sha:
+        raise ReferenceEngineError("historical projection content/hash mismatch")
+    source_first_valid_time = _require_string(
+        generation.get("source_first_valid_time"), "source_first_valid_time"
+    )
+    _parse_time(source_first_valid_time, "source_first_valid_time")
+    expected_generation_id = f"p1:generation:{canonical_sha256({'series_id': series_id, 'projection_sha256': actual_projection_sha, 'source_first_valid_time': source_first_valid_time})}"
+    if generation_id != expected_generation_id:
+        raise ReferenceEngineError("historical generation ID/content binding mismatch")
+    if series.get("first_generation_id") == generation_id:
+        expected_series_id = f"p1:series:{canonical_sha256({'owner': projection.get('owner_semantic_binding'), 'projection_sha256': actual_projection_sha})}"
+        if series_id != expected_series_id:
+            raise ReferenceEngineError("historical first-generation series binding mismatch")
     return dict(series), dict(generation), dict(projection)
 
 
@@ -213,6 +304,99 @@ def assign_series_generation(
     }
 
 
+def resolve_dmrp_independence(
+    *,
+    left_generation_id: str,
+    right_generation_id: str,
+    evidence_records: Sequence[Mapping[str, Any]],
+    as_of_time: str | None = None,
+) -> dict[str, Any]:
+    """Resolve only exact, current DMRP-owned independence evidence."""
+
+    left_generation_id = _require_string(left_generation_id, "left_generation_id")
+    right_generation_id = _require_string(right_generation_id, "right_generation_id")
+    as_of = _parse_time(as_of_time, "as_of_time") if as_of_time is not None else None
+    normalized: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for record in evidence_records:
+        if not isinstance(record, Mapping) or set(record) != _DMRP_INDEPENDENCE_FIELDS:
+            raise ReferenceEngineError("DMRP independence evidence must use the exact closed field set")
+        item = dict(record)
+        record_id = _require_string(item["record_id"], "record_id")
+        if record_id in seen_ids:
+            raise ReferenceEngineError("duplicate DMRP independence evidence record")
+        seen_ids.add(record_id)
+        if item["owner"] != "DMRP_EXPOSURE_INFLUENCE_RECORDS":
+            raise ReferenceEngineError("independence evidence owner mismatch")
+        if (
+            item["left_generation_id"] != left_generation_id
+            or item["right_generation_id"] != right_generation_id
+        ):
+            raise ReferenceEngineError("independence evidence generation mismatch")
+        source_ref = _require_string(item["source_ref"], "source_ref")
+        source_generation = _require_string(item["source_generation"], "source_generation")
+        source_sha = _require_string(item["source_sha256"], "source_sha256")
+        if len(source_sha) != 64 or any(char not in "0123456789abcdef" for char in source_sha):
+            raise ReferenceEngineError("source_sha256 must be a lowercase SHA-256 string")
+        current_source_ref = _require_string(item["current_source_ref"], "current_source_ref")
+        current_source_generation = _require_string(
+            item["current_source_generation"], "current_source_generation"
+        )
+        current_source_sha = _require_string(
+            item["current_source_sha256"], "current_source_sha256"
+        )
+        if len(current_source_sha) != 64 or any(
+            char not in "0123456789abcdef" for char in current_source_sha
+        ):
+            raise ReferenceEngineError("current_source_sha256 must be a lowercase SHA-256 string")
+        valid_time = _parse_time(item["evidence_first_valid_time"], "evidence_first_valid_time")
+        if item["currentness_state"] not in {"CURRENT", "STALE", "HISTORICAL", "UNRESOLVED", "CONFLICT"}:
+            raise ReferenceEngineError("invalid DMRP evidence currentness state")
+        if item["independence_state"] not in {
+            "INDEPENDENCE_UNKNOWN",
+            "AFFIRMATIVELY_DEPENDENT",
+            "AFFIRMATIVELY_INDEPENDENT",
+        }:
+            raise ReferenceEngineError("invalid DMRP independence state")
+        if item["authority_effect"] != "NONE":
+            raise ReferenceEngineError("DMRP evidence cannot grant P1CDI authority")
+        source_moved = (
+            source_ref,
+            source_generation,
+            source_sha,
+        ) != (
+            current_source_ref,
+            current_source_generation,
+            current_source_sha,
+        )
+        if item["currentness_state"] == "CURRENT" and source_moved:
+            raise ReferenceEngineError("DMRP evidence marked current after source frontier moved")
+        if item["currentness_state"] == "STALE" and not source_moved:
+            raise ReferenceEngineError("DMRP evidence stale state lacks a moved source frontier")
+        if as_of is None or valid_time <= as_of:
+            normalized.append(item)
+
+    if not normalized:
+        return {"state": "INDEPENDENCE_UNKNOWN", "source_refs": [], "reason": "NO_EXPOSURE_RECORD"}
+    if any(item["currentness_state"] == "CONFLICT" for item in normalized):
+        raise ReferenceEngineError("conflicting DMRP exposure evidence")
+    if any(item["currentness_state"] != "CURRENT" for item in normalized):
+        return {
+            "state": "INDEPENDENCE_UNKNOWN",
+            "source_refs": sorted(item["source_ref"] for item in normalized),
+            "reason": "DMRP_EVIDENCE_NOT_CURRENT",
+        }
+    states = {item["independence_state"] for item in normalized}
+    if len(states) != 1:
+        raise ReferenceEngineError("conflicting DMRP independence states")
+    state = states.pop()
+    return {
+        "state": state,
+        "source_refs": sorted(item["source_ref"] for item in normalized),
+        "reason": "EXPLICIT_CURRENT_DMRP_EVIDENCE" if state != "INDEPENDENCE_UNKNOWN" else "DMRP_EXPLICIT_UNKNOWN",
+    }
+
+
 def stage_correspondence(
     *,
     left_projection: Mapping[str, Any],
@@ -221,6 +405,8 @@ def stage_correspondence(
     admission_basis: str,
     source_relation_ref: str | None = None,
     review_ref: str | None = None,
+    independence_evidence: Sequence[Mapping[str, Any]] = (),
+    as_of_time: str | None = None,
 ) -> dict[str, Any]:
     """Stage exact or non-exact multi-plane correspondence without fuzzy inference."""
 
@@ -238,6 +424,16 @@ def stage_correspondence(
             raise ReferenceEngineError(f"unregistered correspondence plane value: {field}")
     left_generation = _require_string(left_projection.get("generation_id"), "left_generation_id")
     right_generation = _require_string(right_projection.get("generation_id"), "right_generation_id")
+    independence = resolve_dmrp_independence(
+        left_generation_id=left_generation,
+        right_generation_id=right_generation,
+        evidence_records=independence_evidence,
+        as_of_time=as_of_time,
+    )
+    if planes["independence_state"] != independence["state"]:
+        raise ReferenceEngineError(
+            "correspondence independence must equal exact DMRP-owned evidence resolution"
+        )
     exact = exact_semantic_equal(left_projection, right_projection)
     semantic = planes["semantic_relation"]
     if exact and semantic != "EXACT_EQUIVALENT":
@@ -283,6 +479,8 @@ def stage_correspondence(
         "record": record,
         "source_relation_ref": source_relation_ref,
         "review_ref": review_ref,
+        "independence_evidence_refs": independence["source_refs"],
+        "independence_reason": independence["reason"],
         "decision_bearing": False,
         "authority_effect": "NONE",
     }
@@ -302,7 +500,69 @@ def _validate_vector(record: Mapping[str, Any], generation_id: str) -> dict[str,
         raise ReferenceEngineError("evidence vector requires exact source refs")
     if len(refs) != len(set(refs)) or not isinstance(record.get("other_planes"), Mapping):
         raise ReferenceEngineError("evidence vector source refs or other planes are invalid")
+    for plane, allowed in EVIDENCE_PLANE_REGISTRY["vector_planes"].items():
+        value = record.get(plane)
+        if type(value) is not str or value not in allowed:
+            raise ReferenceEngineError(f"unregistered {plane} state")
+    other_planes = record["other_planes"]
+    allowed_other = EVIDENCE_PLANE_REGISTRY["other_planes"]
+    unknown = set(other_planes) - set(allowed_other)
+    if unknown:
+        raise ReferenceEngineError(f"unknown evidence planes: {sorted(unknown)}")
+    forbidden = set(EVIDENCE_PLANE_REGISTRY["forbidden_scalar_keys"])
+    for key, value in other_planes.items():
+        if type(key) is not str or key.lower() in forbidden:
+            raise ReferenceEngineError("hidden scalar or invalid evidence-plane key")
+        specification = allowed_other[key]
+        allowed_types = specification["type"]
+        allowed_types = [allowed_types] if isinstance(allowed_types, str) else allowed_types
+        type_matches = {
+            "null": value is None,
+            "boolean": type(value) is bool,
+            "integer": type(value) is int,
+            "number": type(value) in {int, float},
+            "string": type(value) is str,
+        }
+        if not any(type_matches[name] for name in allowed_types):
+            raise ReferenceEngineError(f"malformed typed evidence plane: {key}")
+        if "enum" in specification and value not in specification["enum"]:
+            raise ReferenceEngineError(f"unregistered typed evidence-plane value: {key}")
     return dict(record)
+
+
+def _validate_preserved_record(
+    *, name: str, record: Mapping[str, Any], generation_id: str, expected_type: str
+) -> dict[str, Any]:
+    if not isinstance(record, Mapping) or set(record) != _PRESERVED_RECORD_FIELDS[name]:
+        raise ReferenceEngineError(f"{name} source record must use the exact closed field set")
+    item = dict(record)
+    if item.get("record_type") != expected_type:
+        raise ReferenceEngineError(f"invalid {name} source record")
+    if item.get("schema_version") != "0.1" or item.get("authority_effect") != "NONE":
+        raise ReferenceEngineError(f"{name} schema or authority mismatch")
+    _require_string(item.get("record_id"), "record_id")
+    if item.get("generation_id") != generation_id:
+        raise ReferenceEngineError(f"{name} generation mismatch")
+    refs = item.get("source_refs")
+    if (
+        not isinstance(refs, list)
+        or not refs
+        or any(type(ref) is not str or not ref for ref in refs)
+        or len(refs) != len(set(refs))
+    ):
+        raise ReferenceEngineError(f"{name} requires exact unique source refs")
+    preserved_registry = EVIDENCE_PLANE_REGISTRY["preserved_record_planes"]
+    if name == "replications":
+        if item["replication_kind"] not in preserved_registry["replication_kind"]:
+            raise ReferenceEngineError("invalid replication_kind")
+        if item["outcome"] not in preserved_registry["replication_outcome"]:
+            raise ReferenceEngineError("invalid replication outcome")
+    elif name == "null_bindings":
+        if item["null_class"] not in preserved_registry["null_class"]:
+            raise ReferenceEngineError("invalid null_class")
+    else:
+        _require_string(item["contradiction_type"], "contradiction_type")
+    return item
 
 
 def _precedence(values: Sequence[str], ordered: Sequence[str]) -> str:
@@ -376,19 +636,14 @@ def assemble_evidence_reference(
         ("contradictions", contradiction_records),
     ):
         for record in records:
-            if not isinstance(record, Mapping) or record.get("record_type") != expected_types[name]:
-                raise ReferenceEngineError(f"invalid {name} source record")
-            if record.get("generation_id") != generation_id or record.get("authority_effect") != "NONE":
-                raise ReferenceEngineError(f"{name} generation or authority mismatch")
-            refs = record.get("source_refs")
-            if (
-                not isinstance(refs, list)
-                or not refs
-                or any(type(ref) is not str or not ref for ref in refs)
-                or len(refs) != len(set(refs))
-            ):
-                raise ReferenceEngineError(f"{name} requires exact unique source refs")
-            preserved[name].append(dict(record))
+            preserved[name].append(
+                _validate_preserved_record(
+                    name=name,
+                    record=record,
+                    generation_id=generation_id,
+                    expected_type=expected_types[name],
+                )
+            )
         preserved[name].sort(key=lambda item: item["record_id"])
 
     source_refs = sorted(
@@ -469,7 +724,6 @@ def assemble_evidence_reference(
         "vector": vector,
         "assessment": assessment,
         **preserved,
-        "confidence_score": None,
         "decision_bearing": False,
         "authority_effect": "NONE",
     }

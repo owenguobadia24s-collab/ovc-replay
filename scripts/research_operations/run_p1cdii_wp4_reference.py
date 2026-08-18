@@ -53,6 +53,22 @@ def rebuild() -> bytes:
         planes=fixture["non_exact_planes"],
         admission_basis="SOURCE_EXPLICIT_DETERMINISTIC_RELATION",
         source_relation_ref="fixture:source:successor",
+        independence_evidence=[{
+            "record_id": "fixture:dmrp:dependent",
+            "owner": "DMRP_EXPOSURE_INFLUENCE_RECORDS",
+            "left_generation_id": first["projection"]["generation_id"],
+            "right_generation_id": successor["projection"]["generation_id"],
+            "source_ref": "fixture:dmrp:exposure:1",
+            "source_generation": "fixture:dmrp:generation:1",
+            "source_sha256": "d" * 64,
+            "current_source_ref": "fixture:dmrp:exposure:1",
+            "current_source_generation": "fixture:dmrp:generation:1",
+            "current_source_sha256": "d" * 64,
+            "evidence_first_valid_time": "2026-02-01T00:00:00Z",
+            "currentness_state": "CURRENT",
+            "independence_state": "AFFIRMATIVELY_DEPENDENT",
+            "authority_effect": "NONE",
+        }],
     )
     evidence = assemble_evidence_reference(
         generation_id="fixture:generation:1",

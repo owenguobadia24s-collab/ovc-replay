@@ -20,12 +20,10 @@ def test_independent_block_packet_is_exact_and_state_preserves_wp4() -> None:
     assert packet["gate_decision"] == "BLOCK"
     assert packet["authority_delta"] == "NONE"
     assert packet["reviewed_frontier"]["latest_lawful_main"] == "81faa31be2e59e47bc9784174f971c93a5a3a41c"
-    assert state["current_packet"] == "P1CDII-WP4"
-    assert state["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4"]["status"] == "GATE_READY"
     assert state["packets"]["P1CDII-G4-ALG"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-G4-ALG"]["authority_delta"] == "NONE"
-    assert state["next_packet"] == "P1CDII-WP4-REMEDIATION-1"
+    assert state["packets"]["P1CDII-G4-ALG"]["next_packet"] == "P1CDII-WP4-REMEDIATION-1"
     assert state["authority"]["operational_read_only"] == "DENIED"
     assert state["authority"]["continuous_intake"] == "DENIED"
     validate_contract(

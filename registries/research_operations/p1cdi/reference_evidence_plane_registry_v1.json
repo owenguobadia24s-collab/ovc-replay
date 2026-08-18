@@ -1,0 +1,38 @@
+{
+  "schema": "p1cdi-reference-evidence-plane-registry/v0.1",
+  "registry_id": "P1CDI-REFERENCE-EVIDENCE-PLANE-REGISTRY-v1",
+  "status": "CLOSED",
+  "authority_effect": "NONE",
+  "vector_planes": {
+    "denominator": ["COMPLETE", "COMPLETE_WITH_CENSORING", "PARTIAL_DECLARED", "NOT_EVALUABLE", "OWNER_UNRESOLVED", "CAPACITY_INCOMPLETE"],
+    "recurrence": ["NOT_TESTED", "PRESENT", "ABSENT", "NOT_EVALUABLE", "CAPACITY_INCOMPLETE"],
+    "dependence": ["INDEPENDENCE_UNKNOWN", "DEPENDENT", "INDEPENDENT_AFFIRMATIVE", "UNRESOLVED"],
+    "separation": ["PRESENT", "WEAK", "FAILED", "AMBIGUOUS", "NOT_COMPARABLE"],
+    "integrity": ["PASS", "WARN", "UNRESOLVED", "QUARANTINED", "SOURCE_CONFLICT"]
+  },
+  "other_planes": {
+    "effect_direction": {"type": "string", "enum": ["POSITIVE", "NEGATIVE", "AMBIGUOUS", "NOT_EVALUABLE"]},
+    "typed_value": {"type": ["null", "boolean", "integer", "number", "string"]}
+  },
+  "forbidden_scalar_keys": [
+    "confidence",
+    "confidence_score",
+    "effective_n",
+    "truth",
+    "probability",
+    "value",
+    "ranking",
+    "risk",
+    "exposure",
+    "trading",
+    "execution"
+  ],
+  "preserved_record_planes": {
+    "replication_kind": ["REPRODUCTION", "SCIENTIFIC_REPLICATION"],
+    "replication_outcome": ["PRESENT", "ABSENT", "FAILED", "NOT_EVALUABLE", "UNRESOLVED"],
+    "null_class": ["NULL", "RESIDUAL", "CENSORED", "CAPACITY_INCOMPLETE", "AMBIGUOUS"]
+  },
+  "unknown_plane_policy": "REJECT",
+  "coercion_policy": "FORBIDDEN",
+  "invalid_plane_policy": "REJECT_NOT_COLLAPSE"
+}
