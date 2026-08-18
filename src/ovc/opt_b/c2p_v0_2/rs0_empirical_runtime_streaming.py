@@ -253,6 +253,52 @@ def _final_indexes(connection: sqlite3.Connection) -> dict[str, dict[str, list[s
     }
 
 
+def canonicalise_source_stream_group_order(
+    stream: Iterable[Mapping[str, Any]],
+) -> Iterator[Mapping[str, Any]]:
+    """Sort equal-first_valid_time groups deterministically by source_record_id.
+
+    Fails closed on:
+    - Duplicate (first_valid_time, source_record_id) pairs within a group.
+    - Genuinely decreasing first_valid_time between groups.
+
+    Rows within each group are buffered only until the first_valid_time changes;
+    the buffer is therefore bounded by the largest single-timestamp group.
+    """
+    group_fvt: str | None = None
+    group: list[tuple[str, Mapping[str, Any]]] = []
+    seen_ids: set[str] = set()
+
+    def _flush() -> Iterator[Mapping[str, Any]]:
+        for _, row in sorted(group, key=lambda item: item[0]):
+            yield row
+
+    for row in stream:
+        material = normalize_candidate_source_row(row)
+        fvt = material["first_valid_time"]
+        src_id = material["source_record_id"]
+        if fvt == group_fvt:
+            if src_id in seen_ids:
+                raise RS0SpooledRuntimeError(
+                    f"RS0_SOURCE_GROUP_DUPLICATE_RECORD_ID — duplicate id: {src_id}"
+                )
+            seen_ids.add(src_id)
+            group.append((src_id, row))
+        else:
+            if group_fvt is not None:
+                if fvt < group_fvt:
+                    raise RS0SpooledRuntimeError(
+                        "RS0_SOURCE_STREAM_NONMONOTONIC_FVT"
+                    )
+                yield from _flush()
+            group_fvt = fvt
+            group = [(src_id, row)]
+            seen_ids = {src_id}
+
+    if group:
+        yield from _flush()
+
+
 def merge_canonical_source_streams(
     streams: Sequence[Iterable[Mapping[str, Any]]],
 ) -> Iterator[Mapping[str, Any]]:
