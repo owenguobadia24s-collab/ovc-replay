@@ -1,0 +1,40 @@
+{
+  "action_dependency_hygiene": {"automatic_version_bump": false, "classification": "NON_BLOCKING_REVIEW_ITEM"},
+  "additional_non_pr_diagnostic_workflows": [
+    {"admission_basis":"Preserve consumed GREAL workflow after successful single-use full-population disagreement replay","authority_mode":"PRESERVED_CONSUMED_GREAL_NO_RELAUNCH_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-sd-greal.yml","pull_request_listener":false},
+    {"admission_basis":"Preserve v0.10 WP3 R2 qualifier after successful synthetic qualification","authority_mode":"PRESERVED_SYNTHETIC_ONLY_NO_REAL_SOURCE_READ_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-sd-wp3-qualification-r2.yml","pull_request_listener":false},
+    {"admission_basis":"Preserve initial WP3 qualifier for audit","authority_mode":"SYNTHETIC_ONLY_NO_REAL_SOURCE_READ_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-sd-wp3-qualification.yml","pull_request_listener":false},
+    {"admission_basis":"Preserved consumed R5 workflow","authority_mode":"PRESERVED_CONSUMED_R5_NO_RELAUNCH_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-rs0-real-source-shadow-run-r5.yml","pull_request_listener":false},
+    {"admission_basis":"Preserved R4 recovery","authority_mode":"SYNTHETIC_ONLY_NO_REAL_SOURCE","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-rs0-r4-capacity-recovery.yml","pull_request_listener":false},
+    {"admission_basis":"Preserved source materialisation","authority_mode":"READ_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION","classification":"ACTIVE_MANUAL_OPERATION","path":".github/workflows/c2p2-rs0-current-source-materialisation.yml","pull_request_listener":false}
+  ],
+  "admitted_new_workflow": {
+    "admission_basis":"Operator-frozen C2P2-SD-GADJ human label set permits automatic post-freeze unblinding, WP6 error/Pareto analysis and GSEL packet generation",
+    "authority_mode":"FROZEN_HUMAN_LABELS_ONLY_POST_FREEZE_UNBLIND_WP6_ANALYSIS_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION_NO_EC1_CANDIDATE_USE_NO_REQUIRED_CHECK_SUBSTITUTION",
+    "classification":"ACTIVE_MANUAL_OPERATION",
+    "path":".github/workflows/c2p2-sd-wp6-after-gadj.yml",
+    "pull_request_listener":false,
+    "triggers":["push"]
+  },
+  "approved_pull_request_workflows":[".github/workflows/tests.yml",".github/workflows/ovc-tiered-tests.yml"],
+  "authority_delta":"BOUNDED_C2P2_SD_WP6_POST_GADJ_ANALYSIS_ONLY",
+  "baseline_main_sha":"c4a732d0cdc70126006eef86a2805fd0a55c280c",
+  "categories":["CURRENT_PR_CI","TEMPORARY","HISTORICAL_MANUAL_VERIFICATION","ACTIVE_MANUAL_OPERATION"],
+  "classification_precedence":["CURRENT_PR_CI","TEMPORARY","HISTORICAL_MANUAL_VERIFICATION","ACTIVE_MANUAL_OPERATION"],
+  "governance":{"classification_only":true,"historical_evidence_preservation":"REQUIRED","required_check_mutation":"PROHIBITED_BY_THIS_PACKET","workflow_deletion":"PROHIBITED","workflow_disablement":"PROHIBITED_BY_THIS_PACKET"},
+  "historical_policy_preserved":"registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_11.json",
+  "packet_id":"C2P2-SD-WP6",
+  "policy_id":"OVC.CIPR.WORKFLOW_GOVERNANCE.v0.12",
+  "programme_id":"OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1",
+  "required_trigger_inventory":["pull_request","push","workflow_dispatch","schedule","workflow_call","workflow_run"],
+  "rollback":"Preserve all workflow history; supersede only the current inventory snapshot.",
+  "rules": {
+    "ACTIVE_MANUAL_OPERATION":{"condition":"all remaining workflow definitions after higher-precedence rules"},
+    "CURRENT_PR_CI":{"condition":"workflow has pull_request trigger and path is approved","unexpected_pull_request_listener":"FAIL_CLOSED"},
+    "HISTORICAL_MANUAL_VERIFICATION":{"content_markers_case_insensitive":["historical manual verification","historical packet verification"]},
+    "TEMPORARY":{"path_basename_prefixes":["_temp_"],"workflow_name_prefixes_case_insensitive":["temp ","temp-"]}
+  },
+  "schema":"ovc-ci-workflow-governance-policy/v1",
+  "snapshot":{"expected_repository_workflow_definition_count":142,"github_actions_registered_total_count":191,"registration_count_excess":49,"github_actions_source":"PRIOR_SNAPSHOT_NOT_REMEASURED"},
+  "supersedes_for_current_inventory":"OVC.CIPR.WORKFLOW_GOVERNANCE.v0.11"
+}
