@@ -37,7 +37,7 @@ def test_authority_registry_fails_closed_outside_wp6():
     assert a["side_effect_policy"]["unknown_side_effect"] == "DENY"
     assert a["scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution"] == "NONE"
 
-def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_wp6():
+def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_persistent_preactivation():
     p = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
     approved = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_7.json")
     pilot = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_8.json")
@@ -73,28 +73,49 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_w
         assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH_AFTER_BRANCH_PILOT_COMPLETION"
         return
 
-    assert p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_9.json")
-    assert p["status"] == "READY"
-    assert p["packet_id"] == "CERS-PS-WP0"
-    assert p["next_packet"] == "CERS-PS-WP0"
-    assert p["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
-
-    persistent = load(p["current_state"])
-    assert persistent["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_8.json"
-    assert persistent["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
-    assert persistent["status"] == "READY"
-    assert persistent["packet_id"] == "CERS-PS-WP0"
-    assert persistent["current_gate"] == "CERS-PS-G0"
-    assert persistent["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert persistent["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
-    predecessor = persistent["predecessor_effectivity"]
+    persistent_plan = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_9.json")
+    assert persistent_plan["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_8.json"
+    assert persistent_plan["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
+    assert persistent_plan["status"] == "READY"
+    assert persistent_plan["packet_id"] == "CERS-PS-WP0"
+    assert persistent_plan["current_gate"] == "CERS-PS-G0"
+    assert persistent_plan["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert persistent_plan["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
+    predecessor = persistent_plan["predecessor_effectivity"]
     assert predecessor["status"] == "CERS_IMPLEMENTED_QUALIFIED_LIVE_PILOT_PASS"
     assert predecessor["merge_commit"] == "81faa31be2e59e47bc9784174f971c93a5a3a41c"
     assert predecessor["physical_tree"] == "5faa522134abfae1749a13bb9b53ae51e8054ee7"
     assert predecessor["transaction_id"] == "8e306f0506d1a2199777e267c5321425e97ff3b72a07ca9605a9ef04c47516f9"
     assert predecessor["completion_proof"] == "112fcfcec02c73b1b19d56d90c5965e45da9d2a7cc26d19706f8cd0816fde860"
-    activation = next(row for row in persistent["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
+    activation = next(row for row in persistent_plan["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
+    assert activation["status"] == "PLANNED"
+    assert activation["authority_required"] == "OPERATOR_REQUIRED"
+    assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
+
+    if p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_9.json"):
+        assert p["status"] == "READY"
+        assert p["packet_id"] == "CERS-PS-WP0"
+        assert p["next_packet"] == "CERS-PS-WP0"
+        assert p["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+        assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
+        return
+
+    assert p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_10.json")
+    assert p["status"] == "READY"
+    assert p["packet_id"] == "CERS-PS-WP1"
+    assert p["next_packet"] == "CERS-PS-WP1"
+    assert p["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
+    wp0_state = load(p["current_state"])
+    assert wp0_state["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_9.json"
+    assert wp0_state["status"] == "READY"
+    assert wp0_state["packet_id"] == "CERS-PS-WP1"
+    assert wp0_state["current_gate"] == "CERS-PS-G1"
+    assert wp0_state["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert wp0_state["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
+    wp0 = next(row for row in wp0_state["packet_register"] if row["packet_id"] == "CERS-PS-WP0")
+    activation = next(row for row in wp0_state["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
+    assert wp0["status"] == "COMPLETED" and wp0["decision"] == "PASS_DELEGATED"
     assert activation["status"] == "PLANNED"
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
     assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
