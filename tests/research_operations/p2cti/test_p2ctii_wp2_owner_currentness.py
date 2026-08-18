@@ -266,17 +266,31 @@ def test_consolidated_review_packet_stops_at_independent_boundary() -> None:
     state = json.loads(
         (ROOT / "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json").read_text()
     )
+    remediation_qa = json.loads(
+        (ROOT / "docs/programmes/p2cti-v0-1/wp2/P2CTII_WP2_REMEDIATION_1_QA_PACKET_v0_1.json").read_text()
+    )
+    remediation_decision = json.loads(
+        (ROOT / "docs/programmes/p2cti-v0-1/wp2/P2CTII_WP2_REMEDIATION_1_DECISION_v0_1.json").read_text()
+    )
+    fresh_review = json.loads(
+        (ROOT / "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_FRESH_REVIEW_COMMISSION_v0_1.json").read_text()
+    )
     assert review["gate_class"] == "INDEPENDENT_NON_OPERATOR_BLOCKING"
     assert review["reviewer_binding"]["status"] == "BOUND"
     assert review["gate_decision"] == "BLOCK"
     assert review["decision_bearing_pointer"] == "DENIED"
     assert review["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
-    assert state["packet_id"] == "P2CTII-WP2-REMEDIATION-1"
-    assert state["next_packet"] == "P2CTII-WP2-REMEDIATION-1-QA-DECISION"
-    assert state["p2ctii_g2_alg_status"] == "UNRESOLVED_PRIOR_BLOCK_PRESERVED"
+    assert remediation_qa["status"] == "PASS_EXACT_FINAL"
+    assert remediation_qa["p2ctii_g2_alg_decision"] == "UNRESOLVED_REQUIRES_FRESH_CONFLICT_FREE_INDEPENDENT_REVIEW"
+    assert remediation_decision["decision"] == "PASS_REMEDIATION"
+    assert remediation_decision["p2ctii_g2_alg"]["status"] == "UNRESOLVED"
+    assert fresh_review["status"] == "COMMISSIONED_AWAITING_CONFLICT_FREE_REVIEWER_BINDING"
+    assert fresh_review["reviewer_binding"]["reviewer_identity"] is None
+    assert state["packet_id"] == "P2CTII-WP2"
+    assert state["next_packet"] == "P2CTII-G2-ALG-FRESH-INDEPENDENT-REVIEW"
+    assert state["p2ctii_g2_alg_status"] == "UNRESOLVED_PRIOR_BLOCK_PRESERVED_FRESH_REVIEW_COMMISSIONED"
     assert state["remediation_author_may_grant_g2_alg_pass"] is False
     assert state["wp3_authorised"] is False
     assert state["blockers"] == [
-        "P2CTII_WP2_REMEDIATION_1_EXACT_FINAL_ASSURANCE_REQUIRED",
         "P2CTII_G2_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED",
     ]
