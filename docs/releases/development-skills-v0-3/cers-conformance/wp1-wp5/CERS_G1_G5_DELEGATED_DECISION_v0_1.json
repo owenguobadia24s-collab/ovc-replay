@@ -1,0 +1,24 @@
+{
+  "schema": "ovc-cers-g1-g5-delegated-decision/v1",
+  "decision_id": "CERS-G1-G5.DELEGATED.PASS.20260818",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_BY_OPERATOR_RATIFIED_PLAN",
+  "gates": [
+    {"gate_id": "CERS-G1", "decision": "PASS", "authority_delta": "INACTIVE_CONTRACTS_SCHEMAS_REGISTRIES"},
+    {"gate_id": "CERS-G2", "decision": "PASS", "authority_delta": "READ_ONLY_DETERMINISTIC_RECONCILER"},
+    {"gate_id": "CERS-G3", "decision": "PASS", "authority_delta": "INACTIVE_FENCING_RECOVERY_WAKE_RECONCILIATION"},
+    {"gate_id": "CERS-G4", "decision": "PASS", "authority_delta": "FIXTURE_ONLY_NON_WRITING_EXECUTOR_SHADOW"},
+    {"gate_id": "CERS-G5", "decision": "PASS", "authority_delta": "SHADOW_QUALIFICATION_DEVOBS_GATE_PREPARATION"}
+  ],
+  "qualification_head": "f750e609b1361354ffad8ad2351ce77766b84a83",
+  "qa_packet": "docs/releases/development-skills-v0-3/cers-conformance/wp1-wp5/CERS_WP1_WP5_QA_PACKET_v0_1.json",
+  "blocking_warnings": [],
+  "unresolved_reviews": [],
+  "authority_effect": "INACTIVE_SHADOW_ONLY",
+  "next_gate": "CERS-G-LIVE-DISPATCH",
+  "next_gate_class": "OPERATOR_REQUIRED",
+  "live_unattended_dispatch": "DENIED_PENDING_CERS-G-LIVE-DISPATCH",
+  "rollback": "Forward-supersede the inactive/shadow implementation and delegated decisions if later evidence invalidates qualification; preserve historical evidence and never rewrite history."
+}
