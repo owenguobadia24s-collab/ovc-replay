@@ -1,7 +1,8 @@
-"""P1CDI conservative source, identity, intake, currentness, and bootstrap primitives.
+"""P1CDI advisory, non-decision-bearing conformance primitives.
 
-WP3 bootstrap is historical-only and grants no operational publication. This package
-grants no owner-scientific, candidate, Validation, or actuation authority.
+P1CDII-G2-ALG qualifies the exact resolver mechanics but does not grant operational
+publication. WP3 bootstrap is historical-only. This package grants no owner-scientific,
+candidate, Validation, or actuation authority.
 """
 
 from .bootstrap import (
