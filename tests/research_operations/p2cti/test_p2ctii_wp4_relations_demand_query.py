@@ -468,9 +468,11 @@ def test_fresh_g4_alg_block_remains_byte_exact_during_bounded_remediation() -> N
     )
     assert review["decision"] == "BLOCK"
     assert review["authority_delta"] == "NONE"
-    assert state["status"] == "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE"
+    assert state["status"] == "PASS_REMEDIATION_AWAITING_MATERIALISATION"
     assert state["p2ctii_g4_alg_status"] == "UNRESOLVED_PRIOR_BLOCK_PRESERVED"
-    assert state["next_packet"] == "P2CTII-WP4-REMEDIATION-1-QA-DECISION"
+    assert state["next_packet"] == (
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1"
+    )
     assert state["wp5_authorised"] is False
     assert state["g4_alg_remediation_author_may_grant_pass"] is False
     assert state["authority_delta"] == "NONE"
