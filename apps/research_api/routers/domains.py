@@ -7,6 +7,7 @@ from fastapi import APIRouter, Query
 from ovc.console_vnext.application.errors import AuthorityDenied, ContractError, SourceGap
 from ovc.console_vnext.application.investigate_preparation import build_fixture_investigate_snapshot
 from ovc.console_vnext.application.research_wp5a import build_wp5a_representation_snapshot
+from ovc.console_vnext.application.research_wp5b1 import build_wp5b1_dmrp_snapshot
 
 from ..fixture_store import FixtureStore
 from ..query import bounded_time_window, stable_page
@@ -19,6 +20,13 @@ _DEFAULT_WP5A_BINDINGS = (
     / "research_console_vnext"
     / "research_native"
     / "wp5a_representation_source_bindings_v1.json"
+)
+_DEFAULT_WP5B1_BINDINGS = (
+    _REPOSITORY_ROOT
+    / "registries"
+    / "research_console_vnext"
+    / "research_native"
+    / "wp5b1_dmrp_source_bindings_v1.json"
 )
 
 
@@ -34,10 +42,12 @@ def build_domain_router(
     source_mode: str = "FIXTURE",
     repository_root: Path | None = None,
     wp5a_bindings: Path | None = None,
+    wp5b1_bindings: Path | None = None,
 ) -> APIRouter:
     router = APIRouter()
     repo_root = Path(repository_root or _REPOSITORY_ROOT)
     representation_bindings = Path(wp5a_bindings or _DEFAULT_WP5A_BINDINGS)
+    dmrp_bindings = Path(wp5b1_bindings or _DEFAULT_WP5B1_BINDINGS)
 
     def real_projection(capability_id: str, resource: str, schema_id: str):
         if source_mode != "REAL" or real_store is None:
@@ -213,6 +223,21 @@ def build_domain_router(
             "research.representations.snapshot",
             payload,
             schema_id="ovc-rcn-rn-wp5a-representation-snapshot/v1",
+            capability_id="RESEARCH",
+        )
+
+    @router.get("/research/dmrp/snapshot", tags=["research"])
+    def dmrp_snapshot(role: str | None = Query(default=None)):
+        _deny_validation(role)
+        payload = build_wp5b1_dmrp_snapshot(
+            repository_root=repo_root,
+            presentation=store.resource("research_wp5b1"),
+            bindings=dmrp_bindings,
+        )
+        return store.envelope(
+            "research.dmrp.snapshot",
+            payload,
+            schema_id="ovc-rcn-rn-wp5b1-dmrp-snapshot/v1",
             capability_id="RESEARCH",
         )
 
