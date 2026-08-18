@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from ovc.research_operations.canonical import canonical_sha256
+from ovc.research_operations.canonical import canonical_json_bytes, canonical_sha256
 
 from .identity import (
     PROFILE_ID,
@@ -85,6 +85,31 @@ _DMRP_INDEPENDENCE_FIELDS = frozenset(
         "authority_effect",
     }
 )
+_PLANE_EVIDENCE_FIELDS = frozenset(
+    {
+        "record_type",
+        "schema_version",
+        "record_id",
+        "owner",
+        "plane",
+        "value",
+        "left_generation_id",
+        "right_generation_id",
+        "source_ref",
+        "source_generation",
+        "source_content",
+        "source_sha256",
+        "current_source_ref",
+        "current_source_generation",
+        "current_source_sha256",
+        "evidence_first_valid_time",
+        "currentness_state",
+        "authority_effect",
+    }
+)
+_NON_SEMANTIC_SOURCE_PLANES = frozenset(
+    {"core_relation", "occurrence_relation", "envelope_relation", "lineage_relation"}
+)
 _PRESERVED_RECORD_FIELDS = {
     "replications": frozenset(
         {"record_type", "schema_version", "record_id", "generation_id", "source_refs", "replication_kind", "outcome", "authority_effect"}
@@ -129,6 +154,16 @@ if (
 ):
     raise RuntimeError("P1CDI evidence-plane registry must be closed and non-authorising")
 
+CONFORMANCE_SEPARATION_PRINCIPLE = (
+    "SEMANTIC_EQUALITY",
+    "CANONICAL_OBJECT_VALIDITY",
+    "SOURCE_EVIDENCE_VALIDITY",
+    "NON_SEMANTIC_PLANE_TRUTH",
+    "SERIES_HISTORY_VALIDITY",
+    "SCIENTIFIC_SUPPORT",
+    "INDEPENDENCE",
+)
+
 
 def _require_string(value: object, field: str) -> str:
     if type(value) is not str or not value:
@@ -145,6 +180,125 @@ def _parse_time(value: object, field: str) -> datetime:
     if parsed.tzinfo is None:
         raise ReferenceEngineError(f"{field} must include a timezone")
     return parsed
+
+
+def _canonical_bytes(value: object) -> bytes:
+    try:
+        return canonical_json_bytes(value, trailing_newline=False)
+    except (TypeError, ValueError) as exc:
+        raise ReferenceEngineError("record content is not canonical JSON") from exc
+
+
+def _validate_projection(record: Mapping[str, Any]) -> dict[str, Any]:
+    if not isinstance(record, Mapping) or set(record) != _PROJECTION_FIELDS:
+        raise ReferenceEngineError("semantic projection must use the exact closed canonical field set")
+    if record.get("record_type") != "P1DistinctionSemanticProjection":
+        raise ReferenceEngineError("semantic projection record type is invalid")
+    if record.get("schema_version") != "0.1" or record.get("authority_effect") != "NONE":
+        raise ReferenceEngineError("semantic projection schema or authority is invalid")
+    if record.get("profile_id") != PROFILE_ID:
+        raise ReferenceEngineError("semantic projection profile is invalid")
+    generation_id = _require_string(record.get("generation_id"), "generation_id")
+    try:
+        rebuilt = build_semantic_projection(
+            generation_id=generation_id,
+            owner_semantic_binding=record.get("owner_semantic_binding"),
+            identity_fields=record.get("identity_fields", {}),
+        )
+    except ValueError as exc:
+        raise ReferenceEngineError("semantic projection cannot be canonically rebuilt") from exc
+    if _canonical_bytes(record) != _canonical_bytes(rebuilt):
+        raise ReferenceEngineError("semantic projection differs from authoritative canonical reconstruction")
+    return rebuilt
+
+
+def _validate_projection_generation_binding(
+    projection: Mapping[str, Any], generation: Mapping[str, Any] | None
+) -> dict[str, Any]:
+    if generation is None:
+        raise ReferenceEngineError("automatic correspondence requires an exact generation binding")
+    if not isinstance(generation, Mapping) or set(generation) != _GENERATION_FIELDS:
+        raise ReferenceEngineError("projection generation binding must use the exact closed field set")
+    if generation.get("record_type") != "P1EmpiricalDistinctionGeneration":
+        raise ReferenceEngineError("projection generation record type is invalid")
+    if generation.get("schema_version") != "0.1" or generation.get("authority_effect") != "NONE":
+        raise ReferenceEngineError("projection generation schema or authority is invalid")
+    if generation.get("profile_id") != PROFILE_ID or generation.get("immutable") is not True:
+        raise ReferenceEngineError("projection generation profile or immutability is invalid")
+    if generation.get("generation_id") != projection.get("generation_id"):
+        raise ReferenceEngineError("projection wrapper has a stale or mismatched generation binding")
+    if generation.get("projection_sha256") != projection.get("projection_sha256"):
+        raise ReferenceEngineError("projection generation does not bind canonical projection content")
+    series_id = _require_string(generation.get("series_id"), "series_id")
+    source_time = _require_string(
+        generation.get("source_first_valid_time"), "source_first_valid_time"
+    )
+    _parse_time(source_time, "source_first_valid_time")
+    expected_generation_id = f"p1:generation:{canonical_sha256({'series_id': series_id, 'projection_sha256': projection['projection_sha256'], 'source_first_valid_time': source_time})}"
+    if generation.get("generation_id") != expected_generation_id:
+        raise ReferenceEngineError("projection generation deterministic identity mismatch")
+    return dict(generation)
+
+
+def _reconcile_identity_bundles(
+    existing: Sequence[Mapping[str, Any]],
+) -> list[tuple[dict[str, Any], dict[str, Any], dict[str, Any]]]:
+    validated = [_identity_bundle(item) for item in existing]
+    by_generation: dict[str, tuple[bytes, tuple[dict[str, Any], dict[str, Any], dict[str, Any]]]] = {}
+    series_bytes: dict[str, bytes] = {}
+    for bundle in validated:
+        series, generation, projection = bundle
+        generation_id = generation["generation_id"]
+        bundle_bytes = _canonical_bytes(
+            {"series": series, "generation": generation, "projection": projection}
+        )
+        prior = by_generation.get(generation_id)
+        if prior is not None and prior[0] != bundle_bytes:
+            raise ReferenceEngineError("same generation identity has conflicting canonical bundle content")
+        by_generation.setdefault(generation_id, (bundle_bytes, bundle))
+        series_id = series["series_id"]
+        observed_series_bytes = _canonical_bytes(series)
+        if series_id in series_bytes and series_bytes[series_id] != observed_series_bytes:
+            raise ReferenceEngineError("same series identity has conflicting canonical series content")
+        series_bytes.setdefault(series_id, observed_series_bytes)
+
+    reconciled = [by_generation[key][1] for key in sorted(by_generation)]
+    generation_index = {bundle[1]["generation_id"]: bundle for bundle in reconciled}
+    for series, _generation, _projection in reconciled:
+        first_generation_id = series["first_generation_id"]
+        first = generation_index.get(first_generation_id)
+        if first is None:
+            raise ReferenceEngineError("series first-generation binding is unavailable or unverifiable")
+        first_series, first_generation, first_projection = first
+        if first_series["series_id"] != series["series_id"] or first_generation["series_id"] != series["series_id"]:
+            raise ReferenceEngineError("series first-generation binding crosses series identity")
+        expected_series_id = f"p1:series:{canonical_sha256({'owner': first_projection['owner_semantic_binding'], 'projection_sha256': first_projection['projection_sha256']})}"
+        if series["series_id"] != expected_series_id:
+            raise ReferenceEngineError("series first-generation deterministic identity mismatch")
+    return reconciled
+
+
+def _reconcile_source_record_groups(
+    groups: Mapping[str, Sequence[Mapping[str, Any]]],
+) -> dict[str, list[Mapping[str, Any]]]:
+    identities: dict[str, tuple[bytes, str, Mapping[str, Any]]] = {}
+    output: dict[str, list[Mapping[str, Any]]] = {name: [] for name in groups}
+    for name in sorted(groups):
+        local: dict[str, Mapping[str, Any]] = {}
+        for record in groups[name]:
+            if not isinstance(record, Mapping):
+                raise ReferenceEngineError("source evidence records must be objects")
+            record_id = _require_string(record.get("record_id"), "record_id")
+            content = _canonical_bytes(record)
+            prior = identities.get(record_id)
+            if prior is not None and prior[0] != content:
+                raise ReferenceEngineError("source record identity has conflicting canonical content")
+            if prior is not None and prior[1] != name:
+                raise ReferenceEngineError("source record identity is reused across evidence owners")
+            identities.setdefault(record_id, (content, name, record))
+            local.setdefault(record_id, record)
+        output[name] = [local[key] for key in sorted(local)]
+    return output
 
 
 def _identity_bundle(entry: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
@@ -169,6 +323,7 @@ def _identity_bundle(entry: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str
         raise ReferenceEngineError("identity bundle authority must remain NONE")
     if generation.get("profile_id") != PROFILE_ID or projection.get("profile_id") != PROFILE_ID:
         raise ReferenceEngineError("identity bundle semantic profile is invalid")
+    projection = _validate_projection(projection)
     series_id = _require_string(series.get("series_id"), "series_id")
     generation_id = _require_string(generation.get("generation_id"), "generation_id")
     _require_string(series.get("first_generation_id"), "first_generation_id")
@@ -225,7 +380,7 @@ def assign_series_generation(
         owner_semantic_binding=owner_semantic_binding,
         identity_fields=identity_fields,
     )
-    bundles = [_identity_bundle(item) for item in existing]
+    bundles = _reconcile_identity_bundles(existing)
     exact = [bundle for bundle in bundles if exact_semantic_equal(candidate, bundle[2])]
     exact_ids = {bundle[1]["generation_id"] for bundle in exact}
     if len(exact_ids) > 1:
@@ -317,15 +472,12 @@ def resolve_dmrp_independence(
     right_generation_id = _require_string(right_generation_id, "right_generation_id")
     as_of = _parse_time(as_of_time, "as_of_time") if as_of_time is not None else None
     normalized: list[dict[str, Any]] = []
-    seen_ids: set[str] = set()
-    for record in evidence_records:
+    reconciled = _reconcile_source_record_groups({"dmrp": evidence_records})["dmrp"]
+    for record in reconciled:
         if not isinstance(record, Mapping) or set(record) != _DMRP_INDEPENDENCE_FIELDS:
             raise ReferenceEngineError("DMRP independence evidence must use the exact closed field set")
         item = dict(record)
-        record_id = _require_string(item["record_id"], "record_id")
-        if record_id in seen_ids:
-            raise ReferenceEngineError("duplicate DMRP independence evidence record")
-        seen_ids.add(record_id)
+        _require_string(item["record_id"], "record_id")
         if item["owner"] != "DMRP_EXPOSURE_INFLUENCE_RECORDS":
             raise ReferenceEngineError("independence evidence owner mismatch")
         if (
@@ -397,18 +549,178 @@ def resolve_dmrp_independence(
     }
 
 
+def build_correspondence_plane_evidence(
+    *,
+    owner: str,
+    plane: str,
+    value: str,
+    left_generation_id: str,
+    right_generation_id: str,
+    source_ref: str,
+    source_generation: str,
+    evidence_first_valid_time: str,
+) -> dict[str, Any]:
+    """Build one canonical source-owned proof for an existing correspondence plane."""
+
+    owner = _require_string(owner, "owner")
+    if plane not in _NON_SEMANTIC_SOURCE_PLANES:
+        raise ReferenceEngineError("plane evidence must name one registered non-semantic plane")
+    registry_key = {
+        "core_relation": "core",
+        "occurrence_relation": "occurrence",
+        "envelope_relation": "envelope",
+        "lineage_relation": "lineage",
+    }[plane]
+    if type(value) is not str or value not in RELATION_REGISTRY[registry_key]:
+        raise ReferenceEngineError("plane evidence value is unregistered")
+    left_generation_id = _require_string(left_generation_id, "left_generation_id")
+    right_generation_id = _require_string(right_generation_id, "right_generation_id")
+    source_ref = _require_string(source_ref, "source_ref")
+    source_generation = _require_string(source_generation, "source_generation")
+    _parse_time(evidence_first_valid_time, "evidence_first_valid_time")
+    source_content = {
+        "owner": owner,
+        "plane": plane,
+        "value": value,
+        "left_generation_id": left_generation_id,
+        "right_generation_id": right_generation_id,
+        "source_generation": source_generation,
+    }
+    source_sha = hashlib.sha256(_canonical_bytes(source_content)).hexdigest()
+    identity = {
+        "source_ref": source_ref,
+        "source_sha256": source_sha,
+        "evidence_first_valid_time": evidence_first_valid_time,
+    }
+    return {
+        "record_type": "P1CorrespondencePlaneEvidence",
+        "schema_version": "0.1",
+        "record_id": f"p1:plane-evidence:{canonical_sha256(identity)}",
+        "owner": owner,
+        "plane": plane,
+        "value": value,
+        "left_generation_id": left_generation_id,
+        "right_generation_id": right_generation_id,
+        "source_ref": source_ref,
+        "source_generation": source_generation,
+        "source_content": source_content,
+        "source_sha256": source_sha,
+        "current_source_ref": source_ref,
+        "current_source_generation": source_generation,
+        "current_source_sha256": source_sha,
+        "evidence_first_valid_time": evidence_first_valid_time,
+        "currentness_state": "CURRENT",
+        "authority_effect": "NONE",
+    }
+
+
+def _resolve_plane_evidence(
+    *,
+    left_generation_id: str,
+    right_generation_id: str,
+    evidence_records: Sequence[Mapping[str, Any]],
+    as_of_time: str | None,
+) -> tuple[dict[str, str], dict[str, list[str]]]:
+    as_of = _parse_time(as_of_time, "as_of_time") if as_of_time is not None else None
+    reconciled = _reconcile_source_record_groups({"planes": evidence_records})["planes"]
+    by_plane: dict[str, list[dict[str, Any]]] = {
+        plane: [] for plane in sorted(_NON_SEMANTIC_SOURCE_PLANES)
+    }
+    for record in reconciled:
+        if set(record) != _PLANE_EVIDENCE_FIELDS:
+            raise ReferenceEngineError("plane evidence must use the exact closed field set")
+        item = dict(record)
+        if item["record_type"] != "P1CorrespondencePlaneEvidence":
+            raise ReferenceEngineError("plane evidence record type is invalid")
+        if item["schema_version"] != "0.1" or item["authority_effect"] != "NONE":
+            raise ReferenceEngineError("plane evidence schema or authority is invalid")
+        _require_string(item["record_id"], "record_id")
+        _require_string(item["owner"], "owner")
+        plane = item["plane"]
+        if plane not in _NON_SEMANTIC_SOURCE_PLANES:
+            raise ReferenceEngineError("plane evidence names an unregistered plane")
+        registry_key = {
+            "core_relation": "core",
+            "occurrence_relation": "occurrence",
+            "envelope_relation": "envelope",
+            "lineage_relation": "lineage",
+        }[plane]
+        if type(item["value"]) is not str or item["value"] not in RELATION_REGISTRY[registry_key]:
+            raise ReferenceEngineError("plane evidence carries an unregistered value")
+        if (
+            item["left_generation_id"] != left_generation_id
+            or item["right_generation_id"] != right_generation_id
+        ):
+            raise ReferenceEngineError("plane evidence generation binding mismatch")
+        source_ref = _require_string(item["source_ref"], "source_ref")
+        source_generation = _require_string(item["source_generation"], "source_generation")
+        source_sha = _require_string(item["source_sha256"], "source_sha256")
+        expected_content = {
+            "owner": item["owner"],
+            "plane": plane,
+            "value": item["value"],
+            "left_generation_id": left_generation_id,
+            "right_generation_id": right_generation_id,
+            "source_generation": source_generation,
+        }
+        if _canonical_bytes(item["source_content"]) != _canonical_bytes(expected_content):
+            raise ReferenceEngineError("plane evidence source content is not canonically owner-bound")
+        actual_sha = hashlib.sha256(_canonical_bytes(item["source_content"])).hexdigest()
+        if source_sha != actual_sha:
+            raise ReferenceEngineError("plane evidence source content/hash mismatch")
+        current_ref = _require_string(item["current_source_ref"], "current_source_ref")
+        current_generation = _require_string(
+            item["current_source_generation"], "current_source_generation"
+        )
+        current_sha = _require_string(item["current_source_sha256"], "current_source_sha256")
+        for digest in (source_sha, current_sha):
+            if len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest):
+                raise ReferenceEngineError("plane evidence hashes must be lowercase SHA-256 strings")
+        if item["currentness_state"] not in {"CURRENT", "STALE", "HISTORICAL", "UNRESOLVED", "CONFLICT"}:
+            raise ReferenceEngineError("plane evidence currentness state is invalid")
+        moved = (source_ref, source_generation, source_sha) != (
+            current_ref,
+            current_generation,
+            current_sha,
+        )
+        if item["currentness_state"] == "CURRENT" and moved:
+            raise ReferenceEngineError("plane evidence marked current after source frontier moved")
+        if item["currentness_state"] == "STALE" and not moved:
+            raise ReferenceEngineError("plane evidence stale state lacks a moved source frontier")
+        valid_time = _parse_time(item["evidence_first_valid_time"], "evidence_first_valid_time")
+        if as_of is None or valid_time <= as_of:
+            by_plane[plane].append(item)
+
+    resolved: dict[str, str] = {}
+    refs: dict[str, list[str]] = {}
+    for plane, records in by_plane.items():
+        if any(item["currentness_state"] == "CONFLICT" for item in records):
+            raise ReferenceEngineError(f"conflicting source evidence for {plane}")
+        current = [item for item in records if item["currentness_state"] == "CURRENT"]
+        values = {item["value"] for item in current}
+        if len(values) > 1:
+            raise ReferenceEngineError(f"contradictory current source evidence for {plane}")
+        if values:
+            resolved[plane] = values.pop()
+            refs[plane] = sorted(item["record_id"] for item in current)
+    return resolved, refs
+
+
 def stage_correspondence(
     *,
     left_projection: Mapping[str, Any],
     right_projection: Mapping[str, Any],
+    left_generation_record: Mapping[str, Any] | None = None,
+    right_generation_record: Mapping[str, Any] | None = None,
     planes: Mapping[str, str],
     admission_basis: str,
     source_relation_ref: str | None = None,
     review_ref: str | None = None,
+    plane_evidence_records: Sequence[Mapping[str, Any]] = (),
     independence_evidence: Sequence[Mapping[str, Any]] = (),
     as_of_time: str | None = None,
 ) -> dict[str, Any]:
-    """Stage exact or non-exact multi-plane correspondence without fuzzy inference."""
+    """Stage plane-local correspondence without transferring truth across planes."""
 
     if not isinstance(planes, Mapping) or set(planes) != _CORRESPONDENCE_PLANES:
         raise ReferenceEngineError("correspondence must supply every exact relation plane")
@@ -422,8 +734,19 @@ def stage_correspondence(
     }.items():
         if type(planes[field]) is not str or planes[field] not in RELATION_REGISTRY[registry_key]:
             raise ReferenceEngineError(f"unregistered correspondence plane value: {field}")
-    left_generation = _require_string(left_projection.get("generation_id"), "left_generation_id")
-    right_generation = _require_string(right_projection.get("generation_id"), "right_generation_id")
+    left_projection = _validate_projection(left_projection)
+    right_projection = _validate_projection(right_projection)
+    left_generation = left_projection["generation_id"]
+    right_generation = right_projection["generation_id"]
+    resolved_planes, plane_evidence_refs = _resolve_plane_evidence(
+        left_generation_id=left_generation,
+        right_generation_id=right_generation,
+        evidence_records=plane_evidence_records,
+        as_of_time=as_of_time,
+    )
+    for plane, resolved_value in resolved_planes.items():
+        if planes[plane] != resolved_value:
+            raise ReferenceEngineError(f"correspondence claim conflicts with exact source evidence: {plane}")
     independence = resolve_dmrp_independence(
         left_generation_id=left_generation,
         right_generation_id=right_generation,
@@ -456,6 +779,40 @@ def stage_correspondence(
         executability = "REVIEW_REQUIRED"
     else:
         raise ReferenceEngineError("unknown correspondence admission basis")
+    unresolved_planes = sorted(
+        set(_NON_SEMANTIC_SOURCE_PLANES) - set(resolved_planes)
+    )
+    if independence["state"] == "INDEPENDENCE_UNKNOWN" and not independence["source_refs"]:
+        unresolved_planes.append("independence_state")
+    plane_admission: dict[str, dict[str, Any]] = {
+        "semantic_relation": {
+            "status": "RESOLVED",
+            "value": semantic,
+            "basis": admission_basis,
+            "evidence_refs": [],
+        }
+    }
+    for plane in sorted(_NON_SEMANTIC_SOURCE_PLANES):
+        if plane in resolved_planes:
+            plane_admission[plane] = {
+                "status": "RESOLVED",
+                "value": resolved_planes[plane],
+                "basis": "EXACT_OWNER_SOURCE_EVIDENCE",
+                "evidence_refs": plane_evidence_refs[plane],
+            }
+        else:
+            plane_admission[plane] = {
+                "status": "UNRESOLVED",
+                "value": None,
+                "basis": "NO_EXACT_CURRENT_PLANE_EVIDENCE",
+                "evidence_refs": [],
+            }
+    plane_admission["independence_state"] = {
+        "status": "RESOLVED" if independence["source_refs"] else "UNRESOLVED",
+        "value": independence["state"],
+        "basis": independence["reason"],
+        "evidence_refs": independence["source_refs"],
+    }
     identity = {
         "left_generation_id": left_generation,
         "right_generation_id": right_generation,
@@ -463,22 +820,33 @@ def stage_correspondence(
         "admission_basis": admission_basis,
         "source_relation_ref": source_relation_ref,
         "review_ref": review_ref,
+        "plane_evidence_refs": plane_evidence_refs,
+        "independence_evidence_refs": independence["source_refs"],
     }
-    record = {
-        "record_type": "P1DistinctionCorrespondenceRecord",
-        "schema_version": "0.1",
-        "correspondence_id": f"p1:correspondence:{canonical_sha256(identity)}",
-        "left_generation_id": left_generation,
-        "right_generation_id": right_generation,
-        **dict(planes),
-        "admission_basis": admission_basis,
-        "executability": executability,
-        "authority_effect": "NONE",
-    }
+    record = None
+    if not unresolved_planes:
+        _validate_projection_generation_binding(left_projection, left_generation_record)
+        _validate_projection_generation_binding(right_projection, right_generation_record)
+        record = {
+            "record_type": "P1DistinctionCorrespondenceRecord",
+            "schema_version": "0.1",
+            "correspondence_id": f"p1:correspondence:{canonical_sha256(identity)}",
+            "left_generation_id": left_generation,
+            "right_generation_id": right_generation,
+            **dict(planes),
+            "admission_basis": admission_basis,
+            "executability": executability,
+            "authority_effect": "NONE",
+        }
     return {
         "record": record,
+        "semantic_identity": "EXACT" if exact else "NON_EXACT",
+        "plane_admission": plane_admission,
+        "unresolved_planes": unresolved_planes,
+        "executability": executability if record is not None else "BLOCKED_UNRESOLVED_PLANES",
         "source_relation_ref": source_relation_ref,
         "review_ref": review_ref,
+        "plane_evidence_refs": plane_evidence_refs,
         "independence_evidence_refs": independence["source_refs"],
         "independence_reason": independence["reason"],
         "decision_bearing": False,
@@ -619,7 +987,15 @@ def assemble_evidence_reference(
     _parse_time(frontier_first_valid_time, "frontier_first_valid_time")
     if not vector_inputs:
         raise ReferenceEngineError("at least one source-owned evidence vector is required")
-    vectors = [_validate_vector(record, generation_id) for record in vector_inputs]
+    reconciled = _reconcile_source_record_groups(
+        {
+            "vectors": vector_inputs,
+            "replications": replication_records,
+            "null_bindings": null_records,
+            "contradictions": contradiction_records,
+        }
+    )
+    vectors = [_validate_vector(record, generation_id) for record in reconciled["vectors"]]
     preserved: dict[str, list[dict[str, Any]]] = {
         "replications": [],
         "null_bindings": [],
@@ -631,9 +1007,9 @@ def assemble_evidence_reference(
         "contradictions": "P1DistinctionContradictionRecord",
     }
     for name, records in (
-        ("replications", replication_records),
-        ("null_bindings", null_records),
-        ("contradictions", contradiction_records),
+        ("replications", reconciled["replications"]),
+        ("null_bindings", reconciled["null_bindings"]),
+        ("contradictions", reconciled["contradictions"]),
     ):
         for record in records:
             preserved[name].append(
