@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-plan-ratification-operator-decision/v1",
+  "decision_id": "CERS-PS-PLAN-RATIFICATION.OPERATOR.PASS.20260818T180100+0100",
+  "gate_id": "CERS-PS-PLAN-RATIFICATION",
+  "decision": "PASS",
+  "operator_command": "OVC APPROVE CERS-PS-PLAN-RATIFICATION PASS",
+  "decision_time_local": "2026-08-18T18:01:00+01:00",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "proposal_plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-PROPOSED",
+  "ratified_plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "governing_design": "OVC-DSAI3V-CERS-DESIGN-SPEC-0.1-R1-RATIFIED",
+  "decision_baseline_main": "bb313b004a3a4fa2be9f8141ddc5f56fd4b3ba86",
+  "authority_kind": "BOUNDED_CERS_PERSISTENT_SUPERVISOR_PREACTIVATION_IMPLEMENTATION",
+  "authority_effect": "AUTHORISE_CERS_PS_WP0_WP5_INACTIVE_SHADOW_ONLY",
+  "authorized_packets": [
+    "CERS-PS-WP0",
+    "CERS-PS-WP1",
+    "CERS-PS-WP2",
+    "CERS-PS-WP3",
+    "CERS-PS-WP4",
+    "CERS-PS-WP5"
+  ],
+  "auto_ratifiable_gates": [
+    "CERS-PS-G0",
+    "CERS-PS-G1",
+    "CERS-PS-G2",
+    "CERS-PS-G3",
+    "CERS-PS-G4",
+    "CERS-PS-G5"
+  ],
+  "reserved_next_gate": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "persistent_general_dispatch": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "post_pilot_quiescence": "DISABLE_NEW_DISPATCH",
+  "retained_boundaries": {
+    "new_writer_identity": false,
+    "new_merge_authority": false,
+    "direct_main_write": false,
+    "parallel_physical_merge": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "automatic_future_programme_admission": false,
+    "operator_required_or_reserved_boundary_bypass": false,
+    "scientific_validation_publication_probability_risk_exposure_trading_execution_authority": "NONE"
+  },
+  "rollback": "Leave persistent CERS in DISABLE_NEW_DISPATCH, forward-disable/supersede only persistent preactivation surfaces, preserve WP6/G6 evidence, ReceiptStore records and Git history.",
+  "next_packet": "CERS-PS-WP0"
+}
