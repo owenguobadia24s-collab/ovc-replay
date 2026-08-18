@@ -12,15 +12,19 @@ PYT = ROOT / "docs/releases/ci-performance-remediation-v0-1/cipr-wp4/CIPR_WP4_PY
 STATE = ROOT / "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_1.json"
 TESTS_WORKFLOW = ROOT / ".github/workflows/tests.yml"
 TIERED_WORKFLOW = ROOT / ".github/workflows/ovc-tiered-tests.yml"
+RESOLVER = ROOT / "tools/ci/prvitr_live_admission.py"
+
 
 def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
 
 class CiPerformanceG4GateTests(unittest.TestCase):
     def setUp(self):
         self.gate = load(GATE); self.qa = load(QA); self.heavy = load(HEAVY); self.pyt = load(PYT); self.state = load(STATE)
         self.tests_workflow = TESTS_WORKFLOW.read_text(encoding="utf-8")
         self.tiered_workflow = TIERED_WORKFLOW.read_text(encoding="utf-8")
+        self.resolver = RESOLVER.read_text(encoding="utf-8")
 
     def test_gate_is_operator_required_and_recommends_bounded_shadow_sharding(self):
         self.assertEqual(self.gate["gate_id"], "CIPR-G4-SUITE-TOPOLOGY")
@@ -41,8 +45,9 @@ class CiPerformanceG4GateTests(unittest.TestCase):
         self.assertNotIn("tools/ci/ovc_run_with_main_lease.py", self.tests_workflow)
         self.assertIn("tools/ci/ovc_run_with_main_lease.py", self.tiered_workflow)
         self.assertIn("Run mandatory SIQ/PDC exact-final assurance inside lease", self.tiered_workflow)
-        for required in ("'tests'", "'pytest-unittest-parity'", "'runner-parity'"):
-            self.assertIn(required, self.tiered_workflow)
+        for required in ("tests", "pytest-unittest-parity", "runner-parity"):
+            self.assertIn(required, self.resolver)
+        self.assertIn('PROFILE_JOB_NAME = "OVC profile assurance"', self.resolver)
         self.assertEqual(self.pyt["current_required_exact_head_checks"], ["tests", "pytest-unittest-parity", "runner-parity"])
         self.assertEqual(self.pyt["python_runner_programme"]["legacy_unittest_ci_command"], "PRESERVE_UNTIL_PYT_G2")
 
@@ -71,5 +76,6 @@ class CiPerformanceG4GateTests(unittest.TestCase):
             self.assertEqual(self.state["authority_delta"], "BOUNDED_RUNNER_NEUTRAL_DETERMINISTIC_REQUIRED_SHARD_SHADOW_EVALUATION")
         else:
             self.fail(f"unexpected CIPR-G4 state: {self.state['status']}")
+
 
 if __name__ == "__main__": unittest.main()
