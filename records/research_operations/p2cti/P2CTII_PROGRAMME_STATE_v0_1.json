@@ -1,31 +1,37 @@
 {
   "schema": "ovc-programme-state/v1",
   "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
-  "packet_id": "P2CTII-WP1",
+  "packet_id": "P2CTII-WP2",
   "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
   "plan_version": "0.1_REVISED_1",
-  "status": "QA_REVIEW",
+  "status": "GATE_READY_ON_SUCCESSFUL_WP2_MATERIALISATION",
   "completed_packets": [
-    {"packet_id":"P2CTII-WP0","status":"COMPLETED","merge_commit":"49fc565541fe33ec5cdc42296528fc449ea86fff","decision":"PASS"}
+    {"packet_id":"P2CTII-WP0","status":"COMPLETED","merge_commit":"49fc565541fe33ec5cdc42296528fc449ea86fff","decision":"PASS"},
+    {"packet_id":"P2CTII-WP1","status":"COMPLETED","merge_commit":"05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3","decision":"PASS"}
   ],
-  "prerequisites": ["P2CTII-WP0_COMPLETED@49fc565541fe33ec5cdc42296528fc449ea86fff"],
-  "authority_required": "DELEGATED_WITHIN_APPROVED_G0",
+  "prerequisites": [
+    "P2CTII-WP0_COMPLETED@49fc565541fe33ec5cdc42296528fc449ea86fff",
+    "P2CTII-WP1_IMPLEMENTATION_MERGED@05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
+    "P2CTII-WP1_DELEGATED_PASS_BOUND_IN_CURRENT_SUBSTANTIVE_TREE"
+  ],
+  "authority_required": "INDEPENDENT_REVIEW_REQUIRED_AT_P2CTII-G2-ALG",
   "authority_delta": "NONE",
-  "baseline_commit": "cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded",
-  "baseline_tree": "24d32663a65191dddcd1125d8ec74aaf9d6358b8",
-  "branch": "build/p2ctii-wp1-current-main-r3-20260818",
-  "candidate_commit": "PENDING_FINAL_PR_HEAD",
+  "baseline_commit": "17c2aac536893005fc07f4ec1717d04b6b2f9177",
+  "baseline_tree": "5643bf72e0ca54169737474a5ce5437d3c651709",
+  "branch": "build/p2ctii-wp2-current-main-20260818",
+  "candidate_commit": "BOUND_BY_FINAL_VIT_LINEAGE",
   "tests": [
     "tests/research_operations/p2cti/test_p2ctii_wp1_contracts.py",
     "tests/research_operations/p2cti/test_p2ctii_wp1_schemas.py",
+    "tests/research_operations/p2cti/test_p2ctii_wp2_owner_currentness.py",
     "REPOSITORY_REQUIRED_CI",
     "VIT_ROUTING_PREFLIGHT",
     "FINAL_HEAD_ASSURANCE"
   ],
-  "qa_packet": null,
-  "decision_record": null,
-  "merge_commit": null,
-  "blockers": [],
+  "qa_packet": "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_CONSOLIDATED_REVIEW_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/p2cti-v0-1/wp1/P2CTII_WP1_DELEGATED_DECISION_v0_1.json",
+  "merge_commit": "EFFECTIVE_ON_VIT_POST_MERGE_PACKET_COMPLETION_RECEIPT",
+  "blockers": ["P2CTII_G2_ALG_INDEPENDENT_REVIEW_REQUIRED"],
   "superseded_candidates": [
     "PR1022",
     "PR1025",
@@ -36,9 +42,10 @@
     "PR1048",
     "PR1051",
     "PR1131",
-    "PR1133"
+    "PR1133",
+    "PR1138"
   ],
-  "next_packet": "P2CTII-WP2",
+  "next_packet": "P2CTII-G2-ALG",
   "reserved_later_gates": ["P2CTII-G2-ALG","P2CTII-G4-ALG","P2CTII-G-OBSERVABILITY-ACTIVATE","P2CTII-G-CONTINUOUS-INTAKE"],
   "explicit_non_grants": ["THEORY_SEMANTIC_FREEZE","P2_6_CANDIDATE_FORMATION","RESEARCH_CANDIDATE_GENERATION_FREEZE","OPT_C_ADMISSION","CAPABILITY_ACTIVATION","VALIDATION","PUBLICATION","PROBABILITY","RISK","EXPOSURE","TRADING","EXECUTION","AGENT_WRITE"]
 }
