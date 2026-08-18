@@ -22,8 +22,9 @@ def test_remediation_court_record_grants_no_g4_pass_or_successor_authority() -> 
     assert decision["decision"] == "PASS_REMEDIATION"
     assert decision["p1cdii_g4_alg"]["current_status"] == "UNRESOLVED"
     assert decision["successor_beyond_wp4_authorised"] is False
-    assert state["status"] == "GATE_READY"
+    assert state["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-G4-ALG"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-1"]["status"] == "COMPLETED"
-    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW"]["status"] == "READY"
-    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW"
+    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW"]["status"] == "BLOCKED"
+    assert state["packets"]["P1CDII-WP4-REMEDIATION-2"]["status"] == "READY"
+    assert state["next_packet"] == "P1CDII-WP4-REMEDIATION-2"
