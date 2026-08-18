@@ -10,6 +10,7 @@ import tempfile
 from typing import Any, Mapping, Sequence
 
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
+from ovc.development.skills.vit_completion_policy import validate_non_churning_completion_transition
 from ovc.development.skills.vit_core import DependencyFrontier, IntegrationAuthorityManifest, PacketIntegrationPayload
 from ovc.development.skills.vit_routing import build_vit_lineage_record
 
@@ -121,6 +122,10 @@ def main() -> int:
     completion_transition = json.loads(args.completion_transition_json)
     if not isinstance(targets, list) or not isinstance(completion_transition, Mapping):
         raise RuntimeError("targets must be a list and completion transition must be an object")
+    validate_non_churning_completion_transition(
+        packet_id=args.packet_id,
+        completion_transition=completion_transition,
+    )
 
     _git(repo, ["cat-file", "-e", f"{args.base}^{{commit}}"])
     base_tree = _git(repo, ["rev-parse", f"{args.base}^{{tree}}"])
