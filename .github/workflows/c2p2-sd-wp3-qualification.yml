@@ -1,0 +1,357 @@
+name: C2P2 SD WP3 synthetic qualification
+
+on:
+  push:
+    branches:
+      - build/c2p2-sd-wp3-20260818
+    paths:
+      - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_WP3_LAUNCH_v0_1.json
+
+concurrency:
+  group: c2p2-sd-wp3-synthetic-qualification
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  qualify_wp3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONPATH: src:.
+      QUAL_DIR: /tmp/c2p2-sd-wp3-qualification
+    steps:
+      - name: Checkout exact WP3 trigger head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install repository and test dependencies
+        run: python -m pip install -e ".[test]" -r requirements-console-vnext.txt
+
+      - name: Verify live WP3 branch is exact trigger head
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "+refs/heads/${GITHUB_REF_NAME}:refs/remotes/origin/${GITHUB_REF_NAME}"
+          live_branch="$(git rev-parse "origin/${GITHUB_REF_NAME}")"
+          test "$live_branch" = "$GITHUB_SHA" || {
+            echo "C2P2_SD_WP3_STALE_TRIGGER:${live_branch}:${GITHUB_SHA}" >&2
+            exit 41
+          }
+
+      - name: Re-resolve live main frozen scientific identities
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --no-tags
+          live_main="$(git rev-parse origin/main)"
+          echo "LIVE_MAIN_SHA=$live_main" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import json
+          import subprocess
+
+          def git_json(path: str):
+              return json.loads(subprocess.run(
+                  ['git', 'show', f'origin/main:{path}'],
+                  check=True, capture_output=True, text=True,
+              ).stdout)
+
+          candidate = git_json('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CANDIDATE_CURRENTNESS_v0_2.json')
+          final = candidate['final_generation']
+          assert final['generation_id'] == 'C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3'
+          assert final['generation_logical_sha256'] == 'c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a'
+          assert final['candidate_hashes'] == {
+              'C2P2-PS0-OP-A-STRICT-CONTINUITY-v3': 'a8cb003521c62129044a4d62cb9a4d5a967cd3ef9d933fb1090ac4dad0843102',
+              'C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3': 'a91f50c12438c4d5263d36b48e40acc0a5e146b474307721a4108ac2398a752e',
+              'C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3': '29f8ac9a5844b425901fda90299f911a48a85422a390771753ffd5b894b1c52c',
+          }
+          assert candidate['selection_state'] == 'COMPARATIVE_SET_ONLY_NO_WINNER'
+          assert candidate['active_object_pack_id'] is None
+
+          source = git_json('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CURRENT_SOURCE_MATERIALISATION_CLOSEOUT_v0_1.json')
+          material = source['materialisation']
+          assert material['materialisation_id'] == 'C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1'
+          assert material['logical_sha256'] == 'f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b'
+          assert source['artifact']['github_actions_artifact_id'] == 9283576949
+          assert source['artifact']['github_actions_artifact_digest'] == 'sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e'
+          print('C2P2_SD_LIVE_MAIN_CURRENTNESS=PASS')
+          PY
+
+      - name: Verify plan and R5 compact evidence bindings without source access
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          plan = json.loads(Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SCIENTIFIC_DISCRIMINATION_PLAN_v0_1_RATIFIED.json').read_text())
+          assert plan['status'] == 'RATIFIED_READY_NOT_STARTED'
+          assert plan['first_mandatory_stop_when_run'] == 'C2P2-SD-GREAL'
+          assert plan['authority_envelope']['execution_start_requires'] == 'OVC RUN C2P2-SD'
+          result_path = Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R5_RESULT_v0_1.json')
+          assert hashlib.sha256(result_path.read_bytes()).hexdigest() == '2c47aa5d96f6c58fcb03bf079778ddd96e98f9e32480ef0b3796e491196aa18b'
+          result = json.loads(result_path.read_text())
+          assert result['status'] == 'COMPLETED_COMPARATIVE_SET_NO_WINNER'
+          assert result['authority']['execution_count_consumed'] == 1
+          assert result['authority']['run_count_remaining'] == 0
+          assert result['active_object_pack_id'] is None
+          assert result['c2p_activation'] == 'NONE'
+          print('C2P2_SD_WP3_NO_REAL_SOURCE_PREFLIGHT=PASS')
+          PY
+          test ! -d /tmp/c2p2-rs0-current-source-r5
+
+      - name: Run targeted C2P2 SD and workflow governance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest -q \
+            tests/opt_b/c2p/v0_2/test_c2p2_sd_aggregate.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_sd_discrimination.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_sd_adversarial_fixture.py \
+            tests/development/test_ci_workflow_inventory.py \
+            --tb=short | tee /tmp/c2p2-sd-targeted.log
+
+      - name: Run repository-wide regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pytest tests -q --tb=short | tee /tmp/c2p2-sd-full.log
+
+      - name: Run synthetic worst-case capacity qualification
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$QUAL_DIR"
+          mkdir -p "$QUAL_DIR"
+          python scripts/c2p2_sd_wp3_qualification.py \
+            --output-dir "$QUAL_DIR" \
+            --synthetic-edges 20000 | tee /tmp/c2p2-sd-capacity.log
+
+      - name: Upload immutable WP3 synthetic qualification evidence
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: c2p2-sd-wp3-qualification-${{ github.run_id }}
+          path: /tmp/c2p2-sd-wp3-qualification
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Materialise WP3 PASS and GREAL gate-ready court record
+        shell: bash
+        env:
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          ARTIFACT_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          release = Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd')
+          qualification_src = Path(os.environ['QUAL_DIR']) / 'C2P2_SD_WP3_CAPACITY_QUALIFICATION_v0_1.json'
+          qualification = json.loads(qualification_src.read_text())
+          assert qualification['status'] == 'PASS'
+          assert qualification['real_source_read'] is False
+          assert qualification['real_source_execution'] is False
+
+          target_summary = Path('/tmp/c2p2-sd-targeted.log').read_text().strip().splitlines()[-1]
+          full_summary = Path('/tmp/c2p2-sd-full.log').read_text().strip().splitlines()[-1]
+          qualification_bytes = qualification_src.read_bytes()
+          qualification_sha = hashlib.sha256(qualification_bytes).hexdigest()
+          (release / 'C2P2_SD_WP3_CAPACITY_QUALIFICATION_v0_1.json').write_bytes(qualification_bytes)
+
+          assurance = {
+              'schema': 'ovc-c2p2-scientific-discrimination-cumulative-assurance/v1',
+              'programme_id': 'OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1',
+              'packet_scope': ['C2P2-SD-WP0', 'C2P2-SD-WP1', 'C2P2-SD-WP2', 'C2P2-SD-WP3'],
+              'status': 'PASS',
+              'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+              'tested_head_sha': os.environ['GITHUB_SHA'],
+              'live_main_sha': os.environ['LIVE_MAIN_SHA'],
+              'targeted_summary': target_summary,
+              'repository_summary': full_summary,
+              'real_source_read': False,
+              'real_source_execution': False,
+              'selection': 'NONE',
+              'activation': 'NONE',
+              'validation': 'LOCKED_UNCONSUMED',
+              'warnings': [],
+              'unresolved_issues': [],
+          }
+          (release / 'C2P2_SD_CUMULATIVE_ASSURANCE_v0_1.json').write_text(json.dumps(assurance, indent=2, sort_keys=True) + '\n')
+
+          qa = {
+              'schema': 'ovc-c2p2-scientific-discrimination-qa/v1',
+              'programme_id': 'OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1',
+              'packet_id': 'C2P2-SD-WP3',
+              'recommendation': 'PASS',
+              'tested_head_sha': os.environ['GITHUB_SHA'],
+              'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+              'targeted_tests': target_summary,
+              'repository_tests': full_summary,
+              'capacity_qualification_sha256': qualification_sha,
+              'checks': {
+                  'full_disagreement_ledger_builder': 'PASS_SYNTHETIC',
+                  'hard_break_detector': 'PASS_SYNTHETIC',
+                  'review_manifest_builder': 'PASS_SYNTHETIC',
+                  'candidate_blinding': 'PASS',
+                  'future_information_firewall': 'PASS',
+                  'duplicate_edge_fail_closed': 'PASS',
+                  'worst_case_capacity_measurement': 'PASS',
+                  'live_main_scientific_currentness': 'PASS',
+                  'real_source_read': 'NONE',
+                  'selection': 'NONE',
+                  'activation': 'NONE',
+              },
+              'warnings': [
+                  'Capacity is a synthetic worst-case projection and does not itself grant real-source replay authority.',
+                  'Candidate C episode-enrichment value remains untested because the frozen episode-relative role count is zero.'
+              ],
+              'unresolved_issues': [],
+              'authority_delta': 'NONE_SYNTHETIC_TOOLING_QUALIFICATION_ONLY',
+              'next_packet': 'C2P2-SD-GREAL',
+          }
+          (release / 'C2P2_SD_WP3_QA_v0_1.json').write_text(json.dumps(qa, indent=2, sort_keys=True) + '\n')
+
+          gate = {
+              'schema': 'ovc-c2p2-scientific-discrimination-greal-gate-packet/v1',
+              'gate_id': 'C2P2-SD-GREAL',
+              'title': 'Bounded real-source discrimination replay authority',
+              'programme_id': 'OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1',
+              'plan_id': 'OVC-C2P2-SCIENTIFIC-DISCRIMINATION-PLAN-v0.1',
+              'plan_version': 'v0.1',
+              'status': 'GATE_READY',
+              'gate_classification': 'OPERATOR_REQUIRED',
+              'baseline_commit': '779163f159964e0f1dae0184b52f2124f12e72ac',
+              'candidate_commit': os.environ['GITHUB_SHA'],
+              'completed_packets': ['C2P2-SD-WP0', 'C2P2-SD-WP1', 'C2P2-SD-WP2', 'C2P2-SD-WP3'],
+              'current_authority': 'SYNTHETIC_AND_R5_COMPACT_REANALYSIS_ONLY_NO_REAL_SOURCE_AUTHORITY',
+              'proposed_authority_delta': 'ONE_EXACT_FULL_POPULATION_DISCOVERY_SHADOW_REPLAY_FOR_DISAGREEMENT_EVIDENCE_ONLY',
+              'proposed_capacity': {
+                  'external_storage_limit_bytes': qualification['proposed_execution_storage_limit_bytes'],
+                  'peak_memory_limit_bytes': qualification['proposed_peak_memory_limit_bytes'],
+                  'concurrency_limit': 1,
+                  'checkpoint_cadence_source_records': 4096,
+              },
+              'required_bindings': {
+                  'candidate_generation_id': 'C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3',
+                  'candidate_generation_logical_sha256': 'c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a',
+                  'source_materialisation_id': 'C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1',
+                  'source_materialisation_logical_sha256': 'f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b',
+                  'source_artifact_id': 9283576949,
+                  'source_artifact_digest': 'sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e',
+                  'runtime_binding_id': 'C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_BINDING_v0_3',
+                  'evidence_contract_id': 'C2P2_RS0_NEGATIVE_COVERAGE_CERTIFICATE_v0_2',
+                  'source_order_binding_id': 'C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2',
+                  'population': 'GBPUSD BID/ASK 15M/2H_A_L [2021-01-01,2024-01-01) DISCOVERY_SHADOW_ONLY FULL_POPULATION',
+                  'sampling': 'FORBIDDEN',
+                  'reduced_precision': 'FORBIDDEN',
+                  'semantic_or_threshold_change': 'FORBIDDEN',
+              },
+              'acceptance_conditions': [
+                  'WP0-WP3 cumulative assurance PASS',
+                  'live-main candidate and source identities remain exact immediately before source access',
+                  'same frozen A/B/C generation, runtime, evidence contract and source-order route',
+                  'full population only; no sampling or reduced precision',
+                  'execution remains disagreement-evidence shadow only with no candidate selection or activation',
+                  'capacity remains within the operator-approved GREAL envelope',
+              ],
+              'tests': {'targeted': target_summary, 'repository': full_summary, 'qa': 'PASS'},
+              'warnings': qa['warnings'],
+              'unresolved_issues': [],
+              'changed_files': [
+                  'src/ovc/opt_b/c2p_v0_2/sd_aggregate.py',
+                  'src/ovc/opt_b/c2p_v0_2/sd_discrimination.py',
+                  'scripts/c2p2_sd_wp3_qualification.py',
+                  'tests/opt_b/c2p/v0_2/test_c2p2_sd_aggregate.py',
+                  'tests/opt_b/c2p/v0_2/test_c2p2_sd_discrimination.py',
+                  'tests/opt_b/c2p/v0_2/test_c2p2_sd_adversarial_fixture.py',
+                  '.github/workflows/c2p2-sd-wp3-qualification.yml',
+                  'registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_9.json',
+              ],
+              'external_artifact_hashes': {
+                  'github_actions_artifact_id': int(os.environ['ARTIFACT_ID']),
+                  'github_actions_artifact_digest': os.environ['ARTIFACT_DIGEST'],
+                  'github_actions_artifact_url': os.environ['ARTIFACT_URL'],
+                  'capacity_qualification_sha256': qualification_sha,
+              },
+              'rollback': 'DO_NOT_GRANT_GREAL; preserve WP0-WP3 evidence and prior R4/R5 consumption. If granted then any launched GREAL token is append-only and cannot be silently reinstated.',
+              'recommended_decision': 'PASS',
+              'exact_work_after_approval': 'Materialise a new single-use C2P2-SD-GREAL authority/token bound to this exact gate and capacity; execute exactly one frozen full-population disagreement-evidence replay; then materialise WP4/WP5 and stop at C2P2-SD-GADJ. No selection or activation follows automatically.',
+              'non_transitive_denials': {
+                  'objectpack_selection': 'NONE',
+                  'c2p_activation': 'NONE',
+                  'validation': 'LOCKED_UNCONSUMED',
+                  'canonical_publication': 'NONE',
+                  'ec1_candidate_defining_use': 'FORBIDDEN',
+                  'probability_risk_exposure_trading_execution_agent_write': 'NONE',
+              },
+          }
+          (release / 'C2P2_SD_GREAL_GATE_PACKET_v0_1.json').write_text(json.dumps(gate, indent=2, sort_keys=True) + '\n')
+
+          state = {
+              'schema': 'ovc-c2p2-scientific-discrimination-programme-state/v1',
+              'programme_id': 'OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1',
+              'plan_id': 'OVC-C2P2-SCIENTIFIC-DISCRIMINATION-PLAN-v0.1',
+              'plan_version': 'v0.1',
+              'packet_id': 'C2P2-SD-GREAL',
+              'status': 'GATE_READY',
+              'prerequisites': ['C2P2-SD-WP0_COMPLETED', 'C2P2-SD-WP1_COMPLETED', 'C2P2-SD-WP2_COMPLETED', 'C2P2-SD-WP3_COMPLETED'],
+              'authority_required': 'OPERATOR_REQUIRED',
+              'authority_delta': 'PROPOSED_NOT_GRANTED_ONE_FULL_POPULATION_DISAGREEMENT_REPLAY',
+              'baseline_commit': '779163f159964e0f1dae0184b52f2124f12e72ac',
+              'branch': os.environ['GITHUB_REF_NAME'],
+              'candidate_commit': os.environ['GITHUB_SHA'],
+              'tests': [target_summary, full_summary],
+              'qa_packet': str(release / 'C2P2_SD_WP3_QA_v0_1.json'),
+              'decision_record': None,
+              'merge_commit': None,
+              'blockers': [],
+              'next_packet': 'C2P2-SD-GREAL',
+              'mandatory_stop': 'C2P2-SD-GREAL',
+              'real_source_authority': 'NONE_PENDING_OPERATOR_GREAL_DECISION',
+              'selection_state': 'COMPARATIVE_SET_ONLY_NO_WINNER',
+              'active_object_pack_id': None,
+              'c2p_activation': 'NONE',
+              'validation': 'LOCKED_UNCONSUMED',
+              'publication_probability_risk_exposure_trading_execution_agent_write': 'NONE',
+              'no_vit': True,
+              'main_merge': 'NONE',
+              'rollback': 'PRESERVE_WP0_WP3_EVIDENCE_AND_ALL_R4_R5_CONSUMPTION_FORWARD_ONLY',
+          }
+          Path('registries/implementation/c2p_v0_2/C2P2_SD_PROGRAMME_STATE_v0_1.json').write_text(json.dumps(state, indent=2, sort_keys=True) + '\n')
+          PY
+          git config user.name 'ovc-continuous-execution'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_WP3_CAPACITY_QUALIFICATION_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_CUMULATIVE_ASSURANCE_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_WP3_QA_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_GREAL_GATE_PACKET_v0_1.json \
+            registries/implementation/c2p_v0_2/C2P2_SD_PROGRAMME_STATE_v0_1.json
+          git commit -m 'C2P2-SD-WP3: qualify tooling and materialise GREAL gate [skip ci]'
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+      - name: Summarise operator boundary
+        run: |
+          echo '## C2P2-SD-GREAL' >> "$GITHUB_STEP_SUMMARY"
+          echo '- WP0-WP3: PASS' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Real-source authority: NONE pending operator decision' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Selection: NONE' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Activation: NONE' >> "$GITHUB_STEP_SUMMARY"
+          echo '- Mandatory stop: C2P2-SD-GREAL' >> "$GITHUB_STEP_SUMMARY"

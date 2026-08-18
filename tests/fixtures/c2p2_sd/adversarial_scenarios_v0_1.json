@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-c2p2-scientific-discrimination-adversarial-scenarios/v1",
+  "programme_id": "OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1",
+  "packet_id": "C2P2-SD-WP3",
+  "scenarios": [
+    {
+      "scenario_id": "NO_BREAK_ALL_SAME_NOT_REVIEWED",
+      "candidate_dispositions": ["SAME", "SAME", "SAME"],
+      "confirmed_hard_breaks": [],
+      "expected_ledger": false,
+      "expected_hard_falsification_slots": []
+    },
+    {
+      "scenario_id": "DISAGREEMENT_WITHOUT_BREAK_REVIEW_ONLY",
+      "candidate_dispositions": ["DIFFERENT", "SAME", "SAME"],
+      "confirmed_hard_breaks": [],
+      "expected_ledger": true,
+      "expected_hard_falsification_slots": []
+    },
+    {
+      "scenario_id": "REQUIRED_SOURCE_BREAK_SAME_IS_HARD_FAIL",
+      "candidate_dispositions": ["SAME", "DIFFERENT", "SAME"],
+      "confirmed_hard_breaks": ["REQUIRED_SOURCE_DISCONTINUITY"],
+      "expected_ledger": true,
+      "expected_hard_falsification_slots": [0, 2]
+    },
+    {
+      "scenario_id": "ROLE_CHANGE_SAME_IS_HARD_FAIL",
+      "candidate_dispositions": ["SAME", "SAME", "DIFFERENT"],
+      "confirmed_hard_breaks": ["DECLARED_STRUCTURAL_ROLE_CHANGE"],
+      "expected_ledger": true,
+      "expected_hard_falsification_slots": [0, 1]
+    },
+    {
+      "scenario_id": "ALL_SAME_ACROSS_GEOMETRY_KIND_BREAK_ALL_HARD_FAIL",
+      "candidate_dispositions": ["SAME", "SAME", "SAME"],
+      "confirmed_hard_breaks": ["DECLARED_GEOMETRY_KIND_CHANGE"],
+      "expected_ledger": true,
+      "expected_hard_falsification_slots": [0, 1, 2]
+    },
+    {
+      "scenario_id": "AMBIGUITY_PRESERVED",
+      "candidate_dispositions": ["AMBIGUOUS", "SAME", "DIFFERENT"],
+      "confirmed_hard_breaks": [],
+      "expected_ledger": true,
+      "expected_hard_falsification_slots": []
+    }
+  ],
+  "authority_effect": "NONE_SYNTHETIC_ONLY"
+}
