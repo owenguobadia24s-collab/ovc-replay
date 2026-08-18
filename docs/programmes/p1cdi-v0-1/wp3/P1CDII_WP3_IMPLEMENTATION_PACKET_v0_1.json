@@ -1,0 +1,83 @@
+{
+  "schema": "p1cdii-wp3-implementation-packet/v0.1",
+  "packet_id": "P1CDII-WP3",
+  "gate": "P1CDII-G3",
+  "status": "GATE_READY_AWAITING_REQUIRED_CI_AND_PHYSICAL_INTEGRATION",
+  "reviewed_lawful_main": {
+    "commit": "35d3dc736d5b16b3113a89cc1733a9c75bafd139",
+    "tree": "03e3bdcd98e988ac9b5c4429e54f4bdaf72a3469"
+  },
+  "authority": {
+    "plan_sha256": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+    "design_sha256": "5eaee768bc18ce9fa40c79fe1c3a91c57cbadf21ce15ba39438a0b34a55bbea3",
+    "g0": "OPERATOR_PASS_MATERIALISED",
+    "g2_alg": "PASS_MATERIALISED@1fbd5909571de411a25bb554ad91bb97599cb591",
+    "authority_delta": "NONE"
+  },
+  "scope": [
+    "FREEZE_EXACT_GENERATION_0_SOURCE_CENSUS_FROM_CLOSED_OWNER_RECORD_ROOTS",
+    "RECONCILE_EVERY_AND_ONLY_FROZEN_SOURCE_SUBJECT",
+    "PRESERVE_EXACT_SOURCE_IDENTITY_AND_TYPED_TERMINAL_DISPOSITION",
+    "CREATE_HISTORICAL_ONLY_MEMBERSHIP_FOR_MIGRATED_SUBJECTS",
+    "PROVE_CLEAN_REBUILD_DETERMINISM"
+  ],
+  "source_census": {
+    "source_registry": "registries/research_operations/p1cdi/bootstrap_source_registry.json",
+    "closed_owner_roots": ["records/research_operations/ec1"],
+    "owner_root_json_files_scanned": 9,
+    "owner_root_snapshot": [
+      {"path":"records/research_operations/ec1/EC1_RV_PREPARATION_EXTERNAL_ARTIFACT_INDEX_v0_1.json","sha256":"fb8b05af6523b03fd1d3dc2c6c9c7ae4c4cc88b7154efb4ff8bb45cb33aaa95b","bytes":5375},
+      {"path":"records/research_operations/ec1/ec1_rv_synthetic_fixture_validation_report_v0_1.json","sha256":"e26969b23008e288201eed0e25a68931769b4aff9d1d7090c35ca05e502010b8","bytes":4968},
+      {"path":"records/research_operations/ec1/prsc/PRSCI_EXECUTION_INTEGRITY_INCIDENT_v0_1.json","sha256":"a69dd7ac1fd98285f19eee8429f6629ca5795e5f58ac6dae0633a9db8407dd56","bytes":1543},
+      {"path":"records/research_operations/ec1/prsc/PRSCI_G_PREREG_FREEZE_RECEIPT_v0_1.json","sha256":"80cccbb7be84ec22f23d39f97107215c5b04094e907905c1780f56327713b6be","bytes":1352},
+      {"path":"records/research_operations/ec1/prsc/PRSCI_PROGRAMME_STATE_v0_1.json","sha256":"9f9b770702e293310c8858cea4d9b625e09c38d6b3348e7ccaea2b86e7c88826","bytes":3523},
+      {"path":"records/research_operations/ec1/prsc/PRSCI_REAL_SOURCE_AUTHORITY_GAP_v0_1.json","sha256":"125f33ad2014eed39c5707966e6fe6c75a6bda09ecd4eaf06d01947a59448223","bytes":1174},
+      {"path":"records/research_operations/ec1/prsc/PRSCI_WP0_OPERATOR_INCIDENT_DISPOSITION_v0_1.json","sha256":"6be32a99027115f46a55f71f6d87db2a5c5599cdf3f18bf4a2f0ad024fa9e57f","bytes":1487},
+      {"path":"records/research_operations/ec1/prsc/PRSCI_WP9_PREREGISTRATION_BUNDLE_v0_1.json","sha256":"c995c7907a10c049ba4fcd70416e7e346dba1bf30c8d7affc5590284a06cec17","bytes":2647},
+      {"path":"records/research_operations/ec1/prsc/PRSCI_WP9_PREREGISTRATION_READINESS_RECEIPT_v0_1.json","sha256":"3fc778364a699bb0dff44f5831f63d71e2240413cf7ed156f0a9e1d86b23b18b","bytes":587}
+    ],
+    "recognized_admissible_source_subjects": 0,
+    "frozen_census": "records/research_operations/p1cdi/P1CDI_BOOTSTRAP_SOURCE_CENSUS_MANIFEST_v0_2.json",
+    "frozen_census_sha256": "b3ceb9deb3f29ee5ddf50a3c465d03bb79a424a30bedef910ec155febacaa676",
+    "completeness_manifest": "records/research_operations/p1cdi/P1CDI_BOOTSTRAP_SOURCE_COMPLETENESS_MANIFEST_v0_1.json",
+    "completeness_manifest_sha256": "1a5bb047383179810cbd109a50d5399747b240ee466b9ba4d8d465b7b8f67c72",
+    "clean_rebuild_combined_sha256": "9f26d49a79bef2b703ce5c866039c8bb38ab7a7d9d072cf1cf9fb82b159a79c9",
+    "expected_subject_count": 0,
+    "reconciled_subject_count": 0,
+    "complete": true
+  },
+  "exclusions": [
+    {
+      "surface": "fixtures/research_operations/ec1/ec1_rv_synthetic_fixture_bundle_v0_1.json",
+      "reason": "COURT_RECORD_LABELS_SYNTHETIC_ASSURANCE_ONLY_NOT_DURABLE_SOURCE"
+    },
+    {
+      "surface": "records/research_operations/ec1/EC1_RV_PREPARATION_EXTERNAL_ARTIFACT_INDEX_v0_1.json",
+      "reason": "INDEX_DECLARES_PREPARATION_AND_SYNTHETIC_ASSURANCE_ONLY_AND_CONTAINS_NO_REGISTERED_SOURCE_OBJECT"
+    },
+    {
+      "surface": "SCHEMAS_REGISTRIES_IMPLEMENTATION_TYPES",
+      "reason": "TYPE_OR_CONTRACT_PRESENCE_IS_NOT_A_SOURCE_SUBJECT"
+    }
+  ],
+  "zero_member_interpretation": "EXACT_DISCOVERED_COUNT_NOT_DESIGN_ASSUMPTION; NONZERO_PERMANENT_FIXTURES_PROVE_RECONCILIATION_PATH",
+  "historical_current_separation": {
+    "generation_zero_membership": "HISTORICAL_ONLY",
+    "automatic_active_research": "DENIED",
+    "automatic_current_publication": "DENIED",
+    "operational_pointer": "NOT_CREATED",
+    "historical_as_of_preservation": "REQUIRED"
+  },
+  "implementation_paths": [
+    "registries/research_operations/p1cdi/bootstrap_source_registry.json",
+    "src/ovc/research_operations/p1cdi/bootstrap.py",
+    "src/ovc/research_operations/p1cdi/__init__.py",
+    "scripts/research_operations/run_p1cdii_wp3_bootstrap.py",
+    "fixtures/research_operations/p1cdi/P1CDII_WP3_BOOTSTRAP_FIXTURES_v0_1.json",
+    "tests/research_operations/p1cdi/test_p1cdii_wp3_bootstrap.py",
+    "records/research_operations/p1cdi/P1CDI_BOOTSTRAP_SOURCE_CENSUS_MANIFEST_v0_2.json",
+    "records/research_operations/p1cdi/P1CDI_BOOTSTRAP_SOURCE_COMPLETENESS_MANIFEST_v0_1.json"
+  ],
+  "rollback": "REVERT_WP3_PACKET_AS_ONE_BOUNDED_CHANGE; PRESERVE_WP0_DRAFT_AND_G2_ALG_REVIEW_HISTORY",
+  "next_packet_after_pass": "P1CDII-WP4"
+}
