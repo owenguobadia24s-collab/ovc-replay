@@ -1,0 +1,72 @@
+{
+  "schema": "p1cdii-wp4-reference-fixtures/v0.1",
+  "status": "SYNTHETIC_ADVISORY_NON_DECISION_BEARING",
+  "owner_semantic_binding": "fixture:owner:path1",
+  "first_valid_time": "2026-01-01T00:00:00Z",
+  "identity_a": {
+    "unit_type": "STRUCTURAL_CORE",
+    "structural_predicates": ["predicate:a"],
+    "structural_relations": ["relation:a>b"],
+    "complete_minimal_core_set": ["core:a"],
+    "applicability_scope": {"instrument": "EURUSD"},
+    "identity_defining_dependencies": ["dep:a"],
+    "first_valid_semantics": "2026-01-01T00:00:00Z",
+    "missingness_semantics": "EXPLICIT_UNKNOWN",
+    "representation_dependency": "OWNER_BOUND",
+    "method_dependency": "OWNER_BOUND",
+    "boundary_dependency": "OWNER_BOUND"
+  },
+  "identity_b": {
+    "unit_type": "STRUCTURAL_CORE",
+    "structural_predicates": ["predicate:a", "predicate:b"],
+    "structural_relations": ["relation:a>b"],
+    "complete_minimal_core_set": ["core:a"],
+    "applicability_scope": {"instrument": "EURUSD"},
+    "identity_defining_dependencies": ["dep:a"],
+    "first_valid_semantics": "2026-01-01T00:00:00Z",
+    "missingness_semantics": "EXPLICIT_UNKNOWN",
+    "representation_dependency": "OWNER_BOUND",
+    "method_dependency": "OWNER_BOUND",
+    "boundary_dependency": "OWNER_BOUND"
+  },
+  "exact_planes": {
+    "semantic_relation": "EXACT_EQUIVALENT",
+    "core_relation": "EXACT_CORE",
+    "occurrence_relation": "SAME_MEMBERSHIP",
+    "envelope_relation": "SAME_ENVELOPE",
+    "lineage_relation": "REAPPEARS_AS",
+    "independence_state": "INDEPENDENCE_UNKNOWN"
+  },
+  "non_exact_planes": {
+    "semantic_relation": "REFINES",
+    "core_relation": "SHARES_CORE",
+    "occurrence_relation": "PARTIAL_OVERLAP",
+    "envelope_relation": "SCOPE_CHANGE",
+    "lineage_relation": "SUCCESSOR_OF",
+    "independence_state": "AFFIRMATIVELY_DEPENDENT"
+  },
+  "vector_inputs": [
+    {"record_type":"P1DistinctionEvidenceStateVector","schema_version":"0.1","record_id":"fixture:vector:1","generation_id":"fixture:generation:1","source_refs":["fixture:source:1"],"denominator":"COMPLETE_WITH_CENSORING","recurrence":"PRESENT","dependence":"INDEPENDENCE_UNKNOWN","separation":"PRESENT","integrity":"PASS","other_planes":{"effect_direction":"POSITIVE","typed_value":42},"authority_effect":"NONE"},
+    {"record_type":"P1DistinctionEvidenceStateVector","schema_version":"0.1","record_id":"fixture:vector:2","generation_id":"fixture:generation:1","source_refs":["fixture:source:2"],"denominator":"CAPACITY_INCOMPLETE","recurrence":"ABSENT","dependence":"DEPENDENT","separation":"WEAK","integrity":"WARN","other_planes":{"effect_direction":"NEGATIVE","typed_value":"42"},"authority_effect":"NONE"}
+  ],
+  "replications": [
+    {"record_type":"P1ReplicationOutcomeRecord","schema_version":"0.1","record_id":"fixture:replication:reproduction","generation_id":"fixture:generation:1","source_refs":["fixture:source:3"],"replication_kind":"REPRODUCTION","outcome":"PRESENT","authority_effect":"NONE"},
+    {"record_type":"P1ReplicationOutcomeRecord","schema_version":"0.1","record_id":"fixture:replication:scientific","generation_id":"fixture:generation:1","source_refs":["fixture:source:4"],"replication_kind":"SCIENTIFIC_REPLICATION","outcome":"FAILED","authority_effect":"NONE"}
+  ],
+  "null_bindings": [
+    {"record_type":"P1NullEvidenceBinding","schema_version":"0.1","record_id":"fixture:null:1","generation_id":"fixture:generation:1","source_refs":["fixture:source:5"],"null_class":"NULL","authority_effect":"NONE"},
+    {"record_type":"P1NullEvidenceBinding","schema_version":"0.1","record_id":"fixture:null:2","generation_id":"fixture:generation:1","source_refs":["fixture:source:6"],"null_class":"RESIDUAL","authority_effect":"NONE"},
+    {"record_type":"P1NullEvidenceBinding","schema_version":"0.1","record_id":"fixture:null:3","generation_id":"fixture:generation:1","source_refs":["fixture:source:7"],"null_class":"CENSORED","authority_effect":"NONE"},
+    {"record_type":"P1NullEvidenceBinding","schema_version":"0.1","record_id":"fixture:null:4","generation_id":"fixture:generation:1","source_refs":["fixture:source:8"],"null_class":"CAPACITY_INCOMPLETE","authority_effect":"NONE"},
+    {"record_type":"P1NullEvidenceBinding","schema_version":"0.1","record_id":"fixture:null:5","generation_id":"fixture:generation:1","source_refs":["fixture:source:9"],"null_class":"AMBIGUOUS","authority_effect":"NONE"}
+  ],
+  "contradictions": [
+    {"record_type":"P1DistinctionContradictionRecord","schema_version":"0.1","record_id":"fixture:contradiction:1","generation_id":"fixture:generation:1","source_refs":["fixture:source:10"],"contradiction_type":"SOURCE_RESULT_CONTRADICTION","authority_effect":"NONE"}
+  ],
+  "history": [
+    {"record_id":"fixture:history:1","logical_id":"fixture:logical:1","first_valid_time":"2026-01-01T00:00:00Z","correction_of":null,"payload":{"state":"INITIAL"},"source_refs":["fixture:source:h1"]},
+    {"record_id":"fixture:history:2","logical_id":"fixture:logical:1","first_valid_time":"2026-02-01T00:00:00Z","correction_of":"fixture:history:1","payload":{"state":"CORRECTED"},"source_refs":["fixture:source:h2"]},
+    {"record_id":"fixture:history:3","logical_id":"fixture:logical:1","first_valid_time":"2026-03-01T00:00:00Z","correction_of":"fixture:history:2","payload":{"state":"FUTURE"},"source_refs":["fixture:source:h3"]}
+  ],
+  "authority_effect": "NONE"
+}
