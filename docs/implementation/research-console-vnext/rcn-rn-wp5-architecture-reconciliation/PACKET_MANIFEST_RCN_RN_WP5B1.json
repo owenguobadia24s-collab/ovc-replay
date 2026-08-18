@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-dsai-packet-manifest/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "packet_id": "RCN-RN-WP5B1",
+  "parent_source_packet": "RCN-RN-WP5B",
+  "title": "DMRP Research Operations",
+  "status": "PLANNED_READY_AFTER_RECONCILIATION_MERGE",
+  "objective": "Materialise a federated GET/read-only Research Operations surface for canonical DMRP Path 1, Path 2 and ResearchCandidateGeneration owner records without constructing, repairing, ranking or merging scientific identities.",
+  "prerequisites": ["RCN-RN-WP5-ARCHITECTURE-RECONCILIATION COMPLETED", "RCN-RN-WP5A COMPLETED"],
+  "owner": "DMRP",
+  "owner_sources": [
+    "src/ovc/research_operations/dmrp.py",
+    "src/ovc/research_operations/dmrp_execution.py",
+    "registries/research_operations/DMRP_CANDIDATE_CORE_REGISTRY_v0_1.json"
+  ],
+  "required_artifacts": [
+    "DMRP source-authority preflight",
+    "typed Path1/Path2/generation read model contract",
+    "GET-only API route and generated client",
+    "Research Operations WorkbenchFrame components",
+    "identity/missingness/authority/capacity evidence",
+    "QA/decision/state evidence"
+  ],
+  "acceptance_conditions": [
+    "One canonical DMRP ResearchCandidateGeneration constitution is preserved.",
+    "StructuralTermCandidate, P1CDI objects, C2P ObjectPack candidates and other owner-native candidates are not collapsed into ResearchCandidateGeneration.",
+    "Path 1 and Path 2 provenance remains distinct.",
+    "No Path winner meter, candidate ranking, candidate construction or candidate repair exists.",
+    "No first-new real DMRP Console presentation occurs without exact per-source admission.",
+    "GET/read-only and authority delta NONE are preserved."
+  ],
+  "source_admission_matrix": "RCN_RN_WP5_SOURCE_ADMISSION_MATRIX_v0_1.json",
+  "conditional_gate": "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]",
+  "authority_required": "AUTO_ONLY_FOR_FIXTURE_SHADOW_OR_EXACT_PREAUTHORISED_READ; OPERATOR_G5_OTHERWISE",
+  "authority_delta": "NONE",
+  "next_packet": "RCN-RN-WP5B2",
+  "rollback": "Forward-disable/revert only WP5B1 Console bindings and restore the post-reconciliation pre-WP5B1 state; preserve DMRP owner records and history."
+}
