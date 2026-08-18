@@ -5,9 +5,15 @@
   "programme_id": "OVC-C2P2-IDENTITY-ANCHOR-DISCRIMINATION-v0.1",
   "plan_id": "OVC-C2P2-IDENTITY-ANCHOR-DISCRIMINATION-PLAN-v0.1",
   "plan_version": "v0.1",
-  "status": "DRAFT_PENDING_WP1_WP2_QA",
+  "status": "GATE_READY",
   "gate_classification": "OPERATOR_REQUIRED_MATERIAL_OWNER_IDENTITY_SEMANTICS",
-  "completed_packets": ["C2P2-IAD-WP0"],
+  "baseline_commit": "ad498142c0308e4e47baf2d1e3c46eff7ee89975",
+  "candidate_commit": "e3e600453b261d37bbe633a634bac7e93946dc81",
+  "completed_packets": [
+    "C2P2-IAD-WP0",
+    "C2P2-IAD-WP1",
+    "C2P2-IAD-WP2"
+  ],
   "current_authority": "PRE_REAL_SOURCE_IDENTITY_ANCHOR_DISCRIMINATION_ONLY",
   "current_scientific_state": {
     "objectpack_selection": "NONE",
@@ -17,9 +23,20 @@
     "real_source_authority": "NONE",
     "ec1_candidate_defining_use": "FORBIDDEN"
   },
+  "currentness": {
+    "live_main_at_wp2_census": "cc24d44d427c73e874043b2eccf82d754de5ca39",
+    "live_main_at_gate_ready": "ac4bad9a5c76a8777df91a235e0a7caa8b3f0ca9",
+    "main_delta_relevant_to_owner_census": false,
+    "main_delta_files": [
+      "docs/programmes/p2cti-v0-1/wp4/P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_AFTER_REMEDIATION_1_PACKET_v0_1.json",
+      "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json",
+      "tests/research_operations/p2cti/test_p2ctii_wp2_owner_currentness.py",
+      "tests/research_operations/p2cti/test_p2ctii_wp4_relations_demand_query.py"
+    ]
+  },
   "owner_census_result": "EXISTING_OWNER_CONTRACTS_AND_FROZEN_RS0_SOURCE_PROJECTION_CANNOT_PRODUCE_POSITIVE_SAME_OR_POSITIVE_DIFFERENT_FOR_THE_HIGHER_PERSISTENT_REFERENT_WITHOUT_EXPLICIT_NEW_OWNER_IDENTITY_MEANING",
   "why_gate_is_required": [
-    "The IAD contract requires affirmative owner identity semantics; absence of a break, shared lineage, geometry similarity and candidate outputs are insufficient.",
+    "The frozen IAD contract requires affirmative owner identity semantics; absence of a break, shared lineage, geometry similarity and candidate outputs are insufficient.",
     "C2 trailing-range levels have immutable snapshot level_ids and an upstream lineage_id, but the current owner contract does not grant that lineage the IAD persistent-referent identity meaning required for POSITIVE_SAME.",
     "TRAILING_RANGE_SNAPSHOT containers are exact-population snapshots and do not expose a higher persistent referent identity.",
     "The frozen RS0 source projection omits level lineage_id, source_ids, anchor observation identity and boundary-lineage identity, so C2P cannot reconstruct them lawfully.",
@@ -30,9 +47,34 @@
     "contract_id": "C2.IAD.OWNER.PERSISTENCE_ANCHOR.v0.1",
     "mode": "ADDITIVE_SHADOW_ONLY_NO_MUTATION_OF_EXISTING_C2_IDENTITIES",
     "purpose": "Explicitly grant candidate-independent owner identity meaning to construction-anchor referents for the frozen trailing-range measurement surface so IAD can form positive SAME/DIFFERENT anchors.",
-    "high_low_referent_identity": ["instrument", "side", "clock", "horizon_id", "level_type", "anchor_observation_id", "source_release_id"],
-    "midpoint_referent_identity": ["high_owner_referent_id", "low_owner_referent_id", "horizon_id", "instrument", "side", "clock", "source_release_id"],
-    "measurement_container_referent_identity": ["lower_owner_referent_id", "upper_owner_referent_id", "horizon_id", "instrument", "side", "clock", "source_release_id"],
+    "core_semantic_choice": "CONSTRUCTION_ANCHOR_SUBSTITUTION_DEFINES_REFERENT_DEATH_BIRTH_FOR_THE_ADDITIVE_IAD_OWNER_REFERENT",
+    "high_low_referent_identity": [
+      "instrument",
+      "side",
+      "clock",
+      "horizon_id",
+      "level_type",
+      "anchor_observation_id",
+      "source_release_id"
+    ],
+    "midpoint_referent_identity": [
+      "high_owner_referent_id",
+      "low_owner_referent_id",
+      "horizon_id",
+      "instrument",
+      "side",
+      "clock",
+      "source_release_id"
+    ],
+    "measurement_container_referent_identity": [
+      "lower_owner_referent_id",
+      "upper_owner_referent_id",
+      "horizon_id",
+      "instrument",
+      "side",
+      "clock",
+      "source_release_id"
+    ],
     "positive_same_rule": "Exact governed owner_referent_id equality across the edge, with both referent records first-valid by cutoff and no explicit owner invalidation before cutoff.",
     "positive_different_rule": "Exact governed owner_referent_id change caused by owner construction-anchor substitution, or explicit owner INVALIDATED_SOURCE for the prior referent, with all evidence first-valid by cutoff.",
     "gap_rule": "SOURCE_GAP_OR_UNKNOWN_BREAK_IS_NOT_EVALUABLE_UNLESS_A_SEPARATE_OWNER_RULE_EXPLICITLY_MAKES_IT_IDENTITY_BREAKING",
@@ -41,9 +83,31 @@
     "episode_firewall": "C2E_EPISODE_MEMBERSHIP_OR_LINEAGE_CANNOT_DEFINE_REFERENT_IDENTITY",
     "future_firewall": "NO_POST_CUTOFF_EVIDENCE"
   },
+  "scientific_consequence": {
+    "false_continuity": "A candidate that asserts SAME across an owner construction-anchor substitution will count as false continuity on a POSITIVE_DIFFERENT anchor.",
+    "false_fragmentation": "A candidate that fragments while the exact governed construction-anchor referent is unchanged will count as false fragmentation on POSITIVE_SAME.",
+    "not_equivalent_to": [
+      "GEOMETRY_CHANGE_MEANS_DIFFERENT",
+      "PRICE_CHANGE_MEANS_DIFFERENT",
+      "REFERENCE_SNAPSHOT_ID_CHANGE_ALONE_MEANS_DIFFERENT",
+      "NO_HARD_BREAK_MEANS_SAME",
+      "SHARED_LINEAGE_MEANS_SAME",
+      "C2E_EPISODE_CONTINUITY_MEANS_SAME",
+      "A_B_C_CANDIDATE_OUTPUT_MEANS_GROUND_TRUTH"
+    ]
+  },
   "sidecar_requirement": {
     "schema_id": "C2.IAD.OWNER.PERSISTENCE_ANCHOR.SIDECAR.v0.1",
-    "fields_required": ["owner_referent_id", "owner_referent_kind", "anchor_observation_id_or_boundary_referent_ids", "source_record_id", "first_valid_time", "evaluation_cutoff", "owner_contract_id", "owner_contract_hash"],
+    "fields_required": [
+      "owner_referent_id",
+      "owner_referent_kind",
+      "anchor_observation_id_or_boundary_referent_ids",
+      "source_record_id",
+      "first_valid_time",
+      "evaluation_cutoff",
+      "owner_contract_id",
+      "owner_contract_hash"
+    ],
     "current_rs0_artifact_mutation": "FORBIDDEN",
     "real_source_materialisation": "DEFERRED_TO_FUTURE_C2P2_IAD_GREAL_SINGLE_USE_AUTHORITY",
     "source_binding": "MUST_REUSE_EXACT_FROZEN_2021_2023_GBPUSD_BID_ASK_15M_C2_CONSTRUCTION_INPUTS_AND_C2_PACKAGE_IDENTITY; NO_NEW_PROVIDER_OR_POPULATION",
@@ -57,14 +121,68 @@
     "Equal geometry, adjacency, absence of break or shared lineage without exact referent identity cannot create POSITIVE_SAME.",
     "Gaps and missing owner evidence fail closed to NOT_EVALUABLE.",
     "Synthetic/adversarial WP3 tests prove anchor substitution, unchanged anchor, midpoint/container composition, gap handling, future leakage and candidate leakage.",
+    "WP4 must qualify deterministic anchor construction and evidence sufficiency before GREAL.",
     "No real-source execution occurs until a separately approved C2P2-IAD-GREAL packet binds the sidecar extractor and single-use token."
   ],
-  "tests": {"wp0":"PASS_3_TARGETED_4354_REPOSITORY","wp1":"PENDING","wp2":"PENDING"},
-  "qa": "PENDING_WP1_WP2",
+  "tests": {
+    "wp0": {
+      "github_actions_run_id": 32169515355,
+      "targeted": "3 passed in 0.03s",
+      "repository": "4354 passed, 2 skipped, 687 subtests passed in 286.34s (0:04:46)",
+      "qa": "PASS",
+      "tested_head_sha": "d0fe7a7f1c0fd9ee60f7f2a7b455e886990ede4f"
+    },
+    "wp1": {
+      "github_actions_run_id": 32175079133,
+      "targeted": "7 passed in 0.04s",
+      "repository": "4358 passed, 2 skipped, 687 subtests passed in 276.41s (0:04:36)",
+      "qa": "PASS",
+      "tested_head_sha": "6570425c29eaadc5a31aed9b6631a6c803e4a670"
+    },
+    "wp2": {
+      "github_actions_run_id": 32176109900,
+      "targeted": "10 passed in 0.07s",
+      "repository": "4361 passed, 2 skipped, 687 subtests passed in 287.36s (0:04:47)",
+      "qa": "PASS",
+      "tested_head_sha": "e3e600453b261d37bbe633a634bac7e93946dc81"
+    }
+  },
+  "qa": "PASS",
+  "changed_files": [
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_EXECUTION_START_RECEIPT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP0_CURRENTNESS_AND_AUTHORITY_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP0_BRANCH_RECEIPT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP0_ASSURANCE_RECEIPT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP0_COMPLETION_RECEIPT_v0_1.json",
+    "contracts/research/c2p2_iad/C2P2_IAD_IDENTITY_ANCHOR_EVIDENCE_CONTRACT_v0_1.md",
+    "schemas/research/c2p2_iad/c2p2_iad_identity_anchor_evidence_v0_1.schema.json",
+    "registries/opt_b/c2p/v0_2/research/C2P2_IAD_ANCHOR_ADMISSIBILITY_REGISTRY_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP1_R2_CORRECTION_RECEIPT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP1_R3_QA_FAILURE_RECEIPT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP1_ASSURANCE_RECEIPT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP2_OWNER_EVIDENCE_CENSUS_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_GOWNER_AUTHORITY_DELTA_ANALYSIS_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP2_ASSURANCE_RECEIPT_v0_1.json",
+    "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad/C2P2_IAD_WP2_COMPLETION_RECEIPT_v0_1.json",
+    "tests/opt_b/c2p/v0_2/test_c2p2_iad_wp0.py",
+    "tests/opt_b/c2p/v0_2/test_c2p2_iad_wp1.py",
+    "tests/opt_b/c2p/v0_2/test_c2p2_iad_wp2.py",
+    "registries/implementation/c2p_v0_2/C2P2_IAD_EXECUTION_STATE_v0_1.json"
+  ],
+  "external_artifact_hashes": {
+    "frozen_source_materialisation_id": "C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1",
+    "frozen_source_artifact_id": 9283576949,
+    "frozen_source_artifact_digest": "sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e",
+    "c2p2_sd_greal_artifact_id": 9333347172,
+    "c2p2_sd_greal_artifact_digest": "76d9989c8c6dfb5fce024a7a604bb0e5867795c27ba6660bad4b0207819cfb3d",
+    "c2p2_sd_blind_review_manifest_sha256": "4e6abf3afda0ce762737b02e2b5b54bdc96a3f6bc4427951eaa8feeccc70b8ae",
+    "candidate_generation_logical_sha256": "c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a"
+  },
   "warnings": [
     "This gate intentionally changes the authority of owner identity semantics and cannot be auto-ratified.",
     "The proposed referent is construction-anchor identity, not a claim that geometric continuity, episode continuity or candidate continuity is itself object identity.",
-    "The current frozen RS0 source artifact does not expose the required anchor provenance, so any real owner-anchor sidecar must be produced only under future GREAL authority without mutating the preserved artifact."
+    "The current frozen RS0 source artifact does not expose the required anchor provenance, so any real owner-anchor sidecar must be produced only under future GREAL authority without mutating the preserved artifact.",
+    "Candidate C episode enrichment remains outside this owner-anchor definition and cannot define or validate owner referent identity."
   ],
   "unresolved_issues": [],
   "rollback": "DEFER_OR_BLOCK_GOWNER; preserve WP0-WP2 census evidence and all predecessor C2/C2P contracts unchanged. If later superseded after PASS, preserve the additive owner contract/sidecar schema and issue a new version; never rewrite prior source artifacts.",
