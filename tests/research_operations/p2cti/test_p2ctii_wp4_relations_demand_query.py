@@ -366,5 +366,35 @@ def test_g4_alg_packet_is_exact_unbound_and_blocks_wp5() -> None:
     assert packet["exact_next_route"] == (
         "MATERIALISE_WP4_THEN_COMMISSION_CONFLICT_FREE_INDEPENDENT_P2CTII-G4-ALG_REVIEW"
     )
+    decision_materialisation_artifacts = {
+        "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json",
+        "tests/research_operations/p2cti/test_p2ctii_wp2_owner_currentness.py",
+        "tests/research_operations/p2cti/test_p2ctii_wp4_relations_demand_query.py",
+    }
     for path, expected in packet["exact_artifact_hashes"].items():
-        assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected
+        if path not in decision_materialisation_artifacts:
+            assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected
+
+
+def test_fresh_g4_alg_block_is_materialised_byte_exact_and_routes_only_to_remediation() -> None:
+    review_path = (
+        ROOT
+        / "docs/programmes/p2cti-v0-1/wp4/"
+        "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json"
+    )
+    review = json.loads(review_path.read_text(encoding="utf-8"))
+    state = json.loads(
+        (ROOT / "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json")
+        .read_text(encoding="utf-8")
+    )
+    assert hashlib.sha256(review_path.read_bytes()).hexdigest() == (
+        "a8b31cd18c2d65168d0c5b49a89e45d9ac14845a156d9675725e63a1aa89efb3"
+    )
+    assert review["decision"] == "BLOCK"
+    assert review["authority_delta"] == "NONE"
+    assert state["status"] == "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-1"
+    assert state["p2ctii_g4_alg_status"] == "BLOCK"
+    assert state["next_packet"] == "P2CTII-WP4-REMEDIATION-1"
+    assert state["wp5_authorised"] is False
+    assert state["g4_alg_remediation_author_may_grant_pass"] is False
+    assert state["authority_delta"] == "NONE"

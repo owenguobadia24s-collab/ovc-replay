@@ -296,8 +296,17 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
     assert fresh_decision["authority_delta"] == "NONE"
     assert fresh_decision["programme_state_materialised_by_this_packet"] is False
     assert state["packet_id"] in {"P2CTII-G2-ALG", "P2CTII-WP3", "P2CTII-G4-ALG"}
-    assert state["status"] in {"COMPLETED", "AWAITING_CONFLICT_FREE_INDEPENDENT_REVIEW"}
-    assert state["next_packet"] in {"P2CTII-WP3", "P2CTII-WP4", "P2CTII-G4-ALG"}
+    assert state["status"] in {
+        "COMPLETED",
+        "AWAITING_CONFLICT_FREE_INDEPENDENT_REVIEW",
+        "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-1",
+    }
+    assert state["next_packet"] in {
+        "P2CTII-WP3",
+        "P2CTII-WP4",
+        "P2CTII-G4-ALG",
+        "P2CTII-WP4-REMEDIATION-1",
+    }
     if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG"}:
         assert any(
             packet["packet_id"] == "P2CTII-WP3"
@@ -312,4 +321,13 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
     assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
     assert state["remediation_author_may_grant_g2_alg_pass"] is False
     assert state["wp3_authorised"] is True
-    assert state["blockers"] == []
+    if state.get("p2ctii_g4_alg_status") == "BLOCK":
+        assert state["blockers"] == [
+            "P2CTII_G4_ALG_BLOCK_001_OWNER_GENERATION_AND_SOURCE_EVIDENCE_NOT_RESOLVED",
+            "P2CTII_G4_ALG_BLOCK_002_RESEARCH_QUESTION_CURRENTNESS_NOT_BOUND",
+            "P2CTII_G4_ALG_BLOCK_003_QUERY_STATE_COHERENCE_AND_CONFLICT_PRESERVATION_GAP",
+            "P2CTII_G4_ALG_BLOCK_004_QUERY_VISIBILITY_AND_EXPOSURE_ENFORCEMENT_GAP",
+            "P2CTII_G4_ALG_BLOCK_005_QUERY_RETURN_ALIAS_MUTATES_HELD_STATE",
+        ]
+    else:
+        assert state["blockers"] == []
