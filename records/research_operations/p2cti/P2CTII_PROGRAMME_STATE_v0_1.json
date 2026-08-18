@@ -1,52 +1,43 @@
 {
   "schema": "ovc-programme-state/v1",
   "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
-  "packet_id": "P2CTII-WP2",
+  "packet_id": "P2CTII-G2-ALG",
   "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
   "plan_version": "0.1_REVISED_1",
-  "status": "GATE_READY_ON_SUCCESSFUL_WP2_MATERIALISATION",
+  "status": "BLOCKED",
   "completed_packets": [
     {"packet_id":"P2CTII-WP0","status":"COMPLETED","merge_commit":"49fc565541fe33ec5cdc42296528fc449ea86fff","decision":"PASS"},
-    {"packet_id":"P2CTII-WP1","status":"COMPLETED","merge_commit":"05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3","decision":"PASS"}
+    {"packet_id":"P2CTII-WP1","status":"COMPLETED","merge_commit":"05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3","decision":"PASS"},
+    {"packet_id":"P2CTII-WP2","status":"COMPLETED_GATE_REVIEWED_BLOCK","merge_commit":"7533ec8cc4cfd4111aea59de8264fe87d542b0d0","materialisation_receipt_id":"4d83f728b245c49357b6f9449e7ce5ac09865b07a2149e00074e77e6cabffe3a","completion_receipt_id":"9ef68c3e33118ec4cf2aab936cb49bfaeabf4359e56f988dbfcedc9e0cdf4c4d","decision":"P2CTII-G2-ALG_BLOCK"}
   ],
   "prerequisites": [
     "P2CTII-WP0_COMPLETED@49fc565541fe33ec5cdc42296528fc449ea86fff",
-    "P2CTII-WP1_IMPLEMENTATION_MERGED@05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
-    "P2CTII-WP1_DELEGATED_PASS_BOUND_IN_CURRENT_SUBSTANTIVE_TREE"
+    "P2CTII-WP1_COMPLETED@05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
+    "P2CTII-WP2_MATERIALISED@7533ec8cc4cfd4111aea59de8264fe87d542b0d0",
+    "P2CTII-WP2_COMPLETION_RECEIPT@9ef68c3e33118ec4cf2aab936cb49bfaeabf4359e56f988dbfcedc9e0cdf4c4d"
   ],
-  "authority_required": "INDEPENDENT_REVIEW_REQUIRED_AT_P2CTII-G2-ALG",
+  "authority_required": "AUTO_EXECUTABLE_BOUNDED_WP2_REMEDIATION_THEN_FRESH_INDEPENDENT_REVIEW",
   "authority_delta": "NONE",
-  "baseline_commit": "d7a7f12d99f9c101c3203cb4189f0c9f1d60d77d",
-  "baseline_tree": "4f6184eaeef74dbb0eefe9e11fe2091d1f42696a",
-  "branch": "build/p2ctii-wp2-current-main-r2-20260818",
+  "baseline_commit": "ca8561705f90d5f0f2a777a1c4d7ac22bcb8f55e",
+  "baseline_tree": "8ed0232010d77b9e7b18ecde5bb0c46d43d4306f",
+  "branch": "review/p2ctii-g2-alg-independent-20260818",
   "candidate_commit": "BOUND_BY_FINAL_VIT_LINEAGE",
   "tests": [
-    "tests/research_operations/p2cti/test_p2ctii_wp1_contracts.py",
-    "tests/research_operations/p2cti/test_p2ctii_wp1_schemas.py",
-    "tests/research_operations/p2cti/test_p2ctii_wp2_owner_currentness.py",
-    "REPOSITORY_REQUIRED_CI",
-    "VIT_ROUTING_PREFLIGHT",
-    "FINAL_HEAD_ASSURANCE"
+    "P2CTII_G2_ALG_DECLARED_MATRIX:11_PASS_OF_11",
+    "P2CTII_G2_ALG_ADVERSARIAL_MATRIX:8_PASS_2_BLOCK",
+    "P2CTII_G2_ALG_TWO_CLEAN_PROCESSES:BYTE_EQUAL@0540a6b8fc957178ae200ed56a31b9f3109c0d2748b8dd86ad40c7d28f97559d",
+    "P2CTII_TARGETED_REPOSITORY_TESTS:18_PASS"
   ],
   "qa_packet": "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_CONSOLIDATED_REVIEW_PACKET_v0_1.json",
-  "decision_record": "docs/programmes/p2cti-v0-1/wp1/P2CTII_WP1_DELEGATED_DECISION_v0_1.json",
+  "decision_record": "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_CONSOLIDATED_REVIEW_PACKET_v0_1.json",
   "merge_commit": "EFFECTIVE_ON_VIT_POST_MERGE_PACKET_COMPLETION_RECEIPT",
-  "blockers": ["P2CTII_G2_ALG_INDEPENDENT_REVIEW_REQUIRED"],
-  "superseded_candidates": [
-    "PR1022",
-    "PR1025",
-    "PR1036",
-    "PR1039",
-    "PR1043",
-    "PR1045",
-    "PR1048",
-    "PR1051",
-    "PR1131",
-    "PR1133",
-    "PR1138",
-    "PR1152"
+  "blockers": [
+    "P2CTII_G2_ALG_BLOCK_001_REQUIRED_OWNER_COMPLETENESS_NOT_BOUND",
+    "P2CTII_G2_ALG_BLOCK_002_RUNTIME_FRONTIER_SCHEMA_ENFORCEMENT_GAP"
   ],
-  "next_packet": "P2CTII-G2-ALG",
-  "reserved_later_gates": ["P2CTII-G2-ALG","P2CTII-G4-ALG","P2CTII-G-OBSERVABILITY-ACTIVATE","P2CTII-G-CONTINUOUS-INTAKE"],
-  "explicit_non_grants": ["THEORY_SEMANTIC_FREEZE","P2_6_CANDIDATE_FORMATION","RESEARCH_CANDIDATE_GENERATION_FREEZE","OPT_C_ADMISSION","CAPABILITY_ACTIVATION","VALIDATION","PUBLICATION","PROBABILITY","RISK","EXPOSURE","TRADING","EXECUTION","AGENT_WRITE"]
+  "superseded_candidates": ["PR1022","PR1025","PR1036","PR1039","PR1043","PR1045","PR1048","PR1051","PR1131","PR1133","PR1138","PR1152"],
+  "next_packet": "P2CTII-WP2-REMEDIATION-1",
+  "required_return_gate": "FRESH_CONFLICT_FREE_P2CTII-G2-ALG_INDEPENDENT_REVIEW",
+  "reserved_later_gates": ["P2CTII-G4-ALG","P2CTII-G-OBSERVABILITY-ACTIVATE","P2CTII-G-CONTINUOUS-INTAKE"],
+  "explicit_non_grants": ["P2CTI_OBSERVABILITY","P2CTI_CONTINUOUS_INTAKE_WRITES","THEORY_SEMANTIC_FREEZE","P2_6_CANDIDATE_FORMATION","RESEARCH_CANDIDATE_GENERATION_FREEZE","OPT_C_ADMISSION","CAPABILITY_ACTIVATION","VALIDATION","PUBLICATION","PROBABILITY","RISK","EXPOSURE","TRADING","EXECUTION","AGENT_WRITE"]
 }
