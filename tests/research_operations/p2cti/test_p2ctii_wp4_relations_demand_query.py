@@ -459,6 +459,14 @@ def test_fresh_g4_alg_block_remains_byte_exact_during_bounded_remediation() -> N
         "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json"
     )
     review = json.loads(review_path.read_text(encoding="utf-8"))
+    post_remediation_review_path = (
+        ROOT
+        / "docs/programmes/p2cti-v0-1/wp4/"
+        "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_AFTER_REMEDIATION_1_PACKET_v0_1.json"
+    )
+    post_remediation_review = json.loads(
+        post_remediation_review_path.read_text(encoding="utf-8")
+    )
     state = json.loads(
         (ROOT / "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json")
         .read_text(encoding="utf-8")
@@ -468,11 +476,14 @@ def test_fresh_g4_alg_block_remains_byte_exact_during_bounded_remediation() -> N
     )
     assert review["decision"] == "BLOCK"
     assert review["authority_delta"] == "NONE"
-    assert state["status"] == "PASS_REMEDIATION_AWAITING_MATERIALISATION"
-    assert state["p2ctii_g4_alg_status"] == "UNRESOLVED_PRIOR_BLOCK_PRESERVED"
-    assert state["next_packet"] == (
-        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1"
+    assert hashlib.sha256(post_remediation_review_path.read_bytes()).hexdigest() == (
+        "3f5db3fcac072addac14f8f073ab1ea13d500bcd12884d6a1d26f23740fae7c1"
     )
+    assert post_remediation_review["decision"] == "BLOCK"
+    assert post_remediation_review["authority_delta"] == "NONE"
+    assert state["status"] == "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-2"
+    assert state["p2ctii_g4_alg_status"] == "BLOCK"
+    assert state["next_packet"] == "P2CTII-WP4-REMEDIATION-2"
     assert state["wp5_authorised"] is False
     assert state["g4_alg_remediation_author_may_grant_pass"] is False
     assert state["authority_delta"] == "NONE"

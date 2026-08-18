@@ -296,7 +296,11 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
     assert fresh_decision["authority_delta"] == "NONE"
     assert fresh_decision["programme_state_materialised_by_this_packet"] is False
     assert state["packet_id"] in {
-        "P2CTII-G2-ALG", "P2CTII-WP3", "P2CTII-G4-ALG", "P2CTII-WP4-REMEDIATION-1"
+        "P2CTII-G2-ALG",
+        "P2CTII-WP3",
+        "P2CTII-G4-ALG",
+        "P2CTII-WP4-REMEDIATION-1",
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
     }
     assert state["status"] in {
         "COMPLETED",
@@ -304,6 +308,7 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-1",
         "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
         "PASS_REMEDIATION_AWAITING_MATERIALISATION",
+        "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-2",
     }
     assert state["next_packet"] in {
         "P2CTII-WP3",
@@ -312,6 +317,7 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "P2CTII-WP4-REMEDIATION-1",
         "P2CTII-WP4-REMEDIATION-1-QA-DECISION",
         "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
+        "P2CTII-WP4-REMEDIATION-2",
     }
     if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG"}:
         assert any(
@@ -327,7 +333,18 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
     assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
     assert state["remediation_author_may_grant_g2_alg_pass"] is False
     assert state["wp3_authorised"] is True
-    if state.get("p2ctii_g4_alg_status") == "BLOCK":
+    if state["packet_id"] == (
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1"
+    ):
+        assert state["p2ctii_g4_alg_status"] == "BLOCK"
+        assert state["blockers"] == [
+            "P2CTII_G4_ALG_FRESH_BLOCK_001_OWNER_PROVENANCE_AND_CANONICAL_EVIDENCE_ORDER",
+            "P2CTII_G4_ALG_FRESH_BLOCK_002_RESEARCH_QUESTION_AND_FRONTIER_CURRENTNESS_NOT_AUTHORITATIVELY_BOUND",
+            "P2CTII_G4_ALG_FRESH_BLOCK_003_QUERY_CONSTITUENT_COHERENCE_AND_WARNING_PROPAGATION",
+            "P2CTII_G4_ALG_FRESH_BLOCK_004_CROSS_MODE_CURRENT_EXPOSURE_AND_FORMAL_CORRESPONDENCE_NOT_BOUND",
+            "P2CTII_G4_ALG_FRESH_BLOCK_005_QUERY_COLLECTION_ORDER_NOT_CANONICAL",
+        ]
+    elif state.get("p2ctii_g4_alg_status") == "BLOCK":
         assert state["blockers"] == [
             "P2CTII_G4_ALG_BLOCK_001_OWNER_GENERATION_AND_SOURCE_EVIDENCE_NOT_RESOLVED",
             "P2CTII_G4_ALG_BLOCK_002_RESEARCH_QUESTION_CURRENTNESS_NOT_BOUND",
