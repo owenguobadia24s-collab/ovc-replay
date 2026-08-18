@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-c2p2-rs0-run-recovery-r3-gate-packet/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "gate_id": "C2P2-RS0-RUN-RECOVERY-R3",
+  "status": "GATE_READY",
+  "gate_classification": "OPERATOR_REQUIRED",
+  "diagnosis_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_DIAGNOSIS_v0_1.json",
+  "r3_run_id": 32112742273,
+  "r3_evidence_commit": "9f095652f7a2cdd9eb14d6199192c8bb0da30058",
+  "r3_authority": {
+    "authority_id": "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4",
+    "consumed": true,
+    "run_count_remaining": 0,
+    "rerun": "FORBIDDEN"
+  },
+  "failure_class": "POST_SEMANTIC_LAUNCH_STORAGE_CAPACITY_EXCEEDED",
+  "root_cause": "CAPACITY_QUALIFICATION_SHAPE_GAP",
+  "recommended_decision": "PASS_BOUNDED_STORAGE_RECOVERY_NO_RERUN",
+  "decision_effect_if_pass": {
+    "authority_delta": "BOUNDED_NON_EVIDENTIARY_STORAGE_DIAGNOSTIC_AND_MATERIALISATION_REMEDIATION_ONLY",
+    "real_source_execution_authority": "NONE",
+    "fresh_run_token": "NONE",
+    "storage_limit_change": "NOT_AUTHORISED",
+    "scientific_semantics_change": "NONE",
+    "selection": "NONE",
+    "activation": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "f0_a": "HOLD_NO_JOINT_LAUNCH"
+  },
+  "required_work_after_pass": [
+    "Instrument storage-capacity checkpoints with processed-row, table-count and SQLite allocation telemetry.",
+    "Qualify adversarial synthetic/non-evidentiary workloads that bound hard-scope concentration, structural diversity, evidence-vector multiplicity and real-width payload shape.",
+    "If necessary, implement internal storage compaction only with exact deterministic logical-output/reference equivalence and no scientific delta.",
+    "Run targeted assurance and complete repository regression.",
+    "Measure the final high-density full-cardinality storage/memory envelope on the intended GitHub-hosted execution substrate.",
+    "Prepare C2P2-RS0-FRESH-GRUN-R4 only after all recovery qualification is PASS; that future gate must independently request any new storage ceiling and exactly one fresh real-source run token."
+  ],
+  "stop_conditions": [
+    "Any semantic, source, candidate, predicate, threshold or population drift",
+    "Any sampling or reduced precision",
+    "Any inability to prove exact logical-output equivalence after materialisation changes",
+    "Any synthetic capacity breach or nondeterminism",
+    "Any attempt to execute the real source or recreate R3 authority",
+    "Any selection, activation, Validation, publication, probability, risk, exposure, trading, execution or agent-write authority request inside the recovery packet"
+  ],
+  "preserved_states": {
+    "selection_state": "NONE_SELECTED_INCOMPLETE_RUN",
+    "active_object_pack_id": null,
+    "c2p_activation": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "f0_a": "HOLD_NO_JOINT_LAUNCH",
+    "publication_probability_risk_exposure_trading_execution_agent_write": "NONE"
+  },
+  "next_gate_after_qualified_recovery": "C2P2-RS0-FRESH-GRUN-R4",
+  "operator_command": "OVC APPROVE C2P2-RS0-RUN-RECOVERY-R3",
+  "rollback": "FORWARD_ONLY_PRESERVE_CONSUMED_R3_AND_ALL_PARTIAL_EVIDENCE"
+}
