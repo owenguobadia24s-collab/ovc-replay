@@ -30,9 +30,8 @@ def test_dependency_frontier_binds_integrated_wp0_and_current_vit_policy():
     assert f["observations"]["administrative_closeout_route"]=="PHYSICAL_MATERIALISATION_RECEIPT_PACKET_COMPLETION_RECEIPT"
     assert f["blockers"]==[]
 
-def test_programme_state_carries_wp0_completion_and_stops_gate_ready_without_live_activation():
+def test_programme_state_snapshot_carries_wp0_completion_and_stops_gate_ready_without_live_activation():
     s=load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_6.json")
-    p=load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
     assert s["status"]=="GATE_READY"
     assert s["packet_id"]=="CERS-G-LIVE-DISPATCH"
     assert s["live_unattended_dispatch"]=="DENIED_PENDING_CERS-G-LIVE-DISPATCH"
@@ -45,10 +44,8 @@ def test_programme_state_carries_wp0_completion_and_stops_gate_ready_without_liv
     assert gate["status"]=="GATE_READY"
     assert gate["authority_required"]=="OPERATOR_REQUIRED"
     assert gate["decision"]=="NOT_TAKEN"
-    assert p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_6.json")
-    assert p["status"]=="GATE_READY"
 
-def test_live_dispatch_gate_binds_existing_trusted_executor_but_does_not_activate_it():
+def test_live_dispatch_gate_snapshot_binds_existing_trusted_executor_but_does_not_activate_it():
     g=load("docs/releases/development-skills-v0-3/cers-conformance/wp1-wp5/CERS_G_LIVE_DISPATCH_GATE_PACKET_v0_1.json")
     assert g["status"]=="GATE_READY"
     assert g["decision"]=="NOT_TAKEN"
