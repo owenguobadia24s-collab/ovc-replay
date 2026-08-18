@@ -3,9 +3,9 @@ from __future__ import annotations
 import copy
 import json
 from pathlib import Path
+import re
 
 import pytest
-from jsonschema import Draft202012Validator
 
 from ovc.research_operations.p2cti.currentness import (
     build_source_frontier,
@@ -24,6 +24,73 @@ FIXTURE = json.loads(
 OWNER_REGISTRY = json.loads(
     (ROOT / "registries/research_operations/p2cti/P2CTI_OWNER_SOURCE_REGISTRY_v0_1.json").read_text()
 )
+
+
+def _resolve(schema_root: dict, reference: str) -> dict:
+    if not reference.startswith("#/"):
+        raise AssertionError(f"non-local schema reference: {reference}")
+    node: object = schema_root
+    for part in reference[2:].split("/"):
+        assert isinstance(node, dict)
+        node = node[part]
+    assert isinstance(node, dict)
+    return node
+
+
+def _validate_schema(schema: dict, instance: object, root: dict | None = None) -> None:
+    """Validate the closed WP1 schema vocabulary without optional packages."""
+
+    root = root or schema
+    if "$ref" in schema:
+        _validate_schema(_resolve(root, schema["$ref"]), instance, root)
+        return
+    if "oneOf" in schema:
+        matches = 0
+        for branch in schema["oneOf"]:
+            try:
+                _validate_schema(branch, instance, root)
+            except (AssertionError, KeyError, TypeError):
+                continue
+            matches += 1
+        assert matches == 1
+        return
+    if "const" in schema:
+        assert instance == schema["const"]
+    if "enum" in schema:
+        assert instance in schema["enum"]
+    expected = schema.get("type")
+    if expected is not None:
+        allowed = [expected] if isinstance(expected, str) else expected
+        checks = {
+            "object": lambda value: isinstance(value, dict),
+            "array": lambda value: isinstance(value, list),
+            "string": lambda value: isinstance(value, str),
+            "boolean": lambda value: isinstance(value, bool),
+            "null": lambda value: value is None,
+        }
+        assert any(checks[kind](instance) for kind in allowed)
+    if isinstance(instance, dict):
+        properties = schema.get("properties", {})
+        assert not (set(schema.get("required", [])) - set(instance))
+        if schema.get("additionalProperties") is False:
+            assert not (set(instance) - set(properties))
+        for name, value in instance.items():
+            if name in properties:
+                _validate_schema(properties[name], value, root)
+    if isinstance(instance, list):
+        assert len(instance) >= schema.get("minItems", 0)
+        if "maxItems" in schema:
+            assert len(instance) <= schema["maxItems"]
+        if schema.get("uniqueItems"):
+            encoded = [json.dumps(value, sort_keys=True, separators=(",", ":")) for value in instance]
+            assert len(encoded) == len(set(encoded))
+        if isinstance(schema.get("items"), dict):
+            for value in instance:
+                _validate_schema(schema["items"], value, root)
+    if isinstance(instance, str):
+        assert len(instance) >= schema.get("minLength", 0)
+        if "pattern" in schema:
+            assert re.search(schema["pattern"], instance) is not None
 
 
 def _frontier(rows: list[dict], *, unresolved: tuple[str, ...] = ()) -> dict:
@@ -116,7 +183,7 @@ def test_source_frontier_is_order_independent_and_schema_conformant() -> None:
     schema = json.loads(
         (ROOT / "schemas/research_operations/p2cti/p2cti_source_frontier_v0_1.schema.json").read_text()
     )
-    Draft202012Validator(schema).validate(before)
+    _validate_schema(schema, before)
 
 
 def test_two_point_equal_frontier_is_current_but_not_decision_bearing() -> None:
@@ -137,7 +204,7 @@ def test_two_point_equal_frontier_is_current_but_not_decision_bearing() -> None:
     schema = json.loads(
         (ROOT / "schemas/research_operations/p2cti/p2cti_current_pointer_v0_1.schema.json").read_text()
     )
-    Draft202012Validator(schema).validate(result["advisory_pointer"])
+    _validate_schema(schema, result["advisory_pointer"])
 
 
 def test_generation_advance_and_incomplete_frontier_never_fall_back() -> None:
