@@ -29,6 +29,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.programme_genesis",
     "ovc.programme_genesis.grt_v0_2",
     "ovc.research_operations",
+    "ovc.research_operations.p1cdi",
     "ovc.research_operations.prsc",
     "ovc.research_operations.rccr",
     "ovc.research_operations.p2cti",
@@ -71,6 +72,16 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
             for path in package_root.rglob("__init__.py")
         }
         self.assertEqual(EXPECTED_OVC_PACKAGES, actual)
+
+    def test_p1cdi_namespace_is_advisory_non_decision_bearing_conformance_only(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "p1cdi" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("advisory", init_text)
+        self.assertIn("non-decision-bearing", init_text)
+        self.assertIn("p1cdii-g2-alg", init_text)
+        self.assertIn("no owner-scientific", init_text)
+        self.assertIn("candidate", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("actuation authority", init_text)
 
     def test_console_vnext_namespace_is_local_read_only_application_only(self) -> None:
         init_text = (SRC / "ovc" / "console_vnext" / "__init__.py").read_text(encoding="utf-8").lower()

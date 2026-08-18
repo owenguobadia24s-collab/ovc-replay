@@ -1,0 +1,24 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/p1cdi/p1cdi_correspondence_v0_1.schema.json",
+  "title":"P1CDI correspondence record v0.1",
+  "type":"object",
+  "required":["record_type","schema_version","correspondence_id","left_generation_id","right_generation_id","semantic_relation","core_relation","occurrence_relation","envelope_relation","lineage_relation","independence_state","admission_basis","executability","authority_effect"],
+  "properties":{
+    "record_type":{"const":"P1DistinctionCorrespondenceRecord"},"schema_version":{"const":"0.1"},
+    "correspondence_id":{"type":"string","minLength":1},"left_generation_id":{"type":"string","minLength":1},"right_generation_id":{"type":"string","minLength":1},
+    "semantic_relation":{"enum":["EXACT_EQUIVALENT","REFINES","NARROWS","BROADENS","PARTIAL_OVERLAP","CONTRADICTS","NO_CORRESPONDENCE","NOT_COMPARABLE","AMBIGUOUS"]},
+    "core_relation":{"enum":["EXACT_CORE","SHARES_CORE","CORE_SUBSET","CORE_SUPERSET","PARTIAL_CORE_OVERLAP","MULTIPLE_PLAUSIBLE_CORES","NO_SHARED_CORE","UNRESOLVED"]},
+    "occurrence_relation":{"enum":["SAME_MEMBERSHIP","SUBSET","SUPERSET","PARTIAL_OVERLAP","DISJOINT","NO_SHARED_POPULATION","NOT_COMPARABLE"]},
+    "envelope_relation":{"enum":["SAME_ENVELOPE","NEW_POPULATION","REPRESENTATION_CHANGE","METHOD_CHANGE","SENSITIVITY_CHANGE","BOUNDARY_PACK_CHANGE","UPSTREAM_SEMANTIC_CHANGE","SCOPE_CHANGE"]},
+    "lineage_relation":{"enum":["SUCCESSOR_OF","REFINED_BY","SPLIT_FROM","MERGED_FROM","REAPPEARS_AS","SUPERSEDES","NO_LINEAGE","AMBIGUOUS_LINEAGE"]},
+    "independence_state":{"enum":["INDEPENDENCE_UNKNOWN","AFFIRMATIVELY_DEPENDENT","AFFIRMATIVELY_INDEPENDENT"]},
+    "admission_basis":{"enum":["EXACT_CANONICAL_BYTES","SOURCE_EXPLICIT_DETERMINISTIC_RELATION","REVIEWED_NON_EXACT"]},
+    "executability":{"enum":["AUTO_ADMITTED","REVIEW_REQUIRED","BLOCKED"]},"authority_effect":{"const":"NONE"}
+  },
+  "allOf":[
+    {"if":{"properties":{"semantic_relation":{"not":{"const":"EXACT_EQUIVALENT"}}}},"then":{"properties":{"executability":{"enum":["REVIEW_REQUIRED","BLOCKED"]}}}},
+    {"if":{"properties":{"executability":{"const":"AUTO_ADMITTED"}}},"then":{"properties":{"admission_basis":{"enum":["EXACT_CANONICAL_BYTES","SOURCE_EXPLICIT_DETERMINISTIC_RELATION"]}}}}
+  ],
+  "additionalProperties":false
+}

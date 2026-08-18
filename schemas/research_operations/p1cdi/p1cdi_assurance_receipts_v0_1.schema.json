@@ -1,0 +1,9 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/p1cdi/p1cdi_assurance_receipts_v0_1.schema.json",
+  "title":"P1CDI assurance receipts v0.1",
+  "type":"object",
+  "required":["record_type","schema_version","receipt_id","packet_id","assertions","result","authority_effect","source_evidence_refs"],
+  "properties":{"record_type":{"enum":["P1CDIQueryEquivalenceReceipt","P1CDIResolverReviewPacket","P1CDISemanticEngineReviewPacket","P1CDIReferenceEngineReceipt","P1CDIVisibilityLeakReport","P1CDINonActuationProof","P1CDICandidateFirewallReceipt","P1CDIOperationalBudget","P1CDIQAReceipt"]},"schema_version":{"const":"0.1"},"receipt_id":{"type":"string","minLength":1},"packet_id":{"type":"string","pattern":"^P1CDII-(WP[0-9]+|G[0-9A-Z-]+)$"},"assertions":{"type":"array","minItems":1,"items":{"type":"object","required":["assertion_id","result","reason_codes"],"properties":{"assertion_id":{"type":"string","minLength":1},"result":{"enum":["PASS","WARN","BLOCK","QUARANTINE"]},"reason_codes":{"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true}},"additionalProperties":false}},"result":{"enum":["PASS","WARN","BLOCK","QUARANTINE"]},"authority_effect":{"const":"NONE"},"source_evidence_refs":{"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true}},
+  "additionalProperties":false
+}
