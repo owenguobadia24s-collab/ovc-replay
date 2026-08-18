@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -12,6 +13,11 @@ def _load(path: str | Path):
     if not p.is_absolute():
         p = ROOT / p
     return json.loads(p.read_text(encoding="utf-8"))
+
+
+def _canonical_id(value: dict) -> str:
+    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def test_cers_wp0_freezes_current_control_plane_without_authority_expansion():
@@ -86,3 +92,16 @@ def test_cers_wp0_programme_state_does_not_claim_runtime_or_live_dispatch():
     assert state["parallel_physical_merge"] is False
     gate = next(row for row in state["packet_register"] if row["packet_id"] == "CERS-G-LIVE-DISPATCH")
     assert gate["authority_required"] == "OPERATOR_REQUIRED"
+
+
+def test_cers_wp0_authority_manifest_and_dependency_frontier_are_exact():
+    authority = _load(WP0 / "CERS_WP0_AUTHORITY_MANIFEST_v0_1.json")
+    frontier = _load(WP0 / "CERS_WP0_DEPENDENCY_FRONTIER_v0_1.json")
+    packet = _load(WP0 / "CERS_WP0_IMPLEMENTATION_PACKET_v0_1.json")
+    assert _canonical_id(authority) == packet["authority_manifest_id"] == "7318a8673c96822145c659d45dd7bebe3678e2fe7989d02ef01f41d27446cd10"
+    assert _canonical_id(frontier) == packet["dependency_frontier_id"] == "5eb53a50d256541de952225ddc81fe32a4f70fad8c4273c8dbb6fbecd7c249a8"
+    assert authority["authority_class"] == "AUTO_EXECUTABLE"
+    assert authority["authority_delta"] == "NONE"
+    assert "CERS_UNATTENDED_WRITE_CAPABLE_DISPATCH" in authority["denied"]
+    assert frontier["observations"]["grt_is_cers_wp0_prerequisite"] is False
+    assert frontier["blockers"] == []
