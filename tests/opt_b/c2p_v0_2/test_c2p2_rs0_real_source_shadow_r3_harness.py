@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 from pathlib import Path
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -17,6 +19,15 @@ WORKFLOW = ROOT / ".github/workflows/c2p2-rs0-real-source-shadow-run-r2.yml"
 
 def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_runner_module():
+    spec = importlib.util.spec_from_file_location("c2p2_rs0_real_source_shadow_r3_assurance", RUNNER)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
 def test_r3_operator_pass_materialises_exact_single_use_authority() -> None:
@@ -82,11 +93,16 @@ def test_r3_trigger_preserves_prior_consumption_and_has_no_prelaunch_r3_consumpt
 
 
 def test_r3_runner_and_branch_workflow_are_bound_to_recovered_source_order_adapter() -> None:
+    runner_module = load_runner_module()
     runner = RUNNER.read_text(encoding="utf-8")
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
-    assert "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4" in runner
-    assert "C2P2_RS0_SOURCE_ORDER_RECOVERY_ADAPTER_v0_2" in runner
+    assert runner_module.AUTHORITY_ID == "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4"
+    assert runner_module.SOURCE_ORDER_ADAPTER_ID == "C2P2_RS0_SOURCE_ORDER_RECOVERY_ADAPTER_v0_2"
+    assert runner_module.base.ADAPTER_ID == runner_module.SOURCE_ORDER_ADAPTER_ID
+    assert runner_module.base.ADAPTER_IMPLEMENTATION_PATH == runner_module.ADAPTER_IMPLEMENTATION_PATH
+    assert runner_module.base.ADAPTER_IMPLEMENTATION_SHA == runner_module.ADAPTER_IMPLEMENTATION_SHA
+    assert runner_module.merge_source_factories_with_kind_segmentation is not None
     assert "merge_source_factories_with_kind_segmentation" in runner
     assert "C2P2-RS0-RUN-RECOVERY-R3" in runner
     assert "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION" in runner
