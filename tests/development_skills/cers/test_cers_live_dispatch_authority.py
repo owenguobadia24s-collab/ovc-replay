@@ -37,18 +37,40 @@ def test_authority_registry_fails_closed_outside_wp6():
     assert a["side_effect_policy"]["unknown_side_effect"] == "DENY"
     assert a["scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution"] == "NONE"
 
-def test_programme_state_advances_only_to_wp6_ready():
+def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_wp6():
     p = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
-    s = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_7.json")
-    assert p["status"] == "APPROVED"
-    assert p["next_packet"] == "CERS-WP6"
-    assert p["live_unattended_dispatch"] == "AUTHORIZED_CERS_WP6_BOUNDED_PILOT_ONLY"
-    assert s["status"] == "APPROVED"
-    assert s["runtime_authority"] == "AUTHORIZED_PENDING_WP6_IMPLEMENTATION_AND_PILOT"
-    gate = next(row for row in s["packet_register"] if row["packet_id"] == "CERS-G-LIVE-DISPATCH")
-    wp6 = next(row for row in s["packet_register"] if row["packet_id"] == "CERS-WP6")
+    approved = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_7.json")
+
+    assert approved["status"] == "APPROVED"
+    assert approved["runtime_authority"] == "AUTHORIZED_PENDING_WP6_IMPLEMENTATION_AND_PILOT"
+    gate = next(row for row in approved["packet_register"] if row["packet_id"] == "CERS-G-LIVE-DISPATCH")
+    wp6 = next(row for row in approved["packet_register"] if row["packet_id"] == "CERS-WP6")
     assert gate["decision"] == "PASS_OPERATOR"
     assert wp6["status"] == "READY"
+
+    if p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_7.json"):
+        assert p["status"] == "APPROVED"
+        assert p["packet_id"] == "CERS-G-LIVE-DISPATCH"
+        assert p["next_packet"] == "CERS-WP6"
+        assert p["live_unattended_dispatch"] == "AUTHORIZED_CERS_WP6_BOUNDED_PILOT_ONLY"
+        return
+
+    assert p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_8.json")
+    assert p["status"] == "G6_PASS_CONDITIONAL_EXACT_HEAD_AND_PHYSICAL_RECEIPT"
+    assert p["packet_id"] == "CERS-WP6"
+    assert p["next_packet"] is None
+    assert p["live_unattended_dispatch"] == "AUTHORIZED_CERS_WP6_BOUNDED_PILOT_ONLY_NO_SCOPE_EXPANSION"
+    assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH_AFTER_BRANCH_PILOT_COMPLETION"
+
+    pilot = load(p["current_state"])
+    assert pilot["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_7.json"
+    assert pilot["status"] == "G6_PASS_CONDITIONAL_EXACT_HEAD_AND_PHYSICAL_RECEIPT"
+    assert pilot["runtime_authority"] == "CERS_WP6_BOUNDED_LIVE_PILOT_EXECUTED"
+    assert pilot["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH_AFTER_BRANCH_PILOT_COMPLETION"
+    pilot_gate = next(row for row in pilot["packet_register"] if row["packet_id"] == "CERS-G-LIVE-DISPATCH")
+    pilot_wp6 = next(row for row in pilot["packet_register"] if row["packet_id"] == "CERS-WP6")
+    assert pilot_gate["decision"] == "PASS_OPERATOR"
+    assert pilot_wp6["status"] == "APPROVED_CONDITIONAL_EXACT_HEAD_AND_PHYSICAL_RECEIPT"
 
 def test_gate_ready_evidence_and_external_completion_are_bound():
     d = load("records/development/skills/CERS_G_LIVE_DISPATCH_OPERATOR_PASS_20260818T151800+0100.json")
