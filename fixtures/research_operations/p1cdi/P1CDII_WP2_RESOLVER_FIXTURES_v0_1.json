@@ -58,6 +58,22 @@
   "frontier_incomplete_review_reproduction": [
     {"owner":"ECX_DMRP_RESEARCH_OPERATIONS","source_ref":"ec1:result:001","generation_ref":"ec1:generation:001","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","resolution_state":"RESOLVED"}
   ],
+  "schema_invalid_resolved_source_identity_review_reproductions": [
+    {"field":"source_ref","invalid_value":42,"expected_error":"source_ref must be a non-empty string"},
+    {"field":"generation_ref","invalid_value":42,"expected_error":"generation_ref must be a non-empty string"},
+    {"field":"source_sha256","invalid_value":1111111111111111111111111111111111111111111111111111111111111111,"expected_error":"source_sha256 must be a lowercase SHA-256 string"}
+  ],
+  "source_identity_invalid_type_neighbors": [
+    {"field":"owner","invalid_value":42,"expected_error":"owner must be a non-empty string","targets":["resolver","frontier"]},
+    {"field":"resolution_state","invalid_value":42,"expected_error":"invalid resolution_state","targets":["resolver","frontier"]},
+    {"field":"predicate","invalid_value":42,"expected_error":"predicate must be a non-empty string","targets":["resolver"]}
+  ],
+  "source_identity_valid_typed_neighbors": [
+    {"field":"source_ref","value":"42"},
+    {"field":"generation_ref","value":"42"},
+    {"field":"generation_ref","value":null},
+    {"field":"source_sha256","value":"1111111111111111111111111111111111111111111111111111111111111111"}
+  ],
   "frontier_state_neighbors": [
     {"resolution_state":"UNRESOLVED","expected_currentness":"UNRESOLVED","expected_reason":"UNRESOLVED_CURRENTNESS"},
     {"resolution_state":"UNAVAILABLE","expected_currentness":"UNRESOLVED","expected_reason":"UNRESOLVED_CURRENTNESS"},
