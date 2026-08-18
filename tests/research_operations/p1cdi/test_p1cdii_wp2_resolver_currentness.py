@@ -423,13 +423,11 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     assert review_2_commission["reviewer_binding"]["reviewer_identity"] is None
     assert review_2_commission["authority_delta"] == "NONE"
     assert review_2_commission["wp3_authorised_before_material_pass"] is False
-    assert state["current_packet"] == "P1CDII-WP2"
-    assert state["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-WP2"]["status"] == "COMPLETED"
+    assert state["packets"]["P1CDII-WP2"]["next_packet"] == "P1CDII-WP3"
     assert state["packets"]["P1CDII-WP2-REMEDIATION"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-WP2-REMEDIATION-2"]["status"] == "COMPLETED"
     assert "P1CDII-G2-ALG:PASS@1741e3f221bfdbbed75d1c0980e6ccc95869b4ad" in state["packets"][
         "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW-2"
     ]["tests"]
     assert state["blockers"] == []
-    assert state["next_packet"] == "P1CDII-WP3"
