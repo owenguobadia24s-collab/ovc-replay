@@ -1,0 +1,110 @@
+{
+  "authority": {
+    "activation": "NONE",
+    "real_source_read": "NONE_WP1",
+    "selection": "NONE",
+    "semantic_change": "NONE",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "blind_adjudication": {
+    "allowed_labels": [
+      "SAME",
+      "DIFFERENT",
+      "AMBIGUOUS",
+      "NOT_EVALUABLE"
+    ],
+    "candidate_names": "HIDDEN",
+    "future_information": "FORBIDDEN",
+    "label_semantics": {
+      "AMBIGUOUS": "Two or more identity interpretations remain equally lawful.",
+      "DIFFERENT": "Evidence supports an identity break or different referents.",
+      "NOT_EVALUABLE": "Available cutoff-safe evidence cannot support a scientific label.",
+      "SAME": "Evidence supports one persistent referent across the edge."
+    },
+    "required_context": [
+      "immediate_predecessor",
+      "edge_pair",
+      "immediate_successor_if_first_valid_at_or_before_cutoff",
+      "hard_break_evidence",
+      "owner_constitution_evidence"
+    ]
+  },
+  "definitions": {
+    "candidate_ambiguity": "Candidate disposition AMBIGUOUS; never silently coerced to SAME or DIFFERENT.",
+    "false_continuity": "After blinded adjudication labels an edge DIFFERENT, a candidate disposition SAME on that edge.",
+    "false_fragmentation": "After blinded adjudication labels an edge SAME, a candidate disposition DIFFERENT or NO_CORRESPONDENCE on that edge.",
+    "hard_falsification": "A candidate disposition SAME across a confirmed D1 hard constitutional break. This is an automatic candidate-level falsification independent of human labels.",
+    "not_evaluable": "Evidence available at evaluation_cutoff cannot lawfully support SAME, DIFFERENT or AMBIGUOUS."
+  },
+  "final_analysis": {
+    "error_matrix": "Compute false_split and false_join only over human-adjudicated SAME/DIFFERENT edges; AMBIGUOUS and NOT_EVALUABLE remain separate denominators.",
+    "hard_falsification_rule": "ANY_CONFIRMED_D1_VIOLATION_MAKES_CANDIDATE_NOT_RECOMMENDATION_ELIGIBLE",
+    "pareto_rule": "Candidate dominated if weakly worse on false_split and false_join and strictly worse on at least one, conditional on no hard falsification.",
+    "recommendation_rule": "Recommend only a uniquely non-falsified, non-dominated candidate with no concealed year/side/clock failure; otherwise DEFER."
+  },
+  "hard_breaks": [
+    "EXPLICIT_UPSTREAM_INVALIDATION",
+    "DECLARED_STRUCTURAL_ROLE_CHANGE",
+    "DECLARED_GEOMETRY_KIND_CHANGE",
+    "SPLIT_PARENT_DISPOSITION",
+    "MERGE_PARENT_DISPOSITION",
+    "REQUIRED_SOURCE_DISCONTINUITY"
+  ],
+  "packet_id": "C2P2-SD-WP1",
+  "plan_id": "OVC-C2P2-SCIENTIFIC-DISCRIMINATION-PLAN-v0.1",
+  "plan_version": "v0.1",
+  "positive_same_anchor_policy": {
+    "automatic_same_anchor": "NONE_FROM_ABSENCE_OF_BREAK_ALONE",
+    "review_target_if": [
+      "hard_scope_constant",
+      "no_confirmed_hard_break",
+      "candidate_independent_owner_constitution_allows_continued_observation"
+    ],
+    "rule": "Absence of a hard break is necessary but not sufficient for SAME. Final SAME labels require blinded adjudication using cutoff-safe evidence."
+  },
+  "programme_id": "OVC-C2P2-SCIENTIFIC-DISCRIMINATION-v0.1",
+  "schema": "ovc-c2p2-scientific-discrimination-contract/v1",
+  "selection_firewalls": {
+    "C3_semantics": "FORBIDDEN",
+    "c2e_episode_enrichment_for_C": "FORBIDDEN_SELECTION_JUSTIFICATION_CURRENT_ROLE_COUNT_ZERO",
+    "compression": "DESCRIPTIVE_ONLY_NOT_SELECTION_EVIDENCE",
+    "family_labels": "FORBIDDEN",
+    "future_outcomes": "FORBIDDEN",
+    "object_count": "DESCRIPTIVE_ONLY_NOT_SELECTION_EVIDENCE",
+    "scalar_similarity": "FORBIDDEN",
+    "wall_time_memory_storage": "CAPACITY_ONLY_NOT_SELECTION_EVIDENCE"
+  },
+  "status": "FROZEN",
+  "stratification": [
+    "year",
+    "side",
+    "clock",
+    "structural_role_id",
+    "geometry_kind_id"
+  ],
+  "unit_of_analysis": {
+    "candidate_disposition_values": [
+      "SAME",
+      "DIFFERENT",
+      "AMBIGUOUS",
+      "NO_CORRESPONDENCE"
+    ],
+    "candidate_labels_in_review": "HIDDEN",
+    "description": "A candidate-independent ordered source pair within one hard scope, joined to each frozen candidate's identity disposition at the current evaluation cutoff.",
+    "name": "candidate_identity_edge",
+    "required_fields": [
+      "edge_id",
+      "prior_source_record_id",
+      "current_source_record_id",
+      "first_valid_time",
+      "evaluation_cutoff",
+      "instrument",
+      "side",
+      "clock",
+      "structural_role_id",
+      "geometry_kind_id",
+      "candidate_dispositions",
+      "independent_anchor_evidence"
+    ]
+  }
+}
