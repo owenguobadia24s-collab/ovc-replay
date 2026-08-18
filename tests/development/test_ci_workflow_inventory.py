@@ -9,9 +9,10 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = ROOT / "scripts/development/ci_workflow_inventory.py"
 POLICY_DIR = ROOT / "registries/development"
-CURRENT_VERSION = "0_10"
-HISTORICAL_VERSIONS = ("0_9", "0_8", "0_7", "0_6", "0_5", "0_4", "0_3", "0_2", "0_1")
+CURRENT_VERSION = "0_11"
+HISTORICAL_VERSIONS = ("0_10", "0_9", "0_8", "0_7", "0_6", "0_5", "0_4", "0_3", "0_2", "0_1")
 EXPECTED_SNAPSHOTS = {
+    "0_11": (191, 142, 49),
     "0_10": (191, 141, 50),
     "0_9": (191, 140, 51),
     "0_8": (191, 139, 52),
@@ -24,6 +25,7 @@ EXPECTED_SNAPSHOTS = {
     "0_1": (175, 129, 46),
 }
 EXPECTED_SUPERSESSION_CHAIN = {
+    "0_11": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.10",
     "0_10": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.9",
     "0_9": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.8",
     "0_8": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.7",
@@ -56,7 +58,7 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def test_current_inventory_is_exhaustive_and_exact(self):
         inventory_module.validate_inventory(self.inventory, self.policy)
         expected = self.policy["snapshot"]["expected_repository_workflow_definition_count"]
-        self.assertEqual(expected, 141)
+        self.assertEqual(expected, 142)
         self.assertEqual(self.inventory["total_workflow_definitions"], expected)
         self.assertEqual(sum(self.inventory["category_counts"].values()), expected)
         self.assertTrue(set(self.inventory["category_counts"]).issubset(set(self.policy["categories"])))
@@ -84,7 +86,7 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
             self.assertEqual(observed, expected, version)
         for version, predecessor_id in EXPECTED_SUPERSESSION_CHAIN.items():
             self.assertEqual(policies[version]["supersedes_for_current_inventory"], predecessor_id, version)
-        self.assertEqual(self.policy["historical_policy_preserved"], "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_9.json")
+        self.assertEqual(self.policy["historical_policy_preserved"], "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_10.json")
         self.assertIn("NOT_REMEASURED", self.policy["snapshot"]["github_actions_source"])
 
     def test_exactly_two_approved_pull_request_listeners_remain(self):
@@ -129,6 +131,27 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
             "NO_SELECTION",
             "NO_ACTIVATION",
             "NO_STORAGE_CEILING_CHANGE",
+            "NO_REQUIRED_CHECK_SUBSTITUTION",
+        ):
+            self.assertIn(marker, mode)
+
+    def test_r4_workflow_is_single_use_non_pr_no_vit_and_non_promoting(self):
+        path = ".github/workflows/c2p2-rs0-real-source-shadow-run-r4.yml"
+        admission = next(
+            item for item in self.policy["additional_non_pr_diagnostic_workflows"]
+            if item["path"] == path
+        )
+        record = self.records[path]
+        self.assertEqual(record["category"], "ACTIVE_MANUAL_OPERATION")
+        self.assertEqual(record["triggers"], ["push"])
+        mode = admission["authority_mode"]
+        for marker in (
+            "OPERATOR_APPROVED_SINGLE_USE_R4_REAL_SOURCE_A_B_C_SHADOW",
+            "NO_VIT",
+            "NO_SELECTION",
+            "NO_ACTIVATION",
+            "NO_VALIDATION",
+            "NO_PUBLICATION",
             "NO_REQUIRED_CHECK_SUBSTITUTION",
         ):
             self.assertIn(marker, mode)
