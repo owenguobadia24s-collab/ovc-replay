@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-c2p2-rs0-run-recovery-r4-successor-reanchor/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-RUN-RECOVERY-R4",
+  "status": "CORRECTED_SUCCESSOR_RUNNING",
+  "supersedes_execution_branch_only": "recover/c2p2-rs0-run-recovery-r4-20260818",
+  "successor_branch": "recover/c2p2-rs0-run-recovery-r4-r2-20260818",
+  "successor_baseline_main_sha": "7fbba589f432ff02d8d1b6f717f3b4b071d57451",
+  "failed_qualification_run": {
+    "github_actions_run_id": 32133096020,
+    "github_actions_job_id": 95698327934,
+    "head_sha": "7ab8154765663196e0d2a3929547df818cef70f7",
+    "targeted_assurance": "PASS_36",
+    "repository_regression": "FAIL_2_WITH_4107_PASS_2_SKIP_687_SUBTEST_PASS",
+    "synthetic_capacity_measurement_started": false,
+    "real_source_read": false,
+    "real_source_execution": false,
+    "fresh_run_token": "NONE"
+  },
+  "correctable_defects": [
+    {
+      "id": "R4REC-GRT-UNSUPPORTED-DIAGNOSTICS-ROOT",
+      "cause": "The prior recovery branch added diagnostics/c2p2-rs0-r4-capacity-recovery/trigger-v0_1.json. GRT v0.2 deliberately does not classify diagnostics/ as an evaluable repository artifact root, so A8 returned NOT_EVALUABLE.",
+      "correction": "Preserve the old branch and history; create this successor from current main and do not carry the unsupported diagnostics-root trigger. No GRT classification or constitution change is made."
+    },
+    {
+      "id": "R4REC-STALE-PRELAUNCH-ASSERTION",
+      "cause": "Historical R4 harness expected PREPARED_PENDING_SINGLE_USE_AUTHORITY after R4 had already reached a terminal BLOCKED post-semantic capacity failure.",
+      "correction": "Recovery assurance binds the actual R4 terminal result/post-run gate and verifies BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED with no selection, activation or Validation change."
+    }
+  ],
+  "authority_effect": "NONE_BRANCH_DISCIPLINE_AND_TEST_STATE_CORRECTION_ONLY",
+  "r4_authority": "CONSUMED_NO_REINSTATEMENT",
+  "real_source_read": "FORBIDDEN",
+  "real_source_execution": "FORBIDDEN",
+  "fresh_run_token": "NONE",
+  "storage_limit_change": "NOT_AUTHORISED",
+  "scientific_semantics_change": "NONE",
+  "selection": "NONE",
+  "activation": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
+  "publication_probability_risk_exposure_trading_execution_agent_write": "NONE",
+  "next_gate_on_qualified_recovery": "C2P2-RS0-FRESH-GRUN-R5",
+  "rollback": "FORWARD_ONLY_PRESERVE_PRIOR_FAILED_RECOVERY_BRANCH_R4_CONSUMPTION_AND_ALL_R4_EVIDENCE"
+}
