@@ -12,6 +12,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
 
+from ovc.development.dsai3v_live_trace import build_observed_completion_trace
 from ovc.development.identity import canonical_sha256
 from ovc.development.skills.vit_core import VitContractError
 from ovc.development.skills.vit_local_completion_executor import (
@@ -105,6 +106,52 @@ def _associated_pr(repository: str, merge_sha: str, token: str) -> Mapping[str, 
             f"expected exactly one merged main PR for {merge_sha}, found {len(candidates)}"
         )
     return candidates[0]
+
+
+def _pr_head_workflow_observations(
+    repository: str,
+    head_sha: str,
+    token: str,
+) -> tuple[tuple[Mapping[str, Any], ...], dict[int, tuple[Mapping[str, Any], ...]]]:
+    """Fetch completed PR-head Actions runs/jobs for observed DEVOBS timing only."""
+    owner, repo = repository.split("/", 1)
+    query = urlencode(
+        {
+            "head_sha": head_sha,
+            "event": "pull_request",
+            "status": "completed",
+            "per_page": "100",
+        }
+    )
+    payload = _json(
+        f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/runs?{query}",
+        token,
+    )
+    if not isinstance(payload, Mapping):
+        raise PostMergeCompletionError("workflow timing response invalid")
+    runs = tuple(
+        dict(row)
+        for row in payload.get("workflow_runs", [])
+        if isinstance(row, Mapping)
+    )
+    jobs_by_run: dict[int, tuple[Mapping[str, Any], ...]] = {}
+    for run in runs:
+        try:
+            run_id = int(run["id"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise PostMergeCompletionError("workflow timing run id invalid") from exc
+        jobs_payload = _json(
+            f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/runs/{run_id}/jobs?per_page=100",
+            token,
+        )
+        if not isinstance(jobs_payload, Mapping):
+            raise PostMergeCompletionError("workflow timing jobs response invalid")
+        jobs_by_run[run_id] = tuple(
+            dict(job)
+            for job in jobs_payload.get("jobs", [])
+            if isinstance(job, Mapping)
+        )
+    return runs, jobs_by_run
 
 
 def _freeze_from_prewrite_logs(
@@ -238,6 +285,9 @@ def run(repo_root: Path, merge_sha: str) -> Mapping[str, Any]:
     pr = _associated_pr(repository, merge_sha, token)
     pr_number = int(pr["number"])
     head_sha = str((pr.get("head") or {}).get("sha") or "")
+    merged_at = str(pr.get("merged_at") or "")
+    if not merged_at:
+        raise PostMergeCompletionError("associated PR merged_at is required")
     freeze = _freeze_from_prewrite_logs(
         repository=repository,
         head_sha=head_sha,
@@ -260,12 +310,55 @@ def run(repo_root: Path, merge_sha: str) -> Mapping[str, Any]:
         create=False,
     )
     receipt_store = ReceiptStore(external_root / "receipts")
+
+    trace_bundle: Mapping[str, Any] | None = None
+    context = freeze.get("completion_context")
+    if isinstance(context, Mapping):
+        try:
+            workflow_runs, jobs_by_run = _pr_head_workflow_observations(
+                repository,
+                head_sha,
+                token,
+            )
+            trace_bundle = build_observed_completion_trace(
+                programme_id=str(context["programme_id"]),
+                packet_id=str(context["packet_id"]),
+                pr_number=pr_number,
+                head_sha=head_sha,
+                merged_at_utc=merged_at,
+                workflow_runs=workflow_runs,
+                jobs_by_run=jobs_by_run,
+            )
+        except (PostMergeCompletionError, ValueError, KeyError) as exc:
+            print(
+                "::warning title=DEVOBS routine trace unavailable::"
+                f"observed workflow timing could not be attached; canonical completion remains fail-honest: {exc}",
+                flush=True,
+            )
+
+    if trace_bundle is not None:
+        for event in trace_bundle.get("trace_events", []):
+            if not isinstance(event, Mapping):
+                raise PostMergeCompletionError("DEVOBS trace event invalid")
+            record_id = event.get("record_id")
+            if not isinstance(record_id, str) or not record_id:
+                raise PostMergeCompletionError("DEVOBS trace event id missing")
+            receipt_store.put(dict(event), record_id)
+
     proof = complete_frozen_transaction(
         freeze=freeze,
         observed_commit=merge_sha,
         observed_tree=observed_tree,
         receipt_store=receipt_store,
         siq_receipts=_siq_observations(repository, head_sha, token),
+        trace_summary=(
+            trace_bundle.get("trace_summary") if trace_bundle is not None else None
+        ),
+        async_assurance_metrics=(
+            trace_bundle.get("async_assurance_metrics")
+            if trace_bundle is not None
+            else None
+        ),
     )
     safe = {
         "schema": proof["schema"],
@@ -280,6 +373,8 @@ def run(repo_root: Path, merge_sha: str) -> Mapping[str, Any]:
         "receipt_ids": proof["receipt_ids"],
         "authority_effect": proof["authority_effect"],
     }
+    if proof.get("trace_summary_id"):
+        safe["trace_summary_id"] = proof["trace_summary_id"]
     print("OVC_VIT_POST_MERGE_COMPLETION_PROOF " + json.dumps(safe, sort_keys=True))
     return safe
 
