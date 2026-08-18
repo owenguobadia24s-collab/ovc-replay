@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-dsai-packet-manifest/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "packet_id": "RCN-RN-WP5C1",
+  "parent_source_packet": "RCN-RN-WP5C",
+  "title": "EC1 / PRSC Scientific Challenge",
+  "status": "PLANNED_AFTER_WP5B2",
+  "objective": "Materialise a GET/read-only Scientific Challenge workspace for lawful PRSC/EC1 protocol, readiness, representation/temporal/context, multiplicity and scientific-review evidence while failing closed on decision-bearing real challenge results until owner and Console source authority are both satisfied.",
+  "prerequisites": ["RCN-RN-WP5B2 COMPLETED"],
+  "owner": "PRSC_EC1",
+  "owner_sources": [
+    "contracts/research_operations/ec1/prsc/PRSC_REPRESENTATION_TEMPORAL_CONTEXT_CONTRACT_v0_1.md",
+    "contracts/research_operations/ec1/prsc/PRSC_MULTIPLICITY_CONTRACT_v0_1.md",
+    "records/research_operations/ec1/prsc/PRSCI_PROGRAMME_STATE_v0_1.json"
+  ],
+  "required_artifacts": [
+    "PRSC/EC1 source-authority preflight",
+    "Scientific Challenge read model contract",
+    "GET-only API route and generated client",
+    "Protocol/Readiness/Challenge/Multiplicity/Review WorkbenchFrame components",
+    "real-result owner-authority firewall",
+    "QA/decision/state evidence"
+  ],
+  "acceptance_conditions": [
+    "Frozen protocol identity and preregistration state are presented without mutation.",
+    "Representation, temporal and context challenge evidence preserves complete denominators and typed not-evaluable/not-comparable states.",
+    "Multiplicity/family evidence preserves registered family provenance and no hidden top-N.",
+    "Real decision-bearing scientific results remain denied until E1/R1 and PRSCI-G-EC1-CHALLENGE or exact lawful successor authority plus Console source admission are satisfied.",
+    "CandidateFreeze remains separate and non-actuating from the Console.",
+    "Validation remains locked/separate and denied before protected resolution.",
+    "GET/read-only and authority delta NONE are preserved."
+  ],
+  "source_admission_matrix": "RCN_RN_WP5_SOURCE_ADMISSION_MATRIX_v0_1.json",
+  "conditional_gate": "RCN-RN-G5-FIRST-NEW-SOURCE[PRSC_EC1]",
+  "authority_required": "AUTO_ONLY_FOR_FIXTURE_SHADOW_OR_EXACT_PREAUTHORISED_READ; OPERATOR_G5_OTHERWISE",
+  "authority_delta": "NONE",
+  "next_packet": "RCN-RN-WP5C2",
+  "rollback": "Forward-disable/revert only WP5C1 Console bindings; preserve PRSC/EC1 protocol, challenge evidence, exposure records and history."
+}
