@@ -125,7 +125,17 @@ def test_unknown_hard_break_and_future_edge_fail_closed() -> None:
     with pytest.raises(ScientificDiscriminationError, match="HARD_BREAK_INVALID"):
         analyze_edge(bad_break)
 
-    future = _edge(31, dispositions=_dispositions("SAME", "SAME", "DIFFERENT"))
-    future["evaluation_cutoff"] = "2020-12-31T23:59:59Z"
+    future = make_edge(
+        prior_source_record_id="P-FUTURE",
+        current_source_record_id="C-FUTURE",
+        first_valid_time="2021-01-01T00:31:00Z",
+        evaluation_cutoff="2020-12-31T23:59:59Z",
+        instrument="GBPUSD",
+        side="BID",
+        clock="15M",
+        structural_role_id="ROLE_LEVEL",
+        geometry_kind_id="LEVEL",
+        candidate_dispositions=_dispositions("SAME", "SAME", "DIFFERENT"),
+    )
     with pytest.raises(ScientificDiscriminationError, match="FUTURE_INFORMATION"):
         analyze_edge(future)
