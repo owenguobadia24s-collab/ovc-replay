@@ -8,7 +8,7 @@ from pathlib import Path
 from ovc.opt_b.c2p_v0_2.rs0_empirical_runtime_indexed import run_indexed_empirical_runtime
 
 
-ROOT = Path(__file__).resolve().parents[5]
+ROOT = Path(__file__).resolve().parents[4]
 SCRIPT = ROOT / "scripts/c2p2_rs0_real_source_shadow_r4.py"
 SPEC = importlib.util.spec_from_file_location("c2p2_rs0_real_source_shadow_r4_test_target", SCRIPT)
 assert SPEC and SPEC.loader
