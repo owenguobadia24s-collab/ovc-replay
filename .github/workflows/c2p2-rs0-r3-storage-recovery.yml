@@ -25,6 +25,37 @@ jobs:
           fetch-depth: 0
           show-progress: false
 
+      - name: Publish diagnostic run locator branch
+        env:
+          OVC_GITHUB_RUN_ID: ${{ github.run_id }}
+          OVC_HEAD_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          original_sha="$OVC_HEAD_SHA"
+          locator_branch="diag/c2p2-rs0-r3-storage-recovery-run-${OVC_GITHUB_RUN_ID}"
+          mkdir -p /tmp/c2p2-rs0-r3-run-locator
+          cat > /tmp/c2p2-rs0-r3-run-locator/locator.json <<JSON
+          {
+            "schema": "ovc-c2p2-rs0-r3-storage-recovery-run-locator/v1",
+            "packet_id": "C2P2-RS0-RUN-RECOVERY-R3",
+            "github_run_id": ${OVC_GITHUB_RUN_ID},
+            "head_sha": "${OVC_HEAD_SHA}",
+            "authority_effect": "NONE_DIAGNOSTIC_ONLY",
+            "real_source_execution_authority": "NONE",
+            "fresh_run_token": "NONE"
+          }
+          JSON
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch --detach "$original_sha"
+          mkdir -p diagnostics/c2p2-rs0-r3-storage-recovery
+          cp /tmp/c2p2-rs0-r3-run-locator/locator.json diagnostics/c2p2-rs0-r3-storage-recovery/run-locator.json
+          git add diagnostics/c2p2-rs0-r3-storage-recovery/run-locator.json
+          git commit -m "C2P2-RS0: expose bounded recovery run ${OVC_GITHUB_RUN_ID} [skip ci]"
+          git push origin HEAD:"refs/heads/${locator_branch}"
+          git reset --hard "$original_sha"
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
