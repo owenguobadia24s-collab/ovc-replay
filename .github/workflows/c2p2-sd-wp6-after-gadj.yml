@@ -1,0 +1,163 @@
+name: C2P2 SD WP6 after GADJ label freeze
+
+on:
+  push:
+    branches:
+      - run/c2p2-sd-greal-20260818
+    paths:
+      - docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_GADJ_HUMAN_LABEL_FREEZE_v0_1.json
+      - .github/workflows/c2p2-sd-wp6-after-gadj.yml
+
+concurrency:
+  group: c2p2-sd-wp6-after-gadj
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  wp6:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PYTHONPATH: src:.
+      EVIDENCE_DIR: /tmp/c2p2-sd-greal-evidence
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          show-progress: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install repository and test dependencies
+        run: python -m pip install -e ".[test]" -r requirements-console-vnext.txt
+
+      - name: Verify live branch head and frozen GADJ authority state
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "+refs/heads/${GITHUB_REF_NAME}:refs/remotes/origin/${GITHUB_REF_NAME}"
+          live_branch="$(git rev-parse "origin/${GITHUB_REF_NAME}")"
+          test "$live_branch" = "$GITHUB_SHA" || {
+            echo "C2P2_SD_WP6_STALE_TRIGGER:$live_branch:$GITHUB_SHA" >&2
+            exit 42
+          }
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('.')
+          decision = json.loads((root / 'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_GADJ_OPERATOR_DECISION_v0_1.json').read_text())
+          freeze = json.loads((root / 'docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_GADJ_HUMAN_LABEL_FREEZE_v0_1.json').read_text())
+          consumption = json.loads((root / 'registries/authority/C2P2_SD_GREAL_CONSUMPTION_v0_1.json').read_text())
+          assert decision['decision'] == 'PASS'
+          assert decision['gate_id'] == 'C2P2-SD-GADJ'
+          assert freeze['decision'] == 'FREEZE_LABEL_SET'
+          assert freeze['review_case_count'] == 72
+          assert freeze['label_counts'] == {'AMBIGUOUS': 0, 'DIFFERENT': 0, 'NOT_EVALUABLE': 72, 'SAME': 0}
+          assert freeze['candidate_names_visible_at_freeze'] is False
+          assert freeze['unblinding_before_freeze'] == 'FORBIDDEN_AND_NOT_PERFORMED'
+          assert consumption['execution_count_consumed'] == 1
+          assert consumption['run_count_remaining'] == 0
+          assert consumption['rerun'] == 'FORBIDDEN_AFTER_SEMANTIC_LAUNCH'
+          print('C2P2_SD_WP6_AUTHORITY_PREFLIGHT=PASS')
+          PY
+
+      - name: Download immutable GREAL evidence artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: c2p2-sd-greal-32159136741
+          path: ${{ env.EVIDENCE_DIR }}
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '32159136741'
+
+      - name: Validate exact frozen blind manifest and human label set before unblinding
+        run: |
+          python -m py_compile scripts/c2p2_sd_wp6_after_gadj.py
+          python scripts/c2p2_sd_wp6_after_gadj.py validate \
+            --repo-root . \
+            --evidence-root "$EVIDENCE_DIR"
+
+      - name: Run targeted C2P2-SD and workflow-governance assurance
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m pytest -q tests/opt_b/c2p/v0_2/test_c2p2_sd_* tests/development/test_ci_workflow_inventory.py --tb=short | tee /tmp/c2p2-sd-wp6-targeted.txt
+
+      - name: Run repository-wide regression
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m pytest tests -q --tb=short | tee /tmp/c2p2-sd-wp6-repository.txt
+
+      - name: Unblind only after frozen labels and execute deterministic WP6 analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          targeted="$(tail -n 1 /tmp/c2p2-sd-wp6-targeted.txt)"
+          repository="$(tail -n 1 /tmp/c2p2-sd-wp6-repository.txt)"
+          python scripts/c2p2_sd_wp6_after_gadj.py execute \
+            --repo-root . \
+            --evidence-root "$EVIDENCE_DIR" \
+            --targeted-summary "$targeted" \
+            --repository-summary "$repository"
+
+      - name: Verify GSEL boundary remains selection and activation safe
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          release = Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd')
+          analysis = json.loads((release / 'C2P2_SD_WP6_ERROR_PARETO_ANALYSIS_v0_1.json').read_text())
+          gate = json.loads((release / 'C2P2_SD_GSEL_GATE_PACKET_v0_1.json').read_text())
+          state = json.loads(Path('registries/implementation/c2p_v0_2/C2P2_SD_EXECUTION_STATE_v0_1.json').read_text())
+          assert analysis['human_same_different_evaluable_count'] == 0
+          assert analysis['candidate_recommendation'] is None
+          assert analysis['selection'] == 'NONE'
+          assert analysis['c2p_activation'] == 'NONE'
+          assert gate['recommended_decision'] == 'DEFER'
+          assert gate['recommended_candidate'] is None
+          assert state['packet_id'] == 'C2P2-SD-GSEL'
+          assert state['status'] == 'GATE_READY'
+          assert state['active_object_pack_id'] is None
+          assert state['c2p_activation'] == 'NONE'
+          assert state['validation'] == 'LOCKED_UNCONSUMED'
+          print('C2P2_SD_GSEL_BOUNDARY=PASS')
+          PY
+
+      - name: Materialise WP6 and GSEL court record on evidence branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'ovc-continuous-execution'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_GADJ_UNBLINDING_MAP_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_WP6_ERROR_PARETO_ANALYSIS_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_WP6_QA_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_GSEL_GATE_PACKET_v0_1.json \
+            registries/implementation/c2p_v0_2/C2P2_SD_EXECUTION_STATE_v0_1.json
+          git commit -m 'C2P2-SD-WP6: materialise frozen-label analysis and GSEL gate [skip ci]'
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+      - name: Summarise mandatory GSEL stop
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          gate = json.loads(Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-sd/C2P2_SD_GSEL_GATE_PACKET_v0_1.json').read_text())
+          print('## C2P2-SD-GSEL')
+          print(f"- Status: `{gate['status']}`")
+          print(f"- Recommended decision: `{gate['recommended_decision']}`")
+          print('- Candidate recommendation: `NONE`')
+          print('- ObjectPack selection: `NONE`')
+          print('- C2P activation: `NONE`')
+          print('- Validation: `LOCKED_UNCONSUMED`')
+          PY
