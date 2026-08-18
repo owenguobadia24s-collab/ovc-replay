@@ -14,6 +14,7 @@ import type {
 } from "./types";
 
 const API_ROOT = "/api/v1";
+const DMRP_SNAPSHOT_PATH = "/research/dmrp/snapshot";
 
 export class FixtureBoundaryError extends Error {
   readonly reasonCode: string;
@@ -80,7 +81,7 @@ export async function getRepresentationSnapshot(): Promise<ReadEnvelope<WP5ARepr
 }
 
 export async function getDMRPSnapshot(): Promise<any> {
-  const response = await fetch(`${API_ROOT}/research/dmrp/snapshot`, {
+  const response = await fetch(`${API_ROOT}${DMRP_SNAPSHOT_PATH}`, {
     method: "GET",
     headers: { Accept: "application/json" },
   });
