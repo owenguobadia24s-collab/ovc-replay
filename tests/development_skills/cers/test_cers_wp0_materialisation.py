@@ -64,12 +64,12 @@ def test_cers_wp0_registered_root_census_is_exact_and_fail_closed():
     assert census["dispatch_eligibility"]["unknown_root"] == "DENY"
 
 
-def test_cers_wp0_current_sources_preserve_existing_controller_and_gateway():
+def test_cers_wp0_sources_preserve_existing_controller_gateway_and_frozen_denial():
     freeze = _load(WP0 / "CERS_WP0_SOURCE_AUTHORITY_FREEZE_v0_1.json")
     default = _load("registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json")
     async_live = _load("registries/authority/DSAI3V_ASYNC_ASSURANCE_LIVE_AUTHORITY_v0_1.json")
     exclusivity = _load("registries/development/skills/VIT_PHYSICAL_MAIN_EXCLUSIVITY_v0_1.json")
-    cers_pointer = _load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
+    wp0_state = _load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_4.json")
     assert default["status"] == "ACTIVE"
     assert default["controller"] == "DSAI_VIT_PHYSICAL_CONTROLLER"
     assert default["execution_policy"]["physical_gateway"] == "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
@@ -81,7 +81,7 @@ def test_cers_wp0_current_sources_preserve_existing_controller_and_gateway():
     assert exclusivity["exclusive_writer_identity"] == "DSAI_VIT_PHYSICAL_CONTROLLER"
     assert exclusivity["physical_gateway"] == "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
     assert exclusivity["parallel_physical_merge"] is False
-    assert cers_pointer["live_unattended_dispatch"] == "DENIED_PENDING_CERS-G-LIVE-DISPATCH"
+    assert wp0_state["live_unattended_dispatch"] == "DENIED_PENDING_CERS-G-LIVE-DISPATCH"
     assert freeze["conclusion"] == "WP0_IMPLEMENTATION_AUTHORITY_CURRENT_LIVE_DISPATCH_REMAINS_DENIED"
 
 

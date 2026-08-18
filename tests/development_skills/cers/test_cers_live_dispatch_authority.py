@@ -1,0 +1,63 @@
+from __future__ import annotations
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+
+def load(path: str):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+def test_operator_pass_is_exact_and_bounded():
+    d = load("records/development/skills/CERS_G_LIVE_DISPATCH_OPERATOR_PASS_20260818T151800+0100.json")
+    assert d["gate_id"] == "CERS-G-LIVE-DISPATCH"
+    assert d["decision"] == "PASS"
+    assert d["operator_command"] == "OVC APPROVE CERS-G-LIVE-DISPATCH PASS"
+    assert d["executor"]["executor_identity"] == "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311"
+    scope = d["approved_scope"]
+    assert scope["programme_allowlist"] == ["OVC-DSAI3V-CERS-CONFORMANCE-v0.1"]
+    assert scope["packet_allowlist"] == ["CERS-WP6"]
+    assert scope["packet_class_allowlist"] == ["LOW_RISK_IMPLEMENTATION"]
+    assert scope["action_classes"] == ["WRITE_FILE", "GIT_COMMIT", "PUSH_BRANCH"]
+    assert scope["worker_concurrency"] == 1
+    assert scope["max_speculative_depth"] == 1
+    assert scope["direct_main_mutation"] is False
+    assert scope["packet_executor_merge_capability"] == "NONE"
+    assert scope["force_push"] is False and scope["history_rewrite"] is False
+
+def test_authority_registry_fails_closed_outside_wp6():
+    a = load("registries/development/skills/cers/CERS_LIVE_DISPATCH_AUTHORITY_v0_1.json")
+    assert a["effective"] is True
+    assert a["authority_effect"] == "CERS_WP6_BOUNDED_UNATTENDED_DISPATCH_ONLY"
+    assert a["scope"]["packet_allowlist"] == ["CERS-WP6"]
+    assert a["scope"]["worker_concurrency"] == 1
+    assert a["integration"]["direct_main_mutation"] is False
+    assert a["integration"]["parallel_physical_merge"] is False
+    assert a["integration"]["force_push"] is False
+    assert a["integration"]["history_rewrite"] is False
+    assert a["side_effect_policy"]["unknown_side_effect"] == "DENY"
+    assert a["scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution"] == "NONE"
+
+def test_programme_state_advances_only_to_wp6_ready():
+    p = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
+    s = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_7.json")
+    assert p["status"] == "APPROVED"
+    assert p["next_packet"] == "CERS-WP6"
+    assert p["live_unattended_dispatch"] == "AUTHORIZED_CERS_WP6_BOUNDED_PILOT_ONLY"
+    assert s["status"] == "APPROVED"
+    assert s["runtime_authority"] == "AUTHORIZED_PENDING_WP6_IMPLEMENTATION_AND_PILOT"
+    gate = next(row for row in s["packet_register"] if row["packet_id"] == "CERS-G-LIVE-DISPATCH")
+    wp6 = next(row for row in s["packet_register"] if row["packet_id"] == "CERS-WP6")
+    assert gate["decision"] == "PASS_OPERATOR"
+    assert wp6["status"] == "READY"
+
+def test_gate_ready_evidence_and_external_completion_are_bound():
+    d = load("records/development/skills/CERS_G_LIVE_DISPATCH_OPERATOR_PASS_20260818T151800+0100.json")
+    gate = load("docs/releases/development-skills-v0-3/cers-conformance/wp1-wp5/CERS_G_LIVE_DISPATCH_GATE_PACKET_v0_1.json")
+    assert gate["status"] == "GATE_READY"
+    assert gate["executor"]["executor_identity"] == d["executor"]["executor_identity"]
+    evidence = d["completion_evidence"]
+    assert evidence["physical_tree_equality"] == "PASS"
+    assert evidence["materialisation_receipt_id"] == "f12c5c6d278e47c3c0270d0948dd135350ee0f633830f7a668f7263f0666e174"
+    assert evidence["completion_receipt_id"] == "3f986979f0f8bea9a3c1c55d4cd1b5f380f2cba72a2f2378d328a185a521cee8"
+    assert evidence["development_latency_receipt_id"] == "b9958b44ed5ad5fded36ac4157dbe0abc010fc87147b39b03bb535ba9fccf302"
+    assert evidence["completion_observability_attachment_id"] == "30037a2e8418c30259b22c4e204ff9417a3cd631cc621582f57721d7628225b6"
