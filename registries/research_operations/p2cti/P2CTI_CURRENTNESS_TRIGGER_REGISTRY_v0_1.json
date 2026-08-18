@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-p2cti-currentness-trigger-registry/v0.1",
+  "registry_id": "P2CTI_CURRENTNESS_TRIGGER_REGISTRY_v0_1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "triggers": [
+    {"id":"SOURCE_SEMANTIC_GENERATION_ADVANCED","result":"SOURCE_GENERATION_ADVANCED","requires_reassessment":true},
+    {"id":"OWNER_AUTHORITY_FRONTIER_CHANGED","result":"AUTHORITY_FRONTIER_CHANGED","requires_reassessment":true},
+    {"id":"OWNER_EVIDENCE_STATE_ADVANCED","result":"REASSESSMENT_REQUIRED","requires_reassessment":true},
+    {"id":"DEPENDENCY_SOURCE_CHANGED","result":"REASSESSMENT_REQUIRED","requires_reassessment":true},
+    {"id":"SOURCE_CONFLICT","result":"UNRESOLVED","requires_reassessment":true},
+    {"id":"SOURCE_MISSING","result":"UNRESOLVED","requires_reassessment":true}
+  ],
+  "pointer_switch_requires": ["PRE_BUILD_SOURCE_FRONTIER", "POST_BUILD_TWO_POINT_SOURCE_FRONTIER_EQUALITY", "P2CTII_G2_ALG_PASS_FOR_DECISION_BEARING_POINTER"],
+  "historical_fallback_for_high_risk_predicates": "FORBIDDEN"
+}
