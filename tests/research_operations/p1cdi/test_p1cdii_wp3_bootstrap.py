@@ -261,23 +261,32 @@ def test_lawful_main_freeze_and_completeness_are_exact_zero_member_rebuild() -> 
     validate_contract(bootstrap_schema, completeness)
 
 
-def test_wp3_gate_ready_packets_preserve_authority_and_deny_wp4_before_pass() -> None:
+def test_wp3_delegated_pass_is_conditioned_on_exact_final_integration() -> None:
     implementation = load_json(
         "docs/programmes/p1cdi-v0-1/wp3/P1CDII_WP3_IMPLEMENTATION_PACKET_v0_1.json"
     )
     qa = load_json("docs/programmes/p1cdi-v0-1/wp3/P1CDII_WP3_QA_PACKET_v0_1.json")
+    decision = load_json(
+        "docs/programmes/p1cdi-v0-1/wp3/P1CDII_G3_DELEGATED_DECISION_v0_1.json"
+    )
     state = load_json("records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json")
     assert implementation["authority"]["authority_delta"] == "NONE"
     assert implementation["source_census"]["recognized_admissible_source_subjects"] == 0
     assert implementation["source_census"]["complete"] is True
     assert implementation["historical_current_separation"]["automatic_current_publication"] == "DENIED"
-    assert qa["status"] == "LOCAL_PASS_AWAITING_REQUIRED_CI_VIT_SIQ_GRT"
-    assert qa["g3_decision"] == "NOT_YET_MATERIALISED"
-    assert qa["wp4_authorised_before_g3_pass"] is False
+    assert qa["status"] == "PASS_PENDING_EXACT_FINAL_INTEGRATION"
+    assert qa["g3_decision"] == "PASS_PENDING_EXACT_FINAL_INTEGRATION"
+    assert qa["wp4_authorised_after_exact_final_integration"] is True
+    assert decision["decision"] == "PASS"
+    assert decision["authority_delta"] == "NONE"
+    assert decision["integration_condition"] == (
+        "EXACT_FINAL_REQUIRED_CI_PRVITR_VIT_GRT_SIQ_READY_PASS"
+    )
+    assert decision["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
     assert state["current_packet"] == "P1CDII-WP3"
-    assert state["status"] == "GATE_READY"
-    assert state["packets"]["P1CDII-WP3"]["status"] == "GATE_READY"
-    assert state["next_packet"] == "P1CDII-WP3"
+    assert state["status"] == "COMPLETED"
+    assert state["packets"]["P1CDII-WP3"]["status"] == "COMPLETED"
+    assert state["next_packet"] == "P1CDII-WP4"
     validate_contract(
         load_json("schemas/research_operations/p1cdi/p1cdii_programme_state_v0_1.schema.json"),
         state,
