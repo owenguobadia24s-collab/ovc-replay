@@ -60,8 +60,18 @@ class Dsai3vLiveTraceTests(unittest.TestCase):
             summary["latency_decomposition"]["MODEL_REASONING"]["reason"],
             "NO_EXPLICIT_PLATFORM_MODEL_TELEMETRY",
         )
-        self.assertEqual(bundle["async_assurance_metrics"]["workflow_green_to_materialisation_ms"], 2000)
+        self.assertEqual(bundle["async_assurance_metrics"], {})
         self.assertGreater(len(bundle["trace_events"]), 0)
+        other = [
+            event
+            for event in bundle["trace_events"]
+            if event.get("operation") == "latest_successful_job_to_physical_merge_elapsed"
+        ]
+        self.assertEqual(len(other), 1)
+        self.assertIn(
+            "NOT_GLOBAL_ASSURANCE_GREEN_EVIDENCE",
+            str(other[0]["metadata"]["interpretation"]),
+        )
         self.assertTrue(summary["run_id"].startswith(f"DSAI3V:{TRACE_SCOPE}:PR42:"))
         self.assertEqual(bundle["authority_effect"], "NONE")
         self.assertEqual(
