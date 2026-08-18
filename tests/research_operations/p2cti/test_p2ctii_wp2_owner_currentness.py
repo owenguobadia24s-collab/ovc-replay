@@ -271,9 +271,12 @@ def test_consolidated_review_packet_stops_at_independent_boundary() -> None:
     assert review["gate_decision"] == "BLOCK"
     assert review["decision_bearing_pointer"] == "DENIED"
     assert review["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
-    assert state["packet_id"] == "P2CTII-G2-ALG"
-    assert state["next_packet"] == "P2CTII-WP2-REMEDIATION-1"
+    assert state["packet_id"] == "P2CTII-WP2-REMEDIATION-1"
+    assert state["next_packet"] == "P2CTII-WP2-REMEDIATION-1-QA-DECISION"
+    assert state["p2ctii_g2_alg_status"] == "UNRESOLVED_PRIOR_BLOCK_PRESERVED"
+    assert state["remediation_author_may_grant_g2_alg_pass"] is False
+    assert state["wp3_authorised"] is False
     assert state["blockers"] == [
-        "P2CTII_G2_ALG_BLOCK_001_REQUIRED_OWNER_COMPLETENESS_NOT_BOUND",
-        "P2CTII_G2_ALG_BLOCK_002_RUNTIME_FRONTIER_SCHEMA_ENFORCEMENT_GAP",
+        "P2CTII_WP2_REMEDIATION_1_EXACT_FINAL_ASSURANCE_REQUIRED",
+        "P2CTII_G2_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED",
     ]
