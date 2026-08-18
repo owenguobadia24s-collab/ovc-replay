@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-wp0-baseline/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-PS-WP0",
+  "gate_id": "CERS-PS-G0",
+  "observed_main": "9fb87de746df6450f703dd0c2d0ac3be66947885",
+  "observed_main_tree": "5d97d40e559f0a20f57fcd8df59e8bc7ee4cb056",
+  "completed_predecessor": {
+    "packet_id": "CERS-WP6",
+    "gate_id": "CERS-G6",
+    "terminal_status": "CERS_IMPLEMENTED_QUALIFIED_LIVE_PILOT_PASS",
+    "merge_commit": "81faa31be2e59e47bc9784174f971c93a5a3a41c",
+    "physical_tree": "5faa522134abfae1749a13bb9b53ae51e8054ee7",
+    "transaction_id": "8e306f0506d1a2199777e267c5321425e97ff3b72a07ca9605a9ef04c47516f9",
+    "materialisation_receipt_id": "68ae19cf78bb719a819bd3714b2204129e4761bbfffebfb6d846f615757c22c6",
+    "packet_completion_receipt_id": "86a88d1f565779d63c0c318e4d69e54d38cc1d8ef6c3bdec18acc8040d02a3d7",
+    "development_latency_receipt_id": "28905a2cb72066b186b8f37307d495b2438ff650886992937db3d8f54ca8a223",
+    "completion_observability_attachment_id": "a62c55c1d8893e789a404e58f364c1e2a6fa8cef5bfaa30be756ba660ee98126",
+    "post_merge_completion_proof_id": "112fcfcec02c73b1b19d56d90c5965e45da9d2a7cc26d19706f8cd0816fde860"
+  },
+  "plan_ratification_materialisation": {
+    "merge_commit": "9fb87de746df6450f703dd0c2d0ac3be66947885",
+    "physical_tree": "5d97d40e559f0a20f57fcd8df59e8bc7ee4cb056",
+    "materialisation_receipt_id": "7f5cfc66652982f9019786994fdd9f48c2351bd8c3a1f2db4c4cedce20aa563d",
+    "packet_completion_receipt_id": "addf8a2f8e4af0dd10f5f95cfd83ce0ff382e260e61208e9c9247310959acb75",
+    "development_latency_receipt_id": "527cef595da3964b863225dbc9a79bba0bdbce2def2121a37ae71291c2534309",
+    "completion_observability_attachment_id": "b37240eae1b7d45eada1856717e957347d2ecaf32337c6adaa568b84d38a74e8"
+  },
+  "current_substrate": {
+    "default_execution_substrate": "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1",
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "parallel_physical_merge": false,
+    "allowed_merge_method": "squash"
+  },
+  "current_executor": {
+    "executor_identity": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311",
+    "existing_write_authority_source": "records/development/skills/DSAI_G8C_OPERATOR_ORCH1_ASSISTED_WRITE_PASS_20260812T164000+0100.json",
+    "existing_write_scope": "LOW_RISK_IMPLEMENTATION_PACKET_DECLARED_WRITE_DOMAIN_AND_SEMANTIC_OWNER_ONLY",
+    "merge_authority": "NONE",
+    "force_push": false,
+    "history_rewrite": false
+  },
+  "current_cers_live_authority": {
+    "source": "registries/development/skills/cers/CERS_LIVE_DISPATCH_AUTHORITY_v0_1.json",
+    "effect": "CERS_WP6_BOUNDED_UNATTENDED_DISPATCH_ONLY",
+    "persistent_general_dispatch": "DENIED",
+    "post_pilot_quiescence": "DISABLE_NEW_DISPATCH"
+  },
+  "programme_root_census_source": "registries/development/skills/cers/CERS_PROGRAMME_ROOT_REGISTRY_v0_1.json",
+  "programme_root_census_role": "BOUNDED_INFRASTRUCTURE_CENSUS_NOT_PERSISTENT_ADMISSION",
+  "general_activation": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "authority_effect": "NONE",
+  "rollback": "Preserve DISABLE_NEW_DISPATCH, existing WP6/G6 evidence and all ReceiptStore records; do not activate persistent RUN."
+}

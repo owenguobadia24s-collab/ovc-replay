@@ -13,6 +13,7 @@ from ovc.research_operations.p1cdi.reference import (
     ReferenceEngineError,
     assemble_evidence_reference,
     assign_series_generation,
+    build_correspondence_plane_evidence,
     replay_as_of,
     stage_correspondence,
 )
@@ -33,6 +34,41 @@ def bundle(fields: dict | None = None) -> dict:
 
 def existing(result: dict) -> dict:
     return {key: result[key] for key in ("series", "generation", "projection")}
+
+
+def dmrp_evidence(left: str, right: str, state: str = "AFFIRMATIVELY_DEPENDENT") -> dict:
+    return {
+        "record_id": "fixture:dmrp:1",
+        "owner": "DMRP_EXPOSURE_INFLUENCE_RECORDS",
+        "left_generation_id": left,
+        "right_generation_id": right,
+        "source_ref": "fixture:dmrp:exposure:1",
+        "source_generation": "fixture:dmrp:generation:1",
+        "source_sha256": "d" * 64,
+        "current_source_ref": "fixture:dmrp:exposure:1",
+        "current_source_generation": "fixture:dmrp:generation:1",
+        "current_source_sha256": "d" * 64,
+        "evidence_first_valid_time": "2026-02-01T00:00:00Z",
+        "currentness_state": "CURRENT",
+        "independence_state": state,
+        "authority_effect": "NONE",
+    }
+
+
+def plane_evidence(planes: dict, left: str, right: str) -> list[dict]:
+    return [
+        build_correspondence_plane_evidence(
+            owner="fixture:owner:path1",
+            plane=plane,
+            value=planes[plane],
+            left_generation_id=left,
+            right_generation_id=right,
+            source_ref=f"fixture:source:relation:{plane}",
+            source_generation="fixture:source:generation:1",
+            evidence_first_valid_time="2026-02-01T00:00:00Z",
+        )
+        for plane in ("core_relation", "occurrence_relation", "envelope_relation", "lineage_relation")
+    ]
 
 
 def test_identity_is_deterministic_schema_valid_and_exact_rediscovery_is_idempotent() -> None:
@@ -80,21 +116,23 @@ def test_semantic_mutation_requires_explicit_predecessor_and_creates_immutable_s
 
 def test_correspondence_exact_auto_admission_and_non_exact_review_only() -> None:
     first = bundle()
-    same = build_semantic_projection(
-        generation_id="fixture:generation:rediscovery",
-        owner_semantic_binding=FIXTURE["owner_semantic_binding"],
-        identity_fields=FIXTURE["identity_a"],
-    )
+    same = copy.deepcopy(first["projection"])
     exact = stage_correspondence(
         left_projection=first["projection"], right_projection=same,
+        left_generation_record=first["generation"], right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"], admission_basis="EXACT_CANONICAL_BYTES",
+        plane_evidence_records=plane_evidence(
+            FIXTURE["exact_planes"], first["projection"]["generation_id"], same["generation_id"]
+        ),
+        independence_evidence=[
+            dmrp_evidence(
+                first["projection"]["generation_id"], same["generation_id"], "INDEPENDENCE_UNKNOWN"
+            )
+        ],
     )
     assert exact["record"]["executability"] == "AUTO_ADMITTED"
-    changed = build_semantic_projection(
-        generation_id="fixture:generation:changed",
-        owner_semantic_binding=FIXTURE["owner_semantic_binding"],
-        identity_fields=FIXTURE["identity_b"],
-    )
+    changed_bundle = bundle(FIXTURE["identity_b"])
+    changed = changed_bundle["projection"]
     with pytest.raises(ReferenceEngineError):
         stage_correspondence(
             left_projection=first["projection"], right_projection=changed,
@@ -102,9 +140,19 @@ def test_correspondence_exact_auto_admission_and_non_exact_review_only() -> None
         )
     staged = stage_correspondence(
         left_projection=first["projection"], right_projection=changed,
+        left_generation_record=first["generation"], right_generation_record=changed_bundle["generation"],
         planes=FIXTURE["non_exact_planes"],
         admission_basis="SOURCE_EXPLICIT_DETERMINISTIC_RELATION",
         source_relation_ref="fixture:source:relation",
+        plane_evidence_records=plane_evidence(
+            FIXTURE["non_exact_planes"], first["projection"]["generation_id"], changed["generation_id"]
+        ),
+        independence_evidence=[
+            dmrp_evidence(
+                first["projection"]["generation_id"],
+                changed["generation_id"],
+            )
+        ],
     )
     assert staged["record"]["executability"] == "REVIEW_REQUIRED"
     validate_contract(
@@ -144,7 +192,7 @@ def test_evidence_algebra_is_order_independent_non_scalar_and_schema_valid() -> 
     left = assemble()
     right = assemble(list(reversed(FIXTURE["vector_inputs"])))
     assert left == right
-    assert left["confidence_score"] is None
+    assert "confidence_score" not in left
     assert left["vector"]["denominator"] == "CAPACITY_INCOMPLETE"
     assert left["vector"]["recurrence"] == "NOT_EVALUABLE"
     assert left["vector"]["dependence"] == "DEPENDENT"

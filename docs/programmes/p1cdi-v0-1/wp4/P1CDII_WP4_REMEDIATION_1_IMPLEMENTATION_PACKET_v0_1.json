@@ -1,0 +1,50 @@
+{
+  "schema": "p1cdii-wp4-remediation-1-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-WP4-REMEDIATION-1",
+  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "reviewed_lawful_main": {
+    "commit": "57995c54e2963984776832b7522841e6b7c834b0",
+    "tree": "f67c49b8c3422948bfd96e1e2f7de3f1e19459a8"
+  },
+  "implementation_commit": "b41403b072dd0c0ed4b09949b41cb6a715cddfd5",
+  "implementation_tree": "23ee3a7fe942fcf7f4c87825b0b29b2eb569365a",
+  "immutable_block": {
+    "review_commit": "2cdcd848ba7346e1bba4cbe6030f0b31cfbeea86",
+    "packet_sha256": "cb86d810309346eeaf8dc4e0ae7c8356ebd9b2592799462aa4975b1b7ea56e35",
+    "adversarial_digest": "f617d9fbfe869e2582d30060f4b242f79b845e38c6695d66b2ca8d807d1a7ac9",
+    "decision": "BLOCK",
+    "preserved_byte_identically": true
+  },
+  "remediated_blockers": [
+    "P1CDII_G4_ALG_BLOCK_001_TAMPERED_HISTORICAL_PREDECESSOR_ACCEPTED",
+    "P1CDII_G4_ALG_BLOCK_002_INCOMPLETE_EVIDENCE_SCHEMA_AND_SCALAR_FIREWALL",
+    "P1CDII_G4_ALG_BLOCK_003_DMRP_ABSENCE_AUTO_INDEPENDENCE"
+  ],
+  "remediation": {
+    "historical_predecessor_integrity": "RECOMPUTE_TYPED_PROJECTION_HASH_GENERATION_ID_SERIES_BINDING_AND_CLOSED_SCHEMA_BEFORE_REDISCOVERY_OR_SUCCESSOR_USE",
+    "evidence_shape": "CLOSED_REGISTERED_TYPED_PLANES_AND_PRESERVED_RECORDS_REJECT_UNKNOWN_INVALID_OR_HIDDEN_SCALARS",
+    "dmrp_independence": "AFFIRMATIVE_STATE_REQUIRES_EXACT_TWO_POINT_CURRENT_DMRP_OWNER_EVIDENCE_FOR_THE_EXACT_GENERATION_PAIR",
+    "source_record_rewrite": "FORBIDDEN_NOT_PERFORMED"
+  },
+  "artifacts": [
+    {"path":"registries/research_operations/p1cdi/reference_evidence_plane_registry_v1.json","sha256":"4ac9f11084a9e67b1813c2dee7697470ea0b315f3e9dbc6c1bf151721586c6d8"},
+    {"path":"src/ovc/research_operations/p1cdi/reference.py","sha256":"c8ec8f05f899cb6bbaaca3f642aec672a5bbbecd613249cfeae31d5faa2ad046"},
+    {"path":"scripts/research_operations/run_p1cdii_wp4_reference.py","sha256":"231e8c6c58c35307e2606a6a83fe9d76b5ca526ba7c5235f39f65046e9a5e61f"},
+    {"path":"tests/research_operations/p1cdi/test_p1cdii_wp4_remediation_1.py","sha256":"b4f8d1d1a69589e3b183c6aab5f8559f3e23512f5311e78e9b744f3624d48618"}
+  ],
+  "oracle_successor": {
+    "old_sha256": "1538a3406bcea04c047bdddf9e66f22a96b1ed78fde5b3e88427590c2104ffb8",
+    "old_bytes": 11696,
+    "new_sha256": "81ee71dd614606dc9fece46f5b5b0822de7b2812f1d4d641cdedc23355935c21",
+    "new_bytes": 11859,
+    "reason": "LAWFUL_BLOCK_REMEDIATION_REMOVES_CONFIDENCE_SCORE_PLACEHOLDER_AND_BINDS_EXPLICIT_DMRP_INDEPENDENCE_PROVENANCE",
+    "silent_historical_rewrite": false
+  },
+  "authority_delta": "NONE",
+  "g4_alg_status": "UNRESOLVED_REQUIRES_FRESH_CONFLICT_FREE_REVIEW",
+  "remediation_author_may_issue_g4_alg_pass": false,
+  "successor_beyond_wp4_authorised": false,
+  "rollback": "Revert only remediation-1 while preserving the immutable G4 BLOCK and all WP0-WP4 history.",
+  "next_packet": "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW"
+}

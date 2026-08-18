@@ -43,43 +43,106 @@ def _ref(index: int) -> dict[str, str]:
     }
 
 
-def _source_ref(index: int = 0) -> dict[str, str]:
-    source = BUNDLE["entries"][index]["source_object_ref"]
-    return {
-        "owner_programme": source["owner_programme"],
-        "object_type": source["object_type"],
-        "object_id": source["object_id"],
-        "semantic_generation": source["semantic_generation"],
-        "content_sha256": source["content_sha256"],
-    }
+def _source_ref(index: int = 0) -> dict:
+    return deepcopy(BUNDLE["entries"][index]["source_object_ref"])
 
 
-def _question_ref(index: int = 0) -> dict[str, str]:
+def _question_ref(index: int = 0) -> dict:
     return {
         "owner_programme": "RESEARCH_OPERATIONS_DMRP_PATH2",
-        "question_id": f"RQ-P2CTII-WP4-{index:02d}",
+        "object_type": "RESEARCH_PROTOCOL",
+        "object_id": f"RQ-P2CTII-WP4-{index:02d}",
         "semantic_generation": "v0.1",
+        "source_path": f"owner://research-question/{index}",
         "content_sha256": f"{index + 2:x}" * 64,
+        "authority_refs": ["P2CTII-G3-PASS"],
+        "scientific_payload_copied": False,
     }
 
 
-def _rccr_ref(index: int = 0) -> dict[str, str]:
+def _rccr_ref(index: int = 0) -> dict:
     return {
         "owner_programme": "RCCR",
         "object_type": "RCCR_ASSESSMENT",
         "object_id": f"RCCR-WP4-{index:02d}",
         "semantic_generation": "v0.1",
+        "source_path": f"owner://rccr/assessment/{index}",
         "content_sha256": f"{index + 5:x}" * 64,
+        "authority_refs": ["RCCR-GATE"],
+        "scientific_payload_copied": False,
+    }
+
+
+def _owner_evidence(reference: dict, predicate: str, state: str = "RESOLVED", object_type: str | None = None) -> dict:
+    return {
+        "object_type": object_type or reference["object_type"], "predicate": predicate,
+        "owner_programme": reference["owner_programme"], "source_ref": reference["source_path"],
+        "semantic_generation": reference["semantic_generation"],
+        "source_sha256": reference["content_sha256"],
+        "authority_refs": reference["authority_refs"], "resolution_state": state,
+    }
+
+
+def _relation_kwargs(relation_type: str, left: dict | None = None, right: dict | None = None) -> dict:
+    left, right = left or _ref(0), right or _ref(1)
+    owner_ref = {
+        "owner_programme": "RESEARCH_OPERATIONS_DMRP_PATH2", "object_type": "THEORY_RECORD",
+        "object_id": f"OWNER-REL-{relation_type}", "semantic_generation": "v0.1",
+        "source_path": f"owner://relation/{relation_type}", "content_sha256": "a" * 64,
+        "authority_refs": ["P2CTII-G3-PASS"], "scientific_payload_copied": False,
+    }
+    evidence = {
+        **owner_ref, "relation_type": relation_type, "left_generation_ref": left,
+        "right_generation_ref": right, "source_frontier_id": FRONTIER,
+        "resolution_state": "RESOLVED", "evidence_origin": "OWNER_EXPLICIT",
+    }
+    return {
+        "source_relation_ref": owner_ref, "owner_relation_evidence": [evidence],
+        "current_generation_bundle": BUNDLE,
+    }
+
+
+def _visibility(*records: dict) -> dict:
+    relation_ids = []
+    demand_ids = []
+    for record in records:
+        payload = record.get("payload", {})
+        relation_ids.extend(payload[key] for key in ("relation_id", "screen_id", "ambiguity_id", "conflict_id") if key in payload)
+        if "demand_id" in payload:
+            demand_ids.append(payload["demand_id"])
+    return {
+        "schema": "ovc-p2cti-query-visibility-context/v0.1", "consumer_class": "WP4_REFERENCE_TEST",
+        "visibility_state": "REFERENCE_ONLY", "source_frontier_id": FRONTIER,
+        "allowed_query_families": sorted(QUERY_FAMILIES),
+        "visible_subject_ids": sorted(entry["subject_id"] for entry in BUNDLE["entries"]),
+        "visible_relation_ids": sorted(relation_ids), "visible_demand_ids": sorted(demand_ids),
+        "allow_history": True, "allow_aggregate_counts": True,
+        "resolution_state": "RESOLVED", "authority_effect": "NONE",
+    }
+
+
+def _exposure_evidence() -> dict:
+    return {
+        "object_type": "DMRP_EXPOSURE", "predicate": "PATH1_PATH2_EXPOSURE",
+        "owner_programme": "DMRP", "source_ref": "dmrp://exposure/wp4",
+        "semantic_generation": "v0.1", "source_sha256": "e" * 64,
+        "authority_refs": ["DMRP-EXPOSURE-BOUNDARY"], "resolution_state": "RESOLVED",
     }
 
 
 def _demand(demand_class: str, index: int = 0, status: str = "OPEN") -> dict:
     kwargs = {}
     if demand_class in {"METHOD_GAP", "INFORMATION_GAP", "DATA_GAP", "ARCHITECTURE_NEED_HYPOTHESIS"}:
-        kwargs = {"classification_owner": "RCCR", "rccr_assessment_ref": _rccr_ref(index)}
+        rccr = _rccr_ref(index)
+        kwargs = {"classification_owner": "RCCR", "rccr_assessment_ref": rccr,
+                  "rccr_owner_evidence": [_owner_evidence(rccr, "GAP_CLASS")]}
+    source, question = _source_ref(index), _question_ref(index)
     return build_research_demand(
-        source_ref=_source_ref(index), research_question_ref=_question_ref(index),
+        source_ref=source, research_question_ref=question,
         demand_class=demand_class, source_frontier_id=FRONTIER, status=status, **kwargs,
+        source_owner_evidence=[_owner_evidence(source, "THEORY_IDENTITY", object_type="THEORY_RECORD")],
+        question_owner_evidence=[_owner_evidence(question, "THEORY_BINDING")],
+        research_question_status="CURRENT",
     )
 
 
@@ -98,7 +161,7 @@ def test_closed_typed_relation_families_bind_exact_semantic_generations() -> Non
         record = build_relation(
             relation_type=relation_type, left_generation_ref=_ref(0), right_generation_ref=_ref(1),
             qualification=qualification, source_frontier_id=FRONTIER,
-            evidence_refs=["WP4-EXACT-EVIDENCE"], source_relation_ref="owner://relation/1",
+            evidence_refs=["WP4-EXACT-EVIDENCE"], **_relation_kwargs(relation_type),
         )
         assert record["payload"]["left_generation_ref"]["semantic_generation"] == "v0.1"
         assert record["payload"]["right_generation_ref"]["semantic_generation"] == "v0.1"
@@ -116,7 +179,7 @@ def test_source_explicit_auto_admission_is_narrow_and_sensitive_semantics_are_re
     ancestry = build_relation(
         relation_type="DESCENDS_FROM", left_generation_ref=_ref(0), right_generation_ref=_ref(1),
         qualification="SOURCE_EXPLICIT_DETERMINISTIC", source_frontier_id=FRONTIER,
-        evidence_refs=["owner-byte#relation"], source_relation_ref="owner://relation/ancestry",
+        evidence_refs=["owner-byte#relation"], **_relation_kwargs("DESCENDS_FROM"),
     )
     assert ancestry["payload"]["admission_disposition"] == "ADMITTED_SOURCE_EXPLICIT"
     with pytest.raises(RelationValidationError):
@@ -128,13 +191,13 @@ def test_source_explicit_auto_admission_is_narrow_and_sensitive_semantics_are_re
     duplicate = build_relation(
         relation_type="DUPLICATE_OF", left_generation_ref=_ref(0), right_generation_ref=_ref(1),
         qualification="SOURCE_EXPLICIT_DETERMINISTIC", source_frontier_id=FRONTIER,
-        evidence_refs=["owner-byte#relation"], source_relation_ref="owner://relation/duplicate",
+        evidence_refs=["owner-byte#relation"], **_relation_kwargs("DUPLICATE_OF"),
     )
     assert duplicate["payload"]["admission_disposition"] == "PROPOSED_REVIEW_REQUIRED"
     reviewed = build_relation(
         relation_type="GENERALISES", left_generation_ref=_ref(0), right_generation_ref=_ref(1),
         qualification="HUMAN_RESEARCH_OPERATIONS_DECISION", source_frontier_id=FRONTIER,
-        evidence_refs=["human-decision://1"],
+        evidence_refs=["human-decision://1"], **_relation_kwargs("GENERALISES"),
     )
     assert reviewed["payload"]["admission_disposition"] == "ADMITTED_REVIEWED"
 
@@ -173,7 +236,7 @@ def test_ambiguity_conflict_and_successor_reassessment_are_preserved() -> None:
     second = build_relation(
         relation_type="SPECIAL_CASE_OF", left_generation_ref=_ref(0), right_generation_ref=_ref(1),
         qualification="INDEPENDENT_RULE_REVIEWED", source_frontier_id=FRONTIER,
-        evidence_refs=["review://2"],
+        evidence_refs=["review://2"], **_relation_kwargs("SPECIAL_CASE_OF"),
     )
     ambiguity = preserve_relation_ambiguity(
         subject_refs=[_ref(0), _ref(1)],
@@ -202,7 +265,7 @@ def test_ambiguity_conflict_and_successor_reassessment_are_preserved() -> None:
 def test_research_demand_has_exact_source_and_question_binding(demand_class: str) -> None:
     demand = _demand(demand_class)
     assert demand["payload"]["source_ref"]["object_id"]
-    assert demand["payload"]["research_question_ref"]["question_id"]
+    assert demand["payload"]["research_question_ref"]["object_id"]
     assert demand["authority_effect"] == "NONE"
     assert not {"truth_score", "value_score", "alpha_score"}.intersection(demand["payload"])
 
@@ -213,6 +276,9 @@ def test_gap_and_capability_classification_remains_rccr_owned() -> None:
             source_ref=_source_ref(), research_question_ref=_question_ref(),
             demand_class="METHOD_GAP", source_frontier_id=FRONTIER,
             classification_owner="RESEARCH_OPERATIONS_DMRP_PATH2", rccr_assessment_ref=_rccr_ref(),
+            source_owner_evidence=[_owner_evidence(_source_ref(), "THEORY_IDENTITY", object_type="THEORY_RECORD")],
+            question_owner_evidence=[_owner_evidence(_question_ref(), "THEORY_BINDING")],
+            research_question_status="CURRENT",
         )
     malformed = _rccr_ref()
     malformed["owner_programme"] = "P2CTI"
@@ -221,6 +287,9 @@ def test_gap_and_capability_classification_remains_rccr_owned() -> None:
             source_ref=_source_ref(), research_question_ref=_question_ref(),
             demand_class="ARCHITECTURE_NEED_HYPOTHESIS", source_frontier_id=FRONTIER,
             classification_owner="RCCR", rccr_assessment_ref=malformed,
+            source_owner_evidence=[_owner_evidence(_source_ref(), "THEORY_IDENTITY", object_type="THEORY_RECORD")],
+            question_owner_evidence=[_owner_evidence(_question_ref(), "THEORY_BINDING")],
+            research_question_status="CURRENT",
         )
 
 
@@ -275,6 +344,8 @@ def test_reference_query_engine_implements_every_registered_family_with_full_env
     engine = ReferenceQueryEngine(
         generation_bundle=BUNDLE, relations=[relation], duplicate_screens=[screen],
         demands=[method, architecture], historical_generations=[],
+        visibility_context=_visibility(relation, screen, method, architecture),
+        exposure_owner_evidence=[_exposure_evidence()],
     )
     subject = _ref(0)["object_id"]
     method_id = method["payload"]["demand_id"]
@@ -319,20 +390,20 @@ def test_reference_query_engine_implements_every_registered_family_with_full_env
 
 
 def test_query_engine_rejects_unknown_family_and_operational_pointer() -> None:
-    engine = ReferenceQueryEngine(generation_bundle=BUNDLE)
+    engine = ReferenceQueryEngine(generation_bundle=BUNDLE, visibility_context=_visibility())
     with pytest.raises(QueryValidationError):
         engine.query("PROMOTE_THEORY")
     active = deepcopy(BUNDLE)
     active["operational_current_pointer_published"] = True
     with pytest.raises(QueryValidationError):
-        ReferenceQueryEngine(generation_bundle=active)
+        ReferenceQueryEngine(generation_bundle=active, visibility_context=_visibility())
 
 
 def test_relation_evidence_order_is_deterministic() -> None:
     kwargs = {
         "relation_type": "DESCENDS_FROM", "left_generation_ref": _ref(0),
         "right_generation_ref": _ref(1), "qualification": "SOURCE_EXPLICIT_DETERMINISTIC",
-        "source_frontier_id": FRONTIER, "source_relation_ref": "owner://relation/order",
+        "source_frontier_id": FRONTIER, **_relation_kwargs("DESCENDS_FROM"),
     }
     first = build_relation(**kwargs, evidence_refs=["evidence://b", "evidence://a"])
     second = build_relation(**kwargs, evidence_refs=["evidence://a", "evidence://b"])
@@ -345,7 +416,7 @@ def test_wp4_reference_fixture_reproduces_in_two_clean_processes() -> None:
     first = subprocess.run(command, cwd=ROOT, env=env, check=True, capture_output=True).stdout
     second = subprocess.run(command, cwd=ROOT, env=env, check=True, capture_output=True).stdout
     assert first == second
-    assert first.decode().strip() == "b07072a42e07f73a02a466d4f1a89a7828609ef86fb03a359e50c0d2a38b7abf"
+    assert first.decode().strip() == "a8b3cee562d5e9f437ee97a863cb7d50d9557c3f56fa605498e284b891d0bebd"
 
 
 def test_g4_alg_packet_is_exact_unbound_and_blocks_wp5() -> None:
@@ -370,19 +441,32 @@ def test_g4_alg_packet_is_exact_unbound_and_blocks_wp5() -> None:
         "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json",
         "tests/research_operations/p2cti/test_p2ctii_wp2_owner_currentness.py",
         "tests/research_operations/p2cti/test_p2ctii_wp4_relations_demand_query.py",
+        "src/ovc/research_operations/p2cti/relations.py",
+        "src/ovc/research_operations/p2cti/demand.py",
+        "src/ovc/research_operations/p2cti/query.py",
+        "scripts/research_operations/run_p2ctii_wp4_reference.py",
+        "fixtures/research_operations/p2cti/P2CTII_WP4_REFERENCE_FIXTURE_v0_1.json",
     }
     for path, expected in packet["exact_artifact_hashes"].items():
         if path not in decision_materialisation_artifacts:
             assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == expected
 
 
-def test_fresh_g4_alg_block_is_materialised_byte_exact_and_routes_only_to_remediation() -> None:
+def test_fresh_g4_alg_block_remains_byte_exact_during_bounded_remediation() -> None:
     review_path = (
         ROOT
         / "docs/programmes/p2cti-v0-1/wp4/"
         "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json"
     )
     review = json.loads(review_path.read_text(encoding="utf-8"))
+    post_remediation_review_path = (
+        ROOT
+        / "docs/programmes/p2cti-v0-1/wp4/"
+        "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_AFTER_REMEDIATION_1_PACKET_v0_1.json"
+    )
+    post_remediation_review = json.loads(
+        post_remediation_review_path.read_text(encoding="utf-8")
+    )
     state = json.loads(
         (ROOT / "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json")
         .read_text(encoding="utf-8")
@@ -392,9 +476,14 @@ def test_fresh_g4_alg_block_is_materialised_byte_exact_and_routes_only_to_remedi
     )
     assert review["decision"] == "BLOCK"
     assert review["authority_delta"] == "NONE"
-    assert state["status"] == "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-1"
+    assert hashlib.sha256(post_remediation_review_path.read_bytes()).hexdigest() == (
+        "3f5db3fcac072addac14f8f073ab1ea13d500bcd12884d6a1d26f23740fae7c1"
+    )
+    assert post_remediation_review["decision"] == "BLOCK"
+    assert post_remediation_review["authority_delta"] == "NONE"
+    assert state["status"] == "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-2"
     assert state["p2ctii_g4_alg_status"] == "BLOCK"
-    assert state["next_packet"] == "P2CTII-WP4-REMEDIATION-1"
+    assert state["next_packet"] == "P2CTII-WP4-REMEDIATION-2"
     assert state["wp5_authorised"] is False
     assert state["g4_alg_remediation_author_may_grant_pass"] is False
     assert state["authority_delta"] == "NONE"
