@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-dsai3v-cers-wp0-source-authority-freeze/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "packet_id": "CERS-WP0",
+  "plan_id": "OVC-DSAI3V-CERS-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1-RATIFIED",
+  "status": "FROZEN_FOR_WP0_QUALIFICATION",
+  "observed_main": {"commit":"a11d29569321e4fe608f09dd51c04349c3f1c13f","tree":"9e5cc15ef1e43b51eade229cd262eea1471bce6d","observation":"EXECUTION_TIME_COURT_RECORD"},
+  "ratified_sources": {
+    "plan": {"path":"docs/plans/development-skills-v0-3/cers/OVC_DSAI3V_CERS_Conformance_Implementation_Plan_v0_1_REVISED_1_RATIFIED.md","blob_sha":"ced03a5a50648479597e4ee3d601d84c1f2cdd77","court_record_sha256":"67d30e815b533deb4944963772e908776981afa2dcb6ac046f76a5d62b3f7c98"},
+    "design": {"path":"docs/design/development-skills-v0-3/cers/OVC_DSAI3V_CERS_Design_Specification_v0_1_REVISED_1_RATIFIED.md","blob_sha":"012ac1a9ecf3889117a19f3482bc0e8b0770f6ec","court_record_sha256":"fd51dded32c8005174f1bf343cc4c27cbae8f2f1b0f037e30abf48f27bc55838"},
+    "operator_decision": {"path":"docs/releases/development-skills-v0-3/cers-conformance/plan-ratification/CERS_PLAN_RATIFICATION_OPERATOR_DECISION_v0_1.json","decision":"PASS","effective_instruction_time":"2026-08-18T09:35:00+01:00"}
+  },
+  "current_control_bindings": [
+    {"id":"DEFAULT_EXECUTION_SUBSTRATE","path":"registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json","blob_sha":"cbe2775f9453e73fa0eb22d1ba809a07ef341b98","status":"ACTIVE","controller":"DSAI_VIT_PHYSICAL_CONTROLLER","physical_gateway":"DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY","parallel_physical_merge":false},
+    {"id":"DSAI3V_ASYNC_ASSURANCE_LIVE_AUTHORITY_v0_1","path":"registries/authority/DSAI3V_ASYNC_ASSURANCE_LIVE_AUTHORITY_v0_1.json","blob_sha":"bdca4cde67438c2778cb5052a6c9db7f2d945861","authority_status":"ACTIVE","effective_scope":"BACKGROUND_REQUIRED_ASSURANCE_AND_CONDITIONAL_WAKE_ONLY","provider_write_or_merge":false,"new_writer_identity":"NONE","parallel_physical_merge":false},
+    {"id":"DSAI3V_ASYNC_ASSURANCE_CURRENT_STATE","path":"registries/implementation/dsai3v_async_assurance_v0_1/CURRENT_STATE_POINTER.json","blob_sha":"5250e01bb21d4da031a7fbfb1021eb3a261ef2ae","status":"COMPLETED"},
+    {"id":"DSAI3V_VIT_CURRENT_POINTER","path":"registries/implementation/dsai_vit_v0_3/CURRENT_STATE_POINTER.json","blob_sha":"131050be8b50535ac974a39de4af29d878a2286c","status":"COMPLETED","current_state":"OVC_DSAI_VIT_V0_3_STATE_v0_19.json"},
+    {"id":"DSAI3V_VIT_CURRENT_STATE","path":"registries/implementation/dsai_vit_v0_3/OVC_DSAI_VIT_V0_3_STATE_v0_19.json","blob_sha":"790dbff14c39b1ef9bc2cf96ec69ced76e36c034","status":"COMPLETED","vit_live_physical_main_control":"ACTIVE_GENERAL_ALREADY_AUTHORISED_AUTO_EXECUTABLE_POPULATION","parallel_physical_merge":false},
+    {"id":"DSAI3V_VIT_GENERAL_AUTHORITY","path":"registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json","blob_sha":"077ec283df6d97f9cc99af9704e7a34b8bb83c7b","authority_status":"ACTIVE","controller":"DSAI_VIT_PHYSICAL_CONTROLLER","physical_gateway":"DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY","parallel_physical_merge":false},
+    {"id":"DSAI2_ORCH345_CURRENT_STATE","path":"registries/implementation/dsai_v0_2/CURRENT_STATE_POINTER.json","blob_sha":"9e0deece3b6966020ca5f684446389607d8cec8e","status":"COMPLETED","current_state":"OVC_DSAI_V0_2_STATE_v0_7.json"},
+    {"id":"GRT_V0_2_CURRENT_POINTER","path":"registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json","blob_sha":"74e4ece8490bd6ac386d2c6590d6d8736504c8c9","status":"QA_REVIEW","gate_id":"GRT2-G2.5","current_state":"registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_11.json"},
+    {"id":"GRT_V0_2_CURRENT_STATE","path":"registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_11.json","blob_sha":"bbedef576091bc40970ea5aa20e9b3e03be529ab","status":"QA_REVIEW","active_enforcement":"LIMITED_NEW_ARTIFACT_ENFORCEMENT","g3_status":"NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE","blockers":[]},
+    {"id":"VIT_PHYSICAL_MAIN_EXCLUSIVITY","path":"registries/development/skills/VIT_PHYSICAL_MAIN_EXCLUSIVITY_v0_1.json","blob_sha":"98f1fc07cbe76a78e09a2bf0d232ad384a90ba25","status":"ACTIVE_ON_MATERIALISATION","exclusive_writer":"DSAI_VIT_PHYSICAL_CONTROLLER","physical_gateway":"DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY","parallel_physical_merge":false},
+    {"id":"PRVITR_TERMINAL_STATE","path":"records/development/prvitr/PRVITR_PROGRAMME_STATE_v0_1.json","blob_sha":"d92abd054c734d5e034e0398f75da1d842ea7472","status":"COMPLETED","live_authoritative_path":"PRVITR_CORRECTED_LIVE_ADMISSION"}
+  ],
+  "persistent_runtime": {"path":"src/ovc/development/skills/vit_runtime.py","required_properties":["durable execution store","fresh-process drainage with chat_dependency_count=0","deterministic continuation resolution"],"ownership":"DSAI3V_OWNER_RUNTIME_CERS_MAY_OBSERVE_OR_INVOKE_NOT_REDEFINE"},
+  "orch_actuation_gap": {"path":"src/ovc/development/skills/orch345_auto.py","observed_decision_phase":"DECISION_SELECTED","execution_started_observed":false,"execution_completed_observed":false,"cers_scope":"HOST_INDEPENDENT_LIVENESS_AND_ACTUATION_CONFORMANCE_ONLY"},
+  "live_dispatch": {"status":"DENIED_PENDING_CERS-G-LIVE-DISPATCH","worker_capability_binding":"NONE_ADMITTED_FOR_LIVE_CERS_DISPATCH","new_writer_identity":"NONE_GRANTED","physical_main_write":"OUTSIDE_CERS","agent_write_authority":"NONE"},
+  "reserved_boundaries": ["CERS-G-LIVE-DISPATCH","NEW_WRITER_IDENTITY","AGENT_WRITE_AUTHORITY","PARALLEL_PHYSICAL_MERGE","FORCE_PUSH_OR_HISTORY_REWRITE","PROGRAMME_AUTHORITY_EXPANSION","SCIENTIFIC_MODEL_SELECTOR_SEMANTIC_PROMOTION","ACTIVE_DISCOVERY_DEVELOPMENT_VALIDATION","PUBLICATION_PROBABILITY_RISK_EXPOSURE_EXECUTION"],
+  "open_cers_prs": [
+    {"pr":1132,"packet":"CERS-PLAN-RATIFICATION-CLOSEOUT","authority_delta":"NONE_POST_MERGE_RECORD_ONLY","role":"NON_BLOCKING_ADMINISTRATIVE_CLOSEOUT"},
+    {"pr":1140,"packet":"CERS-WP0","authority_delta":"NONE","role":"SUPERSEDED_STALE_PLACEMENT"},
+    {"pr":1142,"packet":"CERS-WP0","authority_delta":"NONE","role":"SUPERSEDED_STALE_PLACEMENT_AFTER_MAIN_ADVANCE"},
+    {"pr":1143,"packet":"CERS-WP1-WP5","authority_delta":"INACTIVE_SHADOW_ONLY","role":"STALE_STACKED_SUCCESSOR_PENDING_WP0_REANCHOR"}
+  ],
+  "conclusion": "WP0_IMPLEMENTATION_AUTHORITY_CURRENT_LIVE_DISPATCH_REMAINS_DENIED"
+}
