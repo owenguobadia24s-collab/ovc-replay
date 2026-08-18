@@ -29,6 +29,31 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Prove prior R3 attempts did not reach semantic launch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          runs_json="$(gh api "/repos/${GITHUB_REPOSITORY}/actions/workflows/c2p2-rs0-real-source-shadow-run-r2.yml/runs?branch=${GITHUB_REF_NAME}&event=push&per_page=100")"
+          mapfile -t prior_ids < <(jq -r --arg current "$GITHUB_RUN_ID" '.workflow_runs[] | select((.id|tostring) != $current) | .id' <<<"$runs_json")
+          if [ "${#prior_ids[@]}" -eq 0 ]; then
+            echo 'R3_PRIOR_ATTEMPT_PROOF=NO_PRIOR_RUNS'
+          else
+            for prior_run_id in "${prior_ids[@]}"; do
+              jobs_json="$(gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${prior_run_id}/jobs?per_page=100")"
+              launch_state="$(jq -r '([.jobs[].steps[]? | select(.name == "Launch exactly one authorised R3 A/B/C real-source shadow execution") | (.conclusion // .status // "UNKNOWN")] | first) // "ABSENT"' <<<"$jobs_json")"
+              case "$launch_state" in
+                skipped|ABSENT)
+                  echo "R3_PRIOR_ATTEMPT_PRE_SEMANTIC_SAFE:${prior_run_id}:${launch_state}"
+                  ;;
+                *)
+                  echo "R3_PRIOR_ATTEMPT_REACHED_OR_AMBIGUOUS_SEMANTIC_LAUNCH:${prior_run_id}:${launch_state}" >&2
+                  exit 44
+                  ;;
+              esac
+            done
+          fi
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
