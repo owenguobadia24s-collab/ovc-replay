@@ -1,0 +1,93 @@
+{
+  "schema": "ovc-p2ctii-wp4-remediation-implementation-packet/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-WP4-REMEDIATION-1",
+  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "baseline_main": "bb313b004a3a4fa2be9f8141ddc5f56fd4b3ba86",
+  "baseline_tree": "f414f69a14ffd8613c1c2cbcb2cb740f8395c744",
+  "branch": "agent/p2ctii-wp4-remediation-1-20260818",
+  "authority": "DELEGATED_MECHANICAL_REMEDIATION_UNDER_P2CTII_G0_AND_IMMUTABLE_G4_ALG_BLOCK",
+  "authority_delta": "NONE",
+  "immutable_block_review": {
+    "reviewer_commit": "0a4df5a34765e147a23eebb08f130cd7fc41a7ee",
+    "reviewed_wp4_commit": "fb6db1dc5384835c81965db3495dc6a604b15a86",
+    "packet": "docs/programmes/p2cti-v0-1/wp4/P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json",
+    "packet_blob": "5f123b8131fd0d935f1621d9b7c8d8afabca5d91",
+    "packet_sha256": "a8b31cd18c2d65168d0c5b49a89e45d9ac14845a156d9675725e63a1aa89efb3",
+    "decision": "BLOCK",
+    "preserved_unchanged": true
+  },
+  "remediated_blockers": [
+    "P2CTII_G4_ALG_BLOCK_001_OWNER_GENERATION_AND_SOURCE_EVIDENCE_NOT_RESOLVED",
+    "P2CTII_G4_ALG_BLOCK_002_RESEARCH_QUESTION_CURRENTNESS_NOT_BOUND",
+    "P2CTII_G4_ALG_BLOCK_003_QUERY_STATE_COHERENCE_AND_CONFLICT_PRESERVATION_GAP",
+    "P2CTII_G4_ALG_BLOCK_004_QUERY_VISIBILITY_AND_EXPOSURE_ENFORCEMENT_GAP",
+    "P2CTII_G4_ALG_BLOCK_005_QUERY_RETURN_ALIAS_MUTATES_HELD_STATE"
+  ],
+  "bounded_implementation": {
+    "relation_admission": [
+      "HASH_VERIFIED_CURRENT_GENERATION_BUNDLE",
+      "EXACT_CURRENT_ENDPOINT_MEMBERSHIP",
+      "EXACT_CLOSED_TYPED_OWNER_RELATION_EVIDENCE",
+      "DECLARED_OWNER_PRECEDENCE",
+      "OWNER_EXPLICIT_ONLY_DETERMINISTIC_AUTO_ADMISSION",
+      "MISSING_STALE_WRONG_DUPLICATE_CONFLICT_AND_MACHINE_RELABEL_FAIL_CLOSED"
+    ],
+    "research_demand": [
+      "REFERENCE_ONLY_EXACT_OWNER_REFS",
+      "EXACTLY_ONE_RESOLVED_SOURCE_OWNER_EVIDENCE",
+      "EXACTLY_ONE_RESOLVED_QUESTION_OWNER_EVIDENCE",
+      "CURRENT_QUESTION_STATUS_REQUIRED",
+      "RCCR_GAP_CLASSIFICATION_OWNER_EVIDENCE_REQUIRED"
+    ],
+    "query_integrity": [
+      "HASH_AND_CLOSED_SHAPE_GENERATION_BUNDLE_VALIDATION",
+      "GENERATION_FRONTIER_CURRENTNESS_MEMBERSHIP_COHERENCE",
+      "CURRENT_HISTORY_IDENTITY_DISJOINTNESS",
+      "AMBIGUITY_AND_CONFLICT_VISIBLE_TYPED_OUTPUT",
+      "EXPLICIT_CLOSED_VISIBILITY_CONTEXT",
+      "NO_HIDDEN_COUNTS_OR_AGGREGATE_LEAKAGE",
+      "EXACT_DMRP_EXPOSURE_EVIDENCE_FOR_CROSS_MODE",
+      "DEEP_COPIED_INPUTS_AND_OUTPUTS"
+    ]
+  },
+  "unchanged_frozen_contracts": [
+    "registries/research_operations/p2cti/P2CTI_RELATION_TYPE_REGISTRY_v0_1.json",
+    "registries/research_operations/p2cti/P2CTI_OPERATIONAL_VOCABULARY_REGISTRY_v0_1.json",
+    "registries/research_operations/p2cti/P2CTI_OWNER_SOURCE_REGISTRY_v0_1.json",
+    "schemas/research_operations/p2cti/p2cti_source_frontier_v0_1.schema.json"
+  ],
+  "implementation_hashes_sha256": {
+    "src/ovc/research_operations/p2cti/relations.py": "961ff9c5ee2ebc4167a3ffe18c1cbbfbfcc7bcdd5f7084efbedcc04c466fd055",
+    "src/ovc/research_operations/p2cti/demand.py": "6daffdcb06e6f39e4fa486486d2861de1b5b840ae1eb4feffcc08e61f1f2a983",
+    "src/ovc/research_operations/p2cti/query.py": "0bea0f4ca491b5de3dbda9f52ecb8da89c3cfd7c64c1961baeb7dc7cba07a5ec",
+    "scripts/research_operations/run_p2ctii_wp4_reference.py": "2692ebc1eef661bb2606b9acb19456c8cd6054d0becaa78392f8a3f5a94b3078",
+    "scripts/research_operations/run_p2ctii_wp4_remediation_1.py": "6c85099b87b002cc1a92f4bbf07c0ac8981182357003a0d1fec3eb2cf783b317",
+    "tests/research_operations/p2cti/test_p2ctii_wp4_relations_demand_query.py": "87ab5839075e2fc56fe790e4bc5ee933b5b09f4acb8f30e3907d05ade06bb442",
+    "tests/research_operations/p2cti/test_p2ctii_wp2_owner_currentness.py": "5e3bd6830c6b4e64bb9c141a53b6dcadf372ae1ee3d569f4747428e45b160b43",
+    "tests/research_operations/p2cti/test_p2ctii_wp4_remediation_1.py": "01c4593ffea59c955c5581c2410027f7ce8eac4d968564ad5676bf33f189aa65",
+    "fixtures/research_operations/p2cti/P2CTII_WP4_REFERENCE_FIXTURE_v0_1.json": "913a8ba6617d67057b79a16be0a4355b8b305e3da805be16fc7546eb9a8aecab"
+  },
+  "local_assurance": {
+    "p2ctii_wp1_wp2_wp3_wp4_suite": "PASS_84_OF_84",
+    "original_declared_matrix": "PASS_21_OF_21",
+    "original_fresh_adversarial_matrix": "PASS_41_OF_41",
+    "original_non_transitivity_matrix": "PASS_8_OF_8",
+    "blocking_failures_converted": "PASS_15_OF_15",
+    "remediation_neighbor_matrix": "PASS_16_OF_16",
+    "clean_process_count": 2,
+    "clean_process_output_sha256": "48f107336a7a9a9a90652c418a55bf6273198d9a8091b9ecdd39f4c68d39af19",
+    "clean_process_byte_equal": true,
+    "reference_fixture_sha256": "a8b3cee562d5e9f437ee97a863cb7d50d9557c3f56fa605498e284b891d0bebd",
+    "compileall": "PASS",
+    "git_diff_check": "PASS",
+    "repository_wide_windows_attempt": "ENVIRONMENT_BLOCKED_RESOURCE_MODULE_UNAVAILABLE",
+    "supported_linux_exact_final_assurance": "REQUIRED"
+  },
+  "decision": "PASS_REMEDIATION_AWAITING_MATERIALISATION",
+  "p2ctii_g4_alg_status": "UNRESOLVED_PRIOR_BLOCK_PRESERVED",
+  "remediation_author_eligible_to_issue_g4_alg_pass": false,
+  "wp5_authorised": false,
+  "next_route": "EXACT_FINAL_VIT_SIQ_GRT_THEN_FRESH_CONFLICT_FREE_P2CTII-G4-ALG_REVIEW",
+  "rollback": "Forward-supersede only this bounded remediation while preserving the immutable G4-ALG BLOCK review and all prior WP0-WP4 evidence."
+}

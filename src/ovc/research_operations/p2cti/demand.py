@@ -8,14 +8,21 @@ from typing import Any
 from ovc.research_operations.canonical import canonical_sha256
 
 from .identity import control_record_id
+from .sources import resolve_owner_predicate
 
 
 _REGISTRY_PATH = (
     Path(__file__).resolve().parents[4]
     / "registries/research_operations/p2cti/P2CTI_OPERATIONAL_VOCABULARY_REGISTRY_v0_1.json"
 )
-_SOURCE_REF_FIELDS = {"owner_programme", "object_type", "object_id", "semantic_generation", "content_sha256"}
-_QUESTION_REF_FIELDS = {"owner_programme", "question_id", "semantic_generation", "content_sha256"}
+_OWNER_REGISTRY_PATH = (
+    Path(__file__).resolve().parents[4]
+    / "registries/research_operations/p2cti/P2CTI_OWNER_SOURCE_REGISTRY_v0_1.json"
+)
+_OWNER_REF_FIELDS = {
+    "owner_programme", "object_type", "object_id", "semantic_generation", "source_path",
+    "content_sha256", "authority_refs", "scientific_payload_copied",
+}
 _RCCR_OWNED = {"METHOD_GAP", "INFORMATION_GAP", "DATA_GAP", "ARCHITECTURE_NEED_HYPOTHESIS"}
 _FORBIDDEN_SCORE_KEYS = {"truth_score", "value_score", "alpha_score", "probability", "risk", "exposure"}
 
@@ -38,17 +45,67 @@ def _load_contract() -> tuple[frozenset[str], frozenset[str]]:
 
 
 DEMAND_CLASSES, WORK_CLASSES = _load_contract()
+_OWNER_REGISTRY = json.loads(_OWNER_REGISTRY_PATH.read_text(encoding="utf-8"))
 
 
-def _exact_ref(raw: Mapping[str, Any], fields: set[str], name: str) -> dict[str, str]:
-    if not isinstance(raw, Mapping) or set(raw) != fields:
+def _exact_ref(raw: Mapping[str, Any], name: str) -> dict[str, Any]:
+    if not isinstance(raw, Mapping) or set(raw) != _OWNER_REF_FIELDS:
         raise DemandValidationError(f"{name} must use the exact closed reference shape")
-    if any(type(raw[field]) is not str or not raw[field] for field in fields):
+    if any(
+        type(raw[field]) is not str or not raw[field]
+        for field in _OWNER_REF_FIELDS - {"authority_refs", "scientific_payload_copied"}
+    ):
         raise DemandValidationError(f"{name} values must be non-empty strings")
     digest = raw["content_sha256"]
     if len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest):
         raise DemandValidationError(f"{name} content_sha256 is invalid")
-    return {field: raw[field] for field in sorted(fields)}
+    refs = raw["authority_refs"]
+    if type(refs) is not list or any(type(ref) is not str or not ref for ref in refs):
+        raise DemandValidationError(f"{name} authority_refs are invalid")
+    if len(refs) != len(set(refs)):
+        raise DemandValidationError(f"{name} authority_refs must be unique")
+    if raw["scientific_payload_copied"] is not False:
+        raise DemandValidationError(f"{name} must remain reference-only")
+    normalized = {field: raw[field] for field in sorted(_OWNER_REF_FIELDS)}
+    normalized["authority_refs"] = sorted(refs)
+    return normalized
+
+
+def _resolved_owner_ref(
+    *, reference: Mapping[str, Any], predicate: str,
+    evidence: Sequence[Mapping[str, Any]], name: str, owner_object_type: str | None = None,
+) -> dict[str, Any]:
+    selected = [
+        row for row in evidence
+        if isinstance(row, Mapping)
+        and row.get("object_type") == (owner_object_type or reference["object_type"])
+        and row.get("predicate") == predicate
+    ]
+    if len(selected) != 1:
+        raise DemandValidationError(f"{name} requires exactly one current owner evidence record")
+    try:
+        resolution = resolve_owner_predicate(
+            object_type=owner_object_type or str(reference["object_type"]), predicate=predicate,
+            evidence=evidence, owner_registry=_OWNER_REGISTRY,
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise DemandValidationError(f"{name} owner evidence is invalid: {exc}") from exc
+    if resolution["resolution_state"] != "RESOLVED":
+        raise DemandValidationError(
+            f"{name} owner evidence did not resolve CURRENT: {resolution['resolution_state']}"
+        )
+    source = resolution["resolved_source"]
+    expected = {
+        "owner_programme": reference["owner_programme"],
+        "source_ref": reference["source_path"],
+        "semantic_generation": reference["semantic_generation"],
+        "source_sha256": reference["content_sha256"],
+        "authority_refs": reference["authority_refs"],
+    }
+    observed = {field: source[field] for field in expected}
+    if observed != expected:
+        raise DemandValidationError(f"{name} does not match resolved current owner evidence")
+    return resolution
 
 
 def _reject_scores(value: Any) -> None:
@@ -67,19 +124,46 @@ def build_research_demand(
     *, source_ref: Mapping[str, Any], research_question_ref: Mapping[str, Any],
     demand_class: str, source_frontier_id: str, status: str = "OPEN",
     classification_owner: str | None = None, rccr_assessment_ref: Mapping[str, Any] | None = None,
+    source_owner_evidence: Sequence[Mapping[str, Any]] = (),
+    question_owner_evidence: Sequence[Mapping[str, Any]] = (),
+    rccr_owner_evidence: Sequence[Mapping[str, Any]] = (),
+    research_question_status: str = "UNRESOLVED",
 ) -> dict[str, Any]:
     if demand_class not in DEMAND_CLASSES:
         raise DemandValidationError(f"unknown demand_class: {demand_class}")
     if status not in {"OPEN", "BLOCKED", "DEFERRED", "RESOLVED", "QUARANTINED", "SUPERSEDED"}:
         raise DemandValidationError(f"unknown demand status: {status}")
-    source = _exact_ref(source_ref, _SOURCE_REF_FIELDS, "source_ref")
-    question = _exact_ref(research_question_ref, _QUESTION_REF_FIELDS, "research_question_ref")
+    if type(source_frontier_id) is not str or not source_frontier_id.startswith("p2cti:frontier:"):
+        raise DemandValidationError("exact source_frontier_id is required")
+    source = _exact_ref(source_ref, "source_ref")
+    question = _exact_ref(research_question_ref, "research_question_ref")
+    if source["object_type"] not in {"THEORY_RECORD", "EXTERNAL_THEORY_RECORD", "IN_HOUSE_THEORY_RECORD", "ARCHITECTURE_NEED_SEED"}:
+        raise DemandValidationError("research demand source is not a declared theory-record reference class")
+    if question["object_type"] not in {"RESEARCH_PROTOCOL", "EC1_OBJECT"}:
+        raise DemandValidationError("research question must be an exact Path2 or EC1 owner reference")
+    if research_question_status != "CURRENT":
+        raise DemandValidationError("research question must carry exact CURRENT owner status")
+    _resolved_owner_ref(
+        reference=source, predicate="THEORY_IDENTITY", evidence=source_owner_evidence,
+        name="source_ref", owner_object_type="THEORY_RECORD",
+    )
+    question_predicate = (
+        "THEORY_BINDING" if question["object_type"] == "RESEARCH_PROTOCOL" else "PATH1_QUESTION"
+    )
+    _resolved_owner_ref(
+        reference=question, predicate=question_predicate, evidence=question_owner_evidence,
+        name="research_question_ref",
+    )
     if demand_class in _RCCR_OWNED:
         if classification_owner != "RCCR" or rccr_assessment_ref is None:
             raise DemandValidationError(f"{demand_class} classification requires exact RCCR owner evidence")
-        assessment = _exact_ref(rccr_assessment_ref, _SOURCE_REF_FIELDS, "rccr_assessment_ref")
+        assessment = _exact_ref(rccr_assessment_ref, "rccr_assessment_ref")
         if assessment["owner_programme"] != "RCCR" or assessment["object_type"] != "RCCR_ASSESSMENT":
             raise DemandValidationError("gap/capability classification must remain RCCR-owned")
+        _resolved_owner_ref(
+            reference=assessment, predicate="GAP_CLASS", evidence=rccr_owner_evidence,
+            name="rccr_assessment_ref",
+        )
     else:
         assessment = None
         if classification_owner not in {None, source["owner_programme"]}:
@@ -87,6 +171,7 @@ def build_research_demand(
     identity = {
         "source_ref": source,
         "research_question_ref": question,
+        "research_question_status": research_question_status,
         "demand_class": demand_class,
         "rccr_assessment_ref": assessment,
     }
@@ -95,6 +180,7 @@ def build_research_demand(
         "demand_id": demand_id,
         "source_ref": source,
         "research_question_ref": question,
+        "research_question_status": research_question_status,
         "demand_class": demand_class,
         "status": status,
         "classification_owner": "RCCR" if demand_class in _RCCR_OWNED else source["owner_programme"],
