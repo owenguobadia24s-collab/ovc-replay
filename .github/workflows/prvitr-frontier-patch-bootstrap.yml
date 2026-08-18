@@ -28,7 +28,6 @@ jobs:
     env:
       TARGET_BRANCH: fix/prvitr-vit-frontier-decoupling-20260818
       TRANSPORT_BRANCH: transport/prvitr-vit-frontier-decoupling-20260818
-      BOOTSTRAP_PATH: .github/workflows/prvitr-frontier-patch-bootstrap.yml
       EXPECTED_SHA256: 3a421f593035d452f5778e2d02e68ca0c595283c64e08bb4a67b69d787d6032f
       EXPECTED_BYTES: "62248"
       EXPECTED_FILE_COUNT: "32"
@@ -40,6 +39,14 @@ jobs:
           fetch-depth: 0
           token: ${{ github.token }}
           show-progress: false
+
+      - name: Freeze the exact source transport head
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_head="$(git rev-parse HEAD)"
+          echo "OVC_BOOTSTRAP_SOURCE_HEAD=${source_head}" >> "$GITHUB_ENV"
+          echo "OVC_BOOTSTRAP_SOURCE_HEAD=${source_head}"
 
       - name: Reconstruct and validate the bounded transport archive
         shell: bash
@@ -99,7 +106,6 @@ jobs:
           mkdir -p "$source_root"
           tar -xzf "$archive" -C "$source_root" --no-same-owner --no-same-permissions
           cp -a "$source_root"/. "$GITHUB_WORKSPACE"/
-          git rm -- "$BOOTSTRAP_PATH"
 
           SOURCE_ROOT="$source_root" WORKSPACE="$GITHUB_WORKSPACE" \
           EXPECTED_PATHS="$expected_paths" python3 - <<'PY'
@@ -128,7 +134,7 @@ jobs:
           PY
 
           git add -A
-          EXPECTED_PATHS="$expected_paths" BOOTSTRAP_PATH="$BOOTSTRAP_PATH" python3 - <<'PY'
+          EXPECTED_PATHS="$expected_paths" python3 - <<'PY'
           import os
           import pathlib
           import subprocess
@@ -138,7 +144,6 @@ jobs:
               .read_text(encoding="utf-8")
               .splitlines()
           )
-          expected.add(os.environ["BOOTSTRAP_PATH"])
           raw = subprocess.check_output(
               ["git", "diff", "--cached", "--name-only", "-z"]
           )
@@ -150,7 +155,7 @@ jobs:
               )
           print(
               "OVC_FRONTIER_STAGED_SUBSET_VERIFIED "
-              f"changed={len(changed)} archive_files={len(expected) - 1}"
+              f"changed={len(changed)} archive_files={len(expected)}"
           )
           PY
 
@@ -160,6 +165,14 @@ jobs:
           set -euo pipefail
           git config user.name "OVC PRVITR Frontier Bootstrap"
           git config user.email "ovc-prvitr-frontier-bootstrap@localhost"
+          if git diff --cached --quiet; then
+            echo "OVC_FRONTIER_PATCH_ALREADY_MATERIALISED=true"
+            exit 0
+          fi
           git commit -m "DSAI3V: materialise exact PRVITR frontier-decoupling patch"
+          git fetch --no-tags origin \
+            "${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}"
+          observed_remote="$(git rev-parse "refs/remotes/origin/${TARGET_BRANCH}")"
+          test "$observed_remote" = "$OVC_BOOTSTRAP_SOURCE_HEAD"
           git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
           echo "OVC_FRONTIER_PATCH_PUSHED=$(git rev-parse HEAD)"
