@@ -13,6 +13,7 @@ from ovc.research_operations.p1cdi.reference import (
     ReferenceEngineError,
     assemble_evidence_reference,
     assign_series_generation,
+    build_correspondence_plane_evidence,
     replay_as_of,
     resolve_dmrp_independence,
     stage_correspondence,
@@ -93,6 +94,22 @@ def dmrp(left: str, right: str, state: str, **changes) -> dict:
 def projections() -> tuple[dict, dict]:
     first = new_bundle()
     return first["projection"], copy.deepcopy(first["projection"])
+
+
+def plane_evidence(planes: dict, left: str, right: str) -> list[dict]:
+    return [
+        build_correspondence_plane_evidence(
+            owner="fixture:owner:path1",
+            plane=plane,
+            value=planes[plane],
+            left_generation_id=left,
+            right_generation_id=right,
+            source_ref=f"fixture:source:relation:{plane}",
+            source_generation="fixture:source:generation:1",
+            evidence_first_valid_time="2026-02-01T00:00:00Z",
+        )
+        for plane in ("core_relation", "occurrence_relation", "envelope_relation", "lineage_relation")
+    ]
 
 
 def test_block_packet_remains_byte_identical() -> None:
@@ -231,7 +248,10 @@ def test_no_dmrp_record_never_supports_affirmative_independence() -> None:
         left_projection=left, right_projection=right, planes=unknown_planes,
         admission_basis="EXACT_CANONICAL_BYTES",
     )
-    assert accepted["record"]["independence_state"] == "INDEPENDENCE_UNKNOWN"
+    assert accepted["record"] is None
+    assert accepted["semantic_identity"] == "EXACT"
+    assert accepted["plane_admission"]["independence_state"]["value"] == "INDEPENDENCE_UNKNOWN"
+    assert accepted["plane_admission"]["independence_state"]["status"] == "UNRESOLVED"
     assert accepted["independence_reason"] == "NO_EXPOSURE_RECORD"
     affirmative = {**unknown_planes, "independence_state": "AFFIRMATIVELY_INDEPENDENT"}
     with pytest.raises(ReferenceEngineError, match="DMRP-owned"):
@@ -243,11 +263,14 @@ def test_no_dmrp_record_never_supports_affirmative_independence() -> None:
 
 @pytest.mark.parametrize("state", ["AFFIRMATIVELY_DEPENDENT", "AFFIRMATIVELY_INDEPENDENT"])
 def test_exact_current_dmrp_owner_evidence_supports_only_its_explicit_state(state: str) -> None:
-    left, right = projections()
+    first = new_bundle()
+    left, right = first["projection"], copy.deepcopy(first["projection"])
     planes = {**FIXTURE["exact_planes"], "independence_state": state}
     result = stage_correspondence(
         left_projection=left, right_projection=right, planes=planes,
+        left_generation_record=first["generation"], right_generation_record=first["generation"],
         admission_basis="EXACT_CANONICAL_BYTES",
+        plane_evidence_records=plane_evidence(planes, left["generation_id"], right["generation_id"]),
         independence_evidence=[dmrp(left["generation_id"], right["generation_id"], state)],
     )
     assert result["record"]["executability"] == "AUTO_ADMITTED"

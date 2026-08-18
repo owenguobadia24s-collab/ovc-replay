@@ -15,8 +15,10 @@ from .currentness import evaluate_two_point_currentness, require_g2_alg_for_poin
 from .identity import build_semantic_projection, exact_semantic_equal, projection_bytes
 from .intake import build_intake_envelope, classify_exact_intake
 from .reference import (
+    CONFORMANCE_SEPARATION_PRINCIPLE,
     assemble_evidence_reference,
     assign_series_generation,
+    build_correspondence_plane_evidence,
     replay_as_of,
     resolve_dmrp_independence,
     stage_correspondence,
@@ -24,6 +26,7 @@ from .reference import (
 from .source_resolution import build_source_frontier, resolve_owner_predicate
 
 __all__ = [
+    "CONFORMANCE_SEPARATION_PRINCIPLE",
     "build_intake_envelope",
     "build_historical_membership_events",
     "build_semantic_projection",
@@ -31,6 +34,7 @@ __all__ = [
     "classify_exact_intake",
     "assemble_evidence_reference",
     "assign_series_generation",
+    "build_correspondence_plane_evidence",
     "evaluate_two_point_currentness",
     "exact_semantic_equal",
     "projection_bytes",
