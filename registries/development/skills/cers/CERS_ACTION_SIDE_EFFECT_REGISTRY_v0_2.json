@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-cers-action-side-effect-registry/v2",
+  "registry_id": "OVC-CERS-ACTION-SIDE-EFFECT-REGISTRY-v0.2",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "packet_id": "CERS-WP6",
+  "status": "ACTIVE_BOUNDED_WP6_LIVE_PILOT_ONLY",
+  "source_authority": "registries/development/skills/cers/CERS_LIVE_DISPATCH_AUTHORITY_v0_1.json",
+  "executor_identity": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311",
+  "branch_scope": "pilot/cers-wp6-live-20260818",
+  "semantic_owner": "CERS",
+  "entries": [
+    {
+      "action": "WRITE_FILE",
+      "side_effect_class": "REVERSIBLE_LOCAL",
+      "allowed": true,
+      "constraints": ["EXACT_FROZEN_WRITE_PATH", "PACKET_BRANCH_ONLY", "SEMANTIC_OWNER_CERS"]
+    },
+    {
+      "action": "GIT_COMMIT",
+      "side_effect_class": "BRANCH_ONLY",
+      "allowed": true,
+      "constraints": ["PACKET_BRANCH_ONLY", "NO_DIRECT_MAIN", "NO_HISTORY_REWRITE"]
+    },
+    {
+      "action": "PUSH_BRANCH",
+      "side_effect_class": "BRANCH_ONLY",
+      "allowed": true,
+      "constraints": ["EXACT_PACKET_BRANCH_ONLY", "FAST_FORWARD_ONLY", "NO_FORCE_PUSH"]
+    }
+  ],
+  "explicit_denies": [
+    "MERGE",
+    "DIRECT_MAIN_WRITE",
+    "PARALLEL_PHYSICAL_MERGE",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE",
+    "IRREVERSIBLE_EXTERNAL_SIDE_EFFECT",
+    "VALIDATION_READ",
+    "SCIENTIFIC_PROMOTION",
+    "CANONICAL_PUBLICATION",
+    "R2_PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION"
+  ],
+  "unknown_action": {
+    "side_effect_class": "IRREVERSIBLE_OR_UNKNOWN",
+    "decision": "DENY"
+  },
+  "authority_effect": "NONE"
+}
