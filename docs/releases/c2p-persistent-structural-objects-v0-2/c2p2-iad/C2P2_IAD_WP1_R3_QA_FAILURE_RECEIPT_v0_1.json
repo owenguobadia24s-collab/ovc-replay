@@ -1,0 +1,19 @@
+{
+  "schema": "ovc-c2p2-iad-wp1-r3-qa-failure-receipt/v1",
+  "programme_id": "OVC-C2P2-IDENTITY-ANCHOR-DISCRIMINATION-v0.1",
+  "packet_id": "C2P2-IAD-WP1",
+  "attempt_branch": "build/c2p2-iad-wp1-r3-20260818",
+  "attempt_head": "071e7765e800233f24bb007a3e834ce133665901",
+  "github_actions_run_id": 32174190186,
+  "github_actions_job_id": 95832167184,
+  "status": "FAILED_TARGETED_ASSURANCE_PRESERVED",
+  "diagnosis": "Historical WP0 regression test read the mutable current C2P2_IAD_EXECUTION_STATE_v0_1.json and asserted WP0 RUNNING/branch identity. On a lawful WP1 candidate the current machine state had advanced to WP1 RUNNING, so the historical test became self-invalidating. Historical packet assertions must bind immutable WP0 completion evidence instead of mutable programme state.",
+  "correction": "Materialise immutable C2P2_IAD_WP0_COMPLETION_RECEIPT_v0_1.json and bind the WP0 regression to that receipt. Keep WP1 anchor semantics and corrected research-directory placement unchanged.",
+  "scientific_semantics_changed": false,
+  "authority_delta": "NONE",
+  "fresh_real_source_execution": false,
+  "selection": "NONE",
+  "activation": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
+  "rollback": "PRESERVE_THIS_FAILED_ATTEMPT_AND_R2_CORRECTION_HISTORY; SUPERSEDE_FORWARD_ONLY"
+}

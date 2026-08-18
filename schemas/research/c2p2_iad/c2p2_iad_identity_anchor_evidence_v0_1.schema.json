@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/c2p/v0_2/c2p2_iad_identity_anchor_evidence_v0_1.schema.json",
+  "title": "C2P2 IAD Identity Anchor Evidence v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "anchor_id", "prior_source_record_id", "current_source_record_id",
+    "evaluation_cutoff", "label", "owner_contract", "owner_evidence",
+    "admissibility_rule_id", "candidate_independent", "future_information_used"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2p2-iad-identity-anchor-evidence/v1"},
+    "anchor_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "prior_source_record_id": {"type": "string", "minLength": 1},
+    "current_source_record_id": {"type": "string", "minLength": 1},
+    "evaluation_cutoff": {"type": "string", "format": "date-time"},
+    "label": {"enum": ["POSITIVE_SAME", "POSITIVE_DIFFERENT", "AMBIGUOUS", "NOT_EVALUABLE"]},
+    "owner_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_id", "path", "blob_sha", "identity_semantics_explicit"],
+      "properties": {
+        "contract_id": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "identity_semantics_explicit": {"type": "boolean"}
+      }
+    },
+    "owner_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "first_valid_time", "fact_type"],
+        "properties": {
+          "evidence_id": {"type": "string", "minLength": 1},
+          "first_valid_time": {"type": "string", "format": "date-time"},
+          "fact_type": {"type": "string", "minLength": 1},
+          "value": {}
+        }
+      }
+    },
+    "admissibility_rule_id": {"type": "string", "minLength": 1},
+    "candidate_independent": {"const": true},
+    "future_information_used": {"const": false},
+    "ambiguity_reason_codes": {"type": "array", "items": {"type": "string"}},
+    "not_evaluable_reason_codes": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -5,7 +5,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 RELEASE = ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-iad"
-STATE = ROOT / "registries/implementation/c2p_v0_2/C2P2_IAD_EXECUTION_STATE_v0_1.json"
 
 
 def load(path: Path) -> dict:
@@ -42,11 +41,14 @@ def test_wp0_freezes_exact_candidate_generation_and_denials() -> None:
     assert wp0["real_source_execution"] is False
 
 
-def test_wp0_machine_state_is_non_authoritative_and_no_vit() -> None:
-    state = load(STATE)
-    assert state["packet_id"] == "C2P2-IAD-WP0"
-    assert state["status"] == "RUNNING"
-    assert state["branch"] == "build/c2p2-iad-wp0-20260818"
+def test_wp0_completion_receipt_preserves_non_authoritative_no_vit_state() -> None:
+    receipt = load(RELEASE / "C2P2_IAD_WP0_COMPLETION_RECEIPT_v0_1.json")
+    assert receipt["packet_id"] == "C2P2-IAD-WP0"
+    assert receipt["status"] == "COMPLETED"
+    assert receipt["candidate_commit"] == "d0fe7a7f1c0fd9ee60f7f2a7b455e886990ede4f"
+    assert receipt["qa"]["recommendation"] == "PASS"
+    assert receipt["qa"]["tested_head_sha"] == receipt["candidate_commit"]
+    state = receipt["state_at_completion"]
     assert state["real_source_authority"] == "NONE_PENDING_C2P2_IAD_GREAL"
     assert state["active_object_pack_id"] is None
     assert state["c2p_activation"] == "NONE"
