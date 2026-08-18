@@ -216,6 +216,8 @@ def complete_frozen_transaction(
     observed_tree: str,
     receipt_store: ReceiptStore,
     siq_receipts: Sequence[Mapping[str, Any]] = (),
+    trace_summary: Mapping[str, Any] | None = None,
+    async_assurance_metrics: Mapping[str, Any] | None = None,
 ) -> Mapping[str, Any]:
     """Recover/persist the already-effective physical write and prove its bundle."""
     transaction = validate_live_transaction_freeze(freeze)
@@ -230,6 +232,16 @@ def complete_frozen_transaction(
 
     transaction_copy = receipt_store.root / "transactions" / f"{transaction.transaction_id}.json"
     _write_content_addressed(transaction_copy, freeze)
+
+    trace_summary_id: str | None = None
+    if trace_summary is not None:
+        if trace_summary.get("schema") != "ovc-development-observability-trace-summary/v1":
+            raise VitContractError("DEVOBS_TRACE_SUMMARY_SCHEMA_INVALID")
+        raw_trace_id = trace_summary.get("record_id")
+        if not isinstance(raw_trace_id, str) or not raw_trace_id:
+            raise VitContractError("DEVOBS_TRACE_SUMMARY_ID_MISSING")
+        trace_summary_id = raw_trace_id
+        receipt_store.put(dict(trace_summary), trace_summary_id)
 
     result = recover_effective_write_completion(
         transaction=transaction,
@@ -246,6 +258,8 @@ def complete_frozen_transaction(
         ),
         receipt_store=receipt_store,
         siq_receipts=siq_receipts,
+        trace_summary=trace_summary,
+        async_assurance_metrics=async_assurance_metrics,
     )
     ids = {
         "materialisation_receipt_id": str(result["materialisation_receipt_id"]),
@@ -288,6 +302,8 @@ def complete_frozen_transaction(
         "telemetry_rule": "OBSERVED_ONLY_UNAVAILABLE_WHERE_ABSENT",
         "authority_effect": "NONE",
     }
+    if trace_summary_id is not None:
+        proof_logical["trace_summary_id"] = trace_summary_id
     proof_id = canonical_sha256(
         proof_logical, role="DSAI3V_LOCAL_POST_MERGE_COMPLETION_PROOF"
     )

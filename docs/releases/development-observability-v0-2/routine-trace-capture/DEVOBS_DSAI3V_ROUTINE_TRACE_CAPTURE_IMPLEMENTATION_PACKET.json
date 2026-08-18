@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-devobs-routine-trace-capture-implementation-packet/v1",
+  "packet_id": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE",
+  "programme_id": "OVC-DEVELOPMENT-OBSERVABILITY-v0.2",
+  "status": "IMPLEMENTED_PENDING_QA",
+  "baseline_commit": "cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded",
+  "branch": "reconcile/devobs-routine-trace-current-main-r2-20260818",
+  "authority_required": "NONE",
+  "authority_delta": "NONE_DIAGNOSTIC_OBSERVABILITY",
+  "authority_sources": [
+    "registries/development/skills/development_latency_diagnostic_observability_v0_2.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
+    "github:issue:986:completed"
+  ],
+  "scope": {
+    "purpose": "Attach an observed-only DevelopmentTrace/trace_summary to eligible DSAI3V post-merge completion whenever PR-head GitHub Actions timestamps are available.",
+    "trace_scope": "INTEGRATION_ASSURANCE_TO_PHYSICAL_MERGE",
+    "observed_sources": [
+      "GITHUB_ACTIONS_JOB_CREATED_AT",
+      "GITHUB_ACTIONS_JOB_STARTED_AT",
+      "GITHUB_ACTIONS_JOB_COMPLETED_AT",
+      "GITHUB_PULL_REQUEST_MERGED_AT"
+    ],
+    "durable_outputs": [
+      "development_observability_events",
+      "ovc-development-observability-trace-summary/v1",
+      "canonical DSAI3V development-latency receipt linkage"
+    ]
+  },
+  "fail_honest_rules": [
+    "MODEL_REASONING remains UNAVAILABLE absent explicit measured platform telemetry",
+    "missing workflow timing does not fabricate latency and leaves canonical latency UNAVAILABLE",
+    "workflow-green-to-physical-merge is elapsed observed time only and is not attributed to a causal wait class",
+    "no local-test, remediation, polling, operator-wait or assistant-configuration duration is inferred from GitHub timestamps",
+    "existing four-receipt completion and exact-tree requirements remain unchanged"
+  ],
+  "changed_files": [
+    "src/ovc/development/dsai3v_live_trace.py",
+    "src/ovc/development/skills/vit_local_completion_executor.py",
+    "src/ovc/development/skills/vit_materialisation.py",
+    "tools/ci/vit_post_merge_completion.py",
+    "tests/development_skills/test_dsai3v_live_trace.py",
+    "tests/development_skills/test_dsai3v_live_trace_completion_binding.py",
+    "tests/development_skills/test_vit_post_merge_completion_trace_collection.py"
+  ],
+  "tests_required": [
+    "targeted DEVOBS/DSAI3V live-trace tests",
+    "existing DSAI3V local completion executor tests",
+    "existing post-merge completion tool tests",
+    "repository required assurance/parity"
+  ],
+  "rollback": "Forward-revert the bounded trace assembly and trace arguments; preserve the existing four-receipt post-merge completion path and all already-persisted diagnostic evidence.",
+  "explicit_non_authority": [
+    "no merge or physical-main authority change",
+    "no required-context or ruleset change",
+    "no scientific/model/family/candidate/theory/selector/semantic promotion",
+    "no Validation/publication/probability/risk/exposure/execution/agent-write authority"
+  ],
+  "next_packet": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE-QA"
+}
