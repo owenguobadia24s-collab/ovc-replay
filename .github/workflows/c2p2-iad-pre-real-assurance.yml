@@ -38,6 +38,37 @@ jobs:
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
           echo "packet=$packet" >> "$GITHUB_OUTPUT"
 
+      - name: Publish active-run diagnostic receipt
+        shell: bash
+        env:
+          TARGET_REF: ${{ steps.target.outputs.ref }}
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
+          PACKET_ID: ${{ steps.target.outputs.packet }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          payload={
+            'schema':'ovc-c2p2-iad-assurance-active-run/v1',
+            'programme_id':'OVC-C2P2-IDENTITY-ANCHOR-DISCRIMINATION-v0.1',
+            'packet_id':os.environ['PACKET_ID'],
+            'github_actions_run_id':int(os.environ['GITHUB_RUN_ID']),
+            'controller_head_sha':os.environ['GITHUB_SHA'],
+            'target_ref':os.environ['TARGET_REF'],
+            'target_sha':os.environ['TARGET_SHA'],
+            'status':'STARTED_PRE_TARGET_CHECKOUT',
+            'authority_effect':'NONE_OBSERVABILITY_ONLY'
+          }
+          p=Path('tools/ci/c2p2_iad_assurance_active_run.json')
+          p.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          git config user.name 'ovc-continuous-execution'
+          git config user.email 'actions@users.noreply.github.com'
+          git add tools/ci/c2p2_iad_assurance_active_run.json
+          git commit -m "${PACKET_ID}: record assurance active-run diagnostic [skip ci]"
+          git push origin HEAD:${GITHUB_REF_NAME}
+
       - name: Checkout exact packet candidate
         shell: bash
         env:
@@ -131,4 +162,4 @@ jobs:
             echo "- Authority effect: `NONE_ASSURANCE_ONLY`"
           } >> "$GITHUB_STEP_SUMMARY"
 
-# trigger-generation: 7
+# trigger-generation: 8
