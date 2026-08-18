@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-devobs-routine-trace-capture-delegated-pass/v1",
+  "programme_id": "OVC-DEVELOPMENT-OBSERVABILITY-v0.2",
+  "plan_id": "OVC.DEVOBS.LATENCY.20260813.v2",
+  "packet_id": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE",
+  "gate_id": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE-AUTO-GATE",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_NON_RESERVED_AUTO_RATIFICATION",
+  "baseline_commit": "05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
+  "implementation_head": "15270f3765e252718a0b89d8c10cb088f36e7af9",
+  "qa_packet": "docs/releases/development-observability-v0-2/routine-trace-capture/DEVOBS_DSAI3V_ROUTINE_TRACE_CAPTURE_QA.json",
+  "acceptance": {
+    "required_tests": "PASS",
+    "qa": "PASS",
+    "blocking_warnings": 0,
+    "unresolved_review_or_issue": 0,
+    "authority_delta": "NONE_DIAGNOSTIC_OBSERVABILITY",
+    "operator_reserved_action": false,
+    "rollback_defined": true
+  },
+  "rationale": "The packet adds diagnostic observed-only completion tracing inside the already-authorised DEVOBS/DSAI3V envelope. It does not activate or replace a selector, market/scientific authority, Validation, publication, probability, risk, exposure, execution, agent-write authority, or any other operator-reserved capability.",
+  "rollback": "Forward-revert bounded routine trace capture while preserving the pre-existing four-receipt DSAI3V completion path and historical diagnostics.",
+  "integration_requirements": [
+    "regenerate canonical VIT lineage for the exact decision head",
+    "rerun exact-head repository suite and parity",
+    "rerun FINAL_HEAD, SIQ READY and merge readiness",
+    "squash-merge only if exact-head assurance remains clean and main prerequisites remain contained"
+  ],
+  "merge_commit": null,
+  "next_packet": null
+}

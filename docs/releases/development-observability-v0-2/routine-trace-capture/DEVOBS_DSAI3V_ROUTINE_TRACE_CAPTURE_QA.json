@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-devobs-routine-trace-capture-qa/v1",
+  "programme_id": "OVC-DEVELOPMENT-OBSERVABILITY-v0.2",
+  "plan_id": "OVC.DEVOBS.LATENCY.20260813.v2",
+  "packet_id": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE",
+  "gate_id": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE-AUTO-GATE",
+  "baseline_commit": "05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
+  "implementation_head": "15270f3765e252718a0b89d8c10cb088f36e7af9",
+  "authority_delta": "NONE_DIAGNOSTIC_OBSERVABILITY",
+  "evidence": {
+    "repository_run": 32120682956,
+    "tiered_run": 32120683051,
+    "vit_routing_preflight": "PASS",
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "final_head_profile": "PASS",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "qa_assertions": [
+    "observed GitHub Actions timestamps are the only new routine timing source",
+    "total_wall_ms remains scoped to INTEGRATION_ASSURANCE_TO_PHYSICAL_MERGE",
+    "missing workflow timing preserves UNAVAILABLE rather than fabricating latency",
+    "MODEL_REASONING remains UNAVAILABLE without explicit measured platform telemetry",
+    "existing four-receipt completion and exact-tree requirements remain unchanged",
+    "no operator-reserved scientific, selector, Validation, publication, probability, risk, exposure, execution or agent-write authority changes"
+  ],
+  "warnings": [],
+  "unresolved_issues": [],
+  "rollback": "Forward-revert the bounded trace assembly and trace arguments while preserving the existing four-receipt post-merge completion path and all already-persisted diagnostic evidence.",
+  "recommendation": "PASS",
+  "final_exact_head_assurance_required_after_decision_materialisation": true
+}
