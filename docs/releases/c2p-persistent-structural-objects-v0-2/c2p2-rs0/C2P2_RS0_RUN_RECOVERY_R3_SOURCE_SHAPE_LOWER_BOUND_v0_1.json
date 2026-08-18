@@ -65,14 +65,29 @@
       "BID|C2_LEVEL": 6440727756,
       "BID|C2_CONTAINER": 6864580206
     },
-    "status": "MECHANICAL_LOWER_BOUND_PENDING_SYNTHETIC_SCALING_CONFIRMATION"
+    "status": "CONFIRMED_BY_BOUNDED_SYNTHETIC_SCALING"
   },
-  "interpretation": "The current full-cardinality capacity qualification, which produced about one evidence vector per synthetic candidate and only two terminal tracklets/two assertions, does not bound the logical evidence volume implied by the real Candidate A source shape. If the bounded synthetic scaling harness confirms the frozen N*(N-1)/2 mechanism, physical SQLite compaction or a small storage-ceiling increase cannot lawfully resolve the blocker without a separately governed semantic/runtime scalability design decision.",
+  "synthetic_scaling_confirmation": {
+    "measurement_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_CAPACITY_SCALING_MEASUREMENT_v0_1.json",
+    "github_run_id": 32117645081,
+    "github_artifact_id": 9317447398,
+    "github_artifact_digest": "sha256:b21310a412370c9df9cbee6214765fab1ca2902e7e07ab138d70cf79d8f9e070",
+    "head_sha": "90bd43bf6eb2ad4a0c0730516f22d8b0ec415a7d",
+    "points": [32, 64, 128, 256],
+    "observed_evidence_vectors": [496, 2016, 8128, 32640],
+    "formula_status": "PASS_EXACT_N_TIMES_N_MINUS_ONE_OVER_TWO_AT_ALL_POINTS",
+    "targeted_assurance": "PASS_21",
+    "repository_regression": "PASS_4787_PASSED_2_SKIPPED",
+    "real_source_read": false,
+    "real_source_semantic_execution": false,
+    "fresh_run_token": "NONE"
+  },
+  "interpretation": "The bounded synthetic qualification confirms that the frozen Candidate A evidence contract itself grows quadratically with persistent competitor count inside a hard scope. The exact real-source frequency census therefore implies at least 26.629672948 billion persisted comparison evidence vectors before counting second occurrences, frequency>=3 geometries, assertion comparisons, or other competitor evidence. This is a logical evidence-cardinality blocker, not merely SQLite page or index overhead. A small storage-ceiling increase or physical compaction that preserves the exact frozen evidence stream cannot lawfully resolve it.",
   "real_source_semantic_execution": false,
   "fresh_run_token": "NONE",
   "selection": "NONE",
   "activation": "NONE",
   "validation": "LOCKED_UNCONSUMED",
-  "next_action": "RUN_BOUNDED_SYNTHETIC_SCALING_QUALIFICATION",
+  "next_action": "STOP_AT_C2P2_RS0_SEMANTIC_SCALABILITY_RECOVERY_OPERATOR_GATE",
   "rollback": "PRESERVE_R3_CONSUMPTION_AND_ALL_RECOVERY_DIAGNOSTICS_FORWARD_ONLY"
 }
