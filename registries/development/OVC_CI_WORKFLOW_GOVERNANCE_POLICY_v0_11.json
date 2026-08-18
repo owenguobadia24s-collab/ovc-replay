@@ -1,0 +1,156 @@
+{
+  "schema": "ovc-ci-workflow-governance-policy/v1",
+  "policy_id": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.11",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R4",
+  "supersedes_for_current_inventory": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.10",
+  "historical_policy_preserved": "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_10.json",
+  "baseline_main_sha": "a11d29569321e4fe608f09dd51c04349c3f1c13f",
+  "snapshot": {
+    "github_actions_registered_total_count": 191,
+    "github_actions_captured_at": "2026-08-14T11:45:00+01:00",
+    "github_actions_source": "PRIOR_V0_10_GITHUB_ACTIONS_WORKFLOWS_API_SNAPSHOT_NOT_REMEASURED_BY_THIS_PACKET",
+    "expected_repository_workflow_definition_count": 142,
+    "registration_count_excess": 49,
+    "registration_count_excess_interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK_NOT_AUTHORITY"
+  },
+  "inventory_layers": {
+    "REPOSITORY_DEFINITIONS": "Authoritative exact-head scan of .github/workflows definitions present in the repository tree.",
+    "GITHUB_ACTIONS_REGISTRY": "Prior external Actions workflow-registration snapshot retained as diagnostic provenance; this packet does not infer a refreshed external registration count."
+  },
+  "approved_pull_request_workflows": [
+    ".github/workflows/tests.yml",
+    ".github/workflows/ovc-tiered-tests.yml"
+  ],
+  "categories": ["CURRENT_PR_CI", "TEMPORARY", "HISTORICAL_MANUAL_VERIFICATION", "ACTIVE_MANUAL_OPERATION"],
+  "classification_precedence": ["CURRENT_PR_CI", "TEMPORARY", "HISTORICAL_MANUAL_VERIFICATION", "ACTIVE_MANUAL_OPERATION"],
+  "rules": {
+    "CURRENT_PR_CI": {
+      "condition": "workflow has pull_request trigger and path is in approved_pull_request_workflows",
+      "unexpected_pull_request_listener": "FAIL_CLOSED"
+    },
+    "TEMPORARY": {
+      "path_basename_prefixes": ["_temp_"],
+      "workflow_name_prefixes_case_insensitive": ["temp ", "temp-"],
+      "repository_presence_required_for_local_count": true
+    },
+    "HISTORICAL_MANUAL_VERIFICATION": {
+      "content_markers_case_insensitive": ["historical manual verification", "historical packet verification"]
+    },
+    "ACTIVE_MANUAL_OPERATION": {
+      "condition": "all remaining workflow definitions after higher-precedence rules"
+    }
+  },
+  "required_trigger_inventory": ["pull_request", "push", "workflow_dispatch", "schedule", "workflow_call", "workflow_run"],
+  "admitted_new_workflow": {
+    "path": ".github/workflows/c2p2-rs0-current-source-materialisation.yml",
+    "classification": "ACTIVE_MANUAL_OPERATION",
+    "triggers": ["push"],
+    "pull_request_listener": false,
+    "authority_mode": "BOUNDED_READ_ONLY_CURRENT_SOURCE_MATERIALISATION_INACTIVE_NONCANONICAL_NO_REQUIRED_CHECK_SUBSTITUTION_NO_GRUN_CONSUMPTION",
+    "admission_basis": "Preserved prior admission from C2P2-RS0-SOURCE-MATERIALISATION operator PASS"
+  },
+  "additional_non_pr_diagnostic_workflows": [
+    {
+      "path": ".github/workflows/vit-post-merge-completion.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "POST_WRITE_COMPLETION_OBSERVABILITY_ONLY_READ_GITHUB_WRITE_EXISTING_LOCAL_RECEIPTSTORE_NO_MERGE_AUTHORITY",
+      "admission_basis": "DSAI3V bounded authority-delta-NONE completion observability"
+    },
+    {
+      "path": ".github/workflows/ci-unittest-shard-shadow.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "CIPR-G4 operator PASS"
+    },
+    {
+      "path": ".github/workflows/pyt-wp2-step5-unified.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "DIAGNOSTIC_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "PYT-WP2 native pytest conformance diagnostic"
+    },
+    {
+      "path": ".github/workflows/grt2-g2-qualification.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "QUALIFICATION_EVIDENCE_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "GRT2-G2 qualification evidence"
+    },
+    {
+      "path": ".github/workflows/grt2-g2-performance.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "MEASUREMENT_EVIDENCE_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "GRT2-G2 measured performance evidence"
+    },
+    {
+      "path": ".github/workflows/dsai3v-async-assurance-shadow.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "ASYNC_ASSURANCE_QUALIFICATION_SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION_NO_WRITE",
+      "admission_basis": "DSAI3V-AA shadow qualification"
+    },
+    {
+      "path": ".github/workflows/c2p2-rs0-real-source-shadow-run.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "HISTORICAL_SINGLE_USE_CONSUMED_REAL_SOURCE_RUN_BRANCH_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION_NO_NEW_GRUN",
+      "admission_basis": "Consumed R1 court-record workflow"
+    },
+    {
+      "path": ".github/workflows/c2p2-rs0-runtime-capacity-recovery.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "SYNTHETIC_FULL_CARDINALITY_CAPACITY_RECOVERY_NO_REAL_SOURCE_NO_REQUIRED_CHECK_SUBSTITUTION_NO_GRUN_CONSUMPTION",
+      "admission_basis": "C2P2-RS0-RUN-RECOVERY bounded synthetic/reference remediation"
+    },
+    {
+      "path": ".github/workflows/c2p2-rs0-real-source-shadow-run-r2.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "HISTORICAL_CONSUMED_R3_LAUNCH_WORKFLOW_PRESERVING_R2_R3_COURT_RECORD_NO_REQUIRED_CHECK_SUBSTITUTION_NO_NEW_GRUN",
+      "admission_basis": "R3 run 32112742273 consumed authority v0.4 and cannot rerun"
+    },
+    {
+      "path": ".github/workflows/c2p2-rs0-r3-storage-recovery.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "BOUNDED_SYNTHETIC_R3_STORAGE_RECOVERY_NO_REAL_SOURCE_NO_REQUIRED_CHECK_SUBSTITUTION_NO_FRESH_GRUN_NO_SELECTION_NO_ACTIVATION",
+      "admission_basis": "C2P2-RS0-RUN-RECOVERY-R3 bounded synthetic scaling qualification"
+    },
+    {
+      "path": ".github/workflows/c2p2-rs0-semantic-scalability-qualification.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "BOUNDED_SEMANTIC_SCALABILITY_SYNTHETIC_QUALIFICATION_NO_REAL_SOURCE_NO_FRESH_GRUN_NO_SELECTION_NO_ACTIVATION_NO_STORAGE_CEILING_CHANGE_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "C2P2-RS0-SEMANTIC-SCALABILITY-RECOVERY operator PASS; inactive indexed runtime exact-reference and full-cardinality synthetic qualification only"
+    },
+    {
+      "path": ".github/workflows/c2p2-rs0-real-source-shadow-run-r4.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "OPERATOR_APPROVED_SINGLE_USE_R4_REAL_SOURCE_A_B_C_SHADOW_NO_VIT_NO_SELECTION_NO_ACTIVATION_NO_VALIDATION_NO_PUBLICATION_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "C2P2-RS0-FRESH-GRUN-R4 operator PASS; exact v0.5 one-run authority only, consuming at semantic launch and stopping at scientific review or R4 recovery"
+    }
+  ],
+  "governance": {
+    "classification_only": true,
+    "workflow_deletion": "PROHIBITED",
+    "workflow_disablement": "PROHIBITED_BY_THIS_PACKET",
+    "trigger_mutation": "PROHIBITED_EXCEPT_REMOVAL_OF_UNAUTHORISED_NEW_PR_LISTENERS_FROM_CURRENT_CANDIDATE",
+    "required_check_mutation": "PROHIBITED_BY_THIS_PACKET",
+    "historical_evidence_preservation": "REQUIRED",
+    "temporary_workflow_retirement": "REQUIRES_SEPARATE_AUTHORITY",
+    "registry_repository_count_mismatch": "OBSERVE_AND_RECORD_ONLY"
+  },
+  "action_dependency_hygiene": {
+    "classification": "NON_BLOCKING_REVIEW_ITEM",
+    "known_runner_warning_families": ["actions/checkout@v4 Node target warning", "actions/setup-python@v5 Node target warning"],
+    "automatic_version_bump": false
+  },
+  "authority_delta": "NONE_CLASSIFICATION_OF_OPERATOR_APPROVED_SINGLE_USE_R4_EXECUTION_WORKFLOW_ONLY",
+  "rollback": "Supersede v0.11 current-inventory snapshot only. Preserve v0.1-v0.10 historical policies and all workflow history; do not delete workflows or mutate required checks."
+}
