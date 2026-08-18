@@ -1,45 +1,51 @@
 {
   "schema": "ovc-programme-state/v1",
   "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
-  "packet_id": "P2CTII-WP2-REMEDIATION-1",
+  "packet_id": "P2CTII-WP2",
   "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
   "plan_version": "0.1_REVISED_1",
-  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "status": "GATE_READY",
   "completed_packets": [
     {"packet_id":"P2CTII-WP0","status":"COMPLETED","merge_commit":"49fc565541fe33ec5cdc42296528fc449ea86fff","decision":"PASS"},
     {"packet_id":"P2CTII-WP1","status":"COMPLETED","merge_commit":"05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3","decision":"PASS"},
-    {"packet_id":"P2CTII-WP2","status":"COMPLETED_GATE_REVIEWED_BLOCK","merge_commit":"7533ec8cc4cfd4111aea59de8264fe87d542b0d0","materialisation_receipt_id":"4d83f728b245c49357b6f9449e7ce5ac09865b07a2149e00074e77e6cabffe3a","completion_receipt_id":"9ef68c3e33118ec4cf2aab936cb49bfaeabf4359e56f988dbfcedc9e0cdf4c4d","decision":"P2CTII-G2-ALG_BLOCK"}
+    {"packet_id":"P2CTII-WP2","status":"COMPLETED_GATE_REVIEWED_BLOCK","merge_commit":"7533ec8cc4cfd4111aea59de8264fe87d542b0d0","materialisation_receipt_id":"4d83f728b245c49357b6f9449e7ce5ac09865b07a2149e00074e77e6cabffe3a","completion_receipt_id":"9ef68c3e33118ec4cf2aab936cb49bfaeabf4359e56f988dbfcedc9e0cdf4c4d","decision":"P2CTII-G2-ALG_BLOCK"},
+    {"packet_id":"P2CTII-WP2-REMEDIATION-1","status":"COMPLETED","merge_commit":"12e302f40af55ed485058d80e77bdc07c9148d8a","merge_tree":"8e31ecd15033101e9aaefc124ace1c3ec4f4b219","materialisation_receipt_id":"ff956c37f88662d29c21d3eb6bde8473b1acd967ebb822f2985e9aa74dbd9eb1","completion_receipt_id":"2c37c3abc165da6340896556761c6f862bd8cbc0ded43c16cee4c354afc3378d","decision":"PASS_REMEDIATION"}
   ],
   "prerequisites": [
     "P2CTII-WP0_COMPLETED@49fc565541fe33ec5cdc42296528fc449ea86fff",
     "P2CTII-WP1_COMPLETED@05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
     "P2CTII-WP2_MATERIALISED@7533ec8cc4cfd4111aea59de8264fe87d542b0d0",
     "P2CTII-WP2_COMPLETION_RECEIPT@9ef68c3e33118ec4cf2aab936cb49bfaeabf4359e56f988dbfcedc9e0cdf4c4d",
-    "P2CTII-G2-ALG_BLOCK@dd359448d4c23b617db187297ccad824377dcfdd"
+    "P2CTII-G2-ALG_BLOCK@dd359448d4c23b617db187297ccad824377dcfdd",
+    "P2CTII-WP2-REMEDIATION-1_COMPLETED@12e302f40af55ed485058d80e77bdc07c9148d8a"
   ],
-  "authority_required": "AUTO_EXECUTABLE_BOUNDED_WP2_REMEDIATION",
+  "authority_required": "INDEPENDENT_REVIEWER",
   "authority_delta": "NONE",
-  "baseline_commit": "17e448c2598bcbe70cb07c780f82ad6b5d1d0335",
-  "baseline_tree": "a843009a56297f556157f1187f61ef9f0251174d",
-  "branch": "agent/p2ctii-wp2-remediation-1-20260818",
+  "baseline_commit": "12e302f40af55ed485058d80e77bdc07c9148d8a",
+  "baseline_tree": "8e31ecd15033101e9aaefc124ace1c3ec4f4b219",
+  "branch": "agent/p2ctii-wp2-remediation-1-qa-20260818",
   "candidate_commit": "BOUND_BY_FINAL_VIT_LINEAGE",
   "tests": [
     "P2CTII_WP1_WP2_TARGETED:PASS_35_OF_35",
     "P2CTII_G2_ALG_DECLARED_MATRIX:PASS_11_OF_11",
     "P2CTII_G2_ALG_BLOCKING_REGRESSIONS:PASS_2_OF_2",
     "P2CTII_WP2_REMEDIATION_REGRESSIONS:PASS_17_OF_17",
-    "P2CTII_WP2_REMEDIATION_TWO_CLEAN_PROCESSES:BYTE_EQUAL@314a8611b623286f8257efb77d22ba88757caa6850d1335b2c9d9269f03621a6"
+    "P2CTII_WP2_REMEDIATION_TWO_CLEAN_PROCESSES:BYTE_EQUAL@314a8611b623286f8257efb77d22ba88757caa6850d1335b2c9d9269f03621a6",
+    "REPOSITORY_REQUIRED_CI@32139352187:PASS",
+    "PYTEST_UNITTEST_RUNNER_PARITY@32139352187:PASS",
+    "PRVITR_VIT_GRT_SIQ@32139352285:PASS",
+    "POST_MERGE_COMPLETION@32139950883:PASS"
   ],
-  "qa_packet": "docs/programmes/p2cti-v0-1/wp2/P2CTII_WP2_REMEDIATION_1_IMPLEMENTATION_PACKET_v0_1.json",
-  "decision_record": "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_CONSOLIDATED_REVIEW_PACKET_v0_1.json@sha256:d44e1d45e291e3db0932df2b8103b6e3d74941174747013d38f8716da077ba47",
+  "qa_packet": "docs/programmes/p2cti-v0-1/wp2/P2CTII_WP2_REMEDIATION_1_QA_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/p2cti-v0-1/wp2/P2CTII_WP2_REMEDIATION_1_DECISION_v0_1.json",
   "merge_commit": "EFFECTIVE_ON_VIT_POST_MERGE_PACKET_COMPLETION_RECEIPT",
   "blockers": [
-    "P2CTII_WP2_REMEDIATION_1_EXACT_FINAL_ASSURANCE_REQUIRED",
     "P2CTII_G2_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED"
   ],
-  "next_packet": "P2CTII-WP2-REMEDIATION-1-QA-DECISION",
+  "next_packet": "P2CTII-G2-ALG-FRESH-INDEPENDENT-REVIEW",
+  "review_commission": "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_FRESH_REVIEW_COMMISSION_v0_1.json",
   "required_return_gate": "FRESH_CONFLICT_FREE_P2CTII-G2-ALG_INDEPENDENT_REVIEW",
-  "p2ctii_g2_alg_status": "UNRESOLVED_PRIOR_BLOCK_PRESERVED",
+  "p2ctii_g2_alg_status": "UNRESOLVED_PRIOR_BLOCK_PRESERVED_FRESH_REVIEW_COMMISSIONED",
   "remediation_author_may_grant_g2_alg_pass": false,
   "wp3_authorised": false,
   "reserved_later_gates": ["P2CTII-G4-ALG","P2CTII-G-OBSERVABILITY-ACTIVATE","P2CTII-G-CONTINUOUS-INTAKE"],
