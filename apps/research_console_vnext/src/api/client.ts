@@ -10,6 +10,7 @@ import type {
   ReadEnvelope,
   SourceIdentity,
   WP5ARepresentationSnapshot,
+  WP5B1DMRPSnapshot,
 } from "./types";
 
 const API_ROOT = "/api/v1";
@@ -76,4 +77,7 @@ export async function getFamilies(): Promise<ReadEnvelope<FamilyEvidenceView[]>>
 }
 export async function getRepresentationSnapshot(): Promise<ReadEnvelope<WP5ARepresentationSnapshot>> {
   return get<WP5ARepresentationSnapshot>("/research/representations/snapshot");
+}
+export async function getDMRPSnapshot(): Promise<ReadEnvelope<WP5B1DMRPSnapshot>> {
+  return get<WP5B1DMRPSnapshot>("/research/dmrp/snapshot");
 }
