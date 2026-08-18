@@ -1,0 +1,123 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-plan-ratification-gate-packet/v1",
+  "gate_id": "CERS-PS-PLAN-RATIFICATION",
+  "title": "CERS Persistent Supervisor Activation Plan v0.1 scope ratification",
+  "gate_class": "OPERATOR_REQUIRED",
+  "decision_options": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recommended_decision": "PASS",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-PROPOSED",
+  "plan_version": "0.1 PROPOSED",
+  "governing_design": "OVC-DSAI3V-CERS-DESIGN-SPEC-0.1-R1-RATIFIED",
+  "baseline_commit": "57995c54e2963984776832b7522841e6b7c834b0",
+  "baseline_tree": "f67c49b8c3422948bfd96e1e2f7de3f1e19459a8",
+  "proposal_branch": "plan/cers-persistent-supervisor-activation-v0-1-20260818",
+  "proposal_plan_commit": "3d24250163382bcf09e029877db8a0815862b166",
+  "completed_predecessor": {
+    "packet": "CERS-WP6",
+    "gate": "CERS-G6",
+    "terminal_effectivity": "CERS_IMPLEMENTED_QUALIFIED_LIVE_PILOT_PASS",
+    "merge_commit": "81faa31be2e59e47bc9784174f971c93a5a3a41c",
+    "physical_tree": "5faa522134abfae1749a13bb9b53ae51e8054ee7",
+    "physical_transaction": "8e306f0506d1a2199777e267c5321425e97ff3b72a07ca9605a9ef04c47516f9",
+    "materialisation_receipt": "68ae19cf78bb719a819bd3714b2204129e4761bbfffebfb6d846f615757c22c6",
+    "packet_completion_receipt": "86a88d1f565779d63c0c318e4d69e54d38cc1d8ef6c3bdec18acc8040d02a3d7",
+    "development_latency_receipt": "28905a2cb72066b186b8f37307d495b2438ff650886992937db3d8f54ca8a223",
+    "completion_observability_attachment": "a62c55c1d8893e789a404e58f364c1e2a6fa8cef5bfaa30be756ba660ee98126",
+    "post_merge_completion_proof": "112fcfcec02c73b1b19d56d90c5965e45da9d2a7cc26d19706f8cd0816fde860"
+  },
+  "current_authority": {
+    "live_dispatch_authority": "CERS_WP6_BOUNDED_UNATTENDED_DISPATCH_ONLY",
+    "persistent_general_dispatch": "DENIED",
+    "post_pilot_quiescence": "DISABLE_NEW_DISPATCH",
+    "executor_identity": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311",
+    "packet_executor_write_authority": "DSAI-G8C ASSISTED_AGENT_WRITE LOW_RISK_IMPLEMENTATION PACKET_DOMAIN_ONLY NO_MERGE",
+    "physical_controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
+  },
+  "observed_activation_gaps": [
+    "live.py is hard-bound to OVC-DSAI3V-CERS-CONFORMANCE-v0.1/CERS-WP6/pilot branch/exact WP6 paths",
+    "ReferenceReconciler still denies non-fixture writing executors under pre-activation rules",
+    "CERS programme-root registry is a bounded infrastructure census, not a persistent programme-admission registry",
+    "CERS action/side-effect registry remains ACTIVE_BOUNDED_WP6_LIVE_PILOT_ONLY",
+    "no general persistent event-plus-reference-sweep service is activated",
+    "post-pilot quiescence remains DISABLE_NEW_DISPATCH",
+    "Git CERS current pointer is a historical conditional representation; G6 terminal effectivity is carried by the external physical completion bundle"
+  ],
+  "proposed_scope_delta_if_this_plan_is_ratified": {
+    "implementation_authority": "CERS-PS-WP0 through CERS-PS-WP5 inactive/shadow implementation, tests, QA, DEVOBS and activation-gate preparation",
+    "runtime_activation": "STILL_DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+    "new_writer_identity": false,
+    "new_merge_authority": false,
+    "direct_main_write": false,
+    "parallel_physical_merge": false,
+    "force_push_or_history_rewrite": false,
+    "scientific_or_validation_or_publication_or_probability_risk_exposure_execution_authority": "NONE"
+  },
+  "planned_packets": [
+    "CERS-PS-WP0 terminal baseline and authority reconciliation",
+    "CERS-PS-WP1 persistent contracts, schemas and admission registry",
+    "CERS-PS-WP2 registry-driven live reconciler and coordinator",
+    "CERS-PS-WP3 persistent zero-chat supervisor service inactive/shadow",
+    "CERS-PS-WP4 initial explicit programme admission set",
+    "CERS-PS-WP5 adversarial persistent qualification and capacity freeze"
+  ],
+  "planned_auto_gates": ["CERS-PS-G0", "CERS-PS-G1", "CERS-PS-G2", "CERS-PS-G3", "CERS-PS-G4", "CERS-PS-G5"],
+  "next_operator_gate_after_plan_pass": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "activation_delta_reserved_for_later_gate": "Change persistent CERS quiescence to RUN and permit unattended invocation of the existing trusted Packet Executor only for exact explicitly admitted programmes and already-authorised auto-executable packets, while all owner authority and VIT/SIQ integration remain unchanged.",
+  "acceptance_conditions_for_plan_ratification": [
+    "scope remains liveness-only and does not manufacture programme authority",
+    "persistent programme admission is explicit and fail-closed; no automatic future programme admission",
+    "existing trusted Packet Executor identity is reused; no new writer identity",
+    "Packet Executor write scope remains packet-declared domain/semantic owner only",
+    "CERS has no merge capability and cannot write main",
+    "physical integration remains serialized through VIT/SIQ",
+    "operator-required and reserved boundaries always park",
+    "unknown authority/action/side-effect/executor/programme root fails closed",
+    "DISABLE_NEW_DISPATCH rollback is retained",
+    "activation remains a separate operator-required gate after complete G0-G5 qualification"
+  ],
+  "tests": {
+    "proposal_only": true,
+    "runtime_tests_required_before_this_scope_gate": false,
+    "required_before_activation_gate": [
+      "targeted persistent CERS regressions",
+      "multi-programme adversarial suite",
+      "repository-wide assurance",
+      "pytest/unittest parity",
+      "runner parity",
+      "VIT routing",
+      "GRT exact-tree assurance",
+      "FINAL_HEAD",
+      "SIQ READY",
+      "exact-final merge readiness",
+      "zero-chat restart and persistent-service recovery",
+      "rollback rehearsal"
+    ]
+  },
+  "qa": {
+    "current": "PROPOSAL_SCOPE_REVIEW_ONLY",
+    "activation_qa": "NOT_YET_AUTHORISED_OR_EXECUTED"
+  },
+  "warnings": [
+    "Normal persistent CERS activation is not a one-flag change; the live implementation remains WP6-pilot-specific.",
+    "Initial programme admission set and operational cadence/liveness/reclaim thresholds must be frozen from repository/qualification evidence before activation.",
+    "Existing CERS-G-LIVE-DISPATCH PASS cannot be interpreted as general future-programme dispatch authority because its materialised allowlist is CERS-WP6 only."
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/plans/development-skills-v0-3/cers/OVC_DSAI3V_CERS_Persistent_Supervisor_Activation_Plan_v0_1_PROPOSED.md",
+    "docs/releases/development-skills-v0-3/cers-persistent-supervisor/CERS_PS_PLAN_RATIFICATION_GATE_PACKET_v0_1.json"
+  ],
+  "external_artifact_hashes": {
+    "cers_wp6_physical_completion_proof": "112fcfcec02c73b1b19d56d90c5965e45da9d2a7cc26d19706f8cd0816fde860"
+  },
+  "rollback": "Do not ratify or supersede the proposed plan. Leave CERS post-pilot DISABLE_NEW_DISPATCH and bounded WP6-only authority unchanged; preserve all existing evidence and Git history.",
+  "exact_work_after_pass": [
+    "materialise a RATIFIED copy/decision for this plan without changing CERS runtime quiescence",
+    "execute CERS-PS-WP0 through CERS-PS-WP5 continuously through all auto-ratifiable PASS gates",
+    "repair bounded defects and renew VIT placement automatically on main churn",
+    "materialise one consolidated CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION GATE_READY packet",
+    "stop once at that operator-required activation gate before changing quiescence to RUN"
+  ],
+  "authority_effect": "NONE"
+}
