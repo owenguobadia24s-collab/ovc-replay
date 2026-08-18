@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-c2p2-rs0-run-recovery-r3-result/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-RUN-RECOVERY-R3",
+  "status": "BLOCKED_SEMANTIC_SCALABILITY_OUTSIDE_RECOVERY_SCOPE",
+  "operator_decision": "PASS_BOUNDED_STORAGE_RECOVERY_NO_RERUN",
+  "operator_decision_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_OPERATOR_DECISION_v0_1.json",
+  "r3_terminal_state": {
+    "authority_id": "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.4",
+    "authority_consumed": true,
+    "run_count_remaining": 0,
+    "rerun": "FORBIDDEN",
+    "run_id": 32112742273,
+    "run_status": "BLOCKED_CAPACITY_EXCEEDED_SINGLE_USE_CONSUMED",
+    "selection_state": "NONE_SELECTED_INCOMPLETE_RUN",
+    "active_object_pack_id": null,
+    "c2p_activation": "NONE",
+    "validation": "LOCKED_UNCONSUMED",
+    "f0_a": "HOLD_NO_JOINT_LAUNCH"
+  },
+  "recovery_evidence": {
+    "diagnosis_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_DIAGNOSIS_v0_1.json",
+    "source_shape_lower_bound_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_SOURCE_SHAPE_LOWER_BOUND_v0_1.json",
+    "scaling_measurement_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_CAPACITY_SCALING_MEASUREMENT_v0_1.json",
+    "qa_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_RUN_RECOVERY_R3_QA_v0_1.json",
+    "qualification_actions_run_id": 32117645081,
+    "qualification_actions_artifact_id": 9317447398,
+    "qualification_actions_artifact_digest": "sha256:b21310a412370c9df9cbee6214765fab1ca2902e7e07ab138d70cf79d8f9e070",
+    "qualification_head_sha": "90bd43bf6eb2ad4a0c0730516f22d8b0ec415a7d"
+  },
+  "qualification": {
+    "targeted_assurance": "PASS_21",
+    "repository_regression": "PASS_4787_PASSED_2_SKIPPED",
+    "source_download": "FORBIDDEN_NOT_PERFORMED",
+    "real_source_semantic_execution": false,
+    "synthetic_points": [32, 64, 128, 256],
+    "synthetic_evidence_vectors": [496, 2016, 8128, 32640],
+    "quadratic_formula": "PASS_EXACT_N_TIMES_N_MINUS_ONE_OVER_TWO_AT_ALL_POINTS"
+  },
+  "root_cause_final": {
+    "classification": "FROZEN_RUNTIME_LOGICAL_EVIDENCE_CARDINALITY_SCALABILITY_BLOCKER",
+    "supersedes_provisional_storage_only_interpretation": true,
+    "mechanism": "Persistent unmatched competitors accumulate in each hard scope and the frozen runtime persists negative comparison evidence against each one, producing quadratic evidence-vector growth.",
+    "real_source_persistent_frequency_le_two_geometries": 461506,
+    "strict_first_occurrence_evidence_vector_lower_bound": 26629672948,
+    "strict_first_occurrence_evidence_vector_lower_bound_billions": 26.629672948,
+    "lower_bound_exclusions": [
+      "second occurrences of frequency-two geometries",
+      "all frequency-three-or-more geometry competitor evidence",
+      "assertion comparisons",
+      "any additional tracklet comparisons outside the persistent first-occurrence subset"
+    ]
+  },
+  "bounded_recovery_disposition": {
+    "storage_telemetry": "PASS",
+    "adversarial_synthetic_scaling_qualification": "PASS_BLOCKER_CONFIRMED",
+    "semantics_preserving_physical_compaction": "NOT_IMPLEMENTED_INSUFFICIENT_TO_REMOVE_LOGICAL_OUTPUT_CARDINALITY",
+    "high_density_full_cardinality_physical_capacity_measurement": "NOT_RUN_AFTER_LOGICAL_LOWER_BOUND_CONFIRMED",
+    "storage_ceiling_increase": "NOT_PROPOSED",
+    "reason": "Continuing a materialisation-only path would spend substantial compute/storage while preserving a logical evidence stream already proven to scale quadratically. Any effective pruning, indexing-with-negative-evidence-elision, aggregation, or evidence-representation change crosses the frozen runtime/evidence contract boundary and therefore requires separate operator authority."
+  },
+  "authority_effect": "NONE_FROM_RECOVERY_RESULT",
+  "fresh_run_token": "NONE",
+  "r4_status": "NOT_READY",
+  "selection": "NONE",
+  "activation": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
+  "publication_probability_risk_exposure_trading_execution_agent_write": "NONE",
+  "next_operator_gate": "C2P2-RS0-SEMANTIC-SCALABILITY-RECOVERY",
+  "rollback": "FORWARD_ONLY_PRESERVE_R3_CONSUMPTION_AND_ALL_RECOVERY_EVIDENCE"
+}
