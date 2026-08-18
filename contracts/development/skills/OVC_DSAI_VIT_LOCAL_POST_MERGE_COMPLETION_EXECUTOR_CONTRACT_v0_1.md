@@ -16,6 +16,12 @@ For every VIT-mandatory permanent PR, `tests / VIT routing preflight` emits exac
 
 A main movement that invalidates the frozen base prevents SIQ readiness and therefore prevents that transaction from becoming physical. A lawful requeue/reanchor produces a new exact freeze for the new placement.
 
+### Administrative closeout rule
+
+A permanent VIT PIP MUST NOT create a second ordinary integration contestant whose packet identity or `completion_transition.next_packet` is an administrative `*CLOSEOUT*` step. For delegated/auto-executable gates, implementation, QA and the delegated decision must be bound before physical write so the PIP can name the substantive successor directly. Post-write commit/tree facts are materialised through `PhysicalMaterialisationReceipt`, `PacketCompletionReceipt` and the associated content-addressed completion bundle.
+
+An operator-required packet may lawfully materialise a `GATE_READY` or equivalent owner-defined state and stop; this rule does not auto-approve that gate. It only prohibits using another ordinary PR to record facts that the post-merge receipt path already owns. Historical PIPs remain immutable and recoverable; this rule is prospective and does not rewrite old lineage.
+
 ## Post-merge execution
 
 `.github/workflows/vit-post-merge-completion.yml` runs only from merged `main` content on the existing self-hosted Windows runner. It has read-only GitHub permissions and inherits the operator-local `OVC_EXTERNAL_ARTIFACT_ROOT` from that runner.

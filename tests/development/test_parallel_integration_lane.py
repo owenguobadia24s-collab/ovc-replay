@@ -74,21 +74,23 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertNotIn("compareCommits", self.workflow)
         self.assertNotIn("compareCommits", self.admission)
 
-    def test_predecessor_disposition_advances_successor(self):
+    def test_vit_predecessor_disposition_advances_successor(self):
         for marker in [
             "final_integration_predecessor_lease_wait_ms",
-            "OVC_FINAL_INTEGRATION_PREDECESSOR_LEASE_HELD",
-            "OVC_FINAL_INTEGRATION_PREDECESSOR_MERGED",
-            "OVC_FINAL_INTEGRATION_PREDECESSOR_RELEASED",
-            "OVC_FINAL_INTEGRATION_PREDECESSOR_INVALIDATED",
+            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_HELD",
+            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_MERGED",
+            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_RELEASED_UNMERGED",
+            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_INVALIDATED",
         ]:
             self.assertIn(marker, self.admission)
 
-    def test_only_earlier_pr_can_own_predecessor_lease_and_exact_workflow_evidence_is_used(self):
-        self.assertIn("if number>=pr_number", self.admission)
-        self.assertIn("OVC_FINAL_INTEGRATION_NON_PREDECESSOR_IGNORED", self.admission)
-        self.assertIn("_exact_run(TIERED_WORKFLOW", self.admission)
-        self.assertIn("_exact_merge_job_pass", self.admission)
+    def test_predecessor_is_vit_placement_not_pr_number_or_ready_job_order(self):
+        self.assertIn("resolve_vit_train_predecessor", self.admission)
+        self.assertIn("main_tree == expected_tree", self.admission)
+        self.assertIn("OVC_FINAL_INTEGRATION_NO_VIT_PLACEMENT_PREDECESSOR", self.admission)
+        self.assertNotIn("if number>=pr_number", self.admission.replace(" ", ""))
+        self.assertNotIn("_exact_merge_job_pass", self.admission)
+        self.assertNotIn("sorted(_open_pulls", self.admission)
         self.assertNotIn("checks.listForRef", self.workflow)
         self.assertNotIn("latestNamedRun", self.workflow)
 

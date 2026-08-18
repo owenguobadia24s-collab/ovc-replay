@@ -35,8 +35,8 @@ class CiPerformanceRemediationTests(unittest.TestCase):
 
     def test_ready_admission_rechecks_current_main_and_ancestry(self):
         self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver)
-        self.assertIn("current_main=_branch_sha(base_ref)", self.resolver)
-        self.assertIn("_is_ancestor(current_main,live_head)", self.resolver)
+        self.assertIn("current_main = _branch_sha(base_ref)", self.resolver)
+        self.assertIn("_is_ancestor(current_main, live_head)", self.resolver)
         self.assertIn("git merge-base --is-ancestor", self.ready)
         self.assertIn("Prove READY candidate contains pinned main with local Git", self.ready)
 
@@ -60,20 +60,20 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.readiness)
         self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver)
         self.assertIn("OVC_READY_BASE_REFRESHED_BEFORE_FINAL_LEASE", self.resolver)
-        self.assertIn("_is_ancestor(main_snapshot,expected_head)", self.resolver)
+        self.assertIn("_is_ancestor(main_snapshot, expected_head)", self.resolver)
 
     def test_stable_main_fail_closed_checks_are_retained(self):
         self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver)
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.resolver)
-        self.assertIn("final_main=_branch_sha(base_ref)", self.resolver)
-        self.assertIn("_is_ancestor(base_sha,head_sha)", self.resolver)
+        self.assertIn("final_main = _branch_sha(base_ref)", self.resolver)
+        self.assertIn("_is_ancestor(base_sha, head_sha)", self.resolver)
 
     def test_structured_metrics_cover_late_acquisition_and_hold(self):
         self.assertIn("OVC_CI_METRIC", self.resolver)
         self.assertIn("final_integration_predecessor_lease_wait_ms", self.resolver)
         self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.resolver)
         self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED", self.resolver)
-        self.assertIn("NO_HELD_PREDECESSOR", self.resolver)
+        self.assertIn("NO_VIT_PLACEMENT_PREDECESSOR", self.resolver)
 
     def test_github_script_node_target_is_current(self):
         self.assertNotIn("actions/github-script@v7", self.workflow)
