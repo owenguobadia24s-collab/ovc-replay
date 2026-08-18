@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-p2ctii-implementation-packet/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-WP1",
+  "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
+  "plan_sha256": "abc0ae753c20b557508eb35a00326fc62b3f3bb5ab229550852439d25ea07eef",
+  "design_sha256": "868c496c5c1bfc825fa739bd4e2ee2d5eda9bcd3bbfdded2d117546c9b3824e4",
+  "baseline_main": "9351a0d900064f948f78859e26d12443c04dad6c",
+  "baseline_tree": "45ed60f1a7667d52741d78e51c780fa8d6803eb2",
+  "branch": "build/p2ctii-wp1-current-main-20260818",
+  "status": "QA_REVIEW",
+  "prerequisites": ["P2CTII-WP0_COMPLETED@49fc565541fe33ec5cdc42296528fc449ea86fff"],
+  "scope": [
+    "CORE_BOUNDARY_CONTRACT",
+    "IDENTITY_AND_GENERATION_CONTRACT",
+    "OWNER_SOURCE_ADAPTER_CONTRACT",
+    "STATE_CURRENTNESS_POINTER_CONTRACT",
+    "CANONICAL_INVENTORY_SCHEMAS",
+    "CONTROL_RECORD_SCHEMAS",
+    "SOURCE_FRONTIER_AND_POINTER_SCHEMAS",
+    "OBJECT_STATE_RELATION_REASON_OWNER_OPERATIONAL_REGISTRIES",
+    "DETERMINISTIC_IDENTITY_PRIMITIVES",
+    "REFERENCE_ONLY_OWNER_ADAPTER",
+    "ORTHOGONAL_STATE_PRIMITIVES",
+    "SYNTHETIC_REFERENCE_FIXTURE",
+    "TARGETED_ASSURANCE"
+  ],
+  "authority_delta": "NONE",
+  "acceptance": {
+    "uses_existing_canonical_hash_primitive": true,
+    "owner_scientific_payload_reference_only": true,
+    "branch_pr_worker_run_cache_excluded_from_logical_identity": true,
+    "state_planes_orthogonal": true,
+    "authority_inference_from_state_forbidden": true,
+    "exact_30_bootstrap_shape_frozen_in_schema": true,
+    "architecture_need_seed_type_preserved": true,
+    "owner_resolution_fallback_by_recency_path_title_forbidden": true,
+    "next_theory_work_advisory_only": true,
+    "reason_code_failure_vocabulary_materialised": true,
+    "operational_read_only_activation": "DENIED_UNTIL_P2CTII-G-OBSERVABILITY-ACTIVATE",
+    "continuous_intake_writes": "DENIED_UNTIL_P2CTII-G-CONTINUOUS-INTAKE"
+  },
+  "tests": [
+    "tests/research_operations/p2cti/test_p2ctii_wp1_contracts.py",
+    "tests/research_operations/p2cti/test_p2ctii_wp1_schemas.py",
+    "REPOSITORY_REQUIRED_CI",
+    "VIT_ROUTING_PREFLIGHT",
+    "FINAL_HEAD_ASSURANCE"
+  ],
+  "blockers": [],
+  "supersedes": [
+    "PR1022_PLACEMENT_STALE",
+    "PR1025_PLACEMENT_STALE",
+    "PR1036_PLACEMENT_STALE",
+    "PR1039_PLACEMENT_STALE",
+    "PR1043_PLACEMENT_STALE",
+    "PR1045_SERIALIZED_PREDECESSOR_STALE",
+    "PR1048_QUALIFIED_BUT_UNMERGED_STALE_LINEAGE",
+    "PR1051_INVALID_VIT_PIP_AND_STALE_LINEAGE"
+  ],
+  "rollback": "Forward supersession only. No owner scientific object is mutated by WP1.",
+  "next_packet": "P2CTII-WP2"
+}
