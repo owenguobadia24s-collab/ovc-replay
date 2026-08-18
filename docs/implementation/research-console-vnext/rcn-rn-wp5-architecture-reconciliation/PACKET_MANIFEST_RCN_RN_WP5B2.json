@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-dsai-packet-manifest/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "packet_id": "RCN-RN-WP5B2",
+  "parent_source_packet": "RCN-RN-WP5B",
+  "title": "RCCR Research Coverage",
+  "status": "PLANNED_AFTER_WP5B1",
+  "objective": "Project canonical RCCR source-native Research Coverage, gap, Path correspondence and descriptive Next Research Route read models into the Console without duplicating RCCR computation or introducing ranking/effectuation authority.",
+  "prerequisites": ["RCN-RN-WP5B1 COMPLETED"],
+  "owner": "RCCR",
+  "owner_sources": [
+    "src/ovc/research_operations/rccr/post_pilot_read_models.py"
+  ],
+  "required_artifacts": [
+    "RCCR source-authority preflight",
+    "owner-read-model adapter contract",
+    "GET-only API route and generated client",
+    "Coverage/Gaps/Correspondence/Next Route WorkbenchFrame components",
+    "typed no-score/no-ranking/no-effectuation evidence",
+    "QA/decision/state evidence"
+  ],
+  "acceptance_conditions": [
+    "Console consumes canonical RCCR read models rather than reimplementing coverage/correspondence/next-route logic.",
+    "Explicit denominators and typed gaps remain visible.",
+    "Path correspondence preserves independence/exposure state and creates no ranking.",
+    "Next Research Route remains descriptive and non-effectuating with no priority score.",
+    "No first-new real RCCR Console presentation occurs without exact per-source admission.",
+    "GET/read-only and authority delta NONE are preserved."
+  ],
+  "source_admission_matrix": "RCN_RN_WP5_SOURCE_ADMISSION_MATRIX_v0_1.json",
+  "conditional_gate": "RCN-RN-G5-FIRST-NEW-SOURCE[RCCR]",
+  "authority_required": "AUTO_ONLY_FOR_FIXTURE_SHADOW_OR_EXACT_PREAUTHORISED_READ; OPERATOR_G5_OTHERWISE",
+  "authority_delta": "NONE",
+  "next_packet": "RCN-RN-WP5C1",
+  "rollback": "Forward-disable/revert only WP5B2 Console bindings; preserve RCCR owner read models, evidence and history."
+}
