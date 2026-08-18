@@ -7,7 +7,8 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_8.json"
+POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_9.json"
+V08_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_8.json"
 V07_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_7.json"
 V06_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_6.json"
 V05_POLICY_PATH = ROOT / "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_5.json"
@@ -26,6 +27,7 @@ spec.loader.exec_module(inventory_module)
 class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def setUp(self):
         self.policy = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
+        self.v08_policy = json.loads(V08_POLICY_PATH.read_text(encoding="utf-8"))
         self.v07_policy = json.loads(V07_POLICY_PATH.read_text(encoding="utf-8"))
         self.v06_policy = json.loads(V06_POLICY_PATH.read_text(encoding="utf-8"))
         self.v05_policy = json.loads(V05_POLICY_PATH.read_text(encoding="utf-8"))
@@ -56,13 +58,21 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
     def test_actions_registry_and_repository_definition_layers_are_distinct(self):
         snapshot = self.policy["snapshot"]
         self.assertEqual(snapshot["github_actions_registered_total_count"], 191)
-        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 139)
-        self.assertEqual(snapshot["registration_count_excess"], 52)
+        self.assertEqual(snapshot["expected_repository_workflow_definition_count"], 140)
+        self.assertEqual(snapshot["registration_count_excess"], 51)
         self.assertEqual(
             snapshot["registration_count_excess_interpretation"],
             "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK_NOT_AUTHORITY",
         )
         self.assertIn("NOT_REMEASURED", snapshot["github_actions_source"])
+
+    def test_v0_8_snapshot_remains_historical_and_unchanged(self):
+        historical = self.v08_policy["snapshot"]
+        self.assertEqual(self.v08_policy["policy_id"], "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.8")
+        self.assertEqual(historical["github_actions_registered_total_count"], 191)
+        self.assertEqual(historical["expected_repository_workflow_definition_count"], 139)
+        self.assertEqual(historical["registration_count_excess"], 52)
+        self.assertEqual(self.policy["supersedes_for_current_inventory"], self.v08_policy["policy_id"])
 
     def test_v0_7_snapshot_remains_historical_and_unchanged(self):
         historical = self.v07_policy["snapshot"]
@@ -70,7 +80,7 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertEqual(historical["github_actions_registered_total_count"], 191)
         self.assertEqual(historical["expected_repository_workflow_definition_count"], 138)
         self.assertEqual(historical["registration_count_excess"], 53)
-        self.assertEqual(self.policy["supersedes_for_current_inventory"], self.v07_policy["policy_id"])
+        self.assertEqual(self.v08_policy["supersedes_for_current_inventory"], self.v07_policy["policy_id"])
 
     def test_v0_6_snapshot_remains_historical_and_unchanged(self):
         historical = self.v06_policy["snapshot"]
@@ -167,9 +177,26 @@ class CiWorkflowInventoryGovernanceTests(unittest.TestCase):
         self.assertIn("SYNTHETIC", admissions[".github/workflows/c2p2-rs0-runtime-capacity-recovery.yml"]["authority_mode"])
         self.assertIn("NO_REAL_SOURCE", admissions[".github/workflows/c2p2-rs0-runtime-capacity-recovery.yml"]["authority_mode"])
         r2_mode = admissions[".github/workflows/c2p2-rs0-real-source-shadow-run-r2.yml"]["authority_mode"]
-        self.assertIn("SINGLE_USE_R2_REAL_SOURCE", r2_mode)
-        self.assertIn("NO_SELECTION", r2_mode)
-        self.assertIn("NO_ACTIVATION", r2_mode)
+        self.assertIn("CONSUMED_R3", r2_mode)
+        self.assertIn("NO_NEW_GRUN", r2_mode)
+
+    def test_r3_storage_recovery_workflow_is_non_pr_synthetic_and_no_fresh_grun(self):
+        path = ".github/workflows/c2p2-rs0-r3-storage-recovery.yml"
+        admission = next(
+            item for item in self.policy["additional_non_pr_diagnostic_workflows"]
+            if item["path"] == path
+        )
+        record = next(record for record in self.inventory["records"] if record["path"] == path)
+        self.assertEqual(record["category"], "ACTIVE_MANUAL_OPERATION")
+        self.assertEqual(record["triggers"], ["push"])
+        self.assertNotIn("pull_request", record["triggers"])
+        self.assertFalse(admission["pull_request_listener"])
+        self.assertIn("BOUNDED_SYNTHETIC_R3_STORAGE_RECOVERY", admission["authority_mode"])
+        self.assertIn("NO_REAL_SOURCE", admission["authority_mode"])
+        self.assertIn("NO_REQUIRED_CHECK_SUBSTITUTION", admission["authority_mode"])
+        self.assertIn("NO_FRESH_GRUN", admission["authority_mode"])
+        self.assertIn("NO_SELECTION", admission["authority_mode"])
+        self.assertIn("NO_ACTIVATION", admission["authority_mode"])
 
     def test_local_post_merge_completion_is_preserved_as_non_pr_and_authority_neutral(self):
         admission = next(
