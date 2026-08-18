@@ -131,7 +131,12 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
         self.assertIn(state["packets"]["P1CDII-WP1"]["status"], {"APPROVED", "COMPLETED"})
         self.assertIn(
             state["next_packet"],
-            {"P1CDII-WP2", "P1CDII-G2-ALG", "P1CDII-WP2-REMEDIATION"},
+            {
+                "P1CDII-WP2",
+                "P1CDII-G2-ALG",
+                "P1CDII-WP2-REMEDIATION",
+                "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW",
+            },
         )
 
 

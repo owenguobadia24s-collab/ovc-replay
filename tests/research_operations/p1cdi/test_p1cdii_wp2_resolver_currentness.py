@@ -233,6 +233,12 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     state = json.loads(
         (ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json").read_text()
     )
+    remediation_qa = json.loads(
+        (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_REMEDIATION_QA_PACKET_v0_1.json").read_text()
+    )
+    remediation_decision = json.loads(
+        (ROOT / "docs/programmes/p1cdi-v0-1/wp2/P1CDII_WP2_REMEDIATION_DECISION_v0_1.json").read_text()
+    )
     assert packet["authority_delta"] == "NONE"
     assert packet["status"] == "GATE_READY"
     assert packet["next_packet"] == "P1CDII-G2-ALG"
@@ -252,8 +258,16 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     assert completion["implementation_result"] == "PASS"
     assert completion["gate_decision"] == "NOT_TAKEN"
     assert completion["decision_bearing_outputs"] == "DENIED"
+    assert remediation_qa["status"] == "PASS_EXACT_FINAL"
+    assert remediation_qa["authority_delta"] == "NONE"
+    assert remediation_qa["g2_alg_decision"] == "UNRESOLVED_REQUIRES_FRESH_INDEPENDENT_REVIEW"
+    assert remediation_decision["decision"] == "PASS_REMEDIATION"
+    assert remediation_decision["p1cdii_g2_alg"]["status"] == "UNRESOLVED"
+    assert remediation_decision["p1cdii_g2_alg"]["remediation_author_eligible_to_issue_pass"] is False
+    assert remediation_decision["wp3_authorised"] is False
     assert state["current_packet"] == "P1CDII-WP2"
-    assert state["status"] == "BLOCKED"
-    assert state["packets"]["P1CDII-WP2"]["status"] == "BLOCKED"
-    assert state["blockers"] == review["blockers"]
-    assert state["next_packet"] == "P1CDII-WP2-REMEDIATION"
+    assert state["status"] == "GATE_READY"
+    assert state["packets"]["P1CDII-WP2"]["status"] == "GATE_READY"
+    assert state["packets"]["P1CDII-WP2-REMEDIATION"]["status"] == "COMPLETED"
+    assert state["blockers"] == ["P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED"]
+    assert state["next_packet"] == "P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW"
