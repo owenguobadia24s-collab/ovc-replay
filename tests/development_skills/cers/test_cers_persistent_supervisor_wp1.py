@@ -12,6 +12,10 @@ def load(name: str):
     return json.loads((REG / name).read_text(encoding="utf-8"))
 
 
+def load_path(path: str):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+
 class CersPersistentSupervisorWp1Tests(unittest.TestCase):
     def test_policy_is_fail_closed_and_preactivation_quiescent(self):
         policy = load("CERS_PERSISTENT_SUPERVISOR_POLICY_v0_1.json")
@@ -54,12 +58,7 @@ class CersPersistentSupervisorWp1Tests(unittest.TestCase):
     def test_action_registry_denies_reserved_and_unknown_actions(self):
         registry = load("CERS_PERSISTENT_ACTION_SIDE_EFFECT_REGISTRY_v0_1.json")
         denies = set(registry["explicit_denies"])
-        for required in {
-            "MERGE", "DIRECT_MAIN_WRITE", "PARALLEL_PHYSICAL_MERGE", "FORCE_PUSH",
-            "HISTORY_REWRITE", "IRREVERSIBLE", "IRREVERSIBLE_OR_UNKNOWN", "VALIDATION_READ",
-            "SCIENTIFIC_PROMOTION", "CANONICAL_PUBLICATION", "R2_PUBLICATION", "PROBABILITY",
-            "RISK", "EXPOSURE", "TRADING", "MARKET_EXECUTION",
-        }:
+        for required in {"MERGE","DIRECT_MAIN_WRITE","PARALLEL_PHYSICAL_MERGE","FORCE_PUSH","HISTORY_REWRITE","IRREVERSIBLE","IRREVERSIBLE_OR_UNKNOWN","VALIDATION_READ","SCIENTIFIC_PROMOTION","CANONICAL_PUBLICATION","R2_PUBLICATION","PROBABILITY","RISK","EXPOSURE","TRADING","MARKET_EXECUTION"}:
             self.assertIn(required, denies)
         self.assertEqual(registry["unknown_action"]["decision"], "DENY")
 
@@ -71,13 +70,28 @@ class CersPersistentSupervisorWp1Tests(unittest.TestCase):
 
     def test_reason_registry_contains_all_fail_closed_frontiers(self):
         reasons = set(load("CERS_PERSISTENT_REASON_CODE_REGISTRY_v0_1.json")["codes"])
-        for code in {
-            "PROGRAMME_NOT_ADMITTED", "OWNER_AUTHORITY_UNKNOWN", "OPERATOR_REQUIRED_BOUNDARY",
-            "EXECUTOR_UNKNOWN_OR_INACTIVE", "ACTION_UNKNOWN_OR_DENIED", "SIDE_EFFECT_UNKNOWN_OR_DENIED",
-            "WRITE_DOMAIN_UNKNOWN_OR_DENIED", "STALE_FENCE", "UNKNOWN_START_STATE",
-            "DUPLICATE_AUTHORITATIVE_START", "CURRENT_POINTER_UNRESOLVED",
-        }:
+        for code in {"PROGRAMME_NOT_ADMITTED","OWNER_AUTHORITY_UNKNOWN","OPERATOR_REQUIRED_BOUNDARY","EXECUTOR_UNKNOWN_OR_INACTIVE","ACTION_UNKNOWN_OR_DENIED","SIDE_EFFECT_UNKNOWN_OR_DENIED","WRITE_DOMAIN_UNKNOWN_OR_DENIED","STALE_FENCE","UNKNOWN_START_STATE","DUPLICATE_AUTHORITATIVE_START","CURRENT_POINTER_UNRESOLVED"}:
             self.assertIn(code, reasons)
+
+    def test_wp6_live_pilot_evidence_remains_exactly_preserved(self):
+        pilot = load_path("docs/releases/development-skills-v0-3/cers-conformance/wp6/CERS_WP6_LIVE_PILOT_RUN_v0_1.json")
+        qa = load_path("docs/releases/development-skills-v0-3/cers-conformance/wp6/CERS_WP6_QA_PACKET_v0_1.json")
+        decision = load_path("docs/releases/development-skills-v0-3/cers-conformance/wp6/CERS_G6_DECISION_v0_1.json")
+        state7 = load_path("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_7.json")
+        state8 = load_path("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_8.json")
+        self.assertEqual(state7["packet_id"], "CERS-WP6")
+        self.assertEqual(state7["live_unattended_dispatch"], "AUTHORIZED_CERS_WP6_BOUNDED_PILOT_ONLY_NO_SCOPE_EXPANSION")
+        self.assertEqual(state8["runtime_authority"], "CERS_WP6_BOUNDED_LIVE_PILOT_EXECUTED")
+        self.assertEqual(state8["post_pilot_dispatch_state"], "DISABLE_NEW_DISPATCH_AFTER_BRANCH_PILOT_COMPLETION")
+        self.assertEqual(pilot["programme_id"], "OVC-DSAI3V-CERS-CONFORMANCE-v0.1")
+        self.assertEqual(pilot["packet_id"], "CERS-WP6")
+        self.assertEqual(pilot["dispatch"]["worker_concurrency"], 1)
+        self.assertEqual(pilot["dispatch"]["max_speculative_depth"], 1)
+        self.assertEqual(pilot["result"]["post_pilot_quiescence"], "DISABLE_NEW_DISPATCH")
+        self.assertEqual(pilot["result"]["incidents"], [])
+        self.assertEqual(qa["packet_id"], "CERS-WP6")
+        self.assertEqual(decision["gate_id"], "CERS-G6")
+        self.assertEqual(decision["terminal_on_effectivity"], "CERS_IMPLEMENTED_QUALIFIED_LIVE_PILOT_PASS")
 
 
 if __name__ == "__main__":
