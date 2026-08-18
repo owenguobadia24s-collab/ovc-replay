@@ -44,7 +44,7 @@ class CiPerformanceG4GateTests(unittest.TestCase):
         self.assertIn("Complete repository suite as BASE_INDEPENDENT assurance", self.tests_workflow)
         self.assertNotIn("tools/ci/ovc_run_with_main_lease.py", self.tests_workflow)
         self.assertIn("tools/ci/ovc_run_with_main_lease.py", self.tiered_workflow)
-        self.assertIn("Run mandatory SIQ/PDC exact-final assurance inside lease", self.tiered_workflow)
+        self.assertIn("Run mandatory SIQ/PDC A2 exact-final assurance inside lease", self.tiered_workflow)
         for required in ("tests", "pytest-unittest-parity", "runner-parity"):
             self.assertIn(required, self.resolver)
         self.assertIn('PROFILE_JOB_NAME = "OVC profile assurance"', self.resolver)

@@ -196,7 +196,9 @@ class PRVITRVITFrontierDecouplingTests(unittest.TestCase):
         self.assertNotEqual(ancestry.returncode, 0)
 
     def test_global_integration_movement_reuses_a0_and_renews_a1_a2(self) -> None:
-        _, new_tree = self.fx.advance_main("tools/ci/other.py", "print('changed')\n")
+        _, new_tree = self.fx.advance_main(
+            "tools/ci/vit_routing_preflight.py", "print('changed')\n"
+        )
         movement = classify_frontier_movement(
             pip=self.fx.pip,
             source_predecessor_tree=self.fx.base_tree,

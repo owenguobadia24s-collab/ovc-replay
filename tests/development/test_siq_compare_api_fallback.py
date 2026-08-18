@@ -7,13 +7,18 @@ ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "ovc-tiered-tests.yml"
 ADMISSION = ROOT / "tools" / "ci" / "prvitr_live_admission.py"
 FRONTIER = ROOT / "src" / "ovc" / "development" / "skills" / "vit_frontier_decoupling.py"
+FRONTIER_IMPL = ROOT / "src" / "ovc" / "development" / "skills" / "vit_frontier_decoupling_impl.py"
 
 class SIQCompareAPIFallbackTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.workflow = WORKFLOW.read_text(encoding="utf-8")
         cls.admission = ADMISSION.read_text(encoding="utf-8")
-        cls.frontier = FRONTIER.read_text(encoding="utf-8")
+        cls.frontier = (
+            FRONTIER.read_text(encoding="utf-8")
+            + "\n"
+            + FRONTIER_IMPL.read_text(encoding="utf-8")
+        )
 
     def test_provider_compare_api_is_not_decision_bearing(self) -> None:
         self.assertNotIn("github.rest.repos.compareCommits", self.workflow)
