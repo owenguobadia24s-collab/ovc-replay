@@ -159,15 +159,21 @@ def test_wp2_packet_stops_at_independent_g2_alg_boundary() -> None:
     assert qa["qa_result"] == "PASS"
     assert all(result == "PASS" or result.startswith("PASS_") for result in qa["checks"].values())
     assert review["gate_class"] == "INDEPENDENT_BLOCKING"
-    assert review["status"] == "READY_AWAITING_INDEPENDENT_REVIEW"
-    assert review["reviewer_binding"] == "UNBOUND"
-    assert review["gate_decision"] == "NOT_TAKEN"
-    assert review["decision_bearing_before_pass"] is False
+    assert review["status"] == "REVIEW_COMPLETE_BLOCKED"
+    assert review["reviewer_binding"]["status"] == "BOUND"
+    assert review["reviewer_independence"]["status"] == "DECLARED"
+    assert review["gate_decision"] == "BLOCK"
+    assert review["authority_delta"] == "NONE"
+    assert review["decision_bearing_outputs"] == "DENIED"
+    assert review["blockers"] == [
+        "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION",
+        "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT",
+    ]
     assert completion["implementation_result"] == "PASS"
     assert completion["gate_decision"] == "NOT_TAKEN"
     assert completion["decision_bearing_outputs"] == "DENIED"
     assert state["current_packet"] == "P1CDII-WP2"
-    assert state["status"] == "GATE_READY"
-    assert state["packets"]["P1CDII-WP2"]["status"] == "GATE_READY"
-    assert state["blockers"] == ["P1CDII_G2_ALG_INDEPENDENT_REVIEWER_UNBOUND"]
-    assert state["next_packet"] == "P1CDII-G2-ALG"
+    assert state["status"] == "BLOCKED"
+    assert state["packets"]["P1CDII-WP2"]["status"] == "BLOCKED"
+    assert state["blockers"] == review["blockers"]
+    assert state["next_packet"] == "P1CDII-WP2-REMEDIATION"

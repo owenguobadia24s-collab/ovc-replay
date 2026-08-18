@@ -117,7 +117,10 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
         self.assertEqual(state["authority"]["operational_read_only"], "DENIED")
         self.assertEqual(state["authority"]["continuous_intake"], "DENIED")
         self.assertIn(state["packets"]["P1CDII-WP1"]["status"], {"APPROVED", "COMPLETED"})
-        self.assertIn(state["next_packet"], {"P1CDII-WP2", "P1CDII-G2-ALG"})
+        self.assertIn(
+            state["next_packet"],
+            {"P1CDII-WP2", "P1CDII-G2-ALG", "P1CDII-WP2-REMEDIATION"},
+        )
 
 
 if __name__ == "__main__":
