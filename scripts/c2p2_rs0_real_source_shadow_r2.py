@@ -20,6 +20,7 @@ from typing import Any, Iterable
 from ovc.opt_b.c2p_v0_2.rs0_execution import iter_verified_rows, validate_locator
 from ovc.opt_b.c2p_v0_2.rs0_empirical_runtime_streaming import (
     ADAPTER_ID,
+    canonicalise_source_stream_group_order,
     merge_canonical_source_streams,
     run_spooled_empirical_runtime,
 )
@@ -34,7 +35,7 @@ RUNTIME_BINDING_SHA = "cc25a6fbe2e9bff7ad58d992bb9e267d0afd4b92bd3c8c32c97fcd5c5
 RUNTIME_IMPLEMENTATION_SHA = "5e096f8693fae0f36f76d344388628dab7a450745a40dad08c71cc24cf656121"
 ADAPTER_BINDING_ID = "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1"
 ADAPTER_BINDING_SHA = "43d29861b3a05c5c84676493f94aceb942b7bb530c51dcf6c2687ee11ddbef01"
-ADAPTER_IMPLEMENTATION_SHA = "8d3de43abb1b6c80817ca24b6ef301a2bd39dbc3024cc31e92f382b4dfd6b648"
+ADAPTER_IMPLEMENTATION_SHA = "ea301cacc1e0646c2e77347ab128bab8db85383f54c4a248a21cbe820f8aaf0f"
 DEPENDENCY_REGISTRY_SHA = "5f77f1f520eedb8a472db6ddf7ae5494fe032e6a155c205aaf9ef5d06f125183"
 SOURCE_MATERIALISATION_ID = "C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1"
 SOURCE_MATERIALISATION_SHA = "f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b"
@@ -251,7 +252,9 @@ def validate_source_artifact(source_root: Path) -> dict[str, Any]:
 def merged_c2_rows(source_plan: dict[str, Any]) -> Iterable[dict[str, Any]]:
     root = Path(source_plan["source_root"])
     streams = [
-        iter_verified_rows(root / source["relative_path"], expected_role="C2_VNEXT")
+        canonicalise_source_stream_group_order(
+            iter_verified_rows(root / source["relative_path"], expected_role="C2_VNEXT")
+        )
         for source in source_plan["c2_sources"]
     ]
     yield from merge_canonical_source_streams(streams)
