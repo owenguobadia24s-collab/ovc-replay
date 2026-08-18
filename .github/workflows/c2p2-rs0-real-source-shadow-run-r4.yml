@@ -1,0 +1,300 @@
+name: C2P2 RS0 real-source shadow run R4
+
+on:
+  push:
+    branches:
+      - run/c2p2-rs0-real-source-shadow-r4-20260818
+    paths:
+      - registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_5.json
+
+concurrency:
+  group: c2p2-rs0-real-source-shadow-run-r4-single-use
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  real_source_shadow_r4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      PYTHONPATH: src:.
+      RESULT_DIR: /tmp/c2p2-rs0-real-source-shadow-r4-result
+      SOURCE_DIR: /tmp/c2p2-rs0-current-source-r4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Prove prior R4 attempts did not reach semantic launch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          runs_json="$(gh api "/repos/${GITHUB_REPOSITORY}/actions/workflows/c2p2-rs0-real-source-shadow-run-r4.yml/runs?branch=${GITHUB_REF_NAME}&event=push&per_page=100")"
+          mapfile -t prior_ids < <(jq -r --arg current "$GITHUB_RUN_ID" '.workflow_runs[] | select((.id|tostring) != $current) | .id' <<<"$runs_json")
+          if [ "${#prior_ids[@]}" -eq 0 ]; then
+            echo 'R4_PRIOR_ATTEMPT_PROOF=NO_PRIOR_RUNS'
+          else
+            for prior_run_id in "${prior_ids[@]}"; do
+              jobs_json="$(gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${prior_run_id}/jobs?per_page=100")"
+              launch_state="$(jq -r '([.jobs[].steps[]? | select(.name == "Launch exactly one authorised R4 A/B/C real-source shadow execution") | (.conclusion // .status // "UNKNOWN")] | first) // "ABSENT"' <<<"$jobs_json")"
+              case "$launch_state" in
+                skipped|ABSENT)
+                  echo "R4_PRIOR_ATTEMPT_PRE_SEMANTIC_SAFE:${prior_run_id}:${launch_state}"
+                  ;;
+                *)
+                  echo "R4_PRIOR_ATTEMPT_REACHED_OR_AMBIGUOUS_SEMANTIC_LAUNCH:${prior_run_id}:${launch_state}" >&2
+                  exit 44
+                  ;;
+              esac
+            done
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install repository and test dependencies
+        run: python -m pip install -e ".[test]" -r requirements-console-vnext.txt
+
+      - name: Verify live R4 branch is exact authority-trigger head and still unconsumed
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin "+refs/heads/${GITHUB_REF_NAME}:refs/remotes/origin/${GITHUB_REF_NAME}"
+          live_branch="$(git rev-parse "origin/${GITHUB_REF_NAME}")"
+          if [ "$live_branch" != "$GITHUB_SHA" ]; then
+            echo "LIVE_R4_BRANCH_ADVANCED_OR_STALE_TRIGGER:$live_branch:$GITHUB_SHA" >&2
+            exit 42
+          fi
+          if git cat-file -e "origin/${GITHUB_REF_NAME}:registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_4.json" 2>/dev/null; then
+            echo 'R4_SINGLE_USE_AUTHORITY_ALREADY_CONSUMED_ON_LIVE_BRANCH' >&2
+            exit 43
+          fi
+
+      - name: Verify exact R4 authority runner and accepted evidence contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/c2p2_rs0_real_source_shadow_r4.py
+          python scripts/c2p2_rs0_real_source_shadow_r4.py validate-repo-bindings --repo-root .
+
+      - name: Re-resolve live main and all bound scientific identities before source access
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --no-tags
+          live_main="$(git rev-parse origin/main)"
+          echo "LIVE_MAIN_SHA=$live_main" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import json
+          import subprocess
+
+          def git_json(path: str):
+              raw = subprocess.run(
+                  ['git', 'show', f'origin/main:{path}'],
+                  check=True,
+                  capture_output=True,
+                  text=True,
+              ).stdout
+              return json.loads(raw)
+
+          candidate = git_json('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CANDIDATE_CURRENTNESS_v0_2.json')
+          final = candidate['final_generation']
+          assert final['generation_id'] == 'C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3'
+          assert final['generation_logical_sha256'] == 'c7f0160f7bb8d75b92d4aa95116895c25c44c987e2e78a8352c0e491244bbf1a'
+          assert final['candidate_hashes'] == {
+              'C2P2-PS0-OP-A-STRICT-CONTINUITY-v3': 'a8cb003521c62129044a4d62cb9a4d5a967cd3ef9d933fb1090ac4dad0843102',
+              'C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3': 'a91f50c12438c4d5263d36b48e40acc0a5e146b474307721a4108ac2398a752e',
+              'C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3': '29f8ac9a5844b425901fda90299f911a48a85422a390771753ffd5b894b1c52c',
+          }
+          assert candidate['selection_state'] == 'COMPARATIVE_SET_ONLY_NO_WINNER'
+          assert candidate['active_object_pack_id'] is None
+
+          closeout = git_json('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_CURRENT_SOURCE_MATERIALISATION_CLOSEOUT_v0_1.json')
+          material = closeout['materialisation']
+          assert material['materialisation_id'] == 'C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1'
+          assert material['logical_sha256'] == 'f7e772ca550fe9b1fb69c45ceca6e55f48da3b9cc02d88bb7b8dd1b74dd6766b'
+          assert material['rows']['C2_VNEXT'] == 1505072
+          assert material['rows']['C2E_V0_2'] == 584520
+          artifact = closeout['artifact']
+          assert artifact['github_actions_artifact_id'] == 9283576949
+          assert artifact['github_actions_artifact_digest'] == 'sha256:482781f5b7921d64219650ff4711027337dbfe677b22415df37708848471976e'
+          print('R4_LIVE_MAIN_SCIENTIFIC_CURRENTNESS=PASS')
+          PY
+
+      - name: Run targeted R4 indexed-runtime and authority assurance before source access
+        run: |
+          python -m pytest -q \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_semantic_scalability_indexed.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_order_recovery.py \
+            tests/opt_b/c2p/v0_2/test_c2p2_rs0_real_source_shadow_r4_harness.py \
+            tests/development/test_ci_workflow_inventory.py \
+            --tb=short
+
+      - name: Run repository-wide regression before source access
+        run: python -m pytest tests -q --tb=short
+
+      - name: Download exact authorised current-source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: c2p2-rs0-current-c2-vnext-c2e-2021-2023
+          path: ${{ env.SOURCE_DIR }}
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: '32010902424'
+
+      - name: Preflight exact source and R4 bindings without consuming authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$RESULT_DIR"
+          mkdir -p "$RESULT_DIR"
+          python scripts/c2p2_rs0_real_source_shadow_r4.py preflight \
+            --repo-root . \
+            --source-root "$SOURCE_DIR" \
+            --output-dir "$RESULT_DIR"
+
+      - name: Launch exactly one authorised R4 A/B/C real-source shadow execution
+        id: execute
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          python scripts/c2p2_rs0_real_source_shadow_r4.py execute \
+            --repo-root . \
+            --source-plan "$RESULT_DIR/source-plan-r4.json" \
+            --output-dir "$RESULT_DIR" \
+            --github-run-id "$GITHUB_RUN_ID"
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit $code
+
+      - name: Upload immutable R4 run and partial-run evidence
+        id: upload
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: c2p2-rs0-real-source-shadow-run-r4-${{ github.run_id }}
+          path: ${{ env.RESULT_DIR }}
+          if-no-files-found: warn
+          retention-days: 30
+          compression-level: 6
+
+      - name: Bind R4 artifact and materialise court record on packet branch
+        if: always()
+        env:
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          ARTIFACT_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f "$RESULT_DIR/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_RESULT_v0_1.json" ]; then
+            echo 'No R4 semantic result record exists; prelaunch failure leaves the v0.5 single-use authority unconsumed.'
+            exit 0
+          fi
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          release = Path('docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0')
+          result_path = release / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_RESULT_v0_1.json'
+          result = json.loads(result_path.read_text())
+          result_sha = hashlib.sha256(result_path.read_bytes()).hexdigest()
+          binding = {
+            'schema': 'ovc-c2p2-rs0-real-source-shadow-run-r4-artifact-binding/v1',
+            'programme_id': 'OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1',
+            'packet_id': 'C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R4',
+            'authority_id': 'AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.5',
+            'runtime_binding_id': 'C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_BINDING_v0_3',
+            'runtime_binding_logical_sha256': '4819ccfa0fb01d6e5645e09cff3c1995b9d56c865e52fb4b7bcbfa3836740cae',
+            'runtime_generation_id': 'C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_v0_2',
+            'evidence_contract_id': 'C2P2_RS0_NEGATIVE_COVERAGE_CERTIFICATE_v0_2',
+            'source_order_binding_id': 'C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_2',
+            'source_order_binding_logical_sha256': '01c3e85d5c4b47fbb2a102a1d4dff3774e49fcd15110157aaac3ea538a51201c',
+            'github_actions_run_id': int(os.environ['GITHUB_RUN_ID']),
+            'github_actions_artifact_id': int(os.environ['ARTIFACT_ID']) if os.environ.get('ARTIFACT_ID') else None,
+            'github_actions_artifact_name': f"c2p2-rs0-real-source-shadow-run-r4-{os.environ['GITHUB_RUN_ID']}",
+            'github_actions_artifact_digest': os.environ.get('ARTIFACT_DIGEST'),
+            'github_actions_artifact_url': os.environ.get('ARTIFACT_URL'),
+            'run_result_sha256': result_sha,
+            'run_status': result['status'],
+            'bound_drive_folder_id': '1AkfK95_GB5Oz7U_PC5wA7rUWZAfcGhvv',
+            'durable_drive_file_id': None,
+            'durable_drive_binding_status': 'PENDING_DURABLE_COPY',
+            'retention': 'PRESERVE_FORWARD_SUPERSEDE_ONLY',
+            'authority_effect': 'NONE_STORAGE_PROVENANCE_ONLY',
+            'no_vit': True,
+          }
+          (release / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_ARTIFACT_BINDING_v0_1.json').write_text(
+              json.dumps(binding, indent=2, sort_keys=True) + '\n'
+          )
+
+          packet_path = release / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_PACKET_v0_1.json'
+          packet = json.loads(packet_path.read_text())
+          packet['status'] = 'GATE_READY' if result['status'] == 'COMPLETED_COMPARATIVE_SET_NO_WINNER' else 'BLOCKED'
+          packet['github_actions_run_id'] = int(os.environ['GITHUB_RUN_ID'])
+          packet['run_result_ref'] = str(result_path)
+          packet['run_result_sha256'] = result_sha
+          packet['next_gate'] = result['next_operator_gate']
+          packet_path.write_text(json.dumps(packet, indent=2, sort_keys=True) + '\n')
+          PY
+          git config user.name 'ovc-continuous-execution'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_RESULT_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_POST_RUN_R4_GATE_PACKET_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_ARTIFACT_BINDING_v0_1.json \
+            docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_PACKET_v0_1.json \
+            registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_4.json \
+            registries/implementation/c2p_v0_2/C2P2_RS0_EXECUTION_STATE_v0_3.json
+          git commit -m 'C2P2-RS0: materialise R4 real-source shadow evidence'
+          git push origin HEAD:${GITHUB_REF_NAME}
+
+      - name: Summarise R4 boundary
+        if: always()
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          import os
+          from pathlib import Path
+          path = Path(os.environ['RESULT_DIR']) / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_RESULT_v0_1.json'
+          if not path.exists():
+              print('## C2P2-RS0 R4 stopped before semantic result materialisation')
+              print('- Single-use v0.5 authority remains unconsumed by this attempt.')
+              raise SystemExit(0)
+          result = json.loads(path.read_text())
+          print('## C2P2-RS0 real-source shadow run R4')
+          print(f"- Status: `{result['status']}`")
+          print(f"- Single-use authority consumed: `{result['authority']['execution_count_consumed']}`")
+          print(f"- Remaining run count: `{result['authority']['run_count_remaining']}`")
+          print(f"- Runtime: `{result['runtime_binding']['binding_id']}`")
+          print(f"- Evidence contract: `{result['evidence_contract']['contract_id']}`")
+          print(f"- Selection: `{result['selection_state']}`")
+          print(f"- Active ObjectPack: `{result['active_object_pack_id']}`")
+          print(f"- Next operator gate: `{result['next_operator_gate']}`")
+          for row in result['candidate_results']:
+              print(f"- {row['candidate_id']}: `{row['status']}`")
+          PY
+
+      - name: Fail closed if the authorised R4 comparative run did not complete
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path(os.environ['RESULT_DIR']) / 'C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R4_RESULT_v0_1.json'
+          if not path.exists():
+              raise SystemExit(0)
+          result = json.loads(path.read_text())
+          if result['status'] != 'COMPLETED_COMPARATIVE_SET_NO_WINNER':
+              raise SystemExit(75)
+          PY
